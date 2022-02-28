@@ -1,197 +1,87 @@
-Return-Path: <SRS0=UCcl=TL=ti.com=nm@kernel.org>
+Return-Path: <SRS0=iYx7=TL=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB99AC433EF
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 12:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06E7CC433F5
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 14:42:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6596C340EE; Mon, 28 Feb 2022 12:07:15 +0000 (UTC)
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	id E2514C340F5; Mon, 28 Feb 2022 14:42:05 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F151DC340E7;
-	Mon, 28 Feb 2022 12:07:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F151DC340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21SC7CgO063928;
-	Mon, 28 Feb 2022 06:07:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1646050032;
-	bh=6Tao1zcdP9BNLg7KbFrt9/eMRui2cABSBVkwtBMq2zY=;
-	h=Date:From:To:CC:Subject;
-	b=vYmO0EmQh1MwfBgKCIYDkld9jsEFbho1T0MIqkoqV7LaEEnZ7RlKg9uBCCkF7Unu/
-	 9qQ+bmQvNLjCqdmFlKUMhY7ZyT8A1HfCiVCexOSEHenQpmbVHNT/jnCj/JEa41UHnj
-	 FqnctjKExlgX7fPhXoatylILVV7TK85v8YVSz69Q=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21SC7CIV082070
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 28 Feb 2022 06:07:12 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
- Feb 2022 06:07:11 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 28 Feb 2022 06:07:11 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21SC7B2L035473;
-	Mon, 28 Feb 2022 06:07:11 -0600
-Date: Mon, 28 Feb 2022 06:07:11 -0600
-From: Nishanth Menon <nm@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL 3/3] TI K3 device tree updates for v5.18
-Message-ID: <20220228120711.xdburehxs5gnwxko@capacity>
+	by smtp.kernel.org (Postfix) with ESMTPS id 326D2C340E7;
+	Mon, 28 Feb 2022 14:42:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 326D2C340E7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MQusJ-1nbWk10HXL-00O0kZ; Mon, 28 Feb 2022 15:42:02 +0100
+Received: by mail-wm1-f51.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so6165008wmp.5;
+        Mon, 28 Feb 2022 06:42:01 -0800 (PST)
+X-Gm-Message-State: AOAM533s0WnXu6Xw0lRkEa23iGvBDz7SZPtdOJvLPiDJY/tsyut8iZPd
+	Tj8uRTDRGTV9fUFUddzt8793cHW7HbQLykIG01w=
+X-Google-Smtp-Source: ABdhPJwk5L+QJI8Ubt5qFj7ABYks38P424wjdir/FSthOlrgADQbn1sfQhvydVSPUW/DGwF6B2NNpmzTkRAyHlnnUZ4=
+X-Received: by 2002:a05:600c:154b:b0:381:8148:64d with SMTP id
+ f11-20020a05600c154b00b003818148064dmr362035wmg.98.1646059321645; Mon, 28 Feb
+ 2022 06:42:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sqodd6rh2ja7ngpy"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20220228120704.346bn5c56e53qylb@finless>
+In-Reply-To: <20220228120704.346bn5c56e53qylb@finless>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 28 Feb 2022 15:41:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1PW8afbjvsUNe2UHXBcQHxGXXPodYiK9AgfW-3tTQR0w@mail.gmail.com>
+Message-ID: <CAK8P3a1PW8afbjvsUNe2UHXBcQHxGXXPodYiK9AgfW-3tTQR0w@mail.gmail.com>
+Subject: Re: [GIT PULL 2/3] TI K3 defconfig updates for v5.18
+To: Nishanth Menon <nm@ti.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+	SoC Team <soc@kernel.org>, Tero Kristo <kristo@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:UnnIC44vgw/dGyFwx1HK9b7UQisnZX+uVgTXrq2FEU8uNZ/OMDY
+ TyMMcqBrXLSJSUCEt0bIVyry4PDnTP5toNSZMHjKsGePlVL0l2Qrs59BmjBR/qUP4HeyNw2
+ zg6wo7ZGCS5Udj6LkPkyDeBdnz4cKwRj76FqtXZWrUdmMAC8HIvz0I37Ec2TAYSsVhm1iNW
+ RJKQHqKu0xDrdaYwipAlA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8zwPSKjInKQ=:Ks31hNlDNSpQ9m19u9Bx39
+ Ql3VHxYrUdzkETTHilbw0q9EnU2Ws7HMyve+GNcZVZa76inveshIwXH3OPKovhbbyG6NmG+Nm
+ OSvHA8/eJ02K7id1bPboforOtzSc34nOG0ni7HyAkXHjjh1IyF3AtJi8nC2ZhenJpyizENguh
+ 6YGD2nSzKtZGBXPkjbcWh8vRL9S+WkjD9DZkhEHsETGyYUGhbU3PdNPk3U6JjQ6Ami3V3FeTV
+ VGFyrB/PyvGtRDn+jYuOlGekVVWjXSV0gN3KaqsNlIjL88AoNIA4zQ4WoIfqvOOI1dJXc++c1
+ TdkVEImu5q9vLZM/Q6ehMSEQ+Ivw8vEHf5W+smWhxKBDDbG1gCyIINDHir1NGQvA40huhFRaI
+ aW6dvINAl8JYk8MvEaMK3NB25uYGg3Kv09uZWeW9FEJPkw+wqnj9WyvmWtep71X0g9l1sPrN4
+ 3n2j+GTEy4pEOV/MffDZdB4OSIXZq4HzofmxQrJCe70Pk67YCcJGgzuuJECMG727ps7gPvwYQ
+ ox1C39t57B3zwingEJtjBVxaliFg6fE3V4yPU2vo7tUCb/+xL0E9UBJdzpM5TXbQ7A4hhY2V3
+ mWXLAndbqkGZwdO6HyF28KrPz4EVwjsJr6PLuU6bmUBG9x5gxut8bWjZhUfSMMr4c+L3zfMmR
+ qMpiPCfRtXI32JUCg+Y2Cn8AovnL/Tu5sXMJy7YWNLNGv2V41Q2YnS1AIsXpufri/09Q=
 
---sqodd6rh2ja7ngpy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 28, 2022 at 1:07 PM Nishanth Menon <nm@ti.com> wrote:
+>
+> Hi ARM SoC maintainers,
+>
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+>
+>   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v5.18
+>
+> for you to fetch changes up to 3bc04fba357a269f4b7ff824b146d82ad1ebf9de:
+>
+>   arm64: defconfig: Enable USB controller drivers for TI K3 SoC (2022-01-24 13:40:42 -0600)
+>
+> ----------------------------------------------------------------
+> TI K3 defconfig updates for v5.18
+>
+> * Enable USB modules
 
-Hi ARM SoC maintainers,
+It looks like I had this one applied already from the 5.17 submissions. My plan
+was to drop it all, but it looks like I made a minor mistake here. As
+the contents
+are identical, I'll just keep the old version.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-=
-for-v5.18
-
-for you to fetch changes up to a033588ec66bffd6cb51f946b2e998a9f9bf598d:
-
-  arm64: dts: ti: Add support for AM62-SK (2022-02-28 05:34:43 -0600)
-
-----------------------------------------------------------------
-TI K3 device tree updates for v5.18
-
-Since (ti-k3-dt-fixes-for-v5.17):
-Fixes:
-* Cleanups for flash nodes across K3.
-* gic-v3 backward compatible registers
-* j721s2 interrupt parent fixup for wakeup GPIO
-
-New:
-* AM62 SoC and AM62-SK board
-* wdt support for am64
-
-----------------------------------------------------------------
-Aswath Govindraju (2):
-      arm64: dts: ti: k3-j721s2: Move aliases to board dts
-      arm64: dts: ti: k3-j721s2-common-proc-board: Alias console uart to se=
-rial2
-
-Christian Gmeiner (1):
-      arm64: dts: ti: k3-am64-main: Add RTI watchdog nodes
-
-Hari Nagalla (1):
-      arm64: dts: ti: k3-am64: Add ESM0 to device memory map
-
-Keerthy (1):
-      arm64: dts: ti: k3-j721s2-mcu-wakeup: Fix the interrupt-parent for wk=
-up_gpioX instances
-
-Matthias Schiffer (1):
-      arm64: dts: ti: k3-am65*: Remove #address-cells/#size-cells from flas=
-h nodes
-
-Nishanth Menon (7):
-      arm64: dts: ti: k3-am65: Fix gic-v3 compatible regs
-      arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
-      arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
-      arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
-      arm64: dts: ti: k3-j721s2: Fix gic-v3 compatible regs
-      dt-bindings: arm: ti: Add bindings for AM625 SoC
-      arm64: dts: ti: Add support for AM62-SK
-
-Pratyush Yadav (2):
-      arm64: dts: ti: k3-*: Fix whitespace around flash@0 nodes
-      arm64: dts: ti: k3-*: Drop address and size cells from flash nodes
-
-Suman Anna (1):
-      dt-bindings: pinctrl: k3: Introduce pinmux definitions for AM62
-
-Vignesh Raghavendra (1):
-      arm64: dts: ti: Introduce base support for AM62x SoC
-
- Documentation/devicetree/bindings/arm/ti/k3.yaml   |   6 +
- arch/arm64/boot/dts/ti/Makefile                    |   2 +
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi           | 267 +++++++++++++++++=
-++++
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi            |  36 +++
- arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi         |  41 ++++
- arch/arm64/boot/dts/ti/k3-am62.dtsi                | 105 ++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts             | 206 ++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625.dtsi               | 103 ++++++++
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi           |  23 +-
- arch/arm64/boot/dts/ti/k3-am64.dtsi                |   4 +
- arch/arm64/boot/dts/ti/k3-am642-evm.dts            |   4 +-
- arch/arm64/boot/dts/ti/k3-am642-sk.dts             |   4 +-
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi |   2 -
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi           |   5 +-
- arch/arm64/boot/dts/ti/k3-am65.dtsi                |   1 +
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     |   8 +-
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          |   5 +-
- arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi        |   4 +-
- arch/arm64/boot/dts/ti/k3-j7200.dtsi               |   1 +
- .../boot/dts/ti/k3-j721e-common-proc-board.dts     |   4 +-
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi          |   5 +-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts             |   2 -
- arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi        |   4 +-
- arch/arm64/boot/dts/ti/k3-j721e.dtsi               |   1 +
- .../boot/dts/ti/k3-j721s2-common-proc-board.dts    |  14 +-
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi         |   5 +-
- arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi   |   4 +-
- arch/arm64/boot/dts/ti/k3-j721s2.dtsi              |  23 +-
- include/dt-bindings/pinctrl/k3.h                   |   3 +
- 29 files changed, 836 insertions(+), 56 deletions(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62-main.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625.dtsi
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
-49D 1736 249D
-
---sqodd6rh2ja7ngpy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmIcuukACgkQ3bWEnRc2
-JJ1PRw//bpjBL12JTn1cJIwm0LeTavnY6/M2uev/hZv4mNCw1pumX2ZQhkig/+cC
-BQDjBXfOpqXDsDTEvXUbmH4S6l1KtSXVz/tcbGP9vGls94CU59ypjjuWvmIrjZvL
-31hVZ9rrzKOkq28w+uMpKQVae1hLi4oLg954clmCR6UaGfcJLGawzHmPiya3kwd1
-7h7It4QiRY/n868mv44TqHLjsWbgYjphfdy1Cn31psIpfLam5hQds++eSfxorS0b
-CdAhBQ5IqsumZ/DyzKMypKBVx+oqK43Novx2qKctCLYq+wezStcdS6BVIhPisAVp
-taFj12vItroEd7H/Jv+y+9SPE7aTTRkBh/Rm4gHGdYUs5SFzgU31UpUHpT5LpHzg
-asJXOgI5A+RUSwrWIYqWVHD35JQCBYtOGPq7a8HXpcXKy0pCYghy+WAWCv7Xxbcn
-ESJingNNYyrbvpLf5Qw8AOAwydvW6vqDGYr/rb5k7aiU6Uzm681DtaxFiciyiMDf
-YUR7OyGqt/05nSiO1ScLSY9Z3aElUx1KOpynAKW0x2g4J44UTgWSVzHjtONRtprv
-xuX/xSgRqLld0ZIliuLJaWFdGn/XebefyIhzPPnjUm2nHT0Cd+nC0uWOHkomyn0k
-1kTYhKi1LdiJ2Mb9L2lc+58rWWTnPlY6LSdPB5jv4NcuwrjVbxc=
-=VuNv
------END PGP SIGNATURE-----
-
---sqodd6rh2ja7ngpy--
+        Arnd
