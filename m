@@ -1,117 +1,94 @@
-Return-Path: <SRS0=dTNu=TL=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=ZFoj=TL=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90DA1C433F5
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 16:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D1A9C433EF
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 16:55:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6C0A1C340F1; Mon, 28 Feb 2022 16:43:56 +0000 (UTC)
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E88C8C340F0; Mon, 28 Feb 2022 16:55:41 +0000 (UTC)
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 95FA6C340E7
-	for <soc@kernel.org>; Mon, 28 Feb 2022 16:43:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 95FA6C340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 34E5C3F32C
-	for <soc@kernel.org>; Mon, 28 Feb 2022 16:43:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1646066632;
-	bh=PoF7elbTeQtgqDFeGhaJqHwYRICrtlMa3jaB+3i7AgQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version;
-	b=Z4TYlNswxNMUHzoYBQIyaPxe0cT1AFXysV2Nbhnsp8bp1aeuvYjSDsH5edclN2YdL
-	 gpc3zW7zaUQz7MnOR8l5Pq3tUdD5lgDp4utg5Npiv+vqVUYKjw/aOaoO2ieZWWKXtQ
-	 wLCtnjdE0fKLkDqDvzZ3jt0ENC7wiBSO65ClOL/GAx9FHdJuFF0zVrt35F1F/ViEKT
-	 UCjggPejfpJQ4F55/n4H+ovpT5FTdkZRSbeGeRmDXnsuK9hkZcOwogqXrG1kAYHOux
-	 cRYuFbAyI64u5+jOg5q083c82ezpurglaQABtHTTq5lQnS+MLayHTPCz4X2XirslcM
-	 PlQ+87bC/6vqg==
-Received: by mail-ej1-f69.google.com with SMTP id la22-20020a170907781600b006a7884de505so5456878ejc.7
-        for <soc@kernel.org>; Mon, 28 Feb 2022 08:43:52 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5144BC340E7;
+	Mon, 28 Feb 2022 16:55:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5144BC340E7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d187so11491449pfa.10;
+        Mon, 28 Feb 2022 08:55:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wTcIV7uaKIKWzX6j4s2mtdRtrMtzpU55KzEcP8UT62w=;
+        b=UhsOWbUgqwKm+SkrX2sjQ3YmQlQR3Pqibav1WS9RRhE/bsQZHK4U0pjP0eUp25bYwp
+         5MsaVZV7QXJwCUnBqRxEFnxYYxBZA79VCMXNABhF8v0Z8hgcwqFPkuusnQwHPuiTYEZc
+         faSIo0a5+w4udTHtL849viVKqzahjr+02Ty19xkIjMi2V2Mmul2TI7eE8jHA2JWfhFZE
+         8irTLJj9t+hezOLwKMd9ZDsYE7xcM+6QQFP2oEgTCQB9+DzgYjYsR5sfjkpECO/dBjM9
+         B0W28ItAoX7J1eBrfb5MORF5SASeNLerXbnIfP/3zmW1EeMCz109ChOg2sfqunFa/MyI
+         EHCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PoF7elbTeQtgqDFeGhaJqHwYRICrtlMa3jaB+3i7AgQ=;
-        b=q04Hv+fuGyUVBLOJXV9EnwkUZe8PQBJcloZdEjVfgCfsQL+iEi5IMJqpiQbitWuEug
-         JBnOPqLcxP+kci+PmhsEFaoITtviRRx3E0m1zga3wi+zXC4uUeSMsF8mz07dtcbe0VkI
-         zERmcvI1xfCECZstKrB8E+i3iTIs75QfQ0A7XoA61ZwQk6ngJIuPp+YzR28GYafo6aKH
-         Nc+YRuaY5TG/kQu6piulVOl7qUC+Zr44jGNKWTkxNwfaiOEjzwQzAcKlgWlkJNwG2phA
-         KtmwOuEyUKnfKfn9CQBWXe+m/MjKZPpTh/z7S5jW3wgA+G9heaEJykaod0DAkVCWyBoJ
-         WoOQ==
-X-Gm-Message-State: AOAM532vixmjWq3bqtu7WgGw10rOKBVlcW0dK7aMqsMT43qqkLgS/bgv
-	5nqXasIbR70vI0mMSldBFCYMEbrmlZucgQQtk7Fy4vI4zMJRhSe+U3wMV/dOnj8TdW5X5kwQz3b
-	l+FKswVo4LxqYlEFROHYHrV4=
-X-Received: by 2002:a17:906:c04d:b0:6b9:252:c51c with SMTP id bm13-20020a170906c04d00b006b90252c51cmr15364168ejb.470.1646066631924;
-        Mon, 28 Feb 2022 08:43:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwOi/bdof4uy0KEGbVp5rydze7BHQMHnskiHw6541xXjs05x74RpvOkmh39MSRPcmAqLBZlgA==
-X-Received: by 2002:a17:906:c04d:b0:6b9:252:c51c with SMTP id bm13-20020a170906c04d00b006b90252c51cmr15364150ejb.470.1646066631726;
-        Mon, 28 Feb 2022 08:43:51 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id p18-20020a17090635d200b006cdeef01456sm4498443ejb.163.2022.02.28.08.43.50
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wTcIV7uaKIKWzX6j4s2mtdRtrMtzpU55KzEcP8UT62w=;
+        b=IBHTHBUtZsPVnP6SbUjyO8jc+YdJ/V67TSllnzEpS3lYUq5z/ZF5Ag5KTXstb/htYH
+         RG8FuHiVXomdeeznKky28+/CDizOE2Wcte3ssikwpTyX/s/OBFPyqiSxiiyERCXERlFx
+         DLXHb/DlfcYEAq5VmFOeadqh463/x12ZY9VbXN6ALsk6H11vSNaLSIo6p/nvf233HGLb
+         qNONpuYtuVdrcNoORCc+ur6DJl059ZF0VpomOfl4vt0+vm3lrqSte0LNe0lIY9AFbkiq
+         kxxyggFMp0Wzz1pJpDZw+4QlpyU6GbwCU2l36dWo9GpgjPMW90ip9irY6NqLb7rdlDcZ
+         Okhw==
+X-Gm-Message-State: AOAM531WsfH4RYalfjSvjq58f18c87nWP1vxGSxOuEWo+jKJbsS1fpFm
+	I/f6PNrNenyvTmagfT+L9Mx2H7CGwwY=
+X-Google-Smtp-Source: ABdhPJzoDlRtpyPlAiHa2oy/0/L7Qp4fLrRv99UBFi01AjX2o9nJtf6Vf5F4WPUKzdg+E2C6Or8ILQ==
+X-Received: by 2002:a05:6a02:193:b0:375:65a5:2fcd with SMTP id bj19-20020a056a02019300b0037565a52fcdmr17857833pgb.288.1646067340456;
+        Mon, 28 Feb 2022 08:55:40 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm17915077pju.44.2022.02.28.08.55.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 08:43:50 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        Mon, 28 Feb 2022 08:55:39 -0800 (PST)
+From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 3/3] memory: tegra drivers for v5.18
-Date: Mon, 28 Feb 2022 17:43:13 +0100
-Message-Id: <20220228164313.52931-3-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220228164313.52931-1-krzysztof.kozlowski@canonical.com>
-References: <20220228164313.52931-1-krzysztof.kozlowski@canonical.com>
+To: soc@kernel.org
+Cc: Maxime Ripard <maxime@cerno.tech>,
+	Stefan Wahren <stefan.wahren@i2se.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/1 RESEND] Broadcom devicetree fixes for 5.17
+Date: Mon, 28 Feb 2022 08:55:37 -0800
+Message-Id: <20220228165537.1950863-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
 
-Tegra specific branch.
-
-Best regards,
-Krzysztof
-
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-tegra-5.18
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.17/devicetree-fixes
 
-for you to fetch changes up to 0123af535b9c090cf05dcf500f9303bae5849691:
+for you to fetch changes up to 515415d316168c6521d74ea8280287e28d7303e6:
 
-  memory: tegra: Constify struct thermal_cooling_device_ops (2022-01-27 10:41:54 +0100)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.18 - Tegra SoC
-
-1. Correct Tegra20 EMC memory device mask.
-2. Minor improvements.
+  ARM: boot: dts: bcm2711: Fix HVS register range (2022-02-23 11:03:29 -0800)
 
 ----------------------------------------------------------------
-Dmitry Osipenko (2):
-      memory: tegra30-emc: Print additional memory info
-      memory: tegra20-emc: Correct memory device mask
+This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
+5.17, please pull the following:
 
-Rikard Falkeborn (1):
-      memory: tegra: Constify struct thermal_cooling_device_ops
+- Maxime fixes the HVS (display) register range for the BCM2711
+  (Raspberry Pi 4) SoC
 
- drivers/memory/tegra/Kconfig             |   1 +
- drivers/memory/tegra/tegra20-emc.c       |   2 +-
- drivers/memory/tegra/tegra210-emc-core.c |   2 +-
- drivers/memory/tegra/tegra30-emc.c       | 131 ++++++++++++++++++++++++++++---
- 4 files changed, 124 insertions(+), 12 deletions(-)
+----------------------------------------------------------------
+Maxime Ripard (1):
+      ARM: boot: dts: bcm2711: Fix HVS register range
+
+ arch/arm/boot/dts/bcm2711.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
