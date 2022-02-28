@@ -1,94 +1,54 @@
-Return-Path: <SRS0=ZFoj=TL=gmail.com=f.fainelli@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D1A9C433EF
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 16:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38463C433F5
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 20:53:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E88C8C340F0; Mon, 28 Feb 2022 16:55:41 +0000 (UTC)
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5144BC340E7;
-	Mon, 28 Feb 2022 16:55:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5144BC340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d187so11491449pfa.10;
-        Mon, 28 Feb 2022 08:55:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wTcIV7uaKIKWzX6j4s2mtdRtrMtzpU55KzEcP8UT62w=;
-        b=UhsOWbUgqwKm+SkrX2sjQ3YmQlQR3Pqibav1WS9RRhE/bsQZHK4U0pjP0eUp25bYwp
-         5MsaVZV7QXJwCUnBqRxEFnxYYxBZA79VCMXNABhF8v0Z8hgcwqFPkuusnQwHPuiTYEZc
-         faSIo0a5+w4udTHtL849viVKqzahjr+02Ty19xkIjMi2V2Mmul2TI7eE8jHA2JWfhFZE
-         8irTLJj9t+hezOLwKMd9ZDsYE7xcM+6QQFP2oEgTCQB9+DzgYjYsR5sfjkpECO/dBjM9
-         B0W28ItAoX7J1eBrfb5MORF5SASeNLerXbnIfP/3zmW1EeMCz109ChOg2sfqunFa/MyI
-         EHCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wTcIV7uaKIKWzX6j4s2mtdRtrMtzpU55KzEcP8UT62w=;
-        b=IBHTHBUtZsPVnP6SbUjyO8jc+YdJ/V67TSllnzEpS3lYUq5z/ZF5Ag5KTXstb/htYH
-         RG8FuHiVXomdeeznKky28+/CDizOE2Wcte3ssikwpTyX/s/OBFPyqiSxiiyERCXERlFx
-         DLXHb/DlfcYEAq5VmFOeadqh463/x12ZY9VbXN6ALsk6H11vSNaLSIo6p/nvf233HGLb
-         qNONpuYtuVdrcNoORCc+ur6DJl059ZF0VpomOfl4vt0+vm3lrqSte0LNe0lIY9AFbkiq
-         kxxyggFMp0Wzz1pJpDZw+4QlpyU6GbwCU2l36dWo9GpgjPMW90ip9irY6NqLb7rdlDcZ
-         Okhw==
-X-Gm-Message-State: AOAM531WsfH4RYalfjSvjq58f18c87nWP1vxGSxOuEWo+jKJbsS1fpFm
-	I/f6PNrNenyvTmagfT+L9Mx2H7CGwwY=
-X-Google-Smtp-Source: ABdhPJzoDlRtpyPlAiHa2oy/0/L7Qp4fLrRv99UBFi01AjX2o9nJtf6Vf5F4WPUKzdg+E2C6Or8ILQ==
-X-Received: by 2002:a05:6a02:193:b0:375:65a5:2fcd with SMTP id bj19-20020a056a02019300b0037565a52fcdmr17857833pgb.288.1646067340456;
-        Mon, 28 Feb 2022 08:55:40 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090acd0500b001b9c05b075dsm17915077pju.44.2022.02.28.08.55.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Feb 2022 08:55:39 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+	id F3530C340F2; Mon, 28 Feb 2022 20:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC523C340F1;
+	Mon, 28 Feb 2022 20:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1646081620;
+	bh=c2wRbqBmRaIgKhwGHTND50dxR9g6Vu3+NGpRojMAAbU=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=M0NdHdH+Jw/Tt7UfmlnC7pl/xpyXL/gqPBoDBwCWh6isVZnmr159F0BJ4zuxbAhBh
+	 /L7q68Mgv22+QNztP1mD4mvrrTUF9SHa2DAVuLAYfymYU3vsQ2APMrt3kcm2LIXZfI
+	 OlX6jUQGBK1T679/qKMagVYBN0jBjLIEe3ufr00vcn0lNBwasZtWLxvRAWX+QvxbDV
+	 gfJlcRj4nR3w88A7S9rrBaGrl46WGwyNBWEK5ZGVwLxfW3SaPYzZGOIndrriuW7D/9
+	 yq3v+jSeJnauT+h75Bx1rbMGWwnCbX/ZE0bVLjpPlpkn+RLBlgkPevWVWM2PmW+SdL
+	 pIn7qLN5H2bwQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C0471E6D4BB;
+	Mon, 28 Feb 2022 20:53:40 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for v5.17, part 2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAK8P3a2JGXOYJWWMga0bYbWA=x1yb5EpBUC4v+onpj0U=4e2pQ@mail.gmail.com>
+References: <CAK8P3a2JGXOYJWWMga0bYbWA=x1yb5EpBUC4v+onpj0U=4e2pQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <CAK8P3a2JGXOYJWWMga0bYbWA=x1yb5EpBUC4v+onpj0U=4e2pQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc-fixes-5.17-2
+X-PR-Tracked-Commit-Id: c253bf70c657b407286a6139d85c42fb41f3fcfd
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 719fce7539cd3e186598e2aed36325fe892150cf
+Message-Id: <164608162077.1515.11038062287944624532.pr-tracker-bot@kernel.org>
+Date: Mon, 28 Feb 2022 20:53:40 +0000
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Maxime Ripard <maxime@cerno.tech>,
-	Stefan Wahren <stefan.wahren@i2se.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/1 RESEND] Broadcom devicetree fixes for 5.17
-Date: Mon, 28 Feb 2022 08:55:37 -0800
-Message-Id: <20220228165537.1950863-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 
-The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
+The pull request you sent on Mon, 28 Feb 2022 17:40:03 +0100:
 
-  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
+> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc-fixes-5.17-2
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/719fce7539cd3e186598e2aed36325fe892150cf
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.17/devicetree-fixes
+Thank you!
 
-for you to fetch changes up to 515415d316168c6521d74ea8280287e28d7303e6:
-
-  ARM: boot: dts: bcm2711: Fix HVS register range (2022-02-23 11:03:29 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree fixes for
-5.17, please pull the following:
-
-- Maxime fixes the HVS (display) register range for the BCM2711
-  (Raspberry Pi 4) SoC
-
-----------------------------------------------------------------
-Maxime Ripard (1):
-      ARM: boot: dts: bcm2711: Fix HVS register range
-
- arch/arm/boot/dts/bcm2711.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
