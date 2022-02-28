@@ -1,95 +1,246 @@
-Return-Path: <SRS0=BPsZ=TL=baylibre.com=narmstrong@kernel.org>
+Return-Path: <SRS0=yGDe=TL=ew.tq-group.com=matthias.schiffer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 456ACC433F5
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 09:00:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4510EC433EF
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 10:30:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2D1FDC340E7; Mon, 28 Feb 2022 09:00:30 +0000 (UTC)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 07B15C340EE; Mon, 28 Feb 2022 10:30:59 +0000 (UTC)
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4B9CBC340F2
-	for <soc@kernel.org>; Mon, 28 Feb 2022 09:00:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4B9CBC340F2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f50.google.com with SMTP id d28so14250660wra.4
-        for <soc@kernel.org>; Mon, 28 Feb 2022 01:00:27 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id C8808C340E7;
+	Mon, 28 Feb 2022 10:30:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8808C340E7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:organization:content-transfer-encoding;
-        bh=H8bizYJqwkzoCHttqot6/S0biAEi5EvteUjQXBDh6Lg=;
-        b=a1wRgWkit2Hgi/TlfA+U8FW05MLaahdsaAVn3imJj7U3TfbN9ZWpzAN6+/pbiyClHk
-         vsodzq2rThRbmEy1dv7jM8B3WQ+/4xLRiBr5GdHmYrsMBjknFjw3q+K+w4HGWIaGNzbD
-         1mqQSk6VWkyTVwwWYy4EPgytB92cWIlCTSGkk678OOON/Gq8npro52MZqqTcE1EAEeRC
-         tq18sI6I/+WMDTxBg6hV4qymxaJO2aq8WH6IPQJFdBZLMfaWqgfWugbst8AQ8e+ZoPMH
-         kwNonhQTeumxck42lKfP4Ha5eOJ9zKWrk/wFxxwaIHHDFVB+bcmb9XCcrFJRdfUpCaiX
-         nDgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:organization
-         :content-transfer-encoding;
-        bh=H8bizYJqwkzoCHttqot6/S0biAEi5EvteUjQXBDh6Lg=;
-        b=CY74g+YGmodUyj2/RIma5J2VzHkrmkpJj2yNvALGGdW9n9DLGuoVaAss8P76w008c8
-         JYKgs/j726uVEs8csoqgk2Wlo6LP/mKCalp3ibfSfaJZrqM9gd2blBQWLsrHM/iUERXL
-         jDqW0XshaA2sKnzMdLg6Pwp2YUWdsi5SZMJS698yTRLyoyyGZneqAIzYvPB5hDEW+tW8
-         f9jZiHHGjhZ7OcLC/7b5y38m44fNKnSc1k7zPfr54AI5ffJM3XeHKcM1g7C1Iza5aQsA
-         gHYUattUNB7JTw2uYCUepkB5Y6Fc/qcWKf4o2Eh5IkRuGB0V9YNLq62I1Xj+jbj8eE7v
-         F5kw==
-X-Gm-Message-State: AOAM530vXaZ/aGVbXrd+r+uYd54ECZ8zEXb37+98x3LermoEMyz8NDgA
-	pRKkaRWjZTYIHK/nfLUva/1kc4OtgjJzfUw9
-X-Google-Smtp-Source: ABdhPJwU8NEjIMff5919wlS+clhon3+HVP5ZyPM44A0GhFvTUZVS7uEb34T1bi70ESGYlMPWwb2S9g==
-X-Received: by 2002:a05:6000:1565:b0:1ea:6673:c0b5 with SMTP id 5-20020a056000156500b001ea6673c0b5mr14629400wrz.469.1646038825203;
-        Mon, 28 Feb 2022 01:00:25 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:6431:1dc7:b58f:6282? ([2001:861:44c0:66c0:6431:1dc7:b58f:6282])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600c1d0200b0037cdeb03977sm11700549wms.18.2022.02.28.01.00.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 01:00:24 -0800 (PST)
-Message-ID: <530fd72c-e28a-4d5e-cb8d-8b3fbc1df89a@baylibre.com>
-Date: Mon, 28 Feb 2022 10:00:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PULL] oxnas DT for 5.18
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646044256; x=1677580256;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=b+78FRAJXZYzl+Y9IyY17fr3tqSyDnu1Vfd2nwZsqI4=;
+  b=ASR26DHGGvo89ZtklYNNjVyflhXpby+wRMvhlvd32TBeNV+OWDIEbmrH
+   TOoxGoRkLbb84LJstWn/v26rRVmG1zngf4HO78YaB89j77RejizRtZivp
+   i79/n31e1p+Y/GXtgZO/i0td9cnhQFx8Hk2qZhoIRZipABMO76CashFJy
+   wfplCRjbTdhNsP2mMBo17sNFiCqIIVFx262o3eW+hgavPypqol761s36o
+   EW19iDtqGktZXp12AR0DDCifRPkeAor+nL+XPS7z7cIooDNIPPpBFvpWA
+   dSPr1AAGRZPzl0Qln1eGwOmzwJJim3Y+C8ogi3jAmem8vq58a2/1EseFT
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643670000"; 
+   d="scan'208";a="22347755"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 28 Feb 2022 11:30:52 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 28 Feb 2022 11:30:53 +0100
+X-PGP-Universal: processed;
+	by tq-pgp-pr1.tq-net.de on Mon, 28 Feb 2022 11:30:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1646044253; x=1677580253;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=b+78FRAJXZYzl+Y9IyY17fr3tqSyDnu1Vfd2nwZsqI4=;
+  b=drl60c3M2hZ1JsyApj7b/J3NNsuyJx2l7VmECVLQS/Tf/QjBKp2M9Ifw
+   /i/OIfQfR9ADcRPleNljFyW9yUWvnoptEHSGSSVOIjZum9/e3RB4+VYVX
+   ePlD92B2152XpAoBPYlrecr4XnywkkqK984/I3seSZaukFrIlWm1XG27I
+   2Tpkxsq1GSAUaLbiSqU6YDc2q1EOQ2YF/Unsu8Y3u/N9RceqITRQxJuIz
+   lklF1nnsCeMwiE1kuj51yntelt7kh1BeIuvEE/VPqeDRvfA/GiHSKxk3q
+   L+snH9cH/3oVI5iiGXCZka975PPARx9b+41uiT0wbXLa1ge2QRxq8goNo
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,142,1643670000"; 
+   d="scan'208";a="22347754"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 28 Feb 2022 11:30:52 +0100
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPA id A7F5E280074;
+	Mon, 28 Feb 2022 11:30:52 +0100 (CET)
+Message-ID: <1356e93cd5b101c3d896e35250c66959ed631544.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
+ peripherals by default
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-oxnas@groups.io, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US
-Organization: Baylibre
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof
+ Johansson <olof@lixom.net>, soc@kernel.org, Vignesh Raghavendra
+ <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
+  linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Date: Mon, 28 Feb 2022 11:30:50 +0100
+In-Reply-To: <YgJZbdOlazrde7O/@atomide.com>
+References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
+	 <20220204143108.653qk2ihnlhsr5aa@prior> <YgDCLaBHA3DDQAUd@atomide.com>
+	 <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
+	 <YgEBml9HvFzSl289@atomide.com>
+	 <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
+	 <YgJZbdOlazrde7O/@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On Tue, 2022-02-08 at 13:52 +0200, Tony Lindgren wrote:
+> * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220208
+> 10:53]:
+> > On Mon, 2022-02-07 at 13:25 +0200, Tony Lindgren wrote:
+> > > * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220207
+> > > 08:45]:
+> > > > Generally I think that it's a bootloader's responsiblity to
+> > > > disable
+> > > > unneeded devices - the kernel may not even have a driver for
+> > > > some
+> > > > peripherals, leading to the same behaviour as a "disabled"
+> > > > status.
+> > > > For
+> > > > this reason I believe that it should always be okay to set
+> > > > unneeded
+> > > > devices to "disabled", and it should be considered a safe
+> > > > default.
+> > > 
+> > > Not possible, think kexec for example :) How would the previous
+> > > kernel
+> > > even know what to disable if Linux has no idea about the devices?
+> > 
+> > Well, optimally, bootloader and all kernels would agree on the
+> > devices
+> > that are actually available, but I get your point.
+> > 
+> > > If there are issues you're seeing, it's likely a bug in some of
+> > > the
+> > > device drivers for not checking for the necessary resources like
+> > > pinctrl for i2c lines.
+> > 
+> > I don't think it's common for individual drivers to care about
+> > pinctrl
+> > unless switching between different pin settings is required at
+> > runtime.
+> > Many drivers can be used on different hardware, some of which may
+> > require pinmuxing, while others don't.
+> 
+> Yeah that's true, some configurations only do pin muxing in the
+> bootloader. So pins are not a good criteria for devicetree status
+> enabled
+> for when the device is operational.
+> 
+> Probably a better criteria for devicetree "operational" status is the
+> device can be clocked and configured or idled. Some devices like GPUs
+> can render to memory with no external pin configuration for example.
+> 
 
-Please pull this single change enabling ethernet on the OX810SE based board.
+I don't think any properties currently exist that could or should be
+used to decide whether a device is operational. Clocks etc. are usually
+internal to the SoC and thus already set in the SoC DTSI. Pins and
+power supplies may be specific to a mainboard, but can also be
+optional. Whether an I2C bus can be operational may solely depend on
+whether external pullups are connected to the pins or not.
 
-Neil
+The idea of an "incomplete" status like you mention below sounds better
+to me. I also thought about adding something like a "probe_disabled()"
+that is called instead of probe() for "disabled" devices, but I assume
+that would cause a boot time penalty on systems that have many
+"disabled" devices and don't actually need this...
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+> Following Linux running on a PC analogy.. If ACPI has some device
+> that
+> causes driver warnings on Linux boot, do we patch the ACPI table and
+> pretend the device does not exist? Or do we patch the device driver
+> to
+> deal with the random buggy bootloader state for the device? :)
+> 
+> > Also, what is the expected behavior of a driver that is probed for
+> > an
+> > unusable device? Wouldn't this require some as-of-yet nonexisting
+> > status between "okay" and "disabled" that conveys something like
+> > "probe
+> > this device, initialize (and disable) PM, but don't register
+> > anything",
+> > so no unusable devices become visible to userspace (and possibly
+> > other
+> > kernel drivers)?
+> 
+> I did some experimental patches several years ago to add devicetree
+> status for incomplete, but eventually came to the conclusion that it
+> was not really needed. Feel free to revisit that if you have the
+> spare cycles :)
+> 
+> Having the drivers check for the resources like clocks and then just
+> idle the device after probe solved the issues I was seeing for
+> warnings
+> and kexec. In some cases the device may need to be reset or at least
+> properly reconfigured in the probe as the state can be unknown from
+> the
+> bootloader. That's about all there is to it. Sure you could save some
+> memory with less instances for some devices, so maybe the status =
+> "incomplete" could be used to do the trick for that.
 
-are available in the Git repository at:
+I don't really care about memory usage. What I do care about is that
+incorrect userspace usage doesn't cause ugly kernel warnings (for
+example timeouts for i2cdetect on unmuxed bus) when we can avoid it,
+because such issues always lead to support requests.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/narmstrong/linux-oxnas.git tags/oxnas-arm-soc-dt-for-5.18
+Not being able to hide non-operational devices from userspace feels
+like a regression from older hardware.
 
-for you to fetch changes up to b88ffa66d530ba01ec64b1f5eeb74f8b8ce61d7f:
+> 
+> > > > I'm not sure what the consensus on these issues is. I'm more
+> > > > familiar
+> > > > with NXP's i.MX and Layerscape SoCs, where it's common to have
+> > > > all
+> > > > muxable peripherals set to "disabled" in the base DTSI, and a
+> > > > quick
+> > > > grep through a few dts directories gives me the impression that
+> > > > this is
+> > > > the case for most other vendors as well.
+> > > 
+> > > This approach only works for SoCs that don't need the kernel to
+> > > idle
+> > > devices for runtime PM.
+> > 
+> > I'm pretty sure that most modern SoCs I looked at have runtime PM,
+> > and
+> > it is simply expected that unusable devices are never enabled in
+> > the
+> > first place, so there is no need for the kernel to know about them.
+> 
+> Yeah well that assumption is the difference in getting runtime PM to
+> work in a sane way across multiple SoCs and devices :)
+> 
+> Devices tagged with status = "disabled" are completely ignored by the
+> kernel. Interconnect and bus related code may not know the details on
+> how to reset and idle the child devices. Relying on firmware to do
+> the
+> reset and idle of unused devices may be too generic, can be buggy,
+> and
+> probably depends on the firmware revision.
 
-   ARM: dts: ox810se: Add Ethernet support (2022-01-25 18:03:04 +0100)
+Well, so far it seems like the `status = "disabled"` is just being
+pushed from the SoC DTSIs to the board DTSs on TI hardware. For the
+AM64 platform (which is fairly similar to the AM65), both mainboards
+that currently exist disable unused UARTs, I2C/SPI busses, PWMs, ...
+(Some of these might be disabled to make them usable from the R5/M4
+cores, but I don't think that the case for all of them - "reserved"
+would be more appropriate than "disabled" in these cases anyways)
 
-----------------------------------------------------------------
-- Add Ethernet node for OX810SE base board
+AFAICT, disabling non-operatational devices in the board DTS instead of
+the SoC DTSI is worse than the alternatives in every way:
 
-----------------------------------------------------------------
-Neil Armstrong (1):
-       ARM: dts: ox810se: Add Ethernet support
+- Verbose board DTS: You have to think about all the devices that exist
+in the SoC, not just the ones you want to use
+- Adding new nodes without `status = "disabled" to SoC DTSI can
+potentially cause issues on dependent boards
+- It doesn't solve the issues that not having `status = "disabled"` in
+the DTSI is supposed to solve
 
-  arch/arm/boot/dts/ox810se-wd-mbwe.dts |  4 ++++
-  arch/arm/boot/dts/ox810se.dtsi        | 18 ++++++++++++++++++
-  2 files changed, 22 insertions(+)
+Regards,
+Matthias
+
+
+> 
+> Regards,
+> 
+> Tony
+
