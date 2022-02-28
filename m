@@ -1,246 +1,141 @@
-Return-Path: <SRS0=yGDe=TL=ew.tq-group.com=matthias.schiffer@kernel.org>
+Return-Path: <SRS0=UCcl=TL=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4510EC433EF
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 10:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 480DDC4332F
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 12:07:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 07B15C340EE; Mon, 28 Feb 2022 10:30:59 +0000 (UTC)
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	id 06F98C340F3; Mon, 28 Feb 2022 12:07:09 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C8808C340E7;
-	Mon, 28 Feb 2022 10:30:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8808C340E7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646044256; x=1677580256;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=b+78FRAJXZYzl+Y9IyY17fr3tqSyDnu1Vfd2nwZsqI4=;
-  b=ASR26DHGGvo89ZtklYNNjVyflhXpby+wRMvhlvd32TBeNV+OWDIEbmrH
-   TOoxGoRkLbb84LJstWn/v26rRVmG1zngf4HO78YaB89j77RejizRtZivp
-   i79/n31e1p+Y/GXtgZO/i0td9cnhQFx8Hk2qZhoIRZipABMO76CashFJy
-   wfplCRjbTdhNsP2mMBo17sNFiCqIIVFx262o3eW+hgavPypqol761s36o
-   EW19iDtqGktZXp12AR0DDCifRPkeAor+nL+XPS7z7cIooDNIPPpBFvpWA
-   dSPr1AAGRZPzl0Qln1eGwOmzwJJim3Y+C8ogi3jAmem8vq58a2/1EseFT
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643670000"; 
-   d="scan'208";a="22347755"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 28 Feb 2022 11:30:52 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 28 Feb 2022 11:30:53 +0100
-X-PGP-Universal: processed;
-	by tq-pgp-pr1.tq-net.de on Mon, 28 Feb 2022 11:30:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1646044253; x=1677580253;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=b+78FRAJXZYzl+Y9IyY17fr3tqSyDnu1Vfd2nwZsqI4=;
-  b=drl60c3M2hZ1JsyApj7b/J3NNsuyJx2l7VmECVLQS/Tf/QjBKp2M9Ifw
-   /i/OIfQfR9ADcRPleNljFyW9yUWvnoptEHSGSSVOIjZum9/e3RB4+VYVX
-   ePlD92B2152XpAoBPYlrecr4XnywkkqK984/I3seSZaukFrIlWm1XG27I
-   2Tpkxsq1GSAUaLbiSqU6YDc2q1EOQ2YF/Unsu8Y3u/N9RceqITRQxJuIz
-   lklF1nnsCeMwiE1kuj51yntelt7kh1BeIuvEE/VPqeDRvfA/GiHSKxk3q
-   L+snH9cH/3oVI5iiGXCZka975PPARx9b+41uiT0wbXLa1ge2QRxq8goNo
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643670000"; 
-   d="scan'208";a="22347754"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 28 Feb 2022 11:30:52 +0100
-Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPA id A7F5E280074;
-	Mon, 28 Feb 2022 11:30:52 +0100 (CET)
-Message-ID: <1356e93cd5b101c3d896e35250c66959ed631544.camel@ew.tq-group.com>
-Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
- peripherals by default
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Tony Lindgren <tony@atomide.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3E838C340E7;
+	Mon, 28 Feb 2022 12:07:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E838C340E7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21SC6uwu088786;
+	Mon, 28 Feb 2022 06:06:56 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1646050016;
+	bh=xsy/5NJoGwHmtrLksi7cIa7ZqU2/SzM/kUJsmFAq4nQ=;
+	h=Date:From:To:CC:Subject;
+	b=PYX5Jp4f0FypET08TuLZH0RAstflL5djO9gW1FrvBaJN5k9zt+Qe+7zm5HLUBrm5s
+	 tpjITpYJ8/s48QXXKbNfsI2lGqFVTPRGwG92U2+r8ydOEPIC2VOIjwa6OGm1qE/Izb
+	 6+WvArZqpQnnYEzQXVbTAcWdPsuaBaws0l3l2IRA=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21SC6u1C053355
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 28 Feb 2022 06:06:56 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 28
+ Feb 2022 06:06:55 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 28 Feb 2022 06:06:55 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21SC6txV081800;
+	Mon, 28 Feb 2022 06:06:55 -0600
+Date: Mon, 28 Feb 2022 06:06:55 -0600
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof
- Johansson <olof@lixom.net>, soc@kernel.org, Vignesh Raghavendra
- <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
-  linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Date: Mon, 28 Feb 2022 11:30:50 +0100
-In-Reply-To: <YgJZbdOlazrde7O/@atomide.com>
-References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
-	 <20220204143108.653qk2ihnlhsr5aa@prior> <YgDCLaBHA3DDQAUd@atomide.com>
-	 <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
-	 <YgEBml9HvFzSl289@atomide.com>
-	 <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
-	 <YgJZbdOlazrde7O/@atomide.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
+CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony
+ Lindgren <tony@atomide.com>, <nm@ti.com>
+Subject: [GIT PULL 1/3] TI SoC driver updates for v5.18
+Message-ID: <20220228120655.wobd72acngl2bz6k@ecard>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4udoj2hk2odz47n5"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Tue, 2022-02-08 at 13:52 +0200, Tony Lindgren wrote:
-> * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220208
-> 10:53]:
-> > On Mon, 2022-02-07 at 13:25 +0200, Tony Lindgren wrote:
-> > > * Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220207
-> > > 08:45]:
-> > > > Generally I think that it's a bootloader's responsiblity to
-> > > > disable
-> > > > unneeded devices - the kernel may not even have a driver for
-> > > > some
-> > > > peripherals, leading to the same behaviour as a "disabled"
-> > > > status.
-> > > > For
-> > > > this reason I believe that it should always be okay to set
-> > > > unneeded
-> > > > devices to "disabled", and it should be considered a safe
-> > > > default.
-> > > 
-> > > Not possible, think kexec for example :) How would the previous
-> > > kernel
-> > > even know what to disable if Linux has no idea about the devices?
-> > 
-> > Well, optimally, bootloader and all kernels would agree on the
-> > devices
-> > that are actually available, but I get your point.
-> > 
-> > > If there are issues you're seeing, it's likely a bug in some of
-> > > the
-> > > device drivers for not checking for the necessary resources like
-> > > pinctrl for i2c lines.
-> > 
-> > I don't think it's common for individual drivers to care about
-> > pinctrl
-> > unless switching between different pin settings is required at
-> > runtime.
-> > Many drivers can be used on different hardware, some of which may
-> > require pinmuxing, while others don't.
-> 
-> Yeah that's true, some configurations only do pin muxing in the
-> bootloader. So pins are not a good criteria for devicetree status
-> enabled
-> for when the device is operational.
-> 
-> Probably a better criteria for devicetree "operational" status is the
-> device can be clocked and configured or idled. Some devices like GPUs
-> can render to memory with no external pin configuration for example.
-> 
+--4udoj2hk2odz47n5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I don't think any properties currently exist that could or should be
-used to decide whether a device is operational. Clocks etc. are usually
-internal to the SoC and thus already set in the SoC DTSI. Pins and
-power supplies may be specific to a mainboard, but can also be
-optional. Whether an I2C bus can be operational may solely depend on
-whether external pullups are connected to the pins or not.
+Hi ARM SoC maintainers,
 
-The idea of an "incomplete" status like you mention below sounds better
-to me. I also thought about adding something like a "probe_disabled()"
-that is called instead of probe() for "disabled" devices, but I assume
-that would cause a boot time penalty on systems that have many
-"disabled" devices and don't actually need this...
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-> Following Linux running on a PC analogy.. If ACPI has some device
-> that
-> causes driver warnings on Linux boot, do we patch the ACPI table and
-> pretend the device does not exist? Or do we patch the device driver
-> to
-> deal with the random buggy bootloader state for the device? :)
-> 
-> > Also, what is the expected behavior of a driver that is probed for
-> > an
-> > unusable device? Wouldn't this require some as-of-yet nonexisting
-> > status between "okay" and "disabled" that conveys something like
-> > "probe
-> > this device, initialize (and disable) PM, but don't register
-> > anything",
-> > so no unusable devices become visible to userspace (and possibly
-> > other
-> > kernel drivers)?
-> 
-> I did some experimental patches several years ago to add devicetree
-> status for incomplete, but eventually came to the conclusion that it
-> was not really needed. Feel free to revisit that if you have the
-> spare cycles :)
-> 
-> Having the drivers check for the resources like clocks and then just
-> idle the device after probe solved the issues I was seeing for
-> warnings
-> and kexec. In some cases the device may need to be reset or at least
-> properly reconfigured in the probe as the state can be unknown from
-> the
-> bootloader. That's about all there is to it. Sure you could save some
-> memory with less instances for some devices, so maybe the status =
-> "incomplete" could be used to do the trick for that.
+are available in the Git repository at:
 
-I don't really care about memory usage. What I do care about is that
-incorrect userspace usage doesn't cause ugly kernel warnings (for
-example timeouts for i2cdetect on unmuxed bus) when we can avoid it,
-because such issues always lead to support requests.
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-driver=
+-soc-for-v5.18
 
-Not being able to hide non-operational devices from userspace feels
-like a regression from older hardware.
+for you to fetch changes up to c65d68e7e95a39da31d64d67d5bea6550b91fb43:
 
-> 
-> > > > I'm not sure what the consensus on these issues is. I'm more
-> > > > familiar
-> > > > with NXP's i.MX and Layerscape SoCs, where it's common to have
-> > > > all
-> > > > muxable peripherals set to "disabled" in the base DTSI, and a
-> > > > quick
-> > > > grep through a few dts directories gives me the impression that
-> > > > this is
-> > > > the case for most other vendors as well.
-> > > 
-> > > This approach only works for SoCs that don't need the kernel to
-> > > idle
-> > > devices for runtime PM.
-> > 
-> > I'm pretty sure that most modern SoCs I looked at have runtime PM,
-> > and
-> > it is simply expected that unusable devices are never enabled in
-> > the
-> > first place, so there is no need for the kernel to know about them.
-> 
-> Yeah well that assumption is the difference in getting runtime PM to
-> work in a sane way across multiple SoCs and devices :)
-> 
-> Devices tagged with status = "disabled" are completely ignored by the
-> kernel. Interconnect and bus related code may not know the details on
-> how to reset and idle the child devices. Relying on firmware to do
-> the
-> reset and idle of unused devices may be too generic, can be buggy,
-> and
-> probably depends on the firmware revision.
+  soc: ti: k3-socinfo: Add AM62x JTAG ID (2022-02-28 05:35:19 -0600)
 
-Well, so far it seems like the `status = "disabled"` is just being
-pushed from the SoC DTSIs to the board DTSs on TI hardware. For the
-AM64 platform (which is fairly similar to the AM65), both mainboards
-that currently exist disable unused UARTs, I2C/SPI busses, PWMs, ...
-(Some of these might be disabled to make them usable from the R5/M4
-cores, but I don't think that the case for all of them - "reserved"
-would be more appropriate than "disabled" in these cases anyways)
+----------------------------------------------------------------
+TI Driver updates for v5.18
 
-AFAICT, disabling non-operatational devices in the board DTS instead of
-the SoC DTSI is worse than the alternatives in every way:
+* Fixups for k3-ringacc, smartreflex, tisci, wkup_m3_ipc
+* Device detection for am62x.
 
-- Verbose board DTS: You have to think about all the devices that exist
-in the SoC, not just the ones you want to use
-- Adding new nodes without `status = "disabled" to SoC DTSI can
-potentially cause issues on dependent boards
-- It doesn't solve the issues that not having `status = "disabled"` in
-the DTSI is supposed to solve
+----------------------------------------------------------------
+Christophe JAILLET (2):
+      soc: ti: k3-ringacc: Use devm_bitmap_zalloc() when applicable
+      firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL=
+ is not defined
 
+Lad Prabhakar (1):
+      soc: ti: smartreflex: Use platform_get_irq_optional() to get the inte=
+rrupt
+
+Miaoqian Lin (1):
+      soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
+
+Peiwei Hu (1):
+      firmware: ti_sci: inproper error handling of ti_sci_probe
+
+Vignesh Raghavendra (1):
+      soc: ti: k3-socinfo: Add AM62x JTAG ID
+
+ drivers/firmware/ti_sci.c              |  2 +-
+ drivers/soc/ti/k3-ringacc.c            | 15 ++++++---------
+ drivers/soc/ti/k3-socinfo.c            |  1 +
+ drivers/soc/ti/smartreflex.c           | 13 +++++++------
+ drivers/soc/ti/wkup_m3_ipc.c           |  4 ++--
+ include/linux/soc/ti/ti_sci_protocol.h |  2 +-
+ 6 files changed, 18 insertions(+), 19 deletions(-)
+
+--=20
 Regards,
-Matthias
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
+49D 1736 249D
 
+--4udoj2hk2odz47n5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Regards,
-> 
-> Tony
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmIcutkACgkQ3bWEnRc2
+JJ0Afg//efvyrkRqasngIXD0GUkUHNulYkidTLUr2VZldoqLVIgGXV2rJVjrjreU
+gFbuiwGbXKv5/6EFhvxOtXzYJ7Ze4pbNzLSklZFSBJ21lERp3Hh2sJJGP+ebIYEH
+68KnfzYlwbakk4H428m/zUwViTSSwc9d8UhyY7TidAP5RH/TM+bOGDjZst1P1OSB
+qMdvsKAxPLKozaF+MKYr7spbf4NkWjk2MM5sDa2geKqjWzXHL2v5S5o115ebgXwC
+J4GVL2RAxn3eJlYxBmYMYjmyTjvrkTXnbMhNVnqrtyAltDPODgjfeqdG7IxeegOZ
+L8DhQTVbAKeKO+Q7Zk8TDEew7CIUs25lwh/9uHB5Y00WNXTHYZWrvTF70bNjvP4l
+1i2BeyZ6wngvN71Fm0YnrZLIM4ZsR/ZS4UalblX2Vp3FThianf+QheJIfJPZ+rWL
+NaAKxkyhIl3GTrygxqCZrORVlYrkv860fTRsbmh+kTBwfX7WF4QCKmmCula1PpIg
+CbooeW5PF5Dva43ovi5mJLl5ju+T5zDX9nalzOOAF+KJEq3Jcir2Lcn8/LubyEoh
+Rqu93gHH3jWXEichqdjt7EsvGGe12tXmxngm5GgsimPSBIE3PnT8nuWxCDOM2j8e
+BnhUbtMUMFV5nvkTJH1raeUPdFxb2fmaXi2pxVbf2SGDL1bJfoo=
+=WYZx
+-----END PGP SIGNATURE-----
+
+--4udoj2hk2odz47n5--
