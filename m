@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6A28C433F5
-	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 15:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A06D7C433EF
+	for <soc@archiver.kernel.org>; Mon, 28 Feb 2022 15:17:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD283C340EE; Mon, 28 Feb 2022 15:17:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C72C340F3;
-	Mon, 28 Feb 2022 15:17:00 +0000 (UTC)
+	id 8A354C340EE; Mon, 28 Feb 2022 15:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F05C340F0;
+	Mon, 28 Feb 2022 15:17:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646061422;
-	bh=9IwpEwrETSBlG/xBRQJP/lY6BEq54i+oH9bLD92byoc=;
+	s=k20201202; t=1646061425;
+	bh=J3VmrXgdHmB+uvDki6YP3nYfZOJ7dx/A2RUCurXsSko=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Hcl41tTThc2FPzyNGWRkXRwEINp+zAz4wf6AK6oONHTQTFRtxM7/8pRaXSLgq24Ig
-	 CNoXo0PhQhRjP5GyBAhp0fYykeGJ4lJG8SllZauTLgvNMrcqIDwcaHKsBaCKSPyIyT
-	 41JCp2aELf3L+FGANCboCnQmUt/mDbZ0pGJrSYR0r5Z+hMHap87RcqqYnFycSEBxDa
-	 8mNgqxYfhmSItGSADX0uoM5nCnpxlV8F4CQ/y6d6P8m/vKDNfHoxp3MXX6E0Y/p+dx
-	 xJv8SweaFmbqBUGODUfqxQb0aE55rPtHRWt9a3D7dql8hlWSe4GLfqr2J8C7xzn3Dk
-	 cKD57zaNcqgsQ==
+	b=kZ24Lnpa7+cNm1W4qotItBYkoA24vFHtzF0Ao/EKrDPuQB1M6GTJWUtsNra3yY+Bv
+	 Z427zoTB+qQLjiBESBhllOiCCjzQjElVhEzOgYZGfoJDrB9pMV/nsc8UCw1lxH5hbZ
+	 IOakBd2vpE2j13YPgMdvcj3Z0biyzqJEzNIoKi0znTTXo1EhHHYuu7psps7nm4eGx1
+	 qXWR9tf5FC8PUSm1vV/eqg5gFMD8f3AFFkaLIQdoW5hw6JIcPwxICE9eS8UfpWxTwV
+	 mBpXbMFlW5GkMhHCiVZxooeYmUCeaqcUDR0e2PR8KCm6UOcqH+mUhlxFaKPVyP1FGn
+	 YbhTfGQyeiRFQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	arm@kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	soc@kernel.org
+To: arm@kernel.org,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-samsung-soc@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [GIT PULL 2/2] arm64: dts: samsung: Exynos for v5.18
-Date: Mon, 28 Feb 2022 16:16:34 +0100
-Message-Id: <164606116929.3364867.7581706251470314776.b4-ty@arndb.de>
+Subject: Re: [GIT PULL 2/3] arm64: dts: samsung: Second round for v5.18
+Date: Mon, 28 Feb 2022 16:16:35 +0100
+Message-Id: <164606117118.3364867.7242093674219751827.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220209145226.184375-2-krzysztof.kozlowski@canonical.com>
-References: <20220209145226.184375-1-krzysztof.kozlowski@canonical.com> <20220209145226.184375-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220226220116.13452-2-krzysztof.kozlowski@canonical.com>
+References: <20220226220116.13452-1-krzysztof.kozlowski@canonical.com> <20220226220116.13452-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 9 Feb 2022 15:52:26 +0100, Krzysztof Kozlowski wrote:
-> This includes arm64 DTS changes for v5.17-late which did not make it.
+On Sat, 26 Feb 2022 23:01:15 +0100, Krzysztof Kozlowski wrote:
+> On top of previous pull request.
 > 
 > Best regards,
 > Krzysztof
 > 
 > 
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+> The following changes since commit a0d5455330ece6f50ddf9e71d530f91c302803e9:
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: daeb1c2b50fb98118d6318b5fdbd9ef9bdfaeaf5
+merge commit: 2cd76c2aba5e40c280739c3131939b5f5c93f1ec
 
        Arnd
