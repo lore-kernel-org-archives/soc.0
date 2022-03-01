@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C597C433F5
-	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 09:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E7DC433EF
+	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 09:38:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F0230C340F3; Tue,  1 Mar 2022 09:38:37 +0000 (UTC)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	id 4B384C340F1; Tue,  1 Mar 2022 09:38:59 +0000 (UTC)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4EABEC340EE;
-	Tue,  1 Mar 2022 09:38:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4EABEC340EE
+	by smtp.kernel.org (Postfix) with ESMTPS id 6397DC340EE;
+	Tue,  1 Mar 2022 09:38:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6397DC340EE
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id u1so19452976wrg.11;
-        Tue, 01 Mar 2022 01:38:37 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id m6so2265999wrr.10;
+        Tue, 01 Mar 2022 01:38:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:content-language:to:cc:from
          :subject:content-transfer-encoding;
-        bh=AGqj3zqARUTZ9ZQDgZs+PFSA6lptX1zD63YRGqiRdK0=;
-        b=YJx9pSRECJeyQYK0gK55pl0wp7u2Eg2umDYPQ3h9jtA6X7HwS7nEbrB2GDXEr20kwY
-         n7l05236ttx1dewcupvyh3s0ixqLzBX8NAAO3rfGFTBws95Cq9SzLNXtNmkiw4KDc0R9
-         jbO3LMlBJOzgFS5ogZ2RoVgX5fbGsS+b/cB182BHCFrSZf4V23GaPBu3V0m0gKbB/Cxy
-         7r+sTPJgLpO1EMNM9YlXbmdstxeSPmO3PJ/iC/FU8obJlRAfzYUCVnef0Gh8yL64jIpM
-         3RsbkLnAxqpct5Zb+JpWOR7rEcqD53Ksgzyk1ddhY7C3Gs10Tj/vOS4xRp7BAtKK017g
-         M9Ww==
+        bh=Vsa3xP3k40cLCu4K30DmA7ryUsS2fZhxr5VMEaV7OyQ=;
+        b=PiRPvmSh1PgNyPuA2nKq9TDyRD0oWh+8yt1oH8ecTtPmfUkVXXdZTCfjXzb3VQMYY0
+         uXEkzlog/2BZe5EelgBrZTbkKSRyiOm6PX15K0AmeTF7azikC3W681DDwUyY3i9yXCm9
+         JmCeFJ8RxrwWXSxVa5UT+i993Dc9fnfgfEDH5CpuNRju8dNG/xyi2qjZuvQ4Dir2JhLH
+         /UTJ4tktgmNa/LBEN40Em18E6iuJQcvuwel+dxs/rFna7Tab7Mnl1CkkkGecTSoLqqCs
+         9LssGw8VU5IlvV34kNlmsccm2xCpAlgca8nywvXcTchxeJWpAwrqrEBu2FZOVMPXGTvo
+         MjGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent
          :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=AGqj3zqARUTZ9ZQDgZs+PFSA6lptX1zD63YRGqiRdK0=;
-        b=ihCw9l1loEFbrMNRKNlJsH0WJVATQruvWwCOR0TLncojOldYMeb+YB0394lWdP8RiW
-         DTvDXkprz+/HynEM8lVAuSQUkOQLsCh3djrZSYfKfxQmLACuRsT9HqgsBxhyoU7V/wmK
-         m3KOZnNnQifMvHB52/nhYl2XvBVOtjApd4jo591uxIS+rLtdWcKczTEG3kZwPn9V6b3c
-         kghyeDMbLIScmX8woNekMxhFkH5VCgGSvv9kXb6ujMbLA6QJY9bQa4106hUubZPxU9Mo
-         jJ+oN5RwTiTziQbHfFBw+rItFyiYfYGICpjmMlO1qjp0uCsnW+HhRkUtji6HfMly5cp7
-         Y6og==
-X-Gm-Message-State: AOAM532V8BciirNDEsEERXKwGAws/MqTdyT7jltvuyEPo48IHXsyRscZ
-	BByVR1eDD8/rmAAkvBXpMqjWiumhaJgW2A==
-X-Google-Smtp-Source: ABdhPJz2waHTw2Hy4YaCi5TEU/BCv9YAfaUv76iZGQbHTxkNRo0QbwunbCVfOdPJ/X+TUIcnNjHxBg==
-X-Received: by 2002:a05:6000:1364:b0:1ed:b65a:da45 with SMTP id q4-20020a056000136400b001edb65ada45mr19081629wrz.680.1646127515509;
-        Tue, 01 Mar 2022 01:38:35 -0800 (PST)
+        bh=Vsa3xP3k40cLCu4K30DmA7ryUsS2fZhxr5VMEaV7OyQ=;
+        b=d3JWDizGS94bnmAd1U8owcH/vPsbMXrVMikxfVTntP+CaPVNg4GrgFLAN7wqTFZUpa
+         bKnguIdf3bx48jnc91veJ+q2Z5O5I/sc/l9xeMAgMC/IIUSRGeGeMUSsauvSVgr/d+M7
+         9ZsmMsDEWc6SicxKJ+9HuP2FAm7c4jFUsoav5eJ8XmvlPHgIIps6cp/TE6EqKjeZNYZI
+         DtbTTcPGOzgQodNM1z8uDE9kl+jHVVuvFCSQ2O0lIYq9ZirnvbVCSgcbePCNveSjkmZS
+         ICchXEhb1rSARUpfA2Tw3LqEKxQ8a/6rzcKykwvA64HgpzX3NZEG8rgFMDtoOsOqV84I
+         fCSQ==
+X-Gm-Message-State: AOAM531RMhPr3+lFTBghbVoTa5VEjMZQbzG2AEyhV/yktAzZXeuzrIIm
+	GeoWi36YIC40kZplrHpqbre+bkE3FCInzw==
+X-Google-Smtp-Source: ABdhPJzcW/SB22M9Lytgt8lLsAvdd51gsvLOg6OJOIOjYQWdTsWdu2w9sz4jM1luNb9H7V/xAHEeQw==
+X-Received: by 2002:a5d:584f:0:b0:1e8:5697:e979 with SMTP id i15-20020a5d584f000000b001e85697e979mr19158083wrf.167.1646127536707;
+        Tue, 01 Mar 2022 01:38:56 -0800 (PST)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i6-20020adfaac6000000b001e7f9a9498asm13510452wrc.50.2022.03.01.01.38.34
+        by smtp.gmail.com with ESMTPSA id m11-20020adff38b000000b001ef879a5930sm9661521wro.61.2022.03.01.01.38.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 01:38:35 -0800 (PST)
-Message-ID: <8eb8510d-c597-4fee-e4b3-924b6d4bb3be@gmail.com>
-Date: Tue, 1 Mar 2022 10:38:34 +0100
+        Tue, 01 Mar 2022 01:38:56 -0800 (PST)
+Message-ID: <16a53482-5a8c-e95e-8cd4-b8304f110987@gmail.com>
+Date: Tue, 1 Mar 2022 10:38:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -61,47 +61,96 @@ Cc: "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>,
  "moderated list:ARM/Mediatek SoC support"
  <linux-mediatek@lists.infradead.org>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+ Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+ Johnson Wang <johnson.wang@mediatek.com>,
+ Rex-BC Chen <rex-bc.chen@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>,
+ Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
 From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] arm64: MediaTek fixes for v5.17
+Subject: [GIT PULL] soc: mediatek: updates for v5.18
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd and Olof,
+Hi Olof and Arnd,
 
-Please have a look on the following fixes for v5.17.
+Please have a look on the SoC driver updates for v5.18.
+As you can see, we get quite some support for SoC devices based on mt8186.
 
-Best regards,
+Regards,
 Matthias
 
 ---
-The following changes since commit 5c1ee569660d4a205dced9cb4d0306b907fb7599:
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-   Merge branch 'for-5.17-fixes' of 
-git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2022-02-22 16:14:35 -0800)
+   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
 are available in the Git repository at:
 
    https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v5.17-fixes-tag
+tags/v5.17-next-soc
 
-for you to fetch changes up to c432cd598a185afefba1ac3b0ee226f222f71341:
+for you to fetch changes up to eb1b02bef52ae545d5eb24116d5c099f738d39d5:
 
-   soc: mediatek: mt8192-mmsys: Fix dither to dsi0 path's input sel (2022-03-01 
-08:36:59 +0100)
-
-----------------------------------------------------------------
-- Set display pipeline to DSI on mt8183 kukui jacuzzi
-- Fix display for mt8192 based boards by fixing the routing table
+   dt-bindings: arm: mediatek: mmsys: add support for MT8186 (2022-03-01 
+09:26:56 +0100)
 
 ----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-       soc: mediatek: mt8192-mmsys: Fix dither to dsi0 path's input sel
+- add power domains support for mt8195
+- disable ACP on mt8192
 
-Nícolas F. R. A. Prado (1):
-       arm64: dts: mt8183: jacuzzi: Fix bus properties in anx's DSI endpoint
+mt8186:
+- add support for power domains
+- add mmsys and mutex support needed for DRM
+- add reset control based on mmsys subsystem
+- add pmic wrapper
 
-  arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi | 2 ++
-  drivers/soc/mediatek/mt8192-mmsys.h                    | 3 ++-
-  2 files changed, 4 insertions(+), 1 deletion(-)
+----------------------------------------------------------------
+Alyssa Rosenzweig (1):
+       soc: mediatek: mtk-infracfg: Disable ACP on MT8192
+
+Chun-Jie Chen (7):
+       dt-bindings: power: Add MT8195 power domains
+       soc: mediatek: pm-domains: Add wakeup capacity support in power domain
+       soc: mediatek: pm-domains: Remove unused macro
+       soc: mediatek: pm-domains: Move power status offset to power domain data
+       soc: mediatek: pm-domains: Add support for mt8195
+       dt-bindings: power: Add MT8186 power domains
+       soc: mediatek: pm-domains: Add support for mt8186
+
+Johnson Wang (2):
+       soc: mediatek: pwrap: add pwrap driver for MT8186 SoC
+       dt-bindings: mediatek: add compatible for MT8186 pwrap
+
+Rex-BC Chen (2):
+       soc: mediatek: mmsys: add mmsys reset control for MT8186
+       dt-bindings: arm: mediatek: mmsys: add support for MT8186
+
+Yongqiang Niu (2):
+       soc: mediatek: mmsys: add mt8186 mmsys routing table
+       soc: mediatek: add MTK mutex support for MT8186
+
+  .../bindings/arm/mediatek/mediatek,mmsys.yaml      |   1 +
+  .../bindings/power/mediatek,power-controller.yaml  |   3 +
+  .../devicetree/bindings/soc/mediatek/pwrap.txt     |   1 +
+  drivers/soc/mediatek/mt8167-pm-domains.h           |  16 +-
+  drivers/soc/mediatek/mt8173-pm-domains.h           |  22 +-
+  drivers/soc/mediatek/mt8183-pm-domains.h           |  32 +-
+  drivers/soc/mediatek/mt8186-mmsys.h                | 115 ++++
+  drivers/soc/mediatek/mt8186-pm-domains.h           | 344 ++++++++++++
+  drivers/soc/mediatek/mt8192-pm-domains.h           |  44 +-
+  drivers/soc/mediatek/mt8195-pm-domains.h           | 613 +++++++++++++++++++++
+  drivers/soc/mediatek/mtk-infracfg.c                |  19 +
+  drivers/soc/mediatek/mtk-mmsys.c                   |  12 +
+  drivers/soc/mediatek/mtk-mutex.c                   |  45 ++
+  drivers/soc/mediatek/mtk-pm-domains.c              |  17 +-
+  drivers/soc/mediatek/mtk-pm-domains.h              |   8 +-
+  drivers/soc/mediatek/mtk-pmic-wrap.c               |  71 +++
+  include/dt-bindings/power/mt8186-power.h           |  32 ++
+  include/dt-bindings/power/mt8195-power.h           |  46 ++
+  include/linux/soc/mediatek/infracfg.h              | 133 +++++
+  19 files changed, 1559 insertions(+), 15 deletions(-)
+  create mode 100644 drivers/soc/mediatek/mt8186-mmsys.h
+  create mode 100644 drivers/soc/mediatek/mt8186-pm-domains.h
+  create mode 100644 drivers/soc/mediatek/mt8195-pm-domains.h
+  create mode 100644 include/dt-bindings/power/mt8186-power.h
+  create mode 100644 include/dt-bindings/power/mt8195-power.h
