@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B2FC433EF
-	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 14:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5D18C433F5
+	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 14:19:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3E2EC340F2; Tue,  1 Mar 2022 14:15:53 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	id 9399EC340F6; Tue,  1 Mar 2022 14:19:16 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7988BC340F0;
-	Tue,  1 Mar 2022 14:15:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7988BC340F0
+	by smtp.kernel.org (Postfix) with ESMTPS id 5E8E5C340EE;
+	Tue,  1 Mar 2022 14:19:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E8E5C340EE
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: (Authenticated sender: gregory.clement@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id D783D40009;
-	Tue,  1 Mar 2022 14:15:41 +0000 (UTC)
+	by mail.gandi.net (Postfix) with ESMTPSA id 3BEDC240008;
+	Tue,  1 Mar 2022 14:19:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1646144143;
+	t=1646144350;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F3x3lkFJT+ZRj61/DNlVXG7ArvV5MVZ+fAxKdhm4608=;
-	b=U708p2T8Mit9I7xir3u5rszvGTOYeECZfHLmG6UFozEfp60xXA0+A74k0o9MlTIgSYbO1i
-	OYeBCARboKQQl3buap8qHTow54zHURJnHb33fI8lrZ4yIJcOH02UgVqt+3xCfGHRLTF+Pw
-	4xSgV2imRmn3EZNo/uR7Of7idY6CGcwybTih5ZPB4OWMNq1eb8w+5UvWoamupTyLFqDKQk
-	CV1o4jVmFNhF/B0VtIRwESA+yw9YqJWcK9VI8ElPD5Hfb4Q83epElvpAbKyG3OEbviObae
-	QGfyCILKyJdIJrcG4vXCXhBJqpCjHjNybmvjdheKUWQ5yQ3kGVSV71606qm3fg==
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=Muk6fy/4Kn+GgGVfjWZeLU/BtZ5qcKTYKFP0fw3SlLw=;
+	b=DDQ/hiozA8bXglm+gbtxPHymqPGOO0lVufW9wBtMHWxdon58pwwyZM+aFqI8TyWy59tPsU
+	oH+kRZzTODgzgwTcgJeQ7sPdbq2ch0jb3y6O17QR8cpjaAEJEmf6HiblcpQYqdEQ6UKcBK
+	mwO7dxWM287UWPFSnGSFPdF6aBheJFxdwU96EryL9sldFvCppDF8tG11WoT8lLjYbnelKh
+	k46f9F3WybjkXFr/KKNQ4JXDylpHgdvVHK9cxiNirIfNTG6AZJKUH5hhPGl3/Q/I/GjdDf
+	Cis+uCPPQb6TyOaMdddrl8aMdxZsuLs6FQLoBuRDM3hNf7cEOaf2yxmLhDVtmA==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt64 for v5.18 (#1)
-Date: Tue, 01 Mar 2022 15:15:31 +0100
-Message-ID: <87v8wxzrlo.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: arm for v5.18 (#1)
+Date: Tue, 01 Mar 2022 15:19:08 +0100
+Message-ID: <87sfs1zrfn.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
 
 Hi,
 
-Here is the first pull request for dt64 for mvebu for v5.18.
+Here is the first pull request for arm for mvebu for v5.18.
 
 Gregory
 
@@ -55,20 +53,29 @@ The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-5.18-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-arm-5.18-1
 
-for you to fetch changes up to 5344930c64ab7416bc845142dd1367120614b51c:
+for you to fetch changes up to bba14b329157d914b81ec764b87d60ee97c05e57:
 
-  arm64: dts: marvell: armada-37xx: Add clock to PCIe node (2022-02-28 16:51:32 +0100)
-
-----------------------------------------------------------------
-mvebu dt64 for 5.18 (part 1)
-
-Add PCIe clock resource for Armada 37xx
+  ARM: orion/gpio: Get rid of unused first parameter in orion_gpio_init() (2022-02-03 09:25:11 +0100)
 
 ----------------------------------------------------------------
-Marek Beh.ºn (1):
-      arm64: dts: marvell: armada-37xx: Add clock to PCIe node
+mvebu arm for 5.18 (part 1)
 
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+gpio clean-up for Orion
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      ARM: orion/gpio: Get rid of unused first parameter in orion_gpio_init()
+
+ arch/arm/mach-dove/irq.c                      | 6 +++---
+ arch/arm/mach-mv78xx0/irq.c                   | 3 +--
+ arch/arm/mach-orion5x/irq.c                   | 2 +-
+ arch/arm/plat-orion/gpio.c                    | 8 ++------
+ arch/arm/plat-orion/include/plat/orion-gpio.h | 3 +--
+ 5 files changed, 8 insertions(+), 14 deletions(-)
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
