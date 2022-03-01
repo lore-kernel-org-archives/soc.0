@@ -1,107 +1,100 @@
-Return-Path: <SRS0=GkT/=TM=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=ONuN=TM=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEB26C433EF
-	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 09:54:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29B73C433F5
+	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 10:44:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9580BC340F1; Tue,  1 Mar 2022 09:54:31 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id F156AC340EF; Tue,  1 Mar 2022 10:44:02 +0000 (UTC)
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 06F5EC340EE;
-	Tue,  1 Mar 2022 09:54:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06F5EC340EE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so1018430wmb.3;
-        Tue, 01 Mar 2022 01:54:30 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8FDE9C340EE
+	for <soc@kernel.org>; Tue,  1 Mar 2022 10:44:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8FDE9C340EE
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=0x0f.com
+Received: by mail-pl1-f176.google.com with SMTP id p17so13108598plo.9
+        for <soc@kernel.org>; Tue, 01 Mar 2022 02:44:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=Uuqfudvqx8A1r7O6FRl0D0tm/yyoYCBJlkBGNHCef98=;
-        b=QbyMlpsQA1iLg4MH7Yrz7E5h4lWt6CBS6hO7GkfwEQnGdwLw7yE7TPRdgH2srDbN2h
-         4EDPzd5JPwyq4AK40se0wMu1WZXM7MYjARYEpUvAfns9BV12bisS8xYoL9lJHtYpqhAv
-         xdOIgfOKMFbDWEJeKk7rIDd5t1MFs3EHTQvWbLirLaeHqFYbODvss79pe027BWlNgfnr
-         Lbx+5NOfS2zFEGP8yFdd7OQ/EgTtQ0jSdZ36qAFDMquTfYiloctcuikPkzACp3GZZZ5B
-         HZMdy9vaKMsmeQn2BnQDZrCZvLTDB4Tea5cdkJPvdxoD3nHtGXk7s7Bq01eEHhPZ53Qn
-         djqQ==
+        d=0x0f.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qmdWZ0Ngl9nlWWgEJzu97RHRmPhanMjm7buTdrAowbQ=;
+        b=QnSZWYzZdu9pqqIrseh0j/wMKrMxCoz1ovhyc32RMroAy9PX81dIaqyWXzuBcd+Ing
+         38+fyN5e1R5RX5MjBQ2hFz81qRwouo2brDxy+SavYZ15NksmlfWinKxuEjsCXLX1twnK
+         2M/vcNiXIbmFtFvCY2cHvFLR2XHsbBdBzUOL4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=Uuqfudvqx8A1r7O6FRl0D0tm/yyoYCBJlkBGNHCef98=;
-        b=OcfOCxlWm4riLJhxpvWGqYgm1sTsH2rCePJFVAb5VctWIe8qzDJcnksKIIN4klTW4o
-         KHeg0wnsS2tl5rk2jJa9HDamLj763J7Rvo1dVr2QkSu9sDoKZxhEL2hK1I5xRDPSO5B2
-         LwtD75qOltwRz4x1rYYSt0NyF/+d54veX+07zaxkQRLB1dfKiSypgxsLy9urXtTd93is
-         m1oUrFo+97GDJCc8nUZ4gZhxQybaDHJ026Q2L6vOmuThTFbce6SRpinai485cSEauG4S
-         wqVawbWyZE1dbzCuVIVlgTc8+rk996KtfM6gI6dgKWGtm3jabu/uUe5HuRujYSVnWQfl
-         uCAA==
-X-Gm-Message-State: AOAM533FImXXPNUkGXEgiKHDDG3hNUpPKMT2uYL6lxlbTO8xfrnBoS3o
-	9KN5JFT+gRIaXu3UPNeCdmd49L8M9r3LUQ==
-X-Google-Smtp-Source: ABdhPJxFgSr4iz+YiXmOJ60RzQhJ8hm4ZtrBSwpq9G487MOI13arAtpuNsd41HY811OsZqPGtoxsXA==
-X-Received: by 2002:a05:600c:4e4a:b0:380:e40a:289 with SMTP id e10-20020a05600c4e4a00b00380e40a0289mr16319445wmq.17.1646128469257;
-        Tue, 01 Mar 2022 01:54:29 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm2630094wmp.44.2022.03.01.01.54.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 01:54:28 -0800 (PST)
-Message-ID: <9b90b407-025b-ec78-a626-faccdbc7ab39@gmail.com>
-Date: Tue, 1 Mar 2022 10:54:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qmdWZ0Ngl9nlWWgEJzu97RHRmPhanMjm7buTdrAowbQ=;
+        b=n9zei5gD2gvs+KmFAkJmYsw67rxbODiIbIgxiuUvWPKHPsdRpVfck4pWxADDAyIOhb
+         axVC/PIQp1KRegYNbsapglow1inkjweNeri9GEROBluXbHtpbvdsmaGhRRLurktdtSMN
+         UB46HsfvuaH0y4zA4IS19etjp8k0DCdH2dVMGL7s+estsMOla9CvNxaopnFnbqQsuvnN
+         a3Ic3LUC0sWm6SyTIrA0L21PgY2EyN8zsGCmnqViJI1l2Aa7KPpvZyqW9RgEAGP5mu4y
+         IgHKm/847EIJyaoGLLZJVC5YI9zm9K8roquWUaJdOeebpW0KORFofml4q4KuwP1M/RD/
+         s0ng==
+X-Gm-Message-State: AOAM5316EF9hb41XYkSGC05JTQxt8tOh+UFkJt9e6fdxfzYMe25VyhQu
+	kqVPnZMzPvAA1yJN1XCl9o2UMRG+R3kAKQ==
+X-Google-Smtp-Source: ABdhPJwrSX2GUxypOi5r5JZLVm6VZm/peM4ozIYt2gLhPM/CN+YBAry5prx9rHsksurFwbXdzwGRCg==
+X-Received: by 2002:a17:902:cf02:b0:14f:e0c2:1514 with SMTP id i2-20020a170902cf0200b0014fe0c21514mr25090497plg.90.1646131440627;
+        Tue, 01 Mar 2022 02:44:00 -0800 (PST)
+Received: from shiro.work ([2400:4162:2428:2f01:7285:c2ff:fe8e:66d7])
+        by smtp.googlemail.com with ESMTPSA id m20-20020a634c54000000b003739af127c9sm12832867pgl.70.2022.03.01.02.43.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 02:44:00 -0800 (PST)
+From: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-Cc: "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>, John Crispin <john@phrozen.org>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] defconfig: mediatek updates for v5.18
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: soc@kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	romain.perier@gmail.com
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Daniel Palmer <daniel@0x0f.com>
+Subject: [PATCH] ARM: mstar: Select HAVE_ARM_ARCH_TIMER
+Date: Tue,  1 Mar 2022 19:43:49 +0900
+Message-Id: <20220301104349.3040422-1-daniel@0x0f.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Arnd and Olof,
+The mstar SoCs have an arch timer but HAVE_ARM_ARCH_TIMER wasn't
+selected. If MSC313E_TIMER isn't selected then the kernel gets
+stuck at boot because there are no timers available.
 
-Please have a look on the below defconfig changes for v5.18.
-
-Regards,
-Matthias
-
+Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 ---
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+I moved one of my CI builds from a 5.16 based tree to a 5.17
+based one and it stopped booting. At some point I had broken my DTB
+so the MStar timer wasn't getting probed anymore and at
+the same time the arch timer driver wasn't getting built in.
+I'm not entirely sure why the arch timer driver was built
+before but isn't now. Anyhow, all of the other ARMv7 machines
+seem to do this so I guess it's right.
 
-are available in the Git repository at:
+Arnd/Olof, please apply directly if acceptable. Maybe this should
+be in 5.17 as a fix?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v5.17-next-defconfig
+ arch/arm/mach-mstar/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-for you to fetch changes up to b5d8378ff0baa69e6ee857dcb7548c10bf16d64e:
+diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
+index cd300eeedc20..0bf4d312bcfd 100644
+--- a/arch/arm/mach-mstar/Kconfig
++++ b/arch/arm/mach-mstar/Kconfig
+@@ -3,6 +3,7 @@ menuconfig ARCH_MSTARV7
+ 	depends on ARCH_MULTI_V7
+ 	select ARM_GIC
+ 	select ARM_HEAVY_MB
++	select HAVE_ARM_ARCH_TIMER
+ 	select MST_IRQ
+ 	select MSTAR_MSC313_MPLL
+ 	help
+-- 
+2.35.1
 
-   ARM: multi_v7_defconfig: Add support for Airoha EN7523 SoC (2022-03-01 
-09:08:31 +0100)
-
-----------------------------------------------------------------
-- Enable Airoha SoC on armv7 config.
-- Enable CPU freq for arm64 based SoCs.
-- Enable PMIC based (mt6397) RTC for mt8173
-
-----------------------------------------------------------------
-John Crispin (1):
-       ARM: multi_v7_defconfig: Add support for Airoha EN7523 SoC
-
-Nícolas F. R. A. Prado (2):
-       arm64: defconfig: Enable MT6397 RTC
-       arm64: defconfig: Enable cpufreq for MediaTek
-
-  arch/arm/configs/multi_v7_defconfig | 1 +
-  arch/arm64/configs/defconfig        | 2 ++
-  2 files changed, 3 insertions(+)
