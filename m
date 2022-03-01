@@ -1,59 +1,60 @@
-Return-Path: <SRS0=Qnqp=TM=gmail.com=paweldembicki@kernel.org>
+Return-Path: <SRS0=yDTJ=TM=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F12A0C433F5
-	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 20:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 038E6C433FE
+	for <soc@archiver.kernel.org>; Tue,  1 Mar 2022 22:05:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A8F7EC36AE2; Tue,  1 Mar 2022 20:32:41 +0000 (UTC)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	id C745EC340EF; Tue,  1 Mar 2022 22:05:02 +0000 (UTC)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF409C340EE;
-	Tue,  1 Mar 2022 20:32:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF409C340EE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id u1so22307134wrg.11;
-        Tue, 01 Mar 2022 12:32:40 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id B4A9CC340EE
+	for <soc@kernel.org>; Tue,  1 Mar 2022 22:05:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B4A9CC340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dbfe58670cso18634137b3.3
+        for <soc@kernel.org>; Tue, 01 Mar 2022 14:05:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=CrQXtLIGnRJeaQHQZnoEPNrRNT+7/qaBjqmC6+8ZDYA=;
-        b=gwPNVZYiRqm/ONMrZpXb5c/9raUwfFAFa5xWtypoXxpNWHjRwbdBrN7ce1jsSnUi5E
-         qu4tjsQE+/eFRINGfuAAC8fxvuigawD6NshWh2jJsNbNyD5ncd4CGkmQN7fiCcvHqNJv
-         hpt8YYho7cEwf6o+a4lgCnCb7BgzNWGqovXSt3wU93Kr5yG8/ajgaZ6H5Du/HTLG/mEF
-         VY+xszOpxm1UffGR4FrA3BcWhCSDC6tSNi9zV7kFRamiK9cNTlrMkhP+LqXD0yl/nv4E
-         h4ZZYlUUsYobbY33WFhIOejaEVjjSnXLyiXi29U2rgYN+KGhINIWsTc8QGkdYlRtEWuW
-         RZPQ==
+        bh=UcPAPgfcldc73jEP+C7Dej+leQMSuSLsqYm57vv73+s=;
+        b=nRakB6HmSQvAY0Kx8G5e0XiHu+lZH+cNOSVvManb39OQg5KXxnMddGx3eaTlkqCwZ1
+         tD3b2Xov2F7FLOGsOzjBxOVPu9aKqb2AqpjUU1eWbTbx00Ju3UR40XNvN0l3LMy4bkt9
+         Rui06CAZMrodVpaNMV5lUTT+sDBGnsNvtd0hVGWHCjSw8DlzZ7frrYemADTorf6gcuYD
+         kHhnCqVDMa2qFBaQLMP27xmcmelDgZEstkQIDIVpK1HV60D9tRmgAUcp+g6b9yplwuZ+
+         Spq9ZALSr6S9zZA2jhs1GuzgkujBQTV2BcBMIp2DZVmie1F4BWb+HD0OKh8S+TaUi8zF
+         espg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CrQXtLIGnRJeaQHQZnoEPNrRNT+7/qaBjqmC6+8ZDYA=;
-        b=XOr+uaOJtCLZgCTV7qSTnErBPxPtELOdE5Z9vnU8JbtRjiRma9myIIyZvc3zP+iikm
-         5wM1sb79e1E4Re+sesyPS54m1JlV8mLesz823L9Z/OLN8UcTlpUUaOBrQFfvNWnofjvS
-         hpoKJiFyg3Ns6vjucqr5JjYUx5I3ODh/kw5OZwBVJVXfgPAsBwT4Ccnc8KlxN0T9LCHL
-         ouCqI34JQHUETof0SrbtPqz/1zcinuSwZdaCudoRMGVHguXxKAwUcDD5ei4MKkEu8kjt
-         cdWF24QClBHkmZ24fgBKNxDOtJwdJQNnQNpFTmmQ94JvcP75zqVyzUcQtUu0H4hk9OjH
-         sNag==
-X-Gm-Message-State: AOAM5316A70x+LoV1kW17RS5tOw7uMMJkY1lP5Lq6i9Q26GDF7NiTRKE
-	YXYcPh9zQuhdd46VILzobWl1RIlJ+mT3OBsnMEM=
-X-Google-Smtp-Source: ABdhPJyOyqrAmq0du9j8vJye29kK1c8pmM58hk4zrpISMGQfTykc6McfVWvFM94evxgpJmtoTmCcTROBwR2hlAwTSlk=
-X-Received: by 2002:adf:efc6:0:b0:1ed:f546:bd94 with SMTP id
- i6-20020adfefc6000000b001edf546bd94mr19989617wrp.33.1646166758969; Tue, 01
- Mar 2022 12:32:38 -0800 (PST)
+        bh=UcPAPgfcldc73jEP+C7Dej+leQMSuSLsqYm57vv73+s=;
+        b=YhZaAzKdwO5fLlNo+QnvZyl0+sqTflNqyIpbsK+06nZYHIMEZV8JjtKz5d8pNHTkhT
+         OKYmWmDbWVGC2RiRHtwP/hVG2LT0qONuY6XBVZ98NvtbCveLjBMMXSnRpogsNAUv4rNe
+         jIrXsq8/DtyIxwdasJo7yjIF/BeaqyXchmxmR2ymy8URHJsU+Ktl+yL52J2+OS4riqmn
+         8x/40la1OISYcDoihXzUjhFXo9I1tg+TlaaQXVFDXTGs8TIh4wf0ENTjDQlVuIlR+vYD
+         xcrVbFFLQtqKTH3wAL8pwzrS2sRCFQHKbMOG1ODHPb/M5ficKjUSERDGOTSys1qeJiI+
+         om2Q==
+X-Gm-Message-State: AOAM530PGd0+WWDWFtaZiTSgZEoEFviy/g2qTpB88oAIqtqQEJK55wCb
+	4VjUdzDZqN0WQ70DhPpipNerpCWBsdX+oUPNcxeNuw==
+X-Google-Smtp-Source: ABdhPJz0z5NUDx5yT9o5PaqMCK36QA8R6U5yziPTGeHEgqZnWomadFex96iDbgDg/IFQkrR5Udu+iKW6bIM/vAp44rg=
+X-Received: by 2002:a81:d15:0:b0:2db:d348:2fda with SMTP id
+ 21-20020a810d15000000b002dbd3482fdamr6926473ywn.151.1646172299759; Tue, 01
+ Mar 2022 14:04:59 -0800 (PST)
 MIME-Version: 1.0
 References: <20220215163926.894-1-paweldembicki@gmail.com> <CACRpkda=ky29PiTjWimnNihLDHSTfYWk68qg5GcLqZTD76ba=g@mail.gmail.com>
-In-Reply-To: <CACRpkda=ky29PiTjWimnNihLDHSTfYWk68qg5GcLqZTD76ba=g@mail.gmail.com>
-From: =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
-Date: Tue, 1 Mar 2022 21:32:27 +0100
-Message-ID: <CAJN1KkygDrGPzJj4nobS-ZFSRqP+g9LQ49tbcLA8V7KvPhfYOQ@mail.gmail.com>
+ <CAJN1KkygDrGPzJj4nobS-ZFSRqP+g9LQ49tbcLA8V7KvPhfYOQ@mail.gmail.com>
+In-Reply-To: <CAJN1KkygDrGPzJj4nobS-ZFSRqP+g9LQ49tbcLA8V7KvPhfYOQ@mail.gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 1 Mar 2022 23:04:48 +0100
+Message-ID: <CACRpkdaks_R11d6+LS7ER6KgS2uupO3xLunH1CxfoMiJtc2qaw@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] ARM: dts: kirkwood: Add Ctera C-200 V1 board
-To: Linus Walleij <linus.walleij@linaro.org>
+To: =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
 	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
@@ -66,51 +67,21 @@ Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johans
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-wt., 1 mar 2022 o 00:43 Linus Walleij <linus.walleij@linaro.org> napisa=C5=
-=82(a):
->
-> On Tue, Feb 15, 2022 at 5:40 PM Pawel Dembicki <paweldembicki@gmail.com> =
-wrote:
->
-> > +&i2c0 {
-> > +       status =3D "okay";
-> > +
-> > +       rtc@30 {
-> > +               compatible =3D "s35390a";
-> > +               reg =3D <0x30>;
-> > +       };
-> > +
-> > +       lm63@4c {
-> > +               compatible =3D "national,lm63";
-> > +               reg =3D <0x4c>;
-> > +       };
->
-> Think about adding chassis thermal zone for this sensor,
->
-> I suppose you don't have any active control of cooling (fan)?
-> This often sits on GPIO...
->
+On Tue, Mar 1, 2022 at 9:32 PM Pawe=C5=82 Dembicki <paweldembicki@gmail.com=
+> wrote:
 
-Hi Linus,
-It has a fan controlled by the lm63: PWM controller. But the fan blows
-only on disks, board temperature won't change even when PWM =3D 100%.
-It should be controlled by hdd temperature.
+> It has a fan controlled by the lm63: PWM controller.
 
-> In that case just add a critical temperature so it can't burn
-> down the house.
->
+Aha it is one of those combo things, sorry for my ignorance.
 
-Patch it's merged now, I will add critical temperatures in a separate patch=
-.
+>  But the fan blows
+> only on disks, board temperature won't change even when PWM =3D 100%.
+> It should be controlled by hdd temperature.
 
-> See:
-> arch/arm/boot/dts/gemini-dlink-dns-313.dts
-> node thermal-zones {} for an example of how to do this
-> quick and easy. You need CONFIG_THERMAL and
-> CONFIG_THERMAL_HWMON for this to work.
->
-> Yours,
-> Linus Walleij
+We have a way to even monitor the temperature of individual hard disks
+these days and I create a thermal zone and use it here to control a fan
+in this DTS:
+arch/arm/boot/dts/gemini-dlink-dir-685.dts
 
-Best Regards,
-Pawel Dembicki
+Yours,
+Linus Walleij
