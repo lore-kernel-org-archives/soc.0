@@ -4,33 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC49C4332F
-	for <soc@archiver.kernel.org>; Thu,  3 Mar 2022 16:03:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C3E2C43219
+	for <soc@archiver.kernel.org>; Thu,  3 Mar 2022 16:03:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 78742C340FD; Thu,  3 Mar 2022 16:03:47 +0000 (UTC)
+	id 51318C004E1; Thu,  3 Mar 2022 16:03:48 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D7D15C340F0;
-	Thu,  3 Mar 2022 16:03:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D7D15C340F0
+	by smtp.kernel.org (Postfix) with ESMTPS id 6580EC340FC;
+	Thu,  3 Mar 2022 16:03:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6580EC340FC
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 69CEE2223B;
-	Thu,  3 Mar 2022 17:03:37 +0100 (CET)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 86757223F0;
+	Thu,  3 Mar 2022 17:03:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1646323417;
+	t=1646323419;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Uo2jQzlRBlO/U+XirDGC57q2/rWBgA7MwjnR6V85rDs=;
-	b=qNvnxppS/enmuRHkWN31q99iPxsjk7RMJDn3nyVm3rQHma122FrbVuKiYfMxdOxxLpR4o0
-	O78G2hpYGGse6v2+2kzOtmZCpyuq0jRQNlE6hw2CpKdvLeRAx7mS4jl6LfvUgr083Q+1Dk
-	q2t2nezLCwVESVeb6jWQt8ckNeQ2zOw=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iFXEQ9bpa2qwjHSVEWYlqETOgXcSXZboSWvdCQL+/AI=;
+	b=gL4tmEZ84cMEk5XZzI6PvZtwQfqDgJ4btJawjfsl5dzDDLMFb67ewDgxbMw84Pppn9voCs
+	bQaCh0Sxrfb5FK2vOUaPw50iQkVkUpvsz9C2nOMF/gL4kMtbM+tYap/8qwr6/A71ZAXamD
+	06wIX9CklGtlV/ODFDoRKUWGvh8269U=
 From: Michael Walle <michael@walle.cc>
 To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -46,33 +47,137 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Claudiu Beznea <claudiu.beznea@microchip.com>,
 	Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 0/6] ARM: dts: lan966x: dtsi improvements and KSwitch D10 support
-Date: Thu,  3 Mar 2022 17:03:17 +0100
-Message-Id: <20220303160323.3316317-1-michael@walle.cc>
+Subject: [PATCH v1 4/6] ARM: dts: lan966x: add flexcom SPI nodes
+Date: Thu,  3 Mar 2022 17:03:21 +0100
+Message-Id: <20220303160323.3316317-5-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220303160323.3316317-1-michael@walle.cc>
+References: <20220303160323.3316317-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add missing nodes for the flexcom blocks and a node for the SGPIO
-block. Then add basic support for the Kontron KSwitch D10.
+Add all the SPI nodes for the flexcom IP block. Keep them
+disabled by default.
 
-Microchip, please take a closer look at the compatible strings of
-the newly added nodes.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ arch/arm/boot/dts/lan966x.dtsi | 75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-Michael Walle (6):
-  ARM: dts: lan966x: swap dma channels for crypto node
-  ARM: dts: lan966x: add sgpio node
-  ARM: dts: lan966x: add all flexcom usart nodes
-  ARM: dts: lan966x: add flexcom SPI nodes
-  ARM: dts: lan966x: add flexcom I2C nodes
-  ARM: dts: lan966x: add basic Kontron KSwitch D10 support
-
- arch/arm/boot/dts/Makefile                    |   3 +-
- ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159 ++++++++++++
- arch/arm/boot/dts/lan966x.dtsi                | 228 +++++++++++++++++-
- 3 files changed, 386 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+index bea69b6d2749..0616927f1bb1 100644
+--- a/arch/arm/boot/dts/lan966x.dtsi
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -105,6 +105,21 @@ usart0: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi0: spi@400 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
++					   <&dma0 AT91_XDMAC_DT_PERID(2)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		flx1: flexcom@e0044000 {
+@@ -128,6 +143,21 @@ usart1: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi1: spi@400 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
++					   <&dma0 AT91_XDMAC_DT_PERID(4)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		trng: rng@e0048000 {
+@@ -168,6 +198,21 @@ usart2: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi2: spi@400 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
++					   <&dma0 AT91_XDMAC_DT_PERID(6)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		flx3: flexcom@e0064000 {
+@@ -191,6 +236,21 @@ usart3: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi3: spi@400 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
++					   <&dma0 AT91_XDMAC_DT_PERID(8)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		dma0: dma-controller@e0068000 {
+@@ -233,6 +293,21 @@ usart4: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi4: spi@400 {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
++					   <&dma0 AT91_XDMAC_DT_PERID(10)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		timer0: timer@e008c000 {
 -- 
 2.30.2
 
