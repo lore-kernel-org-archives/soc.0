@@ -1,146 +1,99 @@
-Return-Path: <SRS0=UCf6=TP=0x0f.com=daniel@kernel.org>
+Return-Path: <SRS0=arFV=TP=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD2EC433F5
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 13:05:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83876C433EF
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 14:43:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E5E3DC340F0; Fri,  4 Mar 2022 13:05:38 +0000 (UTC)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 4EA14C340F1; Fri,  4 Mar 2022 14:43:37 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 82BC0C340E9
-	for <soc@kernel.org>; Fri,  4 Mar 2022 13:05:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82BC0C340E9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=0x0f.com
-Received: by mail-vs1-f51.google.com with SMTP id d11so8980796vsm.5
-        for <soc@kernel.org>; Fri, 04 Mar 2022 05:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aiwsrecM9WtgaZA42WLqCTiy2D01II3AHBBfXeGJehw=;
-        b=XtswYgscLWfBsIzJNXZFzQcbI/jfyHYdIDRPbw9LjtMv8cSr2yn8XQ9oa5flPtqM47
-         vrOX/cnESCZg7IBfNjx3JoHa3H7nVTb5zbl1TOM6O0Vw5RVs45KA65H4zZoKTlrAC55O
-         BdwOFqk+JWoN/PtUJK/z0tQ2/TUS+TNMQyItE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aiwsrecM9WtgaZA42WLqCTiy2D01II3AHBBfXeGJehw=;
-        b=Ms8BiOdydRSQFpUovlfKBEdeH6LWEWchHkOCCsRgIyGbU92dBca0xdq8LYLNXaDtRx
-         TqZUHkUrc5PbboMqCjvXkNypVGw7KNzcS71yU1Z4O6H/3+BnJ640FoY9GSHPvzBgw0eF
-         s1cN2pfp5E3ukD0N8nO0LOwMfpJmk4YUb8cbHjaNxWGld4crTMJw14A+LEylQ6DoNZoL
-         LSBGQLyg3G/WVXWX8LOGwP8iqOG5oT5ZTlZNcWkMhR9+CEH99lmB/PIpWbtmn6/XPOys
-         +znorQHY2b4q8Y+tNRncrU5aJnX2ozEp+dcjmMXfQEcIdCMyXb6DK1Zk84nO7xpvHylZ
-         UdHg==
-X-Gm-Message-State: AOAM533NumVPmI8jcxL7PTmSPKkvhyDRLOBE6abRXYwbSc/VEs9NJBnM
-	/7Kd5ZSSUh6+ZbTOJr4YMXwia3BvDAjME8ZGM71+YD4nszc=
-X-Google-Smtp-Source: ABdhPJxNkSI1cjXklKhFVfilChMNkEq+84m444X6hclD5m1QYaP1K/9FO8hIFo8GLU0Ronevz+YSxlb6ytQb2IkxjVM=
-X-Received: by 2002:a67:fad9:0:b0:31e:be9f:4974 with SMTP id
- g25-20020a67fad9000000b0031ebe9f4974mr6604754vsq.43.1646399136281; Fri, 04
- Mar 2022 05:05:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20220301104349.3040422-1-daniel@0x0f.com> <CABgxDo+32A+akgbcD5Y+oGGJwZ_2G+dqfNTAdHYSD3xVPUnoTQ@mail.gmail.com>
-In-Reply-To: <CABgxDo+32A+akgbcD5Y+oGGJwZ_2G+dqfNTAdHYSD3xVPUnoTQ@mail.gmail.com>
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Fri, 4 Mar 2022 22:08:03 +0900
-Message-ID: <CAFr9PXnvF5ArbO_E4oPbz-7DBPiCaZxr3dsE1G=Ln8=+VyoPrA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: mstar: Select HAVE_ARM_ARCH_TIMER
-To: Romain Perier <romain.perier@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4E8A9C340E9;
+	Fri,  4 Mar 2022 14:43:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E8A9C340E9
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646405016; x=1677941016;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CW0GZlgSnEJ+z/BmZSRD3m0q4ahJDHVBRYgA4ELGTuQ=;
+  b=fPFQo756LV4/yQMeFymLNkYjUAb4HSBVtTCiZcKhzKkRYUlMS7DfT8ax
+   +8auCukGEsxxQuY4N3zMd5+bvW5/VVHuWgXRNbr1Fx3JRrzNzlj0bVS2P
+   ELMq1AJZEe99IEdM87vZHtTWt32XfDheu/KY4ZHXojufrji0roO1PQQQm
+   8+irrVyejgJJwHKcANhVFSQDhzYCrcL1yQuxY1oda1B2AH8NEMx6zHYzP
+   Go9WihzD496ftAbdd+Ksc1N3EMWW+Vk0SVdQxRQSZsadthbimWcjNlPRr
+   qvCz8UhNqs8dzCs5LOt1WxATr8Hk6ZzJFNMOBEOhs+hlg25vp+HYvNKyq
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="150870328"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:43:34 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 07:43:34 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 07:43:32 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/alternative; boundary="000000000000ad4e1505d9642b0b"
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>, Conor Dooley <conor.dooley@microchip.com>
+Subject: [GIT PULL] ARM: at91: soc for 5.18 #2
+Date: Fri, 4 Mar 2022 15:42:17 +0100
+Message-ID: <20220304144216.23340-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
---000000000000ad4e1505d9642b0b
-Content-Type: text/plain; charset="UTF-8"
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Hi Romain,
+Arnd, Olof,
 
-On Fri, 4 Mar 2022 at 19:09, Romain Perier <romain.perier@gmail.com> wrote:
+One more patch for 5.18 on the SoC branch.
+You already have the patch made by Conor "soc: microchip: make
+mpfs_sys_controller_put static" in your tree, so I didn't add it here.
 
-> Hi all,
->
-> Interesting, when I wrote the patch for msc313e-timer, I always had
-> ARCH_ARM_TIMER implicitly built, so I thought that it was implicitly
-> selected by MULTI_V7...
->
+Thanks, best regards,
+  Nicolas
 
-It was getting built somehow until 5.17 I think and I only noticed it got
-broken because the CI build uses a defconfig whereas my development tree
-has a full config that has ARCH_ARM_TIMER in it.
+The following changes since commit d0054a470c33902f5ae88835ed8a8ecc3cf8faa4:
 
+  soc: add microchip polarfire soc system controller (2022-02-25 12:50:59 +0100)
 
-> I agree that we should at least have ARM_ARCH_TIMER enabled, otherwise
-> we won't being able to boot correctly (no clockevents)
->
+are available in the Git repository at:
 
-Arnd applied this for us already.
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.18-2
 
+for you to fetch changes up to def8abbb1464579c37f15b3d7a95e5f3bab758dc:
 
-> I have also noticed that we missed this commit
->
-> https://github.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d80f767d5524c32fb40a91c6
->  (that selects MSC313E_TIMER), which might explain your initial issue
-> (not being to boot).
->
-> MSC313E_TIMER being optional on ARM (because of ARM_ARCH_TIMER), we
-> should be sure that arm_timer is enabled and we can keep the mstar
-> timer optional, imho.
->
-> What do you think ?
->
+  ARM: at91: add support in soc driver for new SAMA5D29 (2022-03-04 12:49:22 +0100)
 
-I think MSC313E_TIMER should be optional but default for ARCH_MSTARV7.
+----------------------------------------------------------------
+AT91 SoC #2 for 5.18:
 
-Cheers,
+- SAMA5D29 variant to the SAMA5D2 family in SoC driver.
 
-Daniel
+----------------------------------------------------------------
+Mihai Sain (1):
+      ARM: at91: add support in soc driver for new SAMA5D29
 
---000000000000ad4e1505d9642b0b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ drivers/soc/atmel/soc.c | 3 +++
+ drivers/soc/atmel/soc.h | 1 +
+ 2 files changed, 4 insertions(+)
 
-<div dir=3D"ltr"><div>Hi Romain,</div><br><div class=3D"gmail_quote"><div d=
-ir=3D"ltr" class=3D"gmail_attr">On Fri, 4 Mar 2022 at 19:09, Romain Perier =
-&lt;<a href=3D"mailto:romain.perier@gmail.com">romain.perier@gmail.com</a>&=
-gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0=
-px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi al=
-l,<br>
-<br>
-Interesting, when I wrote the patch for msc313e-timer, I always had<br>
-ARCH_ARM_TIMER implicitly built, so I thought that it was implicitly<br>
-selected by MULTI_V7...<br></blockquote><div><br></div><div>It was getting =
-built somehow until 5.17 I think and I only noticed it got broken because t=
-he CI build uses a defconfig whereas my development tree has a full config =
-that has ARCH_ARM_TIMER in it.</div><div>=C2=A0</div><blockquote class=3D"g=
-mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
-,204,204);padding-left:1ex">
-I agree that we should at least have ARM_ARCH_TIMER enabled, otherwise<br>
-we won&#39;t being able to boot correctly (no clockevents)<br></blockquote>=
-<div><br></div><div>Arnd applied this for us already.</div><div>=C2=A0</div=
-><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
--left:1px solid rgb(204,204,204);padding-left:1ex">
-I have also noticed that we missed this commit<br>
-<a href=3D"https://github.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d=
-80f767d5524c32fb40a91c6" rel=3D"noreferrer" target=3D"_blank">https://githu=
-b.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d80f767d5524c32fb40a91c6<=
-/a><br>
-=C2=A0(that selects MSC313E_TIMER), which might explain your initial issue<=
-br>
-(not being to boot).<br>
-<br>
-MSC313E_TIMER being optional on ARM (because of ARM_ARCH_TIMER), we<br>
-should be sure that arm_timer is enabled and we can keep the mstar<br>
-timer optional, imho.<br>
-<br>
-What do you think ?<br></blockquote><div><br></div><div>I think MSC313E_TIM=
-ER should be optional but default for ARCH_MSTARV7.</div><div><br></div><di=
-v>Cheers,</div><div><br></div><div>Daniel</div></div></div>
-
---000000000000ad4e1505d9642b0b--
+-- 
+Nicolas Ferre
