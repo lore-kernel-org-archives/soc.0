@@ -1,177 +1,116 @@
-Return-Path: <SRS0=uyAw=TP=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=arFV=TP=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74DCEC4167B
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 15:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84684C433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 16:00:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 53563C340F7; Fri,  4 Mar 2022 15:36:24 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	id 484AAC340F0; Fri,  4 Mar 2022 16:00:45 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DB44BC340F5;
-	Fri,  4 Mar 2022 15:36:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB44BC340F5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 9B25D223F7;
-	Fri,  4 Mar 2022 16:36:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1646408179;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=voApxY9YB+l3nIfRPjrWF2SozsSlzTtol4QxJ9Ny/8I=;
-	b=v1Kt0Bddon4Irss+CIY3hlvhM/PcHiqdHY5DtfbNPDi5zLISg/FYcbBq7/egeSbQA7YGWZ
-	pQesrK5o2uWisgOEhIZyVhnXKtkhIVwuTaebIpjQaZg3x1nxIMoVNfUeggp35g+iMSTDEH
-	tLEAo+3mO6Y8/pO9lTcG2g/jlqBUr+w=
-From: Michael Walle <michael@walle.cc>
-To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4BDEBC340E9;
+	Fri,  4 Mar 2022 16:00:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BDEBC340E9
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646409644; x=1677945644;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m1ChR7M0tuClOXVONifHVOA2VcoI0G6cdp50B0K6wFI=;
+  b=vXogSLmRuIzBNkFsW0VPrXw4OC0h//vseB14NcwuWm7rsl8jTa4y9Y6T
+   Kui3RH5N5mXang5f7OFTgEcu18vyuY6wSlCwcFI9T8FbLIDMiS9/5iBXH
+   W3j5g+QxFcVzrCrPfp1NyEvivOsfxeGMdx2Rrhot38pL2pzbCmOjMRdfe
+   W6fKAXZUheuWoGVvQGoAZmzGPXpWTYUxePHKywPDzlduTmmkmFGnEyhtP
+   efFy8dhD5hvRdTUPnn8tl5jtNIRTJWgw1yRKFS/X54e3Bn5fi3bHvloEV
+   Lsin872K896CXEo8jg2E1+A0ZYPegmRcBLXSLuj0xhN3YMsoOUIpLMX7J
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="164553996"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 09:00:43 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 09:00:42 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 09:00:40 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 6/7] ARM: dts: lan966x: add flexcom I2C nodes
-Date: Fri,  4 Mar 2022 16:35:47 +0100
-Message-Id: <20220304153548.3364480-7-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220304153548.3364480-1-michael@walle.cc>
-References: <20220304153548.3364480-1-michael@walle.cc>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>, Tudor Ambarus <Tudor.Ambarus@microchip.com>
+Subject: [GIT PULL] ARM: at91: dt for 5.18 #2
+Date: Fri, 4 Mar 2022 17:00:36 +0100
+Message-ID: <20220304160036.27392-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Organization: microchip
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Add all I2C nodes of the flexcom IP blocks. The driver supports
-FIFO, DMA or both combined. But the latter isn't working correctly.
-Thus, skip the fifo-size property for now. DMA is doing single byte
-reads in this case.
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Keep the nodes disabled by default.
+Arnd, Olof,
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm/boot/dts/lan966x.dtsi | 65 ++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Some more dt changes for 5.18.
+I had to modify one patch to remove a dependency with the clock tree because of
+a modification of the header file in [1] which is already in linux-next.
+I tought it would be the simplest solution as I didn't manage to get an
+inmutable branch (which could be an overkill solution for such a small change).
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index a61d394ad04d..95d58bdca3f0 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -120,6 +120,19 @@ spi0: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c0: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(2)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx1: flexcom@e0044000 {
-@@ -158,6 +171,19 @@ spi1: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c1: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(4)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		trng: rng@e0048000 {
-@@ -213,6 +239,19 @@ spi2: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c2: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(6)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx3: flexcom@e0064000 {
-@@ -251,6 +290,19 @@ spi3: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c3: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(8)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		dma0: dma-controller@e0068000 {
-@@ -308,6 +360,19 @@ spi4: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c4: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(10)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		timer0: timer@e008c000 {
+I verified that there is no conflict when merging this content with linux-next.
+Anyway, tell me if you prefer to not proceed like this.
+
+Thanks, best regards,
+  Nicolas
+
+[1]: https://lore.kernel.org/linux-clk/20220111125310.902856-1-tudor.ambarus@microchip.com/T/#u
+
+The following changes since commit 3c8a9c2e2daf51bd3dcaedd321ecc79f10227c41:
+
+  ARM: dts: at91: sama7g5: add opps (2022-02-25 11:32:22 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.18-2
+
+for you to fetch changes up to 92499dec3aa9c251e605b42e1024e805bbaa50ad:
+
+  ARM: dts: at91: sama7g5: Add NAND support (2022-03-04 15:03:53 +0100)
+
+----------------------------------------------------------------
+AT91 DT #2 for 5.18:
+
+- Align one sam9x60ek regulator with reality at vdd_1v15
+- Clean sama7g5 i2c nodes
+- Add EIC and NAND nodes to sama7g5
+
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: dts: at91: sama7g5: add eic node
+
+Mihai Sain (1):
+      ARM: dts: at91: sam9x60ek: modify vdd_1v5 regulator to vdd_1v15
+
+Tudor Ambarus (2):
+      ARM: dts: at91: sama7g5: Remove unused properties in i2c nodes
+      ARM: dts: at91: sama7g5: Add NAND support
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts |  8 ++--
+ arch/arm/boot/dts/sama7g5.dtsi       | 74 ++++++++++++++++++++++++++++++++---
+ include/dt-bindings/clock/at91.h     |  1 +
+ 3 files changed, 73 insertions(+), 10 deletions(-)
+
 -- 
-2.30.2
-
+Nicolas Ferre
