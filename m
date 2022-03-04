@@ -1,128 +1,124 @@
-Return-Path: <SRS0=1xZH=TP=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=HkMw=TP=gmail.com=romain.perier@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF46C433F5
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 10:08:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8802FC433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 10:09:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0D38C340F2; Fri,  4 Mar 2022 10:08:48 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	id 6E21DC340EE; Fri,  4 Mar 2022 10:09:57 +0000 (UTC)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3FB6FC340E9;
-	Fri,  4 Mar 2022 10:08:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FB6FC340E9
+	by smtp.kernel.org (Postfix) with ESMTPS id BCDC1C340E9
+	for <soc@kernel.org>; Fri,  4 Mar 2022 10:09:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BCDC1C340E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ay10so11891862wrb.6;
-        Fri, 04 Mar 2022 02:08:48 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id q9so8523657vsg.2
+        for <soc@kernel.org>; Fri, 04 Mar 2022 02:09:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=5lH9FqmB9r27huwrwW03QkyzKv1cGa4Cdi1lEm6ZGVs=;
-        b=oiCasSmZxW2Niq+7NicKuNDvP1EG9NDcBZbRbVAspDOimseyXnfPjZMJg1Tl03lFu3
-         kHk0nHxMtLaa0PshDNs7KNWNa154VbZtJw5nlx8PXip1llrCJEFQOomMyQbhdXm2jIzF
-         0y50BIdoyKOK3+uuqaPcQBxHeB8lcXNnV/npoN92NaeV/tavfOJ+xp4OAYvnQX8frHP3
-         IlqQyLOs+VSwfFhwMJR7xzIXWAFlW30QsLT8BkNpdTMuBB1VYuz1RXleBoxA0Fc2TtMU
-         Y2yW33Lp3Oa1F/XORTiwINqxz/g/naHFy+47jLj0lZYfDHXdosj5cAzmwhuPF0O4xIbf
-         yLMQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RSJBHH3RIOxPBOcxPLKpTBjHoXhMbYFt7YY2XmHkL2c=;
+        b=LVJRTrUwjgLtiChQ4t98fTwWF5nmzhttA+KFC8QBwhkjXiQ/+93m1cUkxQ9yDGOZh1
+         lCm3tbCQ7jq9MRaiDNoxZkviTZvO9CvuVDJ8luzEcK5zpSLqbpXET4v0KeHLRX7aohcN
+         nWxHCUhJIPN+/KLh+UK9gAGZdTA0R2eo+I7Mbj0jfvUrn/82uQ4uTmUfwK/nQQW7vgF1
+         dpu2+lxPhier/0JMjkml30u0FC3joN1conEQcGRtUxs7DtkPo8Pz7St+8AJ29tPLQTBp
+         T9Lyg4OuefdcU54lIjazBZf7jnArGGUH4zGRJXMpALvkRJXNkBQw9FuCELHzDxd4TWNj
+         EeOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=5lH9FqmB9r27huwrwW03QkyzKv1cGa4Cdi1lEm6ZGVs=;
-        b=hFze1rXaR6OY4N/F1f07CuyPtj7F9DOeCL289Phf9W5j/URYg2Dgqhng2/JGg115Jl
-         mCIh/0ndeMooe9nhdq4wvGl4AitudyWJJ6x4q7C1JRGK/pYiO2uQS8T3en2vr8gYrC/Y
-         4SD4Izj8E0lHJKx0n2lYAI0k3i3QrLtNsugdVEz6ey4Qm7vpUDsApsVQl6TnlhdrITny
-         0MA90r+JvuCTughBpxOV5hvsxMkfOVFSUagfYOXv10QGczcIabCCbBNV95+ttZL5NP+E
-         H93fFKsrfVKAqsuX8ktjnWp9UO0CiSQH7ql4RFbz8XqVQjhHRiBwf1+p+QwfOcpPmjwB
-         dXew==
-X-Gm-Message-State: AOAM532F8tYv4dDlhTrUxl0Yt+YKZhMgwBBOuOTHGVukl0L25UuyRMQF
-	OnvScbJaYR1wZbNDErnSAHYFtOiQ8NPC7w==
-X-Google-Smtp-Source: ABdhPJwp5wNbI4cvDR43Kvv9DlnKNh5I8meYl21cLGp/ukDe3dnegTeeYf/twNdlW17bK1I50Ud66Q==
-X-Received: by 2002:adf:fcd0:0:b0:1ef:31fe:d08e with SMTP id f16-20020adffcd0000000b001ef31fed08emr27563175wrs.667.1646388526465;
-        Fri, 04 Mar 2022 02:08:46 -0800 (PST)
-Received: from [192.168.0.14] (static-63-182-85-188.ipcom.comunitel.net. [188.85.182.63])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm447269wmq.46.2022.03.04.02.08.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 02:08:45 -0800 (PST)
-Message-ID: <e1b90372-a041-db6e-f35a-d17b26069e40@gmail.com>
-Date: Fri, 4 Mar 2022 11:08:45 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RSJBHH3RIOxPBOcxPLKpTBjHoXhMbYFt7YY2XmHkL2c=;
+        b=AIQKBuN1r1Szz6JqfWTm8JzGBwZS2iAU85OWzg0KPnDEBhl2FIIvtujwbALE0EvGym
+         BtpaiHP2VzjfR+0ZtQjCeTHNwp292UtOJWihyqN9Od0ava4KkzTmUDH5sEZyd1rsCXZD
+         yN2F8ktmSJI1SS0P+tgFaspEZHfC9pccgX5ywUoT+0ZfD8ma+8UfHp1zAwgTW0leGNuH
+         FbriFguDDHN+4nbNkFWc1JsrJ8IcoCcPnLUwn/B5F2QXiHbXfQZlZUcJUlTN9E+8xKBV
+         3GB6qXOmEkAxv8Rf1v72XgXdT0LSXfdwaTyi4vskAId0zkKJZwmCWA7SfkfDOorxsw2J
+         nQlQ==
+X-Gm-Message-State: AOAM533oSvXdOdAUGbKmbLJaxnftJygHzh633AqqfoMtE3Y55FSmkhhQ
+	Arq1Hg0dc1a7qeXb/UTIVdyPTCkbBO+a0Zywh1k=
+X-Google-Smtp-Source: ABdhPJyHzf5pLWlWedCr7aTKVfPFnb/hWZ5e7AA7syMYGDrCO2/YVX+6c9IVDG8SJGat5AWfIjIaA25sjl2rkTOVnV4=
+X-Received: by 2002:a05:6102:3912:b0:320:6bb3:f1fe with SMTP id
+ e18-20020a056102391200b003206bb3f1femr2827115vsu.4.1646388595625; Fri, 04 Mar
+ 2022 02:09:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
+References: <20220301104349.3040422-1-daniel@0x0f.com>
+In-Reply-To: <20220301104349.3040422-1-daniel@0x0f.com>
+From: Romain Perier <romain.perier@gmail.com>
+Date: Fri, 4 Mar 2022 11:09:44 +0100
+Message-ID: <CABgxDo+32A+akgbcD5Y+oGGJwZ_2G+dqfNTAdHYSD3xVPUnoTQ@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mstar: Select HAVE_ARM_ARCH_TIMER
+To: Daniel Palmer <daniel@0x0f.com>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-Cc: "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- Rex-BC Chen <rex-bc.chen@mediatek.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] drivers: soc: mediatek updates for v5.18 take 2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
-Hi Olof,
+Hi all,
 
-This pull request fixes the compilation error in the mmsys driver. Sorry for the 
-incovennience.
+Interesting, when I wrote the patch for msc313e-timer, I always had
+ARCH_ARM_TIMER implicitly built, so I thought that it was implicitly
+selected by MULTI_V7...
+I agree that we should at least have ARM_ARCH_TIMER enabled, otherwise
+we won't being able to boot correctly (no clockevents)
 
-Regards,
-Matthias
+I have also noticed that we missed this commit
+https://github.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d80f767d5524=
+c32fb40a91c6
+ (that selects MSC313E_TIMER), which might explain your initial issue
+(not being to boot).
 
----
-The following changes since commit eb1b02bef52ae545d5eb24116d5c099f738d39d5:
+MSC313E_TIMER being optional on ARM (because of ARM_ARCH_TIMER), we
+should be sure that arm_timer is enabled and we can keep the mstar
+timer optional, imho.
 
+What do you think ?
 
+Romain
 
-   dt-bindings: arm: mediatek: mmsys: add support for MT8186 (2022-03-01 
-09:26:56 +0100)
-
-
-
-are available in the Git repository at:
-
-
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v5.17-next-soc.2
-
-
-
-for you to fetch changes up to 62dc30150c06774a8122c52aedd0eddaceaf5940:
-
-
-
-   soc: mediatek: mmsys: add sw0_rst_offset in mmsys driver data (2022-03-04 
-10:15:47 +0100)
-
-
-
-----------------------------------------------------------------
-
-mmsys: fix compilation by adding SW reset infrastructure
-
-
-
-----------------------------------------------------------------
-
-Rex-BC Chen (1):
-
-       soc: mediatek: mmsys: add sw0_rst_offset in mmsys driver data
-
-
-
-  drivers/soc/mediatek/mt8183-mmsys.h | 2 ++
-
-  drivers/soc/mediatek/mtk-mmsys.c    | 6 ++++--
-
-  drivers/soc/mediatek/mtk-mmsys.h    | 3 +--
-
-  3 files changed, 7 insertions(+), 4 deletions(-)
-
+Le mar. 1 mars 2022 =C3=A0 11:44, Daniel Palmer <daniel@0x0f.com> a =C3=A9c=
+rit :
+>
+> The mstar SoCs have an arch timer but HAVE_ARM_ARCH_TIMER wasn't
+> selected. If MSC313E_TIMER isn't selected then the kernel gets
+> stuck at boot because there are no timers available.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> ---
+>
+> I moved one of my CI builds from a 5.16 based tree to a 5.17
+> based one and it stopped booting. At some point I had broken my DTB
+> so the MStar timer wasn't getting probed anymore and at
+> the same time the arch timer driver wasn't getting built in.
+> I'm not entirely sure why the arch timer driver was built
+> before but isn't now. Anyhow, all of the other ARMv7 machines
+> seem to do this so I guess it's right.
+>
+> Arnd/Olof, please apply directly if acceptable. Maybe this should
+> be in 5.17 as a fix?
+>
+>  arch/arm/mach-mstar/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
+> index cd300eeedc20..0bf4d312bcfd 100644
+> --- a/arch/arm/mach-mstar/Kconfig
+> +++ b/arch/arm/mach-mstar/Kconfig
+> @@ -3,6 +3,7 @@ menuconfig ARCH_MSTARV7
+>         depends on ARCH_MULTI_V7
+>         select ARM_GIC
+>         select ARM_HEAVY_MB
+> +       select HAVE_ARM_ARCH_TIMER
+>         select MST_IRQ
+>         select MSTAR_MSC313_MPLL
+>         help
+> --
+> 2.35.1
+>
