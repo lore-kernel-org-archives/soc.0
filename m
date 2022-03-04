@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19282C433EF
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 11:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E046C433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 11:15:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DB49FC340EE; Fri,  4 Mar 2022 11:01:16 +0000 (UTC)
+	id C03E0C340EE; Fri,  4 Mar 2022 11:15:25 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6B3E2C340E9;
-	Fri,  4 Mar 2022 11:01:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B3E2C340E9
+	by smtp.kernel.org (Postfix) with ESMTPS id 4F1EFC340E9;
+	Fri,  4 Mar 2022 11:15:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4F1EFC340E9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
 Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 9210122175;
-	Fri,  4 Mar 2022 12:01:10 +0100 (CET)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 792F622175;
+	Fri,  4 Mar 2022 12:15:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1646391671;
+	t=1646392521;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=99xRnRPJDumTOTwUMBekudNmfTg7+IdOQMg2FPQY/9E=;
-	b=m0NnZ75dLCXbxcFWFVKasJNohU3bwywMEbUerq5FTd+HIPJHncdtqjURtSSxUIO5j1TR1e
-	ZSAtVJaCkco5IRgIrNoeSPhFWT8T+29R2u51JF5IUk0g/n4dxEeINYZkeoIWkCpblV+zZz
-	QEvWljJ8FOtufLPbksZe64cX5GQaa9U=
+	bh=lm7m072d8v8Dzfgsy93FLf7sDvnn63P9eUXC4Q6AMDU=;
+	b=mYkOpi6cDhwSgu99agkQZmaGJHGRqn9esPKOl4dD52+um9BRg2dp+l+MOCXPqnkOHKhWPB
+	12wlrfCqxuxxI+PmnkCsAcuzOgI37MduyVDQm0AwQ1AOjc6/blF6NKVREoNS4hAxKAgXO7
+	A61aWNGDHZgx3XXbLAMgNVgyou3k3Vg=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date: Fri, 04 Mar 2022 12:01:09 +0100
+Date: Fri, 04 Mar 2022 12:15:21 +0100
 From: Michael Walle <michael@walle.cc>
 To: Claudiu.Beznea@microchip.com
 List-Id: <soc.lore.kernel.org>
@@ -44,192 +44,260 @@ Cc: Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
  linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, robh+dt@kernel.org,
  krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v1 3/6] ARM: dts: lan966x: add all flexcom usart nodes
-In-Reply-To: <a33f0c73-df49-5a22-14b3-0059f7d6b827@microchip.com>
+Subject: Re: [PATCH v1 6/6] ARM: dts: lan966x: add basic Kontron KSwitch D10
+ support
+In-Reply-To: <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
 References: <20220303160323.3316317-1-michael@walle.cc>
- <20220303160323.3316317-4-michael@walle.cc>
- <a33f0c73-df49-5a22-14b3-0059f7d6b827@microchip.com>
+ <20220303160323.3316317-7-michael@walle.cc>
+ <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
 User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <2e0aefc90a80bdf13df0e59857c52ca7@walle.cc>
+Message-ID: <900be5239b96cd77493fbcfbe220989f@walle.cc>
 X-Sender: michael@walle.cc
 
-Hi,
-
-thanks for the quick review.
-
-Am 2022-03-04 09:30, schrieb Claudiu.Beznea@microchip.com:
+Am 2022-03-04 09:31, schrieb Claudiu.Beznea@microchip.com:
 > On 03.03.2022 18:03, Michael Walle wrote:
 >> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
 >> the content is safe
 >> 
->> Add all the usart nodes for the flexcom block. There was already
->> an usart node for the flexcom3 block. But it missed the DMA
->> channels.
-> 
-> And it would be good to go though a different patch.
-
-sure
-
->> Although the DMA channels are specified, DMA is not
->> enabled by default because break detection doesn't work with DMA.
->> 
->> Keep the nodes disabled by default.
+>> Add basic support for the Kontron KSwitch D10 MMT 6G-2GS which
+>> features 6 Gigabit copper ports and two SFP cages. For now the
+>> following is working:
+>>  - Kernel console
+>>  - SFP cages I2C bus and mux
+>>  - SPI
+>>  - SGPIO
+>>  - Watchdog
 >> 
 >> Signed-off-by: Michael Walle <michael@walle.cc>
 >> ---
->>  arch/arm/boot/dts/lan966x.dtsi | 55 
->> ++++++++++++++++++++++++++++++++++
->>  1 file changed, 55 insertions(+)
+>>  arch/arm/boot/dts/Makefile                    |   3 +-
+>>  ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159 
+>> ++++++++++++++++++
+>>  2 files changed, 161 insertions(+), 1 deletion(-)
+>>  create mode 100644 
+>> arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
 >> 
->> diff --git a/arch/arm/boot/dts/lan966x.dtsi 
->> b/arch/arm/boot/dts/lan966x.dtsi
->> index a7d46a2ca058..bea69b6d2749 100644
->> --- a/arch/arm/boot/dts/lan966x.dtsi
->> +++ b/arch/arm/boot/dts/lan966x.dtsi
->> @@ -92,6 +92,19 @@ flx0: flexcom@e0040000 {
->>                         #size-cells = <1>;
->>                         ranges = <0x0 0xe0040000 0x800>;
->>                         status = "disabled";
+>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>> index 085c43649d44..86dd0f9804ee 100644
+>> --- a/arch/arm/boot/dts/Makefile
+>> +++ b/arch/arm/boot/dts/Makefile
+>> @@ -739,7 +739,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+>>         imx7ulp-com.dtb \
+>>         imx7ulp-evk.dtb
+>>  dtb-$(CONFIG_SOC_LAN966) += \
+>> -       lan966x-pcb8291.dtb
+>> +       lan966x-pcb8291.dtb \
+>> +       lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
+>>  dtb-$(CONFIG_SOC_LS1021A) += \
+>>         ls1021a-moxa-uc-8410a.dtb \
+>>         ls1021a-qds.dtb \
+>> diff --git 
+>> a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts 
+>> b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>> new file mode 100644
+>> index 000000000000..958678dec7ad
+>> --- /dev/null
+>> +++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>> @@ -0,0 +1,159 @@
+>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>> +/*
+>> + * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
+>> + */
 >> +
->> +                       usart0: serial@200 {
->> +                               compatible = 
->> "atmel,at91sam9260-usart";
+>> +/dts-v1/;
+>> +#include "lan966x.dtsi"
+>> +
+>> +/ {
+>> +       model = "Kontron KSwitch D10 MMT 6G-2GS";
+>> +       compatible = "kontron,kswitch-d10-mmt-6g-2gs", 
+>> "kontron,s1921",
+>> +                    "microchip,lan9668", "microchip,lan966";
+>> +
+>> +       aliases {
+>> +               serial0 = &usart0;
+>> +       };
+>> +
+>> +       chosen {
+>> +               stdout-path = "serial0:115200n8";
+>> +       };
+>> +
+>> +       gpio-restart {
+>> +               compatible = "gpio-restart";
+>> +               gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
+>> +               priority = <200>;
+>> +       };
+>> +
+>> +       i2cmux {
+>> +               compatible = "i2c-mux-gpio";
+>> +               #address-cells = <1>;
+>> +               #size-cells = <0>;
+>> +               mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
+>> +                           <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
+>> +               i2c-parent = <&i2c4>;
+>> +
+>> +               i2c4_0: i2c@1 {
+>> +                       reg = <1>;
+>> +                       #address-cells = <1>;
+>> +                       #size-cells = <0>;
+>> +               };
+>> +
+>> +               i2c4_1: i2c@2 {
+>> +                       reg = <2>;
+>> +                       #address-cells = <1>;
+>> +                       #size-cells = <0>;
+>> +               };
+>> +       };
+>> +
+>> +       sfp0: sfp0 {
+>> +               compatible = "sff,sfp";
+>> +               i2c-bus = <&i2c4_0>;
+>> +               los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
+>> +               mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
+>> +               maximum-power-milliwatt = <2500>;
+>> +               tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
+>> +               tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
+>> +               rate-select0-gpios = <&sgpio_out 2 0 
+>> GPIO_ACTIVE_HIGH>;
+>> +               rate-select1-gpios = <&sgpio_out 2 1 
+>> GPIO_ACTIVE_HIGH>;
+>> +       };
+>> +
+>> +       sfp1: sfp1 {
+>> +               compatible = "sff,sfp";
+>> +               i2c-bus = <&i2c4_1>;
+>> +               los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
+>> +               mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
+>> +               maximum-power-milliwatt = <2500>;
+>> +               tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
+>> +               tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
+>> +               rate-select0-gpios = <&sgpio_out 2 2 
+>> GPIO_ACTIVE_HIGH>;
+>> +               rate-select1-gpios = <&sgpio_out 2 3 
+>> GPIO_ACTIVE_HIGH>;
+>> +       };
+>> +};
+>> +
+>> +&flx0 {
+>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&flx3 {
+>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&flx4 {
+>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+>> +       status = "okay";
+>> +};
 > 
-> Are the usart blocks in lan966x 1:1 compatible with what is is sam9260? 
-> In
-> case not it may worth to have a new compatible here, for lan966x, such 
-> that
-> when new features will be implemented in usart driver for lan966x the 
-> old
-> DT (this one) will work with the new kernel implementation.
+> Although there is 1:1 mapping b/w ids of flexcoms and the embedded 
+> blocks
+> (flxX has usartX, i2cX, spiX) and there is nothing wrong with the 
+> approach
+> here I found a bit hard to follow if the correspondent embedded block
+> (i2c, spi, usart) is enabled or not.
 
-During my review of the inital dtsi patch, I've asked the same question 
-[1]
-and I was told they are the same.
+I know and I had the same feeling, but I don't want to have the
+subnodes (matched by name) in these nodes.  I.e. I want to avoid
+something like:
 
-At least this exact usart compatible is already in this file. I was 
-under
-the impression, that was the least controversial compatible :)
+&flx4 {
+        atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+        status = "okay";
 
-But you'll need to tell me if they are the same or not, I don't have
-any clue what microchip has reused. The only thing I can add is that
-there is a version register within the IP blocks which is already used
-in some drivers.
+        i2c@600 {
+               pinctrl-0 = <&fc4_b_pins>;
+               pinctrl-names = "default";
+               status = "okay";
+        };
+};
 
-> Same for the rest of the nodes added in this series.
-> 
->> +                               reg = <0x200 0x200>;
->> +                               interrupts = <GIC_SPI 48 
->> IRQ_TYPE_LEVEL_HIGH>;
->> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
->> +                                          <&dma0 
->> AT91_XDMAC_DT_PERID(2)>;
-> 
-> Keep dma entries aligned.
+If someone renames the subnode in the dtsi, it might easily be
+overlooked in the board files. Having the handle will raise an
+error.
 
-Oh shoot. How embarrassing they are alligned when the tab width is 4 *g*
-Thanks.
+And because the node references should be sorted alphabetically
+it will be cluttered around in the file. You could rename the
+references to flx4_i2c though. But I don't know it its worth
+the efforts. Let me know what you think.
 
 -michael
 
-[1] 
-https://lore.kernel.org/lkml/20220210123704.477826-1-michael@walle.cc/
-
->> +                               dma-names = "tx", "rx";
->> +                               clocks = <&nic_clk>;
->> +                               clock-names = "usart";
->> +                               atmel,fifo-size = <32>;
->> +                               status = "disabled";
->> +                       };
->>                 };
->> 
->>                 flx1: flexcom@e0044000 {
->> @@ -102,6 +115,19 @@ flx1: flexcom@e0044000 {
->>                         #size-cells = <1>;
->>                         ranges = <0x0 0xe0044000 0x800>;
->>                         status = "disabled";
+> 
 >> +
->> +                       usart1: serial@200 {
->> +                               compatible = 
->> "atmel,at91sam9260-usart";
->> +                               reg = <0x200 0x200>;
->> +                               interrupts = <GIC_SPI 49 
->> IRQ_TYPE_LEVEL_HIGH>;
->> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
->> +                                          <&dma0 
->> AT91_XDMAC_DT_PERID(4)>;
->> +                               dma-names = "tx", "rx";
->> +                               clocks = <&nic_clk>;
->> +                               clock-names = "usart";
->> +                               atmel,fifo-size = <32>;
->> +                               status = "disabled";
->> +                       };
->>                 };
->> 
->>                 trng: rng@e0048000 {
->> @@ -129,6 +155,19 @@ flx2: flexcom@e0060000 {
->>                         #size-cells = <1>;
->>                         ranges = <0x0 0xe0060000 0x800>;
->>                         status = "disabled";
+>> +&gpio {
+>> +       usart0_pins: usart0-pins {
+>> +               /* RXD, TXD */
+>> +               pins = "GPIO_25", "GPIO_26";
+>> +               function = "fc0_b";
+>> +       };
 >> +
->> +                       usart2: serial@200 {
->> +                               compatible = 
->> "atmel,at91sam9260-usart";
->> +                               reg = <0x200 0x200>;
->> +                               interrupts = <GIC_SPI 50 
->> IRQ_TYPE_LEVEL_HIGH>;
->> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
->> +                                          <&dma0 
->> AT91_XDMAC_DT_PERID(6)>;
->> +                               dma-names = "tx", "rx";
->> +                               clocks = <&nic_clk>;
->> +                               clock-names = "usart";
->> +                               atmel,fifo-size = <32>;
->> +                               status = "disabled";
->> +                       };
->>                 };
->> 
->>                 flx3: flexcom@e0064000 {
->> @@ -144,6 +183,9 @@ usart3: serial@200 {
->>                                 compatible = 
->> "atmel,at91sam9260-usart";
->>                                 reg = <0x200 0x200>;
->>                                 interrupts = <GIC_SPI 51 
->> IRQ_TYPE_LEVEL_HIGH>;
->> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
->> +                                          <&dma0 
->> AT91_XDMAC_DT_PERID(8)>;
->> +                               dma-names = "tx", "rx";
->>                                 clocks = <&nic_clk>;
->>                                 clock-names = "usart";
->>                                 atmel,fifo-size = <32>;
->> @@ -178,6 +220,19 @@ flx4: flexcom@e0070000 {
->>                         #size-cells = <1>;
->>                         ranges = <0x0 0xe0070000 0x800>;
->>                         status = "disabled";
+>> +       sgpio_a_pins: sgpio-a-pins {
+>> +               /* SCK, D0, D1, LD */
+>> +               pins = "GPIO_32", "GPIO_33", "GPIO_34";
+>> +               function = "sgpio_a";
+>> +       };
 >> +
->> +                       usart4: serial@200 {
->> +                               compatible = 
->> "atmel,at91sam9260-usart";
->> +                               reg = <0x200 0x200>;
->> +                               interrupts = <GIC_SPI 52 
->> IRQ_TYPE_LEVEL_HIGH>;
->> +                               dmas = <&dma0 
->> AT91_XDMAC_DT_PERID(11)>,
->> +                                          <&dma0 
->> AT91_XDMAC_DT_PERID(10)>;
->> +                               dma-names = "tx", "rx";
->> +                               clocks = <&nic_clk>;
->> +                               clock-names = "usart";
->> +                               atmel,fifo-size = <32>;
->> +                               status = "disabled";
->> +                       };
->>                 };
->> 
->>                 timer0: timer@e008c000 {
+>> +       sgpio_b_pins: sgpio-b-pins {
+>> +               /* SCK, D0, D1, LD */
+>> +               pins = "GPIO_64";
+>> +               function = "sgpio_b";
+>> +       };
+>> +
+>> +       fc3_b_pins: fc3-b-spi-pins {
+>> +               /* SCK, MISO, MOSI */
+>> +               pins = "GPIO_51", "GPIO_52", "GPIO_53";
+>> +               function = "fc3_b";
+>> +       };
+>> +
+>> +       fc4_b_pins: fc4-b-i2c-pins {
+>> +               /* RXD, TXD */
+>> +               pins = "GPIO_57", "GPIO_58";
+>> +               function = "fc4_b";
+>> +       };
+>> +};
+>> +
+>> +&i2c4 {
+>> +       pinctrl-0 = <&fc4_b_pins>;
+>> +       pinctrl-names = "default";
+>> +       status = "okay";
+>> +};
+>> +
+>> +&usart0 {
+>> +       pinctrl-0 = <&usart0_pins>;
+>> +       pinctrl-names = "default";
+>> +       status = "okay";
+>> +};
+>> +
+>> +&sgpio {
+>> +       pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
+>> +       pinctrl-names = "default";
+>> +       bus-frequency = <8000000>;
+>> +       /* arbitrary range because all GPIOs are in software mode */
+>> +       microchip,sgpio-port-ranges = <0 11>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&sgpio_in {
+>> +       ngpios = <128>;
+>> +};
+>> +
+>> +&sgpio_out {
+>> +       ngpios = <128>;
+>> +};
+>> +
+>> +&spi3 {
+>> +       pinctrl-0 = <&fc3_b_pins>;
+>> +       pinctrl-names = "default";
+>> +       cs-gpios = <&gpio 46 GPIO_ACTIVE_LOW>;
+>> +       status = "okay";
+>> +};
+>> +
+>> +&watchdog {
+>> +       status = "okay";
+>> +};
 >> --
 >> 2.30.2
 >> 
-
--- 
--michael
