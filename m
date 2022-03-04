@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83876C433EF
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 14:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68AB9C433EF
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 14:47:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4EA14C340F1; Fri,  4 Mar 2022 14:43:37 +0000 (UTC)
+	id 50AC1C340F3; Fri,  4 Mar 2022 14:47:54 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4E8A9C340E9;
-	Fri,  4 Mar 2022 14:43:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E8A9C340E9
+	by smtp.kernel.org (Postfix) with ESMTPS id 65666C340F0;
+	Fri,  4 Mar 2022 14:47:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65666C340F0
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646405016; x=1677941016;
+  t=1646405273; x=1677941273;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=CW0GZlgSnEJ+z/BmZSRD3m0q4ahJDHVBRYgA4ELGTuQ=;
-  b=fPFQo756LV4/yQMeFymLNkYjUAb4HSBVtTCiZcKhzKkRYUlMS7DfT8ax
-   +8auCukGEsxxQuY4N3zMd5+bvW5/VVHuWgXRNbr1Fx3JRrzNzlj0bVS2P
-   ELMq1AJZEe99IEdM87vZHtTWt32XfDheu/KY4ZHXojufrji0roO1PQQQm
-   8+irrVyejgJJwHKcANhVFSQDhzYCrcL1yQuxY1oda1B2AH8NEMx6zHYzP
-   Go9WihzD496ftAbdd+Ksc1N3EMWW+Vk0SVdQxRQSZsadthbimWcjNlPRr
-   qvCz8UhNqs8dzCs5LOt1WxATr8Hk6ZzJFNMOBEOhs+hlg25vp+HYvNKyq
+  bh=E3j7SQpok6Ea6NdstnR4CWXDU6IjMCFuF1+JSKHNG38=;
+  b=BzxiKsyWgEEw7wdQga4AWuObtfxrSSJDZ9vwj9uHbOtKyharVFsF676w
+   USU1fYWRh6QWTdxcnrsY72AxXtT9jhvUbcTUAEDOvpNXtu6c9Wysrphq8
+   WjHkJ6LL2DcGy/IM+3SgY/25EcC8cAw6rY1u11C0dc9unWt4ueFv4gs/8
+   xb41NKVowh8JWwq0EXj/k6oJ+l5iU0R/bosBE3aKZ4+gJzE3LCsqlkQTv
+   j6O1qsRsoxnFoi+MEQnmj530kAysxlOjZipkPMmgFqKnY2FDYfHhdTnuC
+   EdmE/y9lcs4kmqV/S9ZtwxTWQ4Tnby98aeSllsPUTz2MnT7yKA6tbbDRi
    Q==;
 X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="150870328"
+   d="scan'208";a="150870895"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:43:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:47:51 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 07:43:34 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 4 Mar 2022 07:43:32 -0700
+ 15.1.2375.17; Fri, 4 Mar 2022 07:47:51 -0700
+Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 07:47:49 -0700
 From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -49,10 +49,10 @@ CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
 	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
 	<alexandre.belloni@bootlin.com>, Ludovic Desroches
 	<ludovic.desroches@microchip.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>, Conor Dooley <conor.dooley@microchip.com>
-Subject: [GIT PULL] ARM: at91: soc for 5.18 #2
-Date: Fri, 4 Mar 2022 15:42:17 +0100
-Message-ID: <20220304144216.23340-1-nicolas.ferre@microchip.com>
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: defconfig for 5.18 #2
+Date: Fri, 4 Mar 2022 15:47:46 +0100
+Message-ID: <20220304144746.23779-1-nicolas.ferre@microchip.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Organization: microchip
@@ -63,37 +63,37 @@ From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
 Arnd, Olof,
 
-One more patch for 5.18 on the SoC branch.
-You already have the patch made by Conor "soc: microchip: make
-mpfs_sys_controller_put static" in your tree, so I didn't add it here.
+A little more defconfig changes for 5.18. Please pull.
 
 Thanks, best regards,
   Nicolas
 
-The following changes since commit d0054a470c33902f5ae88835ed8a8ecc3cf8faa4:
+The following changes since commit 2884f2dda70ac8659b2e15b8ba8b85fe7184b9f4:
 
-  soc: add microchip polarfire soc system controller (2022-02-25 12:50:59 +0100)
+  ARM: configs: at91: sama7: add config for cpufreq (2022-02-25 12:20:43 +0100)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.18-2
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.18-2
 
-for you to fetch changes up to def8abbb1464579c37f15b3d7a95e5f3bab758dc:
+for you to fetch changes up to 5f5399843c0ec3bd562dfd533f32e4074ca90314:
 
-  ARM: at91: add support in soc driver for new SAMA5D29 (2022-03-04 12:49:22 +0100)
-
-----------------------------------------------------------------
-AT91 SoC #2 for 5.18:
-
-- SAMA5D29 variant to the SAMA5D2 family in SoC driver.
+  ARM: configs: at91: sama7: Unselect CONFIG_DMATEST (2022-03-04 12:53:15 +0100)
 
 ----------------------------------------------------------------
-Mihai Sain (1):
-      ARM: at91: add support in soc driver for new SAMA5D29
+AT91: defconfig #2 for 5.18:
 
- drivers/soc/atmel/soc.c | 3 +++
- drivers/soc/atmel/soc.h | 1 +
- 2 files changed, 4 insertions(+)
+- Add EIC, remove DMATEST to sama7_defconfig
+
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: configs: at91: add eic
+
+Tudor Ambarus (1):
+      ARM: configs: at91: sama7: Unselect CONFIG_DMATEST
+
+ arch/arm/configs/sama7_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 -- 
 Nicolas Ferre
