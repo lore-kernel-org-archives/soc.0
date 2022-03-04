@@ -1,303 +1,146 @@
-Return-Path: <SRS0=uyAw=TP=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=UCf6=TP=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E046C433F5
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 11:15:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD2EC433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 13:05:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C03E0C340EE; Fri,  4 Mar 2022 11:15:25 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E5E3DC340F0; Fri,  4 Mar 2022 13:05:38 +0000 (UTC)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4F1EFC340E9;
-	Fri,  4 Mar 2022 11:15:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4F1EFC340E9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 792F622175;
-	Fri,  4 Mar 2022 12:15:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1646392521;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lm7m072d8v8Dzfgsy93FLf7sDvnn63P9eUXC4Q6AMDU=;
-	b=mYkOpi6cDhwSgu99agkQZmaGJHGRqn9esPKOl4dD52+um9BRg2dp+l+MOCXPqnkOHKhWPB
-	12wlrfCqxuxxI+PmnkCsAcuzOgI37MduyVDQm0AwQ1AOjc6/blF6NKVREoNS4hAxKAgXO7
-	A61aWNGDHZgx3XXbLAMgNVgyou3k3Vg=
+	by smtp.kernel.org (Postfix) with ESMTPS id 82BC0C340E9
+	for <soc@kernel.org>; Fri,  4 Mar 2022 13:05:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82BC0C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=0x0f.com
+Received: by mail-vs1-f51.google.com with SMTP id d11so8980796vsm.5
+        for <soc@kernel.org>; Fri, 04 Mar 2022 05:05:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aiwsrecM9WtgaZA42WLqCTiy2D01II3AHBBfXeGJehw=;
+        b=XtswYgscLWfBsIzJNXZFzQcbI/jfyHYdIDRPbw9LjtMv8cSr2yn8XQ9oa5flPtqM47
+         vrOX/cnESCZg7IBfNjx3JoHa3H7nVTb5zbl1TOM6O0Vw5RVs45KA65H4zZoKTlrAC55O
+         BdwOFqk+JWoN/PtUJK/z0tQ2/TUS+TNMQyItE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aiwsrecM9WtgaZA42WLqCTiy2D01II3AHBBfXeGJehw=;
+        b=Ms8BiOdydRSQFpUovlfKBEdeH6LWEWchHkOCCsRgIyGbU92dBca0xdq8LYLNXaDtRx
+         TqZUHkUrc5PbboMqCjvXkNypVGw7KNzcS71yU1Z4O6H/3+BnJ640FoY9GSHPvzBgw0eF
+         s1cN2pfp5E3ukD0N8nO0LOwMfpJmk4YUb8cbHjaNxWGld4crTMJw14A+LEylQ6DoNZoL
+         LSBGQLyg3G/WVXWX8LOGwP8iqOG5oT5ZTlZNcWkMhR9+CEH99lmB/PIpWbtmn6/XPOys
+         +znorQHY2b4q8Y+tNRncrU5aJnX2ozEp+dcjmMXfQEcIdCMyXb6DK1Zk84nO7xpvHylZ
+         UdHg==
+X-Gm-Message-State: AOAM533NumVPmI8jcxL7PTmSPKkvhyDRLOBE6abRXYwbSc/VEs9NJBnM
+	/7Kd5ZSSUh6+ZbTOJr4YMXwia3BvDAjME8ZGM71+YD4nszc=
+X-Google-Smtp-Source: ABdhPJxNkSI1cjXklKhFVfilChMNkEq+84m444X6hclD5m1QYaP1K/9FO8hIFo8GLU0Ronevz+YSxlb6ytQb2IkxjVM=
+X-Received: by 2002:a67:fad9:0:b0:31e:be9f:4974 with SMTP id
+ g25-20020a67fad9000000b0031ebe9f4974mr6604754vsq.43.1646399136281; Fri, 04
+ Mar 2022 05:05:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Fri, 04 Mar 2022 12:15:21 +0100
-From: Michael Walle <michael@walle.cc>
-To: Claudiu.Beznea@microchip.com
+References: <20220301104349.3040422-1-daniel@0x0f.com> <CABgxDo+32A+akgbcD5Y+oGGJwZ_2G+dqfNTAdHYSD3xVPUnoTQ@mail.gmail.com>
+In-Reply-To: <CABgxDo+32A+akgbcD5Y+oGGJwZ_2G+dqfNTAdHYSD3xVPUnoTQ@mail.gmail.com>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Fri, 4 Mar 2022 22:08:03 +0900
+Message-ID: <CAFr9PXnvF5ArbO_E4oPbz-7DBPiCaZxr3dsE1G=Ln8=+VyoPrA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mstar: Select HAVE_ARM_ARCH_TIMER
+To: Romain Perier <romain.perier@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v1 6/6] ARM: dts: lan966x: add basic Kontron KSwitch D10
- support
-In-Reply-To: <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
-References: <20220303160323.3316317-1-michael@walle.cc>
- <20220303160323.3316317-7-michael@walle.cc>
- <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <900be5239b96cd77493fbcfbe220989f@walle.cc>
-X-Sender: michael@walle.cc
+Cc: SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/alternative; boundary="000000000000ad4e1505d9642b0b"
 
-Am 2022-03-04 09:31, schrieb Claudiu.Beznea@microchip.com:
-> On 03.03.2022 18:03, Michael Walle wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the content is safe
->> 
->> Add basic support for the Kontron KSwitch D10 MMT 6G-2GS which
->> features 6 Gigabit copper ports and two SFP cages. For now the
->> following is working:
->>  - Kernel console
->>  - SFP cages I2C bus and mux
->>  - SPI
->>  - SGPIO
->>  - Watchdog
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->>  arch/arm/boot/dts/Makefile                    |   3 +-
->>  ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159 
->> ++++++++++++++++++
->>  2 files changed, 161 insertions(+), 1 deletion(-)
->>  create mode 100644 
->> arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->> 
->> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->> index 085c43649d44..86dd0f9804ee 100644
->> --- a/arch/arm/boot/dts/Makefile
->> +++ b/arch/arm/boot/dts/Makefile
->> @@ -739,7 +739,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
->>         imx7ulp-com.dtb \
->>         imx7ulp-evk.dtb
->>  dtb-$(CONFIG_SOC_LAN966) += \
->> -       lan966x-pcb8291.dtb
->> +       lan966x-pcb8291.dtb \
->> +       lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
->>  dtb-$(CONFIG_SOC_LS1021A) += \
->>         ls1021a-moxa-uc-8410a.dtb \
->>         ls1021a-qds.dtb \
->> diff --git 
->> a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts 
->> b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->> new file mode 100644
->> index 000000000000..958678dec7ad
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->> @@ -0,0 +1,159 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +/*
->> + * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
->> + */
->> +
->> +/dts-v1/;
->> +#include "lan966x.dtsi"
->> +
->> +/ {
->> +       model = "Kontron KSwitch D10 MMT 6G-2GS";
->> +       compatible = "kontron,kswitch-d10-mmt-6g-2gs", 
->> "kontron,s1921",
->> +                    "microchip,lan9668", "microchip,lan966";
->> +
->> +       aliases {
->> +               serial0 = &usart0;
->> +       };
->> +
->> +       chosen {
->> +               stdout-path = "serial0:115200n8";
->> +       };
->> +
->> +       gpio-restart {
->> +               compatible = "gpio-restart";
->> +               gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
->> +               priority = <200>;
->> +       };
->> +
->> +       i2cmux {
->> +               compatible = "i2c-mux-gpio";
->> +               #address-cells = <1>;
->> +               #size-cells = <0>;
->> +               mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
->> +                           <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
->> +               i2c-parent = <&i2c4>;
->> +
->> +               i2c4_0: i2c@1 {
->> +                       reg = <1>;
->> +                       #address-cells = <1>;
->> +                       #size-cells = <0>;
->> +               };
->> +
->> +               i2c4_1: i2c@2 {
->> +                       reg = <2>;
->> +                       #address-cells = <1>;
->> +                       #size-cells = <0>;
->> +               };
->> +       };
->> +
->> +       sfp0: sfp0 {
->> +               compatible = "sff,sfp";
->> +               i2c-bus = <&i2c4_0>;
->> +               los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
->> +               mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
->> +               maximum-power-milliwatt = <2500>;
->> +               tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
->> +               tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
->> +               rate-select0-gpios = <&sgpio_out 2 0 
->> GPIO_ACTIVE_HIGH>;
->> +               rate-select1-gpios = <&sgpio_out 2 1 
->> GPIO_ACTIVE_HIGH>;
->> +       };
->> +
->> +       sfp1: sfp1 {
->> +               compatible = "sff,sfp";
->> +               i2c-bus = <&i2c4_1>;
->> +               los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
->> +               mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
->> +               maximum-power-milliwatt = <2500>;
->> +               tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
->> +               tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
->> +               rate-select0-gpios = <&sgpio_out 2 2 
->> GPIO_ACTIVE_HIGH>;
->> +               rate-select1-gpios = <&sgpio_out 2 3 
->> GPIO_ACTIVE_HIGH>;
->> +       };
->> +};
->> +
->> +&flx0 {
->> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
->> +       status = "okay";
->> +};
->> +
->> +&flx3 {
->> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
->> +       status = "okay";
->> +};
->> +
->> +&flx4 {
->> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
->> +       status = "okay";
->> +};
-> 
-> Although there is 1:1 mapping b/w ids of flexcoms and the embedded 
-> blocks
-> (flxX has usartX, i2cX, spiX) and there is nothing wrong with the 
-> approach
-> here I found a bit hard to follow if the correspondent embedded block
-> (i2c, spi, usart) is enabled or not.
+--000000000000ad4e1505d9642b0b
+Content-Type: text/plain; charset="UTF-8"
 
-I know and I had the same feeling, but I don't want to have the
-subnodes (matched by name) in these nodes.  I.e. I want to avoid
-something like:
+Hi Romain,
 
-&flx4 {
-        atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-        status = "okay";
+On Fri, 4 Mar 2022 at 19:09, Romain Perier <romain.perier@gmail.com> wrote:
 
-        i2c@600 {
-               pinctrl-0 = <&fc4_b_pins>;
-               pinctrl-names = "default";
-               status = "okay";
-        };
-};
+> Hi all,
+>
+> Interesting, when I wrote the patch for msc313e-timer, I always had
+> ARCH_ARM_TIMER implicitly built, so I thought that it was implicitly
+> selected by MULTI_V7...
+>
 
-If someone renames the subnode in the dtsi, it might easily be
-overlooked in the board files. Having the handle will raise an
-error.
+It was getting built somehow until 5.17 I think and I only noticed it got
+broken because the CI build uses a defconfig whereas my development tree
+has a full config that has ARCH_ARM_TIMER in it.
 
-And because the node references should be sorted alphabetically
-it will be cluttered around in the file. You could rename the
-references to flx4_i2c though. But I don't know it its worth
-the efforts. Let me know what you think.
 
--michael
+> I agree that we should at least have ARM_ARCH_TIMER enabled, otherwise
+> we won't being able to boot correctly (no clockevents)
+>
 
-> 
->> +
->> +&gpio {
->> +       usart0_pins: usart0-pins {
->> +               /* RXD, TXD */
->> +               pins = "GPIO_25", "GPIO_26";
->> +               function = "fc0_b";
->> +       };
->> +
->> +       sgpio_a_pins: sgpio-a-pins {
->> +               /* SCK, D0, D1, LD */
->> +               pins = "GPIO_32", "GPIO_33", "GPIO_34";
->> +               function = "sgpio_a";
->> +       };
->> +
->> +       sgpio_b_pins: sgpio-b-pins {
->> +               /* SCK, D0, D1, LD */
->> +               pins = "GPIO_64";
->> +               function = "sgpio_b";
->> +       };
->> +
->> +       fc3_b_pins: fc3-b-spi-pins {
->> +               /* SCK, MISO, MOSI */
->> +               pins = "GPIO_51", "GPIO_52", "GPIO_53";
->> +               function = "fc3_b";
->> +       };
->> +
->> +       fc4_b_pins: fc4-b-i2c-pins {
->> +               /* RXD, TXD */
->> +               pins = "GPIO_57", "GPIO_58";
->> +               function = "fc4_b";
->> +       };
->> +};
->> +
->> +&i2c4 {
->> +       pinctrl-0 = <&fc4_b_pins>;
->> +       pinctrl-names = "default";
->> +       status = "okay";
->> +};
->> +
->> +&usart0 {
->> +       pinctrl-0 = <&usart0_pins>;
->> +       pinctrl-names = "default";
->> +       status = "okay";
->> +};
->> +
->> +&sgpio {
->> +       pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
->> +       pinctrl-names = "default";
->> +       bus-frequency = <8000000>;
->> +       /* arbitrary range because all GPIOs are in software mode */
->> +       microchip,sgpio-port-ranges = <0 11>;
->> +       status = "okay";
->> +};
->> +
->> +&sgpio_in {
->> +       ngpios = <128>;
->> +};
->> +
->> +&sgpio_out {
->> +       ngpios = <128>;
->> +};
->> +
->> +&spi3 {
->> +       pinctrl-0 = <&fc3_b_pins>;
->> +       pinctrl-names = "default";
->> +       cs-gpios = <&gpio 46 GPIO_ACTIVE_LOW>;
->> +       status = "okay";
->> +};
->> +
->> +&watchdog {
->> +       status = "okay";
->> +};
->> --
->> 2.30.2
->> 
+Arnd applied this for us already.
+
+
+> I have also noticed that we missed this commit
+>
+> https://github.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d80f767d5524c32fb40a91c6
+>  (that selects MSC313E_TIMER), which might explain your initial issue
+> (not being to boot).
+>
+> MSC313E_TIMER being optional on ARM (because of ARM_ARCH_TIMER), we
+> should be sure that arm_timer is enabled and we can keep the mstar
+> timer optional, imho.
+>
+> What do you think ?
+>
+
+I think MSC313E_TIMER should be optional but default for ARCH_MSTARV7.
+
+Cheers,
+
+Daniel
+
+--000000000000ad4e1505d9642b0b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Romain,</div><br><div class=3D"gmail_quote"><div d=
+ir=3D"ltr" class=3D"gmail_attr">On Fri, 4 Mar 2022 at 19:09, Romain Perier =
+&lt;<a href=3D"mailto:romain.perier@gmail.com">romain.perier@gmail.com</a>&=
+gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0=
+px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi al=
+l,<br>
+<br>
+Interesting, when I wrote the patch for msc313e-timer, I always had<br>
+ARCH_ARM_TIMER implicitly built, so I thought that it was implicitly<br>
+selected by MULTI_V7...<br></blockquote><div><br></div><div>It was getting =
+built somehow until 5.17 I think and I only noticed it got broken because t=
+he CI build uses a defconfig whereas my development tree has a full config =
+that has ARCH_ARM_TIMER in it.</div><div>=C2=A0</div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
+,204,204);padding-left:1ex">
+I agree that we should at least have ARM_ARCH_TIMER enabled, otherwise<br>
+we won&#39;t being able to boot correctly (no clockevents)<br></blockquote>=
+<div><br></div><div>Arnd applied this for us already.</div><div>=C2=A0</div=
+><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
+-left:1px solid rgb(204,204,204);padding-left:1ex">
+I have also noticed that we missed this commit<br>
+<a href=3D"https://github.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d=
+80f767d5524c32fb40a91c6" rel=3D"noreferrer" target=3D"_blank">https://githu=
+b.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d80f767d5524c32fb40a91c6<=
+/a><br>
+=C2=A0(that selects MSC313E_TIMER), which might explain your initial issue<=
+br>
+(not being to boot).<br>
+<br>
+MSC313E_TIMER being optional on ARM (because of ARM_ARCH_TIMER), we<br>
+should be sure that arm_timer is enabled and we can keep the mstar<br>
+timer optional, imho.<br>
+<br>
+What do you think ?<br></blockquote><div><br></div><div>I think MSC313E_TIM=
+ER should be optional but default for ARCH_MSTARV7.</div><div><br></div><di=
+v>Cheers,</div><div><br></div><div>Daniel</div></div></div>
+
+--000000000000ad4e1505d9642b0b--
