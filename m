@@ -1,124 +1,235 @@
-Return-Path: <SRS0=HkMw=TP=gmail.com=romain.perier@kernel.org>
+Return-Path: <SRS0=uyAw=TP=walle.cc=michael@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8802FC433F5
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 10:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19282C433EF
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 11:01:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6E21DC340EE; Fri,  4 Mar 2022 10:09:57 +0000 (UTC)
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id DB49FC340EE; Fri,  4 Mar 2022 11:01:16 +0000 (UTC)
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BCDC1C340E9
-	for <soc@kernel.org>; Fri,  4 Mar 2022 10:09:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BCDC1C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f45.google.com with SMTP id q9so8523657vsg.2
-        for <soc@kernel.org>; Fri, 04 Mar 2022 02:09:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RSJBHH3RIOxPBOcxPLKpTBjHoXhMbYFt7YY2XmHkL2c=;
-        b=LVJRTrUwjgLtiChQ4t98fTwWF5nmzhttA+KFC8QBwhkjXiQ/+93m1cUkxQ9yDGOZh1
-         lCm3tbCQ7jq9MRaiDNoxZkviTZvO9CvuVDJ8luzEcK5zpSLqbpXET4v0KeHLRX7aohcN
-         nWxHCUhJIPN+/KLh+UK9gAGZdTA0R2eo+I7Mbj0jfvUrn/82uQ4uTmUfwK/nQQW7vgF1
-         dpu2+lxPhier/0JMjkml30u0FC3joN1conEQcGRtUxs7DtkPo8Pz7St+8AJ29tPLQTBp
-         T9Lyg4OuefdcU54lIjazBZf7jnArGGUH4zGRJXMpALvkRJXNkBQw9FuCELHzDxd4TWNj
-         EeOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RSJBHH3RIOxPBOcxPLKpTBjHoXhMbYFt7YY2XmHkL2c=;
-        b=AIQKBuN1r1Szz6JqfWTm8JzGBwZS2iAU85OWzg0KPnDEBhl2FIIvtujwbALE0EvGym
-         BtpaiHP2VzjfR+0ZtQjCeTHNwp292UtOJWihyqN9Od0ava4KkzTmUDH5sEZyd1rsCXZD
-         yN2F8ktmSJI1SS0P+tgFaspEZHfC9pccgX5ywUoT+0ZfD8ma+8UfHp1zAwgTW0leGNuH
-         FbriFguDDHN+4nbNkFWc1JsrJ8IcoCcPnLUwn/B5F2QXiHbXfQZlZUcJUlTN9E+8xKBV
-         3GB6qXOmEkAxv8Rf1v72XgXdT0LSXfdwaTyi4vskAId0zkKJZwmCWA7SfkfDOorxsw2J
-         nQlQ==
-X-Gm-Message-State: AOAM533oSvXdOdAUGbKmbLJaxnftJygHzh633AqqfoMtE3Y55FSmkhhQ
-	Arq1Hg0dc1a7qeXb/UTIVdyPTCkbBO+a0Zywh1k=
-X-Google-Smtp-Source: ABdhPJyHzf5pLWlWedCr7aTKVfPFnb/hWZ5e7AA7syMYGDrCO2/YVX+6c9IVDG8SJGat5AWfIjIaA25sjl2rkTOVnV4=
-X-Received: by 2002:a05:6102:3912:b0:320:6bb3:f1fe with SMTP id
- e18-20020a056102391200b003206bb3f1femr2827115vsu.4.1646388595625; Fri, 04 Mar
- 2022 02:09:55 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6B3E2C340E9;
+	Fri,  4 Mar 2022 11:01:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B3E2C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 9210122175;
+	Fri,  4 Mar 2022 12:01:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+	t=1646391671;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=99xRnRPJDumTOTwUMBekudNmfTg7+IdOQMg2FPQY/9E=;
+	b=m0NnZ75dLCXbxcFWFVKasJNohU3bwywMEbUerq5FTd+HIPJHncdtqjURtSSxUIO5j1TR1e
+	ZSAtVJaCkco5IRgIrNoeSPhFWT8T+29R2u51JF5IUk0g/n4dxEeINYZkeoIWkCpblV+zZz
+	QEvWljJ8FOtufLPbksZe64cX5GQaa9U=
 MIME-Version: 1.0
-References: <20220301104349.3040422-1-daniel@0x0f.com>
-In-Reply-To: <20220301104349.3040422-1-daniel@0x0f.com>
-From: Romain Perier <romain.perier@gmail.com>
-Date: Fri, 4 Mar 2022 11:09:44 +0100
-Message-ID: <CABgxDo+32A+akgbcD5Y+oGGJwZ_2G+dqfNTAdHYSD3xVPUnoTQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: mstar: Select HAVE_ARM_ARCH_TIMER
-To: Daniel Palmer <daniel@0x0f.com>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Fri, 04 Mar 2022 12:01:09 +0100
+From: Michael Walle <michael@walle.cc>
+To: Claudiu.Beznea@microchip.com
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
+ arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v1 3/6] ARM: dts: lan966x: add all flexcom usart nodes
+In-Reply-To: <a33f0c73-df49-5a22-14b3-0059f7d6b827@microchip.com>
+References: <20220303160323.3316317-1-michael@walle.cc>
+ <20220303160323.3316317-4-michael@walle.cc>
+ <a33f0c73-df49-5a22-14b3-0059f7d6b827@microchip.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <2e0aefc90a80bdf13df0e59857c52ca7@walle.cc>
+X-Sender: michael@walle.cc
 
-Hi all,
+Hi,
 
-Interesting, when I wrote the patch for msc313e-timer, I always had
-ARCH_ARM_TIMER implicitly built, so I thought that it was implicitly
-selected by MULTI_V7...
-I agree that we should at least have ARM_ARCH_TIMER enabled, otherwise
-we won't being able to boot correctly (no clockevents)
+thanks for the quick review.
 
-I have also noticed that we missed this commit
-https://github.com/linux-chenxing/linux/commit/4cf42fcb4618cd77d80f767d5524=
-c32fb40a91c6
- (that selects MSC313E_TIMER), which might explain your initial issue
-(not being to boot).
+Am 2022-03-04 09:30, schrieb Claudiu.Beznea@microchip.com:
+> On 03.03.2022 18:03, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the content is safe
+>> 
+>> Add all the usart nodes for the flexcom block. There was already
+>> an usart node for the flexcom3 block. But it missed the DMA
+>> channels.
+> 
+> And it would be good to go though a different patch.
 
-MSC313E_TIMER being optional on ARM (because of ARM_ARCH_TIMER), we
-should be sure that arm_timer is enabled and we can keep the mstar
-timer optional, imho.
+sure
 
-What do you think ?
+>> Although the DMA channels are specified, DMA is not
+>> enabled by default because break detection doesn't work with DMA.
+>> 
+>> Keep the nodes disabled by default.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>  arch/arm/boot/dts/lan966x.dtsi | 55 
+>> ++++++++++++++++++++++++++++++++++
+>>  1 file changed, 55 insertions(+)
+>> 
+>> diff --git a/arch/arm/boot/dts/lan966x.dtsi 
+>> b/arch/arm/boot/dts/lan966x.dtsi
+>> index a7d46a2ca058..bea69b6d2749 100644
+>> --- a/arch/arm/boot/dts/lan966x.dtsi
+>> +++ b/arch/arm/boot/dts/lan966x.dtsi
+>> @@ -92,6 +92,19 @@ flx0: flexcom@e0040000 {
+>>                         #size-cells = <1>;
+>>                         ranges = <0x0 0xe0040000 0x800>;
+>>                         status = "disabled";
+>> +
+>> +                       usart0: serial@200 {
+>> +                               compatible = 
+>> "atmel,at91sam9260-usart";
+> 
+> Are the usart blocks in lan966x 1:1 compatible with what is is sam9260? 
+> In
+> case not it may worth to have a new compatible here, for lan966x, such 
+> that
+> when new features will be implemented in usart driver for lan966x the 
+> old
+> DT (this one) will work with the new kernel implementation.
 
-Romain
+During my review of the inital dtsi patch, I've asked the same question 
+[1]
+and I was told they are the same.
 
-Le mar. 1 mars 2022 =C3=A0 11:44, Daniel Palmer <daniel@0x0f.com> a =C3=A9c=
-rit :
->
-> The mstar SoCs have an arch timer but HAVE_ARM_ARCH_TIMER wasn't
-> selected. If MSC313E_TIMER isn't selected then the kernel gets
-> stuck at boot because there are no timers available.
->
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> ---
->
-> I moved one of my CI builds from a 5.16 based tree to a 5.17
-> based one and it stopped booting. At some point I had broken my DTB
-> so the MStar timer wasn't getting probed anymore and at
-> the same time the arch timer driver wasn't getting built in.
-> I'm not entirely sure why the arch timer driver was built
-> before but isn't now. Anyhow, all of the other ARMv7 machines
-> seem to do this so I guess it's right.
->
-> Arnd/Olof, please apply directly if acceptable. Maybe this should
-> be in 5.17 as a fix?
->
->  arch/arm/mach-mstar/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
-> index cd300eeedc20..0bf4d312bcfd 100644
-> --- a/arch/arm/mach-mstar/Kconfig
-> +++ b/arch/arm/mach-mstar/Kconfig
-> @@ -3,6 +3,7 @@ menuconfig ARCH_MSTARV7
->         depends on ARCH_MULTI_V7
->         select ARM_GIC
->         select ARM_HEAVY_MB
-> +       select HAVE_ARM_ARCH_TIMER
->         select MST_IRQ
->         select MSTAR_MSC313_MPLL
->         help
-> --
-> 2.35.1
->
+At least this exact usart compatible is already in this file. I was 
+under
+the impression, that was the least controversial compatible :)
+
+But you'll need to tell me if they are the same or not, I don't have
+any clue what microchip has reused. The only thing I can add is that
+there is a version register within the IP blocks which is already used
+in some drivers.
+
+> Same for the rest of the nodes added in this series.
+> 
+>> +                               reg = <0x200 0x200>;
+>> +                               interrupts = <GIC_SPI 48 
+>> IRQ_TYPE_LEVEL_HIGH>;
+>> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
+>> +                                          <&dma0 
+>> AT91_XDMAC_DT_PERID(2)>;
+> 
+> Keep dma entries aligned.
+
+Oh shoot. How embarrassing they are alligned when the tab width is 4 *g*
+Thanks.
+
+-michael
+
+[1] 
+https://lore.kernel.org/lkml/20220210123704.477826-1-michael@walle.cc/
+
+>> +                               dma-names = "tx", "rx";
+>> +                               clocks = <&nic_clk>;
+>> +                               clock-names = "usart";
+>> +                               atmel,fifo-size = <32>;
+>> +                               status = "disabled";
+>> +                       };
+>>                 };
+>> 
+>>                 flx1: flexcom@e0044000 {
+>> @@ -102,6 +115,19 @@ flx1: flexcom@e0044000 {
+>>                         #size-cells = <1>;
+>>                         ranges = <0x0 0xe0044000 0x800>;
+>>                         status = "disabled";
+>> +
+>> +                       usart1: serial@200 {
+>> +                               compatible = 
+>> "atmel,at91sam9260-usart";
+>> +                               reg = <0x200 0x200>;
+>> +                               interrupts = <GIC_SPI 49 
+>> IRQ_TYPE_LEVEL_HIGH>;
+>> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
+>> +                                          <&dma0 
+>> AT91_XDMAC_DT_PERID(4)>;
+>> +                               dma-names = "tx", "rx";
+>> +                               clocks = <&nic_clk>;
+>> +                               clock-names = "usart";
+>> +                               atmel,fifo-size = <32>;
+>> +                               status = "disabled";
+>> +                       };
+>>                 };
+>> 
+>>                 trng: rng@e0048000 {
+>> @@ -129,6 +155,19 @@ flx2: flexcom@e0060000 {
+>>                         #size-cells = <1>;
+>>                         ranges = <0x0 0xe0060000 0x800>;
+>>                         status = "disabled";
+>> +
+>> +                       usart2: serial@200 {
+>> +                               compatible = 
+>> "atmel,at91sam9260-usart";
+>> +                               reg = <0x200 0x200>;
+>> +                               interrupts = <GIC_SPI 50 
+>> IRQ_TYPE_LEVEL_HIGH>;
+>> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
+>> +                                          <&dma0 
+>> AT91_XDMAC_DT_PERID(6)>;
+>> +                               dma-names = "tx", "rx";
+>> +                               clocks = <&nic_clk>;
+>> +                               clock-names = "usart";
+>> +                               atmel,fifo-size = <32>;
+>> +                               status = "disabled";
+>> +                       };
+>>                 };
+>> 
+>>                 flx3: flexcom@e0064000 {
+>> @@ -144,6 +183,9 @@ usart3: serial@200 {
+>>                                 compatible = 
+>> "atmel,at91sam9260-usart";
+>>                                 reg = <0x200 0x200>;
+>>                                 interrupts = <GIC_SPI 51 
+>> IRQ_TYPE_LEVEL_HIGH>;
+>> +                               dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
+>> +                                          <&dma0 
+>> AT91_XDMAC_DT_PERID(8)>;
+>> +                               dma-names = "tx", "rx";
+>>                                 clocks = <&nic_clk>;
+>>                                 clock-names = "usart";
+>>                                 atmel,fifo-size = <32>;
+>> @@ -178,6 +220,19 @@ flx4: flexcom@e0070000 {
+>>                         #size-cells = <1>;
+>>                         ranges = <0x0 0xe0070000 0x800>;
+>>                         status = "disabled";
+>> +
+>> +                       usart4: serial@200 {
+>> +                               compatible = 
+>> "atmel,at91sam9260-usart";
+>> +                               reg = <0x200 0x200>;
+>> +                               interrupts = <GIC_SPI 52 
+>> IRQ_TYPE_LEVEL_HIGH>;
+>> +                               dmas = <&dma0 
+>> AT91_XDMAC_DT_PERID(11)>,
+>> +                                          <&dma0 
+>> AT91_XDMAC_DT_PERID(10)>;
+>> +                               dma-names = "tx", "rx";
+>> +                               clocks = <&nic_clk>;
+>> +                               clock-names = "usart";
+>> +                               atmel,fifo-size = <32>;
+>> +                               status = "disabled";
+>> +                       };
+>>                 };
+>> 
+>>                 timer0: timer@e008c000 {
+>> --
+>> 2.30.2
+>> 
+
+-- 
+-michael
