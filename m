@@ -1,177 +1,121 @@
-Return-Path: <SRS0=gfAI=TO=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=0bQq=TP=fujitsu.com=hasegawa-hitomi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 098BCC433EF
-	for <soc@archiver.kernel.org>; Thu,  3 Mar 2022 16:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD5C0C433EF
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 06:45:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E8C45C340F0; Thu,  3 Mar 2022 16:03:49 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	id A00EDC340F1; Fri,  4 Mar 2022 06:45:56 +0000 (UTC)
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 70473C340F1;
-	Thu,  3 Mar 2022 16:03:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70473C340F1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id E47A3223F6;
-	Thu,  3 Mar 2022 17:03:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1646323420;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BOHb81f6UjTpy/o++osD43lpaRTuWZcu/2E7PE6CXxA=;
-	b=abuUEQ/zGzluu5mT0ZzbVlfNgbdmEbU1+ftwK2a2CuMvWek5MqX7RGD3gKJbhydWzHmv0S
-	DO2cf5V1DlYHeBfBRDJCRnKYetqf2ywawas5RqHrugybdeR2N1pVRxLbCiZ2AzGZzMhvck
-	97FlmFBGObbciyYoaVm+FCYAxUnCgs8=
-From: Michael Walle <michael@walle.cc>
-To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4245AC340E9;
+	Fri,  4 Mar 2022 06:45:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4245AC340E9
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=fujitsu.com
+IronPort-SDR: 9oP8RQQSYvesNLjS5RRToHAyb9OPnid9VD2NmT9CqrnvdpNzXNSPWawwMMyhiGq9JzK+uv0scA
+ Shbnun0Tn/KBX8T7TEgGq6QUs0FqRWj3sFtcKpqsGFyUZrjhhvfgQlUD9RdzOm5hJnttOmkYk+
+ /p7XS9ncmtzuHS7mVPuS/69EguouWrtbucM/PzdJtNr/3BpulqbqgeVYugloDgmGeLxRWvnYS0
+ g+AegqH0WwfAlgNGSmWNQRcTSavnMGv4kElILDSk1tgS+Jh7HYTyaByPv2r1LaqUozhEelWoS1
+ xvZvkoWHA2swUGLEbbTSPr0Y
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="44623342"
+X-IronPort-AV: E=Sophos;i="5.90,154,1643641200"; 
+   d="scan'208";a="44623342"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 04 Mar 2022 15:45:44 +0900
+Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
+	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 33DAACA241;
+	Fri,  4 Mar 2022 15:45:44 +0900 (JST)
+Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
+	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 4EE18125A6;
+	Fri,  4 Mar 2022 15:45:43 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+	by yto-om2.fujitsu.com (Postfix) with ESMTP id 7D372403884F7;
+	Fri,  4 Mar 2022 15:45:42 +0900 (JST)
+From: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
+To: linux-arm-kernel@lists.infradead.org,
 	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	sumit.garg@linaro.org
+Cc: arnd@arndb.de,
+	olof@lixom.net,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	jason.wessel@windriver.com,
+	daniel.thompson@linaro.org,
+	dianders@chromium.org,
 	linux-kernel@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 5/6] ARM: dts: lan966x: add flexcom I2C nodes
-Date: Thu,  3 Mar 2022 17:03:22 +0100
-Message-Id: <20220303160323.3316317-6-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220303160323.3316317-1-michael@walle.cc>
-References: <20220303160323.3316317-1-michael@walle.cc>
+	kgdb-bugreport@lists.sourceforge.net,
+	peterz@infradead.org,
+	hasegawa-hitomi@fujitsu.com
+Subject: [PATCH v2 0/2] soc: fujitsu: Add A64FX diagnostic interrupt driver
+Date: Fri,  4 Mar 2022 15:43:22 +0900
+Message-Id: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add all I2C nodes of the flexcom IP blocks. The driver supports
-FIFO, DMA or both combined. But the latter isn't working correctly.
-Thus, skip the fifo-size property for now. DMA is doing single byte
-reads in this case.
+The interrupt is set using pseudo-NMI if it is available. Arm has a
+diagnostic interrupt feature called "Arm Generic Diagnostic Dump and
+Reset device", but the A64FX does not support this feature and instead
+has its own device definition.
 
-Keep the nodes disabled by default.
+This patch series includes ones created by Sumit.[1]
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm/boot/dts/lan966x.dtsi | 65 ++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+I tested on FX700:
+$ echo 1 > /proc/sys/kernel/sysrq
+$ echo HARDLOCKUP > /sys/kernel/debug/provoke-crash/DIRECT
+[  124.712351] lkdtm: Performing direct entry HARDLOCKUP
+[  147.232096] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+:
+:
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 0616927f1bb1..c4aab7f65790 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -120,6 +120,19 @@ spi0: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
-+
-+			i2c0: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(2)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx1: flexcom@e0044000 {
-@@ -158,6 +171,19 @@ spi1: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
-+
-+			i2c1: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(4)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		trng: rng@e0048000 {
-@@ -213,6 +239,19 @@ spi2: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
-+
-+			i2c2: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(6)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx3: flexcom@e0064000 {
-@@ -251,6 +290,19 @@ spi3: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
-+
-+			i2c3: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(8)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		dma0: dma-controller@e0068000 {
-@@ -308,6 +360,19 @@ spi4: spi@400 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
-+
-+			i2c4: i2c@600 {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
-+					   <&dma0 AT91_XDMAC_DT_PERID(10)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		timer0: timer@e008c000 {
+Send the "chassis power diag" command from the management server
+using ipmitool, the following message is shown:
+[  206.061770] sysrq: Trigger a crash
+[  206.061779] Kernel panic - not syncing: sysrq triggered crash
+:
+:
+
+Changes in V2:
+ - Include Sumit's patch.
+ - The handler calls handle_sysrq() to use the sysrq feature to cause
+   a panic.
+ - request_nmi() and request_irq() now use the same handler, and
+   the function name of the handler has also changed.
+ - Use readl()/writel() instead of readl_relaxed()/writel_relaxed().
+
+V1:
+  https://lore.kernel.org/linux-arm-kernel/20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com/
+
+[1] https://lore.kernel.org/all/20220228135408.1452882-1-sumit.garg@linaro.org/
+
+Sumit Garg (1):
+  tty/sysrq: Make sysrq handler NMI aware
+
+Hitomi Hasegawa (1):
+  soc: fujitsu: Add A64FX diagnostic interrupt driver
+
+ MAINTAINERS                      |   5 +
+ drivers/soc/Kconfig              |   1 +
+ drivers/soc/Makefile             |   1 +
+ drivers/soc/fujitsu/Kconfig      |  13 +++
+ drivers/soc/fujitsu/Makefile     |   3 +
+ drivers/soc/fujitsu/a64fx-diag.c | 151 +++++++++++++++++++++++++++++++
+ drivers/tty/sysrq.c              |  45 ++++++++-
+ include/linux/sysrq.h            |   1 +
+ kernel/debug/debug_core.c        |   1 +
+ 9 files changed, 220 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
+ create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
+
 -- 
-2.30.2
+2.27.0
 
