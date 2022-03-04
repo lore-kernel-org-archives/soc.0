@@ -1,310 +1,162 @@
-Return-Path: <SRS0=0bQq=TP=fujitsu.com=hasegawa-hitomi@kernel.org>
+Return-Path: <SRS0=LpVH=TP=synaptics.com=Jisheng.Zhang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3B7C433F5
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 06:47:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCF6C433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 07:56:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1E9B7C340F5; Fri,  4 Mar 2022 06:47:07 +0000 (UTC)
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
+	id AAEE4C340EF; Fri,  4 Mar 2022 07:56:18 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 199C4C340E9;
-	Fri,  4 Mar 2022 06:47:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 199C4C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-IronPort-SDR: VnTR0Ef4EQ5a0EJ8YASk4YNjRaWu/1GOTHBaKiZuVC36jjtYIsFkLkVTgHvWDn8mip8/DaaMsm
- /yL5XLRkBsKdwOy+ollFxhgGvvb7kuloGxx08c3q4fLDR+g8npI7gsQJJciemU+xv3JNawNKwi
- hONr/3x3txUr5XuEjin1u9sSQwJhOYs405A4a99D0CZiixRMF5a97oWdT/+aWwVnYQiA+xtYmN
- O7hsY+gAg/IS4mdd7loX5lg34i8H8PoJ7lW7njzs1mDpeC508eRzOI6ikTH3AHiT4UPWksnZrX
- bvl3hQuJopwOkz4zRUHf0gVy
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="64667367"
-X-IronPort-AV: E=Sophos;i="5.90,154,1643641200"; 
-   d="scan'208";a="64667367"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 04 Mar 2022 15:45:53 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id B8298CA38E;
-	Fri,  4 Mar 2022 15:45:51 +0900 (JST)
-Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
-	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id DFF6E1427C;
-	Fri,  4 Mar 2022 15:45:50 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-	by yto-om2.fujitsu.com (Postfix) with ESMTP id 838674007DEED;
-	Fri,  4 Mar 2022 15:45:50 +0900 (JST)
-From: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6E1B1C340E9
+	for <soc@kernel.org>; Fri,  4 Mar 2022 07:56:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E1B1C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=synaptics.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=synaptics.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mItJHAhNrSKDhVegM4NoAHxSiOtxsXt2E5wOVM5UCchpAFZkos8hb511+aZEM3gp01JutS+BNEmTJvjvGIJgjaflh5hGs40B9y4kvgHSWC/Rdj0R6A9fuzugR3NicZv8k9aV1Y1r/7N0diR7Gs8GY3Ht9v3ESS4Pr8M+CZdjUO1Qhjswus6eu3bTrNGI/TnngnXvbviogerhe3Ik691Zz6jRaD95KwFz/gYV6NWix+vQCpubWSy67tP5PmYLbsvbEIwhekrhtyflMrBaxAkfzSlayY1lobeB+eLOy3i39JXnrNYo3Z7NBlSV21fJmpTM2YGPRW8ddIfteP98HlBlQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6FmBTGaUtuRmpeyy9/vSo6W3EsyNN8ZIoSwl8n7atec=;
+ b=hv+Cw6WkenXIs2RD/HwsB5LPzOIxtZTPw/ZNXyianYAQyqQPbeU8At9hPRRusU1bEkE0C4gNPAn8tuuDAlZMzyi5+HMDi4G5HTHNdxW6SEdzLYli4nnMlp4LIJ3bqhZm2SkzfsGaYt3SIAdexoUtCdLeDO56vj2x6wHPZH7cNfl/m62RXgyvd6oF0wzwb3nJsFCVVz4Q/DYXDJg3Pn41qhVwPyPJ9S92e8BBn8epJZAirLcsczLhIbpex8YgSFGYCEVO5nPjfHo25J2aR5GI0BFzZMA2wAFyqZYg9QQkB5FOx3jF3sXdGsQqqAbtwxPwuMmEG+oVqqIaf51V3ytnmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6FmBTGaUtuRmpeyy9/vSo6W3EsyNN8ZIoSwl8n7atec=;
+ b=M2Cic+YGaZ6ehi85MRXsKLFCRU5qK5B9WbUxRl5okav9AafBR4hO+kovuth+7SRUKGfY3fLlufrbWHJpgM49KLSfn2mWsBdBUQGsO0GlAomBfzZ7ejqOFfBGiZ/TPIjxLUzBd+y5cbafRTwsW1EZugmi1+D1h+zWnjKzhN6SkPA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from BN9PR03MB6058.namprd03.prod.outlook.com (2603:10b6:408:137::15)
+ by CY1PR03MB2315.namprd03.prod.outlook.com (2a01:111:e400:c616::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
+ 2022 07:56:14 +0000
+Received: from BN9PR03MB6058.namprd03.prod.outlook.com
+ ([fe80::71f3:df33:af9e:a8a6]) by BN9PR03MB6058.namprd03.prod.outlook.com
+ ([fe80::71f3:df33:af9e:a8a6%4]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 07:56:14 +0000
+Message-ID: <ce7213bd-28ac-6580-466e-875e755fe0ae@synaptics.com>
+Date: Fri, 4 Mar 2022 15:55:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+From: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Subject: [PATCH] MAINTAINERS: Update Jisheng's email address
 List-Id: <soc.lore.kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	soc@kernel.org,
-	linux-serial@vger.kernel.org,
-	sumit.garg@linaro.org
-Cc: arnd@arndb.de,
-	olof@lixom.net,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	jason.wessel@windriver.com,
-	daniel.thompson@linaro.org,
-	dianders@chromium.org,
-	linux-kernel@vger.kernel.org,
-	kgdb-bugreport@lists.sourceforge.net,
-	peterz@infradead.org,
-	hasegawa-hitomi@fujitsu.com
-Subject: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt driver
-Date: Fri,  4 Mar 2022 15:43:24 +0900
-Message-Id: <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
-References: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
+To: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR04CA0060.apcprd04.prod.outlook.com
+ (2603:1096:202:14::28) To BN9PR03MB6058.namprd03.prod.outlook.com
+ (2603:10b6:408:137::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 22fd7b21-9b6d-42c7-042f-08d9fdb4748e
+X-MS-TrafficTypeDiagnostic: CY1PR03MB2315:EE_
+X-Microsoft-Antispam-PRVS:
+	<CY1PR03MB231577505861308F3EA8D883ED059@CY1PR03MB2315.namprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	1e+F3cq7OgJ9HOp+yJtkATMNmSG1dF32PCFSvbsNWVInwPVG4MS0hUHN0plwvs4d7H4dYT41IeUOY/PXEPAtRvJVVKc2X6TP8mnL0Cjr5lZ4xHi41uZkN2BEU0qDJfIDnQRJ8nJyDltUAKt+YaYyJsNlsElQLrad+07BH+lSC79YVq0dV3TwVQy4pUzR7Uks87e+ZivJoXJgQcuE1q6f1lN4uOVtV/Fyjs1KAuBeyPSy/wuxIsrSW/nrUfCIjiKQZwO61xGzS2INBG/mDVev4cHRTf+tOSXqcP6shR/GpsZ8QVPogcW+dnU6b/bmdlMvuRL1nUCzqSwTdb4PA3FzQV5z+ngSv3fwNCJf/Tz74vRrSpDyrtbbFZ37L3oXnov4AQS0Iz/S+SuuIiH2iJBp2cfcyIGN/5Q0GR17PF3+I74lx+zxsoyB8nyrmbs01HzzWQYK+1/JJSlxq0XkakoXIxlfFbSvhUwh8F9zY2L+TMQCJJ8D8/WBOPx6jkJkpfG+MKxdCIaKSFom86DP+VTTPkDXoi1FHMXzHODRy3LxhfDsXj62rpqFDHqvrK+yr/IjgkB2zUApcqVmEGPwlIwp8SzIi0xrF6fF3CoNsRwNxGsBb2ezFcFTdYyy5cuU5ac1o6o5N9cuFcc+ud/vSrG5LrUsM/5MRZLvJXiZckV5Kji7OPBwc5QK7B59Nipb39g6XMl4F85P6SmFyRMGnuHmxsYUet4Ihs9GBNEEL83TcyFKU9iYCOiObg8v1dGsWULSTOQCmbxcgzr7g+sDNbcbnQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR03MB6058.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(5660300002)(186003)(26005)(66476007)(8676002)(6486002)(66556008)(66946007)(4326008)(6506007)(31686004)(15650500001)(52116002)(6512007)(83380400001)(2616005)(6666004)(2906002)(86362001)(31696002)(38350700002)(38100700002)(6916009)(36756003)(508600001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Y3E5Yk9MQXVIZ3ZSNXI3MW9RQ01pODd6QkJsNFBYRWY2Zkhvemc5Y1VXd0ZB?=
+ =?utf-8?B?OTI5UEdybGpMZUtielF3Y3NlN01oSFpHL1g0NjNNUFQ3ZHp3am82Ry9kc2RJ?=
+ =?utf-8?B?T3YzZ2xnZVVub2JOMXkrdWFhL3E0SndrREZ5eWQwaEhLN3BVQkRIQTRCaHpH?=
+ =?utf-8?B?VEVoSWdNbEZXS3F6Qk04bE4rbjAzZ2hRZHVmelRnVFdnNVJuOUg2dFBpclVY?=
+ =?utf-8?B?elR4cFh6OUI2enNLQXhUZktpZVFiam1vOTRvUVppcVpMbldGdHhDOU1Fam44?=
+ =?utf-8?B?V2ptTHJlcTRJdzNIZWZHd3dLRlJMQStwQVVvRDRjWjNpSGp0ZEQvMitQbnZ0?=
+ =?utf-8?B?TTVVMHhLclIyL1dld3Y2bHhEdGVJNG9CVFBzdVZudjNsTEdjb214UFNkVnRo?=
+ =?utf-8?B?WmNKZUhkbzlTYW8rVERNS3duSjJ6djZKcCs0YUk3QXNhWHZiZGNQUFJMSGdh?=
+ =?utf-8?B?R2swbHd5Y1dzTUpmQjlFRkNtRk1NNTRpU3RBQXROa1hDbGVwTmpnVUlTaG0w?=
+ =?utf-8?B?WGNocUxaRVhHYTR3S1g2eVp6Nmo0N1I5Ukw0YzRHYVIzSUVHUVFaSWtoVm1h?=
+ =?utf-8?B?NkV6cU02aXFUUWxpbFVYb1VQaW8xWE1FS2IrcGM2bUtWU1gwc1FJdzJDMW0v?=
+ =?utf-8?B?SDZET3FFL3dLNy9EKzM1WDlpT0VFVldVdmhCNUphQkFLc2JNWDdtcTdDdWh3?=
+ =?utf-8?B?Wmxwdktvd3U5dHNXSVZqNTJZQVlCbjR2cCtTdnhoVGZpQlJ5YkRMaTNabHZi?=
+ =?utf-8?B?MGZ0Qlk4cDFkaktoMmVZSi8vekJUeTV4SUdxZHg3ckN6TlBBSkRKVkt1UVlj?=
+ =?utf-8?B?THdEcWhEei9kOXVYOG96NC9CWVluQUlzTFJ6T2F5WDYvemFkenU5Mm8zb0U1?=
+ =?utf-8?B?MThBanBrdDJFNlVEdTEzcHNhTXpYYUdldXRKK3ZjQStyWEJMQUt3R3psNzhy?=
+ =?utf-8?B?amFxdGJLRDdsZWZZcEJwYmwxekJOaXdkMkJKcGZUZ3NvWUhQS0VqYU95VDdq?=
+ =?utf-8?B?TlcrQ2NYME9IdlAza1lOcXhGU0s2a2w2NUthdzlQeDhjbW44QUJmQ2F0NHZq?=
+ =?utf-8?B?eG5kbXk0SUdOVURXa2p6WDRrVkhNNzl0RUdoQ3N4WUkrbm9WcFp1d3dkQ0cw?=
+ =?utf-8?B?N2xTWVRJMW15V09VY25sd1FJU0pzQ2RTSGE5Y0NjMnBXSVh5RWVad2FBTVAx?=
+ =?utf-8?B?V1hJbGcxQXI0ZlRDZUNPUXdxL00ySDlnMDBJdy9PYkxqankrekRpYnZ6NkxL?=
+ =?utf-8?B?VEQwMTk4T3F5Vjc4Y3ExcHJMOGpaNEdUWmVOSEN3S3o2czFXUE9sUUZjSWFn?=
+ =?utf-8?B?bzVoWXBJY3gzT0tzYmZHV1JDRXpRWnVoUHNvN29yYlA5Z1gyNStYWFFucmlR?=
+ =?utf-8?B?azQxWlNGRlBTSnRWZEoyVmpCYWVKcGJsUXI1WHg5RzBkZUs0Y01lbWNvRm5O?=
+ =?utf-8?B?ZU94LzhTRjJmRFhmZHNEbHBNeUtJUHVLczFoNDlwWjhHSTA1SXBtYTFtcnNm?=
+ =?utf-8?B?WEp0WERNc2oreFVDUFRmczEvaVMyVFJZWXJrbDJJTmYvM010S0FOOFhYMEw2?=
+ =?utf-8?B?VFAyRnRpYnNjTEVJeE9tcTZ5WThrSlEwY0tNdGw2S2g2eGpUWW41Zy9pVlpx?=
+ =?utf-8?B?OVRpQVlyNFJyVDBlbXpOck9pbVNSQmNETWJpK2cyRS9mOE1WVU40cTkxOTN3?=
+ =?utf-8?B?L3pqbEovbWtkWkNaWUt2ZHova1EzMUN6TXZzK3B1QXNNbDBJL25WWWh0NGNt?=
+ =?utf-8?B?K3hoTkh1SVM3YmE0ZHppcmpRVmRYVlF6dWlhYjNYV25LRTZUN0JPY0owTk13?=
+ =?utf-8?B?UDZuMlk2a2F1ZW5scTlSbDZheE9JdFVmVmZ1NEFXUnBQMWFESkhLSFRjbkJs?=
+ =?utf-8?B?MXlmYU9tV2xrVllkcU5tTkRLNXFPWkhDcFRHWHJZZkRtdXRNNnZHeUxRRzJ1?=
+ =?utf-8?B?d2VYZGZIaS8rN1RIa1dMeUJuYnl3RTFhK0kzL0dRNmJXZ2FqQmJGbUJUK01m?=
+ =?utf-8?B?MVJ5bWYrN0RESVByeGFHVWxzTWVvOXd4alFOSGhjOElEdFB1dWhLMDhTYURk?=
+ =?utf-8?B?cll0SmhkWldiV1Z4dTU4Zk8vc2d1NVh5YnhhWGdVTW84aTI5YVZZNk05Y3N2?=
+ =?utf-8?B?VUFTalBLcUpEelRmaEdLY1BGSk9YY1E4NmlmaE5wRGhjb01zcTM3b2FCbkho?=
+ =?utf-8?Q?Ibrf2pKXgGCYWy8q1fWdjrs=3D?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22fd7b21-9b6d-42c7-042f-08d9fdb4748e
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR03MB6058.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 07:56:14.6053
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mc0b7Ymj/wwSO2JrGF3Y9qbgzNLwY7BeRmeKTJCvQ4NINhL2MqKTar3Hwm+rPP11xRrnJIe+2bhZFasbsZA33w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR03MB2315
 
-Enable diagnostic interrupts for the A64FX.
-This is done using a pseudo-NMI.
+I'm leaving synaptics. Update my email address to my korg mail
+address and add entries to .mailmap as well to map my work
+addresses to korg mail address.
 
-Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+Signed-off-by: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
 ---
- MAINTAINERS                      |   5 +
- drivers/soc/Kconfig              |   1 +
- drivers/soc/Makefile             |   1 +
- drivers/soc/fujitsu/Kconfig      |  13 +++
- drivers/soc/fujitsu/Makefile     |   3 +
- drivers/soc/fujitsu/a64fx-diag.c | 151 +++++++++++++++++++++++++++++++
- 6 files changed, 174 insertions(+)
- create mode 100644 drivers/soc/fujitsu/Kconfig
- create mode 100644 drivers/soc/fujitsu/Makefile
- create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
+ .mailmap    | 2 ++
+ MAINTAINERS | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/.mailmap b/.mailmap
+index 10ee1103c823..4e9dc453b893 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -187,6 +187,8 @@ Jiri Slaby <jirislaby@kernel.org> <jslaby@novell.com>
+ Jiri Slaby <jirislaby@kernel.org> <jslaby@suse.com>
+ Jiri Slaby <jirislaby@kernel.org> <jslaby@suse.cz>
+ Jiri Slaby <jirislaby@kernel.org> <xslaby@fi.muni.cz>
++Jisheng Zhang <jszhang@kernel.org> <jszhang@marvell.com>
++Jisheng Zhang <jszhang@kernel.org> <Jisheng.Zhang@synaptics.com>
+ Johan Hovold <johan@kernel.org> <jhovold@gmail.com>
+ Johan Hovold <johan@kernel.org> <johan@hovoldconsulting.com>
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 diff --git a/MAINTAINERS b/MAINTAINERS
-index dd36acc87ce6..e9663fa92a52 100644
+index d2b39f444abf..bfaa3aa685cd 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -239,6 +239,11 @@ F:	include/trace/events/9p.h
- F:	include/uapi/linux/virtio_9p.h
- F:	net/9p/
+@@ -2739,7 +2739,7 @@ N:	stm32
+ N:	stm
  
-+A64FX DIAG DRIVER
-+M:	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-+S:	Supported
-+F:	drivers/soc/fujitsu/a64fx-diag.c
-+
- A8293 MEDIA DRIVER
- M:	Antti Palosaari <crope@iki.fi>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index e8a30c4c5aec..0405ff0b3be6 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -8,6 +8,7 @@ source "drivers/soc/atmel/Kconfig"
- source "drivers/soc/bcm/Kconfig"
- source "drivers/soc/canaan/Kconfig"
- source "drivers/soc/fsl/Kconfig"
-+source "drivers/soc/fujitsu/Kconfig"
- source "drivers/soc/imx/Kconfig"
- source "drivers/soc/ixp4xx/Kconfig"
- source "drivers/soc/litex/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index a05e9fbcd3e0..86596405a39c 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
- obj-$(CONFIG_ARCH_DOVE)		+= dove/
- obj-$(CONFIG_MACH_DOVE)		+= dove/
- obj-y				+= fsl/
-+obj-y				+= fujitsu/
- obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
- obj-y				+= imx/
- obj-y				+= ixp4xx/
-diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
-new file mode 100644
-index 000000000000..b41cdac67637
---- /dev/null
-+++ b/drivers/soc/fujitsu/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "fujitsu SoC drivers"
-+
-+config A64FX_DIAG
-+	bool "A64FX diag driver"
-+	depends on ARM64
-+	help
-+	  Say Y here if you want to enable diag interrupt on A64FX.
-+	  This driver uses pseudo-NMI if available.
-+
-+	  If unsure, say N.
-+
-+endmenu
-diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
-new file mode 100644
-index 000000000000..945bc1c14ad0
---- /dev/null
-+++ b/drivers/soc/fujitsu/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_A64FX_DIAG)	+= a64fx-diag.o
-diff --git a/drivers/soc/fujitsu/a64fx-diag.c b/drivers/soc/fujitsu/a64fx-diag.c
-new file mode 100644
-index 000000000000..c6f895cf8912
---- /dev/null
-+++ b/drivers/soc/fujitsu/a64fx-diag.c
-@@ -0,0 +1,151 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * A64FX diag driver.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/sysrq.h>
-+
-+#define A64FX_DIAG_IRQ 1
-+#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
-+#define BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
-+#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
-+#define BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
-+
-+struct a64fx_diag_priv {
-+	int irq;
-+	void __iomem *mmsc_reg_base;
-+	bool has_nmi;
-+};
-+
-+static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
-+{
-+	handle_sysrq('c');
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_status_reg_addr;
-+
-+	diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
-+	mmsc = readl(diag_status_reg_addr);
-+	if (mmsc & BMC_INTERRUPT_STATUS_MASK)
-+		writel(BMC_INTERRUPT_STATUS_MASK, (void *)diag_status_reg_addr);
-+}
-+
-+static void a64fx_diag_interrupt_enable(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_enable_reg_addr;
-+
-+	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-+	mmsc = readl(diag_enable_reg_addr);
-+	if (!(mmsc & BMC_INTERRUPT_ENABLE_MASK)) {
-+		mmsc |= BMC_INTERRUPT_STATUS_MASK;
-+		writel(mmsc, (void *)diag_enable_reg_addr);
-+	}
-+}
-+
-+static void a64fx_diag_interrupt_disable(struct a64fx_diag_priv *priv)
-+{
-+	u32 mmsc;
-+	const void __iomem *diag_enable_reg_addr;
-+
-+	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
-+	mmsc = readl(diag_enable_reg_addr);
-+	if (mmsc & BMC_INTERRUPT_ENABLE_MASK) {
-+		mmsc &= ~BMC_INTERRUPT_ENABLE_MASK;
-+		writel(mmsc, (void *)diag_enable_reg_addr);
-+	}
-+}
-+
-+static int a64fx_diag_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	unsigned long irq_flags;
-+	struct device *dev = &pdev->dev;
-+	struct a64fx_diag_priv *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(struct a64fx_diag_priv), GFP_KERNEL);
-+	if (priv == NULL)
-+		return -ENOMEM;
-+
-+	priv->mmsc_reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->mmsc_reg_base))
-+		return PTR_ERR(priv->mmsc_reg_base);
-+
-+	priv->irq = platform_get_irq(pdev, A64FX_DIAG_IRQ);
-+	if (priv->irq < 0)
-+		return priv->irq;
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	a64fx_diag_interrupt_clear(priv);
-+	a64fx_diag_interrupt_enable(priv);
-+
-+	irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
-+		   IRQF_NO_THREAD;
-+	ret = request_nmi(priv->irq, &a64fx_diag_handler, irq_flags,
-+			"a64fx_diag_nmi", NULL);
-+	if (ret) {
-+		ret = request_irq(priv->irq, &a64fx_diag_handler,
-+				irq_flags, "a64fx_diag_irq", NULL);
-+		if (ret) {
-+			dev_err(dev, "cannot register IRQ %d\n", ret);
-+			return ret;
-+		}
-+		enable_irq(priv->irq);
-+		priv->has_nmi = false;
-+		dev_info(dev, "registered for IRQ %d\n", priv->irq);
-+	} else {
-+		enable_nmi(priv->irq);
-+		priv->has_nmi = true;
-+		dev_info(dev, "registered for NMI %d\n", priv->irq);
-+	}
-+
-+	return 0;
-+}
-+
-+static int __exit a64fx_diag_remove(struct platform_device *pdev)
-+{
-+	struct a64fx_diag_priv *priv = platform_get_drvdata(pdev);
-+
-+	a64fx_diag_interrupt_disable(priv);
-+	a64fx_diag_interrupt_clear(priv);
-+
-+	if (priv->has_nmi)
-+		free_nmi(priv->irq, NULL);
-+	else
-+		free_irq(priv->irq, NULL);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id a64fx_diag_acpi_match[] = {
-+	{ "FUJI2007", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, a64fx_diag_acpi_match);
-+
-+
-+static struct platform_driver a64fx_diag_driver = {
-+	.driver = {
-+		.name = "a64fx_diag_driver",
-+		.acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
-+	},
-+	.probe = a64fx_diag_probe,
-+	.remove = a64fx_diag_remove,
-+};
-+
-+module_platform_driver(a64fx_diag_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>");
-+MODULE_DESCRIPTION("A64FX diag driver");
+ ARM/Synaptics SoC support
+-M:	Jisheng Zhang <Jisheng.Zhang@synaptics.com>
++M:	Jisheng Zhang <jszhang@kernel.org>
+ M:	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
 -- 
-2.27.0
+2.34.1
 
