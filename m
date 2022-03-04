@@ -1,99 +1,88 @@
-Return-Path: <SRS0=arFV=TP=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <SRS0=uyAw=TP=walle.cc=michael@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68AB9C433EF
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 14:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6733BC433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 15:36:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 50AC1C340F3; Fri,  4 Mar 2022 14:47:54 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id 2B3D6C340F4; Fri,  4 Mar 2022 15:36:21 +0000 (UTC)
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 65666C340F0;
-	Fri,  4 Mar 2022 14:47:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65666C340F0
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646405273; x=1677941273;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=E3j7SQpok6Ea6NdstnR4CWXDU6IjMCFuF1+JSKHNG38=;
-  b=BzxiKsyWgEEw7wdQga4AWuObtfxrSSJDZ9vwj9uHbOtKyharVFsF676w
-   USU1fYWRh6QWTdxcnrsY72AxXtT9jhvUbcTUAEDOvpNXtu6c9Wysrphq8
-   WjHkJ6LL2DcGy/IM+3SgY/25EcC8cAw6rY1u11C0dc9unWt4ueFv4gs/8
-   xb41NKVowh8JWwq0EXj/k6oJ+l5iU0R/bosBE3aKZ4+gJzE3LCsqlkQTv
-   j6O1qsRsoxnFoi+MEQnmj530kAysxlOjZipkPMmgFqKnY2FDYfHhdTnuC
-   EdmE/y9lcs4kmqV/S9ZtwxTWQ4Tnby98aeSllsPUTz2MnT7yKA6tbbDRi
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
-   d="scan'208";a="150870895"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 07:47:51 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Mar 2022 07:47:51 -0700
-Received: from ness.home (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 4 Mar 2022 07:47:49 -0700
-From: <nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8562AC340F2;
+	Fri,  4 Mar 2022 15:36:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8562AC340F2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 2049522247;
+	Fri,  4 Mar 2022 16:36:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+	t=1646408177;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R2mmjz+Kg+zve+C9vJUel319BOl8L2+J2zRG93WOEoE=;
+	b=eBF5ri9WplXjvZ++J5L2seyyC2gJlQA860VCgRmP2WLAbiY23uQj/Q2jmwLB5srT/Y6NZS
+	Ua36XrALVU2oVkx0yec5AQdnmiHbUkBIUGmbVy/Hr7YxD7x8OzEhZW6GPVf1B/zQE/gzwX
+	nBMHQTe8xzLGcbPnzkHupb4ujIdiXIU=
+From: Michael Walle <michael@walle.cc>
+To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<arm@kernel.org>, <soc@kernel.org>
-CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
-	<linux-kernel@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Ludovic Desroches
-	<ludovic.desroches@microchip.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>
-Subject: [GIT PULL] ARM: at91: defconfig for 5.18 #2
-Date: Fri, 4 Mar 2022 15:47:46 +0100
-Message-ID: <20220304144746.23779-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 1/7] ARM: dts: lan966x: swap dma channels for crypto node
+Date: Fri,  4 Mar 2022 16:35:42 +0100
+Message-Id: <20220304153548.3364480-2-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220304153548.3364480-1-michael@walle.cc>
+References: <20220304153548.3364480-1-michael@walle.cc>
 MIME-Version: 1.0
-Organization: microchip
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+The YAML binding (crypto/atmel,at91sam9g46-aes.yaml) mandates the order
+of the channels. Swap them to pass devicetree validation.
 
-Arnd, Olof,
+Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board pcb8291")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ arch/arm/boot/dts/lan966x.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-A little more defconfig changes for 5.18. Please pull.
-
-Thanks, best regards,
-  Nicolas
-
-The following changes since commit 2884f2dda70ac8659b2e15b8ba8b85fe7184b9f4:
-
-  ARM: configs: at91: sama7: add config for cpufreq (2022-02-25 12:20:43 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-5.18-2
-
-for you to fetch changes up to 5f5399843c0ec3bd562dfd533f32e4074ca90314:
-
-  ARM: configs: at91: sama7: Unselect CONFIG_DMATEST (2022-03-04 12:53:15 +0100)
-
-----------------------------------------------------------------
-AT91: defconfig #2 for 5.18:
-
-- Add EIC, remove DMATEST to sama7_defconfig
-
-----------------------------------------------------------------
-Claudiu Beznea (1):
-      ARM: configs: at91: add eic
-
-Tudor Ambarus (1):
-      ARM: configs: at91: sama7: Unselect CONFIG_DMATEST
-
- arch/arm/configs/sama7_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+index 7d2869648050..5e9cbc8cdcbc 100644
+--- a/arch/arm/boot/dts/lan966x.dtsi
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -114,9 +114,9 @@ aes: crypto@e004c000 {
+ 			compatible = "atmel,at91sam9g46-aes";
+ 			reg = <0xe004c000 0x100>;
+ 			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+-			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
+-			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
+-			dma-names = "rx", "tx";
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(12)>,
++			       <&dma0 AT91_XDMAC_DT_PERID(13)>;
++			dma-names = "tx", "rx";
+ 			clocks = <&nic_clk>;
+ 			clock-names = "aes_clk";
+ 		};
 -- 
-Nicolas Ferre
+2.30.2
+
