@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B927DC433EF
-	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 06:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D3B7C433F5
+	for <soc@archiver.kernel.org>; Fri,  4 Mar 2022 06:47:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9FFC0C340F4; Fri,  4 Mar 2022 06:47:04 +0000 (UTC)
-Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
+	id 1E9B7C340F5; Fri,  4 Mar 2022 06:47:07 +0000 (UTC)
+Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 05B49C340EF;
-	Fri,  4 Mar 2022 06:47:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 05B49C340EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 199C4C340E9;
+	Fri,  4 Mar 2022 06:47:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 199C4C340E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-IronPort-SDR: hDGZAS87OcA7zkuaaJKSA7fMkUvAJ3+E76zH4356kM86KON9FOYqIihhT2/knd2xsJ1WLt4fb/
- wlKqZeLw/ZdFx4r/LF0MmvHCX/c9kM2XLFn9wcPU1aOSx8Lo5he0oFJC/8LC1tUtS7S25ZKowv
- a402oxHasnMqHe04/m+Wxusp7e1sIpkrf71kHDOOxeFRM8KsQoPf4T7pZaXDjBAUjaFkrmDJks
- nN2mIha6sMJo2h5ZVA+vd8Zn8TiItsTKwDHKiN13fY9dqXpdoJXkTU8mZeU9Nf/kwmi//8RrtX
- 3WbYFaJeBbojOegP291Bj1Vn
-X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="64906695"
+IronPort-SDR: VnTR0Ef4EQ5a0EJ8YASk4YNjRaWu/1GOTHBaKiZuVC36jjtYIsFkLkVTgHvWDn8mip8/DaaMsm
+ /yL5XLRkBsKdwOy+ollFxhgGvvb7kuloGxx08c3q4fLDR+g8npI7gsQJJciemU+xv3JNawNKwi
+ hONr/3x3txUr5XuEjin1u9sSQwJhOYs405A4a99D0CZiixRMF5a97oWdT/+aWwVnYQiA+xtYmN
+ O7hsY+gAg/IS4mdd7loX5lg34i8H8PoJ7lW7njzs1mDpeC508eRzOI6ikTH3AHiT4UPWksnZrX
+ bvl3hQuJopwOkz4zRUHf0gVy
+X-IronPort-AV: E=McAfee;i="6200,9189,10275"; a="64667367"
 X-IronPort-AV: E=Sophos;i="5.90,154,1643641200"; 
-   d="scan'208";a="64906695"
-Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
-  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 04 Mar 2022 15:45:49 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id D0093E07E2;
-	Fri,  4 Mar 2022 15:45:48 +0900 (JST)
+   d="scan'208";a="64667367"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 04 Mar 2022 15:45:53 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id B8298CA38E;
+	Fri,  4 Mar 2022 15:45:51 +0900 (JST)
 Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id CF078DCCFA;
-	Fri,  4 Mar 2022 15:45:47 +0900 (JST)
+	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id DFF6E1427C;
+	Fri,  4 Mar 2022 15:45:50 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-	by yto-om2.fujitsu.com (Postfix) with ESMTP id 616B64007DEED;
-	Fri,  4 Mar 2022 15:45:47 +0900 (JST)
+	by yto-om2.fujitsu.com (Postfix) with ESMTP id 838674007DEED;
+	Fri,  4 Mar 2022 15:45:50 +0900 (JST)
 From: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
 To: linux-arm-kernel@lists.infradead.org,
@@ -54,9 +54,9 @@ Cc: arnd@arndb.de,
 	kgdb-bugreport@lists.sourceforge.net,
 	peterz@infradead.org,
 	hasegawa-hitomi@fujitsu.com
-Subject: [PATCH v2 1/2] tty/sysrq: Make sysrq handler NMI aware
-Date: Fri,  4 Mar 2022 15:43:23 +0900
-Message-Id: <20220304064324.331217-2-hasegawa-hitomi@fujitsu.com>
+Subject: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt driver
+Date: Fri,  4 Mar 2022 15:43:24 +0900
+Message-Id: <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
 References: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
@@ -64,181 +64,247 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 
-From: Sumit Garg <sumit.garg@linaro.org>
+Enable diagnostic interrupts for the A64FX.
+This is done using a pseudo-NMI.
 
-Allow a magic sysrq to be triggered from an NMI context. This is done
-via marking some sysrq actions as NMI safe. Safe actions will be allowed
-to run from NMI context whilst that cannot run from an NMI will be queued
-as irq_work for later processing.
-
-The major use-case is to add NMI debugging capabilities to the kernel
-in order to debug scenarios such as:
-- Primary CPU is stuck in deadlock with interrupts disabled and hence
-  doesn't honor serial device interrupt. So having magic sysrq triggered
-  as an NMI is helpful for debugging.
-- Always enabled NMI based magic sysrq irrespective of whether the serial
-  TTY port is active or not.
-- Apart from UART interrupts, it allows magic sysrq to be triggered from
-  a diagnostic NMI interrupt on systems such as A64FX.
-
-A particular sysrq handler is only marked as NMI safe in case the handler
-isn't contending for any synchronization primitives as in NMI context
-they are expected to cause deadlocks. Note that the debug sysrq do not
-contend for any synchronization primitives. It does call kgdb_breakpoint()
-to provoke a trap but that trap handler should be NMI safe on
-architectures that implement an NMI.
-
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 ---
- drivers/tty/sysrq.c       | 45 ++++++++++++++++++++++++++++++++++++++-
- include/linux/sysrq.h     |  1 +
- kernel/debug/debug_core.c |  1 +
- 3 files changed, 46 insertions(+), 1 deletion(-)
+ MAINTAINERS                      |   5 +
+ drivers/soc/Kconfig              |   1 +
+ drivers/soc/Makefile             |   1 +
+ drivers/soc/fujitsu/Kconfig      |  13 +++
+ drivers/soc/fujitsu/Makefile     |   3 +
+ drivers/soc/fujitsu/a64fx-diag.c | 151 +++++++++++++++++++++++++++++++
+ 6 files changed, 174 insertions(+)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
+ create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
 
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index bbfd004449b5..40cd492fe6ec 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -51,6 +51,7 @@
- #include <linux/syscalls.h>
- #include <linux/of.h>
- #include <linux/rcupdate.h>
-+#include <linux/irq_work.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dd36acc87ce6..e9663fa92a52 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -239,6 +239,11 @@ F:	include/trace/events/9p.h
+ F:	include/uapi/linux/virtio_9p.h
+ F:	net/9p/
  
- #include <asm/ptrace.h>
- #include <asm/irq_regs.h>
-@@ -112,6 +113,7 @@ static const struct sysrq_key_op sysrq_loglevel_op = {
- 	.help_msg	= "loglevel(0-9)",
- 	.action_msg	= "Changing Loglevel",
- 	.enable_mask	= SYSRQ_ENABLE_LOG,
-+	.nmi_safe	= true,
- };
- 
- #ifdef CONFIG_VT
-@@ -159,6 +161,7 @@ static const struct sysrq_key_op sysrq_crash_op = {
- 	.help_msg	= "crash(c)",
- 	.action_msg	= "Trigger a crash",
- 	.enable_mask	= SYSRQ_ENABLE_DUMP,
-+	.nmi_safe	= true,
- };
- 
- static void sysrq_handle_reboot(int key)
-@@ -172,6 +175,7 @@ static const struct sysrq_key_op sysrq_reboot_op = {
- 	.help_msg	= "reboot(b)",
- 	.action_msg	= "Resetting",
- 	.enable_mask	= SYSRQ_ENABLE_BOOT,
-+	.nmi_safe	= true,
- };
- 
- const struct sysrq_key_op *__sysrq_reboot_op = &sysrq_reboot_op;
-@@ -219,6 +223,7 @@ static const struct sysrq_key_op sysrq_showlocks_op = {
- 	.handler	= sysrq_handle_showlocks,
- 	.help_msg	= "show-all-locks(d)",
- 	.action_msg	= "Show Locks Held",
-+	.nmi_safe	= true,
- };
- #else
- #define sysrq_showlocks_op (*(const struct sysrq_key_op *)NULL)
-@@ -291,6 +296,7 @@ static const struct sysrq_key_op sysrq_showregs_op = {
- 	.help_msg	= "show-registers(p)",
- 	.action_msg	= "Show Regs",
- 	.enable_mask	= SYSRQ_ENABLE_DUMP,
-+	.nmi_safe	= true,
- };
- 
- static void sysrq_handle_showstate(int key)
-@@ -328,6 +334,7 @@ static const struct sysrq_key_op sysrq_ftrace_dump_op = {
- 	.help_msg	= "dump-ftrace-buffer(z)",
- 	.action_msg	= "Dump ftrace buffer",
- 	.enable_mask	= SYSRQ_ENABLE_DUMP,
-+	.nmi_safe	= true,
- };
- #else
- #define sysrq_ftrace_dump_op (*(const struct sysrq_key_op *)NULL)
-@@ -566,6 +573,32 @@ static void __sysrq_put_key_op(int key, const struct sysrq_key_op *op_p)
- 		sysrq_key_table[i] = op_p;
- }
- 
-+static int sysrq_nmi_key = -1;
++A64FX DIAG DRIVER
++M:	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
++S:	Supported
++F:	drivers/soc/fujitsu/a64fx-diag.c
 +
-+static void sysrq_do_irq_work(struct irq_work *work)
+ A8293 MEDIA DRIVER
+ M:	Antti Palosaari <crope@iki.fi>
+ L:	linux-media@vger.kernel.org
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index e8a30c4c5aec..0405ff0b3be6 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -8,6 +8,7 @@ source "drivers/soc/atmel/Kconfig"
+ source "drivers/soc/bcm/Kconfig"
+ source "drivers/soc/canaan/Kconfig"
+ source "drivers/soc/fsl/Kconfig"
++source "drivers/soc/fujitsu/Kconfig"
+ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index a05e9fbcd3e0..86596405a39c 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
+ obj-$(CONFIG_ARCH_DOVE)		+= dove/
+ obj-$(CONFIG_MACH_DOVE)		+= dove/
+ obj-y				+= fsl/
++obj-y				+= fujitsu/
+ obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
+ obj-y				+= imx/
+ obj-y				+= ixp4xx/
+diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
+new file mode 100644
+index 000000000000..b41cdac67637
+--- /dev/null
++++ b/drivers/soc/fujitsu/Kconfig
+@@ -0,0 +1,13 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menu "fujitsu SoC drivers"
++
++config A64FX_DIAG
++	bool "A64FX diag driver"
++	depends on ARM64
++	help
++	  Say Y here if you want to enable diag interrupt on A64FX.
++	  This driver uses pseudo-NMI if available.
++
++	  If unsure, say N.
++
++endmenu
+diff --git a/drivers/soc/fujitsu/Makefile b/drivers/soc/fujitsu/Makefile
+new file mode 100644
+index 000000000000..945bc1c14ad0
+--- /dev/null
++++ b/drivers/soc/fujitsu/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-$(CONFIG_A64FX_DIAG)	+= a64fx-diag.o
+diff --git a/drivers/soc/fujitsu/a64fx-diag.c b/drivers/soc/fujitsu/a64fx-diag.c
+new file mode 100644
+index 000000000000..c6f895cf8912
+--- /dev/null
++++ b/drivers/soc/fujitsu/a64fx-diag.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * A64FX diag driver.
++ */
++
++#include <linux/acpi.h>
++#include <linux/interrupt.h>
++#include <linux/irq.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/sysrq.h>
++
++#define A64FX_DIAG_IRQ 1
++#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
++#define BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
++#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
++#define BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
++
++struct a64fx_diag_priv {
++	int irq;
++	void __iomem *mmsc_reg_base;
++	bool has_nmi;
++};
++
++static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
 +{
-+	const struct sysrq_key_op *op_p;
-+	int orig_suppress_printk;
++	handle_sysrq('c');
 +
-+	orig_suppress_printk = suppress_printk;
-+	suppress_printk = 0;
-+
-+	rcu_sysrq_start();
-+	rcu_read_lock();
-+
-+	op_p = __sysrq_get_key_op(sysrq_nmi_key);
-+	if (op_p)
-+		op_p->handler(sysrq_nmi_key);
-+
-+	rcu_read_unlock();
-+	rcu_sysrq_end();
-+
-+	suppress_printk = orig_suppress_printk;
-+	sysrq_nmi_key = -1;
++	return IRQ_HANDLED;
 +}
 +
-+static DEFINE_IRQ_WORK(sysrq_irq_work, sysrq_do_irq_work);
++static void a64fx_diag_interrupt_clear(struct a64fx_diag_priv *priv)
++{
++	u32 mmsc;
++	const void __iomem *diag_status_reg_addr;
 +
- void __handle_sysrq(int key, bool check_mask)
- {
- 	const struct sysrq_key_op *op_p;
-@@ -573,6 +606,10 @@ void __handle_sysrq(int key, bool check_mask)
- 	int orig_suppress_printk;
- 	int i;
- 
-+	/* Skip sysrq handling if one already in progress */
-+	if (sysrq_nmi_key != -1)
-+		return;
++	diag_status_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_STATUS_OFFSET;
++	mmsc = readl(diag_status_reg_addr);
++	if (mmsc & BMC_INTERRUPT_STATUS_MASK)
++		writel(BMC_INTERRUPT_STATUS_MASK, (void *)diag_status_reg_addr);
++}
 +
- 	orig_suppress_printk = suppress_printk;
- 	suppress_printk = 0;
- 
-@@ -596,7 +633,13 @@ void __handle_sysrq(int key, bool check_mask)
- 		if (!check_mask || sysrq_on_mask(op_p->enable_mask)) {
- 			pr_info("%s\n", op_p->action_msg);
- 			console_loglevel = orig_log_level;
--			op_p->handler(key);
++static void a64fx_diag_interrupt_enable(struct a64fx_diag_priv *priv)
++{
++	u32 mmsc;
++	const void __iomem *diag_enable_reg_addr;
 +
-+			if (in_nmi() && !op_p->nmi_safe) {
-+				sysrq_nmi_key = key;
-+				irq_work_queue(&sysrq_irq_work);
-+			} else {
-+				op_p->handler(key);
-+			}
- 		} else {
- 			pr_info("This sysrq operation is disabled.\n");
- 			console_loglevel = orig_log_level;
-diff --git a/include/linux/sysrq.h b/include/linux/sysrq.h
-index 3a582ec7a2f1..630b5b9dc225 100644
---- a/include/linux/sysrq.h
-+++ b/include/linux/sysrq.h
-@@ -34,6 +34,7 @@ struct sysrq_key_op {
- 	const char * const help_msg;
- 	const char * const action_msg;
- 	const int enable_mask;
-+	const bool nmi_safe;
- };
- 
- #ifdef CONFIG_MAGIC_SYSRQ
-diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
-index da06a5553835..53b56114f59b 100644
---- a/kernel/debug/debug_core.c
-+++ b/kernel/debug/debug_core.c
-@@ -978,6 +978,7 @@ static const struct sysrq_key_op sysrq_dbg_op = {
- 	.handler	= sysrq_handle_dbg,
- 	.help_msg	= "debug(g)",
- 	.action_msg	= "DEBUG",
-+	.nmi_safe	= true,
- };
- #endif
- 
++	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
++	mmsc = readl(diag_enable_reg_addr);
++	if (!(mmsc & BMC_INTERRUPT_ENABLE_MASK)) {
++		mmsc |= BMC_INTERRUPT_STATUS_MASK;
++		writel(mmsc, (void *)diag_enable_reg_addr);
++	}
++}
++
++static void a64fx_diag_interrupt_disable(struct a64fx_diag_priv *priv)
++{
++	u32 mmsc;
++	const void __iomem *diag_enable_reg_addr;
++
++	diag_enable_reg_addr = priv->mmsc_reg_base + BMC_DIAG_INTERRUPT_ENABLE_OFFSET;
++	mmsc = readl(diag_enable_reg_addr);
++	if (mmsc & BMC_INTERRUPT_ENABLE_MASK) {
++		mmsc &= ~BMC_INTERRUPT_ENABLE_MASK;
++		writel(mmsc, (void *)diag_enable_reg_addr);
++	}
++}
++
++static int a64fx_diag_probe(struct platform_device *pdev)
++{
++	int ret;
++	unsigned long irq_flags;
++	struct device *dev = &pdev->dev;
++	struct a64fx_diag_priv *priv;
++
++	priv = devm_kzalloc(dev, sizeof(struct a64fx_diag_priv), GFP_KERNEL);
++	if (priv == NULL)
++		return -ENOMEM;
++
++	priv->mmsc_reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(priv->mmsc_reg_base))
++		return PTR_ERR(priv->mmsc_reg_base);
++
++	priv->irq = platform_get_irq(pdev, A64FX_DIAG_IRQ);
++	if (priv->irq < 0)
++		return priv->irq;
++
++	platform_set_drvdata(pdev, priv);
++
++	a64fx_diag_interrupt_clear(priv);
++	a64fx_diag_interrupt_enable(priv);
++
++	irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
++		   IRQF_NO_THREAD;
++	ret = request_nmi(priv->irq, &a64fx_diag_handler, irq_flags,
++			"a64fx_diag_nmi", NULL);
++	if (ret) {
++		ret = request_irq(priv->irq, &a64fx_diag_handler,
++				irq_flags, "a64fx_diag_irq", NULL);
++		if (ret) {
++			dev_err(dev, "cannot register IRQ %d\n", ret);
++			return ret;
++		}
++		enable_irq(priv->irq);
++		priv->has_nmi = false;
++		dev_info(dev, "registered for IRQ %d\n", priv->irq);
++	} else {
++		enable_nmi(priv->irq);
++		priv->has_nmi = true;
++		dev_info(dev, "registered for NMI %d\n", priv->irq);
++	}
++
++	return 0;
++}
++
++static int __exit a64fx_diag_remove(struct platform_device *pdev)
++{
++	struct a64fx_diag_priv *priv = platform_get_drvdata(pdev);
++
++	a64fx_diag_interrupt_disable(priv);
++	a64fx_diag_interrupt_clear(priv);
++
++	if (priv->has_nmi)
++		free_nmi(priv->irq, NULL);
++	else
++		free_irq(priv->irq, NULL);
++
++	return 0;
++}
++
++static const struct acpi_device_id a64fx_diag_acpi_match[] = {
++	{ "FUJI2007", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, a64fx_diag_acpi_match);
++
++
++static struct platform_driver a64fx_diag_driver = {
++	.driver = {
++		.name = "a64fx_diag_driver",
++		.acpi_match_table = ACPI_PTR(a64fx_diag_acpi_match),
++	},
++	.probe = a64fx_diag_probe,
++	.remove = a64fx_diag_remove,
++};
++
++module_platform_driver(a64fx_diag_driver);
++
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>");
++MODULE_DESCRIPTION("A64FX diag driver");
 -- 
 2.27.0
 
