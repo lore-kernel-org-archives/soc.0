@@ -1,100 +1,155 @@
-Return-Path: <SRS0=7QVw=TS=baylibre.com=narmstrong@kernel.org>
+Return-Path: <SRS0=uMg9=TS=nuvoton.com=YCHuang3@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17BF7C433F5
-	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 08:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D26FC4332F
+	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 09:19:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C0865C340F3; Mon,  7 Mar 2022 08:45:37 +0000 (UTC)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 08644C340F3; Mon,  7 Mar 2022 09:19:41 +0000 (UTC)
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2048.outbound.protection.outlook.com [40.107.215.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C451DC340F4
-	for <soc@kernel.org>; Mon,  7 Mar 2022 08:45:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C451DC340F4
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f52.google.com with SMTP id q20so6366001wmq.1
-        for <soc@kernel.org>; Mon, 07 Mar 2022 00:45:36 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id B2144C340E9;
+	Mon,  7 Mar 2022 09:19:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2144C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jHrOMiuuYTzoJJBADyFfZgepTu5LeDO3zP41JhU9Dy5d7IXoOnwL7gBXisShFfMachhXYrOZ8cMu2b/nfe64r1yAbmntSrg6EL7yKqBG09iSIiYksDGP+dmPSxL6rkkiZB1ry5p9IljzZC3r34tL12GhdZKJsEr+T2bMazSsnCIufpxQwysdFQbeXs+zB+4wbH4DC4/sTWI7ckqvbw7z1MT+o0urT7AXnSaGsYwBYO4M7y17qb/gjsEVdGlx3bW6BNLrsuZSoCWsC9FMSVQKnct2kX9qPswqup2AAXcrT0/XK1j6IeEZWmXt5LPeSChSlqHQyLqKqX4KCpKqZeblKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8iez/ik0IZbj/jgzwGYVRSmtK4LfAEcgvGxtKV71MXQ=;
+ b=YeKBT7qFzssi0Tqm83m3GajIVI3eVWPMNER42ghG+Dw05bGmkUBGHIreu5DNG27i6+67QUsdfA83aOuSrtT9VUJRAO2lhBx/TeRymFzKlRVWLcuxELjZ7H4cJhyALgmlEOGRuCGRgLFIpeyyd9FPSivKb1bUmh4U6I+W4YqbOCAwd/zaMC6tRENzCTvQqm+Kewe91NCpp26+gygacfNNJK12GkIGetM3xpBOF3B0gaDgOE8Cn/tAD7PSjVpKXk104i/dWF3Wl7pzC/JVr1ChQuZxPlxFTglUt3/fLwHKNB1u6W4lBZk7LTZnmBnwGo6mxeiaRraTp7jFbwyY6rZkFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nuvoton.com; dmarc=pass action=none header.from=nuvoton.com;
+ dkim=pass header.d=nuvoton.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:organization:content-transfer-encoding;
-        bh=NNH81ZuTlZ9R6IvbjsRsCalYWZjx70C0eZ0TqIBdVik=;
-        b=rTkMyox9zC1nlmU4aTFhaaPxLaxUyan3IUQoqYUR7zyC4EKLVPR9EHklZucXlReAsH
-         PMe7CN1dTzfHw1cCeDjTQoX2jQ6hvMpAzQN0JfUPbInv7GsTuMrrUJjnhMUktX17fSRu
-         J9A0XafEqdbUtwx6a0kZliKIux0zEx0kq5GKwasy5mvT7wuozn30PiSERDj4uAR7z9Md
-         kn5d9H9pybpRM5O3jDBr0n+aUXhA4MQkhAAYN+di8V3p2gACQCb8DFUmOH+itx67tIDP
-         j3M/r2R6yalrP/LV+jjZdCQ0OlhdLFZnN9/2lLpKvjeN9b2J3dVJ8pJMZ/2qEvnVTLOi
-         ps5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:organization
-         :content-transfer-encoding;
-        bh=NNH81ZuTlZ9R6IvbjsRsCalYWZjx70C0eZ0TqIBdVik=;
-        b=hLcQ2+yt+eORuLNnNIO8cgOciYiLgFtHtg27WLzYIwCoknAqtR6W9v4ClQO8yhIG2s
-         BbmIL7BdKTL+REmgynfZkhs3eMY7++vbGaVxfaqCoewpO0IcaYasVr4i08LbBf5QSH1I
-         cazvgfpz7Lfv/j0CCgcfDdEv+tbLcCyK73D1Jn2zssw5AbFUMxSqytl3Eyj+BzHJHxyT
-         UPJjf9UeEhyzeAaLSOjcBm540vamnfx9dAJTfe0zS9bldDQQ7DVQueV2vOeuUA1RPFyl
-         EapH7Cy4V6a0vAgpaazxA1uu9PCceTTsuHBhoI4MbDYAKE6/rcRwAh+SdC0z+/S79cdT
-         O+VQ==
-X-Gm-Message-State: AOAM5334zBATCAM+wHgJ2P2WL8AxO+N2iHAcqyOUT75HZrTzW5KebRCm
-	1wiSVT8rmphR+GEMB6FoU97rRLgTIXP/GQ==
-X-Google-Smtp-Source: ABdhPJzBGnm3vczH9cpTvFWCECpLXeFjAwJgIl3BHH/SNEOKz4pCH74ickWXp10r4cEYNSRe3oZxqA==
-X-Received: by 2002:a1c:4c0f:0:b0:382:ab63:19ac with SMTP id z15-20020a1c4c0f000000b00382ab6319acmr8283711wmf.121.1646642734695;
-        Mon, 07 Mar 2022 00:45:34 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:1451:71b4:fefe:6096? ([2001:861:44c0:66c0:1451:71b4:fefe:6096])
-        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm14636011wmb.3.2022.03.07.00.45.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 00:45:34 -0800 (PST)
-Message-ID: <c7471989-d929-c744-c0c3-c8e86eaaa225@baylibre.com>
-Date: Mon, 7 Mar 2022 09:45:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From: Neil Armstrong <narmstrong@baylibre.com>
-Subject: [GIT PULL] soc: amlogic: driver updates for v5.18
+ d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8iez/ik0IZbj/jgzwGYVRSmtK4LfAEcgvGxtKV71MXQ=;
+ b=ohsZ9OQZcoKOzmbRif9qt2hAgYI5uW0PA34JHKYGWAPotNXtSmnCWhniPU76caz+N5d7Q6muc6feNyEIx6WgF9RY4fgNLiTv1WVD0mgoRPwgyFl03quwUpZAfMN4ZlvOjQWFi+8Y9sf6UjQCMuGx4DkCtXA141tu+kb03JlikMo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nuvoton.com;
+Received: from HK0PR03MB4833.apcprd03.prod.outlook.com (2603:1096:203:b1::19)
+ by KL1PR03MB4646.apcprd03.prod.outlook.com (2603:1096:820:1c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.8; Mon, 7 Mar
+ 2022 09:19:35 +0000
+Received: from HK0PR03MB4833.apcprd03.prod.outlook.com
+ ([fe80::39bb:b24a:15ed:811e]) by HK0PR03MB4833.apcprd03.prod.outlook.com
+ ([fe80::39bb:b24a:15ed:811e%3]) with mapi id 15.20.5061.017; Mon, 7 Mar 2022
+ 09:19:35 +0000
+From: Jacky Huang <ychuang3@nuvoton.com>
+To: robh+dt@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, "arm@kernel.org" <arm@kernel.org>
-Cc: linux-amlogic@lists.infradead.org,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Language: en-US
-Organization: Baylibre
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Jacky Huang <ychuang3@nuvoton.com>
+Subject: [PATCH 0/3] Add initial support for MA35D1 SoC
+Date: Mon,  7 Mar 2022 17:19:20 +0800
+Message-Id: <20220307091923.9909-1-ychuang3@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR04CA0079.apcprd04.prod.outlook.com
+ (2603:1096:202:15::23) To HK0PR03MB4833.apcprd03.prod.outlook.com
+ (2603:1096:203:b1::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 77a349c7-6a2f-45ed-7821-08da001b986d
+X-MS-TrafficTypeDiagnostic: KL1PR03MB4646:EE_
+X-Microsoft-Antispam-PRVS:
+ <KL1PR03MB46461FD11C0BD692F61E94A19E089@KL1PR03MB4646.apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	NoCEnT58gPVVBxDEKgUcmmsuj8yMbCLt1kib2tz9YDJ77lUd7wkkqmZOn+e1g570N16zrZ1uRlgnMCseTQMbnKvEXPUTUeHQUhD/bgaoPmQimlaje1+0i7n+XTyhNBK68CLAVbYChfjhXUl27bCfT8oDGeKo985xkUI8gphgCRnNPuQnWtNxb5d7LKxPD9EK4OnW1o60PQSw9HN3GN/JLIMbxSWJ9pYpslR8aMtMmVyK2eCbLiRYnVP2Lqn6WtEvWp1/gD50eYiDua2CGMYO1oiKx9j3Rrq5gG5XK0HawA0bpYfnmM9S67U/odjA9FWlZwX9dcogZnsBZ/RXuFR9U0BDfGWLgyFLELY+puVJqoeP2jHai4Cgr/9hqDS0nUaAlExn1Rxv1PTYrD9rCZTg7H/SoJq8Id6dhw3HeuRHhXDvIT7D3hAupJj/Zc0p9YMS3Johxh0BSGhFAjxy9kzgA2bvS7V0WHeIOLSnLgWg06Ff8cRWi3iqrAjX08ShO7p7gZUbRPpWVV299shD+t3/MI3rU/Zu5CknbJDo1xlQwjToRlcVjbQw3KT2ZlmFuRv4mXFdbr+1/e9axfYq0CE5LKUuNDkvMjAgACAdDAmQuVw9t/9gZo1bM5rBQLuSWZjMv9Ipz3FViBJo7QUJ1kWXcWAD/nYPX7Pd/Uat2jxEv/ipuNjzKmQO7z/v6zodwUaBEP8/res/JS2Iom/f0MqNDQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB4833.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(38350700002)(2616005)(1076003)(186003)(508600001)(5660300002)(8936002)(7416002)(2906002)(26005)(36756003)(6666004)(6512007)(6506007)(66556008)(66476007)(86362001)(8676002)(66946007)(4326008)(52116002)(107886003)(83380400001)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xwQn7SozYuUOX1mglQ/vKU9ap7bT1Fg5OQPYKA/sNGSymKQ6LHmi2o/m+ieG?=
+ =?us-ascii?Q?v+DXmQeQbXViYtBi38fsKrlOTutC+XeutaQ+hD+nyaXkr9HTisGvxKkx3+2x?=
+ =?us-ascii?Q?wbu6gR5wsSWcPlQ1xEVGHBO68MoMqLv2lmIxsHW3gjAWGNiwRknbEeVkCOrB?=
+ =?us-ascii?Q?Dc14CtAWTxfj5dJXXQ2EB3i5VFrENvskOW+On8LJWH6lvA0o5C/l5+Naf4Iw?=
+ =?us-ascii?Q?m7633kCJ/vx/zW3RMClG0FAapU1oXrFVcIlttcDd3KMPO13oPDBtSJpnLJ+6?=
+ =?us-ascii?Q?1OBrA3JwAVfpNE4ERmlFmq2WXEJrft0nXJonJUCDCAXISLnuy8VasHb21j4T?=
+ =?us-ascii?Q?2RJgikxSanYfdWWi8JdLXTUNqgQK6c1bYzjVdHYmuIbe4pB/HwAqwCvewH/3?=
+ =?us-ascii?Q?FR4MBGhotvVx1g733MRa5XbIR0kJwCJ5QwR8TFNqz/XcYv6KFLgGYprX5c0y?=
+ =?us-ascii?Q?eUF5z6uM0YSu1XDOaTt+5R+WmnADERFvdrAPE7w+0J4IL37xpkKO8GuHU7Sq?=
+ =?us-ascii?Q?fJsjlT7NwDMAHQS3kvJqP0VEOpacufeEhdtESB+PKio1kUPgISuVw4R8BWjK?=
+ =?us-ascii?Q?i/WJi2XggQaKxJ/cEZVXFcR776MwafsvWIJiOfa8hqJU5J4iIDZVpWu1S5DU?=
+ =?us-ascii?Q?2gbjzCCEU0RYbM6wi0LKSCwDmDz/ssRVH4jk5QxBt2jYAPRbR3htrccNA4J5?=
+ =?us-ascii?Q?Nmxp/Eaju5u8kbEBG28qqWExQVnxM9K4YlaV8SZtfpmvMn8JupqV5OqdUDJS?=
+ =?us-ascii?Q?1nE4Jg1HeCKOLmtYp3N9t7M/oIxiDZDYgu/GrvV9zWlvCyXxZcOZsvx0xAqq?=
+ =?us-ascii?Q?oLgq0qEzuIu+NV5U6pkLOaH0EhSj0bB3sg3z0JBlurKbeJWUis1wb4l74ZdQ?=
+ =?us-ascii?Q?jOjIx7eTihPfi7SSLe7cYPTTZpehW0ixr+531pmo96ngnvhvgM54JOMhZw7W?=
+ =?us-ascii?Q?nhG0JK0p/YAuWLinuH4zltsYA63fQrynIqMMiympEWyDnNNwr93OiVZMh+Lo?=
+ =?us-ascii?Q?Z0qWzLdbKbQgedd5qKF2T8DSEzZj2ImbD+ViKAhMUU6/vjw/OKyaGwsgMtW/?=
+ =?us-ascii?Q?Mkk4k3kZbB9UpnBIcRycBA7X29X191vy5E8hKS2PO+XcluZ7qMFYfkyTVm1Q?=
+ =?us-ascii?Q?krLTQFGcWL0GkgKxbK7adnm1FwXBThmVR3rJuH/0JKD0yrdbrV3Ay14gwA4p?=
+ =?us-ascii?Q?tki+kwvArbo1hwYZXZvHY8PDA2tlnLFbuAffTAPiTwr9wWieS/7fSeYHecO1?=
+ =?us-ascii?Q?ilfX06EDU/DrvnWeoIAl2IKIlJCCl6tK/U9HR7bQe+x5357dFuHa2B7LjCY3?=
+ =?us-ascii?Q?SZHHbylWvxyWKmduEh6luGdoYD3OudqLIgHXaZ+u6LxhixS5n5uCGBG9IXnu?=
+ =?us-ascii?Q?28hWqDfHO/QhB1ebUdrJ2UX0WvpNZonv/Qc2XgkSyq6ZQBvUo/eFMWldZi31?=
+ =?us-ascii?Q?+Kl0sTt5XlIMH/loAOx7iRgPLBggvOQhLpN1DV8AD/xNmNAOM5c+fw=3D=3D?=
+X-OriginatorOrg: nuvoton.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77a349c7-6a2f-45ed-7821-08da001b986d
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR03MB4833.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:19:34.9180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aGkuhyX2Ng1B0r7ni1AvELgGq+YQwzY05R06+tDdEeS0bqpbrmtSAf+thZEnyXa66aOh0IwDjDiv/p0M1usmZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB4646
 
-Hi,
+This patch series adds initial support for Nuvoton MA35D1 SoC,
+include initial dts and clock controller binding.
 
-Please find for v5.18 support for Amlogic S4 SoC in secure power domain driver.
+Jacky Huang (3):
+  dt-bindings: clock: add binding for MA35D1 clock controller
+  dt-bindings: clock: Document MA35D1 clock controller bindings
+  arm64: dts: nuvoton: Add initial support for MA35D1
 
-Neil
+ .../bindings/clock/nuvoton,ma35d1-clk.yaml    |  66 +++++
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts    |  23 ++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       | 106 +++++++
+ .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 262 ++++++++++++++++++
+ 6 files changed, 460 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-=
+clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+ create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+--
+2.17.1
 
-   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v5.18
-
-for you to fetch changes up to f2b03c1056ef5c0829678f51273eace3e6327884:
-
-   soc: s4: Add support for power domains controller (2022-03-07 09:40:39 +0100)
-
-----------------------------------------------------------------
-Amlogic Drivers updates for v5.18:
-- Add support for Amlogic S4 in meson-secure-pwrc power domain driver
-
-----------------------------------------------------------------
-Shunzhou Jiang (2):
-       dt-bindings: power: add Amlogic s4 power domains bindings
-       soc: s4: Add support for power domains controller
-
-  .../bindings/power/amlogic,meson-sec-pwrc.yaml     |  3 ++-
-  drivers/soc/amlogic/meson-secure-pwrc.c            | 22 ++++++++++++++++++++++
-  include/dt-bindings/power/meson-s4-power.h         | 19 +++++++++++++++++++
-  3 files changed, 43 insertions(+), 1 deletion(-)
-  create mode 100644 include/dt-bindings/power/meson-s4-power.h
+________________________________
+________________________________
+ The privileged confidential information contained in this email is intende=
+d for use only by the addressees as indicated by the original sender of thi=
+s email. If you are not the addressee indicated in this email or are not re=
+sponsible for delivery of the email to such a person, please kindly reply t=
+o the sender indicating this fact and delete all copies of it from your com=
+puter and network server immediately. Your cooperation is highly appreciate=
+d. It is advised that any unauthorized use of confidential information of N=
+uvoton is strictly prohibited; and any information in this email irrelevant=
+ to the official business of Nuvoton shall be deemed as neither given nor e=
+ndorsed by Nuvoton.
