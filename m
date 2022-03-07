@@ -1,310 +1,108 @@
-Return-Path: <SRS0=uMg9=TS=nuvoton.com=YCHuang3@kernel.org>
+Return-Path: <SRS0=D0ga=TS=gmail.com=k.kozlowski.k@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFA27C433FE
-	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 09:19:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8237DC41535
+	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 10:21:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AA889C340F3; Mon,  7 Mar 2022 09:19:46 +0000 (UTC)
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2048.outbound.protection.outlook.com [40.107.215.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 59A6AC340F7; Mon,  7 Mar 2022 10:21:11 +0000 (UTC)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 35D5FC36AE2;
-	Mon,  7 Mar 2022 09:19:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35D5FC36AE2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kwh5Plf3eIQ9gs53ZERTk0TLNCR9Vd6KS1ITHC2mj6G9AtBB8j7qR97dcKglPvvy4KCfNlCUHKg+Ye9yDpOvnuTo9j/xQpY4hlBj7vgQUZBImVF6iyKwZi/t0gBbScw/ZshzJ15MSrHF6cBNSw0+Q7iAr5wrOmTM1p/uADXFveo66LfWSauBo1/jY7K+BbBxFdtfnC91VmWU3MBJ37laX5lAVGUIuU25IrpbmTU912tHOsO+PBgiFrZMOR+BSzrRpk/xOED44oeuHtpuOKlqEGd0nklmxIg+dcbLNvJMGXEFS71V0jW/dsMdFL+yGC6v4D2mLThJfqiGMZU7KdL7rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hjNjjnzCJMF2QjZTTKHEKWi2u+8FCf2NGgGvl5IlhIA=;
- b=K/U2rRlbhW8SgfTfu8+3uQ8xkYHfCZBsRJgk2DnwLvhesOX2C88L7Bo3Xa8z0C+WZV4s4ShvGdVxlXOJA+xz/tiJ1iwk4B13zZ7urahu9cVQcbT9rPe8bsO7N8Qj5U/X1IwZ0nCmHCKTaB9J804TBrLYV+77KV9UuRHIjLBefgH2MXjUDHjU4Rx06SFagcFN+pvuBkTwQgN6bId0BEDwttukoP3H4FwdY9c9bw2hBilwubtmlu2B4hTPK5V2l0eCXZTbOmpbg0NL4wEuKD/PQ2t5Pn/AfeGR6CRjtI93EVMmsNAkyiegExm7ES1Isd+UlFSN+AfiMGGYx77cKbqckQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nuvoton.com; dmarc=pass action=none header.from=nuvoton.com;
- dkim=pass header.d=nuvoton.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hjNjjnzCJMF2QjZTTKHEKWi2u+8FCf2NGgGvl5IlhIA=;
- b=Csem5soSXU3IymIxtJfGl394wwyHsEdq9SbHCnVeogH/YwcUiHl/JO/udHsZXD1Bc3TW40TF4bQ5XcG5BLIwX2bUVQERxWM0xO+60frl1WN5RTUGdHjaGzVlVHpkOsWQyszmvi+HfBsKTWVFymeCs1h6ZdzxDBC/G5Uot7dTa7o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nuvoton.com;
-Received: from HK0PR03MB4833.apcprd03.prod.outlook.com (2603:1096:203:b1::19)
- by KL1PR03MB4646.apcprd03.prod.outlook.com (2603:1096:820:1c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.8; Mon, 7 Mar
- 2022 09:19:41 +0000
-Received: from HK0PR03MB4833.apcprd03.prod.outlook.com
- ([fe80::39bb:b24a:15ed:811e]) by HK0PR03MB4833.apcprd03.prod.outlook.com
- ([fe80::39bb:b24a:15ed:811e%3]) with mapi id 15.20.5061.017; Mon, 7 Mar 2022
- 09:19:41 +0000
-From: Jacky Huang <ychuang3@nuvoton.com>
-To: robh+dt@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	arnd@arndb.de,
-	olof@lixom.net
-List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
-Date: Mon,  7 Mar 2022 17:19:23 +0800
-Message-Id: <20220307091923.9909-4-ychuang3@nuvoton.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220307091923.9909-1-ychuang3@nuvoton.com>
-References: <20220307091923.9909-1-ychuang3@nuvoton.com>
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR04CA0079.apcprd04.prod.outlook.com
- (2603:1096:202:15::23) To HK0PR03MB4833.apcprd03.prod.outlook.com
- (2603:1096:203:b1::19)
+	by smtp.kernel.org (Postfix) with ESMTPS id 966AFC340F3;
+	Mon,  7 Mar 2022 10:21:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 966AFC340F3
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id qa43so30712170ejc.12;
+        Mon, 07 Mar 2022 02:21:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Gklbw6NojNX9LElaFUzhIaJ+ODG7CHLZKWRF0mPmNTQ=;
+        b=eSshe5UGTjiHDFcnqvluRXclGlp073yvr22D17oYK7ygMNiddvkJLnEFITbcTcM1p3
+         qrl2RR+aVpeEjma3JGBwb+mm+5LopUNX4yVALxaIbQ5fQUX1Uv7ISuOHPRnsUN38N0MQ
+         Paoo6quY4PQ1GSC7uFm+gHqRRnZvq9kErLZPeih0IAaBjFXJczxqp53uty0h0cZvUnnv
+         BAEeaLzn1KSqwMxKO6hR08GKEi3g4WimmJY7D0BXmYHk/o1ZP8Q2JjZ/cqjt5FU96KjD
+         HHdgfNtOQDC4acfb/smVIMlovLXEWz6kUTWlTUtbr7BvohyjwQ3XQJ5/N7akyLmhogIl
+         5E3g==
+X-Gm-Message-State: AOAM531/K6gxgMdhB1e6p9w3BO+uqdIGKaIGvhakZE36gXXekNQF6O9U
+	Uj/xsKhP93vtz8pFlbGxZq0=
+X-Google-Smtp-Source: ABdhPJy21DbK07SCgek3zh0yMBqPZ8MlpeuXaq1JdFirxPsVEyr0x6vQ0zDAW41uHxvAu24AWYpx1g==
+X-Received: by 2002:a17:906:5d11:b0:6da:68ed:270f with SMTP id g17-20020a1709065d1100b006da68ed270fmr8736100ejt.661.1646648468731;
+        Mon, 07 Mar 2022 02:21:08 -0800 (PST)
+Received: from [192.168.0.141] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id r14-20020a1709067fce00b006db0edb8a80sm1604632ejs.225.2022.03.07.02.21.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 02:21:08 -0800 (PST)
+Message-ID: <81e8d2cb-c935-fb83-4a29-5ec9dfce16e8@kernel.org>
+Date: Mon, 7 Mar 2022 11:21:07 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 98286bfb-2bc3-44a6-d1c8-08da001b9c88
-X-MS-TrafficTypeDiagnostic: KL1PR03MB4646:EE_
-X-Microsoft-Antispam-PRVS:
- <KL1PR03MB4646B43A5BE3938A798BECFC9E089@KL1PR03MB4646.apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	LQtfbZ34joxcM6pQ++h7Ic+cqex3smPuO6BN5CXt2JkLUpFNK8iVkbhs6IorLQLm+R1ohl+U3hQX/TOnlUw3Ub5S8sAwr2/rQQ9dyEr6Oo2il+Dl/O2GLCQutsh7Uvy181/GYYJicHK/kjGQHfvz1HIj77Eb+RomVvdQC4Z/Kn3jsT4siu+46v9lVoG9FuQf4jBx/V/v+xe1K3W+Us5yG3JIQs6FTVciqVEuJHGovZvitTH5AtEj79E75i72A8M5QZm2/GD5xgLLEe9gog2Aw6SY72lgP5AqyQHqdvNcDBiHA0/waiaQT4K1zlURhIvq/rlvz+pvZ004f/o+uYBzlVqzYVrHD0w63OuiyPiRRcd0YEWzJo/kFLPF06ZzvA8vxjunlTDw/nbXqe9QR289SPrxUQfQgZCbbDIF3Eef4Wazo3sKLupNcjFF5j1/6aMHLGmxgkmp686ScmySt4qwpcPHp59wrgDuHFEA7s9O022UoN7LaMLoKTwmT/QgME1vcYmwa13z0ROehTJKA9mAIfWchHZH5bk4LHetUf2LBAExIwV/rC7klBSdfmQAgBCDTOiqgNvUAn9U8dYBiwUA474lr4VacEkwYayr1KMCO/2vdAjlCLqEeZukFooW3OIrjgT0a+HpyDYQfnQMEZIxbxv8/oHTNJ+uq/RUFtYB6e0QEyjllZq/IZfgW0/o7EXdcg4GwpLPVPoBVNYX1qqx0Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB4833.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(38350700002)(2616005)(1076003)(186003)(508600001)(5660300002)(8936002)(7416002)(2906002)(26005)(36756003)(6666004)(6512007)(6506007)(66556008)(66476007)(86362001)(8676002)(66946007)(4326008)(52116002)(107886003)(83380400001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XK2tvCUdKMK5w63kvgU7uOuGGAmY6kv1MkEZGbk9zIjYfAty9e91TBT3Uiao?=
- =?us-ascii?Q?NDuPjZp8vOPB2N3VTXlDC4wqeAI8pQ6131fEK7sDrqAby5GVgTVx+gPgs95s?=
- =?us-ascii?Q?S0uWQBDi7m6gy1SzbfwXqVI0IG4vAlwKVBoMAo7/iZNcS1pBRoSCLMBARj+v?=
- =?us-ascii?Q?C1QDXKfK9+zcJ978Kggvm8vyNt/1vymqKCwg3Qtk0O5PvvPjhjIgSZH6lGhK?=
- =?us-ascii?Q?dt7U1V74DiBVQitrIXaDYqa4Re6AAThtetQO2qAYVWbdPuSLewvEtexz5kpq?=
- =?us-ascii?Q?BiiSA9Hdb0+xeZ2aeO8bhqmNxtMwsliTu8CKyk+vVNMFA7YfBUxSmobRswI5?=
- =?us-ascii?Q?bdKOR0cQn4q1EDRqBNYJ4szB15pRQbWtSQ1c01yoV0rSSsQLGYKMEjskwCHc?=
- =?us-ascii?Q?patmkWz720eRz7ZBQHTv65m5CgwJUlJFllP0bhBUh0TWWcTpWRrKk8G5URso?=
- =?us-ascii?Q?U2CHtCnFH0nTgmc0Sne1erZJH2GDPWcH/raNhHUy2jYvwyKebWLz5tfXh8Zp?=
- =?us-ascii?Q?HSHWHnXXuUEhTX/qvATKEcqtjifBdEZSyNfBdcoiXiRMrCdE5l2272WjMboz?=
- =?us-ascii?Q?tTxcgqO7DeTEF3JE3HJe6m7duljn3WqoZC/i7KX4UdwYWPK5svaEsZ2uNcJj?=
- =?us-ascii?Q?pQ9U1Gl+XLOkNfraV601tjed8jM+nUFn5AMin3FwT86skMUawDNY1wAehRho?=
- =?us-ascii?Q?nqWjnZpaMxPzr/+JPGjnEObPomENhlUMz326kxbLaBVgBA2TrR1FNb3nDe3E?=
- =?us-ascii?Q?0qLMdULYHOEnL9XrDFHkLmraAwQl9aonV6SiXS6niRIbepvBpcqcH0eRuvs3?=
- =?us-ascii?Q?X9PDFELNqYg7JNHTaBuMx0z0jYPaPa6vkqAeVoVIYCxxc0fuyD8uXsuprdFw?=
- =?us-ascii?Q?dks8wsb5pU2vPZr69mbmvZt9T5Bnr193Y38H0qdqbsZhQhun1MFCpNiLNN/c?=
- =?us-ascii?Q?1bnOB59Qb9agNbBRQxOp5B15BoQv6dAJk2AePf9c9MVKpeypdnAjD4UX3GFI?=
- =?us-ascii?Q?nEisaFrX5xdiLDG2NFBkjpVbLXoqDLXe1YxwE9P+8/FrpGFPbNRUxETDNJCt?=
- =?us-ascii?Q?luUnsf/KTVSR/kdtMVqvJ7Tfbhx5Zv//35TSCHCq5EHRe87NKAZNid21MyEj?=
- =?us-ascii?Q?mlYATYwX8GJncAJl2aYZYEcgREBzV++g+L+wtam1umNK715XX5/cmpjpqtuH?=
- =?us-ascii?Q?G6NL6IQUJqI8Eaw9pqCU2VPT2qj/09CiwlX7sCPKrvyCEcN9cKzQtEEvXg+s?=
- =?us-ascii?Q?QzBWZr2gp0px0UiNtChJPdxLo2eLrEIQqJ+bDf/KGpztD9AV9IdRVI1kygvL?=
- =?us-ascii?Q?LAIOXaMeOeGIAn4zwubS15UhjzP0XQS1rubwmRfRZS/O7memIAPzAOUAQOOY?=
- =?us-ascii?Q?Fn4HNAQzIlvag/B6jK9haNkdhTK9UPUlrsDfWFKTXQJ2mc/8BHX13KXNH2VP?=
- =?us-ascii?Q?cyQANCK/W+qOtejaAmcqt124ck4dAVbg8EAU8dSedf4qEQU5231NiA=3D=3D?=
-X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98286bfb-2bc3-44a6-d1c8-08da001b9c88
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR03MB4833.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:19:41.7769
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E2fkD9qL1Rt5lJn+gxvaGy/3/X2SbQCEVD3HNJB9y3CcLoFDMxgpSO7nzAUJWZfKtihKmB4o4tZpx5SrIzMRdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB4646
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] dt-bindings: clock: add binding for MA35D1 clock
+ controller
+Content-Language: en-US
+To: Jacky Huang <ychuang3@nuvoton.com>, robh+dt@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, arnd@arndb.de, olof@lixom.net
+List-Id: <soc.lore.kernel.org>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-clk@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20220307091923.9909-1-ychuang3@nuvoton.com>
+ <20220307091923.9909-2-ychuang3@nuvoton.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220307091923.9909-2-ychuang3@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the initial device tree files for Nuvoton MA35D1 Soc.
+On 07/03/2022 10:19, Jacky Huang wrote:
+> Add the dt-bindings header for Nuvoton MA35D1, that gets shared
+> between the clock controller and clock references in the dts.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 262 ++++++++++++++++++
+>  1 file changed, 262 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+> 
+> diff --git a/include/dt-bindings/clock/nuvoton,ma35d1-clk.h b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+> new file mode 100644
+> index 000000000000..3634e5edcac5
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+> @@ -0,0 +1,262 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ OR MIT */
+> +/*
+> + * Copyright (c) 2022 Nuvoton Technology Corporation.
+> + */
+> +
+> +#ifndef __DT_BINDINGS_MA35D1_CLK_H
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- arch/arm64/boot/dts/Makefile               |   1 +
- arch/arm64/boot/dts/nuvoton/Makefile       |   2 +
- arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts |  23 +++++
- arch/arm64/boot/dts/nuvoton/ma35d1.dtsi    | 106 +++++++++++++++++++++
- 4 files changed, 132 insertions(+)
- create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
- create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
- create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+Please use header guard matching more parts of path, so:
+__DT_BINDINGS_CLOCK_ NUVOTON_MA35D1_CLK_H
 
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 639e01a4d855..28e01442094f 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -30,3 +30,4 @@ subdir-y +=3D synaptics
- subdir-y +=3D ti
- subdir-y +=3D toshiba
- subdir-y +=3D xilinx
-+subdir-y +=3D nuvoton
-diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuv=
-oton/Makefile
-new file mode 100644
-index 000000000000..e1e0c466bf5e
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_NUVOTON) +=3D ma35d1-evb.dtb
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/d=
-ts/nuvoton/ma35d1-evb.dts
-new file mode 100644
-index 000000000000..38e4f734da0f
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree Source for MA35D1 Evaluation Board (EVB)
-+ *
-+ * Copyright (C) 2021 Nuvoton Technology Corp.
-+ */
-+
-+/dts-v1/;
-+#include "ma35d1.dtsi"
-+
-+/ {
-+       model =3D "Nuvoton MA35D1-EVB";
-+
-+       chosen {
-+               bootargs =3D "console=3DttyS0,115200n8";
-+       };
-+
-+       memory@80000000 {
-+               device_type =3D "memory";
-+               reg =3D <0x00000000 0x80000000 0 0x10000000>;
-+       };
-+};
-+
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/=
-nuvoton/ma35d1.dtsi
-new file mode 100644
-index 000000000000..27adac4975c3
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Nuvoton Technology Corp.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
-+
-+/ {
-+       compatible =3D "nuvoton,ma35d1";
-+       interrupt-parent =3D <&gic>;
-+       #address-cells =3D <2>;
-+       #size-cells =3D <2>;
-+
-+       cpus {
-+               #address-cells =3D <2>;
-+               #size-cells =3D <0>;
-+               cpu-map {
-+                       cluster0 {
-+                               core0 {
-+                                       cpu =3D <&cpu0>;
-+                               };
-+                               core1 {
-+                                       cpu =3D <&cpu1>;
-+                               };
-+                       };
-+               };
-+               cpu0: cpu@0 {
-+                       device_type =3D "cpu";
-+                       compatible =3D "arm,cortex-a35";
-+                       reg =3D <0x0 0x0>;
-+                       enable-method =3D "psci";
-+                       next-level-cache =3D <&L2_0>;
-+               };
-+               cpu1: cpu@1 {
-+                       device_type =3D "cpu";
-+                       compatible =3D "arm,cortex-a35";
-+                       reg =3D <0x0 0x1>;
-+                       enable-method =3D "psci";
-+                       next-level-cache =3D <&L2_0>;
-+               };
-+               L2_0: l2-cache0 {
-+                       compatible =3D "cache";
-+                       cache-level =3D <2>;
-+               };
-+       };
-+
-+       psci {
-+               compatible =3D "arm,psci-0.2";
-+               method =3D "smc";
-+       };
-+
-+       timer {
-+               compatible =3D "arm,armv8-timer";
-+               interrupts =3D <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>,
-+                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>,
-+                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>,
-+                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>;
-+               clock-frequency =3D <12000000>;
-+       };
-+
-+       sys: system-controller@40460000 {
-+               compatible =3D "nuvoton,ma35d1-sys", "syscon", "simple-mfd"=
-;
-+               reg =3D <0x0 0x40460000 0x0 0x200>;
-+       };
-+
-+       reset: reset-controller {
-+               compatible =3D "nuvoton,ma35d1-reset";
-+               nuvoton,ma35d1-sys =3D <&sys>;
-+               #reset-cells =3D <1>;
-+       };
-+
-+       clk: clock-controller@40460200 {
-+               compatible =3D "nuvoton,ma35d1-clk";
-+               reg =3D <0x00000000 0x40460200 0x0 0x100>;
-+               #clock-cells =3D <1>;
-+               assigned-clocks =3D <&clk DDRPLL>,
-+                                 <&clk APLL>,
-+                                 <&clk EPLL>,
-+                                 <&clk VPLL>;
-+               assigned-clock-rates =3D <266000000>,
-+                                      <180000000>,
-+                                      <500000000>,
-+                                      <102000000>;
-+               clock-pll-mode =3D <1>, <0>, <0>, <0>;
-+       };
-+
-+       gic: interrupt-controller@50800000 {
-+               compatible =3D "arm,gic-400";
-+               #interrupt-cells =3D <3>;
-+               interrupt-parent =3D <&gic>;
-+               interrupt-controller;
-+               reg =3D <0x0 0x50801000 0 0x1000>,
-+                     <0x0 0x50802000 0 0x2000>,
-+                     <0x0 0x50804000 0 0x2000>,
-+                     <0x0 0x50806000 0 0x2000>;
-+               interrupts =3D <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
-+                                        IRQ_TYPE_LEVEL_HIGH)>;
-+       };
-+};
---
-2.17.1
 
-________________________________
-________________________________
- The privileged confidential information contained in this email is intende=
-d for use only by the addressees as indicated by the original sender of thi=
-s email. If you are not the addressee indicated in this email or are not re=
-sponsible for delivery of the email to such a person, please kindly reply t=
-o the sender indicating this fact and delete all copies of it from your com=
-puter and network server immediately. Your cooperation is highly appreciate=
-d. It is advised that any unauthorized use of confidential information of N=
-uvoton is strictly prohibited; and any information in this email irrelevant=
- to the official business of Nuvoton shall be deemed as neither given nor e=
-ndorsed by Nuvoton.
+> +#define __DT_BINDINGS_MA35D1_CLK_H
+> +
+
+(...)
+
+> ________________________________
+> ________________________________
+>  The privileged confidential information contained in this email is intended for use only by the addressees as indicated by the original sender of this email. If you are not the addressee indicated in this email or are not responsible for delivery of the email to such a person, please kindly reply to the sender indicating this fact and delete all copies of it from your computer and network server immediately. Your cooperation is highly appreciated. It is advised that any unauthorized use of confidential information of Nuvoton is strictly prohibited; and any information in this email irrelevant to the official business of Nuvoton shall be deemed as neither given nor endorsed by Nuvoton.
+
+Since I was not intended recipient, I am going to NAK it and delete all
+copies.
+
+NAK. Cannot be included in Linux kernel.
+
+Deleted from my computer, but I cannot delete it from network servers.
+There are just too many of them...
+
+Best regards,
+Krzysztof
