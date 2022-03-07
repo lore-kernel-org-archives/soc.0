@@ -1,124 +1,283 @@
-Return-Path: <SRS0=vJyh=TS=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=ZOfN=TS=canonical.com=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43F23C433FE
-	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 14:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3798C433F5
+	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 17:28:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 149A7C340E9; Mon,  7 Mar 2022 14:35:00 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id DCB06C340F6;
-	Mon,  7 Mar 2022 14:34:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCB06C340F6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F2151042;
-	Mon,  7 Mar 2022 06:34:58 -0800 (PST)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E5A53F66F;
-	Mon,  7 Mar 2022 06:34:56 -0800 (PST)
-From: Andre Przywara <andre.przywara@arm.com>
-To: Maxime Ripard <mripard@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>
+	id 8CABEC340F4; Mon,  7 Mar 2022 17:28:23 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 33CF5C340E9
+	for <soc@kernel.org>; Mon,  7 Mar 2022 17:28:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 33CF5C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7D91C3F5F1
+	for <soc@kernel.org>; Mon,  7 Mar 2022 17:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1646674099;
+	bh=zWqkAeekz2GA5fDk4zNgeAU/W+NGxH0bY9P4VqyG+q4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=h4nys6dARqH1HOAALE3Fwwh8ziSOds/uvfoNsZIrxfsEPewbGLOhjUz3GCCIfLt9H
+	 0qpqFxYEnGWgp8FdkwOGMPDGXbB16/TIID3OR/nTEHx9J8Ayx8JKiLLASVF0HeyjSb
+	 GbIJFVCeiRBvVgc0D2anaRExn7Z3ZBh4/98LjkSbaj9tOCaFZX3soThIWgfDFPaw5s
+	 tHKyhEkC2sHVO+IqsKVTqvYAund9bDaai8ruSiX7QUlsSgsKxf5XfbungTFjABdUQ4
+	 s+A9J7/5234SMyqv9RZRQ9vVDLitb7IeqCwUrzmWSTn5VNxwuc2YAZT4JYJWoeyVaH
+	 wdRiaOQqWSCQw==
+Received: by mail-ed1-f71.google.com with SMTP id n11-20020aa7c68b000000b0041641550e11so2668187edq.8
+        for <soc@kernel.org>; Mon, 07 Mar 2022 09:28:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zWqkAeekz2GA5fDk4zNgeAU/W+NGxH0bY9P4VqyG+q4=;
+        b=JVAxNS9HfYMVTJNCirjk/WsqJjo1OJXIReoEUc62xEvEe1S4QjjjwK++7SWEpDYJUt
+         lL6AWc5OossCB9ZHKKuSqlDwD7OaspOpnoNbXqeAp6fOh58THDFcr5g9mQDTxOE/R0Ml
+         9ycJRtxx5BAt9qfS5pmT3VaOak4KkHfSjXrYO2kJsyPAC6htOOxI0535DzTbAI+iR9Pu
+         hlqCy4r0MkqtqxUL+Hhb9q+fanrLBqp90dtGpQsnHVCzSYLkQTLPjZTnhC1DFuWEuqId
+         6cIBZtLuY9AzpkWTHE7RZ6d9QZhacyGNeuj3/i1RwJQzJC495h8l0jol1+Av93NVj3C4
+         072A==
+X-Gm-Message-State: AOAM533cqOd/QfKOjho9LI+R5fZnzVh30raKaj2EDx96xnnQBlkeX9KK
+	LD1yoyO9RMJU14Pt1dYc+hdbpYgKtdT9aC4CTOswXh16APhzHoyj+BnSwtV2874fADj8uoBduDp
+	ums5LjsIkgsSDFh8pzkSIGQI=
+X-Received: by 2002:a17:907:1c0f:b0:6db:fb2:ff94 with SMTP id nc15-20020a1709071c0f00b006db0fb2ff94mr6386428ejc.581.1646674099018;
+        Mon, 07 Mar 2022 09:28:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxFsbDaiR0foKLH8GCD7HHZMCXBWAvQszk0lRq624IFRdPIjSR6SL8eJwUWJp7owpT4k6uG1g==
+X-Received: by 2002:a17:907:1c0f:b0:6db:fb2:ff94 with SMTP id nc15-20020a1709071c0f00b006db0fb2ff94mr6386406ejc.581.1646674098773;
+        Mon, 07 Mar 2022 09:28:18 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id g13-20020a50bf4d000000b00410d407da2esm6557971edk.13.2022.03.07.09.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 09:28:18 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Mesih Kilinc <mesihkilinc@gmail.com>,
-	Icenowy Zheng <icenowy@aosc.io>,
-	Jesse Taube <mr.bossman075@gmail.com>,
-	Giulio Benetti <giulio.benetti@benettiengineering.com>,
-	George Hilliard <thirtythreeforty@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	Russell King <linux@armlinux.org.uk>,
+To: Olof Johansson <olof@lixom.net>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
 	soc@kernel.org
-Subject: [PATCH 14/14] ARM: configs: multi_v5: Enable Allwinner F1C100
-Date: Mon,  7 Mar 2022 14:34:21 +0000
-Message-Id: <20220307143421.1106209-15-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220307143421.1106209-1-andre.przywara@arm.com>
-References: <20220307143421.1106209-1-andre.przywara@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH] MAINTAINERS: update Krzysztof Kozlowski's email
+Date: Mon,  7 Mar 2022 18:28:05 +0100
+Message-Id: <20220307172805.156760-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Kconfig symbols required for the Allwinner F1C100 (MACH_SUNIV) are
-currently not selected by any defconfig. sunxi_defconfig only covers the
-v7 SoCs, but the F1C100s is ARMv5, so we cannot share a single image.
+Use Krzysztof Kozlowski's @kernel.org account in maintainer entries.
 
-Add the required symbols to multi_v5_defconfig, to give people some sane
-default config when playing around with this chip. This is probably more
-important as there are surely not many distros out there supporting
-ARMv5 out of the box.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-This allows my LicheePi Nano board to boot to a busybox prompt.
-
-The zImage size grows by about 50 KB, in detail:
-
-    text    data     bss     dec     hex   filename
-10269442  4284276  678316 15232034 e86c22 vmlinux-old
-10348026  4351912  681516 15381454 eab3ce vmlinux-new
-
-14560300			arch/arm/boot/Image-old
-14712940			arch/arm/boot/Image-new
-6231192				arch/arm/boot/zImage-old
-6282928				arch/arm/boot/zImage-new
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- arch/arm/configs/multi_v5_defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-index 8b7fe7ff5366..3130f5f132f5 100644
---- a/arch/arm/configs/multi_v5_defconfig
-+++ b/arch/arm/configs/multi_v5_defconfig
-@@ -52,6 +52,7 @@ CONFIG_MACH_WNR854T=y
- CONFIG_MACH_RD88F5181L_GE=y
- CONFIG_MACH_RD88F5181L_FXO=y
- CONFIG_MACH_RD88F6183AP_GE=y
-+CONFIG_ARCH_SUNXI=y
- CONFIG_AEABI=y
- CONFIG_HIGHMEM=y
- CONFIG_ARM_APPENDED_DTB=y
-@@ -135,6 +136,7 @@ CONFIG_SERIAL_8250_RUNTIME_UARTS=6
- CONFIG_SERIAL_8250_EXTENDED=y
- CONFIG_SERIAL_8250_MANY_PORTS=y
- CONFIG_SERIAL_8250_ASPEED_VUART=m
-+CONFIG_SERIAL_8250_DW=y
- CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_SERIAL_ATMEL=y
- CONFIG_SERIAL_ATMEL_CONSOLE=y
-@@ -155,6 +157,7 @@ CONFIG_SPI=y
- CONFIG_SPI_ATMEL=y
- CONFIG_SPI_IMX=y
- CONFIG_SPI_ORION=y
-+CONFIG_SPI_SUN6I=y
- CONFIG_GPIO_ASPEED=m
- CONFIG_GPIO_ASPEED_SGPIO=y
- CONFIG_GPIO_MXC=y
-@@ -171,6 +174,7 @@ CONFIG_THERMAL=y
- CONFIG_KIRKWOOD_THERMAL=y
- CONFIG_AT91SAM9X_WATCHDOG=y
- CONFIG_ORION_WATCHDOG=y
-+CONFIG_SUNXI_WATCHDOG=y
- CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_IMX2_WDT=y
- CONFIG_MFD_ATMEL_HLCDC=y
-@@ -231,6 +235,7 @@ CONFIG_MMC_SDHCI_PLTFM=m
- CONFIG_MMC_SDHCI_OF_ASPEED=m
- CONFIG_MMC_ATMELMCI=y
- CONFIG_MMC_MVSDIO=y
-+CONFIG_MMC_SUNXI=y
- CONFIG_NEW_LEDS=y
- CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_GPIO=y
+Hi Arnd and Olof,
+
+Could you take this one directly for fixes?
+
+My email address also appears in the bindings. For now mailmap will
+handle it. I will change it after merge window, because some of the
+bindings are in separate for-next branches.
+---
+ .mailmap                            |  1 +
+ MAINTAINERS                         | 34 ++++++++++++++---------------
+ drivers/soc/samsung/exynos-chipid.c |  2 +-
+ 3 files changed, 19 insertions(+), 18 deletions(-)
+
+diff --git a/.mailmap b/.mailmap
+index 29a45c106dfb..f9781674e7e7 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -217,6 +217,7 @@ Koushik <raghavendra.koushik@neterion.com>
+ Krishna Manikandan <quic_mkrishn@quicinc.com> <mkrishn@codeaurora.org>
+ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski.k@gmail.com>
+ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
++Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+ Kuogee Hsieh <quic_khsieh@quicinc.com> <khsieh@codeaurora.org>
+ Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d7ea92ce1b1d..4e88b4e17e35 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2627,7 +2627,7 @@ F:	sound/soc/rockchip/
+ N:	rockchip
+ 
+ ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ R:	Alim Akhtar <alim.akhtar@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -11852,7 +11852,7 @@ F:	drivers/iio/proximity/mb1232.c
+ 
+ MAXIM MAX17040 FAMILY FUEL GAUGE DRIVERS
+ R:	Iskren Chernev <iskren.chernev@gmail.com>
+-R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++R:	Krzysztof Kozlowski <krzk@kernel.org>
+ R:	Marek Szyprowski <m.szyprowski@samsung.com>
+ R:	Matheus Castello <matheus@castello.eng.br>
+ L:	linux-pm@vger.kernel.org
+@@ -11862,7 +11862,7 @@ F:	drivers/power/supply/max17040_battery.c
+ 
+ MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
+ R:	Hans de Goede <hdegoede@redhat.com>
+-R:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++R:	Krzysztof Kozlowski <krzk@kernel.org>
+ R:	Marek Szyprowski <m.szyprowski@samsung.com>
+ R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+ R:	Purism Kernel Team <kernel@puri.sm>
+@@ -11907,7 +11907,7 @@ F:	Documentation/devicetree/bindings/power/supply/maxim,max77976.yaml
+ F:	drivers/power/supply/max77976_charger.c
+ 
+ MAXIM MUIC CHARGER DRIVERS FOR EXYNOS BASED BOARDS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-pm@vger.kernel.org
+ S:	Supported
+@@ -11917,7 +11917,7 @@ F:	drivers/power/supply/max77693_charger.c
+ 
+ MAXIM PMIC AND MUIC DRIVERS FOR EXYNOS BASED BOARDS
+ M:	Chanwoo Choi <cw00.choi@samsung.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+@@ -12607,7 +12607,7 @@ F:	mm/memblock.c
+ F:	tools/testing/memblock/
+ 
+ MEMORY CONTROLLER DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
+@@ -13748,7 +13748,7 @@ F:	include/uapi/linux/nexthop.h
+ F:	net/ipv4/nexthop.c
+ 
+ NFC SUBSYSTEM
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-nfc@lists.01.org (subscribers-only)
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+@@ -14062,7 +14062,7 @@ F:	Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
+ F:	drivers/regulator/pf8x00-regulator.c
+ 
+ NXP PTN5150A CC LOGIC AND EXTCON DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/extcon/extcon-ptn5150.yaml
+@@ -15515,7 +15515,7 @@ F:	drivers/pinctrl/renesas/
+ 
+ PIN CONTROLLER - SAMSUNG
+ M:	Tomasz Figa <tomasz.figa@gmail.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ R:	Alim Akhtar <alim.akhtar@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -17193,7 +17193,7 @@ W:	http://www.ibm.com/developerworks/linux/linux390/
+ F:	drivers/s390/scsi/zfcp_*
+ 
+ S3C ADC BATTERY DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Odd Fixes
+ F:	drivers/power/supply/s3c_adc_battery.c
+@@ -17238,7 +17238,7 @@ F:	Documentation/admin-guide/LSM/SafeSetID.rst
+ F:	security/safesetid/
+ 
+ SAMSUNG AUDIO (ASoC) DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Supported
+@@ -17246,7 +17246,7 @@ F:	Documentation/devicetree/bindings/sound/samsung*
+ F:	sound/soc/samsung/
+ 
+ SAMSUNG EXYNOS PSEUDO RANDOM NUMBER GENERATOR (RNG) DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-crypto@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+@@ -17281,7 +17281,7 @@ S:	Maintained
+ F:	drivers/platform/x86/samsung-laptop.c
+ 
+ SAMSUNG MULTIFUNCTION PMIC DEVICE DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -17307,7 +17307,7 @@ F:	drivers/media/platform/s3c-camif/
+ F:	include/media/drv-intf/s3c_camif.h
+ 
+ SAMSUNG S3FWRN5 NFC DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Krzysztof Opasiak <k.opasiak@samsung.com>
+ L:	linux-nfc@lists.01.org (subscribers-only)
+ S:	Maintained
+@@ -17329,7 +17329,7 @@ S:	Supported
+ F:	drivers/media/i2c/s5k5baf.c
+ 
+ SAMSUNG S5P Security SubSystem (SSS) DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Vladimir Zapolskiy <vz@mleia.com>
+ L:	linux-crypto@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -17364,7 +17364,7 @@ F:	include/linux/clk/samsung.h
+ F:	include/linux/platform_data/clk-s3c2410.h
+ 
+ SAMSUNG SPI DRIVERS
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ M:	Andi Shyti <andi@etezian.org>
+ L:	linux-spi@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+@@ -17382,7 +17382,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
+ 
+ SAMSUNG THERMAL DRIVER
+ M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
++M:	Krzysztof Kozlowski <krzk@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
+index 2746d05936d3..0fb3631e7346 100644
+--- a/drivers/soc/samsung/exynos-chipid.c
++++ b/drivers/soc/samsung/exynos-chipid.c
+@@ -204,7 +204,7 @@ module_platform_driver(exynos_chipid_driver);
+ 
+ MODULE_DESCRIPTION("Samsung Exynos ChipID controller and ASV driver");
+ MODULE_AUTHOR("Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>");
+-MODULE_AUTHOR("Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>");
++MODULE_AUTHOR("Krzysztof Kozlowski <krzk@kernel.org>");
+ MODULE_AUTHOR("Pankaj Dubey <pankaj.dubey@samsung.com>");
+ MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
+ MODULE_LICENSE("GPL");
 -- 
-2.25.1
+2.32.0
 
