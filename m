@@ -1,258 +1,133 @@
-Return-Path: <SRS0=CyWi=TS=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=vJyh=TS=arm.com=andre.przywara@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C54EC433FE
-	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 12:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB57EC433FE
+	for <soc@archiver.kernel.org>; Mon,  7 Mar 2022 14:34:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3E245C340F5; Mon,  7 Mar 2022 12:17:10 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D56C0C340F3;
-	Mon,  7 Mar 2022 12:17:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D56C0C340F3
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 4B4442223A;
-	Mon,  7 Mar 2022 13:17:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1646655424;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0Gpr1Xg6QkwtyGAbSKHyjlK5VgUrvEjiF2wzRKT1dYs=;
-	b=gll/rzRQe4/Bc0sN3O41kZBJi7z3WEQ54AgWH3/ox48A+LkbvKnm65Pd/OCFehW1BSwkXm
-	dUclOG2Gg1I6/Am39yTyLw48rujxrWKqZhV7JwqYp2kyjLgOtv1/zcherediBmzyrC4ohY
-	1BKkmU5XB2m8Lu871EFK6wdCTmE7HxE=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date: Mon, 07 Mar 2022 13:17:04 +0100
-From: Michael Walle <michael@walle.cc>
-To: Claudiu.Beznea@microchip.com
+	id AF09BC340EB; Mon,  7 Mar 2022 14:34:57 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 7949DC340E9;
+	Mon,  7 Mar 2022 14:34:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7949DC340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A798ED1;
+	Mon,  7 Mar 2022 06:34:56 -0800 (PST)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0924C3F66F;
+	Mon,  7 Mar 2022 06:34:53 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Maxime Ripard <mripard@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v1 6/6] ARM: dts: lan966x: add basic Kontron KSwitch D10
- support
-In-Reply-To: <1098e023-afb7-5453-cd3a-8b81b3d48f4f@microchip.com>
-References: <20220303160323.3316317-1-michael@walle.cc>
- <20220303160323.3316317-7-michael@walle.cc>
- <b4aca5f1-38c0-8197-6914-0a39b7755180@microchip.com>
- <900be5239b96cd77493fbcfbe220989f@walle.cc>
- <1098e023-afb7-5453-cd3a-8b81b3d48f4f@microchip.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <f8c115a1358305b9d190d2417e55f73c@walle.cc>
-X-Sender: michael@walle.cc
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Mesih Kilinc <mesihkilinc@gmail.com>,
+	Icenowy Zheng <icenowy@aosc.io>,
+	Jesse Taube <mr.bossman075@gmail.com>,
+	Giulio Benetti <giulio.benetti@benettiengineering.com>,
+	George Hilliard <thirtythreeforty@gmail.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	Russell King <linux@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org
+Subject: [PATCH 13/14] ARM: configs: sync multi_v5_defconfig from savedefconfig
+Date: Mon,  7 Mar 2022 14:34:20 +0000
+Message-Id: <20220307143421.1106209-14-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220307143421.1106209-1-andre.przywara@arm.com>
+References: <20220307143421.1106209-1-andre.przywara@arm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Am 2022-03-07 13:07, schrieb Claudiu.Beznea@microchip.com:
-> On 04.03.2022 13:15, Michael Walle wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the
->> content is safe
->> 
->> Am 2022-03-04 09:31, schrieb Claudiu.Beznea@microchip.com:
->>> On 03.03.2022 18:03, Michael Walle wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
->>>> know
->>>> the content is safe
->>>> 
->>>> Add basic support for the Kontron KSwitch D10 MMT 6G-2GS which
->>>> features 6 Gigabit copper ports and two SFP cages. For now the
->>>> following is working:
->>>>  - Kernel console
->>>>  - SFP cages I2C bus and mux
->>>>  - SPI
->>>>  - SGPIO
->>>>  - Watchdog
->>>> 
->>>> Signed-off-by: Michael Walle <michael@walle.cc>
->>>> ---
->>>>  arch/arm/boot/dts/Makefile                    |   3 +-
->>>>  ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 159
->>>> ++++++++++++++++++
->>>>  2 files changed, 161 insertions(+), 1 deletion(-)
->>>>  create mode 100644
->>>> arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->>>> 
->>>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->>>> index 085c43649d44..86dd0f9804ee 100644
->>>> --- a/arch/arm/boot/dts/Makefile
->>>> +++ b/arch/arm/boot/dts/Makefile
->>>> @@ -739,7 +739,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
->>>>         imx7ulp-com.dtb \
->>>>         imx7ulp-evk.dtb
->>>>  dtb-$(CONFIG_SOC_LAN966) += \
->>>> -       lan966x-pcb8291.dtb
->>>> +       lan966x-pcb8291.dtb \
->>>> +       lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb
->>>>  dtb-$(CONFIG_SOC_LS1021A) += \
->>>>         ls1021a-moxa-uc-8410a.dtb \
->>>>         ls1021a-qds.dtb \
->>>> diff --git
->>>> a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->>>> b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->>>> new file mode 100644
->>>> index 000000000000..958678dec7ad
->>>> --- /dev/null
->>>> +++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
->>>> @@ -0,0 +1,159 @@
->>>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->>>> +/*
->>>> + * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
->>>> + */
->>>> +
->>>> +/dts-v1/;
->>>> +#include "lan966x.dtsi"
->>>> +
->>>> +/ {
->>>> +       model = "Kontron KSwitch D10 MMT 6G-2GS";
->>>> +       compatible = "kontron,kswitch-d10-mmt-6g-2gs",
->>>> "kontron,s1921",
->>>> +                    "microchip,lan9668", "microchip,lan966";
->>>> +
->>>> +       aliases {
->>>> +               serial0 = &usart0;
->>>> +       };
->>>> +
->>>> +       chosen {
->>>> +               stdout-path = "serial0:115200n8";
->>>> +       };
->>>> +
->>>> +       gpio-restart {
->>>> +               compatible = "gpio-restart";
->>>> +               gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
->>>> +               priority = <200>;
->>>> +       };
->>>> +
->>>> +       i2cmux {
->>>> +               compatible = "i2c-mux-gpio";
->>>> +               #address-cells = <1>;
->>>> +               #size-cells = <0>;
->>>> +               mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
->>>> +                           <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
->>>> +               i2c-parent = <&i2c4>;
->>>> +
->>>> +               i2c4_0: i2c@1 {
->>>> +                       reg = <1>;
->>>> +                       #address-cells = <1>;
->>>> +                       #size-cells = <0>;
->>>> +               };
->>>> +
->>>> +               i2c4_1: i2c@2 {
->>>> +                       reg = <2>;
->>>> +                       #address-cells = <1>;
->>>> +                       #size-cells = <0>;
->>>> +               };
->>>> +       };
->>>> +
->>>> +       sfp0: sfp0 {
->>>> +               compatible = "sff,sfp";
->>>> +               i2c-bus = <&i2c4_0>;
->>>> +               los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
->>>> +               mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
->>>> +               maximum-power-milliwatt = <2500>;
->>>> +               tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
->>>> +               tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
->>>> +               rate-select0-gpios = <&sgpio_out 2 0
->>>> GPIO_ACTIVE_HIGH>;
->>>> +               rate-select1-gpios = <&sgpio_out 2 1
->>>> GPIO_ACTIVE_HIGH>;
->>>> +       };
->>>> +
->>>> +       sfp1: sfp1 {
->>>> +               compatible = "sff,sfp";
->>>> +               i2c-bus = <&i2c4_1>;
->>>> +               los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
->>>> +               mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
->>>> +               maximum-power-milliwatt = <2500>;
->>>> +               tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
->>>> +               tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
->>>> +               rate-select0-gpios = <&sgpio_out 2 2
->>>> GPIO_ACTIVE_HIGH>;
->>>> +               rate-select1-gpios = <&sgpio_out 2 3
->>>> GPIO_ACTIVE_HIGH>;
->>>> +       };
->>>> +};
->>>> +
->>>> +&flx0 {
->>>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
->>>> +       status = "okay";
->>>> +};
->>>> +
->>>> +&flx3 {
->>>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
->>>> +       status = "okay";
->>>> +};
->>>> +
->>>> +&flx4 {
->>>> +       atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
->>>> +       status = "okay";
->>>> +};
->>> 
->>> Although there is 1:1 mapping b/w ids of flexcoms and the embedded
->>> blocks
->>> (flxX has usartX, i2cX, spiX) and there is nothing wrong with the
->>> approach
->>> here I found a bit hard to follow if the correspondent embedded block
->>> (i2c, spi, usart) is enabled or not.
->> 
->> I know and I had the same feeling, but I don't want to have the
->> subnodes (matched by name) in these nodes.  I.e. I want to avoid
->> something like:
->> 
->> &flx4 {
->>        atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
->>        status = "okay";
->> 
->>        i2c@600 {
->>               pinctrl-0 = <&fc4_b_pins>;
->>               pinctrl-names = "default";
->>               status = "okay";
->>        };
->> };
-> 
-> All the other AT91 DTs are using the above format + the specific label 
-> in
-> front of the subnode, e.g:
-> 
-> 	i2cX: i2c@600 {
-> 
->> 
->> If someone renames the subnode in the dtsi, it might easily be
->> overlooked in the board files. Having the handle will raise an
->> error.
-> 
-> If using label + node name as pointed above there will be an error 
-> thrown
-> for your scenario.
+Some Kconfig options have changed, some other platforms have been
+removed.
 
-Fair enough. You'll get a duplicate reference error as long as
-the reference itself isn't renamed either.
+Update multi_v5_defconfig with the result of "make savedefconfig", the
+resulting .config files are identical.
 
-But to make it short, unless you force me too, I'd like
-to keep the child node as is and not as a subnode of
-the flexcom. I just don't want to repeat the name if
-there is no reason and I live with the fact that they
-are not near each other :)
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ arch/arm/configs/multi_v5_defconfig | 20 +-------------------
+ 1 file changed, 1 insertion(+), 19 deletions(-)
 
-That flexcom-mode could also be deduced from the enabled
-children, btw.
+diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
+index fe8d760256a4..8b7fe7ff5366 100644
+--- a/arch/arm/configs/multi_v5_defconfig
++++ b/arch/arm/configs/multi_v5_defconfig
+@@ -24,11 +24,6 @@ CONFIG_MACH_DM355_LEOPARD=y
+ CONFIG_MACH_MITYOMAPL138=y
+ CONFIG_MACH_OMAPL138_HAWKBOARD=y
+ CONFIG_ARCH_MXC=y
+-CONFIG_MACH_MX21ADS=y
+-CONFIG_MACH_MX27ADS=y
+-CONFIG_MACH_MX27_3DS=y
+-CONFIG_MACH_IMX27_VISSTRIM_M10=y
+-CONFIG_MACH_PCA100=y
+ CONFIG_SOC_IMX25=y
+ CONFIG_SOC_IMX27=y
+ CONFIG_ARCH_MVEBU=y
+@@ -57,11 +52,8 @@ CONFIG_MACH_WNR854T=y
+ CONFIG_MACH_RD88F5181L_GE=y
+ CONFIG_MACH_RD88F5181L_FXO=y
+ CONFIG_MACH_RD88F6183AP_GE=y
+-CONFIG_ARCH_U300=y
+ CONFIG_AEABI=y
+ CONFIG_HIGHMEM=y
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+ CONFIG_ARM_APPENDED_DTB=y
+ CONFIG_ARM_ATAG_DTB_COMPAT=y
+ CONFIG_CPU_FREQ=y
+@@ -159,7 +151,6 @@ CONFIG_I2C_ASPEED=m
+ CONFIG_I2C_AT91=y
+ CONFIG_I2C_IMX=y
+ CONFIG_I2C_MV64XXX=y
+-CONFIG_I2C_NOMADIK=y
+ CONFIG_SPI=y
+ CONFIG_SPI_ATMEL=y
+ CONFIG_SPI_IMX=y
+@@ -183,22 +174,13 @@ CONFIG_ORION_WATCHDOG=y
+ CONFIG_NPCM7XX_WATCHDOG=y
+ CONFIG_IMX2_WDT=y
+ CONFIG_MFD_ATMEL_HLCDC=y
+-# CONFIG_ABX500_CORE is not set
+ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_MEDIA_SUPPORT=y
+ CONFIG_MEDIA_CAMERA_SUPPORT=y
+-CONFIG_V4L_PLATFORM_DRIVERS=y
+-CONFIG_VIDEO_ASPEED=m
+-CONFIG_VIDEO_ATMEL_ISI=m
+ CONFIG_DRM=y
+ CONFIG_DRM_ATMEL_HLCDC=m
+-CONFIG_DRM_PANEL_SIMPLE=y
+-CONFIG_DRM_PANEL_EDP=y
+ CONFIG_DRM_ASPEED_GFX=m
+-CONFIG_FB_IMX=y
+-CONFIG_FB_ATMEL=y
+-CONFIG_BACKLIGHT_ATMEL_LCDC=y
+ CONFIG_SOUND=y
+ CONFIG_SND=y
+ CONFIG_SND_SOC=y
+@@ -303,8 +285,8 @@ CONFIG_CRYPTO_DEV_MARVELL_CESA=y
+ CONFIG_CRC_CCITT=y
+ CONFIG_LIBCRC32C=y
+ CONFIG_DEBUG_INFO=y
+-CONFIG_DEBUG_FS=y
+ CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_KERNEL=y
+ # CONFIG_SCHED_DEBUG is not set
+ # CONFIG_DEBUG_PREEMPT is not set
+-- 
+2.25.1
 
->> And because the node references should be sorted alphabetically
->> it will be cluttered around in the file. You could rename the
->> references to flx4_i2c though. But I don't know it its worth
->> the efforts. Let me know what you think.
-
--michael
