@@ -1,117 +1,92 @@
-Return-Path: <SRS0=a1KN=TT=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=kMf3=TT=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 596E4C433EF
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 00:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2FC5C433F5
+	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 01:07:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 209ADC340EF; Tue,  8 Mar 2022 00:06:52 +0000 (UTC)
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	id A32BDC340E9; Tue,  8 Mar 2022 01:07:51 +0000 (UTC)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 33829C340E9
-	for <soc@kernel.org>; Tue,  8 Mar 2022 00:06:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 33829C340E9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+	by smtp.kernel.org (Postfix) with ESMTPS id D41D5C340EF;
+	Tue,  8 Mar 2022 01:07:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D41D5C340EF
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id g19so4288211pfc.9
-        for <soc@kernel.org>; Mon, 07 Mar 2022 16:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:subject:date:message-id:list-id:mime-version
-         :content-transfer-encoding;
-        bh=ESnSD0M0sMm9mkD5V5GjVHdXKKegVsjzUlOpsOoLRs0=;
-        b=cZ2jvdfe2cDE2crnOkuWk0+JW/24IKHfbGK6zLDuk4Cq1eAgg1VS9P7knhYlXrkXDI
-         tq5VN87chej+jnp4hs89zb9XgEpFES0u65av824I28GJdDekKxXErMLUBFAZvwE9/Cph
-         OErjHvSqf2hMNobCw2fQbx5ezI2FQX2PXVq+bSXEWSZmkY3fzUdf7A7rBbtakBH/gdoj
-         gxAtv6J8LEO7GSwu3wcVfGMCFzECRgJyoJIYdc+zQEjR3OEae7XT7RvMz3m9o0CCDI1A
-         VEDAzLd3yNhQ15cNtdYl7Up7e9dz4KAQsu2LMXGSx5aAoyylCESnJ7bMivl5osjYfocQ
-         3lCA==
+Received: by mail-oi1-f175.google.com with SMTP id k2so17249063oia.2;
+        Mon, 07 Mar 2022 17:07:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:subject:date:message-id:list-id
-         :mime-version:content-transfer-encoding;
-        bh=ESnSD0M0sMm9mkD5V5GjVHdXKKegVsjzUlOpsOoLRs0=;
-        b=N8kQapuozlppBAOc5ECH6ZwYjeIkXswRMY8DgMJTuZCJjj8mXtu4npgqJsTFyHX0eG
-         BGprYcPndOt4xNnnU3Pg1yN+SxKagB6OSrfAKcVgfaxkmiAfzN3SUArFo5W8SVF3MsjR
-         vq++IsvN8GXWA00Sh5F2bRwBqwXJb1O8bN01jzt+YaGqkt94cWBBnjUlmeEj47JwW4Hg
-         inaFt0hxxxPtEm6w/fXsXNXWgK1I4P3WYTMDLB+N4bwsFdu2bPY5cfirFo55NhRrXFgD
-         N5/wuK+S3IEJfC0cHSIEDR56jpRJgla1tj5a08L3Wl6h8TS5HqtCLk1RnTAhsteEvJm5
-         zbBQ==
-X-Gm-Message-State: AOAM530k7nn6uRr6sEfr4/OlB4BruPNBZ+N/PJ54MpY4QlzaO4DrIIRN
-	SZcBPK7zJ/s0FmGYk40falVeMA/l8uHkHg==
-X-Google-Smtp-Source: ABdhPJxtWtFAyp7Nne7ooT4Mb2QCK8LIuRRp8i/tWyRWUCxnRYFC8mKxhVRU5oopVPxXvvTpJRePJQ==
-X-Received: by 2002:a05:6a00:1692:b0:4df:c6b0:2f02 with SMTP id k18-20020a056a00169200b004dfc6b02f02mr15430981pfc.50.1646698009971;
-        Mon, 07 Mar 2022 16:06:49 -0800 (PST)
-Received: from localhost.localdomain ([45.124.203.14])
-        by smtp.gmail.com with ESMTPSA id i187-20020a626dc4000000b004f6e0f346e7sm8598695pfc.39.2022.03.07.16.06.47
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=4Vh0skU/TpnaqVycF2Gk7ec7Z9iE5PhyKRGG3sXCJBg=;
+        b=7QRjDMtjkimCKGBYy4jP0KiKyrzHfSLArsxDlIohkPDfIh7aq1mP4PFtaSouX94/+l
+         3IGvTslz1UzD0RgVTNSlOvFJ31G1z+BUPNgo8rWW/54T5wFmE8sHOJpEdSNuchNxH4cg
+         YPtDg7wTkYR5fTEs/t2Jc+eSon5HCkc24GRgbW7zPJRcQXtD/T7tN60DfZTj7O2ZdDdl
+         hdcfse8Hra5wRVSzieZ9hBuS9WF/S747KrG5ErO6/yZNZe++LyeJSnKpPNCteYZrhNzt
+         MqvvmlwIkghffXibdbR/UNmT098kAl74VkafHdQTCZPCFMV+/WetDzFOvEmRY/g1w7cQ
+         uB8w==
+X-Gm-Message-State: AOAM533W3oYn22426Qxfvzy7wXpNH21lcu8gat7T6TtvRYrdGc/dHxui
+	fEI+9ICRhLUUFo1qMBBRlw==
+X-Google-Smtp-Source: ABdhPJxEXFX5X26D3/ir03omCumnoMENEbRGwsO3RleYVqWM2D929Ye1JbqjPzZIxCh8ZhbBCUC6lg==
+X-Received: by 2002:a05:6808:1450:b0:2d9:dad1:a14e with SMTP id x16-20020a056808145000b002d9dad1a14emr1137355oiv.294.1646701669918;
+        Mon, 07 Mar 2022 17:07:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q16-20020a9d4b10000000b005b22b93d468sm3186416otf.74.2022.03.07.17.07.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 16:06:48 -0800 (PST)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From: Joel Stanley <joel@jms.id.au>
+        Mon, 07 Mar 2022 17:07:49 -0800 (PST)
+Received: (nullmailer pid 3624787 invoked by uid 1000);
+	Tue, 08 Mar 2022 01:07:40 -0000
+From: Rob Herring <robh@kernel.org>
+To: Jacky Huang <ychuang3@nuvoton.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Andrew Jeffery <andrew@aj.id.au>
-Subject: [PATCH] ARM: dts: aspeed: Fix AST2600 quad spi group
-Date: Tue,  8 Mar 2022 10:36:31 +1030
-Message-Id: <20220304011010.974863-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.34.1
-List-Id: <devicetree.vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Cc: sboyd@kernel.org, robh+dt@kernel.org, mturquette@baylibre.com, linux-clk@vger.kernel.org, soc@kernel.org, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220307091923.9909-3-ychuang3@nuvoton.com>
+References: <20220307091923.9909-1-ychuang3@nuvoton.com> <20220307091923.9909-3-ychuang3@nuvoton.com>
+Subject: Re: [PATCH 2/3] dt-bindings: clock: Document MA35D1 clock controller bindings
+Date: Mon, 07 Mar 2022 19:07:40 -0600
+Message-Id: <1646701660.895821.3624783.nullmailer@robh.at.kernel.org>
 
-Requesting quad mode for the FMC resulted in an error:
+On Mon, 07 Mar 2022 17:19:22 +0800, Jacky Huang wrote:
+> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> 
 
-  &fmc {
-         status = "okay";
- +       pinctrl-names = "default";
- +       pinctrl-0 = <&pinctrl_fwqspi_default>'
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-[    0.742963] aspeed-g6-pinctrl 1e6e2000.syscon:pinctrl: invalid function FWQSPID in map table
-￼
+yamllint warnings/errors:
 
-This is because the quad mode pins are a group of pins, not a function.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml: properties: 'clocks' is a dependency of 'assigned-clocks'
+	from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml: ignoring, error in schema: properties
+Error: Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dts:24.37-38 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1398: dt_binding_check] Error 2
 
-After applying this patch we can request the pins and the QSPI data
-lines are muxed:
+doc reference errors (make refcheckdocs):
 
- # cat /sys/kernel/debug/pinctrl/1e6e2000.syscon\:pinctrl-aspeed-g6-pinctrl/pinmux-pins |grep 1e620000.spi
- pin 196 (AE12): device 1e620000.spi function FWSPID group FWQSPID
- pin 197 (AF12): device 1e620000.spi function FWSPID group FWQSPID
- pin 240 (Y1): device 1e620000.spi function FWSPID group FWQSPID
- pin 241 (Y2): device 1e620000.spi function FWSPID group FWQSPID
- pin 242 (Y3): device 1e620000.spi function FWSPID group FWQSPID
- pin 243 (Y4): device 1e620000.spi function FWSPID group FWQSPID
+See https://patchwork.ozlabs.org/patch/1601972
 
-Fixes: f510f04c8c83 ("ARM: dts: aspeed: Add AST2600 pinmux nodes")
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Link: https://lore.kernel.org/r/20220304011010.974863-1-joel@jms.id.au
----
-This is a fix but it's not urgent. Please merge through whichever tree
-you think is best.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
- arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-index 6dde51c2aed3..e4775bbceecc 100644
---- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-@@ -118,7 +118,7 @@ pinctrl_fwspid_default: fwspid_default {
- 	};
- 
- 	pinctrl_fwqspid_default: fwqspid_default {
--		function = "FWQSPID";
-+		function = "FWSPID";
- 		groups = "FWQSPID";
- 	};
- 
+pip3 install dtschema --upgrade
 
--- 
-2.34.1
-
+Please check and re-submit.
 
