@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5729C4332F
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09D60C433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:30:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AE911C340F5; Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97628C340EF
-	for <soc@kernel.org>; Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
+	id E5AE6C340F7; Tue,  8 Mar 2022 16:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CEABCC340F4;
+	Tue,  8 Mar 2022 16:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646756412;
-	bh=gvEzWsriSS3etBi2OP9gQfD3Kv9QSk3QsbVkrMUC620=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=tGs08eN7uJVQo1w+6CP8fT1+petOlFs296THmo2tyG5/uF+qcAGSacdICgw3gAOSL
-	 0t8EnlkgngvW0QndDNeYuncyOp7RIKaA9e931g5LUwGr2Doat8EOYW2tmRuWesx+yC
-	 7IqbH+VX8yps8abdHF3P7mONiwrQkQzysEkfSi7ALwhB/s1xy7trBCC0mHNYj49PoJ
-	 U+au7nGqXkPqo1hSbBaQ0TbI+iowRSXRbHMd2vuinnUYO3BaPTJAH3qaWsOtLriX39
-	 WhjCOW+rDVD8ERwqRCnI0KPPiMulIs+Gh2dSJjGvV46bW5SAjDoZQ9wLQNzjsXc37T
-	 rxg674krJbMKA==
+	s=k20201202; t=1646757014;
+	bh=mYEJwUS6Jr90RvZt/4GCBKjYQboNpSYmOtnDhFtbfUI=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=t8mW1Euwi1LYALie+doP1LiWBQjDhEFes54F2aZiyX7Xe3IqeBsK6ixtY4mapvPmt
+	 GkcXiqM+hHAk8N727QDVO6XJuij2pb1e3CooQTMeCILnQSNckBZ/FJqHpR+hwuZaWP
+	 BMryUVNwM7V2Sk2RjhO9yZbTrYb3zXsshyMQBe28BLIuw4+OAGJRZLP3akbBKNRgky
+	 ui/v2TrJNWqtMQv8XwAcfuMZTrFy5lh7Kx68cKkRkMyKSysc2eXOgWPQEiyPGDGUJD
+	 FkjR1coBeX6CjakcFon0HIsog2JUSqGvwe6M7KqQayCvw/ZDO5r9j/fH4wz7BMIj6j
+	 yXa4gdBRnz4wA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7DA7BE6D3DD;
-	Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B17DFEAC081;
+	Tue,  8 Mar 2022 16:30:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH] arm64: defconfig: enable Layerscape SFP driver
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164675641251.4559.13318298799996385132.git-patchwork-summary@kernel.org>
-Date: Tue, 08 Mar 2022 16:20:12 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <164675701472.9628.17662807755540145650.git-patchwork-notify@kernel.org>
+Date: Tue, 08 Mar 2022 16:30:14 +0000
+References: <20220304202124.3401165-1-michael@walle.cc>
+In-Reply-To: <20220304202124.3401165-1-michael@walle.cc>
+To: Michael Walle <michael@walle.cc>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] ARM: tegra: Device tree fixes for v5.17
-  Submitter: Thierry Reding <thierry.reding@gmail.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=621386
-  Lore link: https://lore.kernel.org/r/20220308084339.2199400-1-thierry.reding@gmail.com
+On Fri,  4 Mar 2022 21:21:24 +0100 you wrote:
+> Enable the driver for the Layerscape SFP (Security Fuse Processor) found
+> on most Layerscape SoCs. For example, a per-device unique serial number
+> is stored in the fuses.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-Patch: ARM: dts: aspeed: Fix AST2600 quad spi group
-  Submitter: Joel Stanley <joel@jms.id.au>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=621236
-  Lore link: https://lore.kernel.org/r/20220304011010.974863-1-joel@jms.id.au
+Here is the summary with links:
+  - arm64: defconfig: enable Layerscape SFP driver
+    https://git.kernel.org/soc/soc/c/b3b44f502450
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
