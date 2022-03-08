@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E49CBC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E499FC433EF
 	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD69BC340EF; Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A632EC340F4;
+	id C1937C340F7; Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AABFCC340EB;
 	Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1646756412;
-	bh=StFkQjOPGhWOef2qrCuU4DFejHETPE4ZbPESuU3B6po=;
+	bh=TWTgXHDwB3laDBUws+B9QMaSrtzgru1SAJk4iQR+xtI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ccjmk+TisfoWdwxq9pVemy1P2I9M8Cp8aImgyvqzrlrGYYLILJfwbJ1/njtN5Mg9J
-	 AteI3d4zJQ2t/WMG/ISBCjGJOiSWfp+3ALXhcNY1z1AXs3jYQbSPVQEvYAS+un6aao
-	 Dp30CTHRdFU9E/5erPGqUonr5B0/o69UnhEBIzBdf8yd75R3OeMFGtqbM7dAe8yzyZ
-	 /fc0sAIsYW1gfd6ppdHMP1nzNlqyVtUzIxlyHp8ZfZaXnfdWFwr8dEsVpefghAIZ+s
-	 4SkmokZgxPOsFrZZNv9BaNXxfyvJSSjMxWUJGHZYZEjDLc8+8JOM5aOUQ//heXDuCn
-	 Ibvf6lY7GGXbg==
+	b=TrsoUVOQZrt4JR57gT9Zu2COeFqrK4UYfZOU7360SiCSAgeA3ZFZY+YuEsj4W3waW
+	 wUZIH6w7EgFA2fVcSnSdckAp9JIyBSDfTnCOVrRRwm//tdKHbAGEIG1wsxvlhUbBYB
+	 JdLmvFTI6MWpnQxgn5T/eS3oxwt780Qh4zROT3DXA7J2yi55JnO9E647h1fWXyLrQp
+	 A6nQHOs8cULOFCML5I7zwyJ9pjp7l3Sb22W9023QMyusPobVK1X4o3EqWL/+fTuR6T
+	 oaTFp1+ep8zibfi2Rrk4yt6YrEwu92HzATV8fZDzq8rrDGuiLeKYyQcPW7Zj+zdRJD
+	 nPTbM4HF9obXw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86D90E7BB08;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8FDC1EAC081;
 	Tue,  8 Mar 2022 16:20:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: tegra: Device tree fixes for v5.17
+Subject: Re: [PATCH] ARM: dts: aspeed: Fix AST2600 quad spi group
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164675641254.4559.12702684309194939029.git-patchwork-notify@kernel.org>
+ <164675641258.4559.17542740646534283971.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Mar 2022 16:20:12 +0000
-References: <20220308084339.2199400-1-thierry.reding@gmail.com>
-In-Reply-To: <20220308084339.2199400-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+References: <20220304011010.974863-1-joel@jms.id.au>
+In-Reply-To: <20220304011010.974863-1-joel@jms.id.au>
+To: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue,  8 Mar 2022 09:43:39 +0100 you wrote:
-> Hi ARM SoC maintainers,
+On Tue,  8 Mar 2022 10:36:31 +1030 you wrote:
+> Requesting quad mode for the FMC resulted in an error:
 > 
-> The following changes since commit 8d3b01e0d4bb54368d73d0984466d72c2eeeac74:
-> 
->   ARM: tegra: Move panels to AUX bus (2022-02-23 13:26:00 +0100)
-> 
-> are available in the Git repository at:
+>   &fmc {
+>          status = "okay";
+>  +       pinctrl-names = "default";
+>  +       pinctrl-0 = <&pinctrl_fwqspi_default>'
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: tegra: Device tree fixes for v5.17
-    https://git.kernel.org/soc/soc/c/60392db617b5
+  - ARM: dts: aspeed: Fix AST2600 quad spi group
+    https://git.kernel.org/soc/soc/c/2f6edb6bcb2f
 
 You are awesome, thank you!
 -- 
