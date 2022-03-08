@@ -4,53 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E135C433FE
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF90BC433F5
+	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:49:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 461CEC340F4; Tue,  8 Mar 2022 16:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9511EC340EF;
-	Tue,  8 Mar 2022 16:49:17 +0000 (UTC)
+	id C82A6C36AE3; Tue,  8 Mar 2022 16:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDEF6C340F6;
+	Tue,  8 Mar 2022 16:49:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646758160;
-	bh=a1n/SiR53Xh24Sv6hn5qQI0CCxFrvEnrUps+EJOtSFA=;
+	s=k20201202; t=1646758162;
+	bh=QjbxPfHfkHcwJzSVslnbdnqgcuAnAr4VEguexb/zu98=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lSQyEHFIOU00025xem6XAfXZjZkh5St+w5nbPTMARFYuItzLIdiPyhIObRPt2IDwT
-	 LuNmhASV4ZVhoWCn5uxZjW3PTN/iSN42iNkRhulNuYzXNaOlQrz9gq76liexzrHdzZ
-	 IPrF1xxT5gmbmrUKmjpfEk2YCO+/dG+JQUrINAb1Qrm879Nd4IS0tQDVbXf8LwG6k6
-	 rCnD494FIqXpV28dpCAqzh0YHDTugxH6XtWNBBa7pigC561UNJLf0Wvc6NsA8cwpaX
-	 XCzUZV3o4p/WTJXbdxWLwRB8dhU7ZTox51qy5g6RSceTcQ4EDiKnGD3U2We9HPatTv
-	 wxfvCkYHuH1pg==
+	b=AdSTc7aJjL5PmnPnK59VS1LgDwwLYF23D7ab6rEh73lEDp8goxdf7FULqziggL1FL
+	 NzHnOhkeuftGQgZivEFNejfbLL7Zvz3hHmbvYvg/FDK3MrUVD8i7mJZ0uwAWqRhVXV
+	 DphqozrVX2c1cB6ZxqJJpMIfcoD5JqV0udWesTpnygtfEBwJfmTS7xeeyQsfcjyQcC
+	 62boKjScT7bDpozIlTDFSzoAGRw4KfwxZFmqR455fdVZrdLR5Y/sIaNFxtRnyIpAK1
+	 IZ5CMiXZ46LQ7l4YQi6oEmakGn4+ET4lM48WCD7hkV7KXdAO7yY/XRWwht8Pr/G3nw
+	 vlGz3b2GhEgYA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Olof Johansson <olof@lixom.net>
+To: SoC Team <soc@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	arm-soc <arm@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: update Krzysztof Kozlowski's email
-Date: Tue,  8 Mar 2022 17:49:01 +0100
-Message-Id: <164675812274.4164061.2176150830401955260.b4-ty@arndb.de>
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [GIT PULL] arm64: MediaTek fixes for v5.17
+Date: Tue,  8 Mar 2022 17:49:02 +0100
+Message-Id: <164675812246.4164061.13281744278219084371.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220307172805.156760-1-krzysztof.kozlowski@canonical.com>
-References: <20220307172805.156760-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <8eb8510d-c597-4fee-e4b3-924b6d4bb3be@gmail.com>
+References: <8eb8510d-c597-4fee-e4b3-924b6d4bb3be@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 7 Mar 2022 18:28:05 +0100, Krzysztof Kozlowski wrote:
-> Use Krzysztof Kozlowski's @kernel.org account in maintainer entries.
+On Tue, 1 Mar 2022 10:38:34 +0100, Matthias Brugger wrote:
+> Please have a look on the following fixes for v5.17.
+> 
+> Best regards,
+> Matthias
 
-Applied to arm/fixes, thanks!
+Merged into arm/fixes, thanks!
 
-[1/1] MAINTAINERS: update Krzysztof Kozlowski's email
-      commit: 5125091d757a251a128ec38d2397c9d160394eac
+merge commit: 35e33a24f8fe0bacc55d62eb506d99c122f02012
 
        Arnd
