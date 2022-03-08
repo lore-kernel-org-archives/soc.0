@@ -4,55 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A218C433F5
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E897DC433EF
+	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:49:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 02B50C340F4; Tue,  8 Mar 2022 16:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA1AC340F5;
-	Tue,  8 Mar 2022 16:45:24 +0000 (UTC)
+	id CECD6C340F6; Tue,  8 Mar 2022 16:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E57C340EF;
+	Tue,  8 Mar 2022 16:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646757925;
-	bh=BvuACGeXbeP1bLbpyNZb+43YQ7D2IBjf9sCvlyz6B9g=;
+	s=k20201202; t=1646758149;
+	bh=whrrsb8CPPNNCMRKSsnG44U7V5T88jVoTshij7m4ttU=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DizfbVMiQGUk8dJHciQJ4RyZ3FzRvB63Rfaud7p1A8Oh05x8dTvbxtu3YFNU88ejE
-	 HRXGsI9K6v5XK1I7OONAla/gbV8k5YeBb5XVJ81//eg3f+AxdNrzUVof08ZTgN0EH1
-	 GpK1hBQK3MsGIUEB5z6h+DNCDnnIdc+gQsORmmiPSDpGocsp27biubRXK8GSJtNsCe
-	 9l2uats+dPQn9i8L3VQ2n8kjd4U+7Hf5h0ZnnysR1kmbo36ShMNXtS2o7oKy28McxU
-	 AUuVVyGrAwpxWU5L12Y3CKEOamzNHDWpbbE7mEgq3DmXiseBflj+JpA2xjsAGgbzog
-	 HLglP4iZ2zUPg==
+	b=avmCi5z+/zDva1ZbbWyIgwpqgjqARbfi8+pDXFG2x8YOBlqgsqUG8D4ILs2MnQu+d
+	 KErPjFSPRxNirozlzJAqeig2E/TXk2096sKtTHH6MmYPV6osUdE97snx+L6TMCtnSJ
+	 7msgPXH7aTDG2Ds3xHi/cK/zOpjm+cNdFDA317E9UTDxRdmnLRlILPmq1aT4e2n2bq
+	 KSn0fA2RaCT85T1IrT+dreANFxXoWRpB1sk0/pMViLjCAJbaUOBTgxb9LWNmrGrEXG
+	 /2oUyHIMg2R+mYWsuvBoKly1Fu4vo7SMialXjzlceXYsrIJzV2LgUbz2w5fjW87qKd
+	 0xh6qtxT7EglA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>,
-	SoC Team <soc@kernel.org>,
-	arm-soc <arm@kernel.org>
+To: soc@kernel.org,
+	arm@kernel.org,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] ARM: dts: mediatek updates on dts32 for v5.18
-Date: Tue,  8 Mar 2022 17:44:42 +0100
-Message-Id: <164675781062.4163171.16962087279129392112.b4-ty@arndb.de>
+	Steev Klimaszewski <steev@kali.org>,
+	linux-arm-msm@vger.kernel.org,
+	Kevin Hilman <khilman@baylibre.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Olof Johansson <olof@lixom.net>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Andy Gross <agross@kernel.org>
+Subject: Re: [GIT PULL] Qualcomm ARM64 DeviceTree fixes for 5.17
+Date: Tue,  8 Mar 2022 17:48:57 +0100
+Message-Id: <164675812200.4164061.9528871879791402816.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <3974dc7e-4185-4d88-ab5b-031a7d24214d@gmail.com>
-References: <3974dc7e-4185-4d88-ab5b-031a7d24214d@gmail.com>
+In-Reply-To: <20220301033526.1801295-1-bjorn.andersson@linaro.org>
+References: <20220301033526.1801295-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Tue, 1 Mar 2022 10:49:10 +0100, Matthias Brugger wrote:
-> Please find below the updates for the 32 bit based SoC from Mediatek.
-> We got very initial support for mt6582 and a tablet based on the SoC. Hopefully
-> we will get more support for the components of this rather old SoC.
-> On the other hand we get some support for the Airoha EN7523. Unfortunately I
-> didn't got any response for the clock and PCIe driver, so I decided to not wait
-> any longer and go forward to add the parts that are ready. We'll have to work
-> with the maintainer to unblock the situation on the two left drivers.
+On Mon, 28 Feb 2022 21:35:26 -0600, Bjorn Andersson wrote:
+> Sorry for the late fixes request. If it's too late, please merge it towards
+> v5.18.
+> 
+> Thanks,
+> Bjorn
+> 
+> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 > 
 > [...]
 
-Merged into arm/dt, thanks!
+Merged into arm/fixes, thanks!
 
-merge commit: 8a6ea4edcf3e1c9eada53d64da192df009fddc18
+merge commit: e1d7eed180b6355cedfbbd5c69ef7e0f145a5510
 
        Arnd
