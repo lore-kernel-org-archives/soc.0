@@ -4,60 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C982C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19F58C433F5
 	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:30:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2096BC340FD; Tue,  8 Mar 2022 16:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B8F2C340FC;
-	Tue,  8 Mar 2022 16:30:15 +0000 (UTC)
+	id 01E9EC340FB; Tue,  8 Mar 2022 16:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E01A9C340F8;
+	Tue,  8 Mar 2022 16:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646757015;
-	bh=BT39C8+1fMaATMlSo7fngY/XKLv97MdU/PQ1Y6cU3a8=;
+	s=k20201202; t=1646757014;
+	bh=D7wPIoQ2T+VBi4ZdCE7kT3ZatTKG8CBMA0ZBqBBC2Ts=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ZAa9P72xe9OWWbFUIJgiCyODCPvlO3bVw60xVuLZGxPnS3KmmIQwDJpIfDShJpapU
-	 DLCFQWmheNC3FVl6iNdmj51hBs7MB4kWe7Az4Ly7Lo0JS2IfXrXRENJohiBg19cKCm
-	 +/GEJ1aiYnfCYpCG1iOHtvtJ4bQn4iYYLb/J66ZpKccXeR/QWxu+kKG+fIcUOuMs0m
-	 GjHRLTD70YbiS17LkQllsNaCIz9GRJW8wjHIjql+b5kCeF/9ensd67+MNfQFp9OdUF
-	 hGwJ4+dpbaYzlZchbCH/QWy2PN0VjbEcrmPzymhTBBxL3jHjVaZ5Hkru8MH2br+8oo
-	 ypTJL0N/8/ueg==
+	b=aGjqSqc1jXGKMBrzjLPDiThIbEU3o2JCucW2kn0LRSubx1UONOEFwSjt+ABCVdzL5
+	 PAOjrxFzVREN0yj87VnCKkSBOPn5bdg1+66I6LH8VnTLxyhplOGhtopX+GDB2PX56E
+	 AHRVyEp0JedaJb5pXRHxt5HazhYs8EcrPCjrgbN/uoGSE35cwTDMEeSncJ6X1sSUR4
+	 dKK24wTVejf0mhMZDyrLKVHv17iTarITciEoTrDybv9+w17RTBfty3FFQsz/Nucu9Y
+	 7A91hsMnoY1tI0yT7GMYpVgS7PgGjLSmAvK5pw2OYIRzK3XLfv44Qt0Q2+1TK3SVyq
+	 ywIwJjW0Abszg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0217E6D3DD;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C4A35F0383C;
 	Tue,  8 Mar 2022 16:30:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm: multi_v5: enable configs for versatile
+Subject: Re: [GIT PULL] arm64: zynqmp: Xilinx DT changes for v5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164675701491.9628.16810524361559670779.git-patchwork-notify@kernel.org>
+ <164675701480.9628.4411052594268909198.git-patchwork-notify@kernel.org>
 Date: Tue, 08 Mar 2022 16:30:14 +0000
-References: <20220308121933.3967868-1-anders.roxell@linaro.org>
-In-Reply-To: <20220308121933.3967868-1-anders.roxell@linaro.org>
-To: Anders Roxell <anders.roxell@linaro.org>
+References: <19464dc6-eca9-f9a7-8aba-43af094d7c37@xilinx.com>
+In-Reply-To: <19464dc6-eca9-f9a7-8aba-43af094d7c37@xilinx.com>
+To: Michal Simek <michal.simek@xilinx.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue,  8 Mar 2022 13:19:33 +0100 you wrote:
-> Make it possible to boot a versatile machine in qemu.
+On Thu, 3 Mar 2022 16:24:50 +0100 you wrote:
+> Hi,
 > 
-> Boot command:
->  /usr/bin/qemu-system-arm -cpu arm926 -machine versatilepb \
->   -nographic -nic none -m 256M -monitor none -no-reboot \
->   -kernel zImage -dtb versatile-pb.dtb \
->   -append "console=ttyAMA0,115200 rootwait root=/dev/vda" \
->   -drive armv5_rootfs.ext4,if=none,format=raw,id=hd0 \
->   -device virtio-blk-pci,drive=hd0
+> please pull these 3 patches to your tree. The only thing to be aware of is that
+> there is a conflict with one patch which goes via Greg's USB tree.
+> Stephen reported this issue some time ago also with simple resolution which is
+> visible here.
+> https://lore.kernel.org/all/20220210141550.56359523@canb.auug.org.au/
 > 
 > [...]
 
 Here is the summary with links:
-  - arm: multi_v5: enable configs for versatile
-    https://git.kernel.org/soc/soc/c/42cc353b54fd
+  - [GIT,PULL] arm64: zynqmp: Xilinx DT changes for v5.18
+    https://git.kernel.org/soc/soc/c/756f4ae14562
 
 You are awesome, thank you!
 -- 
