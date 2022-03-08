@@ -1,165 +1,130 @@
-Return-Path: <SRS0=QVu5=TT=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=eDiF=TT=linaro.org=anders.roxell@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9DFEC433EF
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 12:07:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF746C433F5
+	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 12:19:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A3B1EC340EE; Tue,  8 Mar 2022 12:07:57 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id EA765C340EC;
-	Tue,  8 Mar 2022 12:07:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA765C340EC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4955AD6E;
-	Tue,  8 Mar 2022 04:07:55 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DC2F3FA5D;
-	Tue,  8 Mar 2022 04:07:53 -0800 (PST)
-Date: Tue, 8 Mar 2022 12:07:50 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Arnd Bergmann <arnd@arndb.de>
+	id 77F6BC340EC; Tue,  8 Mar 2022 12:19:44 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 76AB4C340EB
+	for <soc@kernel.org>; Tue,  8 Mar 2022 12:19:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76AB4C340EB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id w27so31878355lfa.5
+        for <soc@kernel.org>; Tue, 08 Mar 2022 04:19:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a949UFK8TIX5ZVNaSFCn5mxBv9wqXzD6DnUk1Klh2s4=;
+        b=z8FevG9uFrB9OKUKwLSr+Ahd73o/R4ouLWoQxUP7MQ/b7g0dnZyHUNAzPUYYIDtOp8
+         Zj8Sn6ersZ/yAoiL9lN+qwF6V2vQch2ZYBXFf+OxWKdijCWfVDBFLPLeICBcNz9wyUC2
+         HXED8BqYlL7Ggio7Zq9iVVqwvpn6p9v/o04TjbBHTOc02Tc1Be8viNoep7F9kNAPgMoW
+         /VROfFUN0VQYOUDobV7wtBQnuo1GLsi/SASx6GFmiKQEi+WwTEc0whI7h3mh6rkA6aGG
+         FUD27pTvn3Sek5MsJwtNx0NdsXKmcvZUhSKwDcWZLnMlchR1i2Mwq5Afdq5ZhNQz335i
+         Yc0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a949UFK8TIX5ZVNaSFCn5mxBv9wqXzD6DnUk1Klh2s4=;
+        b=wv+rkWoPw4ZM+HmcSdXb+/nfByogWEorfko29rojZsFMAvlX300vPdbuVU20pZjjhr
+         Pjj2sBpanuq3GuZKpqB8UPGzNCTLoSRV6MVNLRStskKmjarSOHyya/KgPCO4XZ5YAF3i
+         jOJRIg8HerUfpy9FsmYNTURVw2oFMg1Tie4h3hsWfKlkMkiCfaRt97DTVO3zW8MA0Dvd
+         yxdb6bwSRvc274Nhf1DfvN8PUxjOBDq9zlb53pT2PZS3ZSDTn0AqSa6V5y+GntF/HJZf
+         y+tVkPfGIzO1F59SC5VWsrSst0FwXzVXY7NMWFISHJ62P1uR0uUJzsx7Lk7iAkYmHzcI
+         WbJw==
+X-Gm-Message-State: AOAM530Nqj5JPdVIc+YJ4je5IycTB61DIShiL9lq2DUTaV5UdsUcEB+l
+	drRd11luYL+/DJonKOJA//QbGS3bvGZzZ6Tl
+X-Google-Smtp-Source: ABdhPJzb9sc1puN0GmA4MXgyXFDkw9QbWxlgmVLXEL8OuRSoHRpzGmp0ScrueQEtlO7DiR/XOibqZw==
+X-Received: by 2002:a19:8c50:0:b0:448:3d35:c060 with SMTP id i16-20020a198c50000000b004483d35c060mr2304403lfj.689.1646741981449;
+        Tue, 08 Mar 2022 04:19:41 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id j8-20020a196e08000000b0044313d10b4dsm3450250lfc.14.2022.03.08.04.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 04:19:41 -0800 (PST)
+From: Anders Roxell <anders.roxell@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej
- Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
- Rob Herring <robh+dt@kernel.org>, Mesih Kilinc <mesihkilinc@gmail.com>,
- Icenowy Zheng <icenowy@aosc.io>, Jesse Taube <mr.bossman075@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>, George Hilliard
- <thirtythreeforty@gmail.com>, DTML <devicetree@vger.kernel.org>, Linux ARM
- <linux-arm-kernel@lists.infradead.org>, linux-sunxi@lists.linux.dev,
- Russell King <linux@armlinux.org.uk>, Olof Johansson <olof@lixom.net>, SoC
- Team <soc@kernel.org>
-Subject: Re: [PATCH 13/14] ARM: configs: sync multi_v5_defconfig from
- savedefconfig
-Message-ID: <20220308120750.0bbe0122@donnerap.cambridge.arm.com>
-In-Reply-To: <CAK8P3a1FxfZj0=T=cvLNfagP+c_d+SEYYuV30+-UTU+B+HVXmQ@mail.gmail.com>
-References: <20220307143421.1106209-1-andre.przywara@arm.com>
- <20220307143421.1106209-14-andre.przywara@arm.com>
- <CAK8P3a1FxfZj0=T=cvLNfagP+c_d+SEYYuV30+-UTU+B+HVXmQ@mail.gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] arm: multi_v5: enable configs for versatile
+Date: Tue,  8 Mar 2022 13:19:33 +0100
+Message-Id: <20220308121933.3967868-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 8 Mar 2022 10:38:37 +0100
-Arnd Bergmann <arnd@arndb.de> wrote:
+Make it possible to boot a versatile machine in qemu.
 
-Hi Arnd,
+Boot command:
+ /usr/bin/qemu-system-arm -cpu arm926 -machine versatilepb \
+  -nographic -nic none -m 256M -monitor none -no-reboot \
+  -kernel zImage -dtb versatile-pb.dtb \
+  -append "console=ttyAMA0,115200 rootwait root=/dev/vda" \
+  -drive armv5_rootfs.ext4,if=none,format=raw,id=hd0 \
+  -device virtio-blk-pci,drive=hd0
 
-thanks for having a look. I was a bit unsure about the policy of those
-changes, so glad to have the discussion.
+When doing build and boot testing, it makes more sense to enable arch
+vesatile, serial amba_pl011 and virtio (mmio|blk|pci) to
+multi_v5_defconfig to make that boot out of the box, with a modern
+virtio (mmio|blk|pci) driver. Using the above commandline. Another way
+to build and boot would be to use tuxmake/tuxrun. Tuxmake [1] builds the
+kernel, and Tuxrun [2] boots the kernel in qemu. Both projects uses
+podman to do the build/tests inside.  This makes both project a good
+tool to use when finding a regression that you would like someone else
+to reproduce with the exact same setup.
 
-> On Mon, Mar 7, 2022 at 3:34 PM Andre Przywara <andre.przywara@arm.com> wrote:
-> >
-> > Some Kconfig options have changed, some other platforms have been
-> > removed.  
-> 
-> Please split this up into logical chunks: list the platforms that were removed
-> and remove only the lines corresponding to those platforms in one patch,
-> do functional changes in separate patches each with a reason for doing them,
-> and cleanups (moving lines to match the savedefconfig output, removing lines
-> that are now the default) in one final patch.
+tuxmake --runtime podman --target-arch arm \
+        --toolchain gcc-11 --kconfig multi_v5_defconfig
+tuxrun --tuxmake ~/.cache/tuxmake/builds/3072 --device qemu-armv5
 
-Actually this patch is meant to be only about the last past: to sync
-multi_v5_defconfig with the output of "make savedefconfig". .config stays
-the same. I initially tried to chase down the reason for each line change,
-but gave up quickly, because it becomes tedious to learn about this,
-especially about symbols that got *removed*. Also Kconfig is somewhat
-sensitive, a single "select" or "default" change in one random Kconfig can
-affect the result of savedefconfig.
+[1] https://tuxmake.org/
+[2] https://tuxrun.org/
 
-As I noted in the commit message, the .config does *not* change as a result
-of this patch, the whole purpose is just to make the next patch clearer.
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ arch/arm/configs/multi_v5_defconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-So I can try find the reason for each removal, if you like, but I am not
-sure that's worthwhile? It is my understanding that Kconfig changes tend
-to accumulate cruft in the various defconfigs over time. In U-Boot we gave
-up on reasoning, and just regularly sync the output of savedefconfig over
-to the *_defconfigs, to keep them minimal and meaningful.
-
-And I found Olof's commit 30b10c77837c ("ARM: defconfig: re-run
-savedefconfig on multi_v* configs") as a precedence for this kind of cleanup.
-
-> >  CONFIG_AEABI=y
-> >  CONFIG_HIGHMEM=y
-> > -CONFIG_ZBOOT_ROM_TEXT=0x0
-> > -CONFIG_ZBOOT_ROM_BSS=0x0
-> >  CONFIG_ARM_APPENDED_DTB=y
-> >  CONFIG_ARM_ATAG_DTB_COMPAT=y
-> >  CONFIG_CPU_FREQ=y  
-> 
-> These were not removed, what happened here is that 'savedefconfig'
-> no longer produces the lines because they now match the defaults.
-
-Yes, I understand. Is there some policy here, for instance to keep
-those in, for clarity?
-
-> > @@ -159,7 +151,6 @@ CONFIG_I2C_ASPEED=m
-> >  CONFIG_I2C_AT91=y
-> >  CONFIG_I2C_IMX=y
-> >  CONFIG_I2C_MV64XXX=y
-> > -CONFIG_I2C_NOMADIK=y
-> >  CONFIG_SPI=y
-> >  CONFIG_SPI_ATMEL=y
-> >  CONFIG_SPI_IMX=y  
-> 
-> This one is still there. Not sure why it's no longer enabled.
-
-It's not in the current .config. From what I can see, it depends on
-ARCH_AMBA, which is selected by ARCH_NOMADIK, but that one is not enabled
-by multi_v5_defconfig. Not sure if that is an oversight, or a change, a
-the dependency is bogus, or something else.
-
-If you find that useful, I can try to find those dependency chains for the
-other options, but I definitely lack the knowledge about the history of
-those old platforms, so I can't reason about them. But I could present you
-the findings and you can then say what to do?
-
-> >  CONFIG_REGULATOR_FIXED_VOLTAGE=y
-> >  CONFIG_MEDIA_SUPPORT=y
-> >  CONFIG_MEDIA_CAMERA_SUPPORT=y
-> > -CONFIG_V4L_PLATFORM_DRIVERS=y
-> > -CONFIG_VIDEO_ASPEED=m
-> > -CONFIG_VIDEO_ATMEL_ISI=m
-> >  CONFIG_DRM=y
-> >  CONFIG_DRM_ATMEL_HLCDC=m
-> > -CONFIG_DRM_PANEL_SIMPLE=y
-> > -CONFIG_DRM_PANEL_EDP=y
-> >  CONFIG_DRM_ASPEED_GFX=m
-> > -CONFIG_FB_IMX=y
-> > -CONFIG_FB_ATMEL=y
-> > -CONFIG_BACKLIGHT_ATMEL_LCDC=y  
-> 
-> This doesn't look right at all. If you want to disable graphics support,
-> please do that in a separate patch and explain why we can't have those
-> any more. Are you running into problems with the vmlinux size?
-
-As I mentioned, the .config didn't change at all, so those options are
-already not included in mainline anymore.
-
-AFAICS, those last options depend on CONFIG_FB, which isn't enabled. Is
-that a regression due to the recent fbdev changes?
-
-Cheers,
-Andre
-
-> 
-> >  CONFIG_LIBCRC32C=y
-> >  CONFIG_DEBUG_INFO=y
-> > -CONFIG_DEBUG_FS=y
-> >  CONFIG_MAGIC_SYSRQ=y
-> > +CONFIG_DEBUG_FS=y
-> >  CONFIG_DEBUG_KERNEL=y
-> >  # CONFIG_SCHED_DEBUG is not set
-> >  # CONFIG_DEBUG_PREEMPT is not set  
-> 
-> This should probably go along with the ZBOOT_ROM change, it's
-> only cosmetic.
-> 
->         Arnd
+diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
+index fe8d760256a4..db5b52e77b94 100644
+--- a/arch/arm/configs/multi_v5_defconfig
++++ b/arch/arm/configs/multi_v5_defconfig
+@@ -85,6 +85,8 @@ CONFIG_NET_PKTGEN=m
+ CONFIG_CFG80211=y
+ CONFIG_MAC80211=y
+ CONFIG_PCI_MVEBU=y
++CONFIG_ARCH_VERSATILE=y
++CONFIG_PCI_VERSATILE=y
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_IMX_WEIM=y
+@@ -111,6 +113,9 @@ CONFIG_EEPROM_AT24=y
+ # CONFIG_SCSI_PROC_FS is not set
+ CONFIG_BLK_DEV_SD=y
+ CONFIG_BLK_DEV_SR=m
++CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_BLK=y
+ CONFIG_CHR_DEV_SG=m
+ CONFIG_ATA=y
+ CONFIG_SATA_AHCI=y
+@@ -144,6 +149,8 @@ CONFIG_SERIAL_8250_EXTENDED=y
+ CONFIG_SERIAL_8250_MANY_PORTS=y
+ CONFIG_SERIAL_8250_ASPEED_VUART=m
+ CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_SERIAL_ATMEL=y
+ CONFIG_SERIAL_ATMEL_CONSOLE=y
+ CONFIG_SERIAL_ATMEL_TTYAT=y
+-- 
+2.34.1
 
