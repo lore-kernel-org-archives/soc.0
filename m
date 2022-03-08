@@ -4,63 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07AFCC433F5
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:45:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F301AC433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:45:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C89ECC340EB; Tue,  8 Mar 2022 16:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CE41C340F5;
-	Tue,  8 Mar 2022 16:45:17 +0000 (UTC)
+	id DC75BC340EB; Tue,  8 Mar 2022 16:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48674C340F4;
+	Tue,  8 Mar 2022 16:45:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646757920;
-	bh=fpg+ttMf8MhcWXYOR4Se/wz6diwsQPY7g/JqZ29sW60=;
+	s=k20201202; t=1646757923;
+	bh=GYIufgGGLr9GxrrY4rIU9KUo4E+VCK3yFeTecR6ehQ4=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZREFR75ReqlJngoL5tZq5hWzH8wZlhWcGvKSyAeeehhBucAvwPgewjUfjC6qpLExO
-	 twvIA3/J/J4d9/YEYvdxRJ3KkLq5RgNjValU/9bpV6X114p4pLZ3/TXPKgSeyszary
-	 CFA9XyG8eR1iMsfh3ndarXwyp5dXqKUBRTolQkGaeOcNzL86F6K6zkzYBxTk0aZcCa
-	 23s2XNCXqRkzbEQuA9/HcyfbZ8XVqA8NyhJag4n6bfVJNR3TD/pfOv0qKQ8GALbB/D
-	 3UJKrl8Ik5LQOByEyiGoXHDPDpRL67kpIf4zaHLHjDyP2yHyX+hD9dKp9pdXEbVou+
-	 P9FeTGT/ctbdw==
+	b=sLMGfu3du1eA0pEoO32ZidYhCnRUjTuBXbYA1+1igjKi0Td7z4XaE1ef8TMuUKM4M
+	 5ekJScG2sCUfs34bsEQc9RQsnCrnOH6+YMqjh9IGlz64pi1P4LpbMFW6lXFLFqeT9u
+	 enrHOUbg/gNwUNsvqgGf8UB2HSDd1TxjBxI2FenAF4rNUUhSeruEPx7zt+OY8R9NGT
+	 lzMbaKYYgUIgKKHqynTBDjcdNUogISNiN/8/OeJ/7Az5aIe6b4L4Pjbn3HTQdXmtSp
+	 KBhzsS3Yz5z83m10rTnMWazdy/fVp2W1aI3Adsiv6ft8MyHZba9i2WUPtmBCHJ/sZi
+	 iUvzSy0aUNqOQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	arm@kernel.org,
-	soc@kernel.org
+To: Matthias Brugger <matthias.bgg@gmail.com>,
+	SoC Team <soc@kernel.org>,
+	arm-soc <arm@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Chanho Min <chanho.min@lge.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] arm64: dts: various cleanup for v5.18
-Date: Tue,  8 Mar 2022 17:44:40 +0100
-Message-Id: <164675781073.4163171.4537137163640184257.b4-ty@arndb.de>
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	Maoguang Meng <maoguang.meng@mediatek.com>,
+	"allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
+	Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+	Sam Shih <sam.shih@mediatek.com>,
+	Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: Re: [GIT PULL] arm64: dts: mediatek updates for v5.18
+Date: Tue,  8 Mar 2022 17:44:41 +0100
+Message-Id: <164675781051.4163171.14022771995881024304.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220307173614.157884-1-krzysztof.kozlowski@canonical.com>
-References: <20220307173614.157884-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <c2064dcc-acdc-c86b-5ef7-cb8e7ae3122f@gmail.com>
+References: <c2064dcc-acdc-c86b-5ef7-cb8e7ae3122f@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 7 Mar 2022 18:36:14 +0100, Krzysztof Kozlowski wrote:
-> These patches were for very long time on the mailing list, but they were not
-> picked up. LG maintainer acked the LG part, ARM Juno remains unanswered.
-> 
-> These are considered cleanups, not fixes, although they fix real
-> dt_bindings_check warnings.
-> 
-> Could you pick them up for v5.18?
+On Tue, 1 Mar 2022 10:43:41 +0100, Matthias Brugger wrote:
+> Please have a look into the below updates for v5.18
+> Little by little the mt8192 is getting into shape, now that the devices have the
+> corresponding clock drivers. We also gained watchdog and power domain controller.
+> Also mt8183 has now support for the keyboard connected to the PMIC as well as
+> the JPGEG enconder.
+> On the router side, unfortunately the mt7986 is moving a bit slow. Hopefully in
+> the next cycle we can get more drivers supported for this new chip.
 > 
 > [...]
 
 Merged into arm/dt, thanks!
 
-merge commit: e8f022f9ecb4bb77fb9ab7afc7af03093ee83658
+merge commit: c723b6b7b7a1331709b44f16655ad702e10b025a
 
        Arnd
