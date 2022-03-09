@@ -1,55 +1,180 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=l4rn=TU=fujitsu.com=hasegawa-hitomi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB65C433F5
-	for <soc@archiver.kernel.org>; Tue,  8 Mar 2022 16:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FAECC433F5
+	for <soc@archiver.kernel.org>; Wed,  9 Mar 2022 02:57:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37AEAC340EF; Tue,  8 Mar 2022 16:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EA3C340EB;
-	Tue,  8 Mar 2022 16:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646758699;
-	bh=laX4D7M39zT/hwn4Cg/k7KyZJm9tgxYL/w79HzyyZ2E=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JDXK9FOaHHHYwRxglufflhRQvfvbWhxX7YbHXlpkxCzSXicoNz7LmmERvXYl0qCRG
-	 vnPmKG3ZhnyKW2Fr/QcddM+LZQAMWsIc+ERnjPGOComoQJkw3S9JutiR2UPiOjdb66
-	 tlITU1tBs0Lj8Qqpl5Lzop5hCnHN6SNMS21vbcodxZxqHIFLymzMHtetCmcIKyhafI
-	 YL/aSQSvrrC1gv7c4v9Folq2dmJL5ew2DZHjBRJO86xb53RUv6b2UUhMVaIHr9xK4h
-	 9NxNJ9lXz4DWp2jqDQo2yiWpvyUKtjMqA7OmwRVUaiyqwv2a0hRi54DfoTDTlJBgRa
-	 tdrr45fFQ7zfg==
-From: Arnd Bergmann <arnd@kernel.org>
+	id C1BA8C340F4; Wed,  9 Mar 2022 02:57:09 +0000 (UTC)
+Received: from esa15.fujitsucc.c3s2.iphmx.com (esa15.fujitsucc.c3s2.iphmx.com [68.232.156.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 83B93C340EE;
+	Wed,  9 Mar 2022 02:57:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83B93C340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1646794628; x=1678330628;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JJd0yyPl/tuCxhNMaAuXbRzgHDz7X6UWmQHZ7RqCBb0=;
+  b=q28fnsNbTCZf8sdO1OMhFw4M1dTsQOSoJS94nnpdTIr9GEM+kp99YdM5
+   g+66484puvyb6zEXO+Q0d9sqWHPnz5RcWJnOURkvX8RUTcayJYINHxqxZ
+   1ac8A9M/QW9O++2atwqOZuq7ASRrSp5wdX0nPYfFAK5fHdvWASMgx3vKO
+   EaQDMdQOkDyj3ZDaODMu0bHn82Yi6tvCzTb1GqlEkPMJ9rkDERr8iIecb
+   sGh2y4Qtg2ZnR4wRyvFess5HRCeKcbcOVkcYRFZTB1FJBd5maDOV+P7DO
+   zcF1zOERXzYhau5gtMwxFQ3lx3XPa6jVLA3u6CQGbBdc7GwMQ6QMtznK/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10280"; a="51263877"
+X-IronPort-AV: E=Sophos;i="5.90,166,1643641200"; 
+   d="scan'208";a="51263877"
+Received: from mail-os0jpn01lp2112.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.112])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 11:55:52 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=odks6oJNpgJJlWCUK+juChGwSvoU5M2R/9v1zZEwiRdyNm2gYsAFCbbR+3B0l2ljG/PvQvqbvGcSkMC0R16Gxg1O3pr7LBsw9gu0mdxsle3b1oaitShu9UB4hQLZ4ql9DkJg+rrjo8UsiIiG0Rrz7HWbDZbwSry7fIa8/e3f4H1WT7wJgZPqeRgPEPWffLUPA2G74wkWMio3k8QYeQ19Whu9HN5ns7zfLRwCLBqLIUep7kjrq0Jdh6czW8NZ9yiEtcMPdaQWlDGK2VWsCKffcLi7yMch+2nd1GDnYPaW62L1Bm9vzffL7WMJLnmZ4n8uvog5bUo6rQdxoAokXWxcPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JJd0yyPl/tuCxhNMaAuXbRzgHDz7X6UWmQHZ7RqCBb0=;
+ b=ObGOJoORrihcUE0vm7IqTy4pvmalux6YKUspVcwmo4yfUXL3MImxpYU+HCL3q0ccA3aa2RON3L6ROke1ka7wBGAn46Ne3pD1Sz8uEZYTzhPCQrWWyizpwiv3LoXWbtQ88plNJW0CcWPsPFC3U4spDjJzFzmZUd/KybFsn+KxK+tmJUcDvFR9MNSOjpFXvJKf7Mk1x+lHsFKbrUrsKHBbEQULNi19KjE4Xlvhi16cP5tSFU+iJKRLX1hKIPDI1HQv6wLQFR37cLCiEXqI88Wgor8HRKRV6+XZFlMZ3iq/sPFK0vdnQ0PIOBZAcjNKoENkzL4B2B3bQoadNJLHa6503w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JJd0yyPl/tuCxhNMaAuXbRzgHDz7X6UWmQHZ7RqCBb0=;
+ b=Hyf+NGGJWkSK4JlPSTU284ZaswHELgT+GxJlM3AyEdu7eWZ5h8h6NVBpWOVOrqACny83tip+foIB8cG9YCzhWPCvc0dGAq81tC7bWPOAnvBYhSmMyeqEb6mTv9mFtCRk3R7dQum3wPjuaxLniLKysg6abS6WKcsWgu8yKsXdfiI=
+Received: from OSZPR01MB7050.jpnprd01.prod.outlook.com (2603:1096:604:13e::5)
+ by TY2PR01MB2331.jpnprd01.prod.outlook.com (2603:1096:404:75::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.18; Wed, 9 Mar
+ 2022 02:55:49 +0000
+Received: from OSZPR01MB7050.jpnprd01.prod.outlook.com
+ ([fe80::e8a9:971f:52b9:8d07]) by OSZPR01MB7050.jpnprd01.prod.outlook.com
+ ([fe80::e8a9:971f:52b9:8d07%9]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 02:55:49 +0000
+From: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+To: Sumit Garg <sumit.garg@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>,
-	John Crispin <john@phrozen.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [GIT PULL] defconfig: mediatek updates for v5.18
-Date: Tue,  8 Mar 2022 17:58:10 +0100
-Message-Id: <164675866030.4165470.17163484953895240088.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <9b90b407-025b-ec78-a626-faccdbc7ab39@gmail.com>
-References: <9b90b407-025b-ec78-a626-faccdbc7ab39@gmail.com>
+CC: "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "soc@kernel.org" <soc@kernel.org>,
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
+	<will@kernel.org>, "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"jirislaby@kernel.org" <jirislaby@kernel.org>, "jason.wessel@windriver.com"
+	<jason.wessel@windriver.com>, "daniel.thompson@linaro.org"
+	<daniel.thompson@linaro.org>, "dianders@chromium.org"
+	<dianders@chromium.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "kgdb-bugreport@lists.sourceforge.net"
+	<kgdb-bugreport@lists.sourceforge.net>, "peterz@infradead.org"
+	<peterz@infradead.org>
+Subject: Re: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt
+ driver
+Thread-Topic: [PATCH v2 2/2] soc: fujitsu: Add A64FX diagnostic interrupt
+ driver
+Thread-Index: AQHYL5N9NH7YBhS2wU+ZKVA80VMN6ayz07gAgAFqVqI=
+Date: Wed, 9 Mar 2022 02:55:49 +0000
+Message-ID:
+ <OSZPR01MB705082EC83690A56ECC2BE79EB099@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+References: <20220304064324.331217-1-hasegawa-hitomi@fujitsu.com>
+ <20220304064324.331217-3-hasegawa-hitomi@fujitsu.com>
+ <CAFA6WYMESyto9bFtk2qNBMi40BkJOoUKpYtAScXjb3yunhHTJA@mail.gmail.com>
+In-Reply-To:
+ <CAFA6WYMESyto9bFtk2qNBMi40BkJOoUKpYtAScXjb3yunhHTJA@mail.gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=True;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-03-09T02:55:48.605Z;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
+suggested_attachment_session_id: fa229cd5-699f-884b-76ee-bdd4b157060b
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3cf82cfe-22da-49e5-99bd-08da01785102
+x-ms-traffictypediagnostic: TY2PR01MB2331:EE_
+x-microsoft-antispam-prvs:
+ <TY2PR01MB23313B0841B8472EE4784A68EB0A9@TY2PR01MB2331.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 5yR0RZH4velhonDxb/YFR1OAtJvvezfW4aTu6xGq4/KYSDFjWPD9+xUzbILbiEgU6NPTLcL6LXaXCVCEvBKcsYMSZlDGdEguhNc0Xosz0WxCU37+E2gmfN0NoQJaVqDG/VFOULiW+OT6cAoclgxMSujrsnzK/Nqgd/kR3xMeC0o+i7IBYzAS7HWUjIZPlU0860IZ5lpaSluOfWHobw9yiuTbpWFy1efhfYzGnKBoxqXjQObaHfpUPVRgop7XiY7/F+bnmutrWmxcmzzdgYp21TAh9UWm17jkfwSYHo7PRNdHZoltEfP25yFvUPEbUfRmPNUENogs1lP4os757O6/IXPV8gsal5Ts/nwllQ9v8wLtkwApYuYMaNnZMPjacX6cjM+VDmo66LvChbn/xLWEVn7Lh6tStQa3mtHMjlynfvOu2AQ3jT3X3ra2B8TtAjQDsj6VaD1hcBGFuK4fbLYYpALqf9s55uuiGQ+D9gQ0MwHo+aVP9aHa2KiH13IB85enqZUExEgHvZI+cK3vI4abRXTg5GWpViW3TJQTYQFmnMv18PuOvE7D0SFFcjPcnzoCTesbH5cr1Y9OfCfDwn5Wyi9RpyR/SDUg+0XH+MZbBaMX2z0hqYdMxJFLrIdRode9XdJXidolT3kU1MS22CAzsAJpvEChuLtrEJAcShVHlGJ7y0aj1h/yO2Jt82MyhvU/t+sERz7XL4CU7CtuaTt7yA==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB7050.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(186003)(7696005)(33656002)(26005)(6506007)(38070700005)(71200400001)(9686003)(508600001)(54906003)(86362001)(55016003)(316002)(8936002)(4744005)(6916009)(66556008)(64756008)(7416002)(66476007)(66446008)(122000001)(8676002)(66946007)(76116006)(52536014)(5660300002)(38100700002)(82960400001)(85182001)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-2022-jp?B?ekg1OGV1cFBLNHN0TlcrUFluL2Rra3hjcDBXRFZkK2QwWjg5aUloU0xn?=
+ =?iso-2022-jp?B?N3FobUpsdzRmVXRNeTEyd1AwUm9FdE43d3Bia3JxWnlGRXdtZnVrRzhL?=
+ =?iso-2022-jp?B?aHRaTURzMTZXdTZSOHUyY3lvUjVwcVllYVBPSndRYXYxUE5ZTGdQTitK?=
+ =?iso-2022-jp?B?TGtlSnpaZVBiTlpocUNXeGtmVzUxUm55bzZMbmZuOVR6dTA3ZFdUbHg3?=
+ =?iso-2022-jp?B?UUJ5bURFbE9QZXdqcjduU1dPZjJDeHdpOHB1OWlURXFyVkoyVzkzcmZi?=
+ =?iso-2022-jp?B?QjBjb0tycUhlcTdJYmIvZnVLSC9YcG41Y21MbktwdFIxNVVWQURKWjA1?=
+ =?iso-2022-jp?B?cDNnZzhsekRMK2tSTnR6SFBhVDRLbEJrNjhDUFRleXRuM1owNnJuMHVJ?=
+ =?iso-2022-jp?B?M3Y1OFN1ejNYTmdvU29VcmFkRDFjTHJQd1JlTFlzRHJGdmVQSlQxTnBz?=
+ =?iso-2022-jp?B?QXdNSnpJZkFKYVRJSlZGWjBPdmFodTgyY1ZPSjFUUUdPOEQ2NjBYWktt?=
+ =?iso-2022-jp?B?UmxZQmhINHYvVmJlTkNZUVVwL25QWUF6QXNydi9ybDFqck1KT2cwbXMy?=
+ =?iso-2022-jp?B?U1cxbCtRUGtTTXFETEVWend2NTJyT0cxR3dzNlZWWTUvc0NRNERVQWJ5?=
+ =?iso-2022-jp?B?MXBnSlY1b3kwVVN1Zi92dXZXbVJCb1o2RWNSSHkzUEFKckNxTjIvdUsy?=
+ =?iso-2022-jp?B?aUlGcmZtMkdYdEhaVnFxVjFqL01EYjZweFRhOE9aWndIcnBqSm9xQXBz?=
+ =?iso-2022-jp?B?SXFkc0c1Yk5XY3VxTVVKeEc2eCthQUlXcmQxc3BUZWFhTjd4S2tFanpC?=
+ =?iso-2022-jp?B?OUlRekl3d05FNzVpUnhvZmNteGxVbWFSTzdPcGVzYnM4QXJ5MzZLeGxa?=
+ =?iso-2022-jp?B?bDJzdFIwQWZ2NDR4RXpkNTZrNmU3RjFPMFgrT0IxeGZnZk9mMFN2Ukhn?=
+ =?iso-2022-jp?B?Q2JvM2MwNzFENjBJa2hWbG9CU0phR0ZoUmI4emZQUWNmWTJPOU5VMUxz?=
+ =?iso-2022-jp?B?K050K1JTTW05NURURW1wajVuZlIwb3FoVENoMkRjbTl4YWR3ZDRFUlhz?=
+ =?iso-2022-jp?B?NlFxdC80QUxTWW5KVW55UVFGZWhzdEx1Mld2OHBXdjBUTEZVZVZ6bXRo?=
+ =?iso-2022-jp?B?OElkMEUwSURXRDQvZ1FtQzYzZ1R6Z041QzlkZlBJL0YxSlJ1MU1lWG9J?=
+ =?iso-2022-jp?B?d2xsdEQ5Q3RodjRXZDNWeVBVYkpwbFFOZ01xSHh0MlRtUHUvUzlvMC9G?=
+ =?iso-2022-jp?B?VVZCMno2OHQ3TjZCVTdnbGRuWnpsMGJYTWt6YUliVjN0SkJnTmNoRTJQ?=
+ =?iso-2022-jp?B?RUw2ME9wcTA2UG1NMFlNSTFBeS93ODRBempra0hBVVJKeW5ZanZ2THVS?=
+ =?iso-2022-jp?B?clcwZTdqYmpDSDExL1YvNWxkcy9vS1lMaWVHeHZ5c04zbEVqMUdCcVBo?=
+ =?iso-2022-jp?B?VGc2cXZ4UlBaYldIQ3p0cXFRQzZPbll4UzBDekErbVdDR0JlWkMrWGhT?=
+ =?iso-2022-jp?B?OTdFUlBiTnBHaUVIb2ROckdRbk5mbDhQbXJBSlgvc1EzTVVGemhDd21R?=
+ =?iso-2022-jp?B?NG1wakRvUlI3Q09TcWNOUURML3hCblNxd2c2aFdFcjdvNGdEU1czVWhQ?=
+ =?iso-2022-jp?B?dlhuUncydHBrQ3RtaW9DTExKRjBMWkJ6UEh1RDFlYnBEaFNBKzVOdE15?=
+ =?iso-2022-jp?B?MjVrZGIrRHVFSjQyZzhpMzI4dGxUbU5Xd2ZIbmFBYkNRbm9oYURBTjBz?=
+ =?iso-2022-jp?B?S2tadU8vM20wbHRGSm1VOE9zVWNjb2F5bjFFOUJYTXkzSHExdzA5K3pG?=
+ =?iso-2022-jp?B?N3liZU1nQ05paElrRlhhdmNnWHJpb01jWUl2SGEyeDZKYVRNMDNDeE90?=
+ =?iso-2022-jp?B?UjJwL2ExR1hiQUsrOG1qU0V1UkN5UTQ2VERPVHAxTmVxMEdsT1FkdzZs?=
+ =?iso-2022-jp?B?U1YwMjBkaENUeGxtODIyTGxWaURQS2o2emlFbVpTdy9zL3ErNmlwYVky?=
+ =?iso-2022-jp?B?THNnc0lRWXR3Tm83aXMxcGt0T2xmbTI5cVhaWWQ4TmxUSWNLSG9aSHhH?=
+ =?iso-2022-jp?B?cDBlaEhrQUhETUN5N2ZUV09kZDVmRHIvUUtoS1YzaFhNZ013U2pVUWxT?=
+ =?iso-2022-jp?B?OWFYVXBVVVpid2d5dFN1SExpZjlUaWV0UTBUQVBYVmJ2SktDY2JZNHVi?=
+ =?iso-2022-jp?B?RGhSSktUbFRFcFYzUXRKNFNnYzZMYzBIZ1lQOVYvUy8vaXFsWU1tcmt6?=
+ =?iso-2022-jp?B?TjY1KzZsYWFaWlpBVkFzejlQajFudzU3YzZzMWI4K2Y4cDdtR2FSS3Ux?=
+ =?iso-2022-jp?B?ckNWdDhoZzljb2JVY0tJQjF0Y1l4VjJzbmp5RHFqTHlpcDdyWXFtYmtB?=
+ =?iso-2022-jp?B?dStYeHdnZGtaUmlGQTZJWndMQk5EVWxaWHFKNXpQVFlERk81UTNrMWZF?=
+ =?iso-2022-jp?B?QkFXODNnPT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB7050.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3cf82cfe-22da-49e5-99bd-08da01785102
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2022 02:55:49.2706
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l8dhBNZUEzT9TP7GPu12kGZJJ68K9f+SqJlnZCh8teQ/8a4V7s/6spqwhaaF/3gPu0YlldDUaHrsoOiW0YYwGQqSixo1D/Iy0YlTwHPoe7I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2331
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-On Tue, 1 Mar 2022 10:54:27 +0100, Matthias Brugger wrote:
-> Please have a look on the below defconfig changes for v5.18.
-> 
-> Regards,
-> Matthias
-
-Merged into arm/defconfig, thanks!
-
-merge commit: c687cdc66ffc1452a205d7a36132d620f2fdc677
-
-       Arnd
+Hi Sumit,=0A=
+=0A=
+> Would it be possible to pass a dynamic sysrq key from BMC to the host=0A=
+> as that would unleash the true power of sysrq in an NMI context=0A=
+> capable of launching kdb as one example?=0A=
+=0A=
+A64FX's BMC supports a subset of the ipmitool command but it doesn't=0A=
+have the ability to dynamically send additional information such as the=0A=
+sysrq key, so I don't think it's possible.=0A=
+=0A=
+Thank you=0A=
+Hitomi Hasegawa=
