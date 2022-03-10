@@ -1,75 +1,141 @@
-Return-Path: <SRS0=FE/q=TV=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=8Epl=TV=arm.com=andre.przywara@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A97C433F5
-	for <soc@archiver.kernel.org>; Thu, 10 Mar 2022 01:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60280C433EF
+	for <soc@archiver.kernel.org>; Thu, 10 Mar 2022 10:33:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 63981C340F4; Thu, 10 Mar 2022 01:39:55 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 55987C340E8;
-	Thu, 10 Mar 2022 01:39:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 55987C340E8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=sntech.de
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <heiko@sntech.de>)
-	id 1nS7mS-0000Qc-F4; Thu, 10 Mar 2022 02:39:52 +0100
-From: heiko@sntech.de
-To: arm@kernel.org
+	id 2BD28C340E9; Thu, 10 Mar 2022 10:33:51 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 6374EC340F3;
+	Thu, 10 Mar 2022 10:33:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6374EC340F3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD2881650;
+	Thu, 10 Mar 2022 02:33:47 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AC6E3FA27;
+	Thu, 10 Mar 2022 02:33:45 -0800 (PST)
+Date: Thu, 10 Mar 2022 10:33:41 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 5.18 #1
-Date: Thu, 10 Mar 2022 02:39:51 +0100
-Message-ID: <37432054.P6GNo21ksS@phil>
-In-Reply-To: <3788968.RB9BLzCXGK@phil>
-References: <3788968.RB9BLzCXGK@phil>
+Cc: Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ Rob Herring <robh+dt@kernel.org>, Mesih Kilinc <mesihkilinc@gmail.com>,
+ Icenowy Zheng <icenowy@aosc.io>, Jesse Taube <mr.bossman075@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>, George Hilliard
+ <thirtythreeforty@gmail.com>, DTML <devicetree@vger.kernel.org>, Linux ARM
+ <linux-arm-kernel@lists.infradead.org>, linux-sunxi@lists.linux.dev,
+ Russell King <linux@armlinux.org.uk>, Olof Johansson <olof@lixom.net>, SoC
+ Team <soc@kernel.org>
+Subject: Re: [PATCH 13/14] ARM: configs: sync multi_v5_defconfig from
+ savedefconfig
+Message-ID: <20220310103342.74b8e516@donnerap.cambridge.arm.com>
+In-Reply-To: <CAK8P3a1FxfZj0=T=cvLNfagP+c_d+SEYYuV30+-UTU+B+HVXmQ@mail.gmail.com>
+References: <20220307143421.1106209-1-andre.przywara@arm.com>
+	<20220307143421.1106209-14-andre.przywara@arm.com>
+	<CAK8P3a1FxfZj0=T=cvLNfagP+c_d+SEYYuV30+-UTU+B+HVXmQ@mail.gmail.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Correction: The mail subject was supposed to be "#2"
+On Tue, 8 Mar 2022 10:38:37 +0100
+Arnd Bergmann <arnd@arndb.de> wrote:
 
-Heiko
+Hi,
 
-Am Donnerstag, 10. M=E4rz 2022, 02:38:50 CET schrieb Heiko Stuebner:
-> The following changes since commit 5a68ce0a7b89a7005a71d406435a45a24c7e86=
-da:
->=20
->   ARM: dts: rockchip: remove status from rk3288 crypto node (2022-02-15 0=
-8:59:53 +0100)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
-tags/v5.18-rockchip-dts32-2
->=20
-> for you to fetch changes up to c042639a70ed00ab2138f507ae1d6fa57c66ce11:
->=20
->   ARM: dts: rockchip: Update regulator name for PX3 (2022-03-05 18:17:08 =
-+0100)
->=20
-> ----------------------------------------------------------------
-> Some fixes for rk8xx pmics to make them follow
-> the dt-binding better.
->=20
-> ----------------------------------------------------------------
-> Chris Morgan (2):
->       ARM: dts: rockchip: Add #clock-cells value for rk805
->       ARM: dts: rockchip: Update regulator name for PX3
->=20
->  arch/arm/boot/dts/rk3188-px3-evb.dts  | 2 +-
->  arch/arm/boot/dts/rv1108-elgin-r1.dts | 1 +
->  arch/arm/boot/dts/rv1108-evb.dts      | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
->=20
+> On Mon, Mar 7, 2022 at 3:34 PM Andre Przywara <andre.przywara@arm.com> wrote:
+> >
+> > Some Kconfig options have changed, some other platforms have been
+> > removed.  
+> 
+> Please split this up into logical chunks: list the platforms that were removed
+> and remove only the lines corresponding to those platforms in one patch,
+> do functional changes in separate patches each with a reason for doing them,
+> and cleanups (moving lines to match the savedefconfig output, removing lines
+> that are now the default) in one final patch.
+
+OK, I did that, and will send that as a separate series, as it's not
+really related to the F1C100 DT changes.
+
+Please disregard patches 13/14 and 14/14 for now.
+
+For the sake of completeness of this thread, this is what I found out:
+
+> 
+> >  CONFIG_AEABI=y
+> >  CONFIG_HIGHMEM=y
+> > -CONFIG_ZBOOT_ROM_TEXT=0x0
+> > -CONFIG_ZBOOT_ROM_BSS=0x0
+> >  CONFIG_ARM_APPENDED_DTB=y
+> >  CONFIG_ARM_ATAG_DTB_COMPAT=y
+> >  CONFIG_CPU_FREQ=y  
+> 
+> These were not removed, what happened here is that 'savedefconfig'
+> no longer produces the lines because they now match the defaults.
+> 
+> > @@ -159,7 +151,6 @@ CONFIG_I2C_ASPEED=m
+> >  CONFIG_I2C_AT91=y
+> >  CONFIG_I2C_IMX=y
+> >  CONFIG_I2C_MV64XXX=y
+> > -CONFIG_I2C_NOMADIK=y
+> >  CONFIG_SPI=y
+> >  CONFIG_SPI_ATMEL=y
+> >  CONFIG_SPI_IMX=y  
+> 
+> This one is still there. Not sure why it's no longer enabled.
+
+ARCH_U300 was the only user, and we lost a prerequisite (ARCH_AMBA) when
+it was removed, so this symbol cannot be selected anymore.
+ 
+> 
+> >  CONFIG_REGULATOR_FIXED_VOLTAGE=y
+> >  CONFIG_MEDIA_SUPPORT=y
+> >  CONFIG_MEDIA_CAMERA_SUPPORT=y
+> > -CONFIG_V4L_PLATFORM_DRIVERS=y
+> > -CONFIG_VIDEO_ASPEED=m
+> > -CONFIG_VIDEO_ATMEL_ISI=m
+> >  CONFIG_DRM=y
+> >  CONFIG_DRM_ATMEL_HLCDC=m
+> > -CONFIG_DRM_PANEL_SIMPLE=y
+> > -CONFIG_DRM_PANEL_EDP=y
+> >  CONFIG_DRM_ASPEED_GFX=m
+> > -CONFIG_FB_IMX=y
+> > -CONFIG_FB_ATMEL=y
+> > -CONFIG_BACKLIGHT_ATMEL_LCDC=y  
+> 
+> This doesn't look right at all. If you want to disable graphics support,
+> please do that in a separate patch and explain why we can't have those
+> any more. Are you running into problems with the vmlinux size?
+
+CONFIG_FB was not selected anymore, when DRM_KMS_FB_HELPER was removed, so
+we lost all those drivers. I brought CONFIG_FB in explicitly, as
+multi_v7_defconfig did a while ago.
+
+More details in the commit messages of the upcoming series.
+
+Cheers,
+Andre
 
 
-
+> >  CONFIG_LIBCRC32C=y
+> >  CONFIG_DEBUG_INFO=y
+> > -CONFIG_DEBUG_FS=y
+> >  CONFIG_MAGIC_SYSRQ=y
+> > +CONFIG_DEBUG_FS=y
+> >  CONFIG_DEBUG_KERNEL=y
+> >  # CONFIG_SCHED_DEBUG is not set
+> >  # CONFIG_DEBUG_PREEMPT is not set  
+> 
+> This should probably go along with the ZBOOT_ROM change, it's
+> only cosmetic.
+> 
+>         Arnd
 
