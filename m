@@ -1,75 +1,85 @@
-Return-Path: <SRS0=9Wb0=TU=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=FE/q=TV=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0107FC433EF
-	for <soc@archiver.kernel.org>; Wed,  9 Mar 2022 14:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B09FAC433F5
+	for <soc@archiver.kernel.org>; Thu, 10 Mar 2022 01:38:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DD1D2C340F3; Wed,  9 Mar 2022 14:03:32 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id E7AB0C340E8;
-	Wed,  9 Mar 2022 14:03:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E7AB0C340E8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from localhost (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTPS id 1289480C1;
-	Wed,  9 Mar 2022 14:02:07 +0000 (UTC)
-Date: Wed, 9 Mar 2022 16:03:29 +0200
-From: Tony Lindgren <tony@atomide.com>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+	id 9BDC1C340EF; Thu, 10 Mar 2022 01:38:04 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 73C11C340E8;
+	Thu, 10 Mar 2022 01:38:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73C11C340E8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=sntech.de
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <heiko@sntech.de>)
+	id 1nS7kc-0000Oz-Oy; Thu, 10 Mar 2022 02:37:58 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, jan.kiszka@siemens.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH v2 1/2] arm64: dts: ti: k3-am65: disable optional
- peripherals by default
-Message-ID: <YiizsYnKB0X9bDY2@atomide.com>
-References: <20220203140240.973690-1-matthias.schiffer@ew.tq-group.com>
- <20220204143108.653qk2ihnlhsr5aa@prior>
- <YgDCLaBHA3DDQAUd@atomide.com>
- <5944ba0ce568eaf507917799b1dfd89a3d0ca492.camel@ew.tq-group.com>
- <YgEBml9HvFzSl289@atomide.com>
- <9923df6525212389b86cb635624bcfb5c27a8bc5.camel@ew.tq-group.com>
- <YgJZbdOlazrde7O/@atomide.com>
- <1356e93cd5b101c3d896e35250c66959ed631544.camel@ew.tq-group.com>
- <YihvWFdr1cT7cyk5@atomide.com>
- <5058591a3e0f0cb82b26cffe888d87b4d1bdd713.camel@ew.tq-group.com>
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts64 changes for 5.18 #2
+Date: Thu, 10 Mar 2022 02:37:57 +0100
+Message-ID: <13959624.7hp8jFWaoN@phil>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5058591a3e0f0cb82b26cffe888d87b4d1bdd713.camel@ew.tq-group.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-* Matthias Schiffer <matthias.schiffer@ew.tq-group.com> [220309 11:09]:
-> while I agree that it would be great if drivers could just detect when
-> hardware is not available, this is simply not how most drivers work -
-> when you instantiate the driver via a non-disabled(/reserved/...) DT
-> node, the driver expects a usable device.
-> 
-> Especially for busses like I2C, there is no way for a driver to
-> reliably detect whether the bus is usable or not. (There are several
-> states that can't really be distinguished: Is pinmuxing missing, or
-> does the device not need any muxing? Is a line low because it is not
-> actually connected to anything, or is there another master currently
-> using the bus, or is the bus stuck due to a faulty device?)
+Hi Arnd, Kevin, Olof,
 
-Well how about set only the problem devices with status = "disabled"
-with a proper comment in the SoC dtsi file?
+please find below some somewhat tiny additional Rockchip changes
+ideally still for 5.18.
 
-See for example what has been done in arch/arm64/boot/dts/apple that
-has been pretty widely reviewed and done with a good taste :)
+I can also move them to 5.19 if needed though.
 
-Not sure what can be done to idle the unused devices in the disabled
-case though, maybe some firmware call to disable all unclaimed devices
-could be done if it does not exist already. The firmware may not have
-the capability to idle devices that need firmware loaded to idle them
-for example though.
 
-Regards,
+So if it's not too late yet, please pull!
 
-Tony
+Thanks
+Heiko
+
+
+The following changes since commit a0024f55eb5b741b76a0b950f1222ddbab6a9fc9:
+
+  arm64: dts: rockchip: align Google CROS EC PWM node name with dtschema (2022-02-24 00:07:56 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.18-rockchip-dts64-2
+
+for you to fetch changes up to 9d25aadd55bb8c37c468661b506f932d15492028:
+
+  arm64: dts: rockchip: Add #clock-cells value for rk805 (2022-03-05 18:16:45 +0100)
+
+----------------------------------------------------------------
+Some corrections for the rk80x pmic nodes, a supply fix for rk3399-firefly
+and addition of the usb/sata combophys for rk3568.
+
+----------------------------------------------------------------
+Chris Morgan (2):
+      arm64: dts: rockchip: Remove vcc13 and vcc14 for rk808
+      arm64: dts: rockchip: Add #clock-cells value for rk805
+
+Rob Herring (1):
+      arm64: dts: rockchip: Fix SDIO regulator supply properties on rk3399-firefly
+
+Yifeng Zhao (1):
+      arm64: dts: rockchip: add naneng combo phy nodes for rk3568
+
+ arch/arm64/boot/dts/rockchip/rk3328-a1.dts         |  1 +
+ arch/arm64/boot/dts/rockchip/rk3399-firefly.dts    |  4 +-
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts      |  2 -
+ arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi    |  2 -
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 21 ++++++++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           | 47 ++++++++++++++++++++++
+ 6 files changed, 71 insertions(+), 6 deletions(-)
+
+
+
