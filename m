@@ -1,170 +1,154 @@
-Return-Path: <SRS0=EJTU=TW=canonical.com=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Xlam=TW=fw-web.de=linux@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 596DEC433F5
-	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 14:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94C20C433EF
+	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 21:04:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 17FBDC340E9; Fri, 11 Mar 2022 14:33:13 +0000 (UTC)
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	id 5F8DBC340EC; Fri, 11 Mar 2022 21:04:29 +0000 (UTC)
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D04ECC340ED
-	for <soc@kernel.org>; Fri, 11 Mar 2022 14:33:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D04ECC340ED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 99F843F799
-	for <soc@kernel.org>; Fri, 11 Mar 2022 14:33:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1647009188;
-	bh=OnW6EN46n7vaYBFSgg2vgSftb7Rx3mwGGTomxWm4iNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=jRWetIREIKNVrL4/o42mzVkqKP1aHpmS5Fyi4qT6dNPKHbe0ww+wK/sO4CqHAcZbh
-	 ysHr7B0IuQ1TB6nk3ecm23Hdrvm20n7uDxiJkKuNv+Fa/37D9ykn8SD/e8HHTw8bSf
-	 H7ZLYcuhmVQBgBXNE09RLg1fo4aC0xCL6iQLrGdcAeb+CC+RFKUit98cNHQJtJxUew
-	 OMxycZSJ/NwM+fZhtJ3tO2N2bRWJ84n0uaMjtpE5mM1kdwA5Jk3Rb/TAOVzvT68ynj
-	 ZUZDNWZV5zLLPxBfNoai+HKG6q9L8cR3s+qXVH6kr6g4jDTZPOsrON8u7hRSGPsHCD
-	 DbkPXcmx5TYzA==
-Received: by mail-wm1-f72.google.com with SMTP id 3-20020a05600c230300b00384e15ceae4so5566735wmo.7
-        for <soc@kernel.org>; Fri, 11 Mar 2022 06:33:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OnW6EN46n7vaYBFSgg2vgSftb7Rx3mwGGTomxWm4iNQ=;
-        b=6mB48pGn1OC7+OJAoFCcstLvISfA/aMCVfdDiYVe67BU9zahnE4YN/GbZu8H5WeU4O
-         FRFZHp3YRCJEY1Zqd7gTIk+fFONI9+GPkLZI6niboCTOdyug31eIMxMiWsk0EyWYRGZT
-         ttlqLK4DISpsCaI0MUvyx6mXC7o1EA/j7hBr3ZUyo2ubdbdhGMtvZd1puhNCT709Zxpx
-         nFxkmnhUbGonWCysEYanlyJnhzbIS+H6qMg3i7WzogSkTKzzcUjvZ++rOJEv09HJU7Zh
-         SsbpeVCaqvPtW8Z3cHhSHfU7cvxWZ38/KYGx1UsJGmH7QGWpdH8e2HYQY1k3jxBdBuw5
-         4fBg==
-X-Gm-Message-State: AOAM532nPoylSfVwO+o2DXyCw5DzV1jNCrxLAWRs4YeaPic+yTOAKoT/
-	WJCQEnyq2vVLsajo+X+6m1Jx01xtdm74lVVAE4TDzxDGe0O9P0XFmeJhKEqr3XANIpj8BXOZzhz
-	PBcptmRNyd4S+scn64wchcMw=
-X-Received: by 2002:a05:600c:34c4:b0:389:a4c3:c4b1 with SMTP id d4-20020a05600c34c400b00389a4c3c4b1mr7607592wmq.65.1647009188131;
-        Fri, 11 Mar 2022 06:33:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyFzx1SPSweAq4eva3FzBdIfwL59AEbdj699V43mjce3zliJKeU+w5FN7C7Zd5dBSf5kORNAg==
-X-Received: by 2002:a05:600c:34c4:b0:389:a4c3:c4b1 with SMTP id d4-20020a05600c34c400b00389a4c3c4b1mr7607573wmq.65.1647009187861;
-        Fri, 11 Mar 2022 06:33:07 -0800 (PST)
-Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id 10-20020adf808a000000b001edd413a952sm6726713wrl.95.2022.03.11.06.33.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 06:33:07 -0800 (PST)
-Message-ID: <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
-Date: Fri, 11 Mar 2022 15:33:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-Content-Language: en-US
-To: Vladimir Zapolskiy <vz@mleia.com>, Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 35136C340E9;
+	Fri, 11 Mar 2022 21:04:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35136C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+	by mxout2.routing.net (Postfix) with ESMTP id B06455FD39;
+	Fri, 11 Mar 2022 21:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1647032658;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dqoouwB8fBLOnpT8CCz+WpgKrPdobpaCbLTnMi6n0lU=;
+	b=iPcsVWFSj21ZM3iK3XmjYgxqSVjaj9ZH8UYoNzMLz40zFttSNLDigs1B4DbQrnU15I3Nbt
+	55djBEwWjJM6s1fFBehC8r5ghWNox79S2wetCsnmx4zNx+KLWgQO26pAjp0c7moO7bMPGh
+	juiPmVMDo9zhwpBsxZnQgaUBMeSaLvs=
+Received: from localhost.localdomain (fttx-pool-217.61.144.196.bambit.de [217.61.144.196])
+	by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 3A602402CA;
+	Fri, 11 Mar 2022 21:04:17 +0000 (UTC)
+From: Frank Wunderlich <linux@fw-web.de>
+To: devicetree@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>,
- Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
- Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
- <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
- <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
- <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
- <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Frank Wunderlich <frank-w@public-files.de>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@kernel.org,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Peter Geis <pgwipeout@gmail.com>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-ide@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: [PATCH v6 0/6] Add sata nodes to rk356x
+Date: Fri, 11 Mar 2022 22:03:51 +0100
+Message-Id: <20220311210357.222830-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: c2271224-4634-4d57-8dd2-2e15f21c9f88
 
-On 11/03/2022 15:07, Vladimir Zapolskiy wrote:
-> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
->> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
->>>
->>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
->>>> PL022 binding require two clocks to be defined but lpc platform doesn't
->>>> comply with bindings and define only one clock i.e apb_pclk.
->>>>
->>>> Update spi clocks and clocks-names property by adding appropriate clock
->>>> reference to make it compliant with bindings.
->>>>
->>>> CC: Vladimir Zapolskiy <vz@mleia.com>
->>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
->>>> ---
->>>> v2:
->>>> - New patch with similar changeset
->>>> - Send to soc ML
->>>>
->>>>    arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
->>>>    1 file changed, 4 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
->>>> index c87066d6c995..30958e02d5e2 100644
->>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
->>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
->>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
->>>>                                compatible = "arm,pl022", "arm,primecell";
->>>>                                reg = <0x20084000 0x1000>;
->>>>                                interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
->>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
->>>> -                             clock-names = "apb_pclk";
->>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
->>>> +                             clock-names = "sspclk", "apb_pclk";
->>>
->>> In fact I'm uncertain if it is the right change, could it happen that the commit
->>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
->>> schema pattern?
->>
->> Good pointm this doesn't quite seem right: it is unlikely that the same clock
->> is used for both the SPI bus and the APB bus.
->>
->>> Apparently just one clock is wanted on all observed platforms and cases, this
->>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
->>>
->>>          pl022->clk = devm_clk_get(&adev->dev, NULL);
->>>
->>> So, I would vote to fix the device tree bindings schema.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Drivers do not describe the hardware. Bindings should not be modeled on
-drivers, but on actual hardware, so the example is not convincing.
+This Series converts the binding for ahci-platform to yaml and adds
+sata nodes to rockchip rk356x device trees.
 
->>
->> Isn't this just using the wrong name? The name of the macro
->> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
->> rather than the APB clock, so we only need to change clock-names
->> property here and leave it unchanged otherwise.
-> 
-> Yes, the name is wrong, here I'm ready to take the blame:
-> 
-> Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device nodes")
-> 
-> Noteworthy the commit above presets the same clock name to other PrimeCell
-> controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x (SD),
-> plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in fact.
-> 
-> On LPC32xx the bus clock source and function clock source for SSP is HCLK.
-> 
-> My guess is that the misnamed "apb_pclk" migrated into the schema from
-> the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
-> firstly fix the schema by removing "apb_pclk" clock. It will leave just one
-> clock, so "clock-names" property can be set as optional, and the drop
-> the property from the lpc32xx.dtsi.
-> 
->> Looking at the driver, I also see that this refers to the clock as
->> "SSP/SPI bus clock", and it reads the rate from that.
-> 
-> Yes, that's correct, it's a SPI bus clock with an option to set a rate.
+---
 
-It seems versioning of this patchset lacks proper references to previous
-discussions:
-https://lore.kernel.org/linux-devicetree/Yip2MZdQNjMz%2FCos@robh.at.kernel.org/
+v6:
+  - add fix for spear1340
+  - fix indentation of examples
+  - add compatible marvell,berlin2-ahci
+  - change maximum of ports-implemented
+  - add select to exclude qcom compatibles
+  - drop marvell,armada-380-ahci
+    it is not handled in the ahci-platform.c but ahci_mvebu.c
+    and incompatible due to missing phys/target-supply
 
+v5:
+  DTS:
+  - drop broadcom-patch as it is already applied
+  - add fix for marvell
+  YAML:
+  - change subject
+  - drop brcm,iproc-ahci from standalone enum
+  - fix reg address in example 2
+  - move clocknames next to clocks, regnames to reg
+  - drop interrupts description
+  - drop newline from dma-coherent
+  - drop max-items from ports-implemented
+  - min2max in child phys
+  - fix identation for compatible and sata-common
+  - add additionalProperties=false for subnodes
+  - pipe for paragraphs and newline after title
+  - add maximum for ports-implemented (found only 0x1 as its value)
+  - add phy-names to sata-ports
+v4:
+  YAML binding:
+  - fix min vs. max
+  - fix indention of examples
+  - move up sata-common.yaml
+  - reorder compatible
+  - add descriptions/maxitems
+  - fix compatible-structure
+  - fix typo in example achi vs. ahci
+  - add clock-names and reg-names
+  DTS-Patches:
+  - drop newline in dts
+  - re-add clock-names
+  - add soc specific compatible
+  - fix sata nodename in arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
+v3:
+  - add conversion to sata-series
+  - fix some errors in dt_binding_check and dtbs_check
+  - move to unevaluated properties = false
+  - add power-domain to yaml
+  - move sata0 to rk3568.dtsi
+  - drop clock-names and interrupt-names
 
-Best regards,
-Krzysztof
+Frank Wunderlich (6):
+  dt-bindings: ata: ahci-platform: Convert DT bindings to yaml
+  arm64: dts: marvell: Fix anyOf conditional failed
+  ARM: dts: spear13xx: Fix sata node name
+  dt-bindings: ata: ahci-platform: Add power-domains property
+  dt-bindings: ata: ahci-platform: Add rk3568-dwc-ahci compatible
+  arm64: dts: rockchip: Add sata nodes to rk356x
+
+ .../devicetree/bindings/ata/ahci-platform.txt |  79 --------
+ .../bindings/ata/ahci-platform.yaml           | 189 ++++++++++++++++++
+ arch/arm/boot/dts/spear1310.dtsi              |   6 +-
+ arch/arm/boot/dts/spear1340-evb.dts           |   2 +-
+ arch/arm/boot/dts/spear1340.dtsi              |   2 +-
+ .../arm64/boot/dts/marvell/armada-7040-db.dts |   1 +
+ .../boot/dts/marvell/armada-7040-mochabin.dts |   2 +
+ .../marvell/armada-8040-clearfog-gt-8k.dts    |   1 +
+ .../arm64/boot/dts/marvell/armada-8040-db.dts |   2 +
+ .../boot/dts/marvell/armada-8040-mcbin.dtsi   |   1 +
+ .../dts/marvell/armada-8040-puzzle-m801.dts   |   2 +
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi |   2 +
+ arch/arm64/boot/dts/marvell/cn9130-crb-B.dts  |   1 +
+ arch/arm64/boot/dts/marvell/cn9131-db.dtsi    |   1 +
+ arch/arm64/boot/dts/marvell/cn9132-db.dtsi    |   1 +
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  14 ++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  28 +++
+ 17 files changed, 250 insertions(+), 84 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/ata/ahci-platform.txt
+ create mode 100644 Documentation/devicetree/bindings/ata/ahci-platform.yaml
+
+-- 
+2.25.1
+
