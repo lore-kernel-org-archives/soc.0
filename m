@@ -4,97 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D33EBC433F5
-	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 09:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C207AC433FE
+	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 09:38:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A11B6C340E9; Fri, 11 Mar 2022 09:38:06 +0000 (UTC)
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	id AC71FC340EC; Fri, 11 Mar 2022 09:38:10 +0000 (UTC)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0E7C3C340EC;
-	Fri, 11 Mar 2022 09:38:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0E7C3C340EC
+	by smtp.kernel.org (Postfix) with ESMTPS id 113DEC340E9;
+	Fri, 11 Mar 2022 09:38:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 113DEC340E9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 6so7067537pgg.0;
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
+Received: by mail-pj1-f44.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso8436341pjc.0;
+        Fri, 11 Mar 2022 01:38:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4UdACirxY0xsWd1veLmX7WNmlz8Y4QUFgsG8QaePNhI=;
-        b=agrL8Vmm1KeqiI6nEnTVDa1ZDOK8ULV8iyMijEcu7zlaHK/lViw8aOiuYCHluRe3Qi
-         oI2maBBIeOnqNHMah24Rs+m8zgWKzTMpYvDbNT30bnfLtUj8FirJYsb4Odg1qG6Pox7K
-         HITnTQoW3KUSvStsl7JahidRqX8hYxPZ2DdoiPtxSAQMtWbPJ3wxFPLjfzLDA/naZp2B
-         U+NT8mxtT8Cn0PyuSyh7R+PoimjJHsvqsQv+gGcBk2rZL99FfWbB+HhTDtH0Wl8ocVB3
-         n2I9viEraC7mJBkzRsFBEQ0rsBriRXbD406YQvHY/rOc53ejhYsjL7V2p99pkn8/Ghvz
-         jenw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+sti7R5r7TlUzIhwq2afJWAsp4Iedj4R4baq+ryUh2g=;
+        b=UPsLXqoS5RBH3+XHcocj3dT6VT/oGbCNu4zvXSVjMWOQiIW4Zv17pEQjwbEJSmuHKq
+         nwt/rKa9jWswtdLbCpD7380vcsbGTynIJOI+EJOU1h24OKwK9TOjMpg9t2KCq89gkedX
+         rrzz28GkgRUXbJ8yI9rda/V2EE7WzDjn74gJiwec3XUzXqWu84Tv355++8yxsjlK8OCr
+         slB+drV0Yvrnt1rRSJOGrEFj/+gHKsH53kXryJxw9tB1AIbdUcpyjUv0Z9hkhy0DOKEd
+         5pv8Y9K17lZ4i1+xAmlhZruknJN1k+vaMTTA0LNYp6VuZm+Ut3GT05DuXjkEdPPJjUZu
+         sMbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4UdACirxY0xsWd1veLmX7WNmlz8Y4QUFgsG8QaePNhI=;
-        b=1O3GezS84bO/6Wqvg3D57ZNriK/Ij93/0W2ZVZEnd9bc1gZeHJY29sxaoFTBg8X5pZ
-         XYU0UrW8ptvW9lhQdsD2skQrU1SQUn1c6DMMC2pDIiZ0/KHtrsxgEpmlf/2FxLRHqu7i
-         titlgycJEV3/XjiHBcnILBGuYcDPntw54A5PCBdy880XJtpK9Ng0mi73szxHrfaPt3Fe
-         1kLzYvb8n0a9oF3Lsq2PtVR+L+MZP+mlhTqVX4PG/e6FpiNMYFby4sqFcKKEEu9HmIwv
-         VWJm3Zi/VDHAxsgJCGKVfCMLuQDubzTfvNY69brOHyJ/F/Xw/DlDe5JF1Jor1GxxV72Y
-         vC1g==
-X-Gm-Message-State: AOAM530NJIUvAVLqe+/H6JdWRKgHqmOX+OKAgTVEQbkrPcWUvk2n/JAf
-	sUG2aKQLokj9FR5mDAnE9w0=
-X-Google-Smtp-Source: ABdhPJwi+/lQ+Rkkt9up1U51/sxroO3UN6n1mL7YQhZ1PnzaQEQ/lsj9lpDBsMDW6DVKszVkq0Sl+A==
-X-Received: by 2002:a63:d758:0:b0:380:fba9:f6e5 with SMTP id w24-20020a63d758000000b00380fba9f6e5mr4125220pgi.330.1646991485433;
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+sti7R5r7TlUzIhwq2afJWAsp4Iedj4R4baq+ryUh2g=;
+        b=WW74RCCyfYpzcpYGmP5UmPFbqjMUAI6V9ebuLN46Uvt0iOKsLZ/4embyx4pd/aEJM9
+         0joa4BYP5tuiT+1K/nHsEzIKEqK43yQ8SG82F+erEXUlaMeAkjN8oxlUO7n6igomT5B4
+         Q/+9OYJi0UFJfWq5Kn7PxCkFRnd3e2D7wZH97lT3Wufu81UJMfu55xd+IWd7oNYLyTvP
+         sud2f2XenGx3k8MXQeXDEf8Du1zmPEvYaqq9lgvT4HCSA8hqYEHpqRtjakpIjqUZ1EGa
+         APdBoBKCtdVWj4DJ9r0N4RAXsH7q8Fd9cVoi8Hz8TfZU1QAEs63EutPTtrhitDEb0H0m
+         NWsA==
+X-Gm-Message-State: AOAM533BV4/kGoDdru+HOFsEeIUfr3ZqNCbTG8ikVvptiljcJxECy1mD
+	kEm/jQB4R7NNABRjEdlYd8o=
+X-Google-Smtp-Source: ABdhPJzYRJlhVYjsiUbgyuUOuHb8yYvjyX5Y3NPJ7anc1+dPGbWZPcJPM2mEEqB5bo8jjieTu90yqg==
+X-Received: by 2002:a17:90b:1c86:b0:1bf:2a7e:5c75 with SMTP id oo6-20020a17090b1c8600b001bf2a7e5c75mr9954721pjb.145.1646991489547;
+        Fri, 11 Mar 2022 01:38:09 -0800 (PST)
 Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm9011011pfk.26.2022.03.11.01.38.02
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm9011011pfk.26.2022.03.11.01.38.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 01:38:05 -0800 (PST)
+        Fri, 11 Mar 2022 01:38:09 -0800 (PST)
 From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org
+	soc@kernel.org,
+	Brijesh Singh <brijeshkumar.singh@amd.com>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Rob Herring <robh+dt@kernel.org>
 Cc: devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 0/3] PL022 DT fixes for seattle, lg and lpc platform
-Date: Fri, 11 Mar 2022 15:07:57 +0530
-Message-Id: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 1/3] arm64: dts: seattle: Update spi clock properties
+Date: Fri, 11 Mar 2022 15:07:58 +0530
+Message-Id: <20220311093800.18778-2-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset is an attempt to fix DTs which are not compliant with
-pl022 spi binding. Please note, there are other fixes required also
-which are sent from other trees.
-As git trees for these platforms are not available, Rob advised me to
-seek help from soc tree maintainers.
+PL022 binding require two clocks to be defined but AMD seattle platform
+does't comply with binding and define only one clock i.e apb_pclk.
 
-Arnd and Olof, could you please help in reviewing and merging this
-patchset.
+Update spi clocks and clocks-names property by adding appropriate clock
+reference to make it compliant with bindings.
 
-These patches are base on
-git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git, arm/dt
+CC: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+v2:
+- Resend to soc ML
+- Add Rob's acked-by tag
 
-Link to v1 below:
-https://lore.kernel.org/linux-devicetree/20220311025932.GD54098@9a2d8922b8f1/T/#m734e470b3be87b7591b3e6d618e4c777f8e61981
-
-Patch1: Fix spi clock for amd seattle platform
-Patch2: Fix spi clock for lg platforms
-Patch3: Fix spi clock for lpc platform
-
-Kuldeep Singh (3):
-  arm64: dts: seattle: Update spi clock properties
-  arm64: dts: lg131x: Update spi clock properties
-  ARM: dts: lpc32xx: Update spi clock properties
-
- arch/arm/boot/dts/lpc32xx.dtsi               | 8 ++++----
  arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi | 8 ++++----
- arch/arm64/boot/dts/lg/lg1312.dtsi           | 8 ++++----
- arch/arm64/boot/dts/lg/lg1313.dtsi           | 8 ++++----
- 4 files changed, 16 insertions(+), 16 deletions(-)
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi b/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
+index b664e7af74eb..2aa21d98d560 100644
+--- a/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
++++ b/arch/arm64/boot/dts/amd/amd-seattle-soc.dtsi
+@@ -113,8 +113,8 @@ spi0: spi@e1020000 {
+ 			reg = <0 0xe1020000 0 0x1000>;
+ 			spi-controller;
+ 			interrupts = <0 330 4>;
+-			clocks = <&uartspiclk_100mhz>;
+-			clock-names = "apb_pclk";
++			clocks = <&uartspiclk_100mhz>, <&uartspiclk_100mhz>;
++			clock-names = "sspclk", "apb_pclk";
+ 		};
+ 
+ 		spi1: spi@e1030000 {
+@@ -123,8 +123,8 @@ spi1: spi@e1030000 {
+ 			reg = <0 0xe1030000 0 0x1000>;
+ 			spi-controller;
+ 			interrupts = <0 329 4>;
+-			clocks = <&uartspiclk_100mhz>;
+-			clock-names = "apb_pclk";
++			clocks = <&uartspiclk_100mhz>, <&uartspiclk_100mhz>;
++			clock-names = "sspclk", "apb_pclk";
+ 			num-cs = <1>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
 -- 
 2.25.1
 
