@@ -1,70 +1,128 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=pF13=TW=mleia.com=vz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFF5BC433EF
-	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 10:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45848C433F5
+	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 13:20:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C8868C340EE; Fri, 11 Mar 2022 10:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A7304C340EC;
-	Fri, 11 Mar 2022 10:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1646995810;
-	bh=+gy9SqhvapU7GQ8Wmua8LahM+Dx5nK0vQvFjrdZ3Uog=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=iVLgE083RpjIzykq/31lb178UzWSSgZHTh4lGo1kvkZ2dPh1E5pACeSrKwGRe439r
-	 CgWHxlaXbyG5bipNjwEWAhfgaN0iFkQ9wZbVgvKXDYVTQFWIcKgaMMD0e9bTD0wsNJ
-	 3+7r8o29s786nnSMC/zOQ/HmasaGoDQsI0jrbMO3Y+dszS0GEInLsLvKLtjU89x0Wv
-	 +PtY79Itrrm2WafpfzScmlZO0TcSMnep8Tcutpv1y9L/jZhpBVIyZMsbQRbnIiToN5
-	 0x0NzX8IGkMrD/zhrGXeGf7LaIKwx3o2sKmGAiya8FRbfTh5SL3rVks9DFDicFpLXW
-	 5zuqIOGvz4gcw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F6CEE6D3DD;
-	Fri, 11 Mar 2022 10:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/3] PL022 DT fixes for seattle, lg and lpc platform
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <164699581051.25725.6706762400815957104.git-patchwork-notify@kernel.org>
-Date: Fri, 11 Mar 2022 10:50:10 +0000
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
-In-Reply-To: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
-To: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+	id 10394C340EE; Fri, 11 Mar 2022 13:20:53 +0000 (UTC)
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 57E2EC340E9;
+	Fri, 11 Mar 2022 13:20:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57E2EC340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1647004842; bh=J7/vKcyix+nji45hqGrcjszxF1kSDnocg442Y//BGKo=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=tOhHJisO0eoVBxXAyJJVaphOYMMSeBqvEeikezoAsTuQxuXP/DrQ/jRcRmrk3F1v5
+	 S0PPiGSE7VOj6V778ZCTCqxgsFWcb6Dfp14kJOZsRDKIYe/8SP5vnlUXNPc6QY3Fip
+	 cCSpCjcyhDXrCINmTirV/w3AyWfvAe1U2kSm13yo2S3m2XlTc2A0fSCK76NffTgmyR
+	 F1n1tMZnOzuY5SHDKuFymCG9lCh06Z+NmDuY/NjoSiwW2KTZDQhU8fo7MoNfMwba33
+	 zx76vIdgTDlmZ+c/BYTDigElSyh3SZud/P5+zbnxDMZpkzwjOnHfw4W+XWzZgPDTwc
+	 WeM/PBJLVyPmA==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+	by mail.mleia.com (Postfix) with ESMTP id 138F439E948;
+	Fri, 11 Mar 2022 13:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1647004842; bh=J7/vKcyix+nji45hqGrcjszxF1kSDnocg442Y//BGKo=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=tOhHJisO0eoVBxXAyJJVaphOYMMSeBqvEeikezoAsTuQxuXP/DrQ/jRcRmrk3F1v5
+	 S0PPiGSE7VOj6V778ZCTCqxgsFWcb6Dfp14kJOZsRDKIYe/8SP5vnlUXNPc6QY3Fip
+	 cCSpCjcyhDXrCINmTirV/w3AyWfvAe1U2kSm13yo2S3m2XlTc2A0fSCK76NffTgmyR
+	 F1n1tMZnOzuY5SHDKuFymCG9lCh06Z+NmDuY/NjoSiwW2KTZDQhU8fo7MoNfMwba33
+	 zx76vIdgTDlmZ+c/BYTDigElSyh3SZud/P5+zbnxDMZpkzwjOnHfw4W+XWzZgPDTwc
+	 WeM/PBJLVyPmA==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by mail.mleia.com (Postfix) with ESMTPSA id AA1DF39E937;
+	Fri, 11 Mar 2022 13:20:41 +0000 (UTC)
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Kuldeep Singh <singh.kuldeep87k@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+From: Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+Date: Fri, 11 Mar 2022 15:20:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220311_132042_108857_54C47694 
+X-CRM114-Status: GOOD (  20.88  )
 
-Hello:
-
-This series was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Fri, 11 Mar 2022 15:07:57 +0530 you wrote:
-> This patchset is an attempt to fix DTs which are not compliant with
-> pl022 spi binding. Please note, there are other fixes required also
-> which are sent from other trees.
-> As git trees for these platforms are not available, Rob advised me to
-> seek help from soc tree maintainers.
+On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+> PL022 binding require two clocks to be defined but lpc platform doesn't
+> comply with bindings and define only one clock i.e apb_pclk.
 > 
-> Arnd and Olof, could you please help in reviewing and merging this
-> patchset.
+> Update spi clocks and clocks-names property by adding appropriate clock
+> reference to make it compliant with bindings.
 > 
-> [...]
+> CC: Vladimir Zapolskiy <vz@mleia.com>
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+> v2:
+> - New patch with similar changeset
+> - Send to soc ML
+> 
+>   arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+> index c87066d6c995..30958e02d5e2 100644
+> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>   				compatible = "arm,pl022", "arm,primecell";
+>   				reg = <0x20084000 0x1000>;
+>   				interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk LPC32XX_CLK_SSP0>;
+> -				clock-names = "apb_pclk";
+> +				clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+> +				clock-names = "sspclk", "apb_pclk";
 
-Here is the summary with links:
-  - [v2,1/3] arm64: dts: seattle: Update spi clock properties
-    https://git.kernel.org/soc/soc/c/2201faa9fd72
-  - [v2,2/3] arm64: dts: lg131x: Update spi clock properties
-    https://git.kernel.org/soc/soc/c/19297aab805a
-  - [v2,3/3] ARM: dts: lpc32xx: Update spi clock properties
-    https://git.kernel.org/soc/soc/c/dc89633b8a1c
+In fact I'm uncertain if it is the right change, could it happen that the commit
+cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+schema pattern?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Apparently just one clock is wanted on all observed platforms and cases, this
+is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
 
+	pl022->clk = devm_clk_get(&adev->dev, NULL);
 
+So, I would vote to fix the device tree bindings schema.
+
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+>   				status = "disabled";
+> @@ -202,8 +202,8 @@ ssp1: spi@2008c000 {
+>   				compatible = "arm,pl022", "arm,primecell";
+>   				reg = <0x2008c000 0x1000>;
+>   				interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk LPC32XX_CLK_SSP1>;
+> -				clock-names = "apb_pclk";
+> +				clocks = <&clk LPC32XX_CLK_SSP1>, <&clk LPC32XX_CLK_SSP1>;
+> +				clock-names = "sspclk", "apb_pclk";
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+>   				status = "disabled";
+> 
+
+--
+Best wishes,
+Vladimir
