@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50E01C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9D0BC433EF
 	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 21:04:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 18F0EC340E9; Fri, 11 Mar 2022 21:04:37 +0000 (UTC)
-Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
+	id 92FE5C340EC; Fri, 11 Mar 2022 21:04:37 +0000 (UTC)
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4A533C340EC;
-	Fri, 11 Mar 2022 21:04:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A533C340EC
+	by smtp.kernel.org (Postfix) with ESMTPS id 361D8C340F4;
+	Fri, 11 Mar 2022 21:04:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 361D8C340F4
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fw-web.de
 Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-	by mxout4.routing.net (Postfix) with ESMTP id C8E3C10094E;
-	Fri, 11 Mar 2022 21:04:24 +0000 (UTC)
+	by mxout2.routing.net (Postfix) with ESMTP id CE2F7603D3;
+	Fri, 11 Mar 2022 21:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
 	s=20200217; t=1647032665;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xzUpAU2rIj4MneApxcGOMZkO1oQVZIG7wDHq0O5jdws=;
-	b=ZZb0pptTkqL/70UKGUTNRJHridSGTKhiZir/Aeqv7psFkZ8D30xO2Sj0P+n6uHVE7y3EE7
-	+Vna7IZjIQrbOnFmY9BLo8IoHbO+uO1dFlo63gkal+xXZdtM+QGI9N6evNyRmdolqhHPTd
-	/HXu8+QO0VhYzOjDYEHGzeYHA3nVb2I=
+	bh=0UipeGN/lk/TzTLQBE8U+msplr/bYO1V5yFkflbotwM=;
+	b=cvqjTokRRKZjXjx9aF/ckduIIPg7J2HlPa+bWDbk6KsHO95HS/EbRhAv4pe2oEjR5jLFRZ
+	7QAy0G8uPWIJK87IatoyfsRLMrTN98cLG5z/yRCsnYtl06tLTE+nFusrYQhYAVoBrJgZMe
+	WIZbG00PJch45aPzwzZBz0YICkITdyw=
 Received: from localhost.localdomain (fttx-pool-217.61.144.196.bambit.de [217.61.144.196])
-	by mxbox1.masterlogin.de (Postfix) with ESMTPSA id B4DBD402CA;
-	Fri, 11 Mar 2022 21:04:23 +0000 (UTC)
+	by mxbox1.masterlogin.de (Postfix) with ESMTPSA id B54BA40684;
+	Fri, 11 Mar 2022 21:04:24 +0000 (UTC)
 From: Frank Wunderlich <linux@fw-web.de>
 To: devicetree@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
@@ -55,45 +55,44 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org
-Subject: [PATCH v6 4/6] dt-bindings: ata: ahci-platform: Add power-domains property
-Date: Fri, 11 Mar 2022 22:03:55 +0100
-Message-Id: <20220311210357.222830-5-linux@fw-web.de>
+Subject: [PATCH v6 5/6] dt-bindings: ata: ahci-platform: Add rk3568-dwc-ahci compatible
+Date: Fri, 11 Mar 2022 22:03:56 +0100
+Message-Id: <20220311210357.222830-6-linux@fw-web.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220311210357.222830-1-linux@fw-web.de>
 References: <20220311210357.222830-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 6845e91d-5aad-440f-94ee-4fd891871427
+X-Mail-ID: c6cb62a7-76d4-402f-8b87-826c4e7c4312
 
 From: Frank Wunderlich <frank-w@public-files.de>
 
-Some SoC using power-domains property so add it here
+Add SoC specific compatible for rk3568 ahci controller
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
-changes in v5: added reviewed by
-changes in v4: none
-changes in v3:
-  - new patch
+v6:
+  change subject to dwc instead of dwc3
 ---
- Documentation/devicetree/bindings/ata/ahci-platform.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/ata/ahci-platform.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-index e71bfb04d7f1..a02f6d12773e 100644
+index a02f6d12773e..c146ab8e14e5 100644
 --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
 +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-@@ -108,6 +108,9 @@ properties:
-       some embedded SoCs.
-     maximum: 0x1f
- 
-+  power-domains:
-+    maxItems: 1
-+
-   resets:
-     maxItems: 1
- 
+@@ -49,6 +49,10 @@ properties:
+               - marvell,berlin2-ahci
+               - marvell,berlin2q-ahci
+           - const: generic-ahci
++      - items:
++          - enum:
++              - rockchip,rk3568-dwc-ahci
++          - const: snps,dwc-ahci
+       - enum:
+           - cavium,octeon-7130-ahci
+           - hisilicon,hisi-ahci
 -- 
 2.25.1
 
