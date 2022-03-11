@@ -1,155 +1,133 @@
-Return-Path: <SRS0=Xlam=TW=fw-web.de=linux@kernel.org>
+Return-Path: <SRS0=pF13=TW=mleia.com=vz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3103EC4332F
-	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 21:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23C66C433F5
+	for <soc@archiver.kernel.org>; Fri, 11 Mar 2022 21:26:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 18F76C340F4; Fri, 11 Mar 2022 21:04:38 +0000 (UTC)
-Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
+	id F3739C340E9; Fri, 11 Mar 2022 21:26:44 +0000 (UTC)
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C4496C340F5;
-	Fri, 11 Mar 2022 21:04:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4496C340F5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-	by mxout4.routing.net (Postfix) with ESMTP id DC59D10095D;
-	Fri, 11 Mar 2022 21:04:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1647032666;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oeojDkbixb+3+AqcShTPnuHWz+1GrcPznWJUJt5Sy3k=;
-	b=bzTczSWREjQ3mxzMkT9keqmraAkrZQjXA4WiTGUgMPD4ZBFvK5zojoN1UDx6r6AExcHCwN
-	Zujff9r9blSITJPcBNswR61/U/rzPlBk4bRJjkd8Hx+1EALJMBIsDSSOh784u0Ao51HaE6
-	6K80JUJzQ7LuSRHsHjaYGmOISQJCoHI=
-Received: from localhost.localdomain (fttx-pool-217.61.144.196.bambit.de [217.61.144.196])
-	by mxbox1.masterlogin.de (Postfix) with ESMTPSA id BB1EC402CA;
-	Fri, 11 Mar 2022 21:04:25 +0000 (UTC)
-From: Frank Wunderlich <linux@fw-web.de>
-To: devicetree@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 6A750C340EC;
+	Fri, 11 Mar 2022 21:26:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6A750C340EC
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1647034001; bh=7WkCBki01o3cgWpYVtHrHq4muPjNKx9mmNTlevvNUDM=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=Xi29xZzNV8VdAfnPq3bwoIDchffnvxI7Czcpvx1uMa9qcPtCItKCDtsGHx3aq4z2v
+	 NjyewKqy/TT9vzHd1E/bpvL1vkOHnzUqLImJLNKi/u4FepwOyHd2rcQIiAokmb9mwN
+	 AE7ayxffj0ZOieR0TVmuPLnjZqgR3YxJTy56HLlknEv2/dA+qUO9JtmBVegc/89y9O
+	 FTVOYDQdy20xjiXNo+m/aZsJI40OZD5fDyKMeomqh/gxU2UUGjybB54TnhqxKPz1Po
+	 SQ/4OfXnHNrB0mqydQcS0Z48Amg7kSqN4ExVAseV8RCYFK6nF3D7ixUaz7V62Qwe+A
+	 1B/WNWgTNx+Zg==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+	by mail.mleia.com (Postfix) with ESMTP id 5B80E39EB7A;
+	Fri, 11 Mar 2022 21:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1647034001; bh=7WkCBki01o3cgWpYVtHrHq4muPjNKx9mmNTlevvNUDM=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+	b=Xi29xZzNV8VdAfnPq3bwoIDchffnvxI7Czcpvx1uMa9qcPtCItKCDtsGHx3aq4z2v
+	 NjyewKqy/TT9vzHd1E/bpvL1vkOHnzUqLImJLNKi/u4FepwOyHd2rcQIiAokmb9mwN
+	 AE7ayxffj0ZOieR0TVmuPLnjZqgR3YxJTy56HLlknEv2/dA+qUO9JtmBVegc/89y9O
+	 FTVOYDQdy20xjiXNo+m/aZsJI40OZD5fDyKMeomqh/gxU2UUGjybB54TnhqxKPz1Po
+	 SQ/4OfXnHNrB0mqydQcS0Z48Amg7kSqN4ExVAseV8RCYFK6nF3D7ixUaz7V62Qwe+A
+	 1B/WNWgTNx+Zg==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.mleia.com (Postfix) with ESMTPSA id E338D39EB79;
+	Fri, 11 Mar 2022 21:26:40 +0000 (UTC)
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+ Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Frank Wunderlich <frank-w@public-files.de>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	soc@kernel.org,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Peter Geis <pgwipeout@gmail.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	linux-ide@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: [PATCH v6 6/6] arm64: dts: rockchip: Add sata nodes to rk356x
-Date: Fri, 11 Mar 2022 22:03:57 +0100
-Message-Id: <20220311210357.222830-7-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220311210357.222830-1-linux@fw-web.de>
-References: <20220311210357.222830-1-linux@fw-web.de>
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+ Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+ <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
+From: Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <9f4e3cdc-f5e2-7102-949e-7b3032118e63@mleia.com>
+Date: Fri, 11 Mar 2022 23:26:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: ccc3f7ef-33a7-48f7-8154-2ff8acbe060a
+In-Reply-To: <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220311_212641_399648_0507643B 
+X-CRM114-Status: GOOD (  20.91  )
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On 3/11/22 4:33 PM, Krzysztof Kozlowski wrote:
+> On 11/03/2022 15:07, Vladimir Zapolskiy wrote:
+>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>>>>
+>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>>>> PL022 binding require two clocks to be defined but lpc platform doesn't
+>>>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>>>
+>>>>> Update spi clocks and clocks-names property by adding appropriate clock
+>>>>> reference to make it compliant with bindings.
+>>>>>
+>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>>>> ---
+>>>>> v2:
+>>>>> - New patch with similar changeset
+>>>>> - Send to soc ML
+>>>>>
+>>>>>     arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>> index c87066d6c995..30958e02d5e2 100644
+>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>>>                                 compatible = "arm,pl022", "arm,primecell";
+>>>>>                                 reg = <0x20084000 0x1000>;
+>>>>>                                 interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>>>> -                             clock-names = "apb_pclk";
+>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+>>>>> +                             clock-names = "sspclk", "apb_pclk";
+>>>>
+>>>> In fact I'm uncertain if it is the right change, could it happen that the commit
+>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+>>>> schema pattern?
+>>>
+>>> Good pointm this doesn't quite seem right: it is unlikely that the same clock
+>>> is used for both the SPI bus and the APB bus.
+>>>
+>>>> Apparently just one clock is wanted on all observed platforms and cases, this
+>>>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
+>>>>
+>>>>           pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>>>
+>>>> So, I would vote to fix the device tree bindings schema.
+> 
+> Drivers do not describe the hardware. Bindings should not be modeled on
+> drivers, but on actual hardware, so the example is not convincing.
 
-RK356x supports up to 3 sata controllers which were compatible with the
-existing snps,dwc-ahci binding.
+My concern is that fixing the bindings can break the driver and all its users,
+is it clear enough how it can happen in assumption that the driver uses just
+one clock at the moment?
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
-changes in v4:
- - drop newline in dts
- - re-add clock-names
- -  add soc specific compatible
-changes in v3:
-  - fix combphy error by moving sata0 to rk3568.dtsi
-  - remove clock-names and interrupt-names
-changes in v2:
-  - added sata0 + 1, but have only tested sata2
----
- arch/arm64/boot/dts/rockchip/rk3568.dtsi | 14 ++++++++++++
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 28 ++++++++++++++++++++++++
- 2 files changed, 42 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-index 5b0f528d6818..3e07d9f6a2d1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-@@ -8,6 +8,20 @@
- / {
- 	compatible = "rockchip,rk3568";
- 
-+	sata0: sata@fc000000 {
-+		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-+		reg = <0 0xfc000000 0 0x1000>;
-+		clocks = <&cru ACLK_SATA0>, <&cru CLK_SATA0_PMALIVE>,
-+			 <&cru CLK_SATA0_RXOOB>;
-+		clock-names = "sata", "pmalive", "rxoob";
-+		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-+		phys = <&combphy0 PHY_TYPE_SATA>;
-+		phy-names = "sata-phy";
-+		ports-implemented = <0x1>;
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		status = "disabled";
-+	};
-+
- 	pipe_phy_grf0: syscon@fdc70000 {
- 		compatible = "rockchip,rk3568-pipe-phy-grf", "syscon";
- 		reg = <0x0 0xfdc70000 0x0 0x1000>;
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 7cdef800cb3c..264dd030e703 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -230,6 +230,34 @@ scmi_shmem: sram@0 {
- 		};
- 	};
- 
-+	sata1: sata@fc400000 {
-+		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-+		reg = <0 0xfc400000 0 0x1000>;
-+		clocks = <&cru ACLK_SATA1>, <&cru CLK_SATA1_PMALIVE>,
-+			 <&cru CLK_SATA1_RXOOB>;
-+		clock-names = "sata", "pmalive", "rxoob";
-+		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
-+		phys = <&combphy1 PHY_TYPE_SATA>;
-+		phy-names = "sata-phy";
-+		ports-implemented = <0x1>;
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		status = "disabled";
-+	};
-+
-+	sata2: sata@fc800000 {
-+		compatible = "rockchip,rk3568-dwc-ahci", "snps,dwc-ahci";
-+		reg = <0 0xfc800000 0 0x1000>;
-+		clocks = <&cru ACLK_SATA2>, <&cru CLK_SATA2_PMALIVE>,
-+			 <&cru CLK_SATA2_RXOOB>;
-+		clock-names = "sata", "pmalive", "rxoob";
-+		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-+		phys = <&combphy2 PHY_TYPE_SATA>;
-+		phy-names = "sata-phy";
-+		ports-implemented = <0x1>;
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		status = "disabled";
-+	};
-+
- 	gic: interrupt-controller@fd400000 {
- 		compatible = "arm,gic-v3";
- 		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
--- 
-2.25.1
-
+--
+Best wishes,
+Vladimir
