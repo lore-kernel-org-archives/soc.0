@@ -1,152 +1,88 @@
-Return-Path: <SRS0=tzw6=TX=mleia.com=vz@kernel.org>
+Return-Path: <SRS0=pvkH=TX=gmail.com=singh.kuldeep87k@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD1EC433EF
-	for <soc@archiver.kernel.org>; Sat, 12 Mar 2022 12:26:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F6D3C433EF
+	for <soc@archiver.kernel.org>; Sat, 12 Mar 2022 18:06:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 921D5C340EE; Sat, 12 Mar 2022 12:26:28 +0000 (UTC)
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 615E6C340EE; Sat, 12 Mar 2022 18:06:22 +0000 (UTC)
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5A356C340EB;
-	Sat, 12 Mar 2022 12:26:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A356C340EB
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1647087985; bh=g13EmdZxu+uLRpV+kyaRzAukTxiJf6X3eNAGmWIHgAo=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=CPnErHe4YEwRBekyBp89em3A6FstmaMFoVzhG4gIDx0dr/UrgvKNIejKbv36zEXT+
-	 4s5bRvAUM4vpCI9MgzvafySLRtu29/sz4kwmtZpNCvJniC2S0sO+1JK45MBn5Tv0t3
-	 vOIhvQfSIxQgDBVeccTpunjOPlcYYTeXas0n/3HLt1+6ug/jjuVhHGk/cz22hLeu8P
-	 1OuY2e4QhzlYQmqqZ2k+gYCvaNpN4Ze7HufNj3+k39ejyuoFklHrnKXM2cY+Oa1Dnb
-	 5NgfrIEJ+ULEErViYlhMKWqfPFmnESkLzp+cxaz12dRSHlp32R3VVlHHTIa8fNKH4l
-	 Alk7eqhtu+RAQ==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id 3297239ED25;
-	Sat, 12 Mar 2022 12:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1647087985; bh=g13EmdZxu+uLRpV+kyaRzAukTxiJf6X3eNAGmWIHgAo=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=CPnErHe4YEwRBekyBp89em3A6FstmaMFoVzhG4gIDx0dr/UrgvKNIejKbv36zEXT+
-	 4s5bRvAUM4vpCI9MgzvafySLRtu29/sz4kwmtZpNCvJniC2S0sO+1JK45MBn5Tv0t3
-	 vOIhvQfSIxQgDBVeccTpunjOPlcYYTeXas0n/3HLt1+6ug/jjuVhHGk/cz22hLeu8P
-	 1OuY2e4QhzlYQmqqZ2k+gYCvaNpN4Ze7HufNj3+k39ejyuoFklHrnKXM2cY+Oa1Dnb
-	 5NgfrIEJ+ULEErViYlhMKWqfPFmnESkLzp+cxaz12dRSHlp32R3VVlHHTIa8fNKH4l
-	 Alk7eqhtu+RAQ==
-Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.mleia.com (Postfix) with ESMTPSA id B6B5D39E5F9;
-	Sat, 12 Mar 2022 12:26:24 +0000 (UTC)
-Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
- Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id A8426C340EB
+	for <soc@kernel.org>; Sat, 12 Mar 2022 18:06:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8426C340EB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id s11so10632961pfu.13
+        for <soc@kernel.org>; Sat, 12 Mar 2022 10:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NvNq+45Cgx0F9RlJNbV6eVIGlsmW+8HM1hn3gRVvPWk=;
+        b=BdFHcOFjPNbp1ClgSl4cyaGkb5MGKSVWZdY+OtHHZfGHtXKxN28jZZxVPQtkBFiS06
+         GZEUZR1GSzIdkVQsh83Bixkp1BHYgQ6ZGzl/tIytqspcbY48Kf8UwKgCPmEHFn3pI97n
+         REiy22FPkON3FN0ck3/jcmt9VssS8fG/wH4NA9Duxpsk5Itm5EgH2Pvq6MhkNLc4HG8J
+         8rwHl/9WEGKrsvw02JwZ5GtUPV08BFaJ6/xMBbqobumoBuR8rox2TaDALeattwmyita9
+         7opxYp+bS+wauBOBa0m8kurcBLW5yaFusZ8PhrG67B8Ei7bc/yZClni0yL9C4gPhlthM
+         IxYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NvNq+45Cgx0F9RlJNbV6eVIGlsmW+8HM1hn3gRVvPWk=;
+        b=NDHo4pI83kV0Cv70v1yeegKrOF7rcYwdsMtTH06GglKjoMEYmnnElSLiGM7zstmo5l
+         FNbJWLHZ9RuadFScQhj/URqfmca9SqEVzCC1yJfuin/CG8Ofs0gT2EZWCJTx6RAlGmiW
+         rlwr2POY1nRhYbktpWSe9xu7fMNfz25O3yErsB2TkmscolfwnVvP3hxlJZBs65sBDE2w
+         12LXoAk+s78AKqeW+/BswjUSrkxsi/5K62BRGCNu6lUDZHmwrz39cWw6e6LOdHfpWJVM
+         TsD+xcy/sMg0Lw5+iXrggkVDw8NtbEpjwSuNEo16u1cjonxcMG6KlXvXJJd1oGMU0vj8
+         mSDA==
+X-Gm-Message-State: AOAM5319LWLK3JXdtJXKmhNIHrtbdiThWv1oUrecnApJ3sAdeMw8PDk6
+	ThTVLsb3paPjqj3l44uky3uYFR/DhuQ=
+X-Google-Smtp-Source: ABdhPJxyh0A25Tmu6u5SH/ooAqZ5mdXki0nzOSIzCUFbTtXvAoNYNvhzqX1hQjol5DBouIIcS5LXqg==
+X-Received: by 2002:a05:6a00:2444:b0:4f7:73bb:7582 with SMTP id d4-20020a056a00244400b004f773bb7582mr14509995pfj.39.1647108380870;
+        Sat, 12 Mar 2022 10:06:20 -0800 (PST)
+Received: from localhost.localdomain ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id z72-20020a627e4b000000b004f70cbcb06esm14017951pfc.49.2022.03.12.10.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 10:06:20 -0800 (PST)
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>,
- Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
- Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
- <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
- <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
- <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
- <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
- <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
- <9f4e3cdc-f5e2-7102-949e-7b3032118e63@mleia.com>
- <e0da4fbc-b72c-60a0-5a5f-99d18653c294@canonical.com>
-From: Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <d3e4e548-47c9-7488-26bc-f42be5e3c62a@mleia.com>
-Date: Sat, 12 Mar 2022 14:26:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+To: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] More DT fixes for arm,pl022
+Date: Sat, 12 Mar 2022 23:36:13 +0530
+Message-Id: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <e0da4fbc-b72c-60a0-5a5f-99d18653c294@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20220312_122625_237657_4D9DD867 
-X-CRM114-Status: GOOD (  22.68  )
+Content-Transfer-Encoding: 8bit
 
-On 3/12/22 12:23 PM, Krzysztof Kozlowski wrote:
-> On 11/03/2022 22:26, Vladimir Zapolskiy wrote:
->> On 3/11/22 4:33 PM, Krzysztof Kozlowski wrote:
->>> On 11/03/2022 15:07, Vladimir Zapolskiy wrote:
->>>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
->>>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
->>>>>>
->>>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
->>>>>>> PL022 binding require two clocks to be defined but lpc platform doesn't
->>>>>>> comply with bindings and define only one clock i.e apb_pclk.
->>>>>>>
->>>>>>> Update spi clocks and clocks-names property by adding appropriate clock
->>>>>>> reference to make it compliant with bindings.
->>>>>>>
->>>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
->>>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
->>>>>>> ---
->>>>>>> v2:
->>>>>>> - New patch with similar changeset
->>>>>>> - Send to soc ML
->>>>>>>
->>>>>>>      arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
->>>>>>>      1 file changed, 4 insertions(+), 4 deletions(-)
->>>>>>>
->>>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>>> index c87066d6c995..30958e02d5e2 100644
->>>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
->>>>>>>                                  compatible = "arm,pl022", "arm,primecell";
->>>>>>>                                  reg = <0x20084000 0x1000>;
->>>>>>>                                  interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
->>>>>>> -                             clock-names = "apb_pclk";
->>>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
->>>>>>> +                             clock-names = "sspclk", "apb_pclk";
->>>>>>
->>>>>> In fact I'm uncertain if it is the right change, could it happen that the commit
->>>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
->>>>>> schema pattern?
->>>>>
->>>>> Good pointm this doesn't quite seem right: it is unlikely that the same clock
->>>>> is used for both the SPI bus and the APB bus.
->>>>>
->>>>>> Apparently just one clock is wanted on all observed platforms and cases, this
->>>>>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
->>>>>>
->>>>>>            pl022->clk = devm_clk_get(&adev->dev, NULL);
->>>>>>
->>>>>> So, I would vote to fix the device tree bindings schema.
->>>
->>> Drivers do not describe the hardware. Bindings should not be modeled on
->>> drivers, but on actual hardware, so the example is not convincing.
->>
->> My concern is that fixing the bindings can break the driver and all its users,
->> is it clear enough how it can happen in assumption that the driver uses just
->> one clock at the moment?
-> 
-> You meant fixing the DTS? We do not consider here "fixing bindings"
+As per spi pl022 binding, spear and lpc18 platform require fix in dma
+properties to resolve dtbs_check warning.
 
-Yes, I meant fixing the DTS, sorry for confusion.
+Patch 1(spear): just reorder entries to resolve warning.
+Patch 2(lpc): require reorder of dma pairs, and also within pairs.
+In general, dmas follow below convention:
+<rx,tx> = <x+1,x>
+Keeping this mind, I updated entries for dma pairs.
 
-> because they look correct. About DTS, using the same clock twice should
-> not cause negative effect.
+This patchset is based on
+git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git, arm/dt
 
-But it is erroneous to specify the SSP clock as APB clock, so this v2 is
-incorrect, and I've mentioned above in the discussion that the APB clock
-shall be HCLK on the platform.
+Kuldeep Singh (2):
+  ARM: dts: spear13xx: Update SPI dma properties
+  ARM: dts: lpc18xx: Update SPI dma properties
 
-To avoid any unpleasant uncertainties I expect to get a change in the
-driver firstly, the driver shall work according to the bindings, at
-the moment it is obviously broken.
+ arch/arm/boot/dts/lpc18xx.dtsi   | 19 +++++++------------
+ arch/arm/boot/dts/spear13xx.dtsi |  5 ++---
+ 2 files changed, 9 insertions(+), 15 deletions(-)
 
---
-Best wishes,
-Vladimir
+-- 
+2.25.1
+
