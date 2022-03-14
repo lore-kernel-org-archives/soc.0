@@ -1,97 +1,130 @@
-Return-Path: <SRS0=DEnQ=TZ=linaro.org=viresh.kumar@kernel.org>
+Return-Path: <SRS0=gKxw=TZ=arm.com=robin.murphy@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54B0FC433F5
-	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 10:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1776AC433EF
+	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 11:43:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3C9A2C340ED; Mon, 14 Mar 2022 10:43:40 +0000 (UTC)
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B67A9C340E9
-	for <soc@kernel.org>; Mon, 14 Mar 2022 10:43:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B67A9C340E9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f173.google.com with SMTP id g19so13949492pfc.9
-        for <soc@kernel.org>; Mon, 14 Mar 2022 03:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=offBx8u5K9bH2yAbo6I5jJGdKaFPcNiQgtHBU/dwurU=;
-        b=abaAC5ZVOSjYCB5GTI4jMzp/Cl/Q0BjriRREyaCyTUp1j4rom2RG1SEY7jugYfJ/EP
-         mvas1maqJCucHjUM5DzwP+zSwpR3D4nPAmt6MI+ongS9Uh2fwmFYeEib3Z4Uy5TDXJSN
-         pnMCu0WnVdNHr7LiEitsfmFUQPWzF1zEZydrUO3xrNkqdWZN/Tb1+QxhXQhxPq2+M+/Z
-         rjQuEQW/radAtdYCXe/lJK/4QP7vj0eRCvSoDLhsbhq+eDmiof0juJ/bgL83/u2sKr+p
-         Qcpi2fniHGCfwftvFpPh7F+wtPYXkjo1ZIBpObCCanSpmaEhCiQn6QNHaXLlKazRCJ1t
-         a1aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=offBx8u5K9bH2yAbo6I5jJGdKaFPcNiQgtHBU/dwurU=;
-        b=kcgAb99R4YyFFtFMcbxfyO098g+/GPRTwqNRkHKZlvPN2ysu/QyHJ11cscEo8eUQzI
-         lwTGnkb6nfQlj0LV6jNbAR62R2iM340diSIFeU6oa7IyETiakKvsKG16Q3Zl3YfuZMIs
-         l9WOzEe1TBQSzYYGfaomWu1ZHVyiZ1G92Usmg1WIynAGBjiT+JWxJUx/r4Y15ILspvyo
-         dTMigJ2WNW11QJIIJZHLeq2ymD4QWITFajS+9dPyBt3S0dnksR1Geqc31HqZqiCEF4YH
-         561Dcn77H2YpfKdsD6oIQy9SMoetB69PseE2bDdD9yK8TUYGjDCXnPNm8Fmc0uzEX//z
-         fvPA==
-X-Gm-Message-State: AOAM531BcG1rVbRJtv9SnEtyMAGs/qYbRV4x3L2DXKUl1qKkVf8eTFK3
-	hI5wPrqu0cP9YPZT8ZOoM91v0g==
-X-Google-Smtp-Source: ABdhPJzPuCIBqKGT2yR3Mt9Jycz4pRUYKogWOk7q1ldx2/KnEQ0XxCwD/43nSZpnKOQc0BoR4ieMdg==
-X-Received: by 2002:a63:914a:0:b0:380:1b9a:5bee with SMTP id l71-20020a63914a000000b003801b9a5beemr19047917pge.39.1647254618131;
-        Mon, 14 Mar 2022 03:43:38 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056a00190500b004f104b5350fsm20537440pfi.93.2022.03.14.03.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 03:43:37 -0700 (PDT)
-Date: Mon, 14 Mar 2022 16:13:36 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>, SoC Team <soc@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	DTML <devicetree@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] ARM: dts: spear13xx: Update SPI dma properties
-Message-ID: <20220314104336.ojkkynvqldrnw2kb@vireshk-i7>
-References: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
- <20220312180615.68929-2-singh.kuldeep87k@gmail.com>
- <20220314035118.gbjbrwbsywxljjti@vireshk-i7>
- <20220314065434.GA43329@9a2d8922b8f1>
- <20220314073102.l6vokyookzyo76hj@vireshk-i7>
- <CAK8P3a1Go8xiQG=BLBmqoQiVqwkcR+T8gi0WLijzVfa3A_WuKA@mail.gmail.com>
+	id D3F73C340EC; Mon, 14 Mar 2022 11:43:33 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 29DB5C340E9;
+	Mon, 14 Mar 2022 11:43:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29DB5C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90714106F;
+	Mon, 14 Mar 2022 04:43:31 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34EC43F99C;
+	Mon, 14 Mar 2022 04:43:30 -0700 (PDT)
+Message-ID: <dc599cae-7245-73dc-8050-14ec6c1336b8@arm.com>
+Date: Mon, 14 Mar 2022 11:43:26 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1Go8xiQG=BLBmqoQiVqwkcR+T8gi0WLijzVfa3A_WuKA@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+Content-Language: en-GB
+To: Vladimir Zapolskiy <vz@mleia.com>, Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+ Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 14-03-22, 11:27, Arnd Bergmann wrote:
-> I don't think that it was meant to have a fixed order: unlike the other
-> bindings that define xxx-names properties, dmas require giving
-> names to allow the DT to specify more than one possible DMA
-> specifier for a given name. This means that nothing may ever just
-> rely on an index but has to use the name for lookup.
+On 2022-03-11 14:07, Vladimir Zapolskiy wrote:
+> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>>>
+>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>>> PL022 binding require two clocks to be defined but lpc platform doesn't
+>>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>>
+>>>> Update spi clocks and clocks-names property by adding appropriate clock
+>>>> reference to make it compliant with bindings.
+>>>>
+>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>>> ---
+>>>> v2:
+>>>> - New patch with similar changeset
+>>>> - Send to soc ML
+>>>>
+>>>>    arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi 
+>>>> b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>> index c87066d6c995..30958e02d5e2 100644
+>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>>                                compatible = "arm,pl022", 
+>>>> "arm,primecell";
+>>>>                                reg = <0x20084000 0x1000>;
+>>>>                                interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>>> -                             clock-names = "apb_pclk";
+>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, 
+>>>> <&clk LPC32XX_CLK_SSP0>;
+>>>> +                             clock-names = "sspclk", "apb_pclk";
+>>>
+>>> In fact I'm uncertain if it is the right change, could it happen that 
+>>> the commit
+>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") 
+>>> sets a wrong
+>>> schema pattern?
+>>
+>> Good pointm this doesn't quite seem right: it is unlikely that the 
+>> same clock
+>> is used for both the SPI bus and the APB bus.
+>>
+>>> Apparently just one clock is wanted on all observed platforms and 
+>>> cases, this
+>>> is implicitly confirmed by clock handling in the 
+>>> drivers/spi/spi-pl022.c :
+>>>
+>>>          pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>>
+>>> So, I would vote to fix the device tree bindings schema.
+>>
+>> Isn't this just using the wrong name? The name of the macro
+>> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
+>> rather than the APB clock, so we only need to change clock-names
+>> property here and leave it unchanged otherwise.
+> 
+> Yes, the name is wrong, here I'm ready to take the blame:
+> 
+> Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device 
+> nodes")
+> 
+> Noteworthy the commit above presets the same clock name to other PrimeCell
+> controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x (SD),
+> plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in fact.
+> 
+> On LPC32xx the bus clock source and function clock source for SSP is HCLK.
+> 
+> My guess is that the misnamed "apb_pclk" migrated into the schema from
+> the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
+> firstly fix the schema by removing "apb_pclk" clock. It will leave just one
+> clock, so "clock-names" property can be set as optional, and the drop
+> the property from the lpc32xx.dtsi.
 
-Is there a way to update the yaml or tooling in that case so it doesn't expect a
-fixed order ?
+No, "apb_pclk" is part of the common AMBA binding, and is required by 
+the "arm,primecell" compatible. You won't (usually) find it referenced 
+in drivers because it's dealt with by amba_get_enable_pclk() via 
+amba_probe().
 
-> OTOH, while fixing the order in the binding does not add any
-> value, it's also harmless as this should never be able to break
-> anything that worked for any combination of old/new dtb and
-> kernel, and it's probably easier to express in the binding.
-
-I agree, but such a patch shouldn't be required at all, which caught my
-attention. It is fine to merge it and won't break anything, but it shouldn't be
-required as well.
-
--- 
-viresh
+Robin.
