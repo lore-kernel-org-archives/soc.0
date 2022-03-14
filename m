@@ -1,71 +1,178 @@
-Return-Path: <SRS0=5ggH=TZ=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=Ubu7=TZ=gmail.com=max.oss.09@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47BB2C433F5
-	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 15:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14626C433F5
+	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 16:30:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AE79C340EE; Mon, 14 Mar 2022 15:41:35 +0000 (UTC)
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	id B9AFBC340F5; Mon, 14 Mar 2022 16:30:07 +0000 (UTC)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CA841C340E9;
-	Mon, 14 Mar 2022 15:41:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA841C340E9
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id F32B6C340E9;
+	Mon, 14 Mar 2022 16:30:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F32B6C340E9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f46.google.com with SMTP id z7so18765926iom.1;
-        Mon, 14 Mar 2022 08:41:33 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so6006183wme.5;
+        Mon, 14 Mar 2022 09:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XvhrMTIMvKzPGRJgmngvFLAfyO2VzTvVeYWKjcIpGxA=;
+        b=e3Sah/Di09yh5ceRUwRXYNtdeD4LgUZUDEv4lgZApVQ9EiAuyz3bem7EmaGfSLDu6p
+         FeToxKOAq+aDXzDUC5tLjoLP/JO6pb9LER4kJ+k/NSjYb0BY2+Z/LKiIqW9L7zS+z8Fm
+         walWjQ0D2fQ7qjarnBog9+z2VbBw/A+iRyhArLY80DIHNaDVPyxugLP4H8Fbssz10geb
+         029xSVHE5uJoLt8JUyOIYN4Ho5cRbtizTB19zaSNlvzAUoqzb4pObw3CREBgpeOPgxo4
+         L8DdPofEYV6GG98O3/P/xy0WsFiRN1DzRNMSZBtGDkEWeHzyH9uMGTXdfcOleqmgowqv
+         ShYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rY4lnGX91BSkoxPaQ5SCRaMmjihX3PZ5V3Bm/1QXiHs=;
-        b=BDj+NTYA7lMXze1pKRL6KdvvKNZslq+3Spfbs/wFLpgvKmqY2SJxsYXJFF+wVUdMNF
-         d1WD7Z8+8VyoTFUkIEobgpPd6HMhfo/NmWzQC6uEIWfAXbGQPqQ4XTbqB7k3ifsIENmq
-         i6d7K4md46Ve2JTIjLDkvmOEPUCXVeFa7qABAQY7iX7UYK2FJwsfMyOO0GwhgyINL6vb
-         2uiXkwRU/AQs5uQPDcawCwKjl/f9CpsEIGVOwd9tr1Doj7OILnEOXY79Cy43u2KPm8di
-         VJZBQopKNINQFZH4mcJFxhkvgr1OCP+74f2McKRwo9pFedppkoLOCIV1KxgkvFu+UhGi
-         SzhQ==
-X-Gm-Message-State: AOAM531KR7+/s2vEEafZW/GVjH0TXITJTgCx1Jc2XgT1gaz+11y3HyER
-	EMnGCF/cuNU1KksS2gb1Nw==
-X-Google-Smtp-Source: ABdhPJytlg8Rd17SG2Xpxxb2QPBALLGcdAVJUaxLHiJr4h8bQywp8afLDDXcpMLP4g+TKe2OqcmrJw==
-X-Received: by 2002:a05:6638:35a0:b0:31a:d42:1dd with SMTP id v32-20020a05663835a000b0031a0d4201ddmr3098236jal.95.1647272492898;
-        Mon, 14 Mar 2022 08:41:32 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id k15-20020a92c24f000000b002c79ec214f9sm2189432ilo.30.2022.03.14.08.41.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XvhrMTIMvKzPGRJgmngvFLAfyO2VzTvVeYWKjcIpGxA=;
+        b=xKNNFkYoFaA1SknTIsuuB1QEjocGCQCi93iCrM6OH77nYlgrXY4nvcwnYuIdEPdEnl
+         oApEVdFCqQFWDgY4stS4Z6VYi6mcSdPRcpWBSFv3fVmluhvmB8Ol84ctD2fR4WeVkTU6
+         NSTqLu6kiGrADgCfNEMGtO2X8VWkZaCkttb2oGtrvfeUY9oi0iECoPSZ8TNgsgLvgGSP
+         eTgt4AXnhCPb7WR6rHKEDriNu9im6EuVg36UZks/dHHitimstTGNCSaDxeCzQ1PRV+Ru
+         o5csY3P0s80WsdDjlJtoiUKR7XKVh9JSfTqtd+I/UthWNwwamV4UFMJq4/bm6U4tNkyC
+         HC4Q==
+X-Gm-Message-State: AOAM531cBp6CIhR51EE4/o1iO1ti7KQrsiGMSYjA2AsLS+C6XlWkBdoD
+	tYwawE4cQqtKdh457oOO2bI=
+X-Google-Smtp-Source: ABdhPJyFNTB3mLdxXVKW9CXVu9oHJ446cfD46sOj4wFh4o9HnBId3wNCqgcQb+12uGlh3N5FH/1Veg==
+X-Received: by 2002:a05:600c:21c3:b0:389:ee24:caf2 with SMTP id x3-20020a05600c21c300b00389ee24caf2mr45862wmj.20.1647275405179;
+        Mon, 14 Mar 2022 09:30:05 -0700 (PDT)
+Received: from linuxdev2.toradex.int (31-10-206-124.static.upc.ch. [31.10.206.124])
+        by smtp.gmail.com with ESMTPSA id w10-20020a5d680a000000b001f1dabec837sm13476817wru.113.2022.03.14.09.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 08:41:32 -0700 (PDT)
-Received: (nullmailer pid 104552 invoked by uid 1000);
-	Mon, 14 Mar 2022 15:41:28 -0000
-Date: Mon, 14 Mar 2022 09:41:28 -0600
-From: Rob Herring <robh@kernel.org>
-To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+        Mon, 14 Mar 2022 09:30:04 -0700 (PDT)
+From: Max Krummenacher <max.oss.09@gmail.com>
+X-Google-Original-From: Max Krummenacher <max.krummenacher@toradex.com>
+To: max.krummenacher@toradex.com
 List-Id: <soc.lore.kernel.org>
-Cc: Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>, Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Russell King <linux@armlinux.org.uk>, Heiko Stuebner <heiko@sntech.de>, Peter Geis <pgwipeout@gmail.com>, Michael Riesch <michael.riesch@wolfvision.net>, Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v6 0/6] Add sata nodes to rk356x
-Message-ID: <Yi9iKBr7pPUuzg15@robh.at.kernel.org>
-References: <20220311210357.222830-1-linux@fw-web.de>
- <05309a59-85cd-2434-6435-6fd956fa75d6@opensource.wdc.com>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Alistair Francis <alistair@alistair23.me>,
+	Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Johann Neuhauser <jneuhauser@dh-electronics.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Li Yang <leoyang.li@nxp.com>,
+	Lucas Stach <dev@lynxeye.de>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Oleksij Rempel <linux@rempel-privat.de>,
+	Olof Johansson <olof@lixom.net>,
+	Pascal Zimmermann <pzimmermann@dh-electronics.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Philippe Schenker <philippe.schenker@toradex.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Tim Harvey <tharvey@gateworks.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH v1 00/14] ARM: dts: imx6dl-colibri: Misc improvements and newly added carriers
+Date: Mon, 14 Mar 2022 17:29:44 +0100
+Message-Id: <20220314162958.40361-1-max.krummenacher@toradex.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05309a59-85cd-2434-6435-6fd956fa75d6@opensource.wdc.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 12, 2022 at 05:00:53PM +0900, Damien Le Moal wrote:
-> On 3/12/22 06:03, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> > 
-> > This Series converts the binding for ahci-platform to yaml and adds
-> > sata nodes to rockchip rk356x device trees.
-> 
-> Rob,
-> 
-> I saw you took patches 1, 4 and 5. What about the others ? Are you
-> taking them or should I take them through the ATA tree ?
 
-It's all dts changes, so they should go via the sub-arch trees.
+This is a general update of the Colibri iMX6 device tree files.
 
-Rob
+The Toradex Colibri family is composed of a SoM that can be plugged on
+various carrier boards, with carrier boards allowing multiple optional
+accessories (e.g. display, camera, ...).
+
+The device tree sources are structured into a SoM dtsi and a carrier dts
+which then includes the SoM dtsi. The SoM dtsi defines and enables the
+functionality self contained on the SoM and prepares for functionality
+provided by the carrier HW or accessories, so that the carrier dts then
+can enable or amend nodes provided. Accessories are enabled in overlays
+depending on HW configuration.
+
+The series improves the existing Colibri Evaluation Board device tree and
+adds new device trees for the Aster, Iris, and Iris V2 carrier boards.
+
+Additionally it drops the dedicated device tree for SoM V1.1 HW used in a
+Evaluation board. The regular device tree works well in that combination.
+The higher SD card speed possible with SoM V1.1 would require HW
+modification on the carrier board.
+
+Improvements:
+- Specifies GPIO line names for use with libgpiod.
+- Disables optional accessories. They would be enabled in overlays
+  depending on HW configuration.
+- Lower power consumption after poweroff.
+- Move more functionality into the SoM dtsi file to reduce code
+  duplication.
+- General cleanup to adhere to dtbs bindings and missed alphabetically
+  ordering.
+
+Fixes:
+- Copy/paste error in i2c2 pinmuxing resulting in i2c2 being
+  nonfunctional.
+
+Adds:
+- imx6dl-colibri-aster.dtb: used for a Colibri iMX6 mated in an Aster
+  carrier board.
+- imx6dl-colibri-iris.dtb: used for a Colibri iMX6 mated in an
+  Iris V1.x carrier board.
+- imx6dl-colibri-iris-v2.dtb: used for a Colibri iMX6 mated in an
+  Iris V2.x carrier board.
+
+Drops:
+- imx6dl-colibri-v1_1-eval-v3.dtb, imx6dl-colibri-eval-v3.dtb is good
+  enough.
+
+
+Max Krummenacher (13):
+  dt-bindings: arm: fsl: imx6dl-colibri: Drop dedicated v1.1 bindings
+  dt-bindings: arm: fsl: Add carriers for toradex,colibri-imx6dl
+  ARM: dts: imx6dl-colibri: Drop dedicated v1.1 device tree
+  ARM: dts: imx6dl-colibri: Fix I2C pinmuxing
+  ARM: dts: imx6dl-colibri: Disable add-on accessories
+  ARM: dts: imx6dl-colibri: Command pmic to standby for poweroff
+  ARM: dts: imx6dl-colibri: Add additional pingroups
+  ARM: dts: imx6dl-colibri: Move common nodes to SoM dtsi
+  ARM: dts: imx6dl-colibri: Cleanup
+  ARM: dts: imx6dl-colibri: Add usdhc1 sleep pin configuration
+  ARM: dts: imx6dl-colibri: Add support for Toradex Iris carrier boards
+  ARM: dts: imx6dl-colibri: Add support for Toradex Aster carrier board
+  ARM: imx_v6_v7_defconfig: Enable the ADC part of the STMPE MFD
+
+Oleksandr Suvorov (1):
+  ARM: dts: imx6dl-colibri: Add gpio-line-names
+
+ .../devicetree/bindings/arm/fsl.yaml          |  11 +-
+ arch/arm/boot/dts/Makefile                    |   4 +-
+ arch/arm/boot/dts/imx6dl-colibri-aster.dts    | 113 +++
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts  | 110 +--
+ arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts  |  46 ++
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts     | 152 ++++
+ .../boot/dts/imx6dl-colibri-v1_1-eval-v3.dts  |  31 -
+ .../boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi    |  44 -
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi        | 771 ++++++++++++++----
+ arch/arm/configs/imx_v6_v7_defconfig          |   1 +
+ 10 files changed, 919 insertions(+), 364 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-aster.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris.dts
+ delete mode 100644 arch/arm/boot/dts/imx6dl-colibri-v1_1-eval-v3.dts
+ delete mode 100644 arch/arm/boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi
+
+-- 
+2.20.1
+
