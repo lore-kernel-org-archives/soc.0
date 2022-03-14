@@ -1,145 +1,105 @@
-Return-Path: <SRS0=kJ9B=TZ=nbd.name=nbd@kernel.org>
+Return-Path: <SRS0=ZaKQ=TZ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35893C35278
-	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 08:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51A56C433F5
+	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 10:27:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 209CCC340EC; Mon, 14 Mar 2022 08:44:33 +0000 (UTC)
-Received: from nbd.name (nbd.name [46.4.11.11])
+	id 0F025C340ED; Mon, 14 Mar 2022 10:27:25 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6C08BC34101;
-	Mon, 14 Mar 2022 08:44:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6C08BC34101
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nbd.name
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=nbd.name
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-	 s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=UPZIGRUhEgeZEuYwXHCw/OeVuq+IZh/TeJF0FMiXACE=; b=BV/vKH253XxeLkp6IbqfcpZ1rl
-	40Y+NeW2y/S4VNuyNVdBVdeWBqWWEU3aNH9RNLxoAQSEhilcJFIMm93Yf3s/AlJvTSBaHIyEw/4M+
-	VPsvmgRTWsSTXWDlTjXkUiFATMRhQKsvoqJ8JRIZl1WkcL7dssNb0G5EH7ZOuxMFtp/0=;
-Received: from p200300daa7204f006c015a90d6b6c4d6.dip0.t-ipconnect.de ([2003:da:a720:4f00:6c01:5a90:d6b6:c4d6] helo=Maecks.lan)
-	by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.89)
-	(envelope-from <nbd@nbd.name>)
-	id 1nTgJS-0002UN-Of; Mon, 14 Mar 2022 09:44:22 +0100
-From: Felix Fietkau <nbd@nbd.name>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v10 6/6] ARM: dts: Add PCIe support for Airoha EN7523
-Date: Mon, 14 Mar 2022 09:44:08 +0100
-Message-Id: <20220314084409.84394-7-nbd@nbd.name>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314084409.84394-1-nbd@nbd.name>
-References: <20220314084409.84394-1-nbd@nbd.name>
+	by smtp.kernel.org (Postfix) with ESMTPS id 82AA9C340EC;
+	Mon, 14 Mar 2022 10:27:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82AA9C340EC
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MmUcL-1nu0GO1y77-00iWXk; Mon, 14 Mar 2022 11:27:21 +0100
+Received: by mail-wr1-f45.google.com with SMTP id t11so23070364wrm.5;
+        Mon, 14 Mar 2022 03:27:21 -0700 (PDT)
+X-Gm-Message-State: AOAM5324ft1pkh/4VALI2xrnHfvHTrQrF40zLFhkA2nEnc5MXuk9QNF3
+	HdP7Tv7HDKhzKPMz2mnamWMaV/gAVpV20A3g5yU=
+X-Google-Smtp-Source: ABdhPJzEqI1LonVZ6bGY0Zc5X1CtCNLufMa4XfGQ0mQSVCry0VjHQXsTUbzVOBx8Utrgu6D459mOK3Qcxj1FOdSYpI8=
+X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
+ v3-20020adfedc3000000b001ec5f115415mr15782141wro.317.1647253641105; Mon, 14
+ Mar 2022 03:27:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
+ <20220312180615.68929-2-singh.kuldeep87k@gmail.com> <20220314035118.gbjbrwbsywxljjti@vireshk-i7>
+ <20220314065434.GA43329@9a2d8922b8f1> <20220314073102.l6vokyookzyo76hj@vireshk-i7>
+In-Reply-To: <20220314073102.l6vokyookzyo76hj@vireshk-i7>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 14 Mar 2022 11:27:05 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1Go8xiQG=BLBmqoQiVqwkcR+T8gi0WLijzVfa3A_WuKA@mail.gmail.com>
+Message-ID: <CAK8P3a1Go8xiQG=BLBmqoQiVqwkcR+T8gi0WLijzVfa3A_WuKA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ARM: dts: spear13xx: Update SPI dma properties
+To: Viresh Kumar <viresh.kumar@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>, SoC Team <soc@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Viresh Kumar <vireshk@kernel.org>, 
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:1IBHx1hfR4NE9siIFW52xRE+h03VEZIupmx4RBHu5kYcWYxdcuR
+ CunICejY5uY6Xq7AeRFYFhn2kHMzUMcwgsEhLhOqVFfmv+k7WRVmlcjy+ScLgJZACw9GTP5
+ LDOXq/FgJQV0820X1uv+WO2C0Ly1R+kYiUFibJhVhpjI3zg9JutxmWDvyL/fnRSYqZk+Ow0
+ PeRoUhl+rCg4enVQEPJRQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lUNbedHtYIQ=:3Q1oHK44iH9cs1gsC8n7uB
+ EtpHbVjjmWiHZj+vFmotPG6870Bgso/M8YfKtFw0AjBcD8M1xmj1xuwB0YgaUrARmHKKquFgZ
+ vw4kl2e5vCTPYYVILojhU/38RblQq6Dg9KhLIzHzz51l4aGHQXlcFYu4zYqnmkxDX90po6W2s
+ tSe3xQgjsxURpU+1YFHMdJIgsfXEhcdvIJKnCVrvkSLZ/xir+wPxe0c/83wf8YZ3rzP4xZH44
+ T6u7YDigAUJq+BwbDJiuhj9dCUptprCFyH5zQQvvO42CAWgWL4PBni4FUE287eNHyNRuBSfT4
+ oG6xVAoKFPdmADKTZ+uAEOT3nCg546ihNmiRqSAhR1f29TMlUOEt/a4bdUqrwPRLeAuep0INP
+ Qs4mqZ2E1WxKCYqG8hdDWdXXnOSaR1lrpwOpY8jr2fJmLJtpQFYoNvHTEAvuTVk4eygUP9BMa
+ PjGUmd9WBI+to9XujtMijN7NL0EDk5iCWxApTpNCuz74wrqLQjCWO/rIiTZKKRqcw1oxWjGQY
+ sYG/ReiILYzjW/SAUO9xBjDu/QDgdb8a3EsUk0LUXiN+ZFKISFaimNltPVSXeWOhXyPxg3LUP
+ FB3TSD9sC5u1U/x7CPTF97S+ykZO3VBwlaN0jQQSwckE9QX6H3zQHKtN+m2dJusFxs68i+SXD
+ tnVLXOk4keIwLQGWpk93KZSqCRYPqvQfg5gqRdv2omCRcVLXff0AaXhl6u+yp4XOmrjc=
 
-This uses the MediaTek MT7622 PCIe driver, since the PCIe IP block is nearly
-identical to the one in MT7622
+On Mon, Mar 14, 2022 at 8:31 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 14-03-22, 12:24, Kuldeep Singh wrote:
+> > Dma-names order matters here.
+> > As per pl022 binding, dma-names order specify rx,tx and all DTs which
+> > have tx,rx as order start raising dtbs_chek warning. Thus, need to
+> > reverse this order. Please note, no functional change in this patch
+> > apart from just fixing warning.
+> >
+> > Warning:
+> > 'rx' was expected
+> > 'tx' was expected
+>
+> Hmm. I see your point now.
+>
+>   dma-names:
+>     description:
+>       There must be at least one channel named "tx" for transmit and named "rx"
+>       for receive.
+>     minItems: 2
+>     maxItems: 32
+>     additionalItems: true
+>     items:
+>       - const: rx
+>       - const: tx
+>
+>
+> I was expecting above to allow adding the items in any order, but
+> looks like the order is fixed with this.
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- arch/arm/boot/dts/en7523-evb.dts |  8 +++++
- arch/arm/boot/dts/en7523.dtsi    | 58 ++++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+I don't think that it was meant to have a fixed order: unlike the other
+bindings that define xxx-names properties, dmas require giving
+names to allow the DT to specify more than one possible DMA
+specifier for a given name. This means that nothing may ever just
+rely on an index but has to use the name for lookup.
 
-diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
-index a8d8bb0419a0..f23a25cce119 100644
---- a/arch/arm/boot/dts/en7523-evb.dts
-+++ b/arch/arm/boot/dts/en7523-evb.dts
-@@ -33,3 +33,11 @@ &gpio0 {
- &gpio1 {
- 	status = "okay";
- };
-+
-+&pcie0 {
-+	status = "okay";
-+};
-+
-+&pcie1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
-index 2e705b87b6c1..7f839331a777 100644
---- a/arch/arm/boot/dts/en7523.dtsi
-+++ b/arch/arm/boot/dts/en7523.dtsi
-@@ -143,4 +143,62 @@ gpio1: gpio@1fbf0270 {
- 		gpio-controller;
- 		#gpio-cells = <2>;
- 	};
-+
-+	pcie0: pcie@1fa91000 {
-+		compatible = "airoha,en7523-pcie", "mediatek,mt7622-pcie";
-+		device_type = "pci";
-+		reg = <0x1fa91000 0x1000>;
-+		reg-names = "port0";
-+		linux,pci-domain = <0>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "pcie_irq";
-+		clocks = <&scu EN7523_CLK_PCIE>;
-+		clock-names = "sys_ck0";
-+		bus-range = <0x00 0xff>;
-+		ranges = <0x82000000 0 0x20000000  0x20000000  0 0x8000000>;
-+		status = "disabled";
-+
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie_intc0 0>,
-+				<0 0 0 2 &pcie_intc0 1>,
-+				<0 0 0 3 &pcie_intc0 2>,
-+				<0 0 0 4 &pcie_intc0 3>;
-+		pcie_intc0: interrupt-controller {
-+			interrupt-controller;
-+			#address-cells = <0>;
-+			#interrupt-cells = <1>;
-+		};
-+	};
-+
-+	pcie1: pcie@1fa92000 {
-+		compatible = "airoha,en7523-pcie", "mediatek,mt7622-pcie";
-+		device_type = "pci";
-+		reg = <0x1fa92000 0x1000>;
-+		reg-names = "port1";
-+		linux,pci-domain = <1>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "pcie_irq";
-+		clocks = <&scu EN7523_CLK_PCIE>;
-+		clock-names = "sys_ck1";
-+		bus-range = <0x00 0xff>;
-+		ranges = <0x82000000 0 0x28000000  0x28000000  0 0x8000000>;
-+		status = "disabled";
-+
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie_intc1 0>,
-+				<0 0 0 2 &pcie_intc1 1>,
-+				<0 0 0 3 &pcie_intc1 2>,
-+				<0 0 0 4 &pcie_intc1 3>;
-+		pcie_intc1: interrupt-controller {
-+			interrupt-controller;
-+			#address-cells = <0>;
-+			#interrupt-cells = <1>;
-+		};
-+	};
- };
--- 
-2.35.1
+OTOH, while fixing the order in the binding does not add any
+value, it's also harmless as this should never be able to break
+anything that worked for any combination of old/new dtb and
+kernel, and it's probably easier to express in the binding.
 
+       Arnd
