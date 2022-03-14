@@ -1,57 +1,57 @@
-Return-Path: <SRS0=DEnQ=TZ=linaro.org=viresh.kumar@kernel.org>
+Return-Path: <SRS0=yJwA=TZ=gmail.com=singh.kuldeep87k@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22ADDC433F5
-	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 03:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33305C433FE
+	for <soc@archiver.kernel.org>; Mon, 14 Mar 2022 06:54:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EDAF1C340F4; Mon, 14 Mar 2022 03:51:22 +0000 (UTC)
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	id 00E61C340F4; Mon, 14 Mar 2022 06:54:42 +0000 (UTC)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6E1D3C340F5
-	for <soc@kernel.org>; Mon, 14 Mar 2022 03:51:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E1D3C340F5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id e2so12436554pls.10
-        for <soc@kernel.org>; Sun, 13 Mar 2022 20:51:21 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5E96AC340EE;
+	Mon, 14 Mar 2022 06:54:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E96AC340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so13562376pju.2;
+        Sun, 13 Mar 2022 23:54:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/Oqm6rMIEYZj78iej3CXr853eUOdIFYFax/LH5tNlQ4=;
-        b=HT6ocqKuPFuAvF58pUg2kKkQKHEcOIlRgjO3OjMnA41k7rJvTugBLPWdbwSuGBrbm4
-         hG8bU5/+Tu1cFFH1f2FY5KW8so58G5ibDdkgeGvmbU7IrG7m+zEc2Qb9KQjEb/gJhEIT
-         aBkwd+ucbuLxui1U/Nj4IcMGywN++FYQg3HKrjR7+uWIC6csasTQROt8/LDExYa+b+/k
-         r94RNe9ubcmA9iaq8GOsaFbhMLrBuxEOrBy8xAv+7B5i8Z/2IvGczVCTvZQKG12k7lFG
-         x99atVsOaWmLwxUbSAmbva3PEDZ8OcxCQU3/IjX1YDj723fTn7pHr3E+3fi8T6Ow3LOx
-         BPLw==
+         :content-disposition:in-reply-to;
+        bh=ty6PwcxLzIVrqLfmu+9Ne928mUjT7ENA64son7AJAZo=;
+        b=ZGY/KZNA9gTe1grOsoHZT2V1gfXNR7zcB/QMdQc0lY0zzvx6LFNO89ToSoVPvcwdKS
+         aMA4qwy4WgaS2gGCJIZUUIszGUL0empqFJVQar4anjnNgukjglDVIzdnng1IkGQ+a4Af
+         gnxIdAI9C9/7KOcV2Wu/WR41fNqYybY4sC3gyrWMH0O/XZICKRSflhJ27SgG4K9U2kLN
+         d3VBgGhPXuB3BT0PWX8sITD/5PRzmNLaEXV1l0U71G5DpPALuwzS6wJ+RIuZ+oOGvddg
+         5z3OwlP+A+BRDd7VtejvLIVjMBrnxDrb9IZoOiCgO1k/m8XL7OC6t2A0k93ZDeaeWxfg
+         TcOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/Oqm6rMIEYZj78iej3CXr853eUOdIFYFax/LH5tNlQ4=;
-        b=yDDgHkWyAx50fxONKrrYwmOBTo4+RwRHJMzvjhWThr6RKsV4KxwlraNFOgt1bTU/Xx
-         Obt9qd7oWbnfvRppmbx7FQBZPd1nwRSgNEH9x5eEccfpYPENSsPeHUpzsrrkJyt/pSd0
-         t0SZnhvGSEPsafXmjjuxJuyRA+fcBHGN6InC3W+L8SHxEfLeNbH405U7BnVmNBLFl5+3
-         HLIB3mR1PFwUrU2GPI4VeKOXOlaQ4kq8fC42WETHaEOV+UP6BP2Ve7zwM3wPzCKmBOmy
-         mYaBD0//xFSnkM8F9j4n75Pyh+bYXEBNs8XiXpc3xSMJCRiAw+GLXYg7kGTZfBKjApJ2
-         RjlQ==
-X-Gm-Message-State: AOAM5315yD0GxbdBlcynZBHILGfcsnHyzt4XyH2ejlMFFLutiaIcuNFA
-	59JNQrV6gppJ6rnt9UHcXEM0/w==
-X-Google-Smtp-Source: ABdhPJzRDv5E6ORpbQOsmkNhWUYCtTFzJpR8SogiKKLlKw0MvmqA5q9cATA2IpIJX4OlGa3gdrfVgA==
-X-Received: by 2002:a17:902:d284:b0:153:6463:253d with SMTP id t4-20020a170902d28400b001536463253dmr4632616plc.54.1647229880920;
-        Sun, 13 Mar 2022 20:51:20 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id t7-20020a056a0021c700b004f7916d44bcsm9179206pfj.220.2022.03.13.20.51.20
+         :mime-version:content-disposition:in-reply-to;
+        bh=ty6PwcxLzIVrqLfmu+9Ne928mUjT7ENA64son7AJAZo=;
+        b=7TMCXibT/HB/kRZFKgZLMIMMtAcveLfE8utKOyv0p+E1tkjxRgr21qKv9a6E6PLnq5
+         spZdidDE3TQ8Pqg5XAqgoY6Olpow1x2VMFPbkOteaBXi3H+pe/fULQcgMQOV0Lctu7X+
+         97K9aZv0WvcB5rEJ90CZ5k+ZBWRr/nXAProyvJsGbqw3eNKIwdWJukF5PnbnAIdui/J7
+         teW9+U+Y6EVGwyBMgvs4MFiulEJyh/69Wa0Fe518EzukRUU/dw9kAsKMmmGwP0THvp/h
+         ovprPgNxN79Hr6vois46qGVcRrqdMgZaM08VAXpx7aZDToL4pIS7fzBBD7BiXQsHyh3g
+         TmOw==
+X-Gm-Message-State: AOAM5337Mv4dI7dVLfobX2ZK4wO2fO8GneOYdEY7viMlK+tv6rkBICKE
+	bBG/rr9FHSCVEkTyfyZRHPo=
+X-Google-Smtp-Source: ABdhPJy9dg1ytDwWF5oBI9JRVSns4+X/cV/eUxiu8GWjgUVo7wm+A3Nzdx5ki2X39sTeFdtdRP7LfA==
+X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id q13-20020a17090a430d00b001bcf3408096mr23455757pjg.93.1647240880682;
+        Sun, 13 Mar 2022 23:54:40 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id p17-20020a639511000000b0038108d69e8fsm9310536pgd.53.2022.03.13.23.54.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 20:51:20 -0700 (PDT)
-Date: Mon, 14 Mar 2022 09:21:18 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+        Sun, 13 Mar 2022 23:54:40 -0700 (PDT)
+Date: Mon, 14 Mar 2022 12:24:34 +0530
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
 	Viresh Kumar <vireshk@kernel.org>,
@@ -60,49 +60,56 @@ Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
 	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/2] ARM: dts: spear13xx: Update SPI dma properties
-Message-ID: <20220314035118.gbjbrwbsywxljjti@vireshk-i7>
+Message-ID: <20220314065434.GA43329@9a2d8922b8f1>
 References: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
  <20220312180615.68929-2-singh.kuldeep87k@gmail.com>
+ <20220314035118.gbjbrwbsywxljjti@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220312180615.68929-2-singh.kuldeep87k@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20220314035118.gbjbrwbsywxljjti@vireshk-i7>
 
-On 12-03-22, 23:36, Kuldeep Singh wrote:
-> Reorder dmas and dma-names property for spi controller node to make it
-> compliant with bindings.
+On Mon, Mar 14, 2022 at 09:21:18AM +0530, Viresh Kumar wrote:
+> On 12-03-22, 23:36, Kuldeep Singh wrote:
+> > Reorder dmas and dma-names property for spi controller node to make it
+> > compliant with bindings.
+> > 
+> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 > 
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> What about a fixes tag ?
 
-What about a fixes tag ?
+Sure, will add one.
 
-> ---
->  arch/arm/boot/dts/spear13xx.dtsi | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> > ---
+> >  arch/arm/boot/dts/spear13xx.dtsi | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/spear13xx.dtsi b/arch/arm/boot/dts/spear13xx.dtsi
+> > index c87b881b2c8b..45f0b2a33e02 100644
+> > --- a/arch/arm/boot/dts/spear13xx.dtsi
+> > +++ b/arch/arm/boot/dts/spear13xx.dtsi
+> > @@ -284,9 +284,8 @@ spi0: spi@e0100000 {
+> >  				#size-cells = <0>;
+> >  				interrupts = <0 31 0x4>;
+> >  				status = "disabled";
+> > -				dmas = <&dwdma0 4 0 0>,
+> > -					<&dwdma0 5 0 0>;
+> > -				dma-names = "tx", "rx";
+> > +				dmas = <&dwdma0 5 0 0>, <&dwdma0 4 0 0>;
+> > +				dma-names = "rx", "tx";
 > 
-> diff --git a/arch/arm/boot/dts/spear13xx.dtsi b/arch/arm/boot/dts/spear13xx.dtsi
-> index c87b881b2c8b..45f0b2a33e02 100644
-> --- a/arch/arm/boot/dts/spear13xx.dtsi
-> +++ b/arch/arm/boot/dts/spear13xx.dtsi
-> @@ -284,9 +284,8 @@ spi0: spi@e0100000 {
->  				#size-cells = <0>;
->  				interrupts = <0 31 0x4>;
->  				status = "disabled";
-> -				dmas = <&dwdma0 4 0 0>,
-> -					<&dwdma0 5 0 0>;
-> -				dma-names = "tx", "rx";
-> +				dmas = <&dwdma0 5 0 0>, <&dwdma0 4 0 0>;
-> +				dma-names = "rx", "tx";
+> Why does the order matter here since we have dma-names anyway, which
+> was correct earlier ?
 
-Why does the order matter here since we have dma-names anyway, which
-was correct earlier ?
+Dma-names order matters here.
+As per pl022 binding, dma-names order specify rx,tx and all DTs which
+have tx,rx as order start raising dtbs_chek warning. Thus, need to
+reverse this order. Please note, no functional change in this patch
+apart from just fixing warning.
 
->  			};
->  
->  			rtc@e0580000 {
-> -- 
-> 2.25.1
+Warning:
+'rx' was expected
+'tx' was expected
 
--- 
-viresh
+Regards
+Kuldeep
