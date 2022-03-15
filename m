@@ -1,69 +1,479 @@
-Return-Path: <SRS0=3y6m=T2=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=a6Wl=T2=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E032C433F5
-	for <soc@archiver.kernel.org>; Tue, 15 Mar 2022 11:00:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1829BC433F5
+	for <soc@archiver.kernel.org>; Tue, 15 Mar 2022 16:34:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 51ED7C340F4; Tue, 15 Mar 2022 11:00:48 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id CD7F6C340E8; Tue, 15 Mar 2022 16:34:24 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E0A70C340E8;
-	Tue, 15 Mar 2022 11:00:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E0A70C340E8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=sntech.de
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <heiko@sntech.de>)
-	id 1nU4ue-0002hT-9o; Tue, 15 Mar 2022 12:00:24 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: Frank Wunderlich <linux@fw-web.de>,
-	devicetree@vger.kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	linux-ide@vger.kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	Frank Wunderlich <frank-w@public-files.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Peter Geis <pgwipeout@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	linux-rockchip@lists.infradead.org,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	soc@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v6 0/6] Add sata nodes to rk356x
-Date: Tue, 15 Mar 2022 12:00:21 +0100
-Message-Id: <164734201499.2137788.90858927315746768.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220311210357.222830-1-linux@fw-web.de>
-References: <20220311210357.222830-1-linux@fw-web.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 97E75C340EE;
+	Tue, 15 Mar 2022 16:34:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 97E75C340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id b19so7518907wrh.11;
+        Tue, 15 Mar 2022 09:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tyUnuXIDfilf67oqdDzi7HyRYDor5UNbV5JcMlFjM9Y=;
+        b=XpNS+OXKY0dknfWFfc40jBwuVKUvfnGKAqQFkSxlUFKYvWgjc4rfXLs8OQg3iEmuWK
+         S9iCy3wdXkD+T/zpclR/eYEDalGrdw+ohSRT5+0XRSlOi7qLjJYagj2dCcUKXxBe4t6a
+         I9VKbXJ2Zb0YWETulir4L0gljF6xjvrW5eRVZzbd1iWV2Xq9RW+dIKkMH4aq1idL8jxA
+         dVT5rYkYy5q7eiSFA08eGzCTtCdS7shfenLy0cInyd1mzmIoCSGP9J5KTzwXWt6NKW2n
+         U5A+qesjL2nXt3p2lJWJzRhoGKvSCdOFyphuJO4NQHTVR92P7dwR8dQ6zBcUa0Lp63Au
+         W/1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tyUnuXIDfilf67oqdDzi7HyRYDor5UNbV5JcMlFjM9Y=;
+        b=Hsa+fgHcCq6JlsZoll9KfkRrGMrhzWIf3X8FxqGVFGYReF4U/uuoCrdkUE1LYMEqOW
+         fCxNXRJ2jW8Io9OUNmzzDwEJnWtTu8RXK/bdTQxVVZe/5pmVyw+ZuS+NDecRUbr/ioeY
+         JUjoZs8FnBBtf2qKMfwwcQwdxrU07fpKqCbseU80A7y5edJrXdcRHXTZP8UZHc6oQND3
+         bNk+9UBpRYVmXq8P4K/MYcTPCRxY6SN98iqoIWJJxBX3XxwiEyHMnZQuLtu/YT010vP7
+         0hTQhA2uyV7EIPi8a+JIJZ9jXqqXOs75QE9xEr3e7XPAYRb113Mwkcuqw38nV88vHiTl
+         lHBw==
+X-Gm-Message-State: AOAM533+ETbXWjhoO6rz576pNGGdSG7yS8xlJaRMSerrTo0Jflh/h+hL
+	faIT420htGAh5zVuTMR75fM=
+X-Google-Smtp-Source: ABdhPJw3y6LK2ci5/PRTL2tmbjIWEOtt2zXlZ36eZDUGb7j30QgeQ5PZ2RowTNYsXrBLtQ91ef3FKQ==
+X-Received: by 2002:a5d:5987:0:b0:203:a4a6:c496 with SMTP id n7-20020a5d5987000000b00203a4a6c496mr12168651wri.205.1647362061583;
+        Tue, 15 Mar 2022 09:34:21 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id f12-20020a5d64cc000000b00203da79ca2fsm825522wri.97.2022.03.15.09.34.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 09:34:20 -0700 (PDT)
+Message-ID: <5ef446ee-f7b4-e8df-93fc-fc7ec9cd816a@gmail.com>
+Date: Tue, 15 Mar 2022 17:34:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 2/6] clk: en7523: Add clock driver for Airoha EN7523
+ SoC
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Felix Fietkau <nbd@nbd.name>, soc@kernel.org,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220314084409.84394-1-nbd@nbd.name>
+ <20220314084409.84394-3-nbd@nbd.name>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220314084409.84394-3-nbd@nbd.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 11 Mar 2022 22:03:51 +0100, Frank Wunderlich wrote:
-> This Series converts the binding for ahci-platform to yaml and adds
-> sata nodes to rockchip rk356x device trees.
 
-Applied, thanks!
 
-[6/6] arm64: dts: rockchip: Add sata nodes to rk356x
-      commit: b2e5612f6ea23c87397e50f8d976cd8c95e3ed17
+On 14/03/2022 09:44, Felix Fietkau wrote:
+> This driver only registers fixed rate clocks, since the clocks are fully
+> initialized by the boot loader and should not be changed later, according
+> to Airoha.
+> 
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   drivers/clk/Kconfig      |   9 +
+>   drivers/clk/Makefile     |   1 +
+>   drivers/clk/clk-en7523.c | 351 +++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 361 insertions(+)
+>   create mode 100644 drivers/clk/clk-en7523.c
+> 
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index ad4256d54361..4765e4c6f2a1 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -200,6 +200,15 @@ config COMMON_CLK_CS2000_CP
+>   	help
+>   	  If you say yes here you get support for the CS2000 clock multiplier.
+>   
+> +config COMMON_CLK_EN7523
+> +	bool "Clock driver for Airoha EN7523 SoC system clocks"
+> +	depends on OF
+> +	depends on ARCH_AIROHA || COMPILE_TEST
+> +	default ARCH_AIROHA
+> +	help
+> +	  This driver provides the fixed clocks and gates present on Airoha
+> +	  ARM silicon.
+> +
+>   config COMMON_CLK_FSL_FLEXSPI
+>   	tristate "Clock driver for FlexSPI on Layerscape SoCs"
+>   	depends on ARCH_LAYERSCAPE || COMPILE_TEST
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index 16e588630472..da8dd3ab304f 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -27,6 +27,7 @@ obj-$(CONFIG_COMMON_CLK_CDCE925)	+= clk-cdce925.o
+>   obj-$(CONFIG_ARCH_CLPS711X)		+= clk-clps711x.o
+>   obj-$(CONFIG_COMMON_CLK_CS2000_CP)	+= clk-cs2000-cp.o
+>   obj-$(CONFIG_ARCH_SPARX5)		+= clk-sparx5.o
+> +obj-$(CONFIG_COMMON_CLK_EN7523)		+= clk-en7523.o
+>   obj-$(CONFIG_COMMON_CLK_FIXED_MMIO)	+= clk-fixed-mmio.o
+>   obj-$(CONFIG_COMMON_CLK_FSL_FLEXSPI)	+= clk-fsl-flexspi.o
+>   obj-$(CONFIG_COMMON_CLK_FSL_SAI)	+= clk-fsl-sai.o
+> diff --git a/drivers/clk/clk-en7523.c b/drivers/clk/clk-en7523.c
+> new file mode 100644
+> index 000000000000..076a70c2e173
+> --- /dev/null
+> +++ b/drivers/clk/clk-en7523.c
+> @@ -0,0 +1,351 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/delay.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <dt-bindings/clock/en7523-clk.h>
+> +
+> +#define REG_PCI_CONTROL			0x88
+> +#define   REG_PCI_CONTROL_PERSTOUT	BIT(29)
+> +#define   REG_PCI_CONTROL_PERSTOUT1	BIT(26)
+> +#define   REG_PCI_CONTROL_REFCLK_EN1	BIT(22)
+> +#define REG_GSW_CLK_DIV_SEL		0x1b4
+> +#define REG_EMI_CLK_DIV_SEL		0x1b8
+> +#define REG_BUS_CLK_DIV_SEL		0x1bc
+> +#define REG_SPI_CLK_DIV_SEL		0x1c4
+> +#define REG_SPI_CLK_FREQ_SEL		0x1c8
+> +#define REG_NPU_CLK_DIV_SEL		0x1fc
+> +#define REG_CRYPTO_CLKSRC		0x200
+> +#define REG_RESET_CONTROL		0x834
+> +#define   REG_RESET_CONTROL_PCIEHB	BIT(29)
+> +#define   REG_RESET_CONTROL_PCIE1	BIT(27)
+> +#define   REG_RESET_CONTROL_PCIE2	BIT(26)
+> +
+> +struct en_clk_desc {
+> +	int id;
+> +	const char *name;
+> +	u32 base_reg;
+> +	u8 base_bits;
+> +	u8 base_shift;
+> +	union {
+> +		const unsigned int *base_values;
+> +		unsigned int base_value;
+> +	};
+> +	size_t n_base_values;
+> +
+> +	u16 div_reg;
+> +	u8 div_bits;
+> +	u8 div_shift;
+> +	u16 div_val0;
+> +	u8 div_step;
+> +};
+> +
+> +struct en_clk_gate {
+> +	void __iomem *base;
+> +	struct clk_hw hw;
+> +};
+> +
+> +static const u32 gsw_base[] = { 400000000, 500000000 };
+> +static const u32 emi_base[] = { 333000000, 400000000 };
+> +static const u32 bus_base[] = { 500000000, 540000000 };
+> +static const u32 slic_base[] = { 100000000, 3125000 };
+> +static const u32 npu_base[] = { 333000000, 400000000, 500000000 };
+> +
+> +static const struct en_clk_desc en7523_base_clks[] = {
+> +	{
+> +		.id = EN7523_CLK_GSW,
+> +		.name = "gsw",
+> +
+> +		.base_reg = REG_GSW_CLK_DIV_SEL,
+> +		.base_bits = 1,
+> +		.base_shift = 8,
+> +		.base_values = gsw_base,
+> +		.n_base_values = ARRAY_SIZE(gsw_base),
+> +
+> +		.div_bits = 3,
+> +		.div_shift = 0,
+> +		.div_step = 1,
+> +	}, {
+> +		.id = EN7523_CLK_EMI,
+> +		.name = "emi",
+> +
+> +		.base_reg = REG_EMI_CLK_DIV_SEL,
+> +		.base_bits = 1,
+> +		.base_shift = 8,
+> +		.base_values = emi_base,
+> +		.n_base_values = ARRAY_SIZE(emi_base),
+> +
+> +		.div_bits = 3,
+> +		.div_shift = 0,
+> +		.div_step = 1,
+> +	}, {
+> +		.id = EN7523_CLK_BUS,
+> +		.name = "bus",
+> +
+> +		.base_reg = REG_BUS_CLK_DIV_SEL,
+> +		.base_bits = 1,
+> +		.base_shift = 8,
+> +		.base_values = bus_base,
+> +		.n_base_values = ARRAY_SIZE(bus_base),
+> +
+> +		.div_bits = 3,
+> +		.div_shift = 0,
+> +		.div_step = 1,
+> +	}, {
+> +		.id = EN7523_CLK_SLIC,
+> +		.name = "slic",
+> +
+> +		.base_reg = REG_SPI_CLK_FREQ_SEL,
+> +		.base_bits = 1,
+> +		.base_shift = 0,
+> +		.base_values = slic_base,
+> +		.n_base_values = ARRAY_SIZE(slic_base),
+> +
+> +		.div_reg = REG_SPI_CLK_DIV_SEL,
+> +		.div_bits = 5,
+> +		.div_shift = 24,
+> +		.div_val0 = 20,
+> +		.div_step = 2,
+> +	}, {
+> +		.id = EN7523_CLK_SPI,
+> +		.name = "spi",
+> +
+> +		.base_reg = REG_SPI_CLK_DIV_SEL,
+> +
+> +		.base_value = 400000000,
+> +
+> +		.div_bits = 5,
+> +		.div_shift = 8,
+> +		.div_val0 = 40,
+> +		.div_step = 2,
+> +	}, {
+> +		.id = EN7523_CLK_NPU,
+> +		.name = "npu",
+> +
+> +		.base_reg = REG_NPU_CLK_DIV_SEL,
+> +		.base_bits = 2,
+> +		.base_shift = 8,
+> +		.base_values = npu_base,
+> +		.n_base_values = ARRAY_SIZE(npu_base),
+> +
+> +		.div_bits = 3,
+> +		.div_shift = 0,
+> +		.div_step = 1,
+> +	}, {
+> +		.id = EN7523_CLK_CRYPTO,
+> +		.name = "crypto",
+> +
+> +		.base_reg = REG_CRYPTO_CLKSRC,
+> +		.base_bits = 1,
+> +		.base_shift = 8,
+> +		.base_values = emi_base,
+> +		.n_base_values = ARRAY_SIZE(emi_base),
+> +	}
+> +};
+> +
+> +static const struct of_device_id of_match_clk_en7523[] = {
+> +	{ .compatible = "airoha,en7523-scu", },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +static unsigned int en7523_get_base_rate(void __iomem *base, unsigned int i)
+> +{
+> +	const struct en_clk_desc *desc = &en7523_base_clks[i];
+> +	u32 val;
+> +
+> +	if (!desc->base_bits)
+> +		return desc->base_value;
+> +
+> +	val = readl(base + desc->base_reg);
+> +	val >>= desc->base_shift;
+> +	val &= (1 << desc->base_bits) - 1;
+> +
+> +	if (val >= desc->n_base_values)
+> +		return 0;
+> +
+> +	return desc->base_values[val];
+> +}
+> +
+> +static u32 en7523_get_div(void __iomem *base, int i)
+> +{
+> +	const struct en_clk_desc *desc = &en7523_base_clks[i];
+> +	u32 reg, val;
+> +
+> +	if (!desc->div_bits)
+> +		return 1;
+> +
+> +	reg = desc->div_reg ? desc->div_reg : desc->base_reg;
+> +	val = readl(base + reg);
+> +	val >>= desc->div_shift;
+> +	val &= (1 << desc->div_bits) - 1;
+> +
+> +	if (!val && desc->div_val0)
+> +		return desc->div_val0;
+> +
+> +	return (val + 1) * desc->div_step;
+> +}
+> +
+> +static int en7523_pci_is_enabled(struct clk_hw *hw)
+> +{
+> +	struct en_clk_gate *cg = container_of(hw, struct en_clk_gate, hw);
+> +
+> +	return !!(readl(cg->base + REG_PCI_CONTROL) & REG_PCI_CONTROL_REFCLK_EN1);
+> +}
+> +
+> +static int en7523_pci_prepare(struct clk_hw *hw)
+> +{
+> +	struct en_clk_gate *cg = container_of(hw, struct en_clk_gate, hw);
+> +	void __iomem *np_base = cg->base;
+> +	u32 val, mask;
+> +
+> +	/* Need to pull device low before reset */
+> +	val = readl(np_base + REG_PCI_CONTROL);
+> +	val &= ~(REG_PCI_CONTROL_PERSTOUT1 | REG_PCI_CONTROL_PERSTOUT);
+> +	writel(val, np_base + REG_PCI_CONTROL);
+> +	usleep_range(1000, 2000);
+> +
+> +	/* Enable PCIe port 1 */
+> +	val |= REG_PCI_CONTROL_REFCLK_EN1;
+> +	writel(val, np_base + REG_PCI_CONTROL);
+> +	usleep_range(1000, 2000);
+> +
+> +	/* Reset to default */
+> +	val = readl(np_base + REG_RESET_CONTROL);
+> +	mask = REG_RESET_CONTROL_PCIE1 | REG_RESET_CONTROL_PCIE2 |
+> +	       REG_RESET_CONTROL_PCIEHB;
+> +	writel(val & ~mask, np_base + REG_RESET_CONTROL);
+> +	usleep_range(1000, 2000);
+> +	writel(val | mask, np_base + REG_RESET_CONTROL);
+> +	msleep(100);
+> +	writel(val & ~mask, np_base + REG_RESET_CONTROL);
+> +	usleep_range(5000, 10000);
+> +
+> +	/* Release device */
+> +	mask = REG_PCI_CONTROL_PERSTOUT1 | REG_PCI_CONTROL_PERSTOUT;
+> +	val = readl(np_base + REG_PCI_CONTROL);
+> +	writel(val & ~mask, np_base + REG_PCI_CONTROL);
+> +	usleep_range(1000, 2000);
+> +	writel(val | mask, np_base + REG_PCI_CONTROL);
+> +	msleep(250);
+> +
+> +	return 0;
+> +}
+> +
+> +static void en7523_pci_unprepare(struct clk_hw *hw)
+> +{
+> +	struct en_clk_gate *cg = container_of(hw, struct en_clk_gate, hw);
+> +	void __iomem *np_base = cg->base;
+> +	u32 val;
+> +
+> +	val = readl(np_base + REG_PCI_CONTROL);
+> +	val &= ~REG_PCI_CONTROL_REFCLK_EN1;
+> +	writel(val, np_base + REG_PCI_CONTROL);
+> +}
+> +
+> +static struct clk_hw *en7523_register_pcie_clk(struct device *dev,
+> +					       void __iomem *np_base)
+> +{
+> +	static const struct clk_ops pcie_gate_ops = {
+> +		.is_enabled = en7523_pci_is_enabled,
+> +		.prepare = en7523_pci_prepare,
+> +		.unprepare = en7523_pci_unprepare,
+> +	};
+> +	struct clk_init_data init = {
+> +		.name = "pcie",
+> +		.ops = &pcie_gate_ops,
+> +	};
+> +	struct en_clk_gate *cg;
+> +
+> +	cg = devm_kzalloc(dev, sizeof(*cg), GFP_KERNEL);
+> +	if (!cg)
+> +		return NULL;
+> +
+> +	cg->base = np_base;
+> +	cg->hw.init = &init;
+> +	en7523_pci_unprepare(&cg->hw);
+> +
+> +	if (clk_hw_register(dev, &cg->hw))
+> +		return NULL;
+> +
+> +	return &cg->hw;
+> +}
+> +
+> +static void en7523_register_clocks(struct device *dev, struct clk_hw_onecell_data *clk_data,
+> +				   void __iomem *base, void __iomem *np_base)
+> +{
+> +	struct clk_hw *hw;
+> +	u32 rate;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(en7523_base_clks); i++) {
+> +		const struct en_clk_desc *desc = &en7523_base_clks[i];
+> +
+> +		rate = en7523_get_base_rate(base, i);
+> +		rate /= en7523_get_div(base, i);
+> +
+> +		hw = clk_hw_register_fixed_rate(dev, desc->name, NULL, 0, rate);
+> +		if (IS_ERR(hw)) {
+> +			pr_err("Failed to register clk %s: %ld\n",
+> +			       desc->name, PTR_ERR(hw));
+> +			continue;
+> +		}
+> +
+> +		clk_data->hws[desc->id] = hw;
+> +	}
+> +
+> +	hw = en7523_register_pcie_clk(dev, np_base);
+> +	clk_data->hws[EN7523_CLK_PCIE] = hw;
+> +
+> +	clk_data->num = EN7523_NUM_CLOCKS;
+> +}
+> +
+> +static int en7523_clk_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *node = pdev->dev.of_node;
+> +	struct clk_hw_onecell_data *clk_data;
+> +	void __iomem *base, *np_base;
+> +	int r;
+> +
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	np_base = devm_platform_ioremap_resource(pdev, 1);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(np_base);
+> +
+> +	clk_data = devm_kzalloc(&pdev->dev,
+> +				struct_size(clk_data, hws, EN7523_NUM_CLOCKS),
+> +				GFP_KERNEL);
+> +	if (!clk_data)
+> +		return -ENOMEM;
+> +
+> +	en7523_register_clocks(&pdev->dev, clk_data, base, np_base);
+> +
+> +	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+> +	if (r)
+> +		dev_err(&pdev->dev,
+> +			"could not register clock provider: %s: %d\n",
+> +			pdev->name, r);
+> +
+> +	return r;
+> +}
+> +
+> +static struct platform_driver clk_en7523_drv = {
+> +	.probe = en7523_clk_probe,
+> +	.driver = {
+> +		.name = "clk-en7523",
+> +		.of_match_table = of_match_clk_en7523,
+> +		.suppress_bind_attrs = true,
+> +	},
+> +};
+> +
+> +static int __init clk_en7523_init(void)
+> +{
+> +	return platform_driver_register(&clk_en7523_drv);
+> +}
+> +
+> +arch_initcall(clk_en7523_init);
