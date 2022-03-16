@@ -4,116 +4,241 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B6AC433EF
-	for <soc@archiver.kernel.org>; Wed, 16 Mar 2022 15:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33904C433F5
+	for <soc@archiver.kernel.org>; Wed, 16 Mar 2022 15:50:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9C90BC340E9; Wed, 16 Mar 2022 15:43:36 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	id 17472C340F1; Wed, 16 Mar 2022 15:50:58 +0000 (UTC)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BBE8AC340F0
-	for <soc@kernel.org>; Wed, 16 Mar 2022 15:43:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BBE8AC340F0
+	by smtp.kernel.org (Postfix) with ESMTPS id 4B548C340F0
+	for <soc@kernel.org>; Wed, 16 Mar 2022 15:50:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4B548C340F0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 941873F338
-	for <soc@kernel.org>; Wed, 16 Mar 2022 15:43:33 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 796603F1FC
+	for <soc@kernel.org>; Wed, 16 Mar 2022 15:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1647445413;
-	bh=XuRPjb+L9Lv30fCs29S3sfbbciGexy5s6gIsD7rnkDc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type;
-	b=twAFJO9C6GYO3DFzKSttKy3YJZmUTgI4G/YaMiUr1FFA+efWROHV/togxlq8h5Fxw
-	 bu8EoFwrnQ0kZ5oGX4qVnsTHF9/NXp7HltnZ5+BkXnL5czpYDgP62uLbvUcKMxCQgQ
-	 sFoKwZ1D7i3lKC+9ckmil6cZQ+LqidoPL0N+FdEThLgTCIr2QEmp6/D2TQchQZll7P
-	 f3TCmf5pLWsggnbZW2llV23eQVkrJpaudTsps3e2cKp0Ye8+k9Zdgmm3aSbbMBWZHb
-	 i6FXn9Ns/xux2mEoe/d+vysM23/zrVCND+N5W9oIwx3YM3onhCQxsVX/Q/p3kr2cbr
-	 p92yS+W+iTC9g==
-Received: by mail-wr1-f71.google.com with SMTP id t15-20020a5d534f000000b001f1e5759cebso701805wrv.7
-        for <soc@kernel.org>; Wed, 16 Mar 2022 08:43:33 -0700 (PDT)
+	s=20210705; t=1647445854;
+	bh=HvaRNfutCNKLhahjNo+JQfIF58rvJReA0Z+kiiuJ6gw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=pLPSyt4Dfl6KXFSCeVSvapJubJTqUCfiz4heTB4zSul1wzEUxa/eBaHfmJcgUxnAe
+	 sRjr9a06MeBDNiT5gHRmdmDhZMXl2It5hXq9xNZEnqeUv3Nmqwqg2PPmKlhLFYNsGk
+	 dnj/UzqY4LOpE2H8b5zGA2Hxfv2zRgo4CFnharelMqmWTZZhiDpgpXpF1CzEDVTyN+
+	 xcqpE8rJtC9iFoDK0+8eeBEYsOxD96T5dW4DZTgMN3HfsRIELFMM67+YoFyBgr5ddr
+	 p2VESvHxd5VhWCIdJvx9ZvG6duol/5ZsJdFRydOqoOnoAyQzanEtH+TSPYIVK3QMgQ
+	 IJZAPVeELIAUQ==
+Received: by mail-wm1-f69.google.com with SMTP id 14-20020a05600c104e00b003897a167353so1186931wmx.8
+        for <soc@kernel.org>; Wed, 16 Mar 2022 08:50:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XuRPjb+L9Lv30fCs29S3sfbbciGexy5s6gIsD7rnkDc=;
-        b=rPDKvHxL4dpjN2dqDyRi/D5KAWE5NMql9RM9ZjvSPeGQNpcUpvHFffpjj1enC1gHVW
-         4ZFv9dVNnPUm+fGkpxOG8JcmDvNfICxpwmtW7lzHPXszkOEtMol07BUklF8T6ru34Xt0
-         mRAVb3pom/jOwtHjIP+/g2rmfLQBQNqaCCsNpvQyqHvh1LflCoKm/yyeoUjbL9RX3/gp
-         mp0fc/S33FfQp0NlBGbQhb/z7MSPIEw6zT6j+KR9yR3Yd8r6tNf9o6XGBlTp8l4l+E8w
-         G5Z7jWZNHuseeqmMqvPBWqkpWOcZwmyK/pNm0bBAYp68lOXp9GnoeWNj6YK2hRqQQjHS
-         gkRA==
-X-Gm-Message-State: AOAM532fmauG83svKxYWT9l4PC0HdllF9llq2yAeI/ZwsVjKfz0c0czk
-	R5bLcLqWjeGxVA7uJQ24wCfHMdz85C/wuzbNSEp48R4i23yS8tvjnG6Gt+55vHvH0FT26btla/K
-	7S6rIssy9fvF87/ySepIKwwM=
-X-Received: by 2002:a05:600c:1f05:b0:38b:842e:9a19 with SMTP id bd5-20020a05600c1f0500b0038b842e9a19mr224677wmb.71.1647445412970;
-        Wed, 16 Mar 2022 08:43:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyJWB/QmBT0sFKxk6uBzZE6I5fWazwBfnQLJi8R4rhbJgCpUF3/R+xOC2qPTjJW4nZl1ZEa3A==
-X-Received: by 2002:a05:600c:1f05:b0:38b:842e:9a19 with SMTP id bd5-20020a05600c1f0500b0038b842e9a19mr224664wmb.71.1647445412737;
-        Wed, 16 Mar 2022 08:43:32 -0700 (PDT)
-Received: from localhost.localdomain (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id c7-20020a5d4f07000000b00203db8f13c6sm1918907wru.75.2022.03.16.08.43.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 08:43:32 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-Cc: krzk@kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 2/2] ARM: defconfig: add SMB347 charger driver for p4note
-Date: Wed, 16 Mar 2022 16:43:09 +0100
-Message-Id: <20220316154309.436028-3-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220316154309.436028-1-krzysztof.kozlowski@canonical.com>
-References: <20220316154309.436028-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HvaRNfutCNKLhahjNo+JQfIF58rvJReA0Z+kiiuJ6gw=;
+        b=c1audjelvT31+EYIHkNXtG6eWWawlslIV1rmY3QIpZY7F17Qape8OC/Lo9ZVe9qEME
+         +0U8sEzB4QOATh/tAwa4ZZpJpUmfisTwCvgzlJFuZdwIUn56tUoztXLIlDu7W0fRQwfe
+         YqZjis9AsARlv0an45QZBsjkNRLL5fjM7Ju/xtSzX4rHTmlg0/sKR/9mThEzRNKn5xN0
+         LntI6trjBTT0iZxoh29DdM/YW/oE9qwY9nugEy6dakze9/sWv8MEGoyirxRKmOQY+hZf
+         reDt0QUmEGhlzL4STUsg79vwzGaCiLxO/3jj6RbDVQ13MXUqt7s56ze5aRc1+6Q8bJC9
+         Ec3w==
+X-Gm-Message-State: AOAM531vLlx52EmqnkVuhJZLxp3ShHLyVOZMs9+fD5O649SzjYoCpmK7
+	DJvUEf0W3xyrqL43ur0V1VzBbv5n+qYKONkLRgiL8Eo3CACvRLw8c7QnKJX2uu3J41zi6a4VHLO
+	P//M8nGUWWrvuFlPlO4lHq+8=
+X-Received: by 2002:adf:a551:0:b0:1f0:23fd:6f11 with SMTP id j17-20020adfa551000000b001f023fd6f11mr436406wrb.7.1647445854080;
+        Wed, 16 Mar 2022 08:50:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyQqqJ+nDGKXrOS1VEARwnjbWFRztgMdeejd2f0SHoTsOezIbLIQvsvGOybcrd8b3UelpB/+A==
+X-Received: by 2002:adf:a551:0:b0:1f0:23fd:6f11 with SMTP id j17-20020adfa551000000b001f023fd6f11mr436386wrb.7.1647445853859;
+        Wed, 16 Mar 2022 08:50:53 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id v8-20020a1cf708000000b0034d7b5f2da0sm2043363wmh.33.2022.03.16.08.50.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 08:50:53 -0700 (PDT)
+Message-ID: <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com>
+Date: Wed, 16 Mar 2022 16:50:52 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device
+ tree
+Content-Language: en-US
+To: "Hawkins, Nick" <nick.hawkins@hpe.com>,
+ "Verdun, Jean-Marie" <verdun@hpe.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ "soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220310195229.109477-1-nick.hawkins@hpe.com>
+ <20220310195229.109477-9-nick.hawkins@hpe.com>
+ <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com>
+ <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-From: Martin Jücker <martin.juecker@gmail.com>
+On 16/03/2022 16:41, Hawkins, Nick wrote:
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+> Sent: Friday, March 11, 2022 4:30 AM
+> To: Hawkins, Nick <nick.hawkins@hpe.com>>; Verdun, Jean-Marie <verdun@hpe.com>>
+> Cc: Arnd Bergmann <arnd@arndb.de>>; Olof Johansson <olof@lixom.net>>; soc@kernel.org; Rob Herring <robh+dt@kernel.org>>; linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device tree
+> 
+> On 10/03/2022 20:52, nick.hawkins@hpe.com wrote:
+>>> From: Nick Hawkins <nick.hawkins@hpe.com>>
+>>>
+>>> The HPE SoC is new to linux. This patch creates the basic device tree 
+>>> layout with minimum required for linux to boot. This includes timer 
+>>> and watchdog support.
+>>>
+>>> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>>
+>>> ---
+>>>  arch/arm/boot/dts/Makefile               |   2 +
+>>>  arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  27 +++++
+>>>  arch/arm/boot/dts/hpe-gxp.dtsi           | 148 +++++++++++++++++++++++
+>>>  3 files changed, 177 insertions(+)
+>>>  create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+>>>  create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+>>>
+>>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile 
+>>> index e41eca79c950..2823b359d373 100644
+>>> --- a/arch/arm/boot/dts/Makefile
+>>> +++ b/arch/arm/boot/dts/Makefile
+>>> @@ -1550,3 +1550,5 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>>>  	aspeed-bmc-vegman-n110.dtb \
+>>>  	aspeed-bmc-vegman-rx20.dtb \
+>>>  	aspeed-bmc-vegman-sx20.dtb
+>>> +dtb-$(CONFIG_ARCH_HPE_GXP) += \
+>>> +	hpe-bmc-dl360gen10.dtb
+> 
+>> Alphabetically, also in respect to other architectures, so before CONFIG_ARCH_INTEGRATOR.
+> 
+> Done
+> 
+>>> diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+>>> b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+>>> new file mode 100644
+>>> index 000000000000..da5eac1213a8
+>>> --- /dev/null
+>>> +++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+>>> @@ -0,0 +1,27 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Device Tree file for HPE DL360Gen10  */
+>>> +
+>>> +/include/ "hpe-gxp.dtsi"
+>>> +
+>>> +/ {
+>>> +	#address-cells = <1>>;
+>>> +	#size-cells = <1>>;
+>>> +	compatible = "hpe,gxp";
+> 
+>> Missing board compatible.
+> 
+> Will become compatible =  "hpe,gxp","hpe,bmc-dl360gen10"; If that seems okay to you.
 
-The Summit SMB347 charger is part of the P4Note family of devices (e.g.
-Samsung Galaxy Note 10.1 (GT-N8010/N8013), enable the driver in exynos
-and multi_v7 defconfigs.
+Yes, except hpe,gxp goes at the end.
 
-Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
-Link: https://lore.kernel.org/r/4f1f6a4f8200855d07f3faed80ec5cc320e40941.1643919230.git.martin.juecker@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm/configs/exynos_defconfig   | 1 +
- arch/arm/configs/multi_v7_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+> 
+>>> +	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
+>>> +
 
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index cae09010a799..aa061074db78 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -158,6 +158,7 @@ CONFIG_CHARGER_MAX14577=y
- CONFIG_CHARGER_MAX77693=y
- CONFIG_CHARGER_MAX8997=y
- CONFIG_CHARGER_MAX8998=y
-+CONFIG_CHARGER_SMB347=y
- CONFIG_CHARGER_TPS65090=y
- CONFIG_SENSORS_LM90=y
- CONFIG_SENSORS_NTC_THERMISTOR=y
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 8863fa969ede..3062dc93eb15 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -493,6 +493,7 @@ CONFIG_CHARGER_MAX14577=m
- CONFIG_CHARGER_MAX77693=m
- CONFIG_CHARGER_MAX8997=m
- CONFIG_CHARGER_MAX8998=m
-+CONFIG_CHARGER_SMB347=m
- CONFIG_CHARGER_TPS65090=y
- CONFIG_SENSORS_ARM_SCMI=y
- CONFIG_SENSORS_ASPEED=m
--- 
-2.32.0
+(...)
 
+>>> +
+>>> +		usb0: usb@cefe0000 {
+>>> +			compatible = "generic-ehci";
+> 
+>> I think one of previous comments was that you cannot have "generic-ehci"
+>> only, right?
+> 
+> Yes there was, I removed the usb0: ehci@cefe0000. I see now that this is in reference to the compatible. This is our ehci controller. What would be a more appropriate compatible? Do we need hpe,gxp-ehci perhaps?
+
+Yes,, see other cases in generic-ehci.yaml bindings. Your current choice
+would be pointed out by dtbs_check, that it's invalid according to
+current bindings.
+
+> 
+>>> +			reg = <0xcefe0000 0x100>>;
+>>> +			interrupts = <7>>;
+>>> +			interrupt-parent = <&vic0>>;
+>>> +		};
+>>> +
+>>> +		usb1: usb@cefe0100 {
+>>> +			compatible = "generic-ohci";
+>>> +			reg = <0xcefe0100 0x110>>;
+>>> +			interrupts = <6>>;
+>>> +			interrupt-parent = <&vic0>>;
+>>> +		};
+>>> +
+>>> +		vrom@58000000 {
+>>> +			compatible = "mtd-ram";
+>>> +			bank-width = <4>>;
+>>> +			reg = <0x58000000 0x4000000>>;
+>>> +			#address-cells = <1>>;
+>>> +			#size-cells = <1>>;
+>>> +			partition@0 {
+>>> +				label = "vrom-prime";
+>>> +				reg = <0x0 0x2000000>>;
+>>> +			};
+>>> +			partition@2000000 {
+>>> +				label = "vrom-second";
+>>> +				reg = <0x2000000 0x2000000>>;
+>>> +			};
+>>> +		};
+>>> +
+>>> +		i2cg: syscon@c00000f8 {
+> 
+> 
+>>> +			compatible = "simple-mfd", "syscon";
+>>> +			reg = <0xc00000f8 0x08>>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	clocks {
+>>> +		osc: osc {
+> 
+>> Keep node naming consistent, so just "clk"... but it's also very generic comparing to others, so I wonder what is this clock?
+> 
+> We are in the process of redoing the clocks. This was the oscillator but no longer needed for the minimum boot config.
+> 
+>>> +			compatible = "fixed-clock";
+>>> +			#clock-cells = <0>>;
+>>> +			clock-output-names = "osc";
+>>> +			clock-frequency = <33333333>>;
+>>> +		};
+>>> +
+>>> +		iopclk: iopclk {
+>>> +			compatible = "fixed-clock";
+>>> +			#clock-cells = <0>>;
+>>> +			clock-output-names = "iopclk";
+>>> +			clock-frequency = <400000000>>;
+>>> +		};
+>>> +
+>>> +		memclk: memclk {
+>>> +			compatible = "fixed-clock";
+>>> +			#clock-cells = <0>>;
+>>> +			clock-output-names = "memclk";
+>>> +			clock-frequency = <800000000>>;
+>>> +		};
+> 
+>> What are these clocks? If external to the SoC, then where are they? On the board?
+> 
+> This was the internal iopclk and memclk they were both internal to the chip.
+> For now I am removing osc and memclk and will just have an iopclk that Gxp-timer will refer to.
+
+You should rather have a clock controller driver which defines this (and
+many others). They can stay as a temporary work-around, if you really
+need them for some other nodes.
+
+Best regards,
+Krzysztof
