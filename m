@@ -1,118 +1,71 @@
-Return-Path: <SRS0=YD5N=T4=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=3feU=T5=inria.fr=Julia.Lawall@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D6A3C433EF
-	for <soc@archiver.kernel.org>; Thu, 17 Mar 2022 18:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E385C4332F
+	for <soc@archiver.kernel.org>; Fri, 18 Mar 2022 10:37:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85313C340F2; Thu, 17 Mar 2022 18:31:02 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 222B2C340EE
-	for <soc@kernel.org>; Thu, 17 Mar 2022 18:31:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 222B2C340EE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CFE8169E;
-	Thu, 17 Mar 2022 11:31:00 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C8B53F7F5;
-	Thu, 17 Mar 2022 11:30:58 -0700 (PDT)
-From: Andre Przywara <andre.przywara@arm.com>
-To: Russell King <linux@armlinux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
+	id C4916C340E8; Fri, 18 Mar 2022 10:37:51 +0000 (UTC)
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B7EA2C340EC;
+	Fri, 18 Mar 2022 10:37:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7EA2C340EC
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inria.fr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kLFY9Yxqe1s3OOFAPDyKIWGJGBLJRoXKVlnXfo8VTrQ=;
+  b=EKOvbyqoGSC/JvN9rk4SvEUe1jyqefG6RQQe6dlY+/PslstO3gPjh2Px
+   7vuORTfLDtlAWDsH4A1vWe/Bkx+iGaPJCIRthnj4i/tuHxOKFEG7PaRQz
+   8NFKvGigLS1kz6xHrGc1j5x8nurYPRMzUUtwwyM7xhkJdI7SxqUCWPgiR
+   I=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
+   d="scan'208";a="8935657"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:38 +0100
+From: Julia Lawall <Julia.Lawall@inria.fr>
+To: Viresh Kumar <vireshk@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
+Cc: kernel-janitors@vger.kernel.org,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@kernel.org,
+	Russell King <linux@armlinux.org.uk>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev
-Subject: [PATCH 5/5] ARM: configs: multi_v5: Enable Allwinner F1C100
-Date: Thu, 17 Mar 2022 18:30:43 +0000
-Message-Id: <20220317183043.948432-6-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220317183043.948432-1-andre.przywara@arm.com>
-References: <20220317183043.948432-1-andre.przywara@arm.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: spear: fix typos in comments
+Date: Fri, 18 Mar 2022 11:37:16 +0100
+Message-Id: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Kconfig symbols required for the Allwinner F1C100 (MACH_SUNIV) are
-currently not selected by any defconfig. sunxi_defconfig only covers the
-v7 SoCs, but the F1C100s is ARMv5, so we cannot share a single image.
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-Add the required symbols to multi_v5_defconfig, to give people some sane
-default config when playing around with this chip. This is probably more
-important as there are surely not many distros out there supporting
-ARMv5 out of the box.
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-This allows my LicheePi Nano board to boot to a busybox prompt.
-
-The zImage size grows by about 50 KB, in detail:
-
-    text    data     bss     dec     hex   filename
-10510000  4400700  687740 15598440 ee0368 vmlinux-old
-10588592  4469096  686812 15744500 f03df4 vmlinux-new
-
-14922908			arch/arm/boot/Image-old
-15067388			arch/arm/boot/Image-new
-6388016				arch/arm/boot/zImage-old
-6440064				arch/arm/boot/zImage-new
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- arch/arm/configs/multi_v5_defconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm/mach-spear/spear13xx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-index f89baa88facb..19ffce42223f 100644
---- a/arch/arm/configs/multi_v5_defconfig
-+++ b/arch/arm/configs/multi_v5_defconfig
-@@ -52,6 +52,7 @@ CONFIG_MACH_WNR854T=y
- CONFIG_MACH_RD88F5181L_GE=y
- CONFIG_MACH_RD88F5181L_FXO=y
- CONFIG_MACH_RD88F6183AP_GE=y
-+CONFIG_ARCH_SUNXI=y
- CONFIG_AEABI=y
- CONFIG_HIGHMEM=y
- CONFIG_ARM_APPENDED_DTB=y
-@@ -135,6 +136,7 @@ CONFIG_SERIAL_8250_RUNTIME_UARTS=6
- CONFIG_SERIAL_8250_EXTENDED=y
- CONFIG_SERIAL_8250_MANY_PORTS=y
- CONFIG_SERIAL_8250_ASPEED_VUART=m
-+CONFIG_SERIAL_8250_DW=y
- CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_SERIAL_ATMEL=y
- CONFIG_SERIAL_ATMEL_CONSOLE=y
-@@ -155,6 +157,7 @@ CONFIG_SPI=y
- CONFIG_SPI_ATMEL=y
- CONFIG_SPI_IMX=y
- CONFIG_SPI_ORION=y
-+CONFIG_SPI_SUN6I=y
- CONFIG_GPIO_ASPEED=m
- CONFIG_GPIO_ASPEED_SGPIO=y
- CONFIG_GPIO_MXC=y
-@@ -171,6 +174,7 @@ CONFIG_THERMAL=y
- CONFIG_KIRKWOOD_THERMAL=y
- CONFIG_AT91SAM9X_WATCHDOG=y
- CONFIG_ORION_WATCHDOG=y
-+CONFIG_SUNXI_WATCHDOG=y
- CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_IMX2_WDT=y
- CONFIG_MFD_ATMEL_HLCDC=y
-@@ -241,6 +245,7 @@ CONFIG_MMC_SDHCI_PLTFM=m
- CONFIG_MMC_SDHCI_OF_ASPEED=m
- CONFIG_MMC_ATMELMCI=y
- CONFIG_MMC_MVSDIO=y
-+CONFIG_MMC_SUNXI=y
- CONFIG_NEW_LEDS=y
- CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_GPIO=y
--- 
-2.25.1
+diff --git a/arch/arm/mach-spear/spear13xx.c b/arch/arm/mach-spear/spear13xx.c
+index 74d1ca2a529a..b38391e9d8bf 100644
+--- a/arch/arm/mach-spear/spear13xx.c
++++ b/arch/arm/mach-spear/spear13xx.c
+@@ -29,7 +29,7 @@ void __init spear13xx_l2x0_init(void)
+ 	/*
+ 	 * 512KB (64KB/way), 8-way associativity, parity supported
+ 	 *
+-	 * FIXME: 9th bit, of Auxillary Controller register must be set
++	 * FIXME: 9th bit, of Auxiliary Controller register must be set
+ 	 * for some spear13xx devices for stable L2 operation.
+ 	 *
+ 	 * Enable Early BRESP, L2 prefetch for Instruction and Data,
 
