@@ -1,65 +1,76 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EACFC433F5
-	for <soc@archiver.kernel.org>; Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 860BFC433EF
+	for <soc@archiver.kernel.org>; Sat, 19 Mar 2022 23:32:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5A011C340F6; Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3659CC340F3;
-	Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
+	id 31516C340F5; Sat, 19 Mar 2022 23:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED1BC340ED;
+	Sat, 19 Mar 2022 23:32:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647727211;
-	bh=81JDwQ3MPhQBXUVxoGYHv7HkM1aayAEPmKJ3klsWg04=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=LeqI7WpmpYM3rOkIC2Pc1SsTr84tkNWOV74icCo58mHxNjjjzYaof0x08waOiVVFw
-	 ezCVC8GNzrKvoOn/GM20ewxzMCopZefM05YBV5R9FKPxKXe+emfAgmFyo6YOFgDS9i
-	 LLX1A1BnlcpuzBtUiy0r3PDZj3XMmzwJ0bFn6+O4fb6+OvxB4VWEaGuQ5z7Stxj5Bh
-	 tTJ625Ho+8XtxMSykkIjw5mF44zAQFHOLsQNlp0v1G9i+TK4jx1TZLdb3Z0YyS1Bnw
-	 qicr+mRH8tQVp0BYJcsXu4Pgr7jZ6XqWOXnsLqQzw0Ql58fNQMDN/8lw+i7q0VtNk4
-	 fTEsjnkrSsrGA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 17959F0383F;
-	Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1647732767;
+	bh=q90rJhy0FCf9WZ4etZn+6EjqeVNSyA5KFJMVRIzmVtI=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=BE7TvNAY2ftvKSeGFij2bHrKqaiBUwrfgsOG0OFyCK2BA/3ZjYus82IRoHRpy9K2H
+	 UsmC43/Uxy4aDwQVPenC3Ltis4ZRRnHR2SVA9qLSiQ96lyNz4qXoCOLEb2LPqbXDwc
+	 9wGqFdovr7TvkI6aSYnWOqSjZSg9y2pN5I5YjScGPM1Dco89puuv8oSskekAsKSWEB
+	 l1QbWYsjI1CUhu5Q4WPJ9f+SjcXCIaiNPiK0t24fZEnx1X0HaKn2Ce6EdcQ1np2FNp
+	 cjt+m4BuFjjkk6Ibgd3T0GRd6vEIkgRqAwYsrOJrLPYBnDq9iWzUEVGTXueIq08F6l
+	 aWbl0iJWsG8Mw==
+Received: by mail-wm1-f46.google.com with SMTP id h16so6132848wmd.0;
+        Sat, 19 Mar 2022 16:32:46 -0700 (PDT)
+X-Gm-Message-State: AOAM530Xkl2Q9VCiA9nBHk04dCc+JUVSvLIjto8qI/Z08x7+r7aT+Ydg
+	nHXhmD6cEkZLYV8gf7CWhEoMNB8v9a1+dxZvmA8=
+X-Google-Smtp-Source: ABdhPJx74LUCktQTOclww6WRJ3gEC0yEpKR6QxvywEL321vUgZdQHgNVsMKxkQ4xZi1WHKVViX/6Kge2WdmS1G9SxLo=
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
+ s25-20020a1cf219000000b0038c782c03bbmr12363936wmc.94.1647732765309; Sat, 19
+ Mar 2022 16:32:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: dts: n5x: drop invalid property and fix edac node name
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <164772721109.21632.6944599694851201175.git-patchwork-notify@kernel.org>
-Date: Sat, 19 Mar 2022 22:00:11 +0000
-References: <20220318121044.108750-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220318121044.108750-1-krzysztof.kozlowski@canonical.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Sun, 20 Mar 2022 00:32:29 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1NPYBhj3icwvQm1muRiWTAZEJT+ORovVsiwCCAAkYSqg@mail.gmail.com>
+Message-ID: <CAK8P3a1NPYBhj3icwvQm1muRiWTAZEJT+ORovVsiwCCAAkYSqg@mail.gmail.com>
+Subject: ARM: SoC fix for 5.17, part 4
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, Marc Zyngier <maz@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
 
-On Fri, 18 Mar 2022 13:10:44 +0100 you wrote:
-> The intel,sysmgr-syscon in EDAC/memory controller node is not a
-> recognized and documented property, so drop it to fix error:
-> 
->   sdr_edac@f87f8000: 'intel,sysmgr-syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Align also the node name with Devicetree specification (generic, not
-> specific, and EDAC is purely Linux term).
-> 
-> [...]
+are available in the Git repository at:
 
-Here is the summary with links:
-  - arm64: dts: n5x: drop invalid property and fix edac node name
-    https://git.kernel.org/soc/soc/c/bcea9aaa4373
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/soc-fixes-5.17-4
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+for you to fetch changes up to 1447c635802fd0f5e213ad5277753108d56a4db3:
 
+  Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address
+cells" (2022-03-16 19:41:14 +0100)
 
+----------------------------------------------------------------
+ARM: SoC fix for 5.17, part 4
+
+Here is one last regression fix for 5.17, reverting a patch
+that went into 5.16 as a cleanup that ended up breaking
+external interrupts on Layerscape chips.
+
+The revert makes it work again, but also reintroduces a
+build time warning about the nonstandard DT binding that
+will have to be dealt with in the future.
+
+----------------------------------------------------------------
+Vladimir Oltean (1):
+      Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address cells"
+
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 24 ++++++++++++------------
+ arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 24 ++++++++++++------------
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 24 ++++++++++++------------
+ 3 files changed, 36 insertions(+), 36 deletions(-)
