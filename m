@@ -4,68 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A2FCC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99336C433EF
 	for <soc@archiver.kernel.org>; Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 44F4BC340F5; Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 20489C340ED
-	for <soc@kernel.org>; Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
+	id 4964CC340F4; Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22204C340F2;
+	Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1647727211;
-	bh=Avqh8oXk4goKE1TDiXjraBC7WtK7AQxcje7C1ccl/q0=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=N91vRng0txjmW2sRMV8b0swq7LhwSh1+ReWL9jztVF/iCKQEV0H0GPhpEdCdoVmCW
-	 kHVZg31i+NZBYQTSNvM5xHYhIYRAcHAU//Fs3Dqtg7M+wiDpPxSGJSxaf3G5IlmaVO
-	 mCH/kV0lKAYZhYmCkXr1lBCQpmGrCpnqjCUsrxgLMiZ03Mgp40O1KalZafKnwchw0F
-	 lb3z1sV5Hb1PI0a9h2GfspjSYSDey2fvQ0dbSlq9mLSkxNqyL3G7VCGPzCm4HY9TNW
-	 5msLHqX9aMeq3EBHN8B0f2Xgj/JtGBiBqG81ayv6KttwiLhIzOstdXPlmi8cJqJXSz
-	 Tf+Pzi/KaMWBg==
+	bh=bThyptE4MupUZzLLnrOiPzm/8F2CFokcMtZ+mN5Xpr4=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=pZDLZjyar5wvoiykmj1+AO7s2XJxHVBLG6AbCXmZ8Y1K5coyMES45t0jJPlmK5V/L
+	 SCII3/Mt6DPs7+rbZl7sQCkh07Jpox7Wa6uGgvFRp0OnYrJXyUp0O691FUm0seAYtT
+	 DYa5uoXqyGTZIAIHy6KHE2IeHyFLED8tFWaYsSR0nSfLHSVwMBHYguw3T+fRpU9y1e
+	 bGaKVcDEQv3lg/b6g1M/jTLdzImZEsVD3cSx34xE0QueQqdPX+VYW0wf3ZDthjq7PW
+	 V24a/Lqp+qJnp81e97+w6wKA/jhFxx3L8SOtiUKeSFLdDAxJuhJ0de8CFTHvLGvQrX
+	 +8Tc22cTWaiog==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F11A2E6D3DD;
-	Sat, 19 Mar 2022 22:00:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06B33EAC09C;
+	Sat, 19 Mar 2022 22:00:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH] ARM: spear: fix typos in comments
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164772721093.21632.5114829360709719734.git-patchwork-summary@kernel.org>
-Date: Sat, 19 Mar 2022 22:00:10 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <164772721102.21632.16520774977965134029.git-patchwork-notify@kernel.org>
+Date: Sat, 19 Mar 2022 22:00:11 +0000
+References: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+In-Reply-To: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+To: Julia Lawall <julia.lawall@inria.fr>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: ARM: spear: fix typos in comments
-  Submitter: Julia Lawall <julia.lawall@inria.fr>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=624578
-  Lore link: https://lore.kernel.org/r/20220318103729.157574-21-Julia.Lawall@inria.fr
+On Fri, 18 Mar 2022 11:37:16 +0100 you wrote:
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
+> ---
+>  arch/arm/mach-spear/spear13xx.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Series: ARM: configs: fix multi_v5_defconfig
-  Submitter: Andre Przywara <andre.przywara@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=624362
-  Lore link: https://lore.kernel.org/r/20220317183043.948432-1-andre.przywara@arm.com
-    Patches: [1/5] ARM: configs: multi_v5_defconfig: remove deleted platforms
-             [2/5] ARM: configs: multi_v5_defconfig: re-enable CONFIG_V4L_PLATFORM_DRIVERS
-             [3/5] ARM: configs: multi_v5_defconfig: re-enable DRM_PANEL and FB_xxx
-             [4/5] ARM: configs: clean up multi_v5_defconfig
+Here is the summary with links:
+  - ARM: spear: fix typos in comments
+    https://git.kernel.org/soc/soc/c/339ac71b233e
 
-Patch: arm64: dts: n5x: drop invalid property and fix edac node name
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=624630
-  Lore link: https://lore.kernel.org/r/20220318121044.108750-1-krzysztof.kozlowski@canonical.com
-
-
-Total patches: 6
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
