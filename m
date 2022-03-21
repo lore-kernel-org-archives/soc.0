@@ -1,76 +1,96 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=zIQU=UA=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 860BFC433EF
-	for <soc@archiver.kernel.org>; Sat, 19 Mar 2022 23:32:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15407C433EF
+	for <soc@archiver.kernel.org>; Mon, 21 Mar 2022 05:11:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 31516C340F5; Sat, 19 Mar 2022 23:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED1BC340ED;
-	Sat, 19 Mar 2022 23:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1647732767;
-	bh=q90rJhy0FCf9WZ4etZn+6EjqeVNSyA5KFJMVRIzmVtI=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=BE7TvNAY2ftvKSeGFij2bHrKqaiBUwrfgsOG0OFyCK2BA/3ZjYus82IRoHRpy9K2H
-	 UsmC43/Uxy4aDwQVPenC3Ltis4ZRRnHR2SVA9qLSiQ96lyNz4qXoCOLEb2LPqbXDwc
-	 9wGqFdovr7TvkI6aSYnWOqSjZSg9y2pN5I5YjScGPM1Dco89puuv8oSskekAsKSWEB
-	 l1QbWYsjI1CUhu5Q4WPJ9f+SjcXCIaiNPiK0t24fZEnx1X0HaKn2Ce6EdcQ1np2FNp
-	 cjt+m4BuFjjkk6Ibgd3T0GRd6vEIkgRqAwYsrOJrLPYBnDq9iWzUEVGTXueIq08F6l
-	 aWbl0iJWsG8Mw==
-Received: by mail-wm1-f46.google.com with SMTP id h16so6132848wmd.0;
-        Sat, 19 Mar 2022 16:32:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530Xkl2Q9VCiA9nBHk04dCc+JUVSvLIjto8qI/Z08x7+r7aT+Ydg
-	nHXhmD6cEkZLYV8gf7CWhEoMNB8v9a1+dxZvmA8=
-X-Google-Smtp-Source: ABdhPJx74LUCktQTOclww6WRJ3gEC0yEpKR6QxvywEL321vUgZdQHgNVsMKxkQ4xZi1WHKVViX/6Kge2WdmS1G9SxLo=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr12363936wmc.94.1647732765309; Sat, 19
- Mar 2022 16:32:45 -0700 (PDT)
-MIME-Version: 1.0
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Sun, 20 Mar 2022 00:32:29 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1NPYBhj3icwvQm1muRiWTAZEJT+ORovVsiwCCAAkYSqg@mail.gmail.com>
-Message-ID: <CAK8P3a1NPYBhj3icwvQm1muRiWTAZEJT+ORovVsiwCCAAkYSqg@mail.gmail.com>
-Subject: ARM: SoC fix for 5.17, part 4
-To: Linus Torvalds <torvalds@linux-foundation.org>
+	id C6D1EC340F0; Mon, 21 Mar 2022 05:11:46 +0000 (UTC)
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E084FC340E8
+	for <soc@kernel.org>; Mon, 21 Mar 2022 05:11:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E084FC340E8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f178.google.com with SMTP id w4so11708350ply.13
+        for <soc@kernel.org>; Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ljtCtXdVDHvboQzqZn2Q/lABoXg83zrD6bjOe7HHLFQ=;
+        b=zfrmFyu/ZYdoUki2x8lfXqzA+xFOfDNne30+A0kuctzZXnrUfD659CDieFanTrv3ym
+         h7/+Mi9WRZ8kPZXyA2Y27+TEoVcM3QsxC8yjssKaQgYIvuKCwEYlB3Wnyfr4cFQyTaK1
+         nZ4s7AJMu7uVqv4/UnjgC8rv6vmx1l4/ycjLOnkiVxihvPOarlJvT1pnSRLkSeyqMRO5
+         1qJl9DJK93bcaINaFdqtb9UQo84Y4IuUmTxZHvmmDep2CP0z9r9lEE6bISsIM8eCBXvo
+         uPppjNLRkdm1iCvcgOQmohE4QG+QzsF8ONc1U9VYeQaBcQPx+aaTA/Fd7WgnHb+z0bVV
+         Dd2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ljtCtXdVDHvboQzqZn2Q/lABoXg83zrD6bjOe7HHLFQ=;
+        b=qZMMgxw7YYsAbFxDJZ5uOgwEViKf0jd8BkLvUE3k4172r0ZYoIGkYnz6u+JXqqaomX
+         peM6DSC1FyiF0E6EcB2kABlw5JVWIA8YfraWcM3jNAiGDH80TKq4gCnB1E8XNqADRmY5
+         FQrlbHn/4belx81K913qszGUSPZZAVTHSRKzWLyIvM8ok1XUtBHgZrWjxSqpeltwul9K
+         TgKAIoOWnyb9FQKUeP3jcRwd84G9+fW+LHCgpwkAhVNZMmptDXwOLcRCwC+RvehUmsFX
+         FQfbP8KfKzoYs5BTFXju0ut1mNPo9gsTr5GBlRoay1wyr2668ST85rz7Q2cc5Vl88Rwo
+         Gp0g==
+X-Gm-Message-State: AOAM5314bcpqfD8JNihhVV5L93faVXupVINzicKTjuB+bKqLSOL/tzi4
+	YCPiCAK1jCzZFUzbZqA0An9d8Q==
+X-Google-Smtp-Source: ABdhPJxpP7IH2vtw0+4J1t9nHjBU4tJNb2wQP+R8AXexRkuTkU6j6fBJND4g9OSGcNQaJ2MyM1HtBQ==
+X-Received: by 2002:a17:902:700b:b0:148:ee33:70fe with SMTP id y11-20020a170902700b00b00148ee3370femr11279112plk.38.1647839505294;
+        Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm13170925pgr.37.2022.03.20.22.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 22:11:44 -0700 (PDT)
+Date: Mon, 21 Mar 2022 10:41:42 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Julia Lawall <Julia.Lawall@inria.fr>
 List-Id: <soc.lore.kernel.org>
-Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, Marc Zyngier <maz@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Viresh Kumar <vireshk@kernel.org>, kernel-janitors@vger.kernel.org,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: spear: fix typos in comments
+Message-ID: <20220321051142.pkihlm6bnclmtdrq@vireshk-i7>
+References: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+User-Agent: NeoMutt/20180716-391-311a52
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+On 18-03-22, 11:37, Julia Lawall wrote:
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
+> ---
+>  arch/arm/mach-spear/spear13xx.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/mach-spear/spear13xx.c b/arch/arm/mach-spear/spear13xx.c
+> index 74d1ca2a529a..b38391e9d8bf 100644
+> --- a/arch/arm/mach-spear/spear13xx.c
+> +++ b/arch/arm/mach-spear/spear13xx.c
+> @@ -29,7 +29,7 @@ void __init spear13xx_l2x0_init(void)
+>  	/*
+>  	 * 512KB (64KB/way), 8-way associativity, parity supported
+>  	 *
+> -	 * FIXME: 9th bit, of Auxillary Controller register must be set
+> +	 * FIXME: 9th bit, of Auxiliary Controller register must be set
+>  	 * for some spear13xx devices for stable L2 operation.
+>  	 *
+>  	 * Enable Early BRESP, L2 prefetch for Instruction and Data,
 
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/soc-fixes-5.17-4
-
-for you to fetch changes up to 1447c635802fd0f5e213ad5277753108d56a4db3:
-
-  Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address
-cells" (2022-03-16 19:41:14 +0100)
-
-----------------------------------------------------------------
-ARM: SoC fix for 5.17, part 4
-
-Here is one last regression fix for 5.17, reverting a patch
-that went into 5.16 as a cleanup that ended up breaking
-external interrupts on Layerscape chips.
-
-The revert makes it work again, but also reintroduces a
-build time warning about the nonstandard DT binding that
-will have to be dealt with in the future.
-
-----------------------------------------------------------------
-Vladimir Oltean (1):
-      Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address cells"
-
- arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 24 ++++++++++++------------
- arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 24 ++++++++++++------------
- arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 24 ++++++++++++------------
- 3 files changed, 36 insertions(+), 36 deletions(-)
+-- 
+viresh
