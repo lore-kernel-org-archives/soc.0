@@ -1,96 +1,192 @@
-Return-Path: <SRS0=zIQU=UA=linaro.org=viresh.kumar@kernel.org>
+Return-Path: <SRS0=U6UU=UB=walle.cc=michael@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15407C433EF
-	for <soc@archiver.kernel.org>; Mon, 21 Mar 2022 05:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DCBBC433F5
+	for <soc@archiver.kernel.org>; Tue, 22 Mar 2022 21:39:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C6D1EC340F0; Mon, 21 Mar 2022 05:11:46 +0000 (UTC)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id E06AAC340F5; Tue, 22 Mar 2022 21:39:14 +0000 (UTC)
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E084FC340E8
-	for <soc@kernel.org>; Mon, 21 Mar 2022 05:11:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E084FC340E8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id w4so11708350ply.13
-        for <soc@kernel.org>; Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ljtCtXdVDHvboQzqZn2Q/lABoXg83zrD6bjOe7HHLFQ=;
-        b=zfrmFyu/ZYdoUki2x8lfXqzA+xFOfDNne30+A0kuctzZXnrUfD659CDieFanTrv3ym
-         h7/+Mi9WRZ8kPZXyA2Y27+TEoVcM3QsxC8yjssKaQgYIvuKCwEYlB3Wnyfr4cFQyTaK1
-         nZ4s7AJMu7uVqv4/UnjgC8rv6vmx1l4/ycjLOnkiVxihvPOarlJvT1pnSRLkSeyqMRO5
-         1qJl9DJK93bcaINaFdqtb9UQo84Y4IuUmTxZHvmmDep2CP0z9r9lEE6bISsIM8eCBXvo
-         uPppjNLRkdm1iCvcgOQmohE4QG+QzsF8ONc1U9VYeQaBcQPx+aaTA/Fd7WgnHb+z0bVV
-         Dd2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ljtCtXdVDHvboQzqZn2Q/lABoXg83zrD6bjOe7HHLFQ=;
-        b=qZMMgxw7YYsAbFxDJZ5uOgwEViKf0jd8BkLvUE3k4172r0ZYoIGkYnz6u+JXqqaomX
-         peM6DSC1FyiF0E6EcB2kABlw5JVWIA8YfraWcM3jNAiGDH80TKq4gCnB1E8XNqADRmY5
-         FQrlbHn/4belx81K913qszGUSPZZAVTHSRKzWLyIvM8ok1XUtBHgZrWjxSqpeltwul9K
-         TgKAIoOWnyb9FQKUeP3jcRwd84G9+fW+LHCgpwkAhVNZMmptDXwOLcRCwC+RvehUmsFX
-         FQfbP8KfKzoYs5BTFXju0ut1mNPo9gsTr5GBlRoay1wyr2668ST85rz7Q2cc5Vl88Rwo
-         Gp0g==
-X-Gm-Message-State: AOAM5314bcpqfD8JNihhVV5L93faVXupVINzicKTjuB+bKqLSOL/tzi4
-	YCPiCAK1jCzZFUzbZqA0An9d8Q==
-X-Google-Smtp-Source: ABdhPJxpP7IH2vtw0+4J1t9nHjBU4tJNb2wQP+R8AXexRkuTkU6j6fBJND4g9OSGcNQaJ2MyM1HtBQ==
-X-Received: by 2002:a17:902:700b:b0:148:ee33:70fe with SMTP id y11-20020a170902700b00b00148ee3370femr11279112plk.38.1647839505294;
-        Sun, 20 Mar 2022 22:11:45 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm13170925pgr.37.2022.03.20.22.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 22:11:44 -0700 (PDT)
-Date: Mon, 21 Mar 2022 10:41:42 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Julia Lawall <Julia.Lawall@inria.fr>
-List-Id: <soc.lore.kernel.org>
-Cc: Viresh Kumar <vireshk@kernel.org>, kernel-janitors@vger.kernel.org,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: spear: fix typos in comments
-Message-ID: <20220321051142.pkihlm6bnclmtdrq@vireshk-i7>
-References: <20220318103729.157574-21-Julia.Lawall@inria.fr>
+	by smtp.kernel.org (Postfix) with ESMTPS id E0085C340EC;
+	Tue, 22 Mar 2022 21:39:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E0085C340EC
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id D984422205;
+	Tue, 22 Mar 2022 22:39:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+	t=1647985148;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=u4r6vLaven55dK5umy3WWTE/9sCNUfcL0n7ze3I+7DM=;
+	b=ctAGNtYfe8CwjY/aTkifNRWAwYZy8sRj6XRwTET4GJv47XFDI1JT3Ms31A9dLRq09wGtPg
+	JptzSQE/WfiU+5hcXkZ9e1AW9hGGKTNlF0W7qSkPYYdgLcnh+kUbaR8n2P47o+KQfHmCAR
+	1b2bUtWP+H5SGkLgXF8A9QsvGv/LbWI=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318103729.157574-21-Julia.Lawall@inria.fr>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date: Tue, 22 Mar 2022 22:39:07 +0100
+From: Michael Walle <michael@walle.cc>
+To: Claudiu.Beznea@microchip.com
+List-Id: <soc.lore.kernel.org>
+Cc: Kavyasree.Kotagiri@microchip.com, Nicolas.Ferre@microchip.com,
+ arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski@canonical.com, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v1 3/6] ARM: dts: lan966x: add all flexcom usart nodes
+In-Reply-To: <3e17aa8b-f6e5-e2c1-bd1d-8950d23c3e49@microchip.com>
+References: <20220303160323.3316317-1-michael@walle.cc>
+ <20220303160323.3316317-4-michael@walle.cc>
+ <a33f0c73-df49-5a22-14b3-0059f7d6b827@microchip.com>
+ <2e0aefc90a80bdf13df0e59857c52ca7@walle.cc>
+ <bf005cd2-4c83-1552-8282-d229eacc51f3@microchip.com>
+ <219ffd086373c453d5d0aad897cd2d41@walle.cc>
+ <3e17aa8b-f6e5-e2c1-bd1d-8950d23c3e49@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d7d17a2156a9591ad4c19ef912189a98@walle.cc>
+X-Sender: michael@walle.cc
 
-On 18-03-22, 11:37, Julia Lawall wrote:
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
+Am 2022-03-18 13:17, schrieb Claudiu.Beznea@microchip.com:
+> On 07.03.2022 14:04, Michael Walle wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
+>> the
+>> content is safe
+>> 
+>> Am 2022-03-07 12:53, schrieb Claudiu.Beznea@microchip.com:
+>>> On 04.03.2022 13:01, Michael Walle wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
+>>>> know
+>>>> the
+>>>> content is safe
+>>>> 
+>>>> Hi,
+>>>> 
+>>>> thanks for the quick review.
+>>>> 
+>>>> Am 2022-03-04 09:30, schrieb Claudiu.Beznea@microchip.com:
+>>>>> On 03.03.2022 18:03, Michael Walle wrote:
+>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+>>>>>> know
+>>>>>> the content is safe
+>>>>>> 
+>>>>>> Add all the usart nodes for the flexcom block. There was already
+>>>>>> an usart node for the flexcom3 block. But it missed the DMA
+>>>>>> channels.
+>>>>> 
+>>>>> And it would be good to go though a different patch.
+>>>> 
+>>>> sure
+>>>> 
+>>>>>> Although the DMA channels are specified, DMA is not
+>>>>>> enabled by default because break detection doesn't work with DMA.
+>>>>>> 
+>>>>>> Keep the nodes disabled by default.
+>>>>>> 
+>>>>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>>>>> ---
+>>>>>>  arch/arm/boot/dts/lan966x.dtsi | 55
+>>>>>> ++++++++++++++++++++++++++++++++++
+>>>>>>  1 file changed, 55 insertions(+)
+>>>>>> 
+>>>>>> diff --git a/arch/arm/boot/dts/lan966x.dtsi
+>>>>>> b/arch/arm/boot/dts/lan966x.dtsi
+>>>>>> index a7d46a2ca058..bea69b6d2749 100644
+>>>>>> --- a/arch/arm/boot/dts/lan966x.dtsi
+>>>>>> +++ b/arch/arm/boot/dts/lan966x.dtsi
+>>>>>> @@ -92,6 +92,19 @@ flx0: flexcom@e0040000 {
+>>>>>>                         #size-cells = <1>;
+>>>>>>                         ranges = <0x0 0xe0040000 0x800>;
+>>>>>>                         status = "disabled";
+>>>>>> +
+>>>>>> +                       usart0: serial@200 {
+>>>>>> +                               compatible =
+>>>>>> "atmel,at91sam9260-usart";
+>>>>> 
+>>>>> Are the usart blocks in lan966x 1:1 compatible with what is is
+>>>>> sam9260?
+>>>>> In
+>>>>> case not it may worth to have a new compatible here, for lan966x,
+>>>>> such
+>>>>> that
+>>>>> when new features will be implemented in usart driver for lan966x 
+>>>>> the
+>>>>> old
+>>>>> DT (this one) will work with the new kernel implementation.
+>>>> 
+>>>> During my review of the inital dtsi patch, I've asked the same
+>>>> question
+>>>> [1]
+>>>> and I was told they are the same.
+>>>> 
+>>>> At least this exact usart compatible is already in this file. I was
+>>>> under
+>>>> the impression, that was the least controversial compatible :)
+>>> 
+>>> OK.
+>>> 
+>>>> 
+>>>> But you'll need to tell me if they are the same or not, I don't have
+>>>> any clue what microchip has reused.
+>>> 
+>>> From software point of view comparing registers should be good, as 
+>>> far
+>>> as I
+>>> can tell. All AT91 datasheet should be available. I though you have
+>>> checked
+>>> one against LAN966. At the moment I don't have a DS for LAN966. I'll
+>>> find
+>>> one and have a look.
+>> 
+>> So my train of thought was like: even if the registers are the same I
+>> cannot be sure that it is the exact same IP and will behave the same.
+>> Therefore, it is something only microchip can answer.
+>> 
+>> You can find the registers at
+>> https://microchip-ung.github.io/lan9668_reginfo/reginfo_LAN9668.html
+>> 
+>> I'm not aware of any "classic" datasheet.
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> You can find all AT91 datasheet on Microchip web site [1].
 > 
-> ---
->  arch/arm/mach-spear/spear13xx.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-spear/spear13xx.c b/arch/arm/mach-spear/spear13xx.c
-> index 74d1ca2a529a..b38391e9d8bf 100644
-> --- a/arch/arm/mach-spear/spear13xx.c
-> +++ b/arch/arm/mach-spear/spear13xx.c
-> @@ -29,7 +29,7 @@ void __init spear13xx_l2x0_init(void)
->  	/*
->  	 * 512KB (64KB/way), 8-way associativity, parity supported
->  	 *
-> -	 * FIXME: 9th bit, of Auxillary Controller register must be set
-> +	 * FIXME: 9th bit, of Auxiliary Controller register must be set
->  	 * for some spear13xx devices for stable L2 operation.
->  	 *
->  	 * Enable Early BRESP, L2 prefetch for Instruction and Data,
+> Simple register comparison b/w register mapping at [2] and SAMA5D2
+> datasheet [3] (which uses the same compatible),  SAM9X60 datasheet [3] 
+> and
+> SAMA7G5 datasheet (not public at the moment) brings up a difference at
+> register FLEX_US_CR (bits 16, 17) which are not available on SAMA5D2,
+> SAM9X60 or SAMA7G5. Unless this is a mistake on documentation at [2] I 
+> say
+> it needs a new compatible.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I can't follow you here. These bits are already used in the current UART
+driver and are supported on the LAN966X. So if anything, SAMA5D2, 
+SAM9X60
+and SAMA7G5 need a new compatible, no?
 
--- 
-viresh
+-michael
+
+> Kavya, could you confirm this?
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> [1] https://www.microchip.com/
+> [2] 
+> https://microchip-ung.github.io/lan9668_reginfo/reginfo_LAN9668.html
+> [3] 
+> http://ww1.microchip.com/downloads/en/devicedoc/ds60001476b.pdf#G22.2193277
+> [4]
+> https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductDocuments/DataSheets/SAM9X60-Data-Sheet-DS60001579E.pdf
+> 
+>> 
+>> -michael
