@@ -4,38 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFDCDC433EF
-	for <soc@archiver.kernel.org>; Wed, 23 Mar 2022 23:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1353C433EF
+	for <soc@archiver.kernel.org>; Wed, 23 Mar 2022 23:09:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95B94C340F5; Wed, 23 Mar 2022 23:08:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80166C340F2
-	for <soc@kernel.org>; Wed, 23 Mar 2022 23:08:34 +0000 (UTC)
+	id 70B34C36AE7; Wed, 23 Mar 2022 23:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B871C36AE2
+	for <soc@kernel.org>; Wed, 23 Mar 2022 23:09:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1648076914;
-	bh=PRKnupBT2/5IsR6uehhBAD4EHuoZTBiSDyzGJKS/ELQ=;
+	s=k20201202; t=1648076963;
+	bh=r/A5U8oPryUJLqqlWG3YWZFHPOMc7MEUxZQ0xPbZeRk=;
 	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=CDcZt7OW1SsojJLT0bPr8mmdxxT6fczr0rZcess5BsvVIS3Dvo/vUx2dMxSyfmRQM
-	 5H4xjo1n6ridkrL+413OWDsWGeWfC8VkPMvv5Gp0XW47sYWvu5yO1Ae80clibxOaAd
-	 OmyQMtxVyhfQc7evv2w1VoepkWZ/IeMTFwHaVD9rFSJKhxDDNNgTxME6zXguQGtzL4
-	 JV0krcCkYCevKiUyudwcC0/NfvWuAXVCb+N+uIQHoZbFOmAmxITdD1eilTv+17bL9z
-	 F0JD4m0K04T4KKoQ1XlV1gOPL/LCwmmAhOdn0okoGKj4qe5jPFPrQUde1kHJWikSHj
-	 enI8ys4/t786g==
-Received: by mail-wr1-f54.google.com with SMTP id a1so4217062wrh.10
-        for <soc@kernel.org>; Wed, 23 Mar 2022 16:08:34 -0700 (PDT)
-X-Gm-Message-State: AOAM531dhpjBWpwe+7fjm2C0fTwOuX+AwFAuVpssA15TQodlSwC6frSR
-	Mb4POWwm1SPorg5InMEEDEWaqGLqwBen6K238qk=
-X-Google-Smtp-Source: ABdhPJzheCri/3PKMz4+GkCjxx2c21oxG1hIEQyjp5IN203b45Ucjx7+hCBW4WtzUX0L0pXd9Q+69nMVWyiWOEK8Raw=
-X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
- e12-20020a056000178c00b002040648b4c4mr2038006wrg.219.1648076912683; Wed, 23
- Mar 2022 16:08:32 -0700 (PDT)
+	b=ZY7fWoft5nQXSVD4rRAfjbL37BzGdg9d4If72i1rfDabWrIl6yAQYkKDd9AHgMKNV
+	 sMSgeqD1DApH7Rske18p7n7g90piO06YbrSl29g6nlKD9XYK/NNKnFR0BTzJ+xAvGp
+	 rFlGrDtw7Lm39u+nGasbrCmenqAD9baa8UWuVYVb/yya8KqAXVsHIQsLPSHaeL/NIz
+	 PNoXIqamBooV5kBanbaYjsWCbYTcp7C9HBhM4lE84tKa+FMcA7tGes2rCUfV91Ep0I
+	 Gpo+y11UQLEuqX4kJgP795yczkeoYINTnZNVwWHldjPw6pkum1pwX4KulbCQyPjEk6
+	 3c+Cw1zcFvQyw==
+Received: by mail-wm1-f41.google.com with SMTP id r64so1791256wmr.4
+        for <soc@kernel.org>; Wed, 23 Mar 2022 16:09:23 -0700 (PDT)
+X-Gm-Message-State: AOAM532KoKrfMUHSSvkAfTe415gLkCmNLyfOaqLoZtkGa3ulRg0n3AuK
+	qBTQDSva4460aVM1LW4d2TVlCiJg7/TRnIzx3pQ=
+X-Google-Smtp-Source: ABdhPJx1yHt60EEAiM3xKZH+imjVrJx5IhU4I32tIfEwmTyWAlZnWKdgwJDyQMPRUdJv5LkH8EvanD8UeVRWVMFEZbE=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr2261800wmj.20.1648076961593; Wed, 23
+ Mar 2022 16:09:21 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a29JCfCNWrJ-x7S+kewcSBpeguyo8fmUTt_V4gfrW3=HA@mail.gmail.com>
-In-Reply-To: <CAK8P3a29JCfCNWrJ-x7S+kewcSBpeguyo8fmUTt_V4gfrW3=HA@mail.gmail.com>
+ <CAK8P3a182FVbZ5QfVhMr20nxQN31fK29Csr_GRp_WpFoBFEPzQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a182FVbZ5QfVhMr20nxQN31fK29Csr_GRp_WpFoBFEPzQ@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 24 Mar 2022 00:08:16 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a182FVbZ5QfVhMr20nxQN31fK29Csr_GRp_WpFoBFEPzQ@mail.gmail.com>
-Message-ID: <CAK8P3a182FVbZ5QfVhMr20nxQN31fK29Csr_GRp_WpFoBFEPzQ@mail.gmail.com>
-Subject: [GIT PULL 1/4] ARM: defconfig updates for 5.18
+Date: Thu, 24 Mar 2022 00:09:05 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3_ykZD8sRQc=y_bfViDxmakXFpgWNL3bAz0Y6bHsV1wQ@mail.gmail.com>
+Message-ID: <CAK8P3a3_ykZD8sRQc=y_bfViDxmakXFpgWNL3bAz0Y6bHsV1wQ@mail.gmail.com>
+Subject: [GIT PULL 2/4] ARM: SoC updates for 5.18
 To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
 Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
@@ -50,147 +51,199 @@ The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566=
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-defconfig-5.18
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-5.=
+18
 
-for you to fetch changes up to cf38326010aebf39855977475a901c4c7a3e0b63:
+for you to fetch changes up to 2f618d5ef5dd05e2380ee627814de90d5a33c3f2:
 
-  ARM: configs: multi_v5: Enable Allwinner F1C100 (2022-03-23 11:16:59 +010=
-0)
-
-----------------------------------------------------------------
-ARM: defconfig updates for 5.18
-
-Various updates for the 32-bit and 64-bit defconfig files, mostly to
-enable additional hardware drivers for more machines, specifically for
-the Allwinner F1C100, Altera SoCFPGA, Broadcom, Microchip, Qualcomm,
-Airoha, Tegra, Renesas, and i.NX.
-
-The multi_v5_defconfig for older ARMv5 configs gets a rework for Andre
-Przywara to cleans up the multi_v5_defconfig for some cruft that has
-accumulated and drivers that got disabled unintentionally, while Anders
-Roxell makes it more useful for running under Qemu.
+  ARM: remove support for NOMMU ARMv4/v5 (2022-03-17 09:13:13 +0100)
 
 ----------------------------------------------------------------
-Akhil R (1):
-      arm64: defconfig: tegra: Enable GPCDMA
+ARM: SoC updates for 5.18
 
-Anders Roxell (1):
-      arm: multi_v5: enable configs for versatile
+SoC specific code is generally used for older platforms that don't (yet)
+use device tree to do the same things.
 
-Andre Przywara (5):
-      ARM: configs: multi_v5_defconfig: remove deleted platforms
-      ARM: configs: multi_v5_defconfig: re-enable CONFIG_V4L_PLATFORM_DRIVE=
-RS
-      ARM: configs: multi_v5_defconfig: re-enable DRM_PANEL and FB_xxx
-      ARM: configs: clean up multi_v5_defconfig
-      ARM: configs: multi_v5: Enable Allwinner F1C100
+ - Support is added for i.MXRT10xx, a Cortex-M7 based microcontroller
+   from NXP. At the moment this is still incomplete as other portions
+   are merged through different trees.
 
-Arnd Bergmann (11):
-      Merge tag 'ti-k3-config-for-v5.17-v2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into
-arm/defconfig
-      Merge tag 'imx-defconfig-5.18' of
+ - Long abandoned support for running NOMMU ARMv4 or ARMv5 platforms
+   gets removed, now the Arm NOMMU platforms are limited to the
+   Cortex-M family of microcontrollers
+
+ - Two old PXA boards get removed, along with corresponding driver
+   bits.
+
+ - Continued cleanup of the Intel IXP4xx platforms, removing some
+   remnants of the old board files.
+
+ - Minor Cleanups and fixes for Orion, PXA, MMP, Mstar, Samsung
+
+ - CPU idle support for AT91
+
+ - A system controller driver for Polarfire
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      ARM: orion/gpio: Get rid of unused first parameter in orion_gpio_init=
+()
+
+Arnd Bergmann (7):
+      Merge tag 'ixp4xx-cleanup-for-v5.18' of
+git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik
+into arm/soc
+      Merge tag 'imx-soc-5.18' of
 git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/defconfig
-      Merge tag 'at91-defconfig-5.18' of
-git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into
-arm/defconfig
-      Merge tag 'renesas-arm-defconfig-for-v5.18-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into
-arm/defconfig
-      Merge tag 'tegra-for-5.18-arm64-defconfig' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into
-arm/defconfig
-      Merge tag 'qcom-defconfig-for-5.18' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
-arm/defconfig
-      Merge tag 'v5.17-next-defconfig' of
-git://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into
-arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-5.17' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
-arm/defconfig
-      Merge tag 'at91-defconfig-5.18-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into
-arm/defconfig
-      Merge tag 'arm-soc/for-5.18/defconfig-arm64' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'arm64_defconfig_for_v5.18' of
-git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into
-arm/defconfig
+arm/soc
+      Merge tag 'at91-soc-5.18' of
+git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/soc
+      Merge tag 'samsung-soc-5.18' of
+git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/soc
+      ARM: PXA: fix up decompressor code
+      Merge tag 'mvebu-arm-5.18-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into
+arm/soc
+      ARM: remove support for NOMMU ARMv4/v5
 
-Claudiu Beznea (3):
-      ARM: configs: at91: sama7: enable cpu idle
-      ARM: configs: at91: sama7: add config for cpufreq
-      ARM: configs: at91: add eic
+Claudiu Beznea (5):
+      ARM: at91: ddr: remove CONFIG_SOC_SAMA7 dependency
+      ARM: at91: ddr: align macro definitions
+      ARM: at91: ddr: fix typo to align with datasheet naming
+      ARM: at91: PM: add cpu idle support for sama7g5
+      ARM: at91: Kconfig: select PM_OPP
 
-Dinh Nguyen (1):
-      arm64: defconfig: enable the CVP driver
+Conor Dooley (2):
+      soc: add microchip polarfire soc system controller
+      soc: microchip: make mpfs_sys_controller_put static
 
-Florian Fainelli (3):
-      arm64: defconfig: Enable additional Broadcom STB drivers
-      ARM: multi_v7_defconfig: Enable Broadcom STB USB drivers
-      ARM: multi_v7_defconfig: Enable BCM23550 and BCM53573
-
-Geert Uytterhoeven (2):
-      ARM: shmobile: defconfig: Disable unneeded 8250 serial options
-      arm64: defconfig: Enable additional support for Renesas platforms
+Daniel Palmer (1):
+      ARM: mstar: Select ARM_ERRATA_814220
 
 Giulio Benetti (1):
-      ARM: imxrt_defconfig: Add i.MXRT family defconfig
+      ARM: imx: Add initial support for i.MXRT10xx family
 
-John Crispin (1):
-      ARM: multi_v7_defconfig: Add support for Airoha EN7523 SoC
+Henrik Grimler (1):
+      ARM: exynos: only do SMC_CMD_CPU1BOOT call on Exynos4
 
-Kuninori Morimoto (1):
-      arm64: defconfig: Enable Audio Graph Card2 driver
+Jonathan Cameron (1):
+      ARM: pxa: remove Intel Imote2 and Stargate 2 boards
 
-Marcel Ziswiler (9):
-      arm64: defconfig: enable taskstats configuration
-      arm64: defconfig: enable pcieaer configuration
-      arm64: defconfig: re-order default configuration
-      arm64: defconfig: rebuild default configuration
-      arm64: defconfig: enable bpf/cgroup firewalling
-      arm64: defconfig: enable imx8m pcie phy driver
-      arm64: defconfig: build imx-sdma as a module
-      arm64: defconfig: build r8169 as a module
-      arm64: defconfig: enable verdin-imx8mm relevant drivers as modules
+Krzysztof Kozlowski (1):
+      dt-bindings: soc: samsung: usi: refer to dtschema for children
 
-Martin J=C3=BCcker (1):
-      ARM: defconfig: add SMB347 charger driver for p4note
+Linus Walleij (12):
+      ARM: ixp4xx: Delete the Goramo MLR boardfile
+      ARM: ixp4xx: Delete old PCI driver
+      ARM: ixp4xx: Drop stale Kconfig entry
+      ARM: ixp4xx: Drop UDC info setting function
+      soc: ixp4xx: Add features from regmap helper
+      soc: ixp4xx-npe: Access syscon regs using regmap
+      net: ixp4xx_eth: Drop platform data support
+      net: ixp4xx_hss: Check features using syscon
+      ARM: ixp4xx: Remove feature bit accessors
+      ARM: ixp4xx: Drop custom DMA coherency and bouncing
+      ARM: ixp4xx: Drop all common code
+      ARM: ixp4xx: Convert to SPARSE_IRQ and P2V
 
-Michael Walle (1):
-      arm64: defconfig: enable Layerscape SFP driver
+Uwe Kleine-K=C3=B6nig (1):
+      ARM: mmp: Fix failure to remove sram device
 
-N=C3=ADcolas F. R. A. Prado (2):
-      arm64: defconfig: Enable MT6397 RTC
-      arm64: defconfig: Enable cpufreq for MediaTek
+Zoltan HERPAI (1):
+      ARM: ixp4xx: Delete Gateway 7001 boardfiles
 
-Stephan Gerhold (1):
-      ARM: multi_v7_defconfig: Enable drivers for DragonBoard 410c
-
-Tudor Ambarus (4):
-      ARM: configs: at91: sama7: Enable NAND / SMC
-      ARM: configs: at91: sama7: Enable UBIFS_FS
-      ARM: configs: at91: sama7: Enable crypto IPs and software algs
-      ARM: configs: at91: sama7: Unselect CONFIG_DMATEST
-
-Vignesh Raghavendra (1):
-      arm64: defconfig: Enable USB controller drivers for TI K3 SoC
-
-Vinod Koul (3):
-      arm64: defconfig: Add SM8450 GCC config
-      arm64: defconfig: Add SM8450 pinctrl config
-      arm64: defconfig: Add SM8450 icc configs
-
- arch/arm/configs/exynos_defconfig   |   1 +
- arch/arm/configs/imxrt_defconfig    |  35 ++++++++
- arch/arm/configs/multi_v5_defconfig |  26 +++---
- arch/arm/configs/multi_v7_defconfig |  63 ++++++++++++++-
- arch/arm/configs/sama7_defconfig    |  31 ++++++--
- arch/arm/configs/shmobile_defconfig |   4 +
- arch/arm64/configs/defconfig        | 155 +++++++++++++++++++++-----------=
+ .../bindings/soc/samsung/exynos-usi.yaml           |   20 +-
+ MAINTAINERS                                        |    7 -
+ arch/arm/Kconfig                                   |   45 +-
+ arch/arm/configs/pxa_defconfig                     |    3 -
+ arch/arm/mach-at91/Kconfig                         |    1 +
+ arch/arm/mach-at91/pm.c                            |   27 +-
+ arch/arm/mach-at91/pm_suspend.S                    |    4 +-
+ arch/arm/mach-bcm/Kconfig                          |    1 -
+ arch/arm/mach-dove/irq.c                           |    6 +-
+ arch/arm/mach-exynos/firmware.c                    |    4 +-
+ arch/arm/mach-footbridge/include/mach/hardware.h   |   20 +-
+ arch/arm/mach-footbridge/include/mach/io.h         |   20 -
+ arch/arm/mach-imx/Kconfig                          |    7 +
+ arch/arm/mach-imx/Makefile                         |    2 +
+ arch/arm/mach-imx/mach-imxrt.c                     |   19 +
+ arch/arm/mach-integrator/Kconfig                   |   37 +-
+ arch/arm/mach-integrator/hardware.h                |    5 -
+ arch/arm/mach-ixp4xx/Kconfig                       |   57 --
+ arch/arm/mach-ixp4xx/Makefile                      |   19 +-
+ arch/arm/mach-ixp4xx/common-pci.c                  |  451 ---------
+ arch/arm/mach-ixp4xx/common.c                      |  448 ---------
+ arch/arm/mach-ixp4xx/gateway7001-pci.c             |   61 --
+ arch/arm/mach-ixp4xx/gateway7001-setup.c           |  113 ---
+ arch/arm/mach-ixp4xx/goramo_mlr.c                  |  532 ----------
+ arch/arm/mach-ixp4xx/include/mach/hardware.h       |   32 -
+ arch/arm/mach-ixp4xx/include/mach/io.h             |  545 -----------
+ arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h    |  303 ------
+ arch/arm/mach-ixp4xx/include/mach/platform.h       |  102 --
+ arch/arm/mach-ixp4xx/include/mach/udc.h            |    8 -
+ arch/arm/mach-ixp4xx/include/mach/uncompress.h     |    4 +-
+ arch/arm/mach-ixp4xx/irqs.h                        |   64 --
+ arch/arm/mach-mmp/sram.c                           |   22 +-
+ arch/arm/mach-mstar/Kconfig                        |    1 +
+ arch/arm/mach-mv78xx0/irq.c                        |    3 +-
+ arch/arm/mach-nspire/Kconfig                       |    1 -
+ arch/arm/mach-orion5x/Kconfig                      |    2 +-
+ arch/arm/mach-orion5x/irq.c                        |    2 +-
+ arch/arm/mach-pxa/Kconfig                          |   10 -
+ arch/arm/mach-pxa/Makefile                         |    2 -
+ arch/arm/mach-pxa/include/mach/uncompress.h        |    5 +-
+ arch/arm/mach-pxa/stargate2.c                      | 1030 ----------------=
 ----
- 7 files changed, 232 insertions(+), 83 deletions(-)
- create mode 100644 arch/arm/configs/imxrt_defconfig
+ arch/arm/mach-shmobile/Kconfig                     |    2 +-
+ arch/arm/mach-ux500/Kconfig                        |    2 +-
+ arch/arm/plat-orion/gpio.c                         |    8 +-
+ arch/arm/plat-orion/include/plat/orion-gpio.h      |    3 +-
+ drivers/crypto/ixp4xx_crypto.c                     |    1 -
+ drivers/net/ethernet/xscale/Kconfig                |    4 +-
+ drivers/net/ethernet/xscale/ixp4xx_eth.c           |   85 +-
+ drivers/net/ethernet/xscale/ptp_ixp46x.c           |    1 -
+ drivers/net/wan/Kconfig                            |    3 +-
+ drivers/net/wan/ixp4xx_hss.c                       |   39 +-
+ drivers/pcmcia/Kconfig                             |    2 +-
+ drivers/pcmcia/Makefile                            |    1 -
+ drivers/pcmcia/pxa2xx_stargate2.c                  |  137 ---
+ drivers/soc/Kconfig                                |    1 +
+ drivers/soc/Makefile                               |    1 +
+ drivers/soc/ixp4xx/Kconfig                         |    1 +
+ drivers/soc/ixp4xx/ixp4xx-npe.c                    |   33 +-
+ drivers/soc/microchip/Kconfig                      |   10 +
+ drivers/soc/microchip/Makefile                     |    1 +
+ drivers/soc/microchip/mpfs-sys-controller.c        |  193 ++++
+ include/linux/clk/at91_pmc.h                       |    4 +
+ include/linux/platform_data/eth_ixp4xx.h           |   21 -
+ include/linux/platform_data/wan_ixp4xx_hss.h       |   17 -
+ include/linux/soc/ixp4xx/cpu.h                     |   26 +-
+ include/linux/soc/ixp4xx/npe.h                     |    2 +
+ include/soc/at91/sama7-ddr.h                       |   15 +-
+ include/soc/microchip/mpfs.h                       |    4 +-
+ kernel/dma/mapping.c                               |    2 -
+ sound/soc/pxa/Kconfig                              |    9 -
+ sound/soc/pxa/Makefile                             |    2 -
+ sound/soc/pxa/imote2.c                             |   99 --
+ 72 files changed, 435 insertions(+), 4339 deletions(-)
+ delete mode 100644 arch/arm/mach-footbridge/include/mach/io.h
+ create mode 100644 arch/arm/mach-imx/mach-imxrt.c
+ delete mode 100644 arch/arm/mach-ixp4xx/common-pci.c
+ delete mode 100644 arch/arm/mach-ixp4xx/common.c
+ delete mode 100644 arch/arm/mach-ixp4xx/gateway7001-pci.c
+ delete mode 100644 arch/arm/mach-ixp4xx/gateway7001-setup.c
+ delete mode 100644 arch/arm/mach-ixp4xx/goramo_mlr.c
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/hardware.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/io.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/ixp4xx-regs.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/platform.h
+ delete mode 100644 arch/arm/mach-ixp4xx/include/mach/udc.h
+ delete mode 100644 arch/arm/mach-ixp4xx/irqs.h
+ delete mode 100644 arch/arm/mach-pxa/stargate2.c
+ delete mode 100644 drivers/pcmcia/pxa2xx_stargate2.c
+ create mode 100644 drivers/soc/microchip/Kconfig
+ create mode 100644 drivers/soc/microchip/Makefile
+ create mode 100644 drivers/soc/microchip/mpfs-sys-controller.c
+ delete mode 100644 include/linux/platform_data/eth_ixp4xx.h
+ delete mode 100644 include/linux/platform_data/wan_ixp4xx_hss.h
+ delete mode 100644 sound/soc/pxa/imote2.c
