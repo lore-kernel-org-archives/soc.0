@@ -1,123 +1,76 @@
-Return-Path: <SRS0=ZAgO=UC=hoobykp.cn=eki-system6@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E159C433FE
-	for <soc@archiver.kernel.org>; Wed, 23 Mar 2022 23:15:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C98DC433F5
+	for <soc@archiver.kernel.org>; Thu, 24 Mar 2022 01:41:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DA1BCC340EE; Wed, 23 Mar 2022 23:15:52 +0000 (UTC)
-Received: from hoobykp.cn (unknown [180.215.239.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 62945C340E8; Thu, 24 Mar 2022 01:41:48 +0000 (UTC)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC6C3C340E8
-	for <soc@kernel.org>; Wed, 23 Mar 2022 23:15:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC6C3C340E8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hoobykp.cn
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hoobykp.cn
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=default; d=hoobykp.cn;
- h=Date:From:To:Subject:Message-ID:Mime-Version:Content-Type;
- i=eki-system6@hoobykp.cn;
- bh=OCoDhjTA59Jai69wOlGQFMaUPWy4Qw5rUHciO7GisFg=;
- b=JbcpcBT2DxZRV1To/4Umx8fXhp1R02WJu3yTLLOymZ+1ZG8lQdSc5t4TJR/3kgdh1TxZUijEA6Jk
-   m9N80UhD1rcJl+KL3fGSs/vTipbPF/5L3wGPGk/gwGXbsZrFvmNHe0oqX+z3kl1bH1L+fzg5xqM8
-   C/ro/yTwa+epp/6MUqg=
-Date: Thu, 24 Mar 2022 06:11:40 +0800
-From: "Eki-net.com" <eki-system6@hoobykp.cn>
+	by smtp.kernel.org (Postfix) with ESMTPS id B5C61C340EE
+	for <soc@kernel.org>; Thu, 24 Mar 2022 01:41:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5C61C340EE
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f53.google.com with SMTP id m3so5592987lfj.11
+        for <soc@kernel.org>; Wed, 23 Mar 2022 18:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4VmCNpUktJfhcqAvDV0WxH3zaT4vDImvmvOoWvKF5Gs=;
+        b=UW43zwyr7VzAWy0J7pa4I6DoGCPEoRpfqb5FRW/fgJtPoxaaWAvDDDKni4bVmn2CF7
+         FoneE+ygtfrCccxNCf0tihRpQDykhG7fSiKsrY9JTHmw2Y8gDqaIcBn8lATXk5HEBP5w
+         6YLjgN/7mQ4ZVp+a/2pjFriUi925WrG0ZXVCQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4VmCNpUktJfhcqAvDV0WxH3zaT4vDImvmvOoWvKF5Gs=;
+        b=e1WYNMPibHOxUxC6hffwtNCBqlk4TIsLqsjOemRSipfY5FLRu2K6ikvLYFRjPR9WK7
+         105gbXZO2FHzDo3YhAV+7hCcWUtPUKIDHrCUcQTxKIKJ9wbS6HZahf4SCUKU4MzvJq9S
+         KXt0FcL/ZOLebqvVmY3KHaSIHuiPJGQlL2KUfbKtKqdHi7lgITE+mWc5fsBUM1L26oc0
+         GKOGmp2oc5jZj3hCBZhqyYj6mFOI/uh753ICcY2CDGiJQSoK/cIooFyYI1dsr3H/LeNS
+         kfYu3Y24rPdgeaxtryhmrZJVLgaMeaEHAoKCqOFD8CppYMIEpYIsoDER1yR6xuErBZqt
+         kAnA==
+X-Gm-Message-State: AOAM531reB6URGHyposb2HOHjj57hPtM45X/APblxpSXDbnZXoKTbFiw
+	Ng29ylyTnl+KBXgkrtlhQure4AG8kE90LnMFkZg=
+X-Google-Smtp-Source: ABdhPJyCDliFqaYYQbwkCTZ085z+z+VnF/ZBW2dPbyPZxfQYiSZO0yAYUP5p8Q/VaapkXownCL4fqg==
+X-Received: by 2002:a05:6512:2395:b0:44a:33d2:b9b5 with SMTP id c21-20020a056512239500b0044a33d2b9b5mr2067709lfv.514.1648086104451;
+        Wed, 23 Mar 2022 18:41:44 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id k10-20020a2eb74a000000b0024965dbf2d8sm159875ljo.82.2022.03.23.18.41.43
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 18:41:43 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id q14so4238709ljc.12
+        for <soc@kernel.org>; Wed, 23 Mar 2022 18:41:43 -0700 (PDT)
+X-Received: by 2002:a2e:9904:0:b0:247:ec95:fdee with SMTP id
+ v4-20020a2e9904000000b00247ec95fdeemr2372025lji.291.1648086103115; Wed, 23
+ Mar 2022 18:41:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAK8P3a29JCfCNWrJ-x7S+kewcSBpeguyo8fmUTt_V4gfrW3=HA@mail.gmail.com>
+ <CAK8P3a182FVbZ5QfVhMr20nxQN31fK29Csr_GRp_WpFoBFEPzQ@mail.gmail.com> <CAK8P3a1oGWkyPHZ-gV3pP94hOrJJFBsvvkuzzXBhaYpbzEGR5w@mail.gmail.com>
+In-Reply-To: <CAK8P3a1oGWkyPHZ-gV3pP94hOrJJFBsvvkuzzXBhaYpbzEGR5w@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 23 Mar 2022 18:41:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whLyCDkXfMoAYFWX4qbLg7KajXiQWLNhfcaN5EB3HuO5w@mail.gmail.com>
+Message-ID: <CAHk-=whLyCDkXfMoAYFWX4qbLg7KajXiQWLNhfcaN5EB3HuO5w@mail.gmail.com>
+Subject: Re: [GIT PULL 4/4] ARM: DT updates for 5.18
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: <soc@kernel.org>
-Subject: =?utf-8?B?44CQ6YeN6KaB44CR44GI44GN44Gt44Gj44Go44Ki44Kr44Km44Oz44OI44Gu6Ieq5YuV6YCA5Lya5Yem?=
-	=?utf-8?B?55CG44Gr44Gk44GE44Gm?=
-Message-ID: <20220324061147038206@hoobykp.cn>
-Mime-Version: 1.0
-Content-Type: multipart/alternative;
-	boundary="=====003_Dragon572631803473_====="
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-This is a multi-part message in MIME format.
+On Wed, Mar 23, 2022 at 4:12 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> The new machines are really too many to list, but I'll do it anyway:
 
---=====003_Dragon572631803473_=====
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+Heh.
 
-5pel6aCD44KI44KK44CM44GI44GN44Gt44Gj44Go44CN44KS44GU5Yip55So44GE44Gf44Gg44GN
-44GC44KK44GM44Go44GG44GU44GW44GE44G+44GZ44CCIA0KDQoNCuOAjOOBiOOBjeOBreOBo+OB
-qOOAjeOBryAyMDIyIOW5tCAzIOaciCAwNiDml6Uo5pelKeOBq+OCteODvOODk+OCueOCkuODquOD
-i+ODpeODvOOCouODq+OBhOOBn+OBl+OBvuOBl+OBn+OAguOBk+OCjCDjgavkvLTjgYTjgIHjgIzj
-gYjjgY3jga3jgaPjgajjgI3liKnnlKjopo/ntITjg7vkvJrlk6Hopo/ntITjgpLlpInmm7TjgZfj
-gIHmnIDlvozjgavjg63jgrDjgqTjg7PjgpLjgZfjgZ/ml6XjgojjgorotbfnrpfjgZcg44Gm77yS
-5bm05Lul5LiK44CM44GI44GN44Gt44Gj44Go44CN44Gu44GU5Yip55So77yI44Ot44Kw44Kk44Oz
-77yJ44GM56K66KqN44Gn44GN44Gq44GE44CM44GI44GN44Gt44Gj44Go44CN44Ki44Kr44Km44Oz
-44OIIOOBr+OAgeiHquWLleeahOOBq+mAgOS8muWHpueQhuOBleOBm+OBpuOBhOOBn+OBoOOBj+OB
-k+OBqOOBqOOBhOOBn+OBl+OBvuOBl+OBn+OAguOBquOBiuOAgeWvvuixoeOCouOCq+OCpuODs+OD
-iOOBruiHquWLlemAgCDkvJrlh6bnkIbjgpLjgIHmnKzopo/ntITjgavln7rjgaXjgY3jgIEyMDIy
-IOW5tCAzIOaciCAyMeaXpSjmnIgp44KI44KK6aCG5qyh44CB5a6f5pa944GV44Gb44Gm44GE44Gf
-44Gg44GN44G+44GZ44CCDQoNCg0K77yS5bm05Lul5LiK44Ot44Kw44Kk44Oz44GX44Gm44GE44Gq
-44GE44GK5a6i44GV44G+44Gn44CB5LuK5b6M44KC44CM44GI44GN44Gt44Gj44Go44CN44KS44GU
-5Yip55So44GE44Gf44Gg44GR44KL5aC05ZCIIOOBr+OAgTIwMjIg5bm0IDMg5pyIIDMxIOaXpSjm
-nIgp44KI44KK44KC5YmN44Gr44CB5LiA5bqm44Ot44Kw44Kk44Oz5pON5L2c44KS44GK6aGY44GE
-44GE44Gf44GX44G+44GZ44CCIA0K4oeS44Ot44Kw44Kk44Oz44Gv44GT44Gh44KJDQrigLvjgYjj
-gY3jga3jgaPjgajjg4jjg4Pjg5fjg5rjg7zjgrjlj7PkuIrjga7jg63jgrDjgqTjg7Pjg5zjgr/j
-g7Pjgojjgorjg63jgrDjgqTjg7PjgZfjgabjgY/jgaDjgZXjgYTjgIINCg0KDQrjgarjgYrjgIHj
-gqLjgqvjgqbjg7Pjg4jjgYzpgIDkvJrlh6bnkIbjgZXjgozjgZ/loLTlkIjjgoLjgIHmlrDjgZ/j
-gavjgqLjgqvjgqbjg7Pjg4jnmbvpjLLvvIjnhKHmlpnnmbvpjLLvvInjgZfjgabjgYTjgZ8g44Gg
-44GP44GT44Go44Gn44GZ44GQ44Gr44CM44GI44GN44Gt44Gj44Go44CN44KS44GU5Yip55So44GE
-44Gf44Gg44GP44GT44Go44GM44Gn44GN44G+44GZ44Gu44Gn44CB5LuK5b6M44KC44GU5oSb6aGn
-44GE44GfIOOBoOOBkeOBvuOBmeOCiOOBhuOCiOOCjeOBl+OBj+OBiumhmOOBhOOBhOOBn+OBl+OB
-vuOBmeOAgiANCg0KDQogQ29weXJpZ2h0IMKpIEpSIEVhc3QgTmV0IFN0YXRpb24gQ28uLEx0ZC4g
-QWxsIFJpZ2h0cyBSZXNlcnZlZC4=
-
---=====003_Dragon572631803473_=====
-Content-Type: text/html;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-
-PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9XM0MvL0RURCBIVE1MIDQuMCBUcmFuc2l0aW9uYWwv
-L0VOIj4NCjxIVE1MPjxIRUFEPg0KPE1FVEEgY29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0
-Zi04IiBodHRwLWVxdWl2PUNvbnRlbnQtVHlwZT4NCjxNRVRBIG5hbWU9R0VORVJBVE9SIGNvbnRl
-bnQ9Ik1TSFRNTCAxMS4wMC4xMDU3MC4xMDAxIj48L0hFQUQ+DQo8Qk9EWT4NCjxESVYgY2xhc3M9
-Im1haWxCb2R5SW5uZXIgaHRtbCIgX25nY29udGVudC1jMTA9IiI+DQo8RElWIF9uZ2NvbnRlbnQt
-YzEwPSIiPg0KPFA+5pel6aCD44KI44KK44CM44GI44GN44Gt44Gj44Go44CN44KS44GU5Yip55So
-44GE44Gf44Gg44GN44GC44KK44GM44Go44GG44GU44GW44GE44G+44GZ44CCIDwvUD4NCjxQPjxC
-Uj48L1A+DQo8UD7jgIzjgYjjgY3jga3jgaPjgajjgI3jga8gMjAyMiDlubQgMyDmnIggMDYg5pel
-KOaXpSnjgavjgrXjg7zjg5PjgrnjgpLjg6rjg4vjg6Xjg7zjgqLjg6vjgYTjgZ/jgZfjgb7jgZfj
-gZ/jgILjgZPjgowgDQrjgavkvLTjgYTjgIHjgIzjgYjjgY3jga3jgaPjgajjgI3liKnnlKjopo/n
-tITjg7vkvJrlk6Hopo/ntITjgpLlpInmm7TjgZfjgIHmnIDlvozjgavjg63jgrDjgqTjg7PjgpLj
-gZfjgZ/ml6XjgojjgorotbfnrpfjgZcgDQrjgabvvJLlubTku6XkuIrjgIzjgYjjgY3jga3jgaPj
-gajjgI3jga7jgZTliKnnlKjvvIjjg63jgrDjgqTjg7PvvInjgYznorroqo3jgafjgY3jgarjgYTj
-gIzjgYjjgY3jga3jgaPjgajjgI3jgqLjgqvjgqbjg7Pjg4ggDQrjga/jgIHoh6rli5XnmoTjgavp
-gIDkvJrlh6bnkIbjgZXjgZvjgabjgYTjgZ/jgaDjgY/jgZPjgajjgajjgYTjgZ/jgZfjgb7jgZfj
-gZ/jgILjgarjgYrjgIHlr77osaHjgqLjgqvjgqbjg7Pjg4jjga7oh6rli5XpgIAg5Lya5Yem55CG
-44KS44CB5pys6KaP57SE44Gr5Z+644Gl44GN44CBMjAyMiDlubQmbmJzcDszIA0K5pyIJm5ic3A7
-MjHml6Uo5pyIKeOCiOOCiumghuasoeOAgeWun+aWveOBleOBm+OBpuOBhOOBn+OBoOOBjeOBvuOB
-meOAgjwvUD4NCjxQPjxCUj48L1A+DQo8UD7vvJLlubTku6XkuIrjg63jgrDjgqTjg7PjgZfjgabj
-gYTjgarjgYTjgYrlrqLjgZXjgb7jgafjgIHku4rlvozjgoLjgIzjgYjjgY3jga3jgaPjgajjgI3j
-gpLjgZTliKnnlKjjgYTjgZ/jgaDjgZHjgovloLTlkIgg44Gv44CBMjAyMiDlubQmbmJzcDszIOac
-iCZuYnNwOzMxIA0K5pelKOaciCnjgojjgorjgoLliY3jgavjgIHkuIDluqbjg63jgrDjgqTjg7Pm
-k43kvZzjgpLjgYrpoZjjgYTjgYTjgZ/jgZfjgb7jgZnjgIIgPC9QPg0KPFA+PEEgaHJlZj0iaHR0
-cDovL2VraS0xY28uc2hvcC8iPuKHkuODreOCsOOCpOODs+OBr+OBk+OBoeOCiTwvQT48L1A+DQo8
-UD7igLvjgYjjgY3jga3jgaPjgajjg4jjg4Pjg5fjg5rjg7zjgrjlj7PkuIrjga7jg63jgrDjgqTj
-g7Pjg5zjgr/jg7Pjgojjgorjg63jgrDjgqTjg7PjgZfjgabjgY/jgaDjgZXjgYTjgII8L1A+DQo8
-UD48QlI+PC9QPg0KPFA+44Gq44GK44CB44Ki44Kr44Km44Oz44OI44GM6YCA5Lya5Yem55CG44GV
-44KM44Gf5aC05ZCI44KC44CB5paw44Gf44Gr44Ki44Kr44Km44Oz44OI55m76Yyy77yI54Sh5paZ
-55m76Yyy77yJ44GX44Gm44GE44GfIA0K44Gg44GP44GT44Go44Gn44GZ44GQ44Gr44CM44GI44GN
-44Gt44Gj44Go44CN44KS44GU5Yip55So44GE44Gf44Gg44GP44GT44Go44GM44Gn44GN44G+44GZ
-44Gu44Gn44CB5LuK5b6M44KC44GU5oSb6aGn44GE44GfIOOBoOOBkeOBvuOBmeOCiOOBhuOCiOOC
-jeOBl+OBj+OBiumhmOOBhOOBhOOBn+OBl+OBvuOBmeOAgiZuYnNwOzwvUD4NCjxQPjxCUj48L1A+
-DQo8UCBhbGlnbj1jZW50ZXI+PFNQQU4gDQpzdHlsZT0nRk9OVC1TSVpFOiAxMXB4OyBGT05ULUZB
-TUlMWTogIk5vdG8gU2VyaWYgSmFwYW5lc2UiLCBzYW5zLXNlcmlmOyBXSElURS1TUEFDRTogbm9y
-bWFsOyBXT1JELVNQQUNJTkc6IDBweDsgVEVYVC1UUkFOU0ZPUk06IG5vbmU7IEZMT0FUOiBub25l
-OyBGT05ULVdFSUdIVDogNDAwOyBDT0xPUjogcmdiKDUxLDUxLDUxKTsgRk9OVC1TVFlMRTogbm9y
-bWFsOyBURVhULUFMSUdOOiBjZW50ZXI7IE9SUEhBTlM6IDI7IFdJRE9XUzogMjsgRElTUExBWTog
-aW5saW5lICFpbXBvcnRhbnQ7IExFVFRFUi1TUEFDSU5HOiBub3JtYWw7IEJBQ0tHUk9VTkQtQ09M
-T1I6IHJnYigyNDUsMjQ1LDI0NSk7IFRFWFQtSU5ERU5UOiAwcHg7IC13ZWJraXQtdGV4dC1zdHJv
-a2Utd2lkdGg6IDBweDsgZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm9ybWFsOyBmb250LXZhcmlh
-bnQtY2Fwczogbm9ybWFsOyB0ZXh0LWRlY29yYXRpb24tdGhpY2tuZXNzOiBpbml0aWFsOyB0ZXh0
-LWRlY29yYXRpb24tc3R5bGU6IGluaXRpYWw7IHRleHQtZGVjb3JhdGlvbi1jb2xvcjogaW5pdGlh
-bCc+Jm5ic3A7Q29weXJpZ2h0IA0KwqkgSlIgRWFzdCBOZXQgU3RhdGlvbiBDby4sTHRkLiBBbGwg
-UmlnaHRzIFJlc2VydmVkLjwvU1BBTj48QlI+PC9QPg0KPFA+PEJSPjwvUD48L0RJVj48L0RJVj48
-L0JPRFk+PC9IVE1MPg0K
-
---=====003_Dragon572631803473_=====--
-
+                   Linus
