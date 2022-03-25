@@ -1,87 +1,90 @@
-Return-Path: <SRS0=TMVL=UE=linaro.org=viresh.kumar@kernel.org>
+Return-Path: <SRS0=LaOI=UE=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1F5AC433F5
-	for <soc@archiver.kernel.org>; Fri, 25 Mar 2022 01:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51DF9C433F5
+	for <soc@archiver.kernel.org>; Fri, 25 Mar 2022 09:12:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79519C340EC; Fri, 25 Mar 2022 01:58:54 +0000 (UTC)
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 1E72FC340F0; Fri, 25 Mar 2022 09:12:07 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2F9A7C340ED
-	for <soc@kernel.org>; Fri, 25 Mar 2022 01:58:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2F9A7C340ED
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f49.google.com with SMTP id b8so6265351pjb.4
-        for <soc@kernel.org>; Thu, 24 Mar 2022 18:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7UqoxnexRZIYgAmaCT2NR/FFNg3pbUIhHD5KY1C8P0o=;
-        b=avCYBKKvdypfuoJNrbhAIMEIcgShk1Zj1USbl3poWtUPT8Bet+mLntrgUKSMss/bh6
-         92lgLD5ty7Pdq2r9sxykimbuw1qTH9fvdhiAjnHYjB/W8osj/rVq5wbl3n9tcv2BA4ym
-         ytk27+4wen2ceHQDcHck6NQ0n4dBzYM7zcNmfIJzgfuHIkChyjz4TZOlLwwnUxNLiUmv
-         LWI4lHe13uN83Zd7vyAzK0YSK8nvZ2DiCIdcEkJO6nUUYIz+2md2TtyEYb3Qza6OaiZq
-         rokEQhRpK7j/KhCyzhJN7vZgMxaH0wLvz4q0m+9K9qWhvhLxw7JbzOnLYEPw9wcoKEFd
-         iRSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7UqoxnexRZIYgAmaCT2NR/FFNg3pbUIhHD5KY1C8P0o=;
-        b=XKbbMQFgi/Zj2ww/Znde0VnLazV3KuJeBuq4DHV6D08cFrAGctvc2YIaATCHuJvGVv
-         BsRAtD+c/BmB0KRcfE4N6M0Ec9aytWOVZwMGS1AciEBa5z++9wD86NbkDEu4+ka+1iwr
-         SYFkIusPQ4bbSJLyuRShQCrc4mWnNMuZdoiovtAo1SkxneqOiLnHcYoNp6FoOphwmX/K
-         D7s7IJEjG0iJH6crOHHTKs9mL5U4LzG6q1ZJP4sN+/QzHRrTFddAANikXO1Y5wdRuga7
-         xq+jVBmwcqhOtkqn0ZPzSFqgviaH6b+omsRPSzu9/+n2UByupcZPhzsGJBZoqqyscBsy
-         KdUA==
-X-Gm-Message-State: AOAM531pLqR+3OJ3txktolQg71xMVmCgrRNK6Pqggawiq20+FC3Fo7sy
-	MdT2JVZ8kAeG0E/hVoI68AoMIw==
-X-Google-Smtp-Source: ABdhPJxZJhn3xGpOGCemBqjUHadgwgd6nBeVTCB5L3NUi0Odrw/tF5FzN0TXzKmg1SnC8nj7Jbx6zQ==
-X-Received: by 2002:a17:902:e801:b0:154:19ec:53a2 with SMTP id u1-20020a170902e80100b0015419ec53a2mr8886398plg.151.1648173532485;
-        Thu, 24 Mar 2022 18:58:52 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id l185-20020a6388c2000000b0038614ed80c0sm3931676pgd.41.2022.03.24.18.58.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 18:58:51 -0700 (PDT)
-Date: Fri, 25 Mar 2022 07:28:49 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
-Message-ID: <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
-References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
- <20220324023904.h2qfxzxlznggbsyr@vireshk-i7>
- <20220324062547.GA15504@9a2d8922b8f1>
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F595C340E9;
+	Fri, 25 Mar 2022 09:12:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F595C340E9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MvJsF-1oO80y3foP-00rKEb; Fri, 25 Mar 2022 10:11:57 +0100
+Received: by mail-wr1-f51.google.com with SMTP id h23so9955567wrb.8;
+        Fri, 25 Mar 2022 02:11:57 -0700 (PDT)
+X-Gm-Message-State: AOAM532EdeLO3Ug0UsAnPymBPRpAqBSYR1Nv8343MvOqrTrpUEe6fmtr
+	ZdzASznrEU/wQXnkAUZNxPw9tEcz3PQFyFs/3ac=
+X-Google-Smtp-Source: ABdhPJzlSwDWgsgZpeRugVuvy428D1qgQK8pZuiKTRIYi9OSl8H4ndqwB0mRzcaYHlfTvLPePtNJpSY9MHEOxziK+P8=
+X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
+ k10-20020a5d66ca000000b00203fb72a223mr7999785wrw.12.1648199517413; Fri, 25
+ Mar 2022 02:11:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324062547.GA15504@9a2d8922b8f1>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
+ <20220324023904.h2qfxzxlznggbsyr@vireshk-i7> <20220324062547.GA15504@9a2d8922b8f1>
+ <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
+In-Reply-To: <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 25 Mar 2022 10:11:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
+Message-ID: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
+To: Viresh Kumar <viresh.kumar@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:M8kSWReg2C4oN6Iwy1Ou0cFZ7/EdZI/IeJVeC1D0RXoOrbmluJJ
+ olNnkTYMWDNxgiymStp0W7vDi97oKDNRgBc9Tx1TjmEngHZ9sGvpm5lnAW6Ee55/v6ac76G
+ jxVaEUjJ6AcydBb4M0BobDf7Y/V1LCLF+hgPi3V7RFBD7yE49+UDmIMuOrkpZz2rt0TvWQr
+ BcQe3JA9ODqGtX2xzGKjA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BcUo4+/4YRw=:1ui/fNFX8fvcO9svSw1vhA
+ VdeeZakq3kbpiwdqzhWlAG9iDbAsNQ6Pr/OZQVN6qFTkRJ2TWw7CGEBlW5qRtf8cLN07crWMl
+ Des/LGYXF85WLpJIyzu/w/6+j6owJpV1B8WOQh0+Qg2RWq3RXQLJ8IW8wip5hw0GMFbBLzrwW
+ YP+KZLziE1YKHark4S8ChFeFr/qxACS40QC7B8XbCAK+uFa9Gsh2LK3EBoGXtVqw6i/754u8P
+ Zpir2+3BXKtOchj5EQF+iDvZIKIRO4UR+IbVU3T7T0K0zYbwVHzp4+c1qM8JpzbwH48AUH61y
+ p/DaDgxR/ygXdmRdi5SVAVKEiyMstjEu2bdPlPkJOTIzbrZQQX5STba1+YkLSK0fb/Ik1PdGH
+ OaGI+qojsRGIa5RGVCSCEJO2h/n4o843589cHM0QDyoah2RenXGRHLu4q+w0BqgnFBOJG/ZcZ
+ 6vGzukjL0Gsmxp1+9ygT4ulKuisJyYEZyK0r3ZxVwhqOdBI5Ed06awZ2NSoVyu3xelxWOq3ER
+ Wl42UOPrcqCSPVXbl2TVzh9ko7IDlVTJgHEV54YFR1FneKLQvroHsm5J9Ad2MEgqJMgY+07Bm
+ 4rKtsEflhJPKjEfkMevG9UXHxmzecZmDmRUwQostkLdKo68CkTGd8MUjSiObUb0Gs5706CRsR
+ R5BsB+nW1TRoYdGF9mg80OyYcNiuJCrg57A6bsjRgx9kQ4Tkzg7utip+ZZ4OMLwvXOosfwqQV
+ 6ZPsl6Csz2HHXrdeebhsG8SnyklYRCR+fUlviZIGvpqzxWxDSYZH1VTb8SsC7lj3GKKB1U9oI
+ F5o3VCs7nsyiM2gjuoNe4QgTY8Q5RU/4QVo2eMlDWPp1MoDtjA=
 
-On 24-03-22, 11:55, Kuldeep Singh wrote:
-> Fixed order of values is important in case of properties like
-> compatibles etc. In case of dma-names, yes order shouldn't matter here.
-> 
-> This patch is more of appeasing dtbs_check warning rather than fixing
-> something.
+On Fri, Mar 25, 2022 at 2:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> On 24-03-22, 11:55, Kuldeep Singh wrote:
+> > Fixed order of values is important in case of properties like
+> > compatibles etc. In case of dma-names, yes order shouldn't matter here.
+> >
+> > This patch is more of appeasing dtbs_check warning rather than fixing
+> > something.
+>
+> Exactly my point. We have seen similar type of issues with other tools, like
+> coccinelle, earlier and such patches were rejected as the kernel was just fine
+> and tooling needs to be fixed.
+>
+> > It's safe to go with this patch.
+> > I am not sure if there's a provision to exclude dma-names from fix
+> > ordering checks. Rob can help here in providing better insights.
 
-Exactly my point. We have seen similar type of issues with other tools, like
-coccinelle, earlier and such patches were rejected as the kernel was just fine
-and tooling needs to be fixed.
+I think it's a question of the scale of the warnings: my understanding is that
+there are only a handful of dts files that trigger the warning at all, and it
+would be rather hard to change the tooling around this. Since the proposed
+dts change is clearly harmless, I don't mind applying it.
 
-> It's safe to go with this patch.
-> I am not sure if there's a provision to exclude dma-names from fix
-> ordering checks. Rob can help here in providing better insights.
+Kuldeep, you have probably looked at all dts files in the kernel, can you
+say how many of them are affected by the dma property reordering?
 
--- 
-viresh
+         Arnd
