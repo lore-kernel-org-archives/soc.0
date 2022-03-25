@@ -1,107 +1,123 @@
-Return-Path: <SRS0=yl/V=UE=gmail.com=singh.kuldeep87k@kernel.org>
+Return-Path: <SRS0=t5sx=UE=qpatrwv.cn=eki-service4@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF3CC433F5
-	for <soc@archiver.kernel.org>; Fri, 25 Mar 2022 17:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 661ABC433F5
+	for <soc@archiver.kernel.org>; Fri, 25 Mar 2022 17:53:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 982B3C36AE3; Fri, 25 Mar 2022 17:38:33 +0000 (UTC)
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 4BFE4C2BBE4; Fri, 25 Mar 2022 17:53:29 +0000 (UTC)
+Received: from qpatrwv.cn (unknown [134.122.216.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF11AC340EE;
-	Fri, 25 Mar 2022 17:38:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF11AC340EE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id p17so8813041plo.9;
-        Fri, 25 Mar 2022 10:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ayOYjTZU6HmufvMH+uKYpu/1dCIaQ5A33lYHz9+DMm4=;
-        b=X+FNOez4egUGi+RaEDC5o5ifCxnPeAfq9cKoQQXRcF/X2s6qCcDabfodEZqtqP/0od
-         lcKDpg5zdyKA0VfQxajowo2N9HrIRQBF1bBCnHD2DkeibXkuGPEgOt/UZGMsOcCk0gYL
-         Prm8lhECgBMpAltiHAWJIMm2YO91CQDkFYQssH6ntOXpAWz4JChc3Gb4CrUDQmh5uvsS
-         P3yCPBbSUoWo5SXyWtNxbVV/B8OxseinYxnd6EcJk/8egWfeCX2KLAKfdZXFur5oZWIf
-         ol1ErG6sBtdoxsbv6c1zkZOtjZNrrYbybeS6kSTlU0snIT+/4aXoexhXhIMNsG1rQt7p
-         SV+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ayOYjTZU6HmufvMH+uKYpu/1dCIaQ5A33lYHz9+DMm4=;
-        b=EBINez86sl4mVoUSjOZLOHIW1zpSXYougE6zZ/SyfWgBdX5wm1lgu/wv0G/ylUuUf1
-         S3xYlO0tnX34xfiZSdycauIu4EeUNDhgvdWACix2dfOIk7J+YIs7sNcBZrSk/AbPUaLx
-         GnnIvinTcXbAUru5K2WoBmPOuT7j1uXWirAt8e0dk+T7/73uswLyTd5VFoc6/W7tJvfN
-         6Ud0BYH7ZA0/c0cbVroea+hXTrWEBFx1R9IOZX64Gjn9XDZIhT01E7Sjqs7AwR95IuAv
-         jwLpZKsJausyr8/+Q43uCN2j+ISeHsuPfysP2e3yj6druEPg2M5bnX9yGJcDMBuDeX38
-         a5hQ==
-X-Gm-Message-State: AOAM531W3PheyhSosZctP6wCr7Wra2QIfio8OIpwwSF+Z/U3gVFQoQl/
-	bGdARcq4VODi6sleJ9kXsRQPpbpQ5Sg=
-X-Google-Smtp-Source: ABdhPJw3p6wgf3puKfvwDvOdglHa/WYaO+uhShtAN0fwz7BRG4eEy82IN781iCaO/bIGRTwjoMTc+w==
-X-Received: by 2002:a17:90b:33cd:b0:1c6:5db5:5ff9 with SMTP id lk13-20020a17090b33cd00b001c65db55ff9mr14110308pjb.197.1648229912288;
-        Fri, 25 Mar 2022 10:38:32 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id pi2-20020a17090b1e4200b001c7b15928e0sm6737763pjb.23.2022.03.25.10.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 10:38:32 -0700 (PDT)
-Date: Fri, 25 Mar 2022 23:08:26 +0530
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2C99AC340EE
+	for <soc@kernel.org>; Fri, 25 Mar 2022 17:53:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2C99AC340EE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=qpatrwv.cn
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=qpatrwv.cn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=default; d=qpatrwv.cn;
+ h=Date:From:To:Subject:Message-ID:Mime-Version:Content-Type;
+ i=eki-service4@qpatrwv.cn;
+ bh=Sw7LdSK9F/oibOCVIrDa9eDiT3PxH7XKezA+KmQ6gkA=;
+ b=Hdv1WTOYwWVYRH1KCkVSSM9QD4cp2PyQCu8Og4wdRGde5+vVrf7DSeCm8vnqeLeLsJhWKSXW+CPy
+   HLfxPtXNPEidR4VingXtt1mdvAHNvWsaOFwSRXNw5ip7PErjcfvT33TDySdvk5O07+8Tr0zkc50X
+   JOfKiNRl3LKONg7RMbI=
+Date: Sat, 26 Mar 2022 01:43:04 +0800
+From: "Eki-web.com" <eki-service4@qpatrwv.cn>
 List-Id: <soc.lore.kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	SoC Team <soc@kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	DTML <devicetree@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] ARM: dts: spear13xx: Update SPI dma properties
-Message-ID: <20220325173826.GA70042@9a2d8922b8f1>
-References: <20220323175920.93155-1-singh.kuldeep87k@gmail.com>
- <20220324023904.h2qfxzxlznggbsyr@vireshk-i7>
- <20220324062547.GA15504@9a2d8922b8f1>
- <20220325015849.sazvlevnvdqj5z42@vireshk-i7>
- <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0Q8eOTeRmd5-G8rNCKAcH+4HReCsOAGKd4Vq30C9TaEA@mail.gmail.com>
+To: <soc@kernel.org>
+Subject: =?utf-8?B?44CQ6YeN6KaB44CR44GI44GN44Gt44Gj44Go44Ki44Kr44Km44Oz44OI44Gu6Ieq5YuV6YCA5Lya5Yem?=
+	=?utf-8?B?55CG44Gr44Gk44GE44Gm?=
+Message-ID: <20220326014315687264@qpatrwv.cn>
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="=====003_Dragon446265254621_====="
 
-On Fri, Mar 25, 2022 at 10:11:41AM +0100, Arnd Bergmann wrote:
-> On Fri, Mar 25, 2022 at 2:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > On 24-03-22, 11:55, Kuldeep Singh wrote:
-> > > Fixed order of values is important in case of properties like
-> > > compatibles etc. In case of dma-names, yes order shouldn't matter here.
-> > >
-> > > This patch is more of appeasing dtbs_check warning rather than fixing
-> > > something.
-> >
-> > Exactly my point. We have seen similar type of issues with other tools, like
-> > coccinelle, earlier and such patches were rejected as the kernel was just fine
-> > and tooling needs to be fixed.
-> >
-> > > It's safe to go with this patch.
-> > > I am not sure if there's a provision to exclude dma-names from fix
-> > > ordering checks. Rob can help here in providing better insights.
-> 
-> I think it's a question of the scale of the warnings: my understanding is that
-> there are only a handful of dts files that trigger the warning at all, and it
-> would be rather hard to change the tooling around this. Since the proposed
-> dts change is clearly harmless, I don't mind applying it.
-> 
-> Kuldeep, you have probably looked at all dts files in the kernel, can you
-> say how many of them are affected by the dma property reordering?
+This is a multi-part message in MIME format.
 
-I have checked spi-pl022.yaml as of now and this was the only one which
-was affected with dma ordering.
+--=====003_Dragon446265254621_=====
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
 
-For all dts files, I can definitely give a try and will come up with
-some numbers. Please note, there are still bindings left to be converted
-to yaml format, so won't be able to catch those cases.
+5pel6aCD44KI44KK44CM44GI44GN44Gt44Gj44Go44CN44KS44GU5Yip55So44GE44Gf44Gg44GN
+44GC44KK44GM44Go44GG44GU44GW44GE44G+44GZ44CCIA0KDQoNCuOAjOOBiOOBjeOBreOBo+OB
+qOOAjeOBryAyMDIyIOW5tCAzIOaciCAwNiDml6Uo5pelKeOBq+OCteODvOODk+OCueOCkuODquOD
+i+ODpeODvOOCouODq+OBhOOBn+OBl+OBvuOBl+OBn+OAguOBk+OCjCDjgavkvLTjgYTjgIHjgIzj
+gYjjgY3jga3jgaPjgajjgI3liKnnlKjopo/ntITjg7vkvJrlk6Hopo/ntITjgpLlpInmm7TjgZfj
+gIHmnIDlvozjgavjg63jgrDjgqTjg7PjgpLjgZfjgZ/ml6XjgojjgorotbfnrpfjgZcg44Gm77yS
+5bm05Lul5LiK44CM44GI44GN44Gt44Gj44Go44CN44Gu44GU5Yip55So77yI44Ot44Kw44Kk44Oz
+77yJ44GM56K66KqN44Gn44GN44Gq44GE44CM44GI44GN44Gt44Gj44Go44CN44Ki44Kr44Km44Oz
+44OIIOOBr+OAgeiHquWLleeahOOBq+mAgOS8muWHpueQhuOBleOBm+OBpuOBhOOBn+OBoOOBj+OB
+k+OBqOOBqOOBhOOBn+OBl+OBvuOBl+OBn+OAguOBquOBiuOAgeWvvuixoeOCouOCq+OCpuODs+OD
+iOOBruiHquWLlemAgCDkvJrlh6bnkIbjgpLjgIHmnKzopo/ntITjgavln7rjgaXjgY3jgIEyMDIy
+IOW5tCAzIOaciCAyMeaXpSjmnIgp44KI44KK6aCG5qyh44CB5a6f5pa944GV44Gb44Gm44GE44Gf
+44Gg44GN44G+44GZ44CCDQoNCg0K77yS5bm05Lul5LiK44Ot44Kw44Kk44Oz44GX44Gm44GE44Gq
+44GE44GK5a6i44GV44G+44Gn44CB5LuK5b6M44KC44CM44GI44GN44Gt44Gj44Go44CN44KS44GU
+5Yip55So44GE44Gf44Gg44GR44KL5aC05ZCIIOOBr+OAgTIwMjIg5bm0IDMg5pyIIDMxIOaXpSjm
+nIgp44KI44KK44KC5YmN44Gr44CB5LiA5bqm44Ot44Kw44Kk44Oz5pON5L2c44KS44GK6aGY44GE
+44GE44Gf44GX44G+44GZ44CCIA0K4oeS44Ot44Kw44Kk44Oz44Gv44GT44Gh44KJDQrigLvjgYjj
+gY3jga3jgaPjgajjg4jjg4Pjg5fjg5rjg7zjgrjlj7PkuIrjga7jg63jgrDjgqTjg7Pjg5zjgr/j
+g7Pjgojjgorjg63jgrDjgqTjg7PjgZfjgabjgY/jgaDjgZXjgYTjgIINCg0KDQrjgarjgYrjgIHj
+gqLjgqvjgqbjg7Pjg4jjgYzpgIDkvJrlh6bnkIbjgZXjgozjgZ/loLTlkIjjgoLjgIHmlrDjgZ/j
+gavjgqLjgqvjgqbjg7Pjg4jnmbvpjLLvvIjnhKHmlpnnmbvpjLLvvInjgZfjgabjgYTjgZ8g44Gg
+44GP44GT44Go44Gn44GZ44GQ44Gr44CM44GI44GN44Gt44Gj44Go44CN44KS44GU5Yip55So44GE
+44Gf44Gg44GP44GT44Go44GM44Gn44GN44G+44GZ44Gu44Gn44CB5LuK5b6M44KC44GU5oSb6aGn
+44GE44GfIOOBoOOBkeOBvuOBmeOCiOOBhuOCiOOCjeOBl+OBj+OBiumhmOOBhOOBhOOBn+OBl+OB
+vuOBmeOAgiANCg0KDQogQ29weXJpZ2h0IMKpIEpSIEVhc3QgTmV0IFN0YXRpb24gQ28uLEx0ZC4g
+QWxsIFJpZ2h0cyBSZXNlcnZlZC4=
 
-- Kuldeep
+--=====003_Dragon446265254621_=====
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9XM0MvL0RURCBIVE1MIDQuMCBUcmFuc2l0aW9uYWwv
+L0VOIj4NCjxIVE1MPjxIRUFEPg0KPE1FVEEgY29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0
+Zi04IiBodHRwLWVxdWl2PUNvbnRlbnQtVHlwZT4NCjxNRVRBIG5hbWU9R0VORVJBVE9SIGNvbnRl
+bnQ9Ik1TSFRNTCAxMS4wMC4xMDU3MC4xMDAxIj48L0hFQUQ+DQo8Qk9EWT4NCjxESVYgY2xhc3M9
+Im1haWxCb2R5SW5uZXIgaHRtbCIgX25nY29udGVudC1jMTA9IiI+DQo8RElWIF9uZ2NvbnRlbnQt
+YzEwPSIiPg0KPFA+5pel6aCD44KI44KK44CM44GI44GN44Gt44Gj44Go44CN44KS44GU5Yip55So
+44GE44Gf44Gg44GN44GC44KK44GM44Go44GG44GU44GW44GE44G+44GZ44CCIDwvUD4NCjxQPjxC
+Uj48L1A+DQo8UD7jgIzjgYjjgY3jga3jgaPjgajjgI3jga8gMjAyMiDlubQgMyDmnIggMDYg5pel
+KOaXpSnjgavjgrXjg7zjg5PjgrnjgpLjg6rjg4vjg6Xjg7zjgqLjg6vjgYTjgZ/jgZfjgb7jgZfj
+gZ/jgILjgZPjgowgDQrjgavkvLTjgYTjgIHjgIzjgYjjgY3jga3jgaPjgajjgI3liKnnlKjopo/n
+tITjg7vkvJrlk6Hopo/ntITjgpLlpInmm7TjgZfjgIHmnIDlvozjgavjg63jgrDjgqTjg7PjgpLj
+gZfjgZ/ml6XjgojjgorotbfnrpfjgZcgDQrjgabvvJLlubTku6XkuIrjgIzjgYjjgY3jga3jgaPj
+gajjgI3jga7jgZTliKnnlKjvvIjjg63jgrDjgqTjg7PvvInjgYznorroqo3jgafjgY3jgarjgYTj
+gIzjgYjjgY3jga3jgaPjgajjgI3jgqLjgqvjgqbjg7Pjg4ggDQrjga/jgIHoh6rli5XnmoTjgavp
+gIDkvJrlh6bnkIbjgZXjgZvjgabjgYTjgZ/jgaDjgY/jgZPjgajjgajjgYTjgZ/jgZfjgb7jgZfj
+gZ/jgILjgarjgYrjgIHlr77osaHjgqLjgqvjgqbjg7Pjg4jjga7oh6rli5XpgIAg5Lya5Yem55CG
+44KS44CB5pys6KaP57SE44Gr5Z+644Gl44GN44CBMjAyMiDlubQmbmJzcDszIA0K5pyIJm5ic3A7
+MjHml6Uo5pyIKeOCiOOCiumghuasoeOAgeWun+aWveOBleOBm+OBpuOBhOOBn+OBoOOBjeOBvuOB
+meOAgjwvUD4NCjxQPjxCUj48L1A+DQo8UD7vvJLlubTku6XkuIrjg63jgrDjgqTjg7PjgZfjgabj
+gYTjgarjgYTjgYrlrqLjgZXjgb7jgafjgIHku4rlvozjgoLjgIzjgYjjgY3jga3jgaPjgajjgI3j
+gpLjgZTliKnnlKjjgYTjgZ/jgaDjgZHjgovloLTlkIgg44Gv44CBMjAyMiDlubQmbmJzcDszIOac
+iCZuYnNwOzMxIA0K5pelKOaciCnjgojjgorjgoLliY3jgavjgIHkuIDluqbjg63jgrDjgqTjg7Pm
+k43kvZzjgpLjgYrpoZjjgYTjgYTjgZ/jgZfjgb7jgZnjgIIgPC9QPg0KPFA+PEEgaHJlZj0iaHR0
+cHM6Ly9la2ktbmV1LnNob3AvIj7ih5Ljg63jgrDjgqTjg7Pjga/jgZPjgaHjgok8L0E+PC9QPg0K
+PFA+4oC744GI44GN44Gt44Gj44Go44OI44OD44OX44Oa44O844K45Y+z5LiK44Gu44Ot44Kw44Kk
+44Oz44Oc44K/44Oz44KI44KK44Ot44Kw44Kk44Oz44GX44Gm44GP44Gg44GV44GE44CCPC9QPg0K
+PFA+PEJSPjwvUD4NCjxQPuOBquOBiuOAgeOCouOCq+OCpuODs+ODiOOBjOmAgOS8muWHpueQhuOB
+leOCjOOBn+WgtOWQiOOCguOAgeaWsOOBn+OBq+OCouOCq+OCpuODs+ODiOeZu+mMsu+8iOeEoeaW
+meeZu+mMsu+8ieOBl+OBpuOBhOOBnyANCuOBoOOBj+OBk+OBqOOBp+OBmeOBkOOBq+OAjOOBiOOB
+jeOBreOBo+OBqOOAjeOCkuOBlOWIqeeUqOOBhOOBn+OBoOOBj+OBk+OBqOOBjOOBp+OBjeOBvuOB
+meOBruOBp+OAgeS7iuW+jOOCguOBlOaEm+mhp+OBhOOBnyDjgaDjgZHjgb7jgZnjgojjgYbjgojj
+go3jgZfjgY/jgYrpoZjjgYTjgYTjgZ/jgZfjgb7jgZnjgIImbmJzcDs8L1A+DQo8UD48QlI+PC9Q
+Pg0KPFAgYWxpZ249Y2VudGVyPjxTUEFOIA0Kc3R5bGU9J0ZPTlQtU0laRTogMTFweDsgRk9OVC1G
+QU1JTFk6ICJOb3RvIFNlcmlmIEphcGFuZXNlIiwgc2Fucy1zZXJpZjsgV0hJVEUtU1BBQ0U6IG5v
+cm1hbDsgV09SRC1TUEFDSU5HOiAwcHg7IFRFWFQtVFJBTlNGT1JNOiBub25lOyBGTE9BVDogbm9u
+ZTsgRk9OVC1XRUlHSFQ6IDQwMDsgQ09MT1I6IHJnYig1MSw1MSw1MSk7IEZPTlQtU1RZTEU6IG5v
+cm1hbDsgVEVYVC1BTElHTjogY2VudGVyOyBPUlBIQU5TOiAyOyBXSURPV1M6IDI7IERJU1BMQVk6
+IGlubGluZSAhaW1wb3J0YW50OyBMRVRURVItU1BBQ0lORzogbm9ybWFsOyBCQUNLR1JPVU5ELUNP
+TE9SOiByZ2IoMjQ1LDI0NSwyNDUpOyBURVhULUlOREVOVDogMHB4OyAtd2Via2l0LXRleHQtc3Ry
+b2tlLXdpZHRoOiAwcHg7IGZvbnQtdmFyaWFudC1saWdhdHVyZXM6IG5vcm1hbDsgZm9udC12YXJp
+YW50LWNhcHM6IG5vcm1hbDsgdGV4dC1kZWNvcmF0aW9uLXRoaWNrbmVzczogaW5pdGlhbDsgdGV4
+dC1kZWNvcmF0aW9uLXN0eWxlOiBpbml0aWFsOyB0ZXh0LWRlY29yYXRpb24tY29sb3I6IGluaXRp
+YWwnPiZuYnNwO0NvcHlyaWdodCANCsKpIEpSIEVhc3QgTmV0IFN0YXRpb24gQ28uLEx0ZC4gQWxs
+IFJpZ2h0cyBSZXNlcnZlZC48L1NQQU4+PEJSPjwvUD4NCjxQPjxCUj48L1A+PC9ESVY+PC9ESVY+
+PC9CT0RZPjwvSFRNTD4NCg==
+
+--=====003_Dragon446265254621_=====--
+
