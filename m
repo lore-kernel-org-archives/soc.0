@@ -1,106 +1,156 @@
-Return-Path: <SRS0=m72a=UF=gmail.com=singh.kuldeep87k@kernel.org>
+Return-Path: <SRS0=yj5T=UF=gmail.com=mr.bossman075@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E201CC433EF
-	for <soc@archiver.kernel.org>; Sat, 26 Mar 2022 04:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B80AC433EF
+	for <soc@archiver.kernel.org>; Sat, 26 Mar 2022 14:43:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CB68EC340F3; Sat, 26 Mar 2022 04:23:54 +0000 (UTC)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	id 06BF8C36AE2; Sat, 26 Mar 2022 14:43:22 +0000 (UTC)
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3AE74C340F0;
-	Sat, 26 Mar 2022 04:23:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3AE74C340F0
+	by smtp.kernel.org (Postfix) with ESMTPS id 37F0FC2BBE4;
+	Sat, 26 Mar 2022 14:43:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37F0FC2BBE4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id q19so7992637pgm.6;
-        Fri, 25 Mar 2022 21:23:54 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id v2so8797521qtc.5;
+        Sat, 26 Mar 2022 07:43:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=no5zVlNN2+nYdfxfk03szGsm0djF7V5HA+HKzA4dT0k=;
-        b=mi6tnMMcp/sODd4TZHeEDcdtKlKjpFiDoQvBfp2oFR3eE8TbuI6UQchXI7GyAzJ1gT
-         MZp78KNwIelQo4fw9TP/qWe/NxZDAJEgf6PQc3PIRaWw9SvWfWL5gni7uBOax7oBpwzW
-         tzDPiWD0qxmCFEQkIo7kEZEEvEXB69t7n2J+CKyZlJQ1bNSBLbOiqCm2SlKvcJ236Ds3
-         ScM2rFDv+lYDMb2mcKofp1eAjdzmiG20TkMfIVcxD8jjAtPArjmV5/qn0miaO7O4xHC0
-         ekN0dqnQrfe7t9BYOX3GkrzwP9IhgrKFv2sYnV/egb6QLh+R89EWgRfzQXwTFzHHPcKm
-         HSig==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4EjMh1BXc6L+8+2yCB/wSo589PUQ7VAWNTCQaSkJ5DQ=;
+        b=bX5hy0vhjxCbMhu+7P8AdpCsHwvPtkAzjWp8oIILb7PvQEqQPvSkMEtE8wD/zI+b4O
+         A1iLDSA6UOIia18J1ieodiovWaDGODX2GAmQ03CXwXeBvvVIzteKT79vqPh1bBzg5Ov8
+         1YeVjJgC+UlAujDFCZi/pcIqjXhKnbdFXi5V5ojTesq7e+tVoxZQXtTrPo6bzdprd0vh
+         0J6fco6DGwJU7HGK5Ll5duDmf3vyzmPGSbla+z5IQ9HSUs8IqBCwY4CYWV36fcevaecN
+         osbk0AMuA1eD9384huE9v64oB9jQDCGnctVakdgcHBnNVsj2O2hbDll3VrobpLyoLY/O
+         MZgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=no5zVlNN2+nYdfxfk03szGsm0djF7V5HA+HKzA4dT0k=;
-        b=a21weSD0jfQdXIkRXpS/Dc2Z90alfzvh6A3U4mTwgAFYxyKIELHI5Q5eMZTn0NoEeA
-         It3wPL4YGmgL8zs3G+N0rBRjD7d2zyxNzZpDJXDg23neqDssVh/FPpWEHmWbTZDJG41A
-         GjzT8ILAvOFTw/SH3Who2DQwv2rZOfSsWVW0vI4e5DJO6JZm2l5b3s6e+lzaD1fpOnuJ
-         9xqTyzeSlrGi/7TakG9tjWEK8z6YMgT9LWc+4hAGlusoNRXZoMIicFYD937oe5iKM30i
-         VMr35zb78w59VyryJKTyBES0fH+NoS+gGNtKe73/ITf9ItsHKxIkhn/38i7WQiqvTGym
-         gHmw==
-X-Gm-Message-State: AOAM5309sTjyP72x2/EYunqNxA3tTkVgWTiOUCcIYBhoDKt64/XEZAja
-	W0F4jBmlq4GVi77zzaazfvM=
-X-Google-Smtp-Source: ABdhPJwS8X8wIe3tqpoHerYo9sSMvdEjMD9ikw2WKJc60CtUqYOapfdW3W7jym3Am2N/VjgpKu1DeQ==
-X-Received: by 2002:a05:6a00:10cb:b0:4f7:942:6a22 with SMTP id d11-20020a056a0010cb00b004f709426a22mr13581398pfu.84.1648268633767;
-        Fri, 25 Mar 2022 21:23:53 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id gd10-20020a17090b0fca00b001c75d6a4b18sm7457544pjb.14.2022.03.25.21.23.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4EjMh1BXc6L+8+2yCB/wSo589PUQ7VAWNTCQaSkJ5DQ=;
+        b=R2oDkacEh6bt4TJ3GvFCcRZNi1FcKD0wUHBbDL1NzyOV147qrJCT/cbnW0DXI3dScj
+         tuyjGizCO3x8/HUt78kfOnwzVVdgyob9AfVS8EVyImR8j0bdgBnFNCiXMdK9ds208z/P
+         mvv4w6obX3YjjnySQTF2Abwvk0C6oBEHOk8YQX5L+60KBamZHRSkbZLABKARwIbrvfH/
+         OACBFukE+XzKmlHBtn/bHe9yhwUdWcrwcGRu+KdhDGISk4mzh1dJvLsCYGlsviUoZdrk
+         svL1P/8FatyfNr5mEZ8g+tow6Q5izvGUiqZx3/TYwUmueF0o532WP+MqprJm6rbzMNSN
+         T97g==
+X-Gm-Message-State: AOAM530Wg9t74sldRgGesRBGK+Lu3o2sNTnukWrmi3lF4IRxmWkSUyG3
+	Qe5eYNj1NvpZQnL/xt/4nJw=
+X-Google-Smtp-Source: ABdhPJxlSMIB6q5kWqyaMQn/pan1GzoHN8bORyLMAqLixcIUaE8/0GbyYu4Eju9FJ1kveap/pQmo3Q==
+X-Received: by 2002:a05:622a:155:b0:2e1:cc60:8947 with SMTP id v21-20020a05622a015500b002e1cc608947mr13974558qtw.243.1648305800092;
+        Sat, 26 Mar 2022 07:43:20 -0700 (PDT)
+Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 21:23:53 -0700 (PDT)
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Li Yang <leoyang.li@nxp.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Gong Qianyu <Qianyu.Gong@nxp.com>,
-	Chenhui Zhao <chenhui.zhao@nxp.com>,
-	Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-	Mihai Bantea <mihai.bantea@nxp.com>
+        Sat, 26 Mar 2022 07:43:18 -0700 (PDT)
+From: Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To: linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+Cc: robh+dt@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	aisheng.dong@nxp.com,
+	stefan@agner.ch,
+	linus.walleij@linaro.org,
+	daniel.lezcano@linaro.org,
+	tglx@linutronix.de,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux@armlinux.org.uk,
+	abel.vesa@nxp.com,
+	dev@lynxeye.de,
+	marcel.ziswiler@toradex.com,
+	tharvey@gateworks.com,
+	leoyang.li@nxp.com,
+	sebastian.reichel@collabora.com,
+	cniedermaier@dh-electronics.com,
+	Mr.Bossman075@gmail.com,
+	clin@suse.com,
+	giulio.benetti@benettiengineering.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Mingkai Hu <Mingkai.Hu@nxp.com>,
-	"Horia Geant?" <horia.geanta@nxp.com>
-Subject: [PATCH 4/4] arm64: dts: ls1046a: Update i2c node dma properties
-Date: Sat, 26 Mar 2022 09:53:12 +0530
-Message-Id: <20220326042313.97862-5-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220326042313.97862-1-singh.kuldeep87k@gmail.com>
-References: <20220326042313.97862-1-singh.kuldeep87k@gmail.com>
+	linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org
+Subject: [PATCH v1 00/12] Add support for the i.MXRT1170-evk
+Date: Sat, 26 Mar 2022 10:43:01 -0400
+Message-Id: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Reorder dmas and dma-names properties for i2c controller node to make it
-compliant with bindings.
+This patch continues support for the imxrt series now with the imxrt1170
 
-Fixes: 8126d88162a5 ("arm64: dts: add QorIQ LS1046A SoC support")
-CC: soc@kernel.org
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
- arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This patch contains:
+- Update to imxrt_defconfig
+- Devicetree
+- Clock driver
+- Pinctrl driver
+- New pll
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-index 687fea6d8afa..4e7bd04d9798 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-@@ -499,9 +499,9 @@ i2c0: i2c@2180000 {
- 			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
- 					    QORIQ_CLK_PLL_DIV(2)>;
--			dmas = <&edma0 1 39>,
--			       <&edma0 1 38>;
--			dma-names = "tx", "rx";
-+			dmas = <&edma0 1 38>,
-+			       <&edma0 1 39>;
-+			dma-names = "rx", "tx";
- 			status = "disabled";
- 		};
- 
+This patch also updates some documentation for both imxrt1170 an 1050.
+
+The i.MXRT1170 has a vast array of fetures includeing two cores. 2 Ethernet, 2 USB phy, and a 2d gpu.
+
+It also is fetured in a new google coral board
+https://coral.ai/products/dev-board-micro
+Not affiliated unfortunaly.
+
+Jesse Taube (12):
+  dt-bindings: arm: imx: Add i.MXRT compatible Documentation
+  dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
+  dt-bindings: pinctrl: add i.MXRT1170 pinctrl Documentation
+  dt-bindings: clock: imx: Add documentation for i.MXRT1170 clock
+  ARM: mach-imx: Add support for i.MXRT1170
+  ARM: clk: imx: Update pllv3 to support i.MXRT1170
+  dt-bindings: imx: Add clock binding for i.MXRT1170
+  clk: imx: Add initial support for i.MXRT1170 clock driver
+  pinctrl: freescale: Add i.MXRT1170 pinctrl driver support
+  ARM: dts: imxrt1170-pinfunc: Add pinctrl binding header
+  ARM: dts: imx: Add i.MXRT1170-EVK support
+  ARM: imxrt_defconfig: Add i.MXRT1170
+
+ .../devicetree/bindings/arm/fsl.yaml          |   12 +
+ .../bindings/clock/imxrt1170-clock.yaml       |   59 +
+ .../bindings/pinctrl/fsl,imxrt1170.yaml       |   77 +
+ .../devicetree/bindings/timer/fsl,imxgpt.yaml |    2 +
+ arch/arm/boot/dts/Makefile                    |    3 +-
+ arch/arm/boot/dts/imxrt1170-evk.dts           |  126 ++
+ arch/arm/boot/dts/imxrt1170-pinfunc.h         | 1561 +++++++++++++++++
+ arch/arm/boot/dts/imxrt1170.dtsi              |  278 +++
+ arch/arm/configs/imxrt_defconfig              |   26 +
+ arch/arm/mach-imx/mach-imxrt.c                |    1 +
+ drivers/clk/imx/Kconfig                       |    7 +
+ drivers/clk/imx/Makefile                      |    1 +
+ drivers/clk/imx/clk-imxrt1170.c               |  391 +++++
+ drivers/clk/imx/clk-pllv3.c                   |   57 +-
+ drivers/clk/imx/clk.h                         |    4 +
+ drivers/pinctrl/freescale/Kconfig             |    7 +
+ drivers/pinctrl/freescale/Makefile            |    1 +
+ drivers/pinctrl/freescale/pinctrl-imxrt1170.c |  349 ++++
+ include/dt-bindings/clock/imxrt1170-clock.h   |  282 +++
+ 19 files changed, 3241 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/imxrt1170-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+ create mode 100644 arch/arm/boot/dts/imxrt1170-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1170-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/imxrt1170.dtsi
+ create mode 100644 drivers/clk/imx/clk-imxrt1170.c
+ create mode 100644 drivers/pinctrl/freescale/pinctrl-imxrt1170.c
+ create mode 100644 include/dt-bindings/clock/imxrt1170-clock.h
+
 -- 
-2.25.1
+2.34.1
 
