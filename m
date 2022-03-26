@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4274C433FE
-	for <soc@archiver.kernel.org>; Sat, 26 Mar 2022 14:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13211C433EF
+	for <soc@archiver.kernel.org>; Sat, 26 Mar 2022 14:43:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BE6A6C340EE; Sat, 26 Mar 2022 14:43:45 +0000 (UTC)
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	id F32A2C34100; Sat, 26 Mar 2022 14:43:52 +0000 (UTC)
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B676CC36AE5;
-	Sat, 26 Mar 2022 14:43:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B676CC36AE5
+	by smtp.kernel.org (Postfix) with ESMTPS id DE8C9C340EE;
+	Sat, 26 Mar 2022 14:43:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DE8C9C340EE
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id k125so8129922qkf.0;
-        Sat, 26 Mar 2022 07:43:44 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id k7so8453837qvc.4;
+        Sat, 26 Mar 2022 07:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xDKdPr6wzrB8Q6j4CB3CeccJLFdK/JjrKMfOvj+5qC0=;
-        b=I8w3NmOlvfgHx9QjSlrytRoJvQwo7/FhR3meo80a8J7/wdZoDFq5N/DrJCbiloDBT3
-         1P9CgTaxuo4ZoDu7iEEx8AYC2E9UkLu9Ds2uuj2s4H6pihfKuf+un8XwClWJJGTjBtZV
-         rnbMFEKWBpOXL82pVk5fW1S9ms9GJRnbgjpH10Y3gqZ2Q66zhWb7eovrauR7OmI3h6pP
-         0F5ALM47Tc3QF9p3raO8O+3SJtAMXK1cw7VVsTN5qXgICRbUWqSxvA/uiYNhPvhYIAO3
-         gXwcjPM9CBJqusF2mJKw/mQwyBxYVVSGAjkbOh3pBc8Gbyvsjx8X6GPsRtcr7p0ihfDT
-         iSag==
+        bh=vb2ZOaYsO4CyUWoU4mZse36oHT1LXfcvDTGWA9nha+g=;
+        b=ZNlH3G7sic6bbMTQsp4SV8085iOZMqssE3HV43C50KJy33XbR5vidkI3FAmis6UR+b
+         RagNkUet0iF2Y42wWL9ygEV6olNcAaDwTYyYGG/b1/dnEW89fgLrEMxsO0J/BMZLuAYW
+         37M5vOBiSewjXTBP6dFyLw201AGWDaHDWtRsZsmfOjO3gM6QY0NnXua2hOZ6P9kj9P9O
+         JzBdO85/SyAtV1Ay9xW4t8Me20yeEFcIahbO+TVLURnveCpSGnzQweANm7gxt18Je8mP
+         XZ8JXWQKQd3y0BGVPziFGMKEolcRjtoj8H44hTKydcp7oDbVv0W3C1g4sUa6+NbnrqCD
+         /8bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xDKdPr6wzrB8Q6j4CB3CeccJLFdK/JjrKMfOvj+5qC0=;
-        b=OJGx5VmagnbS5J7tcmTwCQrBeh8V5Wp/D3mbEs94Lphe/cpfth4LYyhPUNN/9OCD5S
-         B4d2FZlr6p91+NHGGQ5Niz0e2d4j7zqxGRlAyg2FyIQoK0CBmkS7ooAW//H4J36oc6To
-         1u0dVE35GGAI5kc3MjPdZ37yOqCyl8CC6X/ZDvdx3U9XpgAEl/yP2qrmh9QSua2/yNBD
-         aXKvrE6LNNPa1bng9+XhPya4jQiFvcStPomyRfzsunePxQkDYBgP5BytQCOtShinxo95
-         Bl9gJC19GURSYUyo7UNthw6RMSp0jTgytUv/B1lQoFBm4Z4rJNFcrraC0xEyULzERZIe
-         nvSA==
-X-Gm-Message-State: AOAM5316B8wRP+SrdonjuGEYGsgkF1yGRjNbihqiED1ZbLjRiQDKLzFw
-	43tkJhpUfwIGzQuaq1A59qiUeV/UCx0=
-X-Google-Smtp-Source: ABdhPJz2jWLp/Wx6ET0p9QY2QJO9IzJgyrHVN9pzdBARJRy1FHfymvM+qPc/hLd6h1eGra3MVG255Q==
-X-Received: by 2002:a05:620a:271d:b0:67d:bb5f:8a7d with SMTP id b29-20020a05620a271d00b0067dbb5f8a7dmr10445028qkp.154.1648305823666;
-        Sat, 26 Mar 2022 07:43:43 -0700 (PDT)
+        bh=vb2ZOaYsO4CyUWoU4mZse36oHT1LXfcvDTGWA9nha+g=;
+        b=5Emtsa5WTPuQSwluKI8ucHnKzF484mErljgMIBCevCbtnEJMb+1tljgRjWDVw4QVZJ
+         YO/xd123g5wjx6zREVQeT521Me/cLMJLgzHWxuzARLlfBxbn9xLr0kSmKAC3v8qeZzOc
+         W1b13d21iTAMD+/MGPhs8SxqrEFCpCyziYAf5W6hgJ6R4kC3AadmTFq8SwyL6LbID/9f
+         pQP7JPxp5XEOUh9id/XVJEGnvpVbxWNvLqoNuZKKwg9Gf5Phr5s046szWkoY0Iy2T6mQ
+         mk9DKwF/7e+7bztKjX0khPJUPdVnAWthmv4k9knKrVKSJYsVa3HJQD/QjVuJ3K2udFZu
+         CaSw==
+X-Gm-Message-State: AOAM532RjhYnPJ3wnxfSwVJAOHm/CCeO3AVXlfva+IhoJt7eu61x7o01
+	+qMjO8g0yzoGE9FEEy6w/gc=
+X-Google-Smtp-Source: ABdhPJzoPEcKBhlObnABxMAkn3QVuUczHXUwTPLpPJvdyaaltd8pqj2J58Ved9sC2cuHZe0NJImR+Q==
+X-Received: by 2002:a0c:be89:0:b0:42c:38b2:9d17 with SMTP id n9-20020a0cbe89000000b0042c38b29d17mr13861381qvi.50.1648305830795;
+        Sat, 26 Mar 2022 07:43:50 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.41
+        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 07:43:42 -0700 (PDT)
+        Sat, 26 Mar 2022 07:43:49 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -84,405 +84,468 @@ Cc: robh+dt@kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH v1 09/12] pinctrl: freescale: Add i.MXRT1170 pinctrl driver support
-Date: Sat, 26 Mar 2022 10:43:10 -0400
-Message-Id: <20220326144313.673549-10-Mr.Bossman075@gmail.com>
+Subject: [PATCH v1 11/12] ARM: dts: imx: Add i.MXRT1170-EVK support
+Date: Sat, 26 Mar 2022 10:43:12 -0400
+Message-Id: <20220326144313.673549-12-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
 References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the pinctrl driver support for i.MXRT1170.
+The NXP i.MXRT1170 Evaluation Kit (EVK) provides a platform for rapid
+evaluation of the i.MXRT, which features NXP's implementation of the Arm
+Cortex-M7 and M4 core.
+
+The EVK provides 64 MB SDRAM, 128 MB Quad SPI flash, Micro SD card socket,
+two USB 2.0 OTG, and two Ethernet ports.
+
+This patch aims to support the preliminary booting up features
+as follows:
+GPIO
+LPUART
+SD/MMC
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
- drivers/pinctrl/freescale/Kconfig             |   7 +
- drivers/pinctrl/freescale/Makefile            |   1 +
- drivers/pinctrl/freescale/pinctrl-imxrt1170.c | 349 ++++++++++++++++++
- 3 files changed, 357 insertions(+)
- create mode 100644 drivers/pinctrl/freescale/pinctrl-imxrt1170.c
+ arch/arm/boot/dts/Makefile          |   3 +-
+ arch/arm/boot/dts/imxrt1170-evk.dts | 126 +++++++++++++
+ arch/arm/boot/dts/imxrt1170.dtsi    | 278 ++++++++++++++++++++++++++++
+ 3 files changed, 406 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/imxrt1170-evk.dts
+ create mode 100644 arch/arm/boot/dts/imxrt1170.dtsi
 
-diff --git a/drivers/pinctrl/freescale/Kconfig b/drivers/pinctrl/freescale/Kconfig
-index 21fa21c6547b..15af3d80e119 100644
---- a/drivers/pinctrl/freescale/Kconfig
-+++ b/drivers/pinctrl/freescale/Kconfig
-@@ -192,3 +192,10 @@ config PINCTRL_IMX23
- config PINCTRL_IMX28
- 	bool
- 	select PINCTRL_MXS
-+
-+config PINCTRL_IMXRT1170
-+	bool "IMXRT1170 pinctrl driver"
-+	depends on ARCH_MXC
-+	select PINCTRL_IMX
-+	help
-+	  Say Y here to enable the imxrt1170 pinctrl driver
-diff --git a/drivers/pinctrl/freescale/Makefile b/drivers/pinctrl/freescale/Makefile
-index c44930b1b362..c2c088ca33cc 100644
---- a/drivers/pinctrl/freescale/Makefile
-+++ b/drivers/pinctrl/freescale/Makefile
-@@ -30,3 +30,4 @@ obj-$(CONFIG_PINCTRL_MXS)	+= pinctrl-mxs.o
- obj-$(CONFIG_PINCTRL_IMX23)	+= pinctrl-imx23.o
- obj-$(CONFIG_PINCTRL_IMX25)	+= pinctrl-imx25.o
- obj-$(CONFIG_PINCTRL_IMX28)	+= pinctrl-imx28.o
-+obj-$(CONFIG_PINCTRL_IMXRT1170)	+= pinctrl-imxrt1170.o
-diff --git a/drivers/pinctrl/freescale/pinctrl-imxrt1170.c b/drivers/pinctrl/freescale/pinctrl-imxrt1170.c
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 07acd6189cae..87ae30818f39 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -724,7 +724,8 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
+ dtb-$(CONFIG_SOC_IMXRT) += \
+-	imxrt1050-evk.dtb
++	imxrt1050-evk.dtb \
++	imxrt1170-evk.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-moxa-uc-8410a.dtb \
+ 	ls1021a-qds.dtb \
+diff --git a/arch/arm/boot/dts/imxrt1170-evk.dts b/arch/arm/boot/dts/imxrt1170-evk.dts
 new file mode 100644
-index 000000000000..5da1545fde91
+index 000000000000..fc3b41de8215
 --- /dev/null
-+++ b/drivers/pinctrl/freescale/pinctrl-imxrt1170.c
-@@ -0,0 +1,349 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/arch/arm/boot/dts/imxrt1170-evk.dts
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2022
-+ * Author(s): Jesse Taube <Mr.Bossman075@gmail.com>
++ * Author(s):  Jesse Taube <Mr.Bossman075@gmail.com>
 + */
 +
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/of_device.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/platform_device.h>
++/dts-v1/;
++#include "imxrt1170.dtsi"
++#include "imxrt1170-pinfunc.h"
 +
-+#include "pinctrl-imx.h"
++/ {
++	model = "NXP imxrt1170-evk board";
++	compatible = "fsl,imxrt1170-evk", "fsl,imxrt1170";
 +
-+enum imxrt1170_pads {
-+	IMXRT1170_PAD_RESERVE0,
-+	IMXRT1170_PAD_RESERVE1,
-+	IMXRT1170_PAD_RESERVE2,
-+	IMXRT1170_PAD_RESERVE3,
-+	IMXRT1170_PAD_EMC_B1_00,
-+	IMXRT1170_PAD_EMC_B1_01,
-+	IMXRT1170_PAD_EMC_B1_02,
-+	IMXRT1170_PAD_EMC_B1_03,
-+	IMXRT1170_PAD_EMC_B1_04,
-+	IMXRT1170_PAD_EMC_B1_05,
-+	IMXRT1170_PAD_EMC_B1_06,
-+	IMXRT1170_PAD_EMC_B1_07,
-+	IMXRT1170_PAD_EMC_B1_08,
-+	IMXRT1170_PAD_EMC_B1_09,
-+	IMXRT1170_PAD_EMC_B1_10,
-+	IMXRT1170_PAD_EMC_B1_11,
-+	IMXRT1170_PAD_EMC_B1_12,
-+	IMXRT1170_PAD_EMC_B1_13,
-+	IMXRT1170_PAD_EMC_B1_14,
-+	IMXRT1170_PAD_EMC_B1_15,
-+	IMXRT1170_PAD_EMC_B1_16,
-+	IMXRT1170_PAD_EMC_B1_17,
-+	IMXRT1170_PAD_EMC_B1_18,
-+	IMXRT1170_PAD_EMC_B1_19,
-+	IMXRT1170_PAD_EMC_B1_20,
-+	IMXRT1170_PAD_EMC_B1_21,
-+	IMXRT1170_PAD_EMC_B1_22,
-+	IMXRT1170_PAD_EMC_B1_23,
-+	IMXRT1170_PAD_EMC_B1_24,
-+	IMXRT1170_PAD_EMC_B1_25,
-+	IMXRT1170_PAD_EMC_B1_26,
-+	IMXRT1170_PAD_EMC_B1_27,
-+	IMXRT1170_PAD_EMC_B1_28,
-+	IMXRT1170_PAD_EMC_B1_29,
-+	IMXRT1170_PAD_EMC_B1_30,
-+	IMXRT1170_PAD_EMC_B1_31,
-+	IMXRT1170_PAD_EMC_B1_32,
-+	IMXRT1170_PAD_EMC_B1_33,
-+	IMXRT1170_PAD_EMC_B1_34,
-+	IMXRT1170_PAD_EMC_B1_35,
-+	IMXRT1170_PAD_EMC_B1_36,
-+	IMXRT1170_PAD_EMC_B1_37,
-+	IMXRT1170_PAD_EMC_B1_38,
-+	IMXRT1170_PAD_EMC_B1_39,
-+	IMXRT1170_PAD_EMC_B1_40,
-+	IMXRT1170_PAD_EMC_B1_41,
-+	IMXRT1170_PAD_EMC_B2_00,
-+	IMXRT1170_PAD_EMC_B2_01,
-+	IMXRT1170_PAD_EMC_B2_02,
-+	IMXRT1170_PAD_EMC_B2_03,
-+	IMXRT1170_PAD_EMC_B2_04,
-+	IMXRT1170_PAD_EMC_B2_05,
-+	IMXRT1170_PAD_EMC_B2_06,
-+	IMXRT1170_PAD_EMC_B2_07,
-+	IMXRT1170_PAD_EMC_B2_08,
-+	IMXRT1170_PAD_EMC_B2_09,
-+	IMXRT1170_PAD_EMC_B2_10,
-+	IMXRT1170_PAD_EMC_B2_11,
-+	IMXRT1170_PAD_EMC_B2_12,
-+	IMXRT1170_PAD_EMC_B2_13,
-+	IMXRT1170_PAD_EMC_B2_14,
-+	IMXRT1170_PAD_EMC_B2_15,
-+	IMXRT1170_PAD_EMC_B2_16,
-+	IMXRT1170_PAD_EMC_B2_17,
-+	IMXRT1170_PAD_EMC_B2_18,
-+	IMXRT1170_PAD_EMC_B2_19,
-+	IMXRT1170_PAD_EMC_B2_20,
-+	IMXRT1170_PAD_AD_00,
-+	IMXRT1170_PAD_AD_01,
-+	IMXRT1170_PAD_AD_02,
-+	IMXRT1170_PAD_AD_03,
-+	IMXRT1170_PAD_AD_04,
-+	IMXRT1170_PAD_AD_05,
-+	IMXRT1170_PAD_AD_06,
-+	IMXRT1170_PAD_AD_07,
-+	IMXRT1170_PAD_AD_08,
-+	IMXRT1170_PAD_AD_09,
-+	IMXRT1170_PAD_AD_10,
-+	IMXRT1170_PAD_AD_11,
-+	IMXRT1170_PAD_AD_12,
-+	IMXRT1170_PAD_AD_13,
-+	IMXRT1170_PAD_AD_14,
-+	IMXRT1170_PAD_AD_15,
-+	IMXRT1170_PAD_AD_16,
-+	IMXRT1170_PAD_AD_17,
-+	IMXRT1170_PAD_AD_18,
-+	IMXRT1170_PAD_AD_19,
-+	IMXRT1170_PAD_AD_20,
-+	IMXRT1170_PAD_AD_21,
-+	IMXRT1170_PAD_AD_22,
-+	IMXRT1170_PAD_AD_23,
-+	IMXRT1170_PAD_AD_24,
-+	IMXRT1170_PAD_AD_25,
-+	IMXRT1170_PAD_AD_26,
-+	IMXRT1170_PAD_AD_27,
-+	IMXRT1170_PAD_AD_28,
-+	IMXRT1170_PAD_AD_29,
-+	IMXRT1170_PAD_AD_30,
-+	IMXRT1170_PAD_AD_31,
-+	IMXRT1170_PAD_AD_32,
-+	IMXRT1170_PAD_AD_33,
-+	IMXRT1170_PAD_AD_34,
-+	IMXRT1170_PAD_AD_35,
-+	IMXRT1170_PAD_SD_B1_00,
-+	IMXRT1170_PAD_SD_B1_01,
-+	IMXRT1170_PAD_SD_B1_02,
-+	IMXRT1170_PAD_SD_B1_03,
-+	IMXRT1170_PAD_SD_B1_04,
-+	IMXRT1170_PAD_SD_B1_05,
-+	IMXRT1170_PAD_SD_B2_00,
-+	IMXRT1170_PAD_SD_B2_01,
-+	IMXRT1170_PAD_SD_B2_02,
-+	IMXRT1170_PAD_SD_B2_03,
-+	IMXRT1170_PAD_SD_B2_04,
-+	IMXRT1170_PAD_SD_B2_05,
-+	IMXRT1170_PAD_SD_B2_06,
-+	IMXRT1170_PAD_SD_B2_07,
-+	IMXRT1170_PAD_SD_B2_08,
-+	IMXRT1170_PAD_SD_B2_09,
-+	IMXRT1170_PAD_SD_B2_10,
-+	IMXRT1170_PAD_SD_B2_11,
-+	IMXRT1170_PAD_DISP_B1_00,
-+	IMXRT1170_PAD_DISP_B1_01,
-+	IMXRT1170_PAD_DISP_B1_02,
-+	IMXRT1170_PAD_DISP_B1_03,
-+	IMXRT1170_PAD_DISP_B1_04,
-+	IMXRT1170_PAD_DISP_B1_05,
-+	IMXRT1170_PAD_DISP_B1_06,
-+	IMXRT1170_PAD_DISP_B1_07,
-+	IMXRT1170_PAD_DISP_B1_08,
-+	IMXRT1170_PAD_DISP_B1_09,
-+	IMXRT1170_PAD_DISP_B1_10,
-+	IMXRT1170_PAD_DISP_B1_11,
-+	IMXRT1170_PAD_DISP_B2_00,
-+	IMXRT1170_PAD_DISP_B2_01,
-+	IMXRT1170_PAD_DISP_B2_02,
-+	IMXRT1170_PAD_DISP_B2_03,
-+	IMXRT1170_PAD_DISP_B2_04,
-+	IMXRT1170_PAD_DISP_B2_05,
-+	IMXRT1170_PAD_DISP_B2_06,
-+	IMXRT1170_PAD_DISP_B2_07,
-+	IMXRT1170_PAD_DISP_B2_08,
-+	IMXRT1170_PAD_DISP_B2_09,
-+	IMXRT1170_PAD_DISP_B2_10,
-+	IMXRT1170_PAD_DISP_B2_11,
-+	IMXRT1170_PAD_DISP_B2_12,
-+	IMXRT1170_PAD_DISP_B2_13,
-+	IMXRT1170_PAD_DISP_B2_14,
-+	IMXRT1170_PAD_DISP_B2_15,
++	chosen {
++		stdout-path = &lpuart1;
++	};
++
++	aliases {
++		gpio0 = &gpio1;
++		gpio1 = &gpio2;
++		gpio2 = &gpio3;
++		gpio3 = &gpio4;
++		gpio4 = &gpio5;
++		gpio5 = &gpio6;
++		gpio6 = &gpio7;
++		gpio7 = &gpio8;
++		gpio8 = &gpio9;
++		gpio9 = &gpio10;
++		gpio10 = &gpio11;
++		gpio11 = &gpio12;
++		gpio12 = &gpio13;
++		mmc0 = &usdhc1;
++		serial0 = &lpuart1;
++		usbphy0 = &usbphy1;
++	};
++
++	memory@20240000 {
++		device_type = "memory";
++		reg = <0x20240000 0xf0000>;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x4000000>;
++	};
++
++	reg_usb_otg1_vbus: regulator-usb-otg1-vbus {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pwm0>;
++		regulator-name = "usb_otg1_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&gpio9 9 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
 +};
 +
-+/* Pad names for the pinmux subsystem */
-+static const struct pinctrl_pin_desc imxrt1170_pinctrl_pads[] = {
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_RESERVE0),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_RESERVE1),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_RESERVE2),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_RESERVE3),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_06),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_07),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_08),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_09),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_10),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_11),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_12),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_13),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_14),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_15),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_16),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_17),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_18),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_19),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_20),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_21),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_22),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_23),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_24),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_25),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_26),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_27),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_28),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_29),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_30),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_31),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_32),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_33),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_34),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_35),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_36),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_37),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_38),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_39),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_40),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B1_41),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_06),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_07),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_08),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_09),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_10),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_11),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_12),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_13),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_14),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_15),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_16),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_17),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_18),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_19),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_EMC_B2_20),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_06),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_07),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_08),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_09),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_10),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_11),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_12),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_13),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_14),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_15),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_16),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_17),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_18),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_19),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_20),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_21),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_22),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_23),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_24),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_25),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_26),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_27),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_28),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_29),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_30),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_31),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_32),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_33),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_34),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_AD_35),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B1_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B1_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B1_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B1_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B1_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B1_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_06),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_07),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_08),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_09),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_10),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_SD_B2_11),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_06),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_07),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_08),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_09),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_10),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B1_11),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_00),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_01),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_02),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_03),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_04),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_05),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_06),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_07),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_08),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_09),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_10),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_11),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_12),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_13),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_14),
-+	IMX_PINCTRL_PIN(IMXRT1170_PAD_DISP_B2_15),
++&lpuart1 { /* console */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_lpuart1>;
++	status = "okay";
 +};
 +
-+static const struct imx_pinctrl_soc_info imxrt1170_pinctrl_info = {
-+	.pins = imxrt1170_pinctrl_pads,
-+	.npins = ARRAY_SIZE(imxrt1170_pinctrl_pads),
-+	.gpr_compatible = "fsl,imxrt1170-iomuxc-gpr",
++
++&usbotg1 {
++	vbus-supply = <&reg_usb_otg1_vbus>;
++	dr_mode = "host";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usbotg1_id>;
++	disable-over-current;
++	status = "okay";
 +};
 +
-+static const struct of_device_id imxrt1170_pinctrl_of_match[] = {
-+	{ .compatible = "fsl,imxrt1170-iomuxc", .data = &imxrt1170_pinctrl_info, },
-+	{ /* sentinel */ }
++&iomuxc {
++	pinctrl_lpuart1: lpuart1grp {
++		fsl,pins = <
++			IOMUXC_GPIO_AD_24_LPUART1_TXD 0xf1
++			IOMUXC_GPIO_AD_25_LPUART1_RXD 0xf1
++		>;
++	};
++
++	pinctrl_pwm0: pwm0grp {
++		fsl,pins = <
++			IOMUXC_GPIO_AD_11_USB_OTG1_OC 0xf1
++		>;
++	};
++
++	pinctrl_usbotg1_id: pinctrl_usbotg1_id {
++		fsl,pins = <
++			IOMUXC_GPIO_AD_09_USBPHY1_OTG_ID 0xf1
++		>;
++	};
++
++	pinctrl_usdhc0: usdhc0grp {
++		fsl,pins = <
++			IOMUXC_GPIO_AD_32_USDHC1_CD_B
++				0x1B000
++			IOMUXC_GPIO_AD_34_USDHC1_VSELECT
++				0xB069
++			IOMUXC_GPIO_SD_B1_00_USDHC1_CMD
++				0x17061
++			IOMUXC_GPIO_SD_B1_01_USDHC1_CLK
++				0x17061
++			IOMUXC_GPIO_SD_B1_05_USDHC1_DATA3
++				0x17061
++			IOMUXC_GPIO_SD_B1_04_USDHC1_DATA2
++				0x17061
++			IOMUXC_GPIO_SD_B1_03_USDHC1_DATA1
++				0x17061
++			IOMUXC_GPIO_SD_B1_02_USDHC1_DATA0
++				0x17061
++		>;
++	};
 +};
 +
-+static int imxrt1170_pinctrl_probe(struct platform_device *pdev)
-+{
-+	return imx_pinctrl_probe(pdev, &imxrt1170_pinctrl_info);
-+}
-+
-+static struct platform_driver imxrt1170_pinctrl_driver = {
-+	.driver = {
-+		.name = "imxrt1170-pinctrl",
-+		.of_match_table = of_match_ptr(imxrt1170_pinctrl_of_match),
-+		.suppress_bind_attrs = true,
-+	},
-+	.probe = imxrt1170_pinctrl_probe,
++&usdhc1 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc0>;
++	pinctrl-1 = <&pinctrl_usdhc0>;
++	pinctrl-2 = <&pinctrl_usdhc0>;
++	pinctrl-3 = <&pinctrl_usdhc0>;
++	status = "okay";
++	broken-cd;
 +};
+diff --git a/arch/arm/boot/dts/imxrt1170.dtsi b/arch/arm/boot/dts/imxrt1170.dtsi
+new file mode 100644
+index 000000000000..fb53347571a9
+--- /dev/null
++++ b/arch/arm/boot/dts/imxrt1170.dtsi
+@@ -0,0 +1,278 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2022
++ * Author(s):  Jesse Taube <Mr.Bossman075@gmail.com>
++ */
 +
-+static int __init imxrt1170_pinctrl_init(void)
-+{
-+	return platform_driver_register(&imxrt1170_pinctrl_driver);
-+}
-+arch_initcall(imxrt1170_pinctrl_init);
++#include "armv7-m.dtsi"
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/clock/imxrt1170-clock.h>
++#include <dt-bindings/gpio/gpio.h>
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		linux,cma {
++			compatible = "shared-dma-pool";
++			size = <0x40000>;
++			no-map;
++			linux,dma-default;
++		};
++	};
++
++	clocks {
++		osc: osc {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <24000000>;
++		};
++
++		rcosc16M: rcosc16M {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <16000000>;
++		};
++
++		osc32k: osc32k {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <32768>;
++		};
++
++		osc3M: osc3M {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <3000000>;
++		};
++	};
++
++	soc {
++		anatop: anatop@40c84000 {
++			compatible = "fsl,imxrt-anatop";
++			reg = <0x40c84000 0x4000>;
++		};
++
++		clks: ccm@40cc0000 {
++			compatible = "fsl,imxrt1170-ccm";
++			reg = <0x40cc0000 0x4000>;
++			clocks = <&osc>, <&rcosc16M>, <&osc32k>;
++			clock-names = "osc", "rcosc16M", "osc32k";
++			#clock-cells = <1>;
++		};
++
++		edma1: dma-controller@40070000 {
++			#dma-cells = <2>;
++			compatible = "fsl,imx7ulp-edma";
++			reg = <0x40070000 0x4000>,
++				<0x40074000 0x4000>;
++			dma-channels = <32>;
++			interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>, <8>,
++				<9>, <10>, <11>, <12>, <13>, <14>, <15>, <16>;
++			clock-names = "dma", "dmamux0";
++			clocks = <&clks IMXRT1170_CLK_BUS>,
++				 <&clks IMXRT1170_CLK_M4>;
++		};
++
++		gpio1: gpio@4012c000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x4012c000 0x4000>;
++			interrupts = <100>, <101>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio2: gpio@40130000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40130000 0x4000>;
++			interrupts = <102>, <103>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio3: gpio@40134000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40134000 0x4000>;
++			interrupts = <104>, <105>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio4: gpio@40138000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40138000 0x4000>;
++			interrupts = <106>, <107>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio5: gpio@4013c000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x4013c000 0x4000>;
++			interrupts = <108>, <109>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio6: gpio@40140000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40140000 0x4000>;
++			interrupts = <61>, <62>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio7: gpio@40c5c000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40c5c000 0x4000>;
++			interrupts = <99>, <99>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio8: gpio@40c60000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40c60000 0x4000>;
++			interrupts = <99>, <99>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio9: gpio@40c64000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40c64000 0x4000>;
++			interrupts = <99>, <99>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio10: gpio@40c68000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40c68000 0x4000>;
++			interrupts = <99>, <99>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio11: gpio@40c6c000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40c6c000 0x4000>;
++			interrupts = <99>, <99>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio12: gpio@40c70000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40c70000 0x4000>;
++			interrupts = <61>, <62>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpio13: gpio@40ca0000 {
++			compatible = "fsl,imxrt1170-gpio", "fsl,imx35-gpio";
++			reg = <0x40ca0000 0x4000>;
++			interrupts = <93>, <93>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		gpt: timer@400ec000 {
++			compatible = "fsl,imxrt1170-gpt", "fsl,imx6dl-gpt", "fsl,imx6sl-gpt";
++			reg = <0x400ec000 0x4000>;
++			interrupts = <119>;
++			clocks = <&osc3M>;
++			clock-names = "per";
++		};
++
++		iomuxc: iomuxc@400e8000 {
++			compatible = "fsl,imxrt1170-iomuxc";
++			reg = <0x400e8000 0x4000>;
++			fsl,mux_mask = <0x7>;
++		};
++
++		lpuart1: serial@4007c000 {
++			compatible = "fsl,imxrt1170-lpuart", "fsl,imxrt1050-lpuart", "fsl,imx7ulp-lpuart";
++			reg = <0x4007c000 0x4000>;
++			interrupts = <20>;
++			clocks = <&clks IMXRT1170_CLK_LPUART1>;
++			clock-names = "ipg";
++			status = "disabled";
++		};
++
++		usdhc1: mmc@40418000 {
++			compatible ="fsl,imxrt1050-usdhc", "fsl,imx6sl-usdhc";
++			reg = <0x40418000 0x10000>;
++			interrupts = <133>;
++			clocks = <&clks IMXRT1170_CLK_BUS>,
++				<&clks IMXRT1170_CLK_BUS>,
++				<&clks IMXRT1170_CLK_USDHC1>;
++			clock-names = "ipg", "ahb", "per";
++			bus-width = <4>;
++			fsl,wp-controller;
++			no-1-8-v;
++			max-frequency = <4000000>;
++			fsl,tuning-start-tap = <20>;
++			fsl,tuning-step= <2>;
++			status = "disabled";
++		};
++
++
++		usbmisc1: usbmisc@40430200 {
++			compatible = "fsl,imx7ulp-usbmisc";
++			#index-cells = <1>;
++			reg = <0x40430200 0x200>;
++		};
++
++		usbotg1: usb@40430000 {
++			compatible = "fsl,imx7ulp-usb";
++			reg = <0x40430000 0x200>;
++			interrupts = <136>;
++			clocks = <&clks IMXRT1170_CLK_USB>;
++			phys = <&usbphy1>;
++			fsl,usbmisc = <&usbmisc1 0>;
++			status = "disabled";
++		};
++
++		usbphy1: usb-phy@40434000 {
++			compatible = "fsl,imx7ulp-usbphy";
++			reg = <0x40434000 0x1000>;
++			interrupts = <90>;
++			clocks = <&clks IMXRT1170_CLK_USB>;
++			#phy-cells = <0>;
++		};
++
++	};
++};
 -- 
 2.34.1
 
