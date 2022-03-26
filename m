@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74C5DC433FE
-	for <soc@archiver.kernel.org>; Sat, 26 Mar 2022 14:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F32C433FE
+	for <soc@archiver.kernel.org>; Sat, 26 Mar 2022 14:43:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 610F5C340F3; Sat, 26 Mar 2022 14:43:35 +0000 (UTC)
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	id F0F9EC340EE; Sat, 26 Mar 2022 14:43:37 +0000 (UTC)
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BC0A3C2BBE4;
-	Sat, 26 Mar 2022 14:43:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BC0A3C2BBE4
+	by smtp.kernel.org (Postfix) with ESMTPS id 2FF66C36AE3;
+	Sat, 26 Mar 2022 14:43:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2FF66C36AE3
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f179.google.com with SMTP id 85so8090557qkm.9;
-        Sat, 26 Mar 2022 07:43:34 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id d142so8114234qkc.4;
+        Sat, 26 Mar 2022 07:43:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zVMBwba+OFGRWQLxhmJNkbLVJBAIF3Hcu3hVj+hPIDU=;
-        b=FniufBSCFh+91j1tpQbTWPp8uemvOlCHmjXSXLtwwlllmSJZinICj9WIcDaJg/xx24
-         eWOcnNkO5xGyB9yKf85d+2EjF1pdUeldMgzyD0hAW9QVGP7sJBQHICjxLH6qClFEXs80
-         k/K68QOUerpigmnLyPLKk6vHDfMwoTbQsfbtVbb8AJz1JkvrHVTNU2CysV3xJ7tLSO6Y
-         Fw0q5K8KBNNFWFIVJblHZmBbQAQTKyAIiysLSy1j1596lMrEayK3hVF1KQUZh75YTA3H
-         BmQlqJPHz+pZmE+QGMCzto5Il8THsOCGr4KOY3wYqKuHXvHQGL31UojtQ9OoJactgGAC
-         9Spw==
+        bh=0OnOYnWbKBOx8TDVywfCrwMlRr6WkNrB+huo8muKs9o=;
+        b=cjbfxrVbMkrDr0KXh0iFZddnkTfRsTYS9dfaLk04lNN4lnEgXN6tIa/yzosPfOMO0A
+         jktwrc51whcVCEI452+v+rn4bnOkHro85ulLAn+z8KMf0oSR9kDCIK+Uo4xn8Sa4AmGR
+         eZeu8FZ+OsG4J5YCPEJQGFY/BEoizJ5BAE9eyQ8trXk+3ecxLsTHtJMW8q9zNq2k3dTL
+         vhGGWT1zDnaGPgmE9OZoXezZRHl4vIJcDhxNghHk3uNlcjP5acTswVYS1Y8koTnh0hdZ
+         1a5vrXvRjJIjorJzHylPPbu5k6K/B4eXPBaLK8j6qViYD0pbF+P8pOLdmJbmHeDLv19j
+         Ppvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zVMBwba+OFGRWQLxhmJNkbLVJBAIF3Hcu3hVj+hPIDU=;
-        b=kRAWTbfhvs/T45Nxm1bpfFpIw8Evku001Kjy0yWIvMR9+SzsWEjuob8Un+XKQ/8ATC
-         iiCH5NSNTAxib1YU4xzOuvEZo8DQKtTMklFX6eCBq8q520d4mdmzA7eQJUv2j7p0fUwV
-         AgX6oaLUXu3odWZV3HaEe46vOQcICOL+1xe4Pp9W4AJzgHgQqw9ujf2qbqTasw/7pBiX
-         NMy1UDOrRFiaNKlBx2cGAjTGjfERR1w16Ua7vOSENC4qLSCf49Twg5AODOeKCEuZfpkW
-         BhK4avRWzcsDloNZAMNIjiG4zbttbEggXPgXHSXhF6y+yI+XSNP3zTy+kfBRVs1ZyNuC
-         Aa7w==
-X-Gm-Message-State: AOAM531ft0/OSXVFWGI2OcOR9oXtImMQiW14Z5MqZonq9bECRzD/vssD
-	T9bJ6vF40ssWmbFzARrmQr3l6HswH3U=
-X-Google-Smtp-Source: ABdhPJxoO0y4Sx6UvlWtKljSwWMgKXTv+3rXp+vP1+NOfQ21036bAjvNWvhasa3Dnc/U8OYO1uTHFw==
-X-Received: by 2002:a05:620a:199b:b0:67e:ce80:e414 with SMTP id bm27-20020a05620a199b00b0067ece80e414mr10522894qkb.209.1648305813727;
-        Sat, 26 Mar 2022 07:43:33 -0700 (PDT)
+        bh=0OnOYnWbKBOx8TDVywfCrwMlRr6WkNrB+huo8muKs9o=;
+        b=0gVQ9lX7SXwpEovKZvVAbDg6DtNSt9aVH21Ux36+Vk0numaG4WtRTd7GiNnufjkA9b
+         55Ua0Tq33stQlx+hQxk1A0LzvOxJhdKkXukoPeXOWa5He88DJA9zYMsX1AWJd8eP3gJc
+         0+dQ+5vH2vXlY2pLXf3U3aQKSFvTvXCkK+4LJ9RWsRcNnokdyCB+tDAH2VZXfR+cStPd
+         dCL4LBy6IfxqH3gQrm6mAjwCU2ZG+J/ixjN/gq4DPgwNzVbVt4gzReWII7WzAp01DN/K
+         28mSxgJh+0SgUGKb8d8BSbBJLsx2Rt5zjzr1oOBDlJSOzI6waAfF6b0NJYNFbpd2Cn0X
+         /pfQ==
+X-Gm-Message-State: AOAM531RSp4QW+wB3I+cMigGII7mUim4WuFlIfBnzULiP9gttP4ByiEg
+	MfUeIz/oIedM2F+CzSHo7Gw=
+X-Google-Smtp-Source: ABdhPJy+1FW46r9Xlk22W6b8B6E/RyujUvD7Cl1mjy5NqVePje9bHC+O2MF5tJvwzDFBp4H1Oh5DwQ==
+X-Received: by 2002:a05:620a:2889:b0:67a:ee33:3c15 with SMTP id j9-20020a05620a288900b0067aee333c15mr10336073qkp.236.1648305816191;
+        Sat, 26 Mar 2022 07:43:36 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.31
+        by smtp.gmail.com with ESMTPSA id 70-20020a370649000000b0067b4cd8ffbasm4908918qkg.60.2022.03.26.07.43.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Mar 2022 07:43:32 -0700 (PDT)
+        Sat, 26 Mar 2022 07:43:35 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -84,34 +84,170 @@ Cc: robh+dt@kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH v1 05/12] ARM: mach-imx: Add support for i.MXRT1170
-Date: Sat, 26 Mar 2022 10:43:06 -0400
-Message-Id: <20220326144313.673549-6-Mr.Bossman075@gmail.com>
+Subject: [PATCH v1 06/12] ARM: clk: imx: Update pllv3 to support i.MXRT1170
+Date: Sat, 26 Mar 2022 10:43:07 -0400
+Message-Id: <20220326144313.673549-7-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
 References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add "fsl,imxrt1170" to imxrt_compat
+The i.MXRT1170 has a pll that has the multiplier bits inverted and
+cannot be changed add IMX_PLLV3_GENERICV2.
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The i.MXRT1170 also has the lock bit moved as well as the
+power bit inverted the power bit also is in different locations on each
+pll control register.
+
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
- arch/arm/mach-imx/mach-imxrt.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/imx/clk-pllv3.c | 57 +++++++++++++++++++++++++++++++++++--
+ drivers/clk/imx/clk.h       |  4 +++
+ 2 files changed, 59 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-imx/mach-imxrt.c b/arch/arm/mach-imx/mach-imxrt.c
-index 2063a3059c84..0070214feb42 100644
---- a/arch/arm/mach-imx/mach-imxrt.c
-+++ b/arch/arm/mach-imx/mach-imxrt.c
-@@ -10,6 +10,7 @@
+diff --git a/drivers/clk/imx/clk-pllv3.c b/drivers/clk/imx/clk-pllv3.c
+index 20ee9611ba6e..a1dbc3a2e280 100644
+--- a/drivers/clk/imx/clk-pllv3.c
++++ b/drivers/clk/imx/clk-pllv3.c
+@@ -23,6 +23,7 @@
  
- static const char *const imxrt_compat[] __initconst = {
- 	"fsl,imxrt1050",
-+	"fsl,imxrt1170",
- 	NULL
+ #define BM_PLL_POWER		(0x1 << 12)
+ #define BM_PLL_LOCK		(0x1 << 31)
++#define BM_PLL_LOCK_V2		(0x1 << 29)
+ #define IMX7_ENET_PLL_POWER	(0x1 << 5)
+ #define IMX7_DDR_PLL_POWER	(0x1 << 20)
+ 
+@@ -34,6 +35,7 @@
+  * @base:	 base address of PLL registers
+  * @power_bit:	 pll power bit mask
+  * @powerup_set: set power_bit to power up the PLL
++ * @lock_bit:	 pll lock bit mask
+  * @div_mask:	 mask of divider bits
+  * @div_shift:	 shift of divider bits
+  * @ref_clock:	reference clock rate
+@@ -48,6 +50,7 @@ struct clk_pllv3 {
+ 	void __iomem	*base;
+ 	u32		power_bit;
+ 	bool		powerup_set;
++	u32		lock_bit;
+ 	u32		div_mask;
+ 	u32		div_shift;
+ 	unsigned long	ref_clock;
+@@ -65,7 +68,7 @@ static int clk_pllv3_wait_lock(struct clk_pllv3 *pll)
+ 	if ((pll->powerup_set && !val) || (!pll->powerup_set && val))
+ 		return 0;
+ 
+-	return readl_relaxed_poll_timeout(pll->base, val, val & BM_PLL_LOCK,
++	return readl_relaxed_poll_timeout(pll->base, val, val & pll->lock_bit,
+ 					  500, PLL_LOCK_TIMEOUT);
+ }
+ 
+@@ -101,7 +104,7 @@ static int clk_pllv3_is_prepared(struct clk_hw *hw)
+ {
+ 	struct clk_pllv3 *pll = to_clk_pllv3(hw);
+ 
+-	if (readl_relaxed(pll->base) & BM_PLL_LOCK)
++	if (readl_relaxed(pll->base) & pll->lock_bit)
+ 		return 1;
+ 
+ 	return 0;
+@@ -155,6 +158,39 @@ static const struct clk_ops clk_pllv3_ops = {
+ 	.set_rate	= clk_pllv3_set_rate,
  };
+ 
++static int clk_pllv3_genericv2_set_rate(struct clk_hw *hw, unsigned long rate,
++		unsigned long parent_rate)
++{
++	struct clk_pllv3 *pll = to_clk_pllv3(hw);
++	u32 val, div;
++
++	div = (readl_relaxed(pll->base) >> pll->div_shift) & pll->div_mask;
++	val = (div == 0) ? parent_rate * 22 : parent_rate * 20;
++
++	if (rate == val)
++		return 0;
++
++	return -EINVAL;
++}
++
++static unsigned long clk_pllv3_genericv2_recalc_rate(struct clk_hw *hw,
++					   unsigned long parent_rate)
++{
++	struct clk_pllv3 *pll = to_clk_pllv3(hw);
++	u32 div = (readl_relaxed(pll->base) >> pll->div_shift)  & pll->div_mask;
++
++	return (div == 0) ? parent_rate * 22 : parent_rate * 20;
++}
++
++static const struct clk_ops clk_pllv3_genericv2_ops = {
++	.prepare	= clk_pllv3_prepare,
++	.unprepare	= clk_pllv3_unprepare,
++	.is_prepared	= clk_pllv3_is_prepared,
++	.recalc_rate	= clk_pllv3_genericv2_recalc_rate,
++	.round_rate	= clk_pllv3_round_rate,
++	.set_rate	= clk_pllv3_genericv2_set_rate,
++};
++
+ static unsigned long clk_pllv3_sys_recalc_rate(struct clk_hw *hw,
+ 					       unsigned long parent_rate)
+ {
+@@ -407,6 +443,13 @@ static const struct clk_ops clk_pllv3_enet_ops = {
+ 	.recalc_rate	= clk_pllv3_enet_recalc_rate,
+ };
+ 
++void imx_clk_hw_pll3_powerbit(struct clk_hw *hw, u8 shift)
++{
++	struct clk_pllv3 *pll = to_clk_pllv3(hw);
++
++	pll->power_bit = shift;
++}
++
+ struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
+ 			  const char *parent_name, void __iomem *base,
+ 			  u32 div_mask)
+@@ -422,10 +465,20 @@ struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	pll->power_bit = BM_PLL_POWER;
++	pll->lock_bit = BM_PLL_LOCK;
+ 	pll->num_offset = PLL_NUM_OFFSET;
+ 	pll->denom_offset = PLL_DENOM_OFFSET;
+ 
+ 	switch (type) {
++	case IMX_PLLV3_GENERICV2:
++		pll->lock_bit = BM_PLL_LOCK_V2;
++		pll->powerup_set = true;
++		ops = &clk_pllv3_genericv2_ops;
++		break;
++	case IMX_PLLV3_SYSV2:
++		pll->lock_bit = BM_PLL_LOCK_V2;
++		pll->powerup_set = true;
++		fallthrough;
+ 	case IMX_PLLV3_SYS:
+ 		ops = &clk_pllv3_sys_ops;
+ 		break;
+diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
+index 7d220a01de1f..e70e985840a4 100644
+--- a/drivers/clk/imx/clk.h
++++ b/drivers/clk/imx/clk.h
+@@ -220,6 +220,8 @@ struct clk_hw *imx_clk_hw_sscg_pll(const char *name,
+ 
+ enum imx_pllv3_type {
+ 	IMX_PLLV3_GENERIC,
++	IMX_PLLV3_GENERICV2,
++	IMX_PLLV3_SYSV2,
+ 	IMX_PLLV3_SYS,
+ 	IMX_PLLV3_USB,
+ 	IMX_PLLV3_USB_VF610,
+@@ -231,6 +233,8 @@ enum imx_pllv3_type {
+ 	IMX_PLLV3_AV_IMX7,
+ };
+ 
++void imx_clk_hw_pll3_powerbit(struct clk_hw *hw, u8 shift);
++
+ struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
+ 		const char *parent_name, void __iomem *base, u32 div_mask);
  
 -- 
 2.34.1
