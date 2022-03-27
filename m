@@ -1,59 +1,67 @@
-Return-Path: <SRS0=CYjh=UG=mleia.com=vz@kernel.org>
+Return-Path: <SRS0=BVEf=UG=gmail.com=twoerner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13644C433F5
-	for <soc@archiver.kernel.org>; Sun, 27 Mar 2022 16:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB325C433EF
+	for <soc@archiver.kernel.org>; Sun, 27 Mar 2022 18:32:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D91A1C340F0; Sun, 27 Mar 2022 16:27:12 +0000 (UTC)
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 8AD93C3410F; Sun, 27 Mar 2022 18:32:17 +0000 (UTC)
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 333F1C340EC;
-	Sun, 27 Mar 2022 16:27:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 333F1C340EC
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1648398422; bh=jVVP0iUlP0DlXFXuRsvD4l9GTzsez6QkvgD7J3RohAc=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=MLm+0493wtU0w5AGNp4Mdt4LzIQsnV2mq/n8xB1pqaDR7JKikrDnSl4aXiBj7Z7UN
-	 Kw/41C3gPUabbLyNzcllMxYQ02Y3RDw/mA6HcpfdA2Afk8n9Dsu/pciVfal6UY3JvN
-	 DLQpvgREaj37SBVnRxQDhC0i1mWycsasfR048qA28L/Z1emPW9RtI5WZl2LCi5Abwh
-	 2VPSMyEAHk+i78BTH0otUBOzhW7bsjjPqHCjrjGimP5hGp5n9t0MeC8NZPc3oFDXfc
-	 WmJb+d4+aGRMqcw8JALyolWkwz6ZQBupB2SuK+IU19R1EWyAI7LYDRh9rQDnxYjgGH
-	 fFLenR9Eeji+A==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id 114013A2E38;
-	Sun, 27 Mar 2022 16:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1648398421; bh=jVVP0iUlP0DlXFXuRsvD4l9GTzsez6QkvgD7J3RohAc=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-	b=LshbMpuF6Mc9PBPUXyNqiRWjCUSmzNiYCCgFLY70CaWSiQl21q3+RbWcvcB5CKC8y
-	 FkhgdP9++a13mFTnPoHup9KEIV0CO2sWYLYOg/HEFtpDlDAM1DNzfZDwaHCzkoVP/4
-	 OINUOgh3SCZeF6WS8GPoyfhoezv0xfZ+zNbAWiXzY40Eg0MMrtllYsgd815oD5n1Vz
-	 rJGJ2Cmxh+K01MzUHciQiv4ywEaFeiID1O8HOdVAKL57Zi2sTM+L1Eqvj2SMN1rQup
-	 BGFw07BDr4LPVVu3MhoRVtBjenHUMPbDl+nCbvtGFYWo2Wl02KLCR8PL1ThCr3iV9W
-	 tn0H5LinR8S9w==
-Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.mleia.com (Postfix) with ESMTPSA id 898A438C4B9;
-	Sun, 27 Mar 2022 16:27:01 +0000 (UTC)
-Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-To: Trevor Woerner <twoerner@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id C9AD3C340ED;
+	Sun, 27 Mar 2022 18:32:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C9AD3C340ED
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id h196so9836044qke.12;
+        Sun, 27 Mar 2022 11:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=19uBF9iCIoMNrxoWIz9dMSdfhYfSKOAUfWryPoAUr/c=;
+        b=Gje6NJsyJp7AHQqT8ZqvE+6dIuz3pv15I4EH5k6OsoU+u8gfU8rTssKRtwx1aJXBj1
+         0aSvPogUKwd3anE2Qwp0SJQJXD1Q/DrTfufYwhPAU7wNL8+StG7Kr4/ZO46hZV8HmoIi
+         zbhGm1yN/SOLjvVRFhHKef1ugLlgQNTDs7JhrNE8ynd8yH1Xdppwa/jQnpjVkJIALGKW
+         ENpLg3SwSDyMW8otYwnsPwZT7ZlZToUIZfp7MZUHK1vprze3Mk1sY4i1Ll1lwuDSUdCv
+         ZwM8i8rAEMAHbje9tk19AvBCzRjrOCwGu0/YbcNlxUprgloq6dF52KPdxWBbvtCeG3MR
+         i28w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=19uBF9iCIoMNrxoWIz9dMSdfhYfSKOAUfWryPoAUr/c=;
+        b=MhoV/18HRSopltYPGSyvguKDQxQQgmJ6ViQAvqTbVP9jEX3MpUxiem/UX338hFg7yN
+         SruuMYqCX8yXm4LZoL1M0W+qxlPCvd8Yw3cROJYw7UBdcOQjBpqVoqE91gVi7UVv8Wi6
+         aK6rCBzXvOP40byHHw43Fii03ziujLykAVy/4RCnba42w+GTBHzYsAvPqVR0ta+v+Dg2
+         dPxBpcfDdJjTVJG+mtgLHUhQ2QCmKfVEcTrWn8u7R4+AAKLQgkTzNvAWsXV9Hviqv0Ht
+         jTowJF183ETxcA7a2jBGJPSRUE99tBD4GKlL4g5fIM2cgR/dpwSd8CbcXrERGyQmaHP2
+         7Log==
+X-Gm-Message-State: AOAM532qH1UMgOdM/eEBUcBj5gsCrSj2OzoDSbRTVtCP30J8vPZ9ieB5
+	BL6hzokQKTk4NAHJNYexNEo=
+X-Google-Smtp-Source: ABdhPJxCaiO7jDnSjehUfjkz+hqrEdPwhVeKUAkTK7W6xw2jWYd/Z6bqyePBx1P3+qPV7N2hL4lZ1g==
+X-Received: by 2002:a37:9dca:0:b0:67b:8dfb:6835 with SMTP id g193-20020a379dca000000b0067b8dfb6835mr12859531qke.638.1648405935727;
+        Sun, 27 Mar 2022 11:32:15 -0700 (PDT)
+Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
+        by smtp.gmail.com with ESMTPSA id q26-20020ae9e41a000000b0067d1a20872fsm6564613qkc.94.2022.03.27.11.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Mar 2022 11:32:15 -0700 (PDT)
+Date: Sun, 27 Mar 2022 14:32:13 -0400
+From: Trevor Woerner <twoerner@gmail.com>
+To: Vladimir Zapolskiy <vz@mleia.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Robin Murphy <robin.murphy@arm.com>, Arnd Bergmann <arnd@arndb.de>,
- Kuldeep Singh <singh.kuldeep87k@gmail.com>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- DTML <devicetree@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
- <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+	Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>, DTML <devicetree@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+Message-ID: <20220327183213.GA36326@localhost>
+References: <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
  <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
  <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
  <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
@@ -62,194 +70,65 @@ References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
  <faea4c0c-e20b-c043-6f74-95af8177e8bd@arm.com>
  <4a7e3d0e-f804-74a5-ef5b-206404eb9b61@mleia.com>
  <CAHUNapQMaBZ2-yJR10Qv+Pix9BA3AGSgjBaMBB9zJTTLLOGSkg@mail.gmail.com>
-From: Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
-Date: Sun, 27 Mar 2022 19:27:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+ <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHUNapQMaBZ2-yJR10Qv+Pix9BA3AGSgjBaMBB9zJTTLLOGSkg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20220327_162702_104191_3EA1195D 
-X-CRM114-Status: GOOD (  53.54  )
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <024f0d22-47d8-2d14-bed4-9f538a1537b3@mleia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Trevor,
+Hi Vladimir,
 
-On 3/27/22 5:57 AM, Trevor Woerner wrote:
+On Sun 2022-03-27 @ 07:27:00 PM, Vladimir Zapolskiy wrote:
+> Hi Trevor,
 > 
-> On Tue, Mar 15, 2022 at 2:00 AM Vladimir Zapolskiy <vz@mleia.com <mailto:vz@mleia.com>> wrote:
+> On 3/27/22 5:57 AM, Trevor Woerner wrote:
+> > On the lpc32xx both the SPI and SSP peripherals are APB devices (low-speed)
+> > 
+> > lpc32xx-apb-peripherals.png
+> > The APB devices on this SoC are driven by the PERIPH_CLK which can be
+> > derived from either the HCLK or the SYSCLK.
 > 
->     On 3/14/22 2:20 PM, Robin Murphy wrote:
->      > On 2022-03-14 11:50, Vladimir Zapolskiy wrote:
->      >> On 3/14/22 1:43 PM, Robin Murphy wrote:
->      >>> On 2022-03-11 14:07, Vladimir Zapolskiy wrote:
->      >>>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
->      >>>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com <mailto:vz@mleia.com>>
->      >>>>> wrote:
->      >>>>>>
->      >>>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
->      >>>>>>> PL022 binding require two clocks to be defined but lpc platform
->      >>>>>>> doesn't
->      >>>>>>> comply with bindings and define only one clock i.e apb_pclk.
->      >>>>>>>
->      >>>>>>> Update spi clocks and clocks-names property by adding appropriate
->      >>>>>>> clock
->      >>>>>>> reference to make it compliant with bindings.
->      >>>>>>>
->      >>>>>>> CC: Vladimir Zapolskiy <vz@mleia.com <mailto:vz@mleia.com>>
->      >>>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com <mailto:singh.kuldeep87k@gmail.com>>
->      >>>>>>> ---
->      >>>>>>> v2:
->      >>>>>>> - New patch with similar changeset
->      >>>>>>> - Send to soc ML
->      >>>>>>>
->      >>>>>>>      arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
->      >>>>>>>      1 file changed, 4 insertions(+), 4 deletions(-)
->      >>>>>>>
->      >>>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi
->      >>>>>>> b/arch/arm/boot/dts/lpc32xx.dtsi
->      >>>>>>> index c87066d6c995..30958e02d5e2 100644
->      >>>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
->      >>>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
->      >>>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
->      >>>>>>>                                  compatible = "arm,pl022",
->      >>>>>>> "arm,primecell";
->      >>>>>>>                                  reg = <0x20084000 0x1000>;
->      >>>>>>>                                  interrupts = <20
->      >>>>>>> IRQ_TYPE_LEVEL_HIGH>;
->      >>>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
->      >>>>>>> -                             clock-names = "apb_pclk";
->      >>>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>,
->      >>>>>>> <&clk LPC32XX_CLK_SSP0>;
->      >>>>>>> +                             clock-names = "sspclk", "apb_pclk";
->      >>>>>>
->      >>>>>> In fact I'm uncertain if it is the right change, could it happen that
->      >>>>>> the commit
->      >>>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema")
->      >>>>>> sets a wrong
->      >>>>>> schema pattern?
->      >>>>>
->      >>>>> Good pointm this doesn't quite seem right: it is unlikely that the
->      >>>>> same clock
->      >>>>> is used for both the SPI bus and the APB bus.
->      >>>>>
->      >>>>>> Apparently just one clock is wanted on all observed platforms and
->      >>>>>> cases, this
->      >>>>>> is implicitly confirmed by clock handling in the
->      >>>>>> drivers/spi/spi-pl022.c :
->      >>>>>>
->      >>>>>>            pl022->clk = devm_clk_get(&adev->dev, NULL);
->      >>>>>>
->      >>>>>> So, I would vote to fix the device tree bindings schema.
->      >>>>>
->      >>>>> Isn't this just using the wrong name? The name of the macro
->      >>>>> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
->      >>>>> rather than the APB clock, so we only need to change clock-names
->      >>>>> property here and leave it unchanged otherwise.
->      >>>>
->      >>>> Yes, the name is wrong, here I'm ready to take the blame:
->      >>>>
->      >>>> Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device
->      >>>> nodes")
->      >>>>
->      >>>> Noteworthy the commit above presets the same clock name to other
->      >>>> PrimeCell
->      >>>> controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x
->      >>>> (SD),
->      >>>> plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in
->      >>>> fact.
->      >>>>
->      >>>> On LPC32xx the bus clock source and function clock source for SSP is
->      >>>> HCLK.
->      >>>>
->      >>>> My guess is that the misnamed "apb_pclk" migrated into the schema from
->      >>>> the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
->      >>>> firstly fix the schema by removing "apb_pclk" clock. It will leave
->      >>>> just one
->      >>>> clock, so "clock-names" property can be set as optional, and the drop
->      >>>> the property from the lpc32xx.dtsi.
->      >>>
->      >>> No, "apb_pclk" is part of the common AMBA binding, and is required by
->      >>> the "arm,primecell" compatible. You won't (usually) find it referenced
->      >>> in drivers because it's dealt with by amba_get_enable_pclk() via
->      >>> amba_probe().
->      >>>
->      >>
->      >> Thank you, it explains, why "apb_pclk" is required for all PrimeCell
->      >> controllers on the SoC. Nevertheless, in commit 93898eb775e5 it was
->      >> misidentified with the sspclk clock, the latter one is the only clock
->      >> explicitly utilized by the driver in 2015 and till today. Fixes in dts
->      >> files should be preceded by a fix in the driver.
->      >
->      > There's nothing to fix in the driver, though. In fact it can only be
->      > working today because the Linux driver isn't very strict and simply
->      > assumes that the first clock entry is SSPCLK *without* considering its
->      > name (other consumers of the binding might be stricter; I don't know),
-> 
->     Here I'm a bit ignorant, would it be totally reliable to assume that
->     clk_get(dev, NULL) gets the first clock from the list, and will it never
->     happen that one day it takes e.g. the last entry?
-> 
->     I'm kind of surprised that the asked fix in the driver meets such a
->     resistance.
-> 
->      > and because presumably the HCLK happens to be enabled already anyway.
-> 
->     Yes, that's the case here.
-> 
->      > Changing the driver behaviour would only stand to cause functional
->      > regressions.
->      >
->      > There are effectively two bugs in the DTS here, firstly that it only has
->      > one clock entry when it should have two, and secondly that the clock
->      > entry which *is* present has the wrong name (or the wrong clock
->      > specifier, depending on how you look at it). Kuldeep's patch merely
->      > fixes the first one by fully describing the way it's currently working
->      > in practice, so it's really just a choice of whether to treat "respect
->      > the binding" and "describe the hardware correctly" as separate issues
->      > and have a follow-up patch to correctly reference HCLK as the second
->      > clock, or whether they're trivial enough to squash together.
->      >
-> 
->     The two problems in the DTS are not argued, the chosen way to correct them
->     is questionable though. Well, I won't object to see it split into two
->     changes, but please send them at least in one series then, so that it
->     won't be left forgotten.
-> 
->     --
->     Best wishes,
->     Vladimir
-> 
-> On the lpc32xx both the SPI and SSP peripherals are APB devices (low-speed)
-> 
-> lpc32xx-apb-peripherals.png
-> The APB devices on this SoC are driven by the PERIPH_CLK which can be
-> derived from either the HCLK or the SYSCLK.
+> thank you for the data, I'd like to reference to Table 14, which says that
+> both bus clock source and function clock source for SSP0 and SSP1 are a
+> non-selectable HCLK. I'm unsure if for instance PERIPH_CLK can be set as
+> a function clock source for SSPx.
 
-thank you for the data, I'd like to reference to Table 14, which says that
-both bus clock source and function clock source for SSP0 and SSP1 are a
-non-selectable HCLK. I'm unsure if for instance PERIPH_CLK can be set as
-a function clock source for SSPx.
+Interesting. I see that I had assumed that all APB peripherals would be driven
+by the PERIPH_CLK since the diagram shows that clock as going to all APB
+peripherals.
 
-> lpc32xx-clock.png
-> The default on reset is for PERIPH_CLK to be derived from the SYSCLK but
-> both U-Boot and Linux run in "normal" mode, which is to say that
-> PERIPH_CLK, HCLK, ARM_CLK, and DDRAM_CLK are derived from the HCLK PLL.> 
-> There is no separate SSP clock, the SSP is driven by one clock: the
-> PERIPH_CLK (or "apb_pclk").
+In the SSP chapter, for example, there is a clock prescale register, which
+says:
 
-Right, there is no separate SSP clock in sense of a bus clock, it is
-correct to get HCLK clock (or equally its child SSP clock) rate as a bus
-clock rate, and the reason for introduction of SSP0/SSP1 clocks is that
-these clocks are gated.
+	This register controls the factor by which the prescaler divides the AHB clock
+	HCLK to yield the prescaler clock that is, in turn, divided by the SCR factor
+	in SSPnCR0, to determine the bit clock.
 
-If I'm correct above, what does it mean in connection to LPC32xx device
-tree bindings? The first or single clock source shall remain to be SSPx
-clock, either the former is "sspclk" or "apb_pclk".
+So that confirms that the clock driving the SSP (an APB peripheral) is the
+AHB's HCLK!
 
---
-Best wishes,
-Vladimir
+Section 21.7 of the SPI chapter also clearly shows the SPI clock as being
+derived from the HCLK as well.
+
+Thanks for the clarification :-)
+
+> > lpc32xx-clock.png
+> > The default on reset is for PERIPH_CLK to be derived from the SYSCLK but
+> > both U-Boot and Linux run in "normal" mode, which is to say that
+> > PERIPH_CLK, HCLK, ARM_CLK, and DDRAM_CLK are derived from the HCLK PLL.>
+> > There is no separate SSP clock, the SSP is driven by one clock: the
+> > PERIPH_CLK (or "apb_pclk").
+> 
+> Right, there is no separate SSP clock in sense of a bus clock, it is
+> correct to get HCLK clock (or equally its child SSP clock) rate as a bus
+> clock rate, and the reason for introduction of SSP0/SSP1 clocks is that
+> these clocks are gated.
+> 
+> If I'm correct above, what does it mean in connection to LPC32xx device
+> tree bindings? The first or single clock source shall remain to be SSPx
+> clock, either the former is "sspclk" or "apb_pclk".
+
+Doesn't this mean the apb_pclk should not be specified as the SSP/SPI clock?
+If sspclk is a synonym for HCLK, then sspclk and apb_pclk are completely
+different clocks. On my device HCLK is 260MHz and PERIPH_CLK is 13MHz.
