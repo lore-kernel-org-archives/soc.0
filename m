@@ -4,26 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07BD6C433EF
-	for <soc@archiver.kernel.org>; Mon,  4 Apr 2022 10:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48A8C433FE
+	for <soc@archiver.kernel.org>; Mon,  4 Apr 2022 10:58:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C8FC5C34110; Mon,  4 Apr 2022 10:58:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 564BAC2BBE4;
-	Mon,  4 Apr 2022 10:58:12 +0000 (UTC)
+	id ABD5EC340F3; Mon,  4 Apr 2022 10:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39218C2BBE4;
+	Mon,  4 Apr 2022 10:58:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1649069892;
-	bh=z+3Z03Spj3eCipiCCtAOtm+whQsfdLEoahZGsmTZTCU=;
+	s=korg; t=1649069924;
+	bh=11KmQRu5S3JJZsnJadpcz5mlkzaoPCZTDJ5syM7mVsQ=;
 	h=Subject:List-Id:To:Cc:From:Date:From;
-	b=mTuwoGsp2J9ejYF5PNndlKwaljlUoLIyuCDEl/pjxf6srhZTiCWSoFpGIFatTJoOw
-	 K4s3/1xmtHFknznCcZ9/pTzrX1/I5Hhza8YkumzWPRAr8voh/LPzzUBkiZlE+rxhGS
-	 3YeAl8iCjVAaOnWgAXL8o4ZWtFgMGQdPM5m9gXtc=
-Subject: Patch "arm64: dts: ls1046a: Update i2c node dma properties" has been added to the 5.15-stable tree
+	b=PQ1UHUJonJA08kU1vdaLcvxrrUw5fPjVZdXPOxuzAskB8Orc1NzTiEaHpJNfkw/rP
+	 yNX8Xt5g62S+HFqgfU9XL4ZcGdrezq9q+ioDVgBRg+QM6jFPEaREh5ZSZm3BI4SYsI
+	 mucn7v9iIqxDfwjC1iHxu6ilDtz+6tewU165X19I=
+Subject: Patch "arm64: dts: ls1046a: Update i2c node dma properties" has been added to the 5.16-stable tree
 List-Id: <soc.lore.kernel.org>
 To: arnd@arndb.de,gregkh@linuxfoundation.org,singh.kuldeep87k@gmail.com,soc@kernel.org
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Mon, 04 Apr 2022 12:57:56 +0200
-Message-ID: <1649069876148249@kroah.com>
+Date: Mon, 04 Apr 2022 12:58:07 +0200
+Message-ID: <1649069887240189@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=ANSI_X3.4-1968
 Content-Transfer-Encoding: 8bit
@@ -35,12 +35,12 @@ This is a note to let you know that I've just added the patch titled
 
     arm64: dts: ls1046a: Update i2c node dma properties
 
-to the 5.15-stable tree which can be found at:
+to the 5.16-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      arm64-dts-ls1046a-update-i2c-node-dma-properties.patch
-and it can be found in the queue-5.15 subdirectory.
+and it can be found in the queue-5.16 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
@@ -87,8 +87,8 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Patches currently in stable-queue which might be from singh.kuldeep87k@gmail.com are
 
-queue-5.15/arm64-dts-ns2-fix-spi-cpol-and-spi-cpha-property.patch
-queue-5.15/arm64-dts-ls1043a-update-i2c-dma-properties.patch
-queue-5.15/arm64-dts-ls1046a-update-i2c-node-dma-properties.patch
-queue-5.15/arm-dts-spear1340-update-serial-node-properties.patch
-queue-5.15/arm-dts-spear13xx-update-spi-dma-properties.patch
+queue-5.16/arm64-dts-ns2-fix-spi-cpol-and-spi-cpha-property.patch
+queue-5.16/arm64-dts-ls1043a-update-i2c-dma-properties.patch
+queue-5.16/arm64-dts-ls1046a-update-i2c-node-dma-properties.patch
+queue-5.16/arm-dts-spear1340-update-serial-node-properties.patch
+queue-5.16/arm-dts-spear13xx-update-spi-dma-properties.patch
