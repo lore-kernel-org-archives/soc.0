@@ -4,19 +4,19 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D242DC433EF
-	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 09:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78908C433F5
+	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 09:17:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9B941C385A0; Tue,  5 Apr 2022 09:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E7FEC385A3;
-	Tue,  5 Apr 2022 09:17:28 +0000 (UTC)
+	id 5BC11C385A0; Tue,  5 Apr 2022 09:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03D4C385A2;
+	Tue,  5 Apr 2022 09:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1649150248;
-	bh=EEo7KrgaXtqrkSsjEuUL73k5zwFAAXPPtUO8II4l9/U=;
+	s=korg; t=1649150276;
+	bh=M4lqNObJM+r1/tJzivqYIMuiBnctq0svQNzKg4neuPY=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KbvlDZ1llCNZpfkp6mGOR71sVeZanBfuWEz1SrhW3/xB09E5xbi4v8odCbS7fsdt7
-	 D1k1zZf4wvrB4Jy8vetRxweNO47cQJOXF9M4ra/sAvAn9ZpJna1Sv8EVMlNjV3iMFn
-	 wzSkAFsVfDJhfjv/EsUCcfHzCROVEguePGWEN3iA=
+	b=JxI2YVz9w9vqcQn//ng5igF6ohr4Ze1Eq5fRp53KEgDy3MS04SosCwDHRvZhZndCV
+	 ffxP/cI9AvhuWB+Kiem6TqYg3A6+F2f/vUjwPLR0EvDOx+DPu65N5Yy8kdmIgiWCOl
+	 bU1yzsAO1yD15+HlkaJN8C6oe4m+7Sp1t5cEjUE4=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
@@ -25,9 +25,9 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Kuldeep Singh <singh.kuldeep87k@gmail.com>,
 	soc@kernel.org,
 	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.16 1000/1017] arm64: dts: ls1043a: Update i2c dma properties
-Date: Tue,  5 Apr 2022 09:31:53 +0200
-Message-Id: <20220405070423.884065064@linuxfoundation.org>
+Subject: [PATCH 5.16 1001/1017] arm64: dts: ls1046a: Update i2c node dma properties
+Date: Tue,  5 Apr 2022 09:31:54 +0200
+Message-Id: <20220405070423.914185207@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -38,27 +38,27 @@ Content-Transfer-Encoding: 8bit
 
 From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
-commit aa4df840d1c5eab2bb33695efe4409b3e5526749 upstream.
+commit eeeb4f1075d71d67083c75f69247206e9b3d9f4a upstream.
 
 Reorder dmas and dma-names properties for i2c controller node to make it
 compliant with bindings.
 
-Fixes: 6d453cd22357 ("arm64: dts: add Freescale LS1043a SoC support")
+Fixes: 8126d88162a5 ("arm64: dts: add QorIQ LS1046A SoC support")
 Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 CC: soc@kernel.org
-Link: https://lore.kernel.org/r/20220326042313.97862-4-singh.kuldeep87k@gmail.com'
+Link: https://lore.kernel.org/r/20220326042313.97862-5-singh.kuldeep87k@gmail.com'
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi |    6 +++---
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi |    6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
-@@ -536,9 +536,9 @@
- 			clock-names = "i2c";
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+@@ -499,9 +499,9 @@
+ 			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
  			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
- 					    QORIQ_CLK_PLL_DIV(1)>;
+ 					    QORIQ_CLK_PLL_DIV(2)>;
 -			dmas = <&edma0 1 39>,
 -			       <&edma0 1 38>;
 -			dma-names = "tx", "rx";
