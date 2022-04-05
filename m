@@ -1,72 +1,433 @@
-Return-Path: <gregkh@linuxfoundation.org>
+Return-Path: <SRS0=FLbI=UP=huawei.com=jonathan.cameron@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F106CC433F5
-	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 09:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 970E7C433EF
+	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 13:52:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C5947C385A1; Tue,  5 Apr 2022 09:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8EDC385A2;
-	Tue,  5 Apr 2022 09:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1649152772;
-	bh=M4lqNObJM+r1/tJzivqYIMuiBnctq0svQNzKg4neuPY=;
-	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Yjh2M0sxhNanoa+2qo0BUYwIE8Ls7P5y/b2wy6rAHZ2AC7FB93nwu8K/mt+Kewexh
-	 hPrpFSPuVTD1mYMzYG8M/O3OrlTz/Gi2cOFVuHiodSZG0Aq/oFST0986JhBNLe/yJw
-	 TD5DhBp98EDB91ASOqDRMn0P4tDLsYUbzAWGzWko=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
+	id 51FEAC385A4; Tue,  5 Apr 2022 13:52:42 +0000 (UTC)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C01A3C385A0
+	for <soc@kernel.org>; Tue,  5 Apr 2022 13:52:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C01A3C385A0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXptz26TLz67WtW;
+	Tue,  5 Apr 2022 21:50:35 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 15:52:36 +0200
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 14:52:35 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-	soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.15 896/913] arm64: dts: ls1046a: Update i2c node dma properties
-Date: Tue,  5 Apr 2022 09:32:38 +0200
-Message-Id: <20220405070406.678602597@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
-User-Agent: quilt/0.66
+To: Arnd Bergmann <arnd@arndb.de>, <soc@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+CC: Daniel Mack <daniel@zonque.org>, Robert Jarzmik <robert.jarzmik@free.fr>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>, Guenter Roeck
+	<linux@roeck-us.net>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH] arm: configs: imote2: Drop defconfig as board support dropped.
+Date: Tue, 5 Apr 2022 14:52:52 +0100
+Message-ID: <20220405135252.10283-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhreml717-chm.china.huawei.com (10.201.108.68) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Missed the defconfig when removing the board files causing
+failures in builds using this defconfig.
 
-commit eeeb4f1075d71d67083c75f69247206e9b3d9f4a upstream.
-
-Reorder dmas and dma-names properties for i2c controller node to make it
-compliant with bindings.
-
-Fixes: 8126d88162a5 ("arm64: dts: add QorIQ LS1046A SoC support")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-CC: soc@kernel.org
-Link: https://lore.kernel.org/r/20220326042313.97862-5-singh.kuldeep87k@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 28f74201e37c ("ARM: pxa: remove Intel Imote2 and Stargate 2 boards")
+Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/configs/imote2_defconfig | 365 ------------------------------
+ 1 file changed, 365 deletions(-)
+ delete mode 100644 arch/arm/configs/imote2_defconfig
 
---- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
-@@ -499,9 +499,9 @@
- 			interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
- 					    QORIQ_CLK_PLL_DIV(2)>;
--			dmas = <&edma0 1 39>,
--			       <&edma0 1 38>;
--			dma-names = "tx", "rx";
-+			dmas = <&edma0 1 38>,
-+			       <&edma0 1 39>;
-+			dma-names = "rx", "tx";
- 			status = "disabled";
- 		};
- 
-
+diff --git a/arch/arm/configs/imote2_defconfig b/arch/arm/configs/imote2_defconfig
+deleted file mode 100644
+index 015b7ef237de..000000000000
+--- a/arch/arm/configs/imote2_defconfig
++++ /dev/null
+@@ -1,365 +0,0 @@
+-# CONFIG_LOCALVERSION_AUTO is not set
+-CONFIG_SYSVIPC=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_SYSFS_DEPRECATED_V2=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_RD_BZIP2=y
+-CONFIG_RD_LZMA=y
+-CONFIG_EXPERT=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODULE_FORCE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_ARCH_PXA=y
+-CONFIG_MACH_INTELMOTE2=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_PREEMPT=y
+-CONFIG_AEABI=y
+-CONFIG_ZBOOT_ROM_TEXT=0x0
+-CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_CMDLINE="root=/dev/mtdblock2 rootfstype=jffs2 console=ttyS2,115200 mem=32M"
+-CONFIG_KEXEC=y
+-CONFIG_FPE_NWFPE=y
+-CONFIG_BINFMT_AOUT=m
+-CONFIG_BINFMT_MISC=m
+-CONFIG_PM=y
+-CONFIG_APM_EMULATION=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_IP_PNP_RARP=y
+-CONFIG_SYN_COOKIES=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_DIAG is not set
+-CONFIG_INET6_AH=m
+-CONFIG_INET6_ESP=m
+-CONFIG_INET6_IPCOMP=m
+-CONFIG_IPV6_MIP6=m
+-CONFIG_IPV6_TUNNEL=m
+-CONFIG_IPV6_MULTIPLE_TABLES=y
+-CONFIG_IPV6_SUBTREES=y
+-CONFIG_NETFILTER=y
+-CONFIG_NETFILTER_NETLINK_QUEUE=m
+-CONFIG_NF_CONNTRACK=m
+-CONFIG_NF_CONNTRACK_EVENTS=y
+-CONFIG_NF_CT_PROTO_SCTP=y
+-CONFIG_NF_CT_PROTO_UDPLITE=y
+-CONFIG_NF_CONNTRACK_AMANDA=m
+-CONFIG_NF_CONNTRACK_FTP=m
+-CONFIG_NF_CONNTRACK_H323=m
+-CONFIG_NF_CONNTRACK_IRC=m
+-CONFIG_NF_CONNTRACK_NETBIOS_NS=m
+-CONFIG_NF_CONNTRACK_PPTP=m
+-CONFIG_NF_CONNTRACK_SANE=m
+-CONFIG_NF_CONNTRACK_SIP=m
+-CONFIG_NF_CONNTRACK_TFTP=m
+-CONFIG_NF_CT_NETLINK=m
+-CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+-CONFIG_NETFILTER_XT_TARGET_LED=m
+-CONFIG_NETFILTER_XT_TARGET_MARK=m
+-CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+-CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+-CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+-CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+-CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+-CONFIG_NETFILTER_XT_MATCH_DCCP=m
+-CONFIG_NETFILTER_XT_MATCH_DSCP=m
+-CONFIG_NETFILTER_XT_MATCH_ESP=m
+-CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_HELPER=m
+-CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+-CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_MAC=m
+-CONFIG_NETFILTER_XT_MATCH_MARK=m
+-CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+-CONFIG_NETFILTER_XT_MATCH_POLICY=m
+-CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+-CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+-CONFIG_NETFILTER_XT_MATCH_REALM=m
+-CONFIG_NETFILTER_XT_MATCH_SCTP=m
+-CONFIG_NETFILTER_XT_MATCH_STATE=m
+-CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+-CONFIG_NETFILTER_XT_MATCH_STRING=m
+-CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+-CONFIG_NETFILTER_XT_MATCH_TIME=m
+-CONFIG_NETFILTER_XT_MATCH_U32=m
+-CONFIG_NF_CONNTRACK_IPV4=m
+-CONFIG_IP_NF_IPTABLES=m
+-CONFIG_IP_NF_MATCH_ADDRTYPE=m
+-CONFIG_IP_NF_MATCH_AH=m
+-CONFIG_IP_NF_MATCH_ECN=m
+-CONFIG_IP_NF_MATCH_TTL=m
+-CONFIG_IP_NF_FILTER=m
+-CONFIG_IP_NF_TARGET_REJECT=m
+-CONFIG_IP_NF_TARGET_LOG=m
+-CONFIG_NF_NAT=m
+-CONFIG_IP_NF_TARGET_MASQUERADE=m
+-CONFIG_IP_NF_TARGET_NETMAP=m
+-CONFIG_IP_NF_TARGET_REDIRECT=m
+-CONFIG_NF_NAT_SNMP_BASIC=m
+-CONFIG_IP_NF_MANGLE=m
+-CONFIG_IP_NF_TARGET_CLUSTERIP=m
+-CONFIG_IP_NF_TARGET_ECN=m
+-CONFIG_IP_NF_TARGET_TTL=m
+-CONFIG_IP_NF_RAW=m
+-CONFIG_IP_NF_ARPTABLES=m
+-CONFIG_IP_NF_ARPFILTER=m
+-CONFIG_IP_NF_ARP_MANGLE=m
+-CONFIG_NF_CONNTRACK_IPV6=m
+-CONFIG_IP6_NF_IPTABLES=m
+-CONFIG_IP6_NF_MATCH_AH=m
+-CONFIG_IP6_NF_MATCH_EUI64=m
+-CONFIG_IP6_NF_MATCH_FRAG=m
+-CONFIG_IP6_NF_MATCH_OPTS=m
+-CONFIG_IP6_NF_MATCH_HL=m
+-CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+-CONFIG_IP6_NF_MATCH_MH=m
+-CONFIG_IP6_NF_MATCH_RT=m
+-CONFIG_IP6_NF_TARGET_HL=m
+-CONFIG_IP6_NF_FILTER=m
+-CONFIG_IP6_NF_TARGET_REJECT=m
+-CONFIG_IP6_NF_MANGLE=m
+-CONFIG_IP6_NF_RAW=m
+-CONFIG_BRIDGE=m
+-# CONFIG_BRIDGE_IGMP_SNOOPING is not set
+-CONFIG_IEEE802154=y
+-# CONFIG_WIRELESS is not set
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_FW_LOADER=m
+-CONFIG_CONNECTOR=m
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_AFS_PARTS=y
+-CONFIG_MTD_AR7_PARTS=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_ADV_OPTIONS=y
+-CONFIG_MTD_CFI_GEOMETRY=y
+-# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
+-# CONFIG_MTD_MAP_BANK_WIDTH_4 is not set
+-# CONFIG_MTD_CFI_I2 is not set
+-CONFIG_MTD_OTP=y
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_PXA2XX=y
+-CONFIG_BLK_DEV_LOOP=m
+-CONFIG_BLK_DEV_CRYPTOLOOP=m
+-CONFIG_BLK_DEV_NBD=m
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_NETDEVICES=y
+-CONFIG_DUMMY=y
+-# CONFIG_WLAN is not set
+-CONFIG_PPP=m
+-CONFIG_PPP_MULTILINK=y
+-CONFIG_PPP_FILTER=y
+-CONFIG_PPP_ASYNC=m
+-CONFIG_PPP_SYNC_TTY=m
+-CONFIG_PPP_DEFLATE=m
+-CONFIG_PPP_BSDCOMP=m
+-# CONFIG_INPUT_MOUSEDEV is not set
+-CONFIG_INPUT_EVDEV=y
+-# CONFIG_KEYBOARD_ATKBD is not set
+-CONFIG_KEYBOARD_GPIO=y
+-CONFIG_KEYBOARD_PXA27x=y
+-# CONFIG_INPUT_MOUSE is not set
+-CONFIG_INPUT_TOUCHSCREEN=y
+-CONFIG_INPUT_MISC=y
+-CONFIG_INPUT_UINPUT=y
+-# CONFIG_SERIO is not set
+-CONFIG_SERIAL_PXA=y
+-CONFIG_SERIAL_PXA_CONSOLE=y
+-CONFIG_LEGACY_PTY_COUNT=8
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_PXA=y
+-CONFIG_SPI=y
+-CONFIG_SPI_PXA2XX=y
+-CONFIG_GPIO_SYSFS=y
+-CONFIG_POWER_SUPPLY=y
+-# CONFIG_HWMON is not set
+-CONFIG_PMIC_DA903X=y
+-CONFIG_REGULATOR=y
+-CONFIG_REGULATOR_DEBUG=y
+-CONFIG_REGULATOR_DA903X=y
+-CONFIG_MEDIA_SUPPORT=y
+-CONFIG_VIDEO_DEV=y
+-CONFIG_MEDIA_TUNER_CUSTOMISE=y
+-# CONFIG_MEDIA_TUNER_SIMPLE is not set
+-# CONFIG_MEDIA_TUNER_TDA8290 is not set
+-# CONFIG_MEDIA_TUNER_TDA827X is not set
+-# CONFIG_MEDIA_TUNER_TDA18271 is not set
+-# CONFIG_MEDIA_TUNER_TDA9887 is not set
+-# CONFIG_MEDIA_TUNER_TEA5761 is not set
+-# CONFIG_MEDIA_TUNER_TEA5767 is not set
+-# CONFIG_MEDIA_TUNER_MT20XX is not set
+-# CONFIG_MEDIA_TUNER_MT2060 is not set
+-# CONFIG_MEDIA_TUNER_MT2266 is not set
+-# CONFIG_MEDIA_TUNER_MT2131 is not set
+-# CONFIG_MEDIA_TUNER_QT1010 is not set
+-# CONFIG_MEDIA_TUNER_XC2028 is not set
+-# CONFIG_MEDIA_TUNER_XC5000 is not set
+-# CONFIG_MEDIA_TUNER_MXL5005S is not set
+-# CONFIG_MEDIA_TUNER_MXL5007T is not set
+-# CONFIG_MEDIA_TUNER_MC44S803 is not set
+-# CONFIG_VIDEO_HELPER_CHIPS_AUTO is not set
+-CONFIG_VIDEO_PXA27x=y
+-# CONFIG_V4L_USB_DRIVERS is not set
+-# CONFIG_RADIO_ADAPTERS is not set
+-CONFIG_FB=y
+-CONFIG_FB_PXA=y
+-CONFIG_FB_PXA_OVERLAY=y
+-CONFIG_FB_PXA_PARAMETERS=y
+-# CONFIG_LCD_CLASS_DEVICE is not set
+-CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_VGA_CONSOLE is not set
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_FONTS=y
+-CONFIG_FONT_MINI_4x6=y
+-CONFIG_SOUND=y
+-CONFIG_SND=y
+-CONFIG_SND_MIXER_OSS=y
+-CONFIG_SND_PCM_OSS=y
+-# CONFIG_SND_DRIVERS is not set
+-# CONFIG_SND_ARM is not set
+-# CONFIG_SND_SPI is not set
+-# CONFIG_SND_USB is not set
+-CONFIG_SND_SOC=y
+-CONFIG_SND_PXA2XX_SOC=y
+-# CONFIG_USB_HID is not set
+-CONFIG_USB=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_PXA27X=y
+-CONFIG_USB_ETH=m
+-# CONFIG_USB_ETH_RNDIS is not set
+-CONFIG_MMC=y
+-CONFIG_SDIO_UART=m
+-CONFIG_MMC_PXA=y
+-CONFIG_MMC_SPI=y
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_CLASS=y
+-CONFIG_LEDS_LP3944=y
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_LEDS_TRIGGER_TIMER=y
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+-CONFIG_LEDS_TRIGGER_BACKLIGHT=y
+-CONFIG_LEDS_TRIGGER_GPIO=y
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_PXA=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=m
+-CONFIG_AUTOFS4_FS=y
+-CONFIG_FUSE_FS=m
+-CONFIG_CUSE=m
+-CONFIG_MSDOS_FS=m
+-CONFIG_VFAT_FS=m
+-CONFIG_TMPFS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_JFFS2_FS_WBUF_VERIFY=y
+-CONFIG_JFFS2_SUMMARY=y
+-CONFIG_JFFS2_FS_XATTR=y
+-CONFIG_JFFS2_COMPRESSION_OPTIONS=y
+-CONFIG_JFFS2_LZO=y
+-CONFIG_JFFS2_RUBIN=y
+-CONFIG_CRAMFS=m
+-CONFIG_SQUASHFS=m
+-CONFIG_ROMFS_FS=m
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V3=y
+-CONFIG_NFS_V3_ACL=y
+-CONFIG_NFSD=m
+-CONFIG_NFSD_V3_ACL=y
+-CONFIG_SMB_FS=m
+-CONFIG_CIFS=m
+-CONFIG_CIFS_STATS=y
+-CONFIG_CIFS_XATTR=y
+-CONFIG_CIFS_POSIX=y
+-CONFIG_NLS_CODEPAGE_437=m
+-CONFIG_NLS_CODEPAGE_737=m
+-CONFIG_NLS_CODEPAGE_775=m
+-CONFIG_NLS_CODEPAGE_850=m
+-CONFIG_NLS_CODEPAGE_852=m
+-CONFIG_NLS_CODEPAGE_855=m
+-CONFIG_NLS_CODEPAGE_857=m
+-CONFIG_NLS_CODEPAGE_860=m
+-CONFIG_NLS_CODEPAGE_861=m
+-CONFIG_NLS_CODEPAGE_862=m
+-CONFIG_NLS_CODEPAGE_863=m
+-CONFIG_NLS_CODEPAGE_864=m
+-CONFIG_NLS_CODEPAGE_865=m
+-CONFIG_NLS_CODEPAGE_866=m
+-CONFIG_NLS_CODEPAGE_869=m
+-CONFIG_NLS_CODEPAGE_936=m
+-CONFIG_NLS_CODEPAGE_950=m
+-CONFIG_NLS_CODEPAGE_932=m
+-CONFIG_NLS_CODEPAGE_949=m
+-CONFIG_NLS_CODEPAGE_874=m
+-CONFIG_NLS_ISO8859_8=m
+-CONFIG_NLS_CODEPAGE_1250=m
+-CONFIG_NLS_CODEPAGE_1251=m
+-CONFIG_NLS_ASCII=m
+-CONFIG_NLS_ISO8859_1=m
+-CONFIG_NLS_ISO8859_2=m
+-CONFIG_NLS_ISO8859_3=m
+-CONFIG_NLS_ISO8859_4=m
+-CONFIG_NLS_ISO8859_5=m
+-CONFIG_NLS_ISO8859_6=m
+-CONFIG_NLS_ISO8859_7=m
+-CONFIG_NLS_ISO8859_9=m
+-CONFIG_NLS_ISO8859_13=m
+-CONFIG_NLS_ISO8859_14=m
+-CONFIG_NLS_ISO8859_15=m
+-CONFIG_NLS_KOI8_R=m
+-CONFIG_NLS_KOI8_U=m
+-CONFIG_NLS_UTF8=m
+-CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_FS=y
+-CONFIG_DEBUG_KERNEL=y
+-# CONFIG_SCHED_DEBUG is not set
+-CONFIG_DEBUG_RT_MUTEXES=y
+-CONFIG_PROVE_LOCKING=y
+-# CONFIG_FTRACE is not set
+-CONFIG_DEBUG_USER=y
+-CONFIG_CRYPTO_NULL=m
+-CONFIG_CRYPTO_CRYPTD=m
+-CONFIG_CRYPTO_TEST=m
+-CONFIG_CRYPTO_ECB=m
+-CONFIG_CRYPTO_LRW=m
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_XTS=m
+-CONFIG_CRYPTO_XCBC=m
+-CONFIG_CRYPTO_VMAC=m
+-CONFIG_CRYPTO_GHASH=m
+-CONFIG_CRYPTO_MD4=m
+-CONFIG_CRYPTO_MICHAEL_MIC=m
+-CONFIG_CRYPTO_SHA256=m
+-CONFIG_CRYPTO_SHA512=m
+-CONFIG_CRYPTO_TGR192=m
+-CONFIG_CRYPTO_AES=m
+-CONFIG_CRYPTO_ARC4=m
+-CONFIG_CRYPTO_BLOWFISH=m
+-CONFIG_CRYPTO_CAST5=m
+-CONFIG_CRYPTO_CAST6=m
+-CONFIG_CRYPTO_FCRYPT=m
+-CONFIG_CRYPTO_KHAZAD=m
+-CONFIG_CRYPTO_SEED=m
+-CONFIG_CRYPTO_SERPENT=m
+-CONFIG_CRYPTO_TEA=m
+-CONFIG_CRYPTO_TWOFISH=m
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRC16=y
+-- 
+2.32.0
 
