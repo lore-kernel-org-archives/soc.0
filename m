@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4CDC433F5
-	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 16:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 347FFC4332F
+	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 16:08:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5CDA5C385A5; Tue,  5 Apr 2022 16:08:53 +0000 (UTC)
+	id 195D8C385A9; Tue,  5 Apr 2022 16:08:54 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 20C2EC385A7;
-	Tue,  5 Apr 2022 16:08:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 20C2EC385A7
+	by smtp.kernel.org (Postfix) with ESMTPS id 18662C385A0;
+	Tue,  5 Apr 2022 16:08:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 18662C385A0
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 3AB2A22258;
-	Tue,  5 Apr 2022 18:08:50 +0200 (CEST)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 85B5422255;
+	Tue,  5 Apr 2022 18:08:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1649174930;
+	t=1649174929;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VmrF2s9a0zsVi05pMwxqMdgIb42SRoi4+ICmOQzDKGA=;
-	b=aAdNkAzy+Gx9uqzAVUf/+VVLk24DHTm52lb+2xqkypsjx6wUYCLVzYb69BWyhTXOnv+sRf
-	jwiV8Bk1D3kGB/py8GK+w0Uo9JAW1diZZo+i8UmQktiEZFidhOxjJ1aj4DYhBxk9m2tbUB
-	MIWP099YobK4+0dkbWplTKvW9Z39oFw=
+	bh=yOxddNobkG29CG4y5YoXQEAGgvfg9n1rTfCuIDFre0A=;
+	b=cZzpRljaNUvDJAkqSLGiEmVvdluyyTyNu0gChI6jqsE3XcgxAXjbhf1opHhFNeisVVYRu7
+	RIOdf5WvHvJb2UQ+qnPVNgi98dmJnu2teE+HeBvrl3pKZ06KQZRswxe9dhGyTOVoan6JUU
+	Lj5evrmR0hUhB2gk/7w6YTIj/y0KcJ0=
 From: Michael Walle <michael@walle.cc>
 To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -48,133 +48,106 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Claudiu Beznea <claudiu.beznea@microchip.com>,
 	Tudor.Ambarus@microchip.com,
 	Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 5/7] ARM: dts: lan966x: add flexcom SPI nodes
-Date: Tue,  5 Apr 2022 18:08:35 +0200
-Message-Id: <20220405160837.4093563-6-michael@walle.cc>
+Subject: [PATCH v3 4/7] ARM: dts: lan966x: add all flexcom usart nodes
+Date: Tue,  5 Apr 2022 18:08:34 +0200
+Message-Id: <20220405160837.4093563-5-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220405160837.4093563-1-michael@walle.cc>
 References: <20220405160837.4093563-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add all the SPI nodes for the flexcom IP block. Keep them
-disabled by default.
+Add all the remaining usart nodes for the flexcom block. Although the
+DMA channels are specified, DMA is not enabled by default because break
+detection doesn't work with DMA.
+
+Keep the nodes disabled by default.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 75 ++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ arch/arm/boot/dts/lan966x.dtsi | 52 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index ae3ac08cfc3b..a37f2e58a1c2 100644
+index e9d6c16d04cf..ae3ac08cfc3b 100644
 --- a/arch/arm/boot/dts/lan966x.dtsi
 +++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -105,6 +105,21 @@ usart0: serial@200 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
+@@ -92,6 +92,19 @@ flx0: flexcom@e0040000 {
+ 			#size-cells = <1>;
+ 			ranges = <0x0 0xe0040000 0x800>;
+ 			status = "disabled";
 +
-+			spi0: spi@400 {
-+				compatible = "atmel,at91rm9200-spi";
-+				reg = <0x400 0x200>;
++			usart0: serial@200 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0x200 0x200>;
 +				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(2)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "spi_clk";
++				clock-names = "usart";
 +				atmel,fifo-size = <32>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
  
  		flx1: flexcom@e0044000 {
-@@ -128,6 +143,21 @@ usart1: serial@200 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
+@@ -102,6 +115,19 @@ flx1: flexcom@e0044000 {
+ 			#size-cells = <1>;
+ 			ranges = <0x0 0xe0044000 0x800>;
+ 			status = "disabled";
 +
-+			spi1: spi@400 {
-+				compatible = "atmel,at91rm9200-spi";
-+				reg = <0x400 0x200>;
++			usart1: serial@200 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0x200 0x200>;
 +				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(4)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "spi_clk";
++				clock-names = "usart";
 +				atmel,fifo-size = <32>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
  
  		trng: rng@e0048000 {
-@@ -168,6 +198,21 @@ usart2: serial@200 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
+@@ -129,6 +155,19 @@ flx2: flexcom@e0060000 {
+ 			#size-cells = <1>;
+ 			ranges = <0x0 0xe0060000 0x800>;
+ 			status = "disabled";
 +
-+			spi2: spi@400 {
-+				compatible = "atmel,at91rm9200-spi";
-+				reg = <0x400 0x200>;
++			usart2: serial@200 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0x200 0x200>;
 +				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(6)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "spi_clk";
++				clock-names = "usart";
 +				atmel,fifo-size = <32>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
  
  		flx3: flexcom@e0064000 {
-@@ -191,6 +236,21 @@ usart3: serial@200 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
+@@ -181,6 +220,19 @@ flx4: flexcom@e0070000 {
+ 			#size-cells = <1>;
+ 			ranges = <0x0 0xe0070000 0x800>;
+ 			status = "disabled";
 +
-+			spi3: spi@400 {
-+				compatible = "atmel,at91rm9200-spi";
-+				reg = <0x400 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(8)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				clock-names = "spi_clk";
-+				atmel,fifo-size = <32>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		dma0: dma-controller@e0068000 {
-@@ -233,6 +293,21 @@ usart4: serial@200 {
- 				atmel,fifo-size = <32>;
- 				status = "disabled";
- 			};
-+
-+			spi4: spi@400 {
-+				compatible = "atmel,at91rm9200-spi";
-+				reg = <0x400 0x200>;
++			usart4: serial@200 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0x200 0x200>;
 +				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
 +				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
 +				       <&dma0 AT91_XDMAC_DT_PERID(10)>;
 +				dma-names = "tx", "rx";
 +				clocks = <&nic_clk>;
-+				clock-names = "spi_clk";
++				clock-names = "usart";
 +				atmel,fifo-size = <32>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
 +				status = "disabled";
 +			};
  		};
