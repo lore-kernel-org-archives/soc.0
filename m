@@ -1,89 +1,95 @@
-Return-Path: <SRS0=JkwK=UP=roeck-us.net=linux@kernel.org>
+Return-Path: <SRS0=O1yd=UP=walle.cc=michael@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E257FC433F5
-	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 15:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB7DBC433EF
+	for <soc@archiver.kernel.org>; Tue,  5 Apr 2022 16:08:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A010BC385A4; Tue,  5 Apr 2022 15:40:40 +0000 (UTC)
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.60])
+	id B2E82C385A0; Tue,  5 Apr 2022 16:08:47 +0000 (UTC)
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 39FC7C385A1
-	for <soc@kernel.org>; Tue,  5 Apr 2022 15:40:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 39FC7C385A1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=roeck-us.net
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-	by gateway23.websitewelcome.com (Postfix) with ESMTP id A9E7B5B05
-	for <soc@kernel.org>; Tue,  5 Apr 2022 10:40:31 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-	by cmsmtp with SMTP
-	id blIFnEolvXvvJblIFnGPt4; Tue, 05 Apr 2022 10:40:31 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-	:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-	:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=r3uTnp3qXaBGXyABGhqOfk4VxI8GRTJ95xAWXm7EQEQ=; b=INMSuuJZ2h64g3ry9GHgS86pC7
-	Ei9WmIj4mtVpJ85FTaZEi1DzF/Tm4/GrqHVQkEP9UGgz+qnTr5sUfvb116FupqqSRiopR8D5JsTuR
-	PGcl1F0aaHqeycLBZr6G0d7TErxBww3B2PCgyfx8BEC8sFOK5AVEeernVkkDRibgR2p1Vm1dd/UhX
-	Cog3PO++1Y3QzruwA24jWj9GY7n76dbh9cyeMWDV5HwIn5QVPmLNO3iPcW524noaU5wg/RTikhZyb
-	siCBPrBmGwjvk8T2/UgYsRKtu5s6eY611lKYpxaCqXAQp0imNu68qaHIICnyO76kHSa6dzYjG5Lc/
-	D30ktD+g==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57864 helo=localhost)
-	by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <linux@roeck-us.net>)
-	id 1nblIF-004GC9-0L; Tue, 05 Apr 2022 15:40:31 +0000
-Date: Tue, 5 Apr 2022 08:40:29 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 31DBAC385A4;
+	Tue,  5 Apr 2022 16:08:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31DBAC385A4
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 7687B22247;
+	Tue,  5 Apr 2022 18:08:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+	t=1649174924;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=h6X3/D3utwq+kJMZuybBLFCBUbNYycHilQpxUt5aIVA=;
+	b=sb4RLOw06F2OUikWNR7VIXmVEnMHuJWPtX2SRlNJukEY65dgHr+D1emUjY3vKtAHv2GS+9
+	Fj4MmL/WHm5eROQx1OqqoK+XXptio9gUyK3rZzfxlTtLJKsn8u2jd2ussYbLL6sSciesS9
+	3jNOznvAHXDr16PAnTAIF88lO/HUwwg=
+From: Michael Walle <michael@walle.cc>
+To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Daniel Mack <daniel@zonque.org>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH] arm: configs: imote2: Drop defconfig as board support
- dropped.
-Message-ID: <20220405154029.GA1840190@roeck-us.net>
-References: <20220405135252.10283-1-Jonathan.Cameron@huawei.com>
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Tudor.Ambarus@microchip.com,
+	Michael Walle <michael@walle.cc>
+Subject: [PATCH v3 0/7] ARM: dts: lan966x: dtsi improvements and KSwitch D10 support
+Date: Tue,  5 Apr 2022 18:08:30 +0200
+Message-Id: <20220405160837.4093563-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405135252.10283-1-Jonathan.Cameron@huawei.com>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nblIF-004GC9-0L
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57864
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 6
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 05, 2022 at 02:52:52PM +0100, Jonathan Cameron wrote:
-> Missed the defconfig when removing the board files causing
-> failures in builds using this defconfig.
-> 
-> Fixes: 28f74201e37c ("ARM: pxa: remove Intel Imote2 and Stargate 2 boards")
-> Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Add missing nodes for the flexcom blocks and a node for the SGPIO
+block. Then add basic support for the Kontron KSwitch D10.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Microchip, please take a closer look at the compatible strings of
+the newly added nodes.
 
-Guenter
+changes since v2:
+ - add second kontron board variant and moved common stuff into a
+   new dtsi
+ - moved the uart/i2c nodes inside of the flexcom node
+ - moved sgpio child nodes inside of the sgpio node
+
+changes since v1:
+ - fixed indendation
+ - keep compatible, reg first, move #address-cells and #size-cells
+   towards the end
+
+Michael Walle (7):
+  ARM: dts: lan966x: swap dma channels for crypto node
+  ARM: dts: lan966x: add sgpio node
+  ARM: dts: lan966x: add missing uart DMA channel
+  ARM: dts: lan966x: add all flexcom usart nodes
+  ARM: dts: lan966x: add flexcom SPI nodes
+  ARM: dts: lan966x: add flexcom I2C nodes
+  ARM: dts: lan966x: add basic Kontron KSwitch D10 support
+
+ arch/arm/boot/dts/Makefile                    |   4 +-
+ ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts |  77 ++++++
+ .../lan966x-kontron-kswitch-d10-mmt-8g.dts    |  13 +
+ .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  |  75 ++++++
+ arch/arm/boot/dts/lan966x.dtsi                | 227 +++++++++++++++++-
+ 5 files changed, 392 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+
+-- 
+2.30.2
+
