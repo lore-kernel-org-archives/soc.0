@@ -1,181 +1,102 @@
-Return-Path: <SRS0=Ts3h=UQ=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=FI0R=UQ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 762C9C433F5
-	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 07:15:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBDEC433F5
+	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 07:25:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 44EFFC385A9; Wed,  6 Apr 2022 07:15:01 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 114AEC385A5; Wed,  6 Apr 2022 07:25:01 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 62636C385A1
-	for <soc@kernel.org>; Wed,  6 Apr 2022 07:15:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 62636C385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id dr20so2330592ejc.6
-        for <soc@kernel.org>; Wed, 06 Apr 2022 00:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ItLT2iWRQ8MK455HPWYXz8o5FEVTFaa0PW9WN5W7PWQ=;
-        b=aljVglaiorKfLr8hIxisEour0ptMG48CK1Bco7fzAXebuy++7+j30VgUqeBNWNdapT
-         46/oBIK5ME7783f1qbqsbxF5x372/E+eU6rexLJ3siZ4UM45XdYoJ8n8w31/ArgK1aNk
-         uwAEQrHoYEM0WjRO1nd1VUEwecsGsuQ1oi5AAOjZiNcyShoav28NWybX7c8Oa+tJbMez
-         Mey+ABS6X67p4P5xSubdsTVUfYEFFabbavXous5101XE2chjMSSJAY5XDxyGP1N/xccQ
-         JHURGWS09J+gDo3OLTrPKlNqcW6azIrdVUp/cCMhfqs+syP26YHknSOBGxCrRJue8I7e
-         mA1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ItLT2iWRQ8MK455HPWYXz8o5FEVTFaa0PW9WN5W7PWQ=;
-        b=C+VkWajMZAJl22tbi9xaYye3F8nItSJ1id26VwkLRkJ/GnYco4Dbirj40CI25+4MSm
-         E16XKRmvh3EH8aFp2PArW8u/yY2mLOtluUmk1tzvKup5rDNv0XfLVWSqsh3w5skzxZsk
-         sRPm9qWFyI8dNePmQe9tSQkBSjzK+NHvlLFEf5kuQ88P/fxuIUq8QRQLDpbYOmqpFVpb
-         QWeAtuYNLykBwAcDYc/ly4Rmz/p7nxTFdcO1MzrP+yZMln5/BYOvErQRz/sl82OZHjI/
-         YPKAMfkgU1n1QTLFeCVlQxdMTktli7g5uy67Vz8KBkVE3mnKSDcR4+uHKebKiyqgNryg
-         6eQg==
-X-Gm-Message-State: AOAM531duVZd/zm9O4HIirpLwcdyhcqmTh4pN3Wxxhz+jTI37kh8n7HK
-	5JvAw6KX74eA1zZ6HH+z3K1ngw==
-X-Google-Smtp-Source: ABdhPJxkVzG6YeLl1AHfVOPZW8vCgyulJy2IwvFDrOQZC3HKys5OOJ6wApTj/h6GZDOZpaKoaF2krQ==
-X-Received: by 2002:a17:906:dc92:b0:6e4:a93b:8958 with SMTP id cs18-20020a170906dc9200b006e4a93b8958mr7148361ejc.403.1649229298612;
-        Wed, 06 Apr 2022 00:14:58 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm7531111eds.21.2022.04.06.00.14.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 00:14:58 -0700 (PDT)
-Message-ID: <bba99b9d-6960-f6e8-0ee4-0b5fe8a5601d@linaro.org>
-Date: Wed, 6 Apr 2022 09:14:57 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 37C26C385A1;
+	Wed,  6 Apr 2022 07:24:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37C26C385A1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wm1-f48.google.com ([209.85.128.48]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M8xsm-1nfsBq48bW-00657L; Wed, 06 Apr 2022 09:24:57 +0200
+Received: by mail-wm1-f48.google.com with SMTP id m67-20020a1ca346000000b0038e6a1b218aso1044795wme.2;
+        Wed, 06 Apr 2022 00:24:56 -0700 (PDT)
+X-Gm-Message-State: AOAM531UWaXMZwzDSIFsfguPcuL6ckSJUO9Y8Jxrz+SyLek2WlzIJ7Xx
+	yOhTtV4SH3OncEBWtrwx0dnedaJgO/dmmw+ib/8=
+X-Google-Smtp-Source: ABdhPJwu5LvNECmW4HyBVpv2Cer4xxd1JvOZpZs+VR8+dhKNlRWp+EIRBOEzkloFndgC0TmlXfWSyv+rVVHS3rSKUo4=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr6437333wmj.20.1649229896617; Wed, 06
+ Apr 2022 00:24:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
-Content-Language: en-US
-To: Jacky Huang <ychuang3@nuvoton.com>,
- "robh+dt@kernel.org" <robh+dt@kernel.org>,
- "mturquette@baylibre.com" <mturquette@baylibre.com>,
- "sboyd@kernel.org" <sboyd@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
- "olof@lixom.net" <olof@lixom.net>
+References: <20220310195229.109477-1-nick.hawkins@hpe.com> <20220310195229.109477-9-nick.hawkins@hpe.com>
+ <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com> <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com> <PH0PR84MB1718292B1C11F4FE83326A5388119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <fb4def96-4b20-604f-d15d-fef87eb2232d@canonical.com> <PH0PR84MB1718A2CFBFC90C9C0CAA5515881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a0fCE_NM=z68d1m9BTfuKixh1pKLw3gn+Sr7SxKb6UJAg@mail.gmail.com>
+ <PH0PR84MB17181C316E55073EBC28C386881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <PH0PR84MB17185ADBA824F9CC9EB3E022881F9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a1080yz9jggOrwz2iQ1sAB2Xe2Emh22uCuqRok60BQSiA@mail.gmail.com>
+ <PH0PR84MB17186189F5025374AA39584D88E19@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a2b+ESAAkc=_2hqx0kOxwYVS6mNjMGBKhhipaSj_5jV9g@mail.gmail.com>
+ <PH0PR84MB17182115D57EF6032782659C88E09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a1Cc+2oY9djdp11PuOW+TBQ0zf+p8QaDY3aerk1QqaG-g@mail.gmail.com>
+ <PH0PR84MB1718925AA3C8FA998C486D7C88E59@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a3RSST6yvv8Oy13RFd6eZ6cS5yX9TOuK6wxXKUO-qdQ=Q@mail.gmail.com> <PH0PR84MB1718C7447207BF210FBB477788E49@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <PH0PR84MB1718C7447207BF210FBB477788E49@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 6 Apr 2022 09:24:40 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3jr-FkyxLff2cK4=X-4AShnKkeYMRKsvUg=2W0bTviiQ@mail.gmail.com>
+Message-ID: <CAK8P3a3jr-FkyxLff2cK4=X-4AShnKkeYMRKsvUg=2W0bTviiQ@mail.gmail.com>
+Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device tree
+To: "Hawkins, Nick" <nick.hawkins@hpe.com>
 List-Id: <soc.lore.kernel.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
- "soc@kernel.org" <soc@kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-References: <20220307091923.9909-1-ychuang3@nuvoton.com>
- <20220307091923.9909-4-ychuang3@nuvoton.com>
- <2669852c-5bb6-1edf-bf58-ea815f54d50f@kernel.org>
- <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: Arnd Bergmann <arnd@arndb.de>, "Verdun, Jean-Marie" <verdun@hpe.com>, Olof Johansson <olof@lixom.net>, 
+	"soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:wu4f9mH3V2TnUmX0FywzM0mbPXaD3c8LOU86xidHqY+sK3g9aAj
+ Q33RW48K/8o7S3P2J0Y//DOlSV9f7WAy6d2vVpZBs9YCdaP55B+gdPf63eVUMQwmLWOyvFG
+ MAgfS1P6TnXpU0BUDFTE9wCwowGyYiSwPX7twUPQvS+QBCXIB/1S+kv0F8o8LRKdnCWgTll
+ 8TsldPd0XhTlCrTh47noA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DR+CDj31Lx4=:DpZlnggOfxQz81uKITB+/l
+ G2mVlDgDCxxBs0/WeAsJesROefjEjdLg1PK420tr0qrnY5KeTCXeSr94AcU2Ww0/EBtNbLeov
+ frOBrWdGfyh0zqoxDihCA2Djl0brvCXJz9gDtSfVQISlca88P7l7pPXTPFw90LInidCCeOCE+
+ byJoY+Xf5pdg606OTo5L5ARQ9qMAJs9RYlGR75VGTWxTXbcJGXLRaZ0Rf1iIKOiBlbvAXX5WX
+ tROzHnLpgAUWZt3U9sAUKm9uYoDD239miFz8yjkbhNXQht/nD0DMRR9UTwSmBUzR1ZViMPTU1
+ y3ib1KjF5zvQztQnoHRjREphJi/jWEOGvs67fQAUsW6va9RlKMtW75faOYxHUqLEw4Xv2cmvr
+ o/6aSk65i2QB1SsgIp7e3C4W0VFcZGKA+yWSq6Ay8oUrZsEbFekksC/zSPdNCSVRhBdyCZlt4
+ rNxP+5HptL1h20k6zGU423bnf4nIWovrd288obowEF/hASFQvQ91Ex+Z7aXeplcZioaeyjTca
+ NvqzKSLGPbZunNUw+95CQiVO73nhCfiCiN/u1eOoFUPxZNA4k3jNRNtKrHDp93n4jmL4NaK7r
+ 1YOWx0UORga8yan+FVFunWFP2VBC2lVbGvYfBLPqFyNJ2atdaLLk319zo8RO3xQlxk/zbwMnh
+ hiaxz4X2qY3fcwKd+pcT60NzUoVW6MFF8PehRxyuizrPv5kcIfTRHFZtds03s1F2qE2g=
 
-On 06/04/2022 04:58, Jacky Huang wrote:
->>> diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
->>> index 639e01a4d855..28e01442094f 100644
->>> --- a/arch/arm64/boot/dts/Makefile
->>> +++ b/arch/arm64/boot/dts/Makefile
->>> @@ -30,3 +30,4 @@ subdir-y += synaptics
->>>   subdir-y += ti
->>>   subdir-y += toshiba
->>>   subdir-y += xilinx
->>> +subdir-y += nuvoton
->>> diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
->>> new file mode 100644
->>> index 000000000000..e1e0c466bf5e
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/nuvoton/Makefile
->>> @@ -0,0 +1,2 @@
->>> +# SPDX-License-Identifier: GPL-2.0
->>> +dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
->> ARCH_NUVOTON does not exist.
-> 
-> I would add the following to end of arch/arm64/Kconfig.platforms,
+On Tue, Apr 5, 2022 at 11:21 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+>
+> > Right, it is possible to make this work, but it's not recommended, and =
+you have to work around the sanity checks in the code that try to keep you =
+from doing it wrong, as well as any tooling that tries to check for these i=
+n the DT.
+>
+> I found an example in the kernel where the timer creates a child watchdog=
+ device and passes it the base address when creating it. I used this to mod=
+el the gxp-timer and gxp-wdt. The following files were what I have referenc=
+ed:
+> drivers/watchdog/ixp4xx_wdt.c
+> drivers/clocksource/timer-ixp4xx.c
 
-Don't add things at the end of files but rather in respective place
-without messing the order.
+Yes, I think that is a good example.
 
-> and 
-> add the
-> modification to this patch series.
-> 
-> config ARCH_MA35D1
->      bool "Nuvoton MA35D1 SOC Family"
+> This seems very similar to what you suggested previously except I do not =
+see a private interface in there between the parent and the child device. I=
+s it mandatory to have the private interface between the two? If it is, wha=
+t would you recommend that interface be? So far without the private interfa=
+ce I am not seeing any issues accessing the registers.
 
-We do not add options for specific SoCs, but for entire families, so
-ARCH_NUVOTON is correct.
+I would count passing a register address to the child device as a
+private interface.
+It's a minimalistic one, but that is not a bad thing here.
 
->      select PINCTRL
->      select PINCTRL_MA35D1
->      select PM
->      select GPIOLIB
->      select SOC_BUS
->      select VIDEOMODE_HELPERS
->      select FB_MODE_HELPERS
->      help
->        This enables support for Nuvoton MA35D1 SOC Family.
-> 
-> 
->>> diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
->>> new file mode 100644
->>> index 000000000000..38e4f734da0f
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
->>> @@ -0,0 +1,23 @@
->>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->>> +/*
->>> + * Device Tree Source for MA35D1 Evaluation Board (EVB)
->>> + *
->>> + * Copyright (C) 2021 Nuvoton Technology Corp.
->>> + */
->>> +
->>> +/dts-v1/;
->>> +#include "ma35d1.dtsi"
->>> +
->>> +/ {
->>> +       model = "Nuvoton MA35D1-EVB";
->>> +
->>> +       chosen {
->>> +               bootargs = "console=ttyS0,115200n8";
->> No bootargs. "chosen", please.
-> 
-> OK, I would modify it as:
-> 
-> chosen {
->          stdout-path = "serial0:115200n8";
->      };
-> 
-> 
->>> +       };
->> You need compatible and bindings.
-> 
-> I will add the compatible here
-> compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1"
-> 
-> And, I should create a new binding file 
-> Documentation/devicetree/bindings/arm/nuvoton.yaml to this patch series.
-> And the property would be:
-> 
-> properties:
->    compatible:
->      description: Nuvoton MA35D1-EVB
->      items:
->        - const: nuvoton,ma35d1-evb
->        - const: nuvoton,ma35d1
-> 
-> 
-> Is it OK?
-
-Yes
-
-
-
-Best regards,
-Krzysztof
+         Arnd
