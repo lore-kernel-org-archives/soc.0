@@ -1,92 +1,103 @@
-Return-Path: <SRS0=FI0R=UQ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Ts3h=UQ=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B05E1C433EF
-	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 07:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45282C433EF
+	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 07:46:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 73424C385A5; Wed,  6 Apr 2022 07:43:35 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 02B7FC385A9; Wed,  6 Apr 2022 07:46:59 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EE4CDC385A1;
-	Wed,  6 Apr 2022 07:43:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EE4CDC385A1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M58SY-1natrb438e-0016zy; Wed, 06 Apr 2022 09:43:32 +0200
-Received: by mail-wr1-f41.google.com with SMTP id m30so1895831wrb.1;
-        Wed, 06 Apr 2022 00:43:31 -0700 (PDT)
-X-Gm-Message-State: AOAM530w6vgnG23CijIm20t+5eGMNPQh/rZWr4BAq6eXPj0LNUs4EShv
-	hn1yY9PDJnupu+x72x0o+Pb0Q+Y3bfnVtw+dZfI=
-X-Google-Smtp-Source: ABdhPJypJul9cdCELa/1AnvYtkz00lmeff9mRrfOlzOzJtIgInlf166z4d0cq68yNgLel+5mgKe5/LD/ixwy4Exk7RQ=
-X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
- e12-20020a056000178c00b002040648b4c4mr5368683wrg.219.1649231011518; Wed, 06
- Apr 2022 00:43:31 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id AF0B3C385AA
+	for <soc@kernel.org>; Wed,  6 Apr 2022 07:46:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF0B3C385AA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id dr20so2480185ejc.6
+        for <soc@kernel.org>; Wed, 06 Apr 2022 00:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KmxEJzWVtAPtT0hHJKYkYT+MKJ5FKhKIUSiktqCv3H0=;
+        b=FTwM4mW7Uk8wlU0y17I9NC3iOW9d3uTv7LnOyLd+urZwYIj4tdPV6Zf7Sb8CC92yuI
+         WycSjTVsqfFPfulEQS1WWVrpihU6LDNZofWNUFMhX5Kr89oM6wSe+X7UKK5BiHHKOpCm
+         wSWgqlQybRaPxjM9aEF059CgvzrzMCMLa6aWzlqWaugml52gVv1puQYh9xhyqYyEVVPM
+         Zf351ZPxXApZKClS3Fb1gMUw62rea/lC0Z4p6HUMl2LhOxgLJdBtcnSRFo58AFJArklC
+         w6X7nCd7JAlb9hWt5DW+TJwYQtOZ7UDwcixBtfUcT8HF7WZrqCgMVc05AlMXm/W8erCY
+         rfpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KmxEJzWVtAPtT0hHJKYkYT+MKJ5FKhKIUSiktqCv3H0=;
+        b=DMtIgdL0ypoIHAA/ZF4vy+mcY5vzxfTSrNy+oj/YQVVf1xz93y09A1yqEK9HmY8cLo
+         uI2SciEcpI1seR9AOCD7tYpqV9BGpwX12m+i9PxIESz4PLByfIsqhM49bLv1wtFgwCp0
+         EBvf93cHQ5S9BfQvuHb70rpth63nqaL4CjADUDCfEHu1aNNmatyIoi5SWvTQ8OedosMG
+         bwzRFjDoqzuH98ptrHZwvr6ktuY8sEAu8bDuqBvcuycGqLfrmBYIJ9ZwnlhGKj6rDTcR
+         5Fng31yXdBM8yKwbGnfvQcpzGxz4FlFCB9u0fu3+wODV6aCfbJsQTnd+CainZgbAKcaB
+         lJ5A==
+X-Gm-Message-State: AOAM533s+5jrK8wzsvynABRoACQq5HktD/nY1GEda2z3KQWYy/vrUiIt
+	IPm26//G0eNzxg+D5sMCRmZr7A==
+X-Google-Smtp-Source: ABdhPJyLX+kJl66+LI5ZU/LOjINI9y85HnNQVRa6f1zZCdvyKyniSugFb2Co7cWo++WiAQK3v1vv7A==
+X-Received: by 2002:a17:907:7d9e:b0:6df:9fe8:856a with SMTP id oz30-20020a1709077d9e00b006df9fe8856amr6996138ejc.373.1649231215957;
+        Wed, 06 Apr 2022 00:46:55 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id p22-20020a17090653d600b006e7eb81d0b6sm3717673ejo.29.2022.04.06.00.46.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 00:46:55 -0700 (PDT)
+Message-ID: <d94ffddf-8bec-fecd-1eb1-a873966e60a0@linaro.org>
+Date: Wed, 6 Apr 2022 09:46:53 +0200
 MIME-Version: 1.0
-References: <20220307091923.9909-1-ychuang3@nuvoton.com> <20220307091923.9909-4-ychuang3@nuvoton.com>
- <2669852c-5bb6-1edf-bf58-ea815f54d50f@kernel.org> <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
-In-Reply-To: <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 6 Apr 2022 09:43:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1Gbr4PoJbPy3BEQ=T3iJo9kQdjes7+0UK5vnc4CDckSw@mail.gmail.com>
-Message-ID: <CAK8P3a1Gbr4PoJbPy3BEQ=T3iJo9kQdjes7+0UK5vnc4CDckSw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
-To: Jacky Huang <ychuang3@nuvoton.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] dt-bindings: clock: add binding for MA35D1 clock
+ controller
+Content-Language: en-US
+To: Jacky Huang <ychuang3@nuvoton.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>, 
-	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org" <sboyd@kernel.org>, 
-	"arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, "soc@kernel.org" <soc@kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZxXzpPnMuNkvpml9CLy34oQE32iJJrn5ti1zZVR1a3PPQ15A9Mv
- mZaw5vh0k3/ZCzJ/0QVJJPzEHC+DspfgXm7QcmtsuGbLDZAt9Sn1AjIMvIqzas0khmD/K+c
- /nxu6TAN4CaVJzZkG8d/e9Pz0T+jxDEnwkA4GFgRZvpJSveoS6mrlV1rXG6Iq/yDKEr9KMa
- zm0+ImOE79khtN9AqCkFw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bW8XcZJdL28=:dDEtSNQxhBqsidppFQX6Of
- jWg9+P3CCA4MeKA3neSP98RWsoX/qZdIzTYabRSrcYmp3ztfhdC4Haqgppr573ifv8+yzqwPa
- EhO9AVwR0yPFEnWF9mb2YJKDyipzdN2kYMYWNPDqeRFWv7qXQ9+eBITx2eRuKPxlmZnkUluek
- /q353Fl8AL4ZV9WcIRGx/xPSR+U5hLwiCopdpsuGZWOD52EVs+p7Q85hrBxOW4d/g9wu8inBW
- GNXsKJ2dsWol9cYoZ92AlVy83pkr7MWpqJ7OLVF0lWwvnBA3ume8onmztq6eGzRmmucA8NqoC
- gRtzYCTgjLn8ddJFLsua2DLs4OV/sMdDvCpUbIktMGzk35vZXkyOJ0Z4Hns06UIOnRs72nGtu
- uHFPELregGf9UlQ322+O4otG+8DQG2xWeujRO88RLLQqs9rJ0zGLe4ZcAM06rgR8EJgzuxAGs
- EJyJ+AGPbzyF5wRubXGGFdX0M/QusE1bFW7q6ulUs3lEHYxOgWfKQ5g9PLajQ+RuKLzNC2EAi
- gzLxVkt0VJUqF3JfuF5OrkqJVbJ61cxzpArbMN1KhS3vhD/qKV1Dj8rsrnDgyBJ7nFmdgu0uI
- NXmJAXs6Cz/jubb58xjzhPy8mv/bTtgQa44wBJb/45m2wS0WUYiW1EarNV4PLq/wG6U7FDINF
- e/FoYEUhhMeVNuj/UoOvKidR6kt5wVYdZtii4Ja7afXt55YCyaVDrMI7M5BN+jjBgn++QaNwy
- S1qCGs/311s6OLjApXQTcYMgVLVm3jrqxki/1t2RvvpLfTf3awlerGF7U0g1nv9PaF7INc3Y9
- RwRSSTEFeD157BI7TivKBKWYok+QXOkm4T8wPeycgwmD48WRew=
+Cc: "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
+ "olof@lixom.net" <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
+ MS10 CFLi0 <CFLi0@nuvoton.com>
+References: <20220331024256.14762-1-ychuang3@nuvoton.com>
+ <20220331024256.14762-2-ychuang3@nuvoton.com>
+ <866c6b42-434d-e7db-5319-2256cd7003d7@linaro.org>
+ <cbe5c963-c727-0fe6-6e03-039c4334f7a9@linaro.org>
+ <724094ab-ed58-debd-8901-466540a66eab@nuvoton.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <724094ab-ed58-debd-8901-466540a66eab@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 6, 2022 at 4:58 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
-> On 2022/3/7 =E4=B8=8B=E5=8D=88 06:25, Krzysztof Kozlowski wrote:
-> > On 07/03/2022 10:19, Jacky Huang wrote:
->
-> I would add the following to end of arch/arm64/Kconfig.platforms, and
-> add the
-> modification to this patch series.
->
-> config ARCH_MA35D1
->      bool "Nuvoton MA35D1 SOC Family"
->      select PINCTRL
->      select PINCTRL_MA35D1
->      select PM
->      select GPIOLIB
->      select SOC_BUS
->      select VIDEOMODE_HELPERS
->      select FB_MODE_HELPERS
->      help
->        This enables support for Nuvoton MA35D1 SOC Family.
+On 06/04/2022 06:00, Jacky Huang wrote:
+>> You also ignored my comments from your v1 (because this is not v1...).
+>> Do not resend without discussion or implementation.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hi Krzysztof,
+> 
+> I am finding out the comments from all mails of this series and working 
+> on them.
+> I will fix all the issues before sending the next version.
+> So, the next version should be V3, right?
+> I will add modification history "V1 -> V2" and "V2 -> V3" to [PATCH V3 0/3].
+> Is that OK?
 
-Selecting SOC_BUS and the gpio/pinctrl stuff is ok, but please don't
-select the video helpers from the platform config, those should not
-be essential for building a kernel.
+Yes
 
-       Arnd
+
+Best regards,
+Krzysztof
