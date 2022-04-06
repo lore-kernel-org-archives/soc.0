@@ -1,72 +1,98 @@
-Return-Path: <SRS0=M9xQ=UQ=pengutronix.de=p.zabel@kernel.org>
+Return-Path: <SRS0=3lNK=UQ=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A669C433FE
-	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 15:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAB31C433EF
+	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 19:09:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D214EC385A6; Wed,  6 Apr 2022 15:55:22 +0000 (UTC)
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9E6A0C385A3; Wed,  6 Apr 2022 19:09:50 +0000 (UTC)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5BEBBC385A3
-	for <soc@kernel.org>; Wed,  6 Apr 2022 15:55:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5BEBBC385A3
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1nc807-0001Ow-0D; Wed, 06 Apr 2022 17:55:19 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1nc807-001RVA-Mo; Wed, 06 Apr 2022 17:55:18 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1nc805-000BEk-LA; Wed, 06 Apr 2022 17:55:17 +0200
-Message-ID: <6cae40d92a645781197dbdee7a301c8ddb4ca777.camel@pengutronix.de>
-Subject: Re: [GIT PULL] Reset controller updates vor v5.17
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id AF027C385A1
+	for <soc@kernel.org>; Wed,  6 Apr 2022 19:09:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF027C385A1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e2442907a1so3610248fac.8
+        for <soc@kernel.org>; Wed, 06 Apr 2022 12:09:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=nkvvt5iU3/huYVMTWpqmeVmasOECJdxAJG738D8isiA=;
+        b=nyBz7VgD8p2gtK3DqmlD73BEcxAXfLALhOPnWbWqEDHRnwQdx2ndDX6pwWl8+K9XAw
+         lTmz7bDQZDzZRDTGsbRisRkSMaykW/c1Oh+PJSlazFTVPpDSboZoFmOyjgiOIzctoe6K
+         Kw9ldHRYI4avCtua8Vodu1xK6tPJJPNxuwD5uN6HA3YLaM+dDn2qpktG4QYnEgKnR0RU
+         0JMm5qdVJrLBvG1KOOB7HgJi0M1AktMRDvVASkrTI0qxAvrN7oo0jrj1x5QdOVYeRrgi
+         +OAWVT9M67A80UZrWy01sPt7lmoMVYazJmkrzPV5LIcyATDxQSejZJyu2PDP+MgRZy53
+         hjcw==
+X-Gm-Message-State: AOAM530WumJq2I88oV+BNNQmVBEmw4ddeur8qXaGRfgBFYJ6Dso027Mt
+	oqUH/HYS+loPWehaskRDnw==
+X-Google-Smtp-Source: ABdhPJw25u3J4jdicjV95QI6NUKAkXMnWtfFRhrT2nJEQpb3wVemqoBH7x9wlwuPgFzL3oA/pMeSGw==
+X-Received: by 2002:a05:6870:2103:b0:de:29de:12c4 with SMTP id f3-20020a056870210300b000de29de12c4mr4829087oae.203.1649272188810;
+        Wed, 06 Apr 2022 12:09:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w1-20020a056808090100b002da82caced5sm6676892oih.3.2022.04.06.12.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Apr 2022 12:09:48 -0700 (PDT)
+Received: (nullmailer pid 2604082 invoked by uid 1000);
+	Wed, 06 Apr 2022 19:09:47 -0000
+Date: Wed, 6 Apr 2022 14:09:47 -0500
+From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM
- <linux-arm-kernel@lists.infradead.org>,  Sascha Hauer
- <kernel@pengutronix.de>
-Date: Wed, 06 Apr 2022 17:55:17 +0200
-In-Reply-To: <259b06179c0cbce518a5d8276d10d27fd5aa7247.camel@pengutronix.de>
-References: <20220105172618.302522-1-p.zabel@pengutronix.de>
-	 <CAK8P3a0C5Yy370KDQudiqhvU5MJ7oaj8VfCo-P4x54SVmT1HKQ@mail.gmail.com>
-	 <259b06179c0cbce518a5d8276d10d27fd5aa7247.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.38.3-1 
+To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Ludovic Desroches <ludovic.desroches@microchip.com>, soc@kernel.org
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] arm: dts: at91: Fix boolean properties with values
+Message-ID: <Yk3leykDEKGBN8rk@robh.at.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email 2.32.0
 
-Hi Arnd,
+Boolean properties in DT are present or not present and don't take a value.
+A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
+matter.
 
-On Mi, 2022-02-16 at 17:51 +0100, Philipp Zabel wrote:
-> > Please let me know how you would like to proceed.
->=20
-> Could you pick up these two commits:
-> =C2=A0 5e23c1ec4347 ("reset: renesas: Check return value of reset_control=
-_deassert()")
-> =C2=A0 f90f1bbe0d70 ("dt-bindings: reset: document deprecated HiSilicon p=
-roperty")
-> into v5.17 fixes?
+It may have been intended that 0 values are false, but there is no change
+in behavior with this patch.
 
-I have sent a pull request [1] containing these two now.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Can someone apply this for 5.18 please.
 
-[1] https://lore.kernel.org/all/20220406153337.1265414-1-p.zabel@pengutroni=
-x.de/
+ arch/arm/boot/dts/at91-kizbox3-hs.dts      | 2 +-
+ arch/arm/boot/dts/at91-kizbox3_common.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm/boot/dts/at91-kizbox3-hs.dts b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+index 2799b2a1f4d2..f7d90cf1bb77 100644
+--- a/arch/arm/boot/dts/at91-kizbox3-hs.dts
++++ b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+@@ -225,7 +225,7 @@ pinctrl_pio_zbe_rst: gpio_zbe_rst {
+ 		pinctrl_pio_io_reset: gpio_io_reset {
+ 			pinmux = <PIN_PB30__GPIO>;
+ 			bias-disable;
+-			drive-open-drain = <1>;
++			drive-open-drain;
+ 			output-low;
+ 		};
+ 		pinctrl_pio_input: gpio_input {
+diff --git a/arch/arm/boot/dts/at91-kizbox3_common.dtsi b/arch/arm/boot/dts/at91-kizbox3_common.dtsi
+index abe27adfa4d6..465664628419 100644
+--- a/arch/arm/boot/dts/at91-kizbox3_common.dtsi
++++ b/arch/arm/boot/dts/at91-kizbox3_common.dtsi
+@@ -211,7 +211,7 @@ pinctrl_flx4_default: flx4_i2c6_default {
+ 		pinmux = <PIN_PD12__FLEXCOM4_IO0>, //DATA
+ 		<PIN_PD13__FLEXCOM4_IO1>; //CLK
+ 		bias-disable;
+-		drive-open-drain = <1>;
++		drive-open-drain;
+ 	};
+ 
+ 	pinctrl_pwm0 {
+-- 
+2.32.0
 
-regards
-Philipp
