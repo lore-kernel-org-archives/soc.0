@@ -1,84 +1,72 @@
-Return-Path: <SRS0=bijT=UR=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=LCsd=UR=microchip.com=Kavyasree.Kotagiri@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9A52C433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 08:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F5DC433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 10:58:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95A1BC385A4; Thu,  7 Apr 2022 08:16:18 +0000 (UTC)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id BB750C385A6; Thu,  7 Apr 2022 10:58:58 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 79153C385A8
-	for <soc@kernel.org>; Thu,  7 Apr 2022 08:16:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 79153C385A8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id x24so505846edl.2
-        for <soc@kernel.org>; Thu, 07 Apr 2022 01:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xUYWxyJEg6leDM0Xoa+hYl6e09Zj0klrd/06rKmbpmY=;
-        b=VDt+MTz290lEtYWH2rYjozi9VS/wDkTwYnmZ1LHSDAEKP9qIm5ptabMoOVy2BND0Jd
-         0L/LUQaem3vZwxfUuvDjdbtMswNl1eX0QWzsSivBnM1zpfkIFZ4hXbyDzByJBJkrf2yo
-         llVHCnqcLTsm62tnuOi5v/6b71TBZCDJNbHwM/PM0+G57hSSWjRQi+4dEon9BUSW8EIA
-         hozevSwzAYq/hABD6Yre/N7t1Spx9rVku5XMnFRlg8vFRtQ5gD5N0lyqR4Vr1D/G7s7d
-         WDjA5Dm7s8ar9mDYFoj7tTOBGU+uGdcq4XJBDLpdni7lwiaorQQeU5BNNHm43b2JjE+I
-         qywQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xUYWxyJEg6leDM0Xoa+hYl6e09Zj0klrd/06rKmbpmY=;
-        b=BNWTYa2/c3hJdvUeAM3reSA0YLaAtR/9NikbaRiCo9P3eQoFwIpqnYzgXPh39xr0Wd
-         iBrEfuN698sRH56N/9lKARHC/HNoPW3O5uL923LC6pRgRSqTE93U7G2ZEiNUSZi1ocpv
-         F/MM3dKPR0ae/zkLW2SFmnkeG3kuGxW12wu6ik91pOYYRvQOe/gwqHcffZnImroU8kCd
-         JJC4emxbKtTGvJxaW4m2jopOUwT3og1+LD2Uq+T1QXMTtUmaXgY1ih6FOD+qXv+/djyy
-         qJ0s64gn8sf5QhJZPmNZl+mntRw0O35NNL5m+QYlNMyDEqcPV/KRwW1D1SrfI00SkZdB
-         p0dg==
-X-Gm-Message-State: AOAM532AtuqU7sjllqe00n65V4nSw9NE+oeEa+U49tYpi3bqheX65JlX
-	3DSwA95YLQwP5XTz9xjxbMC98g==
-X-Google-Smtp-Source: ABdhPJy/ERLqCYKh9BpiL5bF6j78reR9LcaBuPraPoj6GLaivpbUlPeSk3kUE3ntnN95zAfa0g/A9w==
-X-Received: by 2002:aa7:cc96:0:b0:410:b9ac:241 with SMTP id p22-20020aa7cc96000000b00410b9ac0241mr13117970edt.246.1649319375803;
-        Thu, 07 Apr 2022 01:16:15 -0700 (PDT)
-Received: from [192.168.0.185] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056402090a00b004196250baeasm8923523edz.95.2022.04.07.01.16.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 01:16:15 -0700 (PDT)
-Message-ID: <c46aa011-1292-0dfb-2f10-a4d9f9a4fdaa@linaro.org>
-Date: Thu, 7 Apr 2022 10:16:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [GIT PULL] ARM: samsung: Fixes for v5.18 (current cycle)
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 596B6C385A4;
+	Thu,  7 Apr 2022 10:58:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 596B6C385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649329137; x=1680865137;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=EzmSGWlsWjkeqCQgsHDdF/k8eR0xW55Lf0E785X6ELU=;
+  b=NIQBqT7lI0EYL1D0P4xN6kCx6GMOqHDeH60q9MJF7b73JwsXAYunKHHf
+   PWAHhDmQb/XMdU3RWqlEDh2Zl++xOW24LzHQisUIGkrzmGkFpLsXvOWOz
+   rFeg7eEC6Dd6lUOorkmrli956+kQwQ8is/IhiSenTWPjXER85lwk54DxX
+   as4lO2HNBTx6/cImcCS31AFhAVx8zLN52vTZeFFk44mTVP94+Na6LvPIx
+   cOnJLOMgcr8RX88aTGA1wuRk74+JacFNcB3Pq20GKUcQ7Ux92nJrkBX2j
+   g8ZGlS/M7U7s1xz/Flh/0Y+sLq41uDphHIxkziHOHhnUrRuGaa7imgtXz
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,241,1643698800"; 
+   d="scan'208";a="154758581"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Apr 2022 03:58:56 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 7 Apr 2022 03:58:55 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 7 Apr 2022 03:58:50 -0700
+From: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
- Krzysztof Kozlowski <krzk@kernel.org>
-References: <20220407080545.112290-1-krzysztof.kozlowski@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407080545.112290-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: <arnd@arndb.de>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+	<alexandre.belloni@bootlin.com>, <olof@lixom.net>, <soc@kernel.org>,
+	<nicolas.ferre@microchip.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
+	<tudor.ambarus@microchip.com>, <Kavyasree.Kotagiri@microchip.com>,
+	<Manohar.Puri@microchip.com>
+Subject: [PATCH 0/2] ARM: dts: Add LAN966x QSPI nodes
+Date: Thu, 7 Apr 2022 16:28:33 +0530
+Message-ID: <20220407105835.10962-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On 07/04/2022 10:05, Krzysztof Kozlowski wrote:
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
-> Hi,
-> 
-> For the v5.18, please.
+This patch series adds QSPI nodes of LAN966x Soc.
+Also enables qspi0 controller and SST SPI-NOR flash
+for pcb8291 board.
 
-Argh, I need to update my email in my scripts as well. The tag is done
-with correct identity.
+Kavyasree Kotagiri (2):
+  ARM: dts: lan966x: Add QSPI nodes
+  ARM: dts: lan966x-pcb8291: Add QSPI0 and SPI NOR memory nodes
 
+ arch/arm/boot/dts/lan966x-pcb8291.dts | 15 +++++++++
+ arch/arm/boot/dts/lan966x.dtsi        | 48 +++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
 
-Best regards,
-Krzysztof
+-- 
+2.17.1
+
