@@ -4,104 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9568FC433FE
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 15:32:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9D00C433F5
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 20:39:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 386ABC385AB; Thu,  7 Apr 2022 15:32:49 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id 847A3C385A8; Thu,  7 Apr 2022 20:39:13 +0000 (UTC)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A2935C385A5
-	for <soc@kernel.org>; Thu,  7 Apr 2022 15:32:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A2935C385A5
+	by smtp.kernel.org (Postfix) with ESMTPS id C6EAAC385A0
+	for <soc@kernel.org>; Thu,  7 Apr 2022 20:39:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C6EAAC385A0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id p15so11633254ejc.7
-        for <soc@kernel.org>; Thu, 07 Apr 2022 08:32:47 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id d3so9566469wrb.7
+        for <soc@kernel.org>; Thu, 07 Apr 2022 13:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DFgO9JddDHmoRuVn2ZPzU+MXFPn5DQlDECjTYk/+IjM=;
-        b=etnNwUNrZy+kn1KBn4YIpJwNbeshptJH4Fm6WZ+D4OqvvMVOUq0rLC0veEqzlPjQmB
-         6jcYLMPVZ5rrNmVHisvWszE0xv0oteiK+4lHaPAuOktcV35kdr08ILA52HkCCCAFyEm3
-         BGRrvucNz7UduF8B3mSY97tls+29nup8xDi3h+0XvvxUdncbBpUm65jRbM/KrU6En3q6
-         qvkiGNHmtiNYbsH4Nkr8aI8UsKvI8DX46Xr0odQBjHxtz3893zyk9V6V+rWUzvBonVav
-         AobD41RDLEWiY5+K0G49Q5CvjzqK7MV6ZFR75Rp+WMN2gQhiNBHIQag/sqzZsenvJ/p8
-         Mcqg==
+        bh=fqtKr787N6Vy1cwaYaYZc9PI8pUmju7Cz4kLVR3rNO0=;
+        b=xd/uN/+Wfa0+DJziXe7CM988LNaoE/LluwkoUHTwQ9+zH3ooZE1UWwe7s2BIb3c1My
+         +esS9mC72qFXdlzWLyQnaolMh3gfwuzHDc4OALOUZAkHKljGW/17t6SY2BefhYkzmR9j
+         s5w/ym9EyM1G11gyyb8n0f1speuoHsrdCRrMjd4uydyz+uNmsUAz2Bv2uvCsmDDbUTht
+         CMAS2VmtJcNiWBQiF3YDbR+DbtTez2CXIt3x89DCv1ZWbq5FeH4kLl8vdIT0pt/NjK/4
+         BvErXNsFnFwcldyNvMR5l37DqHw/QXSkKDJ/R0HYkjnkdQD1vH1yozKEsvj1CUz6ui5/
+         zp4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=DFgO9JddDHmoRuVn2ZPzU+MXFPn5DQlDECjTYk/+IjM=;
-        b=8HkJ6I/5WLDdE93PcgiomHDzmOBQCxmEdXt29pkcavQIrYAnTfyEQwXFMZLUmX3k3u
-         Hvfvft5kHWTisyyviARVdjJ3RMS4qBIZNSKdC3/niokB1Rj0prvlf+OlFcX28eUulwq+
-         JubEwySYz+6SxEJxAHAn63FLh3uTMFY7yo+oc7zNXuO850b2Ab9lTjqtkuQStTTp/Nhf
-         2hzGzBqS9+oeb3DrmraTDB4vQnrOsSqeeSL2nFDHiHuN4M4rcTLLPZHLifj/voEAeSql
-         rdSCAZ+1okCls3gV+IfqBvygfhIu+sSZ0CphUL76nE9qiqnJsf5Mzfy7oWh5j+vWMRvP
-         pvkQ==
-X-Gm-Message-State: AOAM533WVc80XaN6x14th9xMF5rK14umrKFYJP132vh8gX8oLgd4LRXi
-	kjQIRKFl6SZNKS23A9EiYfzVzA==
-X-Google-Smtp-Source: ABdhPJyCd/4Er+epPFAKRZT1fWjWQhW/F7nuejDSiXLEHH7ibZ0yXXXeFBsJf3FdnumCHcknC+egKw==
-X-Received: by 2002:a17:906:bb01:b0:6a7:df9:d67c with SMTP id jz1-20020a170906bb0100b006a70df9d67cmr13784767ejb.733.1649345565891;
-        Thu, 07 Apr 2022 08:32:45 -0700 (PDT)
+        bh=fqtKr787N6Vy1cwaYaYZc9PI8pUmju7Cz4kLVR3rNO0=;
+        b=wLocABzT8gZJPFBN4zoltL6IHbkG2wHPUGl27gqLJaHBhH2VtrGdJxhqRrUqxkQUUV
+         EbQ01gYtH3GSkyN2u3WD2Lq14Nk5xRciFKOVoyS2ismH9846DSLgQkBsvsgaHvrfXrQv
+         i1DemeBPI654eaKzYc6WJoCacfQXV3ynXxk2ElLG5CPRZtJLYVh6ALLTwNWtELBNI610
+         LqEr82HWl0286YOWjdtRWhljbimTYvzvbdKqgwwErL0g0dgrcEG+U3/bZNl3YX28SEAb
+         nhSMAz6RtWHPIKry28NHM3UPOutboOGISlpOfOhou/Pb6a8eUx/1xrBuHvrMogPNupcM
+         6GFw==
+X-Gm-Message-State: AOAM533yxGCo/l4pZyEW5G2lQ5NZ2K68dHP1FHz8wd40uspMABI0GK2M
+	3vDYhJgdG7Ety54NzPtsi3JL2g==
+X-Google-Smtp-Source: ABdhPJzFnUZMpklEvBXqWfIprKr3SeUKOVHJYtNHafYjioDtHTrl0Yu/4IrS7rpVQtAYsGOUPaDGmQ==
+X-Received: by 2002:a05:600c:28cd:b0:38e:72c5:5259 with SMTP id h13-20020a05600c28cd00b0038e72c55259mr13665875wmd.176.1649363951008;
+        Thu, 07 Apr 2022 13:39:11 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id f3-20020a056402004300b004162aa024c0sm9283672edu.76.2022.04.07.08.32.44
+        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm8584615wmh.31.2022.04.07.13.39.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 08:32:45 -0700 (PDT)
-Message-ID: <4c9161b2-0146-56c0-5c86-7df31f43b0ac@linaro.org>
-Date: Thu, 7 Apr 2022 17:32:44 +0200
+        Thu, 07 Apr 2022 13:39:10 -0700 (PDT)
+Message-ID: <8fa6212c-a914-dcc4-c852-32a3948db99f@linaro.org>
+Date: Thu, 7 Apr 2022 22:39:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [GIT PULL] ARM: samsung: Fixes for v5.18 (current cycle)
+Subject: Re: [PATCH] arm64: dts: synaptics: add DT for AS370-RDK
 Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Jisheng Zhang <Jisheng.Zhang@synaptics.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>, arm@kernel.org,
- Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzk@kernel.org>, linux-samsung-soc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Alim Akhtar <alim.akhtar@samsung.com>
-References: <20220407080545.112290-1-krzysztof.kozlowski@linaro.org>
- <164933532417.2189563.2554142563906098629.b4-ty@arndb.de>
+Cc: SoC Team <soc@kernel.org>, Rob Herring <robh@kernel.org>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ DTML <devicetree@vger.kernel.org>
+References: <20210820173108.01d5c6de@xhacker.debian>
+ <29e96ece-8541-a7a2-c6a9-453be6644eed@canonical.com>
+ <20210820182708.51d13e29@xhacker.debian>
+ <CAK8P3a2vkZVt1bb7-iDGaSHp20U9d8QXu6AcrUMceJSS9Q_-4Q@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <164933532417.2189563.2554142563906098629.b4-ty@arndb.de>
+In-Reply-To: <CAK8P3a2vkZVt1bb7-iDGaSHp20U9d8QXu6AcrUMceJSS9Q_-4Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 07/04/2022 14:42, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 20/08/2021 21:55, Arnd Bergmann wrote:
+> On Fri, Aug 20, 2021 at 12:27 PM Jisheng Zhang
+> <Jisheng.Zhang@synaptics.com> wrote:
+>> On Fri, 20 Aug 2021 11:59:30 +0200 Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+>>> On 20/08/2021 11:31, Jisheng Zhang wrote:
+>>>
+>>> There is no such binding. You need to update the bindings file (first
+>>> patch in the series).
+>>
+>> This is my plan ;) In fact, "berlin4ct" related binding is also missing.
+>> I want to convert Documentation/devicetree/bindings/arm/syna.txt
+>> to yaml, then add missing bindings. But it's too late for 5.15,
+>>
+>> If it's fine to keep as370.dtsi without board user(s), we can drop
+>> this patch. I will solve this issue in next development window.
 > 
-> On Thu, 7 Apr 2022 10:05:45 +0200, Krzysztof Kozlowski wrote:
->> For the v5.18, please.
->>
->> Best regards,
->> Krzysztof
->>
->>
->> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
->>
->> [...]
-> 
-> Merged into arm/fixes, thanks!
+> Yes, doing it for the next cycle is ok.
 
-Thanks!
+Hi Arnd and Jisheng,
 
-Let me just remind about possible conflict (but you were on CC):
+This patch was discussed in Aug 2021 and since then there was no resend.
+I assume that AD370 will not get a board, so I propose to pick up my
+removal patch:
+https://lore.kernel.org/all/YRbDNInfG7caSr2r@robh.at.kernel.org/
 
--------
-
-Documentation/devicetree/bindings/memory-controllers/renesas,h8300-bsc.yaml
-
-between commit:
-
-  8a1e6bb3f78f ("dt-bindings: update Krzysztof Kozlowski's email")
-
-from the samsung-krzk-fixes tree and commit:
-
-  1c4b5ecb7ea1 ("remove the h8300 architecture")
--------
+I will resend it.
 
 Best regards,
 Krzysztof
