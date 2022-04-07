@@ -4,66 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9830DC433F5
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 22:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13859C433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 22:52:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5874CC385A0; Thu,  7 Apr 2022 22:51:11 +0000 (UTC)
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+	id EECEBC385A8; Thu,  7 Apr 2022 22:52:57 +0000 (UTC)
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5CDAFC385A4;
-	Thu,  7 Apr 2022 22:51:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5CDAFC385A4
+	by smtp.kernel.org (Postfix) with ESMTPS id 35F7CC385A0;
+	Thu,  7 Apr 2022 22:52:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35F7CC385A0
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f51.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso4920893otd.6;
-        Thu, 07 Apr 2022 15:51:10 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id v75so7205197oie.1;
+        Thu, 07 Apr 2022 15:52:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0Iyq/ySqnNcpA1SmKPqHUlu1t9ONi5yGKorm7jYXHrI=;
-        b=2XMJMna7dcWCGrF91oq0DjfijhELBk1PyEtpus2dRgLVgThieVZ1wbymZf7zZHzdRy
-         VjyTdmU3d3RGIsBcCy/rLC33znDuQNtLj9WPAkpqU3TF2n2YDirb1WbVLYhZQuq5z5RS
-         tWqPLW/MsVy0G/t4UsWYghw76HwSGdFlC68xzfILRFQSR0o+EkwQB1Gz9kRZqq/BdQ9T
-         rYfyDV91Gl/NXI8WSF/6sGFrlij+W8ecKeTqRSoAN3CJHCe7eH3Q3pVN4ToP+gJO93k+
-         PfJfBnLwGznpNvoeAppiCqqGFJT3ZN6WdJnB4E9UIBvjZxB7hJnAyQ5Bea8/6XGll8Ng
-         j7fw==
-X-Gm-Message-State: AOAM531d3UJZjz6XgK0Tt2eZ1AGA6OICe5sh08otGfwlMD31IAO3ndOz
-	y74y95puzvgncpW2qd9Z674lFINePQ==
-X-Google-Smtp-Source: ABdhPJxIQn9UQyb2mvfpCWRQISx5uWJHlcnDpiZ1+T8/LMvMks1GjET2QcDeL3rtiUsS/mzexB+/9A==
-X-Received: by 2002:a9d:7dd8:0:b0:5b2:29e1:d46a with SMTP id k24-20020a9d7dd8000000b005b229e1d46amr5681467otn.106.1649371869235;
-        Thu, 07 Apr 2022 15:51:09 -0700 (PDT)
+        bh=wcjcXdrrKeTILsdee3EFxDpF+gt6sT7ltJDO5X75a7E=;
+        b=cdE6VEH9146ZsuVP7La+LpgGxElrsVndlTbEkOTeQXlMx+LdKiKXWv7Ri8CPbhckME
+         /KtxA6ufcAaBpOxEam5/2VW+xfq+HVO5SYH+VdJjiZP1kzFhFDUWweouVPCbhbKJwMFP
+         ACkxhsGJavXRMBm9c7xELfjgAdH7cv4zRPp12kzbJNiRsSeJeD0F5K63ubxFlXz5ezMF
+         gN4dmMe0sGTbCssCx0VWjvEp3uZshhRnZADmfNKimImGYDRfTsSfey0UL+AJnYM2D+Kd
+         qqZS/6MBjs5p3kl8oZ59rr87bWsfnBd75GK2tos0+Hwozvkk1X8OrvHP1e/2hkTTGhY8
+         y+Lg==
+X-Gm-Message-State: AOAM5303SqKpr7noUvo2xDEiGZ+cPBv3KGIQ2S5oo4srtDxbS7AGuvsy
+	s7OyNwt/KmcdtClmn4+w4J8mCAdlkQ==
+X-Google-Smtp-Source: ABdhPJyDbvxVfMG2eRw3vUNka/aMqjhgJ4TqyIHAX9Xb+93TaO0KuYqphbYvkb0xvay1F0IAqmEjGQ==
+X-Received: by 2002:a05:6808:e82:b0:2d9:a01a:48c1 with SMTP id k2-20020a0568080e8200b002d9a01a48c1mr6997148oil.268.1649371975502;
+        Thu, 07 Apr 2022 15:52:55 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id u22-20020a4ae696000000b0032158ab4ce9sm7760668oot.26.2022.04.07.15.51.08
+        by smtp.googlemail.com with ESMTPSA id y15-20020a056830208f00b005e6bf82e0b6sm421954otq.46.2022.04.07.15.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 15:51:08 -0700 (PDT)
+        Thu, 07 Apr 2022 15:52:55 -0700 (PDT)
 From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-	Tony Lindgren <tony@atomide.com>,
 	Andy Gross <agross@kernel.org>,
 	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	linux-omap@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-arm-msm@vger.kernel.org
-Subject: [PATCH] ARM: dts: Fix more boolean properties with values
-Date: Thu,  7 Apr 2022 17:51:07 -0500
-Message-Id: <20220407225107.2175958-1-robh@kernel.org>
+Subject: [PATCH] arm64: dts: qcom/sdm845-shift-axolotl: Fix boolean properties with values
+Date: Thu,  7 Apr 2022 17:52:54 -0500
+Message-Id: <20220407225254.2178644-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Boolean properties in DT are present or not present and don't take a value.
@@ -73,111 +61,30 @@ matter.
 It may have been intended that 0 values are false, but there is no change
 in behavior with this patch.
 
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: "Benoît Cousson" <bcousson@baylibre.com>
-Cc: Tony Lindgren <tony@atomide.com>
 Cc: Andy Gross <agross@kernel.org>
 Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-omap@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
 Cc: linux-arm-msm@vger.kernel.org
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm/boot/dts/at91-sam9_l9260.dts            | 2 +-
- arch/arm/boot/dts/imx28-ts4600.dts               | 2 +-
- arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi | 4 ++--
- arch/arm/boot/dts/qcom-ipq8064.dtsi              | 8 ++++----
- 4 files changed, 8 insertions(+), 8 deletions(-)
+Please apply for v5.18.
 
-diff --git a/arch/arm/boot/dts/at91-sam9_l9260.dts b/arch/arm/boot/dts/at91-sam9_l9260.dts
-index 1e2a28c2f365..2fb51b9aca2a 100644
---- a/arch/arm/boot/dts/at91-sam9_l9260.dts
-+++ b/arch/arm/boot/dts/at91-sam9_l9260.dts
-@@ -101,7 +101,7 @@ pinctrl_board_mmc0: mmc0-board {
- 		nand0: nand@40000000 {
- 			nand-bus-width = <8>;
- 			nand-ecc-mode = "soft";
--			nand-on-flash-bbt = <1>;
-+			nand-on-flash-bbt;
- 			status = "okay";
+ arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+index 8553c8bf79bd..103cc40816fd 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+@@ -563,7 +563,7 @@ mux {
+ 		config {
+ 			pins = "gpio6", "gpio11";
+ 			drive-strength = <8>;
+-			bias-disable = <0>;
++			bias-disable;
  		};
+ 	};
  
-diff --git a/arch/arm/boot/dts/imx28-ts4600.dts b/arch/arm/boot/dts/imx28-ts4600.dts
-index 097ec35c62d8..0d58da1c0cc5 100644
---- a/arch/arm/boot/dts/imx28-ts4600.dts
-+++ b/arch/arm/boot/dts/imx28-ts4600.dts
-@@ -26,7 +26,7 @@ ssp0: spi@80010000 {
- 				pinctrl-0 = <&mmc0_4bit_pins_a
- 					     &mmc0_sck_cfg
- 					     &en_sd_pwr>;
--				broken-cd = <1>;
-+				broken-cd;
- 				bus-width = <4>;
- 				vmmc-supply = <&reg_vddio_sd0>;
- 				status = "okay";
-diff --git a/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi b/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi
-index b4664ab00256..d3da8b1b473b 100644
---- a/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi
-+++ b/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi
-@@ -118,8 +118,8 @@ usb@6,0 {
- 		gpmc,device-width = <2>;
- 		gpmc,wait-pin = <0>;
- 		gpmc,burst-length = <4>;
--		gpmc,cycle2cycle-samecsen = <1>;
--		gpmc,cycle2cycle-diffcsen = <1>;
-+		gpmc,cycle2cycle-samecsen;
-+		gpmc,cycle2cycle-diffcsen;
- 		gpmc,cs-on-ns = <0>;
- 		gpmc,cs-rd-off-ns = <45>;
- 		gpmc,cs-wr-off-ns = <45>;
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 996f4458d9fc..8cb04aa8ed2f 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -972,7 +972,7 @@ gmac0: ethernet@37000000 {
- 
- 			snps,axi-config = <&stmmac_axi_setup>;
- 			snps,pbl = <32>;
--			snps,aal = <1>;
-+			snps,aal;
- 
- 			qcom,nss-common = <&nss_common>;
- 			qcom,qsgmii-csr = <&qsgmii_csr>;
-@@ -996,7 +996,7 @@ gmac1: ethernet@37200000 {
- 
- 			snps,axi-config = <&stmmac_axi_setup>;
- 			snps,pbl = <32>;
--			snps,aal = <1>;
-+			snps,aal;
- 
- 			qcom,nss-common = <&nss_common>;
- 			qcom,qsgmii-csr = <&qsgmii_csr>;
-@@ -1020,7 +1020,7 @@ gmac2: ethernet@37400000 {
- 
- 			snps,axi-config = <&stmmac_axi_setup>;
- 			snps,pbl = <32>;
--			snps,aal = <1>;
-+			snps,aal;
- 
- 			qcom,nss-common = <&nss_common>;
- 			qcom,qsgmii-csr = <&qsgmii_csr>;
-@@ -1044,7 +1044,7 @@ gmac3: ethernet@37600000 {
- 
- 			snps,axi-config = <&stmmac_axi_setup>;
- 			snps,pbl = <32>;
--			snps,aal = <1>;
-+			snps,aal;
- 
- 			qcom,nss-common = <&nss_common>;
- 			qcom,qsgmii-csr = <&qsgmii_csr>;
 -- 
 2.32.0
 
