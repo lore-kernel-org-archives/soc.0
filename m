@@ -1,332 +1,90 @@
-Return-Path: <SRS0=3lNK=UQ=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=JkaG=UR=nuvoton.com=YCHuang3@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47443C433F5
-	for <soc@archiver.kernel.org>; Wed,  6 Apr 2022 19:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CBE8C433FE
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 04:07:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2E94AC385A6; Wed,  6 Apr 2022 19:17:34 +0000 (UTC)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 215F6C385A1;
-	Wed,  6 Apr 2022 19:17:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 215F6C385A1
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-deb9295679so4000449fac.6;
-        Wed, 06 Apr 2022 12:17:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=+elv5nUcYO+9KxIPsGLm8mW7Otl7wTZ4tdEnucwBh/c=;
-        b=L0CxdwL5ZLPpq3DAbgiWKuSH5ZFVmYwwnrlad7YpB+qWxfzL6L8lY/Pkob/WpjooMh
-         FFcdEtNL2rLze7hSrT4I+ucstSYqxtLB6KeTJQk+KNjt0/vH9WUOOMWJ4nw3/x7OD9d7
-         9Ck3fCK5e+s9ly9O20XOEsm1vhqH4aiUaYO/TYNqVEh9vgpZwCmYt2/ryyaRTvSKLpYm
-         CqnkzalrtXUkpnc2sjaG8elxknRqswXhPM9Ff7ZnQ15Oi5dYxdsI5IES8i4LoAWWD3sA
-         FkinqzD4CRLcoCqgHJb1yW1FpmSBXmn9Km52nLHMqmK5nbaENtQV6S8gS3vNB/1EUNPg
-         9icA==
-X-Gm-Message-State: AOAM533XRjXnAgP8jIcKaJVxHoYTEs3+gZYr/2+EayGiu1CBIHb8BNlg
-	w08iEtXjirL/ozO60epM6pebzVbM4g==
-X-Google-Smtp-Source: ABdhPJzWUypFFpBzMufl7IKO2Huhe7Ol7N6/hBhhXxa5wzfiiHRzIVxOp8s5NaDTX2ceV8BZrbhv6g==
-X-Received: by 2002:a05:6870:9628:b0:e1:c420:af75 with SMTP id d40-20020a056870962800b000e1c420af75mr4617093oaq.246.1649272652036;
-        Wed, 06 Apr 2022 12:17:32 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k30-20020a056870819e00b000e18ee342c0sm7171247oae.18.2022.04.06.12.17.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 12:17:31 -0700 (PDT)
-Received: (nullmailer pid 2614465 invoked by uid 1000);
-	Wed, 06 Apr 2022 19:17:30 -0000
-Date: Wed, 6 Apr 2022 14:17:30 -0500
-From: Rob Herring <robh@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, soc@kernel.org
-Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with values
-Message-ID: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org>
+	id 55062C385A8; Thu,  7 Apr 2022 04:07:39 +0000 (UTC)
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+	by smtp.kernel.org (Postfix) with ESMTP id E3D7FC385A4;
+	Thu,  7 Apr 2022 04:07:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3D7FC385A4
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+	by maillog.nuvoton.com (Postfix) with ESMTP id 640071C810A3;
+	Thu,  7 Apr 2022 12:07:29 +0800 (CST)
+Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 7 Apr 2022
+ 12:07:29 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS03.nuvoton.com
+ (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Thu, 7 Apr 2022
+ 12:07:28 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Thu, 7 Apr 2022 12:07:28 +0800
+Message-ID: <125f4a13-cd4c-7deb-6ff6-0dc2e5458bf1@nuvoton.com>
+Date: Thu, 7 Apr 2022 12:07:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.32.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+CC: Krzysztof Kozlowski <krzk@kernel.org>, "robh+dt@kernel.org"
+	<robh+dt@kernel.org>, "mturquette@baylibre.com" <mturquette@baylibre.com>,
+	"sboyd@kernel.org" <sboyd@kernel.org>, "olof@lixom.net" <olof@lixom.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, "soc@kernel.org"
+	<soc@kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+References: <20220307091923.9909-1-ychuang3@nuvoton.com>
+ <20220307091923.9909-4-ychuang3@nuvoton.com>
+ <2669852c-5bb6-1edf-bf58-ea815f54d50f@kernel.org>
+ <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
+ <CAK8P3a1Gbr4PoJbPy3BEQ=T3iJo9kQdjes7+0UK5vnc4CDckSw@mail.gmail.com>
+From: Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <CAK8P3a1Gbr4PoJbPy3BEQ=T3iJo9kQdjes7+0UK5vnc4CDckSw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Boolean properties in DT are present or not present and don't take a value.
-A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
-matter.
 
-It may have been intended that 0 values are false, but there is no change
-in behavior with this patch.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-Can someone apply this for 5.18.
+On 2022/4/6 下午 03:43, Arnd Bergmann wrote:
+> On Wed, Apr 6, 2022 at 4:58 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
+>> On 2022/3/7 下午 06:25, Krzysztof Kozlowski wrote:
+>>> On 07/03/2022 10:19, Jacky Huang wrote:
+>> I would add the following to end of arch/arm64/Kconfig.platforms, and
+>> add the
+>> modification to this patch series.
+>>
+>> config ARCH_MA35D1
+>>       bool "Nuvoton MA35D1 SOC Family"
+>>       select PINCTRL
+>>       select PINCTRL_MA35D1
+>>       select PM
+>>       select GPIOLIB
+>>       select SOC_BUS
+>>       select VIDEOMODE_HELPERS
+>>       select FB_MODE_HELPERS
+>>       help
+>>         This enables support for Nuvoton MA35D1 SOC Family.
+> Selecting SOC_BUS and the gpio/pinctrl stuff is ok, but please don't
+> select the video helpers from the platform config, those should not
+> be essential for building a kernel.
+>
+>         Arnd
 
- arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
- .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
- arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
- arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
- arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
- arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
- arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
- 8 files changed, 27 insertions(+), 27 deletions(-)
+Yes, I will remove  VIDEOMODE_HELPERS and FB_MODE_HELPERS.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
-index aff857df25cf..1df84335925b 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
-@@ -262,25 +262,25 @@ gpio3 {
- 					gpio4 {
- 						pins = "gpio4";
- 						function = "32k-out1";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio5 {
- 						pins = "gpio5";
- 						function = "gpio";
--						drive-push-pull = <0>;
-+						drive-push-pull;
- 					};
- 
- 					gpio6 {
- 						pins = "gpio6";
- 						function = "gpio";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio7 {
- 						pins = "gpio7";
- 						function = "gpio";
--						drive-push-pull = <0>;
-+						drive-push-pull;
- 					};
- 				};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts b/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
-index 4631504c3c7a..1ab132c152bb 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts
-@@ -462,25 +462,25 @@ gpio3 {
- 					gpio4 {
- 						pins = "gpio4";
- 						function = "32k-out1";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio5 {
- 						pins = "gpio5";
- 						function = "gpio";
--						drive-push-pull = <0>;
-+						drive-push-pull;
- 					};
- 
- 					gpio6 {
- 						pins = "gpio6";
- 						function = "gpio";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio7 {
- 						pins = "gpio7";
- 						function = "gpio";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 				};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-index a7d7cfd66379..634d0f493c2e 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-@@ -174,19 +174,19 @@ gpio3 {
- 					gpio4 {
- 						pins = "gpio4";
- 						function = "32k-out1";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio6 {
- 						pins = "gpio6";
- 						function = "gpio";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio7 {
- 						pins = "gpio7";
- 						function = "gpio";
--						drive-push-pull = <0>;
-+						drive-push-pull;
- 					};
- 				};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
-index 0bd66f9c620b..0b219e72765e 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi
-@@ -148,19 +148,19 @@ gpio3 {
- 					gpio4 {
- 						pins = "gpio4";
- 						function = "32k-out1";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio6 {
- 						pins = "gpio6";
- 						function = "gpio";
--						drive-push-pull = <1>;
-+						drive-push-pull;
- 					};
- 
- 					gpio7 {
- 						pins = "gpio7";
- 						function = "gpio";
--						drive-push-pull = <0>;
-+						drive-push-pull;
- 					};
- 				};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-index 75eb743a7242..0fe772b04bd0 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-@@ -59,7 +59,7 @@ gpio0 {
- 				gpio1 {
- 					pins = "gpio1";
- 					function = "fps-out";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 					maxim,active-fps-power-up-slot = <7>;
- 					maxim,active-fps-power-down-slot = <0>;
-@@ -68,7 +68,7 @@ gpio1 {
- 				gpio2_3 {
- 					pins = "gpio2", "gpio3";
- 					function = "fps-out";
--					drive-open-drain = <1>;
-+					drive-open-drain;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 				};
- 
-@@ -80,7 +80,7 @@ gpio4 {
- 				gpio5_6_7 {
- 					pins = "gpio5", "gpio6", "gpio7";
- 					function = "gpio";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 				};
- 			};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
-index 10347b6e6e84..936a309e288c 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi
-@@ -1351,7 +1351,7 @@ gpio0 {
- 				gpio1 {
- 					pins = "gpio1";
- 					function = "fps-out";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 					maxim,active-fps-power-up-slot = <7>;
- 					maxim,active-fps-power-down-slot = <0>;
-@@ -1360,14 +1360,14 @@ gpio1 {
- 				gpio2 {
- 					pins = "gpio2";
- 					function = "fps-out";
--					drive-open-drain = <1>;
-+					drive-open-drain;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 				};
- 
- 				gpio3 {
- 					pins = "gpio3";
- 					function = "fps-out";
--					drive-open-drain = <1>;
-+					drive-open-drain;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 				};
- 
-@@ -1379,7 +1379,7 @@ gpio4 {
- 				gpio5_6_7 {
- 					pins = "gpio5", "gpio6", "gpio7";
- 					function = "gpio";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 				};
- 			};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-index 72c2dc3c14ea..f6446120c267 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-@@ -195,7 +195,7 @@ gpio0 {
- 				gpio1 {
- 					pins = "gpio1";
- 					function = "fps-out";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_NONE>;
- 					maxim,active-fps-power-up-slot = <0>;
- 					maxim,active-fps-power-down-slot = <7>;
-@@ -204,7 +204,7 @@ gpio1 {
- 				gpio2 {
- 					pins = "gpio2";
- 					function = "fps-out";
--					drive-open-drain = <1>;
-+					drive-open-drain;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 					maxim,active-fps-power-up-slot = <0>;
- 					maxim,active-fps-power-down-slot = <7>;
-@@ -213,7 +213,7 @@ gpio2 {
- 				gpio3 {
- 					pins = "gpio3";
- 					function = "fps-out";
--					drive-open-drain = <1>;
-+					drive-open-drain;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 					maxim,active-fps-power-up-slot = <4>;
- 					maxim,active-fps-power-down-slot = <3>;
-@@ -227,7 +227,7 @@ gpio4 {
- 				gpio5_6_7 {
- 					pins = "gpio5", "gpio6", "gpio7";
- 					function = "gpio";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 				};
- 			};
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-index a263d51882ee..e42384f097d6 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-@@ -1386,7 +1386,7 @@ gpio0_1_2_7 {
- 				gpio3 {
- 					pins = "gpio3";
- 					function = "fps-out";
--					drive-open-drain = <1>;
-+					drive-open-drain;
- 					maxim,active-fps-source = <MAX77620_FPS_SRC_0>;
- 					maxim,active-fps-power-up-slot = <4>;
- 					maxim,active-fps-power-down-slot = <2>;
-@@ -1395,7 +1395,7 @@ gpio3 {
- 				gpio5_6 {
- 					pins = "gpio5", "gpio6";
- 					function = "gpio";
--					drive-push-pull = <1>;
-+					drive-push-pull;
- 				};
- 
- 				gpio4 {
--- 
-2.32.0
+
+Best Regards,
+Jacky
 
