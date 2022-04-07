@@ -1,92 +1,183 @@
-Return-Path: <SRS0=0sZe=UR=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=ri78=UR=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B21AAC433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 21:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9830DC433F5
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 22:51:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6BBACC385A8; Thu,  7 Apr 2022 21:57:47 +0000 (UTC)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	id 5874CC385A0; Thu,  7 Apr 2022 22:51:11 +0000 (UTC)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 952B6C385A0
-	for <soc@kernel.org>; Thu,  7 Apr 2022 21:57:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 952B6C385A0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id f23so11953625ybj.7
-        for <soc@kernel.org>; Thu, 07 Apr 2022 14:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=+mwTOTKQS7Wp/Xv8f5IrshAbrRV3och300Y3ulOJBWM=;
-        b=R337hkr6I8N+7oqeVTXIW4i+OzBetClse+BCPPexfTqqSr5HoopdjBBpg6uO1iY1AT
-         e8HUxhjE2WVN6huCanw4h9zcQEv+WHUDSTQSbHQwustA4mdraFtXLj2yDTyojnfh+DSy
-         8WysrFc8T0kVtWgkzMKf/U0R7buS+MzO5EG9NmxSWXkTQn4uoi4g6XWhiW5LRhm5pRna
-         FZIlUtqbBPGFkwQkbxwpSR43chV94A+XGcOb3aQCnYCsYg0PY82Lh51u7905pccWBm6v
-         JPYDB1U99YoVZGkrdsS/r3ReL4dbibwctVa4goLv1csNeJ+6to9RguoqybuftjYV7JHS
-         7zwg==
+	by smtp.kernel.org (Postfix) with ESMTPS id 5CDAFC385A4;
+	Thu,  7 Apr 2022 22:51:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5CDAFC385A4
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f51.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso4920893otd.6;
+        Thu, 07 Apr 2022 15:51:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=+mwTOTKQS7Wp/Xv8f5IrshAbrRV3och300Y3ulOJBWM=;
-        b=lWfdri8rHMwfyFz4Ye3IvzsTLnwCtJtPKLpYdLV0Pun8zrpKC2WUVfmLQAx+BY8Y62
-         gprrhX4f7ktMmCLnWaMlMlLBbzGB+avelBP1Jp76EjdzYaGZayXnwBLGIKhj19TZLOIj
-         DQazImc4AOyOdSSzDmgCB09CpxusVSG7CiWLhNRFZGjvENzrEBxS4YMqMVq8W959Npcu
-         Vh9PsBaeTbKfExFYFAdfxyxl1GSTZe3xR2KLdA1UjxmltdnKYFIh28z/8LOqova7eMOP
-         FYcrUpzsKyyyTy39RsHaj4xDKnB2PkdTzSrzf1PTPtrozl6NMb0zlkU3n9BOZ6TwuyJY
-         XOQA==
-X-Gm-Message-State: AOAM5305DKtFbXY2IeTGdGjauJX/p+iM6WJw+qIODUZAaydq7jLmEDL8
-	P55/MahX7zXx3OvDBYSL4+YlCXhhXEgmvcLHlqJK/Y+UuyvIww==
-X-Google-Smtp-Source: ABdhPJwoFJalhB/W2Eu4Rn3tNIE/xlIM7EAlFw6C7umYfRc+CG3YX++OoB6nFWtxGNzfA3kfLr7H3MRPC2CxwR0pzZc=
-X-Received: by 2002:a5b:dc5:0:b0:624:f16d:7069 with SMTP id
- t5-20020a5b0dc5000000b00624f16d7069mr11692986ybr.295.1649368665463; Thu, 07
- Apr 2022 14:57:45 -0700 (PDT)
-MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 7 Apr 2022 23:57:34 +0200
-Message-ID: <CACRpkdY+_Go4XNzOh+Rvc24QBnUud2k-S7VQuaH5d-j71_dJog@mail.gmail.com>
-Subject: [GIT PULL] Ux500 defconfig updates for v5.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0Iyq/ySqnNcpA1SmKPqHUlu1t9ONi5yGKorm7jYXHrI=;
+        b=2XMJMna7dcWCGrF91oq0DjfijhELBk1PyEtpus2dRgLVgThieVZ1wbymZf7zZHzdRy
+         VjyTdmU3d3RGIsBcCy/rLC33znDuQNtLj9WPAkpqU3TF2n2YDirb1WbVLYhZQuq5z5RS
+         tWqPLW/MsVy0G/t4UsWYghw76HwSGdFlC68xzfILRFQSR0o+EkwQB1Gz9kRZqq/BdQ9T
+         rYfyDV91Gl/NXI8WSF/6sGFrlij+W8ecKeTqRSoAN3CJHCe7eH3Q3pVN4ToP+gJO93k+
+         PfJfBnLwGznpNvoeAppiCqqGFJT3ZN6WdJnB4E9UIBvjZxB7hJnAyQ5Bea8/6XGll8Ng
+         j7fw==
+X-Gm-Message-State: AOAM531d3UJZjz6XgK0Tt2eZ1AGA6OICe5sh08otGfwlMD31IAO3ndOz
+	y74y95puzvgncpW2qd9Z674lFINePQ==
+X-Google-Smtp-Source: ABdhPJxIQn9UQyb2mvfpCWRQISx5uWJHlcnDpiZ1+T8/LMvMks1GjET2QcDeL3rtiUsS/mzexB+/9A==
+X-Received: by 2002:a9d:7dd8:0:b0:5b2:29e1:d46a with SMTP id k24-20020a9d7dd8000000b005b229e1d46amr5681467otn.106.1649371869235;
+        Thu, 07 Apr 2022 15:51:09 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id u22-20020a4ae696000000b0032158ab4ce9sm7760668oot.26.2022.04.07.15.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 15:51:08 -0700 (PDT)
+From: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+To: soc@kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	linux-omap@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: [PATCH] ARM: dts: Fix more boolean properties with values
+Date: Thu,  7 Apr 2022 17:51:07 -0500
+Message-Id: <20220407225107.2175958-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi SoC folks,
+Boolean properties in DT are present or not present and don't take a value.
+A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
+matter.
 
-please pull in these Ux500/U8500 defconfig updates for v5.18.
+It may have been intended that 0 values are false, but there is no change
+in behavior with this patch.
 
-Yours,
-Linus Walleij
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: "Benoît Cousson" <bcousson@baylibre.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/arm/boot/dts/at91-sam9_l9260.dts            | 2 +-
+ arch/arm/boot/dts/imx28-ts4600.dts               | 2 +-
+ arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi | 4 ++--
+ arch/arm/boot/dts/qcom-ipq8064.dtsi              | 8 ++++----
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+diff --git a/arch/arm/boot/dts/at91-sam9_l9260.dts b/arch/arm/boot/dts/at91-sam9_l9260.dts
+index 1e2a28c2f365..2fb51b9aca2a 100644
+--- a/arch/arm/boot/dts/at91-sam9_l9260.dts
++++ b/arch/arm/boot/dts/at91-sam9_l9260.dts
+@@ -101,7 +101,7 @@ pinctrl_board_mmc0: mmc0-board {
+ 		nand0: nand@40000000 {
+ 			nand-bus-width = <8>;
+ 			nand-ecc-mode = "soft";
+-			nand-on-flash-bbt = <1>;
++			nand-on-flash-bbt;
+ 			status = "okay";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/imx28-ts4600.dts b/arch/arm/boot/dts/imx28-ts4600.dts
+index 097ec35c62d8..0d58da1c0cc5 100644
+--- a/arch/arm/boot/dts/imx28-ts4600.dts
++++ b/arch/arm/boot/dts/imx28-ts4600.dts
+@@ -26,7 +26,7 @@ ssp0: spi@80010000 {
+ 				pinctrl-0 = <&mmc0_4bit_pins_a
+ 					     &mmc0_sck_cfg
+ 					     &en_sd_pwr>;
+-				broken-cd = <1>;
++				broken-cd;
+ 				bus-width = <4>;
+ 				vmmc-supply = <&reg_vddio_sd0>;
+ 				status = "okay";
+diff --git a/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi b/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi
+index b4664ab00256..d3da8b1b473b 100644
+--- a/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi
++++ b/arch/arm/boot/dts/logicpd-torpedo-baseboard.dtsi
+@@ -118,8 +118,8 @@ usb@6,0 {
+ 		gpmc,device-width = <2>;
+ 		gpmc,wait-pin = <0>;
+ 		gpmc,burst-length = <4>;
+-		gpmc,cycle2cycle-samecsen = <1>;
+-		gpmc,cycle2cycle-diffcsen = <1>;
++		gpmc,cycle2cycle-samecsen;
++		gpmc,cycle2cycle-diffcsen;
+ 		gpmc,cs-on-ns = <0>;
+ 		gpmc,cs-rd-off-ns = <45>;
+ 		gpmc,cs-wr-off-ns = <45>;
+diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+index 996f4458d9fc..8cb04aa8ed2f 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+@@ -972,7 +972,7 @@ gmac0: ethernet@37000000 {
+ 
+ 			snps,axi-config = <&stmmac_axi_setup>;
+ 			snps,pbl = <32>;
+-			snps,aal = <1>;
++			snps,aal;
+ 
+ 			qcom,nss-common = <&nss_common>;
+ 			qcom,qsgmii-csr = <&qsgmii_csr>;
+@@ -996,7 +996,7 @@ gmac1: ethernet@37200000 {
+ 
+ 			snps,axi-config = <&stmmac_axi_setup>;
+ 			snps,pbl = <32>;
+-			snps,aal = <1>;
++			snps,aal;
+ 
+ 			qcom,nss-common = <&nss_common>;
+ 			qcom,qsgmii-csr = <&qsgmii_csr>;
+@@ -1020,7 +1020,7 @@ gmac2: ethernet@37400000 {
+ 
+ 			snps,axi-config = <&stmmac_axi_setup>;
+ 			snps,pbl = <32>;
+-			snps,aal = <1>;
++			snps,aal;
+ 
+ 			qcom,nss-common = <&nss_common>;
+ 			qcom,qsgmii-csr = <&qsgmii_csr>;
+@@ -1044,7 +1044,7 @@ gmac3: ethernet@37600000 {
+ 
+ 			snps,axi-config = <&stmmac_axi_setup>;
+ 			snps,pbl = <32>;
+-			snps,aal = <1>;
++			snps,aal;
+ 
+ 			qcom,nss-common = <&nss_common>;
+ 			qcom,qsgmii-csr = <&qsgmii_csr>;
+-- 
+2.32.0
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/ux500-defconfig-soc-v5.18
-
-for you to fetch changes up to 62f6424514991ce6104f6a8becfd58e986f993b6:
-
-  ARM: config: u8500: Re-enable AB8500 battery charging (2022-04-06
-14:41:41 +0200)
-
-----------------------------------------------------------------
-Defconfig updates for kernel v5.18:
-
-- Refresh defconfig with new and moved options
-- Add some new hardware drivers
-- Activate battery charging
-
-----------------------------------------------------------------
-Linus Walleij (3):
-      ARM: config: Refresh U8500 defconfig
-      ARM: config: u8500: Add some common hardware
-      ARM: config: u8500: Re-enable AB8500 battery charging
-
- arch/arm/configs/u8500_defconfig | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
