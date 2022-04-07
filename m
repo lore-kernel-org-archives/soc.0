@@ -1,93 +1,83 @@
-Return-Path: <SRS0=LCsd=UR=microchip.com=Kavyasree.Kotagiri@kernel.org>
+Return-Path: <SRS0=Xko5=UR=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0ADBC433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 10:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04317C433F5
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 11:08:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8908AC385A0; Thu,  7 Apr 2022 10:59:19 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1F36EC385B6;
-	Thu,  7 Apr 2022 10:59:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1F36EC385B6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649329158; x=1680865158;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=U1ExlaQ0xLgzrMqOMAXenCfNzoFHQXdgfyOJjDemSpc=;
-  b=WgRXazan30IUPnbGlb1+HQBeQiS7AtB0UA5w4LYpvAcpqukZQpyzVfyo
-   HBPbRzVTDFwV52057/3dAC+YAq8JCkrndA6z+UKURdvFcTzenw0zuxRcF
-   Ai/eLiBWAd4FcbtpcY4RrpfJh8HMyAyxS935rtMbrJcpBTjj14qCQ9z5+
-   x91FPNW9S9L81l1Sa+c93GiKm4I12/wgezoeg86EzPGkxjIucXN2i6pQr
-   e4vpSX/A8uYSKBUplhPWxru8YBfjNYMI/DoN843gGX3/rO396I4TG+u3L
-   mkK/G1oizaJbF6nCUfyO0lOZbIIcNsqr7ZHOaMMMq1AFFoedbh4L7Csng
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,241,1643698800"; 
-   d="scan'208";a="91613510"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Apr 2022 03:59:17 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 7 Apr 2022 03:59:16 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 7 Apr 2022 03:59:12 -0700
-From: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+	id BC539C385A8; Thu,  7 Apr 2022 11:08:24 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 2E9FFC385A4;
+	Thu,  7 Apr 2022 11:08:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E9FFC385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B7DF812FC;
+	Thu,  7 Apr 2022 04:08:22 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B745B3F5A1;
+	Thu,  7 Apr 2022 04:08:21 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-	<alexandre.belloni@bootlin.com>, <olof@lixom.net>, <soc@kernel.org>,
-	<nicolas.ferre@microchip.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-	<tudor.ambarus@microchip.com>, <Kavyasree.Kotagiri@microchip.com>,
-	<Manohar.Puri@microchip.com>
-Subject: [PATCH 2/2] ARM: dts: lan966x-pcb8291: Add QSPI0 and SPI NOR memory nodes
-Date: Thu, 7 Apr 2022 16:28:35 +0530
-Message-ID: <20220407105835.10962-3-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220407105835.10962-1-kavyasree.kotagiri@microchip.com>
-References: <20220407105835.10962-1-kavyasree.kotagiri@microchip.com>
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] firmware: arm_scmi: Fixes for v5.18
+Date: Thu,  7 Apr 2022 12:08:18 +0100
+Message-Id: <20220407110818.1436181-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Enable QSPI0 controller and sst26vf016b SPI-NOR flash present on it.
+Hi ARM SoC Team,
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
- arch/arm/boot/dts/lan966x-pcb8291.dts | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Please pull !
 
-diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-index 3281af90ac6d..99d96d46661d 100644
---- a/arch/arm/boot/dts/lan966x-pcb8291.dts
-+++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-@@ -62,3 +62,18 @@
- &watchdog {
- 	status = "okay";
- };
-+
-+&qspi0 {
-+	status = "okay";
-+
-+	spi-flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <20000000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+		m25p,fast-read;
-+	};
-+};
--- 
-2.17.1
+Regards,
+Sudeep
 
+-->8
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-5.18
+
+for you to fetch changes up to bf36619a5463fbe6d3ecde37bb13680b532a253b:
+
+  firmware: arm_scmi: Fix sparse warnings in OPTEE transport driver (2022-04-04 23:06:37 +0100)
+
+----------------------------------------------------------------
+Arm SCMI firmware interface fixes for v5.18
+
+Few fixes to address assorted set of issues:
+- Erroneous clearing of Tx channel which only platform firmware must do
+- Invalid point access pass as parameter to sort() in clock support
+- Sparse build warnings in OPTEE transport driver
+- Use of deprecated zero-length arrays
+
+----------------------------------------------------------------
+Cristian Marussi (2):
+      firmware: arm_scmi: Remove clear channel call on the TX channel
+      firmware: arm_scmi: Fix sorting of retrieved clock rates
+
+Lv Ruyi (1):
+      firmware: arm_scmi: Replace zero-length array with flexible-array member
+
+Sudeep Holla (1):
+      firmware: arm_scmi: Fix sparse warnings in OPTEE transport driver
+
+ drivers/firmware/arm_scmi/clock.c  | 5 +++--
+ drivers/firmware/arm_scmi/driver.c | 3 ++-
+ drivers/firmware/arm_scmi/optee.c  | 8 ++++----
+ 3 files changed, 9 insertions(+), 7 deletions(-)
