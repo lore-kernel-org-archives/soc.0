@@ -1,196 +1,204 @@
-Return-Path: <SRS0=2lp4=UR=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <SRS0=bijT=UR=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 609ADC433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 06:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26316C433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 08:05:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2426EC385A8; Thu,  7 Apr 2022 06:36:15 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E14FAC385A8; Thu,  7 Apr 2022 08:05:51 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A9661C385A4;
-	Thu,  7 Apr 2022 06:36:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9661C385A4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649313374; x=1680849374;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Jjyv98cbyCDCJfn3I/hwBRFWhmPuICgYJjuXRSYP3qU=;
-  b=pmgElSNPLYD8NfUHqxyDDVSYjgIHkZMm7SOevms86l5i5DcOaBzOxxnj
-   DkGU5yEBH5mFr1fNeYKafa0V1haCCkKz2UMbEATQUdMYjmpHzt0PFs/Tx
-   B5GV3HMVSa6BkdXVg/X1sAgKT6K4F0E2jW8gNd2iePaPgs4Qo+4G+2c66
-   NlTU/zCVBAVGrJjDSCf5yQ+AupbV3m0FEr6kt6QwsoZw7SSeRjp5ltoH7
-   QXOSe9oxl/yk3XMVE/dRbx7seN2isjRLX1S2M3I3XHEsF972/1dr3rnot
-   7dRoYyaIJ3QaOuNSIVZBBHaRS7GnzzFPM6KI5JbSQ8lXCSdUBmPSoNA3W
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,241,1643698800"; 
-   d="scan'208";a="159242579"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2022 23:36:12 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 6 Apr 2022 23:36:10 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Wed, 6 Apr 2022 23:36:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Eah8qiK12JYr3tXWuCRSwz2oQhkppx3hzarod27lqtgz5SJzU7Y3BvwwSl8lFxorTqTzBIeqy2YbTE4KuPz3tw8uv7U1iq06a7Pp81BOnbzcplzF2JMSMP3e03BN/ns9QaU92+CxMpln5/0rYK8Hnqg5IDKpw2Gfgh7QU3NPW68bTWqGYL1SF8MKB5ZUS7H7Qm3LfpVfvdYEr09OALMCUJXsi6Q1BAf71Fdx5kHkrf1+VxbgCPjMTzkAVe4T6kuKNSNw4FxtO30gnk7j6y199JC7HT70Io1VosnG0Xbjql5MAKbHbSwk+fPc7yLgAt8N/8yHiayh0pAJyk4ej3Ow8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jjyv98cbyCDCJfn3I/hwBRFWhmPuICgYJjuXRSYP3qU=;
- b=GH5Vkg8O8dyiJ+tWQ2io4R4YRu5BxsDdNKGoeLWHomMEEstBPyOjmjcTlkZrdzQqs+w6sLAzoMVhYD4Dh9tzRlidXGRHppBGlXczUDkQDHXC6zZQprk89sCLk1QZl2keWUR4ba4vujqEZk4k6H+jLGgB+1jFQgnfQMmnx/7NJRqWF+g18VFjDwpVbryd7TOPwXExfN526LmK+5Lx4mJzqUZDuwD4LCturXQXNxLDkJ8zecLkoMUzdEC1JRGFPkGvuXxJSDeTjCeH0mfpbNQFYuxGb0XhfbyzYZg8vCM30jLskFT+GiYoDxY8qYuT6ajsgdtMGXr7+2wqTy+bnNY1pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+	by smtp.kernel.org (Postfix) with ESMTPS id 4BD1CC385A4
+	for <soc@kernel.org>; Thu,  7 Apr 2022 08:05:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BD1CC385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id qh7so9082015ejb.11
+        for <soc@kernel.org>; Thu, 07 Apr 2022 01:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jjyv98cbyCDCJfn3I/hwBRFWhmPuICgYJjuXRSYP3qU=;
- b=iUYyEPeqvObvH/aIOSHTmWxLk/vQmTYUoyTFRdsdBEoEf6aqgYltLqWWsb/zcYqBO0SE7wwt68Lh+RshR+mJa2B7mctd0D3BEPLQbgng8sHHt/Lkpu3Ctn4tORbfg5v4pmvtoRDUKWVoYhO/ugOMp5JFtz7HsA56LaSjUH0Yzic=
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
- by MWHPR11MB1342.namprd11.prod.outlook.com (2603:10b6:300:1e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.21; Thu, 7 Apr
- 2022 06:36:08 +0000
-Received: from CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::6d66:3f1d:7b05:660b]) by CO1PR11MB4769.namprd11.prod.outlook.com
- ([fe80::6d66:3f1d:7b05:660b%7]) with mapi id 15.20.5144.022; Thu, 7 Apr 2022
- 06:36:08 +0000
-From: <Claudiu.Beznea@microchip.com>
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4mBqmv7n4vaPJNzqJP9XRBObc2z1tM4karynGs0Phtk=;
+        b=Qq1qfnd9npA9nHTudyH/BT6S+kcCLVHNf9FrbefprUkxea94X8hHKsnDNg+5ccEGxg
+         r87XTfa5dzAOXyeJTgAkuMot3slOlmPogMwQ8ucdoxREihf/skk2LM/xagYN39q3PdRf
+         xBbsjsQsh5y4SbVMM59UZ4mUCez68EVSWLHdq50/ZCHxPZb32E21a4WnjkPJG2VwSd/s
+         HVI6IEgv2O7gO+NAkdITQg9KnvdviEUjAMCF9rnluidnZIwPSBSTPlbvMllHW9oBbxfD
+         fQHxbmFsSaxJ3f64QMIHsEpnJsN+s/IN5/MUdLDcT3Dn3QzfAgwadsnppVAHALW1JUnY
+         Vtew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4mBqmv7n4vaPJNzqJP9XRBObc2z1tM4karynGs0Phtk=;
+        b=WMFWLeAxXfvc9yqKUPXlndVweRcAOL56cIMcWmctY1eablqBXdAdAMN6+A6V4XEMPg
+         5LqqiiYkPmwCIW8NqkcrWWMCrOy9KMfLsD+eeKkwiDPBkEDCTJHUQ7Q/rmJ347nSVIgp
+         Dza18XniJSsTFAtr1LzXxBMBa+Xs0A0Msz2Vta/KG8a971PVbom2DXknmj5wfYYKqgTp
+         qPTdXkCSn1UpQPmLZKFjsIvsN7D2TfNZDeEoR3oKlUKWWC9E6iWl0TgPqB9UZ1xiNK76
+         vR9SUYfxA7FzvqUV0ydVxbAPl+IbS2ok5JnW6yfWXFq/RhZBsxTCdQiryf7MEdg9qWwF
+         P4WA==
+X-Gm-Message-State: AOAM531osXKN/r5cUahqvawh4Ss+IzcG55An160VF+xgMQqNHxep3I/X
+	nPlbfEQ37BBaIB0gz2Yw7STwFw==
+X-Google-Smtp-Source: ABdhPJyHdAGSEzniLyxDIIzfiDZCPSJ8ph+g9N9poqt0EGINfDqa0e4lfi/998p+LVKaG22T2l1KCA==
+X-Received: by 2002:a17:907:7255:b0:6e7:e853:73b8 with SMTP id ds21-20020a170907725500b006e7e85373b8mr12655082ejc.172.1649318748546;
+        Thu, 07 Apr 2022 01:05:48 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id m14-20020a056402510e00b0041d0c0942adsm217575edd.52.2022.04.07.01.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 01:05:48 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: <robh@kernel.org>, <krzysztof.kozlowski@canonical.com>,
-	<Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<Ludovic.Desroches@microchip.com>, <soc@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH] arm: dts: at91: Fix boolean properties with values
-Thread-Topic: [RESEND PATCH] arm: dts: at91: Fix boolean properties with
- values
-Thread-Index: AQHYSknDMfGn26aYr02utpl+XHeWnQ==
-Date: Thu, 7 Apr 2022 06:36:08 +0000
-Message-ID: <938abddc-4d6b-1bae-5107-be4fd439960b@microchip.com>
-References: <Yk3leykDEKGBN8rk@robh.at.kernel.org>
-In-Reply-To: <Yk3leykDEKGBN8rk@robh.at.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3f381732-65c8-4b90-2732-08da1860e67f
-x-ms-traffictypediagnostic: MWHPR11MB1342:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB1342DAEEBC2C77333858E61387E69@MWHPR11MB1342.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5TboNpROwnWvN3wHR4ERcdAVm4wW+AWgzuRRHU4KHMHWjNBX+QdKY2i8AU1t3MJhlPEjgsz8AvWxm7RpUPDrq5We31zlq1k5W3NlB28w7GcfPPRgg3J5w7Y/BksdsO4PoT9NWYnvK4NlsxbEEIaFmb5Qyd2rdgx35YYuK/Ik2BJJ1Vel/28UeSLV72G44Qcf8Qsyl1CKnNl/v1wGxPc4Rc3Fi48zjHibLxOib2q8iKLqLRpKDgn8lsvc9eD9rTGqEHYl7ReObCMPZeWf50lmLyKeEKb/vRbe5dOKA456dUH9JeI1euxO8ATalkfccJG9iBcl3gz0Zb4VuMmvX/MGQCqugFeb0q0XRkPNc7DaXS5zlNo12xl/v9fbSlP5APTIXWnTphKe6G8w6X+psPKCn5tT6dapYux01nP3GXwVH2AqTk0XMTx3uGHoUUedZJoyOTwkAXr1aWw6QYP03108p3VxKusHukE7ERlOf31lXTdNalz4H46SHP7PyAHvmlpFv6FOrZUK6AYrASZlNeJLcvdhpYr1NlSDbMubjkPAObbkA03XpvsEPFZnP3gSeBbHuSMYKUZWPAqgUqPxy/SPt4OpV1+jkiJdzaluOwA9z/llaDXXnEAuRL4/Uatf6ldoemyZKbKzcxgiTKuRduMaR6fs2AwlueCTCJg7O9dSsXYrDRg69VzH8ple+7dUEw8pr+8XzMHCuQReZR9uczXvLTro8CwR9/RnXKyMm18plY+hhwmPD+4yPMf5Fsoml/kXcZymHjp7PTTRHoWVruCSTa8ClPsFGmxZHpDLhwYXwu2U7ZeXF+tem4H4wbUHzJSfHY8ncGClfo3184xnmIULZ16lmT01GEAaXkybbl8k/c0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(86362001)(4326008)(31686004)(31696002)(8936002)(2906002)(5660300002)(64756008)(66446008)(66476007)(66556008)(36756003)(8676002)(91956017)(66946007)(76116006)(186003)(508600001)(6486002)(966005)(122000001)(26005)(71200400001)(110136005)(54906003)(316002)(38100700002)(38070700005)(2616005)(6512007)(6506007)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MFRVOXVYcVRCNnI3NUdlSVVJQXJaeklFZzhySE9oa0RjbmdDdERFN1BWUE93?=
- =?utf-8?B?TFUzQXFnRUd0MVQ0T1IwTktIUEs2LzMyMHEwY1dXeis1eXI3Rlc4UjBOUjFV?=
- =?utf-8?B?dFhyUXp5TEtDaDNNN2JON05xcCszUUVCNzdBeDZrcW8rUGRBdDBhM0lrellv?=
- =?utf-8?B?VFJHWDVLN3FNQjFrYUFTaE8xUXpiL0dsVG5NOVlVc3VMRS9sWms3MldaSTVI?=
- =?utf-8?B?WXBNK3NiMFl3WVlURkdzN1Y1T3BkZFg4cVdpenpFRXUvWDc0dDNmUGgyNG96?=
- =?utf-8?B?Vy80SXhxZTliU2JtblRnZnl3eEpCTm9QRHM5bzc2QVlYWk1HRThWbzk5ZGRN?=
- =?utf-8?B?VXc4d1djVFRNa2MxMExqdTl1a0hrZlpISkQxNnlYN0k0bHNWbERpVGwrV0F3?=
- =?utf-8?B?R2NlMUFZNi9ac0JqVzFrejhCS2dacWNPYnlRZ0FlL3ZNZVk4SmpMTXNseElq?=
- =?utf-8?B?WHVWMjlJbWVBR1h3SGxnZExudHpVMVYzT1k4MUFBOHQyRzZjd1ZGc0pMcWpV?=
- =?utf-8?B?NmcrZEJLMmQ2MG51K1VuYzRnWXVDMWZ4VFlDd1RjTVVoOGZGd0VKM3ZTUm9D?=
- =?utf-8?B?ZUVjMnJOUDNNM3ZFaEY1UGtCeEE0Mmd6TC9id2haRC85Q0Qwc3RaUGVvaFl2?=
- =?utf-8?B?dWFVYzBBc0xGWldHK0xuUEZKbDlLSnoxLzFEd2JjWWZYaFJ6V1MxR2p0TW85?=
- =?utf-8?B?bE43WFg5WFIzajF2RnZWOFZqMjVmSXNJSnpseENGcWZkVjlRQ09qRUtsSlJY?=
- =?utf-8?B?cE4rYmp4Z0d5T1pVOC9MSVB4YVRMakNnKzdLam9XM1FBR1hBT2VNTHVIb1R0?=
- =?utf-8?B?bEhZdDArMVFGRjdyVXplaHdkcmxMVGJxUUtlRnkyWEllam0reXJSU0VEdmxU?=
- =?utf-8?B?VVI2Zk9FdWZhMXZ6UFFpUk9iVXUwZ2JSVkNHbHBpejJBL2UwcmNGT0VtNkhR?=
- =?utf-8?B?ZEUxc2hhSWNUajIzYU80dTM4dG1nVFRQZGFCRFkxdGQ5LzBoTVErRjNubHEx?=
- =?utf-8?B?SkZjY0NVVDJKb1RDeUc4SkdpZ0E1V3I2MGlpY0RoVFBCU0VjMy9TL0EyL1Iv?=
- =?utf-8?B?d3BGbmJQUGZjMExnc3gyTk1YWEFnYWd3Lzh2ZHcwdmJsYytFdzZEZmJlN1Z4?=
- =?utf-8?B?eFkrUFVmeUo1c0FjUmJyYjRNblpMUFlJbG1reEVJWWQyK2l6K3g0TzdIY1NO?=
- =?utf-8?B?WENiN2g5VEphN1E4S0prSVhoMFNYQXkvang3cWlaZXk3TVg5Q3RFMmh1bVBr?=
- =?utf-8?B?ZERYK2IwR1FpL3VLUUF1Q3NZd3JBVkpNUUpYRFVCSjNUSWNsSHR5V29SY05C?=
- =?utf-8?B?SDFOUlUyU29pZ3IzVzM5V3Erb2k5djgrcWhJZHBYcGpsM1BKaUVBREw0N1Nr?=
- =?utf-8?B?M2JXUjZuQ1BFSWtpZ0lNOVIydmNWdFR0eEoxM016ZGIrcGFPVXVnUS9YanVs?=
- =?utf-8?B?U0xuWkdQNGxxa1NXcGl6VGZiR3V4ZWRnazZZR1NEejRBZVAwODdJK1JDRUVh?=
- =?utf-8?B?UTgwUU5zTk1wNkp0WG1OaWlSWW5MRzZHS09XTFVUbzZhNmlha2M4OWtMdGJk?=
- =?utf-8?B?TzhURFRHWjV1SHdlNG1wNUZFbi9zVmw1YURIaThOcWtyaXRPaXdJa2xkemRa?=
- =?utf-8?B?WEM5UXRGeXRXRnBwVUNDdHJtU3pCU0hVWkN5ZDFnNzlrZHlyWWRVY0lQZHNr?=
- =?utf-8?B?V1VyY1h0a0VzaEliZkw5Nm5BM0Y2TUowTHpxOW1ML1ptTDd2UU5yL1ZseDEz?=
- =?utf-8?B?SjNzSW5MMlNBODZZdlQwSExCRzdTdFo0aGRLVUU0OXhCcnR4cXpMWC9yS1Rt?=
- =?utf-8?B?OEZ1Z3VnalY0VGZxVVFXYVRjVWpuTHdLeExnRnZsMkdCYjVnUFFoR0Nqa3NF?=
- =?utf-8?B?QWlnZWFVQWZwd0NzdGJoaWR0OW0yWnNoQU1jYXhjemdhenNvZ0k2ZmR1bkNs?=
- =?utf-8?B?cFVyU0dCY3F3TFlNcFkxRkV6Skp2TUVtQ1o4dTFNYkZKYng1V09GMlVaZUl1?=
- =?utf-8?B?a2c1eGVxNGlOcTBHbW5XbUh2R09BbEVPTzQ0SnpkZ3F3bWJEVFpRZ0wxdEMx?=
- =?utf-8?B?T00zRVYrOWVZSlVpM1d4aWNRNEtQV05Ibm9wQW5BbzdvSVBWcjBmSWs0NHEr?=
- =?utf-8?B?UFlidnhPWUlRcjd2cVhkc2RWTDFTdXErclpJOHhYT1BtbFhLTkNOaGswNjh3?=
- =?utf-8?B?WkJhR3RIanp3QmoyTjdNdVpHaklBNU1xemZSOFp3dGh5QU1na1pNRTR3bTkw?=
- =?utf-8?B?OTJ5RzE4MUdNTXR0QUN5Ny9OUitpcXFmVXJKQ3FRVHM3akxOQ0xMb1BkSjJj?=
- =?utf-8?B?QzF0NkpSb0dJOFdZQiswc1UraXdCZXhvbCtWNDI4Y2ZlTGZTSDIwSlJKbXJO?=
- =?utf-8?Q?ZHt7fJndZu5kwr7s=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <895E99788E85084D99826A8FEE7EE0AD@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] ARM: samsung: Fixes for v5.18 (current cycle)
+Date: Thu,  7 Apr 2022 10:05:45 +0200
+Message-Id: <20220407080545.112290-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f381732-65c8-4b90-2732-08da1860e67f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2022 06:36:08.8261
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7qwUKjdD0M9KnbmxTRTp1U+mzxWZ4ZtZpt3IzfwaeLQcF8zu53xT8cT9ZKl4lxpex6L4AjWvgP+YRMbwZD6XCQDLL+uqX0TJJFLt4aVbsZA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1342
+Content-Transfer-Encoding: 8bit
 
-T24gMDYuMDQuMjAyMiAyMjowOSwgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlM
-OiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cg
-dGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gQm9vbGVhbiBwcm9wZXJ0aWVzIGluIERUIGFyZSBw
-cmVzZW50IG9yIG5vdCBwcmVzZW50IGFuZCBkb24ndCB0YWtlIGEgdmFsdWUuDQo+IEEgcHJvcGVy
-dHkgc3VjaCBhcyAnZm9vID0gPDA+OycgZXZhbHVhdGVkIHRvIHRydWUuIElPVywgdGhlIHZhbHVl
-IGRvZXNuJ3QNCj4gbWF0dGVyLg0KPiANCj4gSXQgbWF5IGhhdmUgYmVlbiBpbnRlbmRlZCB0aGF0
-IDAgdmFsdWVzIGFyZSBmYWxzZSwgYnV0IHRoZXJlIGlzIG5vIGNoYW5nZQ0KPiBpbiBiZWhhdmlv
-ciB3aXRoIHRoaXMgcGF0Y2guDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBSb2IgSGVycmluZyA8cm9i
-aEBrZXJuZWwub3JnPg0KDQpSZXZpZXdlZC1ieTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6
-bmVhQG1pY3JvY2hpcC5jb20+DQoNCg0KPiAtLS0NCj4gQ2FuIHNvbWVvbmUgYXBwbHkgdGhpcyBm
-b3IgNS4xOCBwbGVhc2UuDQo+IA0KPiAgYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1raXpib3gzLWhz
-LmR0cyAgICAgIHwgMiArLQ0KPiAgYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1raXpib3gzX2NvbW1v
-bi5kdHNpIHwgMiArLQ0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVs
-ZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1raXpi
-b3gzLWhzLmR0cyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEta2l6Ym94My1ocy5kdHMNCj4gaW5k
-ZXggMjc5OWIyYTFmNGQyLi5mN2Q5MGNmMWJiNzcgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtL2Jv
-b3QvZHRzL2F0OTEta2l6Ym94My1ocy5kdHMNCj4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5
-MS1raXpib3gzLWhzLmR0cw0KPiBAQCAtMjI1LDcgKzIyNSw3IEBAIHBpbmN0cmxfcGlvX3piZV9y
-c3Q6IGdwaW9femJlX3JzdCB7DQo+ICAgICAgICAgICAgICAgICBwaW5jdHJsX3Bpb19pb19yZXNl
-dDogZ3Bpb19pb19yZXNldCB7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIHBpbm11eCA9IDxQ
-SU5fUEIzMF9fR1BJTz47DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIGJpYXMtZGlzYWJsZTsN
-Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgZHJpdmUtb3Blbi1kcmFpbiA9IDwxPjsNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgZHJpdmUtb3Blbi1kcmFpbjsNCj4gICAgICAgICAgICAgICAg
-ICAgICAgICAgb3V0cHV0LWxvdzsNCj4gICAgICAgICAgICAgICAgIH07DQo+ICAgICAgICAgICAg
-ICAgICBwaW5jdHJsX3Bpb19pbnB1dDogZ3Bpb19pbnB1dCB7DQo+IGRpZmYgLS1naXQgYS9hcmNo
-L2FybS9ib290L2R0cy9hdDkxLWtpemJveDNfY29tbW9uLmR0c2kgYi9hcmNoL2FybS9ib290L2R0
-cy9hdDkxLWtpemJveDNfY29tbW9uLmR0c2kNCj4gaW5kZXggYWJlMjdhZGZhNGQ2Li40NjU2NjQ2
-Mjg0MTkgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2F0OTEta2l6Ym94M19jb21t
-b24uZHRzaQ0KPiArKysgYi9hcmNoL2FybS9ib290L2R0cy9hdDkxLWtpemJveDNfY29tbW9uLmR0
-c2kNCj4gQEAgLTIxMSw3ICsyMTEsNyBAQCBwaW5jdHJsX2ZseDRfZGVmYXVsdDogZmx4NF9pMmM2
-X2RlZmF1bHQgew0KPiAgICAgICAgICAgICAgICAgcGlubXV4ID0gPFBJTl9QRDEyX19GTEVYQ09N
-NF9JTzA+LCAvL0RBVEENCj4gICAgICAgICAgICAgICAgIDxQSU5fUEQxM19fRkxFWENPTTRfSU8x
-PjsgLy9DTEsNCj4gICAgICAgICAgICAgICAgIGJpYXMtZGlzYWJsZTsNCj4gLSAgICAgICAgICAg
-ICAgIGRyaXZlLW9wZW4tZHJhaW4gPSA8MT47DQo+ICsgICAgICAgICAgICAgICBkcml2ZS1vcGVu
-LWRyYWluOw0KPiAgICAgICAgIH07DQo+IA0KPiAgICAgICAgIHBpbmN0cmxfcHdtMCB7DQo+IC0t
-DQo+IDIuMzIuMA0KPiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fDQo+IGxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0DQo+IGxpbnV4LWFy
-bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwNCg0K
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+Hi,
+
+For the v5.18, please.
+
+Best regards,
+Krzysztof
+
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-fixes-5.18
+
+for you to fetch changes up to 1a9f338f9cf96f8338d5592dee5fce222929e4f7:
+
+  MAINTAINERS: update Krzysztof Kozlowski's email to Linaro (2022-04-04 15:43:20 +0200)
+
+----------------------------------------------------------------
+Samsung fixes for v5.18
+
+Update Krzysztof Kozlowski's email address in multiple maintainer
+entries.  The old one @canonical.com bounces already.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (2):
+      dt-bindings: update Krzysztof Kozlowski's email
+      MAINTAINERS: update Krzysztof Kozlowski's email to Linaro
+
+ .../bindings/clock/samsung,exynos-audss-clock.yaml |  2 +-
+ .../bindings/clock/samsung,exynos-clock.yaml       |  2 +-
+ .../bindings/clock/samsung,exynos-ext-clock.yaml   |  2 +-
+ .../clock/samsung,exynos4412-isp-clock.yaml        |  2 +-
+ .../bindings/clock/samsung,exynos5260-clock.yaml   |  2 +-
+ .../bindings/clock/samsung,exynos5410-clock.yaml   |  2 +-
+ .../bindings/clock/samsung,exynos5433-clock.yaml   |  2 +-
+ .../bindings/clock/samsung,exynos7-clock.yaml      |  2 +-
+ .../bindings/clock/samsung,exynos7885-clock.yaml   |  2 +-
+ .../bindings/clock/samsung,exynos850-clock.yaml    |  2 +-
+ .../devicetree/bindings/clock/samsung,s2mps11.yaml |  2 +-
+ .../clock/samsung,s5pv210-audss-clock.yaml         |  2 +-
+ .../bindings/clock/samsung,s5pv210-clock.yaml      |  2 +-
+ .../devfreq/event/samsung,exynos-nocp.yaml         |  2 +-
+ .../devfreq/event/samsung,exynos-ppmu.yaml         |  2 +-
+ .../display/samsung/samsung,exynos-hdmi-ddc.yaml   |  2 +-
+ .../display/samsung/samsung,exynos-hdmi.yaml       |  2 +-
+ .../display/samsung/samsung,exynos-mixer.yaml      |  2 +-
+ .../display/samsung/samsung,exynos5433-decon.yaml  |  2 +-
+ .../display/samsung/samsung,exynos5433-mic.yaml    |  2 +-
+ .../display/samsung/samsung,exynos7-decon.yaml     |  2 +-
+ .../bindings/display/samsung/samsung,fimd.yaml     |  2 +-
+ .../devicetree/bindings/extcon/maxim,max77843.yaml |  2 +-
+ .../devicetree/bindings/hwmon/lltc,ltc4151.yaml    |  2 +-
+ .../bindings/hwmon/microchip,mcp3021.yaml          |  2 +-
+ .../devicetree/bindings/hwmon/sensirion,sht15.yaml |  2 +-
+ .../devicetree/bindings/hwmon/ti,tmp102.yaml       |  2 +-
+ .../devicetree/bindings/hwmon/ti,tmp108.yaml       |  2 +-
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml       |  2 +-
+ .../bindings/i2c/samsung,s3c2410-i2c.yaml          |  2 +-
+ .../samsung,exynos4210-combiner.yaml               |  2 +-
+ .../devicetree/bindings/leds/maxim,max77693.yaml   |  2 +-
+ .../bindings/memory-controllers/brcm,dpfe-cpu.yaml |  2 +-
+ .../ddr/jedec,lpddr2-timings.yaml                  |  2 +-
+ .../memory-controllers/ddr/jedec,lpddr2.yaml       |  2 +-
+ .../ddr/jedec,lpddr3-timings.yaml                  |  2 +-
+ .../memory-controllers/ddr/jedec,lpddr3.yaml       |  2 +-
+ .../marvell,mvebu-sdram-controller.yaml            |  2 +-
+ .../qca,ath79-ddr-controller.yaml                  |  2 +-
+ .../memory-controllers/renesas,h8300-bsc.yaml      |  2 +-
+ .../memory-controllers/samsung,exynos5422-dmc.yaml |  2 +-
+ .../memory-controllers/synopsys,ddrc-ecc.yaml      |  2 +-
+ .../memory-controllers/ti,da8xx-ddrctl.yaml        |  2 +-
+ .../devicetree/bindings/mfd/maxim,max14577.yaml    |  2 +-
+ .../devicetree/bindings/mfd/maxim,max77686.yaml    |  2 +-
+ .../devicetree/bindings/mfd/maxim,max77693.yaml    |  2 +-
+ .../devicetree/bindings/mfd/maxim,max77802.yaml    |  2 +-
+ .../devicetree/bindings/mfd/maxim,max77843.yaml    |  2 +-
+ .../bindings/mfd/samsung,exynos5433-lpass.yaml     |  2 +-
+ .../devicetree/bindings/mfd/samsung,s2mpa01.yaml   |  2 +-
+ .../devicetree/bindings/mfd/samsung,s2mps11.yaml   |  2 +-
+ .../devicetree/bindings/mfd/samsung,s5m8767.yaml   |  2 +-
+ .../devicetree/bindings/net/nfc/marvell,nci.yaml   |  2 +-
+ .../devicetree/bindings/net/nfc/nxp,nci.yaml       |  2 +-
+ .../devicetree/bindings/net/nfc/nxp,pn532.yaml     |  2 +-
+ .../devicetree/bindings/net/nfc/nxp,pn544.yaml     |  2 +-
+ .../devicetree/bindings/net/nfc/st,st-nci.yaml     |  2 +-
+ .../devicetree/bindings/net/nfc/st,st21nfca.yaml   |  2 +-
+ .../devicetree/bindings/net/nfc/st,st95hf.yaml     |  2 +-
+ .../devicetree/bindings/net/nfc/ti,trf7970a.yaml   |  2 +-
+ .../bindings/phy/samsung,dp-video-phy.yaml         |  2 +-
+ .../bindings/phy/samsung,exynos-hdmi-phy.yaml      |  2 +-
+ .../bindings/phy/samsung,exynos5250-sata-phy.yaml  |  2 +-
+ .../bindings/phy/samsung,mipi-video-phy.yaml       |  2 +-
+ .../devicetree/bindings/phy/samsung,usb2-phy.yaml  |  2 +-
+ .../bindings/phy/samsung,usb3-drd-phy.yaml         |  2 +-
+ .../pinctrl/samsung,pinctrl-gpio-bank.yaml         |  2 +-
+ .../bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml |  2 +-
+ .../pinctrl/samsung,pinctrl-wakeup-interrupt.yaml  |  2 +-
+ .../bindings/pinctrl/samsung,pinctrl.yaml          |  2 +-
+ .../bindings/power/supply/maxim,max14577.yaml      |  2 +-
+ .../bindings/power/supply/maxim,max77693.yaml      |  2 +-
+ .../bindings/regulator/maxim,max14577.yaml         |  2 +-
+ .../bindings/regulator/maxim,max77686.yaml         |  2 +-
+ .../bindings/regulator/maxim,max77693.yaml         |  2 +-
+ .../bindings/regulator/maxim,max77802.yaml         |  2 +-
+ .../bindings/regulator/maxim,max77843.yaml         |  2 +-
+ .../bindings/regulator/maxim,max8952.yaml          |  2 +-
+ .../bindings/regulator/maxim,max8973.yaml          |  2 +-
+ .../bindings/regulator/maxim,max8997.yaml          |  2 +-
+ .../bindings/regulator/samsung,s2mpa01.yaml        |  2 +-
+ .../bindings/regulator/samsung,s2mps11.yaml        |  2 +-
+ .../bindings/regulator/samsung,s2mps13.yaml        |  2 +-
+ .../bindings/regulator/samsung,s2mps14.yaml        |  2 +-
+ .../bindings/regulator/samsung,s2mps15.yaml        |  2 +-
+ .../bindings/regulator/samsung,s2mpu02.yaml        |  2 +-
+ .../bindings/regulator/samsung,s5m8767.yaml        |  2 +-
+ .../bindings/rng/samsung,exynos5250-trng.yaml      |  2 +-
+ .../devicetree/bindings/rng/timeriomem_rng.yaml    |  2 +-
+ .../bindings/soc/samsung/exynos-usi.yaml           |  2 +-
+ .../devicetree/bindings/sound/samsung,arndale.yaml |  2 +-
+ .../bindings/sound/samsung,smdk5250.yaml           |  2 +-
+ .../devicetree/bindings/sound/samsung,snow.yaml    |  2 +-
+ .../devicetree/bindings/sound/samsung,tm2.yaml     |  2 +-
+ .../bindings/spi/samsung,spi-peripheral-props.yaml |  2 +-
+ .../devicetree/bindings/spi/samsung,spi.yaml       |  2 +-
+ .../bindings/thermal/samsung,exynos-thermal.yaml   |  2 +-
+ .../bindings/usb/samsung,exynos-dwc3.yaml          |  2 +-
+ .../bindings/usb/samsung,exynos-usb2.yaml          |  2 +-
+ MAINTAINERS                                        | 36 +++++++++++-----------
+ 100 files changed, 117 insertions(+), 117 deletions(-)
