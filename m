@@ -4,75 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26316C433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 08:05:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E094C433F5
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 08:14:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E14FAC385A8; Thu,  7 Apr 2022 08:05:51 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 1472AC385A9; Thu,  7 Apr 2022 08:14:56 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4BD1CC385A4
-	for <soc@kernel.org>; Thu,  7 Apr 2022 08:05:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BD1CC385A4
+	by smtp.kernel.org (Postfix) with ESMTPS id 5B078C385A0
+	for <soc@kernel.org>; Thu,  7 Apr 2022 08:14:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5B078C385A0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id qh7so9082015ejb.11
-        for <soc@kernel.org>; Thu, 07 Apr 2022 01:05:50 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id d10so5532829edj.0
+        for <soc@kernel.org>; Thu, 07 Apr 2022 01:14:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4mBqmv7n4vaPJNzqJP9XRBObc2z1tM4karynGs0Phtk=;
-        b=Qq1qfnd9npA9nHTudyH/BT6S+kcCLVHNf9FrbefprUkxea94X8hHKsnDNg+5ccEGxg
-         r87XTfa5dzAOXyeJTgAkuMot3slOlmPogMwQ8ucdoxREihf/skk2LM/xagYN39q3PdRf
-         xBbsjsQsh5y4SbVMM59UZ4mUCez68EVSWLHdq50/ZCHxPZb32E21a4WnjkPJG2VwSd/s
-         HVI6IEgv2O7gO+NAkdITQg9KnvdviEUjAMCF9rnluidnZIwPSBSTPlbvMllHW9oBbxfD
-         fQHxbmFsSaxJ3f64QMIHsEpnJsN+s/IN5/MUdLDcT3Dn3QzfAgwadsnppVAHALW1JUnY
-         Vtew==
+        bh=uuPCrvHDkvmkaWKFBJeZIWghlVm/xXawdQ6pGCSJBsY=;
+        b=X76cHWHH+dKO15k7nRs696qFHOComkQcq5VyssHr/p36pNENkVdOithAKx3GTruA4l
+         u8wb0yE8g7u/vEm4BZ+ublqst3AvzTGVsyPmFehSAAm+aG5VLzh460t0e5CSLcI2GxNh
+         NgHj5lWAjA2kuV9/sY1lhGnzw8B0p/mFK7ddFasN9xIJuLaxhj1XPVMwb0aKLWP7AnyS
+         cZLDWhiPZ+3mW7ie8f2UeMtZjCTuj8hDcPdG9RW+aLE5/QRmjyWVx57t6M53EqQ1jJAJ
+         zcqqCy8Sqdid/tnG0Qfr/ORHTNN8/H+BBdW+K6TISwmSyPJqLrI8Bl/drRUqMZf0H0iS
+         BifA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4mBqmv7n4vaPJNzqJP9XRBObc2z1tM4karynGs0Phtk=;
-        b=WMFWLeAxXfvc9yqKUPXlndVweRcAOL56cIMcWmctY1eablqBXdAdAMN6+A6V4XEMPg
-         5LqqiiYkPmwCIW8NqkcrWWMCrOy9KMfLsD+eeKkwiDPBkEDCTJHUQ7Q/rmJ347nSVIgp
-         Dza18XniJSsTFAtr1LzXxBMBa+Xs0A0Msz2Vta/KG8a971PVbom2DXknmj5wfYYKqgTp
-         qPTdXkCSn1UpQPmLZKFjsIvsN7D2TfNZDeEoR3oKlUKWWC9E6iWl0TgPqB9UZ1xiNK76
-         vR9SUYfxA7FzvqUV0ydVxbAPl+IbS2ok5JnW6yfWXFq/RhZBsxTCdQiryf7MEdg9qWwF
-         P4WA==
-X-Gm-Message-State: AOAM531osXKN/r5cUahqvawh4Ss+IzcG55An160VF+xgMQqNHxep3I/X
-	nPlbfEQ37BBaIB0gz2Yw7STwFw==
-X-Google-Smtp-Source: ABdhPJyHdAGSEzniLyxDIIzfiDZCPSJ8ph+g9N9poqt0EGINfDqa0e4lfi/998p+LVKaG22T2l1KCA==
-X-Received: by 2002:a17:907:7255:b0:6e7:e853:73b8 with SMTP id ds21-20020a170907725500b006e7e85373b8mr12655082ejc.172.1649318748546;
-        Thu, 07 Apr 2022 01:05:48 -0700 (PDT)
+        bh=uuPCrvHDkvmkaWKFBJeZIWghlVm/xXawdQ6pGCSJBsY=;
+        b=oKYbN6okWa1R/14kbO1OnK3EVZMcenZ5v5pJ/pV5iAD8JZ6/Q0+dUGhWMG82VsgwFD
+         ai6d1sqVByLH/IjpINNV2r/568fC9raWPKncpPHmjJbuy3YZ4HRSFFHlVvBhdN53nlyY
+         Kujvtjk/+CFElV8XGMVcFfQbyCQdAW7ghF7G9HcPOvbpqQgJrEcd8GG+Pa7SAMwhllWM
+         6U+W6yPJkyJHVVPLPwD/zb/y1/e9B0DjTBwKOSR91f5ehhR5YcHizIj+gB9jU9FPEVBo
+         0N0L4XjhzYDJ6HsRlNAWS2Vaw60k2VR821wTvk2jTRhUro43nlx0Sy/J61oyy1XFjYPJ
+         rGkw==
+X-Gm-Message-State: AOAM533DVkwQxopQfsSH16UGe6FAd83xAr5jVbVq1oO98sVj2oecndhc
+	OIl1aM5dVKQnsZS8jnr0Di+JI00FtmYiMDHv
+X-Google-Smtp-Source: ABdhPJwaxJSzvu7XogoiRn/oibfelC9c2fpnLOfco3bPP29ZKDL2pqIOiV7f5CgICkKrJMwAzRa8Qg==
+X-Received: by 2002:aa7:db18:0:b0:41c:e010:a07f with SMTP id t24-20020aa7db18000000b0041ce010a07fmr12822787eds.281.1649319292623;
+        Thu, 07 Apr 2022 01:14:52 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m14-20020a056402510e00b0041d0c0942adsm217575edd.52.2022.04.07.01.05.47
+        by smtp.gmail.com with ESMTPSA id u26-20020a17090626da00b006e7cb663277sm4956566ejc.90.2022.04.07.01.14.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 01:05:48 -0700 (PDT)
+        Thu, 07 Apr 2022 01:14:52 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
 	Arnd Bergmann <arnd@arndb.de>,
 	arm@kernel.org,
 	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] ARM: samsung: Fixes for v5.18 (current cycle)
-Date: Thu,  7 Apr 2022 10:05:45 +0200
-Message-Id: <20220407080545.112290-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] memory: Fixes for v5.18 (current cycle)
+Date: Thu,  7 Apr 2022 10:14:48 +0200
+Message-Id: <20220407081448.113208-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
 Hi,
 
-For the v5.18, please.
+Fixes for v5.18, please. One is recently introduced, others were already
+existing.
 
 Best regards,
 Krzysztof
@@ -84,121 +80,40 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-fixes-5.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-fixes-5.18
 
-for you to fetch changes up to 1a9f338f9cf96f8338d5592dee5fce222929e4f7:
+for you to fetch changes up to dd8adc713b1656ce469702eba8fc1adc4db91dc4:
 
-  MAINTAINERS: update Krzysztof Kozlowski's email to Linaro (2022-04-04 15:43:20 +0200)
-
-----------------------------------------------------------------
-Samsung fixes for v5.18
-
-Update Krzysztof Kozlowski's email address in multiple maintainer
-entries.  The old one @canonical.com bounces already.
+  memory: fsl_ifc: populate child nodes of buses and mfd devices (2022-04-06 09:39:16 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      dt-bindings: update Krzysztof Kozlowski's email
-      MAINTAINERS: update Krzysztof Kozlowski's email to Linaro
+Memory controller drivers - fixes for v5.18
 
- .../bindings/clock/samsung,exynos-audss-clock.yaml |  2 +-
- .../bindings/clock/samsung,exynos-clock.yaml       |  2 +-
- .../bindings/clock/samsung,exynos-ext-clock.yaml   |  2 +-
- .../clock/samsung,exynos4412-isp-clock.yaml        |  2 +-
- .../bindings/clock/samsung,exynos5260-clock.yaml   |  2 +-
- .../bindings/clock/samsung,exynos5410-clock.yaml   |  2 +-
- .../bindings/clock/samsung,exynos5433-clock.yaml   |  2 +-
- .../bindings/clock/samsung,exynos7-clock.yaml      |  2 +-
- .../bindings/clock/samsung,exynos7885-clock.yaml   |  2 +-
- .../bindings/clock/samsung,exynos850-clock.yaml    |  2 +-
- .../devicetree/bindings/clock/samsung,s2mps11.yaml |  2 +-
- .../clock/samsung,s5pv210-audss-clock.yaml         |  2 +-
- .../bindings/clock/samsung,s5pv210-clock.yaml      |  2 +-
- .../devfreq/event/samsung,exynos-nocp.yaml         |  2 +-
- .../devfreq/event/samsung,exynos-ppmu.yaml         |  2 +-
- .../display/samsung/samsung,exynos-hdmi-ddc.yaml   |  2 +-
- .../display/samsung/samsung,exynos-hdmi.yaml       |  2 +-
- .../display/samsung/samsung,exynos-mixer.yaml      |  2 +-
- .../display/samsung/samsung,exynos5433-decon.yaml  |  2 +-
- .../display/samsung/samsung,exynos5433-mic.yaml    |  2 +-
- .../display/samsung/samsung,exynos7-decon.yaml     |  2 +-
- .../bindings/display/samsung/samsung,fimd.yaml     |  2 +-
- .../devicetree/bindings/extcon/maxim,max77843.yaml |  2 +-
- .../devicetree/bindings/hwmon/lltc,ltc4151.yaml    |  2 +-
- .../bindings/hwmon/microchip,mcp3021.yaml          |  2 +-
- .../devicetree/bindings/hwmon/sensirion,sht15.yaml |  2 +-
- .../devicetree/bindings/hwmon/ti,tmp102.yaml       |  2 +-
- .../devicetree/bindings/hwmon/ti,tmp108.yaml       |  2 +-
- .../devicetree/bindings/i2c/i2c-exynos5.yaml       |  2 +-
- .../bindings/i2c/samsung,s3c2410-i2c.yaml          |  2 +-
- .../samsung,exynos4210-combiner.yaml               |  2 +-
- .../devicetree/bindings/leds/maxim,max77693.yaml   |  2 +-
- .../bindings/memory-controllers/brcm,dpfe-cpu.yaml |  2 +-
- .../ddr/jedec,lpddr2-timings.yaml                  |  2 +-
- .../memory-controllers/ddr/jedec,lpddr2.yaml       |  2 +-
- .../ddr/jedec,lpddr3-timings.yaml                  |  2 +-
- .../memory-controllers/ddr/jedec,lpddr3.yaml       |  2 +-
- .../marvell,mvebu-sdram-controller.yaml            |  2 +-
- .../qca,ath79-ddr-controller.yaml                  |  2 +-
- .../memory-controllers/renesas,h8300-bsc.yaml      |  2 +-
- .../memory-controllers/samsung,exynos5422-dmc.yaml |  2 +-
- .../memory-controllers/synopsys,ddrc-ecc.yaml      |  2 +-
- .../memory-controllers/ti,da8xx-ddrctl.yaml        |  2 +-
- .../devicetree/bindings/mfd/maxim,max14577.yaml    |  2 +-
- .../devicetree/bindings/mfd/maxim,max77686.yaml    |  2 +-
- .../devicetree/bindings/mfd/maxim,max77693.yaml    |  2 +-
- .../devicetree/bindings/mfd/maxim,max77802.yaml    |  2 +-
- .../devicetree/bindings/mfd/maxim,max77843.yaml    |  2 +-
- .../bindings/mfd/samsung,exynos5433-lpass.yaml     |  2 +-
- .../devicetree/bindings/mfd/samsung,s2mpa01.yaml   |  2 +-
- .../devicetree/bindings/mfd/samsung,s2mps11.yaml   |  2 +-
- .../devicetree/bindings/mfd/samsung,s5m8767.yaml   |  2 +-
- .../devicetree/bindings/net/nfc/marvell,nci.yaml   |  2 +-
- .../devicetree/bindings/net/nfc/nxp,nci.yaml       |  2 +-
- .../devicetree/bindings/net/nfc/nxp,pn532.yaml     |  2 +-
- .../devicetree/bindings/net/nfc/nxp,pn544.yaml     |  2 +-
- .../devicetree/bindings/net/nfc/st,st-nci.yaml     |  2 +-
- .../devicetree/bindings/net/nfc/st,st21nfca.yaml   |  2 +-
- .../devicetree/bindings/net/nfc/st,st95hf.yaml     |  2 +-
- .../devicetree/bindings/net/nfc/ti,trf7970a.yaml   |  2 +-
- .../bindings/phy/samsung,dp-video-phy.yaml         |  2 +-
- .../bindings/phy/samsung,exynos-hdmi-phy.yaml      |  2 +-
- .../bindings/phy/samsung,exynos5250-sata-phy.yaml  |  2 +-
- .../bindings/phy/samsung,mipi-video-phy.yaml       |  2 +-
- .../devicetree/bindings/phy/samsung,usb2-phy.yaml  |  2 +-
- .../bindings/phy/samsung,usb3-drd-phy.yaml         |  2 +-
- .../pinctrl/samsung,pinctrl-gpio-bank.yaml         |  2 +-
- .../bindings/pinctrl/samsung,pinctrl-pins-cfg.yaml |  2 +-
- .../pinctrl/samsung,pinctrl-wakeup-interrupt.yaml  |  2 +-
- .../bindings/pinctrl/samsung,pinctrl.yaml          |  2 +-
- .../bindings/power/supply/maxim,max14577.yaml      |  2 +-
- .../bindings/power/supply/maxim,max77693.yaml      |  2 +-
- .../bindings/regulator/maxim,max14577.yaml         |  2 +-
- .../bindings/regulator/maxim,max77686.yaml         |  2 +-
- .../bindings/regulator/maxim,max77693.yaml         |  2 +-
- .../bindings/regulator/maxim,max77802.yaml         |  2 +-
- .../bindings/regulator/maxim,max77843.yaml         |  2 +-
- .../bindings/regulator/maxim,max8952.yaml          |  2 +-
- .../bindings/regulator/maxim,max8973.yaml          |  2 +-
- .../bindings/regulator/maxim,max8997.yaml          |  2 +-
- .../bindings/regulator/samsung,s2mpa01.yaml        |  2 +-
- .../bindings/regulator/samsung,s2mps11.yaml        |  2 +-
- .../bindings/regulator/samsung,s2mps13.yaml        |  2 +-
- .../bindings/regulator/samsung,s2mps14.yaml        |  2 +-
- .../bindings/regulator/samsung,s2mps15.yaml        |  2 +-
- .../bindings/regulator/samsung,s2mpu02.yaml        |  2 +-
- .../bindings/regulator/samsung,s5m8767.yaml        |  2 +-
- .../bindings/rng/samsung,exynos5250-trng.yaml      |  2 +-
- .../devicetree/bindings/rng/timeriomem_rng.yaml    |  2 +-
- .../bindings/soc/samsung/exynos-usi.yaml           |  2 +-
- .../devicetree/bindings/sound/samsung,arndale.yaml |  2 +-
- .../bindings/sound/samsung,smdk5250.yaml           |  2 +-
- .../devicetree/bindings/sound/samsung,snow.yaml    |  2 +-
- .../devicetree/bindings/sound/samsung,tm2.yaml     |  2 +-
- .../bindings/spi/samsung,spi-peripheral-props.yaml |  2 +-
- .../devicetree/bindings/spi/samsung,spi.yaml       |  2 +-
- .../bindings/thermal/samsung,exynos-thermal.yaml   |  2 +-
- .../bindings/usb/samsung,exynos-dwc3.yaml          |  2 +-
- .../bindings/usb/samsung,exynos-usb2.yaml          |  2 +-
- MAINTAINERS                                        | 36 +++++++++++-----------
- 100 files changed, 117 insertions(+), 117 deletions(-)
+Issues in v5.18:
+1. Freescale/NXP: fix populating children of Integrated Flash Controller
+   DT nodes.
+
+Issues existing before:
+1. Renesas: fix platform-device leak in probe's error path.
+2. Atmel: fix of_node reference leak in probe's error path.
+3. Synopsys: correct the bindings for snps,ddrc-3.80a (interrupts are
+   required).
+
+----------------------------------------------------------------
+Johan Hovold (1):
+      memory: renesas-rpc-if: fix platform-device leak in error path
+
+Li Yang (1):
+      memory: fsl_ifc: populate child nodes of buses and mfd devices
+
+Miaoqian Lin (1):
+      memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
+
+Sherry Sun (1):
+      dt-bindings: memory: snps,ddrc-3.80a compatible also need interrupts
+
+ .../memory-controllers/synopsys,ddrc-ecc.yaml      |  6 ++++--
+ drivers/memory/atmel-ebi.c                         | 23 ++++++++++++++++------
+ drivers/memory/fsl_ifc.c                           |  3 +--
+ drivers/memory/renesas-rpc-if.c                    | 10 +++++++++-
+ 4 files changed, 31 insertions(+), 11 deletions(-)
