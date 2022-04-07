@@ -1,60 +1,65 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68964C433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 12:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AF68C433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Apr 2022 12:50:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4854EC385A7; Thu,  7 Apr 2022 12:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7676EC385A4;
-	Thu,  7 Apr 2022 12:42:22 +0000 (UTC)
+	id 310D2C385B7; Thu,  7 Apr 2022 12:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1BF2EC385A0;
+	Thu,  7 Apr 2022 12:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649335344;
-	bh=26IrVvGkZCFmiRo7YFORqM9fXlgQUvYhK5fl4tUJq28=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iCj12DFKnlnxy17JAFdRqO5OF7nKcC4Uoi1PsIZiJAJWs/CgWOV1zjKLi5HVg1amG
-	 ORu5HjLUfCFe2TSy0lxNXkyulDoi0wQVza33GjaNcibKjqS4++KBGdDg6KWJtYMHa/
-	 ulaKMl6wknScBx5ap4anJLOQrCN9DEX29b2nNSfvf/ipAnBmfFe4/3hOMiMEPuLYjX
-	 oXlQy2NdvoxklVM0gdIlugNt+QVSzaeM9oNappV9Auqfo04IZaHRKbDyptt60XBuNE
-	 EAL33N3knooDZi5K3WgXf8OVQD5lLWJzgeS9NYIkrsbO0DJWQzVS5w2kyCZeVGmbVZ
-	 eFmLoDbj3AEXg==
-From: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	arm@kernel.org,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [GIT PULL] memory: Fixes for v5.18 (current cycle)
-Date: Thu,  7 Apr 2022 14:42:16 +0200
-Message-Id: <164933532419.2189563.5826663417623059896.b4-ty@arndb.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220407081448.113208-1-krzysztof.kozlowski@linaro.org>
-References: <20220407081448.113208-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
+	s=k20201202; t=1649335811;
+	bh=i39tq/87neAjAYpUoude+4Rq0BXVwXzuIkpxrY4u+a4=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=u9t5oRIzWEj7kgKO3pane19aGTLsJfn+l/RZv4vIAuGp0EuxGGupuXvoFnaTTqGBx
+	 pC3AyqtTxg459Vj+kMxUJ+JVuky//GRJcfvSk64GMXIAYBsmp/TEw6f/mJV2z2Fvzx
+	 noMUqiudeb/SQgweEBuDm7Lr3e6owYXp14t/bAuh4FCvEhx2kBq2lPnVuxh4cHPJWy
+	 idPzq94hWe7kPRrZDqzrPmGlJwQtEg06duFLxboxfGRj2k00xyhiOo8qu7WKpcFQIz
+	 FY5cwtr1scOjFnoauZmTsYDcHEUbsXjzVR8SDmgmND1ELOIFgJnOJHNvQ5HXYDSSsK
+	 BTSdks1fiWfzg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0BE9E8DBD1;
+	Thu,  7 Apr 2022 12:50:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Reset controller fixes for v5.18
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <164933581098.7761.16806169330205157736.git-patchwork-notify@kernel.org>
+Date: Thu, 07 Apr 2022 12:50:10 +0000
+References: <20220406153337.1265414-1-p.zabel@pengutronix.de>
+In-Reply-To: <20220406153337.1265414-1-p.zabel@pengutronix.de>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello:
 
-On Thu, 7 Apr 2022 10:14:48 +0200, Krzysztof Kozlowski wrote:
-> Fixes for v5.18, please. One is recently introduced, others were already
-> existing.
-> 
-> Best regards,
-> Krzysztof
-> 
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Wed,  6 Apr 2022 17:33:37 +0200 you wrote:
+> Dear arm-soc maintainers,
 > 
 > The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 > 
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
+> 
 > [...]
 
-Merged into arm/fixes, thanks!
+Here is the summary with links:
+  - [GIT,PULL] Reset controller fixes for v5.18
+    https://git.kernel.org/soc/soc/c/475acef9ed48
 
-merge commit: 44e4a2c75676eda875bf5da20709bfae62af9a99
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-       Arnd
+
