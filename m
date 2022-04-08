@@ -1,277 +1,342 @@
-Return-Path: <SRS0=l9PI=US=fujitsu.com=hasegawa-hitomi@kernel.org>
+Return-Path: <SRS0=BsUX=US=gmail.com=itaru.kitayama@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4CBDC433F5
-	for <soc@archiver.kernel.org>; Fri,  8 Apr 2022 10:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29903C433F5
+	for <soc@archiver.kernel.org>; Fri,  8 Apr 2022 10:44:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AD453C385AA; Fri,  8 Apr 2022 10:32:27 +0000 (UTC)
-Received: from esa18.fujitsucc.c3s2.iphmx.com (esa18.fujitsucc.c3s2.iphmx.com [216.71.158.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id DCDB3C385A9; Fri,  8 Apr 2022 10:44:35 +0000 (UTC)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4C767C385A1;
-	Fri,  8 Apr 2022 10:32:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C767C385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1649413946; x=1680949946;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=8SEbYrBgOyIV3v8EU5DTeb3nWg5J3X3w3EGjrrVMAzA=;
-  b=SBSCf/idXsHPw6mGoaSWApZ1mn8YbnvVBEgWr0Bth0H8ZyIVaiymDllH
-   QZ7FLhWLsyNs3Y8oiN/fY1pVCBtkwevIC3OTmTl3S96fW/x5b30lBb/Up
-   1H4jBSSpAHXU8b2wuV/dgBMlJXWSA8Iw8QmlyRsARM7dyDlSrAPGRL6mk
-   j+0EqAwTGD+NT1yHy5mVqSWBGxhOWt84ygLW9jfocfark8hV8cImrDDk1
-   Rsgr1RdmPqkaFkBiBf7a6fhY9RuEyFElYaXL2Gr9BunZb5IhyHLp+ovfu
-   6BbOdhewdzhTn72eiIgBKA2Fhj6RDKivyP2d2Wu8r9qI8XzOPQ8BRikZo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="54726668"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643641200"; 
-   d="scan'208";a="54726668"
-Received: from mail-tycjpn01lp2177.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.177])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 19:32:20 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jhY207AnXWiDk3nsTaFXIo5aQmZaujmtE+/BvKA9TDwXVUAtCSd3vDHJ+2DKYWq5QUHNAWYPYx6p6MM7dI98A9f4EnfcBJDwBJvb/r4JfbI3wVPROJCkz2vPQlpVsI9IqESbODtzVoEMm2dBkvgZb9//RmZgnuthc6TV5ZhpUUkV84mIsyZEMZZjkiPNjA2OyLCx0OekfcjdGExyVGV0WPQGBWNO6k6jf3kf0Pb53XB+Lf5JCeSiwnxbTULj6a5hTzYYgW3MmDLukHb8c2umvvblv20JavkxNy0/lD3+Lm8v2qYIsqKw9zTIbUZ64wqiccWTNiV9Qq1aoQZ+5jo9Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NdC54XSWxA9wtHjXVTeU06IQDWoCM3hbljZ9/QOYq3I=;
- b=NkV23UEP9qG4VGx8cprA0gsKQ5YD1A9hPYnelN87nEd2dE3JlSN3+q30jNwLlIcM0jaCqE1cWek6BcLGwMmYoLl0x/MQRh/uJBhaI6QKfB/9vSawXQxC0wF508uu7OLQTB8D45p9lKXdhARDVEzm/VMhB7Cy283BY+S5KC3ocNGx8LqVa/G7u23ctOey1j2w1cThmcllzgIWONepJtUM3jmNfNPNCZZ9OCflymsB2GbsplgiBWNwzHJJT8kGtcdByb16bLjJOhlKNXSBNogs6HbXDrQvIOf2RLMq1k25LnGmRVVtuH/8ZkmWbSWJNnJcL4mKabJDWAg1fnJ8qEmrJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
+	by smtp.kernel.org (Postfix) with ESMTPS id E2FDBC385A5;
+	Fri,  8 Apr 2022 10:44:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E2FDBC385A5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f51.google.com with SMTP id n5so6267532vsc.4;
+        Fri, 08 Apr 2022 03:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NdC54XSWxA9wtHjXVTeU06IQDWoCM3hbljZ9/QOYq3I=;
- b=Y1B4CTYBcAJWdT5X1tTzTPQ8Fe51mXzlk4WdXai4PP2ZnkwcFd89eXhASm0jfygwNF9JcMB1sT8Z69JqMkeSgDIB8Q12mKlR5KEoHGCQgssnngxirDtpDHpIwM1/DS4gYNMYpeymz2+RGVF9rqvQVHAEVCySXUZl3XFLIu6EqGw=
-Received: from OSZPR01MB7050.jpnprd01.prod.outlook.com (2603:1096:604:13e::5)
- by TYAPR01MB4784.jpnprd01.prod.outlook.com (2603:1096:404:12a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
- 2022 10:32:16 +0000
-Received: from OSZPR01MB7050.jpnprd01.prod.outlook.com
- ([fe80::a91e:d936:37ec:f656]) by OSZPR01MB7050.jpnprd01.prod.outlook.com
- ([fe80::a91e:d936:37ec:f656%4]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
- 10:32:16 +0000
-From: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-List-Id: <soc.lore.kernel.org>
-CC: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "soc@kernel.org" <soc@kernel.org>,
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-	"sumit.garg@linaro.org" <sumit.garg@linaro.org>, "arnd@arndb.de"
-	<arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>, "catalin.marinas@arm.com"
-	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
-	"jirislaby@kernel.org" <jirislaby@kernel.org>, "jason.wessel@windriver.com"
-	<jason.wessel@windriver.com>, "daniel.thompson@linaro.org"
-	<daniel.thompson@linaro.org>, "dianders@chromium.org"
-	<dianders@chromium.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "kgdb-bugreport@lists.sourceforge.net"
-	<kgdb-bugreport@lists.sourceforge.net>, "peterz@infradead.org"
-	<peterz@infradead.org>
-Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Thread-Topic: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Thread-Index: AQHYROFUWg6uBlnqVU2NIy0zBQeT5KzZYQIAgAdi+j8=
-Date: Fri, 8 Apr 2022 10:32:15 +0000
-Message-ID:
- <OSZPR01MB7050ED8D47839EAC9B4FC5BFEBE49@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
- <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com>
- <YkWVTEG5oFO82GPL@kroah.com>
-In-Reply-To: <YkWVTEG5oFO82GPL@kroah.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=True;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-04-08T10:32:14.684Z;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0;MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
-suggested_attachment_session_id: 3288d822-e269-7beb-e4b7-24d55e1c63bf
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 39e905fc-2b53-4b1c-2548-08da194b0d39
-x-ms-traffictypediagnostic: TYAPR01MB4784:EE_
-x-microsoft-antispam-prvs:
- <TYAPR01MB4784B81B8C06F5E9C772F28BEBE99@TYAPR01MB4784.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- b+ht22gJ1IYf+dUTJr/gvwA8w4VItbx4VfmfIxtcsn93qTxRqbqOFAEP9YGzpn7v53zi3OeNx4+0q4/FOXZ4WiYpccr0Dwp2tTASr1jXy9a3IPp4QJLUUfsDfLkemAkE9HBbRddYyMVFBYXBYew/bLeoxivPpEVqxz+KklaeQSUDW8Qypw1lQSbE+LanrceYOUezQferkP0lHw+IX950Rfh+M7BPTfWSvBqKCsT7Ym5YnFex7daQGS3UolbOzxUwngUZ87lv+Lyiy3/wMqescaW01+Ph+Xi2xqDUryJWWNF2m0mPwESs3Sz6/IzLK3BwpDTn+R94v1eogQx34dCrVRvK1EZfunGO/4koeru7eOCYXK8AHrjbqJZs2QFe4TDj/mp1vgWHB1o01zC7/o0xZe1SNatkl5O79PN4EB/iCIZtkl2bzHg3Z1anUTo6DNS/ZMLqpIcsFusC2wWXjBRkj3QzNCINBH/BnJogNkPv+MQ4JiUCj6ZgGI8u4SFjzEvoYiUfieprnHjjeIWAERiE2mheiLyCbdtkHMTVgwnXDidd46GdZQGCwSc7nmIFB1XleDwUTFLwGOx8wHgpf7ecVqKvbqm4HyBwNdNgJC+nLszYIofW8tdS83gJE4vQWEJ3kh1l/Hygjq/gZ5IC0cs1XhKd2sKeufsNJ4H1qJ9nuWby5um441rEgYQDGHACA3735H8GZp4aZ+k4N2oK0lChTA==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB7050.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(83380400001)(2906002)(8676002)(9686003)(7416002)(8936002)(33656002)(5660300002)(186003)(26005)(52536014)(508600001)(7696005)(86362001)(6506007)(66446008)(122000001)(64756008)(66946007)(76116006)(66476007)(66556008)(82960400001)(38100700002)(55016003)(316002)(6916009)(54906003)(71200400001)(38070700005)(85182001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-2022-jp?B?SE9ZVlliSFpXU0dOQXcyTHdseTNyQUZidllqY2ozb1lTTGw2MVl3bGZH?=
- =?iso-2022-jp?B?OFJaU0laQUlDbzBKNHVIOHdlRjJBd1F4L2Q5K3dvd2FTb2ZsU0hmZGJF?=
- =?iso-2022-jp?B?S2srYjFud1Ric1g2SHU1K2J1T3ExSHAzb3lpT0xKRGZyd2w4bUM1dkdp?=
- =?iso-2022-jp?B?RzRWTXpTMXViVHRJV3BHODhRdDdFRis0MjQvZGtYenhSUHQ0M1JES21G?=
- =?iso-2022-jp?B?TGpkU0F6bTN0WEtZU2txRjBHMnNia21aaDhwZnNkSEtJbUprYzcvQ2Qr?=
- =?iso-2022-jp?B?WFVFL3RnbERYSEhYN2F4eGU0Y2I0T1l1YkZsYnYvZk9iVzA5dXk5Zng0?=
- =?iso-2022-jp?B?SFA5RFVUeEhGZ3pLZnZHeVVvQXY4UXNab1ZSb2FFd0ZVNWowdHpoRnkr?=
- =?iso-2022-jp?B?d2lxNkpHWXJKNlYycHBpNS8rZ2xwaVpWVldPSWlIdkcweVBnb3IwOW9X?=
- =?iso-2022-jp?B?bHo1QkhSZGtmUkFESExLdC8vNzN3dUNzd2lqY1JlRlQ2YmdIOGphOEo4?=
- =?iso-2022-jp?B?b0h2WldBYkNXSEh1cjdOY3Z3UEIwVWZralc4dFdycGpncEZjMXFsUmFW?=
- =?iso-2022-jp?B?U0svb2E1dTdSVGo1UklrbjNEN3RSUGpxY2JIdXVFNlBMbVlCMjZMZE9u?=
- =?iso-2022-jp?B?UlBEcHU1YUhwOVJEMThDNDRzekNhYmNtVnhMU1VRWjRueFJzVFFPemZu?=
- =?iso-2022-jp?B?ZmMveWxUZFdWdnZWZUxzOU9NTXJ6c2pZWFVZQ21GcG04QTZGcHhrL2lr?=
- =?iso-2022-jp?B?bkNKWS9qTG1tbENQOUdUZlZqeTFIYUhzR0ZHVnY2WTR4UkdsWFc3MHBH?=
- =?iso-2022-jp?B?QnFiZjFld2FPRlloMjVoNGlHQ2Z0MXdIRVh0b3FPQzNUUlRBVE9HQ0NL?=
- =?iso-2022-jp?B?RU5zTzlzQVRqRXhndHFhb1hieDFWbGxHOVhtaFdSV3R6b25QM2V4YzFh?=
- =?iso-2022-jp?B?TnpvZlNGN1R4Q1BrU0RsRGFTS1RlMUNPa1NXRkhXcXBVR3RqcW1EcGFG?=
- =?iso-2022-jp?B?WVR2c2tlS25NeTIxaTFCYUJzK0IzWUw1QXFoOUY4Zk9xNE9TV0k4MDNM?=
- =?iso-2022-jp?B?WTIzUGNZUHNVQzdLVllTSHVma0EvNXN3RE5RcUlEd3FPTUlyalNKc3k2?=
- =?iso-2022-jp?B?R3BSbVBJT25JWU8ydDhBZ0lOV3pxRWZBZ3VKTnpCRzNMZ3lvOVhJc05C?=
- =?iso-2022-jp?B?dTlheHV4YndhOWZHZnhvcVFSbVZWZVRXRHlLU0p3NHQ0SUZQM0hoM3BW?=
- =?iso-2022-jp?B?YnNkQ01SUUkraEZPSEhWd1pjY0QyMSs4REowbnI1RFdlWFJnY0FmdG85?=
- =?iso-2022-jp?B?ZHVvTU44NkdteEMybDhPUGpPSENxSUtqeGxSVjNMdXBHQy8vV2VnWFBI?=
- =?iso-2022-jp?B?WE1UeFRMSGhjVjVCcWhUVmVlcDd0bGpKUnc0YnN6L2dYeFJVaWNsV1lu?=
- =?iso-2022-jp?B?M0tmSk50ZCt6aU5FeENmWHVHVGdBQmU1WTBnN0Y5WndaQ1laVkp0NkNW?=
- =?iso-2022-jp?B?aTdHaFBEMWxjZ1A2Q1NsR3FDVTVnaHkvd3dDZlA1RWxhbUJJV2ZLdzhh?=
- =?iso-2022-jp?B?RVBXUlhlWStGeHl6MWo1RjE3RVdGZjRHL1JzaTlXbDk3a1Rna0MyT01v?=
- =?iso-2022-jp?B?SkJSNy96SmpWTm5kTFVKazJlWmpsS3ZlcVVZMVVmWlVXQXk0bG1Danll?=
- =?iso-2022-jp?B?SGxjQ1oreVRMRHdoUUlRYUZQNG8wZDNTRjliYWdhVDh3UklsUDFJcjBk?=
- =?iso-2022-jp?B?bEpmdlZHVWtabHZ1NFU2R05vMGRqaWE2ZWNaUDRIbmJLaHB1bUJnTzJI?=
- =?iso-2022-jp?B?ZmRrd1l5dlRCeFdnc09BbThFTnYxcERmcGxMd25YU3g2VS9kZVpZQk5F?=
- =?iso-2022-jp?B?TzJGcldFTEtxNXMrNlMvVHFPOUhIY1Vsc2ZWbmt6Q3psR0EreFNwUng5?=
- =?iso-2022-jp?B?ZXBNZjMrb09hcUZlQVNwWnRkbEowQVE1V1IrS3N5cVBsMEQ2RlQ5YjNj?=
- =?iso-2022-jp?B?Z3g5ODVjTTNnZ2ppTFFNTmlVUTkrcjFLUVE4SUNTUjRDcVQ4cnlYdzNX?=
- =?iso-2022-jp?B?em11ZzZMYVVFZm95NUs5bE4rck1NTGVKZ0x3TmhsQ05kRE8wTWxBOXNF?=
- =?iso-2022-jp?B?NHFwTi9RbU9QNElDYVpqNlREUlBKdE9Xa05VVloxSE1CV1kvOHRrbjdp?=
- =?iso-2022-jp?B?eXA4RjlxeEFDQk9WYVlXSldMNHUzM05DM2lXVlFxMzBHY1QxcXB4QmJk?=
- =?iso-2022-jp?B?RXdCUlpsTHpvQU1rWlg2b2w0SS9ld2Y1K1pBTmNuQ1c0RWdxUHpFWXF5?=
- =?iso-2022-jp?B?V2dxUzlEVzMycTh3eUVzNW10a1hpSXdvR3kzemxaQ29yL0tVMEN4c1VZ?=
- =?iso-2022-jp?B?c3FLZTZLUE9tcGRGRVBIRG9LVGhIbVlPcU54Qmt3MFlqLzlQYnFlUHNG?=
- =?iso-2022-jp?B?LzJIc2ZrZzI1UVlGM3Y0T08zUGE4SGtSNnpmYUZXMXBWSXEydWVJRklB?=
- =?iso-2022-jp?B?VktJU1BpUWdOU0RRR3ZXbGNoVTNjQXAxcnJ5VHJIRjFyblNUTk44c3VT?=
- =?iso-2022-jp?B?eXhkdmZmVT0=?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q84CpmN6HcAdLjwgnok8DT6LnoTrdsedTAsaK5EuaM4=;
+        b=Z4P4yFSOUSMA9y9zFXitqSaVKi0NHwNN1KTzbODc5a2DaiWoogIdh6RKnXThQGYtdi
+         uM1svG5l8LTJpUxTHnib37budyl6hIP4LBPuFkXWLPygL8SvGgbiZBAMQcYCVdqP9o0n
+         HUmotu5gqCai7t4Vafn0KkXJtT33wb2467vPAnM/5rYfsDhG1vUtv8YjzdQP4eotDmLK
+         99e3xiTyXTsaubmiTZsk1SNb093Dmu0MiQClzZMXUXpB+YjDsBvtlWHls4Z2GSYlasw9
+         3hj1tcM/T18rjCo98RERlKBezQfPdej9tvDYyeuroFcToeDgm5nh9/NqUpqhRiktHv2r
+         5WwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q84CpmN6HcAdLjwgnok8DT6LnoTrdsedTAsaK5EuaM4=;
+        b=UUbrdHoDm0QYCrKS8WABT5ypRY4jn+IuQIOegUtWGJc3T7v/6o+b1EfWxXYlHAI1tq
+         xcVo6Vi7nbnueOEyTmI1mW/OS3d4s2ZK8sRzYXZMrhdP9beNM6qmMcjpPKOiGUHigsZ2
+         kAdZoNJyq2DK2WfMUodbyQG0wO5Y/1b4LQ814nSD0uqK2tyIQyQnlOAAhj1vCjiZLNQa
+         OzDaMZ3/OS76Jg5z/pAAaNubbsN1QEljeMvqOMmErIqvOJyMFKWAsPIS+U3Jzk0CVECo
+         7dZj7WhI6h0yYlW/kvz8U+mAJwHAPj4HUcCGUx+eJlRnpOa/0jskEpUwoVwvMa54hCI9
+         ykeg==
+X-Gm-Message-State: AOAM530EbNSwq2HAquo4UwWvwI6KsHf7T3mjl/dIPwgfKlF1ySZIcC46
+	idQY944mZAzAESDqzfQMhCYBXvNYL3b7/11NBZU=
+X-Google-Smtp-Source: ABdhPJxjK6n4PMUa+0B+m32pYHOhwY0WKuX/21o5BeMt/s5oSpqtnDh3IFRtRrzi4nKQz20KwYV8OJQP7KmPVvHpKP4=
+X-Received: by 2002:a67:c981:0:b0:320:92c2:d2ee with SMTP id
+ y1-20020a67c981000000b0032092c2d2eemr5291342vsk.79.1649414673778; Fri, 08 Apr
+ 2022 03:44:33 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB7050.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39e905fc-2b53-4b1c-2548-08da194b0d39
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 10:32:15.9562
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pHA5+GKU92JM4Sa1RieiwPRKMy6uNzzC306RBOxTiBZLb/IPkAw3LinTI8aRpzya/xNYb8becUKjN86QFVykultsHVP+3cx+B11YFX+UKfw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4784
+References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
+ <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com> <YkWVTEG5oFO82GPL@kroah.com>
+ <OSZPR01MB7050ED8D47839EAC9B4FC5BFEBE49@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSZPR01MB7050ED8D47839EAC9B4FC5BFEBE49@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+From: Itaru Kitayama <itaru.kitayama@gmail.com>
+Date: Fri, 8 Apr 2022 19:44:23 +0900
+Message-ID: <CANW9uyvYSQNOAimKmJBmiWkfo4F+K9g+JOfoa+yFDLwSx2xcPQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Greg KH <gregkh@linuxfoundation.org>, "arnd@arndb.de" <arnd@arndb.de>, 
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
+	"daniel.thompson@linaro.org" <daniel.thompson@linaro.org>, 
+	"dianders@chromium.org" <dianders@chromium.org>, 
+	"jason.wessel@windriver.com" <jason.wessel@windriver.com>, "jirislaby@kernel.org" <jirislaby@kernel.org>, 
+	"kgdb-bugreport@lists.sourceforge.net" <kgdb-bugreport@lists.sourceforge.net>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, "olof@lixom.net" <olof@lixom.net>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "soc@kernel.org" <soc@kernel.org>, 
+	"sumit.garg@linaro.org" <sumit.garg@linaro.org>, "will@kernel.org" <will@kernel.org>
+Content-Type: multipart/alternative; boundary="000000000000b7cad505dc2247ed"
 
-Hi Greg,=0A=
-=0A=
-> > Enable diagnostic interrupts for the A64FX.=0A=
-> > This is done using a pseudo-NMI.=0A=
-> =0A=
-> I do not understand what this driver is, sorry.  Can you please provide m=
-ore=0A=
-> information in the changelog text for what this is, who would use it, and=
- how it will=0A=
-> be interacted with.=0A=
-=0A=
-I understand. I will add a description in the next version.=0A=
-=0A=
-> > +config A64FX_DIAG=0A=
-> > +	bool "A64FX diag driver"=0A=
-> > +	depends on ARM64=0A=
-> =0A=
-> What about ACPI?  Shouldn't this code depend on that?=0A=
-=0A=
-Okey. I will make it dependent on ACPI.=0A=
-=0A=
-> > +	help=0A=
-> > +	  Say Y here if you want to enable diag interrupt on A64FX.=0A=
-> =0A=
-> What is A64FX?=0A=
-=0A=
-A64FX is a processor designed by Fujitsu.=0A=
-For the sake of clarity, I will describe it as "Fujitsu A64FX".=0A=
-=0A=
-> > +	  This driver uses pseudo-NMI if available.=0A=
-> =0A=
-> What does this mean?=0A=
-=0A=
-This driver uses the pseudo-NMI feature to perform diagnostic interrupts=0A=
+--000000000000b7cad505dc2247ed
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Wondering if, Greg you approves Hitomi=E2=80=99s updated series, then you p=
+ick up
+it whatever the tree you maintain?
+
+Thanks,
+Itaru.
+
+On Fri, Apr 8, 2022 at 19:36 hasegawa-hitomi@fujitsu.com <
+hasegawa-hitomi@fujitsu.com> wrote:
+
+> Hi Greg,
+>
+> > > Enable diagnostic interrupts for the A64FX.
+> > > This is done using a pseudo-NMI.
+> >
+> > I do not understand what this driver is, sorry.  Can you please provide
+> more
+> > information in the changelog text for what this is, who would use it,
+> and how it will
+> > be interacted with.
+>
+> I understand. I will add a description in the next version.
+>
+> > > +config A64FX_DIAG
+> > > +   bool "A64FX diag driver"
+> > > +   depends on ARM64
+> >
+> > What about ACPI?  Shouldn't this code depend on that?
+>
+> Okey. I will make it dependent on ACPI.
+>
+> > > +   help
+> > > +     Say Y here if you want to enable diag interrupt on A64FX.
+> >
+> > What is A64FX?
+>
+> A64FX is a processor designed by Fujitsu.
+> For the sake of clarity, I will describe it as "Fujitsu A64FX".
+>
+> > > +     This driver uses pseudo-NMI if available.
+> >
+> > What does this mean?
+>
+> This driver uses the pseudo-NMI feature to perform diagnostic interrupts
+> for A64FX. However, I felt that it was superfluous to give this explanati=
+on
+> here, so I will delete this sentence.
+>
+> > > +     If unsure, say N.
+> >
+> > No module?  Why not?
+>
+> request_nmi() is not EXPORT_SYMBOL. So this driver cannot be a module.
+>
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * A64FX diag driver.
+> >
+> > No copyright information?  Are you sure?
+>
+> I will add copyright information.
+>
+> > > +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044) #define
+> > > +BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
+> >
+> > BIT()?
+> >
+> > > +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040) #define
+> > > +BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
+> >
+> > BIT()?
+>
+> Okey, I will use BIT().
+>
+> > > +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id) {
+> > > +   handle_sysrq('c');
+> >
+> >
+> > Why is this calling this sysrq call?  From an interrupt?  Why?
+> >
+> > And you are hard-coding "c", are you sure?
+>
+> As mentioned by Arnd, I only called panic () at first, but after receivin=
+g
+> his suggestion, I decided to call handle_sysrq ('c').
+> This driver only supports the function that causes a panic when receiving
+> a diagnostic interrupt from the outside, so "c" is coded.
+> Also, no data is added when a diagnostic interrupt is sent.
+>
+> > > +   if (mmsc & BMC_INTERRUPT_STATUS_MASK)
+> > > +           writel(BMC_INTERRUPT_STATUS_MASK, (void
+> > *)diag_status_reg_addr);
+> >
+> > No need to wait for the write to complete?
+> >
+> > You shouldn't have to cast diag_status_reg_addr, right?
+>
+> Due to the specifications of the machine, there is no problem even
+> if there is no write wait processing.
+>
+> I will remove constant and (void *). Thank you for pointing out.
+>
+> > > +           enable_irq(priv->irq);
+> > > +           priv->has_nmi =3D false;
+> > > +           dev_info(dev, "registered for IRQ %d\n", priv->irq);
+> > > +   } else {
+> > > +           enable_nmi(priv->irq);
+> > > +           priv->has_nmi =3D true;
+> > > +           dev_info(dev, "registered for NMI %d\n", priv->irq);
+> >
+> > When drivers are successful, they are quiet.  No need for the noise her=
+e.
+>
+> I will remove the message for a successful NMI/IRQ registration.
+>
+> Thank you.
+> Hitomi Hasegawa
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+
+--000000000000b7cad505dc2247ed
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Wondering if, Greg you approves Hitomi=E2=80=99s updated =
+series, then you pick up it whatever the tree you maintain?</div><div dir=
+=3D"auto"><br></div><div dir=3D"auto">Thanks,</div><div dir=3D"auto">Itaru.=
+</div><div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_a=
+ttr">On Fri, Apr 8, 2022 at 19:36 <a href=3D"mailto:hasegawa-hitomi@fujitsu=
+.com">hasegawa-hitomi@fujitsu.com</a> &lt;<a href=3D"mailto:hasegawa-hitomi=
+@fujitsu.com">hasegawa-hitomi@fujitsu.com</a>&gt; wrote:<br></div><blockquo=
+te class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc so=
+lid;padding-left:1ex">Hi Greg,<br>
+<br>
+&gt; &gt; Enable diagnostic interrupts for the A64FX.<br>
+&gt; &gt; This is done using a pseudo-NMI.<br>
+&gt; <br>
+&gt; I do not understand what this driver is, sorry.=C2=A0 Can you please p=
+rovide more<br>
+&gt; information in the changelog text for what this is, who would use it, =
+and how it will<br>
+&gt; be interacted with.<br>
+<br>
+I understand. I will add a description in the next version.<br>
+<br>
+&gt; &gt; +config A64FX_DIAG<br>
+&gt; &gt; +=C2=A0 =C2=A0bool &quot;A64FX diag driver&quot;<br>
+&gt; &gt; +=C2=A0 =C2=A0depends on ARM64<br>
+&gt; <br>
+&gt; What about ACPI?=C2=A0 Shouldn&#39;t this code depend on that?<br>
+<br>
+Okey. I will make it dependent on ACPI.<br>
+<br>
+&gt; &gt; +=C2=A0 =C2=A0help<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0Say Y here if you want to enable diag interr=
+upt on A64FX.<br>
+&gt; <br>
+&gt; What is A64FX?<br>
+<br>
+A64FX is a processor designed by Fujitsu.<br>
+For the sake of clarity, I will describe it as &quot;Fujitsu A64FX&quot;.<b=
+r>
+<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0This driver uses pseudo-NMI if available.<br=
+>
+&gt; <br>
+&gt; What does this mean?<br>
+<br>
+This driver uses the pseudo-NMI feature to perform diagnostic interrupts<br=
+>
 for A64FX. However, I felt that it was superfluous to give this explanation=
-=0A=
-here, so I will delete this sentence.=0A=
-=0A=
-> > +	  If unsure, say N.=0A=
-> =0A=
-> No module?  Why not?=0A=
-=0A=
-request_nmi() is not EXPORT_SYMBOL. So this driver cannot be a module.=0A=
-=0A=
-> > +// SPDX-License-Identifier: GPL-2.0-only=0A=
-> > +/*=0A=
-> > + * A64FX diag driver.=0A=
-> =0A=
-> No copyright information?  Are you sure?=0A=
-=0A=
-I will add copyright information.=0A=
-=0A=
-> > +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044) #define=0A=
-> > +BMC_INTERRUPT_STATUS_MASK ((1U) << 31)=0A=
-> =0A=
-> BIT()?=0A=
-> =0A=
-> > +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040) #define=0A=
-> > +BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)=0A=
-> =0A=
-> BIT()?=0A=
-=0A=
-Okey, I will use BIT().=0A=
-=0A=
-> > +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id) {=0A=
-> > +	handle_sysrq('c');=0A=
-> =0A=
-> =0A=
-> Why is this calling this sysrq call?  From an interrupt?  Why?=0A=
-> =0A=
-> And you are hard-coding "c", are you sure?=0A=
-=0A=
-As mentioned by Arnd, I only called panic () at first, but after receiving=
-=0A=
-his suggestion, I decided to call handle_sysrq ('c').=0A=
-This driver only supports the function that causes a panic when receiving=
-=0A=
-a diagnostic interrupt from the outside, so "c" is coded.=0A=
-Also, no data is added when a diagnostic interrupt is sent.=0A=
-=0A=
-> > +	if (mmsc & BMC_INTERRUPT_STATUS_MASK)=0A=
-> > +		writel(BMC_INTERRUPT_STATUS_MASK, (void=0A=
-> *)diag_status_reg_addr);=0A=
-> =0A=
-> No need to wait for the write to complete?=0A=
-> =0A=
-> You shouldn't have to cast diag_status_reg_addr, right?=0A=
-=0A=
-Due to the specifications of the machine, there is no problem even=0A=
-if there is no write wait processing.=0A=
-=0A=
-I will remove constant and (void *). Thank you for pointing out.=0A=
-=0A=
-> > +		enable_irq(priv->irq);=0A=
-> > +		priv->has_nmi =3D false;=0A=
-> > +		dev_info(dev, "registered for IRQ %d\n", priv->irq);=0A=
-> > +	} else {=0A=
-> > +		enable_nmi(priv->irq);=0A=
-> > +		priv->has_nmi =3D true;=0A=
-> > +		dev_info(dev, "registered for NMI %d\n", priv->irq);=0A=
-> =0A=
-> When drivers are successful, they are quiet.  No need for the noise here.=
-=0A=
-=0A=
-I will remove the message for a successful NMI/IRQ registration.=0A=
-=0A=
-Thank you.=0A=
-Hitomi Hasegawa=
+<br>
+here, so I will delete this sentence.<br>
+<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0If unsure, say N.<br>
+&gt; <br>
+&gt; No module?=C2=A0 Why not?<br>
+<br>
+request_nmi() is not EXPORT_SYMBOL. So this driver cannot be a module.<br>
+<br>
+&gt; &gt; +// SPDX-License-Identifier: GPL-2.0-only<br>
+&gt; &gt; +/*<br>
+&gt; &gt; + * A64FX diag driver.<br>
+&gt; <br>
+&gt; No copyright information?=C2=A0 Are you sure?<br>
+<br>
+I will add copyright information.<br>
+<br>
+&gt; &gt; +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044) #define<br>
+&gt; &gt; +BMC_INTERRUPT_STATUS_MASK ((1U) &lt;&lt; 31)<br>
+&gt; <br>
+&gt; BIT()?<br>
+&gt; <br>
+&gt; &gt; +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040) #define<br>
+&gt; &gt; +BMC_INTERRUPT_ENABLE_MASK ((1U) &lt;&lt; 31)<br>
+&gt; <br>
+&gt; BIT()?<br>
+<br>
+Okey, I will use BIT().<br>
+<br>
+&gt; &gt; +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id) {<b=
+r>
+&gt; &gt; +=C2=A0 =C2=A0handle_sysrq(&#39;c&#39;);<br>
+&gt; <br>
+&gt; <br>
+&gt; Why is this calling this sysrq call?=C2=A0 From an interrupt?=C2=A0 Wh=
+y?<br>
+&gt; <br>
+&gt; And you are hard-coding &quot;c&quot;, are you sure?<br>
+<br>
+As mentioned by Arnd, I only called panic () at first, but after receiving<=
+br>
+his suggestion, I decided to call handle_sysrq (&#39;c&#39;).<br>
+This driver only supports the function that causes a panic when receiving<b=
+r>
+a diagnostic interrupt from the outside, so &quot;c&quot; is coded.<br>
+Also, no data is added when a diagnostic interrupt is sent.<br>
+<br>
+&gt; &gt; +=C2=A0 =C2=A0if (mmsc &amp; BMC_INTERRUPT_STATUS_MASK)<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0writel(BMC_INTERRUPT_ST=
+ATUS_MASK, (void<br>
+&gt; *)diag_status_reg_addr);<br>
+&gt; <br>
+&gt; No need to wait for the write to complete?<br>
+&gt; <br>
+&gt; You shouldn&#39;t have to cast diag_status_reg_addr, right?<br>
+<br>
+Due to the specifications of the machine, there is no problem even<br>
+if there is no write wait processing.<br>
+<br>
+I will remove constant and (void *). Thank you for pointing out.<br>
+<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0enable_irq(priv-&gt;irq=
+);<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0priv-&gt;has_nmi =3D fa=
+lse;<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0dev_info(dev, &quot;reg=
+istered for IRQ %d\n&quot;, priv-&gt;irq);<br>
+&gt; &gt; +=C2=A0 =C2=A0} else {<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0enable_nmi(priv-&gt;irq=
+);<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0priv-&gt;has_nmi =3D tr=
+ue;<br>
+&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0dev_info(dev, &quot;reg=
+istered for NMI %d\n&quot;, priv-&gt;irq);<br>
+&gt; <br>
+&gt; When drivers are successful, they are quiet.=C2=A0 No need for the noi=
+se here.<br>
+<br>
+I will remove the message for a successful NMI/IRQ registration.<br>
+<br>
+Thank you.<br>
+Hitomi Hasegawa<br>
+_______________________________________________<br>
+linux-arm-kernel mailing list<br>
+<a href=3D"mailto:linux-arm-kernel@lists.infradead.org" target=3D"_blank">l=
+inux-arm-kernel@lists.infradead.org</a><br>
+<a href=3D"http://lists.infradead.org/mailman/listinfo/linux-arm-kernel" re=
+l=3D"noreferrer" target=3D"_blank">http://lists.infradead.org/mailman/listi=
+nfo/linux-arm-kernel</a><br>
+</blockquote></div></div>
+
+--000000000000b7cad505dc2247ed--
