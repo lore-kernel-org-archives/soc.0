@@ -1,342 +1,119 @@
-Return-Path: <SRS0=BsUX=US=gmail.com=itaru.kitayama@kernel.org>
+Return-Path: <SRS0=2qXS=US=linaro.org=daniel.thompson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29903C433F5
-	for <soc@archiver.kernel.org>; Fri,  8 Apr 2022 10:44:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22BD8C433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Apr 2022 13:32:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DCDB3C385A9; Fri,  8 Apr 2022 10:44:35 +0000 (UTC)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+	id D7CCDC385A8; Fri,  8 Apr 2022 13:32:51 +0000 (UTC)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E2FDBC385A5;
-	Fri,  8 Apr 2022 10:44:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E2FDBC385A5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f51.google.com with SMTP id n5so6267532vsc.4;
-        Fri, 08 Apr 2022 03:44:34 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 73D93C385A9
+	for <soc@kernel.org>; Fri,  8 Apr 2022 13:32:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73D93C385A9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so7564137wmb.4
+        for <soc@kernel.org>; Fri, 08 Apr 2022 06:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q84CpmN6HcAdLjwgnok8DT6LnoTrdsedTAsaK5EuaM4=;
-        b=Z4P4yFSOUSMA9y9zFXitqSaVKi0NHwNN1KTzbODc5a2DaiWoogIdh6RKnXThQGYtdi
-         uM1svG5l8LTJpUxTHnib37budyl6hIP4LBPuFkXWLPygL8SvGgbiZBAMQcYCVdqP9o0n
-         HUmotu5gqCai7t4Vafn0KkXJtT33wb2467vPAnM/5rYfsDhG1vUtv8YjzdQP4eotDmLK
-         99e3xiTyXTsaubmiTZsk1SNb093Dmu0MiQClzZMXUXpB+YjDsBvtlWHls4Z2GSYlasw9
-         3hj1tcM/T18rjCo98RERlKBezQfPdej9tvDYyeuroFcToeDgm5nh9/NqUpqhRiktHv2r
-         5WwQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pDC9L0lcr1QHf8qfh13ooZQp7CHb5z3+opmiIbCpO5g=;
+        b=jmrr9ES2B8XWO03NQZzQI4F2KKQwsDwVsKRsbWp63khlAKSkmi9C+eilQOfzSCKath
+         b3no7GA5N4PEoy7SBC5oRO6EjCTlned/SX99tuyEsBpExUCpvQy48bLQ5u/Ei8+f7+70
+         JjoSwIq3ChdypUMSjHJMZXtPDo6LBN4VWGLzEibGOseVKZTsmd8rOjKDQID9fcDLqQLJ
+         NDZUZYPMPUPPbnyc0e1+Kc+f3IMnC7PXOXkmbrtOHF4HITAHh0MbxX93nNvzfRQLYfBj
+         JRUU1LkEyrPi6gVeOgj1vX501pObHoK8SRG8vDH2evWMkgLQFKGNabXNKtnXXbfryVtb
+         7B1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q84CpmN6HcAdLjwgnok8DT6LnoTrdsedTAsaK5EuaM4=;
-        b=UUbrdHoDm0QYCrKS8WABT5ypRY4jn+IuQIOegUtWGJc3T7v/6o+b1EfWxXYlHAI1tq
-         xcVo6Vi7nbnueOEyTmI1mW/OS3d4s2ZK8sRzYXZMrhdP9beNM6qmMcjpPKOiGUHigsZ2
-         kAdZoNJyq2DK2WfMUodbyQG0wO5Y/1b4LQ814nSD0uqK2tyIQyQnlOAAhj1vCjiZLNQa
-         OzDaMZ3/OS76Jg5z/pAAaNubbsN1QEljeMvqOMmErIqvOJyMFKWAsPIS+U3Jzk0CVECo
-         7dZj7WhI6h0yYlW/kvz8U+mAJwHAPj4HUcCGUx+eJlRnpOa/0jskEpUwoVwvMa54hCI9
-         ykeg==
-X-Gm-Message-State: AOAM530EbNSwq2HAquo4UwWvwI6KsHf7T3mjl/dIPwgfKlF1ySZIcC46
-	idQY944mZAzAESDqzfQMhCYBXvNYL3b7/11NBZU=
-X-Google-Smtp-Source: ABdhPJxjK6n4PMUa+0B+m32pYHOhwY0WKuX/21o5BeMt/s5oSpqtnDh3IFRtRrzi4nKQz20KwYV8OJQP7KmPVvHpKP4=
-X-Received: by 2002:a67:c981:0:b0:320:92c2:d2ee with SMTP id
- y1-20020a67c981000000b0032092c2d2eemr5291342vsk.79.1649414673778; Fri, 08 Apr
- 2022 03:44:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
- <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com> <YkWVTEG5oFO82GPL@kroah.com>
- <OSZPR01MB7050ED8D47839EAC9B4FC5BFEBE49@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSZPR01MB7050ED8D47839EAC9B4FC5BFEBE49@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-From: Itaru Kitayama <itaru.kitayama@gmail.com>
-Date: Fri, 8 Apr 2022 19:44:23 +0900
-Message-ID: <CANW9uyvYSQNOAimKmJBmiWkfo4F+K9g+JOfoa+yFDLwSx2xcPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
-To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pDC9L0lcr1QHf8qfh13ooZQp7CHb5z3+opmiIbCpO5g=;
+        b=4VdgIMRxDMixp35EqmOwMP17HfxhQv9z43g9stfA/5ijtYLQOAZdSOocsg6i2BU5Ik
+         Cp8Fijv67J4DQsu99IPD1GfjmbnBa4MwNKoOeXoePZRdUyz5rxGRKI/FJfsYANoNAffK
+         7XGdAZ/LNSrAwQaxZpSb2+pCD5yD7Vs58et1ye0X6PG1IEVEprhADw1R8V5v53+IdZUC
+         Kekr66rqy31zqtjc0zbvGTb895VO6VS5pEWd/uV/aRPF5lgG9DzR5e5xLM38rO8aeiCk
+         U+KMDvIsvF2a7cYXeUJkkE1Ioers4jIk7F6ue3axM787jfst1A2qwmjLAYeMNqDyVQwD
+         Fxzg==
+X-Gm-Message-State: AOAM5302Sn9c2AHL29vWttMuB7pha0bS5xiz0Cy/TP/w/kL1vWMPTmBk
+	ARWy2Z8yR9aZJxaPTj593cmTqg==
+X-Google-Smtp-Source: ABdhPJyeiw4bwAQfXU133L8POlyN9oSdy3Td0K/5lQO2DSbqQQ73iq/K4PM/64Hhgx/RD0NCcuI3hQ==
+X-Received: by 2002:a05:600c:34c5:b0:38c:30e3:1e6c with SMTP id d5-20020a05600c34c500b0038c30e31e6cmr17255479wmq.144.1649424768622;
+        Fri, 08 Apr 2022 06:32:48 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id v26-20020a1cf71a000000b0038ea373273bsm1707695wmh.47.2022.04.08.06.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 06:32:48 -0700 (PDT)
+Date: Fri, 8 Apr 2022 14:32:46 +0100
+From: Daniel Thompson <daniel.thompson@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, "arnd@arndb.de" <arnd@arndb.de>, 
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
-	"daniel.thompson@linaro.org" <daniel.thompson@linaro.org>, 
-	"dianders@chromium.org" <dianders@chromium.org>, 
-	"jason.wessel@windriver.com" <jason.wessel@windriver.com>, "jirislaby@kernel.org" <jirislaby@kernel.org>, 
-	"kgdb-bugreport@lists.sourceforge.net" <kgdb-bugreport@lists.sourceforge.net>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, "olof@lixom.net" <olof@lixom.net>, 
-	"peterz@infradead.org" <peterz@infradead.org>, "soc@kernel.org" <soc@kernel.org>, 
-	"sumit.garg@linaro.org" <sumit.garg@linaro.org>, "will@kernel.org" <will@kernel.org>
-Content-Type: multipart/alternative; boundary="000000000000b7cad505dc2247ed"
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	SoC Team <soc@kernel.org>,
+	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+	Sumit Garg <sumit.garg@linaro.org>, Olof Johansson <olof@lixom.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Doug Anderson <dianders@chromium.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	kgdb-bugreport@lists.sourceforge.net,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mike Travis <mike.travis@hpe.com>
+Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
+ driver
+Message-ID: <20220408133246.fyw5554lgli4olvg@maple.lan>
+References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
+ <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com>
+ <YkWVTEG5oFO82GPL@kroah.com>
+ <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
 
---000000000000b7cad505dc2247ed
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Wondering if, Greg you approves Hitomi=E2=80=99s updated series, then you p=
-ick up
-it whatever the tree you maintain?
-
-Thanks,
-Itaru.
-
-On Fri, Apr 8, 2022 at 19:36 hasegawa-hitomi@fujitsu.com <
-hasegawa-hitomi@fujitsu.com> wrote:
-
-> Hi Greg,
->
-> > > Enable diagnostic interrupts for the A64FX.
-> > > This is done using a pseudo-NMI.
-> >
-> > I do not understand what this driver is, sorry.  Can you please provide
-> more
-> > information in the changelog text for what this is, who would use it,
-> and how it will
-> > be interacted with.
->
-> I understand. I will add a description in the next version.
->
-> > > +config A64FX_DIAG
-> > > +   bool "A64FX diag driver"
-> > > +   depends on ARM64
-> >
-> > What about ACPI?  Shouldn't this code depend on that?
->
-> Okey. I will make it dependent on ACPI.
->
-> > > +   help
-> > > +     Say Y here if you want to enable diag interrupt on A64FX.
-> >
-> > What is A64FX?
->
-> A64FX is a processor designed by Fujitsu.
-> For the sake of clarity, I will describe it as "Fujitsu A64FX".
->
-> > > +     This driver uses pseudo-NMI if available.
-> >
-> > What does this mean?
->
-> This driver uses the pseudo-NMI feature to perform diagnostic interrupts
-> for A64FX. However, I felt that it was superfluous to give this explanati=
-on
-> here, so I will delete this sentence.
->
-> > > +     If unsure, say N.
-> >
-> > No module?  Why not?
->
-> request_nmi() is not EXPORT_SYMBOL. So this driver cannot be a module.
->
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * A64FX diag driver.
-> >
-> > No copyright information?  Are you sure?
->
-> I will add copyright information.
->
-> > > +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044) #define
-> > > +BMC_INTERRUPT_STATUS_MASK ((1U) << 31)
-> >
-> > BIT()?
-> >
-> > > +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040) #define
-> > > +BMC_INTERRUPT_ENABLE_MASK ((1U) << 31)
-> >
-> > BIT()?
->
-> Okey, I will use BIT().
->
-> > > +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id) {
-> > > +   handle_sysrq('c');
+On Thu, Mar 31, 2022 at 05:44:55PM +0200, Arnd Bergmann wrote:
+> On Thu, Mar 31, 2022 at 1:49 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > +
+> > > +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
+> > > +{
+> > > +     handle_sysrq('c');
 > >
 > >
 > > Why is this calling this sysrq call?  From an interrupt?  Why?
 > >
 > > And you are hard-coding "c", are you sure?
->
-> As mentioned by Arnd, I only called panic () at first, but after receivin=
-g
-> his suggestion, I decided to call handle_sysrq ('c').
-> This driver only supports the function that causes a panic when receiving
-> a diagnostic interrupt from the outside, so "c" is coded.
-> Also, no data is added when a diagnostic interrupt is sent.
->
-> > > +   if (mmsc & BMC_INTERRUPT_STATUS_MASK)
-> > > +           writel(BMC_INTERRUPT_STATUS_MASK, (void
-> > *)diag_status_reg_addr);
-> >
-> > No need to wait for the write to complete?
-> >
-> > You shouldn't have to cast diag_status_reg_addr, right?
->
-> Due to the specifications of the machine, there is no problem even
-> if there is no write wait processing.
->
-> I will remove constant and (void *). Thank you for pointing out.
->
-> > > +           enable_irq(priv->irq);
-> > > +           priv->has_nmi =3D false;
-> > > +           dev_info(dev, "registered for IRQ %d\n", priv->irq);
-> > > +   } else {
-> > > +           enable_nmi(priv->irq);
-> > > +           priv->has_nmi =3D true;
-> > > +           dev_info(dev, "registered for NMI %d\n", priv->irq);
-> >
-> > When drivers are successful, they are quiet.  No need for the noise her=
-e.
->
-> I will remove the message for a successful NMI/IRQ registration.
->
-> Thank you.
-> Hitomi Hasegawa
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->
+> 
+> This is an actual sysrq driver in the traditional sense, where you can send
+> a single interrupt to the machine from the outside over a side channel.
+> 
+> I suggested sysrq instead of just panic() to make it a bit more flexible.
+> Unfortunately there is no additional data, so it comes down to always
+> sending the same character.
+> 
+> It would be possible to make that character configurable with a module
+> parameter or something like that, but I'm not sure that is an improvement.
+> Maybe you have another idea for this.
 
---000000000000b7cad505dc2247ed
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Given the interrupt can be dismissed then offering non-fatal actions in
+response the chassis command seems reasonable.
 
-<div dir=3D"auto">Wondering if, Greg you approves Hitomi=E2=80=99s updated =
-series, then you pick up it whatever the tree you maintain?</div><div dir=
-=3D"auto"><br></div><div dir=3D"auto">Thanks,</div><div dir=3D"auto">Itaru.=
-</div><div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_a=
-ttr">On Fri, Apr 8, 2022 at 19:36 <a href=3D"mailto:hasegawa-hitomi@fujitsu=
-.com">hasegawa-hitomi@fujitsu.com</a> &lt;<a href=3D"mailto:hasegawa-hitomi=
-@fujitsu.com">hasegawa-hitomi@fujitsu.com</a>&gt; wrote:<br></div><blockquo=
-te class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc so=
-lid;padding-left:1ex">Hi Greg,<br>
-<br>
-&gt; &gt; Enable diagnostic interrupts for the A64FX.<br>
-&gt; &gt; This is done using a pseudo-NMI.<br>
-&gt; <br>
-&gt; I do not understand what this driver is, sorry.=C2=A0 Can you please p=
-rovide more<br>
-&gt; information in the changelog text for what this is, who would use it, =
-and how it will<br>
-&gt; be interacted with.<br>
-<br>
-I understand. I will add a description in the next version.<br>
-<br>
-&gt; &gt; +config A64FX_DIAG<br>
-&gt; &gt; +=C2=A0 =C2=A0bool &quot;A64FX diag driver&quot;<br>
-&gt; &gt; +=C2=A0 =C2=A0depends on ARM64<br>
-&gt; <br>
-&gt; What about ACPI?=C2=A0 Shouldn&#39;t this code depend on that?<br>
-<br>
-Okey. I will make it dependent on ACPI.<br>
-<br>
-&gt; &gt; +=C2=A0 =C2=A0help<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0Say Y here if you want to enable diag interr=
-upt on A64FX.<br>
-&gt; <br>
-&gt; What is A64FX?<br>
-<br>
-A64FX is a processor designed by Fujitsu.<br>
-For the sake of clarity, I will describe it as &quot;Fujitsu A64FX&quot;.<b=
-r>
-<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0This driver uses pseudo-NMI if available.<br=
->
-&gt; <br>
-&gt; What does this mean?<br>
-<br>
-This driver uses the pseudo-NMI feature to perform diagnostic interrupts<br=
->
-for A64FX. However, I felt that it was superfluous to give this explanation=
-<br>
-here, so I will delete this sentence.<br>
-<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0If unsure, say N.<br>
-&gt; <br>
-&gt; No module?=C2=A0 Why not?<br>
-<br>
-request_nmi() is not EXPORT_SYMBOL. So this driver cannot be a module.<br>
-<br>
-&gt; &gt; +// SPDX-License-Identifier: GPL-2.0-only<br>
-&gt; &gt; +/*<br>
-&gt; &gt; + * A64FX diag driver.<br>
-&gt; <br>
-&gt; No copyright information?=C2=A0 Are you sure?<br>
-<br>
-I will add copyright information.<br>
-<br>
-&gt; &gt; +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044) #define<br>
-&gt; &gt; +BMC_INTERRUPT_STATUS_MASK ((1U) &lt;&lt; 31)<br>
-&gt; <br>
-&gt; BIT()?<br>
-&gt; <br>
-&gt; &gt; +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040) #define<br>
-&gt; &gt; +BMC_INTERRUPT_ENABLE_MASK ((1U) &lt;&lt; 31)<br>
-&gt; <br>
-&gt; BIT()?<br>
-<br>
-Okey, I will use BIT().<br>
-<br>
-&gt; &gt; +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id) {<b=
-r>
-&gt; &gt; +=C2=A0 =C2=A0handle_sysrq(&#39;c&#39;);<br>
-&gt; <br>
-&gt; <br>
-&gt; Why is this calling this sysrq call?=C2=A0 From an interrupt?=C2=A0 Wh=
-y?<br>
-&gt; <br>
-&gt; And you are hard-coding &quot;c&quot;, are you sure?<br>
-<br>
-As mentioned by Arnd, I only called panic () at first, but after receiving<=
-br>
-his suggestion, I decided to call handle_sysrq (&#39;c&#39;).<br>
-This driver only supports the function that causes a panic when receiving<b=
-r>
-a diagnostic interrupt from the outside, so &quot;c&quot; is coded.<br>
-Also, no data is added when a diagnostic interrupt is sent.<br>
-<br>
-&gt; &gt; +=C2=A0 =C2=A0if (mmsc &amp; BMC_INTERRUPT_STATUS_MASK)<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0writel(BMC_INTERRUPT_ST=
-ATUS_MASK, (void<br>
-&gt; *)diag_status_reg_addr);<br>
-&gt; <br>
-&gt; No need to wait for the write to complete?<br>
-&gt; <br>
-&gt; You shouldn&#39;t have to cast diag_status_reg_addr, right?<br>
-<br>
-Due to the specifications of the machine, there is no problem even<br>
-if there is no write wait processing.<br>
-<br>
-I will remove constant and (void *). Thank you for pointing out.<br>
-<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0enable_irq(priv-&gt;irq=
-);<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0priv-&gt;has_nmi =3D fa=
-lse;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0dev_info(dev, &quot;reg=
-istered for IRQ %d\n&quot;, priv-&gt;irq);<br>
-&gt; &gt; +=C2=A0 =C2=A0} else {<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0enable_nmi(priv-&gt;irq=
-);<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0priv-&gt;has_nmi =3D tr=
-ue;<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0dev_info(dev, &quot;reg=
-istered for NMI %d\n&quot;, priv-&gt;irq);<br>
-&gt; <br>
-&gt; When drivers are successful, they are quiet.=C2=A0 No need for the noi=
-se here.<br>
-<br>
-I will remove the message for a successful NMI/IRQ registration.<br>
-<br>
-Thank you.<br>
-Hitomi Hasegawa<br>
-_______________________________________________<br>
-linux-arm-kernel mailing list<br>
-<a href=3D"mailto:linux-arm-kernel@lists.infradead.org" target=3D"_blank">l=
-inux-arm-kernel@lists.infradead.org</a><br>
-<a href=3D"http://lists.infradead.org/mailman/listinfo/linux-arm-kernel" re=
-l=3D"noreferrer" target=3D"_blank">http://lists.infradead.org/mailman/listi=
-nfo/linux-arm-kernel</a><br>
-</blockquote></div></div>
+There is some prior art for this sort of feature. AFAICT SGI UV has a
+similar mechanism that can send an NMI-with-no-side-channel to the
+kernel. The corresponding driver offers a range of actions using a
+module parameter:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/platform/uv/uv_nmi.c#n180
 
---000000000000b7cad505dc2247ed--
+I don't think a hardcoded 'c' makes any sense. With a hardcoded argument
+it is just obfuscation. However it is certainly seems attractive to be
+able to reuse handle_sysrq() to provide a more powerful set of actions.
+
+
+Daniel.
