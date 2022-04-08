@@ -1,119 +1,86 @@
-Return-Path: <SRS0=2qXS=US=linaro.org=daniel.thompson@kernel.org>
+Return-Path: <SRS0=jJml=US=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22BD8C433EF
-	for <soc@archiver.kernel.org>; Fri,  8 Apr 2022 13:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26375C433F5
+	for <soc@archiver.kernel.org>; Fri,  8 Apr 2022 14:17:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7CCDC385A8; Fri,  8 Apr 2022 13:32:51 +0000 (UTC)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id E9117C385A3; Fri,  8 Apr 2022 14:17:36 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 73D93C385A9
-	for <soc@kernel.org>; Fri,  8 Apr 2022 13:32:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73D93C385A9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so7564137wmb.4
-        for <soc@kernel.org>; Fri, 08 Apr 2022 06:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pDC9L0lcr1QHf8qfh13ooZQp7CHb5z3+opmiIbCpO5g=;
-        b=jmrr9ES2B8XWO03NQZzQI4F2KKQwsDwVsKRsbWp63khlAKSkmi9C+eilQOfzSCKath
-         b3no7GA5N4PEoy7SBC5oRO6EjCTlned/SX99tuyEsBpExUCpvQy48bLQ5u/Ei8+f7+70
-         JjoSwIq3ChdypUMSjHJMZXtPDo6LBN4VWGLzEibGOseVKZTsmd8rOjKDQID9fcDLqQLJ
-         NDZUZYPMPUPPbnyc0e1+Kc+f3IMnC7PXOXkmbrtOHF4HITAHh0MbxX93nNvzfRQLYfBj
-         JRUU1LkEyrPi6gVeOgj1vX501pObHoK8SRG8vDH2evWMkgLQFKGNabXNKtnXXbfryVtb
-         7B1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pDC9L0lcr1QHf8qfh13ooZQp7CHb5z3+opmiIbCpO5g=;
-        b=4VdgIMRxDMixp35EqmOwMP17HfxhQv9z43g9stfA/5ijtYLQOAZdSOocsg6i2BU5Ik
-         Cp8Fijv67J4DQsu99IPD1GfjmbnBa4MwNKoOeXoePZRdUyz5rxGRKI/FJfsYANoNAffK
-         7XGdAZ/LNSrAwQaxZpSb2+pCD5yD7Vs58et1ye0X6PG1IEVEprhADw1R8V5v53+IdZUC
-         Kekr66rqy31zqtjc0zbvGTb895VO6VS5pEWd/uV/aRPF5lgG9DzR5e5xLM38rO8aeiCk
-         U+KMDvIsvF2a7cYXeUJkkE1Ioers4jIk7F6ue3axM787jfst1A2qwmjLAYeMNqDyVQwD
-         Fxzg==
-X-Gm-Message-State: AOAM5302Sn9c2AHL29vWttMuB7pha0bS5xiz0Cy/TP/w/kL1vWMPTmBk
-	ARWy2Z8yR9aZJxaPTj593cmTqg==
-X-Google-Smtp-Source: ABdhPJyeiw4bwAQfXU133L8POlyN9oSdy3Td0K/5lQO2DSbqQQ73iq/K4PM/64Hhgx/RD0NCcuI3hQ==
-X-Received: by 2002:a05:600c:34c5:b0:38c:30e3:1e6c with SMTP id d5-20020a05600c34c500b0038c30e31e6cmr17255479wmq.144.1649424768622;
-        Fri, 08 Apr 2022 06:32:48 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id v26-20020a1cf71a000000b0038ea373273bsm1707695wmh.47.2022.04.08.06.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 06:32:48 -0700 (PDT)
-Date: Fri, 8 Apr 2022 14:32:46 +0100
-From: Daniel Thompson <daniel.thompson@linaro.org>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	SoC Team <soc@kernel.org>,
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-	Sumit Garg <sumit.garg@linaro.org>, Olof Johansson <olof@lixom.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Jason Wessel <jason.wessel@windriver.com>,
-	Doug Anderson <dianders@chromium.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	kgdb-bugreport@lists.sourceforge.net,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mike Travis <mike.travis@hpe.com>
-Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
- driver
-Message-ID: <20220408133246.fyw5554lgli4olvg@maple.lan>
-References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
- <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com>
- <YkWVTEG5oFO82GPL@kroah.com>
- <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 41A99C385A1;
+	Fri,  8 Apr 2022 14:17:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 41A99C385A1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N8GIa-1nywjl0UlM-014CAk; Fri, 08 Apr 2022 16:17:33 +0200
+Received: by mail-wr1-f41.google.com with SMTP id u3so13098830wrg.3;
+        Fri, 08 Apr 2022 07:17:33 -0700 (PDT)
+X-Gm-Message-State: AOAM530sP4+UIxQNi0rWHs7a7UaDEj85vviYgoEYS7A31c2QCwYcdxmL
+	tJV62V6Ic939utoiIOxmYizW15Yyll5ctJsyKro=
+X-Google-Smtp-Source: ABdhPJyRvLylYLoRuY6841KYpUytqXI11HqBYxQTS325hyru8pYNuf4xphTlAZhMdkzDaG6t0dxOMOlKEQOVIRLpsBk=
+X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
+ e12-20020a056000178c00b002040648b4c4mr14524137wrg.219.1649427452724; Fri, 08
+ Apr 2022 07:17:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
+References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
+ <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com> <YkWVTEG5oFO82GPL@kroah.com>
+ <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com> <20220408133246.fyw5554lgli4olvg@maple.lan>
+In-Reply-To: <20220408133246.fyw5554lgli4olvg@maple.lan>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 8 Apr 2022 16:17:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0u2xa9BFmakG+f4kyLsqNZQbE6KQ6jz2356Fyen=1EHw@mail.gmail.com>
+Message-ID: <CAK8P3a0u2xa9BFmakG+f4kyLsqNZQbE6KQ6jz2356Fyen=1EHw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To: Daniel Thompson <daniel.thompson@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Greg KH <gregkh@linuxfoundation.org>, 
+	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
+	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, Sumit Garg <sumit.garg@linaro.org>, 
+	Olof Johansson <olof@lixom.net>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Jason Wessel <jason.wessel@windriver.com>, 
+	Doug Anderson <dianders@chromium.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, kgdb-bugreport@lists.sourceforge.net, 
+	Peter Zijlstra <peterz@infradead.org>, Mike Travis <mike.travis@hpe.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:X9qbcW4xNEOA45nPjhp01CEhS/iO8UpBdKdQQqjaNUWIaX7eFrj
+ sXbeXJhfj2D6X/5mIb3S+21B+pD9LzUiEEE1f5dTohhpPpfeNamEqzHXGwfdLAJVWCiVJ2J
+ 0JTXoQE6IeK5+9Knk/dulNDpUqPwDpQH2BhfHQiPDx4v2wwoUFV2ohLzVpsDI201UjtIJI8
+ lm8bKxoHGx8t0RASUNqMw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UNcBtMJ8Jhs=:Wo+BodL5OFI2ANaZTfoNc/
+ puXp7UlSmWjbWtA1rAKt6QgkFYXti5idoqUAmlYa4a2scNDK+k5nGRR1NEOnYoYaXFus10sbB
+ ctDnpNWYJWNVSbi8jHZn14NHWebJ5L1UDgRT6k+ao3cZe3aScFZocIIc1CFAIWaE3DFRdr/Am
+ 9fXNPC17M7dBgqdCZFZ4ij45ggRQFdEoDYQc5T6X4mLKxneykaK7e7yxkwSY5JoZXGqPk9loc
+ bi2Am01+cDPmaGtLQ3UhVCs6v6ohUZssKni932pzIie8VJ7xeNLShD+wcoC2nnAZ+WFzcmhuY
+ vebBXKK0rzA6qHB2KYrn7nfbEvD41kdnngI5WtLp8OmoxQKe1DHmayi3FkNI5F7s2kb32GhwP
+ Jj08cDWn+FSWT/u6xik7jducAg0stwSloj4B5Pj7SQlSzM0BHUAfk9vHaddMiM+u19r5+Ses8
+ PbOts/GA99qXd04yEQDLghYeziEuHTMHPlsCtT+gcahyb+ekCrwdHh+As9JduY8yFmW8PsBNq
+ MtkoRwh8SW0o6d92lAkTiFWrEnWDPYJD75QDBoeiw2k/1ksmkSm09UuRROw5va5sSQeh5hIWT
+ Xm6b0PuS+naGCQkq93wAXwHecqYmjeARHqx315GxTL3V9OL1uWXkZVKvbrY3T4ksE9NsqNgsw
+ LE5KhwxbgAMTHrJdLwZhYVH2VeYegCoabD28C5Khy+ybd9wKJmIgmEtTo+jDAP6rZPlAi9Lmw
+ AgqXtOdO13dYAsBm22gRu0UBnJFfxyzRjO4k/Pt+j4e+MbSZKuV1BJcKT2DMK03tqaA4JDv3H
+ U1FKGbfMRHMS99cIwyNhyNskUjeFEs0JAQYlkLmbFaLaEpzw74=
 
-On Thu, Mar 31, 2022 at 05:44:55PM +0200, Arnd Bergmann wrote:
-> On Thu, Mar 31, 2022 at 1:49 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > +
-> > > +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
-> > > +{
-> > > +     handle_sysrq('c');
-> >
-> >
-> > Why is this calling this sysrq call?  From an interrupt?  Why?
-> >
-> > And you are hard-coding "c", are you sure?
-> 
-> This is an actual sysrq driver in the traditional sense, where you can send
-> a single interrupt to the machine from the outside over a side channel.
-> 
-> I suggested sysrq instead of just panic() to make it a bit more flexible.
-> Unfortunately there is no additional data, so it comes down to always
-> sending the same character.
-> 
-> It would be possible to make that character configurable with a module
-> parameter or something like that, but I'm not sure that is an improvement.
-> Maybe you have another idea for this.
+On Fri, Apr 8, 2022 at 3:32 PM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+> On Thu, Mar 31, 2022 at 05:44:55PM +0200, Arnd Bergmann wrote:
+>
+> There is some prior art for this sort of feature. AFAICT SGI UV has a
+> similar mechanism that can send an NMI-with-no-side-channel to the
+> kernel. The corresponding driver offers a range of actions using a
+> module parameter:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/platform/uv/uv_nmi.c#n180
+>
+> I don't think a hardcoded 'c' makes any sense. With a hardcoded argument
+> it is just obfuscation. However it is certainly seems attractive to be
+> able to reuse handle_sysrq() to provide a more powerful set of actions.
 
-Given the interrupt can be dismissed then offering non-fatal actions in
-response the chassis command seems reasonable.
+How about a module parameter that allows picking a sysrq character then?
 
-There is some prior art for this sort of feature. AFAICT SGI UV has a
-similar mechanism that can send an NMI-with-no-side-channel to the
-kernel. The corresponding driver offers a range of actions using a
-module parameter:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/platform/uv/uv_nmi.c#n180
-
-I don't think a hardcoded 'c' makes any sense. With a hardcoded argument
-it is just obfuscation. However it is certainly seems attractive to be
-able to reuse handle_sysrq() to provide a more powerful set of actions.
-
-
-Daniel.
+        Arnd
