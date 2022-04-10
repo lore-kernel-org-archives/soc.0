@@ -1,125 +1,106 @@
-Return-Path: <SRS0=i7Gr=UU=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=klBj=UU=aurel32.net=aurelien@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F81BC433F5
-	for <soc@archiver.kernel.org>; Sun, 10 Apr 2022 20:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC67C433FE
+	for <soc@archiver.kernel.org>; Sun, 10 Apr 2022 23:00:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3DA9EC385A4; Sun, 10 Apr 2022 20:30:44 +0000 (UTC)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 4D5ABC385B7; Sun, 10 Apr 2022 23:00:38 +0000 (UTC)
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CE510C385A1
-	for <soc@kernel.org>; Sun, 10 Apr 2022 20:30:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE510C385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id q14so17762738ljc.12
-        for <soc@kernel.org>; Sun, 10 Apr 2022 13:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Vc8qpYMnWrnbEisGyhhs8zQtGaopunQ/9w2IAx3UflU=;
-        b=PRCaOLEqNXb01zaEjbvJ9VBlD3aRk1TgBhgzi6e6cAWInP0SuFHZZbSSHTF5hQtN7g
-         zCzKDVK1b3PSQTKMlgWdwrcb7E9gcDd8BZrWI71BmwvUXJcPOEEHzKfW3OZ01t5m63wU
-         jg6sih/dADEtaG8IUB7reLTJy2mHvobjVVBUyRfVMTnCC8U7wSDPqiw9ufSEsOfAR8tL
-         5ca6u4F6NbGWqSK2G6XswMXyqOB4TyCu5OQ9LMOsBlFpmgUVdk0Kq9VFQXD3hb+Hzamw
-         v2XR8UHWojxJ0xADGPdCGuaQplbO6dxiSwfX53tS1Pf9fAHkf502X48rKbXkiZNA3xRl
-         w4ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Vc8qpYMnWrnbEisGyhhs8zQtGaopunQ/9w2IAx3UflU=;
-        b=ELob4w3eh0ewXukQQ1iX27wypI9wVHSrDoBsOwo64rlpQxqw0iED4d1w+QnEi6w+MX
-         trErgyk+wmJYsMpSrAKQNbyyvIV0TInK7rpeuYL+HXNiCKo+/tufI5hAw8+4XGhHTRgf
-         lUU37IrraQ/vZfNc6NX1msgGZf/BbJeziqNJ6pe0SDc6xT6Z6xlEpyC1Kdd5fsbuTsFb
-         Q/2ebdgI/fsTZgwaCBehbenFLVlwjyiDZ7xvsq4UNIrcjLfbY4ewIeM2RRaQURHcmKOe
-         q4r82ZnP4NwrbCFNT4/DXAK5DtgYRwzRceoo5VNXIfyjWW9nyc30ggQPsWKOR+LUX0CK
-         gu/w==
-X-Gm-Message-State: AOAM531PISdpNrNbXrzUUX6r3RkGzOEWLPNP42QSMacM7GZAatUPuZ1g
-	90iUPjZ3AIEWKhP5PfVTfgV+WA==
-X-Google-Smtp-Source: ABdhPJxAE3Li7OklrNm3Df8V/aAWCBx3d7cfODsva2/BJ7QwFvdoxKZ5E7JJD4RefRGqK4fCpNHvAg==
-X-Received: by 2002:a2e:b2ce:0:b0:24b:5f39:3124 with SMTP id 14-20020a2eb2ce000000b0024b5f393124mr2802068ljz.483.1649622639821;
-        Sun, 10 Apr 2022 13:30:39 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id x12-20020a056512046c00b0046b846fcc12sm855758lfd.173.2022.04.10.13.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 13:30:39 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id A9E11C385A5;
+	Sun, 10 Apr 2022 23:00:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9E11C385A5
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=aurel32.net
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=aurel32.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=aJRncnFPGogcci9EJtlIRk6kkiE8YTvJb5FUaqmBsaQ=; b=UNqKglfVHf9nXXqEcm+xSyRD8Y
+	AI6nDI78xyR9QPIjT058FZpb01ltnweaPAA8+9sWpFAgR3EKxB6Tt5mr/E+3M8PXUSp+P40qSJsR+
+	T+zGFJ5DD88xUhb0/lZX/thFNOfdLUjwFvnjB30OmTQALV3Q0p6hiNpjpcRJgaopdfaGrDR95QjvT
+	IL84JJJ5t12Ei6Gqi2+CmVW4C9soHtsuVx0A7FSWJaSJhwg73B9GRaHi55RxK2cSVeNJBWeyiTM3W
+	ouW/mZ09YDuoZZWPkNMGX8en6Hr2vKCm7hnUdtr/oSyDhJ7aFqTO1Ak7BYQWP99gD46I4YULFRNtO
+	Rfto70gQ==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1ndgXe-00BKd0-D1; Mon, 11 Apr 2022 01:00:22 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.95)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1ndgXd-000ZMa-PF;
+	Mon, 11 Apr 2022 01:00:21 +0200
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
+Cc: Aurelien Jarno <aurelien@aurel32.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
 	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-	Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Subject: [PATCH] ARM: config: Update Gemini defconfig
-Date: Sun, 10 Apr 2022 22:28:37 +0200
-Message-Id: <20220410202837.2667333-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+Subject: [PATCH 1/2] arm64: dts: broadcom: Enable device-tree overlay support for RPi devices
+Date: Mon, 11 Apr 2022 00:59:39 +0200
+Message-Id: <20220410225940.135744-2-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220410225940.135744-1-aurelien@aurel32.net>
+References: <20220410225940.135744-1-aurelien@aurel32.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Gemini defconfig needs to be updated due to DSA driver
-Kconfig changes in the v5.18 merge window:
-CONFIG_NET_DSA_REALTEK_SMI is now behind
-CONFIG_NET_DSA_REALTEK and the desired DSA switch need
-to be selected explicitly with
-CONFIG_NET_DSA_REALTEK_RTL8366RB.
+Add the '-@' DTC option for the Raspberry Pi devices. This option
+populates the '__symbols__' node that contains all the necessary symbols
+for supporting device-tree overlays (for instance from the firmware or
+the bootloader) on these devices.
 
-Take this opportunity to update some other minor config
-options:
+The Rasbperry Pi devices are well known for their GPIO header, that
+allow various "HATs" or other modules do be connected and this enables
+users to create out-of-tree device-tree overlays for these modules.
 
-- CONFIG_MARVELL_PHY moved around because of Kconfig
-  changes.
+Please note that this change does increase the size of the resulting DTB
+by ~40%. For example, with v5.17 increase in size is as follows:
 
-- CONFIG_SENSORS_DRIVETEMP should be selected since is
-  regulates the system critical alert temperature on
-  some devices, which is nice if it is handled even
-  if initramfs or root fails to mount.
+  bcm2711-rpi-400.dtb       26481 -> 36830 bytes
+  bcm2711-rpi-4-b.dtb       26537 -> 36886 bytes
+  bcm2711-rpi-cm4-io.dtb    26426 -> 36945 bytes
+  bcm2837-rpi-3-a-plus.dtb  14133 -> 19740 bytes
+  bcm2837-rpi-3-b.dtb       14310 -> 20006 bytes
+  bcm2837-rpi-3-b-plus.dtb  14670 -> 20474 bytes
+  bcm2837-rpi-cm3-io3.dtb   13680 -> 19266 bytes
 
-Cc: Hans Ulli Kroll <ulli.kroll@googlemail.com>
-Cc: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Fixes: 319a70a5fea9 ("net: dsa: realtek-smi: move to subdirectory")
-Fixes: 765c39a4fafe ("net: dsa: realtek: convert subdrivers into modules")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
 ---
-SoC folks: please apply this patch directly for v5.18
----
- arch/arm/configs/gemini_defconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/broadcom/Makefile | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm/configs/gemini_defconfig b/arch/arm/configs/gemini_defconfig
-index a7acfee11ffc..a80bc8a43091 100644
---- a/arch/arm/configs/gemini_defconfig
-+++ b/arch/arm/configs/gemini_defconfig
-@@ -49,11 +49,13 @@ CONFIG_ATA=y
- CONFIG_PATA_FTIDE010=y
- CONFIG_NETDEVICES=y
- CONFIG_TUN=y
-+CONFIG_NET_DSA_REALTEK=y
- CONFIG_NET_DSA_REALTEK_SMI=y
-+CONFIG_NET_DSA_REALTEK_RTL8366RB=y
- CONFIG_GEMINI_ETHERNET=y
-+CONFIG_MARVELL_PHY=y
- CONFIG_MDIO_BITBANG=y
- CONFIG_MDIO_GPIO=y
--CONFIG_MARVELL_PHY=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_KEYBOARD_GPIO=y
- # CONFIG_INPUT_MOUSE is not set
-@@ -66,6 +68,7 @@ CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_I2C_GPIO=y
- CONFIG_SPI=y
- CONFIG_SPI_GPIO=y
-+CONFIG_SENSORS_DRIVETEMP=y
- CONFIG_SENSORS_GPIO_FAN=y
- CONFIG_SENSORS_LM75=y
- CONFIG_THERMAL=y
+diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
+index 5082fcd1fea5..0aa8ee2afdd5 100644
+--- a/arch/arm64/boot/dts/broadcom/Makefile
++++ b/arch/arm64/boot/dts/broadcom/Makefile
+@@ -1,4 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
++
++# Enables support for device-tree overlays
++DTC_FLAGS_bcm2711-rpi-400 := -@
++DTC_FLAGS_bcm2711-rpi-4-b := -@
++DTC_FLAGS_bcm2711-rpi-cm4-io := -@
++DTC_FLAGS_bcm2837-rpi-3-a-plus := -@
++DTC_FLAGS_bcm2837-rpi-3-b := -@
++DTC_FLAGS_bcm2837-rpi-3-b-plus := -@
++DTC_FLAGS_bcm2837-rpi-cm3-io3 := -@
++DTC_FLAGS_bcm2837-rpi-zero-2-w := -@
++
+ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
+ 			      bcm2711-rpi-4-b.dtb \
+ 			      bcm2711-rpi-cm4-io.dtb \
 -- 
-2.35.1
+2.34.1
 
