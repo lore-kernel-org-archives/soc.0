@@ -1,107 +1,87 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=5fya=UV=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE82C433F5
-	for <soc@archiver.kernel.org>; Mon, 11 Apr 2022 02:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0D3BC433F5
+	for <soc@archiver.kernel.org>; Mon, 11 Apr 2022 02:51:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8847EC385AA; Mon, 11 Apr 2022 02:43:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7379C385A1;
-	Mon, 11 Apr 2022 02:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649644987;
-	bh=jFAjRZgPYtKz3SN2lDyPdZIi9S3ksXFDNIYpPdk2qCc=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=p9H4NeXNxltz5Qt1L1/8gOVQiiu53e94coxFEFiVP1aZY95g2zVbvpic6Tkn/Abba
-	 9cjfljh6oLQwQTfw6NwogBfMeJsLjo2Fa141p2tZ/OjkLcJKED8yS9lWPXTmcmfsUp
-	 z3SKqjhRDsh5rYFWhPyDVDUATYRCz5vnf6iPeQVywfIsXrr7jvt5zEe4SUjZ1tPWxG
-	 n4FWniwg91eUpzkFHNS9XyBQnDBmaeWwuL2zx2eJmn3f8F9v9bDGOyMbQ6GHaowHP0
-	 3zxwW3ulHxg6lhhZZTXvscUZKKYOqY3dTy9fKGQJTAbyI5vicgQMdc9biPrVyPkcpy
-	 ZilhZ+LH9PGyg==
-Date: Mon, 11 Apr 2022 10:43:01 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	id 65CB8C385AB; Mon, 11 Apr 2022 02:51:46 +0000 (UTC)
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 91D55C385A4
+	for <soc@kernel.org>; Mon, 11 Apr 2022 02:51:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 91D55C385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f53.google.com with SMTP id bx5so13886794pjb.3
+        for <soc@kernel.org>; Sun, 10 Apr 2022 19:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rXMHDZ/wjPIXvL9nqfsrxMZkzmm8UuxVAONDINflarg=;
+        b=AE76w0buips1IavXt8IqZhb/mkmazdyXyCp/cggM8TOunNklvkgT4lSsRzujLmLdE3
+         476Yi8o85rpPXFHnov+x/BLI3qBaqVaaP6I4k4iLECAwuzFym8qZNIZbEP/WaSKDg6Zg
+         Q3gO1XTRhmNyxHLz71bDze79BuvYZ4M53fsVYrBMjvPRw4FZhhWJB6p04pI8WUQU1wUF
+         VS6JxUiB5uS9NezIa01SRAz5HYjTn9xC4rSa4gCrxokcMgDrVexzZAX9iJXsx6xLW0TK
+         CSo+qBkDUpOfw17IEGKJH3+MaferjZI/1prH9OTR0qLrgBsw9ADJ367gVGLHIl088MBE
+         6bVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rXMHDZ/wjPIXvL9nqfsrxMZkzmm8UuxVAONDINflarg=;
+        b=F0y1coeVtbM2Zl3DdqErIAdbbEQqfpuXRRsRd3NvmQO7oK/VC530+YcQ+5ZZlt5cEK
+         W7RxJSwyEvo6kCRKP7qWyNbvtdPVkwJe3+lm9+ZQ4SCwSTbBNKRNrCI5Sx7XdJoHxFKD
+         wKrKzlSUjlI0g+kqUVvxQaE89ye6U9uOFX+szUu7M0SUpR1fDEJ+tUXAVIUx9NRdXl1q
+         jvwvY6y6Xv1RLM3TE19kZrmSWW784Uu68Uc3J3Ja/Lls1qAkVUCPhix6UDP659LRllpa
+         Yz+gNDS5oJwHuu1ibqn9OI8oE5lxvWtOjkR8PwDKKp+fJ8nh3svS4ym2WYZRrKpI+rlh
+         7Fgg==
+X-Gm-Message-State: AOAM5310GLnZMrrvvMhaaxGyp8T0XrKkB90UWvVGKz0XD2SDFAqmIBC0
+	Ks1Ryimie6f75bHiv5BeJgkIkg==
+X-Google-Smtp-Source: ABdhPJzGVKQR6w8pMxMmb2S23wGUZsQuhLLg7iNaBj4HpD8z37EDF1Ky46L9XugLcAZWFBAiFvYfIA==
+X-Received: by 2002:a17:90b:4a4e:b0:1ca:c996:20dc with SMTP id lb14-20020a17090b4a4e00b001cac99620dcmr35062125pjb.98.1649645505104;
+        Sun, 10 Apr 2022 19:51:45 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id d8-20020aa78688000000b00505793566f7sm9440536pfo.211.2022.04.10.19.51.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 19:51:44 -0700 (PDT)
+Date: Mon, 11 Apr 2022 08:21:42 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 5.18
-Message-ID: <20220411024301.GH129381@dragon>
+Cc: Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com, arm@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH] ARM: dts: align SPI NOR node name with dtschema
+Message-ID: <20220411025142.uhdllnknn232h26f@vireshk-i7>
+References: <20220407143027.294678-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220407143027.294678-1-krzysztof.kozlowski@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+On 07-04-22, 16:30, Krzysztof Kozlowski wrote:
+> The node names should be generic and SPI NOR dtschema expects "flash".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/spear1310-evb.dts              | 2 +-
+>  arch/arm/boot/dts/spear1340-evb.dts              | 2 +-
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.18
-
-for you to fetch changes up to f571e9c9aafed2fbd60fd99aa4b9823221338b98:
-
-  arm64: dts: imx: Fix imx8*-var-som touchscreen property sizes (2022-04-11 09:38:07 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 5.18:
-
-- Increase DOMAIN_MAX_CLKS in imx8m-blk-ctrl driver to fix an ISI hang
-  on i.MX8MN.
-- Fix spi-tx-bus-width on imx8mq-tqma8mq board.
-- Fix an SGTL5000 detection issue by moving MCLK pinctrl into SGTL5000
-  codec node.
-- Fix spi2 pin configuration on imx8mm-venice board.
-- Fix SCU clock controller's compatible property for i.MX8QM.
-- Fix SAI device compatible for i.MX8MN.
-- A couple of fixes from Rob to address issues in boolean properties
-  and touchscreen property sizes.
-- Fix OTG controller over-current configuration for imx8mm-venice-gw
-  boards.
-- Fix NULL but dereferenced coccicheck error in imx-weim driver.
-
-----------------------------------------------------------------
-Adam Ford (1):
-      soc: imx: imx8m-blk-ctrl: Fix IMX8MN_DISPBLK_PD_ISI hang
-
-Alexander Stein (1):
-      arm64: dts: imx8mq-tqma8mq: change the spi-nor tx
-
-Fabio Estevam (1):
-      ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
-
-Johan Hovold (1):
-      arm64: dts: imx8mm-venice: fix spi2 pin configuration
-
-Liu Ying (1):
-      arm64: dts: imx8qm: Correct SCU clock controller's compatible property
-
-Marek Vasut (1):
-      arm64: dts: imx8mn: Fix SAI nodes
-
-Rob Herring (2):
-      ARM: dts: imx: Fix boolean properties with values
-      arm64: dts: imx: Fix imx8*-var-som touchscreen property sizes
-
-Tim Harvey (1):
-      ARM: dts: imx8mm-venice-gw{71xx,72xx,73xx}: fix OTG controller OC mode
-
-Wan Jiabing (1):
-      bus: imx-weim: fix NULL but dereferenced coccicheck error
-
- arch/arm/boot/dts/imx6qdl-apalis.dtsi              | 10 +++++--
- arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi       | 32 +++++++++++-----------
- .../boot/dts/imx6ul-phytec-segin-peb-av-02.dtsi    |  4 +--
- arch/arm64/boot/dts/freescale/imx8mm-var-som.dtsi  |  8 +++---
- .../boot/dts/freescale/imx8mm-venice-gw71xx.dtsi   |  4 ++-
- .../boot/dts/freescale/imx8mm-venice-gw72xx.dtsi   |  4 ++-
- .../boot/dts/freescale/imx8mm-venice-gw73xx.dtsi   |  4 ++-
- arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi  |  8 +++---
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          | 10 +++----
- arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi  |  2 +-
- arch/arm64/boot/dts/freescale/imx8qm.dtsi          |  2 +-
- drivers/bus/imx-weim.c                             |  3 +-
- drivers/soc/imx/imx8m-blk-ctrl.c                   |  2 +-
- 13 files changed, 52 insertions(+), 41 deletions(-)
+-- 
+viresh
