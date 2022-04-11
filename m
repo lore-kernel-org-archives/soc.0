@@ -1,124 +1,107 @@
-Return-Path: <SRS0=klBj=UU=aurel32.net=aurelien@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E552C4332F
-	for <soc@archiver.kernel.org>; Sun, 10 Apr 2022 23:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE82C433F5
+	for <soc@archiver.kernel.org>; Mon, 11 Apr 2022 02:43:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E4A47C385A4; Sun, 10 Apr 2022 23:00:38 +0000 (UTC)
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8EF56C385AA;
-	Sun, 10 Apr 2022 23:00:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8EF56C385AA
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=qWl2Mn2dgNw5/xL1kBPYx11jQuGzlGIXV7NZL9/oICM=; b=UL9lELEKVxByJLvZhjCsj39PtB
-	yW1RyKZtT4AQBKso9lya4nFexHKr92ehuRDpdqU8pr87ZjhRE2Rbpn0+c2swJ9mPPOgvcwLEOTlvt
-	EHqVgEfnwYXajyhWMoMJY0L9+nKIUXvq1vh5qNDgXsQc/MZZPXvkbo6C92l0vPm577Rc2nIr8tQoi
-	X3WMFE3gEL+oxxvj306blQGjD+XVm0n+WDCcap0ahxG/J1m6Ik0Uj+ui8/fZcHRBIFyzOtxi3NK1W
-	etsaEKvYRF3MfxO9KSQ5uKj4wG9QU4zGChZk3x0z8nHiuB/piK+rns+Vbr4O4mNm5ETt9C9CAmoLW
-	TIwOLWTQ==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1ndgXe-00BKdE-Pr; Mon, 11 Apr 2022 01:00:22 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.95)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1ndgXe-000ZMn-3l;
-	Mon, 11 Apr 2022 01:00:22 +0200
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: linux-kernel@vger.kernel.org
+	id 8847EC385AA; Mon, 11 Apr 2022 02:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7379C385A1;
+	Mon, 11 Apr 2022 02:43:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1649644987;
+	bh=jFAjRZgPYtKz3SN2lDyPdZIi9S3ksXFDNIYpPdk2qCc=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=p9H4NeXNxltz5Qt1L1/8gOVQiiu53e94coxFEFiVP1aZY95g2zVbvpic6Tkn/Abba
+	 9cjfljh6oLQwQTfw6NwogBfMeJsLjo2Fa141p2tZ/OjkLcJKED8yS9lWPXTmcmfsUp
+	 z3SKqjhRDsh5rYFWhPyDVDUATYRCz5vnf6iPeQVywfIsXrr7jvt5zEe4SUjZ1tPWxG
+	 n4FWniwg91eUpzkFHNS9XyBQnDBmaeWwuL2zx2eJmn3f8F9v9bDGOyMbQ6GHaowHP0
+	 3zxwW3ulHxg6lhhZZTXvscUZKKYOqY3dTy9fKGQJTAbyI5vicgQMdc9biPrVyPkcpy
+	 ZilhZ+LH9PGyg==
+Date: Mon, 11 Apr 2022 10:43:01 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Aurelien Jarno <aurelien@aurel32.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	soc@kernel.org
-Subject: [PATCH 2/2] arm: dts: Enable device-tree overlay support for RPi devices
-Date: Mon, 11 Apr 2022 00:59:40 +0200
-Message-Id: <20220410225940.135744-3-aurelien@aurel32.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220410225940.135744-1-aurelien@aurel32.net>
-References: <20220410225940.135744-1-aurelien@aurel32.net>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 5.18
+Message-ID: <20220411024301.GH129381@dragon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Add the '-@' DTC option for the Raspberry Pi devices. This option
-populates the '__symbols__' node that contains all the necessary symbols
-for supporting device-tree overlays (for instance from the firmware or
-the bootloader) on these devices.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-The Rasbperry Pi devices are well known for their GPIO header, that
-allow various "HATs" or other modules do be connected and this enables
-users to create out-of-tree device-tree overlays for these modules.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-Please note that this change does increase the size of the resulting DTB
-by ~40%. For example, with v5.17 increase in size is as follows:
+are available in the Git repository at:
 
-  bcm2711-rpi-400.dtb       26481 -> 36830 bytes
-  bcm2711-rpi-4-b.dtb       26537 -> 36886 bytes
-  bcm2711-rpi-cm4-io.dtb    26426 -> 36945 bytes
-  bcm2835-rpi-a.dtb         12641 -> 17852 bytes
-  bcm2835-rpi-a-plus.dtb    12765 -> 17976 bytes
-  bcm2835-rpi-b.dtb         12763 -> 17998 bytes
-  bcm2835-rpi-b-plus.dtb    12979 -> 18263 bytes
-  bcm2835-rpi-b-rev2.dtb    12847 -> 18131 bytes
-  bcm2835-rpi-cm1-io1.dtb   12839 -> 18113 bytes
-  bcm2835-rpi-zero.dtb      12681 -> 17924 bytes
-  bcm2835-rpi-zero-w.dtb    13135 -> 18430 bytes
-  bcm2836-rpi-2-b.dtb       13687 -> 19255 bytes
-  bcm2837-rpi-3-a-plus.dtb  14133 -> 19740 bytes
-  bcm2837-rpi-3-b.dtb       14310 -> 20006 bytes
-  bcm2837-rpi-3-b-plus.dtb  14670 -> 20474 bytes
-  bcm2837-rpi-cm3-io3.dtb   13680 -> 19266 bytes
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.18
 
-Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
----
- arch/arm/boot/dts/Makefile | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+for you to fetch changes up to f571e9c9aafed2fbd60fd99aa4b9823221338b98:
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..85644149de44 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -81,6 +81,24 @@ dtb-$(CONFIG_SOC_SAMA7G5) += \
- 	at91-sama7g5ek.dtb
- dtb-$(CONFIG_ARCH_AXXIA) += \
- 	axm5516-amarillo.dtb
-+# Enables support for device-tree overlays
-+DTC_FLAGS_bcm2835-rpi-b := -@
-+DTC_FLAGS_bcm2835-rpi-a := -@
-+DTC_FLAGS_bcm2835-rpi-b-rev2 := -@
-+DTC_FLAGS_bcm2835-rpi-b-plus := -@
-+DTC_FLAGS_bcm2835-rpi-a-plus := -@
-+DTC_FLAGS_bcm2835-rpi-cm1-io1 := -@
-+DTC_FLAGS_bcm2836-rpi-2-b := -@
-+DTC_FLAGS_bcm2837-rpi-3-a-plus := -@
-+DTC_FLAGS_bcm2837-rpi-3-b := -@
-+DTC_FLAGS_bcm2837-rpi-3-b-plus := -@
-+DTC_FLAGS_bcm2837-rpi-cm3-io3 := -@
-+DTC_FLAGS_bcm2837-rpi-zero-2-w := -@
-+DTC_FLAGS_bcm2711-rpi-400 := -@
-+DTC_FLAGS_bcm2711-rpi-4-b := -@
-+DTC_FLAGS_bcm2711-rpi-cm4-io := -@
-+DTC_FLAGS_bcm2835-rpi-zero := -@
-+DTC_FLAGS_bcm2835-rpi-zero-w := -@
- dtb-$(CONFIG_ARCH_BCM2835) += \
- 	bcm2835-rpi-b.dtb \
- 	bcm2835-rpi-a.dtb \
--- 
-2.34.1
+  arm64: dts: imx: Fix imx8*-var-som touchscreen property sizes (2022-04-11 09:38:07 +0800)
 
+----------------------------------------------------------------
+i.MX fixes for 5.18:
+
+- Increase DOMAIN_MAX_CLKS in imx8m-blk-ctrl driver to fix an ISI hang
+  on i.MX8MN.
+- Fix spi-tx-bus-width on imx8mq-tqma8mq board.
+- Fix an SGTL5000 detection issue by moving MCLK pinctrl into SGTL5000
+  codec node.
+- Fix spi2 pin configuration on imx8mm-venice board.
+- Fix SCU clock controller's compatible property for i.MX8QM.
+- Fix SAI device compatible for i.MX8MN.
+- A couple of fixes from Rob to address issues in boolean properties
+  and touchscreen property sizes.
+- Fix OTG controller over-current configuration for imx8mm-venice-gw
+  boards.
+- Fix NULL but dereferenced coccicheck error in imx-weim driver.
+
+----------------------------------------------------------------
+Adam Ford (1):
+      soc: imx: imx8m-blk-ctrl: Fix IMX8MN_DISPBLK_PD_ISI hang
+
+Alexander Stein (1):
+      arm64: dts: imx8mq-tqma8mq: change the spi-nor tx
+
+Fabio Estevam (1):
+      ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
+
+Johan Hovold (1):
+      arm64: dts: imx8mm-venice: fix spi2 pin configuration
+
+Liu Ying (1):
+      arm64: dts: imx8qm: Correct SCU clock controller's compatible property
+
+Marek Vasut (1):
+      arm64: dts: imx8mn: Fix SAI nodes
+
+Rob Herring (2):
+      ARM: dts: imx: Fix boolean properties with values
+      arm64: dts: imx: Fix imx8*-var-som touchscreen property sizes
+
+Tim Harvey (1):
+      ARM: dts: imx8mm-venice-gw{71xx,72xx,73xx}: fix OTG controller OC mode
+
+Wan Jiabing (1):
+      bus: imx-weim: fix NULL but dereferenced coccicheck error
+
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi              | 10 +++++--
+ arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi       | 32 +++++++++++-----------
+ .../boot/dts/imx6ul-phytec-segin-peb-av-02.dtsi    |  4 +--
+ arch/arm64/boot/dts/freescale/imx8mm-var-som.dtsi  |  8 +++---
+ .../boot/dts/freescale/imx8mm-venice-gw71xx.dtsi   |  4 ++-
+ .../boot/dts/freescale/imx8mm-venice-gw72xx.dtsi   |  4 ++-
+ .../boot/dts/freescale/imx8mm-venice-gw73xx.dtsi   |  4 ++-
+ arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi  |  8 +++---
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          | 10 +++----
+ arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi  |  2 +-
+ arch/arm64/boot/dts/freescale/imx8qm.dtsi          |  2 +-
+ drivers/bus/imx-weim.c                             |  3 +-
+ drivers/soc/imx/imx8m-blk-ctrl.c                   |  2 +-
+ 13 files changed, 52 insertions(+), 41 deletions(-)
