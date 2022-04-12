@@ -4,206 +4,129 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D31BC433F5
-	for <soc@archiver.kernel.org>; Tue, 12 Apr 2022 11:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D37E4C433EF
+	for <soc@archiver.kernel.org>; Tue, 12 Apr 2022 11:56:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 72612C385A1; Tue, 12 Apr 2022 11:27:47 +0000 (UTC)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	id 918BCC385A5; Tue, 12 Apr 2022 11:56:45 +0000 (UTC)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8DD87C385A6
-	for <soc@kernel.org>; Tue, 12 Apr 2022 11:27:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DD87C385A6
+	by smtp.kernel.org (Postfix) with ESMTPS id BF04CC385A1
+	for <soc@kernel.org>; Tue, 12 Apr 2022 11:56:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BF04CC385A1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id w18so21910718edi.13
-        for <soc@kernel.org>; Tue, 12 Apr 2022 04:27:46 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id t25so9369497edt.9
+        for <soc@kernel.org>; Tue, 12 Apr 2022 04:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fTL0LuyHJP55C0ZkxhV5JJZCHR1IVobkoraz2H3z7k0=;
-        b=jVUvZd+C01riSCcHtgCctzSsElQtUk8vtWMbSMQ0kpaIrv7jqatQzCEI1qVasdJKjA
-         tyd1W6KKLu/n4MpTQQjVjZuXwZceAITHCEa7JFYmr0IASwv0/vqIswXQozv9oeFlVdAW
-         rp+FXno2KJShW9hFRtGloTdd3C4UdkVpfL0CmNpja33fk/9f0SywNlRw6Y0daKipBVwh
-         oqCi0qvHdK7l8oDZb8B0X4961KVVr/XYmYa4YgepQ+s9l5f7HL2JZvtTyotQxZg0XWH/
-         tU8tr5syoz9+QUIP4mtfvULYsZXF69MvqlZhiw1QBIiJriOQenmWYGIC52R93R7ITyO4
-         qD7Q==
+        bh=6vxAMFFRr0NPCcUM2OeYvzLThu9KnprPtO/7Wfh+zGw=;
+        b=ptim7LvKUVHYzXsNFJJ5lOaaox1uNgxiKhyPHrCda1KZNkPqmpHSSM7S74nwKh0dvL
+         q4cVJEO3EkbIGIxyLH0TfH+HhFu8S3eeUES7UGraptR5tLGLxg/ZBaIJjGjNy2yAQ411
+         uWchf47F0ACHsaUCiCK25xpQ0DHeL5nvO42fGfhWpzKbtesbxetvVWBKFtMtK3QlbKBz
+         oahU5jP207DqRKUf7G82xDiGfJykhP2Q4aHMc8q37r87gs0Rve8ahNDV/Q1036Usxs5a
+         aSiovyNq2WTYnHCtFmwmQ/Gbql3e6KlXgej00MEIrsa75JJj9G4N7uo9tII/8ItCdq5y
+         NlRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=fTL0LuyHJP55C0ZkxhV5JJZCHR1IVobkoraz2H3z7k0=;
-        b=7HtXH2pec9H1yt7TQhgzJRqVFFs/pWyEmp6lAUEfrSALh3LbXIiZFGNrBaTPYhw7/M
-         gjkTvna+oxonmpYNcj0aKirTj7vew4yNBOhsr2Rf2C/ard+HiuHw9L9KfdYGxIYzOXB0
-         4BebZJ87Zu2JerUlajsQo11bO+e2/5nz4EZKZnwAEPWg8B4XMpYy2gKXJ72B2VV+CeUG
-         x4bPOIZXVtpo1j87YYABG87LAVv+P8P8UPuWI65gnYiG3KdDFtxyXZBlK4Wff+Q1ATR1
-         mm3jLMoy1rAOb7PQU4ESvKcxnIAyKxkn8NPrrVjiMbDQqsmtgej3XF1YCjkg79TRwvE8
-         qUqQ==
-X-Gm-Message-State: AOAM530x0s7vEbLxI1U9JcNTXX0eEqOR+EeDGSbh8SWYJB3JwX/H0Ds/
-	xfxB1lzRxFIYd1ibCEydqPraMw==
-X-Google-Smtp-Source: ABdhPJxieY0YdmARZCcyw24ryB8+AJrHlDefLmPsyvARI8OPfb3IKN7u+coH1M9vVUt+9v2SWeq++g==
-X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id y20-20020a056402441400b0041928bc55dcmr38705253eda.130.1649762864946;
-        Tue, 12 Apr 2022 04:27:44 -0700 (PDT)
-Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o5-20020a170906974500b006dfc781498dsm13167937ejy.37.2022.04.12.04.27.43
+        bh=6vxAMFFRr0NPCcUM2OeYvzLThu9KnprPtO/7Wfh+zGw=;
+        b=XBSvChoNX2ZuknYdZh+o1PWJYtBI1EX7MSNfJ7YRd1PVDranOgmwJd3Z8zG4Lg0SM3
+         h4iW/QN5pXsdyyhXWjWBasAvhoInFIz5V0Stzp5OLHRx6Z8AUxsB14EyPFKPCv2TNAco
+         wfiw88erY4oZghC7pX5apIi4DB/zXNxdtV7obNWMyf78lSiSdjULBxer62nrHbN2A7Wi
+         2xdaHngRlDhMy96kogbGR3SSV9KfHsTktHVCNx79VRAK2+cxi5Hl56ZcH1Gwc0StvqRe
+         y+pkAKvS6DxmkCcvxDl02SyyV6mSBZoQpju2Hx60XpF3pJdv1rFydU9XaDSfUs7DvhGZ
+         N6xg==
+X-Gm-Message-State: AOAM531RytkHJTPfcR8Z5+Ypc4ZAfItr4zfdY6NXhhQXUYAMOxlBVx0Q
+	+g9aM7PatZUMdGp//v9bO8DqtQ==
+X-Google-Smtp-Source: ABdhPJy/oRgec0WQTvkI71j0XXmhBfTd5Z+XNoP8pK290bttfxckXJziNbgyTb89bNmiFkhIQYDrxA==
+X-Received: by 2002:aa7:c790:0:b0:41d:7e0f:f15c with SMTP id n16-20020aa7c790000000b0041d7e0ff15cmr9193914eds.129.1649764603156;
+        Tue, 12 Apr 2022 04:56:43 -0700 (PDT)
+Received: from [192.168.0.195] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056402120b00b004196059efd1sm17152944edw.75.2022.04.12.04.56.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 04:27:44 -0700 (PDT)
-Message-ID: <ed806d35-3613-4f9c-54ba-b31fc5ed91c8@linaro.org>
-Date: Tue, 12 Apr 2022 13:27:43 +0200
+        Tue, 12 Apr 2022 04:56:42 -0700 (PDT)
+Message-ID: <a8d09ab7-7e5d-2166-13b4-621259bc46d6@linaro.org>
+Date: Tue, 12 Apr 2022 13:56:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 3/5] ARM: dts: add dts files for bcmbca soc 47622
+Subject: Re: [PATCH 2/2 v2] ARM: dts: Add initial LS1021A IoT board dts
+ support
 Content-Language: en-US
-To: William Zhang <william.zhang@broadcom.com>,
- Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Samyon Furman <samyon.furman@broadcom.com>,
- Joel Peshkin <joel.peshkin@broadcom.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Dan Beygelman <dan.beygelman@broadcom.com>,
- Tomer Yacoby <tomer.yacoby@broadcom.com>,
- Anand Gore <anand.gore@broadcom.com>, Kursad Oney
- <kursad.oney@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
- Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- soc@kernel.org
-References: <20220411172815.20916-1-william.zhang@broadcom.com>
- <20220411172815.20916-4-william.zhang@broadcom.com>
+To: Changming Huang <jerry.huang@nxp.com>, robh+dt@kernel.org,
+ krzk+dt@kernel.org, shawnguo@kernel.org, festevam@gmail.com,
+ l.stach@pengutronix.de, alexander.stein@ew.tq-group.com,
+ marcel.ziswiler@toradex.com, tharvey@gateworks.com, linux@rempel-privat.de,
+ matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
+ sebastian.reichel@collabora.com, leoyang.li@nxp.com,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org
+Cc: Alison Wang <alison.wang@nxp.com>
+References: <20220411090828.1965450-1-jerry.huang@nxp.com>
+ <20220411090828.1965450-2-jerry.huang@nxp.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220411172815.20916-4-william.zhang@broadcom.com>
+In-Reply-To: <20220411090828.1965450-2-jerry.huang@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/04/2022 19:28, William Zhang wrote:
-> Add dts for ARMv7 based broadband SoC BCM47622. bcm47622.dtsi is the
-> SoC description dts header and bcm947622.dts is a simple dts file for
-> Broadcom BCM947622 Reference board that only enable the UART port.
-> 
-
+On 11/04/2022 11:08, Changming Huang wrote:
+> The LS1021A-IoT gateway reference design is a purpose-built,
+> small footprint hardware platform equipped with a wide array
+> of both high-speed connectivity and low speed serial interfaces.
 
 Thank you for your patch. There is something to discuss/improve.
 
-> + */
 > +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
+> +&enet2 {
+> +	fixed-link = <0 1 1000 0 0>;
+> +	phy-connection-type = "rgmii-id";
+> +	status = "okay";
+> +};
 > +
-> +/ {
-> +	compatible = "brcm,bcm47622";
+> +&esdhc{
+> +	status = "okay";
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +
+> +	gpio: pca9555@23 {
 
-This does not match your bindings. Even if it is not used.
+Here and in all other places - generic node name, please. For example
+pca9555 is "gpio"
 
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	interrupt-parent = <&gic>;
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		CA7_0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a7";
-> +			reg = <0x0>;
-> +			next-level-cache = <&L2_0>;
-> +			enable-method = "psci";
-> +		};
-> +
-> +		CA7_1: cpu@1 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a7";
-> +			reg = <0x1>;
-> +			next-level-cache = <&L2_0>;
-> +			enable-method = "psci";
-> +		};
-> +		CA7_2: cpu@2 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a7";
-> +			reg = <0x2>;
-> +			next-level-cache = <&L2_0>;
-> +			enable-method = "psci";
-> +		};
-> +		CA7_3: cpu@3 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a7";
-> +			reg = <0x3>;
-> +			next-level-cache = <&L2_0>;
-> +			enable-method = "psci";
-> +		};
-> +		L2_0: l2-cache0 {
-> +			compatible = "cache";
-> +		};
+> +		compatible = "nxp,pca9555";
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +		reg = <0x23>;
+
+Please put "reg" after compatible, everywhere.
+
 > +	};
 > +
-> +	timer {
-> +		compatible = "arm,armv7-timer";
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-> +		arm,cpu-registers-not-fw-configured;
-> +	};
-> +
-> +	pmu: pmu {
-> +		compatible = "arm,cortex-a7-pmu";
-> +		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> +			<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-affinity = <&CA7_0>, <&CA7_1>,
-> +			<&CA7_2>, <&CA7_3>;
-> +	};
-> +
-> +	clocks: clocks {
-> +		periph_clk: periph_clk {
+> +	codec: sgtl5000@2a {
 
-No underscores in node names.
+Ditto...
 
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <200000000>;
-> +		};
-> +		uart_clk: uart_clk {
-> +			compatible = "fixed-factor-clock";
-> +			#clock-cells = <0>;
-> +			clocks = <&periph_clk>;
-> +			clock-div = <4>;
-> +			clock-mult = <1>;
-> +		};
+> +		#sound-dai-cells=<0x0>;
+> +		compatible = "fsl,sgtl5000";
+> +		reg = <0x2a>;
+> +		VDDA-supply = <&reg_3p3v>;
+> +		VDDIO-supply = <&reg_2p5v>;
+> +		clocks = <&sys_mclk 1>;
 > +	};
 > +
-> +	psci {
-> +		compatible = "arm,psci-0.2";
-> +		method = "smc";
-> +		cpu_off = <1>;
-> +		cpu_on = <2>;
-> +	};
-> +
-> +	axi@81000000 {
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0 0x81000000 0x818000>;
-> +
-> +		gic: interrupt-controller@1000 {
-> +			compatible = "arm,cortex-a7-gic";
-> +			#interrupt-cells = <3>;
-> +			#address-cells = <0>;
-> +			interrupt-controller;
-> +			reg = <0x1000 0x1000>,
-> +				<0x2000 0x2000>;
-> +		};
-> +	};
-> +
-> +	periph-bus@ff800000 {
+> +	adc: max1239@35 {
 
-just "bus" to be generic?
-
+and so on.
 
 
 Best regards,
