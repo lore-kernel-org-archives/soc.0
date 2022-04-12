@@ -1,153 +1,210 @@
-Return-Path: <SRS0=Fhj3=UW=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=+HBL=UW=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0725C433F5
-	for <soc@archiver.kernel.org>; Tue, 12 Apr 2022 09:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D31BC433F5
+	for <soc@archiver.kernel.org>; Tue, 12 Apr 2022 11:27:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9AC0CC385A5; Tue, 12 Apr 2022 09:05:22 +0000 (UTC)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	id 72612C385A1; Tue, 12 Apr 2022 11:27:47 +0000 (UTC)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D49D9C385AB;
-	Tue, 12 Apr 2022 09:05:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D49D9C385AB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id d10so21616014edj.0;
-        Tue, 12 Apr 2022 02:05:21 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8DD87C385A6
+	for <soc@kernel.org>; Tue, 12 Apr 2022 11:27:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DD87C385A6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id w18so21910718edi.13
+        for <soc@kernel.org>; Tue, 12 Apr 2022 04:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JvUzj4eJQSW6VlbLUjMSITUiq97FPtxDr7ncwYmoRZw=;
-        b=PQN4pGhpOlIZoayWPrUBzGowazBqMXrd4jRr1snIyitef4NjsLhheTAe0qQ4xxS53b
-         3Bt6MF+gTSAJvT6Dr3An/eqtqMwA/5zAkSdx9c7loYNVNFh9WM+LFbECAWMLVRdG5mYk
-         EHaD8+YmvSfCswWysoOwVBSMt1FW0TYI80ssVuaKlsX40TIA1HRDORT8I2xQLJg1MiMs
-         Yx/pt7YehaJjEiMKaTBxBkXZNXuWm38BnB890ruRydAj6g6KeFCaBmrdhEULfmwVXtvW
-         JuXDdKRrxlc7wpyYmrYqigcamJk84SaFG6J8AQDlYbDZrY894fzLN+jF/gyZI2J22cJA
-         G+3g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fTL0LuyHJP55C0ZkxhV5JJZCHR1IVobkoraz2H3z7k0=;
+        b=jVUvZd+C01riSCcHtgCctzSsElQtUk8vtWMbSMQ0kpaIrv7jqatQzCEI1qVasdJKjA
+         tyd1W6KKLu/n4MpTQQjVjZuXwZceAITHCEa7JFYmr0IASwv0/vqIswXQozv9oeFlVdAW
+         rp+FXno2KJShW9hFRtGloTdd3C4UdkVpfL0CmNpja33fk/9f0SywNlRw6Y0daKipBVwh
+         oqCi0qvHdK7l8oDZb8B0X4961KVVr/XYmYa4YgepQ+s9l5f7HL2JZvtTyotQxZg0XWH/
+         tU8tr5syoz9+QUIP4mtfvULYsZXF69MvqlZhiw1QBIiJriOQenmWYGIC52R93R7ITyO4
+         qD7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JvUzj4eJQSW6VlbLUjMSITUiq97FPtxDr7ncwYmoRZw=;
-        b=XZOOMtwzV9YhBG/Ch+AkrLBDb4tjzI486jr7e1d7TksDQhobFNzGwH9GRCHzK+hyC2
-         0NjFQJAmfkWD17AYvmZ8sElDy7ho9IdJM3qoSRrwN68WyMcqGqgUW5m4h+ypjqm3Wz0W
-         bUmg/buPsiyEVmVa2x2RnkUeD9OKV+5cWlq9wLH86PM/mjFVOkFzQMHa7zeZ7CLQXFGF
-         67eiJRC+VRwOEqyZug7MSljuC91aUwRHKyuaXf1cDP5GPulTWYFlj85bMiluTKU6RUkv
-         mn2bNVvbmRhvzT5FBURZ1sNJBVZYb6b5n1Dln9H4BUPCZcoGs8LatauIRf0mImTxXb9x
-         pOZQ==
-X-Gm-Message-State: AOAM533SvqYREL0Q3cNtM0rb3EOuZq3cxp+VIQSOJ94lBs/YDE4+p0Hv
-	zdcBhZjVCRBVIzd5xZ4WQ6NFpFEKifc=
-X-Google-Smtp-Source: ABdhPJy7UIlkAw90AvWa8CNYC9UtMZpU5M8mz2CPjgf62C2T/CEb2v4+GAYAJGpj0vByS1chiMtK+A==
-X-Received: by 2002:a05:6402:27d1:b0:419:1b02:4a04 with SMTP id c17-20020a05640227d100b004191b024a04mr37474442ede.218.1649754319553;
-        Tue, 12 Apr 2022 02:05:19 -0700 (PDT)
-Received: from orome (pd9e518f7.dip0.t-ipconnect.de. [217.229.24.247])
-        by smtp.gmail.com with ESMTPSA id d26-20020a1709064c5a00b006e89debe3f4sm1595260ejw.9.2022.04.12.02.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 02:05:18 -0700 (PDT)
-Date: Tue, 12 Apr 2022 11:05:15 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org,
-	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with
- values
-Message-ID: <YlVAy95eF/9b1nmu@orome>
-References: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fTL0LuyHJP55C0ZkxhV5JJZCHR1IVobkoraz2H3z7k0=;
+        b=7HtXH2pec9H1yt7TQhgzJRqVFFs/pWyEmp6lAUEfrSALh3LbXIiZFGNrBaTPYhw7/M
+         gjkTvna+oxonmpYNcj0aKirTj7vew4yNBOhsr2Rf2C/ard+HiuHw9L9KfdYGxIYzOXB0
+         4BebZJ87Zu2JerUlajsQo11bO+e2/5nz4EZKZnwAEPWg8B4XMpYy2gKXJ72B2VV+CeUG
+         x4bPOIZXVtpo1j87YYABG87LAVv+P8P8UPuWI65gnYiG3KdDFtxyXZBlK4Wff+Q1ATR1
+         mm3jLMoy1rAOb7PQU4ESvKcxnIAyKxkn8NPrrVjiMbDQqsmtgej3XF1YCjkg79TRwvE8
+         qUqQ==
+X-Gm-Message-State: AOAM530x0s7vEbLxI1U9JcNTXX0eEqOR+EeDGSbh8SWYJB3JwX/H0Ds/
+	xfxB1lzRxFIYd1ibCEydqPraMw==
+X-Google-Smtp-Source: ABdhPJxieY0YdmARZCcyw24ryB8+AJrHlDefLmPsyvARI8OPfb3IKN7u+coH1M9vVUt+9v2SWeq++g==
+X-Received: by 2002:a05:6402:4414:b0:419:28bc:55dc with SMTP id y20-20020a056402441400b0041928bc55dcmr38705253eda.130.1649762864946;
+        Tue, 12 Apr 2022 04:27:44 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o5-20020a170906974500b006dfc781498dsm13167937ejy.37.2022.04.12.04.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 04:27:44 -0700 (PDT)
+Message-ID: <ed806d35-3613-4f9c-54ba-b31fc5ed91c8@linaro.org>
+Date: Tue, 12 Apr 2022 13:27:43 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="NBsBIpgqCfiMExLJ"
-Content-Disposition: inline
-In-Reply-To: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/5] ARM: dts: add dts files for bcmbca soc 47622
+Content-Language: en-US
+To: William Zhang <william.zhang@broadcom.com>,
+ Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Samyon Furman <samyon.furman@broadcom.com>,
+ Joel Peshkin <joel.peshkin@broadcom.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Dan Beygelman <dan.beygelman@broadcom.com>,
+ Tomer Yacoby <tomer.yacoby@broadcom.com>,
+ Anand Gore <anand.gore@broadcom.com>, Kursad Oney
+ <kursad.oney@broadcom.com>, Arnd Bergmann <arnd@arndb.de>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ soc@kernel.org
+References: <20220411172815.20916-1-william.zhang@broadcom.com>
+ <20220411172815.20916-4-william.zhang@broadcom.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220411172815.20916-4-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 11/04/2022 19:28, William Zhang wrote:
+> Add dts for ARMv7 based broadband SoC BCM47622. bcm47622.dtsi is the
+> SoC description dts header and bcm947622.dts is a simple dts file for
+> Broadcom BCM947622 Reference board that only enable the UART port.
+> 
 
 
---NBsBIpgqCfiMExLJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for your patch. There is something to discuss/improve.
 
-On Wed, Apr 06, 2022 at 02:17:30PM -0500, Rob Herring wrote:
-> Boolean properties in DT are present or not present and don't take a valu=
-e.
-> A property such as 'foo =3D <0>;' evaluated to true. IOW, the value doesn=
-'t
-> matter.
->=20
-> It may have been intended that 0 values are false, but there is no change
-> in behavior with this patch.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Can someone apply this for 5.18.
->=20
->  arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
->  .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
->  arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
->  arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
->  arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
->  arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
->  arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
->  arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
->  8 files changed, 27 insertions(+), 27 deletions(-)
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	compatible = "brcm,bcm47622";
 
-This causes multiple regressions on Tegra boards. The reason for this is
-that these properties are not in fact boolean, despite what the DT
-bindings say. If you look at the code that handles these, you'll notice
-that they are single-cell properties, typically with <0> and <1> values.
-What may have led to the conclusion that these are boolean is that there
-is also a special case where these can be left out, but the meaning of
-that is not the "false" (<0>) value. Instead, leaving these out means
-that the values should be left at whatever is currently in the register.
+This does not match your bindings. Even if it is not used.
 
-See pinconf_generic_parse_dt_config() and parse_dt_cfg() specifically in
-drivers/pinctrl/pinconf-generic.c.
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	interrupt-parent = <&gic>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		CA7_0: cpu@0 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0x0>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		CA7_1: cpu@1 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0x1>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +		CA7_2: cpu@2 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0x2>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +		CA7_3: cpu@3 {
+> +			device_type = "cpu";
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0x3>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +		L2_0: l2-cache0 {
+> +			compatible = "cache";
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv7-timer";
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +		arm,cpu-registers-not-fw-configured;
+> +	};
+> +
+> +	pmu: pmu {
+> +		compatible = "arm,cortex-a7-pmu";
+> +		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-affinity = <&CA7_0>, <&CA7_1>,
+> +			<&CA7_2>, <&CA7_3>;
+> +	};
+> +
+> +	clocks: clocks {
+> +		periph_clk: periph_clk {
 
-Arnd, can you please revert this so that these boards can be unbroken?
+No underscores in node names.
 
-It's a bit unfortunate because there seem to be other platforms that
-also employ these in the boolean form that Rob mentioned, but I think it
-is those that probably need fixing instead. Not sure what the intentions
-were for those.
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <200000000>;
+> +		};
+> +		uart_clk: uart_clk {
+> +			compatible = "fixed-factor-clock";
+> +			#clock-cells = <0>;
+> +			clocks = <&periph_clk>;
+> +			clock-div = <4>;
+> +			clock-mult = <1>;
+> +		};
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-0.2";
+> +		method = "smc";
+> +		cpu_off = <1>;
+> +		cpu_on = <2>;
+> +	};
+> +
+> +	axi@81000000 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0 0x81000000 0x818000>;
+> +
+> +		gic: interrupt-controller@1000 {
+> +			compatible = "arm,cortex-a7-gic";
+> +			#interrupt-cells = <3>;
+> +			#address-cells = <0>;
+> +			interrupt-controller;
+> +			reg = <0x1000 0x1000>,
+> +				<0x2000 0x2000>;
+> +		};
+> +	};
+> +
+> +	periph-bus@ff800000 {
 
-Adding Bjorn for MSM, the Nuvoton and STM32 folks.
+just "bus" to be generic?
 
-Thierry
 
---NBsBIpgqCfiMExLJ
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJVQMgACgkQ3SOs138+
-s6FAcQ//f9+PoHjpquYwfy+qc69MSz549E+MT1SBelK6GGDpNc7CWrtmujpeiTP/
-bgA1e0TzCagra2528fAUyOtyAaVKPHS8BVt6OxptgyEgvwP2fygn83+2BIQsVar1
-Ls092mvWt1GeHYri19DRt3L43JH1RlcYxaPsUbgWU2tucetEtEDndOVUki87oclX
-se/tsVqGRA5B1FMFHPiVgJyTaFzJtiwkCZnH31BN3DRXSsOnkJr33fV5bQM4Ylg5
-vxWmwURr1T7+vTgUSCxi2RNzYGAuveI/IGFs1QD/jddo8MEHqF/EHmGmPWHF5fta
-iP3T6u7bSb0y433imp3GDtLFch/cJ4BZ9sIWfLqPXP06sVVMfbLq2joo0p26XEZ1
-q7hxFhNrpWBpmEna+RtNQWLCbcW7BBI+v0f4VYml+xNVpYehqUfHwrOqLdURucPO
-WbriU9+nODw81tLTJbSr2EGGvYi4uiGBZw302ZuApk2pOhF+Az9WnlxUHiM3Q64D
-WFubEG7Ezq1lEFO4hD4zZs9bMhSycTi6LMIJRTz7HHH/qPubJ8DWRi/Npn7WjN5S
-uzQyjmD9ei7E/jLb28Sa0TCk4zAKiZiSVWZF/ONXhJ4aGzkgLhebFgMlGOihj4Gj
-4J3cLi4fOm2o4qU7axaSMb8yd6hAD93kKRIylehK0Lfdmt9pM4I=
-=kKPk
------END PGP SIGNATURE-----
-
---NBsBIpgqCfiMExLJ--
+Best regards,
+Krzysztof
