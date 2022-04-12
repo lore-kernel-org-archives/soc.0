@@ -1,63 +1,58 @@
-Return-Path: <SRS0=+HBL=UW=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=jP+Z=UW=broadcom.com=william.zhang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27FBCC433EF
-	for <soc@archiver.kernel.org>; Tue, 12 Apr 2022 16:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DB59C433EF
+	for <soc@archiver.kernel.org>; Tue, 12 Apr 2022 18:39:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E0A3DC385AC; Tue, 12 Apr 2022 16:27:59 +0000 (UTC)
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	id D02EFC385AB; Tue, 12 Apr 2022 18:39:00 +0000 (UTC)
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CA530C385A8
-	for <soc@kernel.org>; Tue, 12 Apr 2022 16:27:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA530C385A8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f47.google.com with SMTP id bv19so15377713ejb.6
-        for <soc@kernel.org>; Tue, 12 Apr 2022 09:27:57 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id E15C4C385A5
+	for <soc@kernel.org>; Tue, 12 Apr 2022 18:38:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E15C4C385A5
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pj1-f41.google.com with SMTP id 2so19307797pjw.2
+        for <soc@kernel.org>; Tue, 12 Apr 2022 11:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NDMWPs4S7zilupRHZRh1G0PStgWMtqHNX86waZCmVE8=;
-        b=dLqmb6kJL5mNPwhuzfsZIOYf5d4DggnddiZ5T1YazUghckPybZmqFE+PE1EBKvLGoI
-         WJLC9SFdCWvTV3ielnSpXSBbtdLZxodidqSypOgcBqEQyxnzI8Y8N+t6+F8VJrV7mGLu
-         ufIm5LiSViEmjJR7el+bjssJ218/plCuY61Q8hsfp1C9xEZpJnx5Jengqphk/6btlNHx
-         nFAEYhMCaySp7kk/buf0tZYPTsPmitigjeJTNE6mNi9fjNezM7a4SYW+P41QzbpE9ZD6
-         yNI81MAGKHX7EmhPxVGLcyH5OyKtY0IiP7BQFQapa12TpyyXteQdmdOvhyGpHhA2Ls2o
-         VQqQ==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=IXciwfj3iLWfD3q8rot0rBsrkRyUJK1TXF6j/e51nTA=;
+        b=HY71NbriboyB3bbsuhsnrLIEXrZyiDQwvX3v8fyRDE+pqYtZlz7E4gdfhiBIOribOw
+         04gkUM3u3+6avaebj+a03+tRLW+OXfB7qBjs23TnrxVVphaw4UUBHtI3sbodifpNPIyD
+         yUPRKPJyi5kBPp6Wwx/lOibaF2kmmPGxtEoig=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NDMWPs4S7zilupRHZRh1G0PStgWMtqHNX86waZCmVE8=;
-        b=A5rac9QPOHE60/5K5nww75P9tc0l7xWKaHt4MW3zt0jxJMLASVqFZutNRmswJq9dqu
-         bvaVGJqayEP0RmtcNGh/IX6yVkkcZhtJzd20R/iH00rtQA9X9a+M8mv07iJa3jdUxtk/
-         sYCHXO/RdoQa0ajdQFIJnEoG6aGpaEvqsbBeuOafgahsULp05SBtl//RFAtMfEWWWi6C
-         Xm6qq2h1SWH6L1hHuvkSbhDEaiR6fOOb9wCEEln0tmElJDhnRsxe45pwfRTEewsaan1Z
-         2m5Aqmxp1DGn4tdtwqq0rsSxA8++lUAAYslGxriZP8waQ098YBVgzfubTTi92SZYODqJ
-         ncGA==
-X-Gm-Message-State: AOAM531EvRPGjPLG5d5hxWCr3Nhvk6aJSPKdz/QDgbLrZxg6xqb0yYeJ
-	9tpOOjHY+/5ypbYEB2zEsxXpoA==
-X-Google-Smtp-Source: ABdhPJxOgxov+X+zXtcd2ayLa52f1FP4vBidDROaYaMLhZJo1c4KNN1Dn13j9jc1Pkv6HT2SJxILKA==
-X-Received: by 2002:a17:907:e87:b0:6e8:42ef:86d9 with SMTP id ho7-20020a1709070e8700b006e842ef86d9mr22736713ejc.59.1649780876063;
-        Tue, 12 Apr 2022 09:27:56 -0700 (PDT)
-Received: from [192.168.0.197] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id r29-20020a50c01d000000b00415fb0dc793sm17267681edb.47.2022.04.12.09.27.54
+         :to:cc:references:from:in-reply-to;
+        bh=IXciwfj3iLWfD3q8rot0rBsrkRyUJK1TXF6j/e51nTA=;
+        b=Frzyk07iQcFoUB/CbE/QHYXO+zsx6vRJo84YSU85I4AwuOO76Bbfl7FY8jkyy0e4mv
+         ub8SwgQASgixbP38ZavJDkGC/603KCkxxcuKkv4vDjA6VAb/fdrMTjSE/CAxCg02hRuB
+         1jxIGjMh8OvdL1DneS+fZaxobZUBcSoaiGD3l8CzdmkE8WTymT72fI1nh/tUNUvfbXc0
+         7/Guceut4p+rrbMLnNUBwzaP5KYV1N2BpXY7JanuKSswW/JwAZVu2K51h5TGvIoOJR5o
+         lhhOkYslyN3GrAvEPllGzOCY/hhX7HSAePc3c7vcnVovHsJg2NCNPLgxLm0B1+vLFO68
+         T7TA==
+X-Gm-Message-State: AOAM533k+F3x1wstLuWlY0MpyWSyB9diVba6bCXxUiOl4MsszyDhe27q
+	NJ1DZ7hCeoJea12NqbJqIDGVCw==
+X-Google-Smtp-Source: ABdhPJx/sJSrweQHvrdVRKgICDw+M/XbRqlTe4l9yGgHZC7MZ+1jKQXHOvkzK6Kj+6Lpcwr7UNkB0A==
+X-Received: by 2002:a17:903:124a:b0:154:c860:6d52 with SMTP id u10-20020a170903124a00b00154c8606d52mr39169914plh.159.1649788738293;
+        Tue, 12 Apr 2022 11:38:58 -0700 (PDT)
+Received: from [10.67.99.21] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm197327pjj.56.2022.04.12.11.38.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 09:27:55 -0700 (PDT)
-Message-ID: <60a9a401-7d1f-5100-7c3d-45452ebfa2ae@linaro.org>
-Date: Tue, 12 Apr 2022 18:27:54 +0200
+        Tue, 12 Apr 2022 11:38:53 -0700 (PDT)
+Message-ID: <db3d90d6-2365-4591-f323-514a98e85772@broadcom.com>
+Date: Tue, 12 Apr 2022 11:38:51 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: [PATCH 3/5] ARM: dts: add dts files for bcmbca soc 47622
-Content-Language: en-US
-To: William Zhang <william.zhang@broadcom.com>,
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Samyon Furman <samyon.furman@broadcom.com>,
@@ -75,32 +70,125 @@ References: <20220411172815.20916-1-william.zhang@broadcom.com>
  <20220411172815.20916-4-william.zhang@broadcom.com>
  <ed806d35-3613-4f9c-54ba-b31fc5ed91c8@linaro.org>
  <147e23b6-c5a3-a9fa-c0e1-defe906e42a9@broadcom.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <147e23b6-c5a3-a9fa-c0e1-defe906e42a9@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
+ <60a9a401-7d1f-5100-7c3d-45452ebfa2ae@linaro.org>
+From: William Zhang <william.zhang@broadcom.com>
+In-Reply-To: <60a9a401-7d1f-5100-7c3d-45452ebfa2ae@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000c7d46705dc795f50"
+
+--000000000000c7d46705dc795f50
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/04/2022 17:37, William Zhang wrote:
->>> +/ {
->>> +	compatible = "brcm,bcm47622";
->>
->> This does not match your bindings. Even if it is not used.
-> Did I miss anything? But it matches one of the compatible strings in 
-> brcm,bcmbca.yaml.
 
-Your bindings expect that this compatible is followed with "brcm,bcmbca".
 
-(...)
+On 4/12/22 09:27, Krzysztof Kozlowski wrote:
+> On 12/04/2022 17:37, William Zhang wrote:
+>>>> +/ {
+>>>> +	compatible = "brcm,bcm47622";
+>>>
+>>> This does not match your bindings. Even if it is not used.
+>> Did I miss anything? But it matches one of the compatible strings in
+>> brcm,bcmbca.yaml.
+> 
+> Your bindings expect that this compatible is followed with "brcm,bcmbca".
+> 
+> (...)
+Thanks! My misunderstanding.
+> 
+>>>> +	periph-bus@ff800000 {
+>>>
+>>> just "bus" to be generic?
+>> This node represents the peripheral bus in the soc. Would prefer to use
+>> the specific name unless it is not allowed by the linux dts.
+> 
+> It is allowed but the Devicetree spec explicitly asks for generic names
+> and gives example: bus ("2.2.2 Generic Names Recommendation"). Specific
+> names are discouraged.
+Will use bus.
+> 
+> Best regards,
+> Krzysztof
 
->>> +	periph-bus@ff800000 {
->>
->> just "bus" to be generic?
-> This node represents the peripheral bus in the soc. Would prefer to use 
-> the specific name unless it is not allowed by the linux dts.
+--000000000000c7d46705dc795f50
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-It is allowed but the Devicetree spec explicitly asks for generic names
-and gives example: bus ("2.2.2 Generic Names Recommendation"). Specific
-names are discouraged.
-
-Best regards,
-Krzysztof
+MIIQcAYJKoZIhvcNAQcCoIIQYTCCEF0CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3HMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBU8wggQ3oAMCAQICDDbx5fpN++xs1+5IgzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIwODA1MjJaFw0yMjA5MDUwODEwMTZaMIGQ
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xFjAUBgNVBAMTDVdpbGxpYW0gWmhhbmcxKTAnBgkqhkiG9w0B
+CQEWGndpbGxpYW0uemhhbmdAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEA4fxIZbzNLvB+7yJE8mbojRaOoaK1uZy1/etc55NzisSJJfY36BAlb7LlMDsza2/BcjXh
+lSACuzeOyI8sy2pKHGt5SZCMHeHaxP8q4ZNR6EGz7+5Lopw6ies8fkDoZ/XFIHpfU2eKcIYrxI25
+bTaYAPDA50BHTPDFzPNkWEIIQaSBBkk55bndnMmB/pPR/IhKjLefDIhIsiWLrvQstTiSf7iUCwMf
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIB+zwv6y/IKwfgsfrnmBEhbrvXDw
+3hTKAtHw6RART4WBMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDQxMjE4Mzg1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQC+yWizSrqKFyKXzebKByhU4+vaFNJdXX6RRe4j1Tf7UIhv
+xSYTOp5cuM7JCfH1rYNaJqgGMsQyL2n3aL72pvuwk0qoE2MqfcwNO5F/gVEFhi9gwGem7z9HrXQI
+kKtTju5netMayUF1apWQeVL2QPFslrTEHpfl/6IqqHYPapRpVzFD7bag1T29YQvx8L174TVwtTJg
+RE73hz04MI6GlQ89UTUePsWSaGSxlAy3nikgg1oMCW9Vd7+m9dX6HWf8Fn5JEjfDjPKSNyTh3Uwd
+cIK6QoNxc2tDXhIU/lPOMx07dLKRsvIyHTQ7tjBW6s1OM3cws62D4++Ttp1y4PHCXXUQ
+--000000000000c7d46705dc795f50--
