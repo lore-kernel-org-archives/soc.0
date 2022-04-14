@@ -4,94 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591F5C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FDC8C43217
 	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1BA4DC385AC; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 06B54C385A1
-	for <soc@kernel.org>; Thu, 14 Apr 2022 21:10:14 +0000 (UTC)
+	id 4DF73C385B2; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3110CC385AF;
+	Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1649970615;
-	bh=YAtVWFWIilE+vBHB2OPF3H7W97FILqdAY/60FC81E10=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=XgsWzlMTaQ8cUC/RCww+FTGMK3R6EN8+LXHPvGbToZUJX02zbyVaiirTgDn6lUeop
-	 9G0vCaWqN1hGRqLXZsXnFqBzJB/HJTZZ6R/CUFiuRE4WM+0MdpGoPfRKFV1c7csMmG
-	 09pqPdPzMq9qi483aPKhB4NcczYHjeGNSWVhTMREfLRzOaOe7Vzqbx7RPknEJ76W6u
-	 w/UJz6eaiAy81I4EK22XzfeuNRSHqOOIbOdTzDGSUTQYKnOijqWpCPHtRcVSkhtaoL
-	 YxorcoG6O0wlhn4nqPH/hTpFJ/3P7DHjcSi+CYOG+kSQEAIXAU5eLHEWkiHyPPnTyd
-	 3Gfv6dZPaWCPw==
+	bh=86QIll9OtINnhQ6eFyBhVzI9KsK41Osh+NCNTaxGipo=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=ne0sN2yehUSdxErGHoTvTrTbednuN4hjGQg8HWl9zbm+UOf/ZQ36OPqLrePYbWA5y
+	 F1PYeyFfW2gzRYgaN9CYxT+h7zhFFwOOUdBg2ghzgLWkn9Vfc5YdlhfIqw3gCUr0pk
+	 RCZyR7i2UikG/J3pwekquaHTZU4p3FDBJ9h0w1ozse1DMGIj5NYd7rNhlAsACnF4VV
+	 L7bFXFrIAgS6wOAIetU/di7AfaLexFNp1HC/qS//7u0i1yomPJ8M55+Iyc+vPiBfq9
+	 y/7k3JlYqowW08YN0sNIOdbF6fxVoK8M5S/U7lWuHkiY8sNvHNbOYBz+e0qhJwPsrT
+	 uOHtqEuUtLtgw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D61F9E8DBD4;
-	Thu, 14 Apr 2022 21:10:14 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1377FEAC09C;
+	Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Ux500 defconfig updates for v5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164997061479.10394.9513819925828230117.git-patchwork-summary@kernel.org>
-Date: Thu, 14 Apr 2022 21:10:14 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <164997061507.10394.4833305190454252137.git-patchwork-notify@kernel.org>
+Date: Thu, 14 Apr 2022 21:10:15 +0000
+References: <CACRpkdY+_Go4XNzOh+Rvc24QBnUud2k-S7VQuaH5d-j71_dJog@mail.gmail.com>
+In-Reply-To: <CACRpkdY+_Go4XNzOh+Rvc24QBnUud2k-S7VQuaH5d-j71_dJog@mail.gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: arm64: dts: qcom/sdm845-shift-axolotl: Fix boolean properties with values
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630208
-  Lore link: https://lore.kernel.org/r/20220407225254.2178644-1-robh@kernel.org
+On Thu, 7 Apr 2022 23:57:34 +0200 you wrote:
+> Hi SoC folks,
+> 
+> please pull in these Ux500/U8500 defconfig updates for v5.18.
+> 
+> Yours,
+> Linus Walleij
+> 
+> [...]
 
-Patch: [[GIT,PULL] OP-TEE fix for v5.18
-  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=631716
-  Lore link: https://lore.kernel.org/r/20220413052001.GA49798@jade
+Here is the summary with links:
+  - [GIT,PULL] Ux500 defconfig updates for v5.18
+    https://git.kernel.org/soc/soc/c/cfd08b94bed0
 
-Patch: [GIT,PULL] i.MX fixes for 5.18
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630877
-  Lore link: https://lore.kernel.org/r/20220411024301.GH129381@dragon
-
-Patch: [GIT,PULL] Ux500 defconfig updates for v5.18
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630195
-  Lore link: https://lore.kernel.org/r/CACRpkdY+_Go4XNzOh+Rvc24QBnUud2k-S7VQuaH5d-j71_dJog@mail.gmail.com
-
-Patch: ARM: dts: align SPI NOR node name with dtschema
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630044
-  Lore link: https://lore.kernel.org/r/20220407143027.294678-1-krzysztof.kozlowski@linaro.org
-
-Patch: ARM: config: Update Gemini defconfig
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630826
-  Lore link: https://lore.kernel.org/r/20220410202837.2667333-1-linus.walleij@linaro.org
-
-Patch: ARM: dts: Fix more boolean properties with values
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630207
-  Lore link: https://lore.kernel.org/r/20220407225107.2175958-1-robh@kernel.org
-
-Patch: [GIT,PULL] ARM: at91: fixes for 5.18
-  Submitter: Nicolas Ferre <nicolas.ferre@microchip.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=632321
-  Lore link: https://lore.kernel.org/r/20220414143318.26363-1-nicolas.ferre@microchip.com
-
-
-Total patches: 8
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
