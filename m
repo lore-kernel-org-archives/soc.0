@@ -4,70 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25D71C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38790C35274
 	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 21:10:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0A7DBC385A8; Thu, 14 Apr 2022 21:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E8562C385AC
-	for <soc@kernel.org>; Thu, 14 Apr 2022 21:10:16 +0000 (UTC)
+	id 1C653C385AA; Thu, 14 Apr 2022 21:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 064ACC385A5;
+	Thu, 14 Apr 2022 21:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1649970616;
-	bh=2+hmK5W5DOOZ3Lgw2+DDiSgV5XNaCp/FpCmcg4wPs8o=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=aOuiOl1MEU78GubRNf7MahhV6UTTQMzI2ZSbPYMLc5vuRBS2TOZLKgfSq3cypLOGB
-	 aJa9biX7il5yszT1olAQx8cfIM93kmSU7GpUu9olKm3h8sAgFpykfNlBhQ5pZKXF82
-	 SmPdjeyo1NbOMqhx1dbom90sAPrtRwYtBBVfDzh5mZvQg7bBFQVOrZnF98MGXxVGpa
-	 JlkHDZtB1tfZEm/2PhGecT2IF+DWcBJ4c17Ibo/TkTcSfrV8cgymMspung8/XOwLr1
-	 imNxNXBBmd9gQqkelDi00TuuLvjPp4/SPZol6B1/wqMlHbMeS7qwiBJ0LGb8RfqvEs
-	 zkJp1PAD0t9WQ==
+	s=k20201202; t=1649970617;
+	bh=bx8pA8Myz3l/C0/rd5ScPo+VS33gl4zsbFJZfUHpwqs=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=oOTeZuChhgLl90j9keyaJlAgxINjmLcpZ6P/06BAsDLfe9i220tCNTkawzRgL0V7/
+	 RLs2ZK7U6HdTWikNbQsLruKkLv7w4+uKN7TjWvC9ZeqgP+HubQ9Rp1Yo3E6rhe+yQz
+	 OrhNrMgZL/xZ7zG0SQ6AYha7AoRZJVDJv3lU3xM6dUhw0AsversEV5JF/k0D5tkOHy
+	 HNXikJ/0CZm+NRECKz8e83/tNLYYfwNAS+DI1co3MXl9Gty9bZatEnJQ7w8J/YSYCl
+	 cbFU/ELX61b57H4HImDQGJSktKXVPTNc2cWKaJvUr9moaUmp6wkaGEfDPTivB5kjIk
+	 Pu+EmWBLAQoZQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4B3DE8DBD4;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5CE4EAC081;
 	Thu, 14 Apr 2022 21:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] i.MX fixes for 5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164997061686.10394.2697393314031349153.git-patchwork-summary@kernel.org>
+ <164997061693.10394.11766535308908472857.git-patchwork-notify@kernel.org>
 Date: Thu, 14 Apr 2022 21:10:16 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20220411024301.GH129381@dragon>
+In-Reply-To: <20220411024301.GH129381@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [[GIT,PULL] OP-TEE fix for v5.18
-  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=631716
-  Lore link: https://lore.kernel.org/r/20220413052001.GA49798@jade
+On Mon, 11 Apr 2022 10:43:01 +0800 you wrote:
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> 
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.18
+> 
+> [...]
 
-Patch: [GIT,PULL] i.MX fixes for 5.18
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630877
-  Lore link: https://lore.kernel.org/r/20220411024301.GH129381@dragon
+Here is the summary with links:
+  - [GIT,PULL] i.MX fixes for 5.18
+    https://git.kernel.org/soc/soc/c/803fa58dfa47
 
-Patch: [GIT,PULL] Ux500 defconfig updates for v5.18
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630195
-  Lore link: https://lore.kernel.org/r/CACRpkdY+_Go4XNzOh+Rvc24QBnUud2k-S7VQuaH5d-j71_dJog@mail.gmail.com
-
-Patch: [GIT,PULL] ARM: at91: fixes for 5.18
-  Submitter: Nicolas Ferre <nicolas.ferre@microchip.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=632321
-  Lore link: https://lore.kernel.org/r/20220414143318.26363-1-nicolas.ferre@microchip.com
-
-
-Total patches: 4
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
