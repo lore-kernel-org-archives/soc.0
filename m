@@ -1,47 +1,148 @@
-Return-Path: <SRS0=irR1=UY=cars-manager.com=webmaster@kernel.org>
+Return-Path: <SRS0=r7nx=UY=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FCE7C3527C
-	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 13:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9C7C433EF
+	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 14:33:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2B15EC385AB; Thu, 14 Apr 2022 13:32:12 +0000 (UTC)
-Received: from ns205832.ip-94-23-34.eu (ns205832.ip-94-23-34.eu [94.23.34.16])
+	id 88D45C385AA; Thu, 14 Apr 2022 14:33:38 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 07568C385A1
-	for <soc@kernel.org>; Thu, 14 Apr 2022 13:32:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 07568C385A1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cars-manager.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=cars-manager.com
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by ns205832.ip-94-23-34.eu (Postfix) with ESMTP id CAC1F42C2437
-	for <soc@kernel.org>; Thu, 14 Apr 2022 15:32:07 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at ns205832.ip-94-23-34.eu
-Received: from ns205832.ip-94-23-34.eu ([127.0.0.1])
-	by localhost (ns205832.ip-94-23-34.eu [127.0.0.1]) (amavisd-new, port 10024)
-	with LMTP id Jg3MnX_W-5Fc for <soc@kernel.org>;
-	Thu, 14 Apr 2022 15:32:07 +0200 (CEST)
-Received: by ns205832.ip-94-23-34.eu (Postfix, from userid 5009)
-	id 6493942C2438; Thu, 14 Apr 2022 15:32:07 +0200 (CEST)
+	by smtp.kernel.org (Postfix) with ESMTPS id D4B1FC385A1;
+	Thu, 14 Apr 2022 14:33:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4B1FC385A1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649946817; x=1681482817;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a9isROkySwnE11B+AHokM790DJBnMvG/rOrv3n4CWIo=;
+  b=ENXNU65SENAy3bDVJ7+KDfs/q9RN/DFzL9xkdSgvDiu/tkVTctTH1Qp2
+   /07LU6kW2+0btqFzKibNCfqTEiM0Q9OsgPXN1xctdhcLFsbkAKMvTB4jb
+   4td7nhxOvXpHwIbJXDoJp+s+eciYnrIFmiZ3x0KYh/dTiQhZo7KdqbXwR
+   rxi5PR8f6XohAxlVl3ffuqEU5THaDAxevNXdLNC2V0gER/UFrp4DT315X
+   0icVPIK0NZebeIXRhe8MbkftqVAqEWBN4EK1dpreOgytL9e+QGDYogAU/
+   YboI0p0Gu8RD9lDelLFrma71WCGBPPqr57kZ2wmqetElGjG+RXtMWiQj5
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,260,1643698800"; 
+   d="scan'208";a="152657359"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2022 07:33:30 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 14 Apr 2022 07:33:30 -0700
+Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 14 Apr 2022 07:33:28 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: Compte Cars Manager
-X-PHP-Originating-Script: 5009:inscription.php
-From: noreply@cars-manager.com
-Message-Id: <20220414133207.6493942C2438@ns205832.ip-94-23-34.eu>
-Date: Thu, 14 Apr 2022 15:32:07 +0200 (CEST)
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: fixes for 5.18
+Date: Thu, 14 Apr 2022 16:33:18 +0200
+Message-ID: <20220414143318.26363-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Bienvenue aevzreq !
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Vos pilotes sont prêts à honorer les couleurs de l'équipe 🥰 Jade just viewed your profile! More info: https://telegra.ph/insta-sex-04-14?hmvs 🥰 !
+Arnd, Olof,
 
-Pour activer votre compte sur le site Cars-Manager.com, veuillez cliquez sur le lien suivant :
-https://www.cars-manager.com/?page=validation_compte&mail=df2be3e832505f95ed3d08b0b5b04e35
+Here are the fixes for 5.18 addressing DT issues. Please pull.
 
-Bonne chance à vous !
+Thanks, best regards,
+  Nicolas
 
-Sportivement,
-Cars-manager.com 
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.18
+
+for you to fetch changes up to 0c640d9544d0109da3889d71ae77301e556db977:
+
+  ARM: dts: at91: fix pinctrl phandles (2022-04-13 18:48:01 +0200)
+
+----------------------------------------------------------------
+AT91 fixes #1 for 5.18:
+
+Only DT fixes. They cover syntax issues as well as features:
+- fix dtschema check warnings for DMA channel entries, boolean
+  properties and flash names
+- sam9g20ek audio clock and regulator description
+- sama5d[34]_xplained SPI pinctrl
+- align DT with hardware subtleties on sama7g5ek
+
+----------------------------------------------------------------
+Claudiu Beznea (2):
+      ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name
+      ARM: dts: at91: fix pinctrl phandles
+
+Eugen Hristev (1):
+      ARM: dts: at91: sama7g5ek: enable pull-up on flexcom3 console lines
+
+Krzysztof Kozlowski (2):
+      ARM: dts: at91: align SPI NOR node name with dtschema
+      ARM: dts: at91: use generic node name for dataflash
+
+Mark Brown (2):
+      ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
+      ARM: dts: at91: Describe regulators on at91sam9g20ek
+
+Rob Herring (1):
+      ARM: dts: at91: Fix boolean properties with values
+
+Sergiu Moga (1):
+      ARM: dts: at91: sama7g5: Swap `rx` and `tx` for `i2c` nodes
+
+Tudor Ambarus (1):
+      ARM: dts: at91: sama7g5ek: Align the impedance of the QSPI0's HSIO and PCB lines
+
+ .../devicetree/bindings/mfd/atmel-flexcom.txt      |  2 +-
+ arch/arm/boot/dts/at91-dvk_su60_somc.dtsi          |  2 +-
+ arch/arm/boot/dts/at91-kizbox3-hs.dts              |  2 +-
+ arch/arm/boot/dts/at91-kizbox3_common.dtsi         |  2 +-
+ arch/arm/boot/dts/at91-q5xr5.dts                   |  2 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi        |  2 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts      |  2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts        |  2 +-
+ arch/arm/boot/dts/at91-sama5d3_xplained.dts        |  8 ++--
+ arch/arm/boot/dts/at91-sama5d4_ma5d4.dtsi          |  2 +-
+ arch/arm/boot/dts/at91-sama5d4_xplained.dts        |  6 +--
+ arch/arm/boot/dts/at91-sama5d4ek.dts               |  2 +-
+ arch/arm/boot/dts/at91-sama7g5ek.dts               |  4 +-
+ arch/arm/boot/dts/at91-vinco.dts                   |  2 +-
+ arch/arm/boot/dts/at91rm9200ek.dts                 |  4 +-
+ arch/arm/boot/dts/at91sam9260ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9261ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9263ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi        | 45 +++++++++++++++++++++-
+ arch/arm/boot/dts/at91sam9m10g45ek.dts             |  2 +-
+ arch/arm/boot/dts/at91sam9n12ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9rlek.dts                 |  2 +-
+ arch/arm/boot/dts/at91sam9x5ek.dtsi                |  2 +-
+ arch/arm/boot/dts/sama5d3xmb.dtsi                  |  2 +-
+ arch/arm/boot/dts/sama5d3xmb_cmp.dtsi              |  2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                     | 18 ++++-----
+ arch/arm/boot/dts/usb_a9263.dts                    |  2 +-
+ 27 files changed, 85 insertions(+), 42 deletions(-)
+
+-- 
+Nicolas Ferre
