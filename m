@@ -1,148 +1,65 @@
-Return-Path: <SRS0=r7nx=UY=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9C7C433EF
-	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 14:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66771C433FE
+	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 88D45C385AA; Thu, 14 Apr 2022 14:33:38 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D4B1FC385A1;
-	Thu, 14 Apr 2022 14:33:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4B1FC385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649946817; x=1681482817;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=a9isROkySwnE11B+AHokM790DJBnMvG/rOrv3n4CWIo=;
-  b=ENXNU65SENAy3bDVJ7+KDfs/q9RN/DFzL9xkdSgvDiu/tkVTctTH1Qp2
-   /07LU6kW2+0btqFzKibNCfqTEiM0Q9OsgPXN1xctdhcLFsbkAKMvTB4jb
-   4td7nhxOvXpHwIbJXDoJp+s+eciYnrIFmiZ3x0KYh/dTiQhZo7KdqbXwR
-   rxi5PR8f6XohAxlVl3ffuqEU5THaDAxevNXdLNC2V0gER/UFrp4DT315X
-   0icVPIK0NZebeIXRhe8MbkftqVAqEWBN4EK1dpreOgytL9e+QGDYogAU/
-   YboI0p0Gu8RD9lDelLFrma71WCGBPPqr57kZ2wmqetElGjG+RXtMWiQj5
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,260,1643698800"; 
-   d="scan'208";a="152657359"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Apr 2022 07:33:30 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 14 Apr 2022 07:33:30 -0700
-Received: from ness.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 14 Apr 2022 07:33:28 -0700
-From: <nicolas.ferre@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<arm@kernel.org>, <soc@kernel.org>
-CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
-	<linux-kernel@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Ludovic Desroches
-	<ludovic.desroches@microchip.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>
-Subject: [GIT PULL] ARM: at91: fixes for 5.18
-Date: Thu, 14 Apr 2022 16:33:18 +0200
-Message-ID: <20220414143318.26363-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+	id 3E781C385B3; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27428C385A1;
+	Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1649970615;
+	bh=QpQ7WSwV9dMrahEFXgcIAFMdJVFNw3s5lAxMfF+Zhbo=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=l7cxOtTr8ONGyUF7CSiHwoGelh2BN7koBd5w89wyiPGWhsgpa/qE1tjDQIeIHPuza
+	 lCc1yiBccN02WBasA+NMMK46s0qkw4C2ScJD9tOLeL0jaAnH9ZZ6K8yeAePlAHUpug
+	 HLhulv6tXzcS0lk096wtJBthVbmhmEOmqHl4NOyu6W8ZzxkIAz7opHGCV8kUAmqKLG
+	 v8dE4eNQWd7LEwk2LEnUadM0urBvW130Tg+6Xu0Yn7tX+F/J72NAOV6T2ygs4sKHQ5
+	 0I4IhaRZbdfdDoWR/Dl20c3Q7EcfdNAKXBux6UYhexdWoNoNtYN37zQByXZmOVwiW/
+	 gfjek9jiqibow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0AD3DE8DD69;
+	Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Organization: microchip
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Subject: Re: [GIT PULL] i.MX fixes for 5.18
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <164997061503.10394.12972569383172615476.git-patchwork-notify@kernel.org>
+Date: Thu, 14 Apr 2022 21:10:15 +0000
+References: <20220411024301.GH129381@dragon>
+In-Reply-To: <20220411024301.GH129381@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hello:
 
-Arnd, Olof,
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Here are the fixes for 5.18 addressing DT issues. Please pull.
+On Mon, 11 Apr 2022 10:43:01 +0800 you wrote:
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> 
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.18
+> 
+> [...]
 
-Thanks, best regards,
-  Nicolas
+Here is the summary with links:
+  - [GIT,PULL] i.MX fixes for 5.18
+    https://git.kernel.org/soc/soc/c/803fa58dfa47
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.18
-
-for you to fetch changes up to 0c640d9544d0109da3889d71ae77301e556db977:
-
-  ARM: dts: at91: fix pinctrl phandles (2022-04-13 18:48:01 +0200)
-
-----------------------------------------------------------------
-AT91 fixes #1 for 5.18:
-
-Only DT fixes. They cover syntax issues as well as features:
-- fix dtschema check warnings for DMA channel entries, boolean
-  properties and flash names
-- sam9g20ek audio clock and regulator description
-- sama5d[34]_xplained SPI pinctrl
-- align DT with hardware subtleties on sama7g5ek
-
-----------------------------------------------------------------
-Claudiu Beznea (2):
-      ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name
-      ARM: dts: at91: fix pinctrl phandles
-
-Eugen Hristev (1):
-      ARM: dts: at91: sama7g5ek: enable pull-up on flexcom3 console lines
-
-Krzysztof Kozlowski (2):
-      ARM: dts: at91: align SPI NOR node name with dtschema
-      ARM: dts: at91: use generic node name for dataflash
-
-Mark Brown (2):
-      ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
-      ARM: dts: at91: Describe regulators on at91sam9g20ek
-
-Rob Herring (1):
-      ARM: dts: at91: Fix boolean properties with values
-
-Sergiu Moga (1):
-      ARM: dts: at91: sama7g5: Swap `rx` and `tx` for `i2c` nodes
-
-Tudor Ambarus (1):
-      ARM: dts: at91: sama7g5ek: Align the impedance of the QSPI0's HSIO and PCB lines
-
- .../devicetree/bindings/mfd/atmel-flexcom.txt      |  2 +-
- arch/arm/boot/dts/at91-dvk_su60_somc.dtsi          |  2 +-
- arch/arm/boot/dts/at91-kizbox3-hs.dts              |  2 +-
- arch/arm/boot/dts/at91-kizbox3_common.dtsi         |  2 +-
- arch/arm/boot/dts/at91-q5xr5.dts                   |  2 +-
- arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi        |  2 +-
- arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts      |  2 +-
- arch/arm/boot/dts/at91-sama5d2_xplained.dts        |  2 +-
- arch/arm/boot/dts/at91-sama5d3_xplained.dts        |  8 ++--
- arch/arm/boot/dts/at91-sama5d4_ma5d4.dtsi          |  2 +-
- arch/arm/boot/dts/at91-sama5d4_xplained.dts        |  6 +--
- arch/arm/boot/dts/at91-sama5d4ek.dts               |  2 +-
- arch/arm/boot/dts/at91-sama7g5ek.dts               |  4 +-
- arch/arm/boot/dts/at91-vinco.dts                   |  2 +-
- arch/arm/boot/dts/at91rm9200ek.dts                 |  4 +-
- arch/arm/boot/dts/at91sam9260ek.dts                |  2 +-
- arch/arm/boot/dts/at91sam9261ek.dts                |  2 +-
- arch/arm/boot/dts/at91sam9263ek.dts                |  2 +-
- arch/arm/boot/dts/at91sam9g20ek_common.dtsi        | 45 +++++++++++++++++++++-
- arch/arm/boot/dts/at91sam9m10g45ek.dts             |  2 +-
- arch/arm/boot/dts/at91sam9n12ek.dts                |  2 +-
- arch/arm/boot/dts/at91sam9rlek.dts                 |  2 +-
- arch/arm/boot/dts/at91sam9x5ek.dtsi                |  2 +-
- arch/arm/boot/dts/sama5d3xmb.dtsi                  |  2 +-
- arch/arm/boot/dts/sama5d3xmb_cmp.dtsi              |  2 +-
- arch/arm/boot/dts/sama7g5.dtsi                     | 18 ++++-----
- arch/arm/boot/dts/usb_a9263.dts                    |  2 +-
- 27 files changed, 85 insertions(+), 42 deletions(-)
-
+You are awesome, thank you!
 -- 
-Nicolas Ferre
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
