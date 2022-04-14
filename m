@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77EA1C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CE86C4167B
 	for <soc@archiver.kernel.org>; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 435B4C385A1; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C4B7C385AE;
+	id 6ECE9C385B5; Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 594D6C385BA;
 	Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1649970615;
-	bh=WuPL6piRvgHHHrqj1vtpG824Di6PN6Jp6wRSkqq6HMY=;
+	bh=M6Dgks4QW77lgmT2472YVhhu9jkzs+HGYmLSePsCBDY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=JVSWSDyrIwVLvtiKAkGyyDaHzic5fi82+OqCgnvd9iXXZgZRIaD9yUriVaiTShHHR
-	 ODw50ASaQCLUFsP0V6qqL84QoazuV+16+TB7HsABwIAD+DOQG6tv8mydG/UHBN30BI
-	 XN7kwW9UsLKQ9uD/NzcJpqvtY8tSTEyrhnWz01MeMDPVCKczZgE7gjObg29tK+kuwc
-	 IG2QmsVWo+zIpnwYeBMQ6DpYoFyWol0tNDCGcz6xLbaQGwrvPudTjJX4x5nizpSomv
-	 Evdr0MMHgBadgnWA9VWx3/BIAYoYfkeFzTUkEEiv1CsDFCL6y/9FI0iI3HojCMhyWo
-	 k+pyDBwXFzd4w==
+	b=oX+52XdfG9gmf8zfW/f8r7T0qO8ykBlLDAMB5/JRzo3VPLZGnYd5R7OKVTM8FtKzt
+	 0qh2jX8QqTuB+PZtEXFYSxwVshk1Sp+MmYkUxASTMEuut/TTLBZmSTykbVafTWfwm/
+	 BREFYnynB1BVJl3tBLdbg5p5OgsL1vNHDxrm9uXMKdv+HhLk/3Au9rN0BL5/Vw1Xiw
+	 t1OKTJ9JhPv+qxE2yqIbgJVxfwgpmpuD4eBrD/o12U9TmgiMVC6AwaopAAJtnzNBmy
+	 RpR/PHpHyB1OHIHpYQelUdHjA8bNBlgUaTx2fK4NVOW5GjNBtp3wYBnysmrRsXGbvq
+	 JdFTGnXzRM1rA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C7C0EAC09B;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35FD2F03848;
 	Thu, 14 Apr 2022 21:10:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: align SPI NOR node name with dtschema
+Subject: Re: [GIT PULL] ARM: at91: fixes for 5.18
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <164997061511.10394.677075662266988243.git-patchwork-notify@kernel.org>
+ <164997061521.10394.4792100813414024490.git-patchwork-notify@kernel.org>
 Date: Thu, 14 Apr 2022 21:10:15 +0000
-References: <20220407143027.294678-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407143027.294678-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20220414143318.26363-1-nicolas.ferre@microchip.com>
+In-Reply-To: <20220414143318.26363-1-nicolas.ferre@microchip.com>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu,  7 Apr 2022 16:30:27 +0200 you wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
+On Thu, 14 Apr 2022 16:33:18 +0200 you wrote:
+> From: Nicolas Ferre <nicolas.ferre@microchip.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/da850-evm.dts                  | 2 +-
->  arch/arm/boot/dts/dm8168-evm.dts                 | 2 +-
->  arch/arm/boot/dts/spear1310-evb.dts              | 2 +-
->  arch/arm/boot/dts/spear1340-evb.dts              | 2 +-
->  arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi | 2 +-
->  arch/arm/boot/dts/stm32mp157c-ev1.dts            | 4 ++--
->  6 files changed, 7 insertions(+), 7 deletions(-)
+> Arnd, Olof,
+> 
+> Here are the fixes for 5.18 addressing DT issues. Please pull.
+> 
+> Thanks, best regards,
+>   Nicolas
+> 
+> [...]
 
 Here is the summary with links:
-  - ARM: dts: align SPI NOR node name with dtschema
-    https://git.kernel.org/soc/soc/c/56147a156e7e
+  - [GIT,PULL] ARM: at91: fixes for 5.18
+    https://git.kernel.org/soc/soc/c/67e473a303e7
 
 You are awesome, thank you!
 -- 
