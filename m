@@ -1,318 +1,108 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=fcyF=U4=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 584C6C433F5
-	for <soc@archiver.kernel.org>; Mon, 18 Apr 2022 12:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C7DCC433FE
+	for <soc@archiver.kernel.org>; Mon, 18 Apr 2022 13:35:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 22965C385A8; Mon, 18 Apr 2022 12:45:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4366BC385A7;
-	Mon, 18 Apr 2022 12:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650285958;
-	bh=Xi62UPker/DcT6fp0qdLaeAVONJgCLSbfDS7vHhvyTI=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=ly60fWfU6qaTaBYOoH9MM8eLT0sPQ7A10e0u67PABx3y7nBTw/7YtatJW8KeF04tB
-	 q353Wsl+P0c/62ErfrTH++82H4yNc0qp7uVf6B+ooX7GSFwCzpIb4k1F9WjKXdfnBP
-	 h42NRj8NUZMjN3w9hO50hdOtvYjeQcC1JUTMJVpuEQasiKUWGszZ/4UmwQZ6d/p5VY
-	 sWaOZoF9yOo7PT+EXleNObGcU9Ui7SeXsKpg4DouG/H9ZV5LZOAVnd2PW1nJWQb8dV
-	 /PzxbiE+yOC9ChzfDhXsnN4NtIZnwWg094a/12sa+3jurF9FLSjPEIrHUdBBxB8cRV
-	 Y35ABZ/WYZ3oA==
-Date: Mon, 18 Apr 2022 20:45:50 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Changming Huang <jerry.huang@nxp.com>
+	id CD1E2C385A7; Mon, 18 Apr 2022 13:35:52 +0000 (UTC)
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id F3BD9C385A1;
+	Mon, 18 Apr 2022 13:35:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F3BD9C385A1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so2504675ooj.2;
+        Mon, 18 Apr 2022 06:35:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=/7DrYrmalKThMdy4LcLfM/HEgQyeZb4ql4+RxoW5Tek=;
+        b=kPXGBJ4d+2sOfRJBlJsNABERDVbVp8nksTVE4maMN5aaTidhMOwbS1X1nMT8YijDr0
+         D4mTKZDrnJSTLGSY847QXJT3PbvXPVs24QJo5B7PEquh2gWaS/f525mhYKbo/Nb7oULV
+         ahy2wGRf/BPNvek2FWmU7x4VWu6r6qOTkHtOKCEzA3/HFJUR5jxu8nKeYhe9bZ9SBIdk
+         OdkYJR1qDfc/luO8lnitUWM2ZBWjbYas1X2DyFZ7JHWkqBiDCGgNjYKkq1NtjZr40V/K
+         OD0vyzqpoq4HXp1IAOoz4dGSNUnkML8fOwNVzdwEmPNQ5rEvliiPw75YnGR/7kj490oo
+         Zr6A==
+X-Gm-Message-State: AOAM530oq7OkCS+Y+7KRV75N/Xn6051c6wUBbvpa2rWqdKHIhjKEGkzp
+	OZwxkprgbw9eaZA7mjR03w==
+X-Google-Smtp-Source: ABdhPJycojyv4H+nJQ2x1+adkeuVDAjldV3SjAu/92fF+LKn4/jU3ne8TQqcEwIkD35VyIOwx2l8gQ==
+X-Received: by 2002:a4a:8888:0:b0:321:7448:42df with SMTP id j8-20020a4a8888000000b00321744842dfmr3575456ooa.82.1650288951046;
+        Mon, 18 Apr 2022 06:35:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g15-20020a05687054cf00b000e29cbc65e4sm3956240oan.51.2022.04.18.06.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 06:35:50 -0700 (PDT)
+Received: (nullmailer pid 3125299 invoked by uid 1000);
+	Mon, 18 Apr 2022 13:35:48 -0000
+From: Rob Herring <robh@kernel.org>
+To: Jacky Huang <ychuang3@nuvoton.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzk+dt@kernel.org, festevam@gmail.com,
-	marcel.ziswiler@toradex.com, l.stach@pengutronix.de,
-	tharvey@gateworks.com, alexander.stein@ew.tq-group.com,
-	ariel.dalessandro@collabora.com, matthias.schiffer@ew.tq-group.com,
-	cniedermaier@dh-electronics.com, sebastian.reichel@collabora.com,
-	leoyang.li@nxp.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, arnd@arndb.de, olof@lixom.net,
-	soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-	Alison Wang <alison.wang@nxp.com>
-Subject: Re: [PATCH 2/2 v3] ARM: dts: Add initial LS1021A IoT board dts
- support
-Message-ID: <20220418124550.GO391514@dragon>
-References: <20220415025600.2019912-1-jerry.huang@nxp.com>
- <20220415025600.2019912-2-jerry.huang@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415025600.2019912-2-jerry.huang@nxp.com>
+Cc: robh+dt@kernel.org, krzk+dt@kernel.org, will@kernel.org, arnd@arndb.de, ychuang570808@gmail.com, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, olof@lixom.net, cfli0@nuvoton.com, soc@kernel.org, devicetree@vger.kernel.org, sboyd@kernel.org
+In-Reply-To: <20220418082738.11301-3-ychuang3@nuvoton.com>
+References: <20220418082738.11301-1-ychuang3@nuvoton.com> <20220418082738.11301-3-ychuang3@nuvoton.com>
+Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Document MA35D1 clock controller bindings
+Date: Mon, 18 Apr 2022 08:35:48 -0500
+Message-Id: <1650288948.503037.3125298.nullmailer@robh.at.kernel.org>
 
-On Fri, Apr 15, 2022 at 10:56:00AM +0800, Changming Huang wrote:
-> The LS1021A-IoT gateway reference design is a purpose-built,
-> small footprint hardware platform equipped with a wide array
-> of both high-speed connectivity and low speed serial interfaces.
+On Mon, 18 Apr 2022 16:27:35 +0800, Jacky Huang wrote:
+> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
 > 
-> CC: Li Yang <leoyang.li@nxp.com>
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> Signed-off-by: Alison Wang <alison.wang@nxp.com>
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 > ---
-> changes in v3:
->   - adjust to generic node name for i2c nodes
+>  .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
 > 
->  arch/arm/boot/dts/Makefile        |   1 +
->  arch/arm/boot/dts/ls1021a-iot.dts | 227 ++++++++++++++++++++++++++++++
->  2 files changed, 228 insertions(+)
->  create mode 100644 arch/arm/boot/dts/ls1021a-iot.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 7c16f8a2b738..e2faf913e313 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -744,6 +744,7 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
->  dtb-$(CONFIG_SOC_LAN966) += \
->  	lan966x-pcb8291.dtb
->  dtb-$(CONFIG_SOC_LS1021A) += \
-> +	ls1021a-iot.dtb \
->  	ls1021a-moxa-uc-8410a.dtb \
->  	ls1021a-qds.dtb \
->  	ls1021a-tsn.dtb \
-> diff --git a/arch/arm/boot/dts/ls1021a-iot.dts b/arch/arm/boot/dts/ls1021a-iot.dts
-> new file mode 100644
-> index 000000000000..9e5a41880050
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/ls1021a-iot.dts
-> @@ -0,0 +1,227 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2021-2022 NXP
-> + *
-> + */
-> +
-> +/dts-v1/;
-> +#include "ls1021a.dtsi"
-> +
-> +/ {
-> +	model = "LS1021A-IOT Board";
-> +	compatible = "fsl,ls1021a-iot", "fsl,ls1021a";
-> +
-> +	sys_mclk: clock-mclk {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <24576000>;
-> +	};
-> +
-> +	reg_3p3v: regulator-3V3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "3P3V";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	reg_2p5v: regulator-2V5 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "2P5V";
-> +		regulator-min-microvolt = <2500000>;
-> +		regulator-max-microvolt = <2500000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,format = "i2s";
-> +		simple-audio-card,widgets =
-> +			"Microphone", "Microphone Jack",
-> +			"Headphone", "Headphone Jack",
-> +			"Speaker", "Speaker Ext",
-> +			"Line", "Line In Jack";
-> +		simple-audio-card,routing =
-> +			"MIC_IN", "Microphone Jack",
-> +			"Microphone Jack", "Mic Bias",
-> +			"LINE_IN", "Line In Jack",
-> +			"Headphone Jack", "HP_OUT",
-> +			"Speaker Ext", "LINE_OUT";
-> +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&sai2>;
-> +			frame-master;
-> +			bitclock-master;
-> +		};
-> +
-> +		simple-audio-card,codec {
-> +			sound-dai = <&sgtl5000>;
-> +			frame-master;
-> +			bitclock-master;
-> +		};
-> +	};
-> +};
-> +
-> +&can0{
-> +	status = "disabled";
-> +};
-> +
-> +&can1{
-> +	status = "disabled";
-> +};
-> +
-> +&can2{
-> +	status = "disabled";
-> +};
-> +
-> +&can3{
-> +	status = "okay";
-> +};
-> +
-> +&dcu {
-> +	display = <&display>;
-> +	status = "okay";
-> +
-> +	display: display@0 {
-> +		bits-per-pixel = <24>;
-> +
-> +		display-timings {
-> +			native-mode = <&timing0>;
-> +
-> +			timing0: mode0 {
-> +				clock-frequency = <25000000>;
-> +				hactive = <640>;
-> +				vactive = <480>;
-> +				hback-porch = <80>;
-> +				hfront-porch = <80>;
-> +				vback-porch = <16>;
-> +				vfront-porch = <16>;
-> +				hsync-len = <12>;
-> +				vsync-len = <2>;
-> +				hsync-active = <1>;
-> +				vsync-active = <1>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&enet0 {
-> +	tbi-handle = <&tbi1>;
-> +	phy-handle = <&phy1>;
-> +	phy-connection-type = "sgmii";
-> +	status = "okay";
-> +};
-> +
-> +&enet1 {
-> +	tbi-handle = <&tbi1>;
-> +	phy-handle = <&phy3>;
-> +	phy-connection-type = "sgmii";
-> +	status = "okay";
-> +};
-> +
-> +&enet2 {
-> +	fixed-link = <0 1 1000 0 0>;
-> +	phy-connection-type = "rgmii-id";
-> +	status = "okay";
-> +};
-> +
-> +&esdhc{
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +
-> +	pca9555: gpio@23 {
-> +		compatible = "nxp,pca9555";
-> +		reg = <0x23>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		interrupt-controller;
-> +		#interrupt-cells = <2>;
-> +	};
-> +
-> +	sgtl5000: codec@2a {
 
-audio-codec for node name.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +		#sound-dai-cells=<0x0>;
-> +		compatible = "fsl,sgtl5000";
-> +		reg = <0x2a>;
-> +		VDDA-supply = <&reg_3p3v>;
-> +		VDDIO-supply = <&reg_2p5v>;
-> +		clocks = <&sys_mclk 1>;
-> +	};
-> +
-> +	max1239: adc@35 {
-> +		compatible = "maxim,max1239";
-> +		reg = <0x35>;
-> +		#io-channel-cells = <1>;
-> +	};
-> +
-> +	ina2201: core_monitor@44 {
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml:41:9: [error] syntax error: mapping values are not allowed here (syntax)
 
-Hyphen rather than underscore is recommended for node name.
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 52, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+  in "<unicode string>", line 41, column 9
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml:  mapping values are not allowed in this context
+  in "<unicode string>", line 41, column 9
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml: ignoring, error parsing file
+make: *** [Makefile:1401: dt_binding_check] Error 2
 
-Shawn
+doc reference errors (make refcheckdocs):
 
-> +		compatible = "ti,ina220";
-> +		reg = <0x44>;
-> +		shunt-resistor = <1000>;
-> +	};
-> +
-> +	ina2202: current_monitor@45 {
-> +		compatible = "ti,ina220";
-> +		reg = <0x45>;
-> +		shunt-resistor = <1000>;
-> +	};
-> +
-> +	lm75b: thermal_monitor@48 {
-> +		compatible = "national,lm75b";
-> +		reg = <0x48>;
-> +	};
-> +};
-> +
-> +&lpuart0 {
-> +	status = "okay";
-> +};
-> +
-> +&mdio0 {
-> +	phy0: ethernet-phy@0 {
-> +		reg = <0x0>;
-> +	};
-> +
-> +	phy1: ethernet-phy@1 {
-> +		reg = <0x1>;
-> +	};
-> +
-> +	phy2: ethernet-phy@2 {
-> +		reg = <0x2>;
-> +	};
-> +
-> +	phy3: ethernet-phy@3 {
-> +		reg = <0x3>;
-> +	};
-> +
-> +	tbi1: tbi-phy@1f {
-> +		reg = <0x1f>;
-> +		device_type = "tbi-phy";
-> +	};
-> +};
-> +
-> +&qspi {
-> +	num-cs = <2>;
-> +	status = "okay";
-> +
-> +	s25fl128s: flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <20000000>;
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&sai2 {
-> +	status = "okay";
-> +};
-> +
-> +&uart0 {
-> +	status = "okay";
-> +};
-> +
-> +&uart1 {
-> +	status = "okay";
-> +};
-> -- 
-> 2.25.1
-> 
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
