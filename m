@@ -1,99 +1,318 @@
-Return-Path: <SRS0=Kfe6=U4=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D88DC433F5
-	for <soc@archiver.kernel.org>; Mon, 18 Apr 2022 12:20:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 584C6C433F5
+	for <soc@archiver.kernel.org>; Mon, 18 Apr 2022 12:45:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5614AC385AF; Mon, 18 Apr 2022 12:20:29 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2A3F8C385A8
-	for <soc@kernel.org>; Mon, 18 Apr 2022 12:20:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2A3F8C385A8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id r13so26556578ejd.5
-        for <soc@kernel.org>; Mon, 18 Apr 2022 05:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IrspqwoC0i8xWBSDGv/e81WYq/G3Gaial55KaXcpMB4=;
-        b=EROJPtVhkTWMC362VRxsn28ErAWXjxRwSGzBrXd/ILtzWuytV08hvlbx49encLOOqc
-         yeMw9yc7SKrF1+IquHFumnC5nzv8sCjiS/9h3Ie6onCCBYKAmaLf0suDnplCv4q3oEDF
-         knghEFqpRQpYEfE3tDtNwMu2obylGzqhbXAdLhvCLWIQKLnEXd8Sw7hYct4HM0iizOxM
-         KJxVev9k4sh5XJ89IrjxtG8nz5L8AoKnxF88C74xHknJiavH0KHq7Pxu0mOPH9XvZWze
-         PiVvIKdjNyMdM4oEgTDgrWs57aI2jc86pzv2U3KyxgYxeQX5iqZEIrJxIMY3Y4NeUc0Y
-         leDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IrspqwoC0i8xWBSDGv/e81WYq/G3Gaial55KaXcpMB4=;
-        b=wOmTIovB9ET8nS03ElBfJZUodfvx1SsYkUiQpJ9v5fdslO+gvXEYnfrzjIn++74mBY
-         ycRscxPfQbOKb0sx6EY4AyI7igvNXznWrOYCxBum/gR0Hx4XE75r1Fo0t+8/SrWMrDVW
-         6ZrCrmdSnUu4h7aPa8y+3lIHjiKhYY6mihmSYKSAFm1OnvUk6qcNl8i4M8NgZA3030n9
-         +A0Ih0GMLrIP6ae3NdClpkTUcY3YYO4KrghXYHR7XqdaMP9XIHDhbRLUyVC3BKlBW74r
-         2x1PQi2sPKai4npWKQrzc/oxRpDHClI3tmWbI55U0Y+AMDAOJKyxBsTphcj51L6uFG+X
-         HGdQ==
-X-Gm-Message-State: AOAM533f5tr+QDlhOItD90sTkqgiornzjYCVWgCaHTDA2nNEsKBMcFHf
-	NiWDe22ALozB/dnMG56kJ75dKA==
-X-Google-Smtp-Source: ABdhPJzoDxvcNzmEcyeGaDq97ow/WOeOSzYmXAahpLo2Kg1wrT2tHDDGSBII00dY0Cob+6Pqx4rvHQ==
-X-Received: by 2002:a17:907:7e9f:b0:6e8:92eb:4171 with SMTP id qb31-20020a1709077e9f00b006e892eb4171mr8636712ejc.53.1650284425490;
-        Mon, 18 Apr 2022 05:20:25 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170906774e00b006d5b915f27dsm4538016ejn.169.2022.04.18.05.20.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:20:25 -0700 (PDT)
-Message-ID: <60e50c11-118d-431f-7120-95fcbb53eeb5@linaro.org>
-Date: Mon, 18 Apr 2022 14:20:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 3/5] arm64: dts: nuvoton: Add initial support for
- MA35D1
-Content-Language: en-US
-To: Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+	id 22965C385A8; Mon, 18 Apr 2022 12:45:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4366BC385A7;
+	Mon, 18 Apr 2022 12:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650285958;
+	bh=Xi62UPker/DcT6fp0qdLaeAVONJgCLSbfDS7vHhvyTI=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=ly60fWfU6qaTaBYOoH9MM8eLT0sPQ7A10e0u67PABx3y7nBTw/7YtatJW8KeF04tB
+	 q353Wsl+P0c/62ErfrTH++82H4yNc0qp7uVf6B+ooX7GSFwCzpIb4k1F9WjKXdfnBP
+	 h42NRj8NUZMjN3w9hO50hdOtvYjeQcC1JUTMJVpuEQasiKUWGszZ/4UmwQZ6d/p5VY
+	 sWaOZoF9yOo7PT+EXleNObGcU9Ui7SeXsKpg4DouG/H9ZV5LZOAVnd2PW1nJWQb8dV
+	 /PzxbiE+yOC9ChzfDhXsnN4NtIZnwWg094a/12sa+3jurF9FLSjPEIrHUdBBxB8cRV
+	 Y35ABZ/WYZ3oA==
+Date: Mon, 18 Apr 2022 20:45:50 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: Changming Huang <jerry.huang@nxp.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
- olof@lixom.net, will@kernel.org, soc@kernel.org, cfli0@nuvoton.com
-References: <20220418082738.11301-1-ychuang3@nuvoton.com>
- <20220418082738.11301-4-ychuang3@nuvoton.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220418082738.11301-4-ychuang3@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: robh+dt@kernel.org, krzk+dt@kernel.org, festevam@gmail.com,
+	marcel.ziswiler@toradex.com, l.stach@pengutronix.de,
+	tharvey@gateworks.com, alexander.stein@ew.tq-group.com,
+	ariel.dalessandro@collabora.com, matthias.schiffer@ew.tq-group.com,
+	cniedermaier@dh-electronics.com, sebastian.reichel@collabora.com,
+	leoyang.li@nxp.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, arnd@arndb.de, olof@lixom.net,
+	soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+	Alison Wang <alison.wang@nxp.com>
+Subject: Re: [PATCH 2/2 v3] ARM: dts: Add initial LS1021A IoT board dts
+ support
+Message-ID: <20220418124550.GO391514@dragon>
+References: <20220415025600.2019912-1-jerry.huang@nxp.com>
+ <20220415025600.2019912-2-jerry.huang@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415025600.2019912-2-jerry.huang@nxp.com>
 
-On 18/04/2022 10:27, Jacky Huang wrote:
-> Add the initial device tree files for Nuvoton MA35D1 Soc.
+On Fri, Apr 15, 2022 at 10:56:00AM +0800, Changming Huang wrote:
+> The LS1021A-IoT gateway reference design is a purpose-built,
+> small footprint hardware platform equipped with a wide array
+> of both high-speed connectivity and low speed serial interfaces.
 > 
-
-(...)
-
-> +	gic: interrupt-controller@50800000 {
-
-The unit address does not match first reg property. Don't you have
-warnings with this?
-
-> +		compatible = "arm,gic-400";
-> +		#interrupt-cells = <3>;
-> +		interrupt-parent = <&gic>;
-> +		interrupt-controller;
-> +		reg = <0x0 0x50801000 0x0 0x1000>,
-> +		      <0x0 0x50802000 0x0 0x2000>,
-> +		      <0x0 0x50804000 0x0 0x2000>,
-> +		      <0x0 0x50806000 0x0 0x2000>;
-> +		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
-> +			      IRQ_TYPE_LEVEL_HIGH)>;
+> CC: Li Yang <leoyang.li@nxp.com>
+> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> Signed-off-by: Alison Wang <alison.wang@nxp.com>
+> ---
+> changes in v3:
+>   - adjust to generic node name for i2c nodes
+> 
+>  arch/arm/boot/dts/Makefile        |   1 +
+>  arch/arm/boot/dts/ls1021a-iot.dts | 227 ++++++++++++++++++++++++++++++
+>  2 files changed, 228 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/ls1021a-iot.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 7c16f8a2b738..e2faf913e313 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -744,6 +744,7 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+>  dtb-$(CONFIG_SOC_LAN966) += \
+>  	lan966x-pcb8291.dtb
+>  dtb-$(CONFIG_SOC_LS1021A) += \
+> +	ls1021a-iot.dtb \
+>  	ls1021a-moxa-uc-8410a.dtb \
+>  	ls1021a-qds.dtb \
+>  	ls1021a-tsn.dtb \
+> diff --git a/arch/arm/boot/dts/ls1021a-iot.dts b/arch/arm/boot/dts/ls1021a-iot.dts
+> new file mode 100644
+> index 000000000000..9e5a41880050
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/ls1021a-iot.dts
+> @@ -0,0 +1,227 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2021-2022 NXP
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +#include "ls1021a.dtsi"
+> +
+> +/ {
+> +	model = "LS1021A-IOT Board";
+> +	compatible = "fsl,ls1021a-iot", "fsl,ls1021a";
+> +
+> +	sys_mclk: clock-mclk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <24576000>;
+> +	};
+> +
+> +	reg_3p3v: regulator-3V3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "3P3V";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	reg_2p5v: regulator-2V5 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "2P5V";
+> +		regulator-min-microvolt = <2500000>;
+> +		regulator-max-microvolt = <2500000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	sound {
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,format = "i2s";
+> +		simple-audio-card,widgets =
+> +			"Microphone", "Microphone Jack",
+> +			"Headphone", "Headphone Jack",
+> +			"Speaker", "Speaker Ext",
+> +			"Line", "Line In Jack";
+> +		simple-audio-card,routing =
+> +			"MIC_IN", "Microphone Jack",
+> +			"Microphone Jack", "Mic Bias",
+> +			"LINE_IN", "Line In Jack",
+> +			"Headphone Jack", "HP_OUT",
+> +			"Speaker Ext", "LINE_OUT";
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&sai2>;
+> +			frame-master;
+> +			bitclock-master;
+> +		};
+> +
+> +		simple-audio-card,codec {
+> +			sound-dai = <&sgtl5000>;
+> +			frame-master;
+> +			bitclock-master;
+> +		};
 > +	};
 > +};
+> +
+> +&can0{
+> +	status = "disabled";
+> +};
+> +
+> +&can1{
+> +	status = "disabled";
+> +};
+> +
+> +&can2{
+> +	status = "disabled";
+> +};
+> +
+> +&can3{
+> +	status = "okay";
+> +};
+> +
+> +&dcu {
+> +	display = <&display>;
+> +	status = "okay";
+> +
+> +	display: display@0 {
+> +		bits-per-pixel = <24>;
+> +
+> +		display-timings {
+> +			native-mode = <&timing0>;
+> +
+> +			timing0: mode0 {
+> +				clock-frequency = <25000000>;
+> +				hactive = <640>;
+> +				vactive = <480>;
+> +				hback-porch = <80>;
+> +				hfront-porch = <80>;
+> +				vback-porch = <16>;
+> +				vfront-porch = <16>;
+> +				hsync-len = <12>;
+> +				vsync-len = <2>;
+> +				hsync-active = <1>;
+> +				vsync-active = <1>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&enet0 {
+> +	tbi-handle = <&tbi1>;
+> +	phy-handle = <&phy1>;
+> +	phy-connection-type = "sgmii";
+> +	status = "okay";
+> +};
+> +
+> +&enet1 {
+> +	tbi-handle = <&tbi1>;
+> +	phy-handle = <&phy3>;
+> +	phy-connection-type = "sgmii";
+> +	status = "okay";
+> +};
+> +
+> +&enet2 {
+> +	fixed-link = <0 1 1000 0 0>;
+> +	phy-connection-type = "rgmii-id";
+> +	status = "okay";
+> +};
+> +
+> +&esdhc{
+> +	status = "okay";
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +
+> +	pca9555: gpio@23 {
+> +		compatible = "nxp,pca9555";
+> +		reg = <0x23>;
+> +		gpio-controller;
+> +		#gpio-cells = <2>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +	};
+> +
+> +	sgtl5000: codec@2a {
 
-Best regards,
-Krzysztof
+audio-codec for node name.
+
+> +		#sound-dai-cells=<0x0>;
+> +		compatible = "fsl,sgtl5000";
+> +		reg = <0x2a>;
+> +		VDDA-supply = <&reg_3p3v>;
+> +		VDDIO-supply = <&reg_2p5v>;
+> +		clocks = <&sys_mclk 1>;
+> +	};
+> +
+> +	max1239: adc@35 {
+> +		compatible = "maxim,max1239";
+> +		reg = <0x35>;
+> +		#io-channel-cells = <1>;
+> +	};
+> +
+> +	ina2201: core_monitor@44 {
+
+Hyphen rather than underscore is recommended for node name.
+
+Shawn
+
+> +		compatible = "ti,ina220";
+> +		reg = <0x44>;
+> +		shunt-resistor = <1000>;
+> +	};
+> +
+> +	ina2202: current_monitor@45 {
+> +		compatible = "ti,ina220";
+> +		reg = <0x45>;
+> +		shunt-resistor = <1000>;
+> +	};
+> +
+> +	lm75b: thermal_monitor@48 {
+> +		compatible = "national,lm75b";
+> +		reg = <0x48>;
+> +	};
+> +};
+> +
+> +&lpuart0 {
+> +	status = "okay";
+> +};
+> +
+> +&mdio0 {
+> +	phy0: ethernet-phy@0 {
+> +		reg = <0x0>;
+> +	};
+> +
+> +	phy1: ethernet-phy@1 {
+> +		reg = <0x1>;
+> +	};
+> +
+> +	phy2: ethernet-phy@2 {
+> +		reg = <0x2>;
+> +	};
+> +
+> +	phy3: ethernet-phy@3 {
+> +		reg = <0x3>;
+> +	};
+> +
+> +	tbi1: tbi-phy@1f {
+> +		reg = <0x1f>;
+> +		device_type = "tbi-phy";
+> +	};
+> +};
+> +
+> +&qspi {
+> +	num-cs = <2>;
+> +	status = "okay";
+> +
+> +	s25fl128s: flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-max-frequency = <20000000>;
+> +		reg = <0>;
+> +	};
+> +};
+> +
+> +&sai2 {
+> +	status = "okay";
+> +};
+> +
+> +&uart0 {
+> +	status = "okay";
+> +};
+> +
+> +&uart1 {
+> +	status = "okay";
+> +};
+> -- 
+> 2.25.1
+> 
