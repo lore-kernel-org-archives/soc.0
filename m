@@ -1,140 +1,150 @@
-Return-Path: <SRS0=wXmp=U6=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=GJ3E=U6=hpe.com=prvs=0109495177=nick.hawkins@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 977FEC433F5
-	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 10:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A773BC433F5
+	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 14:59:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5E99AC385AB; Wed, 20 Apr 2022 10:47:20 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 6CB86C385A1; Wed, 20 Apr 2022 14:59:37 +0000 (UTC)
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C8EC5C385AA
-	for <soc@kernel.org>; Wed, 20 Apr 2022 10:47:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8EC5C385AA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id s18so2761999ejr.0
-        for <soc@kernel.org>; Wed, 20 Apr 2022 03:47:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bcpYqRaU49XKqh0Z0sSXhDxB3o3VF6wDafoLfTVp4EQ=;
-        b=TllbobzAtOeBEXWQjxWZwmHDv/7A+77wdjCWcGGlbLmwQnEk+Zd8uBxoUl8qMoYIvt
-         GP6zRKxeVe+L2gaGMMHvIvIrU1SHOX/jNhZ6zrtqzUqhzFoM/yxmyUM0bMSHCDRMiJux
-         Gf/26FTMxYbd+jdvyZcC/5pABqDpE6CKw16ps+kIPS8tkE0WcSA3rhBy7wzu3ixbt4Hp
-         gXMk7EaNo+5uQkHTqZJEkFrh14utTtQ0fDC0Vqv+9JHXyDgQGfF2OfNK2SJy0gb37pDx
-         AVruYFb2E/K95YlR0+UCI1vLc6tb+2usEeGEfigufEujzTpvXdAr8e9dyLKT90vLTSC6
-         61tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bcpYqRaU49XKqh0Z0sSXhDxB3o3VF6wDafoLfTVp4EQ=;
-        b=cyqt/L2g+PHETPdhIno0MntSc3hkuUAJp8z+CUf5mq2piX4I4Osh5LCUqH9RrkSnIC
-         jMFY/gOe6dg/uG4ZKziTPsyON+GBe2G2xbwy6XhuC37yml4vx4Wp0vxusFFZPI+jyYLa
-         7pC6aaxHtIdvaEjjhmTWd8nDhqAmyIAKiOJQ/C2/akYhH7pXpOxbRxa8eMLhEuCl3uc0
-         vYuw04uSq8nOxHoIUByL0YUQoAw9N1FonuC1/n7N0WoZE4sBeUETVPPHBFLQkt9OwhS1
-         gDDD/JosEJ1yWbGxgAdh1hvhg5ZJRFoAkahMZtM5VQXk0JbuxVVMYHbb2u0y7KSnhO3l
-         Zdyg==
-X-Gm-Message-State: AOAM533XAlmwPn4IvdiPo9pegK17AhUT/iJfsGQBlKDGT+sO7EKkBU/x
-	McQeHZw6iSNzEEGk8DzRSSnGxg==
-X-Google-Smtp-Source: ABdhPJy9OVgwcawWRlYVZ5WxCEw/1/2nlUmelZjjBlqNclDd2qstERYLUEf0WaDM3tW8fI/yuSRHvA==
-X-Received: by 2002:a17:906:6a1c:b0:6eb:d76c:e835 with SMTP id qw28-20020a1709066a1c00b006ebd76ce835mr18773642ejc.15.1650451637094;
-        Wed, 20 Apr 2022 03:47:17 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm6583019eja.217.2022.04.20.03.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 03:47:16 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id C4B0FC385A0;
+	Wed, 20 Apr 2022 14:59:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4B0FC385A0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KETO8K024773;
+	Wed, 20 Apr 2022 14:59:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=SrJ1s9ybwVbdOOH7gaX0781T69f23uJScMgAQXx2D9s=;
+ b=mVF4jgUb+ooe5pMgvTeUB8D2IRz/uWHiglputfztkKAkwk6gsaEwG7oS6upmuSAJYrZC
+ mRfEWStqBrfn7UfCC1Hkk4ZwoJjL/NddIwX58nxUWasnE4DzlZFoKqqN7KtY7SFn6i7O
+ ZyyU49dZzCjy7/k13YU7u0/BiUb4cPgkjl2iHV+hr2+cz6yC4u8akKmVK2UnKZUn/yo7
+ XPQjmMzexasVeotZmsUxRgRaToSjYjK1zG8W+qodNuWZ+cYXHDMw1Gj5rTt4sehGTcct
+ 0UnZinGKVaYO6VVwAKA3PLjMwP60njxIfyEIE4otZ2EVXQ/2SBaooxc/hVVaU3P07gjR 2Q== 
+Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fjkypr8t3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Apr 2022 14:59:15 +0000
+Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
+	by g9t5009.houston.hpe.com (Postfix) with ESMTP id F03E255;
+	Wed, 20 Apr 2022 14:59:13 +0000 (UTC)
+Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
+	by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 711514A;
+	Wed, 20 Apr 2022 14:59:12 +0000 (UTC)
+From: nick.hawkins@hpe.com
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alim Akhtar <alim.akhtar@samsung.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] MAINTAINERS: add Bug entry for Samsung and memory controller drivers
-Date: Wed, 20 Apr 2022 12:47:08 +0200
-Message-Id: <20220420104708.106738-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To: verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        linux@armlinux.org.uk, arnd@arndb.de, olof@lixom.net, joel@jms.id.au,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 00/11] ARM: Introduce HPE GXP Architecture
+Date: Wed, 20 Apr 2022 10:01:14 -0500
+Message-Id: <20220420150114.47356-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: HaEgkcqBFgiSzCPe6r6przRCKLH88dHH
+X-Proofpoint-GUID: HaEgkcqBFgiSzCPe6r6przRCKLH88dHH
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_04,2022-04-20_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 clxscore=1011 adultscore=0
+ impostorscore=0 mlxlogscore=851 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204200089
 
-Add a Bug sections, indicating preferred mailing method for bug
-reports, to Samsung SoC related entries and memory controller drivers.
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes since v3:
+ *Completely redid the dtsi file to represent architecture
+ *Reduced device tree size
+ *Rewrote the timer driver to start the watchdog driver due
+ to similar register region
+ *Made adjustments to timer
+ *Made adjustments to watchdog
+ *Changed gxp.yaml to hpe,gxp.yaml with changes
+ *Updated Maintainers to represent new file names
+ *Added hpe bindings to generic-ehci and generic-ohci
+ *Fixed clock architecture to be accurate
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4cfe5a9acf3f..2d746723306a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2645,6 +2645,7 @@ L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
- C:	irc://irc.libera.chat/linux-exynos
- Q:	https://patchwork.kernel.org/project/linux-samsung-soc/list/
-+B:	mailto:linux-samsung-soc@vger.kernel.org
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git
- F:	Documentation/arm/samsung/
- F:	Documentation/devicetree/bindings/arm/samsung/
-@@ -11989,6 +11990,7 @@ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-pm@vger.kernel.org
- S:	Supported
-+B:	mailto:linux-samsung-soc@vger.kernel.org
- F:	Documentation/devicetree/bindings/power/supply/maxim,max14577.yaml
- F:	Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml
- F:	drivers/power/supply/max14577_charger.c
-@@ -12000,6 +12002,7 @@ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
-+B:	mailto:linux-samsung-soc@vger.kernel.org
- F:	Documentation/devicetree/bindings/*/maxim,max14577.yaml
- F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
- F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
-@@ -12693,6 +12696,7 @@ MEMORY CONTROLLER DRIVERS
- M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+B:	mailto:krzysztof.kozlowski@linaro.org
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
- F:	Documentation/devicetree/bindings/memory-controllers/
- F:	drivers/memory/
-@@ -15624,6 +15628,7 @@ L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
- C:	irc://irc.libera.chat/linux-exynos
- Q:	https://patchwork.kernel.org/project/linux-samsung-soc/list/
-+B:	mailto:linux-samsung-soc@vger.kernel.org
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git
- F:	Documentation/devicetree/bindings/pinctrl/samsung,pinctrl*yaml
- F:	drivers/pinctrl/samsung/
-@@ -17357,6 +17362,7 @@ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Supported
-+B:	mailto:linux-samsung-soc@vger.kernel.org
- F:	Documentation/devicetree/bindings/sound/samsung*
- F:	sound/soc/samsung/
- 
-@@ -17401,6 +17407,7 @@ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Supported
-+B:	mailto:linux-samsung-soc@vger.kernel.org
- F:	Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
- F:	Documentation/devicetree/bindings/mfd/samsung,s2m*.yaml
- F:	Documentation/devicetree/bindings/mfd/samsung,s5m*.yaml
+Changes since v2:
+ *Reduced size of changes, put them into patchset format
+
+Changes since v1:
+ *Fixed compiler warnings
+
+The GXP is the HPE BMC SoC that is used in the majority
+of HPE Generation 10 servers. Traditionally the asic will
+last multiple generations of server before being replaced.
+
+Info about SoC:
+
+ HPE GXP is the name of the HPE Soc. This SoC is used to implement
+ many BMC features at HPE. It supports ARMv7 architecture based on
+ the Cortex A9 core. It is capable of using an AXI bus to which
+ a memory controller is attached. It has multiple SPI interfaces
+ to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+ for network connectivity. It has multiple i2c engines to drive
+ connectivity with a host infrastructure. The initial patches
+ enable the watchdog and timer enabling the host to be able to
+ boot. Based on feedback from the device tree gxp-timer now
+ creates a gxp-wdt child because of similar register region.
+
+Nick Hawkins (11):
+  arch: arm: mach-hpe: Introduce the HPE GXP architecture
+  arch: arm: configs: multi_v7_defconfig
+  drivers: wdt: Introduce HPE GXP SoC Watchdog
+  clocksource/drivers: Add HPE GXP timer
+  dt-bindings: timer: Add HPE GXP Timer Binding
+  dt-bindings: watchdog: Add HPE GXP Watchdog timer binding
+  dt-bindings: arm: Add HPE GXP Binding
+  dt-bindings: usb: generic-echi:  Add HPE GXP echi binding
+  dt-bindings: usb: generic-ochi:  Add HPE GXP ochi binding
+  arch: arm: boot: dts: Introduce HPE GXP Device tree
+  maintainers: Introduce HPE GXP Architecture
+
+ .../devicetree/bindings/arm/hpe,gxp.yaml      |  22 +++
+ .../bindings/timer/hpe,gxp-timer.yaml         |  49 +++++
+ .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+ .../bindings/watchdog/hpe,gxp-wdt.yaml        |  30 +++
+ MAINTAINERS                                   |  13 ++
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  13 ++
+ arch/arm/boot/dts/hpe-gxp.dtsi                | 128 ++++++++++++
+ arch/arm/configs/multi_v7_defconfig           |   3 +
+ arch/arm/mach-hpe/Kconfig                     |  17 ++
+ arch/arm/mach-hpe/Makefile                    |   1 +
+ arch/arm/mach-hpe/gxp.c                       |  16 ++
+ drivers/clocksource/Kconfig                   |   8 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-gxp.c               | 183 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/gxp-wdt.c                    | 166 ++++++++++++++++
+ 21 files changed, 666 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/hpe,gxp-wdt.yaml
+ create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+ create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ create mode 100644 arch/arm/mach-hpe/Kconfig
+ create mode 100644 arch/arm/mach-hpe/Makefile
+ create mode 100644 arch/arm/mach-hpe/gxp.c
+ create mode 100644 drivers/clocksource/timer-gxp.c
+ create mode 100644 drivers/watchdog/gxp-wdt.c
+
 -- 
-2.32.0
+2.17.1
 
