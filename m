@@ -1,119 +1,159 @@
-Return-Path: <SRS0=+W3W=U5=foss.st.com=prvs=0108d9da75=alexandre.torgue@kernel.org>
+Return-Path: <SRS0=957I=U6=nxp.com=jerry.huang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE63C433FE
-	for <soc@archiver.kernel.org>; Tue, 19 Apr 2022 13:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6974C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 02:36:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B0619C385AD; Tue, 19 Apr 2022 13:30:16 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	id 9884EC385A5; Wed, 20 Apr 2022 02:36:17 +0000 (UTC)
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70082.outbound.protection.outlook.com [40.107.7.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 072CBC385A7;
-	Tue, 19 Apr 2022 13:30:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 072CBC385A7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23JCeESq019632;
-	Tue, 19 Apr 2022 15:30:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=yVMrm4zWjinomEQt6Qi0CU02yE86wEnfHBQgY0IOHqc=;
- b=nFB0m7eyQ1BHx2n5SeGnAyqflzmTnnBNt+gQV/xjoQu3LfSq5YTU/69SkKOGdx8nIkZw
- FJDjxEa7c6hypgNU62Y2i5lXOiwstXJFhQXwEzPSGk+oLP1gix327yzSG4PJtArSM9QN
- da/63nkP+2s0tc5n1zbnPWpeTc4ZTIKeXoaKXtPc9LNEOW4idvqv71gy55RIzWcCZjST
- x+pKEQUqIEgFmzJD0zSH3xYCj9uZVlJxqWng+8wBja2Fi+3Gpz6+HWBFQ892PJY3DIg/
- Hr93FGwT6Cd6yJMuyNMRMxcye3UQv/YXpIxBI4+g+F+DuHbMYIkUA+Q6FmTKcuGsvsxl PA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fh09kr17x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Apr 2022 15:30:11 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D1EFB100034;
-	Tue, 19 Apr 2022 15:30:10 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C7E742128DC;
-	Tue, 19 Apr 2022 15:30:10 +0200 (CEST)
-Received: from [10.48.0.142] (10.75.127.46) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 19 Apr
- 2022 15:30:09 +0200
-Message-ID: <c40b818d-1036-8068-2ebb-a6f1eab4d738@foss.st.com>
-Date: Tue, 19 Apr 2022 15:30:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] ARM: dts: align SPI NOR node name with dtschema
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id E590AC385A7;
+	Wed, 20 Apr 2022 02:36:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E590AC385A7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YVIRjH2ysUtRdDu8RyF1LqGG6OHDvKBdX4HsIlRxlQW9a23T669+C5rMOxz8SUbCk61de+fnmpvkKSikTBZ6nP3ST+eOBgQexjeagg25XB5+KAvxzaE+xH7ZrpYRrO+6/sb7ToEghMFrvB5wa6w6JPEtIy/Fp8JDDemo/EcgkTN7HAH7HJBsXpHuuMjaidMniyhCLARCcv0kqK9kW3CBM36IUGBftbnenajBxeTXGi6BM+NH1sTUtSSWzB+niVJAk4UlHLE2BSsP65yohPailS5VnHmkpfX9bLpeT3XswULWR7CKCpnFEQAdgNAc6gENsufswxYSY6zFN53Is4+3Yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ihiURGwiw2sax1zrl8u0rLtR+PFsndv08LJdk5kLK10=;
+ b=GbGe6H9eu+QdQcJ9PpEzrzeb5xLyy9PQdpflUfMJifclTWrSIPTESZ+ComyDMsO/2Wa1B/e/dtj4qvwYCGmreWAZBWQQER3NXwcpBf1mRKZDX3qw8rBpgaT1J27nYaYm8pnDST450FWSilLQvnTcmODva8vjReotbuwzgtbtVn4wjDbfNP/Rp345sAuPLzv0PmF281UlZlw4xVeibkEywno0XrAH/zmrN8x2GeAI2mK9GQI9iZlkn4gYd8Bjt5+jFS39xPQiWHWwvVq/WrlAaGSRbBtn/W6Ze6kXM+c/LPZbC1tvhlVpY7zY2JTOa7bfTqLkzY3sQBTXnkEuN+4FCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ihiURGwiw2sax1zrl8u0rLtR+PFsndv08LJdk5kLK10=;
+ b=AYUq6nnAZCM7gwX+l9Rh5DAAjVDZ2dpdihY9DsMv3vPBb/Zw+CmUbvsFQChxRp5mCoqlzvpPF3b3rBqQAIieJUqG02OogOdmEgZeLvV3NzasfmbO41+pAAC3iwuoxVKrbtJEeUV0Y3Wxjab1A8OQvX/XgHN7cZo4dPhSJq0p8b8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
+ by VI1PR04MB5597.eurprd04.prod.outlook.com (2603:10a6:803:dd::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Wed, 20 Apr
+ 2022 02:36:12 +0000
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01]) by VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01%3]) with mapi id 15.20.5186.014; Wed, 20 Apr 2022
+ 02:36:12 +0000
+From: Changming Huang <jerry.huang@nxp.com>
 List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sekhar Nori
-	<nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, <soc@kernel.org>,
-        Maxime
- Coquelin <mcoquelin.stm32@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-CC: <arm@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson
-	<olof@lixom.net>
-References: <20220407143027.294678-1-krzysztof.kozlowski@linaro.org>
- <d0d9c16f-4668-1263-49fa-e51648c8c098@foss.st.com>
- <8798d7bb-6480-90ef-90fd-d7ff7d7beb2a@linaro.org>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <8798d7bb-6480-90ef-90fd-d7ff7d7beb2a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_05,2022-04-15_01,2022-02-23_01
+To: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	shawnguo@kernel.org,
+	l.stach@pengutronix.de,
+	alexander.stein@ew.tq-group.com,
+	festevam@gmail.com,
+	tharvey@gateworks.com,
+	marcel.ziswiler@toradex.com,
+	linux@rempel-privat.de,
+	matthias.schiffer@ew.tq-group.com,
+	cniedermaier@dh-electronics.com,
+	sebastian.reichel@collabora.com,
+	leoyang.li@nxp.com,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Changming Huang <jerry.huang@nxp.com>,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH 1/2 v4] dt-bindings: arm: fsl: add ls1021a-iot board
+Date: Wed, 20 Apr 2022 10:35:55 +0800
+Message-Id: <20220420023556.33157-1-jerry.huang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0020.apcprd02.prod.outlook.com
+ (2603:1096:3:17::32) To VE1PR04MB6477.eurprd04.prod.outlook.com
+ (2603:10a6:803:11e::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c11de23a-20e3-4e9c-7f27-08da2276888c
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5597:EE_
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-Microsoft-Antispam-PRVS:
+ <VI1PR04MB559754CFA59CF73A578EDDE0FEF59@VI1PR04MB5597.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+ gCjxuj2exg2otKdqSTjXGA4wUeXnh1th6b4DEDhqf0eaUJSXRNyCBjvUPODaqqWQI8rXcMK8yS4zXbmsLHfGBJfsrx4OGDCH5Dwj8CDVhgRju9un2fx/Uqw5Jx0a1FuT1l8NOBR/ELlUI0qPwttnU8jfmSdAo2sC3mDwM5+gehSj2LeBBXwqAnmZ2FhSGmsD3KE6ERRQ/LmWErxVQcg6C/AJyWW6dQbOYCNWNjBOhxxOnkkg4MFfBPVZc7ZaTuZA9LKCuRFcwioiBE354F/fT1fHiDn/T4qgKOJBd2KGBOUTumtyW1ScYgKrdgMg2NVJgpeZertBM8yeIV6Ov6xCwftERDfj6zUtH5PawriY5A9dNXVXoOhhzNXHmWRFo88mRpJVfZz683cEa7IzMoqRXKPgXtne2w6NP+7dDFF739zEaL/Ps6aIJsVp6YQffkPjUvc/EJjRylnSodcJ2J+weDoIjAcoRdF8f0F9gAA7+wwozLfBN1SlT7KI0gjTK8now4agfaQOQtVRLb86IrSlF9HpLrRkNGq/hY0yup1PSLxrqhglWAYX3KAO6zOPIgCzeX3SMhWJDiCHRo9vt/WteRpIyYF+WFxM9DLnK7MX8SSXx9qRP/B33tTUeGnUwdDjD8vliApNHjGTIXRk6T58OWKi+UKBA4x57ReE5p7JrV0EZfdqxZ5VOqAQvnnBxLdmKNG3ouTbs6REn5Tb3NpJBQmizw+WkDcLB0CoTP3SmYw=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66946007)(52116002)(2616005)(38100700002)(66476007)(316002)(54906003)(6506007)(6666004)(5660300002)(7416002)(4744005)(8936002)(8676002)(4326008)(6512007)(921005)(38350700002)(508600001)(83380400001)(2906002)(1076003)(36756003)(26005)(186003)(6486002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?SjLoQOYXa06W3LPrPieqdYDp9ZZyloEgFPqh8v6bdiqW986DwmtmFRjRO5E8?=
+ =?us-ascii?Q?EvpTnSJH3pZy+lGyF3WNZ4uoI/rqMYy/1wV6zv5Xz4bMdXQddtGKyhGoiGNX?=
+ =?us-ascii?Q?PQME7a5AT27ZhTw8klluj5viwz4griXqsHjTS2Qu9j2BUrdipHq9cIYlrH5R?=
+ =?us-ascii?Q?Aj/vRpNMFJPiwRePW1dqf3XKTKj7xapTn9PiS9Ydabs1VRBmIRl1VEntfqWw?=
+ =?us-ascii?Q?4fVTMn1i4kvjCOhgIsWkP39Q0J/fWgIgdZzWYS4nLz2ojP2/4UAUBtWEv1DZ?=
+ =?us-ascii?Q?K/rs9ltt/5Bub7qEeBhky/Cxu/opHKbNTcCaSv73UVBX7zI5CqvgVZqjOCAA?=
+ =?us-ascii?Q?ib2QAt5Od13oaoWfTkoBeIx0gsWnUNDB29kDU7ZMIs8WSS5HR7w+owmh9ECC?=
+ =?us-ascii?Q?//woZeZYhGynxfnyPujbITwcosz+iKfWTfgpefaxFpyNX18+CIdZj6c8pjRM?=
+ =?us-ascii?Q?dwffzKkI0B1oEva+xi6hgkFRKdwNWL7UYUufIEsv4G1HzT1JmBQF7Lof0X4M?=
+ =?us-ascii?Q?yTCbSkVDyuIBc1xTq/PZFx28UaNqE89zxFqqc4yABezdwsKFWFAeQEdNDxIk?=
+ =?us-ascii?Q?75o8Vwv0o8SujNxaZ3OvlKGWRJlsmUEacgzCPLjzjAGb+E3joVwjxwlUREEV?=
+ =?us-ascii?Q?MSl0a3mClqqoZhH6i+6nw4F4OiADDkzl6yVrekW+4+6yfdFEeSRAHGiFK1dr?=
+ =?us-ascii?Q?/QpbLiWSFT1JzK4HQb2056xXCxrrRQR6aUUsjOcNZXJUo3KI8Hju6O37dKfd?=
+ =?us-ascii?Q?+CGAkj+u4N76bWTx+TxUUWu65gXfzb2qvjRSbYQ+kKH6XZgUsx7fjFKxQy53?=
+ =?us-ascii?Q?lih+wyJXxt7HUm0Z3olcIDJiE0KbqjuSvr9ptzuHMIjG0RCtbfOKWRcQal8V?=
+ =?us-ascii?Q?6mJrL64iQzzBbhhIlRnKTSybsr2Ljn0vl8vDW0ItUri9dvachNDflVuhZ/0V?=
+ =?us-ascii?Q?lORgbAmoiajeIb9rD6WLWOkSCfcVsfWf4K08m8QA1LL85TN1mXSdi9r8BTx1?=
+ =?us-ascii?Q?7WKBWZdreBRAzRcvmstEQvRc/3yboyDGhnDDkRvQ6SsxXraeGCaVdTmeiPsv?=
+ =?us-ascii?Q?dZGJDprxFa5D/cYqxasiTcw6wnl0YK7V5d35q5mnGK6Lp3oigm08NGO7pnzd?=
+ =?us-ascii?Q?SwkRqvin9sUKKAzeFNMvzcIdM99TrLgdzHJXscTMhwC5b1AljyFpE298O6zo?=
+ =?us-ascii?Q?FA3cq0ELhSOEkBaySG5MEyDWXQlxBafDPnZJl52760BpKuJrQkVi3OeCXAN1?=
+ =?us-ascii?Q?bEaP7gFsXCGhqEOsVkxOSkDNEYBSfUQfb6opyFwKbQe0OCZmjTt8VgK8rsqR?=
+ =?us-ascii?Q?0zb6swDO80kUsKkz5DLuOUYxtnHs11Trm8qsPTkAf+nMmQw6IA7B8vJc6Jq1?=
+ =?us-ascii?Q?BnxvU+w0OtWvl0377xtO+mWgjncCUyTHakbixnWqsKgvShZTIE1RK2pXOEDn?=
+ =?us-ascii?Q?6CVYS/bQp0Qqm875nERBeyX5qULN1fuWfUHGcXe4Hfh/1ROlJ6mZwWVwbOEb?=
+ =?us-ascii?Q?oOq88/qthr7PKBepv/Wcxp+kGzajkYu2xDE1f+1Cv2APR8lVS1ZsN6rS1dil?=
+ =?us-ascii?Q?VVJg3CvEwBsJjQUBaERDV79zJ/vC1DKbrUHySGSBwzQf3KhAdv35K2Ylpb4k?=
+ =?us-ascii?Q?PNYFVCmq+2ADhPLbgd+sUMP9y4snbPXdbtLTqXpho+nxTfxHQU0YcRp8C0b6?=
+ =?us-ascii?Q?zPppjJ3RqpoPUGGzHIur3Z/yXn9C+7j8LgndCHtbI9QlBau0Ba95YDTk+ni5?=
+ =?us-ascii?Q?zTgVBs7JFw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c11de23a-20e3-4e9c-7f27-08da2276888c
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6477.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 02:36:12.2644
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4BpUKBf/tcwjqQ0+EbcAOU3gQEujmEt9213Z5Zdspt0J67hmLgMh69gLdP2jMlMiAY5s1W5EmOpkkCtrgVDgZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5597
 
-On 4/19/22 15:10, Krzysztof Kozlowski wrote:
-> On 19/04/2022 15:03, Alexandre TORGUE wrote:
->> Hi Krzysztof
->>
->> On 4/7/22 16:30, Krzysztof Kozlowski wrote:
->>> The node names should be generic and SPI NOR dtschema expects "flash".
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>    arch/arm/boot/dts/da850-evm.dts                  | 2 +-
->>>    arch/arm/boot/dts/dm8168-evm.dts                 | 2 +-
->>>    arch/arm/boot/dts/spear1310-evb.dts              | 2 +-
->>>    arch/arm/boot/dts/spear1340-evb.dts              | 2 +-
->>>    arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi | 2 +-
->>>    arch/arm/boot/dts/stm32mp157c-ev1.dts            | 4 ++--
->>>    6 files changed, 7 insertions(+), 7 deletions(-)
->>
->> Thanks for your patch. Is it possible to split it per vendor
->> (TI/STM32/SPEAR) ?
-> 
-> This was a part of a bigger set where most of these I split. However
-> here split would be more churn for such simple change, so I combined them.
-> 
-> This was already picked up by Arnd:
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=for-next&id=56147a156e7e2f50bef695efe6cc4fe8e91c40dc
+Add the board ls1021a-iot in the binding docuemnt.
 
-Ah Ok, I missed that Arnd took them, sorry.
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+changes in v2:
+  - adjust the location in the alphabetic order
 
-Regards
-Alex
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> 
-> Best regards,
-> Krzysztof
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 08bdd30e511c..242dd99c272c 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -999,6 +999,7 @@ properties:
+       - description: LS1021A based Boards
+         items:
+           - enum:
++              - fsl,ls1021a-iot
+               - fsl,ls1021a-moxa-uc-8410a
+               - fsl,ls1021a-qds
+               - fsl,ls1021a-tsn
+-- 
+2.25.1
 
