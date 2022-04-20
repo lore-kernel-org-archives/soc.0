@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90ECEC433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 07:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA5D8C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 07:27:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79020C385AB; Wed, 20 Apr 2022 07:22:01 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	id B9B3AC385A9; Wed, 20 Apr 2022 07:27:17 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7528DC385AE
-	for <soc@kernel.org>; Wed, 20 Apr 2022 07:22:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7528DC385AE
+	by smtp.kernel.org (Postfix) with ESMTPS id 7CE5BC385A0
+	for <soc@kernel.org>; Wed, 20 Apr 2022 07:27:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7CE5BC385A0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id ks6so1692284ejb.1
-        for <soc@kernel.org>; Wed, 20 Apr 2022 00:22:00 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id t11so1604216eju.13
+        for <soc@kernel.org>; Wed, 20 Apr 2022 00:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5bhHmkNynxArCaTA/7bZ7/hQVWgPWdbqpkbJXO91I6o=;
-        b=V3BsCCRe/dmD5vyspIiiwnvVRGjTw9phFS+Deblji7ZMzkzb5GRm14IBNskkzUYr6i
-         koMqOflEWfWXuj7c4vmEwAZtWkhCR8hk6SuDMVs+7TNfHQAt/r5fKrBeCFcVtJPzJzl8
-         jm1t2FYtqyIkzxUGEtEVq/yXcOQqqlsW1s+jOL47F3pFti0iLq5r9S28TL6vjk0Iyj8t
-         xuZq3DQD2y/BQJDVo/66/I+rDTTuGNoIBNy7pSYpg2pHBq/57iG1ZjZnPecQ1LpyC6oL
-         xz+h3p4HDqngQKdFN/UhCEBglc/b4Yp5guIIMAAE+pjqVeTwvUb3hhFCoy4Na0lA6eJY
-         F1dQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V012myQFecH4RwOiutDxuAhe7kD3PdUfMSj2lgEMrMA=;
+        b=BIguwQ0St1I5BdcJmLLQHXVyqVZkbjRiVuHtC++WSEf8y+nf7rBypBvTYezUVPc44N
+         8eq3Dy2HVeCZK4QJsvIJEDWOhttBPSXBBcpIW45Urd19YQeDMi8CRrLGVKsvTOeTTnFw
+         0QBlF8U5gPhnHdgdjAqC+MmMc4zFZS+5cknRt2N+76EunwOBmlvYPrjaOxxqI3bwOBVS
+         Tz+hBWm2hz9xpi2yDqSVskw8h+2beVoLWrMiFOW1ql4c0EYlTaYhPNAcJfJ4WbofJAIA
+         DPSm7gZNoCCb1kqSn0aj1pYGpBKa3SSgclM3Nw8pyhazOGFbn7HSPyS/RJv4u+yFbRGp
+         fW+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5bhHmkNynxArCaTA/7bZ7/hQVWgPWdbqpkbJXO91I6o=;
-        b=eEhzSFP0hNjj6zodtLxWR8lcE6woaL+UNKyMmUV2TpfIO2mWhNsZqFsh43sM3S/D3X
-         lANLxecDnKSRXFNRacdPPevJ451t5dhEdi+Y2jTpXIviW8dD13bzYBntQ6DOs4sstaWw
-         HGSy7Ek3sL9s/00bEGr8p7YQ7G+9O6nvMeEQZRJhc67FEHMw6AdDh0KU3kQSLy2Bwolz
-         lAubrUyggQvE2tldLrcoGd97wcueu+do8RmcogYh1vZsoPJyYdEoCweLhXjM6gnxLiMT
-         ucq/0hALrVeV9a1DoAfjzvoU655DCaXoP56P+XfDEt7Ir1Q2yw93kTob0VUb9SQaNpe3
-         NBYg==
-X-Gm-Message-State: AOAM530fmCFzaESOOixvfv6Xew2ijy1AA9XGm2DtI8HqmizCiRL6gIaT
-	kH4A16eJegestAkgwpaia/yiiA==
-X-Google-Smtp-Source: ABdhPJyDYc5gwpPbK9kabmfq2DveJYHoUheuzGxUxOm+QOQqAKm0THRZRPtHRpizJ2fraH1+pUxO8Q==
-X-Received: by 2002:a17:906:c110:b0:6e8:3a96:996a with SMTP id do16-20020a170906c11000b006e83a96996amr17040723ejc.216.1650439318749;
-        Wed, 20 Apr 2022 00:21:58 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V012myQFecH4RwOiutDxuAhe7kD3PdUfMSj2lgEMrMA=;
+        b=dlB6VWgaPCR5uLllxR4WMiYCs6q0M6eZO5SSzG+0MryainbOmHICA75EUuCVahu1lN
+         tWead0PeB3bDy6uh/TxPu7t3LSK7BKFYKokqp+ot9cOu73ItdsewGAYrlrzZa1+I4Tnx
+         QFCZSqCfmFEW1x7W0w+iy255CoT/Pl0amzIlpKMCTfhgvyscVjO48SBFs1TbmjyPIVa6
+         RZRTFgMY44tdOWXeA5oFh9v/4W2sYTH1+NkkgL8PREdr21cyuE5Z+0z0quc7y9UJ3tWq
+         +1YGTY/vZdQDno/zVurAK0kQdrm594wucMgsLh9M+5tZmaeZa3y02Qyv4FWhbhOeaF08
+         xoww==
+X-Gm-Message-State: AOAM530tLx36DXIxeucS7DFkHzThTTyuoZWvRokTT/1oQ+6eBjX17BXE
+	pl7uljlybXUeOHBrR56RFw7IaA==
+X-Google-Smtp-Source: ABdhPJwt7yUdpklzrHQQHRPhDbadLHRqaTEz8y0KS4pjn8IitxP+QbvgQWdrAiB1aPUVmcgx0aor3w==
+X-Received: by 2002:a17:907:7f19:b0:6ef:fe0b:71aa with SMTP id qf25-20020a1709077f1900b006effe0b71aamr1784184ejc.493.1650439634807;
+        Wed, 20 Apr 2022 00:27:14 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm6492106ejj.142.2022.04.20.00.21.57
+        by smtp.gmail.com with ESMTPSA id lg4-20020a170906f88400b006e869103240sm6366147ejb.131.2022.04.20.00.27.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 00:21:58 -0700 (PDT)
+        Wed, 20 Apr 2022 00:27:14 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -56,19 +56,22 @@ To: Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 3/3] arm64: dts: samsung: dts for v5.19
-Date: Wed, 20 Apr 2022 09:21:52 +0200
-Message-Id: <20220420072152.11696-3-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] memory: drivers for v5.19
+Date: Wed, 20 Apr 2022 09:27:12 +0200
+Message-Id: <20220420072712.12648-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220420072152.11696-1-krzysztof.kozlowski@linaro.org>
-References: <20220420072152.11696-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
+Hi,
+
+Early pull with few commits.
+
+Best regards,
+Krzysztof
+
 
 The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
@@ -76,28 +79,38 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.19
 
-for you to fetch changes up to 22cbcb8f4a17c194d208f686fc3ea37fc860bd71:
+for you to fetch changes up to d37b07897e5024088b2170b8e6e1c68d567b9be6:
 
-  arm64: dts: tesla: add a specific compatible to MCT on FSD (2022-04-04 18:53:08 +0200)
-
-----------------------------------------------------------------
-Samsung DTS ARM64 changes for v5.19
-
-1. Cleanup: move aliases of board-related features to board in
-   Exynos850.
-2. Add specific compatibles to Multi Core Timer to allow stricter DT
-   schema matching.
+  memory: fsl-corenet-cf: Use helper function devm_platform_ioremap_resource() (2022-04-19 16:59:03 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (3):
-      arm64: dts: exynos: move aliases to board in Exynos850
-      arm64: dts: exynos: add a specific compatible to MCT
-      arm64: dts: tesla: add a specific compatible to MCT on FSD
+Memory controller drivers for v5.19
 
- arch/arm64/boot/dts/exynos/exynos5433.dtsi       |  3 ++-
- arch/arm64/boot/dts/exynos/exynos850-e850-96.dts |  5 +++++
- arch/arm64/boot/dts/exynos/exynos850.dtsi        | 19 ++-----------------
- arch/arm64/boot/dts/tesla/fsd.dtsi               |  2 +-
- 4 files changed, 10 insertions(+), 19 deletions(-)
+1. Exynos: Reduce memory usage/allocation in Exynos5422 DMC driver.
+2. Renesas:
+   - Add bindings for R-Car H3/M3/E3.
+   - Simplify single/double data register access.
+3. Minor cleanups: TI/EMIF and FSL/Corenet.
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      memory: samsung: exynos5422-dmc: Avoid some over memory allocation
+
+Geert Uytterhoeven (2):
+      dt-bindings: memory: renesas,rpc-if: Document R-Car H3/M3/E3 support
+      memory: renesas-rpc-if: Simplify single/double data register access
+
+Krzysztof Kozlowski (1):
+      memory: emif: remove unneeded ENOMEM error messages
+
+Lv Ruyi (1):
+      memory: fsl-corenet-cf: Use helper function devm_platform_ioremap_resource()
+
+ .../memory-controllers/renesas,rpc-if.yaml         |  5 ++++
+ drivers/memory/emif.c                              | 11 +--------
+ drivers/memory/fsl-corenet-cf.c                    |  9 +------
+ drivers/memory/renesas-rpc-if.c                    | 28 +++++++---------------
+ drivers/memory/samsung/exynos5422-dmc.c            |  5 ++--
+ 5 files changed, 17 insertions(+), 41 deletions(-)
