@@ -4,230 +4,107 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999E7C433F5
-	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 07:05:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCE49C433F5
+	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 07:21:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 811C7C385A9; Wed, 20 Apr 2022 07:05:36 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id 9336EC385A9; Wed, 20 Apr 2022 07:21:58 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3F542C385A0
-	for <soc@kernel.org>; Wed, 20 Apr 2022 07:05:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F542C385A0
+	by smtp.kernel.org (Postfix) with ESMTPS id D0DB7C385A1
+	for <soc@kernel.org>; Wed, 20 Apr 2022 07:21:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0DB7C385A1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id u15so1514789ejf.11
-        for <soc@kernel.org>; Wed, 20 Apr 2022 00:05:35 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id s25so1060066edi.13
+        for <soc@kernel.org>; Wed, 20 Apr 2022 00:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Cs33zVKATtYwBAjt3G3bc95qbW93xGE5Ve8FyegMOGc=;
-        b=T5G4aeSHJKDc4yJE3qYKEL0oEzPu43qNYQDk7i+dWTGxirpISMKLsh0bxqND9Hryh3
-         3CRCvSeeJhWkO0NbHDzd8Z7htTQDw/aLDxbUdv/xDK85MAPKfsEfuaISiyAGtlY2/cbu
-         c8TkALDwMkpJfZXMS8T8Q4jWbWpdLCz+yOZvS6bEZjUa9PEcZXNAslCwVBrUkAljf6mE
-         VAnQyW3Bt2ou7y1BSDbSdD8v+Juz/S50/jIR5ydwcfupjEGYaB9z/hpTnnDPSoCxGo+Z
-         4kYCfj18Tjrck4prjBL/covxwFoLs7T0KvgxQeXsQHlRbI2onbzcYVIqWkY1BfGr8mMb
-         Tkeg==
+        bh=uxmYy8O3B9S8Z/t2A4fXr3iVXi2rAgR9IiSdOI1pb5c=;
+        b=j4MlJffbNOKszAngWM2pnsI5+AUS4yrhe1hYMLBt7tQNu1TXEqTLJI/+cMGaadm4qX
+         DVWvgylWFQBi4/TWkOkHefBsKemVN1H9R2p5KXp+kCngYSyrKAVCoy0KT2F+18bZGFcU
+         GTnlZVE0qm7dg1YC+xszO66TvXEZjT+xNUpl8cCuaU5Wg1mph7ZSsBL04PpaYPCcfDUg
+         R9yFKx3CfS2Qt3P7uR+IJdudn1ZO3Duq6Ttl4a2Ll4AQrwGxvoPfHyhTuPVijSvGrs8d
+         K6paQYxg0JNv7f9ZEWlrJx4iG+m0DTBe7W3e368zPAgyYRxzcWkk3o5k/gFrVMhJZjqT
+         BOzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Cs33zVKATtYwBAjt3G3bc95qbW93xGE5Ve8FyegMOGc=;
-        b=yIRfncYNhFJAcUOlMjsbCeryNSFWa5MUBRuVFKYXDzVKxtq1mSwH9E9lEsdxkt4h5P
-         SlEEBMfOJ+8rLe6FJg8ji65Ib0ZY208fLQOx2xSE+k30JWi8t5bqrnIdErhCv5/mLXVM
-         SpC+pEIuN/d7Ee3ye6dsyzlKPLERxMSniRnvcJzIsanJoItajRNDwyPCl9OZ9U0FWD4Y
-         863u4gQ1E5E/gQIwwBOki5dJwAaIu1feXF4eGrBnckBqCG4rplxwyQwQSUdk/hfixDCA
-         vcnPlD46qMlrSLJrhPF5nY0IGytNHqmRCx9JrY5zdvCWH/KB2dpfWiC0cwuqXB9JP+8n
-         4CpQ==
-X-Gm-Message-State: AOAM530FsHgub9TXH3VmfAqs3ae2rt2cUXbj1+PCrq1BgS8qPx21Y3Aj
-	i0GoFRkaR38b1LQcWRLByl5lHg==
-X-Google-Smtp-Source: ABdhPJxHcdPisZ0QVBxPRcgcwViFGG+sGGyzl90+8b+NWepSZzBjASl7snENZprcpjkfbpfBAfVkJw==
-X-Received: by 2002:a17:907:628c:b0:6ee:70cf:d59 with SMTP id nd12-20020a170907628c00b006ee70cf0d59mr17490957ejc.402.1650438333528;
-        Wed, 20 Apr 2022 00:05:33 -0700 (PDT)
+        bh=uxmYy8O3B9S8Z/t2A4fXr3iVXi2rAgR9IiSdOI1pb5c=;
+        b=idcinNybjV27GTxw51fNKzGs7AlkqIY2sJgxfDvBfGRPeb6MCztjotUwSqHfoWRxID
+         o7m6ZLJMgTNxfXMtLXikmd3xwPL+f1c8GxjVUYO7OFeoQa3MT6UCG/Ppf1PdN7506h3f
+         1S5hVkxAB1uHc2RHxogmlI359teaM1P+pLyDpJXLLKSVRPRVfQ+59DkwBYEoAf12hbVG
+         vZNke8BmX5uKxZQpoI+bLAdkUo0DWO8FQkc9SjoXHuwPM4/VzWfJ79a7Mar070LUUbZ+
+         i7Xa/4RfpMuLabyseJJjzHF1MCkeesPyRgOMzf+h3cX1H384u3sHcEMqWjFaI9wXm+PO
+         NtQQ==
+X-Gm-Message-State: AOAM530eS+TbyoHDSZ4Es/sxaEzoFwHFCs1wucH+voqLgKBHNs3AS7h4
+	cT3q1hTX75opf8POrN+PO39TKQ==
+X-Google-Smtp-Source: ABdhPJwSy+FJb4H1cp6AcRQOgklNGnvLsJgBDZ3kdwqQ0JHRbbxJeuyMHY/Sv45mSH+JW9f+TfpEpA==
+X-Received: by 2002:a05:6402:1e89:b0:423:e004:bf61 with SMTP id f9-20020a0564021e8900b00423e004bf61mr16075680edf.14.1650439316140;
+        Wed, 20 Apr 2022 00:21:56 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k15-20020a50ce4f000000b00420119333c1sm9671152edj.62.2022.04.20.00.05.32
+        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm6492106ejj.142.2022.04.20.00.21.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 00:05:33 -0700 (PDT)
+        Wed, 20 Apr 2022 00:21:55 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org,
+To: Olof Johansson <olof@lixom.net>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH drivers/memory/fixes] memory: renesas-rpc-if: Fix HF/OSPI data transfer in Manual Mode
-Date: Wed, 20 Apr 2022 09:05:26 +0200
-Message-Id: <20220420070526.9367-1-krzysztof.kozlowski@linaro.org>
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/3] ARM: dts: various: cleanup for v5.19
+Date: Wed, 20 Apr 2022 09:21:50 +0200
+Message-Id: <20220420072152.11696-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi,
 
-HyperFlash devices fail to probe:
+These were waiting on the LKML for some time, got few acks but no one picked
+them up.  Please take them through SoC.
 
-    rpc-if-hyperflash rpc-if-hyperflash: probing of hyperbus device failed
+Best regards,
+Krzysztof
 
-In HyperFlash or Octal-SPI Flash mode, the Transfer Data Enable bits
-(SPIDE) in the Manual Mode Enable Setting Register (SMENR) are derived
-from half of the transfer size, cfr. the rpcif_bits_set() helper
-function.  However, rpcif_reg_{read,write}() does not take the bus size
-into account, and does not double all Manual Mode Data Register access
-sizes when communicating with a HyperFlash or Octal-SPI Flash device.
 
-Fix this, and avoid the back-and-forth conversion between transfer size
-and Transfer Data Enable bits, by explicitly storing the transfer size
-in struct rpcif, and using that value to determine access size in
-rpcif_reg_{read,write}().
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-Enforce that the "high" Manual Mode Read/Write Data Registers
-(SM[RW]DR1) are only used for 8-byte data accesses.
-While at it, forbid writing to the Manual Mode Read Data Registers,
-as they are read-only.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-Fixes: fff53a551db50f5e ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual mode")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Link: https://lore.kernel.org/r/cde9bfacf704c81865f57b15d1b48a4793da4286.1649681476.git.geert+renesas@glider.be
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
+are available in the Git repository at:
 
-One fix, on top of my previous pull-request:
-memory-controller-drv-fixes-5.18
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt-cleanup-5.19
 
-https://lore.kernel.org/all/20220407081448.113208-1-krzysztof.kozlowski@linaro.org/
+for you to fetch changes up to c9bdd50d2019f78bf4c1f6a79254c27771901023:
 
- drivers/memory/renesas-rpc-if.c | 60 +++++++++++++++++++++++++--------
- include/memory/renesas-rpc-if.h |  1 +
- 2 files changed, 47 insertions(+), 14 deletions(-)
+  ARM: dts: socfpga: align interrupt controller node name with dtschema (2022-04-07 21:30:22 +0200)
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index 2e545f473cc6..019a0822bde0 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -164,25 +164,39 @@ static const struct regmap_access_table rpcif_volatile_table = {
- 
- 
- /*
-- * Custom accessor functions to ensure SMRDR0 and SMWDR0 are always accessed
-- * with proper width. Requires SMENR_SPIDE to be correctly set before!
-+ * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
-+ * proper width.  Requires rpcif.xfer_size to be correctly set before!
-  */
- static int rpcif_reg_read(void *context, unsigned int reg, unsigned int *val)
- {
- 	struct rpcif *rpc = context;
- 
--	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
--		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
--
--		if (spide == 0x8) {
-+	switch (reg) {
-+	case RPCIF_SMRDR0:
-+	case RPCIF_SMWDR0:
-+		switch (rpc->xfer_size) {
-+		case 1:
- 			*val = readb(rpc->base + reg);
- 			return 0;
--		} else if (spide == 0xC) {
-+
-+		case 2:
- 			*val = readw(rpc->base + reg);
- 			return 0;
--		} else if (spide != 0xF) {
-+
-+		case 4:
-+		case 8:
-+			*val = readl(rpc->base + reg);
-+			return 0;
-+
-+		default:
- 			return -EILSEQ;
- 		}
-+
-+	case RPCIF_SMRDR1:
-+	case RPCIF_SMWDR1:
-+		if (rpc->xfer_size != 8)
-+			return -EILSEQ;
-+		break;
- 	}
- 
- 	*val = readl(rpc->base + reg);
-@@ -193,18 +207,34 @@ static int rpcif_reg_write(void *context, unsigned int reg, unsigned int val)
- {
- 	struct rpcif *rpc = context;
- 
--	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
--		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
--
--		if (spide == 0x8) {
-+	switch (reg) {
-+	case RPCIF_SMWDR0:
-+		switch (rpc->xfer_size) {
-+		case 1:
- 			writeb(val, rpc->base + reg);
- 			return 0;
--		} else if (spide == 0xC) {
-+
-+		case 2:
- 			writew(val, rpc->base + reg);
- 			return 0;
--		} else if (spide != 0xF) {
-+
-+		case 4:
-+		case 8:
-+			writel(val, rpc->base + reg);
-+			return 0;
-+
-+		default:
- 			return -EILSEQ;
- 		}
-+
-+	case RPCIF_SMWDR1:
-+		if (rpc->xfer_size != 8)
-+			return -EILSEQ;
-+		break;
-+
-+	case RPCIF_SMRDR0:
-+	case RPCIF_SMRDR1:
-+		return -EPERM;
- 	}
- 
- 	writel(val, rpc->base + reg);
-@@ -469,6 +499,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 
- 			smenr |= RPCIF_SMENR_SPIDE(rpcif_bits_set(rpc, nbytes));
- 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
-+			rpc->xfer_size = nbytes;
- 
- 			memcpy(data, rpc->buffer + pos, nbytes);
- 			if (nbytes == 8) {
-@@ -533,6 +564,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
- 			regmap_write(rpc->regmap, RPCIF_SMCR,
- 				     rpc->smcr | RPCIF_SMCR_SPIE);
-+			rpc->xfer_size = nbytes;
- 			ret = wait_msg_xfer_end(rpc);
- 			if (ret)
- 				goto err_out;
-diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
-index 7c93f5177532..9c0ad64b8d29 100644
---- a/include/memory/renesas-rpc-if.h
-+++ b/include/memory/renesas-rpc-if.h
-@@ -72,6 +72,7 @@ struct rpcif {
- 	enum rpcif_type type;
- 	enum rpcif_data_dir dir;
- 	u8 bus_size;
-+	u8 xfer_size;
- 	void *buffer;
- 	u32 xferlen;
- 	u32 smcr;
--- 
-2.32.0
+----------------------------------------------------------------
+Minor cleanup of ARM DTS for v5.19
 
+Align node names and unit addresses to DT schema and DT coding style in
+nspire, ox820 and socfpga.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      ARM: dts: nspire: use lower case hex addresses in node unit addresses
+      ARM: dts: ox820: align interrupt controller node name with dtschema
+      ARM: dts: socfpga: align interrupt controller node name with dtschema
+
+ arch/arm/boot/dts/nspire-classic.dtsi  | 10 +++---
+ arch/arm/boot/dts/nspire-cx.dts        |  4 +--
+ arch/arm/boot/dts/nspire.dtsi          | 60 +++++++++++++++++-----------------
+ arch/arm/boot/dts/ox820.dtsi           |  2 +-
+ arch/arm/boot/dts/socfpga.dtsi         |  2 +-
+ arch/arm/boot/dts/socfpga_arria10.dtsi |  2 +-
+ 6 files changed, 40 insertions(+), 40 deletions(-)
