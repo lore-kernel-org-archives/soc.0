@@ -1,138 +1,382 @@
-Return-Path: <SRS0=8S0D=U7=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <SRS0=sXtS=U7=gmail.com=takayoshi.shimamoto.360@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84A76C433F5
-	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 14:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C31CDC433FE
+	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 15:11:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3C00DC385B0; Thu, 21 Apr 2022 14:27:19 +0000 (UTC)
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	id 73C63C385B5; Thu, 21 Apr 2022 15:11:12 +0000 (UTC)
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 15A1CC385B6
-	for <soc@kernel.org>; Thu, 21 Apr 2022 14:27:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 15A1CC385B6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f180.google.com with SMTP id r8so5781318oib.5
-        for <soc@kernel.org>; Thu, 21 Apr 2022 07:27:17 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id DF4B0C385A1;
+	Thu, 21 Apr 2022 15:11:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF4B0C385A1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id iq10so1460272pjb.0;
+        Thu, 21 Apr 2022 08:11:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=f15a6+xs9NKJFvzgc2IaMpJjhmhU9m6JYAJXpBSlmQ4=;
-        b=GKovL9nANToRyZUk1FRQ0ruMbSCG6mExQ7WgGwAqcv6efGQ6iFB0cjuBb1IYzEjcAQ
-         V0uukMlDIw+8fdnu+V5L4I1231iNwscQ0LgsWWrysQbrns9dZRY4p1djuPuX2O/eKHRh
-         04R1ESluDrwj4bwa3vHy2TUmHrFtQtKE5MgidrqSTrv9UcyjtqM4AKAgen4PqIsw1k6L
-         ViGyVfQ5BEhXHkFGTktehSiFiUNU9q9qJVjzEco/gmdKP0cSANt/zemK+yd9NVcjMTN5
-         6hJkub9SSUGz6clQRrV2epVnMdOPzJ68SCrst8zrnvc10lNOlO+9Ap3RicG+7d16faZf
-         9AzA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3FK8dTuLoBtzcuEmwJHQddp5IKeSSjXBglcT/dgsgJE=;
+        b=BOgNinI6yGyyXVu0C94MJIr88RLyuV9PKO8smiv1WF5fPEqDIKzxUSGuFSboxOKmsR
+         WuTICmD6/Hf50TfPfoZFoK2APZrms83bQ9P9IjobwL5nbPpCXZA3cdfj3wNPaGa/HQTz
+         G3GcUgJ1X47ECyLqlZgcsG8b8L/5+QKQpVbWqTPt/jk0WW+hYOxrin4CtnE7AWGyT1mD
+         1+QNCmHHOnRSQ8q3o89ViJu1us0X0GTaL2SoMkyJp5MshfrqgN4JRUprlEp+KMTfsL0E
+         Q7RXWn2JVR6RCZNPzpiybwjcYZICXz6Y1dndxeFawnpRiO8UseJbsfku8jJGTqjvVFgP
+         xJPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=f15a6+xs9NKJFvzgc2IaMpJjhmhU9m6JYAJXpBSlmQ4=;
-        b=4AEstU0UNdjavXcZzCsJTD89POeDsZoR2GQZB2DFs7WiARHOJ4QahZ/l/qlnu+tqaV
-         V82vna/4ix/PmLane4h170WBim4uAvew/6Q3JIUyAIX+96PvurraKyKZiQ0qFJMZIQiV
-         n7b+Erw690n6ecjb4oXd4nlOxJbJzpIAz9RcSQ7ZmccRXQ+GNie+UD2knRYS14bBzUg4
-         KnMCQGmyI25U6feuHqzw3c8D7X0XyNkXvuMEd+l7/BIVPHgSb7+iLIcYuHwHMzthXrZE
-         oMjcw5FMbbz4FMQ7jHJGXWir+g5jv2vfFkxmU9545IGsG3lzfvBTQKLt6lfPZHVlzq6z
-         lfaQ==
-X-Gm-Message-State: AOAM5316iXRJSMc2lqt8CGFd+A9qg6f6F5zQqJqCMEyu48llyusVbtCX
-	FwL2AKWSobM7eLuBTg0kPNE4Tw==
-X-Google-Smtp-Source: ABdhPJysEHvqrQEzG8iRGi09wuDzsYuWrHm1z8tT37vWTxvOJc/5UdL4tDFWA+G7EieWnjvNBWep8w==
-X-Received: by 2002:aca:d1a:0:b0:322:35db:2c0 with SMTP id 26-20020aca0d1a000000b0032235db02c0mr16227oin.82.1650551237184;
-        Thu, 21 Apr 2022 07:27:17 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id s14-20020a0568302a8e00b006054e841915sm4296295otu.73.2022.04.21.07.27.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3FK8dTuLoBtzcuEmwJHQddp5IKeSSjXBglcT/dgsgJE=;
+        b=WYI/UHn09tObTw8CZkhjrf35LjKyyMGu6HwZdAD7mJQ+flzudtLmt9HhXILucSIbO5
+         PsaS+hYTaoigk1LiuABot9XMmfUbuCxNJllcPSf4oyiCjtGuLSfe3Tcr+2Gtc7pB9INM
+         WL5IA8QUmgOin8SNh+Gb/hpi3Sb55ckgewhsPhAI9DaqulLXP0sUb71JuuwQwuhivfSM
+         hB9LDDSn9mp9Ob9oTN6sg8w0s+2V36qM0dT3XtNBDjJ8OY6jxiPD1i+4YEQDzY9n4ftE
+         I9wkgtQ6tu+Al8vkUD3YdI9K9XLZaX3MtLETQFmQSgB10Zoz+fmCR++KM69500zSON+z
+         Eokg==
+X-Gm-Message-State: AOAM532VhFtgmRS+XouZZeLRiJ5J3IqC2F/Q52DMc04hVT+cGjl6vLrU
+	ItB5e7cQft5YdVs0zMJOW7c=
+X-Google-Smtp-Source: ABdhPJyODH2AISsaZ+PqtXq3kLm8nnNbMGuEcP7ZbCBev1zsTuFGuG863k/Bp9yECP4esT7A9c5asw==
+X-Received: by 2002:a17:90b:4d81:b0:1d2:8525:5f1c with SMTP id oj1-20020a17090b4d8100b001d285255f1cmr113711pjb.27.1650553870325;
+        Thu, 21 Apr 2022 08:11:10 -0700 (PDT)
+Received: from V2.localdomain (M106073234000.v4.enabler.ne.jp. [106.73.234.0])
+        by smtp.gmail.com with ESMTPSA id 16-20020a621410000000b0050aca5f79f5sm6875704pfu.97.2022.04.21.08.11.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 07:27:16 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: ~postmarketos/upstreaming@lists.sr.ht,
-	Konrad Dybcio <konrad.dybcio@somainline.org>
+        Thu, 21 Apr 2022 08:11:10 -0700 (PDT)
+From: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+To: takayoshi.shimamoto.360@gmail.com
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>,
-	marijn.suijten@somainline.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	devicetree@vger.kernel.org,
-	jamipkettunen@somainline.org,
-	martin.botka@somainline.org,
-	angelogioacchino.delregno@somainline.org,
-	Rob Herring <robh+dt@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
 	soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 01/23] ARM: dts: qcom-*-sony*: Mention SONY board names in DT filenames
-Date: Thu, 21 Apr 2022 09:26:54 -0500
-Message-Id: <165055095991.2574292.5049219728779482349.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220415115633.575010-2-konrad.dybcio@somainline.org>
-References: <20220415115633.575010-1-konrad.dybcio@somainline.org> <20220415115633.575010-2-konrad.dybcio@somainline.org>
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: BCM5301X: Add DT for WZR-1166DHP,DHP2
+Date: Fri, 22 Apr 2022 00:10:54 +0900
+Message-Id: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Fri, 15 Apr 2022 13:56:11 +0200, Konrad Dybcio wrote:
-> SONY phones/tables are based on a common board ('platform'). Devices
-> based on the same are often close to identical. Mention their association
-> in filenames, like it's done in arm64 DTs.
-> 
-> 
+  Buffalo WZR-1166DHP/WZR-1166DHP2  wireless router with
 
-Applied, thanks!
+    - BCM4708A0
+    - 128MiB NAND flash
+    - 2T2R 11ac/a/b/g/n Wi-Fi
+    - 4x 10/100/1000M ethernet switch
+    - 1x USB 3.0 port
 
-[01/23] ARM: dts: qcom-*-sony*: Mention SONY board names in DT filenames
-        commit: 73618b43dc5af291be0eb150f4ba8a3c1a5c5436
-[02/23] ARM: dts: qcom-msm8974: Remove properties that are always overriden
-        commit: eba5e62045b2848042435ae0503d7c2354edf2af
-[03/23] ARM: dts: qcom-msm8974*: Fix UART naming
-        commit: b905c34ae7db6b564589f02fa7eac7afaa0294e9
-[04/23] ARM: dts: qcom-msm8974*: Fix I2C labels
-        commit: bb167546d06847a8729c973fe5165a231fd5c39d
-[05/23] ARM: dts: qcom-msm8974: Fix up mdss nodes
-        commit: 4de36f7b6d0e7e792d36800ac6c5e3392b59573a
-[06/23] ARM: dts: qcom-msm8974: Fix up SDHCI nodes
-        commit: 64cf62683b5398e46cf967c308be95685137626a
-[07/23] ARM: dts: qcom-msm8974*: Rename msmgpio to tlmm
-        commit: 087c9704d5bb322dd5db52938416caeaf4cdc3c3
-[08/23] ARM: dts: qcom-apq8074-dragonboard: Use &labels
-        commit: 9f440d17e2309c7d14eba0898c775be6d6e6d6b7
-[09/23] ARM: dts: qcom-msm8974-fp2: Use &labels
-        commit: 409ab7dc57c41d9db54d221f4d247e229ba34cf9
-[10/23] ARM: dts: qcom-msm8974-lge-nexus5: Use &labels
-        commit: 1c1574e24990e9f9d753958745b8274874241158
-[11/23] ARM: dts: qcom-msm8974-klte: Use &labels
-        commit: 1d59524b9181e17110ae7b809c62a6a66f336fd6
-[12/23] ARM: dts: qcom-msm8974-{"hon","am"}ami: Commonize and modernize the DTs
-        commit: 5c554c2d67a8c6c43a1fb542cbc73c33ff04c344
-[13/23] ARM: dts: qcom-msm8974-castor: Use &labels
-        commit: 598a1e333224e73ae8f078ed6aa8dcd416cfb490
-[14/23] ARM: dts: qcom-msm8974pro: Use &labels
-        commit: 7bdc6d8c37c0848da6646484aa1b5e3554525ee5
-[15/23] ARM: dts: qcom-msm8974pro-*: Use the 8974pro name in DT filenames
-        commit: c919956818361826903707e023efbb6db7b49091
-[16/23] ARM: dts: qcom-msm8974: Convert ADSP to a MMIO device
-        commit: 2daa785817dd35172b856c30fc5148b2773b6891
-[17/23] ARM: dts: qcom-msm8974: Sort and clean up nodes
-        commit: f300826d27be7f7f671c922bf57007c98c683590
-[18/23] ARM: dts: qcom-msm8974*: Enable IMEM unconditionally
-        commit: 9f43e1973840955c0bd639c504095fba5f565e20
-[19/23] ARM: dts: qcom-msm8974*: Consolidate I2C/UART/SDHCI
-        commit: 1dfe967ec7cfb03b468d096a69d945070f1cd2a0
-[20/23] ARM: dts: qcom-msm8974*: Clean up old GPIO declarations
-        commit: 09db313d392b42a3a356867d84dc933bcb4556ef
-[21/23] ARM: dts: qcom-msm8974-rhine: Add NFC and enable I2C hosts
-        commit: e82be679de942decbcdaac82aecbcd1277e03fd1
-[22/23] ARM: dts: qcom-msm8974-rhine: Add pstore node
-        commit: e63d4c51997af75cdf3f096c333a957b4579e43a
-[23/23] ARM: dts: qcom-msm8974*: Remove unnecessary include
-        commit: 4b6a151f17cbea6e9bd5b043d0e6e7d19b77c3f7
+  WZR-1166DHP and WZR-1166DHP2 have different memory capacity.
 
-Best regards,
+  WZR-1166DHP
+    - 512 MiB DDR2 SDRAM
+
+  WZR-1166DHP2
+    - 256 MiB DDR2 SDRAM
+
+  These hardware components are very similar to the WZR-1750DHP
+   except for the number of antennas.
+
+Signed-off-by: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+---
+ arch/arm/boot/dts/Makefile                    |   2 +
+ .../bcm4708-buffalo-wzr-1166dhp-common.dtsi   | 192 ++++++++++++++++++
+ .../boot/dts/bcm4708-buffalo-wzr-1166dhp.dts  |  26 +++
+ .../boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts |  26 +++
+ 4 files changed, 246 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp-common.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dts
+ create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7c16f8a2b738..8611d9b38d3b 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -103,6 +103,8 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
+ 	bcm4708-asus-rt-ac56u.dtb \
+ 	bcm4708-asus-rt-ac68u.dtb \
+ 	bcm4708-buffalo-wzr-1750dhp.dtb \
++	bcm4708-buffalo-wzr-1166dhp.dtb \
++	bcm4708-buffalo-wzr-1166dhp2.dtb \
+ 	bcm4708-linksys-ea6300-v1.dtb \
+ 	bcm4708-linksys-ea6500-v2.dtb \
+ 	bcm4708-luxul-xap-1510.dtb \
+diff --git a/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp-common.dtsi b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp-common.dtsi
+new file mode 100644
+index 000000000000..d659e409a17e
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp-common.dtsi
+@@ -0,0 +1,192 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Broadcom BCM470X / BCM5301X ARM platform code.
++ * DTS for Buffalo WZR-1166DHP and WZR-1166DHP2
++ *
++ * Copyright (C) 2014 Rafał Miłecki <zajec5@gmail.com>
++ * Copyright (C) 2022 SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
++ */
++
++
++#include "bcm4708.dtsi"
++#include "bcm5301x-nand-cs0-bch8.dtsi"
++#include <dt-bindings/leds/common.h>
++
++/ {
++	spi {
++		compatible = "spi-gpio";
++		num-chipselects = <1>;
++		gpio-sck = <&chipcommon 7 0>;
++		gpio-mosi = <&chipcommon 4 0>;
++		cs-gpios = <&chipcommon 6 0>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		hc595: gpio_spi@0 {
++			compatible = "fairchild,74hc595";
++			reg = <0>;
++			registers-number = <1>;
++			spi-max-frequency = <100000>;
++
++			gpio-controller;
++			#gpio-cells = <2>;
++
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		usb {
++			/* label = "bcm53xx:blue:usb"; */
++			function = LED_FUNCTION_USB;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&hc595 0 GPIO_ACTIVE_HIGH>;
++			trigger-sources = <&ohci_port1>, <&ehci_port1>,
++					  <&xhci_port1>, <&ohci_port2>,
++					  <&ehci_port2>;
++			linux,default-trigger = "usbport";
++		};
++
++		power0 {
++			/* label = "bcm53xx:red:power"; */
++			function = LED_FUNCTION_FAULT;
++			color = <LED_COLOR_ID_RED>;
++			gpios = <&hc595 1 GPIO_ACTIVE_HIGH>;
++		};
++
++		power1 {
++			/* label = "bcm53xx:white:power"; */
++			function = LED_FUNCTION_POWER;
++			color = <LED_COLOR_ID_WHITE>;
++			gpios = <&hc595 2 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "default-on";
++		};
++
++		router0 {
++			/*  label = "bcm53xx:blue:router"; */
++			function = LED_FUNCTION_STATUS;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&hc595 3 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "default-on";
++		};
++
++		router1 {
++			/* label = "bcm53xx:amber:router"; */
++			function = LED_FUNCTION_STATUS;
++			color = <LED_COLOR_ID_AMBER>;
++			gpios = <&hc595 4 GPIO_ACTIVE_HIGH>;
++		};
++
++		wan {
++			/* label = "bcm53xx:blue:wan"; */
++			function = LED_FUNCTION_WAN;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&hc595 5 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "default-on";
++		};
++
++		wireless0 {
++			/* label = "bcm53xx:blue:wireless"; */
++			function = LED_FUNCTION_WLAN;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&hc595 6 GPIO_ACTIVE_HIGH>;
++		};
++
++		wireless1 {
++			/* label = "bcm53xx:amber:wireless"; */
++			function = LED_FUNCTION_WLAN;
++			color = <LED_COLOR_ID_AMBER>;
++			gpios = <&hc595 7 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		restart {
++			label = "Reset";
++			linux,code = <KEY_RESTART>;
++			gpios = <&chipcommon 11 GPIO_ACTIVE_LOW>;
++		};
++
++		aoss {
++			label = "AOSS";
++			linux,code = <KEY_WPS_BUTTON>;
++			gpios = <&chipcommon 12 GPIO_ACTIVE_LOW>;
++		};
++
++		/* Commit mode set by switch? */
++		mode {
++			label = "Mode";
++			linux,code = <KEY_SETUP>;
++			gpios = <&chipcommon 13 GPIO_ACTIVE_LOW>;
++		};
++
++		/* Switch: AP mode */
++		sw_ap {
++			label = "AP";
++			linux,code = <BTN_0>;
++			gpios = <&chipcommon 14 GPIO_ACTIVE_LOW>;
++		};
++
++		eject {
++			label = "USB eject";
++			linux,code = <KEY_EJECTCD>;
++			gpios = <&chipcommon 15 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
++
++&usb2 {
++	vcc-gpio = <&chipcommon 9 GPIO_ACTIVE_HIGH>;
++};
++
++&usb3 {
++	vcc-gpio = <&chipcommon 10 GPIO_ACTIVE_LOW>;
++};
++
++&spi_nor {
++	status = "okay";
++};
++
++&usb3_phy {
++	status = "okay";
++};
++
++&srab {
++	status = "okay";
++
++	ports {
++		port@0 {
++			reg = <0>;
++			label = "lan1";
++		};
++
++		port@1 {
++			reg = <1>;
++			label = "lan2";
++		};
++
++		port@2 {
++			reg = <2>;
++			label = "lan3";
++		};
++
++		port@3 {
++			reg = <3>;
++			label = "lan4";
++		};
++
++		port@4 {
++			reg = <4>;
++			label = "wan";
++		};
++
++		port@5 {
++			reg = <5>;
++			label = "cpu";
++			ethernet = <&gmac0>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dts b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dts
+new file mode 100644
+index 000000000000..8e506269fa1a
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dts
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Bindigs for Buffalo WZR-1166DHP
++ *
++ * Copyright (C) 2022 SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
++ */
++
++/dts-v1/;
++
++#include "bcm4708-buffalo-wzr-1166dhp-common.dtsi"
++
++/ {
++	compatible = "buffalo,wzr-1166dhp", "brcm,bcm4708";
++	model = "Buffalo WZR-1166DHP";
++
++	chosen {
++		bootargs = "console=ttyS0,115200";
++	};
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x00000000 0x08000000>,
++		      <0x88000000 0x18000000>;
++	};
++
++};
+diff --git a/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
+new file mode 100644
+index 000000000000..596129027074
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Bindigs for Buffalo WZR-1166DHP2
++ *
++ * Copyright (C) 2022 SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
++ */
++
++/dts-v1/;
++
++#include "bcm4708-buffalo-wzr-1166dhp-common.dtsi"
++
++/ {
++	compatible = "buffalo,wzr-1166dhp2", "brcm,bcm4708";
++	model = "Buffalo WZR-1166DHP2";
++
++	chosen {
++		bootargs = "console=ttyS0,115200";
++	};
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x00000000 0x08000000>,
++		      <0x88000000 0x08000000>;
++	};
++
++};
 -- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+2.30.2
+
