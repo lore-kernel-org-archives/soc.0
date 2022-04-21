@@ -1,98 +1,98 @@
-Return-Path: <SRS0=7lJw=U7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=agI+=U7=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BD0FC433F5
-	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 08:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55AA6C433EF
+	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 12:15:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 402CBC385A9; Thu, 21 Apr 2022 08:33:13 +0000 (UTC)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 61248C385A1
-	for <soc@kernel.org>; Thu, 21 Apr 2022 08:33:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 61248C385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id z12so5564220edl.2
-        for <soc@kernel.org>; Thu, 21 Apr 2022 01:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7hLXPIweBUa1OCSsueogoc1wGUx6MfJz9AL8E0t93jg=;
-        b=U4hZWxQ15Dqk0wtSihPrY5dFY+Zd20Mw5s2nwZe/wuuUZNAPoYt6v3Y+Pk721XjIMY
-         fN54vNkZUqedcCEZVb9LaQvCq4jyFloChkMzBlAMlwXRBBMOpjl3jV7yzfnn1L5h7d8f
-         gjhu4UIgZeV4rPAHSvnAV2Tru+nY6L+szdOV0wm5scuOBPPtQ2b9FU3br17C+1P9v2my
-         QgI/tuS6cJ4JdJCR74VtChP6CVi2iuGRe1XLq1ScwUPPjqsO+4RxTHGfZIg4aH9V8kPV
-         xLTZEN0Zs5SPdj1FWHSeNgQ9DPxTfBTZwvt72oMiooqYosg12DekYECdb8i0nE2r9shF
-         7FCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7hLXPIweBUa1OCSsueogoc1wGUx6MfJz9AL8E0t93jg=;
-        b=OFmpyN0ediSGQL2hBRrko8BATixBk81or34c5X3QR9RZ+GOh2POwSCWXdL24JtmCMy
-         trDOSqaexhTn79Sdhwj2MDhChBWPML3xAiTqzqO7C776opnxgW1k47b9jQ+TvvbC2B71
-         iBIxRim30uCVIksn/1bEEP3/1WhdahsvYKsAgbG5478nqE1b7GKsNURnpClAnS5KuHY/
-         +cwPQ56vlLBI97nUnUARELa6RuFaa5oJvwRnAig/sA4xggmNQgSlCeJU9spOOw1QXcwX
-         XJVnLseNEEV9rBZ77vqIsj71t9BWZS3AOG3/AILt5PblEAeLKQgUAU+5WlS417yJzHvc
-         dLew==
-X-Gm-Message-State: AOAM532vDA04ju6ZSZqzHm3yqKXQQMyl+jMQkq+8rwlnEyUVh/xD1KVu
-	PPxHOKwLNbxlFE+a+9r6aagwfA==
-X-Google-Smtp-Source: ABdhPJyNiZUR5/1EAoV+iZUhUgCKupJDomQq/+l5hKN9S0IbtjtPAKPEGxqD9/YunVEWQ5kpF8Kh7w==
-X-Received: by 2002:a05:6402:51d2:b0:424:536:94dd with SMTP id r18-20020a05640251d200b00424053694ddmr12066971edd.191.1650529990792;
-        Thu, 21 Apr 2022 01:33:10 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v8-20020a1709063bc800b006e898cfd926sm7546603ejf.134.2022.04.21.01.33.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 01:33:10 -0700 (PDT)
-Message-ID: <51f47c39-4bd2-b378-2868-587c07caf399@linaro.org>
-Date: Thu, 21 Apr 2022 10:33:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 5/5] dt-bindings: arm: Add initial bindings for Nuvoton
- Platform
-Content-Language: en-US
-To: Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+	id 1E89BC385A5; Thu, 21 Apr 2022 12:15:42 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by smtp.kernel.org (Postfix) with ESMTP id 4B281C385A1;
+	Thu, 21 Apr 2022 12:15:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4B281C385A1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id 086E78106;
+	Thu, 21 Apr 2022 12:12:47 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
- olof@lixom.net, will@kernel.org, soc@kernel.org, cfli0@nuvoton.com
-References: <20220418082738.11301-1-ychuang3@nuvoton.com>
- <20220418082738.11301-6-ychuang3@nuvoton.com>
- <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
- <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
- <4e9eaede-2208-bd73-35ae-89e128562653@linaro.org>
- <80994f4b-136f-7669-4674-0c9826e88248@nuvoton.com>
- <43cb61ac-461f-e6ff-b495-44f8befde79f@linaro.org>
- <257d878e-8455-2770-7868-c9445b0eabba@nuvoton.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <257d878e-8455-2770-7868-c9445b0eabba@nuvoton.com>
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Fixes for omaps
+Date: Thu, 21 Apr 2022 15:15:27 +0300
+Message-Id: <pull-1650543308-836725@atomide.com>
+X-Mailer: git-send-email 2.35.2
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 21/04/2022 10:13, Jacky Huang wrote:
-> OK, I got it. Like this,
-> 
->    compatible:
->      oneOf:
-> 
->        - description: MA35D1 based boards
->          items:
->            - enum:
->                - nuvoton,ma35d1-evb
->                - nuvoton,ma35d1-iot
->                - nuvoton,ma35d1-som512
->                - nuvoton,ma35d1-som1g
->            - const: nuvoton,ma35d1
+From: "Tony Lindgren" <tony@atomide.com>
 
-Yes, exactly. Thank you.
+The following changes since commit 71ff461c3f41f6465434b9e980c01782763e7ad8:
 
-Best regards,
-Krzysztof
+  iommu/omap: Fix regression in probe for NULL pointer dereference (2022-04-08 11:16:29 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.18/fixes-take2
+
+for you to fetch changes up to 46ff3df87215ff42c0cd2c4bdb7d74540384a69c:
+
+  ARM: dts: logicpd-som-lv: Fix wrong pinmuxing on OMAP35 (2022-04-14 11:38:44 +0300)
+
+----------------------------------------------------------------
+Fixes for omaps
+
+Few regression fixes for omap variants. These mostly fix issues related to
+warnings added for system suspend, and some devicetree issues:
+
+- Make ti-sysc driver quirks for gpt12 timer omap3 specific to fix
+  timer clock disabling for am335x system suspend
+
+- Fix new system suspend warning for dra7 vpe caused by trying to
+  use register bits not wired for vpe
+
+- Fix mmc boot order for omap3-gta04 that has no mmc2 or 3 wired
+
+- Add missing touchscreen properties for am3
+
+- Fix pin muxing for logicpd-som-lv and am3517-evm to not depend on
+  earlier bootloader versions
+
+- Fix refcount leak for omap_gic_of_init
+
+----------------------------------------------------------------
+Adam Ford (2):
+      ARM: dts: am3517-evm: Fix misc pinmuxing
+      ARM: dts: logicpd-som-lv: Fix wrong pinmuxing on OMAP35
+
+H. Nikolaus Schaller (1):
+      ARM: dts: Fix mmc order for omap3-gta04
+
+Miaoqian Lin (1):
+      ARM: OMAP2+: Fix refcount leak in omap_gic_of_init
+
+Miquel Raynal (1):
+      ARM: dts: am33xx-l4: Add missing touchscreen clock properties
+
+Tony Lindgren (2):
+      bus: ti-sysc: Make omap3 gpt12 quirk handling SoC specific
+      ARM: dts: dra7: Fix suspend warning for vpe powerdomain
+
+ arch/arm/boot/dts/am33xx-l4.dtsi                 |  2 ++
+ arch/arm/boot/dts/am3517-evm.dts                 | 45 +++++++++++++++++++++---
+ arch/arm/boot/dts/am3517-som.dtsi                |  9 +++++
+ arch/arm/boot/dts/dra7-l4.dtsi                   |  4 +--
+ arch/arm/boot/dts/logicpd-som-lv-35xx-devkit.dts | 15 ++++++++
+ arch/arm/boot/dts/logicpd-som-lv-37xx-devkit.dts | 15 ++++++++
+ arch/arm/boot/dts/logicpd-som-lv.dtsi            | 15 --------
+ arch/arm/boot/dts/omap3-gta04.dtsi               |  2 ++
+ arch/arm/mach-omap2/omap4-common.c               |  2 ++
+ drivers/bus/ti-sysc.c                            | 16 ++++++++-
+ 10 files changed, 102 insertions(+), 23 deletions(-)
