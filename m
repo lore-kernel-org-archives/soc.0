@@ -1,130 +1,134 @@
-Return-Path: <SRS0=7lJw=U7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=o6Q+=U7=nuvoton.com=YCHuang3@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C22C433F5
-	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 06:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18322C433F5
+	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 08:04:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7FF04C385AB; Thu, 21 Apr 2022 06:56:47 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 85E9BC385A1
-	for <soc@kernel.org>; Thu, 21 Apr 2022 06:56:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 85E9BC385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id y10so8001085ejw.8
-        for <soc@kernel.org>; Wed, 20 Apr 2022 23:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4PKhdf8WzDnZowwZrhfJmcEZbvR9EkexBiBw0CwxFDE=;
-        b=s0VhQFRqpo2tuyDY4V/atE+9w0bOZvKXb6KQtrb8lBCnOudvqK+QCGoEvTFHxSy5E6
-         zPePUlI5UXCINOKd3AfhEWvNKJads0draYU+Voi+X48Z7ynGLU16QCJAkjO3h+WTMbP2
-         3b7sJf5gwbFo4fL7IfEa99ahYJJjLDWArjNqEUeD3jf/3mF3KKqMr8yMKS2ymST0BuoA
-         Boif7OUCyh+5Q8PaJ1czC5rau8rkBl5dQRimEp9BCpXjyDXZOfn6XR1a8XRItNZwshQD
-         aegAR5VbJjRKgkx9Dgvunzqis/OvS527CJ1vxwQu97jMhQw/gmhoWZHwud27lfEXEnJV
-         ii5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4PKhdf8WzDnZowwZrhfJmcEZbvR9EkexBiBw0CwxFDE=;
-        b=GPqwfAyKUJdKUARWvPWPvmOzYRX+KGg7GyN1LGrZK0UMwfWvy1fRQMCQJ8IdbYS1AX
-         /ltU8tcfga5TbuzKZKAnu2+UIPHWTubVmrCUsq1s+1mvK6rHIuYhKhgYBrMfPeFYMXyN
-         DmAzrLYPgcwfjS7A638rLfdLksVagM0oX4wzmC0I4vQDuSjRL5CTsCK0miiMAeUscXc1
-         OJC6y0vbRADZ46lPW4KR+fny5Z4VuLac0FnLoYb9hCuVxkqfN9AVD2CkqaALHt0pD70h
-         yszLGojOYQrcwED9QG5sZLwsmsMdEjQJVcAPPLlJGCNtksW7HTqY6cM0A4dxgHJjDbAf
-         f2wQ==
-X-Gm-Message-State: AOAM533FdRw1R3M0fDzy7DwBrit9rxQWT+pxyotqV7VUzyL5+NXomPjK
-	Dd6y1s3Wuv/Ubu85woGtLP5ZyA==
-X-Google-Smtp-Source: ABdhPJxU9qR62ZWZ18FtHlLxXexbcA0ITexAROMRGXFpYN87GP559GP3pejAuLGXMq/BvQzPj+6kAQ==
-X-Received: by 2002:a17:906:19c3:b0:6ec:c7b:ed28 with SMTP id h3-20020a17090619c300b006ec0c7bed28mr21313882ejd.612.1650524204904;
-        Wed, 20 Apr 2022 23:56:44 -0700 (PDT)
-Received: from [192.168.0.226] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm11052288edt.80.2022.04.20.23.56.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 23:56:44 -0700 (PDT)
-Message-ID: <4e9eaede-2208-bd73-35ae-89e128562653@linaro.org>
-Date: Thu, 21 Apr 2022 08:56:42 +0200
+	id D54B0C385AC; Thu, 21 Apr 2022 08:04:28 +0000 (UTC)
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+	by smtp.kernel.org (Postfix) with ESMTP id 5CA19C385A5;
+	Thu, 21 Apr 2022 08:04:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5CA19C385A5
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+	by maillog.nuvoton.com (Postfix) with ESMTP id C80FA1C810F7;
+	Thu, 21 Apr 2022 16:04:24 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 21
+ Apr 2022 16:04:24 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Thu, 21 Apr 2022 16:04:24 +0800
+Message-ID: <80994f4b-136f-7669-4674-0c9826e88248@nuvoton.com>
+Date: Thu, 21 Apr 2022 16:04:24 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
 Subject: Re: [PATCH v3 5/5] dt-bindings: arm: Add initial bindings for Nuvoton
  Platform
 Content-Language: en-US
-To: Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
- olof@lixom.net, will@kernel.org, soc@kernel.org, cfli0@nuvoton.com
+CC: <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+	<arnd@arndb.de>, <olof@lixom.net>, <will@kernel.org>, <soc@kernel.org>,
+	<cfli0@nuvoton.com>
 References: <20220418082738.11301-1-ychuang3@nuvoton.com>
  <20220418082738.11301-6-ychuang3@nuvoton.com>
  <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
  <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
+ <4e9eaede-2208-bd73-35ae-89e128562653@linaro.org>
+From: Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <4e9eaede-2208-bd73-35ae-89e128562653@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 21/04/2022 08:39, Jacky Huang wrote:
-> 
-> 
-> On 2022/4/18 下午 08:11, Krzysztof Kozlowski wrote:
->> On 18/04/2022 10:27, Jacky Huang wrote:
->>> +properties:
->>> +  $nodename:
->>> +    const: '/'
->>> +  compatible:
->>> +    items:
->>> +      - enum:
->>> +          - nuvoton,ma35d1
->>> +          - nuvoton,ma35d1-evb
->>> +          - nuvoton,ma35d1-iot
->>> +          - nuvoton,ma35d1-som512
->>> +          - nuvoton,ma35d1-som1g
->> This does not match your DTS and does not look reasonable (SoC
->> compatible should not be part of this enum). Check some other board
->> bindings for examples.
+
+
+On 2022/4/21 下午 02:56, Krzysztof Kozlowski wrote:
+> On 21/04/2022 08:39, Jacky Huang wrote:
 >>
+>> On 2022/4/18 下午 08:11, Krzysztof Kozlowski wrote:
+>>> On 18/04/2022 10:27, Jacky Huang wrote:
+>>>> +properties:
+>>>> +  $nodename:
+>>>> +    const: '/'
+>>>> +  compatible:
+>>>> +    items:
+>>>> +      - enum:
+>>>> +          - nuvoton,ma35d1
+>>>> +          - nuvoton,ma35d1-evb
+>>>> +          - nuvoton,ma35d1-iot
+>>>> +          - nuvoton,ma35d1-som512
+>>>> +          - nuvoton,ma35d1-som1g
+>>> This does not match your DTS and does not look reasonable (SoC
+>>> compatible should not be part of this enum). Check some other board
+>>> bindings for examples.
+>>>
+>>>
+>>> Best regards,
+>>> Krzysztof
+>> I would like to modify it as follows:
 >>
->> Best regards,
->> Krzysztof
-> 
-> I would like to modify it as follows:
-> 
-> description: |
->    Boards with an ARMv8 based Nuvoton SoC shall have the following
->    properties.
-> 
-> properties:
->    $nodename:
->      const: '/'
->    compatible:
->      oneOf:
-> 
->        - description: MA35D1 evaluation board
->          items:
->            - const: nuvoton,ma35d1-evb
->            - const: nuvoton,ma35d1
-> 
->        - description: MA35D1 IoT board
->          items:
->            - const: nuvoton,ma35d1-iot
+>> description: |
+>>     Boards with an ARMv8 based Nuvoton SoC shall have the following
+>>     properties.
+>>
+>> properties:
+>>     $nodename:
+>>       const: '/'
+>>     compatible:
+>>       oneOf:
+>>
+>>         - description: MA35D1 evaluation board
+>>           items:
+>>             - const: nuvoton,ma35d1-evb
+>>             - const: nuvoton,ma35d1
+>>
+>>         - description: MA35D1 IoT board
+>>           items:
+>>             - const: nuvoton,ma35d1-iot
+> Instead just enum with all board compatibles.
 
-Instead just enum with all board compatibles.
+How about to modify it as the follows:
 
-> 
-> Thank you very much.
-> Jacky Huang
-> 
+   compatible:
+     oneOf:
+
+       - description: MA35D1 evaluation board
+         items:
+           - enum:
+               - nuvoton,ma35d1-evb
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 IoT board
+         items:
+           - enum:
+               - nuvoton,ma35d1-iot
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 SOM board
+         items:
+           - enum:
+               - nuvoton,ma35d1-som512
+               - nuvoton,ma35d1-som1g
+           - const: nuvoton,ma35d1
+
+>> Thank you very much.
+>> Jacky Huang
+>>
+>
+> Best regards,
+> Krzysztof
+
+Sincerely,
+Jacky Huang
 
 
-Best regards,
-Krzysztof
