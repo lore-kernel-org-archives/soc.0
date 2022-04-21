@@ -1,266 +1,112 @@
-Return-Path: <SRS0=GJ3E=U6=hpe.com=prvs=0109495177=nick.hawkins@kernel.org>
+Return-Path: <SRS0=o6Q+=U7=nuvoton.com=YCHuang3@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB826C433F5
-	for <soc@archiver.kernel.org>; Wed, 20 Apr 2022 15:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF825C433EF
+	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 06:39:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 82C6CC385A0; Wed, 20 Apr 2022 15:00:01 +0000 (UTC)
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 56787C385A1;
-	Wed, 20 Apr 2022 15:00:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 56787C385A1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KEXKZw028897;
-	Wed, 20 Apr 2022 14:59:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=FThOS7HgbypSTpDCD5OKTFFor5T4+jTmD4Iwx6tYZX0=;
- b=lIOfWNcxZfehIAUKpbhFrc0w6F2ZkcMkwmAvvUR0wBT60XXB6RcZqzQyxa5AL5b0UU0W
- qMYBvmba9173YouY8XGvDF6zmG02RJJJhhnaE0goyATaeHzUCwE+Qtuk+2Wzz45l3KN8
- zSO3l47CNG5z1Go5fbZzwj9A5ARnMRGWbRv6DriyiDIcfYaGDF2gbS8ac2eJKuGRofV/
- DwSRleckCJM0CtamyuXEaD+FSGfvT8DZ3V2DSVP6M6JZ3ByvLXz0S5ye/8lZouAbdhGj
- 2GsYP+h/srVk+eZZNFcj8r3RweyGLZmFxIwzsvo2oDowfH6kGqJQOMBhKuaulUGI2FZ/ fQ== 
-Received: from g2t2354.austin.hpe.com (g2t2354.austin.hpe.com [15.233.44.27])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fjm1k88cm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Apr 2022 14:59:56 +0000
-Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
-	by g2t2354.austin.hpe.com (Postfix) with ESMTP id 9C3D281;
-	Wed, 20 Apr 2022 14:59:55 +0000 (UTC)
-Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-	by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id 4B52D37;
-	Wed, 20 Apr 2022 14:59:55 +0000 (UTC)
-From: nick.hawkins@hpe.com
-To: verdun@hpe.com, nick@hpe.com, joel@jms.id.au, arnd@arndb.de
+	id A8D04C385A9; Thu, 21 Apr 2022 06:39:40 +0000 (UTC)
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+	by smtp.kernel.org (Postfix) with ESMTP id 3E1C8C385A5;
+	Thu, 21 Apr 2022 06:39:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E1C8C385A5
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+	by maillog.nuvoton.com (Postfix) with ESMTP id 089D01C810D0;
+	Thu, 21 Apr 2022 14:39:31 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 21
+ Apr 2022 14:39:30 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Thu, 21 Apr 2022 14:39:30 +0800
+Message-ID: <caf4867f-7f71-9262-f190-463325eb13ab@nuvoton.com>
+Date: Thu, 21 Apr 2022 14:39:30 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 5/5] dt-bindings: arm: Add initial bindings for Nuvoton
+ Platform
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Nick Hawkins <nick.hawkins@hpe.com>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 10/11] arch: arm: boot: dts: Introduce HPE GXP Device tree
-Date: Wed, 20 Apr 2022 10:01:54 -0500
-Message-Id: <20220420150156.47405-10-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220420150156.47405-1-nick.hawkins@hpe.com>
-References: <20220420150156.47405-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: VbaIKAmvfJ-MdR-4g8vWqyoWrBSrwhy-
-X-Proofpoint-GUID: VbaIKAmvfJ-MdR-4g8vWqyoWrBSrwhy-
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-20_04,2022-04-20_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 impostorscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 bulkscore=0 adultscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204200089
+CC: <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+	<arnd@arndb.de>, <olof@lixom.net>, <will@kernel.org>, <soc@kernel.org>,
+	<cfli0@nuvoton.com>
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-6-ychuang3@nuvoton.com>
+ <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
+From: Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <fd9316a6-7df6-e1fa-50dc-ff50934afb5c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
 
-The HPE SoC is new to linux. This patch
-creates the basic device tree layout with minimum required
-for linux to boot. This includes timer and watchdog
-support.
 
-The dts file is empty at this point but will be
-updated in subsequent updates as board specific features
-are enabled.
+On 2022/4/18 下午 08:11, Krzysztof Kozlowski wrote:
+> On 18/04/2022 10:27, Jacky Huang wrote:
+>> +properties:
+>> +  $nodename:
+>> +    const: '/'
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - nuvoton,ma35d1
+>> +          - nuvoton,ma35d1-evb
+>> +          - nuvoton,ma35d1-iot
+>> +          - nuvoton,ma35d1-som512
+>> +          - nuvoton,ma35d1-som1g
+> This does not match your DTS and does not look reasonable (SoC
+> compatible should not be part of this enum). Check some other board
+> bindings for examples.
+>
+>
+> Best regards,
+> Krzysztof
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+I would like to modify it as follows:
 
----
-v4:
-* Removed hpe,gxp-cpu-init as it was no longer necessary
-* Removed bootargs as requested
-* Removed empty ahb node
-* Moved reg after compatible, everywhere
-* Removed osc and memclk
-* Removed syscon@c00000f8 as it was not necessary for boot
-* Fixed Alphabetical issue in dts/Makefile
-* Added specific board binding for dl360gen10
-* Removed empty node
-* Added Accurate Clock Architecture
----
- arch/arm/boot/dts/Makefile               |   2 +
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  13 +++
- arch/arm/boot/dts/hpe-gxp.dtsi           | 128 +++++++++++++++++++++++
- 3 files changed, 143 insertions(+)
- create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
- create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+description: |
+   Boards with an ARMv8 based Nuvoton SoC shall have the following
+   properties.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index e41eca79c950..a217c403c819 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -250,6 +250,8 @@ dtb-$(CONFIG_ARCH_HISI) += \
- 	hi3519-demb.dtb
- dtb-$(CONFIG_ARCH_HIX5HD2) += \
- 	hisi-x5hd2-dkb.dtb
-+dtb-$(CONFIG_ARCH_HPE_GXP) += \
-+	hpe-bmc-dl360gen10.dtb
- dtb-$(CONFIG_ARCH_INTEGRATOR) += \
- 	integratorap.dtb \
- 	integratorap-im-pd1.dtb \
-diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-new file mode 100644
-index 000000000000..69e9c6672ea8
---- /dev/null
-+++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree file for HPE DL360Gen10
-+ */
-+
-+/include/ "hpe-gxp.dtsi"
-+
-+/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	compatible = "hpe,gxp-dl360gen10","hpe,gxp";
-+	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
-+};
-diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-new file mode 100644
-index 000000000000..e0b77f4a799a
---- /dev/null
-+++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree file for HPE GXP
-+ */
-+
-+/dts-v1/;
-+/ {
-+	model = "Hewlett Packard Enterprise GXP BMC";
-+	compatible = "hpe,gxp","hpe,gxp-dl360gen10";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "arm,cortex-a9";
-+			reg = <0>;
-+			device_type = "cpu";
-+		};
-+	};
-+
-+	clocks {
-+
-+		pll: pll {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <1600000000>;
-+		};
-+
-+		iopclk: iopclk {
-+			compatible = "fixed-factor-clock";
-+			#clock-cells = <0>;
-+			clock-div = <4>;
-+			clock-mult = <1>;
-+			clocks = <&pll>;
-+		};
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x40000000 0x20000000>;
-+	};
-+
-+	axi {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+		dma-ranges;
-+
-+		ahb@c0000000 {
-+			compatible = "simple-bus";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xc0000000 0x30000000>;
-+
-+			vic0: interrupt-controller@eff0000 {
-+				compatible = "arm,pl192-vic";
-+				reg = <0xeff0000 0x1000>;
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+
-+			vic1: interrupt-controller@80f00000 {
-+				compatible = "arm,pl192-vic";
-+				reg = <0x80f00000 0x1000>;
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+
-+			uarta: serial@e0 {
-+				compatible = "ns16550a";
-+				reg = <0xe0 0x8>;
-+				interrupts = <17>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			uartb: serial@e8 {
-+				compatible = "ns16550a";
-+				reg = <0xe8 0x8>;
-+				interrupts = <18>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			uartc: serial@f0 {
-+				compatible = "ns16550a";
-+				reg = <0xf0 0x8>;
-+				interrupts = <19>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			usb0: usb@efe0000 {
-+				compatible = "hpe,gxp-echi","generic-ehci";
-+				reg = <0xefe0000 0x100>;
-+				interrupts = <7>;
-+				interrupt-parent = <&vic0>;
-+			};
-+
-+			st: timer@80 {
-+				compatible = "hpe,gxp-timer","simple-mfd";
-+				reg = <0x80 0x16>;
-+				interrupts = <0>;
-+				interrupt-parent = <&vic0>;
-+				clocks = <&iopclk>;
-+				clock-names = "iopclk";
-+				watchdog {
-+					compatible = "hpe,gxp-wdt";
-+				};
-+			};
-+
-+			usb1: usb@efe0100 {
-+				compatible = "hpe,gxp-ohci","generic-ohci";
-+				reg = <0xefe0100 0x110>;
-+				interrupts = <6>;
-+				interrupt-parent = <&vic0>;
-+			};
-+		};
-+	};
-+
-+};
--- 
-2.17.1
+properties:
+   $nodename:
+     const: '/'
+   compatible:
+     oneOf:
+
+       - description: MA35D1 evaluation board
+         items:
+           - const: nuvoton,ma35d1-evb
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 IoT board
+         items:
+           - const: nuvoton,ma35d1-iot
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 SOM board with 512MB DDR
+         items:
+           - const: nuvoton,ma35d1-som512
+           - const: nuvoton,ma35d1
+
+       - description: MA35D1 SOM board with 1GB DDR
+         items:
+           - const: nuvoton,ma35d1-som1g
+           - const: nuvoton,ma35d1
+
+additionalProperties: true
+
+
+
+Thank you very much.
+Jacky Huang
 
