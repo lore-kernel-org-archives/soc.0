@@ -4,64 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1863C433F5
-	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 15:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E6EFC433FE
+	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 15:31:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A4C62C385AB; Thu, 21 Apr 2022 15:30:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CC89C385A8
-	for <soc@kernel.org>; Thu, 21 Apr 2022 15:30:26 +0000 (UTC)
+	id 2482CC385A5; Thu, 21 Apr 2022 15:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EC8FC385A1;
+	Thu, 21 Apr 2022 15:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1650555026;
-	bh=mpxdZbW6j306rKwYjBAUib6vsFOsXFYWsXUCbKYSjtM=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=nX6qjOdCAFucZquFkQM0xSUREwcV+piS0Ikw/tq9pEw7etO4Buflv2h0QnSSX33uN
-	 eOHcIW+ZyFzZl4MFGH8043mEkdWADPLsyMWl4TR76PjrMtABsIe20T2AmMfvSz3M20
-	 IKqOOdyD2Zy0yrj3oaSZxAhE+EhEm/o/7y1hy2yIWpu1xQGBNbaq5f/t5XA+KiCGfr
-	 OK/Mh5IbTxI+z6mm1H/EaEe9Z1aStKQumqbhkcVM0NXlzTG3Fs9kgx6J2wMjzcVSSF
-	 i2MA89+5eq1CEZDU93rZ1LyM6kaMJHaaw9WKgqDqQKgdyBdzOy+0f1Pqk+YA9+0iG5
-	 6k/zv0jeDL+bg==
+	s=k20201202; t=1650555063;
+	bh=tZ2vezFVzaL/vZJvBL9Pg2FHbEtUO31sEU7M6V5dsqY=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=bnpbeQc150Vhe1upbGgdn4VwrVkSVupOxaGb8RQNgoI8kWqcOUD+npLGN5Lc8YBwS
+	 DbVIxg2dPGa1getlhxDxu19MzCkJEcJ/s1rEwCOF65kvDK9xydwfSvwe9KKK8+ZdrU
+	 Li4GUatbPd+Y3B4Y8q8tvFd1IDCjk0MVHFkkvtIic3a+FVh4HzekBuFLgZXsZGxmqv
+	 y7GERxvaR3xWstrpAZBSrj++df1HQVbZgshNhhdzpa6GynKofZb0uYkblzJ8KC56R+
+	 0Xb0nCl1dTcW6KLqq3hHemogjw1GcIp6Boi0gpeWO+tjPHOMxxCAvTOluYt+L6pk74
+	 UzZoahWQCUSMw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 628F5E85D90;
-	Thu, 21 Apr 2022 15:30:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EC8ABE8DD85;
+	Thu, 21 Apr 2022 15:31:02 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Fixes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165055502632.23603.3695826957071813620.git-patchwork-summary@kernel.org>
-Date: Thu, 21 Apr 2022 15:30:26 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <165055506296.23603.15873238631352797890.git-patchwork-notify@kernel.org>
+Date: Thu, 21 Apr 2022 15:31:02 +0000
+References: <pull-1650543308-836725@atomide.com>
+In-Reply-To: <pull-1650543308-836725@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Fixes for omaps
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=634143
-  Lore link: https://lore.kernel.org/r/pull-1650543308-836725@atomide.com
+On Thu, 21 Apr 2022 15:15:27 +0300 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
+> 
+> The following changes since commit 71ff461c3f41f6465434b9e980c01782763e7ad8:
+> 
+>   iommu/omap: Fix regression in probe for NULL pointer dereference (2022-04-08 11:16:29 +0200)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Patch: MAINTAINERS: add Bug entry for Samsung and memory controller drivers
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=633736
-  Lore link: https://lore.kernel.org/r/20220420104708.106738-1-krzysztof.kozlowski@linaro.org
+Here is the summary with links:
+  - [GIT,PULL] Fixes for omaps
+    https://git.kernel.org/soc/soc/c/846e24dcae5d
 
-Patch: [drivers/memory/fixes] memory: renesas-rpc-if: Fix HF/OSPI data transfer in Manual Mode
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=633645
-  Lore link: https://lore.kernel.org/r/20220420070526.9367-1-krzysztof.kozlowski@linaro.org
-
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
