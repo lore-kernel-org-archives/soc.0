@@ -1,82 +1,75 @@
-Return-Path: <SRS0=FdBY=VA=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Z9GS=VA=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87171C433F5
-	for <soc@archiver.kernel.org>; Fri, 22 Apr 2022 13:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3533BC433F5
+	for <soc@archiver.kernel.org>; Fri, 22 Apr 2022 14:55:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 49CC6C385A4; Fri, 22 Apr 2022 13:06:59 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+	id 1C7A7C385AC; Fri, 22 Apr 2022 14:55:16 +0000 (UTC)
+Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [195.130.137.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8564DC385A0;
-	Fri, 22 Apr 2022 13:06:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8564DC385A0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MSqbe-1nKGlF1bzS-00UHlc; Fri, 22 Apr 2022 15:06:55 +0200
-Received: by mail-wr1-f41.google.com with SMTP id u3so11005676wrg.3;
-        Fri, 22 Apr 2022 06:06:55 -0700 (PDT)
-X-Gm-Message-State: AOAM531I6/dYuWh0dYy7HSNaZEBKZ/bjMO84XlUiVZWPt5R6fAezwIfv
-	swTEUCnpCMjACKDCIyBj9nplVJDlhD7d6saOV2k=
-X-Google-Smtp-Source: ABdhPJzr/sEIyUtXuTAvF8Q8/DssMA5FZLT4Nk4euAN9C8OsZ19szl+6WaUMm+cqYUy3lMIOfLqToKLe+raWpc5CMcM=
-X-Received: by 2002:a5d:49cb:0:b0:20a:cee3:54fc with SMTP id
- t11-20020a5d49cb000000b0020acee354fcmr122170wrs.12.1650632815075; Fri, 22 Apr
- 2022 06:06:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421192132.109954-1-nick.hawkins@hpe.com> <20220421192132.109954-11-nick.hawkins@hpe.com>
-In-Reply-To: <20220421192132.109954-11-nick.hawkins@hpe.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Fri, 22 Apr 2022 15:06:38 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2axNe=w_5PDdSQ8tDZFand_aEQxdgrNMx0uUKYKVmWtw@mail.gmail.com>
-Message-ID: <CAK8P3a2axNe=w_5PDdSQ8tDZFand_aEQxdgrNMx0uUKYKVmWtw@mail.gmail.com>
-Subject: Re: [PATCH v5 10/11] arch: arm: boot: dts: Introduce HPE GXP Device tree
-To: "Hawkins, Nick" <nick.hawkins@hpe.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 951DCC385B8
+	for <soc@kernel.org>; Fri, 22 Apr 2022 14:55:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 951DCC385B8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+	by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4KlHWX4zMyz50Lvq
+	for <soc@kernel.org>; Fri, 22 Apr 2022 16:55:04 +0200 (CEST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:2928:9f72:c4af:fbd9])
+	by baptiste.telenet-ops.be with bizsmtp
+	id Mquw2700f2Ah9RF01quxTE; Fri, 22 Apr 2022 16:54:57 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1nhugS-001cQB-HJ; Fri, 22 Apr 2022 16:54:56 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1nhugR-00COlW-Qu; Fri, 22 Apr 2022 16:54:55 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-Cc: "Verdun, Jean-Marie" <verdun@hpe.com>, Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>, 
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:An/emhIC5bx6DcUFVv+kpN7kxkD+eNi2enJeuObjV1V/9t8psEk
- Od1PTtqCqHJEKv9UUEVF9FtHSpNXnbe2eTUv5luIfL2fGQTZVXoDNgHUYTvWPPIhCmzVXd7
- lA+oyblk2lVrdpVA4fnUcXHNghsker+RkX+Hyfcc+DSq69PXjx/uKJPYIfiUiBDxmVOJwxU
- /hE53NY3akSAmxwvV0lxg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BUM27cOpnxw=:RKS8pJmlwYtvm3MjsG0Fph
- PJ2Ux+kGjSJC/DAOj9PSzbl6kOVIlSySH8p2eneZ2Xmh2WeHGZAgcZ5PzL3B2xWjCMXWX8sc1
- hAObsAC+3Sk5EWXEZRve8Tk3m+TJrGkJ37CWIM8OkFI0oY/bN6Xce6f813V6t5ndtIzb52xX8
- p7+v1o4X9LLlehpKJyp5bkESiN/30kDT2ASHeoD+11pI0L/ZePCSWIltG1oLVNaomuzrFFuii
- qmt7GkfeZFrlV8SdDjq8T3Ou9HDk64ZMj66ZgNeSdvxDJtnzrWRh/p+IghqRhPB66opf8sD9A
- 6OsCzwqQEg3vRkn0892hGTJxwAWhPq9jjUXK3msoB+JlBgNLm6LS0PDErWx9SdyVxOQmffuOU
- okx0gBIrDVNM968hM0S+2mKxCR5BCv6C0BhU1CL0tRoeTLPCpKnFazUbh8XVdFSsUd1tzJswZ
- 3ZT9NKVjj28dP5FNbnrshhZjEtJYLV4j59tD5hBD8EmgHLx5QhstSIXL+s/RbP2ITBzy5h5x9
- enBsc2uNoJDFPP4x9CL5Fdb4CCaN+tfF3SFqWlyI4Q3zKQYAqAyrAni4XbEjCPxJR0g2qQiyS
- FKdFEsyn+sMY+uJmxBQyilFvRsMJ786P6CyBuBjpSDjfMPLOLGxDYvzLHQ27LbYFJ+GCAVxDP
- 19ftCaVEQUduCkuyXc0nlXz6ZbyUQTMQDwH4IHvceQLtyiHd1kepbBkMPybBsjIO6TB4=
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 4/4] Renesas DT binding updates for v5.19
+Date: Fri, 22 Apr 2022 16:54:53 +0200
+Message-Id: <cover.1650638516.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1650638502.git.geert+renesas@glider.be>
+References: <cover.1650638502.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 21, 2022 at 9:21 PM <nick.hawkins@hpe.com> wrote:
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-> +       axi {
-> +               compatible = "simple-bus";
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               ranges;
-> +               dma-ranges;
-> +
-> +               ahb@c0000000 {
-> +                       compatible = "simple-bus";
-> +                       #address-cells = <1>;
-> +                       #size-cells = <1>;
-> +                       ranges = <0x0 0xc0000000 0x30000000>;
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-I think you should add a "dma-ranges" property in the ahb node as well,
-otherwise this would mean that none of the children are DMA capable,
-when at the minimum the USB controllers require DMA.
+are available in the Git repository at:
 
-       Arnd
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.19-tag1
+
+for you to fetch changes up to 05d39fc06cee5b11b195d0d5fec55d01da2781cb:
+
+  dt-bindings: arm: renesas: Document Renesas RZ/G2UL SMARC EVK (2022-04-13 12:19:31 +0200)
+
+----------------------------------------------------------------
+Renesas DT binding updates for v5.19
+
+  - Document support for the new RZ/G2UL SoC and the RZ/G2UL SMARC EVK
+    development board.
+
+----------------------------------------------------------------
+Biju Das (2):
+      dt-bindings: power: renesas,rzg2l-sysc: Document RZ/G2UL SoC
+      dt-bindings: arm: renesas: Document Renesas RZ/G2UL SMARC EVK
+
+ Documentation/devicetree/bindings/arm/renesas.yaml              | 2 ++
+ Documentation/devicetree/bindings/power/renesas,rzg2l-sysc.yaml | 5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
