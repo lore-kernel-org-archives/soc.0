@@ -1,92 +1,82 @@
-Return-Path: <SRS0=noUR=U7=z3ntu.xyz=luca@kernel.org>
+Return-Path: <SRS0=FdBY=VA=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6239BC433EF
-	for <soc@archiver.kernel.org>; Thu, 21 Apr 2022 21:20:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87171C433F5
+	for <soc@archiver.kernel.org>; Fri, 22 Apr 2022 13:06:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0FDE0C385A7; Thu, 21 Apr 2022 21:20:06 +0000 (UTC)
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+	id 49CC6C385A4; Fri, 22 Apr 2022 13:06:59 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7C974C385A5;
-	Thu, 21 Apr 2022 21:20:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C974C385A5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=z3ntu.xyz
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
-Received: from g550jk.arnhem.chello.nl (a246182.upc-a.chello.nl [62.163.246.182])
-	by mail.z3ntu.xyz (Postfix) with ESMTPSA id 24CB2CC10C;
-	Thu, 21 Apr 2022 21:19:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-	t=1650575997; bh=5ScSxn4n5ySRopwqFbclap1GFEUkLSSL+DlpBzrrvQk=;
-	h=From:To:Cc:Subject:Date;
-	b=KoUyVqigeI1pJrTPGIqB1K06o9w5tlY0D/m6/YssQKeRf+3HZd29OO5GVU7rVamOG
-	 5CsZU/QKsPuUWkM9HaelMXLps0RmexhLMiFRsP4iM8+RzYCL03h6kakQ6sBQve0/cI
-	 tBJkd7EC/6KTxy/ZpNIAYQzpddD7FpKRi9Ofx1R4=
-From: Luca Weiss <luca@z3ntu.xyz>
-To: linux-arm-msm@vger.kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] ARM: dts: msm8974-FP2: We're msm8974pro
-Date: Thu, 21 Apr 2022 23:19:33 +0200
-Message-Id: <20220421211936.345168-1-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.36.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 8564DC385A0;
+	Fri, 22 Apr 2022 13:06:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8564DC385A0
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MSqbe-1nKGlF1bzS-00UHlc; Fri, 22 Apr 2022 15:06:55 +0200
+Received: by mail-wr1-f41.google.com with SMTP id u3so11005676wrg.3;
+        Fri, 22 Apr 2022 06:06:55 -0700 (PDT)
+X-Gm-Message-State: AOAM531I6/dYuWh0dYy7HSNaZEBKZ/bjMO84XlUiVZWPt5R6fAezwIfv
+	swTEUCnpCMjACKDCIyBj9nplVJDlhD7d6saOV2k=
+X-Google-Smtp-Source: ABdhPJzr/sEIyUtXuTAvF8Q8/DssMA5FZLT4Nk4euAN9C8OsZ19szl+6WaUMm+cqYUy3lMIOfLqToKLe+raWpc5CMcM=
+X-Received: by 2002:a5d:49cb:0:b0:20a:cee3:54fc with SMTP id
+ t11-20020a5d49cb000000b0020acee354fcmr122170wrs.12.1650632815075; Fri, 22 Apr
+ 2022 06:06:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220421192132.109954-1-nick.hawkins@hpe.com> <20220421192132.109954-11-nick.hawkins@hpe.com>
+In-Reply-To: <20220421192132.109954-11-nick.hawkins@hpe.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 22 Apr 2022 15:06:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2axNe=w_5PDdSQ8tDZFand_aEQxdgrNMx0uUKYKVmWtw@mail.gmail.com>
+Message-ID: <CAK8P3a2axNe=w_5PDdSQ8tDZFand_aEQxdgrNMx0uUKYKVmWtw@mail.gmail.com>
+Subject: Re: [PATCH v5 10/11] arch: arm: boot: dts: Introduce HPE GXP Device tree
+To: "Hawkins, Nick" <nick.hawkins@hpe.com>
+List-Id: <soc.lore.kernel.org>
+Cc: "Verdun, Jean-Marie" <verdun@hpe.com>, Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>, 
+	OpenBMC Maillist <openbmc@lists.ozlabs.org>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:An/emhIC5bx6DcUFVv+kpN7kxkD+eNi2enJeuObjV1V/9t8psEk
+ Od1PTtqCqHJEKv9UUEVF9FtHSpNXnbe2eTUv5luIfL2fGQTZVXoDNgHUYTvWPPIhCmzVXd7
+ lA+oyblk2lVrdpVA4fnUcXHNghsker+RkX+Hyfcc+DSq69PXjx/uKJPYIfiUiBDxmVOJwxU
+ /hE53NY3akSAmxwvV0lxg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BUM27cOpnxw=:RKS8pJmlwYtvm3MjsG0Fph
+ PJ2Ux+kGjSJC/DAOj9PSzbl6kOVIlSySH8p2eneZ2Xmh2WeHGZAgcZ5PzL3B2xWjCMXWX8sc1
+ hAObsAC+3Sk5EWXEZRve8Tk3m+TJrGkJ37CWIM8OkFI0oY/bN6Xce6f813V6t5ndtIzb52xX8
+ p7+v1o4X9LLlehpKJyp5bkESiN/30kDT2ASHeoD+11pI0L/ZePCSWIltG1oLVNaomuzrFFuii
+ qmt7GkfeZFrlV8SdDjq8T3Ou9HDk64ZMj66ZgNeSdvxDJtnzrWRh/p+IghqRhPB66opf8sD9A
+ 6OsCzwqQEg3vRkn0892hGTJxwAWhPq9jjUXK3msoB+JlBgNLm6LS0PDErWx9SdyVxOQmffuOU
+ okx0gBIrDVNM968hM0S+2mKxCR5BCv6C0BhU1CL0tRoeTLPCpKnFazUbh8XVdFSsUd1tzJswZ
+ 3ZT9NKVjj28dP5FNbnrshhZjEtJYLV4j59tD5hBD8EmgHLx5QhstSIXL+s/RbP2ITBzy5h5x9
+ enBsc2uNoJDFPP4x9CL5Fdb4CCaN+tfF3SFqWlyI4Q3zKQYAqAyrAni4XbEjCPxJR0g2qQiyS
+ FKdFEsyn+sMY+uJmxBQyilFvRsMJ786P6CyBuBjpSDjfMPLOLGxDYvzLHQ27LbYFJ+GCAVxDP
+ 19ftCaVEQUduCkuyXc0nlXz6ZbyUQTMQDwH4IHvceQLtyiHd1kepbBkMPybBsjIO6TB4=
 
-Fairphone 2 always uses Snapdragon 801, a.k.a msm8974pro so change the
-include and filename to that.
+On Thu, Apr 21, 2022 at 9:21 PM <nick.hawkins@hpe.com> wrote:
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm/boot/dts/Makefile                                      | 2 +-
- ...8974-fairphone-fp2.dts => qcom-msm8974pro-fairphone-fp2.dts} | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename arch/arm/boot/dts/{qcom-msm8974-fairphone-fp2.dts => qcom-msm8974pro-fairphone-fp2.dts} (99%)
+> +       axi {
+> +               compatible = "simple-bus";
+> +               #address-cells = <1>;
+> +               #size-cells = <1>;
+> +               ranges;
+> +               dma-ranges;
+> +
+> +               ahb@c0000000 {
+> +                       compatible = "simple-bus";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       ranges = <0x0 0xc0000000 0x30000000>;
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 3541e5eec611..728bbd0f8c26 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1010,10 +1010,10 @@ dtb-$(CONFIG_ARCH_QCOM) += \
- 	qcom-msm8660-surf.dtb \
- 	qcom-msm8916-samsung-serranove.dtb \
- 	qcom-msm8960-cdp.dtb \
--	qcom-msm8974-fairphone-fp2.dtb \
- 	qcom-msm8974-lge-nexus5-hammerhead.dtb \
- 	qcom-msm8974-sony-xperia-rhine-amami.dtb \
- 	qcom-msm8974-sony-xperia-rhine-honami.dtb \
-+	qcom-msm8974pro-fairphone-fp2.dtb \
- 	qcom-msm8974pro-samsung-klte.dtb \
- 	qcom-msm8974pro-sony-xperia-shinano-castor.dtb \
- 	qcom-mdm9615-wp8548-mangoh-green.dtb \
-diff --git a/arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-similarity index 99%
-rename from arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dts
-rename to arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-index 97d109a5c71d..08e723f2bdfc 100644
---- a/arch/arm/boot/dts/qcom-msm8974-fairphone-fp2.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-@@ -1,4 +1,4 @@
--#include "qcom-msm8974.dtsi"
-+#include "qcom-msm8974pro.dtsi"
- #include "qcom-pm8841.dtsi"
- #include "qcom-pm8941.dtsi"
- #include <dt-bindings/input/input.h>
--- 
-2.36.0
+I think you should add a "dma-ranges" property in the ahb node as well,
+otherwise this would mean that none of the children are DMA capable,
+when at the minimum the USB controllers require DMA.
 
+       Arnd
