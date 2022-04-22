@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEB4EC433EF
-	for <soc@archiver.kernel.org>; Fri, 22 Apr 2022 14:55:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DFB5C4332F
+	for <soc@archiver.kernel.org>; Fri, 22 Apr 2022 14:55:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8D4CFC385A8; Fri, 22 Apr 2022 14:55:15 +0000 (UTC)
-Received: from riemann.telenet-ops.be (riemann.telenet-ops.be [195.130.137.80])
+	id 44193C385A8; Fri, 22 Apr 2022 14:55:17 +0000 (UTC)
+Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 55219C385B4
+	by smtp.kernel.org (Postfix) with ESMTPS id 9F2F3C385B5
 	for <soc@kernel.org>; Fri, 22 Apr 2022 14:55:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 55219C385B4
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F2F3C385B5
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-	by riemann.telenet-ops.be (Postfix) with ESMTPS id 4KlHWX4yfhz4wwkX
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4KlHWX4TF2z50Lcn
 	for <soc@kernel.org>; Fri, 22 Apr 2022 16:55:04 +0200 (CEST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:2928:9f72:c4af:fbd9])
-	by baptiste.telenet-ops.be with bizsmtp
-	id Mqux2700A2Ah9RF01quxTH; Fri, 22 Apr 2022 16:54:57 +0200
+	by andre.telenet-ops.be with bizsmtp
+	id Mquw2701Y2Ah9RF01quwAr; Fri, 22 Apr 2022 16:54:56 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1nhugS-001cQ7-MT; Fri, 22 Apr 2022 16:54:56 +0200
+	id 1nhugS-001cQ8-9I; Fri, 22 Apr 2022 16:54:56 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1nhugR-00COl7-MQ; Fri, 22 Apr 2022 16:54:55 +0200
+	id 1nhugR-00COlB-Nq; Fri, 22 Apr 2022 16:54:55 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -38,68 +38,42 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 0/4] Renesas ARM defconfig updates for v5.19
-Date: Fri, 22 Apr 2022 16:54:49 +0200
-Message-Id: <cover.1650638502.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/4] Renesas ARM defconfig updates for v5.19
+Date: Fri, 22 Apr 2022 16:54:50 +0200
+Message-Id: <cover.1650638503.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1650638502.git.geert+renesas@glider.be>
+References: <cover.1650638502.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-This is my first pull request for the inclusion of Renesas SoC updates
-for v5.19.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-It consists of 4 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/4] Renesas ARM defconfig updates for v5.19
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v5.19-tag1
 
-    - Enable support for the Renesas RZ/V2L SoC and the Maxim MAX96712
-      Quad GMSL2 Deserializer in the arm64 defconfig,
-    - Refresh shmobile_defconfig for v5.18-rc1.
+for you to fetch changes up to dcc1449554ba8e49880507c7b761559022363bdd:
 
-  [GIT PULL 2/4] Renesas ARM DT updates for v5.19
+  ARM: shmobile: defconfig: Refresh for v5.18-rc1 (2022-04-19 10:36:23 +0200)
 
-    - ADC, SDHI, CAN-FD, I2C, QSPI, timer, watchdog, sound, USB, SPI, GPU,
-      cpufreq, and thermal support for the RZ/V2L SoC, and the RZ/V2L
-      SMARC EVK development board,
-    - USB, I2C, Audio, NOR Flash, timer, SPI support for RZ/G2LC SMARC EVK
-      development board,
-    - Can-FD support for the R-Car M30W+ and V3U SoCs, and the Falcon
-      development board,
-    - I2C and GPIO support for the R-Car S4-8 SoC,
-    - I2C EEPROM support for the Falcon development board,
-    - SPI Multi I/O Bus Controller (RPC-IF) support for the R-Car H3,
-      M3-W(+), M3-N, E3, and D3 SoCs,
-    - RPC HyperFlash support for the Draak, Ebisu, Salvator-X(S), and ULCB
-      development boards,
-    - Initial support (UART, DMAC, pin control, SDHI, eMMC, Ethernet) for
-      the RZ/G2UL SoC, and the RZ/G2UL SMARC EVK development board,
-    - Miscellaneous fixes and improvements.
+----------------------------------------------------------------
+Renesas ARM defconfig updates for v5.19
 
-  [GIT PULL 3/4] Renesas driver updates for v5.19
+  - Enable support for the Renesas RZ/V2L SoC and the Maxim MAX96712
+    Quad GMSL2 Deserializer in the arm64 defconfig,
+  - Refresh shmobile_defconfig for v5.18-rc1.
 
-    - Initial support for the new RZ/G2UL SoC.
+----------------------------------------------------------------
+Geert Uytterhoeven (2):
+      arm64: defconfig: Enable Maxim MAX96712 Quad GMSL2 Deserializer support
+      ARM: shmobile: defconfig: Refresh for v5.18-rc1
 
-  [GIT PULL 4/4] Renesas DT binding updates for v5.19
+Lad Prabhakar (1):
+      arm64: defconfig: Enable ARCH_R9A07G054
 
-    - Document support for the new RZ/G2UL SoC and the RZ/G2UL SMARC EVK
-      development board.
-
-Note that the new Renesas RZ/G2UL DT Binding Definitions are shared by
-driver and DT source files, and thus included in multiple pull requests:
-  - "[GIT PULL] clk: renesas: Updates for v5.19" (for clk),
-  - "[GIT PULL 2/4] Renesas ARM DT updates for v5.19" (for soc).
-
-Thanks for pulling!
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ arch/arm/configs/shmobile_defconfig | 4 ++--
+ arch/arm64/configs/defconfig        | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
