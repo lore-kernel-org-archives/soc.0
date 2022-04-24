@@ -1,206 +1,565 @@
-Return-Path: <SRS0=Kkry=VC=gmail.com=mr.bossman075@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD54AC433F5
-	for <soc@archiver.kernel.org>; Sun, 24 Apr 2022 03:53:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D833C433EF
+	for <soc@archiver.kernel.org>; Sun, 24 Apr 2022 13:02:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 920A5C385AF; Sun, 24 Apr 2022 03:53:24 +0000 (UTC)
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9436FC385AB;
-	Sun, 24 Apr 2022 03:53:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9436FC385AB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id q13so339125qvk.3;
-        Sat, 23 Apr 2022 20:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6jWJt9XTXVVwmHW6n7cY0VehyahZoXhvY7honrosNaM=;
-        b=UHOC4oaV0BK0SaJf96f+kbk6a9WOcVogxsr62v7w+RBq1tdVir5KiH5uikGln619q3
-         dkaRuLKXu+QOZOXiEejJziFxEyogLLE3eQezNiv80pEIbt8qn9ESnd1m+36MHWqEsOlg
-         BI5kR8SmQtMLYmvizST8jFFom5YQ2wnu/ctkNMO9pDGgs4ysrYc7HehF1WUly3KSf6bQ
-         3RJZZKOIwUEpNBRwmgTzB48flpCNmiKJGChCtiwLeOmRM4hjzFXWl8TydWWyZhbESz+H
-         f6R2Hua/4A8qF5iAt4D+D79e4uubIVgLyam5gGoUSIlqAyA4Sty1FHWiAyo9g/quGH2u
-         6Tmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6jWJt9XTXVVwmHW6n7cY0VehyahZoXhvY7honrosNaM=;
-        b=tyVNW1NERFPHngBEyFigabajXlnqJhDYoBdlntSftR5j8XFiE2/rubpuQ1obyZX1JX
-         E0qPBMxxA4wyavwWljznuU8kuzDpzFA1ehGLc9OzxC3P9x98xq7RkThe8xDqFI0Sz9DV
-         eq6aO5zUTd+7HpKdDEQRmBDWHcdhUX+kFtWMxGFGWdiSmTeZNBOOy29gJKFc4Gewphas
-         H+nTugJvakyXBKsfbPu9xv+WnotJ9vIkvQozYk7WyWmL0S6ZnJeAIbtQ4FLkmHHoaKBx
-         t+4Ii0VNuEtp+lx+SqU3SidCVbjURxIdCrzVjci0go9wT8/Mvqtvvnf8Vsw3f+Z0yXaU
-         71Bg==
-X-Gm-Message-State: AOAM533VSOTeuX0RU7g0BQYT/oJKzLCxVyYvrGeGf2HPpnzIie4U9bOo
-	iP6eyXyfC7JYuXy//6iQUjaReAQ5YvA=
-X-Google-Smtp-Source: ABdhPJz5JdrJrl5qLtHz+/NCpPnsgRZA3P+rkWCFTYCInOshw9B3LibU+/G07m3g5ZT2dcBgwo6hIw==
-X-Received: by 2002:a05:6214:2344:b0:441:8201:7246 with SMTP id hu4-20020a056214234400b0044182017246mr9094442qvb.120.1650772402262;
-        Sat, 23 Apr 2022 20:53:22 -0700 (PDT)
-Received: from [10.4.10.60] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05622a034700b002f337000725sm3855022qtw.42.2022.04.23.20.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 20:53:21 -0700 (PDT)
-Message-ID: <506edc5d-8f66-5414-361a-0b517d8c4f38@gmail.com>
-Date: Sat, 23 Apr 2022 23:53:19 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 08/12] clk: imx: Add initial support for i.MXRT1170
- clock driver
-Content-Language: en-US
-To: Stephen Boyd <sboyd@kernel.org>, linux-imx@nxp.com
+	id 66776C385A9; Sun, 24 Apr 2022 13:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A1EC385A7;
+	Sun, 24 Apr 2022 13:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1650805335;
+	bh=jdW2GLO3VeG8C4KGHY8tjnorAW+qhR75JPlEhHE0M+I=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=Ahv9oXOeaQBvpcRLwDdW/H5LngYVOl/lEqqw6J6C0OpiFw+0608qi2PyyWQQQNrg3
+	 RUpauVxy8XFWOhASdITKbmub8klCs8yMtp0+dDdPTNFX947Ql/VLjHJxVPnOEmdMWt
+	 XXxZBedJDkqvPggWWwx4IUSmZ3QzNFprJF7Z2L/Q5jZ1xI+d3WdKaeHCzFV0VxF6tw
+	 OBfJx//qtNOlErwdc/vuJDrOFsJtV350qSBQQixpBfWlBcwt94FkZzr9m7J/uOzbbA
+	 wCF7bcdWIdKIBWUJ25GNfBW5mIOwmYod/MLrKCpal42+u8CIrW+2T7gxEf4VygwEFP
+	 nG6ZjwVGUerJg==
+Date: Sun, 24 Apr 2022 21:02:07 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: Marcel Ziswiler <marcel@ziswiler.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, mturquette@baylibre.com, shawnguo@kernel.org,
- s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
- aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org,
- daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
- olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
- dev@lynxeye.de, marcel.ziswiler@toradex.com, tharvey@gateworks.com,
- leoyang.li@nxp.com, sebastian.reichel@collabora.com,
- cniedermaier@dh-electronics.com, clin@suse.com,
- giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
- <20220326144313.673549-9-Mr.Bossman075@gmail.com>
- <20220423030331.0E85CC385A0@smtp.kernel.org>
-From: Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <20220423030331.0E85CC385A0@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: linux-arm-kernel@lists.infradead.org,
+	Denys Drozdov <denys.drozdov@toradex.com>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	NXP Linux Team <linux-imx@nxp.com>, Olof Johansson <olof@lixom.net>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: Re: [PATCH v1 10/14] ARM: dts: imx6ull-colibri: add support for
+ toradex iris carrier boards
+Message-ID: <20220424130207.GU391514@dragon>
+References: <20220414085106.18621-1-marcel@ziswiler.com>
+ <20220414085106.18621-11-marcel@ziswiler.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414085106.18621-11-marcel@ziswiler.com>
 
+On Thu, Apr 14, 2022 at 10:51:02AM +0200, Marcel Ziswiler wrote:
+> From: Denys Drozdov <denys.drozdov@toradex.com>
+> 
+> Add support for Toradex Iris, small form-factor Pico-ITX Colibri Arm
+> Computer Module family carrier boards.
+> 
+> Iris Device Trees:
+> - imx6ull-colibri-iris.dtb
+> - imx6ull-colibri-emmc-iris.dtb
+> - imx6ull-colibri-wifi-iris.dtb
+> 
+> Iris-V2 Device Trees:
+> - imx6ull-colibri-iris-v2.dtb
+> - imx6ull-colibri-emmc-iris-v2.dtb
+> - imx6ull-colibri-wifi-iris-v2.dtb
+> 
+> Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> ---
+> 
+>  arch/arm/boot/dts/Makefile                    |   6 +
+>  .../boot/dts/imx6ull-colibri-emmc-iris-v2.dts |  17 +++
+>  .../boot/dts/imx6ull-colibri-emmc-iris.dts    |  17 +++
+>  .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     |   4 +-
+>  arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts |   6 +-
+>  .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi |   5 +-
+>  arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts |  28 ++++
+>  .../arm/boot/dts/imx6ull-colibri-iris-v2.dtsi |  27 ++++
+>  arch/arm/boot/dts/imx6ull-colibri-iris.dts    |  20 +++
+>  arch/arm/boot/dts/imx6ull-colibri-iris.dtsi   | 132 ++++++++++++++++++
+>  .../arm/boot/dts/imx6ull-colibri-nonwifi.dtsi |   4 +-
+>  .../boot/dts/imx6ull-colibri-wifi-eval-v3.dts |   4 +-
+>  .../boot/dts/imx6ull-colibri-wifi-iris-v2.dts |  28 ++++
+>  .../boot/dts/imx6ull-colibri-wifi-iris.dts    |  20 +++
+>  arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi   |   4 +-
+>  arch/arm/boot/dts/imx6ull-colibri.dtsi        |   4 +-
+>  16 files changed, 311 insertions(+), 15 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 252353fb4e3b..53b41ef092d9 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -705,8 +705,14 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+>  	imx6ul-tx6ul-mainboard.dtb \
+>  	imx6ull-14x14-evk.dtb \
+>  	imx6ull-colibri-emmc-eval-v3.dtb \
+> +	imx6ull-colibri-emmc-iris.dtb \
+> +	imx6ull-colibri-emmc-iris-v2.dtb \
+>  	imx6ull-colibri-eval-v3.dtb \
+> +	imx6ull-colibri-iris.dtb \
+> +	imx6ull-colibri-iris-v2.dtb \
+>  	imx6ull-colibri-wifi-eval-v3.dtb \
+> +	imx6ull-colibri-wifi-iris.dtb \
+> +	imx6ull-colibri-wifi-iris-v2.dtb \
+>  	imx6ull-jozacp.dtb \
+>  	imx6ull-myir-mys-6ulx-eval.dtb \
+>  	imx6ull-opos6uldev.dtb \
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
+> new file mode 100644
+> index 000000000000..b9060c2f7977
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
+> @@ -0,0 +1,17 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2022 Toradex
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx6ull-colibri-emmc-nonwifi.dtsi"
+> +#include "imx6ull-colibri-iris-v2.dtsi"
+> +
+> +/ {
+> +	model = "Toradex Colibri iMX6ULL 1G (eMMC) on Colibri Iris V2";
+> +	compatible = "toradex,colibri-imx6ull-iris-v2",
+> +		     "toradex,colibri-imx6ull-emmc",
+> +		     "toradex,colibri-imx6ull",
+> +		     "fsl,imx6ull";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
+> new file mode 100644
+> index 000000000000..0ab71f2f5daa
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
+> @@ -0,0 +1,17 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2022 Toradex
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx6ull-colibri-emmc-nonwifi.dtsi"
+> +#include "imx6ull-colibri-iris.dtsi"
+> +
+> +/ {
+> +	model = "Toradex Colibri iMX6ULL 1GB (eMMC) on Colibri Iris";
+> +	compatible = "toradex,colibri-imx6ull-emmc-iris",
+> +		     "toradex,colibri-imx6ull-emmc",
+> +		     "toradex,colibri-imx6ull",
+> +		     "fsl,imx6ull";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+> index a099abfdfa27..1d75bc671f75 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: GPL-2.0+ OR MIT
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2021 Toradex
+> + * Copyright 2022 Toradex
+>   */
+>  
+>  #include "imx6ull-colibri.dtsi"
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts
+> index 08669a18349e..9bf7111d7b00 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2018 Toradex AG
+> + * Copyright 2018-2022 Toradex
+>   */
+>  
+>  /dts-v1/;
+> @@ -9,6 +9,6 @@
+>  #include "imx6ull-colibri-eval-v3.dtsi"
+>  
+>  / {
+> -	model = "Toradex Colibri iMX6ULL 256MB on Colibri Evaluation Board V3";
+> +	model = "Toradex Colibri iMX6ULL 256/512MB on Colibri Evaluation Board V3";
+>  	compatible = "toradex,colibri-imx6ull-eval", "fsl,imx6ull";
+>  };
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+> index 3c07b4273e80..08197c66af12 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2017 Toradex AG
+> + * Copyright 2017-2022 Toradex
+>   */
+>  
+>  / {
+> @@ -121,6 +121,7 @@ &uart5 {
+>  };
+>  
+>  &usbotg1 {
+> +	vbus-supply = <&reg_usbh_vbus>;
+>  	status = "okay";
+>  };
+>  
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
+> new file mode 100644
+> index 000000000000..47940a4ba6e6
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
+> @@ -0,0 +1,28 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2018-2022 Toradex
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx6ull-colibri-nonwifi.dtsi"
+> +#include "imx6ull-colibri-iris-v2.dtsi"
+> +
+> +/ {
+> +	model = "Toradex Colibri iMX6ULL 256M/512B on Colibri Iris V2";
+> +	compatible = "toradex,colibri-imx6ull-iris-v2",
+> +		     "toradex,colibri-imx6ull",
+> +		     "fsl,imx6ull";
+> +};
+> +
+> +&atmel_mxt_ts {
+> +	status = "okay";
+> +};
+> +
+> +&gpio1 {
+> +	lvds_tx_on {
+> +		gpio-hog;
+> +		gpios = <14 GPIO_ACTIVE_HIGH>;
+> +		output-high;
+> +	};
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
+> new file mode 100644
+> index 000000000000..93649cad0cc0
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2018-2022 Toradex
+> + */
+> +
+> +#include "imx6ull-colibri-iris.dtsi"
+> +
+> +/ {
+> +	reg_3v3_vmmc: regulator-3v3-vmmc {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "3v3_vmmc";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpio = <&gpio1 26 GPIO_ACTIVE_HIGH>;
+> +		startup-delay-us = <100>;
+> +		enable-active-high;
+> +	};
+> +};
+> +
+> +
+> +&usdhc1 {
+> +	cap-power-off-card;
+> +	vmmc-supply = <&reg_3v3_vmmc>;
+> +	/delete-property/ keep-power-in-suspend;
+> +	/delete-property/ no-1-8-v;
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris.dts b/arch/arm/boot/dts/imx6ull-colibri-iris.dts
+> new file mode 100644
+> index 000000000000..4fb97b0fe30b
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-iris.dts
+> @@ -0,0 +1,20 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2018-2022 Toradex
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx6ull-colibri-nonwifi.dtsi"
+> +#include "imx6ull-colibri-iris.dtsi"
+> +
+> +/ {
+> +	model = "Toradex Colibri iMX6ULL 256/512MB on Colibri Iris";
+> +	compatible = "toradex,colibri-imx6ull-iris",
+> +		     "toradex,colibri-imx6ull",
+> +		     "fsl,imx6ull";
+> +};
+> +
+> +&atmel_mxt_ts {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi b/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
+> new file mode 100644
+> index 000000000000..eb30353e7fa8
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
+> @@ -0,0 +1,132 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2018-2022 Toradex
+> + */
+> +
+> +/ {
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_snvs_gpiokeys>;
+> +
+> +		power {
+> +			label = "Wake-Up";
+> +			gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
+> +			linux,code = <KEY_WAKEUP>;
+> +			debounce-interval = <10>;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	reg_3v3: regulator-3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "3.3V";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +	};
+> +
+> +	reg_5v0: regulator-5v0 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "5V";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +	};
+> +
+> +	reg_usbh_vbus: regulator-usbh-vbus {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_usbh_reg>;
+> +		regulator-name = "VCC_USB[1-4]";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		gpio = <&gpio1 2 GPIO_ACTIVE_LOW>;
+> +		vin-supply = <&reg_5v0>;
+> +	};
+> +};
+> +
+> +&adc1 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +	status = "okay";
+> +
+> +	/* M41T0M6 real time clock on carrier board */
+> +	m41t0m6: rtc@68 {
+> +		compatible = "st,m41t0";
+> +		reg = <0x68>;
+> +	};
+> +};
+> +
+> +/* PWM <A> */
+> +&pwm4 {
+> +	status = "okay";
+> +};
+> +
+> +/* PWM <B> */
+> +&pwm5 {
+> +	status = "okay";
+> +};
+> +
+> +/* PWM <C> */
+> +&pwm6 {
+> +	status = "okay";
+> +};
+> +
+> +/* PWM <D> */
+> +&pwm7 {
+> +	status = "okay";
+> +};
+> +
+> +&uart1 {
+> +	status = "okay";
+> +};
+> +
+> +&uart2 {
+> +	status = "okay";
+> +};
+> +
+> +&uart5 {
+> +	status = "okay";
+> +};
+> +
+> +&usbotg1 {
+> +	vbus-supply = <&reg_usbh_vbus>;
+> +	status = "okay";
+> +};
+> +
+> +&usbotg2 {
+> +	vbus-supply = <&reg_usbh_vbus>;
+> +	status = "okay";
+> +};
+> +
+> +&usdhc1 {
+> +	vmmc-supply = <&reg_3v3>;
+> +	status = "okay";
+> +};
+> +
+> +&gpio1 {
 
+Break alphabetical order.
 
-On 4/22/22 23:03, Stephen Boyd wrote:
-> Quoting Jesse Taube (2022-03-26 07:43:09)
->> diff --git a/drivers/clk/imx/clk-imxrt1170.c b/drivers/clk/imx/clk-imxrt1170.c
->> new file mode 100644
->> index 000000000000..041aea3d4b02
->> --- /dev/null
->> +++ b/drivers/clk/imx/clk-imxrt1170.c
->> @@ -0,0 +1,391 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
->> +/*
->> + * Copyright (C) 2022
->> + * Author(s):
->> + * Jesse Taube <Mr.Bossman075@gmail.com>
->> + */
->> +#include <linux/clk.h>
->> +#include <linux/of_address.h>
+Shawn
+
+> +	/*
+> +	 * uart25_tx_on turns the UART transceiver on. If one wants to turn the
+> +	 * transceiver off, that property has to be deleted and the gpio handled
+> +	 * in userspace.
+> +	 * The same applies to uart1_tx_on.
+> +	 */
+> +	uart25_tx_on {
+> +		gpio-hog;
+> +		gpios = <15 0>;
+> +		output-high;
+> +	};
+> +};
+> +
+> +&gpio2 {
+> +	uart1_tx_on {
+> +		gpio-hog;
+> +		gpios = <7 0>;
+> +		output-high;
+> +	};
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
+> index 60f169227ad9..88901db255d6 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2018 Toradex AG
+> + * Copyright 2018-2022 Toradex
+>   */
+>  
+>  #include "imx6ull-colibri.dtsi"
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts
+> index df72ce1ae2cb..1d64d1a5d8a7 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2018 Toradex AG
+> + * Copyright 2018-2022 Toradex
+>   */
+>  
+>  /dts-v1/;
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
+> new file mode 100644
+> index 000000000000..ea610141a8bf
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
+> @@ -0,0 +1,28 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2018-2022 Toradex
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx6ull-colibri-wifi.dtsi"
+> +#include "imx6ull-colibri-iris-v2.dtsi"
+> +
+> +/ {
+> +	model = "Toradex Colibri iMX6ULL 512MB on Colibri Iris V2";
+> +	compatible = "toradex,colibri-imx6ull-wifi-iris-v2",
+> +		     "toradex,colibri-imx6ull",
+> +		     "fsl,imx6ull";
+> +};
+> +
+> +&atmel_mxt_ts {
+> +	status = "okay";
+> +};
+> +
+> +&gpio1 {
+> +	lvds_tx_on {
+> +		gpio-hog;
+> +		gpios = <14 GPIO_ACTIVE_HIGH>;
+> +		output-high;
+> +	};
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
+> new file mode 100644
+> index 000000000000..5ac1aa298ce7
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
+> @@ -0,0 +1,20 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Copyright 2018-2022 Toradex
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "imx6ull-colibri-wifi.dtsi"
+> +#include "imx6ull-colibri-iris.dtsi"
+> +
+> +/ {
+> +	model = "Toradex Colibri iMX6ULL 512MB on Colibri Iris";
+> +	compatible = "toradex,colibri-imx6ull-wifi-iris",
+> +		     "toradex,colibri-imx6ull",
+> +		     "fsl,imx6ull";
+> +};
+> +
+> +&atmel_mxt_ts {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
+> index 3c47cfa7afa5..db59ee6b1c86 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
+> +++ b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2018 Toradex AG
+> + * Copyright 2018-2022 Toradex
+>   */
+>  
+>  #include "imx6ull-colibri.dtsi"
+> diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
+> index a1e26ac4d1e7..59731ae7d04d 100644
+> --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
+> +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
+> @@ -1,6 +1,6 @@
+> -// SPDX-License-Identifier: GPL-2.0+ OR MIT
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>  /*
+> - * Copyright 2018-2021 Toradex
+> + * Copyright 2018-2022 Toradex
+>   */
+>  
+>  #include "imx6ull.dtsi"
+> -- 
+> 2.35.1
 > 
-> Is this include used?
-> 
-Yes `of_iomap`
->> +#include <linux/of_irq.h>
-> 
-> Is this include used?
-> 
-No, but includes
-#include <linux/slab.h>
-for `kzalloc`
->> +#include <linux/platform_device.h>
-> 
-> Need to include clk-provider.h
-> 
->> +#include <dt-bindings/clock/imxrt1170-clock.h>
->> +
->> +#include "clk.h"
->> +
->> +#define CLOCK_MUX_DEFAULT "rcosc48M_div2", "osc", "rcosc400M", "rcosc16M"
->> +
->> +#define LPCG_GATE(gate) (0x6000 + (gate * 0x20))
->> +
->> +#define DEF_CLOCK(flags, macro, name) \
->> +do { \
->> +       hws[macro##_SEL] = imx_clk_hw_mux(#name"_sel", ccm_base + (name * 0x80), \
->> +               8, 3, root_clocks[name], 8); \
->> +       hws[macro##_GATE] = imx_clk_hw_gate_dis_flags(#name"_gate", #name"_sel", \
->> +               ccm_base + (name * 0x80), 24, flags); \
->> +       hws[macro] = imx_clk_hw_divider(#name, #name"_gate", ccm_base + (name * 0x80), 0, 8); \
->> +} while (0)
->> +
->> +enum root_clock_names {
->> +       m7,             /* root clock m7. */
-> 
-> Is the comment adding any value? It has the enum name after "root clock"
-> and the enum is "root_clock_names" so it looks very obvious.
-> 
->> +       m4,             /* root clock m4. */
->> +       bus,            /* root clock bus. */
->> +       bus_lpsr,       /* root clock bus lpsr. */
-> [...]
->> +       end,            /* root clock end. */
->> +};
->> +
->> +static const char * const root_clocks[79][8] = {
->> +       {CLOCK_MUX_DEFAULT, "pll_arm", "pll1_sys", "pll3_sys", "pll_video"},
-> 
-> Space after { and before }
-> 
->> +       {CLOCK_MUX_DEFAULT, "pll3_pfd3", "pll3_sys", "pll2_sys", "pll1_div5"},
->> +       {CLOCK_MUX_DEFAULT, "pll3_sys", "pll1_div5", "pll2_sys", "pll2_pfd3"},
-> [...]
->> +       {CLOCK_MUX_DEFAULT, "pll2_pfd3", "rcosc48M", "pll3_pfd1", "pll_audio"}
->> +};
->> +
->> +static const char * const pll_arm_mux[] = {"pll_arm_pre", "osc"};
->> +static const char * const pll3_mux[] = {"pll3_pre", "osc"};
->> +static const char * const pll2_mux[] = {"pll2_pre", "osc"};
->> +
->> +static const struct clk_div_table post_div_table[] = {
->> +       { .val = 3, .div = 1, },
->> +       { .val = 2, .div = 8, },
->> +       { .val = 1, .div = 4, },
->> +       { .val = 0, .div = 2, },
->> +       { }
->> +};
->> +
->> +static struct clk_hw **hws;
->> +static struct clk_hw_onecell_data *clk_hw_data;
-> 
-> Do either of these need to be static global variables? They could be
-> local function pointers allocated on the heap (like they already are).
-> 
->> +
->> +static int imxrt1170_clocks_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +       hws[IMXRT1170_CLK_PLL2_PFD3] = imx_clk_hw_pfd("pll2_pfd3", "pll2_sys", pll_base + 0x270, 3);
->> +
->> +       /* CCM clocks */
->> +       ccm_base = devm_platform_ioremap_resource(pdev, 0);
->> +       if (WARN_ON(IS_ERR(ccm_base)))
->> +               return PTR_ERR(ccm_base);
->> +
->> +       DEF_CLOCK(CLK_IS_CRITICAL, IMXRT1170_CLK_M7, m7);
-> 
-> Don't have macros do things to variables that are in global scope. It
-> makes things very non-obvious. Instead, pass hw to the macro, or better
-> yet make a static inline function and let the compiler decide to inline
-> it or not.
-> 
->> +       DEF_CLOCK(CLK_IS_CRITICAL, IMXRT1170_CLK_M4, m4);
-> [...]
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CSI2_UI, csi2_ui);
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CSI, csi);
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CKO1, cko1);
->> +       DEF_CLOCK(0, IMXRT1170_CLK_CKO2, cko2);
->> +
->> +       hws[IMXRT1170_CLK_USB] = imx_clk_hw_gate("usb", "bus", ccm_base + LPCG_GATE(115), 0);
->> +
->> +       clk_set_rate(hws[IMXRT1170_CLK_PLL_ARM]->clk, 90000000);
-> 
-> Use assigned-clock-rates?
-> 
->> +
->> +       imx_check_clk_hws(hws, IMXRT1170_CLK_END);
