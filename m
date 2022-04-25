@@ -1,343 +1,125 @@
-Return-Path: <SRS0=mCLW=VD=ziswiler.com=marcel@kernel.org>
+Return-Path: <SRS0=ZGDJ=VD=foss.st.com=prvs=011448a4c9=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58557C433EF
-	for <soc@archiver.kernel.org>; Mon, 25 Apr 2022 16:24:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 427D8C433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Apr 2022 17:21:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42A4FC385A7; Mon, 25 Apr 2022 16:24:51 +0000 (UTC)
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+	id F30A8C385A9; Mon, 25 Apr 2022 17:21:33 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2AC43C385AD;
-	Mon, 25 Apr 2022 16:24:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2AC43C385AD
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ziswiler.com
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M5dpW-1o71aO2Im0-00xYXo;
- Mon, 25 Apr 2022 18:24:37 +0200
-From: Marcel Ziswiler <marcel@ziswiler.com>
-To: linux-arm-kernel@lists.infradead.org
-List-Id: <soc.lore.kernel.org>
-Cc: Denys Drozdov <denys.drozdov@toradex.com>,
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Olof Johansson <olof@lixom.net>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org
-Subject: [PATCH v2 10/14] ARM: dts: imx6ull-colibri: add support for toradex aster carrier boards
-Date: Mon, 25 Apr 2022 18:23:52 +0200
-Message-Id: <20220425162356.176665-11-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220425162356.176665-1-marcel@ziswiler.com>
-References: <20220425162356.176665-1-marcel@ziswiler.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 7AD6BC385A4;
+	Mon, 25 Apr 2022 17:21:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7AD6BC385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PBOxh9026633;
+	Mon, 25 Apr 2022 19:21:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Aleh7166rh9D1CmXqz7MI/E+eg7HPpeG/MxMJeFQSsM=;
+ b=kJsqvJYBRQqqU9XDdwl18vaz1jVFYpTYb47kTfUsHumkTHAzWJibNIrpmP/txG+L7YEq
+ 3+EH0khKDBLVO6d+JqbJetuBXOaf4wi+mtuVdby3YU04bg1VcDIyCNp3NAcXmtnr7gUv
+ p6HVC9c9cYVHgB/pFhcyUHiSEp58LTAii4nMbLG9imoBcutlztv6X3JVUuVr+apeegP6
+ kKG/P67N7fjo1RLpftCaIC3aqN10pyKysadS+xCqoDUag2FMtV09ygCksyhnqhXtWCda
+ y/yyURSLZhzQfoyp3l7uMzy4XL7qGN5yfHrjjcnWI+mme1xbbZJTZJldA6gTKdJB4LVi kg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fm6k92fqw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Apr 2022 19:21:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CE57410002A;
+	Mon, 25 Apr 2022 19:21:19 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A982524551E;
+	Mon, 25 Apr 2022 19:21:19 +0200 (CEST)
+Received: from [10.211.4.234] (10.75.127.51) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 25 Apr
+ 2022 19:21:18 +0200
+Message-ID: <c8f0436d-3389-04bb-089d-aca4b4d8d7fd@foss.st.com>
+Date: Mon, 25 Apr 2022 19:21:17 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/8] dt-bindings: rcc: Add optional external ethernet RX
+ clock properties
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Marek Vasut <marex@denx.de>, <arnd@arndb.de>, <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>, <soc@kernel.org>,
+        Stephen Boyd
+	<sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        <etienne.carriere@st.com>
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-2-alexandre.torgue@foss.st.com>
+ <7d365d28-66ac-93d4-72b5-87d0b36ba017@denx.de>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <7d365d28-66ac-93d4-72b5-87d0b36ba017@denx.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Hzr4iHc16kut1SNComZgrRs7isdK2Ry5z8GurKHUydqJTTC1fQT
- ZKtj/cM4MAoNy294udAHPQDujvE7B+/A5GwSy3sYlCODuKxzV9KzRMBv+rizSOAQISv2WrQ
- cRlqd/90TWZFQWzUefnF4XdmkZmxriN7gAjQIUUSYzhuo/akePzPpWTE/2hlBZ8Emi2MNnq
- KqqmlK742DIUsOwF1gAfw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L27nKVNhx7s=:k5VF5uqJSuiihzASpAUSa2
- 0xiET0q86BMaG7NqS1vqcZCk55y38oyUUXY6juSRcuAUrCHm944CcieqVv1C+9jMM/ysWKcbE
- P6FWeP17t/fjlw5CseTUX6uc9ZKoluMUWPf+Os8wC1i5suHvSR80HuHwcM9yuOEKRjT9+xoY3
- QfZbbXZtJYRHhQE41JSgNH9THv6KOqiZoNld/+89+TG49WYaK7AkF7nIuKcNS/eQCec1isdcj
- NQ02UBo2M+l8tWUayNTL+dJLngb1UwT7OyzqBMlmS56ssWpZqw8nTlo7Z8J+vOhzQAz94x2FK
- FiZy96X1QZKtzdGsNOVg3MRkXDGJemAbQgFD3w850jb1V2LKzvhrP9VyZBr3+tGJFNe8P5W0D
- gAuZ7DoGTDorUfI0z+gCQDo3vj7sgAJHn/oomr4ds3CpIGcGqBNKNi9ppITYCmGVp1RY/P5fn
- idcfiCvvkBjlheMMPb7nmnqC5+ul+O6ALalWICJRuKBJmMOtgsyQrjLdHUSEtRuR7gU1xw913
- oxlmfJn//lmv5WlC0gOuHX0KGqTZgaFhpKzoFhJ/aOdoKtydaIdgeoOqo+zkPkTononilpNpu
- S5fUIT58dOdNajy79NIs6Rz8CeCi/wXieM1EBBJGy/qHcbswz+tuE2sxbU2c0/9d0hGLeXGK9
- 9FGvbju1kMUmalllbXaZ/i5vDSGV2gLoNnwI6UWW7XNw1d9ItItmyVfSVca4s5nHjShE=
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-25_09,2022-04-25_03,2022-02-23_01
 
-From: Denys Drozdov <denys.drozdov@toradex.com>
+Hi Marek
 
-Add support for Toradex Aster, small form-factor Colibri Arm
-Computer Module family carrier board.
+On 4/22/22 18:28, Marek Vasut wrote:
+> On 4/22/22 17:09, Alexandre Torgue wrote:
+>> From: Marek Vasut <marex@denx.de>
+>>
+>> Describe optional external ethernet RX clock in the DT binding
+>> to fix dtbs_check warnings like:
+>>
+>> arch/arm/boot/dts/stm32mp153c-dhcom-drc02.dt.yaml: rcc@50000000: 
+>> 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks', 
+>> 'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+>>
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+>> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>> Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> To: devicetree@vger.kernel.org
+>> Acked-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml 
+>> b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+>> index a0ae4867ed27..7a251264582d 100644
+>> --- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+>> @@ -59,6 +59,14 @@ properties:
+>>             - st,stm32mp1-rcc
+>>         - const: syscon
+>> +  clocks:
+>> +    description:
+>> +      Specifies the external RX clock for ethernet MAC.
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    const: ETH_RX_CLK/ETH_REF_CLK
+>> +
+>>     reg:
+>>       maxItems: 1
+> 
+> Should this patch be part of this series, maybe this was re-sent by 
+> accident ?
 
-Aster Device Trees:
-- imx6ull-colibri-aster.dtb
-- imx6ull-colibri-emmc-aster.dtb
-- imx6ull-colibri-wifi-aster.dtb
+Not by accident. As your patch is already merged in Rob tree (I guess), 
+I added it in this series to avoid merge conflict later. I added a late 
+note in the cover-letter.
 
-Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-
----
-
-Changes in v2:
-- Dropped [PATCH v1 02/14] ARM: dts: imx6ull-colibri: fix vqmmc
-  regulator which already got applied by Shawn. Thanks!
-
- arch/arm/boot/dts/Makefile                    |   3 +
- arch/arm/boot/dts/imx6ull-colibri-aster.dts   |  20 +++
- arch/arm/boot/dts/imx6ull-colibri-aster.dtsi  | 145 ++++++++++++++++++
- .../boot/dts/imx6ull-colibri-emmc-aster.dts   |  17 ++
- .../boot/dts/imx6ull-colibri-wifi-aster.dts   |  20 +++
- 5 files changed, 205 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-aster.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 727aa78443e1..011f0747fdb2 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -706,12 +706,15 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
- 	imx6ul-tx6ul-0011.dtb \
- 	imx6ul-tx6ul-mainboard.dtb \
- 	imx6ull-14x14-evk.dtb \
-+	imx6ull-colibri-aster.dtb \
-+	imx6ull-colibri-emmc-aster.dtb \
- 	imx6ull-colibri-emmc-eval-v3.dtb \
- 	imx6ull-colibri-emmc-iris.dtb \
- 	imx6ull-colibri-emmc-iris-v2.dtb \
- 	imx6ull-colibri-eval-v3.dtb \
- 	imx6ull-colibri-iris.dtb \
- 	imx6ull-colibri-iris-v2.dtb \
-+	imx6ull-colibri-wifi-aster.dtb \
- 	imx6ull-colibri-wifi-eval-v3.dtb \
- 	imx6ull-colibri-wifi-iris.dtb \
- 	imx6ull-colibri-wifi-iris-v2.dtb \
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-aster.dts b/arch/arm/boot/dts/imx6ull-colibri-aster.dts
-new file mode 100644
-index 000000000000..d3f2fb7c6c1e
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-aster.dts
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2017-2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-nonwifi.dtsi"
-+#include "imx6ull-colibri-aster.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 256/512MB on Colibri Aster";
-+	compatible = "toradex,colibri-imx6ull-aster",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-aster.dtsi b/arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
-new file mode 100644
-index 000000000000..c9133ba2d705
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2017-2022 Toradex
-+ */
-+
-+/ {
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_snvs_gpiokeys>;
-+
-+		power {
-+			label = "Wake-Up";
-+			gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
-+			linux,code = <KEY_WAKEUP>;
-+			debounce-interval = <10>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	reg_3v3: regulator-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "3.3V";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	reg_5v0: regulator-5v0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "5V";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_usbh_vbus: regulator-usbh-vbus {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbh_reg>;
-+		regulator-name = "VCC_USB[1-4]";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio1 2 GPIO_ACTIVE_LOW>;
-+		vin-supply = <&reg_5v0>;
-+	};
-+};
-+
-+&adc1 {
-+	status = "okay";
-+};
-+
-+&ecspi1 {
-+	status = "okay";
-+
-+	num-cs = <2>;
-+	cs-gpios = <
-+		&gpio3 26 GPIO_ACTIVE_HIGH /* SODIMM 86 LCD_DATA21 */
-+		&gpio4 28 GPIO_ACTIVE_HIGH /* SODIMM 65 CSI_DATA07 */
-+	>;
-+};
-+
-+/*
-+ * Following SODIMM Pins should not be accessed as GPIO on Aster board:
-+ * 134 - AIN5_SCL (no connection)
-+ * 127 - Voltage Level Translator OE# signal (IC11 and IC12)
-+ *
-+ * To configure GPIO to LED5, please disable FEC2 and uncomment the following:
-+ *	&iomuxc {
-+ *		pinctrl-names = "default";
-+ *		pinctrl-0 = <
-+ *			&pinctrl_gpio1
-+ *			&pinctrl_gpio2
-+ *			&pinctrl_gpio3
-+ *			&pinctrl_gpio4
-+ *			&pinctrl_gpio6 - for non-WiFi modules only
-+ *			&pinctrl_gpio7
-+ *			&pinctrl_gpio_aster
-+ *		>;
-+ *
-+ *		pinctrl_gpio_aster: gpio-aster {
-+ *			fsl,pins = <
-+ *				MX6UL_PAD_GPIO1_IO07__GPIO1_IO07    0x1b0b0
-+ *			>;
-+ *		};
-+ *  };
-+ */
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	m41t0m6: rtc@68 {
-+		compatible = "st,m41t0";
-+		reg = <0x68>;
-+	};
-+};
-+
-+/* PWM <A> */
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+/* PWM <B> */
-+&pwm5 {
-+	status = "okay";
-+};
-+
-+/* PWM <C> */
-+&pwm6 {
-+	status = "okay";
-+};
-+
-+/* PWM <D> */
-+&pwm7 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&usbotg1 {
-+	vbus-supply = <&reg_usbh_vbus>;
-+	status = "okay";
-+};
-+
-+&usbotg2 {
-+	vbus-supply = <&reg_usbh_vbus>;
-+	status = "okay";
-+};
-+
-+&usdhc1 {
-+	vmmc-supply = <&reg_3v3>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
-new file mode 100644
-index 000000000000..919c0464d6cb
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-emmc-nonwifi.dtsi"
-+#include "imx6ull-colibri-aster.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 1GB (eMMC) on Colibri Aster";
-+	compatible = "toradex,colibri-imx6ull-emmc-aster",
-+		     "toradex,colibri-imx6ull-emmc",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
-new file mode 100644
-index 000000000000..b4f65e8c5857
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2017-2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-wifi.dtsi"
-+#include "imx6ull-colibri-aster.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 512MB on Colibri Aster";
-+	compatible = "toradex,colibri-imx6ull-wifi-aster",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
--- 
-2.35.1
-
+regards
+alex
