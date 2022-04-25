@@ -1,112 +1,118 @@
-Return-Path: <SRS0=zm63=VD=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=Tx7w=VD=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C08C433F5
-	for <soc@archiver.kernel.org>; Mon, 25 Apr 2022 11:51:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E762C433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Apr 2022 11:55:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 91198C385AD; Mon, 25 Apr 2022 11:51:08 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 59502C385AD; Mon, 25 Apr 2022 11:55:57 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A5C33C385A7;
-	Mon, 25 Apr 2022 11:51:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5C33C385A7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id k2so15344wrd.5;
-        Mon, 25 Apr 2022 04:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9EscMvNq76GeUom/FtzlsqDl8sdOCj3rZo00CWoiuwA=;
-        b=F7CeinsqS7wotCIbiDe0PSdED/m/nEhij5VdSZwAPlpQo/wUAA6kvkSFvCh1Sj7DoG
-         I+Y/7wtJdsRBk/txmwJv+E+Jmm+RvsNoCjLEWMfZ6zj7g4L1DW0nQMZlFOK+vH9eE3zq
-         PJP4gOEJ5i2+IuFKrf6eIJZTX0yRiYqn7rfAjkQF58tv3+sA2KEIRxqACfhrn5gXjgc2
-         k3zdEaAuqNa2jxuwV3XYiLwM97lJ50Y6uUEYvTs+v/RjlVbOxHs3ND35GqFby9PFQU9g
-         qNUJJ7URS8t+02Dh+OAf2PxXIXKq/oNOlq+B29sD6fa37eTGVJTR9pDnIw+Cl1yXMVRd
-         lbMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9EscMvNq76GeUom/FtzlsqDl8sdOCj3rZo00CWoiuwA=;
-        b=Kz5KBM951qmsO7NyXbCeTfrKgopxqDMekpARpS/SYT48yIFNnMqH+FbSJE7HOeHjoc
-         CSNo+ReUdHLp/pyTXpfpo1oevIHeFygZfOfZus17uHkguyRzWv9l0h3B7scCdEKs4iXM
-         uSpi6xLnMjbxPeBROcXfpB3XN5tLCO1pqeP2EJAgRhw1hVM4rnlRBoV4qrxz/fLAGQJo
-         XRR0iN4hG2ydvFkGl8lQxZMRsaKZji5hGAm/VcmZdfg5e6TFYysu/TGQcnkTmXWAoQr3
-         KJywGKSm6TV4Wp1lVkjO3W6G7Ibtzy2Bblc8tYUiGncYS7tudp+0ViLAArR0526IfV1U
-         Lg1w==
-X-Gm-Message-State: AOAM531JVDnAM/pL7cNNL0qYvgpp9d4aZOC+8j41WywCET/Ou8hK+7rQ
-	ZE/WybSwgIvDaXk7efYusWWr6ypOLUQslQ==
-X-Google-Smtp-Source: ABdhPJx5UVMEI7qk+X/GYHCw8s1oJwyJxDKu2qUGV9WU7GKqAoeY+izqW35kJFgowSEYipjDWNs+cA==
-X-Received: by 2002:a5d:4a0a:0:b0:20a:c899:cb7b with SMTP id m10-20020a5d4a0a000000b0020ac899cb7bmr13446037wrq.618.1650887465776;
-        Mon, 25 Apr 2022 04:51:05 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e5ca446bcsm11573603wmp.5.2022.04.25.04.51.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 04:51:05 -0700 (PDT)
-Message-ID: <20650a35-5392-43fa-8b70-902eea860d92@gmail.com>
-Date: Mon, 25 Apr 2022 13:51:04 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 7EE18C385A7;
+	Mon, 25 Apr 2022 11:55:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7EE18C385A7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N5FxN-1nqtQq1lsT-01172y; Mon, 25 Apr 2022 13:55:53 +0200
+Received: by mail-wr1-f43.google.com with SMTP id t6so17032974wra.4;
+        Mon, 25 Apr 2022 04:55:53 -0700 (PDT)
+X-Gm-Message-State: AOAM530tvox2KlvbS21kOOddCdCNOgZMzsn0n4GPU1wFIH3nw1RLSLle
+	mZ/6IQZQIT6VmfdHwYj8u2YU6TFuVtSFwuC1W6c=
+X-Google-Smtp-Source: ABdhPJy6G1KFbKHEzOAredhlniFlHgR99fdfjjNVGzWiR1NENqqdvyAlm9QrDNMIfUNAfKR7gKHmCTAe8oiy/GkxXHY=
+X-Received: by 2002:a5d:6da5:0:b0:20a:8805:6988 with SMTP id
+ u5-20020a5d6da5000000b0020a88056988mr13310843wrs.317.1650887753050; Mon, 25
+ Apr 2022 04:55:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 3/6] ARM: dts: add clock support for Airoha EN7523
-Content-Language: en-US
+References: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org> <YlVAy95eF/9b1nmu@orome> <c5fad2c0-598d-a90c-5272-398ce48399fe@nvidia.com>
+In-Reply-To: <c5fad2c0-598d-a90c-5272-398ce48399fe@nvidia.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 25 Apr 2022 13:55:37 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1fyibqtkNMXDA6JXFWc2856B40C6oD8hBaieR8jTD-Ng@mail.gmail.com>
+Message-ID: <CAK8P3a1fyibqtkNMXDA6JXFWc2856B40C6oD8hBaieR8jTD-Ng@mail.gmail.com>
+Subject: Re: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with values
+To: Jon Hunter <jonathanh@nvidia.com>
 List-Id: <soc.lore.kernel.org>
-To: Felix Fietkau <nbd@nbd.name>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>
-Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220314084409.84394-1-nbd@nbd.name>
- <20220314084409.84394-4-nbd@nbd.name>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220314084409.84394-4-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: Thierry Reding <thierry.reding@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Bjorn Andersson <bjorn.andersson@linaro.org>, Avi Fishman <avifishman70@gmail.com>, 
+	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
+	Benjamin Fair <benjaminfair@google.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-stm32@st-md-mailman.stormreply.com, 
+	SoC Team <soc@kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:/UXDsTW0W4xfhNRmU/KiyTAJu5AP2EKGU80+EI0edQ5kdGa511J
+ hwqIifvjLaQCSUx3Dv99ps2KQmZJBPBz2qHurv39qe78baGg7IOffZ7iEycZ/zVSCexdfYp
+ tJstq102zc4gxT0KMV8niD2iAN4Fk6mRInIeYpnv2qhitTxWR4fm47ItnI1jXOXEiEcplj2
+ L0YfDfu/eJ0PhmJU/fsdA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XEjKoFGkr5A=:x61pR72G7pBijy3wBWRz2p
+ WSHJzuvfTGhvtPoW3lessAYJd9k2jdXlDYukdl9MS4moJCld1W1Y7sfeBucd1Dhh/EuJQNnBu
+ tRYuzSzmf6a4CM1EdzhLKITnpSUgRtwNFsag/RfM5Ke4scySfHDYLJSIXscj3IxWhuMzmZ/QO
+ uU5sTFf3FnvI22EX7bVUuhttUCvDCufcmatRIjC1psKpdSOwCGH1N8OjSOKhpmhrP7DbbD6f8
+ T5PlCxlnup2wMV1xVSFnlNC557+3JwNTSNmpEe8kKmcpcSRobyUb+0d25J1mY9g/sbFVLTKGE
+ RDf8acfwlxpRD/VwQFmfiu9LdMyXYljU/bacyQyw/haEPwPnXv1wgyzXAm7FJ7tfPNrmzeo7O
+ RljG61RZTAsxJoGGxaPiApl/TIcWLijkBT41YF66uvozgP7w1K5aApaMF0QXMZKiwkH+ej9Ny
+ 2pkukYcJVDZdUm9wSkXH0eZ06DIOoFVm/WV5mpJrerIWtn5qzVraueF5MbAxC1dzH/iR1xdmd
+ kStJ+W7IBQOm0vEQ4Dapfk4rYtQWDzTyv/a/ZX7bodLstbmh3dUU18bcgsili8gfXteuz97na
+ ARSnRK8EBY8llRSLbz5ruvzjeC+A0gFGysvVb6Y+9Wo3COJyLydK4YX/MqDQp6wi7clCUxW5o
+ 2fCmliU0Ko95+/dX9Neyw1YQ1zBjUVIj2Yy38j8U6UOA1kTnH85XPg+cECEFg54owDYU=
 
+On Mon, Apr 25, 2022 at 1:20 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+> On 12/04/2022 10:05, Thierry Reding wrote:
+> > On Wed, Apr 06, 2022 at 02:17:30PM -0500, Rob Herring wrote:
+> >> Boolean properties in DT are present or not present and don't take a value.
+> >> A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
+> >> matter.
+> >>
+> >> It may have been intended that 0 values are false, but there is no change
+> >> in behavior with this patch.
+> >>
+> >> Signed-off-by: Rob Herring <robh@kernel.org>
+> >> ---
+> >> Can someone apply this for 5.18.
+> >>
+> >>   arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
+> >>   .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
+> >>   arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
+> >>   arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
+> >>   arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
+> >>   arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
+> >>   arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
+> >>   arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
+> >>   8 files changed, 27 insertions(+), 27 deletions(-)
+> >
+> > This causes multiple regressions on Tegra boards. The reason for this is
+> > that these properties are not in fact boolean, despite what the DT
+> > bindings say. If you look at the code that handles these, you'll notice
+> > that they are single-cell properties, typically with <0> and <1> values.
+> > What may have led to the conclusion that these are boolean is that there
+> > is also a special case where these can be left out, but the meaning of
+> > that is not the "false" (<0>) value. Instead, leaving these out means
+> > that the values should be left at whatever is currently in the register.
+> >
+> > See pinconf_generic_parse_dt_config() and parse_dt_cfg() specifically in
+> > drivers/pinctrl/pinconf-generic.c.
+> >
+> > Arnd, can you please revert this so that these boards can be unbroken?
+>
+>
+> Arnd, any feedback on this? A lot of Tegra boards are still not booting
+> with v5.18-rc4.
 
+I have reverted this commit now, sorry for missing the earlier report.
+https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=arm/fixes
 
-On 14/03/2022 09:44, Felix Fietkau wrote:
-> This driver only registers fixed rate clocks, since the clocks are fully
-> initialized by the boot loader and should not be changed later, according
-> to Airoha.
-> 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> > Adding Bjorn for MSM, the Nuvoton and STM32 folks.
 
-Applied, thanks!
+I'll wait for the others to reply, but I do agree that these are likely broken
+as well. Could one of you propose a patch to make the binding
+describe what the kernel code actually expects here?
 
-> ---
->   arch/arm/boot/dts/en7523.dtsi | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
-> index 36597f587f46..2e705b87b6c1 100644
-> --- a/arch/arm/boot/dts/en7523.dtsi
-> +++ b/arch/arm/boot/dts/en7523.dtsi
-> @@ -3,6 +3,7 @@
->   #include <dt-bindings/interrupt-controller/irq.h>
->   #include <dt-bindings/interrupt-controller/arm-gic.h>
->   #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/clock/en7523-clk.h>
->   
->   / {
->   	interrupt-parent = <&gic>;
-> @@ -83,6 +84,13 @@ L2_0: l2-cache0 {
->   		};
->   	};
->   
-> +	scu: system-controller@1fa20000 {
-> +		compatible = "airoha,en7523-scu";
-> +		reg = <0x1fa20000 0x400>,
-> +		      <0x1fb00000 0x1000>;
-> +		#clock-cells = <1>;
-> +	};
-> +
->   	gic: interrupt-controller@9000000 {
->   		compatible = "arm,gic-v3";
->   		interrupt-controller;
+       Arnd
