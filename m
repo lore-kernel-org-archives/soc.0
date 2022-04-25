@@ -1,185 +1,112 @@
-Return-Path: <SRS0=2oPt=VD=nvidia.com=jonathanh@kernel.org>
+Return-Path: <SRS0=zm63=VD=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39EA7C433FE
-	for <soc@archiver.kernel.org>; Mon, 25 Apr 2022 11:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C08C433F5
+	for <soc@archiver.kernel.org>; Mon, 25 Apr 2022 11:51:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E2019C385AD; Mon, 25 Apr 2022 11:20:16 +0000 (UTC)
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 91198C385AD; Mon, 25 Apr 2022 11:51:08 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 87F2FC385A7;
-	Mon, 25 Apr 2022 11:20:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87F2FC385A7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cPAl6LdxtTEKI3WFS++egJusBbkXaii8IkLnZEOV1jGUZ86qirgDVnAjj2W2AbDbpSJsYBqqzT+2/7qDRE739avUmLpxxCy4AOTdN+dyyJTumX79/0C/khsf1KgiLBx42xoWvxFqLPYzOQFrqUqd7QNEgNb0/QYgjlaD+a/dq+oJFLc2r5xAHlVuMAg1m1hhzaw7OzTEtQB+nKLFLouaq0S8vfDWN2orWDSI3G1CLyIHqcA3q0b90pIew23OgeVFN9hGxMiV8SOZPvGSiDEnqTuHylTrIu3YRE9Nc7Uz57GiXiYjBgsViMTSa/L8w95XN2kdMES+yttpdNWobir2YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h5Rp1v1IocZCPs29O+2faMQ6BGtqzTGVvxpLCE1pwOQ=;
- b=B7wR6Vz3EyNG5aWYa8PvoywIHT6nrriULAfqSe259sOMNGfIx4ddHuXx4qEaSEMRHaEDD9T64AumPti6VLCZWNFSRJbjbCBcDk5IxErtF7ENqa/mz6URnWSFNmP4tNNH2KBgdP+vmyNv5KvNaNbj7NUPdsXROY4re0KN9x3ojzOJ+yWoKu3y0LYv6Z2voeucx8x8nTz+zg47beF/1odMvKY0So19VE2HzuPHmbxS8IFbElgTIdi4RfaaxiVOAuB6RHWny8DG7oW4dfqJHcUSrHGzPu7KacL0xcZrHTH99yH68JZygNjY+3cCLGo4KwwhXb2ooUrmAYyYc00cipS5mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h5Rp1v1IocZCPs29O+2faMQ6BGtqzTGVvxpLCE1pwOQ=;
- b=EEZjBxA6GO415/vNh3elHNapNhcxGJTUao19ToN/Z1YHq3hVXXYJ7xZ/CdT2gDr7A928cxCPCQsOC2Slm3jMwqI2IKGnn5ChmRy6nEEHE9e1t9MICyTmc1pAGNPf+cNeymc/+LRsTGHl6rC5YhVjkPOeaYc9zS8I0t45zdJZF4jIZ1inx0sUcnuh1EjzHcroMoczVl85LV5AKiJSxp+1oaCGFxodRAkc2jPDnrQutztBWKumfwAeBIBNW5mczs7/gNDZ9Jq03z2uhhnpEfC5+miwaiJXtc7p/L0/M7pSJVTAX2eeZ6uyOuIWvlQv68hW2a50aVQ6t2h6on/CnyaCqw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MN2PR12MB4190.namprd12.prod.outlook.com (2603:10b6:208:1dd::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Mon, 25 Apr
- 2022 11:20:12 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::a4b2:cd18:51b1:57e0]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::a4b2:cd18:51b1:57e0%4]) with mapi id 15.20.5186.021; Mon, 25 Apr 2022
- 11:20:12 +0000
-Message-ID: <c5fad2c0-598d-a90c-5272-398ce48399fe@nvidia.com>
-Date: Mon, 25 Apr 2022 12:20:04 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id A5C33C385A7;
+	Mon, 25 Apr 2022 11:51:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5C33C385A7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id k2so15344wrd.5;
+        Mon, 25 Apr 2022 04:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9EscMvNq76GeUom/FtzlsqDl8sdOCj3rZo00CWoiuwA=;
+        b=F7CeinsqS7wotCIbiDe0PSdED/m/nEhij5VdSZwAPlpQo/wUAA6kvkSFvCh1Sj7DoG
+         I+Y/7wtJdsRBk/txmwJv+E+Jmm+RvsNoCjLEWMfZ6zj7g4L1DW0nQMZlFOK+vH9eE3zq
+         PJP4gOEJ5i2+IuFKrf6eIJZTX0yRiYqn7rfAjkQF58tv3+sA2KEIRxqACfhrn5gXjgc2
+         k3zdEaAuqNa2jxuwV3XYiLwM97lJ50Y6uUEYvTs+v/RjlVbOxHs3ND35GqFby9PFQU9g
+         qNUJJ7URS8t+02Dh+OAf2PxXIXKq/oNOlq+B29sD6fa37eTGVJTR9pDnIw+Cl1yXMVRd
+         lbMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9EscMvNq76GeUom/FtzlsqDl8sdOCj3rZo00CWoiuwA=;
+        b=Kz5KBM951qmsO7NyXbCeTfrKgopxqDMekpARpS/SYT48yIFNnMqH+FbSJE7HOeHjoc
+         CSNo+ReUdHLp/pyTXpfpo1oevIHeFygZfOfZus17uHkguyRzWv9l0h3B7scCdEKs4iXM
+         uSpi6xLnMjbxPeBROcXfpB3XN5tLCO1pqeP2EJAgRhw1hVM4rnlRBoV4qrxz/fLAGQJo
+         XRR0iN4hG2ydvFkGl8lQxZMRsaKZji5hGAm/VcmZdfg5e6TFYysu/TGQcnkTmXWAoQr3
+         KJywGKSm6TV4Wp1lVkjO3W6G7Ibtzy2Bblc8tYUiGncYS7tudp+0ViLAArR0526IfV1U
+         Lg1w==
+X-Gm-Message-State: AOAM531JVDnAM/pL7cNNL0qYvgpp9d4aZOC+8j41WywCET/Ou8hK+7rQ
+	ZE/WybSwgIvDaXk7efYusWWr6ypOLUQslQ==
+X-Google-Smtp-Source: ABdhPJx5UVMEI7qk+X/GYHCw8s1oJwyJxDKu2qUGV9WU7GKqAoeY+izqW35kJFgowSEYipjDWNs+cA==
+X-Received: by 2002:a5d:4a0a:0:b0:20a:c899:cb7b with SMTP id m10-20020a5d4a0a000000b0020ac899cb7bmr13446037wrq.618.1650887465776;
+        Mon, 25 Apr 2022 04:51:05 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e5ca446bcsm11573603wmp.5.2022.04.25.04.51.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 04:51:05 -0700 (PDT)
+Message-ID: <20650a35-5392-43fa-8b70-902eea860d92@gmail.com>
+Date: Mon, 25 Apr 2022 13:51:04 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with
- values
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 3/6] ARM: dts: add clock support for Airoha EN7523
 Content-Language: en-US
-To: Thierry Reding <thierry.reding@gmail.com>, Rob Herring <robh@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Bjorn Andersson <bjorn.andersson@linaro.org>,
- Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
- Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org,
- devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org> <YlVAy95eF/9b1nmu@orome>
-From: Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <YlVAy95eF/9b1nmu@orome>
+To: Felix Fietkau <nbd@nbd.name>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>
+Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220314084409.84394-1-nbd@nbd.name>
+ <20220314084409.84394-4-nbd@nbd.name>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220314084409.84394-4-nbd@nbd.name>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0029.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:61::17) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6eda6e54-4dab-447b-37bc-08da26ad90a4
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4190:EE_
-X-Microsoft-Antispam-PRVS:
-	<MN2PR12MB4190F8FFEED92954D5977AC0D9F89@MN2PR12MB4190.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	8ZxZFUiceNj01zzQKzQLNaMu+QhNkhLsJxsdLcHIeL9uHwNDv/B66pi/sJzfF0zwojZbBTU3IgSkVTOL4hpOhW1824lJop7wwYs8GoSmjtRmpBa8oaxS+St+djHBuySpFFiIjwXinXBhvbYF6ABannXPznx+Nf3h3zZVCD7kLWI0BGiutBOxx1T/A9O8mgnOS2SLWC52kT2CjNc6JwkwUdFVqlxadudzWC0hTwEmLReTaIH8NAN/xqmJDhNP1AhcR9xbnrHKPfmgTh6arGqjgBFAaR7jMfWIio02W4iY7w+eVL2PEo1VHqKPezLLMTuAxTMGe6I5HL4eZgShE2EERisVCqau4JjbOAQnhfgIkV+oHruMpI4ec4jMzT0aLYOfSf/0FMzNnfyAEuk+oY9ZMZSWj24xDCOcRxHnCZPt7UDbf6pNEcxq4ebvtMNb1zVzlwXJdOhdESVWa1JHNoVoKZwln2fnfLQQJvNpPrrGNxaRpgP4x5Tumg/Hgu3KeJE2EtUpUNCNjd050Ig4pF55wl20He9wympGamIJfkzDEqtfh4b+xJZc6xnPB+m89bDtZg+kwc+d+0YLjaa0B6cIhQrxRdEpo59WKecp5ngmK2btpU7w9TreFbFwV2Gx6UTG9QDd7PncKkNLS6+kX1t4YLs+THeysrLivfdauq7rfXvKvZJ7jFYodih9vgUCos5wj3MOi8YoNMEtQ7h7SFBM0rkdSfHP8Y8VHlRhukrEL9AK50Yq+7fhT7Lbt9zGCVGx
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(66946007)(86362001)(26005)(6666004)(8936002)(31696002)(66556008)(36756003)(6512007)(54906003)(110136005)(316002)(8676002)(5660300002)(7416002)(508600001)(4326008)(6486002)(66476007)(31686004)(2906002)(186003)(38100700002)(83380400001)(53546011)(55236004)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ekptYWZvZkR2ZU1xTDZKM3lHcTBNdTRvZEUvMlhSL2RJTXl0TFBUdTJiMFRv?=
- =?utf-8?B?TGhIVGJIT2pwYWtSU09RM0liR0VYSkp5bHNmQm9mMTRmWnh5UCtGV0xDVkZv?=
- =?utf-8?B?bWtLVTUrOVVXMi96UFNxSGhsUnRjY05lcmJlMlA4eGRNcCsyVUFSbnQ3MVdM?=
- =?utf-8?B?Z2R5Y0lKZzVLWnd4VXFFdnF3VE1NMHYyM2VQNGZ5TWdVNk1YcDMzZVBPS25X?=
- =?utf-8?B?alJRazVOZG9adTRNUysyd3krOUc5NUI5ZnVwTVlxd0hqN213UFJnUFpvSjhM?=
- =?utf-8?B?bWtwOGRxWFE1RU5aTDdDUG5tazU2Z1FiWFBpRnVva3dSSmFRYURtLzkvVUky?=
- =?utf-8?B?WWlNSGVIaGRJVzJQdTB0aDdPT1dmUko3YkNBem9DRlNNcm4yOXI1dVB4eDVr?=
- =?utf-8?B?Tm1yVUw3eHZGaU40bU4reHZVY2luQm1DcU8rUG1KVlZRV0E3LytIZ0JRZmZX?=
- =?utf-8?B?aHVCT3dTNk9lRld0a2RnNmJadk5NUzF6RGE4dzBiMEhVeVljcy9FdURxbCtS?=
- =?utf-8?B?UEVHSGxPZng0TFFmS0pIN0tpelpPUTdoT2VZQ2E2cEw1c25RRVJJUllQWHZD?=
- =?utf-8?B?VGJqWGhXdkRJNGZGQmR3Zy80N3NNZ2RiYXpvbXdtTzNaU0h3UlFZdHppQU9x?=
- =?utf-8?B?Ym9rcFZtdGIxclNNdTJZMGFFVEFDTTBJVVQwWTI1S2tTWU1zdURzMHpMNkhR?=
- =?utf-8?B?NjN1ZjFxU2k4TkRSbWtUaTlKWk5hN2QwQXVucnF3RUxKVjRkTGZPUUNxVU01?=
- =?utf-8?B?dTh4cWQzRm5lbEZKSGZ6MGpzTVR5S0NsNHdXUjJhc0FyQ05Fc2ZkWXhVM1FQ?=
- =?utf-8?B?NGFCdjBhU3l1aDJNb0VCSmJFcTR0MXhGSXppRzAyUVpkVkYvbGxJb25Ub3RE?=
- =?utf-8?B?dERxdHhFVENuRjd0OGkzR2t2VzdzZ2QvL3YrdlJSVkhNRGdPUEt5S2hmTWdu?=
- =?utf-8?B?Z0VPRmVDa0V4T1N6RWhFMlFaVS9sd2xqc3JleFB1TWgveTdGZDYrN01aUjlx?=
- =?utf-8?B?Y05jVlVWT0kvV0w3RVJydG5qc1Mya3hIODluWDZxRUhIaVhRK1Z5SnBJTVZG?=
- =?utf-8?B?UGRBTEczS1g4SzhuZXVyQTVtVjQxdmREOVBuS2M4S1RMN2Zka01pRGQxbmo4?=
- =?utf-8?B?S09oMFVacG1tVDYydE9tUS9vVVJ4bzdEVmZyS2tyY3lHUUdodU5HaVY3eEoy?=
- =?utf-8?B?M0p0L2lpWlUrMnhFUnJvbHRkM2JkSE53Y2twY0xyQ3dMVEJxUWdKcE04cDZk?=
- =?utf-8?B?TktCNnZnTW5lYW80NmgwVXRnMEluLzlQa0NyVkpGM3lhQllDSkx2NDVkUFdv?=
- =?utf-8?B?MFRnYjREcHpSN280K2JHZTUrNzVzWXczU2lTdXErVkdxK0F4ZFM0cWFJWGYv?=
- =?utf-8?B?eDN5WW9EZjF3ajlIazB4UWNFZVBQNGVsSFJzK2JRUTlKRFJBODNCYkFBYWs2?=
- =?utf-8?B?SG9KckQ0MFZmc3QrdTd1aFNYN1I5KzYvTHhJeWxvd21qL2VPUVJZc0tuN0dj?=
- =?utf-8?B?UWR2T1p6a2Y1UzFTSkhXMGNQNU8yZCtJVE5HNlFHZ2hRWGh2bVA1NnIranli?=
- =?utf-8?B?LzNsVW4vMFI0M2ZBOUJmNWE2Rit6cHBWT2FHSDRXR3NuKys1VmIyV2FhdW9O?=
- =?utf-8?B?UG53K29mRkJ5dWhEK3pyVVdrRXFIVjBoMzRJd2M5SGFDOFdMYTJWK1NrNXVB?=
- =?utf-8?B?aktvSmpxWUdQWGdTV29NRFliTGRFMXUzWkN3S1h6NW1yYnhBUk55SE5UMXQx?=
- =?utf-8?B?Um5jclVEYlhIOXVndlMwblBUdDUzMk52Q25OQ3JhUm1idFpGczRVZTlRT1Ew?=
- =?utf-8?B?bnZ3aWVJa0dTSVVWSng0Rk1yMVB2WXlEaTFGNUh1cTJaZU0rcUNlQ3Z5Rzlh?=
- =?utf-8?B?eFM4SzdLSlNJVlh3L1Z6ZkNGMzlCWElwVkNJZE5qLzRjNFhhQXRSU3dPWVR0?=
- =?utf-8?B?cVdaQ0dLRnZ5Sitac1VYSG5ESnphQXRZdlRHUDlMdGMxRGpOWUxhL0NMQmMx?=
- =?utf-8?B?THhUQUNId29MelIyMG1jaGRxdHpVMFRQNXJ0NGlHZ2JITXJZbUYvYjVLUmpS?=
- =?utf-8?B?V01qU3hJbTkvMWlGZTRkVDdGY3BnRjNCRXN4SUgwbmdVWGFRNWFrcmVZbHRk?=
- =?utf-8?B?alM4eTQyM0l6b0Nrcjc3N1ZhcGd5WEtGeTYwVUVpUDdCRThZaWhVYXRWbmVz?=
- =?utf-8?B?QnVGaEpIdCtyaHN2TElCRklWbDdYKzhLcCs2cDEraS90Wk01emRMVmg1dEI1?=
- =?utf-8?B?cS9LOFFublhheG4xb1cvcVpJN210WHdVcjBpalBuUmVuMFBuM1ZaRHp1NkJQ?=
- =?utf-8?B?cWlDNjg4TWk0dzB1aUF5SVZ2SUNhSEhrSFJqWWNYNjhjMUw2RVNsbFB3NFVV?=
- =?utf-8?Q?eqg6A1RdzvOJCHR4=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6eda6e54-4dab-447b-37bc-08da26ad90a4
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 11:20:12.8130
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 86J9006EG+CRvyf8jR3H9afgl2LHfpd5+P/N/+3w/OdySgyoCwBjuLXD9KGaKhZxYEfrKtgJi+KFf2ZsbBkQtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4190
 
 
-On 12/04/2022 10:05, Thierry Reding wrote:
-> On Wed, Apr 06, 2022 at 02:17:30PM -0500, Rob Herring wrote:
->> Boolean properties in DT are present or not present and don't take a value.
->> A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
->> matter.
->>
->> It may have been intended that 0 values are false, but there is no change
->> in behavior with this patch.
->>
->> Signed-off-by: Rob Herring <robh@kernel.org>
->> ---
->> Can someone apply this for 5.18.
->>
->>   arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
->>   .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
->>   arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
->>   arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
->>   arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
->>   arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
->>   arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
->>   arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
->>   8 files changed, 27 insertions(+), 27 deletions(-)
+
+On 14/03/2022 09:44, Felix Fietkau wrote:
+> This driver only registers fixed rate clocks, since the clocks are fully
+> initialized by the boot loader and should not be changed later, according
+> to Airoha.
 > 
-> This causes multiple regressions on Tegra boards. The reason for this is
-> that these properties are not in fact boolean, despite what the DT
-> bindings say. If you look at the code that handles these, you'll notice
-> that they are single-cell properties, typically with <0> and <1> values.
-> What may have led to the conclusion that these are boolean is that there
-> is also a special case where these can be left out, but the meaning of
-> that is not the "false" (<0>) value. Instead, leaving these out means
-> that the values should be left at whatever is currently in the register.
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+
+Applied, thanks!
+
+> ---
+>   arch/arm/boot/dts/en7523.dtsi | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
-> See pinconf_generic_parse_dt_config() and parse_dt_cfg() specifically in
-> drivers/pinctrl/pinconf-generic.c.
-> 
-> Arnd, can you please revert this so that these boards can be unbroken?
-
-
-Arnd, any feedback on this? A lot of Tegra boards are still not booting 
-with v5.18-rc4.
-
-Jon
-
--- 
-nvpublic
+> diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
+> index 36597f587f46..2e705b87b6c1 100644
+> --- a/arch/arm/boot/dts/en7523.dtsi
+> +++ b/arch/arm/boot/dts/en7523.dtsi
+> @@ -3,6 +3,7 @@
+>   #include <dt-bindings/interrupt-controller/irq.h>
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/clock/en7523-clk.h>
+>   
+>   / {
+>   	interrupt-parent = <&gic>;
+> @@ -83,6 +84,13 @@ L2_0: l2-cache0 {
+>   		};
+>   	};
+>   
+> +	scu: system-controller@1fa20000 {
+> +		compatible = "airoha,en7523-scu";
+> +		reg = <0x1fa20000 0x400>,
+> +		      <0x1fb00000 0x1000>;
+> +		#clock-cells = <1>;
+> +	};
+> +
+>   	gic: interrupt-controller@9000000 {
+>   		compatible = "arm,gic-v3";
+>   		interrupt-controller;
