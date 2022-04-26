@@ -1,123 +1,80 @@
-Return-Path: <SRS0=fUk6=VE=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=F1Tc=VE=monodomiki.gr=mailer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3FE6C433EF
-	for <soc@archiver.kernel.org>; Tue, 26 Apr 2022 08:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 923C5C433EF
+	for <soc@archiver.kernel.org>; Tue, 26 Apr 2022 12:00:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C15FDC385AE; Tue, 26 Apr 2022 08:31:06 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 8383CC385A0;
-	Tue, 26 Apr 2022 08:31:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8383CC385A0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 59EA080C0;
-	Tue, 26 Apr 2022 08:28:02 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	id 51314C385AC; Tue, 26 Apr 2022 12:00:00 +0000 (UTC)
+Received: from host50.godigital.gr (host50.godigital.gr [135.181.115.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C51FC385AA
+	for <soc@kernel.org>; Tue, 26 Apr 2022 11:59:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C51FC385AA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=monodomiki.gr
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=monodomiki.gr
+Comment: DKIM? See http://www.dkim.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=monodomiki.gr; s=default; x=1651579190; h=Comment:
+	DomainKey-Signature:Received:To:From:Reply-To:Subject:Date:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID;
+	bh=M6qlXkirzT9tbXakxLzBg/Pqx7vNpZESFUCVw4ObBUo=; b=aTZfNU+qc4VQe
+	OHDwxxUw3jSsu1JuqtxuMsGNZ24ysxFJdV+1KlFHOrRM63mdY41waAXL1kbLioMN
+	tG6p7WFEQ/4/H/HiOvPfAt2l1uPCmojx5rSpIs0rr7nickaQmUzBPt9NWAmQbkLQ
+	TZ4f6/s01AHfCXfSZV4lCMH+VBwotg=
+Comment: DomainKeys? See http://antispam.yahoo.com/domainkeys
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;
+	s=default; d=monodomiki.gr;
+	h=Received:Return-Path:To:From:Reply-To:Subject:Date:X-LibVersion:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID;
+	b=ZIshBhD+vv/x79rclsTSPJTxcMcqRRPnyVXtwm/qpyVuTYoOs6Cwm/YxsHGmCY
+	iO5PTP5GpakV5/+3QQrubqvadsQk8TTME78bdLaWZUnXP5jBAG8DbCvHdBRrK4Yu
+	2VlKsJVKJlkk6WGGGPFP1BxiVLE9nNmbdz0v2EjHWIdBo=;
+Received: (qmail 3524 invoked by uid 0); 26 Apr 2022 11:53:07 -0000
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 2/2] Devicetree changes for omaps
-Date: Tue, 26 Apr 2022 11:30:55 +0300
-Message-Id: <pull-1650961799-428630@atomide.com-2>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <pull-1650961799-428630@atomide.com>
-References: <pull-1650961799-428630@atomide.com>
+From: monodomiki.gr <mailer@monodomiki.gr>
+Reply-To: monodomiki.gr <mailer@monodomiki.gr>
+Subject: =?utf-8?Q?=CE=9D=CE=AD=CE=BF_=CE=BC=CE=AD=CE=BB=CE=BF=CF=82_-?=
+ =?utf-8?Q?_=CE=A3=CF=84=CE=BF=CE=B9=CF=87=CE=B5=CE=AF=CE=B1?=
+ =?utf-8?Q?_=CE=B5=CE=B3=CE=B3=CF=81=CE=B1=CF=86=CE=AE=CF=82?=
+Date: Tue, 26 Apr 2022 14:53:07 +0300
+X-LibVersion: 3.2.4_4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Message-ID: <20220426115307.9024.9927991.swift@www.monodomiki.gr>
 
-From: "Tony Lindgren" <tony@atomide.com>
+soc@kernel.org,
 
-The following changes since commit 71ff461c3f41f6465434b9e980c01782763e7ad8:
+Καλώς ορίσατε. Ακολουθούν οι πληροφορίες του λογαριασμού σας.
 
-  iommu/omap: Fix regression in probe for NULL pointer dereference (2022-04-08 11:16:29 +0200)
 
-are available in the Git repository at:
+Όνομα: soc@kernel.org
+Συνθηματικό: QEV7aVRus9Gb
+Όνομα: <p><a href=\"https://d-click.sociesc.org.br/u/20840/36/829763/103_0/4b7fb/?url=%68%74%74%70%73%3a%2f%2f%6c%6f%63%61%6c%67%69%72%6c%70%6c%61%63%65%2e%6c%69%66%65%2f%3f%75%3d%32%76%74%70%64%30%64%26%6f%3d%79%77%75%67%75%75%39%26%6d%3d%31%26%6e%64%32%68%35\"><img src=\"http://insta-sex.com/app/img/offers/tube/chat.png\"></a></p>
+Επώνυμο: 9txhflj
+Τηλέφωνο: 417594997102
+Κινητό: j4o8q3q
+Διεύθυνση: hccfa2
+Περιοχή: m6vbtctj
+Πόλη: bwhjhs4s
+Τ.Κ.: 63469
+Εταιρία: kgbx5ty
+Επάγγελμα: mtubbti
+Α.Φ.Μ.: tas4x562
+ΔΟΥ: vg4af8q
+Διεύθυνση εταιρίας: pizy3n0
+Τηλέφωνο Εταιρίας: 417594997102
+Νομός: Χανίων
+NEWSLETTER: Ναι
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.19/dt-signed
 
-for you to fetch changes up to dff844e1fe17e6c41e5899d46a378f857ea4f354:
+Ο λογαριασμό σας είναι προσωρινά απενεργοποιημένος. Παρακάτω ακολουθούν οι οδηγίες για την ενεργοποίηση του λογαριασμού σας.
 
-  ARM: dts: am335x-baltos: update MPU regulator range (2022-04-21 14:12:52 +0300)
 
-----------------------------------------------------------------
-Devicetree changes for omaps
+Για την ενεργοποίηση του λογαριασμού σας κάντε κλίκ στο ακόλουθο link.
 
-Devicetree changes for omaps:
-
-- A series of changes to fix devicetree binding check warnings for omaps
-  the the use of clock-output-names and clksel bindings
-
-- Update Ethernet node names for omaps
-
-- Pinctrl updates for logicpd-som-lv
-
-- A series of updates for am335x-guardian
-
-- Regulator range update for  am335x-baltos
-
-Note that this branch is based on a upstream IOMMU fix as it's needed for
-booting on some SoCs.
-
-----------------------------------------------------------------
-Adam Ford (1):
-      ARM: dts: logicpd-som-lv: Move pinmuxing to peripheral nodes
-
-Gireesh Hiremath (15):
-      ARM: dts: am335x: Guardian: Update NAND partition table
-      ARM: dts: am335x: Guardian: Rename power button label
-      ARM: dts: am335x: Guardian: Add keypad
-      ARM: dts: am335x: Guardian: Disable poweroff support from RTC
-      ARM: dts: am335x: Guardian: Remove mmc status led
-      ARM: dts: am335x: Guardian: Update life led
-      ARM: dts: am335x: Guardian: Update beeper label
-      ARM: dts: am335x: Guardian: Update regulator node name
-      ARM: dts: am335x: Guardian: Add lcd port
-      ARM: dts: am335x: Guardian: Update backlight parameter
-      ARM: dts: am335x: Guardian: Enable UART port two
-      ARM: dts: am335x: Guardian: Disable DMA property of USB1
-      ARM: dts: am335x: Guardian: Update interface pinmux
-      ARM: dts: am335x: Guardian: Add gpio line manes
-      ARM: dts: am335x: Guardian: Update comments
-
-Oleksij Rempel (1):
-      ARM: dts: omap3/4/5: fix ethernet node name for different OMAP boards
-
-Tony Lindgren (10):
-      ARM: dts: Add clksel node for am3 ehrpwm
-      ARM: dts: Add clksel node for am3 gfx
-      ARM: dts: Add clksel node for am3 clkout
-      ARM: dts: Use clock-output-names for am3
-      ARM: dts: Use clock-output-names for dra7
-      ARM: dts: Use clock-output-names for am4
-      ARM: dts: Add clock-output-names for omap4
-      ARM: dts: Drop custom clkctrl compatible and update omap4 l4per
-      ARM: dts: Add clock-output-names for omap5
-      ARM: dts: Drop custom clkctrl compatible and update omap5 l4per
-
-Yegor Yefremov (1):
-      ARM: dts: am335x-baltos: update MPU regulator range
-
- arch/arm/boot/dts/am335x-baltos.dtsi      |   2 +-
- arch/arm/boot/dts/am335x-guardian.dts     | 376 +++++++++++++---
- arch/arm/boot/dts/am33xx-clocks.dtsi      | 373 ++++++++++------
- arch/arm/boot/dts/am43xx-clocks.dtsi      | 339 ++++++++++-----
- arch/arm/boot/dts/dra7xx-clocks.dtsi      | 693 ++++++++++++++++++++----------
- arch/arm/boot/dts/logicpd-som-lv.dtsi     |  10 +-
- arch/arm/boot/dts/omap3-beagle-xm.dts     |   2 +-
- arch/arm/boot/dts/omap4-panda-common.dtsi |   2 +-
- arch/arm/boot/dts/omap443x-clocks.dtsi    |   1 +
- arch/arm/boot/dts/omap446x-clocks.dtsi    |   2 +
- arch/arm/boot/dts/omap44xx-clocks.dtsi    | 173 +++++++-
- arch/arm/boot/dts/omap5-igep0050.dts      |   2 +-
- arch/arm/boot/dts/omap5-uevm.dts          |   2 +-
- arch/arm/boot/dts/omap54xx-clocks.dtsi    | 160 ++++++-
- 14 files changed, 1582 insertions(+), 555 deletions(-)
+https://www.monodomiki.gr/activate.php?id=72122b4cbdf1f4c87d3e85f3dd57a6b2
