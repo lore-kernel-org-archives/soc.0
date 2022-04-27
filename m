@@ -4,19 +4,19 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B1AC433EF
-	for <soc@archiver.kernel.org>; Wed, 27 Apr 2022 12:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C105C433EF
+	for <soc@archiver.kernel.org>; Wed, 27 Apr 2022 12:08:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D3180C385A9; Wed, 27 Apr 2022 12:08:35 +0000 (UTC)
+	id B8D8FC385A7; Wed, 27 Apr 2022 12:08:37 +0000 (UTC)
 Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 14CCDC385A7;
-	Wed, 27 Apr 2022 12:08:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 14CCDC385A7
+	by smtp.kernel.org (Postfix) with ESMTP id EBD7EC385A9;
+	Wed, 27 Apr 2022 12:08:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EBD7EC385A9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
 Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 899C280E4;
-	Wed, 27 Apr 2022 12:05:28 +0000 (UTC)
+	by muru.com (Postfix) with ESMTP id 52502813D;
+	Wed, 27 Apr 2022 12:05:31 +0000 (UTC)
 From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -24,10 +24,12 @@ Cc: arm@kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 1/4] Maintainaer updates for omaps
-Date: Wed, 27 Apr 2022 15:08:25 +0300
-Message-Id: <pull-1651061256-836848@atomide.com>
+Subject: [GIT PULL 2/4] Defconfig changes for omaps
+Date: Wed, 27 Apr 2022 15:08:26 +0300
+Message-Id: <pull-1651061256-836848@atomide.com-2>
 X-Mailer: git-send-email 2.35.2
+In-Reply-To: <pull-1651061256-836848@atomide.com>
+References: <pull-1651061256-836848@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -40,21 +42,24 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/maintainers-signed-take2
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v5.19/defconfig-signed
 
-for you to fetch changes up to 73f1aaf114e63ee2baa94ac798d5764b15e4fdc5:
+for you to fetch changes up to 5c81cfb6a60a7abbfe7520fa13cabdad094d3d39:
 
-  MAINTAINERS: omap: remove me as a maintainer (2022-04-26 10:48:55 +0300)
-
-----------------------------------------------------------------
-A maintainer update for omaps
-
-A patch from Rajendra to remove his contact information for omap
-PM framework.
+  ARM: omap2plus_defconfig: Enable ISP176x USB driver (2022-04-21 15:00:49 +0300)
 
 ----------------------------------------------------------------
-Rajendra Nayak (1):
-      MAINTAINERS: omap: remove me as a maintainer
+Defconfig changes for omaps
 
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+Changes to add tlv320aic3x and is176x drivers as loadable modules
+to omap2plus_defconfig.
+
+----------------------------------------------------------------
+Adam Ford (1):
+      ARM: omap2plus_defconfig: Enable ISP176x USB driver
+
+Merlijn Wajer (1):
+      ARM: omap2plus_defconfig: enable TLV320AIC3X
+
+ arch/arm/configs/omap2plus_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
