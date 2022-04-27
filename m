@@ -1,95 +1,100 @@
-Return-Path: <SRS0=pgBt=VF=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Bfw1=VF=collabora.com=detlev.casanova@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0141C433EF
-	for <soc@archiver.kernel.org>; Wed, 27 Apr 2022 18:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379BBC433FE
+	for <soc@archiver.kernel.org>; Wed, 27 Apr 2022 18:53:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 91241C385AA; Wed, 27 Apr 2022 18:12:53 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+	id 051DAC385AF; Wed, 27 Apr 2022 18:53:03 +0000 (UTC)
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1853EC385A9;
-	Wed, 27 Apr 2022 18:12:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1853EC385A9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MvryJ-1o2fmo3gHP-00ssCD; Wed, 27 Apr 2022 20:12:50 +0200
-Received: by mail-yb1-f179.google.com with SMTP id y76so4900890ybe.1;
-        Wed, 27 Apr 2022 11:12:49 -0700 (PDT)
-X-Gm-Message-State: AOAM530SzA3j8y4ZCScR+UMT490y89qq2e1pYtS+grCmgKOBgR/lApcJ
-	WlOzS1pf8q9qmo00q+nl+i45vBpHoEB+c/ubbd8=
-X-Google-Smtp-Source: ABdhPJyvIQ6D3x49OiNKnaLLSiVJHsuCNnQ3wyi9FtzBNbA80wvadvDkfUVYkIpT7NF74EwdQ21G9vqZ8d9sa8bTn1k=
-X-Received: by 2002:a25:75c5:0:b0:648:dccd:e1c with SMTP id
- q188-20020a2575c5000000b00648dccd0e1cmr3057440ybc.452.1651083168625; Wed, 27
- Apr 2022 11:12:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi> <20220427162123.110458-2-maukka@ext.kapsi.fi>
-In-Reply-To: <20220427162123.110458-2-maukka@ext.kapsi.fi>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 27 Apr 2022 20:12:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2renoWK+rUYBAyUb10v-TKfv6gLTQUiGFRroFgLCv+9w@mail.gmail.com>
-Message-ID: <CAK8P3a2renoWK+rUYBAyUb10v-TKfv6gLTQUiGFRroFgLCv+9w@mail.gmail.com>
-Subject: Re: [RFC RFT PATCH v1 1/1] ARM: orion5x: convert D-Link DNS-323 to
- the Device Tree
-To: Mauri Sandberg <maukka@ext.kapsi.fi>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3FA4AC385A7;
+	Wed, 27 Apr 2022 18:53:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FA4AC385A7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(Authenticated sender: detlev)
+	with ESMTPSA id 70F871F44C76
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1651085578;
+	bh=OV0Z+SXN5LTYQytPf5y0kDwTuGPnGohLGzr4axQ+7yw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AY6LsKCA/lI55xWW2jetqHmqlqE0JMO7i5IAIbxL2lRP+b1zh69hkwb7ptIHxTCfU
+	 3FdEN21owDZZLmhrOowfjMTzqZPh6yetG8IUxry7w7Ow9kHTPCj9PhDN3MnjJPOzl6
+	 1W+YZJ5HmVotKypHriO5kFEuxQZtRG/GplyNGEM3WEdlhvGtP7bP9a5GTYVky22kWH
+	 w91t7BXVh1Ukc2aHGr4EdEHBqHIifnKJ4m7ej8mNWoEggYTuJXzB7RdA5+bV7/1J+V
+	 TPxuJUBtOz0u4X4f1nObiflnwu43pyNseFexaHJXxe1yB/SuUlriNTEtb2DRuOYloP
+	 4TZ4tKkj7tc4w==
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	DTML <devicetree@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Andrew Lunn <andrew@lunn.ch>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:aOlRDY7lD82X+PQ8WlhrwX//LhBoJaZcpzDx7kWU91f7mZZS76/
- Jm5Z/WdNULOaRMcR75yRcR8P5EElsfi3dZasK8qoV3jBwZDY2wARaXE63bYwiX9/hy2qsi/
- cBRdeu38cnsyL+BocndhDRBxzN/GC11fJDvcl+2l6D8wu63WR1mhMppee8cxrX6Fliyms7h
- 6P7/Fuf8Gpgq/+w+80kQA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hQvVtI8KZ+0=:PYeHXLbKmUvTgzRj7z3NSF
- oAsCXsnXi4j4Dih9qqduHl7RQYbPUkGtm3ir7femajU7ZmiFNkAXwjnRrRgwEeE0bFV7mHheK
- ucwyWw+VmNhQT270s9Jmqq74CeQPuFoaIHGrDLO0BRGK4jtFluc9gvZWJF6vZmiTzv4yadw3Q
- fpSDKMkqCJwQV257AGpd941ObJ0Epvgx2z3KShHLxnRJoo6cvKbb94DAyjNedo8kbS76/aMJ0
- UHx9+UIL2H6RoJtcfU70gv45YV6rIhD9gikOQpDin5ksjXru0xaMZzuj515paWwS0vdfg1t3e
- 4IUtI0ci1o4Ph6ntt40LUF9F2k0Vs5gGcaxVq3a5NVEI0fkH6AuGoIMXH8ifqUqsN0y61n1Uh
- +sp4c4i/d2FCE/jNh8EKWL04Kpw+mJ6cA35SNz/hNS0Cer1MVBrLgyUxf6P4pz+Stid+LVMoa
- +/vmu4g5QMTZ6rNJnImcSe4xTYfoEd+QV2IzHw7H6eV3Q8Kwm+cU5laBXdeUEftLYa0Ia+O9Q
- mh4//u4d3Br2dHd1v5gPXgQ1BQ+XYhRtsWNsLWh4+S0TVdB2LqzB9a+9uOXsOzH2kexfNSsSW
- qH1o1YfJpSN9CLHY30uHKItp2vJn37kP6bOjixFVtXxJ1POsWC87R3AU+kcjSK4l+cynKzWtg
- MTJL/TFk7uorjA6Rzy/JPgTie9klq4wwBWcSTzrTEpOPf7tEG404lr1XqpcVRWUaUhY8PmA85
- ATjl4DUi8i3O5BaDfn2uA4MVeLi1Gx3iH+RpmwKAGaVQ/wziqNHymVK+rCb1LE/2UTeRYz1rE
- K6RZWf65sVv5qt2TiF3Yw+UdFPyM6Js5wWWaCdnCSvvsUDPZW4=
+Cc: arnd@arndb.de,
+	bcm-kernel-feedback-list@broadcom.com,
+	devicetree@vger.kernel.org,
+	f.fainelli@gmail.com,
+	frowand.list@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	masahiroy@kernel.org,
+	michal.lkml@markovi.net,
+	ndesaulniers@google.com,
+	nsaenz@kernel.org,
+	olof@lixom.net,
+	rjui@broadcom.com,
+	robh+dt@kernel.org,
+	sbranden@broadcom.com,
+	soc@kernel.org,
+	stefan.wahren@i2se.com,
+	Detlev Casanova <detlev.casanova@collabora.com>
+Subject: [RFC PATCH v2 0/3] ARM: dts: Support official Raspberry Pi 7inch touchscreen
+Date: Wed, 27 Apr 2022 14:52:40 -0400
+Message-Id: <20220427185243.173594-1-detlev.casanova@collabora.com>
+X-Mailer: git-send-email 2.36.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 27, 2022 at 6:21 PM Mauri Sandberg <maukka@ext.kapsi.fi> wrote:
->
-> Convert D-Link DNS-323 to use the device tree and remove associated
-> mach file.
->
-> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
-> ---
->  arch/arm/boot/dts/Makefile                   |   3 +
->  arch/arm/boot/dts/orion5x-dlink-dns323.dtsi  | 217 ++++++
->  arch/arm/boot/dts/orion5x-dlink-dns323a1.dts |  59 ++
->  arch/arm/boot/dts/orion5x-dlink-dns323b1.dts |  38 +
->  arch/arm/boot/dts/orion5x-dlink-dns323c1.dts |  80 ++
->  arch/arm/mach-orion5x/Kconfig                |   6 +-
->  arch/arm/mach-orion5x/Makefile               |   2 +-
->  arch/arm/mach-orion5x/board-dns323.c         | 118 +++
->  arch/arm/mach-orion5x/board-dt.c             |   3 +
->  arch/arm/mach-orion5x/common.h               |   6 +
->  arch/arm/mach-orion5x/dns323-setup.c         | 724 -------------------
->  11 files changed, 528 insertions(+), 728 deletions(-)
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323a1.dts
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323c1.dts
->  create mode 100644 arch/arm/mach-orion5x/board-dns323.c
->  delete mode 100644 arch/arm/mach-orion5x/dns323-setup.c
+Add a devicetree overlay to support the official Raspberry Pi 7inch touchscreen.
 
-Having the combined patch is generally fine for review, but for actually
-merging it, I would prefer splitting the new DT from the code removal,
-as I send these through different trees to Linus.
+This also demuxes the i2c0 controller to support both pinctrls.
 
-       Arnd
+Changes in v2:
+ * The device tree in now an overlay
+ * The i2c demux patch is kept for now to have a working patch set. It has
+   not been merged yet in [1].
+ * The device tree overlay doesn't use fragments. It is working as is 
+   but not enough literature was found to go one way or the other.
+
+[1] https://www.spinics.net/lists/arm-kernel/msg944330.html
+
+Detlev Casanova (3):
+  ARM: dts: bcm2*: Demux i2c0 with a pinctrl
+  of: Add support for -@ when compiling overlays
+  ARM: dto: Add bcm2711-rpi-7-inches-ts.dts overlay
+
+ arch/arm/boot/dts/Makefile                    |   4 +
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |   1 +
+ arch/arm/boot/dts/bcm2711.dtsi                |   2 +-
+ arch/arm/boot/dts/bcm2835-rpi.dtsi            |   9 +-
+ .../boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi    |   4 +
+ arch/arm/boot/dts/bcm283x.dtsi                |  26 +++-
+ arch/arm/boot/dts/overlays/Makefile           |   3 +
+ .../dts/overlays/bcm2711-rpi-7-inches-ts.dts  | 125 ++++++++++++++++++
+ arch/arm64/boot/dts/broadcom/Makefile         |   4 +
+ .../arm64/boot/dts/broadcom/overlays/Makefile |   3 +
+ .../overlays/bcm2711-rpi-7-inches-ts.dts      |   2 +
+ drivers/of/Kconfig                            |   8 ++
+ scripts/Makefile.lib                          |   9 +-
+ 13 files changed, 193 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
+ create mode 100644 arch/arm/boot/dts/overlays/Makefile
+ create mode 100644 arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
+ create mode 100644 arch/arm64/boot/dts/broadcom/overlays/Makefile
+ create mode 100644 arch/arm64/boot/dts/broadcom/overlays/bcm2711-rpi-7-inches-ts.dts
+
+-- 
+2.36.0
+
