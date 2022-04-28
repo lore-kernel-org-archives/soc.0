@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 502B9C433EF
-	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 21:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD474C4332F
+	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 21:48:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37B14C385AE; Thu, 28 Apr 2022 21:48:54 +0000 (UTC)
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	id C5F84C385AF; Thu, 28 Apr 2022 21:48:55 +0000 (UTC)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 85FCEC385A9;
-	Thu, 28 Apr 2022 21:48:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 85FCEC385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id 2EC01C385A9;
+	Thu, 28 Apr 2022 21:48:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2EC01C385A9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id a5so4187284qvx.1;
-        Thu, 28 Apr 2022 14:48:53 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id k12so4171763qvc.4;
+        Thu, 28 Apr 2022 14:48:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Gn7ITOapzCSzC+UQtM9UH81e8sishwGd1JBZzz5dmQ0=;
-        b=QI2TXltuvtMXE9cecftYJaV4Si7Yl+BLHTKNw9x6DaB8Nf1eSsA2VrBHCpiFU0fSyb
-         3BBW5az7wDYeIIfVcnvEl/bPeMQu9V2/qdMMjAfJfzAM9P7/EYQAPPKPOyINz0cBztVL
-         m3++hDriXgeyuWH2M+KpqSUOaMFQiff3K5DGY8LMaRygbz/o3ZeqITM9k2b/9olhyuQn
-         F+UDp6PMpcLJiL0P7pLpQJ7qkpCba/l0pbeMngAWMDiCJ/SKngFgRWfmKWiUukg3Igrt
-         SUXxixSCqbClWXUFIeGO+wHGhTXavhOoe0l7NoMSqX1gIXn+C3MgxV5EzlwUOQoFebCo
-         LDlw==
+        bh=Ychtn8SD4NMRNaGjpVNr9S3Ei5rtR05oQ+ZMmU3VmQk=;
+        b=BV3xaN9mU4t9ycFzzpXdCJhcZYdak1cPV3uu+3RRUt+NIESdWtCc5MtmbmnStfBbU4
+         Z+w8VjvZhiis1K3RJiKbH+dMtwBiP1tzZVs7uJ0EIg8p4pAeDoZajdaeGiSyHTK07SVg
+         Aai5AUqGpwIH/0KLCmLeySL7p3HfSQoMogC6pXcT4H96HLAqfqRfWNq+ZWh04ge6dyKz
+         xYBWKQLc+5CeoVstl0nIAa/53jDSr1mQ6NbZvJ/jQU5jUPvy32+wxXkMjgsrrRn1lmsR
+         UomUO6ylkc/ZdT9czHk4q6Yk80XFeE4eHK4Ths/Rm6cBLzNBFesjf9XZrK5IDjmrsmMJ
+         /keg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Gn7ITOapzCSzC+UQtM9UH81e8sishwGd1JBZzz5dmQ0=;
-        b=gMYHt6nEPKHoN4KyJajcgC/7pm5CRhcWkGRk6bM5wnRJXnQyFf0HYmPuXxzZNm3NKS
-         dVmUAHEuoECDdE7YJEF50qUSVKcHk+SebjhBmMpbtRa6sPpM8wSPmRj1ZUx30ugu8vQk
-         zwz1cdjWvWyYw4rr40P5YwhF1QAEJqe6uYbuBlNFd9oct1wojhxP6LfYj2kfBQhI5FOZ
-         pEDQKIyhu1eiLXFUtH+ahP/KZGXDy+hrAbmp59QkExwBJyxRoDjzwdqktlZy5/SN/Gkx
-         Yvj0EvweT4RmrRJnuXaHCVK/BiFxtm18uK5qifF0iGf5ltmA6ZW/ZgWkYE9ldUQyUolm
-         /SjA==
-X-Gm-Message-State: AOAM533iAck54McLa5ZboIh5MGCQdSM7wJBhUOt2FmUSE8/R9aQu29lS
-	79EIg5EbZETi7m0/V7097mc=
-X-Google-Smtp-Source: ABdhPJwEdti+wpPjI/D1brW1LYLvBuG5CvGZfc48iyfzoDbNOlsVLdU+j5YjI9EqNPBdH8VTpxonEw==
-X-Received: by 2002:ad4:4eea:0:b0:446:62c2:4e88 with SMTP id dv10-20020ad44eea000000b0044662c24e88mr26448288qvb.116.1651182532499;
-        Thu, 28 Apr 2022 14:48:52 -0700 (PDT)
+        bh=Ychtn8SD4NMRNaGjpVNr9S3Ei5rtR05oQ+ZMmU3VmQk=;
+        b=oQHtcRej8VirZSUQBtOCZG+tB3/LMWxDR/aq4ww4bePhByKTMWCLIMdQrw78+SObVh
+         QKi2zIfwxXKSp5wlM1Wjwpi1rkMwnMEL0oQTAJOEM9fjxZfxR6fJsmNSgONFfbzM8hCe
+         Cc1Upktm8EaclSmTPEDlqKJTUZwK2MABbDFbhmuPcCtWM4Ye1zd0/SwQLfBdgJqrGnHW
+         tVZJzJCAO5s2B1Xb4L7+24e2zjriOr1lSkwTvmGdooug8lJNN5a/lP6DhQUMhpXa7BgZ
+         MF/Cm01Jbk8o69EnnPUh+yW9GGLo5qbJTwOjs6gmNNcHDfBoRn+1+H0L3mKUa42vAb6+
+         ognA==
+X-Gm-Message-State: AOAM533nWbENrKPkVVcpktzqW/uKtcaXziCeKS7N5sok4qAamnXxuheu
+	u2522dYGWRIs1XgJojwMddR424BEmPA=
+X-Google-Smtp-Source: ABdhPJwut13QdUA10q/S608ZFTUULF1LRhMsjGAMh86U9IZsVz5jMxqzbxxGJkGrkrcNyaWMMYmS4g==
+X-Received: by 2002:ad4:5ba8:0:b0:456:3c2a:dcd9 with SMTP id 8-20020ad45ba8000000b004563c2adcd9mr14947726qvq.14.1651182534148;
+        Thu, 28 Apr 2022 14:48:54 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id bl5-20020a05620a1a8500b0069f51e47c5esm546442qkb.110.2022.04.28.14.48.50
+        by smtp.gmail.com with ESMTPSA id bl5-20020a05620a1a8500b0069f51e47c5esm546442qkb.110.2022.04.28.14.48.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 14:48:52 -0700 (PDT)
+        Thu, 28 Apr 2022 14:48:53 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -84,93 +84,38 @@ Cc: robh+dt@kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH v2 07/15] dt-bindings: clock: imx: Add documentation for i.MXRT1170 clock
-Date: Thu, 28 Apr 2022 17:48:30 -0400
-Message-Id: <20220428214838.1040278-8-Mr.Bossman075@gmail.com>
+Subject: [PATCH v2 08/15] ARM: mach-imx: Add support for i.MXRT1170
+Date: Thu, 28 Apr 2022 17:48:31 -0400
+Message-Id: <20220428214838.1040278-9-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
 References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add DT binding documentation for i.MXRT1170 clock driver.
+Add "fsl,imxrt1170" to imxrt_compat
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
 V1 -> V2:
- - Change title to Clock Controller
- - Rename to add fsl
+ - Nothing done
 ---
- .../bindings/clock/fsl,imxrt1170-clock.yaml   | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
+ arch/arm/mach-imx/mach-imxrt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml b/Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
-new file mode 100644
-index 000000000000..a092ac0f7a50
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/imxrt1170-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale i.MXRT1170 Clock Controller
-+
-+maintainers:
-+  - Giulio Benetti <giulio.benetti@benettiengineering.com>
-+  - Jesse Taube <Mr.Bossman075@gmail.com>
-+
-+description: |
-+  The clock consumer should specify the desired clock by having the clock
-+  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
-+  for the full list of i.MXRT clock IDs.
-+
-+properties:
-+  compatible:
-+    const: fsl,imxrt1170-ccm
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 32M ext osc
-+      - description: 16M int rcosc
-+      - description: 32k osc
-+
-+  clock-names:
-+    items:
-+      - const: osc
-+      - const: rcosc16M
-+      - const: osc32k
-+
-+  '#clock-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imxrt1170-clock.h>
-+
-+    clks: clock-controller@40cc0000 {
-+        compatible = "fsl,imxrt1170-ccm";
-+        reg = <0x40cc0000 0x4000>;
-+        clocks = <&osc>, <&rcosc16M>, <&osc32k>;
-+        clock-names = "osc", "rcosc16M", "osc32k";
-+        #clock-cells = <1>;
-+    };
+diff --git a/arch/arm/mach-imx/mach-imxrt.c b/arch/arm/mach-imx/mach-imxrt.c
+index 2063a3059c84..0070214feb42 100644
+--- a/arch/arm/mach-imx/mach-imxrt.c
++++ b/arch/arm/mach-imx/mach-imxrt.c
+@@ -10,6 +10,7 @@
+ 
+ static const char *const imxrt_compat[] __initconst = {
+ 	"fsl,imxrt1050",
++	"fsl,imxrt1170",
+ 	NULL
+ };
+ 
 -- 
 2.35.1
 
