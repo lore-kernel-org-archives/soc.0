@@ -1,128 +1,107 @@
-Return-Path: <SRS0=8GTC=VF=aurel32.net=aurelien@kernel.org>
+Return-Path: <SRS0=sTNi=VG=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1011C433EF
-	for <soc@archiver.kernel.org>; Wed, 27 Apr 2022 23:36:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32EEBC433F5
+	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 00:02:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BB949C385A7; Wed, 27 Apr 2022 23:36:34 +0000 (UTC)
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E2516C385AE; Thu, 28 Apr 2022 00:02:01 +0000 (UTC)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6E1F3C385AA;
-	Wed, 27 Apr 2022 23:36:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E1F3C385AA
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=aurel32.net
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=aurel32.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=rtzKHvK52/YyI9iOUl+5leZ5LnRvydEZvetZFryYg2U=; b=Zx+O39PPyuUBhiteC14mio57+7
-	nOMjcMHAFS1hEvfY4kGaYQfrIuPkToHKgWsn6Fo0Ikhw4PZTSvElgHFaIQX9nMxMV/08cIcKmTuDR
-	GZzs/KI8QJ+fAZKglFnhC4sKvlkvN9hQZmyGkpT/ifbwtX8mlk5AHuR2LdE6Ln+pIeWxhJfnSTxyr
-	CH+1H+q+nEwsR/2tC6juNIwL4NeV6KVRoS8f9122iVQhDokWs/o+BQWEQ5sbAMMG1DBbfqI6jGzp7
-	O4bY6I904nUiaCgfKffuyCt+gUF+T0hmCUmn0korLJscXd0vSsyRFnfW8KEfJ6743551GgIxWiRZF
-	eM9W1CaA==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1njrCe-006YNU-Ea; Thu, 28 Apr 2022 01:36:12 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.95)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1njrCd-0058nI-4A;
-	Thu, 28 Apr 2022 01:36:11 +0200
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	bcm-kernel-feedback-list@broadcom.com
-List-Id: <soc.lore.kernel.org>
-Cc: Stefan Wahren <stefan.wahren@i2se.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	devicetree@vger.kernel.org,
-	Phil Elwell <phil@raspberrypi.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	soc@kernel.org,
-	Aurelien Jarno <aurelien@aurel32.net>
-Subject: [PATCH RESEND 2/2] arm: dts: Enable device-tree overlay support for RPi devices
-Date: Thu, 28 Apr 2022 01:36:07 +0200
-Message-Id: <20220427233607.1225419-3-aurelien@aurel32.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220427233607.1225419-1-aurelien@aurel32.net>
-References: <20220427233607.1225419-1-aurelien@aurel32.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0753AC385A7;
+	Thu, 28 Apr 2022 00:02:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0753AC385A7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d15so2895424pll.10;
+        Wed, 27 Apr 2022 17:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MQAHzj75bUL24cVXZai27Cp7fT8NBFoM4IN6VdxYD9M=;
+        b=qrgstjD662uD0mASf4Lns6/fJJC8Tw6D60c8TonIiOHwaARfrwncV13tYmVyM4dxRf
+         Xp5N9IIzn+L4Dn/v+Nicm554zwRblHhkT7QlMbIKLyJKPqmozxzf1aEI2NehOEziAGce
+         h9ZWydlpd9ICko97l/P64TYeUxHYPz57A/rzewn6fGiFStDOhSqD8SbfnuoJIpP6gYqu
+         rsMar46OapajVOcXf1Qym7RuOOWc8lQDH9rGGJrswsJqBN/RU0gYvo49pN5fnRrL6p56
+         KC8Ig8QDfOHwousLQ6SXkfmKHTHuqeJ7snT58Fac3P60N6gOV//APIBU7P483/8tkpqb
+         sLoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MQAHzj75bUL24cVXZai27Cp7fT8NBFoM4IN6VdxYD9M=;
+        b=VXw+18oQ9sWC+00I7AGkOWj11u0CNj1xt1YU//gQ5OF6PLM9Qs1c2UA7Co6hcHH7Zr
+         tjTUlvOCnNv3BEk4H9Oa1G30E5Vk5RyQJZNbrtnliCvRRUqitnnEYiDRlI5TEbmS8/l3
+         A0e3F69oGwptQMMRgo7aIsdpPAB7/cf79Ls0PMIkWXEgixD9I2bpiXc+ph4g6MhDefan
+         RnK6QvviMpS/RONvtWycPokaijMQcxpvwK8rtXT/BVcv3ImTe4V76QiGq24uw0H13RjP
+         W705fP4W+Xc+LTYLM426ODh80xROkb2UbC09l1w7FlVF1HnVFFRw2MHj1XOfoDh/UnJJ
+         2A0g==
+X-Gm-Message-State: AOAM530C4mDMW7Ix8SgjGe4l6v0wzXuj8STnvXGyvMtZvbKBcSMJGuD0
+	iE/sgtBM2fwYSf7yTGqqa5DbOZD+L+I=
+X-Google-Smtp-Source: ABdhPJzZHN/PJml0c5wTRNM4ywoHQ5+7W4SXdULxBRlC6dGLU7RIBY8NFxoHyuzclzXuZoehvRDd8g==
+X-Received: by 2002:a17:903:31d1:b0:159:804:e852 with SMTP id v17-20020a17090331d100b001590804e852mr30769629ple.19.1651104120170;
+        Wed, 27 Apr 2022 17:02:00 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:7132:60ce:33ea:8830? ([2600:8802:b00:4a48:7132:60ce:33ea:8830])
+        by smtp.gmail.com with ESMTPSA id x2-20020aa79182000000b00505a61ec387sm19612074pfa.138.2022.04.27.17.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 17:01:59 -0700 (PDT)
+Message-ID: <21986066-f72c-83ce-d1b9-ef5767fdebef@gmail.com>
+Date: Wed, 27 Apr 2022 17:01:57 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH v2 2/3] of: Add support for -@ when compiling overlays
+Content-Language: en-US
+To: Rob Herring <robh@kernel.org>,
+ Detlev Casanova <detlev.casanova@collabora.com>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-kernel@vger.kernel.org, arnd@arndb.de,
+ bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+ f.fainelli@gmail.com, frowand.list@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org,
+ masahiroy@kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com,
+ nsaenz@kernel.org, olof@lixom.net, rjui@broadcom.com, sbranden@broadcom.com,
+ soc@kernel.org, stefan.wahren@i2se.com
+References: <20220427185243.173594-1-detlev.casanova@collabora.com>
+ <20220427185243.173594-3-detlev.casanova@collabora.com>
+ <Ymm0l2/oGpt/SeDO@robh.at.kernel.org>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <Ymm0l2/oGpt/SeDO@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add the '-@' DTC option for the Raspberry Pi devices. This option
-populates the '__symbols__' node that contains all the necessary symbols
-for supporting device-tree overlays (for instance from the firmware or
-the bootloader) on these devices.
 
-The Rasbperry Pi devices are well known for their GPIO header, that
-allow various "HATs" or other modules do be connected and this enables
-users to create out-of-tree device-tree overlays for these modules.
 
-Please note that this change does increase the size of the resulting DTB
-by ~40%. For example, with v5.17 increase in size is as follows:
+On 4/27/2022 2:24 PM, Rob Herring wrote:
+> On Wed, Apr 27, 2022 at 02:52:42PM -0400, Detlev Casanova wrote:
+>> This commit adds an option to compile all device trees with -@ to add the
+>> symbol table to the Device Tree Blobs.
+> 
+> Why would we want to tie this to the kernel config?
+> 
+> Globally enabling it has already been discussed and rejected.
+> 
+>> It prepares the introduction of device tree overlays that are
+>> not applied on device trees at compile time (dtbo files.)
+>>
+>> These device tree overlays will be used by either a bootloader or a
+>> linux userspace tool to extend the base device tree.
+>>
+>> This is used e.g. for drivers that need device tree nodes for optional
+>> non plug and play devices, like an external DSI touchscreen panel that
+>> embeds different i2c devices to control it.
+> 
+> You can already set DTC_FLAGS per directory (and target?), so enable it
+> for the dtbs that have overlays.
 
-  bcm2711-rpi-400.dtb       26481 -> 36830 bytes
-  bcm2711-rpi-4-b.dtb       26537 -> 36886 bytes
-  bcm2711-rpi-cm4-io.dtb    26426 -> 36945 bytes
-  bcm2835-rpi-a.dtb         12641 -> 17852 bytes
-  bcm2835-rpi-a-plus.dtb    12765 -> 17976 bytes
-  bcm2835-rpi-b.dtb         12763 -> 17998 bytes
-  bcm2835-rpi-b-plus.dtb    12979 -> 18263 bytes
-  bcm2835-rpi-b-rev2.dtb    12847 -> 18131 bytes
-  bcm2835-rpi-cm1-io1.dtb   12839 -> 18113 bytes
-  bcm2835-rpi-zero.dtb      12681 -> 17924 bytes
-  bcm2835-rpi-zero-w.dtb    13135 -> 18430 bytes
-  bcm2836-rpi-2-b.dtb       13687 -> 19255 bytes
-  bcm2837-rpi-3-a-plus.dtb  14133 -> 19740 bytes
-  bcm2837-rpi-3-b.dtb       14310 -> 20006 bytes
-  bcm2837-rpi-3-b-plus.dtb  14670 -> 20474 bytes
-  bcm2837-rpi-cm3-io3.dtb   13680 -> 19266 bytes
+Looks like this patch series from Aurelien should take care of that:
 
-Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
----
- arch/arm/boot/dts/Makefile | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..85644149de44 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -81,6 +81,24 @@ dtb-$(CONFIG_SOC_SAMA7G5) += \
- 	at91-sama7g5ek.dtb
- dtb-$(CONFIG_ARCH_AXXIA) += \
- 	axm5516-amarillo.dtb
-+# Enables support for device-tree overlays
-+DTC_FLAGS_bcm2835-rpi-b := -@
-+DTC_FLAGS_bcm2835-rpi-a := -@
-+DTC_FLAGS_bcm2835-rpi-b-rev2 := -@
-+DTC_FLAGS_bcm2835-rpi-b-plus := -@
-+DTC_FLAGS_bcm2835-rpi-a-plus := -@
-+DTC_FLAGS_bcm2835-rpi-cm1-io1 := -@
-+DTC_FLAGS_bcm2836-rpi-2-b := -@
-+DTC_FLAGS_bcm2837-rpi-3-a-plus := -@
-+DTC_FLAGS_bcm2837-rpi-3-b := -@
-+DTC_FLAGS_bcm2837-rpi-3-b-plus := -@
-+DTC_FLAGS_bcm2837-rpi-cm3-io3 := -@
-+DTC_FLAGS_bcm2837-rpi-zero-2-w := -@
-+DTC_FLAGS_bcm2711-rpi-400 := -@
-+DTC_FLAGS_bcm2711-rpi-4-b := -@
-+DTC_FLAGS_bcm2711-rpi-cm4-io := -@
-+DTC_FLAGS_bcm2835-rpi-zero := -@
-+DTC_FLAGS_bcm2835-rpi-zero-w := -@
- dtb-$(CONFIG_ARCH_BCM2835) += \
- 	bcm2835-rpi-b.dtb \
- 	bcm2835-rpi-a.dtb \
+https://lore.kernel.org/linux-arm-kernel/20220427233607.1225419-1-
+aurelien@aurel32.net/
 -- 
-2.35.1
-
+Florian
