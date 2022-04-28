@@ -1,143 +1,142 @@
-Return-Path: <SRS0=cNPI=VG=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=kw8K=VG=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8215AC433F5
-	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 07:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8820CC433F5
+	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 14:26:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56EF5C385AC; Thu, 28 Apr 2022 07:13:30 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id 5E4DDC385A0; Thu, 28 Apr 2022 14:26:07 +0000 (UTC)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 547B6C385A0
-	for <soc@kernel.org>; Thu, 28 Apr 2022 07:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 547B6C385A0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id r13so7705702ejd.5
-        for <soc@kernel.org>; Thu, 28 Apr 2022 00:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iGqqNXodCdUDh7H9P3dABdV87d92uw3GOCws81glz0A=;
-        b=bZSDYZK3nZ8gNy0m2zOk1wfcaP/wBfAJTWrD4X7zoB+oJBYlWudyPmULtS1NYm4mxp
-         7HfiUBgkOKIwAzB4l4kApY3BoLGk/ZoyLxYc7OtY4Whi+KY/JkuV3ZOkSXu/28vUE/0D
-         3v/J3lI7c5WbaegYPuiWYmUX/pR/+IiERbtnl07Ek3QmqFEeA6DrJnzri8MhZzRsePQ2
-         NQII16PWfwWBGz9/z3Q5wfP/Ng2BvuX7NxP8ZzvtU+aQ4JFFPKB2A8eJR61JyS9BAr+B
-         VWKOYXYjyzGazWswq8q7jjB6GWV27+/fCtbo+sGDf7xKX1cuHHekM1EQEMVSicse3rjh
-         ywFw==
+	by smtp.kernel.org (Postfix) with ESMTPS id 586FEC385A9;
+	Thu, 28 Apr 2022 14:26:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 586FEC385A9
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f176.google.com with SMTP id e189so5480096oia.8;
+        Thu, 28 Apr 2022 07:26:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iGqqNXodCdUDh7H9P3dABdV87d92uw3GOCws81glz0A=;
-        b=MlYUoOhlRWQZ2BPGa3N3QjwF45+4gH0fsOb+O3TD8yChq/ldHOydXjq1Gcn0E1quhx
-         sF3gKCcyIhM5Q2OsNat/XUHUL8lZDAoFAyt1Trp7+YZhTzGO8yiyfIYVxaZroDIkqFKm
-         eENNP51hjtlNiSgD2FM+ryZlW1hBAr2Kz4aGpOdskZDeT+G7MtYPfFIwfKH1lI/8sZuW
-         z5MuORVW6jUC38v9uQ43NgS38LkNSXr1OR3T+jMNe2aaoORvKPN1JL7xACco9rsT0IBo
-         vVcE5xJhfqjBgzhf0q0rBTh6cICWWWmv4rlfiNgGPYPOFi0oTww7V5BlYGl6YRHVPa3T
-         9Lfg==
-X-Gm-Message-State: AOAM532qfN1Nw/mFanmnWEKNvKPytKg5/RhAejeNj6sFlhmRI8WZfTEZ
-	lg46/n/wsXfMUu9Ti9Pz8Y+Z/g==
-X-Google-Smtp-Source: ABdhPJzklgMRo6K6Lgff0kJeIZiKiKNlkH0bcxPoFqazCmfw8oQiB7HgE78X2TJm3gxs/k62MWTUpg==
-X-Received: by 2002:a17:907:e88:b0:6ef:bce9:ff6a with SMTP id ho8-20020a1709070e8800b006efbce9ff6amr32059892ejc.275.1651130007604;
-        Thu, 28 Apr 2022 00:13:27 -0700 (PDT)
-Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k26-20020a17090666da00b006ef79b595e9sm7946644ejp.80.2022.04.28.00.13.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 00:13:26 -0700 (PDT)
-Message-ID: <a1d5cec3-b883-319c-c413-b09cca1fa518@linaro.org>
-Date: Thu, 28 Apr 2022 09:13:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC RFT PATCH v1 1/1] ARM: orion5x: convert D-Link DNS-323 to
- the Device Tree
-Content-Language: en-US
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zXubuPjx2pjAm7hx5cD02wC66amPUE4R4gLIeK6MStk=;
+        b=VZ8RIbkbe5Qdu9kBYRWzfIhW1MxLvVd8S/KgaxuFbStIy1eaWsbDIHhkund4DRXQ53
+         LTyDcWoCCwbTGehw0SxelubruPbgWwcdXV5oWggxkDRdaJbVxvttoiHFyZ2f06AyQeHU
+         U2HC/Kc6TUutGre8Wqqsokyap75nlaFd8NjJcqprgY0s8S/yWB2hUWtrwRY5HgelueGO
+         f1dZZ67XfAuwbmPdtGYfjN8QgM4SlHmYmmFbz8HuVrpaFozqKd8bSR/jIcK5oOYDnYnj
+         KtOO1pueMC0lA/Zjq43SVtovXbvqYgsIRsYojIvIpNgEd4Xj5SOqfLxblI7jcb9YSRXt
+         Jdkg==
+X-Gm-Message-State: AOAM530RcL9MuWUOSGOs0MXv6HMqA+QZ2V2CpJiy2QSZFYgj5ka5PU7P
+	IK7xWd8wA0UoV/yAUsokpA==
+X-Google-Smtp-Source: ABdhPJyGuPF0HOA0tIXbE2tN+YPk6d3A782bnuVeS4IVfJscr45WQBcONamKAO4aNHjqSxXj6dJ9ww==
+X-Received: by 2002:aca:1811:0:b0:2ef:3c0f:f169 with SMTP id h17-20020aca1811000000b002ef3c0ff169mr15678035oih.61.1651155965318;
+        Thu, 28 Apr 2022 07:26:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x21-20020a4aea15000000b0035e9a8d6e58sm68641ood.26.2022.04.28.07.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 07:26:04 -0700 (PDT)
+Received: (nullmailer pid 2177702 invoked by uid 1000);
+	Thu, 28 Apr 2022 14:26:03 -0000
+Date: Thu, 28 Apr 2022 09:26:03 -0500
+From: Rob Herring <robh@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 List-Id: <soc.lore.kernel.org>
-To: Mauri Sandberg <maukka@ext.kapsi.fi>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Cc: arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
- sebastian.hesselbarth@gmail.com
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <20220427162123.110458-2-maukka@ext.kapsi.fi>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220427162123.110458-2-maukka@ext.kapsi.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Detlev Casanova <detlev.casanova@collabora.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>, "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, Florian Fainelli <f.fainelli@gmail.com>, Frank Rowand <frowand.list@gmail.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>, Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, Nick Desaulniers <ndesaulniers@google.com>, Nicolas Saenz Julienne <nsaenz@kernel.org>, Olof Johansson <olof@lixom.net>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, arm-soc <soc@kernel.org>, Stefan Wahren <stefan.wahren@i2se.com>
+Subject: Re: [RFC PATCH v2 3/3] ARM: dto: Add bcm2711-rpi-7-inches-ts.dts
+ overlay
+Message-ID: <Ymqj+2xBuHCmGUd/@robh.at.kernel.org>
+References: <20220427185243.173594-1-detlev.casanova@collabora.com>
+ <20220427185243.173594-4-detlev.casanova@collabora.com>
+ <YmmyvdjiG7s/Qil4@robh.at.kernel.org>
+ <CAMuHMdXHRQOOrmUO1AyDXye+nnRtpzx7WHiC__whcg0aBtzAmw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXHRQOOrmUO1AyDXye+nnRtpzx7WHiC__whcg0aBtzAmw@mail.gmail.com>
 
-On 27/04/2022 18:21, Mauri Sandberg wrote:
-> Convert D-Link DNS-323 to use the device tree and remove associated
-> mach file.
+On Thu, Apr 28, 2022 at 08:44:17AM +0200, Geert Uytterhoeven wrote:
+> Hi Rob,
 > 
-
-Thank you for your patch. There is something to discuss/improve.
-
-> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
-> ---
->  arch/arm/boot/dts/Makefile                   |   3 +
->  arch/arm/boot/dts/orion5x-dlink-dns323.dtsi  | 217 ++++++
->  arch/arm/boot/dts/orion5x-dlink-dns323a1.dts |  59 ++
->  arch/arm/boot/dts/orion5x-dlink-dns323b1.dts |  38 +
->  arch/arm/boot/dts/orion5x-dlink-dns323c1.dts |  80 ++
->  arch/arm/mach-orion5x/Kconfig                |   6 +-
->  arch/arm/mach-orion5x/Makefile               |   2 +-
->  arch/arm/mach-orion5x/board-dns323.c         | 118 +++
->  arch/arm/mach-orion5x/board-dt.c             |   3 +
->  arch/arm/mach-orion5x/common.h               |   6 +
->  arch/arm/mach-orion5x/dns323-setup.c         | 724 -------------------
->  11 files changed, 528 insertions(+), 728 deletions(-)
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323a1.dts
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
->  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323c1.dts
->  create mode 100644 arch/arm/mach-orion5x/board-dns323.c
->  delete mode 100644 arch/arm/mach-orion5x/dns323-setup.c
-
-DTS goes separately.
-
+> On Wed, Apr 27, 2022 at 11:23 PM Rob Herring <robh@kernel.org> wrote:
+> > On Wed, Apr 27, 2022 at 02:52:43PM -0400, Detlev Casanova wrote:
+> > > Add a device tree overlay to support the official Raspberrypi 7" touchscreen for
+> > > the bcm2711 devices.
+> > >
+> > > The panel is connected on the DSI 1 port and uses the simple-panel
+> > > driver.
+> > >
+> > > The device tree also makes sure to activate the pixelvalve[0-4] CRTC modules
+> > >
+> > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> > > ---
+> > >  arch/arm/boot/dts/Makefile                    |   4 +
+> > >  arch/arm/boot/dts/overlays/Makefile           |   3 +
+> > >  .../dts/overlays/bcm2711-rpi-7-inches-ts.dts  | 125 ++++++++++++++++++
+> >
+> > .dtso is preferred. I think... It was discussed, but I never got an
+> > updated patch to switch.
 > 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 7c16f8a2b738..c7c5c0b6c843 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -949,6 +949,9 @@ dtb-$(CONFIG_SOC_DRA7XX) += \
->  	dra71-evm.dtb \
->  	dra76-evm.dtb
->  dtb-$(CONFIG_ARCH_ORION5X) += \
-> +	orion5x-dlink-dns323a1.dtb \
-> +	orion5x-dlink-dns323b1.dtb \
-> +	orion5x-dlink-dns323c1.dtb \
->  	orion5x-kuroboxpro.dtb \
->  	orion5x-lacie-d2-network.dtb \
->  	orion5x-lacie-ethernet-disk-mini-v2.dtb \
-> diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi b/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
-> new file mode 100644
-> index 000000000000..2b033d37cbf8
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
-> @@ -0,0 +1,217 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
-> + *
-> + */
-> +
-> +/ {
-> +	model = "D-Link DNS-323";
-> +	compatible = "dlink,dns323", "marvell,orion5x";
+> Unfortunately that switch indeed hasn't happened yet.
+> My main gripe with .dts for overlays is that you cannot know whether
+> it's an overlay or not without reading the file's contents.
+> Hence tools like make also cannot know, and you need to e.g. list
+> all files explicitly in a Makefile.
+
+See my reply in the other thread for that.
+
+> > >  arch/arm64/boot/dts/broadcom/Makefile         |   4 +
+> > >  .../arm64/boot/dts/broadcom/overlays/Makefile |   3 +
+> > >  .../overlays/bcm2711-rpi-7-inches-ts.dts      |   2 +
+> > >  6 files changed, 141 insertions(+)
+> > >  create mode 100644 arch/arm/boot/dts/overlays/Makefile
+> > >  create mode 100644 arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
+> >
+> > A global (to arm) 'overlays' directory will create the same mess that we
+> > have in arch/arm/boot/dts/. IMO, first you should move all the Broadcom
+> > dts files to a 'broadcom' subdirectory like we have for arm64.
 > 
+> As I believe this display is not only used with real Raspberry Pi
+> devices, it makes sense to not have it a broadcom directory.
 
-You need to also document the compatibles in bindings file for boards.
-It would be nice to convert
-Documentation/devicetree/bindings/arm/marvell/marvell,orion5x.txt to DT
-Schema (see armada-7k-8k.yaml for example), but it is not a requirement.
+Then at a minimum 'bcm2711' in the name is not appropriate.
 
+I'm doubtful that as-is the overlay would apply to boards outside of 
+RPi's. For this to work (well), there needs to be a connector node to 
+translate between connector resources and the base board resources. See 
+the recent mikrobus thread[2].
 
-Best regards,
-Krzysztof
+> In fact it may be used on other architectures than arm, too, so I
+> think we need an arch-agnostic directory for overlays[1]?
+
+Probably so.
+
+Personally, I would prefer no DTs under /arch.
+
+> This may need remapping of labels. I'm aware the rpi infrastructure has
+> support for remapping labels when applying overlays during boot, but
+> AFAIK this is not yet supported by fdtoverlay (or perhaps by a fork?)?
+> Note that the remapping is also needed if you want to apply two
+> instances of the same overlay.
+
+First I've heard of label remapping... I have a lot of concerns about 
+using labels for overlays. For starters, with a flip of a switch (-@), 
+they all become an ABI when they were not previously. I think at a 
+minimum, we need an annotation so that a subset can be exported. 
+Anything that's an ABI, we should be documenting and reviewing.
+
+The requirement for overlays upstream is that they are applied at build 
+time to a base DT. Otherwise, we can't validate them completely. So if 
+there's a label remapping dependency on these, sounds like there is some 
+more work to do. The first being getting agreement that label remapping 
+is the right approach.
+
+Common label names or some remapping for targets kind of works, but 
+easily falls apart. For example, GPIO (or any provider with identifier 
+cells) numbering or SPI CS numbering would be different. 
+
+Rob
+
+[2] https://lore.kernel.org/all/YmFo+EntwxIsco%2Ft@robh.at.kernel.org/
