@@ -1,81 +1,76 @@
-Return-Path: <SRS0=/1sb=VG=ext.kapsi.fi=maukka@kernel.org>
+Return-Path: <SRS0=8exe=VG=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7525CC433EF
-	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 20:25:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80A1CC433F5
+	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 20:48:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5E059C385AD; Thu, 28 Apr 2022 20:25:15 +0000 (UTC)
-Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [91.232.154.157])
+	id 451C5C385AD; Thu, 28 Apr 2022 20:48:10 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AE99AC385B2;
-	Thu, 28 Apr 2022 20:25:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AE99AC385B2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ext.kapsi.fi
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ext.kapsi.fi
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:To:Cc:MIME-Version:Date:Message-ID:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=xtJrZMVo5Mq3hApYo1dK34SYaneZ5Xak6ST3DDUrWsk=; b=Cf9KlFIoJxk2im6IWZE7gAy3bN
-	wy5LrUD37eYdPGdVPIKuOqAzsnlhh+apqGEmGllR50k+a7KODr8tAawtrg038DxG3qoYDpDti7Fdv
-	++p4jODQYrCoJe/Ez5M+ncnDeanu5ejRHnQWSjaS/H8h82gKWbrEBMp7T7auqvnKgpm//X2jvnbRv
-	EdTR/0AokSf8efK2q2WYxbT9fVM+gNlOOg/x4aSA3OtElDWpi/TOMhuz5ZG49/kLn0MVLTobB/Aoi
-	9ElVcaCVMM77RGsRkHK5cKtAi8v81iYNXbqsF3oTf/4Mk1bwr+03LzjKkafq6nwqrW9oWfxmdMIPv
-	CfTwiEng==;
-Received: from 378b-225d-1272-9d03-8500-87e2-07d0-2001.dyn.estpak.ee ([2001:7d0:87e2:8500:9d03:1272:225d:378b]:57203)
-	by mailserv1.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	(Exim 4.89)
-	(envelope-from <maukka@ext.kapsi.fi>)
-	id 1nkAhB-0000Mf-Bx; Thu, 28 Apr 2022 23:25:01 +0300
-Message-ID: <b9c7eb81-c49e-76bf-5b49-b97cb5c2b03d@ext.kapsi.fi>
-Date: Thu, 28 Apr 2022 23:25:00 +0300
+	by smtp.kernel.org (Postfix) with ESMTPS id C044EC385A9;
+	Thu, 28 Apr 2022 20:48:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C044EC385A9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MmkjY-1oAx2E3Cpq-00jopJ; Thu, 28 Apr 2022 22:48:00 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ec42eae76bso65963367b3.10;
+        Thu, 28 Apr 2022 13:48:00 -0700 (PDT)
+X-Gm-Message-State: AOAM532zKVUU2imIFPukS3/0cKzkwUwcSsxJz15B1w3vjE+vUpRaGsJL
+	7059ul5ciQMuPcrvc+Fl36/+VFc41eCS233wKPU=
+X-Google-Smtp-Source: ABdhPJwwrdVTuYv//nRPW9fNDE9Rr8o8BYq06TKXNGJU2kXtWtzvORA/cpH7FQOL1pHoe/faBSaozhss7bne+khipgo=
+X-Received: by 2002:a81:1dd1:0:b0:2ea:c38b:65a8 with SMTP id
+ d200-20020a811dd1000000b002eac38b65a8mr34417764ywd.135.1651178879470; Thu, 28
+ Apr 2022 13:47:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-List-Id: <soc.lore.kernel.org>
-Cc: maukka@ext.kapsi.fi, SoC Team <soc@kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- DTML <devicetree@vger.kernel.org>, Olof Johansson <olof@lixom.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>
-References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
- <CAK8P3a0p-ev50UfGiHCpMM5Jz5Mf8pdfQtNep0M7qi7PANSBVg@mail.gmail.com>
- <YmndWe63ELJbQe20@lunn.ch>
-From: Mauri Sandberg <maukka@ext.kapsi.fi>
-In-Reply-To: <YmndWe63ELJbQe20@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:7d0:87e2:8500:9d03:1272:225d:378b
-X-SA-Exim-Mail-From: maukka@ext.kapsi.fi
-Subject: Re: [RFC RFT PATCH v1 0/1] ARM: orion5x: convert D-Link DNS-323 to
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi> <20220427162123.110458-2-maukka@ext.kapsi.fi>
+ <CAK8P3a2renoWK+rUYBAyUb10v-TKfv6gLTQUiGFRroFgLCv+9w@mail.gmail.com> <d8ab7986-c0a8-e11f-3599-a09c2938d936@ext.kapsi.fi>
+In-Reply-To: <d8ab7986-c0a8-e11f-3599-a09c2938d936@ext.kapsi.fi>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 28 Apr 2022 22:47:43 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1P0y9rKDbXbUW9GCyGg=4hT+XYPZt3HKoWRGoBiNfKSQ@mail.gmail.com>
+Message-ID: <CAK8P3a1P0y9rKDbXbUW9GCyGg=4hT+XYPZt3HKoWRGoBiNfKSQ@mail.gmail.com>
+Subject: Re: [RFC RFT PATCH v1 1/1] ARM: orion5x: convert D-Link DNS-323 to
  the Device Tree
-X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
-X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
+To: Mauri Sandberg <maukka@ext.kapsi.fi>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Andrew Lunn <andrew@lunn.ch>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:oWAiFrqApGyS+RNoH8GDsZWXwie0C/vMT3GbGrOpuCtqs1cpgcb
+ UsD/9T8m3VM/hPXhRbygyXjFOKbxwGzKQqLoFB6Bp44g7jK9ocof7tI/JstP+lHB8OR/siE
+ 9BbUFlXmmr8ckvkZ9eB4xECKA3buS9OYk3RE/6In85Zk1i3z3Cwav3fIUjHhZ2TUqYgB/Nk
+ E+5buqxz+RfKHMieEGbrQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hTRl2eh6TiI=:yI+MBqxoPX6vJuazjd45pe
+ ZHN3OoS1DiItmMAAJAhwujY2BqZsuYReTj1V60ZCfg/kjrlxpK+qo0VE7UxsAKN9uD0bgWdmg
+ dhwmgftkh+CeFWVQjOIO2pnyAXr347ibb+IrE+q6GVviIXUqm7NWUn6igYm8FLRaIJd+3ZCe5
+ 57W4wt+UbTXlYPzhmCo5vlNo/F7KAJKLqeucPA+U340hdAzVkye8LWHTLAZSHGNfC1ev/fEgK
+ KKXKLNeTVasyYwpbF+Fkr7zWxUCb9/GieSQwoGL63CP1NHrjSLzXI5NS74GoBDwodKpQIUMK+
+ uLfuAwVHy1/eYouMc9tDLOGnfIpJuFqgjzkCENUsjKBqdAHw2DuU8KSxQM53eTfpviX+jR54e
+ 2yEVhetjXvscaJxUO6C1i+E1ao1s/CsYm6rcgONdDvTqgbMR3g5HkD5hyx+DbxgILpyc6MOjo
+ CJX7FuUH2GTyZwRqiX5CMU8qVfj0dikOzUyG6xwPXe/0ZQJFy7iWe8yNVFmx0hPJDBeQ016oW
+ NFgDEgpEQ/Ak5FSRu/YmSS+6Pn8rie5WDD2vls6acvWPkMh/VjEEO4PZm+XihtUcfdCrURMZd
+ qnqZ84dmYyJ7CealEyJiH3XRLt40x4q5hztKG9DCis2klAbATWvYI1bIzmAD7IA3f9Ba172Tq
+ 8xrUPwDTmOSWRL4TdLzJNSSM/jQ6qt8LULDVW+5kx8H4jP/ebnVg0Kf/t9E0n5E5nRz4=
 
-Hello Andrew!
+On Thu, Apr 28, 2022 at 10:06 PM Mauri Sandberg <maukka@ext.kapsi.fi> wrote:
+>
+> You know, I had them initially in separate patches but then I looked at
+> the existing commit history and at least a few ones were in a single
+> commit so I merged them. :)
 
-On 28.4.2022 3.18, Andrew Lunn wrote:
->>> - there is no concensus on how to get ascii formatted MAC address from mtd
->>>    partitions so eth is not fully functional without setting the MAC from
->>>    userspace
->>
->> Ideally this is handled by the boot loader, but that requires being
->> able to update
->> it.
-> 
-> The mv643xx Ethernet driver is happy if it finds the MAC address
-> already in the hardware. The vendor uboot often does this. Does tftp
-> boot work in uboot? That would indicate it has access to the MAC
-> address.
+Just for context, we sometimes do a mass-conversion in a separate branch
+when there are a lot of changes that touch both DT and source files.
 
-The u-boot is really limited and I am transferring new images over 
-kermit. Tftp is not enabled.
+If you only do a single board, I would not make that a separate top-level
+pull request, so it has to fit into the regular branches.
 
+        Arnd
