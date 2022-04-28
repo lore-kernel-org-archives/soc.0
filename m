@@ -1,97 +1,143 @@
-Return-Path: <SRS0=8exe=VG=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=cNPI=VG=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC19CC433EF
-	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 07:04:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8215AC433F5
+	for <soc@archiver.kernel.org>; Thu, 28 Apr 2022 07:13:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A3458C385A0; Thu, 28 Apr 2022 07:04:54 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 56EF5C385AC; Thu, 28 Apr 2022 07:13:30 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1A988C385A9;
-	Thu, 28 Apr 2022 07:04:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1A988C385A9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mg6JS-1oM1iG3Ll0-00hijc; Thu, 28 Apr 2022 09:04:51 +0200
-Received: by mail-yb1-f180.google.com with SMTP id r189so7383254ybr.6;
-        Thu, 28 Apr 2022 00:04:50 -0700 (PDT)
-X-Gm-Message-State: AOAM531PDtl2Wa/ASoILlJnbKK90unP/GtzzOlh5J7WvryemKwwezhi0
-	EkgI4Z9qj2PZ3fAwzhjhIJws8OXTGMvc5npX3ig=
-X-Google-Smtp-Source: ABdhPJxPFdoAK53KrDUJDvXZZBNItrxVRstFggJZqPSzN1hTf5QMiOJMiJirNLjAI0bMczN8kVmmcLMEGUTHnXYsKxk=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr29428750ybx.472.1651129489342; Thu, 28
- Apr 2022 00:04:49 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 547B6C385A0
+	for <soc@kernel.org>; Thu, 28 Apr 2022 07:13:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 547B6C385A0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id r13so7705702ejd.5
+        for <soc@kernel.org>; Thu, 28 Apr 2022 00:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iGqqNXodCdUDh7H9P3dABdV87d92uw3GOCws81glz0A=;
+        b=bZSDYZK3nZ8gNy0m2zOk1wfcaP/wBfAJTWrD4X7zoB+oJBYlWudyPmULtS1NYm4mxp
+         7HfiUBgkOKIwAzB4l4kApY3BoLGk/ZoyLxYc7OtY4Whi+KY/JkuV3ZOkSXu/28vUE/0D
+         3v/J3lI7c5WbaegYPuiWYmUX/pR/+IiERbtnl07Ek3QmqFEeA6DrJnzri8MhZzRsePQ2
+         NQII16PWfwWBGz9/z3Q5wfP/Ng2BvuX7NxP8ZzvtU+aQ4JFFPKB2A8eJR61JyS9BAr+B
+         VWKOYXYjyzGazWswq8q7jjB6GWV27+/fCtbo+sGDf7xKX1cuHHekM1EQEMVSicse3rjh
+         ywFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iGqqNXodCdUDh7H9P3dABdV87d92uw3GOCws81glz0A=;
+        b=MlYUoOhlRWQZ2BPGa3N3QjwF45+4gH0fsOb+O3TD8yChq/ldHOydXjq1Gcn0E1quhx
+         sF3gKCcyIhM5Q2OsNat/XUHUL8lZDAoFAyt1Trp7+YZhTzGO8yiyfIYVxaZroDIkqFKm
+         eENNP51hjtlNiSgD2FM+ryZlW1hBAr2Kz4aGpOdskZDeT+G7MtYPfFIwfKH1lI/8sZuW
+         z5MuORVW6jUC38v9uQ43NgS38LkNSXr1OR3T+jMNe2aaoORvKPN1JL7xACco9rsT0IBo
+         vVcE5xJhfqjBgzhf0q0rBTh6cICWWWmv4rlfiNgGPYPOFi0oTww7V5BlYGl6YRHVPa3T
+         9Lfg==
+X-Gm-Message-State: AOAM532qfN1Nw/mFanmnWEKNvKPytKg5/RhAejeNj6sFlhmRI8WZfTEZ
+	lg46/n/wsXfMUu9Ti9Pz8Y+Z/g==
+X-Google-Smtp-Source: ABdhPJzklgMRo6K6Lgff0kJeIZiKiKNlkH0bcxPoFqazCmfw8oQiB7HgE78X2TJm3gxs/k62MWTUpg==
+X-Received: by 2002:a17:907:e88:b0:6ef:bce9:ff6a with SMTP id ho8-20020a1709070e8800b006efbce9ff6amr32059892ejc.275.1651130007604;
+        Thu, 28 Apr 2022 00:13:27 -0700 (PDT)
+Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id k26-20020a17090666da00b006ef79b595e9sm7946644ejp.80.2022.04.28.00.13.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 00:13:26 -0700 (PDT)
+Message-ID: <a1d5cec3-b883-319c-c413-b09cca1fa518@linaro.org>
+Date: Thu, 28 Apr 2022 09:13:25 +0200
 MIME-Version: 1.0
-References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
- <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com> <YkWVTEG5oFO82GPL@kroah.com>
- <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
- <20220408133246.fyw5554lgli4olvg@maple.lan> <CAK8P3a0u2xa9BFmakG+f4kyLsqNZQbE6KQ6jz2356Fyen=1EHw@mail.gmail.com>
- <YlBE6hZHmLo9/wrU@kroah.com> <CAK8P3a3v4+AO5avGoxeZSyNTOWqk8YS95xQLWSBZ=yV_3DKggg@mail.gmail.com>
- <20220408150202.yhn3qppqwm7wzmo3@maple.lan> <OSZPR01MB7050BE18BC9E8DA05C00F478EBF29@OSZPR01MB7050.jpnprd01.prod.outlook.com>
- <OSZPR01MB70504BD8347355EB51F7CCB8EBFD9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSZPR01MB70504BD8347355EB51F7CCB8EBFD9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Thu, 28 Apr 2022 09:04:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2aHBxRJbOcXBGM7gjAqpErBAeaG3NmfgBTn4TNYscSgw@mail.gmail.com>
-Message-ID: <CAK8P3a2aHBxRJbOcXBGM7gjAqpErBAeaG3NmfgBTn4TNYscSgw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
-To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC RFT PATCH v1 1/1] ARM: orion5x: convert D-Link DNS-323 to
+ the Device Tree
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, Sumit Garg <sumit.garg@linaro.org>, 
-	Olof Johansson <olof@lixom.net>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Jason Wessel <jason.wessel@windriver.com>, 
-	Doug Anderson <dianders@chromium.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"kgdb-bugreport@lists.sourceforge.net" <kgdb-bugreport@lists.sourceforge.net>, 
-	Peter Zijlstra <peterz@infradead.org>, Mike Travis <mike.travis@hpe.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3xHeUSjOFhUo+JH6XEVgVn7rnay62+aGnKT3HnJN1hEHk9I3w4e
- rBqdTVnhF3jxHkntQz/qz4+HODLuKMxUX86mfKyjCqmvSYN459gRxHLv5Gw82Km2PFhvLFZ
- Qp4VFEZqAvg908zKNtJIwJ11LsTUM/S+uxKuW/I6wpZGEgt3lT+g2GIS9BXTM00YbehrfVV
- t1l6NLLQMxryS8NSAQXLg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZPTDJlqUv7E=:qDBBVG4WzRLwwzOYFoYrtM
- RQtHLluptnHHbDEDRbUEWjTN+lcYzFgEpMGu5yFL3EECD1G6JjL/qBy9PsbEX8DyEYA7moKHL
- +nltDhP5oZkwdFzTsmMmoRzc3Udyc4LyAKNF2KeUKPePTghCBy/saCt1yNwWaqKeo6oPN6bFs
- 3EOY3T5spxXBoeyPBq4QmvBSZ8PqRvK3F/ed70zdwSeZhugfvkmbaEUcr6Y1hhRPbrDVnWrpC
- n2vv+KBRT6GE+BGXHZg0N1HKy1veW5XhTkssqhia3KmvjYGC03Et8LSjCFbJuP3pfwYiZosRs
- FnLBDiEIf0Iu/txXkDkpucZqFarEiRRMHIA6ij9I2TWIGz/14oAsYrtTer1xnPyNvhQgDrw/M
- KupvZr4lekFzs+w36bFtWb7lbExfFbzf5XrbGFOfbHi7cZkDq2j87LAAPjVObHxnD33oM2VqV
- /RHWGzXnz546LIAHEohhIbLHYdom2g8xoqfMOTtX+8mOF1w0tRXC7Y6nn1JREpZ/O5SJlV2Zz
- Uvk3UxxnBEB3rBImBkdku4BKUvMStrX4vZPsxKZG6MxMXwJcqpk/N+I+7xIp7Hg07MHxJA+N+
- ZCJ6uHuBerrPCPpasMr7wCc54pKVlYhPJw6xPwxtWFMeJVGuE1H8/KwI2xiTqyiKcGkjpoXUF
- qnFsiMBLG7lVKqOyaVVkNw8ZQdcfjyyW1kjNlxyl1Py8bqY92My7r79McoGlTcZq9PTv7Go+N
- brwiZMO15X/NiCCVzSg43imfSznO33AMIR2wyOzs4kb/gL1YAWKpTEC98kvzLEbGdA4OtTWoX
- dEacfexjGkSJ4r7UOvb8Ah0Tr4O+Y+A6wo4UfI03RKuzwT0KA8=
+To: Mauri Sandberg <maukka@ext.kapsi.fi>, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Cc: arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+ sebastian.hesselbarth@gmail.com
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <20220427162123.110458-2-maukka@ext.kapsi.fi>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220427162123.110458-2-maukka@ext.kapsi.fi>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 28, 2022 at 4:15 AM hasegawa-hitomi@fujitsu.com
-<hasegawa-hitomi@fujitsu.com> wrote:
->
-> Hi Greg, Arnd, and Daniel,
->
-> > I understand that it is not appropriate to hardcode c.
-> > How about using __setup() to add a new kernel parameter and allow the admin
-> > to specify the sysrq command when booting?
->
-> I have received a lot of advice regarding sysrq, but after some consideration,
-> I would like to change to calling panic() directly as in v1 instead of sysrq.
->
-> If the administrator wants to request a diagnostic, I think they usually
-> expect crash with NMI like x86 and take a dump the kernel. It's not common
-> to handle diagnostic interrupts with sysrq now, so I don't think
-> it's necessary to make this driver extensible at this time.
+On 27/04/2022 18:21, Mauri Sandberg wrote:
+> Convert D-Link DNS-323 to use the device tree and remove associated
+> mach file.
+> 
 
-Ok, fair enough. Matching x86 behavior sounds like a reasonable outcome.
-If we want to make this configurable in the future, that can still be done then,
-and it should work the same across architectures but adding the logic
-in nmi_panic() directly.
+Thank you for your patch. There is something to discuss/improve.
 
-        Arnd
+> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
+> ---
+>  arch/arm/boot/dts/Makefile                   |   3 +
+>  arch/arm/boot/dts/orion5x-dlink-dns323.dtsi  | 217 ++++++
+>  arch/arm/boot/dts/orion5x-dlink-dns323a1.dts |  59 ++
+>  arch/arm/boot/dts/orion5x-dlink-dns323b1.dts |  38 +
+>  arch/arm/boot/dts/orion5x-dlink-dns323c1.dts |  80 ++
+>  arch/arm/mach-orion5x/Kconfig                |   6 +-
+>  arch/arm/mach-orion5x/Makefile               |   2 +-
+>  arch/arm/mach-orion5x/board-dns323.c         | 118 +++
+>  arch/arm/mach-orion5x/board-dt.c             |   3 +
+>  arch/arm/mach-orion5x/common.h               |   6 +
+>  arch/arm/mach-orion5x/dns323-setup.c         | 724 -------------------
+>  11 files changed, 528 insertions(+), 728 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
+>  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323a1.dts
+>  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323b1.dts
+>  create mode 100644 arch/arm/boot/dts/orion5x-dlink-dns323c1.dts
+>  create mode 100644 arch/arm/mach-orion5x/board-dns323.c
+>  delete mode 100644 arch/arm/mach-orion5x/dns323-setup.c
+
+DTS goes separately.
+
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 7c16f8a2b738..c7c5c0b6c843 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -949,6 +949,9 @@ dtb-$(CONFIG_SOC_DRA7XX) += \
+>  	dra71-evm.dtb \
+>  	dra76-evm.dtb
+>  dtb-$(CONFIG_ARCH_ORION5X) += \
+> +	orion5x-dlink-dns323a1.dtb \
+> +	orion5x-dlink-dns323b1.dtb \
+> +	orion5x-dlink-dns323c1.dtb \
+>  	orion5x-kuroboxpro.dtb \
+>  	orion5x-lacie-d2-network.dtb \
+>  	orion5x-lacie-ethernet-disk-mini-v2.dtb \
+> diff --git a/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi b/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
+> new file mode 100644
+> index 000000000000..2b033d37cbf8
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/orion5x-dlink-dns323.dtsi
+> @@ -0,0 +1,217 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Mauri Sandberg <maukka@ext.kapsi.fi>
+> + *
+> + */
+> +
+> +/ {
+> +	model = "D-Link DNS-323";
+> +	compatible = "dlink,dns323", "marvell,orion5x";
+> 
+
+You need to also document the compatibles in bindings file for boards.
+It would be nice to convert
+Documentation/devicetree/bindings/arm/marvell/marvell,orion5x.txt to DT
+Schema (see armada-7k-8k.yaml for example), but it is not a requirement.
+
+
+Best regards,
+Krzysztof
