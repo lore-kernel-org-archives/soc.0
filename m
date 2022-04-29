@@ -4,119 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E36F5C433FE
-	for <soc@archiver.kernel.org>; Fri, 29 Apr 2022 15:18:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36B35C433F5
+	for <soc@archiver.kernel.org>; Fri, 29 Apr 2022 15:53:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9DF4BC385A4; Fri, 29 Apr 2022 15:18:40 +0000 (UTC)
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	id 03CBDC385A4; Fri, 29 Apr 2022 15:53:20 +0000 (UTC)
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9B1AFC385A7;
-	Fri, 29 Apr 2022 15:18:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9B1AFC385A7
+	by smtp.kernel.org (Postfix) with ESMTPS id F29FFC385AE;
+	Fri, 29 Apr 2022 15:53:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F29FFC385AE
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f171.google.com with SMTP id e189so8814454oia.8;
-        Fri, 29 Apr 2022 08:18:39 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id q8so8512349oif.13;
+        Fri, 29 Apr 2022 08:53:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h5I147M5SAG5aKSeTFIpJ9Fdg0GC9tCoery/v4BvAoc=;
-        b=XHglo6bC+8gPi31RACQ5T1jCN7FZS8CqNnKSh+a1REkwZtOZx1nIgicyzc/BiwFBLO
-         OiPRZy3LcSw0d/p8xpKNqlMr4NyTZ9xwQsrt4X7MRpEjm7tXeGSSRwaYzIJm3NCkF7Wr
-         9B3SyGN/e/yYc+yZCxs4kSEYG6LmL0ZPThgZwqwlvJWjiDsW13yM0R+/I1YXra1ukVxz
-         LQ0nRGd4MaaKinEeZDejvhX29T78uiIK+32Q4mzOswxd3S3JoSu6BUdiu8YKM8Ea8Z6u
-         UL3WoH65gH2iTcCPCZI4gReqPhcU22RHBosqHQuitG0JXXuioej31T68dDytFpo+yS+q
-         m9JQ==
-X-Gm-Message-State: AOAM533ONvASNxoB06skq8MAYZsiDZhkIIZppZzhXf931fMJ7oxIJSZO
-	e3S3+qvqq40qGpC+WmNbbw==
-X-Google-Smtp-Source: ABdhPJw1fKhbwx6lx70lrdW0UswFjeYAMQ8BdI+q1NecOx0z8DU6TRguS9yHIi1JzMEh2mVexnvGug==
-X-Received: by 2002:a05:6808:1886:b0:322:f55c:133d with SMTP id bi6-20020a056808188600b00322f55c133dmr1691725oib.217.1651245518636;
-        Fri, 29 Apr 2022 08:18:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=FFjFGklMesuiQkPh+8rzTAyTXof2tZBqFJs5Jn3OJF4=;
+        b=hcZK7A8jrmKJtYcxXbs25f0NnC2LN8vu0IOLTySaJqUDxOoz8yFlxlMLywo2tt6vcZ
+         CSHpKRWv+MBriQfhr/ZAIp5N+gOooe4b8AAEZu+tRq/GpAGer358QC69rSnNCh7Uh88+
+         971yDFaQp4W6vFf1uySLLB46kaTWsTGf0pWB0WShrUwUV29n1u/dcQ+gO+ZXPBOMT109
+         wwMwdlmMFDWNPIPxh5SAkWkV5BaNKruJFtg953fIEnJsZDKAasWbO72FwkQPZY4YfWx3
+         O/xSg67uY87RajFKKwOCLgf5CLzoV9ihNGz9lmgpQtrW0L1nmN0R3wRxA8EXlX6jCRvr
+         MuQg==
+X-Gm-Message-State: AOAM533UMnmOp/pdHNlgzn9/yAb3DBG6NWOURKz5JiXHpnVhN7c5D9ms
+	I1Lehp319b8rDt+rldyrAQ==
+X-Google-Smtp-Source: ABdhPJxBDckK9tQAVZHKd7BiQTS1n/On3l+TQwVLBKxxqANVBsJa67fSMJpCyXx9MaORSsHbqtpJ+w==
+X-Received: by 2002:a05:6808:f8d:b0:325:5728:997b with SMTP id o13-20020a0568080f8d00b003255728997bmr1891780oiw.163.1651247598036;
+        Fri, 29 Apr 2022 08:53:18 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m18-20020a4add12000000b0035eb4e5a6d3sm852822oou.41.2022.04.29.08.18.37
+        by smtp.gmail.com with ESMTPSA id o24-20020a4ae598000000b0035eb4e5a6d0sm890263oov.38.2022.04.29.08.53.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 08:18:38 -0700 (PDT)
-Received: (nullmailer pid 2284027 invoked by uid 1000);
-	Fri, 29 Apr 2022 15:18:36 -0000
-Date: Fri, 29 Apr 2022 10:18:36 -0500
+        Fri, 29 Apr 2022 08:53:17 -0700 (PDT)
+Received: (nullmailer pid 2344490 invoked by uid 1000);
+	Fri, 29 Apr 2022 15:53:16 -0000
 From: Rob Herring <robh@kernel.org>
-To: Thierry Reding <thierry.reding@gmail.com>
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, Bjorn Andersson <bjorn.andersson@linaro.org>, Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-stm32@st-md-mailman.stormreply.com, soc@kernel.org, devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] arm64: dts: tegra: Fix boolean properties with
- values
-Message-ID: <YmwBzLrTilOPdX5m@robh.at.kernel.org>
-References: <Yk3nShkFzNJaI3/Z@robh.at.kernel.org>
- <YlVAy95eF/9b1nmu@orome>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlVAy95eF/9b1nmu@orome>
+Cc: shawnguo@kernel.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, s.hauer@pengutronix.de, tglx@linutronix.de, leoyang.li@nxp.com, cniedermaier@dh-electronics.com, aisheng.dong@nxp.com, soc@kernel.org, olof@lixom.net, abel.vesa@nxp.com, clin@suse.com, linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com, stefan@agner.ch, Mr.Bossman075@gmail.com, daniel.lezcano@linaro.org, sboyd@kernel.org, tharvey@gateworks.com, linus.walleij@linaro.org, sebastian.reichel@collabora.com, giulio.benetti@benettiengineering.com, marcel.ziswiler@toradex.com, robh+dt@kernel.org, devicetree@vger.kernel.org, festevam@gmail.com, linux@armlinux.org.uk, linux-gpio@vger.kernel.org, dev@lynxeye.de, kernel@pengutronix.de, linux-imx@nxp.com, arnd@arndb.de
+In-Reply-To: <20220428214838.1040278-8-Mr.Bossman075@gmail.com>
+References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com> <20220428214838.1040278-8-Mr.Bossman075@gmail.com>
+Subject: Re: [PATCH v2 07/15] dt-bindings: clock: imx: Add documentation for i.MXRT1170 clock
+Date: Fri, 29 Apr 2022 10:53:16 -0500
+Message-Id: <1651247596.107110.2344489.nullmailer@robh.at.kernel.org>
 
-On Tue, Apr 12, 2022 at 11:05:15AM +0200, Thierry Reding wrote:
-> On Wed, Apr 06, 2022 at 02:17:30PM -0500, Rob Herring wrote:
-> > Boolean properties in DT are present or not present and don't take a value.
-> > A property such as 'foo = <0>;' evaluated to true. IOW, the value doesn't
-> > matter.
-> > 
-> > It may have been intended that 0 values are false, but there is no change
-> > in behavior with this patch.
-> > 
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > Can someone apply this for 5.18.
-> > 
-> >  arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi            | 8 ++++----
-> >  .../boot/dts/nvidia/tegra186-p3509-0000+p3636-0001.dts    | 8 ++++----
-> >  arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi            | 6 +++---
-> >  arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi            | 6 +++---
-> >  arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi            | 6 +++---
-> >  arch/arm64/boot/dts/nvidia/tegra210-p2894.dtsi            | 8 ++++----
-> >  arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts        | 8 ++++----
-> >  arch/arm64/boot/dts/nvidia/tegra210-smaug.dts             | 4 ++--
-> >  8 files changed, 27 insertions(+), 27 deletions(-)
+On Thu, 28 Apr 2022 17:48:30 -0400, Jesse Taube wrote:
+> Add DT binding documentation for i.MXRT1170 clock driver.
 > 
-> This causes multiple regressions on Tegra boards. The reason for this is
-> that these properties are not in fact boolean, despite what the DT
-> bindings say. If you look at the code that handles these, you'll notice
-> that they are single-cell properties, typically with <0> and <1> values.
-> What may have led to the conclusion that these are boolean is that there
-> is also a special case where these can be left out, but the meaning of
-> that is not the "false" (<0>) value. Instead, leaving these out means
-> that the values should be left at whatever is currently in the register.
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> ---
+> V1 -> V2:
+>  - Change title to Clock Controller
+>  - Rename to add fsl
+> ---
+>  .../bindings/clock/fsl,imxrt1170-clock.yaml   | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
+> 
 
-The majority of users do use boolean in their DT.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Treating these as tri-state doesn't make much sense because what does 
-setting the pin to !push-pull mean? Isn't that just open-drain or 
-open-source for which also have boolean values? Allowing these to have 
-values is unnecessary and enables more invalid combinations.
+yamllint warnings/errors:
 
-> See pinconf_generic_parse_dt_config() and parse_dt_cfg() specifically in
-> drivers/pinctrl/pinconf-generic.c.
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/clock/fsl,imxrt1170-clock.yaml#
+Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.example.dts:20:18: fatal error: dt-bindings/clock/imxrt1170-clock.h: No such file or directory
+   20 |         #include <dt-bindings/clock/imxrt1170-clock.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1401: dt_binding_check] Error 2
 
-of_property_read_u32() will return -EOVERFLOW on a boolean value and 
-then the default value (0) is used. However, at least for QCom the value 
-is ignored.
+doc reference errors (make refcheckdocs):
 
-Looking at max77620, the value is used. However, it is clear that 
-push-pull and open-drain operate on the same register bit.
+See https://patchwork.ozlabs.org/patch/
 
-> Arnd, can you please revert this so that these boards can be unbroken?
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-That's fine for now...
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> It's a bit unfortunate because there seem to be other platforms that
-> also employ these in the boolean form that Rob mentioned, but I think it
-> is those that probably need fixing instead. Not sure what the intentions
-> were for those.
+pip3 install dtschema --upgrade
 
-I still think it's Tegra that needs fixing. The question is to what 
-extent forwards and backwards compatibity is needed on these platforms? 
-I'm not sure if we can fix new dtb with old kernel. A new dtb with a 
-stable kernel update would be plausible. It may work just replacing 
-'drive-push-pull = <0>' cases with 'drive-open-drain'.
+Please check and re-submit.
 
-Rob
