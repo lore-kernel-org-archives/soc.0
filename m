@@ -1,65 +1,71 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=tp0+=VH=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F20EC4332F
-	for <soc@archiver.kernel.org>; Fri, 29 Apr 2022 21:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A4DAC433EF
+	for <soc@archiver.kernel.org>; Fri, 29 Apr 2022 22:37:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CEA05C385B0; Fri, 29 Apr 2022 21:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7AD8C385AE;
-	Fri, 29 Apr 2022 21:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651267811;
-	bh=F8YhYWd0QNkt9RX6QtDrOEoCbzHSvCcyidH9c14nFnA=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=jUwjHGSxu9MWg/lVxlmUJYMA+WxzwOKC1AIOvXqZ2K/tUSzwMZ8kJCf/ZekT7eXhD
-	 m7KA+KI7MHOKci+PKH8dhOleF8j0ZVH8ilTBgqxWGM9uJC59IOkqvRM3Ua1UTaF/Ik
-	 xkXhQNeiRJqf0LWfr4jZOZSuwsP2FPBbecEfhOosOkggyXApSRQYDR8vdUGF67JvMU
-	 ZVNZAlsB3B9I4H6ZGK8xbPyaS+pv9ZqiQ1RUoZj3k4eORsOnLSavWAy0BAumWKrMpe
-	 eg49DytosKcc0eN0G8L47BjcL8679Q3vpDuwu0iLgKLgl8efzh2IBDYgpRbxRmL2Ee
-	 QssR6aolkBtmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90C09EAC09C;
-	Fri, 29 Apr 2022 21:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.18, 2nd round
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165126781158.28372.10029245187327484014.git-patchwork-notify@kernel.org>
-Date: Fri, 29 Apr 2022 21:30:11 +0000
-References: <20220426013427.GB14615@dragon>
-In-Reply-To: <20220426013427.GB14615@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+	id C33A6C385A7; Fri, 29 Apr 2022 22:37:21 +0000 (UTC)
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D3F2C385A4;
+	Fri, 29 Apr 2022 22:37:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D3F2C385A4
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f48.google.com with SMTP id l9-20020a056830268900b006054381dd35so6059427otu.4;
+        Fri, 29 Apr 2022 15:37:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cECeERhvUI5B2Nya2PZFr4hXbWHDmZxUWHyaVMrMdOM=;
+        b=xdPMIlyViX63qlr5Rl5Tdf4s9k2TuZuC9kvVqMG0vvsfTHI+/1uONqBFBapQCevLhB
+         YZLMir3Sw3oju7M+EELkxge9idHrQ+uUEk/CFENat6Ha0WSwNknjCd5b9i7NObsMJQJJ
+         fA1+1WgYlx8SmQavQASPODl5BC9SCqlhq6d4nCy60kE5jNgV9yedQSCKZgSgS/37utlN
+         8HOwoR051BNKDCDwqVfHwYJ9TcNvkCJUMrSvAbMKJSg7kZZYZpgWMiGgt0CMoGfG43AE
+         X0IK+nCd4vjUJmTvqxFILoLRsIdfJzDK42y2qJluuX9gsUdgj9LQ9I8165U8g5TL3Eu8
+         UmYg==
+X-Gm-Message-State: AOAM531lxSPBY2JBZ4Gy9R3vbPlcijeaSbFj5bY/54Aafep6Qv211cov
+	cjfz3ubJFJhzzNeywjDraQ==
+X-Google-Smtp-Source: ABdhPJyRAmQ8+XOfTHvj7UZzS2Ges1j2q3irvixYxfrcbLWzrJA+bVtMu1axF6/4PRoI3OhLfPzLBQ==
+X-Received: by 2002:a05:6830:3155:b0:605:57e8:c8de with SMTP id c21-20020a056830315500b0060557e8c8demr577896ots.170.1651271840073;
+        Fri, 29 Apr 2022 15:37:20 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05687044c300b000e686d13892sm3485854oai.44.2022.04.29.15.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 15:37:19 -0700 (PDT)
+Received: (nullmailer pid 3029410 invoked by uid 1000);
+	Fri, 29 Apr 2022 22:37:18 -0000
+Date: Fri, 29 Apr 2022 17:37:18 -0500
+From: Rob Herring <robh@kernel.org>
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux@armlinux.org.uk, kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org, clin@suse.com, linus.walleij@linaro.org, festevam@gmail.com, mturquette@baylibre.com, marcel.ziswiler@toradex.com, soc@kernel.org, sboyd@kernel.org, shawnguo@kernel.org, Mr.Bossman075@gmail.com, linux-imx@nxp.com, daniel.lezcano@linaro.org, tharvey@gateworks.com, linux-gpio@vger.kernel.org, dev@lynxeye.de, giulio.benetti@benettiengineering.com, stefan@agner.ch, devicetree@vger.kernel.org, tglx@linutronix.de, abel.vesa@nxp.com, s.hauer@pengutronix.de, olof@lixom.net, linux-clk@vger.kernel.org, sebastian.reichel@collabora.com, aisheng.dong@nxp.com, robh+dt@kernel.org, arnd@arndb.de, leoyang.li@nxp.com, cniedermaier@dh-electronics.com
+Subject: Re: [PATCH v2 01/15] dt-bindings: arm: imx: Add i.MXRT compatible
+ Documentation
+Message-ID: <YmxonpKvcmoKVXmT@robh.at.kernel.org>
+References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
+ <20220428214838.1040278-2-Mr.Bossman075@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428214838.1040278-2-Mr.Bossman075@gmail.com>
 
-Hello:
-
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Tue, 26 Apr 2022 09:34:27 +0800 you wrote:
-> The following changes since commit f571e9c9aafed2fbd60fd99aa4b9823221338b98:
+On Thu, 28 Apr 2022 17:48:24 -0400, Jesse Taube wrote:
+> Recently the imxrt1050 was added but the cpu compatible node wasn't
+> added. Add both i.MXRT1170 and 1050 compatibles to fsl.yaml.
 > 
->   arm64: dts: imx: Fix imx8*-var-som touchscreen property sizes (2022-04-11 09:38:07 +0800)
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> ---
+> V1 -> V2:
+>  - Swap order of soc's
+> ---
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.18-2
-> 
-> [...]
 
-Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.18, 2nd round
-    https://git.kernel.org/soc/soc/c/73c7bcdcfddc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Rob Herring <robh@kernel.org>
