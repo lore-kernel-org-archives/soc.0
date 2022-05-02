@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67005C3527E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 479AAC3527B
 	for <soc@archiver.kernel.org>; Mon,  2 May 2022 22:41:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4C077C385B7; Mon,  2 May 2022 22:41:41 +0000 (UTC)
+	id 2CF0BC385B2; Mon,  2 May 2022 22:41:41 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8283FC385AC;
+	by smtp.kernel.org (Postfix) with ESMTPS id 30B71C385B6;
 	Mon,  2 May 2022 22:41:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8283FC385AC
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30B71C385B6
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 723CE2225B;
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 2739D22259;
 	Tue,  3 May 2022 00:41:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
 	t=1651531298;
@@ -28,10 +28,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail20160613
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2XryzGzX/GCtpl4hilTF5QC80Em9YezsBOr2OtpM3LQ=;
-	b=CNODkGwP83ttNQN2L/c/EAoGHXQR2abDLY3sTSU+A4rvKKT2d/QPi7T9cOHQutHIFpN/uN
-	yvRKmtPinj0M+qHNROo7hFUoCRPNgwPbztLR2ml9zM7e1z35L04ga4H8YVPpxTsj84Ll3M
-	aDpgKAhW+tTTf3zCm22rp9Ph1zsURTQ=
+	bh=1vzO+oKgDSaVbLDInS6cU89cYjO6q21VAAN84a2Gs6g=;
+	b=Y6pQuvWFMv6MdMUlm5rWGSFtakp4S7olxxV3Obe8YwNEaYkeChYQ9MffIaTL1SVqwa9hEF
+	Q+VFC8nEontE9UgcRdMZ6AzufLLmMAVp39/HcBEFtau7+tah9hJy+a20Wmz3QtNEMFtbge
+	Vglf+qEaL2cEidblISE8kbb8iQQDUW4=
 From: Michael Walle <michael@walle.cc>
 To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -49,44 +49,72 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Tudor.Ambarus@microchip.com,
 	Horatiu Vultur <horatiu.vultur@microchip.com>,
 	Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 11/13] ARM: dts: lan966x: add serdes node
-Date: Tue,  3 May 2022 00:41:25 +0200
-Message-Id: <20220502224127.2604333-12-michael@walle.cc>
+Subject: [PATCH v4 10/13] ARM: dts: lan966x: add reset switch reset node
+Date: Tue,  3 May 2022 00:41:24 +0200
+Message-Id: <20220502224127.2604333-11-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220502224127.2604333-1-michael@walle.cc>
 References: <20220502224127.2604333-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the SerDes node. On the LAN966x SoC these SerDes are used to connect
-network PHYs.
-
-By default, that node is disabled.
+Add the switch reset node which will later be used by the switch driver.
+The switch reset also resets the GPIO controller and the SGPIO
+controller, thus it also has to be connectected to these nodes. This way
+the reset will only issued once for the first device requesting the
+reset.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm/boot/dts/lan966x.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 7020b31322d8..d8185f5c7bfc 100644
+index 0442735910da..7020b31322d8 100644
 --- a/arch/arm/boot/dts/lan966x.dtsi
 +++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -500,6 +500,14 @@ hwmon: hwmon@e2010180 {
- 			clocks = <&sys_clk>;
+@@ -391,6 +391,11 @@ watchdog: watchdog@e0090000 {
+ 			status = "disabled";
  		};
  
-+		serdes: serdes@e202c000 {
-+			compatible = "microchip,lan966x-serdes";
-+			reg = <0xe202c000 0x9c>,
-+			      <0xe2004010 0x4>;
-+			#phy-cells = <2>;
-+			status = "disabled";
++		cpu_ctrl: syscon@e00c0000 {
++			compatible = "microchip,lan966x-cpu-syscon", "syscon";
++			reg = <0xe00c0000 0x350>;
 +		};
 +
- 		gic: interrupt-controller@e8c11000 {
- 			compatible = "arm,gic-400", "arm,cortex-a7-gic";
- 			#interrupt-cells = <3>;
+ 		can0: can@e081c000 {
+ 			compatible = "bosch,m_can";
+ 			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
+@@ -406,10 +411,20 @@ can0: can@e081c000 {
+ 			status = "disabled";
+ 		};
+ 
++		reset: reset-controller@e200400c {
++			compatible = "microchip,lan966x-switch-reset";
++			reg = <0xe200400c 0x4>;
++			reg-names = "gcb";
++			#reset-cells = <1>;
++			cpu-syscon = <&cpu_ctrl>;
++		};
++
+ 		gpio: pinctrl@e2004064 {
+ 			compatible = "microchip,lan966x-pinctrl";
+ 			reg = <0xe2004064 0xb4>,
+ 			    <0xe2010024 0x138>;
++			resets = <&reset 0>;
++			reset-names = "switch";
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+ 			gpio-ranges = <&gpio 0 0 78>;
+@@ -453,6 +468,8 @@ sgpio: gpio@e2004190 {
+ 			compatible = "microchip,sparx5-sgpio";
+ 			reg = <0xe2004190 0x118>;
+ 			clocks = <&sys_clk>;
++			resets = <&reset 0>;
++			reset-names = "switch";
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			status = "disabled";
 -- 
 2.30.2
 
