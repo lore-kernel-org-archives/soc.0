@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63A1C4167B
-	for <soc@archiver.kernel.org>; Mon,  2 May 2022 22:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B40BC3527A
+	for <soc@archiver.kernel.org>; Mon,  2 May 2022 22:41:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B861C385B8; Mon,  2 May 2022 22:41:40 +0000 (UTC)
+	id EE8F6C385BA; Mon,  2 May 2022 22:41:40 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 45297C385AF;
-	Mon,  2 May 2022 22:41:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45297C385AF
+	by smtp.kernel.org (Postfix) with ESMTPS id 0B817C385B5;
+	Mon,  2 May 2022 22:41:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B817C385B5
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 60FCC22253;
-	Tue,  3 May 2022 00:41:36 +0200 (CEST)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id 9056222258;
+	Tue,  3 May 2022 00:41:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1651531296;
+	t=1651531297;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0zWa7FnAehsT5VQr7sLCyyvpTKbFiugxFLtDfUCAJuI=;
-	b=Ks7Ah9D3aR4H94/WEhxydW29DtYwgI2n1luwiucBUceFk7vLKXbzjC/e8CCBREvQq7A4Dj
-	eYE5G11Mhub63JsTVCK8+Wvy+/eLDVY6Xxz2eM0ckmC5nJmcbRepgAY6ZuNrLRzdec9FTw
-	FIABMBASA0qNUW0razYkrBcY28Jt+Kc=
+	bh=WDeyz0LlR3w2vrF+SQ8eLPVhnHyoFLscpmzHcNbmj34=;
+	b=XDW0x8j2GVHkofLH8ZiayccVc56nO0E1ZOf7HBcrYGOZuzmQkK3S5Is96QBdGaWRLbH08A
+	C01YLwZOyt+me+wakYq9FvGuKxct7u9JBcBa6KZW80GEW9NMW2dRs2ZaQ9YHky5FGpL3Nj
+	MbTHhI0vyr1f9xB3luZrEfV7s18MVbs=
 From: Michael Walle <michael@walle.cc>
 To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -49,132 +49,69 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Tudor.Ambarus@microchip.com,
 	Horatiu Vultur <horatiu.vultur@microchip.com>,
 	Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 06/13] ARM: dts: lan966x: add flexcom I2C nodes
-Date: Tue,  3 May 2022 00:41:20 +0200
-Message-Id: <20220502224127.2604333-7-michael@walle.cc>
+Subject: [PATCH v4 09/13] ARM: dts: lan966x: add MIIM nodes
+Date: Tue,  3 May 2022 00:41:23 +0200
+Message-Id: <20220502224127.2604333-10-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220502224127.2604333-1-michael@walle.cc>
 References: <20220502224127.2604333-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add all I2C nodes of the flexcom IP blocks. The driver supports
-FIFO, DMA or both combined. But the latter isn't working correctly.
-Thus, skip the fifo-size property for now. DMA is doing single byte
-reads in this case.
+Add the MDIO controller nodes. The integrated PHYs are connected to the
+second controller. This controller also takes care of the resets of the
+integrated PHYs, thus it has two memory regions. The first controller
+is routed to the external MDIO/MDC pins.
 
-Keep the nodes disabled by default.
+By default, they are disabled.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 65 ++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ arch/arm/boot/dts/lan966x.dtsi | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
 diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index a37f2e58a1c2..342c8cee2b9a 100644
+index 64290fb43926..0442735910da 100644
 --- a/arch/arm/boot/dts/lan966x.dtsi
 +++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -120,6 +120,19 @@ spi0: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c0: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(2)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
+@@ -418,6 +418,37 @@ gpio: pinctrl@e2004064 {
+ 			#interrupt-cells = <2>;
  		};
  
- 		flx1: flexcom@e0044000 {
-@@ -158,6 +171,19 @@ spi1: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
++		mdio0: mdio@e2004118 {
++			compatible = "microchip,lan966x-miim";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0xe2004118 0x24>;
++			clocks = <&sys_clk>;
++			status = "disabled";
++		};
 +
-+			i2c1: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(4)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++		mdio1: mdio@e200413c {
++			compatible = "microchip,lan966x-miim";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0xe200413c 0x24>,
++			      <0xe2010020 0x4>;
++			clocks = <&sys_clk>;
++			status = "disabled";
++
++			phy0: ethernet-phy@1 {
++				reg = <1>;
++				interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
 +				status = "disabled";
 +			};
- 		};
- 
- 		trng: rng@e0048000 {
-@@ -213,6 +239,19 @@ spi2: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
 +
-+			i2c2: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(6)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++			phy1: ethernet-phy@2 {
++				reg = <2>;
++				interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
 +				status = "disabled";
 +			};
- 		};
- 
- 		flx3: flexcom@e0064000 {
-@@ -251,6 +290,19 @@ spi3: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
++		};
 +
-+			i2c3: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(8)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		dma0: dma-controller@e0068000 {
-@@ -308,6 +360,19 @@ spi4: spi@400 {
- 				#size-cells = <0>;
- 				status = "disabled";
- 			};
-+
-+			i2c4: i2c@600 {
-+				compatible = "microchip,sam9x60-i2c";
-+				reg = <0x600 0x200>;
-+				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(10)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		timer0: timer@e008c000 {
+ 		sgpio: gpio@e2004190 {
+ 			compatible = "microchip,sparx5-sgpio";
+ 			reg = <0xe2004190 0x118>;
 -- 
 2.30.2
 
