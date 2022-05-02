@@ -1,292 +1,66 @@
-Return-Path: <SRS0=w0/X=VK=hpe.com=prvs=0121ebe89c=nick.hawkins@kernel.org>
+Return-Path: <SRS0=O7CA=VK=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D27EC433F5
-	for <soc@archiver.kernel.org>; Mon,  2 May 2022 20:39:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2B21C433F5
+	for <soc@archiver.kernel.org>; Mon,  2 May 2022 21:13:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 66B90C385A4; Mon,  2 May 2022 20:39:38 +0000 (UTC)
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 728E3C385B1; Mon,  2 May 2022 21:13:53 +0000 (UTC)
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 29DF9C385AC;
-	Mon,  2 May 2022 20:39:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29DF9C385AC
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242G25pD011505;
-	Mon, 2 May 2022 20:39:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=G/ZRrlsyFni9Z7FN4E9Us+mBXkqrvLyy85nN3Yi3TTc=;
- b=IB5CAuXrnxbxEH/XiMEqRMr/7ezd9v51lhe+Kk7+P9sLQy00Tx3AZkZMpXA37lujgFFA
- +/qJ9sEZj7Rz+weH4lxBpgt5P8La5o5J0zT86dUrVQRLsAHP3ILgVS+FFssrRCVSrWkZ
- sC36JNvjxuGb6aURtWCTT67Wcpzc4Zjr3TebsD73CIbaIOIStK2NWj4hnlchYiCKWiYb
- PaZCqMbJ9a//oW8R7aSAQOMZBJpzwrAufOoe/av7mJMJIdNZpMuGkhw6R7iENfmwHRao
- 2mQCcZEvYHfaNPX2PSFDXzK9o0JMgTko7qq53C80DGT1yOF5deDoQeeKfNPR9gKCm4XL mg== 
-Received: from g9t5008.houston.hpe.com (g9t5008.houston.hpe.com [15.241.48.72])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fthrtjqmw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 May 2022 20:39:34 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-	by g9t5008.houston.hpe.com (Postfix) with ESMTP id D239153;
-	Mon,  2 May 2022 20:39:33 +0000 (UTC)
-Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-	by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 7CD1648;
-	Mon,  2 May 2022 20:39:33 +0000 (UTC)
-From: nick.hawkins@hpe.com
-To: verdun@hpe.com, nick@hpe.com, joel@jms.id.au, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id C08B5C385AC;
+	Mon,  2 May 2022 21:13:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C08B5C385AC
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f46.google.com with SMTP id f2-20020a4a8f42000000b0035e74942d42so2786563ool.13;
+        Mon, 02 May 2022 14:13:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3q+qtdP+luQ33LzicXlYLTVCEnsuA+2H8mH4UxrS+O4=;
+        b=XT3z5d7sh0GTGX+1MwQB33HfCL2c2jOEzmZcj8mRnU67KnbFO94mDkp4pFn4LnFb4E
+         82THXOXenRfR0DAeTX134zkh9cCn6ImgH5sedxMfZN3SUwGo4sE4naYVMuBo5XUHpTyd
+         8jF0tLgk5fLuF4qqJDZWfyEaC2P8Znr8Uji9CgBiH+Fe/nqlKrDwHVLBh8CAc4d3NkoK
+         atxlMVV0/OK7YzLuBSP6N/2J1sdbEKezp0AmA/j1PPUhymLD8b2u+TlgrzlVB3BJMBtY
+         xSVhWBfe83AYa27SVGFkGUwRIeXfPrG7eZT2mYs7OvnbakxjVpetZmjYdVn+uIGzQ3zY
+         DAHg==
+X-Gm-Message-State: AOAM531/vdj/ti5fnfaul1Q5DsQPTJRGQB+821XNWEcHSEBQiaiGeodT
+	V92ZR2fExIx5oV00adT1xg==
+X-Google-Smtp-Source: ABdhPJzdddq7QjHdq1Gyqkm9hnLQMotisgl4Ju8ztMqS+jbqac/2Etf+2iATS8SO6UwVwY2Ix6AJGQ==
+X-Received: by 2002:a4a:d40d:0:b0:33a:33be:9c1e with SMTP id n13-20020a4ad40d000000b0033a33be9c1emr4627230oos.96.1651526031874;
+        Mon, 02 May 2022 14:13:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o11-20020a54478b000000b00325cda1ff93sm2771256oic.18.2022.05.02.14.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 14:13:51 -0700 (PDT)
+Received: (nullmailer pid 1763244 invoked by uid 1000);
+	Mon, 02 May 2022 21:13:50 -0000
+Date: Mon, 2 May 2022 16:13:50 -0500
+From: Rob Herring <robh@kernel.org>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Nick Hawkins <nick.hawkins@hpe.com>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
-Date: Mon,  2 May 2022 15:40:49 -0500
-Message-Id: <20220502204050.88316-7-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220502204050.88316-1-nick.hawkins@hpe.com>
-References: <20220502204050.88316-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: Dh-gRaGmu-YexrngHIHeALl7ZRpJtzb6
-X-Proofpoint-ORIG-GUID: Dh-gRaGmu-YexrngHIHeALl7ZRpJtzb6
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-02_06,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 phishscore=0
- priorityscore=1501 suspectscore=0 mlxscore=0 impostorscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205020153
+Cc: etienne.carriere@st.com, arnd@arndb.de, Ahmad Fatoum <a.fatoum@pengutronix.de>, Marek Vasut <marex@denx.de>, soc@kernel.org, robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>, Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
+ "st,stm32mp1-rcc-secure"
+Message-ID: <YnBJjhv6uu2USIUs@robh.at.kernel.org>
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-3-alexandre.torgue@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422150952.20587-3-alexandre.torgue@foss.st.com>
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+On Fri, 22 Apr 2022 17:09:46 +0200, Alexandre Torgue wrote:
+> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
+> security support hardened), "clocks" and "clock-names" describe oscillators
+> and are required.
+> 
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> 
 
-The HPE SoC is new to linux. A basic device tree layout with minimum
-required for linux to boot including a timer and watchdog support has
-been created.
-
-The dts file is empty at this point but will be updated in subsequent
-updates as board specific features are enabled.
-
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-
----
-v6:
-* Added cache-controller to CPU
-* Removed hpe,gxp-wdt and removed simple-mfd from hpe,gxp-timer
-* Added space after ',' in compatible lists containing more than one
-  item
-* Switched clock name iopclk to iop based on feedback from
-  hpe,gxp-timer.yaml
-* Added clock labels clock-0 and clock-1
-* Added dma-ranges to ahb
-* Changed subject to better match ones in the log
-* Changed description to fit 75 characters per line
-v5:
-* Fixed commit message to show previous changes
-* Fixed typo ehci -> echi
-v4:
-* Removed hpe,gxp-cpu-init as it was no longer necessary
-* Removed bootargs as requested
-* Removed empty ahb node
-* Moved reg after compatible, everywhere
-* Removed osc and memclk
-* Removed syscon@c00000f8 as it was not necessary for boot
-* Fixed Alphabetical issue in dts/Makefile
-* Added specific board binding for dl360gen10
-* Removed empty node
-* Added Accurate Clock Architecture
-* Fixed generic-echi and generic-ochi issues
-* Removed i2cg
-v3:
-* Fixed issues with warnings
-* Used proper patchset format
-v2:
-* Reduced size of dtsi to essential components
-* Followed the proper format for having a dtsi and
-  dts
----
- arch/arm/boot/dts/Makefile               |   2 +
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  13 +++
- arch/arm/boot/dts/hpe-gxp.dtsi           | 132 +++++++++++++++++++++++
- 3 files changed, 147 insertions(+)
- create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
- create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..293717719c70 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -255,6 +255,8 @@ dtb-$(CONFIG_ARCH_HISI) += \
- 	hi3519-demb.dtb
- dtb-$(CONFIG_ARCH_HIX5HD2) += \
- 	hisi-x5hd2-dkb.dtb
-+dtb-$(CONFIG_ARCH_HPE_GXP) += \
-+	hpe-bmc-dl360gen10.dtb
- dtb-$(CONFIG_ARCH_INTEGRATOR) += \
- 	integratorap.dtb \
- 	integratorap-im-pd1.dtb \
-diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-new file mode 100644
-index 000000000000..69e9c6672ea8
---- /dev/null
-+++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree file for HPE DL360Gen10
-+ */
-+
-+/include/ "hpe-gxp.dtsi"
-+
-+/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	compatible = "hpe,gxp-dl360gen10","hpe,gxp";
-+	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
-+};
-diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-new file mode 100644
-index 000000000000..7a99e174e4b3
---- /dev/null
-+++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree file for HPE GXP
-+ */
-+
-+/dts-v1/;
-+/ {
-+	model = "Hewlett Packard Enterprise GXP BMC";
-+	compatible = "hpe,gxp", "hpe,gxp-dl360gen10";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "arm,cortex-a9";
-+			reg = <0>;
-+			device_type = "cpu";
-+			next-level-cache = <&L2>;
-+		};
-+	};
-+
-+	clocks {
-+		pll: clock-0 {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <1600000000>;
-+		};
-+
-+		iopclk: clock-1 {
-+			compatible = "fixed-factor-clock";
-+			#clock-cells = <0>;
-+			clock-div = <4>;
-+			clock-mult = <1>;
-+			clocks = <&pll>;
-+		};
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x40000000 0x20000000>;
-+	};
-+
-+	axi {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+		dma-ranges;
-+
-+		L2: cache-controller@b0040000 {
-+			compatible = "arm,pl310-cache";
-+			reg = <0xb0040000 0xFFC>;
-+			cache-unified;
-+			cache-level = <2>;
-+		};
-+
-+		ahb@c0000000 {
-+			compatible = "simple-bus";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xc0000000 0x30000000>;
-+			dma-ranges;
-+
-+			vic0: interrupt-controller@eff0000 {
-+				compatible = "arm,pl192-vic";
-+				reg = <0xeff0000 0x1000>;
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+
-+			vic1: interrupt-controller@80f00000 {
-+				compatible = "arm,pl192-vic";
-+				reg = <0x80f00000 0x1000>;
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+
-+			uarta: serial@e0 {
-+				compatible = "ns16550a";
-+				reg = <0xe0 0x8>;
-+				interrupts = <17>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			uartb: serial@e8 {
-+				compatible = "ns16550a";
-+				reg = <0xe8 0x8>;
-+				interrupts = <18>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			uartc: serial@f0 {
-+				compatible = "ns16550a";
-+				reg = <0xf0 0x8>;
-+				interrupts = <19>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			usb0: usb@efe0000 {
-+				compatible = "hpe,gxp-ehci", "generic-ehci";
-+				reg = <0xefe0000 0x100>;
-+				interrupts = <7>;
-+				interrupt-parent = <&vic0>;
-+			};
-+
-+			st: timer@80 {
-+				compatible = "hpe,gxp-timer";
-+				reg = <0x80 0x16>;
-+				interrupts = <0>;
-+				interrupt-parent = <&vic0>;
-+				clocks = <&iopclk>;
-+				clock-names = "iop";
-+			};
-+
-+			usb1: usb@efe0100 {
-+				compatible = "hpe,gxp-ohci", "generic-ohci";
-+				reg = <0xefe0100 0x110>;
-+				interrupts = <6>;
-+				interrupt-parent = <&vic0>;
-+			};
-+		};
-+	};
-+};
--- 
-2.17.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
