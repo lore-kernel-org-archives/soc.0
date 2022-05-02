@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 479AAC3527B
-	for <soc@archiver.kernel.org>; Mon,  2 May 2022 22:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C168C35280
+	for <soc@archiver.kernel.org>; Mon,  2 May 2022 22:41:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2CF0BC385B2; Mon,  2 May 2022 22:41:41 +0000 (UTC)
+	id 25E3DC385B8; Mon,  2 May 2022 22:41:42 +0000 (UTC)
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 30B71C385B6;
-	Mon,  2 May 2022 22:41:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30B71C385B6
+	by smtp.kernel.org (Postfix) with ESMTPS id EFA71C385AE;
+	Mon,  2 May 2022 22:41:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EFA71C385AE
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 2739D22259;
-	Tue,  3 May 2022 00:41:38 +0200 (CEST)
+	by ssl.serverraum.org (Postfix) with ESMTPSA id D587A22255;
+	Tue,  3 May 2022 00:41:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1651531298;
+	t=1651531297;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1vzO+oKgDSaVbLDInS6cU89cYjO6q21VAAN84a2Gs6g=;
-	b=Y6pQuvWFMv6MdMUlm5rWGSFtakp4S7olxxV3Obe8YwNEaYkeChYQ9MffIaTL1SVqwa9hEF
-	Q+VFC8nEontE9UgcRdMZ6AzufLLmMAVp39/HcBEFtau7+tah9hJy+a20Wmz3QtNEMFtbge
-	Vglf+qEaL2cEidblISE8kbb8iQQDUW4=
+	bh=DX3XCmwDiLSeYaSRJCeAE6w2gxP2IShyreuN4Ql9ODU=;
+	b=jwZRn1yWnisPWOPx3jSWutoY6+aHYA8pOh+Vxq65dMqHXi3QYwZBNdYAuU3ydSSVczbIhK
+	ynquARJrdMTcr6h6ZJEWS7LH30DGZgTTyoGexE2+y4vtK8bUDSqudCsf22iV9sfppih3I9
+	NPA4tw1G7+eGaZd6XYc7HMYEal/7wc4=
 From: Michael Walle <michael@walle.cc>
 To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -49,72 +49,256 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Tudor.Ambarus@microchip.com,
 	Horatiu Vultur <horatiu.vultur@microchip.com>,
 	Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 10/13] ARM: dts: lan966x: add reset switch reset node
-Date: Tue,  3 May 2022 00:41:24 +0200
-Message-Id: <20220502224127.2604333-11-michael@walle.cc>
+Subject: [PATCH v4 07/13] ARM: dts: lan966x: add basic Kontron KSwitch D10 support
+Date: Tue,  3 May 2022 00:41:21 +0200
+Message-Id: <20220502224127.2604333-8-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220502224127.2604333-1-michael@walle.cc>
 References: <20220502224127.2604333-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the switch reset node which will later be used by the switch driver.
-The switch reset also resets the GPIO controller and the SGPIO
-controller, thus it also has to be connectected to these nodes. This way
-the reset will only issued once for the first device requesting the
-reset.
+Add basic support for the Kontron KSwitch D10 MMT. It comes in two
+variants: "6G-2GS" which features 6 Gigabit copper ports and two SFP
+cages and "8G" which features 6 Gigbabit copper ports (where two are
+2.5G capable).
+
+For now the following is supported and working:
+ - Kernel console
+ - SFP cages
+ - SPI
+ - SGPIO
+ - Watchdog
 
 Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 78 ++++++++++++++++
+ .../lan966x-kontron-kswitch-d10-mmt-8g.dts    | 13 +++
+ .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  | 93 +++++++++++++++++++
+ 4 files changed, 187 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 0442735910da..7020b31322d8 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -391,6 +391,11 @@ watchdog: watchdog@e0090000 {
- 			status = "disabled";
- 		};
- 
-+		cpu_ctrl: syscon@e00c0000 {
-+			compatible = "microchip,lan966x-cpu-syscon", "syscon";
-+			reg = <0xe00c0000 0x350>;
-+		};
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index de7ff629d1f8..928bc7eeb73c 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -751,7 +751,9 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
+ dtb-$(CONFIG_SOC_LAN966) += \
+-	lan966x-pcb8291.dtb
++	lan966x-pcb8291.dtb \
++	lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb \
++	lan966x-kontron-kswitch-d10-mmt-8g.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-iot.dtb \
+ 	ls1021a-moxa-uc-8410a.dtb \
+diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+new file mode 100644
+index 000000000000..7b12cbe11c58
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
++ */
 +
- 		can0: can@e081c000 {
- 			compatible = "bosch,m_can";
- 			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-@@ -406,10 +411,20 @@ can0: can@e081c000 {
- 			status = "disabled";
- 		};
- 
-+		reset: reset-controller@e200400c {
-+			compatible = "microchip,lan966x-switch-reset";
-+			reg = <0xe200400c 0x4>;
-+			reg-names = "gcb";
-+			#reset-cells = <1>;
-+			cpu-syscon = <&cpu_ctrl>;
-+		};
++/dts-v1/;
++#include "lan966x-kontron-kswitch-d10-mmt.dtsi"
 +
- 		gpio: pinctrl@e2004064 {
- 			compatible = "microchip,lan966x-pinctrl";
- 			reg = <0xe2004064 0xb4>,
- 			    <0xe2010024 0x138>;
-+			resets = <&reset 0>;
-+			reset-names = "switch";
- 			gpio-controller;
- 			#gpio-cells = <2>;
- 			gpio-ranges = <&gpio 0 0 78>;
-@@ -453,6 +468,8 @@ sgpio: gpio@e2004190 {
- 			compatible = "microchip,sparx5-sgpio";
- 			reg = <0xe2004190 0x118>;
- 			clocks = <&sys_clk>;
-+			resets = <&reset 0>;
-+			reset-names = "switch";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			status = "disabled";
++/ {
++	model = "Kontron KSwitch D10 MMT 6G-2GS";
++	compatible = "kontron,kswitch-d10-mmt-6g-2gs", "kontron,s1921",
++		     "microchip,lan9668", "microchip,lan966";
++
++	aliases {
++		i2c0 = &i2c4;
++		i2c1 = &i2c1;
++	};
++
++	sfp0: sfp0 {
++		compatible = "sff,sfp";
++		i2c-bus = <&i2c4>;
++		los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
++		mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
++		maximum-power-milliwatt = <2500>;
++		tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
++		tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
++		rate-select0-gpios = <&sgpio_out 2 0 GPIO_ACTIVE_HIGH>;
++		rate-select1-gpios = <&sgpio_out 2 1 GPIO_ACTIVE_HIGH>;
++	};
++
++	sfp1: sfp1 {
++		compatible = "sff,sfp";
++		i2c-bus = <&i2c1>;
++		los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
++		mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
++		maximum-power-milliwatt = <2500>;
++		tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
++		tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
++		rate-select0-gpios = <&sgpio_out 2 2 GPIO_ACTIVE_HIGH>;
++		rate-select1-gpios = <&sgpio_out 2 3 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&flx1 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
++	status = "okay";
++
++	i2c1: i2c@600 {
++		pinctrl-0 = <&fc1_c_pins>;
++		pinctrl-names = "default";
++		status = "okay";
++	};
++};
++
++&flx4 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
++	status = "okay";
++
++	i2c4: i2c@600 {
++		pinctrl-0 = <&fc4_b_pins>;
++		pinctrl-names = "default";
++		status = "okay";
++	};
++};
++
++&gpio {
++	fc1_c_pins: fc1-c-i2c-pins {
++		/* SCL, SDA */
++		pins = "GPIO_47", "GPIO_48";
++		function = "fc1_c";
++	};
++
++	fc4_b_pins: fc4-b-i2c-pins {
++		/* SCL, SDA */
++		pins = "GPIO_57", "GPIO_58";
++		function = "fc4_b";
++	};
++};
+diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
+new file mode 100644
+index 000000000000..4b35f6c46e7f
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Device Tree file for the Kontron KSwitch D10 MMT 8G
++ */
++
++/dts-v1/;
++#include "lan966x-kontron-kswitch-d10-mmt.dtsi"
++
++/ {
++	model = "Kontron KSwitch D10 MMT 8G";
++	compatible = "kontron,kswitch-d10-mmt-8g", "kontron,s1921",
++		     "microchip,lan9668", "microchip,lan966";
++};
+diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+new file mode 100644
+index 000000000000..4c1ebb4aa5b0
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Common part of the device tree for the Kontron KSwitch D10 MMT
++ */
++
++/dts-v1/;
++#include "lan966x.dtsi"
++
++/ {
++	aliases {
++		serial0 = &usart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	gpio-restart {
++		compatible = "gpio-restart";
++		gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
++		priority = <200>;
++	};
++};
++
++&flx0 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
++	status = "okay";
++
++	usart0: serial@200 {
++		pinctrl-0 = <&usart0_pins>;
++		pinctrl-names = "default";
++		status = "okay";
++	};
++};
++
++&flx3 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
++	status = "okay";
++
++	spi3: spi@400 {
++		pinctrl-0 = <&fc3_b_pins>;
++		pinctrl-names = "default";
++		status = "okay";
++		cs-gpios = <&gpio 46 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&gpio {
++	fc3_b_pins: fc3-b-pins {
++		/* SCK, MISO, MOSI */
++		pins = "GPIO_51", "GPIO_52", "GPIO_53";
++		function = "fc3_b";
++	};
++
++	sgpio_a_pins: sgpio-a-pins {
++		/* SCK, D0, D1 */
++		pins = "GPIO_32", "GPIO_33", "GPIO_34";
++		function = "sgpio_a";
++	};
++
++	sgpio_b_pins: sgpio-b-pins {
++		/* LD */
++		pins = "GPIO_64";
++		function = "sgpio_b";
++	};
++
++	usart0_pins: usart0-pins {
++		/* RXD, TXD */
++		pins = "GPIO_25", "GPIO_26";
++		function = "fc0_b";
++	};
++};
++
++&sgpio {
++	pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
++	pinctrl-names = "default";
++	bus-frequency = <8000000>;
++	/* arbitrary range because all GPIOs are in software mode */
++	microchip,sgpio-port-ranges = <0 11>;
++	status = "okay";
++
++	sgpio_in: gpio@0 {
++		ngpios = <128>;
++	};
++
++	sgpio_out: gpio@1 {
++		ngpios = <128>;
++	};
++};
++
++&watchdog {
++	status = "okay";
++};
 -- 
 2.30.2
 
