@@ -4,59 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00245C433EF
-	for <soc@archiver.kernel.org>; Mon,  2 May 2022 21:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFD1FC433F5
+	for <soc@archiver.kernel.org>; Mon,  2 May 2022 21:28:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DA591C385AF; Mon,  2 May 2022 21:27:06 +0000 (UTC)
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	id D1EC7C385AF; Mon,  2 May 2022 21:28:37 +0000 (UTC)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E7CC0C385A4;
-	Mon,  2 May 2022 21:27:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E7CC0C385A4
+	by smtp.kernel.org (Postfix) with ESMTPS id 1F04FC385A4;
+	Mon,  2 May 2022 21:28:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1F04FC385A4
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f43.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so5344625otl.0;
-        Mon, 02 May 2022 14:27:05 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id s131so16502794oie.1;
+        Mon, 02 May 2022 14:28:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EsdfTRzRsElhBArWgPiV5kB/wKpIPZn5Ogj7LhGJATU=;
-        b=1YNC1wt2NzOcZqc/1Ti180+hwJ2+l3ue71IKtgNnbMH9+Yq2MtL/n96+8JJEQEgUNp
-         wDuZghHIF3CFZLUadDyy+bb5UoK1j782f9XwIWmubVncSJVdswM2d4mkmx9GsHvm9M7R
-         V/njaGp+tJQ3xzQ5Wuh+a8+BVIf5GrXgjFwptcAIC4LMAZJdbKrdL/ui6NJdq63lpXBU
-         qhepp1MqUNhoV06TX38Rq8GgVae1QPe4VnxNkIOvqCDO8ex5J8ZEzfvFWf7nXQE9K8mZ
-         3O8lyybngt0kejye/NlKarXCmyt89W8JkO8PIlRtP2ytv7ItWcwRZ2LYDvXcZmFXu6cf
-         +iqw==
-X-Gm-Message-State: AOAM5316P9055FB/xO5nulib3Wl/fZ3KYtOm9JgOzw/yiBj1j0aLqes9
-	y5xDfqhMLNhnw46dKJWs6UEFUdZvhg==
-X-Google-Smtp-Source: ABdhPJxkBlKrm6SvtSp+hLxpW9sfD1oaQcy4xBqkj3dJZ98/SwK51i5iypx4zzQa3BHjub2l6y5/TQ==
-X-Received: by 2002:a9d:172f:0:b0:606:31ed:5d86 with SMTP id i47-20020a9d172f000000b0060631ed5d86mr471566ota.266.1651526824990;
-        Mon, 02 May 2022 14:27:04 -0700 (PDT)
+        bh=aWRyyqTX1zgpUL0i+w8d1Ou1tFF0ewiHqxv686F2LGk=;
+        b=AfGdL6w9aJLFcjVSkeef+TXi/wjli7Rh56Ls3zxhDQayVH/KM9/9nVNQjo9gBvfQBY
+         sArRHQU28Ts+yeqY6YBXylEVqNppWNHunlgaJovVEG998IC54ZD6ba1g/vP3UId/+YtC
+         fiJn1Ep3nXCQut0kLSShU/bXoAbiFg5rToAT3uIDfEI2SPw4roiGVkN7l0WnChub1yBq
+         F9RqT7lLAeDPifp3wDxQpAKFQ0ej0pEUhDXhOvgv28nnlSkiiDIjlz0Nw7uAV4T8eO9a
+         3VIYFx3Vl0hQvFIB7RzwqVLeWnT0spT/K76nW+UUEeVUgxZr9CoECdSkKPW/wDoEQzMV
+         6P3w==
+X-Gm-Message-State: AOAM530OsFyo+w6fZaFTP+/asevDbPd/9jsXyfu9yTktd+/HEn9ZPleK
+	tCamGS8KLvwM2RKDqeE4V9799u0kVg==
+X-Google-Smtp-Source: ABdhPJzuZVJjvpvlPD9utsP/MMvXGt+bpD1i+qtjarMTrHxsWFFkdFazKHKJ+54WhwWRfMXuHv14FQ==
+X-Received: by 2002:a05:6808:1526:b0:323:1194:d3bf with SMTP id u38-20020a056808152600b003231194d3bfmr535917oiw.120.1651526916142;
+        Mon, 02 May 2022 14:28:36 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w5-20020a9d70c5000000b0060603221268sm3254695otj.56.2022.05.02.14.27.04
+        by smtp.gmail.com with ESMTPSA id k3-20020a9d7dc3000000b0060603221261sm3416202otn.49.2022.05.02.14.28.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 14:27:04 -0700 (PDT)
-Received: (nullmailer pid 1784930 invoked by uid 1000);
-	Mon, 02 May 2022 21:27:03 -0000
-Date: Mon, 2 May 2022 16:27:03 -0500
+        Mon, 02 May 2022 14:28:35 -0700 (PDT)
+Received: (nullmailer pid 1787413 invoked by uid 1000);
+	Mon, 02 May 2022 21:28:34 -0000
+Date: Mon, 2 May 2022 16:28:34 -0500
 From: Rob Herring <robh@kernel.org>
 To: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, etienne.carriere@st.com, Stephen Boyd <sboyd@kernel.org>, linux-arm-kernel@lists.infradead.org, Philipp Zabel <p.zabel@pengutronix.de>, devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, Marek Vasut <marex@denx.de>, Ahmad Fatoum <a.fatoum@pengutronix.de>, arnd@arndb.de, soc@kernel.org, linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH 4/8] dt-bindings: reset: stm32mp15: rename RST_SCMI define
-Message-ID: <YnBMp27tB1774s/L@robh.at.kernel.org>
+Cc: arnd@arndb.de, etienne.carriere@st.com, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>, linux-stm32@st-md-mailman.stormreply.com, Krzysztof Kozlowski <krzk+dt@kernel.org>, Marek Vasut <marex@denx.de>, robh+dt@kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>, linux-kernel@vger.kernel.org, soc@kernel.org, Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 7/8] dt-bindings: arm: stm32: Add SCMI version of STM32
+ boards (DK1/DK2/ED1/EV1)
+Message-ID: <YnBNAnlIvF6ujYWg@robh.at.kernel.org>
 References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
- <20220422150952.20587-5-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-8-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422150952.20587-5-alexandre.torgue@foss.st.com>
+In-Reply-To: <20220422150952.20587-8-alexandre.torgue@foss.st.com>
 
-On Fri, 22 Apr 2022 17:09:48 +0200, Alexandre Torgue wrote:
-> As we only have one SCMI instance, it's not necessary to add an index to
-> the name.
+On Fri, 22 Apr 2022 17:09:51 +0200, Alexandre Torgue wrote:
+> Add a "secure" version based on SCMI of STM32 boards. Only boards
+> provided by STMicroelectronics are concerned:
+> 
+> -STM32MP157A-DK1
+> -STM32MP157C-DK2
+> -STM32MP157C-ED1
+> -STM32MP157C-EV1
 > 
 > Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 > 
