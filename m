@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5533CC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB33C4332F
 	for <soc@archiver.kernel.org>; Tue,  3 May 2022 14:50:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3EE30C385B9; Tue,  3 May 2022 14:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 28C74C385B7;
+	id 3A828C385B6; Tue,  3 May 2022 14:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DF80C385B4;
 	Tue,  3 May 2022 14:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1651589422;
-	bh=i8S/GamZPIRojBXndZSSy4IZtQgtCikKKNSFAt/bpl0=;
+	bh=EXxDiDosVF5wO9SrMF0LiS/AuWk09RPgPc8fbc4zo4w=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tuODvFR2tSObaPlb3EQFogwMx6wv6M6n2TBMZch5Y6Wlwm5n9kVurqPOfm/0lDuJ3
-	 q2uHA6vMh765HrZnxL5oi4780cH5SeteWIw8daDJPm0S49JnudaWd5hIiJBxojOePy
-	 c/vBqc79KuZjGilmoHgxdhT5RJ89CZJ3A+pKQUPSK6qsqIvRHZZ4utKODoU4MzdbJo
-	 m4jmwHHONcNGaJQE8oPD3ASq8e5brSXPIq4s9FwHj/Ci1h6pfLtp9amoPryfK2/e7r
-	 iPWWw5g7c9G1+S0BGgk+awsN6KaGGUeCcRehFr530H8eEs5bjYw2B+KWpt69FLKlS+
-	 X6T+d+QQbLbyg==
+	b=gyd9LOaFkv7YyGzdV197okY6K/98qEiK08hy4WoxX+8vN2zBKC3b8Fp7VTfjxuH9l
+	 +arShuLp8vly52Tq+Yf79R2Op/u7ycc+ISlHDYexPE9kauNwXRn3jIrmZaA4qNkkrs
+	 EfmTXRvd0OEbhmf0XpLUTU9XZD64xfUBuFuayn9uGWOnqZvHUuIYJz2qgE8OCkyFco
+	 jwZVedcBKvFRJgmzYaO34LyrNbEbOYZEV+pID4BychVu+ncSBULV+nMbWjCSf04Kaz
+	 jkH2ncx+cNourfi4TZdKGKKXHl6jzBwN3lKS2gOxaABO3ugWRVt+1PZzZg9IpEmVB1
+	 ZsSpGdU+5ofqA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13546F03874;
-	Tue,  3 May 2022 14:50:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF51BF03870;
+	Tue,  3 May 2022 14:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm: nomadik: drop selecting obsolete
- CLKSRC_NOMADIK_MTU_SCHED_CLOCK
+Subject: Re: [GIT PULL 1/2] Binding changes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165158942207.22061.17053077080501799095.git-patchwork-notify@kernel.org>
-Date: Tue, 03 May 2022 14:50:22 +0000
-References: <20220410145623.2620380-1-linus.walleij@linaro.org>
-In-Reply-To: <20220410145623.2620380-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+ <165158942197.22061.12138098782436405153.git-patchwork-notify@kernel.org>
+Date: Tue, 03 May 2022 14:50:21 +0000
+References: <pull-1650961799-428630@atomide.com>
+In-Reply-To: <pull-1650961799-428630@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 10 Apr 2022 16:56:23 +0200 you wrote:
-> From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+On Tue, 26 Apr 2022 11:30:54 +0300 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
 > 
-> Commit 85b6fcadcf66 ("clocksource/drivers/ux500: Drop Ux500 custom
-> SCHED_CLOCK") removes a sched_clock workaround and its corresponding
-> config CLKSRC_NOMADIK_MTU_SCHED_CLOCK. Since then, selecting
-> CLKSRC_NOMADIK_MTU_SCHED_CLOCK in ./arch/arm/mach-nomadik/Kconfig has no
-> effect and ./scripts/checkkconfigsymbols.py warns:
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> 
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - arm: nomadik: drop selecting obsolete CLKSRC_NOMADIK_MTU_SCHED_CLOCK
-    https://git.kernel.org/soc/soc/c/2b65c1162ade
+  - [GIT,PULL,1/2] Binding changes for omaps
+    https://git.kernel.org/soc/soc/c/3908ca662416
+  - [GIT,PULL,2/2] Devicetree changes for omaps
+    https://git.kernel.org/soc/soc/c/cbc842c2f217
 
 You are awesome, thank you!
 -- 
