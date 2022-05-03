@@ -1,261 +1,119 @@
-Return-Path: <SRS0=MAlP=VK=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=Fita=VL=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3D5AC433EF
-	for <soc@archiver.kernel.org>; Mon,  2 May 2022 22:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E533FC433F5
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 07:06:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A68DEC385CB; Mon,  2 May 2022 22:41:42 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id B6612C385A9; Tue,  3 May 2022 07:06:59 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9DB5DC385B2;
-	Mon,  2 May 2022 22:41:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DB5DC385B2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 63DAB22260;
-	Tue,  3 May 2022 00:41:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1651531299;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=quewXMLWRGuNF9x++PYzltF9q3n3loXTwHKkv1bRl80=;
-	b=S6XX6MD6Qfd5FP38C5rYyyDzh+gBnoUBB5GRQDCtLOehVyQdtg74gt1KsU5d3tSIgVHhNd
-	/azGu+C/VqbpJCLsZfQvajEB5tHixNAdqAlS9WC7+koMEeIQM16Sb4644ev+LVc8vLwkdB
-	XPsp9rjhoEhH05Y/J34JJLJPdzh4H4E=
-From: Michael Walle <michael@walle.cc>
-To: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 763D5C385B1
+	for <soc@kernel.org>; Tue,  3 May 2022 07:06:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 763D5C385B1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f46.google.com with SMTP id z19so18827392edx.9
+        for <soc@kernel.org>; Tue, 03 May 2022 00:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kc27XkBGcgpvj03uAIYtN/02TiD3/pa2n1+ce6OYwxU=;
+        b=oiujbke1mRaMlkrcvlJUsyRrSeYQQfI74Nfjm3EQNjNj1vJPnauGqf8I9d/0ottIAO
+         9blvr38o8Rx9hytaNwfDaQsSyqkgbczUToEqrMYzmV0IHAsfmBj0QSXXAGsx7WFNyTxy
+         435x0+jDlBxN0vM9vG3RcXG4spjyxafTf2YUHIRJ4zBYN6e/LnFpdxUNvo5QsYxpjQBO
+         6qeXC1TJYSr8NUBIAfIcmDZwu0/6StMwPGQdzfcBGX4JrmN8AIsVffC8MCECL7PFGQeh
+         gDwdI4BEFBo0albVdfwjVn+rJM9UpO/hdMWSnCxWr2jSaIYyOv5RBqGgz99p8Uh2m1xG
+         nBgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kc27XkBGcgpvj03uAIYtN/02TiD3/pa2n1+ce6OYwxU=;
+        b=p13XIGZVf25kEFNw+wyiQmh7VWGh4rCWiMqXaoFY7PjqJ2XH5vlFhJU0aIf9fA0Hv4
+         z6bU8olWLE2Kxn2q0ZXyjq+YLLx1IpMa8FqVw6z69wGBWUaXQScHzMRrcA27vXuKa816
+         sfxBhIUh/eFrPehOdyDrdymdpxKv/OpnZFr4aQggLpbxdqH7tLtX9fHh7oNtxFPD++j7
+         hUFdw9+6aUJSFF4YVgZb351J24d6mBqSOYGHdvfrAGcZQ7JeBor1a06ScAeyxBJmSSgH
+         AkDXN3xXGrgdG7+2saL9hg/OXbvAWK6rU5h0LYNLeHUjUFtKZdIedIUOaCCJLC259d4+
+         MMag==
+X-Gm-Message-State: AOAM531gF7ThO9Mfz2kUzBAKiUjZvS2lR1x37NtuK72t6hhvOxECjwYk
+	Mgg4VMUqgZFolp82fHX+w9xFjA==
+X-Google-Smtp-Source: ABdhPJx6otopPtL/mDsEY9EYB6OU78ELkUNRo7Bc1zygiqHJ0krCRFZejUlcSAKWtlvTUFjS9GkqFA==
+X-Received: by 2002:aa7:d407:0:b0:425:f57e:7ae5 with SMTP id z7-20020aa7d407000000b00425f57e7ae5mr16536588edq.393.1651561616510;
+        Tue, 03 May 2022 00:06:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e37sm4300593ejb.157.2022.05.03.00.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 00:06:56 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-kernel@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Tudor.Ambarus@microchip.com,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 13/13] ARM: dts: kswitch-d10: enable networking
-Date: Tue,  3 May 2022 00:41:27 +0200
-Message-Id: <20220502224127.2604333-14-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220502224127.2604333-1-michael@walle.cc>
-References: <20220502224127.2604333-1-michael@walle.cc>
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v5.19, part two
+Date: Tue,  3 May 2022 09:06:52 +0200
+Message-Id: <20220503070652.54091-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable all the necessary network related nodes, wire the pinctrl
-configurations, add the PHYs and connect them to the corresponding
-network ports.
+Hi,
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 16 +++
- .../lan966x-kontron-kswitch-d10-mmt-8g.dts    | 26 +++++
- .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  | 97 +++++++++++++++++++
- 3 files changed, 139 insertions(+)
+On top of previous pull (tags/memory-controller-drv-5.19).
 
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-index 7b12cbe11c58..0f555eb45bda 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-@@ -76,3 +76,19 @@ fc4_b_pins: fc4-b-i2c-pins {
- 		function = "fc4_b";
- 	};
- };
-+
-+&port2 {
-+	phys = <&serdes 2 SERDES6G(0)>;
-+	sfp = <&sfp0>;
-+	managed = "in-band-status";
-+	phy-mode = "sgmii";
-+	status = "okay";
-+};
-+
-+&port3 {
-+	phys = <&serdes 3 SERDES6G(1)>;
-+	sfp = <&sfp1>;
-+	managed = "in-band-status";
-+	phy-mode = "sgmii";
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-index 4b35f6c46e7f..5feef9a59a79 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-@@ -11,3 +11,29 @@ / {
- 	compatible = "kontron,kswitch-d10-mmt-8g", "kontron,s1921",
- 		     "microchip,lan9668", "microchip,lan966";
- };
-+
-+&mdio0 {
-+	phy2: ethernet-phy@3 {
-+		reg = <3>;
-+	};
-+
-+	phy3: ethernet-phy@4 {
-+		reg = <4>;
-+	};
-+};
-+
-+&port2 {
-+	phys = <&serdes 2 SERDES6G(0)>;
-+	phy-handle = <&phy2>;
-+	phy-mode = "sgmii";
-+	managed = "in-band-status";
-+	status = "okay";
-+};
-+
-+&port3 {
-+	phys = <&serdes 3 SERDES6G(1)>;
-+	phy-handle = <&phy3>;
-+	phy-mode = "sgmii";
-+	managed = "in-band-status";
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-index 4c1ebb4aa5b0..4cab1b3b3b29 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- #include "lan966x.dtsi"
-+#include "dt-bindings/phy/phy-lan966x-serdes.h"
- 
- / {
- 	aliases {
-@@ -52,6 +53,12 @@ fc3_b_pins: fc3-b-pins {
- 		function = "fc3_b";
- 	};
- 
-+	miim_c_pins: miim-c-pins {
-+		/* MDC, MDIO */
-+		pins = "GPIO_59", "GPIO_60";
-+		function = "miim_c";
-+	};
-+
- 	sgpio_a_pins: sgpio-a-pins {
- 		/* SCK, D0, D1 */
- 		pins = "GPIO_32", "GPIO_33", "GPIO_34";
-@@ -71,6 +78,92 @@ usart0_pins: usart0-pins {
- 	};
- };
- 
-+&mdio0 {
-+	pinctrl-0 = <&miim_c_pins>;
-+	pinctrl-names = "default";
-+	reset-gpios = <&gpio 29 GPIO_ACTIVE_LOW>;
-+	clock-frequency = <2500000>;
-+	status = "okay";
-+
-+	phy4: ethernet-phy@5 {
-+		reg = <5>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	phy5: ethernet-phy@6 {
-+		reg = <6>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	phy6: ethernet-phy@7 {
-+		reg = <7>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	phy7: ethernet-phy@8 {
-+		reg = <8>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&mdio1 {
-+	status = "okay";
-+};
-+
-+&phy0 {
-+	status = "okay";
-+};
-+
-+&phy1 {
-+	status = "okay";
-+};
-+
-+&port0 {
-+	phys = <&serdes 0 CU(0)>;
-+	phy-handle = <&phy0>;
-+	phy-mode = "gmii";
-+	status = "okay";
-+};
-+
-+&port1 {
-+	phys = <&serdes 1 CU(1)>;
-+	phy-handle = <&phy1>;
-+	phy-mode = "gmii";
-+	status = "okay";
-+};
-+
-+&port4 {
-+	phys = <&serdes 4 SERDES6G(2)>;
-+	phy-handle = <&phy4>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&port5 {
-+	phys = <&serdes 5 SERDES6G(2)>;
-+	phy-handle = <&phy5>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&port6 {
-+	phys = <&serdes 6 SERDES6G(2)>;
-+	phy-handle = <&phy6>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&port7 {
-+	phys = <&serdes 7 SERDES6G(2)>;
-+	phy-handle = <&phy7>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&serdes {
-+	status = "okay";
-+};
-+
- &sgpio {
- 	pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
- 	pinctrl-names = "default";
-@@ -88,6 +181,10 @@ sgpio_out: gpio@1 {
- 	};
- };
- 
-+&switch {
-+	status = "okay";
-+};
-+
- &watchdog {
- 	status = "okay";
- };
--- 
-2.30.2
+Best regards,
+Krzysztof
 
+
+The following changes since commit d37b07897e5024088b2170b8e6e1c68d567b9be6:
+
+  memory: fsl-corenet-cf: Use helper function devm_platform_ioremap_resource() (2022-04-19 16:59:03 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.19-2
+
+for you to fetch changes up to 854fd9209b20837ab48c2e6714e5e44dd8ea33a2:
+
+  memory: omap-gpmc: Allow building as a module (2022-04-29 08:57:36 +0200)
+
+----------------------------------------------------------------
+Memory controller drivers for v5.19, part two
+
+1. Cleanup: simplify platform_get_resource() calls by using
+   devm_platform_get_and_ioremap_resource() helper.
+2. OMAP: allow building omap-gpmc as module and make it visible (it is
+   not selected by platform anymore).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (7):
+      memory: da8xx-ddrctl: simplify platform_get_resource()
+      memory: emif: simplify platform_get_resource()
+      memory: ti-emif: simplify platform_get_resource()
+      memory: ti-emif-pm: simplify platform_get_resource()
+      memory: tegra: mc: simplify platform_get_resource()
+      memory: brcmstb_dpfe: simplify platform_get_resource_byname()
+      memory: renesas-rpc-if: simplify platform_get_resource_byname()
+
+Roger Quadros (2):
+      memory: omap-gpmc: Make OMAP_GPMC config visible and selectable
+      memory: omap-gpmc: Allow building as a module
+
+ drivers/memory/Kconfig          |  2 +-
+ drivers/memory/brcmstb_dpfe.c   | 10 +++-------
+ drivers/memory/da8xx-ddrctl.c   |  3 +--
+ drivers/memory/emif.c           |  4 +---
+ drivers/memory/omap-gpmc.c      | 43 ++++++++++++++++++++++-------------------
+ drivers/memory/renesas-rpc-if.c |  3 +--
+ drivers/memory/tegra/mc.c       |  4 +---
+ drivers/memory/ti-aemif.c       |  4 +---
+ drivers/memory/ti-emif-pm.c     |  6 +++---
+ 9 files changed, 35 insertions(+), 44 deletions(-)
