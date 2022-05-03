@@ -1,687 +1,207 @@
-Return-Path: <SRS0=6Jum=VL=startmail.com=hanetzer@kernel.org>
+Return-Path: <SRS0=7R3c=VL=hpe.com=prvs=01224eb144=nick.hawkins@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B699BC433F5
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 13:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D76DC433F5
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 14:09:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 708BBC385B2; Tue,  3 May 2022 13:45:12 +0000 (UTC)
-Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
+	id 444A9C385AF; Tue,  3 May 2022 14:09:05 +0000 (UTC)
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D9D3EC385A4;
-	Tue,  3 May 2022 13:45:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9D3EC385A4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=startmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=startmail.com
-Date: Tue, 3 May 2022 08:44:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-	s=2020-07; t=1651585507;
-	bh=WTr3zVTTNyCdhxYBth93IvSInDhU8itEfs0ZovXdAsk=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
-	 Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
-	 Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-	b=WaVWG2a7EZkDtSGaQAtEHj3E1W1Js1SuR+KW4bUakGP5nDUsR2tkQ6jNZeQXuq7jK
-	 j5J6Q2OtXuLQ3y2V3kwTtDBfBSDnaoLmef2LDTqWudB93MGhmwf2vjabBt3DO5ecpQ
-	 de/RG4W+++B1dAsxqsIdWzen07qRZ8wq3+OvX8ePVDlt4RP+OVGEP9T8eQlmMuZVtD
-	 zrxZ0kPws7rlZkPvdWdjixpyaLKYE/FQ1qAUKpRPFUjy8kLzhBcf546UoqyoVAOISD
-	 rd/gMYSf4O46VwhIlynRvae21fZtiKD+3YKtydrwb0n3agu7nqUd6EEsQu3EWAKY1W
-	 7eQ8SQI8vgUGg==
-From: "Marty E. Plummer" <hanetzer@startmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 01141C385A9;
+	Tue,  3 May 2022 14:09:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01141C385A9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243DK3lO000871;
+	Tue, 3 May 2022 14:08:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=pKwh5hyfKZ6wyu4Xfjkyfg6iLbTDZu0l8wrYdjJKM00=;
+ b=PHJESw4X8+7L7OE7IiWFMfAs8Izuxj6izsmDbDt9uXoMj8rJxug1IHW+SHTmYDvNsvuY
+ h/5x0WT38/r7SAMPBENI1f4v3Cex7Xtnm7SkKkSiuOBWDU4JgGBftuUI+2Yt2nwzAqUM
+ AKfiEuqEHv0gXXGczhDl9DxXLVgkSld3Ua0NMYN9b4VkGqOvbEP9kA68XaAKTpBnZCV+
+ dgyBVsOoKYOY6CvkwmRBDp149ZoXtcy3HSI+AFK61EHs58MLP6/87TO1Ev6oHKL5DwHf
+ gmLbvh95x4+DN8I3BZwJDoo9BVQ/Y+lvM9j5iP8g22k/vDuveJ9RwRwnFmVMi4GYOs0u sw== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fu1f92b57-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 May 2022 14:08:58 +0000
+Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 8DE98805E0B;
+	Tue,  3 May 2022 14:08:57 +0000 (UTC)
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 3 May 2022 02:08:51 -1200
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 3 May 2022 02:08:51 -1200
+Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Tue, 3 May 2022 02:08:51 -1200
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 3 May 2022 02:08:33 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XuSu/tpGgpAFGyA0nvvE3B2KNlhXltwcEEkpYmqhM0EGzkpA/zKzquG2oiIKTkSvi9HSVOtfOBfEdXrndB8ANs2SolukUgqRV0SCkwQj2HcENQlh6Y1WZILk9dYPwkr0n9E8U55YBPDT/6UTgFO3d1T/bf+lrXPMrSKFyyiX+tNktSocNu0LKzC/lBvTTa875g/LoSxqzwHZlvxuGKMCSFWJ3aDqdqYSJDh2vwgYzm/CBlhxCK6HltWxJIY8Ct9ixMewn883USjn0+07MpPANXnI2/34SSMheu8adUzie6g+8YKMlSrL5YCZPF72G0J8ZiyzArT1BAIavA+5cVTSBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pKwh5hyfKZ6wyu4Xfjkyfg6iLbTDZu0l8wrYdjJKM00=;
+ b=MKKxeJxztIqcP7ud1syyjZ1CsAT7hAJkoQDl4PZdlkQekFh5aV+lKHbV13QI5P9D4dpa++TH7ScILz0TukQDugKcS1yMUpMP54Z8gKIE4IYi/i4J6ClXTwzjjK/G1MpHNRgV4oZ5m37QbGajmXz1tlwsl5xerPChCLomNT23CmQbv9b3B6WIYh/dlkXFZbt05b61k/8IgnhEL2WTqieYdNjwJmh435fI+phEZ9MFPVQNuUUklSkP3KQTZM9Nq63F7zG97DfftVjxw4DMhyVGqj2vy+d9ciFuBCVkJDq4UzTVM48s6P7w/Rtq9hKSc3QXUZmY7uqrl21Adbn0Ny6f5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:172::21)
+ by SJ0PR84MB1387.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:431::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
+ 2022 14:08:32 +0000
+Received: from PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::6055:1602:5a0a:1562]) by PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::6055:1602:5a0a:1562%8]) with mapi id 15.20.5206.024; Tue, 3 May 2022
+ 14:08:32 +0000
+From: "Hawkins, Nick" <nick.hawkins@hpe.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Verdun, Jean-Marie"
+	<verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de"
+	<arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
-	devicetree@vger.kernel.org, gengdongjiu@huawei.com,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
-	mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
-	p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
-	robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
-	sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
-	vigneshr@ti.com, xuwei5@hisilicon.com
-Subject: Re: [RFC v2 2/2] arm: hisi: enable Hi3521a soc
-Message-ID: <20220503134459.pplgvhcckja4ivcg@proprietary-killer>
-References: <20220501054440.2434247-1-hanetzer@startmail.com>
- <20220501173423.2473093-1-hanetzer@startmail.com>
- <20220501173423.2473093-3-hanetzer@startmail.com>
- <4cda3645-c4e8-1b3c-bd80-891afd56449a@linaro.org>
+CC: Olof Johansson <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
+        "Rob
+ Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>
+Subject: RE: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
+Thread-Topic: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
+Thread-Index: AQHYXmTKMgAnIeG/Tk629X6tcmENZa0M7HeAgABB+qA=
+Date: Tue, 3 May 2022 14:08:31 +0000
+Message-ID: <PH0PR84MB1718A4E67E6B7585099B84EB88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220502204050.88316-1-nick.hawkins@hpe.com>
+ <20220502204050.88316-7-nick.hawkins@hpe.com>
+ <c4d85ebc-05f1-95d5-ac71-ba92527a32d5@linaro.org>
+In-Reply-To: <c4d85ebc-05f1-95d5-ac71-ba92527a32d5@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9939ce11-7264-44a1-07da-08da2d0e67b5
+x-ms-traffictypediagnostic: SJ0PR84MB1387:EE_
+x-microsoft-antispam-prvs: <SJ0PR84MB13870F0D143DA3B3B5DC008E88C09@SJ0PR84MB1387.NAMPRD84.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 16k/HtEaZk7Hr+ayLHOdvDx+Urs/JD+Xqe0CrFRzzPvlqVI2xWhqFjSH0+Z05HIsp3W1wF7KyV/r5HtJywOCiBGEvDfFN1I3rWZ4W+6M3P6K0/DCYNkWCrd7LpY9JnhtjgZp832H/3i3gWqvtbPZVf9kIbqtiw8Z70ORFvQO32WqVR4drljtYCFEI9jdFONlLIvLylQZXWaoHx/nD92K+kD5sk5e/He+pltLsDQ5TRRLqkizma8TSfV5uwGpxBdua1kgiJxcWgNd8DOVbjxdFBnNN2ejoZG0116DNm0kTrsaCQrtfwkSv1+3U74CIu9D1XoTSuGtus/ozL1WqzC5g9VTO+dGqm1d24NIOZLj76MoBkBLez18/Uv4+rIyYIG0j/TH7gQNMEaPhToByzKaE8AFFXPP9+f/S8JKTJyF6jRRHok34xzGubeeuqiEV6CZQUyCxj3dYO5knuvTocMPONy3ry9XMEK+E5YiY15HgDKBFjOTmsslYr6TKr1GkmirF9LTTixjNjzTQz4c98f9Ex43sUy2wCXBt7LvflqyAkYvN1Rez0BiIHiTX6Q0fLi/J9pfp/fK6aHy4vSh2F/KE60f0GXyWc8/eohJEQ/TTGkHBETd37P38pf8IEdhZKxGhShilZ/JanPlTyluAXQ4SR6w2lPnolWL6NWQdtS1JA6Iq7P9ARu3dgdB7XRhNCTtyT11ntm57ZLN2qK98BM1ag==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(366004)(33656002)(64756008)(316002)(76116006)(4326008)(66556008)(66946007)(8676002)(52536014)(66476007)(66446008)(5660300002)(83380400001)(54906003)(8936002)(508600001)(71200400001)(110136005)(55016003)(2906002)(7416002)(9686003)(26005)(86362001)(55236004)(53546011)(6506007)(122000001)(7696005)(38100700002)(38070700005)(82960400001)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ckRpT010WjNlb3dtdHlQNzJ1ckZ5dytCd2NWYzJVMlczRnhzTXptaVY1MGVj?=
+ =?utf-8?B?WjlPQXEvdnNsWTdJTnE0T25TaXNtajltSW85ZW9qR2xGUnpVZk5vbHh3akNS?=
+ =?utf-8?B?aEMxTmoxZStnM1FWNVVoMmIrS1B0ZWx3RzlBcWNOVkxwZmE0L2hBdnJrQkZX?=
+ =?utf-8?B?aHROOFEzVDJoTlRXelRZeDdHNnBZZ0RlSkV3a2xGN0RSR2pvZytsdHNpajVP?=
+ =?utf-8?B?d2tkTWZrRUxPUUdkVWNpdHIrK00wcGNLUXJBVE1GZ0QvQ1ljc3d0aXAzRGox?=
+ =?utf-8?B?SlNZNDdsYzVZRUMzb3J0dDFuZFIwblFGMW4zZW85WHZuKy83THpEZFVmeGJm?=
+ =?utf-8?B?bDV4cTlYZjFjT3ZwOWVxWnFTM2xKQWMzRVlPQnU2RWFJM1N1bm1waVdkaTNE?=
+ =?utf-8?B?UVZ0TDFHajZBL2QxYWU3aGRaUk85RWpHWWNvV01hYUhvQzlybE1CaE1qKy9D?=
+ =?utf-8?B?UzlLMms1YnRDRFBJUUxhSkRZZXgwYy94UEw4NFNoQThaQ0VWN3oxZkRvWTF3?=
+ =?utf-8?B?YVJodmZsTDRVMXU4TS9qN0ZrVVBaK3MrUTgxeVYrY3lZbFZUNXpsU0ZOVUFG?=
+ =?utf-8?B?QkgzOHhlNkpKWk0rdk94QzNxdE41SGtIek5ERWd3bFd0cHRzc2NUbGxDKzJ6?=
+ =?utf-8?B?cS9samFlLzU0YjJ1bGJwU0habmtYcnFTYlhCTDF4dlBhbFhsQnNKVXRXeDQv?=
+ =?utf-8?B?Z3dDWWlVQlFrb1lVL1ErUGJZTkVjS1hEd2JIYWpVSElpME8waTQ3WTVlUmZ3?=
+ =?utf-8?B?K2NuTUpmdGlxUmsxZXFFTmtXTVlORjBnTEF0SUlobkI3Zk9xRlpRMTY1MTVQ?=
+ =?utf-8?B?cndhN1FiNEpmODloOEZFVGgwd0ZBYUhZUE9vSkVBam5jWXJrYno5dUZnUzlo?=
+ =?utf-8?B?ampLNlM5OEFudUZxdiswQTZEcmp5TFNWTmIxbUlyTnd1eW1oRjZieWkrTGtx?=
+ =?utf-8?B?dHdLM0ZWOG4zdVBaVXN3ZmRoMjhiMWFXT200NzNSakxmamhWemRQZHVxdjFv?=
+ =?utf-8?B?b1Fzd25EcXhzRnluN0hRbzR0SUgyUTBLWDFUVFBIZnA2YmhjT3pPUW41QUNF?=
+ =?utf-8?B?bmMyakN0aUNmaUNCb0pHZHF4emxZTk5TVHcwV2tRa0JuQ0E2SW5GL2dwRkJt?=
+ =?utf-8?B?TlMwQnRUdTQyNnJSMkYzOTBINUpLck95Tk1KWVdVZXo1ditmdmpyVzNHdWYy?=
+ =?utf-8?B?M0Z1bUl0MlFOMWM3RHVaVDNuR3cxYWt4eTBoQVFqSWxYWVZaR0dNeXEzTWY1?=
+ =?utf-8?B?dndEd25DRjdEdnh2UjJnYkorMWJ5U1hpcWU2Si9mSCswWG5veERNYnNWSnR0?=
+ =?utf-8?B?TGtDNVVtVjRHblpneDRhTStFTER6MVduWm9wQkEwSkljQlV2K1ljQUtiSzRn?=
+ =?utf-8?B?NVlyRE0vc01mcCsreDFqR0dDaThoUTI0bFB2eVhOdVNLQy92VWtnQXlpeUla?=
+ =?utf-8?B?UE1QNjVWUy9jRDVmUkR1cHRMNlFOTTVhN04ranE0NElRRnhlUmxuY2wyQ0Q0?=
+ =?utf-8?B?bVZacnpZTUM3eW5GNzNTWi9VWTgzQnd2SmgwRjBuS0FjT3ZwMksxblcyakRG?=
+ =?utf-8?B?a05aVnlEWGxyTmpUNURNYm5GL1M1WC9xNGtVSVBKcmgxaGdBOEZwS3JUVlVI?=
+ =?utf-8?B?bEpxbTZLTjdXS29uSnR3OFludTN0bHJtRzlwVkl5TzRRUG1ldUczYkdPVjdh?=
+ =?utf-8?B?dzlmaDhHa3JaLzcrUkc2cVd4RnBQdDRIV0FibHV3czhYMHUrZERPOStPNmJR?=
+ =?utf-8?B?YTVHNHc0WSs2N0FSaVJFR1ZKVXRUWDl5bCtUVFFuVzNUcEFXdWowNFBzNDhT?=
+ =?utf-8?B?MlA3dEUyMHdTWUZKaDMrZkI2cksxN0crY21xWGJWeFVGdEN0WFVKbElKUWhD?=
+ =?utf-8?B?UldWK2xlc0Z1L1hQcmxnVFZQWnB3cFd2bllrczFXMUxYZ2RpME0yZEd5azha?=
+ =?utf-8?B?dEJvQjY1TWtlZzRLQXVtY1ZyNWF5OHpicHhicUN3RzN5ODJMZUVrNEdmNjBO?=
+ =?utf-8?B?MHd0bGFISk1JNVhiQXVydi9OOXN0cW45R2dTY0M3VldVNDFBTHAwOU1pQ2l5?=
+ =?utf-8?B?MHdrZDl6c1BOKzM2Zy9JVG1yWGIyUjhPTjROUjhhaWR2d01qTjRTQ0pYSWdR?=
+ =?utf-8?B?MTVlajVWKzU0QmhSMEFkd29VaGlQYkM4K0xDVEczRGE5RGpEUkczRVlrR1Fo?=
+ =?utf-8?B?QzVwRTRLdk96QnhGdG15dEU0b0RMNVUrcHB0NzJKQUhtb0lZZGRpeC9WWkZO?=
+ =?utf-8?B?aWNwdFJnZlVuZTBaZE5yamZhZWY0Yit2UUYrU1ZrVXR4N2htMkUwVytyOEZI?=
+ =?utf-8?B?Z2p0K2M4Nlp0eURid04xMXNGTVM0U1NQY1dUSkdGR3UrWC9rRjRWQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cda3645-c4e8-1b3c-bd80-891afd56449a@linaro.org>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9939ce11-7264-44a1-07da-08da2d0e67b5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2022 14:08:31.9055
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QzwFA8NZ7dMMK3lD/LefJ88fh2g9Cnx1BwwVCFlnKlUusa67/Z9Y9bS3x8vWZkpBnMmorTCoqDeBQTOggwTfFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1387
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: 7vQBehy7XI2PraCZFK_tbAirsc-cG05k
+X-Proofpoint-ORIG-GUID: 7vQBehy7XI2PraCZFK_tbAirsc-cG05k
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-03_05,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ mlxscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=760 impostorscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205030102
 
-On Tue, May 03, 2022 at 01:47:01PM +0200, Krzysztof Kozlowski wrote:
-> On 01/05/2022 19:34, Marty E. Plummer wrote:
-> > Enable Hisilicon Hi3521A/Hi3520DCV300 SoC. This SoC series includes
-> > hardware mutlimedia codec cores, commonly used in consumer cctv/dvr
-> > security systems and ipcameras. The arm core is a Cortex A7.
-> > 
-> > Add hi3521a.dtsi and hi3521a-rs-dm290e.dts for RaySharp CCTV systems,
-> > marketed under the name Samsung SDR-B74301N.
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
-> > 
-> > Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
-> > ---
-> >  arch/arm/boot/dts/Makefile              |   2 +
-> >  arch/arm/boot/dts/hi3521a-rs-dm290e.dts | 134 ++++++++
-> >  arch/arm/boot/dts/hi3521a.dtsi          | 423 ++++++++++++++++++++++++
-> 
-> DTSes go to separate patches.
-Do you mean dts and dtsi need to be separate patches?
-> 
-> >  arch/arm/mach-hisi/Kconfig              |   9 +
-> >  4 files changed, 568 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/hi3521a-rs-dm290e.dts
-> >  create mode 100644 arch/arm/boot/dts/hi3521a.dtsi
-> > 
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index 7c16f8a2b738..535cef3b14ab 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -242,6 +242,8 @@ dtb-$(CONFIG_ARCH_GEMINI) += \
-> >  	gemini-ssi1328.dtb \
-> >  	gemini-wbd111.dtb \
-> >  	gemini-wbd222.dtb
-> > +dtb-$(CONFIG_ARCH_HI3521A) += \
-> > +	hi3521a-rs-dm290e.dtb
-> >  dtb-$(CONFIG_ARCH_HI3xxx) += \
-> >  	hi3620-hi4511.dtb
-> >  dtb-$(CONFIG_ARCH_HIGHBANK) += \
-> > diff --git a/arch/arm/boot/dts/hi3521a-rs-dm290e.dts b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
-> > new file mode 100644
-> > index 000000000000..b24fcf2ca85e
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
-> > @@ -0,0 +1,134 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Copyright (C) 2017-2022 Marty Plummer <hanetzer@startmail.com>
-> > + */
-> > +
-> > +#include "hi3521a.dtsi"
-> > +
-> > +/ {
-> > +	model = "RaySharp RS-DM-290E DVR Board";
-> > +	compatible = "raysharp,rs-dm-290e", "hisilicon,hi3521a";
-> 
-> Please run checkpatch and fix the warnings.
-> 
-sunova. I could have sworn I had my editor setup right for whitespace
-and such.
-> > +
-> > +	aliases {
-> > +		serial0 = &uart0;
-> > +		serial1 = &uart1;
-> > +		serial2 = &uart2;
-> > +	};
-> > +
-> > +	chosen {
-> > +		stdout-path = "serial0:115200n8";
-> > +	};
-> > +
-> > +	memory@800000000 {
-> > +		device_type = "memory";
-> > +		reg = <0x80000000 0xf00000>;
-> > +	};
-> > +};
-> > +
-> > +&hi_sfc {
-> > +	status = "okay";
-> > +	spi-nor@0 {
-> 
-> Looks like wrong node name. You need to run "dtbs_check" and fix
-> warnings related to your DTS.
-> 
-Ah, that's a good thing to know. dt-doc-validate isn't found, doesn't
-seem packaged for gentoo either. I'll see about that asap.
-> > +		// compatible = "jedec,spi-nor";
-> 
-> No dead code in Linux kernel. Commented out stuff sometimes is okay if
-> it is explained with comments.
-> 
-As mentioned in the title, just an RFC, not final.
-> > +		compatible = "macronix,mx25l25635e", "jedec,spi-nor";
-> > +		reg = <0>;
-> > +		spi-max-frequency = <150000000>;
-> > +		// spi-rx-bus-width = <1>;
-> > +		// spi-tx-bus-width = <1>;
-> > +		// m25p,default-addr-width = <4>;
-> > +		// spi-max-frequency = <160000000>;
-> 
-> No dead code.
-> 
-> > +		m25p,fast-read;
-> > +
-> > +		partitions {
-> > +			compatible = "fixed-partitions";
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +			
-> > +			u-boot@0 {
-> > +				label = "u-boot";
-> > +				reg = <0x0 0x50000>;
-> > +				read-only;
-> > +			};
-> > +			u-boot-env@50000 {
-> > +				label = "u-boot-env";
-> > +				reg = <0x50000 0x20000>;
-> > +			};
-> > +			kernel@70000 {
-> > +				label = "kernel";
-> > +				reg = <0x70000 0x700000>;
-> > +			};
-> > +			rootfs@770000 {
-> > +				label = "rootfs";
-> > +				reg = <0x800000 0x300000>;
-> > +				read-only;
-> > +			};
-> > +			extra@b00000 {
-> > +				label = "extra";
-> > +				reg = <0xb00000 0x1500000>;
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&dual_timer0 {
-> > +	status = "okay";
-> > +};
-> > +
-> > +&uart0 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&uart0_pmx_func &uart0_cfg_func>;
-> > +	status = "okay";
-> > +};
-> > +
-> > +&pmx0 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&sfc_pmx_func>;
-> > +	uart0_pmx_func: uart0_pmx_func {
-> > +		pinctrl-single,pins = <
-> > +			0x00e8 0x0
-> > +			0x00ec 0x0
-> > +		>;
-> > +	};
-> > +
-> > +	sfc_pmx_func: sfc_pmx_func {
-> > +		pinctrl-single,pins = <
-> > +			0x00c4 0x1
-> > +			0x00c8 0x1
-> > +			0x00cc 0x1
-> > +			0x00d0 0x1
-> > +			0x00d4 0x1
-> > +		>;
-> > +	};
-> > +};
-> > +
-> > +&pmx1 {
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&sfc_cfg_func>;
-> > +	uart0_cfg_func: uart0_cfg_func {
-> > +		pinctrl-single,pins = <
-> > +			0x00e8 0x0
-> > +			0x00ec 0x0
-> > +		>;
-> > +	};
-> 
-> Blank line
-> 
-> > +	sfc_cfg_func: sfc_cfg_func {
-> > +		pinctrl-single,pins = <
-> > +			0x00c4 0x58
-> > +			0x00c8 0x28
-> > +			0x00cc 0x38
-> > +			0x00d0 0x38
-> > +			0x00d4 0x38
-> > +		>;
-> > +	};
-> > +};
-> > +
-> > +/* &gmac0 { */
-> > +/* 	#address-cells = <1>; */
-> > +/* 	#size-cells = <0>; */
-> > +/* 	phy-handle = <&phy3>; */
-> > +/* 	phy-mode = "rgmii"; */
-> > +/* 	mac-address = [00 00 00 00 00 00]; */
-> > +/* 	status = "okay"; */
-> > +/**/
-> > +/* 	phy3: ethernet-phy@3 { */
-> > +/* 		reg = <3>; */
-> > +/* 	}; */
-> > +/* }; */
-> 
-> 
-> ? What's this?
-> 
-ethernet port. its giving me a bit of trouble at the moment, but it does
-work and has a phy at 3.
-> > diff --git a/arch/arm/boot/dts/hi3521a.dtsi b/arch/arm/boot/dts/hi3521a.dtsi
-> > new file mode 100644
-> > index 000000000000..53993a32fd5d
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/hi3521a.dtsi
-> > @@ -0,0 +1,423 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Copyright (C) 2017-2022 Marty Plummer <hanetzer@startmail.com>
-> > + */
-> > +
-> > +#include <dt-bindings/clock/hi3521a-clock.h>
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +/dts-v1/;
-> 
-> Blank line.
-> 
-> > +/ {
-> > +	#address-cells = <1>;
-> > +	#size-cells = <1>;
-> > +
-> > +	cpus {
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +
-> > +		cpu0: cpu@0 {
-> > +			device_type = "cpu";
-> > +			compatible = "arm,cortex-a7";
-> > +			reg = <0>;
-> > +			clock-frequency = <1100000000>;
-> > +		};
-> > +	};
-> > +
-> > +	timer {
-> > +		compatible = "arm,armv7-timer";
-> > +		interrupt-parent = <&gic>;
-> > +		interrupts = <GIC_PPI 13 0xf08>,
-> > +			     <GIC_PPI 14 0xf08>,
-> > +			     <GIC_PPI 11 0xf08>,
-> > +			     <GIC_PPI 10 0xf08>;
-> 
-> Use macros for these interrupts.
-> 
-moot point, turns out enabling this timer is causing the system to lock
-up. Something's weird there.
-> > +		clock-frequency = <24000000>;
-> > +	};
-> > +
-> > +	pmu {
-> > +		compatible = "arm,cortex-a7-pmu";
-> > +		interrupt-parent = <&gic>;
-> > +		interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
-> > +	};
-> > +
-> > +	gic: interrupt-controller@10301000 {
-> > +		compatible = "arm,pl390";
-> > +		#interrupt-cells = <3>;
-> > +		interrupt-controller;
-> > +		reg = <0x10301000 0x1000>, <0x10302000 0x1000>;
-> 
-> Put reg just after compatible. This applies to each other node as well
-> (if it comes with reg).
-> 
-Ah gotcha.
-> > +	};
-> > +
-> > +	xtal24m: xtal24m {
-> 
-> Generic node names, so one of: "clock-0" "clock-xtal24m"
-> 
-Will do.
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <24000000>;
-> 
-> This does not look like property of the SoC, so should be defined by boards.
-> 
-SoC requires a 24Mhz osc (and a 32khz one as well), so it'll always be
-present regardless.
-> > +	};
-> > +
-> > +	clk_3m: clk_3m {
-> 
-> No underscores in node names, generic node name (see above).
-> 
-early debugging clock, will be removed.
-> > +		compatible = "fixed-clock";
-> > +		#clock-cells = <0>;
-> > +		clock-frequency = <3000000>;
-> 
-> This does not look like property of the SoC, so should be defined by boards.
-> 
-> > +	};
-> > +
-> > +	soc {
-> > +		#address-cells = <1>;
-> > +		#size-cells = <1>;
-> > +		compatible = "simple-bus";
-> > +		interrupt-parent = <&gic>;
-> > +		ranges;
-> > +
-> > +		hi_sfc: spi@10000000 {
-> > +			compatible = "hisilicon,hi3521a-spi-nor", "hisilicon,fmc-spi-nor";
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> > +			reg = <0x10000000 0x1000>, <0x14000000 0x10000>;
-> > +			reg-names = "control", "memory";
-> > +			clocks = <&crg HI3521A_FMC_CLK>;
-> > +			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		/* usb0: usb@10030000 { */
-> > +		/* 		compatible = "generic-ohci"; */
-> > +		/* 		reg = <0x10030000 0x1000>; */
-> > +		/* 		interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>; */
-> > +		/* 		clocks = <&crg > */
-> > +		/* 	}; */
-> 
-> No dead code please.
-> 
-> > +		dmac: dma-controller@10060000 {
-> > +			compatible = "arm,pl080", "arm,primecell";
-> > +			arm,primecell-periphid = <0x00041080>;
-> > +			reg = <0x10060000 0x1000>;
-> > +			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_DMAC_CLK>;
-> > +			clock-names = "apb_pclk";
-> > +			lli-bus-interface-ahb1;
-> > +			lli-bus-interface-ahb2;
-> > +			mem-bus-interface-ahb1;
-> > +			mem-bus-interface-ahb2;
-> > +			memcpy-burst-size = <256>;
-> > +			memcpy-bus-width = <32>;
-> > +			#dma-cells = <2>;
-> > +			status = "okay";
-> 
-> No need for status okay, it's by default.
-> 
-ah, good to know.
-> > +		};
-> > +
-> > +		gmac0: ethernet@100a0000 {
-> > +			compatible = "hisilicon,hisi-gmac-v1";
-> > +			reg = <0x100a0000 0x1000>, <0x1204008c 0x4>;
-> > +			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_ETH_CLK>, <&crg HI3521A_ETH_MACIF_CLK>;
-> > +			clock-names = "mac_core", "mac_ifc";
-> > +			/* resets = <&crg 0x78 0>, <&crg 0x78 2>, <&crg 0x78 5>; */
-> > +			/* reset-names = "mac_core", "mac_ifc", "phy"; */
-> > +			/* hisilicon,phy-reset-delays-us = <10000 10000 30000>; */
-> 
-> No dead code.
-> 
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		dual_timer0: timer@12000000 {
-> > +			compatible = "arm,sp804", "arm,primecell";
-> > +			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
-> 
-> A bit weird interrupts... the same?
-> 
-Yes, though I am aware that some sp804 timers do have a separate
-interrupts per pair.
-> > +			reg = <0x12000000 0x1000>;
-> > +			clocks = <&sysctrl HI3521A_TIMER0_CLK>,
-> > +				 <&sysctrl HI3521A_TIMER1_CLK>,
-> > +				 <&crg HI3521A_APB_CLK>;
-> > +			clock-names = "timer0clk", "timer1clk", "apb_pclk";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		dual_timer1: timer@12010000 {
-> > +			compatible = "arm,sp804", "arm,primecell";
-> > +			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-> > +			reg = <0x12010000 0x1000>;
-> > +			clocks = <&sysctrl HI3521A_TIMER2_CLK>,
-> > +				 <&sysctrl HI3521A_TIMER3_CLK>,
-> > +				 <&crg HI3521A_APB_CLK>;
-> > +			clock-names = "timer0clk", "timer1clk", "apb_pclk";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		dual_timer2: timer@12020000 {
-> > +			compatible = "arm,sp804", "arm,primecell";
-> > +			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
-> > +			reg = <0x12020000 0x1000>;
-> > +			clocks = <&sysctrl HI3521A_TIMER4_CLK>,
-> > +				 <&sysctrl HI3521A_TIMER5_CLK>,
-> > +				 <&crg HI3521A_APB_CLK>;
-> > +			clock-names = "timer0clk", "timer1clk", "apb_pclk";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		dual_timer3: timer@12030000 {
-> > +			compatible = "arm,sp804", "arm,primecell";
-> > +			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > +				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
-> > +			reg = <0x12030000 0x1000>;
-> > +			clocks = <&sysctrl HI3521A_TIMER6_CLK>,
-> > +				 <&sysctrl HI3521A_TIMER7_CLK>,
-> > +				 <&crg HI3521A_APB_CLK>;
-> > +			clock-names = "timer0clk", "timer1clk", "apb_pclk";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		crg: clock-reset-controller@12040000 {
-> > +			compatible = "hisilicon,hi3521a-crg";
-> 
-> Undocumented compatible.  Didn't checkpatch warn about it?
-> 
-As mentioned, RFC. I'm more concerned with getting it to work consistently
-at the moment.
-> > +			#clock-cells = <1>;
-> > +			#reset-cells = <2>;
-> > +			reg = <0x12040000 0x1000>;
-> > +		};
-> > +
-> > +		sysctrl: system-controller@12050000 {
-> > +			compatible = "hisilicon,hi3521a-sysctrl", "syscon";
-> 
-> Same.
-> 
-> > +			reg = <0x12050000 0x1000>;
-> > +			#clock-cells = <1>;
-> > +			#reset-cells = <2>;
-> > +		};
-> > +
-> > +		reboot {
-> > +			compatible = "syscon-reboot";
-> > +			regmap = <&sysctrl>;
-> > +			offset = <0x4>;
-> > +			mask = <0xdeadbeef>;
-> > +		};
-> > +
-> > +		wdt0: watchdog@12070000 {
-> > +			compatible = "arm,sp805", "arm,primecell";
-> > +			arm,primecell-periphid = <0x00141805>;
-> > +			reg = <0x12070000 0x1000>;
-> > +			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_FIXED_3M>;
-> > +			clock-names = "apb_pclk";
-> > +		};
-> > +
-> > +		uart0: serial@12080000 {
-> > +			compatible = "arm,pl011", "arm,primecell";
-> > +			reg = <0x12080000 0x1000>;
-> > +			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_UART0_CLK>, <&crg HI3521A_UART0_CLK>;
-> > +			clock-names = "uartclk", "apb_pclk";
-> > +			dmas = <&dmac 0 1>, <&dmac 1 2>;
-> > +			dma-names = "rx", "tx";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		uart1: serial@12090000 {
-> > +			compatible = "arm,pl011", "arm,primecell";
-> > +			reg = <0x12090000 0x1000>;
-> > +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_UART1_CLK>;
-> > +			clock-names = "apb_pclk";
-> > +			dmas = <&dmac 2 1>, <&dmac 3 2>;
-> > +			dma-names = "rx", "tx";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		uart2: serial@120a0000 {
-> > +			compatible = "arm,pl011", "arm,primecell";
-> > +			reg = <0x120a0000 0x1000>;
-> > +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_UART2_CLK>;
-> > +			clock-names = "apb_pclk";
-> > +			dmas = <&dmac 4 1>, <&dmac 5 2>;
-> > +			dma-names = "rx", "tx";
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		spi_bus0: spi@120d0000 {
-> > +			compatible = "arm,pl022", "arm,primecell";
-> > +			reg = <0x120d0000 0x1000>;
-> > +			arm,primecell-periphid = <0x00041022>;
-> > +			interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks = <&crg HI3521A_SPI0_CLK>;
-> > +			clock-names = "apb_pclk";
-> > +			dmas = <&dmac 6 1>, <&dmac 7 2>;
-> > +			dma-names = "rx", "tx";
-> > +			num-cs = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		pmx0: pinmux@120f0000 {
-> > +			compatible = "pinctrl-single";
-> > +			reg = <0x120f0000 0x188>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +			#pinctrl-cells = <1>;
-> > +			#gpio-range-cells = <3>;
-> > +			ranges;
-> > +
-> > +			pinctrl-single,register-width = <32>;
-> > +			pinctrl-single,function-mask = <7>;
-> > +			/* pin base, nr pins & gpio function */
-> > +			pinctrl-single,gpio-range = <
-> > +				&range 58 4 0
-> > +			>;
-> > +
-> > +			range: gpio-range {
-> > +				#pinctrl-single,gpio-range-cells = <3>;
-> > +			};
-> > +		};
-> > +
-> > +		pmx1: pinmux@120f0800 {
-> > +			compatible = "pinconf-single";
-> > +			reg = <0x120f0800 0x1d4>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +			#pinctrl-cells = <1>;
-> > +			ranges;
-> > +
-> > +			pinctrl-single,register-width = <32>;
-> > +		};
-> > +
-> > +		gpio0: gpio@12150000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x12150000 0x1000>;
-> > +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio1: gpio@12160000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x12160000 0x1000>;
-> > +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio2: gpio@12170000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x12170000 0x1000>;
-> > +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio3: gpio@12180000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x12180000 0x1000>;
-> > +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio4: gpio@12190000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x12190000 0x1000>;
-> > +			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio5: gpio@121a0000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x121a0000 0x1000>;
-> > +			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio6: gpio@121b0000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x121b0000 0x1000>;
-> > +			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
-> 
-> Same interrupts as for other nodes? Is it correct?
-> 
-Yep, there are three interrupts for the gpios and they're shared among a
-few each.
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		gpio7: gpio@121c0000 {
-> > +			compatible = "arm,pl061", "arm,primecell";
-> > +			reg = <0x121c0000 0x1000>;
-> > +			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
-> > +			gpio-controller;
-> > +			#gpio-cells = <2>;
-> > +			interrupt-controller;
-> > +			#interrupt-cells = <2>;
-> > +			status = "disabled";
-> > +		};
-> > +_MULTI_V7
-> 
-> 
-> Best regards,
-> Krzysztof
+T24gMDIvMDUvMjAyMiAyMjo0MCwgbmljay5oYXdraW5zQGhwZS5jb20gd3JvdGU6DQo+ID4gRnJv
+bTogTmljayBIYXdraW5zIDxuaWNrLmhhd2tpbnNAaHBlLmNvbT4NCj4gPiANCj4gPiBUaGUgSFBF
+IFNvQyBpcyBuZXcgdG8gbGludXguIEEgYmFzaWMgZGV2aWNlIHRyZWUgbGF5b3V0IHdpdGggbWlu
+aW11bSANCj4gPiByZXF1aXJlZCBmb3IgbGludXggdG8gYm9vdCBpbmNsdWRpbmcgYSB0aW1lciBh
+bmQgd2F0Y2hkb2cgc3VwcG9ydCBoYXMgDQo+ID4gYmVlbiBjcmVhdGVkLg0KPiA+IA0KPiA+IFRo
+ZSBkdHMgZmlsZSBpcyBlbXB0eSBhdCB0aGlzIHBvaW50IGJ1dCB3aWxsIGJlIHVwZGF0ZWQgaW4g
+c3Vic2VxdWVudCANCj4gPiB1cGRhdGVzIGFzIGJvYXJkIHNwZWNpZmljIGZlYXR1cmVzIGFyZSBl
+bmFibGVkLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE5pY2sgSGF3a2lucyA8bmljay5oYXdr
+aW5zQGhwZS5jb20+DQo+ID4gDQo+ID4gLS0tDQo+ID4gdjY6DQo+ID4gKiBBZGRlZCBjYWNoZS1j
+b250cm9sbGVyIHRvIENQVQ0KPiA+ICogUmVtb3ZlZCBocGUsZ3hwLXdkdCBhbmQgcmVtb3ZlZCBz
+aW1wbGUtbWZkIGZyb20gaHBlLGd4cC10aW1lcg0KPiA+ICogQWRkZWQgc3BhY2UgYWZ0ZXIgJywn
+IGluIGNvbXBhdGlibGUgbGlzdHMgY29udGFpbmluZyBtb3JlIHRoYW4gb25lDQo+ID4gICBpdGVt
+DQoNCj4gSG1tbS4uLi4NCg0KPiA+ICAJaW50ZWdyYXRvcmFwLWltLXBkMS5kdGIgXA0KPiA+IGRp
+ZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9ocGUtYm1jLWRsMzYwZ2VuMTAuZHRzIA0KPiA+
+IGIvYXJjaC9hcm0vYm9vdC9kdHMvaHBlLWJtYy1kbDM2MGdlbjEwLmR0cw0KPiA+IG5ldyBmaWxl
+IG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi42OWU5YzY2NzJlYTgNCj4gPiAt
+LS0gL2Rldi9udWxsDQo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaHBlLWJtYy1kbDM2MGdl
+bjEwLmR0cw0KPiA+IEBAIC0wLDAgKzEsMTMgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50
+aWZpZXI6IEdQTC0yLjANCj4gPiArLyoNCj4gPiArICogRGV2aWNlIFRyZWUgZmlsZSBmb3IgSFBF
+IERMMzYwR2VuMTAgICovDQo+ID4gKw0KPiA+ICsvaW5jbHVkZS8gImhwZS1neHAuZHRzaSINCj4g
+PiArDQo+ID4gKy8gew0KPiA+ICsJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gKwkjc2l6ZS1j
+ZWxscyA9IDwxPjsNCj4gPiArCWNvbXBhdGlibGUgPSAiaHBlLGd4cC1kbDM2MGdlbjEwIiwiaHBl
+LGd4cCI7DQoNCj4gTWlzc2luZyBzcGFjZSBhZnRlciAnLCcNCg0KPiBXaXRoIHRoaXMgZml4ZWQ6
+DQo+IFJldmlld2VkLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tp
+QGxpbmFyby5vcmc+DQoNCkkgZm9yZ290IHRvIGNoZWNrIHRoaXMgZmlsZSB3aGlsZSBmaXhpbmcg
+dGhlIHNwYWNpbmcuIFRoYW5rIHlvdSBmb3IgeW91ciByZXZpZXcgYW5kIGFwb2xvZ2llcyBhYm91
+dCBtaXNzaW5nIHRoaXMuDQoNClRoYW5rcywNCg0KLU5pY2sgSGF3a2lucw0K
