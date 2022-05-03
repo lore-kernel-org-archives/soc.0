@@ -4,60 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB33C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61E37C43219
 	for <soc@archiver.kernel.org>; Tue,  3 May 2022 14:50:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3A828C385B6; Tue,  3 May 2022 14:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DF80C385B4;
+	id 31207C385B8; Tue,  3 May 2022 14:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13612C385B1;
 	Tue,  3 May 2022 14:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1651589422;
-	bh=EXxDiDosVF5wO9SrMF0LiS/AuWk09RPgPc8fbc4zo4w=;
+	bh=zaFi2hHYHUqGI1zZP691kdEPmhSqRV2o4M+A4VHp81Y=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=gyd9LOaFkv7YyGzdV197okY6K/98qEiK08hy4WoxX+8vN2zBKC3b8Fp7VTfjxuH9l
-	 +arShuLp8vly52Tq+Yf79R2Op/u7ycc+ISlHDYexPE9kauNwXRn3jIrmZaA4qNkkrs
-	 EfmTXRvd0OEbhmf0XpLUTU9XZD64xfUBuFuayn9uGWOnqZvHUuIYJz2qgE8OCkyFco
-	 jwZVedcBKvFRJgmzYaO34LyrNbEbOYZEV+pID4BychVu+ncSBULV+nMbWjCSf04Kaz
-	 jkH2ncx+cNourfi4TZdKGKKXHl6jzBwN3lKS2gOxaABO3ugWRVt+1PZzZg9IpEmVB1
-	 ZsSpGdU+5ofqA==
+	b=foPWTXWVhGGL8/jynR5prGA77ZbC+sgpWV6DIawEmKZiMs9J9XR0RMD4Q7ea0iW9x
+	 Q12VsB9meg1tYnX8IJPFtCCc+yIZUwXgJvMHCiYJ3GziwNLRIG9apGtpaLAe3hZyl5
+	 qGg72UaU3KVKO4wBw8jVtZ/NO/MPHKreIEfEu/4yJOjn53meEDH8+UD3ij33OlHmgX
+	 riqdX0e38GTbYfzy8AtexV6MrH1wJaXWbAfhUqIFsMpzfgsrjMupQ0LyCGP5UmVLCw
+	 4sIAjOjkVNeG/6TcU3E0sPjRFcGvAPMmy7iNy/iPVqhRJk40pamYXrQE8kL7qfs35m
+	 sMpHMYRaKoFeg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF51BF03870;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E51A4F03847;
 	Tue,  3 May 2022 14:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] Binding changes for omaps
+Subject: Re: [GIT PULL 0/4] Renesas ARM defconfig updates for v5.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165158942197.22061.12138098782436405153.git-patchwork-notify@kernel.org>
+ <165158942193.22061.11497666207878064654.git-patchwork-notify@kernel.org>
 Date: Tue, 03 May 2022 14:50:21 +0000
-References: <pull-1650961799-428630@atomide.com>
-In-Reply-To: <pull-1650961799-428630@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <cover.1650638502.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1650638502.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 26 Apr 2022 11:30:54 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Fri, 22 Apr 2022 16:54:49 +0200 you wrote:
+> Hi SoC folks,
 > 
-> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> This is my first pull request for the inclusion of Renesas SoC updates
+> for v5.19.
 > 
->   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-> 
-> are available in the Git repository at:
+> It consists of 4 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Binding changes for omaps
-    https://git.kernel.org/soc/soc/c/3908ca662416
-  - [GIT,PULL,2/2] Devicetree changes for omaps
-    https://git.kernel.org/soc/soc/c/cbc842c2f217
+  - [GIT,PULL,1/4] Renesas ARM defconfig updates for v5.19
+    https://git.kernel.org/soc/soc/c/65462ba7e1ad
+  - [GIT,PULL,2/4] Renesas ARM DT updates for v5.19
+    https://git.kernel.org/soc/soc/c/70a89009f723
+  - [GIT,PULL,3/4] Renesas driver updates for v5.19
+    https://git.kernel.org/soc/soc/c/447455690fb7
+  - [GIT,PULL,4/4] Renesas DT binding updates for v5.19
+    https://git.kernel.org/soc/soc/c/fafb0343aa6d
 
 You are awesome, thank you!
 -- 
