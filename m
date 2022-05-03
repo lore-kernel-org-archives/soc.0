@@ -1,92 +1,340 @@
-Return-Path: <SRS0=1zmO=VL=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <robh+dt@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69873C433EF
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 19:29:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37112C433F5
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 21:42:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 51402C385A4; Tue,  3 May 2022 19:29:22 +0000 (UTC)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9798AC385A9
-	for <soc@kernel.org>; Tue,  3 May 2022 19:29:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9798AC385A9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id y32so31982345lfa.6
-        for <soc@kernel.org>; Tue, 03 May 2022 12:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=vrL7XkKPM/fDDKM+WseGESNouqMD+FfUqKoaeNFxXOw=;
-        b=XWuECTjXnwuPdrZllK4DeqHBBkqyK3F/k+4xtX/o3AuWklbUoso8ijNsaXpy6IQ+c3
-         UdH1qbnVvBOYesa2R8E8Fpzlfq5bg3X7qQvGtEFh8LGYWaI/+RJRLncOt0+Nzw24WAka
-         gVzRyloeN6KRSicVJH0VDKzgBzes8xrfDMcENHbvJ4HseJkNQm/DuVjElzOgm9FlnsX7
-         nCcGIbiFmqeadeJmgsw8mXjzjUPDTq+9NaQOEAbzNIMtAIe++NFEUN8WvCptDH2wUTFG
-         Lhtay5xL0CajMIDc0XtfXBal2lZoxjafp+p6eje9z7wqINLTqp9MAYdzN506ksRmajIJ
-         DIsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=vrL7XkKPM/fDDKM+WseGESNouqMD+FfUqKoaeNFxXOw=;
-        b=pClGOHUQHRWTCEjvRPkmSehXQRkINTfNtq/cIBJb6MEEplch0Po+APmx/uggqI2evW
-         y7R8qzeCQqKqpAHHyibnLCnGS7qTzwVvi9uHBQDtSnuDlr3ZQ7aOpxhBnVCH7IeX94lY
-         8eG+ebhgbu202vr/+zLVPLf/bGlcwM+krSeGslPKDZT3zSmaaT2t92oFXZ5tGd5GidHB
-         FpqVtR9oXDi3cbSchd7L04TZU0BVzFWZY9uqedi1Cvn8u84Do9AL3wSyda35S6p+NKTg
-         NPVnW1pDvYVuIfCWmjrNCDSz3AkJhtrJ0SYYkF2h6/j15GA1HfCQSbVBQ7ojapKuZhLs
-         v3OQ==
-X-Gm-Message-State: AOAM531rOzwmlba8ogmcU5TSdh/n6NbEqWTD43HQ7p6OzepAK8gcZr97
-	W+gZ57dCTFPdovGJw7RppwfmDQ==
-X-Google-Smtp-Source: ABdhPJzf6t1KXZQ7VbgFSHWEP9s4rPmvnO49pd4XQDm0Sr89zB1DbHVlC9wf5jwU+tibSOhz4uCZ+Q==
-X-Received: by 2002:a05:6512:b11:b0:44a:2ead:daf2 with SMTP id w17-20020a0565120b1100b0044a2eaddaf2mr12201966lfu.642.1651606159560;
-        Tue, 03 May 2022 12:29:19 -0700 (PDT)
-Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
-        by smtp.gmail.com with ESMTPSA id a8-20020ac25208000000b0047255d21161sm1015104lfl.144.2022.05.03.12.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 12:29:18 -0700 (PDT)
-Date: Tue, 3 May 2022 21:29:16 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE SHM vmalloc for v5.19
-Message-ID: <20220503192916.GA3288817@jade>
+	id DF0CFC385BD; Tue,  3 May 2022 21:42:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C388BC385B3;
+	Tue,  3 May 2022 21:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651614156;
+	bh=UK8gM7hcz2L7sEEGiaT6aIZY+1gR7TSgBzLU98dnaZo=;
+	h=References:In-Reply-To:From:Date:Subject:List-Id:To:Cc:From;
+	b=uUvTIsopnc1GwLdSSCMbV/9BFWl+ktMV8w42kxIq9JxWnq8ywEkzct2FlKMNLHEM+
+	 7IRB5cdOnBrJKM9vY7f7g/Z4kzVJc3Z1O1Q4W1AEzcAWFzs8SvWzxvPHJSgFyB0NGz
+	 yUNYobW/vgx7r0nCTAPatHaslDutt8UkNhGRnyWyDssDrbKn+BIBopqA+P//uHK/bw
+	 OITBimEtWYrG/qJb1cq+Qh4c2luov/RThS+iRGnd6lplP8aAvyueVs5sYUgVz+CdIo
+	 7Jx2hsflMck3pgns1WVWdBaKF1eIG1pNCrxmcpPj4h1q8C+uPDkO50/+F9aH7ZIYft
+	 ZG3EQqebDv7Pg==
+Received: by mail-pf1-f179.google.com with SMTP id a11so15797941pff.1;
+        Tue, 03 May 2022 14:42:36 -0700 (PDT)
+X-Gm-Message-State: AOAM533Uc4KhTDuPCUB0yP/lgDeFSkO0tXsRzd2jIjPi9N+2f8GOUKVg
+	NirGxoaAL91yROHyF9InULCdsknOavaB0WrJug==
+X-Google-Smtp-Source: ABdhPJwif6K+hf8APaY1ruMbTWbTOXKyxCerYvfRwFWXsT7Y43hfgwpqyfnRkGYtn5eyXE9+v0qlY0+rMGhWSJUdWC4=
+X-Received: by 2002:aa7:8893:0:b0:4fb:10e1:8976 with SMTP id
+ z19-20020aa78893000000b004fb10e18976mr17684246pfe.36.1651614155999; Tue, 03
+ May 2022 14:42:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20220503211954.1428919-1-frowand.list@gmail.com>
+In-Reply-To: <20220503211954.1428919-1-frowand.list@gmail.com>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Tue, 3 May 2022 16:42:23 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKqBWKWzQC1qXABuiC6b3OgwfO+c5-fpGz=AgSUSCHCcA@mail.gmail.com>
+Message-ID: <CAL_JsqKqBWKWzQC1qXABuiC6b3OgwfO+c5-fpGz=AgSUSCHCcA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] of: overlay: rename overlay source files from .dts
+ to .dtso
+List-Id: <soc.lore.kernel.org>
+To: Frank Rowand <frowand.list@gmail.com>, SoC Team <soc@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Pantelis Antoniou <pantelis.antoniou@konsulko.com>, Tim Harvey <tharvey@gateworks.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Li Yang <leoyang.li@nxp.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Michal Simek <michal.simek@xilinx.com>, 
+	Michal Simek <monstr@monstr.eu>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Michael Walle <michael@walle.cc>, 
+	Alex Marginean <alexandru.marginean@nxp.com>, Ioana Ciornei <ioana.ciornei@nxp.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Jason Liu <jason.hui.liu@nxp.com>, 
+	Vladimir Oltean <vladimir.oltean@nxp.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	NXP Linux Team <linux-imx@nxp.com>, devicetree@vger.kernel.org, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello arm-soc maintainers,
+On Tue, May 3, 2022 at 4:20 PM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> In drivers/of/unittest-data/:
+>    - Rename .dts overlay source files to use .dtso suffix.
+>    - Add Makefile rule to build .dtbo.o assembly file from overlay
+>      .dtso source file.
+>    - Update Makefile to build .dtbo.o objects instead of .dtb.o from
+>      unittest overlay source files.
+>
+> Modify driver/of/unitest.c to use .dtbo.o based symbols instead of
+> .dtb.o
+>
+> Modify scripts/Makefile.lib %.dtbo rule to depend upon %.dtso instead
+> of %.dts
+>
+> Rename .dts overlay source files to use .dtso suffix in:
+>    arch/arm64/boot/dts/freescale/
+>    arch/arm64/boot/dts/xilinx/
+>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+>
+> Testing by arm64 people would be much appreciated.
+>
+> Applies on branch dt/next, commit 4fb74186cee8 of Rob's kernel.org tree.
+> git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+>
+> version 1 patch:
+>    https://lore.kernel.org/r/20210324223713.1334666-1-frowand.list@gmail.com
+>
+> changes from version 1:
+>    - rebase to 5.18-rc1 plus many patches already accepted by Rob
+>      Applies on branch dt/next, commit 4fb74186cee8 of Rob's kernel.org tree.
+>    - Add new overlay source files in:
+>       arch/arm64/boot/dts/freescale/
+>       arch/arm64/boot/dts/xilinx/
 
-Please pull this patch which enables tee_shm_register_kernel_buf() to
-accept vmalloc()ed buffers.
+I can't apply these. They need to be applied separately. And probably
+at end of the merge window or right after rc1 (IOW, coordinated with
+SoC maintainers in advance). Or we support both forms for a cycle.
 
-Thanks,
-Jens
+[...]
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> diff --git a/drivers/of/unittest-data/Makefile b/drivers/of/unittest-data/Makefile
+> index d072f3ba3971..df2ca1820273 100644
+> --- a/drivers/of/unittest-data/Makefile
+> +++ b/drivers/of/unittest-data/Makefile
+> @@ -1,38 +1,58 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -obj-y += testcases.dtb.o
+>
+> -obj-$(CONFIG_OF_OVERLAY) += overlay.dtb.o \
+> -                           overlay_0.dtb.o \
+> -                           overlay_1.dtb.o \
+> -                           overlay_2.dtb.o \
+> -                           overlay_3.dtb.o \
+> -                           overlay_4.dtb.o \
+> -                           overlay_5.dtb.o \
+> -                           overlay_6.dtb.o \
+> -                           overlay_7.dtb.o \
+> -                           overlay_8.dtb.o \
+> -                           overlay_9.dtb.o \
+> -                           overlay_10.dtb.o \
+> -                           overlay_11.dtb.o \
+> -                           overlay_12.dtb.o \
+> -                           overlay_13.dtb.o \
+> -                           overlay_15.dtb.o \
+> -                           overlay_16.dtb.o \
+> -                           overlay_17.dtb.o \
+> -                           overlay_18.dtb.o \
+> -                           overlay_19.dtb.o \
+> -                           overlay_20.dtb.o \
+> -                           overlay_bad_add_dup_node.dtb.o \
+> -                           overlay_bad_add_dup_prop.dtb.o \
+> -                           overlay_bad_phandle.dtb.o \
+> -                           overlay_bad_symbol.dtb.o \
+> -                           overlay_base.dtb.o \
+> -                           overlay_gpio_01.dtb.o \
+> -                           overlay_gpio_02a.dtb.o \
+> -                           overlay_gpio_02b.dtb.o \
+> -                           overlay_gpio_03.dtb.o \
+> -                           overlay_gpio_04a.dtb.o \
+> -                           overlay_gpio_04b.dtb.o
+> +# Generate an assembly file to wrap the output of the device tree compiler
+> +quiet_cmd_dt_S_dtbo= DTB     $@
+> +cmd_dt_S_dtbo=\
+> +{                                                      \
+> +       echo '\#include <asm-generic/vmlinux.lds.h>';   \
+> +       echo '.section .dtb.init.rodata,"a"';           \
+> +       echo '.balign STRUCT_ALIGNMENT';                \
+> +       echo '.global __dtbo_$(subst -,_,$(*F))_begin'; \
+> +       echo '__dtbo_$(subst -,_,$(*F))_begin:';        \
+> +       echo '.incbin "$<" ';                           \
+> +       echo '__dtbo_$(subst -,_,$(*F))_end:';          \
+> +       echo '.global __dtbo_$(subst -,_,$(*F))_end';   \
+> +       echo '.balign STRUCT_ALIGNMENT';                \
+> +} > $@
+> +
+> +
+> +$(obj)/%.dtbo.S: $(obj)/%.dtbo FORCE
+> +       $(call if_changed,dt_S_dtbo)
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Humm, this belongs in scripts/Makefile.lib.
 
-are available in the Git repository at:
+I don't think we need a different section name with __dtbo_* instead
+of __dtb_* if that simplifies the Makefile.
 
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-shm-vmalloc-for-v5.19
+> +
+> +obj-y += testcases.dtbo.o
+> +
+> +obj-$(CONFIG_OF_OVERLAY) += overlay.dtbo.o \
+> +                           overlay_0.dtbo.o \
+> +                           overlay_1.dtbo.o \
+> +                           overlay_2.dtbo.o \
+> +                           overlay_3.dtbo.o \
+> +                           overlay_4.dtbo.o \
+> +                           overlay_5.dtbo.o \
+> +                           overlay_6.dtbo.o \
+> +                           overlay_7.dtbo.o \
+> +                           overlay_8.dtbo.o \
+> +                           overlay_9.dtbo.o \
+> +                           overlay_10.dtbo.o \
+> +                           overlay_11.dtbo.o \
+> +                           overlay_12.dtbo.o \
+> +                           overlay_13.dtbo.o \
+> +                           overlay_15.dtbo.o \
+> +                           overlay_16.dtbo.o \
+> +                           overlay_17.dtbo.o \
+> +                           overlay_18.dtbo.o \
+> +                           overlay_19.dtbo.o \
+> +                           overlay_20.dtbo.o \
+> +                           overlay_bad_add_dup_node.dtbo.o \
+> +                           overlay_bad_add_dup_prop.dtbo.o \
+> +                           overlay_bad_phandle.dtbo.o \
+> +                           overlay_bad_symbol.dtbo.o \
+> +                           overlay_base.dtbo.o \
+> +                           overlay_gpio_01.dtbo.o \
+> +                           overlay_gpio_02a.dtbo.o \
+> +                           overlay_gpio_02b.dtbo.o \
+> +                           overlay_gpio_03.dtbo.o \
+> +                           overlay_gpio_04a.dtbo.o \
+> +                           overlay_gpio_04b.dtbo.o
+>
+>  # enable creation of __symbols__ node
+>  DTC_FLAGS_overlay += -@
 
-for you to fetch changes up to 3e47235eaee09488c7e467b9aaccb7c93c862c6b:
 
-  tee: make tee_shm_register_kernel_buf vmalloc supported (2022-04-05 08:04:16 +0200)
+> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> index dff55ae09d97..1d3c170d95db 100644
+> --- a/drivers/of/unittest.c
+> +++ b/drivers/of/unittest.c
+> @@ -1423,12 +1423,12 @@ static int __init unittest_data_add(void)
+>         void *unittest_data_align;
+>         struct device_node *unittest_data_node = NULL, *np;
+>         /*
+> -        * __dtb_testcases_begin[] and __dtb_testcases_end[] are magically
+> -        * created by cmd_dt_S_dtb in scripts/Makefile.lib
+> +        * __dtbo_testcases_begin[] and __dtbo_testcases_end[] are
+> +        * created by cmd_dt_S_dtbo in Makefile
+>          */
+> -       extern uint8_t __dtb_testcases_begin[];
+> -       extern uint8_t __dtb_testcases_end[];
+> -       const int size = __dtb_testcases_end - __dtb_testcases_begin;
+> +       extern uint8_t __dtbo_testcases_begin[];
+> +       extern uint8_t __dtbo_testcases_end[];
+> +       const int size = __dtbo_testcases_end - __dtbo_testcases_begin;
+>         int rc;
+>         void *ret;
+>
+> @@ -1443,7 +1443,7 @@ static int __init unittest_data_add(void)
+>                 return -ENOMEM;
+>
+>         unittest_data_align = PTR_ALIGN(unittest_data, FDT_ALIGN_SIZE);
+> -       memcpy(unittest_data_align, __dtb_testcases_begin, size);
+> +       memcpy(unittest_data_align, __dtbo_testcases_begin, size);
+>
+>         ret = of_fdt_unflatten_tree(unittest_data_align, NULL, &unittest_data_node);
+>         if (!ret) {
+> @@ -3009,24 +3009,24 @@ static inline void __init of_unittest_overlay(void) { }
+>  #ifdef CONFIG_OF_OVERLAY
+>
+>  /*
+> - * __dtb_ot_begin[] and __dtb_ot_end[] are created by cmd_dt_S_dtb
+> - * in scripts/Makefile.lib
+> + * __dtbo_##overlay_name##_begin[] and __dtbo_##overlay_name##_end[] are
+> + * created by cmd_dt_S_dtbo in Makefile
+>   */
+>
+> -#define OVERLAY_INFO_EXTERN(name) \
+> -       extern uint8_t __dtb_##name##_begin[]; \
+> -       extern uint8_t __dtb_##name##_end[]
+> +#define OVERLAY_INFO_EXTERN(overlay_name) \
+> +       extern uint8_t __dtbo_##overlay_name##_begin[]; \
+> +       extern uint8_t __dtbo_##overlay_name##_end[]
+>
+> -#define OVERLAY_INFO(overlay_name, expected)             \
+> -{      .dtb_begin       = __dtb_##overlay_name##_begin, \
+> -       .dtb_end         = __dtb_##overlay_name##_end,   \
+> -       .expected_result = expected,                     \
+> -       .name            = #overlay_name,                \
+> +#define OVERLAY_INFO(overlay_name, expected)               \
+> +{      .dtbo_begin       = __dtbo_##overlay_name##_begin, \
+> +       .dtbo_end         = __dtbo_##overlay_name##_end,   \
+> +       .expected_result = expected,                       \
+> +       .name            = #overlay_name,                  \
+>  }
+>
+>  struct overlay_info {
+> -       uint8_t         *dtb_begin;
+> -       uint8_t         *dtb_end;
+> +       uint8_t         *dtbo_begin;
+> +       uint8_t         *dtbo_end;
 
-----------------------------------------------------------------
-TEE accept vmalloc()ed buffers for tee_shm_register_kernel_buf()
+Is this rename really needed?
 
-----------------------------------------------------------------
-Phil Chang (1):
-      tee: make tee_shm_register_kernel_buf vmalloc supported
-
- drivers/tee/optee/call.c |  2 +-
- drivers/tee/tee_shm.c    | 35 +++++++++++++++++++++++++----------
- 2 files changed, 26 insertions(+), 11 deletions(-)
+>         int             expected_result;
+>         int             ovcs_id;
+>         char            *name;
+> @@ -3100,7 +3100,7 @@ static struct overlay_info overlays[] = {
+>         OVERLAY_INFO(overlay_bad_phandle, -EINVAL),
+>         OVERLAY_INFO(overlay_bad_symbol, -EINVAL),
+>         /* end marker */
+> -       {.dtb_begin = NULL, .dtb_end = NULL, .expected_result = 0, .name = NULL}
+> +       {.dtbo_begin = NULL, .dtbo_end = NULL, .expected_result = 0, .name = NULL}
+>  };
+>
+>  static struct device_node *overlay_base_root;
+> @@ -3157,13 +3157,13 @@ void __init unittest_unflatten_overlay_base(void)
+>                 return;
+>         }
+>
+> -       data_size = info->dtb_end - info->dtb_begin;
+> +       data_size = info->dtbo_end - info->dtbo_begin;
+>         if (!data_size) {
+>                 pr_err("No dtb 'overlay_base' to attach\n");
+>                 return;
+>         }
+>
+> -       size = fdt_totalsize(info->dtb_begin);
+> +       size = fdt_totalsize(info->dtbo_begin);
+>         if (size != data_size) {
+>                 pr_err("dtb 'overlay_base' header totalsize != actual size");
+>                 return;
+> @@ -3175,7 +3175,7 @@ void __init unittest_unflatten_overlay_base(void)
+>                 return;
+>         }
+>
+> -       memcpy(new_fdt, info->dtb_begin, size);
+> +       memcpy(new_fdt, info->dtbo_begin, size);
+>
+>         __unflatten_device_tree(new_fdt, NULL, &overlay_base_root,
+>                                 dt_alloc_memory, true);
+> @@ -3210,11 +3210,11 @@ static int __init overlay_data_apply(const char *overlay_name, int *ovcs_id)
+>                 return 0;
+>         }
+>
+> -       size = info->dtb_end - info->dtb_begin;
+> +       size = info->dtbo_end - info->dtbo_begin;
+>         if (!size)
+>                 pr_err("no overlay data for %s\n", overlay_name);
+>
+> -       ret = of_overlay_fdt_apply(info->dtb_begin, size, &info->ovcs_id);
+> +       ret = of_overlay_fdt_apply(info->dtbo_begin, size, &info->ovcs_id);
+>         if (ovcs_id)
+>                 *ovcs_id = info->ovcs_id;
+>         if (ret < 0)
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 9f69ecdd7977..b409bec5fa45 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -363,7 +363,7 @@ endef
+>  $(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
+>         $(call if_changed_rule,dtc)
+>
+> -$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
+> +$(obj)/%.dtbo: $(src)/%.dtso $(DTC) FORCE
+>         $(call if_changed_dep,dtc)
+>
+>  dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)
+> --
+> Frank Rowand <frank.rowand@sony.com>
+>
