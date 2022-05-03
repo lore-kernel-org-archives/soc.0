@@ -1,116 +1,91 @@
-Return-Path: <SRS0=yZUZ=VL=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=1zmO=VL=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED5E0C433F5
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 18:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 477B7C433EF
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 19:16:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B8590C385A9; Tue,  3 May 2022 18:20:25 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 09D07C385B1; Tue,  3 May 2022 19:16:32 +0000 (UTC)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 03C5AC385A4;
-	Tue,  3 May 2022 18:20:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 03C5AC385A4
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MekKJ-1oM7QY2Hor-00aj0w; Tue, 03 May 2022 20:20:15 +0200
-Received: by mail-wm1-f51.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so1732016wmn.1;
-        Tue, 03 May 2022 11:20:15 -0700 (PDT)
-X-Gm-Message-State: AOAM531N1m6M757nDrfYEdxHCSk1Uza6WoMB3XZnWSDwBE1FIn0x0N8A
-	YPwMYzBMwHBFd77lRdQjOYRdt2/IUcALMfH1mSs=
-X-Google-Smtp-Source: ABdhPJzdLAi6LusGzpUmQqAEN7Ep7tmyrMxpq73q7upJ6tCWBfIvFV42Z7BCJneune7LbBwSqLK48yMk9eyVnxECpN8=
-X-Received: by 2002:a05:600c:3798:b0:394:454a:df74 with SMTP id
- o24-20020a05600c379800b00394454adf74mr4515023wmr.174.1651602015176; Tue, 03
- May 2022 11:20:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-7-nick.hawkins@hpe.com>
- <CAK8P3a2rzmVrpnf2r73iXB=T06OMOsgwyq1i8z7swuOW-q88eQ@mail.gmail.com> <PH0PR84MB17180215774D59A3EC277B1388C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <PH0PR84MB17180215774D59A3EC277B1388C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 3 May 2022 20:19:58 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1q6pJ6pdZav0rWJFR2dAWwz8mpiFRO6vc+TA+L-Sk5uQ@mail.gmail.com>
-Message-ID: <CAK8P3a1q6pJ6pdZav0rWJFR2dAWwz8mpiFRO6vc+TA+L-Sk5uQ@mail.gmail.com>
-Subject: Re: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
-To: "Hawkins, Nick" <nick.hawkins@hpe.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 342A9C385A9
+	for <soc@kernel.org>; Tue,  3 May 2022 19:16:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 342A9C385A9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f47.google.com with SMTP id bq30so31959419lfb.3
+        for <soc@kernel.org>; Tue, 03 May 2022 12:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=wPTnR2Zu/nMupXPED8+6zfG3R03kfxI0ufpTxQT+s40=;
+        b=tjQdxT++eBAtCciDu2vU3NoUP4QW6qBmdwluJN7ZqTxj5rCLdpDXoPA48gZOr5T9JR
+         Te40XWsMzEhOWZumvQ0tidKpqGFo+dZmA84nwmchSTzMnxyLvAWfAxhk6KmTExqHOZ2w
+         BNXaoBlUSVt/2a+kA8BScws+d2nLejwqepBJLd/c4n84GvLJRoqcAge0xcRpuNsjcHKC
+         MKHJmMwbkmyHpazMg6NuqL52MS88IhStwuUzr6I/+6NP9KepZ1guoda30WFcSYGasBnk
+         Z6MdIzaa3k9WdCnxWtr/DghvKxLTu8EFbc/vLdy5GHAALvnLBG2KuGJAvwIqoSo0QOZ/
+         fbkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=wPTnR2Zu/nMupXPED8+6zfG3R03kfxI0ufpTxQT+s40=;
+        b=XVplWmJYBst24pHxboACQH57e3PCVWjBwW1PQmDXmidHfLThTRMuCGiOznJtZnq9IZ
+         5/WsqTB++UMJnZXUh/noRpJ27QKxwGotAfo0NhJJHpl1M7asnTTWq1Clmivtc710oeFU
+         BXf9/FF61T4u1mYiW8OAsZcDS4j3jSO6A6Slr8NQ3gXHXxmrcztO6m3jKXMc5HC3JiTT
+         C4PoESDdbDLguzYl7Gb7cmktA+VXghzLQQgNnp71U2J46txNkic8W09l4snKNgDd6wNU
+         +HzKvacPSmxi++hVt4neRZMu9jODtk21ZYSTHdhogNLjsA/AmYfL06bJN7/+RFwK5BaP
+         i77Q==
+X-Gm-Message-State: AOAM5321BUv6FFft+CAFLDluT75AlpqlXkfq4xIFDMHeW7X6hfeyO0kI
+	AHD3fjXJ0T4mBCVYvYrMPoO61UlYHtXb+w==
+X-Google-Smtp-Source: ABdhPJwPzzX7IVXeDUZKXs6KdmMPkgA7AOVPSzXGlSNues3oWyX7bzj63hV8upZvkAXNMXk0YzSTWQ==
+X-Received: by 2002:a05:6512:3f88:b0:44f:567f:8715 with SMTP id x8-20020a0565123f8800b0044f567f8715mr11912202lfa.609.1651605389115;
+        Tue, 03 May 2022 12:16:29 -0700 (PDT)
+Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
+        by smtp.gmail.com with ESMTPSA id d10-20020a05651221ca00b0047255d2119bsm1013800lft.202.2022.05.03.12.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 12:16:28 -0700 (PDT)
+Date: Tue, 3 May 2022 21:16:26 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, "Verdun, Jean-Marie" <verdun@hpe.com>, Joel Stanley <joel@jms.id.au>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:R+kCVdtK0x9ELlmfP7NYCUi/WlDfGkkfB7phlvAXr2Ws9xFDEF8
- hJsbQ8ZCbDY5VTLPWQz9xK+YIzHevUgHUZ5RLQvXMpvIoBsA/IAYI90UxLzY9u5Dqth4pp+
- dTRlxJwrdortioyfG7OFnhwfH2Bs03ps4D4te+EG51mb+FezIyvYBbseOaChGIJceWh1vol
- K94X2lOMhi02fBCEIAJOg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UE9HOcOXtJ0=:/3kkRUI7m0Q1wn8zEbExBe
- BE8U80s/p9YupZ9gN444gU1rZn0/c3f30rZeEposx4+kfNKzPF3TsogObdzO9pHCC3abWmnGb
- IQkhqzoUI7u26PCAINZ483yPq1Ri4t//uSST5NLlvucy6H9JnfZI7Bxcxl5nciCxBw/cWkIOK
- 1av2zcJloYmA2XRqXC3qIty4HFTyMWmvrdFQ0KJhM7hhM/nSTYx23mAwxKaSLy+nhHS5OxAID
- PYjHNw2Wu9/z+FjgIbZmbRAM7cb9BIOYwTBQYz5x0BUcjH9FuL1XAom2bPPGw09MuUsC44BHp
- GEDr2Xlu7GLzt+6LEautUENgdRgPnkf8+UtjNP4uYCQF0G/JsGOUIY5t1GJFhb17jeUwIwaEL
- A6l1CjFpml2JFsjwLBCFi0f+Qm+govJXAXDOS3M+kgHEcz2Bc9hpYKphE04owkstLqhaI/+FI
- kIK4NbaJduVqmmzqWXnbMwm8mPBKiyoRgdjJJCWzajtRxIU4xFjB/6a7Mcs+5c3AoaEncCvJ2
- KA5NWHnaa39UCBX6N2VEnPNAxwAWLl/cBv2n4aTFtQ1maDEJ5PV22urZFvN+L7RZc0M5zoZj6
- OShc7rp9U0KiuC5l+MBHPp3ZkiORz6kt4tlVWLZu/tmSSZdShI23YK4IBIhvjmAiKdnUXTtB5
- h7ie7fkPEDBF/MWOfUA6Xlz/Q6xFXjZ+etHLxZpPT9FWYwhe1fOHWI53ri8onYv2fyeg=
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] TEE menu for v5.19
+Message-ID: <20220503191626.GA3278203@jade>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Tue, May 3, 2022 at 5:07 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
-> On Mon, May 2, 2022 at 10:40 PM <nick.hawkins@hpe.com> wrote:
-> > > +++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
->
-> > In the board specific file, you normally have "aliases", "chosen" and "memory"
-> > nodes that define e.g. which uart is used for the console.
->
-> This is what I have come up with.
->
-> / {
->         #address-cells = <1>;
->         #size-cells = <1>;
->         compatible = "hpe,gxp-dl360gen10", "hpe,gxp";
->         model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
->
->         aliases {
->                 serial2 = &uartc;
->         };
+Hello arm-soc maintainers,
 
-It's a bit unusual to have a serial2 uart when there is no serial0 or serial1.
-Most boards that only have a single uart label it either '0' or '1'.
->
->         chosen {
->                 bootargs = "console=ttyS2,115200";
->         };
+Please pull this small patch which combines the config and menu for TEE's
+menuconfig into one line.
 
-Use 'stdout-path' to pick the console device here, not the argument
-string.
+Thanks,
+Jens
 
->
->         memory@40000000 {
->                 device_type = "memory";
->                 reg = <0x40000000 0x20000000>;
->         };
-> };
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-> > > +       memory@40000000 {
-> > > +               device_type = "memory";
-> > > +               reg = <0x40000000 0x20000000>;
-> > > +       };
->
-> > If the memory is outside of the SoC, it should not be here.
->
-> It is part of the SoC. Should I put it in the axi bus instead? If so would
-> I need to create an axi for the .dts as well?
+are available in the Git repository at:
 
-That's fine then. The memory node has to be at the root of the DT, not in a
-child node. It's just that most SoCs have the memory in a separate chip
-on the board, rather than inside of the SoC itself, so it would be part
-of the board file. If the gxp package includes the memory and it's not
-an option for the board design, you can leave it in the .dtsi file.
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-menu-for-v5.19
 
-         Arnd
+for you to fetch changes up to a4b75fe8e1c15c96c4eb083e211ccbbfd56599f9:
+
+  tee: combine "config" and "menu" for TEE's menuconfig (2022-04-05 07:32:23 +0200)
+
+----------------------------------------------------------------
+Combine TEE config and menu in one line
+
+----------------------------------------------------------------
+Jan Engelhardt (1):
+      tee: combine "config" and "menu" for TEE's menuconfig
+
+ drivers/tee/Kconfig | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
