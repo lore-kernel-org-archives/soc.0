@@ -1,128 +1,222 @@
-Return-Path: <SRS0=joC1=VL=foss.st.com=prvs=1122b4fdae=alexandre.torgue@kernel.org>
+Return-Path: <SRS0=Fita=VL=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFA42C433EF
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 14:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D4FBC433F5
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 14:55:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CAB11C385A9; Tue,  3 May 2022 14:51:50 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 52AC1C385B2; Tue,  3 May 2022 14:55:28 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C3929C385AF;
-	Tue,  3 May 2022 14:51:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3929C385AF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243A1AJQ000434;
-	Tue, 3 May 2022 16:51:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=1U+jXKnIsS7rQlKgrVn1pp4mv3sRe9hTsUCKKNCqfto=;
- b=GmEUOW+Omwl9ECrQ4aSWCN+wUS1ns/MiHuUtTxn1vi6+s7j4SO5dteDkZVaVFHAaOI7D
- 9DBmZjMSn7e04juYoU10HjwBfAPcTJe0HFSIyYEB1ArCrq92VWmCBQJ2CbQo6bz5K4hV
- 5gMMz+lTJ380vvbmiJLEQjEGm7a7jizPEjV4NBCTHNgUnXHpzG4DggZ+Qp5LbLCfhbxa
- KrQmGDFJPDfFQetLwbOKq1UmLF39XqORx7JwcyY3prHeB+S5oYc/+7qNdWXImOKb9wV8
- M2ZbHl7Vp1u3f/vwTM1EIIFiL4HCf8FW7G/7KDM1e02OFGJMwZDT8RwzuuEB1FqQ+31q 7Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frt88r2ah-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 May 2022 16:51:44 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FC2910002A;
-	Tue,  3 May 2022 16:51:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C54BE2248D5;
-	Tue,  3 May 2022 16:51:40 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.47) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 3 May
- 2022 16:51:39 +0200
-Message-ID: <25ed3a16-c277-5170-3feb-51484f744de1@foss.st.com>
-Date: Tue, 3 May 2022 16:51:38 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 384B6C385A4
+	for <soc@kernel.org>; Tue,  3 May 2022 14:55:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 384B6C385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id m20so33909952ejj.10
+        for <soc@kernel.org>; Tue, 03 May 2022 07:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=59t7vn28D3yzCeD/SWs0WQWMWUokBjgyTL8jtIQ/mZ4=;
+        b=wyYQAm/yL4YCxQZnJSalcQidq4K2VieDxkJ7UUhCt+AngFV8CNSTl1gULdZ8ouWH3a
+         yN39Hd9vLvj5l98q1Q73+qN2XQluRsg/ZIxg1rCCkpBXOfXWyDoUFwsLg7q3raIuPL2M
+         CbuHA1N2i4l5BWNS9Ad6NovhugumU5uXoOKIFAIOOY1EFIZgg8FDoLd+XEPJzjAWqaYK
+         K+AK+4mF6Ew2tYA6877x1QYSEdUlpH6vE63HrDR9H/9KVh5NaUw3GNrC3ae8TkjeCKFn
+         NyJoU946TQfwq1inDJpG7Um3nsvSVO+TVIixUPCsqBUjfbGv/QJbs/E5tk+B2/lsmilw
+         X+Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=59t7vn28D3yzCeD/SWs0WQWMWUokBjgyTL8jtIQ/mZ4=;
+        b=B4CkVX0djWsnWbSRQQdTXKJHXh1wP8euAELtn/IxDBhRtiW5AoL7nPM3OYpd4q5NGn
+         371skRJOOPYx393FMV7femV2ZlpJJ0W80HI3NpqQLSDfDNVvG2BbBIoFPjVwSfCIaMdT
+         NCp2pALShEt0HbMhOBlvmdMwPcN4G/gHf3alkXG+LKkegpPVSlEaNlrDQLdcT3TNCO4S
+         b7jLHpA+EOQ6vAFS9CQYmoTJZ29OXzhT0TNsPzcdZKM7xZJxIp4hgWVfPXrahx1zcNlo
+         CWIMXW7MXCwuCdyPDAJDrVX0WoS3v6ylySeodyDL1nJ7XBOEs3AWYvvBQ0GuN0kNe3Pg
+         CrXw==
+X-Gm-Message-State: AOAM532VCyJ6mPELQBU/qX2W4F1WxTgg1SH+VQR7/ku+0nZdnsgRy06+
+	cTrjv1luRfmg1impQusCiKSzgQ==
+X-Google-Smtp-Source: ABdhPJzrfLJwCJ3gQEW0hRsCRD17fpgu4Gejz8nnGLU7xiWLRfposWniK4q9adqoAsaMHEQW9ESexg==
+X-Received: by 2002:a17:907:7209:b0:6da:9781:ae5d with SMTP id dr9-20020a170907720900b006da9781ae5dmr15134105ejc.73.1651589725490;
+        Tue, 03 May 2022 07:55:25 -0700 (PDT)
+Received: from [192.168.0.205] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s23-20020a056402037700b0042617ba639bsm7956855edw.37.2022.05.03.07.55.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 07:55:24 -0700 (PDT)
+Message-ID: <75a48dfa-6fc9-aed9-b00e-d928bd9f33af@linaro.org>
+Date: Tue, 3 May 2022 16:55:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 0/8] Add SCMI version of ST boards
+Subject: Re: [RFC v2 2/2] arm: hisi: enable Hi3521a soc
 Content-Language: en-US
+To: "Marty E. Plummer" <hanetzer@startmail.com>
 List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, <soc@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>, <etienne.carriere@st.com>
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
+ devicetree@vger.kernel.org, gengdongjiu@huawei.com,
+ krzysztof.kozlowski+dt@linaro.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mtd@lists.infradead.org, linux@armlinux.org.uk, michael@walle.cc,
+ miquel.raynal@bootlin.com, mturquette@baylibre.com, novikov@ispras.ru,
+ olof@lixom.net, p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+ robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+ sumit.semwal@linaro.org, tudor.ambarus@microchip.com, vigneshr@ti.com,
+ xuwei5@hisilicon.com
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
+ <20220501173423.2473093-1-hanetzer@startmail.com>
+ <20220501173423.2473093-3-hanetzer@startmail.com>
+ <4cda3645-c4e8-1b3c-bd80-891afd56449a@linaro.org>
+ <20220503134459.pplgvhcckja4ivcg@proprietary-killer>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220503134459.pplgvhcckja4ivcg@proprietary-killer>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-03_06,2022-05-02_03,2022-02-23_01
 
-On 4/22/22 17:09, Alexandre Torgue wrote:
-> The aim of this series is to add OPTEE and SCMI support for STM32 boards in
-> order to enable secure services for clocks and resets. New boards have been added
-> to enable this support in order to not break boot of current STM32 boards users.
-> 
-> This series targets only boards provided by ST which are:
-> -STM32MP157A-DK1
-> -STM32MP157C-DK2
-> -STM32MP157C-ED1
-> -STM32MP157C-EV1
-> 
-> Some modifications in bindings files (yaml and .h) was needed and OPTEE/TEE
-> configs are now enabled by default for ARCH_STM32 architecture.
-> 
-> Note that patch [1] "dt-bindings: rcc: Add optional external ethernet RX clock
-> properties" done by Marek has been already merged in Rob tree.
-> 
-> Thanks
-> Alex
-> 
-> Alexandre Torgue (7):
->    dt-bindings: clock: stm32mp1: describes clocks if
->      "st,stm32mp1-rcc-secure"
->    dt-bindings: clock: stm32mp15: rename CK_SCMI define
->    dt-bindings: reset: stm32mp15: rename RST_SCMI define
->    ARM: stm32: select OPTEE on MPU family
->    ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP15
->    dt-bindings: arm: stm32: Add SCMI version of STM32 boards
->      (DK1/DK2/ED1/EV1)
->    ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)
-> 
-> Marek Vasut (1):
->    dt-bindings: rcc: Add optional external ethernet RX clock properties
-> 
->   .../devicetree/bindings/arm/stm32/stm32.yaml  |  17 +++
->   .../bindings/clock/st,stm32mp1-rcc.yaml       |  34 ++++++
->   arch/arm/boot/dts/Makefile                    |   4 +
->   arch/arm/boot/dts/stm32mp151.dtsi             |  41 +++++++
->   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts    |  86 +++++++++++++++
->   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts    |  95 +++++++++++++++++
->   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts    |  91 ++++++++++++++++
->   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts    | 100 ++++++++++++++++++
->   arch/arm/mach-stm32/Kconfig                   |   2 +
->   include/dt-bindings/clock/stm32mp1-clks.h     |  46 ++++----
->   include/dt-bindings/reset/stm32mp1-resets.h   |  24 ++---
->   11 files changed, 503 insertions(+), 37 deletions(-)
->   create mode 100644 arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-> 
+On 03/05/2022 15:44, Marty E. Plummer wrote:
+> On Tue, May 03, 2022 at 01:47:01PM +0200, Krzysztof Kozlowski wrote:
+>> On 01/05/2022 19:34, Marty E. Plummer wrote:
+>>> Enable Hisilicon Hi3521A/Hi3520DCV300 SoC. This SoC series includes
+>>> hardware mutlimedia codec cores, commonly used in consumer cctv/dvr
+>>> security systems and ipcameras. The arm core is a Cortex A7.
+>>>
+>>> Add hi3521a.dtsi and hi3521a-rs-dm290e.dts for RaySharp CCTV systems,
+>>> marketed under the name Samsung SDR-B74301N.
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>>
+>>> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
+>>> ---
+>>>  arch/arm/boot/dts/Makefile              |   2 +
+>>>  arch/arm/boot/dts/hi3521a-rs-dm290e.dts | 134 ++++++++
+>>>  arch/arm/boot/dts/hi3521a.dtsi          | 423 ++++++++++++++++++++++++
+>>
+>> DTSes go to separate patches.
+> Do you mean dts and dtsi need to be separate patches?
 
-Series applied on stm32-next. Patch[5] has been dropped.
+I mean that any changes to "arch/arm/boot/dts/" have to be separate from
+other changes. These can be still one patch. See other examples on
+mailing lists.
 
-Alex
+>>
+>>>  arch/arm/mach-hisi/Kconfig              |   9 +
+>>>  4 files changed, 568 insertions(+)
+>>>  create mode 100644 arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+>>>  create mode 100644 arch/arm/boot/dts/hi3521a.dtsi
+>>>
+>>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>>> index 7c16f8a2b738..535cef3b14ab 100644
+>>> --- a/arch/arm/boot/dts/Makefile
+>>> +++ b/arch/arm/boot/dts/Makefile
+>>> @@ -242,6 +242,8 @@ dtb-$(CONFIG_ARCH_GEMINI) += \
+>>>  	gemini-ssi1328.dtb \
+>>>  	gemini-wbd111.dtb \
+>>>  	gemini-wbd222.dtb
+>>> +dtb-$(CONFIG_ARCH_HI3521A) += \
+>>> +	hi3521a-rs-dm290e.dtb
+>>>  dtb-$(CONFIG_ARCH_HI3xxx) += \
+>>>  	hi3620-hi4511.dtb
+>>>  dtb-$(CONFIG_ARCH_HIGHBANK) += \
+>>> diff --git a/arch/arm/boot/dts/hi3521a-rs-dm290e.dts b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+>>> new file mode 100644
+>>> index 000000000000..b24fcf2ca85e
+>>> --- /dev/null
+>>> +++ b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+>>> @@ -0,0 +1,134 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>>> +/*
+>>> + * Copyright (C) 2017-2022 Marty Plummer <hanetzer@startmail.com>
+>>> + */
+>>> +
+>>> +#include "hi3521a.dtsi"
+>>> +
+>>> +/ {
+>>> +	model = "RaySharp RS-DM-290E DVR Board";
+>>> +	compatible = "raysharp,rs-dm-290e", "hisilicon,hi3521a";
+>>
+>> Please run checkpatch and fix the warnings.
+>>
+> sunova. I could have sworn I had my editor setup right for whitespace
+> and such.
+
+It's not about whitespace but:
+
+WARNING: DT compatible string "raysharp,rs-dm-290e" appears
+un-documented -- check ./Documentation/devicetree/bindings/
+
+
+WARNING: DT compatible string vendor "raysharp" appears un-documented --
+check ./Documentation/devicetree/bindings/vendor-prefixes.yaml
+
+
+(...)
+
+> Ah gotcha.
+>>> +	};
+>>> +
+>>> +	xtal24m: xtal24m {
+>>
+>> Generic node names, so one of: "clock-0" "clock-xtal24m"
+>>
+> Will do.
+>>> +		compatible = "fixed-clock";
+>>> +		#clock-cells = <0>;
+>>> +		clock-frequency = <24000000>;
+>>
+>> This does not look like property of the SoC, so should be defined by boards.
+>>
+> SoC requires a 24Mhz osc (and a 32khz one as well), so it'll always be
+> present regardless.
+
+Sure, but DTS/DTSI describes hardware. If the clock is not in the SoC
+but on the board, it should be in the board DTSI. Many times such clocks
+are put partially in DTSI and only their specific parts - frequency - in
+the board DTS, to indicate that implementation is relevant to the board,
+not SoC.
+
+>>> +	};
+>>> +
+>>> +	clk_3m: clk_3m {
+>>
+>> No underscores in node names, generic node name (see above).
+>>
+> early debugging clock, will be removed.
+>>> +		compatible = "fixed-clock";
+>>> +		#clock-cells = <0>;
+>>> +		clock-frequency = <3000000>;
+>>
+>> This does not look like property of the SoC, so should be defined by boards.
+
+(...)
+
+>>
+>>> +			status = "disabled";
+>>> +		};
+>>> +
+>>> +		dual_timer0: timer@12000000 {
+>>> +			compatible = "arm,sp804", "arm,primecell";
+>>> +			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+>>> +				     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
+>>
+>> A bit weird interrupts... the same?
+>>
+> Yes, though I am aware that some sp804 timers do have a separate
+> interrupts per pair.
+
+They have also separate interrupts, one combined interrupt or one sole
+interrupt. However what you described here is one interrupt line
+physically connected to two separate pins on the device yet still not
+being somehow shared (shared as "combined interrupt"). I don't think it
+is your case...
+
+
+
+Best regards,
+Krzysztof
