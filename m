@@ -1,103 +1,145 @@
-Return-Path: <SRS0=Fita=VL=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Ru3w=VL=pengutronix.de=p.zabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC95AC433EF
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 15:57:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB7DC433EF
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 16:01:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ABB4CC385B1; Tue,  3 May 2022 15:57:58 +0000 (UTC)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 8E0F1C385AF; Tue,  3 May 2022 16:01:08 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4D63DC385A4
-	for <soc@kernel.org>; Tue,  3 May 2022 15:57:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D63DC385A4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f47.google.com with SMTP id y21so20386401edo.2
-        for <soc@kernel.org>; Tue, 03 May 2022 08:57:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D+3ayXGiIWunG5xftXtSVJKt5SyAcJy2+fwwapTKiuY=;
-        b=r5n8OtbrS3K9irtBKE+b++XUYBykqYPbxxjb16ReRhJbBOoiJG15shu5v90AGUTXNB
-         Zgja5/5KVmxkqpIDW8QBQcPdjKo2qiy7ztbJSbMWWU0Qegxdi53Q2PjiNtGQxyQH+YQK
-         qajUFNtnae9QpldA1oUuOAM8BZbjb/3nttvp6/R5W/6pZv4Wy1KbX5DCrouoUe1GkU0i
-         iO83KG6mUY5Ho1WB/DBL2xrrha0HXRiwXBciFlhkQPuRf8xwB2VZRGPb7td/FHdSpQ8a
-         d3kvyBWMdyuMPAb3dqHzCPfCC9o9ZMbH+ohFE4hSbcbR1NlZVI/KBIq0dD308+VXDIua
-         fDJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D+3ayXGiIWunG5xftXtSVJKt5SyAcJy2+fwwapTKiuY=;
-        b=Clq9ATZNyFsK1ytJGh1ap2VV2BjF/rtlXlBSYTrh6VqvvCBkIoAgCu32LCAR3OSRvc
-         NxUzMSc3IVR78bubZgBWybG6kU/bUnFWUsJMo5N94g7eqzcZyVSTFgkdIc66CQaK2+gn
-         HEHAwSR9ocmcVRRadlXDbhLYp4zNXoJWtYbfZK9tQSl6+OEdTPQqQQclgnVjqRpwkBtP
-         hZ1jKrRx5mN8K1cUoL2UsjG+gISvQR9UqzJAvVH7x+4NfFE86pcUuq8bAQW+PxJy7sn4
-         wvMDbx34e1n86rgc7J2jo6534770mxU5qVQlhZ83rIEhIZLK/GBMy2ZsKceVm0AX0oJw
-         2znw==
-X-Gm-Message-State: AOAM531ETCafwRmNDV3SS9eWWt8NhdqiQCMguxo/ZvDIFLUIo4AMBTxE
-	xb4je/Iql6XP4VHCu9HEvRMXWg==
-X-Google-Smtp-Source: ABdhPJxKrhXYiytBuBL2uMw9/17lCFEgVDX5YAwj0edRfiBrkDBcoqsP3eMgwqKrnOsYZ/vZMCTb8Q==
-X-Received: by 2002:a05:6402:1770:b0:425:b2b5:6248 with SMTP id da16-20020a056402177000b00425b2b56248mr18454740edb.281.1651593475606;
-        Tue, 03 May 2022 08:57:55 -0700 (PDT)
-Received: from [192.168.0.206] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jz1-20020a17090775e100b006f3ef214e27sm4814174ejc.141.2022.05.03.08.57.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 08:57:54 -0700 (PDT)
-Message-ID: <0df2fd83-951c-d253-6494-3b70f5762aae@linaro.org>
-Date: Tue, 3 May 2022 17:57:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC v2 2/2] arm: hisi: enable Hi3521a soc
-Content-Language: en-US
-To: "Marty E. Plummer" <hanetzer@startmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 40DC5C385A9
+	for <soc@kernel.org>; Tue,  3 May 2022 16:01:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40DC5C385A9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e])
+	by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1nluxS-0008OU-K3; Tue, 03 May 2022 18:01:02 +0200
+From: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
- devicetree@vger.kernel.org, gengdongjiu@huawei.com,
- krzysztof.kozlowski+dt@linaro.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org, linux@armlinux.org.uk, michael@walle.cc,
- miquel.raynal@bootlin.com, mturquette@baylibre.com, novikov@ispras.ru,
- olof@lixom.net, p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
- robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
- sumit.semwal@linaro.org, tudor.ambarus@microchip.com, vigneshr@ti.com,
- xuwei5@hisilicon.com
-References: <20220501054440.2434247-1-hanetzer@startmail.com>
- <20220501173423.2473093-1-hanetzer@startmail.com>
- <20220501173423.2473093-3-hanetzer@startmail.com>
- <4cda3645-c4e8-1b3c-bd80-891afd56449a@linaro.org>
- <20220503134459.pplgvhcckja4ivcg@proprietary-killer>
- <75a48dfa-6fc9-aed9-b00e-d928bd9f33af@linaro.org>
- <20220503155141.ekbysx6fjom5el2h@proprietary-killer>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220503155141.ekbysx6fjom5el2h@proprietary-killer>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [GIT PULL] Reset controller updates for v5.19
+Date: Tue,  3 May 2022 18:00:57 +0200
+Message-Id: <20220503160057.46625-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::4e
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-On 03/05/2022 17:51, Marty E. Plummer wrote:
->>>> A bit weird interrupts... the same?
->>>>
->>> Yes, though I am aware that some sp804 timers do have a separate
->>> interrupts per pair.
->>
->> They have also separate interrupts, one combined interrupt or one sole
->> interrupt. However what you described here is one interrupt line
->> physically connected to two separate pins on the device yet still not
->> being somehow shared (shared as "combined interrupt"). I don't think it
->> is your case...
->>
-> Unsure. datasheet just says '33 | Timer0/Timer1'. I don't think these
-> timers are attached to pins, however.
+Dear arm-soc maintainers,
 
-So it looks like a combined interrupt, doesn't it?
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-Best regards,
-Krzysztof
+are available in the Git repository at:
+
+  git://git.pengutronix.de/pza/linux.git tags/reset-for-v5.19
+
+for you to fetch changes up to 2ca065dc9468fa1c60ada1e8cb9c1aa866367ec7:
+
+  dt-bindings: reset: st,sti-powerdown: Convert to yaml (2022-05-03 17:41:30 +0200)
+
+----------------------------------------------------------------
+Reset controller updates for v5.19
+
+Add Meson-S4 SoC reset controller support to reset-meson, AST2600 LPC
+reset controller support to reset-simple, and R9A07G054 USBPHY reset
+controller support to reset-rzg2l-usbphy-ctrl. Add ACPI _RST support to
+device_reset(), simplify the uniphier-glue reset driver using bulk API
+and devres and clean up its dt-bindings docs. Convert most dt-bindings
+docs from txt to yaml.
+
+----------------------------------------------------------------
+Joel Stanley (1):
+      reset: simple: Add AST2600 compatible
+
+Krishna Yarlagadda (1):
+      reset: ACPI reset support
+
+Kunihiko Hayashi (1):
+      dt-bindings: reset: uniphier-glue: Clean up clocks, resets, and their names using compatible string
+
+Lad Prabhakar (1):
+      reset: Kconfig: Make RESET_RZG2L_USBPHY_CTRL depend on ARCH_RZG2L
+
+Philipp Zabel (12):
+      reset: uniphier-glue: Use reset_control_bulk API
+      reset: uniphier-glue: Use devm_add_action_or_reset()
+      dt-bindings: reset: amlogic,meson-axg-audio-arb: Convert to yaml
+      dt-bindings: reset: ath79: Convert to yaml
+      dt-bindings: reset: berlin: Convert to yaml
+      dt-bindings: reset: bitmain,bm1880-reset: Convert to yaml
+      dt-bindings: reset: lantiq,reset: Convert to yaml
+      dt-bindings: reset: nuvoton,npcm-reset: Convert to yaml
+      dt-bindings: reset: snps,axs10x-reset: Convert to yaml
+      dt-bindings: reset: socfpga: Convert to yaml
+      dt-bindings: reset: st,sti-picophyreset: Convert to yaml
+      dt-bindings: reset: st,sti-powerdown: Convert to yaml
+
+Zelong Dong (3):
+      dt-bindings: reset: Add compatible for Meson-S4 Reset Controller
+      dt-bindings: reset: add bindings for the Meson-S4 SoC Reset Controller
+      reset: reset-meson: add support for the Meson-S4 SoC Reset Controller
+
+ .../devicetree/bindings/reset/altr,rst-mgr.yaml    |  47 ++++++++
+ .../bindings/reset/amlogic,meson-axg-audio-arb.txt |  22 ----
+ .../reset/amlogic,meson-axg-audio-arb.yaml         |  56 +++++++++
+ .../bindings/reset/amlogic,meson-reset.yaml        |   1 +
+ .../devicetree/bindings/reset/ath79-reset.txt      |  20 ----
+ .../devicetree/bindings/reset/berlin,reset.txt     |  23 ----
+ .../bindings/reset/bitmain,bm1880-reset.txt        |  18 ---
+ .../bindings/reset/bitmain,bm1880-reset.yaml       |  36 ++++++
+ .../devicetree/bindings/reset/lantiq,reset.txt     |  30 -----
+ .../devicetree/bindings/reset/lantiq,reset.yaml    |  49 ++++++++
+ .../bindings/reset/marvell,berlin2-reset.yaml      |  38 +++++++
+ .../bindings/reset/nuvoton,npcm-reset.txt          |  32 ------
+ .../bindings/reset/nuvoton,npcm750-reset.yaml      |  50 +++++++++
+ .../bindings/reset/qca,ar7100-reset.yaml           |  40 +++++++
+ .../bindings/reset/snps,axs10x-reset.txt           |  33 ------
+ .../bindings/reset/snps,axs10x-reset.yaml          |  48 ++++++++
+ .../devicetree/bindings/reset/socfpga-reset.txt    |  16 ---
+ .../reset/socionext,uniphier-glue-reset.yaml       |  52 ++++++---
+ .../bindings/reset/st,sti-picophyreset.txt         |  42 -------
+ .../devicetree/bindings/reset/st,sti-powerdown.txt |  45 --------
+ .../bindings/reset/st,stih407-picophyreset.yaml    |  47 ++++++++
+ .../bindings/reset/st,stih407-powerdown.yaml       |  49 ++++++++
+ drivers/reset/Kconfig                              |   2 +-
+ drivers/reset/core.c                               |  15 ++-
+ drivers/reset/reset-meson.c                        |   6 +
+ drivers/reset/reset-simple.c                       |   1 +
+ drivers/reset/reset-uniphier-glue.c                |  75 ++++++-------
+ include/dt-bindings/reset/amlogic,meson-s4-reset.h | 125 +++++++++++++++++++++
+ 28 files changed, 680 insertions(+), 338 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/reset/altr,rst-mgr.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-axg-audio-arb.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/amlogic,meson-axg-audio-arb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/ath79-reset.txt
+ delete mode 100644 Documentation/devicetree/bindings/reset/berlin,reset.txt
+ delete mode 100644 Documentation/devicetree/bindings/reset/bitmain,bm1880-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/bitmain,bm1880-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/lantiq,reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/lantiq,reset.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/marvell,berlin2-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/qca,ar7100-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/snps,axs10x-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/snps,axs10x-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/socfpga-reset.txt
+ delete mode 100644 Documentation/devicetree/bindings/reset/st,sti-picophyreset.txt
+ delete mode 100644 Documentation/devicetree/bindings/reset/st,sti-powerdown.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/st,stih407-picophyreset.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/st,stih407-powerdown.yaml
+ create mode 100644 include/dt-bindings/reset/amlogic,meson-s4-reset.h
