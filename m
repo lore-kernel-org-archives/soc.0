@@ -1,119 +1,94 @@
-Return-Path: <SRS0=Fita=VL=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=9B/D=VL=ext.kapsi.fi=maukka@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E533FC433F5
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 07:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5851C433EF
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 08:21:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B6612C385A9; Tue,  3 May 2022 07:06:59 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 9C151C385A4; Tue,  3 May 2022 08:21:19 +0000 (UTC)
+Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [91.232.154.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 763D5C385B1
-	for <soc@kernel.org>; Tue,  3 May 2022 07:06:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 763D5C385B1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id z19so18827392edx.9
-        for <soc@kernel.org>; Tue, 03 May 2022 00:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kc27XkBGcgpvj03uAIYtN/02TiD3/pa2n1+ce6OYwxU=;
-        b=oiujbke1mRaMlkrcvlJUsyRrSeYQQfI74Nfjm3EQNjNj1vJPnauGqf8I9d/0ottIAO
-         9blvr38o8Rx9hytaNwfDaQsSyqkgbczUToEqrMYzmV0IHAsfmBj0QSXXAGsx7WFNyTxy
-         435x0+jDlBxN0vM9vG3RcXG4spjyxafTf2YUHIRJ4zBYN6e/LnFpdxUNvo5QsYxpjQBO
-         6qeXC1TJYSr8NUBIAfIcmDZwu0/6StMwPGQdzfcBGX4JrmN8AIsVffC8MCECL7PFGQeh
-         gDwdI4BEFBo0albVdfwjVn+rJM9UpO/hdMWSnCxWr2jSaIYyOv5RBqGgz99p8Uh2m1xG
-         nBgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kc27XkBGcgpvj03uAIYtN/02TiD3/pa2n1+ce6OYwxU=;
-        b=p13XIGZVf25kEFNw+wyiQmh7VWGh4rCWiMqXaoFY7PjqJ2XH5vlFhJU0aIf9fA0Hv4
-         z6bU8olWLE2Kxn2q0ZXyjq+YLLx1IpMa8FqVw6z69wGBWUaXQScHzMRrcA27vXuKa816
-         sfxBhIUh/eFrPehOdyDrdymdpxKv/OpnZFr4aQggLpbxdqH7tLtX9fHh7oNtxFPD++j7
-         hUFdw9+6aUJSFF4YVgZb351J24d6mBqSOYGHdvfrAGcZQ7JeBor1a06ScAeyxBJmSSgH
-         AkDXN3xXGrgdG7+2saL9hg/OXbvAWK6rU5h0LYNLeHUjUFtKZdIedIUOaCCJLC259d4+
-         MMag==
-X-Gm-Message-State: AOAM531gF7ThO9Mfz2kUzBAKiUjZvS2lR1x37NtuK72t6hhvOxECjwYk
-	Mgg4VMUqgZFolp82fHX+w9xFjA==
-X-Google-Smtp-Source: ABdhPJx6otopPtL/mDsEY9EYB6OU78ELkUNRo7Bc1zygiqHJ0krCRFZejUlcSAKWtlvTUFjS9GkqFA==
-X-Received: by 2002:aa7:d407:0:b0:425:f57e:7ae5 with SMTP id z7-20020aa7d407000000b00425f57e7ae5mr16536588edq.393.1651561616510;
-        Tue, 03 May 2022 00:06:56 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e37sm4300593ejb.157.2022.05.03.00.06.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 00:06:56 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v5.19, part two
-Date: Tue,  3 May 2022 09:06:52 +0200
-Message-Id: <20220503070652.54091-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+	by smtp.kernel.org (Postfix) with ESMTPS id CFCAAC385A9;
+	Tue,  3 May 2022 08:21:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CFCAAC385A9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ext.kapsi.fi
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ext.kapsi.fi
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=OqscgcMP9UVcA9P6b/llsibkIGdaT45kJnJUIEEFa+E=; b=SO7arh+QQbvl3u+idWbbxla84E
+	rBBkmJycDY87e63wuNoKkFLGdgjbn65KS2zuY2rKl0ajbzM91l0u0sZCbae6fE107iExFfFcNK4Ps
+	AlLbFXtWl0qKF2/Ttd+qzeOwbwrmzO1VXFNgWrnQcGHLCah/gYn4iF1bZYRUBE72owho6gBXtsV0X
+	iIUiKS/juFoI2HMvtLIT4Y46RYqpOZRAD4+6Y+5m7cVxpiYKPJ4hpwp29wd3+PeK2eXaLX28HChA6
+	JF+D7zXuIlPm3nP5PK94IRdFG9iZXCZ+x9zAcy440w2th6nYWHiZ70Jkp7jY0FPb8YvSL9hmi1+45
+	Fy6n5+FA==;
+Received: from 13-105-191-90.dyn.estpak.ee ([90.191.105.13]:58685 helo=[10.0.2.15])
+	by mailserv1.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	(Exim 4.89)
+	(envelope-from <maukka@ext.kapsi.fi>)
+	id 1nlnm8-000596-6d; Tue, 03 May 2022 11:20:52 +0300
+Message-ID: <c6d61bfd-24c0-030b-eb50-5e97214f3f13@ext.kapsi.fi>
+Date: Tue, 3 May 2022 11:20:50 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To: Andrew Lunn <andrew@lunn.ch>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, SoC Team <soc@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ DTML <devicetree@vger.kernel.org>, Olof Johansson <olof@lixom.net>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+References: <20220427162123.110458-1-maukka@ext.kapsi.fi>
+ <CAK8P3a0p-ev50UfGiHCpMM5Jz5Mf8pdfQtNep0M7qi7PANSBVg@mail.gmail.com>
+ <YmndWe63ELJbQe20@lunn.ch>
+ <b9c7eb81-c49e-76bf-5b49-b97cb5c2b03d@ext.kapsi.fi>
+ <YmsisTq28nsSlf3k@lunn.ch>
+From: Mauri Sandberg <maukka@ext.kapsi.fi>
+In-Reply-To: <YmsisTq28nsSlf3k@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 90.191.105.13
+X-SA-Exim-Mail-From: maukka@ext.kapsi.fi
+Subject: Re: [RFC RFT PATCH v1 0/1] ARM: orion5x: convert D-Link DNS-323 to
+ the Device Tree
+X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
+X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
 
-Hi,
 
-On top of previous pull (tags/memory-controller-drv-5.19).
+On 29.04.22 02:26, Andrew Lunn wrote:
+> On Thu, Apr 28, 2022 at 11:25:00PM +0300, Mauri Sandberg wrote:
+>> Hello Andrew!
+>>
+>> On 28.4.2022 3.18, Andrew Lunn wrote:
+>>>>> - there is no concensus on how to get ascii formatted MAC address from mtd
+>>>>>     partitions so eth is not fully functional without setting the MAC from
+>>>>>     userspace
+>>>> Ideally this is handled by the boot loader, but that requires being
+>>>> able to update
+>>>> it.
+>>> The mv643xx Ethernet driver is happy if it finds the MAC address
+>>> already in the hardware. The vendor uboot often does this. Does tftp
+>>> boot work in uboot? That would indicate it has access to the MAC
+>>> address.
+>> The u-boot is really limited and I am transferring new images over kermit.
+> Ouch!
+>
+> If you can, try kexec. You can use wget or similar to grab the kernel
+> from you host machine, and then something like:
+>
+> kexec --append 'rootwait ro earlyprintk console=ttyS0,115200n8' bzImage
+>
+> wget will be much faster then kernel.
+>
+Nice, this looks promising. Thanks for the tip.
 
-Best regards,
-Krzysztof
 
-
-The following changes since commit d37b07897e5024088b2170b8e6e1c68d567b9be6:
-
-  memory: fsl-corenet-cf: Use helper function devm_platform_ioremap_resource() (2022-04-19 16:59:03 +0200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.19-2
-
-for you to fetch changes up to 854fd9209b20837ab48c2e6714e5e44dd8ea33a2:
-
-  memory: omap-gpmc: Allow building as a module (2022-04-29 08:57:36 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v5.19, part two
-
-1. Cleanup: simplify platform_get_resource() calls by using
-   devm_platform_get_and_ioremap_resource() helper.
-2. OMAP: allow building omap-gpmc as module and make it visible (it is
-   not selected by platform anymore).
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (7):
-      memory: da8xx-ddrctl: simplify platform_get_resource()
-      memory: emif: simplify platform_get_resource()
-      memory: ti-emif: simplify platform_get_resource()
-      memory: ti-emif-pm: simplify platform_get_resource()
-      memory: tegra: mc: simplify platform_get_resource()
-      memory: brcmstb_dpfe: simplify platform_get_resource_byname()
-      memory: renesas-rpc-if: simplify platform_get_resource_byname()
-
-Roger Quadros (2):
-      memory: omap-gpmc: Make OMAP_GPMC config visible and selectable
-      memory: omap-gpmc: Allow building as a module
-
- drivers/memory/Kconfig          |  2 +-
- drivers/memory/brcmstb_dpfe.c   | 10 +++-------
- drivers/memory/da8xx-ddrctl.c   |  3 +--
- drivers/memory/emif.c           |  4 +---
- drivers/memory/omap-gpmc.c      | 43 ++++++++++++++++++++++-------------------
- drivers/memory/renesas-rpc-if.c |  3 +--
- drivers/memory/tegra/mc.c       |  4 +---
- drivers/memory/ti-aemif.c       |  4 +---
- drivers/memory/ti-emif-pm.c     |  6 +++---
- 9 files changed, 35 insertions(+), 44 deletions(-)
