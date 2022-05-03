@@ -4,92 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40660C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52CE7C43217
 	for <soc@archiver.kernel.org>; Tue,  3 May 2022 14:50:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 16EE5C385B2; Tue,  3 May 2022 14:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01F2DC385A4
-	for <soc@kernel.org>; Tue,  3 May 2022 14:50:21 +0000 (UTC)
+	id 27F7CC385A4; Tue,  3 May 2022 14:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11348C385AF;
+	Tue,  3 May 2022 14:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1651589422;
-	bh=Sv9iN9b8WrxnZ29WO/MgDGWxAoIyjXu+BydNQtkraW4=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=FhWuXt6Ahr8xq/bo5Akfx6P486pvOvklAL4p0jLHjh0EaqUxUsJ94ldyZ8BzKOoWS
-	 pXnYfyNPLPJCf96Zo8T4RhQWx2jL+wAR351XxUKzvv1vgKhe4lSnwU9IwarX5hX7ju
-	 E3kvlmvGXOG8urATKLbxA1py1Ww6AMH8ioyNbXdP9gNdXeHa0CLAqRPNF3i4pEQIOe
-	 Nh4grIbezf0ZgImJtJxlAHKRI+9FSBPYS0Z3/pT6WyWjIKcS1n+KHz/oeSqd4ImcZV
-	 FBT7JSOO7PstdU036xK7Ipvfgx5/8BJphopo5sN0L6nE4G1Yz0fJxgLS2QFmA2Ffwj
-	 +7AHaIfmG9gJw==
+	bh=0jXdW3CmDSxQLmQa0Z9veUr+1GnUwjovETkQ/wVA4qY=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Awsfkl2ezLr+oK7llt5t/D4d4Y8jQnJ75vVUgIjUDl37LxF9WaG5Wyf7aRT5o51sH
+	 7WOnC3DWrpUYHF05S6379iJU5J6WRaCCYs6j1cd9qDjstcr9vHgIWmAMmBOguclbT9
+	 qFKPaaBDgovDUtOjN1P0oX3aW/nhWy0HkoUNBQcHUDcSUbNSD9jx3YDDSQv/K7A4OJ
+	 GinYUJEdrBQE/LDK5B4uQsKMW+nJ5ewucymAm8SGszC51jTyMloD7ho3+ZD+LryBgU
+	 G0O7xz8QVzA0mSjh3G8ZrVNN+FBe11pOO+1wy+0V+miehxLryd1qvPz3WRSqtmKMak
+	 qciPrpK2UJ6Jw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C59E5E6D402;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBD72F03848;
 	Tue,  3 May 2022 14:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] DTS updates for the v5.19 kernel
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165158942171.22061.11747346146220737285.git-patchwork-summary@kernel.org>
+ <165158942189.22061.9496234297797710716.git-patchwork-notify@kernel.org>
 Date: Tue, 03 May 2022 14:50:21 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <CACRpkdYngWscqak5phKm58O2GF0RmVETgwW4NCKTBiASdaEcyg@mail.gmail.com>
+In-Reply-To: <CACRpkdYngWscqak5phKm58O2GF0RmVETgwW4NCKTBiASdaEcyg@mail.gmail.com>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Series: [GIT,PULL,1/4] Maintainaer updates for omaps
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=636158
-  Lore link: https://lore.kernel.org/r/pull-1651061256-836848@atomide.com
-    Patches: [GIT,PULL,1/4] Maintainaer updates for omaps
-             [GIT,PULL,2/4] Defconfig changes for omaps
-             [GIT,PULL,3/4] SoC clean-up for omaps
-             [GIT,PULL,4/4] Drivers changes for ti-sysc
+On Sun, 1 May 2022 00:52:43 +0200 you wrote:
+> Hi SoC folks,
+> 
+> please pull in these Arm Ux500 DTS changes for the v5.19 kernel.
+> 
+> The details are in the signed tag!
+> 
+> Yours,
+> Linus Walleij
+> 
+> [...]
 
-Patch: [GIT,PULL] DTS updates for the v5.19 kernel
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=637343
-  Lore link: https://lore.kernel.org/r/CACRpkdYngWscqak5phKm58O2GF0RmVETgwW4NCKTBiASdaEcyg@mail.gmail.com
+Here is the summary with links:
+  - [GIT,PULL] DTS updates for the v5.19 kernel
+    https://git.kernel.org/soc/soc/c/97736c2ef670
 
-Series: Renesas ARM defconfig updates for v5.19
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=634697
-  Lore link: https://lore.kernel.org/r/cover.1650638502.git.geert+renesas@glider.be
-    Patches: [GIT,PULL,1/4] Renesas ARM defconfig updates for v5.19
-             [GIT,PULL,2/4] Renesas ARM DT updates for v5.19
-             [GIT,PULL,3/4] Renesas driver updates for v5.19
-             [GIT,PULL,4/4] Renesas DT binding updates for v5.19
-
-Series: [GIT,PULL,1/2] Binding changes for omaps
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=635606
-  Lore link: https://lore.kernel.org/r/pull-1650961799-428630@atomide.com
-    Patches: [GIT,PULL,1/2] Binding changes for omaps
-             [GIT,PULL,2/2] Devicetree changes for omaps
-
-Patch: [GIT,PULL] ARM: aspeed: Fixes for v5.18
-  Submitter: Joel Stanley <joel@jms.id.au>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=637474
-  Lore link: https://lore.kernel.org/r/CACPK8XdhLfafOfqvR0r7p6V6AhtNXD4uZGaz7Y+Y4P-rc9p0tQ@mail.gmail.com
-
-Patch: arm: nomadik: drop selecting obsolete CLKSRC_NOMADIK_MTU_SCHED_CLOCK
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=630792
-  Lore link: https://lore.kernel.org/r/20220410145623.2620380-1-linus.walleij@linaro.org
-
-
-Total patches: 13
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
