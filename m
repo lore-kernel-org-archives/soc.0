@@ -1,129 +1,96 @@
-Return-Path: <SRS0=yZUZ=VL=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Fita=VL=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50872C433F5
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 10:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B80EC433F5
+	for <soc@archiver.kernel.org>; Tue,  3 May 2022 11:37:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 16879C385B0; Tue,  3 May 2022 10:46:09 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5B2B1C385B1; Tue,  3 May 2022 11:37:21 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D735EC385A9;
-	Tue,  3 May 2022 10:46:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D735EC385A9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MFsER-1ncGaR2PnD-00HRnP; Tue, 03 May 2022 12:46:04 +0200
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ec42eae76bso174923887b3.10;
-        Tue, 03 May 2022 03:46:04 -0700 (PDT)
-X-Gm-Message-State: AOAM531CKYK/CJJwbxd+jXXEh2GqGBDR8hclVUvtZYC7JVPiw6Rp+SuQ
-	oDE4jjWRQsWSCw0eOGOIi8wCTCWRT53n6e73R9k=
-X-Google-Smtp-Source: ABdhPJylICN3Lkv4MnajtKZ/mtz5v98V10dI0vpMrO0w3cw4ngaYj64jqdkCQYAkS/F2fDxRL5svru9bENy/YJPD9Ww=
-X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
- m125-20020a0dfc83000000b002e5b0f4c125mr14878150ywf.347.1651574763350; Tue, 03
- May 2022 03:46:03 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 10289C385A4
+	for <soc@kernel.org>; Tue,  3 May 2022 11:37:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 10289C385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f45.google.com with SMTP id k23so32896225ejd.3
+        for <soc@kernel.org>; Tue, 03 May 2022 04:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=X1FUNuB7P3eW2ayDNUqILdNTj2LgjfmvS/GJDjAZwJ8=;
+        b=m1lsa/lUBG13ARmSDKBacb1BxkHOLDYVNgdzx87jaByNzrYBqQjteQH9jkfbbdF0QO
+         gVBjSQDRDw79CP7VbvuDmFkUQHW5Y/2HQOpqKUZd50/mRQE0HrMFgj8B66PmfYRy61kb
+         8mQDe2M8M3SeuqAHv+CkuKeCTRxKJ8py6uI2LM1l0QxqNtLGG3TQ/E1drhj9elaMYM+Z
+         xFA/t/PW27qFlRei0Or6PigQwyezhQQlkaMdEd86vK4ijPxTDPA3k4qBDuVAyd7WmywV
+         UJb9Ji7I8Ftv+i2NiOVJKZ3oCXUG0kPPc9hYXimNdHyqsP34bD3r76D1aIy486doAtNa
+         cl7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X1FUNuB7P3eW2ayDNUqILdNTj2LgjfmvS/GJDjAZwJ8=;
+        b=cI1neb+ZFuRvpUvBg71yvCkiwquzmJvyHAenzTWqfeE9O2Z0b6GhW1CE3nAKOq0h5h
+         viOmC/vq6D6vQIXyMkVAUiNO07j7zPIFLmn//wLAQ4SbaRgyIE1+7FGtCpbON4tqGGON
+         neKn4auuPrP3msloWwoAvGh0QkYmM/GrFtfrsCwnB2gGXiAGRROghV6amKDBFrH/lVwO
+         so9WYVqY2yP8sF9wkGv8fl57b16DNBW22YbCKJ5bInWsrecyqWbZGk4mU2K3eD0eRKzb
+         9NU8N7K2A8yS82yn1PUHXGFAduJD1OA9kw3DRj8AUkhxmGMxU8Foad1uB+ZY4KKYFL/r
+         WzXw==
+X-Gm-Message-State: AOAM5331xz4jwNAKo3Kf2MuINgxTdS2BvyA/7KdT6/HW2A7YCUWnDVTA
+	txNoI0eLQEH5wrqQZiB+HuYxvw==
+X-Google-Smtp-Source: ABdhPJzQ+6Vtojorbgz03fnGzcETCdUI4hWoJhuVofseBZB8aIdh7DtxCNdBnYFVXj5i+orsRW9lFg==
+X-Received: by 2002:a17:907:1c9c:b0:6f4:2918:5672 with SMTP id nb28-20020a1709071c9c00b006f429185672mr12582950ejc.439.1651577838380;
+        Tue, 03 May 2022 04:37:18 -0700 (PDT)
+Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l24-20020a056402029800b0042617ba63a7sm7841464edv.49.2022.05.03.04.37.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 04:37:17 -0700 (PDT)
+Message-ID: <b7bf8ab3-9680-6318-a575-bb1dfaeef405@linaro.org>
+Date: Tue, 3 May 2022 13:37:16 +0200
 MIME-Version: 1.0
-References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-7-nick.hawkins@hpe.com>
-In-Reply-To: <20220502204050.88316-7-nick.hawkins@hpe.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 3 May 2022 12:45:47 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2rzmVrpnf2r73iXB=T06OMOsgwyq1i8z7swuOW-q88eQ@mail.gmail.com>
-Message-ID: <CAK8P3a2rzmVrpnf2r73iXB=T06OMOsgwyq1i8z7swuOW-q88eQ@mail.gmail.com>
-Subject: Re: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
-To: "Hawkins, Nick" <nick.hawkins@hpe.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC v2 0/2] Hi3521a support.
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: "Verdun, Jean-Marie" <verdun@hpe.com>, nick@hpe.com, Joel Stanley <joel@jms.id.au>, 
-	Arnd Bergmann <arnd@arndb.de>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:R6nF/Wiz/7c9DrRz3Zj/0igV4cp71zWjWaEMpEHSpotNo3+xYdF
- v/C4bLmXecrmRzfR39cPGHy3u3haDBfqU/GBdVAGGy3+azW8YtdFu+VQvor08mNzdyzuIRN
- Ocg0M3H1ehpGBbbAcfMCsQOUZm/rOAAU3uxMMrHJJ2Dq0tBHjMc/TMK2av2FND4B1m69BBl
- OheN4aRNJVfdnIVq1utpw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+6KEdY6qs9o=:I3xNV8HA4uLdXjlw5I3Y1w
- 2pODTz6dmX+e6ycINbsRvMAmUBlryvHv2AFmTgRUKB+jZnXwQQtpfEf6bXIyzwvwDMSK+c0Oj
- 5W4NK/bKpvxQSYJWcsy71eHJa26uRo0iJxxRhHxMwZ2NwjxZMI6oiGYcmQ6Fi/gduRSQ8v4Fq
- 4xnXX++0Lx9ZKgAZCysFO1Qmq/m7PMp3mHUZaz4qzW8AFd+TdE08l4ctUaZqfhDGFGZrY8nGp
- yB2eGboS3H4vxonhifWC2gPddiP+rHjyPnkCDeXIUofum+L2ATXeohB//QPkw1xC5rhpLG8Sr
- etYgYREUxti+o73pMy8W6ILJ+Delfw4rHPgEuhK6vIVOcFVs1QoRBEqKUK/SvEqYTRB1n6KIK
- w8Z/9g5ERHjT1S2lbcw455Z0AkReUvmk3Go8ctED8ymjGZLdHahlilm10pvMh1gDXV8oRO52F
- b+MmmPWtv1hE7rBccclN4JpIakAA9IQp6mvQxFXFw+TWNpqzJhctLxwcOI2sIMKosjtfoyLSJ
- fR7tlpTsCXc/03OFcsgtcQJR7vUB/WqUE5T9v69g01OEXhbqdNBeC+tTcB0fRm3yK8yaxjQ15
- zhQh0sbBibLzX4X8wWC5048TQljD/wgzXPMp1Tl4BE6cOqzLi90jXq2M7z9o7NZP7XYMUfiF6
- gnv5GOaRAI6Pi6IiX2TrkvcqgscEngCxsHBNWwqu4KZfrboVDPGRQn1iRJwk6ZZ4hFGkW+tWQ
- mY+I/xFqu2z8BRCOkxDi7reZpIzJffWcK+K4eZ3XZ0KzyEVArzVbFnlgczTRO1Dy0BVlMGk14
- zyn07DpzkEGEHt0PkZjKMxxvJZOTZdw65zx0OpzwO4WxwMzYpQ=
+To: "Marty E. Plummer" <hanetzer@startmail.com>, arnd@arndb.de,
+ cai.huoqing@linux.dev, christian.koenig@amd.com, devicetree@vger.kernel.org,
+ gengdongjiu@huawei.com, krzysztof.kozlowski+dt@linaro.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
+ mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net, p.yadav@ti.com,
+ rdunlap@infradead.org, richard@nod.at, robh+dt@kernel.org, sboyd@kernel.org,
+ soc@kernel.org, sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
+ vigneshr@ti.com, xuwei5@hisilicon.com
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
+ <20220501173423.2473093-1-hanetzer@startmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220501173423.2473093-1-hanetzer@startmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 2, 2022 at 10:40 PM <nick.hawkins@hpe.com> wrote:
+On 01/05/2022 19:34, Marty E. Plummer wrote:
+> Resend RFC.
+> 
+> Changes in v2:
+> - Actually include the dts files.
+> - DT Bindings still missing, as the the driver is not quite complete
+>   (need to add the reset controller bindings, have't quite figured that
+>   out yet.)
+> 
+> Marty E. Plummer (2):
+>   clk: hisilicon: add CRG driver Hi3521a SoC
+>   arm: hisi: enable Hi3521a soc
 
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-> @@ -0,0 +1,13 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree file for HPE DL360Gen10
-> + */
-> +
-> +/include/ "hpe-gxp.dtsi"
-> +
-> +/ {
-> +       #address-cells = <1>;
-> +       #size-cells = <1>;
-> +       compatible = "hpe,gxp-dl360gen10","hpe,gxp";
-> +       model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
-> +};
+Still no bindings for boards/SoC.
 
-In the board specific file, you normally have "aliases", "chosen" and "memory"
-nodes that define e.g. which uart is used for the console.
 
-> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-> new file mode 100644
-> index 000000000000..7a99e174e4b3
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree file for HPE GXP
-> + */
-> +
-> +/dts-v1/;
-> +/ {
-> +       model = "Hewlett Packard Enterprise GXP BMC";
-> +       compatible = "hpe,gxp", "hpe,gxp-dl360gen10";
 
-I think "hpe,gxp-dl360gen10" is misplaced here, if that is the identifier
-of a particular machine rather than the SoC.
-
-> +       memory@40000000 {
-> +               device_type = "memory";
-> +               reg = <0x40000000 0x20000000>;
-> +       };
-
-If the memory is outside of the SoC, it should not be here.
-
-> +       axi {
-> +               compatible = "simple-bus";
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               ranges;
-> +               dma-ranges;
-> +
-> +               L2: cache-controller@b0040000 {
-> +                       compatible = "arm,pl310-cache";
-> +                       reg = <0xb0040000 0xFFC>;
-> +                       cache-unified;
-> +                       cache-level = <2>;
-> +               };
-
-The length of the register area looks wrong, this is usually the full
-4KB area, rather than leaving out the last four bytes.
-
-        Arnd
+Best regards,
+Krzysztof
