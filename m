@@ -1,94 +1,115 @@
-Return-Path: <SRS0=D/gk=VM=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <SRS0=o2FI=VM=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 527A9C433F5
-	for <soc@archiver.kernel.org>; Wed,  4 May 2022 17:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 462BDC433EF
+	for <soc@archiver.kernel.org>; Wed,  4 May 2022 20:18:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 21105C385AF; Wed,  4 May 2022 17:21:28 +0000 (UTC)
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	id 09A61C385B1; Wed,  4 May 2022 20:18:08 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7D227C385A4
-	for <soc@kernel.org>; Wed,  4 May 2022 17:21:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D227C385A4
+	by smtp.kernel.org (Postfix) with ESMTPS id 1798CC385A5
+	for <soc@kernel.org>; Wed,  4 May 2022 20:18:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1798CC385A5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-ed8a3962f8so1846957fac.4
-        for <soc@kernel.org>; Wed, 04 May 2022 10:21:27 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id y32so4239163lfa.6
+        for <soc@kernel.org>; Wed, 04 May 2022 13:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tlkw9w1COBFGlrfEOEmUj1EqnjghHZ07vJ79BtjifOo=;
-        b=m+YUKyfod23OXFRBpqCg4+1iapObamekGkHiEzVU7Lul/qnTAvu7zDVFU3xa801Dc2
-         ocJltiKLrpYKnM78r2NZvtsvk0BeOdLmgPk7PJLkIMVQVFMgYHeDMBUoHl8W2ex7gxP4
-         pYcGNoJgdGp8ogLIdB+RBnD6oqjAQWT5q9we6gVdjSjT6f7VNR+ZCzGlt1IdPPqw9boD
-         FIMf8jSQMIwwvdKBBusZGXTTm40jCnYKeE+FT9nEMctTYkw8EwDjiHfaHzUd5fNudZwK
-         6IRIlSmNHgtDCCvA0Z2jHz9IZfI7BW4NWlI+VNz1tnhVXda5n2U0qFXW8Pdm1HGetY7G
-         RWnw==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=/7SaxbrAKYy5nHjPeP6rKPzhr5cf0KgWZreybqQSSK0=;
+        b=vH4P23aRILvPjXrFTf+PKSY5WZyteRVwqCQxiYPHQY4SnjhV5kTiBoIIHwMT3N3nzb
+         n2gTDORYJZ3lIchUKu2QKuDBYZUJnTjm2A0iQh9tjc2GjceqpKx0eQcnQakbOeVlNKcP
+         gYJElSdyE2lUs0EWGrRj5xbNIF9UK5mf3InKhQglmy2HC3/q9dDKE2ud97fB7Xt09juG
+         ZQDZ5a0zyxlT7/vD1CAnIHMa4iRN96ujdZ+vj0ymSR8YEEY/gW2UKHA618uUEQpZBdmh
+         wvrW4Ol5LienogN5JX72UVxYyEm465NfTwzhPyAZY2cSwFPw9PpzHH82RlAB68cPXKx2
+         l0kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tlkw9w1COBFGlrfEOEmUj1EqnjghHZ07vJ79BtjifOo=;
-        b=kiETz60iM6SYt7lJPqTRb0K+mF/JTjgflBTv2aI3bYw5JdOOcj7JbBPr+0m6mKuEuF
-         e0Gg7YJlkZbWRJUitxL1NutRdV716DlFgeO8lR3LIXQfogsYrYzHvwyqWFNCA/07bEF+
-         0jpMhU0x/6BmndhJtze8fnBLf03ylk0UUhzPlhSvm7EXIp/3xyjJUExnElIUhkURWHz5
-         f/nTj7oU8Bb2v/+JdZhbs0s9YquFNR4NMxBMg6+RobAVM0odSuVUTncjIP2I+1wEZ2KO
-         58KP76ZPtgR85X1faoqJFssDxHKh2lSbZGxgH2UwXKy4WkIErGTvBp3xjueBuNm8XUob
-         PyUQ==
-X-Gm-Message-State: AOAM530LR4oTPLhsPIsCEdZZNexYraIySOEfOVTN0p79CQotsXRS8ADl
-	l8tYN5qUb726b71PCSmXwLnG4w==
-X-Google-Smtp-Source: ABdhPJynAOZr1shQZ1UOcpvXwTWpxit4tHD2dse/1+L32+bYnRcaMWIrrO38klBRBghqjWxW+5whVA==
-X-Received: by 2002:a05:6870:a2cd:b0:ed:754:a2c6 with SMTP id w13-20020a056870a2cd00b000ed0754a2c6mr247783oak.270.1651684886531;
-        Wed, 04 May 2022 10:21:26 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056870b14700b000ead8b89484sm5785452oal.5.2022.05.04.10.21.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=/7SaxbrAKYy5nHjPeP6rKPzhr5cf0KgWZreybqQSSK0=;
+        b=JPDKsgRc64c+IB/UDECEYil+MaD/DTLwzzEsys0HeHrUHT0rXRGzLZ9AwwoMfFzCgE
+         AIYsK6xoH12yKCgPrzikOSduTTGA0WJezMxiI3lS/5F9RmHuqfcMq4+hyb8QJqCsA1P+
+         Q8hcrPbGLucJ8WF/LdvBEpC8S0PV+M1YFbZ9tz67RKk+ivdaIno0OpgbSXIAMmfdceww
+         1DjBSpDGxD/2f31Z0GtpkvX0jlhnb6JW8d01h8rhguYjCtnwbq0nWdSdPWJdAYMrgYFM
+         Nv0gyAS8hwc0jdQBOODopsfawzqYeR0T07mxY69WHRl9LV5fQxsM3ncRUk/TijmaDBxz
+         jGzw==
+X-Gm-Message-State: AOAM530A/XuFa0vWn/DLwEGbwzgCKF5VGCZDfuUjk3tc/cJTVVl1H3Li
+	w+40Sc1QO+GtwZCfhll8SMui9g==
+X-Google-Smtp-Source: ABdhPJx7s9k+vQS15Ri0wixJykWHpgypG/aIMgqdCW4IpR8U7ii9SJNply59hEAHQaq76eBWTiLrqg==
+X-Received: by 2002:a05:6512:10c2:b0:473:b559:2016 with SMTP id k2-20020a05651210c200b00473b5592016mr4584359lfg.641.1651695485120;
+        Wed, 04 May 2022 13:18:05 -0700 (PDT)
+Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05651c159200b0025052e35be2sm1064541ljq.130.2022.05.04.13.18.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 10:21:26 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: Luca Weiss <luca@z3ntu.xyz>,
-	linux-arm-msm@vger.kernel.org
+        Wed, 04 May 2022 13:18:02 -0700 (PDT)
+Date: Wed, 4 May 2022 22:17:59 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org,
-	phone-devel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 1/3] ARM: dts: msm8974-FP2: We're msm8974pro
-Date: Wed,  4 May 2022 12:21:11 -0500
-Message-Id: <165168485226.3730817.5587724254002689421.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220421211936.345168-1-luca@z3ntu.xyz>
-References: <20220421211936.345168-1-luca@z3ntu.xyz>
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] OP-TEE RPC arg for v5.19
+Message-ID: <20220504201759.GA180315@jade>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Thu, 21 Apr 2022 23:19:33 +0200, Luca Weiss wrote:
-> Fairphone 2 always uses Snapdragon 801, a.k.a msm8974pro so change the
-> include and filename to that.
-> 
-> 
+Hello arm-soc maintainers,
 
-Applied, thanks!
+Please pull these patches which improves performance when communicating
+with OP-TEE in the secure world. A cache of argument structs is
+implemented to minimize the number of alloc/free and possibly also
+register/unregister of these buffers in the secure world. This boosts
+the performance in particular in a FF-A configuration. It should also
+save a bit of shared memory since each multiple a physical page now can
+hold multiple argument structs, instead of one page per struct as it was
+before.
 
-[1/3] ARM: dts: msm8974-FP2: We're msm8974pro
-      commit: 3237f21824165b41ef0bbdd3f784579c931b2a21
-[2/3] ARM: dts: msm8974-FP2: Add mmc* aliases
-      commit: 9c5537723429b82561087f8eb8179d065355443c
-[3/3] ARM: dts: qcom: msm8974: Add missing license headers
-      commit: 3912e74c576a56920cde1d5591125cdd5560caae
+The OP-TEE SMC ABI is also extended to pass an argument struct needed
+for RPC together with the primary argument struct, in a manner similar
+the OP-TEE FF-A ABI.
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Thanks,
+Jens
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-rpc-arg-for-v5.19
+
+for you to fetch changes up to 5b4018b959149eb5b5f3004fc0339674af67516b:
+
+  optee: cache argument shared memory structs (2022-04-25 21:13:05 +0200)
+
+----------------------------------------------------------------
+OP-TEE RPC argument cache
+
+Adds caching of the OP-TEE argument structure used to pass request to
+secure world. This reduces quite a bit of unnecessary alloc/free and
+possibly switching back and forth to secure work in order to register
+the buffers in some configurations, most notably FF-A.
+
+----------------------------------------------------------------
+Jens Wiklander (4):
+      optee: rename rpc_arg_count to rpc_param_count
+      optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and OPTEE_SMC_CALL_WITH_REGD_ARG
+      optee: add FF-A capability OPTEE_FFA_SEC_CAP_ARG_OFFSET
+      optee: cache argument shared memory structs
+
+ drivers/tee/optee/call.c          | 238 +++++++++++++++++++++++++++++++-------
+ drivers/tee/optee/core.c          |   1 +
+ drivers/tee/optee/ffa_abi.c       |  36 ++++--
+ drivers/tee/optee/optee_ffa.h     |  12 +-
+ drivers/tee/optee/optee_private.h |  31 ++++-
+ drivers/tee/optee/optee_smc.h     |  48 +++++++-
+ drivers/tee/optee/smc_abi.c       | 197 +++++++++++++++++++++++++------
+ 7 files changed, 461 insertions(+), 102 deletions(-)
