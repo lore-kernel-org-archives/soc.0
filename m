@@ -4,65 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 616F1C433EF
-	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:09:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98AB7C433F5
+	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:09:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1149DC385A4; Wed,  4 May 2022 21:09:48 +0000 (UTC)
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	id 800EDC385B1; Wed,  4 May 2022 21:09:51 +0000 (UTC)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 632CBC385A5;
-	Wed,  4 May 2022 21:09:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 632CBC385A5
+	by smtp.kernel.org (Postfix) with ESMTPS id 4DFB5C385A4;
+	Wed,  4 May 2022 21:09:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4DFB5C385A4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d17so2602937plg.0;
-        Wed, 04 May 2022 14:09:47 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so4367443pjb.1;
+        Wed, 04 May 2022 14:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uJfeiXwSNE7V54odsox7T56XEijaYm//sfiuHeo1Y7M=;
-        b=UqsXiMIerl8dAxJzUed2vt5DHfg1Wj3sK6bIETMUd6ytb8ldSHEkW2MHgmqlhzjcw5
-         qGEGh+n3ZQTYJ9/rxTUjvPPzrcpZ/QAbitA2eI9IzT+s9ayaZG5tddUdwn7i4nLGCZVE
-         gX1bABHk8dPj2nT+yyHQ61r+/ozAr3Zrdqur/urdMzyfBS+ClkBHgDZ5vFHVyyMTeWvA
-         KB0ptOVTMjRXEtcOq5RaA3dJ0GAsGvJU48r7U6n/pMkyjzc5Nbm5G+Qr/ZkzJ/ts1oAR
-         Lh/L6oSmDRyoULQgFiFh/R6G324Nn8NtufaqeogrNHrmRGdUcNEHzwN6uzR8dZ5c2v+U
-         WfOw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xxZpPQ09APBLBJTZfiQ9M3tMr7+h1AAfLZpLAA+jiRA=;
+        b=Q/wdv+HbEgSfkLACejiuwOw43QaLL2Ykc86e9VMxtGuykSGYYolNdtN5O02EI5euqc
+         QVg4s34g9GmCJJo0irH12iSuQX/YS2Oac1PAfCQzvtlB8WJ0NzYxW56+pkdvY29B4plV
+         Uw2xnGq+z4W/o6recoGZOHWC1u7WQBoW/mborhryaSEkqOvuCfAosLnk/MBlwUgp6POu
+         BEizUt2MGtKTujUspvUnwlgsvJJccPquDo/YtTSp/1uRQdxtWc1cwE+kEDm50wzFVgb8
+         1g/I9FQ4tLMiVd18bJJUPDmtw746BwRFjAmadKHCKMlipGMRpj8Frsk/szX4blXouhDR
+         fqww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uJfeiXwSNE7V54odsox7T56XEijaYm//sfiuHeo1Y7M=;
-        b=XuvTIzHDoXZr8kMs4ldz5aXGtc0fhvznSF47jSuJ/lkUYIVss8dXPH3zSHtifA1fOY
-         VxTRXdmF1R5QpLgYjaePYuVs1oiZDGTlM7T05ixuwM53QF4tIfTBWIY7VnCPrFjxEJha
-         f3Z4av56GqJmb3E+bLOQR6p50U62J9gDGn5gTxiQ4G398YANCu84MtrFgIe9KePa2cWD
-         R09inkGqTfPUl+UX5tJiJZD/ENi+3bB2zBH0ZbeYKvtibN6OHX+Ud1I8nn8kdwg5+ycK
-         aTPZSw4R2CuCec9jYAPfGD0DFAm83W1TVoHRQWOoWhyK8N61L3s33BF0dF3+fUT1xhL7
-         7QrQ==
-X-Gm-Message-State: AOAM530/6+ksEQvvzw9EdFJneJjMSb77PkeuiZFIsTWV7XAzJugWNypE
-	+UiK+15c69MSZTjozGFqJ8NeEx1of3o=
-X-Google-Smtp-Source: ABdhPJxKoZnD95HD/bwhSuFyvlVp4IzihGfV0ndOOoCaeX2IvbCxp1cGWmlAGIpp5T6rmYR6K4k7RQ==
-X-Received: by 2002:a17:903:2341:b0:15e:c7c4:2bb9 with SMTP id c1-20020a170903234100b0015ec7c42bb9mr4752211plh.108.1651698586697;
-        Wed, 04 May 2022 14:09:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xxZpPQ09APBLBJTZfiQ9M3tMr7+h1AAfLZpLAA+jiRA=;
+        b=tFequ+036XZNRSK+WKC9SEPz1RbOOHTvG40tGTFKnQ9wd6fyrWO9PJWnGapnRB7DyD
+         tv3ildAZps8opt8HZtN49c/rLRrP64yhuCliyL1Wo1vjIVRrX/JO6FUYO1vvEooWkLZV
+         nmLz8ZM90+5pOTEMqAGU7KzEAyIqAiiBsctL6eLjRBvAkQardLL92/RTNNX2sBAbJ0eM
+         zkt0gqTGEvO3YZ19Odwn9om+07EBv7uaHn5zkohL4RLb8qnrkF9flp82rp2KWQOabE5O
+         aVLFHPTr3urS5b1TuV/U56Yhs6EtSRtPU4A/BrWkQb6oA9Qyw5lH6HIJhDgAw3G9hK/T
+         DBBQ==
+X-Gm-Message-State: AOAM533/mpijYKfE3KW5GTsUZwSziV9Rux7dHnA8CA+4AGFdhcAM6quH
+	ZBYAXDtBhNkNwvD1HiZVLRXcnYJh1/Y=
+X-Google-Smtp-Source: ABdhPJw9C2iDy+L+SiVK4TOEPSK4OPz7LpBrzN7KZvKXAl/0fdC4DSjPV+0E88dxEZaW47YS4LIaMQ==
+X-Received: by 2002:a17:902:6acc:b0:149:8f60:a526 with SMTP id i12-20020a1709026acc00b001498f60a526mr23901766plt.25.1651698589514;
+        Wed, 04 May 2022 14:09:49 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id r11-20020a63204b000000b003aaf27b5ceasm14820457pgm.1.2022.05.04.14.09.45
+        by smtp.gmail.com with ESMTPSA id r11-20020a63204b000000b003aaf27b5ceasm14820457pgm.1.2022.05.04.14.09.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 14:09:46 -0700 (PDT)
+        Wed, 04 May 2022 14:09:49 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: William Zhang <william.zhang@broadcom.com>,
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Florian Fainelli <f.fainelli@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 1/6] Broadcom defconfig changes for 5.19
-Date: Wed,  4 May 2022 14:09:37 -0700
-Message-Id: <20220504210942.1838248-1-f.fainelli@gmail.com>
+Subject: [GIT PULL 3/6] Broadcom devicetree-arm64 changes for 5.19
+Date: Wed,  4 May 2022 14:09:39 -0700
+Message-Id: <20220504210942.1838248-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220504210942.1838248-1-f.fainelli@gmail.com>
+References: <20220504210942.1838248-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -72,22 +74,24 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/defconfig
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/devicetree-arm64
 
-for you to fetch changes up to 1f61e9aa2e6f97c26d84c66628c2c85bb5e5a56a:
+for you to fetch changes up to ad2c6e3cdd6121bdabf0726355dbe04b987c92e0:
 
-  ARM: multi_v7_defconfig: enable CONFIG_ARCH_BCMBCA in armv7 defconfig (2022-04-22 14:20:24 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoC changes to the
-multi_v7_defconfig file, please pull the following:
-
-- William enables the Broadcom BCA SoC Kconfig option to get build
-  coverage for this newly added SoC
+  arm64: dts: broadcom: align SPI NOR node name with dtschema (2022-04-07 11:57:07 -0700)
 
 ----------------------------------------------------------------
-William Zhang (1):
-      ARM: multi_v7_defconfig: enable CONFIG_ARCH_BCMBCA in armv7 defconfig
+This pull request contains Broadcom ARM64-based SoCs changes for 5.19,
+please pull the following:
 
- arch/arm/configs/multi_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+- Krzysztof fixes the SPI NOR Device Tree node name to comply with the
+  dtschema
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      arm64: dts: broadcom: align SPI NOR node name with dtschema
+
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts  | 2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts  | 2 +-
+ arch/arm64/boot/dts/broadcom/stingray/bcm958742k.dts | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
