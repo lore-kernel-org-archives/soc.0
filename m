@@ -1,100 +1,127 @@
-Return-Path: <SRS0=CL8n=VL=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=P4of=VM=microchip.com=Horatiu.Vultur@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE8EFC433EF
-	for <soc@archiver.kernel.org>; Tue,  3 May 2022 22:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B62C433F5
+	for <soc@archiver.kernel.org>; Wed,  4 May 2022 10:13:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AD308C385A9; Tue,  3 May 2022 22:02:15 +0000 (UTC)
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id D8849C385AE; Wed,  4 May 2022 10:13:27 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 026A0C385AE;
-	Tue,  3 May 2022 22:02:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 026A0C385AE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id v11so6347205pff.6;
-        Tue, 03 May 2022 15:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BML3fCwKAkemWPuJ7hEIxFoVzk3CNeF2ywdelTSnmIQ=;
-        b=owiQWKJ4ZQJAcwCHFiQaYjtX3YmVXpcq8zcYGfq/c9VRE6z6kbjmjaRH1GrbY3bjrq
-         m/dKA+gBL/bv5dD9qStTUM1WA6v3jrmw9ghlDfVH7F0L9aZ05LSHkJkuBDxtL7nTITSE
-         t1xYE14wP20tl3mvkN7YTu5TdPyyPYvgPWEg1icBb/BeYxWjdD4KzNcSCeC0YRAam2EM
-         AZ1IQJoMrXOVmYDPutlC/o/3kQbYTEmpXY5lq1Cyt3X9b0OKlagbWAjVp0GO+vlqEnWF
-         SnGjLXHe46VAqMbWCyDdHS082T8hCuIX1Oip0+RLYnJHxB4wUAajIR07X2DAgx+wB+6K
-         /40Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BML3fCwKAkemWPuJ7hEIxFoVzk3CNeF2ywdelTSnmIQ=;
-        b=m4MeuOCRsiV3SdVR+4a1g/b+P3T1yLfyQbK9itBR8JsSF5OlXb9N7NUdsHnVFPBqXF
-         LT0IMKnewBP/OYnNuWiWwfsKvpRx9wIaIrmWgz8MDYjcxVCnDR2zjRmOAUbwUtR+2ctm
-         fOKePzfRY69PS5Do8jNOkozDGGVEjfvoKU7j2S/YhFUh20/B84Fam5UUPIPVddn9ozAb
-         40qnLYZaSdIHRJttP/x3TWgsI4IT6Muh10mNbIuJIabOwCPD8osqWRz1BUPYNbcWDsYi
-         tm7GMX7mU0SKX+teP5aqO5ViVqTHJ8+DXw8KbpUas+dx+GxY7330/jgHpwg14hqayS2v
-         etJA==
-X-Gm-Message-State: AOAM530yRO8rzhEzKYI9Q05nsOymD8EEtB2220Njuqi4ZWY7CVtu0vZC
-	BA3xHlY4Tp4U/nVK5wpbqzjqmjZIEFI=
-X-Google-Smtp-Source: ABdhPJzP6mUzXABdoFH1ZVeSaq/TMAPgJIb1k9QSNLAFmv5nzlKhGgUDeL8CPA1fwrylMwXwwXOOJg==
-X-Received: by 2002:a63:cc53:0:b0:372:7d69:49fb with SMTP id q19-20020a63cc53000000b003727d6949fbmr15398440pgi.21.1651615334498;
-        Tue, 03 May 2022 15:02:14 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902b20500b0015e8d4eb29asm6794268plr.228.2022.05.03.15.02.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 15:02:14 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E9FF5C385A4;
+	Wed,  4 May 2022 10:13:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E9FF5C385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651659206; x=1683195206;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sM5HZKwbi/TbzfSgE0bd7h9vz8tIFdLqFavip4Djt7k=;
+  b=j70ERuNUipp6l7ToB0KbhP5yxfb1uW1+MJaVoUyjXL0GO9QaDPdl+Ili
+   +VA6Tl4nd/P36yq/cEt85lJoNG2et5X9LOCehiBJTqyC+GXC2uEelbHnS
+   haPp/WGtUs9mKtpUU0J/Go6LHeg4xzEQljvgdoka8XCopF/vNGfci98dx
+   Zu04gXvK2FflQX2WokCXWTrrOmsW0i50cllEamWzxsLeec0nkP8/jlka3
+   eSTlO7PasxkYdCSRuqN1sNHV+3tZ3fs5OLB3A82dos91YkGyRYB5qpN0O
+   Li4oeAC79WSQn54QUpt7XCjctq27qrbLiCL+4e1/cjGmtVoPJk76tqAPL
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="162277051"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 May 2022 03:13:25 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 4 May 2022 03:13:24 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 4 May 2022 03:13:24 -0700
+Date: Wed, 4 May 2022 12:16:54 +0200
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+To: Michael Walle <michael@walle.cc>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <zajec5@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for WZR-1166DHP,DHP2
-Date: Tue,  3 May 2022 15:02:12 -0700
-Message-Id: <20220503220212.1676263-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
-References: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
+CC: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>, Nicolas Ferre
+	<nicolas.ferre@microchip.com>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson
+	<olof@lixom.net>, <soc@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@canonical.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>, <Tudor.Ambarus@microchip.com>
+Subject: Re: [PATCH v4 00/13] ARM: dts: lan966x: dtsi improvements and
+ KSwitch D10 support
+Message-ID: <20220504101654.cuui4kaxrjiw67ky@soft-dev3-1.localhost>
+References: <20220502224127.2604333-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220502224127.2604333-1-michael@walle.cc>
 
-On Fri, 22 Apr 2022 00:10:54 +0900, SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com> wrote:
->   Buffalo WZR-1166DHP/WZR-1166DHP2  wireless router with
+The 05/03/2022 00:41, Michael Walle wrote:
 > 
->     - BCM4708A0
->     - 128MiB NAND flash
->     - 2T2R 11ac/a/b/g/n Wi-Fi
->     - 4x 10/100/1000M ethernet switch
->     - 1x USB 3.0 port
+> Add missing nodes for the flexcom blocks and a node for the SGPIO
+> block. Then add basic support for the Kontron KSwitch D10.
 > 
->   WZR-1166DHP and WZR-1166DHP2 have different memory capacity.
-> 
->   WZR-1166DHP
->     - 512 MiB DDR2 SDRAM
-> 
->   WZR-1166DHP2
->     - 256 MiB DDR2 SDRAM
-> 
->   These hardware components are very similar to the WZR-1750DHP
->    except for the number of antennas.
-> 
-> Signed-off-by: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
-> ---
+> The first submission of this patchset was a long time ago. Since
+> then networking matured and is now working. Thus this now also
+> contains patches for all the networking related nodes and enables
+> them on the Kontron D10 switch.
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+I have tested these changes on the lan966x-pcb82891 board which seems to
+work fine.
+Tested-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+
+> 
+> changes since v3:
+>  - basic d10 switch support dropped the i2c mux and added a
+>    dedicated bus for the second SFP cage.
+>  - new patch to add the hwmon node
+>  - new patches to add the network related nodes and to enable
+>    the nodes on the d10 switch
+> 
+> changes since v2:
+>  - add second kontron board variant and moved common stuff into a
+>    new dtsi
+>  - moved the uart/i2c nodes inside of the flexcom node
+>  - moved sgpio child nodes inside of the sgpio node
+> 
+> changes since v1:
+>  - fixed indendation
+>  - keep compatible, reg first, move #address-cells and #size-cells
+>    towards the end
+> 
+> Michael Walle (13):
+>   ARM: dts: lan966x: swap dma channels for crypto node
+>   ARM: dts: lan966x: add sgpio node
+>   ARM: dts: lan966x: add missing uart DMA channel
+>   ARM: dts: lan966x: add all flexcom usart nodes
+>   ARM: dts: lan966x: add flexcom SPI nodes
+>   ARM: dts: lan966x: add flexcom I2C nodes
+>   ARM: dts: lan966x: add basic Kontron KSwitch D10 support
+>   ARM: dts: lan966x: add hwmon node
+>   ARM: dts: lan966x: add MIIM nodes
+>   ARM: dts: lan966x: add reset switch reset node
+>   ARM: dts: lan966x: add serdes node
+>   ARM: dts: lan966x: add switch node
+>   ARM: dts: kswitch-d10: enable networking
+> 
+>  arch/arm/boot/dts/Makefile                    |   4 +-
+>  ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts |  94 +++++
+>  .../lan966x-kontron-kswitch-d10-mmt-8g.dts    |  39 ++
+>  .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  | 190 ++++++++++
+>  arch/arm/boot/dts/lan966x.dtsi                | 353 +++++++++++++++++-
+>  5 files changed, 676 insertions(+), 4 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+>  create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
+>  create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+> 
+> --
+> 2.30.2
+> 
+
+-- 
+/Horatiu
