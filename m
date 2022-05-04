@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77C1CC433F5
-	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACFABC433FE
+	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:09:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5AF61C385A5; Wed,  4 May 2022 21:09:53 +0000 (UTC)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	id 9550BC385A8; Wed,  4 May 2022 21:09:54 +0000 (UTC)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B0306C385A8;
-	Wed,  4 May 2022 21:09:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B0306C385A8
+	by smtp.kernel.org (Postfix) with ESMTPS id E4BD1C385A4;
+	Wed,  4 May 2022 21:09:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4BD1C385A4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id j8so2560385pll.11;
-        Wed, 04 May 2022 14:09:52 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id i1so2566462plg.7;
+        Wed, 04 May 2022 14:09:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GdCyuXXZyky6stR3MK/zwsqkqsEvNIDdWptr2uejo7k=;
-        b=MzxI8ZfxnFw6b/uj5i7oftoiaOGFpCKI1S7EHqAkXA92hEOlneXrvb6oRBKfXaMPQc
-         9mAFJOtWpFKuFrz8ngBEXwkjPrwTGlXVH5aySweCT9dvTaZbLUrup+H6fY2fqV6iykte
-         hyHFXPl1awkjt6r+0EHJLt+PyS2DCxfp+F09RsMlaro5eESW4PZpuj3CT+f6+wtITIT+
-         LiB4lD067TiDR5+fbqlWMBlLwVGq3J/hdDJHgebe0FrNy6l8MvS9mkqBaoYOOoGZCYLz
-         hPjVdExHzsFPiQhuluReuWSsjF8KA2Qdpl6Ckxouiv1SdG1bqy+nx+N6CJIN5Dpyh3ad
-         z/6w==
+        bh=s5/eGzZENi6sM20xIiIjer1iFYSKR4VU3WNwyJnQFz8=;
+        b=ausnmCgg5d+jHfU370/1RIeyjnxk0VFYYVTcrb2Zxs1yWT6ZgUk6St4u22siE1qD5z
+         RrXCWoFF6J8wO5NWQgMuf3ZhLqCuGVZ/KVUrcMTfZNM4DdhRTxOP6GxAiLlqIZJEW4AO
+         K71qda8XBavk2tT23HzxKBryIbURMqT2GglTSTKHJoFGXoiFOOLr/EJCrIAwYVGsZa/t
+         X3pcskrU9MbSm9IB3MgbAlFgEELFu6h/Cq09x+1FkNhr34eFIQunn1PuGAn4lB+F3MVx
+         Pm0jXPXIpqnSf8R9nChGtMu+SAlLgLq2pfjnfAgZqMBc+nwCC5TVGZcLYz01JtriMU/E
+         sEzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GdCyuXXZyky6stR3MK/zwsqkqsEvNIDdWptr2uejo7k=;
-        b=1ryphOj4dxl6q0z3torfi1w7Y1klrZVBcySGqzl2XEY/qtp8xvrjQ96cpWjKBEdxGB
-         8qLWMlg+VgkuMasXl1nkIZKbnCnGldQoIyNgy7KvwMhR+vH4ijac4WHI0hlcVbQsj3Le
-         P5CknKJkEQRZqqq6hFIXJj5MfSWk7hvvAqSdyZTIJuJM2s1pmrnxgosRcbgBDdp3hVi3
-         NYQcvzs5HQrx9I4CT7mGOd9bK6NnHxRNHg48fgUYeF2DQtZxzQ+r9Fov14G0XvhZhXuD
-         nMFHKMn4j2EWNC7Ddd6kBaTIM4X8lBNnPjZf4Xc8bUzpu0eqrE82Y6wTp7p5+1oFFgsV
-         Ra5g==
-X-Gm-Message-State: AOAM533Uwb2mVzxxh6kqOXBIhb+buJqslWew37wNFX0jUKro4BuOFzuF
-	FdtDiYgIRSSSNegZvoZz2Y26PHd8F08=
-X-Google-Smtp-Source: ABdhPJzB5BBpINxJ17kM73YCcnMhE7TP61MTMc4GR7zow/nnWVSZzWDueZCEUWZyL206RC7gn4lP/g==
-X-Received: by 2002:a17:902:a988:b0:158:9877:6c2c with SMTP id bh8-20020a170902a98800b0015898776c2cmr23745909plb.80.1651698592006;
-        Wed, 04 May 2022 14:09:52 -0700 (PDT)
+        bh=s5/eGzZENi6sM20xIiIjer1iFYSKR4VU3WNwyJnQFz8=;
+        b=KmNG7QE8zyIWBy4yNS56SPOIlQdfXidw0KXUZGl/p2rK9lrvl/ZgTtHdwlB/Y9YfOC
+         YstdeOZTleroJFjhc4sp4dgeCV2rrQW+OF2kXS59AWke7SNtku5ATVtqxKfdLPhqTPXP
+         dCBtHhPB1TKr4bxzLwyz3B1qnWZW+bhsokT3zmEGgDY46COCz/+KrdJSqcovh05Ru5d9
+         a4IKACYGBSe+NEWgSf06p0nYR3q8Wo2oXRw+DA8JJ6WKWx/+yZTCsn6FjiVcbe7l3Kno
+         /k+Z53YXKrdq2TboRdIJtZcYfzztLIcuxpiyZ+3skrXCbkW5abQoXORKTM7UWF4X1xil
+         9yFw==
+X-Gm-Message-State: AOAM5309CpewEVFTsK/JxoTkTzYLJFvB0rWTznGhM0RcI7vHgfPuB5eu
+	LkLRwRReCOy4t+uVdrwSvbXPqUoLKoE=
+X-Google-Smtp-Source: ABdhPJzFCdclwOx3cGXHJsEc4CMMNgL+kXb2KXXchMv+tsXH6vfEWVqmBEJjNPitrHVk1gNtfjQuLg==
+X-Received: by 2002:a17:902:f64d:b0:14f:fb63:f1a with SMTP id m13-20020a170902f64d00b0014ffb630f1amr23952627plg.159.1651698593211;
+        Wed, 04 May 2022 14:09:53 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id r11-20020a63204b000000b003aaf27b5ceasm14820457pgm.1.2022.05.04.14.09.50
+        by smtp.gmail.com with ESMTPSA id r11-20020a63204b000000b003aaf27b5ceasm14820457pgm.1.2022.05.04.14.09.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 14:09:51 -0700 (PDT)
+        Wed, 04 May 2022 14:09:52 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: William Zhang <william.zhang@broadcom.com>,
 	Florian Fainelli <f.fainelli@gmail.com>,
-	Joe Perches <joe@perches.com>,
-	Stefan Wahren <stefan.wahren@i2se.com>,
+	Julia Lawall <Julia.Lawall@inria.fr>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 5/6] Broadcom maintainers changes for 5.19
-Date: Wed,  4 May 2022 14:09:41 -0700
-Message-Id: <20220504210942.1838248-5-f.fainelli@gmail.com>
+Subject: [GIT PULL 6/6] Broadcom soc changes for 5.19
+Date: Wed,  4 May 2022 14:09:42 -0700
+Message-Id: <20220504210942.1838248-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220504210942.1838248-1-f.fainelli@gmail.com>
 References: <20220504210942.1838248-1-f.fainelli@gmail.com>
@@ -76,33 +75,31 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/maintainers
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/soc
 
-for you to fetch changes up to c270a59bc4d7537c3e6bab080c65e669e459fc53:
+for you to fetch changes up to b32c613b3fda3e1c26119609f1ad6b19178f82f5:
 
-  MAINTAINERS: Add Broadcom BCMBCA entry (2022-04-22 14:19:51 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom updates to the MAINTAINERS file for
-5.19, please pull the following:
-
-- Stefan adds the raspberrypi keyword to the BCM2835 section to avoid
-  missing patches
-
-- Joe updates the various entries where the Broadcom internal mailing
-  list is mentioned to make it a reviewer entry
-
-- William updates the MAINTAINERS file to include the BCMBCA SoC entry
+  arm: bcmbca: add arch bcmbca machine entry (2022-04-22 14:18:10 -0700)
 
 ----------------------------------------------------------------
-Joe Perches (1):
-      MAINTAINERS: Broadcom internal lists aren't maintainers
+This pull request contains Broadcom ARM-based SoC changes for 5.19,
+please pull the following:
 
-Stefan Wahren (1):
-      MAINTAINERS: add raspberrypi to BCM2835 architecture
+- Julia fixes a couple of typographic errors in the Brahma-B15 read
+  ahead cache driver and in the ARCH_BRCMSTB bare metal SMP bring-up code
+
+- William adds a Kconfig entry for ARCH_BCMBCA which will be used to
+  upstream support for Broadcom's broadband SoCs
+
+----------------------------------------------------------------
+Julia Lawall (2):
+      ARM: mm: fix typos in comments
+      ARM: brcmstb: fix typos in comments
 
 William Zhang (1):
-      MAINTAINERS: Add Broadcom BCMBCA entry
+      arm: bcmbca: add arch bcmbca machine entry
 
- MAINTAINERS | 79 ++++++++++++++++++++++++++++++++++++-------------------------
- 1 file changed, 47 insertions(+), 32 deletions(-)
+ arch/arm/mach-bcm/Kconfig           | 12 ++++++++++++
+ arch/arm/mach-bcm/platsmp-brcmstb.c |  2 +-
+ arch/arm/mm/cache-b15-rac.c         |  2 +-
+ 3 files changed, 14 insertions(+), 2 deletions(-)
