@@ -4,78 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B107AC433FE
-	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3970DC4332F
+	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:09:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9AFDCC385B0; Wed,  4 May 2022 21:09:51 +0000 (UTC)
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	id 2353BC385A4; Wed,  4 May 2022 21:09:52 +0000 (UTC)
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2785BC385A5;
-	Wed,  4 May 2022 21:09:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2785BC385A5
+	by smtp.kernel.org (Postfix) with ESMTPS id 79C89C385A8;
+	Wed,  4 May 2022 21:09:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 79C89C385A8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id j14so2578020plx.3;
-        Wed, 04 May 2022 14:09:49 -0700 (PDT)
+Received: by mail-pg1-f181.google.com with SMTP id i62so2117478pgd.6;
+        Wed, 04 May 2022 14:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KFw9/SbRY/cqsVY8A1C4C8gLKOhVo0hppANUmMoC4rk=;
-        b=SSKFDTlbiKI7+yJU4TOQWoPkcXlQuN5DXIWcxqjmRLlhN7scHTjm/IG4a5pB8Nnae/
-         5W3YZFmA1FMxpscNo4UYC+ZV3CXYTaX+qNsNSGlDl/KmwuQ5I4qaH2IPnjm+z1HQtG43
-         GmBpmfr0y8nIyxvs8O42nvjZrFEbZ3ziFbxRBPgP9NOjzKvs0zN+eMIC5y//7xEk9gm0
-         la6AE9+nOXMljOgohoOZnVIJSuDeKBHHtRO/xK9hhXa+UN/YKfGiKPrYke03okSexfzA
-         o+FhJuQJqDtAfyFh9/bWHtlAkil9rFRuCvtfRO6VP3QgZC1aXlhFEZQz57lnsn+XCPcW
-         nhQw==
+        bh=f6ZR+kOWRNJna1kAg2RCMnVUOe3Ij7sjBioKLojXogM=;
+        b=mnZ0aDzA8i5WoJmtnNA3gMM6AYyi1AAu2PirHu9Gmo9K893iP5aPH+w9ioWUOdN+zJ
+         WEz9P2atxgg0jQcow665ukcsEc3mbf5QdN+wyU38kUjM319X1NJsHGw5CNg4CpBsI4/7
+         BRHq0XB+XWUjjXsE16XpNoaY78IWfSpaQUZz2/9HsNxiYtrylZR0C6n2lk1bg6VR0iV/
+         dE9Tkw37a7jD8fDKWIgyHdii8JyQn+goubHu05VJ79pjHwQUKJQ1GGx6kPIZqgLn0moN
+         XSb0KMPG4QoCXvn9bcMRgXIN/wb+hbqmHflwKykeiedyIsTD1uRs2m4TVBOvVPjrxHpH
+         eo0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KFw9/SbRY/cqsVY8A1C4C8gLKOhVo0hppANUmMoC4rk=;
-        b=1o64lbTnsB3/O1QIYK8VVzuGmPt9WMr06Bd7xkb6tbIHPNumUPlpq2Wl9gHDzC1Gh8
-         xrK3nAr+3WAwtZECbFluNUeXA4yO7B/K8VyQI08ZhYgc3QOzY2F739kumG2qRF8zYxY+
-         idnFD5/7u9Fef5AcrTyGsUFFC6BwotpmtlZRdNww3XmGK8ZsGtFgzInvr7VLrk5mCJfY
-         c8FFI8be2cJN94mvEqVCrsRAFh42ptpMVsXHx1D64J/gwcMQu/jClfHtqcoYg0aeFUXR
-         ZA6sZ2/M5pHL4w0T6PTWbzr+9m8jAOUmEShQIYYLgxgpahN98KohzqZnJeZbcP7gJfL3
-         t59g==
-X-Gm-Message-State: AOAM533+fwub1xhR9I6s8q7UT6FI19xOMUFy/SS9Itcln6c167QcGveG
-	enXl+sMYwSC0Eody+Ym7CmOF/8SrJKY=
-X-Google-Smtp-Source: ABdhPJyJ43ffI1UgdPkMhSakrSZXDqWuhPA6GO8gDpdLSKVNvGKb2qceSSy6arhGnZ+oJoT3JKS+Tw==
-X-Received: by 2002:a17:902:a581:b0:154:8c7d:736a with SMTP id az1-20020a170902a58100b001548c7d736amr23758271plb.74.1651698588351;
-        Wed, 04 May 2022 14:09:48 -0700 (PDT)
+        bh=f6ZR+kOWRNJna1kAg2RCMnVUOe3Ij7sjBioKLojXogM=;
+        b=7EKOcPF13Q7yIMUXN1MeNK5ufa6x6u+eqPT7stz9eBiICB1+KLHKSeMvK3vh9JyPs2
+         AQivL5EomUPw/JQYoytnnaKXxuAXGrNmG1iofuEzJXoTFz5jT1rSHefxYBvYzQOSxnrx
+         ntGoyYRCEGfgEPo8MTWLC+h28e/g2LSPuXdtr/UuPZ/RRhswuYxnJ4kdSeFEEnclA5PT
+         lNNguuy8xI6wSd4MKhkYI5TNjiN6kDY031IOE2VuB0NB4SQnZIU/QGHc/RXLDyBs+IWV
+         IgQHQAyBO+0YbLVuzMBY6IcpJbsHu9aRG0WPhIhi7VnKVeWq6KmcuiKOiiAQ8/BuAZjf
+         zdxQ==
+X-Gm-Message-State: AOAM533u3J9iF0N70jiBgRyQcbqgeF8RKCR84PPnzc3ocNX6K79JTzNl
+	GJA8GY5teCcdYE1VVucaKeS8lZ/4nfY=
+X-Google-Smtp-Source: ABdhPJzSl3jzpd2lwTe2jW2iSmk9vVfOmHo09yGmOSvdaz+pB3Kq1GooDRR6eAvZTEC+rsIMdf/FBA==
+X-Received: by 2002:a65:4186:0:b0:39d:6f6d:2fdf with SMTP id a6-20020a654186000000b0039d6f6d2fdfmr19556974pgq.248.1651698590732;
+        Wed, 04 May 2022 14:09:50 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id r11-20020a63204b000000b003aaf27b5ceasm14820457pgm.1.2022.05.04.14.09.46
+        by smtp.gmail.com with ESMTPSA id r11-20020a63204b000000b003aaf27b5ceasm14820457pgm.1.2022.05.04.14.09.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 14:09:48 -0700 (PDT)
+        Wed, 04 May 2022 14:09:50 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>,
+Cc: lizhe <sensor1010@163.com>,
 	Florian Fainelli <f.fainelli@gmail.com>,
-	William Zhang <william.zhang@broadcom.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Stefan Wahren <stefan.wahren@i2se.com>,
-	=?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-	Oleksij Rempel <linux@rempel-privat.de>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
+	QintaoShen <unSimple1993@163.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 2/6] Broadcom devicetree changes for 5.19
-Date: Wed,  4 May 2022 14:09:38 -0700
-Message-Id: <20220504210942.1838248-2-f.fainelli@gmail.com>
+Subject: [GIT PULL 4/6] Broadcom drivers changes for 5.19
+Date: Wed,  4 May 2022 14:09:40 -0700
+Message-Id: <20220504210942.1838248-4-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220504210942.1838248-1-f.fainelli@gmail.com>
 References: <20220504210942.1838248-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
@@ -84,129 +75,29 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/devicetree
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/drivers
 
-for you to fetch changes up to 417aea4436bb658d8c5c4dcd0e3c255931d0ee96:
+for you to fetch changes up to 9235d5118fa4e31f4d71c45d788b6f08d18ab6e0:
 
-  ARM: dts: BCM5301X: Add DT for WZR-1166DHP,DHP2 (2022-05-03 15:02:11 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM-based SoCs Device Tree changes
-for 5.19, please pull the following:
-
-- Oleksij fixes the ethernet node name for the USB Ethernet adapter on
-  BCM283x (Raspberry Pi 1/2/3) platforms
-
-- Kuldeep fixes the PL022 SPI controller clock names to conform to the
-  binding
-
-- Rafal updates the various BCM5301X (Northstar) Device Tree include
-  files to be dtsschema conforming for pinctrl, NAND
-
-- Arinc adds the Asus RT-AC88U binding, removes some unnecessary
-  properties of the Ethernet switch DT node, populates the correct PHY
-  interface for port 5 of the switch, adds support for fetching the MAC
-  address from the NVMEM provider and finally disables gmac0 on that
-  device which is unused
-
-- Phil updates the Raspberry Pi 1/2/3 DTS files to have the latest gpio
-  line names conforming to the printed circuit board layout
-
-- Krzysztof updates various Broadcom DTS files to have a conforming SPI
-  nor Device Tree node
-
-- Takayoshi adds support for the Buffalo WZR-1166DHP/WZR-1166DHP2
-  wireless routers based on the BCM4708 SoC
-
-- William adds support for the BCM47622 ARMv7 Broadband SoC and provides
-  a basic DTS to boot upstream Linux on such a system
+  bus: brcmstb_gisb: Remove the suppress_bind_attrs attribute of the driver (2022-04-26 09:12:45 -0700)
 
 ----------------------------------------------------------------
-Arınç ÜNAL (9):
-      ARM: dts: BCM5301X: Fix DTC warning for NAND node
-      ARM: dts: BCM5301X: Remove cell properties from srab ports on Asus RT-AC88U
-      ARM: dts: BCM5301X: Add rgmii to port@5 of Broadcom switch on Asus RT-AC88U
-      ARM: dts: BCM5301X: Retrieve gmac1 MAC address from NVRAM on Asus RT-AC88U
-      dt-bindings: arm: bcm: fix BCM53012 and BCM53016 SoC strings
-      dt-bindings: arm: bcm: create new description for BCM53016
-      ARM: dts: BCM5301X: Fix compatible strings for BCM53012 and BCM53016 SoC
-      dt-bindings: arm: bcm: add bindings for Asus RT-AC88U
-      ARM: dts: BCM5301X: Disable gmac0 and enable port@8 on Asus RT-AC88U
+This pull request contains Broadcom ARM/ARM64 SoCs drivers changes for
+5.19, please pull the following:
 
-Krzysztof Kozlowski (1):
-      ARM: dts: broadcom: align SPI NOR node name with dtschema
+- Qintao adds a missing NULL check to the Broadcom PMB driver after a
+  memory allocation
 
-Kuldeep Singh (1):
-      ARM: dts: bcm-cygnus: Update spi clock properties
+- Li removes the redundant suppress_bind_attrs from the brcmstb_gisb
+  driver which only has a probe and no remove function
 
-Oleksij Rempel (1):
-      ARM: dts: bcm283x: fix ethernet node name
+----------------------------------------------------------------
+QintaoShen (1):
+      soc: bcm: Check for NULL return of devm_kzalloc()
 
-Phil Elwell (4):
-      ARM: dts: bcm2835-rpi-zero-w: Fix GPIO line name for Wifi/BT
-      ARM: dts: bcm2837-rpi-cm3-io3: Fix GPIO line names for SMPS I2C
-      ARM: dts: bcm2837-rpi-3-b-plus: Fix GPIO line name of power LED
-      ARM: dts: bcm283x: Align ETH_CLK GPIO line name
+lizhe (1):
+      bus: brcmstb_gisb: Remove the suppress_bind_attrs attribute of the driver
 
-Rafał Miłecki (1):
-      ARM: dts: BCM5301X: Update pin controller node name
-
-SHIMAMOTO Takayoshi (1):
-      ARM: dts: BCM5301X: Add DT for WZR-1166DHP,DHP2
-
-Stefan Wahren (2):
-      ARM: dts: bcm2835-rpi-b: Fix GPIO line names
-      ARM: dts: bcm283x: Remove gpio line name NC
-
-William Zhang (2):
-      dt-bindings: arm: add bcmbca device tree binding document
-      ARM: dts: add dts files for bcmbca soc 47622
-
- .../devicetree/bindings/arm/bcm/brcm,bcm4708.yaml  |  10 +-
- .../devicetree/bindings/arm/bcm/brcm,bcmbca.yaml   |  33 ++++
- arch/arm/boot/dts/Makefile                         |   4 +
- arch/arm/boot/dts/bcm-cygnus.dtsi                  |  12 +-
- arch/arm/boot/dts/bcm2835-rpi-a-plus.dts           |  21 ++-
- arch/arm/boot/dts/bcm2835-rpi-a.dts                |  35 ++--
- arch/arm/boot/dts/bcm2835-rpi-b-plus.dts           |  19 +-
- arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts           |  35 ++--
- arch/arm/boot/dts/bcm2835-rpi-b.dts                |  48 +++---
- arch/arm/boot/dts/bcm2835-rpi-cm1-io1.dts          |   1 -
- arch/arm/boot/dts/bcm2835-rpi-zero-w.dts           |  25 +--
- arch/arm/boot/dts/bcm2835-rpi-zero.dts             |  29 ++--
- arch/arm/boot/dts/bcm2836-rpi-2-b.dts              |   3 +-
- arch/arm/boot/dts/bcm2837-rpi-3-a-plus.dts         |   1 -
- arch/arm/boot/dts/bcm2837-rpi-3-b-plus.dts         |   5 +-
- arch/arm/boot/dts/bcm2837-rpi-3-b.dts              |   3 +-
- arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts          |   5 +-
- arch/arm/boot/dts/bcm2837-rpi-cm3.dtsi             |  12 +-
- arch/arm/boot/dts/bcm283x-rpi-smsc9512.dtsi        |   2 +-
- arch/arm/boot/dts/bcm283x-rpi-smsc9514.dtsi        |   2 +-
- .../dts/bcm4708-buffalo-wzr-1166dhp-common.dtsi    | 192 +++++++++++++++++++++
- arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dts  |  26 +++
- arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts |  26 +++
- arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts       |  19 +-
- arch/arm/boot/dts/bcm47622.dtsi                    | 126 ++++++++++++++
- arch/arm/boot/dts/bcm53016-meraki-mr32.dts         |   2 +-
- arch/arm/boot/dts/bcm5301x-nand-cs0.dtsi           |   2 -
- arch/arm/boot/dts/bcm5301x.dtsi                    |   2 +-
- arch/arm/boot/dts/bcm53340-ubnt-unifi-switch8.dts  |   2 +-
- arch/arm/boot/dts/bcm947622.dts                    |  30 ++++
- arch/arm/boot/dts/bcm953012er.dts                  |   2 +-
- arch/arm/boot/dts/bcm953012hr.dts                  |   2 +-
- arch/arm/boot/dts/bcm953012k.dts                   |   2 +-
- arch/arm/boot/dts/bcm958522er.dts                  |   2 +-
- arch/arm/boot/dts/bcm958525er.dts                  |   2 +-
- arch/arm/boot/dts/bcm958525xmc.dts                 |   2 +-
- arch/arm/boot/dts/bcm958622hr.dts                  |   2 +-
- arch/arm/boot/dts/bcm958623hr.dts                  |   2 +-
- arch/arm/boot/dts/bcm958625hr.dts                  |   2 +-
- arch/arm/boot/dts/bcm958625k.dts                   |   2 +-
- arch/arm/boot/dts/bcm988312hr.dts                  |   2 +-
- 41 files changed, 596 insertions(+), 158 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
- create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp-common.dtsi
- create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp.dts
- create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
- create mode 100644 arch/arm/boot/dts/bcm47622.dtsi
- create mode 100644 arch/arm/boot/dts/bcm947622.dts
+ drivers/bus/brcmstb_gisb.c        | 1 -
+ drivers/soc/bcm/bcm63xx/bcm-pmb.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
