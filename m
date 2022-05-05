@@ -1,923 +1,261 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=ZU2P=VN=toradex.com=marcel.ziswiler@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C8F8C433EF
-	for <soc@archiver.kernel.org>; Thu,  5 May 2022 05:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F300C433EF
+	for <soc@archiver.kernel.org>; Thu,  5 May 2022 08:56:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 056F8C385A4; Thu,  5 May 2022 05:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1718C385AC;
-	Thu,  5 May 2022 05:15:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1651727773;
-	bh=+REWJ5uZwCOtN/zf1oXHEH/M94Tgf348bqJRXlEfo3w=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=bRZWN76uyntRPCDeiUFoADuthw2FpF2GWNr2m+9QS2u4VZnmWNAJ35ucmxG9rzXro
-	 zXMrFRuOSLAswu9rJ6JaC2CZhoB00eKTX2L43ehDy25TbX+/dddvDytBdLH1I0KScW
-	 /YXe1umy7imd3qbMkv1ESUhuL23ppqfBcSH62izFhwCeeVCg5ukrl27vzxOKnl4mPl
-	 FsJlVpGb31VBfatX6bQcLavcXSf/P4GQ3IeqmMbdHX9fB/IP+3JBt8S4ha3b3CB7BW
-	 g24fqcX/KnR7xcCotenh2Yyet9pr7zpEPW28gebBM6zbmsQ+LzYc2Vk7Y/4MwY4nxn
-	 QzdCS3IxN4AXQ==
-Date: Thu, 5 May 2022 13:14:45 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Philip Oberfichtner <pro@denx.de>
+	id 393B1C385A8; Thu,  5 May 2022 08:56:20 +0000 (UTC)
+Received: from de-smtp-delivery-213.mimecast.com (de-smtp-delivery-213.mimecast.com [194.104.109.213])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 44628C385B0
+	for <soc@kernel.org>; Thu,  5 May 2022 08:56:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44628C385B0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=toradex.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=toradex.com
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2106.outbound.protection.outlook.com [104.47.22.106]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-5-SnRjOy6qM8qR1mhJ_KteDw-1; Thu, 05 May 2022 10:56:11 +0200
+X-MC-Unique: SnRjOy6qM8qR1mhJ_KteDw-1
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ ZR0P278MB0235.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:35::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.13; Thu, 5 May 2022 08:56:09 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::c52f:2a3f:8cf5:6144]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::c52f:2a3f:8cf5:6144%4]) with mapi id 15.20.5206.027; Thu, 5 May 2022
+ 08:56:09 +0000
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To: "shawnguo@kernel.org" <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, matthias.winker@de.bosch.com
-Subject: Re: [PATCH v3 4/4] ARM: dts: Add bosch acc board
-Message-ID: <20220505051445.GW14615@dragon>
-References: <20220427135229.2339865-1-pro@denx.de>
- <20220427135229.2339865-4-pro@denx.de>
+CC: "linux-imx@nxp.com" <linux-imx@nxp.com>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "soc@kernel.org" <soc@kernel.org>,
+	"frowand.list@gmail.com" <frowand.list@gmail.com>, "l.stach@pengutronix.de"
+	<l.stach@pengutronix.de>, Denys Drozdov <denys.drozdov@toradex.com>,
+	"alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+	"olof@lixom.net" <olof@lixom.net>, "matthias.schiffer@tq-group.com"
+	<matthias.schiffer@tq-group.com>, "marex@denx.de" <marex@denx.de>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>, "tharvey@gateworks.com"
+	<tharvey@gateworks.com>, "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>, "kernel@pengutronix.de"
+	<kernel@pengutronix.de>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "festevam@gmail.com" <festevam@gmail.com>,
+	Max Krummenacher <max.krummenacher@toradex.com>
+Subject: Re: [PATCH v2 00/14] ARM: dts: imx6ull-colibri: device tree
+ improvements
+Thread-Topic: [PATCH v2 00/14] ARM: dts: imx6ull-colibri: device tree
+ improvements
+Thread-Index: AQHYWMDrkguBdVFYI0mLpdSkg5mHma0Po20AgABm/oA=
+Date: Thu, 5 May 2022 08:56:09 +0000
+Message-ID: <5fa5fa975a4db152e2f3a92d6ea6dd4c3536eba6.camel@toradex.com>
+References: <20220425162356.176665-1-marcel@ziswiler.com>
+	 <20220505024732.GO14615@dragon>
+In-Reply-To: <20220505024732.GO14615@dragon>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 69c63afd-c616-4da1-b5ab-08da2e751967
+x-ms-traffictypediagnostic: ZR0P278MB0235:EE_
+x-microsoft-antispam-prvs: <ZR0P278MB0235C7650E3FBE17B07518E1FBC29@ZR0P278MB0235.CHEP278.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: ftlFLIBnL2mPqk+z0XL8rpmLZFtsb2JcHkcLfbC1ZBFDj6thZhfrXtrZM4eifDT/YzebcZ+K0VJlxLPVusGEeCSGyVpNu0RbL7X1vtl9+jsaVClIohYpPotnHAyuZtM9PcaZ9qxykwMKBULA5QEMBrQ+tXW5ZG6tzaI08Xe9NgJs2q/R2QQB0Y2b/m7yGzekMbnzZ/JIb+TnR14Pejov0xtNiTElUrtfPxnYEjC61uTuIsb3dbJgpeBtl/sQxKztl5vLw6OICmsIKoEv3V3rdoyfqYcxdPsgp3fknbBhGKtuKszC4uUb1FoE8KXhMbxfqC9yXBMO9d8Mq9GsxoIABJPxuPqMhSRw4T77HQl58o5TKuAIQ3qwKGxbo5t3uVVsF/zAAKIWtx4DGJd3i7WDJ8lzJ3Ru9M4C/HVxr/gck7cz8D463/1+F4wcLrReUTGzYCMmct/oU6IXEjQdmuYbikjNlMRaHG10NKDIo7q/LTpSzA0fflt9dbDAKhKMz3cAgz2SCQOxOVOlXLihPPl7eVXERc7NzbnYqWjCEtcZYOU7bqsxgRTPhrfFxmSXAMxSQieQBMZhC1AmKxrictDrQ5+mfcj4AdMTc2T+DFPHBtUOk9pfJ2/O2ilTxUv8d7WexJ1zVPf/orA+NzF4/vla+Q3Was3d4RiRcqp1Geo9SqtE8EwoglY1c/iXPIahqBTUZEc3myphi7XqUhUOo9RfcdHDZE58BDbMD27zuElVys0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(346002)(136003)(376002)(396003)(39850400004)(366004)(508600001)(83380400001)(36756003)(2906002)(26005)(6512007)(6506007)(76116006)(316002)(122000001)(86362001)(8936002)(5660300002)(38070700005)(38100700002)(6916009)(44832011)(71200400001)(54906003)(186003)(4326008)(8676002)(2616005)(107886003)(66476007)(64756008)(6486002)(7416002)(66946007)(66556008)(66446008)(32563001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OTc4YWFWVmp1STdPeTBueURNYWRYYVNnQlZwSnBMeC9BT0hpSTkzRDA2Y3NF?=
+ =?utf-8?B?aVBzQ0tYaWk3UVBldGl1REp4VEI3cTRUekRWZ3hidUVSbHdtZlovVnVEcTFq?=
+ =?utf-8?B?R1k4NnhGaFBldENITE1uK3BGRnZRR1hranRWMGxQVEZ3MlFjNG5wSm5Ec3ky?=
+ =?utf-8?B?S01xOS8vR05HVlBDTGwzZkxVdGhyRzBnc25iTHhmM0x5SjU2MjFaYjVGeFVy?=
+ =?utf-8?B?RWNpRWpaQkJxUW9ucm1GUVkxTzFiVkxUV0FwYWtMTTdRZW93cDFpRDUrVnJN?=
+ =?utf-8?B?WnRYZFMzcmZKRWJjbXhJSmVRQlJNRXdXTHNWN1Nud2tlaVhmNWk1ZXBZK1FV?=
+ =?utf-8?B?dUZNM202TG5RUUt2ZU00b1dVczdvTW4xM3dRaGlKTTNtVUdYU3BxU25VTFRa?=
+ =?utf-8?B?K2ErRXhRVE1QRngweXVPYnJuZTBscGY2NStjdGFzemxrMGxSOVRFeHRvWjhv?=
+ =?utf-8?B?aW8xenMvUWg4UG9QNkRCb1R6TUlrNGJYYjYyVVc0UDdEbHVDR3YvV293dks5?=
+ =?utf-8?B?MTBhS2FPcWE5UTM2T2t3T0M1N0FKMjJnRDBRQklMZnVLT0lHTEFKbUtxTTJa?=
+ =?utf-8?B?MkpwaFB2ZFRwdE8vUHg1WjRhakVjdDgxTUdVTXhBU1dUZjR0MmdmYWs3MDFy?=
+ =?utf-8?B?TjFkR05QVGp1Vm4xL21iRm5abVlERDcweHk5K2NmT090WFljZS9jbUVUMWpk?=
+ =?utf-8?B?L3BodmlCRHlsTmhsNHFEeEdFajNBemNNUUQ1U1dFMjRCaWdxbnVOQUlSUXhr?=
+ =?utf-8?B?SjU5b01GQ1dlbysxT1JwdjZpblhHZnI2aFI1eEgvUVYyVmV6dzR0UnJxa1Na?=
+ =?utf-8?B?RnhITXI0ZG5rcFpoZTgzNDdoREI1dFp3TkNWNDFwWVNBNVR5SGFWS0hJVkRB?=
+ =?utf-8?B?WEcvazRqYnk5SjM3S0RmcHBZaTZISWRMYTBPQk1nT2tXOWNWRkExWjBvSjZl?=
+ =?utf-8?B?Mm53TlpKS0Jkam9iVVdyRE5vYTl4am5iTXNTNmxYS2dXeG9XZmNsc3FDYStQ?=
+ =?utf-8?B?R3RJZ0pOR0NTdmZwK2cxYUgxdHlEL0lrMmZkR3lsN3Vab0phSVIzN1N4TGVD?=
+ =?utf-8?B?emt1NHlDVllGaWR2ejQycXlkdFp5TisvalZMdGljUk5SeENVc1g1QmlpSzh5?=
+ =?utf-8?B?ZDhiUC9vU3lHbGVaT213Rk56YWtEZThyVTJhRWZ3QldxRUpxOHpGRzFWR0tH?=
+ =?utf-8?B?OHFkenFRRy9WOWdsV0xCWFZvY282VXFJcXNoSTdseEo5Z1VQSFZGTnp1UWNI?=
+ =?utf-8?B?aTlwQ05hZEJ3TTRaaUY0Q05UaXRaNUJOSDZWVDJrRVA2dTlkTVJ1NGdsVFJq?=
+ =?utf-8?B?Tzlrb0lyWlJXMFg5aGhYdlgyeHRORDcxeFd5eDhMK3JGNENzTytQa2JWaFV4?=
+ =?utf-8?B?MklNN2FjVU91QndGWE9kM09KM3JhYTVPNEYxc1BGNHhWbGRxNitDRlNVTGpk?=
+ =?utf-8?B?cFBlTDhDZVB2NW1nNGptK2VWK09pcDR3aldtT1B2bjdEQ1VnU0FxUzV5MnFN?=
+ =?utf-8?B?c3hLYUhwV2hVcFB1YXI1d1doSDhPakQ3UDJPbklQK2JrNVlLWXlTcFNqOXpF?=
+ =?utf-8?B?QXpWMU1JS2U3NittcUY2eDBMTU9BSXppSlYvOTV3c2pzT0ozZzNPUDZaNzZm?=
+ =?utf-8?B?ckVOUEhsYTQ5eXRteS93RDBxNXRYdjlmc2VjM0hUS3dDSlF5b2VtUXVzWUtU?=
+ =?utf-8?B?RmhSTGhTdXRvQS81NTkyZHBzRk9IVDAwSlExakQ5YndqbGxod1RKSEJNd3NL?=
+ =?utf-8?B?MFBQRWd1Z1F6eUV2Rlg2alorQThHUFhiNDdjNzdaVmhMUEZaNkNWb1BSRzVF?=
+ =?utf-8?B?ZXJocDdVc0F5ZWVWUzNyaHcvTk9kUTgrWjY5eTNjVE1oa0ZYYVNQdXR6T09Z?=
+ =?utf-8?B?N1ZaTmtPZkJrb2M2VE12Mm9MeGRwVWVtMDJDUnVMMDBqbHdZd091QXFMWHN1?=
+ =?utf-8?B?WkU4TVQrUXBuZUFXUlhlUUlxSVlYRW5RRHdDQXpwUTJ4aklHNVVBeEFJV3RM?=
+ =?utf-8?B?cFJVcVJTcmxGbUhOYkFsOFlrOHRGSWJyZVVDQUJaMjJZNmVxOWtXeTZTMjJH?=
+ =?utf-8?B?SXJXOWN4YlhDNWs3ZmwvZERiRUpISzIzMEdjTXIyT1pScjhzemVURXRZRjZY?=
+ =?utf-8?B?TXpvMkFFM3JwSDBkaWNyVFcwRkhzYjdCM1IwTFBaR3pNLzdTc2o3Rko3NllR?=
+ =?utf-8?B?RDU4Q2tva2dOU0JwcjNWa2NyMXViRTMwZmJPVGJJUDFwbHVuRmJjcXJ2R2li?=
+ =?utf-8?B?VlZ6NTVrREN1b1ErWVp0SGtWUi9RTlRlNGVKeHFjNDViTFNYOE9DUmU4QW5v?=
+ =?utf-8?B?K2NEcUlDK2FLYkUrLzhqUzBtSTd6QWpINnZzK2Z2Z01wa0lhNVB1Q0VXU3Nw?=
+ =?utf-8?Q?4f3inlfSMYF/r12EbI7/AeG2+w96BXrO4FkjS?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427135229.2339865-4-pro@denx.de>
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69c63afd-c616-4da1-b5ab-08da2e751967
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2022 08:56:09.8468
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AbUryZvRoyVi2uTHlk1cdceRVPegbOczpEdmq/zIw4hbW0coYtUjfz3Rv1sjxGXuV4O+di00VQpcNQeSIx/A/Axa1T6QxdiLo1SYFCJypK0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0235
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CDE13A77 smtp.mailfrom=marcel.ziswiler@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <78A87E3DE32C4844B167DE87D51AFCAD@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 
-On Wed, Apr 27, 2022 at 03:52:33PM +0200, Philip Oberfichtner wrote:
-> Add device tree for the Bosch ACC board, based on i.MX6 Dual.
-> 
-> Signed-off-by: Philip Oberfichtner <pro@denx.de>
-> 
-> ---
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Olof Johansson <olof@lixom.net>
-> Cc: soc@kernel.org
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: matthias.winker@de.bosch.com
-> 
-> ---
-> 
-> Changes in v3:
-> - use panel compatible string instead of display-timings
-> - adapt node naming for regulators and led
-> - remove unreferenced pinctrl configs
-> - remove unused audmux node
-> - remove or adapt invalid or superfluous properties
-> - use real pad settings instead of 0x80000000
-> - fix other minor style issues
-> 
-> Changes in v2:
-> - fix style errors in node naming
-> - place regulators under root node
-> - remove superfluous status properties
-> - remove undocumented nodes and properties
-> - use color instead of label for leds
-> - fix other minor style issues
-> ---
->  arch/arm/boot/dts/Makefile            |   1 +
->  arch/arm/boot/dts/imx6q-bosch-acc.dts | 783 ++++++++++++++++++++++++++
->  2 files changed, 784 insertions(+)
->  create mode 100644 arch/arm/boot/dts/imx6q-bosch-acc.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 7c16f8a2b738..a6eff45bfee3 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -547,6 +547,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
->  	imx6q-b450v3.dtb \
->  	imx6q-b650v3.dtb \
->  	imx6q-b850v3.dtb \
-> +	imx6q-bosch-acc.dtb \
->  	imx6q-cm-fx6.dtb \
->  	imx6q-cubox-i.dtb \
->  	imx6q-cubox-i-emmc-som-v15.dtb \
-> diff --git a/arch/arm/boot/dts/imx6q-bosch-acc.dts b/arch/arm/boot/dts/imx6q-bosch-acc.dts
-> new file mode 100644
-> index 000000000000..81711869210d
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/imx6q-bosch-acc.dts
-> @@ -0,0 +1,783 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Support for the i.MX6-based Bosch ACC board.
-> + *
-> + * Copyright (C) 2016 Garz & Fricke GmbH
-> + * Copyright (C) 2018 DENX Software Engineering GmbH, Heiko Schocher <hs@denx.de>
-> + * Copyright (C) 2018 DENX Software Engineering GmbH, Niel Fourie <lusus@denx.de>
-> + * Copyright (C) 2019-2021 Bosch Thermotechnik GmbH, Matthias Winker <matthias.winker@bosch.com>
-> + * Copyright (C) 2022 DENX Software Engineering GmbH, Philip Oberfichtner <pro@denx.de>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include "imx6q.dtsi"
-> +
-> +/ {
-> +	model = "Bosch ACC";
-> +	compatible = "bosch,imx6q-acc", "fsl,imx6q";
-> +
-> +	aliases {
-> +		serial0 = &uart2;
-> +		serial1 = &uart1;
-> +		i2c0 = &i2c1;
-> +		i2c1 = &i2c2;
-> +		i2c2 = &i2c3;
-> +		mmc0 = &usdhc4;
-> +		mmc1 = &usdhc2;
+SGkgU2hhd24NCg0KT24gVGh1LCAyMDIyLTA1LTA1IGF0IDEwOjQ3ICswODAwLCBTaGF3biBHdW8g
+d3JvdGU6DQo+IE9uIE1vbiwgQXByIDI1LCAyMDIyIGF0IDA2OjIzOjQyUE0gKzAyMDAsIE1hcmNl
+bCBaaXN3aWxlciB3cm90ZToNCj4gPiBGcm9tOiBNYXJjZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3
+aWxlckB0b3JhZGV4LmNvbT4NCj4gPiANCj4gPiANCj4gPiBUaGlzIGlzIGEgZ2VuZXJhbCB1cGRh
+dGUgb2YgdGhlIENvbGlicmkgaU1YNlVMTCBkZXZpY2UgdHJlZSBmaWxlcy4NCj4gPiANCj4gPiBU
+aGUgVG9yYWRleCBDb2xpYnJpIGZhbWlseSBpcyBjb21wb3NlZCBvZiBhIFNvTSB0aGF0IGNhbiBi
+ZSBwbHVnZ2VkIG9uDQo+ID4gdmFyaW91cyBjYXJyaWVyIGJvYXJkcywgd2l0aCBjYXJyaWVyIGJv
+YXJkcyBhbGxvd2luZyBtdWx0aXBsZSBvcHRpb25hbA0KPiA+IGFjY2Vzc29yaWVzIChlLmcuIGRp
+c3BsYXksIGNhbWVyYSwgLi4uKS4NCj4gPiANCj4gPiBUaGUgZGV2aWNlIHRyZWUgc291cmNlcyBh
+cmUgc3RydWN0dXJlZCBpbnRvIGEgU29NIGR0c2kgYW5kIGEgY2FycmllciBkdHMNCj4gPiB3aGlj
+aCB0aGVuIGluY2x1ZGVzIHRoZSBTb00gZHRzaS4gVGhlIFNvTSBkdHNpIGRlZmluZXMgYW5kIGVu
+YWJsZXMgdGhlDQo+ID4gZnVuY3Rpb25hbGl0eSBzZWxmLWNvbnRhaW5lZCBvbiB0aGUgU29NIGFu
+ZCBwcmVwYXJlcyBmb3IgdGhlDQo+ID4gZnVuY3Rpb25hbGl0eSBwcm92aWRlZCBieSB0aGUgY2Fy
+cmllciBIVyBvciBhY2Nlc3NvcmllcyBzbyB0aGF0IHRoZQ0KPiA+IGNhcnJpZXIgZHRzIHRoZW4g
+Y2FuIGVuYWJsZSBvciBhbWVuZCBub2RlcyBwcm92aWRlZC4gQWNjZXNzb3JpZXMgYXJlDQo+ID4g
+ZW5hYmxlZCBpbiBvdmVybGF5cyBkZXBlbmRpbmcgb24gSFcgY29uZmlndXJhdGlvbi4NCj4gPiAN
+Cj4gPiBQbGVhc2UgZmluZCB0aGUgZm9sbG93aW5nIGNvbGlicmktaW14NnVsbCBkZXZpY2UgdHJl
+ZXMgaW1wcm92ZW1lbnRzOg0KPiA+IA0KPiA+IC0gTU1DL1NEDQo+ID4gVGhlIG9yaWdpbmFsIENv
+bGlicmkgc3BlY2lmaWNhdGlvbiBvbmx5IGRlZmluZWQgMy4zIHZvbHQgVFRMIHNpZ25hbGluZw0K
+PiA+IGFuZCByZWxpZWQgb24gZXh0ZXJuYWwgb24tY2FycmllciBwdWxsLXVwcyBmb3IgdGhlIFNE
+X0RBVEFbMC4uM10gbGluZXMuDQo+ID4gVGhlIGxhdGVzdCBjYXJyaWVyIGJvYXJkcyBsaWtlIEly
+aXMgVjIgb24gdGhlIG90aGVyIGhhbmQgYXJlIG5vdyBVSFMtSQ0KPiA+IGNvbXBsaWFudCBieSBs
+ZWF2aW5nIHN1Y2ggZXh0ZXJuYWwgb24tY2FycmllciBwdWxsLXVwcyBhd2F5IHJlbHlpbmcgb24N
+Cj4gPiBtb2R1bGUtIG9yIGV2ZW4gU29DLWxldmVsIG9uZXMgd2hpY2ggcHVsbCB1cCB0byByZXNw
+LiBzaWduYWxpbmcgdm9sdGFnZS4NCj4gPiBJbiBzdWNoIGNhc2VzLCB0aGUgY2FycmllciBib2Fy
+ZC1sZXZlbCBkZXZpY2UgdHJlZSBtYXkgZXhwbGljaXRseSBkZWxldGUNCj4gPiB0aGUgbm8tMS04
+LXYgcHJvcGVydHkgdG8gZW5hYmxlIGZ1bGwgVUhTLUkgc3VwcG9ydC4NCj4gPiBBbHNvLCBmaXgg
+U0QvTU1DIHJlZ3VsYXRvciBmb3IgdGhlIGNhcnJpZXIgYm9hcmRzIHVzaW5nIFVIUy1JIG1vZGVz
+Lg0KPiA+IA0KPiA+IC0gRkVDDQo+ID4gUHJvdmlkZSBhIHByb3BlciBwaHktc3VwcGx5IGZvciB0
+aGUgRkVDLCBhY3R1YWxseSBzd2l0Y2hlZCBieSB0aGUgNTAgTWh6DQo+ID4gUk1JSSBpbnRlcmZh
+Y2UgY2xvY2sgdXNpbmcgYSByZWd1bGF0b3ItZml4ZWQtY2xvY2sgdGhhdCBpcyBub3cgcHJvcGVy
+bHkNCj4gPiBzdGF0ZWQuIFRoZSByZWZlcmVuY2UgY29tbWl0IGZvciBzdWNoIHJlZ3VsYXRvciBj
+YW4gYmUgZm91bmQgYXQgY29tbWl0DQo+ID4gODk1OWU1MzI0NDg1ICgicmVndWxhdG9yOiBmaXhl
+ZDogYWRkIHBvc3NpYmlsaXR5IHRvIGVuYWJsZSBieSBjbG9jayIpLg0KPiA+IA0KPiA+IC0gSTJD
+DQo+ID4gU3dpdGNoZWQgb24gMjIga09obSBwdWxsLXVwcyBhbmQgbG93ZXIgdGhlIEkyQyBmcmVx
+dWVuY3kgdG8gNDAga0h6IHRvDQo+ID4gZ2V0IG1vcmUgcmVsaWFibGUgY29tbXVuaWNhdGlvbi4N
+Cj4gPiANCj4gPiAtIEF0bWVsIFRvdWNoc2NyZWVuDQo+ID4gVGhlIFRvcmFkZXggNyIgQ2FwYWNp
+dGl2ZSBhbmQgMTAiIExWRFMgdG91Y2ggc2NyZWVucyBhcmUgQXRtZWwgTVhUDQo+ID4gcGVyaXBo
+ZXJhbHMgYXZhaWxhYmxlIG9uIHRoZSBJMkMgYnVzIGZvciB0b3VjaHNjcmVlbiBldmVudHMuIEFk
+ZA0KPiA+IGF0bWVsX214dF90cyBub2RlIHRvIHRoZSBtb2R1bGUtbGV2ZWwgZGV2aWNlIHRyZWUu
+IEFsc28sIHByb3ZpZGUgcGlubXV4DQo+ID4gY29uZmlndXJhdGlvbiBmb3IgdGhlIElOVC9SU1Qg
+aW5wdXRzIGZyb20gU09ESU1NIHBpbnMgMTA2LzEwNyBmb3IgbW9zdA0KPiA+IGNhcnJpZXIgYm9h
+cmRzIG9yIGFuIGV4dGVybmFsIHRvdWNoc2NyZWVuIGFkYXB0ZXIgaW5wdXRzIGNvbmZpZ3VyZWQg
+dG8NCj4gPiBTT0RJTU0gcGlucyAyOC8zMC4NCj4gPiANCj4gPiBDaGFuZ2VzIGluIHYyOg0KPiA+
+IC0gRml4ZWQgcGluY3RybCBub2RlIG5hbWVzIGFzIHN1Z2dlc3RlZCBieSBTaGF3bi4NCj4gPiAt
+IEZpeGVkIGxvbmcgbGluZSBhcyBwb2ludGVkIG91dCBieSBSb2IncyBib3QuDQo+ID4gLSBBZGRl
+ZCBWMyB0byBDb2xpYnJpIEV2YWx1YXRpb24gQm9hcmQgYXMgZG9uZSBlbHNld2hlcmUuDQo+ID4g
+LSBGaXggYWxwaGFiZXRpY2FsIG5vZGUgb3JkZXIgYXMgc3VnZ2VzdGVkIGJ5IFNoYXduLg0KPiA+
+IC0gRHJvcHBlZCBbUEFUQ0ggdjEgMDIvMTRdIEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGZp
+eCB2cW1tYw0KPiA+IMKgIHJlZ3VsYXRvciB3aGljaCBhbHJlYWR5IGdvdCBhcHBsaWVkIGJ5IFNo
+YXduLiBUaGFua3MhDQo+ID4gLSBOZXcgY29tbWl0IHdpdGggcGluY3RybCBub2RlIG5hbWUgaW1w
+cm92ZW1lbnRzIGFzIHN1Z2dlc3RlZCBieSBTaGF3bi4NCj4gPiANCj4gPiBEZW55cyBEcm96ZG92
+ICg1KToNCj4gPiDCoCBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiBhZGQgdG91Y2hzY3JlZW4g
+ZGV2aWNlIG5vZGVzDQo+ID4gwqAgQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogdXBkYXRlIGRl
+dmljZSB0cmVlcyB0byBzdXBwb3J0IG92ZXJsYXlzDQo+ID4gwqAgZHQtYmluZGluZ3M6IGFybTog
+ZnNsOiBhZGQgdG9yYWRleCxjb2xpYnJpLWlteDZ1bGwNCj4gPiDCoCBBUk06IGR0czogaW14NnVs
+bC1jb2xpYnJpOiBhZGQgc3VwcG9ydCBmb3IgdG9yYWRleCBpcmlzIGNhcnJpZXIgYm9hcmRzDQo+
+ID4gwqAgQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogYWRkIHN1cHBvcnQgZm9yIHRvcmFkZXgg
+YXN0ZXIgY2Fycmllcg0KPiA+IMKgwqDCoCBib2FyZHMNCj4gPiANCj4gPiBNYXJjZWwgWmlzd2ls
+ZXIgKDQpOg0KPiA+IMKgIEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGZpeCBuYW5kIGJjaCBn
+ZW9tZXRyeQ0KPiA+IMKgIEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGFkZC91cGRhdGUgc29t
+ZSBjb21tZW50cw0KPiA+IMKgIEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IG1vdmUgZ3Bpby1r
+ZXlzIG5vZGUgdG8gc29tIGR0c2kNCj4gPiDCoCBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiBp
+bXByb3ZlIHBpbmN0cmwgbm9kZSBuYW1lcw0KPiA+IA0KPiA+IE1heCBLcnVtbWVuYWNoZXIgKDEp
+Og0KPiA+IMKgIEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGNoYW5nZSB0b3VjaCBpMmMgcGFy
+YW1ldGVycw0KPiA+IA0KPiA+IE9sZWtzYW5kciBTdXZvcm92ICgxKToNCj4gPiDCoCBBUk06IGR0
+czogaW14NnVsbC1jb2xpYnJpOiBhZGQgZ3Bpby1saW5lLW5hbWVzDQo+ID4gDQo+ID4gUGhpbGlw
+cGUgU2NoZW5rZXIgKDMpOg0KPiA+IMKgIEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IHVzZSBw
+dWxsLWRvd24gZm9yIGFkYyBwaW5zDQo+ID4gwqAgQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTog
+YWRkIHBoeS1zdXBwbHkgdG8gZmVjDQo+ID4gwqAgQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTog
+dXBkYXRlIHVzZGhjMSBwaXhtdXggYW5kIHNpZ25hbGluZw0KPiANCj4gVGhlIGR0cyBzZXJpZXMg
+ZG9lc24ndCBhcHBseSB0byBteSBicmFuY2guDQo+IA0KPiBBcHBseWluZzogQVJNOiBkdHM6IGlt
+eDZ1bGwtY29saWJyaTogdXNlIHB1bGwtZG93biBmb3IgYWRjIHBpbnMNCj4gQXBwbHlpbmc6IEFS
+TTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGNoYW5nZSB0b3VjaCBpMmMgcGFyYW1ldGVycw0KPiBB
+cHBseWluZzogQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogYWRkIHBoeS1zdXBwbHkgdG8gZmVj
+DQo+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiBhZGQgdG91Y2hzY3JlZW4g
+ZGV2aWNlIG5vZGVzDQo+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiB1cGRh
+dGUgdXNkaGMxIHBpeG11eCBhbmQgc2lnbmFsaW5nDQo+IGVycm9yOiBwYXRjaCBmYWlsZWQ6IGFy
+Y2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtY29saWJyaS5kdHNpOjM1DQo+IGVycm9yOiBhcmNoL2Fy
+bS9ib290L2R0cy9pbXg2dWxsLWNvbGlicmkuZHRzaTogcGF0Y2ggZG9lcyBub3QgYXBwbHkNCj4g
+UGF0Y2ggZmFpbGVkIGF0IDAwMDUgQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogdXBkYXRlIHVz
+ZGhjMSBwaXhtdXggYW5kIHNpZ25hbGluZw0KPiBoaW50OiBVc2UgJ2dpdCBhbSAtLXNob3ctY3Vy
+cmVudC1wYXRjaCcgdG8gc2VlIHRoZSBmYWlsZWQgcGF0Y2gNCj4gV2hlbiB5b3UgaGF2ZSByZXNv
+bHZlZCB0aGlzIHByb2JsZW0sIHJ1biAiZ2l0IGFtIC0tY29udGludWUiLg0KPiBJZiB5b3UgcHJl
+ZmVyIHRvIHNraXAgdGhpcyBwYXRjaCwgcnVuICJnaXQgYW0gLS1za2lwIiBpbnN0ZWFkLg0KPiBU
+byByZXN0b3JlIHRoZSBvcmlnaW5hbCBicmFuY2ggYW5kIHN0b3AgcGF0Y2hpbmcsIHJ1biAiZ2l0
+IGFtIC0tYWJvcnQiLg0KPiANCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6
+IHVwZGF0ZSBkZXZpY2UgdHJlZXMgdG8gc3VwcG9ydCBvdmVybGF5cw0KPiBBcHBseWluZzogQVJN
+OiBkdHM6IGlteDZ1bGwtY29saWJyaTogYWRkIGdwaW8tbGluZS1uYW1lcw0KPiBBcHBseWluZzog
+QVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogYWRkIHN1cHBvcnQgZm9yIHRvcmFkZXggaXJpcyBj
+YXJyaWVyIGJvYXJkcw0KPiBBcHBseWluZzogQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogYWRk
+IHN1cHBvcnQgZm9yIHRvcmFkZXggYXN0ZXIgY2FycmllciBib2FyZHMNCj4gQXBwbHlpbmc6IEFS
+TTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGZpeCBuYW5kIGJjaCBnZW9tZXRyeQ0KPiBBcHBseWlu
+ZzogQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogYWRkL3VwZGF0ZSBzb21lIGNvbW1lbnRzDQo+
+IGVycm9yOiBwYXRjaCBmYWlsZWQ6IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtY29saWJyaS5k
+dHNpOjI1MQ0KPiBlcnJvcjogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnVsbC1jb2xpYnJpLmR0c2k6
+IHBhdGNoIGRvZXMgbm90IGFwcGx5DQo+IFBhdGNoIGZhaWxlZCBhdCAwMDExIEFSTTogZHRzOiBp
+bXg2dWxsLWNvbGlicmk6IGFkZC91cGRhdGUgc29tZSBjb21tZW50cw0KPiBoaW50OiBVc2UgJ2dp
+dCBhbSAtLXNob3ctY3VycmVudC1wYXRjaCcgdG8gc2VlIHRoZSBmYWlsZWQgcGF0Y2gNCj4gV2hl
+biB5b3UgaGF2ZSByZXNvbHZlZCB0aGlzIHByb2JsZW0sIHJ1biAiZ2l0IGFtIC0tY29udGludWUi
+Lg0KPiBJZiB5b3UgcHJlZmVyIHRvIHNraXAgdGhpcyBwYXRjaCwgcnVuICJnaXQgYW0gLS1za2lw
+IiBpbnN0ZWFkLg0KPiBUbyByZXN0b3JlIHRoZSBvcmlnaW5hbCBicmFuY2ggYW5kIHN0b3AgcGF0
+Y2hpbmcsIHJ1biAiZ2l0IGFtIC0tYWJvcnQiLg0KPiANCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBp
+bXg2dWxsLWNvbGlicmk6IG1vdmUgZ3Bpby1rZXlzIG5vZGUgdG8gc29tIGR0c2kNCj4gQXBwbHlp
+bmc6IEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGltcHJvdmUgcGluY3RybCBub2RlIG5hbWVz
+DQo+IGVycm9yOiBwYXRjaCBmYWlsZWQ6IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtY29saWJy
+aS5kdHNpOjI5Mg0KPiBlcnJvcjogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnVsbC1jb2xpYnJpLmR0
+c2k6IHBhdGNoIGRvZXMgbm90IGFwcGx5DQo+IFBhdGNoIGZhaWxlZCBhdCAwMDEzIEFSTTogZHRz
+OiBpbXg2dWxsLWNvbGlicmk6IGltcHJvdmUgcGluY3RybCBub2RlIG5hbWVzDQo+IGhpbnQ6IFVz
+ZSAnZ2l0IGFtIC0tc2hvdy1jdXJyZW50LXBhdGNoJyB0byBzZWUgdGhlIGZhaWxlZCBwYXRjaA0K
+PiBXaGVuIHlvdSBoYXZlIHJlc29sdmVkIHRoaXMgcHJvYmxlbSwgcnVuICJnaXQgYW0gLS1jb250
+aW51ZSIuDQo+IElmIHlvdSBwcmVmZXIgdG8gc2tpcCB0aGlzIHBhdGNoLCBydW4gImdpdCBhbSAt
+LXNraXAiIGluc3RlYWQuDQo+IA0KPiBTaGF3bg0KDQpJIGRpZCByZWJhc2UgdGhpcyBWMiBvbiB0
+b3Agb2YgeW91ciBmb3ItbmV4dCBicmFuY2ggd2hpY2ggYXMgb2YgdG9kYXkgc3RpbGwgYXBwbGll
+cyBjbGVhbmx5LiBIb3dldmVyLCBpdCBsb29rcw0KbGlrZSB5b3Ugbm93IHRyeSB0byBhcHBseSBp
+dCB3aXRob3V0IHRoZW0gZml4ZXMgd2hpY2ggYXJlIGFscmVhZHkgdXBzdHJlYW0uIEhvdyBleGFj
+dGx5IGlzIHRoaXMgc3VwcG9zZWQgdG8NCndvcms/DQoNCkluIHBhcnRpY3VsYXIgaXQgaXMgdGhl
+IGZvbGxvd2luZyBjb21taXQgd2hpY2ggYWxyZWFkeSBnb3QgYXBwbGllZCB1cHN0cmVhbToNCg0K
+Y29tbWl0IDQ1OTc0ZTQyNzZhOCAoIkFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGZpeCB2cW1t
+YyByZWd1bGF0b3IiKQ0KDQpJZiBJIGRvIHJlLWJhc2UgYSBWMyBvbiB0b3Agb2YgeW91ciBkdCBi
+cmFuY2ggKHdpdGhvdXQgdXBzdHJlYW0gYWxyZWFkeSBhcHBsaWVkIGZpeGVzKSB0aGVuIGl0IGxp
+a2VseSBmYWlscw0KYWdhaW4gd2hlbiBpdCBldmVudHVhbGx5IGdldHMgYXBwbGllZCBvbiB0b3Ag
+b2YgdGhlbSBmaXhlcywgbm90Pw0KDQpBbnl3YXksIGp1c3QgbGV0IG1lIGtub3cgb24gdG9wIG9m
+IHdoYXQgSSBzaG91bGQgcmUtYmFzZSB0aGlzIHNlcmllcyBhbmQgSSB3aWxsIGRvIHNvLiBUaGFu
+a3MhDQoNCkNoZWVycw0KDQpNYXJjZWwNCg==
 
-Sort the list alphabetically.
-
-> +	};
-> +
-> +	memory@10000000 {
-> +		device_type = "memory";
-> +		reg = <0x10000000 0x40000000>;
-> +	};
-> +
-> +	backlight_lvds: backlight_lvds {
-
-Hyphen is recommended in node name.
-
-> +		compatible = "pwm-backlight";
-> +		pwms = <&pwm1 0 200000>;
-> +		brightness-levels = <0 61 499 1706 4079 8022 13938 22237 33328 47623 65535>;
-> +		num-interpolated-steps = <10>;
-> +		default-brightness-level = <60>;
-> +		power-supply = <&reg_lcd>;
-> +	};
-> +
-> +	panel {
-> +		compatible = "dataimage,fg1001l0dsswmg01";
-> +		backlight = <&backlight_lvds>;
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint = <&lvds0_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	refclk: refclk {
-> +		compatible = "fixed-factor-clock";
-> +		#clock-cells = <0>;
-> +		clocks = <&clks IMX6QDL_CLK_CKO2>;
-> +		clock-div = <1>;
-> +		clock-mult = <1>;
-> +		clock-output-names = "12mhz_refclk";
-> +		assigned-clocks = <&clks IMX6QDL_CLK_CKO>,
-> +				  <&clks IMX6QDL_CLK_CKO2>,
-> +				  <&clks IMX6QDL_CLK_CKO2_SEL>;
-> +		assigned-clock-parents = <&clks IMX6QDL_CLK_CKO2>,
-> +					 <&clks IMX6QDL_CLK_CKO2_PODF>,
-> +					 <&clks IMX6QDL_CLK_OSC>;
-> +		assigned-clock-rates = <0>, <12000000>, <0>;
-> +	};
-> +
-> +	cpus {
-> +		cpu0: cpu@0 {
-> +			operating-points = <
-> +				/* kHz    uV */
-> +				1200000 1275000
-> +				996000  1225000
-> +				852000  1225000
-> +				792000  1150000
-> +				396000  950000
-> +			>;
-> +			fsl,soc-operating-points = <
-> +				/* ARM kHz  SOC-PU uV */
-> +				1200000 1225000
-> +				996000	1175000
-> +				852000	1175000
-> +				792000	1150000
-> +				396000	1150000
-> +			>;
-> +		};
-> +
-> +		cpu1: cpu@1 {
-> +			operating-points = <
-> +				/* kHz    uV */
-> +				1200000 1275000
-> +				996000  1225000
-> +				852000  1225000
-> +				792000  1150000
-> +				396000  950000
-> +			>;
-> +			fsl,soc-operating-points = <
-> +				/* ARM kHz  SOC-PU uV */
-> +				1200000 1225000
-> +				996000	1175000
-> +				852000	1175000
-> +				792000	1150000
-> +				396000	1150000
-> +			>;
-> +		};
-> +	};
-> +
-> +	pwm-leds {
-> +		compatible = "pwm-leds";
-> +
-> +		led_red: led-0 {
-> +			color = <LED_COLOR_ID_RED>;
-> +			max-brightness = <248>;
-> +			default-state = "off";
-> +			pwms = <&pwm2 0 500000>;
-> +		};
-> +
-> +		led_white: led-1 {
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			max-brightness = <248>;
-> +			default-state = "off";
-> +			pwms = <&pwm3 0 500000>;
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +
-> +	gpio-leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_reset_gpio_led>;
-> +
-> +		led-2 {
-> +			color = <LED_COLOR_ID_RED>;
-> +			gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
-> +			default-state = "off";
-> +		};
-> +	};
-> +
-> +	reg_5P0: regulator-5P0 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "5P0";
-> +	};
-> +
-> +	reg_vin: regulator-vin {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VIN";
-> +		regulator-min-microvolt = <4500000>;
-> +		regulator-max-microvolt = <4500000>;
-> +		regulator-always-on;
-> +		vin-supply = <&reg_5P0>;
-> +	};
-> +
-> +	reg_usb_otg_vbus: regulator-usb-otg-vbus {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb_otg_vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +	};
-> +
-> +	reg_usb_h1_vbus: regulator-usb-h1-vbus {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb_h1_vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +		vin-supply = <&reg_5P0>;
-> +	};
-> +
-> +	reg_usb_h2_vbus: regulator-usb-h2-vbus {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb_h2_vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&reg_5P0> ;
-> +		regulator-always-on;
-> +	};
-> +
-> +	reg_vsnvs: regulator-vsnvs {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VSNVS_3V0";
-> +		regulator-min-microvolt = <3000000>;
-> +		regulator-max-microvolt = <3000000>;
-> +		regulator-always-on;
-> +		vin-supply = <&reg_5P0>;
-> +	};
-> +
-> +	reg_lcd: regulator-lcd {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "LCD0 POWER";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_lcd_enable>;
-> +		gpio = <&gpio3 23 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	reg_dac: regulator-dac {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vref_dac";
-> +		regulator-min-microvolt = <20000>;
-> +		regulator-max-microvolt = <20000>;
-> +		vin-supply = <&reg_5P0> ;
-> +		regulator-boot-on;
-> +	};
-> +
-> +	reg_sw4: regulator-sw4 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "SW4_3V3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +		vin-supply = <&reg_5P0>;
-> +	};
-> +
-> +	reg_sys: regulator-sys {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "SYS_4V2";
-> +		regulator-min-microvolt = <4200000>;
-> +		regulator-max-microvolt = <4200000>;
-> +		regulator-always-on;
-> +		vin-supply = <&reg_5P0>;
-> +	};
-> +};
-> +
-> +&reg_arm {
-> +	vin-supply = <&sw2_reg>;
-> +};
-> +
-> +&reg_soc {
-> +	vin-supply = <&sw1c_reg>;
-> +};
-> +
-> +&reg_vdd1p1 {
-> +	vin-supply = <&reg_vsnvs>;
-> +};
-> +
-> +&reg_vdd2p5 {
-> +	vin-supply = <&reg_vsnvs>;
-> +};
-> +
-> +&reg_vdd3p0 {
-> +	vin-supply = <&reg_vsnvs>;
-> +};
-> +
-> +&fec {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_enet>;
-> +	clocks = <&clks IMX6QDL_CLK_ENET>,
-> +		<&clks IMX6QDL_CLK_ENET>,
-> +		<&clks IMX6QDL_CLK_ENET>,
-> +		<&clks IMX6QDL_CLK_ENET_REF>;
-> +	clock-names = "ipg", "ahb", "ptp", "enet_out";
-> +	phy-mode = "rmii";
-> +	phy-supply = <&reg_sw4>;
-> +	phy-handle = <&ethphy>;
-> +	status = "okay";
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-
-Have a newline between properties and child node.
-
-> +		ethphy: ethernet-phy@0 {
-> +			compatible = "ethernet-phy-ieee802.3-c22";
-> +			reg = <0>;
-> +			interrupt-parent = <&gpio1>;
-> +			interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
-> +			smsc,disable-energy-detect;
-> +		};
-> +	};
-> +};
-> +
-> +&gpu_vg {
-> +	status = "disabled";
-> +};
-> +
-> +&gpu_2d {
-> +	status = "disabled";
-> +};
-> +
-> +&i2c1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-> +
-> +	eeprom: eeprom@50 {
-> +		compatible = "atmel,24c32";
-> +		reg = <0x50>;
-> +		pagesize = <32>;
-> +	};
-> +
-> +	lm75: sensor@49 {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_lm75>;
-> +		compatible = "national,lm75b";
-> +		reg = <0x49>;
-> +	};
-> +
-> +	pmic: pmic@8 {
-
-Sort I2C devices in unit-address.
-
-> +		compatible = "fsl,pfuze100";
-> +		reg = <0x08>;
-> +
-> +		regulators {
-> +			sw1c_reg: sw1c {
-> +				regulator-name = "VDD_SOC (sw1abc)";
-> +				regulator-min-microvolt = <1275000>;
-> +				regulator-max-microvolt = <1500000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +				regulator-ramp-delay = <6250>;
-> +			};
-> +
-> +			sw2_reg: sw2 {
-> +				regulator-name = "VDD_ARM (sw2)";
-> +				regulator-min-microvolt = <1050000>;
-> +				regulator-max-microvolt = <1500000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +				regulator-ramp-delay = <6250>;
-> +			};
-> +
-> +			sw3a_reg: sw3a {
-> +				compatible = "regulator-fixed";
-> +				regulator-name = "DDR_1V5a";
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +
-> +			};
-> +
-> +			sw3b_reg: sw3b {
-> +				compatible = "regulator-fixed";
-> +				regulator-name = "DDR_1V5b";
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +
-> +			};
-> +
-> +			sw4_reg: sw4 {
-> +				regulator-name = "AUX 3V15 (sw4)";
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +			};
-> +
-> +			swbst_reg: swbst {
-> +				status = "disabled";
-> +				regulator-min-microvolt = <5000000>;
-> +				regulator-max-microvolt = <5150000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			snvs_reg: vsnvs {
-> +				regulator-min-microvolt = <1200000>;
-> +				regulator-max-microvolt = <3000000>;
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			vref_reg: vrefddr {
-> +				regulator-boot-on;
-> +				regulator-always-on;
-> +			};
-> +
-> +			vgen1_reg: vgen1 {
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <1550000>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			vgen2_reg: vgen2 {
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <1550000>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			vgen3_reg: vgen3 {
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			vgen4_reg: vgen4 {
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			vgen5_reg: vgen5 {
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			vgen6_reg: vgen6 {
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-always-on;
-> +			};
-> +		};
-> +	};
-> +
-> +	rtc: rtc@51 {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_rtc>;
-> +		compatible = "nxp,pcf8563";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c2>;
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +
-> +	eeprom_ext: eeprom@50 {
-> +		compatible = "atmel,24c32";
-> +		reg = <0x50>;
-> +		pagesize = <32>;
-> +	};
-> +};
-> +
-> +&i2c3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c3>;
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-> +
-> +	exc3000: touchscreen@2a {
-> +		compatible = "eeti,exc3000";
-> +		reg = <0x2a>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_ctouch>;
-> +		interrupt-parent = <&gpio4>;
-> +		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
-> +		touchscreen-size-x = <4096>;
-> +		touchscreen-size-y = <4096>;
-> +	};
-> +
-> +	usb3503: usb@8 {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_usb3503>;
-> +		compatible = "smsc,usb3503";
-
-Start properties list with compatible if possible.
-
-> +		reg = <0x08>;
-> +		connect-gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>; /* Old: 0, SS: HIGH */
-> +		intn-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>; /* Old: 1, SS: HIGH */
-> +		reset-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>; /* Old: 0, SS: HIGH */
-> +		initial-mode = <1>;
-> +		clocks = <&refclk>;
-> +		clock-names = "refclk";
-> +		refclk-frequency = <12000000>;
-> +	};
-> +
-> +	vcnl4035: light-sensor@60 {
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_proximity>;
-> +		compatible = "vishay,vcnl4035";
-> +		reg = <0x60>;
-> +	};
-> +};
-> +
-> +&ldb {
-> +	status = "okay";
-> +
-> +	lvds0: lvds-channel@0 {
-> +		fsl,data-mapping = "spwg";
-> +		fsl,data-width = <24>;
-> +
-> +		port@4 {
-> +			reg = <4>;
-> +
-> +			lvds0_out: endpoint {
-> +				remote-endpoint = <&panel_in>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&pmu {
-> +	interrupt-affinity = <&{/cpus/cpu@0}>,
-> +			     <&{/cpus/cpu@1}>;
-> +};
-
-Why is this board specific?  Should it be added to <soc>.dtsi?
-
-> +
-> +&pwm1 {
-> +	#pwm-cells = <2>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pwm1>;
-> +	status = "okay";
-> +};
-> +
-> +&pwm2 {
-> +	#pwm-cells = <2>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pwm2>;
-> +	status = "okay";
-> +};
-> +
-> +&pwm3 {
-> +	#pwm-cells = <2>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pwm3>;
-> +	status = "okay";
-> +};
-> +
-> +&pwm4 {
-> +	#pwm-cells = <2>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pwm4>;
-> +	status = "okay";
-> +};
-> +
-> +&uart1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart1>;
-> +	status = "okay";
-
-Please end property list with 'status' if possible.
-
-> +	rts-gpios = <&gpio7 8 GPIO_ACTIVE_HIGH>;
-> +	linux,rs485-enabled-at-boot-time;
-> +	rs485-rx-during-tx;
-> +};
-> +
-> +&uart2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart2>;
-> +	uart-has-rtscts;
-> +	status = "okay";
-> +};
-> +
-> +&usbh1 {
-> +	vbus-supply = <&reg_usb_h1_vbus>;
-> +	status = "okay";
-> +};
-> +
-> +&usbh2 {
-> +	pinctrl-names = "idle", "active";
-> +	pinctrl-0 = <&pinctrl_usbh2_idle>;
-> +	pinctrl-1 = <&pinctrl_usbh2_active>;
-> +	status = "okay";
-> +	vbus-supply = <&reg_usb_h2_vbus>;
-> +};
-> +
-> +&usbotg {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usbotg>;
-> +	status = "okay";
-> +	vbus-supply = <&reg_usb_otg_vbus>;
-> +	disable-over-current;
-> +	dr_mode = "otg";
-> +	srp-disable;
-> +	hnp-disable;
-> +	adp-disable;
-> +};
-> +
-> +&usbphynop1 {
-> +	clocks = <&clks IMX6QDL_CLK_USBPHY1>;
-> +	clock-names = "main_clk";
-> +	vcc-supply = <&reg_usb_h1_vbus>;
-> +};
-> +
-> +&usbphynop2 {
-> +	vcc-supply = <&reg_usb_h2_vbus>;
-> +};
-> +
-> +&usdhc2 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usdhc2>;
-> +	status = "okay";
-> +	cd-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
-> +	no-1-8-v;
-> +	keep-power-in-suspend;
-> +	enable-sdio-wakeup;
-> +	voltage-ranges = <3300 3300>;
-> +	vmmc-supply = <&reg_sw4>;
-> +	fsl,wp-controller;
-> +};
-> +
-> +&usdhc4 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usdhc4>;
-> +	status = "okay";
-> +	bus-width = <8>;
-> +	non-removable;
-> +	no-1-8-v;
-> +	keep-power-in-suspend;
-> +	voltage-ranges = <3300 3300>;
-> +	vmmc-supply = <&reg_sw4>;
-> +	fsl,wp-controller;
-> +};
-> +
-> +&wdog1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_wdog1>;
-> +	fsl,ext-reset-output;
-> +	status = "okay";
-> +	timeout-sec=<10>;
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl_enet: enetgrp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_ENET_MDC__ENET_MDC		0x1b0b0
-> +			MX6QDL_PAD_ENET_MDIO__ENET_MDIO		0x1b0b0
-> +			MX6QDL_PAD_ENET_CRS_DV__ENET_RX_EN	0x1b0b0
-> +			MX6QDL_PAD_ENET_REF_CLK__GPIO1_IO23	0x1b0b0	/* FEC INT */
-> +			MX6QDL_PAD_ENET_RX_ER__ENET_RX_ER	0x1b0b0
-> +			MX6QDL_PAD_ENET_TX_EN__ENET_TX_EN	0x0001b098
-> +			MX6QDL_PAD_ENET_RXD0__ENET_RX_DATA0	0x1b0b0
-> +			MX6QDL_PAD_ENET_RXD1__ENET_RX_DATA1	0x1b0b0
-> +			MX6QDL_PAD_ENET_TXD1__ENET_TX_DATA1	0x0001b098
-> +			MX6QDL_PAD_ENET_TXD0__ENET_TX_DATA0	0x0001b098
-> +			MX6QDL_PAD_GPIO_16__ENET_REF_CLK	0x4001b0a8
-> +		>;
-> +	};
-> +
-> +	pinctrl_reset_gpio_led: pinctrl-reset-gpio-led-grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_CSI0_PIXCLK__GPIO5_IO18		0x1b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1: i2c1grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_CSI0_DAT8__I2C1_SDA 0x4001b8b1
-> +			MX6QDL_PAD_CSI0_DAT9__I2C1_SCL 0x4001b8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_KEY_COL3__I2C2_SCL 0x4001b810
-> +			MX6QDL_PAD_KEY_ROW3__I2C2_SDA 0x4001b810
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c3: i2c3grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_GPIO_5__I2C3_SCL  0x4001b8b1
-> +			MX6QDL_PAD_GPIO_6__I2C3_SDA 0x4001b8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_lcd_enable: lcdenablerp {
-
-lcdenablegrp
-
-> +		fsl,pins = <
-> +			MX6QDL_PAD_EIM_D23__GPIO3_IO23  0x1b0b0 /* lcd enable */
-> +			MX6QDL_PAD_EIM_D16__GPIO3_IO16  0x1b0b0 /* sel6_8 */
-> +		>;
-> +	};
-> +
-> +	pinctrl_lm75: lm75grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_KEY_ROW0__GPIO4_IO07		0x1b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_proximity: proximitygrp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_KEY_ROW2__GPIO4_IO11  0x1b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_pwm1: pwm1grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD1_DAT3__PWM1_OUT 0x0001b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_pwm2: pwm2grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD1_DAT2__PWM2_OUT 0x0001b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_pwm3: pwm3grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD1_DAT1__PWM3_OUT 0x0001b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_pwm4: pwm4grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD1_CMD__PWM4_OUT 0x0001b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_rtc: rtc-grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_KEY_COL1__GPIO4_IO08 0x1b0b0 /* RTC INT */
-> +		>;
-> +	};
-> +
-> +	pinctrl_ctouch: ctouch-grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_KEY_COL0__GPIO4_IO06 0x1b0b0 /* CTOUCH_INT */
-> +			MX6QDL_PAD_SD1_CLK__GPIO1_IO20 0x0001b0b0 /* CTOUCH_RESET */
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart1: uart1grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD3_DAT6__UART1_RX_DATA 0x1b0b1
-> +			MX6QDL_PAD_SD3_DAT7__UART1_TX_DATA 0x1b0b1
-> +			MX6QDL_PAD_SD3_RST__GPIO7_IO08 0x0001b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart2: uart2grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD3_DAT4__UART2_RX_DATA 0x1b0b1
-> +			MX6QDL_PAD_SD3_DAT5__UART2_TX_DATA 0x1b0b1
-> +			MX6QDL_PAD_EIM_D28__UART2_CTS_B 0x1b0b1
-> +			MX6QDL_PAD_EIM_D29__UART2_RTS_B 0x1b0b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_usbh2_idle: usbh2-idle-grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_RGMII_TXC__USB_H2_DATA      0x00013018
-> +			MX6QDL_PAD_RGMII_TX_CTL__USB_H2_STROBE 0x00013018
-> +		>;
-> +	};
-> +
-> +	pinctrl_usbh2_active: usbh2-active-grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_RGMII_TXC__USB_H2_DATA      0x00013018
-> +			MX6QDL_PAD_RGMII_TX_CTL__USB_H2_STROBE 0x00017018
-> +		>;
-> +	};
-> +
-> +	pinctrl_usb3503: pinctrl_usb3503-grp {
-
-usb3503-grp?
-
-Shawn
-
-> +		fsl,pins = <
-> +			MX6QDL_PAD_CSI0_MCLK__CCM_CLKO1    0x00000018
-> +			MX6QDL_PAD_GPIO_17__GPIO7_IO12     0x1b0b0 /* USB INT */
-> +			MX6QDL_PAD_DISP0_DAT11__GPIO5_IO05 0x0001b0b0 /* USB Reset */
-> +			MX6QDL_PAD_SD1_DAT0__GPIO1_IO16    0x1b0b0 /* USB Connect */
-> +		>;
-> +	};
-> +
-> +	pinctrl_usbotg: usbotggrp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_GPIO_1__USB_OTG_ID	0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2: usdhc2grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD2_CMD__SD2_CMD    0x00017069
-> +			MX6QDL_PAD_SD2_CLK__SD2_CLK    0x00010038
-> +			MX6QDL_PAD_SD2_DAT0__SD2_DATA0 0x00017069
-> +			MX6QDL_PAD_SD2_DAT1__SD2_DATA1 0x00017069
-> +			MX6QDL_PAD_SD2_DAT2__SD2_DATA2 0x00017069
-> +			MX6QDL_PAD_SD2_DAT3__SD2_DATA3 0x00017069
-> +			MX6QDL_PAD_GPIO_4__SD2_CD_B    0x0001b0b0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc4: usdhc4grp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_SD4_CMD__SD4_CMD    0x00017059
-> +			MX6QDL_PAD_SD4_CLK__SD4_CLK    0x00010059
-> +			MX6QDL_PAD_SD4_DAT0__SD4_DATA0 0x00017059
-> +			MX6QDL_PAD_SD4_DAT1__SD4_DATA1 0x00017059
-> +			MX6QDL_PAD_SD4_DAT2__SD4_DATA2 0x00017059
-> +			MX6QDL_PAD_SD4_DAT3__SD4_DATA3 0x00017059
-> +			MX6QDL_PAD_SD4_DAT4__SD4_DATA4 0x00017059
-> +			MX6QDL_PAD_SD4_DAT5__SD4_DATA5 0x00017059
-> +			MX6QDL_PAD_SD4_DAT6__SD4_DATA6 0x00017059
-> +			MX6QDL_PAD_SD4_DAT7__SD4_DATA7 0x00017059
-> +		>;
-> +	};
-> +
-> +	pinctrl_wdog1: wdoggrp {
-> +		fsl,pins = <
-> +			MX6QDL_PAD_GPIO_9__WDOG1_B 0x1b0b0
-> +		>;
-> +	};
-> +};
-> -- 
-> 2.34.1
-> 
