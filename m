@@ -4,52 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EA4BC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10000C433FE
 	for <soc@archiver.kernel.org>; Thu,  5 May 2022 11:10:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CFD69C385AF; Thu,  5 May 2022 11:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B84ABC385AA
-	for <soc@kernel.org>; Thu,  5 May 2022 11:10:13 +0000 (UTC)
+	id CB614C385A8; Thu,  5 May 2022 11:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B5539C385A4;
+	Thu,  5 May 2022 11:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1651749013;
-	bh=tMHltRfce0Q4J4YKYpzqWQK3EHr6w9n+Moc4Bh+a3fI=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=Do5qoulLXyz8EPdxVzFognSJ0fEY8XXShDZ+PlCb3FjFaeo4szV8d9+jsx48W9Uxb
-	 tjIA9FF/SMlBf/XWLe7j5FhrWqXF4KE3AtIUuvaHgheIPFZ74LXWAEEdRfh5rwBc2i
-	 ijYzljZKxK6Hkz1AZRcts2jKhsLoV9yvpwUiLZCkWiya/3i6l+NW97KjaWSel9gmSa
-	 PHu1Pv3ZHDG4akcMh78Kb2efAEaNF9wPPSICeytFT5+bEHtPSeHXXqsiAj32Ey27hG
-	 qTGsDnny8Nc6hDVH8jBH5KkHmoLkPV+HTwOkYDxiFWdcqBMXujY1wgf9Kl1tIkIwSo
-	 vhH2Q4UXLmSVw==
+	bh=69LfuDXSjd6gUWQPktC2bbwqtw6SYidoW26m4W38if0=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=NWwkRFARJ+jENcnts2wrvPcQwJ+SlhAkqMlFoNWbBMD94KjMRAVuSgzoyD1rTg3wX
+	 mDMuRsYgtbOw3EcmWZMGnxrJrPI7UmrOd5y0GEWwbpvVejT+TOWJX25QExGFeoLMIC
+	 tGx+LceY7/NTj234xhsUqytfm4PbpcjlNt392+cPHdojmvxD9LiJPMOlFewSbkCTqZ
+	 X9NfQfNMtdF1cx8laqKktMyU/yOWcVmtmA4k6jDhI0J4ksZFgFmd+VhD5hqVXlfDJE
+	 x9lIAAJpGK7m9/i8PYWh9goGEAfTFBpirgcPQgg//UDGISO3c4Z4eLwkm0tLF0v9RP
+	 1Uy6f4ikmhlrA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89C1EF03848;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93D04E8DBDA;
 	Thu,  5 May 2022 11:10:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH] ARM: versatile: Add missing of_node_put in dcscb_init
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165174901348.921.9058056358674129022.git-patchwork-summary@kernel.org>
+ <165174901360.921.6282922765029607542.git-patchwork-notify@kernel.org>
 Date: Thu, 05 May 2022 11:10:13 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20220428230356.69418-1-linus.walleij@linaro.org>
+In-Reply-To: <20220428230356.69418-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: ARM: versatile: Add missing of_node_put in dcscb_init
-  Submitter: Linus Walleij <linus.walleij@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=636749
-  Lore link: https://lore.kernel.org/r/20220428230356.69418-1-linus.walleij@linaro.org
+On Fri, 29 Apr 2022 01:03:56 +0200 you wrote:
+> From: Peng Wu <wupeng58@huawei.com>
+> 
+> The device_node pointer is returned by of_find_compatible_node
+> with refcount incremented. We should use of_node_put() to avoid
+> the refcount leak.
+> 
+> Signed-off-by: Peng Wu <wupeng58@huawei.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> [...]
 
+Here is the summary with links:
+  - ARM: versatile: Add missing of_node_put in dcscb_init
+    https://git.kernel.org/soc/soc/c/23b44f9c649b
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
