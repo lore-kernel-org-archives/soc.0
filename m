@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 391B5C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 421F6C43219
 	for <soc@archiver.kernel.org>; Thu,  5 May 2022 19:31:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F1E75C385B2; Thu,  5 May 2022 19:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4F41C385B0;
+	id 061D1C385A8; Thu,  5 May 2022 19:31:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DDC9BC385A4;
 	Thu,  5 May 2022 19:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1651779107;
-	bh=RZ1wc6cX2tUvkrKTzKrpWqGHha5EjqU/zVNTC5Bax6A=;
+	bh=u454MSdpmqPUQcRpfA5pK4iuqs4tIQzUsnUL0CcYeHc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=dwq1+JlQJ3dDjPZPlQBiC9WuisbhYEUzaAVlh4RYR4BDbABDgy8YAO8nq7aZtrd0s
-	 XtODjPWEaf/SC/HLLM2fjeKLJygFpxXEsGTRLRljI06t0IbN/npLxiUQF5YxVIp10M
-	 iQehTgMRB+M35A3IhRB9ENz0em9Jr+hb4YPWYbOUYLewkWvM6oP0lmFJAQSmSW8iO0
-	 ysY5T6hDFoTtF8HMn/03BAadwpBfXMj8S2DjkqEmbvoUY8uIv/d/5thECDKgqQFX8l
-	 A+0Ih/AZ9WhgrmIdymn6opwsnZiXiQ+6l9o+4QM1eT99k73/2k6HujNzozuixuzRWs
-	 RA/Om0YiMOJCw==
+	b=etIBvZN8fl04EaoxoCDHn5Z0n6q3mPTwRYmh/n2hQKgBemXezcJYxn8ol6Rbzju0D
+	 iZyoIvMzYZ7xQGjz+s6T6buVl5pcRXoeiKJ5dKan5nQ2RSreptkLhGAQUYEfg01BD1
+	 Pxw5JNldyd6sxM+oJYPzmAdcDl7iEjp5CV41876YQfpgpRsXa3FTFCUAZX87gHUKFn
+	 aMLzhjtpHXe+rhPcVjIaRjvWS4SEtk/gbPhamd1Uncn5Kjl5smyJRkSy9q412CMvke
+	 UKQkZO3nON1ravjV47tGxigH2GOXZCKC4k2ZM3bOIWiT/dXQinmTERiES/i6odb8my
+	 vTLQX5UjBzocQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6C1EF0384A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C0349F03848;
 	Thu,  5 May 2022 19:31:47 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v5.19
+Subject: Re: [GIT PULL 1/6] Broadcom defconfig changes for 5.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165177910774.9627.11199212655424345433.git-patchwork-notify@kernel.org>
+ <165177910778.9627.4968957698246668858.git-patchwork-notify@kernel.org>
 Date: Thu, 05 May 2022 19:31:47 +0000
-References: <20220504112906.3491985-1-sudeep.holla@arm.com>
-In-Reply-To: <20220504112906.3491985-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <20220504210942.1838248-1-f.fainelli@gmail.com>
+In-Reply-To: <20220504210942.1838248-1-f.fainelli@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,30 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed,  4 May 2022 12:29:06 +0100 you wrote:
-> Hi ARM SoC Team,
+On Wed,  4 May 2022 14:09:37 -0700 you wrote:
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 > 
-> Please pull !
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 > 
-> Regards,
-> Sudeep
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/defconfig
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Updates for v5.19
-    https://git.kernel.org/soc/soc/c/a4f7f93180a7
+  - [GIT,PULL,1/6] Broadcom defconfig changes for 5.19
+    https://git.kernel.org/soc/soc/c/f68ec5142322
+  - [GIT,PULL,2/6] Broadcom devicetree changes for 5.19
+    https://git.kernel.org/soc/soc/c/814cc4fce8b4
+  - [GIT,PULL,3/6] Broadcom devicetree-arm64 changes for 5.19
+    https://git.kernel.org/soc/soc/c/1b8e9677bc48
+  - [GIT,PULL,4/6] Broadcom drivers changes for 5.19
+    https://git.kernel.org/soc/soc/c/dbdaca130007
+  - [GIT,PULL,5/6] Broadcom maintainers changes for 5.19
+    (no matching commit)
+  - [GIT,PULL,6/6] Broadcom soc changes for 5.19
+    https://git.kernel.org/soc/soc/c/caf10a34aa72
 
 You are awesome, thank you!
 -- 
