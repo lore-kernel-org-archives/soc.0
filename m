@@ -1,86 +1,124 @@
-Return-Path: <SRS0=U146=VN=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=jmGm=VN=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D785FC433EF
-	for <soc@archiver.kernel.org>; Thu,  5 May 2022 14:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E80D8C433EF
+	for <soc@archiver.kernel.org>; Thu,  5 May 2022 15:28:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 91105C385A4; Thu,  5 May 2022 14:48:17 +0000 (UTC)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id AE25BC385AE; Thu,  5 May 2022 15:28:49 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A1869C385AF
-	for <soc@kernel.org>; Thu,  5 May 2022 14:48:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1869C385AF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f83983782fso51030097b3.6
-        for <soc@kernel.org>; Thu, 05 May 2022 07:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x4fRFYc30vVTKimcmiwmc/0s2zAjApXTdSQH+fCjeZc=;
-        b=RJ2dL8Z98GnnChZ/wAx/Tr3GNrlubI/Ewxr7kL1jUgW10fqmD8QWLcd4v0P0B7c2oF
-         UOuPty7DvnIP1hXx+4fNrmF4PP3yczk9Hst/YhDTg+Zb9zDBVJS5bJvPDOlNBe26/Ym7
-         5dhH9mU7w2xc3ncmzXxeiuBl/mKCd+TS6gP0El08mxQGz5pARUKOW7V4nrtGqq3CkMG+
-         OA+QOwpugB3TZYh8/6FWTlx3/SgtKPqKpklqLYymNJo3BJ2iiUJ+nMr83YInf2rO1oGz
-         uRPKDuwtDKnzLTbt4wK0x6Pjs4WAWVLTMlGV2DE7HYEVcryX9h6eT4VdvTPMfY1xLFTW
-         +nAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x4fRFYc30vVTKimcmiwmc/0s2zAjApXTdSQH+fCjeZc=;
-        b=UzT+jJ5fO0CFcWDvHsO6n4ssSsYW7mX7S2XlZVWS3XNYPu1yVNU1+1rDJWjQT4V/Gy
-         2dKmrhqJsm9bCf5paKrj+7q1Vl4m9o0/dIna0Ar0jK8ytr8ARDs/yOqOvxvndQeRHj98
-         ki9QduBNAWTXphwlfv3u5xHMIFpGFY1xUhLVjMu0eFpPRa+LSDDDSL2Xo6i69/DBa/QI
-         A35Ixv6CvHvpD2ITeJK557v0LaVp+B3IZyr6Eu0AroAdHTMeImSn15r7lYICstpaiGMn
-         sn0Toj0dtY87nomfSW69xAyn0zar+D+4WZGtNkWs7iOQgIp089ahw7cgfXs/Vj65kDa1
-         9EvQ==
-X-Gm-Message-State: AOAM531zqVrlFQtWeDm7ens3YW5wz7UiAaVj71vWg3YMNUlNI4BDho31
-	K61Er6sgJG/cO8ZUPtNqJq5rpmM8+oyBHmPgwlP3Hg==
-X-Google-Smtp-Source: ABdhPJwXNLddrQVGyZC3ybRhuNgnpP+SATbyxZTf2xneFJRsYXVCHMlzU26U6NzDh94jiPLqra4RbLz9ctv575Xjku0=
-X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
- d69-20020a811d48000000b002f18ebf25f3mr23701819ywd.118.1651762095701; Thu, 05
- May 2022 07:48:15 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 14CBBC385A4;
+	Thu,  5 May 2022 15:28:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 14CBBC385A4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651764528; x=1683300528;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zajwuSIzW6C6lPQfs2tEYfm5Bvxr1zk48INyaSJUbMc=;
+  b=QAI/DnPxusvMjh9dsSeQdQ4R8lPcIajONBGtBo4DOMp9FUBLedz4WYVX
+   2UcH+TKdO4ugd6lMTwiExt4B2gdPZmTgzarRed8/8GtDMKwO7F0FAxtS8
+   JJFCUkb/2/R5K8nVJDlJIC/4V16iXWdsYGjR1ua8wKbKIsoy0MpFpQAI7
+   uf9g+n7NDtSLcFHvJF2fD9skgfVOGN8uNCRtYAiZkbwg9AnjvMILdZuLe
+   2xgO9HscZj38datHtC8JPsXuLskEBfc1XMaULglC57XHqBuA5rB5j/5nh
+   ewTewkosD67qmTM4Blyg6ZjT9YTRf/UNt9IxOX+WxZmzCt8Et6vhT+9DT
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="162456829"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 08:28:24 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 5 May 2022 08:28:23 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 5 May 2022 08:28:21 -0700
+Message-ID: <1f0b04ac-af35-c20a-94aa-9a45351cc2b4@microchip.com>
+Date: Thu, 5 May 2022 17:28:14 +0200
 MIME-Version: 1.0
-References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
- <20220428214838.1040278-13-Mr.Bossman075@gmail.com> <CACRpkdY2MNkAKhVOQ_Eyq0AwOtEW-seSrxgsJ2D8E78u636A8A@mail.gmail.com>
- <5b8a7e58-1b84-6a6b-cc9e-b4224392b5ef@gmail.com>
-In-Reply-To: <5b8a7e58-1b84-6a6b-cc9e-b4224392b5ef@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 5 May 2022 16:48:04 +0200
-Message-ID: <CACRpkdaK6q6mBTwdxq4sJGUwuzmz+xqCc+G0L9O+=Si_QAkMZQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/15] pinctrl: freescale: Add i.MXRT1170 pinctrl
- driver support
-To: Jesse Taube <mr.bossman075@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH RESEND] ARM: configs: at91: Enable options required for
+ systemd
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, robh+dt@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com, 
-	stefan@agner.ch, daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de, 
-	olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, 
-	dev@lynxeye.de, marcel.ziswiler@toradex.com, tharvey@gateworks.com, 
-	leoyang.li@nxp.com, sebastian.reichel@collabora.com, 
-	cniedermaier@dh-electronics.com, clin@suse.com, 
-	giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+CC: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>
+References: <20220505125736.207029-1-broonie@kernel.org>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220505125736.207029-1-broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 5, 2022 at 1:23 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+Mark,
 
-> > If I get a review from a Freescale maintainer on this driver and the bindings
-> > I can merge it separately, correct?
+On 05/05/2022 at 14:57, Mark Brown wrote:
+> Even smaller embedded systems are using systemd these days, as
+> are test automation systems like KernelCI, so it is useful to be
+> able to use systemd on these boards by default. Enable options
+> that are missing in the at91_dt_defconfig, cgroups which is
+> critical and autofs4 which is less critical but causes warnings
+> on boot when not available.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> 
+> This would be useful for KernelCI which uses a systemd based rootfs for
+> many tests.
+> 
+>   arch/arm/configs/at91_dt_defconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
+> index 549d01be0b47..bbb7f400a57f 100644
+> --- a/arch/arm/configs/at91_dt_defconfig
+> +++ b/arch/arm/configs/at91_dt_defconfig
+> @@ -4,6 +4,7 @@ CONFIG_SYSVIPC=y
+>   CONFIG_NO_HZ_IDLE=y
+>   CONFIG_HIGH_RES_TIMERS=y
+>   CONFIG_LOG_BUF_SHIFT=14
+> +CONFIG_CGROUPS=y
+>   CONFIG_BLK_DEV_INITRD=y
+>   CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+>   CONFIG_KALLSYMS_ALL=y
+> @@ -205,6 +206,7 @@ CONFIG_PWM_ATMEL=y
+>   CONFIG_PWM_ATMEL_HLCDC_PWM=y
+>   CONFIG_PWM_ATMEL_TCB=y
+>   CONFIG_EXT4_FS=y
+> +CONFIG_AUTOFS4_FS=m
 
-> That's fine with me.
-> I cant speak for Abel or Freescale/NXP maintainers though.
+While trying to add this option to our other defconfigs, I read this in 
+the CONFIG_AUTOFS4_FS entry for 5.18-rc1:
 
-I give them some time to review and if I lose my patience I
-usually just merge the patches.
+"This name exists for people to just automatically pick up the
+new name of the autofs Kconfig option. All it does is select
+the new option name.
 
-Yours,
-Linus Walleij
+It will go away in a release or two as people have
+transitioned to just plain AUTOFS_FS."
+
+Don't we need to change to CONFIG_AUTOFS_FS now?
+
+Regards,
+   Nicolas
+
+>   CONFIG_FANOTIFY=y
+>   CONFIG_VFAT_FS=y
+>   CONFIG_TMPFS=y
+> --
+> 2.30.2
+> 
+
+
+-- 
+Nicolas Ferre
