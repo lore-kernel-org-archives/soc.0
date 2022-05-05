@@ -1,263 +1,174 @@
-Return-Path: <SRS0=cFi+=VM=gmail.com=frowand.list@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F37C433EF
-	for <soc@archiver.kernel.org>; Wed,  4 May 2022 21:40:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3FB0C433F5
+	for <soc@archiver.kernel.org>; Thu,  5 May 2022 02:47:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EA46BC385A5; Wed,  4 May 2022 21:40:34 +0000 (UTC)
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B0758C385A4;
-	Wed,  4 May 2022 21:40:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B0758C385A4
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f41.google.com with SMTP id g21so2882261iom.13;
-        Wed, 04 May 2022 14:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7pMVwD47RM1PFqynXyEgTOlvIm8nvv7hB1Tv3GlOAM0=;
-        b=lj+qCsdttvGjAEXZ0lqXkgbGF+eJvJWJIHh2d5EsE5ID1qq5zghgi6ihfKm91OPzaG
-         BhSOue/GpnvbjJ7CDX5BjfK0/q9wzqh2bt1AgRSqEunV/jI/5MHk5G59R9J/SJc8+3bq
-         smEWH6ktpAdPzdBVjJquED1IVIITHPGTQG9IcWhu6RfLeK6cAMRnOm4+kaQCDlUTJ/K/
-         2W9PVSaN6ZHG25nIhKckYaRmPU03l0YzS3bYHDEprE5xd1Y35KsvkZS8kFYpqFpamEWO
-         OTLEGu1UoXcMz6/CsuVFENM45olbyelHmi2ogGZqUGonOGNfeKloxz+VNo2frcLEjkCh
-         8jzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7pMVwD47RM1PFqynXyEgTOlvIm8nvv7hB1Tv3GlOAM0=;
-        b=h8xbp9gcakDVFWkQvP3X7id1rAfg5jUsZ6BB+W7VdjFxAh7bS4cLyHyUOzgvloSfDh
-         ga5rbZ9GKLMHGm5eJiutqjbxY2NZs0NkPR9Vk8jO4xtat0ozrgAlr7e2u2R9fhk8Te4V
-         go9xvuWRsZtVAbBGRp8GTzoU1BtVMhwxnuGCXk0KPdCi1VHJZD9ez8MOKF3CFu9ro1bl
-         iMRjLxycSEEv5YNVDOnUq9kVm31Bp1+jNDaCBF8eg6lebJC2KkbMJrqP08MILQSN0Lno
-         hfk/UL8/tZlvXz68Qq023ho6tl3w54Z75FQ1doHEwZt8OBwiAlPRWT35ynnE+1UNDp7U
-         yd6A==
-X-Gm-Message-State: AOAM533yOXiGEo1JtFT00nDO0R45dvlFHEDc0WCXSY3oylxTmQz3jwbg
-	nOWhd5uRPid/16lXKpKdraeu+/zwRo8=
-X-Google-Smtp-Source: ABdhPJw2GJTpq9f4BjSW8Mn6CbgARaPkrJ9Auty6+zNgCryt/SEsi2WRogD9c4Vk1Ans/fiN9VluRA==
-X-Received: by 2002:a05:6602:1687:b0:65a:856f:42e3 with SMTP id s7-20020a056602168700b0065a856f42e3mr5170910iow.121.1651700432692;
-        Wed, 04 May 2022 14:40:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:5871:54:c73e:3c22? ([2600:1700:2442:6db0:5871:54:c73e:3c22])
-        by smtp.gmail.com with ESMTPSA id u6-20020a022e46000000b0032b3a781799sm18053jae.93.2022.05.04.14.40.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 14:40:32 -0700 (PDT)
-Message-ID: <dcf137b0-9f5c-07b5-e348-a99060136511@gmail.com>
-Date: Wed, 4 May 2022 16:40:30 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/1] of: overlay: rename overlay source files from .dts
- to .dtso
-Content-Language: en-US
-To: Rob Herring <robh+dt@kernel.org>
+	id 5CED8C385AA; Thu,  5 May 2022 02:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16015C385A5;
+	Thu,  5 May 2022 02:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651718863;
+	bh=bQzjVMNbHAk2awAPeFMiHZKI0vi40NJe6ifRjOSuIeM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=QJAZbBG3cFqlbJbs4tlpx36WlNIeWHWvNToJ0HM1d7TyefHH0FoUiLYAMwjjNt1n5
+	 i0V56+0n3NUb1V1FftCS9uBL7ncBT63JzLBHfqMmxePvVcYWRZ57FlzAbSdi0I1Z9K
+	 +Ko/yWndUoU2bLoPAW7/Jhf4SQk8Dt0UI7BImxozCUmccbT9cJnrc6MMoe5WLe/NJD
+	 CCB99lll8FFuLe4y0yRWmWAr+jU5ItmjZt7GPHunCdcyEHkJNoFYxV5sA0kjriCDn9
+	 WJXblxxTjNHVsKDJuNrHji85pPJBnIegNlh8zcWrbe3LyTN4vPaZ07rmCzMLHgZRdA
+	 Yt7b9lYKLliFA==
+Date: Thu, 5 May 2022 10:47:32 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: Marcel Ziswiler <marcel@ziswiler.com>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
- Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
- Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Li Yang <leoyang.li@nxp.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Michal Simek <michal.simek@xilinx.com>, Michal Simek <monstr@monstr.eu>,
- Viresh Kumar <viresh.kumar@linaro.org>, Krzysztof Kozlowski
- <krzk@kernel.org>, Michael Walle <michael@walle.cc>,
- Alex Marginean <alexandru.marginean@nxp.com>,
- Ioana Ciornei <ioana.ciornei@nxp.com>, Dong Aisheng <aisheng.dong@nxp.com>,
- Jason Liu <jason.hui.liu@nxp.com>, Vladimir Oltean
- <vladimir.oltean@nxp.com>, Pengutronix Kernel Team <kernel@pengutronix.de>,
- NXP Linux Team <linux-imx@nxp.com>, devicetree@vger.kernel.org,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- PCI <linux-pci@vger.kernel.org>
-References: <20220503211954.1428919-1-frowand.list@gmail.com>
- <CAL_JsqKqBWKWzQC1qXABuiC6b3OgwfO+c5-fpGz=AgSUSCHCcA@mail.gmail.com>
- <dc72de86-af22-84e3-53fa-8a3958a08fb6@gmail.com>
- <CAL_Jsq+YzYaQMrPjtp0yCRy0dqL2Me+GcLbmj_Drv=XVdvWqdw@mail.gmail.com>
-From: Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAL_Jsq+YzYaQMrPjtp0yCRy0dqL2Me+GcLbmj_Drv=XVdvWqdw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: linux-arm-kernel@lists.infradead.org,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Denys Drozdov <denys.drozdov@toradex.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Li Yang <leoyang.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
+	Marek Vasut <marex@denx.de>,
+	Matthias Schiffer <matthias.schiffer@tq-group.com>,
+	Max Krummenacher <max.krummenacher@toradex.com>,
+	NXP Linux Team <linux-imx@nxp.com>, Olof Johansson <olof@lixom.net>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: Re: [PATCH v2 00/14] ARM: dts: imx6ull-colibri: device tree
+ improvements
+Message-ID: <20220505024732.GO14615@dragon>
+References: <20220425162356.176665-1-marcel@ziswiler.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425162356.176665-1-marcel@ziswiler.com>
 
-On 5/4/22 16:08, Rob Herring wrote:
-> On Wed, May 4, 2022 at 3:42 PM Frank Rowand <frowand.list@gmail.com> wrote:
->>
->> On 5/3/22 16:42, Rob Herring wrote:
->>> On Tue, May 3, 2022 at 4:20 PM <frowand.list@gmail.com> wrote:
->>>>
->>>> From: Frank Rowand <frank.rowand@sony.com>
->>>>
->>>> In drivers/of/unittest-data/:
->>>>    - Rename .dts overlay source files to use .dtso suffix.
->>>>    - Add Makefile rule to build .dtbo.o assembly file from overlay
->>>>      .dtso source file.
->>>>    - Update Makefile to build .dtbo.o objects instead of .dtb.o from
->>>>      unittest overlay source files.
->>>>
->>>> Modify driver/of/unitest.c to use .dtbo.o based symbols instead of
->>>> .dtb.o
->>>>
->>>> Modify scripts/Makefile.lib %.dtbo rule to depend upon %.dtso instead
->>>> of %.dts
->>>>
->>>> Rename .dts overlay source files to use .dtso suffix in:
->>>>    arch/arm64/boot/dts/freescale/
->>>>    arch/arm64/boot/dts/xilinx/
->>>>
->>>> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
->>>> ---
->>>>
->>>> Testing by arm64 people would be much appreciated.
->>>>
->>>> Applies on branch dt/next, commit 4fb74186cee8 of Rob's kernel.org tree.
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
->>>>
->>>> version 1 patch:
->>>>    https://lore.kernel.org/r/20210324223713.1334666-1-frowand.list@gmail.com
->>>>
->>>> changes from version 1:
->>>>    - rebase to 5.18-rc1 plus many patches already accepted by Rob
->>>>      Applies on branch dt/next, commit 4fb74186cee8 of Rob's kernel.org tree.
->>>>    - Add new overlay source files in:
->>>>       arch/arm64/boot/dts/freescale/
->>>>       arch/arm64/boot/dts/xilinx/
->>>
->>> I can't apply these. They need to be applied separately. And probably
->>> at end of the merge window or right after rc1 (IOW, coordinated with
->>> SoC maintainers in advance). Or we support both forms for a cycle.
->>
->> If applied separately then git bisect is broken.  I don't see this change
->> as being big enough to be considered a "flag day" change, but if I can't
->> get the SoC maintainers to ack you pulling these renames then I can easily
->> re-spin in a way to support both forms for a release cycle.
->>
->>>
->>> [...]
->>>
->>>> diff --git a/drivers/of/unittest-data/Makefile b/drivers/of/unittest-data/Makefile
->>>> index d072f3ba3971..df2ca1820273 100644
->>>> --- a/drivers/of/unittest-data/Makefile
->>>> +++ b/drivers/of/unittest-data/Makefile
->>>> @@ -1,38 +1,58 @@
->>>>  # SPDX-License-Identifier: GPL-2.0
->>>> -obj-y += testcases.dtb.o
->>>>
->>>> -obj-$(CONFIG_OF_OVERLAY) += overlay.dtb.o \
->>>> -                           overlay_0.dtb.o \
->>>> -                           overlay_1.dtb.o \
->>>> -                           overlay_2.dtb.o \
->>>> -                           overlay_3.dtb.o \
->>>> -                           overlay_4.dtb.o \
->>>> -                           overlay_5.dtb.o \
->>>> -                           overlay_6.dtb.o \
->>>> -                           overlay_7.dtb.o \
->>>> -                           overlay_8.dtb.o \
->>>> -                           overlay_9.dtb.o \
->>>> -                           overlay_10.dtb.o \
->>>> -                           overlay_11.dtb.o \
->>>> -                           overlay_12.dtb.o \
->>>> -                           overlay_13.dtb.o \
->>>> -                           overlay_15.dtb.o \
->>>> -                           overlay_16.dtb.o \
->>>> -                           overlay_17.dtb.o \
->>>> -                           overlay_18.dtb.o \
->>>> -                           overlay_19.dtb.o \
->>>> -                           overlay_20.dtb.o \
->>>> -                           overlay_bad_add_dup_node.dtb.o \
->>>> -                           overlay_bad_add_dup_prop.dtb.o \
->>>> -                           overlay_bad_phandle.dtb.o \
->>>> -                           overlay_bad_symbol.dtb.o \
->>>> -                           overlay_base.dtb.o \
->>>> -                           overlay_gpio_01.dtb.o \
->>>> -                           overlay_gpio_02a.dtb.o \
->>>> -                           overlay_gpio_02b.dtb.o \
->>>> -                           overlay_gpio_03.dtb.o \
->>>> -                           overlay_gpio_04a.dtb.o \
->>>> -                           overlay_gpio_04b.dtb.o
->>>> +# Generate an assembly file to wrap the output of the device tree compiler
->>>> +quiet_cmd_dt_S_dtbo= DTB     $@
->>>> +cmd_dt_S_dtbo=\
->>>> +{                                                      \
->>>> +       echo '\#include <asm-generic/vmlinux.lds.h>';   \
->>>> +       echo '.section .dtb.init.rodata,"a"';           \
->>>> +       echo '.balign STRUCT_ALIGNMENT';                \
->>>> +       echo '.global __dtbo_$(subst -,_,$(*F))_begin'; \
->>>> +       echo '__dtbo_$(subst -,_,$(*F))_begin:';        \
->>>> +       echo '.incbin "$<" ';                           \
->>>> +       echo '__dtbo_$(subst -,_,$(*F))_end:';          \
->>>> +       echo '.global __dtbo_$(subst -,_,$(*F))_end';   \
->>>> +       echo '.balign STRUCT_ALIGNMENT';                \
->>>> +} > $@
->>>> +
->>>> +
->>>> +$(obj)/%.dtbo.S: $(obj)/%.dtbo FORCE
->>>> +       $(call if_changed,dt_S_dtbo)
->>>
->>> Humm, this belongs in scripts/Makefile.lib.
->>
->> I would rather keep it isolated to just the use in unittest.
->> We just now got rid of the final driver use of of_overlay_fdt_apply()
->> by the grandfathered legacy user in:
->>
->>    841281fe52a7 drm: rcar-du: Drop LVDS device tree backward compatibility
->>
->> That driver was the only use of %.dtb.S for an overlay.
+On Mon, Apr 25, 2022 at 06:23:42PM +0200, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 > 
-> I'd actually prefer more drivers handling compatibility this way than
-> handling old and new DTs in code. That's easier to find and when
-> compatibility with old DTs is no longer needed we can just remove the
-> fixup overlay. Though I guess that one was a lot of code too, but that
-> would probably be mitigated if we had multiple users. Anyways, that's
-> a side issue.
-
-If I remember correctly, that is a total reversal of previous discussions
-and policy decisions.
-
-My previous position has been to not have drivers applying overlays.
-I'll have to step back and revisit the concept, trying to set aside
-my previous assumptions and conclusions.
-
-But before I go away and revisit, there is one thing to mention.  Now
-that you have machine parseable bindings (and many of them implemented)
-and also a method to statically validate overlays applied on top of
-specific base .dtbs (that is the purpose of the arch/arm64/dts/* files
-that I renamed in this patch, right?), allowing drivers to dynamically
-apply overlays, potentially after modifying the base devicetree (that's
-the other patch series I need to be reviewing at the moment...) reduces
-the validation coverage.
-
 > 
-> .dtb.S is an intermediate format that no one looks at. The arguments
-> for knowing what the file is don't really apply to it. We should do
-> here whatever makes the makefiles the simplest.
+> This is a general update of the Colibri iMX6ULL device tree files.
 > 
->> I can't eliminate the rule for %.dtb.S because that is used in several
->> cases for building the system FDT into the kernel.  But having this
->> rule in drivers/of/unittest-data/Makefile provides consistent naming
->> of overlays withing unittest.  Helping to make it clear that they are
->> not a system FDT.
+> The Toradex Colibri family is composed of a SoM that can be plugged on
+> various carrier boards, with carrier boards allowing multiple optional
+> accessories (e.g. display, camera, ...).
 > 
-> But if they are in one spot you can make that whole unreadable mess of
-> a command a macro with '.dtb.S' becoming a variable. Then we have 1
-> unreadable blob and when someone goes to fix something in it, they
-> don't have to find our hidden copy.> 
->>> I don't think we need a different section name with __dtbo_* instead
->>> of __dtb_* if that simplifies the Makefile.
->>
->> A different section name is not needed if the rule is moved to
->> scripts/Makefile.lib but even if moved there, I prefer to keep the
->> overlay data clearly delineated from the system FDT data.
+> The device tree sources are structured into a SoM dtsi and a carrier dts
+> which then includes the SoM dtsi. The SoM dtsi defines and enables the
+> functionality self-contained on the SoM and prepares for the
+> functionality provided by the carrier HW or accessories so that the
+> carrier dts then can enable or amend nodes provided. Accessories are
+> enabled in overlays depending on HW configuration.
 > 
-> At least make that a separate patch then.
+> Please find the following colibri-imx6ull device trees improvements:
+> 
+> - MMC/SD
+> The original Colibri specification only defined 3.3 volt TTL signaling
+> and relied on external on-carrier pull-ups for the SD_DATA[0..3] lines.
+> The latest carrier boards like Iris V2 on the other hand are now UHS-I
+> compliant by leaving such external on-carrier pull-ups away relying on
+> module- or even SoC-level ones which pull up to resp. signaling voltage.
+> In such cases, the carrier board-level device tree may explicitly delete
+> the no-1-8-v property to enable full UHS-I support.
+> Also, fix SD/MMC regulator for the carrier boards using UHS-I modes.
+> 
+> - FEC
+> Provide a proper phy-supply for the FEC, actually switched by the 50 Mhz
+> RMII interface clock using a regulator-fixed-clock that is now properly
+> stated. The reference commit for such regulator can be found at commit
+> 8959e5324485 ("regulator: fixed: add possibility to enable by clock").
+> 
+> - I2C
+> Switched on 22 kOhm pull-ups and lower the I2C frequency to 40 kHz to
+> get more reliable communication.
+> 
+> - Atmel Touchscreen
+> The Toradex 7" Capacitive and 10" LVDS touch screens are Atmel MXT
+> peripherals available on the I2C bus for touchscreen events. Add
+> atmel_mxt_ts node to the module-level device tree. Also, provide pinmux
+> configuration for the INT/RST inputs from SODIMM pins 106/107 for most
+> carrier boards or an external touchscreen adapter inputs configured to
+> SODIMM pins 28/30.
+> 
+> Changes in v2:
+> - Fixed pinctrl node names as suggested by Shawn.
+> - Fixed long line as pointed out by Rob's bot.
+> - Added V3 to Colibri Evaluation Board as done elsewhere.
+> - Fix alphabetical node order as suggested by Shawn.
+> - Dropped [PATCH v1 02/14] ARM: dts: imx6ull-colibri: fix vqmmc
+>   regulator which already got applied by Shawn. Thanks!
+> - New commit with pinctrl node name improvements as suggested by Shawn.
+> 
+> Denys Drozdov (5):
+>   ARM: dts: imx6ull-colibri: add touchscreen device nodes
+>   ARM: dts: imx6ull-colibri: update device trees to support overlays
+>   dt-bindings: arm: fsl: add toradex,colibri-imx6ull
+>   ARM: dts: imx6ull-colibri: add support for toradex iris carrier boards
+>   ARM: dts: imx6ull-colibri: add support for toradex aster carrier
+>     boards
+> 
+> Marcel Ziswiler (4):
+>   ARM: dts: imx6ull-colibri: fix nand bch geometry
+>   ARM: dts: imx6ull-colibri: add/update some comments
+>   ARM: dts: imx6ull-colibri: move gpio-keys node to som dtsi
+>   ARM: dts: imx6ull-colibri: improve pinctrl node names
+> 
+> Max Krummenacher (1):
+>   ARM: dts: imx6ull-colibri: change touch i2c parameters
+> 
+> Oleksandr Suvorov (1):
+>   ARM: dts: imx6ull-colibri: add gpio-line-names
+> 
+> Philippe Schenker (3):
+>   ARM: dts: imx6ull-colibri: use pull-down for adc pins
+>   ARM: dts: imx6ull-colibri: add phy-supply to fec
+>   ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
 
-OK, will do.
+The dts series doesn't apply to my branch.
 
-> 
-> Rob
+Applying: ARM: dts: imx6ull-colibri: use pull-down for adc pins
+Applying: ARM: dts: imx6ull-colibri: change touch i2c parameters
+Applying: ARM: dts: imx6ull-colibri: add phy-supply to fec
+Applying: ARM: dts: imx6ull-colibri: add touchscreen device nodes
+Applying: ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
+error: patch failed: arch/arm/boot/dts/imx6ull-colibri.dtsi:35
+error: arch/arm/boot/dts/imx6ull-colibri.dtsi: patch does not apply
+Patch failed at 0005 ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
+hint: Use 'git am --show-current-patch' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
+Applying: ARM: dts: imx6ull-colibri: update device trees to support overlays
+Applying: ARM: dts: imx6ull-colibri: add gpio-line-names
+Applying: ARM: dts: imx6ull-colibri: add support for toradex iris carrier boards
+Applying: ARM: dts: imx6ull-colibri: add support for toradex aster carrier boards
+Applying: ARM: dts: imx6ull-colibri: fix nand bch geometry
+Applying: ARM: dts: imx6ull-colibri: add/update some comments
+error: patch failed: arch/arm/boot/dts/imx6ull-colibri.dtsi:251
+error: arch/arm/boot/dts/imx6ull-colibri.dtsi: patch does not apply
+Patch failed at 0011 ARM: dts: imx6ull-colibri: add/update some comments
+hint: Use 'git am --show-current-patch' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+
+Applying: ARM: dts: imx6ull-colibri: move gpio-keys node to som dtsi
+Applying: ARM: dts: imx6ull-colibri: improve pinctrl node names
+error: patch failed: arch/arm/boot/dts/imx6ull-colibri.dtsi:292
+error: arch/arm/boot/dts/imx6ull-colibri.dtsi: patch does not apply
+Patch failed at 0013 ARM: dts: imx6ull-colibri: improve pinctrl node names
+hint: Use 'git am --show-current-patch' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+
+Shawn
