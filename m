@@ -1,658 +1,181 @@
-Return-Path: <SRS0=/fei=VO=ziswiler.com=marcel@kernel.org>
+Return-Path: <SRS0=gEjD=VO=toradex.com=marcel.ziswiler@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E4A4C433EF
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 13:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751ADC433F5
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 13:44:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40861C385B1; Fri,  6 May 2022 13:25:25 +0000 (UTC)
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+	id 3F77DC385B1; Fri,  6 May 2022 13:44:20 +0000 (UTC)
+Received: from de-smtp-delivery-213.mimecast.com (de-smtp-delivery-213.mimecast.com [194.104.111.213])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 59CACC385A8;
-	Fri,  6 May 2022 13:25:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 59CACC385A8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ziswiler.com
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MHmnb-1nnnpc17zp-003fxu;
- Fri, 06 May 2022 15:24:49 +0200
-From: Marcel Ziswiler <marcel@ziswiler.com>
-To: linux-arm-kernel@lists.infradead.org
+	by smtp.kernel.org (Postfix) with ESMTPS id E19A6C385AA
+	for <soc@kernel.org>; Fri,  6 May 2022 13:44:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E19A6C385AA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=toradex.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=toradex.com
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2105.outbound.protection.outlook.com [104.47.22.105]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-22-d5woUW79NIOIJ2hVHnz6ew-1; Fri, 06 May 2022 15:44:14 +0200
+X-MC-Unique: d5woUW79NIOIJ2hVHnz6ew-1
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ ZR0P278MB0619.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3a::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.24; Fri, 6 May 2022 13:44:12 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::c52f:2a3f:8cf5:6144]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::c52f:2a3f:8cf5:6144%4]) with mapi id 15.20.5206.027; Fri, 6 May 2022
+ 13:44:12 +0000
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To: "shawnguo@kernel.org" <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Denys Drozdov <denys.drozdov@toradex.com>,
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Olof Johansson <olof@lixom.net>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org
-Subject: [PATCH v3 08/13] ARM: dts: imx6ull-colibri: add support for toradex iris carrier boards
-Date: Fri,  6 May 2022 15:24:11 +0200
-Message-Id: <20220506132416.273965-9-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220506132416.273965-1-marcel@ziswiler.com>
-References: <20220506132416.273965-1-marcel@ziswiler.com>
+CC: "linux-imx@nxp.com" <linux-imx@nxp.com>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "soc@kernel.org" <soc@kernel.org>,
+	"frowand.list@gmail.com" <frowand.list@gmail.com>, "l.stach@pengutronix.de"
+	<l.stach@pengutronix.de>, Denys Drozdov <denys.drozdov@toradex.com>,
+	"alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+	"olof@lixom.net" <olof@lixom.net>, "matthias.schiffer@tq-group.com"
+	<matthias.schiffer@tq-group.com>, "marex@denx.de" <marex@denx.de>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>, "tharvey@gateworks.com"
+	<tharvey@gateworks.com>, "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>, "kernel@pengutronix.de"
+	<kernel@pengutronix.de>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "festevam@gmail.com" <festevam@gmail.com>,
+	Max Krummenacher <max.krummenacher@toradex.com>
+Subject: Re: [PATCH v2 00/14] ARM: dts: imx6ull-colibri: device tree
+ improvements
+Thread-Topic: [PATCH v2 00/14] ARM: dts: imx6ull-colibri: device tree
+ improvements
+Thread-Index: AQHYWMDrkguBdVFYI0mLpdSkg5mHma0Po20AgAJJzQA=
+Date: Fri, 6 May 2022 13:44:12 +0000
+Message-ID: <6a5a4a58092135ce70c404edfaf2570c926878dd.camel@toradex.com>
+References: <20220425162356.176665-1-marcel@ziswiler.com>
+	 <20220505024732.GO14615@dragon>
+In-Reply-To: <20220505024732.GO14615@dragon>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6605d3ad-a2fb-4505-91cc-08da2f66813b
+x-ms-traffictypediagnostic: ZR0P278MB0619:EE_
+x-microsoft-antispam-prvs: <ZR0P278MB06197D1711E5B4C28504397BFBC59@ZR0P278MB0619.CHEP278.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: 9/WcQAug6PMcU1ID0Bw85huSba4Kh7qB2+fu9ufOUJdcG5gyPpDesnkrvq9mqO3Oj/uVN/sMg4ku60dGRgtYkd7jXO3wQzqWIzLnBz4hPJalwvcLj3fcVtzf0uqvJMndbT49NppX83TFf1q/gqzJF3t0f8DVIENDK1X7/ohdmspzXReO8f0x5E34gqvt0xVbuJYJP0c3Ki2rhT/r9YSxHD4zMsx/XOvV2ZlWMdW7Ljd3jB8tfFRW8Hw6LKqsC2v2NSHaZDVxqLadfUY6hhry4AKEvuLxIRAj8Oc6iBEWiOBWGhdFlxkt/OspUohSos7X8qpcovp9cdqpoWfrMze0Mi7bjl8UzqucLCXhRSXLrQg+OFEHLDTVRMI8ziwEUiXT0FD9xrInCFJysb1dPwp7Wpgzy4SakrW1j3OUXbuVYennwkONNa6YLD6CF5xyHiRLvy+HmEPBWcc7rqej8ipYAT9JIgijCIfbM4w7bNWFwgiMDjYuf8PhxaAP9G4AhEjJ5GHQp8CuS0E5MzbPASZreS2jRuMw93fF+ZXv3KV/q5FlNnPurFJl357pDznnaFLtiG0UZBLr2sjkEXL1jwlA4AHaJBe/1+P2FhtwQft/FOB73Lk9iejR+44MBeQxfbnmnVDLwOI3oJxB4uGbVJJeg3pL792Ox7MiFPYSYkA81diEgCkBHxWZEztT9I7Iv453WIKHEZ40p4qPV4kpoYOE2Pf9YSIynDMTZjNfEXPuORE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(346002)(66476007)(8676002)(4326008)(64756008)(2616005)(316002)(6512007)(26005)(6506007)(66446008)(76116006)(66946007)(66556008)(6916009)(86362001)(508600001)(71200400001)(6486002)(186003)(107886003)(38100700002)(122000001)(38070700005)(83380400001)(36756003)(44832011)(7416002)(2906002)(8936002)(5660300002)(54906003)(32563001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K2hieW0rRm81ckc0c3VKS2VXdy9BU0k2K2dzeGdRYlJvMnJSVnlRbHUxT0dt?=
+ =?utf-8?B?aGRqdFFUSzlDSVc2TFcrQjJoUHdSZ0hrbndnYVA5SnRQR1RPSmRGekIzODdD?=
+ =?utf-8?B?WVFPZlRwRHZGRkR0R0ZMTTV3bFRxblJYUW5qK1VnMnZxSVNSQ01ZZkIyVUw4?=
+ =?utf-8?B?bG5oNlRSdUtSaDdxMHJHaW53UDFVM3VhbU5PN09PeHpMdUNNejIyb0tNaEVi?=
+ =?utf-8?B?UldjK3hhaktJL0NPTkgzMGNhM2hjczlLQ0xsYjYzd0JPaklJUXFsRkFHNXAx?=
+ =?utf-8?B?eDUvQmRYTHYvOGhmV3h6QzUycFVQdjlZaHZuclZXM0ZaQUJMcXNDTVF1c2Rj?=
+ =?utf-8?B?dGZvVEx1MkdFdEYrSTV0TzlIZWFqZklrbVpQb3FNVm1sS085YnBRLzRzWDll?=
+ =?utf-8?B?MWsvd3JRY2x6Tml6ZG5FQ3JFSSs3ZWdCSmRqNTBXRTkvTlFXbWozTnJnM0V4?=
+ =?utf-8?B?YmJkVXJHajdIaEtpSFRONVFaam8xV2dPVzZEWWhhV0tYRW1DRC9RUFd2Ynoy?=
+ =?utf-8?B?YTFGc2xRdThoczhEQisyVkMxZ3RPQWtjU0dFdlJYQllyVVh1RjEvYVowTTcr?=
+ =?utf-8?B?NTBITjZENmFRTGlhR0JvbXVsMFZLb29oS25HVklxeXh5SUtDUXpCQTZmcFQr?=
+ =?utf-8?B?NDFCaFdlYzM4UzZsQy9yQnZTR2F1NFg0S0RaeHgydTVTcis0TllmM0tENHRG?=
+ =?utf-8?B?YjU0S2NmWmhRbGJXVFhVTVBNZXcwRnlscVRaTU4rT1hVWStDeklhdEZkWXZB?=
+ =?utf-8?B?ZnJPYUhIZDZNVGVkaGJnT1RTNkdUcVJsZ3ZWSWl2K1pVNW1USlB4bU1ENHJa?=
+ =?utf-8?B?Y2dXK3FsWkloOU1VVG1zTEM4bHo0RE5wVitad0ZGSUdXa0kzNTdpay9Nb0hR?=
+ =?utf-8?B?VWlQN1F6QldOMzZGWVF0K3JzdktsMHZZTC9tVXdJY3NsT0R6UkNlRCtCdVBU?=
+ =?utf-8?B?dlgybFY4OGJXc25WMW9UL1pvbWM4N002eTkvekExcVFFSnp4MmlzQnZkQWow?=
+ =?utf-8?B?U1VWS3MwdzBuQ3FUSExXVFVVNUh4RFRES1hhOUlKa3JkSmIyVUtIWUxJM2dR?=
+ =?utf-8?B?RnhkRUtPL3hQODJBYnBSL0ZWaGVMVmZkUk5RYStCNHlXMTFUZGRub09zajFG?=
+ =?utf-8?B?NjVBaklwU0JqRXRSYlIraS9NYU11NzN4UEFkSFV5SmZwd1g1SHlFRUFNT3hG?=
+ =?utf-8?B?VDJncitkY2tkbmxlVW9kMWVIcDNSS09hbDlzb1c2UnpoUGl4RzZ4ZHplcjR1?=
+ =?utf-8?B?UnU2TFN3bzVibk1LOUhDMEF5cC9CNU5iSVFmZmdhZFlJTE5ZTDR0SUcyM0NR?=
+ =?utf-8?B?VHlkaGY3MW9FQ1UwNFRwNEFqVWxpRVI4TFgzNW1XMk5xbDVFUENpSnhGdjJp?=
+ =?utf-8?B?dmw5Wjk0ZUY5SkZyZjF2ZHRjWHBZaTBaNDFhRUx3QzBzOVB5ZFdtOUQzcWdD?=
+ =?utf-8?B?S09rajJRcEFDcWRwUHNDZ3lGL0RTK1lwTVhjdHFlUHVJWEl0MjJabEhVMkh5?=
+ =?utf-8?B?bEEwMGlTZDJ6cDJ3Qkp1a2JNZTFoOXdncHUyZXpWRzJkVnN5dUIwcW1yT2xr?=
+ =?utf-8?B?VVVQc2s3VStlaWtzUEVCNm9LZWtlRjhiVlE5NXBXUCt5OWdaNXljckxyT3Fv?=
+ =?utf-8?B?M1psYlRMdEk4NmdhZS8rV09hTUFqREo2bnJWTWk4N1NtdUR4anFrcTZWTVIx?=
+ =?utf-8?B?bXFHRTNJZDMwODJ0UXk0bVZiV1ZsZWU1M0pjb3NjY044UFR5V3RRU09ET3g1?=
+ =?utf-8?B?eGFYQVRMeEgxb3FhL082aXVBTVhUNENqVWptemMxUmhXQWJqdGlSUDRjMFlV?=
+ =?utf-8?B?L1NTaUNkVHUrMWN6d1RUMHg0bG5jWE5hYXBmZzRhRlhPUHVGdWhZamFEOU1k?=
+ =?utf-8?B?U3dVdGU0SXVQREg3SGhINjNOaGxSVTJjU0k5ZjFSS0t4T254OWQrVjVuL2Jx?=
+ =?utf-8?B?YzBBV1QxSzNQbTlIaG9uZm0xZ0JCbnJoM3kxTWc3aXVhL0UzYm1RQURVMW5B?=
+ =?utf-8?B?a3hXM01mMlhZbjBtdDluVHhrM3NUOFRXM1lteCtIVkFIcDE2bHp4TzdWaGh6?=
+ =?utf-8?B?Vyt2OUxxdXhJMnpJWnJPRGVZcHg3eXdYVXNlaVJFRDZtS1NKcG9iQkZsVG1S?=
+ =?utf-8?B?dTlrd1U4c2tHc1BrZUhOOWgzdWFodjUxK1ZDSzl4dVZmbUJ4QzZCSzYyRnRz?=
+ =?utf-8?B?OUozMUlsL1UxUGdBb250UVZscXhHY3ErNjF0OG0wZ0hpb3Zrc2htRGs2NEho?=
+ =?utf-8?B?cUFxNDVqRk4xQXYyTDJmalhEcXMvQkFBT1pNckw4L3l1Tytpd3luMllCTHNT?=
+ =?utf-8?B?RGdZWGZnYWtRaHVZVm5ya0gyRFBFQkZkaXZsc2I3djNNR2E5MUFoQmdDRXhO?=
+ =?utf-8?Q?q8P/ewEJGe1hC7gO8nGfCcNhIbppQbTSLIysb?=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:XVnGLvfT9RAgSXntsQzKOxA2U1aob3avOFMoEbCwf5u+/zWMXY7
- ebgVsLARLDFUaoz3s48dXkw671rt0ZvY36lZ/O60sbcVLJcDF8guPbIj33jC+dmGf4ONV1Q
- q67dK7utkkmZZ2teGzaJ6TI1+0f2t/Hb5tyXlEb3yoZzSuFRPLH5qUqEkq1xLdkGAUaL/09
- 4MfEZffi8A7ipPvctH+mw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X+G8Z4paqdg=:CAFvuYjvEA10rMcHipyBR2
- SXLtyA7ITq/WsynolOTLqN5eYjNo5Bkt874gXcq1fpm9qmhpC8Pg17yfZxDKSfS1MH4d1F67Q
- r0cuJoJobtoG7XAHnXZ//rh3L1D30tDAkohI6hAufrYWsNzXUHYEINbMpzXz7L6335/bNpr9E
- kjHm0jgJ2xVuJrU9oPTavRppj8KuSjcjaf0Mab1JE4Nl+8zvRjYPNmjo+Da6jzGliUj3I3t2N
- pC9JEopiVv5FrEIxiXg1ZW/1RHixE4qKHgsO1b3V4kQ+lPz1jrr0COohYJ/2EKD+D4eTbSzSH
- YAtjJgOJU8quCCFZB4H3qDhYqio7pDjCkHEYeY2s1eSYmM3KeI/QMxVPyjoU7evzll2s089uU
- OEtdtpry2SvtAr4Q6GuFvdWYzc2WNK1EQlhWV8a18+EzXzAdmkHnvw8Rr1vWJlbG8r7IvDhVM
- pEzMqJ7TMWUuZ4AJiM0gYBjAZK6AUNzrHTPsz0YUjPD/FwnzVAhWZ0iEPOkvB0QayQsTeg4bS
- X9Sq59vT1C7qy5sGS7QNpLB3kZLH7MrJvcLVyPRnt+hzD2ge8y4ORbU7egROBqUZl+RUW9dn2
- txnlOLwtgoExL0J1WHmP58RFl+081c4zYL/ay3hwQVEXAniNftgKZEQq/QZ130hWetT0+0oKC
- nB2Acfxom0suiG5cHJSLm8ZgELetduQzkKCqyUUlPmq/228+2Q8Sb6FNrT+ThV5998kyoqWiV
- DFWjysn7owLJB6B4
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6605d3ad-a2fb-4505-91cc-08da2f66813b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2022 13:44:12.7056
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VCtl9t4wY3/nqxyZAF2+wYXBYcnTu0pNFyRnHN3mfbmgvg9b7Oc3IDCKle6XdZYfX9b7jwT4AE0/x2XuHCDJ3Wl3r1hxO6nlkM3eclxl5Hc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0619
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CDE13A77 smtp.mailfrom=marcel.ziswiler@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <470FF257C31BC947B2E533D7BE7F1BDB@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 
-From: Denys Drozdov <denys.drozdov@toradex.com>
-
-Add support for Toradex Iris, small form-factor Pico-ITX Colibri Arm
-Computer Module family carrier boards.
-
-Iris Device Trees:
-- imx6ull-colibri-iris.dtb
-- imx6ull-colibri-emmc-iris.dtb
-- imx6ull-colibri-wifi-iris.dtb
-
-Iris-V2 Device Trees:
-- imx6ull-colibri-iris-v2.dtb
-- imx6ull-colibri-emmc-iris-v2.dtb
-- imx6ull-colibri-wifi-iris-v2.dtb
-
-Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-
----
-
-Changes in v3:
-- Replaced underscores by dashes in GPIO hog node names.
-- Added more LVDS specific GPIO hogs in-line with other modules.
-
-Changes in v2:
-- Fix alphabetical node order as suggested by Shawn.
-
- arch/arm/boot/dts/Makefile                    |   6 +
- .../boot/dts/imx6ull-colibri-emmc-iris-v2.dts |  17 +++
- .../boot/dts/imx6ull-colibri-emmc-iris.dts    |  17 +++
- .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     |   4 +-
- arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts |   6 +-
- .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi |   5 +-
- arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts |  65 +++++++++
- .../arm/boot/dts/imx6ull-colibri-iris-v2.dtsi |  27 ++++
- arch/arm/boot/dts/imx6ull-colibri-iris.dts    |  20 +++
- arch/arm/boot/dts/imx6ull-colibri-iris.dtsi   | 132 ++++++++++++++++++
- .../arm/boot/dts/imx6ull-colibri-nonwifi.dtsi |   4 +-
- .../boot/dts/imx6ull-colibri-wifi-eval-v3.dts |   4 +-
- .../boot/dts/imx6ull-colibri-wifi-iris-v2.dts |  65 +++++++++
- .../boot/dts/imx6ull-colibri-wifi-iris.dts    |  20 +++
- arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi   |   4 +-
- arch/arm/boot/dts/imx6ull-colibri.dtsi        |   4 +-
- 16 files changed, 385 insertions(+), 15 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0ad8339e07d8..6c737679165c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -707,8 +707,14 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
- 	imx6ul-tx6ul-mainboard.dtb \
- 	imx6ull-14x14-evk.dtb \
- 	imx6ull-colibri-emmc-eval-v3.dtb \
-+	imx6ull-colibri-emmc-iris.dtb \
-+	imx6ull-colibri-emmc-iris-v2.dtb \
- 	imx6ull-colibri-eval-v3.dtb \
-+	imx6ull-colibri-iris.dtb \
-+	imx6ull-colibri-iris-v2.dtb \
- 	imx6ull-colibri-wifi-eval-v3.dtb \
-+	imx6ull-colibri-wifi-iris.dtb \
-+	imx6ull-colibri-wifi-iris-v2.dtb \
- 	imx6ull-jozacp.dtb \
- 	imx6ull-myir-mys-6ulx-eval.dtb \
- 	imx6ull-opos6uldev.dtb \
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
-new file mode 100644
-index 000000000000..b9060c2f7977
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-emmc-nonwifi.dtsi"
-+#include "imx6ull-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 1G (eMMC) on Colibri Iris V2";
-+	compatible = "toradex,colibri-imx6ull-iris-v2",
-+		     "toradex,colibri-imx6ull-emmc",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
-new file mode 100644
-index 000000000000..0ab71f2f5daa
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-emmc-nonwifi.dtsi"
-+#include "imx6ull-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 1GB (eMMC) on Colibri Iris";
-+	compatible = "toradex,colibri-imx6ull-emmc-iris",
-+		     "toradex,colibri-imx6ull-emmc",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-index a099abfdfa27..1d75bc671f75 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2021 Toradex
-+ * Copyright 2022 Toradex
-  */
- 
- #include "imx6ull-colibri.dtsi"
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts
-index 08669a18349e..9bf7111d7b00 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2018 Toradex AG
-+ * Copyright 2018-2022 Toradex
-  */
- 
- /dts-v1/;
-@@ -9,6 +9,6 @@
- #include "imx6ull-colibri-eval-v3.dtsi"
- 
- / {
--	model = "Toradex Colibri iMX6ULL 256MB on Colibri Evaluation Board V3";
-+	model = "Toradex Colibri iMX6ULL 256/512MB on Colibri Evaluation Board V3";
- 	compatible = "toradex,colibri-imx6ull-eval", "fsl,imx6ull";
- };
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-index 3c07b4273e80..08197c66af12 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2017 Toradex AG
-+ * Copyright 2017-2022 Toradex
-  */
- 
- / {
-@@ -121,6 +121,7 @@ &uart5 {
- };
- 
- &usbotg1 {
-+	vbus-supply = <&reg_usbh_vbus>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
-new file mode 100644
-index 000000000000..afc1e0119783
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2018-2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-nonwifi.dtsi"
-+#include "imx6ull-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 256M/512B on Colibri Iris V2";
-+	compatible = "toradex,colibri-imx6ull-iris-v2",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-+
-+&gpio1 {
-+	/* This turns the LVDS transceiver on */
-+	lvds-power-on {
-+		gpio-hog;
-+		gpios = <14 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
-+		line-name = "LVDS_POWER_ON";
-+		output-high;
-+	};
-+};
-+
-+&gpio2 {
-+	/*
-+	 * This switches the LVDS transceiver to the single-channel
-+	 * output mode.
-+	 */
-+	lvds-ch-mode {
-+		gpio-hog;
-+		gpios = <0 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
-+		line-name = "LVDS_CH_MODE";
-+		output-high;
-+	};
-+
-+	/*
-+	 * This switches the LVDS transceiver to the 24-bit RGB mode.
-+	 */
-+	lvds-rgb-mode {
-+		gpio-hog;
-+		gpios = <1 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
-+		line-name = "LVDS_RGB_MODE";
-+		output-low;
-+	};
-+};
-+
-+&gpio5 {
-+	/*
-+	 * This switches the LVDS transceiver to VESA color mapping mode.
-+	 */
-+	lvds-color-map {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
-+		line-name = "LVDS_COLOR_MAP";
-+		output-low;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
-new file mode 100644
-index 000000000000..93649cad0cc0
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2018-2022 Toradex
-+ */
-+
-+#include "imx6ull-colibri-iris.dtsi"
-+
-+/ {
-+	reg_3v3_vmmc: regulator-3v3-vmmc {
-+		compatible = "regulator-fixed";
-+		regulator-name = "3v3_vmmc";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpio1 26 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <100>;
-+		enable-active-high;
-+	};
-+};
-+
-+
-+&usdhc1 {
-+	cap-power-off-card;
-+	vmmc-supply = <&reg_3v3_vmmc>;
-+	/delete-property/ keep-power-in-suspend;
-+	/delete-property/ no-1-8-v;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris.dts b/arch/arm/boot/dts/imx6ull-colibri-iris.dts
-new file mode 100644
-index 000000000000..4fb97b0fe30b
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-iris.dts
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2018-2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-nonwifi.dtsi"
-+#include "imx6ull-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 256/512MB on Colibri Iris";
-+	compatible = "toradex,colibri-imx6ull-iris",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi b/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
-new file mode 100644
-index 000000000000..7f3b37baba88
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2018-2022 Toradex
-+ */
-+
-+/ {
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_snvs_gpiokeys>;
-+
-+		power {
-+			label = "Wake-Up";
-+			gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
-+			linux,code = <KEY_WAKEUP>;
-+			debounce-interval = <10>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	reg_3v3: regulator-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "3.3V";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	reg_5v0: regulator-5v0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "5V";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_usbh_vbus: regulator-usbh-vbus {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbh_reg>;
-+		regulator-name = "VCC_USB[1-4]";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpio1 2 GPIO_ACTIVE_LOW>;
-+		vin-supply = <&reg_5v0>;
-+	};
-+};
-+
-+&adc1 {
-+	status = "okay";
-+};
-+
-+&gpio1 {
-+	/*
-+	 * uart25_tx_on turns the UART transceiver on. If one wants to turn the
-+	 * transceiver off, that property has to be deleted and the gpio handled
-+	 * in userspace.
-+	 * The same applies to uart1_tx_on.
-+	 */
-+	uart25_tx_on {
-+		gpio-hog;
-+		gpios = <15 0>;
-+		output-high;
-+	};
-+};
-+
-+&gpio2 {
-+	uart1_tx_on {
-+		gpio-hog;
-+		gpios = <7 0>;
-+		output-high;
-+	};
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	/* M41T0M6 real time clock on carrier board */
-+	m41t0m6: rtc@68 {
-+		compatible = "st,m41t0";
-+		reg = <0x68>;
-+	};
-+};
-+
-+/* PWM <A> */
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+/* PWM <B> */
-+&pwm5 {
-+	status = "okay";
-+};
-+
-+/* PWM <C> */
-+&pwm6 {
-+	status = "okay";
-+};
-+
-+/* PWM <D> */
-+&pwm7 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&usbotg1 {
-+	vbus-supply = <&reg_usbh_vbus>;
-+	status = "okay";
-+};
-+
-+&usbotg2 {
-+	vbus-supply = <&reg_usbh_vbus>;
-+	status = "okay";
-+};
-+
-+&usdhc1 {
-+	vmmc-supply = <&reg_3v3>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-index 60f169227ad9..88901db255d6 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-nonwifi.dtsi
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2018 Toradex AG
-+ * Copyright 2018-2022 Toradex
-  */
- 
- #include "imx6ull-colibri.dtsi"
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts
-index df72ce1ae2cb..1d64d1a5d8a7 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dts
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2018 Toradex AG
-+ * Copyright 2018-2022 Toradex
-  */
- 
- /dts-v1/;
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
-new file mode 100644
-index 000000000000..ce02f8a9ddd3
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2018-2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-wifi.dtsi"
-+#include "imx6ull-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 512MB on Colibri Iris V2";
-+	compatible = "toradex,colibri-imx6ull-wifi-iris-v2",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-+
-+&gpio1 {
-+	/* This turns the LVDS transceiver on */
-+	lvds-power-on {
-+		gpio-hog;
-+		gpios = <14 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
-+		line-name = "LVDS_POWER_ON";
-+		output-high;
-+	};
-+};
-+
-+&gpio2 {
-+	/*
-+	 * This switches the LVDS transceiver to the single-channel
-+	 * output mode.
-+	 */
-+	lvds-ch-mode {
-+		gpio-hog;
-+		gpios = <0 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
-+		line-name = "LVDS_CH_MODE";
-+		output-high;
-+	};
-+
-+	/*
-+	 * This switches the LVDS transceiver to the 24-bit RGB mode.
-+	 */
-+	lvds-rgb-mode {
-+		gpio-hog;
-+		gpios = <1 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
-+		line-name = "LVDS_RGB_MODE";
-+		output-low;
-+	};
-+};
-+
-+&gpio5 {
-+	/*
-+	 * This switches the LVDS transceiver to VESA color mapping mode.
-+	 */
-+	lvds-color-map {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
-+		line-name = "LVDS_COLOR_MAP";
-+		output-low;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
-new file mode 100644
-index 000000000000..5ac1aa298ce7
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2018-2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx6ull-colibri-wifi.dtsi"
-+#include "imx6ull-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6ULL 512MB on Colibri Iris";
-+	compatible = "toradex,colibri-imx6ull-wifi-iris",
-+		     "toradex,colibri-imx6ull",
-+		     "fsl,imx6ull";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-index 3c47cfa7afa5..db59ee6b1c86 100644
---- a/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2018 Toradex AG
-+ * Copyright 2018-2022 Toradex
-  */
- 
- #include "imx6ull-colibri.dtsi"
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 28baffcef096..e74dd98fa66a 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -1,6 +1,6 @@
--// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
- /*
-- * Copyright 2018-2021 Toradex
-+ * Copyright 2018-2022 Toradex
-  */
- 
- #include "imx6ull.dtsi"
--- 
-2.35.1
+SGkgU2hhd24NCg0KT24gVGh1LCAyMDIyLTA1LTA1IGF0IDEwOjQ3ICswODAwLCBTaGF3biBHdW8g
+d3JvdGU6DQoNCltzbmlwXQ0KDQo+IFRoZSBkdHMgc2VyaWVzIGRvZXNuJ3QgYXBwbHkgdG8gbXkg
+YnJhbmNoLg0KPiANCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IHVzZSBw
+dWxsLWRvd24gZm9yIGFkYyBwaW5zDQo+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVsbC1jb2xp
+YnJpOiBjaGFuZ2UgdG91Y2ggaTJjIHBhcmFtZXRlcnMNCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBp
+bXg2dWxsLWNvbGlicmk6IGFkZCBwaHktc3VwcGx5IHRvIGZlYw0KPiBBcHBseWluZzogQVJNOiBk
+dHM6IGlteDZ1bGwtY29saWJyaTogYWRkIHRvdWNoc2NyZWVuIGRldmljZSBub2Rlcw0KPiBBcHBs
+eWluZzogQVJNOiBkdHM6IGlteDZ1bGwtY29saWJyaTogdXBkYXRlIHVzZGhjMSBwaXhtdXggYW5k
+IHNpZ25hbGluZw0KPiBlcnJvcjogcGF0Y2ggZmFpbGVkOiBhcmNoL2FybS9ib290L2R0cy9pbXg2
+dWxsLWNvbGlicmkuZHRzaTozNQ0KPiBlcnJvcjogYXJjaC9hcm0vYm9vdC9kdHMvaW14NnVsbC1j
+b2xpYnJpLmR0c2k6IHBhdGNoIGRvZXMgbm90IGFwcGx5DQo+IFBhdGNoIGZhaWxlZCBhdCAwMDA1
+IEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IHVwZGF0ZSB1c2RoYzEgcGl4bXV4IGFuZCBzaWdu
+YWxpbmcNCj4gaGludDogVXNlICdnaXQgYW0gLS1zaG93LWN1cnJlbnQtcGF0Y2gnIHRvIHNlZSB0
+aGUgZmFpbGVkIHBhdGNoDQo+IFdoZW4geW91IGhhdmUgcmVzb2x2ZWQgdGhpcyBwcm9ibGVtLCBy
+dW4gImdpdCBhbSAtLWNvbnRpbnVlIi4NCj4gSWYgeW91IHByZWZlciB0byBza2lwIHRoaXMgcGF0
+Y2gsIHJ1biAiZ2l0IGFtIC0tc2tpcCIgaW5zdGVhZC4NCj4gVG8gcmVzdG9yZSB0aGUgb3JpZ2lu
+YWwgYnJhbmNoIGFuZCBzdG9wIHBhdGNoaW5nLCBydW4gImdpdCBhbSAtLWFib3J0Ii4NCj4gDQo+
+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiB1cGRhdGUgZGV2aWNlIHRyZWVz
+IHRvIHN1cHBvcnQgb3ZlcmxheXMNCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBpbXg2dWxsLWNvbGli
+cmk6IGFkZCBncGlvLWxpbmUtbmFtZXMNCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBpbXg2dWxsLWNv
+bGlicmk6IGFkZCBzdXBwb3J0IGZvciB0b3JhZGV4IGlyaXMgY2FycmllciBib2FyZHMNCj4gQXBw
+bHlpbmc6IEFSTTogZHRzOiBpbXg2dWxsLWNvbGlicmk6IGFkZCBzdXBwb3J0IGZvciB0b3JhZGV4
+IGFzdGVyIGNhcnJpZXIgYm9hcmRzDQo+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVsbC1jb2xp
+YnJpOiBmaXggbmFuZCBiY2ggZ2VvbWV0cnkNCj4gQXBwbHlpbmc6IEFSTTogZHRzOiBpbXg2dWxs
+LWNvbGlicmk6IGFkZC91cGRhdGUgc29tZSBjb21tZW50cw0KPiBlcnJvcjogcGF0Y2ggZmFpbGVk
+OiBhcmNoL2FybS9ib290L2R0cy9pbXg2dWxsLWNvbGlicmkuZHRzaToyNTENCj4gZXJyb3I6IGFy
+Y2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtY29saWJyaS5kdHNpOiBwYXRjaCBkb2VzIG5vdCBhcHBs
+eQ0KPiBQYXRjaCBmYWlsZWQgYXQgMDAxMSBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiBhZGQv
+dXBkYXRlIHNvbWUgY29tbWVudHMNCj4gaGludDogVXNlICdnaXQgYW0gLS1zaG93LWN1cnJlbnQt
+cGF0Y2gnIHRvIHNlZSB0aGUgZmFpbGVkIHBhdGNoDQo+IFdoZW4geW91IGhhdmUgcmVzb2x2ZWQg
+dGhpcyBwcm9ibGVtLCBydW4gImdpdCBhbSAtLWNvbnRpbnVlIi4NCj4gSWYgeW91IHByZWZlciB0
+byBza2lwIHRoaXMgcGF0Y2gsIHJ1biAiZ2l0IGFtIC0tc2tpcCIgaW5zdGVhZC4NCj4gVG8gcmVz
+dG9yZSB0aGUgb3JpZ2luYWwgYnJhbmNoIGFuZCBzdG9wIHBhdGNoaW5nLCBydW4gImdpdCBhbSAt
+LWFib3J0Ii4NCj4gDQo+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiBtb3Zl
+IGdwaW8ta2V5cyBub2RlIHRvIHNvbSBkdHNpDQo+IEFwcGx5aW5nOiBBUk06IGR0czogaW14NnVs
+bC1jb2xpYnJpOiBpbXByb3ZlIHBpbmN0cmwgbm9kZSBuYW1lcw0KPiBlcnJvcjogcGF0Y2ggZmFp
+bGVkOiBhcmNoL2FybS9ib290L2R0cy9pbXg2dWxsLWNvbGlicmkuZHRzaToyOTINCj4gZXJyb3I6
+IGFyY2gvYXJtL2Jvb3QvZHRzL2lteDZ1bGwtY29saWJyaS5kdHNpOiBwYXRjaCBkb2VzIG5vdCBh
+cHBseQ0KPiBQYXRjaCBmYWlsZWQgYXQgMDAxMyBBUk06IGR0czogaW14NnVsbC1jb2xpYnJpOiBp
+bXByb3ZlIHBpbmN0cmwgbm9kZSBuYW1lcw0KPiBoaW50OiBVc2UgJ2dpdCBhbSAtLXNob3ctY3Vy
+cmVudC1wYXRjaCcgdG8gc2VlIHRoZSBmYWlsZWQgcGF0Y2gNCj4gV2hlbiB5b3UgaGF2ZSByZXNv
+bHZlZCB0aGlzIHByb2JsZW0sIHJ1biAiZ2l0IGFtIC0tY29udGludWUiLg0KPiBJZiB5b3UgcHJl
+ZmVyIHRvIHNraXAgdGhpcyBwYXRjaCwgcnVuICJnaXQgYW0gLS1za2lwIiBpbnN0ZWFkLg0KPiAN
+Cj4gU2hhd24NCg0KSSBqdXN0IG5vdyBzZW50IGEgdjMgcmUtYmFzZWQgb24geW91ciBpbXgvZHQu
+IEkgaG9wZSB0aGF0IGFwcGxpZXMgbm93LiBUaGFua3MhDQoNCkNoZWVycw0KDQpNYXJjZWwNCg==
 
