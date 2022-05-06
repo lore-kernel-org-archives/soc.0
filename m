@@ -1,176 +1,183 @@
-Return-Path: <SRS0=YIfF=VO=linux-m68k.org=geert@kernel.org>
+Return-Path: <SRS0=bFJO=VO=foss.st.com=prvs=1125feb66b=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 580DEC433EF
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 09:32:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F91AC433EF
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 10:02:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 443A1C385B2; Fri,  6 May 2022 09:32:32 +0000 (UTC)
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 08DA3C385AE; Fri,  6 May 2022 10:02:19 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D410CC385B6
-	for <soc@kernel.org>; Fri,  6 May 2022 09:32:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D410CC385B6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:287c:a0f:7d45:dc7b])
-	by laurent.telenet-ops.be with bizsmtp
-	id TMYL2700q1UVucw01MYLdN; Fri, 06 May 2022 11:32:22 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1nmuJw-0038XC-Eq; Fri, 06 May 2022 11:32:20 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1nmuJv-00AekG-R8; Fri, 06 May 2022 11:32:19 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/5] Renesas ARM DT updates for v5.19 (take two)
-Date: Fri,  6 May 2022 11:32:13 +0200
-Message-Id: <cover.1651828603.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1651828600.git.geert+renesas@glider.be>
-References: <cover.1651828600.git.geert+renesas@glider.be>
+	by smtp.kernel.org (Postfix) with ESMTPS id AC1E7C385A8;
+	Fri,  6 May 2022 10:02:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC1E7C385A8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2467Y07k015868;
+	Fri, 6 May 2022 12:02:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=3m0mw1nBjzDm+VBX3E2ez2EscVLtrOMj3hZ9LGKIYvI=;
+ b=av6DvpN0ABdk6r6R1R3POxkZs1JjpU1qKDY6IVVoUtipgGWLu3IWroKgeKaibkNUkhm6
+ tf5JhMUURsISmllmKZBUAFGI9eli6oACSW6j24CyLlqeMyL+h8tPe01kChPyan3uAXzo
+ +50DjdH+BGUyjGu7Uy1qyZp8ppFy/BP15C20844nfXnxgiKBHy6jRNxyFjU+X5CC3Bni
+ SuCO1/QMmJY/hML6CkG7sXNF8oUhQDxSA/VbPt27DDNlXlcywQmHO17KfBjCq4n/pjKN
+ Cl05PfULMFHYUXVccloj/xSOXGUB129kSzEB+POJzMpjF9uKTe9DYtKatbQtgD/2GqZX +g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frvf104sc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 06 May 2022 12:02:13 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7421E100034;
+	Fri,  6 May 2022 12:02:12 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5BD7A2171E1;
+	Fri,  6 May 2022 12:02:12 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.45) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 6 May
+ 2022 12:02:11 +0200
+Message-ID: <edf8f01b-e850-1734-2909-f31cd8b082c5@foss.st.com>
+Date: Fri, 6 May 2022 12:02:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
+ "st,stm32mp1-rcc-secure"
+Content-Language: en-US
+To: Rob Herring <robh+dt@kernel.org>
+List-Id: <soc.lore.kernel.org>
+CC: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        SoC Team <soc@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE"
+	<linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Marek Vasut <marex@denx.de>, Ahmad Fatoum
+	<a.fatoum@pengutronix.de>,
+        Etienne Carriere <etienne.carriere@st.com>
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-3-alexandre.torgue@foss.st.com>
+ <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-06_03,2022-05-05_01,2022-02-23_01
 
-The following changes since commit aa70cbda745d5d2085f2847b875d0da3173a9032:
+Hi Rob
 
-  ARM: dts: r9a06g032: Drop "arm,cortex-a7-timer" from timer node (2022-04-19 10:27:36 +0200)
+On 5/5/22 16:11, Rob Herring wrote:
+> On Fri, Apr 22, 2022 at 10:10 AM Alexandre Torgue
+> <alexandre.torgue@foss.st.com> wrote:
+>>
+>> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
+>> security support hardened), "clocks" and "clock-names" describe oscillators
+>> and are required.
+>>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> 
+> This is now failing in linux-next:
+> 
+> make[1]: *** Deleting file
+> 'Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts'
+> Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml: found
+> duplicate key "clocks" with value "{}" (original value: "True")
+> make[1]: *** [Documentation/devicetree/bindings/Makefile:26:
+> Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts]
+> Error 1
+> ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:64:3:
+> [error] duplication of key "clocks" in mapping (key-duplicates)
+> ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:69:3:
+> [error] duplication of key "clock-names" in mapping (key-duplicates)
+> Traceback (most recent call last):
+>    File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
+>      testtree = dtschema.load(filename, line_number=line_number)
+>    File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line
+> 914, in load
+>      return yaml.load(f.read())
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py",
+> line 434, in load
+>      return constructor.get_single_data()
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 121, in get_single_data
+>      return self.construct_document(node)
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 131, in construct_document
+>      for _dummy in generator:
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 674, in construct_yaml_map
+>      value = self.construct_mapping(node)
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 445, in construct_mapping
+>      return BaseConstructor.construct_mapping(self, node, deep=deep)
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 263, in construct_mapping
+>      if self.check_mapping_key(node, key_node, mapping, key, value):
+>    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> line 294, in check_mapping_key
+>      raise DuplicateKeyError(*args)
+> ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+>    in "<unicode string>", line 49, column 3
+> found duplicate key "clocks" with value "{}" (original value: "True")
+>    in "<unicode string>", line 64, column 3
+> To suppress this check see:
+>      http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+> During handling of the above exception, another exception occurred:
+> Traceback (most recent call last):
+>    File "/usr/local/bin/dt-doc-validate", line 74, in <module>
+>      ret = check_doc(f)
+>    File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
+>      print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
+> AttributeError: 'DuplicateKeyError' object has no attribute 'path'
 
-are available in the Git repository at:
+It seems that we have a merge issue between:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.19-tag2
+patch "dt-bindings: rcc: Add optional external ethernet RX clock properties"
+https://lore.kernel.org/r/20220410220514.21779-1-marex@denx.de
 
-for you to fetch changes up to ad1bd2bf658062c6edc5ff1ee1725565a4fc8930:
+and this one (dt-bindings: clock: stm32mp1: describes clocks if 
+"st,stm32mp1-rcc-secure)
 
-  arm64: dts: renesas: Add initial device tree for RZ/V2M EVK (2022-05-06 11:09:57 +0200)
+On linux-next following part remains and creates issue above:
 
-----------------------------------------------------------------
-Renesas ARM DT updates for v5.19 (take two)
+   clocks:
+     description:
+       Specifies the external RX clock for ethernet MAC.
+     maxItems: 1
 
-  - I2C, sound, USB, CANFD, timer, watchdog, (Q)SPI, cpufreq, and
-    thermal support for the RZ/G2UL SoC and the RZ/G2UL SMARC EVK
-    development board,
-  - Initial support for the R-Car V4H SoC and the Renesas White Hawk
-    development board stack,
-  - DMA, RTC, and USB support for the RZ/N1D SoC,
-  - Initial support for the RZ/V2M SoC an the RZ/V2M Evaluation Kit
-    Board,
-  - Miscellaneous fixes and improvements.
+   clock-names:
+     const: ETH_RX_CLK/ETH_REF_CLK
 
-----------------------------------------------------------------
-Biju Das (20):
-      arm64: dts: renesas: r9a07g043: Add I2C2 node and fillup the I2C{0,1,3} stub nodes
-      arm64: dts: renesas: r9a07g043: Add SSI{1,2,3} nodes and fillup the SSI0 stub node
-      arm64: dts: renesas: r9a07g043: Add USB2.0 support
-      arm64: dts: renesas: r9a07g043: Fillup the CANFD stub node
-      arm64: dts: renesas: r9a07g043: Fillup the OSTM{0,1,2} stub nodes
-      arm64: dts: renesas: r9a07g043: Fillup the WDT{0,2} stub nodes
-      arm64: dts: renesas: rzg2ul-smarc: Enable i2c{0,1} and wm8978
-      arm64: dts: renesas: rzg2ul-smarc: Enable CANFD
-      arm64: dts: renesas: rzg2ul-smarc-som: Enable OSTM
-      arm64: dts: renesas: rzg2ul-smarc-som: Enable watchdog
-      arm64: dts: renesas: rzg2l-smarc: Move ssi0 and cpu sound_dai nodes from common dtsi
-      arm64: dts: renesas: rzg2ul-smarc: Enable Audio
-      arm64: dts: renesas: rzg2ul-smarc: Enable USB2.0 support
-      arm64: dts: renesas: r9a07g044: Fix external clk node names
-      arm64: dts: renesas: r9a07g054: Fix external clk node names
-      arm64: dts: renesas: r9a07g043: Add RSPI{0,1,2} nodes
-      arm64: dts: renesas: r9a07g043: Add OPP table
-      arm64: dts: renesas: r9a07g043: Add TSU node
-      arm64: dts: renesas: r9a07g043: Create thermal zone to support IPA
-      arm64: dts: renesas: r9a07g043: Add SPI Multi I/O Bus controller node
+I don't know why this part is remaining. In my tree, I took care to take 
+Marek patch first to avoid this kind of issue.
 
-Geert Uytterhoeven (4):
-      Merge tag 'renesas-r8a779g0-dt-binding-defs-tag' into renesas-arm-dt-for-v5.19
-      arm64: dts: renesas: Add interrupt-names to CANFD nodes
-      arm64: dts: renesas: r8a779a0: Update to R-Car Gen4 compatible values
-      Merge tag 'renesas-r9a09g011-dt-binding-defs-tag' into renesas-arm-dt-for-v5.19
+Btw, how to fix that ?
 
-Herve Codina (4):
-      ARM: dts: r9a06g032: Add missing '#power-domain-cells'
-      ARM: dts: r9a06g032: Add internal PCI bridge node
-      ARM: dts: r9a06g032: Add USB PHY DT support
-      ARM: dts: r9a06g032: Link the PCI USB devices to the USB PHY
+Note, that as soon as we will fix this point I'll send a fix to avoid 
+issue in example build.
 
-Laurent Pinchart (2):
-      arm64: dts: renesas: Remove empty lvds endpoints
-      arm64: dts: renesas: Remove empty rgb output endpoints
+cheers
+Alex
 
-Miquel Raynal (5):
-      ARM: dts: r9a06g032: Add the two DMA nodes
-      ARM: dts: r9a06g032: Describe the DMA router
-      ARM: dts: r9a06g032: Fill the UART DMA properties
-      ARM: dts: r9a06g032: Fix the NAND controller node
-      ARM: dts: r9a06g032: Describe the RTC
 
-Phil Edworthy (3):
-      dt-bindings: clock: Add r9a09g011 CPG Clock Definitions
-      arm64: dts: renesas: Add initial DTSI for RZ/V2M SoC
-      arm64: dts: renesas: Add initial device tree for RZ/V2M EVK
 
-Yoshihiro Shimoda (4):
-      dt-bindings: power: Add r8a779g0 SYSC power domain definitions
-      dt-bindings: clock: Add r8a779g0 CPG Core Clock Definitions
-      arm64: dts: renesas: Add Renesas R8A779G0 SoC support
-      arm64: dts: renesas: Add Renesas White Hawk boards support
 
- arch/arm/boot/dts/r9a06g032.dtsi                   | 110 +++++
- arch/arm64/boot/dts/renesas/Makefile               |   4 +
- .../boot/dts/renesas/beacon-renesom-baseboard.dtsi |  10 +-
- arch/arm64/boot/dts/renesas/draak.dtsi             |   2 +-
- arch/arm64/boot/dts/renesas/ebisu.dtsi             |   2 +-
- arch/arm64/boot/dts/renesas/r8a774a1.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a774c0-cat874.dts    |   2 +-
- arch/arm64/boot/dts/renesas/r8a774c0.dtsi          |   7 +-
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77951.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77960.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77961.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77965.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77970.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77980.dtsi          |   5 +-
- arch/arm64/boot/dts/renesas/r8a77990.dtsi          |   7 +-
- arch/arm64/boot/dts/renesas/r8a77995.dtsi          |   7 +-
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  74 ++--
- .../boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi  |  45 +++
- .../arm64/boot/dts/renesas/r8a779g0-white-hawk.dts |  22 +
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          | 122 ++++++
- arch/arm64/boot/dts/renesas/r9a07g043.dtsi         | 444 ++++++++++++++++++++-
- arch/arm64/boot/dts/renesas/r9a07g043u11-smarc.dts |  76 ----
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         |   8 +-
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi         |   8 +-
- arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts  |  44 ++
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi         |  93 +++++
- arch/arm64/boot/dts/renesas/rz-smarc-common.dtsi   |   8 -
- arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |  11 +
- arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |  11 +
- .../boot/dts/renesas/rzg2ul-smarc-pinfunction.dtsi |  56 +++
- arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi  |  18 +
- arch/arm64/boot/dts/renesas/rzg2ul-smarc.dtsi      |  39 ++
- arch/arm64/boot/dts/renesas/salvator-common.dtsi   |   2 +-
- arch/arm64/boot/dts/renesas/ulcb-kf.dtsi           |  10 +-
- include/dt-bindings/clock/r8a779g0-cpg-mssr.h      |  90 +++++
- include/dt-bindings/clock/r9a09g011-cpg.h          | 352 ++++++++++++++++
- include/dt-bindings/power/r8a779g0-sysc.h          |  45 +++
- 39 files changed, 1570 insertions(+), 204 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779g0-white-hawk.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779g0.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g011-v2mevk2.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g011.dtsi
- create mode 100644 include/dt-bindings/clock/r8a779g0-cpg-mssr.h
- create mode 100644 include/dt-bindings/clock/r9a09g011-cpg.h
- create mode 100644 include/dt-bindings/power/r8a779g0-sysc.h
+
+
+
