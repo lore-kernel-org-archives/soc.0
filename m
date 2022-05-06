@@ -1,183 +1,185 @@
-Return-Path: <SRS0=bFJO=VO=foss.st.com=prvs=1125feb66b=alexandre.torgue@kernel.org>
+Return-Path: <SRS0=/fei=VO=ziswiler.com=marcel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F91AC433EF
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 10:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5290CC433F5
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 13:24:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 08DA3C385AE; Fri,  6 May 2022 10:02:19 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	id 1D2EAC385B1; Fri,  6 May 2022 13:24:50 +0000 (UTC)
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AC1E7C385A8;
-	Fri,  6 May 2022 10:02:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC1E7C385A8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2467Y07k015868;
-	Fri, 6 May 2022 12:02:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=3m0mw1nBjzDm+VBX3E2ez2EscVLtrOMj3hZ9LGKIYvI=;
- b=av6DvpN0ABdk6r6R1R3POxkZs1JjpU1qKDY6IVVoUtipgGWLu3IWroKgeKaibkNUkhm6
- tf5JhMUURsISmllmKZBUAFGI9eli6oACSW6j24CyLlqeMyL+h8tPe01kChPyan3uAXzo
- +50DjdH+BGUyjGu7Uy1qyZp8ppFy/BP15C20844nfXnxgiKBHy6jRNxyFjU+X5CC3Bni
- SuCO1/QMmJY/hML6CkG7sXNF8oUhQDxSA/VbPt27DDNlXlcywQmHO17KfBjCq4n/pjKN
- Cl05PfULMFHYUXVccloj/xSOXGUB129kSzEB+POJzMpjF9uKTe9DYtKatbQtgD/2GqZX +g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frvf104sc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 May 2022 12:02:13 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7421E100034;
-	Fri,  6 May 2022 12:02:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5BD7A2171E1;
-	Fri,  6 May 2022 12:02:12 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.45) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 6 May
- 2022 12:02:11 +0200
-Message-ID: <edf8f01b-e850-1734-2909-f31cd8b082c5@foss.st.com>
-Date: Fri, 6 May 2022 12:02:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
- "st,stm32mp1-rcc-secure"
-Content-Language: en-US
-To: Rob Herring <robh+dt@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4A133C385B2;
+	Fri,  6 May 2022 13:24:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A133C385B2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ziswiler.com
+Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MCszN-1nePN31ygF-009kFE;
+ Fri, 06 May 2022 15:24:26 +0200
+From: Marcel Ziswiler <marcel@ziswiler.com>
+To: linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        SoC Team <soc@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        Marek Vasut <marex@denx.de>, Ahmad Fatoum
-	<a.fatoum@pengutronix.de>,
-        Etienne Carriere <etienne.carriere@st.com>
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
- <20220422150952.20587-3-alexandre.torgue@foss.st.com>
- <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_03,2022-05-05_01,2022-02-23_01
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Olof Johansson <olof@lixom.net>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH v3 00/13] ARM: dts: imx6ull-colibri: device tree improvements
+Date: Fri,  6 May 2022 15:24:03 +0200
+Message-Id: <20220506132416.273965-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:4LbxChUdf4uqviwBn03YFCgkv7u66I0UG3NY+rztR+OJd8FhEzx
+ AKNcOF555MPNjmlhIbnZhURXWjOlzY0tp5+usx8oY3QGa+5oB3CbgohmW+KWLA0tNdGkKpW
+ Tcsq8evuFkTZWxPexpLC+abWk/ownxRpq8KwgFbLOCLlqAcvqRweEY5Ljj/XS/yDjr+8ZSr
+ SsBEf3k+vSM0Bn1SH2dBw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oZJyg5xR51U=:JdnZtXeUXhmaKTGkc9DoMk
+ g34zH9pQi0d72INFGgUNye3Xb6nawQYJAy8q9uzGS3f2cRZkPyhaf1cZywO+VuZOeAruHlTOm
+ rbSe/wT3lLCrSbLnBZhoSxj+/cOS5P6prH3ZLTt7ZURLZIh6FLz873jN04fPuyIcY/J6EVQxv
+ 01R7tFW2457lHhk7E9ctGoIPygNb7sXTpo1xmcIJj7XTe9v9Iaf2LXFvBnKY6ayLpH+SPrCV0
+ Ht5BbXEYgrVdAU/Kh5LO/Ygcek4AtjQwxkyMbunBBovPlTzPHdkW+xdAYgbQQ2YWg9VgrK8vq
+ 7DrhMyAarkrdqPiA/ErnuPUSkCQAUqLgWbFkWEBixVwBUy01oA7EkS/q8jmq+xXl1JkN08zfY
+ Citfu+B4ViIAoeoAvxyjXsdwNvvK2qcyPKAuSiBGWlqTKF9YedyQo35tMhWHxGtL7fvC5OLsr
+ iP89ReiVzzSbjQuFs6bCWemPmFC9Q2Jk/aX1cQczdcvWFINmlDUknb/L+42gtTISJISy0x/VZ
+ Pl1BEUw0Lo8BHGCG10zQp/j68L75rPf9uB6PTSy+8MHM2Rd5hSwuP0kHiDEZbk0dU17XAxeqV
+ QjjQhy3S08mtJdDN6E2eLUWwccUnB7237d6vsbqD1A+3rfbdBC5B0JxFyT7R53AxGYK/bPEnT
+ bRtsfAvr1b/ThUgPMunYVEdNuPgAE9ZiMs9wW6F0rfgPcm5EquIGpdlxM+ljk20ORdAE=
 
-Hi Rob
-
-On 5/5/22 16:11, Rob Herring wrote:
-> On Fri, Apr 22, 2022 at 10:10 AM Alexandre Torgue
-> <alexandre.torgue@foss.st.com> wrote:
->>
->> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
->> security support hardened), "clocks" and "clock-names" describe oscillators
->> and are required.
->>
->> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> 
-> This is now failing in linux-next:
-> 
-> make[1]: *** Deleting file
-> 'Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts'
-> Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml: found
-> duplicate key "clocks" with value "{}" (original value: "True")
-> make[1]: *** [Documentation/devicetree/bindings/Makefile:26:
-> Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts]
-> Error 1
-> ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:64:3:
-> [error] duplication of key "clocks" in mapping (key-duplicates)
-> ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:69:3:
-> [error] duplication of key "clock-names" in mapping (key-duplicates)
-> Traceback (most recent call last):
->    File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
->      testtree = dtschema.load(filename, line_number=line_number)
->    File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line
-> 914, in load
->      return yaml.load(f.read())
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py",
-> line 434, in load
->      return constructor.get_single_data()
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
-> line 121, in get_single_data
->      return self.construct_document(node)
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
-> line 131, in construct_document
->      for _dummy in generator:
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
-> line 674, in construct_yaml_map
->      value = self.construct_mapping(node)
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
-> line 445, in construct_mapping
->      return BaseConstructor.construct_mapping(self, node, deep=deep)
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
-> line 263, in construct_mapping
->      if self.check_mapping_key(node, key_node, mapping, key, value):
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
-> line 294, in check_mapping_key
->      raise DuplicateKeyError(*args)
-> ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
->    in "<unicode string>", line 49, column 3
-> found duplicate key "clocks" with value "{}" (original value: "True")
->    in "<unicode string>", line 64, column 3
-> To suppress this check see:
->      http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-> During handling of the above exception, another exception occurred:
-> Traceback (most recent call last):
->    File "/usr/local/bin/dt-doc-validate", line 74, in <module>
->      ret = check_doc(f)
->    File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
->      print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
-> AttributeError: 'DuplicateKeyError' object has no attribute 'path'
-
-It seems that we have a merge issue between:
-
-patch "dt-bindings: rcc: Add optional external ethernet RX clock properties"
-https://lore.kernel.org/r/20220410220514.21779-1-marex@denx.de
-
-and this one (dt-bindings: clock: stm32mp1: describes clocks if 
-"st,stm32mp1-rcc-secure)
-
-On linux-next following part remains and creates issue above:
-
-   clocks:
-     description:
-       Specifies the external RX clock for ethernet MAC.
-     maxItems: 1
-
-   clock-names:
-     const: ETH_RX_CLK/ETH_REF_CLK
-
-I don't know why this part is remaining. In my tree, I took care to take 
-Marek patch first to avoid this kind of issue.
-
-Btw, how to fix that ?
-
-Note, that as soon as we will fix this point I'll send a fix to avoid 
-issue in example build.
-
-cheers
-Alex
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 
+This is a general update of the Colibri iMX6ULL device tree files.
 
+The Toradex Colibri family is composed of a SoM that can be plugged on
+various carrier boards, with carrier boards allowing multiple optional
+accessories (e.g. display, camera, ...).
 
+The device tree sources are structured into a SoM dtsi and a carrier dts
+which then includes the SoM dtsi. The SoM dtsi defines and enables the
+functionality self-contained on the SoM and prepares for the
+functionality provided by the carrier HW or accessories so that the
+carrier dts then can enable or amend nodes provided. Accessories are
+enabled in overlays depending on HW configuration.
 
+Please find the following colibri-imx6ull device trees improvements:
 
+- MMC/SD
+The original Colibri specification only defined 3.3 volt TTL signaling
+and relied on external on-carrier pull-ups for the SD_DATA[0..3] lines.
+The latest carrier boards like Iris V2 on the other hand are now UHS-I
+compliant by leaving such external on-carrier pull-ups away relying on
+module- or even SoC-level ones which pull up to resp. signaling voltage.
+In such cases, the carrier board-level device tree may explicitly delete
+the no-1-8-v property to enable full UHS-I support.
+Also, fix SD/MMC regulator for the carrier boards using UHS-I modes.
+
+- FEC
+Provide a proper phy-supply for the FEC, actually switched by the 50 Mhz
+RMII interface clock using a regulator-fixed-clock that is now properly
+stated. The reference commit for such regulator can be found at commit
+8959e5324485 ("regulator: fixed: add possibility to enable by clock").
+
+- I2C
+Switched on 22 kOhm pull-ups and lower the I2C frequency to 40 kHz to
+get more reliable communication.
+
+- Atmel Touchscreen
+The Toradex 7" Capacitive and 10" LVDS touch screens are Atmel MXT
+peripherals available on the I2C bus for touchscreen events. Add
+atmel_mxt_ts node to the module-level device tree. Also, provide pinmux
+configuration for the INT/RST inputs from SODIMM pins 106/107 for most
+carrier boards or an external touchscreen adapter inputs configured to
+SODIMM pins 28/30.
+
+Changes in v3:
+- Fixed reset GPIO polarity in-line with the following upstream commit:
+  feedaacdadfc ("Input: atmel_mxt_ts - fix up inverted RESET handler")
+- Fixed comment using more common SODIMM followed by number naming.
+- Replaced underscores by dashes in GPIO hog node names.
+- Added more LVDS specific GPIO hogs in-line with other modules.
+- Re-based on top of Shawn's imx/dt branch.
+- Dropped [PATCH v2 08/14] dt-bindings: arm: fsl: add
+  toradex,colibri-imx6ull which already got applied by Shawn. Thanks!
+
+Changes in v2:
+- Fixed pinctrl node names as suggested by Shawn.
+- Fix alphabetical node order as suggested by Shawn.
+- Dropped [PATCH v1 02/14] ARM: dts: imx6ull-colibri: fix vqmmc
+  regulator which already got applied by Shawn. Thanks!
+- New commit with pinctrl node name improvements as suggested by Shawn.
+
+Denys Drozdov (4):
+  ARM: dts: imx6ull-colibri: add touchscreen device nodes
+  ARM: dts: imx6ull-colibri: update device trees to support overlays
+  ARM: dts: imx6ull-colibri: add support for toradex iris carrier boards
+  ARM: dts: imx6ull-colibri: add support for toradex aster carrier
+    boards
+
+Marcel Ziswiler (4):
+  ARM: dts: imx6ull-colibri: fix nand bch geometry
+  ARM: dts: imx6ull-colibri: add/update some comments
+  ARM: dts: imx6ull-colibri: move gpio-keys node to som dtsi
+  ARM: dts: imx6ull-colibri: improve pinctrl node names
+
+Max Krummenacher (1):
+  ARM: dts: imx6ull-colibri: change touch i2c parameters
+
+Oleksandr Suvorov (1):
+  ARM: dts: imx6ull-colibri: add gpio-line-names
+
+Philippe Schenker (3):
+  ARM: dts: imx6ull-colibri: use pull-down for adc pins
+  ARM: dts: imx6ull-colibri: add phy-supply to fec
+  ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
+
+ arch/arm/boot/dts/Makefile                    |   9 +
+ arch/arm/boot/dts/imx6ull-colibri-aster.dts   |  20 ++
+ arch/arm/boot/dts/imx6ull-colibri-aster.dtsi  | 145 +++++++++
+ .../boot/dts/imx6ull-colibri-emmc-aster.dts   |  17 ++
+ .../boot/dts/imx6ull-colibri-emmc-iris-v2.dts |  17 ++
+ .../boot/dts/imx6ull-colibri-emmc-iris.dts    |  17 ++
+ .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     |   8 +-
+ arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts |   6 +-
+ .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi |  63 +---
+ arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts |  65 ++++
+ .../arm/boot/dts/imx6ull-colibri-iris-v2.dtsi |  27 ++
+ arch/arm/boot/dts/imx6ull-colibri-iris.dts    |  20 ++
+ arch/arm/boot/dts/imx6ull-colibri-iris.dtsi   | 132 ++++++++
+ .../arm/boot/dts/imx6ull-colibri-nonwifi.dtsi | 145 ++++++++-
+ .../boot/dts/imx6ull-colibri-wifi-aster.dts   |  20 ++
+ .../boot/dts/imx6ull-colibri-wifi-eval-v3.dts |   4 +-
+ .../boot/dts/imx6ull-colibri-wifi-iris-v2.dts |  65 ++++
+ .../boot/dts/imx6ull-colibri-wifi-iris.dts    |  20 ++
+ arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi   | 144 ++++++++-
+ arch/arm/boot/dts/imx6ull-colibri.dtsi        | 285 ++++++++++++------
+ 20 files changed, 1065 insertions(+), 164 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-aster.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
+
+-- 
+2.35.1
 
