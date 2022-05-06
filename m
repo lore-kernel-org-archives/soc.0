@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18EB4C433F5
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 14:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88CD8C433EF
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 14:30:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D8E30C385B0; Fri,  6 May 2022 14:30:12 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	id 6E91DC385AC; Fri,  6 May 2022 14:30:15 +0000 (UTC)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3D8DCC385A8;
-	Fri,  6 May 2022 14:30:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3D8DCC385A8
+	by smtp.kernel.org (Postfix) with ESMTPS id A5DE4C385A9;
+	Fri,  6 May 2022 14:30:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5DE4C385A9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id x18so10316332wrc.0;
-        Fri, 06 May 2022 07:30:12 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so4482864wmn.1;
+        Fri, 06 May 2022 07:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aQb6q3Qhc7TawpXFz11bbETIKo6ryfU6AXp8dhF5Rgg=;
-        b=GRQLL9711f6FIy3dhpp0e5+ua2CsBcVHf7VlgfAu7znBi/Rrcw36mU+GiYNULKwp7p
-         VKOME+IQ+mdBdlONnT7HItI0RboHKHddY5D7i+IJI4Z1F9klbkimxexxsqlFkhTnQax0
-         CakCWlrO0SIPWRIKp9uFNfqpEm8Q5tc73KKRnnMCuyQLQj5oCBrI8yp7Ayv8CZzwYjbl
-         4IUqzLzBi3tKei1kJNCIkKV0/zKo0HMAdI8YhmpPYeUC3Ul4llgluvGeokJafZC2du3b
-         p9feCnkyLaLBZQA7/2ynl4EGH7pOVtlp7jFH1f3y4xGgz4wZRRdd6ea7tSorxE0+OJUv
-         5WBg==
+        bh=XvzszIaoDVyGIeiyDwUueQbTfRTKog+5eHM5w7GT3Uw=;
+        b=KYximoHLvW2jnoDv6V1VvejmoARYe+s05gRb2gHDKNyymp5wvO8XECxRmNIg8UPTwB
+         /tTuMIXU2OdiwBalcZZJBv2auLDke+PyuIUaIpQplG6BE2HUxuZ9KQPiJ5qOuz2XfPkA
+         P8nQ8jZ6phdo1/AN1e1GzXC2lKLle27Wvc5ykVTZ+r/JlwbezthlU1z8zkwqhHWdJ1tH
+         x1ZaPq7O1B/RAvDBSRdJfUAN7yp6scug7KGFYGj7i2FDUiDqrQsTghmGx4oIvC+x3nck
+         WLGpsYGy71la7mDqgIwTJ/fufWwa3aMtL+A7OVR2zwD2ZNagVOFYfmr9yva8W4FvmdzX
+         fGCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aQb6q3Qhc7TawpXFz11bbETIKo6ryfU6AXp8dhF5Rgg=;
-        b=lXZgJ5TTrtLVxCHYCdrXjdp/ToaI/Oe7FcAAhQyuh5Sr0yjhPojkREeO0yuscllsmK
-         qmZ7m6UIwi8dTDYQW6Z2s/lt0oLVtgELVki4f9QpVhBb3XssOHeMrZGYLFK+q8eFnIO5
-         aozShinQyq5FcS/Hh+7iVhmdCJ40QCRnT5r+rmWzIlltXriySANqsb9892g1ehGoSNus
-         VO6B/NwWog2a9sAM4pze5QYCUmj/Mx+mS8vIE4VrI9ViSg14NvCfXPTbwMFKj+F6P5of
-         FYA5EGo6HH3WI7LLsn13uL8ciamotTzPDx/sH0PtpgSuvcr6vqfGEhjkOy3OQyrjRc6h
-         ztWg==
-X-Gm-Message-State: AOAM531hDA/5aO+Dts9KbOAfZ2a6r0/bxK1I02YdGxVLRmbMjb3RN2gE
-	BVJtJizAZ0qy2HuJXnImK0o4UziTCfY=
-X-Google-Smtp-Source: ABdhPJxdvPALns7toTxtoaOjGVFh/2dhjEXKbiAkLNhgLxBvXvEyyUhyd7p6fTYCe05SQa2mVHujbg==
-X-Received: by 2002:a5d:6489:0:b0:20c:6c3b:d49e with SMTP id o9-20020a5d6489000000b0020c6c3bd49emr3024054wri.75.1651847410056;
-        Fri, 06 May 2022 07:30:10 -0700 (PDT)
+        bh=XvzszIaoDVyGIeiyDwUueQbTfRTKog+5eHM5w7GT3Uw=;
+        b=57LksBL7FlzrcIEl1SZ7LYEqfJJnS7SjRZRaigjpWBBnsrj85cAglO+ssJ17x8SdQo
+         eQWCJvvPfStrSkO/6/N5mohJEWvsY68OlAMuVNo61mybND0C+FexE5YdDxV2aSK17QMk
+         FV7n6N6mRDdnDHCAGRlnnvamEDqKE/Yc2EQoN9BOAI+HM5x7GLvG6Iyzfcy0KSkUsLu3
+         60JK+5JCZs2ORQEekROoqECN66oT8hyLZXlYPRcjlDOVxdddrdAudWiB/AbQlRJzldYI
+         u2p6UFNuSZ31nbPgXaV3YmhdOb5/H5MEGZP0B+m2Yx/ClxXJ+SyPlJKwMszmXI64w9NK
+         zSuw==
+X-Gm-Message-State: AOAM5308tGvEbE78QLPqXjsm+Q8EhLg5h3l0cxYwgsu4Y0hOEFhUxAPs
+	qE6zL8qY3eQTqx50Nn/gxRDV6c5Ddi4=
+X-Google-Smtp-Source: ABdhPJwUKR3iNuQKRW1bDmDSsMKBsXpPJcrUwzKrZaVbllOBB3u0Yvtka4c+NPZLtMhCR1Fj7IbwFw==
+X-Received: by 2002:a1c:2185:0:b0:38f:f4ed:f964 with SMTP id h127-20020a1c2185000000b0038ff4edf964mr3613394wmh.115.1651847412336;
+        Fri, 06 May 2022 07:30:12 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id a7-20020a05600c348700b003942a244ed7sm4143558wmq.28.2022.05.06.07.30.08
+        by smtp.gmail.com with ESMTPSA id g6-20020a056000118600b0020c5253d8d6sm3825361wrx.34.2022.05.06.07.30.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 07:30:09 -0700 (PDT)
+        Fri, 06 May 2022 07:30:11 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,9 +57,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] soc/tegra: Changes for v5.19-rc1
-Date: Fri,  6 May 2022 16:30:01 +0200
-Message-Id: <20220506143005.3916655-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] dt-bindings: Changes for v5.19-rc1
+Date: Fri,  6 May 2022 16:30:02 +0200
+Message-Id: <20220506143005.3916655-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506143005.3916655-1-thierry.reding@gmail.com>
 References: <20220506143005.3916655-1-thierry.reding@gmail.com>
@@ -75,39 +75,24 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.19-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.19-dt-bindings
 
-for you to fetch changes up to d3a20dcbca4880ada8974b2d0167df99161bbfaf:
+for you to fetch changes up to e2ab93e59bc3c029b61a7091825f193f1a66a1a1:
 
-  soc/tegra: pmc: Document core domain fields (2022-05-06 10:53:19 +0200)
+  dt-bindings: memory: tegra: Update validation for reg and reg-names (2022-04-29 10:32:09 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Changes for v5.19-rc1
+dt-bindings: Changes for v5.19-rc1
 
-This set of changes adds nvmem cell lookup entries for Tegra194 that are
-used to read calibration data from the SoC fuses, and updates the reset
-sources for Tegra234.
-
-Other than that, included is a minor build fix for a missing dependency
-that can be encountered very rarely in random config builds. Lastly some
-kerneldoc comments are added to avoid build warnings.
+Updates the memory controller bindings to properly validate the number
+of entries in the reg and reg-names properties.
 
 ----------------------------------------------------------------
-Sagar Kamble (1):
-      soc/tegra: fuse: Add nvmem cell lookup entries for Tegra194
+Ashish Mhetre (1):
+      dt-bindings: memory: tegra: Update validation for reg and reg-names
 
-Sandipan Patra (1):
-      soc/tegra: pmc: Update Tegra234 reset sources
-
-Thierry Reding (2):
-      soc/tegra: pmc: Select REGMAP
-      soc/tegra: pmc: Document core domain fields
-
- drivers/soc/tegra/Kconfig             |  1 +
- drivers/soc/tegra/fuse/fuse-tegra.c   |  8 ++++----
- drivers/soc/tegra/fuse/fuse-tegra30.c | 17 ++++++++++++++++-
- drivers/soc/tegra/pmc.c               | 35 +++++++++++++++++++++++++++--------
- 4 files changed, 48 insertions(+), 13 deletions(-)
+ .../memory-controllers/nvidia,tegra186-mc.yaml     | 80 ++++++++++++++++++++--
+ 1 file changed, 74 insertions(+), 6 deletions(-)
