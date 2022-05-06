@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEEBC433FE
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 14:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B3F3C433F5
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 14:30:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 39D01C385B3; Fri,  6 May 2022 14:30:19 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	id 44772C385A9; Fri,  6 May 2022 14:30:21 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 86AFBC385A9;
-	Fri,  6 May 2022 14:30:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86AFBC385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id 937C2C385A8;
+	Fri,  6 May 2022 14:30:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 937C2C385A8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id bg25so4543204wmb.4;
-        Fri, 06 May 2022 07:30:18 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id v12so10249177wrv.10;
+        Fri, 06 May 2022 07:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Qj8VvfvNLf5X/XXAEqMgbERZ6Sf7ST2uQfq1vXcwhpI=;
-        b=NVqgU+o7fiPGaCVuxDtU40bjPMu6PjKZOa/GRG9U1vFjE8HFjkCINfQNB6heayiSDV
-         DHEsW5MGwLMzZTwTK8tni9SJkrUoOteY6+qxBOI6bcj8ttzJavTQY1/D3GQPQzqlwWke
-         ICbgJPbCvMIG3hF/bfdD26ZAB0POTg1MT6pffqJzCD6X/W/vr8F0AdalO/ZQzuEtwV9C
-         KDUM+FZJZs+cPYP9AUsng7AIFILS/Gu42uCfyHor1YpXsD+qUu1uDbf9y10FW55mDK3w
-         h//UnuVyESMvsDgIjUZFgX0Gk0nR4xUZst5zXsOLf0o/apllyM8Cq/exwA6X6qiMcq5w
-         52HA==
+        bh=7E6fI/oP3TVn2/gg+vyC6SjczNcImpmXjf/EfX/EIEU=;
+        b=jrBnnEH44+sf3d0rkVVd9mnlGM9qbcjsILZ3u+Sla956FHQw8v7gEsezyXGJcKEx3/
+         uuSG6qLmkuiezON2AmP6n+845JHbxOlIWCVsCCLraUMb4lCw2Q/+9E33Y8p+OsvTfzkC
+         mMogoEezH6hztQZKuaJWUMDhiRpVszZl/44VMbeNfAiV8jnsALo88kI45lc4zIXBLZZ2
+         YPzv9XCX8GMaYUUAKSwdzzF2eeR7jFuotL1jAVCLuHDVP1OzxVSLIYelORAYwJ7x/jpW
+         6XihXQo2baZsUws+M5iitOgKMXkx9sxJbU1xK9zj83smQa4PDGhHk05jnzqrpIozAfas
+         PQNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Qj8VvfvNLf5X/XXAEqMgbERZ6Sf7ST2uQfq1vXcwhpI=;
-        b=yQJfQO6BTfH6i1SIJHWK4+KP2iuZSRo+ZHZoQLpkYD69xJ7RlBx32hdY/1r3guy1I+
-         zXrP4sMay/5gZNQKzA8DszV5g0X47AtmOj26GAoNSlQ8vsqS/SmYn9wIgxXw/j/8wHbw
-         uurUqnAgE+I34rSd6ROB/VHQ0+6mnKDO4d7voMt+K4t3+W767BEv/SmLlGu1z0cFeSla
-         inw5YzcvXhVar5e6aSOxChHKgTuoPTz8XXWQ4JUGIoek1OS5dKOGu2b8Rd3QOgNLqg3b
-         pW5OLE/KyjIuFBIuFVJQ/3e8ri9FryNhdl3+46z13SjKvcyUJUddH6yuFIneJ7+qUqXi
-         2osg==
-X-Gm-Message-State: AOAM531BncCc1VZeu0TE4tPGN8IVooHBBkQnJ6B6i61877dOLbm0LEgs
-	QOUr7JGA9PK4M1Ipd2WF0A0chVToT2M=
-X-Google-Smtp-Source: ABdhPJzZZ6NlmG3qpIn0vOksUwxltxK41NOzqCYn3QdHEdm6Ii8AyQZCqO1fdsplbWsFIJ5TnL870A==
-X-Received: by 2002:a05:600c:a42:b0:393:d831:bf05 with SMTP id c2-20020a05600c0a4200b00393d831bf05mr3556821wmq.187.1651847416293;
-        Fri, 06 May 2022 07:30:16 -0700 (PDT)
+        bh=7E6fI/oP3TVn2/gg+vyC6SjczNcImpmXjf/EfX/EIEU=;
+        b=qUZi1xrYO2lPYOCXxJh9QMFlzR2OEll6xmLd3tJAVGBaUnHbN7DDTfRz8pp1YV4+Nn
+         TdQCBhOj4xTHtXa0XQSrp33k/nhBptSd90DgkorMimwO1yHPzdzDXxLNxihyCMVlbK6k
+         p1OxMEYhhJ1yJdotFcC6x9JWWkOKprtKexzfmM8IMSOoPg3WboaurD7n67QuKPhd3PeN
+         mS+6qxXPxfNmIfIuqY41P75IEfZtVqriv9ktvxLckLj2OG2nj8ChRNpm23GGM5RYZzpW
+         46V6Lh2/biptIi1eNIL7D3Eq7zcEybGquJx61nqZhHn3hAugYlX4GktAx5IRTbKaTnwP
+         HkxA==
+X-Gm-Message-State: AOAM532GZOmG74uTU6FmbkJjf7I4ljSjDUbX2UkJhDLDSQjAKvB2RqYf
+	5NqZjpX5bW1zsuH4UR04QcEtq0jU9f4=
+X-Google-Smtp-Source: ABdhPJzeQuCsbxXOst3YKaO9hmwP2GvMrOstyLO3192slkVa8bsTI2oCXyZ8X2wlYUTbQHQFgYo78w==
+X-Received: by 2002:a05:6000:1569:b0:20c:4ed4:4ba8 with SMTP id 9-20020a056000156900b0020c4ed44ba8mr2924448wrz.270.1651847418393;
+        Fri, 06 May 2022 07:30:18 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id b9-20020a5d6349000000b0020c5253d8c3sm3786285wrw.15.2022.05.06.07.30.15
+        by smtp.gmail.com with ESMTPSA id 66-20020a1c1945000000b003945cdd0d55sm4441422wmz.26.2022.05.06.07.30.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 07:30:15 -0700 (PDT)
+        Fri, 06 May 2022 07:30:17 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,9 +57,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 5/6] arm64: tegra: Device tree changes for v5.19-rc1
-Date: Fri,  6 May 2022 16:30:04 +0200
-Message-Id: <20220506143005.3916655-5-thierry.reding@gmail.com>
+Subject: [GIT PULL 6/6] arm64: tegra: Default configuration updates for v5.19-rc1
+Date: Fri,  6 May 2022 16:30:05 +0200
+Message-Id: <20220506143005.3916655-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506143005.3916655-1-thierry.reding@gmail.com>
 References: <20220506143005.3916655-1-thierry.reding@gmail.com>
@@ -75,57 +75,24 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.19-arm64-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.19-arm64-defconfig
 
-for you to fetch changes up to 0017f2c856e21bb900be88469e15dac4f41f4065:
+for you to fetch changes up to e46ab742195ae8760e03cb15fcf6f6a90fcad636:
 
-  arm64: tegra: Add missing DFLL reset on Tegra210 (2022-05-04 11:22:43 +0200)
+  arm64: defconfig: Build Tegra ASRC module (2022-04-26 15:11:57 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v5.19-rc1
+arm64: tegra: Default configuration updates for v5.19-rc1
 
-This adds some improvements on Tegra234 (QSPI, CCPLEX), improves the
-SDMMC clock speed on Tegra194 and adds the ASRC audio block on various
-chip generations. Memory controller channels are also added on Tegra186
-and later and the missing DFLL reset is added for Tegra210.
+This enables the driver for the new ASRC audio block that is found on
+Tegra186 and later.
 
 ----------------------------------------------------------------
-Aniruddha Rao (1):
-      arm64: tegra: Update SDMMC1/3 clock source for Tegra194
+Sameer Pujar (1):
+      arm64: defconfig: Build Tegra ASRC module
 
-Ashish Mhetre (1):
-      arm64: tegra: Add memory controller channels
-
-Ashish Singhal (1):
-      arm64: tegra: Add QSPI controllers on Tegra234
-
-Diogo Ivo (1):
-      arm64: tegra: Add missing DFLL reset on Tegra210
-
-Jon Hunter (1):
-      arm64: tegra: Update PWM fan node name
-
-Sameer Pujar (2):
-      arm64: tegra: Add ASRC device on Tegra186 and later
-      arm64: tegra: Enable ASRC on various platforms
-
-Sumit Gupta (1):
-      arm64: tegra: Add node for Tegra234 CCPLEX cluster
-
- arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts | 223 ++++++++++++++++++++
- .../dts/nvidia/tegra186-p3509-0000+p3636-0001.dts  |   2 +-
- arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  15 +-
- arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts | 225 ++++++++++++++++++++-
- .../arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi | 225 ++++++++++++++++++++-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  42 +++-
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |   2 +-
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   5 +-
- .../arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi |  12 ++
- .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  | 223 ++++++++++++++++++++
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           |  67 +++++-
- include/dt-bindings/clock/tegra234-clock.h         |   8 +
- include/dt-bindings/reset/tegra234-reset.h         |   2 +
- 13 files changed, 1038 insertions(+), 13 deletions(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
