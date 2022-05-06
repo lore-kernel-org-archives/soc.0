@@ -4,25 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5290CC433F5
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 13:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97672C433EF
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 13:25:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D2EAC385B1; Fri,  6 May 2022 13:24:50 +0000 (UTC)
+	id 66380C385A8; Fri,  6 May 2022 13:25:08 +0000 (UTC)
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4A133C385B2;
-	Fri,  6 May 2022 13:24:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A133C385B2
+	by smtp.kernel.org (Postfix) with ESMTPS id 094EDC385AA;
+	Fri,  6 May 2022 13:25:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 094EDC385AA
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ziswiler.com
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MCszN-1nePN31ygF-009kFE;
- Fri, 06 May 2022 15:24:26 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lkvx5-1oKvej1WKr-00anrC;
+ Fri, 06 May 2022 15:24:52 +0200
 From: Marcel Ziswiler <marcel@ziswiler.com>
 To: linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+Cc: Denys Drozdov <denys.drozdov@toradex.com>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Fabio Estevam <festevam@gmail.com>,
 	Frank Rowand <frowand.list@gmail.com>,
@@ -37,149 +38,311 @@ Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	soc@kernel.org
-Subject: [PATCH v3 00/13] ARM: dts: imx6ull-colibri: device tree improvements
-Date: Fri,  6 May 2022 15:24:03 +0200
-Message-Id: <20220506132416.273965-1-marcel@ziswiler.com>
+Subject: [PATCH v3 09/13] ARM: dts: imx6ull-colibri: add support for toradex aster carrier boards
+Date: Fri,  6 May 2022 15:24:12 +0200
+Message-Id: <20220506132416.273965-10-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220506132416.273965-1-marcel@ziswiler.com>
+References: <20220506132416.273965-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:4LbxChUdf4uqviwBn03YFCgkv7u66I0UG3NY+rztR+OJd8FhEzx
- AKNcOF555MPNjmlhIbnZhURXWjOlzY0tp5+usx8oY3QGa+5oB3CbgohmW+KWLA0tNdGkKpW
- Tcsq8evuFkTZWxPexpLC+abWk/ownxRpq8KwgFbLOCLlqAcvqRweEY5Ljj/XS/yDjr+8ZSr
- SsBEf3k+vSM0Bn1SH2dBw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oZJyg5xR51U=:JdnZtXeUXhmaKTGkc9DoMk
- g34zH9pQi0d72INFGgUNye3Xb6nawQYJAy8q9uzGS3f2cRZkPyhaf1cZywO+VuZOeAruHlTOm
- rbSe/wT3lLCrSbLnBZhoSxj+/cOS5P6prH3ZLTt7ZURLZIh6FLz873jN04fPuyIcY/J6EVQxv
- 01R7tFW2457lHhk7E9ctGoIPygNb7sXTpo1xmcIJj7XTe9v9Iaf2LXFvBnKY6ayLpH+SPrCV0
- Ht5BbXEYgrVdAU/Kh5LO/Ygcek4AtjQwxkyMbunBBovPlTzPHdkW+xdAYgbQQ2YWg9VgrK8vq
- 7DrhMyAarkrdqPiA/ErnuPUSkCQAUqLgWbFkWEBixVwBUy01oA7EkS/q8jmq+xXl1JkN08zfY
- Citfu+B4ViIAoeoAvxyjXsdwNvvK2qcyPKAuSiBGWlqTKF9YedyQo35tMhWHxGtL7fvC5OLsr
- iP89ReiVzzSbjQuFs6bCWemPmFC9Q2Jk/aX1cQczdcvWFINmlDUknb/L+42gtTISJISy0x/VZ
- Pl1BEUw0Lo8BHGCG10zQp/j68L75rPf9uB6PTSy+8MHM2Rd5hSwuP0kHiDEZbk0dU17XAxeqV
- QjjQhy3S08mtJdDN6E2eLUWwccUnB7237d6vsbqD1A+3rfbdBC5B0JxFyT7R53AxGYK/bPEnT
- bRtsfAvr1b/ThUgPMunYVEdNuPgAE9ZiMs9wW6F0rfgPcm5EquIGpdlxM+ljk20ORdAE=
+X-Provags-ID: V03:K1:DN2nvZMKX9eFKrCfEDKZ+tgQxg5KNMypDH0QIT83+nnua90pYTp
+ NX3r3tGtrHnxmX8u09Q1WH795vtrQMnA/20hfvOqDRWcu7uySOc3qcHpX6OJ0qY1y2IUVME
+ xG82q+kPkW2XBsSyrzwTteuTkWSy7UX6MvdvQyZbNVbKJ0evBOBF1gz7e6YfuUKwZdk0rIK
+ 9UUu88OeQemvd88BsJcVg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kE3EHfeCyjQ=:g08za8R/86/0czyCyUggds
+ P9Mj9DHGUTG4lihjBOUt3h7s2y9BKiTL0WRxYAN7Y8xUnjn/P49HJSUSdwkyy5OU2kag8sDf1
+ Av89WkjkTwEPmqs3nOnODWGwT/CrSlRaveEuKHnM1289QMPrZTXgq4rjipwJOnexrgdnv87Se
+ VzbL0UK3mOy1iL/8EKfK7Ft6ilYN9CdsVklOo7Edh8/TQNOoaySFYsmge5VlqF5U9fFR1jB8/
+ cgTM1c543KA3b89UHT0+FQx7KQDDrR1OQaYW56Td6NchZ/HkFjdlWh3hPGnrBMGRBhya+/kKd
+ ONXUmd4zZ0G/slZPyOeLmqAXWsatml8Jic9BHF/e9cocuXQP3WwoMPdyYXfyGWZJdLylgCeGu
+ yXlcWbuQAjnLVBOHzEluhIcVEEqiXPVabZTHyyAHvZJHgmteyxt32vBZp+cfStbGUHPdxKsof
+ CibqvSUP1RsRTZYcqOOEPrZUSMtowYeT6ZRR9pejp6hdswUeBLGAPYpWxZRNjBLbsr6Ug13cK
+ Jb0EcMOHvT7PgQY+QMArjWqroyyvRNaR2N7+BeIxczERRj5Ee69fUp9itICWIXXoJ3VRbhqw4
+ IJcGTOseY665M9NryUirbUBXFajyFCu3Q+tdJK891lVzEYDPOl+FlUdyUSukWTlrrIZmP16Sg
+ 6F75Vtf36SattGyUfeZdCzrNeE7ttZSwijB13vld+gjS2BuPWIQ3EP5uexVoTR2CKxVA=
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Denys Drozdov <denys.drozdov@toradex.com>
 
+Add support for Toradex Aster, small form-factor Colibri Arm
+Computer Module family carrier board.
 
-This is a general update of the Colibri iMX6ULL device tree files.
+Aster Device Trees:
+- imx6ull-colibri-aster.dtb
+- imx6ull-colibri-emmc-aster.dtb
+- imx6ull-colibri-wifi-aster.dtb
 
-The Toradex Colibri family is composed of a SoM that can be plugged on
-various carrier boards, with carrier boards allowing multiple optional
-accessories (e.g. display, camera, ...).
+Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-The device tree sources are structured into a SoM dtsi and a carrier dts
-which then includes the SoM dtsi. The SoM dtsi defines and enables the
-functionality self-contained on the SoM and prepares for the
-functionality provided by the carrier HW or accessories so that the
-carrier dts then can enable or amend nodes provided. Accessories are
-enabled in overlays depending on HW configuration.
-
-Please find the following colibri-imx6ull device trees improvements:
-
-- MMC/SD
-The original Colibri specification only defined 3.3 volt TTL signaling
-and relied on external on-carrier pull-ups for the SD_DATA[0..3] lines.
-The latest carrier boards like Iris V2 on the other hand are now UHS-I
-compliant by leaving such external on-carrier pull-ups away relying on
-module- or even SoC-level ones which pull up to resp. signaling voltage.
-In such cases, the carrier board-level device tree may explicitly delete
-the no-1-8-v property to enable full UHS-I support.
-Also, fix SD/MMC regulator for the carrier boards using UHS-I modes.
-
-- FEC
-Provide a proper phy-supply for the FEC, actually switched by the 50 Mhz
-RMII interface clock using a regulator-fixed-clock that is now properly
-stated. The reference commit for such regulator can be found at commit
-8959e5324485 ("regulator: fixed: add possibility to enable by clock").
-
-- I2C
-Switched on 22 kOhm pull-ups and lower the I2C frequency to 40 kHz to
-get more reliable communication.
-
-- Atmel Touchscreen
-The Toradex 7" Capacitive and 10" LVDS touch screens are Atmel MXT
-peripherals available on the I2C bus for touchscreen events. Add
-atmel_mxt_ts node to the module-level device tree. Also, provide pinmux
-configuration for the INT/RST inputs from SODIMM pins 106/107 for most
-carrier boards or an external touchscreen adapter inputs configured to
-SODIMM pins 28/30.
+---
 
 Changes in v3:
-- Fixed reset GPIO polarity in-line with the following upstream commit:
-  feedaacdadfc ("Input: atmel_mxt_ts - fix up inverted RESET handler")
-- Fixed comment using more common SODIMM followed by number naming.
-- Replaced underscores by dashes in GPIO hog node names.
-- Added more LVDS specific GPIO hogs in-line with other modules.
 - Re-based on top of Shawn's imx/dt branch.
 - Dropped [PATCH v2 08/14] dt-bindings: arm: fsl: add
   toradex,colibri-imx6ull which already got applied by Shawn. Thanks!
 
 Changes in v2:
-- Fixed pinctrl node names as suggested by Shawn.
-- Fix alphabetical node order as suggested by Shawn.
 - Dropped [PATCH v1 02/14] ARM: dts: imx6ull-colibri: fix vqmmc
   regulator which already got applied by Shawn. Thanks!
-- New commit with pinctrl node name improvements as suggested by Shawn.
 
-Denys Drozdov (4):
-  ARM: dts: imx6ull-colibri: add touchscreen device nodes
-  ARM: dts: imx6ull-colibri: update device trees to support overlays
-  ARM: dts: imx6ull-colibri: add support for toradex iris carrier boards
-  ARM: dts: imx6ull-colibri: add support for toradex aster carrier
-    boards
-
-Marcel Ziswiler (4):
-  ARM: dts: imx6ull-colibri: fix nand bch geometry
-  ARM: dts: imx6ull-colibri: add/update some comments
-  ARM: dts: imx6ull-colibri: move gpio-keys node to som dtsi
-  ARM: dts: imx6ull-colibri: improve pinctrl node names
-
-Max Krummenacher (1):
-  ARM: dts: imx6ull-colibri: change touch i2c parameters
-
-Oleksandr Suvorov (1):
-  ARM: dts: imx6ull-colibri: add gpio-line-names
-
-Philippe Schenker (3):
-  ARM: dts: imx6ull-colibri: use pull-down for adc pins
-  ARM: dts: imx6ull-colibri: add phy-supply to fec
-  ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
-
- arch/arm/boot/dts/Makefile                    |   9 +
- arch/arm/boot/dts/imx6ull-colibri-aster.dts   |  20 ++
- arch/arm/boot/dts/imx6ull-colibri-aster.dtsi  | 145 +++++++++
+ arch/arm/boot/dts/Makefile                    |   3 +
+ arch/arm/boot/dts/imx6ull-colibri-aster.dts   |  20 +++
+ arch/arm/boot/dts/imx6ull-colibri-aster.dtsi  | 145 ++++++++++++++++++
  .../boot/dts/imx6ull-colibri-emmc-aster.dts   |  17 ++
- .../boot/dts/imx6ull-colibri-emmc-iris-v2.dts |  17 ++
- .../boot/dts/imx6ull-colibri-emmc-iris.dts    |  17 ++
- .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     |   8 +-
- arch/arm/boot/dts/imx6ull-colibri-eval-v3.dts |   6 +-
- .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi |  63 +---
- arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts |  65 ++++
- .../arm/boot/dts/imx6ull-colibri-iris-v2.dtsi |  27 ++
- arch/arm/boot/dts/imx6ull-colibri-iris.dts    |  20 ++
- arch/arm/boot/dts/imx6ull-colibri-iris.dtsi   | 132 ++++++++
- .../arm/boot/dts/imx6ull-colibri-nonwifi.dtsi | 145 ++++++++-
- .../boot/dts/imx6ull-colibri-wifi-aster.dts   |  20 ++
- .../boot/dts/imx6ull-colibri-wifi-eval-v3.dts |   4 +-
- .../boot/dts/imx6ull-colibri-wifi-iris-v2.dts |  65 ++++
- .../boot/dts/imx6ull-colibri-wifi-iris.dts    |  20 ++
- arch/arm/boot/dts/imx6ull-colibri-wifi.dtsi   | 144 ++++++++-
- arch/arm/boot/dts/imx6ull-colibri.dtsi        | 285 ++++++++++++------
- 20 files changed, 1065 insertions(+), 164 deletions(-)
+ .../boot/dts/imx6ull-colibri-wifi-aster.dts   |  20 +++
+ 5 files changed, 205 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-aster.dts
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-iris.dtsi
  create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dts
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 6c737679165c..7dba9e37ff98 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -706,12 +706,15 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+ 	imx6ul-tx6ul-0011.dtb \
+ 	imx6ul-tx6ul-mainboard.dtb \
+ 	imx6ull-14x14-evk.dtb \
++	imx6ull-colibri-aster.dtb \
++	imx6ull-colibri-emmc-aster.dtb \
+ 	imx6ull-colibri-emmc-eval-v3.dtb \
+ 	imx6ull-colibri-emmc-iris.dtb \
+ 	imx6ull-colibri-emmc-iris-v2.dtb \
+ 	imx6ull-colibri-eval-v3.dtb \
+ 	imx6ull-colibri-iris.dtb \
+ 	imx6ull-colibri-iris-v2.dtb \
++	imx6ull-colibri-wifi-aster.dtb \
+ 	imx6ull-colibri-wifi-eval-v3.dtb \
+ 	imx6ull-colibri-wifi-iris.dtb \
+ 	imx6ull-colibri-wifi-iris-v2.dtb \
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-aster.dts b/arch/arm/boot/dts/imx6ull-colibri-aster.dts
+new file mode 100644
+index 000000000000..d3f2fb7c6c1e
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-colibri-aster.dts
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2017-2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx6ull-colibri-nonwifi.dtsi"
++#include "imx6ull-colibri-aster.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX6ULL 256/512MB on Colibri Aster";
++	compatible = "toradex,colibri-imx6ull-aster",
++		     "toradex,colibri-imx6ull",
++		     "fsl,imx6ull";
++};
++
++&atmel_mxt_ts {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-aster.dtsi b/arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
+new file mode 100644
+index 000000000000..c9133ba2d705
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-colibri-aster.dtsi
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2017-2022 Toradex
++ */
++
++/ {
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_snvs_gpiokeys>;
++
++		power {
++			label = "Wake-Up";
++			gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
++			linux,code = <KEY_WAKEUP>;
++			debounce-interval = <10>;
++			wakeup-source;
++		};
++	};
++
++	reg_3v3: regulator-3v3 {
++		compatible = "regulator-fixed";
++		regulator-name = "3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
++	reg_5v0: regulator-5v0 {
++		compatible = "regulator-fixed";
++		regulator-name = "5V";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++
++	reg_usbh_vbus: regulator-usbh-vbus {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usbh_reg>;
++		regulator-name = "VCC_USB[1-4]";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&gpio1 2 GPIO_ACTIVE_LOW>;
++		vin-supply = <&reg_5v0>;
++	};
++};
++
++&adc1 {
++	status = "okay";
++};
++
++&ecspi1 {
++	status = "okay";
++
++	num-cs = <2>;
++	cs-gpios = <
++		&gpio3 26 GPIO_ACTIVE_HIGH /* SODIMM 86 LCD_DATA21 */
++		&gpio4 28 GPIO_ACTIVE_HIGH /* SODIMM 65 CSI_DATA07 */
++	>;
++};
++
++/*
++ * Following SODIMM Pins should not be accessed as GPIO on Aster board:
++ * 134 - AIN5_SCL (no connection)
++ * 127 - Voltage Level Translator OE# signal (IC11 and IC12)
++ *
++ * To configure GPIO to LED5, please disable FEC2 and uncomment the following:
++ *	&iomuxc {
++ *		pinctrl-names = "default";
++ *		pinctrl-0 = <
++ *			&pinctrl_gpio1
++ *			&pinctrl_gpio2
++ *			&pinctrl_gpio3
++ *			&pinctrl_gpio4
++ *			&pinctrl_gpio6 - for non-WiFi modules only
++ *			&pinctrl_gpio7
++ *			&pinctrl_gpio_aster
++ *		>;
++ *
++ *		pinctrl_gpio_aster: gpio-aster {
++ *			fsl,pins = <
++ *				MX6UL_PAD_GPIO1_IO07__GPIO1_IO07    0x1b0b0
++ *			>;
++ *		};
++ *  };
++ */
++
++&i2c1 {
++	status = "okay";
++
++	m41t0m6: rtc@68 {
++		compatible = "st,m41t0";
++		reg = <0x68>;
++	};
++};
++
++/* PWM <A> */
++&pwm4 {
++	status = "okay";
++};
++
++/* PWM <B> */
++&pwm5 {
++	status = "okay";
++};
++
++/* PWM <C> */
++&pwm6 {
++	status = "okay";
++};
++
++/* PWM <D> */
++&pwm7 {
++	status = "okay";
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&uart5 {
++	status = "okay";
++};
++
++&usbotg1 {
++	vbus-supply = <&reg_usbh_vbus>;
++	status = "okay";
++};
++
++&usbotg2 {
++	vbus-supply = <&reg_usbh_vbus>;
++	status = "okay";
++};
++
++&usdhc1 {
++	vmmc-supply = <&reg_3v3>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts b/arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
+new file mode 100644
+index 000000000000..919c0464d6cb
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dts
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx6ull-colibri-emmc-nonwifi.dtsi"
++#include "imx6ull-colibri-aster.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX6ULL 1GB (eMMC) on Colibri Aster";
++	compatible = "toradex,colibri-imx6ull-emmc-aster",
++		     "toradex,colibri-imx6ull-emmc",
++		     "toradex,colibri-imx6ull",
++		     "fsl,imx6ull";
++};
+diff --git a/arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts b/arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
+new file mode 100644
+index 000000000000..b4f65e8c5857
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dts
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2017-2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx6ull-colibri-wifi.dtsi"
++#include "imx6ull-colibri-aster.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX6ULL 512MB on Colibri Aster";
++	compatible = "toradex,colibri-imx6ull-wifi-aster",
++		     "toradex,colibri-imx6ull",
++		     "fsl,imx6ull";
++};
++
++&atmel_mxt_ts {
++	status = "okay";
++};
 -- 
 2.35.1
 
