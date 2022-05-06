@@ -1,723 +1,146 @@
-Return-Path: <SRS0=/fei=VO=ziswiler.com=marcel@kernel.org>
+Return-Path: <robh+dt@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B749C433F5
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 15:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97C3BC433EF
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 16:21:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3F2EBC385AA; Fri,  6 May 2022 15:58:45 +0000 (UTC)
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0875CC385A9;
-	Fri,  6 May 2022 15:58:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0875CC385A9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ziswiler.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ziswiler.com
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MDiSu-1nbVt62E8c-00HAUO;
- Fri, 06 May 2022 17:58:27 +0200
-From: Marcel Ziswiler <marcel@ziswiler.com>
-To: linux-arm-kernel@lists.infradead.org
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Olof Johansson <olof@lixom.net>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org
-Subject: [PATCH v1 24/24] ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
-Date: Fri,  6 May 2022 17:58:21 +0200
-Message-Id: <20220506155821.297686-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220506152809.295409-1-marcel@ziswiler.com>
-References: <20220506152809.295409-1-marcel@ziswiler.com>
+	id 65168C385B5; Fri,  6 May 2022 16:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDB3C385B0;
+	Fri,  6 May 2022 16:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1651854080;
+	bh=AxLsv+MlHDtR4Ba4/1Hd2BjJXSVz5vOpyyeEN0wDR9o=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=NiroyEcvo4HRxc6pDtp969iTGKsGbIqAxNjv2wzaS/L76OtmvBpBFbx7h9IVECfpN
+	 +S+/fGWAeTN5NzWGYWQNY5xCY3YWkd1V6TnoHGCWwgJUXI/BD5BOcU4BChQ45FAAKd
+	 IQh/q1AQZdgVM6NGh7Vjo4apFlS3LuVBWTscSsPWDlndWUswy4PAffWl+CtIK37Pkz
+	 Na3q3/fcpmiGwOVZOtVfy0aChBdpWlcTfNNrwPlDQsaFtBmMCHMcTQ7iKLJtmoduQz
+	 CfUCdKCnoUIq8Qdq/WjNWmQ0fG1BU8bKO4IXRvt2DFyFcgkIIgeztoRSgs6yorYx91
+	 mnvSGI5i9IJsw==
+Received: by mail-pl1-f182.google.com with SMTP id k1so7902612pll.4;
+        Fri, 06 May 2022 09:21:20 -0700 (PDT)
+X-Gm-Message-State: AOAM530vMYtOuz9CW4z223MBgfMEAeW8EezlWFrVnsc/VpbpHCk/hSNp
+	NzCJS6nnBOVJzcegb0lt56XdUWcbd45HykBS/A==
+X-Google-Smtp-Source: ABdhPJxGBIsMUehaVlYli55Vk/6Ka2uimhuHRzDr+nnDieEXfg2/cpKCg5fNCcM3zaajVlgGtUfkMrVQQc38ZioO7wU=
+X-Received: by 2002:a17:902:7884:b0:15e:e6a8:346 with SMTP id
+ q4-20020a170902788400b0015ee6a80346mr4487227pll.151.1651854079794; Fri, 06
+ May 2022 09:21:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:yRWcy8MKdSGDIQxT6vwlwChUUwElSPtTpT4etGI8iGfj48gnvBD
- 3J4hAC/Gmyp3Kv3zDU3bV418EvSV7n0ppwkYH5BryxaL/b9J9PvTEnjQE22v2j2KrnsyhB3
- HpafVq1kSnBZHDxFStBub7EJA8p6fARFGBPkzdsBG4gyM1eZIth//Oo0W4RoGTV2xVHq3YZ
- l6hFoi8+878cFZSkLeV6A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iFSraCP1FAQ=:jR+L9QJeM9i5ZQyaSAYlo2
- vQvmfhemrQp10ZpNKiXxN6X/QAs42+oEHRB2ezu8bR5fK/gH/lWeOqxnuHdOOt8Dvfhaov4AE
- x2QHP/PzDU2NsOuR9kGz8jJYxSvv+eVLCH4VZFgLEgYPGvQx5w+A5kBCBljaL6RqHxr325ZSp
- IhZL9EhVc17ob0XVpymu8wbYorcReLVzQOkFg8ATzWwqQli6qPFPCpPGU1OC1bstQmp6X0TwA
- tiXaJBHPtGWaE8OUqmlMo3S6c/T3rU8XgnO9v01nzqtewKqbNkfhjus+u04olOwKXssHP3Aaj
- XzAJBr1PnRCLw/MuKl5KDa1FtlrcU6L8yanuXQsUng0uDf+OIHr5DCqbFgklZQsCth3nmQtNO
- 2aaHLCUMpyioDNbqk/XsrtliT5fie0gnCBj4tSEp9ZPQP6YDRTDCfzMpHCAeIdDaZnkbDGwPR
- khdyp8h/OOkPQ8+k5xA9+F0U0kDOJCu0MEQLDtK0Hr70aTlX4S9ivcZwNi1hxFOvBBsnUH7z2
- Utkk1/tcgatHtOij/H8k3iVrDn5ZruikqBzS8EYK4+XHQz5AY9OAnnIgv5oIjbe0sylZt40nW
- 9zTMhhpso7Vp39/PRSMlx6uCqGRrwWOmLa72FbNMLaRw3mKMn6DUa43h+iXXmp4dYMsiIjJxi
- O877SdftN51Eh8PoFtnfxPfeoNS6o2nRAaRiqocv14vCja/sEQRJr3mU4X6NB8fQsCD4AIGSk
- 4EWZ6UPoUfbZ0rLfI6PWQfcL1nv0WA0ZwPfdFniUNXCJJHU6ZNVmklYcs9k=
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-3-alexandre.torgue@foss.st.com> <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
+ <edf8f01b-e850-1734-2909-f31cd8b082c5@foss.st.com>
+In-Reply-To: <edf8f01b-e850-1734-2909-f31cd8b082c5@foss.st.com>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Fri, 6 May 2022 11:21:08 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK5ox681qQFz6b4a8eSaNHJ08XmB2bTE=EZ2Pch0YDJqA@mail.gmail.com>
+Message-ID: <CAL_JsqK5ox681qQFz6b4a8eSaNHJ08XmB2bTE=EZ2Pch0YDJqA@mail.gmail.com>
+Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if "st,stm32mp1-rcc-secure"
+To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, SoC Team <soc@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org, 
+	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>, 
+	Ahmad Fatoum <a.fatoum@pengutronix.de>, Etienne Carriere <etienne.carriere@st.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On Fri, May 6, 2022 at 5:02 AM Alexandre TORGUE
+<alexandre.torgue@foss.st.com> wrote:
+>
+> Hi Rob
+>
+> On 5/5/22 16:11, Rob Herring wrote:
+> > On Fri, Apr 22, 2022 at 10:10 AM Alexandre Torgue
+> > <alexandre.torgue@foss.st.com> wrote:
+> >>
+> >> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
+> >> security support hardened), "clocks" and "clock-names" describe oscillators
+> >> and are required.
+> >>
+> >> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> >
+> > This is now failing in linux-next:
+> >
+> > make[1]: *** Deleting file
+> > 'Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts'
+> > Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml: found
+> > duplicate key "clocks" with value "{}" (original value: "True")
+> > make[1]: *** [Documentation/devicetree/bindings/Makefile:26:
+> > Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts]
+> > Error 1
+> > ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:64:3:
+> > [error] duplication of key "clocks" in mapping (key-duplicates)
+> > ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:69:3:
+> > [error] duplication of key "clock-names" in mapping (key-duplicates)
+> > Traceback (most recent call last):
+> >    File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
+> >      testtree = dtschema.load(filename, line_number=line_number)
+> >    File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line
+> > 914, in load
+> >      return yaml.load(f.read())
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py",
+> > line 434, in load
+> >      return constructor.get_single_data()
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > line 121, in get_single_data
+> >      return self.construct_document(node)
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > line 131, in construct_document
+> >      for _dummy in generator:
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > line 674, in construct_yaml_map
+> >      value = self.construct_mapping(node)
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > line 445, in construct_mapping
+> >      return BaseConstructor.construct_mapping(self, node, deep=deep)
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > line 263, in construct_mapping
+> >      if self.check_mapping_key(node, key_node, mapping, key, value):
+> >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > line 294, in check_mapping_key
+> >      raise DuplicateKeyError(*args)
+> > ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+> >    in "<unicode string>", line 49, column 3
+> > found duplicate key "clocks" with value "{}" (original value: "True")
+> >    in "<unicode string>", line 64, column 3
+> > To suppress this check see:
+> >      http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+> > During handling of the above exception, another exception occurred:
+> > Traceback (most recent call last):
+> >    File "/usr/local/bin/dt-doc-validate", line 74, in <module>
+> >      ret = check_doc(f)
+> >    File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
+> >      print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
+> > AttributeError: 'DuplicateKeyError' object has no attribute 'path'
+>
+> It seems that we have a merge issue between:
+>
+> patch "dt-bindings: rcc: Add optional external ethernet RX clock properties"
+> https://lore.kernel.org/r/20220410220514.21779-1-marex@denx.de
+>
+> and this one (dt-bindings: clock: stm32mp1: describes clocks if
+> "st,stm32mp1-rcc-secure)
+>
+> On linux-next following part remains and creates issue above:
+>
+>    clocks:
+>      description:
+>        Specifies the external RX clock for ethernet MAC.
+>      maxItems: 1
+>
+>    clock-names:
+>      const: ETH_RX_CLK/ETH_REF_CLK
+>
+> I don't know why this part is remaining. In my tree, I took care to take
+> Marek patch first to avoid this kind of issue.
+>
+> Btw, how to fix that ?
 
-Add support for Toradex Iris, small form-factor Pico-ITX Colibri Arm
-Computer Module family Carrier Board.
+Looks like I applied "dt-bindings: rcc: Add optional external ethernet
+RX clock properties" too. I've reverted it in my tree.
 
-Additional details available at
-https://www.toradex.com/products/carrier-board/iris-carrier-board
-
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-
----
-
- arch/arm/boot/dts/Makefile                    |   6 +
- arch/arm/boot/dts/imx6dl-colibri-iris.dts     |   9 +-
- arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi   | 112 ++++++++++++++++++
- arch/arm/boot/dts/imx7-colibri-iris.dtsi      | 108 +++++++++++++++++
- .../boot/dts/imx7d-colibri-emmc-iris-v2.dts   |  21 ++++
- arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts |  21 ++++
- arch/arm/boot/dts/imx7d-colibri-iris-v2.dts   |  83 +++++++++++++
- arch/arm/boot/dts/imx7d-colibri-iris.dts      |  56 +++++++++
- arch/arm/boot/dts/imx7s-colibri-iris-v2.dts   |  78 ++++++++++++
- arch/arm/boot/dts/imx7s-colibri-iris.dts      |  51 ++++++++
- 10 files changed, 540 insertions(+), 5 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
- create mode 100644 arch/arm/boot/dts/imx7-colibri-iris.dtsi
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris.dts
- create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index b711d4423b42..5a9c805dbc84 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -726,8 +726,12 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- 	imx7d-cl-som-imx7.dtb \
- 	imx7d-colibri-aster.dtb \
- 	imx7d-colibri-emmc-aster.dtb \
-+	imx7d-colibri-emmc-iris.dtb \
-+	imx7d-colibri-emmc-iris-v2.dtb \
- 	imx7d-colibri-emmc-eval-v3.dtb \
- 	imx7d-colibri-eval-v3.dtb \
-+	imx7d-colibri-iris.dtb \
-+	imx7d-colibri-iris-v2.dtb \
- 	imx7d-flex-concentrator.dtb \
- 	imx7d-flex-concentrator-mfg.dtb \
- 	imx7d-mba7.dtb \
-@@ -747,6 +751,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- 	imx7d-zii-rpu2.dtb \
- 	imx7s-colibri-aster.dtb \
- 	imx7s-colibri-eval-v3.dtb \
-+	imx7s-colibri-iris.dtb \
-+	imx7s-colibri-iris-v2.dtb \
- 	imx7s-mba7.dtb \
- 	imx7s-warp.dtb
- dtb-$(CONFIG_SOC_IMX7ULP) += \
-diff --git a/arch/arm/boot/dts/imx6dl-colibri-iris.dts b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
-index cf77d894f6d7..6e048d696c77 100644
---- a/arch/arm/boot/dts/imx6dl-colibri-iris.dts
-+++ b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
-@@ -40,11 +40,10 @@ &gpio2 {
- 	pinctrl-0 = <&pinctrl_uart1_forceoff &pinctrl_uart23_forceoff>;
- 
- 	/*
--	 * uart-a-on-x13-enable turns the UART transceiver for UART_A on. If one
--	 * wants to turn the transceiver off, that property has to be deleted
--	 * and the gpio handled in userspace.
--	 * The same applies to uart-b-c-on-x14-enable where the UART_B and
--	 * UART_C transceiver is turned on.
-+	 * uart-a-on-x13-enable-hog turns the UART transceiver for UART_A on. If one wants to turn
-+	 * the transceiver off, that property has to be deleted and the gpio handled in userspace.
-+	 * The same applies to uart-b-c-on-x14-enable-hog where the UART_B and UART_C transceiver is
-+	 * turned on.
- 	 */
- 	uart-a-on-x13-enable-hog {
- 		gpio-hog;
-diff --git a/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi b/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
-new file mode 100644
-index 000000000000..6e199613583c
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/ {
-+	reg_3v3_vmmc: regulator-3v3-vmmc {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio5 16 GPIO_ACTIVE_HIGH>; /* SODIMM 100 */
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "3v3_vmmc";
-+		startup-delay-us = <100>;
-+	};
-+};
-+
-+/* Colibri AD0 to AD3 */
-+&adc1 {
-+	status = "okay";
-+};
-+
-+/* Colibri SSP */
-+&ecspi3 {
-+	status = "okay";
-+};
-+
-+/* Colibri Fast Ethernet */
-+&fec1 {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * uart_b_c_on_x14_enable turns the UART transceiver for UART2 and 5 on. If one wants to
-+	 * turn the transceiver off, that property has to be deleted and the gpio handled in
-+	 * userspace.
-+	 * The same applies to uart_a_on_x13_enable where the UART_A transceiver is turned on.
-+	 */
-+	uart-b-c-on-x14-enable-hog {
-+		gpio-hog;
-+		gpios = <27 GPIO_ACTIVE_HIGH>; /* SODIMM 104 */
-+		output-high;
-+	};
-+};
-+
-+&gpio5 {
-+	uart-a-on-x13-enable-hog {
-+		gpio-hog;
-+		gpios = <17 GPIO_ACTIVE_HIGH>; /* SODIMM 102 */
-+		output-high;
-+	};
-+};
-+
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<A> */
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<D> */
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+/* M41T0M6 real time clock */
-+&rtc {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_A */
-+&uart1 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_B */
-+&uart2 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_C */
-+&uart3 {
-+	status = "okay";
-+};
-+
-+/* Colibri USBC */
-+&usbotg1 {
-+	status = "okay";
-+};
-+
-+/* Colibri MMC/SD, UHS-I capable uSD slot */
-+&usdhc1 {
-+	cap-power-off-card;
-+	/delete-property/ keep-power-in-suspend;
-+	/delete-property/ no-1-8-v;
-+	vmmc-supply = <&reg_3v3_vmmc>;
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7-colibri-iris.dtsi b/arch/arm/boot/dts/imx7-colibri-iris.dtsi
-new file mode 100644
-index 000000000000..175c5d478d2e
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7-colibri-iris.dtsi
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/* Colibri AD0 to AD3 */
-+&adc1 {
-+	status = "okay";
-+};
-+
-+/*
-+ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
-+ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
-+ */
-+&atmel_mxt_ts {
-+	interrupt-parent = <&gpio1>;
-+	interrupts = <9 IRQ_TYPE_EDGE_FALLING>;		/* SODIMM 28 / INT */
-+	pinctrl-0 = <&pinctrl_atmel_adapter>;
-+	reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;	/* SODIMM 30 / RST */
-+};
-+
-+/* Colibri SSP */
-+&ecspi3 {
-+	status = "okay";
-+};
-+
-+/* Colibri Fast Ethernet */
-+&fec1 {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * uart25 turns the UART transceiver for UART2 and 5 on. If one wants to turn the
-+	 * transceiver off, that property has to be deleted and the gpio handled in userspace.
-+	 * The same applies to uart1_tx_on where the UART1 transceiver is turned on.
-+	 */
-+	uart25-tx-on-hog {
-+		gpio-hog;
-+		gpios = <27 GPIO_ACTIVE_HIGH>; /* SODIMM 104 */
-+		output-high;
-+	};
-+};
-+
-+&gpio5 {
-+	uart1-tx-on-hog {
-+		gpio-hog;
-+		gpios = <17 GPIO_ACTIVE_HIGH>; /* SODIMM 102 */
-+		output-high;
-+	};
-+};
-+
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<A> */
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<D> */
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+/* M41T0M6 real time clock */
-+&rtc {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_A */
-+&uart1 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_B */
-+&uart2 {
-+	status = "okay";
-+};
-+
-+/* Colibri UART_C */
-+&uart3 {
-+	status = "okay";
-+};
-+
-+/* Colibri USBC */
-+&usbotg1 {
-+	status = "okay";
-+};
-+
-+/* Colibri MMC/SD */
-+&usdhc1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
-new file mode 100644
-index 000000000000..7347659557f3
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri-emmc.dtsi"
-+#include "imx7-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D 1GB on Iris V2 Carrier Board";
-+	compatible = "toradex,colibri-imx7d-emmc-iris-v2",
-+		     "toradex,colibri-imx7d-emmc",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
-new file mode 100644
-index 000000000000..5324c92e368d
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri-emmc.dtsi"
-+#include "imx7-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D 1GB on Iris Carrier Board";
-+	compatible = "toradex,colibri-imx7d-emmc-iris",
-+		     "toradex,colibri-imx7d-emmc",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts b/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
-new file mode 100644
-index 000000000000..5762f51d5f0f
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri.dtsi"
-+#include "imx7-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D on Iris V2 Carrier Board";
-+	compatible = "toradex,colibri-imx7d-iris-v2",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * This switches the LVDS transceiver to VESA color mapping mode.
-+	 */
-+	lvds-color-map-hog {
-+		gpio-hog;
-+		gpios = <13 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
-+		line-name = "LVDS_COLOR_MAP";
-+		output-low;
-+	};
-+};
-+
-+&gpio7 {
-+	/*
-+	 * This switches the LVDS transceiver to the 24-bit RGB mode.
-+	 */
-+	lvds-rgb-mode-hog {
-+		gpio-hog;
-+		gpios = <2 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
-+		line-name = "LVDS_RGB_MODE";
-+		output-low;
-+	};
-+
-+	/*
-+	 * This switches the LVDS transceiver to the single-channel
-+	 * output mode.
-+	 */
-+	lvds-ch-mode-hog {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
-+		line-name = "LVDS_CH_MODE";
-+		output-high;
-+	};
-+
-+	/* This turns the LVDS transceiver on */
-+	lvds-power-on-hog {
-+		gpio-hog;
-+		gpios = <11 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
-+		line-name = "LVDS_POWER_ON";
-+		output-high;
-+	};
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7d-colibri-iris.dts b/arch/arm/boot/dts/imx7d-colibri-iris.dts
-new file mode 100644
-index 000000000000..9c63cb9d9a64
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7d-colibri-iris.dts
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7d-colibri.dtsi"
-+#include "imx7-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7D on Iris Carrier Board";
-+	compatible = "toradex,colibri-imx7d-iris",
-+		     "toradex,colibri-imx7d",
-+		     "fsl,imx7d";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+/*
-+ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
-+ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
-+ */
-+&atmel_mxt_ts {
-+	status = "disabled";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri USBH */
-+&usbotg2 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts b/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
-new file mode 100644
-index 000000000000..72b5c17ab1ab
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7s-colibri.dtsi"
-+#include "imx7-colibri-iris-v2.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7S on Iris V2 Carrier Board";
-+	compatible = "toradex,colibri-imx7s-iris-v2",
-+		     "toradex,colibri-imx7s",
-+		     "fsl,imx7s";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+&atmel_mxt_ts {
-+	status = "okay";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&gpio2 {
-+	/*
-+	 * This switches the LVDS transceiver to VESA color mapping mode.
-+	 */
-+	lvds-color-map-hog {
-+		gpio-hog;
-+		gpios = <13 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
-+		line-name = "LVDS_COLOR_MAP";
-+		output-low;
-+	};
-+};
-+
-+&gpio7 {
-+	/*
-+	 * This switches the LVDS transceiver to the 24-bit RGB mode.
-+	 */
-+	lvds-rgb-mode-hog {
-+		gpio-hog;
-+		gpios = <2 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
-+		line-name = "LVDS_RGB_MODE";
-+		output-low;
-+	};
-+
-+	/*
-+	 * This switches the LVDS transceiver to the single-channel
-+	 * output mode.
-+	 */
-+	lvds-ch-mode-hog {
-+		gpio-hog;
-+		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
-+		line-name = "LVDS_CH_MODE";
-+		output-high;
-+	};
-+
-+	/* This turns the LVDS transceiver on */
-+	lvds-power-on-hog {
-+		gpio-hog;
-+		gpios = <11 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
-+		line-name = "LVDS_POWER_ON";
-+		output-high;
-+	};
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/imx7s-colibri-iris.dts b/arch/arm/boot/dts/imx7s-colibri-iris.dts
-new file mode 100644
-index 000000000000..26ba72c17feb
---- /dev/null
-+++ b/arch/arm/boot/dts/imx7s-colibri-iris.dts
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+#include "imx7s-colibri.dtsi"
-+#include "imx7-colibri-iris.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX7S on Iris Carrier Board";
-+	compatible = "toradex,colibri-imx7s-iris",
-+		     "toradex,colibri-imx7s",
-+		     "fsl,imx7s";
-+};
-+
-+&ad7879_ts {
-+	status = "okay";
-+};
-+
-+/*
-+ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
-+ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
-+ */
-+&atmel_mxt_ts {
-+	status = "disabled";
-+};
-+
-+&backlight {
-+	status = "okay";
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&panel_dpi {
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<B> */
-+&pwm2 {
-+	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
-+
-+/* Colibri PWM<C> */
-+&pwm3 {
-+	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
-+	status = "okay";
-+};
--- 
-2.35.1
-
+Rob
