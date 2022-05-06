@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90261C433EF
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 09:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73271C433F5
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 09:32:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61705C385BA; Fri,  6 May 2022 09:32:30 +0000 (UTC)
+	id 3591DC385B0; Fri,  6 May 2022 09:32:31 +0000 (UTC)
 Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B22BEC385A8
+	by smtp.kernel.org (Postfix) with ESMTPS id B22CEC385AF
 	for <soc@kernel.org>; Fri,  6 May 2022 09:32:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B22BEC385A8
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B22CEC385AF
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:287c:a0f:7d45:dc7b])
 	by michel.telenet-ops.be with bizsmtp
-	id TMYL270131UVucw06MYMkG; Fri, 06 May 2022 11:32:21 +0200
+	id TMYM270031UVucw06MYMkL; Fri, 06 May 2022 11:32:21 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1nmuJw-0038XD-GT; Fri, 06 May 2022 11:32:20 +0200
+	id 1nmuJw-0038XE-Is; Fri, 06 May 2022 11:32:20 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1nmuJv-00AekN-SE; Fri, 06 May 2022 11:32:19 +0200
+	id 1nmuJv-00AekT-Ss; Fri, 06 May 2022 11:32:19 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -35,45 +35,61 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/5] Renesas ARM SoC updates for v5.19
-Date: Fri,  6 May 2022 11:32:14 +0200
-Message-Id: <cover.1651828611.git.geert+renesas@glider.be>
+Subject: [GIT PULL 4/5] Renesas driver updates for v5.19 (take two)
+Date: Fri,  6 May 2022 11:32:15 +0200
+Message-Id: <cover.1651828613.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1651828600.git.geert+renesas@glider.be>
 References: <cover.1651828600.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+The following changes since commit 2f89bef90de4740be33b2cb4ba95e0107df0d25e:
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+  soc: renesas: Identify RZ/G2UL SoC (2022-04-04 11:01:53 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-soc-for-v5.19-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v5.19-tag2
 
-for you to fetch changes up to 7bc53f59fbcad34599c99d07d6be1ff01849d457:
+for you to fetch changes up to 27e7657a7cdc4b4a73bd5e4448e9ed733bae05c0:
 
-  ARM: shmobile: rcar-gen2: Drop comma after OF match table sentinel (2022-05-05 12:32:40 +0200)
+  soc: renesas: R-Car V3U is R-Car Gen4 (2022-05-05 12:31:22 +0200)
 
 ----------------------------------------------------------------
-Renesas ARM SoC updates for v5.19
+Renesas driver updates for v5.19 (take two)
 
-  - Drop commas after sentinels.
+  - Initial support for the R-Car V4H and RZ/V2M SoCs,
+  - Miscellaneous fixes and improvements.
 
 ----------------------------------------------------------------
 Geert Uytterhoeven (2):
-      ARM: shmobile: Drop commas after dt_compat sentinels
-      ARM: shmobile: rcar-gen2: Drop comma after OF match table sentinel
+      Merge tag 'renesas-r8a779g0-dt-binding-defs-tag' into renesas-drivers-for-v5.19
+      soc: renesas: R-Car V3U is R-Car Gen4
 
- arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c | 2 +-
- arch/arm/mach-shmobile/setup-emev2.c               | 2 +-
- arch/arm/mach-shmobile/setup-r7s72100.c            | 2 +-
- arch/arm/mach-shmobile/setup-r7s9210.c             | 2 +-
- arch/arm/mach-shmobile/setup-r8a73a4.c             | 2 +-
- arch/arm/mach-shmobile/setup-r8a7740.c             | 2 +-
- arch/arm/mach-shmobile/setup-r8a7778.c             | 2 +-
- arch/arm/mach-shmobile/setup-r8a7779.c             | 2 +-
- arch/arm/mach-shmobile/setup-rcar-gen2.c           | 4 ++--
- arch/arm/mach-shmobile/setup-sh73a0.c              | 2 +-
- 10 files changed, 11 insertions(+), 11 deletions(-)
+Herve Codina (1):
+      soc: renesas: rzn1: Select PM and PM_GENERIC_DOMAINS configs
+
+Phil Edworthy (1):
+      soc: renesas: Add RZ/V2M (R9A09G011) config option
+
+Yoshihiro Shimoda (5):
+      dt-bindings: power: Add r8a779g0 SYSC power domain definitions
+      dt-bindings: clock: Add r8a779g0 CPG Core Clock Definitions
+      soc: renesas: r8a779g0-sysc: Add r8a779g0 support
+      soc: renesas: Identify R-Car V4H
+      soc: renesas: rcar-rst: Add support for R-Car V4H
+
+ drivers/soc/renesas/Kconfig                   | 20 ++++++
+ drivers/soc/renesas/Makefile                  |  1 +
+ drivers/soc/renesas/r8a779g0-sysc.c           | 62 ++++++++++++++++++
+ drivers/soc/renesas/rcar-gen4-sysc.c          |  3 +
+ drivers/soc/renesas/rcar-gen4-sysc.h          |  1 +
+ drivers/soc/renesas/rcar-rst.c                |  1 +
+ drivers/soc/renesas/renesas-soc.c             | 10 ++-
+ include/dt-bindings/clock/r8a779g0-cpg-mssr.h | 90 +++++++++++++++++++++++++++
+ include/dt-bindings/power/r8a779g0-sysc.h     | 45 ++++++++++++++
+ 9 files changed, 232 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/soc/renesas/r8a779g0-sysc.c
+ create mode 100644 include/dt-bindings/clock/r8a779g0-cpg-mssr.h
+ create mode 100644 include/dt-bindings/power/r8a779g0-sysc.h
