@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C089C433F5
-	for <soc@archiver.kernel.org>; Fri,  6 May 2022 14:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18EB4C433F5
+	for <soc@archiver.kernel.org>; Fri,  6 May 2022 14:30:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1C097C385AC; Fri,  6 May 2022 14:30:11 +0000 (UTC)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	id D8E30C385B0; Fri,  6 May 2022 14:30:12 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6703AC385A9;
-	Fri,  6 May 2022 14:30:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6703AC385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id 3D8DCC385A8;
+	Fri,  6 May 2022 14:30:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3D8DCC385A8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so6934361wms.3;
-        Fri, 06 May 2022 07:30:10 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id x18so10316332wrc.0;
+        Fri, 06 May 2022 07:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nfFGbXtx8Ki2IjiN7Vk3A6jVBg+1ReA160NvfdgTTd8=;
-        b=mvgmBJZ7C9mMbaPWvrP1UdwUpXFu73rh6NdL0dx1CPzgy8VdrCQdodiWy9Hi3FBTP+
-         qMHMwYWBWs3qtPhUZeGeJWGyhJbE97oyNOrlBBm1GatzaY1IiQVmv0EgEMlAGM12HOOS
-         7MHmZo+1ERgUWZOymxUm/H66xLqvRCW7nmc3cTUFgivl93Ba2v65rGMqxI4wpiT8vyqL
-         iK1xnieIugwM+szmCfP5WYUE/65PhLZgRE80WgsWPKVRjQL+4wR8tGk9nzmYrwOFRImA
-         ZOR3kX/1SOmb+mFWz+dVh/Gnrj19orDSJF2RtaNMYVLBVi+R82ndgkYRv/8P+jiGqlbY
-         MEhA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=aQb6q3Qhc7TawpXFz11bbETIKo6ryfU6AXp8dhF5Rgg=;
+        b=GRQLL9711f6FIy3dhpp0e5+ua2CsBcVHf7VlgfAu7znBi/Rrcw36mU+GiYNULKwp7p
+         VKOME+IQ+mdBdlONnT7HItI0RboHKHddY5D7i+IJI4Z1F9klbkimxexxsqlFkhTnQax0
+         CakCWlrO0SIPWRIKp9uFNfqpEm8Q5tc73KKRnnMCuyQLQj5oCBrI8yp7Ayv8CZzwYjbl
+         4IUqzLzBi3tKei1kJNCIkKV0/zKo0HMAdI8YhmpPYeUC3Ul4llgluvGeokJafZC2du3b
+         p9feCnkyLaLBZQA7/2ynl4EGH7pOVtlp7jFH1f3y4xGgz4wZRRdd6ea7tSorxE0+OJUv
+         5WBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nfFGbXtx8Ki2IjiN7Vk3A6jVBg+1ReA160NvfdgTTd8=;
-        b=TzNicXbRYBAqjH0NG+ij3sGf0OVBouJV3WSqSyBugmty2QC9ricVCed4JwP6oFm/Bt
-         21DHZRCTFUl/47OdMzrw5bZrepToArFkb+YKDxUa9gJuSM2iO8PbT3GgOPLI19npYW6+
-         KkYESHaD/3rZ/AiCoM8gOZVTQV+5Qm+8SAoFdtXSuPumH/sa3a27CF1q2tFPKW+nAMIF
-         FJ5tpFc2BRgkmQ8WRPpAi8gmbGNuCPH2Oi6MxtyFqFRNouIhsomzYW0DCIuW8aTXchm/
-         TQJB8Yp4aTL1vEhtKfoaCw0dQmSJhlLaro0Syp5YC+LWBxyk4xOSD3zwarcgFFazZ2VH
-         yb2g==
-X-Gm-Message-State: AOAM533gOldwY8ncZG6fPGPZUkrDPJIDmhE77lFzRH2Qy4p6na3NMrNy
-	3xnO/8CYsacZhObGDmrJFxsp5Dm/+VU=
-X-Google-Smtp-Source: ABdhPJzRVLvTpSH9Hlb0gTRiLfi2J2Od/21ypwhu2x944HI4J+fMouNTl3zvtcmwjcogC5w/hhWomg==
-X-Received: by 2002:a05:600c:2552:b0:394:65f:fbf1 with SMTP id e18-20020a05600c255200b00394065ffbf1mr3709426wma.55.1651847407991;
-        Fri, 06 May 2022 07:30:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=aQb6q3Qhc7TawpXFz11bbETIKo6ryfU6AXp8dhF5Rgg=;
+        b=lXZgJ5TTrtLVxCHYCdrXjdp/ToaI/Oe7FcAAhQyuh5Sr0yjhPojkREeO0yuscllsmK
+         qmZ7m6UIwi8dTDYQW6Z2s/lt0oLVtgELVki4f9QpVhBb3XssOHeMrZGYLFK+q8eFnIO5
+         aozShinQyq5FcS/Hh+7iVhmdCJ40QCRnT5r+rmWzIlltXriySANqsb9892g1ehGoSNus
+         VO6B/NwWog2a9sAM4pze5QYCUmj/Mx+mS8vIE4VrI9ViSg14NvCfXPTbwMFKj+F6P5of
+         FYA5EGo6HH3WI7LLsn13uL8ciamotTzPDx/sH0PtpgSuvcr6vqfGEhjkOy3OQyrjRc6h
+         ztWg==
+X-Gm-Message-State: AOAM531hDA/5aO+Dts9KbOAfZ2a6r0/bxK1I02YdGxVLRmbMjb3RN2gE
+	BVJtJizAZ0qy2HuJXnImK0o4UziTCfY=
+X-Google-Smtp-Source: ABdhPJxdvPALns7toTxtoaOjGVFh/2dhjEXKbiAkLNhgLxBvXvEyyUhyd7p6fTYCe05SQa2mVHujbg==
+X-Received: by 2002:a5d:6489:0:b0:20c:6c3b:d49e with SMTP id o9-20020a5d6489000000b0020c6c3bd49emr3024054wri.75.1651847410056;
+        Fri, 06 May 2022 07:30:10 -0700 (PDT)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id r190-20020a1c2bc7000000b003942a244f51sm8838909wmr.42.2022.05.06.07.30.06
+        by smtp.gmail.com with ESMTPSA id a7-20020a05600c348700b003942a244ed7sm4143558wmq.28.2022.05.06.07.30.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 07:30:06 -0700 (PDT)
+        Fri, 06 May 2022 07:30:09 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,10 +57,12 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] ARM: tegra: Core changes for v5.19-rc1
-Date: Fri,  6 May 2022 16:30:00 +0200
-Message-Id: <20220506143005.3916655-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 2/6] soc/tegra: Changes for v5.19-rc1
+Date: Fri,  6 May 2022 16:30:01 +0200
+Message-Id: <20220506143005.3916655-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220506143005.3916655-1-thierry.reding@gmail.com>
+References: <20220506143005.3916655-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,23 +75,39 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.19-arm-core
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.19-soc
 
-for you to fetch changes up to d5becc32308c31c6c88bfdf55c1ec8c537a8cdd1:
+for you to fetch changes up to d3a20dcbca4880ada8974b2d0167df99161bbfaf:
 
-  ARM: tegra: Fix typos in comments (2022-04-06 15:33:14 +0200)
+  soc/tegra: pmc: Document core domain fields (2022-05-06 10:53:19 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-ARM: tegra: Core changes for v5.19-rc1
+soc/tegra: Changes for v5.19-rc1
 
-A single fix for a typo in one of the comments in the SMP code.
+This set of changes adds nvmem cell lookup entries for Tegra194 that are
+used to read calibration data from the SoC fuses, and updates the reset
+sources for Tegra234.
+
+Other than that, included is a minor build fix for a missing dependency
+that can be encountered very rarely in random config builds. Lastly some
+kerneldoc comments are added to avoid build warnings.
 
 ----------------------------------------------------------------
-Julia Lawall (1):
-      ARM: tegra: Fix typos in comments
+Sagar Kamble (1):
+      soc/tegra: fuse: Add nvmem cell lookup entries for Tegra194
 
- arch/arm/mach-tegra/platsmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sandipan Patra (1):
+      soc/tegra: pmc: Update Tegra234 reset sources
+
+Thierry Reding (2):
+      soc/tegra: pmc: Select REGMAP
+      soc/tegra: pmc: Document core domain fields
+
+ drivers/soc/tegra/Kconfig             |  1 +
+ drivers/soc/tegra/fuse/fuse-tegra.c   |  8 ++++----
+ drivers/soc/tegra/fuse/fuse-tegra30.c | 17 ++++++++++++++++-
+ drivers/soc/tegra/pmc.c               | 35 +++++++++++++++++++++++++++--------
+ 4 files changed, 48 insertions(+), 13 deletions(-)
