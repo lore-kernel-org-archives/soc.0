@@ -4,87 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35F8DC433EF
-	for <soc@archiver.kernel.org>; Sat,  7 May 2022 16:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B6C3C433F5
+	for <soc@archiver.kernel.org>; Sat,  7 May 2022 16:50:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6C1CC385AC; Sat,  7 May 2022 16:48:42 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	id 2E6B1C385AC; Sat,  7 May 2022 16:50:03 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C11E9C385A6;
-	Sat,  7 May 2022 16:48:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C11E9C385A6
+	by smtp.kernel.org (Postfix) with ESMTPS id 377FEC385A5;
+	Sat,  7 May 2022 16:50:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 377FEC385A5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 247GmXjH106393;
-	Sat, 7 May 2022 11:48:33 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 247GnxXr103922;
+	Sat, 7 May 2022 11:49:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1651942113;
-	bh=0D9MnCzb2qL8xROphj8mFNd53tef0dKco0d7oxlhom4=;
+	s=ti-com-17Q1; t=1651942199;
+	bh=WUG61tWhXrM8j8Y5RTXpv668W5wE9p5I0V9VLwC9u2s=;
 	h=Date:From:Subject:To:CC;
-	b=VrdeLJwrBIvMRk3mlJU2mdVsV7ZT3Qs8S0nrwSPtTEBWrC5ZgUcYYVvFIh5oepHZU
-	 QqdQ55pA2KezXJxygZ5kYMriGjRuQTVdZJwcztZlX1Ix1fhBd18AZHlcDMS9JDgGHJ
-	 r28QIFBut7EmWxqBqSTM5ETObdiDTyUlRtfVzp4M=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 247GmXjt021807
+	b=SWCtgObFp4KvXtE/kAzefhJfYhvHkRQ9Nxu3Lq2K78gLMy7Fymr68Fgs53Q3tS/0l
+	 nFwrfWhqv/d5Hn//kVZfl14myopn95uzmQjwRzg+80GX56bQRuEVKaav4sDyqwgE33
+	 DPSeNvTDuprLTTKVgjQaJ9DLa1nQDbrGIQA47X0w=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 247GnxHu027647
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Sat, 7 May 2022 11:48:33 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+	Sat, 7 May 2022 11:49:59 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 7
- May 2022 11:48:32 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ May 2022 11:49:58 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 7 May 2022 11:48:32 -0500
+ Frontend Transport; Sat, 7 May 2022 11:49:58 -0500
 Received: from [10.250.232.100] (ileax41-snat.itg.ti.com [10.172.224.153])
-	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 247GmSiH069960;
-	Sat, 7 May 2022 11:48:29 -0500
-Message-ID: <3dc2011b-eb6d-dcd5-3921-57f6a1cf6d8e@ti.com>
-Date: Sat, 7 May 2022 22:18:27 +0530
+	by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 247GnsJR010362;
+	Sat, 7 May 2022 11:49:55 -0500
+Message-ID: <88cd734e-47a7-4307-c119-8f6ec6c40452@ti.com>
+Date: Sat, 7 May 2022 22:19:53 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
 From: Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [GIT PULL] TI K3 device tree updates for v5.19
+Subject: [GIT PULL] TI K3 defconfig updates for v5.19
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
         arm-soc
-	<arm@kernel.org>, SoC <soc@kernel.org>
-CC: "Menon, Nishanth" <nm@ti.com>,
+	<arm@kernel.org>,
         Linux ARM Mailing List
 	<linux-arm-kernel@lists.infradead.org>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        Tero Kristo <kristo@kernel.org>
+        SoC <soc@kernel.org>
+CC: "Menon, Nishanth" <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Linux ARM
+ Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vignesh
+ Raghavendra <vigneshr@ti.com>
 Content-Language: en-US
 Content-Type: multipart/signed; micalg=pgp-sha256;
 	protocol="application/pgp-signature";
-	boundary="------------L3wG0oKKqG0fhcT0y5Y9LAft"
+	boundary="------------Dqbvdhn0vzaneJUrNPtm6nSp"
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
---------------L3wG0oKKqG0fhcT0y5Y9LAft
-Content-Type: multipart/mixed; boundary="------------0umc64UNoeOLkJ3rHRuSEyou";
+--------------Dqbvdhn0vzaneJUrNPtm6nSp
+Content-Type: multipart/mixed; boundary="------------me9XVEwUocRrF21hisKjPrR0";
  protected-headers="v1"
 From: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm-soc <arm@kernel.org>, SoC <soc@kernel.org>
-Cc: "Menon, Nishanth" <nm@ti.com>,
+ arm-soc <arm@kernel.org>,
  Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
- Vignesh Raghavendra <vigneshr@ti.com>,
+ SoC <soc@kernel.org>
+Cc: "Menon, Nishanth" <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Tero Kristo <kristo@kernel.org>
-Message-ID: <3dc2011b-eb6d-dcd5-3921-57f6a1cf6d8e@ti.com>
-Subject: [GIT PULL] TI K3 device tree updates for v5.19
+ Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <88cd734e-47a7-4307-c119-8f6ec6c40452@ti.com>
+Subject: [GIT PULL] TI K3 defconfig updates for v5.19
 
---------------0umc64UNoeOLkJ3rHRuSEyou
-Content-Type: multipart/mixed; boundary="------------oTQFyf0K4ofPQWEdmke4Mp06"
+--------------me9XVEwUocRrF21hisKjPrR0
+Content-Type: multipart/mixed; boundary="------------FffNF5V4Aanz6E2JyPdBf06m"
 
---------------oTQFyf0K4ofPQWEdmke4Mp06
+--------------FffNF5V4Aanz6E2JyPdBf06m
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -98,72 +100,27 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc=
 are available in the Git repository at:
 
   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3=
--dt-for-v5.19
+-config-for-v5.19
 
-for you to fetch changes up to 7d4686fc3c2ad9bfd1eaf3c54515d6469e542578:
+for you to fetch changes up to b7d8a9973374e57a85e7296f429f50770ca68000:
 
-  arm64: dts: ti: k3-j721e-sk: Enable HDMI (2022-05-05 22:45:16 +0530)
-
-----------------------------------------------------------------
-TI K3 device tree updates for v5.19
-
-New Features:
-J721e:
-* Enable DSS, DP, HDMI on J721e EVM and SK
-AM62:
-* MCAN, MCU GPIO, ECAP APWM, DMA, Etherent and several peripheral on AM62=
- SK EVM
-AM64:
-* Enable Wireless LAN support
-
-Fixes:
-Drop incorrect MCU UART clock rates
+  arm64: defconfig: Enable configs for DisplayPort on J721e (2022-04-27 2=
+1:06:15 +0530)
 
 ----------------------------------------------------------------
-Aswath Govindraju (1):
-      arm64: dts: ti: k3-am62: Add support for MCAN
+TI K3 defconfig updates for v5.19
 
-Jayesh Choudhary (1):
-      arm64: dts: ti: k3-am62: Add SA3UL ranges in cbass_main
+* Enable TIDSS and Display Port related configs
+* Enable Cadence Torrent PHY for Display Port
 
-Kishon Vijay Abraham I (1):
-      arm64: dts: ti: k3-am642-sk: Enable WLAN connected to SDHCI0
+----------------------------------------------------------------
+Rahul T R (1):
+      arm64: defconfig: Enable configs for DisplayPort on J721e
 
-Matthias Schiffer (1):
-      arm64: dts: ti: k3-am64-mcu: remove incorrect UART base clock rates=
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-Rahul T R (2):
-      arm64: dts: ti: k3-j721e-sk: Enable DisplayPort
-      arm64: dts: ti: k3-j721e-sk: Enable HDMI
-
-Tomi Valkeinen (2):
-      arm64: dts: ti: k3-j721e-*: add DP & DP PHY
-      arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
-
-Vignesh Raghavendra (4):
-      arm64: dts: ti: k3-am62: Add more peripheral nodes
-      arm64: dts: ti: k3-am625-sk: Enable on board peripherals
-      arm64: dts: ti: k3-am625-sk: Add ECAP APWM nodes
-      arm64: dts: ti: k3-am62-mcu: Enable MCU GPIO module
-
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi              | 307 ++++++++++
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi               |  48 ++
- arch/arm64/boot/dts/ti/k3-am62.dtsi                   |   1 +
- arch/arm64/boot/dts/ti/k3-am625-sk.dts                | 289 +++++++++
- arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi               |   2 -
- arch/arm64/boot/dts/ti/k3-am642-sk.dts                |  62 ++
- arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts |  77 ++-
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi             |  75 ++-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts                | 139 ++++-
- 9 files changed, 988 insertions(+), 12 deletions(-)
-
---=20
-Regards
-Vignesh
-
-
---------------oTQFyf0K4ofPQWEdmke4Mp06
+--------------FffNF5V4Aanz6E2JyPdBf06m
 Content-Type: application/pgp-keys; name="OpenPGP_0xF903332F551A78E9.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xF903332F551A78E9.asc"
 Content-Description: OpenPGP public key
@@ -409,24 +366,24 @@ GJNVJcTcoQm87b8LAkYrmlob7AjOAg0Xezz3
 =3DvYBn
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------oTQFyf0K4ofPQWEdmke4Mp06--
+--------------FffNF5V4Aanz6E2JyPdBf06m--
 
---------------0umc64UNoeOLkJ3rHRuSEyou--
+--------------me9XVEwUocRrF21hisKjPrR0--
 
---------------L3wG0oKKqG0fhcT0y5Y9LAft
+--------------Dqbvdhn0vzaneJUrNPtm6nSp
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmJ2otsFAwAAAAAACgkQxEYeRXyRFuO5
-SQf9FasFIU50e0Yj5zyF+aHdqIv/dgwXZewzvfXsXx+wubt/DLQqJRwfkJ662iSjBarpO4jC+JSq
-9JSsCgGLhu04NGnKCaRK5CNhGK0EkHz5mY6VRKiv9k0k36cuGP+QLhIbzywHZDguoyeZbzAJVj4U
-lrnRVJYcXbxr8yp9qzpInd4docZb59Wz4VvUaPkLNnSyGAzOUxlILeTOEScas1Q4vKFVoId9okGm
-HbOyWmYl9Dqi0a7n8C8slwHe8oU3VIkHH3LDoEEoWPqXP7Vt61BIgupXIIxjslJuZuj3oeM9zq4J
-QNbsu75k7PHkQMb65LxdkMKOGTOyvwNyMRHfsUNjVQ==
-=16a8
+wsB5BAABCAAjFiEEyRC2zAhGcGjrhiNExEYeRXyRFuMFAmJ2ozEFAwAAAAAACgkQxEYeRXyRFuNP
+8Af+JVx4Coh+nPvzfHIiPFSlDYUSUeUNNIJsRtkfsNU7/YAhsxbW/kZFMVFS/WjJD6oBEPqf6zoU
+Y1CjhhEV/OD3S/gfC7ghB2QKLO0CR88IUWO6v4By9P6m8ov8FsmArczQS5E0zO/KKxu8Lk6qzfGS
+/pkOVCRoSQ7qbEfmT3e9ga1FKsazGB1PzeYFrcEoNQ82JpJHzC4/Nk5VPLLflC6bSKxAmrC0qtap
+puCkx89xGC5BE4eJ8VepBxI+r2iueGiaNoqr/ujT23wfRAcOMCHAJgeBraiwfW0cmNI5G/FDtK1A
+B7k3xR6g2fyyw1+9YwIZ2MqUvNVpGvu1xaaaY4Mt+g==
+=zH/E
 -----END PGP SIGNATURE-----
 
---------------L3wG0oKKqG0fhcT0y5Y9LAft--
+--------------Dqbvdhn0vzaneJUrNPtm6nSp--
