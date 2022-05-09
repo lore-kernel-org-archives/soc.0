@@ -1,75 +1,94 @@
-Return-Path: <SRS0=y3QB=VR=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=ZukV=VR=gmail.com=jernej.skrabec@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8AC0C433FE
-	for <soc@archiver.kernel.org>; Mon,  9 May 2022 14:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E10A6C433F5
+	for <soc@archiver.kernel.org>; Mon,  9 May 2022 15:06:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BEE84C385A8; Mon,  9 May 2022 14:34:55 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9DD14C385B1; Mon,  9 May 2022 15:06:28 +0000 (UTC)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2EB24C385AE
-	for <soc@kernel.org>; Mon,  9 May 2022 14:34:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2EB24C385AE
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M4aEC-1npiMn3wPe-001eL0 for <soc@kernel.org>; Mon, 09 May 2022 16:34:52
- +0200
-Received: by mail-yb1-f179.google.com with SMTP id i38so25257824ybj.13
-        for <soc@kernel.org>; Mon, 09 May 2022 07:34:51 -0700 (PDT)
-X-Gm-Message-State: AOAM530ouAVXb0aVbCEwAJlz0GrTQ27Bfabx5LYyAwj5/uRi9apdKeMi
-	i/SCsWFyUK9LQFZHYjm/z8dYetzLXrzEiYKS6pM=
-X-Google-Smtp-Source: ABdhPJzlnsRyRFsc62gi+qx5cltbNIAT4S964Gp1TuZQoSV8onMzOxVoze0NR6unPvCKGJ8Y/Qgmmr5dh2j53WXhMvY=
-X-Received: by 2002:a25:c50a:0:b0:647:b840:df2c with SMTP id
- v10-20020a25c50a000000b00647b840df2cmr13146614ybe.106.1652106890792; Mon, 09
- May 2022 07:34:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220427114200.111904-1-carsten.haitzler@foss.arm.com>
-In-Reply-To: <20220427114200.111904-1-carsten.haitzler@foss.arm.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 9 May 2022 16:34:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2dx+qV_LmbtveD8kEi9LhRSXBvgQ-a63bRcXB=niGOfg@mail.gmail.com>
-Message-ID: <CAK8P3a2dx+qV_LmbtveD8kEi9LhRSXBvgQ-a63bRcXB=niGOfg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: defconfig: Enable modules for arm displays
-To: carsten.haitzler@foss.arm.com
+	by smtp.kernel.org (Postfix) with ESMTPS id EA95FC385AE;
+	Mon,  9 May 2022 15:06:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA95FC385AE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id n6-20020a05600c3b8600b0039492b44ce7so1460187wms.5;
+        Mon, 09 May 2022 08:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Vtuult+HXOI7ZtF/5BeS7qYq/jPa50ON+a9bpjtA634=;
+        b=pgM6nmm4hymS4A6ysjr+inu879QqK9kEaxseJfecvNfSf4ksYX99cBKbLO7yZcX74J
+         pCs2urfaw5fX7fzbhoP08fziLPQBtjnpysD0YFKqjJLmEX9+7bqcu9nA6PIgu0tGaV10
+         MqFL/WtRVB3uzsGeNxl+6a3yI0dSnhg7Oa4OtMrf5386cfuk1W04xtIWEQxJcc4Nli1h
+         tgE80prFkmOwQHvwiE6ZYBIDTV5eyRbtOevjK/XSqcyhk2ubQITMCub4UPYXjfcyrxjx
+         WvPWpKu/L3AHeuJENWieIn8T8f3z2sufVz4K1ETqWwVeNrgW2Vfw1OP6c1o3NNlkEpQ8
+         IORA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Vtuult+HXOI7ZtF/5BeS7qYq/jPa50ON+a9bpjtA634=;
+        b=CO//WwlOXuu8e5xQArnqqUAz05QVe41FYnsrpUxB5I6t96nJIZfb2+TPbXAKY04S8a
+         Jly2osHQwJlyANdBLIcegpg1baTOBT81zTPql7h34I7BrOpNHZTzr9dBA0e01msamJhs
+         oIxcfRLEaK/9KdpsYJJ9paOLPtqTdXHfrxRURAVZxJFZ3Pz/dvllsGDd7u3zIpjkc5gY
+         E5y8YNRm0p4JrFGDHqSAPpQCnz2Wd33EUfhlhODmFEMqCNRGXlPL88gdpk2H5fXYrTrE
+         oYAypGsPQJl0KP6DZHg18NhYP1dTun92yki2kbGyfp86jcBcLlcw7amjvjqAbRmJymJA
+         qZfA==
+X-Gm-Message-State: AOAM532xXrqHjtJInZEnEaz4orkc1cfCske3zUbR7B4Q4SOOhCNf61NE
+	H+A3/tKvXLe+LDieOziJ/0Y=
+X-Google-Smtp-Source: ABdhPJzd2YKTa7mT7VfKRjs9oRnYPy836QDekr6iO5gL5PTiA2RYsK898fSfq3OMC/h7EM4qRoeb2g==
+X-Received: by 2002:a1c:f415:0:b0:37f:ab4d:1df2 with SMTP id z21-20020a1cf415000000b0037fab4d1df2mr22572130wma.75.1652108786180;
+        Mon, 09 May 2022 08:06:26 -0700 (PDT)
+Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id y14-20020adfe6ce000000b0020c5253d8bbsm11230631wrm.7.2022.05.09.08.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 08:06:25 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, Jernej Skrabec <jernej@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, linux-sunxi@lists.linux.dev
+Subject: Re: Re: [GIT PULL] Allwinner DT changes for 5.19
+Date: Mon, 09 May 2022 17:06:25 +0200
+Message-ID: <2368089.jE0xQCEvom@kista>
+In-Reply-To: <CAK8P3a3ePzJbh3p9edaDfZhZoYc=0-GvFCs3+2oLGjSoAhgvhw@mail.gmail.com>
+References: <YnVUmSLE1MZFkApt@kista.localdomain> <1789096.atdPhlSkOF@kista> <CAK8P3a3ePzJbh3p9edaDfZhZoYc=0-GvFCs3+2oLGjSoAhgvhw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:oPkejGc0uwGsJqdfsFxQGPijyGazbGE2Z3Cvho42KhpkWGLhSjT
- agJ8GCofd8nBwSAH7u1gQKVROmJMoJYH34dBnGN1EGEfF97dleClWQeTpdUS5QeiKpD2WNC
- 0YHMJPUFdbp+ja4dQwY9Gd1R/21D4bHUKTYeogfLYygzxnH5Pf8wJ4aqFBdAACnV0VZI9Uj
- wQjWs75+n9X+SjUwwu0YQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1SxeCDoifCU=:CLJUggNY3IlRMpy3uKtq+n
- Jl8/NZmEMvOYxFKmelr+ousIt0PrN2gAXR+iWGdw6sC+FpbsD321jPDwx0I7BNOldkLGxAILF
- hE01xwrItKOSLZLlS+vTQ5NmwxzP/OzjwIC7+8vhYVzrpI7RwVV0SubdbSTE+ml+Kqkox3glm
- EcKbm9Azt7+wbbBzZuVsfdCNjc5J/Njcw9R2LiB2Poj96XpnWmwqU42bqSm1IhGGMswX24/EP
- IOfwJlaCqyA2OGqilaXsu+ar6f7MnieRM+xz+xPqH5FQMBe2VtljKdjiXXhATuYbpUc2Bc03B
- O34PlQxKk+8AVh4KOWexA3OpZCpTyjaK3U/7mQUZt5z5lvMIwC5Um5zdUXK7/aSgLsMmNRvkV
- hFgfCExZYzlXcU+zEYrFXKBTSJR4er/yiLOZu1z9NLhfhcZYwQ4djIZYPZNkIMAkFE05PctxZ
- Z/p9tOA1DoLI3nvguq3cOCFdRaU5Xg85H2McQJfZ9kM0l9h4BgK1NnfPxVQ2Uovi8nKdP8Bac
- LLL8flmpeGAGiUSHpZiNvTI5FWgSDins2KgRUAzGy3cD2AxFM9BNl5fYeqW1xgY7G8RYOxof6
- 6ApNc8agQmVYD5vcL9Rmbtbz+4F4WsYYpEr7HH2tBjeCHiqyiWGijwFfjttRSa5+nCAAcDxX9
- e0n+HexF9ml9dPNVawdXXFKK9q+0cVbxsnQ2fCJYsCuRxaoU0rAWcQJoaYI25xQF5/jzpkiHr
- 0jkAf/uj6vkrPQK78Lh7mg0c8GPC5XUvYavekXFNL3KTcJ1HeQ+0ZQ0Mu6cDblk4kUXYnVt4y
- 7QpccFJg8Zk8MOyo05+1hf5jVL84N9WIZ6V7NubOaK8Fl4t3pY=
 
-On Wed, Apr 27, 2022 at 1:42 PM <carsten.haitzler@foss.arm.com> wrote:
->
-> Key devices that support displays on SoCs like the Komeda DRM driver, the
-> older HDLCD were not enabled by default and should be so displays can work
-> out of the box on defconfig. Also Candence I2C support should be enabled so
-> the PHY and thus displays can work too.
->
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+Dne ponedeljek, 09. maj 2022 ob 16:21:29 CEST je Arnd Bergmann napisal(a):
+> On Sun, May 8, 2022 at 10:52 PM Jernej =C5=A0krabec <jernej.skrabec@gmail=
+=2Ecom>=20
+wrote:
+> >
+> > Dne petek, 06. maj 2022 ob 19:02:17 CEST je Jernej Skrabec napisal(a):
+> > > Hi!
+> > >
+> > > Please pull following DT changes for 5.19.
+> >
+> > I missed one patch, please disregard.
+>=20
+> I had already merged this one, merging the new branch on top, while editi=
+ng
+> the merge log to not mention the duplicate commits. You can always follow=
+ up
+> with additional changes based on a branch that is already merged like thi=
+s=20
+one.
 
-I applied this patch on Apr 27 after you first sent it. There is normally an
-automated confirmation email after it gets uploaded, but I think this did not
-happen here because there was a small context mismatch -- the patch
-still applied but patchwork did not detect it.
+Ok, thanks! I'll follow up with new PR next time.
 
-        Arnd
+Best regards,
+Jernej
+
+>=20
+>         Arnd
+>=20
+
+
