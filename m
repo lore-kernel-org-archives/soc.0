@@ -1,171 +1,159 @@
-Return-Path: <SRS0=W4st=VR=nxp.com=aisheng.dong@kernel.org>
+Return-Path: <robh+dt@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85905C433F5
-	for <soc@archiver.kernel.org>; Mon,  9 May 2022 11:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106A2C433EF
+	for <soc@archiver.kernel.org>; Mon,  9 May 2022 12:36:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4AD42C385AF; Mon,  9 May 2022 11:13:01 +0000 (UTC)
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2072.outbound.protection.outlook.com [40.107.20.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4761FC385AB;
-	Mon,  9 May 2022 11:12:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4761FC385AB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ez6wMVfA3cddNk3S0gLBesngFVK8FMgGc7w6PPDs33/A8FR2SJBUZQWZOFIdIeqJDPECQHZjMcMbD4Ex+DUpLtdbHY4oVliMbss1QAZKZEPkbOuO+HvEvPMTdzhbQdz/CMfSd0t2G+/+SpumCFpfVSlslYfaLf57JHVJp4G0OXJZXcjFUUaLvLilzj3XQ30lo17tAMs/cuMhF9H+q3auXECttPKF3guPjM+Fc8MntH4NE8y2D88zMk/M/hPr2rdEboXKLxnKWLicm6hEiX3tG7y2/Gk1iT5pSP5fxeyvx78I0Co/dIecv7HBq5NJibhRT8V/73DGjM+H4rxfjif/Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Eo85RRCKO1H5CsFkfUexaW3G+F449LY4kZPqJiIj/i0=;
- b=jJCkX0Yh5XDP35350peW4thHtZk9sdMtasLPB7v9/U9sO3k/WgJTds4+7U9gHr+b70EJugvQeOVmO1mcA66aioQKlsyaym+NLSOzU3/4RoejmITXMrSccouAThKEeeKkFqrptl0ffEIS63zmwtDtnt5arWegy2gRdvyQT7cjEc2PFjrhzFC2igsXIqUiqJsXBSmTH+OMwfRW2AmP/3RXUImJtEq27LzHkyPbwV8JfIsth32d19xb3qG4YiQoEohNEDXZ+QWs83xsy0MpZVudsLezw5MFBxlyxstqOpP1jYfcwqp4hDhZy+Lj6JFl4CtRMgEwEukZjl7LLtYuxd1byA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Eo85RRCKO1H5CsFkfUexaW3G+F449LY4kZPqJiIj/i0=;
- b=TL8bZKsC+KgvpRAL8zGBg7jxy6G+DvuLYGl05ko5nTfYVCDWS+FRg3HAwDgE20+FAVEcYj4Pe0DIQhu0uUbtKcu/C0OW9ZAcNINnKcxMi41WrTjjhL4oYqV7SQoqJOpEkdy301ikpP6QyE4XHQxjshT9GUtkp/ZmBaGFzbvRZag=
-Received: from DB9PR04MB8477.eurprd04.prod.outlook.com (2603:10a6:10:2c3::11)
- by VI1PR04MB6093.eurprd04.prod.outlook.com (2603:10a6:803:fb::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.21; Mon, 9 May
- 2022 11:12:55 +0000
-Received: from DB9PR04MB8477.eurprd04.prod.outlook.com
- ([fe80::1d57:4a64:1c30:a00f]) by DB9PR04MB8477.eurprd04.prod.outlook.com
- ([fe80::1d57:4a64:1c30:a00f%6]) with mapi id 15.20.5227.023; Mon, 9 May 2022
- 11:12:55 +0000
-From: Aisheng Dong <aisheng.dong@nxp.com>
-To: Jesse Taube <mr.bossman075@gmail.com>, dl-linux-imx <linux-imx@nxp.com>
-List-Id: <soc.lore.kernel.org>
-CC: "robh+dt@kernel.org" <robh+dt@kernel.org>, "mturquette@baylibre.com"
-	<mturquette@baylibre.com>, "sboyd@kernel.org" <sboyd@kernel.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, "s.hauer@pengutronix.de"
-	<s.hauer@pengutronix.de>, "kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>, "stefan@agner.ch"
-	<stefan@agner.ch>, "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net"
-	<olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>, "linux@armlinux.org.uk"
-	<linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, "dev@lynxeye.de"
-	<dev@lynxeye.de>, Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-	"tharvey@gateworks.com" <tharvey@gateworks.com>, Leo Li <leoyang.li@nxp.com>,
-	"sebastian.reichel@collabora.com" <sebastian.reichel@collabora.com>,
-	"cniedermaier@dh-electronics.com" <cniedermaier@dh-electronics.com>,
-	"clin@suse.com" <clin@suse.com>, "giulio.benetti@benettiengineering.com"
-	<giulio.benetti@benettiengineering.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-gpio@vger.kernel.org"
-	<linux-gpio@vger.kernel.org>
-Subject: RE: [PATCH v2 12/15] pinctrl: freescale: Add i.MXRT1170 pinctrl
- driver support
-Thread-Topic: [PATCH v2 12/15] pinctrl: freescale: Add i.MXRT1170 pinctrl
- driver support
-Thread-Index: AQHYW0nHOdkOOqoUhUqbdwP3Ify+eK0Wcz7g
-Date: Mon, 9 May 2022 11:12:55 +0000
-Message-ID:
- <DB9PR04MB84770B71ECC558297AFD2FC780C69@DB9PR04MB8477.eurprd04.prod.outlook.com>
-References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
- <20220428214838.1040278-13-Mr.Bossman075@gmail.com>
-In-Reply-To: <20220428214838.1040278-13-Mr.Bossman075@gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9fd866db-3fca-4937-a837-08da31acddc6
-x-ms-traffictypediagnostic: VI1PR04MB6093:EE_
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs:
- <VI1PR04MB609324C4755DD691C6AA69A480C69@VI1PR04MB6093.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- OaRqp4Uch5+x1zzDiqDyiL6BwjhfJeT7WzhTjDe3pkhrL9ggTivYWVPF9vMzF2vvhcYona73bSjFhxVe62KwWUbi57Nk4e+BGwKiZWUN1ktVM8AmHBxWF2B0m96lwCdQsS0wC8LxLHAQn/Q0ygePBW1zq3B67vAS59S5ixgnIwWlKvV2TN/kDd+7qaYXriAZwHF6V4Sz/GJevGXLSM2TIruDEzh0FNsxAYNq4cfLC5iNgQSaOeckBgUWfC6Z4zWICmrlP9zYwaCTtZubk9B/4xL9jT3UY4hd+KP7zI2IqtC1UoR0sZOApWbUstLYGt72g7qwa6Cs0yt/4AncVprk64t+mv/mZj7YP1EKN1SpSoEJ1W3WEOWkngjPStB7jjsofaWKhu11Fh9eKig2pZ7U60GBICgp9Hypwr6psJiuBIO5EREYp/ZM05JisBRtyif4CXMYlLdFWb3ilvVuvN0Z93IXhak6WUZMWZO/TJ9/Bik8KREvLk8cIkIE9CZuPnBRIax0cNtM2rdCWo3BSImT8OTA3SC1gYSJMFyjI7v/YurzVUiXTbliI5ghYYs2UYNSLyRYMUTPqshLQxT67OjJI/n/JVV0yyFE+HEg5ltkK/ijcRcvXSkIwTnbpNxAP11l/g1oPKBt9gZtqWOgJKcw+6TD8/XuT/TaOTY/arkNExNQP1/ShgbiLNoP4/PDKBy8myQGRhKoHXt4kvhN9uv//g==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(71200400001)(6506007)(6636002)(7696005)(86362001)(54906003)(8936002)(33656002)(44832011)(52536014)(7416002)(4744005)(316002)(55016003)(508600001)(5660300002)(122000001)(38070700005)(38100700002)(2906002)(26005)(9686003)(66556008)(76116006)(66946007)(66446008)(64756008)(66476007)(110136005)(4326008)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?enVMMVI5MzNlYmlIY3JpR0Z4S1NBclJwd1dEUjZxNWtMc2NibzIrWkQ5TDRv?=
- =?utf-8?B?dTVmalcrU0U3Y0hWVW9yZktFV2JrSTJERjB2MitKZGJZYW16UW5OdVlKZTkv?=
- =?utf-8?B?ZU0zUkhPbXIrV25qeDN1bk9BLzc0Wit5QVQyRWFSdDZTZ1JiRDRuUFo0ZXpU?=
- =?utf-8?B?R0lobnQzMnlGVlZwTGx1Sks4WGhvQXhwNWlWYVZqWkFWdks4YXZYNXAwMUdR?=
- =?utf-8?B?bHdUdlppWW81dnZvSU1ySVJYYm5LcERkaUxoMDRlVVZha2dOSTI1M2ovZ1dm?=
- =?utf-8?B?RzJ0c1lrZUg5K0NsYW5xcjI5RSszY0pvUVp4aUlsWWhyUjRUYUpma2dnMjAy?=
- =?utf-8?B?MTJWcWJpUTAzSUFZN1luaDNxVG5NU2dQaWJnT3NpckV2Mko0c00vN3c0ZFp3?=
- =?utf-8?B?VEtZWSt5Sm82em9lM3VySFVZWVRIeDYrV1ZsZDRLNjBvS0Y4OXRVY2JJQk0r?=
- =?utf-8?B?K1pNdzNoa0JGV2IyQ0o1ZEZwSmwwYjJoVmlwQUVJdWFDS0pHVHUxcWlIcGJH?=
- =?utf-8?B?T3NnNXhCTmdkbFJtaGN1RkxtSWwwU1BmVUhOV25xSjBYYitJcUZlVE0yblN0?=
- =?utf-8?B?NVRIY3Vtcnp6L2g5ZkdIUDZpSytud0FRNFNZeVhwbEoxNUVscnhSR2JNTUFj?=
- =?utf-8?B?R1UzQ1h2REhXRFRJMWxYUnFoTm5ha0U2VmszZTdEK2JuUEpybmRuaDJoYTdE?=
- =?utf-8?B?alNNUHN0QzUvbFF5V1ZWSWZaY2U0ZHNNUVk5VEgxekkwWXdDenRwMDhaeGxk?=
- =?utf-8?B?TURvZTF5MndYNkI2NjdocDlRZzFlbzR2ZDVpZy9UUEZLZThETWZHRnlpSVFS?=
- =?utf-8?B?RFZEbDNPbEhscXRCY2FUNEQrSDlsc0xtR2ExNGR0bWg2T3RqSWdFSmcxU3JF?=
- =?utf-8?B?QUZTTG5CZ3hDaVRjUXVpZXNTTzgvVzdyaERPa0hyNXoxNGp6dnFoNFdDSk1h?=
- =?utf-8?B?MWNiZHZmNTZPaGF5MHJBTkVKMVh3NEN2MmxyMWpReTVJKzZDQXFUb3ZHMWZ0?=
- =?utf-8?B?YWNVRUVPTDZaSkhDOWN5aVJaSmJpQXFwRTR3Ukl4NVByY3NyRWxBY2NMUGlJ?=
- =?utf-8?B?OVZ6QVpEMFA5NWxBN2Jkb2tnZ1FpL3pGTWZCektIRWp5ZE84NVhIaHVvVWhL?=
- =?utf-8?B?NUU2OXNXa0FKYmZLYTUwYVBHSWRqaW94TUpIdUJkYWdIeEF2QUQzcEVxUmZU?=
- =?utf-8?B?SEc1YXBNcUlkaEFYbUJpNDB5MDh5R3ZiZ2ZneHpmMmd1aUpFY0VXSHkxY0lP?=
- =?utf-8?B?ZWFWdTN1bEhBU1U3S3hhTktpOWRNSkJ1NmdDdmUyRlE3WlBMbjRlL2c0bnRj?=
- =?utf-8?B?T1V2bGFPYWhaNDlJZEVRRmdYUXNNdzZkR2NSaExpWFhPSEFOczRaYmFPMWJR?=
- =?utf-8?B?NE9Ec1ZVV2h1VWxNek5hcnlUV2lKQmlJT2xEQXlMN1FaT1dVMlNmMm9hRm5y?=
- =?utf-8?B?SzZxM2huM3QxS3dYZll5bVM4NFl6aGZHekwrSEhpOFc5TFlaT1BXN2dWL2JG?=
- =?utf-8?B?TWxNTHYyUnJiSnlORUZqZGpEdzB6WFZLZ0dHVkluWjJpQ0ZVblQvWGNGb3lt?=
- =?utf-8?B?bkdJNHlBNHl2OG1WYWhUSHBSNUZxVzBNODNjaHlKU25peDZ3SkE2MUNwSnZH?=
- =?utf-8?B?alVFWFNxY3BIa1ZqUzB6SDYvZjBlUTg5VjVQbXVadDd2aHhrS1ozUlR0TUFu?=
- =?utf-8?B?c05LTWpPTzB4YmFVd0RFSjZoeTcxZkhPM1pTT04xb2hsSk01SXJxSmozV05a?=
- =?utf-8?B?T3FFWldxWUdETDB5VW14ZDFXUmhBV3pmQ3IzSmdFN2huaUI4NmI0ZWFqMEV3?=
- =?utf-8?B?bG9kMHlCOUJPeDNxYTQwaFVobUtnWk9XYWFVUGRGMlpRblR3UnpaK0pFZ29S?=
- =?utf-8?B?S0hIbUVQYTh1RTFtRDQvQTNHbDlFSWJIUElEUFpLUkw1OFQ1SUZucWZnWFlu?=
- =?utf-8?B?d0haTGFENytnNXRvaUttVUVOcS83cVNZcW1ZeDJMbWJBQS9HZ0M5L3VqM3RW?=
- =?utf-8?B?ZU5aeWZMYk9KOTg3VWlsMnRORklQYWJENDM1anZIeEpXNFN1UEZvOXVYbk44?=
- =?utf-8?B?NExIUEFDWjF1U3F5SEhsR0o2eFQ3djlBWnZqeUFFYXhld3EzS1pnaUt4elpD?=
- =?utf-8?B?cmlMakZ5emlOS2xsTEcyZDg1ODRIN3N0Mlo0UUlBOWZLK0pQMGdVRjN3WnVI?=
- =?utf-8?B?aW1kNCt6ZlgxaFV4VUdqMDUyVFN1QkZwZ0ZMaUgrdjJwWERhNmpIOENTU3RQ?=
- =?utf-8?B?TTZBeDRwQ25LQjA4YXYvSEVrb2RnQVg5R0lVbnZFN2dmN05LK1ZrRGFiYnMw?=
- =?utf-8?B?Zk8wZG9yRFFZWGZZRFZsbUdQek9taURTTDNJekJ4amdYRHF0aU1rZz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	id C693AC385B6; Mon,  9 May 2022 12:36:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02C0C385B3;
+	Mon,  9 May 2022 12:36:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652099815;
+	bh=B+s/rYVJUfjMg3E0m4Q8E13TQl3wSrbEWxfosH8ZVY8=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=Az3d+p4BYvi3nIVAMMkMXT3Z/VYFYjJ67hFnPhMYTzP3l+KEZo6o5rHluowToFWAL
+	 BD01t3JLi9SGh2EusGCF3TjcWIswxo3SBGQV1piQSqkFK5/Nc0c44RayWphbU/bdeR
+	 ncnOftc2ApaccJ3LumMYi7lgH5ZAFSrR8lkQfCPiTli6SPssmWMW1VE/GrRvpvPiwM
+	 ZY9wc/6EKaQjuXmtVuPC1S0UyI7heqkvd8bthBkyBuDWWmlWbkeEoCaZFwijzTA699
+	 K8JIxWQsAywKT2QeuJfmoc908TxaMiSbF5WcnoB0kJYz8QDM5gwQMvcaipcjWjjcjy
+	 ov1o29vZMBBeQ==
+Received: by mail-pl1-f169.google.com with SMTP id x18so13692890plg.6;
+        Mon, 09 May 2022 05:36:55 -0700 (PDT)
+X-Gm-Message-State: AOAM533YCyZjlnTTASM+OmCM09IRAxlbKQtG3TznI1plbq2+/G7k7qEd
+	HeY40aCvx7Bxe5bsiGwZSK9wWaOGH+5DbGS/Ug==
+X-Google-Smtp-Source: ABdhPJywdYrcJqsKTCStDgZoUYubONsgkmZz0dQhKtFjrDKtvW504EY06y3pBrcOkAJkep0q8bHHtv6dLsJBqndCnF0=
+X-Received: by 2002:a17:90a:3486:b0:1d9:3abd:42ed with SMTP id
+ p6-20020a17090a348600b001d93abd42edmr26606909pjb.32.1652099815099; Mon, 09
+ May 2022 05:36:55 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8477.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fd866db-3fca-4937-a837-08da31acddc6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2022 11:12:55.0953
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: p9TYUDo6/JkEUIIc4wRUfxHD+ergDE9yNrvd5OOwdEpjAuNl8E8jfVKjKVwnjFvTARXDIueXa+gqkD4UjDv0Rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6093
+References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
+ <20220422150952.20587-3-alexandre.torgue@foss.st.com> <CAL_JsqKU28BNrozg20_a_XMUmBhaoDHdodWkzyRoH=VcM2pDjg@mail.gmail.com>
+ <edf8f01b-e850-1734-2909-f31cd8b082c5@foss.st.com> <CAL_JsqK5ox681qQFz6b4a8eSaNHJ08XmB2bTE=EZ2Pch0YDJqA@mail.gmail.com>
+In-Reply-To: <CAL_JsqK5ox681qQFz6b4a8eSaNHJ08XmB2bTE=EZ2Pch0YDJqA@mail.gmail.com>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Mon, 9 May 2022 07:36:43 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKfA1joqDiophO4qk0S1XfgxE2EWUBrxqXrGdfjOAe=ew@mail.gmail.com>
+Message-ID: <CAL_JsqKfA1joqDiophO4qk0S1XfgxE2EWUBrxqXrGdfjOAe=ew@mail.gmail.com>
+Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if "st,stm32mp1-rcc-secure"
+To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, SoC Team <soc@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org, 
+	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>, 
+	Ahmad Fatoum <a.fatoum@pengutronix.de>, Etienne Carriere <etienne.carriere@st.com>
+Content-Type: text/plain; charset="UTF-8"
 
-PiBGcm9tOiBKZXNzZSBUYXViZSA8bXIuYm9zc21hbjA3NUBnbWFpbC5jb20+DQo+IFNlbnQ6IEZy
-aWRheSwgQXByaWwgMjksIDIwMjIgNTo0OSBBTQ0KPiANCj4gQWRkIHRoZSBwaW5jdHJsIGRyaXZl
-ciBzdXBwb3J0IGZvciBpLk1YUlQxMTcwLg0KPiANCj4gQ2M6IEdpdWxpbyBCZW5ldHRpIDxnaXVs
-aW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKZXNz
-ZSBUYXViZSA8TXIuQm9zc21hbjA3NUBnbWFpbC5jb20+DQo+IC0tLQ0KPiBWMSAtPiBWMjoNCj4g
-IC0gTm90aGluZyBkb25lDQo+IC0tLQ0KPiAgZHJpdmVycy9waW5jdHJsL2ZyZWVzY2FsZS9LY29u
-ZmlnICAgICAgICAgICAgIHwgICA3ICsNCj4gIGRyaXZlcnMvcGluY3RybC9mcmVlc2NhbGUvTWFr
-ZWZpbGUgICAgICAgICAgICB8ICAgMSArDQo+ICBkcml2ZXJzL3BpbmN0cmwvZnJlZXNjYWxlL3Bp
-bmN0cmwtaW14cnQxMTcwLmMgfCAzNDkgKysrKysrKysrKysrKysrKysrDQo+ICAzIGZpbGVzIGNo
-YW5nZWQsIDM1NyBpbnNlcnRpb25zKCspDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9w
-aW5jdHJsL2ZyZWVzY2FsZS9waW5jdHJsLWlteHJ0MTE3MC5jDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9waW5jdHJsL2ZyZWVzY2FsZS9LY29uZmlnIGIvZHJpdmVycy9waW5jdHJsL2ZyZWVz
-Y2FsZS9LY29uZmlnDQo+IGluZGV4IDIxZmEyMWM2NTQ3Yi4uMTVhZjNkODBlMTE5IDEwMDY0NA0K
-PiAtLS0gYS9kcml2ZXJzL3BpbmN0cmwvZnJlZXNjYWxlL0tjb25maWcNCj4gKysrIGIvZHJpdmVy
-cy9waW5jdHJsL2ZyZWVzY2FsZS9LY29uZmlnDQo+IEBAIC0xOTIsMyArMTkyLDEwIEBAIGNvbmZp
-ZyBQSU5DVFJMX0lNWDIzICBjb25maWcgUElOQ1RSTF9JTVgyOA0KPiAgCWJvb2wNCj4gIAlzZWxl
-Y3QgUElOQ1RSTF9NWFMNCj4gKw0KPiArY29uZmlnIFBJTkNUUkxfSU1YUlQxMTcwDQo+ICsJYm9v
-bCAiSU1YUlQxMTcwIHBpbmN0cmwgZHJpdmVyIg0KPiArCWRlcGVuZHMgb24gQVJDSF9NWEMNCg0K
-U2hvdWxkIGl0IGJlIGJldHRlciBTT0NfSU1YUlQ/DQpPdGhlcndpc2U6DQpSZXZpZXdlZC1ieTog
-RG9uZyBBaXNoZW5nIDxhaXNoZW5nLmRvbmdAbnhwLmNvbT4NCg0KUmVnYXJkcw0KQWlzaGVuZw0K
+On Fri, May 6, 2022 at 11:21 AM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Fri, May 6, 2022 at 5:02 AM Alexandre TORGUE
+> <alexandre.torgue@foss.st.com> wrote:
+> >
+> > Hi Rob
+> >
+> > On 5/5/22 16:11, Rob Herring wrote:
+> > > On Fri, Apr 22, 2022 at 10:10 AM Alexandre Torgue
+> > > <alexandre.torgue@foss.st.com> wrote:
+> > >>
+> > >> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
+> > >> security support hardened), "clocks" and "clock-names" describe oscillators
+> > >> and are required.
+> > >>
+> > >> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> > >
+> > > This is now failing in linux-next:
+> > >
+> > > make[1]: *** Deleting file
+> > > 'Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts'
+> > > Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml: found
+> > > duplicate key "clocks" with value "{}" (original value: "True")
+> > > make[1]: *** [Documentation/devicetree/bindings/Makefile:26:
+> > > Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dts]
+> > > Error 1
+> > > ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:64:3:
+> > > [error] duplication of key "clocks" in mapping (key-duplicates)
+> > > ./Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml:69:3:
+> > > [error] duplication of key "clock-names" in mapping (key-duplicates)
+> > > Traceback (most recent call last):
+> > >    File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
+> > >      testtree = dtschema.load(filename, line_number=line_number)
+> > >    File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line
+> > > 914, in load
+> > >      return yaml.load(f.read())
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py",
+> > > line 434, in load
+> > >      return constructor.get_single_data()
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > > line 121, in get_single_data
+> > >      return self.construct_document(node)
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > > line 131, in construct_document
+> > >      for _dummy in generator:
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > > line 674, in construct_yaml_map
+> > >      value = self.construct_mapping(node)
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > > line 445, in construct_mapping
+> > >      return BaseConstructor.construct_mapping(self, node, deep=deep)
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > > line 263, in construct_mapping
+> > >      if self.check_mapping_key(node, key_node, mapping, key, value):
+> > >    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py",
+> > > line 294, in check_mapping_key
+> > >      raise DuplicateKeyError(*args)
+> > > ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
+> > >    in "<unicode string>", line 49, column 3
+> > > found duplicate key "clocks" with value "{}" (original value: "True")
+> > >    in "<unicode string>", line 64, column 3
+> > > To suppress this check see:
+> > >      http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
+> > > During handling of the above exception, another exception occurred:
+> > > Traceback (most recent call last):
+> > >    File "/usr/local/bin/dt-doc-validate", line 74, in <module>
+> > >      ret = check_doc(f)
+> > >    File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
+> > >      print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
+> > > AttributeError: 'DuplicateKeyError' object has no attribute 'path'
+> >
+> > It seems that we have a merge issue between:
+> >
+> > patch "dt-bindings: rcc: Add optional external ethernet RX clock properties"
+> > https://lore.kernel.org/r/20220410220514.21779-1-marex@denx.de
+> >
+> > and this one (dt-bindings: clock: stm32mp1: describes clocks if
+> > "st,stm32mp1-rcc-secure)
+> >
+> > On linux-next following part remains and creates issue above:
+> >
+> >    clocks:
+> >      description:
+> >        Specifies the external RX clock for ethernet MAC.
+> >      maxItems: 1
+> >
+> >    clock-names:
+> >      const: ETH_RX_CLK/ETH_REF_CLK
+> >
+> > I don't know why this part is remaining. In my tree, I took care to take
+> > Marek patch first to avoid this kind of issue.
+> >
+> > Btw, how to fix that ?
+>
+> Looks like I applied "dt-bindings: rcc: Add optional external ethernet
+> RX clock properties" too. I've reverted it in my tree.
+
+Now with it reverted in today's next:
+
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dtb:
+rcc@50000000: 'clocks' is a required property
+ From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.example.dtb:
+rcc@50000000: 'clock-names' is a required property
+ From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+
+The example needs updating.
+
+Rob
