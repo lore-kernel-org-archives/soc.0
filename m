@@ -4,59 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72D53C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C768C43217
 	for <soc@archiver.kernel.org>; Mon,  9 May 2022 21:40:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46A89C385C7; Mon,  9 May 2022 21:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 30066C385C4;
+	id 41077C385C6; Mon,  9 May 2022 21:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 23E9AC385BF;
 	Mon,  9 May 2022 21:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1652132437;
-	bh=VnsWMlSyILzO22NBgzO6+e4nKMFCEeO+ulkhoBePDtI=;
+	bh=ol0XWVHxD4X1sVhTq2nOVGplLaUa6lvNXtfJzYWGt1w=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=gTadZtA5mGwqrkuidAYfRdHrdqBsKTADguhbqLoM+PRKRpILWLfci9g8ioLqxNE+8
-	 XXKj+5T9kiFBT7sZF/MHP955o85YuNGke3w6zUdiZWbAPniZjEQ8MSgIhkriIBi13v
-	 t7Haz+tO9+ytzjBi+2bO+nEj0qImyeDlLkcI9A1tbk+f4B2bQZQyvHJ50iIIyAkqdf
-	 EpnEF4cGZuNzCi3za7nDA4mUNT58Uzkfr0tp9oMRPjlcpArXFfMz+4i+Bk3n/aU6gE
-	 3HOCb0/LTTc2+Mcg2ntqWXAnp4tqlQDi9lEgq5lqHdBHyn9XpQPPkNBXIogw0Sm9zL
-	 PbxhnFMXNdDKA==
+	b=AzuSyaI/7YV1uT/vAYHsUW8ZG4K8kaCUd9ihoQ4kcf/l3O08VSZiMkJub55pA9gv5
+	 pJssSRLIqQFjQH1CrS34w8dqJxfThkjWVfbzPk49uq0oD0bClMY7cWmb+lz1CUv80W
+	 DytpgZ2xgBsm5e32bsVO/eK0mD/DlEjh81ACGQjpyFSEGrSCGL0pD66NwyHRpUdLkW
+	 ekVfSSHCurBPAQvQ3omt8KdiIq5g0MaMM/SgHcWEXwKU9EsSYv5aCIJoxgvo9b36/z
+	 SQLFO2yvHNTK9KPKIw565/P8H9ob+UuJglUei0RpkrnA6QkwOrzVNoxhzJsiUm35dh
+	 xY2o7jXWJOr+A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10B5BF03933;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06856F03929;
 	Mon,  9 May 2022 21:40:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: configs: Enable audio on BeagleBone Black in
- multi_v7_defconfig
+Subject: Re: [GIT PULL 1/6] ARM: tegra: Core changes for v5.19-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165213243706.32686.16019796000051449171.git-patchwork-notify@kernel.org>
+ <165213243701.32686.4137097652202791825.git-patchwork-notify@kernel.org>
 Date: Mon, 09 May 2022 21:40:37 +0000
-References: <20220506222646.1671474-1-broonie@kernel.org>
-In-Reply-To: <20220506222646.1671474-1-broonie@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+References: <20220506143005.3916655-1-thierry.reding@gmail.com>
+In-Reply-To: <20220506143005.3916655-1-thierry.reding@gmail.com>
+To: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri,  6 May 2022 23:26:46 +0100 you wrote:
-> The BeagleBone Black supports audio over HDMI, using a combination of the
-> DaVinci McASP (used for audio by a very large proportion of DaVinci systems
-> with audio support) and a TDA998x device driving the HDMI link (this is a
-> very widely used driver). Build both drivers as modules in multi_v7_defconfig
-> so they can be more easily included in testing.
+On Fri,  6 May 2022 16:30:00 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> 
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: configs: Enable audio on BeagleBone Black in multi_v7_defconfig
-    https://git.kernel.org/soc/soc/c/553a4ee1c026
+  - [GIT,PULL,1/6] ARM: tegra: Core changes for v5.19-rc1
+    https://git.kernel.org/soc/soc/c/baf7cbbefbe8
+  - [GIT,PULL,2/6] soc/tegra: Changes for v5.19-rc1
+    (no matching commit)
+  - [GIT,PULL,3/6] dt-bindings: Changes for v5.19-rc1
+    (no matching commit)
+  - [GIT,PULL,4/6] ARM: tegra: Default configuration fixes for v5.18
+    (no matching commit)
+  - [GIT,PULL,5/6] arm64: tegra: Device tree changes for v5.19-rc1
+    (no matching commit)
+  - [GIT,PULL,6/6] arm64: tegra: Default configuration updates for v5.19-rc1
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
