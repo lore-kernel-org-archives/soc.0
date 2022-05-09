@@ -1,94 +1,95 @@
-Return-Path: <SRS0=ZukV=VR=gmail.com=jernej.skrabec@kernel.org>
+Return-Path: <SRS0=1uXd=VR=linaro.org=bjorn.andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E10A6C433F5
-	for <soc@archiver.kernel.org>; Mon,  9 May 2022 15:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3F20C433EF
+	for <soc@archiver.kernel.org>; Mon,  9 May 2022 15:23:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9DD14C385B1; Mon,  9 May 2022 15:06:28 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id 75EA4C385B4; Mon,  9 May 2022 15:23:15 +0000 (UTC)
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EA95FC385AE;
-	Mon,  9 May 2022 15:06:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA95FC385AE
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id n6-20020a05600c3b8600b0039492b44ce7so1460187wms.5;
-        Mon, 09 May 2022 08:06:27 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id B8AA7C385AE
+	for <soc@kernel.org>; Mon,  9 May 2022 15:23:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8AA7C385AE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f172.google.com with SMTP id j12so10587397oie.1
+        for <soc@kernel.org>; Mon, 09 May 2022 08:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Vtuult+HXOI7ZtF/5BeS7qYq/jPa50ON+a9bpjtA634=;
-        b=pgM6nmm4hymS4A6ysjr+inu879QqK9kEaxseJfecvNfSf4ksYX99cBKbLO7yZcX74J
-         pCs2urfaw5fX7fzbhoP08fziLPQBtjnpysD0YFKqjJLmEX9+7bqcu9nA6PIgu0tGaV10
-         MqFL/WtRVB3uzsGeNxl+6a3yI0dSnhg7Oa4OtMrf5386cfuk1W04xtIWEQxJcc4Nli1h
-         tgE80prFkmOwQHvwiE6ZYBIDTV5eyRbtOevjK/XSqcyhk2ubQITMCub4UPYXjfcyrxjx
-         WvPWpKu/L3AHeuJENWieIn8T8f3z2sufVz4K1ETqWwVeNrgW2Vfw1OP6c1o3NNlkEpQ8
-         IORA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=REojqMTypU3/iERzyVKWOawFG50CjfHR0afcTjLuxM0=;
+        b=jBb0jbM39pGn+Md7Husess5D5OKzKj906uv1BI0sHPD3y1nCOhro/8dNlnoF3xdp++
+         UHfXxeee2gQWOgvK0avSEj1PYUXdwbYI4ZDqyjex5T1gh/3PL2lP2xwlusoFMMo6hQnY
+         g/wSdypa+lJm9Q66Ucb8TYyVfKURJJyxI3J+o6L7PV4lP8CaNSQG+L7oujmCf/AwFFex
+         zfKtS5rDV5X/E2eAYi5jhIDENhFV3MBU6s9ENGTDcData07T+NfZwdnfTOT9PdX1SWkd
+         c7gJi46erOrrpoLBaKsUOZTzWAh2sI3UgzcdVPFmveenYnPD8ynaNxPNA1xJcQQTwVOJ
+         1Q7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Vtuult+HXOI7ZtF/5BeS7qYq/jPa50ON+a9bpjtA634=;
-        b=CO//WwlOXuu8e5xQArnqqUAz05QVe41FYnsrpUxB5I6t96nJIZfb2+TPbXAKY04S8a
-         Jly2osHQwJlyANdBLIcegpg1baTOBT81zTPql7h34I7BrOpNHZTzr9dBA0e01msamJhs
-         oIxcfRLEaK/9KdpsYJJ9paOLPtqTdXHfrxRURAVZxJFZ3Pz/dvllsGDd7u3zIpjkc5gY
-         E5y8YNRm0p4JrFGDHqSAPpQCnz2Wd33EUfhlhODmFEMqCNRGXlPL88gdpk2H5fXYrTrE
-         oYAypGsPQJl0KP6DZHg18NhYP1dTun92yki2kbGyfp86jcBcLlcw7amjvjqAbRmJymJA
-         qZfA==
-X-Gm-Message-State: AOAM532xXrqHjtJInZEnEaz4orkc1cfCske3zUbR7B4Q4SOOhCNf61NE
-	H+A3/tKvXLe+LDieOziJ/0Y=
-X-Google-Smtp-Source: ABdhPJzd2YKTa7mT7VfKRjs9oRnYPy836QDekr6iO5gL5PTiA2RYsK898fSfq3OMC/h7EM4qRoeb2g==
-X-Received: by 2002:a1c:f415:0:b0:37f:ab4d:1df2 with SMTP id z21-20020a1cf415000000b0037fab4d1df2mr22572130wma.75.1652108786180;
-        Mon, 09 May 2022 08:06:26 -0700 (PDT)
-Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id y14-20020adfe6ce000000b0020c5253d8bbsm11230631wrm.7.2022.05.09.08.06.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=REojqMTypU3/iERzyVKWOawFG50CjfHR0afcTjLuxM0=;
+        b=1SV0u7lJ2nY1mjBdFCp8ywWCBPCFHyj5m5QlizUJDqNdcA//1CSKkzkWKzJYx+1lVI
+         wYh12PVlp1M8+nQp6LLmjJvDO6JBO9jrq39ncviuTqbxLiqRet6L6uDamC4l6nX+C+UO
+         mu+TjeVtGAjNbfNrm7dtLl0Sy/f8m/M2HJW4B2uyUyAgda03mJ8Xp/Uevx4XCl5Hy5pO
+         Gg71k0IV6mU0K4SifgR+ZoFnGamRk5sRGP9KPd9YUtgsN0yqfBSghzorHHvUnvTUiK7m
+         /ii+czLSTX65WVNGJmlyZHVILvy4qT4lMV+K/FQu2E++VeQbyvNpUycKzqGAN+qn4+56
+         RvGw==
+X-Gm-Message-State: AOAM533Rf2cKJzWX/ATFUaEQsKpiM/h0oLrJvpR5+hRsaOPGcqf8pIfi
+	MQ2H/q6ahCfGfiUkq5GSvcl7Tw==
+X-Google-Smtp-Source: ABdhPJzNbJWnvjVt0Sxu1YmytFAB5FhsVfRm9P5Jy8Zc0DzeRDBagQM0LpnOtBrg0cuX5F9QRHY2nA==
+X-Received: by 2002:a05:6808:192a:b0:326:a728:f8a3 with SMTP id bf42-20020a056808192a00b00326a728f8a3mr5731967oib.153.1652109793810;
+        Mon, 09 May 2022 08:23:13 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k18-20020a056870d39200b000e932746d33sm4372902oag.28.2022.05.09.08.23.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 08:06:25 -0700 (PDT)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
+        Mon, 09 May 2022 08:23:13 -0700 (PDT)
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, Jernej Skrabec <jernej@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, linux-sunxi@lists.linux.dev
-Subject: Re: Re: [GIT PULL] Allwinner DT changes for 5.19
-Date: Mon, 09 May 2022 17:06:25 +0200
-Message-ID: <2368089.jE0xQCEvom@kista>
-In-Reply-To: <CAK8P3a3ePzJbh3p9edaDfZhZoYc=0-GvFCs3+2oLGjSoAhgvhw@mail.gmail.com>
-References: <YnVUmSLE1MZFkApt@kista.localdomain> <1789096.atdPhlSkOF@kista> <CAK8P3a3ePzJbh3p9edaDfZhZoYc=0-GvFCs3+2oLGjSoAhgvhw@mail.gmail.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [GIT PULL] Qualcomm ARM64 DT fixes for v5.18
+Date: Mon,  9 May 2022 10:23:10 -0500
+Message-Id: <20220509152310.306179-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Dne ponedeljek, 09. maj 2022 ob 16:21:29 CEST je Arnd Bergmann napisal(a):
-> On Sun, May 8, 2022 at 10:52 PM Jernej =C5=A0krabec <jernej.skrabec@gmail=
-=2Ecom>=20
-wrote:
-> >
-> > Dne petek, 06. maj 2022 ob 19:02:17 CEST je Jernej Skrabec napisal(a):
-> > > Hi!
-> > >
-> > > Please pull following DT changes for 5.19.
-> >
-> > I missed one patch, please disregard.
->=20
-> I had already merged this one, merging the new branch on top, while editi=
-ng
-> the merge log to not mention the duplicate commits. You can always follow=
- up
-> with additional changes based on a branch that is already merged like thi=
-s=20
-one.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-Ok, thanks! I'll follow up with new PR next time.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-Best regards,
-Jernej
+are available in the Git repository at:
 
->=20
->         Arnd
->=20
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-5.18
 
+for you to fetch changes up to 18019eb62efb68c9b365acca9c4fcb2e0d459487:
 
+  arm64: dts: qcom: sm8250: don't enable rx/tx macro by default (2022-04-11 21:40:57 -0500)
+
+----------------------------------------------------------------
+Qualcomm ARM64 DT fixes for v5.18
+
+This disables the two Soundwire controllers as well as rx and tx macros
+by default on the SM8250 platform to avoid crashes on devices where
+these aren't available.
+
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+      arm64: dts: qcom: sm8250: don't enable rx/tx macro by default
+
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 12 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi    |  4 ++++
+ 2 files changed, 16 insertions(+)
