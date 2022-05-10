@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DA75C433F5
-	for <soc@archiver.kernel.org>; Tue, 10 May 2022 07:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60978C4332F
+	for <soc@archiver.kernel.org>; Tue, 10 May 2022 07:08:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F04D7C385CA; Tue, 10 May 2022 07:02:21 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	id 2204CC385C9; Tue, 10 May 2022 07:08:27 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 732C2C385C9;
-	Tue, 10 May 2022 07:02:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 732C2C385C9
+	by smtp.kernel.org (Postfix) with ESMTPS id A5B90C385A6;
+	Tue, 10 May 2022 07:08:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5B90C385A6
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f170.google.com ([209.85.219.170]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M3lgL-1no2u10y0J-000pTT; Tue, 10 May 2022 09:02:18 +0200
-Received: by mail-yb1-f170.google.com with SMTP id v59so28995665ybi.12;
-        Tue, 10 May 2022 00:02:17 -0700 (PDT)
-X-Gm-Message-State: AOAM532J18aADe5e/fWjQcDdeShwIRYxTMlkwA6mVNkOusAODmvo3E+3
-	MbghAHsGOw/ryMHA7ew136NWEcB94Hpxw5s8eOI=
-X-Google-Smtp-Source: ABdhPJzCoErVlOlWP+3agvpOC/u6kgO4/gR8EykNKzu19PrW0u0Z98t99jOPlEpsD8ttySzd6YiVB2UWW4A083+k8U4=
-X-Received: by 2002:a25:cbc9:0:b0:645:879a:cdd3 with SMTP id
- b192-20020a25cbc9000000b00645879acdd3mr15923423ybg.550.1652166136461; Tue, 10
- May 2022 00:02:16 -0700 (PDT)
+Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MV6Bs-1nOZLr2biw-00S9Q7; Tue, 10 May 2022 09:08:17 +0200
+Received: by mail-yb1-f174.google.com with SMTP id e12so29031078ybc.11;
+        Tue, 10 May 2022 00:08:16 -0700 (PDT)
+X-Gm-Message-State: AOAM530Ijvp3KG8GrfDJIihw0/xkxo2SGNlvTDCY9+j5xjB06MKU05Gq
+	T/V9KK08oBeVPYhAcbuQ0p6G8qVnJGgqrbD+1Io=
+X-Google-Smtp-Source: ABdhPJxWna6rlyrTKaLzkGLXfLQ5G36EvqX7iK3snQCVCxZJEjl921KjovbWJOm/HvkmjLf51wP/GU+2IK3ZKdNeooU=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr16728943ybx.472.1652166495925; Tue, 10
+ May 2022 00:08:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510032558.10304-1-ychuang3@nuvoton.com> <20220510032558.10304-4-ychuang3@nuvoton.com>
-In-Reply-To: <20220510032558.10304-4-ychuang3@nuvoton.com>
+References: <20220510032558.10304-1-ychuang3@nuvoton.com>
+In-Reply-To: <20220510032558.10304-1-ychuang3@nuvoton.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 10 May 2022 09:01:59 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
-Message-ID: <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
-Subject: Re: [PATCH V4 3/5] arm64: dts: nuvoton: Add initial support for MA35D1
+Date: Tue, 10 May 2022 09:07:59 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
+Message-ID: <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
+Subject: Re: [PATCH V4 0/5] Add initial support for MA35D1 SoC
 To: Jacky Huang <ychuang3@nuvoton.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, DTML <devicetree@vger.kernel.org>, 
@@ -45,46 +45,44 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, DTML <devicetree@v
 	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>, 
 	cfli0@nuvoton.com
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:5dt/wHiA1Y8WbNjGVcdvnW9u06hOx4wD3EUjB2sg1vUr0KPWzza
- dgUsEcAGWAfHrUaY/zZJFUAv3P3cpkUvLIVrAQLtuCEVwFHIDvKk9SekcN81tM9+NhjIT6i
- U7h9ShBIW2wTFjfWAv62DE4Q6fSDNwnWeOIHjQUAtb1zC0ySvaR4wMJI9pJMqryC4193Mc/
- EtoyQJunTpesAgtkNtapw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:valQB88iB1g=:yv4heBprPjjNF+mmkBUaHv
- skkXYCIOzhA6Zudw9Xb1HP8v7L0wyLVfXtofRKpDsmM8hrqyCuQnpHJxbFmxlLolP67zG7ifI
- gRxAV9OJA5sPDjf5DS8WQRyZOX2zt7YW3TL3ZnzqEOBoyfb3iZLLxPU0+C3cj8RQPiiN2cj8e
- WLGrp7Vvzm0s6x3C29iC6wrWaTAP1hm0p/jgxiPjXI6dOgr5lGI00GZKct7rrwisF0755c3uW
- hdImis1+fVPXgvYw+9oJQMQnxGQKavW/QgNrtfjcu5h9tbW9B97lvXyA8E6ESJdQrupP4aEMe
- Xj6sn4aNH/VRF2Gp5130Q2UEZ1/9B5AJTrkBOvEBUGHP0HOlArmPpruj0Delhzz/7v++Z9x1O
- 6aBUYDKwv8Otd6qiCLidl5Ipq89oa9iX28IJQCDsynUm0M1xI7V85xlUhHWzpR0naSod2F3jU
- LePd04thBCl0wCOLw9ad5qyuQA2FP4ezFL1XKTrFAhY7yFMAZ034l7HKZqYB3WHbDJvQ7FobF
- 5GtA7DTbiTEUddtcGjCLYgRucG+mGhtVAHYyKzTA76uHfx6742QkrGxBYuxhOO6O7TXtPMOjf
- LZWeZj2JJ43qTuEa+dHlmC7uu/B/x2TSFI3J1KLhJu23S4ezl08ehP/F17mvL/zXOIMMSRDBa
- ZBOm+z7ze5ibhcxcManIs4On/rYPKJueBKeJwos0Ln3venFdol6KD67e01mw5SBTOLbLUahao
- Wku7vTb8VUJC3jyH1yIqzmj0EhsllSJUHm7SJAjk/XOfqdfayQ1wA4Y+MNOgLmmCzhKerm+ew
- Vs/qCcGA0skfKNLsCtKm6YzmKOGiQM6FWgakMYM+2GVkFpKNmo=
+X-Provags-ID: V03:K1:4Ce/E1tUlqVBkFNoPqoDgvLJzskG8FpTFkYaMd43K94/wrv4Red
+ JmvmtB8lUOYcfMYCI/52MrD1MKiOrJ0pySBqC/22wbO/IHyhdk+j80GFCX7LXOJG99O13wq
+ qCmcI+N/dF9+7ooNDKViTKWNkyOPTGPaH/ivDU+BFHZi6Vx1uPNsOM5/BaZiRjci3euupg2
+ AvX8QgJb22ei199vMZN4w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NiuSYRT/99U=:9IQS6LXSo7xzEE00HLNi07
+ 37+1DKYhA1Pq2uGC8ZBcJGILcuUvPvJlswHRF8VU5Mp8MVywHttoLL3UK39bPiaVFDv7vA1QT
+ GUQF7RgdQK4+dFTsP5Iu6RkHdQvklynVpo1GpAqkUh7lVF5l36WKSBMmQUmI77uEC8bhg4ztl
+ bjofyDBIp9y663VFnkQp+eeR4vG+h1vDDlZJxa6KPaJpwhShekrwsVco8CdVGbnkiEwefEEGx
+ zJlm5uttpOSKf8ihxR3mZYyXvhMLdhlm+hEEg8y7sG64ORu6TeQuCaJ+qkf1gBn/Bzp4/cjfO
+ Tu9Y/nik5wqkaor4gOlvp+yB8ELUFsyogP4fElKd0P6jpIklp15EPk0tOwYepwbmqBlZ5AVx/
+ MMxFe/yKpk7kUZ581gInbYs2394oOf/VLKcJryZlnHj3DTZtFLv45nVyq1YDumOTWknd3qRiR
+ ETC/bI4CXqx9yfSMB2b4b/Wd/uLAdkQ0cUZ+T+nHWPl1qp9YHHu2w6z9CPx1gPU/KBj/2LJbx
+ CV8Z2KVMAB0GHMj1kX+KJRabDTQmr1w+6yKzpfDqT/CN6uwCaPKnTHg8f+5c/IkIxPmF2Uo8v
+ w/zD3ckWcgi2ivxONs4jylHyYiSc9aipGtyH4xD+JcwIwsJGSOqyCScpESRG3q3oqH7SSedBA
+ SXsec2C2aMg8dyWIeXkWwf8gmAHVHZnxWVH+xfuvEM5otuiSDzg9akOB6fxfQqym5TDa9IF5b
+ OpwQEGVuS0mQwfFOPKg5AN3t7Wn3Rpbhvq0yCZXPsW28JaBz+7zujdpNRz4ojqxPvF12rDTk8
+ tIANEjXyHr2NPnj0zXw1JQWGDHRGVARKtLdKbwaYtmtPDYoKAE=
 
 On Tue, May 10, 2022 at 5:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
 >
-> Add the initial device tree files for Nuvoton MA35D1 Soc.
+> This patch series adds initial support for Nuvoton MA35D1 SoC,
+> include initial dts and clock controller binding.
 >
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
-> +
-> +/ {
-> +       model = "Nuvoton MA35D1-EVB";
-> +       compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1";
-> +
-> +       chosen {
-> +               stdout-path = "serial0:115200n8";
-> +       };
 
-Something seems to be missing here: you set the console to the serial0
-alias, but that is not defined anywhere, and the ma35d1.dtsi file does not
-appear to define any UART at all. Are you still missing the driver for this?
+This looks fine in principle, but we are getting close to the merge window and
+should finalize this quickly to make it into v5.19. I see that you don't have a
+console device, as commented in the .dts patch. Normally I prefer merging
+platforms only when there is at least rudimentary support for booting into
+an initramfs with a serial console, but this is a flexible rule.
 
-Please add a more detailed description in the changelog text above that
-explains what kind of SoC this is (maybe a link to the product web page,
-if there is one), and a status of how complete the support is: which drivers
-are already merged, and which ones are still being worked on?
+As with the changelog text for the .dts file, please explain in the [PATCH 0/5]
+cover letter what the status is.
 
-        Arnd
+Regarding continued maintainership, we should discuss how you plan to
+maintain this platform. In particular, there should be an entry in the
+MAINTAINERS
+file for the platform, either pointing to yourself, or adding it to the  NPCM or
+WPCM450 entries if this chip is in the same family. Is this also a BMC
+implementation, or is it something different?
+
+       Arnd
