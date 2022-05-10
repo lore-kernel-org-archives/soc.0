@@ -1,65 +1,77 @@
-Return-Path: <SRS0=LAtt=VS=foss.arm.com=carsten.haitzler@kernel.org>
+Return-Path: <SRS0=QxDa=VS=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3BB0C433F5
-	for <soc@archiver.kernel.org>; Tue, 10 May 2022 14:05:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67567C4332F
+	for <soc@archiver.kernel.org>; Tue, 10 May 2022 14:51:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A30B0C385A6; Tue, 10 May 2022 14:05:25 +0000 (UTC)
+	id 21941C385A6; Tue, 10 May 2022 14:51:58 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 73A2DC385C2;
-	Tue, 10 May 2022 14:05:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73A2DC385C2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=foss.arm.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+	by smtp.kernel.org (Postfix) with ESMTP id 87C23C385C2;
+	Tue, 10 May 2022 14:51:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87C23C385C2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9FD41042;
-	Tue, 10 May 2022 07:05:23 -0700 (PDT)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B2F4F3F73D;
-	Tue, 10 May 2022 07:05:22 -0700 (PDT)
-Message-ID: <02ce0958-7e19-3315-a39f-548cf41e1f0b@foss.arm.com>
-Date: Tue, 10 May 2022 15:05:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] arm64: defconfig: Enable modules for arm displays
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2F5912FC;
+	Tue, 10 May 2022 07:51:55 -0700 (PDT)
+Received: from bogus (unknown [10.57.0.250])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 517053F73D;
+	Tue, 10 May 2022 07:51:54 -0700 (PDT)
+Date: Tue, 10 May 2022 15:51:48 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Carsten Haitzler <carsten.haitzler@foss.arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, carsten.haitzler@arm.com,
- soc@kernel.org, linux-arm-kernel@lists.infradead.org,
- Robin Murphy <robin.murphy@arm.com>
+Cc: Mark Brown <broonie@kernel.org>, carsten.haitzler@arm.com,
+	soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH] arm64: defconfig: Enable modules for arm displays
+Message-ID: <20220510145148.ty3yfniwolpafmej@bogus>
 References: <20220509125510.152114-1-carsten.haitzler@foss.arm.com>
  <20220510111545.uqatdfthc6lv5p7i@bogus>
- <YnpgsZAfUAN3apQO@e110455-lin.cambridge.arm.com>
- <YnpjKMQnbCr8pD/j@sirena.org.uk>
-From: Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <YnpjKMQnbCr8pD/j@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <YnpMNmNIy1f2/dmc@sirena.org.uk>
+ <20220510120756.gcosdydmccbytmrn@bogus>
+ <dd43b159-0510-dc78-8ec0-7a52fc3d404a@foss.arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd43b159-0510-dc78-8ec0-7a52fc3d404a@foss.arm.com>
 
-
-
-On 5/10/22 14:05, Mark Brown wrote:
-> On Tue, May 10, 2022 at 01:55:13PM +0100, Liviu Dudau wrote:
->> On Tue, May 10, 2022 at 12:15:45PM +0100, Sudeep Holla wrote:
+On Tue, May 10, 2022 at 01:34:00PM +0100, Carsten Haitzler wrote:
 > 
->>> While at it, can we get these too enabled which are needed on JUNO IIUC.
->>> CONFIG_DRM_I2C_NXP_TDA998X
->>> CONFIG_DRM_I2C_NXP_TDA9950
 > 
->> I would not enable by default TDA9950 as that one is for CEC, which Juno doesn't
->> implement so you get warnings everytime time tda998x probes.
+> On 5/10/22 13:07, Sudeep Holla wrote:
+> > On Tue, May 10, 2022 at 12:27:50PM +0100, Mark Brown wrote:
+> > > On Tue, May 10, 2022 at 12:15:45PM +0100, Sudeep Holla wrote:
+> > > 
+> > > > While at it, can we get these too enabled which are needed on JUNO IIUC.
+> > > > CONFIG_DRM_I2C_NXP_TDA998X
+> > > > CONFIG_DRM_I2C_NXP_TDA9950
+> > > 
+> > > > Liviu/Robin who use HDLCD more than me on Juno can confirm if these are
+> > > > needed or not. I seem to have these for some HDLCD clock testing using SCMI.
+> > > 
+> > > Those two, especially TDA998x, are very widely used so should probably
+> > > just be enabled anyway regardless of what's on Juno.
+> > 
+> > Indeed, Robin mentioned the same. I am just adding it blindly every time
+> > I need to test HDLCD without noticing any warnings.
+> > 
 > 
-> If it's generating a warning due to the config option being enabled
-> that doesn't sound good - kernels are supposed to be multiplatform.
+> Yup - those were already there. I was just adding these for our new Morello
+> board - all it needed was I2C Cadence enabled as a module and presto... it
+> "just works". As it's just a module it's not really a bad "cost" so
+> defconfig additions seemed the right thing to do. Just chasing up this patch
+> as I sent it earlier this year and it was not merged or denied... :)
 
-is it the:
+Was it sent to soc@kernel.org earlier as well ? If so, let me know. I am
+not sure if the SoC team expects this to come from some platform maintainer
+or atleast an ack from them so that they can pick up. We can just say it
+is need for Arm Ltd platforms and provide an ack(me or Liviu).
 
-[    7.471809] tda9950 0-0034: driver requires an interrupt
-
-that you're talking about Liviu?
+-- 
+Regards,
+Sudeep
