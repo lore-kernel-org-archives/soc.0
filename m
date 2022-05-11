@@ -1,63 +1,115 @@
-Return-Path: <SRS0=5SgQ=VT=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=Sb25=VT=fujitsu.com=hasegawa-hitomi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA537C433F5
-	for <soc@archiver.kernel.org>; Wed, 11 May 2022 04:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C5DC433EF
+	for <soc@archiver.kernel.org>; Wed, 11 May 2022 06:22:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79AAFC2BBE4; Wed, 11 May 2022 04:07:13 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	id 17843C36AE2; Wed, 11 May 2022 06:22:56 +0000 (UTC)
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1808AC385DE;
-	Wed, 11 May 2022 04:07:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1808AC385DE
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=sntech.de
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <heiko@sntech.de>)
-	id 1nodcx-0000SY-QE; Wed, 11 May 2022 06:07:07 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 82C76C385D1;
+	Wed, 11 May 2022 06:22:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82C76C385D1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=fujitsu.com
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="51935721"
+X-IronPort-AV: E=Sophos;i="5.91,216,1647270000"; 
+   d="scan'208";a="51935721"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 11 May 2022 15:21:41 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+	by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 9214BC68A8;
+	Wed, 11 May 2022 15:21:40 +0900 (JST)
+Received: from oym-om1.fujitsu.com (oym-om1.o.css.fujitsu.com [10.85.58.161])
+	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 7A7FA142B5;
+	Wed, 11 May 2022 15:21:39 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+	by oym-om1.fujitsu.com (Postfix) with ESMTP id 4078940487F9C;
+	Wed, 11 May 2022 15:21:39 +0900 (JST)
+From: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts fixes for 5.18
-Date: Wed, 11 May 2022 06:07:07 +0200
-Message-ID: <2300256.NG923GbCHz@phil>
+To: linux-arm-kernel@lists.infradead.org,
+	soc@kernel.org,
+	linux-serial@vger.kernel.org,
+	sumit.garg@linaro.org
+Cc: arnd@arndb.de,
+	olof@lixom.net,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	jason.wessel@windriver.com,
+	daniel.thompson@linaro.org,
+	dianders@chromium.org,
+	linux-kernel@vger.kernel.org,
+	kgdb-bugreport@lists.sourceforge.net,
+	peterz@infradead.org,
+	hasegawa-hitomi@fujitsu.com
+Subject: [PATCH v4 0/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+Date: Wed, 11 May 2022 15:21:12 +0900
+Message-Id: <20220511062113.2645747-1-hasegawa-hitomi@fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+The interrupt is set using pseudo-NMI if it is available. Arm has a
+diagnostic interrupt feature called "Arm Generic Diagnostic Dump and
+Reset device", but the A64FX does not support this feature and instead
+has its own device definition.
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+I tested on FX700:
+$ echo 1 > /proc/sys/kernel/sysrq
+$ echo HARDLOCKUP > /sys/kernel/debug/provoke-crash/DIRECT
+:
+:
 
-are available in the Git repository at:
+Send the "chassis power diag" command from the management server
+using ipmitool, the following message is shown:
+[  123.272342] Kernel panic - not syncing: a64fx_diag: interrupt received
+:
+:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.18-rockchip-dtsfixes1
+Changes in V4:
+ - Call the panic function instead of sysrq. Prepare a handler
+   for each NMI/IRQ and call nmi_panic()/panic() respectively (as in v1).
+ - Fixing other issues raised by Greg.
 
-for you to fetch changes up to 77047ed73dd8b80c209bf5b5c215b858f1f5b14a:
+Changes in V3:
+ - Exclude Sumit's patch.
+ - Retest in v5.17.
 
-  arm64: dts: rockchip: Add gmac1 and change network settings of bpi-r2-pro (2022-04-10 18:34:50 +0200)
+Changes in V2:
+ - Include Sumit's patch.
+ - The handler calls handle_sysrq() to use the sysrq feature to cause
+   a panic.
+ - request_nmi() and request_irq() now use the same handler, and
+   the function name of the handler has also changed.
+ - Use readl()/writel() instead of readl_relaxed()/writel_relaxed().
 
-----------------------------------------------------------------
-Fixes for the mass-production version of BananaPi R2-Pro.
-The mass market version received some changes compared to
-preproduction versions and especially the io-domain setting
-could affect the lifespan of the board if the wrong dt
-gets booted on it.
-
-----------------------------------------------------------------
-Frank Wunderlich (2):
-      arm64: dts: rockchip: Change io-domains of bpi-r2-pro
-      arm64: dts: rockchip: Add gmac1 and change network settings of bpi-r2-pro
-
- arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 40 +++++++++++++++++++---
- 1 file changed, 35 insertions(+), 5 deletions(-)
+V3: https://lore.kernel.org/linux-arm-kernel/20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com/
+V2: https://lore.kernel.org/linux-arm-kernel/20220304064324.331217-3-hasegawa-hitomi@fujitsu.com/
+V1: https://lore.kernel.org/linux-arm-kernel/20220218092010.1327309-1-hasegawa-hitomi@fujitsu.com/
 
 
+Hitomi Hasegawa (1):
+  soc: fujitsu: Add A64FX diagnostic interrupt driver
+
+ MAINTAINERS                      |   5 +
+ drivers/soc/Kconfig              |   1 +
+ drivers/soc/Makefile             |   1 +
+ drivers/soc/fujitsu/Kconfig      |  13 +++
+ drivers/soc/fujitsu/Makefile     |   3 +
+ drivers/soc/fujitsu/a64fx-diag.c | 155 +++++++++++++++++++++++++++++++
+ 6 files changed, 178 insertions(+)
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
+ create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
+
+-- 
+2.27.0
 
