@@ -1,128 +1,83 @@
-Return-Path: <gregkh@linuxfoundation.org>
+Return-Path: <SRS0=ZEIE=VT=gmail.com=jirislaby@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71763C433EF
-	for <soc@archiver.kernel.org>; Wed, 11 May 2022 06:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A12C433F5
+	for <soc@archiver.kernel.org>; Wed, 11 May 2022 06:51:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2BFC4C2BBE4; Wed, 11 May 2022 06:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C33C385DE;
-	Wed, 11 May 2022 06:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1652251810;
-	bh=oabWsuyWgJhDY5KMYDv/hOs79hVOh8hDpnf427Xsi/8=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=eX8ZyCdm3ekZWZ7y6GzsIWhajRP5spKidB+tKIEeOvAPh+Imr7Fasx+jAFC7k/2+V
-	 nsWE5Ag4PWBe4oSQGvsr4CUzWlXuYftWQTr/0nCO5+8PA83OMw1qHJyZz/XEA2JoO0
-	 BXtktUgd2a0a9ViZ0NR3XMPi2aBIOG5AjsT+Y1Ck=
-Date: Wed, 11 May 2022 08:50:07 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, soc@kernel.org,
-	linux-serial@vger.kernel.org, sumit.garg@linaro.org, arnd@arndb.de,
-	olof@lixom.net, catalin.marinas@arm.com, will@kernel.org,
-	jirislaby@kernel.org, jason.wessel@windriver.com,
-	daniel.thompson@linaro.org, dianders@chromium.org,
-	linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-	peterz@infradead.org
+	id 2A79EC385DE; Wed, 11 May 2022 06:51:20 +0000 (UTC)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 76E8FC385DB;
+	Wed, 11 May 2022 06:51:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76E8FC385DB
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id h16so844414wrb.2;
+        Tue, 10 May 2022 23:51:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1wEl4hKP70nqNM7+s33aDLROWITXXzeuUXQCyFgNxKQ=;
+        b=dXtt6McRrBbztGLE6Sy7m4HBvEGbf3qdy8emAd79mnX2GwapYkoV9Jp0YmgUwpKgLM
+         4R+GccA6SpDbPJENgTuS0N2i8uZ2b7hQ7gzcO2AZBB7EEQ8zgmQLuXDs4WXXVr7CQeFS
+         Sly+UYfC59FECKvBkO0yGIuK6K0u4IvXzUIFWzcMnlUNK2aLgxJu8EK2J8fBsYIz6jxY
+         mrsyQJJDFIDrzZVx6rU5yPIkDFi4HxlMWKchrH/8AV45dwDJP6hycX2KV//kqrJx0CYG
+         QF/5yqiPALMrjAevx1EsiyofU6C2D1W0rfDJZZkuDsUzSk/egmgQkimO+qPD1hol16Dk
+         cVVg==
+X-Gm-Message-State: AOAM533cGQh5jeHlOIQNGZBEj8xXkb+YbKnm6krV1Sbtqphqgk8m/e+i
+	guxp657nX/WX6ZcKvPJB/68=
+X-Google-Smtp-Source: ABdhPJzvSiFXK+Pkx1A+5Jgez3pwE0NnwYeWyDPJFd2IMdUv3cDPSfUbrL34eucFRES0Ji7AeRNSEg==
+X-Received: by 2002:a05:6000:144a:b0:20c:6b73:804 with SMTP id v10-20020a056000144a00b0020c6b730804mr21963700wrx.88.1652251877878;
+        Tue, 10 May 2022 23:51:17 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id r5-20020a05600c424500b003942a244f3asm4242899wmm.19.2022.05.10.23.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 23:51:17 -0700 (PDT)
+Message-ID: <e9a112f8-a35b-1df4-0567-9fddf80c8e17@kernel.org>
+Date: Wed, 11 May 2022 08:51:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
 Subject: Re: [PATCH v4 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
  driver
-Message-ID: <Yntcn4esjJRS50Am@kroah.com>
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+ linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+ linux-serial@vger.kernel.org, sumit.garg@linaro.org
+Cc: arnd@arndb.de, olof@lixom.net, catalin.marinas@arm.com, will@kernel.org,
+ gregkh@linuxfoundation.org, jason.wessel@windriver.com,
+ daniel.thompson@linaro.org, dianders@chromium.org,
+ linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+ peterz@infradead.org
 References: <20220511062113.2645747-1-hasegawa-hitomi@fujitsu.com>
  <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Jiri Slaby <jirislaby@kernel.org>
 In-Reply-To: <20220511062113.2645747-2-hasegawa-hitomi@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 11, 2022 at 03:21:13PM +0900, Hitomi Hasegawa wrote:
-> Enable diagnostic interrupts for the Fujitsu A64FX.
-> 
-> Register the NMI/IRQ corresponding to the A64FX's device definition
-> dedicated to diagnostic interrupts, so that when this interrupt is
-> sent using the BMC, it causes a panic. This can be used to obtain
-> a kernel dump.
-> 
-> Signed-off-by: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> ---
->  MAINTAINERS                      |   5 +
->  drivers/soc/Kconfig              |   1 +
->  drivers/soc/Makefile             |   1 +
->  drivers/soc/fujitsu/Kconfig      |  13 +++
->  drivers/soc/fujitsu/Makefile     |   3 +
->  drivers/soc/fujitsu/a64fx-diag.c | 155 +++++++++++++++++++++++++++++++
->  6 files changed, 178 insertions(+)
->  create mode 100644 drivers/soc/fujitsu/Kconfig
->  create mode 100644 drivers/soc/fujitsu/Makefile
->  create mode 100644 drivers/soc/fujitsu/a64fx-diag.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cd0f68d4a34a..dc35c81ba917 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -241,6 +241,11 @@ F:	include/trace/events/9p.h
->  F:	include/uapi/linux/virtio_9p.h
->  F:	net/9p/
->  
-> +A64FX DIAG DRIVER
-> +M:	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> +S:	Supported
-> +F:	drivers/soc/fujitsu/a64fx-diag.c
-> +
->  A8293 MEDIA DRIVER
->  M:	Antti Palosaari <crope@iki.fi>
->  L:	linux-media@vger.kernel.org
-> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-> index a8562678c437..e10eb27e1e7e 100644
-> --- a/drivers/soc/Kconfig
-> +++ b/drivers/soc/Kconfig
-> @@ -9,6 +9,7 @@ source "drivers/soc/atmel/Kconfig"
->  source "drivers/soc/bcm/Kconfig"
->  source "drivers/soc/canaan/Kconfig"
->  source "drivers/soc/fsl/Kconfig"
-> +source "drivers/soc/fujitsu/Kconfig"
->  source "drivers/soc/imx/Kconfig"
->  source "drivers/soc/ixp4xx/Kconfig"
->  source "drivers/soc/litex/Kconfig"
-> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> index adb30c2d4fea..b12b0b03ad47 100644
-> --- a/drivers/soc/Makefile
-> +++ b/drivers/soc/Makefile
-> @@ -12,6 +12,7 @@ obj-$(CONFIG_SOC_CANAAN)	+= canaan/
->  obj-$(CONFIG_ARCH_DOVE)		+= dove/
->  obj-$(CONFIG_MACH_DOVE)		+= dove/
->  obj-y				+= fsl/
-> +obj-y				+= fujitsu/
-
-Why a sub directory for just one .c file?
-
->  obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
->  obj-y				+= imx/
->  obj-y				+= ixp4xx/
-> diff --git a/drivers/soc/fujitsu/Kconfig b/drivers/soc/fujitsu/Kconfig
-> new file mode 100644
-> index 000000000000..e05c40725922
+On 11. 05. 22, 8:21, Hitomi Hasegawa wrote:
 > --- /dev/null
-> +++ b/drivers/soc/fujitsu/Kconfig
-> @@ -0,0 +1,13 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +menu "fujitsu SoC drivers"
-> +
-> +config A64FX_DIAG
-> +	tristate "A64FX diag driver"
-> +	depends on ARM64
-> +	depends on ACPI
-> +	help
-> +	  Say Y here if you want to enable diag interrupt on Fujitsu A64FX.
-> +
-> +	  If unsure, say N.
+> +++ b/drivers/soc/fujitsu/a64fx-diag.c
+> @@ -0,0 +1,155 @@
+...
+> +#define BMC_DIAG_INTERRUPT_STATUS_OFFSET (0x0044)
+> +#define BMC_DIAG_INTERRUPT_ENABLE_OFFSET (0x0040)
 
-You need to provide more information about what this driver does and
-what it is here.
+And I noticed here, I would:
+* remove unneeded parentheses
+* drop the "_OFFSET" suffix
+* just write 8bit values (0x40, 0x44), given they fit
+* order them numerically, 0x40 goes first
 
 thanks,
-
-greg k-h
+-- 
+js
+suse labs
