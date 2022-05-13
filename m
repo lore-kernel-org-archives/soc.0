@@ -1,65 +1,90 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=xiFP=VV=nuvoton.com=YCHuang3@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85DCC433EF
-	for <soc@archiver.kernel.org>; Thu, 12 May 2022 20:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4401EC433EF
+	for <soc@archiver.kernel.org>; Fri, 13 May 2022 06:26:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9BFA8C385B8; Thu, 12 May 2022 20:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C2C7C36AE2;
-	Thu, 12 May 2022 20:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652388020;
-	bh=EHRfWVpxOma58i26TiSctcHObyqYSIYYnZ7afLAVXKo=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rqibgm+QCseJytGG8xWF/0K9PUD9hRBk7xHYKI+6qPEaqPLZv9kFYpBai6kpHfV6w
-	 bRZojnDT/BV6nEpH7QKof1HuatpEgvufv2sN/PlFlHH5vIOHp6mMAsY+xQONK0+nV/
-	 vqHAZsQRiC08yXMENsk2RXf/lKVf3eeUiHuQKvPGmiMjGT+yK4zEc4+G7WQgEeBcfd
-	 MucHdqq491lARQl8AXkHp4O7RznG31Es20I+BlHYXR27sRTc/8rts+dkw6pfbMCryX
-	 NOc/+BBScdM3SsASq1q1df+Bdi5rvUSOCWjxuBJbZTXiv0xrt9aLfxqYnMYUpgOE/8
-	 Lh+Iy0rxChRXg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58802F03936;
-	Thu, 12 May 2022 20:40:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 05D45C34114; Fri, 13 May 2022 06:26:09 +0000 (UTC)
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+	by smtp.kernel.org (Postfix) with ESMTP id 3A901C34100;
+	Fri, 13 May 2022 06:26:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3A901C34100
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
+Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
+	by maillog.nuvoton.com (Postfix) with ESMTP id 5B9611C80D8E;
+	Fri, 13 May 2022 14:25:59 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 13
+ May 2022 14:25:58 +0800
+Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Fri, 13 May 2022 14:25:58 +0800
+Message-ID: <2786221c-d0a5-9bce-70d3-385dc419591a@nuvoton.com>
+Date: Fri, 13 May 2022 14:25:59 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts fixes for 5.18
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165238802035.21441.3479143178857329459.git-patchwork-notify@kernel.org>
-Date: Thu, 12 May 2022 20:40:20 +0000
-References: <2300256.NG923GbCHz@phil>
-In-Reply-To: <2300256.NG923GbCHz@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V4 2/5] dt-bindings: clock: Document MA35D1 clock
+ controller bindings
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+CC: <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
+	<arnd@arndb.de>, <olof@lixom.net>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <soc@kernel.org>, <cfli0@nuvoton.com>
+References: <20220510032558.10304-1-ychuang3@nuvoton.com>
+ <20220510032558.10304-3-ychuang3@nuvoton.com>
+ <f0969769-9f24-7e48-6a60-adeea94404e1@linaro.org>
+From: Jacky Huang <ychuang3@nuvoton.com>
+In-Reply-To: <f0969769-9f24-7e48-6a60-adeea94404e1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 11 May 2022 06:07:07 +0200 you wrote:
-> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-> 
->   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.18-rockchip-dtsfixes1
-> 
-> [...]
+On 2022/5/12 下午 10:04, Krzysztof Kozlowski wrote:
+> On 10/05/2022 05:25, Jacky Huang wrote:
+>> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+>> +
+>> +    clk: clock-controller@40460200 {
+>> +        compatible = "nuvoton,ma35d1-clk";
+>> +        reg = <0x0 0x40460200 0x0 0x100>;
+> I don't think you tested your bindings. This fails.
+>
+> clock-names below as well. Please do not send untested code.
+>
+> Testing is explained here:
+> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18-rc6%2Fsource%2FDocumentation%2Fdevicetree%2Fbindings%2Fwriting-schema.rst%23L111&amp;data=05%7C01%7Cychuang3%40nuvoton.com%7C7f9b081f94a642e8b40b08da34204e53%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637879610603173566%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=kqInjscLvZpOSWtsN%2BPW3s%2BPeaK5KCD1weTH2JiHqxg%3D&amp;reserved=0
+>
+> Best regards,
+> Krzysztof
 
-Here is the summary with links:
-  - [GIT,PULL] Rockchip dts fixes for 5.18
-    https://git.kernel.org/soc/soc/c/609a097f5f06
+I run the test  make DT_CHECKER_FLAGS=-m dt_binding_check, but not run 
+dtbs_check.
+I will fix it. Thank you.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Sincerely,
+Jacky Huang
+
+
+
+
 
 
