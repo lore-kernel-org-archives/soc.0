@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB5CEC433F5
-	for <soc@archiver.kernel.org>; Fri, 13 May 2022 12:00:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23FF9C433EF
+	for <soc@archiver.kernel.org>; Fri, 13 May 2022 12:00:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8ED07C34115; Fri, 13 May 2022 12:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4487FC34100;
-	Fri, 13 May 2022 12:00:14 +0000 (UTC)
+	id 0C808C34114; Fri, 13 May 2022 12:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8689C34117;
+	Fri, 13 May 2022 12:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652443216;
-	bh=yDDiFpH9S4P3eJdJRr4f2OShBcceTTmp8eDEuYl7fE4=;
+	s=k20201202; t=1652443220;
+	bh=h47tLrFyvqv+7zyBvQhn3TQYqOW/fmOb3fGy/sPJ/EY=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iUAk1sJ8oJy33QgeMOXHd+hwX5SR/hCHdSfchjO7fzBwHZ8eHKBqV6SeZvJKxhQtY
-	 1lehQ6xGluhtgvpnOBEmlKDCuzEbq9qFJr7GVk+iNCzsiL49iCVusl405KqkWSK37u
-	 SAwASUnTKFk3oQdF0eWAkQviZp8vGkft+KHCcbornKVqp7SR5yzYrIGhS4MtCSs7Nm
-	 igmlYfmWHHUwz22veHgWZw0lJMLNUXABvFgA686sbtmdJ3vM0D1sf9hvwfM97OedVo
-	 gyNMQxLaUjdj5GqTTdlZrrfJ6xmn5AxHak40xZXha8FQ7RClHqCy0/7Cp2RVSaKK7D
-	 dIjLQjVXugAHQ==
+	b=hbW6UM0T10UUG/kX4WxzJyKEKs8cGogltSiGC795BcHqIK8Cl1JmAm/BhfWiYyaW/
+	 oPm+ubpRZOYodClzg8SzSHMdtR8jEFxV64lqP4qrDYKxwYYNeW29KxiPZezi8cFOBP
+	 iiluCxhC1Rd7BwFf1UwujLC8UPZTs9IASjde689iWVUbhGbCiCHG0gIkIpbP0hVeX5
+	 Mr8aPr7UqCQ9Zf15g5XaUSWudXl6SWQXSTmwYfQcqWB73S9BD5QU+y98xgAZMN64nC
+	 Rs8TMqHpvqSIwKlaGl+VjazhbgSylGXZ5/b23kIS2kze0HLuejnjHeiha5fq0aCxQL
+	 nhfO8AAGa3V+g==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>,
-	arm@kernel.org,
-	soc@kernel.org
+To: Vignesh Raghavendra <vigneshr@ti.com>,
+	SoC <soc@kernel.org>,
+	Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+	arm-soc <arm@kernel.org>,
+	Olof Johansson <olof@lixom.net>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Brian Masney <bmasney@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Kevin Hilman <khilman@baylibre.com>,
-	Andy Gross <agross@kernel.org>,
-	Olof Johansson <olof@lixom.net>,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [GIT PULL] Qualcomm ARM defconfig updates for v5.19
-Date: Fri, 13 May 2022 14:00:10 +0200
-Message-Id: <165244251856.2864729.1576549327140989278.b4-ty@arndb.de>
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Tero Kristo <kristo@kernel.org>,
+	"Menon, Nishanth" <nm@ti.com>
+Subject: Re: [GIT PULL] TI K3 defconfig updates for v5.19
+Date: Fri, 13 May 2022 14:00:11 +0200
+Message-Id: <165244251866.2864729.12620460775658849127.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220509182209.317208-1-bjorn.andersson@linaro.org>
-References: <20220509182209.317208-1-bjorn.andersson@linaro.org>
+In-Reply-To: <88cd734e-47a7-4307-c119-8f6ec6c40452@ti.com>
+References: <88cd734e-47a7-4307-c119-8f6ec6c40452@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 9 May 2022 13:22:09 -0500, Bjorn Andersson wrote:
+On Sat, 7 May 2022 22:19:53 +0530, Vignesh Raghavendra wrote:
 > The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 > 
 >   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-defconfig-for-5.19
+>   https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-config-for-v5.19
 > 
 > [...]
 
 Merged into arm/defconfig, thanks!
 
-merge commit: a2e8bbe07276d8d981d0a88db9c77944877706cf
+merge commit: 9bc4df1d8b91d8677a547d4d21fde7405e46a39c
 
        Arnd
