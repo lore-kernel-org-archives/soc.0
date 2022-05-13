@@ -1,77 +1,65 @@
-Return-Path: <SRS0=xiFP=VV=nuvoton.com=YCHuang3@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D07ADC433EF
-	for <soc@archiver.kernel.org>; Fri, 13 May 2022 07:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0BE7C433EF
+	for <soc@archiver.kernel.org>; Fri, 13 May 2022 10:00:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9071CC34118; Fri, 13 May 2022 07:00:14 +0000 (UTC)
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-	by smtp.kernel.org (Postfix) with ESMTP id C16F0C34100;
-	Fri, 13 May 2022 07:00:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C16F0C34100
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-	by maillog.nuvoton.com (Postfix) with ESMTP id 59BD41C80DC4;
-	Fri, 13 May 2022 15:00:11 +0800 (CST)
-Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 13
- May 2022 15:00:10 +0800
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS03.nuvoton.com
- (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1847.3; Fri, 13 May
- 2022 15:00:10 +0800
-Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Fri, 13 May 2022 15:00:10 +0800
-Message-ID: <7902bc78-877d-4f00-171f-fbfe7167075f@nuvoton.com>
-Date: Fri, 13 May 2022 15:00:11 +0800
+	id 813F4C36AE5; Fri, 13 May 2022 10:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 671B3C34113;
+	Fri, 13 May 2022 10:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652436018;
+	bh=uua7Gj5IPSM4e5wt1sUnYZe7W3mPQDlRPyJcxJ+f9EU=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Es1FLZSun6VyU2dK8PNgEuuunXRwKa+X9yrNiV1GwKYkDZhUCXWqxcttllJrxJ8Gu
+	 yRU8Cr8jlki5+xZhALGiHcXf4P8U8HMr69vvudoLnVlUk/hOidBB1n5/TjzvId/WpA
+	 UGmoNrgeHLAcwiPP/JgWdDPq+++0biEMj9L9m7Sybm7LNgURuMBzxZxNSnhuOza9oV
+	 V5cAMt+l5nP7jKv3TYFIMb231+gV2q3oXEpXZ2M9R5lWKYdjgHieSrDA2DSDnAUEmc
+	 zgYFaSEmZD4YbeQOivNS8Cf+FqaoA1SzZpvdSEYXb2vIz8NNCztAD1syqmw9/JxgyI
+	 9yxyK5Hravohg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D69DF03935;
+	Fri, 13 May 2022 10:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V4 0/5] Add initial support for MA35D1 SoC
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Arnd Bergmann
-	<arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, DTML
-	<devicetree@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, "Linux
- ARM" <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>, "Rob
- Herring" <robh+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Olof Johansson <olof@lixom.net>, "Catalin
- Marinas" <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, SoC Team
-	<soc@kernel.org>, <cfli0@nuvoton.com>
-References: <20220510032558.10304-1-ychuang3@nuvoton.com>
- <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
- <8be62b40-077a-7634-7d34-7776909a2abe@linaro.org>
- <CAK8P3a3=YD7WV+Www8pf+JTv14DwcnSjD+f=YFCNMxXYT9FAZA@mail.gmail.com>
- <51ce4fca-f7b8-92ab-c9c6-1e57a2a5b5f3@nuvoton.com>
- <9b2ecc28-df1e-903a-c652-2d65fc7d41ec@linaro.org>
-From: Jacky Huang <ychuang3@nuvoton.com>
-In-Reply-To: <9b2ecc28-df1e-903a-c652-2d65fc7d41ec@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] dt-bindings: clock: stm32mp1: adapt example for
+ "st,stm32mp1-rcc-secure"
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <165243601831.30999.161396984094001630.git-patchwork-notify@kernel.org>
+Date: Fri, 13 May 2022 10:00:18 +0000
+References: <20220511092559.4952-1-alexandre.torgue@foss.st.com>
+In-Reply-To: <20220511092559.4952-1-alexandre.torgue@foss.st.com>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
+Hello:
 
+This patch was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-On 2022/5/13 下午 02:55, Krzysztof Kozlowski wrote:
-> On 13/05/2022 08:53, Jacky Huang wrote:
->> Thanks for your review and help.
->> I will run the dtbs_check, add binding document, and include serial
->> driver in the next version.
-> Except dtbs_check you have to run dt_binding_check because this is the
-> one which was failing at the first place.
->
-> Best regards,
-> Krzysztof
+On Wed, 11 May 2022 11:25:59 +0200 you wrote:
+> For "st,stm32mp1-rcc-secure" schema, clocks and clock-names entries are now
+> required properties.
+> 
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> 
+> 
+> [...]
 
-OK, I got it. Thank you very much.
+Here is the summary with links:
+  - dt-bindings: clock: stm32mp1: adapt example for "st,stm32mp1-rcc-secure"
+    https://git.kernel.org/soc/soc/c/045d0c3db911
 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Sincerely,
-Jacky Huang
 
