@@ -1,77 +1,57 @@
-Return-Path: <SRS0=ej+k=VV=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <SRS0=7SGH=VV=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4990C433F5
-	for <soc@archiver.kernel.org>; Fri, 13 May 2022 12:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E07BC433EF
+	for <soc@archiver.kernel.org>; Fri, 13 May 2022 13:13:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 754C7C34100; Fri, 13 May 2022 12:17:25 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id 358BDC34114; Fri, 13 May 2022 13:13:40 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AA507C34114;
-	Fri, 13 May 2022 12:17:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA507C34114
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652444243; x=1683980243;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=801V6lsXCptv+F1vOY2jyhDHT7zZq1ih5XI439rzglc=;
-  b=yOws5y3v9wLTEd884l+PaiZAPt59J6Dg3MXUfBCiMNuVpdzwZMLJ4PyP
-   KdThDlheeZ5uP/FveHHOlVleF9ylNLf/J/KWxzL5f27nx+VcPCebaJk1f
-   8+SY80srjbaoSVVwDWa+XZNY+RqPVhg2jBjxH5LNDreg3nUIrWoq7XVG1
-   he3Hzbk/JjRUA9UEDOx2o16wWlF1ups2MjfoS2jbKIgWRwwaUFvvsDVHB
-   SZ16J4PbnaHYJJth9CwEwnZXRzwBfeuTb6BzDUieIffwBpH04vNNsmlhw
-   IwRAzaLh6dutMRoWXx2xBMt6lMDRIT+Qk2GI041vY1odrULlZ+X74fv+u
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,221,1647327600"; 
-   d="scan'208";a="163935065"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 May 2022 05:17:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 13 May 2022 05:17:22 -0700
-Received: from ROU-LT-M43238L.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 13 May 2022 05:17:19 -0700
-From: <nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 87B81C34100;
+	Fri, 13 May 2022 13:13:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87B81C34100
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id BEB62240006;
+	Fri, 13 May 2022 13:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1652447610;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=uCnGTOBVFug6LQtqTL6WHNZj2tl4ixL7MjXFJtGhJtE=;
+	b=c9Sew0sAQF7nyrwKafrw2RZXbMKkLd4ZGoMy35ilNsYBunP3UewP1A+NMoBiNPACqmoMHN
+	TXrJAPzXxl/lA+7x9k7D4l9IG2LQHznP3d2UcUCtBImECmOEasL+K/GXDsbTbuv2Tp5yPD
+	qaAkXfcEODtbKJ5TdyZ2q2sKi0la32S82itKKb2IgmKJe1xJTsTMeLTKpVJO9blLw9ir67
+	VpyF1P7+7ibrTqq6Wngc+scdd2ibBs6nNiLdfLygUGN6MZ3ElvitwFvVUSY2WSbYYT4/Eq
+	nUs9m9ObK1zM4uva/5DvaUiWsxn+VsNtL24+y02hx6ZwWD8sjou62nLizPm7Dg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<arm@kernel.org>, <soc@kernel.org>
-CC: <kavyasree.kotagiri@microchip.com>, <clement.leger@bootlin.com>, "Nicolas
- Ferre" <nicolas.ferre@microchip.com>, Linux Kernel list
-	<linux-kernel@vger.kernel.org>, linux-arm-kernel
-	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Ludovic Desroches
-	<ludovic.desroches@microchip.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>
-Subject: [GIT PULL] ARM: at91: soc for 5.19
-Date: Fri, 13 May 2022 14:17:01 +0200
-Message-ID: <20220513121701.77683-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v5.19 (#1)
+Date: Fri, 13 May 2022 15:13:19 +0200
+Message-ID: <87r14xr2xc.fsf@BL-laptop>
 MIME-Version: 1.0
-Organization: microchip
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Hi,
 
-Arnd, Olof,
+Here is the first pull request for dt64 for mvebu for v5.19.
 
-Here are the at91 and Polarfire soc changes for 5.19.
-Thanks to Claudiu who did most of the work collecting the patches for this
-pull-request!
+There is a conflict with the arm-soc tree and as pointed by Stephen
+Rothwell and confirmed by Krzysztof Kozlowski, the correct resolution is
+to take the commit 2f00bb4a69c7 ("arm64: dts: marvell: align SPI NOR
+node name with dtschema"), so the node name should be "flash", not
+"spi-flash".
 
-Please pull.
-
-Thanks, best regards,
-  Nicolas
+Gregory
 
 The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
@@ -79,45 +59,46 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.19
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-5.19-1
 
-for you to fetch changes up to 6041558ebf1fc87d1e0bdeb51e985807dab06bed:
+for you to fetch changes up to 239466bddfc02f9643f64be74ba9a1d80c286f4b:
 
-  ARM: at91: debug: add lan966 support (2022-05-13 13:42:03 +0200)
-
-----------------------------------------------------------------
-AT91 & POLARFIRE SoC #1 for 5.19:
-
-- Power Management: add possibility to implement
-  specific pm quirks for some SoCs
-- Kconfig update for AT91 PIT64 and LAN966 low-level debugging
-- sama5d2: add secure calls to OP-TEE and secure suspend
+  arm64: dts: marvell: Update sdhci node names to match schema (2022-05-09 11:23:33 +0200)
 
 ----------------------------------------------------------------
-Claudiu Beznea (5):
-      ARM: at91: pm: keep documentation inline with structure members
-      ARM: at91: pm: introduce macros for pm mode replacement
-      ARM: at91: pm: use kernel documentation style
-      ARM: at91: pm: add quirks for pm
-      ARM: at91: Kconfig: implement PIT64B selection
+mvebu dt64 for 5.19 (part 1)
 
-Clément Léger (2):
-      ARM: at91: add code to handle secure calls
-      ARM: at91: pm: add support for sama5d2 secure suspend
+Update sdhci node names to match schema on all mvebu dt64 dtsi files
 
-Kavyasree Kotagiri (1):
-      ARM: at91: debug: add lan966 support
+Armada 3720:
+  uDPU board:
+   - correct temperature sensors
+   - update partition table
 
- arch/arm/Kconfig.debug          |  22 ++
- arch/arm/mach-at91/Kconfig      |  20 +-
- arch/arm/mach-at91/Makefile     |   2 +-
- arch/arm/mach-at91/pm.c         | 431 ++++++++++++++++++++++++++++++++---
- arch/arm/mach-at91/sam_secure.c |  46 ++++
- arch/arm/mach-at91/sam_secure.h |  18 ++
- arch/arm/mach-at91/sama5.c      |   2 +
- 7 files changed, 506 insertions(+), 35 deletions(-)
- create mode 100644 arch/arm/mach-at91/sam_secure.c
- create mode 100644 arch/arm/mach-at91/sam_secure.h
+  espressobin-ultra board:
+   - enable front USB3 port
+   - add PHY and switch reset pins
+   - fix SPI-NOR config
+
+----------------------------------------------------------------
+Chris Packham (1):
+      arm64: dts: marvell: Update sdhci node names to match schema
+
+Robert Marko (5):
+      arm64: dts: uDPU: update partition table
+      arm64: dts: uDPU: correct temperature sensors
+      arm64: dts: marvell: espressobin-ultra: fix SPI-NOR config
+      arm64: dts: marvell: espressobin-ultra: add PHY and switch reset pins
+      arm64: dts: marvell: espressobin-ultra: enable front USB3 port
+
+ .../dts/marvell/armada-3720-espressobin-ultra.dts   |  9 ++++-----
+ arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts    | 21 +++++++++++++--------
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi        |  4 ++--
+ arch/arm64/boot/dts/marvell/armada-ap80x.dtsi       |  2 +-
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi       |  2 +-
+ 5 files changed, 21 insertions(+), 17 deletions(-)
 
 -- 
-Nicolas Ferre
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
