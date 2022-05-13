@@ -1,85 +1,114 @@
-Return-Path: <SRS0=xiFP=VV=nuvoton.com=YCHuang3@kernel.org>
+Return-Path: <SRS0=XcYy=VV=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BBA8C433EF
-	for <soc@archiver.kernel.org>; Fri, 13 May 2022 06:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17ABBC433EF
+	for <soc@archiver.kernel.org>; Fri, 13 May 2022 06:54:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E6185C34118; Fri, 13 May 2022 06:53:51 +0000 (UTC)
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-	by smtp.kernel.org (Postfix) with ESMTP id 79B72C34100;
-	Fri, 13 May 2022 06:53:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 79B72C34100
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=nuvoton.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=nuvoton.com
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-	by maillog.nuvoton.com (Postfix) with ESMTP id 7D6781C80DC4;
-	Fri, 13 May 2022 14:53:49 +0800 (CST)
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Fri, 13 May
- 2022 14:53:49 +0800
-Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Fri, 13 May 2022 14:53:48 +0800
-Message-ID: <51ce4fca-f7b8-92ab-c9c6-1e57a2a5b5f3@nuvoton.com>
-Date: Fri, 13 May 2022 14:53:49 +0800
+	id D70A2C34116; Fri, 13 May 2022 06:54:27 +0000 (UTC)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6693AC34114
+	for <soc@kernel.org>; Fri, 13 May 2022 06:54:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6693AC34114
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so6377531wms.3
+        for <soc@kernel.org>; Thu, 12 May 2022 23:54:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dM/UD60XbLSqMSyvvmaAVE8YFnIIDSQD84l1NW2QFkM=;
+        b=VEYC8qqTXzfWb0QEif5PNJykYQO2QMEHHxuUPsk8euwok+lzR4x7eMx/R6UBl2VbM2
+         zPD2aJhPyax/zoEp6ayuyi5l14kz9tjijTYv7vWBA9Nq79oqf3ByGeQMErpcBND4zH1n
+         5WVSNFayFhj5tUK9qCM2IL8HsavT1HdKFS4TCRK4HmUBGduucBocNPF1xDbI+XFlCWxO
+         Hjm2K5VU/6bwSkOGfyX3g0aMKWE/o9nb3BSRlrvtaSvCbOo3SFr93oZmU7tUcPwCm9+E
+         9lvj4jWfY5UPlaL33d/qwjjZtAK0/6+Jq8AywKz65u/n8SsSg6sOtYbmygitx3KA7wVY
+         bKXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dM/UD60XbLSqMSyvvmaAVE8YFnIIDSQD84l1NW2QFkM=;
+        b=UdIeJ6gq71McODYJepC90DcraPpCmujUyFYBOtJ/0B0Tt0kzr0SCr/oRLY1W+8tub/
+         ylIYoWlVxuAjmLNyCorNe1j/ywD0cuHm9VCNbfR8iU3EFX7lTYNE3Lynq50b+T5nmgFa
+         DhtQkYEBn71HhBTJdwLD+CF0qk7eKpuMa4Mk9KXLvmNA3r6ghiwg/y9hMBRW00Igp6n5
+         VY0CLafzJFu0lrAFKke/IMrzYRGbwLN7zYYtfiK49AxNGiBAMl/7WzUvXay8bi8Cjo3a
+         HAqtbxR9/zw6nN3Q/gR7NLJtncKtn7psZwWuBMwAZi7DP3Zqunmc/vcaObdERpnoUzCl
+         mPJg==
+X-Gm-Message-State: AOAM530DD6TQwzQVhAqblHgOnDkJxYrco+GKd951gHOpTSRM59d0Ls2S
+	2RP/V4yVmXdYwdfqGzt2ulBSCg==
+X-Google-Smtp-Source: ABdhPJwC6TTLPwnjJetSBa1icGzmaERJpO9MhpyPTBXywNPqL/UclEMB/4tvt4EiXqAN46CARvLc0Q==
+X-Received: by 2002:a05:600c:382:b0:394:6172:59dc with SMTP id w2-20020a05600c038200b00394617259dcmr13436287wmd.120.1652424864766;
+        Thu, 12 May 2022 23:54:24 -0700 (PDT)
+Received: from [192.168.0.167] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d10-20020adfa34a000000b0020cdec3d6dfsm1277477wrb.53.2022.05.12.23.54.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 23:54:24 -0700 (PDT)
+Message-ID: <d2c29e7f-4a16-7abe-fed4-2e4112548a0c@linaro.org>
+Date: Fri, 13 May 2022 08:54:23 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V4 0/5] Add initial support for MA35D1 SoC
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH V4 2/5] dt-bindings: clock: Document MA35D1 clock
+ controller bindings
 Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>
+To: Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
 List-Id: <soc.lore.kernel.org>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, DTML
-	<devicetree@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, "Linux
- ARM" <linux-arm-kernel@lists.infradead.org>, <ychuang570808@gmail.com>, "Rob
- Herring" <robh+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Olof Johansson <olof@lixom.net>, "Catalin
- Marinas" <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, SoC Team
-	<soc@kernel.org>, <cfli0@nuvoton.com>
+Cc: robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+ olof@lixom.net, catalin.marinas@arm.com, will@kernel.org, soc@kernel.org,
+ cfli0@nuvoton.com
 References: <20220510032558.10304-1-ychuang3@nuvoton.com>
- <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
- <8be62b40-077a-7634-7d34-7776909a2abe@linaro.org>
- <CAK8P3a3=YD7WV+Www8pf+JTv14DwcnSjD+f=YFCNMxXYT9FAZA@mail.gmail.com>
-From: Jacky Huang <ychuang3@nuvoton.com>
-In-Reply-To: <CAK8P3a3=YD7WV+Www8pf+JTv14DwcnSjD+f=YFCNMxXYT9FAZA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <20220510032558.10304-3-ychuang3@nuvoton.com>
+ <f0969769-9f24-7e48-6a60-adeea94404e1@linaro.org>
+ <2786221c-d0a5-9bce-70d3-385dc419591a@nuvoton.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2786221c-d0a5-9bce-70d3-385dc419591a@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+On 13/05/2022 08:25, Jacky Huang wrote:
+> 
+> 
+> On 2022/5/12 下午 10:04, Krzysztof Kozlowski wrote:
+>> On 10/05/2022 05:25, Jacky Huang wrote:
+>>> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+>>>
+>>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+>>> +
+>>> +    clk: clock-controller@40460200 {
+>>> +        compatible = "nuvoton,ma35d1-clk";
+>>> +        reg = <0x0 0x40460200 0x0 0x100>;
+>> I don't think you tested your bindings. This fails.
+>>
+>> clock-names below as well. Please do not send untested code.
+>>
+>> Testing is explained here:
+>> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18-rc6%2Fsource%2FDocumentation%2Fdevicetree%2Fbindings%2Fwriting-schema.rst%23L111&amp;data=05%7C01%7Cychuang3%40nuvoton.com%7C7f9b081f94a642e8b40b08da34204e53%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637879610603173566%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=kqInjscLvZpOSWtsN%2BPW3s%2BPeaK5KCD1weTH2JiHqxg%3D&amp;reserved=0
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> I run the test  make DT_CHECKER_FLAGS=-m dt_binding_check, but not run 
+> dtbs_check.
+
+It is the `make dt_binding_check` which fails here, so what do you mean
+that you run it? It cannot pass, the code is clearly not correct.
 
 
-On 2022/5/12 下午 10:35, Arnd Bergmann wrote:
-> On Thu, May 12, 2022 at 4:11 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 10/05/2022 09:07, Arnd Bergmann wrote:
->>> On Tue, May 10, 2022 at 5:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
->>>> This patch series adds initial support for Nuvoton MA35D1 SoC,
->>>> include initial dts and clock controller binding.
->>>>
->>> This looks fine in principle, but we are getting close to the merge window and
->>> should finalize this quickly to make it into v5.19. I see that you don't have a
->>> console device, as commented in the .dts patch. Normally I prefer merging
->>> platforms only when there is at least rudimentary support for booting into
->>> an initramfs with a serial console, but this is a flexible rule.
->> I disagree. It does not look fine - does not pass `make dtbs_check` even
->> with Nuvoton bindings...
-> Ok, thanks for taking a look. It was already late for 5.19 and missing the uart
-> driver, so it was clear it had not seen actual runtime testing. Let's try
-> aiming for 5.20 then.
->
->          Arnd
-
-Thanks for your review and help.
-I will run the dtbs_check, add binding document, and include serial 
-driver in the next version.
-
-
-sincerely,
-Jacky Huang
-
-
-
+Best regards,
+Krzysztof
