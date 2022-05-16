@@ -4,202 +4,307 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934AEC433EF
-	for <soc@archiver.kernel.org>; Mon, 16 May 2022 16:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27CF9C433FE
+	for <soc@archiver.kernel.org>; Mon, 16 May 2022 16:32:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4A8BFC34113; Mon, 16 May 2022 16:31:41 +0000 (UTC)
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	id 10134C385AA; Mon, 16 May 2022 16:32:46 +0000 (UTC)
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7C570C385AA;
-	Mon, 16 May 2022 16:31:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C570C385AA
+	by smtp.kernel.org (Postfix) with ESMTPS id AFCF2C34113;
+	Mon, 16 May 2022 16:32:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AFCF2C34113
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G9ZZxm012847;
-	Mon, 16 May 2022 16:31:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id; s=pps0720;
- bh=M4Ucz3XpmHfg+BS5UkTAgZSf+gZkXZxwowIS8buRzAo=;
- b=GnRCwBNeQI0/gB3ErMXu8ZhkUXF2ymLYd7OKyTYWCkl/1DkeUff9B800EIWnf0AurYIB
- Rls2D7/SwLCbCBMZIXKAUxmCn1Ppbf8PTjX3rF7vpAOKyy6y1dISIPnsk7T9SS/Pagvj
- NyqGVfWolI7NPa/vvjKmwQ+6aPaPcOHyFTHaOWKDTY6Ra/K8fzEdeXcP3GUC9oREBVoP
- x7Q7vc/Jxy1M+ZflYbvNlPCThl4VWOwx+MKXCEfMHvhzgcI2whuCaW+kK+KAWWaYz6uk
- 4K4ZSH6jfJshF4YvWn+9eKHooHfZNilxkQIrt9ykPg2ePj7bZO8+AOIqJ6NaFEbZG+Xs Iw== 
-Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3g3kgrdhtp-1
+Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GEAGBQ029646;
+	Mon, 16 May 2022 16:32:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references; s=pps0720;
+ bh=/DStH2cz6HTojO5/89miC9YP4cLF8UgBZRQ1kIWSQMk=;
+ b=GjCLO6kp9naJUtZYHVN9MW2Zr6JvUMg0laZZNyV2sljyWyDx3yTTMAmw2QVPF0R38XVs
+ BO7CoITwgox5boqqwHtFYDZhN1a5MX6axR/ogdhCRA8SBcOavihNxgC/zFfmB9fgq51r
+ S2V3AeC3FO9GK2PAtCueCpHhlbpU6cLmybGDc/cOUQ6xdKrlsx/546UlYZengWQhiGIr
+ QoQSNcx3t1ihDuuMDkVR6uXCp+krpeG3nLnkFl7Vc7lzWCiwE38NA32rvvVpsimA1BpA
+ N9JC9x9RQAL9nhQeNi2rNjT2HIIz0zF266Y6IwbceFfcU0W0sCAtCf7q/Hs1JbW4mqM4 mA== 
+Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3g3r4uhwnj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 May 2022 16:31:21 +0000
-Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
-	by g2t2353.austin.hpe.com (Postfix) with ESMTP id 412B665;
-	Mon, 16 May 2022 16:31:19 +0000 (UTC)
+	Mon, 16 May 2022 16:32:35 +0000
+Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
+	by g9t5009.houston.hpe.com (Postfix) with ESMTP id 3702F55;
+	Mon, 16 May 2022 16:32:35 +0000 (UTC)
 Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-	by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id C3B6136;
-	Mon, 16 May 2022 16:31:17 +0000 (UTC)
+	by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id D57294D;
+	Mon, 16 May 2022 16:32:34 +0000 (UTC)
 From: nick.hawkins@hpe.com
+To: verdun@hpe.com, nick.hawkins@hpe.com, joel@jms.id.au, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-To: verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, linux@armlinux.org.uk, arnd@arndb.de,
-        olof@lixom.net, soc@kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, joel@jms.id.au
-Subject: [PATCH v8 0/8] Introduce HPE GXP Architecture
-Date: Mon, 16 May 2022 11:33:10 -0500
-Message-Id: <20220516163310.44842-1-nick.hawkins@hpe.com>
+Cc: Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v8 7/8] ARM: dts: Introduce HPE GXP Device tree
+Date: Mon, 16 May 2022 11:33:45 -0500
+Message-Id: <20220516163347.44890-7-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
-X-Proofpoint-ORIG-GUID: fx7CeuKXYiuDZAiqqR2dEuZxtlmH3Pzk
-X-Proofpoint-GUID: fx7CeuKXYiuDZAiqqR2dEuZxtlmH3Pzk
+In-Reply-To: <20220516163347.44890-1-nick.hawkins@hpe.com>
+References: <20220516163347.44890-1-nick.hawkins@hpe.com>
+X-Proofpoint-ORIG-GUID: TwAdXS0TVTzBwDb89h84MqIc0CM73g8_
+X-Proofpoint-GUID: TwAdXS0TVTzBwDb89h84MqIc0CM73g8_
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-16_15,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205160092
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 mlxscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 clxscore=1015 spamscore=0 impostorscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205160092
 
 From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Changes since v7:
- *Fixed comment format in watchdog driver
- *Added the Acked-by tag to the device tree patch.
- *Resubmitted the dt-bindings patches hpe,gxp and hpe,gxp-timer with
-  Reviewed-by tags from previous patch in descriptions to keep patchset
-  continuity for v8.
-Changes since v6:
- *Resubmitted the dt-bindings patches hpe,gxp and hpe,gxp-timer with
-  Reviewed-by tags from previous patch in descriptions to keep patchset
-  continuity for v7.
- *Fixed the subject on dt-binding patch:
-  dt-bindings: timer: hpe,gxp-timer: Creation to
-  dt-bindings: timer: hpe,gxp-timer: Add HPE GXP Timer and Watchdog
- *Changed the following in MAINTAINERS:
-  arch/arm/boot/dts/hpe-bmc-dl360gen10.dts to arch/arm/boot/hpe-bmc*
-  arch/arm/boot/dts/hpe-gxp.dtsi to arch/arm/boot/dts/hpe-gxp*
-  arch/arm/mach-hpe/gxp.c to arch/arm/mach-hpe 
- *Changed cache register area length from 0xFFC to 0x1000 in hpe-gxp.dtsi
- *Added space between "," in compatible list for the
+The HPE SoC is new to linux. A basic device tree layout with minimum
+required for linux to boot including a timer and watchdog support has
+been created.
+
+The dts file is empty at this point but will be updated in subsequent
+updates as board specific features are enabled.
+
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+v8:
+* No change
+v7:
+* Changed cache register area length from 0xFFC to 0x1000
+* Added space between "," in compatible list for the
   hpe-bmc-dl360gen10.dts
- *Added aliases, chosen, and memory to hpe-bmc-dl360gen10.dts
- *Removed memory from hpe-gxp.dtsi
- *Changed conditional statements around COMPILE_TEST and TIMER_OF if of
-  for GXP in clocksource Kconfig
- *Changed commit description for watchdog driver where Adding became Add
-  and compliment became complement.
- *Removed unused include files of_address.h and of_platform.h in gxp-wdt.c
- *Fixed the max timeout on watchdog to be 655350 in gxp-wdt.c
- *Changed time variable computations in gxp_wdt_set_timeout to be clear in
-  gxp-wdt.c
- *Decreased reboot delay to 10ms from 100ms in gxp-wdt.c
- *Added comment to explain why it is necessary to pass the base address
-  over a private interface from the timer driver in gxp-wdt.c
-
-Changes since v5:
- *Removed generic-ohci and generic-ehci from patchset as they were
-  committed to linux-next 
- *Removed watchdog node from device tree and dt-bindings documentation as
-  it is not necessary since the timer creates it
- *Added cache controller to device tree
- *Fixed l2c initialization by making l2c_aux_map=~1
- *Corrected Kconfig punctuation and wording in mach-hpe
- *Added oneOf to hpe,gxp.yaml
- *Set additionalProperties to false on hpe,gxp-timer
- *Added space after "," in compatible lists
- *Switched hpe,gxp-timer.yaml title to Timer from TIMER
- *Switched clockname from iopclk to iop
- *Added clock labels clock-0 and clock-1 to device tree
- *Added dma-ranges to ahb in device tree
- *Fixed static device issue in timer-gxp.c with platform_device_alloc
- *Fixed timer-gxp.c initialization to exit cleanly
- *Corrected all subjects and descriptions for every commit
- *Added information about bootloader to mach-hpe patch
-
-Changes since v4:
- *Fixed version mismatch with patchset across all patches
- *Fixed typos with ochi -> ohci echi -> ehci
- *Adjusted Watchdog Kconfig file
- *Adjusted various commit comments
- *Removed un-necessary include file
- *Updated outdated base revision to newer one to resolve merge conflicts
-  as well as pickup vendor binding change for hpe.
-
-Changes since v3:
- *Completely redid the dtsi file to represent architecture
- *Reduced device tree size
- *Rewrote the timer driver to start the watchdog driver due to similar
-  register region
- *Made adjustments to timer
- *Made adjustments to watchdog
- *Changed gxp.yaml to hpe,gxp.yaml with changes
- *Updated Maintainers to represent new file names
- *Added hpe bindings to generic-ehci and generic-ohci
- *Fixed clock architecture to be accurate
-
-Changes since v2:
- *Reduced size of changes, put them into patchset format
- *Changed from txt->yaml
-
-Changes since v1:
- *Fixed compiler warnings
-
-The GXP is the HPE BMC SoC that is used in the majority of HPE current
-generation servers. Traditionally the asic will last multiple
-generations of server before being replaced.
-
-Info about SoC:
-
- HPE GXP is the name of the HPE Soc. This SoC is used to implement many
- BMC features at HPE. It supports ARMv7 architecture based on the Cortex
- A9 core. It is capable of using an AXI bus to which a memory controller
- is attached. It has multiple SPI interfaces to connect boot flash and
- BIOS flash. It uses a 10/100/1000 MAC for network connectivity. It has
- multiple i2c engines to drive connectivity with a host infrastructure.
- The initial patches enable the watchdog and timer enabling the host to
- be able to boot.
-
-Nick Hawkins (8):
-  ARM: hpe: Introduce the HPE GXP architecture
-  ARM: configs: multi_v7_defconfig: Add HPE GXP ARCH
-  watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-  clocksource/drivers/timer-gxp: Add HPE GXP Timer
-  dt-bindings: timer: hpe,gxp-timer: Add HPE GXP Timer and Watchdog
-  dt-bindings: arm: hpe: add GXP Support
-  ARM: dts: Introduce HPE GXP Device tree
-  MAINTAINERS: Introduce HPE GXP Architecture
-
- .../devicetree/bindings/arm/hpe,gxp.yaml      |  27 +++
- .../bindings/timer/hpe,gxp-timer.yaml         |  47 ++++
- MAINTAINERS                                   |  12 +
- arch/arm/Kconfig                              |   2 +
- arch/arm/Makefile                             |   1 +
- arch/arm/boot/dts/Makefile                    |   2 +
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  26 +++
- arch/arm/boot/dts/hpe-gxp.dtsi                | 127 +++++++++++
- arch/arm/configs/multi_v7_defconfig           |   3 +
- arch/arm/mach-hpe/Kconfig                     |  23 ++
- arch/arm/mach-hpe/Makefile                    |   1 +
- arch/arm/mach-hpe/gxp.c                       |  16 ++
- drivers/clocksource/Kconfig                   |   8 +
- drivers/clocksource/Makefile                  |   1 +
- drivers/clocksource/timer-gxp.c               | 209 ++++++++++++++++++
- drivers/watchdog/Kconfig                      |  11 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/gxp-wdt.c                    | 174 +++++++++++++++
- 18 files changed, 691 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
- create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+* Added aliases, chosen, and memory to hpe-bmc-dl360gen10.dts
+* Removed memory from hpe-gxp.dtsi
+v6:
+* Added cache-controller to CPU
+* Removed hpe,gxp-wdt and removed simple-mfd from hpe,gxp-timer
+* Added space after ',' in compatible lists in the dtsi containing more
+  than one item
+* Switched clock name iopclk to iop based on feedback from
+  hpe,gxp-timer.yaml
+* Added clock labels clock-0 and clock-1
+* Added dma-ranges to ahb
+* Changed subject to better match ones in the log
+* Changed description to fit 75 characters per line
+v5:
+* Fixed commit message to show previous changes
+* Fixed typo ehci -> echi
+v4:
+* Removed hpe,gxp-cpu-init as it was no longer necessary
+* Removed bootargs as requested
+* Removed empty ahb node
+* Moved reg after compatible, everywhere
+* Removed osc and memclk
+* Removed syscon@c00000f8 as it was not necessary for boot
+* Fixed Alphabetical issue in dts/Makefile
+* Added specific board binding for dl360gen10
+* Removed empty node
+* Added Accurate Clock Architecture
+* Fixed generic-echi and generic-ochi issues
+* Removed i2cg
+v3:
+* Fixed issues with warnings
+* Used proper patchset format
+v2:
+* Reduced size of dtsi to essential components
+* Followed the proper format for having a dtsi and
+  dts
+---
+ arch/arm/boot/dts/Makefile               |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  26 +++++
+ arch/arm/boot/dts/hpe-gxp.dtsi           | 127 +++++++++++++++++++++++
+ 3 files changed, 155 insertions(+)
  create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
  create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
- create mode 100644 arch/arm/mach-hpe/Kconfig
- create mode 100644 arch/arm/mach-hpe/Makefile
- create mode 100644 arch/arm/mach-hpe/gxp.c
- create mode 100644 drivers/clocksource/timer-gxp.c
- create mode 100644 drivers/watchdog/gxp-wdt.c
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7c16f8a2b738..293717719c70 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -255,6 +255,8 @@ dtb-$(CONFIG_ARCH_HISI) += \
+ 	hi3519-demb.dtb
+ dtb-$(CONFIG_ARCH_HIX5HD2) += \
+ 	hisi-x5hd2-dkb.dtb
++dtb-$(CONFIG_ARCH_HPE_GXP) += \
++	hpe-bmc-dl360gen10.dtb
+ dtb-$(CONFIG_ARCH_INTEGRATOR) += \
+ 	integratorap.dtb \
+ 	integratorap-im-pd1.dtb \
+diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+new file mode 100644
+index 000000000000..3a7382ce40ef
+--- /dev/null
++++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree file for HPE DL360Gen10
++ */
++
++/include/ "hpe-gxp.dtsi"
++
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	compatible = "hpe,gxp-dl360gen10", "hpe,gxp";
++	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
++
++	aliases {
++		serial0 = &uartc;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0x40000000 0x20000000>;
++	};
++};
+diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
+new file mode 100644
+index 000000000000..cf735b3c4f35
+--- /dev/null
++++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+@@ -0,0 +1,127 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree file for HPE GXP
++ */
++
++/dts-v1/;
++/ {
++	model = "Hewlett Packard Enterprise GXP BMC";
++	compatible = "hpe,gxp";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			compatible = "arm,cortex-a9";
++			reg = <0>;
++			device_type = "cpu";
++			next-level-cache = <&L2>;
++		};
++	};
++
++	clocks {
++		pll: clock-0 {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <1600000000>;
++		};
++
++		iopclk: clock-1 {
++			compatible = "fixed-factor-clock";
++			#clock-cells = <0>;
++			clock-div = <4>;
++			clock-mult = <1>;
++			clocks = <&pll>;
++		};
++	};
++
++	axi {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++		dma-ranges;
++
++		L2: cache-controller@b0040000 {
++			compatible = "arm,pl310-cache";
++			reg = <0xb0040000 0x1000>;
++			cache-unified;
++			cache-level = <2>;
++		};
++
++		ahb@c0000000 {
++			compatible = "simple-bus";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xc0000000 0x30000000>;
++			dma-ranges;
++
++			vic0: interrupt-controller@eff0000 {
++				compatible = "arm,pl192-vic";
++				reg = <0xeff0000 0x1000>;
++				interrupt-controller;
++				#interrupt-cells = <1>;
++			};
++
++			vic1: interrupt-controller@80f00000 {
++				compatible = "arm,pl192-vic";
++				reg = <0x80f00000 0x1000>;
++				interrupt-controller;
++				#interrupt-cells = <1>;
++			};
++
++			uarta: serial@e0 {
++				compatible = "ns16550a";
++				reg = <0xe0 0x8>;
++				interrupts = <17>;
++				interrupt-parent = <&vic0>;
++				clock-frequency = <1846153>;
++				reg-shift = <0>;
++			};
++
++			uartb: serial@e8 {
++				compatible = "ns16550a";
++				reg = <0xe8 0x8>;
++				interrupts = <18>;
++				interrupt-parent = <&vic0>;
++				clock-frequency = <1846153>;
++				reg-shift = <0>;
++			};
++
++			uartc: serial@f0 {
++				compatible = "ns16550a";
++				reg = <0xf0 0x8>;
++				interrupts = <19>;
++				interrupt-parent = <&vic0>;
++				clock-frequency = <1846153>;
++				reg-shift = <0>;
++			};
++
++			usb0: usb@efe0000 {
++				compatible = "hpe,gxp-ehci", "generic-ehci";
++				reg = <0xefe0000 0x100>;
++				interrupts = <7>;
++				interrupt-parent = <&vic0>;
++			};
++
++			st: timer@80 {
++				compatible = "hpe,gxp-timer";
++				reg = <0x80 0x16>;
++				interrupts = <0>;
++				interrupt-parent = <&vic0>;
++				clocks = <&iopclk>;
++				clock-names = "iop";
++			};
++
++			usb1: usb@efe0100 {
++				compatible = "hpe,gxp-ohci", "generic-ohci";
++				reg = <0xefe0100 0x110>;
++				interrupts = <6>;
++				interrupt-parent = <&vic0>;
++			};
++		};
++	};
++};
 -- 
 2.17.1
 
