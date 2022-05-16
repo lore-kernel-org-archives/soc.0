@@ -1,310 +1,179 @@
-Return-Path: <SRS0=DfEa=VY=hpe.com=prvs=0135e980e9=nick.hawkins@kernel.org>
+Return-Path: <SRS0=gz2C=VY=broadcom.com=anand.gore@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27CF9C433FE
-	for <soc@archiver.kernel.org>; Mon, 16 May 2022 16:32:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A4E8C433F5
+	for <soc@archiver.kernel.org>; Mon, 16 May 2022 17:38:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 10134C385AA; Mon, 16 May 2022 16:32:46 +0000 (UTC)
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C7585C34115; Mon, 16 May 2022 17:38:25 +0000 (UTC)
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AFCF2C34113;
-	Mon, 16 May 2022 16:32:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AFCF2C34113
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GEAGBQ029646;
-	Mon, 16 May 2022 16:32:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=/DStH2cz6HTojO5/89miC9YP4cLF8UgBZRQ1kIWSQMk=;
- b=GjCLO6kp9naJUtZYHVN9MW2Zr6JvUMg0laZZNyV2sljyWyDx3yTTMAmw2QVPF0R38XVs
- BO7CoITwgox5boqqwHtFYDZhN1a5MX6axR/ogdhCRA8SBcOavihNxgC/zFfmB9fgq51r
- S2V3AeC3FO9GK2PAtCueCpHhlbpU6cLmybGDc/cOUQ6xdKrlsx/546UlYZengWQhiGIr
- QoQSNcx3t1ihDuuMDkVR6uXCp+krpeG3nLnkFl7Vc7lzWCiwE38NA32rvvVpsimA1BpA
- N9JC9x9RQAL9nhQeNi2rNjT2HIIz0zF266Y6IwbceFfcU0W0sCAtCf7q/Hs1JbW4mqM4 mA== 
-Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3g3r4uhwnj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 May 2022 16:32:35 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-	by g9t5009.houston.hpe.com (Postfix) with ESMTP id 3702F55;
-	Mon, 16 May 2022 16:32:35 +0000 (UTC)
-Received: from hpe.com (cigateway-dev.us.rdlabs.hpecorp.net [10.14.73.30])
-	by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id D57294D;
-	Mon, 16 May 2022 16:32:34 +0000 (UTC)
-From: nick.hawkins@hpe.com
-To: verdun@hpe.com, nick.hawkins@hpe.com, joel@jms.id.au, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id E0234C385AA
+	for <soc@kernel.org>; Mon, 16 May 2022 17:38:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E0234C385AA
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pf1-f181.google.com with SMTP id x23so14667154pff.9
+        for <soc@kernel.org>; Mon, 16 May 2022 10:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=jUIS0FZPSeqZtxyHaF1OPlO7F+NEHUpKEFz+pY/Lso0=;
+        b=P0h6d7w9+ZbtggieQkdzuUItvkHZNZRgvhAg5DwpiNC4lvdV9aK+ZLC3SMfHPKqZmH
+         51zejA5h1U60sc+AsYyF8Q4Ekdl71EXNiuBv8FGJ4hvgJzI/gt1YmImcDvRq69QDyleI
+         jYmC4hoNtj6gTgeyAptCUTaRVwKYltujXfFpQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=jUIS0FZPSeqZtxyHaF1OPlO7F+NEHUpKEFz+pY/Lso0=;
+        b=FG8I1VUKVpD5zL6nyLxLKHjD738FbUgV3geBaQ+dZPLVWSZIg2gORXnNgGDNga3hUl
+         5MFpH8JM+iw+09ugFPdTit2hxkl6emmmzEf4zG68q0+A7x5QuO57jDED1kd2CZkcCXwI
+         6JHlFpzNG3uDt0HzJRNRnqW2H4u3f/gfWcj92Mcl5aAEi/2tnPgvoL7VZAzZUw5pUs4A
+         3BRMWQUVWUgGE46DxdDJzwdmfp4CqDIDlqlB63Mb6IZF6oW2xpZtuoqg2aomlIgsYyS7
+         kX0Dys4QxgJ9i98SzQK2YhYJdEu07UEavMcsj6315a60TaoQ6to/M46BiheGGX1eKn5R
+         +Z+Q==
+X-Gm-Message-State: AOAM53078+b/7QG6L1cZVtVdhPIZHoFn9dTp/S+htwlKqcCMy3gjItwQ
+	r0uU7yYMZ/Gke5jjOQT6vqbyLA==
+X-Google-Smtp-Source: ABdhPJzIyj9Iy4N1uxqwGYpMWMO0OJyduFeVaUOiTmtWRZ54buh8wb4SYvN4E2/li3qnJnKIcHvsSQ==
+X-Received: by 2002:a05:6a00:2442:b0:4fd:8b00:d2f with SMTP id d2-20020a056a00244200b004fd8b000d2fmr18493692pfj.39.1652722704178;
+        Mon, 16 May 2022 10:38:24 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 129-20020a620487000000b0050dc76281e0sm7075344pfe.186.2022.05.16.10.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 10:38:23 -0700 (PDT)
+From: Anand Gore <anand.gore@broadcom.com>
+To: linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v8 7/8] ARM: dts: Introduce HPE GXP Device tree
-Date: Mon, 16 May 2022 11:33:45 -0500
-Message-Id: <20220516163347.44890-7-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220516163347.44890-1-nick.hawkins@hpe.com>
-References: <20220516163347.44890-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: TwAdXS0TVTzBwDb89h84MqIc0CM73g8_
-X-Proofpoint-GUID: TwAdXS0TVTzBwDb89h84MqIc0CM73g8_
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-16_15,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 mlxscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- adultscore=0 clxscore=1015 spamscore=0 impostorscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205160092
+Cc: dan.beygelman@broadcom.com,
+	joel.peshkin@broadcom.com,
+	florian.fainelli@broadcom.com,
+	Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+	kursad.oney@broadcom.com,
+	William Zhang <william.zhang@broadcom.com>,
+	Anand Gore <anand.gore@broadcom.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH 0/3] Broadband SoC BCM63178.
+Date: Mon, 16 May 2022 10:38:05 -0700
+Message-Id: <20220516173808.1391482-1-anand.gore@broadcom.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000b7516505df247d11"
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+--000000000000b7516505df247d11
+Content-Transfer-Encoding: 8bit
 
-The HPE SoC is new to linux. A basic device tree layout with minimum
-required for linux to boot including a timer and watchdog support has
-been created.
 
-The dts file is empty at this point but will be updated in subsequent
-updates as board specific features are enabled.
+The initial support includes a bare-bone dts
+for quad core ARM v7  with a ARM PL011 uart. Linux kernel image can be
+built with the ARM defconfig.
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Anand Gore (3):
+  ARM: dts: add dts files for bcmbca soc 63178
+  dt-bindings: arm: add BCM63178 soc to binding document
+  MAINTAINERS: add bcm63178 to bcmbca arch entry
 
----
-v8:
-* No change
-v7:
-* Changed cache register area length from 0xFFC to 0x1000
-* Added space between "," in compatible list for the
-  hpe-bmc-dl360gen10.dts
-* Added aliases, chosen, and memory to hpe-bmc-dl360gen10.dts
-* Removed memory from hpe-gxp.dtsi
-v6:
-* Added cache-controller to CPU
-* Removed hpe,gxp-wdt and removed simple-mfd from hpe,gxp-timer
-* Added space after ',' in compatible lists in the dtsi containing more
-  than one item
-* Switched clock name iopclk to iop based on feedback from
-  hpe,gxp-timer.yaml
-* Added clock labels clock-0 and clock-1
-* Added dma-ranges to ahb
-* Changed subject to better match ones in the log
-* Changed description to fit 75 characters per line
-v5:
-* Fixed commit message to show previous changes
-* Fixed typo ehci -> echi
-v4:
-* Removed hpe,gxp-cpu-init as it was no longer necessary
-* Removed bootargs as requested
-* Removed empty ahb node
-* Moved reg after compatible, everywhere
-* Removed osc and memclk
-* Removed syscon@c00000f8 as it was not necessary for boot
-* Fixed Alphabetical issue in dts/Makefile
-* Added specific board binding for dl360gen10
-* Removed empty node
-* Added Accurate Clock Architecture
-* Fixed generic-echi and generic-ochi issues
-* Removed i2cg
-v3:
-* Fixed issues with warnings
-* Used proper patchset format
-v2:
-* Reduced size of dtsi to essential components
-* Followed the proper format for having a dtsi and
-  dts
----
- arch/arm/boot/dts/Makefile               |   2 +
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  26 +++++
- arch/arm/boot/dts/hpe-gxp.dtsi           | 127 +++++++++++++++++++++++
- 3 files changed, 155 insertions(+)
- create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
- create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 ++
+ MAINTAINERS                                   |   3 +-
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ arch/arm/boot/dts/bcm63178.dtsi               | 118 ++++++++++++++++++
+ arch/arm/boot/dts/bcm963178.dts               |  30 +++++
+ 5 files changed, 158 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm63178.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm963178.dts
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..293717719c70 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -255,6 +255,8 @@ dtb-$(CONFIG_ARCH_HISI) += \
- 	hi3519-demb.dtb
- dtb-$(CONFIG_ARCH_HIX5HD2) += \
- 	hisi-x5hd2-dkb.dtb
-+dtb-$(CONFIG_ARCH_HPE_GXP) += \
-+	hpe-bmc-dl360gen10.dtb
- dtb-$(CONFIG_ARCH_INTEGRATOR) += \
- 	integratorap.dtb \
- 	integratorap-im-pd1.dtb \
-diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-new file mode 100644
-index 000000000000..3a7382ce40ef
---- /dev/null
-+++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree file for HPE DL360Gen10
-+ */
-+
-+/include/ "hpe-gxp.dtsi"
-+
-+/ {
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	compatible = "hpe,gxp-dl360gen10", "hpe,gxp";
-+	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
-+
-+	aliases {
-+		serial0 = &uartc;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x40000000 0x20000000>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
-new file mode 100644
-index 000000000000..cf735b3c4f35
---- /dev/null
-+++ b/arch/arm/boot/dts/hpe-gxp.dtsi
-@@ -0,0 +1,127 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree file for HPE GXP
-+ */
-+
-+/dts-v1/;
-+/ {
-+	model = "Hewlett Packard Enterprise GXP BMC";
-+	compatible = "hpe,gxp";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			compatible = "arm,cortex-a9";
-+			reg = <0>;
-+			device_type = "cpu";
-+			next-level-cache = <&L2>;
-+		};
-+	};
-+
-+	clocks {
-+		pll: clock-0 {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <1600000000>;
-+		};
-+
-+		iopclk: clock-1 {
-+			compatible = "fixed-factor-clock";
-+			#clock-cells = <0>;
-+			clock-div = <4>;
-+			clock-mult = <1>;
-+			clocks = <&pll>;
-+		};
-+	};
-+
-+	axi {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+		dma-ranges;
-+
-+		L2: cache-controller@b0040000 {
-+			compatible = "arm,pl310-cache";
-+			reg = <0xb0040000 0x1000>;
-+			cache-unified;
-+			cache-level = <2>;
-+		};
-+
-+		ahb@c0000000 {
-+			compatible = "simple-bus";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xc0000000 0x30000000>;
-+			dma-ranges;
-+
-+			vic0: interrupt-controller@eff0000 {
-+				compatible = "arm,pl192-vic";
-+				reg = <0xeff0000 0x1000>;
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+
-+			vic1: interrupt-controller@80f00000 {
-+				compatible = "arm,pl192-vic";
-+				reg = <0x80f00000 0x1000>;
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+
-+			uarta: serial@e0 {
-+				compatible = "ns16550a";
-+				reg = <0xe0 0x8>;
-+				interrupts = <17>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			uartb: serial@e8 {
-+				compatible = "ns16550a";
-+				reg = <0xe8 0x8>;
-+				interrupts = <18>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			uartc: serial@f0 {
-+				compatible = "ns16550a";
-+				reg = <0xf0 0x8>;
-+				interrupts = <19>;
-+				interrupt-parent = <&vic0>;
-+				clock-frequency = <1846153>;
-+				reg-shift = <0>;
-+			};
-+
-+			usb0: usb@efe0000 {
-+				compatible = "hpe,gxp-ehci", "generic-ehci";
-+				reg = <0xefe0000 0x100>;
-+				interrupts = <7>;
-+				interrupt-parent = <&vic0>;
-+			};
-+
-+			st: timer@80 {
-+				compatible = "hpe,gxp-timer";
-+				reg = <0x80 0x16>;
-+				interrupts = <0>;
-+				interrupt-parent = <&vic0>;
-+				clocks = <&iopclk>;
-+				clock-names = "iop";
-+			};
-+
-+			usb1: usb@efe0100 {
-+				compatible = "hpe,gxp-ohci", "generic-ohci";
-+				reg = <0xefe0100 0x110>;
-+				interrupts = <6>;
-+				interrupt-parent = <&vic0>;
-+			};
-+		};
-+	};
-+};
 -- 
-2.17.1
+2.25.1
 
+
+--000000000000b7516505df247d11
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIO077lt9bDrt2xTMY/EbJXauPbnqkmTCiqlm5V1W
+jNsYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUxNjE3Mzgy
+NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQAJMhxfMQPXng5PRUa6WK29MwtTyHv31izOa5mkSndyuEBUv/iBgxvZuPoa
+ckxI+lm1TEG7xLhLyxVBLpd1/vf0AA+SybsZKvoSY/FUsFRcG5cyogY4lxnCzpsoHB5giHFm+07k
+qfpHXVs2TlwEXv3EVWzZUGCjoayu/7Wx/G/c9QqjOsvCWKbS1s+70zG6ecnlt2KFBmLheQw6hFYG
+xT5jFRfRMTjoN7HXzMTgd5RTd3pWLUgr00hRWtIrYP82LZtX+ooh5zFmLWsintPE6NJPOJ+vBrcT
+BxZArXInuHBSmayNyePbKncjNJlWlonmzsJ1vvlCE8erUCU8J90JK5TH
+--000000000000b7516505df247d11--
