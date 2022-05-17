@@ -1,115 +1,85 @@
-Return-Path: <SRS0=4ioG=VZ=benettiengineering.com=giulio.benetti@kernel.org>
+Return-Path: <SRS0=Ovlb=VZ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29277C433FE
-	for <soc@archiver.kernel.org>; Tue, 17 May 2022 13:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D53DC433F5
+	for <soc@archiver.kernel.org>; Tue, 17 May 2022 14:56:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E7352C34117; Tue, 17 May 2022 13:18:50 +0000 (UTC)
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
-	by smtp.kernel.org (Postfix) with ESMTP id 52BA3C385B8
-	for <soc@kernel.org>; Tue, 17 May 2022 13:18:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52BA3C385B8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=benettiengineering.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=benettiengineering.com
-Received: from [192.168.50.220] ([146.241.66.179])
-	by Aruba Outgoing Smtp  with ESMTPSA
-	id qx4zn3r0zcKJdqx50nLnQ1; Tue, 17 May 2022 15:17:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1652793461; bh=Im7bn8a6g50JK3DLRhOYV+yX/muSvMy/n6AfP0SgSe4=;
-	h=Date:MIME-Version:Subject:To:From:Content-Type;
-	b=OVztRY5e+Vo5wgr9R2CB53OXd7RMc+lqZ63p8dXb7vn42RVpWUbZxi/LCyGqI1Rli
-	 I32xy8js5rYtmVCwnqcS1/Aiebq2Mqmrf1j8y9FuwY+Kj4eGa93PlRMaFK/EZSzezH
-	 ppP3Kf74YsLBgdKoxPLcSHoX7hjZYnyApUcuudOxto316yvmBzBD7WFz4bAUxj+wZY
-	 nawiMBUinSxt/DomGEoB+TNWOrSdAnufRmBsXn5fB0BnwMw7rMZCROazheFY61UCdX
-	 RDpGMh8JAsYFebpsKiyax+Aif7H5RxnQm7D3PfTJgtto/17IIA5dkIeLefwc3RzOvk
-	 3VHKCrHTVNbvA==
-Message-ID: <5a01ca81-f49a-a6f5-c80c-4bb8ac5bead8@benettiengineering.com>
-Date: Tue, 17 May 2022 15:17:37 +0200
+	id 5827CC36AE5; Tue, 17 May 2022 14:56:44 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B9BD1C385B8;
+	Tue, 17 May 2022 14:56:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B9BD1C385B8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MatZr-1nJ1Nr1i7n-00cTRn; Tue, 17 May 2022 16:56:40 +0200
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2fefb051547so62085917b3.5;
+        Tue, 17 May 2022 07:56:39 -0700 (PDT)
+X-Gm-Message-State: AOAM531wO2MPFX4iEhN1geYaj90ZNulxkSNfh1uj3Ez5E6gOIRv3fzzS
+	Q/c2s6F7RqTaH/215B+rHrXooRdNWTrErVl0YZ8=
+X-Google-Smtp-Source: ABdhPJzfQfMq9H+I8M/viBf/bZGDpOu9d60f+7Mz7Q+Kz6SQ6MND8STnx2JgGosiR2GP3lJ5ACWXszxYKv0jdRmGk1s=
+X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
+ p6-20020a0dcd06000000b002f8f39c4cfcmr26196437ywd.495.1652799398796; Tue, 17
+ May 2022 07:56:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 05/15] dt-bindings: serial: fsl-lpuart: add i.MXRT1170
- compatible
-Content-Language: en-US
-To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+References: <20220407204115.34350-1-krzysztof.kozlowski@linaro.org> <YoOZ4TawKslvu01w@xhacker>
+In-Reply-To: <YoOZ4TawKslvu01w@xhacker>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Tue, 17 May 2022 15:56:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a34dz7Fkk3jbwNq45BRHMt9tGuO=r5NJDiAuMyX05xW6g@mail.gmail.com>
+Message-ID: <CAK8P3a34dz7Fkk3jbwNq45BRHMt9tGuO=r5NJDiAuMyX05xW6g@mail.gmail.com>
+Subject: Re: [RESEND PATCH] arm64: dts: synaptics: remove unused DTSI for AS370
+To: Jisheng Zhang <jszhang@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
- linus.walleij@linaro.org, daniel.lezcano@linaro.org, tglx@linutronix.de,
- arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
- abel.vesa@nxp.com, dev@lynxeye.de, marcel.ziswiler@toradex.com,
- tharvey@gateworks.com, leoyang.li@nxp.com, sebastian.reichel@collabora.com,
- cniedermaier@dh-electronics.com, clin@suse.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
- Rob Herring <robh@kernel.org>
-References: <20220517032802.451743-1-Mr.Bossman075@gmail.com>
- <20220517032802.451743-4-Mr.Bossman075@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220517032802.451743-4-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfJoC1DnIsmkpTb3OFMpYCrF2/0Umj6FeZvAjR9UVESNbar/h4sXktlDGKjA68llpEIhr8dv49CFeWUt1wXCB+UndhB9vvyX4ui1NQ7ZNcjTNhx/SRryN
- UiKVsbY8NjUC3PayD/agYb3dNN1eeWRK6mwnGwg2+uDvr4V9bd0PLNqNw+FhxwspAIcDq1uSapJC9GdTic0eXKg6bJ+IFaI9cmcqzuY76K2i6SSRQLa0IVz7
- zUtC4zQ6z/162ORDu0B2Lm5vq12JQyM/NXwwYCmj8XofSqbeNzvudmceTlmZUqwu1cJX+xuYgupDXkB4JwKykQK9KMCiZg3gHVDcsR5krp8x9eFxIZYJ8LBO
- j/zzH2GDz4i6upuJxJrZEjKv8dK44Y4fg8+freEhPRaGsM/23fmo9MwK3ESqihBf2SHE9PyQM1g7GnWJptxuvgTk4zOxQuPVTaCcSqtzS/FK0vmbAge0m5dP
- 94gREfP5ufET4qmbX9EeR7Nt0zglEAgyRxNjid9ZMAt7nItoWoDOgoQI7sMysWFVRzyEnbfnlQZkbu1QfvhhpFoUmXRNHsuxFEO48Bzjl1KUoCevReKUjUDO
- Ogznm483V8u+/rxSNWtbgBDuBpw14GAMKmsxJBVK1uAccrOv9UHsHboPebA6tdq+XVmtzgfTI1i/HRjEmBahbVJNfd48/OeVT2mX8hhXEd8l8L+oTUvRtytR
- G6tA4w3wW/lZFbE2e1BdmHg03ROsWCRcD1kymrnIBbSw/uf8BYE0b0vr2lpTYrrYQo3mbI27iGXFnbY7YW0GCPLlMOhwUkL5A/PuyYYtDM+8WajnHU3d7nAr
- h0rejpEE4lHTpmGU9wxBNdUWip8ETBoo139oiMRi0O7WE+NIxXq18gpL64zeureA1HVNuhdzyZ90W0R7GRqIlQJS9Lb83/MB81uQA2gofK/LHdLYWSECChaf
- G8KLH/X4Big95DopvE/AL185nNQOZq5bLogfPVnirfFj/M7/YuSdFXARFkBfiPa1tGXoX3ZwoZ2pMcmkoxCgU/+zKHcVpRnfvL4gYDlZKq/S11fLkWlJoAtH
- zzllnhCy7Z6zrIjSJnSV9fPuwUT4DNcySdDEOa3rPsuQpiiT4w6kfqfFTEFtPuMCUiQj6OXOFPGdeoeoxZ0No6Fq6wpBamCPvaNVgi/Of1anm316qOvpSFDE
- qNZpn2hIiXNm4w5anAJCkS4hqdkawiLYm26UbXKmecOMhgnB6JUG/GYQzJyY0lB/
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:1ytV9Ii5A1saBNLptj/K0jlQb2kElRmPU68ZXsAWhVRkix5Sup4
+ ZQLO1QB5Fb1O5f5UKaXxCy6zTJfkmKNARA9owc4YcPrfsZP/bKUYHQjKY3HZdDG6JvgrEt/
+ hv3cPskaS99bBnZ9xs+hvVeteveE60Pv/LLnaXWAW904p15QHfX0xJsMqMDFgCOfySFW/yC
+ UgGhIGA+wiPV19A5eLv/A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jjEmTRtrKxg=:/GNoVd29RCNVaLotrs0lVG
+ +fmCSdC599LZlyE/JRE10iPsSqMwmEzz3M1noLZ7bVrqW32IEjKUIDrwXkWNyb4SVORLAK4PF
+ 5jM+26ChaAS7pMrwfJnjA2jJw5rt1xOUjfXCcUYUNAvV50T6QB1HDuoirtrSG0NnFMQJxTjDc
+ aq9EwWkX9dah/r3MJwuBRUtwlHnhNZOUDyZIClvypEhZIKHpJRUWyOMK3Qe7NawPhxeJQ7adJ
+ Xu8E2SJbbx53P2QhWybpIsStlkL2r6kKZWJHQOkyZ9rs23QfT8p7YJk9pRZWpnbUpCYbgYsTa
+ ZtcMgFa/+6ipd3DaVuVIwJy5L7uOCsqxlo/L1xe0p9JPLnqfjEC6W/1/X8Ri59dA4ieuLwnxd
+ 3x3vo9IAMkbGcP1zDL3VMCf34zbekAU20IAobwmmDR3ojzc+Nr4ltdSEW6LrA5mLHjQCfUNRa
+ zrOaCQDXF4UbuV/iHHaClp9YPaxfV/geubXgkj15BTexUcc2U1mzv5XVtXbPbZVOhA1x+bsJo
+ xTa94bpd5uWli0fuGeJdCf1FZN4JFTRrwwCY7/NoJyRMgTdVyu6RdoBBbLfwN55aTnQ8Vze8f
+ tFeHchkJUlN3NmzfVtdUFIqQc25B4pcgqnj+1RBJDbywjpAZ+v5yjdtqeDSzPP9at/ZHw2PcT
+ 2kvx520q+6Sjo9oFUDqfoFymT37VqRpuXm9mpGpnghGXRa0+dGT8SmFaBj/jh/s3BFIB2DTIs
+ T9obXiFQtWa9M0o1l+magf7SN8QbSgdrdiOWqQ==
 
-Hi Jesse,
+On Tue, May 17, 2022 at 1:49 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Thu, Apr 07, 2022 at 10:41:15PM +0200, Krzysztof Kozlowski wrote:
+> > The as370.dtsi for Synaptics AS370 SoC does not have a user (DTS board
+> > file), is uncompilable and untestable.  It was added back in 2018.  No
+> > user appeared since that time, so assume it won't be added.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Acked-by: Rob Herring <robh@kernel.org>
+>
+> Acked-by: Jisheng Zhang <jszhang@kernel.org>
+>
+> Hi Arnd, Olof,
+>
+> This is the only one patch of berlin-soc for v5.19, Can you please
+> take it?
 
-On 17/05/22 05:27, Jesse Taube wrote:
-> Add i.MXRT1170 compatible string to Documentation.
-> 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
-> V1 -> V2:
->   - New commit to fix dtbs_check
-> V2 -> V3:
->   - Nothing done
-> ---
->   Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> index 30eaa62e1aed..d988d93eb5e6 100644
-> --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
-> @@ -21,6 +21,7 @@ properties:
->             - fsl,ls1028a-lpuart
->             - fsl,imx7ulp-lpuart
->             - fsl,imx8qxp-lpuart
-> +          - fsl,imx8qm-lpuart
+I had already applied when Krzysztof sent it, but forgot to send
+a notification about it.
 
-this ^^^ looks like a rebase left-over
-
-Kind regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
->             - fsl,imxrt1050-lpuart
->         - items:
->             - enum:
-> @@ -32,6 +33,9 @@ properties:
->                 - fsl,imx8qm-lpuart
->                 - fsl,imx8dxl-lpuart
->             - const: fsl,imx8qxp-lpuart
-> +      - items:
-> +          - const: fsl,imxrt1170-lpuart
-> +          - const: fsl,imxrt1050-lpuart
->   
->     reg:
->       maxItems: 1
-
+         Arnd
