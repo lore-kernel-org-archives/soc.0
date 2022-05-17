@@ -4,73 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 683DDC433F5
-	for <soc@archiver.kernel.org>; Tue, 17 May 2022 19:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 041DBC433F5
+	for <soc@archiver.kernel.org>; Tue, 17 May 2022 19:35:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2DD1FC34117; Tue, 17 May 2022 19:35:12 +0000 (UTC)
+	id C26FAC34118; Tue, 17 May 2022 19:35:43 +0000 (UTC)
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5C9E5C385B8;
-	Tue, 17 May 2022 19:35:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C9E5C385B8
+	by smtp.kernel.org (Postfix) with ESMTPS id D6BC6C385B8;
+	Tue, 17 May 2022 19:35:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6BC6C385B8
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=sntech.de
 Received: from wf0416.dip.tu-dresden.de ([141.76.181.160] helo=phil.localnet)
 	by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <heiko@sntech.de>)
-	id 1nr2yK-0004D1-My; Tue, 17 May 2022 21:35:08 +0200
+	id 1nr2yr-0004DI-1C; Tue, 17 May 2022 21:35:41 +0200
 From: Heiko Stuebner <heiko@sntech.de>
 To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip driver changes for 5.19 #2
-Date: Tue, 17 May 2022 21:35:07 +0200
-Message-ID: <6613768.ejJDZkT8p0@phil>
+Subject: [GIT PULL] Rockchip dts32 changes for 5.19 #2
+Date: Tue, 17 May 2022 21:35:39 +0200
+Message-ID: <5916377.R56niFO833@phil>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
-Hi Arnd, Kevin, Olof,
+The following changes since commit 53070cfa8228bdc64148d1e8c76c9f97ed0dfd62:
 
-some additional things turned up (fixes) or got ready since the first round
-of pull requests for drivers and both flavors of devicetrees.
-
-So depending on the schedule it would be nice to have them still in 5.19.
-But if it's to late for some, that's also no problem and I would then simply
-move them to 5.20.
-
-All new tags (here + following mails) of course go on top of the
-previous tags.
-
-So if timing allow, please pull.
-
-Thanks
-Heiko
-
-
-The following changes since commit add9f6f30e54b5c07e7a0260cda459ef1d9646b7:
-
-  soc: rockchip: Fix compile-testing SoC drivers (2022-04-30 15:06:14 +0200)
+  ARM: dts: rockchip: rename pcfg_pull_default node name on rk3036 (2022-04-11 02:16:33 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.19-rockchip-drivers2
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v5.19-rockchip-dts32-2
 
-for you to fetch changes up to 9b59588d8be91c96bfb0371e912ceb4f16315dbf:
+for you to fetch changes up to 36b1b58523b531f60721d42910e4d6fe447c90d5:
 
-  soc: rockchip: Fix refcount leak in rockchip_grf_init (2022-05-17 10:49:37 +0200)
-
-----------------------------------------------------------------
-Refcount leak for a used of-node in the grf-init.
+  ARM: dts: rockchip: add clocks property to cru node rk3228 (2022-05-17 21:08:20 +0200)
 
 ----------------------------------------------------------------
-Miaoqian Lin (1):
-      soc: rockchip: Fix refcount leak in rockchip_grf_init
+Amba and clock fixes to conform better to actual dt-bindings.
 
- drivers/soc/rockchip/grf.c | 2 ++
- 1 file changed, 2 insertions(+)
+----------------------------------------------------------------
+Johan Jonker (6):
+      ARM: dts: rockchip: add clocks property to cru node rv1108
+      ARM: dts: rockchip: Remove "amba" bus nodes from rv1108
+      ARM: dts: rockchip: add clocks property to cru node rk3288
+      ARM: dts: rockchip: add clocks property to cru node rk3066a/rk3188
+      ARM: dts: rockchip: add clocks property to cru node rk3036
+      ARM: dts: rockchip: add clocks property to cru node rk3228
+
+ arch/arm/boot/dts/rk3036.dtsi  |  2 ++
+ arch/arm/boot/dts/rk3066a.dtsi |  3 ++-
+ arch/arm/boot/dts/rk3188.dtsi  |  3 ++-
+ arch/arm/boot/dts/rk322x.dtsi  |  2 ++
+ arch/arm/boot/dts/rk3288.dtsi  |  2 ++
+ arch/arm/boot/dts/rv1108.dtsi  | 31 +++++++++++++------------------
+ 6 files changed, 23 insertions(+), 20 deletions(-)
 
 
 
