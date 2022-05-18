@@ -1,151 +1,87 @@
-Return-Path: <SRS0=HefB=V2=walle.cc=michael@kernel.org>
+Return-Path: <SRS0=Wkif=V2=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EFB7C433EF
-	for <soc@archiver.kernel.org>; Wed, 18 May 2022 14:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A9F1C433F5
+	for <soc@archiver.kernel.org>; Wed, 18 May 2022 14:52:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E9785C385A9; Wed, 18 May 2022 14:16:01 +0000 (UTC)
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+	id E991FC385AA; Wed, 18 May 2022 14:52:47 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F0978C385A5
-	for <soc@kernel.org>; Wed, 18 May 2022 14:15:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F0978C385A5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=walle.cc
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ssl.serverraum.org (Postfix) with ESMTPSA id 9D2BB2222E;
-	Wed, 18 May 2022 16:15:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-	t=1652883350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SSJAzEBLTF3cVsOUo7/c6hXKoi6NTUJx6rBT9EjOfwk=;
-	b=FgO7IsmjnS6x1oPNQ1KEGDU2vZvEMPA0z7mSqHidCrBEBT8XMJDzDLLZPQFSOQGvLfA/Hr
-	Vyc9GHX4vbYSIVvYbrrHaGYlJ/AFMLEIHFq6QOaD4LHlEyBk32J/rTI+2FpAneA46eoWNR
-	vaOjVpk5RM4nZB9IbZqOfpu6zWrBnV8=
-From: Michael Walle <michael@walle.cc>
-To: Russell King <linux@armlinux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org,
-	Michael Walle <michael@walle.cc>
-Subject: [PATCH] ARM: configs: enable support for Kontron KSwitch D10
-Date: Wed, 18 May 2022 16:15:42 +0200
-Message-Id: <20220518141542.531148-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+	by smtp.kernel.org (Postfix) with ESMTPS id 7D8D1C385A9
+	for <soc@kernel.org>; Wed, 18 May 2022 14:52:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D8D1C385A9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MjgfT-1nTa8F1BdL-00lER8 for <soc@kernel.org>; Wed, 18 May 2022 16:52:44
+ +0200
+Received: by mail-yb1-f174.google.com with SMTP id p139so4059184ybc.11
+        for <soc@kernel.org>; Wed, 18 May 2022 07:52:44 -0700 (PDT)
+X-Gm-Message-State: AOAM5338Pb59uTc1zaG2t+REZNL1THUNRJwhHVMG0isimV8yfuC9qb/c
+	vl8TFl3UYnetx3/6VzV12RwN2LMQuBA87K6sE7k=
+X-Google-Smtp-Source: ABdhPJxP7e/nEbt8Sasz1ATmrn7JsoRoyZGZHFy6NnNuI493m7yBWtmmAYkI1h0VyER/USaUS+yft+DAg0EBkOlvd/U=
+X-Received: by 2002:a25:5e09:0:b0:64d:8543:627d with SMTP id
+ s9-20020a255e09000000b0064d8543627dmr8502ybb.394.1652885563133; Wed, 18 May
+ 2022 07:52:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220518141542.531148-1-michael@walle.cc>
+In-Reply-To: <20220518141542.531148-1-michael@walle.cc>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 18 May 2022 15:52:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a01B2uEP7=AkVBG5FYdfMHyReFP=120Ay3+s2EV9kO5Uw@mail.gmail.com>
+Message-ID: <CAK8P3a01B2uEP7=AkVBG5FYdfMHyReFP=120Ay3+s2EV9kO5Uw@mail.gmail.com>
+Subject: Re: [PATCH] ARM: configs: enable support for Kontron KSwitch D10
+To: Michael Walle <michael@walle.cc>
+List-Id: <soc.lore.kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:zeZK6QCEjYKJSVmCzNVVmuw0SYhXZAEsbgjSI7TVH3/0+4yGZCs
+ /Tq59Nmwtdfi8TiTyn7EHtcxqaW48Cq2m1WkbqN5YgTUdMshBjJmOcuZTqr5Dgqj/c2zMu2
+ 6jbZ/Bdxlspn0zgrHoYcEMKANHvn4G5Ojh2PYM4mUHN8GysSkTsMjMBj/Aao8twsxJNJWHa
+ JWy13uYpkp5UMfOL7eBJw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:miCUDY+0XUQ=:qB8b+VtGsC9+5WHyj0RZJ+
+ 7eeCg59AXDBUCGOCdfuppYUAxYI6BFukPwIASXCYLA/GrUDzMs2D4Hw9m/t3x1ro91twa/1+f
+ 1/tOl1t14aUC2rPMVlpPGC33fA3csnLETyklF7b7rtRf2XepiynYNSgpHl9/BlBA1SIOKm0HC
+ nEFKJt42ZR9+PWNeUUZaz4rhgExyPc2QzJa8i6ZR8MvC4iWi/kJVNFrrKU58KuiLJmIC+q2G2
+ XEvgVbFS8ywfGLJhzy1FDtnPw9gbGbzcUGCdq7MTQU3D2kUkt9r/Yxgq8q2G6uJavsDXIH+OZ
+ xB8mbGtAsTIkq/i9i4uQpxhqU+TDgNiJsJHz6cWeA/CoD3DkesPswIVHEYQ+7LbQZLQCjmz5f
+ Cd+HGS1oAZWWzZYbHBjvJXlxo5lMT1H/gy8OUXY+H+9UQQcQv2Oqz00cZJwoIzt/oyg30EzFG
+ xYVvjoIJ4bEGj3q9gPlKlzZixrQOUwIkCmK1jAxfSGZX1C7Rgo6bATa3an5GirNgRqGBqXGwm
+ iL54/6JHrMkLmB1A6P8hfWbAe0dlHZ96zDv/Yqyc/VHpgbkkEGI1Eojzt44J+5EC/E1TTZEer
+ 50AgXhXsjdFhbf90SSCUlhrWFK6lbHj/zgOv8WDF+ZkFqCq0ukJi8oo1KYPGSYUknptbhwhZ8
+ pbuqC59QDaRaALOlA+KxM/v7OvPiVLOsKM9WM8LtT+VeJY4vJuA/0bC2n6lo1TCamsrXI1Por
+ I0CFYw4XecBj0ypfNvD1rDMwdbeImtKXqGuDWEjEv3qLvEHxVO4Cl+sZkTKl9+Aaa2fhGU6Zr
+ p6gykgi0u8QlVkLOQ9ZAwdGedEm7/NV4APqztuGgh4d0q1UGfPdnt2VBoK7a7v659E9F3widM
+ 5YViIjyQ61L/IY0N8ANnTFz/MUGXYyUbM6NXEF/ck=
 
-The Kontron KSwitch D10 is based on a Microchip LAN9668 SoC. It is a
-managed ethernet network switch with either 8 copper ports or 6 copper
-ports and 2 SFP cages.
+On Wed, May 18, 2022 at 3:15 PM Michael Walle <michael@walle.cc> wrote:
+>
+> The Kontron KSwitch D10 is based on a Microchip LAN9668 SoC. It is a
+> managed ethernet network switch with either 8 copper ports or 6 copper
+> ports and 2 SFP cages.
+>
+> Enable all required kconfig symbols, either as module where possible or
+> compiled-in where it is not possible.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> FWIW, there will be a board in our lab in KernelCI using this config.
 
-Enable all required kconfig symbols, either as module where possible or
-compiled-in where it is not possible.
+The patch looks ok to me, but normally I'd expect it to go through the
+platform maintainer tree unless there is a reason not to. Adding the at91
+maintainers to Cc here.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-FWIW, there will be a board in our lab in KernelCI using this config.
+It's also a bit late for 5.19, but if everyone agrees, I can add the patch
+to the arm/late branch.
 
- arch/arm/configs/multi_v7_defconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 547918170f1f..a858ba971340 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -17,6 +17,7 @@ CONFIG_SOC_SAMA5D2=y
- CONFIG_SOC_SAMA5D3=y
- CONFIG_SOC_SAMA5D4=y
- CONFIG_SOC_SAMA7G5=y
-+CONFIG_SOC_LAN966=y
- CONFIG_ARCH_BCM=y
- CONFIG_ARCH_BCM_CYGNUS=y
- CONFIG_ARCH_BCM_HR2=y
-@@ -277,6 +278,7 @@ CONFIG_MV643XX_ETH=y
- CONFIG_MVNETA=y
- CONFIG_PXA168_ETH=m
- CONFIG_KS8851=y
-+CONFIG_LAN966X_SWITCH=m
- CONFIG_R8169=y
- CONFIG_SH_ETH=y
- CONFIG_SMSC911X=y
-@@ -287,6 +289,7 @@ CONFIG_TI_CPSW=y
- CONFIG_TI_CPSW_SWITCHDEV=y
- CONFIG_TI_CPTS=y
- CONFIG_XILINX_EMACLITE=y
-+CONFIG_SFP=m
- CONFIG_BROADCOM_PHY=y
- CONFIG_ICPLUS_PHY=y
- CONFIG_MARVELL_PHY=y
-@@ -294,6 +297,7 @@ CONFIG_AT803X_PHY=y
- CONFIG_ROCKCHIP_PHY=y
- CONFIG_DP83867_PHY=y
- CONFIG_USB_BRCMSTB=m
-+CONFIG_MDIO_MSCC_MIIM=m
- CONFIG_USB_PEGASUS=y
- CONFIG_USB_RTL8152=m
- CONFIG_USB_LAN78XX=m
-@@ -430,6 +434,7 @@ CONFIG_I2C_CROS_EC_TUNNEL=m
- CONFIG_I2C_SLAVE_EEPROM=y
- CONFIG_SPI=y
- CONFIG_SPI_ATMEL=m
-+CONFIG_SPI_ATMEL_QUADSPI=m
- CONFIG_SPI_BCM2835=y
- CONFIG_SPI_BCM2835AUX=y
- CONFIG_SPI_CADENCE=y
-@@ -459,6 +464,8 @@ CONFIG_SPMI=y
- CONFIG_PTP_1588_CLOCK=y
- CONFIG_PINCTRL_AS3722=y
- CONFIG_PINCTRL_STMFX=y
-+CONFIG_PINCTRL_MICROCHIP_SGPIO=y
-+CONFIG_PINCTRL_OCELOT=y
- CONFIG_PINCTRL_PALMAS=y
- CONFIG_PINCTRL_OWL=y
- CONFIG_PINCTRL_S500=y
-@@ -517,6 +524,7 @@ CONFIG_CHARGER_TPS65090=y
- CONFIG_SENSORS_ARM_SCMI=y
- CONFIG_SENSORS_ASPEED=m
- CONFIG_SENSORS_IIO_HWMON=y
-+CONFIG_SENSORS_LAN966X=m
- CONFIG_SENSORS_LM90=y
- CONFIG_SENSORS_LM95245=y
- CONFIG_SENSORS_NTC_THERMISTOR=m
-@@ -1018,6 +1026,7 @@ CONFIG_CROS_EC_SPI=m
- CONFIG_COMMON_CLK_MAX77686=y
- CONFIG_COMMON_CLK_RK808=m
- CONFIG_COMMON_CLK_SCMI=y
-+CONFIG_COMMON_CLK_LAN966X=y
- CONFIG_COMMON_CLK_S2MPS11=m
- CONFIG_CLK_RASPBERRYPI=y
- CONFIG_COMMON_CLK_QCOM=y
-@@ -1145,6 +1154,7 @@ CONFIG_PWM_SUN4I=y
- CONFIG_PWM_TEGRA=y
- CONFIG_PWM_VT8500=y
- CONFIG_KEYSTONE_IRQ=y
-+CONFIG_RESET_MCHP_SPARX5=y
- CONFIG_PHY_SUN4I_USB=y
- CONFIG_PHY_SUN9I_USB=y
- CONFIG_PHY_HIX5HD2_SATA=y
-@@ -1152,6 +1162,7 @@ CONFIG_PHY_BERLIN_SATA=y
- CONFIG_PHY_BERLIN_USB=y
- CONFIG_PHY_BRCM_USB=m
- CONFIG_PHY_MMP3_USB=m
-+CONFIG_PHY_LAN966X_SERDES=m
- CONFIG_PHY_CPCAP_USB=m
- CONFIG_PHY_QCOM_APQ8064_SATA=m
- CONFIG_PHY_QCOM_USB_HS=y
--- 
-2.30.2
-
+       Arnd
