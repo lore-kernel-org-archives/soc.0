@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AE8EC433EF
-	for <soc@archiver.kernel.org>; Wed, 18 May 2022 19:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77BA9C433F5
+	for <soc@archiver.kernel.org>; Wed, 18 May 2022 20:02:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 224CCC34113; Wed, 18 May 2022 19:52:09 +0000 (UTC)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	id 5D9A4C34113; Wed, 18 May 2022 20:02:05 +0000 (UTC)
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 66374C385A5;
-	Wed, 18 May 2022 19:52:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 66374C385A5
+	by smtp.kernel.org (Postfix) with ESMTPS id 8DF2BC385A5;
+	Wed, 18 May 2022 20:02:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8DF2BC385A5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id q4so2751195plr.11;
-        Wed, 18 May 2022 12:52:08 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id h186so3101203pgc.3;
+        Wed, 18 May 2022 13:02:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GxedodxFdhzBp/djqzdFc+iR49snd3BMQcMfxH7E1es=;
-        b=oGW30oQA8EfMQTWzEn0KKd/uxqPc/Adj+fl4afn9rjC4o60ZKMKqyikXU6hFqpkvJu
-         LywN+CZa7sdKbi/gzXt/o02bkpcgutJcXQ5bn5OvBBu3JDUHzTO8iGsXEtfv9nmUj5bj
-         oq293MIfLn0yuer2iqwK9D27KLAVNhrRlbkk+J1dnA2QKciUivHbQVJNvnjfTIGedp43
-         mdD6nEBo5eecG7isM6Bern8ehdnRHC54gGXZXOjGtxGn8Diuj+dH5JJ/L1CShDWEEUDG
-         jPgzYEvMTHE4nJ3Zj8tO72t8xuXlXVh4AUKEsy3pFLO3tfzpsXKwDjDSVjzWuZAk+oaa
-         hN5A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uqfL2s98jH1KESGEpAYrkz2to9znSXHw/vJwfe+b5DQ=;
+        b=YPVYxFEAxbX9obB0FWsDGjJXZ/xxu0R1tZCQ++6jkOoiO9v559/ECYd0+e/O2SnKIk
+         DbDtz5cgKxPzpnH+uyTvilV8s6IbwTs4inX3uNdgLPM27TDRwtSHqzOkWpM4ch8gryT6
+         AndZRKGF8eXDvaO0E1zoLXJPNO6Ebt5P/rxP9ZuAXcMrgVMTjvDJF86e5CEcHX8KrPw/
+         zt7qqK+70VExBruwYUmRAm7vJNPaBCZEsnDJLYVUSF6gdpChcgPc4WS0zJ2AW2KogD1E
+         d1OEEibKD/Kdsl7l97xR9MOMSbaCdf0VI39+UCXcEtWW6z7FeXiHJvzIqe/8nYP79cFt
+         BP4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GxedodxFdhzBp/djqzdFc+iR49snd3BMQcMfxH7E1es=;
-        b=GpAfWFi4GO9n5bkSWs0eIeVp1jsTzPmwo5Gly3exovd1DIFVECtKDOtVFF6XbtBBUL
-         CsjXWUA6lPNt46Cuid2VND22nLoi3aEtVARXgULlKWQeuF/MMLEM7JU4A2G4Ir4OkDm/
-         4Q5ZR6R5eTlJj94ZZjclhfZ05rT0Y73I7AHwRK2+D8F+k3JcdSBuLYAAW3sT2Oeg8QNS
-         yAZGYqN1rA2KvEGDBEBzm00vMocrJA8t7kA3JKNaw1PL/0G9eIXMmxcIZmOw6yU4WeCc
-         0s2L8csp2CbR7gizN3cLo+BFqI9wdwboFTUyZrOv5WoS0DiM8hTNJPtGLj74nx3iWv/z
-         YkkA==
-X-Gm-Message-State: AOAM530F6iMILqxsdl/Zt3SY4tZu41PJgjCQaro7DFzQfqmtWIramgOU
-	X3UcQVrVVVNHyqXdDlDM7vM=
-X-Google-Smtp-Source: ABdhPJwlTrFcINrBaDMLYRh7G8hnJCLplthRg9PYNGxxRUQ1yNoXG+hHIs7A3NfPM4OYbdiygLUJHg==
-X-Received: by 2002:a17:90b:3851:b0:1dc:4f70:1cb with SMTP id nl17-20020a17090b385100b001dc4f7001cbmr1652449pjb.167.1652903527767;
-        Wed, 18 May 2022 12:52:07 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id e14-20020a17090301ce00b0016194c1df58sm2171449plh.105.2022.05.18.12.52.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 12:52:06 -0700 (PDT)
-Message-ID: <2cfbf1a0-2cef-057d-dce4-13ee50c626d7@gmail.com>
-Date: Wed, 18 May 2022 12:52:04 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH RESEND 0/2] arm/arm64: dts: Enable device-tree overlay
- support for RPi devices
-Content-Language: en-US
-To: Aurelien Jarno <aurelien@aurel32.net>, Arnd Bergmann <arnd@arndb.de>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
- Rob Herring <robh+dt@kernel.org>, bcm-kernel-feedback-list@broadcom.com
-List-Id: <soc.lore.kernel.org>
-Cc: Stefan Wahren <stefan.wahren@i2se.com>,
- Nicolas Saenz Julienne <nsaenz@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, devicetree@vger.kernel.org,
- Phil Elwell <phil@raspberrypi.com>, linux-arm-kernel@lists.infradead.org,
- linux-rpi-kernel@lists.infradead.org, soc@kernel.org
-References: <20220427233607.1225419-1-aurelien@aurel32.net>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uqfL2s98jH1KESGEpAYrkz2to9znSXHw/vJwfe+b5DQ=;
+        b=lMk+85fDuKi7LmcqM7nGn5HauZHen5jEGyIGGolWeg1MbdFkJuNXKmx4qqDVOaG3R0
+         oWF/whGJ/2Awr7LBuQLiE6gGYmoUUDKd0l9Gj0dSH26ORl0z+zCNIl6frQCUKX+PFmLS
+         WYsksXjPVTmjUGolzjZ5kf0OlG44xv04XNEp+NYPNiHsE8seCAMtWSZxSYWBMEdBfKan
+         FylH29vwzimThSavPjo2/H9oFhG0BGj4BpOAphn8HfEMJ76vISK+eWHQ+eOjR9CXr3k5
+         vy68dYeKi/fcfKTNhnJNgxSZ9LwJJ5X1JYyb2Cj/zFm8sdl0UkMKT3wrdq2C5b1YoR1K
+         wX8w==
+X-Gm-Message-State: AOAM530D1TTnWlrzVvEEg0QNYfgNJewFox+jfi+n1aGKnGIiR3kNoqzT
+	w8jK4DBrCg4XeqAqV/HF8U40TzleiSs=
+X-Google-Smtp-Source: ABdhPJyr9iaeXPnDbGCFTOGnkaD+p+nR2I1pLBS5V7XERkYPJllYvgGbkhSs6RXFm2TYStgbhdRVbQ==
+X-Received: by 2002:a65:6919:0:b0:3f6:111c:42d0 with SMTP id s25-20020a656919000000b003f6111c42d0mr881634pgq.449.1652904123979;
+        Wed, 18 May 2022 13:02:03 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id e11-20020a17090a9a8b00b001df4c27e5a5sm3961678pjp.35.2022.05.18.13.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 13:02:03 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220427233607.1225419-1-aurelien@aurel32.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: bcm-kernel-feedback-list@broadcom.com,
+	Anand Gore <anand.gore@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org
+List-Id: <soc.lore.kernel.org>
+Cc: dan.beygelman@broadcom.com,
+	joel.peshkin@broadcom.com,
+	florian.fainelli@broadcom.com,
+	kursad.oney@broadcom.com,
+	William Zhang <william.zhang@broadcom.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: Re: [PATCH 1/3] ARM: dts: add dts files for bcmbca soc 63178
+Date: Wed, 18 May 2022 13:02:01 -0700
+Message-Id: <20220518200201.323063-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220516103801.1.If6875f219ec3c728983c6aec498ef67b43cef8b7@changeid>
+References: <20220516173808.1391482-1-anand.gore@broadcom.com> <20220516103801.1.If6875f219ec3c728983c6aec498ef67b43cef8b7@changeid>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-
-
-On 4/27/2022 4:36 PM, Aurelien Jarno wrote:
-> This patchset changes the generation of the Raspberry Pi devices DTB
-> files to improve the support for out-of-tree device-tree overlays, like
-> it has recently been done for the Nvidia SoCs.
+On Mon, 16 May 2022 10:38:06 -0700, Anand Gore <anand.gore@broadcom.com> wrote:
+> Add dts for ARMv7 based broadband SoC BCM63178. bcm63178.dtsi is the
+> SoC description dts header and bcm963178.dts is a simple dts file for
+> Broadcom BCM963178 Reference board that only enable the UART port.
 > 
-> I personally only need that for arm64, but I have added a similar patch
-> to do the same on arm.
+> Signed-off-by: Anand Gore <anand.gore@broadcom.com>
+> ---
 
-This looks good to me, Rob, does that approach work for you?
--- 
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
 Florian
