@@ -1,99 +1,130 @@
-Return-Path: <SRS0=Zd8H=V2=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D13EC433EF
-	for <soc@archiver.kernel.org>; Wed, 18 May 2022 16:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E47C1C433EF
+	for <soc@archiver.kernel.org>; Wed, 18 May 2022 17:19:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 16E75C385A9; Wed, 18 May 2022 16:05:57 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ED05DC385A5
-	for <soc@kernel.org>; Wed, 18 May 2022 16:05:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ED05DC385A5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652889954; x=1684425954;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3euCKGvKwyKLln5ErCYPgdSqPR/sbrIxcH0pwTWC3p0=;
-  b=jDcObtfeNNlA4n3XV+oR4U2xOPCS9kN9jj/IAJ6BmjfWOERuulvYODfj
-   C8hHrVfp/+7/coEyWFQ5K50C+7F6iuZOzX7qv32w4ftZjJXFlOtVlvyer
-   tHlRBI47a+iaezxnyGTVQpm4Z8Cs/QaKjWzeP15SnenGcJUBYdN2QrvF7
-   Mtj5ThTqP1Y1cpluBRZ/358Jp2Ru+EZSvFh5V8tQlaxkASeulCxAG0RkG
-   XLr/plxUtL6ECQcp6nLcQDzWrfYVkvSidtw0yIhf5vbe9NVOdaF07rtNn
-   /0FcK7HO9P2btADSs5g9zM5VpSdZbXRkNE77QJqR7hJnzMVWXVfEe2Vop
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="96333410"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 May 2022 09:00:53 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 18 May 2022 09:00:53 -0700
-Received: from [10.12.73.39] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 18 May 2022 09:00:51 -0700
-Message-ID: <b97221e1-dd43-e2e0-5c37-f86162768f00@microchip.com>
-Date: Wed, 18 May 2022 18:00:50 +0200
+	id A8458C34118; Wed, 18 May 2022 17:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91863C34100
+	for <soc@kernel.org>; Wed, 18 May 2022 17:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1652894373;
+	bh=rikXJjN5EtlfiBOVji9JEeOLRL+AN6S5Eetf2ixOMWY=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=VRADUatEBpID9HzfIQCI1H+s0VAXEAgAk6VukmxalrsMh0KoIoOkfFN3AtkztRmYh
+	 AzJ6uIiyxSa98mKnB0paKmsJYdSp+Eo0hba3q5hEqFsvBmI6201fufUSccinTgfE9t
+	 ISHtWXDAykOYc4cJ5rkdVl2+KPJH1iyEDhHZTLACGXWxiNlCB8S/0ng+BpHRMO1M99
+	 8GviZ8Y9x9adMjmr6qPkdCS0co8UgP9SHziqgkHM2CTrS12/jqYmZsKLuMbFUrd/a2
+	 02kNwozcn1qYHO5fiGtJNP/fdqomo9Iup9ZYDsum6M/jBOAop5Maa2Dknd5DKPXEbx
+	 iNoCj/iFLMjzw==
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f83983782fso31892097b3.6
+        for <soc@kernel.org>; Wed, 18 May 2022 10:19:33 -0700 (PDT)
+X-Gm-Message-State: AOAM530VmW8OCNCYhRTmU2ec6+BVOKjnyqq7Q4irknSe0P/J0wDfbTig
+	FX9Wt1kl1Pa0ejg0gnQYPug2k2YspJs3SCPRQEY=
+X-Google-Smtp-Source: ABdhPJxwgKGDrpmkRJiq1bujruDF+qD3hJ2C494pqO6Ecb7fVBLcvKVeATWg29enH5ZT2dEx4WHbRq1N2IHh7RCCkeA=
+X-Received: by 2002:a81:950:0:b0:2fe:d88e:5529 with SMTP id
+ 77-20020a810950000000b002fed88e5529mr465175ywj.320.1652894372512; Wed, 18 May
+ 2022 10:19:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] ARM: configs: enable support for Kontron KSwitch D10
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Michael Walle <michael@walle.cc>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Wed, 18 May 2022 18:19:33 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3V3voFgDz+yQji9PpVNs=QOj8MEtdaFf1U3JrLSG6SmQ@mail.gmail.com>
+Message-ID: <CAK8P3a3V3voFgDz+yQji9PpVNs=QOj8MEtdaFf1U3JrLSG6SmQ@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for v5.18, part 4
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-CC: Russell King <linux@armlinux.org.uk>, Olof Johansson <olof@lixom.net>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@microchip.com>, Horatiu Vultur - M31836
-	<Horatiu.Vultur@microchip.com>
-References: <20220518141542.531148-1-michael@walle.cc>
- <CAK8P3a01B2uEP7=AkVBG5FYdfMHyReFP=120Ay3+s2EV9kO5Uw@mail.gmail.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <CAK8P3a01B2uEP7=AkVBG5FYdfMHyReFP=120Ay3+s2EV9kO5Uw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Arnd, Michael,
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-On 18/05/2022 at 16:52, Arnd Bergmann wrote:
-> On Wed, May 18, 2022 at 3:15 PM Michael Walle <michael@walle.cc> wrote:
->>
->> The Kontron KSwitch D10 is based on a Microchip LAN9668 SoC. It is a
->> managed ethernet network switch with either 8 copper ports or 6 copper
->> ports and 2 SFP cages.
->>
->> Enable all required kconfig symbols, either as module where possible or
->> compiled-in where it is not possible.
->>
->> Signed-off-by: Michael Walle <michael@walle.cc>
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+are available in the Git repository at:
 
->> ---
->> FWIW, there will be a board in our lab in KernelCI using this config.
-> 
-> The patch looks ok to me, but normally I'd expect it to go through the
-> platform maintainer tree unless there is a reason not to. Adding the at91
-> maintainers to Cc here.
-> 
-> It's also a bit late for 5.19, but if everyone agrees, I can add the patch
-> to the arm/late branch.
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git arm/fixes
 
-If it's possible for you Arnd, I do agree that you take it in the 
-arm/late branch.
+for you to fetch changes up to 609a097f5f0687539490625523ec3075b7d404b8:
 
-Thanks, best regards,
-   Nicolas
+  Merge tag 'v5.18-rockchip-dtsfixes1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/fixes (2022-05-12 22:33:17 +0200)
 
--- 
-Nicolas Ferre
+-----
+ARM: SoC fixes for v5.18, part 4
+
+The SoC bug fixes have calmed down sufficiently, there is one minor update
+for the MAINTAINERS file, and few bug fixes for dts descriptions:
+
+ - Updates to the BananaPi R2-Pro (rk3568) dts to match production
+   hardware rather than the prototype version.
+
+ - Qualcomm sm8250 soundwire gets disabled on some machines to avoid crashes
+
+ - A number of aspeed SoC specific fixes, addressing incorrect pin cotrol
+   settings, some values in the romed8hm board, and a revert for an
+   accidental removal of a DT node
+----
+I'm sorry for the lack of a signed tag this time, I'm travelling at
+the moment and
+forgot to tag it first. The top commit in the branch is tagged with my
+usual key,
+and I can send the signed tag when I'm back on Saturday if you prefer to wait.
+
+       Arnd
+----------------------------------------------------------------
+Arnd Bergmann (4):
+      Merge tag 'maintainers-signed-take2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
+arm/fixes
+      Merge tag 'aspeed-v5.18-fixes' of
+git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-5.18' of
+git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
+arm/fixes
+      Merge tag 'v5.18-rockchip-dtsfixes1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/fixes
+
+Dmitry Baryshkov (1):
+      arm64: dts: qcom: sm8250: don't enable rx/tx macro by default
+
+Frank Wunderlich (2):
+      arm64: dts: rockchip: Change io-domains of bpi-r2-pro
+      arm64: dts: rockchip: Add gmac1 and change network settings of bpi-r2-pro
+
+Howard Chiu (1):
+      ARM: dts: aspeed: Add video engine to g6
+
+Jae Hyun Yoo (5):
+      ARM: dts: aspeed-g6: remove FWQSPID group in pinctrl dtsi
+      pinctrl: pinctrl-aspeed-g6: remove FWQSPID group in pinctrl
+      dt-bindings: pinctrl: aspeed-g6: remove FWQSPID group
+      dt-bindings: pinctrl: aspeed-g6: add FWQSPI function/group
+      ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
+
+Johnny Huang (2):
+      pinctrl: pinctrl-aspeed-g6: add FWQSPI function-group
+      ARM: dts: aspeed-g6: add FWQSPI group in pinctrl dtsi
+
+Rajendra Nayak (1):
+      MAINTAINERS: omap: remove me as a maintainer
+
+Zev Weiss (2):
+      ARM: dts: aspeed: romed8hm3: Add lm25066 sense resistor values
+      ARM: dts: aspeed: romed8hm3: Fix GPIOB0 name
+
+ .../bindings/pinctrl/aspeed,ast2600-pinctrl.yaml   |  4 +--
+ MAINTAINERS                                        |  1 -
+ arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts  |  4 ++-
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi           | 10 +++---
+ arch/arm/boot/dts/aspeed-g6.dtsi                   | 10 ++++++
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            | 12 +++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |  4 +++
+ arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 40 +++++++++++++++++++---
+ drivers/pinctrl/aspeed/pinctrl-aspeed-g6.c         | 17 +++++----
+ 9 files changed, 79 insertions(+), 23 deletions(-)
