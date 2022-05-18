@@ -1,130 +1,88 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=aCAB=V2=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E47C1C433EF
-	for <soc@archiver.kernel.org>; Wed, 18 May 2022 17:19:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AE8EC433EF
+	for <soc@archiver.kernel.org>; Wed, 18 May 2022 19:52:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A8458C34118; Wed, 18 May 2022 17:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91863C34100
-	for <soc@kernel.org>; Wed, 18 May 2022 17:19:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1652894373;
-	bh=rikXJjN5EtlfiBOVji9JEeOLRL+AN6S5Eetf2ixOMWY=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=VRADUatEBpID9HzfIQCI1H+s0VAXEAgAk6VukmxalrsMh0KoIoOkfFN3AtkztRmYh
-	 AzJ6uIiyxSa98mKnB0paKmsJYdSp+Eo0hba3q5hEqFsvBmI6201fufUSccinTgfE9t
-	 ISHtWXDAykOYc4cJ5rkdVl2+KPJH1iyEDhHZTLACGXWxiNlCB8S/0ng+BpHRMO1M99
-	 8GviZ8Y9x9adMjmr6qPkdCS0co8UgP9SHziqgkHM2CTrS12/jqYmZsKLuMbFUrd/a2
-	 02kNwozcn1qYHO5fiGtJNP/fdqomo9Iup9ZYDsum6M/jBOAop5Maa2Dknd5DKPXEbx
-	 iNoCj/iFLMjzw==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f83983782fso31892097b3.6
-        for <soc@kernel.org>; Wed, 18 May 2022 10:19:33 -0700 (PDT)
-X-Gm-Message-State: AOAM530VmW8OCNCYhRTmU2ec6+BVOKjnyqq7Q4irknSe0P/J0wDfbTig
-	FX9Wt1kl1Pa0ejg0gnQYPug2k2YspJs3SCPRQEY=
-X-Google-Smtp-Source: ABdhPJxwgKGDrpmkRJiq1bujruDF+qD3hJ2C494pqO6Ecb7fVBLcvKVeATWg29enH5ZT2dEx4WHbRq1N2IHh7RCCkeA=
-X-Received: by 2002:a81:950:0:b0:2fe:d88e:5529 with SMTP id
- 77-20020a810950000000b002fed88e5529mr465175ywj.320.1652894372512; Wed, 18 May
- 2022 10:19:32 -0700 (PDT)
+	id 224CCC34113; Wed, 18 May 2022 19:52:09 +0000 (UTC)
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 66374C385A5;
+	Wed, 18 May 2022 19:52:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 66374C385A5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id q4so2751195plr.11;
+        Wed, 18 May 2022 12:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GxedodxFdhzBp/djqzdFc+iR49snd3BMQcMfxH7E1es=;
+        b=oGW30oQA8EfMQTWzEn0KKd/uxqPc/Adj+fl4afn9rjC4o60ZKMKqyikXU6hFqpkvJu
+         LywN+CZa7sdKbi/gzXt/o02bkpcgutJcXQ5bn5OvBBu3JDUHzTO8iGsXEtfv9nmUj5bj
+         oq293MIfLn0yuer2iqwK9D27KLAVNhrRlbkk+J1dnA2QKciUivHbQVJNvnjfTIGedp43
+         mdD6nEBo5eecG7isM6Bern8ehdnRHC54gGXZXOjGtxGn8Diuj+dH5JJ/L1CShDWEEUDG
+         jPgzYEvMTHE4nJ3Zj8tO72t8xuXlXVh4AUKEsy3pFLO3tfzpsXKwDjDSVjzWuZAk+oaa
+         hN5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GxedodxFdhzBp/djqzdFc+iR49snd3BMQcMfxH7E1es=;
+        b=GpAfWFi4GO9n5bkSWs0eIeVp1jsTzPmwo5Gly3exovd1DIFVECtKDOtVFF6XbtBBUL
+         CsjXWUA6lPNt46Cuid2VND22nLoi3aEtVARXgULlKWQeuF/MMLEM7JU4A2G4Ir4OkDm/
+         4Q5ZR6R5eTlJj94ZZjclhfZ05rT0Y73I7AHwRK2+D8F+k3JcdSBuLYAAW3sT2Oeg8QNS
+         yAZGYqN1rA2KvEGDBEBzm00vMocrJA8t7kA3JKNaw1PL/0G9eIXMmxcIZmOw6yU4WeCc
+         0s2L8csp2CbR7gizN3cLo+BFqI9wdwboFTUyZrOv5WoS0DiM8hTNJPtGLj74nx3iWv/z
+         YkkA==
+X-Gm-Message-State: AOAM530F6iMILqxsdl/Zt3SY4tZu41PJgjCQaro7DFzQfqmtWIramgOU
+	X3UcQVrVVVNHyqXdDlDM7vM=
+X-Google-Smtp-Source: ABdhPJwlTrFcINrBaDMLYRh7G8hnJCLplthRg9PYNGxxRUQ1yNoXG+hHIs7A3NfPM4OYbdiygLUJHg==
+X-Received: by 2002:a17:90b:3851:b0:1dc:4f70:1cb with SMTP id nl17-20020a17090b385100b001dc4f7001cbmr1652449pjb.167.1652903527767;
+        Wed, 18 May 2022 12:52:07 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id e14-20020a17090301ce00b0016194c1df58sm2171449plh.105.2022.05.18.12.52.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 12:52:06 -0700 (PDT)
+Message-ID: <2cfbf1a0-2cef-057d-dce4-13ee50c626d7@gmail.com>
+Date: Wed, 18 May 2022 12:52:04 -0700
 MIME-Version: 1.0
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Wed, 18 May 2022 18:19:33 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3V3voFgDz+yQji9PpVNs=QOj8MEtdaFf1U3JrLSG6SmQ@mail.gmail.com>
-Message-ID: <CAK8P3a3V3voFgDz+yQji9PpVNs=QOj8MEtdaFf1U3JrLSG6SmQ@mail.gmail.com>
-Subject: [GIT PULL] ARM: SoC fixes for v5.18, part 4
-To: Linus Torvalds <torvalds@linux-foundation.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH RESEND 0/2] arm/arm64: dts: Enable device-tree overlay
+ support for RPi devices
+Content-Language: en-US
+To: Aurelien Jarno <aurelien@aurel32.net>, Arnd Bergmann <arnd@arndb.de>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Rob Herring <robh+dt@kernel.org>, bcm-kernel-feedback-list@broadcom.com
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Stefan Wahren <stefan.wahren@i2se.com>,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, devicetree@vger.kernel.org,
+ Phil Elwell <phil@raspberrypi.com>, linux-arm-kernel@lists.infradead.org,
+ linux-rpi-kernel@lists.infradead.org, soc@kernel.org
+References: <20220427233607.1225419-1-aurelien@aurel32.net>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220427233607.1225419-1-aurelien@aurel32.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-are available in the Git repository at:
+On 4/27/2022 4:36 PM, Aurelien Jarno wrote:
+> This patchset changes the generation of the Raspberry Pi devices DTB
+> files to improve the support for out-of-tree device-tree overlays, like
+> it has recently been done for the Nvidia SoCs.
+> 
+> I personally only need that for arm64, but I have added a similar patch
+> to do the same on arm.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git arm/fixes
-
-for you to fetch changes up to 609a097f5f0687539490625523ec3075b7d404b8:
-
-  Merge tag 'v5.18-rockchip-dtsfixes1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/fixes (2022-05-12 22:33:17 +0200)
-
------
-ARM: SoC fixes for v5.18, part 4
-
-The SoC bug fixes have calmed down sufficiently, there is one minor update
-for the MAINTAINERS file, and few bug fixes for dts descriptions:
-
- - Updates to the BananaPi R2-Pro (rk3568) dts to match production
-   hardware rather than the prototype version.
-
- - Qualcomm sm8250 soundwire gets disabled on some machines to avoid crashes
-
- - A number of aspeed SoC specific fixes, addressing incorrect pin cotrol
-   settings, some values in the romed8hm board, and a revert for an
-   accidental removal of a DT node
-----
-I'm sorry for the lack of a signed tag this time, I'm travelling at
-the moment and
-forgot to tag it first. The top commit in the branch is tagged with my
-usual key,
-and I can send the signed tag when I'm back on Saturday if you prefer to wait.
-
-       Arnd
-----------------------------------------------------------------
-Arnd Bergmann (4):
-      Merge tag 'maintainers-signed-take2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
-arm/fixes
-      Merge tag 'aspeed-v5.18-fixes' of
-git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-5.18' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
-arm/fixes
-      Merge tag 'v5.18-rockchip-dtsfixes1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/fixes
-
-Dmitry Baryshkov (1):
-      arm64: dts: qcom: sm8250: don't enable rx/tx macro by default
-
-Frank Wunderlich (2):
-      arm64: dts: rockchip: Change io-domains of bpi-r2-pro
-      arm64: dts: rockchip: Add gmac1 and change network settings of bpi-r2-pro
-
-Howard Chiu (1):
-      ARM: dts: aspeed: Add video engine to g6
-
-Jae Hyun Yoo (5):
-      ARM: dts: aspeed-g6: remove FWQSPID group in pinctrl dtsi
-      pinctrl: pinctrl-aspeed-g6: remove FWQSPID group in pinctrl
-      dt-bindings: pinctrl: aspeed-g6: remove FWQSPID group
-      dt-bindings: pinctrl: aspeed-g6: add FWQSPI function/group
-      ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
-
-Johnny Huang (2):
-      pinctrl: pinctrl-aspeed-g6: add FWQSPI function-group
-      ARM: dts: aspeed-g6: add FWQSPI group in pinctrl dtsi
-
-Rajendra Nayak (1):
-      MAINTAINERS: omap: remove me as a maintainer
-
-Zev Weiss (2):
-      ARM: dts: aspeed: romed8hm3: Add lm25066 sense resistor values
-      ARM: dts: aspeed: romed8hm3: Fix GPIOB0 name
-
- .../bindings/pinctrl/aspeed,ast2600-pinctrl.yaml   |  4 +--
- MAINTAINERS                                        |  1 -
- arch/arm/boot/dts/aspeed-bmc-asrock-romed8hm3.dts  |  4 ++-
- arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi           | 10 +++---
- arch/arm/boot/dts/aspeed-g6.dtsi                   | 10 ++++++
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts            | 12 +++++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |  4 +++
- arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 40 +++++++++++++++++++---
- drivers/pinctrl/aspeed/pinctrl-aspeed-g6.c         | 17 +++++----
- 9 files changed, 79 insertions(+), 23 deletions(-)
+This looks good to me, Rob, does that approach work for you?
+-- 
+Florian
