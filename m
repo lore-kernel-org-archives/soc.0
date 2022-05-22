@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794CBC4321E
-	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D165C352AA
+	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 59CF3C341E3; Sun, 22 May 2022 15:51:48 +0000 (UTC)
+	id F2CCEC34118; Sun, 22 May 2022 15:51:48 +0000 (UTC)
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
 	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4BCE2C36AE7;
+	by smtp.kernel.org (Postfix) with ESMTPS id 1B5AAC385AA;
 	Sun, 22 May 2022 15:51:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BCE2C36AE7
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B5AAC385AA
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nuvoton.com
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9au031646;
-	Sun, 22 May 2022 18:51:09 +0300
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp3dS031630;
+	Sun, 22 May 2022 18:51:03 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id 94C7263A4A; Sun, 22 May 2022 18:51:09 +0300 (IDT)
+	id AAAB063A4A; Sun, 22 May 2022 18:51:03 +0300 (IDT)
 From: Tomer Maimon <tmaimon77@gmail.com>
 To: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -39,66 +39,156 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 16/19] arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
-Date: Sun, 22 May 2022 18:50:43 +0300
-Message-Id: <20220522155046.260146-17-tmaimon77@gmail.com>
+Subject: [PATCH v1 07/19] dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+Date: Sun, 22 May 2022 18:50:34 +0300
+Message-Id: <20220522155046.260146-8-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This adds support for the Nuvoton NPCM8XX Board Management
-controller (BMC) SoC family.
-
-The NPCM8XX based quad-core Cortex-A35 ARMv8 architecture.
+Nuvoton Arbel BMC NPCM7XX contains an integrated clock controller, which
+generates and supplies clocks to all modules within the BMC.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- MAINTAINERS                  |  3 +++
- arch/arm64/Kconfig.platforms | 11 +++++++++++
- 2 files changed, 14 insertions(+)
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   | 68 +++++++++++++++++++
+ .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 ++++++++++++++
+ 2 files changed, 118 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d6d879cb0afd..bb81dda94372 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2431,9 +2431,12 @@ F:	Documentation/devicetree/bindings/*/*npcm*
- F:	Documentation/devicetree/bindings/arm/npcm/*
- F:	arch/arm/boot/dts/nuvoton-npcm*
- F:	arch/arm/mach-npcm/
-+F:	arch/arm64/boot/dts/nuvoton/
- F:	drivers/*/*npcm*
- F:	drivers/*/*/*npcm*
- F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
-+F:	include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
-+F:	include/dt-bindings/clock/nuvoton,npcm8xx-reset.h
- 
- ARM/NUVOTON WPCM450 ARCHITECTURE
- M:	Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 30b123cde02c..1767027ee9e8 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -203,6 +203,17 @@ config ARCH_MXC
- 	  This enables support for the ARMv8 based SoCs in the
- 	  NXP i.MX family.
- 
-+config ARCH_NPCM
-+	bool "Nuvoton NPCM Architecture"
-+	select PINCTRL
-+	select GPIOLIB
-+	select NPCM7XX_TIMER
-+	select RESET_CONTROLLER
-+	select MFD_SYSCON
-+	help
-+	  General support for NPCM8xx BMC (Arbel).
-+	  Nuvoton NPCM8xx BMC based on the Cortex A35.
+diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+new file mode 100644
+index 000000000000..f305c7c7eaf0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- config ARCH_QCOM
- 	bool "Qualcomm Platforms"
- 	select GPIOLIB
++title: Nuvoton NPCM8XX Clock Controller Binding
++
++maintainers:
++  - Tomer Maimon <tmaimon77@gmail.com>
++
++description: |
++  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
++  generates and supplies clocks to all modules within the BMC.
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm845-clk
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description:
++      specify the external clocks used by the NPCM8XX clock module.
++    items:
++      - description: 25M reference clock
++      - description: CPU reference clock
++      - description: MC reference clock
++
++  clock-names:
++    description:
++      specify the external clocks names used by the NPCM8XX clock module.
++    items:
++      - const: refclk
++      - const: sysbypck
++      - const: mcbypck
++
++  '#clock-cells':
++    const: 1
++    description:
++      See include/dt-bindings/clock/nuvoton,npcm8xx-clock.h for the full
++      list of NPCM8XX clock IDs.
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++
++additionalProperties: false
++
++examples:
++  # Clock Control Module node:
++  - |
++
++    ahb {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        clk: clock-controller@f0801000 {
++            compatible = "nuvoton,npcm845-clk";
++            reg = <0x0 0xf0801000 0x0 0x1000>;
++            #clock-cells = <1>;
++        };
++    };
++
++...
+diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+new file mode 100644
+index 000000000000..d76f606bf88b
+--- /dev/null
++++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Nuvoton NPCM8xx Clock Generator binding
++ * clock binding number for all clocks supportted by nuvoton,npcm8xx-clk
++ *
++ * Copyright (C) 2021 Nuvoton Technologies tomer.maimon@nuvoton.com
++ *
++ */
++
++#ifndef __DT_BINDINGS_CLOCK_NPCM8XX_H
++#define __DT_BINDINGS_CLOCK_NPCM8XX_H
++
++#define NPCM8XX_CLK_CPU		0
++#define NPCM8XX_CLK_GFX_PIXEL	1
++#define NPCM8XX_CLK_MC		2
++#define NPCM8XX_CLK_ADC		3
++#define NPCM8XX_CLK_AHB		4
++#define NPCM8XX_CLK_TIMER	5
++#define NPCM8XX_CLK_UART	6
++#define NPCM8XX_CLK_UART2	7
++#define NPCM8XX_CLK_MMC		8
++#define NPCM8XX_CLK_SPI3	9
++#define NPCM8XX_CLK_PCI		10
++#define NPCM8XX_CLK_AXI		11
++#define NPCM8XX_CLK_APB4	12
++#define NPCM8XX_CLK_APB3	13
++#define NPCM8XX_CLK_APB2	14
++#define NPCM8XX_CLK_APB1	15
++#define NPCM8XX_CLK_APB5	16
++#define NPCM8XX_CLK_CLKOUT	17
++#define NPCM8XX_CLK_GFX		18
++#define NPCM8XX_CLK_SU		19
++#define NPCM8XX_CLK_SU48	20
++#define NPCM8XX_CLK_SDHC	21
++#define NPCM8XX_CLK_SPI0	22
++#define NPCM8XX_CLK_SPI1	23
++#define NPCM8XX_CLK_SPIX	24
++#define NPCM8XX_CLK_RG		25
++#define NPCM8XX_CLK_RCP		26
++#define NPCM8XX_CLK_PRE_ADC	27
++#define NPCM8XX_CLK_ATB		28
++#define NPCM8XX_CLK_PRE_CLK	29
++#define NPCM8XX_CLK_TH		30
++#define NPCM8XX_CLK_REFCLK	31
++#define NPCM8XX_CLK_SYSBYPCK	32
++#define NPCM8XX_CLK_MCBYPCK	33
++
++#define NPCM8XX_NUM_CLOCKS	(NPCM8XX_CLK_MCBYPCK + 1)
++
++#endif
 -- 
 2.33.0
 
