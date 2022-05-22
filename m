@@ -1,135 +1,73 @@
-Return-Path: <SRS0=+qjS=V6=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=A6KV=V6=nuvoton.com=Tomer.Maimon@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9B8BC433F5
-	for <soc@archiver.kernel.org>; Sun, 22 May 2022 07:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97C99C433FE
+	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 75CFAC34113; Sun, 22 May 2022 07:26:02 +0000 (UTC)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 88644C36AEF; Sun, 22 May 2022 15:51:46 +0000 (UTC)
+Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5F05AC385AA
-	for <soc@kernel.org>; Sun, 22 May 2022 07:26:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5F05AC385AA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id r3so6993570ljd.7
-        for <soc@kernel.org>; Sun, 22 May 2022 00:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bClLLZOEkS78eDSYlE4FkbbbTc9pKAb4suzwGlPbP/4=;
-        b=Pd29BUuNBc4QsRgP1tKdp1G1GgkzRidqQef41FKtVLSrI5aD8SZ0OrH3tUKB8lk3sC
-         oc9YmBYMBz4+5nmJJ7+fH1EDkq2O7NGD0IE7gQym2BP5SlB94djSmL94e8JGEFuSIp+r
-         JTRE+eoyDUYxYSN1cu9znFtWz0rWu6/Za5/i6bR7ARoDZii0pkVAONour0fw29BrMrLc
-         FgKZpSpMG9hrC6ipB3dlmT7goF+nec+FGn6+/6/yCIwYFQHxhZe1B/052n//lvRog4tM
-         nkspfVimR0ryGPb7ZfzjREYi5iJB6PDwkfqT1brDmUQGLeKfoO6sPyjpmachD6AJgDFK
-         u2Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bClLLZOEkS78eDSYlE4FkbbbTc9pKAb4suzwGlPbP/4=;
-        b=saUpGw69jTAvyz6rLOhO7HraaLSX6FxbZTZGXn62NK8bJUZadyCrBoc9qWbmCRtFwY
-         Lw+Kq3TfervAUdD6vH2gC2hZCDurhAh2WpovNasjZhr45Cz2Bt3MfjRByecUOwfJ9oXd
-         /xfjtpimw1Z7NpSe036WiafOzKri3boS2+BPuKtLtPpE8fgfO0U7NOhXjCivmcv71tgK
-         eNGNz7ji6/Y5NfpfoCeA2ka5DG3rxaE8jdPUN5yJ5jNgIDbIqWCkyr8fqVYw96EYUZ/e
-         2nflnrPOlv8G2afHpxNEW0ltDesoRYaHw0KDbAibdgIxkJMUFROHwQWhuQP2ca4QGBeZ
-         kupQ==
-X-Gm-Message-State: AOAM5334Rdw1lAEatuQQCUxrj4RGV4eKED4g+tDY1gDl5ATB4Dhdv5kp
-	lT9xU8kRnWH0KionLDKI6lbD7w==
-X-Google-Smtp-Source: ABdhPJyUKgT4NniB9xIrosW/5q1kq5Gm8Fu3ANqd0BioQHnQjIyo3fdiH42XXWwZSu3o1vg6zz4/yA==
-X-Received: by 2002:a2e:6d12:0:b0:253:e3b9:a56e with SMTP id i18-20020a2e6d12000000b00253e3b9a56emr2788678ljc.103.1653204359468;
-        Sun, 22 May 2022 00:25:59 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id n10-20020a2e86ca000000b00253dffc82b5sm876688ljj.71.2022.05.22.00.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 00:25:58 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 3547DC34118;
+	Sun, 22 May 2022 15:51:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3547DC34118
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nuvoton.com
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp0Oo031613;
+	Sun, 22 May 2022 18:51:00 +0300
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+	id 4D28F63A4E; Sun, 22 May 2022 18:51:00 +0300 (IDT)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+        bjorn.andersson@linaro.org, geert+renesas@glider.be,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Imre Kaloz <kaloz@openwrt.org>,
-	Krzysztof Halasa <khalasa@piap.pl>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] ARM: ixp4xx: Consolidate Kconfig fixing issue
-Date: Sun, 22 May 2022 09:23:56 +0200
-Message-Id: <20220522072356.34062-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.3
+Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1 04/19] tty: serial: 8250: Add NPCM845 UART support
+Date: Sun, 22 May 2022 18:50:31 +0300
+Message-Id: <20220522155046.260146-5-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The IXP4xx Kconfig we ended up with for mach-ixp4xx creates
-as kismet warning:
+Add Nuvoton BMC NPCM845 UART support.
+The NPCM845 uses the same UART as the NPCM750.
 
-   WARNING: unmet direct dependencies detected for GPIO_IXP4XX
-     Depends on [n]: GPIOLIB [=y] && HAS_IOMEM [=y] && ARCH_IXP4XX [=y] && OF [=n]
-     Selected by [y]:
-     - ARCH_IXP4XX [=y] && <choice>
-
-This is because it is possible to select ARCH_IXP4XX witout
-OF while that selects the GPIO driver that now depends on
-OF.
-
-Fix this by creating a single ARCH_IXP4XX kconfig that selects
-USE_OF.
-
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Imre Kaloz <kaloz@openwrt.org>
-Cc: Krzysztof Halasa <khalasa@piap.pl>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
-SoC folks: please apply this directly for fixes for
-v5.19.
----
- arch/arm/mach-ixp4xx/Kconfig | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+ drivers/tty/serial/8250/8250_of.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-ixp4xx/Kconfig b/arch/arm/mach-ixp4xx/Kconfig
-index dc6ea3c2e3ed..cb46802f5ce5 100644
---- a/arch/arm/mach-ixp4xx/Kconfig
-+++ b/arch/arm/mach-ixp4xx/Kconfig
-@@ -3,28 +3,17 @@ menuconfig ARCH_IXP4XX
- 	bool "IXP4xx-based platforms"
- 	depends on ARCH_MULTI_V5
- 	depends on CPU_BIG_ENDIAN
-+	select ARM_APPENDED_DTB # Old Redboot bootloaders deployed
- 	select CPU_XSCALE
- 	select GPIO_IXP4XX
- 	select GPIOLIB
- 	select FORCE_PCI
-+	select I2C
-+	select I2C_IOP3XX
- 	select IXP4XX_IRQ
- 	select IXP4XX_TIMER
- 	select USB_EHCI_BIG_ENDIAN_DESC
- 	select USB_EHCI_BIG_ENDIAN_MMIO
--	help
--	  Support for Intel's IXP4XX (XScale) family of processors.
--
--if ARCH_IXP4XX
--
--config MACH_IXP4XX_OF
--	bool
--	prompt "Device Tree IXP4xx boards"
--	default y
--	select ARM_APPENDED_DTB # Old Redboot bootloaders deployed
--	select I2C
--	select I2C_IOP3XX
- 	select USE_OF
- 	help
--	  Say 'Y' here to support Device Tree-based IXP4xx platforms.
--
--endif
-+	  Support for Intel's IXP4XX (XScale) family of processors.
+diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
+index be8626234627..b155c596e614 100644
+--- a/drivers/tty/serial/8250/8250_of.c
++++ b/drivers/tty/serial/8250/8250_of.c
+@@ -333,6 +333,7 @@ static const struct of_device_id of_platform_serial_table[] = {
+ 	{ .compatible = "ti,da830-uart", .data = (void *)PORT_DA830, },
+ 	{ .compatible = "nuvoton,wpcm450-uart", .data = (void *)PORT_NPCM, },
+ 	{ .compatible = "nuvoton,npcm750-uart", .data = (void *)PORT_NPCM, },
++	{ .compatible = "nuvoton,npcm845-uart", .data = (void *)PORT_NPCM, },
+ 	{ /* end of list */ },
+ };
+ MODULE_DEVICE_TABLE(of, of_platform_serial_table);
 -- 
-2.35.3
+2.33.0
 
