@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 680EAC433FE
-	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DCAC38A2B
+	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4DF14C34113; Sun, 22 May 2022 15:51:49 +0000 (UTC)
+	id 0D063C34116; Sun, 22 May 2022 15:51:50 +0000 (UTC)
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
 	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 62E7CC341C0;
+	by smtp.kernel.org (Postfix) with ESMTPS id 45B84C3411A;
 	Sun, 22 May 2022 15:51:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 62E7CC341C0
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45B84C3411A
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nuvoton.com
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9aw031646;
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9Yc031650;
 	Sun, 22 May 2022 18:51:09 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id C47B663A4B; Sun, 22 May 2022 18:51:09 +0300 (IDT)
+	id 8524863A4B; Sun, 22 May 2022 18:51:09 +0300 (IDT)
 From: Tomer Maimon <tmaimon77@gmail.com>
 To: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -39,51 +39,35 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 19/19] arm64: defconfig: Add Nuvoton NPCM family support
-Date: Sun, 22 May 2022 18:50:46 +0300
-Message-Id: <20220522155046.260146-20-tmaimon77@gmail.com>
+Subject: [PATCH v1 15/19] dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+Date: Sun, 22 May 2022 18:50:42 +0300
+Message-Id: <20220522155046.260146-16-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable basic drivers for NPCM8XX booting up support:
-Architecture, Clock, and WD.
+Add a compatible string for Nuvoton BMC NPCM845
+global control registers (GCR).
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 50aa3d75ab4f..42ad8ac85b99 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -49,6 +49,7 @@ CONFIG_ARCH_MEDIATEK=y
- CONFIG_ARCH_MESON=y
- CONFIG_ARCH_MVEBU=y
- CONFIG_ARCH_MXC=y
-+CONFIG_ARCH_NPCM=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
-@@ -617,6 +618,7 @@ CONFIG_RENESAS_WDT=y
- CONFIG_RENESAS_RZG2LWDT=y
- CONFIG_UNIPHIER_WATCHDOG=y
- CONFIG_BCM2835_WDT=y
-+CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_MFD_ALTERA_SYSMGR=y
- CONFIG_MFD_BD9571MWV=y
- CONFIG_MFD_AXP20X_I2C=y
-@@ -997,6 +999,7 @@ CONFIG_COMMON_CLK_FSL_SAI=y
- CONFIG_COMMON_CLK_S2MPS11=y
- CONFIG_COMMON_CLK_PWM=y
- CONFIG_COMMON_CLK_VC5=y
-+CONFIG_COMMON_CLK_NPCM8XX=y
- CONFIG_COMMON_CLK_BD718XX=m
- CONFIG_CLK_RASPBERRYPI=m
- CONFIG_CLK_IMX8MM=y
+diff --git a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
+index aad7c85e787f..94e72f25b331 100644
+--- a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
++++ b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
+@@ -21,6 +21,7 @@ properties:
+       - enum:
+           - nuvoton,wpcm450-gcr
+           - nuvoton,npcm750-gcr
++          - nuvoton,npcm845-gcr
+       - const: syscon
+       - const: simple-mfd
+ 
 -- 
 2.33.0
 
