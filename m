@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DCAC38A2B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3622C38A2C
 	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0D063C34116; Sun, 22 May 2022 15:51:50 +0000 (UTC)
+	id 8800BC34118; Sun, 22 May 2022 15:51:50 +0000 (UTC)
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
 	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 45B84C3411A;
+	by smtp.kernel.org (Postfix) with ESMTPS id 5DF12C36AEA;
 	Sun, 22 May 2022 15:51:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 45B84C3411A
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5DF12C36AEA
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nuvoton.com
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9Yc031650;
-	Sun, 22 May 2022 18:51:09 +0300
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp5Ms031636;
+	Sun, 22 May 2022 18:51:05 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id 8524863A4B; Sun, 22 May 2022 18:51:09 +0300 (IDT)
+	id C53D563A4A; Sun, 22 May 2022 18:51:05 +0300 (IDT)
 From: Tomer Maimon <tmaimon77@gmail.com>
 To: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -39,34 +39,42 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 15/19] dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
-Date: Sun, 22 May 2022 18:50:42 +0300
-Message-Id: <20220522155046.260146-16-tmaimon77@gmail.com>
+Subject: [PATCH v1 09/19] dt-bindings: reset: add syscon property
+Date: Sun, 22 May 2022 18:50:36 +0300
+Message-Id: <20220522155046.260146-10-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a compatible string for Nuvoton BMC NPCM845
-global control registers (GCR).
+Describe syscon property that handles GCR registers
+in Nuvoton BMC NPCM reset driver.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
-index aad7c85e787f..94e72f25b331 100644
---- a/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
-+++ b/Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
-@@ -21,6 +21,7 @@ properties:
-       - enum:
-           - nuvoton,wpcm450-gcr
-           - nuvoton,npcm750-gcr
-+          - nuvoton,npcm845-gcr
-       - const: syscon
-       - const: simple-mfd
+diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+index 17b7a6a43a29..cb1613092ee7 100644
+--- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
++++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+@@ -4,6 +4,7 @@ Required properties:
+ - compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
+ - reg : specifies physical base address and size of the register.
+ - #reset-cells: must be set to 2
++- syscon: a phandle to access GCR registers.
+ 
+ Optional property:
+ - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
+@@ -16,6 +17,7 @@ Example:
+ 		compatible = "nuvoton,npcm750-reset";
+ 		reg = <0xf0801000 0x70>;
+ 		#reset-cells = <2>;
++		syscon = <&gcr>;
+ 		nuvoton,sw-reset-number = <2>;
+ 	};
  
 -- 
 2.33.0
