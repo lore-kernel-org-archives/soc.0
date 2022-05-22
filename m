@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 376ECC38A04
-	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794CBC4321E
+	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1C4F2C385AA; Sun, 22 May 2022 15:51:49 +0000 (UTC)
+	id 59CF3C341E3; Sun, 22 May 2022 15:51:48 +0000 (UTC)
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
 	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 22391C34113;
+	by smtp.kernel.org (Postfix) with ESMTPS id 4BCE2C36AE7;
 	Sun, 22 May 2022 15:51:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22391C34113
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BCE2C36AE7
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nuvoton.com
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFou6V031610;
-	Sun, 22 May 2022 18:50:56 +0300
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9au031646;
+	Sun, 22 May 2022 18:51:09 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id AEDA963A4B; Sun, 22 May 2022 18:50:56 +0300 (IDT)
+	id 94C7263A4A; Sun, 22 May 2022 18:51:09 +0300 (IDT)
 From: Tomer Maimon <tmaimon77@gmail.com>
 To: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -39,9 +39,9 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 01/19] dt-bindings: timer: npcm: Add npcm845 compatible string
-Date: Sun, 22 May 2022 18:50:28 +0300
-Message-Id: <20220522155046.260146-2-tmaimon77@gmail.com>
+Subject: [PATCH v1 16/19] arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+Date: Sun, 22 May 2022 18:50:43 +0300
+Message-Id: <20220522155046.260146-17-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
@@ -49,32 +49,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add a compatible string for Nuvoton BMC NPCM845 timer.
+This adds support for the Nuvoton NPCM8XX Board Management
+controller (BMC) SoC family.
+
+The NPCM8XX based quad-core Cortex-A35 ARMv8 architecture.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- .../devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml        | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS                  |  3 +++
+ arch/arm64/Kconfig.platforms | 11 +++++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml b/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
-index 0cbc26a72151..737af78ad70c 100644
---- a/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
-+++ b/Documentation/devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml
-@@ -8,12 +8,14 @@ title: Nuvoton NPCM7xx timer
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d6d879cb0afd..bb81dda94372 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2431,9 +2431,12 @@ F:	Documentation/devicetree/bindings/*/*npcm*
+ F:	Documentation/devicetree/bindings/arm/npcm/*
+ F:	arch/arm/boot/dts/nuvoton-npcm*
+ F:	arch/arm/mach-npcm/
++F:	arch/arm64/boot/dts/nuvoton/
+ F:	drivers/*/*npcm*
+ F:	drivers/*/*/*npcm*
+ F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
++F:	include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
++F:	include/dt-bindings/clock/nuvoton,npcm8xx-reset.h
  
- maintainers:
-   - Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-+  - Tomer Maimon <tmaimon77@gmail.com>
+ ARM/NUVOTON WPCM450 ARCHITECTURE
+ M:	Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 30b123cde02c..1767027ee9e8 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -203,6 +203,17 @@ config ARCH_MXC
+ 	  This enables support for the ARMv8 based SoCs in the
+ 	  NXP i.MX family.
  
- properties:
-   compatible:
-     enum:
-       - nuvoton,wpcm450-timer  # for Hermon WPCM450
-       - nuvoton,npcm750-timer  # for Poleg NPCM750
-+      - nuvoton,npcm845-timer  # for Arbel NPCM845
- 
-   reg:
-     maxItems: 1
++config ARCH_NPCM
++	bool "Nuvoton NPCM Architecture"
++	select PINCTRL
++	select GPIOLIB
++	select NPCM7XX_TIMER
++	select RESET_CONTROLLER
++	select MFD_SYSCON
++	help
++	  General support for NPCM8xx BMC (Arbel).
++	  Nuvoton NPCM8xx BMC based on the Cortex A35.
++
+ config ARCH_QCOM
+ 	bool "Qualcomm Platforms"
+ 	select GPIOLIB
 -- 
 2.33.0
 
