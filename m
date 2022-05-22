@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3622C38A2C
-	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AF54C38A05
+	for <soc@archiver.kernel.org>; Sun, 22 May 2022 15:51:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8800BC34118; Sun, 22 May 2022 15:51:50 +0000 (UTC)
+	id 6C3A1C34117; Sun, 22 May 2022 15:51:49 +0000 (UTC)
 Received: from herzl.nuvoton.co.il (unknown [212.199.177.27])
 	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5DF12C36AEA;
+	by smtp.kernel.org (Postfix) with ESMTPS id 600C0C3411D;
 	Sun, 22 May 2022 15:51:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5DF12C36AEA
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 600C0C3411D
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nuvoton.com
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp5Ms031636;
-	Sun, 22 May 2022 18:51:05 +0300
+	by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 24MFp9Ye031650;
+	Sun, 22 May 2022 18:51:09 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id C53D563A4A; Sun, 22 May 2022 18:51:05 +0300 (IDT)
+	id B4BA863A4A; Sun, 22 May 2022 18:51:09 +0300 (IDT)
 From: Tomer Maimon <tmaimon77@gmail.com>
 To: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
@@ -39,43 +39,89 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1 09/19] dt-bindings: reset: add syscon property
-Date: Sun, 22 May 2022 18:50:36 +0300
-Message-Id: <20220522155046.260146-10-tmaimon77@gmail.com>
+Subject: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+Date: Sun, 22 May 2022 18:50:45 +0300
+Message-Id: <20220522155046.260146-19-tmaimon77@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Describe syscon property that handles GCR registers
-in Nuvoton BMC NPCM reset driver.
+Add initial Nuvoton NPCM845 evaluation board device tree.
 
 Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 ---
- Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/nuvoton/Makefile          |  2 +
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  | 50 +++++++++++++++++++
+ 2 files changed, 52 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
 
-diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-index 17b7a6a43a29..cb1613092ee7 100644
---- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-+++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-@@ -4,6 +4,7 @@ Required properties:
- - compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
- - reg : specifies physical base address and size of the register.
- - #reset-cells: must be set to 2
-+- syscon: a phandle to access GCR registers.
- 
- Optional property:
- - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
-@@ -16,6 +17,7 @@ Example:
- 		compatible = "nuvoton,npcm750-reset";
- 		reg = <0xf0801000 0x70>;
- 		#reset-cells = <2>;
-+		syscon = <&gcr>;
- 		nuvoton,sw-reset-number = <2>;
- 	};
- 
+diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
+new file mode 100644
+index 000000000000..a99dab90472a
+--- /dev/null
++++ b/arch/arm64/boot/dts/nuvoton/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_NPCM) += nuvoton-npcm845-evb.dtb
+diff --git a/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+new file mode 100644
+index 000000000000..d7a9a85f8075
+--- /dev/null
++++ b/arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2021 Nuvoton Technology tomer.maimon@nuvoton.com
++
++/dts-v1/;
++#include "nuvoton-npcm845.dtsi"
++
++/ {
++	model = "Nuvoton npcm845 Development Board (Device Tree)";
++	compatible = "nuvoton,npcm845";
++
++	aliases {
++		serial0 = &serial0;
++		serial1 = &serial1;
++		serial2 = &serial2;
++		serial3 = &serial3;
++	};
++
++	chosen {
++		stdout-path = &serial0;
++	};
++
++	memory {
++		reg = <0x0 0x0 0x0 0x40000000>;
++	};
++
++	ahb {
++
++		apb {
++			serial0: serial@0 {
++				status = "okay";
++			};
++
++			serial1: serial@1000 {
++				status = "disabled";
++			};
++
++			serial2: serial@2000 {
++				status = "disabled";
++			};
++
++			serial3: serial@3000 {
++				status = "disabled";
++			};
++
++			watchdog1: watchdog@901c {
++				status = "okay";
++			};
++		};
++	};
++};
 -- 
 2.33.0
 
