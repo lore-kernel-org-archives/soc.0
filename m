@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DAAAC433F5
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:32:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B15E5C433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:36:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6EB5FC34116; Mon, 23 May 2022 07:32:45 +0000 (UTC)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	id 9500FC3411A; Mon, 23 May 2022 07:36:04 +0000 (UTC)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DB419C385A9
-	for <soc@kernel.org>; Mon, 23 May 2022 07:32:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB419C385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E2D9C385A9
+	for <soc@kernel.org>; Mon, 23 May 2022 07:36:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E2D9C385A9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id t25so24052027lfg.7
-        for <soc@kernel.org>; Mon, 23 May 2022 00:32:43 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id s5so16133565ljd.10
+        for <soc@kernel.org>; Mon, 23 May 2022 00:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WM2iSjOLNX4HMYT1KBJ2aGaH1i/fqUVeTTeRZ7BJWqI=;
-        b=xpgnLsJaW+uiXjqcvBRtw1Ox3btq1Zpc6LoTPGuU+r+GEYHXTeZv1y5BsKu6YnI+lV
-         rGii2wxRug/9TVgLd9KhL+MhCvqOKZZd81IFpx4Z1UnUNbLeVTtOKmVWMNWX80qopIpL
-         NbyDgx39jmkQQWv42A3xhY8EOEwFA/bmBAwMyuMUocborhxaNUlNwTtyUWnPh6u/ILa4
-         fFGtP295rUcnHZmb3yhcRw5jXHf/r6OkUeSCP75ebJ0Hdcflz9n7K3c6E04z8+HpYY8v
-         P9xh0fyukxvZ5anO/cG8Woy8w337KFzZbpg0O8xWBLtSuPRYANQ/5O8SIRY9s0ku0Ye6
-         W6Dw==
+        bh=qmrYGzbTeRg5FU7A/ql9JWJcJRbcLIxw9Fcrnsg+ns8=;
+        b=Fl7f2PZH8OhJHy8f17bmryFs5fsjlDhnBa3ivK24I6TBCQhc8GhKXVdzxqucVqzfN5
+         7A1r5ykV1QXG8c0agNo0C4Ec61YqtR6hLin7VmFsmVrQdn+XrgV6BejklmNbU4BD/cWu
+         GGcwMqomyEtuHLfe0hGop+cc+4YKnQiNS02Z8SReHRlLkACfkdEeCvdp+MuRIv4PHe+v
+         JZ4S5qYTbyrN5EqdE8Bj0qzrHDa1emDKHD//aLUuB27ncV37GOHPYCINpH3sARw/gNge
+         CfNrXB1NH+VGrU+lWyBYoLo1v8z/1XOUTQx+Gb7Iv5JVDDLffDX7aQDC/MQFLB5RrZcQ
+         F3Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=WM2iSjOLNX4HMYT1KBJ2aGaH1i/fqUVeTTeRZ7BJWqI=;
-        b=HSBOfmJCT/JzlEy0fTGkDgEEvY2iy5wYFvNBW529MV7cm6bljpMmQ4RZ0v2RvpF/jg
-         L5vmVIWZmK2Bmv1FrzWAfp5WKAAprojCYPe4j6WiJKSGKromPQwIwZuMyndVoXfcWztz
-         CNfOe3aBoPRi4COaj3gUToKDrDIOrsHhv0TrnH6mUII17IGQIeafIDm8ts4tQcD98g1+
-         Q8DdT0UbLx8/BQAwzphRZ1ni54NBwWEhug2cZPIWE0aOsb58I2tEsymMh5uRu9RR8YF9
-         I7dIFBSgNSZUY+FACqBaokKInqkH5DybOrua7sahb+JX67xip+GnR7NPjjJn+6kOEgb0
-         ah3Q==
-X-Gm-Message-State: AOAM533csPpKJSPmpE6UckDAYU296DyEcQzTLbjCOvY4NKw8A4wbFyiE
-	ZSE43BG5WHiIl1aBksUDj/4n8g==
-X-Google-Smtp-Source: ABdhPJxkJ1lbfwE/HFS0yyoqUL4vOqViZG1+sY1vIT/G+AZ35A4VLDbzopZna1vNMRo2bjalfVjU0w==
-X-Received: by 2002:a05:6512:3092:b0:478:786f:9fc0 with SMTP id z18-20020a056512309200b00478786f9fc0mr1502296lfd.562.1653291163402;
-        Mon, 23 May 2022 00:32:43 -0700 (PDT)
+        bh=qmrYGzbTeRg5FU7A/ql9JWJcJRbcLIxw9Fcrnsg+ns8=;
+        b=mYavoJozqftrNp+xYYYam0YLFCstvXKK2S3XOA1yBrveCGwkG4uYPv4fTtDfcV6G8c
+         EavpuclTXvxX72PBPL5tOwya8Zgx79rQ3gVvw7H/VkTO7kdK6efYKxDx1glQ2V4HG9o/
+         +NndfmXlpKw8peXDInP9C26ZFOmNDZmzV0Ox9GWgMlmroekFCIecPe2XsC2jBPV1z8/0
+         f1KrBZQkRJHvftLKBKzUoiT6tSwPjLOsZUdEl7+80Kq6aZPPkIrRg0q5qEnqDmMxREQU
+         /yO4P5UzCJ7QSDnHWFTI26IYPKG8YQAku8U7ieOyEjh0H4X4jbEWIxw20J/8jOrsOezh
+         CzSA==
+X-Gm-Message-State: AOAM530V5f+LFtwASYFZYSLjD/DnKDboxelDxMZevRvRR0WEEYzeyYYf
+	+6Kgq+Q0LUVP+kf3RHKfmDmNYg==
+X-Google-Smtp-Source: ABdhPJz9EPJXuOVRuS5VdPVoeY78CEYAgVvIWJjPvdL+tR38wwBV34jcxYcysL8nx4bNecTwcODNuA==
+X-Received: by 2002:a2e:bba2:0:b0:253:cccf:a967 with SMTP id y34-20020a2ebba2000000b00253cccfa967mr12570352lje.298.1653291361632;
+        Mon, 23 May 2022 00:36:01 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g2-20020a2e9e42000000b0024f3d1daea5sm1666653ljk.45.2022.05.23.00.32.41
+        by smtp.gmail.com with ESMTPSA id v19-20020a05651203b300b00477c583e757sm1809868lfp.275.2022.05.23.00.35.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 00:32:42 -0700 (PDT)
-Message-ID: <828749d1-d0a6-7016-c36a-ace0bb72600d@linaro.org>
-Date: Mon, 23 May 2022 09:32:41 +0200
+        Mon, 23 May 2022 00:36:01 -0700 (PDT)
+Message-ID: <edf1faf3-178c-bc89-148d-892f41492d26@linaro.org>
+Date: Mon, 23 May 2022 09:35:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v1 05/19] dt-bindings: watchdog: npcm: Add npcm845
- compatible string
+Subject: Re: [PATCH v1 07/19] dt-binding: clk: npcm845: Add binding for
+ Nuvoton NPCM8XX Clock
 Content-Language: en-US
 To: Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
  tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
@@ -75,19 +75,175 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-6-tmaimon77@gmail.com>
+ <20220522155046.260146-8-tmaimon77@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522155046.260146-6-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-8-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 22/05/2022 17:50, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 watchdog.
+> Nuvoton Arbel BMC NPCM7XX contains an integrated clock controller, which
+> generates and supplies clocks to all modules within the BMC.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  .../bindings/clock/nuvoton,npcm845-clk.yaml   | 68 +++++++++++++++++++
+>  .../dt-bindings/clock/nuvoton,npcm8xx-clock.h | 50 ++++++++++++++
+>  2 files changed, 118 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+>  create mode 100644 include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> new file mode 100644
+> index 000000000000..f305c7c7eaf0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,npcm845-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM8XX Clock Controller Binding
+> +
+> +maintainers:
+> +  - Tomer Maimon <tmaimon77@gmail.com>
+> +
+> +description: |
+> +  Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller, which
+> +  generates and supplies clocks to all modules within the BMC.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm845-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      specify the external clocks used by the NPCM8XX clock module.
 
+Skip description, it's obvious.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +    items:
+> +      - description: 25M reference clock
+> +      - description: CPU reference clock
+> +      - description: MC reference clock
+> +
+> +  clock-names:
+> +    description:
+> +      specify the external clocks names used by the NPCM8XX clock module.
+
+Skip description, it's obvious.
+
+> +    items:
+> +      - const: refclk
+
+Just "ref"
+
+> +      - const: sysbypck
+> +      - const: mcbypck
+
+Is "ck" short for "clk"? If yes, then just skip the suffix.
+
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      See include/dt-bindings/clock/nuvoton,npcm8xx-clock.h for the full
+> +      list of NPCM8XX clock IDs.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Clock Control Module node:
+> +  - |
+> +
+
+No need for blank line.
+
+> +    ahb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clk: clock-controller@f0801000 {
+> +            compatible = "nuvoton,npcm845-clk";
+> +            reg = <0x0 0xf0801000 0x0 0x1000>;
+> +            #clock-cells = <1>;
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+> new file mode 100644
+> index 000000000000..d76f606bf88b
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
+
+Filename - same as bindings, so nuvoton,npcm845-clk.h
+
+> @@ -0,0 +1,50 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+
+Dual license, same as bindings.
+
+> +/*
+> + * Nuvoton NPCM8xx Clock Generator binding
+> + * clock binding number for all clocks supportted by nuvoton,npcm8xx-clk
+> + *
+> + * Copyright (C) 2021 Nuvoton Technologies tomer.maimon@nuvoton.com
+> + *
+> + */
+> +
+> +#ifndef __DT_BINDINGS_CLOCK_NPCM8XX_H
+> +#define __DT_BINDINGS_CLOCK_NPCM8XX_H
+> +
+> +#define NPCM8XX_CLK_CPU		0
+> +#define NPCM8XX_CLK_GFX_PIXEL	1
+> +#define NPCM8XX_CLK_MC		2
+> +#define NPCM8XX_CLK_ADC		3
+> +#define NPCM8XX_CLK_AHB		4
+> +#define NPCM8XX_CLK_TIMER	5
+> +#define NPCM8XX_CLK_UART	6
+> +#define NPCM8XX_CLK_UART2	7
+> +#define NPCM8XX_CLK_MMC		8
+> +#define NPCM8XX_CLK_SPI3	9
+> +#define NPCM8XX_CLK_PCI		10
+> +#define NPCM8XX_CLK_AXI		11
+> +#define NPCM8XX_CLK_APB4	12
+> +#define NPCM8XX_CLK_APB3	13
+> +#define NPCM8XX_CLK_APB2	14
+> +#define NPCM8XX_CLK_APB1	15
+> +#define NPCM8XX_CLK_APB5	16
+> +#define NPCM8XX_CLK_CLKOUT	17
+> +#define NPCM8XX_CLK_GFX		18
+> +#define NPCM8XX_CLK_SU		19
+> +#define NPCM8XX_CLK_SU48	20
+> +#define NPCM8XX_CLK_SDHC	21
+> +#define NPCM8XX_CLK_SPI0	22
+> +#define NPCM8XX_CLK_SPI1	23
+> +#define NPCM8XX_CLK_SPIX	24
+> +#define NPCM8XX_CLK_RG		25
+> +#define NPCM8XX_CLK_RCP		26
+> +#define NPCM8XX_CLK_PRE_ADC	27
+> +#define NPCM8XX_CLK_ATB		28
+> +#define NPCM8XX_CLK_PRE_CLK	29
+> +#define NPCM8XX_CLK_TH		30
+> +#define NPCM8XX_CLK_REFCLK	31
+> +#define NPCM8XX_CLK_SYSBYPCK	32
+> +#define NPCM8XX_CLK_MCBYPCK	33
+> +
+> +#define NPCM8XX_NUM_CLOCKS	(NPCM8XX_CLK_MCBYPCK + 1)
+> +
+> +#endif
 
 
 Best regards,
