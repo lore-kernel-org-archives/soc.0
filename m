@@ -1,183 +1,232 @@
-Return-Path: <SRS0=08VO=V7=gmail.com=tmaimon77@kernel.org>
+Return-Path: <SRS0=CAhr=V7=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ACEBC433EF
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 14:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2600C433EF
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 14:23:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42966C34100; Mon, 23 May 2022 14:17:54 +0000 (UTC)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	id 6CC82C385A9; Mon, 23 May 2022 14:23:47 +0000 (UTC)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51ACEC385A9;
-	Mon, 23 May 2022 14:17:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51ACEC385A9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f179.google.com with SMTP id x2so25312363ybi.8;
-        Mon, 23 May 2022 07:17:53 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3D4C2C34100
+	for <soc@kernel.org>; Mon, 23 May 2022 14:23:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3D4C2C34100
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f171.google.com with SMTP id i23so17421250ljb.4
+        for <soc@kernel.org>; Mon, 23 May 2022 07:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wya30f8pr71guQambx1m7tJawwhUNfoR2hqmQ3Ew8Kw=;
-        b=VoyHphIe5xAs1WO2PrlGIJ7HPU3+lWmPv8Iv5AXa0sdRCBp6e94HfnWgKIkZd4NMKc
-         X/TWlv92Uz/ZK7UYWd4Xb9cwRFfEFbOYbwfeFvWOCZMOiVOeBxHhs/sZareJ+otRkh0N
-         3HFVAgKkZhTMEomSk/tWNQKTZLrpyIhubGYltMcgPmb6yhTSgkHozp5vj6V/n3oldmvk
-         0GzEgsw+dFLx81rl+gkIZySk4actGtlmiNyatNsJw8RkR6Nlyg4u3E6qalRQkHk/CNND
-         J7IBjsa7U8l66WYD4DLpNpz1tQP91KEa8Vz3YiwJqb857VJpGy7d19JaWWmjDDvCZl67
-         /KTg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OyHM0isO5wTAezh/ODRy2XOY7z3TjUO73U16dlah2Lg=;
+        b=D+KH/MbaKM1Om37PloyJ8FEP0G0r8HIIgD1a9k9OJsHUHaBc52/jowGD5pw4CYYN8h
+         oIWc704WFK7X3+KVKTS1IAGeWcURqmYZKUcDkHuV4mP1DWL6bb04ECgHFPfIeCBw8CJX
+         iZMDqlRMytJ7AkpEn0hcqSyvj+5fLmxWDEXPRkGBkVsPkGrcDwMJieeJxl/47Xktpi3E
+         rQPyyVvtPzNpE6w0ZIIahgxyc+DrCYm8LKL9UfxvD3hwOKByGv0Tq35FHfKxnxM1ReXJ
+         ieCsXLForVSIkGc4vUYq7iQp7IctkU6bNYVy8TKA4H/TkDRENjsRNyMrAb6ErPakBDAu
+         Uexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wya30f8pr71guQambx1m7tJawwhUNfoR2hqmQ3Ew8Kw=;
-        b=6fsy6Jm4pSSlqAWJ6MCaIgjblSMegRksIe5mf+9F0ciJBQqZ+90vKAmUlnt1J3gH4O
-         ZRRD3tKIaP7fGy0MjhQ1ikfYVsq7i+XgLYMotNfzruHHnP+Hgnq1FGfZ9m33Z5/7Yy42
-         4mJC7Bb3EjwvkD3PZj47oKUMcgVtCFmQMGsl1LnhZX4G4OYbltsFQ6f0Q74Inrer+Mfe
-         Q6q6+ZzHb7SLLk5noE9XiSJhHomri3LxT8zwkNycS2ye04ZUKv+5hrzMW9x7dFEejpdk
-         P1AUj8HPW6YBD2XL8DYSi7OP0G5mHkxr5rKmxT70g4z6JMasKySvWRRz+cy47myqd4Ow
-         3wsg==
-X-Gm-Message-State: AOAM530M/MdJdQIj6Vi6Uh9N1vtG9VGWLo4cBg+n+e2MMqNX9S/u2dbD
-	xvRd87eWFv9Z9J9yyPmq3e6VdWMKnePClGiqidM=
-X-Google-Smtp-Source: ABdhPJwdqjadEd0542LH2dPQevVuNUJmiWPBTbBgQ8Q/FMeciS6rMgCYWIsWTpFl+4cG+ammRNFBiAJAMg+nZOPNKXU=
-X-Received: by 2002:a25:b3c3:0:b0:64f:fda2:e394 with SMTP id
- x3-20020a25b3c3000000b0064ffda2e394mr3458257ybf.272.1653315472231; Mon, 23
- May 2022 07:17:52 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OyHM0isO5wTAezh/ODRy2XOY7z3TjUO73U16dlah2Lg=;
+        b=N0kcPtxlxjf4rQZ+Ue8XMhNwmZQ2bAyqjKU4S7R7R8anUsYS05SunHAKoIipICEuU5
+         WDFz9AwgoAil/yYiTPOeJ6q1VgaxejQKxjBnU8IZ/YUd1cAr70xQSm/GOC8CP6vXpHra
+         ScuVdpmNzIziFIpGCQyRK4gs9tXmQcVa0HwSrOeUSxMj77PoNIicM9j0wn5DPklGcvSn
+         ipNSmYI8eKxyy90wCRQrEASXU1FXOYJXkn/xySKc8ETc2jFCVzMiPM7umYhZ036+EFJS
+         1se+apngZtIOZwYXwnkRIyq10MN+bXi7TwmTHk3ebgPrhPSVNrvjmQO6g0kcDezUAX3g
+         dNIg==
+X-Gm-Message-State: AOAM533ln1LFABm/yBlrC9o8dszUPDvbLx9zshZoq9x0J5QaDyezWhkR
+	0YGryUxqEJrTObzDaDml1Pb/3A==
+X-Google-Smtp-Source: ABdhPJzfE9KcPqVU5FLAVn8vclloK7K7k3tlIOfGkMLVado59PwidM8O718jmHMHm8H4Z2C7TU4JXQ==
+X-Received: by 2002:a05:651c:1792:b0:235:1df3:7b8e with SMTP id bn18-20020a05651c179200b002351df37b8emr13338743ljb.464.1653315824311;
+        Mon, 23 May 2022 07:23:44 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s9-20020ac25fa9000000b0047255d211ffsm1996118lfe.302.2022.05.23.07.23.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 07:23:43 -0700 (PDT)
+Message-ID: <96ab5563-ea03-806b-f38e-39ef1ed04093@linaro.org>
+Date: Mon, 23 May 2022 16:23:41 +0200
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-19-tmaimon77@gmail.com>
- <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
-In-Reply-To: <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
-From: Tomer Maimon <tmaimon77@gmail.com>
-Date: Mon, 23 May 2022 17:17:41 +0300
-Message-ID: <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
-Subject: Re: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB
- device tree
-To: Arnd Bergmann <arnd@arndb.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for
+ NPCM8XX
+Content-Language: en-US
+To: Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Avi Fishman <avifishman70@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
-	Joel Stanley <joel@jms.id.au>, Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, gregkh <gregkh@linuxfoundation.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Jiri Slaby <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>, Vinod Koul <vkoul@kernel.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, robert.hancock@calian.com, 
-	"nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>, Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, 
-	LINUXWATCHDOG <linux-watchdog@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: multipart/alternative; boundary="0000000000006c8ec905dfae8179"
+Cc: Avi Fishman <avifishman70@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+ Joel Stanley <joel@jms.id.au>, Patrick Venture <venture@google.com>,
+ Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
+ Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ mturquette@baylibre.com, sboyd@kernel.org,
+ Philipp Zabel <p.zabel@pengutronix.de>, Greg KH
+ <gregkh@linuxfoundation.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, catalin.marinas@arm.com, will@kernel.org,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ jirislaby@kernel.org, shawnguo@kernel.org, bjorn.andersson@linaro.org,
+ geert+renesas@glider.be, marcel.ziswiler@toradex.com,
+ Vinod Koul <vkoul@kernel.org>, biju.das.jz@bp.renesas.com,
+ nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com,
+ =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+ lkundrak@v3.sk, soc@kernel.org, devicetree <devicetree@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-watchdog@vger.kernel.org,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-12-tmaimon77@gmail.com>
+ <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org>
+ <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---0000000000006c8ec905dfae8179
-Content-Type: text/plain; charset="UTF-8"
+On 23/05/2022 16:03, Tomer Maimon wrote:
+> Hi Krzysztof,
+> 
+> Thanks for your comments.
 
-Hi,
+Please stop replying in HTML. It's not the format of emails used in the
+Linux. It makes very difficult to read your replies.
 
-Thanks for your comments.
+> 
+> 
+> On Mon, 23 May 2022 at 12:01, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org <mailto:krzysztof.kozlowski@linaro.org>>
+> wrote:
+> 
+>     On 22/05/2022 17:50, Tomer Maimon wrote:
+>     > Add binding document and device tree binding
+>     > constants for Nuvoton BMC NPCM8XX reset controller.
+>     >
+>     > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com
+>     <mailto:tmaimon77@gmail.com>>
+>     > ---
+>     >  .../bindings/reset/nuvoton,npcm-reset.txt     |  17 ++-
+>     >  .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 124
+>     ++++++++++++++++++
+>     >  2 files changed, 139 insertions(+), 2 deletions(-)
+>     >  create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+>     >
+>     > diff --git
+>     a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+>     b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+>     > index cb1613092ee7..b7eb8615b68b 100644
+>     > --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+>     > +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+>     > @@ -1,14 +1,15 @@
+>     >  Nuvoton NPCM Reset controller
+>     > 
+>     >  Required properties:
+>     > -- compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
+>     > +- compatible : "nuvoton,npcm750-reset" for Poleg NPCM7XX BMC.
+>     > +               "nuvoton,npcm845-reset" for Arbel NPCM8XX BMC.
+>     >  - reg : specifies physical base address and size of the register.
+>     >  - #reset-cells: must be set to 2
+>     >  - syscon: a phandle to access GCR registers.
+>     > 
+>     >  Optional property:
+>     >  - nuvoton,sw-reset-number - Contains the software reset number to
+>     restart the SoC.
+>     > -  NPCM7xx contain four software reset that represent numbers 1 to 4.
+>     > +  NPCM7xx and NPCM8xx contain four software reset that represent
+>     numbers 1 to 4.
+>     > 
+>     >    If 'nuvoton,sw-reset-number' is not specified software reset is
+>     disabled.
+>     > 
+>     > @@ -32,3 +33,15 @@ example:
+>     >          };
+>     > 
+>     >  The index could be found in
+>     <dt-bindings/reset/nuvoton,npcm7xx-reset.h>.
+>     > +
+>     > +Specifying reset lines connected to IP NPCM8XX modules
+>     > +======================================================
+> 
+> we prefer to use the same explanation as the NPCM7XX reset explanation
+> in the reset binding document.
 
-the patch will modify according to your comments and will be sent in the
-next kernel revision 5.19.rc1
+??
 
-On Mon, 23 May 2022 at 12:40, Arnd Bergmann <arnd@arndb.de> wrote:
+> 
+>     No need to document consumers. Just mention the header.
 
-> On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> > +/ {
-> > +       model = "Nuvoton npcm845 Development Board (Device Tree)";
-> > +       compatible = "nuvoton,npcm845";
-> > +
-> > +       aliases {
-> > +               serial0 = &serial0;
-> > +               serial1 = &serial1;
-> > +               serial2 = &serial2;
-> > +               serial3 = &serial3;
-> > +       };
->
-> > +               apb {
-> > +                       serial0: serial@0 {
-> > +                               status = "okay";
-> > +                       };
-> > +
-> > +                       serial1: serial@1000 {
-> > +                               status = "disabled";
-> > +                       };
-> > +
-> > +                       serial2: serial@2000 {
-> > +                               status = "disabled";
-> > +                       };
-> > +
-> > +                       serial3: serial@3000 {
-> > +                               status = "disabled";
-> > +                       };
->
-> Please drop the aliases for disabled uarts. It probably also makes
-> sense to have the status="disabled" properties in the .dtsi file and
-> only override them when you explicitly want to enable a uart for a
-> board.
->
->        Arnd
->
+What explanation? Consumers are trivial. Once you convert it to DT
+schema there should be no such code at all.
+
+> 
+>     > +example:
+>     > +
+>     > +        spi0: spi@..... {
+>     > +                ...
+>     > +                resets = <&rstc NPCM8XX_RESET_IPSRST2
+>     NPCM8XX_RESET_PSPI1>;
+>     > +                ...
+>     > +        };
+>     > +
+>     > +The index could be found in
+>     <dt-bindings/reset/nuvoton,npcm8xx-reset.h>.
+>     > diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+>     b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+>     > new file mode 100644
+>     > index 000000000000..4b832a0fd1dd
+>     > --- /dev/null
+>     > +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+>     > @@ -0,0 +1,124 @@
+>     > +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+>     Dual license.
+> 
+> O.K. 
+> 
+> 
+>     > +// Copyright (c) 2022 Nuvoton Technology corporation.
+>     > +
+>     > +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
+>     > +#define _DT_BINDINGS_NPCM8XX_RESET_H
+>     > +
+>     > +#define NPCM8XX_RESET_IPSRST1                0x20
+>     > +#define NPCM8XX_RESET_IPSRST2                0x24
+>     > +#define NPCM8XX_RESET_IPSRST3                0x34
+>     > +#define NPCM8XX_RESET_IPSRST4                0x74
+> 
+>     What are these? All IDs should be incremental, decimal and start from 0.
+> 
+> Register offset, we use the same method in NPCM7xx. please refer
+> https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/reset/nuvoton,npcm7xx-reset.h
+> <https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/reset/nuvoton,npcm7xx-reset.h>
+> 
+> and the driver asserts the reset according to the reset include definitions 
+
+Register offsets, a device programming model, are not part of bindings.
+ Bindings should be independent of programming model, so only IDs are
+allowed.
+
+Why did you add register offsets to bindings at the first place?
+
+> 
+> 
+>     > +
+>     > +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
+>     > +#define NPCM8XX_RESET_GDMA0          3
+> 
+>     IDs start from 0 and do not have holes.
+> 
+> This represents the reset BIT in the reset register. 
+
+Again, not programming model in the bindings. No bits, not register
+values, no register offsets.
+
 
 Best regards,
-
-Tomer
-
---0000000000006c8ec905dfae8179
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-PGRpdiBkaXI9Imx0ciI+PGRpdiBkaXI9Imx0ciI+SGksPGRpdiBkaXI9Imx0ciI+PGJyPjwvZGl2
-PjxkaXYgZGlyPSJsdHIiPlRoYW5rcyBmb3IgeW91ciBjb21tZW50cy48L2Rpdj48ZGl2IGRpcj0i
-bHRyIj48YnI+PC9kaXY+PGRpdiBkaXI9Imx0ciI+dGhlIHBhdGNoIHdpbGzCoG1vZGlmeSBhY2Nv
-cmRpbmcgdG8geW91ciBjb21tZW50cyBhbmQgd2lsbCBiZSBzZW50IGluIHRoZSBuZXh0IGtlcm5l
-bCByZXZpc2lvbiA1LjE5LnJjMTwvZGl2PjwvZGl2Pjxicj48ZGl2IGNsYXNzPSJnbWFpbF9xdW90
-ZSI+PGRpdiBkaXI9Imx0ciIgY2xhc3M9ImdtYWlsX2F0dHIiPk9uIE1vbiwgMjMgTWF5IDIwMjIg
-YXQgMTI6NDAsIEFybmQgQmVyZ21hbm4gJmx0OzxhIGhyZWY9Im1haWx0bzphcm5kQGFybmRiLmRl
-IiB0YXJnZXQ9Il9ibGFuayI+YXJuZEBhcm5kYi5kZTwvYT4mZ3Q7IHdyb3RlOjxicj48L2Rpdj48
-YmxvY2txdW90ZSBjbGFzcz0iZ21haWxfcXVvdGUiIHN0eWxlPSJtYXJnaW46MHB4IDBweCAwcHgg
-MC44ZXg7Ym9yZGVyLWxlZnQ6MXB4IHNvbGlkIHJnYigyMDQsMjA0LDIwNCk7cGFkZGluZy1sZWZ0
-OjFleCI+T24gU3VuLCBNYXkgMjIsIDIwMjIgYXQgNTo1MCBQTSBUb21lciBNYWltb24gJmx0Ozxh
-IGhyZWY9Im1haWx0bzp0bWFpbW9uNzdAZ21haWwuY29tIiB0YXJnZXQ9Il9ibGFuayI+dG1haW1v
-bjc3QGdtYWlsLmNvbTwvYT4mZ3Q7IHdyb3RlOjxicj4NCiZndDsgKy8gezxicj4NCiZndDsgK8Kg
-IMKgIMKgIMKgbW9kZWwgPSAmcXVvdDtOdXZvdG9uIG5wY204NDUgRGV2ZWxvcG1lbnQgQm9hcmQg
-KERldmljZSBUcmVlKSZxdW90Ozs8YnI+DQomZ3Q7ICvCoCDCoCDCoCDCoGNvbXBhdGlibGUgPSAm
-cXVvdDtudXZvdG9uLG5wY204NDUmcXVvdDs7PGJyPg0KJmd0OyArPGJyPg0KJmd0OyArwqAgwqAg
-wqAgwqBhbGlhc2VzIHs8YnI+DQomZ3Q7ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHNlcmlhbDAg
-PSAmYW1wO3NlcmlhbDA7PGJyPg0KJmd0OyArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBzZXJpYWwx
-ID0gJmFtcDtzZXJpYWwxOzxicj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgc2VyaWFs
-MiA9ICZhbXA7c2VyaWFsMjs8YnI+DQomZ3Q7ICvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHNlcmlh
-bDMgPSAmYW1wO3NlcmlhbDM7PGJyPg0KJmd0OyArwqAgwqAgwqAgwqB9Ozxicj4NCjxicj4NCiZn
-dDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgYXBiIHs8YnI+DQomZ3Q7ICvCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoHNlcmlhbDA6IHNlcmlhbEAwIHs8YnI+DQomZ3Q7ICvCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHN0YXR1cyA9ICZxdW90
-O29rYXkmcXVvdDs7PGJyPg0KJmd0OyArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqB9Ozxicj4NCiZndDsgKzxicj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgc2VyaWFsMTogc2VyaWFsQDEwMDAgezxicj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgc3RhdHVzID0gJnF1b3Q7ZGlzYWJsZWQmcXVv
-dDs7PGJyPg0KJmd0OyArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB9Ozxicj4N
-CiZndDsgKzxicj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgc2Vy
-aWFsMjogc2VyaWFsQDIwMDAgezxicj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgc3RhdHVzID0gJnF1b3Q7ZGlzYWJsZWQmcXVvdDs7PGJyPg0K
-Jmd0OyArwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB9Ozxicj4NCiZndDsgKzxi
-cj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgc2VyaWFsMzogc2Vy
-aWFsQDMwMDAgezxicj4NCiZndDsgK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgc3RhdHVzID0gJnF1b3Q7ZGlzYWJsZWQmcXVvdDs7PGJyPg0KJmd0OyArwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB9Ozxicj4NCjxicj4NClBsZWFzZSBkcm9w
-IHRoZSBhbGlhc2VzIGZvciBkaXNhYmxlZCB1YXJ0cy4gSXQgcHJvYmFibHkgYWxzbyBtYWtlczxi
-cj4NCnNlbnNlIHRvIGhhdmUgdGhlIHN0YXR1cz0mcXVvdDtkaXNhYmxlZCZxdW90OyBwcm9wZXJ0
-aWVzIGluIHRoZSAuZHRzaSBmaWxlIGFuZDxicj4NCm9ubHkgb3ZlcnJpZGUgdGhlbSB3aGVuIHlv
-dSBleHBsaWNpdGx5IHdhbnQgdG8gZW5hYmxlIGEgdWFydCBmb3IgYTxicj4NCmJvYXJkLjxicj4N
-Cjxicj4NCsKgIMKgIMKgIMKgQXJuZDxicj48L2Jsb2NrcXVvdGU+PGRpdj48YnI+PC9kaXY+PGRp
-dj5CZXN0IHJlZ2FyZHMsPC9kaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5Ub21lcsKgPC9kaXY+PC9k
-aXY+DQo8L2Rpdj4NCg==
---0000000000006c8ec905dfae8179--
+Krzysztof
