@@ -4,107 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DF28C433EF
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 05:04:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDDA6C433EF
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 06:56:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C7489C34100; Mon, 23 May 2022 05:04:33 +0000 (UTC)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	id 9FD00C34115; Mon, 23 May 2022 06:56:25 +0000 (UTC)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 003F1C385AA
-	for <soc@kernel.org>; Mon, 23 May 2022 05:04:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 003F1C385AA
+	by smtp.kernel.org (Postfix) with ESMTPS id 0A9B1C385A9
+	for <soc@kernel.org>; Mon, 23 May 2022 06:56:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A9B1C385A9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id e28so18976652wra.10
-        for <soc@kernel.org>; Sun, 22 May 2022 22:04:32 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id k30so19858175wrd.5
+        for <soc@kernel.org>; Sun, 22 May 2022 23:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/QrDltn3VD/pRasuIqMNlaCi5sUwUS1pW+U9YcPglL4=;
-        b=V9frMvmgJEm+MyjbKmqBuItdLs3GXpG78tIqLFeeS8ERhFX16SZP3fpMALj7qjOVmj
-         Xv81Cvlaw/JnyJvTXJITStGrhgF8otMbOmb9E5dBpKiKgigxNrQptj1Sy2qVPNIoNd1t
-         P5xcMvcpvWNnXMmQPjnSMo7U0KofGO7+ndcQpmy+ypxpPb9zSYPuWB3AmY6pshiTdzT9
-         y7OtUZc76kzT5g1WRGotOGNPXeEGkT6bDp1NncGSTCkRr3xOxvW9fdLz3L38Ty5FjVRk
-         fPbXntbmX/XIWhYfe94NzPjxEQO8Wd992E8L/S46iZS226LWHM+oKyXWjxkcLLKCPMLa
-         1JxQ==
+        bh=LKnNzGCx87x63I8h/gwYuHzFIrPdoxH6GKC0KDIqEo8=;
+        b=K1Qbu4LN4uTSgtI2f+EwwHTK17ZwUKdpUB+44EazVoGCE3gAwf4WcSamCf+z//ik71
+         VjU+ape8fK6TZy57aLcVjEW/OJIVyeWkauRLHhOLpymMxmoTE1sRdEGTu1VnwJRymeON
+         GwCbJMw76qSYvQSDrpaXCnj0taljv1ZFbOA3CMzlEv5tdZbvPAwBKF0vntRCUvZVpqAU
+         o9v3sB5mEWuIwXAb5g8OcT+MzlzNf7NRVtb0CLp+T5nf/VUTSvGky3Gl11CtTJbq2bPR
+         MUdlmgCP4Z95Nrb8mPDeBjll7zo679+3VY14PFJf6S3sJo0+0HuFIYLrRWoRY2MDOQR1
+         h2zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/QrDltn3VD/pRasuIqMNlaCi5sUwUS1pW+U9YcPglL4=;
-        b=u6ZKpy8JwX0jSD6GOozI+wfcdAy8zRJli5lfkfGHKTDS6EI2Vh/Q1FE/fZkwt1i5IG
-         w0RriuGONkxyWzT/QwHykA8X0atG+/S48TZlIVHY8nXiXn71AW/1TVXKceIwyCz/qPLT
-         ayowvcs4C5F7BZF63PPiQU1pI0Y99SXDbeWgItA6RUgFZ3TBxDxeZUQg090BO7+K6AEd
-         DQFpN4gPwMgx9vmlasQqC6125VcB7YBMOctHml5R+EdEbXSW+bxtD2Gcan5oQK2PNOJU
-         h+zDMOCe+P06zijDKTelXQXiQkRav06tzaq1ZZshztmdXP5PRIqmMoFCOmfmmUtjddbB
-         rk6w==
-X-Gm-Message-State: AOAM531fHzQ4alhWDisqLRpUB0FZV6wal5XWZiEp4imgwuHVqe0dFbSj
-	BII8DFIvyCBvtwwv7siagKWUgm8XK8gdng==
-X-Google-Smtp-Source: ABdhPJwfoEOJNcRH/CDjafdDfmVqX62p5wTnzxAue5hfmoVe+2CCtpeqvO6VxDuoTj2L7I92JqvDoQ==
-X-Received: by 2002:a05:6000:1542:b0:20c:5e30:88fb with SMTP id 2-20020a056000154200b0020c5e3088fbmr17113741wry.302.1653282271118;
-        Sun, 22 May 2022 22:04:31 -0700 (PDT)
+        bh=LKnNzGCx87x63I8h/gwYuHzFIrPdoxH6GKC0KDIqEo8=;
+        b=0qFR6lDbsj6KtaHxErdRHleaQFzTAJDcBqi9HdkmLVwW/bttlF784Eivm7SseQWsCf
+         VGXWj0LJE1UnzojSyqXQJ1tK4H6lSngd3FR58j0SKHSAhLyGMoyAPYIny0jDY2jBczoC
+         wXbzcMzVq1XpiEiTtsekEDvxzwO53D3/wqZcElL59ZDw9HCPYsIK83ahcknMBt/QCFnn
+         a+yIlglqRPR/3WnPcABsTQKlLnGW6TgCQ6ngmbeIXjzKxW8CXYAqVzuRUfEcftjlaE30
+         HwmQi58FAnGdrM9OmEJJPphYNDaGsGyTMfkjDUTy+iWX/k3tHCK/MD1cabMMgSyFINre
+         zbpA==
+X-Gm-Message-State: AOAM533MW4IuzhKA/SDwxY8x6ga/t2i+bWkNw2aXiRbdOBS0agEV3SZ5
+	pe4ZcrHrPS2G8FGVqBW9qmhJVVhJk1dJVQ==
+X-Google-Smtp-Source: ABdhPJzxVVJfQdTIdKqAqKFnD0HZqlbRwAPf9YDWKBc83FR8g+9DH/H3FcukagCoRtRevHtOOSh5ig==
+X-Received: by 2002:a5d:64e9:0:b0:20f:dcf7:2173 with SMTP id g9-20020a5d64e9000000b0020fdcf72173mr3225598wri.332.1653288983444;
+        Sun, 22 May 2022 23:56:23 -0700 (PDT)
 Received: from giga-mm.. ([195.245.17.24])
-        by smtp.gmail.com with ESMTPSA id k41-20020a05600c1ca900b0039747cf8354sm3059882wms.39.2022.05.22.22.04.30
+        by smtp.gmail.com with ESMTPSA id l6-20020adfa386000000b0020c6a524fd5sm10690243wrb.99.2022.05.22.23.56.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 22:04:30 -0700 (PDT)
+        Sun, 22 May 2022 23:56:22 -0700 (PDT)
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Genjian Zhang <zhanggenjian123@gmail.com>,
-	Genjian Zhang <zhanggenjian@kylinos.cn>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Subject: [PATCH] ARM: ep93xx: clock: Do not return the address of the freed memory
-Date: Mon, 23 May 2022 07:04:21 +0200
-Message-Id: <20220523050421.322555-1-alexander.sverdlin@gmail.com>
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Lukasz Majewski <lukma@denx.de>,
+	Hartley Sweeten <hsweeten@visionengravers.com>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] ARM: ep93xx: Make ts72xx_register_flash() static
+Date: Mon, 23 May 2022 08:56:16 +0200
+Message-Id: <20220523065616.325052-1-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Genjian Zhang <zhanggenjian123@gmail.com>
+... and fix the warning/error:
 
-Avoid return freed memory addresses. Modified to the actual error
-return value of clk_register().
+arch/arm/mach-ep93xx/ts72xx.c:154:13: error: no previous prototype for function 'ts72xx_register_flash' [-Werror,-Wmissing-prototypes]
+void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
+            ^
+arch/arm/mach-ep93xx/ts72xx.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
+^
+static
 
-Fixes: 9645ccc7bd7a ("ep93xx: clock: convert in-place to COMMON_CLK")
-Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
-[AS: Added "ARM:" prefix, punctuation]
+Link: https://lore.kernel.org/lkml/202202140141.HRZ3WZwi-lkp@intel.com/T/
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- arch/arm/mach-ep93xx/clock.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ arch/arm/mach-ep93xx/ts72xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
-index 4fa6ea5461b7..85a496ddc619 100644
---- a/arch/arm/mach-ep93xx/clock.c
-+++ b/arch/arm/mach-ep93xx/clock.c
-@@ -345,9 +345,10 @@ static struct clk_hw *clk_hw_register_ddiv(const char *name,
- 	psc->hw.init = &init;
+diff --git a/arch/arm/mach-ep93xx/ts72xx.c b/arch/arm/mach-ep93xx/ts72xx.c
+index e70bac011407..d3de7283ecb3 100644
+--- a/arch/arm/mach-ep93xx/ts72xx.c
++++ b/arch/arm/mach-ep93xx/ts72xx.c
+@@ -150,7 +150,7 @@ static struct platform_device ts72xx_nand_flash = {
+ 	.num_resources		= ARRAY_SIZE(ts72xx_nand_resource),
+ };
  
- 	clk = clk_register(NULL, &psc->hw);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
- 		kfree(psc);
--
-+		return ERR_CAST(clk);
-+	}
- 	return &psc->hw;
- }
- 
-@@ -452,9 +453,10 @@ static struct clk_hw *clk_hw_register_div(const char *name,
- 	psc->hw.init = &init;
- 
- 	clk = clk_register(NULL, &psc->hw);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
- 		kfree(psc);
--
-+		return ERR_CAST(clk);
-+	}
- 	return &psc->hw;
- }
- 
+-void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
++static void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
+ 				  resource_size_t start)
+ {
+ 	/*
 -- 
 2.36.0
 
