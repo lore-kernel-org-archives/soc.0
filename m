@@ -1,112 +1,105 @@
-Return-Path: <SRS0=CAhr=V7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=jgNI=V7=kemnade.info=andreas@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 210C1C433F5
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 15:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F59AC433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 19:05:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE786C34118; Mon, 23 May 2022 15:37:50 +0000 (UTC)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 72EA7C34115; Mon, 23 May 2022 19:05:48 +0000 (UTC)
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 808E5C34119
-	for <soc@kernel.org>; Mon, 23 May 2022 15:37:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 808E5C34119
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 1so4329153ljh.8
-        for <soc@kernel.org>; Mon, 23 May 2022 08:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
-        b=iau23czuiMXjm0hyqdsK5LqTD+cKYVfnaA9S+hQdET23Y0mX06Yvmm6kF7vXaHTfPy
-         8//i31Rg+IIST3l9Sr0HyecMRQN5OqkZNKc8CS9yKXVH/8RbMhhmXeqzZSfepaj/zkwe
-         ofB4tGj5QcepTEaNJQGL0uCSEQ2ADJPDbE222xkpnEOy/i6hOMC2Gogln7uIOXz1Z2Un
-         eEdA7dxiMWE4KY6pnEhnPDqWZSOM1zSWeijmWVE9dewujOLdGsLSCspFY3jrwHLY5uJy
-         G/qZz7B6FWs1eIB6vxDShca3e0arrF3KoP7sa7f+DQmKL7DLNfpzlnJHap6kywfaaz7X
-         P+oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CNVGYK72FSE/DjXuo5FhnaPlB7gNCfpfmdbuSxUtMOc=;
-        b=07o2YZkt0yW6fYqJc8++RBHi1Bu1uekKrJxfI4IflDCwhAjZZU4873Qi0sgZ3Ppy4p
-         wxVd8XPxPzo5g9AP/GR1+JhvrnXvc9/1qzwUTzkqe1jpy1rFciuTS+Ke1a9n5/gh4K3y
-         +iX2PUaf9417iStA1FjMpLW08Rt3zoLLfIkmMtNU8pSwIgVbqGVR7Yuw8SepX02uLU2B
-         JbdCGIyPR3JasGSYIlOS74+MlEJTiZW92s4lre71kdNYMoKKTFmjQ56OaKLEwv4zXhPc
-         4/eqJl2Z9wPzPTL7npi2kEgsDkaFZqtVOMu8f7esX0zZn72hj//kIBe256ARdoM4Fc6F
-         cOYQ==
-X-Gm-Message-State: AOAM530qv2tOAGfktf4hx8CHEPjoxfN9oQSWmsqTZG4ivwnv6seL9aMF
-	5cfqjFHD3qYGAlOX0YO6hW8bsw==
-X-Google-Smtp-Source: ABdhPJytSX0vw8XiyL0IPRTPz7bNI0Vb5IqxXheMy8cJ6OyJZo+/AZv6Os8PjXd8yRyNcZKkTN4sOg==
-X-Received: by 2002:a05:651c:b06:b0:253:e51a:c507 with SMTP id b6-20020a05651c0b0600b00253e51ac507mr6361505ljr.420.1653320267494;
-        Mon, 23 May 2022 08:37:47 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05651205ce00b0047255d211c2sm2036295lfo.241.2022.05.23.08.37.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 08:37:46 -0700 (PDT)
-Message-ID: <fd52f328-c895-e27e-4807-eb0b8f14a247@linaro.org>
-Date: Mon, 23 May 2022 17:37:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 18/19] arm64: dts: nuvoton: Add initial NPCM845 EVB
- device tree
-Content-Language: en-US
-To: Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id F0763C385A9;
+	Mon, 23 May 2022 19:05:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F0763C385A9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=/VahUGf3jIouTElSgvltjM8fcx6Y4GBfBctItJCCR8o=; b=PhFghKivnQDS61KDy635j7S0Ny
+	j3o3syCqONvFNZAeGYDvsVE33SAl6yc0pW2Ui4S8fLpFh9+zSdcsFkjMc6xkj4EFp2fBPvMXeuR+Y
+	TwcttVSLoUY20v/HHtaDDPkcSvvU6YTQjwzMtkDlrOm2RHZ2rLKBksmQ+abD1/1ZyhXE=;
+Received: from p200300ccff0dcc001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0d:cc00:1a3d:a2ff:febf:d33a] helo=aktux)
+	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.89)
+	(envelope-from <andreas@kemnade.info>)
+	id 1ntDN9-0004DT-LY; Mon, 23 May 2022 21:05:43 +0200
+Date: Mon, 23 May 2022 21:05:42 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Avi Fishman <avifishman70@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
- Joel Stanley <joel@jms.id.au>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- gregkh <gregkh@linuxfoundation.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
- Jiri Slaby <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Bjorn Andersson <bjorn.andersson@linaro.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Marcel Ziswiler <marcel.ziswiler@toradex.com>, Vinod Koul
- <vkoul@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>,
- Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
- robert.hancock@calian.com, nathan=20Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>, Lubomir Rintel <lkundrak@v3.sk>,
- SoC Team <soc@kernel.org>, DTML <devicetree@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-clk <linux-clk@vger.kernel.org>,
- "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
- LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-19-tmaimon77@gmail.com>
- <CAK8P3a1LCkM-w_Oi2qUqgq_Qxsg64uoGg5aaz=X8pBENHBhj0A@mail.gmail.com>
- <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAP6Zq1j8PEQ2m7rG5YztesiOfXExCr=UMPFhD=Oe+GYDwGP95g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ linux-imx@nxp.com, l.stach@pengutronix.de, alexander.stein@ew.tq-group.com,
+ marcel.ziswiler@toradex.com, linux@rempel-privat.de,
+ matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
+ sebastian.reichel@collabora.com, leoyang.li@nxp.com,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, nicolecrivain@gmail.com
+Subject: Re: [PATCH 2/2] ARM: dts: imx: Add devicetree for Kobo Aura 2
+Message-ID: <20220523210542.0735dd5f@aktux>
+In-Reply-To: <402c7e38-7ad0-581f-146d-3db88e77d37c@linaro.org>
+References: <20220522214415.254959-1-andreas@kemnade.info>
+	<20220522214415.254959-3-andreas@kemnade.info>
+	<402c7e38-7ad0-581f-146d-3db88e77d37c@linaro.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 23/05/2022 16:17, Tomer Maimon wrote:
-> Hi,
-> 
-> Thanks for your comments.
-> 
-> the patch will modify according to your comments and will be sent in the
-> next kernel revision 5.19.rc1
-> 
+On Mon, 23 May 2022 12:03:09 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-None of your emails reach lists because of using HTML. Please use
-appropriate messaging format.
+[...]
+> > +
+> > +	gpio_keys: gpio-keys {
+> > +		compatible = "gpio-keys";
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&pinctrl_gpio_keys>;
+> > +
+> > +		cover {  
+> 
+> Generic node names. You could add suffix if needed, so either key or
+> key-cover.
+> 
+hmm, the example in
+Documentation/devicetree/bindings/input/gpio-keys.yaml
 
-Best regards,
-Krzysztof
+shows names like I did. I usually expect to trust binding documentation
+to have something acceptable.
+
+> > +			label = "Cover";
+> > +			gpios = <&gpio5 12 GPIO_ACTIVE_LOW>;
+> > +			linux,code = <SW_LID>;
+> > +			linux,input-type = <EV_SW>;
+> > +			wakeup-source;
+> > +		};
+> > +
+> > +		power {
+> > +			label = "Power";
+> > +			gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
+> > +			linux,code = <KEY_POWER>;
+> > +			wakeup-source;
+> > +		};
+> > +	};
+> > +
+> > +	leds: leds {
+> > +		compatible = "gpio-leds";
+> > +		pinctrl-names = "default";
+> > +		pinctrl-0 = <&pinctrl_led>;
+> > +
+> > +		on {  
+> 
+> The same. You also need property for color.
+> 
+here the documentation clearly indicates led-.*|led
+
+Regards,
+Andreas
