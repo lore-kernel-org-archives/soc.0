@@ -1,83 +1,110 @@
-Return-Path: <SRS0=t/jJ=V6=kemnade.info=andreas@kernel.org>
+Return-Path: <SRS0=zWj5=V7=gmail.com=alexander.sverdlin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6532C433F5
-	for <soc@archiver.kernel.org>; Sun, 22 May 2022 21:44:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DF28C433EF
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 05:04:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D02ACC385B8; Sun, 22 May 2022 21:44:39 +0000 (UTC)
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C7489C34100; Mon, 23 May 2022 05:04:33 +0000 (UTC)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 147EFC34118;
-	Sun, 22 May 2022 21:44:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 147EFC34118
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=92HYTjkI0L8pG37FsCTnBzOvYuZbyWQaGiDdaOuAdG0=; b=NRVCIhf/cXPoap06GyEW7QIfNG
-	U76Hr9iRxy+v9F6r0eJ62VhPQpY8q8Yy9dQlkiGwgAl+COZQhM4puXv81iPbhCIpcWlSYJD+FBo0z
-	O3A6kz+QCNbwLKNVu93pWK3uti4mNKZ5MEPYHoqq4rptT18Rw0OqDhWBbqTX6fCNlUAU=;
-Received: from p200300ccff4f2e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff4f:2e00:1a3d:a2ff:febf:d33a] helo=aktux)
-	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.89)
-	(envelope-from <andreas@kemnade.info>)
-	id 1nstNA-0007G9-0T; Sun, 22 May 2022 23:44:24 +0200
-Received: from andi by aktux with local (Exim 4.94.2)
-	(envelope-from <andreas@kemnade.info>)
-	id 1nstN9-0014L4-BC; Sun, 22 May 2022 23:44:23 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
+	by smtp.kernel.org (Postfix) with ESMTPS id 003F1C385AA
+	for <soc@kernel.org>; Mon, 23 May 2022 05:04:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 003F1C385AA
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id e28so18976652wra.10
+        for <soc@kernel.org>; Sun, 22 May 2022 22:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/QrDltn3VD/pRasuIqMNlaCi5sUwUS1pW+U9YcPglL4=;
+        b=V9frMvmgJEm+MyjbKmqBuItdLs3GXpG78tIqLFeeS8ERhFX16SZP3fpMALj7qjOVmj
+         Xv81Cvlaw/JnyJvTXJITStGrhgF8otMbOmb9E5dBpKiKgigxNrQptj1Sy2qVPNIoNd1t
+         P5xcMvcpvWNnXMmQPjnSMo7U0KofGO7+ndcQpmy+ypxpPb9zSYPuWB3AmY6pshiTdzT9
+         y7OtUZc76kzT5g1WRGotOGNPXeEGkT6bDp1NncGSTCkRr3xOxvW9fdLz3L38Ty5FjVRk
+         fPbXntbmX/XIWhYfe94NzPjxEQO8Wd992E8L/S46iZS226LWHM+oKyXWjxkcLLKCPMLa
+         1JxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/QrDltn3VD/pRasuIqMNlaCi5sUwUS1pW+U9YcPglL4=;
+        b=u6ZKpy8JwX0jSD6GOozI+wfcdAy8zRJli5lfkfGHKTDS6EI2Vh/Q1FE/fZkwt1i5IG
+         w0RriuGONkxyWzT/QwHykA8X0atG+/S48TZlIVHY8nXiXn71AW/1TVXKceIwyCz/qPLT
+         ayowvcs4C5F7BZF63PPiQU1pI0Y99SXDbeWgItA6RUgFZ3TBxDxeZUQg090BO7+K6AEd
+         DQFpN4gPwMgx9vmlasQqC6125VcB7YBMOctHml5R+EdEbXSW+bxtD2Gcan5oQK2PNOJU
+         h+zDMOCe+P06zijDKTelXQXiQkRav06tzaq1ZZshztmdXP5PRIqmMoFCOmfmmUtjddbB
+         rk6w==
+X-Gm-Message-State: AOAM531fHzQ4alhWDisqLRpUB0FZV6wal5XWZiEp4imgwuHVqe0dFbSj
+	BII8DFIvyCBvtwwv7siagKWUgm8XK8gdng==
+X-Google-Smtp-Source: ABdhPJwfoEOJNcRH/CDjafdDfmVqX62p5wTnzxAue5hfmoVe+2CCtpeqvO6VxDuoTj2L7I92JqvDoQ==
+X-Received: by 2002:a05:6000:1542:b0:20c:5e30:88fb with SMTP id 2-20020a056000154200b0020c5e3088fbmr17113741wry.302.1653282271118;
+        Sun, 22 May 2022 22:04:31 -0700 (PDT)
+Received: from giga-mm.. ([195.245.17.24])
+        by smtp.gmail.com with ESMTPSA id k41-20020a05600c1ca900b0039747cf8354sm3059882wms.39.2022.05.22.22.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 22:04:30 -0700 (PDT)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	linux-imx@nxp.com,
-	l.stach@pengutronix.de,
-	alexander.stein@ew.tq-group.com,
-	marcel.ziswiler@toradex.com,
-	linux@rempel-privat.de,
-	andreas@kemnade.info,
-	matthias.schiffer@ew.tq-group.com,
-	cniedermaier@dh-electronics.com,
-	sebastian.reichel@collabora.com,
-	leoyang.li@nxp.com,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	nicolecrivain@gmail.com
-Subject: [PATCH 0/2] ARM: dts: add Kobo Aura 2
-Date: Sun, 22 May 2022 23:44:13 +0200
-Message-Id: <20220522214415.254959-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+To: soc@kernel.org
+Cc: Genjian Zhang <zhanggenjian123@gmail.com>,
+	Genjian Zhang <zhanggenjian@kylinos.cn>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: [PATCH] ARM: ep93xx: clock: Do not return the address of the freed memory
+Date: Mon, 23 May 2022 07:04:21 +0200
+Message-Id: <20220523050421.322555-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds a basic device tree for the Kobo Aura 2 Ebook reader.
-It is equipped with an i.MX6SL SoC.
+From: Genjian Zhang <zhanggenjian123@gmail.com>
 
-Andreas Kemnade (2):
-  dt-bindings: arm: fsl: add compatible string for Kobo Aura 2
-  ARM: dts: imx: Add devicetree for Kobo Aura 2
+Avoid return freed memory addresses. Modified to the actual error
+return value of clk_register().
 
- .../devicetree/bindings/arm/fsl.yaml          |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/imx6sl-kobo-aura2.dts       | 595 ++++++++++++++++++
- 3 files changed, 597 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6sl-kobo-aura2.dts
+Fixes: 9645ccc7bd7a ("ep93xx: clock: convert in-place to COMMON_CLK")
+Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+[AS: Added "ARM:" prefix, punctuation]
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ arch/arm/mach-ep93xx/clock.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
+diff --git a/arch/arm/mach-ep93xx/clock.c b/arch/arm/mach-ep93xx/clock.c
+index 4fa6ea5461b7..85a496ddc619 100644
+--- a/arch/arm/mach-ep93xx/clock.c
++++ b/arch/arm/mach-ep93xx/clock.c
+@@ -345,9 +345,10 @@ static struct clk_hw *clk_hw_register_ddiv(const char *name,
+ 	psc->hw.init = &init;
+ 
+ 	clk = clk_register(NULL, &psc->hw);
+-	if (IS_ERR(clk))
++	if (IS_ERR(clk)) {
+ 		kfree(psc);
+-
++		return ERR_CAST(clk);
++	}
+ 	return &psc->hw;
+ }
+ 
+@@ -452,9 +453,10 @@ static struct clk_hw *clk_hw_register_div(const char *name,
+ 	psc->hw.init = &init;
+ 
+ 	clk = clk_register(NULL, &psc->hw);
+-	if (IS_ERR(clk))
++	if (IS_ERR(clk)) {
+ 		kfree(psc);
+-
++		return ERR_CAST(clk);
++	}
+ 	return &psc->hw;
+ }
+ 
 -- 
-2.30.2
+2.36.0
 
