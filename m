@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 974DDC433F5
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 042FEC433EF
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:32:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5F2D1C385AA; Mon, 23 May 2022 07:31:40 +0000 (UTC)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	id C2EEAC3411A; Mon, 23 May 2022 07:32:18 +0000 (UTC)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0AB4AC36AE3
-	for <soc@kernel.org>; Mon, 23 May 2022 07:31:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0AB4AC36AE3
+	by smtp.kernel.org (Postfix) with ESMTPS id A0F31C34115
+	for <soc@kernel.org>; Mon, 23 May 2022 07:32:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A0F31C34115
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id br17so11735233lfb.2
-        for <soc@kernel.org>; Mon, 23 May 2022 00:31:38 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id p22so24007447lfo.10
+        for <soc@kernel.org>; Mon, 23 May 2022 00:32:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KyV9lT9+ytqJp/YOSL0Uwp6DljeF8AaxfinieX67j3o=;
-        b=lYKCMl/RGy09NhRM6yiabyzHYXnCsb6xykBD2OmT7C4UGXL/tS5cDHEr01DiJT8wXk
-         GDf9X9/aRLHK1aymH4u5opnx2hngCfPwvCdog5UoF6q/sWbvrzunVSLIQmEhmPnLAFAi
-         VkrnAqF0VCikJaynFl5OSGuVIeoLsaCeMiLJuorcsw08+U7Lmi9vU+0A0pLIzwN6ScZn
-         y2TLWJEJ+umDzjeFsXXL9+fYVXTyfd2nsJS7sZCg1RQY4LOavXbz94DUAJQUCzyY34RA
-         8CFQAdnNMsY/ImY0bdfrrWurLzTAAB7MumIRewwvAImYXo0/Tel3qr5Cu0dKYX4hsIPB
-         Gr1A==
+        bh=17JqV26wVHdgo28ZqibLwQLBrW+2wdRYXH2zbWrVfCo=;
+        b=Ib9IYf1AvLT27iihXTu9RkqmCryClPTfougnJ4FyWIlLyfyQLNoahME9lk60jT7YXm
+         jD+7fF0WQXgTnEJ244khLVZ2ruXBE8MS1uUVUlTeK2ut3gzKojOjbTDWEHyZ98VTUslE
+         NjdYJQZNiVrEOIgva4BhEJiS4Ewom+kaGwXmokXK9WVHBOaGDsVce74hQ1PaoCqMtfm7
+         tmQCCcjUUAYxDvOTYI9RRd+9Bf0ud4XjKoAI+6sp0abtcwlOGdCJsf7ESg6hkRNhtrw8
+         nO0lprI8/GsPSj3vbIte8Vsmr0wnD5DbJ9z2/t0tu+2zMycYVUyl8WY7wWrEoa1qh7HP
+         gHmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=KyV9lT9+ytqJp/YOSL0Uwp6DljeF8AaxfinieX67j3o=;
-        b=wRl/femTtna5x9SiiQqE4iRleAu8giIjx3K+3uLmyEdHM9Dq/ZaZxRnCIg9WMa47yW
-         vv5Q/0yaDd9hkC+XoykQyolV+eQQoXk8H2UGv/TuPdCkp8ZKTCm9QkInt3ud9uRQnVz+
-         Z06fmgU/txfK/F/b3GTVGZQXFcNp3j/gaXnaDAwmYI7p2UjISUNIeeBQSVj2vsIQ3Nym
-         ZZC6RwedwAd1F+Y2I84ajoppRgwlR13BUzT0JKbbAL8dIiJ5cH+ktMq1TldSsLJoilKn
-         S4jCNpuPG8W6622fxsSAoQncHGI508eCmKBK9hZXH3q+mCom3eeX/o/DN0qtCOlB33oP
-         33hQ==
-X-Gm-Message-State: AOAM530Io1yZdBJAdAEiwLjfrGH2zH9wA/mr8PhjzN3nLQ5xS2H/w1Rj
-	4mohCCCalJEahAy7AkebwpzwUg==
-X-Google-Smtp-Source: ABdhPJyGZyOu9VIxr33EGSOKBZFSxGoiwpEjxX4VFoXSuoPjjAbUXKOBkNH955vm37QLR3a4tkoUxQ==
-X-Received: by 2002:a05:6512:927:b0:473:ebb9:ec7d with SMTP id f7-20020a056512092700b00473ebb9ec7dmr14833260lft.637.1653291097068;
-        Mon, 23 May 2022 00:31:37 -0700 (PDT)
+        bh=17JqV26wVHdgo28ZqibLwQLBrW+2wdRYXH2zbWrVfCo=;
+        b=V5DEroQRD5gzr5/EpEoczF518KUk2j9YjbMvsZIvbm7AZTkPO9A48sb9yEfcihsp4U
+         YVd+q08QwxLJ6djgXwSdOdkXwOV4A3lHGLwMOyo9kG0rm+T2NyCE7cPu35Jtk2r0lDNH
+         7FK7Dl6yplpZwQGVduxMpq16bj4OLEzV3p0DMmKvlivVKSODYV8m/xuCgbmpQHQREsyl
+         cvcPCSzxVGCEORMh9mblk3Z1wph85oJmk9IjRe1EHl8ExJBXkfv2MhKZtDohJ7+aRmQF
+         6r9d7yU4POh6w2ZqPCoVsj8GaWCmygoGPOBdHOr4zExBztsLhlFVYaWOOQP5JUXoiuyM
+         zbtg==
+X-Gm-Message-State: AOAM530ZE5hM4QIBRHcnRBKMSpsrKlExReKjVOqQDZK5DbpaJ4U1+77+
+	xV0idfJRAdfXz4XhaSeOYxrZPg==
+X-Google-Smtp-Source: ABdhPJwr/sSdCGIN0en6yM1a+IjJKGEZWdESs2RUoX6hwQ9lIqGKLwQqPAREwe3x2yxzBpnbbnpjpg==
+X-Received: by 2002:ac2:43a1:0:b0:478:5867:5047 with SMTP id t1-20020ac243a1000000b0047858675047mr9556576lfl.37.1653291135678;
+        Mon, 23 May 2022 00:32:15 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 10-20020a05651c00ca00b00253e88591f1sm817885ljr.23.2022.05.23.00.31.35
+        by smtp.gmail.com with ESMTPSA id r5-20020a19ac45000000b0047255d21167sm1828342lfc.150.2022.05.23.00.32.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 00:31:36 -0700 (PDT)
-Message-ID: <bff38fba-86c7-36b6-c616-cd96d2a22111@linaro.org>
-Date: Mon, 23 May 2022 09:31:34 +0200
+        Mon, 23 May 2022 00:32:15 -0700 (PDT)
+Message-ID: <d48f8b9b-92e2-2fc9-6d06-0b1496768d4e@linaro.org>
+Date: Mon, 23 May 2022 09:32:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v1 01/19] dt-bindings: timer: npcm: Add npcm845 compatible
- string
+Subject: Re: [PATCH v1 03/19] dt-bindings: serial: 8250: Add npcm845
+ compatible string
 Content-Language: en-US
 To: Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
  tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
@@ -75,20 +75,17 @@ Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-2-tmaimon77@gmail.com>
+ <20220522155046.260146-4-tmaimon77@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522155046.260146-2-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-4-tmaimon77@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 22/05/2022 17:50, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 timer.
+> Add a compatible string for Nuvoton BMC NPCM845 UART.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  .../devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml        | 2 ++
->  1 file changed, 2 insertions(+)
-> 
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
