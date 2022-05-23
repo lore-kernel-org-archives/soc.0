@@ -1,101 +1,249 @@
-Return-Path: <SRS0=u3eJ=V7=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=CAhr=V7=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95721C433EF
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 08:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6285EC433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 09:01:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5A419C34115; Mon, 23 May 2022 08:57:27 +0000 (UTC)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	id 4A19FC34119; Mon, 23 May 2022 09:01:43 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9863BC385A9
-	for <soc@kernel.org>; Mon, 23 May 2022 08:57:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9863BC385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id 377DCC34116
+	for <soc@kernel.org>; Mon, 23 May 2022 09:01:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 377DCC34116
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id u30so24363558lfm.9
-        for <soc@kernel.org>; Mon, 23 May 2022 01:57:26 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id v8so22474563lfd.8
+        for <soc@kernel.org>; Mon, 23 May 2022 02:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qR7H0qStNTe9iR8CcNIgL5rmiYjyIooKLwWYrLY5b4U=;
-        b=QJ3/n7DodBQvdPT3B0a8FnEg4z99FgHl5Jmn0BQYYsljDRTb/k0dEocQv8aoY7IMde
-         Srub6GJw9ggt/ZzlTLHeGo449PlYv/Yx65d5whATZRntj/NwzSFnJ0WbQVVq3ai3Di1X
-         j8JzTqbWy1JAR1RKplNAvczUkVAwftWNku3yTli8JgYM+4xqi92GVo65vR3GKbT+5WhT
-         oae4xb4/ajDumOhUL/eC3VfzX6gcEKRFGqxCgQ8jhufyDB40xpe7pbfGdeCFRqPQFd9C
-         mVs0VctQJ/PtxYUpARotd/MFUYsPWywRkYyuodPnKLZtMaSKIemYo4MOS4OF8ZgoAZFf
-         whcA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fYCNzd5DZy9e/CqtLhmUm9AQGXVd0bR6NXYTSVtz10Q=;
+        b=tcOPeifid63AxtGOEwUuOCh3+d9GSGk3wioI874kER3GgGNBqrV3zfBI7ONuNNfbo8
+         Q73mPLV0mpOokTTYaYs54OZ9LcS3wULB9HEbQaTP6LN6I/P7pX5moARyVOwijRX/FE+L
+         G2Q4c7lSkcAUSsQEU7lopuTEenP/1oRjNBMP0oXHI8uW7/Ux+5w8jq5qI7G7nQvxS8ZI
+         H88FjxD/65ysDCp6c9KmwguVTtayn/JRxHTDiXLPksBNWTE/sn4M1FQR8FOlgxpCoJNT
+         CcyYuXhSB38KIyJC+24EDDwviFl+mp0sCxkJvSKwndzLb6GQA3cDtbdHehMINZQfnG9l
+         DOZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qR7H0qStNTe9iR8CcNIgL5rmiYjyIooKLwWYrLY5b4U=;
-        b=W/tv02c2jBHHxLSr/3fMaWt95maHX8WyrqfAjDedmYJ6dBxXfNN7xoTyvHpUmWaPFf
-         b/yB9WI198jFEoNAq3BknvObFQMuyXgCZsDLqc+fh8bTSgeFSJ7m+d0AupNMwH+/s+jQ
-         tT1OzgI8sVw7O0nHzsiYHBlxBdB8T1UninTq015hUqboGgpsBD552L1frhxBpgXGurli
-         S0saKJ0dSUgioJGmDq699E1eVe9pRVgawpFZVse5j4rXulZINOpAJ361NRIxbXcmdK3+
-         6lRzu1w6vSiV44ntqlcvjZBj2KItreyKBZ3R9wA1qhOAqtXuwrKXEGsF9eIRYQl2nvo/
-         MMgw==
-X-Gm-Message-State: AOAM530DO4qyzCogFzbYOfYHIoKnAfFNnm+bqUuGb5THE6CRE2I5mhpw
-	sR6FuNXEz2sTi99kKCYOiLGR+g==
-X-Google-Smtp-Source: ABdhPJznbj0FPruHl0aQqScW8A/097h+RBl6grsZEERwhbBEJnuQoMvy2Gb2ffBQmga0oMrYwlCajw==
-X-Received: by 2002:a05:6512:2290:b0:478:5fe1:c754 with SMTP id f16-20020a056512229000b004785fe1c754mr6906333lfu.323.1653296244651;
-        Mon, 23 May 2022 01:57:24 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id v22-20020ac25596000000b0047255d210e7sm1864809lfg.22.2022.05.23.01.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 01:57:24 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] soc: ixp4xx/qmgr: Fix unused match warning
-Date: Mon, 23 May 2022 10:55:20 +0200
-Message-Id: <20220523085520.913217-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        bh=fYCNzd5DZy9e/CqtLhmUm9AQGXVd0bR6NXYTSVtz10Q=;
+        b=LKRtQpXO+v3+Tedo6eR7X95674uiRJPoPJRR7yMoJFD0jwj6Z9vrikafBuAwc71P96
+         63lbiVY3GZW8QigTYJAavCWA+oxuNFD41GY+HtBEjdoOLt4M2Lae4FNMiPAdgal+uREy
+         VdkygQMmWQTqJbxJ35904V+ZsgFOy2++BWYkeDa9/mPlgCPUcvHhMZFUu+lSEKG4yVeG
+         yEla95Nh4oF15WMD+Be6On+UN4gGfTsmL/7nDxStLD7Z1pZ0CsJJ3T2Xccm21rOyKyMI
+         KvZDNVWxevpi2m4QOUOHY3XhOljL+0AWOKftBlpzqMHmWPJXLLvHSLMmWHEVIyng9+KC
+         YukA==
+X-Gm-Message-State: AOAM53289g5VwZLeGcPfdIj4eb49lXccjca0nJkDHxMqyq2ZRbPozHLK
+	UqhtJullP9+38onBSEDulVBIjg==
+X-Google-Smtp-Source: ABdhPJzHHP/+WcFU3Js4/bOYcbZttzRgNemubLuXS7gmbHa8Ppa37s0pp4mI7+q4phqBf5ol2YkDfg==
+X-Received: by 2002:a05:6512:3c84:b0:478:19f2:bc2e with SMTP id h4-20020a0565123c8400b0047819f2bc2emr12055162lfv.324.1653296499290;
+        Mon, 23 May 2022 02:01:39 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q1-20020ac25fc1000000b0047255d210eesm1863280lfg.29.2022.05.23.02.01.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 02:01:38 -0700 (PDT)
+Message-ID: <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org>
+Date: Mon, 23 May 2022 11:01:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for
+ NPCM8XX
+Content-Language: en-US
+To: Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+ tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
+ benjaminfair@google.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ sboyd@kernel.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+ daniel.lezcano@linaro.org, tglx@linutronix.de, wim@linux-watchdog.org,
+ linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+ olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+ bjorn.andersson@linaro.org, geert+renesas@glider.be,
+ marcel.ziswiler@toradex.com, vkoul@kernel.org, biju.das.jz@bp.renesas.com,
+ nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com,
+ j.neuschaefer@gmx.net, lkundrak@v3.sk
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-12-tmaimon77@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220522155046.260146-12-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The kernel test robot found this inconsistency:
+On 22/05/2022 17:50, Tomer Maimon wrote:
+> Add binding document and device tree binding
+> constants for Nuvoton BMC NPCM8XX reset controller.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  .../bindings/reset/nuvoton,npcm-reset.txt     |  17 ++-
+>  .../dt-bindings/reset/nuvoton,npcm8xx-reset.h | 124 ++++++++++++++++++
+>  2 files changed, 139 insertions(+), 2 deletions(-)
+>  create mode 100644 include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+> index cb1613092ee7..b7eb8615b68b 100644
+> --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+> +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+> @@ -1,14 +1,15 @@
+>  Nuvoton NPCM Reset controller
+>  
+>  Required properties:
+> -- compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
+> +- compatible : "nuvoton,npcm750-reset" for Poleg NPCM7XX BMC.
+> +               "nuvoton,npcm845-reset" for Arbel NPCM8XX BMC.
+>  - reg : specifies physical base address and size of the register.
+>  - #reset-cells: must be set to 2
+>  - syscon: a phandle to access GCR registers.
+>  
+>  Optional property:
+>  - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
+> -  NPCM7xx contain four software reset that represent numbers 1 to 4.
+> +  NPCM7xx and NPCM8xx contain four software reset that represent numbers 1 to 4.
+>  
+>    If 'nuvoton,sw-reset-number' is not specified software reset is disabled.
+>  
+> @@ -32,3 +33,15 @@ example:
+>          };
+>  
+>  The index could be found in <dt-bindings/reset/nuvoton,npcm7xx-reset.h>.
+> +
+> +Specifying reset lines connected to IP NPCM8XX modules
+> +======================================================
 
->> drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning:
-  'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
-     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
+No need to document consumers. Just mention the header.
 
-This is because the match is enclosed in the of_match_ptr()
-which compiles into NULL when OF is disabled and this
-is unnecessary.
+> +example:
+> +
+> +        spi0: spi@..... {
+> +                ...
+> +                resets = <&rstc NPCM8XX_RESET_IPSRST2 NPCM8XX_RESET_PSPI1>;
+> +                ...
+> +        };
+> +
+> +The index could be found in <dt-bindings/reset/nuvoton,npcm8xx-reset.h>.
+> diff --git a/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+> new file mode 100644
+> index 000000000000..4b832a0fd1dd
+> --- /dev/null
+> +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
+> @@ -0,0 +1,124 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
 
-Fix it by dropping of_match_ptr() around the match.
+Dual license.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-SoC maintainers: please apply this directly for fixes for v5.19.
----
- drivers/soc/ixp4xx/ixp4xx-qmgr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +// Copyright (c) 2022 Nuvoton Technology corporation.
+> +
+> +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
+> +#define _DT_BINDINGS_NPCM8XX_RESET_H
+> +
+> +#define NPCM8XX_RESET_IPSRST1		0x20
+> +#define NPCM8XX_RESET_IPSRST2		0x24
+> +#define NPCM8XX_RESET_IPSRST3		0x34
+> +#define NPCM8XX_RESET_IPSRST4		0x74
 
-diff --git a/drivers/soc/ixp4xx/ixp4xx-qmgr.c b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-index 9154c7029b05..291086bb9313 100644
---- a/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-qmgr.c
-@@ -459,7 +459,7 @@ static const struct of_device_id ixp4xx_qmgr_of_match[] = {
- static struct platform_driver ixp4xx_qmgr_driver = {
- 	.driver = {
- 		.name           = "ixp4xx-qmgr",
--		.of_match_table = of_match_ptr(ixp4xx_qmgr_of_match),
-+		.of_match_table = ixp4xx_qmgr_of_match,
- 	},
- 	.probe = ixp4xx_qmgr_probe,
- 	.remove = ixp4xx_qmgr_remove,
--- 
-2.35.1
+What are these? All IDs should be incremental, decimal and start from 0.
 
+> +
+> +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
+> +#define NPCM8XX_RESET_GDMA0		3
+
+IDs start from 0 and do not have holes.
+
+
+> +#define NPCM8XX_RESET_UDC1		5
+> +#define NPCM8XX_RESET_GMAC3		6
+> +#define NPCM8XX_RESET_UART_2_3		7
+> +#define NPCM8XX_RESET_UDC2		8
+> +#define NPCM8XX_RESET_PECI		9
+> +#define NPCM8XX_RESET_AES		10
+> +#define NPCM8XX_RESET_UART_0_1		11
+> +#define NPCM8XX_RESET_MC		12
+> +#define NPCM8XX_RESET_SMB2		13
+> +#define NPCM8XX_RESET_SMB3		14
+> +#define NPCM8XX_RESET_SMB4		15
+> +#define NPCM8XX_RESET_SMB5		16
+> +#define NPCM8XX_RESET_PWM_M0		18
+> +#define NPCM8XX_RESET_TIMER_0_4		19
+> +#define NPCM8XX_RESET_TIMER_5_9		20
+> +#define NPCM8XX_RESET_GMAC4		21
+> +#define NPCM8XX_RESET_UDC4		22
+> +#define NPCM8XX_RESET_UDC5		23
+> +#define NPCM8XX_RESET_UDC6		24
+> +#define NPCM8XX_RESET_UDC3		25
+> +#define NPCM8XX_RESET_ADC		27
+> +#define NPCM8XX_RESET_SMB6		28
+> +#define NPCM8XX_RESET_SMB7		29
+> +#define NPCM8XX_RESET_SMB0		30
+> +#define NPCM8XX_RESET_SMB1		31
+> +
+> +/* Reset lines on IP2 reset module (NPCM8XX_RESET_IPSRST2) */
+> +#define NPCM8XX_RESET_MFT0		0
+> +#define NPCM8XX_RESET_MFT1		1
+> +#define NPCM8XX_RESET_MFT2		2
+> +#define NPCM8XX_RESET_MFT3		3
+> +#define NPCM8XX_RESET_MFT4		4
+> +#define NPCM8XX_RESET_MFT5		5
+> +#define NPCM8XX_RESET_MFT6		6
+> +#define NPCM8XX_RESET_MFT7		7
+> +#define NPCM8XX_RESET_MMC		8
+> +#define NPCM8XX_RESET_GFX_SYS		10
+> +#define NPCM8XX_RESET_AHB_PCIBRG	11
+> +#define NPCM8XX_RESET_VDMA		12
+> +#define NPCM8XX_RESET_ECE		13
+> +#define NPCM8XX_RESET_VCD		14
+> +#define NPCM8XX_RESET_VIRUART1		16
+> +#define NPCM8XX_RESET_VIRUART2		17
+> +#define NPCM8XX_RESET_SIOX1		18
+> +#define NPCM8XX_RESET_SIOX2		19
+> +#define NPCM8XX_RESET_BT		20
+> +#define NPCM8XX_RESET_3DES		21
+> +#define NPCM8XX_RESET_PSPI2		23
+> +#define NPCM8XX_RESET_GMAC2		25
+> +#define NPCM8XX_RESET_USBH1		26
+> +#define NPCM8XX_RESET_GMAC1		28
+> +#define NPCM8XX_RESET_CP1		31
+> +
+> +/* Reset lines on IP3 reset module (NPCM8XX_RESET_IPSRST3) */
+> +#define NPCM8XX_RESET_PWM_M1		0
+> +#define NPCM8XX_RESET_SMB12		1
+> +#define NPCM8XX_RESET_SPIX		2
+> +#define NPCM8XX_RESET_SMB13		3
+> +#define NPCM8XX_RESET_UDC0		4
+> +#define NPCM8XX_RESET_UDC7		5
+> +#define NPCM8XX_RESET_UDC8		6
+> +#define NPCM8XX_RESET_UDC9		7
+> +#define NPCM8XX_RESET_USBHUB		8
+> +#define NPCM8XX_RESET_PCI_MAILBOX	9
+> +#define NPCM8XX_RESET_GDMA1		10
+> +#define NPCM8XX_RESET_GDMA2		11
+> +#define NPCM8XX_RESET_SMB14		12
+> +#define NPCM8XX_RESET_SHA		13
+> +#define NPCM8XX_RESET_SEC_ECC		14
+> +#define NPCM8XX_RESET_PCIE_RC		15
+> +#define NPCM8XX_RESET_TIMER_10_14	16
+> +#define NPCM8XX_RESET_RNG		17
+> +#define NPCM8XX_RESET_SMB15		18
+> +#define NPCM8XX_RESET_SMB8		19
+> +#define NPCM8XX_RESET_SMB9		20
+> +#define NPCM8XX_RESET_SMB10		21
+> +#define NPCM8XX_RESET_SMB11		22
+> +#define NPCM8XX_RESET_ESPI		23
+> +#define NPCM8XX_RESET_USB_PHY_1		24
+> +#define NPCM8XX_RESET_USB_PHY_2		25
+> +
+
+
+Best regards,
+Krzysztof
