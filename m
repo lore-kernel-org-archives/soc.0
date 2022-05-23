@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF374C433F5
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 10:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16645C433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 10:44:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7EFE9C34116; Mon, 23 May 2022 10:44:11 +0000 (UTC)
+	id EF6E5C36AE5; Mon, 23 May 2022 10:44:27 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 73CB2C385A9;
-	Mon, 23 May 2022 10:44:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73CB2C385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F955C385A9;
+	Mon, 23 May 2022 10:44:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F955C385A9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
+Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
  mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MGQ85-1o4tli0EOr-00GrBZ; Mon, 23 May 2022 12:44:07 +0200
-Received: by mail-yb1-f179.google.com with SMTP id f16so24645305ybk.2;
-        Mon, 23 May 2022 03:44:06 -0700 (PDT)
-X-Gm-Message-State: AOAM5304dXs5+C0YkLlQqYZVBJ9SeAFBTbjT1GAcPRsRoVEHcjGagb96
-	XDugwPG5Q8kVtON7f9cHR4zAIdHHrDnXPtrKhz8=
-X-Google-Smtp-Source: ABdhPJww6UI3VHujKsiD4GORINdaaD7sInRUTDtpI+wOKYOknAfrhPLfgU/Tcrezf+twApFr3bW/yO+tBPWuypHA/W0=
-X-Received: by 2002:a25:c747:0:b0:64f:62fb:f55e with SMTP id
- w68-20020a25c747000000b0064f62fbf55emr13692906ybe.106.1653299558644; Mon, 23
- May 2022 02:52:38 -0700 (PDT)
+ 1Movrq-1nVZB81cXm-00qT8j; Mon, 23 May 2022 12:44:24 +0200
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ef5380669cso142791797b3.9;
+        Mon, 23 May 2022 03:44:23 -0700 (PDT)
+X-Gm-Message-State: AOAM532VBz5pKO74qJvUCEawx7m5phEzfuRkafOAVmqIA5VHIkC1otkl
+	RK9ggLtmbVwK6UTMAM3F9qZuDoGoZRqMxEwEp6g=
+X-Google-Smtp-Source: ABdhPJzbbTU7bxyEy+V6QZ7ro2Wti/wri258NXrp2iXt1Owp7jIbpPdzCSwsk8vjZl8l7XWvxC1S+1Cf8oUw+fAt8d0=
+X-Received: by 2002:a81:6283:0:b0:2ff:2443:6f3c with SMTP id
+ w125-20020a816283000000b002ff24436f3cmr22577090ywb.135.1653302662526; Mon, 23
+ May 2022 03:44:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
-In-Reply-To: <20220522155046.260146-1-tmaimon77@gmail.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-13-tmaimon77@gmail.com>
+In-Reply-To: <20220522155046.260146-13-tmaimon77@gmail.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 23 May 2022 11:52:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
-Message-ID: <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
-Subject: Re: [PATCH v1 00/19] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date: Mon, 23 May 2022 12:44:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0PKvqpTjNeKUm6EnxpmJAtmk1jv+b4YXxr+fXFpsWXtw@mail.gmail.com>
+Message-ID: <CAK8P3a0PKvqpTjNeKUm6EnxpmJAtmk1jv+b4YXxr+fXFpsWXtw@mail.gmail.com>
+Subject: Re: [PATCH v1 12/19] reset: npcm: Add NPCM8XX support
 To: Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Avi Fishman <avifishman70@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
@@ -58,112 +58,61 @@ Cc: Avi Fishman <avifishman70@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
 	LINUXWATCHDOG <linux-watchdog@vger.kernel.org>, 
 	Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Va+Eu4sG2sYMP+9Q+rsZxD4etakQwK4nIGbIGZkTlBNNpVpjOBI
- N1vNeqgHBQ9VTKzoRGTFpP0r/V7j4DQrU8pafN3K7h22CVDqAz+5i+FV+jEKdHgl4l6OrA/
- Tzd/e7kxyXmehSZucsQX/tCMW/hDPSrTfd/Y5eOPGHrZVjt6dDgPYf+zZb3vNR/CCkpq9ip
- MracprCkX4KDaMFoy5QZA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lKho5CK5/ro=:o+bIiJyYtdDDWoyKZleNDN
- 7uDUvEeEHmUqJxmThxAIkEbuu06njAeQ7ItH1dGtWQDQligDQv1UcTN6d3SFjP/5ZUUWWqxQg
- W+p+Nb3JaHASGR9+yUSlQiN5l9ChoxD6URKzdB2k4jTDSM2Wcu46jCUmf/rBJHG1k1mY4BCn1
- pjQwHypKIz0l1A0CGiojJLiKvSZYu6/HNd3c3VVz8k9JCm4RCLW9la5n27tiaAbhkIaxmHdKl
- Z3UNpbat6q6r2eYBD9mf86ibS6nvWkFtWXoD5jtavZVmWL8dP8X8RtxmzdYc43T7vEETNQ7yR
- OwRbA+wbrElDbPvx4wJ5tXynoD2CRy/dynJXSwzI64xSD7yA3BHHtTQfBNOoNESnZJzwkTa8U
- YlkV0JsnhedzDa2r65nOvlFDx81xDnftvBLJg3Bd6HIadilJCurQmQaB6+HrBsE0CyN2FrzRt
- 2oPCzwbqEO1iMvhu5uNlK5O3d86bGL+XYNlILcY3hsDI3Zr0L6nOyzzK6e0CAPiIizbX00b7X
- ZHf5+RJ5gEMJsx+xj+kiB86XX5ROWrISGdkBWX1WCCIbMUwyyg67DbfphxVwxY84W9ndaDphG
- 7cDb9cE54vla3lI8TXglW8r45p5ruVaVPBB/aLdd3TOsCqxhDESfg9Cqa9RBvaRx2RSwmKrik
- 8uMRYo1tTsnNHodkGU1K9geoQuZaiBKVk2ZMqlOfP7YDuNjs+kMsxbN+lMIEcL79z/jFMk22U
- cMe6fW5s5UdJV8k2QqDg5jAeG4aiCa6aMNYXl/fjpUbMW1M+KjuPb8iKV/J8r43R7Pj6SLuQy
- 9pmnVvEVEtZ9nGWdc9q0PRFggbFvOSeQ7mqrpSvKsgZrc/P9QWZoZK5C+8bZYol9hGeKYlP1N
- jWT7TnJXsJnKb1Fl/oP+ZdR1OXo0vIVcSritwSV88=
+X-Provags-ID: V03:K1:B8FAco/A7ps+b1a1a7R/eWg+W4acTIFSeXpnApfp0YjnSoE2d3G
+ vIz2gxWcmf5ikoiyYJrp/SrznMhYkaNXmjTENMZPfOyrskofiB4lk6D++ATgVIf2t9L0+aY
+ 67+wd6HTvmBtwigC94zmcOUlV6gVf4CyEEOzbdr3+ZSsHGVuHDwEU7uNGa6PRH2HrW5bJZj
+ yzgxGj8K1p/tmHf/3SMnQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0LpHDMda9rY=:D7F00BxTJZiPV5RJdbShGX
+ dJakkSeF6TDPx1NqDw5J6gKMQa/jVcQKVWgQszyfw7m7xX4uvVuc+Rwa0A3CMhBJ89Dv/PtHP
+ ALX2fLcVvLuLieHOsOJU5GGyDDYhEqjTduHU/vzBjFe+aiX7uLDTqMc8hLkx8+VxtVOw6TO9i
+ iTsjSyHoYdZi1s7iAD8Qj5nRSHLyQzu7gRAWyYHxxxBSkkVVu+jkYaA+zMQKGGVp3mfOymiUl
+ CZl9avzZPVWbSsj5ruC3CB4yWNjKgpDcKi4wd6GteWv2ucmM/qqhQcHJ3Ioxz6WAITgilUre8
+ SP0K/ntJiXzxDIKMHGdHdBtqqbGsWqxkfo99aXYAU2zVVwiij7CV5pPcWsGL7Kflt0zNkBgrO
+ nUyw+vy/utID4ULqG+YdomYj3QTpuYPW//sfVYM0JcIXWwWey7yCrUn9vyBVAOGdCdlgr5TR0
+ 9NKFqB+m4f1/qIVrChgIfvneKBCXoGAymNcO6PtTVDIUw7cio/nzKUXUjh3kReQnlrtSvbPxg
+ +K5ewqMJRgmAnSAAdVF1n1tTcdM58g9V/4KeXtcvtEZQPcTZJsM/lKkwHhOTdiCLFxttklF1m
+ Hhljxhc+fhPHC0++Vc99yWNoy2ZZJFbQFtoQACSCc3NQnluByGF7ZBK+xlO0ls+jhLqlpnbSM
+ ugifDvJf9REqKDF2kFEG3gRQLWhRpR+2G1ij4MT/n/SHFxXQu0f0Sq8BsieAEDKJPDDE9k4ni
+ BlZ9QN5MYg0+48FnVfRkLkXEWJdf3UExApcuzlALIpV5zx/Pt36Pm6s3oY1ef4ZvAGuX2iWmP
+ 0ndpAmMe28D3Vu/N9uDyeQu5NE3aP1g2ZwJOf8VuUPOpw49LQ9aWe30sOR5rYWtwverGbNzZQ
+ 2yBINY944NQiCfW8w0xfWGIb++HvLEXDdoJyJuIOI=
 
 On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+
+>  static const struct of_device_id npcm_rc_match[] = {
+>         { .compatible = "nuvoton,npcm750-reset"},
+> +       { .compatible = "nuvoton,npcm845-reset"},
+>         { }
+>  };
+> +/*
+> + *  The following procedure should be observed in USB PHY, USB device and
+> + *  USB host initialization at BMC boot
+> + */
+> +static int npcm_usb_reset(struct platform_device *pdev, struct npcm_rc_data *rc)
+> +{
+> +       struct device_node *np = pdev->dev.of_node;
+> +       struct device *dev = &pdev->dev;
+> +
+> +       rc->gcr_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
+> +       if (IS_ERR(rc->gcr_regmap)) {
+> +               dev_err(&pdev->dev, "Failed to find gcr syscon");
+> +               return PTR_ERR(rc->gcr_regmap);
+> +       }
+> +
+> +       if (of_device_is_compatible(np, "nuvoton,npcm750-reset"))
+> +               npcm_usb_reset_npcm7xx(rc);
+> +       else if (of_device_is_compatible(np, "nuvoton,npcm845-reset"))
+> +               npcm_usb_reset_npcm8xx(rc);
+> +       else
+> +               return -ENODEV;
 >
-> This patchset  adds initial support for the Nuvoton
-> Arbel NPCM8XX Board Management controller (BMC) SoC family.
->
-> The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
-> The NPCM8XX computing subsystem comprises a quadcore ARM
-> Cortex A35 ARM-V8 architecture.
->
-> This patchset adds minimal architecture and drivers such as:
-> Clocksource, Clock, Reset, and WD.
->
-> Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
->
-> This patchset was tested on the Arbel NPCM8XX evaluation board.
 
-Thanks for your submission. Please note a few things about the process here:
+In place of the string comparison in of_device_is_compatible(), maybe just use
+the .data field of the of_device_id structure to point to the actual
+reset function.
 
-- The merge window is currently open, which means a lo
+Alternatively, register two separate platform_driver instances here and
+use separate probe functions that do the soc specific bits and call into
+shared functions for the bits that are the same.
 
-Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
-
-This patchset was tested on the Arbel NPCM8XX evaluation board.
-
-Tomer Maimon (19):
-  dt-bindings: timer: npcm: Add npcm845 compatible string
-  clocksource: timer-npcm7xx: Add NPCM845 timer support
-  dt-bindings: serial: 8250: Add npcm845 compatible string
-  tty: serial: 8250: Add NPCM845 UART support
-  dt-bindings: watchdog: npcm: Add npcm845 compatible string
-  watchdog: npcm_wdt: Add NPCM845 watchdog support
-  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
-  clk: npcm8xx: add clock controller
-  dt-bindings: reset: add syscon property
-  reset: npcm: using syscon instead of device data
-  dt-bindings: reset: npcm: Add support for NPCM8XX
-  reset: npcm: Add NPCM8XX support
-  dt-bindings: arm: npcm: Add maintainer
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
-  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
-  arm64: dts: nuvoton: Add initial NPCM8XX device tree
-  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
-  arm64: defconfig: Add Nuvoton NPCM family supportt of maintainers
-  won't be reviewing your patches at the moment. It may be better to wait
-  for the -rc1 to be out before sending out v2
-
-- don't send your patches to soc@kernel.org unless you want me to pick
-  them up into the soc tree and they have been reviewed already. The series
-  is clearly still under review at the moment, and I expect it to go through
-  a few revisions first.
-
-- gmail marked your emails as possible spam for me. I don't know what
-  happened here, but you may want to look into this to ensure that
-  everybody receives it.
-
-Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
-
-This patchset was tested on the Arbel NPCM8XX evaluation board.
-
-Tomer Maimon (19):
-  dt-bindings: timer: npcm: Add npcm845 compatible string
-  clocksource: timer-npcm7xx: Add NPCM845 timer support
-  dt-bindings: serial: 8250: Add npcm845 compatible string
-  tty: serial: 8250: Add NPCM845 UART support
-  dt-bindings: watchdog: npcm: Add npcm845 compatible string
-  watchdog: npcm_wdt: Add NPCM845 watchdog support
-  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
-  clk: npcm8xx: add clock controller
-  dt-bindings: reset: add syscon property
-  reset: npcm: using syscon instead of device data
-  dt-bindings: reset: npcm: Add support for NPCM8XX
-  reset: npcm: Add NPCM8XX support
-  dt-bindings: arm: npcm: Add maintainer
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
-  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
-  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
-  arm64: dts: nuvoton: Add initial NPCM8XX device tree
-  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
-  arm64: defconfig: Add Nuvoton NPCM family support
-
-- For an initial platform submission, I can merge the
-  clk/clocksource/serial/reset drivers along with the platform if they
-  have an Ack from the subsystem maintainers. I would normally
-  not include the watchdog patch in this as it's not essential, but
-  I suppose that it's fine if you only do a oneline change and it
-  has an Ack. If you have other nonessential drivers that need changes,
-  best submit them separately though.
-
-         Arnd
+       Arnd
