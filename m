@@ -1,399 +1,98 @@
-Return-Path: <SRS0=dOe9=V7=linux.intel.com=ilpo.jarvinen@kernel.org>
+Return-Path: <SRS0=CAhr=V7=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C04DC433F5
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:07:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 974DDC433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:31:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB747C385A9; Mon, 23 May 2022 07:07:26 +0000 (UTC)
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5F2D1C385AA; Mon, 23 May 2022 07:31:40 +0000 (UTC)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 197BFC385AA;
-	Mon, 23 May 2022 07:07:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 197BFC385AA
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653289645; x=1684825645;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=ev8v7cyguP4Weqk3Bhpwe6YaRfyri/aaDhL9TcGpb8I=;
-  b=JCIfoaXqnQQrkutLl9ioOCeFsTc8Fqe2rLRzWQtaeRnrCgJCG7uptCan
-   n1dbBspUjK/0JYWHl8cVNllE2+c++MBWurwLGr0UEZRIMHX1VSk73+toS
-   +8p6OYmxcfmWAbKMQczHWiVil9nYghzBjT8vIp1UPu9/o7v2QAZp7pU0C
-   Omf+cpLurlxFR8D/aDMOyWEO9ITIzv63p06RPQph9lpj9GTS8MMY46T1B
-   6uOLW/M7TW16WaBo67FcaI3mhhLBeQrpkps0qqCQC1+hLfm7kWgP59LeA
-   IuWdk7HxqRRQty+mrKA3n7+7hwrkLRltM1MCsT8Zjv7rIhOi/rFgmpoRZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="298442721"
-X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="298442721"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:07:23 -0700
-X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
-   d="scan'208";a="600484629"
-Received: from tstralma-mobl1.ger.corp.intel.com ([10.252.55.107])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:07:13 -0700
-Date: Mon, 23 May 2022 10:07:07 +0300 (EEST)
-From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: Tomer Maimon <tmaimon77@gmail.com>
-List-Id: <soc.lore.kernel.org>
-cc: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au, 
-    venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-    robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-    mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, daniel.lezcano@linaro.org, 
-    tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net, 
-    catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, olof@lixom.net, 
-    Jiri Slaby <jirislaby@kernel.org>, shawnguo@kernel.org, 
-    bjorn.andersson@linaro.org, geert+renesas@glider.be, 
-    marcel.ziswiler@toradex.com, vkoul@kernel.org, biju.das.jz@bp.renesas.com, 
-    nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com, 
-    j.neuschaefer@gmx.net, lkundrak@v3.sk, soc@kernel.org, 
-    devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-clk@vger.kernel.org, linux-serial <linux-serial@vger.kernel.org>, 
-    linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 08/19] clk: npcm8xx: add clock controller
-In-Reply-To: <20220522155046.260146-9-tmaimon77@gmail.com>
-Message-ID: <6fa3d94c-294d-1c6c-5738-6d15b2e17e90@linux.intel.com>
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-9-tmaimon77@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0AB4AC36AE3
+	for <soc@kernel.org>; Mon, 23 May 2022 07:31:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0AB4AC36AE3
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id br17so11735233lfb.2
+        for <soc@kernel.org>; Mon, 23 May 2022 00:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KyV9lT9+ytqJp/YOSL0Uwp6DljeF8AaxfinieX67j3o=;
+        b=lYKCMl/RGy09NhRM6yiabyzHYXnCsb6xykBD2OmT7C4UGXL/tS5cDHEr01DiJT8wXk
+         GDf9X9/aRLHK1aymH4u5opnx2hngCfPwvCdog5UoF6q/sWbvrzunVSLIQmEhmPnLAFAi
+         VkrnAqF0VCikJaynFl5OSGuVIeoLsaCeMiLJuorcsw08+U7Lmi9vU+0A0pLIzwN6ScZn
+         y2TLWJEJ+umDzjeFsXXL9+fYVXTyfd2nsJS7sZCg1RQY4LOavXbz94DUAJQUCzyY34RA
+         8CFQAdnNMsY/ImY0bdfrrWurLzTAAB7MumIRewwvAImYXo0/Tel3qr5Cu0dKYX4hsIPB
+         Gr1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KyV9lT9+ytqJp/YOSL0Uwp6DljeF8AaxfinieX67j3o=;
+        b=wRl/femTtna5x9SiiQqE4iRleAu8giIjx3K+3uLmyEdHM9Dq/ZaZxRnCIg9WMa47yW
+         vv5Q/0yaDd9hkC+XoykQyolV+eQQoXk8H2UGv/TuPdCkp8ZKTCm9QkInt3ud9uRQnVz+
+         Z06fmgU/txfK/F/b3GTVGZQXFcNp3j/gaXnaDAwmYI7p2UjISUNIeeBQSVj2vsIQ3Nym
+         ZZC6RwedwAd1F+Y2I84ajoppRgwlR13BUzT0JKbbAL8dIiJ5cH+ktMq1TldSsLJoilKn
+         S4jCNpuPG8W6622fxsSAoQncHGI508eCmKBK9hZXH3q+mCom3eeX/o/DN0qtCOlB33oP
+         33hQ==
+X-Gm-Message-State: AOAM530Io1yZdBJAdAEiwLjfrGH2zH9wA/mr8PhjzN3nLQ5xS2H/w1Rj
+	4mohCCCalJEahAy7AkebwpzwUg==
+X-Google-Smtp-Source: ABdhPJyGZyOu9VIxr33EGSOKBZFSxGoiwpEjxX4VFoXSuoPjjAbUXKOBkNH955vm37QLR3a4tkoUxQ==
+X-Received: by 2002:a05:6512:927:b0:473:ebb9:ec7d with SMTP id f7-20020a056512092700b00473ebb9ec7dmr14833260lft.637.1653291097068;
+        Mon, 23 May 2022 00:31:37 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05651c00ca00b00253e88591f1sm817885ljr.23.2022.05.23.00.31.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 00:31:36 -0700 (PDT)
+Message-ID: <bff38fba-86c7-36b6-c616-cd96d2a22111@linaro.org>
+Date: Mon, 23 May 2022 09:31:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 01/19] dt-bindings: timer: npcm: Add npcm845 compatible
+ string
+Content-Language: en-US
+To: Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+ tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
+ benjaminfair@google.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ sboyd@kernel.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+ daniel.lezcano@linaro.org, tglx@linutronix.de, wim@linux-watchdog.org,
+ linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+ olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
+ bjorn.andersson@linaro.org, geert+renesas@glider.be,
+ marcel.ziswiler@toradex.com, vkoul@kernel.org, biju.das.jz@bp.renesas.com,
+ nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com,
+ j.neuschaefer@gmx.net, lkundrak@v3.sk
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-2-tmaimon77@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220522155046.260146-2-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, 22 May 2022, Tomer Maimon wrote:
-
-> Nuvoton Arbel BMC NPCM7XX contains an integrated clock controller, which
-> generates and supplies clocks to all modules within the BMC.
+On 22/05/2022 17:50, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 timer.
 > 
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-
-> +static struct clk_hw *
-> +npcm8xx_clk_register_pll(void __iomem *pllcon, const char *name,
-> +			 const char *parent_name, unsigned long flags)
-> +{
-> +	struct npcm8xx_clk_pll *pll;
-> +	struct clk_init_data init;
-> +	struct clk_hw *hw;
-> +	int ret;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	pr_debug("%s reg, name=%s, p=%s\n", __func__, name, parent_name);
-> +
-> +	init.name = name;
-> +	init.ops = &npcm8xx_clk_pll_ops;
-> +	init.parent_names = &parent_name;
-> +	init.num_parents = 1;
-> +	init.flags = flags;
-> +
-> +	pll->pllcon = pllcon;
-> +	pll->hw.init = &init;
-> +
-> +	hw = &pll->hw;
-> +
-> +	ret = clk_hw_register(NULL, hw);
-> +	if (ret) {
-> +		kfree(pll);
-> +		hw = ERR_PTR(ret);
-> +	}
-> +
-> +	return hw;
-> +}
-> +
-> +#define NPCM8XX_CLKEN1          (0x00)
-> +#define NPCM8XX_CLKEN2          (0x28)
-> +#define NPCM8XX_CLKEN3          (0x30)
-> +#define NPCM8XX_CLKEN4          (0x70)
-> +#define NPCM8XX_CLKSEL          (0x04)
-> +#define NPCM8XX_CLKDIV1         (0x08)
-> +#define NPCM8XX_CLKDIV2         (0x2C)
-> +#define NPCM8XX_CLKDIV3         (0x58)
-> +#define NPCM8XX_CLKDIV4         (0x7C)
-> +#define NPCM8XX_PLLCON0         (0x0C)
-> +#define NPCM8XX_PLLCON1         (0x10)
-> +#define NPCM8XX_PLLCON2         (0x54)
-> +#define NPCM8XX_SWRSTR          (0x14)
-> +#define NPCM8XX_IRQWAKECON      (0x18)
-> +#define NPCM8XX_IRQWAKEFLAG     (0x1C)
-> +#define NPCM8XX_IPSRST1         (0x20)
-> +#define NPCM8XX_IPSRST2         (0x24)
-> +#define NPCM8XX_IPSRST3         (0x34)
-> +#define NPCM8XX_WD0RCR          (0x38)
-> +#define NPCM8XX_WD1RCR          (0x3C)
-> +#define NPCM8XX_WD2RCR          (0x40)
-> +#define NPCM8XX_SWRSTC1         (0x44)
-> +#define NPCM8XX_SWRSTC2         (0x48)
-> +#define NPCM8XX_SWRSTC3         (0x4C)
-> +#define NPCM8XX_SWRSTC4         (0x50)
-> +#define NPCM8XX_CORSTC          (0x5C)
-> +#define NPCM8XX_PLLCONG         (0x60)
-> +#define NPCM8XX_AHBCKFI         (0x64)
-> +#define NPCM8XX_SECCNT          (0x68)
-> +#define NPCM8XX_CNTR25M         (0x6C)
-> +#define NPCM8XX_THRTL_CNT       (0xC0)
-> +
-> +struct npcm8xx_clk_gate_data {
-> +	u32 reg;
-> +	u8 bit_idx;
-> +	const char *name;
-> +	const char *parent_name;
-> +	unsigned long flags;
-> +	/*
-> +	 * If this clock is exported via DT, set onecell_idx to constant
-> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
-> +	 * this specific clock.  Otherwise, set to -1.
-> +	 */
-> +	int onecell_idx;
-> +};
-> +
-> +struct npcm8xx_clk_mux_data {
-> +	u8 shift;
-> +	u8 mask;
-> +	u32 *table;
-> +	const char *name;
-> +	const char * const *parent_names;
-> +	u8 num_parents;
-> +	unsigned long flags;
-> +	/*
-> +	 * If this clock is exported via DT, set onecell_idx to constant
-> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
-> +	 * this specific clock.  Otherwise, set to -1.
-> +	 */
-> +	int onecell_idx;
-> +
-> +};
-> +
-> +struct npcm8xx_clk_div_fixed_data {
-> +	u8 mult;
-> +	u8 div;
-> +	const char *name;
-> +	const char *parent_name;
-> +	u8 clk_divider_flags;
-> +	/*
-> +	 * If this clock is exported via DT, set onecell_idx to constant
-> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
-> +	 * this specific clock.  Otherwise, set to -1.
-> +	 */
-> +	int onecell_idx;
-> +};
-> +
-> +struct npcm8xx_clk_div_data {
-> +	u32 reg;
-> +	u8 shift;
-> +	u8 width;
-> +	const char *name;
-> +	const char *parent_name;
-> +	u8 clk_divider_flags;
-> +	unsigned long flags;
-> +	/*
-> +	 * If this clock is exported via DT, set onecell_idx to constant
-> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
-> +	 * this specific clock.  Otherwise, set to -1.
-> +	 */
-> +	int onecell_idx;
-> +};
-> +
-> +struct npcm8xx_clk_pll_data {
-> +	u32 reg;
-> +	const char *name;
-> +	const char *parent_name;
-> +	unsigned long flags;
-> +	/*
-> +	 * If this clock is exported via DT, set onecell_idx to constant
-> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
-> +	 * this specific clock.  Otherwise, set to -1.
-> +	 */
-> +	int onecell_idx;
-> +};
-> +
-
-
-> +/*
-> + * Single copy of strings used to refer to clocks within this driver indexed by
-> + * above enum.
-> + */
-> +#define NPCM8XX_CLK_S_REFCLK      "refclk"
-> +#define NPCM8XX_CLK_S_SYSBYPCK    "sysbypck"
-> +#define NPCM8XX_CLK_S_MCBYPCK     "mcbypck"
-> +#define NPCM8XX_CLK_S_GFXBYPCK    "gfxbypck"
-> +#define NPCM8XX_CLK_S_PLL0        "pll0"
-> +#define NPCM8XX_CLK_S_PLL1        "pll1"
-> +#define NPCM8XX_CLK_S_PLL1_DIV2   "pll1_div2"
-> +#define NPCM8XX_CLK_S_PLL2        "pll2"
-> +#define NPCM8XX_CLK_S_PLL_GFX     "pll_gfx"
-> +#define NPCM8XX_CLK_S_PLL2_DIV2   "pll2_div2"
-> +#define NPCM8XX_CLK_S_PIX_MUX     "gfx_pixel"
-> +#define NPCM8XX_CLK_S_GPRFSEL_MUX "gprfsel_mux"
-> +#define NPCM8XX_CLK_S_MC_MUX      "mc_phy"
-> +#define NPCM8XX_CLK_S_CPU_MUX     "cpu"  /*AKA system clock.*/
-
-Add spaces around comment.
-
-> +#define NPCM8XX_CLK_S_MC          "mc"
-> +#define NPCM8XX_CLK_S_AXI         "axi"  /*AKA CLK2*/
-> +#define NPCM8XX_CLK_S_AHB         "ahb"  /*AKA CLK4*/
-
-Ditto.
-
-> +static void __init npcm8xx_clk_init(struct device_node *clk_np)
-> +{
-> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
-> +	void __iomem *clk_base;
-> +	struct resource res;
-> +	struct clk_hw *hw;
-> +	int ret;
-> +	int i;
-> +
-> +	ret = of_address_to_resource(clk_np, 0, &res);
-> +	if (ret) {
-> +		pr_err("%pOFn: failed to get resource, ret %d\n", clk_np, ret);
-> +		return;
-> +	}
-> +
-> +	clk_base = ioremap(res.start, resource_size(&res));
-> +	if (!clk_base)
-> +		goto npcm8xx_init_error;
-> +
-> +	npcm8xx_clk_data = kzalloc(struct_size(npcm8xx_clk_data, hws,
-> +					       NPCM8XX_NUM_CLOCKS), GFP_KERNEL);
-> +	if (!npcm8xx_clk_data)
-> +		goto npcm8xx_init_np_err;
-> +
-> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
-> +
-> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
-> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
-> +
-> +	/* Register plls */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_plls); i++) {
-> +		const struct npcm8xx_clk_pll_data *pll_data = &npcm8xx_plls[i];
-> +
-> +		hw = npcm8xx_clk_register_pll(clk_base + pll_data->reg,
-> +					      pll_data->name,
-> +					      pll_data->parent_name,
-> +					      pll_data->flags);
-> +		if (IS_ERR(hw)) {
-
-Who deregisters the already registered plls on error paths?
-
-You might want to consider devm_ variants in npcm8xx_clk_register_pll() to 
-make the cleanup simpler.
-
-Please check the other error path rollbacks from this point onward too.
-
-> +			pr_err("npcm8xx_clk: Can't register pll\n");
-> +			goto npcm8xx_init_fail;
-> +		}
-> +
-> +		if (pll_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[pll_data->onecell_idx] = hw;
-> +	}
-> +
-> +	/* Register fixed dividers */
-> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PLL1_DIV2,
-> +					  NPCM8XX_CLK_S_PLL1, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		pr_err("npcm8xx_clk: Can't register fixed div\n");
-> +		goto npcm8xx_init_fail;
-> +	}
-> +
-> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PLL2_DIV2,
-> +					  NPCM8XX_CLK_S_PLL2, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		pr_err("npcm8xx_clk: Can't register pll div2\n");
-> +		goto npcm8xx_init_fail;
-> +	}
-> +
-> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PRE_CLK,
-> +					  NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		pr_err("npcm8xx_clk: Can't register ckclk div2\n");
-> +		goto npcm8xx_init_fail;
-> +	}
-> +
-> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_AXI,
-> +					  NPCM8XX_CLK_S_TH, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		pr_err("npcm8xx_clk: Can't register axi div2\n");
-> +		goto npcm8xx_init_fail;
-> +	}
-> +
-> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_ATB,
-> +					  NPCM8XX_CLK_S_AXI, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		pr_err("npcm8xx_clk: Can't register atb div2\n");
-> +		goto npcm8xx_init_fail;
-> +	}
-> +
-> +	/* Register muxes */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
-> +		const struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
-> +
-> +		hw = clk_hw_register_mux_table(NULL, mux_data->name,
-> +					       mux_data->parent_names,
-> +					       mux_data->num_parents,
-> +					       mux_data->flags,
-> +					       clk_base + NPCM8XX_CLKSEL,
-> +					       mux_data->shift,
-> +					       mux_data->mask, 0,
-> +					       mux_data->table,
-> +					       &npcm8xx_clk_lock);
-> +
-> +		if (IS_ERR(hw)) {
-> +			pr_err("npcm8xx_clk: Can't register mux\n");
-> +			goto npcm8xx_init_fail;
-> +		}
-> +
-> +		if (mux_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[mux_data->onecell_idx] = hw;
-> +	}
-> +
-> +	/* Register clock dividers specified in npcm8xx_divs */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
-> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
-> +
-> +		hw = clk_hw_register_divider(NULL, div_data->name,
-> +					     div_data->parent_name,
-> +					     div_data->flags,
-> +					     clk_base + div_data->reg,
-> +					     div_data->shift, div_data->width,
-> +					     div_data->clk_divider_flags,
-> +					     &npcm8xx_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			pr_err("npcm8xx_clk: Can't register div table\n");
-> +			goto npcm8xx_init_fail;
-> +		}
-> +
-> +		if (div_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
-> +	}
-> +
-> +	ret = of_clk_add_hw_provider(clk_np, of_clk_hw_onecell_get,
-> +				     npcm8xx_clk_data);
-> +	if (ret)
-> +		pr_err("failed to add DT provider: %d\n", ret);
-> +
-> +	of_node_put(clk_np);
-> +
-> +	return;
-> +
-> +npcm8xx_init_fail:
-> +	kfree(npcm8xx_clk_data->hws);
-> +npcm8xx_init_np_err:
-> +	iounmap(clk_base);
-> +npcm8xx_init_error:
-> +	of_node_put(clk_np);
-> +}
-> +
-> +CLK_OF_DECLARE(npcm8xx_clk_init, "nuvoton,npcm845-clk", npcm8xx_clk_init);
+> ---
+>  .../devicetree/bindings/timer/nuvoton,npcm7xx-timer.yaml        | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
--- 
- i.
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
