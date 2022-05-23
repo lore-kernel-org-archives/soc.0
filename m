@@ -1,101 +1,399 @@
-Return-Path: <SRS0=zWj5=V7=gmail.com=alexander.sverdlin@kernel.org>
+Return-Path: <SRS0=dOe9=V7=linux.intel.com=ilpo.jarvinen@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDDA6C433EF
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 06:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C04DC433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:07:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9FD00C34115; Mon, 23 May 2022 06:56:25 +0000 (UTC)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id EB747C385A9; Mon, 23 May 2022 07:07:26 +0000 (UTC)
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0A9B1C385A9
-	for <soc@kernel.org>; Mon, 23 May 2022 06:56:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A9B1C385A9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id k30so19858175wrd.5
-        for <soc@kernel.org>; Sun, 22 May 2022 23:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LKnNzGCx87x63I8h/gwYuHzFIrPdoxH6GKC0KDIqEo8=;
-        b=K1Qbu4LN4uTSgtI2f+EwwHTK17ZwUKdpUB+44EazVoGCE3gAwf4WcSamCf+z//ik71
-         VjU+ape8fK6TZy57aLcVjEW/OJIVyeWkauRLHhOLpymMxmoTE1sRdEGTu1VnwJRymeON
-         GwCbJMw76qSYvQSDrpaXCnj0taljv1ZFbOA3CMzlEv5tdZbvPAwBKF0vntRCUvZVpqAU
-         o9v3sB5mEWuIwXAb5g8OcT+MzlzNf7NRVtb0CLp+T5nf/VUTSvGky3Gl11CtTJbq2bPR
-         MUdlmgCP4Z95Nrb8mPDeBjll7zo679+3VY14PFJf6S3sJo0+0HuFIYLrRWoRY2MDOQR1
-         h2zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LKnNzGCx87x63I8h/gwYuHzFIrPdoxH6GKC0KDIqEo8=;
-        b=0qFR6lDbsj6KtaHxErdRHleaQFzTAJDcBqi9HdkmLVwW/bttlF784Eivm7SseQWsCf
-         VGXWj0LJE1UnzojSyqXQJ1tK4H6lSngd3FR58j0SKHSAhLyGMoyAPYIny0jDY2jBczoC
-         wXbzcMzVq1XpiEiTtsekEDvxzwO53D3/wqZcElL59ZDw9HCPYsIK83ahcknMBt/QCFnn
-         a+yIlglqRPR/3WnPcABsTQKlLnGW6TgCQ6ngmbeIXjzKxW8CXYAqVzuRUfEcftjlaE30
-         HwmQi58FAnGdrM9OmEJJPphYNDaGsGyTMfkjDUTy+iWX/k3tHCK/MD1cabMMgSyFINre
-         zbpA==
-X-Gm-Message-State: AOAM533MW4IuzhKA/SDwxY8x6ga/t2i+bWkNw2aXiRbdOBS0agEV3SZ5
-	pe4ZcrHrPS2G8FGVqBW9qmhJVVhJk1dJVQ==
-X-Google-Smtp-Source: ABdhPJzxVVJfQdTIdKqAqKFnD0HZqlbRwAPf9YDWKBc83FR8g+9DH/H3FcukagCoRtRevHtOOSh5ig==
-X-Received: by 2002:a5d:64e9:0:b0:20f:dcf7:2173 with SMTP id g9-20020a5d64e9000000b0020fdcf72173mr3225598wri.332.1653288983444;
-        Sun, 22 May 2022 23:56:23 -0700 (PDT)
-Received: from giga-mm.. ([195.245.17.24])
-        by smtp.gmail.com with ESMTPSA id l6-20020adfa386000000b0020c6a524fd5sm10690243wrb.99.2022.05.22.23.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 May 2022 23:56:22 -0700 (PDT)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 197BFC385AA;
+	Mon, 23 May 2022 07:07:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 197BFC385AA
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653289645; x=1684825645;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ev8v7cyguP4Weqk3Bhpwe6YaRfyri/aaDhL9TcGpb8I=;
+  b=JCIfoaXqnQQrkutLl9ioOCeFsTc8Fqe2rLRzWQtaeRnrCgJCG7uptCan
+   n1dbBspUjK/0JYWHl8cVNllE2+c++MBWurwLGr0UEZRIMHX1VSk73+toS
+   +8p6OYmxcfmWAbKMQczHWiVil9nYghzBjT8vIp1UPu9/o7v2QAZp7pU0C
+   Omf+cpLurlxFR8D/aDMOyWEO9ITIzv63p06RPQph9lpj9GTS8MMY46T1B
+   6uOLW/M7TW16WaBo67FcaI3mhhLBeQrpkps0qqCQC1+hLfm7kWgP59LeA
+   IuWdk7HxqRRQty+mrKA3n7+7hwrkLRltM1MCsT8Zjv7rIhOi/rFgmpoRZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10355"; a="298442721"
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="298442721"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:07:23 -0700
+X-IronPort-AV: E=Sophos;i="5.91,245,1647327600"; 
+   d="scan'208";a="600484629"
+Received: from tstralma-mobl1.ger.corp.intel.com ([10.252.55.107])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 00:07:13 -0700
+Date: Mon, 23 May 2022 10:07:07 +0300 (EEST)
+From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Lukasz Majewski <lukma@denx.de>,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Russell King <linux@armlinux.org.uk>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] ARM: ep93xx: Make ts72xx_register_flash() static
-Date: Mon, 23 May 2022 08:56:16 +0200
-Message-Id: <20220523065616.325052-1-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.36.0
+cc: avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au, 
+    venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+    robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+    mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, daniel.lezcano@linaro.org, 
+    tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net, 
+    catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, olof@lixom.net, 
+    Jiri Slaby <jirislaby@kernel.org>, shawnguo@kernel.org, 
+    bjorn.andersson@linaro.org, geert+renesas@glider.be, 
+    marcel.ziswiler@toradex.com, vkoul@kernel.org, biju.das.jz@bp.renesas.com, 
+    nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com, 
+    j.neuschaefer@gmx.net, lkundrak@v3.sk, soc@kernel.org, 
+    devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-clk@vger.kernel.org, linux-serial <linux-serial@vger.kernel.org>, 
+    linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 08/19] clk: npcm8xx: add clock controller
+In-Reply-To: <20220522155046.260146-9-tmaimon77@gmail.com>
+Message-ID: <6fa3d94c-294d-1c6c-5738-6d15b2e17e90@linux.intel.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-9-tmaimon77@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-... and fix the warning/error:
+On Sun, 22 May 2022, Tomer Maimon wrote:
 
-arch/arm/mach-ep93xx/ts72xx.c:154:13: error: no previous prototype for function 'ts72xx_register_flash' [-Werror,-Wmissing-prototypes]
-void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
-            ^
-arch/arm/mach-ep93xx/ts72xx.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
-^
-static
+> Nuvoton Arbel BMC NPCM7XX contains an integrated clock controller, which
+> generates and supplies clocks to all modules within the BMC.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-Link: https://lore.kernel.org/lkml/202202140141.HRZ3WZwi-lkp@intel.com/T/
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
- arch/arm/mach-ep93xx/ts72xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +static struct clk_hw *
+> +npcm8xx_clk_register_pll(void __iomem *pllcon, const char *name,
+> +			 const char *parent_name, unsigned long flags)
+> +{
+> +	struct npcm8xx_clk_pll *pll;
+> +	struct clk_init_data init;
+> +	struct clk_hw *hw;
+> +	int ret;
+> +
+> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
+> +	if (!pll)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	pr_debug("%s reg, name=%s, p=%s\n", __func__, name, parent_name);
+> +
+> +	init.name = name;
+> +	init.ops = &npcm8xx_clk_pll_ops;
+> +	init.parent_names = &parent_name;
+> +	init.num_parents = 1;
+> +	init.flags = flags;
+> +
+> +	pll->pllcon = pllcon;
+> +	pll->hw.init = &init;
+> +
+> +	hw = &pll->hw;
+> +
+> +	ret = clk_hw_register(NULL, hw);
+> +	if (ret) {
+> +		kfree(pll);
+> +		hw = ERR_PTR(ret);
+> +	}
+> +
+> +	return hw;
+> +}
+> +
+> +#define NPCM8XX_CLKEN1          (0x00)
+> +#define NPCM8XX_CLKEN2          (0x28)
+> +#define NPCM8XX_CLKEN3          (0x30)
+> +#define NPCM8XX_CLKEN4          (0x70)
+> +#define NPCM8XX_CLKSEL          (0x04)
+> +#define NPCM8XX_CLKDIV1         (0x08)
+> +#define NPCM8XX_CLKDIV2         (0x2C)
+> +#define NPCM8XX_CLKDIV3         (0x58)
+> +#define NPCM8XX_CLKDIV4         (0x7C)
+> +#define NPCM8XX_PLLCON0         (0x0C)
+> +#define NPCM8XX_PLLCON1         (0x10)
+> +#define NPCM8XX_PLLCON2         (0x54)
+> +#define NPCM8XX_SWRSTR          (0x14)
+> +#define NPCM8XX_IRQWAKECON      (0x18)
+> +#define NPCM8XX_IRQWAKEFLAG     (0x1C)
+> +#define NPCM8XX_IPSRST1         (0x20)
+> +#define NPCM8XX_IPSRST2         (0x24)
+> +#define NPCM8XX_IPSRST3         (0x34)
+> +#define NPCM8XX_WD0RCR          (0x38)
+> +#define NPCM8XX_WD1RCR          (0x3C)
+> +#define NPCM8XX_WD2RCR          (0x40)
+> +#define NPCM8XX_SWRSTC1         (0x44)
+> +#define NPCM8XX_SWRSTC2         (0x48)
+> +#define NPCM8XX_SWRSTC3         (0x4C)
+> +#define NPCM8XX_SWRSTC4         (0x50)
+> +#define NPCM8XX_CORSTC          (0x5C)
+> +#define NPCM8XX_PLLCONG         (0x60)
+> +#define NPCM8XX_AHBCKFI         (0x64)
+> +#define NPCM8XX_SECCNT          (0x68)
+> +#define NPCM8XX_CNTR25M         (0x6C)
+> +#define NPCM8XX_THRTL_CNT       (0xC0)
+> +
+> +struct npcm8xx_clk_gate_data {
+> +	u32 reg;
+> +	u8 bit_idx;
+> +	const char *name;
+> +	const char *parent_name;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+> +struct npcm8xx_clk_mux_data {
+> +	u8 shift;
+> +	u8 mask;
+> +	u32 *table;
+> +	const char *name;
+> +	const char * const *parent_names;
+> +	u8 num_parents;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +
+> +};
+> +
+> +struct npcm8xx_clk_div_fixed_data {
+> +	u8 mult;
+> +	u8 div;
+> +	const char *name;
+> +	const char *parent_name;
+> +	u8 clk_divider_flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+> +struct npcm8xx_clk_div_data {
+> +	u32 reg;
+> +	u8 shift;
+> +	u8 width;
+> +	const char *name;
+> +	const char *parent_name;
+> +	u8 clk_divider_flags;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
+> +struct npcm8xx_clk_pll_data {
+> +	u32 reg;
+> +	const char *name;
+> +	const char *parent_name;
+> +	unsigned long flags;
+> +	/*
+> +	 * If this clock is exported via DT, set onecell_idx to constant
+> +	 * defined in include/dt-bindings/clock/nuvoton, NPCM8XX-clock.h for
+> +	 * this specific clock.  Otherwise, set to -1.
+> +	 */
+> +	int onecell_idx;
+> +};
+> +
 
-diff --git a/arch/arm/mach-ep93xx/ts72xx.c b/arch/arm/mach-ep93xx/ts72xx.c
-index e70bac011407..d3de7283ecb3 100644
---- a/arch/arm/mach-ep93xx/ts72xx.c
-+++ b/arch/arm/mach-ep93xx/ts72xx.c
-@@ -150,7 +150,7 @@ static struct platform_device ts72xx_nand_flash = {
- 	.num_resources		= ARRAY_SIZE(ts72xx_nand_resource),
- };
- 
--void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
-+static void __init ts72xx_register_flash(struct mtd_partition *parts, int n,
- 				  resource_size_t start)
- {
- 	/*
+
+> +/*
+> + * Single copy of strings used to refer to clocks within this driver indexed by
+> + * above enum.
+> + */
+> +#define NPCM8XX_CLK_S_REFCLK      "refclk"
+> +#define NPCM8XX_CLK_S_SYSBYPCK    "sysbypck"
+> +#define NPCM8XX_CLK_S_MCBYPCK     "mcbypck"
+> +#define NPCM8XX_CLK_S_GFXBYPCK    "gfxbypck"
+> +#define NPCM8XX_CLK_S_PLL0        "pll0"
+> +#define NPCM8XX_CLK_S_PLL1        "pll1"
+> +#define NPCM8XX_CLK_S_PLL1_DIV2   "pll1_div2"
+> +#define NPCM8XX_CLK_S_PLL2        "pll2"
+> +#define NPCM8XX_CLK_S_PLL_GFX     "pll_gfx"
+> +#define NPCM8XX_CLK_S_PLL2_DIV2   "pll2_div2"
+> +#define NPCM8XX_CLK_S_PIX_MUX     "gfx_pixel"
+> +#define NPCM8XX_CLK_S_GPRFSEL_MUX "gprfsel_mux"
+> +#define NPCM8XX_CLK_S_MC_MUX      "mc_phy"
+> +#define NPCM8XX_CLK_S_CPU_MUX     "cpu"  /*AKA system clock.*/
+
+Add spaces around comment.
+
+> +#define NPCM8XX_CLK_S_MC          "mc"
+> +#define NPCM8XX_CLK_S_AXI         "axi"  /*AKA CLK2*/
+> +#define NPCM8XX_CLK_S_AHB         "ahb"  /*AKA CLK4*/
+
+Ditto.
+
+> +static void __init npcm8xx_clk_init(struct device_node *clk_np)
+> +{
+> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
+> +	void __iomem *clk_base;
+> +	struct resource res;
+> +	struct clk_hw *hw;
+> +	int ret;
+> +	int i;
+> +
+> +	ret = of_address_to_resource(clk_np, 0, &res);
+> +	if (ret) {
+> +		pr_err("%pOFn: failed to get resource, ret %d\n", clk_np, ret);
+> +		return;
+> +	}
+> +
+> +	clk_base = ioremap(res.start, resource_size(&res));
+> +	if (!clk_base)
+> +		goto npcm8xx_init_error;
+> +
+> +	npcm8xx_clk_data = kzalloc(struct_size(npcm8xx_clk_data, hws,
+> +					       NPCM8XX_NUM_CLOCKS), GFP_KERNEL);
+> +	if (!npcm8xx_clk_data)
+> +		goto npcm8xx_init_np_err;
+> +
+> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
+> +
+> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
+> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+> +
+> +	/* Register plls */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_plls); i++) {
+> +		const struct npcm8xx_clk_pll_data *pll_data = &npcm8xx_plls[i];
+> +
+> +		hw = npcm8xx_clk_register_pll(clk_base + pll_data->reg,
+> +					      pll_data->name,
+> +					      pll_data->parent_name,
+> +					      pll_data->flags);
+> +		if (IS_ERR(hw)) {
+
+Who deregisters the already registered plls on error paths?
+
+You might want to consider devm_ variants in npcm8xx_clk_register_pll() to 
+make the cleanup simpler.
+
+Please check the other error path rollbacks from this point onward too.
+
+> +			pr_err("npcm8xx_clk: Can't register pll\n");
+> +			goto npcm8xx_init_fail;
+> +		}
+> +
+> +		if (pll_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[pll_data->onecell_idx] = hw;
+> +	}
+> +
+> +	/* Register fixed dividers */
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PLL1_DIV2,
+> +					  NPCM8XX_CLK_S_PLL1, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register fixed div\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PLL2_DIV2,
+> +					  NPCM8XX_CLK_S_PLL2, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register pll div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_PRE_CLK,
+> +					  NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register ckclk div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_AXI,
+> +					  NPCM8XX_CLK_S_TH, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register axi div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	hw = clk_hw_register_fixed_factor(NULL, NPCM8XX_CLK_S_ATB,
+> +					  NPCM8XX_CLK_S_AXI, 0, 1, 2);
+> +	if (IS_ERR(hw)) {
+> +		pr_err("npcm8xx_clk: Can't register atb div2\n");
+> +		goto npcm8xx_init_fail;
+> +	}
+> +
+> +	/* Register muxes */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
+> +		const struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
+> +
+> +		hw = clk_hw_register_mux_table(NULL, mux_data->name,
+> +					       mux_data->parent_names,
+> +					       mux_data->num_parents,
+> +					       mux_data->flags,
+> +					       clk_base + NPCM8XX_CLKSEL,
+> +					       mux_data->shift,
+> +					       mux_data->mask, 0,
+> +					       mux_data->table,
+> +					       &npcm8xx_clk_lock);
+> +
+> +		if (IS_ERR(hw)) {
+> +			pr_err("npcm8xx_clk: Can't register mux\n");
+> +			goto npcm8xx_init_fail;
+> +		}
+> +
+> +		if (mux_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[mux_data->onecell_idx] = hw;
+> +	}
+> +
+> +	/* Register clock dividers specified in npcm8xx_divs */
+> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
+> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
+> +
+> +		hw = clk_hw_register_divider(NULL, div_data->name,
+> +					     div_data->parent_name,
+> +					     div_data->flags,
+> +					     clk_base + div_data->reg,
+> +					     div_data->shift, div_data->width,
+> +					     div_data->clk_divider_flags,
+> +					     &npcm8xx_clk_lock);
+> +		if (IS_ERR(hw)) {
+> +			pr_err("npcm8xx_clk: Can't register div table\n");
+> +			goto npcm8xx_init_fail;
+> +		}
+> +
+> +		if (div_data->onecell_idx >= 0)
+> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
+> +	}
+> +
+> +	ret = of_clk_add_hw_provider(clk_np, of_clk_hw_onecell_get,
+> +				     npcm8xx_clk_data);
+> +	if (ret)
+> +		pr_err("failed to add DT provider: %d\n", ret);
+> +
+> +	of_node_put(clk_np);
+> +
+> +	return;
+> +
+> +npcm8xx_init_fail:
+> +	kfree(npcm8xx_clk_data->hws);
+> +npcm8xx_init_np_err:
+> +	iounmap(clk_base);
+> +npcm8xx_init_error:
+> +	of_node_put(clk_np);
+> +}
+> +
+> +CLK_OF_DECLARE(npcm8xx_clk_init, "nuvoton,npcm845-clk", npcm8xx_clk_init);
+> 
+
 -- 
-2.36.0
+ i.
 
