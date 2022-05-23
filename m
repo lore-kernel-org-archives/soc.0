@@ -1,123 +1,108 @@
-Return-Path: <SRS0=CAhr=V7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=4JMP=V7=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01629C433EF
-	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F1EC433F5
+	for <soc@archiver.kernel.org>; Mon, 23 May 2022 07:56:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6EBFC34115; Mon, 23 May 2022 07:39:14 +0000 (UTC)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 335F6C385A9; Mon, 23 May 2022 07:56:53 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 42DB5C36AE3
-	for <soc@kernel.org>; Mon, 23 May 2022 07:39:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 42DB5C36AE3
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id g16so16180721lja.3
-        for <soc@kernel.org>; Mon, 23 May 2022 00:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2o0hO8VxGZyOj9xdhEYgL8kZWVgpy5fzSg0aJgogftY=;
-        b=oTlafLq1Et1sqIk16m6DA+jCJFRlO1codjbSN1yIOqPNsC/hH97jn05NIguWsQsgDv
-         MWeWoI2vv9UbV3FkkFH8LRfKOud/5OOHhGZzSyiaRoZ4yq9pf4d9XglXpLwtFhbwxx3h
-         l/MntMA7PuEhdGnWm9xpPY0CELq4x2ndZJmpM6TyRaFCPZ/8baO/9gBuYiHVSGFPS1jm
-         b3KtJKIKCIsC+aHkFf8PcAu100fKNg2B8/yOoC4Ot+GFOGJuZroHrRLSGC770sv8mRIp
-         QTGJT7iEIsDef/Fmtvyt1PfVDHLqAtEk7gs9OuxZND4nvEsGXsjKCbb7lWb0Matyrg/4
-         l6Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2o0hO8VxGZyOj9xdhEYgL8kZWVgpy5fzSg0aJgogftY=;
-        b=PkabDsoxy1gGt3RVOJKJUgzkhhG3XgT2yfcZI+M3nQ+LfshoVcVD13WDS//Ke4UWYt
-         ua/YI1RiVCv72pmaQOBh3PQqO89LfWF0gPbF9dAUy1OlhhYR/7hVX0jvSKxGQCNQ7APK
-         KZaKB5fzIsXZ91SW3wc/YUmcCIlp+8ppk6Z6d/3X/wmWNhPOSVyuIiXuJxgsg22KDuL9
-         uxX5fcdEAX13SWxuAhCiMVu/af4S/qGOjg4ckLpIfTsUJL28ypV/UXSTCGuT1EqFCWsP
-         QP0eU0GVE66/EQCNfiU6+W0bJPJ34EskB1sCx5TcZtfe8Z8st8d/vsvSHY/6u0TARITl
-         1z/w==
-X-Gm-Message-State: AOAM530imvr8fm6Q/IXjduBPJGBKHjBrrpRjJst8eC8rNeOqV1UQXlIR
-	ihQlmotuL4hZW706nxiadTZCxg==
-X-Google-Smtp-Source: ABdhPJwtbBM2Rwibao4fT7vqqa0BZadmJT0isYqGRbFlzHrWoKbx1K2YaXeJwobANdpRy17mjiYuzA==
-X-Received: by 2002:a2e:9e41:0:b0:253:c37c:378b with SMTP id g1-20020a2e9e41000000b00253c37c378bmr12383846ljk.202.1653291551361;
-        Mon, 23 May 2022 00:39:11 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u5-20020a2e8545000000b0024f3d1dae7csm1656531ljj.4.2022.05.23.00.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 00:39:10 -0700 (PDT)
-Message-ID: <d02b042c-7f6e-8d2b-a5eb-c7ac4a0eea7d@linaro.org>
-Date: Mon, 23 May 2022 09:39:08 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 88E6EC385AA;
+	Mon, 23 May 2022 07:56:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88E6EC385AA
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M42fA-1nt2vp0y0G-0006P3; Mon, 23 May 2022 09:56:49 +0200
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f83983782fso138548157b3.6;
+        Mon, 23 May 2022 00:56:48 -0700 (PDT)
+X-Gm-Message-State: AOAM532sP750LuSfqjcEzriPjKUO64N0tPbQiSrX7RXXZaRDNCqkrGjv
+	ohh1g5qykMqpgWQchrFMZBS0x2itmngrH3v7Ot0=
+X-Google-Smtp-Source: ABdhPJw2LHiHqq0/Y/VzFvweK5WuNCUQUczMcSAr5ygjJFwwWwAtTaZ+A1Uu9aWWOiGiwQN+ltRnCtbf6WnrGsZfDuY=
+X-Received: by 2002:a0d:e64b:0:b0:2ff:8745:8a75 with SMTP id
+ p72-20020a0de64b000000b002ff87458a75mr14867694ywe.495.1653292607699; Mon, 23
+ May 2022 00:56:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1 09/19] dt-bindings: reset: add syscon property
-Content-Language: en-US
-To: Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
- tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
- benjaminfair@google.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- sboyd@kernel.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
- daniel.lezcano@linaro.org, tglx@linutronix.de, wim@linux-watchdog.org,
- linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
- bjorn.andersson@linaro.org, geert+renesas@glider.be,
- marcel.ziswiler@toradex.com, vkoul@kernel.org, biju.das.jz@bp.renesas.com,
- nobuhiro1.iwamatsu@toshiba.co.jp, robert.hancock@calian.com,
- j.neuschaefer@gmx.net, lkundrak@v3.sk
+References: <20220517032710.451537-1-Mr.Bossman075@gmail.com>
+In-Reply-To: <20220517032710.451537-1-Mr.Bossman075@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 23 May 2022 09:56:31 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0OKQYq-LPxjtRCNoD+coEcEcJD0eL_SV3aQ01BpyQVKA@mail.gmail.com>
+Message-ID: <CAK8P3a0OKQYq-LPxjtRCNoD+coEcEcJD0eL_SV3aQ01BpyQVKA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/15] Add support for the i.MXRT1170-evk
+To: Jesse Taube <mr.bossman075@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220522155046.260146-1-tmaimon77@gmail.com>
- <20220522155046.260146-10-tmaimon77@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220522155046.260146-10-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: NXP Linux Team <linux-imx@nxp.com>, Rob Herring <robh+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Sascha Hauer <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Stefan Agner <stefan@agner.ch>, 
+	Linus Walleij <linus.walleij@linaro.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	SoC Team <soc@kernel.org>, Russell King - ARM Linux <linux@armlinux.org.uk>, Abel Vesa <abel.vesa@nxp.com>, 
+	dev@lynxeye.de, Marcel Ziswiler <marcel.ziswiler@toradex.com>, 
+	Tim Harvey <tharvey@gateworks.com>, Leo Li <leoyang.li@nxp.com>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	Christoph Niedermaier <cniedermaier@dh-electronics.com>, clin@suse.com, 
+	Giulio Benetti <giulio.benetti@benettiengineering.com>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:s3HRfvwSLs+8Q6+og09BGj2F1TgqywNfGSS2rbOPDhv5qawUBG4
+ 1y/gI21JerMcuw8cTOAvqTt/KmrTBTGW/um2tUf2QA1jMNNTjZRHStQd9sVOjnyDprGDInl
+ mfDd6tZIU60YFhtEPkcQMpB+b2JUaAdbuyVrXRBhMFhq6uZI98l7S6ydeeW55kZANabcNmn
+ EwlXqQMreffZKJFGftpSg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ARhYVZw33WE=:Y23QLqNMUrPB8Xk43odJQD
+ i4YaRz8MTCv0uu+YOPAh613nSsSCAJEPW7vJcAJcHssZU7AfB2MJ1IaEYUGhv2Mjqu8HuBHwl
+ 0zccS9ar3OdkffoU/24h8MppUPjzOrDG6go4FVwMsAKo4GAqwBR8Qc3aM1b/y2hhU/p+5hyKi
+ RVV4xA1JZXdIMd+EY7SLrMY6+Itk9/GoTud3aQwsVV8lHaC5W5TBDqHHl9KHyhZiMtmlX24pv
+ UC/nRNUXPzaBgCyTS+DvA5MtFmjxiGINshftXQUEEkOiZAmzbaFewFlHTMxRiVbxA+lAyZNjW
+ HilpIlgUBmlH/m6+8PMf/6LT9SMo8GzmSRTczWrusI1a/DA4XFtAwGmBGJlXcXMNcKOq+C0O/
+ GaWwjuN2Zlb92IalzRMzl/nRFEK/gA/r3LbPm3S7n/gMo43h30ZZPJkOxyBe8ceiS/dOcPcXM
+ o+DNbGHfFwn8mWXK5JDy0UJ74F0rP6LJ0gqTIdJ05u9yX9IOATT0j9wFr+f+SpA24NET3argM
+ 7s9RuRRIj6uZdVz0nB8IFfrEKOLMQe7wXVVZq4VUX7d5eyC5nHZUmP2bN/RD9ezW9UPwzUb5i
+ WnnE9pz08RISVPEpaP4PN26Ss2vKWMr2TflsrYhJTVnteDqQThd9/+GO1YwpFLSGvWAg8PNzZ
+ tvL5IzUTsxO4Uzruf7RrPIz615X0mdHeNPlzqI9ri1tkvM+UV3dJPQH6b7GTXx+X9cAYiQ3kN
+ cSi9wbAdsMMWfeGrz1YFEf/BURqWNAhvKnyu3g==
 
-On 22/05/2022 17:50, Tomer Maimon wrote:
-> Describe syscon property that handles GCR registers
-> in Nuvoton BMC NPCM reset driver.
+On Tue, May 17, 2022 at 5:26 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
+>
+> This patch continues support for the imxrt series now with the imxrt1170
+>
+> This patch contains:
+> - Update to imxrt_defconfig
+> - Devicetree
+> - Clock driver
+> - Pinctrl driver
+> - New pll
+>
+> This patch also updates some documentation for both imxrt1170 an 1050.
+>
+> The i.MXRT1170 has a vast array of features including two cores. 2 Ethernet, 2 USB phy, and a 2d gpu.
+>
+> It also is featured in a new google coral board
+> https://coral.ai/products/dev-board-micro
+> Not affiliated unfortunately.
 
-Please wrap according to Linux standards:
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+Hi Jesse,
 
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-> index 17b7a6a43a29..cb1613092ee7 100644
-> --- a/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-> +++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
-> @@ -4,6 +4,7 @@ Required properties:
->  - compatible : "nuvoton,npcm750-reset" for NPCM7XX BMC
->  - reg : specifies physical base address and size of the register.
->  - #reset-cells: must be set to 2
-> +- syscon: a phandle to access GCR registers.
+As you have added soc@kernel.org to Cc in this series, it made it into our
+patchwork instance at https://patchwork.kernel.org/project/linux-soc/list/
+and I'll at least reply.
 
-syscon is not a generic property, so vendor prefix and some descriptive
-name of property.
+I expect the i.MX maintainers to pick up the patches into the individual
+branches in the future, and not keep them as a single branch for your
+platform, with the pinctrl and clock patches going through the respective
+subsystem trees.
 
->  
->  Optional property:
->  - nuvoton,sw-reset-number - Contains the software reset number to restart the SoC.
-> @@ -16,6 +17,7 @@ Example:
->  		compatible = "nuvoton,npcm750-reset";
->  		reg = <0xf0801000 0x70>;
->  		#reset-cells = <2>;
-> +		syscon = <&gcr>;
->  		nuvoton,sw-reset-number = <2>;
->  	};
->  
+I have marked the patches as "Not applicable" in patchwork because
+I don't plan to apply them, but they otherwise seem fine. Please drop
+the Cc:soc@kernel.org in the future.
 
-
-Best regards,
-Krzysztof
+      Arnd
