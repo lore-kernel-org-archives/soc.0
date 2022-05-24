@@ -1,229 +1,107 @@
-Return-Path: <SRS0=76tL=WA=gmail.com=tmaimon77@kernel.org>
+Return-Path: <SRS0=/NIB=WA=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 010B6C433F5
-	for <soc@archiver.kernel.org>; Tue, 24 May 2022 07:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB13C433EF
+	for <soc@archiver.kernel.org>; Tue, 24 May 2022 09:20:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B20A2C36AE3; Tue, 24 May 2022 07:26:24 +0000 (UTC)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	id 65874C34100; Tue, 24 May 2022 09:20:12 +0000 (UTC)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BA2F2C34115;
-	Tue, 24 May 2022 07:26:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BA2F2C34115
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f173.google.com with SMTP id w18so383929ybi.12;
-        Tue, 24 May 2022 00:26:23 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id E56E7C34115
+	for <soc@kernel.org>; Tue, 24 May 2022 09:20:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E56E7C34115
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f177.google.com with SMTP id i23so20160531ljb.4
+        for <soc@kernel.org>; Tue, 24 May 2022 02:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L2lvb4Rm5dc2ZLoh6Nqs4vNVk+FLUB8PVDMB9+5k3Ug=;
-        b=pE/MmXlmYdnnZ/q+N5cpAEhALRAk6ooWF0MA2vijyUkqoXJ0u8ytXDIml+Dwg2rQM0
-         92xKjiSmPlv+T6zHuAUjLoaChoIJsBDQCavWjzLYcA4vZdodHy+xaJD8JrRQKadNjFgY
-         W5BBEndyWSJnF1WyBBDE2DREeu7aTM0rjtfL8fk3AcXEes4LZpLjJNHaRDP4KfOELjgM
-         eRbA+rKolx6bsm4xoxisFsKAUInIAqGmTOgqIX9zMCWtRNlM2LKgRTXYWudvnG/ta1Zu
-         vZEqNd7SuIu/OEjpFIJw1gSctGXAyIwwg0HkgMNtmNoMNhdhVak+qJLblNTm2dmlE1lE
-         swdQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gmC1VcL8yscCI1x9Ja1ww8OKwee0RnTTrztFQlz77Bc=;
+        b=o4XvKcc2tDfYpFiGcIER/TkQLhWEG2NxgGdVOxts/6PecWelAhA4ZFGPNSGH+clTjA
+         eVVRKwj3bZsR3XujzfOZDuLsxqer9PqF+7/9THqEj86Q9dv3UqDBTF3zk7LFt0CpfU+T
+         OlW5k++WMSn8Oi99afEDvxYriEt2tENWgR0rLuJyG6p0iiCnFx0Tkwtvx83RVbIAvUUJ
+         +mDvthDpqAq2/Qe2ppbqVKkgNT1ERAaYJPWiKFCDVo/xiYxvwhumP4pJN7OGGSCqxvxg
+         nKaShYV3SHGTX/08yc3Y9nqIG7JasCJqQ3h9CBimib4ZQ0zxLceq/LfqFAzzInr4186O
+         529A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L2lvb4Rm5dc2ZLoh6Nqs4vNVk+FLUB8PVDMB9+5k3Ug=;
-        b=d9yWlVlQjXioBFVjc7F8VWlsnACokufilbEKGFVHf4xznBt+nPxgGRkB3qdO/ZUIsN
-         BgiBZ8ePjDriL+q0n2WS1SUtp7Bg/G/NOkRIRsmdpSOAGLK9+iUw11ZmXQZnMO598D/6
-         xkiu3lgPklX5W9id7k2hDZF1v5CiOATn2YU/R61daZsojbmLusuzlDUa9mRAnvxTOlpY
-         ze1PNjLdNbm8olmKhtY6gL4kUAsn6hByo6d9VkmJ6NiJNJgJSFgZciYPdME69jHUnBpO
-         fpo7pmtb1wLXFdAZwNGgLCejVQ5ZExXqimmL22WtzgO9pUzTPbi7rvXp/8Csk4t1bO1o
-         uV0Q==
-X-Gm-Message-State: AOAM533RPbhhJA+CPseY+3YHTmBciWaJCwMylW/YiOm2H0vgtX7c8tIU
-	bikdJjvTcXAdJ+I2yPtqJkv5HsEed2u+oahU7Vg=
-X-Google-Smtp-Source: ABdhPJyye7lAI0iL3x1b3gHGZlAknCAVA600zEVsBWlp44KWpJ0EBU6xDRAgCo8ZAylQCc457kZJmZ4/z8Nyprvk1Ao=
-X-Received: by 2002:a25:2c81:0:b0:64d:f21d:1fab with SMTP id
- s123-20020a252c81000000b0064df21d1fabmr25290643ybs.355.1653377182772; Tue, 24
- May 2022 00:26:22 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gmC1VcL8yscCI1x9Ja1ww8OKwee0RnTTrztFQlz77Bc=;
+        b=PuhtmNPHapbgj2ErsrrcncCF3aiPOcT23t+HWQgbojHWk5DrNoBWQSziR5cCfBhKWU
+         wXHc2rqHUm3vhTFUAK1jPjx2v4uPiMy5TcEXyVa6MrX3+oJZLWbAvSra6OFNi1DVfCTl
+         0/o9Vy711wfIYB5IsFVdWsQcV0eYgtHeKtde/WtYBxMu7D8Q1jkX/y5AeakwakfFr7C+
+         vtK07uwmoWIq241b7Gg6GEStvoSQSwWWOjgzGIybFcM84Ra5A7w7gnIL26Ah/L/LRCZL
+         3iCVISBTZ4qKQjFyN+uGXrMm+scOh/EbmRqfnZeZ8dVyuxYN0OR3elTGso0kq8Bf5PD4
+         +yqw==
+X-Gm-Message-State: AOAM533vvPgXvSH07h8I9fTKeY4LZ4mzlbpJs46iqu8PNtaQIq1fJxsV
+	1CQqpp1WzRBmvNjDGPku+ss6ow==
+X-Google-Smtp-Source: ABdhPJwsP8QIHu0YwsuqV3LIiclR/+y+mpo9Hp0+N+CZrmjMY1lkIzPrYWaAmSBYM5tGyraII/mBLw==
+X-Received: by 2002:a2e:a41a:0:b0:253:c96a:4e15 with SMTP id p26-20020a2ea41a000000b00253c96a4e15mr14939717ljn.195.1653384009037;
+        Tue, 24 May 2022 02:20:09 -0700 (PDT)
+Received: from [172.20.68.48] ([91.221.145.6])
+        by smtp.gmail.com with ESMTPSA id b8-20020ac24108000000b0047408564c31sm2429755lfi.286.2022.05.24.02.20.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 02:20:08 -0700 (PDT)
+Message-ID: <1546297c-6627-574e-4b30-4b8dbf95a851@linaro.org>
+Date: Tue, 24 May 2022 11:20:05 +0200
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-12-tmaimon77@gmail.com>
- <86cd6a37-70ad-3a90-bc8a-dcd8b41f1175@linaro.org> <CAP6Zq1i2Wj4FCA4-eseVoJyMof5=ocFCUcitVquJqYJ4Z3JTYQ@mail.gmail.com>
- <CAMuHMdVCCrKTpNHng2_kKGViuEXf=O3MsfpjjzMusuUcKE6HiA@mail.gmail.com>
- <62562cdf-93e3-f642-5bbd-48329eff33ea@linaro.org> <CAMuHMdVFV02t+vbwzEpNbpkSP4M3sGnJpzFMPBw7RkrJ9YvyKw@mail.gmail.com>
- <b60f5fd2-dc48-9375-da1c-ffcfe8292683@linaro.org>
-In-Reply-To: <b60f5fd2-dc48-9375-da1c-ffcfe8292683@linaro.org>
-From: Tomer Maimon <tmaimon77@gmail.com>
-Date: Tue, 24 May 2022 10:26:11 +0300
-Message-ID: <CAP6Zq1iPw7QzzdHV77s08-MLKrtC+VCdnWxUjb9WTXpf822f8g@mail.gmail.com>
-Subject: Re: [PATCH v1 11/19] dt-bindings: reset: npcm: Add support for NPCM8XX
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/2] ARM: dts: imx: Add devicetree for Kobo Aura 2
+Content-Language: en-US
+To: Andreas Kemnade <andreas@kemnade.info>
 List-Id: <soc.lore.kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Avi Fishman <avifishman70@gmail.com>, 
-	Tali Perry <tali.perry1@gmail.com>, Joel Stanley <joel@jms.id.au>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Greg KH <gregkh@linuxfoundation.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, Jiri Slaby <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Andersson?= <bjorn.andersson@linaro.org>, 
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>, Vinod Koul <vkoul@kernel.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, 
-	Robert Hancock <robert.hancock@calian.com>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
-	Lubomir Rintel <lkundrak@v3.sk>, arm-soc <soc@kernel.org>, devicetree <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, 
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+ l.stach@pengutronix.de, alexander.stein@ew.tq-group.com,
+ marcel.ziswiler@toradex.com, linux@rempel-privat.de,
+ matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
+ sebastian.reichel@collabora.com, leoyang.li@nxp.com,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, nicolecrivain@gmail.com
+References: <20220522214415.254959-1-andreas@kemnade.info>
+ <20220522214415.254959-3-andreas@kemnade.info>
+ <402c7e38-7ad0-581f-146d-3db88e77d37c@linaro.org>
+ <20220523210542.0735dd5f@aktux>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220523210542.0735dd5f@aktux>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof and Geert,
+On 23/05/2022 21:05, Andreas Kemnade wrote:
+> On Mon, 23 May 2022 12:03:09 +0200
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> 
+> [...]
+>>> +
+>>> +	gpio_keys: gpio-keys {
+>>> +		compatible = "gpio-keys";
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&pinctrl_gpio_keys>;
+>>> +
+>>> +		cover {  
+>>
+>> Generic node names. You could add suffix if needed, so either key or
+>> key-cover.
+>>
+> hmm, the example in
+> Documentation/devicetree/bindings/input/gpio-keys.yaml
+> 
+> shows names like I did. I usually expect to trust binding documentation
+> to have something acceptable.
 
-Appreciate your comments!
+It's only an example and no one usually cares about correcting it, once
+it got merged.
 
-We are using the same binding method in the NPCM7XX that it is
-upstreamed a few years ago.
-https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/reset/nuvoton,npcm7xx-reset.h
-
-In the Reset NPCM driver we check the reset spec arguments that are
-using the correct register offset and BIT.
-https://github.com/torvalds/linux/blob/master/drivers/reset/reset-npcm.c#L125
-
-One more thing,
-Sorry about the mail format, I am using Gmail and now I am moving it
-to plain text mode. hope it will help.
-Any other suggestion to set the Gmail to work with the Linux community
-will help alot
-
-On Mon, 23 May 2022 at 18:23, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 23/05/2022 17:11, Geert Uytterhoeven wrote:
-> > Hi Krzysztof,
-> >
-> > On Mon, May 23, 2022 at 4:26 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >> On 23/05/2022 16:22, Geert Uytterhoeven wrote:
-> >>> On Mon, May 23, 2022 at 4:03 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >>>> On Mon, 23 May 2022 at 12:01, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>> On 22/05/2022 17:50, Tomer Maimon wrote:
-> >>>>>> Add binding document and device tree binding
-> >>>>>> constants for Nuvoton BMC NPCM8XX reset controller.
-> >>>>>>
-> >>>>>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> >>>
-> >>>>>> --- /dev/null
-> >>>>>> +++ b/include/dt-bindings/reset/nuvoton,npcm8xx-reset.h
-> >>>>>> @@ -0,0 +1,124 @@
-> >>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
-> >>>>>> +// Copyright (c) 2022 Nuvoton Technology corporation.
-> >>>>>> +
-> >>>>>> +#ifndef _DT_BINDINGS_NPCM8XX_RESET_H
-> >>>>>> +#define _DT_BINDINGS_NPCM8XX_RESET_H
-> >>>>>> +
-> >>>>>> +#define NPCM8XX_RESET_IPSRST1                0x20
-> >>>>>> +#define NPCM8XX_RESET_IPSRST2                0x24
-> >>>>>> +#define NPCM8XX_RESET_IPSRST3                0x34
-> >>>>>> +#define NPCM8XX_RESET_IPSRST4                0x74
-> >>>>>
-> >>>>> What are these? All IDs should be incremental, decimal and start from 0.
-> >>>>
-> >>>> Register offset, we use the same method in NPCM7xx. please refer
-> >>>> https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/reset/nuvoton,npcm7xx-reset.h
-> >>>>
-> >>>> and the driver asserts the reset according to the reset include definitions
-> >>>
-> >>> So if they're easy to look up the values, you could do without the
-> >>> definitions? Cfr. the interrupts properties in .dtsi files, where we
-> >>> typically just use the hardcoded numbers.
-> >>>
-> >>> If you do decide to keep them, a comment explaining their origins
-> >>> would be useful.
-Will do it in the next patch.
-> >>>
-> >>>>>> +
-> >>>>>> +/* Reset lines on IP1 reset module (NPCM8XX_RESET_IPSRST1) */
-> >>>>>> +#define NPCM8XX_RESET_GDMA0          3
-> >>>>>
-> >>>>> IDs start from 0 and do not have holes.
-> >>>>
-> >>>> This represents the reset BIT in the reset register.
-> >>>
-> >>> Likewise, I think it's a good idea to document that in a comment, cfr.
-> >>> https://elixir.bootlin.com/linux/v5.18/source/include/dt-bindings/power/r8a7795-sysc.h#L8
-> >>
-> >> Renesas is also doing it not correct (just like many others). The
-> >> bindings are not for register bits or offsets. Such data can be DTS but
-> >> not part of bindings.
-> >
-> > I think you are taking a too-extremist standpoint.
-> > The two extremes are:
-> >   1. Numbers correspond to hardware numbers, and are easy to look up
-> >     in the hardware documentation (e.g. GIC SPI interrupt numbers).
-> >      => Use the hardcoded numbers in DTS.
->
-> And such numbers (like GIC_SPI interrupt numbers) do not go to bindings.
-> They go to DTS only.
->
-> >   2. Numbers do not correspond to hardware numbers, so we had to
-> >      invent our own definitions and numbers, usually loosely
-> >      based on some table in the hardware documentation.
-> >      The driver will have to look up the numbers in a data
-> >      structure, to know how to program the hardware.
-> >      The numbers become part of the DT ABI, and cannot be changed
-> >      (header file is append-only).
-> >      => Use the binding definitions in DTS.
->
-> Correct.
->
-> However this patch is some mixture of both approaches.
->
-> The same pointed by Arnd:
-> https://lore.kernel.org/linux-devicetree/CAK8P3a0fDJQvGLEtG0fxLkG08Fh9V7LEMPsx4AaS+2Ldo_xWxw@mail.gmail.com/
->
-> > We are taking the middle ground: there is a one-to-one relation between
-> > numbers and hardware numbers that can be looked up in or derived from
-> > the hardware documentation, but the conversion is non-trivial (for the
-> > casual human reviewer), or the documentation refers to names instead
-> > of numbers in most sections (e.g. named power domains). Then why not
-> > let the numbers match some feature in the hardware (e.g. register
-> > offset or register bit)?
->
-> Because you are embedding the device programming model into the
-> bindings. It's the same as having properties:
-> "vendor,value-for-register-xxx"
->
-> We do not create bindings to describe programming model but hardware.
-> Using the values from programming model is fragile and ties the bindings
-> to that one programming model. Programming model can change, e.g. by
-> mistake, but bindings should stay independent.
->
-> >
-> >> Imagine now you made mistake in this register
-> >> offset and hardware uses slightly different value. What now? Change
-> >> bindings? No. Bindings hold here ID, the abstraction, and ID stays fixed.
-> >
-> > I see no difference here with using the wrong interrupt number in an
-> > interrupts property in DTS.  What do we do in that case? Fix the DTS.
->
-> Yes, fix the DTS. DTS are not the bindings. You can fix the DTS. You
-> cannot fix the bindings because you affect both driver and DTS.
->
-> >
-> > BTW, are you aware of any driver that transforms interrupt numbers
-> > obtained from DTS, because the DTS used the wrong number?
->
-> Again, what do the DTS has here at all? The interrupt numbers are also
-> not included in the bindings, so what does it prove?
->
-> Best regards,
-> Krzysztof
 
 Best regards,
-
-Tomer
+Krzysztof
