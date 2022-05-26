@@ -4,77 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB4BBC433EF
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBCA6C433F5
+	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:43:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D363EC34116; Thu, 26 May 2022 20:43:46 +0000 (UTC)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	id A4507C385A9; Thu, 26 May 2022 20:43:58 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 22A8AC385B8
-	for <soc@kernel.org>; Thu, 26 May 2022 20:43:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22A8AC385B8
+	by smtp.kernel.org (Postfix) with ESMTPS id CCE7CC385B8
+	for <soc@kernel.org>; Thu, 26 May 2022 20:43:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCE7CC385B8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id wh22so5158424ejb.7
-        for <soc@kernel.org>; Thu, 26 May 2022 13:43:46 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id v15so731129edl.9
+        for <soc@kernel.org>; Thu, 26 May 2022 13:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QcLvN03w1UKQPgjX9rv1d+qE6eJZjbxTCqhmh4Irl8s=;
-        b=E7k7ti+TRjeingo8wiGVBmQhssUIKMovZq1CTFf8w0jfK1VOBKzeIvuBZ/R7Nk8+2A
-         QLYTqx9W16pwQSh+Q72mBZwKap2PcQcem3gT500kqHb5BSaZtZGnun8lQ+XgIYMvs2Wm
-         MGWpYFkwHUmBH4XshWzqYAkZiDGm1KyDr8hWyC13lHFLmbh9G9zeCS4WE+vK/3ahSqjs
-         vgb90soY7g7HsjHcbvHFfqvUfM1uQXrxQ8TUlqgSqJKJ6HOspYgZpaEgTtyjGBvYjluR
-         cSQtC4FudRd34ZUqiRfzzOM+3xwYEWQrzcjMfQOZdMqA3X1uRV/99BZNrZrsJe1bRtez
-         HgFg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dsi9QOKKEq+Gq7K5pC3bfltgznXdiEGEzIyAtjmGd6w=;
+        b=sN5esgzHy1r7EwRHGOK1EJV2hGeoC/W0RBHlEDlv2hQHGJ7OEHtkQqFWASC2zx46MP
+         ghDuKZMrm4pGE5vCoZUYYdcx8o02iKMrd9mVmVIr4VSUUz1QhGz0c9cf+p2GEVeGUcv/
+         P05kttBYygAtI0BgYwqMFgZ7XeCkcj61UTRi1ounkhJ8Yh2GnNyTFzaUQ4aUfxkepSx4
+         5ZngsVua4LQzjirQG5Y8IVlp9UvLj3ppKu0oHe4Z96gXkSdoY93VN8o+81uD9TKAUXVK
+         v8d0vTFaZihcAwDvc3LBLpOPODeyZVti48ZZK2XPSP7UL13hSIZ5JoE3slktoWewLZEC
+         ZlSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QcLvN03w1UKQPgjX9rv1d+qE6eJZjbxTCqhmh4Irl8s=;
-        b=KH70Lu2V7v5zPO8AyWXajAGUkdZQtOvmj0BPLgEMHb2c6r23HU3nahjHiOKInRshzP
-         wFDny8SzOkRtECoy7ASL5C1CS5XmMfYnDdsIPKzx2uh5FumCJ5pL+wGeXqnvHYNvJCZV
-         IsoXHK68ThzJM16w0Cim3UHOb2SHU2KH5zAOSqDD6sMsyZwqVfjxKoossbJotJmcd57Y
-         Bi060HMTx5aZcfX0Z9p/xY7C6zwUjZdcAhL3JAkzfieft1+JEoLrekLuVNsn0kHddbmy
-         0aMLmmv6ahHHtEG/edcv1DADQChc4hgp6o+nBlbOAYA2WWiohvDUiCqpilYwnZ5Q+ym2
-         riNw==
-X-Gm-Message-State: AOAM533qIKsk1oLK1ABvhuz267AFKSOw/o/l4GhZy9KMGzIgDXkXdKoe
-	luUvKslElo3H5ton8lxG6uz1qA==
-X-Google-Smtp-Source: ABdhPJzkQvWbZM/xotHvMbcGMGsupNTjLEPyTrX5WSzU+1e2khzPqzlRKi6W6SCEInuggwcCLax6AQ==
-X-Received: by 2002:a17:907:6d26:b0:6fe:b8cc:4613 with SMTP id sa38-20020a1709076d2600b006feb8cc4613mr26198968ejc.229.1653597825692;
-        Thu, 26 May 2022 13:43:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dsi9QOKKEq+Gq7K5pC3bfltgznXdiEGEzIyAtjmGd6w=;
+        b=5TBhepq0D2MpvAcSBT/ZwwcqFLkuMDmpPWFIW/X8wmMq+IKYqoGzqg13U/LCJ1LNpV
+         ZOrb+Hs+okAn7KUjxb/nx8kzPtudysSCkgSkuBJ0HwMUOIEtOfDIWHdKFTEVrwoMNxfh
+         FNl0eQEr5ByjI3NEIFpNY44MiQt1njYwa79C0S/Z78il+0kdUXBJRgAJH5WkATr/VyQY
+         wB+MzlZKNh+p/35DuWiDUEYrAC57s2P/P63Rx9mL4+u0LJNSKYaof5NB/zFSh2MWLN3b
+         odWL5EQr59EuYqDOznTUp/3A4NiTpvobORcvvvIpuhoXn+7PnkKLna7FDYh/358SXN4I
+         FcFg==
+X-Gm-Message-State: AOAM532Nim0YAqVjhCn3On9+lmhgy6KvddMml9Xp7AmoABxEa3sz0+Lw
+	oT2RikJT2U55Ga8ZmwMPiPtPng==
+X-Google-Smtp-Source: ABdhPJy39XOcWA6QrDYRwoFCG5pXOg3b6bp6ZaoAT2xwYTfDZBle+zPNr3kYUdwVsE9J0/wT97cd/g==
+X-Received: by 2002:a05:6402:12d5:b0:42b:c6a8:ab3 with SMTP id k21-20020a05640212d500b0042bc6a80ab3mr11276378edx.209.1653597836165;
+        Thu, 26 May 2022 13:43:56 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id qw39-20020a1709066a2700b006f3ef214e59sm788041ejc.191.2022.05.26.13.43.44
+        by smtp.gmail.com with ESMTPSA id h4-20020a17090619c400b006f3ef214e6esm817635ejd.212.2022.05.26.13.43.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:43:45 -0700 (PDT)
+        Thu, 26 May 2022 13:43:55 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ARM: dts: broadcom: adjust whitespace around '='
-Date: Thu, 26 May 2022 22:43:39 +0200
-Message-Id: <20220526204339.832296-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: arm: adjust whitespace around '='
+Date: Thu, 26 May 2022 22:43:50 +0200
+Message-Id: <20220526204350.832361-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526204339.832296-1-krzysztof.kozlowski@linaro.org>
-References: <20220526204339.832296-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -88,76 +81,135 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm/boot/dts/bcm28155-ap.dts | 8 ++++----
- arch/arm/boot/dts/bcm283x.dtsi    | 6 +++---
- arch/arm/boot/dts/bcm5301x.dtsi   | 6 +++---
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ arch/arm64/boot/dts/arm/juno-base.dtsi    | 44 +++++++++++------------
+ arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi | 16 ++++-----
+ 2 files changed, 30 insertions(+), 30 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm28155-ap.dts b/arch/arm/boot/dts/bcm28155-ap.dts
-index ead6e9804dbf..78465ad37c5f 100644
---- a/arch/arm/boot/dts/bcm28155-ap.dts
-+++ b/arch/arm/boot/dts/bcm28155-ap.dts
-@@ -31,22 +31,22 @@ uart@3e000000 {
+diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
+index 065381c1cbf5..8d0d45d168d1 100644
+--- a/arch/arm64/boot/dts/arm/juno-base.dtsi
++++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
+@@ -581,36 +581,36 @@ cti_sys0: cti@20020000 { /* sys_cti_0 */
+ 
+ 		trig-conns@0 {
+ 			reg = <0>;
+-			arm,trig-in-sigs=<2 3>;
+-			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+-			arm,trig-out-sigs=<0 1>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-in-sigs = <2 3>;
++			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
++			arm,trig-out-sigs = <0 1>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&etr_sys>;
+ 		};
+ 
+ 		trig-conns@1 {
+ 			reg = <1>;
+-			arm,trig-in-sigs=<0 1>;
+-			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+-			arm,trig-out-sigs=<7 6>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-in-sigs = <0 1>;
++			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
++			arm,trig-out-sigs = <7 6>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&etf_sys0>;
+ 		};
+ 
+ 		trig-conns@2 {
+ 			reg = <2>;
+-			arm,trig-in-sigs=<4 5 6 7>;
+-			arm,trig-in-types=<STM_TOUT_SPTE STM_TOUT_SW
++			arm,trig-in-sigs = <4 5 6 7>;
++			arm,trig-in-types = <STM_TOUT_SPTE STM_TOUT_SW
+ 					   STM_TOUT_HETE STM_ASYNCOUT>;
+-			arm,trig-out-sigs=<4 5>;
+-			arm,trig-out-types=<STM_HWEVENT STM_HWEVENT>;
++			arm,trig-out-sigs = <4 5>;
++			arm,trig-out-types = <STM_HWEVENT STM_HWEVENT>;
+ 			arm,cs-dev-assoc = <&stm_sys>;
+ 		};
+ 
+ 		trig-conns@3 {
+ 			reg = <3>;
+-			arm,trig-out-sigs=<2 3>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-out-sigs = <2 3>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&tpiu_sys>;
+ 		};
  	};
+@@ -628,24 +628,24 @@ cti_sys1: cti@20110000 { /* sys_cti_1 */
  
- 	i2c@3e016000 {
--		status="okay";
-+		status = "okay";
- 		clock-frequency = <400000>;
+ 		trig-conns@0 {
+ 			reg = <0>;
+-			arm,trig-in-sigs=<0>;
+-			arm,trig-in-types=<GEN_INTREQ>;
+-			arm,trig-out-sigs=<0>;
+-			arm,trig-out-types=<GEN_HALTREQ>;
++			arm,trig-in-sigs = <0>;
++			arm,trig-in-types = <GEN_INTREQ>;
++			arm,trig-out-sigs = <0>;
++			arm,trig-out-types = <GEN_HALTREQ>;
+ 			arm,trig-conn-name = "sys_profiler";
+ 		};
+ 
+ 		trig-conns@1 {
+ 			reg = <1>;
+-			arm,trig-out-sigs=<2 3>;
+-			arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
++			arm,trig-out-sigs = <2 3>;
++			arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+ 			arm,trig-conn-name = "watchdog";
+ 		};
+ 
+ 		trig-conns@2 {
+ 			reg = <2>;
+-			arm,trig-out-sigs=<1 6>;
+-			arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
++			arm,trig-out-sigs = <1 6>;
++			arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+ 			arm,trig-conn-name = "g_counter";
+ 		};
  	};
+diff --git a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+index 2e43f4531308..ba88d1596f6f 100644
+--- a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
++++ b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+@@ -96,24 +96,24 @@ cti_sys2: cti@20160000 { /* sys_cti_2 */
  
- 	i2c@3e017000 {
--		status="okay";
-+		status = "okay";
- 		clock-frequency = <400000>;
+ 		trig-conns@0 {
+ 			reg = <0>;
+-			arm,trig-in-sigs=<0 1>;
+-			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+-			arm,trig-out-sigs=<0 1>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-in-sigs = <0 1>;
++			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
++			arm,trig-out-sigs = <0 1>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&etf_sys1>;
+ 		};
+ 
+ 		trig-conns@1 {
+ 			reg = <1>;
+-			arm,trig-in-sigs=<2 3 4>;
+-			arm,trig-in-types=<ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
++			arm,trig-in-sigs = <2 3 4>;
++			arm,trig-in-types = <ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+ 			arm,trig-conn-name = "ela_clus_0";
+ 		};
+ 
+ 		trig-conns@2 {
+ 			reg = <2>;
+-			arm,trig-in-sigs=<5 6 7>;
+-			arm,trig-in-types=<ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
++			arm,trig-in-sigs = <5 6 7>;
++			arm,trig-in-types = <ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+ 			arm,trig-conn-name = "ela_clus_1";
+ 		};
  	};
- 
- 	i2c@3e018000 {
--		status="okay";
-+		status = "okay";
- 		clock-frequency = <400000>;
- 	};
- 
- 	i2c@3500d000 {
--		status="okay";
-+		status = "okay";
- 		clock-frequency = <100000>;
- 
- 		pmu: pmu@8 {
-diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
-index c113661a6668..2718e1033929 100644
---- a/arch/arm/boot/dts/bcm283x.dtsi
-+++ b/arch/arm/boot/dts/bcm283x.dtsi
-@@ -50,9 +50,9 @@ cpu_thermal: cpu-thermal {
- 
- 			trips {
- 				cpu-crit {
--					temperature	= <90000>;
--					hysteresis	= <0>;
--					type		= "critical";
-+					temperature = <90000>;
-+					hysteresis = <0>;
-+					type = "critical";
- 				};
- 			};
- 
-diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
-index 65f8a759f1e3..5fc1b847f4aa 100644
---- a/arch/arm/boot/dts/bcm5301x.dtsi
-+++ b/arch/arm/boot/dts/bcm5301x.dtsi
-@@ -568,9 +568,9 @@ cpu_thermal: cpu-thermal {
- 
- 			trips {
- 				cpu-crit {
--					temperature	= <125000>;
--					hysteresis	= <0>;
--					type		= "critical";
-+					temperature = <125000>;
-+					hysteresis = <0>;
-+					type = "critical";
- 				};
- 			};
- 
 -- 
 2.34.1
 
