@@ -4,123 +4,226 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0345FC433F5
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 14:44:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 328B2C433EF
+	for <soc@archiver.kernel.org>; Thu, 26 May 2022 14:45:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C0580C3411A; Thu, 26 May 2022 14:44:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A72C34118
-	for <soc@kernel.org>; Thu, 26 May 2022 14:44:21 +0000 (UTC)
+	id 1A907C3411C; Thu, 26 May 2022 14:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AFBC3411B
+	for <soc@kernel.org>; Thu, 26 May 2022 14:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653576261;
-	bh=FZdgVBAsDEhOhuPNO664KfOqZMLUfaXivcodwnEiEwM=;
-	h=From:Date:Subject:To:List-Id:Cc:From;
-	b=gAZ6jQEiIiAHbvt60m/QJCtMETdseaPvFcIEvo1soWkJhMyF8czIj3Rc0yyq21xWw
-	 DPAcwbli8CWbXs18X58uB0IbNU0Xp3M1Qd+gLKhObQgUT4KDtM5pfSoGiXbytVgZbI
-	 8LAhg7ENbb4XDCf6+iafDAUmubyjbBM4oYTk2JfuVJsGonQRd6bnEMUOlYwz2SzwYg
-	 V5At1xUUtPrC29GZzv0Ynk26W9FjiBtyMOaE2r50SqmNgFnNuYja171QE1HRP9Az7n
-	 qMgQutd5e62NElJdu9Nn4vL4ETQFShcZPUdi4cE5fDPMOOmvUC6GPL/pnRWgk36/Iv
-	 fRyY0m/vxQ+tQ==
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ef5380669cso17569987b3.9
-        for <soc@kernel.org>; Thu, 26 May 2022 07:44:21 -0700 (PDT)
-X-Gm-Message-State: AOAM532UpFEFtB3f/NCZZQBuCq468sMZgAg+Zp3AGAqzkxPEmNSdmsPr
-	GQ6KZmIlCcjfg5Y/4zuR+3rDInewMixARA0mJKc=
-X-Google-Smtp-Source: ABdhPJz62vsqTUeGqCuuKLQZ7SXMUHfeuKaw+CBp1IJQnaqqe+ERnpuX0MjAoShm91SPNEqA0MFPzITn/unpzVK22NQ=
-X-Received: by 2002:a81:a15:0:b0:300:37bd:d2e0 with SMTP id
- 21-20020a810a15000000b0030037bdd2e0mr12687858ywk.249.1653576260759; Thu, 26
- May 2022 07:44:20 -0700 (PDT)
+	s=k20201202; t=1653576340;
+	bh=iRDGchJFBvhvLQHi4LPtoWUASflZyt2L2a4JZiuaYmk=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=UHY3U1NJ6/oEOPzm+KOe9UWaWtId+b5INl9JnoSqqhhywoEt2bC0auE/GKyodh3U+
+	 an+RSiG7VYNZ/Z71lgP0QmxO+pCW8Ud21/epwUc6EaphvgGT7rlE/PFkXMOJ0mbCvD
+	 A2k9ztRoE995lewBVWSeD9ar7RhZNXiBLBYT8PS2h2lPqXIWirXfz8s0g54BzO3x+h
+	 ufgZnJettneHmxVq5NOSML9egoBdlbVtEg2BG1n5Yx8kpoNiGbbFqwDrb1XMCnljCp
+	 dIxEUmNWS5gdOgDeSeJTeU07ubfjuy6SvO+03gT6GtGBXEjM0zC4LeenIHuBE2AxvY
+	 Au/sdhY+hbA8g==
+Received: by mail-yb1-f176.google.com with SMTP id i187so3241716ybg.6
+        for <soc@kernel.org>; Thu, 26 May 2022 07:45:39 -0700 (PDT)
+X-Gm-Message-State: AOAM530xK8oS6hURu7uy3H0kns+RPxg9qzZyrDWoSSnwL28ytXhY0BHq
+	UyIeVc1TLl4QoM4pKmsN3CGEi/z5wmhRXCdsB0A=
+X-Google-Smtp-Source: ABdhPJwjr79zE7aB9vX0//CfQGQ2Zij6iWbJQ0PGTfw6vTP+YVm2bVz+YtckKubC2XL8bNA43Sgfww5CnGVob79G7IY=
+X-Received: by 2002:a25:add6:0:b0:655:9053:c659 with SMTP id
+ d22-20020a25add6000000b006559053c659mr8364108ybe.394.1653576339042; Thu, 26
+ May 2022 07:45:39 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAK8P3a1K_t-a4=uKPbZ2kwa13bDhkNC9S8ZiyhF84SSXJYjT2w@mail.gmail.com>
+In-Reply-To: <CAK8P3a1K_t-a4=uKPbZ2kwa13bDhkNC9S8ZiyhF84SSXJYjT2w@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 26 May 2022 16:44:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1K_t-a4=uKPbZ2kwa13bDhkNC9S8ZiyhF84SSXJYjT2w@mail.gmail.com>
-Message-ID: <CAK8P3a1K_t-a4=uKPbZ2kwa13bDhkNC9S8ZiyhF84SSXJYjT2w@mail.gmail.com>
-Subject: [GIT PULL 0/5] ARM: SoC changes for 5.19, part 1
+Date: Thu, 26 May 2022 16:45:22 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2s3mAOqp40PZ2W7V5R=R5yare6Eq3fNbZq5kLEYYAmzQ@mail.gmail.com>
+Message-ID: <CAK8P3a2s3mAOqp40PZ2W7V5R=R5yare6Eq3fNbZq5kLEYYAmzQ@mail.gmail.com>
+Subject: [GIT PULL 1/5] ARM: updates for 32-bit SoCs
 To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
 Cc: SoC Team <soc@kernel.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
 	Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is a large chunk of ARM related changes, but larger than average
-patches for both DT and drivers, plus a series for multiplatform conversion.
-Today's patches contain the first 1084 changesets, but I am planning for
-a follow-up with another 100 or so next week that had some late rebases.
+The following changes since commit b2d229d4ddb17db541098b83524d901257e93845=
+:
 
-Most active developers this time are:
+  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
 
-     98 Arnd Bergmann
-     95 Krzysztof Kozlowski
-     45 Biju Das
-     39 Konrad Dybcio
-     33 Tony Lindgren
-     33 Dmitry Baryshkov
-     23 Michael Walle
-     22 Cristian Marussi
-     21 Geert Uytterhoeven
-     21 David Jander
-     18 Lad Prabhakar
-     17 Marcel Ziswiler
-     16 Luca Weiss
-     16 Allen-KH Cheng
-     15 Vinod Koul
-     15 Marek Vasut
-     15 Gireesh Hiremath
-     14 Rohit Agarwal
-     14 Max Krummenacher
-     14 Bhupesh Sharma
-     13 Philipp Zabel
-     11 Linus Walleij
-     11 Janusz Krzysztofik
-     11 Fabio Estevam
-     11 Bjorn Andersson
+are available in the Git repository at:
 
-Krzysztof did a lot of work on devicetree fixes cross platforms, while I did
-most of the multiplatform conversion. Interestingly, a large chunk of the
-changes this time are for 32-bit platforms, while the general trend recently
-has been towards 64-bit ones.
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-soc-5.=
+19
 
-Overall dirstat:
-   0.7% Documentation/devicetree/bindings/arm/
-   0.5% Documentation/devicetree/bindings/clock/
-   0.9% Documentation/devicetree/bindings/reset/
-   2.3% Documentation/devicetree/bindings/soc/qcom/
-   1.2% Documentation/devicetree/bindings/
-  27.2% arch/arm/boot/dts/
-   0.6% arch/arm/mach-at91/
-   0.8% arch/arm/mach-davinci/include/mach/
-   0.9% arch/arm/mach-davinci/
-   0.5% arch/arm/mach-mmp/
-   4.2% arch/arm/mach-omap1/
-   0.4% arch/arm/mach-omap2/
-   1.8% arch/arm/mach-pxa/
-   0.4% arch/arm/mach-s3c/
-   0.5% arch/arm/mach-versatile/
-   0.7% arch/arm/plat-omap/
-   2.5% arch/arm/
-   0.5% arch/arm64/boot/dts/arm/
-   7.0% arch/arm64/boot/dts/freescale/
-   3.3% arch/arm64/boot/dts/mediatek/
-   1.0% arch/arm64/boot/dts/nvidia/
-   9.4% arch/arm64/boot/dts/qcom/
-   4.2% arch/arm64/boot/dts/renesas/
-   3.2% arch/arm64/boot/dts/rockchip/
-   1.2% arch/arm64/boot/dts/ti/
-   0.7% arch/arm64/boot/dts/
-   0.5% drivers/bus/
-   0.6% drivers/clk/pxa/
-   3.4% drivers/firmware/arm_scmi/
-   0.4% drivers/memory/tegra/
-   2.0% drivers/nvme/host/
-   1.8% drivers/soc/apple/
-   1.7% drivers/soc/imx/
-   1.1% drivers/soc/mediatek/
-   0.7% drivers/soc/qcom/
-   0.7% drivers/soc/
-   0.8% drivers/tee/optee/
-   3.0% drivers/
-   1.6% include/dt-bindings/clock/
-   0.4% include/linux/soc/ti/
-   0.4% include/linux/soc/
-   0.7% include/
-   1.0% sound/soc/pxa/
-   0.4% sound/
+for you to fetch changes up to 426ecc5851021519374542b0a954b2a9a3942d04:
+
+  Merge tag 'mvebu-arm-5.19-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into
+arm/soc (2022-05-13 16:33:02 +0200)
+
+----------------------------------------------------------------
+ARM: updates for 32-bit SoCs
+
+These updates are for platform specific code in arch/arm/, mostly fixing
+minor issues. The at91 platform gains support for better power
+management on the lan966 platform and new firmware on the sama5
+platform. The mediatek soc drivers in turn are enabled for the new
+mt8195 SoC.
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      soc: mediatek: mmsys: Add sw0_rst_offset for MT8192
+
+Arnd Bergmann (11):
+      Merge tag 'omap-for-v5.19/soc-signed' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into
+arm/soc
+      Merge tag 'arm-soc/for-5.19/soc' of
+https://github.com/Broadcom/stblinux into arm/soc
+      Merge tag 'arm-soc/for-5.19/maintainers' of
+https://github.com/Broadcom/stblinux into arm/soc
+      Merge tag 'samsung-soc-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into arm/soc
+      Merge tag 'renesas-arm-soc-for-v5.19-tag1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into
+arm/soc
+      Merge tag 'tegra-for-5.19-arm-core' of
+git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into arm/soc
+      Merge tag 'hisi-armv7soc-for-5.19' of
+https://github.com/hisilicon/linux-hisi into arm/soc
+      Merge tag 'v5.19-rockchip-soc32-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/soc
+      Merge tag 'v5.18-next-soc' of
+git://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into
+arm/soc
+      Merge tag 'at91-soc-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/soc
+      Merge tag 'mvebu-arm-5.19-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu into
+arm/soc
+
+Chun-Kuang Hu (1):
+      soc: mediatek: cmdq: Use mailbox rx_callback instead of cmdq_task_cb
+
+Claudiu Beznea (5):
+      ARM: at91: pm: keep documentation inline with structure members
+      ARM: at91: pm: introduce macros for pm mode replacement
+      ARM: at91: pm: use kernel documentation style
+      ARM: at91: pm: add quirks for pm
+      ARM: at91: Kconfig: implement PIT64B selection
+
+Cl=C3=A9ment L=C3=A9ger (2):
+      ARM: at91: add code to handle secure calls
+      ARM: at91: pm: add support for sama5d2 secure suspend
+
+Geert Uytterhoeven (2):
+      ARM: shmobile: Drop commas after dt_compat sentinels
+      ARM: shmobile: rcar-gen2: Drop comma after OF match table sentinel
+
+Jason-JH.Lin (1):
+      soc: mediatek: mutex: remove mt8195 MOD0 and SOF0 definition
+
+Joe Perches (1):
+      MAINTAINERS: Broadcom internal lists aren't maintainers
+
+Johan Hovold (2):
+      ARM: OMAP2+: drop omap_device_register() helper
+      ARM: OMAP2+: drop hwmod-clock helper comment
+
+Julia Lawall (6):
+      ARM: rockchip: fix typos in comments
+      ARM: s3c: fix typos in comments
+      ARM: mm: fix typos in comments
+      ARM: brcmstb: fix typos in comments
+      ARM: tegra: Fix typos in comments
+      orion5x: fix typos in comments
+
+Kavyasree Kotagiri (1):
+      ARM: at91: debug: add lan966 support
+
+Matthias Brugger (1):
+      Merge tag 'v5.18-next-vdso0-stable-tag' into v5.18-next/soc
+
+Peng Wu (1):
+      ARM: hisi: Add missing of_node_put after of_find_compatible_node
+
+Stefan Wahren (1):
+      MAINTAINERS: add raspberrypi to BCM2835 architecture
+
+Uwe Kleine-K=C3=B6nig (1):
+      ARM: s3c: Drop config symbol S3C24XX_PWM
+
+Wang Qing (1):
+      ARM: OMAP2+: add missing of_node_put before break and return
+
+William Zhang (2):
+      arm: bcmbca: add arch bcmbca machine entry
+      MAINTAINERS: Add Broadcom BCMBCA entry
+
+Zhiyong.Tao (1):
+      dt-bindings: pwrap: mediatek: Update pwrap document for mt8195
+
+jason-jh.lin (5):
+      dt-bindings: arm: mediatek: mmsys: add power and gce properties
+      dt-bindings: arm: mediatek: mmsys: add mt8195 SoC binding
+      soc: mediatek: add mtk-mmsys support for mt8195 vdosys0
+      soc: mediatek: add mtk-mutex support for mt8195 vdosys0
+      soc: mediatek: add DDP_DOMPONENT_DITHER0 enum for mt8195 vdosys0
+
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml      |  32 ++
+ .../devicetree/bindings/soc/mediatek/pwrap.txt     |  10 +-
+ MAINTAINERS                                        |  79 ++--
+ arch/arm/Kconfig.debug                             |  22 ++
+ arch/arm/configs/mini2440_defconfig                |   3 +-
+ arch/arm/configs/s3c2410_defconfig                 |   2 +
+ arch/arm/mach-at91/Kconfig                         |  20 +-
+ arch/arm/mach-at91/Makefile                        |   2 +-
+ arch/arm/mach-at91/pm.c                            | 431 +++++++++++++++++=
+++--
+ arch/arm/mach-at91/sam_secure.c                    |  46 +++
+ arch/arm/mach-at91/sam_secure.h                    |  18 +
+ arch/arm/mach-at91/sama5.c                         |   2 +
+ arch/arm/mach-bcm/Kconfig                          |  12 +
+ arch/arm/mach-bcm/platsmp-brcmstb.c                |   2 +-
+ arch/arm/mach-hisi/platsmp.c                       |   4 +
+ arch/arm/mach-omap2/cm_common.c                    |   8 +-
+ arch/arm/mach-omap2/control.c                      |  19 +-
+ arch/arm/mach-omap2/omap_device.c                  |  20 -
+ arch/arm/mach-omap2/omap_device.h                  |   1 -
+ arch/arm/mach-omap2/prm_common.c                   |   8 +-
+ arch/arm/mach-orion5x/dns323-setup.c               |   4 +-
+ arch/arm/mach-rockchip/platsmp.c                   |   2 +-
+ arch/arm/mach-s3c/Kconfig                          |   8 -
+ arch/arm/mach-s3c/Kconfig.s3c24xx                  |   2 -
+ arch/arm/mach-s3c/iotiming-s3c2410.c               |   2 +-
+ arch/arm/mach-s3c/pm-s3c64xx.c                     |   2 +-
+ arch/arm/mach-s3c/s3c24xx.c                        |   2 +-
+ arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c |   2 +-
+ arch/arm/mach-shmobile/setup-emev2.c               |   2 +-
+ arch/arm/mach-shmobile/setup-r7s72100.c            |   2 +-
+ arch/arm/mach-shmobile/setup-r7s9210.c             |   2 +-
+ arch/arm/mach-shmobile/setup-r8a73a4.c             |   2 +-
+ arch/arm/mach-shmobile/setup-r8a7740.c             |   2 +-
+ arch/arm/mach-shmobile/setup-r8a7778.c             |   2 +-
+ arch/arm/mach-shmobile/setup-r8a7779.c             |   2 +-
+ arch/arm/mach-shmobile/setup-rcar-gen2.c           |   4 +-
+ arch/arm/mach-shmobile/setup-sh73a0.c              |   2 +-
+ arch/arm/mach-tegra/platsmp.c                      |   2 +-
+ arch/arm/mm/cache-b15-rac.c                        |   2 +-
+ drivers/soc/mediatek/mt8167-mmsys.h                |   2 +-
+ drivers/soc/mediatek/mt8183-mmsys.h                |   2 +-
+ drivers/soc/mediatek/mt8186-mmsys.h                |   4 +-
+ drivers/soc/mediatek/mt8192-mmsys.h                |   4 +-
+ drivers/soc/mediatek/mt8195-mmsys.h                | 370 +++++++++++++++++=
++
+ drivers/soc/mediatek/mt8365-mmsys.h                |   4 +-
+ drivers/soc/mediatek/mtk-cmdq-helper.c             |  25 +-
+ drivers/soc/mediatek/mtk-mmsys.c                   | 153 +++++++-
+ drivers/soc/mediatek/mtk-mmsys.h                   |   6 +
+ drivers/soc/mediatek/mtk-mutex.c                   |  92 ++++-
+ include/linux/soc/mediatek/mtk-cmdq.h              |   5 +-
+ include/linux/soc/mediatek/mtk-mmsys.h             |  12 +
+ 51 files changed, 1281 insertions(+), 187 deletions(-)
+ create mode 100644 arch/arm/mach-at91/sam_secure.c
+ create mode 100644 arch/arm/mach-at91/sam_secure.h
+ create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
