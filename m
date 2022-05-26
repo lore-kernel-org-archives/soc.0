@@ -4,65 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD3CC433F5
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A82C5C433EF
+	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:40:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 051D7C34116; Thu, 26 May 2022 20:38:21 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	id 921A2C34116; Thu, 26 May 2022 20:40:59 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24489C34118
-	for <soc@kernel.org>; Thu, 26 May 2022 20:38:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24489C34118
+	by smtp.kernel.org (Postfix) with ESMTPS id 7D1DFC385B8
+	for <soc@kernel.org>; Thu, 26 May 2022 20:40:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D1DFC385B8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id ck4so5039663ejb.8
-        for <soc@kernel.org>; Thu, 26 May 2022 13:38:19 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id q21so5183761ejm.1
+        for <soc@kernel.org>; Thu, 26 May 2022 13:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SE4BNjFdqLE0+GuEKPforw6u34ofhCy2Rfxq0TB6A5c=;
-        b=oidgsHlBxWTgyl8UEMdxGOEbv0if3NzKgUQfQ6gzbfw7GlEZ8DAKZbXDv+Gfi5Tg5a
-         v55Pgj3p1bdPdnzZIzsU5iXkY5mLEuMqAoRyL5G6xEjO7WhLxyuLT3O2kigDwOWsSAE9
-         adpvtkk7tHVu9VfnOViCi8nYwH30glJZal8TJBaWyJnkKqY43BCfGaKq2sM/a2dhj01u
-         utTw1jXzZDL8GfrxtB3XqkalX6tYlCW9Moam94jpSrP/59F1ROHThuccPpHc4BITRpor
-         NHsgHpe55QtObrKVOSG9BFSF1JhtCT2h4F8S/Sbs8HD05ZZCMMhoLRJk5qDv19wi547O
-         yCrA==
+        bh=aqhBoLtTEqtC8SyTJYD8D3FCPQDdwFN33ubMEAOxADA=;
+        b=klhTqkkBjZyyKz+geuEig4N438/PxZQ/zSYVKjOQWVE63SWsAaH54JHjaeLTd8Z1+L
+         Xpup8sZb0TTCmS0WHy1GGT0yIZ6eP/qkypf4RDPFgB1Hy6M2iPXO/h4fHFbRDqlBZzrj
+         56EWK8A0soyJck4ID7w0gkqr7OcT+ZVV6V4m5NsAlnwg1wx9P/PLAYgh1wvHjPJJjYq0
+         k2jqM+pbMF5WaDDbV4+k2CLOHC+q3i+lQDQy3ZKuUa9I0nApipuQIQIhcTlc/IxeEysk
+         L1atKlUDrU0KmSEOjeh2lk6spoHkSB0PAH/wpOL15MvWMhnDS9+8pKH8lUfv6lM9SVBe
+         gcWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=SE4BNjFdqLE0+GuEKPforw6u34ofhCy2Rfxq0TB6A5c=;
-        b=0euWDnHBSlNP99f/ftvw7TfmcGfvmKmXp+bhht4oKrecH/yCD7tLW19mf00M2qRgRQ
-         dg5W8+0Odfl/0U87NWgdRR8X/ht74TBkzjdm+kClr3Tb2hHCdC4++LwqwJsry2Y2hsCM
-         GjiKYEF27R4cJsK9coM2DXLotJCINi5scNTeAyEVIAmvvH42ol+5e9uPVlwgeHPGo1ae
-         Gv5427CHXSRH4NeBLTU1gzUEf5KAil9uWaBAvagf1//59iCORK7bNfKS2cUul8TYI77S
-         240gQzXkGyk/kv1QBEJ90uRXe3Fvit0CEOYf0DAELEYBQgTx9m2SYXjQ4GbVOvkg05Mv
-         3C7w==
-X-Gm-Message-State: AOAM531XmYv2AOcHoMQpfUkPnuWq9ZaQ6Nj00rSm3AnZJNaHWHdL5FGB
-	Kuyx/gewBtVic06cNb5hzNB8dA==
-X-Google-Smtp-Source: ABdhPJyxzdY9k14chD6ueVnbFF/pTmmgU2qpDaplGqdPnajbWBTlH4U65Qdhrdte2YfL/oMvjT3jsA==
-X-Received: by 2002:a17:907:a089:b0:6ff:29b5:49c3 with SMTP id hu9-20020a170907a08900b006ff29b549c3mr3285275ejc.86.1653597498368;
-        Thu, 26 May 2022 13:38:18 -0700 (PDT)
+        bh=aqhBoLtTEqtC8SyTJYD8D3FCPQDdwFN33ubMEAOxADA=;
+        b=OsJZoMPVpB9uLBZQJkADCAqhRz+3ws546Hjh/eLCLWEe4na9RhyWZqY8DCiyMhod7Z
+         VojmDwcG2MZgHjSnz16jlh5oKrE4loZksxbZy9fmpEt4QTHIwLJCDL0rR8ORDEk6ggo2
+         UC2tcgUJ+u13nd6mJzKH74jvMCmZE4LoM79da15Wfwz0z2wayCKtwuTZTvEAIICZ2a6W
+         1LJDiMzmsr1BDs5yqvbn46F7P0dOqP4mnYtNajF/Qvt8IC6Yzzt/gArWZ0Qc/Gwy24ZD
+         S74OoUeW67TQ52F+uzZIGA0S0wtBV15b1GxV+PiVxg9Ut5J2wMykILf7rH+hrbCF3wkR
+         Mncw==
+X-Gm-Message-State: AOAM533gUq4If/MgY6JImogBjyO1+6o1vfnN2ayh/nO64S7GtU4aovdh
+	BMhf8Ma318GX8EO+6ZcuSRXQHQ==
+X-Google-Smtp-Source: ABdhPJz01ojWcoqHShRpJ9jXwcNEqh7yWxJDa0rGnMF9Xm3ORBLS6PhyZAenvDbuZhG78ZdanV4IWw==
+X-Received: by 2002:a17:907:9805:b0:6f4:fe0e:5547 with SMTP id ji5-20020a170907980500b006f4fe0e5547mr34631737ejc.426.1653597656769;
+        Thu, 26 May 2022 13:40:56 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u19-20020a50a413000000b0042aaecf8707sm1212343edb.70.2022.05.26.13.38.17
+        by smtp.gmail.com with ESMTPSA id q9-20020a50cc89000000b0042ac2705444sm1200203edi.58.2022.05.26.13.40.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:38:17 -0700 (PDT)
+        Thu, 26 May 2022 13:40:56 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
 	soc@kernel.org,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	Tony Lindgren <tony@atomide.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
+	Enric Balletbo i Serra <eballetbo@gmail.com>,
+	Javier Martinez Canillas <javier@dowhile0.org>,
+	linux-omap@vger.kernel.org,
 	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: spear: adjust whitespace around '='
-Date: Thu, 26 May 2022 22:38:15 +0200
-Message-Id: <20220526203815.831383-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: omap: adjust whitespace around '='
+Date: Thu, 26 May 2022 22:40:44 +0200
+Message-Id: <20220526204044.831656-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,120 +83,226 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm/boot/dts/spear1310-evb.dts | 2 +-
- arch/arm/boot/dts/spear1340-evb.dts | 2 +-
- arch/arm/boot/dts/spear1340.dtsi    | 2 +-
- arch/arm/boot/dts/spear300-evb.dts  | 2 +-
- arch/arm/boot/dts/spear310-evb.dts  | 2 +-
- arch/arm/boot/dts/spear320-evb.dts  | 2 +-
- arch/arm/boot/dts/spear320-hmi.dts  | 2 +-
- arch/arm/boot/dts/spear320.dtsi     | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/omap2420-h4.dts           | 2 +-
+ arch/arm/boot/dts/omap3-evm-37xx.dts        | 2 +-
+ arch/arm/boot/dts/omap3-evm.dts             | 2 +-
+ arch/arm/boot/dts/omap3-gta04.dtsi          | 2 +-
+ arch/arm/boot/dts/omap3-igep.dtsi           | 2 +-
+ arch/arm/boot/dts/omap3-ldp.dts             | 6 +++---
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi     | 2 +-
+ arch/arm/boot/dts/omap3-n900.dts            | 4 ++--
+ arch/arm/boot/dts/omap3-n950-n9.dtsi        | 4 ++--
+ arch/arm/boot/dts/omap3-overo-base.dtsi     | 2 +-
+ arch/arm/boot/dts/omap3-pandora-common.dtsi | 2 +-
+ arch/arm/boot/dts/omap3430-sdp.dts          | 6 +++---
+ arch/arm/boot/dts/omap5-l4.dtsi             | 2 +-
+ 13 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/arch/arm/boot/dts/spear1310-evb.dts b/arch/arm/boot/dts/spear1310-evb.dts
-index ddd1cf4d0554..05408df38203 100644
---- a/arch/arm/boot/dts/spear1310-evb.dts
-+++ b/arch/arm/boot/dts/spear1310-evb.dts
-@@ -170,7 +170,7 @@ sdhci@b3000000 {
+diff --git a/arch/arm/boot/dts/omap2420-h4.dts b/arch/arm/boot/dts/omap2420-h4.dts
+index af964f139abf..5acf5dd87c59 100644
+--- a/arch/arm/boot/dts/omap2420-h4.dts
++++ b/arch/arm/boot/dts/omap2420-h4.dts
+@@ -21,7 +21,7 @@ &gpmc {
  
- 		smi: flash@ea000000 {
- 			status = "okay";
--			clock-rate=<50000000>;
-+			clock-rate = <50000000>;
+ 	nor@0,0 {
+ 		compatible = "cfi-flash";
+-		linux,mtd-name= "intel,ge28f256l18b85";
++		linux,mtd-name = "intel,ge28f256l18b85";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		reg = <0 0 0x04000000>;
+diff --git a/arch/arm/boot/dts/omap3-evm-37xx.dts b/arch/arm/boot/dts/omap3-evm-37xx.dts
+index c9332195d096..abd403c228c7 100644
+--- a/arch/arm/boot/dts/omap3-evm-37xx.dts
++++ b/arch/arm/boot/dts/omap3-evm-37xx.dts
+@@ -60,7 +60,7 @@ nand@0,0 {
+ 		interrupt-parent = <&gpmc>;
+ 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+ 			     <1 IRQ_TYPE_NONE>;	/* termcount */
+-		linux,mtd-name= "hynix,h8kds0un0mer-4em";
++		linux,mtd-name = "hynix,h8kds0un0mer-4em";
+ 		nand-bus-width = <16>;
+ 		gpmc,device-width = <2>;
+ 		ti,nand-ecc-opt = "bch8";
+diff --git a/arch/arm/boot/dts/omap3-evm.dts b/arch/arm/boot/dts/omap3-evm.dts
+index 5cc0cf7cd16c..f95eea63b355 100644
+--- a/arch/arm/boot/dts/omap3-evm.dts
++++ b/arch/arm/boot/dts/omap3-evm.dts
+@@ -60,7 +60,7 @@ nand@0,0 {
+ 		interrupt-parent = <&gpmc>;
+ 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+ 			     <1 IRQ_TYPE_NONE>;	/* termcount */
+-		linux,mtd-name= "micron,mt29f2g16abdhc";
++		linux,mtd-name = "micron,mt29f2g16abdhc";
+ 		nand-bus-width = <16>;
+ 		gpmc,device-width = <2>;
+ 		ti,nand-ecc-opt = "bch8";
+diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
+index 0365f06165e9..28a6a9345be5 100644
+--- a/arch/arm/boot/dts/omap3-gta04.dtsi
++++ b/arch/arm/boot/dts/omap3-gta04.dtsi
+@@ -127,7 +127,7 @@ lcd: td028ttec1@0 {
+ 			spi-cpol;
+ 			spi-cpha;
  
- 			flash@e6000000 {
- 				#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/spear1340-evb.dts b/arch/arm/boot/dts/spear1340-evb.dts
-index 3a51a41eb5e4..7700f2afc128 100644
---- a/arch/arm/boot/dts/spear1340-evb.dts
-+++ b/arch/arm/boot/dts/spear1340-evb.dts
-@@ -168,7 +168,7 @@ sdhci@b3000000 {
+-			backlight= <&backlight>;
++			backlight = <&backlight>;
+ 			label = "lcd";
+ 			port {
+ 				lcd_in: endpoint {
+diff --git a/arch/arm/boot/dts/omap3-igep.dtsi b/arch/arm/boot/dts/omap3-igep.dtsi
+index 99f5585097a1..219202610463 100644
+--- a/arch/arm/boot/dts/omap3-igep.dtsi
++++ b/arch/arm/boot/dts/omap3-igep.dtsi
+@@ -111,7 +111,7 @@ nand@0,0 {
+ 		interrupt-parent = <&gpmc>;
+ 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+ 			     <1 IRQ_TYPE_NONE>;	/* termcount */
+-		linux,mtd-name= "micron,mt29c4g96maz";
++		linux,mtd-name = "micron,mt29c4g96maz";
+ 		nand-bus-width = <16>;
+ 		gpmc,device-width = <2>;
+ 		ti,nand-ecc-opt = "bch8";
+diff --git a/arch/arm/boot/dts/omap3-ldp.dts b/arch/arm/boot/dts/omap3-ldp.dts
+index 9c6a92724590..36fc8805e0c1 100644
+--- a/arch/arm/boot/dts/omap3-ldp.dts
++++ b/arch/arm/boot/dts/omap3-ldp.dts
+@@ -103,7 +103,7 @@ nand@0,0 {
+ 		interrupt-parent = <&gpmc>;
+ 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+ 			     <1 IRQ_TYPE_NONE>;	/* termcount */
+-		linux,mtd-name= "micron,nand";
++		linux,mtd-name = "micron,nand";
+ 		nand-bus-width = <16>;
+ 		gpmc,device-width = <2>;
+ 		ti,nand-ecc-opt = "bch8";
+@@ -215,11 +215,11 @@ &mmc1 {
+ };
  
- 		smi: flash@ea000000 {
- 			status = "okay";
--			clock-rate=<50000000>;
-+			clock-rate = <50000000>;
+ &mmc2 {
+-	status="disabled";
++	status = "disabled";
+ };
  
- 			flash@e6000000 {
- 				#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/spear1340.dtsi b/arch/arm/boot/dts/spear1340.dtsi
-index 13e1bdb3ddbf..818886e11713 100644
---- a/arch/arm/boot/dts/spear1340.dtsi
-+++ b/arch/arm/boot/dts/spear1340.dtsi
-@@ -88,7 +88,7 @@ pinmux: pinmux@e0700000 {
- 		};
+ &mmc3 {
+-	status="disabled";
++	status = "disabled";
+ };
  
- 		pwm: pwm@e0180000 {
--			compatible ="st,spear13xx-pwm";
-+			compatible = "st,spear13xx-pwm";
- 			reg = <0xe0180000 0x1000>;
- 			#pwm-cells = <2>;
- 			status = "disabled";
-diff --git a/arch/arm/boot/dts/spear300-evb.dts b/arch/arm/boot/dts/spear300-evb.dts
-index 2beb30ca2cba..303ef29fb805 100644
---- a/arch/arm/boot/dts/spear300-evb.dts
-+++ b/arch/arm/boot/dts/spear300-evb.dts
-@@ -80,7 +80,7 @@ sdhci@70000000 {
+ &omap3_pmx_core {
+diff --git a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
+index 73d477898ec2..c595afe4181d 100644
+--- a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
++++ b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
+@@ -372,7 +372,7 @@ nand@0,0 {
+ 		gpmc,device-width = <2>;
+ 		gpmc,wait-pin = <0>;
+ 		gpmc,wait-monitoring-ns = <0>;
+-		gpmc,burst-length= <4>;
++		gpmc,burst-length = <4>;
+ 		gpmc,cs-on-ns = <0>;
+ 		gpmc,cs-rd-off-ns = <100>;
+ 		gpmc,cs-wr-off-ns = <100>;
+diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
+index d40c3d2c4914..dd7971556449 100644
+--- a/arch/arm/boot/dts/omap3-n900.dts
++++ b/arch/arm/boot/dts/omap3-n900.dts
+@@ -568,8 +568,8 @@ MATRIX_KEY(0x07, 0x02, KEY_F8)
+ };
  
- 		smi: flash@fc000000 {
- 			status = "okay";
--			clock-rate=<50000000>;
-+			clock-rate = <50000000>;
+ &twl_gpio {
+-	ti,pullups	= <0x0>;
+-	ti,pulldowns	= <0x03ff3f>; /* BIT(0..5) | BIT(8..17) */
++	ti,pullups = <0x0>;
++	ti,pulldowns = <0x03ff3f>; /* BIT(0..5) | BIT(8..17) */
+ };
  
- 			flash@f8000000 {
- 				#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/spear310-evb.dts b/arch/arm/boot/dts/spear310-evb.dts
-index 1c41e4a40334..ea0b53036f7b 100644
---- a/arch/arm/boot/dts/spear310-evb.dts
-+++ b/arch/arm/boot/dts/spear310-evb.dts
-@@ -94,7 +94,7 @@ gmac: eth@e0800000 {
+ &i2c2 {
+diff --git a/arch/arm/boot/dts/omap3-n950-n9.dtsi b/arch/arm/boot/dts/omap3-n950-n9.dtsi
+index 7dde9fbb06d3..f68da828b050 100644
+--- a/arch/arm/boot/dts/omap3-n950-n9.dtsi
++++ b/arch/arm/boot/dts/omap3-n950-n9.dtsi
+@@ -162,8 +162,8 @@ twl_power: power {
+ };
  
- 		smi: flash@fc000000 {
- 			status = "okay";
--			clock-rate=<50000000>;
-+			clock-rate = <50000000>;
+ &twl_gpio {
+-	ti,pullups	= <0x000001>; /* BIT(0) */
+-	ti,pulldowns	= <0x008106>; /* BIT(1) | BIT(2) | BIT(8) | BIT(15) */
++	ti,pullups = <0x000001>; /* BIT(0) */
++	ti,pulldowns = <0x008106>; /* BIT(1) | BIT(2) | BIT(8) | BIT(15) */
+ };
  
- 			flash@f8000000 {
- 				#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/spear320-evb.dts b/arch/arm/boot/dts/spear320-evb.dts
-index c322407a0ade..3c026d021c92 100644
---- a/arch/arm/boot/dts/spear320-evb.dts
-+++ b/arch/arm/boot/dts/spear320-evb.dts
-@@ -95,7 +95,7 @@ sdhci@70000000 {
+ &vdac {
+diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
+index 006a6d97231c..adc714c39825 100644
+--- a/arch/arm/boot/dts/omap3-overo-base.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
+@@ -222,7 +222,7 @@ &gpmc {
  
- 		smi: flash@fc000000 {
- 			status = "okay";
--			clock-rate=<50000000>;
-+			clock-rate = <50000000>;
+ 	nand@0,0 {
+ 		compatible = "ti,omap2-nand";
+-		linux,mtd-name= "micron,mt29c4g96maz";
++		linux,mtd-name = "micron,mt29c4g96maz";
+ 		reg = <0 0 4>;	/* CS0, offset 0, IO size 4 */
+ 		interrupt-parent = <&gpmc>;
+ 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+diff --git a/arch/arm/boot/dts/omap3-pandora-common.dtsi b/arch/arm/boot/dts/omap3-pandora-common.dtsi
+index 37608af6c07f..559853764487 100644
+--- a/arch/arm/boot/dts/omap3-pandora-common.dtsi
++++ b/arch/arm/boot/dts/omap3-pandora-common.dtsi
+@@ -666,7 +666,7 @@ tsc2046@0 {
  
- 			flash@f8000000 {
- 				#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/spear320-hmi.dts b/arch/arm/boot/dts/spear320-hmi.dts
-index b587e4ec11e5..34503ac9c51c 100644
---- a/arch/arm/boot/dts/spear320-hmi.dts
-+++ b/arch/arm/boot/dts/spear320-hmi.dts
-@@ -167,7 +167,7 @@ sdhci@70000000 {
+ 	lcd: lcd@1 {
+ 		reg = <1>;	/* CS1 */
+-		compatible =	"tpo,td043mtea1";
++		compatible = "tpo,td043mtea1";
+ 		spi-max-frequency = <100000>;
+ 		spi-cpol;
+ 		spi-cpha;
+diff --git a/arch/arm/boot/dts/omap3430-sdp.dts b/arch/arm/boot/dts/omap3430-sdp.dts
+index 7d530ae3483b..258ecd9e4519 100644
+--- a/arch/arm/boot/dts/omap3430-sdp.dts
++++ b/arch/arm/boot/dts/omap3430-sdp.dts
+@@ -53,7 +53,7 @@ &gpmc {
  
- 		smi: flash@fc000000 {
- 			status = "okay";
--			clock-rate=<50000000>;
-+			clock-rate = <50000000>;
+ 	nor@0,0 {
+ 		compatible = "cfi-flash";
+-		linux,mtd-name= "intel,pf48f6000m0y1be";
++		linux,mtd-name = "intel,pf48f6000m0y1be";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		reg = <0 0 0x08000000>;
+@@ -105,7 +105,7 @@ nand@1,0 {
+ 		interrupt-parent = <&gpmc>;
+ 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
+ 			     <1 IRQ_TYPE_NONE>;	/* termcount */
+-		linux,mtd-name= "micron,mt29f1g08abb";
++		linux,mtd-name = "micron,mt29f1g08abb";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		ti,nand-ecc-opt = "sw";
+@@ -148,7 +148,7 @@ partition@780000 {
+ 	};
  
- 			flash@f8000000 {
- 				#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/spear320.dtsi b/arch/arm/boot/dts/spear320.dtsi
-index 47ac4474ed96..b12474446a48 100644
---- a/arch/arm/boot/dts/spear320.dtsi
-+++ b/arch/arm/boot/dts/spear320.dtsi
-@@ -78,7 +78,7 @@ spi2: spi@a6000000 {
- 		};
- 
- 		pwm: pwm@a8000000 {
--			compatible ="st,spear-pwm";
-+			compatible = "st,spear-pwm";
- 			reg = <0xa8000000 0x1000>;
- 			#pwm-cells = <2>;
- 			status = "disabled";
+ 	onenand@2,0 {
+-		linux,mtd-name= "samsung,kfm2g16q2m-deb8";
++		linux,mtd-name = "samsung,kfm2g16q2m-deb8";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "ti,omap2-onenand";
+diff --git a/arch/arm/boot/dts/omap5-l4.dtsi b/arch/arm/boot/dts/omap5-l4.dtsi
+index 06cc3a19ddaa..3b505fe415ed 100644
+--- a/arch/arm/boot/dts/omap5-l4.dtsi
++++ b/arch/arm/boot/dts/omap5-l4.dtsi
+@@ -482,7 +482,7 @@ usb3_phy: usb3phy@4400 {
+ 				clocks = <&usb_phy_cm_clk32k>,
+ 				<&sys_clkin>,
+ 				<&l3init_clkctrl OMAP5_USB_OTG_SS_CLKCTRL 8>;
+-				clock-names =	"wkupclk",
++				clock-names = "wkupclk",
+ 				"sysclk",
+ 				"refclk";
+ 				#phy-cells = <0>;
 -- 
 2.34.1
 
