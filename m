@@ -4,71 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC92C433FE
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36FA4C433EF
+	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:45:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 23D9FC34113; Thu, 26 May 2022 20:44:12 +0000 (UTC)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	id 1D5A6C34113; Thu, 26 May 2022 20:45:01 +0000 (UTC)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 578A6C385B8
-	for <soc@kernel.org>; Thu, 26 May 2022 20:44:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 578A6C385B8
+	by smtp.kernel.org (Postfix) with ESMTPS id 32F26C385A9
+	for <soc@kernel.org>; Thu, 26 May 2022 20:44:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 32F26C385A9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id c93so1835498edf.7
-        for <soc@kernel.org>; Thu, 26 May 2022 13:44:11 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id rs12so5048947ejb.13
+        for <soc@kernel.org>; Thu, 26 May 2022 13:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XOY58nRo2FBMVZy4R9dChoRFoguqNiD/V0YfBQb6+is=;
-        b=jP0bjuQktDPX6JTVbJjvC+zRgIO8NTyrFajRszjwmIwb1XAOJzbMLaoYRW4V9EiAvC
-         unlwEAj2AHm1wi/ncAhOpQltINgTs8tyspxKTxa45VV/Q9qryXDtlCggrdOE05keuzg5
-         SdkZ1uKmYeQ4JjSlTUnxAyZsOJS4MoGnPqC2g2TRh+wE9jGJJyLBacNOg5dZbcc8Nns0
-         DujxcKG2MHdwp505Fqt4dhqJvokj5t88Tx9ZrCFJJJdBx2rrWKdK9QQgrLExp0cwzio+
-         GlCCQx79fnPsReDh2OMi6GifCZ2J8Q1D6fpPp8sgJfg7YyqQf9a8S/jIp8c3LHDb6SRH
-         gFMg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=paw5SYFXWn9NCMynf9wnULxZ3Y1uB+T0pzqFJf4vB4I=;
+        b=G4uZJutz3Gwl/OF4uR7la5EZptfaZ2TFeAvIFIBniosgSQzjJu9mSdRL10o1eSILSn
+         tokalQfQipoWGw8o2DPrHHvny4q5rklGbfJOZCFOXbcOo7OCK4zcuYhMdoAip8iHCmHQ
+         MX6/JOrsFZr163129HlRV6xM3jTbHVPAVcdvSKqRr+4sWp5O2MeFO0NPLIiGiwpXvOY3
+         CO7ArHxh+0O/dlWjoPHLeCGjL22MEVM+ePK9SWYtPpte5Umi803RGvndePSxfllsoFV0
+         XEf9v9RpMGIf9dbSTxLMk93pGP6nzvd58yUqNBbZdeBmhd5tDJbUhTRB90Qn6s15IhVm
+         lLVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XOY58nRo2FBMVZy4R9dChoRFoguqNiD/V0YfBQb6+is=;
-        b=UJosMO1Z+9N0d2Jm5jZ3GQYRhktmY3cDg/tgcPWPyUMfid1Lm2tP0WwmMnObubNy9f
-         y/j7CfyqmaZNH0YarijuAN1Oi+DrfnY83FhAsdKeiqpbnfWAZKZopyyIzm5e+hDK/Tal
-         XCtqwFPo4VpFjA4KodcpN3MpSNSR2yo/kORWnpUgFR6UiUE9SGH3+hu5SMSV1YsaeRva
-         urazcTIkqoIr3LS/XXyjWyLiUmB7Hrwm/BJDoANdZJLhx1IPmvwfFh/EXfkFa2IEpfIg
-         TubTt50zC4kSlvTRHPTjEaPNQlZwoO+vSyqLYtbU1pdFbfdzEQh+DCJgyUZ8fgGXBH8a
-         J4rA==
-X-Gm-Message-State: AOAM531ETzsj4q3wEqfJZu3QUB/IBG+TCW71BFQegix58gB0vUCX6Fj9
-	CrrMO+0DSni02LEFG3giAHPfDQ==
-X-Google-Smtp-Source: ABdhPJyrLaR89tqeL23Sv2113VdbG8ErSnQMN2ndTBmG7bJIm8BHM2LMNk1k5z6mSMinJ7S/qaYvBw==
-X-Received: by 2002:aa7:dbc1:0:b0:42b:77a2:4f81 with SMTP id v1-20020aa7dbc1000000b0042b77a24f81mr19418697edt.287.1653597849731;
-        Thu, 26 May 2022 13:44:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=paw5SYFXWn9NCMynf9wnULxZ3Y1uB+T0pzqFJf4vB4I=;
+        b=dAYFU6eah5AXF7khjCZtJmC7j2ZdE7TfkaHTW8IilCeJTtkZ0+biy8DZOEwSrtylH3
+         AhVFcZ5p9z2hrDWaX/1MylrSY2L53qvOeE0uCPWSm1V54xwoSxasu25GxBkrJTLPSNa7
+         ar6udOoxTjDJBZ61WMza17IQDfjBbf5A5kWnjJRp+8AvMWit9/hGoV2sVkqRszctbk4k
+         vNYjFJJJ9+4AkfX+mo+BZwHICQKmd1R7TJhBneRkoVBca9z7EAGcbAx9sjjVU+9U/x8w
+         20zns9d6X2gxBOyF0W4vb3eb7N0V/E71gr6A2YV3OD0kK6B6Q10jNPx+ydPbpyZfbSA4
+         hA2g==
+X-Gm-Message-State: AOAM5309Cg0zzvRM821WSSeMgMlnkbUN7rlkTC+LmKib272UEv89gC26
+	SqdLJdwhFQ5fpHQL0uPh/k6bAM6Xba/eqIX7
+X-Google-Smtp-Source: ABdhPJxhuEdarJLR2HwYqRyrz/1r6PmgvWgPUdkDWeAz6mkCle0i8FHB5ebBVjF6tZ92IdprBta6Ig==
+X-Received: by 2002:a17:907:a0c8:b0:6fe:b73c:193f with SMTP id hw8-20020a170907a0c800b006feb73c193fmr27628667ejc.11.1653597897479;
+        Thu, 26 May 2022 13:44:57 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i15-20020a1709061ccf00b006fec5cef701sm803475ejh.197.2022.05.26.13.44.08
+        by smtp.gmail.com with ESMTPSA id g3-20020a1709063b0300b006feb3d65330sm810982ejf.109.2022.05.26.13.44.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:44:09 -0700 (PDT)
+        Thu, 26 May 2022 13:44:56 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org,
+	Wei Xu <xuwei5@hisilicon.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ARM: dts: mediatek: adjust whitespace around '='
-Date: Thu, 26 May 2022 22:44:02 +0200
-Message-Id: <20220526204402.832393-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: hisilicon: adjust whitespace around '='
+Date: Thu, 26 May 2022 22:44:53 +0200
+Message-Id: <20220526204453.832681-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526204402.832393-1-krzysztof.kozlowski@linaro.org>
-References: <20220526204402.832393-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -82,69 +79,189 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm/boot/dts/mt2701.dtsi | 8 ++++----
- arch/arm/boot/dts/mt7623.dtsi | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 12 ++++++------
+ arch/arm64/boot/dts/hisilicon/hi3660.dtsi         |  8 ++++----
+ arch/arm64/boot/dts/hisilicon/hi3670.dtsi         |  2 +-
+ arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts    | 12 ++++++------
+ arch/arm64/boot/dts/hisilicon/hip06.dtsi          |  6 +++---
+ arch/arm64/boot/dts/hisilicon/hip07.dtsi          |  6 +++---
+ 6 files changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/arch/arm/boot/dts/mt2701.dtsi b/arch/arm/boot/dts/mt2701.dtsi
-index ef583cfd3baf..b8eba3ba153c 100644
---- a/arch/arm/boot/dts/mt2701.dtsi
-+++ b/arch/arm/boot/dts/mt2701.dtsi
-@@ -427,9 +427,9 @@ audsys: clock-controller@11220000 {
- 
- 		afe: audio-controller {
- 			compatible = "mediatek,mt2701-audio";
--			interrupts =  <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
-+			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
- 				      <GIC_SPI 132 IRQ_TYPE_LEVEL_LOW>;
--			interrupt-names	= "afe", "asys";
-+			interrupt-names = "afe", "asys";
- 			power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
- 
- 			clocks = <&infracfg CLK_INFRA_AUDIO>,
-@@ -559,7 +559,7 @@ jpegdec: jpegdec@15004000 {
- 		compatible = "mediatek,mt2701-jpgdec";
- 		reg = <0 0x15004000 0 0x1000>;
- 		interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_LOW>;
--		clocks =  <&imgsys CLK_IMG_JPGDEC_SMI>,
-+		clocks = <&imgsys CLK_IMG_JPGDEC_SMI>,
- 			  <&imgsys CLK_IMG_JPGDEC>;
- 		clock-names = "jpgdec-smi",
- 			      "jpgdec";
-@@ -573,7 +573,7 @@ jpegenc: jpegenc@1500a000 {
- 			     "mediatek,mtk-jpgenc";
- 		reg = <0 0x1500a000 0 0x1000>;
- 		interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_LOW>;
--		clocks =  <&imgsys CLK_IMG_VENC>;
-+		clocks = <&imgsys CLK_IMG_VENC>;
- 		clock-names = "jpgenc";
- 		power-domains = <&scpsys MT2701_POWER_DOMAIN_ISP>;
- 		iommus = <&iommu MT2701_M4U_PORT_JPGENC_RDMA>,
-diff --git a/arch/arm/boot/dts/mt7623.dtsi b/arch/arm/boot/dts/mt7623.dtsi
-index f4848362b3be..25d31e40a553 100644
---- a/arch/arm/boot/dts/mt7623.dtsi
-+++ b/arch/arm/boot/dts/mt7623.dtsi
-@@ -241,7 +241,7 @@ infracfg: syscon@10001000 {
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+index f68580dc87d8..d2d1809a99b6 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
++++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+@@ -49,9 +49,9 @@ reserved-memory {
+ 		ramoops@32000000 {
+ 			compatible = "ramoops";
+ 			reg = <0x0 0x32000000 0x0 0x00100000>;
+-			record-size	= <0x00020000>;
+-			console-size	= <0x00020000>;
+-			ftrace-size	= <0x00020000>;
++			record-size = <0x00020000>;
++			console-size = <0x00020000>;
++			ftrace-size = <0x00020000>;
+ 		};
  	};
  
- 	pericfg: syscon@10003000 {
--		compatible =  "mediatek,mt7623-pericfg",
-+		compatible = "mediatek,mt7623-pericfg",
- 			      "mediatek,mt2701-pericfg",
- 			      "syscon";
- 		reg = <0 0x10003000 0 0x1000>;
-@@ -628,9 +628,9 @@ audsys: clock-controller@11220000 {
- 		afe: audio-controller {
- 			compatible = "mediatek,mt7623-audio",
- 				     "mediatek,mt2701-audio";
--			interrupts =  <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
-+			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_LOW>,
- 				      <GIC_SPI 132 IRQ_TYPE_LEVEL_LOW>;
--			interrupt-names	= "afe", "asys";
-+			interrupt-names = "afe", "asys";
- 			power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
+@@ -63,9 +63,9 @@ reboot-mode {
+ 			compatible = "syscon-reboot-mode";
+ 			offset = <0x0>;
  
- 			clocks = <&infracfg CLK_INFRA_AUDIO>,
+-			mode-normal	= <0x77665501>;
+-			mode-bootloader	= <0x77665500>;
+-			mode-recovery	= <0x77665502>;
++			mode-normal = <0x77665501>;
++			mode-bootloader = <0x77665500>;
++			mode-recovery = <0x77665502>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+index 6b3057a09251..8343d0cedde3 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+@@ -479,7 +479,7 @@ uart1: serial@fdf00000 {
+ 			reg = <0x0 0xfdf00000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 2 &dma0 3>;
++			dmas = <&dma0 2 &dma0 3>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART1>,
+ 				 <&crg_ctrl HI3660_CLK_GATE_UART1>;
+ 			clock-names = "uartclk", "apb_pclk";
+@@ -493,7 +493,7 @@ uart2: serial@fdf03000 {
+ 			reg = <0x0 0xfdf03000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 4 &dma0 5>;
++			dmas = <&dma0 4 &dma0 5>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART2>,
+ 				 <&crg_ctrl HI3660_PCLK>;
+ 			clock-names = "uartclk", "apb_pclk";
+@@ -519,7 +519,7 @@ uart4: serial@fdf01000 {
+ 			reg = <0x0 0xfdf01000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 6 &dma0 7>;
++			dmas = <&dma0 6 &dma0 7>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART4>,
+ 				 <&crg_ctrl HI3660_CLK_GATE_UART4>;
+ 			clock-names = "uartclk", "apb_pclk";
+@@ -533,7 +533,7 @@ uart5: serial@fdf05000 {
+ 			reg = <0x0 0xfdf05000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 8 &dma0 9>;
++			dmas = <&dma0 8 &dma0 9>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART5>,
+ 				 <&crg_ctrl HI3660_CLK_GATE_UART5>;
+ 			clock-names = "uartclk", "apb_pclk";
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+index 3125c3869c69..886b93c5893a 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+@@ -324,7 +324,7 @@ gpio3: gpio@e8a0e000 {
+ 			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+-			gpio-ranges =  <&pmx0 0 13 4 &pmx0 7 17 1>;
++			gpio-ranges = <&pmx0 0 13 4 &pmx0 7 17 1>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 			clocks = <&crg_ctrl HI3670_PCLK_GPIO3>;
+diff --git a/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts b/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
+index 3df2afb2f637..629e604aa281 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
++++ b/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
+@@ -54,9 +54,9 @@ reserved-memory {
+ 		ramoops@21f00000 {
+ 			compatible = "ramoops";
+ 			reg = <0x0 0x21f00000 0x0 0x00100000>;
+-			record-size	= <0x00020000>;
+-			console-size	= <0x00020000>;
+-			ftrace-size	= <0x00020000>;
++			record-size = <0x00020000>;
++			console-size = <0x00020000>;
++			ftrace-size = <0x00020000>;
+ 		};
+ 
+ 		/* global autoconfigured region for contiguous allocations */
+@@ -76,9 +76,9 @@ reboot-mode {
+ 			compatible = "syscon-reboot-mode";
+ 			offset = <0x0>;
+ 
+-			mode-normal	= <0x77665501>;
+-			mode-bootloader	= <0x77665500>;
+-			mode-recovery	= <0x77665502>;
++			mode-normal = <0x77665501>;
++			mode-bootloader = <0x77665500>;
++			mode-recovery = <0x77665502>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/hisilicon/hip06.dtsi b/arch/arm64/boot/dts/hisilicon/hip06.dtsi
+index 70d7732dd348..2f8b03b0d365 100644
+--- a/arch/arm64/boot/dts/hisilicon/hip06.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hip06.dtsi
+@@ -537,7 +537,7 @@ port@0 {
+ 
+ 			port@1 {
+ 				reg = <1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <1>;
+ 				port-mode-offset = <1>;
+ 				media-type = "fiber";
+@@ -546,7 +546,7 @@ port@1 {
+ 			port@4 {
+ 				reg = <4>;
+ 				phy-handle = <&phy0>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <4>;
+ 				port-mode-offset = <2>;
+ 				media-type = "copper";
+@@ -555,7 +555,7 @@ port@4 {
+ 			port@5 {
+ 				reg = <5>;
+ 				phy-handle = <&phy1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <5>;
+ 				port-mode-offset = <3>;
+ 				media-type = "copper";
+diff --git a/arch/arm64/boot/dts/hisilicon/hip07.dtsi b/arch/arm64/boot/dts/hisilicon/hip07.dtsi
+index 6baf6a686450..1a16662f8867 100644
+--- a/arch/arm64/boot/dts/hisilicon/hip07.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hip07.dtsi
+@@ -1422,7 +1422,7 @@ port@0 {
+ 
+ 			port@1 {
+ 				reg = <1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				cpld-syscon = <&dsa_cpld 0x4>;
+ 				port-rst-offset = <1>;
+ 				port-mode-offset = <1>;
+@@ -1433,7 +1433,7 @@ port@1 {
+ 			port@4 {
+ 				reg = <4>;
+ 				phy-handle = <&phy0>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <4>;
+ 				port-mode-offset = <2>;
+ 				mc-mac-mask = [ff f0 00 00 00 00];
+@@ -1443,7 +1443,7 @@ port@4 {
+ 			port@5 {
+ 				reg = <5>;
+ 				phy-handle = <&phy1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <5>;
+ 				port-mode-offset = <3>;
+ 				mc-mac-mask = [ff f0 00 00 00 00];
 -- 
 2.34.1
 
