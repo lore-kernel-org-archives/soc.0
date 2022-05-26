@@ -1,54 +1,79 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A0A0C4332F
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 18:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CD2CC433F5
+	for <soc@archiver.kernel.org>; Thu, 26 May 2022 19:24:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3F77CC36AF2; Thu, 26 May 2022 18:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2875AC36AEF;
-	Thu, 26 May 2022 18:20:10 +0000 (UTC)
+	id B54E9C34116; Thu, 26 May 2022 19:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ECAAC385A9;
+	Thu, 26 May 2022 19:24:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1653589210;
-	bh=TLaozXy3rMADFMNr7ISsASGJvQ5hy+oQovgHNQqJoog=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=tFUx+5W8Z/A3Pfhb0QpLtIpho8fUyFyp4zIvn15He0RN1xb7nfh7bBrHhkDXs6wGi
-	 IYTk7NB2ukVO8hWJvW2geLds0/xuK+fOZECYX4a2oxmaeThN0l6j4w+M64qIuyJR5W
-	 qyrc+/Bs/S+0srQ22+P/Yd1PWaQSfowQs2uuUDrLia0ZohpMdV5vTv3HSdxbBVoZ0T
-	 aes90YnDsVyqZ6MWe/H0XTrz+Q+q9fp0gKDSygJoP7nxki1xCu6og0qh4dELuZZ32a
-	 t4ZQGQLRDsMFSYz654sFTroVmCeeNDgAfNtvjRozPbt/LLiwak8031fgzXo3Q9yUXG
-	 GHkZaDKgIGnUw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0BDC1F03944;
-	Thu, 26 May 2022 18:20:10 +0000 (UTC)
-Subject: Re: [GIT PULL 3/5] ARM: driver changes for 5.19
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a1jTC_x1DKcyE80C7JmOtkVKkKOTE85SO_4_OU7NihPzg@mail.gmail.com>
-References: <CAK8P3a1K_t-a4=uKPbZ2kwa13bDhkNC9S8ZiyhF84SSXJYjT2w@mail.gmail.com> <CAK8P3a1jTC_x1DKcyE80C7JmOtkVKkKOTE85SO_4_OU7NihPzg@mail.gmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a1jTC_x1DKcyE80C7JmOtkVKkKOTE85SO_4_OU7NihPzg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-drivers-5.19
-X-PR-Tracked-Commit-Id: d4a3b442335b0a9476248c5d6dc07f6f8580a9ca
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
-Message-Id: <165358921004.17369.13246567845302808968.pr-tracker-bot@kernel.org>
-Date: Thu, 26 May 2022 18:20:10 +0000
-To: Arnd Bergmann <arnd@kernel.org>
+	s=k20201202; t=1653593052;
+	bh=/lByU2XT//2hgm1wryTBQF92iMF6iHi5yygjAKhmCgM=;
+	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
+	b=hxiGMM8dBcCYcqqtYgqZKK6bbmGgMrK1FF05cXVJAFAu2415wRbsiM+ixRpIzxt/c
+	 an7l1ZCdy9ljiZBdfF9z8vqPrFsIyHVVl5A0u0zsCehorPxqYftZwpb1Jdvmps6uzC
+	 AJB7uS2OyIj5aSNJ3ZzsBhUPnARsPTw8rHZyJVqZVaCoef3pppsw54L8bov69n1tjB
+	 qG9srSMTs+uTTZUj5CgKF3zeq3WkjGWuIfDACQ6Cpi/Gy/Di+EGSeoDalkYCLp2XOS
+	 2ELXT+bCECHsu//E/7Cu2MLsgTDO4OQ45jKLNNtfbHXtekDC1y0tibP6G8PzSSJdaG
+	 p9lIAUwAqz+ag==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220522155046.260146-8-tmaimon77@gmail.com>
+References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-8-tmaimon77@gmail.com>
+Subject: Re: [PATCH v1 07/19] dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+From: Stephen Boyd <sboyd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Tomer Maimon <tmaimon77@gmail.com>
+To: Tomer Maimon <tmaimon77@gmail.com>, arnd@arndb.de, avifishman70@gmail.com, benjaminfair@google.com, biju.das.jz@bp.renesas.com, bjorn.andersson@linaro.org, catalin.marinas@arm.com, daniel.lezcano@linaro.org, geert+renesas@glider.be, gregkh@linuxfoundation.org, j.neuschaefer@gmx.net, jirislaby@kernel.org, joel@jms.id.au, krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net, lkundrak@v3.sk, marcel.ziswiler@toradex.com, mturquette@baylibre.com, nobuhiro1.iwamatsu@toshiba.co.jp, olof@lixom.net, p.zabel@pengutronix.de, robert.hancock@calian.com, robh+dt@kernel.org, shawnguo@kernel.org, tali.perry1@gmail.com, tglx@linutronix.de, venture@google.com, vkoul@kernel.org, will@kernel.org, wim@linux-watchdog.org, yuenn@google.com
+Date: Thu, 26 May 2022 12:24:10 -0700
+User-Agent: alot/0.10
+Message-Id: <20220526192412.8ECAAC385A9@smtp.kernel.org>
 
-The pull request you sent on Thu, 26 May 2022 16:49:13 +0200:
+Quoting Tomer Maimon (2022-05-22 08:50:34)
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.=
+yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> new file mode 100644
+> index 000000000000..f305c7c7eaf0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> @@ -0,0 +1,68 @@
+[...]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-drivers-5.19
+Are clocks not required because sometimes the reference clk isn't
+connected?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # Clock Control Module node:
+> +  - |
+> +
+> +    ahb {
 
-Thank you!
+drop ahb node please.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> +        #address-cells =3D <2>;
+> +        #size-cells =3D <2>;
+> +
+> +        clk: clock-controller@f0801000 {
+
+Drop label 'clk' as well please.
+
+> +            compatible =3D "nuvoton,npcm845-clk";
+> +            reg =3D <0x0 0xf0801000 0x0 0x1000>;
+> +            #clock-cells =3D <1>;
+> +        };
+> +    };
+> +
+> +...
