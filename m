@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7306C433F5
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:41:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A596C433F5
+	for <soc@archiver.kernel.org>; Thu, 26 May 2022 20:41:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A3B27C385A9; Thu, 26 May 2022 20:41:21 +0000 (UTC)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	id 1CD42C385B8; Thu, 26 May 2022 20:41:26 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 62B39C385B8
-	for <soc@kernel.org>; Thu, 26 May 2022 20:41:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 62B39C385B8
+	by smtp.kernel.org (Postfix) with ESMTPS id 17253C385A9
+	for <soc@kernel.org>; Thu, 26 May 2022 20:41:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17253C385A9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f49.google.com with SMTP id fd25so3162765edb.3
-        for <soc@kernel.org>; Thu, 26 May 2022 13:41:19 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id jx22so5040807ejb.12
+        for <soc@kernel.org>; Thu, 26 May 2022 13:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VnM7d2FXWjORwXgrumsp11N84bq4QYIyIpgikIJwxHM=;
-        b=JFnsO6U/lk/DUvjClGZCl9nYgRoWYDvVHsv2qwZp2Z83jy21Nysn6Y2zTmqqOEIitM
-         iMKpOx+M3g3VEnkp3w2d4coa90PoKRN/mUbzhpSEyseR791uWrHMYPPCBMegwGiSqIKG
-         9a+dPzKJY/odfJrJyPTHl8ojm0lWzvO4IX/FrdljINszqbdfmK61xvWu6ITX1dzzrpKw
-         3R3kiWBHwk6heYfPs8Yl5Igt2GFmFi18WuuijebaoIp5cj2rbwwM1j/6EU1Zh75Qs+p6
-         bnCJbhbIb33eqpBm3WlmmJza9JJtA2HOphcctF1wwOOgG5nq4ojiZqZKKtHhnClw7552
-         bD8A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y5UFb7XgLvBUFKAtSz03uKpF5a++oXIA+TPFT+Sfg2A=;
+        b=VApX7qgRWBBCFLCVF1xPxaMd7iv9/LgwNp1Y8LXMGxeWVzrbwB64hx7Gk+9bO6u0ak
+         KtLAKhV4UOd4bz6QyAwJo94dxJlVZchPMjEfoudMpDwRgfs9vTMEqMH3ZQcw4JWqkeEk
+         c2fjZD6NOkI8unLZcrZITcG9ffdsatwEfU5cVXwArEK33uhYD5aqBIhOC8L1/bzbDbwG
+         OpgfatbrL7eqBfdASSc+5wb7QEESnmJXMbMvcUGPgM8l1VYzqr6DGay/h+906kR9xxfV
+         6bSpajG5HFapAOnszqouS/ziOZwD0NrDxvZ4gpTl02vE+HBsj4X9MQmXJi5uxhLZX8mE
+         bjyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VnM7d2FXWjORwXgrumsp11N84bq4QYIyIpgikIJwxHM=;
-        b=cBtqlPo/IfDRak+j4T6HD6vK74JRu7ZT2vZZ5DdyMH3wxXK8tQc4egRF8ca4VwQeWw
-         0M1oCVzEfnhBlQvVOi7RGjt88WnOfnRtogsjcmvO3YXNSTFjzYcE88njK4Tw9Tg6Re5a
-         nu1ZyxTdEh1w6dYrEcWwkRilo469WXlG5Zv67NSPGQoZD4GxftC8EVnoc8FvbujvHpdl
-         YozkiT+9DrbSqqow5IT9fKzAnlEEnBEEmMLSnjvwA1xblwJhUU2rSDcLsMVZyniGQWmB
-         1nEAKcQy1GbnxSXQBRuoqve/sf81zjTTguWUD9F4WU7ASRY/Uiv3x9gq1yzNvWYGG4Qy
-         fKVg==
-X-Gm-Message-State: AOAM533Iydnts1LrekIHv5ozTDlUtMuPRJIdsExkNC5dhno5Ov6hvajh
-	fxCRTQNyC9auAfWJkJNFS6dvj0v9A6OOENBk
-X-Google-Smtp-Source: ABdhPJyiMG4ilZtjdyf4pRUs2gQjxZI6aU6yVj3UYNQrudeIs6Xuc1/QXd1+YL3w62XLaTnWvbk+gg==
-X-Received: by 2002:a05:6402:b12:b0:42b:cf04:3e11 with SMTP id bm18-20020a0564020b1200b0042bcf043e11mr8793801edb.85.1653597677631;
-        Thu, 26 May 2022 13:41:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y5UFb7XgLvBUFKAtSz03uKpF5a++oXIA+TPFT+Sfg2A=;
+        b=XoCZ6jEBC065d4wbPiqz6t+YCVkECkLhpeFq/9P0lJhcgNN8ecuxQWmEWD9as56c6+
+         FfUOvfT+gRNyYlCHdwasH+uPYdhh+4o77h0oDRRjieKLTr+WZNVwFMasIoMnQ/HTtzAi
+         c4VlQiWbmuSUEi4eKPT0lrUbiD6A2rd00VmEi8eGE2uboN5+pzrFszWJvFkzDSPvrpc3
+         hr2gIXX85SClEFJvT/06L6L+lguqkWr5B2vcMqRxYsRB/kCGEjY4lyGrL7+okicF1Cxm
+         qbNXRY8I9oQ6ey5zTzXDSbnsqq54MJRe00RBAH4Fu2Fzr3EzHFDzYWz4hg1ZDKZfXo1V
+         TREw==
+X-Gm-Message-State: AOAM5329gOAvGktVz2jmNpHWT+nm4imRwFimMCwWuNNvGygUudIS6NGH
+	rNFqCGbwMGpDX2Q23pzjslhy50EkhYuT726r
+X-Google-Smtp-Source: ABdhPJzIXn754ViI7D++cdgXqpxvr6R6U6sEXU1YrC/bZQQt+H5KYd3S3ClJSNe40jNUeszOOd4Ddg==
+X-Received: by 2002:a17:907:7e90:b0:6fe:c5bc:d391 with SMTP id qb16-20020a1709077e9000b006fec5bcd391mr22945381ejc.747.1653597683325;
+        Thu, 26 May 2022 13:41:23 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y8-20020a50f1c8000000b0042b0dd5db38sm1235470edl.36.2022.05.26.13.41.16
+        by smtp.gmail.com with ESMTPSA id y8-20020a50f1c8000000b0042b0dd5db38sm1235470edl.36.2022.05.26.13.41.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:41:17 -0700 (PDT)
+        Thu, 26 May 2022 13:41:22 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -57,17 +57,19 @@ To: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Lars Povlsen <lars.povlsen@microchip.com>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	UNGLinuxDriver@microchip.com,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] arm64: dts: microchip: adjust whitespace around '='
-Date: Thu, 26 May 2022 22:41:08 +0200
-Message-Id: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] ARM: dts: at91: adjust whitespace around '='
+Date: Thu, 26 May 2022 22:41:09 +0200
+Message-Id: <20220526204110.831805-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
+References: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -81,348 +83,147 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- .../dts/microchip/sparx5_pcb134_board.dtsi    | 200 +++++++++---------
- .../dts/microchip/sparx5_pcb135_board.dtsi    |  48 ++---
- 2 files changed, 124 insertions(+), 124 deletions(-)
+ arch/arm/boot/dts/at91-kizbox3-hs.dts         | 2 +-
+ arch/arm/boot/dts/at91-sam9x60ek.dts          | 2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi     | 2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   | 4 ++--
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts | 2 +-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts        | 4 ++--
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     | 6 +++---
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts   | 6 +++---
+ arch/arm/boot/dts/sam9x60.dtsi                | 2 +-
+ 9 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
-index 699256f1b9d8..bf12be5e8d84 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
-@@ -546,164 +546,164 @@ phy64: ethernet-phy@64 {
+diff --git a/arch/arm/boot/dts/at91-kizbox3-hs.dts b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+index 2799b2a1f4d2..224f4d5ac4df 100644
+--- a/arch/arm/boot/dts/at91-kizbox3-hs.dts
++++ b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+@@ -186,7 +186,7 @@ id_usba {
  
- &axi {
- 	sfp_eth12: sfp-eth12 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp1>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp1>;
- 		tx-disable-gpios = <&sgpio_out2 11 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 11 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 11 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 12 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 11 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 11 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 12 0 GPIO_ACTIVE_HIGH>;
+ &pioA {
+ 	pinctrl_key_gpio_default: key_gpio_default {
+-		pinmux=  <PIN_PA22__GPIO>,
++		pinmux = <PIN_PA22__GPIO>,
+ 		<PIN_PA24__GPIO>,
+ 		<PIN_PA26__GPIO>,
+ 		<PIN_PA29__GPIO>,
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 7719ea3d4933..886bc855daa4 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -85,7 +85,7 @@ gpio_keys {
+ 		sw1 {
+ 			label = "SW1";
+ 			gpios = <&pioD 18 GPIO_ACTIVE_LOW>;
+-			linux,code=<KEY_PROG1>;
++			linux,code = <KEY_PROG1>;
+ 			wakeup-source;
+ 		};
  	};
- 	sfp_eth13: sfp-eth13 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp2>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp2>;
- 		tx-disable-gpios = <&sgpio_out2 12 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 12 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 12 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 13 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 12 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 12 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 13 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth14: sfp-eth14 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp3>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp3>;
- 		tx-disable-gpios = <&sgpio_out2 13 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 13 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 13 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 14 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 13 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 13 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 14 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth15: sfp-eth15 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp4>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp4>;
- 		tx-disable-gpios = <&sgpio_out2 14 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 14 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 14 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 15 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 14 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 14 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 15 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth48: sfp-eth48 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp5>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp5>;
- 		tx-disable-gpios = <&sgpio_out2 15 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 15 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 15 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 16 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 15 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 15 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 16 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth49: sfp-eth49 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp6>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp6>;
- 		tx-disable-gpios = <&sgpio_out2 16 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 16 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 16 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 17 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 16 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 16 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 17 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth50: sfp-eth50 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp7>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp7>;
- 		tx-disable-gpios = <&sgpio_out2 17 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 17 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 17 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 18 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 17 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 17 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 18 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth51: sfp-eth51 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp8>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp8>;
- 		tx-disable-gpios = <&sgpio_out2 18 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 18 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 18 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 19 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 18 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 18 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 19 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth52: sfp-eth52 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp9>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp9>;
- 		tx-disable-gpios = <&sgpio_out2 19 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 19 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 19 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 20 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 19 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 19 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 20 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth53: sfp-eth53 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp10>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp10>;
- 		tx-disable-gpios = <&sgpio_out2 20 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 20 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 20 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 21 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 20 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 20 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 21 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth54: sfp-eth54 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp11>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp11>;
- 		tx-disable-gpios = <&sgpio_out2 21 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 21 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 21 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 22 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 21 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 21 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 22 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth55: sfp-eth55 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp12>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp12>;
- 		tx-disable-gpios = <&sgpio_out2 22 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 22 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 22 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 23 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 22 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 22 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 23 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth56: sfp-eth56 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp13>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp13>;
- 		tx-disable-gpios = <&sgpio_out2 23 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 23 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 23 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 24 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 23 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 23 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 24 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth57: sfp-eth57 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp14>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp14>;
- 		tx-disable-gpios = <&sgpio_out2 24 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 24 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 24 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 25 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 24 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 24 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 25 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth58: sfp-eth58 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp15>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp15>;
- 		tx-disable-gpios = <&sgpio_out2 25 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 25 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 25 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 26 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 25 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 25 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 26 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth59: sfp-eth59 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp16>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp16>;
- 		tx-disable-gpios = <&sgpio_out2 26 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 26 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 26 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 27 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 26 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 26 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 27 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth60: sfp-eth60 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp17>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp17>;
- 		tx-disable-gpios = <&sgpio_out2 27 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 27 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 27 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 28 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 27 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 27 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 28 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth61: sfp-eth61 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp18>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp18>;
- 		tx-disable-gpios = <&sgpio_out2 28 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 28 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 28 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 29 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 28 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 28 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 29 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth62: sfp-eth62 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp19>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp19>;
- 		tx-disable-gpios = <&sgpio_out2 29 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 29 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 29 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 30 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 29 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 29 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 30 0 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth63: sfp-eth63 {
--		compatible       = "sff,sfp";
--		i2c-bus          = <&i2c_sfp20>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp20>;
- 		tx-disable-gpios = <&sgpio_out2 30 1 GPIO_ACTIVE_LOW>;
--		los-gpios        = <&sgpio_in2 30 1 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios   = <&sgpio_in2 30 2 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios   = <&sgpio_in2 31 0 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 30 1 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 30 2 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 31 0 GPIO_ACTIVE_HIGH>;
- 	};
- };
+diff --git a/arch/arm/boot/dts/at91-sama5d27_som1.dtsi b/arch/arm/boot/dts/at91-sama5d27_som1.dtsi
+index a4623cc67cc1..e87c4990bf5d 100644
+--- a/arch/arm/boot/dts/at91-sama5d27_som1.dtsi
++++ b/arch/arm/boot/dts/at91-sama5d27_som1.dtsi
+@@ -15,7 +15,7 @@ / {
+ 	compatible = "atmel,sama5d27-som1", "atmel,sama5d27", "atmel,sama5d2", "atmel,sama5";
  
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
-index d10a9172b529..ec90bda7ed6a 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
-@@ -170,40 +170,40 @@ i2c_sfp4: i2c_sfp4 {
+ 	aliases {
+-		i2c0	= &i2c0;
++		i2c0 = &i2c0;
+ 	};
  
- &axi {
- 	sfp_eth60: sfp-eth60 {
--		compatible	   = "sff,sfp";
--		i2c-bus            = <&i2c_sfp1>;
--		tx-disable-gpios   = <&sgpio_out2 28 0 GPIO_ACTIVE_LOW>;
-+		compatible	 = "sff,sfp";
-+		i2c-bus = <&i2c_sfp1>;
-+		tx-disable-gpios = <&sgpio_out2 28 0 GPIO_ACTIVE_LOW>;
- 		rate-select0-gpios = <&sgpio_out2 28 1 GPIO_ACTIVE_HIGH>;
--		los-gpios          = <&sgpio_in2 28 0 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios     = <&sgpio_in2 28 1 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios     = <&sgpio_in2 28 2 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 28 0 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 28 1 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 28 2 GPIO_ACTIVE_HIGH>;
+ 	clocks {
+diff --git a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+index 08f0d4b995ff..b1c390ae5f98 100644
+--- a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+@@ -21,8 +21,8 @@ aliases {
+ 		serial0 = &uart1;	/* DBGU */
+ 		serial1 = &uart4;	/* mikro BUS 1 */
+ 		serial2 = &uart2;	/* mikro BUS 2 */
+-		i2c1	= &i2c1;
+-		i2c2	= &i2c3;
++		i2c1 = &i2c1;
++		i2c2 = &i2c3;
  	};
- 	sfp_eth61: sfp-eth61 {
--		compatible         = "sff,sfp";
--		i2c-bus            = <&i2c_sfp2>;
--		tx-disable-gpios   = <&sgpio_out2 29 0 GPIO_ACTIVE_LOW>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp2>;
-+		tx-disable-gpios = <&sgpio_out2 29 0 GPIO_ACTIVE_LOW>;
- 		rate-select0-gpios = <&sgpio_out2 29 1 GPIO_ACTIVE_HIGH>;
--		los-gpios          = <&sgpio_in2 29 0 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios     = <&sgpio_in2 29 1 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios     = <&sgpio_in2 29 2 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 29 0 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 29 1 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 29 2 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth62: sfp-eth62 {
--		compatible         = "sff,sfp";
--		i2c-bus            = <&i2c_sfp3>;
--		tx-disable-gpios   = <&sgpio_out2 30 0 GPIO_ACTIVE_LOW>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp3>;
-+		tx-disable-gpios = <&sgpio_out2 30 0 GPIO_ACTIVE_LOW>;
- 		rate-select0-gpios = <&sgpio_out2 30 1 GPIO_ACTIVE_HIGH>;
--		los-gpios          = <&sgpio_in2 30 0 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios     = <&sgpio_in2 30 1 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios     = <&sgpio_in2 30 2 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 30 0 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 30 1 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 30 2 GPIO_ACTIVE_HIGH>;
- 	};
- 	sfp_eth63: sfp-eth63 {
--		compatible         = "sff,sfp";
--		i2c-bus            = <&i2c_sfp4>;
--		tx-disable-gpios   = <&sgpio_out2 31 0 GPIO_ACTIVE_LOW>;
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp4>;
-+		tx-disable-gpios = <&sgpio_out2 31 0 GPIO_ACTIVE_LOW>;
- 		rate-select0-gpios = <&sgpio_out2 31 1 GPIO_ACTIVE_HIGH>;
--		los-gpios          = <&sgpio_in2 31 0 GPIO_ACTIVE_HIGH>;
--		mod-def0-gpios     = <&sgpio_in2 31 1 GPIO_ACTIVE_LOW>;
--		tx-fault-gpios     = <&sgpio_in2 31 2 GPIO_ACTIVE_HIGH>;
-+		los-gpios = <&sgpio_in2 31 0 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in2 31 1 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in2 31 2 GPIO_ACTIVE_HIGH>;
- 	};
- };
  
+ 	chosen {
+diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+index 5e8755f22784..48e85fc3d998 100644
+--- a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+@@ -19,7 +19,7 @@ aliases {
+ 		serial1 = &uart6;	/* BT */
+ 		serial2 = &uart5;	/* mikro BUS 2 */
+ 		serial3 = &uart3;	/* mikro BUS 1 */
+-		i2c1	= &i2c1;
++		i2c1 = &i2c1;
+ 	};
+ 
+ 	chosen {
+diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+index 806eb1d911d7..5ff692ea8a20 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+@@ -24,8 +24,8 @@ aliases {
+ 		serial1 = &uart1;	/* mikro BUS 3 */
+ 		serial3 = &uart3;	/* mikro BUS 2 */
+ 		serial5 = &uart7;	/* flx2 */
+-		i2c0	= &i2c0;
+-		i2c1	= &i2c1;
++		i2c0 = &i2c0;
++		i2c1 = &i2c1;
+ 	};
+ 
+ 	chosen {
+diff --git a/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts b/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
+index 8ed58af01391..64c3e63de179 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
+@@ -20,9 +20,9 @@ / {
+ 
+ 	aliases {
+ 		serial0 = &uart0;	/* DBGU */
+-		i2c0	= &i2c0;	/* mikroBUS 1 */
+-		i2c1	= &i2c1;	/* XPRO EXT1 */
+-		i2c2	= &i2c2;
++		i2c0 = &i2c0;	/* mikroBUS 1 */
++		i2c1 = &i2c1;	/* XPRO EXT1 */
++		i2c2 = &i2c2;
+ 	};
+ 
+ 	chosen {
+diff --git a/arch/arm/boot/dts/at91-sama5d2_xplained.dts b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+index cdfe891f9a9e..5959bf0c2fa3 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+@@ -205,10 +205,10 @@ vdd_1v35_reg: REG_DCDC1 {
+ 
+ 							regulator-state-mem {
+ 								regulator-on-in-suspend;
+-								regulator-suspend-min-microvolt=<1400000>;
+-								regulator-suspend-max-microvolt=<1400000>;
++								regulator-suspend-min-microvolt = <1400000>;
++								regulator-suspend-max-microvolt = <1400000>;
+ 								regulator-changeable-in-suspend;
+-								regulator-mode=<ACT8945A_REGULATOR_MODE_LOWPOWER>;
++								regulator-mode = <ACT8945A_REGULATOR_MODE_LOWPOWER>;
+ 							};
+ 						};
+ 
+diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
+index c328b67bea0c..a0e21022dbc5 100644
+--- a/arch/arm/boot/dts/sam9x60.dtsi
++++ b/arch/arm/boot/dts/sam9x60.dtsi
+@@ -464,7 +464,7 @@ pwm0: pwm@f8034000 {
+ 				interrupts = <18 IRQ_TYPE_LEVEL_HIGH 4>;
+ 				clocks = <&pmc PMC_TYPE_PERIPHERAL 18>;
+ 				#pwm-cells = <3>;
+-				status="disabled";
++				status = "disabled";
+ 			};
+ 
+ 			hlcdc: hlcdc@f8038000 {
 -- 
 2.34.1
 
