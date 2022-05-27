@@ -1,159 +1,199 @@
-Return-Path: <SRS0=d1J0=WC=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=pUaZ=WD=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9249C433F5
-	for <soc@archiver.kernel.org>; Thu, 26 May 2022 21:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CCD7C433F5
+	for <soc@archiver.kernel.org>; Fri, 27 May 2022 02:39:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8F879C34119; Thu, 26 May 2022 21:10:46 +0000 (UTC)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	id D7052C34116; Fri, 27 May 2022 02:39:01 +0000 (UTC)
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2BE31C34116
-	for <soc@kernel.org>; Thu, 26 May 2022 21:10:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2BE31C34116
+	by smtp.kernel.org (Postfix) with ESMTPS id 80AF2C34114
+	for <soc@kernel.org>; Fri, 27 May 2022 02:38:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80AF2C34114
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id y13so5290440eje.2
-        for <soc@kernel.org>; Thu, 26 May 2022 14:10:45 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id ge11so3444061pjb.0
+        for <soc@kernel.org>; Thu, 26 May 2022 19:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n5ISJ9yLZ548Mz4jCd/68AcqRvOzgjUn9wXGD+ASjI4=;
-        b=lZVmHfF6LYBzFMaqjGMVB2ZPV+hPOKUic6CjH+XhRrRzKSyO43nCBJPvX05Nyk6k4Z
-         OdiUk/r7NaOsPqwT9VJG3jgoNjCBThtKaCQuyOkBv8Vi7eqN0eoTgN9ncK6bkGZcKeyC
-         bsoL/H3dLQIWCQfPyEHsnzG4UGGThjGdhCyn9djsqxIL8GWoLBr5U+0C9TU5YJvtn2XJ
-         niDhVthqOEERTZoQjUTgCkyEYs2WmQ8uU8pSswjn9UeW6Xd7qvg567LHcltuktw5tImZ
-         798/3PEQm5cQFgmBuj4ndBuBAp8jRAjdcvNVCUmzJiRqnvefQy1rm3HsUyR8/7BdpDhv
-         oKmw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ufJmyL4u6TL5xtH3DzBKqlIHbWXkaJJ+ESTImboH7N4=;
+        b=PQVrB6z7gTUvlsnP3KfEk10k5SGJgsGe2ZrtFpSQtQbzN3uDQYq7N5cdefLWrO73ur
+         baYf3ZUc3RE8VQaHyiQFM9GtvTHitFNm7VemEHL99rcxLf7gtOFxsVjuFVb+G1FrfI13
+         l3CGOTIZ7P4D8/5r3EfDniCeVhG/f5ycoZ/nFmvW1C1nt1lAREKXdC++bG/8AYiIcC1g
+         /xDJkgBqOjlPC+XRzBR7BuMZJO1xPml8cMIp7KFfVf3i+Yd7UX/70n6LLme+wcp+JJqg
+         DlD3+BWhS27OQMYLs1qzg+4RA4iTLnqoHm+32oIDC/wKYg5WW1ZNIuF7sJuR7NoiMo8k
+         mYhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n5ISJ9yLZ548Mz4jCd/68AcqRvOzgjUn9wXGD+ASjI4=;
-        b=gVZJrvzOz17xo1ScdjLr0C/MKCkN+jEMnKVk7p7Rze2of9Zb6XF8rjzsOQWf5EfISw
-         xHWaKm9M9gQCg8AYJHWDj6Qt1UnBTtNMTy8I+TEUXotx5ZHGLxFUnZqUQT4NqFKIJivE
-         Wn4XUgkcGx7eEtu7AjDe5AWteSnx74YjFIhBVF3/LV6RIGDtMooE7MVlkrDFC+y1WMO2
-         i/jCJdWtWmxw0lVhQrD9RuJeWjjsvCVQtaVpD+nI1PVPiuelHnJCQbPcLIVgYF0FmbS7
-         GqDKgiJMu9HSYb9lR8npDirQYj4GR3FM6E+iqPber/Zt6ly20V/psJ2Z3wUTjE6Y+q8x
-         F9Rg==
-X-Gm-Message-State: AOAM531KzM9gMjvfvCYAjN2Qh+eLhPoNtrXEdUZ7PCsKMkOvYhMCNMxP
-	YkwkCGKdiVnyOfWI3K5W+3mdnA==
-X-Google-Smtp-Source: ABdhPJzH2AYsc87sKJTEJvKhEp90igqSe7vZ4SuRlgUhjJrY2/j5+u/fAOVedF+0min99G5EjJX2IA==
-X-Received: by 2002:a17:906:6985:b0:6fe:988b:d248 with SMTP id i5-20020a170906698500b006fe988bd248mr34031598ejr.226.1653599443354;
-        Thu, 26 May 2022 14:10:43 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s23-20020a1709064d9700b006fe8b3d8cb6sm851155eju.62.2022.05.26.14.10.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 14:10:42 -0700 (PDT)
-Message-ID: <9ad3b26e-5d71-72f4-1a16-9ab3164141de@linaro.org>
-Date: Thu, 26 May 2022 23:10:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm64: dts: renesas: adjust whitespace around '='
-Content-Language: en-US
-To: Geert Uytterhoeven <geert@linux-m68k.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ufJmyL4u6TL5xtH3DzBKqlIHbWXkaJJ+ESTImboH7N4=;
+        b=mYRYp0L/aOMtDr7HM8Zu9CQmcV1qERZN+DwsvVbAFyi8cAL+oGlC5bzMl7a98MekZH
+         WWD/pW8zbS5UBO2AMoshe5nXwhHe4ATVRKiWamhHwu3Q0a2QJJCpy3yGVfyHCtyCShRm
+         AdivMyViNsS/FJ3n+v/DEu+X0XQ/Cf3J3PfdTzlgkKX138SZl/cPCaRb0rtQZMG3FlMg
+         5SYyxoKXrEcAprrWCCBDmd80XpLk0OBjisAO9K/uQAYcxFWERZCw5s15OIHqyrt2Zwr0
+         Vf0JiNcqeAuDBuMbcB4Y8jfyMropzsIfdwgP+jXEmr3Bk1FHS6vKC0qqEKVAE9MUdK/M
+         cXpA==
+X-Gm-Message-State: AOAM531luBNWRZ7K87aRvH5lqmR5ViJeZfv8mBl68E9T6IQE9pv33E/2
+	t/GKiXTSYqcvBz2ZnyvcZu8dfgdRZxlCmA==
+X-Google-Smtp-Source: ABdhPJy4+4N4D3o+CwVPEnODYC+5nuXVxD+eTp3J99nDw6yfw878mrTd+QiTXtjQrvObyydy3KCBFQ==
+X-Received: by 2002:a17:90b:1b07:b0:1e0:41c2:9e15 with SMTP id nu7-20020a17090b1b0700b001e041c29e15mr5795071pjb.20.1653619138985;
+        Thu, 26 May 2022 19:38:58 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id h10-20020a63574a000000b003c25dfd7372sm2192904pgm.26.2022.05.26.19.38.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 19:38:58 -0700 (PDT)
+Date: Fri, 27 May 2022 08:08:56 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
- <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: spear: adjust whitespace around '='
+Message-ID: <20220527023856.zl2varrzuuf7huef@vireshk-i7>
+References: <20220526203815.831383-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526203815.831383-1-krzysztof.kozlowski@linaro.org>
 
-On 26/05/2022 23:05, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
+On 26-05-22, 22:38, Krzysztof Kozlowski wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
 > 
-> On Thu, May 26, 2022 at 10:42 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> Fix whitespace coding style: use single space instead of tabs or
->> multiple spaces around '=' sign in property assignment.  No functional
->> changes (same DTB).
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Thanks for your patch!
+> ---
 > 
->> --- a/arch/arm64/boot/dts/renesas/draak.dtsi
->> +++ b/arch/arm64/boot/dts/renesas/draak.dtsi
->> @@ -630,7 +630,7 @@ rsnd_for_ak4613: endpoint {
->>                                 bitclock-master = <&rsnd_for_ak4613>;
->>                                 frame-master = <&rsnd_for_ak4613>;
->>                                 playback = <&ssi3>, <&src5>, <&dvc0>;
->> -                               capture  = <&ssi4>, <&src6>, <&dvc1>;
->> +                               capture = <&ssi4>, <&src6>, <&dvc1>;
+> Output compared with dtx_diff and fdtdump.
+> ---
+>  arch/arm/boot/dts/spear1310-evb.dts | 2 +-
+>  arch/arm/boot/dts/spear1340-evb.dts | 2 +-
+>  arch/arm/boot/dts/spear1340.dtsi    | 2 +-
+>  arch/arm/boot/dts/spear300-evb.dts  | 2 +-
+>  arch/arm/boot/dts/spear310-evb.dts  | 2 +-
+>  arch/arm/boot/dts/spear320-evb.dts  | 2 +-
+>  arch/arm/boot/dts/spear320-hmi.dts  | 2 +-
+>  arch/arm/boot/dts/spear320.dtsi     | 2 +-
+>  8 files changed, 8 insertions(+), 8 deletions(-)
 > 
-> I think the idea was to align the playback and capture properties,
-> for easier comparison.
-> Hence I'm a bit undecided if this needs to be fixed or not...
+> diff --git a/arch/arm/boot/dts/spear1310-evb.dts b/arch/arm/boot/dts/spear1310-evb.dts
+> index ddd1cf4d0554..05408df38203 100644
+> --- a/arch/arm/boot/dts/spear1310-evb.dts
+> +++ b/arch/arm/boot/dts/spear1310-evb.dts
+> @@ -170,7 +170,7 @@ sdhci@b3000000 {
+>  
+>  		smi: flash@ea000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@e6000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear1340-evb.dts b/arch/arm/boot/dts/spear1340-evb.dts
+> index 3a51a41eb5e4..7700f2afc128 100644
+> --- a/arch/arm/boot/dts/spear1340-evb.dts
+> +++ b/arch/arm/boot/dts/spear1340-evb.dts
+> @@ -168,7 +168,7 @@ sdhci@b3000000 {
+>  
+>  		smi: flash@ea000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@e6000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear1340.dtsi b/arch/arm/boot/dts/spear1340.dtsi
+> index 13e1bdb3ddbf..818886e11713 100644
+> --- a/arch/arm/boot/dts/spear1340.dtsi
+> +++ b/arch/arm/boot/dts/spear1340.dtsi
+> @@ -88,7 +88,7 @@ pinmux: pinmux@e0700000 {
+>  		};
+>  
+>  		pwm: pwm@e0180000 {
+> -			compatible ="st,spear13xx-pwm";
+> +			compatible = "st,spear13xx-pwm";
+>  			reg = <0xe0180000 0x1000>;
+>  			#pwm-cells = <2>;
+>  			status = "disabled";
+> diff --git a/arch/arm/boot/dts/spear300-evb.dts b/arch/arm/boot/dts/spear300-evb.dts
+> index 2beb30ca2cba..303ef29fb805 100644
+> --- a/arch/arm/boot/dts/spear300-evb.dts
+> +++ b/arch/arm/boot/dts/spear300-evb.dts
+> @@ -80,7 +80,7 @@ sdhci@70000000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear310-evb.dts b/arch/arm/boot/dts/spear310-evb.dts
+> index 1c41e4a40334..ea0b53036f7b 100644
+> --- a/arch/arm/boot/dts/spear310-evb.dts
+> +++ b/arch/arm/boot/dts/spear310-evb.dts
+> @@ -94,7 +94,7 @@ gmac: eth@e0800000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear320-evb.dts b/arch/arm/boot/dts/spear320-evb.dts
+> index c322407a0ade..3c026d021c92 100644
+> --- a/arch/arm/boot/dts/spear320-evb.dts
+> +++ b/arch/arm/boot/dts/spear320-evb.dts
+> @@ -95,7 +95,7 @@ sdhci@70000000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear320-hmi.dts b/arch/arm/boot/dts/spear320-hmi.dts
+> index b587e4ec11e5..34503ac9c51c 100644
+> --- a/arch/arm/boot/dts/spear320-hmi.dts
+> +++ b/arch/arm/boot/dts/spear320-hmi.dts
+> @@ -167,7 +167,7 @@ sdhci@70000000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear320.dtsi b/arch/arm/boot/dts/spear320.dtsi
+> index 47ac4474ed96..b12474446a48 100644
+> --- a/arch/arm/boot/dts/spear320.dtsi
+> +++ b/arch/arm/boot/dts/spear320.dtsi
+> @@ -78,7 +78,7 @@ spi2: spi@a6000000 {
+>  		};
+>  
+>  		pwm: pwm@a8000000 {
+> -			compatible ="st,spear-pwm";
+> +			compatible = "st,spear-pwm";
+>  			reg = <0xa8000000 0x1000>;
+>  			#pwm-cells = <2>;
+>  			status = "disabled";
 
-yeah, but then one should align "frame-master" to "bitclock-master" and
-several other properties.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> 
->>                         };
->>                 };
->>         };
-> 
->> --- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
->> +++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
->> @@ -206,12 +206,12 @@ pcm3168a: audio-codec@44 {
->>                                 clocks = <&clksndsel>;
->>                                 clock-names = "scki";
-
-like here ^^^ - clocks with clock-names...
-
->>
->> -                               VDD1-supply     = <&snd_3p3v>;
->> -                               VDD2-supply     = <&snd_3p3v>;
->> -                               VCCAD1-supply   = <&snd_vcc5v>;
->> -                               VCCAD2-supply   = <&snd_vcc5v>;
->> -                               VCCDA1-supply   = <&snd_vcc5v>;
->> -                               VCCDA2-supply   = <&snd_vcc5v>;
->> +                               VDD1-supply = <&snd_3p3v>;
->> +                               VDD2-supply = <&snd_3p3v>;
->> +                               VCCAD1-supply = <&snd_vcc5v>;
->> +                               VCCAD2-supply = <&snd_vcc5v>;
->> +                               VCCDA1-supply = <&snd_vcc5v>;
->> +                               VCCDA2-supply = <&snd_vcc5v>;
-> 
-> Same for the various supplies.
-
-I don't think there is benefit to order few single entries, while entire
-file does not follow that convention. It would be different for some
-multiple-line entries, but that's not the case here.
-
-Anyway that's only my opinion, so I am happy to trim the patch to the
-last part (although then it is a bit churn :) ).
-
-> 
->>
->>                                 ports {
->>                                         #address-cells = <1>;
->> @@ -438,7 +438,7 @@ rsnd_for_pcm3168a_capture: endpoint {
->>                                 bitclock-master;
->>                                 frame-master;
->>                                 dai-tdm-slot-num = <6>;
->> -                               capture  = <&ssi4>;
->> +                               capture = <&ssi4>;
-> 
-> Right, there's nothing to align here.
-
-
-
-Best regards,
-Krzysztof
+-- 
+viresh
