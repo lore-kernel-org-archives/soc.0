@@ -4,138 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC5B7C433EF
-	for <soc@archiver.kernel.org>; Fri, 27 May 2022 08:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B0FC433F5
+	for <soc@archiver.kernel.org>; Fri, 27 May 2022 09:00:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B5864C34100; Fri, 27 May 2022 08:18:37 +0000 (UTC)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	id D995DC34118; Fri, 27 May 2022 09:00:35 +0000 (UTC)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E930C34119
-	for <soc@kernel.org>; Fri, 27 May 2022 08:18:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E930C34119
+	by smtp.kernel.org (Postfix) with ESMTPS id 29C5DC34100
+	for <soc@kernel.org>; Fri, 27 May 2022 09:00:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29C5DC34100
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f47.google.com with SMTP id v17so684821wrv.2
-        for <soc@kernel.org>; Fri, 27 May 2022 01:18:36 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id r204-20020a1c44d5000000b00397345f2c6fso120880wma.4
+        for <soc@kernel.org>; Fri, 27 May 2022 02:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:organization:in-reply-to:content-transfer-encoding;
-        bh=ZkFo19yN9FE8l6w1oc0IJiQl2EoWP33mdxcOBd2mVFc=;
-        b=Fq9c32hxcx2ufnuS5yUUdwgf84fJ2V+HR5zXjKcBgRRQOBn4Oo+Y8PIBAAJ0eAGKis
-         BFq8Tk+WkMh/OpMKqPxu/qDH20z/0g2Bu6S8gNtK+qUGjyVeDQ+QCHdDUEIhiM69KTww
-         kB3Put3kNcCckMhB+JJdnh7Xq3M0LVZC8tIFMlpEgP3SxokQvFGjVw/RAL3kY8sTL1Kh
-         pqEWSwQcYGhjLE01TMhH1jN7uXz6ebJsZ4yeKtRSOIOJpljU58WV9IlzyfOLS+A16ABz
-         9GQnTG5cJGDEJHaTbumnaHlKut9Gc/NSmWOT5otOpcjqqnNXttpKcqTJXWtIV6XqOQYg
-         iHyA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KgOndPAfyvmijpJMBj3VbzHjuhYijVFfIUTkT6Spj0I=;
+        b=yq2L9Iov93prcrerNONY8meYTbFWpiD9fleBq4FXsdIRRV8zY6ph1xHdNY/dzwUrcH
+         vvxyR7HN6/UlVUj1cLMIpxlGYFf4UiDun28TCZzbHE7fNGH0BeuIipqNGnKNpqiAj1Mj
+         DBtUJc1PrpN+1hs6oQMc1WoWyoCsE+ZOzGDMWBsXA7EO223rkpH9kKWQIn7gsB3q5h2C
+         lAvbqAyNeosmQHZ0E7+ipm13Rfd8quSni+xiz9546V4eiDxUdj10O08iBeIaw+KXjHbP
+         MwqfUHMwlumF0Hq84IIh5K4nhvndxXbYTxhG7szKBIBD0U82R5tnmIMQ0FwwZhB5RAb0
+         H08w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZkFo19yN9FE8l6w1oc0IJiQl2EoWP33mdxcOBd2mVFc=;
-        b=4+2YXm6+kM8EowgF/jMUKmlsu8JMcnx1E/Rx7k01wqfb48Jcjqv187suTqiw7jwlcQ
-         4AhcezhdM6qdSjOATYaHBLdiLJRiU6xmR7Z5I4eO3LGJ5F3n7Ls0HvM/jkzuLuQT+mPc
-         fvsqYBZ5Bvy9513hc0ePK0ry64rUrfg55UjGFuX5gR342Nu7sc4yCOlWRn+MJW9ltw57
-         sq/H475qFQqLJEaYGqPs7HlTtqBywoF/QLaO8X77Zz4P+SXiCDGa0L08IBkiOQzCX+G5
-         a71Co80/8zzDcZ3pm36hBs/Pm0MmXZZXWCJVmbYncQmIrHp+nE/l7Jr/3tTUlkiFYWnR
-         DauQ==
-X-Gm-Message-State: AOAM5307APaYl0Ri3L9YZrMwhYzShmIFif4afpg0BQdeLmplXF+wzVtp
-	1JJnwYUlSdJZq+i8ANbytyBDFQ==
-X-Google-Smtp-Source: ABdhPJz+oqbBEG4R4LguW/AlVaAt1T7SUCg4RxJCopLYPsk+CUpf7UJyCqHBCjs0nVw/onX+8/KQFA==
-X-Received: by 2002:adf:e28a:0:b0:210:b31:722 with SMTP id v10-20020adfe28a000000b002100b310722mr5408462wri.65.1653639515570;
-        Fri, 27 May 2022 01:18:35 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:f081:5ded:fc86:365d? ([2001:861:44c0:66c0:f081:5ded:fc86:365d])
-        by smtp.gmail.com with ESMTPSA id v18-20020adfebd2000000b0020c5253d8besm1130050wrn.10.2022.05.27.01.18.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 01:18:35 -0700 (PDT)
-Message-ID: <19a9260c-322b-10e1-e361-cc2d5fdd8ff9@baylibre.com>
-Date: Fri, 27 May 2022 10:18:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] ARM: dts: meson: adjust whitespace around '='
-Content-Language: en-US
-List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220526204552.832961-1-krzysztof.kozlowski@linaro.org>
- <20220526204552.832961-2-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KgOndPAfyvmijpJMBj3VbzHjuhYijVFfIUTkT6Spj0I=;
+        b=mZBpKrqLbwaFY//UuEa1sLl7BfEvEOjvcQrdq3s8fMqznvqIl8UhLGzBDQ4qznsrbj
+         wDvsfE6epQS5ilPWTGOAZer/w8Cb3Mq7MMMbIzMzebnYQm5id7ifiC8Yfv7dOY+p/0Fk
+         odh8BmbVA0pdUWXnTXrQfFC1Fv3Ab9N6K/tBnk5R3axmJIEQf8qF45p8ld2C0Dz0uRoG
+         2KiB0qD84a0M26veK9kgce8JmnqDP6Sy3hEBVKL4RYZ3bN7/wUVTyPhDZDKJvLnCJnMD
+         IIFVpbtP+jocrWFTLx+c17b03tQPsPgo0cPM8TAzy/pwb26/UEA/KiAo2ccOjsCaDeiF
+         P96w==
+X-Gm-Message-State: AOAM533OOvIQ+6+85qB5JPXklxSkgXOys769JGm8XsP9I38a4XMsDC/J
+	dnjTLHbnSDEPyXgV1j6pT2njvg==
+X-Google-Smtp-Source: ABdhPJzkbMuzL2NSPBI/c7uo7e2MnvfNayThyWCQt8pFuNppY95EZcMlvC/RzIZPXwXVBZa2UnWCTQ==
+X-Received: by 2002:a05:600c:1e85:b0:397:6bcb:c52c with SMTP id be5-20020a05600c1e8500b003976bcbc52cmr6042990wmb.41.1653642031059;
+        Fri, 27 May 2022 02:00:31 -0700 (PDT)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:f081:5ded:fc86:365d])
+        by smtp.gmail.com with ESMTPSA id u12-20020a5d6dac000000b0020feb9c44c2sm1347807wrs.20.2022.05.27.02.00.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 02:00:30 -0700 (PDT)
 From: Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220526204552.832961-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+List-Id: <soc.lore.kernel.org>
+To: Jerome Brunet <jbrunet@baylibre.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	soc@kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Subject: Re: [PATCH 1/2] arm64: dts: amlogic: adjust whitespace around '='
+Date: Fri, 27 May 2022 11:00:29 +0200
+Message-Id: <165364202476.67525.12506050494553411270.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220526204552.832961-1-krzysztof.kozlowski@linaro.org>
+References: <20220526204552.832961-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 26/05/2022 22:45, Krzysztof Kozlowski wrote:
+Hi,
+
+On Thu, 26 May 2022 22:45:51 +0200, Krzysztof Kozlowski wrote:
 > Fix whitespace coding style: use single space instead of tabs or
 > multiple spaces around '=' sign in property assignment.  No functional
 > changes (same DTB).
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> ---
-> 
-> Output compared with dtx_diff and fdtdump.
-> ---
->   arch/arm/boot/dts/meson.dtsi   | 4 ++--
->   arch/arm/boot/dts/meson8.dtsi  | 2 +-
->   arch/arm/boot/dts/meson8b.dtsi | 2 +-
->   3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/meson.dtsi b/arch/arm/boot/dts/meson.dtsi
-> index 26eaba3fa96f..8e3860d5d916 100644
-> --- a/arch/arm/boot/dts/meson.dtsi
-> +++ b/arch/arm/boot/dts/meson.dtsi
-> @@ -214,14 +214,14 @@ aobus: aobus@c8100000 {
->   			ranges = <0x0 0xc8100000 0x100000>;
->   
->   			ao_arc_rproc: remoteproc@1c {
-> -				compatible= "amlogic,meson-mx-ao-arc";
-> +				compatible = "amlogic,meson-mx-ao-arc";
->   				reg = <0x1c 0x8>, <0x38 0x8>;
->   				reg-names = "remap", "cpu";
->   				status = "disabled";
->   			};
->   
->   			ir_receiver: ir-receiver@480 {
-> -				compatible= "amlogic,meson6-ir";
-> +				compatible = "amlogic,meson6-ir";
->   				reg = <0x480 0x20>;
->   				interrupts = <GIC_SPI 15 IRQ_TYPE_EDGE_RISING>;
->   				status = "disabled";
-> diff --git a/arch/arm/boot/dts/meson8.dtsi b/arch/arm/boot/dts/meson8.dtsi
-> index 9997a5d0333a..0f8bac8bac8b 100644
-> --- a/arch/arm/boot/dts/meson8.dtsi
-> +++ b/arch/arm/boot/dts/meson8.dtsi
-> @@ -430,7 +430,7 @@ mux {
->   };
->   
->   &ao_arc_rproc {
-> -	compatible= "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
-> +	compatible = "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
->   	amlogic,secbus2 = <&secbus2>;
->   	sram = <&ao_arc_sram>;
->   	resets = <&reset RESET_MEDIA_CPU>;
-> diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dtsi
-> index 94f1c03decce..cf9c04a61ba3 100644
-> --- a/arch/arm/boot/dts/meson8b.dtsi
-> +++ b/arch/arm/boot/dts/meson8b.dtsi
-> @@ -384,7 +384,7 @@ mux {
->   };
->   
->   &ao_arc_rproc {
-> -	compatible= "amlogic,meson8b-ao-arc", "amlogic,meson-mx-ao-arc";
-> +	compatible = "amlogic,meson8b-ao-arc", "amlogic,meson-mx-ao-arc";
->   	amlogic,secbus2 = <&secbus2>;
->   	sram = <&ao_arc_sram>;
->   	resets = <&reset RESET_MEDIA_CPU>;
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.20/arm64)
+
+[1/2] arm64: dts: amlogic: adjust whitespace around '='
+      https://git.kernel.org/amlogic/c/7c928017461a740300ba0d74a5a4e7c09c8f75cd
+[2/2] ARM: dts: meson: adjust whitespace around '='
+      https://git.kernel.org/amlogic/c/5d08817f99847d0ccff65903a99794703de9ad46
+
+These changes has been applied on the intermediate git tree [1].
+
+The v5.20/arm64 branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
