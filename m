@@ -1,345 +1,180 @@
-Return-Path: <SRS0=aEoJ=WD=prime-online-leads.com=jessica.taylor@kernel.org>
+Return-Path: <SRS0=WDxn=WD=broadcom.com=anand.gore@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7053C433F5
-	for <soc@archiver.kernel.org>; Fri, 27 May 2022 15:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB0E4C433EF
+	for <soc@archiver.kernel.org>; Fri, 27 May 2022 17:10:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 63639C34113; Fri, 27 May 2022 15:09:13 +0000 (UTC)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	id 90306C34114; Fri, 27 May 2022 17:10:02 +0000 (UTC)
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 58371C385A9
-	for <soc@kernel.org>; Fri, 27 May 2022 15:09:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 58371C385A9
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=prime-online-leads.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=prime-online-leads.com
-Received: by mail-pj1-f43.google.com with SMTP id cv10so4827476pjb.4
-        for <soc@kernel.org>; Fri, 27 May 2022 08:09:12 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 50167C34113
+	for <soc@kernel.org>; Fri, 27 May 2022 17:10:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 50167C34113
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pj1-f46.google.com with SMTP id z11so5118106pjc.3
+        for <soc@kernel.org>; Fri, 27 May 2022 10:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=prime-online-leads.com; s=google;
-        h=from:to:references:in-reply-to:subject:date:message-id:mime-version
-         :thread-index:content-language;
-        bh=aJBByyPE/CPvSHHLMVE05VKchdHiv/RfOQqPZJOkeXI=;
-        b=mHbZFZ6xq2CnjC2xp22wl0zLjYWKPudLo6Pq2QefgdwnOC0+XtYZkE2SuReBKg5hKo
-         ESllBgmZBFhVmhLsZii+nUidNg9b7yg+OXYog9PFUPfdG25fEQpaRYNfvziB7sEbbFfO
-         O1npviJ3ESIq2nmK46NVn4sluqg28DbHIL1jQmEhV/qbL4VP9FB+TDKTb57beYKaXeOy
-         yUn/TwFwEz3TCtdBf+C4bGoq7MAqKaCbZxigfsif4iLA/KxlxVHr1ag/xSTQtkyb8Da1
-         brSoyZCmoZssqu4H2VkevetgjuDnk8tYD8V3SpGfY/uOiClRfOyuuQJ9VMpNdKhyYy2C
-         w4Aw==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=Yf6tGFovV4B5sdFG3Sy8h1ltLgPig1Ns8zhTKJRCu7Q=;
+        b=hAwG/+6u2YxWHg//fso8bXrIR7RUc4mqO6V+XbXwZvh4IhIQE/YJlU1BTq3c88MGXY
+         O5C6eYFMTCnZy8wF+qOXcM/UImzriBORbz7tuIDMd5BZvvxFvtukWeAF0UgVqsZOagLK
+         0MjOLl/nHS0XIk2M0sSBOZBqyyjslnS6JHed4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:references:in-reply-to:subject:date
-         :message-id:mime-version:thread-index:content-language;
-        bh=aJBByyPE/CPvSHHLMVE05VKchdHiv/RfOQqPZJOkeXI=;
-        b=YrR07T04NxTP4PLwuX75Vsvy1heKuPBnorhaVSrrtO7x6XYimfNqX9R76RnVDLHjz6
-         EMfPvLw9FIWFolvv8I7dQHjtswSN09NS3G2z59UP4UBAG5RHSA4uhrbNa9L20/4Slr8P
-         I2q3Q92xLLNg19VWwjApdgt6aCIyGnC8U3ZwQsBN6uYHFK7D7Ut89CCjoNn5wlztqXSf
-         8XSVRXu25gks1ouN5FyNTLiTHp3h3FNsEemjq48imFLDH//93hHCSfJrqmHTov9mwISF
-         WIzTqCotBrfR8okbh02bUDBaY43MOYuIveW3FaXzd+tPJgoe0vtRN1wbRDJQTuwklL67
-         lrNg==
-X-Gm-Message-State: AOAM530FXvY9Bj/2WiATW7LNf1jZVcqFTM+ZT5y5QQi/sk+Gd2KgFv0V
-	ciE7+wxMF04And6vHxKefVUfsTORiHFKaA==
-X-Google-Smtp-Source: ABdhPJxgcaS2k+ciT6SSesqlTjUQyJ5PQsh9uHbiXqYfvvCf6QA8pFaheEdP/pyLdS/QveYxdaHP6Q==
-X-Received: by 2002:a17:90b:1809:b0:1df:de43:e56 with SMTP id lw9-20020a17090b180900b001dfde430e56mr8955654pjb.135.1653664151480;
-        Fri, 27 May 2022 08:09:11 -0700 (PDT)
-Received: from DESKTOP5M7JK9Q ([117.209.51.153])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170903234800b001628c0d6c4fsm3834105plh.7.2022.05.27.08.09.09
-        for <soc@kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 27 May 2022 08:09:10 -0700 (PDT)
-From: "Jessica Taylor" <jessica.taylor@prime-online-leads.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=Yf6tGFovV4B5sdFG3Sy8h1ltLgPig1Ns8zhTKJRCu7Q=;
+        b=OV8zayL/ptDFQGU9byAviLHSdq5FaAScxsx98b6Ci86jJOfwmkpbWnupEFBDk6dHv3
+         DxLe+4dmB9wh+hxQSvUMqVQBm98IhmZMbi34GO+T1X1W5Z0bIPPeIpJCHBa6fc55Salt
+         o8Hespea7BAznV6XPSta6QJWmM/n+sNU92XtEFzeab/nkOXGhJQvpwq9A53Su2ilQgKo
+         Bxr6nvrOe4KVdsc5hofGhqMZ7hjkjuUDtniIjtsVJUj026Qvu0+GFArhwZ7G05flaNkS
+         uhPPNYgtcFq4FB1JXKohhShXBTGOpk4IcGZktCbG9GxgehMvCJ+sYPEWqzmm5JPsitCM
+         8HXQ==
+X-Gm-Message-State: AOAM533fls/Lo+ViJEmyvny4TlBbQHRSuCWQEPOWgAHyGJKZ9EOkcdSY
+	hHemgH9IQd7M0PL6KWjXrBMQjg==
+X-Google-Smtp-Source: ABdhPJzw/rxNaM2abjOmEoz5iEoQBIV5jzSiXgZ+XGsBidcKiseNO5dP6th7AdepNVRrKdlolMs1vQ==
+X-Received: by 2002:a17:90b:1e06:b0:1e0:db64:3ca9 with SMTP id pg6-20020a17090b1e0600b001e0db643ca9mr9311949pjb.88.1653671399504;
+        Fri, 27 May 2022 10:09:59 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id q5-20020a6557c5000000b003f60df4a5d5sm3786151pgr.54.2022.05.27.10.09.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 10:09:58 -0700 (PDT)
+From: Anand Gore <anand.gore@broadcom.com>
+To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-To: <soc@kernel.org>
-References: 
-In-Reply-To: 
-Subject: Synaptics Incorporated-Semiconductor Manufacturing Technology Industry Professionals
-Date: Fri, 27 May 2022 11:09:00 -0400
-Message-ID: <199701d871db$b8294ac0$287be040$@prime-online-leads.com>
+Cc: joel.peshkin@broadcom.com,
+	kursad.oney@broadcom.com,
+	samyon.furman@broadcom.com,
+	William Zhang <william.zhang@broadcom.com>,
+	dan.beygelman@broadcom.com,
+	tomer.yacoby@broadcom.com,
+	Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+	florian.fainelli@broadcom.com,
+	Anand Gore <anand.gore@broadcom.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH 0/3] arm: bcmbca: add bcm6878 soc support
+Date: Fri, 27 May 2022 10:09:07 -0700
+Message-Id: <20220527170910.2461134-1-anand.gore@broadcom.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_000_1998_01D871BA.31195870"
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: Adhx25T+0i/+g7RgRn6sT2QKEvtbaQAAAneg
-Content-Language: en-us
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000005dcca905e00160ac"
 
-This is a multipart message in MIME format.
-
-------=_NextPart_000_1998_01D871BA.31195870
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-
-Hi,
-
- 
-
-Good day to you,
-
- 
-
-Are you interested to reach the newly updated email list of Semiconductor
-Manufacturing Technology Industry Professionals?
-
- 
-
-Below are the list of some of the specialties available in this database:
-
- 
-
-Semiconductors
-
-Motion Sensors
-
-Photo voltaics (PV)
-High-Brightness LED
-Flat Panel Display (FPD)
-Micro-electromechanical systems (MEMS)
-Printed and flexible electronics
-Related micro- and Nano-electronics
-Technology companies
-IDMs companies
-Foundries
-Fabless
-Contract Packaging and Test Houses
-OEMs
-Materials Manufacturers
-Components and sub-systems
-
- 
-
-If your target audience is not mentioned above, kindly let me know.
-
- 
-
-Please send me your target audience and geographical area, so that I can
-give you more information, Counts, Pricing as well as few samples, just for
-your review.
-
-            
-
-            
-
-Target Industry :  _____________          Target Geography :  ______________
-Target Job Title :  _________________ 
-
-            
-
-Let me know your interest, so that we could discuss further
-
- 
-
-Note: We will provide Sample List for your preview.
-
-                                    
-
-Best Regards,
-
- 
+--0000000000005dcca905e00160ac
+Content-Transfer-Encoding: 8bit
 
 
-Jessica Taylor                        
-
-Online Marketing Manager
-
- 
-
- 
-
-Other Industries: -Oil & Gas,  Energy & Utility, Health Care,
-Transportation, IT Security, Manufacturing, Finance, Insurance, Food &
-Beverage, Hospitality, Construction, Publishing and Printing,
-Semiconductors, Security Etc.
-
- 
-
- 
-
-If you do not wish to receive future emails from us, please reply as 'leave
-out'
+The initial support includes a bare-bone dts
+for dual core ARM v7  with a pl011 uart.
 
 
-------=_NextPart_000_1998_01D871BA.31195870
-Content-Type: text/html;
-	charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Anand Gore (3):
+  ARM: dts: add dts files for bcmbca soc 6878
+  dt-bindings: arm: add BCM6878 soc to binding document
+  MAINTAINERS: add bcm6878 to bcmbca arch entry
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
-xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
-xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
-xmlns=3D"http://www.w3.org/TR/REC-html40"><head><META =
-HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
-charset=3Dus-ascii"><meta name=3DGenerator content=3D"Microsoft Word 15 =
-(filtered medium)"><style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-span.EmailStyle18
-	{mso-style-type:personal;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-size:10.0pt;
-	font-family:"Calibri","sans-serif";}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US link=3Dblue =
-vlink=3Dpurple><div class=3DWordSection1><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>Hi,<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'>Good =
-day to you,<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'>Are you =
-interested to reach the newly updated email list <b><span =
-style=3D'background:yellow;mso-highlight:yellow'>of Semiconductor =
-Manufacturing Technology Industry =
-Professionals?</span><o:p></o:p></b></span></p><p =
-class=3DMsoNormal><span style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'><o:p>&nbsp;</o:p></span></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif"'>Below are the list of some of the specialties =
-available in this database:<o:p></o:p></span></b></p><p =
-class=3DMsoNormal><span style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;<o:p></o:p></span></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New =
-Roman","serif";color:#00B050'>Semiconductors<o:p></o:p></span></b></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif";color:#00B050'>Motion =
-Sensors<o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif";color:#00B050'>Photo voltaics (PV)<br>High-Brightness =
-LED<br>Flat Panel Display (FPD)<br>Micro-electromechanical systems =
-(MEMS)<br>Printed and flexible electronics<br>Related micro- and =
-Nano-electronics<br>Technology companies<br>IDMs =
-companies<br>Foundries<br>Fabless<br>Contract Packaging and Test =
-Houses<br>OEMs<br>Materials Manufacturers<br>Components and =
-sub-systems<o:p></o:p></span></b></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;<o:p></o:p></span></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif"'>If your target audience is not mentioned above, =
-kindly let me know.<o:p></o:p></span></b></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif"'><o:p>&nbsp;</o:p></span></b></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif"'>Please send me your target audience and geographical =
-area, so that I can give you more information, Counts, Pricing as well =
-as few samples, just for your review.<o:p></o:p></span></b></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New =
-Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp; <o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp; <o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif";background:yellow;mso-highlight:yellow'>Target Industry =
-:&nbsp; =
-_____________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
-Target Geography :&nbsp; =
-______________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target Job =
-Title :&nbsp; _________________</span></b><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'> =
-<o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp; <o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'>Let me =
-know your interest, so that we could discuss =
-further<o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'><o:p>&nbsp;</o:p></span></b></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif"'>Note: We will provide Sample List for your =
-preview.<o:p></o:p></span></b></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp; <o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'>Best =
-Regards,<o:p></o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
-<o:p></o:p></span></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'>Jessica =
-Taylor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =
-<o:p></o:p></span></b></p><p class=3DMsoNormal><b><span =
-style=3D'font-size:12.0pt;font-family:"Times New Roman","serif"'>Online =
-Marketing Manager<o:p></o:p></span></b></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'><o:p>&nbsp;</o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'><o:p>&nbsp;</o:p></span></p><p =
-class=3DMsoNormal><b><span style=3D'font-size:12.0pt;font-family:"Times =
-New Roman","serif"'>Other Industries: -<span style=3D'color:red'>Oil =
-&amp; Gas,&nbsp; Energy &amp; Utility, Health Care, Transportation, IT =
-Security, Manufacturing, Finance, Insurance, Food &amp; Beverage, =
-Hospitality, Construction, Publishing and Printing, Semiconductors, =
-Security Etc.<o:p></o:p></span></span></b></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'><o:p>&nbsp;</o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif"'><o:p>&nbsp;</o:p></span></p><p class=3DMsoNormal><span =
-style=3D'font-size:12.0pt;font-family:"Times New =
-Roman","serif";color:#7F7F7F;mso-style-textfill-fill-color:#7F7F7F;mso-st=
-yle-textfill-fill-alpha:100.0%'>If you do not wish to receive future =
-emails from us, please reply as 'leave out'</span><span =
-style=3D'color:#7F7F7F;mso-style-textfill-fill-color:#7F7F7F;mso-style-te=
-xtfill-fill-alpha:100.0%'><o:p></o:p></span></p></div></body></html>
-------=_NextPart_000_1998_01D871BA.31195870--
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   8 ++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ arch/arm/boot/dts/bcm6878.dtsi                | 109 ++++++++++++++++++
+ arch/arm/boot/dts/bcm96878.dts                |  30 +++++
+ 5 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/bcm6878.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm96878.dts
 
+-- 
+2.25.1
+
+
+--0000000000005dcca905e00160ac
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOwdgTBZL1ojNk2uYyUuhLMVN7S+oJGZDe6k169L
+UsYhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUyNzE3MDk1
+OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQAeBgssYVq8Fw4urlBd+RrgQoo4Le9NR3ABgJ1PYO8zn/BMgHaUERuUJfKM
+6i7uzYHKtxDKvofHx2Q1tUSJywPblKa0qRFVxBiMSPhaOdMMDASC1B+gpItzMrAFJC5nvb/NMWXc
+xdxoejIdJn6lC9GuzqpwDP5IaNSxi11A4hJZIvkeMOQG214sHxRt4X3Glyl1qW0BesKWlkbjY1pt
+ggahtTW0gVKQ1XR4niOi/3/yCQTDymtwk+GL8y+ux3pea2hghNrvLMpA/1qRxdaY9hzN8eBugoeh
+4+HeqBjKqSwR8mQ3HY7/vdEtOwG9x03TBGa2n9rGSvKiCk/n809666VG
+--0000000000005dcca905e00160ac--
