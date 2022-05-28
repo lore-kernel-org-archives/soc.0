@@ -1,96 +1,105 @@
-Return-Path: <SRS0=09n4=WE=armlinux.org.uk=linux+soc=kernel.org@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1DDC433EF
-	for <soc@archiver.kernel.org>; Sat, 28 May 2022 20:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B49AC433F5
+	for <soc@archiver.kernel.org>; Sat, 28 May 2022 20:39:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 32BABC3411A; Sat, 28 May 2022 20:32:55 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E9742C3411A; Sat, 28 May 2022 20:39:31 +0000 (UTC)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E2E6DC34119
-	for <soc@kernel.org>; Sat, 28 May 2022 20:32:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E2E6DC34119
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=sVwMCmxLWsbsfDuisFxMS45pxNxsdph6vk/Q4MCnxVs=; b=svLxRgQOL9LJ6eX13vc1DeR5AC
-	7C0eYQF9MVCNok8ATdfWn8yWwjY9ZDAWnPd3UhJLNgQG/kcMhy4N7hynylYbmgz+cMNuuSEBYozlV
-	Gusv3XEcuLGJHOQvlAKD0cJ87v8vDUBCneaD1tmgDaFuA7lXYtbeyD9eRNgEOdL4Z2xiN0tJW+YRf
-	QW3HUhR3meFNqGRY9fbbGwgvkkVutHvzAn0D7uFK1ss3hdwf/9xvSsJEOqeny70pbjREu3VbjWxN2
-	mVS8zjMtfnnKll17XAbcdpAo6crx/N8mMno0Mc6ShDm3dM/TaDVEr/pLYkUjQRG3kDx4jMwgXyfS3
-	+K+q/2Kg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60864)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1nv36j-0001eB-5u; Sat, 28 May 2022 21:32:22 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1nv36Z-0008Aq-Ix; Sat, 28 May 2022 21:32:11 +0100
-Date: Sat, 28 May 2022 21:32:11 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	dri-devel <dri-devel@lists.freedesktop.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	SoC Team <soc@kernel.org>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-Message-ID: <YpKGy1YTT3+wWzDI@shell.armlinux.org.uk>
-References: <YpCUzStDnSgQLNFN@debian>
- <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 28D99C34119
+	for <soc@kernel.org>; Sat, 28 May 2022 20:39:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28D99C34119
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f49.google.com with SMTP id n10so14438943ejk.5
+        for <soc@kernel.org>; Sat, 28 May 2022 13:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L1kBeURXP1GB/kHBU8GORq7J0BLUBtbdZ3DIpYlBaTc=;
+        b=DjAdbu7azasbs7NwcB/7SaHAszgGECqjn47oqs1k4xlPedT4RzvCX0QqPq7lBkKL8h
+         kCDd8EbrgSMsdYPGW3kd71I2wnB1fj5aTc/XMHG5vhBWAJyMC5IrsfUpAp0qTXGDSYTv
+         IHcvWUBdT5BZzPhVuRmnJn+4dngxb6cwXB33Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L1kBeURXP1GB/kHBU8GORq7J0BLUBtbdZ3DIpYlBaTc=;
+        b=a8OGs8Y+QyFvk5d9wOsBSsZk+Ic37WvlhShjZ41pH/j0cmu8Bh/7z4zsJSpRcXkJwy
+         ZiilmgxBAzLufMHOLNNkU/mL9fWILMsjLIKB7ZD6q9KBBzLNSYYw/L7F57CfKCwVt5C7
+         iVDRNLuk1dDC2kwE1ujF6fTCics1eTdS2VJgmKuh0dR+ioiwNp+b/JbNPwAt0SE49OeS
+         sGZ6iOc5RUnhaWeYOoHWWLAt/scf4YgiSTLh7Tu2R6N6rtG3m6RJ5oYzzq7mPYM0Zxpi
+         U+/ZOHb5B6H6Xcm471lA066pvb6PnnhkCQzrHe9TNAsoirMJwyOIUZBz+5q6q8RVilo6
+         lXTA==
+X-Gm-Message-State: AOAM530lAPwD9xfmku3aMN5JogzFz2zx0s74Ycmz8Pq7uoGGDXzbVMlh
+	/SGv35GLbo7JrkJRji0nutUXOmKM5MZWPfBKbmQ=
+X-Google-Smtp-Source: ABdhPJwcCSlVwhJFv5s2P3ziQzS9iwXw7mh6ytwIxiNGgsgzBtzYWbJB4EOzNuvOOZH7DxvHT882Lw==
+X-Received: by 2002:a17:907:3e98:b0:6fe:be1c:af86 with SMTP id hs24-20020a1709073e9800b006febe1caf86mr32777695ejc.632.1653770369106;
+        Sat, 28 May 2022 13:39:29 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170906604800b006feba31171bsm2702639ejj.11.2022.05.28.13.39.28
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 May 2022 13:39:28 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id f23-20020a7bcc17000000b003972dda143eso6394168wmh.3
+        for <soc@kernel.org>; Sat, 28 May 2022 13:39:28 -0700 (PDT)
+X-Received: by 2002:a1c:7207:0:b0:397:66ee:9d71 with SMTP id
+ n7-20020a1c7207000000b0039766ee9d71mr12380873wmc.8.1653769900324; Sat, 28 May
+ 2022 13:31:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
  <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
  <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
- <YpIR67FMtTGCwARZ@debian>
- <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
- <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+ <YpIR67FMtTGCwARZ@debian> <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+ <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com> <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 28 May 2022 13:31:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+Message-ID: <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	Jani Nikula <jani.nikula@intel.com>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, May 28, 2022 at 11:08:48AM -0700, Linus Torvalds wrote:
-> This smells like a compiler bug triggered by "there's a 16-bit member
-> field in that gtf2 structure, and despite it being packed and aligned
-> to 1, we somehow still align the size to 2".
+On Sat, May 28, 2022 at 11:59 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> It's CONFIG_ARM_AEABI, which is normally set everywhere. Without this
+> option, you the kernel is built for the old 'OABI' that forces all non-packed
+> struct members to be at least 16-bit aligned.
 
-It's an age old thing, it's no compiler bug, and it's completely
-compliant with the C standards. Implementations are permitted by the
-C standard to pad structures and unions how they see fit - and some
-do if it makes sense for performance.
+Looks like forced word (32 bit) alignment to me.
 
-The mistake is that people forget this detail, and they expect
-structs and unions to be laid out a certain way - because it doesn't
-matter to the same extent on x86.
+I wonder how many other structures that messes up, but I committed the
+EDID fix for now.
 
-However, as older ARM CPUs could not do unaligned loads, ensuring
-that things were naturally aligned made complete sense, even if it
-meant that people who assume the world is x86 got tripped up - the
-only way around that would be to make every load very expensive.
+This has presumably been broken for a long time, but maybe the
+affected targets don't typically use EDID and kernel modesetting, and
+only use some fixed display setup instead.
 
-It's not "align to size of 2" in OABI, it tends to be align to a
-multiple of 4, because the underlying architecture is 32-bit.
+Those structure definitions go back a _loong_ time (from a quick 'git
+blame' I see November 2008).
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+But despite that, I did not mark my fix 'cc:stable' because I don't
+know if any of those machines affected by this bad arm ABI issue could
+possibly care.
+
+At least my tree hopefully now builds on them, with the BUILD_BUG_ON()
+that uncovered this.
+
+                   Linus
