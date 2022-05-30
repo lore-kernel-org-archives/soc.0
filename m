@@ -1,99 +1,123 @@
-Return-Path: <SRS0=efRH=WG=semihalf.com=pan@kernel.org>
+Return-Path: <SRS0=ER9w=WG=intel.com=jani.nikula@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F08F2C433FE
-	for <soc@archiver.kernel.org>; Mon, 30 May 2022 13:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98CA0C433EF
+	for <soc@archiver.kernel.org>; Mon, 30 May 2022 13:10:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D86C4C341C6; Mon, 30 May 2022 13:08:55 +0000 (UTC)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 7F02EC385B8; Mon, 30 May 2022 13:10:43 +0000 (UTC)
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6C95DC3411E
-	for <soc@kernel.org>; Mon, 30 May 2022 13:08:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6C95DC3411E
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=semihalf.com
-Received: by mail-lf1-f53.google.com with SMTP id c19so16705494lfv.5
-        for <soc@kernel.org>; Mon, 30 May 2022 06:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1+pzy9SDgwlLKqsqL0oBtRcoKaOTRyZQ9Q60hk5By48=;
-        b=xLfsGBLRyM0zlUowQPJtZ60H3StxVqy8Lqev4bSZAFy0amMHwqRiLBFGA8qK+qWlwK
-         l18ufKZ4AWRQq7kDXz9Wtx4O6YN4phZRnzUdMM1LXjVfoqj350pbYMONPB9yLEOBfLtN
-         R+dqGwFfDh+G5DPe8qWmOrywVdGa290EVd9yJ4JJ4yvKBVVmNxpt4r9w1HMI4d3HJQC0
-         vtEWSQ9Dj+05IoYkh5v5FIxACOMnrWENLm/DPfOOyJYnMd05WJcDdp1pGsUXqR6igeV2
-         Oz8kU/UVoNCeKU981jzAAXyKyx1HZIH07mPSSM/EkPIlqNcWl1O41LAemsr6uarD082O
-         gy4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1+pzy9SDgwlLKqsqL0oBtRcoKaOTRyZQ9Q60hk5By48=;
-        b=zhgtPX2OhXquTZ5Ri3ZCCja61NLuaM/QJCsPPZUu8U0DUD7wEETHkYwdjkLkEHg4sw
-         s+RGjmw50Xu3Bsbv5oIw3YNYqfyp/pGHBHqfKyTKtpX8CM/VFNBvx2cfyOLhkeRD39lU
-         r6G9XhopjE/1NiQPCQvWkrsnLqn6GWmexNhQQPHhxgdH0ULlg36EtVMoVBMnfXjdDk14
-         LrDiV9kl+KFmu7nYrevwBcCnWUKwVayRz3wI8NScLZQzqro8WVTbaDHwNAQgEWduTWZ8
-         975l18Q50VkPwXaeZZaxFcvOgP5/pforNWaFc/Rr6Uywpxofs75FdIekDor/EPFTbDp+
-         1dPA==
-X-Gm-Message-State: AOAM5305W/J0iOUbsrssnvI5q5q7rKCJemTunpn6Ouj3P3+dr0gF37XO
-	8fLbAI2nbITAjEycvUVDeVeZHuPZ0DAwpw==
-X-Google-Smtp-Source: ABdhPJxtZA3zoQCpEe2nZfqwlqRtuL4USD5PjImrVtzpcb+6U5nJP7UJY9wlvi9z7SOKd3rbjU89zQ==
-X-Received: by 2002:a05:6512:3da0:b0:478:5b79:d76e with SMTP id k32-20020a0565123da000b004785b79d76emr33233584lfv.540.1653916132727;
-        Mon, 30 May 2022 06:08:52 -0700 (PDT)
-Received: from panikiel.wifi.semihalf.net ([83.142.187.86])
-        by smtp.gmail.com with ESMTPSA id d22-20020ac25456000000b00477a7c8a0f0sm2295701lfn.295.2022.05.30.06.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 06:08:51 -0700 (PDT)
-From: =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 9A9E9C3411F;
+	Mon, 30 May 2022 13:10:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9A9E9C3411F
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653916240; x=1685452240;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=yR4CvAYEHnhJy9L0L3rshOUShjBlml110o6x0DwIo1A=;
+  b=LXT3rX902qcHmZS8ShzsCqkwy/X062sfDvAymc0pO/U5FbLjkrLRSxnx
+   g8OirrZFgLrMFqZrD1X13yAeqj9k7cy4abRWWUHJGafXLLrXnWBk4OqAc
+   AKxyvcU7gmMxPWxCWmJR16/xEynb15OhRNDLct2HjpbC/5ccfxeVTYsC7
+   uTlKJUDzoB5sKUubOYgHOnWUZGlr+OCZTGWAHOVHLg92gBZdoFQpgFgl/
+   sv8I5qwu7GMwIlCxyNBge+JgfbacDqDaOpZ9vMYtxto2U51PcxDwvHmX6
+   kALBll5/2GAAoDUtcn+WqntzuOfoOA7CAJSqza8B8p22GL5Ho2oH5NHVL
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="274998692"
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="274998692"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 06:10:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,263,1647327600"; 
+   d="scan'208";a="605183061"
+Received: from jkuna-mobl.ger.corp.intel.com (HELO localhost) ([10.249.150.228])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 06:10:10 -0700
+From: Jani Nikula <jani.nikula@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: arnd@arndb.de,
-	olof@lixom.net,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	dinguyen@kernel.org,
-	=?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH 3/3] dt-bindings: altera: Update Arria 10 boards
-Date: Mon, 30 May 2022 15:08:39 +0200
-Message-Id: <20220530130839.120710-4-pan@semihalf.com>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220530130839.120710-1-pan@semihalf.com>
-References: <20220530130839.120710-1-pan@semihalf.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann
+ <arnd@arndb.de>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Russell
+ King <linux@armlinux.org.uk>, Viresh Kumar <vireshk@kernel.org>, Shiraz
+ Hashim <shiraz.linux.kernel@gmail.com>, Ville =?utf-8?B?U3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, dri-devel
+ <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux ARM
+ <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+In-Reply-To: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <YpCUzStDnSgQLNFN@debian>
+ <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
+ <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
+ <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
+ <YpIR67FMtTGCwARZ@debian>
+ <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+ <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
+ <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
+ <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+ <87a6aztli2.fsf@intel.com> <877d63tleq.fsf@intel.com>
+ <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Date: Mon, 30 May 2022 16:10:08 +0300
+Message-ID: <87czfvrwsv.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The Mercury+ AA1 is not a standalone board, rather it's a module with
-an Arria 10 SoC and some peripherals on it.
+On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Mon, May 30, 2022 at 11:33 AM Jani Nikula <jani.nikula@intel.com> wrote:
+>>
+>> That is, for EDID. Makes you wonder about all the other packed structs
+>> with enum members across the kernel.
+>
+> It is not the 'enum' that is special here, it's the 'union' having
+> unpacked members,
 
-The Google Chameleon v3 is a base board for the Mercury+ AA1.
+Obviously meant union not enum, that was just a -ENOCOFFEE on my part.
 
-Signed-off-by: Paweł Anikiel <pan@semihalf.com>
----
- Documentation/devicetree/bindings/arm/altera.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> and the same thing happens when you have nested structs: both the inner
+> and the outer aggregate need to be packed, either with __packed at the
+> end, or on each individual member that is not fully aligned to
+> max(sizeof(member), 4)).
+>
+> I think in general, most __packed annotations we have in the kernel are
+> completely pointless because they do not change the structure layout on
+> any architecture but instead just make member access slower on
 
-diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-index 5e2017c0a051..c6e198bb5b29 100644
---- a/Documentation/devicetree/bindings/arm/altera.yaml
-+++ b/Documentation/devicetree/bindings/arm/altera.yaml
-@@ -25,7 +25,7 @@ properties:
-         items:
-           - enum:
-               - altr,socfpga-arria10-socdk
--              - enclustra,mercury-aa1
-+              - google,chameleon-v3
-           - const: altr,socfpga-arria10
-           - const: altr,socfpga
- 
+Please explain.
+
+They are used quite a bit for parsing blob data, or
+serialization/deserialization, like in the EDID case at hand. Try
+removing __attribute__((packed)) from include/drm/drm_edid.h and see the
+sizeof(struct edid) on any architecture.
+
+BR,
+Jani.
+
+> architectures that lack unaligned load/store instructions. There have
+> definitely been other cases though where a __packed annotation is
+> not needed on any sane architecture but is needed for OABI ARM.
+>
+> Overall I'm not that worried because the only machines running OABI
+> kernels would be on really old hardware that runs a limited set of
+> driver code.
+>
+> A completely different matter are the extraneous __packed annotations
+> that lead to possible problems when accessed through a misaligned
+> pointer. We ignore -Waddress-of-packed-member and -Wcast-align
+> in the kernel, so these never get caught at build time, but we have
+> seen bugs from gcc making incorrect assumptions about alignment
+> even on architectures that have unaligned load/store instructions.
+>
+>       Arnd
+
 -- 
-2.36.1.124.g0e6072fb45-goog
-
+Jani Nikula, Intel Open Source Graphics Center
