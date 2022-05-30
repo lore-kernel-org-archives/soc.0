@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C24DC433EF
-	for <soc@archiver.kernel.org>; Mon, 30 May 2022 09:31:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35135C433F5
+	for <soc@archiver.kernel.org>; Mon, 30 May 2022 09:33:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0250EC385B8; Mon, 30 May 2022 09:31:29 +0000 (UTC)
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	id 01AAFC3411C; Mon, 30 May 2022 09:33:29 +0000 (UTC)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0EE59C34119;
-	Mon, 30 May 2022 09:31:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0EE59C34119
+	by smtp.kernel.org (Postfix) with ESMTPS id 0A8C8C34119;
+	Mon, 30 May 2022 09:33:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A8C8C34119
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653903087; x=1685439087;
+  t=1653903207; x=1685439207;
   h=from:to:cc:subject:in-reply-to:references:date:
    message-id:mime-version;
-  bh=RNo1VFn9TNhcSAwdGqSc/kbrNGzlnlE99QCowyLqR4c=;
-  b=hE21XmWSS0E/O1wON30DF892tKRUjqSiTkCf7nIKPiyPOcMMJEHN3oUO
-   fJRMkXbSb++IME4/70dVAXgLDMLazA88V6iw+xifPRQHY9+mabm+YVlRo
-   5IhkoEoP4WEecNkGNJmH3qz3NJoxhCHPRFPq2rTdQL+ITRtH54DSRgswf
-   0NgZXdg11HPmFLiWB3p9TIwPeYLmMsvQiTHi3DA+saScEsaPNQdTsfLA4
-   T06rdd8kWg5s/0dFiyzOxvtJ1cT8maGQWucXheNse1KjP3itEihcLNn7f
-   S4EAua+0lCMIT0MnQeQtCfBVcYUNAL+Kom3nb1ORgtSKolbubuwJTQJPd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="255438075"
+  bh=TBSc0KNGpzSlLLY6lieGvmYQxKAskO2xitesyVYh6/0=;
+  b=QGZ3+P4Ij6XGFmwq+TB8htG172nwvfQGwrQ9m5x7LPU440WMg01Sw9qp
+   Jjgx6wxwieI97E3ZtXUCsfHb8ljrHr7eDIvi4Oyk1lRR4tNIDyyn4yJap
+   9XOVuvvqstwImuoV0HdVXGHV0AGIfUEI6kncd0VEHgA+tvUlqlfmXpJCg
+   3gObW55TuTCNqM/eXThw+cBDR5DsVYftfjY65MLmeI+oIhhmgSewBhYCR
+   ylCZpkuvLXRToZ9fGVXdweTfxXEqzH8QrCnmNmS2l/h22qpBcSBwRt3Wa
+   nZ8hL/6wR+b4Y+XpXLpuKm4S1ACjBtwweKE7v8R99+orTn1bihxMrbtdK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="272522608"
 X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="255438075"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 02:31:26 -0700
+   d="scan'208";a="272522608"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 02:33:26 -0700
 X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
-   d="scan'208";a="706083847"
+   d="scan'208";a="529103807"
 Received: from jkuna-mobl.ger.corp.intel.com (HELO localhost) ([10.249.150.228])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 02:31:20 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 02:33:20 -0700
 From: Jani Nikula <jani.nikula@intel.com>
 To: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann
  <arnd@arndb.de>
@@ -54,7 +54,7 @@ Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Russell King
  <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
 Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
  block count and size helpers")
-In-Reply-To: <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+In-Reply-To: <87a6aztli2.fsf@intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 References: <YpCUzStDnSgQLNFN@debian>
  <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
@@ -65,49 +65,54 @@ References: <YpCUzStDnSgQLNFN@debian>
  <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
  <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
  <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
-Date: Mon, 30 May 2022 12:31:17 +0300
-Message-ID: <87a6aztli2.fsf@intel.com>
+ <87a6aztli2.fsf@intel.com>
+Date: Mon, 30 May 2022 12:33:17 +0300
+Message-ID: <877d63tleq.fsf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Sat, 28 May 2022, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Sat, May 28, 2022 at 11:59 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Mon, 30 May 2022, Jani Nikula <jani.nikula@intel.com> wrote:
+> On Sat, 28 May 2022, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+>> On Sat, May 28, 2022 at 11:59 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>>
+>>> It's CONFIG_ARM_AEABI, which is normally set everywhere. Without this
+>>> option, you the kernel is built for the old 'OABI' that forces all non-packed
+>>> struct members to be at least 16-bit aligned.
 >>
->> It's CONFIG_ARM_AEABI, which is normally set everywhere. Without this
->> option, you the kernel is built for the old 'OABI' that forces all non-packed
->> struct members to be at least 16-bit aligned.
+>> Looks like forced word (32 bit) alignment to me.
+>>
+>> I wonder how many other structures that messes up, but I committed the
+>> EDID fix for now.
 >
-> Looks like forced word (32 bit) alignment to me.
+> Thanks for the fix, and the thorough commit message!
 >
-> I wonder how many other structures that messes up, but I committed the
-> EDID fix for now.
-
-Thanks for the fix, and the thorough commit message!
-
-> This has presumably been broken for a long time, but maybe the
-> affected targets don't typically use EDID and kernel modesetting, and
-> only use some fixed display setup instead.
+>> This has presumably been broken for a long time, but maybe the
+>> affected targets don't typically use EDID and kernel modesetting, and
+>> only use some fixed display setup instead.
+>>
+>> Those structure definitions go back a _loong_ time (from a quick 'git
+>> blame' I see November 2008).
+>>
+>> But despite that, I did not mark my fix 'cc:stable' because I don't
+>> know if any of those machines affected by this bad arm ABI issue could
+>> possibly care.
+>>
+>> At least my tree hopefully now builds on them, with the BUILD_BUG_ON()
+>> that uncovered this.
 >
-> Those structure definitions go back a _loong_ time (from a quick 'git
-> blame' I see November 2008).
+> Indeed the bug is ancient. I just threw in the BUILD_BUG_ON() on a whim
+> as an extra sanity check when doing pointer arithmetics on struct edid
+> *.
 >
-> But despite that, I did not mark my fix 'cc:stable' because I don't
-> know if any of those machines affected by this bad arm ABI issue could
-> possibly care.
->
-> At least my tree hopefully now builds on them, with the BUILD_BUG_ON()
-> that uncovered this.
+> If there are affected machines, buffer overflows are the real danger due
+> to edid->extensions indicating the number of extensions.
 
-Indeed the bug is ancient. I just threw in the BUILD_BUG_ON() on a whim
-as an extra sanity check when doing pointer arithmetics on struct edid
-*.
-
-If there are affected machines, buffer overflows are the real danger due
-to edid->extensions indicating the number of extensions.
-
+That is, for EDID. Makes you wonder about all the other packed structs
+with enum members across the kernel.
 
 BR,
 Jani.
+
 
 -- 
 Jani Nikula, Intel Open Source Graphics Center
