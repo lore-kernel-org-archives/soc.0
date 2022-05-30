@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE56C433F5
-	for <soc@archiver.kernel.org>; Mon, 30 May 2022 16:54:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E16AC433EF
+	for <soc@archiver.kernel.org>; Mon, 30 May 2022 16:56:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C9454C3411A; Mon, 30 May 2022 16:54:57 +0000 (UTC)
+	id 26E07C3411A; Mon, 30 May 2022 16:56:17 +0000 (UTC)
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01FCAC385B8
-	for <soc@kernel.org>; Mon, 30 May 2022 16:54:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01FCAC385B8
+	by smtp.kernel.org (Postfix) with ESMTPS id 4F7A4C385B8
+	for <soc@kernel.org>; Mon, 30 May 2022 16:56:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4F7A4C385B8
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -22,21 +22,21 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
 	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WrOmDPt0q6Eq9k7ftwKfo4uYXTclIrOrl0CM69btmJs=; b=R4yBxl7H8CjKCPk1xSl8sTRVHf
-	SNMWDoYEjcNGJ73ZZ4dexHEGeLNe/Y90ORfHrRZV1Pytz2WgDULEJEd+nvCknAfDtx1zrOw2vrT6R
-	U9Jc8tq4C7goRzK64h2/CBLW5PmIbu1elGFbIUQu+omGumKLpKv+EqLnZ9/U3eqQQrUXGHsFuCf3d
-	aFqHdodzy2sRypsNqKW8y/HfFS2ekYYOLI2/ipd0nieoo9+tcP6UAipvRNo522Bmp4/cgBtYE12YF
-	0oRF56a0c24kuc8WQbwutBAZReXSDH2NluPJfMTB9pkRQ+72dNq7FIEY5rW3WvG/3BqtziaenLrmA
-	0YexQ3IQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60886)
+	bh=UykJ1IPICNFbfEo420X6Xx726q411APwSMuLoQTgdDo=; b=dMiLt0/Fv3cJXwMowD9p3ULFzI
+	yzsGHXFL2yUq6S8ZTXuMQ0q5JZbcQCSd0umLh+lXFdY+97OggxB2MlCPgF2OGicJDAlFkuKajONDY
+	7UabLE+JTBG7aSarulxeIHWW2YauCNc6f6OoUmSXPZ9O92BuzFPDy0TIlHKNeF4B8TXuTHhWhaIOa
+	C5Q6WtENs7aXBgbZ9GsEGMB8VcQFpRC2QTuoOiHATWKJ4YFeJYTdEJ8hFpCzcnhj1NgETylwtSF22
+	BO7HJuet5IcF7H3lHpcNaikDEhnof+/f0rcBweFI5o3ekb7Mhp24t9sAjod4cTd84zXRRX/Efe0GZ
+	rYesoOEA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60890)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <linux@armlinux.org.uk>)
-	id 1nvifD-000464-IQ; Mon, 30 May 2022 17:54:43 +0100
+	id 1nvigZ-00046W-AO; Mon, 30 May 2022 17:56:07 +0100
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1nvifC-0001ZX-SU; Mon, 30 May 2022 17:54:42 +0100
-Date: Mon, 30 May 2022 17:54:42 +0100
+	id 1nvigY-0001Ze-Lg; Mon, 30 May 2022 17:56:06 +0100
+Date: Mon, 30 May 2022 17:56:06 +0100
 From: "Russell King (Oracle)" <linux@armlinux.org.uk>
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
@@ -56,10 +56,8 @@ Cc: Jani Nikula <jani.nikula@intel.com>,
 	SoC Team <soc@kernel.org>
 Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
  block count and size helpers")
-Message-ID: <YpT20mNZaOUd0P86@shell.armlinux.org.uk>
-References: <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
- <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
- <YpIR67FMtTGCwARZ@debian>
+Message-ID: <YpT3JlLc7vEfFu8F@shell.armlinux.org.uk>
+References: <YpIR67FMtTGCwARZ@debian>
  <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
  <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
  <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
@@ -67,18 +65,36 @@ References: <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
  <87a6aztli2.fsf@intel.com>
  <877d63tleq.fsf@intel.com>
  <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+ <87czfvrwsv.fsf@intel.com>
+ <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0HNOCOSx9UONw6gf1UUU8J4iAOmMFP8-DtJ3O7XAACsQ@mail.gmail.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, May 30, 2022 at 02:43:45PM +0200, Arnd Bergmann wrote:
-> Overall I'm not that worried because the only machines running OABI
-> kernels would be on really old hardware that runs a limited set of
-> driver code.
+On Mon, May 30, 2022 at 03:35:28PM +0200, Arnd Bergmann wrote:
+> The annotations for edid are completely correct and necessary. However
+> other driver authors just slap __packed annotations on any structure
+> even if the layout is not fixed at all like:
+> 
+> struct my_driver_priv {
+>        struct device dev;
+>        u8 causes_misalignment;
+>        spinlock_t lock;
+>        atomic_t counter;
+> } __packed; /* this annotation is harmful because it breaks the atomics */
+> 
+> or if the annotation does not change the layout like
+> 
+> struct my_dma_descriptor {
+>      __le64 address;
+>      __le64 length;
+> } __packed; /* does not change layout but makes access slow on some
+> architectures */
 
-... and from what I remember, none of them care about EDID anyway.
+Sounds like we need a howto document for people to ignore and continue
+doing their own thing. :P
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
