@@ -1,155 +1,106 @@
-Return-Path: <SRS0=0RV4=WG=suse.com=clin@kernel.org>
+Return-Path: <SRS0=vHxv=WG=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FC58C433EF
-	for <soc@archiver.kernel.org>; Mon, 30 May 2022 06:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBAADC433F5
+	for <soc@archiver.kernel.org>; Mon, 30 May 2022 06:59:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E68F4C385B8; Mon, 30 May 2022 06:21:44 +0000 (UTC)
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
+	id 90AB2C34119; Mon, 30 May 2022 06:59:09 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9D38EC3411A
-	for <soc@kernel.org>; Mon, 30 May 2022 06:21:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9D38EC3411A
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=suse.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-	t=1653891700;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=GEoWWwPnZHC5PlTEHbYP//hOGoOZXnRTPhL+zdo6i/I=;
-	b=i8FQJoTwfvOKMoaoAOVh/bF5atAZ+GwN2WdcgxP8vvUGVmq87D7a8B71JGKmEc5q/r8lbw
-	WW1oWfcdU/AxBIgb9/M+d4Y/XuezSxxa/ectJcaNWtsMxTUDPoSYwVIcdX+DMRyjW0vudc
-	hnVOTvJO+H4lJg3PLH6IfAjYXVnnv0k=
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com
- (mail-ve1eur02lp2053.outbound.protection.outlook.com [104.47.6.53]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-24-_A8PAXPgPWOfVYJx7iJkQA-1; Mon, 30 May 2022 08:21:39 +0200
-X-MC-Unique: _A8PAXPgPWOfVYJx7iJkQA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZNgzJhOqTwahV32Aznrs+F80eFZIpUwvJO0g5qUq9gxiWGE/6piS5BJ18LEDA2wreihe3j8DJtqLIs1JGY9d/BTm6sm8tXlHTB7l9AtjopRAxxrHVYJ02SMMb8GOV82U64vkB0kCxVqY4LHaZebC9kLHFs6EGP4m3qTWib/kiPqwF2scoXfAFJBbElyAXhNKAfQzshLtp1uOSRjZcdYDBYPtqpPUcmHQbZPSIdE3vqdq6kht8BstrlXfeA/FKcuEE4JHjppaZLivfS9lkidQxuozA4LP3eORxYAKh1GqW3s6xrzP8UKYKqo+SkxtOCYhO4xMCIRuz+ze1VBzOogRfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GEoWWwPnZHC5PlTEHbYP//hOGoOZXnRTPhL+zdo6i/I=;
- b=FBx9BEu4329I3KPSohiGSSgf0+cMzpiTCyXf6TrquMSyyrzQf986wYamZuzTWHKI3m9pBKux9ikWxuPiXKLxsLxngSO32LZR7yk4D3pT51HHSzruagzp0kF7VSVvc4TWhNYSOYsKKP9jb00N+kr2L8MptUOswvuf7Hpwi5gZhZb4/8t1U2ZlkALyMvyf1af738xYCcjb+KQJQGSbFvdyvuefuEMs/vp4tORM1tC2sJVNT1GMziTT7/EtC44gPCB3VcpnIv/twLF5GMfawLgndZUtt+UvXgeRoUacwdEvegO265al/YG0520713HjFQvZ1rTL+d6eA0lskxeCToKpUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
- by AM8PR04MB8019.eurprd04.prod.outlook.com (2603:10a6:20b:24b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Mon, 30 May
- 2022 06:21:37 +0000
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::b51c:9a69:6f99:65c]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::b51c:9a69:6f99:65c%4]) with mapi id 15.20.5293.018; Mon, 30 May 2022
- 06:21:37 +0000
-Date: Mon, 30 May 2022 14:21:26 +0800
-From: Chester Lin <clin@suse.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Matthias Brugger <mbrugger@suse.com>, s32@nxp.com,
-	Fabio Estevam <festevam@gmail.com>
-Subject: [GIT PULL] arm64: s32g changes for v5.19
-Message-ID: <YpRiZpZU3kH2xprC@linux-8mug>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ClientProxiedBy: AM5PR0701CA0012.eurprd07.prod.outlook.com
- (2603:10a6:203:51::22) To VI1PR0402MB3439.eurprd04.prod.outlook.com
- (2603:10a6:803:4::13)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0213FC385B8;
+	Mon, 30 May 2022 06:59:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0213FC385B8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MlwJv-1nW62M3FQp-00j4Ux; Mon, 30 May 2022 08:59:05 +0200
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-300312ba5e2so100425007b3.0;
+        Sun, 29 May 2022 23:59:05 -0700 (PDT)
+X-Gm-Message-State: AOAM530XLhXbVUeLotiEplJGRwoaPeiLKVW0Q+emnXWziUjbOXR1o1mU
+	SxBysOBV+bUjjXnZLk+u2Ke1pfJUmsLdh8tQOQQ=
+X-Google-Smtp-Source: ABdhPJxUw44ZxZjLw4bJuR6gTaVgYPR/zf2umvBRrFctapNjZG+QSh8cQbisCMhP+USKPzZc22esKiCBCM85C4wtFyk=
+X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
+ m125-20020a0dfc83000000b002e5b0f4c125mr57702118ywf.347.1653893944463; Sun, 29
+ May 2022 23:59:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5ca948cb-7b7e-4144-58af-08da4204a6f5
-X-MS-TrafficTypeDiagnostic: AM8PR04MB8019:EE_
-X-Microsoft-Antispam-PRVS:
-	<AM8PR04MB801929317DCED4C0EE8FEC76ADDD9@AM8PR04MB8019.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	X4lR3tERPv+s8GSuAt6Cmur7s8X/E1g0YbGUC1/hmEDvcWtV7BshCFTT9R3KO0etXEkNqIs73CastCLw9i1JKYv8PlyIoqNVB9BINwl415t2//sQItBdDA5j7u0Gt/S2KHSabLdeXL0ECoUHyXAL8HPqaospZvIAKyfeto+XYzRcHC58tlqtXQyTYdsva9X2DYtynq+ww/lcdSC+vjFN5pVSsCO0pYgrxwE13Xb3QUbFjg2tagU2uUMmWfYRL80wMYw/o3Mv+dBPypVUh4FXtNv2W0Gt1M+SoMsekcqMGL+A3epje9tOy8Zf9UxEfdDqmDoRT7ku32K9+5G1hsGs+EYn5ne9A+Y7uKhvVEk9rHNUm9DCMTvzfEwEYregGZmDSuMHgGe7W+wpD8+8d7b2z3K2kOgB6Hdf9pvbatxyuO+IXSsWjtaX1hn5PXYBPvMLQA3yXJTatDxkLElyZ4MkXlzokOnplKv61eM+79O30UQtrygCTwm4WN0zwxcqPybNBYYGocR6eJ3ylCV8LBXFxn+X1AXWXzwG/hEUYquyZrinNyy/kJDg4v3MnLOeXpgqfgWhXuk96BcYJMCOd1cM7gxco7iZZ+burap3bFGtGXY03M0elxFz0zSXWh8qSeW0wi6ePD+NyYm2wsPRfIxKenrQQxc//HFq5nRlAPaY/ipWeGHoKQlJeWs2lrK6I1k0ArE7T7EZn5IM0OLmRkpcJz1dwkadS5HXC29Tm8IE11I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66556008)(508600001)(110136005)(66476007)(66946007)(186003)(966005)(83380400001)(4326008)(86362001)(2906002)(38100700002)(33716001)(26005)(9686003)(6506007)(6512007)(5660300002)(8936002)(6486002)(4744005)(316002)(54906003)(8676002)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?HFgQSFe5elNTZ8itsrkeXIf5ar4fEPDcFi2hy2kYRFDwSkiej6zX32wRzABR?=
- =?us-ascii?Q?oXIT33+8H8FL/2ef8avUSSUY3SoVDKB64QnE+DMh05r7T+cBKuKIRdeRj3Nw?=
- =?us-ascii?Q?8xG1NHrhRot1jiEmB9IxTFyomeDySuDoQgtDsYvrnrR8vSz0kqf27lveE6U8?=
- =?us-ascii?Q?H7hHW8wApaivBZuEoNTOYHBa6pdEAOhVqhM96iRqeEjJqcD1OfddZZD/SUBw?=
- =?us-ascii?Q?zJs3jpThRMHY62dtzjWPnUXbPjEEpYHQnAXRZW17U8Su3vooF5Nb8Ty+ZCV1?=
- =?us-ascii?Q?0kqtIntTnd6Qxxxihfn2mDEmV16WE2DBMjD8mWr+aLCtWkiuFtic40Cr4WJb?=
- =?us-ascii?Q?QQjj4FJf5QOlmaC9CmdBtrqUehPysv/k9hx4AzfTW/zjsBmQbx1AAbq+V5/V?=
- =?us-ascii?Q?gyI1nMFMvlWab+owbw9PaA3h6gZd3ZxpiKuIXFIN/In6DqUSuMIbBofBpZjo?=
- =?us-ascii?Q?ljbSQ1p4lQFIccEwYErwyqb1CSFH6EF04rfsHMYHiVs8d3vHnMM3fOnjK3dG?=
- =?us-ascii?Q?yT8nOBgMf0RNqRxYrW/YzNOGb8bG0SVYMx9YnAGO2h/YVU6NWHRfFoaotkEP?=
- =?us-ascii?Q?tXfOH6FnezHO2tS/wq/0CJMDpdsKjbRxrDAX83F8rv68NDLwXvyFjGeQvZui?=
- =?us-ascii?Q?TfECWBaVIrq24HdBcvCWlfk9cONebQQ/7MOjOk9K6sgUuMJyjrSo/sWeuaVS?=
- =?us-ascii?Q?FBBiClE9HaXs+ZYQAKt1u8MA99coWjFi1YT2237bB+KwCRJEiHje0fH8nuM1?=
- =?us-ascii?Q?fEAugJvwsh16TSeLdOxuTWPCfUkxNDoY2MkwMkFd812vS9MDCyrt3ik6TifS?=
- =?us-ascii?Q?G61iSf8ann5rzQfcLa96sli8FafGA4nde2lIsIKRMa9InKAw+33xoxnqEvt8?=
- =?us-ascii?Q?zTQBA/WL6pK/rmeir2AAOrl/rYyByy1UFCzouH4dRgR/ziK/x2LqcYV1lCuv?=
- =?us-ascii?Q?Vq6O9sBIg9ERzfDiD0ymI9CiNKYKC5QwWyzdu/Ld3oWtb0x1PBZIEdNIr/9+?=
- =?us-ascii?Q?5hMCBHePWSg2iORZ5vMq047L1yX0v6wCuRwMt2B2Zh5wmIqcgjr1Xcq49Vp8?=
- =?us-ascii?Q?jC1X01hCRFLIYSfNp6xVAuIdJbITQnQc2a95r04Eoxhe2H8rW50Xa5adjWfe?=
- =?us-ascii?Q?ajG5jyEHQoDShWwydmk26jAhAqzfMdkzFg+DCcab4Cckcaurqv5HYo5q2h3n?=
- =?us-ascii?Q?DmPwfbehDTDq0sVpZiwX5sqUk5839dmXT0YzqRAsIW4uM6dHzKjqqQTCBn4J?=
- =?us-ascii?Q?q52RMiOpkxJIKhII8APt72jyNSwsuHdM7a2w4G5L8eig05UZ996L12ppc9/L?=
- =?us-ascii?Q?2aweFRyr9TuBkCZT8RuEclfAOuEUm77TK94rc+sLAZsX5M6dvPcsRatIEbfh?=
- =?us-ascii?Q?DpVcylWswQKG5uRVLXurGvcJQcVq21x3XEDMe4ZVT35nWl+5pCLr7EeCKgO5?=
- =?us-ascii?Q?Cg0mCqQCLNeFEgrxTDgmARF6S/7v+7QVL2DFygUETd80KV1eAIbPj7Jm5+zW?=
- =?us-ascii?Q?JFE1Jc62o/W4XIy9FOvlwuxtTCfMIr1nLqf4BcAoz4rUkpWne3aH5KHPAAQ0?=
- =?us-ascii?Q?axePavxqGNcmwcZHPPutuGXPrcTycYjGexfuTMpjWc+I0OZNsm9gZn5Rl8ju?=
- =?us-ascii?Q?gK6gWseo+XPAfQ1pnNIw/GHaXX4yhzlT2cfYurwEIOMjMkwvP/ZHSYqD04GW?=
- =?us-ascii?Q?cXHBQS+cpazIRFJMBKV4GsJnpm7XPT0lKgldNqvF5WTiHqB1?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca948cb-7b7e-4144-58af-08da4204a6f5
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 06:21:37.6308
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IDtCrFi+3mn/Mm5u1H1NAKVvpUgq5hIXkucgg86YpObp/7Qx23TadVQVcCbCdbK9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8019
+References: <YpRiZpZU3kH2xprC@linux-8mug>
+In-Reply-To: <YpRiZpZU3kH2xprC@linux-8mug>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 30 May 2022 08:58:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2A_KHKWN3O2Wcy66yCC+T0eBsK8pNcGuLHN-BVeQ1ymw@mail.gmail.com>
+Message-ID: <CAK8P3a2A_KHKWN3O2Wcy66yCC+T0eBsK8pNcGuLHN-BVeQ1ymw@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64: s32g changes for v5.19
+To: Chester Lin <clin@suse.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	=?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Matthias Brugger <mbrugger@suse.com>, s32@nxp.com, Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:oPWQgG7jlucf6SRvYGZyIu6lmWfqjlbLkkslxO0m5ZplLByOKEC
+ RNGlHCA6/MeL895elU8wd7rs5E64kdojTDvni4k/17jgxuBSFBIUO0CEXEsVd8/R4eTgv4N
+ DWO57yjVQ/6MkNflCfu+LkgX9j9z3GdtNXTLLsaUHen9kZ/ZEZkAS8U5yEe3P0zScX/ERJ1
+ Wg02dLLVzoZQkqANjYuEw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TakvchiQDa0=:y3+WVeNWERW5vkzIH9/4Gh
+ dNjil6E7PUrTR74WB+SjtUCkaMIwwe8AKTtoDOE/DAy/5Ekm1Uh1PvHJ4dhgj7qteGPggPthb
+ 2HoG5gnMtuQfln18htrovp47tKuYVzOe7+gOn+qwCq/DqGsjV22aa/FCzhfXdlaO0lHkFnQx7
+ p8MulD+D/BXSCi+NNRRKoX518/KxGDQKML8wnOGF85ntUVAvVx+s0BKnKfWO4Dfj/QnvoI7YF
+ EfzQwFoirweWrrqmScg/etAwXtgpY/gAt2xiAY1rmFnTqgo18zutCMDhIq/2a1eEfO3EA3C+d
+ xHSJpb3C/hAEdviOnSExV8lnB4fcDOE7q9JOjp9whSjIuzNjqIQwA4FHDdhTH0As83DByH8qU
+ /mksOpdP4IvbzqGFGmICf5RPZKcVxFQ4v3hLIlQMz8/nCgOHF1JT6YkEsSEyEQ2qoO2owayhT
+ bKZlOzS6eWgVMK1EYXdHmmDcW/2M9TTy6HxqFOGBBa9oT5aosAbfCDLFh07NDnWG2Z21AJGjS
+ Rgqu+tQraYxIlK6P5A8J/kGHouaduDihw0+1/yOWQac5Vocm1vX3nCaMeW3Ve/f+mccXVMveF
+ 97mtoXGy+aLiXa/UZomBFyMhgGUD0+Fy8HNNfAX2pZYgCMcjeS7lGslgVF9s9XTwt9XixLqL/
+ CN8GUjxR+Jldq98aSxe925FATYk2d7/k5b0iFs74l3UXGsAu67ojhilF06bHQ9/baaquUbQPo
+ rCK/N4qm91z0eI5JNN/oaGNFHVYAh6bmvgT7aiwvLWSIVlz8fmy5U7JGb+16wln9BrFhinLlW
+ nycogbGY9Y/EMWyNHBnhLazQDgNo3AgcKUGC1dFQGUuw17slaETvEAypsFLdzJKv0OOCp+0JA
+ XGshUVN2FWP1q4C5uPyA==
 
-Hi Arnd, Olof, and ARM SoC maintainers,
+On Mon, May 30, 2022 at 8:21 AM Chester Lin <clin@suse.com> wrote:
+>
+> ----------------------------------------------------------------
+> s32g changes for v5.19
+>
+> ----------------------------------------------------------------
+> Chester Lin (1):
+>       MAINTAINERS: add a new reviewer for S32G
+>
+> Fabio Estevam (1):
+>       Pass unit name to soc node to fix the following W=1 build warning:
 
-Please pull the following two changes for s32g. Thanks.
+The patches look fine, but there are a few minor problems with the
+submission:
 
-The following changes since commit b00ed48bb0a7c295facf9036135a573a5cdbe7de:
+- The branch is based on top of a random commit from the mainline repository,
+  you should instead always base this on top of an -rc tag in order to not
+  clutter up the git history or make bisection unnecessarily hard. My 'arm/late'
+  branch is currently based on a random commit 16477cdfefdb ("Merge tag
+  'asm-generic-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic")
+  as well, but this is an exception and I will explain it when I send the pull
+  request ;-)
 
-  Merge tag 'dmaengine-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine (2022-05-29 11:38:27 -0700)
+- The tag description is only a single line, there should be at least some
+  content in here. Please have a look at other merge commits to see what
+  you can put in here. For a small number of independent patches like
+  these two, you can also just forward them to soc@kernel.org as
+  individual emails without a tag.
 
-are available in the Git repository at:
+- The subject lines of the individual emails should have the right namespace
+  listed in them, e.g. 'arm64: s32g: ...'.  Fabio's patch originally had
+  this, but it looks like the entire subject line got lost.
 
-  https://github.com/chesterlintw/linux-s32g.git tags/s32g2-5.19
+- The subject for the pull request indicates that this is meant as your normal
+  submission, but this is the wrong time for that, because the merge window
+  is currently open. At this point, only bugfixes get merged, but I do classify
+  MAINTAINERS changes as bugfixes, so this is actually ok, just change the
+  subject.
 
-for you to fetch changes up to fdb31e581566f7a2790b602f62701fce96b16443:
+Please address these and resend.
 
-  MAINTAINERS: add a new reviewer for S32G (2022-05-30 11:21:49 +0800)
-
-----------------------------------------------------------------
-s32g changes for v5.19
-
-----------------------------------------------------------------
-Chester Lin (1):
-      MAINTAINERS: add a new reviewer for S32G
-
-Fabio Estevam (1):
-      Pass unit name to soc node to fix the following W=1 build warning:
-
- MAINTAINERS                              | 1 +
- arch/arm64/boot/dts/freescale/s32g2.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
+         Arnd
