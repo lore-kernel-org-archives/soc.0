@@ -1,181 +1,107 @@
-Return-Path: <SRS0=KkGf=WG=gmail.com=andy.shevchenko@kernel.org>
+Return-Path: <SRS0=vHxv=WG=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BCB1C433F5
-	for <soc@archiver.kernel.org>; Mon, 30 May 2022 12:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C85C433F5
+	for <soc@archiver.kernel.org>; Mon, 30 May 2022 12:44:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 26FBBC34119; Mon, 30 May 2022 12:24:39 +0000 (UTC)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 94646C3411A; Mon, 30 May 2022 12:44:07 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 27A53C385B8;
-	Mon, 30 May 2022 12:24:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 27A53C385B8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id z43so8803513ede.1;
-        Mon, 30 May 2022 05:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Gf3IvEnikRvp3Oa8O4SMunFc6fuhRnS1KPonMS+jQ+I=;
-        b=NyQ+kCGK3kg3v6Adv/XUYZAJCjEWhflsEmpIwgkeTZw0Ni7YgQNimIJ2MWBNV1J314
-         nFrO3LoILzRYfe9Uxh7YsjXWZd2OPNcp8ToAqOOe0jCLJgXnz/o5vCjc42nMfojO7kCj
-         QAgjC16cVioo2a0vkXIolNnbvAvJQXhm23uI9P611ez5yYfOfS+13Mj3Ko5Y3eSd8nqu
-         04KBpo7UkSbNUsWgDO4pPc/PjbB3R5O+rJ4J80+Wq+oPF1Ds2ccn9Jw9JfMx9b+VGSBj
-         RdU8wZe8Yc+5yxCCchki9DZpn+1NmjBczSEkDXrqxz61zhVt9K2emiU88ADzGKrJNWRU
-         bnag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Gf3IvEnikRvp3Oa8O4SMunFc6fuhRnS1KPonMS+jQ+I=;
-        b=ERxH7Ii4ZJKYg2bydJH4tWPdYmR5VcgfvBFs4qBWIHWBWPIuTnBBqZyh3U0/u4E1ew
-         knJeDtIf/Ch99lqb4tMFSUTFCQSFAOG9PXZ3wr6MbD+TARC4bh2lnxx5TYvlex9Aeoyt
-         smI0jQBdHYEQYjy3QVRgkoXPQpDtCnc8k5OktjYlXs4hRLF9nL+VZ6ZhC2pb0OIwmBbt
-         L/dwFhThGxGczcUG09ZuLtFMFyjvpWvRrZz3Enx+uG4toZPWrCfpZDv7iFYgakkV4KSj
-         XJxMVUm/b6jXgq4r1CSOZQbmLr1RccDlBRS7JNTfL1y01qMuOKlMMrxkxPhzS/2DnOQd
-         +Kzg==
-X-Gm-Message-State: AOAM531skVOtI/wdhg0oEzWjFXrqpXKEVkjGNBrWhusVls/+tFOlyu23
-	KE5nAQq8iuVwJzbX/GL7cUck+d5uFR3m8oYyukk=
-X-Google-Smtp-Source: ABdhPJyByk+8pCmJj05rtEymQhMckw/8QiNYSuteRwbfSGq4YiABghOAxycfRHnt7uQgycGiWNHw22Dc1Nbyr02Cx7o=
-X-Received: by 2002:a05:6402:2382:b0:42b:7fec:1abf with SMTP id
- j2-20020a056402238200b0042b7fec1abfmr33516209eda.111.1653913476233; Mon, 30
- May 2022 05:24:36 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 181EBC385B8;
+	Mon, 30 May 2022 12:44:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 181EBC385B8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1My6xz-1nbUIm2Uxj-00zVQ7; Mon, 30 May 2022 14:44:03 +0200
+Received: by mail-yb1-f176.google.com with SMTP id a64so8583833ybg.11;
+        Mon, 30 May 2022 05:44:03 -0700 (PDT)
+X-Gm-Message-State: AOAM532Uv0hpe+yoh/FFmYyHePvmiDYarIK0QnmwSS++5Vsn18HtzTlN
+	dx15ZvqlVFOK1ElQSNDGafSieyzg6eDUwb9r9Zw=
+X-Google-Smtp-Source: ABdhPJwGhDH7TTQEFtfKClpkV8v6MgE6/PlkkdchHiAR2sctlXWrlvyx8XgWbwbNazMHWQ8TgK10FAziIIsvzr+V4hc=
+X-Received: by 2002:a25:9b89:0:b0:655:8454:dc92 with SMTP id
+ v9-20020a259b89000000b006558454dc92mr25317431ybo.550.1653914642134; Mon, 30
+ May 2022 05:44:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2CUy17vbd5Go523894vcF_oLz=dAR7JNLsUuR1Gsc9sA@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 30 May 2022 14:24:00 +0200
-Message-ID: <CAHp75Vc3i6bWOo_ZHD25rtn0o1pjzHtdfRQg4RkAfrmMs77eOw@mail.gmail.com>
-Subject: Re: [PATCH v1 00/19] Introduce Nuvoton Arbel NPCM8XX BMC SoC
-To: Arnd Bergmann <arnd@arndb.de>
+References: <YpCUzStDnSgQLNFN@debian> <CAHk-=wg0uGAX5DYZq+tY2KeUAR8DtR91YE1y9CkPMKkKOyE4jg@mail.gmail.com>
+ <CADVatmNGPbSdRNQuwJEWAaPtqb3vBYRjvsuBpoRUnhEHj=X5GQ@mail.gmail.com>
+ <CAHk-=wisQd8yiPX=SsK3eFiakKo713hq4SyqPWsJ-oyAmLFefQ@mail.gmail.com>
+ <YpIR67FMtTGCwARZ@debian> <CAHk-=wjuyHE=1wLgHncub8FfgeyYqfWYsy4-YrhAvq9991h_Aw@mail.gmail.com>
+ <CAHk-=wi_hJV0V=Ecg2dzbe2P_H1XKTu6VP_AtCH6u=tis31ayg@mail.gmail.com>
+ <CAK8P3a0-QyOQiieEvM0yQb43XbCtPmeao8UvoAsdFnjCxYPz7Q@mail.gmail.com>
+ <CAHk-=whfmwzjF4eBPYS6pHFqHVzJF3m=2h=gRWSRyHks8V=ABA@mail.gmail.com>
+ <87a6aztli2.fsf@intel.com> <877d63tleq.fsf@intel.com>
+In-Reply-To: <877d63tleq.fsf@intel.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 30 May 2022 14:43:45 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Message-ID: <CAK8P3a0-S77QLR1dK3NT6ot7JTAD5AdojAZJr-Xi112-v5EOdw@mail.gmail.com>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+To: Jani Nikula <jani.nikula@intel.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Tomer Maimon <tmaimon77@gmail.com>, Avi Fishman <avifishman70@gmail.com>, 
-	Tali Perry <tali.perry1@gmail.com>, Joel Stanley <joel@jms.id.au>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, gregkh <gregkh@linuxfoundation.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Jiri Slaby <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>, Vinod Koul <vkoul@kernel.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, 
-	Robert Hancock <robert.hancock@calian.com>, 
-	"nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>, Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
-	"open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>, 
-	LINUXWATCHDOG <linux-watchdog@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	=?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:dpD3ZsYY1OsV5vrsnWlBQSIXp+LnKO27QFblgf9tWU3L6/1VQN1
+ vpVVC0uGd9On5a72XIUPVreyqqg1hMpnry/3Q7WnGOqjfbsAA2/+ZEj2Ma0kNSLhvmqhDbF
+ qOvzGxr+I88TjKpDl+bshmkGljEylixZvCb0nmeUbTmEcCzCAYa1Cc1vgOnMgMBjq+/f7al
+ HGW6ZynflOatjqaUTxwEA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qsaauFMN/m8=:gc6ft9ct6Vhm37uDI2VbkX
+ iiY5dXW+r7NHfMunFRQIuA+jHRtjKIFqcYXkOUhGu9bGeplhWwfCWA6tQNdsQ0pZfAMXrr8zE
+ 9RroS35Q8Jnh0HBYEXbvtIZXaBBGXAY54+rRDzZyAFIwNxctYpjL0EK7bcTx7u42gT/VoXrND
+ 6tCzv3jOs5Eu/A5WwxSdeQyZXu1A0RRQHNMFfVFXovg0X2hn/Fi7EktLCuumIQRQcFiqXtNsL
+ E+mCGEdTa9Kp2ceQEt864lF5D2vp/Vdze1yZtle8Uy37G1tZldwZjLDfk/HF7Kt+fpTxNe41V
+ jKIgVu/rj8j6T6l+mcIidvd1K3xp0phiXCx92+Rdtn2AaOnnoMhk/b78f/xhMV79UUFk4QzqA
+ LL9fHZnCFVnFJn8USS94djCE3Lz2hUTDokhY/YghxB4Zqg+7VMq61pOKgyW/lEaGraMtu6LAe
+ Hoyo4SleAmqUJQ58/Kj/sP38vf2Qj2MgHH75XeraDtGGKtygAKUINe+oRdw0CLKKKTiT20sHp
+ SxTTc8OguSkolUyKiSBGeYh4Tu9v7Bd0ywYoVF5I2+F9TkKFbajHTIh6bi5ZSRUnQplBb/H1T
+ hIbgeXx7h4BREc7o+QKDLZkOyAMuaU7b5GrXzh+m7BVrIgvNz5O290prNH0WuCBFFwU+bt0aM
+ wpZcD5ljFXA9gNgM2guqAbyjI8c1SqvFIDYPLiNGJ3fU0/QB1Ct+5u1icFKDKGwhRyYWb8kFF
+ w0bmzEKkSHY2ExhXUt0nKzx0o+Fprt6ibbU/4Vm1cp88XdiQUUd/M1yCgOwh7ZiZ28eGTbQGa
+ zW+oTon7m2J3Kv7vTp/8HDOljBxyNUI6KFDufBG9SVDpsPjRc/F5ozX9VVXJF9ZGkUwIunCMF
+ /cX0G6leGl9vTGO5d0uQ==
 
-On Mon, May 23, 2022 at 1:59 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Mon, May 30, 2022 at 11:33 AM Jani Nikula <jani.nikula@intel.com> wrote:
 >
-> On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >
-> > This patchset  adds initial support for the Nuvoton
-> > Arbel NPCM8XX Board Management controller (BMC) SoC family.
-> >
-> > The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
-> > The NPCM8XX computing subsystem comprises a quadcore ARM
-> > Cortex A35 ARM-V8 architecture.
-> >
-> > This patchset adds minimal architecture and drivers such as:
-> > Clocksource, Clock, Reset, and WD.
-> >
-> > Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
-> >
-> > This patchset was tested on the Arbel NPCM8XX evaluation board.
->
-> Thanks for your submission. Please note a few things about the process here:
->
-> - The merge window is currently open, which means a lo
+> That is, for EDID. Makes you wonder about all the other packed structs
+> with enum members across the kernel.
 
-Something wrong with the script?
+It is not the 'enum' that is special here, it's the 'union' having
+unpacked members,
+and the same thing happens when you have nested structs: both the inner
+and the outer aggregate need to be packed, either with __packed at the
+end, or on each individual member that is not fully aligned to
+max(sizeof(member), 4)).
 
-> Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
->
-> This patchset was tested on the Arbel NPCM8XX evaluation board.
->
-> Tomer Maimon (19):
->   dt-bindings: timer: npcm: Add npcm845 compatible string
->   clocksource: timer-npcm7xx: Add NPCM845 timer support
->   dt-bindings: serial: 8250: Add npcm845 compatible string
->   tty: serial: 8250: Add NPCM845 UART support
->   dt-bindings: watchdog: npcm: Add npcm845 compatible string
->   watchdog: npcm_wdt: Add NPCM845 watchdog support
->   dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
->   clk: npcm8xx: add clock controller
->   dt-bindings: reset: add syscon property
->   reset: npcm: using syscon instead of device data
->   dt-bindings: reset: npcm: Add support for NPCM8XX
->   reset: npcm: Add NPCM8XX support
->   dt-bindings: arm: npcm: Add maintainer
->   dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
->   dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
->   arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
->   arm64: dts: nuvoton: Add initial NPCM8XX device tree
->   arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
->   arm64: defconfig: Add Nuvoton NPCM family supportt of maintainers
->   won't be reviewing your patches at the moment. It may be better to wait
->   for the -rc1 to be out before sending out v2
->
-> - don't send your patches to soc@kernel.org unless you want me to pick
->   them up into the soc tree and they have been reviewed already. The series
->   is clearly still under review at the moment, and I expect it to go through
->   a few revisions first.
->
-> - gmail marked your emails as possible spam for me. I don't know what
->   happened here, but you may want to look into this to ensure that
->   everybody receives it.
->
-> Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
->
-> This patchset was tested on the Arbel NPCM8XX evaluation board.
->
-> Tomer Maimon (19):
->   dt-bindings: timer: npcm: Add npcm845 compatible string
->   clocksource: timer-npcm7xx: Add NPCM845 timer support
->   dt-bindings: serial: 8250: Add npcm845 compatible string
->   tty: serial: 8250: Add NPCM845 UART support
->   dt-bindings: watchdog: npcm: Add npcm845 compatible string
->   watchdog: npcm_wdt: Add NPCM845 watchdog support
->   dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
->   clk: npcm8xx: add clock controller
->   dt-bindings: reset: add syscon property
->   reset: npcm: using syscon instead of device data
->   dt-bindings: reset: npcm: Add support for NPCM8XX
->   reset: npcm: Add NPCM8XX support
->   dt-bindings: arm: npcm: Add maintainer
->   dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
->   dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
->   arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
->   arm64: dts: nuvoton: Add initial NPCM8XX device tree
->   arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
->   arm64: defconfig: Add Nuvoton NPCM family support
->
-> - For an initial platform submission, I can merge the
->   clk/clocksource/serial/reset drivers along with the platform if they
->   have an Ack from the subsystem maintainers. I would normally
->   not include the watchdog patch in this as it's not essential, but
->   I suppose that it's fine if you only do a oneline change and it
->   has an Ack. If you have other nonessential drivers that need changes,
->   best submit them separately though.
->
->          Arnd
+I think in general, most __packed annotations we have in the kernel are
+completely pointless because they do not change the structure layout on
+any architecture but instead just make member access slower on
+architectures that lack unaligned load/store instructions. There have
+definitely been other cases though where a __packed annotation is
+not needed on any sane architecture but is needed for OABI ARM.
 
+Overall I'm not that worried because the only machines running OABI
+kernels would be on really old hardware that runs a limited set of
+driver code.
 
+A completely different matter are the extraneous __packed annotations
+that lead to possible problems when accessed through a misaligned
+pointer. We ignore -Waddress-of-packed-member and -Wcast-align
+in the kernel, so these never get caught at build time, but we have
+seen bugs from gcc making incorrect assumptions about alignment
+even on architectures that have unaligned load/store instructions.
 
--- 
-With Best Regards,
-Andy Shevchenko
+      Arnd
