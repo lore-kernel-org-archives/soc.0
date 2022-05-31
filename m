@@ -1,104 +1,198 @@
-Return-Path: <SRS0=Wjvf=WG=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=JgBq=WH=chromium.org=amstan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE1AC433EF
-	for <soc@archiver.kernel.org>; Mon, 30 May 2022 18:58:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC94DC433F5
+	for <soc@archiver.kernel.org>; Tue, 31 May 2022 01:21:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6B1A3C385B8; Mon, 30 May 2022 18:58:23 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id 9F12EC385B8; Tue, 31 May 2022 01:21:23 +0000 (UTC)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2CE14C34119
-	for <soc@kernel.org>; Mon, 30 May 2022 18:58:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2CE14C34119
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id gi33so22532622ejc.3
-        for <soc@kernel.org>; Mon, 30 May 2022 11:58:22 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D0E2BC3411C
+	for <soc@kernel.org>; Tue, 31 May 2022 01:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0E2BC3411C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ua1-f54.google.com with SMTP id m10so619040uao.11
+        for <soc@kernel.org>; Mon, 30 May 2022 18:21:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aZ4hSZLty16XZtYDyN1iI3FQFX0xiK9Qd3Z5M2gZKCw=;
-        b=wM7WyZVXegXf3sHYj6hVYcw/P4aAaMlv3drBS/wJer6tcwr8R1qIAg3jY7R56/uLJg
-         AkL4lRXKVL+atJXRI1RwFtm5scfXzyPz4HyY8sQsjVcPPuE+gbnmz9tbOijbaY0wsPat
-         VVzNGtmHf0lgbCz1TkCONCrCNpok5C64WaRx+ieOXzsugLNAWuTh8WPpQqGOxqj3Pwc+
-         lrGiLArhPWW0Lo5gt/uJUyJVtgKc7QeaFUgTRk0WMiNzSz++hob/ExUe9G6w/1OufoFX
-         cgRJwS3fGl7Q3zjhcQWOWsN65HPQzv2gYTMMafViqZY+pSexHwyZce8rTbnesrdKWTm4
-         olaw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BWNRT5udm1cgBdQ1Fxg5zG/+3/maHcJ/jTCZwv9kK0Y=;
+        b=YQYAAlLeMUHgntePBFcBgxcUsquOmjLnhtgUC/3Q3o/zgoZkgVeK36XpsBCi6pns+R
+         kLef9uDuC+Io3XodrSVzibaBXvsOd5uSUfLuES2zkWFDV89HFpb3G0w+Zj0tTY1/E+IC
+         3LuKDTbAuqiVOqwu7QJvcN0qtjWnECEHDZoQc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aZ4hSZLty16XZtYDyN1iI3FQFX0xiK9Qd3Z5M2gZKCw=;
-        b=3Lv/ceXn6xftSNkEzF/OqtrxFterBxRGBPCw/vz808Lpna5fH4wPmfAiCFvTENdhaw
-         vlS5mDP7RG7iiZM/xWIqu4THfOT9LG1HojB+K40t7N2u+kzQszzxUQXz90LQK9Uq/cbE
-         9H/WWy+Dkin5dVouS3weLpEnoxgrnjYSQwnWi26IMsks2FIV4/v7xTbQZPpck5UiGKJY
-         labbytWcFxA9uNwJN3ZZqYC64ty8CFJt3lFtJdCGKCVbsRaudMx3ABN7A7SoDbGrsbve
-         1YaskugIBUpT2M6amNzm6fG+N+QhToZx63+vjl74VQjtCTWz7E5JkqCzQXGlzsCbu1po
-         n0vQ==
-X-Gm-Message-State: AOAM532qPbuy+MATKhDZzLKWBkRrCIk5AFl9QHKa168kQRxV+3ifWBof
-	+jfhc4TvU3megE0m573NE0QKDw==
-X-Google-Smtp-Source: ABdhPJz6VqYPIb7dFTIdH5KP/w/rMk6xgXoHqfYCoOM6vHY7XEp3TXC9rduj5i3qN1TaEaiRI1+kGQ==
-X-Received: by 2002:a17:906:fc20:b0:6fe:a5f6:379d with SMTP id ov32-20020a170906fc2000b006fea5f6379dmr44922645ejb.503.1653937100528;
-        Mon, 30 May 2022 11:58:20 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v15-20020a17090606cf00b006feaa22e367sm4365712ejb.165.2022.05.30.11.58.19
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BWNRT5udm1cgBdQ1Fxg5zG/+3/maHcJ/jTCZwv9kK0Y=;
+        b=QDjYEcLmbdqWjJCXVAwxFC1cZ8qgrIZh54jxuQeHBG35UBZvkNCk3cwypKDeKd9aIm
+         IbFK4xMlyXtFqh8f8yorkPhWlW8BNujZxZEqGJO/zD5V/EEytuR44X8RWiQNkSsUzPH3
+         O8aPujx0Tc7N6PYDmmvDxXwT2dAlgzOBjgllQsh3hBqIjA7Vsn+yVHtNw9oyz3NMjwj4
+         rQii2+w1wCToBpjBsMeRYc4muXqI5MbZAuKIjeF7LsU18WpTY4T30MkwVO8biX1QtKfp
+         ULkuMCk2PwjknoARN6nokD0fC8C8whFNxOz1Vuqi4M8I3vVlEaTyKHDIM5IL4eFvdytn
+         2kWw==
+X-Gm-Message-State: AOAM531p11eyNLZn1SJp1il4fCCR3CAy+jtZ8F2B9iLxWZpgGBxOh5cT
+	j1NcEZSbCBF8XsMzZ/kzD47xWTbIN75k0A==
+X-Google-Smtp-Source: ABdhPJxDMt+f170o897JpGREZsADfW/Vq1SJzkOJypgOzWXF+TbYBK+p/tUkUpYcKlLYhyU7XicvGA==
+X-Received: by 2002:ab0:1343:0:b0:362:9e6c:74f5 with SMTP id h3-20020ab01343000000b003629e6c74f5mr19709282uae.15.1653960081529;
+        Mon, 30 May 2022 18:21:21 -0700 (PDT)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id f22-20020ac5c9b6000000b003571658b813sm1575659vkm.10.2022.05.30.18.21.20
+        for <soc@kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 11:58:20 -0700 (PDT)
-Message-ID: <615ac44b-fd9b-332c-5ea0-8775cda8cb00@linaro.org>
-Date: Mon, 30 May 2022 20:58:19 +0200
+        Mon, 30 May 2022 18:21:20 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id b144so1843363vkb.13
+        for <soc@kernel.org>; Mon, 30 May 2022 18:21:20 -0700 (PDT)
+X-Received: by 2002:a05:6122:818:b0:357:26f8:5e73 with SMTP id
+ 24-20020a056122081800b0035726f85e73mr20773778vkj.5.1653960079694; Mon, 30 May
+ 2022 18:21:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/3] dt-bindings: altera: Update Arria 10 boards
-Content-Language: en-US
+References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-3-pan@semihalf.com>
+ <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
+In-Reply-To: <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
+From: Alexandru M Stan <amstan@chromium.org>
+Date: Mon, 30 May 2022 18:20:43 -0700
+X-Gmail-Original-Message-ID: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
+Message-ID: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dts: socfpga: Add Google Chameleon v3 devicetree
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org
-References: <20220530130839.120710-1-pan@semihalf.com>
- <20220530130839.120710-4-pan@semihalf.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220530130839.120710-4-pan@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org, 
+	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, arnd@arndb.de, 
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org, 
+	dinguyen@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Subject is too generic, please describe what are you doing. Anything
-could be an "update".
+Hello Krzysztof
 
+On Mon, May 30, 2022 at 11:56 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
+> > Add devicetree for the Google Chameleon v3 board.
+> >
+> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+> > Signed-off-by: Alexandru M Stan <amstan@chromium.org>
+>
+> Your SoB chain looks odd. Who did what here?
 
-On 30/05/2022 15:08, Paweł Anikiel wrote:
-> The Mercury+ AA1 is not a standalone board, rather it's a module with
-> an Arria 10 SoC and some peripherals on it.
-> 
-> The Google Chameleon v3 is a base board for the Mercury+ AA1.
-> 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
-> ---
->  Documentation/devicetree/bindings/arm/altera.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-> index 5e2017c0a051..c6e198bb5b29 100644
-> --- a/Documentation/devicetree/bindings/arm/altera.yaml
-> +++ b/Documentation/devicetree/bindings/arm/altera.yaml
-> @@ -25,7 +25,7 @@ properties:
->          items:
->            - enum:
->                - altr,socfpga-arria10-socdk
-> -              - enclustra,mercury-aa1
-> +              - google,chameleon-v3
+Sorry about this.
 
-As mentioned in patch 2, I would expect to have still enclustra
-compatible. It's a SoM, so as usual it goes with its own binding, even
-if not used standalone.
+It was mainly Pawel but I did some small changes at some point before
+it landed in our tree (particularly the GPIOs).
 
-Best regards,
-Krzysztof
+>
+> > ---
+> >  arch/arm/boot/dts/Makefile                    |  1 +
+> >  .../boot/dts/socfpga_arria10_chameleonv3.dts  | 90 +++++++++++++++++++
+> >  2 files changed, 91 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+> >
+> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> > index 023c8b4ba45c..9417106d3289 100644
+> > --- a/arch/arm/boot/dts/Makefile
+> > +++ b/arch/arm/boot/dts/Makefile
+> > @@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
+> >       s5pv210-torbreck.dtb
+> >  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
+> >       socfpga_arria5_socdk.dtb \
+> > +     socfpga_arria10_chameleonv3.dtb \
+> >       socfpga_arria10_socdk_nand.dtb \
+> >       socfpga_arria10_socdk_qspi.dtb \
+> >       socfpga_arria10_socdk_sdmmc.dtb \
+> > diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch/a=
+rm/boot/dts/socfpga_arria10_chameleonv3.dts
+> > new file mode 100644
+> > index 000000000000..988cc445438e
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
+> > @@ -0,0 +1,90 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright 2022 Google LLC
+> > + */
+> > +/dts-v1/;
+> > +#include "socfpga_arria10_mercury_aa1.dtsi"
+> > +
+> > +/ {
+> > +     model =3D "Google Chameleon V3";
+> > +     compatible =3D "google,chameleon-v3",
+>
+> You miss here enclustra compatible.
+
+Does this make sense? I don't expect this device tree to boot/work on
+an enclustra motherboard. It's only really compatible with a
+"chameleon-v3".
+
+>
+> > +                  "altr,socfpga-arria10", "altr,socfpga";
+> > +
+> > +     aliases {
+> > +             serial0 =3D &uart0;
+> > +             i2c0 =3D &i2c0;
+> > +             i2c1 =3D &i2c1;
+> > +     };
+> > +};
+> > +
+> > +&gmac0 {
+> > +     status =3D "okay";
+> > +};
+> > +
+> > +&gpio0 {
+> > +     status =3D "okay";
+> > +};
+> > +
+> > +&gpio1 {
+> > +     status =3D "okay";
+> > +};
+> > +
+> > +&gpio2 {
+> > +     status =3D "okay";
+> > +};
+> > +
+> > +&i2c0 {
+> > +     status =3D "okay";
+> > +
+> > +     ssm2603: ssm2603@1a {
+>
+> Generic node names.
+
+Dumb question: what does this mean?
+
+Are you saying the name is too generic? As someone reading the
+schematics this would be immediately clear what chip it's talking
+about.
+
+>
+> > +             compatible =3D "adi,ssm2603";
+> > +             reg =3D <0x1a>;
+> > +     };
+> > +};
+> > +
+> > +&i2c1 {
+> > +     status =3D "okay";
+> > +
+> > +     u80: u80@21 {
+> > +             compatible =3D "nxp,pca9535";
+>
+> Generic node names.
+
+FWIW: Schematic is full of these pca9535 io expanders, only one (U80)
+is visible to linux on an I2C bus.
+
+>
+>
+>
+> Best regards,
+> Krzysztof
+
+Thanks,
+Alexandru Stan (amstan)
