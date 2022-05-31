@@ -1,198 +1,120 @@
-Return-Path: <SRS0=JgBq=WH=chromium.org=amstan@kernel.org>
+Return-Path: <SRS0=nKU2=WH=inria.fr=Julia.Lawall@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC94DC433F5
-	for <soc@archiver.kernel.org>; Tue, 31 May 2022 01:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58BAEC433F5
+	for <soc@archiver.kernel.org>; Tue, 31 May 2022 06:28:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9F12EC385B8; Tue, 31 May 2022 01:21:23 +0000 (UTC)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 1FF47C34114; Tue, 31 May 2022 06:28:12 +0000 (UTC)
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D0E2BC3411C
-	for <soc@kernel.org>; Tue, 31 May 2022 01:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0E2BC3411C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ua1-f54.google.com with SMTP id m10so619040uao.11
-        for <soc@kernel.org>; Mon, 30 May 2022 18:21:22 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8851EC385A9;
+	Tue, 31 May 2022 06:28:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8851EC385A9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inria.fr
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BWNRT5udm1cgBdQ1Fxg5zG/+3/maHcJ/jTCZwv9kK0Y=;
-        b=YQYAAlLeMUHgntePBFcBgxcUsquOmjLnhtgUC/3Q3o/zgoZkgVeK36XpsBCi6pns+R
-         kLef9uDuC+Io3XodrSVzibaBXvsOd5uSUfLuES2zkWFDV89HFpb3G0w+Zj0tTY1/E+IC
-         3LuKDTbAuqiVOqwu7QJvcN0qtjWnECEHDZoQc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BWNRT5udm1cgBdQ1Fxg5zG/+3/maHcJ/jTCZwv9kK0Y=;
-        b=QDjYEcLmbdqWjJCXVAwxFC1cZ8qgrIZh54jxuQeHBG35UBZvkNCk3cwypKDeKd9aIm
-         IbFK4xMlyXtFqh8f8yorkPhWlW8BNujZxZEqGJO/zD5V/EEytuR44X8RWiQNkSsUzPH3
-         O8aPujx0Tc7N6PYDmmvDxXwT2dAlgzOBjgllQsh3hBqIjA7Vsn+yVHtNw9oyz3NMjwj4
-         rQii2+w1wCToBpjBsMeRYc4muXqI5MbZAuKIjeF7LsU18WpTY4T30MkwVO8biX1QtKfp
-         ULkuMCk2PwjknoARN6nokD0fC8C8whFNxOz1Vuqi4M8I3vVlEaTyKHDIM5IL4eFvdytn
-         2kWw==
-X-Gm-Message-State: AOAM531p11eyNLZn1SJp1il4fCCR3CAy+jtZ8F2B9iLxWZpgGBxOh5cT
-	j1NcEZSbCBF8XsMzZ/kzD47xWTbIN75k0A==
-X-Google-Smtp-Source: ABdhPJxDMt+f170o897JpGREZsADfW/Vq1SJzkOJypgOzWXF+TbYBK+p/tUkUpYcKlLYhyU7XicvGA==
-X-Received: by 2002:ab0:1343:0:b0:362:9e6c:74f5 with SMTP id h3-20020ab01343000000b003629e6c74f5mr19709282uae.15.1653960081529;
-        Mon, 30 May 2022 18:21:21 -0700 (PDT)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id f22-20020ac5c9b6000000b003571658b813sm1575659vkm.10.2022.05.30.18.21.20
-        for <soc@kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 May 2022 18:21:20 -0700 (PDT)
-Received: by mail-vk1-f179.google.com with SMTP id b144so1843363vkb.13
-        for <soc@kernel.org>; Mon, 30 May 2022 18:21:20 -0700 (PDT)
-X-Received: by 2002:a05:6122:818:b0:357:26f8:5e73 with SMTP id
- 24-20020a056122081800b0035726f85e73mr20773778vkj.5.1653960079694; Mon, 30 May
- 2022 18:21:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-3-pan@semihalf.com>
- <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
-In-Reply-To: <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
-From: Alexandru M Stan <amstan@chromium.org>
-Date: Mon, 30 May 2022 18:20:43 -0700
-X-Gmail-Original-Message-ID: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
-Message-ID: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dts: socfpga: Add Google Chameleon v3 devicetree
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org, 
-	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, arnd@arndb.de, 
-	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org, 
-	dinguyen@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+  d=inria.fr; s=dc;
+  h=content-transfer-encoding:from:mime-version:subject:date:
+   message-id:references:cc:in-reply-to:to;
+  bh=q0Ly3VYEbjYqQhjsAGdFo317POmXxxJct8nswHWSNRc=;
+  b=Crq9x9JaUkBocQegHBPU2uNvvPdzl7EqK4zJYsHxWYYL5HcLcVQKBQhr
+   9tKuFo4YEJfEvBXWsmN1GfpzCc9ktKDJvTauHuIUpWxwmBLsgMis++m5C
+   Ba6RU42SUSSqvNgQInV27Hpf6StFB0/GJyvwCR0C7IBQj6mFE9YtEzGyK
+   c=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,264,1647298800"; 
+   d="scan'208";a="38688098"
+Received: from 193.92-254-62.static.virginmediabusiness.co.uk (HELO [172.16.3.59]) ([62.254.92.193])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2022 08:26:55 +0200
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+From: Julia Lawall <Julia.Lawall@inria.fr>
+Mime-Version: 1.0 (1.0)
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID block count and size helpers")
+Date: Tue, 31 May 2022 07:26:53 +0100
+Message-Id: <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
+References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Jani Nikula <jani.nikula@intel.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Viresh Kumar <vireshk@kernel.org>,
+ Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+ =?utf-8?Q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ SoC Team <soc@kernel.org>
+In-Reply-To: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
+X-Mailer: iPhone Mail (17A860)
 
-Hello Krzysztof
 
-On Mon, May 30, 2022 at 11:56 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
-> > Add devicetree for the Google Chameleon v3 board.
-> >
-> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
-> > Signed-off-by: Alexandru M Stan <amstan@chromium.org>
->
-> Your SoB chain looks odd. Who did what here?
 
-Sorry about this.
+> On 30 May 2022, at 15:27, Arnd Bergmann <arnd@arndb.de> wrote:
+>=20
+> =EF=BB=BFOn Mon, May 30, 2022 at 4:08 PM Jani Nikula <jani.nikula@intel.co=
+m> wrote:
+>>> On Mon, 30 May 2022, Arnd Bergmann <arnd@arndb.de> wrote:
+>>> struct my_driver_priv {
+>>>       struct device dev;
+>>>       u8 causes_misalignment;
+>>>       spinlock_t lock;
+>>>       atomic_t counter;
+>>> } __packed; /* this annotation is harmful because it breaks the atomics *=
+/
+>>=20
+>> I wonder if this is something that could be caught with coccinelle. Or
+>> sparse. Are there any cases where this combo is necessary? (I can't
+>> think of any, but it's a low bar. ;)
+>>=20
+>> Cc: Julia.
+>=20
+> I think one would first have to make a list of data types that are not
+> meant to be in a packed structure. It could be a good start to
+> search for any packed aggregates with a pointer, atomic_t or spinlock_t
+> in them, but there are of course many more types that you won't
+> find in hardware structures.
+>=20
+>>> or if the annotation does not change the layout like
+>>>=20
+>>> struct my_dma_descriptor {
+>>>     __le64 address;
+>>>     __le64 length;
+>>> } __packed; /* does not change layout but makes access slow on some
+>>> architectures */
+>>=20
+>> Why is this the case, though? I'd imagine the compiler could figure this
+>> out.
+>=20
+> When you annotate the entire structure as __packed without an
+> extra __aligned() annotation, the compiler has to assume that the
+> structure itself is unaligned as well. On many of the older architectures,=
 
-It was mainly Pawel but I did some small changes at some point before
-it landed in our tree (particularly the GPIOs).
+> this will result in accessing the values one byte at a time. Marking
+> the structure as "__packed __aligned(8)" instead would be harmless.
+>=20
+> When I have a structure with a few misaligned members, I generally
+> prefer to only annotate the members that are not naturally aligned,
+> but this approach is not very common.
 
->
-> > ---
-> >  arch/arm/boot/dts/Makefile                    |  1 +
-> >  .../boot/dts/socfpga_arria10_chameleonv3.dts  | 90 +++++++++++++++++++
-> >  2 files changed, 91 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> >
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index 023c8b4ba45c..9417106d3289 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
-> >       s5pv210-torbreck.dtb
-> >  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
-> >       socfpga_arria5_socdk.dtb \
-> > +     socfpga_arria10_chameleonv3.dtb \
-> >       socfpga_arria10_socdk_nand.dtb \
-> >       socfpga_arria10_socdk_qspi.dtb \
-> >       socfpga_arria10_socdk_sdmmc.dtb \
-> > diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch/a=
-rm/boot/dts/socfpga_arria10_chameleonv3.dts
-> > new file mode 100644
-> > index 000000000000..988cc445438e
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
-> > @@ -0,0 +1,90 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright 2022 Google LLC
-> > + */
-> > +/dts-v1/;
-> > +#include "socfpga_arria10_mercury_aa1.dtsi"
-> > +
-> > +/ {
-> > +     model =3D "Google Chameleon V3";
-> > +     compatible =3D "google,chameleon-v3",
->
-> You miss here enclustra compatible.
+Searching for specific types in a packed structure would be easy.
 
-Does this make sense? I don't expect this device tree to boot/work on
-an enclustra motherboard. It's only really compatible with a
-"chameleon-v3".
+Coccinelle could duplicate the structure without the packed and see if any o=
+ffsets change, using build bug on, but that would be architecture specific s=
+o maybe not useful.
 
->
-> > +                  "altr,socfpga-arria10", "altr,socfpga";
-> > +
-> > +     aliases {
-> > +             serial0 =3D &uart0;
-> > +             i2c0 =3D &i2c0;
-> > +             i2c1 =3D &i2c1;
-> > +     };
-> > +};
-> > +
-> > +&gmac0 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&gpio0 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&gpio1 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&gpio2 {
-> > +     status =3D "okay";
-> > +};
-> > +
-> > +&i2c0 {
-> > +     status =3D "okay";
-> > +
-> > +     ssm2603: ssm2603@1a {
->
-> Generic node names.
+Julia
 
-Dumb question: what does this mean?
 
-Are you saying the name is too generic? As someone reading the
-schematics this would be immediately clear what chip it's talking
-about.
 
->
-> > +             compatible =3D "adi,ssm2603";
-> > +             reg =3D <0x1a>;
-> > +     };
-> > +};
-> > +
-> > +&i2c1 {
-> > +     status =3D "okay";
-> > +
-> > +     u80: u80@21 {
-> > +             compatible =3D "nxp,pca9535";
->
-> Generic node names.
+>         Arnd
 
-FWIW: Schematic is full of these pca9535 io expanders, only one (U80)
-is visible to linux on an I2C bus.
-
->
->
->
-> Best regards,
-> Krzysztof
-
-Thanks,
-Alexandru Stan (amstan)
