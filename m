@@ -1,219 +1,273 @@
-Return-Path: <SRS0=OIpR=WH=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=mEcO=WH=semihalf.com=pan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D5FAC433F5
-	for <soc@archiver.kernel.org>; Tue, 31 May 2022 09:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D7CC433F5
+	for <soc@archiver.kernel.org>; Tue, 31 May 2022 12:44:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 73592C385A9; Tue, 31 May 2022 09:12:03 +0000 (UTC)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	id EDF5BC341C0; Tue, 31 May 2022 12:44:01 +0000 (UTC)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2D517C3411E
-	for <soc@kernel.org>; Tue, 31 May 2022 09:12:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D517C3411E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id q1so8836615ejz.9
-        for <soc@kernel.org>; Tue, 31 May 2022 02:12:01 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id C5C6CC385A9
+	for <soc@kernel.org>; Tue, 31 May 2022 12:44:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5C6CC385A9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=semihalf.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-300312ba5e2so138548557b3.0
+        for <soc@kernel.org>; Tue, 31 May 2022 05:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tCT50Fh+5piWSzBKb7EMdRddbudd57xtmdgm3CE6V14=;
-        b=PGB/B7/Yzc2AzW6eApiu2Hn5uZicnKoLYS9im7otzR9PXX5JVzOTLEJELyx+CxnPXO
-         +kH94qrP+Fl1d+WMT6EiSTc331sBIbuOTUPMvQwqTdp96XlohJi0+bXIk85NvMpqcHWv
-         PMlCoYEKHzrRYolXGe6CxaIiSo0zu+GL7/Dddi2Ct3tghdM9ybWi3ZNw7TBTzEDJkFtw
-         cihKAuay8eov8BIzWAq7KZRlpmNFYRlPBX/QyxeHOhR/CYTDhgqURHViPZmrT2Mink6l
-         PAvfNK3B03KiznBxeXA4yCAhQ3oPrJLGl/EwlKLVqBkbF7e5sr6nOCIUcqTHeVzg38uv
-         xw1w==
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Wv+lZyCaE5kbkLZpqQvi2xp+OoDSqLcG7HNruSmDfC8=;
+        b=XNWi1d1oeE0HDSgunP6m9EOL2loWM0Nn14vYZ7RDHJApDMHysMiN9E9GxGPeft5nSa
+         BTgo7Ek7+TpqeLvM+63oxN+U81RPwTIV96z04d7ugi/hj1bv9WfjpfefwvGxP+4Rt1DV
+         4almvcFW6ZKDRTJWC/ranIrKv9t3ENmkKE/Z2a/Vl3yPIxFDZXTT+O8JJHNedz9ZGxCI
+         K/xeYzvmmRJcY0+z5wO+eZPJ/cpNZXAXr70FT0SdPea0rDxWWoxMo3DZ3ks6lHCc7+Ty
+         dhl1y8aMn2pppa3+ZjvqABteKAeQ/1DDZZkj0VSPfqXa3uTZO6uPE0+QSLJxhdfIy5ja
+         Zf2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tCT50Fh+5piWSzBKb7EMdRddbudd57xtmdgm3CE6V14=;
-        b=TAWEZhWmqyBrCKcB+N0JLBw6fK8cPeucBtMCzMLm+NV352BJxKHrbncBsNUc2I+fjZ
-         VcnM+qOej9QIl/RB4NFj7qph8wuGs7rj0ZFeijvPo2KMWrkY+SathyWJMxKRHJx/1Bz0
-         RcvCmMaIfrNdEBEOVLFzWcMO82TOmKU8F4ruNZoq8StU9l8JllkkBgMmPnkBAfNcD37m
-         hui9bpmtqjLLvGCQlitILPHxIxe7XelEVu3mioP0go4JJlZp72h9UCfzjfce2MEsOA1g
-         NYSYU+TMuG8d8Y617u6SrarwpxQB95qIwUE4IZIS8IMsO9AQsR7Qq1HtdpzDlA0TKbSf
-         cQ6g==
-X-Gm-Message-State: AOAM533AlMRZSbeFlugmReRs0t53r7vhOgp0LlG14dHZAMuJcLxXBY01
-	+pazCHJL5okE/EsU6V3DZOmwNw==
-X-Google-Smtp-Source: ABdhPJwO4McNyf+LCq8d8GlFSdkiQA/rXG1KcssvcKs4gyMH/JmH0M8NOi6N7hux818VUWZb9IUbxw==
-X-Received: by 2002:a17:907:d16:b0:6f8:c054:29ac with SMTP id gn22-20020a1709070d1600b006f8c05429acmr53469868ejc.96.1653988319462;
-        Tue, 31 May 2022 02:11:59 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id mc22-20020a170906eb5600b006feb002a620sm4737178ejb.1.2022.05.31.02.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 02:11:58 -0700 (PDT)
-Message-ID: <e4ef2056-c990-b308-a9d5-98f11ac0ba51@linaro.org>
-Date: Tue, 31 May 2022 11:11:57 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Wv+lZyCaE5kbkLZpqQvi2xp+OoDSqLcG7HNruSmDfC8=;
+        b=gCrhqpInNVLEblovzJ7OArYDXtnkW5b/EJE/Em44g2474NU2R99EBmdMvAAaQuD9lD
+         BQHHhmEm3WB0cTmniuOviptLZbgEQtyEkocSUscigqtrFearxTbmqQLhkzA7bPtZ3ANs
+         oO8hfP357uhfiGxPWNVj6rctBCe64fqovzAkepiUC52AE8u30K+dAxkwTWDQF736p/uT
+         dkJMOKp/8Yf8SpwwNv/T3R6exD2shMTg53QWe3xVEd1wvfEQZb3EfEKyfJxA08JGAp8R
+         DMKaY/9JEwH9XA9MUVldVydWHhAiHZUh0yqLk+QUvUavTJkora0iX036ou21HyNuFVQD
+         6Vkw==
+X-Gm-Message-State: AOAM532MDD07bgeS5OwaJsqF9CdEfdjLz8nWlNfhr4hxFRSmVJj6Sytr
+	2Veky0BwPvY4HN19FDLsKAH9bNuQIjt8cpExplIRMQ==
+X-Google-Smtp-Source: ABdhPJzeGNxtL8TPdvCOrBOXNjOCKP8RSjF0qzXwrWGx09HwYJPlam/R5UHa322kEdYOs0PWmQPr2S/j6AIlnevJFPY=
+X-Received: by 2002:a81:ccd:0:b0:30c:2ad6:925b with SMTP id
+ 196-20020a810ccd000000b0030c2ad6925bmr15444888ywm.498.1654001039770; Tue, 31
+ May 2022 05:43:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/3] dts: socfpga: Add Google Chameleon v3 devicetree
-Content-Language: en-US
-To: Alexandru M Stan <amstan@chromium.org>
+References: <20220530130839.120710-1-pan@semihalf.com> <20220530130839.120710-2-pan@semihalf.com>
+ <73f01056-e674-d910-1c0d-98c4001f909d@linaro.org>
+In-Reply-To: <73f01056-e674-d910-1c0d-98c4001f909d@linaro.org>
+From: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+Date: Tue, 31 May 2022 14:43:49 +0200
+Message-ID: <CAF9_jYQTTtK-MmEc11NnW8Aez6OtmZeJB7aPhYLoEvQ9vFiuLQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dts: socfpga: Change Mercury+ AA1 devicetree to header
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
- "moderated list:ARM/Mediatek SoC support"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>,
- arnd@arndb.de, Olof Johansson <olof@lixom.net>,
- Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- dinguyen@kernel.org
-References: <20220530130839.120710-1-pan@semihalf.com>
- <20220530130839.120710-3-pan@semihalf.com>
- <f789afb2-33c5-2b28-5ade-0c76ebb7206f@linaro.org>
- <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAHNYxRw00QraVW0085xO-qzgGJdZ2joukuSYzBQo+yjLnkD=Tw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org, 
+	Dinh Nguyen <dinguyen@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 31/05/2022 03:20, Alexandru M Stan wrote:
-> Hello Krzysztof
-> 
-> On Mon, May 30, 2022 at 11:56 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 30/05/2022 15:08, Paweł Anikiel wrote:
->>> Add devicetree for the Google Chameleon v3 board.
->>>
->>> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
->>> Signed-off-by: Alexandru M Stan <amstan@chromium.org>
->>
->> Your SoB chain looks odd. Who did what here?
-> 
-> Sorry about this.
-> 
-> It was mainly Pawel but I did some small changes at some point before
-> it landed in our tree (particularly the GPIOs).
+Thank you for the review, I'm thinking of splitting this commit into
+several smaller ones:
+- remove all status =3D "okay" things and i2c aliases
+- remove sdmmc-ecc node (it's a part of the Arria 10 SoC, not the mercury)
+- add atsha204a node
+- add copyright header
+- style fixes (phy reg, memory)
+What do you think?
 
-Then usually Paweł should be the owner of the patch, not you.
-Alternatively it could be also co-developed.
+Please see my other comments below.
 
-> 
->>
->>> ---
->>>  arch/arm/boot/dts/Makefile                    |  1 +
->>>  .../boot/dts/socfpga_arria10_chameleonv3.dts  | 90 +++++++++++++++++++
->>>  2 files changed, 91 insertions(+)
->>>  create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
->>>
->>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->>> index 023c8b4ba45c..9417106d3289 100644
->>> --- a/arch/arm/boot/dts/Makefile
->>> +++ b/arch/arm/boot/dts/Makefile
->>> @@ -1146,6 +1146,7 @@ dtb-$(CONFIG_ARCH_S5PV210) += \
->>>       s5pv210-torbreck.dtb
->>>  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += \
->>>       socfpga_arria5_socdk.dtb \
->>> +     socfpga_arria10_chameleonv3.dtb \
->>>       socfpga_arria10_socdk_nand.dtb \
->>>       socfpga_arria10_socdk_qspi.dtb \
->>>       socfpga_arria10_socdk_sdmmc.dtb \
->>> diff --git a/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
->>> new file mode 100644
->>> index 000000000000..988cc445438e
->>> --- /dev/null
->>> +++ b/arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
->>> @@ -0,0 +1,90 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Copyright 2022 Google LLC
->>> + */
->>> +/dts-v1/;
->>> +#include "socfpga_arria10_mercury_aa1.dtsi"
->>> +
->>> +/ {
->>> +     model = "Google Chameleon V3";
->>> +     compatible = "google,chameleon-v3",
->>
->> You miss here enclustra compatible.
-> 
-> Does this make sense? I don't expect this device tree to boot/work on
-> an enclustra motherboard. It's only really compatible with a
-> "chameleon-v3".
+On Mon, May 30, 2022 at 8:55 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 30/05/2022 15:08, Pawe=C5=82 Anikiel wrote:
+> > The Mercury+ AA1 is not a standalone board, rather it's a module
+> > with an Arria 10 SoC and some peripherals on it. Remove everything that
+> > is not strictly related to the module.
+>
+> Subject has several issues:
+> 1. Use prefix matching subsystem (git log --oneline)
 
-You also do not expect it to boot on altr,socfpga, do you?
+Just to make sure, are you referring to the ARM: prefix?
 
-If I understood correctly, this board has physically Mercury AA1 SoM, so
-that compatible should be there.
+> 2. You are not changing here anything to header. Header files have
+> different format and end with .h. This is a DTSI file.
 
-It's the same for every other SoM. Neither Google nor Enclustra are
-special...
+Yes, I meant dtsi.
 
-> 
->>
->>> +                  "altr,socfpga-arria10", "altr,socfpga";
->>> +
->>> +     aliases {
->>> +             serial0 = &uart0;
->>> +             i2c0 = &i2c0;
->>> +             i2c1 = &i2c1;
->>> +     };
->>> +};
->>> +
->>> +&gmac0 {
->>> +     status = "okay";
->>> +};
->>> +
->>> +&gpio0 {
->>> +     status = "okay";
->>> +};
->>> +
->>> +&gpio1 {
->>> +     status = "okay";
->>> +};
->>> +
->>> +&gpio2 {
->>> +     status = "okay";
->>> +};
->>> +
->>> +&i2c0 {
->>> +     status = "okay";
->>> +
->>> +     ssm2603: ssm2603@1a {
->>
->> Generic node names.
-> 
-> Dumb question: what does this mean?
-> 
-> Are you saying the name is too generic? As someone reading the
-> schematics this would be immediately clear what chip it's talking
-> about.
+>
+> >
+> > Signed-off-by: Pawe=C5=82 Anikiel <pan@semihalf.com>
+>
+> Thank you for your patch. There is something to discuss/improve.
+>
+> > ---
+> >  arch/arm/boot/dts/Makefile                    |  1 -
+> >  ...1.dts =3D> socfpga_arria10_mercury_aa1.dtsi} | 68 ++++-------------=
+--
+> >  2 files changed, 14 insertions(+), 55 deletions(-)
+> >  rename arch/arm/boot/dts/{socfpga_arria10_mercury_aa1.dts =3D> socfpga=
+_arria10_mercury_aa1.dtsi} (58%)
+> >
+> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> > index edfbedaa6168..023c8b4ba45c 100644
+> > --- a/arch/arm/boot/dts/Makefile
+> > +++ b/arch/arm/boot/dts/Makefile
+> > @@ -1146,7 +1146,6 @@ dtb-$(CONFIG_ARCH_S5PV210) +=3D \
+> >       s5pv210-torbreck.dtb
+> >  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) +=3D \
+> >       socfpga_arria5_socdk.dtb \
+> > -     socfpga_arria10_mercury_aa1.dtb \
+> >       socfpga_arria10_socdk_nand.dtb \
+> >       socfpga_arria10_socdk_qspi.dtb \
+> >       socfpga_arria10_socdk_sdmmc.dtb \
+> > diff --git a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts b/arch/a=
+rm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
+> > similarity index 58%
+> > rename from arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
+> > rename to arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
+> > index a75c059b6727..fee1fc39bb2b 100644
+> > --- a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dts
+> > +++ b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
+> > @@ -1,57 +1,38 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> > -/dts-v1/;
+> > -
+> > +/*
+> > + * Copyright 2022 Google LLC
+> > + */
+>
+> How is this related to the patch?
 
-Let me clarify - please use generic node names, as asked by Devicetree
-specification (2.2.1. Node Name Requirements). There is also list of
-some examples in the spec, but you can use some other generic node name.
+I'll move this change to a seperate commit.
 
-Several bindings also require it.
+>
+> >  #include "socfpga_arria10.dtsi"
+> >
+> >  / {
+> > -
+> > -     model =3D "Enclustra Mercury AA1";
+> > -     compatible =3D "enclustra,mercury-aa1", "altr,socfpga-arria10", "=
+altr,socfpga";
+> > -
+> >       aliases {
+> >               ethernet0 =3D &gmac0;
+> >               serial1 =3D &uart1;
+> > -             i2c0 =3D &i2c0;
+> > -             i2c1 =3D &i2c1;
+> > -     };
+> > -
+> > -     memory@0 {
+> > -             name =3D "memory";
+> > -             device_type =3D "memory";
+> > -             reg =3D <0x0 0x80000000>; /* 2GB */
+> >       };
+> >
+> >       chosen {
+> >               stdout-path =3D "serial1:115200n8";
+> >       };
+> > -};
+> >
+> > -&eccmgr {
+> > -     sdmmca-ecc@ff8c2c00 {
+> > -             compatible =3D "altr,socfpga-sdmmc-ecc";
+> > -             reg =3D <0xff8c2c00 0x400>;
+> > -             altr,ecc-parent =3D <&mmc>;
+> > -             interrupts =3D <15 IRQ_TYPE_LEVEL_HIGH>,
+> > -                          <47 IRQ_TYPE_LEVEL_HIGH>,
+> > -                          <16 IRQ_TYPE_LEVEL_HIGH>,
+> > -                          <48 IRQ_TYPE_LEVEL_HIGH>;
+> > +     memory@0 {
+> > +             name =3D "memory";
+> > +             device_type =3D "memory";
+> > +             reg =3D <0x0 0x80000000>; /* 2GB */
+> >       };
+> >  };
+> >
+> >  &gmac0 {
+> >       phy-mode =3D "rgmii";
+> > -     phy-addr =3D <0xffffffff>; /* probe for phy addr */
+> > +     phy-handle =3D <&phy3>;
+> >
+> >       max-frame-size =3D <3800>;
+> > -     status =3D "okay";
+> > -
+> > -     phy-handle =3D <&phy3>;
+> >
+> >       mdio {
+> >               #address-cells =3D <1>;
+> >               #size-cells =3D <0>;
+> >               compatible =3D "snps,dwmac-mdio";
+> >               phy3: ethernet-phy@3 {
+> > +                     reg =3D <3>;
+> >                       txd0-skew-ps =3D <0>; /* -420ps */
+> >                       txd1-skew-ps =3D <0>; /* -420ps */
+> >                       txd2-skew-ps =3D <0>; /* -420ps */
+> > @@ -64,35 +45,23 @@ phy3: ethernet-phy@3 {
+> >                       txc-skew-ps =3D <1860>; /* 960ps */
+> >                       rxdv-skew-ps =3D <420>; /* 0ps */
+> >                       rxc-skew-ps =3D <1680>; /* 780ps */
+> > -                     reg =3D <3>;
+>
+> This and few other changes (like memory) are not related to the commit.
+> Do not mix different cleanups together.
 
-> 
->>
->>> +             compatible = "adi,ssm2603";
->>> +             reg = <0x1a>;
->>> +     };
->>> +};
->>> +
->>> +&i2c1 {
->>> +     status = "okay";
->>> +
->>> +     u80: u80@21 {
->>> +             compatible = "nxp,pca9535";
->>
->> Generic node names.
-> 
-> FWIW: Schematic is full of these pca9535 io expanders, only one (U80)
-> is visible to linux on an I2C bus.
+l'll put the cleanup changes into a seperate commit.
+
+>
+> >               };
+> >       };
+> >  };
+> >
+> > -&gpio0 {
+> > -     status =3D "okay";
+> > -};
+> > -
+> > -&gpio1 {
+> > -     status =3D "okay";
+> > -};
+> > -
+> > -&gpio2 {
+> > -     status =3D "okay";
+> > -};
+>
+> Why removing all these? Aren't they available on the SoM? The same
+> question applies to several other pieces, for example UART and USB -
+> aren't these part of SoM?
+
+I'm removing them from here, but adding them to socfpga_arria10_chameleonv3=
+.dts.
+I think that enabling them should be done in the base board's dts, as
+the connections
+go to the base board. The Chameleon v3 has a USB port, but a different
+base board might
+not have one.
+
+>
+> > -
+> >  &i2c1 {
+> > -     status =3D "okay";
+> > +     atsha204a: atsha204a@64 {
+>
+> How is this change related at all to what you described in commit? There
+> was no atsha204a before.
+
+As previously mentioned, I'll move this change to a seperate commit.
+
+>
+> > +             compatible =3D "atmel,atsha204a";
+> > +             reg =3D <0x64>;
+> > +     };
+> > +
+> >       isl12022: isl12022@6f {
+> > -             status =3D "okay";
+> >               compatible =3D "isil,isl12022";
+> >               reg =3D <0x6f>;
+> >       };
+> >  };
+> >
+>
+> Best regards,
+> Krzysztof
 
 
-
-Best regards,
-Krzysztof
+Regards,
+Pawe=C5=82
