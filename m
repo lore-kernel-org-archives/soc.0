@@ -1,62 +1,61 @@
-Return-Path: <SRS0=jDKR=WH=broadcom.com=anand.gore@kernel.org>
+Return-Path: <SRS0=1kQw=WI=broadcom.com=william.zhang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550EDC433F5
-	for <soc@archiver.kernel.org>; Tue, 31 May 2022 18:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98EEEC433F5
+	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 02:22:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3E7D8C3411E; Tue, 31 May 2022 18:46:53 +0000 (UTC)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	id 5F118C3411D; Wed,  1 Jun 2022 02:22:45 +0000 (UTC)
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 891A8C3411F
-	for <soc@kernel.org>; Tue, 31 May 2022 18:46:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 891A8C3411F
+	by smtp.kernel.org (Postfix) with ESMTPS id 728DFC385A9
+	for <soc@kernel.org>; Wed,  1 Jun 2022 02:22:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 728DFC385A9
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f171.google.com with SMTP id w3so13607614plp.13
-        for <soc@kernel.org>; Tue, 31 May 2022 11:46:51 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id e11so641612pfj.5
+        for <soc@kernel.org>; Tue, 31 May 2022 19:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=0JQSa/tv0LSiak3CYmKir9vJ79LPM913yIXOARxQgjo=;
-        b=gm25HZnHlipVoNMoEaPB6sgQpD1mfAqTgkQrLOYl7nSCGVQ9mFG96y7mqGKb7ZJn1s
-         eFW5rOPcOgeTRe3NihHI8W0pPWiYZfUnMRoCFr1jS55ui0T5GGQrd0WOXDxGQKHEjJbo
-         /AbHnLkxWL6qGticKP2ex/uFb1wTMm5Lo6spc=
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=hvaR4TuAzzHGkd13jqDkWPv5t09KdGcgIhjmZCJbXNs=;
+        b=CIA3L5i35IitduS0dp875ySw90zq7YIfpjbei4u3dfyv2LTGN5ehwpYUcoy/dU7ynA
+         eYDvPLryGvn4vDCeB8Y8Bzmo2JQ6uMdcYRXGChuIX7zOXSwtxHWSEaLJCwpjOIxgTm6+
+         OD7leQOPreLZqICbtg/egvGunDKbIaloK3xsw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=0JQSa/tv0LSiak3CYmKir9vJ79LPM913yIXOARxQgjo=;
-        b=PHkTM4z9kjGTknrUxBpnqNXN2BuqpCWHlmTcfQ6ba8zs6PcZqXEcEimuz3G/h+0qPY
-         OtnxczNJxuYxeOm0Xbm9c8u3FU5PCh4I9dGe2vgAtRM68EnY//lVO/Mj+ff54IMwuRf1
-         ELSmVcVa14rRMnBqhsUDxvm/t8hPS4gJxqk60ZAChOkzgy68/CKr6KBnMjTaDL2JG3R9
-         QJGOrJbCnGN3dRrtvyHgO6EsTCkEyz8UbtTjEEopebJesc0j6yXaw6OTf++dS8LE5tm7
-         SEwFtNckbnXxQw3PQMPROs1/2liclib7Zj87uhMyvmQ4T6LsjqH3Q5i3xI/o2DtvD0Gj
-         fUTw==
-X-Gm-Message-State: AOAM531zIawaLFyqiHhpVFaTle+S41oF16DTqLkmWbi9SybtkKi6yYw2
-	afEYP+g5BHHnquqUsmBNdf4cYQ==
-X-Google-Smtp-Source: ABdhPJzvQZrlRH7tQ+xv36d7zaX0msQmITOTTdVHwoWlhl6Lo+A5unKo1c394IJpu/aHar6qLiFv4w==
-X-Received: by 2002:a17:90a:2c43:b0:1e0:b3fe:1bf5 with SMTP id p3-20020a17090a2c4300b001e0b3fe1bf5mr30104516pjm.27.1654022810855;
-        Tue, 31 May 2022 11:46:50 -0700 (PDT)
-Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902b68100b00163f6428657sm3311766pls.6.2022.05.31.11.46.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=hvaR4TuAzzHGkd13jqDkWPv5t09KdGcgIhjmZCJbXNs=;
+        b=rslTc7wXoRCIWMGJ938769CHl3KqGJGm6He+phjJ7g/WNYatedOdbKITJL8tagM7aJ
+         rT6D4Y0qJu3OYws8bHRRPyIiNsIADTyCRbZVlKUADIyfQHyb/fHk7TJfm/AsVNt1AbwC
+         FjD88G2KGgllA03BgX1NPiktxbUusEZRgwDYt3TqtsiRDB/hRWycin3Lbdb6iOOpTZra
+         zSk6MBQbsdagDjwxHC8LIpPoxsM+wnTU3zKbk1SUfs9AZj4sTUp1AKC+Bg9jwL2SGiNT
+         8bKLyZ8KMH6LazHc29vxuznjs+80tIrgTtMJFPxME+YGlLies9XMIoG6EFTZaob1e4w/
+         Prlw==
+X-Gm-Message-State: AOAM533bM6PIg9zpHJtuHNaQ/EN1UmE4rq9Bfb2c5EizvugkCe23IQlx
+	DhqN6o+4RE8ndejJBn3MgjJEgg==
+X-Google-Smtp-Source: ABdhPJyDLNBEmdEbSvRFcwSc+ee5sb7XMtY+Q+MXPjPnw0CyKEe8Nbb1JR5QkYAtJ2BZjWTQJunr8Q==
+X-Received: by 2002:a65:5601:0:b0:3fb:355:5f2f with SMTP id l1-20020a655601000000b003fb03555f2fmr25790918pgs.78.1654050163716;
+        Tue, 31 May 2022 19:22:43 -0700 (PDT)
+Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id v24-20020a634658000000b003fad46ceb85sm157824pgk.7.2022.05.31.19.22.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 11:46:50 -0700 (PDT)
-From: Anand Gore <anand.gore@broadcom.com>
+        Tue, 31 May 2022 19:22:43 -0700 (PDT)
+From: William Zhang <william.zhang@broadcom.com>
 To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-Cc: florian.fainelli@broadcom.com,
-	William Zhang <william.zhang@broadcom.com>,
+Cc: anand.gore@broadcom.com,
 	dan.beygelman@broadcom.com,
-	samyon.furman@broadcom.com,
-	kursad.oney@broadcom.com,
+	florian.fainelli@broadcom.com,
 	joel.peshkin@broadcom.com,
 	tomer.yacoby@broadcom.com,
-	Anand Gore <anand.gore@broadcom.com>,
+	kursad.oney@broadcom.com,
+	samyon.furman@broadcom.com,
+	philippe.reynes@softathome.com,
+	William Zhang <william.zhang@broadcom.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -65,214 +64,56 @@ Cc: florian.fainelli@broadcom.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	soc@kernel.org
-Subject: [PATCH v2 1/3] ARM: dts: add dts files for bcmbca soc 6878
-Date: Tue, 31 May 2022 11:46:43 -0700
-Message-Id: <20220531114639.v2.1.I0ef47baf3d32d36f823c539c3da3735a6b3e855b@changeid>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531184645.2836581-1-anand.gore@broadcom.com>
-References: <20220531184645.2836581-1-anand.gore@broadcom.com>
+Subject: [PATCH v3 0/3] arm: bcmbca: add bcm6846 SoC support
+Date: Tue, 31 May 2022 19:22:10 -0700
+Message-Id: <20220601022215.32494-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000001d524b05e053324f"
+	boundary="0000000000007a074405e059908b"
 
---0000000000001d524b05e053324f
+--0000000000007a074405e059908b
 Content-Transfer-Encoding: 8bit
 
-Add dts for ARMv7 based broadband SoC BCM6878. bcm63178.dtsi is the
-SoC description dts header and bcm96878.dts is a simple dts file for
-Broadcom BCM96878 Reference board that only enable the UART port.
+This change adds the basic support for Broadcom's ARMv7 based
+Broadband SoC BCM6846. The initial support includes a bare-bone dts
+for dual core ARM A7 with a Broadcom uart.
 
-Signed-off-by: Anand Gore <anand.gore@broadcom.com>
----
+Changes in v3:
+- Simplify dt-bindings patch subject line
+- Fix timer PPI interrupt cpu mask for dual core cpu
+- Remove unnecessary cpu_on and cpu_off properties from psci node
+- Add the missing gic registers and interrupts property to gic node
 
 Changes in v2:
-- Fix psci, GIC dts entries
+- Add new line between entries
 
- arch/arm/boot/dts/Makefile     |   3 +-
- arch/arm/boot/dts/bcm6878.dtsi | 110 +++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/bcm96878.dts |  30 +++++++++
- 3 files changed, 142 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/bcm6878.dtsi
- create mode 100644 arch/arm/boot/dts/bcm96878.dts
+William Zhang (3):
+  dt-bindings: arm: add BCM6846 SoC
+  ARM: dts: add dts files for bcmbca SoC bcm6846
+  MAINTAINERS: add bcm6846 to bcmbca arch entry
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index d9ac59524408..553fef458926 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -183,7 +183,8 @@ dtb-$(CONFIG_ARCH_BRCMSTB) += \
- 	bcm7445-bcm97445svmb.dtb
- dtb-$(CONFIG_ARCH_BCMBCA) += \
- 	bcm947622.dtb \
--	bcm963178.dtb
-+	bcm963178.dtb \
-+	bcm96878.dtb
- dtb-$(CONFIG_ARCH_CLPS711X) += \
- 	ep7211-edb7211.dtb
- dtb-$(CONFIG_ARCH_DAVINCI) += \
-diff --git a/arch/arm/boot/dts/bcm6878.dtsi b/arch/arm/boot/dts/bcm6878.dtsi
-new file mode 100644
-index 000000000000..a7dff596fe1e
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm6878.dtsi
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022 Broadcom Ltd.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	compatible = "brcm,bcm6878", "brcm,bcmbca";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	interrupt-parent = <&gic>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		CA7_0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			reg = <0x0>;
-+			next-level-cache = <&L2_0>;
-+			enable-method = "psci";
-+		};
-+
-+		CA7_1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			reg = <0x1>;
-+			next-level-cache = <&L2_0>;
-+			enable-method = "psci";
-+		};
-+		L2_0: l2-cache0 {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	pmu: pmu {
-+		compatible = "arm,cortex-a7-pmu";
-+		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-affinity = <&CA7_0>, <&CA7_1>;
-+	};
-+
-+	clocks: clocks {
-+		periph_clk: periph-clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+		uart_clk: uart-clk {
-+			compatible = "fixed-factor-clock";
-+			#clock-cells = <0>;
-+			clocks = <&periph_clk>;
-+			clock-div = <4>;
-+			clock-mult = <1>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	axi@81000000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0x81000000 0x8000>;
-+
-+		gic: interrupt-controller@1000 {
-+			compatible = "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupt-controller;
-+			reg = <0x1000 0x1000>,
-+				<0x2000 0x2000>,
-+				<0x4000 0x2000>,
-+				<0x6000 0x2000>;
-+			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) |
-+					IRQ_TYPE_LEVEL_HIGH)>;
-+		};
-+	};
-+
-+	bus@ff800000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0xff800000 0x800000>;
-+
-+		uart0: serial@12000 {
-+			compatible = "arm,pl011", "arm,primecell";
-+			reg = <0x12000 0x1000>;
-+			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_clk>, <&uart_clk>;
-+			clock-names = "uartclk", "apb_pclk";
-+			status = "disabled";
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/bcm96878.dts b/arch/arm/boot/dts/bcm96878.dts
-new file mode 100644
-index 000000000000..8fbc175cb452
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm96878.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2019 Broadcom Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "bcm6878.dtsi"
-+
-+/ {
-+	model = "Broadcom BCM96878 Reference Board";
-+	compatible = "brcm,bcm96878", "brcm,bcm6878", "brcm,bcmbca";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x08000000>;
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 ++
+ MAINTAINERS                                   |   3 +-
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ arch/arm/boot/dts/bcm6846.dtsi                | 103 ++++++++++++++++++
+ arch/arm/boot/dts/bcm96846.dts                |  30 +++++
+ 5 files changed, 143 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm6846.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm96846.dts
+
 -- 
-2.25.1
+2.36.1
 
 
---0000000000001d524b05e053324f
+--0000000000007a074405e059908b
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Description: S/MIME Cryptographic Signature
 
-MIIQZwYJKoZIhvcNAQcCoIIQWDCCEFQCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg2+MIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+MIIQcAYJKoZIhvcNAQcCoIIQYTCCEF0CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3HMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
 VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
 AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
 AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
@@ -310,39 +151,39 @@ M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
 Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
 14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
 a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBUYwggQuoAMCAQICDHNxlHShyr1/yxU67zANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+XzCCBU8wggQ3oAMCAQICDDbx5fpN++xs1+5IgzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
 RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIwODA1MjdaFw0yMjA5MDUwODEwMjNaMIGK
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIwODA1MjJaFw0yMjA5MDUwODEwMTZaMIGQ
 MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xEzARBgNVBAMTCkFuYW5kIEdvcmUxJjAkBgkqhkiG9w0BCQEW
-F2FuYW5kLmdvcmVAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-ndzykUhgQxkZsXfE3NMuhXrc96M9A6Bs4efEix3G/zVx1fQCMK7N9aAY7EbLe0JFInC/jSCRn5hs
-KgoQKSF9Cyuf0HGgYR9mSPvPnQr6NxsssWH3vUEtZ3tI6ebaviiWzuzDtEQ93NbSpK+u2ly8Lifn
-R9NgV4osV4obyP+gwwiEAnVjUQUEAHrn62ABQpHV8P0eMbpFKeNC53UFC5d06tcQHhCggGCkaSoi
-dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
-/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
-KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
-nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
-eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
-LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
-S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEcIICo05jQu+bF+T4JskVuazaN+BFHgXBzL/WyJ
-c2vxMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUzMTE4NDY1
-MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQBEw2TV7wGhrMVHlpbwCTfq/HDbKKx92jcqma1UzkHmt5v+LuSz9muVPIqM
-zW2iOGKRvivP8mDAHAnjdShozok8/g+gwe0Jvb9dIrFeN480yJd75nc9RdLzbQHdFansJufokptH
-kz865e9mFerdBgpMQjGV5rfwP+hC/JIetW0xNNrMvDJAxO7yLDoJkVWYgw+ejVc91CM5t/vhmtVf
-SVNmeQG7UuuGOU2kPNRJQiLr9c64yi1UFqJ+Iydz3W2SwLeretvewMB5Bbc7cyADFQFLPZnOwkjs
-7dwrtX0pstLH8u71XomFO+tKZkaL4yjIqcY9kbn2IvWoAfSfhadkKye3
---0000000000001d524b05e053324f--
+BgNVBAoTDUJyb2FkY29tIEluYy4xFjAUBgNVBAMTDVdpbGxpYW0gWmhhbmcxKTAnBgkqhkiG9w0B
+CQEWGndpbGxpYW0uemhhbmdAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEA4fxIZbzNLvB+7yJE8mbojRaOoaK1uZy1/etc55NzisSJJfY36BAlb7LlMDsza2/BcjXh
+lSACuzeOyI8sy2pKHGt5SZCMHeHaxP8q4ZNR6EGz7+5Lopw6ies8fkDoZ/XFIHpfU2eKcIYrxI25
+bTaYAPDA50BHTPDFzPNkWEIIQaSBBkk55bndnMmB/pPR/IhKjLefDIhIsiWLrvQstTiSf7iUCwMf
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFklBBr5OVRDvzaDJeSmtkagLn+3
+lKtT4eNlT9WbjaTrMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDYwMTAyMjI0NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQASPz4SfsI4mDbMlvaNetZiESGd7iIpAl/qO5Snyb9idhfR
+9QA9udAB8oDsCBCvJIvlWirWXbqWte8MDU/RBKKuZFBK8+d0SbQRpMkx+Er3fDF+dDJOQ8hZlYyo
+HvMEfTLMp+BAImCIm4gI2PgHGwT626WR3PRmFMyHOSscdUubxR9RK9+Z+M5MuyxBCqd6p3DDFTiK
+cHxHwW5YjTyc7GRW8fQr7L1VBrde2cNMAZKB3ikJGr+QpHttwH5y1Pq8PUItakio90Crv6rtgmV7
+oz9n76Qs+y6AxXyvuuYqKbKVyhVIhFCQo0mqUbb6WfDZV9tY4q9/V+QFD+TTj9diPAzt
+--0000000000007a074405e059908b--
