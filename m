@@ -1,80 +1,200 @@
-Return-Path: <SRS0=62O1=WI=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=fTdW=WI=inria.fr=keisuke.nishimura@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5AF0C433EF
-	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 19:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E462C433EF
+	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 22:28:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8A25BC3411A; Wed,  1 Jun 2022 19:26:37 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	id C673AC3411C; Wed,  1 Jun 2022 22:28:38 +0000 (UTC)
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 95B36C385A5;
-	Wed,  1 Jun 2022 19:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 95B36C385A5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MAxLT-1o7A9Y0nl3-00BP34; Wed, 01 Jun 2022 21:26:33 +0200
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-30c1c9b9b6cso29541027b3.13;
-        Wed, 01 Jun 2022 12:26:32 -0700 (PDT)
-X-Gm-Message-State: AOAM530+/NG86xtlfb/5/Cz8RPYTzUhYAaqfBgvkpvlsvbLwhD+Ac8HF
-	K/OUWv7K7R29WONIC+XG6KA0YGMSgPw0cZw7/gU=
-X-Google-Smtp-Source: ABdhPJz0JApbo0Qv67wndhuM17KjFiRygdVF6IoIIcQ65oBNOgfkV7dKkoHQPvHnC/sJqYfjVswl/2RhIyt72lCR3vQ=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr1208726ywk.209.1654111591816; Wed, 01
- Jun 2022 12:26:31 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id C9C80C385A5;
+	Wed,  1 Jun 2022 22:28:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C9C80C385A5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inria.fr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AkDE+5ZI+IK3BHuS7N7ViWTtDYvZB4rptzcmh8eb1n8=;
+  b=ciO8DIRhw86/ODL5KXlAbuCIsWdUVr65CDTHtk2tDoP9AoVAH7qNtfnF
+   KU+mwi2rgZ6Cf64GqsKh3HgBkBJMfS2VQbVTEcVT4U7O3d2xR7VeMOmDI
+   2ZKs9XO4RK+y56oP0BgJpCEo8Qpz091wtL7m22O6JPphXLTN2WA5VzsxQ
+   Y=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=keisuke.nishimura@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,269,1647298800"; 
+   d="scan'208";a="39079992"
+Received: from eth-east-parth2-46-193-69-7.wb.wifirst.net (HELO [10.188.210.33]) ([46.193.69.7])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 00:28:28 +0200
+Message-ID: <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr>
+Date: Thu, 2 Jun 2022 07:28:29 +0900
 MIME-Version: 1.0
-References: <20220601154647.80071-1-pan@semihalf.com>
-In-Reply-To: <20220601154647.80071-1-pan@semihalf.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 1 Jun 2022 21:26:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2TXUd6JjSiXSZix1xL+bO-fVAbLWht-zNQV8r_Kn05Zg@mail.gmail.com>
-Message-ID: <CAK8P3a2TXUd6JjSiXSZix1xL+bO-fVAbLWht-zNQV8r_Kn05Zg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Add Chameleon v3 devicetree
-To: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, arnd@arndb.de, 
-	olof@lixom.net, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	amstan@chromium.org, upstream@semihalf.com, Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:eZ4md2S1skx2JYVGAmH+CqP78Xriuox82hDssYEPUfVy4SmsPUx
- F/c7lEmlCsq91fxI9IN6AEyU576Q87Jh+gk68YDA7jTxgr+7wPP1BZzzeM4aEX7TkT35ILE
- RMTMHd5pyRjKfE5ES273Z4LXmctMri9TC3/l8BWiQOO6+D4z4D1TdHHyjkV+Ie6Q9DhsX55
- OxXa/PxLfJ/2BPxynHhQg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:orcPm839a3I=:ntg0hBb/NLOq7kUlRBAg2U
- ialoWrSQCm6E3uG6sMupVPrtF5G1VNbarvgJYxEjBxt21HjN4V3zvZHaLTTC3ge6qWTpdjed3
- RCgX9RR07duFrDli4kMmcNG82wp+w0XavfH8IXSmqZFILQz67TbGvTRwcF/vEMRkr0JNT1c/f
- wGI3ISp8nMN2voysIdZ0LRLNHVc9k5bRiDZY2PWSyLhH49DZiK9rwKZijNxZpQsCQoORC6HD7
- xvv8eL0Qw2a1e4keYdRnj0TnQ7wWCh/bRpiaO9ULGzrJO8I5crLoXUBHgHdl33Uyi89aLJQRR
- C2ykUJ7uC52L8n/b4WP7/ESnnUvv2rjPntwREP6BIezRdP0X1AWhF+1WY6fpKsH5Px4haCDb1
- HIb2HraXxutxjRK9e444ChKZaFz8WYF1t8aKlPU0jYKntCTMEUDBb5+qMfUW76/6EHSF3BEZI
- 0D1EOVnnyyrvOzadTUrTpdxR2T9YJDqpAxvnUknQCjlmcI//cEQrjZ/XYzOQq14XcWAlA4Tqv
- MSlsdUCZiR3TXInAI4DMzLjdca42+Edb+SFvoQy+qYdo4TXP4v7PSWaHkiPTKQgYsfFkLcuDd
- Z/Xd0+IwRvAC0dUhmWH3OBd8V5XcB9xEYvwr0mZwjeb5VJMuKXiM2EorJh5RwXKjaNdVMfqp9
- MWZgbIh9KIF/QXVFG4qx2/nLWr+iqEnjJKS8/ZWus0yt9UJ8GDXLong4AR1oUG2MTvMQ9w9ni
- /lpmdPiTGHKeDTyqzRpYZcLMWbpkU2WucniwKw==
+Cc: Julia Lawall <Julia.Lawall@inria.fr>, Arnd Bergmann <arnd@arndb.de>,
+ Jani Nikula <jani.nikula@intel.com>,
+ Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Viresh Kumar <vireshk@kernel.org>,
+ Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+ =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+ <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
+ <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
+ <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
+From: Keisuke Nishimura <keisuke.nishimura@inria.fr>
+In-Reply-To: <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 1, 2022 at 5:46 PM Pawe=C5=82 Anikiel <pan@semihalf.com> wrote:
->
-> The Google Chameleon v3 is a board made for testing both video and audio
-> interfaces of external devices. It acts as a base board for the
-> Mercury+ AA1 module.
->
-> socfpga_arria10_mercury_aa1.dtsi and socfpga_arria10_chameleonv3.dts
-> have also been sent to u-boot:
-> https://lists.denx.de/pipermail/u-boot/2022-May/485107.html
-> https://lists.denx.de/pipermail/u-boot/2022-May/485111.html
 
-Hi Pawe=C5=82,
 
-The patches look ok to me, but I think you should be sending them to
-Dinh Nguyen for merging through the socfpga tree instead of directly
-going to soc@kernel.org.
+On 2022/06/01 1:41, Linus Torvalds wrote:
+> On Tue, May 31, 2022 at 1:04 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> As an experiment: what kind of results would we get when looking
+>> for packed structures and unions that contain any of these:
+> 
 
-      Arnd
+> I don't think we have that. Not only because it would already cause
+> breakage, but simply because the kinds of structures that people pack
+> aren't generally the kind that contain these kinds of things.
+> 
+> That said, you might have a struct that is packed, but that
+> intentionally aligns parts of itself, so it *could* be valid.
+> 
+> But it would probably not be a bad idea to check that packed
+> structures/unions don't have atomic types or locks in them. I _think_
+> we're all good, but who knows..
+
+
+I am Julia's student at INRIA and I heard from her that there is an 
+opportunity to use Coccinelle to find specific types in packed struct or
+enum.
+
+I found 13 definitions of packed structure that contains:
+ > - spinlock_t
+ > - atomic_t
+ > - dma_addr_t
+ > - phys_addr_t
+ > - size_t
+
+ > - struct mutex
+ > - struct device
+
+- raw_spinlock_t
+
+== Results ==
+security/tomoyo/common.h: atomic_t in tomoyo_shared_acl_head
+drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h: spinlock_t in 
+key_map
+include/linux/ti-emif-sram.h: phys_addr_t in ti_emif_pm_data
+drivers/scsi/wd719x.h: dma_addr_t in wd719x_scb
+drivers/net/wireless/intel/ipw2x00/ipw2200.h: dma_addr_t in clx2_queue
+drivers/infiniband/hw/irdma/osdep.h: dma_addr_t in irdma_dma_mem
+drivers/infiniband/core/mad_priv.h: size_t in ib_mad_private
+drivers/crypto/qat/qat_common/qat_asym_algs.c:
+- dma_addr_t in qat_rsa_ctx
+- dma_addr_t in qat_dh_ctx
+drivers/atm/idt77252.h: dma_addr_t in idt77252_skb_prv
+arch/s390/include/asm/kvm_host.h: atomic_t in kvm_s390_sie_block
+
+drivers/net/wireless/ath/ath10k/core.h: dma_addr_t in ath10k_skb_cb
+drivers/net/wireless/ath/ath11k/core.h: dma_addr_t in ath10k_skb_cb
+drivers/crypto/ccp/ccp-dev.h: dma_addr_t in ccp_dma_info
+
+The last 3 structures have a dma_adddr_t member defined as the first 
+member variable. Most of the others also seems valid.
+
+I used this SmPL script to find them:
+
+@e1@
+type T;
+identifier i;
+position p;
+attribute name __packed;
+@@
+  T@p  {
+   ...
+(
+   atomic_t i;
+|
+   raw_spinlock_t i;
+|
+   struct mutex i;
+|
+   spinlock_t i;
+|
+   dma_addr_t i;
+|
+   phys_addr_t i;
+|
+   size_t i;
+|
+  struct device i;
+)
+   ...
+  }
+  __packed;
+
+@e2@
+type T;
+identifier i;
+position p;
+@@
+  T@p  {
+   ...
+(
+   atomic_t i;
+|
+   raw_spinlock_t i;
+|
+   struct mutex i;
+|
+   spinlock_t i;
+|
+   dma_addr_t i;
+|
+   phys_addr_t i;
+|
+   size_t i;
+|
+  struct device i;
+)
+   ...
+  }
+    __attribute__((
+(
+  pack
+|
+  __pack__
+)
+  ,... ));
+
+@script:python@
+ps <<e1.p;
+@@
+for p in ps:
+   print p.file, p.line
+@script:python@
+ps <<e2.p;
+@@
+for p in ps:
+   print p.file, p.line
+
+
+Keisuke
