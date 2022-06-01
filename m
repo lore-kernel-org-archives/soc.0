@@ -1,97 +1,104 @@
-Return-Path: <SRS0=DTuh=WI=semihalf.com=pan@kernel.org>
+Return-Path: <SRS0=ACcd=WI=startmail.com=hanetzer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB89CCA479
-	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 15:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC3ACC43334
+	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 18:24:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 279AEC3411F; Wed,  1 Jun 2022 15:47:48 +0000 (UTC)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 82F7BC385B8; Wed,  1 Jun 2022 18:24:29 +0000 (UTC)
+Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B9C1AC3411C
-	for <soc@kernel.org>; Wed,  1 Jun 2022 15:47:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B9C1AC3411C
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=semihalf.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=semihalf.com
-Received: by mail-lf1-f46.google.com with SMTP id i10so3499794lfj.0
-        for <soc@kernel.org>; Wed, 01 Jun 2022 08:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=s1I1Lu6vDnv+FXCTPOWPHqa85mx5mVRb44SdNNE1HaQ=;
-        b=5gR5CbreQ7srjG4Ym7Ultz+/q2nE9r/GfUDpbd3uPQOeB+iu3HtDcbNu0p5kZmpUVg
-         fPsNMYipnB9IVUAWme2bDC4FLqYU/14GMYY6J4Y3SCThHAjhYedfsTWBDiDxtcIn9H49
-         5qyC6kVfcQssWlVcxU/8uB8L8K503iFBC0fVZlOcVQZCQoXP1w1YMCTqkkvxjFUH7XjT
-         k2NSE+lny5cnmbM8CvqoOxLSaP8P9QHuGLm7TzOLwct2gxHP/CHXtxvtLi9Rt9/vvAsO
-         QPi7t527ylkC9oTqEyokrkmCuXLU8nBZZyCyqKVY0qN8ifyP6ypEoNYx8ZgRmj8LCmZL
-         xi8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=s1I1Lu6vDnv+FXCTPOWPHqa85mx5mVRb44SdNNE1HaQ=;
-        b=Y+NVQQZ1g9MNItV3eJZZVuslrlshX5dR6Ih4BfoSGAuHCElzcVMlveAkj8Dp0sE8J/
-         eipavgXc4gvgzagSclpo4kINKelGofFCbclPPQtkU75H2zLUcvoltRUCSHoIX1I+zlX9
-         sM1LO+RjvmDF3HqigXOuWFD/tnZ6D/zsS9kpl4NIGGGapq0xIsij/+FiODfUeGMBFSAx
-         KrMl3XZjXABKFY2W/DdX0Dzv6+JjTqooiDFi4YqBkX5+VV4GQCOEmTV+hynjMcDita/2
-         orOiZD2y+1fp+1lJ1Etvk+94Oo+KX7zsq482OMlqB6NbQyIvq2uQJAp5T9jUKdVvyiu+
-         gS0w==
-X-Gm-Message-State: AOAM532vLkTL1/ESf9jQFY+y7bMt7q6z9MAUvgxEyiFgddZJsXQj72Vg
-	a8RnN5F7ZmK6o+QPCDC4MSTYXCELVhcf/w==
-X-Google-Smtp-Source: ABdhPJxDG73AD76s9kMvKtHwHRysyphsIohDnmLglBHeLvKPQfhd9oKlb71wR7C2XDycAqZr0Ev1hw==
-X-Received: by 2002:a05:6512:6c9:b0:478:dc36:b25b with SMTP id u9-20020a05651206c900b00478dc36b25bmr13149300lff.369.1654098465821;
-        Wed, 01 Jun 2022 08:47:45 -0700 (PDT)
-Received: from panikiel.wifi.semihalf.net ([83.142.187.86])
-        by smtp.gmail.com with ESMTPSA id f10-20020a19380a000000b00478ad871b25sm431219lfa.145.2022.06.01.08.47.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 08:47:45 -0700 (PDT)
-From: =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E8F07C385A5;
+	Wed,  1 Jun 2022 18:24:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E8F07C385A5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=startmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=startmail.com
+Date: Wed, 1 Jun 2022 13:24:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+	s=2020-07; t=1654107865;
+	bh=6QDUqmhuM8l1tVdeJi5firhjmNHPasPFCys26Iie+VU=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
+	 Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
+	 Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+	b=P1EAv5a9i3kopW4ykn8OWCntXzA5gWdkPwbERsEnYcy/tjRQveyLYsTwQphYppYkg
+	 vY/DjjN/zYCSSGli2wMbqrr16cYWnTVI3aZENthlFVht1jr/vUBu68fEHxPsS18HWe
+	 kuKcS1obKaJqlvVPh8fYsb0VD0w/AmUz6Ms/DirGW2NAnw15+/ydJPKJi6rfcsuLVP
+	 ZY/F4blN3h7f0Cwev/KOyE1FVIaH8s2PXlmxB6LQTeW4ovz+LVcCLGYSVZYuCRVJJg
+	 DM+p+GmiybFO0t1oXTpAX4PYIYLTufWrHsai6V6Mac7D7rCvWF7XFfcYkwlSjuCLPO
+	 LCDpcIHp5et0A==
+From: "Marty E. Plummer" <hanetzer@startmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: arnd@arndb.de,
-	olof@lixom.net,
-	robh+dt@kernel.org,
+Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
+	devicetree@vger.kernel.org, gengdongjiu@huawei.com,
 	krzysztof.kozlowski+dt@linaro.org,
-	dinguyen@kernel.org,
-	amstan@chromium.org,
-	upstream@semihalf.com,
-	=?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v2 5/5] dt-bindings: altera: Add Chameleon v3 board
-Date: Wed,  1 Jun 2022 17:46:47 +0200
-Message-Id: <20220601154647.80071-6-pan@semihalf.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-In-Reply-To: <20220601154647.80071-1-pan@semihalf.com>
-References: <20220601154647.80071-1-pan@semihalf.com>
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
+	mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
+	p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+	robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+	sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
+	vigneshr@ti.com, xuwei5@hisilicon.com
+Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
+Message-ID: <20220601182418.okoofgannw6vbcxo@proprietary-killer>
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
+ <20220501173423.2473093-1-hanetzer@startmail.com>
+ <20220501173423.2473093-2-hanetzer@startmail.com>
+ <f42cb4d0-7133-eea5-b456-b5169bebfad1@linaro.org>
+ <20220601105846.7hriawg3stxb657f@proprietary-killer>
+ <630b0d13-6778-2508-6a34-9daa0358047d@linaro.org>
+ <20220601110616.xmxih663kxgupszv@proprietary-killer>
+ <a2a98c6d-2ff7-89f6-0711-c8f8b99e85c2@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2a98c6d-2ff7-89f6-0711-c8f8b99e85c2@linaro.org>
 
-Add Chameleon v3 to Arria 10 boards.
+On Wed, Jun 01, 2022 at 01:09:28PM +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2022 13:06, Marty E. Plummer wrote:
+> > On Wed, Jun 01, 2022 at 01:00:38PM +0200, Krzysztof Kozlowski wrote:
+> >> On 01/06/2022 12:58, Marty E. Plummer wrote:
+> >>> On Tue, May 03, 2022 at 01:37:42PM +0200, Krzysztof Kozlowski wrote:
+> >>>> On 01/05/2022 19:34, Marty E. Plummer wrote:
+> >>>>> Add CRG driver for Hi3521A SoC. CRG (Clock and Reset Generator) module
+> >>>>> generates clock and reset signals used by other module blocks on SoC.
+> >>>>>
+> >>>>> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
+> >>>>> ---
+> >>>>>  drivers/clk/hisilicon/Kconfig             |   8 ++
+> >>>>>  drivers/clk/hisilicon/Makefile            |   1 +
+> >>>>>  drivers/clk/hisilicon/crg-hi3521a.c       | 141 ++++++++++++++++++++++
+> >>>>>  include/dt-bindings/clock/hi3521a-clock.h |  34 ++++++
+> >>>>
+> >>>> Bindings go to separate patch. Your patchset is unmerge'able.
+> >>>>
+> >>> So, assuming I have the following patches:
+> >>> 1: +include/dt-bindings/clock/hi3521a-clock.h
+> >>> 2: +drivers/clk/hisilicon/crg-hi3521a.c
+> >>> 3: +Documentation/devicetree/bindings/whatever
+> >>>
+> >>> In what order should they be applied?
+> >>
+> >> Applied or sent? The maintainer will apply them in proper order, this is
+> >> bisectable.
+> >>
+> >>
+> > Either or. Whatever makes the workload easier is what I'm looking for.
+> 
+> Sorry, you need to be more specific. Apply is not a job for you, for the
+> patch submitter.
+> 
+> Then you miss here important piece - which is the first patch. DTS goes
+> always via separate branch (or even tree) from driver changes. That's
+> why bindings are always separate first patches.
+> 
+So, add a 4: arch/arm/boot/dts/soc.dtsi and 5: arch/arm/boot/dts/board.dts
+to the above list, or should those be the same patch as well?
 
-Signed-off-by: Paweł Anikiel <pan@semihalf.com>
----
- Documentation/devicetree/bindings/arm/altera.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-index 5e2017c0a051..400543fbe78d 100644
---- a/Documentation/devicetree/bindings/arm/altera.yaml
-+++ b/Documentation/devicetree/bindings/arm/altera.yaml
-@@ -26,6 +26,7 @@ properties:
-           - enum:
-               - altr,socfpga-arria10-socdk
-               - enclustra,mercury-aa1
-+              - google,chameleon-v3
-           - const: altr,socfpga-arria10
-           - const: altr,socfpga
- 
--- 
-2.36.1.255.ge46751e96f-goog
-
+> Best regards,
+> Krzysztof
