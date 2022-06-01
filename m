@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98EEEC433F5
-	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 02:22:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19375C433FE
+	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 02:23:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5F118C3411D; Wed,  1 Jun 2022 02:22:45 +0000 (UTC)
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	id DA402C34114; Wed,  1 Jun 2022 02:23:08 +0000 (UTC)
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 728DFC385A9
-	for <soc@kernel.org>; Wed,  1 Jun 2022 02:22:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 728DFC385A9
+	by smtp.kernel.org (Postfix) with ESMTPS id E50ADC385A9
+	for <soc@kernel.org>; Wed,  1 Jun 2022 02:23:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E50ADC385A9
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f174.google.com with SMTP id e11so641612pfj.5
-        for <soc@kernel.org>; Tue, 31 May 2022 19:22:44 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so688100pjq.2
+        for <soc@kernel.org>; Tue, 31 May 2022 19:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=hvaR4TuAzzHGkd13jqDkWPv5t09KdGcgIhjmZCJbXNs=;
-        b=CIA3L5i35IitduS0dp875ySw90zq7YIfpjbei4u3dfyv2LTGN5ehwpYUcoy/dU7ynA
-         eYDvPLryGvn4vDCeB8Y8Bzmo2JQ6uMdcYRXGChuIX7zOXSwtxHWSEaLJCwpjOIxgTm6+
-         OD7leQOPreLZqICbtg/egvGunDKbIaloK3xsw=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=ngZwjq45tM7azpd6oPc/h1R+M5f0JzyBZc1rQz+1yCQ=;
+        b=O3l8v1c0GLb7TL6+UW1AFXqEdgJt8uhYF7uK2f/XPTp24vQjSRM0tMMwFtDTYbXMoW
+         gx6PKqR2qWPlaeZxn+1EI80IVC9RlHrZcSEthOv3BXGuzBcjjkaH+Tj9kZ+8qzE6TUmL
+         pKZGP1IAEqd8gQIcqVbG2N37y9HLXO/rLx1mg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=hvaR4TuAzzHGkd13jqDkWPv5t09KdGcgIhjmZCJbXNs=;
-        b=rslTc7wXoRCIWMGJ938769CHl3KqGJGm6He+phjJ7g/WNYatedOdbKITJL8tagM7aJ
-         rT6D4Y0qJu3OYws8bHRRPyIiNsIADTyCRbZVlKUADIyfQHyb/fHk7TJfm/AsVNt1AbwC
-         FjD88G2KGgllA03BgX1NPiktxbUusEZRgwDYt3TqtsiRDB/hRWycin3Lbdb6iOOpTZra
-         zSk6MBQbsdagDjwxHC8LIpPoxsM+wnTU3zKbk1SUfs9AZj4sTUp1AKC+Bg9jwL2SGiNT
-         8bKLyZ8KMH6LazHc29vxuznjs+80tIrgTtMJFPxME+YGlLies9XMIoG6EFTZaob1e4w/
-         Prlw==
-X-Gm-Message-State: AOAM533bM6PIg9zpHJtuHNaQ/EN1UmE4rq9Bfb2c5EizvugkCe23IQlx
-	DhqN6o+4RE8ndejJBn3MgjJEgg==
-X-Google-Smtp-Source: ABdhPJyDLNBEmdEbSvRFcwSc+ee5sb7XMtY+Q+MXPjPnw0CyKEe8Nbb1JR5QkYAtJ2BZjWTQJunr8Q==
-X-Received: by 2002:a65:5601:0:b0:3fb:355:5f2f with SMTP id l1-20020a655601000000b003fb03555f2fmr25790918pgs.78.1654050163716;
-        Tue, 31 May 2022 19:22:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=ngZwjq45tM7azpd6oPc/h1R+M5f0JzyBZc1rQz+1yCQ=;
+        b=7EkS2p9v950D2yj2jXyxv3bBoMxjs4io1IXEx1R5h+0HcYhskAndpCcbrQPJ8yHLO6
+         su24O+2D5sqenL7+qsaYwdY2FnMH5ur/zMbbksbH9ebnMQs+muk3tDIR5o+Mxrk3f6mn
+         2xcE2pVIFQP2nlxtSqQPUyfXbWcYmHNYCMjGiMi08BCjmwhUAfLpnywg7cBqMnZ9V2zI
+         wqopb4JD7smXIYg8WCtnKYrA0rDyFHkpRaoEolVPBDjdfgk44rtpe6qDQqc127BSJuYx
+         Ftfg5DTjavH4YICW8++8SY26IXqscOj8cRYFOnNQEvXMan1Xpad6chkTs/OOMCFocd8v
+         UEbA==
+X-Gm-Message-State: AOAM530FSb6H0PNm15wT6bzJx1ciymyzQtN+JfaP6uFpPQ70sfdyQvJO
+	eFcxVpCL+uXIcyuM8PM+L/HvKw==
+X-Google-Smtp-Source: ABdhPJyVQ6BqRjO2+eKFo69VmqoB1DX6OTBsxsQd9r7b+eZsy8UYi5iI7eTY0iz6DFs/x08U3RGPZg==
+X-Received: by 2002:a17:90a:fe8f:b0:1e3:1dcd:7f94 with SMTP id co15-20020a17090afe8f00b001e31dcd7f94mr10568867pjb.23.1654050187319;
+        Tue, 31 May 2022 19:23:07 -0700 (PDT)
 Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v24-20020a634658000000b003fad46ceb85sm157824pgk.7.2022.05.31.19.22.42
+        by smtp.gmail.com with ESMTPSA id v24-20020a634658000000b003fad46ceb85sm157824pgk.7.2022.05.31.19.23.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 19:22:43 -0700 (PDT)
+        Tue, 31 May 2022 19:23:06 -0700 (PDT)
 From: William Zhang <william.zhang@broadcom.com>
 To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
@@ -64,49 +66,203 @@ Cc: anand.gore@broadcom.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	soc@kernel.org
-Subject: [PATCH v3 0/3] arm: bcmbca: add bcm6846 SoC support
-Date: Tue, 31 May 2022 19:22:10 -0700
-Message-Id: <20220601022215.32494-1-william.zhang@broadcom.com>
+Subject: [PATCH v3 2/3] ARM: dts: add dts files for bcmbca SoC bcm6846
+Date: Tue, 31 May 2022 19:22:12 -0700
+Message-Id: <20220601022215.32494-3-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220601022215.32494-1-william.zhang@broadcom.com>
+References: <20220601022215.32494-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000007a074405e059908b"
+	boundary="000000000000dfbb3705e0599110"
 
---0000000000007a074405e059908b
+--000000000000dfbb3705e0599110
 Content-Transfer-Encoding: 8bit
 
-This change adds the basic support for Broadcom's ARMv7 based
-Broadband SoC BCM6846. The initial support includes a bare-bone dts
-for dual core ARM A7 with a Broadcom uart.
+Add dts for ARMv7 based broadband SoC BCM6846. bcm6846.dtsi is the
+SoC description dts header and bcm96846.dts is a simple dts file for
+Broadcom BCM96846 Reference board that only enable the UART port.
+
+Signed-off-by: William Zhang <william.zhang@broadcom.com>
+
+---
 
 Changes in v3:
-- Simplify dt-bindings patch subject line
 - Fix timer PPI interrupt cpu mask for dual core cpu
 - Remove unnecessary cpu_on and cpu_off properties from psci node
 - Add the missing gic registers and interrupts property to gic node
 
-Changes in v2:
-- Add new line between entries
-
-William Zhang (3):
-  dt-bindings: arm: add BCM6846 SoC
-  ARM: dts: add dts files for bcmbca SoC bcm6846
-  MAINTAINERS: add bcm6846 to bcmbca arch entry
-
- .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 ++
- MAINTAINERS                                   |   3 +-
- arch/arm/boot/dts/Makefile                    |   3 +-
- arch/arm/boot/dts/bcm6846.dtsi                | 103 ++++++++++++++++++
- arch/arm/boot/dts/bcm96846.dts                |  30 +++++
- 5 files changed, 143 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/Makefile     |   3 +-
+ arch/arm/boot/dts/bcm6846.dtsi | 103 +++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/bcm96846.dts |  30 ++++++++++
+ 3 files changed, 135 insertions(+), 1 deletion(-)
  create mode 100644 arch/arm/boot/dts/bcm6846.dtsi
  create mode 100644 arch/arm/boot/dts/bcm96846.dts
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 03f5b3a15415..2f20dcf74858 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -182,7 +182,8 @@ dtb-$(CONFIG_ARCH_BERLIN) += \
+ dtb-$(CONFIG_ARCH_BRCMSTB) += \
+ 	bcm7445-bcm97445svmb.dtb
+ dtb-$(CONFIG_ARCH_BCMBCA) += \
+-	bcm947622.dtb
++	bcm947622.dtb \
++	bcm96846.dtb
+ dtb-$(CONFIG_ARCH_CLPS711X) += \
+ 	ep7211-edb7211.dtb
+ dtb-$(CONFIG_ARCH_DAVINCI) += \
+diff --git a/arch/arm/boot/dts/bcm6846.dtsi b/arch/arm/boot/dts/bcm6846.dtsi
+new file mode 100644
+index 000000000000..8aa47a2583b2
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm6846.dtsi
+@@ -0,0 +1,103 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 Broadcom Ltd.
++ */
++
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++
++/ {
++	compatible = "brcm,bcm6846", "brcm,bcmbca";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	interrupt-parent = <&gic>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		CA7_0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0x0>;
++			next-level-cache = <&L2_0>;
++			enable-method = "psci";
++		};
++
++		CA7_1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0x1>;
++			next-level-cache = <&L2_0>;
++			enable-method = "psci";
++		};
++
++		L2_0: l2-cache0 {
++			compatible = "cache";
++		};
++	};
++
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
++			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
++			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
++			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
++		arm,cpu-registers-not-fw-configured;
++	};
++
++	pmu: pmu {
++		compatible = "arm,cortex-a7-pmu";
++		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
++			<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-affinity = <&CA7_0>, <&CA7_1>;
++	};
++
++	clocks: clocks {
++		periph_clk: periph-clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <200000000>;
++		};
++	};
++
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
++
++	axi@81000000 {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x81000000 0x8000>;
++
++		gic: interrupt-controller@1000 {
++			compatible = "arm,cortex-a7-gic";
++			#interrupt-cells = <3>;
++			interrupt-controller;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_HIGH)>;
++			reg = <0x1000 0x1000>,
++				<0x2000 0x2000>,
++				<0x4000 0x2000>,
++				<0x6000 0x2000>;
++		};
++	};
++
++	bus@ff800000 {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0xff800000 0x800000>;
++
++		uart0: serial@640 {
++			compatible = "brcm,bcm6345-uart";
++			reg = <0x640 0x1b>;
++			interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&periph_clk>;
++			clock-names = "refclk";
++			status = "disabled";
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/bcm96846.dts b/arch/arm/boot/dts/bcm96846.dts
+new file mode 100644
+index 000000000000..c70ebccabc19
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm96846.dts
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2022 Broadcom Ltd.
++ */
++
++/dts-v1/;
++
++#include "bcm6846.dtsi"
++
++/ {
++	model = "Broadcom BCM96846 Reference Board";
++	compatible = "brcm,bcm96846", "brcm,bcm6846", "brcm,bcmbca";
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x0 0x08000000>;
++	};
++};
++
++&uart0 {
++	status = "okay";
++};
 -- 
 2.36.1
 
 
---0000000000007a074405e059908b
+--000000000000dfbb3705e0599110
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -177,13 +333,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFklBBr5OVRDvzaDJeSmtkagLn+3
-lKtT4eNlT9WbjaTrMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDYwMTAyMjI0NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIACA8MMtfmdk89DA/GdFfMg4yGGC
+StpOt01qDMTpoB9VMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDYwMTAyMjMwN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQASPz4SfsI4mDbMlvaNetZiESGd7iIpAl/qO5Snyb9idhfR
-9QA9udAB8oDsCBCvJIvlWirWXbqWte8MDU/RBKKuZFBK8+d0SbQRpMkx+Er3fDF+dDJOQ8hZlYyo
-HvMEfTLMp+BAImCIm4gI2PgHGwT626WR3PRmFMyHOSscdUubxR9RK9+Z+M5MuyxBCqd6p3DDFTiK
-cHxHwW5YjTyc7GRW8fQr7L1VBrde2cNMAZKB3ikJGr+QpHttwH5y1Pq8PUItakio90Crv6rtgmV7
-oz9n76Qs+y6AxXyvuuYqKbKVyhVIhFCQo0mqUbb6WfDZV9tY4q9/V+QFD+TTj9diPAzt
---0000000000007a074405e059908b--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCYyrwKcpdWzlm9nB4lxufQ0opN938RhjxD/keMb2pIoqIk
+FIu+ok5eyc+vy6aTJQm10R8QNVHdia4IvfeCdhH+QLXtTSBnd+4MBHnVNzDhSOcp70KleLHeUNVY
+YhJddXlD68CgDDVOnNELEWg3wrEAXe4Yrikk6SYtwXLV0rKJUkC5SmvbQljZwJgfcmyk2vFc372c
+PM/PCzLHfrRb3mXQj7gubmVgwSYSYgfB2eXNR5SkIXCYZZIu9b5/eEoZcXg/kdV3mGj0GbilbqqZ
+RniGCH7rz8Tk4o7auDIEVRXva15chGDp+Dyi/3QJYRD2Dqu2EXk/Ru/MSCquCGYsoIjP
+--000000000000dfbb3705e0599110--
