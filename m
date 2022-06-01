@@ -1,89 +1,122 @@
-Return-Path: <SRS0=ACcd=WI=startmail.com=hanetzer@kernel.org>
+Return-Path: <SRS0=BzuP=WI=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EAC3C433EF
-	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 11:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85AE0C433F5
+	for <soc@archiver.kernel.org>; Wed,  1 Jun 2022 11:09:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C714FC34119; Wed,  1 Jun 2022 11:06:28 +0000 (UTC)
-Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 6C1C6C385A5; Wed,  1 Jun 2022 11:09:34 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7561DC385B8;
-	Wed,  1 Jun 2022 11:06:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7561DC385B8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=startmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=startmail.com
-Date: Wed, 1 Jun 2022 06:06:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-	s=2020-07; t=1654081583;
-	bh=AP3oFJBNtpyqWEDwPuJs+2d2Hm8MZqU21we76PtPVCU=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
-	 Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
-	 Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-	b=V13YoxjYEIOd1Iag5EpQsjGEP++IfmJGqBwINVQ965F/Fb5P/TD0qM50U7+3XhOap
-	 zf//6f3ifo7ursws8QVdcy1TWCkq3ObGanOaEZAGk9ogIbjzYiOQxYqkgNRy75hfF2
-	 AQEu91CC0XEbRfTrIUIyEqwwiM84v9Sngb7oYaXRgaUizAvdtWL3M4aI5AKHkGBL1g
-	 yt+s9HdSkPcScDZjqlFpt/bF+EmlAMXvMtXuFzoWwWAH+8urkyMDjfHjCfQqwL4NZ0
-	 BbqRt959GznLMf7YJND8IoZoHwJdIc7pypzcbZk5QIOt9kvGdiWiGG23VAsMnIdzD3
-	 PZVdTW/SOu27g==
-From: "Marty E. Plummer" <hanetzer@startmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 541D9C385B8
+	for <soc@kernel.org>; Wed,  1 Jun 2022 11:09:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 541D9C385B8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id u12so2992331eja.8
+        for <soc@kernel.org>; Wed, 01 Jun 2022 04:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z68BPkHGmXG4mVETeBafciiA8RC/qdrJ/VFB7M66ZuE=;
+        b=tqFGCJ4RTJkEK92PVGNoVh28xEJj+O7VYJlTwHo8Ex+LN1g3ttEtaR5yBGgp+NwdQA
+         uEvtSphrWBkwxpsJauJj8Vs3u9uyps9R5QwNJVV/TzE/pKPUnm0MzUEg3jXms9hUoNt9
+         93AIyMB/GQkj16HIlF+tY/USUtmVIoddsFUkG2eaKksAgyI7+Ugl3bm6YNpoANHHSIrj
+         rJ0NCUi/wo0vk24/Nr+lSqphmvn3gGFLzsRph+HKDGaJ2FnLxngiYOpudXgVnNRk3ZqR
+         n4dM63Kovfe7kSFz1y25kQe5OjdgjS1jsf2sAMJSRpTFIbTcE4yyHDGX4ZYXOVv4bYn1
+         Qy0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z68BPkHGmXG4mVETeBafciiA8RC/qdrJ/VFB7M66ZuE=;
+        b=brO04Hnz3hEiXqP7wj+AXGCJPS0oKegxfRXGp9J8l6tRHfw3IOdp+XQHP1xmiDXCpL
+         NTnFIVijJU3yhx04WhJbd6eCeYYfLToqxSDVNO0dfr/yhacvUIzjsaJvCoEJhS36Hbi8
+         CbzDv4ha0RfZd0JGye0L0yspQM6jnwxy29OsbWwc9qkQvOoa1tKa/H4aZ80Z79l+7EBF
+         Tz+l721teCaOHZYhr1AaMCY9K353yJsdpc9yjyHGNSQXYMx1bbxWIOnxgdXy8Dk2XwGa
+         Us67GMTessc29mhH54JXF1FZdfI4m1GMficpnpudsHVJ0iMQKCMJftGC3eBDF4gJceoy
+         0ldw==
+X-Gm-Message-State: AOAM532WwqTeyd7lhyMr6pkGNH5urrwqWmHesC0CYO1wOXZGqzNMkLOW
+	Q8mvuR4ZF65UXgEfvWEfbDiODw==
+X-Google-Smtp-Source: ABdhPJw2asZRW4TmqBmTFmIGcRc+9YuVnLYnMGhIYn+0EBLNBJi0x7ztJ0JcgXHC4UAKHMxJAiE5bQ==
+X-Received: by 2002:a17:907:d86:b0:6ff:1557:a080 with SMTP id go6-20020a1709070d8600b006ff1557a080mr30424418ejc.678.1654081770533;
+        Wed, 01 Jun 2022 04:09:30 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906081a00b006f39ffe23fdsm627514ejd.0.2022.06.01.04.09.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 04:09:30 -0700 (PDT)
+Message-ID: <a2a98c6d-2ff7-89f6-0711-c8f8b99e85c2@linaro.org>
+Date: Wed, 1 Jun 2022 13:09:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
+Content-Language: en-US
+To: "Marty E. Plummer" <hanetzer@startmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
-	devicetree@vger.kernel.org, gengdongjiu@huawei.com,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
-	mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
-	p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
-	robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
-	sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
-	vigneshr@ti.com, xuwei5@hisilicon.com
-Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
-Message-ID: <20220601110616.xmxih663kxgupszv@proprietary-killer>
+ devicetree@vger.kernel.org, gengdongjiu@huawei.com,
+ krzysztof.kozlowski+dt@linaro.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mtd@lists.infradead.org, linux@armlinux.org.uk, michael@walle.cc,
+ miquel.raynal@bootlin.com, mturquette@baylibre.com, novikov@ispras.ru,
+ olof@lixom.net, p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+ robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+ sumit.semwal@linaro.org, tudor.ambarus@microchip.com, vigneshr@ti.com,
+ xuwei5@hisilicon.com
 References: <20220501054440.2434247-1-hanetzer@startmail.com>
  <20220501173423.2473093-1-hanetzer@startmail.com>
  <20220501173423.2473093-2-hanetzer@startmail.com>
  <f42cb4d0-7133-eea5-b456-b5169bebfad1@linaro.org>
  <20220601105846.7hriawg3stxb657f@proprietary-killer>
  <630b0d13-6778-2508-6a34-9daa0358047d@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <630b0d13-6778-2508-6a34-9daa0358047d@linaro.org>
+ <20220601110616.xmxih663kxgupszv@proprietary-killer>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220601110616.xmxih663kxgupszv@proprietary-killer>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 01, 2022 at 01:00:38PM +0200, Krzysztof Kozlowski wrote:
-> On 01/06/2022 12:58, Marty E. Plummer wrote:
-> > On Tue, May 03, 2022 at 01:37:42PM +0200, Krzysztof Kozlowski wrote:
-> >> On 01/05/2022 19:34, Marty E. Plummer wrote:
-> >>> Add CRG driver for Hi3521A SoC. CRG (Clock and Reset Generator) module
-> >>> generates clock and reset signals used by other module blocks on SoC.
-> >>>
-> >>> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
-> >>> ---
-> >>>  drivers/clk/hisilicon/Kconfig             |   8 ++
-> >>>  drivers/clk/hisilicon/Makefile            |   1 +
-> >>>  drivers/clk/hisilicon/crg-hi3521a.c       | 141 ++++++++++++++++++++++
-> >>>  include/dt-bindings/clock/hi3521a-clock.h |  34 ++++++
-> >>
-> >> Bindings go to separate patch. Your patchset is unmerge'able.
-> >>
-> > So, assuming I have the following patches:
-> > 1: +include/dt-bindings/clock/hi3521a-clock.h
-> > 2: +drivers/clk/hisilicon/crg-hi3521a.c
-> > 3: +Documentation/devicetree/bindings/whatever
-> > 
-> > In what order should they be applied?
-> 
-> Applied or sent? The maintainer will apply them in proper order, this is
-> bisectable.
-> 
-> 
-Either or. Whatever makes the workload easier is what I'm looking for.
-> Best regards,
-> Krzysztof
+On 01/06/2022 13:06, Marty E. Plummer wrote:
+> On Wed, Jun 01, 2022 at 01:00:38PM +0200, Krzysztof Kozlowski wrote:
+>> On 01/06/2022 12:58, Marty E. Plummer wrote:
+>>> On Tue, May 03, 2022 at 01:37:42PM +0200, Krzysztof Kozlowski wrote:
+>>>> On 01/05/2022 19:34, Marty E. Plummer wrote:
+>>>>> Add CRG driver for Hi3521A SoC. CRG (Clock and Reset Generator) module
+>>>>> generates clock and reset signals used by other module blocks on SoC.
+>>>>>
+>>>>> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
+>>>>> ---
+>>>>>  drivers/clk/hisilicon/Kconfig             |   8 ++
+>>>>>  drivers/clk/hisilicon/Makefile            |   1 +
+>>>>>  drivers/clk/hisilicon/crg-hi3521a.c       | 141 ++++++++++++++++++++++
+>>>>>  include/dt-bindings/clock/hi3521a-clock.h |  34 ++++++
+>>>>
+>>>> Bindings go to separate patch. Your patchset is unmerge'able.
+>>>>
+>>> So, assuming I have the following patches:
+>>> 1: +include/dt-bindings/clock/hi3521a-clock.h
+>>> 2: +drivers/clk/hisilicon/crg-hi3521a.c
+>>> 3: +Documentation/devicetree/bindings/whatever
+>>>
+>>> In what order should they be applied?
+>>
+>> Applied or sent? The maintainer will apply them in proper order, this is
+>> bisectable.
+>>
+>>
+> Either or. Whatever makes the workload easier is what I'm looking for.
+
+Sorry, you need to be more specific. Apply is not a job for you, for the
+patch submitter.
+
+Then you miss here important piece - which is the first patch. DTS goes
+always via separate branch (or even tree) from driver changes. That's
+why bindings are always separate first patches.
+
+Best regards,
+Krzysztof
