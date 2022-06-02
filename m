@@ -1,288 +1,189 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=S2jC=WJ=broadcom.com=anand.gore@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21F32C433EF
-	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 21:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA17FC43334
+	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 22:16:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 07346C341C4; Thu,  2 Jun 2022 21:35:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6310C34115
-	for <soc@kernel.org>; Thu,  2 Jun 2022 21:35:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654205741;
-	bh=DTF8v0sBUG9+OxywcOnbFy3s555Skqd9Abw5AiRcVUE=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=syr3bxyTPCx/L/mwo2e9OD8kBKnDKrgknuIotC2qa8osUkuE3zar7VXbjg+WJ0wRN
-	 Nrfx1rJG8TE9+j8ygTZqXgFzy9FVm8opx5ior4ctRCpNPTx82w6IkIJzdvcmDG8Vt/
-	 4tHN4+l3ED1GqRRs2i4e6FJKw+qPURZQbP5Q6KpcbhfX5PP/+TUc3DqKPCrCgozA1M
-	 7hGLhKABQjcZfHIS6BvcnfHc4x5FzS/UqHjlWISUi3BBfrzT9Yfp1nMm0tHp7pqgPn
-	 AD7FATU52WKoINpmVhqNJkZcfGZcKeO0BsuPHTv3/I4MJT3HR+J3qYbX5m5xT/HgLj
-	 e0FB42Ul5sGdg==
-Received: by mail-yb1-f169.google.com with SMTP id r82so10542030ybc.13
-        for <soc@kernel.org>; Thu, 02 Jun 2022 14:35:41 -0700 (PDT)
-X-Gm-Message-State: AOAM533Vn3CFPe/17+zauTjcncdnR5LW3Q/Ijqfq/qPOBIWZ2z8Dwy5E
-	wixOPPJ+D/aLcGsCs5hqrIfQR/XGnTdiAe1yafE=
-X-Google-Smtp-Source: ABdhPJxxMsubt13N0LIzKkQAhjBWVKWJQ/Ns2rqU3mkwBaqoWtn7ARPcNP8PDT0rsuoYn4tWxiwgstJ81TfyfXQ8xdM=
-X-Received: by 2002:a25:db8a:0:b0:65c:b04a:f612 with SMTP id
- g132-20020a25db8a000000b0065cb04af612mr7472420ybf.106.1654205740910; Thu, 02
- Jun 2022 14:35:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 2 Jun 2022 23:35:24 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0sR64MTxVBGBsUputmjbeUJmia6oieCTXoJ4Hb3-rt4w@mail.gmail.com>
-Message-ID: <CAK8P3a0sR64MTxVBGBsUputmjbeUJmia6oieCTXoJ4Hb3-rt4w@mail.gmail.com>
-Subject: [GIT PULL 2/2] ARM: SoC changes, part 2
-To: Linus Torvalds <torvalds@linux-foundation.org>
+	id 9CDABC34115; Thu,  2 Jun 2022 22:16:53 +0000 (UTC)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5A330C385A5
+	for <soc@kernel.org>; Thu,  2 Jun 2022 22:16:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A330C385A5
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pj1-f44.google.com with SMTP id gd1so6066311pjb.2
+        for <soc@kernel.org>; Thu, 02 Jun 2022 15:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=ZsQjSJqbk7DnDxF6U5OtECfUeJHEng9cDlfYdirktNM=;
+        b=MkdiMFgjs4NZjxJWQq67pddm+VHqyFui1dYErHz7QWQT4fZH/t0jJyKxT9uxr0vaHb
+         PQqY14J72ML8o43+MpJIjSfE24eOvwBAAS+aQ0epDJwahGwev20LBmL0tSxS998wWvN+
+         VeDcSH2bwiXwoy6kK+U7kDznZ64tDLqqz0JM0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=ZsQjSJqbk7DnDxF6U5OtECfUeJHEng9cDlfYdirktNM=;
+        b=EVRtR9fQ0of4OZPbqH/4dlOlRccbDB9Uyogei/av9z02roBINT7eR6I2ZrdDotMEFB
+         ybSgMn4PAklf7HybFBweFijikuuC0PZRVwx3+NgvNnXmBVqIdzsB8atLRKNPM8Og1ojc
+         6LjorKXht3Z6H1VJvzBuDj32eq0xtwvR1pXKfQoRkHCglTBv0XBCeHj/2xj8R/fcen9p
+         s9DOvhl5d2w/yR/zz+PXjf6Yf1ERCkp4+72luyp+6Plg/vxXThErb5aIE+IyB7WSd18J
+         eZqJkl/UyHFHBlYsYtddtMX2X0yOPoZZqJGazlnAE3TUlggk3fhBFxglxXUSjoceGlg7
+         bejw==
+X-Gm-Message-State: AOAM533A1IFtZU5QkobsB3/6b9jbs3L+GeVx77qIervDjxvmTPz+35+1
+	u1aMeclrnWzXxGEmNW4vEQ8/IA==
+X-Google-Smtp-Source: ABdhPJxNzSPV5AgI16h4jptg5dZ1YQXkPQm8Dx0ImGp/9UOFpFOPoES2DpYY9NsQfrm27DDfDBNaVA==
+X-Received: by 2002:a17:903:249:b0:163:6dc0:b8b3 with SMTP id j9-20020a170903024900b001636dc0b8b3mr7003658plh.24.1654208211700;
+        Thu, 02 Jun 2022 15:16:51 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id z10-20020a056a001d8a00b00518d0707b52sm3903369pfw.208.2022.06.02.15.16.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 15:16:49 -0700 (PDT)
+From: Anand Gore <anand.gore@broadcom.com>
+To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Daniel Mack <daniel@zonque.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: kursad.oney@broadcom.com,
+	florian.fainelli@broadcom.com,
+	tomer.yacoby@broadcom.com,
+	samyon.furman@broadcom.com,
+	dan.beygelman@broadcom.com,
+	William Zhang <william.zhang@broadcom.com>,
+	joel.peshkin@broadcom.com,
+	Anand Gore <anand.gore@broadcom.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH v4 0/3] arm: bcmbca: add bcm6878 soc support
+Date: Thu,  2 Jun 2022 15:16:43 -0700
+Message-Id: <20220602221646.3127512-1-anand.gore@broadcom.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000ddb03505e07e5c36"
 
-The following changes since commit 16477cdfefdb494235a675cc80563d736991d833=
-:
+--000000000000ddb03505e07e5c36
+Content-Transfer-Encoding: 8bit
 
-  Merge tag 'asm-generic-5.19' of
-git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
-(2022-05-26 10:50:30 -0700)
 
-are available in the Git repository at:
+The initial support includes a bare-bone dts
+for dual core ARM v7  with a pl011 uart.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-late-5=
-.19
+Changes in v4:
+- Fixed subject line
 
-for you to fetch changes up to 9c76d723edd4f4d7d10b33e7e56f72ecbe6cee34:
+Changes in v3:
+- Simplify subject line
 
-  Merge tag 'optee-warning-for-v5.19' of
-https://git.linaro.org/people/jens.wiklander/linux-tee into arm/late
-(2022-05-30 14:44:27 +0200)
+Changes in v2:
+- Fix psci, GIC dts entries
+- Remove extra empty lines
 
-----------------------------------------------------------------
-ARM: SoC changes, part 2
+Anand Gore (3):
+  ARM: dts: add dts files for bcmbca soc 6878
+  dt-bindings: arm: add BCM6878 soc
+  MAINTAINERS: add bcm6878 to bcmbca arch entry
 
-This is the second part of the general SoC updates, containing
-everything that did not make it in the initial pull request,
-or that came in as a bugfix later.
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |   7 ++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/Makefile                    |   3 +-
+ arch/arm/boot/dts/bcm6878.dtsi                | 110 ++++++++++++++++++
+ arch/arm/boot/dts/bcm96878.dts                |  30 +++++
+ 5 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/bcm6878.dtsi
+ create mode 100644 arch/arm/boot/dts/bcm96878.dts
 
- - Devicetree updates for SoCFPGA, ASPEED, AT91 and Rockchip, including
-   a new machine using an ASPEED BMC.
+-- 
+2.25.1
 
- - More DT fixes from Krzysztof Kozlowski across platforms
 
- - A new SoC platform for the GXP baseboard management controller,
-   used in current server products from HPE.
+--000000000000ddb03505e07e5c36
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-----------------------------------------------------------------
-Alexander Sverdlin (1):
-      ARM: ep93xx: Make ts72xx_register_flash() static
-
-Arnd Bergmann (9):
-      Merge branch 'hpe/gxp-soc' into arm/late
-      Merge tag 'at91-soc-5.19-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/late
-      Merge tag 'at91-dt-5.19-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/late
-      Merge tag 'v5.19-rockchip-drivers2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/late
-      Merge tag 'v5.19-rockchip-dts32-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/late
-      Merge tag 'v5.19-rockchip-dts64-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
-into arm/late
-      Merge tag 'aspeed-5.19-devicetree' of
-git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc into arm/late
-      Merge tag 'socfpga_dts_updates_for_v5.19' of
-git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into
-arm/late
-      Merge tag 'optee-warning-for-v5.19' of
-https://git.linaro.org/people/jens.wiklander/linux-tee into arm/late
-
-Brandon Wyman (1):
-      ARM: dts: aspeed: everest, rainier: Add power-ffs-sync-history GPIO
-
-Codrin Ciubotariu (2):
-      ARM: dts: at91: sama7g5: add nodes for PDMC
-      ARM: dts: at91: sama7g5ek: add node for PDMC0
-
-C=C3=A9dric Le Goater (2):
-      ARM: dts: aspeed: Adjust "reg" property of FMC/SPI controllers
-      ARM: dts: aspeed: Enable Dual SPI RX transfers
-
-Dinh Nguyen (1):
-      dt-bindings: gpio: altera: correct interrupt-cells
-
-Genjian Zhang (1):
-      ep93xx: clock: Do not return the address of the freed memory
-
-Graeme Gregory (1):
-      ARM: dts: aspeed: Add Nuvia DC-SCM BMC
-
-Howard Chiu (3):
-      ARM: dts: aspeed: ast2600-evb: Enable RX delay for MAC0/MAC1
-      ARM: dts: aspeed: ast2600-evb: Enable video engine
-      ARM: dts: aspeed: ast2600-evb: Enable virtual hub
-
-Joel Stanley (2):
-      ARM: dts: aspeed: Add GFX node to AST2600
-      ARM: dts: aspeed: ast2600-evb: Enable GFX device
-
-Johan Jonker (8):
-      ARM: dts: rockchip: add clocks property to cru node rv1108
-      ARM: dts: rockchip: Remove "amba" bus nodes from rv1108
-      ARM: dts: rockchip: add clocks property to cru node rk3288
-      ARM: dts: rockchip: add clocks property to cru node rk3066a/rk3188
-      ARM: dts: rockchip: add clocks property to cru node rk3036
-      ARM: dts: rockchip: add clocks property to cru node rk3228
-      arm64: dts: rockchip: add clocks property to cru node rk3308
-      arm64: dts: rockchip: add clocks property to cru node rk3368
-
-Krzysztof Kozlowski (4):
-      ARM: dts: socfpga: align SPI NOR node name with dtschema
-      ARM: dts: pxa: use new 'dma-channels/requests' properties
-      ARM: dts: da850: use new 'dma-channels' property
-      arm64: dts: sprd: use new 'dma-channels' property
-
-Linus Walleij (2):
-      soc: ixp4xx/qmgr: Fix unused match warning
-      tee: optee: Pass a pointer to virt_addr_valid()
-
-Mark Brown (1):
-      ARM: configs: Enable more audio support for i.MX
-
-Matthew Gerlach (3):
-      dt-bindings: soc: add bindings for Intel HPS Copy Engine
-      dt-bindings: intel: add binding for Intel n6000
-      arm64: dts: intel: add device tree for n6000
-
-Miaoqian Lin (1):
-      soc: rockchip: Fix refcount leak in rockchip_grf_init
-
-Michael Walle (1):
-      ARM: configs: enable support for Kontron KSwitch D10
-
-Neal Liu (1):
-      ARM: dts: aspeed: Add USB2.0 device controller node
-
-Nick Hawkins (8):
-      ARM: hpe: Introduce the HPE GXP architecture
-      ARM: configs: multi_v7_defconfig: Add HPE GXP ARCH
-      watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-      clocksource/drivers/timer-gxp: Add HPE GXP Timer
-      dt-bindings: timer: hpe,gxp-timer: Add HPE GXP Timer and Watchdog
-      dt-bindings: arm: hpe: add GXP Support
-      ARM: dts: Introduce HPE GXP Device tree
-      MAINTAINERS: Introduce HPE GXP Architecture
-
-Peter Geis (2):
-      arm64: dts: rockchip: add clocks to rk356x cru
-      arm64: dts: rockchip: rename Quartz64-A bluetooth gpios
-
-Potin Lai (7):
-      ARM: dts: aspeed: bletchley: enable ehci0 device node
-      ARM: dts: aspeed: bletchley: switch spi2 driver to aspeed-smc
-      ARM: dts: aspeed: bletchley: Enable mdio0 bus
-      ARM: dts: aspeed: bletchley: update gpio0 line names
-      ARM: dts: aspeed: bletchley: add pca9536 node on each sled
-      ARM: dts: aspeed: bletchley: add eeprom node on each sled
-      ARM: dts: aspeed: bletchley: add sample averaging for ADM1278
-
-Sergiu Moga (2):
-      ARM: dts: at91: Add the required 'atmel, rtt-rtc-time-reg' property
-      ARM: dts: at91: Use the generic "rtc" node name for the rtt IPs
-
-Tao Ren (1):
-      ARM: dts: aspeed-g4: Set spi-max-frequency for all flashes
-
-YueHaibing (1):
-      ARM: at91: pm: Fix rand build error
-
- Documentation/devicetree/bindings/arm/hpe,gxp.yaml |  27 +++
- .../devicetree/bindings/arm/intel,socfpga.yaml     |   1 +
- .../devicetree/bindings/gpio/gpio-altera.txt       |   5 +-
- .../bindings/soc/intel/intel,hps-copy-engine.yaml  |  51 +++++
- .../devicetree/bindings/timer/hpe,gxp-timer.yaml   |  47 +++++
- MAINTAINERS                                        |  12 ++
- arch/arm/Kconfig                                   |   2 +
- arch/arm/Makefile                                  |   1 +
- arch/arm/boot/dts/Makefile                         |   3 +
- arch/arm/boot/dts/aspeed-ast2600-evb.dts           |  39 +++-
- .../arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 182 ++++++++++++++---=
--
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |   2 +-
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |   2 +-
- arch/arm/boot/dts/aspeed-bmc-nuvia-dc-scm.dts      | 190 +++++++++++++++++=
-++
- arch/arm/boot/dts/aspeed-g4.dtsi                   |  16 +-
- arch/arm/boot/dts/aspeed-g5.dtsi                   |  16 +-
- arch/arm/boot/dts/aspeed-g6.dtsi                   |  38 +++-
- arch/arm/boot/dts/at91-sama7g5ek.dts               |  21 ++-
- arch/arm/boot/dts/at91sam9261ek.dts                |   4 +
- arch/arm/boot/dts/at91sam9263ek.dts                |   4 +
- arch/arm/boot/dts/at91sam9rlek.dts                 |   4 +
- arch/arm/boot/dts/da850.dtsi                       |   2 +
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts           |  26 +++
- arch/arm/boot/dts/hpe-gxp.dtsi                     | 127 +++++++++++++
- arch/arm/boot/dts/mmp2.dtsi                        |   2 +
- arch/arm/boot/dts/pxa25x.dtsi                      |   5 +-
- arch/arm/boot/dts/pxa27x.dtsi                      |   5 +-
- arch/arm/boot/dts/pxa3xx.dtsi                      |   5 +-
- arch/arm/boot/dts/rk3036.dtsi                      |   2 +
- arch/arm/boot/dts/rk3066a.dtsi                     |   3 +-
- arch/arm/boot/dts/rk3188.dtsi                      |   3 +-
- arch/arm/boot/dts/rk322x.dtsi                      |   2 +
- arch/arm/boot/dts/rk3288.dtsi                      |   2 +
- arch/arm/boot/dts/rv1108.dtsi                      |  31 ++-
- arch/arm/boot/dts/sam9x60.dtsi                     |   2 +-
- arch/arm/boot/dts/sama7g5.dtsi                     |  26 ++-
- arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts   |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socdk.dts       |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sodia.dts       |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts |   4 +-
- arch/arm/configs/multi_v7_defconfig                |  16 ++
- arch/arm/mach-at91/Kconfig                         |   2 +-
- arch/arm/mach-ep93xx/clock.c                       |  10 +-
- arch/arm/mach-ep93xx/ts72xx.c                      |   2 +-
- arch/arm/mach-hpe/Kconfig                          |  23 +++
- arch/arm/mach-hpe/Makefile                         |   1 +
- arch/arm/mach-hpe/gxp.c                            |  16 ++
- arch/arm64/boot/dts/intel/Makefile                 |   3 +-
- arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts |  66 +++++++
- arch/arm64/boot/dts/rockchip/rk3308.dtsi           |   5 +-
- arch/arm64/boot/dts/rockchip/rk3368.dtsi           |   2 +
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts |   4 +-
- arch/arm64/boot/dts/rockchip/rk356x.dtsi           |   2 +
- arch/arm64/boot/dts/sprd/whale2.dtsi               |   4 +
- drivers/clocksource/Kconfig                        |   8 +
- drivers/clocksource/Makefile                       |   1 +
- drivers/clocksource/timer-gxp.c                    | 209 +++++++++++++++++=
-++++
- drivers/soc/ixp4xx/ixp4xx-qmgr.c                   |   2 +-
- drivers/soc/rockchip/grf.c                         |   2 +
- drivers/tee/optee/call.c                           |   2 +-
- drivers/watchdog/Kconfig                           |  11 ++
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/gxp-wdt.c                         | 174 +++++++++++++++++
- 63 files changed, 1385 insertions(+), 101 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/hpe,gxp.yaml
- create mode 100644
-Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
- create mode 100644 Documentation/devicetree/bindings/timer/hpe,gxp-timer.y=
-aml
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-nuvia-dc-scm.dts
- create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
- create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
- create mode 100644 arch/arm/mach-hpe/Kconfig
- create mode 100644 arch/arm/mach-hpe/Makefile
- create mode 100644 arch/arm/mach-hpe/gxp.c
- create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
- create mode 100644 drivers/clocksource/timer-gxp.c
- create mode 100644 drivers/watchdog/gxp-wdt.c
+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
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIZ0aEzdTiltX9LOCd5HUmoggO6G5MjLKfHXmEBA
+DtnRMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDYwMjIyMTY1
+MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQCVbCl42AeHgi3G6/JSCYh4xapIQkMCjSrB3E8jLwbTudbW+EohJ7PUYqTa
+JHCdTN2jZWEZ/qYepLq4b97IJlQ+9mG1aSXXANP6ssgiurVg4TfLTucJeiDKXnXF6oSf3xpwcfSP
+rt3OJ89fbbRjmlsyVgB8/MZOzH+Y5QTtrk+5KiZcNwqQSNftwyOP9nLmeBxPIfp6oY+wXFKJnImW
+Fh92VIV+2ycA/za+1O1Jpdg5OTOY0uPSbROaXdOps1pv8hvsjnRejKAyovHxt9GHxgbD790vQCRF
+gayvjQi1kJERWFRKA6o4vDpm0uU96EDkYcrOHfQjZol7QIZLjFCs9NRs
+--000000000000ddb03505e07e5c36--
