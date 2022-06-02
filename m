@@ -1,350 +1,80 @@
-Return-Path: <SRS0=S2jC=WJ=broadcom.com=anand.gore@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1FAFC43334
-	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 22:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C76D5C433EF
+	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 22:27:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A8A68C385A5; Thu,  2 Jun 2022 22:16:56 +0000 (UTC)
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	id A3D05C34115; Thu,  2 Jun 2022 22:27:50 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D04A1C3411C
-	for <soc@kernel.org>; Thu,  2 Jun 2022 22:16:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D04A1C3411C
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pj1-f42.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso5948269pjg.0
-        for <soc@kernel.org>; Thu, 02 Jun 2022 15:16:54 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id BEE7BC385A5
+	for <soc@kernel.org>; Thu,  2 Jun 2022 22:27:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BEE7BC385A5
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f53.google.com with SMTP id n10so12647483ejk.5
+        for <soc@kernel.org>; Thu, 02 Jun 2022 15:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=SQ2nKwTsggHkqUB0ACUb1f7+uog6AkJh2TQSgR7UR7I=;
-        b=IQnJllevfjPAX/xVkwfuFdlc3NCkuR+lr/TcHopIBdGi7I/WThZzUSbp6ZEnCOJ2FM
-         TrQvwHZbHKn4mYb2r2KHZMODZbq8es09VIg9ktImXsckmWVkwAm+REvN6b1jfXyc47RR
-         es5zp85w5knXPei1MMW/0vKmWE1neRpSwty9w=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4lkEm3X5HzLB+VEej4UrcRIdtwa8kr6O7GlkHLzBLBw=;
+        b=gFZIssbt+h/sxsyvNCH7artU5gehoIt/kKoK/9oNcChP/4Sv5nBc/4jjQorEbwGZxy
+         78rVbf6zRNHC51dOFpIHY9049CgamsSMbEQYdKzOBB42x+hPXXhdPYjpW4dLfttqT1HH
+         L9RZH0Ko5Onvj0xmEoOIQJl3MYHYCouYjpS9k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=SQ2nKwTsggHkqUB0ACUb1f7+uog6AkJh2TQSgR7UR7I=;
-        b=Ln6PEy8IuhkBfEftx1HtzgYtPdaX4zCiTKX5xgS922DsNx8/Q8PoiJDEDmLwU5O75r
-         OxJ1pAlJJ2UR4TapHt2h7dDmwWHwH6//iT2Ru0RpU4Q3GeOHYxjB3F+j3HeQ4H6dkIum
-         SsP6b/z+2AgySPQdKc5y1edbSR87mSJCMnmMcoBcnO/vJqqCtb9cI4qeaODhU5f7iJHl
-         rOXuEf+RzfPfNARsL5FvPhQSe8hAVfH5ieU+Rw4JUfmrjI08W3pCKv1zQ9N4ba39BO0P
-         hGkven7iipWBu8HxeYXkyJX1opzLNZrZmlWUX+Hjqp7pkv6HkJUmeqd7vTgqAEbrMxVE
-         GXEA==
-X-Gm-Message-State: AOAM531jlJ3S5hw4P7vLjDW9Ey1RK8oIHLC4LuarGMZQwsZtwOmRCldZ
-	Mgz1+Ay7k0cpfY+EKRcinPnhkA==
-X-Google-Smtp-Source: ABdhPJx+R2Tcy9vTujgOhufMaVUKvSQKeyfZf+0o5QPEVWoXAnrTgy3Mz7TtbuVobzYC5EdWYyN2+A==
-X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr7258003plo.158.1654208214124;
-        Thu, 02 Jun 2022 15:16:54 -0700 (PDT)
-Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z10-20020a056a001d8a00b00518d0707b52sm3903369pfw.208.2022.06.02.15.16.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 15:16:52 -0700 (PDT)
-From: Anand Gore <anand.gore@broadcom.com>
-To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
-List-Id: <soc.lore.kernel.org>
-Cc: kursad.oney@broadcom.com,
-	florian.fainelli@broadcom.com,
-	tomer.yacoby@broadcom.com,
-	samyon.furman@broadcom.com,
-	dan.beygelman@broadcom.com,
-	William Zhang <william.zhang@broadcom.com>,
-	joel.peshkin@broadcom.com,
-	Anand Gore <anand.gore@broadcom.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	soc@kernel.org
-Subject: [PATCH v4 1/3] ARM: dts: add dts files for bcmbca soc 6878
-Date: Thu,  2 Jun 2022 15:16:44 -0700
-Message-Id: <20220602151639.v4.1.I0ef47baf3d32d36f823c539c3da3735a6b3e855b@changeid>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220602221646.3127512-1-anand.gore@broadcom.com>
-References: <20220602221646.3127512-1-anand.gore@broadcom.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4lkEm3X5HzLB+VEej4UrcRIdtwa8kr6O7GlkHLzBLBw=;
+        b=iW+VfTVzskPMpSqaW6843g6WOI03mhDZ+pgeIJZPQdwMf86EEm5gbxeo0upxhzkGy0
+         aGJtqdxNDpSZyhmdn/KRY9O5Syryj7W6F88aj+0kUp45JTuYar/1ttlKSLDjIxt168wZ
+         zBsfjsD3uRyceOQZC/PzVKpF3cHxBBNHn2+xL1C+2nIIZu0o/DHMuK58CL0hGUEIIeZw
+         /ZNfaX3SgfplpHCZrWV9gtBa3Usq7vRrRlOWgO4gR+YRFazYWK5oKe7f5dR2Px8X7APJ
+         SYSg5A+zwOt0v9pB7yWMw8aud+Os49ZluhHr+dYVZhQo4tAYmDKH2Yt8OghGw6kLpmT/
+         Y4fQ==
+X-Gm-Message-State: AOAM533tnjaMrlL5ffcpEzm5jvXUNtV3GkXzdglKoZCNdhs6mqwGaHoS
+	cVWysvevgZddNUdHvoH7TT4bwmT9KVXUKX6g1h0=
+X-Google-Smtp-Source: ABdhPJzBMfoRtNOoNrqmzOlOaoEcE0YgxpcQg6GC5wzWpNtpUM3PrLDnRFKxpMdkkKMVfsljDrLBYg==
+X-Received: by 2002:a17:907:2da6:b0:6fe:b40a:c817 with SMTP id gt38-20020a1709072da600b006feb40ac817mr6103686ejc.365.1654208867744;
+        Thu, 02 Jun 2022 15:27:47 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id bs13-20020a056402304d00b0042bd6f745fasm3078915edb.92.2022.06.02.15.27.46
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 15:27:46 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id p10so8153996wrg.12
+        for <soc@kernel.org>; Thu, 02 Jun 2022 15:27:46 -0700 (PDT)
+X-Received: by 2002:a5d:414d:0:b0:213:be00:a35 with SMTP id
+ c13-20020a5d414d000000b00213be000a35mr24746wrq.97.1654208866390; Thu, 02 Jun
+ 2022 15:27:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000002416705e07e5dd5"
+References: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 2 Jun 2022 15:27:30 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjhJ1dUVVMkHOk88xsYJtqfyGZ_8hSGJoZG5K+uwUYT3A@mail.gmail.com>
+Message-ID: <CAHk-=wjhJ1dUVVMkHOk88xsYJtqfyGZ_8hSGJoZG5K+uwUYT3A@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] ARM: multiplatform changes, part 2
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	Daniel Mack <daniel@zonque.org>
+Content-Type: text/plain; charset="UTF-8"
 
---00000000000002416705e07e5dd5
-Content-Transfer-Encoding: 8bit
+On Thu, Jun 2, 2022 at 2:34 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> The second part of the multiplatform changes now converts the
+> Intel/Marvell PXA platform along with the rest.
 
-Add dts for ARMv7 based broadband SoC BCM6878. bcm6878.dtsi is the
-SoC description dts header and bcm96878.dts is a simple dts file for
-Broadcom BCM96878 Reference board that only enable the UART port.
+I _think_ the conflicts were all trivial, but hey, since I can't
+really even build-test them, please do check the result out...
 
-Signed-off-by: Anand Gore <anand.gore@broadcom.com>
----
-
-(no changes since v2)
-
-Changes in v2:
-- Fix psci, GIC dts entries
-
- arch/arm/boot/dts/Makefile     |   3 +-
- arch/arm/boot/dts/bcm6878.dtsi | 110 +++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/bcm96878.dts |  30 +++++++++
- 3 files changed, 142 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/bcm6878.dtsi
- create mode 100644 arch/arm/boot/dts/bcm96878.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index d9ac59524408..553fef458926 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -183,7 +183,8 @@ dtb-$(CONFIG_ARCH_BRCMSTB) += \
- 	bcm7445-bcm97445svmb.dtb
- dtb-$(CONFIG_ARCH_BCMBCA) += \
- 	bcm947622.dtb \
--	bcm963178.dtb
-+	bcm963178.dtb \
-+	bcm96878.dtb
- dtb-$(CONFIG_ARCH_CLPS711X) += \
- 	ep7211-edb7211.dtb
- dtb-$(CONFIG_ARCH_DAVINCI) += \
-diff --git a/arch/arm/boot/dts/bcm6878.dtsi b/arch/arm/boot/dts/bcm6878.dtsi
-new file mode 100644
-index 000000000000..a7dff596fe1e
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm6878.dtsi
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022 Broadcom Ltd.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	compatible = "brcm,bcm6878", "brcm,bcmbca";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	interrupt-parent = <&gic>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		CA7_0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			reg = <0x0>;
-+			next-level-cache = <&L2_0>;
-+			enable-method = "psci";
-+		};
-+
-+		CA7_1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			reg = <0x1>;
-+			next-level-cache = <&L2_0>;
-+			enable-method = "psci";
-+		};
-+		L2_0: l2-cache0 {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	pmu: pmu {
-+		compatible = "arm,cortex-a7-pmu";
-+		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+			<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-affinity = <&CA7_0>, <&CA7_1>;
-+	};
-+
-+	clocks: clocks {
-+		periph_clk: periph-clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+		uart_clk: uart-clk {
-+			compatible = "fixed-factor-clock";
-+			#clock-cells = <0>;
-+			clocks = <&periph_clk>;
-+			clock-div = <4>;
-+			clock-mult = <1>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	axi@81000000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0x81000000 0x8000>;
-+
-+		gic: interrupt-controller@1000 {
-+			compatible = "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupt-controller;
-+			reg = <0x1000 0x1000>,
-+				<0x2000 0x2000>,
-+				<0x4000 0x2000>,
-+				<0x6000 0x2000>;
-+			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(2) |
-+					IRQ_TYPE_LEVEL_HIGH)>;
-+		};
-+	};
-+
-+	bus@ff800000 {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0xff800000 0x800000>;
-+
-+		uart0: serial@12000 {
-+			compatible = "arm,pl011", "arm,primecell";
-+			reg = <0x12000 0x1000>;
-+			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_clk>, <&uart_clk>;
-+			clock-names = "uartclk", "apb_pclk";
-+			status = "disabled";
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/bcm96878.dts b/arch/arm/boot/dts/bcm96878.dts
-new file mode 100644
-index 000000000000..8fbc175cb452
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm96878.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2019 Broadcom Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "bcm6878.dtsi"
-+
-+/ {
-+	model = "Broadcom BCM96878 Reference Board";
-+	compatible = "brcm,bcm96878", "brcm,bcm6878", "brcm,bcmbca";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x08000000>;
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
--- 
-2.25.1
-
-
---00000000000002416705e07e5dd5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
-/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
-KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
-nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
-eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
-LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
-S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILA8TmFht0BQRWlESkZOszZNdF7OYIsBK3odav1n
-qbE+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDYwMjIyMTY1
-NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQBs95sj0me5yGMiXJ/X6w0BZsm2HD7KDA8MceJbtXPAQXGGf9GpFo9Uz4yL
-P4ZvdeBVa2bLNX+puc6JojRGqcyFwkZzLFdO0R+xuZpnxSkjkxB/ogovnS+ryjK1JgAYWSEGb9zr
-N0U1prWZx9x1MeJ0i4qsHfoQ00YQhk+vuWkLOftu/e3Iz05vwC8O6q8YSyn/wEJgDBzX+kwIUO7H
-IEPlCWBqqANM/MYIzyu3/SCzutjnRqSsevrpx03o4GCdxKU44bN0qaIHvMUtVSu/CN0TCVAbW5tn
-EC5Cy5yGTn+F3VlSpKXl83c5dKBnIcPkvJ20VCpbkV5Htsa73dJcmAee
---00000000000002416705e07e5dd5--
+                   Linus
