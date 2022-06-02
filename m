@@ -1,80 +1,67 @@
-Return-Path: <SRS0=FEWR=WJ=bombadil.srs.infradead.org=BATV+b56869c198be7c3a2e83+6857+infradead.org+hch@kernel.org>
+Return-Path: <SRS0=PzPn=WJ=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BEDFC433EF
-	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 12:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E755C433EF
+	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 12:58:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 36806C3411D; Thu,  2 Jun 2022 12:19:34 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 12FE9C3411F; Thu,  2 Jun 2022 12:58:49 +0000 (UTC)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 887B2C385A5;
-	Thu,  2 Jun 2022 12:19:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 887B2C385A5
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=spjc1NV0tUcIwlyH3r+o1pjArgZsS0mBD5aKUtZaglY=; b=a8cqrPdTs/qxidHZhDFLhcaUr+
-	rWxaXcKx6i+s1vcq8M7kVMAxI7iOCkQJv1b9eR59IFfXAhvJBtSMMmCe6GY3dYGLlYpd4PC5ZB4SY
-	NdFZ7oVhQD6ELNWiK62a2SS4CeAXaQ2VAzHa+Vk1+TfaeGRoZ2gQjOkO66YR+sULeV4SYyfSq2nBh
-	ljG7J1vhQWz/RNshKWkiNipOOJkRNvJZ6oqIDTtzBTA2ZKxX7Ok7jfPzTbAXk/G/KhfkS8R8S2+IY
-	Hhe0KVRJgiGnaAx6aM4FaWN3AAOJtgVVSxQVtlc1mZCdJa/r12d55dMaVQlIgVtMpfSYJ98FQMVot
-	7tx/UdJg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1nwjnE-003B8U-45; Thu, 02 Jun 2022 12:19:12 +0000
-Date: Thu, 2 Jun 2022 05:19:12 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 52934C385A5;
+	Thu,  2 Jun 2022 12:58:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52934C385A5
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f176.google.com with SMTP id m82so6374644oif.13;
+        Thu, 02 Jun 2022 05:58:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9Sl40eTqdPmzEKppcJA4FQwmfcLIIy0ie+JY3OH9t8Y=;
+        b=Ai5PwrRFuTEdDHzAb0NnASYpyEs9JgYgymg6Qd4gNgLOTAP2S5m+GsVH2C3cATthsk
+         IGB2gL4aDAR0aMtUwc+UHitLnAF2mjDAbRpilBfdF2UuNoMgMElP3Djx3W8+FvjReAo2
+         o3f9fTuB4XQ0VplM967QxQTSx3S5kEsmKLUzQHVE09NpVEu3+ftcEoJ1QMKh0KE5VBK8
+         2AdWvsd+BmdroyzArP3dValYfZX9yDNm/vxLVRsXUeprHud03U5Dcer1X0FOTTQiI6+I
+         4l+487Pr9EqYgQh+mrmqyE8JME2QAM2zjQPiO4gqw8zpY6GiXitcAISPVKH4QzuSWEVz
+         QCcg==
+X-Gm-Message-State: AOAM531On7RxvfFEcT7UBGUaMfKueIE9EXDqrKg9ucQt/d0nZrRhffkp
+	xmsXtfGEIck26+o3slUyFA==
+X-Google-Smtp-Source: ABdhPJwH6fy65rUHt6Lx51K//7iArjhtsHzTFqg2VRAtu11CoBlEcwO2/HjeRWn2atnzqNt3dkCjhg==
+X-Received: by 2002:a05:6808:1584:b0:32b:314a:54ef with SMTP id t4-20020a056808158400b0032b314a54efmr17995256oiw.41.1654174727364;
+        Thu, 02 Jun 2022 05:58:47 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 63-20020aca0542000000b00325643bce40sm2314868oif.0.2022.06.02.05.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 05:58:46 -0700 (PDT)
+Received: (nullmailer pid 2095464 invoked by uid 1000);
+	Thu, 02 Jun 2022 12:58:45 -0000
+Date: Thu, 2 Jun 2022 07:58:45 -0500
+From: Rob Herring <robh@kernel.org>
+To: Tomer Maimon <tmaimon77@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Keisuke Nishimura <keisuke.nishimura@inria.fr>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Ayush Sawal <ayush.sawal@chelsio.com>,
-	Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-	Rohit Maheshwari <rohitm@chelsio.com>,
-	Julia Lawall <Julia.Lawall@inria.fr>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	dri-devel <dri-devel@lists.freedesktop.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	SoC Team <soc@kernel.org>
-Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-Message-ID: <YpiqwDjCP0Am8kZV@infradead.org>
-References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
- <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr>
- <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
- <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
- <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr>
- <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
- <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
+Cc: linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org, sboyd@kernel.org, olof@lixom.net, venture@google.com, vkoul@kernel.org, jirislaby@kernel.org, nobuhiro1.iwamatsu@toshiba.co.jp, arnd@arndb.de, daniel.lezcano@linaro.org, joel@jms.id.au, soc@kernel.org, devicetree@vger.kernel.org, tali.perry1@gmail.com, will@kernel.org, catalin.marinas@arm.com, linux@roeck-us.net, linux-serial@vger.kernel.org, bjorn.andersson@linaro.org, linux-watchdog@vger.kernel.org, shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org, j.neuschaefer@gmx.net, wim@linux-watchdog.org, krzysztof.kozlowski+dt@linaro.org, benjaminfair@google.com, mturquette@baylibre.com, p.zabel@pengutronix.de, linux-clk@vger.kernel.org, avifishman70@gmail.com, geert+renesas@glider.be, yuenn@google.com, tglx@linutronix.de, robh+dt@kernel.org, marcel.ziswiler@toradex.com, biju.das.jz@bp.renesas.com, robert.hancock@calian.com, lkundrak@v3.sk
+Subject: Re: [PATCH v1 13/19] dt-bindings: arm: npcm: Add maintainer
+Message-ID: <20220602125845.GA2095431-robh@kernel.org>
+References: <20220522155046.260146-1-tmaimon77@gmail.com>
+ <20220522155046.260146-14-tmaimon77@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20220522155046.260146-14-tmaimon77@gmail.com>
 
-On Thu, Jun 02, 2022 at 09:38:56AM +0200, Arnd Bergmann wrote:
-> - dma_addr_t/phys_addr_t are sometimes put into hardware data
->   structures in coherent DMA allocations.
+On Sun, 22 May 2022 18:50:40 +0300, Tomer Maimon wrote:
+> Add Tomer Maimon to the maintainers list.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/npcm/npcm.yaml        | 1 +
+>  Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml | 1 +
+>  2 files changed, 2 insertions(+)
+> 
 
-Putting a dma_addr_t into a hardware data structure is broken.
-dma_addr_t is the in-memory type, for the hardare it should always
-be a __le/__be type of the actual width that the particular piece
-of hardware uses.
+Acked-by: Rob Herring <robh@kernel.org>
