@@ -1,97 +1,216 @@
-Return-Path: <SRS0=14BC=WJ=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=2b8X=WJ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04937C43334
-	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 06:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D83C433EF
+	for <soc@archiver.kernel.org>; Thu,  2 Jun 2022 07:39:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E109CC34114; Thu,  2 Jun 2022 06:42:10 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5DC54C3411C; Thu,  2 Jun 2022 07:39:19 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 36D86C385A5
-	for <soc@kernel.org>; Thu,  2 Jun 2022 06:42:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36D86C385A5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id jx22so8013271ejb.12
-        for <soc@kernel.org>; Wed, 01 Jun 2022 23:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YcVxfDa9LvCUOkqeRnWeJHFwW9LiD3rmlRjajceH05M=;
-        b=MJXE1rnhYI4EtbgnAGDkzJmgeAz5fHOoCVrAd7HfHDIK4UKQTyK3j+GfE6/mDGwnMe
-         IkOjUpb2DVq2VAD7M5BZYUsn/2jBIpzfKERlpGokDCM+jIJe+q/dZziGQMoBiny+HN9m
-         Bh0jT7xuHaPt/137bjd4VVJzkYpgITu/W2fi3sWXsk1IP1rJ8mwSF14HwiaHHNcopaD4
-         Ch+NyQTsIegQfpouRCcN5awRjiWR5RYaSZLPGsH8nub20euyI07Uiy1UPBiLxJlofmvH
-         utu7pZvoqMHMtamUPH8zH1QkO3WSBuat/f2k1EF/zMQfZ+DTIFjjXAS9goBT8mHa7klX
-         +d1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YcVxfDa9LvCUOkqeRnWeJHFwW9LiD3rmlRjajceH05M=;
-        b=qjPenxae2p8jDgAU404Xhrf44DLh1bCv79w0MZNjabEOotEvCzUDXPM2M4BsHMnXwv
-         kwvoMG5axy1f65XwhzF4J4TmlLsoQ13E8g1PM6Se8E533YvQEr7GRcsjgEs2uNaK1wtn
-         iGmbPROZe2HgTBL8rP3+5XqNQfijTSNpNArO6wb49hUdtrRyf1yBZXGtGkYPzO6niFZp
-         fH726QS+uuQiqo9F+6VO+y7/YI7nRSQrgZ3CqNK99kNbSrQpBnBWQrcc/acFswyJsJdX
-         gG9IlAmHRXZ1ZFsacTuOgrJsRaHmx8ZMfwP5A8ss0gbegky/0i+pz9yHJmzSb+tjfrth
-         /LrA==
-X-Gm-Message-State: AOAM531BWqZCWAtkT6gKhCjVPoA0CMgmw2kh7LPo0IXIZN9BTNqrJTQf
-	Gpg5dCJnDJWhVt2m180QRPmLMQ==
-X-Google-Smtp-Source: ABdhPJw8/Sb3u1AXrdJHsfhBh0XKfSg6ceuAhBGJDSd8b17kHdSaHMdFbuG171xpt21Hmqv9rRT5DA==
-X-Received: by 2002:a17:907:6d14:b0:6fe:d86e:7e1a with SMTP id sa20-20020a1709076d1400b006fed86e7e1amr2829800ejc.615.1654152128590;
-        Wed, 01 Jun 2022 23:42:08 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170906254c00b0070759e37183sm1392910ejb.59.2022.06.01.23.42.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 23:42:08 -0700 (PDT)
-Message-ID: <4f82e7e6-5c36-928c-0b76-c342dbb1e5ba@linaro.org>
-Date: Thu, 2 Jun 2022 08:42:07 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 95273C385A5;
+	Thu,  2 Jun 2022 07:39:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 95273C385A5
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N3omW-1nnu1z1Ayu-00zkfR; Thu, 02 Jun 2022 09:39:15 +0200
+Received: by mail-yb1-f176.google.com with SMTP id l204so6903225ybf.10;
+        Thu, 02 Jun 2022 00:39:14 -0700 (PDT)
+X-Gm-Message-State: AOAM530kQGvRW+oVzTKO88C6ktYtTkEvTRP4MeIWjCzjy5qjgix6rCbk
+	lL6KdOctUWUljBYekw2sNfZCPW2Ven7+gk0zwgk=
+X-Google-Smtp-Source: ABdhPJxVfhxEh2sV1U0/oHXedOW7Ij9SWgaqXnw+k1hmmKvq9A8gu2wmdTH5eNlILVHHm3z97S0Z2Co5/rXDXyJX6t0=
+X-Received: by 2002:a25:1209:0:b0:65d:63f9:e10a with SMTP id
+ 9-20020a251209000000b0065d63f9e10amr3777324ybs.480.1654155553742; Thu, 02 Jun
+ 2022 00:39:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 5/5] dt-bindings: altera: Add Chameleon v3 board
-Content-Language: en-US
+References: <CAK8P3a2Zg2QDS1_Ysn8-Zqqd+K7bbTFS7JV7gPabp6nvPiKaog@mail.gmail.com>
+ <91E67F46-A3C7-4159-9E0C-C6C6306F3669@inria.fr> <CAK8P3a2iAsemAQdbTZ_E7GGGCXAOeWbjSjLgXEsd5sg_buZWhw@mail.gmail.com>
+ <CAHk-=wgO0V9OdY+DFm-f0qZYMyFSm0ptReO+_qgSTEpBLtFV7Q@mail.gmail.com>
+ <d971a684-ccd9-3839-1e30-c166fd55cf49@inria.fr> <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
+In-Reply-To: <CAHk-=wiViikY0szsJGipSxFmMwdsvxjm7SwDfwNfMHYvQ64kAA@mail.gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 2 Jun 2022 09:38:56 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
+Message-ID: <CAK8P3a1m80u+eVnoSJ-APihjNQ1se9=FG+E6tKBb-hRJx5FAVg@mail.gmail.com>
+Subject: Re: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
+ block count and size helpers")
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: arnd@arndb.de, olof@lixom.net, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org, amstan@chromium.org,
- upstream@semihalf.com
-References: <20220601154647.80071-1-pan@semihalf.com>
- <20220601154647.80071-6-pan@semihalf.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601154647.80071-6-pan@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: Keisuke Nishimura <keisuke.nishimura@inria.fr>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Ayush Sawal <ayush.sawal@chelsio.com>, 
+	Vinay Kumar Yadav <vinay.yadav@chelsio.com>, Rohit Maheshwari <rohitm@chelsio.com>, 
+	Julia Lawall <Julia.Lawall@inria.fr>, Arnd Bergmann <arnd@arndb.de>, 
+	Jani Nikula <jani.nikula@intel.com>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Viresh Kumar <vireshk@kernel.org>, 
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	=?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, 
+	dri-devel <dri-devel@lists.freedesktop.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:e4j647snQWOHMjeti4IZWr+zBjDwD0mcIPoGUz4K4AboAY9Im5Q
+ ua/5Mx7noq7d4dj9iSflXJYhcmEiKaU5f3c/yqjSVqET7QsZU5f8AyEWE/AI8Q9j/QWf0sB
+ quFaZu/kCtaqIZY6AAsobTwftsHqxPyYArOaRBN2CvyeuTjyWHWu08eYW+L154g11pdwKBI
+ AyedyAxXcxPoHzFSV8tTw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fMW7sgixFNU=:j4jwE1iv8z7Lvj72N1aAnG
+ Mw8/gIv2M9gdmhW1+o+45lWboDy2NKyL6CriER+GGECJhTmBjj0kagHID+rTja1horKhlAKgo
+ ry8Yti7Mq3MHvKvFuzMK4ToKv8jh5OSFycLWrJL4R1FFv/wJYp2r/6wWtNZ5R54W3SxjamM1p
+ 3tF7HJy18kRsiDKI5bHhv8vwF+l9GnN3ZzBkEQ7q85Vb5hXb5By1VtPOfVlUAp4vV0gVZTG6y
+ g1LeTE14gvMmYse0WNBU0+C60dMXIpMjK+7oTvxwqCIo/QW5Yba6Zc7G2loNp48lzndy+2f+r
+ F2gvbiHbz+zPi47YBgkkpQVCWtM52rQ2WY0A1bTS3bcmWTDdeOQm70jMPLWIMpIaA3FS8a6Sa
+ zc9stq438DSO6tLCOtXS1ufQyAbnIURa0ck0hrAIz+di/VTtJl6ITCDW6PdYNPk5uT8RGrOEZ
+ AVrbkPJZzPxBRCLgoByjl+6GpohDNrX5ve3gzgckc9InHrLatKm/vgHf1wIgkubXBt0T+dYP+
+ LVK2jDuzNM+tU1owSEhecv+bgMnB4gNEkSNmUV7rSnjxw9CjHgEi1xS427vcWmoPw7IfLcDEh
+ Hyv7W/fiV6NIIoLd0/QAoHYJSJm5uknZ51jw8M5WcKcBkzZ/Gsgf3kUzBZy/bJFUpDJ6GMBiV
+ eVMJFIp14R0wrHdAY/zGRqyjEw5w0QcdTgfXH8p2m0XllKmsbCymnfKD38qhQiPwdVm1SPc8i
+ lvpsAWEsyV+DOjINrZP6VwWly+UvegSIVJK+MnJCM4ODUOz3dh8B0lgAYjWRBJWqIl+nWUX7I
+ aLHvlW1HAQExrwGl9wo4MTWpG3CixM8+b1NlxlHh/P/i5hLm1kASKH/61kKr2YS7HFdctIAZ3
+ tzVGaMlYLqv3Ec9lFQiNjjz8bhrQcHqkv2+IE4Ft0=
 
-On 01/06/2022 17:46, Paweł Anikiel wrote:
-> Add Chameleon v3 to Arria 10 boards.
-> 
-> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
-> ---
->  Documentation/devicetree/bindings/arm/altera.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-> index 5e2017c0a051..400543fbe78d 100644
-> --- a/Documentation/devicetree/bindings/arm/altera.yaml
-> +++ b/Documentation/devicetree/bindings/arm/altera.yaml
-> @@ -26,6 +26,7 @@ properties:
->            - enum:
->                - altr,socfpga-arria10-socdk
->                - enclustra,mercury-aa1
-> +              - google,chameleon-v3
+On Thu, Jun 2, 2022 at 3:08 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, Jun 1, 2022 at 3:28 PM Keisuke Nishimura
+> <keisuke.nishimura@inria.fr> wrote:
+> >
+> >
+> > I found 13 definitions of packed structure that contains:
+> >  > - spinlock_t
+> >  > - atomic_t
+> >  > - dma_addr_t
+> >  > - phys_addr_t
+> >  > - size_t
+> >  > - struct mutex
+> >  > - struct device
+> >
+> > - raw_spinlock_t
+>
+> Ok, so I don't think dma_addr_t/phys_addr_t/size_t are problematic,
+> they are just regular integers.
+>
+> And 'struct device' is problematic only as it then contains any of the
+> atomic types (which it does)
+is
+I suggested this list because they are problematic for different reasons:
 
-This won't work like that. You need separate group. Please install
-dtschema and run `make dtbs_check`.
+- any atomics are clearly broken here
 
+- dma_addr_t/phys_addr_t are sometimes put into hardware data
+  structures in coherent DMA allocations. This is broken because these
+  types are variably-sized depending on the architecture, and annotating
+  structures in uncached memory as __packed is also broken on
+  architectures that have neither coherent DMA nor unaligned access
+  (most 32-bit mips and armv5), where this will result in a series of
+  expensive one-byte uncached load/store instructions.
 
-Best regards,
-Krzysztof
+- having any complex kernel data structure embedded in a __packed
+  struct is a red flag, because there should not be a need to mark
+  it packed for compatibility with either hardware or user space.
+  If the structure is actually misaligned, passing a pointer for the
+  embedded struct into an interface that expects an aligned pointer
+  is undefined behavior in C, and gcc may decide to do something
+  bad here even on architectures that can access unaligned
+  pointers.
+
+> > security/tomoyo/common.h: atomic_t in tomoyo_shared_acl_head
+> > drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h: spinlock_t in key_map
+> > arch/s390/include/asm/kvm_host.h: atomic_t in kvm_s390_sie_block
+>
+> So these do look problematic.
+>
+> I'm not actually clear on why tomoyo_shared_acl_head would be packed.
+> That makes no sense to me.
+>
+> Same goes for key_map, it's not clear what the reason for that
+> __packed is, and it's clearly bogus. It might work, almost by mistake,
+> but it's wrong to try to pack that spinlock_t.
+>
+> The s390 kvm use actually looks fine: the structure is packed, but
+> it's also aligned, and the spin-lock is at the beginning, so the
+> "packing" part is about the other members, not the first one.
+
+Right, I think the coccinelle script should nor report structures
+that are both packed and aligned.
+
+> The two that look wrong look like they will probably work anyway
+> (they'll presumably be effectively word-aligned, and that's sufficient
+> for spinlocks in practice).
+>
+> But let's cc the tomoyo and chelsio people.
+
+I think both of them work because the structures are always
+embedded inside of larger structures that have at least word
+alignment. This is the thing I was looking for, and the
+__packed attribute was added in error, most likely copied
+from somewhere else.
+
+Looking at the other ones:
+
+include/linux/ti-emif-sram.h: phys_addr_t in ti_emif_pm_data
+
+No misalignment because of the __aligned(8), but this
+might go wrong if the emif firmware relies on the structure
+layout to have a 32-bit phys_addr_t.
+
+drivers/scsi/wd719x.h: dma_addr_t in wd719x_scb
+
+This one is correct, as the structure has 64 bytes of
+hardware data and a few members that are only accessed
+by the kernel. There should still be an __aligned(8)
+for efficiency.
+
+drivers/net/wireless/intel/ipw2x00/ipw2200.h: dma_addr_t in clx2_queue
+
+Al marked the incorrect __packed annotations in 2008,
+see 83f7d57c37e8 ("ipw2200 annotations and fixes").
+Mostly harmless but the __packed should just get removed here.
+
+> drivers/infiniband/hw/irdma/osdep.h: dma_addr_t in irdma_dma_mem
+> drivers/infiniband/core/mad_priv.h: size_t in ib_mad_private
+
+Same here: harmless but __packed should be removed, possibly
+while reordering members by size.
+
+> drivers/crypto/qat/qat_common/qat_asym_algs.c:
+> - dma_addr_t in qat_rsa_ctx
+> - dma_addr_t in qat_dh_ctx
+
+Probably harmless because the structure is __aligned(64), but I'm
+completely puzzled by what the author was actually trying to
+achieve here. There are also 'bool' members in the packed struct,
+which is probably something we want to look for as well.
+
+> drivers/atm/idt77252.h: dma_addr_t in idt77252_skb_prv
+
+This is a bug on architectures with 64-bit dma_addr_t, it should
+be an __le32, and the structure should be __aligned() as a DMA
+descriptor.
+
+> drivers/net/wireless/ath/ath10k/core.h: dma_addr_t in ath10k_skb_cb
+> drivers/net/wireless/ath/ath11k/core.h: dma_addr_t in ath10k_skb_cb
+
+Should almost certainly not be __packed, fixing these will
+likely improve performance on mips32 routers using ath10k
+
+> drivers/crypto/ccp/ccp-dev.h: dma_addr_t in ccp_dma_info
+
+This looks ok, the "__packed __aligned(4)" here can save
+a bit of stack space as intended.
+
+I think that SmPL script worked great, almost every instance is
+something that ought to be changed, as long as it stops reporting
+those structures that are also __aligned(). I would extend it to
+also report structures with 'bool', 'enum', or any pointer, but that
+could give more false-positives. Maybe have a separate script
+for those instances embedding atomics or spinlocks (very broken)
+vs the other members (causes more harm than good or might
+need alignment).
+
+       Arnd
