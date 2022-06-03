@@ -1,63 +1,87 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=1JKI=WK=startmail.com=hanetzer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF299C433EF
-	for <soc@archiver.kernel.org>; Fri,  3 Jun 2022 07:49:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDCA6C43334
+	for <soc@archiver.kernel.org>; Fri,  3 Jun 2022 11:22:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7C93FC3411D; Fri,  3 Jun 2022 07:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662CAC36AE9
-	for <soc@kernel.org>; Fri,  3 Jun 2022 07:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1654242569;
-	bh=5VWEmk5P6MuYYd5myyeP1w398M8prhSzzvETfvT8tXo=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=Cxf45UaTpNV+iGbPt7RptU7o1HHUzQg0PCdWs1IQjKClsKtTDEkMM0e1BPMob6MdG
-	 ORMXqChqMJwlqhZlYb2KG6Jg/ROr85DiVAmNoSWTj8J0HCzX5Hwhch5tiNtbTkmxdH
-	 fvuphhyICa7B+XQzMq+wGRQ3es/EmzWrbA0NjEVXLUqlUplvFI0g9frsDzlzPqANTh
-	 nvtKS7GZMPLnRBjibrgVT7ZvCRwYmvDwtQpGPUPNHI8qkGFzZCjV+tOv4zJwBxhYyR
-	 KS3cTWNzDCNdDOYU1kM0MORWZLHM4PnETtvsR6O4Iib848L7h2dcTY2TQNlIsnsLrr
-	 ircgE22bbDbIw==
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-30c143c41e5so74411517b3.3
-        for <soc@kernel.org>; Fri, 03 Jun 2022 00:49:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533OMOal8nymDSGk8EEHnyta6CrQuG89atZN4eONPE0lAwHfYv9E
-	fBt5ySvCVbvG419db3CkOXDZkyWFz4lvCtrCB9s=
-X-Google-Smtp-Source: ABdhPJyjFAGYlg0LX4rfJq7TlIRr3CKHV9eUzzvCBgviaQgqdUbACstpz9sjTmnfX9UqAxFPXs/wkH8xELN3rFztF9E=
-X-Received: by 2002:a81:745:0:b0:30f:b172:9efb with SMTP id
- 66-20020a810745000000b0030fb1729efbmr10225775ywh.495.1654242568416; Fri, 03
- Jun 2022 00:49:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
- <CAHk-=wjhJ1dUVVMkHOk88xsYJtqfyGZ_8hSGJoZG5K+uwUYT3A@mail.gmail.com>
-In-Reply-To: <CAHk-=wjhJ1dUVVMkHOk88xsYJtqfyGZ_8hSGJoZG5K+uwUYT3A@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 3 Jun 2022 09:49:11 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0KY85oXykWqPwJFJ+yw1a=KmRvA0SYM1zioV6DW+76TQ@mail.gmail.com>
-Message-ID: <CAK8P3a0KY85oXykWqPwJFJ+yw1a=KmRvA0SYM1zioV6DW+76TQ@mail.gmail.com>
-Subject: Re: [GIT PULL 1/2] ARM: multiplatform changes, part 2
-To: Linus Torvalds <torvalds@linux-foundation.org>
+	id 81A44C385B8; Fri,  3 Jun 2022 11:22:44 +0000 (UTC)
+Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id EF20CC385A9;
+	Fri,  3 Jun 2022 11:22:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF20CC385A9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=startmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=startmail.com
+Date: Fri, 3 Jun 2022 06:22:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+	s=2020-07; t=1654255355;
+	bh=BVv2NM9n65XEgstvWZEX3Zz0IsWB0nQDd9CmGlBZ1e8=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
+	 Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
+	 Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+	b=TaHE9+rTyTn3uo0Ihyw9XeRywIri5CokHtUnXmvWBUvxj7QpMfl659rYDDUthemfw
+	 JDXglecgRmHRtFhUnE1pBX1ZZ1mYxZGxXQKGGGio2/2sQaTIJaQk+P77qZGnX3F2Xr
+	 0bGtgjEq3muByV8xMktfZAv+1DCRVp102o9UNJp9qUslKCDlOG9BrpoxI75ANeC75s
+	 ef1ed+r/fYmYby6gCAporGN0ySGZPSsQfNaTbQLfklIQcllOmGlTp/aO+NTRC7sqju
+	 qgU2F3/onmtQaBr9ql/yiVstsBoMbSkwLAX+Zh2/8K/IxsuiRJfbWuPnoly64ueyNm
+	 jSBSc8cPAkN3g==
+From: "Marty E. Plummer" <hanetzer@startmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Daniel Mack <daniel@zonque.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
+	devicetree@vger.kernel.org, gengdongjiu@huawei.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
+	mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
+	p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+	robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+	sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
+	vigneshr@ti.com, xuwei5@hisilicon.com
+Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
+Message-ID: <20220603112227.hmzwy7xxl6ddezqh@proprietary-killer>
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
+ <20220501173423.2473093-1-hanetzer@startmail.com>
+ <20220501173423.2473093-2-hanetzer@startmail.com>
+ <f42cb4d0-7133-eea5-b456-b5169bebfad1@linaro.org>
+ <20220601105846.7hriawg3stxb657f@proprietary-killer>
+ <630b0d13-6778-2508-6a34-9daa0358047d@linaro.org>
+ <20220601110616.xmxih663kxgupszv@proprietary-killer>
+ <a2a98c6d-2ff7-89f6-0711-c8f8b99e85c2@linaro.org>
+ <20220601182418.okoofgannw6vbcxo@proprietary-killer>
+ <b1b87be5-a048-b713-c9f2-84b948aa6718@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1b87be5-a048-b713-c9f2-84b948aa6718@linaro.org>
 
-On Fri, Jun 3, 2022 at 12:27 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Jun 2, 2022 at 2:34 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > The second part of the multiplatform changes now converts the
-> > Intel/Marvell PXA platform along with the rest.
->
-> I _think_ the conflicts were all trivial, but hey, since I can't
-> really even build-test them, please do check the result out...
-
-Yes, looks good to me. I really should have mentioned the bit about
-'depends on CPU_LITTLE_ENDIAN', but I see you figured it out.
-
-        Arnd
+On Thu, Jun 02, 2022 at 08:37:43AM +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2022 20:24, Marty E. Plummer wrote:
+> 
+> >>> Either or. Whatever makes the workload easier is what I'm looking for.
+> >>
+> >> Sorry, you need to be more specific. Apply is not a job for you, for the
+> >> patch submitter.
+> >>
+> >> Then you miss here important piece - which is the first patch. DTS goes
+> >> always via separate branch (or even tree) from driver changes. That's
+> >> why bindings are always separate first patches.
+> >>
+> > So, add a 4: arch/arm/boot/dts/soc.dtsi and 5: arch/arm/boot/dts/board.dts
+> > to the above list, or should those be the same patch as well?
+> 
+> For me does not matter, sub architecture maintainer might have preference.
+> 
+Fair enough. That being said, for the dt-bindings patch, is it
+permissible to include #define CLOCK_FOO 1337 and so on for clocks which
+haven't been wired up in the driver yet? As in, you know they're there,
+and are important enough to model, but you haven't gotten to that point
+yet?
+> Best regards,
+> Krzysztof
