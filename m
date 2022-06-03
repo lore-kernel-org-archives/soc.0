@@ -1,87 +1,96 @@
-Return-Path: <SRS0=1JKI=WK=startmail.com=hanetzer@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDCA6C43334
-	for <soc@archiver.kernel.org>; Fri,  3 Jun 2022 11:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E46FC43334
+	for <soc@archiver.kernel.org>; Fri,  3 Jun 2022 18:57:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 81A44C385B8; Fri,  3 Jun 2022 11:22:44 +0000 (UTC)
-Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EF20CC385A9;
-	Fri,  3 Jun 2022 11:22:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF20CC385A9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=startmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=startmail.com
-Date: Fri, 3 Jun 2022 06:22:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-	s=2020-07; t=1654255355;
-	bh=BVv2NM9n65XEgstvWZEX3Zz0IsWB0nQDd9CmGlBZ1e8=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
-	 Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
-	 Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-	b=TaHE9+rTyTn3uo0Ihyw9XeRywIri5CokHtUnXmvWBUvxj7QpMfl659rYDDUthemfw
-	 JDXglecgRmHRtFhUnE1pBX1ZZ1mYxZGxXQKGGGio2/2sQaTIJaQk+P77qZGnX3F2Xr
-	 0bGtgjEq3muByV8xMktfZAv+1DCRVp102o9UNJp9qUslKCDlOG9BrpoxI75ANeC75s
-	 ef1ed+r/fYmYby6gCAporGN0ySGZPSsQfNaTbQLfklIQcllOmGlTp/aO+NTRC7sqju
-	 qgU2F3/onmtQaBr9ql/yiVstsBoMbSkwLAX+Zh2/8K/IxsuiRJfbWuPnoly64ueyNm
-	 jSBSc8cPAkN3g==
-From: "Marty E. Plummer" <hanetzer@startmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
-	devicetree@vger.kernel.org, gengdongjiu@huawei.com,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
-	mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
-	p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
-	robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
-	sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
-	vigneshr@ti.com, xuwei5@hisilicon.com
-Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
-Message-ID: <20220603112227.hmzwy7xxl6ddezqh@proprietary-killer>
-References: <20220501054440.2434247-1-hanetzer@startmail.com>
- <20220501173423.2473093-1-hanetzer@startmail.com>
- <20220501173423.2473093-2-hanetzer@startmail.com>
- <f42cb4d0-7133-eea5-b456-b5169bebfad1@linaro.org>
- <20220601105846.7hriawg3stxb657f@proprietary-killer>
- <630b0d13-6778-2508-6a34-9daa0358047d@linaro.org>
- <20220601110616.xmxih663kxgupszv@proprietary-killer>
- <a2a98c6d-2ff7-89f6-0711-c8f8b99e85c2@linaro.org>
- <20220601182418.okoofgannw6vbcxo@proprietary-killer>
- <b1b87be5-a048-b713-c9f2-84b948aa6718@linaro.org>
+	id 45337C3411F; Fri,  3 Jun 2022 18:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282C7C36AE3
+	for <soc@kernel.org>; Fri,  3 Jun 2022 18:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1654282641;
+	bh=6/gFciY7ZZpNgDZvjP+oAhAVcWhb2YN2G1yVV6HPowY=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=SJ/rQnxtF6ZF6mXdfBs7eOAgRDpoPu8fa/HBvEivdK27w8ZemlM2R6Alun4f9q07p
+	 xxIq+tb8nNeMfe1h1paIngbywNbPFlhzoT1YtKsrdnC7z4NkIVxOOGSwWpxXgWXF3G
+	 JQXns4cy2+OhmRIxIoYVEFm3Gti81ly7BV9Ywk8T1PCIQOliPpr4i3M5+tW10GTsN4
+	 iKvYlZ/+yMMuiDfFFlnUTKWFUs9CJSUpiAUaXrozLzbyMVcbmOoFz8Qus02XOHom8l
+	 kFMKo+XUZfOD1730zT/1Iy3Uhs1V8vZzG+mAUGgVaDuPrLwZHFzGuLv/YVe8LMY59/
+	 uh0/1Ta3Za55A==
+Received: by mail-yb1-f179.google.com with SMTP id w2so15290817ybi.7
+        for <soc@kernel.org>; Fri, 03 Jun 2022 11:57:21 -0700 (PDT)
+X-Gm-Message-State: AOAM532qO+475uc/UcJuJP/CkKyCxnztBaM2nMaM8xgN50l69hdZB6KV
+	PNWIhGwhpH/Lh5IPC8JofV00TIouR/o/jIzJ+/E=
+X-Google-Smtp-Source: ABdhPJyxi7gJv4KMR8FsO2v+k+o+WLF2p6ry+f8fU8EcnodNDOpwNLu3UsW/Gxunq/x00y3iML+Wy2kaZgvhZJbNw2Q=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr12462634ybx.472.1654282640168; Fri, 03
+ Jun 2022 11:57:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1b87be5-a048-b713-c9f2-84b948aa6718@linaro.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 3 Jun 2022 20:57:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Q2DbCrSUuu8Fui_W7ZydQZeza=s-2cgKFS8AL1geFZQ@mail.gmail.com>
+Message-ID: <CAK8P3a1Q2DbCrSUuu8Fui_W7ZydQZeza=s-2cgKFS8AL1geFZQ@mail.gmail.com>
+Subject: [GIT PULL, PATCH 0/2] ARM: multiplatform changes, part 3
+To: Linus Torvalds <torvalds@linux-foundation.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
+	linux-omap <linux-omap@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 02, 2022 at 08:37:43AM +0200, Krzysztof Kozlowski wrote:
-> On 01/06/2022 20:24, Marty E. Plummer wrote:
-> 
-> >>> Either or. Whatever makes the workload easier is what I'm looking for.
-> >>
-> >> Sorry, you need to be more specific. Apply is not a job for you, for the
-> >> patch submitter.
-> >>
-> >> Then you miss here important piece - which is the first patch. DTS goes
-> >> always via separate branch (or even tree) from driver changes. That's
-> >> why bindings are always separate first patches.
-> >>
-> > So, add a 4: arch/arm/boot/dts/soc.dtsi and 5: arch/arm/boot/dts/board.dts
-> > to the above list, or should those be the same patch as well?
-> 
-> For me does not matter, sub architecture maintainer might have preference.
-> 
-Fair enough. That being said, for the dt-bindings patch, is it
-permissible to include #define CLOCK_FOO 1337 and so on for clocks which
-haven't been wired up in the driver yet? As in, you know they're there,
-and are important enough to model, but you haven't gotten to that point
-yet?
-> Best regards,
-> Krzysztof
+The following changes since commit 6f9b5ed8caddfbc94af8307c557ed57a8ec5c65c:
+
+  Merge tag 'char-misc-5.19-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
+(2022-06-03 11:36:34 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/arm-multiplatform-5.19-3
+
+for you to fetch changes up to 7036440eab3e2d47a775d4616909f8235488d714:
+
+  ARM: omap1: enable multiplatform (2022-06-03 20:48:53 +0200)
+
+[ The branch is just rebased on top of the usb driver merge, which is
+not great for the
+ git history but required for bisection. Sending the individual
+patches as well if you
+ prefer to just apply them. ]
+
+----------------------------------------------------------------
+ARM: multiplatform changes, part 3
+
+This is the third and final bit of the multiplatform conversion
+for ARMv5, finishing off OMAP1. One patch enables the common-clk
+interface, and the other ones does the Kconfig change.
+
+These were waiting on a few dependencies to trickle in for
+common-clk, and the last one of those was in the USB tree.
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      ARM: omap1: enable multiplatform
+
+Janusz Krzysztofik (1):
+      ARM: OMAP1: clock: Convert to CCF
+
+ arch/arm/Kconfig                                |  13 -
+ arch/arm/configs/omap1_defconfig                |   3 +
+ arch/arm/mach-omap1/Kconfig                     |  16 +
+ arch/arm/mach-omap1/clock.c                     | 693 ++++++++++--------------
+ arch/arm/mach-omap1/clock.h                     | 139 ++---
+ arch/arm/mach-omap1/clock_data.c                | 483 +++++++----------
+ arch/arm/mach-omap1/hardware.h                  |   2 +-
+ arch/arm/mach-omap1/include/mach/uncompress.h   | 117 ----
+ arch/arm/mach-omap1/io.c                        |   7 -
+ arch/arm/mach-omap1/serial.c                    |   3 +-
+ arch/arm/mach-omap1/{include/mach => }/serial.h |   0
+ arch/arm/mach-omap1/time.c                      |   5 +
+ 12 files changed, 584 insertions(+), 897 deletions(-)
+ delete mode 100644 arch/arm/mach-omap1/include/mach/uncompress.h
+ rename arch/arm/mach-omap1/{include/mach => }/serial.h (100%)
