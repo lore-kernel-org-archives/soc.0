@@ -1,94 +1,119 @@
-Return-Path: <SRS0=zXxM=WL=kemnade.info=andreas@kernel.org>
+Return-Path: <SRS0=K/Ty=WM=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E28B1C433EF
-	for <soc@archiver.kernel.org>; Sat,  4 Jun 2022 13:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08EA6C433EF
+	for <soc@archiver.kernel.org>; Sun,  5 Jun 2022 14:54:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C9FDDC34114; Sat,  4 Jun 2022 13:56:21 +0000 (UTC)
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id B783EC385A5; Sun,  5 Jun 2022 14:54:48 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E67D0C385B8;
-	Sat,  4 Jun 2022 13:56:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E67D0C385B8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=BmBmUf2v9Q9hYXdfwnJjZQULdKw68XYCi/mBaSZxjyM=; b=muBE82ZCLw9ZgRWspJFLn0MdF9
-	/gZZe6vnsJp7iH3nTDkt1WB4AcB1dGpIkDe48Ct0S1Er5ux6fYce8fo2aOJoe5xz5M64vnFNfD9rw
-	1LO/k+yAJjdHXTFxD+/Lc2h5dXkCKA10rt4t0zJafL6YYJxEY6mVxsfztO4J4EjlO8sI=;
-Received: from p200300ccff3313001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff33:1300:1a3d:a2ff:febf:d33a] helo=aktux)
-	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.89)
-	(envelope-from <andreas@kemnade.info>)
-	id 1nxUGA-0007bO-Rj; Sat, 04 Jun 2022 15:56:11 +0200
-Received: from andi by aktux with local (Exim 4.94.2)
-	(envelope-from <andreas@kemnade.info>)
-	id 1nxUGA-002NzD-8V; Sat, 04 Jun 2022 15:56:10 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-List-Id: <soc.lore.kernel.org>
-To: robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	linux-imx@nxp.com,
-	l.stach@pengutronix.de,
-	marcel.ziswiler@toradex.com,
-	alexander.stein@ew.tq-group.com,
-	tharvey@gateworks.com,
-	linux@rempel-privat.de,
-	matthias.schiffer@ew.tq-group.com,
-	cniedermaier@dh-electronics.com,
-	sebastian.reichel@collabora.com,
-	leoyang.li@nxp.com,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	nicolecrivain@gmail.com
-Cc: Andreas Kemnade <andreas@kemnade.info>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/2] dt-bindings: arm: fsl: add compatible string for Kobo Aura 2
-Date: Sat,  4 Jun 2022 15:52:59 +0200
-Message-Id: <20220604135300.568754-2-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220604135300.568754-1-andreas@kemnade.info>
-References: <20220604135300.568754-1-andreas@kemnade.info>
+	by smtp.kernel.org (Postfix) with ESMTPS id 715EFC3411D
+	for <soc@kernel.org>; Sun,  5 Jun 2022 14:54:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 715EFC3411D
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id bg6so4693110ejb.0
+        for <soc@kernel.org>; Sun, 05 Jun 2022 07:54:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nr9goO6JCR6ynsOrkzdJyNSIrUg9yZwLsbH12VXCnv0=;
+        b=nrithu8KVe+0Ef6h0ePei9GiCMv2WDKM8GSaIfn0Ar6bNX8ASc1AN2K35a49/JrU3Y
+         j7k1YP5G4ugVlQjqD7hAuCd2aeuhbtK5rX6bFyzvxtHlkP8M/y5F145phmQbiR4J3Jvl
+         R85UOsOC9MPCyuuEjTYVXzl71SqvDMby/ip4U7POqd0Bra5XOdQ20YGXgH53LrsGPh59
+         gaeHsgWIzTUjQj+iouDOtdS6cR7/jwTbqvSsWJPR03Wh9u0yKHTDO7v4BwhVD5myoo4K
+         i17inQ2rz0Q/j8o8eagXaXgmEB/kFnFtQJ2FfBE+qb1ojXv8ba+1MEVFeWTTPR7YewC8
+         d02g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nr9goO6JCR6ynsOrkzdJyNSIrUg9yZwLsbH12VXCnv0=;
+        b=p01Q8GyfACosIl412G+rchUpGUP4ZaPsOYBp3T3/7sYABmrBa6I61+DEVmaPQfijKJ
+         OcFdNB4Qu7/dqquZRkJPe9b7fmiZcFEMISn/y5TO2kxXf1Ntus29NSEiulJoExPlTeIJ
+         wT/tnbEDfrHlic1wpxrwRkrfGyYyI0KdV/zJLmdwUhcBwDbzWItPeDp5xg/KP6QhpSpk
+         ZcrLoHSju5ZH4XuyhDaqMSbDBTm6XTNbhVinLxSbiRakN4Sxy9JSRc8SH+xBC8PoMH8E
+         s5urfQPskVjEmoKuEp0xwJsV/uRngH5PE6+gkoYt7nv8C8isWHZenVC1YyZ9p2sUYmKT
+         r4PQ==
+X-Gm-Message-State: AOAM532/oy3Y8ITSCgv6quGFalTpQyF064NU/yIQikDC8jqW49lQqQTV
+	N4HFR+7JalLaLOekyqeQLoiXOQ==
+X-Google-Smtp-Source: ABdhPJzJldMnVHXS3QDl/dM42X4k0XAaCUYXOZ4XIGmGG7wyaMi/VlfLe5nM4rkal6LkB6xfrPpcNQ==
+X-Received: by 2002:a17:907:3f9f:b0:6fe:f9e2:9c6a with SMTP id hr31-20020a1709073f9f00b006fef9e29c6amr18158922ejc.479.1654440885697;
+        Sun, 05 Jun 2022 07:54:45 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a23-20020aa7cf17000000b0042dc882c823sm7009190edy.70.2022.06.05.07.54.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 07:54:45 -0700 (PDT)
+Message-ID: <34e6715e-795c-3d64-1341-31da9bd27563@linaro.org>
+Date: Sun, 5 Jun 2022 16:54:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
+Content-Language: en-US
+To: "Marty E. Plummer" <hanetzer@startmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
+ devicetree@vger.kernel.org, gengdongjiu@huawei.com,
+ krzysztof.kozlowski+dt@linaro.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mtd@lists.infradead.org, linux@armlinux.org.uk, michael@walle.cc,
+ miquel.raynal@bootlin.com, mturquette@baylibre.com, novikov@ispras.ru,
+ olof@lixom.net, p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+ robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+ sumit.semwal@linaro.org, tudor.ambarus@microchip.com, vigneshr@ti.com,
+ xuwei5@hisilicon.com
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
+ <20220501173423.2473093-1-hanetzer@startmail.com>
+ <20220501173423.2473093-2-hanetzer@startmail.com>
+ <f42cb4d0-7133-eea5-b456-b5169bebfad1@linaro.org>
+ <20220601105846.7hriawg3stxb657f@proprietary-killer>
+ <630b0d13-6778-2508-6a34-9daa0358047d@linaro.org>
+ <20220601110616.xmxih663kxgupszv@proprietary-killer>
+ <a2a98c6d-2ff7-89f6-0711-c8f8b99e85c2@linaro.org>
+ <20220601182418.okoofgannw6vbcxo@proprietary-killer>
+ <b1b87be5-a048-b713-c9f2-84b948aa6718@linaro.org>
+ <20220603112227.hmzwy7xxl6ddezqh@proprietary-killer>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220603112227.hmzwy7xxl6ddezqh@proprietary-killer>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This adds a compatible string for the Kobo Aura 2 eBook reader.
+On 03/06/2022 13:22, Marty E. Plummer wrote:
+> On Thu, Jun 02, 2022 at 08:37:43AM +0200, Krzysztof Kozlowski wrote:
+>> On 01/06/2022 20:24, Marty E. Plummer wrote:
+>>
+>>>>> Either or. Whatever makes the workload easier is what I'm looking for.
+>>>>
+>>>> Sorry, you need to be more specific. Apply is not a job for you, for the
+>>>> patch submitter.
+>>>>
+>>>> Then you miss here important piece - which is the first patch. DTS goes
+>>>> always via separate branch (or even tree) from driver changes. That's
+>>>> why bindings are always separate first patches.
+>>>>
+>>> So, add a 4: arch/arm/boot/dts/soc.dtsi and 5: arch/arm/boot/dts/board.dts
+>>> to the above list, or should those be the same patch as well?
+>>
+>> For me does not matter, sub architecture maintainer might have preference.
+>>
+> Fair enough. That being said, for the dt-bindings patch, is it
+> permissible to include #define CLOCK_FOO 1337 and so on for clocks which
+> haven't been wired up in the driver yet? As in, you know they're there,
+> and are important enough to model, but you haven't gotten to that point
+> yet?
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
- 1 file changed, 1 insertion(+)
+What would be the benefit to include them now? I imagine that if you
+plan to add such clocks to the driver in next week or something, and you
+need to use them in DTS, then it's fine. If that's not the case,
+probably there is little sense in defining them upfront...
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 08bdd30e511c..c8c1c6e54543 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -523,6 +523,7 @@ properties:
-         items:
-           - enum:
-               - fsl,imx6sl-evk            # i.MX6 SoloLite EVK Board
-+              - kobo,aura2
-               - kobo,tolino-shine2hd
-               - kobo,tolino-shine3
-               - kobo,tolino-vision5
--- 
-2.30.2
 
+Best regards,
+Krzysztof
