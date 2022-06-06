@@ -1,62 +1,63 @@
-Return-Path: <SRS0=K/Ty=WM=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=2Jf0=WN=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08EA6C433EF
-	for <soc@archiver.kernel.org>; Sun,  5 Jun 2022 14:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB39FC433EF
+	for <soc@archiver.kernel.org>; Mon,  6 Jun 2022 07:30:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B783EC385A5; Sun,  5 Jun 2022 14:54:48 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id 9F42AC34119; Mon,  6 Jun 2022 07:30:04 +0000 (UTC)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 715EFC3411D
-	for <soc@kernel.org>; Sun,  5 Jun 2022 14:54:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 715EFC3411D
+	by smtp.kernel.org (Postfix) with ESMTPS id 53353C3411E
+	for <soc@kernel.org>; Mon,  6 Jun 2022 07:30:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53353C3411E
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id bg6so4693110ejb.0
-        for <soc@kernel.org>; Sun, 05 Jun 2022 07:54:47 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id q1so27206250ejz.9
+        for <soc@kernel.org>; Mon, 06 Jun 2022 00:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nr9goO6JCR6ynsOrkzdJyNSIrUg9yZwLsbH12VXCnv0=;
-        b=nrithu8KVe+0Ef6h0ePei9GiCMv2WDKM8GSaIfn0Ar6bNX8ASc1AN2K35a49/JrU3Y
-         j7k1YP5G4ugVlQjqD7hAuCd2aeuhbtK5rX6bFyzvxtHlkP8M/y5F145phmQbiR4J3Jvl
-         R85UOsOC9MPCyuuEjTYVXzl71SqvDMby/ip4U7POqd0Bra5XOdQ20YGXgH53LrsGPh59
-         gaeHsgWIzTUjQj+iouDOtdS6cR7/jwTbqvSsWJPR03Wh9u0yKHTDO7v4BwhVD5myoo4K
-         i17inQ2rz0Q/j8o8eagXaXgmEB/kFnFtQJ2FfBE+qb1ojXv8ba+1MEVFeWTTPR7YewC8
-         d02g==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=C20vxMWdqTwD6Z42rEEVzIJpyd097nkNjpEAy8hCZfk=;
+        b=FT0hiO/wt9Ln26hReszWV7kve6WAQ7SHRAXHuM3oRcyMcf62QkOMqSeKO7K5Q78tV5
+         jqZbs/pnJHNkKXfFb5szKb/IknvxYaw6NxhOfSQMJu39Orgpud1c0nHJEYhlJwBSG3g4
+         MmGf34twiFLhdqro9wTstyDge0JufEnO8kpC6eFUvoJMSFadTBbyjOMQe0j2P8JJ0S/D
+         iWAc3DOU0+HSvwVqGySRPfQDMJMQ+d9ne1njR2H81Dx76MXiTUbI3BF2QydGU6s0Z4OR
+         2sLoyhzZDAB6++fqC4WXdwKsoNeRFox4yH28AxiIaBKfcq7eroLmoOeZx8H74tM6VFRp
+         BpAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=nr9goO6JCR6ynsOrkzdJyNSIrUg9yZwLsbH12VXCnv0=;
-        b=p01Q8GyfACosIl412G+rchUpGUP4ZaPsOYBp3T3/7sYABmrBa6I61+DEVmaPQfijKJ
-         OcFdNB4Qu7/dqquZRkJPe9b7fmiZcFEMISn/y5TO2kxXf1Ntus29NSEiulJoExPlTeIJ
-         wT/tnbEDfrHlic1wpxrwRkrfGyYyI0KdV/zJLmdwUhcBwDbzWItPeDp5xg/KP6QhpSpk
-         ZcrLoHSju5ZH4XuyhDaqMSbDBTm6XTNbhVinLxSbiRakN4Sxy9JSRc8SH+xBC8PoMH8E
-         s5urfQPskVjEmoKuEp0xwJsV/uRngH5PE6+gkoYt7nv8C8isWHZenVC1YyZ9p2sUYmKT
-         r4PQ==
-X-Gm-Message-State: AOAM532/oy3Y8ITSCgv6quGFalTpQyF064NU/yIQikDC8jqW49lQqQTV
-	N4HFR+7JalLaLOekyqeQLoiXOQ==
-X-Google-Smtp-Source: ABdhPJzJldMnVHXS3QDl/dM42X4k0XAaCUYXOZ4XIGmGG7wyaMi/VlfLe5nM4rkal6LkB6xfrPpcNQ==
-X-Received: by 2002:a17:907:3f9f:b0:6fe:f9e2:9c6a with SMTP id hr31-20020a1709073f9f00b006fef9e29c6amr18158922ejc.479.1654440885697;
-        Sun, 05 Jun 2022 07:54:45 -0700 (PDT)
+        bh=C20vxMWdqTwD6Z42rEEVzIJpyd097nkNjpEAy8hCZfk=;
+        b=QcIqZ9sMnhGMRV0xblzMfH2bqKMFDhk/7wCMBULsFKk1n31gamwkGW3DboaODmNfx5
+         JPmAuqsvfrEmjO3+mc0XzfUy5WJfua1FHLnMJetiYJIzlHmAy6Eui88DKRLM/J+U4knj
+         nscthVvfwQPI9WtShrAc8R8ciMxGK4UYKCliEstOa9fEjTW194p6p+kDB4YKlJMFxD7L
+         LKzJIE8Rrme/M3QFhSKT4YS52S6r53sqPMKxdpel4XaDSAX9FFW4+9ePxH3sQhqefejj
+         EguOEB6lN69O89OPi3Jryj11nttvV6eTP/Bkwof76HbELyNPcTuKyzcoCZkNi1r0TP8B
+         6vbQ==
+X-Gm-Message-State: AOAM531OejM+4h1woUJK9/B190M2vXPfFz2+mJPjDt3GWH1w0SxZWAOT
+	1L8BP/kDtNPw+2i7pIcugDdHKA==
+X-Google-Smtp-Source: ABdhPJwDrG9m7vAQS+VF/GQXXz1IT+Mgco25TxBuVlJNzEy+22mr0JP9+ZK6aVbHXdWQQHWMrTExsA==
+X-Received: by 2002:a17:907:3daa:b0:6fe:88ab:fe8c with SMTP id he42-20020a1709073daa00b006fe88abfe8cmr20075363ejc.575.1654500601591;
+        Mon, 06 Jun 2022 00:30:01 -0700 (PDT)
 Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a23-20020aa7cf17000000b0042dc882c823sm7009190edy.70.2022.06.05.07.54.44
+        by smtp.gmail.com with ESMTPSA id t11-20020a17090605cb00b00706c1327f4bsm5994755ejt.23.2022.06.06.00.30.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 07:54:45 -0700 (PDT)
-Message-ID: <34e6715e-795c-3d64-1341-31da9bd27563@linaro.org>
-Date: Sun, 5 Jun 2022 16:54:43 +0200
+        Mon, 06 Jun 2022 00:30:01 -0700 (PDT)
+Message-ID: <8e81de5f-dfb7-e34f-ff5f-44b52421fa24@linaro.org>
+Date: Mon, 6 Jun 2022 09:29:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Subject: Re: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: "Marty E. Plummer" <hanetzer@startmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
@@ -80,40 +81,49 @@ References: <20220501054440.2434247-1-hanetzer@startmail.com>
  <20220601182418.okoofgannw6vbcxo@proprietary-killer>
  <b1b87be5-a048-b713-c9f2-84b948aa6718@linaro.org>
  <20220603112227.hmzwy7xxl6ddezqh@proprietary-killer>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220603112227.hmzwy7xxl6ddezqh@proprietary-killer>
+ <34e6715e-795c-3d64-1341-31da9bd27563@linaro.org>
+In-Reply-To: <34e6715e-795c-3d64-1341-31da9bd27563@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 03/06/2022 13:22, Marty E. Plummer wrote:
-> On Thu, Jun 02, 2022 at 08:37:43AM +0200, Krzysztof Kozlowski wrote:
->> On 01/06/2022 20:24, Marty E. Plummer wrote:
->>
->>>>> Either or. Whatever makes the workload easier is what I'm looking for.
->>>>
->>>> Sorry, you need to be more specific. Apply is not a job for you, for the
->>>> patch submitter.
->>>>
->>>> Then you miss here important piece - which is the first patch. DTS goes
->>>> always via separate branch (or even tree) from driver changes. That's
->>>> why bindings are always separate first patches.
->>>>
->>> So, add a 4: arch/arm/boot/dts/soc.dtsi and 5: arch/arm/boot/dts/board.dts
->>> to the above list, or should those be the same patch as well?
->>
->> For me does not matter, sub architecture maintainer might have preference.
->>
-> Fair enough. That being said, for the dt-bindings patch, is it
-> permissible to include #define CLOCK_FOO 1337 and so on for clocks which
-> haven't been wired up in the driver yet? As in, you know they're there,
-> and are important enough to model, but you haven't gotten to that point
-> yet?
+On 05/06/2022 16:54, Krzysztof Kozlowski wrote:
+> On 03/06/2022 13:22, Marty E. Plummer wrote:
+>> On Thu, Jun 02, 2022 at 08:37:43AM +0200, Krzysztof Kozlowski wrote:
+>>> On 01/06/2022 20:24, Marty E. Plummer wrote:
+>>>
+>>>>>> Either or. Whatever makes the workload easier is what I'm looking for.
+>>>>>
+>>>>> Sorry, you need to be more specific. Apply is not a job for you, for the
+>>>>> patch submitter.
+>>>>>
+>>>>> Then you miss here important piece - which is the first patch. DTS goes
+>>>>> always via separate branch (or even tree) from driver changes. That's
+>>>>> why bindings are always separate first patches.
+>>>>>
+>>>> So, add a 4: arch/arm/boot/dts/soc.dtsi and 5: arch/arm/boot/dts/board.dts
+>>>> to the above list, or should those be the same patch as well?
+>>>
+>>> For me does not matter, sub architecture maintainer might have preference.
+>>>
+>> Fair enough. That being said, for the dt-bindings patch, is it
+>> permissible to include #define CLOCK_FOO 1337 and so on for clocks which
+>> haven't been wired up in the driver yet? As in, you know they're there,
+>> and are important enough to model, but you haven't gotten to that point
+>> yet?
+> 
+> What would be the benefit to include them now? I imagine that if you
+> plan to add such clocks to the driver in next week or something, and you
+> need to use them in DTS, then it's fine. If that's not the case,
+> probably there is little sense in defining them upfront...
 
-What would be the benefit to include them now? I imagine that if you
-plan to add such clocks to the driver in next week or something, and you
-need to use them in DTS, then it's fine. If that's not the case,
-probably there is little sense in defining them upfront...
+Actually I see one more benefit - since IDs should be incremented by
+one, you can define all of them upfront thus having some
+logical/alphabetical order/grouping. If you extend the bindings header
+with new IDs later, they must go to the end of the list, thus maybe
+ordering will not be that nice.
 
+If you want, go ahead with all IDs. Just remeber that these must be IDs,
+not register values or some programming offsets.
 
 Best regards,
 Krzysztof
