@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D75DCCA473
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5C9ACCA484
 	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 01:58:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E6ACDC3411C; Tue,  7 Jun 2022 01:58:45 +0000 (UTC)
+	id A6EBBC3411C; Tue,  7 Jun 2022 01:58:46 +0000 (UTC)
 Received: from mx1.cqplus1.com (mx1.cqplus1.com [113.204.237.245])
-	by smtp.kernel.org (Postfix) with ESMTP id 6BA9EC3411F
-	for <soc@kernel.org>; Tue,  7 Jun 2022 01:58:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6BA9EC3411F
+	by smtp.kernel.org (Postfix) with ESMTP id 62215C385A9
+	for <soc@kernel.org>; Tue,  7 Jun 2022 01:58:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 62215C385A9
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cqplus1.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cqplus1.com
 X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
 	LIVER,40,3)
 Received: from 172.28.114.216
 	by mx1.cqplus1.com with MailGates ESMTP Server V5.0(2334:0:AUTH_RELAY)
-	(envelope-from <qinjian@cqplus1.com>); Tue, 07 Jun 2022 09:58:33 +0800 (CST)
+	(envelope-from <qinjian@cqplus1.com>); Tue, 07 Jun 2022 09:58:35 +0800 (CST)
 From: Qin Jian <qinjian@cqplus1.com>
 To: sboyd@kernel.org
 List-Id: <soc.lore.kernel.org>
@@ -34,194 +34,137 @@ Cc: krzysztof.kozlowski+dt@linaro.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v17 04/10] dt-bindings: clock: Add bindings for SP7021 clock driver
-Date: Tue,  7 Jun 2022 09:58:04 +0800
-Message-Id: <8f5673ae8730ec117c1d8fe1e28fb50a2216e891.1654565776.git.qinjian@cqplus1.com>
+Subject: [PATCH v17 08/10] ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+Date: Tue,  7 Jun 2022 09:58:08 +0800
+Message-Id: <cc8f55135da467f92322b317dd59cf8bd782ce0e.1654565776.git.qinjian@cqplus1.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1654565776.git.qinjian@cqplus1.com>
 References: <cover.1654565776.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add documentation to describe Sunplus SP7021 clock driver bindings.
+This patch aims to add an initial support for Sunplus SP7021 SoC.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Qin Jian <qinjian@cqplus1.com>
 ---
- .../bindings/clock/sunplus,sp7021-clkc.yaml   | 52 +++++++++++
- MAINTAINERS                                   |  2 +
- .../dt-bindings/clock/sunplus,sp7021-clkc.h   | 88 +++++++++++++++++++
- 3 files changed, 142 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ MAINTAINERS                    |  1 +
+ arch/arm/Kconfig               |  2 ++
+ arch/arm/Makefile              |  1 +
+ arch/arm/mach-sunplus/Kconfig  | 27 +++++++++++++++++++++++++++
+ arch/arm/mach-sunplus/Makefile |  8 ++++++++
+ arch/arm/mach-sunplus/sp7021.c | 16 ++++++++++++++++
+ 6 files changed, 55 insertions(+)
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
 
-diff --git a/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
-new file mode 100644
-index 000000000..bcc140882
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/sunplus,sp7021-clkc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus SP7021 SoC Clock Controller
-+
-+maintainers:
-+  - Qin Jian <qinjian@cqplus1.com>
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-clkc
-+
-+  reg:
-+    maxItems: 3
-+
-+  clocks:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    extclk: osc0 {
-+      compatible = "fixed-clock";
-+      #clock-cells = <0>;
-+      clock-frequency = <27000000>;
-+      clock-output-names = "extclk";
-+    };
-+
-+    clkc: clock-controller@9c000004 {
-+      compatible = "sunplus,sp7021-clkc";
-+      reg = <0x9c000004 0x28>,
-+            <0x9c000200 0x44>,
-+            <0x9c000268 0x08>;
-+      clocks = <&extclk>;
-+      #clock-cells = <1>;
-+    };
-+
-+...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 5e352bb97..91b92b4fb 100644
+index 5a7d157cb..9d4cf62eb 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2811,8 +2811,10 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for mon-subscribers)
- S:	Maintained
- W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
- F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
-+F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+@@ -2814,6 +2814,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
  F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
++F:	arch/arm/mach-sunplus/
+ F:	drivers/clk/clk-sp7021.c
+ F:	drivers/irqchip/irq-sp7021-intc.c
  F:	drivers/reset/reset-sunplus.c
-+F:	include/dt-bindings/clock/sunplus,sp7021-clkc.h
- F:	include/dt-bindings/reset/sunplus,sp7021-reset.h
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 2e8091e2d..300929f58 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -695,6 +695,8 @@ source "arch/arm/mach-sti/Kconfig"
  
- ARM/Synaptics SoC support
-diff --git a/include/dt-bindings/clock/sunplus,sp7021-clkc.h b/include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ source "arch/arm/mach-stm32/Kconfig"
+ 
++source "arch/arm/mach-sunplus/Kconfig"
++
+ source "arch/arm/mach-sunxi/Kconfig"
+ 
+ source "arch/arm/mach-tegra/Kconfig"
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index a2391b8de..ec7ec5a05 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -217,6 +217,7 @@ machine-$(CONFIG_ARCH_RENESAS)	 	+= shmobile
+ machine-$(CONFIG_ARCH_INTEL_SOCFPGA)	+= socfpga
+ machine-$(CONFIG_ARCH_STI)		+= sti
+ machine-$(CONFIG_ARCH_STM32)		+= stm32
++machine-$(CONFIG_ARCH_SUNPLUS)		+= sunplus
+ machine-$(CONFIG_ARCH_SUNXI)		+= sunxi
+ machine-$(CONFIG_ARCH_TEGRA)		+= tegra
+ machine-$(CONFIG_ARCH_U8500)		+= ux500
+diff --git a/arch/arm/mach-sunplus/Kconfig b/arch/arm/mach-sunplus/Kconfig
 new file mode 100644
-index 000000000..cd84321eb
+index 000000000..be20425c2
 --- /dev/null
-+++ b/include/dt-bindings/clock/sunplus,sp7021-clkc.h
-@@ -0,0 +1,88 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++++ b/arch/arm/mach-sunplus/Kconfig
+@@ -0,0 +1,27 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++
++menuconfig ARCH_SUNPLUS
++	bool "Sunplus SoCs"
++	depends on ARCH_MULTI_V7
++	help
++	  Support for Sunplus SoC family: SP7021 and succeeding SoC-based systems,
++	  such as the Banana Pi BPI-F2S development board (and derivatives).
++	  (<http://www.sinovoip.com.cn/ecp_view.asp?id=586>)
++	  (<https://tibbo.com/store/plus1.html>)
++
++config SOC_SP7021
++	bool "Sunplus SP7021 SoC support"
++	depends on ARCH_SUNPLUS
++	default ARCH_SUNPLUS
++	select HAVE_ARM_ARCH_TIMER
++	select ARM_GIC
++	select ARM_PSCI
++	select PINCTRL
++	select PINCTRL_SPPCTL
++	select SERIAL_SUNPLUS
++	select SERIAL_SUNPLUS_CONSOLE
++	help
++	  Support for Sunplus SP7021 SoC. It is based on ARM 4-core
++	  Cortex-A7 with various peripherals (ex: I2C, SPI, SDIO,
++	  Ethernet and etc.), FPGA interface,  chip-to-chip bus.
++	  It is designed for industrial control.
+diff --git a/arch/arm/mach-sunplus/Makefile b/arch/arm/mach-sunplus/Makefile
+new file mode 100644
+index 000000000..d211de6af
+--- /dev/null
++++ b/arch/arm/mach-sunplus/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for the linux kernel.
++#
++
++# Object file lists.
++
++obj-$(CONFIG_SOC_SP7021)	+= sp7021.o
+diff --git a/arch/arm/mach-sunplus/sp7021.c b/arch/arm/mach-sunplus/sp7021.c
+new file mode 100644
+index 000000000..774d0a5bd
+--- /dev/null
++++ b/arch/arm/mach-sunplus/sp7021.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +/*
 + * Copyright (C) Sunplus Technology Co., Ltd.
 + *       All rights reserved.
 + */
-+#ifndef _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
-+#define _DT_BINDINGS_CLOCK_SUNPLUS_SP7021_H
++#include <linux/kernel.h>
++#include <asm/mach/arch.h>
 +
-+/* gates */
-+#define CLK_RTC         0
-+#define CLK_OTPRX       1
-+#define CLK_NOC         2
-+#define CLK_BR          3
-+#define CLK_SPIFL       4
-+#define CLK_PERI0       5
-+#define CLK_PERI1       6
-+#define CLK_STC0        7
-+#define CLK_STC_AV0     8
-+#define CLK_STC_AV1     9
-+#define CLK_STC_AV2     10
-+#define CLK_UA0         11
-+#define CLK_UA1         12
-+#define CLK_UA2         13
-+#define CLK_UA3         14
-+#define CLK_UA4         15
-+#define CLK_HWUA        16
-+#define CLK_DDC0        17
-+#define CLK_UADMA       18
-+#define CLK_CBDMA0      19
-+#define CLK_CBDMA1      20
-+#define CLK_SPI_COMBO_0 21
-+#define CLK_SPI_COMBO_1 22
-+#define CLK_SPI_COMBO_2 23
-+#define CLK_SPI_COMBO_3 24
-+#define CLK_AUD         25
-+#define CLK_USBC0       26
-+#define CLK_USBC1       27
-+#define CLK_UPHY0       28
-+#define CLK_UPHY1       29
-+#define CLK_I2CM0       30
-+#define CLK_I2CM1       31
-+#define CLK_I2CM2       32
-+#define CLK_I2CM3       33
-+#define CLK_PMC         34
-+#define CLK_CARD_CTL0   35
-+#define CLK_CARD_CTL1   36
-+#define CLK_CARD_CTL4   37
-+#define CLK_BCH         38
-+#define CLK_DDFCH       39
-+#define CLK_CSIIW0      40
-+#define CLK_CSIIW1      41
-+#define CLK_MIPICSI0    42
-+#define CLK_MIPICSI1    43
-+#define CLK_HDMI_TX     44
-+#define CLK_VPOST       45
-+#define CLK_TGEN        46
-+#define CLK_DMIX        47
-+#define CLK_TCON        48
-+#define CLK_GPIO        49
-+#define CLK_MAILBOX     50
-+#define CLK_SPIND       51
-+#define CLK_I2C2CBUS    52
-+#define CLK_SEC         53
-+#define CLK_DVE         54
-+#define CLK_GPOST0      55
-+#define CLK_OSD0        56
-+#define CLK_DISP_PWM    57
-+#define CLK_UADBG       58
-+#define CLK_FIO_CTL     59
-+#define CLK_FPGA        60
-+#define CLK_L2SW        61
-+#define CLK_ICM         62
-+#define CLK_AXI_GLOBAL  63
++static const char *sp7021_compat[] __initconst = {
++	"sunplus,sp7021",
++	NULL
++};
 +
-+/* plls */
-+#define PLL_A           64
-+#define PLL_E           65
-+#define PLL_E_2P5       66
-+#define PLL_E_25        67
-+#define PLL_E_112P5     68
-+#define PLL_F           69
-+#define PLL_TV          70
-+#define PLL_TV_A        71
-+#define PLL_SYS         72
-+
-+#define CLK_MAX         73
-+
-+#endif
++DT_MACHINE_START(SP7021_DT, "SP7021")
++	.dt_compat	= sp7021_compat,
++MACHINE_END
 -- 
 2.33.1
 
