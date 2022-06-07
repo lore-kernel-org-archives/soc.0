@@ -1,161 +1,348 @@
-Return-Path: <SRS0=6Lw4=WO=suse.com=clin@kernel.org>
+Return-Path: <SRS0=RPJI=WO=foss.st.com=prvs=2157859850=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB6E5C433EF
-	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 13:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105ACC43334
+	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 16:02:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 788F4C385A5; Tue,  7 Jun 2022 13:56:23 +0000 (UTC)
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
+	id BDDE5C34114; Tue,  7 Jun 2022 16:02:49 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 554C6C34114
-	for <soc@kernel.org>; Tue,  7 Jun 2022 13:56:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 554C6C34114
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=suse.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-	t=1654610179;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=LvNA/6DgjdCC2nlkldSmyGNHSvB3r3DzNaR1z99GzfE=;
-	b=TBpT3MrW6x9eHh+1Cit6bpPw6hIGg/CJS20crHnH1M1qvVBAIiCqG2ntAtDE5hv2uNnLx2
-	iUpJyZynFHMKi7V3drFgHauC4gH7TZOsT/SKA5iPhngldJOMwHt2kSXWO/eFuExYePe3m2
-	RbZFjjDxaJKaGHr5/+zklxU7YtrOVMM=
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
- (mail-db8eur05lp2107.outbound.protection.outlook.com [104.47.17.107]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-12-DOP8HtYAMjCr1sH6bwE1nA-1; Tue, 07 Jun 2022 15:56:18 +0200
-X-MC-Unique: DOP8HtYAMjCr1sH6bwE1nA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hGOpVJDqxuSDczRfRxdkOqev7RsDcZhEnWI+CQMaZuucd0HMW6c1P35v25KJRXjXtnEXoq9Sh1MaKFsBd1sSzPjO6usLUlP0uRdKxqLO4ryPMR/uH812CT0i6LA75xwrODiD6lujLgFPgtFtktpzhXEjY+22tqOuS692W5626kw9LfBc9P1nWMo5Zlfu4Ub77uQ2c/Mwjb6s+HM4lfswuP17SdsJKMVkvvVv2OinqtqutCURsbP/xG4Yu3T016dxotaWdIJ1nNBWKsLgv+6WA+yh+dAeBWrNHCJSWgWLbNuOfPsGVIL5IBY0SLGvu1s/ow2nWqNr9w1r2CA1xsQ8gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LvNA/6DgjdCC2nlkldSmyGNHSvB3r3DzNaR1z99GzfE=;
- b=R8Ug52TjqONmE6TXOID+wBQS50IGb5pyFxFh7aNSSOFdgoD78yQ1tNBI3D2dZ7oUVYMGOYMLyf2yZ/oWoeE3ivcAlTqlsylW4g1kkTxrPIOt6/m7u+c7TK39b+i7uuKxKo1fnxMFoTlcCpH9Z8KB4LjsCqiNj6g9AgLeoEDEfqyujihQWcHp2qHGO91EKjAcOP4OKuSlcAEyihf9uBzRTE5SfvgdcR/dTsQUj5v+umh3PtJHsPMATIGOuEG1UHifFL2D7cfw21NG24dNKpdBlKVd/FAhGV/mffG1sQwXkLDzeGtgrJZQ+mHTrwZ56CzefKQ1RM1FiFV16/c1U4qOAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mysuse.onmicrosoft.com; s=selector1-mysuse-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LvNA/6DgjdCC2nlkldSmyGNHSvB3r3DzNaR1z99GzfE=;
- b=GXyMCWaECDKaiGbci6UyOXAC/IlomfzdaUQbP28E3RexoS3OOJK7StqL52EwkXbZ2QTDsBFNxqHPnvtAxu2WZQmsxB91/K7gTFuTDk74lcjmiZGCFk+l7Bsu/R0ZlZALnegAB98DlssxSmRgUwf7buzAkOFmPSGlwKu3KbcGz6uGo1RZ2anb0csWuej+JeHJcugytxqpu9i44Dc7LyoK8fxOeHDTYPpwRP5IV31tNL2DedP4rGLebRNirF2Yc33VhRFiMjxdPiSjvvullzTTvpLCjlaBCskkpPGGPF3hUmLZrlaobWD+U1m59ZZbz2tDVpvRL2cxP1ErHAox3QSoIA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
- by VI1PR0402MB2798.eurprd04.prod.outlook.com (2603:10a6:800:ae::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 13:56:16 +0000
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::f518:3115:e069:2669]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::f518:3115:e069:2669%6]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 13:56:15 +0000
-Date: Tue, 7 Jun 2022 21:55:46 +0800
-From: Chester Lin <clin@suse.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id B0A5DC385A5;
+	Tue,  7 Jun 2022 16:02:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B0A5DC385A5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257E4aEK008111;
+	Tue, 7 Jun 2022 18:02:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=nb5LpqJUj5iizl/xOOfiQHg6cuAiGW78cC6YDScMeX8=;
+ b=2gOz6fK+uQsK+kY8GliGVTAUIgswgYKoCND3JGle4iiaDIAyNuhv+d51fvA2rx19tESo
+ e+kJscvSvyyWAWrqp/b8GgMADtyfYDRiU+o7TqjNdwSvVxdj4zEOcrZNZDTNQ2OVcCv4
+ j6/Vi/vddrnF+Lmx6eTd4UnpUZWAIDNCzDTWRaszdde6Y8Z0w4zL/AdR9CujVi6zzfzh
+ scrbjUIRZBLm9G8LIXlmJEKP+LoVc1KiVWqUNQCNTRW+AKh4KN6cHSM+bvPL8vzDHzPR
+ dAttHZ82BwGzMKP/sVnAapeW6u4h/tGNTADEFQEHJWGI2uCeQg+VDxkVfWzKN7daFmTt jg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gfvhaas2h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jun 2022 18:02:41 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F35E510002A;
+	Tue,  7 Jun 2022 18:02:39 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 17BBE231519;
+	Tue,  7 Jun 2022 18:02:39 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 7 Jun
+ 2022 18:02:38 +0200
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	arm@kernel.org, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Matthias Brugger <mbrugger@suse.com>, s32@nxp.com
-Subject: [GIT PULL] arm64: s32g fixes for v5.19
-Message-ID: <Yp9Y4nGrQ2kVKV6S@linux-8mug>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ClientProxiedBy: SG2PR04CA0168.apcprd04.prod.outlook.com (2603:1096:4::30)
- To VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
+To: <arnd@arndb.de>, <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, <soc@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ARM: dts: stm32: move SCMI related nodes in a dedicated file for stm32mp15
+Date: Tue, 7 Jun 2022 18:02:38 +0200
+Message-ID: <20220607160238.17200-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1c8680b7-536b-4841-a2d8-08da488d7d57
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB2798:EE_
-X-Microsoft-Antispam-PRVS:
-	<VI1PR0402MB2798E1F95B455023409D75C2ADA59@VI1PR0402MB2798.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	rPbZyS4DL/Of0fTt6J6sYoqwiJXt/v/xACHmiDGKaS0qS7caDVtg/+FbXFCVQZH+3+tGQASvuamykh4aEmHa3ZFTioLBkNp//zl+V7CMsAQ3obmCl9cb+UMnuXkPGIW215FLicub67TtmS+6vk/ECgzuiVjSeajdAjM9Sj32ny7JLiaIk9n4PBLkXdRfrOIpGGqzR1KLu8ZXxy/Lsnn7TYmIk4A6BVyiUrlfJQpj0j6wEJ6XqYV3o4ixxei1khq/oUQZkMnfOCl+rNcsZQLOutjXDbqxD25PogDjWVj0EDxJ27jPGY20FBp2L5um0eZnS4EV4GEozAZAKxGdEh4lTOPkG8nfTpHvuBWXAw8MxEmpHnMlAHl6Ow910N7PvFx1jsrbhCGd7lMKegtmSVm84IE2bK6C6nAzLVe4SPHH0qkm7kjapg6p9EWm16c0nNGHsx/cORFQTxkccTm4tp9f7ro2oEbPcnnp9xkwsTRgR2fUF9e/Hgf+OUhZj/cRk5joMLGvZFtEccbU+dlca40NkZRj8T/mWBiSUnN1uGoKLqNeI3x6SlbtHLw7rNrbt2fp4yxqifaLHhPLouwpXSxd2J39LVpz6U3z4fHgF2PyTuY3Ompxa3X7MgaHFzX/BIN+mUx9ymQHpmAQTbhBc8sJaloU/EgqrIvdaP52OlVMfOtQLLRkvKjmMYnQWTzkm/nM61jAMbpttxggj1QndMrs6eWAeIaiJzeQ1loZ6hH+VU0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(54906003)(6486002)(186003)(66946007)(966005)(66556008)(5660300002)(508600001)(8676002)(110136005)(4326008)(66476007)(33716001)(6506007)(26005)(8936002)(6666004)(2906002)(4744005)(38100700002)(316002)(83380400001)(86362001)(9686003)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?u4nUZZgwX+tjY7uoldndtQLwITVkRuG3A8tK2MY2Xr14lx0cAk27ErqUxlUI?=
- =?us-ascii?Q?ViPX3RjD8mH07tv3ld4bvvEGfLlcqSz0SOrt/Rab9Zv6VrwvWHyEDWSq2BHD?=
- =?us-ascii?Q?mKs72XukitnMOLQIoP/7XVztTw+0h92eCv240p0nBc7l+vphOI3QGZ3J4Q4R?=
- =?us-ascii?Q?5mctj/Aw3PyRfB0TOzuwXKxYPY3iwzXd2xZ7zCjKm10zIBRuUDWdyFa8ZHz8?=
- =?us-ascii?Q?eZPwb0ZwgfZ19zKwzrrK6fZ6SZX0sHFO9LbDAcoJsU4/89ypdpz9R0Y9SkQY?=
- =?us-ascii?Q?31Qy28BtGKogwWHvm6wrdTPpgw+JzoUawa5vC7AmeO3ZJGSR+8bZ1RlH16Wr?=
- =?us-ascii?Q?WoCQg2PAp6E9yt8l4WuAVK/Y9zZzqvoS7cnmuyO7LWT3hQdFyWapCkByIGoL?=
- =?us-ascii?Q?U7uHKQjvVAfaL33yQHi6x/5qYYOuM59T8zFEIPUjHmHrxmfqX62qTv13bzfW?=
- =?us-ascii?Q?V0cNUaJlmP/kIbm2TS7+oT2YLUT461Lj+GAULZR3yWI2fk0kmXCXMYWMnMOE?=
- =?us-ascii?Q?vf1C8CX18GH3HJT8PeIvMesr6c8lwq8y/lCX5airSLQ1DduqtEQEYYyzzpg9?=
- =?us-ascii?Q?wiVOB5WalcP/cxqu11+0XqDQUzqgPXpLiGpLqsYZxPjK4W/x6gjqz138OfQU?=
- =?us-ascii?Q?eIHDImJDSgvvDak2VB8sKbFwTmAyFG4Es6MHrONAFEr9XGZ7cNCNkeXPeUGx?=
- =?us-ascii?Q?ARwvGxBXflsoRd6GahbQf1tFsdaaydwQf4Mz7hfpNoFfYX/XIVswe46SzI28?=
- =?us-ascii?Q?2dYWPsTABz/dKfpRQGiY+3XzUA2lVozLuj6RqiRmTa+XUEx7q1qaavTC1iXs?=
- =?us-ascii?Q?PQPf1jA3l513qvBWStXofW1BIs+UtdKHruteZNOwVKNJE10gOg5l1+xDVg1C?=
- =?us-ascii?Q?8ZavQVeBMkVzkEUmGUx0JLftiv+PffBV+UGrbmeSrYJOKZwjXNn4x5S1kGaJ?=
- =?us-ascii?Q?eKso437Mn222d/qbbz8BS+z/5CEMnTusLCNgY1gS1RtO6UZTgI+nJUsb9lJL?=
- =?us-ascii?Q?ORAxWHpjqercKb/jAFHttXEI1c8RLO0vTrJWVDv1FBaM7ObLZBttlP2nh1ug?=
- =?us-ascii?Q?Ww/ya+m8CvvxhiCK9+i19S1TtbVl7Sl9SFRR9SsRSzL8Nh6d3kfixx54UzXF?=
- =?us-ascii?Q?bBCHKj7DizT16pqVrzQiUPJaq+b36qNG6+H176y95KUBbXCQAN1Zym1cQgtr?=
- =?us-ascii?Q?RrnKlflqoBaWWENldl8whtfATOIREVOR9KDlWGJq8lvtYP1GxVxqfsSiZqtX?=
- =?us-ascii?Q?v/yvpTdl0tqocOhDI05TxB0giFqazq9ZGQnQAsBkRjjI8GBDzRzqCvohYYPf?=
- =?us-ascii?Q?cjy/jqqOZBKuX0k9myjcqtSxly8lvc54we9phAcDuCbnq2btit7/yWAScM+W?=
- =?us-ascii?Q?QlEqON25Z5MqqWGH0joKTtG234esCtDC73IBPDa3FqQjDGlfMyUtO6d2+3CO?=
- =?us-ascii?Q?3tSGV/wVtUb0Bm1rrZaKXOoHXJE930SsqnDZIuahk71wB3MBDM5AmdW+xGjJ?=
- =?us-ascii?Q?XKxN6cQQHG6ZAqjU+/eaSzQtHgjdDT4dX4nVbvxIu0CgYZjYzRUrVSZ6brid?=
- =?us-ascii?Q?+WZQd+WW5uhZuAa73Za+qUuzZJj6VHsD6m9kxk14zJVpX5uSuqYdDg82Dggm?=
- =?us-ascii?Q?KJBcg9c2RmjBP0i5ov0RHIuYyy09S2+jKBsKwr04oMntXTDKFV+I8YS0t251?=
- =?us-ascii?Q?HcjgDHB0efYc/NtHMSH4arZRjCPtrZzCpmhpS2KVudACqToT?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c8680b7-536b-4841-a2d8-08da488d7d57
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 13:56:15.8549
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dOUzcIaC2vJw3+5q8Uo/vPOHS2Y1KTcPObzXTQ96n/0PcIC8Oox/6ffmX0xu+O7C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2798
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-07_07,2022-06-07_02,2022-02-23_01
 
-Hi Arnd, Olof, and ARM SoC maintainers,
+Adding a "secure" version of STM32 boards (DK1/DK2/ED1/EV1), SCMI (clock/
+reset) protocol and OP-TEE node have been added in SoC dtsi file
+(stm32mp151.dtsi). They have been added with a status disabled in order to
+keep our legacy unchanged. It is actually not enough to keep our legacy
+unchanged.
 
-Please pull the following two changes for s32g. Thanks.
+First, just a reminder about our use case: TF-A (BL2) loads and starts
+OP-TEE, then loads and runs U-Boot. U-Boot code checks if an OP-TEE is
+running, if yes it searches in Kernel device tree if an OP-TEE node is
+present:
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+-If the OP-TEE node is not present then U-Boot copies OP-TEE node and its
+reserved memory region from U-Boot device tree to the kernel device tree.
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+-If the OP-TEE node is present then it does nothing (this OP-TEE node will
+be used by Linux). So U-Boot lets the kernel device tree unchanged thinking
+it is correct for an OP-TEE usage. It is the case for our legacy boards,
+the OP-TEE node is present (although disabled) but the reserved memory
+region is not declared. As no memory region has been reserved for OP-TEE,
+the end of DDR is seen by the kernel as free and then used for CMA. But as
+OP-TEE is running, this end of DDR is already used by OP-TEE. So as soon as
+kernel tries to access to the CMA region OP-TEE raises an error.
 
-are available in the Git repository at:
+To fix it, all OP-TEE node and SCMI is moved in a dedicated file.
 
-  https://github.com/chesterlintw/linux-s32g.git tags/s32g2-fixes-5.19
+Fixes: 40b4157dbd8c ("ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP15")
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-for you to fetch changes up to 680c0aee97690c3f595e074a5f677599aac5d26b:
-
-  MAINTAINERS: add a new reviewer for S32G (2022-06-07 10:26:05 +0800)
-
-----------------------------------------------------------------
-S32G2 fixes for 5.19
-
-- MAINTAINERS: Add s32@nxp.com as a review group.
-- dts: Pass unit name to soc node to fix a W=1 build warning.
-
-----------------------------------------------------------------
-Chester Lin (1):
-      MAINTAINERS: add a new reviewer for S32G
-
-Fabio Estevam (1):
-      arm64: s32g2: Pass unit name to soc node
-
- MAINTAINERS                              | 1 +
- arch/arm64/boot/dts/freescale/s32g2.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+diff --git a/arch/arm/boot/dts/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/stm32mp15-scmi.dtsi
+new file mode 100644
+index 000000000000..e90cf3acd0b3
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15-scmi.dtsi
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
++ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
++ */
++
++/ {
++	firmware {
++		optee: optee {
++			compatible = "linaro,optee-tz";
++			method = "smc";
++		};
++
++		scmi: scmi {
++			compatible = "linaro,scmi-optee";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			linaro,optee-channel-id = <0>;
++			shmem = <&scmi_shm>;
++
++			scmi_clk: protocol@14 {
++				reg = <0x14>;
++				#clock-cells = <1>;
++			};
++
++			scmi_reset: protocol@16 {
++				reg = <0x16>;
++				#reset-cells = <1>;
++			};
++		};
++	};
++
++	soc {
++		scmi_sram: sram@2ffff000 {
++			compatible = "mmio-sram";
++			reg = <0x2ffff000 0x1000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x2ffff000 0x1000>;
++
++			scmi_shm: scmi-sram@0 {
++				compatible = "arm,scmi-shmem";
++				reg = <0 0x80>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
+index 1b2fd3426a81..7fdc324b3cf9 100644
+--- a/arch/arm/boot/dts/stm32mp151.dtsi
++++ b/arch/arm/boot/dts/stm32mp151.dtsi
+@@ -115,33 +115,6 @@
+ 		status = "disabled";
+ 	};
+ 
+-	firmware {
+-		optee: optee {
+-			compatible = "linaro,optee-tz";
+-			method = "smc";
+-			status = "disabled";
+-		};
+-
+-		scmi: scmi {
+-			compatible = "linaro,scmi-optee";
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-			linaro,optee-channel-id = <0>;
+-			shmem = <&scmi_shm>;
+-			status = "disabled";
+-
+-			scmi_clk: protocol@14 {
+-				reg = <0x14>;
+-				#clock-cells = <1>;
+-			};
+-
+-			scmi_reset: protocol@16 {
+-				reg = <0x16>;
+-				#reset-cells = <1>;
+-			};
+-		};
+-	};
+-
+ 	soc {
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
+@@ -149,20 +122,6 @@
+ 		interrupt-parent = <&intc>;
+ 		ranges;
+ 
+-		scmi_sram: sram@2ffff000 {
+-			compatible = "mmio-sram";
+-			reg = <0x2ffff000 0x1000>;
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			ranges = <0 0x2ffff000 0x1000>;
+-
+-			scmi_shm: scmi-sram@0 {
+-				compatible = "arm,scmi-shmem";
+-				reg = <0 0x80>;
+-				status = "disabled";
+-			};
+-		};
+-
+ 		timers2: timer@40000000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+index e3d3f3f30c7d..36371d6ed660 100644
+--- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
++++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157a-dk1.dts"
++#include "stm32mp15-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157A-DK1 SCMI Discovery Board";
+@@ -54,10 +55,6 @@
+ 	resets = <&scmi_reset RST_SCMI_MCU>;
+ };
+ 
+-&optee {
+-	status = "okay";
+-};
+-
+ &rcc {
+ 	compatible = "st,stm32mp1-rcc-secure", "syscon";
+ 	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+@@ -76,11 +73,3 @@
+ &rtc {
+ 	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ };
+-
+-&scmi {
+-	status = "okay";
+-};
+-
+-&scmi_shm {
+-	status = "okay";
+-};
+diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+index 45dcd299aa9e..03226a596904 100644
+--- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
++++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157c-dk2.dts"
++#include "stm32mp15-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157C-DK2 SCMI Discovery Board";
+@@ -63,10 +64,6 @@
+ 	resets = <&scmi_reset RST_SCMI_MCU>;
+ };
+ 
+-&optee {
+-	status = "okay";
+-};
+-
+ &rcc {
+ 	compatible = "st,stm32mp1-rcc-secure", "syscon";
+ 	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+@@ -85,11 +82,3 @@
+ &rtc {
+ 	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ };
+-
+-&scmi {
+-	status = "okay";
+-};
+-
+-&scmi_shm {
+-	status = "okay";
+-};
+diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+index 458e0ca3cded..c1a79272c068 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157c-ed1.dts"
++#include "stm32mp15-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157C-ED1 SCMI eval daughter";
+@@ -59,10 +60,6 @@
+ 	resets = <&scmi_reset RST_SCMI_MCU>;
+ };
+ 
+-&optee {
+-	status = "okay";
+-};
+-
+ &rcc {
+ 	compatible = "st,stm32mp1-rcc-secure", "syscon";
+ 	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+@@ -81,11 +78,3 @@
+ &rtc {
+ 	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ };
+-
+-&scmi {
+-	status = "okay";
+-};
+-
+-&scmi_shm {
+-	status = "okay";
+-};
+diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+index df9c113edb4b..7842384ddbe4 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
+ 
+ #include "stm32mp157c-ev1.dts"
++#include "stm32mp15-scmi.dtsi"
+ 
+ / {
+ 	model = "STMicroelectronics STM32MP157C-EV1 SCMI eval daughter on eval mother";
+@@ -68,10 +69,6 @@
+ 	resets = <&scmi_reset RST_SCMI_MCU>;
+ };
+ 
+-&optee {
+-	status = "okay";
+-};
+-
+ &rcc {
+ 	compatible = "st,stm32mp1-rcc-secure", "syscon";
+ 	clock-names = "hse", "hsi", "csi", "lse", "lsi";
+@@ -90,11 +87,3 @@
+ &rtc {
+ 	clocks = <&scmi_clk CK_SCMI_RTCAPB>, <&scmi_clk CK_SCMI_RTC>;
+ };
+-
+-&scmi {
+-	status = "okay";
+-};
+-
+-&scmi_shm {
+-	status = "okay";
+-};
+-- 
+2.17.1
 
