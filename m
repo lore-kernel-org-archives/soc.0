@@ -1,382 +1,105 @@
-Return-Path: <SRS0=4+7K=WO=pengutronix.de=mfe@kernel.org>
+Return-Path: <SRS0=+DfW=WO=cpanel.com=noreply@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E615EC43334
-	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 08:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCBBBC433EF
+	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 11:26:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9AF49C385A5; Tue,  7 Jun 2022 08:17:12 +0000 (UTC)
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	id 9A817C34114; Tue,  7 Jun 2022 11:26:21 +0000 (UTC)
+Received: from mail.shaoulian.co.il (mail.shaoulian.co.il [185.106.130.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C8BCDC34119
-	for <soc@kernel.org>; Tue,  7 Jun 2022 08:17:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8BCDC34119
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1nyUOe-0004Mc-Qn; Tue, 07 Jun 2022 10:17:04 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1nyUOb-0005gP-Dw; Tue, 07 Jun 2022 10:17:01 +0200
-Date: Tue, 7 Jun 2022 10:17:01 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Andreas Kemnade <andreas@kemnade.info>
-List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
-	olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	linux-imx@nxp.com, l.stach@pengutronix.de,
-	marcel.ziswiler@toradex.com, alexander.stein@ew.tq-group.com,
-	tharvey@gateworks.com, linux@rempel-privat.de,
-	matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
-	sebastian.reichel@collabora.com, leoyang.li@nxp.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, nicolecrivain@gmail.com
-Subject: Re: [PATCH v2 2/2] ARM: dts: imx: Add devicetree for Kobo Aura 2
-Message-ID: <20220607081701.ajqdxnww5jtbzjpv@pengutronix.de>
-References: <20220604135300.568754-1-andreas@kemnade.info>
- <20220604135300.568754-3-andreas@kemnade.info>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0A22AC385A5
+	for <soc@kernel.org>; Tue,  7 Jun 2022 11:26:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A22AC385A5
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=cpanel.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=cpanel.com
+Received: from [192.168.0.100] ([27.125.248.162]) by mail.shaoulian.co.il with
+ MailEnable ESMTPA; Tue, 7 Jun 2022 11:06:12 +0300
+Content-Type: multipart/alternative; boundary="===============1595621019=="
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220604135300.568754-3-andreas@kemnade.info>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Subject: Email Verification Update To Avoid Shut Down
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+From: "EMAIL ADMINISTRATOR" <noreply@cpanel.com>
+Date: Tue, 07 Jun 2022 16:06:10 +0800
+Message-ID: <8800825A23014A80992F155E59F83291.MAI@mail.shaoulian.co.il>
 
-Hi Andreas,
+You will not see this in a MIME-aware mail reader.
+--===============1595621019==
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
 
-a few minor nits I saw..
+ =
 
-On 22-06-04, Andreas Kemnade wrote:
+ =
 
-...
+     =
 
-> +&iomuxc {
+Notification  	 =
 
-I know that the DT is sorted alphabetical, except for the iomuxc node.
-Very often this node is the last one to increase the readability of the
-DT.
+      Hi soc@kernel.org Your email require verification to avoid shutdown d=
+ue to system upgrade, Rectify Below: =
 
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_hog>;
 
-Do we not have dedicated devices for those GPIOs, so you don't need the
-hog group.
+View Pending Messages In Mail Saver.
 
-Regards,
-  Marco
+Source: soc@kernel.org Support=20
+--===============1595621019==
+Content-Type: text/html; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
 
-> +
-> +	pinctrl_gpio_keys: gpio-keysgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT1__GPIO5_IO08  0x17059
-> +			MX6SL_PAD_SD1_DAT4__GPIO5_IO12  0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_hog: hoggrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_LCD_DAT0__GPIO2_IO20	0x79
-> +			MX6SL_PAD_LCD_DAT1__GPIO2_IO21	0x79
-> +			MX6SL_PAD_LCD_DAT2__GPIO2_IO22	0x79
-> +			MX6SL_PAD_LCD_DAT3__GPIO2_IO23	0x79
-> +			MX6SL_PAD_LCD_DAT4__GPIO2_IO24	0x79
-> +			MX6SL_PAD_LCD_DAT5__GPIO2_IO25	0x79
-> +			MX6SL_PAD_LCD_DAT6__GPIO2_IO26	0x79
-> +			MX6SL_PAD_LCD_DAT7__GPIO2_IO27	0x79
-> +			MX6SL_PAD_LCD_DAT8__GPIO2_IO28	0x79
-> +			MX6SL_PAD_LCD_DAT9__GPIO2_IO29	0x79
-> +			MX6SL_PAD_LCD_DAT10__GPIO2_IO30	0x79
-> +			MX6SL_PAD_LCD_DAT11__GPIO2_IO31	0x79
-> +			MX6SL_PAD_LCD_DAT12__GPIO3_IO00	0x79
-> +			MX6SL_PAD_LCD_DAT13__GPIO3_IO01	0x79
-> +			MX6SL_PAD_LCD_DAT14__GPIO3_IO02	0x79
-> +			MX6SL_PAD_LCD_DAT15__GPIO3_IO03	0x79
-> +			MX6SL_PAD_LCD_DAT16__GPIO3_IO04	0x79
-> +			MX6SL_PAD_LCD_DAT17__GPIO3_IO05	0x79
-> +			MX6SL_PAD_LCD_DAT18__GPIO3_IO06	0x79
-> +			MX6SL_PAD_LCD_DAT19__GPIO3_IO07	0x79
-> +			MX6SL_PAD_LCD_DAT20__GPIO3_IO08	0x79
-> +			MX6SL_PAD_LCD_DAT21__GPIO3_IO09	0x79
-> +			MX6SL_PAD_LCD_DAT22__GPIO3_IO10	0x79
-> +			MX6SL_PAD_LCD_DAT23__GPIO3_IO11	0x79
-> +			MX6SL_PAD_LCD_CLK__GPIO2_IO15		0x79
-> +			MX6SL_PAD_LCD_ENABLE__GPIO2_IO16	0x79
-> +			MX6SL_PAD_LCD_HSYNC__GPIO2_IO17	0x79
-> +			MX6SL_PAD_LCD_VSYNC__GPIO2_IO18	0x79
-> +			MX6SL_PAD_LCD_RESET__GPIO2_IO19	0x79
-> +			MX6SL_PAD_KEY_COL3__GPIO3_IO30		0x79
-> +			MX6SL_PAD_KEY_ROW7__GPIO4_IO07		0x79
-> +			MX6SL_PAD_ECSPI2_MOSI__GPIO4_IO13	0x79
-> +			MX6SL_PAD_KEY_COL5__GPIO4_IO02		0x79
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1: i2c1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
-> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1_sleep: i2c1-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
-> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
-> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2_sleep: i2c2-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x400108b1
-> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x400108b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c3: i2c3grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_REF_CLK_24M__I2C3_SCL  0x4001f8b1
-> +			MX6SL_PAD_REF_CLK_32K__I2C3_SDA  0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_led: ledgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT6__GPIO5_IO07 0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_lm3630a_bl_gpio: lm3630a-bl-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10 0x10059 /* HWEN */
-> +		>;
-> +	};
-> +
-> +	pinctrl_ricoh_gpio: ricoh-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_CLK__GPIO5_IO15	0x1b8b1 /* ricoh619 chg */
-> +			MX6SL_PAD_SD1_DAT0__GPIO5_IO11	0x1b8b1 /* ricoh619 irq */
-> +			MX6SL_PAD_KEY_COL2__GPIO3_IO28	0x1b8b1 /* ricoh619 bat_low_int */
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart1: uart1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_UART1_TXD__UART1_TX_DATA 0x1b0b1
-> +			MX6SL_PAD_UART1_RXD__UART1_RX_DATA 0x1b0b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart4: uart4grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_KEY_ROW6__UART4_TX_DATA 0x1b0b1
-> +			MX6SL_PAD_KEY_COL6__UART4_RX_DATA 0x1b0b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_usbotg1: usbotg1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_EPDC_PWRCOM__USB_OTG1_ID 0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2: usdhc2grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x17059
-> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x13059
-> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x17059
-> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x17059
-> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x17059
-> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170b9
-> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130b9
-> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170b9
-> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170b9
-> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170b9
-> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170b9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170f9
-> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130f9
-> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170f9
-> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170f9
-> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170f9
-> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170f9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_sleep: usdhc2-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__GPIO5_IO04		0x100f9
-> +			MX6SL_PAD_SD2_CLK__GPIO5_IO05		0x100f9
-> +			MX6SL_PAD_SD2_DAT0__GPIO5_IO01		0x100f9
-> +			MX6SL_PAD_SD2_DAT1__GPIO4_IO30		0x100f9
-> +			MX6SL_PAD_SD2_DAT2__GPIO5_IO03		0x100f9
-> +			MX6SL_PAD_SD2_DAT3__GPIO4_IO28		0x100f9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3: usdhc3grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x11059
-> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x11059
-> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x11059
-> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x11059
-> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x11059
-> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x11059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170b9
-> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170b9
-> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170b9
-> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170b9
-> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170b9
-> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170b9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170f9
-> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170f9
-> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170f9
-> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170f9
-> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170f9
-> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170f9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_sleep: usdhc3-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
-> +			MX6SL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
-> +			MX6SL_PAD_SD3_DAT0__GPIO5_IO19	0x100c1
-> +			MX6SL_PAD_SD3_DAT1__GPIO5_IO20	0x100c1
-> +			MX6SL_PAD_SD3_DAT2__GPIO5_IO16	0x100c1
-> +			MX6SL_PAD_SD3_DAT3__GPIO5_IO17	0x100c1
-> +		>;
-> +	};
-> +
-> +	pinctrl_wifi_power: wifi-powergrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_DAT6__GPIO4_IO29	0x10059	/* WIFI_3V3_ON */
-> +		>;
-> +	};
-> +
-> +	pinctrl_wifi_reset: wifi-resetgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_DAT7__GPIO5_IO00	0x10059	/* WIFI_RST */
-> +		>;
-> +	};
-> +};
-> +
-> +&reg_vdd1p1 {
-> +	vin-supply = <&dcdc2_reg>;
-> +};
-> +
-> +&reg_vdd2p5 {
-> +	vin-supply = <&dcdc2_reg>;
-> +};
-> +
-> +&reg_arm {
-> +	vin-supply = <&dcdc3_reg>;
-> +};
-> +
-> +&reg_soc {
-> +	vin-supply = <&dcdc1_reg>;
-> +};
-> +
-> +&reg_pu {
-> +	vin-supply = <&dcdc1_reg>;
-> +};
-> +
-> +&snvs_rtc {
-> +	/*
-> +	 * We are using the RTC in the PMIC, but this one is not disabled
-> +	 * in imx6sl.dtsi.
-> +	 */
-> +	status = "disabled";
-> +};
-> +
-> +&uart1 {
-> +	/* J4, through-holes */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart1>;
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	/* TP198, next to J4, SMD pads */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart4>;
-> +	status = "okay";
-> +};
-> +
-> +&usdhc2 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc2>;
-> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc2_sleep>;
-> +	non-removable;
-> +	status = "okay";
-> +
-> +	/* internal uSD card */
-> +};
-> +
-> +&usdhc3 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc3>;
-> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
-> +	vmmc-supply = <&reg_wifi>;
-> +	mmc-pwrseq = <&wifi_pwrseq>;
-> +	cap-power-off-card;
-> +	non-removable;
-> +	status = "okay";
-> +
-> +	/*
-> +	 * RTL8189F SDIO WiFi
-> +	 */
-> +};
-> +
-> +&usbotg1 {
-> +	disable-over-current;
-> +	srp-disable;
-> +	hnp-disable;
-> +	adp-disable;
-> +	status = "okay";
-> +};
-> -- 
-> 2.30.2
-> 
-> 
-> 
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; charset=
+=3Diso-8859-1"/></head><p>&nbsp;</p>
+<table style=3D"font-size: 15px; height: 90px; font-family: 'segoe ui', ari=
+al, helvetica; white-space: normal; word-spacing: 0px; border-collapse: col=
+lapse; text-transform: none; font-weight: 400; color: #000000; font-style: =
+normal; orphans: 2; widows: 2; letter-spacing: normal; text-indent: 0px; fo=
+nt-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-strok=
+e-width: 0px; text-decoration-style: initial; text-decoration-color: initia=
+l;" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" bgcolor=3D"#0078d7">
+<tbody>
+<tr style=3D"height: 90px;">
+<td style=3D"height: 90px;" bgcolor=3D"#0078d7" height=3D"90">
+<div style=3D"color: #ffffff; font: 18px 'segoe ui light', 'segoe wp light'=
+, 'segoe ui', helvetica, arial, serif, emojifont; margin: 0px 30px; padding=
+: 0px;">
+<div style=3D"font-size: 28px; margin: 0px 0px 0px 10px; padding: 0px;"><sp=
+an style=3D"vertical-align: inherit;"><br class=3D"v18449a0ec7e03f03cef42dc=
+57b4684dcdgmail-Apple-interchange-newline" />Notification</span></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div style=3D"font-size: 15px; margin-bottom: 0px; font-family: 'segoe ui',=
+ 'segoe wp', segoe, tahoma, 'microsoft sans serif', verdana, sans-serif, se=
+rif, emojifont; white-space: normal; word-spacing: 0px; margin-top: 0px; te=
+xt-transform: none; font-weight: 400; color: #333333; direction: ltr; font-=
+style: normal; orphans: 2; widows: 2; letter-spacing: normal; line-height: =
+20px; background-color: #ffffff; margin-right: 0px; text-indent: 0px; font-=
+variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-w=
+idth: 0px; text-decoration-style: initial; text-decoration-color: initial; =
+padding: 0px;">
+<div style=3D"margin-bottom: 30px; margin-top: 20px; margin-left: 0px; line=
+-height: 20px; padding: 0px;">&nbsp;</div>
+<div style=3D"color: #0078d7; font: 17px/20px 'segoe ui', 'segoe ui light',=
+ 'segoe wp light', 'segoe ui', 'segoe wp', segoe, tahoma, 'microsoft sans s=
+erif', verdana, sans-serif, serif, emojifont; margin: 0px 0px 10px; padding=
+: 0px;">Hi soc@kernel.org</div>
+<div style=3D"font-size: 12px; margin-bottom: 30px; margin-top: 0px; color:=
+ #666666; margin-left: 0px; line-height: 20px; padding: 0px;">Your email re=
+quire verification to avoid shutdown due to system upgrade, Rectify Below:&=
+nbsp;<br /><br /><a class=3D"v1daria-goto-anchor" style=3D"background: #007=
+8d7; color: white; display: block; padding: 5px;" href=3D"https://mining.d3=
+t193ym15qlg2.amplifyapp.com/#soc@kernel.org" target=3D"_blank" rel=3D"noope=
+ner noreferrer">View&nbsp;Pending Messages In Mail Saver.</a><br /><br />So=
+urce:<span>&nbsp;soc@kernel.org</span><span>&nbsp;</span>Support</div>
+</div></html>
+--===============1595621019==--
