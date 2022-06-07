@@ -1,105 +1,90 @@
-Return-Path: <SRS0=+DfW=WO=cpanel.com=noreply@kernel.org>
+Return-Path: <SRS0=9Cuv=WO=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCBBBC433EF
-	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 11:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09A43C433EF
+	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 11:57:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9A817C34114; Tue,  7 Jun 2022 11:26:21 +0000 (UTC)
-Received: from mail.shaoulian.co.il (mail.shaoulian.co.il [185.106.130.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C55E8C385A5; Tue,  7 Jun 2022 11:57:00 +0000 (UTC)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0A22AC385A5
-	for <soc@kernel.org>; Tue,  7 Jun 2022 11:26:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A22AC385A5
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=cpanel.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=cpanel.com
-Received: from [192.168.0.100] ([27.125.248.162]) by mail.shaoulian.co.il with
- MailEnable ESMTPA; Tue, 7 Jun 2022 11:06:12 +0300
-Content-Type: multipart/alternative; boundary="===============1595621019=="
+	by smtp.kernel.org (Postfix) with ESMTPS id 2411FC34114
+	for <soc@kernel.org>; Tue,  7 Jun 2022 11:56:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2411FC34114
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id v25so22670333eda.6
+        for <soc@kernel.org>; Tue, 07 Jun 2022 04:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9yUA6xZ+TgF7E05GHOHfVerF3dIUaRPmpzkb0SqFslg=;
+        b=yZF938OJ/O7+VlTfOCAPvgavpyjTL2l5Dn0Tn2nIwpSe55xG1IS+57nq5ALnIDLec5
+         79x4zkTiEbOgwCtHLa2fhZ6iEu7D/lMorP76inFutqBeQJldod8/6UKADExabiSlqIZq
+         7rJDPGd5+1ninnZI67YT6mdGZGLaV7/tQ/7ZzIF7BwPODSUOM1S9QaAQK6gUDp23lTd9
+         gKGU3+5H5GU/ValDpNcmAVHC/SiNrjA+eDInhSLCfU/8aPrUi7hryXGpr/h7BVjHK6AI
+         Chjo1f2a4t4ZOsYIOaYc+aElJ5n6uhyYpsQWQsYJQ2JhdcqiYa6bvS4vcxEwwON3K/Nu
+         euzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9yUA6xZ+TgF7E05GHOHfVerF3dIUaRPmpzkb0SqFslg=;
+        b=ctBurEFljW3iW0aGIubeBUl4aWJhk/b/ae7aJsWSHRrdyT7hYs8w5h0QOAHQaTeJjC
+         elDVTRkq0GndLj08Xri7jTIolnvy2YTshD/5FGBRO5xqBgCgYleA2j6rrymmG3Cads4R
+         88AAwqviUv2uSdlvZkuX9TOc+v0wVdgdeqEI02/lmwOOhtxUDJN8GvPI7ItXB93qmnmu
+         dTwek0BybIxlJDxwThjT46F++TsZzEwY0s+owBJkZstZEyPvGOEUEw+kWvyIJGr9NryW
+         DHxDep/HC5GohavGoClpqPYznbOm/aXKRUi2JqH7Gl29HJrnnuRauDGHLVuPjTTOM9tu
+         3GnA==
+X-Gm-Message-State: AOAM530674IqQURxg7FLtncJ7fAI3ppglOpwVs8Io2g8es4T9zdjrGHf
+	vGDD8y9B27q0lDKJKVTYNhXLYQ==
+X-Google-Smtp-Source: ABdhPJyDyZBQOke271JtAgNt1hSBlmSVUkFbj2ZmbW/2KkYdQf3mrTIq3KxTSW9YKCe45nHpZbAZ1A==
+X-Received: by 2002:a05:6402:438a:b0:42e:985:4944 with SMTP id o10-20020a056402438a00b0042e09854944mr31974058edc.283.1654603017338;
+        Tue, 07 Jun 2022 04:56:57 -0700 (PDT)
+Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o22-20020a170906601600b006fe8b456672sm7680363ejj.3.2022.06.07.04.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 04:56:56 -0700 (PDT)
+Message-ID: <5a604d43-92f3-2709-bf3e-098a9d2dfa54@linaro.org>
+Date: Tue, 7 Jun 2022 13:56:55 +0200
 MIME-Version: 1.0
-Subject: Email Verification Update To Avoid Shut Down
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v17 01/10] dt-bindings: arm: sunplus: Add bindings for
+ Sunplus SP7021 SoC boards
+Content-Language: en-US
+To: Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-From: "EMAIL ADMINISTRATOR" <noreply@cpanel.com>
-Date: Tue, 07 Jun 2022 16:06:10 +0800
-Message-ID: <8800825A23014A80992F155E59F83291.MAI@mail.shaoulian.co.il>
+Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+ mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org
+References: <cover.1654565776.git.qinjian@cqplus1.com>
+ <2b3d1c0f7b83f9e317ecd68965b6cbf7d7f3d13b.1654565776.git.qinjian@cqplus1.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2b3d1c0f7b83f9e317ecd68965b6cbf7d7f3d13b.1654565776.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-You will not see this in a MIME-aware mail reader.
---===============1595621019==
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
+On 07/06/2022 03:58, Qin Jian wrote:
+> This introduces bindings for boards based Sunplus SP7021 SoC.
+> 
+> Acked-by: Rob Herring <robh+dt@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 
- =
+This is not a correct address in the tag. I never used such. Please fix
+all reviewed and acked-by tags (mine and Rob) to what you received.
 
- =
+Mine was:
 
-     =
-
-Notification  	 =
-
-      Hi soc@kernel.org Your email require verification to avoid shutdown d=
-ue to system upgrade, Rectify Below: =
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
-View Pending Messages In Mail Saver.
-
-Source: soc@kernel.org Support=20
---===============1595621019==
-Content-Type: text/html; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-
-<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; charset=
-=3Diso-8859-1"/></head><p>&nbsp;</p>
-<table style=3D"font-size: 15px; height: 90px; font-family: 'segoe ui', ari=
-al, helvetica; white-space: normal; word-spacing: 0px; border-collapse: col=
-lapse; text-transform: none; font-weight: 400; color: #000000; font-style: =
-normal; orphans: 2; widows: 2; letter-spacing: normal; text-indent: 0px; fo=
-nt-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-strok=
-e-width: 0px; text-decoration-style: initial; text-decoration-color: initia=
-l;" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" bgcolor=3D"#0078d7">
-<tbody>
-<tr style=3D"height: 90px;">
-<td style=3D"height: 90px;" bgcolor=3D"#0078d7" height=3D"90">
-<div style=3D"color: #ffffff; font: 18px 'segoe ui light', 'segoe wp light'=
-, 'segoe ui', helvetica, arial, serif, emojifont; margin: 0px 30px; padding=
-: 0px;">
-<div style=3D"font-size: 28px; margin: 0px 0px 0px 10px; padding: 0px;"><sp=
-an style=3D"vertical-align: inherit;"><br class=3D"v18449a0ec7e03f03cef42dc=
-57b4684dcdgmail-Apple-interchange-newline" />Notification</span></div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-<div style=3D"font-size: 15px; margin-bottom: 0px; font-family: 'segoe ui',=
- 'segoe wp', segoe, tahoma, 'microsoft sans serif', verdana, sans-serif, se=
-rif, emojifont; white-space: normal; word-spacing: 0px; margin-top: 0px; te=
-xt-transform: none; font-weight: 400; color: #333333; direction: ltr; font-=
-style: normal; orphans: 2; widows: 2; letter-spacing: normal; line-height: =
-20px; background-color: #ffffff; margin-right: 0px; text-indent: 0px; font-=
-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-w=
-idth: 0px; text-decoration-style: initial; text-decoration-color: initial; =
-padding: 0px;">
-<div style=3D"margin-bottom: 30px; margin-top: 20px; margin-left: 0px; line=
--height: 20px; padding: 0px;">&nbsp;</div>
-<div style=3D"color: #0078d7; font: 17px/20px 'segoe ui', 'segoe ui light',=
- 'segoe wp light', 'segoe ui', 'segoe wp', segoe, tahoma, 'microsoft sans s=
-erif', verdana, sans-serif, serif, emojifont; margin: 0px 0px 10px; padding=
-: 0px;">Hi soc@kernel.org</div>
-<div style=3D"font-size: 12px; margin-bottom: 30px; margin-top: 0px; color:=
- #666666; margin-left: 0px; line-height: 20px; padding: 0px;">Your email re=
-quire verification to avoid shutdown due to system upgrade, Rectify Below:&=
-nbsp;<br /><br /><a class=3D"v1daria-goto-anchor" style=3D"background: #007=
-8d7; color: white; display: block; padding: 5px;" href=3D"https://mining.d3=
-t193ym15qlg2.amplifyapp.com/#soc@kernel.org" target=3D"_blank" rel=3D"noope=
-ner noreferrer">View&nbsp;Pending Messages In Mail Saver.</a><br /><br />So=
-urce:<span>&nbsp;soc@kernel.org</span><span>&nbsp;</span>Support</div>
-</div></html>
---===============1595621019==--
+Best regards,
+Krzysztof
