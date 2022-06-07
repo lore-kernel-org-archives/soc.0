@@ -1,839 +1,382 @@
-Return-Path: <SRS0=Mv/n=WO=cqplus1.com=prvs=115555DFF1=qinjian@kernel.org>
+Return-Path: <SRS0=4+7K=WO=pengutronix.de=mfe@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B9D1C43334
-	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 01:58:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E615EC43334
+	for <soc@archiver.kernel.org>; Tue,  7 Jun 2022 08:17:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6504FC385A9; Tue,  7 Jun 2022 01:58:48 +0000 (UTC)
-Received: from mx1.cqplus1.com (mx1.cqplus1.com [113.204.237.245])
-	by smtp.kernel.org (Postfix) with ESMTP id 7EA14C341C0
-	for <soc@kernel.org>; Tue,  7 Jun 2022 01:58:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7EA14C341C0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cqplus1.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cqplus1.com
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-	LIVER,40,3)
-Received: from 172.28.114.216
-	by mx1.cqplus1.com with MailGates ESMTP Server V5.0(2334:0:AUTH_RELAY)
-	(envelope-from <qinjian@cqplus1.com>); Tue, 07 Jun 2022 09:58:34 +0800 (CST)
-From: Qin Jian <qinjian@cqplus1.com>
-To: sboyd@kernel.org
+	id 9AF49C385A5; Tue,  7 Jun 2022 08:17:12 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C8BCDC34119
+	for <soc@kernel.org>; Tue,  7 Jun 2022 08:17:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8BCDC34119
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1nyUOe-0004Mc-Qn; Tue, 07 Jun 2022 10:17:04 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1nyUOb-0005gP-Dw; Tue, 07 Jun 2022 10:17:01 +0200
+Date: Tue, 7 Jun 2022 10:17:01 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Andreas Kemnade <andreas@kemnade.info>
 List-Id: <soc.lore.kernel.org>
-Cc: krzysztof.kozlowski+dt@linaro.org,
-	robh+dt@kernel.org,
-	mturquette@baylibre.com,
-	linux@armlinux.org.uk,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v17 05/10] clk: Add Sunplus SP7021 clock driver
-Date: Tue,  7 Jun 2022 09:58:05 +0800
-Message-Id: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1654565776.git.qinjian@cqplus1.com>
-References: <cover.1654565776.git.qinjian@cqplus1.com>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	linux-imx@nxp.com, l.stach@pengutronix.de,
+	marcel.ziswiler@toradex.com, alexander.stein@ew.tq-group.com,
+	tharvey@gateworks.com, linux@rempel-privat.de,
+	matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
+	sebastian.reichel@collabora.com, leoyang.li@nxp.com,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, nicolecrivain@gmail.com
+Subject: Re: [PATCH v2 2/2] ARM: dts: imx: Add devicetree for Kobo Aura 2
+Message-ID: <20220607081701.ajqdxnww5jtbzjpv@pengutronix.de>
+References: <20220604135300.568754-1-andreas@kemnade.info>
+ <20220604135300.568754-3-andreas@kemnade.info>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220604135300.568754-3-andreas@kemnade.info>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-Add clock driver for Sunplus SP7021 SoC.
+Hi Andreas,
 
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
-Fix the comments from Stephen Boyd.
----
- MAINTAINERS              |   1 +
- drivers/clk/Kconfig      |  10 +
- drivers/clk/Makefile     |   1 +
- drivers/clk/clk-sp7021.c | 727 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 739 insertions(+)
- create mode 100644 drivers/clk/clk-sp7021.c
+a few minor nits I saw..
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 91b92b4fb..b90bb93a3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2813,6 +2813,7 @@ W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
- F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	drivers/clk/clk-sp7021.c
- F:	drivers/reset/reset-sunplus.c
- F:	include/dt-bindings/clock/sunplus,sp7021-clkc.h
- F:	include/dt-bindings/reset/sunplus,sp7021-reset.h
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 5d596e778..5b28f9c04 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -414,6 +414,16 @@ config COMMON_CLK_K210
- 	help
- 	  Support for the Canaan Kendryte K210 RISC-V SoC clocks.
- 
-+config COMMON_CLK_SP7021
-+	tristate "Clock driver for Sunplus SP7021 SoC"
-+	depends on SOC_SP7021 || COMPILE_TEST
-+	default SOC_SP7021
-+	help
-+	  This driver supports the Sunplus SP7021 SoC clocks.
-+	  It implements SP7021 PLLs/gate.
-+	  Not all features of the PLL are currently supported
-+	  by the driver.
-+
- source "drivers/clk/actions/Kconfig"
- source "drivers/clk/analogbits/Kconfig"
- source "drivers/clk/baikal-t1/Kconfig"
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 2bd5ffd59..b9af64503 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -64,6 +64,7 @@ obj-$(CONFIG_COMMON_CLK_SI5351)		+= clk-si5351.o
- obj-$(CONFIG_COMMON_CLK_SI514)		+= clk-si514.o
- obj-$(CONFIG_COMMON_CLK_SI544)		+= clk-si544.o
- obj-$(CONFIG_COMMON_CLK_SI570)		+= clk-si570.o
-+obj-$(CONFIG_COMMON_CLK_SP7021)		+= clk-sp7021.o
- obj-$(CONFIG_COMMON_CLK_STM32F)		+= clk-stm32f4.o
- obj-$(CONFIG_COMMON_CLK_STM32H7)	+= clk-stm32h7.o
- obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= clk-stm32mp1.o
-diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-new file mode 100644
-index 000000000..4538746fa
---- /dev/null
-+++ b/drivers/clk/clk-sp7021.c
-@@ -0,0 +1,727 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Copyright (C) Sunplus Technology Co., Ltd.
-+ *       All rights reserved.
-+ */
-+#include <linux/module.h>
-+#include <linux/clk-provider.h>
-+#include <linux/of.h>
-+#include <linux/bitfield.h>
-+#include <linux/slab.h>
-+#include <linux/io.h>
-+#include <linux/err.h>
-+#include <linux/platform_device.h>
-+#include <dt-bindings/clock/sunplus,sp7021-clkc.h>
-+
-+/* speical div_width values for PLLTV/PLLA */
-+#define DIV_TV		33
-+#define DIV_A		34
-+
-+/* PLLTV parameters */
-+enum {
-+	SEL_FRA,
-+	SDM_MOD,
-+	PH_SEL,
-+	NFRA,
-+	DIVR,
-+	DIVN,
-+	DIVM,
-+	P_MAX
-+};
-+
-+#define MASK_SEL_FRA	GENMASK(1, 1)
-+#define MASK_SDM_MOD	GENMASK(2, 2)
-+#define MASK_PH_SEL	GENMASK(4, 4)
-+#define MASK_NFRA	GENMASK(12, 6)
-+#define MASK_DIVR	GENMASK(8, 7)
-+#define MASK_DIVN	GENMASK(7, 0)
-+#define MASK_DIVM	GENMASK(14, 8)
-+
-+/* HIWORD_MASK FIELD_PREP */
-+#define HWM_FIELD_PREP(mask, value)		\
-+({						\
-+	u32 _m = mask;				\
-+	(_m << 16) | FIELD_PREP(_m, value);	\
-+})
-+
-+struct sp_pll {
-+	struct clk_hw hw;
-+	void __iomem *reg;
-+	spinlock_t lock;	/* lock for reg */
-+	int div_shift;
-+	int div_width;
-+	int pd_bit;		/* power down bit idx */
-+	int bp_bit;		/* bypass bit idx */
-+	unsigned long brate;	/* base rate, TODO: replace brate with muldiv */
-+	u32 p[P_MAX];		/* for hold PLLTV/PLLA parameters */
-+};
-+
-+#define to_sp_pll(_hw)	container_of(_hw, struct sp_pll, hw)
-+
-+struct sp_clk_gate_info {
-+	u16	reg;		/* reg_index_shift */
-+	u16	ext_parent;	/* parent is extclk */
-+};
-+
-+static const struct sp_clk_gate_info sp_clk_gates[] = {
-+	{ 0x02 },
-+	{ 0x05 },
-+	{ 0x06 },
-+	{ 0x07 },
-+	{ 0x09 },
-+	{ 0x0b, 1 },
-+	{ 0x0f, 1 },
-+	{ 0x14 },
-+	{ 0x15 },
-+	{ 0x16 },
-+	{ 0x17 },
-+	{ 0x18, 1 },
-+	{ 0x19, 1 },
-+	{ 0x1a, 1 },
-+	{ 0x1b, 1 },
-+	{ 0x1c, 1 },
-+	{ 0x1d, 1 },
-+	{ 0x1e },
-+	{ 0x1f, 1 },
-+	{ 0x20 },
-+	{ 0x21 },
-+	{ 0x22 },
-+	{ 0x23 },
-+	{ 0x24 },
-+	{ 0x25 },
-+	{ 0x26 },
-+	{ 0x2a },
-+	{ 0x2b },
-+	{ 0x2d },
-+	{ 0x2e },
-+	{ 0x30 },
-+	{ 0x31 },
-+	{ 0x32 },
-+	{ 0x33 },
-+	{ 0x3d },
-+	{ 0x3e },
-+	{ 0x3f },
-+	{ 0x42 },
-+	{ 0x44 },
-+	{ 0x4b },
-+	{ 0x4c },
-+	{ 0x4d },
-+	{ 0x4e },
-+	{ 0x4f },
-+	{ 0x50 },
-+	{ 0x55 },
-+	{ 0x60 },
-+	{ 0x61 },
-+	{ 0x6a },
-+	{ 0x73 },
-+	{ 0x86 },
-+	{ 0x8a },
-+	{ 0x8b },
-+	{ 0x8d },
-+	{ 0x8e },
-+	{ 0x8f },
-+	{ 0x90 },
-+	{ 0x92 },
-+	{ 0x93 },
-+	{ 0x95 },
-+	{ 0x96 },
-+	{ 0x97 },
-+	{ 0x98 },
-+	{ 0x99 },
-+};
-+
-+#define _M		1000000UL
-+#define F_27M		(27 * _M)
-+
-+/*********************************** PLL_TV **********************************/
-+
-+/* TODO: set proper FVCO range */
-+#define FVCO_MIN	(100 * _M)
-+#define FVCO_MAX	(200 * _M)
-+
-+#define F_MIN		(FVCO_MIN / 8)
-+#define F_MAX		(FVCO_MAX)
-+
-+static long plltv_integer_div(struct sp_pll *clk, unsigned long freq)
-+{
-+	/* valid m values: 27M must be divisible by m */
-+	static const u32 m_table[] = {
-+		1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32
-+	};
-+	u32 m, n, r;
-+	unsigned long fvco, nf;
-+	long ret;
-+
-+	freq = clamp(freq, F_MIN, F_MAX);
-+
-+	/* DIVR 0~3 */
-+	for (r = 0; r <= 3; r++) {
-+		fvco = freq << r;
-+		if (fvco <= FVCO_MAX)
-+			break;
-+	}
-+
-+	/* DIVM */
-+	for (m = 0; m < ARRAY_SIZE(m_table); m++) {
-+		nf = fvco * m_table[m];
-+		n = nf / F_27M;
-+		if ((n * F_27M) == nf)
-+			break;
-+	}
-+	m = m_table[m];
-+
-+	if (!m) {
-+		ret = -EINVAL;
-+		goto err_not_found;
-+	}
-+
-+	/* save parameters */
-+	clk->p[SEL_FRA] = 0;
-+	clk->p[DIVR]    = r;
-+	clk->p[DIVN]    = n;
-+	clk->p[DIVM]    = m;
-+
-+	return freq;
-+
-+err_not_found:
-+	pr_err("%s: %s freq:%lu not found a valid setting\n",
-+	       __func__, clk_hw_get_name(&clk->hw), freq);
-+
-+	return ret;
-+}
-+
-+/* parameters for PLLTV fractional divider */
-+static const u32 pt[][5] = {
-+	/* conventional fractional */
-+	{
-+		1,			/* factor */
-+		5,			/* 5 * p0 (nint) */
-+		1,			/* 1 * p0 */
-+		F_27M,			/* F_27M / p0 */
-+		1,			/* p0 / p2 */
-+	},
-+	/* phase rotation */
-+	{
-+		10,			/* factor */
-+		54,			/* 5.4 * p0 (nint) */
-+		2,			/* 0.2 * p0 */
-+		F_27M / 10,		/* F_27M / p0 */
-+		5,			/* p0 / p2 */
-+	},
-+};
-+
-+static const u32 sdm_mod_vals[] = { 91, 55 };
-+
-+static long plltv_fractional_div(struct sp_pll *clk, unsigned long freq)
-+{
-+	u32 m, r;
-+	u32 nint, nfra;
-+	u32 df_quotient_min = 210000000;
-+	u32 df_remainder_min = 0;
-+	unsigned long fvco, nf, f, fout = 0;
-+	int sdm, ph;
-+
-+	freq = clamp(freq, F_MIN, F_MAX);
-+
-+	/* DIVR 0~3 */
-+	for (r = 0; r <= 3; r++) {
-+		fvco = freq << r;
-+		if (fvco <= FVCO_MAX)
-+			break;
-+	}
-+	f = F_27M >> r;
-+
-+	/* PH_SEL */
-+	for (ph = ARRAY_SIZE(pt) - 1; ph >= 0; ph--) {
-+		const u32 *pp = pt[ph];
-+
-+		/* SDM_MOD */
-+		for (sdm = 0; sdm < ARRAY_SIZE(sdm_mod_vals); sdm++) {
-+			u32 mod = sdm_mod_vals[sdm];
-+
-+			/* DIVM 1~32 */
-+			for (m = 1; m <= 32; m++) {
-+				u32 df; /* diff freq */
-+				u32 df_quotient, df_remainder;
-+
-+				nf = fvco * m;
-+				nint = nf / pp[3];
-+
-+				if (nint < pp[1])
-+					continue;
-+				if (nint > pp[1])
-+					break;
-+
-+				nfra = (((nf % pp[3]) * mod * pp[4]) + (F_27M / 2)) / F_27M;
-+				if (nfra) {
-+					u32 df0 = f * (nint + pp[2]) / pp[0];
-+					u32 df1 = f * (mod - nfra) / mod / pp[4];
-+
-+					df = df0 - df1;
-+				} else {
-+					df = f * (nint) / pp[0];
-+				}
-+
-+				df_quotient  = df / m;
-+				df_remainder = ((df % m) * 1000) / m;
-+
-+				if (freq > df_quotient) {
-+					df_quotient  = freq - df_quotient - 1;
-+					df_remainder = 1000 - df_remainder;
-+				} else {
-+					df_quotient = df_quotient - freq;
-+				}
-+
-+				if (df_quotient_min > df_quotient ||
-+				    (df_quotient_min == df_quotient &&
-+				    df_remainder_min > df_remainder)) {
-+					/* found a closer freq, save parameters */
-+					clk->p[SEL_FRA] = 1;
-+					clk->p[SDM_MOD] = sdm;
-+					clk->p[PH_SEL]  = ph;
-+					clk->p[NFRA]    = nfra;
-+					clk->p[DIVR]    = r;
-+					clk->p[DIVM]    = m;
-+
-+					fout = df / m;
-+					df_quotient_min = df_quotient;
-+					df_remainder_min = df_remainder;
-+				}
-+			}
-+		}
-+	}
-+
-+	if (!fout) {
-+		pr_err("%s: %s freq:%lu not found a valid setting\n",
-+		       __func__, clk_hw_get_name(&clk->hw), freq);
-+		return -EINVAL;
-+	}
-+
-+	return fout;
-+}
-+
-+static long plltv_div(struct sp_pll *clk, unsigned long freq)
-+{
-+	if (freq % 100)
-+		return plltv_fractional_div(clk, freq);
-+
-+	return plltv_integer_div(clk, freq);
-+}
-+
-+static int plltv_set_rate(struct sp_pll *clk)
-+{
-+	unsigned long flags;
-+	u32 r0, r1, r2;
-+
-+	r0  = BIT(clk->bp_bit + 16);
-+	r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-+	r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-+	r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-+	r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-+
-+	r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-+
-+	r2  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
-+	r2 |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
-+
-+	spin_lock_irqsave(&clk->lock, flags);
-+	writel(r0, clk->reg);
-+	writel(r1, clk->reg + 4);
-+	writel(r2, clk->reg + 8);
-+	spin_unlock_irqrestore(&clk->lock, flags);
-+
-+	return 0;
-+}
-+
-+/*********************************** PLL_A ***********************************/
-+
-+/* from Q628_PLLs_REG_setting.xlsx */
-+static const struct {
-+	u32 rate;
-+	u32 regs[5];
-+} pa[] = {
-+	{
-+		.rate = 135475200,
-+		.regs = {
-+			0x4801,
-+			0x02df,
-+			0x248f,
-+			0x0211,
-+			0x33e9
-+		}
-+	},
-+	{
-+		.rate = 147456000,
-+		.regs = {
-+			0x4801,
-+			0x1adf,
-+			0x2490,
-+			0x0349,
-+			0x33e9
-+		}
-+	},
-+	{
-+		.rate = 196608000,
-+		.regs = {
-+			0x4801,
-+			0x42ef,
-+			0x2495,
-+			0x01c6,
-+			0x33e9
-+		}
-+	},
-+};
-+
-+static int plla_set_rate(struct sp_pll *clk)
-+{
-+	const u32 *pp = pa[clk->p[0]].regs;
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&clk->lock, flags);
-+	for (i = 0; i < ARRAY_SIZE(pa->regs); i++)
-+		writel(0xffff0000 | pp[i], clk->reg + (i * 4));
-+	spin_unlock_irqrestore(&clk->lock, flags);
-+
-+	return 0;
-+}
-+
-+static long plla_round_rate(struct sp_pll *clk, unsigned long rate)
-+{
-+	int i = ARRAY_SIZE(pa);
-+
-+	while (--i) {
-+		if (rate >= pa[i].rate)
-+			break;
-+	}
-+	clk->p[0] = i;
-+
-+	return pa[i].rate;
-+}
-+
-+/********************************** SP_PLL ***********************************/
-+
-+static long sp_pll_calc_div(struct sp_pll *clk, unsigned long rate)
-+{
-+	u32 fbdiv;
-+	u32 max = 1 << clk->div_width;
-+
-+	fbdiv = DIV_ROUND_CLOSEST(rate, clk->brate);
-+	if (fbdiv > max)
-+		fbdiv = max;
-+
-+	return fbdiv;
-+}
-+
-+static long sp_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-+			      unsigned long *prate)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+	long ret;
-+
-+	if (rate == *prate) {
-+		ret = *prate; /* bypass */
-+	} else if (clk->div_width == DIV_A) {
-+		ret = plla_round_rate(clk, rate);
-+	} else if (clk->div_width == DIV_TV) {
-+		ret = plltv_div(clk, rate);
-+		if (ret < 0)
-+			ret = *prate;
-+	} else {
-+		ret = sp_pll_calc_div(clk, rate) * clk->brate;
-+	}
-+
-+	return ret;
-+}
-+
-+static unsigned long sp_pll_recalc_rate(struct clk_hw *hw,
-+					unsigned long prate)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+	u32 reg = readl(clk->reg);
-+	unsigned long ret;
-+
-+	if (reg & BIT(clk->bp_bit)) {
-+		ret = prate; /* bypass */
-+	} else if (clk->div_width == DIV_A) {
-+		ret = pa[clk->p[0]].rate;
-+	} else if (clk->div_width == DIV_TV) {
-+		u32 m, r, reg2;
-+
-+		r = FIELD_GET(MASK_DIVR, readl(clk->reg + 4));
-+		reg2 = readl(clk->reg + 8);
-+		m = FIELD_GET(MASK_DIVM, reg2) + 1;
-+
-+		if (reg & MASK_SEL_FRA) {
-+			/* fractional divider */
-+			u32 sdm  = FIELD_GET(MASK_SDM_MOD, reg);
-+			u32 ph   = FIELD_GET(MASK_PH_SEL, reg);
-+			u32 nfra = FIELD_GET(MASK_NFRA, reg);
-+			const u32 *pp = pt[ph];
-+			unsigned long r0, r1;
-+
-+			ret = prate >> r;
-+			r0  = ret * (pp[1] + pp[2]) / pp[0];
-+			r1  = ret * (sdm_mod_vals[sdm] - nfra) / sdm_mod_vals[sdm] / pp[4];
-+			ret = (r0 - r1) / m;
-+		} else {
-+			/* integer divider */
-+			u32 n = FIELD_GET(MASK_DIVN, reg2) + 1;
-+
-+			ret = (prate / m * n) >> r;
-+		}
-+	} else {
-+		u32 fbdiv = ((reg >> clk->div_shift) & ((1 << clk->div_width) - 1)) + 1;
-+
-+		ret = clk->brate * fbdiv;
-+	}
-+
-+	return ret;
-+}
-+
-+static int sp_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-+			   unsigned long prate)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+	unsigned long flags;
-+	u32 reg;
-+
-+	reg = BIT(clk->bp_bit + 16); /* HIWORD_MASK */
-+
-+	if (rate == prate) {
-+		reg |= BIT(clk->bp_bit); /* bypass */
-+	} else if (clk->div_width == DIV_A) {
-+		return plla_set_rate(clk);
-+	} else if (clk->div_width == DIV_TV) {
-+		return plltv_set_rate(clk);
-+	} else if (clk->div_width) {
-+		u32 fbdiv = sp_pll_calc_div(clk, rate);
-+		u32 mask = GENMASK(clk->div_shift + clk->div_width - 1, clk->div_shift);
-+
-+		reg |= mask << 16;
-+		reg |= ((fbdiv - 1) << clk->div_shift) & mask;
-+	}
-+
-+	spin_lock_irqsave(&clk->lock, flags);
-+	writel(reg, clk->reg);
-+	spin_unlock_irqrestore(&clk->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int sp_pll_enable(struct clk_hw *hw)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+
-+	writel(BIT(clk->pd_bit + 16) | BIT(clk->pd_bit), clk->reg);
-+
-+	return 0;
-+}
-+
-+static void sp_pll_disable(struct clk_hw *hw)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+
-+	writel(BIT(clk->pd_bit + 16), clk->reg);
-+}
-+
-+static int sp_pll_is_enabled(struct clk_hw *hw)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+
-+	return readl(clk->reg) & BIT(clk->pd_bit);
-+}
-+
-+static const struct clk_ops sp_pll_ops = {
-+	.enable = sp_pll_enable,
-+	.disable = sp_pll_disable,
-+	.is_enabled = sp_pll_is_enabled,
-+	.round_rate = sp_pll_round_rate,
-+	.recalc_rate = sp_pll_recalc_rate,
-+	.set_rate = sp_pll_set_rate
-+};
-+
-+static const struct clk_ops sp_pll_sub_ops = {
-+	.enable = sp_pll_enable,
-+	.disable = sp_pll_disable,
-+	.is_enabled = sp_pll_is_enabled,
-+	.recalc_rate = sp_pll_recalc_rate,
-+};
-+
-+static struct clk_hw *sp_pll_register(struct device *dev, const char *name,
-+				      const struct clk_parent_data *parent_data,
-+				      void __iomem *reg, int pd_bit, int bp_bit,
-+				      unsigned long brate, int shift, int width,
-+				      unsigned long flags)
-+{
-+	struct sp_pll *pll;
-+	struct clk_hw *hw;
-+	struct clk_init_data initd = {
-+		.name = name,
-+		.parent_data = parent_data,
-+		.ops = (bp_bit >= 0) ? &sp_pll_ops : &sp_pll_sub_ops,
-+		.num_parents = 1,
-+		.flags = flags,
-+	};
-+	int ret;
-+
-+	pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
-+	if (!pll)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pll->hw.init = &initd;
-+	pll->reg = reg;
-+	pll->pd_bit = pd_bit;
-+	pll->bp_bit = bp_bit;
-+	pll->brate = brate;
-+	pll->div_shift = shift;
-+	pll->div_width = width;
-+	spin_lock_init(&pll->lock);
-+
-+	hw = &pll->hw;
-+	ret = devm_clk_hw_register(dev, hw);
-+	if (ret) {
-+		kfree(pll);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return hw;
-+}
-+
-+#define PLLA_CTL	(pll_base + 0x1c)
-+#define PLLE_CTL	(pll_base + 0x30)
-+#define PLLF_CTL	(pll_base + 0x34)
-+#define PLLTV_CTL	(pll_base + 0x38)
-+
-+static int sp7021_clk_probe(struct platform_device *pdev)
-+{
-+	static const u32 sp_clken[] = {
-+		0x67ef, 0x03ff, 0xff03, 0xfff0, 0x0004, /* G0.1~5  */
-+		0x0000, 0x8000, 0xffff, 0x0040, 0x0000, /* G0.6~10 */
-+	};
-+	static struct clk_parent_data pd_ext, pd_sys, pd_e;
-+	struct device *dev = &pdev->dev;
-+	void __iomem *clk_base, *pll_base, *sys_base;
-+	struct clk_hw_onecell_data *clk_data;
-+	struct clk_hw **hws;
-+	int i, ret;
-+
-+	clk_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (!clk_base)
-+		return -ENXIO;
-+	pll_base = devm_platform_ioremap_resource(pdev, 1);
-+	if (!pll_base)
-+		return -ENXIO;
-+	sys_base = devm_platform_ioremap_resource(pdev, 2);
-+	if (!sys_base)
-+		return -ENXIO;
-+
-+	/* enable default clks */
-+	for (i = 0; i < ARRAY_SIZE(sp_clken); i++)
-+		writel((sp_clken[i] << 16) | sp_clken[i], clk_base + i * 4);
-+
-+	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, CLK_MAX),
-+				GFP_KERNEL);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	hws = clk_data->hws;
-+	pd_ext.index = 0;
-+
-+	/* PLLs */
-+	hws[PLL_A] = sp_pll_register(dev, "plla", &pd_ext, PLLA_CTL,
-+				     11, 12, 27000000, 0, DIV_A, 0);
-+	if (IS_ERR(hws[PLL_A]))
-+		return PTR_ERR(hws[PLL_A]);
-+
-+	hws[PLL_E] = sp_pll_register(dev, "plle", &pd_ext, PLLE_CTL,
-+				     6, 2, 50000000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E]))
-+		return PTR_ERR(hws[PLL_E]);
-+	pd_e.hw = hws[PLL_E];
-+	hws[PLL_E_2P5] = sp_pll_register(dev, "plle_2p5", &pd_e, PLLE_CTL,
-+					 13, -1, 2500000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E_2P5]))
-+		return PTR_ERR(hws[PLL_E_2P5]);
-+	hws[PLL_E_25] = sp_pll_register(dev, "plle_25", &pd_e, PLLE_CTL,
-+					12, -1, 25000000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E_25]))
-+		return PTR_ERR(hws[PLL_E_25]);
-+	hws[PLL_E_112P5] = sp_pll_register(dev, "plle_112p5", &pd_e, PLLE_CTL,
-+					   11, -1, 112500000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E_112P5]))
-+		return PTR_ERR(hws[PLL_E_112P5]);
-+
-+	hws[PLL_F] = sp_pll_register(dev, "pllf", &pd_ext, PLLF_CTL,
-+				     0, 10, 13500000, 1, 4, 0);
-+	if (IS_ERR(hws[PLL_F]))
-+		return PTR_ERR(hws[PLL_F]);
-+
-+	hws[PLL_TV] = sp_pll_register(dev, "plltv", &pd_ext, PLLTV_CTL,
-+				      0, 15, 27000000, 0, DIV_TV, 0);
-+	if (IS_ERR(hws[PLL_TV]))
-+		return PTR_ERR(hws[PLL_TV]);
-+	hws[PLL_TV_A] = devm_clk_hw_register_divider(dev, "plltv_a", "plltv", 0,
-+						     PLLTV_CTL + 4, 5, 1,
-+						     CLK_DIVIDER_POWER_OF_TWO,
-+						     &to_sp_pll(hws[PLL_TV])->lock);
-+	if (IS_ERR(hws[PLL_TV_A]))
-+		return PTR_ERR(hws[PLL_TV_A]);
-+
-+	/* system clock, should not be disabled */
-+	hws[PLL_SYS] = sp_pll_register(dev, "pllsys", &pd_ext, sys_base,
-+				       10, 9, 13500000, 0, 4, CLK_IS_CRITICAL);
-+	if (IS_ERR(hws[PLL_SYS]))
-+		return PTR_ERR(hws[PLL_SYS]);
-+	pd_sys.hw = hws[PLL_SYS];
-+
-+	/* gates */
-+	for (i = 0; i < ARRAY_SIZE(sp_clk_gates); i++) {
-+		char name[10];
-+		u32 j = sp_clk_gates[i].reg;
-+		struct clk_parent_data *pd = sp_clk_gates[i].ext_parent ? &pd_ext : &pd_sys;
-+
-+		sprintf(name, "%02d_0x%02x", i, j);
-+		hws[i] = clk_hw_register_gate_parent_data(dev, name, pd, 0,
-+							  clk_base + (j >> 4) * 4,
-+							  j & 0x0f,
-+							  CLK_GATE_HIWORD_MASK,
-+							  NULL);
-+		if (IS_ERR(hws[i])) {
-+			ret = PTR_ERR(hws[i]);
-+			goto unregister_gates;
-+		}
-+	}
-+
-+	clk_data->num = CLK_MAX;
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-+	if (ret)
-+		goto unregister_gates;
-+
-+	return 0;
-+
-+unregister_gates:
-+	while (i--)
-+		clk_hw_unregister_gate(hws[i]);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id sp7021_clk_dt_ids[] = {
-+	{ .compatible = "sunplus,sp7021-clkc" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, sp7021_clk_dt_ids);
-+
-+static struct platform_driver sp7021_clk_driver = {
-+	.probe  = sp7021_clk_probe,
-+	.driver = {
-+		.name = "sp7021-clk",
-+		.of_match_table = sp7021_clk_dt_ids,
-+	},
-+};
-+module_platform_driver(sp7021_clk_driver);
-+
-+MODULE_AUTHOR("Sunplus Technology");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Clock driver for Sunplus SP7021 SoC");
--- 
-2.33.1
+On 22-06-04, Andreas Kemnade wrote:
 
+...
+
+> +&iomuxc {
+
+I know that the DT is sorted alphabetical, except for the iomuxc node.
+Very often this node is the last one to increase the readability of the
+DT.
+
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_hog>;
+
+Do we not have dedicated devices for those GPIOs, so you don't need the
+hog group.
+
+Regards,
+  Marco
+
+> +
+> +	pinctrl_gpio_keys: gpio-keysgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD1_DAT1__GPIO5_IO08  0x17059
+> +			MX6SL_PAD_SD1_DAT4__GPIO5_IO12  0x17059
+> +		>;
+> +	};
+> +
+> +	pinctrl_hog: hoggrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_LCD_DAT0__GPIO2_IO20	0x79
+> +			MX6SL_PAD_LCD_DAT1__GPIO2_IO21	0x79
+> +			MX6SL_PAD_LCD_DAT2__GPIO2_IO22	0x79
+> +			MX6SL_PAD_LCD_DAT3__GPIO2_IO23	0x79
+> +			MX6SL_PAD_LCD_DAT4__GPIO2_IO24	0x79
+> +			MX6SL_PAD_LCD_DAT5__GPIO2_IO25	0x79
+> +			MX6SL_PAD_LCD_DAT6__GPIO2_IO26	0x79
+> +			MX6SL_PAD_LCD_DAT7__GPIO2_IO27	0x79
+> +			MX6SL_PAD_LCD_DAT8__GPIO2_IO28	0x79
+> +			MX6SL_PAD_LCD_DAT9__GPIO2_IO29	0x79
+> +			MX6SL_PAD_LCD_DAT10__GPIO2_IO30	0x79
+> +			MX6SL_PAD_LCD_DAT11__GPIO2_IO31	0x79
+> +			MX6SL_PAD_LCD_DAT12__GPIO3_IO00	0x79
+> +			MX6SL_PAD_LCD_DAT13__GPIO3_IO01	0x79
+> +			MX6SL_PAD_LCD_DAT14__GPIO3_IO02	0x79
+> +			MX6SL_PAD_LCD_DAT15__GPIO3_IO03	0x79
+> +			MX6SL_PAD_LCD_DAT16__GPIO3_IO04	0x79
+> +			MX6SL_PAD_LCD_DAT17__GPIO3_IO05	0x79
+> +			MX6SL_PAD_LCD_DAT18__GPIO3_IO06	0x79
+> +			MX6SL_PAD_LCD_DAT19__GPIO3_IO07	0x79
+> +			MX6SL_PAD_LCD_DAT20__GPIO3_IO08	0x79
+> +			MX6SL_PAD_LCD_DAT21__GPIO3_IO09	0x79
+> +			MX6SL_PAD_LCD_DAT22__GPIO3_IO10	0x79
+> +			MX6SL_PAD_LCD_DAT23__GPIO3_IO11	0x79
+> +			MX6SL_PAD_LCD_CLK__GPIO2_IO15		0x79
+> +			MX6SL_PAD_LCD_ENABLE__GPIO2_IO16	0x79
+> +			MX6SL_PAD_LCD_HSYNC__GPIO2_IO17	0x79
+> +			MX6SL_PAD_LCD_VSYNC__GPIO2_IO18	0x79
+> +			MX6SL_PAD_LCD_RESET__GPIO2_IO19	0x79
+> +			MX6SL_PAD_KEY_COL3__GPIO3_IO30		0x79
+> +			MX6SL_PAD_KEY_ROW7__GPIO4_IO07		0x79
+> +			MX6SL_PAD_ECSPI2_MOSI__GPIO4_IO13	0x79
+> +			MX6SL_PAD_KEY_COL5__GPIO4_IO02		0x79
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c1: i2c1grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
+> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c1_sleep: i2c1-sleepgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
+> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c2: i2c2grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
+> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c2_sleep: i2c2-sleepgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x400108b1
+> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x400108b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_i2c3: i2c3grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_REF_CLK_24M__I2C3_SCL  0x4001f8b1
+> +			MX6SL_PAD_REF_CLK_32K__I2C3_SDA  0x4001f8b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_led: ledgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD1_DAT6__GPIO5_IO07 0x17059
+> +		>;
+> +	};
+> +
+> +	pinctrl_lm3630a_bl_gpio: lm3630a-bl-gpiogrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10 0x10059 /* HWEN */
+> +		>;
+> +	};
+> +
+> +	pinctrl_ricoh_gpio: ricoh-gpiogrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD1_CLK__GPIO5_IO15	0x1b8b1 /* ricoh619 chg */
+> +			MX6SL_PAD_SD1_DAT0__GPIO5_IO11	0x1b8b1 /* ricoh619 irq */
+> +			MX6SL_PAD_KEY_COL2__GPIO3_IO28	0x1b8b1 /* ricoh619 bat_low_int */
+> +		>;
+> +	};
+> +
+> +	pinctrl_uart1: uart1grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_UART1_TXD__UART1_TX_DATA 0x1b0b1
+> +			MX6SL_PAD_UART1_RXD__UART1_RX_DATA 0x1b0b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_uart4: uart4grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_KEY_ROW6__UART4_TX_DATA 0x1b0b1
+> +			MX6SL_PAD_KEY_COL6__UART4_RX_DATA 0x1b0b1
+> +		>;
+> +	};
+> +
+> +	pinctrl_usbotg1: usbotg1grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_EPDC_PWRCOM__USB_OTG1_ID 0x17059
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc2: usdhc2grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x17059
+> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x13059
+> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x17059
+> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x17059
+> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x17059
+> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x17059
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170b9
+> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130b9
+> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170b9
+> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170b9
+> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170b9
+> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170b9
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170f9
+> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130f9
+> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170f9
+> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170f9
+> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170f9
+> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170f9
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc2_sleep: usdhc2-sleepgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD2_CMD__GPIO5_IO04		0x100f9
+> +			MX6SL_PAD_SD2_CLK__GPIO5_IO05		0x100f9
+> +			MX6SL_PAD_SD2_DAT0__GPIO5_IO01		0x100f9
+> +			MX6SL_PAD_SD2_DAT1__GPIO4_IO30		0x100f9
+> +			MX6SL_PAD_SD2_DAT2__GPIO5_IO03		0x100f9
+> +			MX6SL_PAD_SD2_DAT3__GPIO4_IO28		0x100f9
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3: usdhc3grp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x11059
+> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x11059
+> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x11059
+> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x11059
+> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x11059
+> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x11059
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170b9
+> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170b9
+> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170b9
+> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170b9
+> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170b9
+> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170b9
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170f9
+> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170f9
+> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170f9
+> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170f9
+> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170f9
+> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170f9
+> +		>;
+> +	};
+> +
+> +	pinctrl_usdhc3_sleep: usdhc3-sleepgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
+> +			MX6SL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
+> +			MX6SL_PAD_SD3_DAT0__GPIO5_IO19	0x100c1
+> +			MX6SL_PAD_SD3_DAT1__GPIO5_IO20	0x100c1
+> +			MX6SL_PAD_SD3_DAT2__GPIO5_IO16	0x100c1
+> +			MX6SL_PAD_SD3_DAT3__GPIO5_IO17	0x100c1
+> +		>;
+> +	};
+> +
+> +	pinctrl_wifi_power: wifi-powergrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD2_DAT6__GPIO4_IO29	0x10059	/* WIFI_3V3_ON */
+> +		>;
+> +	};
+> +
+> +	pinctrl_wifi_reset: wifi-resetgrp {
+> +		fsl,pins = <
+> +			MX6SL_PAD_SD2_DAT7__GPIO5_IO00	0x10059	/* WIFI_RST */
+> +		>;
+> +	};
+> +};
+> +
+> +&reg_vdd1p1 {
+> +	vin-supply = <&dcdc2_reg>;
+> +};
+> +
+> +&reg_vdd2p5 {
+> +	vin-supply = <&dcdc2_reg>;
+> +};
+> +
+> +&reg_arm {
+> +	vin-supply = <&dcdc3_reg>;
+> +};
+> +
+> +&reg_soc {
+> +	vin-supply = <&dcdc1_reg>;
+> +};
+> +
+> +&reg_pu {
+> +	vin-supply = <&dcdc1_reg>;
+> +};
+> +
+> +&snvs_rtc {
+> +	/*
+> +	 * We are using the RTC in the PMIC, but this one is not disabled
+> +	 * in imx6sl.dtsi.
+> +	 */
+> +	status = "disabled";
+> +};
+> +
+> +&uart1 {
+> +	/* J4, through-holes */
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_uart1>;
+> +	status = "okay";
+> +};
+> +
+> +&uart4 {
+> +	/* TP198, next to J4, SMD pads */
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_uart4>;
+> +	status = "okay";
+> +};
+> +
+> +&usdhc2 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
+> +	pinctrl-0 = <&pinctrl_usdhc2>;
+> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
+> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
+> +	pinctrl-3 = <&pinctrl_usdhc2_sleep>;
+> +	non-removable;
+> +	status = "okay";
+> +
+> +	/* internal uSD card */
+> +};
+> +
+> +&usdhc3 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
+> +	pinctrl-0 = <&pinctrl_usdhc3>;
+> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
+> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
+> +	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
+> +	vmmc-supply = <&reg_wifi>;
+> +	mmc-pwrseq = <&wifi_pwrseq>;
+> +	cap-power-off-card;
+> +	non-removable;
+> +	status = "okay";
+> +
+> +	/*
+> +	 * RTL8189F SDIO WiFi
+> +	 */
+> +};
+> +
+> +&usbotg1 {
+> +	disable-over-current;
+> +	srp-disable;
+> +	hnp-disable;
+> +	adp-disable;
+> +	status = "okay";
+> +};
+> -- 
+> 2.30.2
+> 
+> 
+> 
