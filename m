@@ -1,237 +1,145 @@
-Return-Path: <SRS0=xbdU=WQ=gmail.com=maccraft123mc@kernel.org>
+Return-Path: <SRS0=qwHo=WQ=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837C7C43334
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 13:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB101C43334
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 14:15:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 69978C3411D; Thu,  9 Jun 2022 13:58:05 +0000 (UTC)
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	id 93933C3411B; Thu,  9 Jun 2022 14:15:29 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7C576C34114;
-	Thu,  9 Jun 2022 13:58:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C576C34114
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id c14so21864084pgu.13;
-        Thu, 09 Jun 2022 06:58:04 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id B53D8C34115
+	for <soc@kernel.org>; Thu,  9 Jun 2022 14:15:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B53D8C34115
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id g25so1273046ejh.9
+        for <soc@kernel.org>; Thu, 09 Jun 2022 07:15:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=96RW/mbL/2DXM4l3I73TuzvCiuTWdOKUYU3PG/oUzAI=;
-        b=SlFMlYBtIJ/K5g5OCznvRlvul8d4SV8HRB+pG+lzVNyUqxOFclbbfZLuxq27CIKtyu
-         4N3BPrpxDld8pG00PIuA20mHxX0oz9kBlygD0ZmiXuBxS6erJ7D4pRMjsPDqogyuvNzV
-         bGSm2yOWc4m1fJZnW0KJcbqwV8wqK4A7bwKydp8hisrUK7uUX5p4Y1+6e3RxDcTwDQLs
-         kwt0/PgrFHTlaDUr0PMxb44X2P2I0USvSdyyM4CGSTEXg7BSxAiWkASIx1V7KtW9yVv5
-         6qKG9qEAD5AUWQih6Gez6cBRLwO2XjvHivcBP3g6/YbREDinrcn0csMsXHoRPc148rzu
-         zlWQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xMZyHB+w1HZyBtjYMs8VhyGH58NpWoIROf4SCsJgVWE=;
+        b=IHfLfPqINk7QaemV+fnV7fo1ZYEA9/I2MgUtE2RiNbc6CjqAc2dVvhHP6lyYYroDa9
+         Btg7oV8h6m2pfWzlCHGvCcDTcw7pxjsTyjpbIYw6dPKrpXJHHisL2zCA2yuGtrk7QCIp
+         px21nXKdE0RpOq3V6GbPTBVyPpt4hkWmU9JLFuVFSGu4IK7SLMQpP248PfFxY+wx6KLE
+         ZR0cMC6Lic7+BaBSEH6kXcnedohAd5llgl5UciHgNnTKDqeOZZTEPFbg6qmJDqxPguLg
+         VzROxqS2E9P1v+lvmA5yA8oQTUewsPFedXXNZ15QsBxmGxQmreKxQs5MjO7ij0JiBfTg
+         8ywg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=96RW/mbL/2DXM4l3I73TuzvCiuTWdOKUYU3PG/oUzAI=;
-        b=dGPJucV3Ede5cQcxSOwlur6is4hnAB7mYP/brd6RlCwVeYEIlJoGgkG4LA0TH61w5w
-         6B+ascVrxUIjVp2bKux2B0A8OcTekmJ2ubkWMAC7lfPZeNUzKx85Le9o2O2XIF1Qs9hz
-         gIg+TdCWgbEpWRhBo8fXBDQIUqybHvj+Mhv5cxV1sG1CtOVV4+buEkF7/tQrxX5tVBtO
-         WxHIxqaIZaTXe6unB/l3YvY3IRoU6tlAhpZlgLqQJ26Clqwk8GADM9PuDVrD5R3930N8
-         /DHbkr2Fh6FAGVFBmhgtEBEqGmEHwwYwssnJyOnO26RagIC+22mn4V7DgmuuMXO3PyH2
-         zO9A==
-X-Gm-Message-State: AOAM531GUdjnAaN95p5bf/BLfTR3bKtb47e6mq9Gv8mmjbUtRQptw6wl
-	In237R9OB+cgYALeWMSgpFv9ErhJPR/P9fhz/DU=
-X-Google-Smtp-Source: ABdhPJxdQOsF/jy/W9Sm3gtlVbx9Q0MLLzsW63TqmMEat5HrSAEw2Wm/rDyrqDhSBuYXXOi9qMB0pvCET46e5qc4pC4=
-X-Received: by 2002:a63:2:0:b0:3f6:5b37:e94c with SMTP id 2-20020a630002000000b003f65b37e94cmr34982956pga.356.1654783083815;
- Thu, 09 Jun 2022 06:58:03 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xMZyHB+w1HZyBtjYMs8VhyGH58NpWoIROf4SCsJgVWE=;
+        b=m/z4Em/J8qa71ck3cD3hIhPKlGOxbigi5hlxgk10mgGwuJ57rlFh4pYLNk48f9R72s
+         MPiAWLrQ4YRxd2/UWWfvm2F5OQyVdU2L8tFQYRJFr8+KB6kl/n+tQWADArKy1pvROKGm
+         noO4kR9ORA74+cMLEs3WD+tUoiSAxwwAqneRyFIUpzIjnl+UFeAAFd08mF1er8K5nVhX
+         bOIIWD0D2TZLrHqGlcqYuKnyEUoO9fOPunETroNPgQPEodOWhviDntPWtaxPhYircyCM
+         h0OWakUb/VDpt4ujPdw9YmCn4fK+o7ZI3sRLpN+IsmdBn0UVCUWNTlp4FVTF+hAi2TW2
+         vC/w==
+X-Gm-Message-State: AOAM530frTdn7w05QEUUrMamdoD1spxnRHTfv6u5m2Zrwb2AvVHmLGGK
+	xX5+HikhTwJcMiyyHc8T2Lb+8w==
+X-Google-Smtp-Source: ABdhPJwsQpdC8zY3pVgw5zuU9Lvz3PaHrGxutuHe3kM9BTzGZe/6dDFTxGXvB8QTefO1W0gh7jjJeA==
+X-Received: by 2002:a17:907:d24:b0:712:1142:88c7 with SMTP id gn36-20020a1709070d2400b00712114288c7mr1505148ejc.435.1654784126853;
+        Thu, 09 Jun 2022 07:15:26 -0700 (PDT)
+Received: from [192.168.0.198] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id rn13-20020a170906d92d00b006f3ef214df2sm10603243ejb.88.2022.06.09.07.15.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 07:15:26 -0700 (PDT)
+Message-ID: <e0f7146d-3ccc-a194-bb1e-c3475ca8c29e@linaro.org>
+Date: Thu, 9 Jun 2022 16:15:25 +0200
 MIME-Version: 1.0
-References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609114026.380682-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220609114026.380682-3-krzysztof.kozlowski@linaro.org>
-From: Maya Matuszczyk <maccraft123mc@gmail.com>
-Date: Thu, 9 Jun 2022 15:57:27 +0200
-Message-ID: <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
 Subject: Re: [PATCH v2 32/48] arm64: dts: rockchip: align gpio-key node names
  with dtschema
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+To: Maya Matuszczyk <maccraft123mc@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
-	devicetree <devicetree@vger.kernel.org>, 
-	arm-mail-list <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Heiko Stuebner <heiko@sntech.de>, devicetree <devicetree@vger.kernel.org>,
+ arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+ "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+ linux-kernel@vger.kernel.org
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
+ <20220609114026.380682-3-krzysztof.kozlowski@linaro.org>
+ <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-czw., 9 cze 2022 o 13:56 Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> napisa=C5=82(a):
->
-> The node names should be generic and DT schema expects certain pattern
-> (e.g. with key/button/switch).
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3308-evb.dts   |  2 +-
->  .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 32 +++++++++----------
->  .../boot/dts/rockchip/rk3328-nanopi-r2s.dts   |  2 +-
->  arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi  |  2 +-
->  .../boot/dts/rockchip/rk3368-geekbox.dts      |  2 +-
->  .../dts/rockchip/rk3368-orion-r68-meta.dts    |  2 +-
->  .../boot/dts/rockchip/rk3368-px5-evb.dts      |  2 +-
->  arch/arm64/boot/dts/rockchip/rk3368-r88.dts   |  2 +-
->  .../boot/dts/rockchip/rk3399-firefly.dts      |  2 +-
->  .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  2 +-
->  .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  2 +-
->  .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  2 +-
->  .../boot/dts/rockchip/rk3399-khadas-edge.dtsi |  2 +-
->  .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   |  4 +--
->  .../boot/dts/rockchip/rk3399-nanopi4.dtsi     |  2 +-
->  .../boot/dts/rockchip/rk3399-orangepi.dts     |  2 +-
->  .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  4 +--
->  .../boot/dts/rockchip/rk3399-roc-pc.dtsi      |  2 +-
->  .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  2 +-
->  .../boot/dts/rockchip/rk3399-sapphire.dtsi    |  2 +-
->  .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  2 +-
->  21 files changed, 38 insertions(+), 38 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts b/arch/arm64/boo=
-t/dts/rockchip/rk3308-evb.dts
-> index 9b4f855ea5d4..4b5413b12bfa 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
-> @@ -75,7 +75,7 @@ gpio-keys {
->                 pinctrl-names =3D "default";
->                 pinctrl-0 =3D <&pwr_key>;
->
-> -               power {
-> +               power-key {
->                         gpios =3D <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
->                         linux,code =3D <KEY_POWER>;
->                         label =3D "GPIO Key Power";
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/ar=
-m64/boot/dts/rockchip/rk3326-odroid-go2.dts
-> index ea0695b51ecd..72328dd993ee 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-> @@ -71,82 +71,82 @@ gpio-keys {
->                  * |------------------------------------------------|
->                  */
->
-> -               sw1 {
-> +               switch-1 {
-Wouldn't it make more sense to rename this and all other
-renamed nodes in this dts into "button-dpad-up" or "button-1",
-as on the physical device those are buttons and the naming
-scheme of "sw" + number seems to be a carryover from
-downstream sources.
+On 09/06/2022 15:57, Maya Matuszczyk wrote:
+> czw., 9 cze 2022 o 13:56 Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> napisał(a):
+>>
+>> The node names should be generic and DT schema expects certain pattern
+>> (e.g. with key/button/switch).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  arch/arm64/boot/dts/rockchip/rk3308-evb.dts   |  2 +-
+>>  .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 32 +++++++++----------
+>>  .../boot/dts/rockchip/rk3328-nanopi-r2s.dts   |  2 +-
+>>  arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi  |  2 +-
+>>  .../boot/dts/rockchip/rk3368-geekbox.dts      |  2 +-
+>>  .../dts/rockchip/rk3368-orion-r68-meta.dts    |  2 +-
+>>  .../boot/dts/rockchip/rk3368-px5-evb.dts      |  2 +-
+>>  arch/arm64/boot/dts/rockchip/rk3368-r88.dts   |  2 +-
+>>  .../boot/dts/rockchip/rk3399-firefly.dts      |  2 +-
+>>  .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  2 +-
+>>  .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  2 +-
+>>  .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  2 +-
+>>  .../boot/dts/rockchip/rk3399-khadas-edge.dtsi |  2 +-
+>>  .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   |  4 +--
+>>  .../boot/dts/rockchip/rk3399-nanopi4.dtsi     |  2 +-
+>>  .../boot/dts/rockchip/rk3399-orangepi.dts     |  2 +-
+>>  .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  4 +--
+>>  .../boot/dts/rockchip/rk3399-roc-pc.dtsi      |  2 +-
+>>  .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  2 +-
+>>  .../boot/dts/rockchip/rk3399-sapphire.dtsi    |  2 +-
+>>  .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  2 +-
+>>  21 files changed, 38 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+>> index 9b4f855ea5d4..4b5413b12bfa 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+>> @@ -75,7 +75,7 @@ gpio-keys {
+>>                 pinctrl-names = "default";
+>>                 pinctrl-0 = <&pwr_key>;
+>>
+>> -               power {
+>> +               power-key {
+>>                         gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
+>>                         linux,code = <KEY_POWER>;
+>>                         label = "GPIO Key Power";
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> index ea0695b51ecd..72328dd993ee 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> @@ -71,82 +71,82 @@ gpio-keys {
+>>                  * |------------------------------------------------|
+>>                  */
+>>
+>> -               sw1 {
+>> +               switch-1 {
+> Wouldn't it make more sense to rename this and all other
+> renamed nodes in this dts into "button-dpad-up" or "button-1",
+> as on the physical device those are buttons and the naming
+> scheme of "sw" + number seems to be a carryover from
+> downstream sources.
 
->                         gpios =3D <&gpio1 RK_PB4 GPIO_ACTIVE_LOW>;
->                         label =3D "DPAD-UP";
->                         linux,code =3D <BTN_DPAD_UP>;
->                 };
-> -               sw2 {
-> +               switch-2 {
->                         gpios =3D <&gpio1 RK_PB5 GPIO_ACTIVE_LOW>;
->                         label =3D "DPAD-DOWN";
->                         linux,code =3D <BTN_DPAD_DOWN>;
->                 };
-> -               sw3 {
-> +               switch-3 {
->                         gpios =3D <&gpio1 RK_PB6 GPIO_ACTIVE_LOW>;
->                         label =3D "DPAD-LEFT";
->                         linux,code =3D <BTN_DPAD_LEFT>;
->                 };
-> -               sw4 {
-> +               switch-4 {
->                         gpios =3D <&gpio1 RK_PB7 GPIO_ACTIVE_LOW>;
->                         label =3D "DPAD-RIGHT";
->                         linux,code =3D <BTN_DPAD_RIGHT>;
->                 };
-> -               sw5 {
-> +               switch-5 {
->                         gpios =3D <&gpio1 RK_PA2 GPIO_ACTIVE_LOW>;
->                         label =3D "BTN-A";
->                         linux,code =3D <BTN_EAST>;
->                 };
-> -               sw6 {
-> +               switch-6 {
->                         gpios =3D <&gpio1 RK_PA5 GPIO_ACTIVE_LOW>;
->                         label =3D "BTN-B";
->                         linux,code =3D <BTN_SOUTH>;
->                 };
-> -               sw7 {
-> +               switch-7 {
->                         gpios =3D <&gpio1 RK_PA6 GPIO_ACTIVE_LOW>;
->                         label =3D "BTN-Y";
->                         linux,code =3D <BTN_WEST>;
->                 };
-> -               sw8 {
-> +               switch-8 {
->                         gpios =3D <&gpio1 RK_PA7 GPIO_ACTIVE_LOW>;
->                         label =3D "BTN-X";
->                         linux,code =3D <BTN_NORTH>;
->                 };
-> -               sw9 {
-> +               switch-9 {
->                         gpios =3D <&gpio2 RK_PA0 GPIO_ACTIVE_LOW>;
->                         label =3D "F1";
->                         linux,code =3D <BTN_TRIGGER_HAPPY1>;
->                 };
-> -               sw10 {
-> +               switch-10 {
->                         gpios =3D <&gpio2 RK_PA1 GPIO_ACTIVE_LOW>;
->                         label =3D "F2";
->                         linux,code =3D <BTN_TRIGGER_HAPPY2>;
->                 };
-> -               sw11 {
-> +               switch-11 {
->                         gpios =3D <&gpio2 RK_PA2 GPIO_ACTIVE_LOW>;
->                         label =3D "F3";
->                         linux,code =3D <BTN_TRIGGER_HAPPY3>;
->                 };
-> -               sw12 {
-> +               switch-12 {
->                         gpios =3D <&gpio2 RK_PA3 GPIO_ACTIVE_LOW>;
->                         label =3D "F4";
->                         linux,code =3D <BTN_TRIGGER_HAPPY4>;
->                 };
-> -               sw13 {
-> +               switch-13 {
->                         gpios =3D <&gpio2 RK_PA4 GPIO_ACTIVE_LOW>;
->                         label =3D "F5";
->                         linux,code =3D <BTN_TRIGGER_HAPPY5>;
->                 };
-> -               sw14 {
-> +               switch-14 {
->                         gpios =3D <&gpio2 RK_PA5 GPIO_ACTIVE_LOW>;
->                         label =3D "F6";
->                         linux,code =3D <BTN_TRIGGER_HAPPY6>;
->                 };
-> -               sw15 {
-> +               switch-15 {
->                         gpios =3D <&gpio2 RK_PA6 GPIO_ACTIVE_LOW>;
->                         label =3D "TOP-LEFT";
->                         linux,code =3D <BTN_TL>;
->                 };
-> -               sw16 {
-> +               switch-16 {
->                         gpios =3D <&gpio2 RK_PA7 GPIO_ACTIVE_LOW>;
->                         label =3D "TOP-RIGHT";
->                         linux,code =3D <BTN_TR>;
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts b/arch/ar=
-m64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
-> index 3857d487ab84..1445b879ac7a 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
-> @@ -34,7 +34,7 @@ keys {
->                 pinctrl-0 =3D <&reset_button_pin>;
->                 pinctrl-names =3D "default";
->
-> -               reset {
-> +               key-reset {
->                         label =3D "reset";
->                         gpios =3D <&gpio0 RK_PA0 GPIO_ACTIVE_LOW>;
->                         linux,code =3D <KEY_RESTART>;
+Can be buttons. I assumed SW comes from some kind of switch.
+I assume you mean only this Odroid Go2 DTS, because some other DTSes
+(like EVB above) explicitly call it "Key Power".
 
-[snip]
+
+Best regards,
+Krzysztof
