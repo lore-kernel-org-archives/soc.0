@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C6BCC43334
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:40:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FDA6C43334
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:40:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4A2B4C3411F; Thu,  9 Jun 2022 11:40:35 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id EDD6DC3411D; Thu,  9 Jun 2022 11:40:37 +0000 (UTC)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7B838C3411B
-	for <soc@kernel.org>; Thu,  9 Jun 2022 11:40:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B838C3411B
+	by smtp.kernel.org (Postfix) with ESMTPS id D38AFC3411B
+	for <soc@kernel.org>; Thu,  9 Jun 2022 11:40:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D38AFC3411B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id v1so36213738ejg.13
-        for <soc@kernel.org>; Thu, 09 Jun 2022 04:40:33 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id c2so30782468edf.5
+        for <soc@kernel.org>; Thu, 09 Jun 2022 04:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VIMCTR1frvgpFCy/vc70wP9R+xYc4n9eebnCO6KFjK8=;
-        b=e87w43dqaKRQ7Z/dx+eIcL+FrCawq+shSTObf8LVjoQtraBFuU9aOy5zqaETz0fAu5
-         sOjEiZqfSRL1Qvn3y+om0xZsVLmMggAgQPn9t0SJ2S3xMtB+MTRF2tmyOUw3yF9MNQR5
-         fejPJ/pGRUhL66yMSYmRWbgVSUGuuqOZkwpB6jmoVgIY3Qlg15kXmqmCBlyynUfjLaEq
-         srqqTDE6kT9Vtl50jxgDHRowOHnGC+Da8f8+QUd36Vs8YMzAP+tFMjRLSn8aNTiHQz/K
-         uuFUbdx5SXkCMdhX6JegFLquuwlb/q1x+JeEj4uugHxcUwWZjvTiuwZvNUwGnOxBMEcj
-         UOqA==
+        bh=6E1822zqmeR434mGS2TCsjkIyd0y0F8I8Lnrj27v+VA=;
+        b=k+Qe1VBgs50sahiMlASBeeTlbm+9vLVBaP8VMGkAztmofTZTBOFFIn5p18zdieGOsB
+         de14TChGH7n2Akdyy2F1wJ2TEuIIB5j4n77napx9L+pBsIHMPwLunTaLd89y/X2URCI5
+         pWNPJrUECbgYBapkDbmYdGrwnOt0r6+HpxNDB6ayguqvo5kKTRXFlr/VprouHTj2nbVk
+         sSfPdYfkaXLh9m6Xwglj+4EO9sYiU7HKyBkYwB6HfE5a7DdB6l/fusUL4ByJXuRDup21
+         m/6IqWQz1gok52/Lw9m3tqt8hmPeMrr+5hwGUWSoo6s0dIhHLtTTTqz4VWMzmLFrtIaL
+         51yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VIMCTR1frvgpFCy/vc70wP9R+xYc4n9eebnCO6KFjK8=;
-        b=vjw/inxdPBJzRsrD1mc+ByoiEoZ2EbbRab+kMdyf1gL8DZTduwNenMruvaXuVGS6A2
-         wNFxZDvvQiD8a/q+H67/nSLYDoshkevH90yUoxeXyZjwzNJqVNCpD3/ICtqrwMLSpVQe
-         kTNVz0aDG9+yNHM8GyCaUD/QLXUyCGdDUnvGI+25nYZDtPPjkepq+4QPMiN8Mr9M14NA
-         o1cXbn9n2uTUEd/pczF1kjlHZwlnUKF5d4ZQbAoSG15wHCrugcmsM4yKcactcsnEDsjp
-         j8KzWNwtgCwNYva2HTjyx/iqDyWHJNVw+MAZSg+h2FEizkynr8veBHGpnSTn8hmGME1F
-         UVmg==
-X-Gm-Message-State: AOAM533JLWaDq8OMcqUZbrl4nOy0OVycIlf+fd0JdCwfoQLTII6zZDRp
-	hNZE1xsbn8FberZZVe48num7tg==
-X-Google-Smtp-Source: ABdhPJxg5RjCwZhjIijeZmNGh2LNUXMbxIJjQHT/neGfAI+evNUZBpeF4c5I0UK2Tq9zSG8JegRfWg==
-X-Received: by 2002:a17:907:1310:b0:709:bfa:4f3e with SMTP id vj16-20020a170907131000b007090bfa4f3emr28754314ejb.589.1654774833043;
-        Thu, 09 Jun 2022 04:40:33 -0700 (PDT)
+        bh=6E1822zqmeR434mGS2TCsjkIyd0y0F8I8Lnrj27v+VA=;
+        b=7NtR+2pCGwQOHXQkkrpotRKmlolo0EAmX9oZY2hZWSJLiad1NalA2NuFEoFdQpWKoO
+         ySaLfnXOvTYtZn3OPTE6bBYONMr1Yj5MnZOlX9eIBTbjWOoEG78ymI8LDhDDjGYvY3yO
+         lBrfaRhr2dKDHz8mV5XF/jDJdgIiNKmFj7k+jX38mgGp+vLqxSljw4fR3R5SLi3+pcGt
+         aCYdeVeAMw57/eIFaXPIV06KWhcm6hQKn4nZeZlp3b285bQzHIBWb7ENk/xAquZIYocl
+         WtEkq1DxvkvMJJviC07DucReNj/E+6AO4I4RSZgkslALxcHf5Y0v4KV01IIDxm6T/Q3T
+         nnRg==
+X-Gm-Message-State: AOAM531/DGdFB1orT+6X1LlQq39X0otUU45ohWSZFZrEPcWZ5qK2Vd1n
+	j2u31nUsIPCAQp2S7Jb4vPfwEYJYPiCe2w==
+X-Google-Smtp-Source: ABdhPJyRucBWM0zsEoD394rr4/Uhn518CmMvxTBau47Tj99+LIp4dwj/x2iw/YvvczHedU0gbmtwzg==
+X-Received: by 2002:a05:6402:4410:b0:427:ab6f:a39a with SMTP id y16-20020a056402441000b00427ab6fa39amr44759736eda.120.1654774835077;
+        Thu, 09 Jun 2022 04:40:35 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906058a00b007101f6f0720sm7760844ejn.120.2022.06.09.04.40.32
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906058a00b007101f6f0720sm7760844ejn.120.2022.06.09.04.40.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:40:32 -0700 (PDT)
+        Thu, 09 Jun 2022 04:40:34 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-arm-msm@vger.kernel.org,
+	Heiko Stuebner <heiko@sntech.de>,
 	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 31/48] ARM: dts: qcom: align gpio-key node names with dtschema
-Date: Thu,  9 Jun 2022 13:40:18 +0200
-Message-Id: <20220609114026.380682-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 32/48] arm64: dts: rockchip: align gpio-key node names with dtschema
+Date: Thu,  9 Jun 2022 13:40:19 +0200
+Message-Id: <20220609114026.380682-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
@@ -77,290 +77,404 @@ The node names should be generic and DT schema expects certain pattern
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts        | 4 ++--
- arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts | 8 ++++----
- arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi             | 2 +-
- arch/arm/boot/dts/qcom-ipq8064-rb3011.dts                 | 4 ++--
- arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi                  | 6 +++---
- arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts  | 4 ++--
- arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi     | 8 ++++----
- arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts       | 6 +++---
- arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts        | 6 +++---
- .../dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts    | 8 ++++----
- 10 files changed, 28 insertions(+), 28 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3308-evb.dts   |  2 +-
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 32 +++++++++----------
+ .../boot/dts/rockchip/rk3328-nanopi-r2s.dts   |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi  |  2 +-
+ .../boot/dts/rockchip/rk3368-geekbox.dts      |  2 +-
+ .../dts/rockchip/rk3368-orion-r68-meta.dts    |  2 +-
+ .../boot/dts/rockchip/rk3368-px5-evb.dts      |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-r88.dts   |  2 +-
+ .../boot/dts/rockchip/rk3399-firefly.dts      |  2 +-
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  2 +-
+ .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  2 +-
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  2 +-
+ .../boot/dts/rockchip/rk3399-khadas-edge.dtsi |  2 +-
+ .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   |  4 +--
+ .../boot/dts/rockchip/rk3399-nanopi4.dtsi     |  2 +-
+ .../boot/dts/rockchip/rk3399-orangepi.dts     |  2 +-
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  4 +--
+ .../boot/dts/rockchip/rk3399-roc-pc.dtsi      |  2 +-
+ .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  2 +-
+ .../boot/dts/rockchip/rk3399-sapphire.dtsi    |  2 +-
+ .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  2 +-
+ 21 files changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-index ca9f73528196..549f3ef53b2d 100644
---- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-@@ -44,12 +44,12 @@ ext_3p3v: regulator-fixed@1 {
- 
- 	gpio-keys {
- 		compatible = "gpio-keys";
--		volume_up {
-+		key-volume-up {
- 			label = "Volume Up";
- 			gpios = <&pm8921_gpio 4 GPIO_ACTIVE_HIGH>;
- 			linux,code = <KEY_VOLUMEUP>;
- 		};
--		volume_down {
-+		key-volume-down {
- 			label = "Volume Down";
- 			gpios = <&pm8921_gpio 38 GPIO_ACTIVE_HIGH>;
- 			linux,code = <KEY_VOLUMEDOWN>;
-diff --git a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts
-index 0cee62c7b8b0..13826462fee5 100644
---- a/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-sony-xperia-lagan-yuga.dts
-@@ -23,28 +23,28 @@ gpio-keys {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+index 9b4f855ea5d4..4b5413b12bfa 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
+@@ -75,7 +75,7 @@ gpio-keys {
  		pinctrl-names = "default";
- 		pinctrl-0 = <&gpio_keys_pin_a>;
+ 		pinctrl-0 = <&pwr_key>;
  
--		camera-focus {
-+		key-camera-focus {
- 			label = "camera_focus";
- 			gpios = <&pm8921_gpio 3 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_CAMERA_FOCUS>;
+-		power {
++		power-key {
+ 			gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_POWER>;
+ 			label = "GPIO Key Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+index ea0695b51ecd..72328dd993ee 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+@@ -71,82 +71,82 @@ gpio-keys {
+ 		 * |------------------------------------------------|
+ 		 */
+ 
+-		sw1 {
++		switch-1 {
+ 			gpios = <&gpio1 RK_PB4 GPIO_ACTIVE_LOW>;
+ 			label = "DPAD-UP";
+ 			linux,code = <BTN_DPAD_UP>;
  		};
- 
--		camera-snapshot {
-+		key-camera-snapshot {
- 			label = "camera_snapshot";
- 			gpios = <&pm8921_gpio 4 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_CAMERA>;
+-		sw2 {
++		switch-2 {
+ 			gpios = <&gpio1 RK_PB5 GPIO_ACTIVE_LOW>;
+ 			label = "DPAD-DOWN";
+ 			linux,code = <BTN_DPAD_DOWN>;
  		};
- 
--		volume-down {
-+		key-volume-down {
- 			label = "volume_down";
- 			gpios = <&pm8921_gpio 29 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_VOLUMEDOWN>;
+-		sw3 {
++		switch-3 {
+ 			gpios = <&gpio1 RK_PB6 GPIO_ACTIVE_LOW>;
+ 			label = "DPAD-LEFT";
+ 			linux,code = <BTN_DPAD_LEFT>;
  		};
- 
--		volume-up {
-+		key-volume-up {
- 			label = "volume_up";
- 			gpios = <&pm8921_gpio 35 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
-diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-index 1f3b1ce82108..af9a26fb5d4a 100644
---- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-@@ -11,7 +11,7 @@ / {
- 	keys {
- 		compatible = "gpio-keys";
+-		sw4 {
++		switch-4 {
+ 			gpios = <&gpio1 RK_PB7 GPIO_ACTIVE_LOW>;
+ 			label = "DPAD-RIGHT";
+ 			linux,code = <BTN_DPAD_RIGHT>;
+ 		};
+-		sw5 {
++		switch-5 {
+ 			gpios = <&gpio1 RK_PA2 GPIO_ACTIVE_LOW>;
+ 			label = "BTN-A";
+ 			linux,code = <BTN_EAST>;
+ 		};
+-		sw6 {
++		switch-6 {
+ 			gpios = <&gpio1 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "BTN-B";
+ 			linux,code = <BTN_SOUTH>;
+ 		};
+-		sw7 {
++		switch-7 {
+ 			gpios = <&gpio1 RK_PA6 GPIO_ACTIVE_LOW>;
+ 			label = "BTN-Y";
+ 			linux,code = <BTN_WEST>;
+ 		};
+-		sw8 {
++		switch-8 {
+ 			gpios = <&gpio1 RK_PA7 GPIO_ACTIVE_LOW>;
+ 			label = "BTN-X";
+ 			linux,code = <BTN_NORTH>;
+ 		};
+-		sw9 {
++		switch-9 {
+ 			gpios = <&gpio2 RK_PA0 GPIO_ACTIVE_LOW>;
+ 			label = "F1";
+ 			linux,code = <BTN_TRIGGER_HAPPY1>;
+ 		};
+-		sw10 {
++		switch-10 {
+ 			gpios = <&gpio2 RK_PA1 GPIO_ACTIVE_LOW>;
+ 			label = "F2";
+ 			linux,code = <BTN_TRIGGER_HAPPY2>;
+ 		};
+-		sw11 {
++		switch-11 {
+ 			gpios = <&gpio2 RK_PA2 GPIO_ACTIVE_LOW>;
+ 			label = "F3";
+ 			linux,code = <BTN_TRIGGER_HAPPY3>;
+ 		};
+-		sw12 {
++		switch-12 {
+ 			gpios = <&gpio2 RK_PA3 GPIO_ACTIVE_LOW>;
+ 			label = "F4";
+ 			linux,code = <BTN_TRIGGER_HAPPY4>;
+ 		};
+-		sw13 {
++		switch-13 {
+ 			gpios = <&gpio2 RK_PA4 GPIO_ACTIVE_LOW>;
+ 			label = "F5";
+ 			linux,code = <BTN_TRIGGER_HAPPY5>;
+ 		};
+-		sw14 {
++		switch-14 {
+ 			gpios = <&gpio2 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "F6";
+ 			linux,code = <BTN_TRIGGER_HAPPY6>;
+ 		};
+-		sw15 {
++		switch-15 {
+ 			gpios = <&gpio2 RK_PA6 GPIO_ACTIVE_LOW>;
+ 			label = "TOP-LEFT";
+ 			linux,code = <BTN_TL>;
+ 		};
+-		sw16 {
++		switch-16 {
+ 			gpios = <&gpio2 RK_PA7 GPIO_ACTIVE_LOW>;
+ 			label = "TOP-RIGHT";
+ 			linux,code = <BTN_TR>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
+index 3857d487ab84..1445b879ac7a 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2s.dts
+@@ -34,7 +34,7 @@ keys {
+ 		pinctrl-0 = <&reset_button_pin>;
+ 		pinctrl-names = "default";
  
 -		reset {
 +		key-reset {
  			label = "reset";
- 			gpios = <&tlmm 63 GPIO_ACTIVE_LOW>;
+ 			gpios = <&gpio0 RK_PA0 GPIO_ACTIVE_LOW>;
  			linux,code = <KEY_RESTART>;
-diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-index 596d129d4a95..760151b52add 100644
---- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-+++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
-@@ -187,12 +187,12 @@ partition@0 {
- 			};
- 		};
- 
--		gpio_keys {
-+		gpio-keys {
- 			compatible = "gpio-keys";
- 			pinctrl-0 = <&buttons_pins>;
- 			pinctrl-names = "default";
- 
--			button@1 {
-+			button {
- 				label = "reset";
- 				linux,code = <KEY_RESTART>;
- 				gpios = <&qcom_pinmux 66 GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
-index 5c802b99e15f..ccebb7d56113 100644
---- a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
-@@ -65,19 +65,19 @@ sata@29000000 {
- 			status = "okay";
- 		};
- 
--		gpio_keys {
-+		gpio-keys {
- 			compatible = "gpio-keys";
- 			pinctrl-0 = <&buttons_pins>;
- 			pinctrl-names = "default";
- 
--			button@1 {
-+			button-1 {
- 				label = "reset";
- 				linux,code = <KEY_RESTART>;
- 				gpios = <&qcom_pinmux 54 GPIO_ACTIVE_LOW>;
- 				linux,input-type = <1>;
- 				debounce-interval = <60>;
- 			};
--			button@2 {
-+			button-2 {
- 				label = "wps";
- 				linux,code = <KEY_WPS_BUTTON>;
- 				gpios = <&qcom_pinmux 65 GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 9493886a5c0d..72e82033252e 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -24,14 +24,14 @@ gpio-keys {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi b/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi
+index 15d1fc541c38..083452c67711 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi
+@@ -76,7 +76,7 @@ keys: gpio-keys {
  		pinctrl-names = "default";
- 		pinctrl-0 = <&gpio_keys_pin_a>;
+ 		pinctrl-0 = <&pwr_key>;
  
--		volume-up {
-+		key-volume-up {
- 			label = "volume_up";
- 			gpios = <&pm8941_gpios 2 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_VOLUMEUP>;
- 		};
- 
--		volume-down {
-+		key-volume-down {
- 			label = "volume_down";
- 			gpios = <&pm8941_gpios 3 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-index 1d21de46f85c..e0152f118495 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-@@ -20,28 +20,28 @@ gpio-keys {
+-		power {
++		key-power {
+ 			wakeup-source;
+ 			gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-geekbox.dts b/arch/arm64/boot/dts/rockchip/rk3368-geekbox.dts
+index 62aa97a0b8c9..be06e6e64d18 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-geekbox.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-geekbox.dts
+@@ -43,7 +43,7 @@ keys: gpio-keys {
  		pinctrl-names = "default";
- 		pinctrl-0 = <&gpio_keys_pin_a>;
+ 		pinctrl-0 = <&pwr_key>;
  
--		volume-down {
-+		key-volume-down {
- 			label = "volume_down";
- 			gpios = <&pm8941_gpios 2 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_VOLUMEDOWN>;
- 		};
- 
--		camera-snapshot {
-+		key-camera-snapshot {
- 			label = "camera_snapshot";
- 			gpios = <&pm8941_gpios 3 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_CAMERA>;
- 		};
- 
--		camera-focus {
-+		key-camera-focus {
- 			label = "camera_focus";
- 			gpios = <&pm8941_gpios 4 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_CAMERA_FOCUS>;
- 		};
- 
--		volume-up {
-+		key-volume-up {
- 			label = "volume_up";
- 			gpios = <&pm8941_gpios 5 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-index 58cb2ce1e4df..92857283a675 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts
-@@ -25,7 +25,7 @@ gpio-keys {
+-		power {
++		key-power {
+ 			gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Power";
+ 			linux,code = <KEY_POWER>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+index 3ebe15e03cf4..f4c60623c905 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+@@ -44,7 +44,7 @@ keys: gpio-keys {
  		pinctrl-names = "default";
- 		pinctrl-0 = <&gpio_keys_pin_a>;
+ 		pinctrl-0 = <&pwr_key>;
  
--		camera-snapshot {
-+		key-camera-snapshot {
- 			label = "camera_snapshot";
- 			gpios = <&pm8941_gpios 1 GPIO_ACTIVE_LOW>;
- 			linux,code = <KEY_CAMERA>;
-@@ -33,7 +33,7 @@ camera-snapshot {
- 			debounce-interval = <15>;
- 		};
- 
--		volume-down {
-+		key-volume-down {
- 			label = "volume_down";
- 			gpios = <&pm8941_gpios 2 GPIO_ACTIVE_LOW>;
- 			linux,code = <KEY_VOLUMEDOWN>;
-@@ -41,7 +41,7 @@ volume-down {
- 			debounce-interval = <15>;
- 		};
- 
--		volume-up {
-+		key-volume-up {
- 			label = "volume_up";
- 			gpios = <&pm8941_gpios 5 GPIO_ACTIVE_LOW>;
- 			linux,code = <KEY_VOLUMEUP>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-index d6b2300a8223..1ed40c14f9d3 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts
-@@ -25,7 +25,7 @@ gpio-keys {
+-		power {
++		key-power {
+ 			wakeup-source;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
+ 			label = "GPIO Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dts b/arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dts
+index 5ccaa5f7a370..29df84b81552 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dts
+@@ -30,7 +30,7 @@ keys: gpio-keys {
  		pinctrl-names = "default";
- 		pinctrl-0 = <&gpio_keys_pin_a>;
+ 		pinctrl-0 = <&pwr_key>;
  
--		volume-down {
-+		key-volume-down {
- 			label = "volume_down";
- 			gpios = <&pma8084_gpios 2 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
-@@ -33,7 +33,7 @@ volume-down {
- 			debounce-interval = <15>;
- 		};
- 
--		home-key {
-+		key-home {
- 			label = "home_key";
- 			gpios = <&pma8084_gpios 3 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
-@@ -42,7 +42,7 @@ home-key {
- 			debounce-interval = <15>;
- 		};
- 
--		volume-up {
-+		key-volume-up {
- 			label = "volume_up";
- 			gpios = <&pma8084_gpios 5 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 9bd8faea61a5..e409c12edc81 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -24,28 +24,28 @@ gpio-keys {
+-		power {
++		key-power {
+ 			gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Power";
+ 			linux,code = <KEY_POWER>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+index 959d3cc801f2..38d757c00548 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+@@ -37,7 +37,7 @@ keys: gpio-keys {
  		pinctrl-names = "default";
- 		pinctrl-0 = <&gpio_keys_pin_a>;
+ 		pinctrl-0 = <&pwr_key>;
  
--		volume-down {
-+		key-volume-down {
- 			label = "volume_down";
- 			gpios = <&pm8941_gpios 2 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_VOLUMEDOWN>;
- 		};
+-		power {
++		key-power {
+ 			wakeup-source;
+ 			gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
+index b340c9e246c4..c5db64f3e124 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
+@@ -87,7 +87,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pwrbtn>;
  
--		camera-snapshot {
-+		key-camera-snapshot {
- 			label = "camera_snapshot";
- 			gpios = <&pm8941_gpios 3 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_CAMERA>;
- 		};
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Key Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index 50d459ee4831..cd074641884b 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -206,7 +206,7 @@ gpio_keys: gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&bt_host_wake_l>;
  
--		camera-focus {
-+		key-camera-focus {
- 			label = "camera_focus";
- 			gpios = <&pm8941_gpios 4 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
- 			linux,code = <KEY_CAMERA_FOCUS>;
- 		};
+-		wake_on_bt: wake-on-bt {
++		wake_on_bt: key-wake-on-bt {
+ 			label = "Wake-on-Bluetooth";
+ 			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_WAKEUP>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts
+index 6863689df06f..2cc9b3386c16 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts
+@@ -92,7 +92,7 @@ &gpio_keys {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&bt_host_wake_l>, <&cpu1_pen_eject>;
  
--		volume-up {
-+		key-volume-up {
- 			label = "volume_up";
- 			gpios = <&pm8941_gpios 5 GPIO_ACTIVE_LOW>;
- 			linux,input-type = <1>;
+-	pen-insert {
++	switch-pen-insert {
+ 		label = "Pen Insert";
+ 		/* Insert = low, eject = high */
+ 		gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+index 913d845eb51a..0dadac51daa6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+@@ -183,7 +183,7 @@ gpio_keys: gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pen_eject_odl>;
+ 
+-		pen-insert {
++		switch-pen-insert {
+ 			label = "Pen Insert";
+ 			/* Insert = low, eject = high */
+ 			gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi
+index 46c4581deb8d..2a332763c35c 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi
+@@ -136,7 +136,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pwrbtn>;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Key Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
+index cef4d18b599d..fe5b52610010 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
+@@ -46,9 +46,9 @@ wan_led: led-wan {
+ 	gpio-keys {
+ 		pinctrl-0 = <&reset_button_pin>;
+ 
+-		/delete-node/ power;
++		/delete-node/ key-power;
+ 
+-		reset {
++		key-reset {
+ 			debounce-interval = <50>;
+ 			gpios = <&gpio1 RK_PC6 GPIO_ACTIVE_LOW>;
+ 			label = "reset";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+index 248ad41a976b..278123b4f911 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+@@ -111,7 +111,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&power_key>;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Key Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts b/arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts
+index ed856bfcfc33..9e2e246e0bab 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts
+@@ -78,7 +78,7 @@ keys: gpio-keys {
+ 		compatible = "gpio-keys";
+ 		autorepeat;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+index d6b68d77d63a..194e48c755f6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+@@ -76,7 +76,7 @@ gpio-key-lid {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&lidbtn_pin>;
+ 
+-		lid {
++		switch-lid {
+ 			debounce-interval = <20>;
+ 			gpios = <&gpio1 RK_PA1 GPIO_ACTIVE_LOW>;
+ 			label = "Lid";
+@@ -92,7 +92,7 @@ gpio-key-power {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pwrbtn_pin>;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <20>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+index 0e45cc2d195b..acb174d3a8c5 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+@@ -54,7 +54,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pwr_key_l>;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Key Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
+index 6fdeee7d5f6d..78157521e944 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-rockpro64.dtsi
+@@ -42,7 +42,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pwrbtn>;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Key Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi
+index 2aa0fad8f893..e6ac292ce645 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-sapphire.dtsi
+@@ -53,7 +53,7 @@ keys: gpio-keys {
+ 		compatible = "gpio-keys";
+ 		autorepeat;
+ 
+-		power {
++		key-power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+ 			label = "GPIO Power";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
+index e01668e6e5f9..ea0fa627c464 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi
+@@ -49,7 +49,7 @@ gpio-keys {
+ 		pinctrl-0 = <&hall_int_l>;
+ 		pinctrl-names = "default";
+ 
+-		cover {
++		switch {
+ 			label = "cover";
+ 			gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_SW>;
 -- 
 2.34.1
 
