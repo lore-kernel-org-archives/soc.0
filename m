@@ -1,172 +1,78 @@
-Return-Path: <SRS0=qwHo=WQ=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Zk5r=WQ=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93DD6C433EF
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 15:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 992CAC43334
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 15:17:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7BF05C34114; Thu,  9 Jun 2022 15:05:54 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id 5C606C3411F; Thu,  9 Jun 2022 15:17:42 +0000 (UTC)
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1A811C3411B
-	for <soc@kernel.org>; Thu,  9 Jun 2022 15:05:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1A811C3411B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id v1so37373990ejg.13
-        for <soc@kernel.org>; Thu, 09 Jun 2022 08:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lPZqyysbfO+3buaJKul7mEmadI+ROjg8n1gq6FC8MZk=;
-        b=GUuTlPoRfZMUwhoNlPqshTBdDwigWGKdXr6k1ybuLUMRk2PTHVOD3lsSAoLIulEL6C
-         oe92M3x9VO4xZ2QTeXagALdpleC5i3UaH0EGMg+hUItb/yl5a/qhN0SZ78mE4C5N2//2
-         r97Sa/VVq2NbaU9VlkkW2e+vHsw97ZoXL0UovybFrboNLb9FSj5sD96Kp4dj+9eF1vJD
-         wnrEe/U2wRXuJ0XISAg0QTdXxbGl4SRWXhEn5qu/D4FDBJ7RQDvT4PCju9fo0a0NOyLk
-         YKz0nPjUA32KKVwKU4lAYVyVzSCLj/X3PrmqGOVVwHVN3j7gAGhbod8t86XY6CKh8Ob3
-         D8fQ==
+	by smtp.kernel.org (Postfix) with ESMTPS id B2B64C34114;
+	Thu,  9 Jun 2022 15:17:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2B64C34114
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f48.google.com with SMTP id n11so2559578iod.4;
+        Thu, 09 Jun 2022 08:17:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lPZqyysbfO+3buaJKul7mEmadI+ROjg8n1gq6FC8MZk=;
-        b=PQMGNGbaPrXMWSI+cJBrdyrdkgd+80MErWVEmlJCxWsYNXxDqhpkEisYUJJVrVc8Bf
-         rFbzUpOlBr6wuKXNeTLa6ArfwQ3MuOls9+2cmEgN3vS1J/3g/Rje08vAjLp1yVm4ysXD
-         5ZDYF+XRXqB+izyEwaG55a8ELE2JD7crkfqZ6ALLuj+dL0aGZ89SC7veboY9yThmyndQ
-         VZEkkt8wYSFPpeHpLD6v871pABtxLMAEcXRLXBkI5e/BvXPqetAZ3GjFqMSN1yDZtdRe
-         7tvio3Om0yAQUzUc4b0ZpOBDpCwo+JLyfb4IUiXAR+s0kZ4I+pMrjcY7qmIlClu/b/Au
-         IInA==
-X-Gm-Message-State: AOAM531WB0Ef3FcUxoTs3MUi4ccFbPwBi/3BRp4hJD1ZZn33EaEkg5u9
-	5qvN/WhocdpyFepnoQrNwm5f0w==
-X-Google-Smtp-Source: ABdhPJwkyyWsIEB6RI1cOVWGgt6CQYMSQhhBa+63/Q1yQVUN9GDh93/YoJ+vTNkZewfJ+r2RpRKqAA==
-X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id cr16-20020a170906d55000b007047ba69854mr35879652ejc.579.1654787151224;
-        Thu, 09 Jun 2022 08:05:51 -0700 (PDT)
-Received: from [192.168.0.198] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l1-20020a1709060e0100b006fec4ee28d0sm9305486eji.189.2022.06.09.08.05.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 08:05:50 -0700 (PDT)
-Message-ID: <e6406956-07b7-d217-f8f4-ef6168647cc2@linaro.org>
-Date: Thu, 9 Jun 2022 17:05:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 32/48] arm64: dts: rockchip: align gpio-key node names
- with dtschema
-Content-Language: en-US
-To: =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
- Maya Matuszczyk <maccraft123mc@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7CNQXhlme5eQIHXbnsgkUH7CMFXIeljNmFCXWsWvWE4=;
+        b=OJs1DaH/iCEBRblag0fs7QrrWg79HZmZ4834RFkR07hqdc5WJbtxWlAymU7SmE6jkV
+         wfhGWfUAW2N6Z19KHYNiW0n8T1CYKMKwKESCzOQvLgCVuQ+oReOWv96v4uKprfa6atwy
+         5Pzas7TYJpE8JRi2djXlSs5oeOUOw3uYVDVVkCe/wut609KqHO4NGkSxjY8pblkTduGn
+         KXN+lTlwjMshcaQzsM3aT0FkLRXAqMxHuBbC52NcLMOsIQA+h7Or5xf1bUXOgRG9uLRO
+         DtZjJVLdw42JJiwdCZ1ooKPRV3iMWgAcskR85Yp+7FKk9QtGmNN5bPrwwcm/tosLE3S9
+         kSNQ==
+X-Gm-Message-State: AOAM532MqxCFeOQXghLQVqha92DXCpJ0WZJq6M7jgeJdLNHGANShCcwZ
+	AoXCLYgHMnQ7tQXAV3y4IA==
+X-Google-Smtp-Source: ABdhPJxJRrvWySB45UK6FLQxD5ol1vphUXTZCU3F4uQ4ESUHx/oZ/n2249kg4HzMx/J2Z7cR3VtiOw==
+X-Received: by 2002:a6b:2bc8:0:b0:669:af77:34bd with SMTP id r191-20020a6b2bc8000000b00669af7734bdmr1442822ior.182.1654787860556;
+        Thu, 09 Jun 2022 08:17:40 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056602038600b00665862d12bbsm9438447iov.46.2022.06.09.08.17.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 08:17:40 -0700 (PDT)
+Received: (nullmailer pid 3812662 invoked by uid 1000);
+	Thu, 09 Jun 2022 15:17:38 -0000
+Date: Thu, 9 Jun 2022 09:17:38 -0600
+From: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree <devicetree@vger.kernel.org>,
- arm-mail-list <linux-arm-kernel@lists.infradead.org>,
- "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
- linux-kernel@vger.kernel.org
+Cc: arm@kernel.org, linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH v2 01/48] dt-bindings: input: gpio-keys: enforce node
+ names to match all properties
+Message-ID: <20220609151738.GA3812591-robh@kernel.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
- <CAO_MupKxvaXRQvMyEUZMThBZ9033OeJec+BtBndjs5oZ3etTEQ@mail.gmail.com>
- <e0f7146d-3ccc-a194-bb1e-c3475ca8c29e@linaro.org> <2126178.C4sosBPzcN@diego>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2126178.C4sosBPzcN@diego>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20220609113843.380260-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609113843.380260-1-krzysztof.kozlowski@linaro.org>
 
-On 09/06/2022 16:56, Heiko Stübner wrote:
-> Am Donnerstag, 9. Juni 2022, 16:15:25 CEST schrieb Krzysztof Kozlowski:
->> On 09/06/2022 15:57, Maya Matuszczyk wrote:
->>> czw., 9 cze 2022 o 13:56 Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> napisał(a):
->>>>
->>>> The node names should be generic and DT schema expects certain pattern
->>>> (e.g. with key/button/switch).
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>  arch/arm64/boot/dts/rockchip/rk3308-evb.dts   |  2 +-
->>>>  .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 32 +++++++++----------
->>>>  .../boot/dts/rockchip/rk3328-nanopi-r2s.dts   |  2 +-
->>>>  arch/arm64/boot/dts/rockchip/rk3368-evb.dtsi  |  2 +-
->>>>  .../boot/dts/rockchip/rk3368-geekbox.dts      |  2 +-
->>>>  .../dts/rockchip/rk3368-orion-r68-meta.dts    |  2 +-
->>>>  .../boot/dts/rockchip/rk3368-px5-evb.dts      |  2 +-
->>>>  arch/arm64/boot/dts/rockchip/rk3368-r88.dts   |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-firefly.dts      |  2 +-
->>>>  .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-khadas-edge.dtsi |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-nanopi-r4s.dts   |  4 +--
->>>>  .../boot/dts/rockchip/rk3399-nanopi4.dtsi     |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-orangepi.dts     |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  4 +--
->>>>  .../boot/dts/rockchip/rk3399-roc-pc.dtsi      |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-rockpro64.dtsi   |  2 +-
->>>>  .../boot/dts/rockchip/rk3399-sapphire.dtsi    |  2 +-
->>>>  .../boot/dts/rockchip/rk3566-pinenote.dtsi    |  2 +-
->>>>  21 files changed, 38 insertions(+), 38 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
->>>> index 9b4f855ea5d4..4b5413b12bfa 100644
->>>> --- a/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
->>>> +++ b/arch/arm64/boot/dts/rockchip/rk3308-evb.dts
->>>> @@ -75,7 +75,7 @@ gpio-keys {
->>>>                 pinctrl-names = "default";
->>>>                 pinctrl-0 = <&pwr_key>;
->>>>
->>>> -               power {
->>>> +               power-key {
+On Thu, 09 Jun 2022 13:38:43 +0200, Krzysztof Kozlowski wrote:
+> The gpio-keys DT schema matches all properties with a wide pattern and
+> applies specific schema to children.  This has drawback - all regular
+> properties are also matched and are silently ignored, even if they are
+> not described in schema.  Basically this allows any non-object property
+> to be present.
 > 
-> hmm, it looks like all the others below are named key-power, while
-> only this uses power-key ?
+> Enforce specific naming pattern for children (keys) to narrow the
+> pattern thus do not match other properties.  This will require all
+> children to be named with 'key-' prefix or '-key' suffix.
+> 
+> Removal of "if:" within patternProperties causes drop of one indentation
+> level, but there are no other changes in the affected block.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/input/gpio-keys.yaml  | 157 +++++++++---------
+>  1 file changed, 77 insertions(+), 80 deletions(-)
 > 
 
-Because a bit earlier in DTS, there are two adc-keys nodes with "key"
-suffix, so I kept that approach to be consistent within one DTS. If you
-prefer, I can change it to key-power.
-
-> 
->>>>                         gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
->>>>                         linux,code = <KEY_POWER>;
->>>>                         label = "GPIO Key Power";
->>>> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
->>>> index ea0695b51ecd..72328dd993ee 100644
->>>> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
->>>> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
->>>> @@ -71,82 +71,82 @@ gpio-keys {
->>>>                  * |------------------------------------------------|
->>>>                  */
->>>>
->>>> -               sw1 {
->>>> +               switch-1 {
->>> Wouldn't it make more sense to rename this and all other
->>> renamed nodes in this dts into "button-dpad-up" or "button-1",
->>> as on the physical device those are buttons and the naming
->>> scheme of "sw" + number seems to be a carryover from
->>> downstream sources.
-> 
-> The naming actually carries over from the device itself.
-> In the schematics the relevant keys are also named sw1, sw2, etc.
-> 
-> And I do believe it is way nicer when devicetree names correspond to the
-> things you find in device schematics and not be named "arbitarily" to
-> only conform to some schema ;-)
-
-Then you are entirely depending on hardware engineers which might start
-calling their buttons "cute-pony-xxx" :)
-
-> 
-> So personally I'd actually prefer going with switch-sw1 (or button-sw1 if
-> you prefer) as being able to just use the search function in schematic pdfs
-> is a helpful tool.
-
-Both are fine with me, let's just pick one - switch-sw1 or button-sw1.
-Since these are physically buttons, I propose the latter.
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Rob Herring <robh@kernel.org>
