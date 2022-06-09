@@ -4,95 +4,155 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 712CCCCA47B
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AAD9CCA47B
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:39:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 41046C3411B; Thu,  9 Jun 2022 11:39:22 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	id 46B18C341C0; Thu,  9 Jun 2022 11:39:25 +0000 (UTC)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4BB8BC341C0
-	for <soc@kernel.org>; Thu,  9 Jun 2022 11:39:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4BB8BC341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id A517FC3411D
+	for <soc@kernel.org>; Thu,  9 Jun 2022 11:39:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A517FC3411D
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id u12so46910263eja.8
-        for <soc@kernel.org>; Thu, 09 Jun 2022 04:39:20 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id o7so13603476eja.1
+        for <soc@kernel.org>; Thu, 09 Jun 2022 04:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PsY51Y9LbGxALCP41QTkZafNtgUGmXvRyYQiy6lI9FU=;
-        b=zYVkK+/V8ZGti1yZD5tr+qJSCek+CBHl2Nd1S/T3io//rE3MLRz4Uc6JvOZh//3oZf
-         NI0ICECMerr05hjz/YzwcnYcowv9p8XnqaiK9gT1FKO+jvGLlLxJTRc5K8Tyl+cw0tli
-         GCrWHIkFLBzMLB4NdF9ll+WcNamrxTIkPgLQggG/rhOflxUtLzoFk4K8mZ5BvLElGwt6
-         lwfkDaDKEHIUH6k6qBWnaXgka8n9HzeMOXg0ZwINqRaQg3VDZdNZ47Es/FeEi/YCSAuQ
-         lCjAvCwH3a90XTLrXe2L173Z0Tt4dh7LQW3aGReoQTnq25LDPafCnA2RrIgWA9aIlpEG
-         gJCA==
+        bh=S/Iyhr3Mwr1/UaDl6/ye/BNS3vuL4j/ikUzThz7lvvc=;
+        b=BkcyjVbmqgJLXxxpG0tjNrsiP4G/fJ60EsNHOJWUtbgrY1qCdzdhaPm5SUSWXnl0vo
+         R+xtqx2Dhyn+2+hz28TQMps9+bMFj1aGyois5HorVpF3/Q4aFO6zXsBlkc81gRPbXp65
+         /WWrutLtVhXjj+JnFJavnpk6ngRUZ/r280lPDGdD2MYKA3EYqSZJ5/hwgUkbXCC7K756
+         75qRP6JbG8wsNITUK22s0KuGGfXw79ZxdabwEQTm9ZAGkWyUtZRxBUIYsUfoiUGGdvC5
+         3E6gvrsmWFsvkamd+HfER608MxakEpme47E1ANpMtso28NM7mK6t8vOdlVAIVSM65vvN
+         lPsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PsY51Y9LbGxALCP41QTkZafNtgUGmXvRyYQiy6lI9FU=;
-        b=f9Y0vvoVTckjyrAMqlc6u0aFGg8u6nAE29OXxNkSgY2qbbalYqRPYPQfAMYSMaSFca
-         MPnt24EUdRZskDDL1QQ0F/Z7b1Du1QzA8f7y9e2LhZ0XZasuJKazuZPB0xAha0AUxNZ3
-         ad/agX8NjnT4vov0oEoKA5CULjf5uXiGFh2EdTb7AGkaAOEh/IGiqU7F3Tf/Ac/D5TRP
-         2O6RyUmuhfhl3beDQAFsFcqmPrIxpUjOGu39X7OU/+1r5HFZVSvpGye6nqrKQzEGAbA/
-         P2hGSuy2MqMVUR/NSJj+V6i85zfsw7zbeWq1znKkugi6pUgAH0BYIOeaJrkK6Mp6TlKQ
-         b9og==
-X-Gm-Message-State: AOAM530coJtfytv5YrJDwDMO0yXZnIf+1mcWKfile3WeuEphBCQ3qQ+F
-	ZZBkoWYe9hwBX8Jg1pCeHjzlcw==
-X-Google-Smtp-Source: ABdhPJxghBIkt/oPlnkhYfc+sNVuqIIRec7ri31pQri4hdc3zeWjKeem2e8hWbd5rY1utC5lGBYtqQ==
-X-Received: by 2002:a17:906:9b86:b0:6f8:24e7:af7d with SMTP id dd6-20020a1709069b8600b006f824e7af7dmr36649187ejc.295.1654774759852;
-        Thu, 09 Jun 2022 04:39:19 -0700 (PDT)
+        bh=S/Iyhr3Mwr1/UaDl6/ye/BNS3vuL4j/ikUzThz7lvvc=;
+        b=6WxaU0m1temNK0FJp5HFpJ2yBQlbxDgvAhVM3+JGqLrI8NDLdVEBOASJgf6bxOmpPU
+         hEm0IPsHG8r22eeYgpr2upPx1UiFL9FqsmGdYlFLMcDbFuy0GKeSMq7OtdwNZOCbowXr
+         lyOEuBlJhpt515ZzYLDfCpncfoCwwtLTTuxdZanNjqLewsGVTXUNjGLNO3KpkFbt1aJ2
+         ogMXVVtZosS7cJyNvhQEZ+wyWLsfMDDBB7UqjIOhxI4af+qb9VqaWBl7DdArJLoxZ2SD
+         AIdq+JI7SGDNDAeiB/YRqe1H4FfEXzxQBhMn8YXV8l2rBHC5LwW6EDDI5AOO1RNPdTqm
+         YWCw==
+X-Gm-Message-State: AOAM532SzuWfIMSYwoAUTSIWzPX/SNgv7DCHk76Xi4ab78ARR9cuV60s
+	q1wfwXfvNWWmmwfvHbRGGKacwQ==
+X-Google-Smtp-Source: ABdhPJwQMIc3Uo+Ew0KdGsrt/Gc0dKGNxXahzqr0DO79q4xdDDGhu38fN93TWtCnSdX63yIKmiTRXg==
+X-Received: by 2002:a17:907:6282:b0:6e0:c64a:60a7 with SMTP id nd2-20020a170907628200b006e0c64a60a7mr35588659ejc.349.1654774762958;
+        Thu, 09 Jun 2022 04:39:22 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u14-20020aa7d54e000000b0042e21f8c412sm11898495edr.42.2022.06.09.04.39.18
+        by smtp.gmail.com with ESMTPSA id u14-20020aa7d54e000000b0042e21f8c412sm11898495edr.42.2022.06.09.04.39.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:39:19 -0700 (PDT)
+        Thu, 09 Jun 2022 04:39:22 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org,
-	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	openbmc@lists.ozlabs.org,
-	linux-gpio@vger.kernel.org,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
 	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 04/48] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl: align key node name
-Date: Thu,  9 Jun 2022 13:39:06 +0200
-Message-Id: <20220609113911.380368-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 05/48] arm64: dts: allwinner: align gpio-key node names with dtschema
+Date: Thu,  9 Jun 2022 13:39:07 +0200
+Message-Id: <20220609113911.380368-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gpio-keys schema requires keys to have more generic name.
+The node names should be generic and DT schema expects certain pattern
+(e.g. with key/button/switch).
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts      | 4 ++--
+ arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts  | 4 ++--
+ arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts   | 4 ++--
+ arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
-index 47a56b83a610..4c7691c38b10 100644
---- a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
-@@ -152,7 +152,7 @@ examples:
-       pinctrl-names = "default";
-       pinctrl-0 = <&pinctrl_uid>, <&pinmux_uid>;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+index 63571df24da4..620cb3ef5f6c 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+@@ -35,10 +35,10 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
  
--      uid {
-+      switch-uid {
-         label = "UID";
-         linux,code = <102>;
-         gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		lid_switch {
++		lid-switch {
+ 			label = "Lid Switch";
+ 			gpios = <&r_pio 0 12 GPIO_ACTIVE_LOW>; /* PL12 */
+ 			linux,input-type = <EV_SW>;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
+index 55b369534a08..a3e040da38a0 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
+@@ -52,10 +52,10 @@ led-2 {
+ 		};
+ 	};
+ 
+-	r-gpio-keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		reset {
++		key-reset {
+ 			label = "reset";
+ 			linux,code = <KEY_RESTART>;
+ 			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts
+index 1010c1b22d2e..b5c1ff19b4c4 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-pc2.dts
+@@ -54,10 +54,10 @@ led-1 {
+ 		};
+ 	};
+ 
+-	r-gpio-keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		sw4 {
++		key-sw4 {
+ 			label = "sw4";
+ 			linux,code = <BTN_0>;
+ 			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts
+index 74e0444af19b..d7f8bad6bb98 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts
+@@ -48,10 +48,10 @@ led-1 {
+ 		};
+ 	};
+ 
+-	r-gpio-keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		sw4 {
++		key-sw4 {
+ 			label = "sw4";
+ 			linux,code = <BTN_0>;
+ 			gpios = <&r_pio 0 3 GPIO_ACTIVE_LOW>;
 -- 
 2.34.1
 
