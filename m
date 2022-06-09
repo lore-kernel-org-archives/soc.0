@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF78CC43334
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0D61C43334
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:41:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C23E1C341D3; Thu,  9 Jun 2022 11:40:57 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	id 8D2C8C341C0; Thu,  9 Jun 2022 11:41:01 +0000 (UTC)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1C625C341C0
-	for <soc@kernel.org>; Thu,  9 Jun 2022 11:40:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1C625C341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 061EBC3411F
+	for <soc@kernel.org>; Thu,  9 Jun 2022 11:41:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 061EBC3411F
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id v1so36211171ejg.13
-        for <soc@kernel.org>; Thu, 09 Jun 2022 04:40:56 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id v1so36213738ejg.13
+        for <soc@kernel.org>; Thu, 09 Jun 2022 04:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=41oDl2jkYIAe+UpezywZKxtSXaIGEAoKjC6bZyfTtEs=;
-        b=yGclU4iyQ66wby5XzT+mGMHwuLnUadKKPsx8vSBbA0tHlaj27yUBmx0FTDsAaqlA/3
-         VyZa5Bk+6+A/D4pOjQnG5TnMkJhAuJMAMenmdUyDYUtrwshT1rj1A8ekzUSnMP8pGqFc
-         VGCZf0FGX2EX/stMLrMbAlpyvpoQmSX0XbM3W8vyjmx0X1AHB8f81sSycjEix3RjcpUD
-         6WOdttLPJ+SLpQB1jTQptsR+++vwKf+/w3e90Gzgl+Irifil6RgSlW5uy6Eeoy6URE25
-         5UueNhVx2Lah7/k8IictBXOG82fwVSmCcKbM6ycVW5bdVvQHc97YOA9wL/pK6tD9r4iX
-         fTAQ==
+        bh=4EZfS7ATgWCdgh/EfjHHInnvBBYRuwXN7niAgItceFc=;
+        b=CL/YAlmkeRD0DlhrH9j2yhdcNzher3dmz/PL/hXJLFJqSY9UIwD3gcZnJu8cEOvKI+
+         Cj4FJ3wXkVILCXq+zJyT9c2HtXs61AaB58ZfG3AnO7939MgMHRG+09usTgc3J1nmWfTN
+         CND6MbTQ+bDJBmkImQ/3ou0VLJsa6Wyi3Hw+Fws/KrK/q8T38x3wB4qaJnCDsthDcVVi
+         BAD37ubyiLNUGZk6d0CAD4M41rIef4hPLhn7PnehSkat4IaWNOmv4pb7Vr9+KgEJc3l8
+         uJekmqbp6uiM7Kl3WxoYKKN2JIE0ob+5NFhBNcaJX5ie2bosl/v18IHakGWpJ0WfBodr
+         3XlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=41oDl2jkYIAe+UpezywZKxtSXaIGEAoKjC6bZyfTtEs=;
-        b=dFLzxSKC8XSI5J/VsR+uPUXmZYE0qYb1mbBXfD1VYjFBGeMOeG9Y8+Z7uFjxeqn8JA
-         YF024YEuxrQAx5o0F7WBzI+zlzV0UXcXfOvBUuXX2zIxuTTYClFb//rbE6rguiQ5FgEy
-         da1WZhY/hHPVILyozterSJ54mZPMpGS8+5T1HKyWDx9l5rG/DYZKd9YW8JexVaAfmFML
-         j8GI7E0Ie4fvXu3lWWtIVXevUYOKpHQJTjmIPWYU0sbE+mM2qhz595mmS7SoOL/X/L1T
-         NIurWl0vk4kUH4LzH32/zQX7TMFL/USpzYonh1X6JfI4uvXfZ8WZJewNJuMIHpEwby9J
-         GQdw==
-X-Gm-Message-State: AOAM530VANz8hgDBqlxFX5ZqL89A4EYriGRPsAOczzxd2qeIkGahRSn+
-	zGbAFKDiKzpJT1+XJtKS8P0MJQ==
-X-Google-Smtp-Source: ABdhPJz+4Bz+KnA1gdGoTVTUN/iasE7Og/XaOpDwv7hD/PAbe2n7DnMtwPFsB4mgeAhDBQ9Dfi6mfA==
-X-Received: by 2002:a17:907:7d91:b0:6fe:efb8:8f97 with SMTP id oz17-20020a1709077d9100b006feefb88f97mr35675631ejc.717.1654774855509;
-        Thu, 09 Jun 2022 04:40:55 -0700 (PDT)
+        bh=4EZfS7ATgWCdgh/EfjHHInnvBBYRuwXN7niAgItceFc=;
+        b=pkjkRGNZo9L9NbMzeaQWCGOSNYMTNGojcEc3eMxf8F8Y2kGS/5ukQqUcqAQIoZNa1p
+         KJxF5KXuZux0Y5PzX4bY1j3qAUDxf7pg+qlfRksMyxRrqJs1YhfzCStWvJE8RQJGROZw
+         dPQp9I6BQaUMNN6lNs553vQwGCx+veYdnDQFCnJqJvhP1FxiiNB1QJ16cM4b89biVF5m
+         TybgEoRdymrXa2y0CHiDdkcfW+D111PBEWdRZdPLjg0sVe6Elt4KznKzvVNW3jke2H+Z
+         prDey4XKqVoGs9wmX4QzaIgTgndRQhHyUn75EeQXiQ+3hCxY0n3LwLyVrz4e/36b5Yf1
+         /6ew==
+X-Gm-Message-State: AOAM533hEI/mFvDjqgL2ofLcOAVMBVqVOskOHn7GhkkCHC1ZMMWq2T9J
+	GfFO0g/7tU5ptiB2a5pFLIQkIg==
+X-Google-Smtp-Source: ABdhPJxIAr1tPW99GAb7omkhMgDBWTW2cbyUU8dAqS/1mqEHmaXOEBhSAJb9/kUdM6ncogXHU74jow==
+X-Received: by 2002:a17:907:2d24:b0:711:d584:f118 with SMTP id gs36-20020a1709072d2400b00711d584f118mr16738464ejc.238.1654774859391;
+        Thu, 09 Jun 2022 04:40:59 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm10498662ejb.80.2022.06.09.04.40.54
+        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm10498662ejb.80.2022.06.09.04.40.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:40:55 -0700 (PDT)
+        Thu, 09 Jun 2022 04:40:58 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -57,16 +57,17 @@ To: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@aj.id.au>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Peter Rosin <peda@axentia.se>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 42/48] ARM: dts: aspeed: align gpio-key node names with dtschema
-Date: Thu,  9 Jun 2022 13:40:41 +0200
-Message-Id: <20220609114047.380793-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 44/48] ARM: dts: at91: align gpio-key node names with dtschema
+Date: Thu,  9 Jun 2022 13:40:43 +0200
+Message-Id: <20220609114047.380793-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
@@ -78,946 +79,689 @@ The node names should be generic and DT schema expects certain pattern
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 30 ++++++------
- .../boot/dts/aspeed-bmc-bytedance-g220a.dts   | 48 +++++++++----------
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts  |  8 ++--
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts  | 12 ++---
- .../boot/dts/aspeed-bmc-inspur-fp5280g2.dts   | 22 ++++-----
- arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts   | 23 ++++-----
- arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts   | 20 ++++----
- arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts   |  2 +-
- arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts |  2 +-
- arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts  |  2 +-
- arch/arm/boot/dts/aspeed-bmc-opp-swift.dts    | 30 ++++++------
- arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts   | 12 ++---
- arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts   |  4 +-
- .../boot/dts/aspeed-bmc-opp-witherspoon.dts   | 16 +++----
- arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts    |  4 +-
- 15 files changed, 118 insertions(+), 117 deletions(-)
+ arch/arm/boot/dts/at91-foxg20.dts                |  4 ++--
+ arch/arm/boot/dts/at91-gatwick.dts               |  2 +-
+ arch/arm/boot/dts/at91-kizbox.dts                |  6 +++---
+ arch/arm/boot/dts/at91-kizbox2-common.dtsi       |  8 ++++----
+ arch/arm/boot/dts/at91-kizbox3-hs.dts            | 12 ++++++------
+ arch/arm/boot/dts/at91-kizboxmini-common.dtsi    |  4 ++--
+ arch/arm/boot/dts/at91-nattis-2-natte-2.dts      |  2 +-
+ arch/arm/boot/dts/at91-qil_a9260.dts             |  2 +-
+ arch/arm/boot/dts/at91-sam9x60ek.dts             |  4 ++--
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts      |  4 ++--
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts    |  4 ++--
+ arch/arm/boot/dts/at91-sama5d2_icp.dts           |  4 ++--
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts        |  4 ++--
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts      |  4 ++--
+ arch/arm/boot/dts/at91-sama5d3_xplained.dts      |  4 ++--
+ arch/arm/boot/dts/at91-sama5d4_xplained.dts      |  4 ++--
+ arch/arm/boot/dts/at91-sama5d4ek.dts             |  4 ++--
+ arch/arm/boot/dts/at91-sama7g5ek.dts             |  4 ++--
+ arch/arm/boot/dts/at91-wb45n.dts                 |  2 +-
+ arch/arm/boot/dts/at91-wb50n.dts                 |  2 +-
+ arch/arm/boot/dts/at91sam9260ek.dts              |  6 +++---
+ arch/arm/boot/dts/at91sam9261ek.dts              | 10 +++++-----
+ arch/arm/boot/dts/at91sam9263ek.dts              |  6 +++---
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi      |  6 +++---
+ .../dts/at91sam9g25-gardena-smart-gateway.dts    |  2 +-
+ arch/arm/boot/dts/at91sam9m10g45ek.dts           | 16 ++++++++--------
+ arch/arm/boot/dts/at91sam9n12ek.dts              |  4 ++--
+ arch/arm/boot/dts/at91sam9rlek.dts               |  6 +++---
+ 28 files changed, 70 insertions(+), 70 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-index 1b2e7ad37566..82a6f14a45f0 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts
-@@ -100,91 +100,91 @@ identify {
- 	gpio-keys {
+diff --git a/arch/arm/boot/dts/at91-foxg20.dts b/arch/arm/boot/dts/at91-foxg20.dts
+index 7edf057047f8..9dfd5de808d1 100644
+--- a/arch/arm/boot/dts/at91-foxg20.dts
++++ b/arch/arm/boot/dts/at91-foxg20.dts
+@@ -155,10 +155,10 @@ user_led {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
  		compatible = "gpio-keys";
  
--		shutdown_ack {
-+		event-shutdown-ack {
- 			label = "SHUTDOWN_ACK";
- 			gpios = <&gpio ASPEED_GPIO(G, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(G, 2)>;
- 		};
+-		btn {
++		button {
+ 			label = "Button";
+ 			gpios = <&pioC 4 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x103>;
+diff --git a/arch/arm/boot/dts/at91-gatwick.dts b/arch/arm/boot/dts/at91-gatwick.dts
+index 5a81cab5fc3a..2c718cf84d7b 100644
+--- a/arch/arm/boot/dts/at91-gatwick.dts
++++ b/arch/arm/boot/dts/at91-gatwick.dts
+@@ -13,7 +13,7 @@ / {
+ 	model = "Laird Workgroup Bridge 50N - Project Gatwick";
+ 	compatible = "laird,gatwick", "laird,wb50n", "atmel,sama5d31", "atmel,sama5d3", "atmel,sama5";
  
--		reboot_ack {
-+		event-reboot-ack {
- 			label = "REBOOT_ACK";
- 			gpios = <&gpio ASPEED_GPIO(J, 3) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 3)>;
- 		};
- 
--		S0_overtemp {
-+		event-s0-overtemp {
- 			label = "S0_OVERTEMP";
- 			gpios = <&gpio ASPEED_GPIO(G, 3) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(G, 3)>;
- 		};
- 
--		S0_hightemp {
-+		event-s0-hightemp {
- 			label = "S0_HIGHTEMP";
- 			gpios = <&gpio ASPEED_GPIO(J, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 0)>;
- 		};
- 
--		S0_cpu_fault {
-+		event-s0-cpu-fault {
- 			label = "S0_CPU_FAULT";
- 			gpios = <&gpio ASPEED_GPIO(J, 1) GPIO_ACTIVE_HIGH>;
- 			linux,code = <ASPEED_GPIO(J, 1)>;
- 		};
- 
--		S0_scp_auth_fail {
-+		event-s0-scp-auth-fail {
- 			label = "S0_SCP_AUTH_FAIL";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
- 		};
- 
--		S1_scp_auth_fail {
-+		event-s1-scp-auth-fail {
- 			label = "S1_SCP_AUTH_FAIL";
- 			gpios = <&gpio ASPEED_GPIO(Z, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Z, 5)>;
- 		};
- 
--		S1_overtemp {
-+		event-s1-overtemp {
- 			label = "S1_OVERTEMP";
- 			gpios = <&gpio ASPEED_GPIO(Z, 6) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Z, 6)>;
- 		};
- 
--		S1_hightemp {
-+		event-s1-hightemp {
- 			label = "S1_HIGHTEMP";
- 			gpios = <&gpio ASPEED_GPIO(AB, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(AB, 0)>;
- 		};
- 
--		S1_cpu_fault {
-+		event-s1-cpu-fault {
- 			label = "S1_CPU_FAULT";
- 			gpios = <&gpio ASPEED_GPIO(Z, 1) GPIO_ACTIVE_HIGH>;
- 			linux,code = <ASPEED_GPIO(Z, 1)>;
- 		};
- 
--		id_button {
-+		event-id {
- 			label = "ID_BUTTON";
- 			gpios = <&gpio ASPEED_GPIO(Q, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Q, 5)>;
- 		};
- 
--		psu1_vin_good {
-+		event-psu1-vin-good {
- 			label = "PSU1_VIN_GOOD";
- 			gpios = <&gpio ASPEED_GPIO(H, 4) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(H, 4)>;
- 		};
- 
--		psu2_vin_good {
-+		event-psu2-vin-good {
- 			label = "PSU2_VIN_GOOD";
- 			gpios = <&gpio ASPEED_GPIO(H, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(H, 5)>;
- 		};
- 
--		psu1_present {
-+		event-psu1-present {
- 			label = "PSU1_PRESENT";
- 			gpios = <&gpio ASPEED_GPIO(I, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(I, 0)>;
- 		};
- 
--		psu2_present {
-+		event-psu2-present {
- 			label = "PSU2_PRESENT";
- 			gpios = <&gpio ASPEED_GPIO(I, 1) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(I, 1)>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts b/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
-index 0d1fb5ccfd36..f75cad41ae6f 100644
---- a/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts
-@@ -100,7 +100,7 @@ bmc_alive {
- 
- 	gpio-keys {
+-	gpio_keys {
++	gpio-keys {
  		compatible = "gpio-keys";
--		burn-in-signal {
-+		event-burn-in-signal {
- 			label = "burn-in";
- 			gpios = <&gpio ASPEED_GPIO(R, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(R, 5)>;
-@@ -111,139 +111,139 @@ gpio-keys-polled {
- 		compatible = "gpio-keys-polled";
- 		poll-interval = <1000>;
+ 		autorepeat;
  
--		rear-riser1-presence {
-+		event-rear-riser1-presence {
- 			label = "rear-riser1-presence";
- 			gpios = <&pca0 1 GPIO_ACTIVE_LOW>;
- 			linux,code = <1>;
+diff --git a/arch/arm/boot/dts/at91-kizbox.dts b/arch/arm/boot/dts/at91-kizbox.dts
+index 3b8812fcd854..87e972eb2ba6 100644
+--- a/arch/arm/boot/dts/at91-kizbox.dts
++++ b/arch/arm/boot/dts/at91-kizbox.dts
+@@ -28,19 +28,19 @@ main_xtal {
  		};
+ 	};
  
--		alrt-pvddq-cpu0 {
-+		event-alrt-pvddq-cpu0 {
- 			label = "alrt-pvddq-cpu0";
- 			gpios = <&pca0 8 GPIO_ACTIVE_LOW>;
- 			linux,code = <2>;
- 		};
- 
--		rear-riser0-presence {
-+		event-rear-riser0-presence {
- 			label = "rear-riser0-presence";
- 			gpios = <&pca0 9 GPIO_ACTIVE_LOW>;
- 			linux,code = <3>;
- 		};
- 
--		fault-pvddq-cpu0 {
-+		event-fault-pvddq-cpu0 {
- 			label = "fault-pvddq-cpu0";
- 			gpios = <&pca0 10 GPIO_ACTIVE_LOW>;
- 			linux,code = <4>;
- 		};
- 
--		alrt-pvddq-cpu1 {
-+		event-alrt-pvddq-cpu1 {
- 			label = "alrt-pvddq-cpu1";
- 			gpios = <&pca0 11 GPIO_ACTIVE_LOW>;
- 			linux,code = <5>;
- 		};
- 
--		fault-pvddq-cpu1 {
-+		event-fault-pvddq-cpu1 {
- 			label = "alrt-pvddq-cpu1";
- 			gpios = <&pca0 12 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
- 		};
- 
--		fault-pvccin-cpu1 {
-+		event-fault-pvccin-cpu1 {
- 			label = "fault-pvccin-cpuq";
- 			gpios = <&pca0 13 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
- 		};
- 
--		bmc-rom0-wp {
-+		event-bmc-rom0-wp {
- 			label = "bmc-rom0-wp";
- 			gpios = <&pca1 0 GPIO_ACTIVE_LOW>;
- 			linux,code = <8>;
- 		};
- 
--		bmc-rom1-wp {
-+		event-bmc-rom1-wp {
- 			label = "bmc-rom1-wp";
- 			gpios = <&pca1 1 GPIO_ACTIVE_LOW>;
- 			linux,code = <9>;
- 		};
- 
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca1 2 GPIO_ACTIVE_LOW>;
- 			linux,code = <10>;
- 		};
- 
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca1 3 GPIO_ACTIVE_LOW>;
- 			linux,code = <11>;
- 		};
- 
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca1 4 GPIO_ACTIVE_LOW>;
- 			linux,code = <12>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca1 5 GPIO_ACTIVE_LOW>;
- 			linux,code = <13>;
- 		};
- 
--		fan4-presence {
-+		event-fan4-presence {
- 			label = "fan4-presence";
- 			gpios = <&pca1 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <14>;
- 		};
- 
--		fan5-presence {
-+		event-fan5-presence {
- 			label = "fan5-presence";
- 			gpios = <&pca1 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <15>;
- 		};
- 
--		front-bp1-presence {
-+		event-front-bp1-presence {
- 			label = "front-bp1-presence";
- 			gpios = <&pca1 8 GPIO_ACTIVE_LOW>;
- 			linux,code = <16>;
- 		};
- 
--		rear-bp-presence {
-+		event-rear-bp-presence {
- 			label = "rear-bp-presence";
- 			gpios = <&pca1 9 GPIO_ACTIVE_LOW>;
- 			linux,code = <17>;
- 		};
- 
--		fault-pvccin-cpu0 {
-+		event-fault-pvccin-cpu0 {
- 			label = "fault-pvccin-cpu0";
- 			gpios = <&pca1 10 GPIO_ACTIVE_LOW>;
- 			linux,code = <18>;
- 		};
- 
--		alrt-p1v05-pvcc {
-+		event-alrt-p1v05-pvcc {
- 			label = "alrt-p1v05-pvcc1";
- 			gpios = <&pca1 11 GPIO_ACTIVE_LOW>;
- 			linux,code = <19>;
- 		};
- 
--		fault-p1v05-pvccio {
-+		event-fault-p1v05-pvccio {
- 			label = "alrt-p1v05-pvcc1";
- 			gpios = <&pca1 12 GPIO_ACTIVE_LOW>;
- 			linux,code = <20>;
- 		};
- 
--		alrt-p1v8-pvccio {
-+		event-alrt-p1v8-pvccio {
- 			label = "alrt-p1v8-pvccio";
- 			gpios = <&pca1 13 GPIO_ACTIVE_LOW>;
- 			linux,code = <21>;
- 		};
- 
--		fault-p1v8-pvccio {
-+		event-fault-p1v8-pvccio {
- 			label = "fault-p1v8-pvccio";
- 			gpios = <&pca1 14 GPIO_ACTIVE_LOW>;
- 			linux,code = <22>;
- 		};
- 
--		front-bp0-presence {
-+		event-front-bp0-presence {
- 			label = "front-bp0-presence";
- 			gpios = <&pca1 15 GPIO_ACTIVE_LOW>;
- 			linux,code = <23>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
-index 382da7934eaa..afad8d732cc3 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
-@@ -193,25 +193,25 @@ gpio-keys-polled {
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		#address-cells = <1>;
  		#size-cells = <0>;
- 		poll-interval = <1000>;
  
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca0 15 GPIO_ACTIVE_LOW>;
- 			linux,code = <15>;
+-		reset {
++		button-reset {
+ 			label = "PB_RST";
+ 			gpios = <&pioB 30 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <0x100>;
+ 			wakeup-source;
  		};
  
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca0 14 GPIO_ACTIVE_LOW>;
- 			linux,code = <14>;
+-		user {
++		button-user {
+ 			label = "PB_USER";
+ 			gpios = <&pioB 31 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <0x101>;
+diff --git a/arch/arm/boot/dts/at91-kizbox2-common.dtsi b/arch/arm/boot/dts/at91-kizbox2-common.dtsi
+index c08834ddf07b..ed7146e23147 100644
+--- a/arch/arm/boot/dts/at91-kizbox2-common.dtsi
++++ b/arch/arm/boot/dts/at91-kizbox2-common.dtsi
+@@ -31,26 +31,26 @@ main_xtal {
  		};
+ 	};
  
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca0 13 GPIO_ACTIVE_LOW>;
- 			linux,code = <13>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca0 12 GPIO_ACTIVE_LOW>;
- 			linux,code = <12>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts b/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
-index 7213434695bf..fc8222ea2dd0 100644
---- a/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts
-@@ -183,37 +183,37 @@ gpio-keys-polled {
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		#address-cells = <1>;
  		#size-cells = <0>;
- 		poll-interval = <1000>;
  
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca0 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
+-		prog {
++		button-prog {
+ 			label = "PB_PROG";
+ 			gpios = <&pioE 27 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x102>;
+ 			wakeup-source;
  		};
  
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca0 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
+-		reset {
++		button-reset {
+ 			label = "PB_RST";
+ 			gpios = <&pioE 29 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x100>;
+ 			wakeup-source;
  		};
  
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca0 8 GPIO_ACTIVE_LOW>;
- 			linux,code = <8>;
+-		user {
++		button-user {
+ 			label = "PB_USER";
+ 			gpios = <&pioE 31 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <0x101>;
+diff --git a/arch/arm/boot/dts/at91-kizbox3-hs.dts b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+index 2799b2a1f4d2..f76e2e0b41ae 100644
+--- a/arch/arm/boot/dts/at91-kizbox3-hs.dts
++++ b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+@@ -55,7 +55,7 @@ led-6 {
  		};
+ 	};
  
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca0 9 GPIO_ACTIVE_LOW>;
- 			linux,code = <9>;
- 		};
- 
--		fan4-presence {
-+		event-fan4-presence {
- 			label = "fan4-presence";
- 			gpios = <&pca0 10 GPIO_ACTIVE_LOW>;
- 			linux,code = <10>;
- 		};
- 
--		fan5-presence {
-+		event-fan5-presence {
- 			label = "fan5-presence";
- 			gpios = <&pca0 11 GPIO_ACTIVE_LOW>;
- 			linux,code = <11>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts b/arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts
-index 60a39ea10ab1..208b0f094ed9 100644
---- a/arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts
-@@ -73,19 +73,19 @@ fsi: gpio-fsi {
- 	gpio-keys {
+-	gpio_keys {
++	gpio-keys {
  		compatible = "gpio-keys";
+ 		pinctrl-names = "default" , "default", "default",
+ 				"default", "default" ;
+@@ -68,35 +68,35 @@ &pinctrl_pio_io_reset
+ 			     &pinctrl_pio_zbe_rst>;
+ 		pinctrl-4 = <&pinctrl_pio_input>;
  
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(B, 3) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(B, 3)>;
+-		SW1 {
++		switch-1 {
+ 			label = "SW1";
+ 			gpios = <&pioA PIN_PA29 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x101>;
+ 			wakeup-source;
  		};
  
--		ps0-presence {
-+		event-ps0-presence {
- 			label = "ps0-presence";
- 			gpios = <&gpio ASPEED_GPIO(F, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 0)>;
+-		SW2 {
++		switch-2 {
+ 			label = "SW2";
+ 			gpios = <&pioA PIN_PA18 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x102>;
+ 			wakeup-source;
  		};
  
--		ps1-presence {
-+		event-ps1-presence {
- 			label = "ps1-presence";
- 			gpios = <&gpio ASPEED_GPIO(F, 1) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 1)>;
-@@ -97,49 +97,49 @@ gpio-keys-polled {
- 		compatible = "gpio-keys-polled";
- 		poll-interval = <1000>;
- 
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca1 0 GPIO_ACTIVE_LOW>;
- 			linux,code = <1>;
+-		SW3 {
++		switch-3 {
+ 			label = "SW3";
+ 			gpios = <&pioA PIN_PA22 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x103>;
+ 			wakeup-source;
  		};
  
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca1 1 GPIO_ACTIVE_LOW>;
- 			linux,code = <2>;
+-		SW7 {
++		switch-7 {
+ 			label = "SW7";
+ 			gpios = <&pioA PIN_PA26 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x107>;
+ 			wakeup-source;
  		};
  
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca1 2 GPIO_ACTIVE_LOW>;
- 			linux,code = <3>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca1 3 GPIO_ACTIVE_LOW>;
- 			linux,code = <4>;
- 		};
- 
--		fan4-presence {
-+		event-fan4-presence {
- 			label = "fan4-presence";
- 			gpios = <&pca1 4 GPIO_ACTIVE_LOW>;
- 			linux,code = <5>;
- 		};
- 
--		fan5-presence {
-+		event-fan5-presence {
- 			label = "fan5-presence";
- 			gpios = <&pca1 5 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
- 		};
- 
--		fan6-presence {
-+		event-fan6-presence {
- 			label = "fan6-presence";
- 			gpios = <&pca1 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
- 		};
- 
--		fan7-presence {
-+		event-fan7-presence {
- 			label = "fan7-presence";
- 			gpios = <&pca1 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <8>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts b/arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts
-index a52a289cee85..48776fb663fb 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts
-@@ -92,30 +92,31 @@ video_engine_memory: jpegbuffer {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		air-water {
-+		event-air-water {
- 			label = "air-water";
- 			gpios = <&gpio ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 6)>;
- 		};
- 
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
- 		};
- 
--		ps0-presence {
-+		event-ps0-presence {
- 			label = "ps0-presence";
- 			gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Z, 2)>;
- 		};
- 
--		ps1-presence {
-+		event-ps1-presence {
- 			label = "ps1-presence";
- 			gpios = <&gpio ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Z, 0)>;
- 		};
--		id-button {
-+
-+		button-id {
- 			label = "id-button";
- 			gpios = <&gpio ASPEED_GPIO(F, 1) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 1)>;
-@@ -126,37 +127,37 @@ gpio-keys-polled {
- 		compatible = "gpio-keys-polled";
- 		poll-interval = <1000>;
- 
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca9552 9 GPIO_ACTIVE_LOW>;
- 			linux,code = <9>;
- 		};
- 
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca9552 10 GPIO_ACTIVE_LOW>;
- 			linux,code = <10>;
- 		};
- 
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca9552 11 GPIO_ACTIVE_LOW>;
- 			linux,code = <11>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca9552 12 GPIO_ACTIVE_LOW>;
- 			linux,code = <12>;
- 		};
- 
--		fan4-presence {
-+		event-fan4-presence {
- 			label = "fan4-presence";
- 			gpios = <&pca9552 13 GPIO_ACTIVE_LOW>;
- 			linux,code = <13>;
- 		};
- 
--		fan5-presence {
-+		event-fan5-presence {
- 			label = "fan5-presence";
- 			gpios = <&pca9552 14 GPIO_ACTIVE_LOW>;
- 			linux,code = <14>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts b/arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts
-index 7d38d121ec6d..31ff19ef87a0 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts
-@@ -46,31 +46,31 @@ video_engine_memory: jpegbuffer {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		air-water {
-+		event-air-water {
- 			label = "air-water";
- 			gpios = <&gpio ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 6)>;
- 		};
- 
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
- 		};
- 
--		ps0-presence {
-+		event-ps0-presence {
- 			label = "ps0-presence";
- 			gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Z, 2)>;
- 		};
- 
--		ps1-presence {
-+		event-ps1-presence {
- 			label = "ps1-presence";
- 			gpios = <&gpio ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(Z, 0)>;
- 		};
- 
--		id-button {
-+		button-id {
- 			label = "id-button";
- 			gpios = <&gpio ASPEED_GPIO(F, 1) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 1)>;
-@@ -81,31 +81,31 @@ gpio-keys-polled {
- 		compatible = "gpio-keys-polled";
- 		poll-interval = <1000>;
- 
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca9552 9 GPIO_ACTIVE_LOW>;
- 			linux,code = <9>;
- 		};
- 
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca9552 10 GPIO_ACTIVE_LOW>;
- 			linux,code = <10>;
- 		};
- 
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca9552 11 GPIO_ACTIVE_LOW>;
- 			linux,code = <11>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca9552 12 GPIO_ACTIVE_LOW>;
- 			linux,code = <12>;
- 		};
- 
--		fan4-presence {
-+		event-fan4-presence {
- 			label = "fan4-presence";
- 			gpios = <&pca9552 13 GPIO_ACTIVE_LOW>;
- 			linux,code = <13>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts b/arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts
-index 3d4bdad27c2d..ac0d666ca10e 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts
-@@ -96,7 +96,7 @@ fsi: gpio-fsi {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts b/arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts
-index cd660c1ff3f5..45631b47a7b3 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts
-@@ -73,7 +73,7 @@ fsi: gpio-fsi {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(P, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(P, 5)>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts b/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts
-index 084f54866f38..893e621ecab1 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts
-@@ -87,7 +87,7 @@ fsi: gpio-fsi {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-swift.dts b/arch/arm/boot/dts/aspeed-bmc-opp-swift.dts
-index 4816486c0c9e..bbf864f84d37 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-swift.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-swift.dts
-@@ -38,37 +38,37 @@ gfx_memory: framebuffer {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		air-water {
-+		event-air-water {
- 			label = "air-water";
- 			gpios = <&gpio ASPEED_GPIO(B, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(B, 5)>;
- 		};
- 
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
- 		};
- 
--		ps0-presence {
-+		event-ps0-presence {
- 			label = "ps0-presence";
- 			gpios = <&gpio ASPEED_GPIO(R, 7) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(R, 7)>;
- 		};
- 
--		ps1-presence {
-+		event-ps1-presence {
- 			label = "ps1-presence";
- 			gpios = <&gpio ASPEED_GPIO(N, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(N, 0)>;
- 		};
- 
--		oppanel-presence {
-+		event-oppanel-presence {
- 			label = "oppanel-presence";
- 			gpios = <&gpio ASPEED_GPIO(A, 7) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(A, 7)>;
- 		};
- 
--		opencapi-riser-presence {
-+		event-opencapi-riser-presence {
- 			label = "opencapi-riser-presence";
- 			gpios = <&gpio ASPEED_GPIO(I, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(I, 0)>;
-@@ -84,55 +84,55 @@ gpio-keys-polled {
- 		compatible = "gpio-keys-polled";
- 		poll-interval = <1000>;
- 
--		scm0-presence {
-+		event-scm0-presence {
- 			label = "scm0-presence";
- 			gpios = <&pca9552 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
- 		};
- 
--		scm1-presence {
-+		event-scm1-presence {
- 			label = "scm1-presence";
- 			gpios = <&pca9552 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
- 		};
- 
--		cpu0vrm-presence {
-+		event-cpu0vrm-presence {
- 			label = "cpu0vrm-presence";
- 			gpios = <&pca9552 12 GPIO_ACTIVE_LOW>;
- 			linux,code = <12>;
- 		};
- 
--		cpu1vrm-presence {
-+		event-cpu1vrm-presence {
- 			label = "cpu1vrm-presence";
- 			gpios = <&pca9552 13 GPIO_ACTIVE_LOW>;
- 			linux,code = <13>;
- 		};
- 
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca0 5 GPIO_ACTIVE_LOW>;
- 			linux,code = <5>;
- 		};
- 
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca0 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
- 		};
- 
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca0 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca0 8 GPIO_ACTIVE_LOW>;
- 			linux,code = <8>;
- 		};
- 
--		fanboost-presence {
-+		event-fanboost-presence {
- 			label = "fanboost-presence";
- 			gpios = <&pca0 9 GPIO_ACTIVE_LOW>;
- 			linux,code = <9>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
-index 72b7a6639ed9..6f6a35fe2caf 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts
-@@ -50,13 +50,13 @@ vga_memory: region@bf000000 {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		ps0-presence {
-+		event-ps0-presence {
- 			label = "ps0-presence";
- 			gpios = <&gpio0 ASPEED_GPIO(H, 3) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(H, 3)>;
- 		};
- 
--		ps1-presence {
-+		event-ps1-presence {
- 			label = "ps1-presence";
- 			gpios = <&gpio0 ASPEED_GPIO(E, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(E, 5)>;
-@@ -69,25 +69,25 @@ gpio-keys-polled {
+-		SW8 {
++		switch-8 {
+ 			label = "SW8";
+ 			gpios = <&pioA PIN_PA24 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x108>;
+diff --git a/arch/arm/boot/dts/at91-kizboxmini-common.dtsi b/arch/arm/boot/dts/at91-kizboxmini-common.dtsi
+index 9c622892c692..8fb08e6fad7a 100644
+--- a/arch/arm/boot/dts/at91-kizboxmini-common.dtsi
++++ b/arch/arm/boot/dts/at91-kizboxmini-common.dtsi
+@@ -39,14 +39,14 @@ gpio_keys {
+ 		#address-cells = <1>;
  		#size-cells = <0>;
- 		poll-interval = <1000>;
  
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca0 4 GPIO_ACTIVE_LOW>;
- 			linux,code = <4>;
+-		prog {
++		key-prog {
+ 			label = "PB_PROG";
+ 			gpios = <&pioC 17 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x102>;
+ 			wakeup-source;
  		};
  
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca0 5 GPIO_ACTIVE_LOW>;
- 			linux,code = <5>;
- 		};
- 
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca0 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca0 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts b/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts
-index 328ef472c479..8a7fb55ab489 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts
-@@ -63,13 +63,13 @@ alarm_yel {
+-		reset {
++		key-reset {
+ 			label = "PB_RST";
+ 			gpios = <&pioC 16 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x100>;
+diff --git a/arch/arm/boot/dts/at91-nattis-2-natte-2.dts b/arch/arm/boot/dts/at91-nattis-2-natte-2.dts
+index 4f123477e631..f71377c9b757 100644
+--- a/arch/arm/boot/dts/at91-nattis-2-natte-2.dts
++++ b/arch/arm/boot/dts/at91-nattis-2-natte-2.dts
+@@ -18,7 +18,7 @@ / {
  	gpio-keys {
  		compatible = "gpio-keys";
  
--		button_checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			linux,code = <74>;
- 			gpios = <&gpio ASPEED_GPIO(P, 5) GPIO_ACTIVE_LOW>;
+-		wakeup {
++		key-wakeup {
+ 			label = "Wakeup";
+ 			linux,code = <10>;
+ 			wakeup-source;
+diff --git a/arch/arm/boot/dts/at91-qil_a9260.dts b/arch/arm/boot/dts/at91-qil_a9260.dts
+index 969d990767fc..d09b3d15a828 100644
+--- a/arch/arm/boot/dts/at91-qil_a9260.dts
++++ b/arch/arm/boot/dts/at91-qil_a9260.dts
+@@ -201,7 +201,7 @@ gpio_keys {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		user_pb {
++		button-user {
+ 			label = "user_pb";
+ 			gpios = <&pioB 10 GPIO_ACTIVE_LOW>;
+ 			linux,code = <28>;
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 7719ea3d4933..7bf99bdbafcf 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -76,13 +76,13 @@ vdd2_3v3: regulator-fixed-vdd2_3v3@3 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 		status = "okay";
+ 
+-		sw1 {
++		switch-1 {
+ 			label = "SW1";
+ 			gpios = <&pioD 18 GPIO_ACTIVE_LOW>;
+ 			linux,code=<KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+index 08f0d4b995ff..96c9290007a8 100644
+--- a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+@@ -478,13 +478,13 @@ can1: can@fc050000 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 
+-		pb4 {
++		button {
+ 			label = "USER";
+ 			gpios = <&pioA PIN_PA29 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+index 5e8755f22784..d5652c974748 100644
+--- a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+@@ -26,14 +26,14 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 		status = "okay";
+ 
+-		sw4 {
++		switch-4 {
+ 			label = "USER BUTTON";
+ 			gpios = <&pioA PIN_PB2 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+index 806eb1d911d7..d7b59e16a081 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+@@ -42,14 +42,14 @@ main_xtal {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 		status = "okay";
+ 
+-		sw4 {
++		switch-4 {
+ 			label = "USER_PB1";
+ 			gpios = <&pioA PIN_PD0 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts b/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
+index 8ed58af01391..544c64549459 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
+@@ -394,13 +394,13 @@ pinctrl_usba_vbus: usba_vbus {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 
+-		bp1 {
++		button-1 {
+ 			label = "PB_USER";
+ 			gpios = <&pioA PIN_PA10 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d2_xplained.dts b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+index cdfe891f9a9e..6799c2f475b2 100644
+--- a/arch/arm/boot/dts/at91-sama5d2_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
+@@ -703,13 +703,13 @@ can1: can@fc050000 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 
+-		bp1 {
++		button {
+ 			label = "PB_USER";
+ 			gpios = <&pioA PIN_PB9 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d3_xplained.dts b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
+index a49c2966b41e..1f42a6a981bf 100644
+--- a/arch/arm/boot/dts/at91-sama5d3_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
+@@ -372,13 +372,13 @@ vcc_mmc0_reg: fixedregulator_mmc0 {
+ 		regulator-always-on;
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio>;
+ 
+-		bp3 {
++		button {
+ 			label = "PB_USER";
+ 			gpios = <&pioE 29 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d4_xplained.dts b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
+index e519d2747936..f122f302f8e0 100644
+--- a/arch/arm/boot/dts/at91-sama5d4_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
+@@ -242,13 +242,13 @@ rootfs@800000 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio>;
+ 
+-		pb_user1 {
++		button {
+ 			label = "pb_user1";
+ 			gpios = <&pioE 8 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-sama5d4ek.dts b/arch/arm/boot/dts/at91-sama5d4ek.dts
+index 7017f626f362..fce4e93c6bee 100644
+--- a/arch/arm/boot/dts/at91-sama5d4ek.dts
++++ b/arch/arm/boot/dts/at91-sama5d4ek.dts
+@@ -269,13 +269,13 @@ rootfs@800000 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio>;
+ 
+-		pb_user1 {
++		button {
+ 			label = "pb_user1";
+ 			gpios = <&pioE 13 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <0x100>;
+diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
+index 103544620fd7..de44da2e4aae 100644
+--- a/arch/arm/boot/dts/at91-sama7g5ek.dts
++++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
+@@ -45,13 +45,13 @@ main_xtal {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_key_gpio_default>;
+ 
+-		bp1 {
++		button {
+ 			label = "PB_USER";
+ 			gpios = <&pioA PIN_PA12 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91-wb45n.dts b/arch/arm/boot/dts/at91-wb45n.dts
+index 54d130c92185..3e46b29412d1 100644
+--- a/arch/arm/boot/dts/at91-wb45n.dts
++++ b/arch/arm/boot/dts/at91-wb45n.dts
+@@ -12,7 +12,7 @@ / {
+ 	model = "Laird Workgroup Bridge 45N - Atmel AT91SAM (dt)";
+ 	compatible = "laird,wb45n", "laird,wbxx", "atmel,at91sam9x5", "atmel,at91sam9";
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/at91-wb50n.dts b/arch/arm/boot/dts/at91-wb50n.dts
+index 89f0f717f7ed..e2195bd3e4b4 100644
+--- a/arch/arm/boot/dts/at91-wb50n.dts
++++ b/arch/arm/boot/dts/at91-wb50n.dts
+@@ -13,7 +13,7 @@ / {
+ 	model = "Laird Workgroup Bridge 50N - Atmel SAMA5D";
+ 	compatible = "laird,wb50n", "atmel,sama5d31", "atmel,sama5d3", "atmel,sama5";
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/at91sam9260ek.dts b/arch/arm/boot/dts/at91sam9260ek.dts
+index 6381088ba24f..bb72f050a4fe 100644
+--- a/arch/arm/boot/dts/at91sam9260ek.dts
++++ b/arch/arm/boot/dts/at91sam9260ek.dts
+@@ -144,17 +144,17 @@ nand0: nand@40000000 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		btn3 {
++		button-3 {
+ 			label = "Button 3";
+ 			gpios = <&pioA 30 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x103>;
+ 			wakeup-source;
  		};
  
--		button_identify {
-+		event-identify {
- 			label = "identify";
- 			linux,code = <152>;
- 			gpios = <&gpio ASPEED_GPIO(O, 7) GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts b/arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts
-index 230f3584bcab..a20a532fc280 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts
-@@ -51,25 +51,25 @@ video_engine_memory: jpegbuffer {
+-		btn4 {
++		button-4 {
+ 			label = "Button 4";
+ 			gpios = <&pioA 31 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91sam9261ek.dts b/arch/arm/boot/dts/at91sam9261ek.dts
+index 6fb4fe49cf1c..88869ca874d1 100644
+--- a/arch/arm/boot/dts/at91sam9261ek.dts
++++ b/arch/arm/boot/dts/at91sam9261ek.dts
+@@ -211,31 +211,31 @@ ds1 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		button_0 {
++		button-0 {
+ 			label = "button_0";
+ 			gpios = <&pioA 27 GPIO_ACTIVE_LOW>;
+ 			linux,code = <256>;
+ 			wakeup-source;
+ 		};
+ 
+-		button_1 {
++		button-1 {
+ 			label = "button_1";
+ 			gpios = <&pioA 26 GPIO_ACTIVE_LOW>;
+ 			linux,code = <257>;
+ 			wakeup-source;
+ 		};
+ 
+-		button_2 {
++		button-2 {
+ 			label = "button_2";
+ 			gpios = <&pioA 25 GPIO_ACTIVE_LOW>;
+ 			linux,code = <258>;
+ 			wakeup-source;
+ 		};
+ 
+-		button_3 {
++		button-3 {
+ 			label = "button_3";
+ 			gpios = <&pioA 24 GPIO_ACTIVE_LOW>;
+ 			linux,code = <259>;
+diff --git a/arch/arm/boot/dts/at91sam9263ek.dts b/arch/arm/boot/dts/at91sam9263ek.dts
+index e732565913a4..ce8baff6a9f4 100644
+--- a/arch/arm/boot/dts/at91sam9263ek.dts
++++ b/arch/arm/boot/dts/at91sam9263ek.dts
+@@ -232,17 +232,17 @@ d2 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		left_click {
++		button-left-click {
+ 			label = "left_click";
+ 			gpios = <&pioC 5 GPIO_ACTIVE_LOW>;
+ 			linux,code = <272>;
+ 			wakeup-source;
+ 		};
+ 
+-		right_click {
++		button-right-click {
+ 			label = "right_click";
+ 			gpios = <&pioC 4 GPIO_ACTIVE_LOW>;
+ 			linux,code = <273>;
+diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+index 85c17dd1c8d5..60d61291f344 100644
+--- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
++++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+@@ -234,17 +234,17 @@ wm8731: wm8731@1b {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		btn3 {
++		button-3 {
+ 			label = "Button 3";
+ 			gpios = <&pioA 30 GPIO_ACTIVE_LOW>;
+ 			linux,code = <0x103>;
+ 			wakeup-source;
+ 		};
+ 
+-		btn4 {
++		button-4 {
+ 			label = "Button 4";
+ 			gpios = <&pioA 31 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dts b/arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dts
+index 7da70aeeb528..92f2c05c873f 100644
+--- a/arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dts
++++ b/arch/arm/boot/dts/at91sam9g25-gardena-smart-gateway.dts
+@@ -23,7 +23,7 @@ aliases {
  	gpio-keys {
  		compatible = "gpio-keys";
  
--		air-water {
-+		event-air-water {
- 			label = "air-water";
- 			gpios = <&gpio ASPEED_GPIO(B, 5) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(B, 5)>;
+-		user_btn1 {
++		button {
+ 			label = "USER_BTN1";
+ 			gpios = <&pioA 24 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_PROG1>;
+diff --git a/arch/arm/boot/dts/at91sam9m10g45ek.dts b/arch/arm/boot/dts/at91sam9m10g45ek.dts
+index e5db198a87a8..7f45e81ca165 100644
+--- a/arch/arm/boot/dts/at91sam9m10g45ek.dts
++++ b/arch/arm/boot/dts/at91sam9m10g45ek.dts
+@@ -343,48 +343,48 @@ led-3 {
  		};
+ 	};
  
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(J, 2) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(J, 2)>;
- 		};
- 
--		ps0-presence {
-+		event-ps0-presence {
- 			label = "ps0-presence";
- 			gpios = <&gpio ASPEED_GPIO(P, 7) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(P, 7)>;
- 		};
- 
--		ps1-presence {
-+		event-ps1-presence {
- 			label = "ps1-presence";
- 			gpios = <&gpio ASPEED_GPIO(N, 0) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(N, 0)>;
-@@ -85,25 +85,25 @@ gpio-keys-polled {
- 		compatible = "gpio-keys-polled";
- 		poll-interval = <1000>;
- 
--		fan0-presence {
-+		event-fan0-presence {
- 			label = "fan0-presence";
- 			gpios = <&pca0 4 GPIO_ACTIVE_LOW>;
- 			linux,code = <4>;
- 		};
- 
--		fan1-presence {
-+		event-fan1-presence {
- 			label = "fan1-presence";
- 			gpios = <&pca0 5 GPIO_ACTIVE_LOW>;
- 			linux,code = <5>;
- 		};
- 
--		fan2-presence {
-+		event-fan2-presence {
- 			label = "fan2-presence";
- 			gpios = <&pca0 6 GPIO_ACTIVE_LOW>;
- 			linux,code = <6>;
- 		};
- 
--		fan3-presence {
-+		event-fan3-presence {
- 			label = "fan3-presence";
- 			gpios = <&pca0 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <7>;
-diff --git a/arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts b/arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts
-index 7ae4ea0d2931..0cb7b20ff3ab 100644
---- a/arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts
-@@ -58,13 +58,13 @@ onewire3 {
- 	gpio-keys {
+-	gpio_keys {
++	gpio-keys {
  		compatible = "gpio-keys";
  
--		checkstop {
-+		event-checkstop {
- 			label = "checkstop";
- 			gpios = <&gpio ASPEED_GPIO(F, 7) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(F, 7)>;
+-		left_click {
++		button-left-click {
+ 			label = "left_click";
+ 			gpios = <&pioB 6 GPIO_ACTIVE_LOW>;
+ 			linux,code = <272>;
+ 			wakeup-source;
  		};
  
--		pcie-e2b-present{
-+		event-pcie-e2b-present{
- 			label = "pcie-e2b-present";
- 			gpios = <&gpio ASPEED_GPIO(E, 7) GPIO_ACTIVE_LOW>;
- 			linux,code = <ASPEED_GPIO(E, 7)>;
+-		right_click {
++		button-right-click {
+ 			label = "right_click";
+ 			gpios = <&pioB 7 GPIO_ACTIVE_LOW>;
+ 			linux,code = <273>;
+ 			wakeup-source;
+ 		};
+ 
+-		left {
++		button-left {
+ 			label = "Joystick Left";
+ 			gpios = <&pioB 14 GPIO_ACTIVE_LOW>;
+ 			linux,code = <105>;
+ 		};
+ 
+-		right {
++		button-right {
+ 			label = "Joystick Right";
+ 			gpios = <&pioB 15 GPIO_ACTIVE_LOW>;
+ 			linux,code = <106>;
+ 		};
+ 
+-		up {
++		button-up {
+ 			label = "Joystick Up";
+ 			gpios = <&pioB 16 GPIO_ACTIVE_LOW>;
+ 			linux,code = <103>;
+ 		};
+ 
+-		down {
++		button-down {
+ 			label = "Joystick Down";
+ 			gpios = <&pioB 17 GPIO_ACTIVE_LOW>;
+ 			linux,code = <108>;
+ 		};
+ 
+-		enter {
++		button-enter {
+ 			label = "Joystick Press";
+ 			gpios = <&pioB 18 GPIO_ACTIVE_LOW>;
+ 			linux,code = <28>;
+diff --git a/arch/arm/boot/dts/at91sam9n12ek.dts b/arch/arm/boot/dts/at91sam9n12ek.dts
+index c905d7bfc771..4c644d4c6be7 100644
+--- a/arch/arm/boot/dts/at91sam9n12ek.dts
++++ b/arch/arm/boot/dts/at91sam9n12ek.dts
+@@ -226,10 +226,10 @@ d10 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		enter {
++		button-enter {
+ 			label = "Enter";
+ 			gpios = <&pioB 3 GPIO_ACTIVE_LOW>;
+ 			linux,code = <28>;
+diff --git a/arch/arm/boot/dts/at91sam9rlek.dts b/arch/arm/boot/dts/at91sam9rlek.dts
+index ddaadfec6751..a57351270551 100644
+--- a/arch/arm/boot/dts/at91sam9rlek.dts
++++ b/arch/arm/boot/dts/at91sam9rlek.dts
+@@ -248,17 +248,17 @@ led-3 {
+ 		};
+ 	};
+ 
+-	gpio_keys {
++	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		right_click {
++		button-right-click {
+ 			label = "right_click";
+ 			gpios = <&pioB 0 GPIO_ACTIVE_LOW>;
+ 			linux,code = <273>;
+ 			wakeup-source;
+ 		};
+ 
+-		left_click {
++		button-left-click {
+ 			label = "left_click";
+ 			gpios = <&pioB 1 GPIO_ACTIVE_LOW>;
+ 			linux,code = <272>;
 -- 
 2.34.1
 
