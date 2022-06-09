@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B870C433EF
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8288C43334
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 11:39:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 65AA3C341C0; Thu,  9 Jun 2022 11:39:17 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	id 95747C341C0; Thu,  9 Jun 2022 11:39:18 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9499BC3411D
-	for <soc@kernel.org>; Thu,  9 Jun 2022 11:39:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9499BC3411D
+	by smtp.kernel.org (Postfix) with ESMTPS id E8347C3411D
+	for <soc@kernel.org>; Thu,  9 Jun 2022 11:39:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E8347C3411D
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id fd25so30836605edb.3
-        for <soc@kernel.org>; Thu, 09 Jun 2022 04:39:16 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id u12so46910263eja.8
+        for <soc@kernel.org>; Thu, 09 Jun 2022 04:39:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yoi+zPkWqTTvlN+wO0cy6XLBUH8069tfMWIB3LL7MAs=;
-        b=jiHkLK2k0V/g9+AU3CbOGfidj6TqBsk4kjV64geDER1L1xv+kpMA6vTWnvPc0C3HcS
-         g8yVvr7jLk/na3LS/SGySvcKJPqXFiUPI7S/5y6LUCElhUncPQWSccSD+hLN4lryu3Mu
-         LUnNeC5yPeRjldMXzw++Sohz1TSconnBpYNnZbZw+aJ18630ydwPup+sBYpkBNTK0I4o
-         ii8PEtXpm02HpG9/z1Hy6kcnwfBJlcGHD0BVITC2VWhn8Jldo5DUSz9jaXiJYFm2wc0i
-         69jQFNVwsQ+slukxmL3x5og1A9PjRJHXqtXW7THYyyw6Qy17CCsAJE1Ip9zIHNYqyg2Z
-         t9rA==
+        bh=n04xRHDLPG5HTJiUoTVbiyOiGV01+5rVdjSb2OnFTXM=;
+        b=Ho4w2nM3+Q5bGqtr36/o6zunEJf1I2XT6LKt8qPNLkRCy08ezqkJOGQcvBy5vco1my
+         LGBVSuQy2o3zJ3VRCl5ktdED8AwYX9JPpK6G/5qGM8by9MmCH5kjgAac+5wdKBNIpFR8
+         xwCEy+untlqCgNrdyjBW7OOwtMZ/fatULZ5sRrG0DbV8h1a8fkBFQZrHUVRrHVTdOMOk
+         bFY0Q+lM7yWFhuw7oGtstkGAHtRN906miEa6MNINObX4FBiMpladAqhuYFhntv02FElx
+         IpEdpyFjcGNvTY5jsUxfo3i9hgyGqj3e7n/Ht1bGDfF6O7zBd2Gr4mncFJWMEbpebOEc
+         /opQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yoi+zPkWqTTvlN+wO0cy6XLBUH8069tfMWIB3LL7MAs=;
-        b=Q+ZI35BoxN+AD3ypvxE7V5NBfqEw8vhJPELddYiQWVY/re8WDjSWV86A39ngq3I2Kz
-         T6dgEe4dSsZLMbEWdCyjR0aVwBViYToE0em6JH5rgOlMMKmrmcZ+6zFvLm0wyzcv7Let
-         cmZESbza3XeMhaQDTIIIRQda9TrMoA7VvG07Hf3z3TG5/gKI0v6+3nHf4uCrjCfECpYC
-         NWAAsVQ9BinJCmnwJ/k5Sy+WSEGO9ihcywl6aWs4EoRd3V+jhvcubQ3qfDsVLaCsM0O+
-         fF7VWPIZwCVIqG3y6Z9xRL1Il9P44uQFcKkMoO4bbb2HEoGCZJfh6JY6IDpjbp71Cm5g
-         pcYw==
-X-Gm-Message-State: AOAM532LF/6NtXahZ9K/GxfSPsLo9TecvNFe0qd/TUOmFvl71Jk+xMDM
-	S6enkUk3tLIdEXSgWlLJh3RrZQ==
-X-Google-Smtp-Source: ABdhPJy+7F28cex3h0pFanY6YezFkbHHuVzHYvL0vVNyCbO/DG3qqXf1BUvEgXxJsF4hNHkgS2Vp7g==
-X-Received: by 2002:a05:6402:3586:b0:42e:2a6a:218b with SMTP id y6-20020a056402358600b0042e2a6a218bmr38718649edc.208.1654774754952;
-        Thu, 09 Jun 2022 04:39:14 -0700 (PDT)
+        bh=n04xRHDLPG5HTJiUoTVbiyOiGV01+5rVdjSb2OnFTXM=;
+        b=goYxJSHIsd6IlXQ+HRHCMfBjYhDWtpYM7WEK5jJ3yJ4q9FSzpxXgSWjlwatjTS5Hgd
+         Vm9Plcu4R8JKqfiCXu9YibX08Qnvh8IzluAft0T4rpcYJmpJQ/5b2ggJiFew0/pKV1Hl
+         zH3cckiDphFO1Ihq70K0O0VG8pO/XaC+NA0JYtCmv4YkOdROoFA+VpGXHPslSKYFZN55
+         5+BOUSsvp0GpKCiF6iHfOgDHPB8+oXsbHKSLDzD4AZ3gvFuT4F1Mil3hE86eYAyPszFh
+         xbLQjlUE1EXAEaGocxImA3B3aQvST+z3rTAt9Tau3R/w8N8ztD0nF5L63azFkxlfOhWM
+         wlJw==
+X-Gm-Message-State: AOAM531Ka0ZnwdgTSD3UQReYYQ3ilsc5kNACN3q8fnjIOAF4H0AAEua+
+	ZZD4Ci5t434KipzNxmwK1nwWjQ==
+X-Google-Smtp-Source: ABdhPJwgFvtD9GYY39BjWKd3xyuHcJYvYead1t+NeA7lJVCKNmpwd5ABumStlG++pLlWR2zP3uaRug==
+X-Received: by 2002:a17:906:e202:b0:6fe:478b:7c1 with SMTP id gf2-20020a170906e20200b006fe478b07c1mr35455237ejb.419.1654774757503;
+        Thu, 09 Jun 2022 04:39:17 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u14-20020aa7d54e000000b0042e21f8c412sm11898495edr.42.2022.06.09.04.39.13
+        by smtp.gmail.com with ESMTPSA id u14-20020aa7d54e000000b0042e21f8c412sm11898495edr.42.2022.06.09.04.39.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 04:39:14 -0700 (PDT)
+        Thu, 09 Jun 2022 04:39:17 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
@@ -62,74 +62,39 @@ To: Arnd Bergmann <arnd@arndb.de>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 02/48] dt-bindings: input: gpio-keys: reference input.yaml and document properties
-Date: Thu,  9 Jun 2022 13:39:04 +0200
-Message-Id: <20220609113911.380368-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 03/48] dt-bindings: input: gpio-keys: accept also interrupt-extended
+Date: Thu,  9 Jun 2022 13:39:05 +0200
+Message-Id: <20220609113911.380368-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The original text bindings documented "autorepeat" and "label"
-properties (in the device node, beside the nodes with keys).  DTS use
-also poll-interval.  Reference the input.yaml to get these top-level
-properties.
+Each key device node might have interrupts-extended instead of
+interrupts property:
+
+  fsl-ls1028a-kontron-sl28-var1.dtb: buttons0: power-button: 'anyOf' conditional failed, one must be fixed:
+    'interrupts' is a required property
+    'gpios' is a required property
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/input/gpio-keys.yaml  | 32 +++++++++++--------
- 1 file changed, 19 insertions(+), 13 deletions(-)
+ Documentation/devicetree/bindings/input/gpio-keys.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-index 27bb5c6ab8d9..e722e681d237 100644
+index e722e681d237..17ac9dff7972 100644
 --- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
 +++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-@@ -15,6 +15,13 @@ properties:
-       - gpio-keys
-       - gpio-keys-polled
- 
-+  autorepeat: true
-+
-+  label:
-+    description: Name of entire device
-+
-+  poll-interval: true
-+
- patternProperties:
-   "^(button|event|key|switch|(button|event|key|switch)-[a-z0-9-]+|[a-z0-9-]+-(button|event|key|switch))$":
-     $ref: input.yaml#
-@@ -94,19 +101,18 @@ patternProperties:
- 
-     unevaluatedProperties: false
- 
--if:
--  properties:
--    compatible:
--      const: gpio-keys-polled
--then:
--  properties:
--    poll-interval:
--      description:
--        Poll interval time in milliseconds
--      $ref: /schemas/types.yaml#/definitions/uint32
--
--  required:
--    - poll-interval
-+allOf:
-+  - $ref: input.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          const: gpio-keys-polled
-+    then:
-+      required:
-+        - poll-interval
-+    else:
-+      properties:
-+        poll-interval: false
- 
- additionalProperties: false
+@@ -92,6 +92,8 @@ patternProperties:
+     anyOf:
+       - required:
+           - interrupts
++      - required:
++          - interrupts-extended
+       - required:
+           - gpios
  
 -- 
 2.34.1
