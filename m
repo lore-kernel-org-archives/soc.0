@@ -1,132 +1,75 @@
-Return-Path: <SRS0=XDW9=WQ=gmx.net=j.neuschaefer@kernel.org>
+Return-Path: <SRS0=Zk5r=WQ=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 713B5C43334
-	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 15:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 086BBC43334
+	for <soc@archiver.kernel.org>; Thu,  9 Jun 2022 15:21:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5850BC34115; Thu,  9 Jun 2022 15:21:01 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id CB9AFC34115; Thu,  9 Jun 2022 15:21:19 +0000 (UTC)
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01253C34114;
-	Thu,  9 Jun 2022 15:20:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01253C34114
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmx.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=badeba3b8450; t=1654788056;
-	bh=0Dt6SZaRlaEh3ePnun+pU3+JfubZBckoFXyh5O+eia4=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=CIbdp4QyABpKXKO5WNjVsQEw+xisecrHd9VV61jJwdj/ZrEgfeIbOGG4QQiaK/nsi
-	 +TAbhA6UDUROo0+gq0GUrQ/JkOoYRtvVyUi9SpnCWAtBz7iYcMTPQk0vt3QnaDX1B0
-	 3yA+X0fBQgxjOJ/k+Kur6ZaJ7t+h0kImeei+tiJw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNbkp-1oNJnQ46QN-00P9rC; Thu, 09
- Jun 2022 17:20:56 +0200
-Date: Thu, 9 Jun 2022 17:20:54 +0200
-From: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0FC04C34114;
+	Thu,  9 Jun 2022 15:21:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0FC04C34114
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f172.google.com with SMTP id v7so18999957ilo.3;
+        Thu, 09 Jun 2022 08:21:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aA/410L+9p0xbmxpZ2Mn80L61ojuTJuT5kn/KAJbX/4=;
+        b=CekKbw2IT0qnc7R2ds9tFWaU5POV8Rc41GVXsuGXg3kaCBka4J9XzNFcttsqyIi/vK
+         LBSZlg4G6WafxUuM64x1KfUX0Qid9AgjqP1+i7TYBsnpsmMlpmDNpSurgvASHj26D4w+
+         qiVLfMi8CQ/NA+WAVXIoO+vbE5dKrCTZEwrpV/ivPyU2yC60mvrCJG8YD5N2dbBsQY6Q
+         p2d72CMDEmGKX+/dALfpmkVxUwWh3LrC4/eUSzYTzvU+mCMAeP95FJzYxLp9ghKO/dUv
+         c8eH2nXVvyC/kri6vELgTEDvUIELZiipEPo323j0EnckVuN+fZPnrlYzor8M4Tz5vKlF
+         mk5w==
+X-Gm-Message-State: AOAM530/8awYQxu8YIEBSuSo0CzTbbQUFt44F60fIu8M143NPlIrz7Sj
+	el00goyQ4Li5W0o3QMWr4g==
+X-Google-Smtp-Source: ABdhPJwS4Z8Uz7/L6+/4oTICgHYgwtFPW/adzsCrE/yk1RazKDvfUEOiTFSooJZLeC437CADIxrnJA==
+X-Received: by 2002:a05:6e02:1bae:b0:2d3:a66b:7432 with SMTP id n14-20020a056e021bae00b002d3a66b7432mr21846994ili.185.1654788078227;
+        Thu, 09 Jun 2022 08:21:18 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id g23-20020a02bb97000000b0032e1e0ac289sm9687144jan.8.2022.06.09.08.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 08:21:17 -0700 (PDT)
+Received: (nullmailer pid 3817707 invoked by uid 1000);
+	Thu, 09 Jun 2022 15:21:16 -0000
+Date: Thu, 9 Jun 2022 09:21:15 -0600
+From: Rob Herring <robh@kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	arm@kernel.org, soc@kernel.org,
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/48] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
- align key node name
-Message-ID: <YqIP1vYuLztSQR+n@latitude>
+Cc: Olof Johansson <olof@lixom.net>, arm@kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-input@vger.kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH v2 03/48] dt-bindings: input: gpio-keys: accept also
+ interrupt-extended
+Message-ID: <20220609152115.GA3815878-robh@kernel.org>
 References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
- <20220609113911.380368-3-krzysztof.kozlowski@linaro.org>
+ <20220609113911.380368-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="esvF/QK4g1mSKhTH"
-Content-Disposition: inline
-In-Reply-To: <20220609113911.380368-3-krzysztof.kozlowski@linaro.org>
-X-Provags-ID: V03:K1:xvlw3Yufw4vkqgLcwcYvYrGxPvtGaNJT2LdX2lY7zPeFAgWdJX0
- lv+0H+PaCO/q6wcma2IPmsvG8awp0MY3q3AfCFUvY44Qnqk1C5AMj2ALXzMNE2bbENvggID
- nZK/XKWYCOcsXTrh/7iseF7jLvUEO1CgNakVGGOI8Idht6t3x3UxMsuOMpXuBxoPb3+bpz2
- D51Hc9krhhrr2gf1fqJFA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NF6caO1+EnQ=:u/nkQjyIxfW7l+oL8nTGg1
- Vk5SXrZ5FFy+S0OBI8hLoI8Um0COTCVfL3K9jxtys7hyaztSlTxx5O3u9KIKbJkcE3EgzbFwt
- /A0Ngy8etnUCr9oLVjg2NALGmGh1STowMEHfjSRZgHGwQgfvVD/65F5AO1qd/g9KW5iOuPukT
- p4LmYsUw4ZAWhe/Clo5h5jIHe8rdaC1IMWQo8DNO7ID9QKOPp7Nme30zWBWQ9Iayonj91AmfD
- Rl0sJCgyBdJ8lQqY60Md0VHj/g2+AgInF6kGQJpoGo3YU5m+99os1e7QBC8clWUMYtMDegpR1
- MXZVP7B/6E+g/REhgDiTmeTo3dKt5k1J+fQMgY6Fg0xGpn0w7DWgaDVuKkaXW2GGqeIWOgiHU
- Gek3QM7YZSunM3wTOc9G5JpnrpSiwpjCfB4qOk4sRmKmMM+ATVvnK4Dvu8cOgFGER3G+xwV+d
- 2vXpQEtBP97naEY7bHyZPMsHDJJzXju89YDNu8zUL8LIf8Y8M0o9rXFFe6Dcvs361AAReRxE5
- MEv69dyTPl/D0wCm7SkL5RrHhXNQU2KektGJTcdMVmzlrLNndj4fPuIIrdO6Qxvt/lMLvD8Rg
- iSBcQdrIrs1VwhJKHLrZ19wqZx9r06gVNrcqO4B8XfnC1xlTAUpB95a4jhKcjd2Uj54YTCxPX
- /FUcYD/fl0qyCsa4k5ZcpZOfYRT0OYXSNAFMhZaFogvtyLjJhM1Z5O974Th1vtkpHUkEx5Z3X
- HBJ37YdrSOINJya1FV8Ej8ogtRBZ6RPbwND+e0dh4LWJnIIunSTp4xRFUO7nCqqDLmC28Dp3Q
- fv4E2RuBXT9XL3M6XZhcmysBuHNLwaf4uFHG6Nu6u4ftXJNEuSxWEvHUITfKwvW6kHaqg7U2K
- 8dZplLDWvNkZUtOZe9Dqbnv1nJeqrGErS7MIhWKPKwQXMxBXJe56F0yxaKcNz3exgWtQZNZUB
- oQ1q+6VEjlhXxgltJxGrwfcTt7fYHa/QiK3Vm3Gh1udIoR3RIcmtwW8wmM3BuDM1IKzbncBlr
- yyLnrxb1BuVRiFSmw6WVDREZMQfrm8YJEuzLvMw7uejSJHISs+iBxf5GkJwCz71y0JblYOo+B
- coYjkhq1zqUpfNGVyuBP7PLZhDSpGvGS7DPxY64ZWoSiWl+Teri3zbxrg==
-
-
---esvF/QK4g1mSKhTH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220609113911.380368-2-krzysztof.kozlowski@linaro.org>
 
-On Thu, Jun 09, 2022 at 01:39:06PM +0200, Krzysztof Kozlowski wrote:
-> gpio-keys schema requires keys to have more generic name.
->=20
+On Thu, 09 Jun 2022 13:39:05 +0200, Krzysztof Kozlowski wrote:
+> Each key device node might have interrupts-extended instead of
+> interrupts property:
+> 
+>   fsl-ls1028a-kontron-sl28-var1.dtb: buttons0: power-button: 'anyOf' conditional failed, one must be fixed:
+>     'interrupts' is a required property
+>     'gpios' is a required property
+> 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pi=
-nctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinc=
-trl.yaml
-> index 47a56b83a610..4c7691c38b10 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.y=
-aml
-> +++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.y=
-aml
-> @@ -152,7 +152,7 @@ examples:
->        pinctrl-names =3D "default";
->        pinctrl-0 =3D <&pinctrl_uid>, <&pinmux_uid>;
-> =20
-> -      uid {
-> +      switch-uid {
+>  Documentation/devicetree/bindings/input/gpio-keys.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-In this example, and more importantly the original copy in
-nuvoton-wpcm450-supermicro-x9sci-ln4f.dts, I think button-uid fits
-slightly better, because it's a momentary push button. (Still arguably a
-switch, but not one that would stay in both the on and off position.)
+The tooling is supposed to take care of this, but it's complicated 
+enough that we don't find it. So easier to handle in the schema.
 
-
-Thanks,
-Jonathan
-
---esvF/QK4g1mSKhTH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKiD7EACgkQCDBEmo7z
-X9snhxAAknzEyrKCSN7rjNKyP88u2Tkm4hoqsO6+zpWTQ2E6/0qSwhjhk7MjV1eS
-2LWJEbWS4hPTPHe2pb8VytTDYmpjijpHIfGsT0euLbjh4YMY7KldVmaxtSxl8F3Q
-OoSdpQeJje2KtfOaTDxQpYG/k6f+OyYbgIh2gvGpRls/FtgT3HFMKi5zLWk/hZt/
-7bbIJGyDGUXc6ZUlMleOw2ea+sF4ch3bBrz1cma0B6xAA/o3ymLvhZw9NS3h2CFA
-ETLd9vfWSXLd6Cuy5qtrk1edITIZyWzg/148GNp4HjwgYYCjxRp2JjSousFbEvwb
-mmRwRjWSqu9zs8gyFO7DO4Yiw/D7F/d9PHJjIDCyeVIJS7hFrEAQPNAkkhWRMRdv
-p/RXiCwEIlFU7ueesiLmLNgNi3FdJmGqaZ2uKtgTYt/ABqM06UwynRft2M1BocEM
-M6NCtde82eBsMvd2E24vEPbZG7QUzyqcA85XoXhBfrLcLPUeuZ/+6TAWpnB4GqBx
-V/Y0z70yfbvCBdWR2Lye0k0B+Byoasnane7/Hb+bwYvFqYVL33lmDPyEbg4qsGE7
-7J3xEEnuxgeypTTnBygegioy4CBZRvRfrSntuxRz1CAy/KPtGt+BU+7fxPXjYxcF
-aeIoba1WUgI8E7DnYHxiIrF9bmEvk4JC9XlySKy8QI3/cZAv9I4=
-=i3Fi
------END PGP SIGNATURE-----
-
---esvF/QK4g1mSKhTH--
+Reviewed-by: Rob Herring <robh@kernel.org>
