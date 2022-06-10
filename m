@@ -1,82 +1,92 @@
-Return-Path: <SRS0=sZdX=WR=baikalelectronics.ru=Sergey.Semin@kernel.org>
+Return-Path: <SRS0=p3cF=WR=pengutronix.de=p.zabel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 360C0C433EF
-	for <soc@archiver.kernel.org>; Fri, 10 Jun 2022 08:01:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E2B0CCA47B
+	for <soc@archiver.kernel.org>; Fri, 10 Jun 2022 09:35:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F038BC3411C; Fri, 10 Jun 2022 08:01:09 +0000 (UTC)
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-	by smtp.kernel.org (Postfix) with ESMTP id 9A600C3411B
-	for <soc@kernel.org>; Fri, 10 Jun 2022 08:01:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9A600C3411B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=baikalelectronics.ru
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baikalelectronics.ru
-Received: from mail (mail.baikal.int [192.168.51.25])
-	by mail.baikalelectronics.com (Postfix) with ESMTP id 1DBA316A0;
-	Fri, 10 Jun 2022 11:01:57 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 1DBA316A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=baikalelectronics.ru; s=mail; t=1654848117;
-	bh=13289GlwRgaXrT3Rf0U7XzRXw9Hx/0u4Wt88ljluT6U=;
-	h=From:To:CC:Subject:Date:From;
-	b=UEN3gEJhqxNB6u9M7AiThaZURbYXH7FOQwJgR/CgXKmhgIPGY1J71t+8bkmfWj3ys
-	 KwCIgUhUwidwG69bX+PRgNUhlTWLqeqw3lcWlF7CoE4ugKw/S22qECG+O1NdKSEDqP
-	 6tj9HO28FeexUr4uu2jmSUmfeqFmvnMVRtNUfEa0=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 10 Jun 2022 11:01:04 +0300
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To: Arnd Bergmann <arnd@arndb.de>, Philipp Zabel <p.zabel@pengutronix.de>
+	id 65412C3411E; Fri, 10 Jun 2022 09:35:44 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 31007C341C4
+	for <soc@kernel.org>; Fri, 10 Jun 2022 09:35:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31007C341C4
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1nzb3K-0003RD-Dz; Fri, 10 Jun 2022 11:35:38 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1nzb3K-007YER-UU; Fri, 10 Jun 2022 11:35:37 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1nzb3I-00047z-Tl; Fri, 10 Jun 2022 11:35:36 +0200
+Message-ID: <103fdfb5287a29fc229a734a40c3bcd3b373037f.camel@pengutronix.de>
+Subject: Re: [PATCH 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Serge Semin <Sergey.Semin@baikalelectronics.ru>, Arnd Bergmann
+	 <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-CC: Serge Semin <Sergey.Semin@baikalelectronics.ru>, Serge Semin
-	<fancer.lancer@gmail.com>, Alexey Malahov
-	<Alexey.Malahov@baikalelectronics.ru>, Pavel Parkhomenko
-	<Pavel.Parkhomenko@baikalelectronics.ru>, <soc@kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
-Date: Fri, 10 Jun 2022 11:01:02 +0300
-Message-ID: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
+Cc: Serge Semin <fancer.lancer@gmail.com>, Alexey Malahov
+	 <Alexey.Malahov@baikalelectronics.ru>, Pavel Parkhomenko
+	 <Pavel.Parkhomenko@baikalelectronics.ru>, soc@kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Fri, 10 Jun 2022 11:35:36 +0200
+In-Reply-To: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
+References: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-The Baikal-T1 APB bus driver correctly handles the deferred probe
-situation, but still pollutes the system log with a misleading error
-message. Let's fix that by using the dev_err_probe() method to print the
-log message in case of the clocks/resets request errors.
+Hi Serge,
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/bus/bt1-apb.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On Fr, 2022-06-10 at 11:01 +0300, Serge Semin wrote:
+> The Baikal-T1 APB bus driver correctly handles the deferred probe
+> situation, but still pollutes the system log with a misleading error
+> message. Let's fix that by using the dev_err_probe() method to print the
+> log message in case of the clocks/resets request errors.
+>=20
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> ---
+> =C2=A0drivers/bus/bt1-apb.c | 6 ++++--
+> =C2=A01 file changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
+> index b25ff941e7c7..ac13b5b97107 100644
+> --- a/drivers/bus/bt1-apb.c
+> +++ b/drivers/bus/bt1-apb.c
+> @@ -176,7 +176,8 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
+> =C2=A0
+>=20
+>=20
+>=20
+> =C2=A0	apb->prst =3D devm_reset_control_get_optional_exclusive(apb->dev, =
+"prst");
+> =C2=A0	if (IS_ERR(apb->prst)) {
+> -		dev_warn(apb->dev, "Couldn't get reset control line\n");
+> +		dev_err_probe(apb->dev, PTR_ERR(apb->prst),
+> +			      "Couldn't get reset control line\n");
+> =C2=A0		return PTR_ERR(apb->prst);
 
-diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-index b25ff941e7c7..ac13b5b97107 100644
---- a/drivers/bus/bt1-apb.c
-+++ b/drivers/bus/bt1-apb.c
-@@ -176,7 +176,8 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
- 
- 	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
- 	if (IS_ERR(apb->prst)) {
+This could be shortened to
+
 -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-+		dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-+			      "Couldn't get reset control line\n");
- 		return PTR_ERR(apb->prst);
- 	}
- 
-@@ -200,7 +201,8 @@ static int bt1_apb_request_clk(struct bt1_apb *apb)
- 
- 	apb->pclk = devm_clk_get(apb->dev, "pclk");
- 	if (IS_ERR(apb->pclk)) {
--		dev_err(apb->dev, "Couldn't get APB clock descriptor\n");
-+		dev_err_probe(apb->dev, PTR_ERR(apb->pclk),
-+			      "Couldn't get APB clock descriptor\n");
- 		return PTR_ERR(apb->pclk);
- 	}
- 
--- 
-2.35.1
++		return dev_err_probe(apb->dev, PTR_ERR(apb->prst),
++				     "Couldn't get reset control line\n");
+-		return PTR_ERR(apb->prst);
+
+regards
+Philipp
 
