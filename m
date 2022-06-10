@@ -1,118 +1,169 @@
-Return-Path: <SRS0=qI/0=WR=gmail.com=fancer.lancer@kernel.org>
+Return-Path: <SRS0=qNS+=WR=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC72C433EF
-	for <soc@archiver.kernel.org>; Fri, 10 Jun 2022 09:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82AE7C43334
+	for <soc@archiver.kernel.org>; Fri, 10 Jun 2022 10:05:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A571CC3411E; Fri, 10 Jun 2022 09:39:31 +0000 (UTC)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	id 3CF66C3411C; Fri, 10 Jun 2022 10:05:56 +0000 (UTC)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C5672C3411C
-	for <soc@kernel.org>; Fri, 10 Jun 2022 09:39:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5672C3411C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id s6so41917757lfo.13
-        for <soc@kernel.org>; Fri, 10 Jun 2022 02:39:30 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 89D1AC341C4
+	for <soc@kernel.org>; Fri, 10 Jun 2022 10:05:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 89D1AC341C4
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f49.google.com with SMTP id x62so34584855ede.10
+        for <soc@kernel.org>; Fri, 10 Jun 2022 03:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nV43jtmwHVhNIUIwHqbPqyXT6AOAMyWo/9t3uutR0Qo=;
-        b=PAtECZypcteP9uwJWi2omhMCe2W0JP5ojEDBSMhWtPUuUP/W5gFWYqDgst1QrGIzrZ
-         Oes9uDu6/m5HC6eqRgievAxVNYETDEdTAtXk6RP1ts2F5VWj9RVslkuah88dkD1mrsy9
-         tjbWGNBxmjO9v0voDhV0bUBdcO8Tj8kvJ2slrW8onbIRu0VrhWBc8yRr0ghCEeriZ/NN
-         veXTvGvDdaULdMdqMh4pzHkGz6ZnoIUneq5Vvf1VcNJPKRPXPlwte59hT3n3KS/XBa5c
-         GGAzX4GUcTtOAbkwKIGpAXUMq9rT8Z+VThb6/X4UKr97n4BJovWcczY1JX60zRQTE47J
-         9iYg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Q5vsmxWtwaYG8oW1AvQlgwQ8iE5Q0pMcGpxfbWiaZG0=;
+        b=mAwnc2FFbtLQIpZr3EhYJcGHEjUDTrbX5Jx0lJTRxxZ0qBjgwzPJoDo1t/rjo0CWE3
+         yerDl7ktV0DQWz4+QGdECsB949KbT+RbfG3jjSbSDHNcLk/Qq32eONfK5Y+syiadgwxc
+         ksxL5klIEiyxCxjJvC8ufzFhxN2Xdp4ryDJ2tg7eEFag1jBlUpf70OVlutNMCQvvFixk
+         895brrs4P/H1ae1l2GIH/45CaIzX/PQ3r60ns2tsqGQzOzuj0bVlcbrTvxO6/D2WULPH
+         VqEwY5ydtSucv3FLVw+nIzGu2j0Jn0IuF9KeJQMxm25MK3JNOoeX21Lku7r4L+7+wnEq
+         em5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nV43jtmwHVhNIUIwHqbPqyXT6AOAMyWo/9t3uutR0Qo=;
-        b=KLMql+hTrAKdbifeF5xXf8qoGLrpblX80Lz9UOVatUXOIfKpuSCSeO6hhuRoKDMLKx
-         4X8nvbB+V2e8uk8AmrCJ+EfDXXzaoxvOrnWacy59Yw1Y1sqq+082vg210OvZG5J1FbW6
-         uNz1EKXWZjjUKMBXssIk3rStbnD/BOOgIJhNf9SUfoK9tjIU+baXcM7o8sgdw30YclCJ
-         czf/lLtSdKfuTgDlfA2qZCQaNwvxLOMo8mfhitZLfBiE2KZcm2CNyW+O0q+YhDtGbP8c
-         f+RUmorEUmvtzKBaluyuZMwANcEOIM52M4S7n+WGFN63GnG8xcLZJCR4xGRWRQ/khcKm
-         UD4w==
-X-Gm-Message-State: AOAM5333JmH4mPb4Mjemsd+zgMylMdopgkcKhtK75VbBke/nMD4flx0M
-	NrKd4CZLsdt/rxMec7r6LQ0=
-X-Google-Smtp-Source: ABdhPJzhfuW5XdHCCRPubLqs1LoFsN2HHa+bDTgi7nPzDkZ8jaCdbntBg6Vboo4kR3OSwudczJn+0Q==
-X-Received: by 2002:ac2:4c48:0:b0:479:4fdc:2c70 with SMTP id o8-20020ac24c48000000b004794fdc2c70mr13827925lfk.295.1654853968748;
-        Fri, 10 Jun 2022 02:39:28 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id n8-20020a056512310800b0047906bad093sm2387841lfb.173.2022.06.10.02.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 02:39:28 -0700 (PDT)
-Date: Fri, 10 Jun 2022 12:39:26 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-	soc@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
-Message-ID: <20220610093926.xgy5pd5wep3hrakl@mobilestation>
-References: <20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru>
- <103fdfb5287a29fc229a734a40c3bcd3b373037f.camel@pengutronix.de>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q5vsmxWtwaYG8oW1AvQlgwQ8iE5Q0pMcGpxfbWiaZG0=;
+        b=XPg1ejNk7ypPF/k0wm/hkn7WXgnWtWrxsGxVj6nRcEqbuJjxI/rFDPeMHf20R72RgV
+         fWiD+i87KyU+acPy+vNRpdOrQ3B8vigSK7MomodYnmHAqWDy4spbGYxzSNghrSGZxv8p
+         mF6wIds2c7leteF9wmoyHqah7xD9QNGZ4NDDhuijzETZ2wltz+eeSIVgwLgRKDUdr0oM
+         wQaQShqXAGpj33oOsPJLRDVA72RRx/zI1lpLRJgoCUt23STSB78pEhx4lNX+OgldKiTK
+         ox2sDyRvFqCYxF0aXwW02RalSOm9ZClB62Cu4RI0LktQ4qpXnZFvhgywDfLeMgZCoJu7
+         Uhbg==
+X-Gm-Message-State: AOAM532zGnDvVyfWym/HSMfteLESccAmhCR4oyn2lzyxYzsP4rroRTn0
+	kyfOPKj/1XAsfyh/xel8zuNvdA==
+X-Google-Smtp-Source: ABdhPJw+10Yv7YpKYQWS1YFaBYbE6qXvaEMzJNgXTJK+zRmZH81nGhz+1LAX3otPNb4lPpztjPphrw==
+X-Received: by 2002:a05:6402:50:b0:431:69fc:eff4 with SMTP id f16-20020a056402005000b0043169fceff4mr26419944edu.243.1654855553741;
+        Fri, 10 Jun 2022 03:05:53 -0700 (PDT)
+Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170906444700b0070e238ff66fsm9834067ejp.96.2022.06.10.03.05.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 03:05:53 -0700 (PDT)
+Message-ID: <537986d4-376e-d787-1581-cf0b0d525daa@linaro.org>
+Date: Fri, 10 Jun 2022 12:05:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <103fdfb5287a29fc229a734a40c3bcd3b373037f.camel@pengutronix.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 44/48] ARM: dts: at91: align gpio-key node names with
+ dtschema
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Claudiu.Beznea@microchip.com, arnd@arndb.de, olof@lixom.net,
+ arm@kernel.org, soc@kernel.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
+ alexandre.belloni@bootlin.com, peda@axentia.se, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org>
+ <20220609114047.380793-5-krzysztof.kozlowski@linaro.org>
+ <42e8f573-cfc2-dfa4-1740-b0a29521628e@microchip.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <42e8f573-cfc2-dfa4-1740-b0a29521628e@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 10, 2022 at 11:35:36AM +0200, Philipp Zabel wrote:
-> Hi Serge,
+On 10/06/2022 09:12, Claudiu.Beznea@microchip.com wrote:
+
+>>                 compatible = "gpio-keys";
+>>                 pinctrl-names = "default";
+>>                 pinctrl-0 = <&pinctrl_key_gpio_default>;
+>>                 status = "okay";
+>>
+>> -               sw1 {
+>> +               switch-1 {
 > 
-> On Fr, 2022-06-10 at 11:01 +0300, Serge Semin wrote:
-> > The Baikal-T1 APB bus driver correctly handles the deferred probe
-> > situation, but still pollutes the system log with a misleading error
-> > message. Let's fix that by using the dev_err_probe() method to print the
-> > log message in case of the clocks/resets request errors.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/bus/bt1-apb.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-> > index b25ff941e7c7..ac13b5b97107 100644
-> > --- a/drivers/bus/bt1-apb.c
-> > +++ b/drivers/bus/bt1-apb.c
-> > @@ -176,7 +176,8 @@ static int bt1_apb_request_rst(struct bt1_apb *apb)
-> >  
-> > 
-> > 
-> > 
-> >  	apb->prst = devm_reset_control_get_optional_exclusive(apb->dev, "prst");
-> >  	if (IS_ERR(apb->prst)) {
-> > -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-> > +		dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-> > +			      "Couldn't get reset control line\n");
-> >  		return PTR_ERR(apb->prst);
-> 
+> This is acutally a button labeled on board as SW1. It has been wrongly
+> carried over from older DTSes. Maybe it would worth to have it now here as
+> button instead of switch.
 
-> This could be shortened to
-> 
-> -		dev_warn(apb->dev, "Couldn't get reset control line\n");
-> +		return dev_err_probe(apb->dev, PTR_ERR(apb->prst),
-> +				     "Couldn't get reset control line\n");
-> -		return PTR_ERR(apb->prst);
-
-You are absolutely right. Thanks. I'll fix it in the v2 in both
-patches.
-
--Sergey
+Sure, I'll name it "button-1". Could be also "button-sw1" if ou prefer.
 
 > 
-> regards
-> Philipp
+>>                         label = "SW1";
+>>                         gpios = <&pioD 18 GPIO_ACTIVE_LOW>;
+>>                         linux,code=<KEY_PROG1>;
+>> diff --git a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+>> index 08f0d4b995ff..96c9290007a8 100644
+>> --- a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+>> +++ b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
+>> @@ -478,13 +478,13 @@ can1: can@fc050000 {
+>>                 };
+>>         };
+>>
+>> -       gpio_keys {
+>> +       gpio-keys {
+>>                 compatible = "gpio-keys";
+>>
+>>                 pinctrl-names = "default";
+>>                 pinctrl-0 = <&pinctrl_key_gpio_default>;
+>>
+>> -               pb4 {
+>> +               button {
+>>                         label = "USER";
+>>                         gpios = <&pioA PIN_PA29 GPIO_ACTIVE_LOW>;
+>>                         linux,code = <KEY_PROG1>;
+>> diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+>> index 5e8755f22784..d5652c974748 100644
+>> --- a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+>> +++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
+>> @@ -26,14 +26,14 @@ chosen {
+>>                 stdout-path = "serial0:115200n8";
+>>         };
+>>
+>> -       gpio_keys {
+>> +       gpio-keys {
+>>                 compatible = "gpio-keys";
+>>
+>>                 pinctrl-names = "default";
+>>                 pinctrl-0 = <&pinctrl_key_gpio_default>;
+>>                 status = "okay";
+>>
+>> -               sw4 {
+>> +               switch-4 {
 > 
+> Same here, this is a button not a switch.
+
+Sure, then button-1 or button-sw4
+
+> 
+>>                         label = "USER BUTTON";
+>>                         gpios = <&pioA PIN_PB2 GPIO_ACTIVE_LOW>;
+>>                         linux,code = <KEY_PROG1>;
+>> diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+>> index 806eb1d911d7..d7b59e16a081 100644
+>> --- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
+>> +++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
+>> @@ -42,14 +42,14 @@ main_xtal {
+>>                 };
+>>         };
+>>
+>> -       gpio_keys {
+>> +       gpio-keys {
+>>                 compatible = "gpio-keys";
+>>
+>>                 pinctrl-names = "default";
+>>                 pinctrl-0 = <&pinctrl_key_gpio_default>;
+>>                 status = "okay";
+>>
+>> -               sw4 {
+>> +               switch-4 {
+> 
+> Same here, button not switch.
+> 
+> Other than this, looks good to me.
+
+Thanks for checking
+
+
+Best regards,
+Krzysztof
