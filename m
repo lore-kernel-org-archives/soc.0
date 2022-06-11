@@ -1,81 +1,153 @@
-Return-Path: <SRS0=3fEa=WS=starinux.org=admin-sys@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24441C433EF
-	for <soc@archiver.kernel.org>; Sat, 11 Jun 2022 08:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1622C43334
+	for <soc@archiver.kernel.org>; Sat, 11 Jun 2022 09:16:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DB844C3411D; Sat, 11 Jun 2022 08:25:21 +0000 (UTC)
-Received: from mail.starinux.org (starinux.org [213.36.253.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 86BDAC34116
-	for <soc@kernel.org>; Sat, 11 Jun 2022 08:25:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86BDAC34116
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starinux.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=starinux.org
-Received: from localhost (localhost [127.0.0.1])
-	by mail.starinux.org (Postfix) with ESMTP id 9C0D6E45E72
-	for <soc@kernel.org>; Sat, 11 Jun 2022 10:25:10 +0200 (CEST)
-X-Virus-Scanned: Filtrage de mails : anti-spam et anti-virus pour Starinux 
-Received: from mail.starinux.org ([127.0.0.1])
-	by localhost (association-starinux.dedibox.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qO_oqyzS_ok3 for <soc@kernel.org>;
-	Sat, 11 Jun 2022 10:25:09 +0200 (CEST)
-Received: from debian-salon (176-163-166-172.abo.bbox.fr [176.163.166.172])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: antoine@starinux.org)
-	by mail.starinux.org (Postfix) with ESMTPSA id 3A944E45E71
-	for <soc@kernel.org>; Sat, 11 Jun 2022 10:25:09 +0200 (CEST)
-From: "admin-sys" <admin-sys@starinux.org>
+	id 4BD4CC3411E; Sat, 11 Jun 2022 09:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82991C34116;
+	Sat, 11 Jun 2022 09:16:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1654938983;
+	bh=f+LsVSerLGZakWJyxNUUH0PCxIuefvT2VIz4H/Hm94g=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=i289JfVmoLETDc2+rZxBDkufrpfyeVgvxu8icT4s4XvVY3VPjm/NtTMZa/3gjmX3V
+	 3v7J/SZkHUf514kzbx3YQf/MaC+oJQJaI2Lvfn8Su5BBCCgwDebeKTIILfOYvPTjRZ
+	 t5SCsU4nvrVqgu1NGgzBtv28c/vq3cEUA9hVTqDowzvtKDQ9cWEwLRTEsj27ocgTZv
+	 7xDZP6T+tyYrBOSg3ZGYZgjc0BZxzc4EkZysnv9LAcRZ5OUM7N6AjW129z47NTYGyH
+	 Pj2S2g/5IQlo6iwUITJ/9AE1j22QnEjQ7UzyvCPvxK3vEY4RIO59ta9v33PGgQZt0s
+	 pue+WuYvymLvg==
+Date: Sat, 11 Jun 2022 17:16:13 +0800
+From: Shawn Guo <shawnguo@kernel.org>
+To: Marcel Ziswiler <marcel@ziswiler.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: Re: Pour vos recrutements ou prestations informatiques
-Date: Sat, 11 Jun 2022 10:25:08 +0200
-User-Agent: KMail/1.9.10
-References: <!&!AAAAAAAAAAAYAAAAAAAAACVbiaN4N69Kg/2KWqgJAAHCgAAAEAAAAAW5sA5dFiZHvhpa0A8wWnMBAAAAAA==@prestation-recrutement.com>
-In-Reply-To: <!&!AAAAAAAAAAAYAAAAAAAAACVbiaN4N69Kg/2KWqgJAAHCgAAAEAAAAAW5sA5dFiZHvhpa0A8wWnMBAAAAAA==@prestation-recrutement.com>
-X-KMail-QuotePrefix: > 
+Cc: linux-arm-kernel@lists.infradead.org,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Denys Drozdov <denys.drozdov@toradex.com>,
+	Fabio Estevam <festevam@denx.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Li Yang <leoyang.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
+	Marek Vasut <marex@denx.de>,
+	Matthias Schiffer <matthias.schiffer@tq-group.com>,
+	Max Krummenacher <max.krummenacher@toradex.com>,
+	NXP Linux Team <linux-imx@nxp.com>, Olof Johansson <olof@lixom.net>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Stefan Agner <stefan@agner.ch>, Tim Harvey <tharvey@gateworks.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: Re: [PATCH v2 00/24] ARM: dts: imx7-colibri: device tree improvements
+Message-ID: <20220611091613.GH254723@dragon>
+References: <20220516134734.493065-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Message-Id: <202206111025.08941.admin-sys@starinux.org>
+In-Reply-To: <20220516134734.493065-1-marcel@ziswiler.com>
 
-Bonjour,
+On Mon, May 16, 2022 at 03:47:10PM +0200, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> 
+> This is a general update of the Colibri iMX7 device tree files.
+> 
+> The Toradex Colibri family is composed of a SoM that can be plugged on
+> various carrier boards, with carrier boards allowing multiple optional
+> accessories (e.g. display, camera, ...).
+> 
+> The device tree sources are structured into a SoM dtsi and a carrier dts
+> which then includes the SoM dtsi. The SoM dtsi defines and enables the
+> functionality self-contained on the SoM and prepares for the
+> functionality provided by the carrier HW or accessories so that the
+> carrier dts then can enable or amend nodes provided. Accessories are
+> enabled in overlays depending on HW configuration.
+> 
+> Please find the following colibri-imx7 device trees improvements:
+> 
+> - Display/Touch Functionality Overhaul
+> Rename display interface to match other modules to make it easier to
+> use device tree overlays.
+> The parallel RGB interface (lcdif) and all related stuff turn on in a
+> device tree overlay. Keep them disabled in the main devicetree.
+> As these subsystems are provided by module and not a part of boards,
+> move their definitions into the module-level devicetree.
+> Disable ad7879 touchscreen which turns on in a devic tree overlay.
+> Remains it disabled in the main devicetree.
+> The Toradex 7" Capacitive and 10" LVDS touch screens are Atmel MXT
+> peripherals available on the I2C bus for touchscreen events. Add
+> atmel_mxt_ts node to the module-level device tree. Also, provide pinmux
+> configuration for the INT/RST inputs from SODIMM pins 106/107 for most
+> carrier boards or an external touchscreen adapter inputs configured to
+> SODIMM pins 28/30.
+> 
+> - Ethernet Improvements
+> Add the MDIO bus with the respective PHY.
+> Add Ethernet aliases which is required to properly pass MAC address
+> from bootloader.
+> Add delay for on-module phy supply.
+> 
+> - USB Device/Host Switching
+> Add usb dual-role switching using extcon.
+> 
+> - MMC/SD
+> The original Colibri specification only defined 3.3 volt TTL signaling
+> and relied on external on-carrier pull-ups for the SD_DATA[0..3] lines.
+> The latest carrier boards like Iris V2 on the other hand are now UHS-I
+> compliant by leaving such external on-carrier pull-ups away relying on
+> module- or even SoC-level ones which pull up to resp. signaling voltage.
+> In such cases, the carrier board-level device tree may explicitly delete
+> the no-1-8-v property to enable full UHS-I support.
+> Also, fix SD/MMC regulator for the carrier boards using UHS-I modes.
+> 
+> - Add Iris and Iris V2 Carrier Board Device Trees
+> Add support for Toradex Iris carrier boards.
+> 
+> Changes in v2:
+> - Add Krzysztof's acked-by. Thanks!
+> - Revert change on arch/arm/boot/dts/imx6dl-colibri-iris.dts which
+>   slipped into this patch set by error.
+> - Re-based on top of Shawn's for-next.
+> 
+> Marcel Ziswiler (18):
+>   ARM: dts: imx7-colibri: overhaul display/touch functionality
+>   ARM: dts: imx7-colibri: add mdio phy node
+>   ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys
+>   ARM: dts: imx7-colibri: move regulators
+>   ARM: dts: imx7-colibri: clean-up usdhc1 and add sleep config
+>   ARM: dts: imx7-colibri: move rtc node
+>   ARM: dts: imx7d-colibri-emmc: add cpu1 supply
+>   ARM: dts: imx7-colibri-eval-v3: correct can controller comment
+>   ARM: dts: imx7-colibri: disable adc2
+>   ARM: dts: imx7-colibri-aster: add ssp aka spi cs aka ss pins
+>   ARM: dts: imx7-colibri: add clarifying comments
+>   ARM: dts: imx7-colibri: alphabetical re-order
+>   ARM: dts: imx7-colibri: clean-up device enabling/disabling
+>   ARM: dts: imx7-colibri: remove leading zero from reg address
+>   ARM: dts: imx7-colibri: set regulator-name properties
+>   ARM: dts: imx7-colibri: clean-up iomuxc pinctrl group naming
+>   dt-bindings: arm: fsl: add toradex,colibri-imx7s/d/d-emmc-iris/-v2
+>   ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
+> 
+> Max Krummenacher (1):
+>   ARM: dts: imx7-colibri: add ethernet aliases
+> 
+> Oleksandr Suvorov (3):
+>   ARM: dts: imx7-colibri: improve licensing and compatible strings
+>   ARM: dts: imx7-colibri: improve wake-up with gpio key
+>   ARM: dts: imx7-colibri: add delay for on-module phy supply
+> 
+> Philippe Schenker (1):
+>   ARM: dts: imx7-colibri: add usb dual-role switching using extcon
+> 
+> Stefan Agner (1):
+>   ARM: dts: imx7-colibri: set lcdif clock source to video pll
 
-Recevez vous sans cesse ce mail ci-dessous ?
-
-On Friday 10 June 2022 22:42:02 you wrote:
-> Bonjour,=20
-> Au sein de votre entreprise, vous pouvez rencontrer des n=C3=A9cessit=C3=
-=A9s
-> d'accroitre votre =C3=A9quipe et devoir recruter des collaborateurs
-> informatiques. Notre soci=C3=A9t=C3=A9 est pr=C3=A9sente sur le secteur d=
-u recrutement de
-> talent dans le secteur IT et nous pouvons mettre =C3=A0 profit nos comp=
-=C3=A9tences de
-> recherche et ce en toute discr=C3=A9tion.
-> Les tarifs que nous proposons sont au succ=C3=A8s.=20
-> Nous pouvons vous proposer des prestations informatiques en r=C3=A9gie su=
-r un
-> ensemble vari=C3=A9 de technologies : ERP, d=C3=A9veloppement, syst=C3=A8=
-me,...=20
-> Je me tiens =C3=A0 votre disposition,=20
-> Cordialement,=20
-> Caroline Revin=20
-> IT Resourcer=20
-> Prestation Recrutement=20
-> caroline.revin@prestation-recrutement.com=20
-> List-Unsubscribe: <mailto: Unsubscribe@azdaz.xyz?subject=3Dunsubscribe>,
-> <http://www.azdaz.xyz/unsubscribe.html>=20
-
-Nous oui, comment faire pour s'en d=C3=A9barrasser ?
-
-Merci
-
-StarinuX
+Applied all, thanks!
