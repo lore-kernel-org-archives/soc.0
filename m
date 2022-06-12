@@ -1,52 +1,132 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=w4/8=WT=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA700C43334
-	for <soc@archiver.kernel.org>; Sun, 12 Jun 2022 03:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24DE9C433EF
+	for <soc@archiver.kernel.org>; Sun, 12 Jun 2022 10:44:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61143C385A2; Sun, 12 Jun 2022 03:02:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80101C3411B;
-	Sun, 12 Jun 2022 03:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655002925;
-	bh=AT2ZB7CiBFkj0hlqmuddoqZT/t4mdO5rqZJ+bNtoR9o=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=T+OtSECZ5gIevRRVJRYhFyN9lHO+P5M/T0kJPMo6NV7yuhRsZxVbJ+DmYdLHfAZn0
-	 fdITxCHWReNnq9Sxv6FDOYWwJL8vc7/cMNkpRPrM5EsHlP902pO9eHWitIXpmBl9yB
-	 yTHK4/BWrAfUdMkUDcFe9oV6FmonmJd7CSHu5gvM7YDUl9sTNHyIQyIWRt0vfqcgyL
-	 Bq1pn4o00Kbw/eYIWoFXux0SdTtfGYC2HdtKKRt2PbQ6IFSbmsTeuuO+wfC79LLcYD
-	 enCAxAJwn6HYPh7SCTRI9kuGkTKYz1Intrcmm84+dUzSPYQixy4Lhaut07Ob568kAH
-	 4qGR2QCgdkaQw==
-Date: Sun, 12 Jun 2022 11:01:57 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id C1E63C341C4; Sun, 12 Jun 2022 10:44:10 +0000 (UTC)
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A1095C34115;
+	Sun, 12 Jun 2022 10:44:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1095C34115
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655030648; x=1686566648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oY4m7/TA+RKNO4Qsg0G2e91Q7hQxCUmosIWjYQ/l6PU=;
+  b=PCwsomosCvftuoIGVb6uQs9Se/vjFsVMdYyO/sqQB3K/oLNkjU3EVvO9
+   ixOIJAcAzwGMsWHTs/2V5Wf94RiIHb0LVO6P4M9sAhBs5PvhsUhkLiAZ3
+   IdecYktAm3F0Hckr5X1Mlee2WDkFGf6aTkBw8LolLAwOjv6WDber+uqVX
+   efCiNnkag+XUrlIo08tZ1yrRtk5w8m+iT5lnKCLrafu4pjBREv1l5FIkF
+   7sXizNIfnkFW4D5Y/cniWTWajtb2YMIW1Y91fFAdD7wYtn+y5sON4SSv+
+   X+6/nTINZI3EDPnLtKo1W06IK1i3GkMxOhtv3eTJat4nLsL0/zkZQ6jj9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="278770894"
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="278770894"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 03:44:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
+   d="scan'208";a="611340376"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2022 03:44:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+	(envelope-from <lkp@intel.com>)
+	id 1o0L4e-000Jqt-Dd;
+	Sun, 12 Jun 2022 10:44:04 +0000
+Date: Sun, 12 Jun 2022 18:43:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	arm@kernel.org, soc@kernel.org, Li Yang <leoyang.li@nxp.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
+Cc: kbuild-all@lists.01.org, krzysztof.kozlowski+dt@linaro.org,
+	robh+dt@kernel.org, mturquette@baylibre.com, linux@armlinux.org.uk,
+	arnd@arndb.de, olof@lixom.net, soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: fsl: adjust whitespace around '='
-Message-ID: <20220612030157.GS254723@dragon>
-References: <20220526204258.832179-1-krzysztof.kozlowski@linaro.org>
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	Qin Jian <qinjian@cqplus1.com>
+Subject: Re: [PATCH v17 05/10] clk: Add Sunplus SP7021 clock driver
+Message-ID: <202206121806.C2ECo2lB-lkp@intel.com>
+References: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220526204258.832179-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <65ef2bf7fc393eb373b966fe839852bcd1bacad8.1654565776.git.qinjian@cqplus1.com>
 
-On Thu, May 26, 2022 at 10:42:56PM +0200, Krzysztof Kozlowski wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Qin,
 
-Applied both, thanks!
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pza/reset/next]
+[also build test WARNING on robh/for-next clk/clk-next tip/irq/core linus/master v5.19-rc1 next-20220610]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220607-100746
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+config: microblaze-randconfig-c024-20220612 (https://download.01.org/0day-ci/archive/20220612/202206121806.C2ECo2lB-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.3.0
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+cocci warnings: (new ones prefixed by >>)
+>> drivers/clk/clk-sp7021.c:584:2-7: WARNING: invalid free of devm_ allocated data
+
+vim +584 drivers/clk/clk-sp7021.c
+
+   550	
+   551	static struct clk_hw *sp_pll_register(struct device *dev, const char *name,
+   552					      const struct clk_parent_data *parent_data,
+   553					      void __iomem *reg, int pd_bit, int bp_bit,
+   554					      unsigned long brate, int shift, int width,
+   555					      unsigned long flags)
+   556	{
+   557		struct sp_pll *pll;
+   558		struct clk_hw *hw;
+   559		struct clk_init_data initd = {
+   560			.name = name,
+   561			.parent_data = parent_data,
+   562			.ops = (bp_bit >= 0) ? &sp_pll_ops : &sp_pll_sub_ops,
+   563			.num_parents = 1,
+   564			.flags = flags,
+   565		};
+   566		int ret;
+   567	
+   568		pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
+   569		if (!pll)
+   570			return ERR_PTR(-ENOMEM);
+   571	
+   572		pll->hw.init = &initd;
+   573		pll->reg = reg;
+   574		pll->pd_bit = pd_bit;
+   575		pll->bp_bit = bp_bit;
+   576		pll->brate = brate;
+   577		pll->div_shift = shift;
+   578		pll->div_width = width;
+   579		spin_lock_init(&pll->lock);
+   580	
+   581		hw = &pll->hw;
+   582		ret = devm_clk_hw_register(dev, hw);
+   583		if (ret) {
+ > 584			kfree(pll);
+   585			return ERR_PTR(ret);
+   586		}
+   587	
+   588		return hw;
+   589	}
+   590	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
