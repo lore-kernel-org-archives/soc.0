@@ -1,77 +1,90 @@
-Return-Path: <SRS0=m3ed=WU=gmail.com=jernej.skrabec@kernel.org>
+Return-Path: <SRS0=r9yq=WU=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E13C433EF
-	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 21:02:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7B07C43334
+	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 21:37:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CBE98C3411F; Mon, 13 Jun 2022 21:02:30 +0000 (UTC)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	id 92206C3411C; Mon, 13 Jun 2022 21:37:55 +0000 (UTC)
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 40ED3C34114;
-	Mon, 13 Jun 2022 21:02:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40ED3C34114
+	by smtp.kernel.org (Postfix) with ESMTPS id EDA9BC34114;
+	Mon, 13 Jun 2022 21:37:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EDA9BC34114
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id v25so8883267eda.6;
-        Mon, 13 Jun 2022 14:02:30 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 184so6695354pga.12;
+        Mon, 13 Jun 2022 14:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Q+yaULdwu+rPL5G3MbWME0SaA5eeeXALvtNnWDC8wYA=;
-        b=Z3Zp+je1tvgRYJne1HFf3ZU8TV5rQ6wVEdKi2Ozg9+v/gZF1Q7EdGSU49t7iJbACzr
-         T60Bn+ddWAdg5eWnfRIB9uAQwPTuvHmXB917v7IPvts0r3jpZWWefU7QacBSK9uwNFZN
-         c8GDDbZqjrTisqwCR/vGfpKSHzXLv/V+6/OyOkGb3CTI6/dQ/4ke0F++EiV+3On1WacQ
-         mGnKAGI887a7ydBLuwYrYT6GHYTtqoYE77UDQ/X/KatV2tWb1fkYwcG9r1PuYSR9PBZZ
-         /+aq1qaKfHXxUomXC+UZrSaEeyNsTVPKnZeOxKLokpF8ku2eturrAlCy4DJg5gNozN0P
-         fAcA==
+        bh=tJuz9yMuGGksOUvKub3tRebZ2Fw5veeK+Cx/3ADZPqs=;
+        b=kFvWcygyYfM80BvamEw4h/McUWui9JJOBZZz8kW4dtikLbvtO9TEDqhQI4WDq1QfbU
+         IHrWQ8Q+RB8mAXAL8zv5YUwk5laiEREqJykNfoXGwUwCEJ56phppC+u57ecyeiOQDV9C
+         28/bZX1V8vFkULKzLpSDZztWUPuM7Svd4sLDb1TopHi1btQCnw4+i7pQ1Mf8rt4VCP6G
+         AW7CONpS7jzvTZe/I6VY6VqPUmq06uoyF+THoFpjNmjkd3Ngkpru1qk4pbNEoARFNlDJ
+         bj7L23XvbkwxJTShOIkIFV6LTLxToMJx/V9nw19siXQKE0IJC6QwIj25edQ8uJKClcfN
+         gYrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Q+yaULdwu+rPL5G3MbWME0SaA5eeeXALvtNnWDC8wYA=;
-        b=dalWWDXNgZGuVqTcFVy4xK1NF55OIFieVwH4YHEqsMhwjuQzmvR78+rcaNRFWsSEup
-         JmvkxrY48zJcFzPbFBT32ozbobluN4Wob+C0hUdqmrg4MJVMdsUqqtrjmt/ijg5/A5sK
-         LQFEmaycOCEE2a5Dkj9GujYCTWvdRaxO6pvJ3LLDKMRop7KsWRvNSMJK9t9iQGU5ZfLT
-         N4FNZvhgY9HZgwxw5taf0DZ0sKmpufWN26OouSwOiEp3umjFWg4wShXSyE3sF6aTjcxd
-         GP4u96+gfGofFcyHfMpTxK7PgQETG63yoXz+ut4q0uGENdv0Zemj7uubaKdvRuWVrZo2
-         S1oQ==
-X-Gm-Message-State: AOAM533LLTwuY8ibRADOtLeRZi6t9DIrThXiGWcDXeBI5O4UJGxfdjRT
-	6kW+3mYnVN+NJyrsF7FHSgk=
-X-Google-Smtp-Source: ABdhPJxQQjQlNd90jfnjQ5cdDCsNYWfxsyeGYqf4sXuU6zLN/1BV9Z4Vj7CJU7eESLv+NSnM2GcZAQ==
-X-Received: by 2002:a05:6402:3293:b0:42e:18a:d6eb with SMTP id f19-20020a056402329300b0042e018ad6ebmr1871193eda.293.1655154148518;
-        Mon, 13 Jun 2022 14:02:28 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id q23-20020a1709064cd700b006feed212f50sm874123ejt.184.2022.06.13.14.02.27
+        bh=tJuz9yMuGGksOUvKub3tRebZ2Fw5veeK+Cx/3ADZPqs=;
+        b=ZXozW1F0CceUHR+8ogEqC9fDLdKVMVHbDcPq+YKYTuMOZjZbksfB6VQCKU42HPF10i
+         0X/sbWaawntVjBuMQ8ea9oPnFPNrW7KPIPjRdJoVbgGC+ckzusovIv7uWsITccHV8isJ
+         /qr4UlgpeOsVKB4ps2EZoQqGhUpYe2h8QK3wwuZ1JH06WdAKPx7cCxT5NESGQGH0mhj1
+         AHSR8242e0LGn9peUFQQCguOElb+zxhK7s6OgT3SLnSdt5AkenSmiKyQiiLj9yTgcnH3
+         zQxdwmX8bfK4Qyc9U4QunSR243mkhfwIbK1IaxfP53oyEy8Zz+g+o2ef4UOMRySfbcI9
+         evQQ==
+X-Gm-Message-State: AJIora9WUG6t9fqv7kwd1i7lhUe86FvwWDMB0gE19kF2cbvRbE46IOAn
+	qi1KuQjJVxiOX1g/+5l5nXo=
+X-Google-Smtp-Source: AGRyM1u329hcXoRkwsNq9U84BJFUtAmhlF0l5uLrFTGxePBB02dK+vjoxQwha4ug/5vzUBrmFiqNgw==
+X-Received: by 2002:a05:6a00:2809:b0:51b:f239:d24d with SMTP id bl9-20020a056a00280900b0051bf239d24dmr945096pfb.73.1655156274363;
+        Mon, 13 Jun 2022 14:37:54 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id p3-20020a1709028a8300b00168adae4eb2sm5574917plo.262.2022.06.13.14.37.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 14:02:28 -0700 (PDT)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+        Mon, 13 Jun 2022 14:37:53 -0700 (PDT)
+From: Florian Fainelli <f.fainelli@gmail.com>
+To: bcm-kernel-feedback-list@broadcom.com,
+	William Zhang <william.zhang@broadcom.com>,
+	Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 06/48] ARM: dts: allwinner: align gpio-key node names with dtschema
-Date: Mon, 13 Jun 2022 23:02:22 +0200
-Message-ID: <4743697.31r3eYUQgx@kista>
-In-Reply-To: <20220609113911.380368-5-krzysztof.kozlowski@linaro.org>
-References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609113911.380368-5-krzysztof.kozlowski@linaro.org>
+Cc: dan.beygelman@broadcom.com,
+	joel.peshkin@broadcom.com,
+	samyon.furman@broadcom.com,
+	philippe.reynes@softathome.com,
+	tomer.yacoby@broadcom.com,
+	kursad.oney@broadcom.com,
+	anand.gore@broadcom.com,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: Re: [PATCH 2/3] ARM: dts: Add DTS files for bcmbca SoC BCM63148
+Date: Mon, 13 Jun 2022 14:37:52 -0700
+Message-Id: <20220613213752.268314-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220610002113.14483-3-william.zhang@broadcom.com>
+References: <20220610002113.14483-1-william.zhang@broadcom.com> <20220610002113.14483-3-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Dne =C4=8Detrtek, 09. junij 2022 ob 13:39:08 CEST je Krzysztof Kozlowski=20
-napisal(a):
-> The node names should be generic and DT schema expects certain pattern
-> (e.g. with key/button/switch).
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Thu,  9 Jun 2022 17:21:12 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> Add DTS for ARMv7 based broadband SoC BCM63148. bcm63148.dtsi is the SoC
+> description DTS header and bcm963148.dts is a simple DTS file for
+> Broadcom BCM963148 Reference board that only enable the UART port.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian
