@@ -4,95 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B6B0C433EF
-	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 17:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC5A4C43334
+	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 17:54:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27BD8C3411C; Mon, 13 Jun 2022 17:20:31 +0000 (UTC)
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	id A4A69C3411F; Mon, 13 Jun 2022 17:54:10 +0000 (UTC)
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8E519C34114;
-	Mon, 13 Jun 2022 17:20:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E519C34114
+	by smtp.kernel.org (Postfix) with ESMTPS id F2F87C3411C;
+	Mon, 13 Jun 2022 17:54:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2F87C3411C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id u8so4778337qvj.2;
-        Mon, 13 Jun 2022 10:20:30 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id f13so4442233qtb.5;
+        Mon, 13 Jun 2022 10:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=5dXpXAMWYea+zUYeNQXJzD8rtjz2yZFaK7kKd5xSQ1U=;
-        b=OyEzzTKdjOtMK+/9YyfvlsKD0yjWoL4NfBi6PUId/U9eBq71D7GFoaCLN6Q28cmTfH
-         SFLRL2rax204LUxPuBr7HKXco4IyrBeMrc7nbWTCbLychAKsoCT3jrDe2XjvjhGikgpK
-         ESUcGsOYDsr/6/jeieum36NnYAy8jHhyW3EA7BSyQpFUmHIm0Q+ZRRf1TFHvDnRA6SdR
-         JqUMCfjaZVF9yAtJs++dhUdVW7CU19HHGluSl8HYAxPHip1j/2JrYtOybonZbee3fdOR
-         y3fMUcOJobfVQzPCrO5/y3nZ/JcBJ+qOBpeyIZUVV+BGVzKA25CVv7nwOfsvWOb46dPF
-         8FOg==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=MQ6Gm6rEcKWgPoZvxj3NUFNwBirG2CnGEdL2DutlzIQ=;
+        b=joXD2Wtj8NaDaXR+5hJSdoaWOTNyBxtsLmkoFylc/33cizkqdQKRxkzKf0UlQE15bI
+         PRppazDhC0xj+Fe3DTGn8ewe8fG68LGzK+KBD2WymPPh/j3bnBzaIH+U+GGL66l/mYfl
+         KfVassBVNwh6ezplUxVW5IONWCdB1nF3F3ol0d82gdC/VBSEL2ER7AVQcXgYZOnsvAw7
+         rcsUcDX7vEmTBL/Q9Av1o/ma3mLnwZjiRxuueKeOw1xDCp0gN4VluDjxe4+sr7GazoXo
+         Bkir+7pgIgzWMzLymH5/p1naiiJRcJZQWIjygscbj0eDMlS7WFd5EPbZQzvR1IDiY8Y7
+         GnLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=5dXpXAMWYea+zUYeNQXJzD8rtjz2yZFaK7kKd5xSQ1U=;
-        b=SOamuwwiay5u5xblHfAhi/luv546WVI9cMwcs5f1ax3lMqbDjjQOcRnQyfoggvsLTg
-         xUpfb+WZD3kAbw1lqIIdyvHrKinBNSn1rvFcLuxEaqx6VCzwC3khzkGw9hJhJB9uYJ7M
-         rmkwSxJeXOHvAw6F2fxuo40C5umaVovoxJ7GqDHM4gf9oz8jfEl1EoIIeT+26Jla9/bD
-         NRyLWmblRdQtX9qeuyE9GLKv8vQUtWjVGy+lBKIeuKDD972YHMM7/SVXgo/8gpZhxOrN
-         m+pqwXsStLYRQSBNkZd3Jm1X/0Aki8zMrlW6kMwxPkqYAvJERA//zQ1X+Cg86kCfQKY7
-         FkCg==
-X-Gm-Message-State: AJIora8zU0TQ1XRYWju7gEfIDiciWdtWR+vaxUgqSBTnkYp+1rjHKYm0
-	Mcvk11xDSwlLQu13jnli17Q8obyOYLs=
-X-Google-Smtp-Source: AGRyM1u1spdKJ70351HEgbOLr99HN1dge1zKKFnnsltRDPq7ybZsc/V9Vhd3DTejVp4KHX0SLDe/yA==
-X-Received: by 2002:a05:6214:2a83:b0:46b:27c2:b44c with SMTP id jr3-20020a0562142a8300b0046b27c2b44cmr24903qvb.26.1655140829103;
-        Mon, 13 Jun 2022 10:20:29 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id f19-20020a05620a409300b006a6278a2b31sm7557236qko.75.2022.06.13.10.20.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 10:20:28 -0700 (PDT)
-Message-ID: <70b33608-f76b-ffcb-9c06-06ee50640158@gmail.com>
-Date: Mon, 13 Jun 2022 10:20:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [GIT PULL 2/2] Broadcom maintainers fixes for 5.19
-Content-Language: en-US
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MQ6Gm6rEcKWgPoZvxj3NUFNwBirG2CnGEdL2DutlzIQ=;
+        b=VHma9rWKHF/OQ+yZeGzgWuzWk/e3GhOQExJGWZSI22X0lnb5kBGc7TvPx7Ig53ju17
+         wcAVlhJ0IEFS3nzAcdV5FHasdxOrNniOCS7mRKyDtHhZEyUxxgYjxoD3OCzCwF6njw16
+         wcjEW3iZN0wJXNwIYRuBRNexSsAo2VNaXq/zVh+6NGtbt006vEwAtF+kVIUmpH3f/AWu
+         72p3QeIenfljYxVXKIle5YauLSUDQJyv8X+ewvenw+EokfXT89XRbfrBWjKCR2yKckq0
+         7Caac4EQ7tlteyumpcnCotukeZbA/jweI4yPuG3nB9GUBwo167QTfXE7xvOeQo8KXOrm
+         judA==
+X-Gm-Message-State: AOAM5313ilgr6vsfikCsXp9D5EsYh8EDss8Kn3QPwOfgpHHz3tdG15aI
+	wa4MCIRO/znCHh8NqNle3Us=
+X-Google-Smtp-Source: ABdhPJx0sAHi+4PMHwNszPdJysQo5Oh8DBgyF1D4IUtP45fNmpWG58yU8cVLYzW6xN4NldgDgnPlkw==
+X-Received: by 2002:a05:622a:287:b0:305:150:a73d with SMTP id z7-20020a05622a028700b003050150a73dmr834462qtw.570.1655142848901;
+        Mon, 13 Jun 2022 10:54:08 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o18-20020a05620a2a1200b006a370031c3esm7400298qkp.106.2022.06.13.10.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 10:54:08 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>,
- linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net,
- khilman@kernel.org, bcm-kernel-feedback-list@broadcom.com
-References: <20220608093132.1465703-1-f.fainelli@gmail.com>
- <20220608093132.1465703-2-f.fainelli@gmail.com>
- <f2336ca6-b4f1-82a5-8b53-07ebadf4fe68@gmail.com>
-In-Reply-To: <f2336ca6-b4f1-82a5-8b53-07ebadf4fe68@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: bcm-kernel-feedback-list@broadcom.com,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
+	soc@kernel.org,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <zajec5@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/48] ARM: dts: broadcom: align gpio-key node names with dtschema
+Date: Mon, 13 Jun 2022 10:54:05 -0700
+Message-Id: <20220613175405.244712-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220609113938.380466-2-krzysztof.kozlowski@linaro.org>
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609113938.380466-2-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 6/8/22 05:43, Florian Fainelli wrote:
+On Thu,  9 Jun 2022 13:39:30 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
 > 
-> 
-> On 6/8/2022 11:31 AM, Florian Fainelli wrote:
->> The following changes since commit 
->> f2906aa863381afb0015a9eb7fefad885d4e5a56:
->>
->>    Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
->>
->> are available in the Git repository at:
->>
->>    https://github.com/Broadcom/stblinux.git 
->> tags/arm-soc/for-5.19/maintainers-fixes
->>
->> for you to fetch changes up to 46d6e11320d21dc40fce229ab3504125847de27e:
->>
->>    MAINTAINERS: Update BCM2711/BCM2835 maintainer (2022-06-08 01:00:47 
->> -0700)
-> 
-> I am going to submit a v2 where the git tree is also changes such that 
-> we do not confuse submitters with a "stale" tree.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Nevermind, there is an appropriate URL change for the git tree, Arnd, 
-can you pull both pull requests?
--- 
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
 Florian
