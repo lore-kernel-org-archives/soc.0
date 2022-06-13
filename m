@@ -1,84 +1,77 @@
-Return-Path: <SRS0=r9yq=WU=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=m3ed=WU=gmail.com=jernej.skrabec@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 141FEC433EF
-	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 17:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DED96C43334
+	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 21:00:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB122C341C4; Mon, 13 Jun 2022 17:55:52 +0000 (UTC)
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	id AC998C3411F; Mon, 13 Jun 2022 21:00:06 +0000 (UTC)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2AEC2C34114;
-	Mon, 13 Jun 2022 17:55:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2AEC2C34114
+	by smtp.kernel.org (Postfix) with ESMTPS id E538DC3411C;
+	Mon, 13 Jun 2022 21:00:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E538DC3411C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id l192so2450884qke.13;
-        Mon, 13 Jun 2022 10:55:52 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id s12so13442010ejx.3;
+        Mon, 13 Jun 2022 14:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=1Pc6hRYC4rxtooxyM7/YSQoCVphSsBsKYzZCiGbgBwo=;
-        b=NHedRiTOluSlKdlkfloHbszUpNhcsUAob4OQWchXPrS15ln7j81SEaRx0j82fIhGS2
-         BB3B7mPS9wILuicHE4AwhdoKIf5TkbEkeStrcQ7JNQ1+eyXeDGqIleGe6N+ShB1/WvpL
-         TxqdkIBcJfkjeajA01l4484kk3K6bxW5bwU+WvQLB1mSX12yKcO7zh8qwG4sQ4G5JGx9
-         hF6hKEroFguQBgV3o4d0BY25fmhHSEVz9JZrL/WfkVfPi0zRdfaeFHb5UC1lkOGteEPu
-         A01+pgg7zzXCyiaUDXTrEbvtIqTrXfxSEoAERt9SO7YUmLMDOYNKcO2iY5yi54tqjxw5
-         aFhw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9CJMCg82C9CA+VF6EtDbiVLWnCE+gcyYEDGZtnWDX8I=;
+        b=cJc/SprZOfokSgWwnzvuGuRwPp1zab3QO7Q9DUSxb6DYSiH8EGH3aR8DOm3dcA9B7l
+         GjDO0NbkAF2WQW/sB26wXSNDG/PQsezHS9Sy3haCeZizj7fwKU12mhzRtLLFDmEiu/hp
+         dlHvkvfXMG7Fl99OAPbv0f+ufocMcSZyjnoKeqK341x16Cgcv1X9zl7i5AP9aThKe9bY
+         IZMJYxoTArAncCcTCMjPw5JyRmrVUAQizo6neNGAPII7SBuHvcAvwtjxvW6e3mhPQLrT
+         dpZI1OZO3WsL9PmsWGp3FGnrSd4NyGXdmNxtFsfVL37/QmqoEv8E9IxiwBvVS/IrPskC
+         WxoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1Pc6hRYC4rxtooxyM7/YSQoCVphSsBsKYzZCiGbgBwo=;
-        b=Ep8IuVHSKPaSWx5V+OWXpjcBxG76iC2ZAms0FZ+v9LKqmXn4axxjKGbuysmjF5yguE
-         eNq+gioej2miMYjGuvDzepJhWC1RcjzMhhtgeZKqTfPL7Cy1lfrX9sTbwGFn5J8pxefN
-         es6vCon7CA7+gpJfVHset7Mp2aVawQ1J0GzOpFtdiUeIcLbRLCMB116Z825B6Lv/MUBv
-         CWy4nFz0M1srlicAJJuiUWpL0J4ei0ygy0UDlwoh6hVyz8OKevghKAYVW7FIzUno6Pcc
-         Dh0Lf+L0/V/s+f5Ib+eBHvbmYS844quw08PTqKQpAl0fxFeKgwoYTXdyLtVjAwGRuq3G
-         gETw==
-X-Gm-Message-State: AOAM531hvXQdMObORZx2+EXwXq+5EZDAJmlhO3v6gu02x7oEj2KGPo7t
-	Ll3qv7UBTn8LR7s+DvGym/lEujlNWw0=
-X-Google-Smtp-Source: ABdhPJyQlPebYQo8foZhKRh7sqp7VBuXiVEpt3Q7DGxRzs+fqeIulnUb+A7p+UEUAl9zsgK8dDMq0A==
-X-Received: by 2002:a05:620a:24d4:b0:6a7:1d74:d8e6 with SMTP id m20-20020a05620a24d400b006a71d74d8e6mr915132qkn.379.1655142950966;
-        Mon, 13 Jun 2022 10:55:50 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05620a0c5000b006a785ba0c25sm4437788qki.77.2022.06.13.10.55.49
+        bh=9CJMCg82C9CA+VF6EtDbiVLWnCE+gcyYEDGZtnWDX8I=;
+        b=h8N8QEfoojtpk1QU33V9wAeQl8ugdqSlPmZNBWRd4RnGv2FYFo6fnDOj6PemZBhk7F
+         Bgaxp+7ln61LngK43xLPbfe2enrRbHYrRBhOyKr+UXs1EPjdjw5gvE8hWiIgED8tIirc
+         3LEoU3d9L+NQbQMqvp1io1aDcmpw4gIIN1wIxBW8azc35PiAWuGJVE8wFRzDBKS26sLr
+         wEURmKJ7eiLL0f2lOtQFeQGiNQ83eRyPt+m9qiMu1r6A2rsTmbUuShfnw9lUWP3mjIgT
+         aw/aBf7mV9WFVYsqz3jhxIILYxKonX/AHETk79fZLAOCKMAJzoYP/YLDMsFZs0Uc0i3l
+         laWA==
+X-Gm-Message-State: AJIora8jRQtm6qR4kVS6NHoKoZwueDOshMFAgqBZUj3U+Bl6HHzfrlAf
+	lfcjVhGG/0aMQ8HtXAVFT9o=
+X-Google-Smtp-Source: ABdhPJy/yfR5haJgk6lB/FbMqG7w8FPgqDK3la1oweXRWZE+kcsnyfKXjsR13vgEm01lVEVNEX/dFA==
+X-Received: by 2002:a17:906:7a13:b0:711:ff9c:f4bb with SMTP id d19-20020a1709067a1300b00711ff9cf4bbmr1415216ejo.642.1655154004124;
+        Mon, 13 Jun 2022 14:00:04 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05640250d200b0042e15364d14sm5671325edb.8.2022.06.13.14.00.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:55:50 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
+        Mon, 13 Jun 2022 14:00:03 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: bcm-kernel-feedback-list@broadcom.com,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	arm@kernel.org,
-	soc@kernel.org,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <zajec5@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/48] ARM: dts: broadcom: correct gpio-keys properties
-Date: Mon, 13 Jun 2022 10:55:47 -0700
-Message-Id: <20220613175547.245095-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220609113938.380466-3-krzysztof.kozlowski@linaro.org>
-References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609113938.380466-3-krzysztof.kozlowski@linaro.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 05/48] arm64: dts: allwinner: align gpio-key node names with dtschema
+Date: Mon, 13 Jun 2022 23:00:02 +0200
+Message-ID: <5574044.DvuYhMxLoT@kista>
+In-Reply-To: <20220609113911.380368-4-krzysztof.kozlowski@linaro.org>
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609113911.380368-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu,  9 Jun 2022 13:39:31 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> gpio-keys children do not use unit addresses.
-> 
+Dne =C4=8Detrtek, 09. junij 2022 ob 13:39:07 CEST je Krzysztof Kozlowski=20
+napisal(a):
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
+>=20
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
+
