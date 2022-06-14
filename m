@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F7D0CCA480
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CBCCCA483
 	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7B219C341D7; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65A0DC341CF;
+	id 68E63C341D2; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 512F9C385A2;
 	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1655238815;
-	bh=0jNpGC6f/KrFV/RJIhf/IoN+ifOlk54XuGmqmX+IoiU=;
+	bh=miCZ5hIBytHIBlqISdUCXF87U9EB/ncjl/Pe9hFOnmU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tB6Neo5MpNlwWiSJR94ni0w0JR+YJ0gSCut07moNBllqPb1W3yzeuU8Mfff4riHNa
-	 it2R5l5iigSKOSOh23U5jmF+xbdXZaK0Roi1mNmvnVh59UQISV0qC/OpKgthgrsPJJ
-	 8yC3pghn76plSvLCrQ6RsLE6IY51fuZZlWpBcROel8PPNVoFC5MBWAl/de5WemDvjn
-	 kuPqW2otFUhFau960OK6sJZfX8zZOInvxZJ24BICSrKQ99VGmgxUybOF4Hioxy1nSv
-	 rq3graR/QgXj6f7aFH9pOnkgTq5hp+8GMbnlVgkQTzcHTCWb9qUFAU6LTGzk+12l2s
-	 GUpgoMxQEsFkw==
+	b=OEkd2Bkd4QkOIxKUAkTlsvv8CuP4z7q+yjUWhVuSeRDPInsTZqIEUb1b9dP8WCOVY
+	 zJsakzPcMOQIeNpdPjnglct6RKeWg9u7aqtoINJsQYMzXPlLAWAsTzBSk/d0iRTI2T
+	 yL0pAZ281M2YwVS1Y+Pbq150U/SoWr40i1A40ynbwksVbBURmcp3nVFigk6he0AVuI
+	 uOMobFwA9/8Xjf7MFCF2d2cVVmVy49IBXBRZjzDdv6jf+vGPGKlK5zw7A2SXQUEoYq
+	 /Q7vhm30iqHe0YTpqYmX+Hrgo/mIbhFYdBUrN2KN+KRXYv8SymDFLtqErEM/mKK9C5
+	 eI7PPQ5Q9t9fw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50FDEE73856;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29B22E7386C;
 	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v5.19
+Subject: Re: [PATCH] ARM: configs: Enable more audio support for i.MX
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165523881532.29335.1081101221098766452.git-patchwork-notify@kernel.org>
+ <165523881516.29335.4797818921408508260.git-patchwork-notify@kernel.org>
 Date: Tue, 14 Jun 2022 20:33:35 +0000
-References: <20220614100007.1029881-1-sudeep.holla@arm.com>
-In-Reply-To: <20220614100007.1029881-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <20220513121258.168364-1-broonie@kernel.org>
+In-Reply-To: <20220513121258.168364-1-broonie@kernel.org>
+To: Mark Brown <broonie@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 14 Jun 2022 11:00:07 +0100 you wrote:
-> Hi ARM SoC Team,
+On Fri, 13 May 2022 13:12:58 +0100 you wrote:
+> From: Mark Brown <broonie@kernel.org>
 > 
-> Please pull !
-> 
-> Regards,
-> Sudeep
+> The generic audio card for Freescale platforms is used by a wide range
+> of i.MX systems and also has selects for the various audio controllers
+> used on them so will help with systems that don't use that specific card
+> too.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Fixes for v5.19
-    https://git.kernel.org/soc/soc/c/002ec157477c
+  - ARM: configs: Enable more audio support for i.MX
+    https://git.kernel.org/soc/soc/c/212e3b6b8734
 
 You are awesome, thank you!
 -- 
