@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CBCCCA483
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABB5ECCA487
 	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 68E63C341D2; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 512F9C385A2;
+	id 7CBADC341CC; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 61D45C341CD;
 	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1655238815;
-	bh=miCZ5hIBytHIBlqISdUCXF87U9EB/ncjl/Pe9hFOnmU=;
+	bh=y/MgrX41YqJTd6FLXNLvo/YlQzxcC3Xc8JmqtKXZYLU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=OEkd2Bkd4QkOIxKUAkTlsvv8CuP4z7q+yjUWhVuSeRDPInsTZqIEUb1b9dP8WCOVY
-	 zJsakzPcMOQIeNpdPjnglct6RKeWg9u7aqtoINJsQYMzXPlLAWAsTzBSk/d0iRTI2T
-	 yL0pAZ281M2YwVS1Y+Pbq150U/SoWr40i1A40ynbwksVbBURmcp3nVFigk6he0AVuI
-	 uOMobFwA9/8Xjf7MFCF2d2cVVmVy49IBXBRZjzDdv6jf+vGPGKlK5zw7A2SXQUEoYq
-	 /Q7vhm30iqHe0YTpqYmX+Hrgo/mIbhFYdBUrN2KN+KRXYv8SymDFLtqErEM/mKK9C5
-	 eI7PPQ5Q9t9fw==
+	b=Jk8LbC03g2hFIiu+Xmzx0FiCXLnuFxDweuKmBZa0LxbygiU5ryrgHeMvtxNMQCN3w
+	 AjUEpV/Cz1U73660CSD64EiiykcLUPdgbQloK83rAzivUcavsMbKsmW7pzUOXuMM00
+	 xQNE62n76FA54T6+ILhp1Bk3Cjq2gQv976gRUA1GX4O0NFDOg6iPGdf96CWD6hUJLE
+	 KoOD620f32EvIiakhNIr2KqZ89ad94mZl+a3eX9+4fduQflv2w0AimiEnCJbnX5QFx
+	 UR0hvgjepfwxLmZe0hXp9aoDpgnsUzAKc/7jlLNd3Ct0IP7FPXMmvCsauqtXYF/lLr
+	 /P6J/pe/bIRwQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29B22E7386C;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4964AFD99FF;
 	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: configs: Enable more audio support for i.MX
+Subject: Re: [RESEND PATCH] ARM: Fix refcount leak in axxia_boot_secondary
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165523881516.29335.4797818921408508260.git-patchwork-notify@kernel.org>
+ <165523881529.29335.5121149300038266463.git-patchwork-notify@kernel.org>
 Date: Tue, 14 Jun 2022 20:33:35 +0000
-References: <20220513121258.168364-1-broonie@kernel.org>
-In-Reply-To: <20220513121258.168364-1-broonie@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+References: <20220601090548.47616-1-linmq006@gmail.com>
+In-Reply-To: <20220601090548.47616-1-linmq006@gmail.com>
+To: Miaoqian Lin <linmq006@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,19 @@ Hello:
 This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 13 May 2022 13:12:58 +0100 you wrote:
-> From: Mark Brown <broonie@kernel.org>
+On Wed,  1 Jun 2022 13:05:48 +0400 you wrote:
+> of_find_compatible_node() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
+> Add missing of_node_put() to avoid refcount leak.
 > 
-> The generic audio card for Freescale platforms is used by a wide range
-> of i.MX systems and also has selects for the various audio controllers
-> used on them so will help with systems that don't use that specific card
-> too.
+> Fixes: 1d22924e1c4e ("ARM: Add platform support for LSI AXM55xx SoC")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: configs: Enable more audio support for i.MX
-    https://git.kernel.org/soc/soc/c/212e3b6b8734
+  - [RESEND] ARM: Fix refcount leak in axxia_boot_secondary
+    https://git.kernel.org/soc/soc/c/7c7ff68daa93
 
 You are awesome, thank you!
 -- 
