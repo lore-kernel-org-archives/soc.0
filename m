@@ -1,90 +1,114 @@
-Return-Path: <SRS0=r9yq=WU=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=j98A=WV=cqplus1.com=prvs=1162F1FB06=qinjian@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7B07C43334
-	for <soc@archiver.kernel.org>; Mon, 13 Jun 2022 21:37:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 815F8C433EF
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 08:31:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 92206C3411C; Mon, 13 Jun 2022 21:37:55 +0000 (UTC)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EDA9BC34114;
-	Mon, 13 Jun 2022 21:37:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EDA9BC34114
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 184so6695354pga.12;
-        Mon, 13 Jun 2022 14:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tJuz9yMuGGksOUvKub3tRebZ2Fw5veeK+Cx/3ADZPqs=;
-        b=kFvWcygyYfM80BvamEw4h/McUWui9JJOBZZz8kW4dtikLbvtO9TEDqhQI4WDq1QfbU
-         IHrWQ8Q+RB8mAXAL8zv5YUwk5laiEREqJykNfoXGwUwCEJ56phppC+u57ecyeiOQDV9C
-         28/bZX1V8vFkULKzLpSDZztWUPuM7Svd4sLDb1TopHi1btQCnw4+i7pQ1Mf8rt4VCP6G
-         AW7CONpS7jzvTZe/I6VY6VqPUmq06uoyF+THoFpjNmjkd3Ngkpru1qk4pbNEoARFNlDJ
-         bj7L23XvbkwxJTShOIkIFV6LTLxToMJx/V9nw19siXQKE0IJC6QwIj25edQ8uJKClcfN
-         gYrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tJuz9yMuGGksOUvKub3tRebZ2Fw5veeK+Cx/3ADZPqs=;
-        b=ZXozW1F0CceUHR+8ogEqC9fDLdKVMVHbDcPq+YKYTuMOZjZbksfB6VQCKU42HPF10i
-         0X/sbWaawntVjBuMQ8ea9oPnFPNrW7KPIPjRdJoVbgGC+ckzusovIv7uWsITccHV8isJ
-         /qr4UlgpeOsVKB4ps2EZoQqGhUpYe2h8QK3wwuZ1JH06WdAKPx7cCxT5NESGQGH0mhj1
-         AHSR8242e0LGn9peUFQQCguOElb+zxhK7s6OgT3SLnSdt5AkenSmiKyQiiLj9yTgcnH3
-         zQxdwmX8bfK4Qyc9U4QunSR243mkhfwIbK1IaxfP53oyEy8Zz+g+o2ef4UOMRySfbcI9
-         evQQ==
-X-Gm-Message-State: AJIora9WUG6t9fqv7kwd1i7lhUe86FvwWDMB0gE19kF2cbvRbE46IOAn
-	qi1KuQjJVxiOX1g/+5l5nXo=
-X-Google-Smtp-Source: AGRyM1u329hcXoRkwsNq9U84BJFUtAmhlF0l5uLrFTGxePBB02dK+vjoxQwha4ug/5vzUBrmFiqNgw==
-X-Received: by 2002:a05:6a00:2809:b0:51b:f239:d24d with SMTP id bl9-20020a056a00280900b0051bf239d24dmr945096pfb.73.1655156274363;
-        Mon, 13 Jun 2022 14:37:54 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p3-20020a1709028a8300b00168adae4eb2sm5574917plo.262.2022.06.13.14.37.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 14:37:53 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	William Zhang <william.zhang@broadcom.com>,
-	Linux ARM List <linux-arm-kernel@lists.infradead.org>
+	id 4C022C341C7; Tue, 14 Jun 2022 08:31:35 +0000 (UTC)
+Received: from mx1.cqplus1.com (mx1.cqplus1.com [113.204.237.245])
+	by smtp.kernel.org (Postfix) with ESMTP id CC6E9C341C4
+	for <soc@kernel.org>; Tue, 14 Jun 2022 08:31:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC6E9C341C4
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cqplus1.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cqplus1.com
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+	LIVER,40,3)
+Received: from 172.28.114.216
+	by mx1.cqplus1.com with MailGates ESMTP Server V5.0(29251:0:AUTH_RELAY)
+	(envelope-from <qinjian@cqplus1.com>); Tue, 14 Jun 2022 16:31:19 +0800 (CST)
+From: Qin Jian <qinjian@cqplus1.com>
+To: sboyd@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: dan.beygelman@broadcom.com,
-	joel.peshkin@broadcom.com,
-	samyon.furman@broadcom.com,
-	philippe.reynes@softathome.com,
-	tomer.yacoby@broadcom.com,
-	kursad.oney@broadcom.com,
-	anand.gore@broadcom.com,
-	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
+Cc: krzysztof.kozlowski+dt@linaro.org,
+	robh+dt@kernel.org,
+	mturquette@baylibre.com,
+	linux@armlinux.org.uk,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	soc@kernel.org
-Subject: Re: [PATCH 2/3] ARM: dts: Add DTS files for bcmbca SoC BCM63148
-Date: Mon, 13 Jun 2022 14:37:52 -0700
-Message-Id: <20220613213752.268314-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220610002113.14483-3-william.zhang@broadcom.com>
-References: <20220610002113.14483-1-william.zhang@broadcom.com> <20220610002113.14483-3-william.zhang@broadcom.com>
+	linux-clk@vger.kernel.org,
+	Qin Jian <qinjian@cqplus1.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v18 01/10] dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+Date: Tue, 14 Jun 2022 16:31:00 +0800
+Message-Id: <c2e3c62897baa551fa4c6146195d9af72aa64c2b.1655194858.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1655194858.git.qinjian@cqplus1.com>
+References: <cover.1655194858.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Thu,  9 Jun 2022 17:21:12 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Add DTS for ARMv7 based broadband SoC BCM63148. bcm63148.dtsi is the SoC
-> description DTS header and bcm963148.dts is a simple DTS file for
-> Broadcom BCM963148 Reference board that only enable the UART port.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
+This introduces bindings for boards based Sunplus SP7021 SoC.
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+---
+ .../bindings/arm/sunplus,sp7021.yaml          | 29 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+
+diff --git a/Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml b/Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+new file mode 100644
+index 000000000..def7d0cfe
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+@@ -0,0 +1,29 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd. 2021
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/sunplus,sp7021.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sunplus SP7021 Boards
++
++maintainers:
++  - qinjian <qinjian@cqplus1.com>
++
++description: |
++  ARM platforms using Sunplus SP7021, an ARM Cortex A7 (4-cores) based SoC.
++  Wiki: https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    items:
++      - enum:
++          - sunplus,sp7021-achip
++          - sunplus,sp7021-demo-v3
++      - const: sunplus,sp7021
++
++additionalProperties: true
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f468864fd..d75a7a5c8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2805,6 +2805,13 @@ F:	drivers/clocksource/armv7m_systick.c
+ N:	stm32
+ N:	stm
+ 
++ARM/SUNPLUS SP7021 SOC SUPPORT
++M:	Qin Jian <qinjian@cqplus1.com>
++L:	linux-arm-kernel@lists.infradead.org (moderated for mon-subscribers)
++S:	Maintained
++W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
++F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
++
+ ARM/Synaptics SoC support
+ M:	Jisheng Zhang <jszhang@kernel.org>
+ M:	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+-- 
+2.33.1
+
