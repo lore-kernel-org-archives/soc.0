@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABAF4CCA486
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABACFCCA485
 	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 74401C341D5; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58730C341C4;
+	id 6F595C341D3; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59E15C385A5;
 	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1655238815;
-	bh=SOB5pycPqdr4gyJXBRg2V5/KIgLHkJ6sqrGVbTKVomI=;
+	bh=E7qDwjx/AmQZpsX0QQesR4QYujc25xu1WCPaGt1578U=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rMnTftKo2icnPyz45duurxKNIJJ/j1LTtJI+rWNyiw4MOA4cSo97dGfIrKGPxpnMV
-	 L8r9A2M5xxi4unJbZuGcHvVh5PsBetRIGYS61YSbacHo14lNhuoYWtnd856pKM9epR
-	 7ltzaZcw9RcjO9aYJWVEGWJzaNy62JgVSr3aYNOQfqGk0ZzvLVeHmjQpH206fJHLr+
-	 441vnCG6dplIOw9cCjpun9PUwWshPIFZfxtaN25hrbui78v/iH14tAKjJNXxhXzJ1w
-	 TdbiKeq5+cBzcoLXmGx4CBfkMWxVpT4SZmOCQ6BlPNrJ1Dh9RGII08L6oxT6N4PP00
-	 daBqzNcLqdjXQ==
+	b=PVL9zqUpvKvSxpZ0GyzD9/UhLmDX7cTu8ltpRwaCIwHO2FzcCSuL96F1+Bg1quFc/
+	 cxHPZdUlDxjELZK3PMN+a9+3aSMLN1LxYjWGWuG+6zG1K/PrnLbSseafmguxjMYm9L
+	 cmk3YiTznnWMBmds6kapRmSzDbdj1qSjaEPmltVsy2HYzNrTwj5xJ+xGsqWP7jnQA5
+	 6ppDkabfV4dv+jujgDV311OrIxGVDZ75vObVFjs2KsPsIIB0bW0dHbACFWoaNGgUgL
+	 GKTfda4MDLzdJa+pSGGVzpGRsByan2R5BHT/Eso3pFjANc2IsFcw0N7mZ28FYWE9pR
+	 X8m4ACXlUt4gA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39564E73872;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40E8AE73875;
 	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
+Subject: Re: [GIT PULL 1/2] ARM: multiplatform changes, part 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165523881523.29335.4042993461878607356.git-patchwork-notify@kernel.org>
+ <165523881526.29335.17939195079035706144.git-patchwork-notify@kernel.org>
 Date: Tue, 14 Jun 2022 20:33:35 +0000
-References: <20220610104030.28399-1-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220610104030.28399-1-Sergey.Semin@baikalelectronics.ru>
-To: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+References: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+This pull request was applied to soc/soc.git (arm/fixes)
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-On Fri, 10 Jun 2022 13:40:29 +0300 you wrote:
-> The Baikal-T1 APB bus driver correctly handles the deferred probe
-> situation, but still pollutes the system log with a misleading error
-> message. Let's fix that by using the dev_err_probe() method to print the
-> log message in case of the clocks/resets request errors.
+On Thu, 2 Jun 2022 23:34:17 +0200 you wrote:
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+> tags/arm-multiplatform-5.19-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
-    https://git.kernel.org/soc/soc/c/be5cddef05f5
-  - [v2,2/2] bus: bt1-axi: Don't print error on -EPROBE_DEFER
-    https://git.kernel.org/soc/soc/c/5e93207e962a
+  - [GIT,PULL,1/2] ARM: multiplatform changes, part 2
+    https://git.kernel.org/soc/soc/c/96479c09803b
+  - [GIT,PULL,2/2] ARM: SoC changes, part 2
+    https://git.kernel.org/soc/soc/c/09a018176ba2
 
 You are awesome, thank you!
 -- 
