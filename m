@@ -1,57 +1,57 @@
-Return-Path: <SRS0=hwjH=WV=gmail.com=logananthece@kernel.org>
+Return-Path: <SRS0=bDow=WV=gmail.com=logananth13.hcl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABEFC433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 12:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5744FC433EF
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 12:55:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3575FC3411D; Tue, 14 Jun 2022 12:44:10 +0000 (UTC)
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	id 41D6FC3411D; Tue, 14 Jun 2022 12:55:35 +0000 (UTC)
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 20599C3411B;
-	Tue, 14 Jun 2022 12:44:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 20599C3411B
+	by smtp.kernel.org (Postfix) with ESMTPS id 44E39C3411B;
+	Tue, 14 Jun 2022 12:55:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44E39C3411B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id l4so7337549pgh.13;
-        Tue, 14 Jun 2022 05:44:09 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id r5so1728629pgr.3;
+        Tue, 14 Jun 2022 05:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
         bh=PXdAipzTvt3rG1BHsoqxaq3VWKbvzJuF2FmNeakRABE=;
-        b=T+iwGuZRNX4rfLUifCpdqJ0VpD+UNZEXrRGUjSNwY0lrv3aUTGyAgzztuOoLNa4nHA
-         nPDtZS4pnJMhSCpqaxNMsFpmB6LQuSxyyhoraeJ1QrP7kV7z8ssmo6LRjZSrSkEr46Bv
-         twe0MlHOgMF4sLECEDO9MbB5BZ+wUmA8MSf0iNiwj4VeaiB+MjBOE7R6Vkn+ENyUgDVk
-         UVTlGd9+PBuRdEK034YH7nwz2E1o570Rq3tJKn1YSOX2HMhTMqq+L58rm9j3YEjZl1H0
-         Myk30MksjnjkJciY6GDueRN4AXuObe3TI6INVohLU8PtE2+nSUl3RbDwUGI8ivo/GCL2
-         k8Rw==
+        b=Cf3aKaJSQSmInGCMy07llaiKqiO9WRoLEov1RalN7yhG5GQmzwZvHSuuBZJM6EpYKy
+         PK7bU1bXEScRdz1w/5oIbBvf1ZkSEl4XZJZxuF2aTac1AiQwZX0knQybzzQeO/tng98i
+         hY7N09PSDXC1gmYIImSLR5zl77CDnjM7TTZl/cQcFv9kFd1fsf7quKiyojPO3NotuGZQ
+         ARq8549fUb9G95WUzUlP+wfSfK2rdwPxY3b5vR/54DC2jZZtFBXTPcF1Bvli1xi8t+vB
+         QQRc6Eu6Fg5yNgAoWyfoipDct5CFJYJECjMhsc9Zl5llgfvTZPSVhvyOZBVoloTTTtXF
+         4lAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
         bh=PXdAipzTvt3rG1BHsoqxaq3VWKbvzJuF2FmNeakRABE=;
-        b=xMaVFFKe4BbisTKfbdZua3ssNJs7NfUkmKHmjgJx5WDJSxsW3oLteGl/i0YSxmRgSm
-         f/07CvUyeVWuf+eDRz6Ke4xAlgppGfE4fQg5Vd0FhYGzvyEli1W2JRgkD1QCk/GlK/eK
-         stAi9/5aHGPmiF04VkRdS8/ZfSo76PsJnfN8ytqiTFfC/3mGed0MomU/PoTad/gGl7KN
-         GCZYCSFBdAHQDsXGJ8bMcui5BxrtiCPNm2nXOOOjmsitTgklDZL6XIN8+Qihf4aTpJpM
-         zbt7fIl0Hz9hqBXEvH/7yObQWmFJhCfHuk35wLtB5ZYRc/N1nwFb6R4gRRbUJ2L8ftSr
-         xKMw==
-X-Gm-Message-State: AOAM532b7vAzd3DykZyuzL1oIvO9h8+PU8vf9eU6EIaQoOIPwv3S1w7q
-	0DiRLezudvguLhUIzpc5k6c=
-X-Google-Smtp-Source: ABdhPJwLIyID9xCMHEM0wUjYmaydH10Xv6Ig9h67uxHaVM7+nA4F+oO3PVkyZTB4L1A6+HnHwHPJrw==
-X-Received: by 2002:a65:4501:0:b0:3fc:4895:283b with SMTP id n1-20020a654501000000b003fc4895283bmr4455662pgq.231.1655210648517;
-        Tue, 14 Jun 2022 05:44:08 -0700 (PDT)
+        b=yYa+H9Q8YOz8p5EtQDjEqtFQ8itiE/vpquam/L8Ni6MGXTkxyJZYbtRdf0zedmql9i
+         +0R/U9TTJiL758C5UiXKRMvCb7d9WeuFFBTfRL4MYEaWW9XHR5q9vvNl2HwPAaVnY3mv
+         J9K4nOMliHVC2LeydEh6EsvRwTofi/0ZENIMPX16xALDxsG9JZ4yTG3hNWFuix9phtDc
+         UaEqDhO5voFRFrngleRrzjRk127A6bu9GckMEeYNMLZtxu+0h3C1aDs4F/5X6/O2baQW
+         YiJKzMylMOvpk+M7lOrn9tdI8BcGbdXsUz5lgLGObiWP1hgcJbjn+YnF3KkE1jJ3TGXI
+         rAPw==
+X-Gm-Message-State: AOAM5338k7xB+jkNTUz23Et/zGi6zXTRWsY8/xWS1tRUZgrLNzTJWNe9
+	zLXBy9cXjmY01MFIR7Xs5JE=
+X-Google-Smtp-Source: AGRyM1vzRQjcyqlWiljfDjQG5K7Cm0ROx2HTjB3YW8jdPh9lXswLfsv2yCAGEFAc+K/N3vZ4NOSZ6w==
+X-Received: by 2002:a05:6a00:2392:b0:51b:fe0e:2b8 with SMTP id f18-20020a056a00239200b0051bfe0e02b8mr4371363pfc.84.1655211333665;
+        Tue, 14 Jun 2022 05:55:33 -0700 (PDT)
 Received: from logan-ThinkPad-T14-Gen-1 ([117.213.143.139])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b001624b1e1a7bsm7133046plh.250.2022.06.14.05.44.02
+        by smtp.gmail.com with ESMTPSA id d190-20020a6368c7000000b003fd4bd3befesm7751167pgc.55.2022.06.14.05.55.28
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Jun 2022 05:44:08 -0700 (PDT)
-From: Logananth Sundararaj <logananthece@gmail.com>
+        Tue, 14 Jun 2022 05:55:32 -0700 (PDT)
+From: Logananth Sundararaj <logananth13.hcl@gmail.com>
 X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
-Date: Tue, 14 Jun 2022 18:14:00 +0530
+Date: Tue, 14 Jun 2022 18:25:25 +0530
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
 	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
@@ -62,7 +62,7 @@ To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
 Cc: patrick@stwcx.xyz, garnermic@gmail.com, thangavel.k@hcl.com,
 	naveen.mosess@hcl.com
 Subject: [PATCH] ARM: dts: aspeed: Adding Facebook Yosemite V3 BMC
-Message-ID: <20220614124400.GA1089@logan-ThinkPad-T14-Gen-1>
+Message-ID: <20220614125525.GA3629@logan-ThinkPad-T14-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
