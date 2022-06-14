@@ -1,161 +1,156 @@
-Return-Path: <robh+dt@kernel.org>
+Return-Path: <SRS0=oDgP=WV=toradex.com=francesco.dolcini@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BA21C43334
-	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 15:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66E89C43334
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 15:17:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1815DC3411D; Tue, 14 Jun 2022 15:00:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0102BC341CE;
-	Tue, 14 Jun 2022 15:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655218839;
-	bh=JjpdanJUgAJ1LFRmbpUiRA9gEh4LhO4EAPrXEp05ApQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=VlySoPjW0YIgCco6/TVfoLiVzkFWpJX3+yOxd3a4XjxHL3jmdQEvlN0s/xVXGv7Kj
-	 VQArGKHQwPXRrs1oVNsk76EeKSCr3riHGBOvwLKWZUO+NvGhA5PmxKXzMEHZOJnu6S
-	 LIz4dJKBWLWOPSxvVIQNzhK1zwPPFaXilP1n/AUsGckzo4zxT7kExb1rq58yPer8CD
-	 0p+GZ99woRn8NYjutkH2fbo598Zv8R1xwg0GCHpJhVC8NRLIzrkZrMdxwoURX+JD29
-	 vswDKl+a9XcwpY8AzkQiV4o+l5kpS2xlVSwS+kveBvVxF8qS8IyMFfb3nWRiEurfkL
-	 /ZRRQUYpdU/oA==
-Received: by mail-vs1-f52.google.com with SMTP id r12so9193945vsg.8;
-        Tue, 14 Jun 2022 08:00:38 -0700 (PDT)
-X-Gm-Message-State: AJIora+ez2gAbJ9tx4/QSKTHOKWP2KYK5Q0YCMMlKLQJQ2+iRyewmB06
-	Qi/ooDkRs9tPnl8CZhYDP7QlQR0tCvYDrqvVzA==
-X-Google-Smtp-Source: AGRyM1sczVVBWLnRF4JznRyKrcjtIkPi4e0RSDolbThgSoX/Dv7ISv+MlkRkIY+6TR0UIGgIc2i3aUStMawx+Hyuvec=
-X-Received: by 2002:a05:6102:1041:b0:349:cfa3:c029 with SMTP id
- h1-20020a056102104100b00349cfa3c029mr2581868vsq.0.1655218837743; Tue, 14 Jun
- 2022 08:00:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220516134734.493065-1-marcel@ziswiler.com> <20220611091613.GH254723@dragon>
-In-Reply-To: <20220611091613.GH254723@dragon>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Tue, 14 Jun 2022 09:00:26 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ5VhU+_QXejPYRSOpkC8Q=gJ7BzYHwqaTw9Pb1Wa04tg@mail.gmail.com>
-Message-ID: <CAL_JsqJ5VhU+_QXejPYRSOpkC8Q=gJ7BzYHwqaTw9Pb1Wa04tg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/24] ARM: dts: imx7-colibri: device tree improvements
-To: Shawn Guo <shawnguo@kernel.org>
+	id 33AF0C3411B; Tue, 14 Jun 2022 15:17:03 +0000 (UTC)
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CA9A7C3411D
+	for <soc@kernel.org>; Tue, 14 Jun 2022 15:17:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA9A7C3411D
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=toradex.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=toradex.com
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2049.outbound.protection.outlook.com [104.47.22.49]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-37-QW1tHaevPq-LlvItB8SVLA-2; Tue, 14 Jun 2022 17:16:56 +0200
+X-MC-Unique: QW1tHaevPq-LlvItB8SVLA-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZRAP278MB0030.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:14::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.14; Tue, 14 Jun 2022 15:16:54 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987%8]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
+ 15:16:54 +0000
+Date: Tue, 14 Jun 2022 17:16:52 +0200
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
+To: Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Marcel Ziswiler <marcel@ziswiler.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Marcel Ziswiler <marcel@ziswiler.com>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Denys Drozdov <denys.drozdov@toradex.com>, Fabio Estevam <festevam@denx.de>, 
-	Fabio Estevam <festevam@gmail.com>, Frank Rowand <frowand.list@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Li Yang <leoyang.li@nxp.com>, 
-	Lucas Stach <l.stach@pengutronix.de>, Marek Vasut <marex@denx.de>, 
-	Matthias Schiffer <matthias.schiffer@tq-group.com>, 
-	Max Krummenacher <max.krummenacher@toradex.com>, NXP Linux Team <linux-imx@nxp.com>, 
-	Olof Johansson <olof@lixom.net>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Russell King <linux@armlinux.org.uk>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Stefan Agner <stefan@agner.ch>, Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Denys Drozdov <denys.drozdov@toradex.com>,
+	Fabio Estevam <festevam@denx.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Li Yang <leoyang.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
+	Marek Vasut <marex@denx.de>,
+	Matthias Schiffer <matthias.schiffer@tq-group.com>,
+	Max Krummenacher <max.krummenacher@toradex.com>,
+	NXP Linux Team <linux-imx@nxp.com>, Olof Johansson <olof@lixom.net>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Russell King <linux@armlinux.org.uk>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Stefan Agner <stefan@agner.ch>, Tim Harvey <tharvey@gateworks.com>,
+	devicetree@vger.kernel.org,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	SoC Team <soc@kernel.org>
+Subject: Re: [PATCH v2 00/24] ARM: dts: imx7-colibri: device tree improvements
+Message-ID: <20220614151652.GA288006@francesco-nb.int.toradex.com>
+References: <20220516134734.493065-1-marcel@ziswiler.com>
+ <20220611091613.GH254723@dragon>
+ <CAL_JsqJ5VhU+_QXejPYRSOpkC8Q=gJ7BzYHwqaTw9Pb1Wa04tg@mail.gmail.com>
+In-Reply-To: <CAL_JsqJ5VhU+_QXejPYRSOpkC8Q=gJ7BzYHwqaTw9Pb1Wa04tg@mail.gmail.com>
+X-ClientProxiedBy: MR1P264CA0156.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:54::17) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c297cbf0-9fbe-4367-064b-08da4e18ea11
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0030:EE_
+X-Microsoft-Antispam-PRVS: <ZRAP278MB0030C1B44F29B9F018A0A6E2E2AA9@ZRAP278MB0030.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: 2x0XfwQicobclF0nIr4ISQtM9shJjyAxRf8L6icQ03IcNk81lwScnqncawC7MGDX49eRuNUSzcCxk1i/XVSCkore0WWaKJtXHHAOE2XG+lmDcsChlK4Ee/gqdArLewfBE+prdkZbWJykJ3CYu8HnzSyM4zPDGmNNS+7Mlq2aZFqQ//c2r97Pia2rD1SqqGcfZbxy5jAO5BnFkefSZ6M4GuY+pIeembSkDEciW2SCVi5mzsF7NYK5gdCsVaYwXKqVxWum8w9SrKbqzLNo9WqY+4BjDfePdWI0kwS+kSQD2srHh1EB1Tk52JdPqVxMwuEn73sDq+mmKzDFQn09mvVmRYmsrWiOwdyQTwKf8c7cWweCeW2nx77nh1jGX8KzrICB1iC+YQaSJ8iJw1HIIZbnm8EYrJkpAcWhMhqFH62YG1Jf4TJNr2QaGXSOBWe/KizdW7eiz1UUHN79bz8lLJ0ki4JGlzfCMT5rQvK98hCDiozvS8IPDV3wNbxlgJ2GVRDDpITXd0cXMhyqlN6hV/hhz9SvB+kFcRmyhILWRGea0m1IkOxXD1s9PuXCB4C16ts36C48qY/JavJTldVXEFAhIb8So80xGOnpkmjGDniZP7JvUwLDca6At6iZX/cj/Rs4vRLXSajr0TlusYJfwGVbT/nZU2xnqJlNE/Um2nDRcmTsbJoWwMeJh/sfEu2QRW01tvVYVpiH7Gwa17WijlI+Xw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39850400004)(346002)(136003)(396003)(8936002)(66476007)(6486002)(2906002)(66556008)(66946007)(4326008)(8676002)(508600001)(5660300002)(86362001)(44832011)(4744005)(7416002)(33656002)(38350700002)(1076003)(186003)(316002)(6506007)(110136005)(53546011)(52116002)(54906003)(26005)(83380400001)(41300700001)(6512007)(38100700002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BB6Wb3gW/S0BS+bd4fjX+bU5CoGKeA85lcONDVpLyRaQA8rKQzagW1Zr54sB?=
+ =?us-ascii?Q?IqYEtgZndKxrIGyIw4eZWW4uh9wQgIQEon4H9Q5xm8ZTc6T+AJa017E06ce7?=
+ =?us-ascii?Q?hvGQ80HKs0msXz6gNo+iW89wnQHGV7Yxxav5pklyQAbnU1PNYyI7Suh47qN/?=
+ =?us-ascii?Q?16IL+DfkUgocDT++45fUq6hMth/CRF4JtlYkCmZUyEsSWm6tq6YwAgqGNkhI?=
+ =?us-ascii?Q?fil33szcN8TBmVnbSmMxvEcC5SI1nbsot6pO0hVhC/elQYBaJezD3Ik57z4y?=
+ =?us-ascii?Q?qCEGA7tX809hXMta7yyxzLt9/MxTpE1yUfwPTul9TVa0D5SyJAnVrTLes6DP?=
+ =?us-ascii?Q?DRON1bKT9s5iGxAKsQhnbpO1e5FeYJFpiMgXMgtl7/SdbL0x2JUcX3IBWC4u?=
+ =?us-ascii?Q?6I60ye6qAQ6Kx1JlgUv67thRXLUA1BXalkINYTXlCZ/5yJMCmw0WFiQLEO84?=
+ =?us-ascii?Q?RgQQzjfVhUKV+s5s08KxtoOoEvO+GsGkMLOiwwBG6ZEotYaymcTnMvcrPaR8?=
+ =?us-ascii?Q?70uHccFcGOalIGk1QHtbXdp0/ogP7ZJGc6gn5N5/eHFZdhzY9nRv3oWwkSAA?=
+ =?us-ascii?Q?xXecEv+cVIQIp6zQKBRVS4J3MpToP7uU5T/Shg5WSCs0TyvO+0ptltCqA42I?=
+ =?us-ascii?Q?3m7SfmjavOXTk1dtaDJVdqfPlNen5XedkB/LlUYqIgXOmNqxawg6Wry23xde?=
+ =?us-ascii?Q?u8iplZRZJx22r9lmPmo9B0Jaaiogkz9RwH4+l7hqBPF7EhSX58kDySsvwBAB?=
+ =?us-ascii?Q?Lj1mjFhnfqe+k/2CiBjPH5XtiVZ58HinR6Uo3RFOvRUWlTKWCSP6QrVXK9/v?=
+ =?us-ascii?Q?Avh/Vq9Em/qoXWN/MIYu3RbW6tQVM1vtRUAX2ZWPE66oPIdFWMe5e30Y6hyL?=
+ =?us-ascii?Q?wONf3yJJw7OuMLQoQuzFk5JnJy6YRi5MCVGusC50utNtncVBONHfxkNiGfMH?=
+ =?us-ascii?Q?MwqVTuUnKl1mziC2eK0LNuTV0VBnjmCs2zB1YX7MPXk1+5P5o1Vbuf5JwOIc?=
+ =?us-ascii?Q?pBy4EAExx2DJ3gmPYtadAE0yb+NdOdKcxkh/o9vs4mhffLpp1rYm3BoAmIvX?=
+ =?us-ascii?Q?TopEVuWSMEEes9UTIvmBELbeTzaTy+AMTUtLaGdMtR2ULSoOOSEhrGM9ETFZ?=
+ =?us-ascii?Q?yjuP7JIiNX/UJXCf4mB8qIE76eqjtO+lhki9zdbAyqzh4O4cMqcvQbTb2jEp?=
+ =?us-ascii?Q?6AzphF7Xznz/CF54FVKUpfGXfIxuevLkrfXtnohmHIAr565sPSIAls25V+aQ?=
+ =?us-ascii?Q?4Y72l6mUZ2x/spgQ07y6a3r3R+DqUR14JaPibwbTUJSjJxvJRp0C7NDTDR9i?=
+ =?us-ascii?Q?85Q7inWXBgTsC9PicOwbWEtbTUXwOZ8DumjjYEflNI+fLn34YGoOnP2JPqmm?=
+ =?us-ascii?Q?+GXUG14PENrRbIRxgL13b25O9ud9eytcamljC2ZxDiNSJASPAlR3hbdYV71c?=
+ =?us-ascii?Q?Vm3Iie7svfoOjgPMjranf5jc04+4xIsQXRkgB6aXC8dNBDgQNUpr51yNgcpI?=
+ =?us-ascii?Q?JyT4LlUpcc9qo2XPkUJNuaZsHNaONQWjLi8t/brR1PkHLAqtqW3Vdjww5d+j?=
+ =?us-ascii?Q?7E7ko2Jvey8U8hJKm0f/p0qrkT7NS8mmT+W2Qk3pwhrfOVEa+BagGWrE9w/C?=
+ =?us-ascii?Q?sSqKZ60lBRG5j+qp7nAtN/0Z+TOxGOraaLtWMVM4mfDQgKyTaeh6YLEqMUq8?=
+ =?us-ascii?Q?nNfD2s0g2Z4iyZ0GXjPCe8OQeiLNMD83meQ4V9b38c8ovp7BLOnUcuEouR7n?=
+ =?us-ascii?Q?IQhnojd0LVsOIySSzx7k4WpG6XgJzHQ=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c297cbf0-9fbe-4367-064b-08da4e18ea11
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 15:16:54.0449
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Yreuuvo+1jdasOfW0tJqB6r1cKAo+3bQ5sPdqn6mbSplMEZ5TAMReDEWvadr4uEJnX0AVzuq3MzNA/Tb/UG8ku2otZOKnhoLHOSbIZ1zIOQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0030
+Authentication-Results: relay.mimecast.com;
+	auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 11, 2022 at 3:16 AM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Mon, May 16, 2022 at 03:47:10PM +0200, Marcel Ziswiler wrote:
-> > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On Tue, Jun 14, 2022 at 09:00:26AM -0600, Rob Herring wrote:
+> On Sat, Jun 11, 2022 at 3:16 AM Shawn Guo <shawnguo@kernel.org> wrote:
 > >
-> >
-> > This is a general update of the Colibri iMX7 device tree files.
-> >
-> > The Toradex Colibri family is composed of a SoM that can be plugged on
-> > various carrier boards, with carrier boards allowing multiple optional
-> > accessories (e.g. display, camera, ...).
-> >
-> > The device tree sources are structured into a SoM dtsi and a carrier dts
-> > which then includes the SoM dtsi. The SoM dtsi defines and enables the
-> > functionality self-contained on the SoM and prepares for the
-> > functionality provided by the carrier HW or accessories so that the
-> > carrier dts then can enable or amend nodes provided. Accessories are
-> > enabled in overlays depending on HW configuration.
-> >
-> > Please find the following colibri-imx7 device trees improvements:
-> >
-> > - Display/Touch Functionality Overhaul
-> > Rename display interface to match other modules to make it easier to
-> > use device tree overlays.
-> > The parallel RGB interface (lcdif) and all related stuff turn on in a
-> > device tree overlay. Keep them disabled in the main devicetree.
-> > As these subsystems are provided by module and not a part of boards,
-> > move their definitions into the module-level devicetree.
-> > Disable ad7879 touchscreen which turns on in a devic tree overlay.
-> > Remains it disabled in the main devicetree.
-> > The Toradex 7" Capacitive and 10" LVDS touch screens are Atmel MXT
-> > peripherals available on the I2C bus for touchscreen events. Add
-> > atmel_mxt_ts node to the module-level device tree. Also, provide pinmux
-> > configuration for the INT/RST inputs from SODIMM pins 106/107 for most
-> > carrier boards or an external touchscreen adapter inputs configured to
-> > SODIMM pins 28/30.
-> >
-> > - Ethernet Improvements
-> > Add the MDIO bus with the respective PHY.
-> > Add Ethernet aliases which is required to properly pass MAC address
-> > from bootloader.
-> > Add delay for on-module phy supply.
-> >
-> > - USB Device/Host Switching
-> > Add usb dual-role switching using extcon.
-> >
-> > - MMC/SD
-> > The original Colibri specification only defined 3.3 volt TTL signaling
-> > and relied on external on-carrier pull-ups for the SD_DATA[0..3] lines.
-> > The latest carrier boards like Iris V2 on the other hand are now UHS-I
-> > compliant by leaving such external on-carrier pull-ups away relying on
-> > module- or even SoC-level ones which pull up to resp. signaling voltage.
-> > In such cases, the carrier board-level device tree may explicitly delete
-> > the no-1-8-v property to enable full UHS-I support.
-> > Also, fix SD/MMC regulator for the carrier boards using UHS-I modes.
-> >
-> > - Add Iris and Iris V2 Carrier Board Device Trees
-> > Add support for Toradex Iris carrier boards.
-> >
-> > Changes in v2:
-> > - Add Krzysztof's acked-by. Thanks!
-> > - Revert change on arch/arm/boot/dts/imx6dl-colibri-iris.dts which
-> >   slipped into this patch set by error.
-> > - Re-based on top of Shawn's for-next.
-> >
-> > Marcel Ziswiler (18):
-> >   ARM: dts: imx7-colibri: overhaul display/touch functionality
-> >   ARM: dts: imx7-colibri: add mdio phy node
-> >   ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys
-> >   ARM: dts: imx7-colibri: move regulators
-> >   ARM: dts: imx7-colibri: clean-up usdhc1 and add sleep config
-> >   ARM: dts: imx7-colibri: move rtc node
-> >   ARM: dts: imx7d-colibri-emmc: add cpu1 supply
-> >   ARM: dts: imx7-colibri-eval-v3: correct can controller comment
-> >   ARM: dts: imx7-colibri: disable adc2
-> >   ARM: dts: imx7-colibri-aster: add ssp aka spi cs aka ss pins
-> >   ARM: dts: imx7-colibri: add clarifying comments
-> >   ARM: dts: imx7-colibri: alphabetical re-order
-> >   ARM: dts: imx7-colibri: clean-up device enabling/disabling
-> >   ARM: dts: imx7-colibri: remove leading zero from reg address
-> >   ARM: dts: imx7-colibri: set regulator-name properties
-> >   ARM: dts: imx7-colibri: clean-up iomuxc pinctrl group naming
-> >   dt-bindings: arm: fsl: add toradex,colibri-imx7s/d/d-emmc-iris/-v2
-> >   ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
-> >
-> > Max Krummenacher (1):
-> >   ARM: dts: imx7-colibri: add ethernet aliases
-> >
-> > Oleksandr Suvorov (3):
-> >   ARM: dts: imx7-colibri: improve licensing and compatible strings
-> >   ARM: dts: imx7-colibri: improve wake-up with gpio key
-> >   ARM: dts: imx7-colibri: add delay for on-module phy supply
-> >
-> > Philippe Schenker (1):
-> >   ARM: dts: imx7-colibri: add usb dual-role switching using extcon
-> >
-> > Stefan Agner (1):
-> >   ARM: dts: imx7-colibri: set lcdif clock source to video pll
->
-> Applied all, thanks!
+> > On Mon, May 16, 2022 at 03:47:10PM +0200, Marcel Ziswiler wrote:
+> > > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> > >
+> > >
+> > > This is a general update of the Colibri iMX7 device tree files.
+...
+> > Applied all, thanks!
+>=20
+> Not completely sure, but I think this series adds a warning to linux-next=
+:
+>=20
+> ./Documentation/devicetree/bindings/arm/fsl.yaml:684:111: [warning]
+> line too long (111 > 110 characters) (line-length)
 
-Not completely sure, but I think this series adds a warning to linux-next:
+The warning is from
 
-./Documentation/devicetree/bindings/arm/fsl.yaml:684:111: [warning]
-line too long (111 > 110 characters) (line-length)
+  bb0fa1533715 ("dt-bindings: arm: fsl: correct 1g vs. 1gb in toradex,colib=
+ri-imx6ull-*")
+
+that is already merged in master/torvalds, not related to this series.
+
+We (Toradex) introduced it, and I guess we can easily fix it, Marcel?
+We'll send a patch.
+
+Francesco
+
