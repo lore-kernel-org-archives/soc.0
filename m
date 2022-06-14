@@ -4,61 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABACFCCA485
-	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4742FC43334
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 20:37:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6F595C341D3; Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59E15C385A5;
-	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
+	id 2D3E4C341C6; Tue, 14 Jun 2022 20:37:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1802CC3411F;
+	Tue, 14 Jun 2022 20:37:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655238815;
-	bh=E7qDwjx/AmQZpsX0QQesR4QYujc25xu1WCPaGt1578U=;
+	s=k20201202; t=1655239034;
+	bh=MLKVQVSHQAv2vJf4GYJGdSGQyo7jju0nsWg/7Kan/ok=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=PVL9zqUpvKvSxpZ0GyzD9/UhLmDX7cTu8ltpRwaCIwHO2FzcCSuL96F1+Bg1quFc/
-	 cxHPZdUlDxjELZK3PMN+a9+3aSMLN1LxYjWGWuG+6zG1K/PrnLbSseafmguxjMYm9L
-	 cmk3YiTznnWMBmds6kapRmSzDbdj1qSjaEPmltVsy2HYzNrTwj5xJ+xGsqWP7jnQA5
-	 6ppDkabfV4dv+jujgDV311OrIxGVDZ75vObVFjs2KsPsIIB0bW0dHbACFWoaNGgUgL
-	 GKTfda4MDLzdJa+pSGGVzpGRsByan2R5BHT/Eso3pFjANc2IsFcw0N7mZ28FYWE9pR
-	 X8m4ACXlUt4gA==
+	b=NFtgzJG2Bp0miXcRQ0PJvcr4v6+ZtXNDHsxYZmz7PQV6WdWt70a4JG19+9g1Fh3PZ
+	 s7jomP/9r6EGXOD+4epZOPtmPoUdBWCIRHsrCfa98PBZSDNSS0nU9JR1/OUSz+HaLD
+	 DYHslJHUeqmENzZy6/ECbnF4rKpUMk6t9lvmYAaBRnZUVbgqzcPMKYCy8NQED1uppY
+	 vledyHZqiHx2lotN0rswu+gLDyFR1HAura4FaA81r4ZzzQUHBpXW9/gYouNUGvVz2S
+	 u7jMzuCuFDnZz3Vvb+QGItKi4GqXuCZZbfT+MSq9chxh0NORzw32MKfHy9mHLv0szW
+	 w66bSqzMOlPtQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40E8AE73875;
-	Tue, 14 Jun 2022 20:33:35 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9B41E6D466;
+	Tue, 14 Jun 2022 20:37:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] ARM: multiplatform changes, part 2
+Subject: Re: [GIT PULL] arm64: s32g fixes for v5.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165523881526.29335.17939195079035706144.git-patchwork-notify@kernel.org>
-Date: Tue, 14 Jun 2022 20:33:35 +0000
-References: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a13uAiBJkqD9UMmnfFn3AAY2ZqQisVQdovRy5dKiyJaXQ@mail.gmail.com>
-To: Arnd Bergmann <arnd@kernel.org>
+ <165523903395.29335.817577555604580802.git-patchwork-notify@kernel.org>
+Date: Tue, 14 Jun 2022 20:37:13 +0000
+References: <Yp9Y4nGrQ2kVKV6S@linux-8mug>
+In-Reply-To: <Yp9Y4nGrQ2kVKV6S@linux-8mug>
+To: Chester Lin <clin@suse.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 2 Jun 2022 23:34:17 +0200 you wrote:
-> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+On Tue, 7 Jun 2022 21:55:46 +0800 you wrote:
+> Hi Arnd, Olof, and ARM SoC maintainers,
 > 
->   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> Please pull the following two changes for s32g. Thanks.
 > 
-> are available in the Git repository at:
+> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-> tags/arm-multiplatform-5.19-2
+>   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] ARM: multiplatform changes, part 2
-    https://git.kernel.org/soc/soc/c/96479c09803b
-  - [GIT,PULL,2/2] ARM: SoC changes, part 2
-    https://git.kernel.org/soc/soc/c/09a018176ba2
+  - [GIT,PULL] arm64: s32g fixes for v5.19
+    https://git.kernel.org/soc/soc/c/2d2cb31bd36b
 
 You are awesome, thank you!
 -- 
