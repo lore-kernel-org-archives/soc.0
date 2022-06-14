@@ -1,75 +1,99 @@
-Return-Path: <dinguyen@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B67C433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 16:17:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2EAFC43334
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 19:25:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37217C3411D; Tue, 14 Jun 2022 16:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D3AC3411B;
-	Tue, 14 Jun 2022 16:17:57 +0000 (UTC)
+	id B07AEC3411E; Tue, 14 Jun 2022 19:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86436C3411B;
+	Tue, 14 Jun 2022 19:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655223479;
-	bh=40xG9Pr/DoOfwZP7IVcnLxrGUa6C77zxsdLmMPmLKHk=;
-	h=Date:Subject:List-Id:To:References:From:In-Reply-To:From;
-	b=S3YgxcqTmfCVn/7tghxFDmjbjt9BxYyX2WuftYjwXHAoMEngIo1MLT2fEWZtJ/bwu
-	 XP6slzyKJBLlt+O53JRVoShcUsaakKdkxJdbwN/l3cfHwbRDEeZSYtjcxcd6TkPIIW
-	 oxJ/pF9+/nh5oNlRq1W/fXQqrGxacsTgxBBjhEDv8bVdDnJSbvkrPedE1/wPgCmh+S
-	 jpnwsHQRvFMXv65JUuPbKv4/WSQrFbAJ4Z/Oy7JuNFagPeRUeLN0XR5VKLhYbjJpQe
-	 9Ez2Mis40Big7vzEe6AazI1Nd+9TkF/6v02lGTUs+RqnJ0AFc0psM3BT/1kDZC+L+1
-	 0Fq8XrBcayyRQ==
-Message-ID: <bdf09cb6-86ff-70d0-bb63-be0d96e1d8b8@kernel.org>
-Date: Tue, 14 Jun 2022 11:17:54 -0500
+	s=k20201202; t=1655234755;
+	bh=zR4N6VFQrTCHnvSWBbsp4C65ceeJXY4ywAxcS0YZrjw=;
+	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
+	b=f2CSbF3r+QJeBCBKi/nH+JCmfalOxnJcoqS6v5dNMKb/0K4LAvDhwXzzgL8v5LXa+
+	 jqiA+0vWxDuXcBHYK0+yTzZm8o8auoVqHE7dZolGP6wquoKGXajarJ5k3hR2D7vCHb
+	 j16x/awsEn3yYDSoUDb5I61S2Em0UPgAtq3pqS/s8hMTl+icLw6ph+Xmh8eIkJH3An
+	 9TwRN4U2r2tkC9AMaqrkimOv9IiTjg36yHbDoMvBHMsOOyysHjDZ3nxmAL5/c/fmxY
+	 yOawj7GIarD1MhpMnwCC98WLNj9KuDwgp0I5i15Un7NJy9GPw4ix4rysAT1AqpzYrK
+	 Dp8ouTSM0dPvg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/5] arm64: dts: altera: adjust whitespace around '='
-Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <42ed93cf0e5cfeaffdf50d63da558a3f1f6c1021.1655194858.git.qinjian@cqplus1.com>
+References: <cover.1655194858.git.qinjian@cqplus1.com> <42ed93cf0e5cfeaffdf50d63da558a3f1f6c1021.1655194858.git.qinjian@cqplus1.com>
+Subject: Re: [PATCH v18 05/10] clk: Add Sunplus SP7021 clock driver
+From: Stephen Boyd <sboyd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220526204606.833054-1-krzysztof.kozlowski@linaro.org>
-From: Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220526204606.833054-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
+To: Qin Jian <qinjian@cqplus1.com>
+Date: Tue, 14 Jun 2022 12:25:53 -0700
+User-Agent: alot/0.10
+Message-Id: <20220614192555.86436C3411B@smtp.kernel.org>
 
+Quoting Qin Jian (2022-06-14 01:31:04)
+> diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
+> new file mode 100644
+> index 000000000..0caef1bc7
+> --- /dev/null
+> +++ b/drivers/clk/clk-sp7021.c
+> @@ -0,0 +1,725 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
+This isn't a common license on driver files. Is it intended? Or
+copy/paste from DT?
 
-On 5/26/22 15:46, Krzysztof Kozlowski wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Output compared with dtx_diff and fdtdump.
-> ---
->   arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> index aa2bba75265f..db771690641b 100644
-> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-> @@ -594,7 +594,7 @@ emac0-tx-ecc@ff8c0400 {
->   		};
->   
->   		qspi: spi@ff8d2000 {
-> -			compatible =  "intel,socfpga-qspi", "cdns,qspi-nor";
-> +			compatible = "intel,socfpga-qspi", "cdns,qspi-nor";
->   			#address-cells = <1>;
->   			#size-cells = <0>;
->   			reg = <0xff8d2000 0x100>,
+> +/*
+> + * Copyright (C) Sunplus Technology Co., Ltd.
+> + *       All rights reserved.
+> + */
+[...]
+> +
+> +static int sp7021_clk_probe(struct platform_device *pdev)
+> +{
+[...]
+> +
+> +       /* gates */
+> +       for (i =3D 0; i < ARRAY_SIZE(sp_clk_gates); i++) {
+> +               char name[10];
+> +               u32 j =3D sp_clk_gates[i].reg;
+> +               struct clk_parent_data *pd =3D sp_clk_gates[i].ext_parent=
+ ? &pd_ext : &pd_sys;
+> +
+> +               sprintf(name, "%02d_0x%02x", i, j);
+> +               hws[i] =3D clk_hw_register_gate_parent_data(dev, name, pd=
+, 0,
 
-Applied!
+This needs to be devm as well. Otherwise if the driver is unbound we'll
+leak these registered clks.
 
-Thanks,
-Dinh
+> +                                                         clk_base + (j >=
+> 4) * 4,
+> +                                                         j & 0x0f,
+> +                                                         CLK_GATE_HIWORD=
+_MASK,
+> +                                                         NULL);
+> +               if (IS_ERR(hws[i])) {
+> +                       ret =3D PTR_ERR(hws[i]);
+> +                       goto unregister_gates;
+> +               }
+> +       }
+> +
+> +       clk_data->num =3D CLK_MAX;
+> +       ret =3D devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, c=
+lk_data);
+> +       if (ret)
+> +               goto unregister_gates;
+> +
+> +       return 0;
+> +
+> +unregister_gates:
+> +       while (i--)
+> +               clk_hw_unregister_gate(hws[i]);
+> +
+> +       return ret;
+> +}
+> +
