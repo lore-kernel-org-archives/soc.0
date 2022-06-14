@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 815F8C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F1BC43334
 	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 08:31:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4C022C341C7; Tue, 14 Jun 2022 08:31:35 +0000 (UTC)
+	id 89A48C3411E; Tue, 14 Jun 2022 08:31:35 +0000 (UTC)
 Received: from mx1.cqplus1.com (mx1.cqplus1.com [113.204.237.245])
-	by smtp.kernel.org (Postfix) with ESMTP id CC6E9C341C4
+	by smtp.kernel.org (Postfix) with ESMTP id 3593FC341C0
 	for <soc@kernel.org>; Tue, 14 Jun 2022 08:31:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC6E9C341C4
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3593FC341C0
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cqplus1.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cqplus1.com
 X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
 	LIVER,40,3)
 Received: from 172.28.114.216
 	by mx1.cqplus1.com with MailGates ESMTP Server V5.0(29251:0:AUTH_RELAY)
-	(envelope-from <qinjian@cqplus1.com>); Tue, 14 Jun 2022 16:31:19 +0800 (CST)
+	(envelope-from <qinjian@cqplus1.com>); Tue, 14 Jun 2022 16:31:20 +0800 (CST)
 From: Qin Jian <qinjian@cqplus1.com>
 To: sboyd@kernel.org
 List-Id: <soc.lore.kernel.org>
@@ -34,81 +34,112 @@ Cc: krzysztof.kozlowski+dt@linaro.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Qin Jian <qinjian@cqplus1.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v18 01/10] dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
-Date: Tue, 14 Jun 2022 16:31:00 +0800
-Message-Id: <c2e3c62897baa551fa4c6146195d9af72aa64c2b.1655194858.git.qinjian@cqplus1.com>
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v18 06/10] dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt controller
+Date: Tue, 14 Jun 2022 16:31:05 +0800
+Message-Id: <59ca4816d90a63bf69254d67b79b28c47e6b1089.1655194858.git.qinjian@cqplus1.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1655194858.git.qinjian@cqplus1.com>
 References: <cover.1655194858.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This introduces bindings for boards based Sunplus SP7021 SoC.
+Add documentation to describe Sunplus SP7021 interrupt controller bindings.
 
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Qin Jian <qinjian@cqplus1.com>
 ---
- .../bindings/arm/sunplus,sp7021.yaml          | 29 +++++++++++++++++++
- MAINTAINERS                                   |  7 +++++
- 2 files changed, 36 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ .../sunplus,sp7021-intc.yaml                  | 62 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
 
-diff --git a/Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml b/Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
 new file mode 100644
-index 000000000..def7d0cfe
+index 000000000..bd0021dba
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
-@@ -0,0 +1,29 @@
++++ b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+@@ -0,0 +1,62 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +# Copyright (C) Sunplus Co., Ltd. 2021
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/arm/sunplus,sp7021.yaml#
++$id: http://devicetree.org/schemas/interrupt-controller/sunplus,sp7021-intc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Sunplus SP7021 Boards
++title: Sunplus SP7021 SoC Interrupt Controller
 +
 +maintainers:
-+  - qinjian <qinjian@cqplus1.com>
-+
-+description: |
-+  ARM platforms using Sunplus SP7021, an ARM Cortex A7 (4-cores) based SoC.
-+  Wiki: https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
++  - Qin Jian <qinjian@cqplus1.com>
 +
 +properties:
-+  $nodename:
-+    const: '/'
 +  compatible:
 +    items:
-+      - enum:
-+          - sunplus,sp7021-achip
-+          - sunplus,sp7021-demo-v3
-+      - const: sunplus,sp7021
++      - const: sunplus,sp7021-intc
 +
-+additionalProperties: true
++  reg:
++    maxItems: 2
++    description:
++      Specifies base physical address(s) and size of the controller regs.
++      The 1st region include type/polarity/priority/mask regs.
++      The 2nd region include clear/masked_ext0/masked_ext1/group regs.
++
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    const: 2
++    description:
++      The first cell is the IRQ number, the second cell is the trigger
++      type as defined in interrupt.txt in this directory.
++
++  interrupts:
++    maxItems: 2
++    description:
++      EXT_INT0 & EXT_INT1, 2 interrupts references to primary interrupt
++      controller.
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - "#interrupt-cells"
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    intc: interrupt-controller@9c000780 {
++        compatible = "sunplus,sp7021-intc";
++        reg = <0x9c000780 0x80>, <0x9c000a80 0x80>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++        interrupt-parent = <&gic>;
++        interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>, /* EXT_INT0 */
++                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>; /* EXT_INT1 */
++    };
 +
 +...
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f468864fd..d75a7a5c8 100644
+index b90bb93a3..23774ee07 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2805,6 +2805,13 @@ F:	drivers/clocksource/armv7m_systick.c
- N:	stm32
- N:	stm
- 
-+ARM/SUNPLUS SP7021 SOC SUPPORT
-+M:	Qin Jian <qinjian@cqplus1.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for mon-subscribers)
-+S:	Maintained
-+W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-+F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
-+
- ARM/Synaptics SoC support
- M:	Jisheng Zhang <jszhang@kernel.org>
- M:	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+@@ -2812,8 +2812,13 @@ S:	Maintained
+ W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
++F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
++F:	arch/arm/boot/dts/sunplus-sp7021*.dts*
++F:	arch/arm/configs/sp7021_*defconfig
++F:	arch/arm/mach-sunplus/
+ F:	drivers/clk/clk-sp7021.c
++F:	drivers/irqchip/irq-sp7021-intc.c
+ F:	drivers/reset/reset-sunplus.c
+ F:	include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ F:	include/dt-bindings/reset/sunplus,sp7021-reset.h
 -- 
 2.33.1
 
