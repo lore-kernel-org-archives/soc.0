@@ -1,44 +1,83 @@
-Return-Path: <sboyd@kernel.org>
+Return-Path: <SRS0=Cjpe=WV=gmail.com=jernej.skrabec@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29FAFC433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 19:26:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02610C433EF
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 20:29:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DEBB7C3411E; Tue, 14 Jun 2022 19:26:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B401BC3411B;
-	Tue, 14 Jun 2022 19:26:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1655234782;
-	bh=ZxFls50/MvoVFmNjUJPqAmiE889LsxObznSRc1AMjcU=;
-	h=In-Reply-To:References:Subject:From:List-Id:Cc:To:Date:From;
-	b=C88iAXuRDy4LiYlY5IODU3MWH2rM4wgW3DiEehtASGqCt41ShwiHbwFUZq8K1wd8X
-	 JcNeYEzJhNqbT9a2K85Z/LdN3HxXhYYU86luGug1PYbfVMK1gQanNO4fvIHhjrv0oy
-	 yZwiuyHU1d0bxWqKZ9UwKwKYkAwppnE5N7uJpr6ZPJ4LxHQazPTI2s7ssBT1LK3tcv
-	 M7ogO+bgbuUhHtV2dzrupnhP7yATe2PuRSmcZxnmO8vKRTvwr3mVjIRQLVvVIyehYj
-	 Vdp6Tdn+1yAI6Lbk6iGcjAFm+W/FSqGK8w8uWdfKKR9Kj0oyA4QQe/cqeUm4xU6Llf
-	 f0miHGe0pcUpw==
-Content-Type: text/plain; charset="utf-8"
+	id BC548C341C0; Tue, 14 Jun 2022 20:29:04 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0BD7BC3411B;
+	Tue, 14 Jun 2022 20:29:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0BD7BC3411B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id m20so19315477ejj.10;
+        Tue, 14 Jun 2022 13:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6vo5ChNd9bkGZCbil2zL+tyn6URWu9ehHcF9fcX0yBw=;
+        b=GF5aqrG6+jO62KEf5kyJY6HiXbGBaETgNAiygw076aURoVfHfYn38EKb05/kUjm0NR
+         xeJ5zImPDgo7yV9SHaAA7MQHEAZpmWM/TyijVmRnTfHoj2GIsQVqtrxaZmJqBRg99KaI
+         TIrnhtNgQrwJl1o5/AbL6Ur/ML34SOjx9iMd7NrMAnEVgz8wcPJ5Ag7scAHMHKSABykY
+         2IHOuvzd9ZBwMUIjIkQegQ9dzH54zcekWPMbp1Jk4M+YkZJyTZvMW+nPFpYKtYIGKayZ
+         XZpP9ERjH4BDLr1lgzKHdq4McSM0vBrwHPTFOjC4CJA+0sCeCT4KaMy5Lgzti0Ekya+k
+         SJew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6vo5ChNd9bkGZCbil2zL+tyn6URWu9ehHcF9fcX0yBw=;
+        b=IGMBhpOGLzE3/Q/fi9m3pjwRWlg0Quo4qaWZcjEoeTHMrDEZHOkvzpA8X24BP3vSHY
+         6180N/IuK9GZW+YVuGoiaWDda1vEQFPwN6Eo9VIZvzZR6ksBAdV16x0oWl9vFGENqlHU
+         Eyc4YxPDN2yak7zWDqGXETr+sme6qXeZbz6NRnDLZUJkgG1uh27+GarJzU9oYz9bp3nj
+         JPYJMn9qGYCyS+MAWE3wC3WTv9cRtM/fKC/+D9+CSehFjMqcYo6CR/ajfZ/jXmFfRcUA
+         c1Ob4uTwi6fJvqP7AucJxWgIsrsbJVIGtexduTNT3ogLYIwS0xvD8cFVZBOeA721ooTv
+         MyBg==
+X-Gm-Message-State: AOAM530dWh28WTjbZ3zp3tmoC8nIK+Ej1KQrBqq6W2/KNioXPlBwshFE
+	2VylADem5KeT0X7M5oiWn+o=
+X-Google-Smtp-Source: AGRyM1uBU1KCDF7xHMhWGVWcFkxuu2ljGCZQBrr9mJ2TRsZvMkGcbgRdTjujq3Suu7GDx3XkIUzwgw==
+X-Received: by 2002:a17:907:9715:b0:711:ca06:ca50 with SMTP id jg21-20020a170907971500b00711ca06ca50mr5968019ejc.192.1655238542217;
+        Tue, 14 Jun 2022 13:29:02 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id k24-20020a1709062a5800b006f3ef214dcdsm5448604eje.51.2022.06.14.13.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 13:29:01 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: Re: [PATCH v2 06/48] ARM: dts: allwinner: align gpio-key node names with dtschema
+Date: Tue, 14 Jun 2022 22:29:00 +0200
+Message-ID: <2184827.iZASKD2KPV@kista>
+In-Reply-To: <4743697.31r3eYUQgx@kista>
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609113911.380368-5-krzysztof.kozlowski@linaro.org> <4743697.31r3eYUQgx@kista>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <4c096a22224e0ba6fba113c172cec45ed705aa47.1655194858.git.qinjian@cqplus1.com>
-References: <cover.1655194858.git.qinjian@cqplus1.com> <4c096a22224e0ba6fba113c172cec45ed705aa47.1655194858.git.qinjian@cqplus1.com>
-Subject: Re: [PATCH v18 04/10] dt-bindings: clock: Add bindings for SP7021 clock driver
-From: Stephen Boyd <sboyd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de, olof@lixom.net, soc@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Qin Jian <qinjian@cqplus1.com>
-Date: Tue, 14 Jun 2022 12:26:20 -0700
-User-Agent: alot/0.10
-Message-Id: <20220614192622.B401BC3411B@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Quoting Qin Jian (2022-06-14 01:31:03)
-> Add documentation to describe Sunplus SP7021 clock driver bindings.
+Dne ponedeljek, 13. junij 2022 ob 23:02:22 CEST je Jernej =C5=A0krabec napi=
+sal(a):
+> Dne =C4=8Detrtek, 09. junij 2022 ob 13:39:08 CEST je Krzysztof Kozlowski=
+=20
+> napisal(a):
+> > The node names should be generic and DT schema expects certain pattern
+> > (e.g. with key/button/switch).
+> >=20
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >=20
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Applied, thanks!
+=20
+Best regards,
+Jernej
+
+
+
