@@ -1,358 +1,76 @@
-Return-Path: <SRS0=bDow=WV=gmail.com=logananth13.hcl@kernel.org>
+Return-Path: <SRS0=o6Gk=WV=infradead.org=rdunlap@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5744FC433EF
-	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 12:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 998B1C43334
+	for <soc@archiver.kernel.org>; Tue, 14 Jun 2022 14:50:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 41D6FC3411D; Tue, 14 Jun 2022 12:55:35 +0000 (UTC)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5792EC3411C; Tue, 14 Jun 2022 14:50:59 +0000 (UTC)
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 44E39C3411B;
-	Tue, 14 Jun 2022 12:55:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44E39C3411B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id r5so1728629pgr.3;
-        Tue, 14 Jun 2022 05:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=PXdAipzTvt3rG1BHsoqxaq3VWKbvzJuF2FmNeakRABE=;
-        b=Cf3aKaJSQSmInGCMy07llaiKqiO9WRoLEov1RalN7yhG5GQmzwZvHSuuBZJM6EpYKy
-         PK7bU1bXEScRdz1w/5oIbBvf1ZkSEl4XZJZxuF2aTac1AiQwZX0knQybzzQeO/tng98i
-         hY7N09PSDXC1gmYIImSLR5zl77CDnjM7TTZl/cQcFv9kFd1fsf7quKiyojPO3NotuGZQ
-         ARq8549fUb9G95WUzUlP+wfSfK2rdwPxY3b5vR/54DC2jZZtFBXTPcF1Bvli1xi8t+vB
-         QQRc6Eu6Fg5yNgAoWyfoipDct5CFJYJECjMhsc9Zl5llgfvTZPSVhvyOZBVoloTTTtXF
-         4lAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=PXdAipzTvt3rG1BHsoqxaq3VWKbvzJuF2FmNeakRABE=;
-        b=yYa+H9Q8YOz8p5EtQDjEqtFQ8itiE/vpquam/L8Ni6MGXTkxyJZYbtRdf0zedmql9i
-         +0R/U9TTJiL758C5UiXKRMvCb7d9WeuFFBTfRL4MYEaWW9XHR5q9vvNl2HwPAaVnY3mv
-         J9K4nOMliHVC2LeydEh6EsvRwTofi/0ZENIMPX16xALDxsG9JZ4yTG3hNWFuix9phtDc
-         UaEqDhO5voFRFrngleRrzjRk127A6bu9GckMEeYNMLZtxu+0h3C1aDs4F/5X6/O2baQW
-         YiJKzMylMOvpk+M7lOrn9tdI8BcGbdXsUz5lgLGObiWP1hgcJbjn+YnF3KkE1jJ3TGXI
-         rAPw==
-X-Gm-Message-State: AOAM5338k7xB+jkNTUz23Et/zGi6zXTRWsY8/xWS1tRUZgrLNzTJWNe9
-	zLXBy9cXjmY01MFIR7Xs5JE=
-X-Google-Smtp-Source: AGRyM1vzRQjcyqlWiljfDjQG5K7Cm0ROx2HTjB3YW8jdPh9lXswLfsv2yCAGEFAc+K/N3vZ4NOSZ6w==
-X-Received: by 2002:a05:6a00:2392:b0:51b:fe0e:2b8 with SMTP id f18-20020a056a00239200b0051bfe0e02b8mr4371363pfc.84.1655211333665;
-        Tue, 14 Jun 2022 05:55:33 -0700 (PDT)
-Received: from logan-ThinkPad-T14-Gen-1 ([117.213.143.139])
-        by smtp.gmail.com with ESMTPSA id d190-20020a6368c7000000b003fd4bd3befesm7751167pgc.55.2022.06.14.05.55.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Jun 2022 05:55:32 -0700 (PDT)
-From: Logananth Sundararaj <logananth13.hcl@gmail.com>
-X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
-Date: Tue, 14 Jun 2022 18:25:25 +0530
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org
-Cc: patrick@stwcx.xyz, garnermic@gmail.com, thangavel.k@hcl.com,
-	naveen.mosess@hcl.com
-Subject: [PATCH] ARM: dts: aspeed: Adding Facebook Yosemite V3 BMC
-Message-ID: <20220614125525.GA3629@logan-ThinkPad-T14-Gen-1>
+	by smtp.kernel.org (Postfix) with ESMTPS id 33066C3411B;
+	Tue, 14 Jun 2022 14:50:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 33066C3411B
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=q5HpLYaReIXbh/47owslMY0HZWewYfHiN1JFwdElSbc=; b=E6aSOb5oyExvAXaBpjFuwkB4yU
+	WeyGRYpcbJvTnv316iGCT3IiC5BlUkGAIG4xZ5ocvX9qmzqaTv8m76L7XmPd/Uy0fexAuX1lDVi4o
+	nzm3K2B27z17K2rTO4yYicz3Mh5AIO7nbuA9IkVpSi7T1EThdcnDJyZiDqsZsTtwHScKgpc/Q1skY
+	QkzjOQfKbO9F4Ge+Zi2spk66hYzzvEbNk6V1JpsHVrjhjZzHGziHQ1O/bAkstRuinFRWjm659e0PK
+	R1SetlBx8YfXqhmYAwZj2i6YzVSFti68OBMqovoqKTaaKDoOALutGtzpjPXAqBa4za63KqagLcq4S
+	sFwN1R6A==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1o17sY-000Fqv-Fo; Tue, 14 Jun 2022 14:50:50 +0000
+Message-ID: <ecfa5816-1ada-5d8a-7189-c70e45a311ac@infradead.org>
+Date: Tue, 14 Jun 2022 07:50:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v18 03/10] reset: Add Sunplus SP7021 reset driver
+Content-Language: en-US
+To: Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+ mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
+References: <cover.1655194858.git.qinjian@cqplus1.com>
+ <06ac69143ce8c98b4f95e38238e1880953dc9040.1655194858.git.qinjian@cqplus1.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <06ac69143ce8c98b4f95e38238e1880953dc9040.1655194858.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The Yosemite V3 is a facebook multi-node server
-platform that host four OCP server. The BMC
-in the Yosemite V3 platform based on AST2600 SoC.
 
-This patch adds linux device tree entry related to
-Yosemite V3 specific devices connected to BMC SoC.
 
-Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
----
---- v1 - Initial draft.
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 251 ++++++++++++++++++
- 2 files changed, 252 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+On 6/14/22 01:31, Qin Jian wrote:
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index b496028b6..e6540036b 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -231,6 +231,15 @@ config RESET_STARFIVE_JH7100
+>  	help
+>  	  This enables the reset controller driver for the StarFive JH7100 SoC.
+>  
+> +config RESET_SUNPLUS
+> +	bool "Sunplus SoCs Reset Driver" if COMPILE_TEST
+> +	default ARCH_SUNPLUS
+> +	help
+> +	  This enables the reset driver support for Sunplus SoCs.
+> +	  The reset lines that can be asserted and deasserted by toggling bits
+> +	  in a contiguous, exclusive register space. The register is HIWORD_MASKED,
+> +	  which means each register hold 16 reset lines.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..58add093e5fb 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
- 	aspeed-bmc-facebook-elbert.dtb \
-+	aspeed-bmc-facebook-fby35.dtb \
- 	aspeed-bmc-facebook-fuji.dtb \
- 	aspeed-bmc-facebook-galaxy100.dtb \
- 	aspeed-bmc-facebook-minipack.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-new file mode 100644
-index 000000000000..7ddf2d442c22
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-@@ -0,0 +1,251 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2020 Facebook Inc.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "Facebook fby35";
-+	compatible = "facebook,fby35", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			<&adc1 4>, <&adc1 5>, <&adc1 6>;
-+	};
-+	spi_gpio: spi-gpio {
-+		status = "okay";
-+		compatible = "spi-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
-+		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
-+		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
-+		num-chipselects = <1>;
-+		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
-+
-+		tpmdev@0 {
-+			compatible = "tcg,tpm_tis-spi";
-+			spi-max-frequency = <33000000>;
-+			reg = <0>;
-+		};
-+	};
-+
-+};
-+
-+&mac3 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	no-hw-checksum;
-+	use-ncsi;
-+	mlx,multi-host;
-+	ncsi-ctrl,start-redo-probe;
-+	ncsi-ctrl,no-channel-monitor;
-+	ncsi-package = <1>;
-+	ncsi-channel = <1>;
-+	ncsi-rexmit = <1>;
-+	ncsi-timeout = <2>;
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+	/* Workaround for AST2600 A0 */
-+	compatible = "snps,dw-apb-uart";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+	aspeed,reset-type = "soc";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+	aspeed,ext-pulse-duration = <256>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	reg = <0x1e620000 0xc4>, <0x20000000 0x8000000>;
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.1";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <2>;
-+		spi-rx-bus-width = <2>;
-+		#include "openbmc-flash-layout-64.dtsi"
-+	};
-+};
-+
-+&spi1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi1_default>;
-+
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "pnor";
-+		spi-rx-bus-width = <4>;
-+		spi-max-frequency = <100000000>;
-+	};
-+};
-+
-+&i2c0 {
-+	multi-master;
-+	bus-frequency = <400000>;
-+	aspeed,hw-timeout-ms = <1000>;
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	multi-master;
-+	bus-frequency = <400000>;
-+	aspeed,hw-timeout-ms = <1000>;
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	multi-master;
-+	bus-frequency = <400000>;
-+	aspeed,hw-timeout-ms = <1000>;
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	multi-master;
-+	bus-frequency = <400000>;
-+	aspeed,hw-timeout-ms = <1000>;
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+};
-+
-+&i2c9 {
-+	multi-master;
-+	bus-frequency = <100000>;
-+	aspeed,hw-timeout-ms = <1000>;
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+	//FRU EEPROM
-+	eeprom@51 {
-+		compatible = "atmel,24c64";
-+		reg = <0x51>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	//INLET TEMP
-+	tmp75@4e {
-+		compatible = "ti,tmp75";
-+		reg = <0x4e>;
-+	};
-+	//OUTLET TEMP
-+	tmp75@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default>;
-+};
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
+	                            holds
+
 -- 
-2.17.1
-
+~Randy
