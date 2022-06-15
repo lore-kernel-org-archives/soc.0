@@ -4,65 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB9D6C43334
-	for <soc@archiver.kernel.org>; Wed, 15 Jun 2022 11:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11971CCA473
+	for <soc@archiver.kernel.org>; Wed, 15 Jun 2022 11:51:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A019AC3411C; Wed, 15 Jun 2022 11:50:41 +0000 (UTC)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	id D9796C34115; Wed, 15 Jun 2022 11:51:04 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DAE96C34115;
-	Wed, 15 Jun 2022 11:50:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DAE96C34115
+	by smtp.kernel.org (Postfix) with ESMTPS id BAF69C3411C;
+	Wed, 15 Jun 2022 11:51:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BAF69C3411C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id v19so15754900edd.4;
-        Wed, 15 Jun 2022 04:50:40 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id kq6so22685065ejb.11;
+        Wed, 15 Jun 2022 04:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nIRvc0ONAOH4KeBatJrKu9r/BO2Atl4Fv8lTxvlA9V4=;
-        b=XjFqVY5CjGeNsB4WO+15swlrY97cAoa/7Rr9ZXozRJgxzZWMOXI5tZU0Amtmeiu5LF
-         rcGhGa+P/QC3zD9MRnEzwEnx55MOtR0GLLjdZi9Mu179EsRnjvK1Te9aATm5pcJ/HcaD
-         FzPO70IytC5LTDJzuGgtcLSVChuUWGfTwdYdB7d2vqQCnEWc5/PTRSDa8ejx6Lso17GE
-         f7LQZFg5ZhzzLwF47PYp0uMF/DV2PWTZkj5ukqelBNW0q5oZzDLnOefL1Q+tI0hfSCdi
-         Dt9qUcXf07N32MJXfeS0RtZERhwcTTKAQ8eMYBcBEM6lcLkqZSUa5L61XBd8tprD+Rdq
-         APgw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Gx9yuVUlvlzFfcIzCpHw8QD0e+WGCkPUwS9OSYRqPco=;
+        b=BWcpyEPTclAh3AgjI+6hqbhwU8P9iD9BxYrQBMrjdLG1K7wU05gscTJyLIaCthnQjq
+         6av7dV8xfFS3TlwQM9XwDm2U39ZdcH2cR0k9FEopKnrvUYWa+bCGqGrciOm6XqOqvq6b
+         pxDU2BIy0LZl01wrT8xRHCtZeqEfxPD4qY1LdtMrFbSi4cvuTeloeXfWJMGBusPOXEaV
+         iAbb9MLlpkYwFixZ7T9X7bBWtm9Pt8M6WYUW15vdCqSsEUA6c1D4KSuGful1gtD4P2zO
+         U4xcPSW3IwLu9eKo/y7xHEFilc7tE8xwN4DneCprASX2lpSpa0EqdS6cI14/xfz0kLG0
+         b73g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nIRvc0ONAOH4KeBatJrKu9r/BO2Atl4Fv8lTxvlA9V4=;
-        b=lW35n5raK6zpTnYTW/SeAQj/P4aYAHSxy2ZIVa0bMs8+PokfyN+RTMfGOxo8g9Wwad
-         FTo1A5tAZQ6g9NJLzyTU2MbGrD2maFoe9qha/FeAJCMDOBeg9Ce6gRca7Y6gvV7b4ZTf
-         26FKI3M0gXPOlMWo00GlIM3PS9cOE1UiipPsY1iYpGXXGyFPZN8OrwLWGpI4vQSeaEM3
-         gDWNHdDIqNNqO1ajQ/8U5GDMa0wn/Bo/L1vhzInMXn+enqUYhwymN/jnNFHakFyckfuA
-         fsT+xB2baCe0p1p5fCNqZ9ZfTQ48iSwodDJ31QBChy3U4exKa0nsVc99NeTJMhC3PFi2
-         qJhA==
-X-Gm-Message-State: AOAM532700fdq+xDxmB67qhnvipg829JKUDUaj5i0H0djrsY31k1pZYf
-	s032Fg11pT4f/pdnEiMdRzk=
-X-Google-Smtp-Source: AGRyM1vmlsVma0i28k6gG0bFleMQyWIMb/6Gu8tm/KbSZmxHGGV+NkhwsaKkn15fwpNDrrj+HLVxdA==
-X-Received: by 2002:a05:6402:3482:b0:42d:e063:7c1d with SMTP id v2-20020a056402348200b0042de0637c1dmr12500732edc.40.1655293839096;
-        Wed, 15 Jun 2022 04:50:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Gx9yuVUlvlzFfcIzCpHw8QD0e+WGCkPUwS9OSYRqPco=;
+        b=wXTiGchtyMfTxYXCHkJfaxc3yJbz3vVqBXldyV77kK8lqSWwWDZwvziUfs+2JT6XYj
+         b4ZqYNaoEB1PZZYcBpdartZnqpvImd1I6tu99kzzcKn4MHapsPUGXMEqwVHH/0Jn08Eq
+         625CuJRwsh2znQXtv35JsBW87P6PO8wnCBTSL/CTrt8d7Jxs69hlD6xGKokQ6Z0hssJW
+         UG2Xpr3DujR+h7n1YbTtbdjgRJ/wGHNRljEh65fTPju5+Tp07MRMfsIBlF9uY2B/0wup
+         5xOEm8FCUoY0eF//YWDtDWzLyH5slKrneQ5vmgqGhP8KkzXubI96gOv5tEfiHjiwP97m
+         ZL0A==
+X-Gm-Message-State: AOAM530H+lrGwlBmjLN1Up2acnQ5M62Kop+mvG5sRg6Cx8rN723sUZdq
+	Rm9Ir5Zxr3Txw85ILEE6CG4=
+X-Google-Smtp-Source: AGRyM1t/YjoxRxQtDPFZlpqqhi4PnFVG7zQ/AkCMNbaixcvi3zmLcUnqxeVgtl+tVS0NQFxBT3fccg==
+X-Received: by 2002:a17:907:7f8d:b0:711:d8db:2714 with SMTP id qk13-20020a1709077f8d00b00711d8db2714mr8510219ejc.63.1655293861983;
+        Wed, 15 Jun 2022 04:51:01 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.37
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.51.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 04:50:38 -0700 (PDT)
+        Wed, 15 Jun 2022 04:51:01 -0700 (PDT)
 From: Max Krummenacher <max.oss.09@gmail.com>
 To: max.krummenacher@toradex.com
 List-Id: <soc.lore.kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Denys Drozdov <denys.drozdov@toradex.com>,
-	Fabio Estevam <festevam@denx.de>,
+Cc: Arnd Bergmann <arnd@arndb.de>,
 	Fabio Estevam <festevam@gmail.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Li Yang <leoyang.li@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-	Marek Vasut <marex@denx.de>,
-	Matthias Schiffer <matthias.schiffer@tq-group.com>,
 	NXP Linux Team <linux-imx@nxp.com>,
 	Olof Johansson <olof@lixom.net>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
@@ -73,98 +65,543 @@ Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	soc@kernel.org
-Subject: [PATCH v2 00/18] ARM: dts: imx6q-apalis: Misc improvements and newly added carrier
-Date: Wed, 15 Jun 2022 13:49:48 +0200
-Message-Id: <20220615115006.45672-1-max.oss.09@gmail.com>
+Subject: [PATCH v2 15/18] ARM: dts: imx6q-apalis: Add support for Toradex Ixora V1.2 carrier boards
+Date: Wed, 15 Jun 2022 13:50:03 +0200
+Message-Id: <20220615115006.45672-16-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220615115006.45672-1-max.oss.09@gmail.com>
+References: <20220615115006.45672-1-max.oss.09@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
+The Ixora V1.2 carrier board adds SW relevant new features compared to
+the V1.1 version.
 
-This is a general update of the Apalis iMX6 device tree files.
+- An I2C EEPROM is added.
+- The SD card slot got a switchable 3.3V supply.
+- Pull ups on the SD card signals are not assembled to faciliate 1.8V
+  speed modes.
+- The CAN transceivers got a switchable 3.3V supply.
 
-The Toradex Apalis family is composed of a SoM that can be plugged on
-various carrier boards, with carrier boards allowing multiple optional
-accessories (e.g. display, camera, ...).
+Add a new device tree and, as the differences are so small rework the
+device tree for V1.1 to include the V1.2 device tree and adjust as
+needed.
+Drop adding the toradex,apalis_imx6q-ixora to the dtb compatible to
+adhere to the binding yaml document.
 
-The device tree sources are structured into a SoM dtsi and a carrier dts
-which then includes the SoM dtsi. The SoM dtsi defines and enables the
-functionality self contained on the SoM and prepares for functionality
-provided by the carrier HW or accessories, so that the carrier dts then
-can enable or amend nodes provided. Accessories are enabled in overlays
-depending on HW configuration.
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-The series improves the existing Apalis carrier board device trees and
-adds a new device trees for the Ixora V1.2 carrier board.
-
-Improvements:
-- Specifies GPIO line names for use with libgpiod.
-- Disables optional accessories. They would be enabled in overlays
-  depending on HW configuration.
-- Lower power consumption after poweroff.
-- Move more functionality into the SoM dtsi file to reduce code
-  duplication.
-- General cleanup to adhere to dtbs bindings and missed alphabetically
-  ordering.
-- PWM backlight for backlights with inverted logic on its PWM input.
-
-Fixes:
-- STMPE ADC not functional due to wrong node name in dts.
-
-Adds:
-- imx6q-apalis-ixora-v1.2.dtb: used for a Apalis iMX6 mated in an Ixora
-  V1.2 carrier board.
-- Adds disable support for a OV5640 MIPI-CSI2 Camera and a ADV7280
-  Video ADC on a parallel video input.
-
+---
 
 Changes in v2:
-- Moved cleanup for things added in earlier commits of the series to
-  the those commit rather than cleaning up later.
-- Added reviewed-by tags
-- Fixed '-' vs. '_' in node name as pointed out by Fabio
-- Added "adv,force-bt656-4" property as suggested by Fabio.
-- Added commit "ARM: dts: imx6q-apalis: move gpio-keys to SoM dtsi"
-  and followed that in the commit adding the Ixora V1.2.
-- Rebased on top of imx/dt, 5.19-rc1
+- removed gpio-keys node. This has been moved to the SoM dtsi in v2
 
-Denys Drozdov (1):
-  ARM: dts: imx6q-apalis: Clean-up sd card support
-
-Max Krummenacher (11):
-  dt-bindings: arm: fsl: Add carrier for toradex,apalis-imx6q
-  Revert "ARM: dts: imx6qdl-apalis: Avoid underscore in node name"
-  ARM: dts: imx6q-apalis: Add gpio-line-names
-  ARM: dts: imx6q-apalis: Command pmic to standby for poweroff
-  ARM: dts: imx6q-apalis: Move Atmel MXT touch ctrl to SoM dtsi
-  ARM: dts: imx6q-apalis: move gpio-keys to SoM dtsi
-  ARM: dts: imx6q-apalis: Disable HDMI
-  ARM: dts: imx6q-apalis: Add support for Toradex Ixora V1.2 carrier
-    boards
-  ARM: dts: imx6q-apalis: backlight pwm: Simplify inverted backlight
-  ARM: dts: imx6q-apalis: backlight pwm: Adapt brightness steps
-  ARM: dts: imx6q-apalis: Cleanup
-
-Oleksandr Suvorov (6):
-  ARM: dts: imx6q-apalis: Move parallel rgb interface to SoM dtsi
-  ARM: dts: imx6q-apalis: Move pinmux groups to SoM dtsi
-  ARM: dts: imx6q-apalis: Add LVDS panel support
-  ARM: dts: imx6q-apalis: Disable stmpe touchscreen
-  ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
-  ARM: dts: imx6q-apalis: Add adv7280 video input
-
- .../devicetree/bindings/arm/fsl.yaml          |   1 +
  arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/imx6q-apalis-eval.dts       | 127 +---
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 263 +-------
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts | 276 ++++++++
- arch/arm/boot/dts/imx6q-apalis-ixora.dts      | 113 +---
- arch/arm/boot/dts/imx6qdl-apalis.dtsi         | 638 ++++++++++++++----
- 7 files changed, 837 insertions(+), 582 deletions(-)
+ arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 178 +----------
+ arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts | 276 ++++++++++++++++++
+ 3 files changed, 289 insertions(+), 166 deletions(-)
  create mode 100644 arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts
 
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index d3f1e3075178..428d758fc411 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -550,6 +550,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
+ 	imx6q-apalis-eval.dtb \
+ 	imx6q-apalis-ixora.dtb \
+ 	imx6q-apalis-ixora-v1.1.dtb \
++	imx6q-apalis-ixora-v1.2.dtb \
+ 	imx6q-apf6dev.dtb \
+ 	imx6q-arm2.dtb \
+ 	imx6q-b450v3.dtb \
+diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
+index 2d0324103804..44637d606e61 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
+@@ -5,187 +5,33 @@
+  * Copyright 2011 Linaro Ltd.
+  */
+ 
+-/dts-v1/;
+-
+-#include <dt-bindings/gpio/gpio.h>
+-#include <dt-bindings/input/input.h>
+-#include <dt-bindings/interrupt-controller/irq.h>
+-#include "imx6q.dtsi"
+-#include "imx6qdl-apalis.dtsi"
++#include "imx6q-apalis-ixora-v1.2.dts"
+ 
+ / {
+ 	model = "Toradex Apalis iMX6Q/D Module on Ixora Carrier Board V1.1";
+-	compatible = "toradex,apalis_imx6q-ixora-v1.1",
+-		     "toradex,apalis_imx6q-ixora", "toradex,apalis_imx6q",
++	compatible = "toradex,apalis_imx6q-ixora-v1.1", "toradex,apalis_imx6q",
+ 		     "fsl,imx6q";
+ 
+-	aliases {
+-		i2c0 = &i2c1;
+-		i2c1 = &i2c3;
+-		i2c2 = &i2c2;
+-		rtc0 = &rtc_i2c;
+-		rtc1 = &snvs_rtc;
+-	};
+-
+-	chosen {
+-		stdout-path = "serial0:115200n8";
+-	};
+-
+-	gpio-keys {
+-		compatible = "gpio-keys";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_gpio_keys>;
+-
+-		wakeup {
+-			label = "Wake-Up";
+-			gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
+-			linux,code = <KEY_WAKEUP>;
+-			debounce-interval = <10>;
+-			wakeup-source;
+-		};
+-	};
+-
+-	leds {
+-		compatible = "gpio-leds";
+-
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_leds_ixora>;
+-
+-		led4-green {
+-			label = "LED_4_GREEN";
+-			gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+-		};
+ 
+-		led4-red {
+-			label = "LED_4_RED";
+-			gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+-		};
+-
+-		led5-green {
+-			label = "LED_5_GREEN";
+-			gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
+-		};
+-
+-		led5-red {
+-			label = "LED_5_RED";
+-			gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>;
+-		};
+-	};
+ };
+ 
++/delete-node/ &eeprom;
++/delete-node/ &reg_3v3_vmmc;
++/delete-node/ &reg_can1_supply;
++/delete-node/ &reg_can2_supply;
++
+ &can1 {
+-	status = "okay";
++	/delete-property/ xceiver-supply;
+ };
+ 
+ &can2 {
+-	status = "okay";
+-};
+-
+-/* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
+-&i2c1 {
+-	status = "okay";
+-
+-	/* M41T0M6 real time clock on carrier board */
+-	rtc_i2c: rtc@68 {
+-		compatible = "st,m41t0";
+-		reg = <0x68>;
+-	};
+-};
+-
+-/*
+- * I2C3_SDA/SCL (CAM) on MXM3 pin 201/203 (e.g. camera sensor on carrier
+- * board)
+- */
+-&i2c3 {
+-	status = "okay";
+-};
+-
+-&pcie {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_reset_moci>;
+-	/* active-high meaning opposite of regular PERST# active-low polarity */
+-	reset-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+-	reset-gpio-active-high;
+-	status = "okay";
+-};
+-
+-&pwm1 {
+-	status = "okay";
+-};
+-
+-&pwm2 {
+-	status = "okay";
+-};
+-
+-&pwm3 {
+-	status = "okay";
+-};
+-
+-&pwm4 {
+-	status = "okay";
+-};
+-
+-&reg_usb_otg_vbus {
+-	status = "okay";
+-};
+-
+-&reg_usb_host_vbus {
+-	status = "okay";
+-};
+-
+-&sata {
+-	status = "okay";
+-};
+-
+-&sound_spdif {
+-	status = "okay";
+-};
+-
+-&spdif {
+-	status = "okay";
+-};
+-
+-&uart1 {
+-	status = "okay";
+-};
+-
+-&uart2 {
+-	status = "okay";
+-};
+-
+-&uart4 {
+-	status = "okay";
+-};
+-
+-&uart5 {
+-	status = "okay";
+-};
+-
+-&usbh1 {
+-	vbus-supply = <&reg_usb_host_vbus>;
+-	status = "okay";
+-};
+-
+-&usbotg {
+-	vbus-supply = <&reg_usb_otg_vbus>;
+-	status = "okay";
++	/delete-property/ xceiver-supply;
+ };
+ 
+ /* MMC1 */
+ &usdhc1 {
++	/delete-property/ cap-power-off-card;
++	/delete-property/ pinctrl-1;
++	/delete-property/ vmmc-supply;
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_usdhc1_4bit &pinctrl_mmc_cd>;
+-	bus-width = <4>;
+-	status = "okay";
+-};
+-
+-&iomuxc {
+-	pinctrl_leds_ixora: ledsixoragrp {
+-		fsl,pins = <
+-			MX6QDL_PAD_SD2_DAT1__GPIO1_IO14 0x1b0b0
+-			MX6QDL_PAD_SD2_DAT3__GPIO1_IO12 0x1b0b0
+-			MX6QDL_PAD_NANDF_D1__GPIO2_IO01 0x1b0b0
+-			MX6QDL_PAD_NANDF_D2__GPIO2_IO02 0x1b0b0
+-		>;
+-	};
+ };
+diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts
+new file mode 100644
+index 000000000000..f9f7d99bd4db
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts
+@@ -0,0 +1,276 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2014-2022 Toradex
++ * Copyright 2012 Freescale Semiconductor, Inc.
++ * Copyright 2011 Linaro Ltd.
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include "imx6q.dtsi"
++#include "imx6qdl-apalis.dtsi"
++
++/ {
++	model = "Toradex Apalis iMX6Q/D Module on Ixora Carrier Board V1.2";
++	compatible = "toradex,apalis_imx6q-ixora-v1.2", "toradex,apalis_imx6q",
++		     "fsl,imx6q";
++
++	aliases {
++		i2c0 = &i2c1;
++		i2c1 = &i2c3;
++		i2c2 = &i2c2;
++		rtc0 = &rtc_i2c;
++		rtc1 = &snvs_rtc;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_leds_ixora>;
++
++		led4-green {
++			gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++			label = "LED_4_GREEN";
++		};
++
++		led4-red {
++			gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
++			label = "LED_4_RED";
++		};
++
++		led5-green {
++			gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
++			label = "LED_5_GREEN";
++		};
++
++		led5-red {
++			gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>;
++			label = "LED_5_RED";
++		};
++	};
++
++	reg_3v3_vmmc: regulator-3v3-vmmc {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio2 0 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_enable_3v3_vmmc>;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "3v3_vmmc";
++		startup-delay-us = <100>;
++	};
++
++	reg_can1_supply: regulator-can1-supply {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio2 3 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_enable_can1_power>;
++		regulator-name = "can1_supply";
++	};
++
++	reg_can2_supply: regulator-can2-supply {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio3 15 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_enable_can2_power>;
++		regulator-name = "can2_supply";
++	};
++};
++
++&can1 {
++	xceiver-supply = <&reg_can1_supply>;
++	status = "okay";
++};
++
++&can2 {
++	xceiver-supply = <&reg_can2_supply>;
++	status = "okay";
++};
++
++&gpio1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart24_forceoff>;
++
++	/*
++	 * uart-2-4-on-x21-enable-hog enables the UART transceiver for Apalis
++	 * UART2 and UART3. If one wants to disable the transceiver force
++	 * the GPIO to output-low, if one wants to control the transceiver
++	 * from user space delete the hog node.
++	 */
++	uart-2-4-on-x21-enable-hog {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>; /* MXM3 180 */
++		output-high;
++	};
++};
++
++/* I2C1_SDA/SCL on MXM3 209/211 (e.g. RTC on carrier board) */
++&i2c1 {
++	status = "okay";
++
++	/* M41T0M6 real time clock on carrier board */
++	rtc_i2c: rtc@68 {
++		compatible = "st,m41t0";
++		reg = <0x68>;
++	};
++
++	eeprom: eeprom@50 {
++		compatible = "atmel,24c02";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++/*
++ * I2C3_SDA/SCL (CAM) on MXM3 pin 201/203 (e.g. camera sensor on carrier
++ * board)
++ */
++&i2c3 {
++	status = "okay";
++};
++
++&pcie {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_reset_moci>;
++	/* active-high meaning opposite of regular PERST# active-low polarity */
++	reset-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
++	reset-gpio-active-high;
++	status = "okay";
++};
++
++&pwm1 {
++	status = "okay";
++};
++
++&pwm2 {
++	status = "okay";
++};
++
++&pwm3 {
++	status = "okay";
++};
++
++&pwm4 {
++	status = "okay";
++};
++
++&reg_usb_host_vbus {
++	status = "okay";
++};
++
++&reg_usb_otg_vbus {
++	status = "okay";
++};
++
++&sata {
++	status = "okay";
++};
++
++&sound_spdif {
++	status = "okay";
++};
++
++&spdif {
++	status = "okay";
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&uart4 {
++	status = "okay";
++};
++
++&uart5 {
++	status = "okay";
++};
++
++&usbh1 {
++	vbus-supply = <&reg_usb_host_vbus>;
++	status = "okay";
++};
++
++&usbotg {
++	vbus-supply = <&reg_usb_otg_vbus>;
++	status = "okay";
++};
++
++/* MMC1 */
++&usdhc1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc1_4bit &pinctrl_mmc_cd>;
++	pinctrl-1 = <&pinctrl_usdhc1_4bit_sleep &pinctrl_mmc_cd_sleep>;
++	bus-width = <4>;
++	cap-power-off-card;
++	vmmc-supply = <&reg_3v3_vmmc>;
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl_enable_3v3_vmmc: enable3v3vmmcgrp {
++		fsl,pins = <
++			MX6QDL_PAD_NANDF_D0__GPIO2_IO00 0x1b0b0
++		>;
++	};
++
++	pinctrl_enable_can1_power: enablecan1powergrp {
++		fsl,pins = <
++			MX6QDL_PAD_NANDF_D3__GPIO2_IO03 0x1b0b0
++		>;
++	};
++
++	pinctrl_enable_can2_power: enablecan2powergrp {
++		fsl,pins = <
++			MX6QDL_PAD_EIM_DA15__GPIO3_IO15 0x1b0b0
++		>;
++	};
++
++	pinctrl_uart24_forceoff: uart24forceoffgrp {
++		fsl,pins = <
++			MX6QDL_PAD_SD2_CMD__GPIO1_IO11 0x1b0b0
++		>;
++	};
++
++	pinctrl_leds_ixora: ledsixoragrp {
++		fsl,pins = <
++			MX6QDL_PAD_SD2_DAT1__GPIO1_IO14 0x1b0b0
++			MX6QDL_PAD_SD2_DAT3__GPIO1_IO12 0x1b0b0
++			MX6QDL_PAD_NANDF_D1__GPIO2_IO01 0x1b0b0
++			MX6QDL_PAD_NANDF_D2__GPIO2_IO02 0x1b0b0
++		>;
++	};
++
++	pinctrl_mmc_cd_sleep: mmccdslpgrp {
++		fsl,pins = <
++			 /* MMC1 CD */
++			MX6QDL_PAD_DI0_PIN4__GPIO4_IO20 0x0
++		>;
++	};
++
++	pinctrl_usdhc1_4bit_sleep: usdhc1-4bitslpgrp {
++		fsl,pins = <
++			MX6QDL_PAD_SD1_CMD__SD1_CMD     0x3000
++			MX6QDL_PAD_SD1_CLK__SD1_CLK     0x3000
++			MX6QDL_PAD_SD1_DAT0__SD1_DATA0  0x3000
++			MX6QDL_PAD_SD1_DAT1__SD1_DATA1  0x3000
++			MX6QDL_PAD_SD1_DAT2__SD1_DATA2  0x3000
++			MX6QDL_PAD_SD1_DAT3__SD1_DATA3  0x3000
++		>;
++	};
++};
 -- 
 2.20.1
 
