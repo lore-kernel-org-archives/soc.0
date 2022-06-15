@@ -1,86 +1,94 @@
-Return-Path: <SRS0=ijZO=WW=126.com=windhl@kernel.org>
+Return-Path: <SRS0=3OsY=WW=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE8E8C43334
-	for <soc@archiver.kernel.org>; Wed, 15 Jun 2022 13:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85D3C43334
+	for <soc@archiver.kernel.org>; Wed, 15 Jun 2022 14:03:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7725DC3411B; Wed, 15 Jun 2022 13:10:19 +0000 (UTC)
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-	by smtp.kernel.org (Postfix) with ESMTP id 997A9C34115;
-	Wed, 15 Jun 2022 13:10:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 997A9C34115
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=126.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aGlwT
-	pJzDJp35gUCkFaGCu1AAXCT+U62kQKsYj5c2C0=; b=AwHCpk2FIq9EyzKxyneVF
-	M7nmt8aQnX8yADa7h/+p5/aT2UJMOokEUN1KhwFBXsUhMGPvaHTqsgTcZrQ2MdPR
-	Cy2Gb1LT8iOcQJyz7UKW22NhskkzOez5l4u9++EIlNCufHzy0AjFdgLDjn6MSdRk
-	84GevR0IgsQwV7+31WHf9M=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-	by smtp3 (Coremail) with SMTP id DcmowAAHmJ3w0qli+QOKDQ--.43766S2;
-	Wed, 15 Jun 2022 20:39:13 +0800 (CST)
-From: Liang He <windhl@126.com>
-List-Id: <soc.lore.kernel.org>
-To: vireshk@kernel.org,
-	shiraz.linux.kernel@gmail.com,
-	soc@kernel.org,
-	linux@armlinux.org.uk
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	windhl@126.com
-Subject: [PATCH] arch: arm: mach-spear: Add missing of_node_put() in time.c
-Date: Wed, 15 Jun 2022 20:39:12 +0800
-Message-Id: <20220615123912.3965902-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+	id 775D7C34115; Wed, 15 Jun 2022 14:03:01 +0000 (UTC)
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 32986C3411B
+	for <soc@kernel.org>; Wed, 15 Jun 2022 14:02:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 32986C3411B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f170.google.com with SMTP id q140so11469938pgq.6
+        for <soc@kernel.org>; Wed, 15 Jun 2022 07:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=M66DAB+19p6w4Na1SDbCKZUUw5Zn5mhELOHN0rTlLtM=;
+        b=UDjUEJIiRoVktXJeykSYszQEk/7Fo9qKyvSGWv6zm3yB6tuZvYVMddV+i8fQajPkE2
+         aAaZE2cW8WfJiV9Bl+ja/qocfZ84YXu66CvwLgyWfYpBuRUjIAVQEVjMuyhiy55sy0gE
+         YOvQWptxx1hqEzX37f8EcQieP+Vbu9XWAZq5akpeLLmyBJFhwQ9UhvZYcBtFuhISrnOI
+         FfbJhNxSShwSO+3+Rz9AZhWy9ZSyMi/6umtFS4lMPcttPWLIfe2s52GsUErh6DBdP0Kg
+         Z2qNqFD+vvD2WozRI6qLTIw42MhWmb8/TfULi1FUTchhKTMP2R5yRC8BhddQzPIyQxHd
+         +i8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=M66DAB+19p6w4Na1SDbCKZUUw5Zn5mhELOHN0rTlLtM=;
+        b=tBJ534pAiyyx2oED3P5jMCjJv0gnpdZ1FaqWYtxU2MpWHW00iPPLy2R3A3OUKdqwRg
+         4SbQXwyM7RPov0e0EvNN5+CAkSWYqsiYgvWGlJQLGdG1pFblwmoWloNddDa9fYuKqWp8
+         IYr16RIYFJpLduS173/RvgXAwj7hqYZchfJA3l+Ij8VP0q8WGjkl+iM0tYvgfUwAkOAy
+         LWbuFHsjB12F5+Z4XvJ6bOcAZLmehHbVhMkz3alBokhasnMlFwAt80veJlbVswci03TG
+         YbCr5zJ96EYrWRTN5s6BcQLheXTgESNBi2G74ub0FlVMxwrhfiZKbDQ4vY5m1D5l4uUi
+         E6Eg==
+X-Gm-Message-State: AJIora/kIn8RYf3VNjFRx8vYOHKtfAhrPhRcinuKH6XbLxS705ZX0UMy
+	gmOQNdtrsKqFU/4PlFFn32KwUg==
+X-Google-Smtp-Source: ABdhPJx3UrcgrUWHd4kpkHv8SdYGvKistJLOVKNX4XSrYpzd92CUkt0EJ89uNYlWk0nQnhp3+4adig==
+X-Received: by 2002:a05:6a00:421a:b0:522:8b4c:69a9 with SMTP id cd26-20020a056a00421a00b005228b4c69a9mr9997626pfb.60.1655301778548;
+        Wed, 15 Jun 2022 07:02:58 -0700 (PDT)
+Received: from [172.20.0.255] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id x3-20020a1709029a4300b001663165eb16sm9358196plv.7.2022.06.15.07.02.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 07:02:58 -0700 (PDT)
+Message-ID: <53d94169-d724-7763-1b34-30f219c9963c@linaro.org>
+Date: Wed, 15 Jun 2022 07:02:50 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:DcmowAAHmJ3w0qli+QOKDQ--.43766S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW3Gryxtr43tFy8AFWrXwb_yoWDXwc_GF
-	1xWa9xGr40gF1Uua9rua1fGwsFyw15Cr4xWFyxZ3W7Kayjvr1UCF1kt3429ry7Zw4YgrW8
-	tFWDCayayw129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREyCGUUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhIhF18RPTEOUgAAs0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v18 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Content-Language: en-US
+To: Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+ mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org
+References: <cover.1655194858.git.qinjian@cqplus1.com>
+ <0574ed0ad1e9ec4c12645fe2d2dde8f701d285e5.1655194858.git.qinjian@cqplus1.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0574ed0ad1e9ec4c12645fe2d2dde8f701d285e5.1655194858.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-In spear_setup_of_timer(), of_find_matching_node() will return a
-node pointer with refcount incrementd. We should use of_node_put()
-in each fail path or when it is not used anymore.
+On 14/06/2022 01:31, Qin Jian wrote:
+> Add the basic support for Sunplus SP7021-Demo-V3 board.
+> 
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+> Fix the comments from Krzysztof.
+> ---
+>  MAINTAINERS                                  |   1 +
+>  arch/arm/boot/dts/Makefile                   |   2 +
+>  arch/arm/boot/dts/sunplus-sp7021-achip.dtsi  |  84 +++++
+>  arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts |  26 ++
+>  arch/arm/boot/dts/sunplus-sp7021.dtsi        | 318 +++++++++++++++++++
+>  5 files changed, 431 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+>  create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
+>  create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+> 
 
-Signed-off-by: Liang He <windhl@126.com>
----
- arch/arm/mach-spear/time.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
-index d1fdb6066f7b..a1b6635b4ecb 100644
---- a/arch/arm/mach-spear/time.c
-+++ b/arch/arm/mach-spear/time.c
-@@ -217,16 +217,20 @@ void __init spear_setup_of_timer(void)
- 
- 	irq = irq_of_parse_and_map(np, 0);
- 	if (!irq) {
-+		of_node_put(np);
- 		pr_err("%s: No irq passed for timer via DT\n", __func__);
- 		return;
- 	}
- 
- 	gpt_base = of_iomap(np, 0);
- 	if (!gpt_base) {
-+		of_node_put(np);
- 		pr_err("%s: of iomap failed\n", __func__);
- 		return;
- 	}
--
-+	
-+	of_node_put(np);
-+	
- 	gpt_clk = clk_get_sys("gpt0", NULL);
- 	if (IS_ERR(gpt_clk)) {
- 		pr_err("%s:couldn't get clk for gpt\n", __func__);
--- 
-2.25.1
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
