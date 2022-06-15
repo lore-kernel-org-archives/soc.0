@@ -1,81 +1,86 @@
-Return-Path: <SRS0=i4M+=WW=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=ijZO=WW=126.com=windhl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 776B8C43334
-	for <soc@archiver.kernel.org>; Wed, 15 Jun 2022 12:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE8E8C43334
+	for <soc@archiver.kernel.org>; Wed, 15 Jun 2022 13:10:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2FBD5C3411F; Wed, 15 Jun 2022 12:30:42 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 201EFC34115;
-	Wed, 15 Jun 2022 12:30:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 201EFC34115
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CD98153B;
-	Wed, 15 Jun 2022 05:30:39 -0700 (PDT)
-Received: from bogus (unknown [10.57.11.43])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B37543F73B;
-	Wed, 15 Jun 2022 05:30:37 -0700 (PDT)
-Date: Wed, 15 Jun 2022 13:29:27 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
+	id 7725DC3411B; Wed, 15 Jun 2022 13:10:19 +0000 (UTC)
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+	by smtp.kernel.org (Postfix) with ESMTP id 997A9C34115;
+	Wed, 15 Jun 2022 13:10:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 997A9C34115
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=126.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aGlwT
+	pJzDJp35gUCkFaGCu1AAXCT+U62kQKsYj5c2C0=; b=AwHCpk2FIq9EyzKxyneVF
+	M7nmt8aQnX8yADa7h/+p5/aT2UJMOokEUN1KhwFBXsUhMGPvaHTqsgTcZrQ2MdPR
+	Cy2Gb1LT8iOcQJyz7UKW22NhskkzOez5l4u9++EIlNCufHzy0AjFdgLDjn6MSdRk
+	84GevR0IgsQwV7+31WHf9M=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+	by smtp3 (Coremail) with SMTP id DcmowAAHmJ3w0qli+QOKDQ--.43766S2;
+	Wed, 15 Jun 2022 20:39:13 +0800 (CST)
+From: Liang He <windhl@126.com>
 List-Id: <soc.lore.kernel.org>
-Cc: ARM SoC Team <arm@kernel.org>, SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v5.19
-Message-ID: <20220615122927.exgqgcpzfmcuq5ic@bogus>
-References: <20220614100007.1029881-1-sudeep.holla@arm.com>
- <de40d63e-b01d-d25b-e7a2-e54d5b5bcddb@gmail.com>
+To: vireshk@kernel.org,
+	shiraz.linux.kernel@gmail.com,
+	soc@kernel.org,
+	linux@armlinux.org.uk
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	windhl@126.com
+Subject: [PATCH] arch: arm: mach-spear: Add missing of_node_put() in time.c
+Date: Wed, 15 Jun 2022 20:39:12 +0800
+Message-Id: <20220615123912.3965902-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <de40d63e-b01d-d25b-e7a2-e54d5b5bcddb@gmail.com>
+X-CM-TRANSID:DcmowAAHmJ3w0qli+QOKDQ--.43766S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW3Gryxtr43tFy8AFWrXwb_yoWDXwc_GF
+	1xWa9xGr40gF1Uua9rua1fGwsFyw15Cr4xWFyxZ3W7Kayjvr1UCF1kt3429ry7Zw4YgrW8
+	tFWDCayayw129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREyCGUUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhIhF18RPTEOUgAAs0
 
-Hi Florian,
+In spear_setup_of_timer(), of_find_matching_node() will return a
+node pointer with refcount incrementd. We should use of_node_put()
+in each fail path or when it is not used anymore.
 
-On Wed, Jun 15, 2022 at 05:42:10AM +0200, Florian Fainelli wrote:
-> Hello,
-> 
-> On 6/14/2022 12:00 PM, Sudeep Holla wrote:
-> > Hi ARM SoC Team,
-> > 
-> > Please pull !
-> > 
-> > Regards,
-> > Sudeep
-> > 
-> > -->8
-> > 
-> > The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-> > 
-> >    Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-5.19
-> > 
-> > for you to fetch changes up to 44dbdf3bb3f44bf08897ed5f22eb262edcf3d926:
-> > 
-> >    firmware: arm_scmi: Fix incorrect error propagation in scmi_voltage_descriptors_get (2022-06-12 19:59:55 +0100)
-> 
-> Looks like "firmware: arm_scmi: Add SCMI v3.1 protocol extended names
-> support" introduces the following splat which is not fixed by the commits in
-> this pull request:
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/arm/mach-spear/time.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Thanks for the report, we weren't even aware of the issue. We can discussed
-in the original patch thread as you have also reported the issue there.
-Cristian is unable to reproduce it yet, it would be great if you can provide
-more info to help us figure out the issue and the fix 🤞.
-
+diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
+index d1fdb6066f7b..a1b6635b4ecb 100644
+--- a/arch/arm/mach-spear/time.c
++++ b/arch/arm/mach-spear/time.c
+@@ -217,16 +217,20 @@ void __init spear_setup_of_timer(void)
+ 
+ 	irq = irq_of_parse_and_map(np, 0);
+ 	if (!irq) {
++		of_node_put(np);
+ 		pr_err("%s: No irq passed for timer via DT\n", __func__);
+ 		return;
+ 	}
+ 
+ 	gpt_base = of_iomap(np, 0);
+ 	if (!gpt_base) {
++		of_node_put(np);
+ 		pr_err("%s: of iomap failed\n", __func__);
+ 		return;
+ 	}
+-
++	
++	of_node_put(np);
++	
+ 	gpt_clk = clk_get_sys("gpt0", NULL);
+ 	if (IS_ERR(gpt_clk)) {
+ 		pr_err("%s:couldn't get clk for gpt\n", __func__);
 -- 
-Regards,
-Sudeep
+2.25.1
+
