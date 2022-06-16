@@ -4,75 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E5F9C433EF
-	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 20:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 317E7C43334
+	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 20:47:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 84411C341C7; Thu, 16 Jun 2022 20:47:54 +0000 (UTC)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	id 163FFC34114; Thu, 16 Jun 2022 20:47:55 +0000 (UTC)
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9BA7DC341C6
-	for <soc@kernel.org>; Thu, 16 Jun 2022 20:47:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9BA7DC341C6
+	by smtp.kernel.org (Postfix) with ESMTPS id 43A75C341C0
+	for <soc@kernel.org>; Thu, 16 Jun 2022 20:47:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43A75C341C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id a17so217131pls.6
-        for <soc@kernel.org>; Thu, 16 Jun 2022 13:47:53 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id hv24-20020a17090ae41800b001e33eebdb5dso6186476pjb.0
+        for <soc@kernel.org>; Thu, 16 Jun 2022 13:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=l23GN/U2DrIJrN/6AEssfMKzsUHbsd5fPbDMrm48ijg=;
-        b=Hlhlfrt/BJXdyf2w8kNa+QzSqO8cQj4lod7jTR2Ma07k8drLJ7tyJdl/R1YMZkIsDr
-         y5njbGkxTrgiaAevYqgykQxDCCo+8D1ds4Wcvzy88/kTMrq3J3WHmHN8le+Qd1+GzDxR
-         +/XdD9/gFkq5ktys+ZaLzxDVJboC2+1dLyZa1iX5aLnkDYMLRorGDXIPM+EsnITuAm/h
-         d4fcbn5xBna0jpES0gnwB98SYs8GI3XsDZEpfVU2PXujg8B8Xcb63PojcdsbXJj8oB4y
-         qNqUtJEbyhPGaBJvagvlYs5RhtTNO2lV9EILkWL6rHgdUFFKMZNbCbU5R6Vr+/pwYzPs
-         XK5Q==
+        bh=5v2GHFZcfC7tWGp0/Up8UArokJ3Id1eqwbB/UFI3a+A=;
+        b=IOYT59dHwTZZhf0BQH52cFoBw+SOqpWmEOWSg0X9Xcp2U8KaHYAGpnVq2wuvPyNuAj
+         QnL+trAcPJUFxMduhexzpqzS3MJwf9bUi2T3Ck0GlC7nKkKe3lmbpqn5brxcCcL9i25K
+         D7fQpG/8GOGEH1c6VOn9oMKY6tv7impuLR/7tW/RQiE4t0YyF4fdFApa3EAeYNfVdVVp
+         hAbDjBEZd0+i1pJjnLKhelk7EZi4EzuVqk5sVHp1LX41SLiWosNIEKSFwmKag8iyAG8g
+         Efhd/sB67PRE8EfuCA+qMz4PxMWzj7ngTpmFkKqQ/S5eNojA0EW3MsZMV8TRT/TyGK8v
+         vqcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l23GN/U2DrIJrN/6AEssfMKzsUHbsd5fPbDMrm48ijg=;
-        b=jFmM2/1oL8jl58o1YGtuO4u5740CDt7bFsVLbhXIMR9uacXI7oYos4l2elWZ5JzM+5
-         lK8DCwIuNBS8KSsXRTyTyZTEu15boO3I8/FTCweYQeMYlQdfHCXET9OJpwsD7P9Ycv4H
-         ddG+I1nVUmWAUh34/ez7maPHDleVCI+cSf/VX0UVvSKMOboe10OyK3lOU4kz5kuZDOd8
-         TXy6pFXjV8W65DsfX0R3Haong9wl5IIDHfEut2QS30tC9nAZQkidTqo2LlTla+rYsKZ/
-         S5jo7dgtkmjsjjLNH5glQ5quBroEdlxTvKbqWCrbeQnqco7KFRCtSr3TmRoUaiFcvpaA
-         f/dw==
-X-Gm-Message-State: AJIora9ipPJ6LWg+wHcZxuuWozcZd5jI8uQz3w2ikqDIY4bBUEyVRQNh
-	9Z1+VUEDRc0NG4nlxSGMzQn1jM/OMIvFqA==
-X-Google-Smtp-Source: AGRyM1sGQFKhrRTWYkWHrvqeQMdQ//vcR5llvQ5SaH3z0VWqOAf04UfgsXRSWIQ6CWv0tnyQGtdkAw==
-X-Received: by 2002:a17:902:efc6:b0:167:8177:60a7 with SMTP id ja6-20020a170902efc600b00167817760a7mr6252404plb.110.1655412473000;
+        bh=5v2GHFZcfC7tWGp0/Up8UArokJ3Id1eqwbB/UFI3a+A=;
+        b=rh2WjzGtaK6EhBmJnBISywip49Kew/PFCSVqKsIUnM1046mBbQjxYP536uJi0wMF77
+         cvMemUSkbPWMHtOwzqOMzHBaefOu2nwvvl9YJQOlxXEWmBWHU438fJTdzk6WSxAT5EYq
+         56x1g7bWk19ztFnKTjD6FUmWRKR/el4ZdsDmdgW+EEcV0HG5Gi4ton/znWe4Asbyczry
+         xfYoeWq5aHA6a8loOAmowqgeqWMbUapVmKkG91hHC4oN2Eo2LvbuzKScPhMyO6QDp6bS
+         RjC7e5ApbYCpjZRzBgx6jMYh3iHaqImlpqQkppMvv7iaGtiM23KTv516/NSQEK/O1d2O
+         0mKQ==
+X-Gm-Message-State: AJIora/8il25FenLHkMmKRYqvUTRHk+gdn67eT4ehtX1dkiiT1on3SBU
+	B3VoDREkIsRhkzRur92sPdXx+Q==
+X-Google-Smtp-Source: AGRyM1ushZiM09a3mKNdXCqRFwNPLDff3+dermk/HgL7TWqS9tRuI7++DJxamLjcFaEiQ9SoiqP8zQ==
+X-Received: by 2002:a17:902:d716:b0:169:78a:11d4 with SMTP id w22-20020a170902d71600b00169078a11d4mr4197409ply.90.1655412473973;
         Thu, 16 Jun 2022 13:47:53 -0700 (PDT)
 Received: from krzk-bin.. ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id 203-20020a6218d4000000b0051ba0ee30cbsm2165453pfy.128.2022.06.16.13.47.52
+        by smtp.gmail.com with ESMTPSA id 203-20020a6218d4000000b0051ba0ee30cbsm2165453pfy.128.2022.06.16.13.47.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 13:47:52 -0700 (PDT)
+        Thu, 16 Jun 2022 13:47:53 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	Wei Xu <xuwei5@hisilicon.com>,
-	Olof Johansson <olof@lixom.net>,
+To: Olof Johansson <olof@lixom.net>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	soc@kernel.org,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
 	arm@kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Rob Herring <robh+dt@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	Baolin Wang <baolin.wang7@gmail.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: hisilicon: adjust whitespace around '='
-Date: Thu, 16 Jun 2022 13:47:13 -0700
-Message-Id: <165541242280.9040.2541894516124804642.b4-ty@linaro.org>
+Subject: Re: [PATCH] arm64: dts: sprd: adjust whitespace around '='
+Date: Thu, 16 Jun 2022 13:47:14 -0700
+Message-Id: <165541242280.9040.15171374886189266159.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526204453.832681-1-krzysztof.kozlowski@linaro.org>
-References: <20220526204453.832681-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220526204152.831948-1-krzysztof.kozlowski@linaro.org>
+References: <20220526204152.831948-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Thu, 26 May 2022 22:44:53 +0200, Krzysztof Kozlowski wrote:
+On Thu, 26 May 2022 22:41:52 +0200, Krzysztof Kozlowski wrote:
 > Fix whitespace coding style: use single space instead of tabs or
 > multiple spaces around '=' sign in property assignment.  No functional
 > changes (same DTB).
@@ -81,8 +82,8 @@ On Thu, 26 May 2022 22:44:53 +0200, Krzysztof Kozlowski wrote:
 
 Applied, thanks!
 
-[1/1] arm64: dts: hisilicon: adjust whitespace around '='
-      https://git.kernel.org/krzk/linux/c/11357f103f2e641e2744d527886ff248dbef13d8
+[1/1] arm64: dts: sprd: adjust whitespace around '='
+      https://git.kernel.org/krzk/linux/c/f028328f60bd33cbdc4b65dac2efa98ed6ca26b7
 
 Best regards,
 -- 
