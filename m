@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBC79C433EF
-	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 00:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE950C433EF
+	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 00:53:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A2D72C3411C; Thu, 16 Jun 2022 00:53:42 +0000 (UTC)
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	id B56D3C3411A; Thu, 16 Jun 2022 00:53:51 +0000 (UTC)
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 90248C3411E
-	for <soc@kernel.org>; Thu, 16 Jun 2022 00:53:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 90248C3411E
+	by smtp.kernel.org (Postfix) with ESMTPS id 6E798C3411F
+	for <soc@kernel.org>; Thu, 16 Jun 2022 00:53:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E798C3411F
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f53.google.com with SMTP id e9so95964pju.5
-        for <soc@kernel.org>; Wed, 15 Jun 2022 17:53:41 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id bo5so111044pfb.4
+        for <soc@kernel.org>; Wed, 15 Jun 2022 17:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wKTJZTS4t7az2GJI7jEzDuSKLi7v9IiEPZUWv0d18/c=;
-        b=SyPuJJklDy1H6XojA4AIHIjZrl+9ePCIBiwQWRmYToeJarpqcQ/FBNSobV3UvGgZdk
-         PoidlA4ccfXC+dV3BtaieQtxlwAGBWJR2FrHtPb1jc1bC0yeQMpnSAlweVOpbW+/lotW
-         nTB7VR0IJEyhh4tnzPXUBh1HHqBBQQpes1xiTYQ+rpLkolYLAySQGYHzZnY9jOtC8+VH
-         KvAO6vjl63YRwJHsRKY2x3371MSJ4/iERfdBYJX0/poVMsDdjhvLTp4l2w1V7fz3LYE1
-         Buvz5DaxfdIUfidKNd+OduGY9IDGNnuoKKssfGJXNedhjl5BSf1U+kMgdZwuiTD8ZB3h
-         BsCw==
+        bh=cvvN8aBgTj9HE/8ZJgUwMRYXoKBSvquSuql4gX904u8=;
+        b=m4X8tc/NeQV4uX2ihYpGARyheg93SpNMVBaA/z+4HAdniayLLeti8D1EIlsGvdTmI7
+         OGunSmuBHcNa1fceZCkfcknYCf27JwxhewXCg0kQzOEI/bd/gFp/YavdRZBd9i8dRuaa
+         UWWR2cdaxdFMxGGmRuLfs+KgyV4f81ZDl2UqJ8vC1jK8oOu8AlO2bibruHvTq52teMay
+         vmLoL9VcE01zsyXEombWiXhOfQgn1dX/aakTXqEJkdqH+OHTvZbiyswbEi4xhkL9pTiT
+         JqOyz4L1pPrk+6ZBowqLVvI7IMOQ+2dYj61wd3Ki3GJP/bsTLkpmmGL8wAWDQAP1ZJh1
+         Olcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wKTJZTS4t7az2GJI7jEzDuSKLi7v9IiEPZUWv0d18/c=;
-        b=GS/KCYAAGBgvCxo5Elm5oty92mvLzj48Sph28d2I38kFAdUogou6Uef8EVfwC8X5Uq
-         RFm0IzNX2o4nXME1I6JcyZIeNiYCM801XDzqdbx13SNvd9MPGy1wjXKVEmMVUIyigspn
-         gfTYqpke97Z3n8zQ94ODf1N8alz0kNwyKR10DUXfa9tzGAS2vKJRAEyzs37ptQ/XSOES
-         nvoP4LTdGDzixrJLkylFU+weyTAnUOll0h9NPZ9fp+ezqLRKFGMX9JXkIlPPOJDBEk29
-         IlziY5rUkcVsh/iDPJ0Awpb8C7d2jiAP3StuKfqU8fMx3H/517dineMWtcqVBF3723Oh
-         vbVQ==
-X-Gm-Message-State: AJIora9JaUIrIgc1hwqBUZ1InbqAdEptDFMa5dB9Y9rpINIqP67cT4Sn
-	NB9eQzPQkRP/ykve/uwX7KI5TA==
-X-Google-Smtp-Source: AGRyM1slGubRm1jDRITvVIr2UimUdhwJ2r7riH5Iflpn7D+E8oMYwXmduVLCULNv3a3f/pF1sU+1Zw==
-X-Received: by 2002:a17:902:ce0c:b0:168:ca2e:c944 with SMTP id k12-20020a170902ce0c00b00168ca2ec944mr2118251plg.107.1655340820939;
-        Wed, 15 Jun 2022 17:53:40 -0700 (PDT)
+        bh=cvvN8aBgTj9HE/8ZJgUwMRYXoKBSvquSuql4gX904u8=;
+        b=XcaxSy/PbCqfKeVOQVdEGLeyplEXzPH8VD1eUUBU6aKw0vUD9CnkadENCiC712pJgl
+         6y/R/ZpCNsVtRJC+oBiq0A5sm4qhKvwfDW4xYUjCVGRi+FlmDGdZeioGlWo8YjACgmzR
+         j3LZ3QZmACEuRM52lBxMdLzM3CDRmNmww2tl56p4eXkWb2ZpgmqG183Yd8HPOZuNC9zm
+         Z4g07Ed54SzNuXvpE9jtByxS8HSBgyJ/Iecc6/39ZUSWdRIp1+Ujd02w1ZxVdtkZmTLO
+         bHozOUqzQ2fvvEU3Bw4afuBrcJUgFpVQWfQyp2D+XAo459VJ51vp2VjrKBXdVjNEx0iP
+         G1PA==
+X-Gm-Message-State: AJIora9MK3Lo7MRanwsY9COtg5pG/pE9GRijIPJQjDA5MlyYYTbBezSX
+	qRwZMyflfI63i21BhQ/Aoo55hw==
+X-Google-Smtp-Source: AGRyM1trMeeEPUM8xA2lwAFvt7jemmODw29ElIK08LzXDNqlwQ4AIXWQuAPAAAOL5K9gcbHeI7raFA==
+X-Received: by 2002:a05:6a00:1a8f:b0:51c:2f82:cdba with SMTP id e15-20020a056a001a8f00b0051c2f82cdbamr2259455pfv.85.1655340829859;
+        Wed, 15 Jun 2022 17:53:49 -0700 (PDT)
 Received: from krzk-bin.. ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016760c06b76sm233660pll.194.2022.06.15.17.53.39
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016760c06b76sm233660pll.194.2022.06.15.17.53.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 17:53:40 -0700 (PDT)
+        Wed, 15 Jun 2022 17:53:49 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -63,203 +63,76 @@ To: arm@kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 01/40] dt-bindings: input: gpio-keys: enforce node names to match all properties
-Date: Wed, 15 Jun 2022 17:52:54 -0700
-Message-Id: <20220616005333.18491-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 02/40] dt-bindings: input: gpio-keys: reference input.yaml and document properties
+Date: Wed, 15 Jun 2022 17:52:55 -0700
+Message-Id: <20220616005333.18491-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The gpio-keys DT schema matches all properties with a wide pattern and
-applies specific schema to children.  This has drawback - all regular
-properties are also matched and are silently ignored, even if they are
-not described in schema.  Basically this allows any non-object property
-to be present.
-
-Enforce specific naming pattern for children (keys) to narrow the
-pattern thus do not match other properties.  This will require all
-children to be properly prefixed or suffixed (button, event, switch or
-key).
-
-Removal of "if:" within patternProperties causes drop of one indentation
-level, but there are no other changes in the affected block.
+The original text bindings documented "autorepeat" and "label"
+properties (in the device node, beside the nodes with keys).  DTS use
+also poll-interval.  Reference the input.yaml to get these top-level
+properties.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/input/gpio-keys.yaml  | 157 +++++++++---------
- 1 file changed, 77 insertions(+), 80 deletions(-)
+ .../devicetree/bindings/input/gpio-keys.yaml  | 32 +++++++++++--------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-index 645dfa1e0d07..27bb5c6ab8d9 100644
+index 27bb5c6ab8d9..e722e681d237 100644
 --- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
 +++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-@@ -16,86 +16,83 @@ properties:
+@@ -15,6 +15,13 @@ properties:
+       - gpio-keys
        - gpio-keys-polled
  
++  autorepeat: true
++
++  label:
++    description: Name of entire device
++
++  poll-interval: true
++
  patternProperties:
--  ".*":
--    if:
--      type: object
--    then:
--      $ref: input.yaml#
--
--      properties:
--        gpios:
--          maxItems: 1
--
--        interrupts:
--          maxItems: 1
--
--        label:
--          description: Descriptive name of the key.
--
--        linux,code:
--          description: Key / Axis code to emit.
--
--        linux,input-type:
--          default: 1  # EV_KEY
--
--        linux,input-value:
--          description: |
--            If linux,input-type is EV_ABS or EV_REL then this
--            value is sent for events this button generates when pressed.
--            EV_ABS/EV_REL axis will generate an event with a value of 0
--            when all buttons with linux,input-type == type and
--            linux,code == axis are released. This value is interpreted
--            as a signed 32 bit value, e.g. to make a button generate a
--            value of -1 use:
--
--            linux,input-value = <0xffffffff>; /* -1 */
--
--          $ref: /schemas/types.yaml#/definitions/uint32
--
--        debounce-interval:
--          description:
--            Debouncing interval time in milliseconds. If not specified defaults to 5.
--          $ref: /schemas/types.yaml#/definitions/uint32
--
--          default: 5
--
--        wakeup-source:
--          description: Button can wake-up the system.
--
--        wakeup-event-action:
--          description: |
--            Specifies whether the key should wake the system when asserted, when
--            deasserted, or both. This property is only valid for keys that wake up the
--            system (e.g., when the "wakeup-source" property is also provided).
--
--            Supported values are defined in linux-event-codes.h:
--
--              EV_ACT_ANY        - both asserted and deasserted
--              EV_ACT_ASSERTED   - asserted
--              EV_ACT_DEASSERTED - deasserted
--          $ref: /schemas/types.yaml#/definitions/uint32
--          enum: [0, 1, 2]
--
--        linux,can-disable:
--          description:
--            Indicates that button is connected to dedicated (not shared) interrupt
--            which can be disabled to suppress events from the button.
--          type: boolean
--
--      required:
--        - linux,code
--
--      anyOf:
--        - required:
--            - interrupts
--        - required:
--            - gpios
--
--      dependencies:
--        wakeup-event-action: [ wakeup-source ]
--        linux,input-value: [ gpios ]
--
--      unevaluatedProperties: false
-+  "^(button|event|key|switch|(button|event|key|switch)-[a-z0-9-]+|[a-z0-9-]+-(button|event|key|switch))$":
-+    $ref: input.yaml#
-+
-+    properties:
-+      gpios:
-+        maxItems: 1
-+
-+      interrupts:
-+        maxItems: 1
-+
-+      label:
-+        description: Descriptive name of the key.
-+
-+      linux,code:
-+        description: Key / Axis code to emit.
-+
-+      linux,input-type:
-+        default: 1  # EV_KEY
-+
-+      linux,input-value:
-+        description: |
-+          If linux,input-type is EV_ABS or EV_REL then this
-+          value is sent for events this button generates when pressed.
-+          EV_ABS/EV_REL axis will generate an event with a value of 0
-+          when all buttons with linux,input-type == type and
-+          linux,code == axis are released. This value is interpreted
-+          as a signed 32 bit value, e.g. to make a button generate a
-+          value of -1 use:
-+
-+          linux,input-value = <0xffffffff>; /* -1 */
-+
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      debounce-interval:
-+        description:
-+          Debouncing interval time in milliseconds. If not specified defaults to 5.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+        default: 5
-+
-+      wakeup-source:
-+        description: Button can wake-up the system.
-+
-+      wakeup-event-action:
-+        description: |
-+          Specifies whether the key should wake the system when asserted, when
-+          deasserted, or both. This property is only valid for keys that wake up the
-+          system (e.g., when the "wakeup-source" property is also provided).
-+
-+          Supported values are defined in linux-event-codes.h:
-+
-+            EV_ACT_ANY        - both asserted and deasserted
-+            EV_ACT_ASSERTED   - asserted
-+            EV_ACT_DEASSERTED - deasserted
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [0, 1, 2]
-+
-+      linux,can-disable:
-+        description:
-+          Indicates that button is connected to dedicated (not shared) interrupt
-+          which can be disabled to suppress events from the button.
-+        type: boolean
-+
-+    required:
-+      - linux,code
-+
-+    anyOf:
-+      - required:
-+          - interrupts
-+      - required:
-+          - gpios
-+
-+    dependencies:
-+      wakeup-event-action: [ wakeup-source ]
-+      linux,input-value: [ gpios ]
-+
-+    unevaluatedProperties: false
+   "^(button|event|key|switch|(button|event|key|switch)-[a-z0-9-]+|[a-z0-9-]+-(button|event|key|switch))$":
+     $ref: input.yaml#
+@@ -94,19 +101,18 @@ patternProperties:
  
- if:
-   properties:
+     unevaluatedProperties: false
+ 
+-if:
+-  properties:
+-    compatible:
+-      const: gpio-keys-polled
+-then:
+-  properties:
+-    poll-interval:
+-      description:
+-        Poll interval time in milliseconds
+-      $ref: /schemas/types.yaml#/definitions/uint32
+-
+-  required:
+-    - poll-interval
++allOf:
++  - $ref: input.yaml#
++  - if:
++      properties:
++        compatible:
++          const: gpio-keys-polled
++    then:
++      required:
++        - poll-interval
++    else:
++      properties:
++        poll-interval: false
+ 
+ additionalProperties: false
+ 
 -- 
 2.34.1
 
