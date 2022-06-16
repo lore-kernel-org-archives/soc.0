@@ -1,74 +1,70 @@
-Return-Path: <SRS0=zpUB=WX=126.com=windhl@kernel.org>
+Return-Path: <SRS0=jlRs=WX=mg.flux-g.com=bounce+76ab1a.79cfb8c-soc=kernel.org@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12699C433EF
-	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 06:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7011C433EF
+	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 07:37:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EE70FC341C0; Thu, 16 Jun 2022 06:56:42 +0000 (UTC)
-Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
-	by smtp.kernel.org (Postfix) with ESMTP id ADEF3C3411B;
-	Thu, 16 Jun 2022 06:56:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ADEF3C3411B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=126.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=oZmYr
-	t1TXBesr3M6NYUwqG/UbHwgSwjMr941Rc7K/pQ=; b=a+FlnFJZM3RUwB9sRNKEl
-	TPnRDD2veXat+izLtfZ3guTOhLhbxdFBbBW+159Q8AwlhwwEF77QwQo0Ak69ZLVB
-	oTGfbbsVeNLnO/DtNEytXwA/ixtybo8zvlpaek/mPKhRtLvP6ECIwShORA4gEZF1
-	iqVhVXGCFTjMpWPFkHbIjY=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
- (Coremail) ; Thu, 16 Jun 2022 14:25:12 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date: Thu, 16 Jun 2022 14:25:12 +0800 (CST)
-From: "Liang He" <windhl@126.com>
-To: "Viresh Kumar" <viresh.kumar@linaro.org>
+	id 76494C3411B; Thu, 16 Jun 2022 07:37:13 +0000 (UTC)
+Received: from so254-40.mailgun.net (so254-40.mailgun.net [198.61.254.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 18B96C34114
+	for <soc@kernel.org>; Thu, 16 Jun 2022 07:37:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 18B96C34114
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=flux-g.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=mg.flux-g.com
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.flux-g.com; q=dns/txt;
+ s=pic; t=1655365031; x=1655573831; h=Content-Type:
+ Content-Transfer-Encoding: Message-Id: Reply-To: To: To: From: From:
+ Subject: Subject: Mime-Version: Date: Sender: Sender;
+ bh=4H+GgDx1aya1Rhz+Fi+gi8nPTFVkS0p2+4DQR+Ib7nc=; b=SnnHZw9dzGgzXUVuyO/Bccfvl6Ndi3sUfvYihfDhNvGi42FJB8/aahlUp1WEG7sGsYfnOBb2
+ oOV0170W6/f3JB/FneqjOVAD4sAPnpE+rQsHN84NanyINL+o+LeBeFq3m5bMP/RmP5ToumbY
+ pw0oDNzd7aOPdH/n8K3kbdCJ5xY/lo1Bur9peh/96G6OfsXFUgkvJy3H1n398E2dSXCZ+aod
+ 5CwbXT9TfJ8l4YnVmO4kjvieM6VXzerA0JByYiw6pA850SDuZKOHLFu59UMaNXMQhfis7EtG
+ uw3Q9ZbMtnhRHFRidkZL5OvBDtS4oBSaIcj2WpyTZ1qsIHdDy+UjyQ==
+X-Mailgun-Sending-Ip: 198.61.254.40
+X-Mailgun-Sid: WyI2NGZjZCIsICJzb2NAa2VybmVsLm9yZyIsICI3OWNmYjhjIl0=
+Received: from <unknown> (<unknown> []) by
+ api-n05.prod.us-west-2.postgun.com with HTTP id 62aadda61648693e8cfc17c6;
+ Thu, 16 Jun 2022 07:37:10 GMT
+Sender: noreply=flux-g.com@mg.flux-g.com
+Date: Thu, 16 Jun 2022 07:37:10 +0000
+Mime-Version: 1.0
+Subject: =?UTF-8?b?5qCq5byP5Lya56S+RkxVWCDjgYrllY/jgYTlkIjjgo/jgZvjgpLmib/jgoo=?=
+ =?UTF-8?b?44G+44GX44Gf?=
+From: =?utf-8?b?5qCq5byP5Lya56S+RkxVWA==?= <noreply@flux-g.com>
 List-Id: <soc.lore.kernel.org>
-Cc: vireshk@kernel.org, shiraz.linux.kernel@gmail.com, soc@kernel.org, 
-	linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] arch: arm: mach-spear: Add missing of_node_put() in
- time.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <20220616060605.jtbgai74w4f7ddyh@vireshk-i7>
-References: <20220615123912.3965902-1-windhl@126.com>
- <20220616060605.jtbgai74w4f7ddyh@vireshk-i7>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
-MIME-Version: 1.0
-Message-ID: <5bab2e47.4324.1816b2ff063.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:GMqowACHjyfJzKpiowg3AA--.9435W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgciF18RPTZzhQABsO
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+To: soc@kernel.org
+X-Mailer: WPMailSMTP/Mailer/mailgun 3.4.0
+Reply-To: r.washida@flux-g.com
+Message-Id: <20220616073710.9241731e066f2717@mg.flux-g.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-CkF0IDIwMjItMDYtMTYgMTQ6MDY6MDUsICJWaXJlc2ggS3VtYXIiIDx2aXJlc2gua3VtYXJAbGlu
-YXJvLm9yZz4gd3JvdGU6Cj5PbiAxNS0wNi0yMiwgMjA6MzksIExpYW5nIEhlIHdyb3RlOgo+PiBJ
-biBzcGVhcl9zZXR1cF9vZl90aW1lcigpLCBvZl9maW5kX21hdGNoaW5nX25vZGUoKSB3aWxsIHJl
-dHVybiBhCj4+IG5vZGUgcG9pbnRlciB3aXRoIHJlZmNvdW50IGluY3JlbWVudGQuIFdlIHNob3Vs
-ZCB1c2Ugb2Zfbm9kZV9wdXQoKQo+PiBpbiBlYWNoIGZhaWwgcGF0aCBvciB3aGVuIGl0IGlzIG5v
-dCB1c2VkIGFueW1vcmUuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBMaWFuZyBIZSA8d2luZGhsQDEy
-Ni5jb20+Cj4+IC0tLQo+PiAgYXJjaC9hcm0vbWFjaC1zcGVhci90aW1lLmMgfCA2ICsrKysrLQo+
-PiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+PiAKPj4g
-ZGlmZiAtLWdpdCBhL2FyY2gvYXJtL21hY2gtc3BlYXIvdGltZS5jIGIvYXJjaC9hcm0vbWFjaC1z
-cGVhci90aW1lLmMKPj4gaW5kZXggZDFmZGI2MDY2ZjdiLi5hMWI2NjM1YjRlY2IgMTAwNjQ0Cj4+
-IC0tLSBhL2FyY2gvYXJtL21hY2gtc3BlYXIvdGltZS5jCj4+ICsrKyBiL2FyY2gvYXJtL21hY2gt
-c3BlYXIvdGltZS5jCj4+IEBAIC0yMTcsMTYgKzIxNywyMCBAQCB2b2lkIF9faW5pdCBzcGVhcl9z
-ZXR1cF9vZl90aW1lcih2b2lkKQo+PiAgCj4+ICAJaXJxID0gaXJxX29mX3BhcnNlX2FuZF9tYXAo
-bnAsIDApOwo+PiAgCWlmICghaXJxKSB7Cj4+ICsJCW9mX25vZGVfcHV0KG5wKTsKPj4gIAkJcHJf
-ZXJyKCIlczogTm8gaXJxIHBhc3NlZCBmb3IgdGltZXIgdmlhIERUXG4iLCBfX2Z1bmNfXyk7Cj4+
-ICAJCXJldHVybjsKPj4gIAl9Cj4+ICAKPj4gIAlncHRfYmFzZSA9IG9mX2lvbWFwKG5wLCAwKTsK
-Pj4gIAlpZiAoIWdwdF9iYXNlKSB7Cj4+ICsJCW9mX25vZGVfcHV0KG5wKTsKPj4gIAkJcHJfZXJy
-KCIlczogb2YgaW9tYXAgZmFpbGVkXG4iLCBfX2Z1bmNfXyk7Cj4+ICAJCXJldHVybjsKPj4gIAl9
-Cj4+IC0KPj4gKwkKPj4gKwlvZl9ub2RlX3B1dChucCk7Cj4+ICsJCj4+ICAJZ3B0X2NsayA9IGNs
-a19nZXRfc3lzKCJncHQwIiwgTlVMTCk7Cj4+ICAJaWYgKElTX0VSUihncHRfY2xrKSkgewo+PiAg
-CQlwcl9lcnIoIiVzOmNvdWxkbid0IGdldCBjbGsgZm9yIGdwdFxuIiwgX19mdW5jX18pOwo+Cj5T
-aW5jZSB0aGlzIHJvdXRpbmUgYWxyZWFkeSBoYXZlIGVycm9yIGxhYmVscywgZm9yIGNvbnNpc3Rl
-bmNlIGl0IHdvdWxkIGJlIGJldHRlcgo+dG8gYWRkIGFub3RoZXIgb25lICJlcnJfcHV0X25wIiBh
-bmQgdXNlIGdvdG8gdG8gdGhhdCA/Cj4KPi0tIAo+dmlyZXNoCgoKVGhhbmtzIGZvciB5b3VyIHJl
-cGx5LiBJIHdpbGwgbWFrZSBhIG5ldyBwYXRjaCBmb3IgdGhhdC4KCkxpYW5n
+=E3=81=8A=E5=95=8F=E3=81=84=E5=90=88=E3=82=8F=E3=81=9B=E7=A8=AE=E5=88=A5=20
+=E3=81=9D=E3=81=AE=E4=BB=96
+
+=E4=BC=9A=E7=A4=BE=E5=90=8D
+=F0=9F=92=9A Have you ever tried this sex game before? GIVE IT A TRY: https=
+://queen22.page.link/photos?ceilg =F0=9F=92=9A
+
+=E3=81=8A=E5=90=8D=E5=89=8D
+j2mnnr
+
+=E9=9B=BB=E8=A9=B1=E7=95=AA=E5=8F=B7=20
+201940928302
+
+=E3=83=A1=E3=83=BC=E3=83=AB=E3=82=A2=E3=83=89=E3=83=AC=E3=82=B9
+soc@kernel.org
+
+=E3=81=8A=E5=95=8F=E3=81=84=E5=90=88=E3=82=8F=E3=81=9B=E5=86=85=E5=AE=B9
+d6pk4y
+
+--=20
+=E3=81=93=E3=81=AE=E3=83=A1=E3=83=BC=E3=83=AB=E3=81=AF =E6=A0=AA=E5=BC=8F=
+=E4=BC=9A=E7=A4=BEFLUX (https://flux.jp) =E3=81=AE=E3=81=8A=E5=95=8F=E3=81=
+=84=E5=90=88=E3=82=8F=E3=81=9B=E3=83=95=E3=82=A9=E3=83=BC=E3=83=A0=E3=81=8B=
+=E3=82=89=E9=80=81=E4=BF=A1=E3=81=95=E3=82=8C=E3=81=BE=E3=81=97=E3=81=9F
