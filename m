@@ -4,165 +4,261 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB14AC433EF
-	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 00:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18E53C43334
+	for <soc@archiver.kernel.org>; Thu, 16 Jun 2022 00:54:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95C1EC3411F; Thu, 16 Jun 2022 00:54:15 +0000 (UTC)
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	id 0249CC3411C; Thu, 16 Jun 2022 00:54:17 +0000 (UTC)
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D4305C3411C
-	for <soc@kernel.org>; Thu, 16 Jun 2022 00:54:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4305C3411C
+	by smtp.kernel.org (Postfix) with ESMTPS id 2D1FFC3411E
+	for <soc@kernel.org>; Thu, 16 Jun 2022 00:54:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D1FFC3411E
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f53.google.com with SMTP id cx11so113772pjb.1
-        for <soc@kernel.org>; Wed, 15 Jun 2022 17:54:14 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id u2so117555pfc.2
+        for <soc@kernel.org>; Wed, 15 Jun 2022 17:54:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=P9oBYdB3cH6UNLeExvbtuDOVwCrp/TsONqfDaucXFbw=;
-        b=fQc9yWGYc4aF3r20S4OLYpi0jtu02XyI+PuIJg9jbHN26FDwSVSsZqrj9DAIsieM/v
-         cwrKTb6gdviRm42Me/9e/6Fy9BkUWhtpy2Q4h7hVKi1tEM/4aM7iYNlhrGLGsaYtDo3N
-         OZTPHGANBb1zE+nzKDJv3VvHOSLJh6lUhPU+sLL16sjHGIH31USM60BonRnqWYKD5bOv
-         kHT2gVB4OPjMOe6Ip4I4Fc4VrpvVeHhdJVK607BrYoTOqwlhf+dtOlBUvR2uAox5q5yv
-         o6J1s6YiTXEjzDA9+g6jm1wAFsOv+jXtUTXYz2e8T9IOIAD2lx1WFQvm4T3vJ/AKMMCe
-         4ymQ==
+        bh=hsW59cFZjklHB2Wpxrfsfror1DmvkvVRBrL7nFD90Rw=;
+        b=gT7gqFzbN8epGJaDV1iKFM6cTxx7kd3KDK95NFIR6vxJr/e/IBbTs4Wztt6Gf8e9nD
+         5sVU/Dk9DyC18wj3nLZp1lVtPcj0NC0BybAhCNtTB10PZg5ho9Q3jIheRedswqqM3vvw
+         YEo+K7qmtxwnfAUZCHk7II4CLLTQ2lCbPTrOb2+9ZL31uPpaPn4LqjklKkDjrJWpmeN2
+         f3yfH3Lu2WPIFiWiAlX355Jt0GRcBNpbmXKttGoO+H66Wwl+NusPKjIn30Zxsfuly9Xz
+         1IhilHqF2ZDGOOyII59iTkLsR02JRWRcEwZF99vHIfqhxibqdQnk+hOfsDswuc8FR5eD
+         4wOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=P9oBYdB3cH6UNLeExvbtuDOVwCrp/TsONqfDaucXFbw=;
-        b=tZdLVbLmPDihEaX0P3vepArpbibdwib2YCfv30rWqbs/5qXn1lJ9+nDoebrVofPLyr
-         4DakB63wWjkV5FTEc3A4oxsjkgpwVctb6QigoMzqR0PjQe9QdJNPWRPZUMjHESmlv5a8
-         NjL3zx7oVa4eWHfqvWyDfUeym1BFxa0fSoJ5O3PQwLiGRmQvpezaXwT6/62uzvTi2hAm
-         jIjKSX2t4T6EwikCH5hIlzaAWifaSEF5OghcWZvUfqMNYlSXT0Mb9o/62bPMZsL0HzsU
-         8w8UVNQsvAqbUMtGwBycCjAB8xm9SWcklmIhsjE4d7IVSfvzLUWuaOZ5A+tQDNsThl62
-         5CYA==
-X-Gm-Message-State: AJIora+65xcaCwKbIoP6yEHjZCKpRYn0k7qjhezo6rJRcs5SaA2Lj5GB
-	uTGGQ+v+G/WHxoTs1S75CGnGeQ==
-X-Google-Smtp-Source: AGRyM1s6OVG6xEuP4DtTT5aZX2ix8Joz5MjrvSJVaXeJFA0xFTzgMaSZOA5oXUPF+pF4DfSjc1KzoQ==
-X-Received: by 2002:a17:902:9f96:b0:163:dc33:6b72 with SMTP id g22-20020a1709029f9600b00163dc336b72mr2383036plq.34.1655340854277;
-        Wed, 15 Jun 2022 17:54:14 -0700 (PDT)
+        bh=hsW59cFZjklHB2Wpxrfsfror1DmvkvVRBrL7nFD90Rw=;
+        b=Bl5zS3pjVrjeSjDNpxkxktIV+ryZ6rwq24K89/l7WqstEUQIenPd4NkULjLNmDB8na
+         M3elE0/tCb17dZqPwxAYliP/b7VIusP/cvnbKHUarjpwEKoCkJOn16Yp4VqeN4mQ/zlr
+         KOC328qL0potCQAgQUTB13/EjPnsHB/tlXWLHopb3pU3j+sZHSE+xJ/Jre7FSDWRZzzO
+         XwMTqi5Fahz8P7qAPig397U2Bh8Z9/ZY7dFj7+LJnRNVZDivXvm5oX5CUsYqKJQeqFll
+         541nJLGDVb4tFSMbIeRKCF84V0xium9SepkUlV7rZr9dyhxQtTkivyd4sj1VKj/u761w
+         JEYg==
+X-Gm-Message-State: AJIora9ePrYysdbPbX+glXrOVohR/in5+DRhTdoU7+MGu3RcwInZpc6c
+	yn3VMZ3HeTGSmhz06ifV47mfQ8J2I5GInw==
+X-Google-Smtp-Source: AGRyM1v9PXc3M6qtFJkIuJ5CZkLsvfE0UjONQMjhaOvEr+7WUGSHaubkM2UtRha1WHx8hBYamDVZtg==
+X-Received: by 2002:a63:441f:0:b0:3fc:8bd2:f828 with SMTP id r31-20020a63441f000000b003fc8bd2f828mr2096272pga.579.1655340855648;
+        Wed, 15 Jun 2022 17:54:15 -0700 (PDT)
 Received: from krzk-bin.. ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016760c06b76sm233660pll.194.2022.06.15.17.54.13
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0016760c06b76sm233660pll.194.2022.06.15.17.54.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 17:54:13 -0700 (PDT)
+        Wed, 15 Jun 2022 17:54:15 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
 	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
 	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 14/40] ARM: dts: marvell: correct gpio-keys properties
-Date: Wed, 15 Jun 2022 17:53:07 -0700
-Message-Id: <20220616005333.18491-14-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 15/40] arm64: dts: mediatek: align gpio-key node names with dtschema
+Date: Wed, 15 Jun 2022 17:53:08 -0700
+Message-Id: <20220616005333.18491-15-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gpio-keys children do not use unit addresses.
+The node names should be generic and DT schema expects certain pattern
+(e.g. with key/button/switch).
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/armada-370-rd.dts                      | 2 --
- arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi       | 2 --
- arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi | 2 --
- arch/arm/boot/dts/armada-xp-axpwifiap.dts                | 2 --
- arch/arm/boot/dts/armada-xp-linksys-mamba.dts            | 2 --
- arch/arm/boot/dts/armada-xp-openblocks-ax3-4.dts         | 2 --
- 6 files changed, 12 deletions(-)
+ .../boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts      |  4 ++--
+ arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts           |  4 ++--
+ arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts  |  6 +++---
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi           | 10 +++++-----
+ arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi |  4 ++--
+ arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi  |  2 +-
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi         |  2 +-
+ arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi       |  4 ++--
+ 8 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm/boot/dts/armada-370-rd.dts b/arch/arm/boot/dts/armada-370-rd.dts
-index c910d157a686..6ba7699b69ed 100644
---- a/arch/arm/boot/dts/armada-370-rd.dts
-+++ b/arch/arm/boot/dts/armada-370-rd.dts
-@@ -84,8 +84,6 @@ usb@51000 {
- 
- 			gpio-keys {
- 				compatible = "gpio-keys";
--				#address-cells = <1>;
--				#size-cells = <0>;
- 				button {
- 					label = "Software Button";
- 					linux,code = <KEY_POWER>;
-diff --git a/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi b/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi
-index cf7bffdd1c21..866b8630d407 100644
---- a/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi
-+++ b/arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi
-@@ -108,8 +108,6 @@ gpio-fan {
- 
+diff --git a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
+index 2b9bf8dd14ec..c2311733d2de 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts
+@@ -40,13 +40,13 @@ cpu@1 {
  	gpio-keys {
  		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
  
- 		button-power {
- 			label = "Power button";
-diff --git a/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi b/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi
-index 6c33e3ba4ffb..702a85af2078 100644
---- a/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi
-+++ b/arch/arm/boot/dts/armada-370-seagate-personal-cloud.dtsi
-@@ -83,8 +83,6 @@ regulator@1 {
+-		factory {
++		factory-key {
+ 			label = "factory";
+ 			linux,code = <BTN_0>;
+ 			gpios = <&pio 0 GPIO_ACTIVE_HIGH>;
+ 		};
  
- 	gpio-keys {
+-		wps {
++		wps-key {
+ 			label = "wps";
+ 			linux,code = <KEY_WPS_BUTTON>;
+ 			gpios = <&pio 102 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts b/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
+index 596c073d8b05..c28da9323a9c 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts
+@@ -42,13 +42,13 @@ gpio-keys {
  		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
+ 		poll-interval = <100>;
  
- 		button-power {
- 			label = "Power button";
-diff --git a/arch/arm/boot/dts/armada-xp-axpwifiap.dts b/arch/arm/boot/dts/armada-xp-axpwifiap.dts
-index 86a0ad9bd5cc..5a74197be0ad 100644
---- a/arch/arm/boot/dts/armada-xp-axpwifiap.dts
-+++ b/arch/arm/boot/dts/armada-xp-axpwifiap.dts
-@@ -71,8 +71,6 @@ ethernet@74000 {
+-		factory {
++		key-factory {
+ 			label = "factory";
+ 			linux,code = <BTN_0>;
+ 			gpios = <&pio 0 0>;
+ 		};
  
- 	gpio-keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
- 		pinctrl-0 = <&keys_pin>;
+-		wps {
++		key-wps {
+ 			label = "wps";
+ 			linux,code = <KEY_WPS_BUTTON>;
+ 			gpios = <&pio 102 0>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts
+index 44f6149c1307..28433b94f7c7 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dts
+@@ -21,7 +21,7 @@ cpu_crit: cpu_crit0 {
+ };
+ 
+ &gpio_keys {
+-	/delete-node/tablet_mode;
+-	/delete-node/volume_down;
+-	/delete-node/volume_up;
++	/delete-node/switch-tablet-mode;
++	/delete-node/switch-volume-down;
++	/delete-node/switch-volume-up;
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+index 9c75fbb31f98..d20378758213 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+@@ -53,7 +53,7 @@ gpio_keys: gpio-keys {
  		pinctrl-names = "default";
+ 		pinctrl-0 = <&gpio_keys_pins>;
  
-diff --git a/arch/arm/boot/dts/armada-xp-linksys-mamba.dts b/arch/arm/boot/dts/armada-xp-linksys-mamba.dts
-index 51b2eb8bb4fd..622ac40dd164 100644
---- a/arch/arm/boot/dts/armada-xp-linksys-mamba.dts
-+++ b/arch/arm/boot/dts/armada-xp-linksys-mamba.dts
-@@ -174,8 +174,6 @@ bm-bppi {
+-		lid {
++		switch-lid {
+ 			label = "Lid";
+ 			gpios = <&pio 69 GPIO_ACTIVE_LOW>;
+ 			linux,code = <SW_LID>;
+@@ -61,7 +61,7 @@ lid {
+ 			gpio-key,wakeup;
+ 		};
  
- 	gpio-keys {
- 		compatible = "gpio-keys";
--		#address-cells = <1>;
--		#size-cells = <0>;
- 		pinctrl-0 = <&keys_pin>;
+-		power {
++		switch-power {
+ 			label = "Power";
+ 			gpios = <&pio 14 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <KEY_POWER>;
+@@ -69,7 +69,7 @@ power {
+ 			gpio-key,wakeup;
+ 		};
+ 
+-		tablet_mode {
++		switch-tablet-mode {
+ 			label = "Tablet_mode";
+ 			gpios = <&pio 121 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <SW_TABLET_MODE>;
+@@ -77,13 +77,13 @@ tablet_mode {
+ 			gpio-key,wakeup;
+ 		};
+ 
+-		volume_down {
++		switch-volume-down {
+ 			label = "Volume_down";
+ 			gpios = <&pio 123 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_VOLUMEDOWN>;
+ 		};
+ 
+-		volume_up {
++		switch-volume-up {
+ 			label = "Volume_up";
+ 			gpios = <&pio 124 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_VOLUMEUP>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+index 2d7a193272ae..3ac83be53627 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+@@ -73,7 +73,7 @@ volume_buttons: volume-buttons {
  		pinctrl-names = "default";
+ 		pinctrl-0 = <&volume_button_pins>;
  
-diff --git a/arch/arm/boot/dts/armada-xp-openblocks-ax3-4.dts b/arch/arm/boot/dts/armada-xp-openblocks-ax3-4.dts
-index ff698d6ebb87..1ecf72a61bca 100644
---- a/arch/arm/boot/dts/armada-xp-openblocks-ax3-4.dts
-+++ b/arch/arm/boot/dts/armada-xp-openblocks-ax3-4.dts
-@@ -99,8 +99,6 @@ green_led {
+-		volume_down {
++		button-volume-down {
+ 			label = "Volume Down";
+ 			linux,code = <KEY_VOLUMEDOWN>;
+ 			debounce-interval = <100>;
+@@ -81,7 +81,7 @@ volume_down {
+ 			gpios = <&pio 6 GPIO_ACTIVE_LOW>;
+ 		};
  
- 			gpio-keys {
- 				compatible = "gpio-keys";
--				#address-cells = <1>;
--				#size-cells = <0>;
+-		volume_up {
++		button-volume-up {
+ 			label = "Volume Up";
+ 			linux,code = <KEY_VOLUMEUP>;
+ 			debounce-interval = <100>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
+index 28966a65391b..50a0dd36b5fb 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtsi
+@@ -45,7 +45,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pen_eject>;
  
- 				button-init {
- 					label = "Init Button";
+-		pen-insert {
++		switch-pen-insert {
+ 			label = "Pen Insert";
+ 			/* Insert = low, eject = high */
+ 			gpios = <&pio 6 GPIO_ACTIVE_LOW>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index b035e06840e6..b50261e8b9ed 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -144,7 +144,7 @@ wifi_wakeup: wifi-wakeup {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&wifi_pins_wakeup>;
+ 
+-		wowlan {
++		button-wowlan {
+ 			label = "Wake on WiFi";
+ 			gpios = <&pio 113 GPIO_ACTIVE_HIGH>;
+ 			linux,code = <KEY_WAKEUP>;
+diff --git a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
+index 7a717f926929..8ee1529683a3 100644
+--- a/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
++++ b/arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi
+@@ -28,7 +28,7 @@ gpio-keys {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&gpio_keys_default>;
+ 
+-		volume-up {
++		key-volume-up {
+ 			gpios = <&pio 42 GPIO_ACTIVE_LOW>;
+ 			label = "volume_up";
+ 			linux,code = <115>;
+@@ -36,7 +36,7 @@ volume-up {
+ 			debounce-interval = <15>;
+ 		};
+ 
+-		volume-down {
++		key-volume-down {
+ 			gpios = <&pio 43 GPIO_ACTIVE_LOW>;
+ 			label = "volume_down";
+ 			linux,code = <114>;
 -- 
 2.34.1
 
