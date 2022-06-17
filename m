@@ -1,188 +1,90 @@
-Return-Path: <SRS0=JVAn=WY=stwcx.xyz=patrick@kernel.org>
+Return-Path: <SRS0=L7aB=WY=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AEFAC433EF
-	for <soc@archiver.kernel.org>; Fri, 17 Jun 2022 16:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F438C43334
+	for <soc@archiver.kernel.org>; Fri, 17 Jun 2022 23:18:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 52376C3411F; Fri, 17 Jun 2022 16:42:43 +0000 (UTC)
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 57DA0C3411B; Fri, 17 Jun 2022 23:18:42 +0000 (UTC)
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AFC9DC3411B;
-	Fri, 17 Jun 2022 16:42:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AFC9DC3411B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=stwcx.xyz
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=stwcx.xyz
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.west.internal (Postfix) with ESMTP id 880EF320094E;
-	Fri, 17 Jun 2022 12:42:38 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 17 Jun 2022 12:42:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1655484158; x=1655570558; bh=AiSSKnRv3m
-	zrSKSMor1JpwujxpGQtnv79xXFLeYhgvM=; b=aWJ1WEAB7fpW3ksRDFuo+wlB7T
-	QyH5gRz+OrZHIEnuu1Q0h2c/jNLK6vfxIeok3dOj6duThJ4E2xe4xTeaJp52gPp3
-	BXg9EqYuyV6LxTIGh7zGbF48O8ySDN7sGi6sHJL3iQ7AGmof0Q3v+9uWE4lz81xQ
-	1mgnObakMLIyipm6DqmQ5qRZu1hwH09VL84Nq8Nqm7TlJ4r0tbK7tyXK9nWBtycJ
-	UUfHkijnECeXXTWD1H209NH+McAfaxZPwSdQy+1R8telkDSA3JfXUEWQ/tfq5U6X
-	S+fgOwlzMsRhH1IO8dO+nxk8xOsk+duLf3P7ohvHGvDJSGv+dRwrzNOKOd+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1655484158; x=1655570558; bh=AiSSKnRv3mzrSKSMor1JpwujxpGQ
-	tnv79xXFLeYhgvM=; b=WdbnG9Mxrwj0toMuApALwtgRZd3wp96RyLRMt1T1T178
-	xmszSIuCUxiyV6v0J0hTzzZCEf6MS3cG3qYp5FG2jFp1Cj0nKL3CUc17HdO8xTaR
-	2Nqx4O3GTSw9Meek3sVu4JbPm6pZpFg6h3t/rj7ZMLKEwSQPx9z+B5yT0tq+2Q+T
-	w7GzL6kczaTqJXVT8GVEix0X98I4foDSQi02NkZ1Tj2kYvy4h5C+E3irIy7lp+re
-	5fYnlOCqzk7okgLp2FYD7fLaJmf7Z9nEHqO7dLKCibtcd0Iz08iI4CQMrp7tHDwf
-	sCFWpd6XQVaq+iGXql1RbCPaQ2GW0cXO7+l+Nuymlg==
-X-ME-Sender: <xms:_K6sYhtK7HDaeNX45fyU_hOMZdqLBPxIAEvOpRyYjuR-WPoIZNL6Eg>
-    <xme:_K6sYqfrCWJe7BLcgJ69dNEOnXWiylMq0jwSj-dZZVVPAlZfzLLMmhiltn2boAXkx
-    3xcEdioSwrQxzC57fM>
-X-ME-Received: <xmr:_K6sYky4Ra-qIClGrA4jLZudJc3DLCVD-EAECpC6rJJeNJOpZwrVDJzoq4tVNltkQNK8m4cr3pHe7ffqTRBWFRz7Il0SmvZ4lGU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvhedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreer
-    tddtvdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkh
-    esshhtfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepjeejteelheelieejuddtudff
-    hfeuueefhfefleehveegvdeigfffheduleehlefhnecuffhomhgrihhnpehgihhthhhusg
-    drtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:_K6sYoMsN1fwFafBxX59k46vv3devjC-WHuIGGzm-SVErQGl5SgzHw>
-    <xmx:_K6sYh9qg5OFy7N2L4mWGMNhzujzp1YSr76PMN5PcH9NFmBZVkq4aw>
-    <xmx:_K6sYoWlxhduHsqMDjuI23Nh5ieZQqN-GwzLtT7Co8QRCym0PonHPg>
-    <xmx:_q6sYvejfzFvkJrNZt9n0skAMhKXbzD8OrVFLsrL0TSWh5chXTdYJg>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Jun 2022 12:42:36 -0400 (EDT)
-Date: Fri, 17 Jun 2022 11:42:35 -0500
-From: Patrick Williams <patrick@stwcx.xyz>
-To: Logananth Sundararaj <logananth13.hcl@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org, garnermic@gmail.com, thangavel.k@hcl.com,
-	naveen.mosess@hcl.com
-Subject: Re: [PATCH v2] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
-Message-ID: <Yqyu+y9ms/DmFCbJ@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220616120707.GA22590@logan-ThinkPad-T14-Gen-1>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6FD0EC3411D
+	for <soc@kernel.org>; Fri, 17 Jun 2022 23:18:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6FD0EC3411D
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f169.google.com with SMTP id x138so5318206pfc.12
+        for <soc@kernel.org>; Fri, 17 Jun 2022 16:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=dnlvDERG8oowX1HgALJdegPeU3FrNxjdXcUUPk217Kc=;
+        b=dYgOoOJ+N1WQxKWgcZXmEa3c1hdI0FiUiq4kjgxMtELC1+LGpzl7e3X18OpxsPSLM6
+         Z/Md1Q8QQHTehEao5xTscQMo7T5Lz4/pzDY3ntkLraiKoKzWL7ROaL2cao0FuDoT9stK
+         Y6P4ABr9fN3CpUeRy0JOTZbpI9REGz0+47sTJIsSUOPeGNaoMlC+f+NCcpS6t8dOO/i0
+         k26TzfWBvaDMUogUbaw/ePh4I1gdsJWFEU4PXk4hYL0DfC4g6chOMd3nJE1h86wiO1et
+         1I9ZkUSlHIQ81Yj27Bv60tr/T2MsJF/eku397IM1VZwlVgBppgapkFlTfY5NfCWNSsqt
+         MDnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dnlvDERG8oowX1HgALJdegPeU3FrNxjdXcUUPk217Kc=;
+        b=3U/hMhJE6+BUKB58JNxckW963mC9ns80NhBcj1OUgYH2t8jRq/r280pkYcvZ6Flqum
+         euh7EC8WCJmjV9c4P3Ri65KUR1DCzN9xWJXLR2Og7kf/ixA0/j6qHwSx2J3BbPUKFkwL
+         r38K4LBzRlm7Kc+Fn2x0NT15NazSny+yrS9wVnZer8efFpOTgImhgznTcfefQlNphnKp
+         mGzbx8ex08KRTkK4WpQGogBNuZqLOENtKgFHuKKPmKGradfJTbvi+NJuto88EjqT1K9c
+         8SUyGYnZchPV+kXxlXROYV6PKeb1/qLuYNwkjEPcESPlFosyGzxwakGp7Pg/TwfMXgxN
+         mxFg==
+X-Gm-Message-State: AJIora8IOCbK/DWbMHRUTEQY2lagJsYj9XjsFdCgOe2/rUWTEhrKyuJ/
+	RdfAClPPJ/LZtuIS4HldM7h/Mw==
+X-Google-Smtp-Source: AGRyM1u/txoKu7R37NfERg5G/UkpHCJc9k3H5j4ALGDpTt/qdkZUdeh8lUa7533JzX4jdxzHyO1UDw==
+X-Received: by 2002:a05:6a00:2410:b0:522:9837:581f with SMTP id z16-20020a056a00241000b005229837581fmr12316295pfh.11.1655507920906;
+        Fri, 17 Jun 2022 16:18:40 -0700 (PDT)
+Received: from [172.31.235.92] ([216.9.110.6])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903120400b001620eb3a2d6sm4088846plh.203.2022.06.17.16.18.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 16:18:40 -0700 (PDT)
+Message-ID: <542f4f86-7bf9-b5fb-16d2-849121b6ee6d@linaro.org>
+Date: Fri, 17 Jun 2022 16:18:37 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="5N0BVpXlyV7XdVV7"
-Content-Disposition: inline
-In-Reply-To: <20220616120707.GA22590@logan-ThinkPad-T14-Gen-1>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 17/40] arm64: dts: mediatek: mt7622-rfb1: correct
+ gpio-keys properties
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>, arm@kernel.org,
+ soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-17-krzysztof.kozlowski@linaro.org>
+ <fcc5f00b-0776-9511-845a-5eac5d4c7876@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fcc5f00b-0776-9511-845a-5eac5d4c7876@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 17/06/2022 03:41, Matthias Brugger wrote:
+> On 16/06/2022 02:53, Krzysztof Kozlowski wrote:
+>> gpio-keys children do not use unit addresses.
+>>
+> 
+> Is it me or doesn't the commit message match the actual commit? Change looks 
+> good, but message puzzles me.
+> 
+
+Indeed, wrong commit msg. Thanks for spotting it, I will send a v4 of
+this patch alone.
 
 
---5N0BVpXlyV7XdVV7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jun 16, 2022 at 05:37:07PM +0530, Logananth Sundararaj wrote:
-> The Yosemite V3.5 is a facebook multi-node server
-> platform that host four OCP server. The BMC
-> in the Yosemite V3.5 platform based on AST2600 SoC.
->=20
-> This patch adds linux device tree entry related to
-> Yosemite V3.5 specific devices connected to BMC SoC.
->=20
-> Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
->=20
-> ---
-> --- v2 - Enabled i2c drivers.
-> --- v1 - Initial draft.
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 277 ++++++++++++++++++
->  2 files changed, 278 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-
-A few comments below.
-
-=2E..
-> +&uart5 {
-> +	status =3D "okay";
-> +	/* Workaround for AST2600 A0 */
-> +	compatible =3D "snps,dw-apb-uart";
-> +};
-
-Is this comment accurate?  Are we using A0 hardware on this system?
-
-> +&fmc {
-> +	status =3D "okay";
-> +	reg =3D <0x1e620000 0xc4>, <0x20000000 0x8000000>;
-> +	flash@0 {
-> +		status =3D "okay";
-> +		m25p,fast-read;
-> +		label =3D "spi0.1";
-> +		spi-max-frequency =3D <50000000>;
-> +		spi-tx-bus-width =3D <2>;
-> +		spi-rx-bus-width =3D <2>;
-> +		#include "openbmc-flash-layout-64.dtsi"
-> +	};
-> +};
-
-Aren't there two SPI flashes?  It seems like it based on:
-https://github.com/facebook/openbmc-linux/blob/dev-5.10/arch/arm/boot/dts/a=
-speed-bmc-facebook-fby35.dts#L162
-
-> +
-> +&spi1 {
-> +	status =3D "okay";
-> +	pinctrl-names =3D "default";
-> +	pinctrl-0 =3D <&pinctrl_spi1_default>;
-> +
-> +	flash@0 {
-> +		status =3D "okay";
-> +		m25p,fast-read;
-> +		label =3D "pnor";
-> +		spi-rx-bus-width =3D <4>;
-> +		spi-max-frequency =3D <100000000>;
-> +	};
-> +};
-
-What is SPI1 used for?  I don't see it in the facebook/openbmc-linux
-DTS.
-
-> --=20
-> 2.17.1
->=20
-
-Are we missing the pwm/tach support?  Or is that still not upstream from
-Aspeed?
-
---=20
-Patrick Williams
-
---5N0BVpXlyV7XdVV7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmKsrvsACgkQqwNHzC0A
-wRnIcQ//VcCo6ddGOZm0/gcObmyDc7rvp8grACdL5h0TbcdIsfsewa4a+/bp6ZmV
-flPUo9HCS4mqkHhip2YZbIfiv4ksneGst6p3LupEwLkba87dtBqgrbMhEGTcrjiz
-fJ3DfwnbPrmexUY3UiNZYifiej2L4PwKk/exlj2hx5VKyErHns+T3vuFov/LkLQX
-B5o1KWNis2E6Luj8olDfdnHQm7LR5Xsi7j9G1ZAYyb8Uro5Osja/GpAkqOxMKWoM
-ZpaavyncNeSBiJH6gMYDN2qEwhuWgMVd1nh0OEbNEk0ZfdySMjLHmHqTBX2fXQ/f
-OchWoLQVoC9Je9k8DAkmJ/cw5n9vOx63CyFezeuI5sFPU8S7DLXH1YFZGkES9cF7
-mw+Waxpho39r3wTNMfA6gM1dQ7L+TJxXrjH6W3FfwD6100611QdKX6tfIjiVMAal
-7Urzckk+EN2G5AbMnuede7Xfm2iRrZjSwDkG32/xSo7XtN0ZN/X9E4YWVWktxJ8E
-+pi0fLHaRl2jcgKWYKQGhQc+BTZxS6b1cjJQSNuJSTDaeyQLFAEyyWr2vXGv0OUv
-lYqB2y2bVrVX1VFHOsO+7eUyT84nekhmEbKJ6Yu95Wr1PgXaQRsQ4loA/aqHPqhY
-sb2g9WrcUvuycVQbXM4pKwwBfayoj4j8APpfFLqIJ9yiHk9R/tA=
-=aJmc
------END PGP SIGNATURE-----
-
---5N0BVpXlyV7XdVV7--
+Best regards,
+Krzysztof
