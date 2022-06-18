@@ -1,129 +1,71 @@
-Return-Path: <SRS0=wlHe=WZ=ti.com=nm@kernel.org>
+Return-Path: <SRS0=frgf=WZ=aharai.org.il=wordpress@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04288C433EF
-	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:16:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4304CC433EF
+	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:30:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BCC68C3411C; Sat, 18 Jun 2022 03:16:32 +0000 (UTC)
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 11CD5C341C0; Sat, 18 Jun 2022 03:30:54 +0000 (UTC)
+Received: from mail-yb1-f194.google.com (mail-yb1-f194.google.com [209.85.219.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E325C3411B;
-	Sat, 18 Jun 2022 03:16:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E325C3411B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I3GSln015032;
-	Fri, 17 Jun 2022 22:16:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1655522188;
-	bh=zTdIw9iN79bljgaLtUEHHav7RH26oRtCIOTmQsJUuTU=;
-	h=Date:From:To:CC:Subject;
-	b=jDZYPLbwU/ohWcg/TGJ3wVR84PFtMNoNmsrLpqx1oAyUFL/civaieV0vC3B3bChgL
-	 9NSZXc6fAevsIaylSnYmdyPoXbV2eXv0TLkjakl2zoUIfL+KwjtEvyWL99zPT+Bc+7
-	 CUn0ZpaZzvzaHN6G+XK+DfzJbWQbXR8+wceuCxnk=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I3GSS2045807
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 17 Jun 2022 22:16:28 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 22:16:27 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 22:16:28 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I3GRUa046331;
-	Fri, 17 Jun 2022 22:16:28 -0500
-Date: Fri, 17 Jun 2022 22:16:27 -0500
-From: Nishanth Menon <nm@ti.com>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL] arm64: dts: TI K3 fixes for v5.19
-Message-ID: <20220618031627.xxvscc22c6doaa3t@kahuna>
+	by smtp.kernel.org (Postfix) with ESMTPS id 430E8C3411C
+	for <soc@kernel.org>; Sat, 18 Jun 2022 03:30:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 430E8C3411C
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=aharai.org.il
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=aharai.org.il
+Received: by mail-yb1-f194.google.com with SMTP id l11so10142113ybu.13
+        for <soc@kernel.org>; Fri, 17 Jun 2022 20:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aharai.org.il; s=google;
+        h=from:mime-version:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ankteHHF1h867JYGe0JTuOA2V3tLGKIH5w0mJlEel/8=;
+        b=Z+G7SBA1WsSK7ulksLz3TgNfJ8IBUB1YVTu5Rmv8PCxMWJmMUprH4fVPhSYM9pkgtr
+         79pWsxUtDQsbUS66dbwi6m9wkW8LSiKAVlARXZ1FxHW6jgx68qUknRwDzbZbnJWig66U
+         hbo6JuDybHRxcd89Ai+U1NcM6EIQnnlhbQwYWbnCAZUom6ZUpSMsoZDr3eZvRHrsPCQF
+         2xolPZVbkR16T43CWzcGg8kvd1ZYM/zlOi2aifrZA2QwZtJXkSafR5erOSqUaAxFua6A
+         wMykN7OOkAndxnaaTDdrGfu247AD1K+6JBrVLUr3jr3YCQrf/VIl+BXzCz+9v0YM2c5G
+         Vd3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:mime-version:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ankteHHF1h867JYGe0JTuOA2V3tLGKIH5w0mJlEel/8=;
+        b=wpXMUqRuChXJCrQ7tlxhK7MWRDS12/oxowWRZJ3uVAfrTlVSj1XpLfRbHunwv02+Ll
+         cle34VqyUNCfLAKkpHduzo42ALEdtk3MuWLmVoE5m6lSaVEyDouHHJX2frb0ydNR6y0v
+         LlcY6EWUArNEewh7pJeBo0f1YFFzN2YQoN7wOAREbVXu9CZCYJfUxM2gimkiUj+zZ7WZ
+         Lk8pkf33KwfoyEv9N4wa/sTy8+kw2qT3TMgMhJtzTvpTkcAvcibjFH9sZrXnLFe0Cls7
+         z5u5ILjNMRc+prRy+7aJMhUtbqTVIPQPZzcIHe5hvtjDx514CbXcn2wwoOsJB5HpMZ7j
+         wFHQ==
+X-Gm-Message-State: AJIora9wLM5ZoSx1mM7fpW8C1yNkBNzmiJ3VYimCrSGrq33fzX2nvh0A
+	tB3G7BTyO9MtOtBKnIvBvvLgHHqRmCdAnNxaso6JOpr5nQlo
+X-Google-Smtp-Source: AGRyM1uo13ZUy/Of6BUCJx1/GxhYrJdGjn+PN3iBmr1M1Ph9xYP3KRqcmzXzBuYRPzzEzYbLBNHvhRYKF0Whwe8oHP4=
+X-Received: by 2002:a25:901:0:b0:668:c5b1:22c2 with SMTP id
+ 1-20020a250901000000b00668c5b122c2mr4975902ybj.401.1655523052103; Fri, 17 Jun
+ 2022 20:30:52 -0700 (PDT)
+Received: from 61950379933 named unknown by gmailapi.google.com with HTTPREST;
+ Fri, 17 Jun 2022 20:30:51 -0700
+From: =?UTF-8?B?15DXqteoINeQ15fXqNeZ15kh?= <wordpress@aharai.org.il>
+X-Mailer: WPMailSMTP/Mailer/gmail 2.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bu67thgfnt2zdkmk"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Date: Fri, 17 Jun 2022 20:30:51 -0700
+Message-ID: <CAH_EgsbtJN0xgLBsV70DUQvyxF1MiXkbjk3czO7_2vQJ3qpX-A@mail.gmail.com>
+Subject: =?UTF-8?B?16rXldeT15Qg16LXnCDXpNeg15nXmdeq15og15zXntei16jXmiDXlNeS15nXldehINeV?=
+	=?UTF-8?B?15TXlNep157XlCDXqdecINeQ15fXqNeZ15k=?=
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
---bu67thgfnt2zdkmk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi ARM SoC maintainers,
-
-Please pull the following for 5.19 cycle as these fixup critical boot
-failures noticed on 5.19-rc1 testing.
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-=
-fixes-for-v5.19
-
-for you to fetch changes up to 0c0af88f3f318e73237f7fadd02d0bf2b6c996bb:
-
-  arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode (2022-0=
-6-17 20:24:01 -0500)
-
-----------------------------------------------------------------
-Devicetree fixes for TI K3 platforms for v5.19
-
-Critical fixes for the following:
-* Boot failure on J721s2 (overlap GIC memory map)
-* AM64 boot fails on highspeed cards (SoC characterization updates)
-
-----------------------------------------------------------------
-Aswath Govindraju (1):
-      arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
-
-Matt Ranostay (1):
-      arm64: dts: ti: k3-j721s2: Fix overlapping GICD memory region
-
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi   | 2 --
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
-
---bu67thgfnt2zdkmk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmKtQ4UACgkQ3bWEnRc2
-JJ3t0hAAgiIZ8GCHi/gXXVmoAV2H68nNmPsG7xfXqCfZLTf90P9IobHgMBA/fFix
-PQEVOe4+YFLSM9IuEtq0Bz1RgF31ckW98ZvsWWH+Oo5sACyr1TrIpbXo3lwGLUIH
-7VkJDr/xHwMRdOxuAqru/7WgJxtoS72xUwySImkldUM8IfPbRP2w/g5ZbGiNzLR/
-CV0Dsb4TNHhvyJ7ARQ/Q/xCaH6OmopgMJ4LuTdQl77FEXSwBg4+dntq5nxFKCz3d
-/RjitmUOalOZWSajWyMEnBSNCAv1Jx2HRxIb89TOVrhU+j4xSiV/LJFA5zamRU55
-DZIAwVtYrtJ1NN2p8aN1YJx/sqaVsCMZXIuKvRflOOL2koMmWa1LxrNB7e6/1BUb
-s3gLnUmwEaWR2e0L0C4WG4mAgMvP9EBgw9Smn0hsZyPA1wHh8JogtR264xMYIAnd
-GJaBqAaXrMCMghjek8LVQUkDyMgYCli20n+898vKHr9F3ru/YY9wGmJSLPr1hksU
-m4zD4FPOGtOfOURu6CMZpYvRoaYPMui7zUKXgQd9GFgaxoyXiHz2WZF6dke5XPEB
-0FkJmMCnvi3+8MGjgbjPK44A0hE/dYb/EI+enm+2GwuTu+/Iyu0cnJXCuMEqJPyQ
-9p44Im2N+fXN5h8K4l7r8htBvBUGqL5/X++oy0PlgnPjojpCSeU=
-=vabo
------END PGP SIGNATURE-----
-
---bu67thgfnt2zdkmk--
+16nXnNeV150s8J+SnyBHcmFjZSBqdXN0IHZpZXdlZCB5b3VyIHByb2ZpbGUhIENsaWNrIGhlcmU6
+DQpodHRwczovL3N3ZWV0a2l0dHkyMi5wYWdlLmxpbmsvZU5oND9mOW80YiDwn5KfICB1Z2Q3azAN
+Cteq15XXk9eUINei15wg16TXoNeZ15nXqteaINec157Xoteo15og15TXkteZ15XXoSDXldeU15TX
+qdee15Qg16nXnCDXkNeX16jXmdeZIQ0K15DXoNeVINee15DXqdeo15nXnSDXkNeqINen15HXnNeq
+INen15XXqNeV16og15TXl9eZ15nXnSDXldeg15nXpteV16gg15DXmdeq15og16fXqdeoINeR15nX
+nteZ150g15TXp9eo15XXkdeZ150g15zXlNee16nXmiDXlNeq15TXnNeZ15ouDQrXoNeZ16rXnyDX
+nNep15zXldeXINen15XXqNeV16og15fXmdeZ150g15zXm9eq15XXkdeqOiBjdi5hc3Npc3RAYWhh
+cmFpLm9yZy5pbA0KDQrXkdeU16bXnNeX15QsDQoh16bXldeV16og15TXkteZ15XXoSDXldeU15TX
+qdee15Qg16nXnCDXkNeX16jXmdeZDQo=
