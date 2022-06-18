@@ -1,90 +1,109 @@
-Return-Path: <SRS0=L7aB=WY=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=wlHe=WZ=ti.com=nm@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F438C43334
-	for <soc@archiver.kernel.org>; Fri, 17 Jun 2022 23:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E19CCA479
+	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:00:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 57DA0C3411B; Fri, 17 Jun 2022 23:18:42 +0000 (UTC)
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 6E327C3411E; Sat, 18 Jun 2022 03:00:31 +0000 (UTC)
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6FD0EC3411D
-	for <soc@kernel.org>; Fri, 17 Jun 2022 23:18:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6FD0EC3411D
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id x138so5318206pfc.12
-        for <soc@kernel.org>; Fri, 17 Jun 2022 16:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=dnlvDERG8oowX1HgALJdegPeU3FrNxjdXcUUPk217Kc=;
-        b=dYgOoOJ+N1WQxKWgcZXmEa3c1hdI0FiUiq4kjgxMtELC1+LGpzl7e3X18OpxsPSLM6
-         Z/Md1Q8QQHTehEao5xTscQMo7T5Lz4/pzDY3ntkLraiKoKzWL7ROaL2cao0FuDoT9stK
-         Y6P4ABr9fN3CpUeRy0JOTZbpI9REGz0+47sTJIsSUOPeGNaoMlC+f+NCcpS6t8dOO/i0
-         k26TzfWBvaDMUogUbaw/ePh4I1gdsJWFEU4PXk4hYL0DfC4g6chOMd3nJE1h86wiO1et
-         1I9ZkUSlHIQ81Yj27Bv60tr/T2MsJF/eku397IM1VZwlVgBppgapkFlTfY5NfCWNSsqt
-         MDnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dnlvDERG8oowX1HgALJdegPeU3FrNxjdXcUUPk217Kc=;
-        b=3U/hMhJE6+BUKB58JNxckW963mC9ns80NhBcj1OUgYH2t8jRq/r280pkYcvZ6Flqum
-         euh7EC8WCJmjV9c4P3Ri65KUR1DCzN9xWJXLR2Og7kf/ixA0/j6qHwSx2J3BbPUKFkwL
-         r38K4LBzRlm7Kc+Fn2x0NT15NazSny+yrS9wVnZer8efFpOTgImhgznTcfefQlNphnKp
-         mGzbx8ex08KRTkK4WpQGogBNuZqLOENtKgFHuKKPmKGradfJTbvi+NJuto88EjqT1K9c
-         8SUyGYnZchPV+kXxlXROYV6PKeb1/qLuYNwkjEPcESPlFosyGzxwakGp7Pg/TwfMXgxN
-         mxFg==
-X-Gm-Message-State: AJIora8IOCbK/DWbMHRUTEQY2lagJsYj9XjsFdCgOe2/rUWTEhrKyuJ/
-	RdfAClPPJ/LZtuIS4HldM7h/Mw==
-X-Google-Smtp-Source: AGRyM1u/txoKu7R37NfERg5G/UkpHCJc9k3H5j4ALGDpTt/qdkZUdeh8lUa7533JzX4jdxzHyO1UDw==
-X-Received: by 2002:a05:6a00:2410:b0:522:9837:581f with SMTP id z16-20020a056a00241000b005229837581fmr12316295pfh.11.1655507920906;
-        Fri, 17 Jun 2022 16:18:40 -0700 (PDT)
-Received: from [172.31.235.92] ([216.9.110.6])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170903120400b001620eb3a2d6sm4088846plh.203.2022.06.17.16.18.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 16:18:40 -0700 (PDT)
-Message-ID: <542f4f86-7bf9-b5fb-16d2-849121b6ee6d@linaro.org>
-Date: Fri, 17 Jun 2022 16:18:37 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 17/40] arm64: dts: mediatek: mt7622-rfb1: correct
- gpio-keys properties
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 29D90C3411B;
+	Sat, 18 Jun 2022 03:00:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29D90C3411B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I30PZs078245;
+	Fri, 17 Jun 2022 22:00:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1655521225;
+	bh=+5VI5pZBo8bqwisTLTBIUAHES2bOLGNcpeVYMMWFTD0=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=kALr+PVdXblpTuhflIf9EavY8lhetJwxWDxYLBs7gkX1RbYVeZbRi8o3qMxnJLOzM
+	 CorkOh+8h6AeVnIOWUvXCMqwFUjcJQO7nle7aKTUrnMpwxAfdzz5NFPpJy0FtKi/EE
+	 ZJUKjjj5+ZexT0WPuY/z1yoDOS1VExvDGI2fEPYg=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I30PXv070105
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 17 Jun 2022 22:00:25 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
+ Jun 2022 22:00:25 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 17 Jun 2022 22:00:25 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I30Poq125209;
+	Fri, 17 Jun 2022 22:00:25 -0500
+From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>, arm@kernel.org,
- soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-17-krzysztof.kozlowski@linaro.org>
- <fcc5f00b-0776-9511-845a-5eac5d4c7876@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fcc5f00b-0776-9511-845a-5eac5d4c7876@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Tony Lindgren <tony@atomide.com>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <arm@kernel.org>,
+        <olof@lixom.net>, <devicetree@vger.kernel.org>, <soc@kernel.org>,
+        <robh+dt@kernel.org>, <vigneshr@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        <linux-arm-kernel@lists.infradead.org>, <kristo@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>
+CC: Nishanth Menon <nm@ti.com>
+Subject: Re: (subset) [PATCH 1/3] arm64: dts: ti: adjust whitespace around '='
+Date: Fri, 17 Jun 2022 22:00:15 -0500
+Message-ID: <165552085007.28094.12509530167428789527.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220526204139.831895-1-krzysztof.kozlowski@linaro.org>
+References: <20220526204139.831895-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 17/06/2022 03:41, Matthias Brugger wrote:
-> On 16/06/2022 02:53, Krzysztof Kozlowski wrote:
->> gpio-keys children do not use unit addresses.
->>
+Hi Krzysztof Kozlowski,
+
+On Thu, 26 May 2022 22:41:36 +0200, Krzysztof Kozlowski wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
 > 
-> Is it me or doesn't the commit message match the actual commit? Change looks 
-> good, but message puzzles me.
 > 
 
-Indeed, wrong commit msg. Thanks for spotting it, I will send a v4 of
-this patch alone.
+I have applied the following to branch ti-k3-dts-next on [1].
 
+[1/3] arm64: dts: ti: Adjust whitespace around '='
+      commit: 5888f1ed173e78fb06ebd2aae61061166dd6b359
 
-Best regards,
-Krzysztof
+I have applied the following to branch ti-keystone-dts-next on [1].
+
+[3/3] ARM: dts: keystone: adjust whitespace around '='
+      commit: 3ea73bf02225ad433e7cfbf8427b08aa8c593775
+
+Thank you!
+
+Tony: I think it is better if you pick up:
+https://lore.kernel.org/all/20220526204139.831895-2-krzysztof.kozlowski@linaro.org/
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+
