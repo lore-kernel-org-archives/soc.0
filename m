@@ -4,58 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E19CCA479
-	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62007C43334
+	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:02:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6E327C3411E; Sat, 18 Jun 2022 03:00:31 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	id 25696C3411E; Sat, 18 Jun 2022 03:02:56 +0000 (UTC)
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 29D90C3411B;
-	Sat, 18 Jun 2022 03:00:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29D90C3411B
+	by smtp.kernel.org (Postfix) with ESMTPS id F14FFC3411B;
+	Sat, 18 Jun 2022 03:02:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F14FFC3411B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I30PZs078245;
-	Fri, 17 Jun 2022 22:00:25 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I32Nt4004650;
+	Fri, 17 Jun 2022 22:02:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1655521225;
-	bh=+5VI5pZBo8bqwisTLTBIUAHES2bOLGNcpeVYMMWFTD0=;
+	s=ti-com-17Q1; t=1655521343;
+	bh=v9iLe16OQzDjus8PgEyzt81ju785zygpn75Qb7cPKDk=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=kALr+PVdXblpTuhflIf9EavY8lhetJwxWDxYLBs7gkX1RbYVeZbRi8o3qMxnJLOzM
-	 CorkOh+8h6AeVnIOWUvXCMqwFUjcJQO7nle7aKTUrnMpwxAfdzz5NFPpJy0FtKi/EE
-	 ZJUKjjj5+ZexT0WPuY/z1yoDOS1VExvDGI2fEPYg=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I30PXv070105
+	b=ubm9+IAhGGTk3kdTt5x7vdcv21zn8SduavN1QPsDFtatpMEQLnnpq14kmxzjhSdoM
+	 EhSYzwprF+3qoaWgxqEa7tkCA7AfNzT0CIUyyPN2V1vMiSYZKDtU+T7Pvq2yIkEfs4
+	 7jCtmDUFYShPMx+ispwTz24Ou/91SMS8cN3blxkI=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I32NTI008896
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 17 Jun 2022 22:00:25 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+	Fri, 17 Jun 2022 22:02:23 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 22:00:25 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 22:02:22 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 22:00:25 -0500
+ Frontend Transport; Fri, 17 Jun 2022 22:02:22 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I30Poq125209;
-	Fri, 17 Jun 2022 22:00:25 -0500
+	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I32MBg024730;
+	Fri, 17 Jun 2022 22:02:22 -0500
 From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: Tony Lindgren <tony@atomide.com>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <arm@kernel.org>,
-        <olof@lixom.net>, <devicetree@vger.kernel.org>, <soc@kernel.org>,
-        <robh+dt@kernel.org>, <vigneshr@ti.com>, Arnd Bergmann <arnd@arndb.de>,
-        <linux-arm-kernel@lists.infradead.org>, <kristo@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>
-CC: Nishanth Menon <nm@ti.com>
-Subject: Re: (subset) [PATCH 1/3] arm64: dts: ti: adjust whitespace around '='
-Date: Fri, 17 Jun 2022 22:00:15 -0500
-Message-ID: <165552085007.28094.12509530167428789527.b4-ty@ti.com>
+To: <krzysztof.kozlowski@linaro.org>, <olof@lixom.net>, <soc@kernel.org>,
+        Arnd
+ Bergmann <arnd@arndb.de>, <arm@kernel.org>
+CC: Nishanth Menon <nm@ti.com>, <linux-input@vger.kernel.org>,
+        <khuong@os.amperecomputing.com>, <heiko@sntech.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <jonathanh@nvidia.com>, <sebastian.hesselbarth@gmail.com>,
+        <agross@kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <tony@atomide.com>,
+        <nicolas.ferre@microchip.com>, <joel@jms.id.au>,
+        <linux-arm-msm@vger.kernel.org>, <robh+dt@kernel.org>,
+        <bcousson@baylibre.com>, <thierry.reding@gmail.com>,
+        <claudiu.beznea@microchip.com>, <vigneshr@ti.com>,
+        <bjorn.andersson@linaro.org>, <openbmc@lists.ozlabs.org>,
+        <peda@axentia.se>, <andrew@lunn.ch>, <linux-aspeed@lists.ozlabs.org>,
+        <linus.walleij@linaro.org>, <festevam@gmail.com>,
+        <xuwei5@hisilicon.com>, <alexandre.belloni@bootlin.com>,
+        <leoyang.li@nxp.com>, <michal.simek@xilinx.com>, <andrew@aj.id.au>,
+        <kristo@kernel.org>, <linux-imx@nxp.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <j.neuschaefer@gmx.net>, <gregory.clement@bootlin.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>, <linux@armlinux.org.uk>,
+        <kernel@pengutronix.de>, <dmitry.torokhov@gmail.com>,
+        <linux-tegra@vger.kernel.org>
+Subject: Re: (subset) [PATCH v3 00/40] dt-bindings: input: gpio-keys: rework matching children
+Date: Fri, 17 Jun 2022 22:02:21 -0500
+Message-ID: <165552126299.28422.3856100388848453087.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220526204139.831895-1-krzysztof.kozlowski@linaro.org>
-References: <20220526204139.831895-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,27 +83,22 @@ X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
 Hi Krzysztof Kozlowski,
 
-On Thu, 26 May 2022 22:41:36 +0200, Krzysztof Kozlowski wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
+On Wed, 15 Jun 2022 17:52:24 -0700, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> 1. dt-bindings: rebased on top of Rob's:
+>    https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
 > 
+> 2. DTS patches are independent. They can be picked up directly by sub-arch
+>    maintainers, by Arnd or Olof, or eventually by me (if you wish).
 > 
+> [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
-
-[1/3] arm64: dts: ti: Adjust whitespace around '='
-      commit: 5888f1ed173e78fb06ebd2aae61061166dd6b359
-
-I have applied the following to branch ti-keystone-dts-next on [1].
-
-[3/3] ARM: dts: keystone: adjust whitespace around '='
-      commit: 3ea73bf02225ad433e7cfbf8427b08aa8c593775
-
 Thank you!
 
-Tony: I think it is better if you pick up:
-https://lore.kernel.org/all/20220526204139.831895-2-krzysztof.kozlowski@linaro.org/
+[29/40] arm64: dts: ti: align gpio-key node names with dtschema
+        commit: 85423386c9763fb20159892631eccc481a2d9b71
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
