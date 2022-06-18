@@ -4,121 +4,126 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62007C43334
-	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:02:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04288C433EF
+	for <soc@archiver.kernel.org>; Sat, 18 Jun 2022 03:16:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 25696C3411E; Sat, 18 Jun 2022 03:02:56 +0000 (UTC)
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	id BCC68C3411C; Sat, 18 Jun 2022 03:16:32 +0000 (UTC)
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F14FFC3411B;
-	Sat, 18 Jun 2022 03:02:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F14FFC3411B
+	by smtp.kernel.org (Postfix) with ESMTPS id 9E325C3411B;
+	Sat, 18 Jun 2022 03:16:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E325C3411B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I32Nt4004650;
-	Fri, 17 Jun 2022 22:02:23 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25I3GSln015032;
+	Fri, 17 Jun 2022 22:16:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1655521343;
-	bh=v9iLe16OQzDjus8PgEyzt81ju785zygpn75Qb7cPKDk=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=ubm9+IAhGGTk3kdTt5x7vdcv21zn8SduavN1QPsDFtatpMEQLnnpq14kmxzjhSdoM
-	 EhSYzwprF+3qoaWgxqEa7tkCA7AfNzT0CIUyyPN2V1vMiSYZKDtU+T7Pvq2yIkEfs4
-	 7jCtmDUFYShPMx+ispwTz24Ou/91SMS8cN3blxkI=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I32NTI008896
+	s=ti-com-17Q1; t=1655522188;
+	bh=zTdIw9iN79bljgaLtUEHHav7RH26oRtCIOTmQsJUuTU=;
+	h=Date:From:To:CC:Subject;
+	b=jDZYPLbwU/ohWcg/TGJ3wVR84PFtMNoNmsrLpqx1oAyUFL/civaieV0vC3B3bChgL
+	 9NSZXc6fAevsIaylSnYmdyPoXbV2eXv0TLkjakl2zoUIfL+KwjtEvyWL99zPT+Bc+7
+	 CUn0ZpaZzvzaHN6G+XK+DfzJbWQbXR8+wceuCxnk=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25I3GSS2045807
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 17 Jun 2022 22:02:23 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+	Fri, 17 Jun 2022 22:16:28 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 17
- Jun 2022 22:02:22 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 22:16:27 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 17 Jun 2022 22:02:22 -0500
+ Frontend Transport; Fri, 17 Jun 2022 22:16:28 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I32MBg024730;
-	Fri, 17 Jun 2022 22:02:22 -0500
+	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25I3GRUa046331;
+	Fri, 17 Jun 2022 22:16:28 -0500
+Date: Fri, 17 Jun 2022 22:16:27 -0500
 From: Nishanth Menon <nm@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: <krzysztof.kozlowski@linaro.org>, <olof@lixom.net>, <soc@kernel.org>,
-        Arnd
- Bergmann <arnd@arndb.de>, <arm@kernel.org>
-CC: Nishanth Menon <nm@ti.com>, <linux-input@vger.kernel.org>,
-        <khuong@os.amperecomputing.com>, <heiko@sntech.de>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <jonathanh@nvidia.com>, <sebastian.hesselbarth@gmail.com>,
-        <agross@kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <tony@atomide.com>,
-        <nicolas.ferre@microchip.com>, <joel@jms.id.au>,
-        <linux-arm-msm@vger.kernel.org>, <robh+dt@kernel.org>,
-        <bcousson@baylibre.com>, <thierry.reding@gmail.com>,
-        <claudiu.beznea@microchip.com>, <vigneshr@ti.com>,
-        <bjorn.andersson@linaro.org>, <openbmc@lists.ozlabs.org>,
-        <peda@axentia.se>, <andrew@lunn.ch>, <linux-aspeed@lists.ozlabs.org>,
-        <linus.walleij@linaro.org>, <festevam@gmail.com>,
-        <xuwei5@hisilicon.com>, <alexandre.belloni@bootlin.com>,
-        <leoyang.li@nxp.com>, <michal.simek@xilinx.com>, <andrew@aj.id.au>,
-        <kristo@kernel.org>, <linux-imx@nxp.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <j.neuschaefer@gmx.net>, <gregory.clement@bootlin.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>, <linux@armlinux.org.uk>,
-        <kernel@pengutronix.de>, <dmitry.torokhov@gmail.com>,
-        <linux-tegra@vger.kernel.org>
-Subject: Re: (subset) [PATCH v3 00/40] dt-bindings: input: gpio-keys: rework matching children
-Date: Fri, 17 Jun 2022 22:02:21 -0500
-Message-ID: <165552126299.28422.3856100388848453087.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>
+Subject: [GIT PULL] arm64: dts: TI K3 fixes for v5.19
+Message-ID: <20220618031627.xxvscc22c6doaa3t@kahuna>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bu67thgfnt2zdkmk"
+Content-Disposition: inline
+User-Agent: NeoMutt/20171215
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Krzysztof Kozlowski,
+--bu67thgfnt2zdkmk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 15 Jun 2022 17:52:24 -0700, Krzysztof Kozlowski wrote:
-> Merging
-> =======
-> 1. dt-bindings: rebased on top of Rob's:
->    https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
-> 
-> 2. DTS patches are independent. They can be picked up directly by sub-arch
->    maintainers, by Arnd or Olof, or eventually by me (if you wish).
-> 
-> [...]
+Hi ARM SoC maintainers,
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+Please pull the following for 5.19 cycle as these fixup critical boot
+failures noticed on 5.19-rc1 testing.
 
-[29/40] arm64: dts: ti: align gpio-key node names with dtschema
-        commit: 85423386c9763fb20159892631eccc481a2d9b71
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+are available in the Git repository at:
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-=
+fixes-for-v5.19
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+for you to fetch changes up to 0c0af88f3f318e73237f7fadd02d0bf2b6c996bb:
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
+  arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode (2022-0=
+6-17 20:24:01 -0500)
+
+----------------------------------------------------------------
+Devicetree fixes for TI K3 platforms for v5.19
+
+Critical fixes for the following:
+* Boot failure on J721s2 (overlap GIC memory map)
+* AM64 boot fails on highspeed cards (SoC characterization updates)
+
+----------------------------------------------------------------
+Aswath Govindraju (1):
+      arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
+
+Matt Ranostay (1):
+      arm64: dts: ti: k3-j721s2: Fix overlapping GICD memory region
+
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi   | 2 --
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+--=20
 Regards,
 Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
 
+--bu67thgfnt2zdkmk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmKtQ4UACgkQ3bWEnRc2
+JJ3t0hAAgiIZ8GCHi/gXXVmoAV2H68nNmPsG7xfXqCfZLTf90P9IobHgMBA/fFix
+PQEVOe4+YFLSM9IuEtq0Bz1RgF31ckW98ZvsWWH+Oo5sACyr1TrIpbXo3lwGLUIH
+7VkJDr/xHwMRdOxuAqru/7WgJxtoS72xUwySImkldUM8IfPbRP2w/g5ZbGiNzLR/
+CV0Dsb4TNHhvyJ7ARQ/Q/xCaH6OmopgMJ4LuTdQl77FEXSwBg4+dntq5nxFKCz3d
+/RjitmUOalOZWSajWyMEnBSNCAv1Jx2HRxIb89TOVrhU+j4xSiV/LJFA5zamRU55
+DZIAwVtYrtJ1NN2p8aN1YJx/sqaVsCMZXIuKvRflOOL2koMmWa1LxrNB7e6/1BUb
+s3gLnUmwEaWR2e0L0C4WG4mAgMvP9EBgw9Smn0hsZyPA1wHh8JogtR264xMYIAnd
+GJaBqAaXrMCMghjek8LVQUkDyMgYCli20n+898vKHr9F3ru/YY9wGmJSLPr1hksU
+m4zD4FPOGtOfOURu6CMZpYvRoaYPMui7zUKXgQd9GFgaxoyXiHz2WZF6dke5XPEB
+0FkJmMCnvi3+8MGjgbjPK44A0hE/dYb/EI+enm+2GwuTu+/Iyu0cnJXCuMEqJPyQ
+9p44Im2N+fXN5h8K4l7r8htBvBUGqL5/X++oy0PlgnPjojpCSeU=
+=vabo
+-----END PGP SIGNATURE-----
+
+--bu67thgfnt2zdkmk--
