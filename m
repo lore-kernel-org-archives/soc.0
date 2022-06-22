@@ -4,59 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAFF6C43334
-	for <soc@archiver.kernel.org>; Wed, 22 Jun 2022 12:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC683C43334
+	for <soc@archiver.kernel.org>; Wed, 22 Jun 2022 19:48:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A6F85C3411B; Wed, 22 Jun 2022 12:53:08 +0000 (UTC)
+	id 76256C341C7; Wed, 22 Jun 2022 19:48:12 +0000 (UTC)
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E37EFC34114;
-	Wed, 22 Jun 2022 12:53:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E37EFC34114
+	by smtp.kernel.org (Postfix) with ESMTPS id 6803DC34114;
+	Wed, 22 Jun 2022 19:48:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6803DC34114
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from [62.91.21.7] (helo=phil.localnet)
+Received: from [46.183.103.8] (helo=phil.sntech)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1o3zqr-0001t1-JW; Wed, 22 Jun 2022 14:52:57 +0200
+	id 1o46KG-0004LY-G0; Wed, 22 Jun 2022 21:47:45 +0200
 From: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 26/40] arm64: dts: rockchip: align gpio-key node names with dtschema
-Date: Wed, 22 Jun 2022 14:52:54 +0200
-Message-ID: <4976966.7s5MMGUR32@phil>
-In-Reply-To: <ca7f343f-fec0-a365-9263-06354c920b01@linaro.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-26-krzysztof.kozlowski@linaro.org> <ca7f343f-fec0-a365-9263-06354c920b01@linaro.org>
+To: soc@kernel.org,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	openbmc@lists.ozlabs.org,
+	Khuong Dinh <khuong@os.amperecomputing.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Joel Stanley <joel@jms.id.au>,
+	linux-arm-msm@vger.kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	Michal Simek <michal.simek@xilinx.com>,
+	linux-aspeed@lists.ozlabs.org,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	linux-input@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Gross <agross@kernel.org>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Wei Xu <xuwei5@hisilicon.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	devicetree@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Fabio Estevam <festevam@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Li Yang <leoyang.li@nxp.com>,
+	linux-tegra@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-omap@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Tero Kristo <kristo@kernel.org>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Nishanth Menon <nm@ti.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	linux-mediatek@lists.infradead.org
+Subject: Re: (subset) [PATCH v3 00/40] dt-bindings: input: gpio-keys: rework matching children
+Date: Wed, 22 Jun 2022 21:47:36 +0200
+Message-Id: <165592714968.3933570.9891201783444800337.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
-
-Am Mittwoch, 22. Juni 2022, 10:34:08 CEST schrieb Krzysztof Kozlowski:
-> On 16/06/2022 02:53, Krzysztof Kozlowski wrote:
-> > The node names should be generic and DT schema expects certain pattern
-> > (e.g. with key/button/switch).
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > ---
-> > 
-> > Changes since v2:
-> > 1. rk3308-evb.dts, rk3326-odroid-go2.dts: different names according to
-> >    discussion.
-> > ---
+On Wed, 15 Jun 2022 17:52:24 -0700, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> 1. dt-bindings: rebased on top of Rob's:
+>    https://lore.kernel.org/all/20220608211207.2058487-1-robh@kernel.org/
 > 
-> Heiko,
+> 2. DTS patches are independent. They can be picked up directly by sub-arch
+>    maintainers, by Arnd or Olof, or eventually by me (if you wish).
 > 
-> Any comments on Rockchip parts? Can you pick them or shall I grab them
-> with rest of cleanups?
+> [...]
 
-no it looks good and I'll just pick up the patch.
+Applied, thanks!
 
-Thanks
-Heiko
+[26/40] arm64: dts: rockchip: align gpio-key node names with dtschema
+        commit: 517ed0ffd3cc691bef747288d51d01d2705b2251
 
+        In the pinenote dts the original patch changed "cover" to
+        switch, so to keep the cover information intact, I changed
+        the node to "switch-cover" ... similar to other "switch-lid"
+        instances in some other Rockchip devicetrees.
 
+[27/40] ARM: dts: rockchip: align gpio-key node names with dtschema
+        commit: 271e2c92285075a890c58cba9ad5979a8959f6ff
+[28/40] ARM: dts: rockchip: rk3288-tinker: correct gpio-keys properties
+        commit: e5a3cbe8b45b0a436a39cc969b7bcc8353248018
+
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
