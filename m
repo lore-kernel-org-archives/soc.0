@@ -1,329 +1,122 @@
-Return-Path: <SRS0=+kPy=W6=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=2i9b=W6=amd.com=michal.simek@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFB74C433EF
-	for <soc@archiver.kernel.org>; Thu, 23 Jun 2022 07:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73F2FC433EF
+	for <soc@archiver.kernel.org>; Thu, 23 Jun 2022 08:10:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 84F2EC341C5; Thu, 23 Jun 2022 07:24:34 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 3BFF1C341C5; Thu, 23 Jun 2022 08:10:43 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8A9D3C3411B
-	for <soc@kernel.org>; Thu, 23 Jun 2022 07:24:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8A9D3C3411B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id cw10so15408100ejb.3
-        for <soc@kernel.org>; Thu, 23 Jun 2022 00:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UndQkFV094yCZSTZ0g3V8yTNtRHE1sSLI8lJ0Whr5OQ=;
-        b=LxxG2HwInE1hIpau8xuu6LTWIsR2ZFXStCwPPsC3E5dWajeJikaGzSqn+YZmgPW4sx
-         gAbKhUs8pvI75j9bYMzlXp8zzZLB1gNEOrD06pYYzVbz8njnJ0rFA3ipRIXBeJUqjwyQ
-         2OkH8zdS243eKNw16oqWzWkJ4k+ohKxi+t15VnbGw+iCqkmnoCDlwFHDwE7o7/NODy3U
-         f3WPG2nfnv8RRUiR7gtdU5pOCcQow69Gw+rEcRBoNPdZCS99Fd0aQ0RVUqFAyRz9hZ9w
-         iidcNhejdHzWcqbGQ1mYSJ52znMWT28hkCuDQYjT4QxHcD/Ee7Qza3u1VQgfjfUdOsiG
-         lHZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UndQkFV094yCZSTZ0g3V8yTNtRHE1sSLI8lJ0Whr5OQ=;
-        b=JSJ5cmCwgCW7acyggYX+6rc4z/13Kzzcw3MbTJIX/EA5xLzDT6D+a+ouy6qPLa2BHK
-         6ToUZYaqjdiMYCZ3t5E0kcXqxBSYXPsvxmyXVg6skYio11YzSGXAWU+CMfSrHTVbKkeL
-         m+fKhZ7yeB+7L0uPnzZcwnwrUeLml+ygiqmSNW0N5esljC04E03Wj45H4mgilC8r4cPU
-         0CQFUItujrFeKABK81UBNFXtbN9D7Z2n0zk6CpTZ8x6dv7K3nrr8rD8y6OQIOYwgNS5a
-         +sOJSCdDp/tghEZvCt3zMsiky1HFL5VA18kGNprQR1qxgMgYWL+XO++S7s8tBlKCaeV2
-         HJTQ==
-X-Gm-Message-State: AJIora+Y2H3Z/j/r4Xdtuztnyq435MxUFXMDC6xkX2fCyvA9vF+sesPo
-	EmjbP/nG7stXbp+9py9xEBCAdQ==
-X-Google-Smtp-Source: AGRyM1t1t95hm8IimzvVPEAlRlVe3PW6IigWDmSWchyuqd6ky2gYS/fF209B7CQraROMk8HyI89kjw==
-X-Received: by 2002:a17:907:2d29:b0:70e:8b1c:c3f0 with SMTP id gs41-20020a1709072d2900b0070e8b1cc3f0mr6709673ejc.37.1655969071889;
-        Thu, 23 Jun 2022 00:24:31 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id qf6-20020a1709077f0600b006fec4ee28d0sm10305248ejc.189.2022.06.23.00.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 00:24:31 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-aspeed@lists.ozlabs.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: aspeed: centriq2400: drop the board
-Date: Thu, 23 Jun 2022 09:24:28 +0200
-Message-Id: <20220623072428.33697-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.kernel.org (Postfix) with ESMTPS id 26AC9C341C0;
+	Thu, 23 Jun 2022 08:10:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26AC9C341C0
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V+LIF6vhEeybo7qlbLLuy2HbXHld6oL/WiBqmMadzQjL9RB3Dwr+aPqtXKy7OqBO+ypFqAs56PyRdPR6KcbgB+0NunttDg7AFRMJE4LN9oehwebn4hGMEbpAg93FwrifnbWSfen876QeVTdvWexdWQsEZ87kuHntV5NGshbjM3OhiUiHq8Z+oYg2N655clxbWGKPpaA4Q6J/u3dpYOy3ltzNXcpkuwhiWB4vMiefoICkTUorLgHHXz/s/Et3jW4xm1cbIkcxbz1/J7bFaY1I5oz/fyGwRGqpEfrCcMSRnnkPGSMMaGxA9C9IDMH1QvccEgcWAgNrGWHveDsxZiau3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cTmSSQzSGzYM9x7B5tDaQnit5ZNgYzzYzF7/Kf1XcSg=;
+ b=K4PD6KNS8h5ugkUmDAfaXkgqo/kG6UnvkGOcdDmD4+kGAiSR6AoPXFTOWzrMEfvXrEfM8oUYSg0rlevhMfgZYYUtBHF3/ibkcv0V7DFhI6GUeUezoM/EOj5i2SZiMG4KHe+PhL3OftEDzAPHxrG0pwCtiarKM7Sg17wovMOVzGIUFIqLhKnPxeGWchMt9J6/H/gq7wBPBbUoAVZtthKCxSobl3JJJ4wfqZwdzUXd9D7pOsh8DkLLEUqzzoEnspoqmKUJ2hYva6DI0tBHBLeXNoY09QMqb4GFKCwBIqJtE/u9ct8TlepTeqPfO2YMCMIu4wu5xsdQQiSrKXcqt9EL0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cTmSSQzSGzYM9x7B5tDaQnit5ZNgYzzYzF7/Kf1XcSg=;
+ b=F3uHkDnirvsHp0cdV9GwSLEgYWsJ3jovc9v+TOHYqhPu6HV6oX8whmd0GK+Nw2HvTpBMX7vAgUOyPPqOjKY5Pi/O6/TiwJz2Rq8bB9mbxt3qnv9mUstEEFhlNIlNzRDHkZ5NcCjBnQ3p84A/gAjsP472ey5Yncy1tw0Uhou9YGI=
+Received: from CO1PR15CA0107.namprd15.prod.outlook.com (2603:10b6:101:21::27)
+ by MN2PR12MB3728.namprd12.prod.outlook.com (2603:10b6:208:167::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Thu, 23 Jun
+ 2022 08:10:39 +0000
+Received: from CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:101:21:cafe::38) by CO1PR15CA0107.outlook.office365.com
+ (2603:10b6:101:21::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15 via Frontend
+ Transport; Thu, 23 Jun 2022 08:10:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT028.mail.protection.outlook.com (10.13.175.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5373.15 via Frontend Transport; Thu, 23 Jun 2022 08:10:38 +0000
+Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
+ 2022 03:10:34 -0500
+Message-ID: <01afe939-162b-0e8f-9f7f-87740cdc0a59@amd.com>
+Date: Thu, 23 Jun 2022 10:10:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 31/40] ARM: dts: xilinx: align gpio-key node names with
+ dtschema
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <arm@kernel.org>,
+	<soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson
+	<olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Michal Simek <michal.simek@xilinx.com>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-31-krzysztof.kozlowski@linaro.org>
+From: Michal Simek <michal.simek@amd.com>
+In-Reply-To: <20220616005333.18491-31-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b68bc2c6-faed-4f60-8f02-08da54efdba5
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3728:EE_
+X-Microsoft-Antispam-PRVS:
+ <MN2PR12MB3728168C4D4CA72E1BBE5A2E88B59@MN2PR12MB3728.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	1akhwrdao1SIDRc+xzP3fK50JxP24hC47Fl8ER0idnyJkwzD8Z7Wc063KFUIJ4yQROqFnhcW6kpLrXoIAXNtbI8oQ99EDBpE1Y7WHOPNY23NNP5XjM/Q5GILnPKMmKxx2CxuctHnJt6ux0Pq3F0BfIKF9B/hbMeP4JW4DlbwO1cnBC2sJtZZrcwIPpnW26+ZVayjq5qXJhCJYg+OAQJZIDDJVgl0pnok2gDBPLTKNRws+83jgHaLLG73/+NIUv2bgL8NpcTcds6iop0YoknQgkCj5ZkqDImJCeYj+8GYSdjhmoROs0pLZNwSYTrPcrmzySnF9wUBHtHj8HPYAycDqhQtT1H/nTSwQ0/5SmHDfAcgTNBP/w2jkwsgO9QInJEEQgZNgxHoihIflGUtA4Y7Ma/BgKZr9ZX1jaBXxFCDzt4H481JsELtAfjSLeJl7h+JMEhn9g2weOed2qp72LHSzm0J0bs3aW/KYazDK30VMYtsc5/lyJVGa7NoJVKkqWrJdmYph+vbe5ulev8P7M9zlYjMtxbwec5KwfVEWd2eeJ7mQw/KqvyYlQvNnJOgzbkxoYJpt6gKK482RUfCSx1EefLDfJYfLsXOptEiYxFtIuiD6dG/Rn3iWJLdQxYWOIucORhZ5Tpwa/hIpDsbTnLC9avVv3EhI+eBtLGRbfxq/+s8aS1vNUVGr/r9D31sAUaaA0wtwFyQ++j71bfWz6GyABfiQrGP2Jxo/J6RSeRnfXYWXYAJhZCU7RiJ1v9PrQUjyY6jT4pqlqoZhPm1fG3w0YJe6LB/8ipmavx+7E1RWS45RSu6Xw4sJSAQPfodsnHPxB5LtwWcG5/n14WUT7QDzuBvkznNlemf5huvqaOGNsB1tl0eCOOsVpAPunDkZJt1Gmw7QO82wWoLjP7oeBMjzA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(396003)(39860400002)(40470700004)(46966006)(36840700001)(2616005)(82310400005)(40480700001)(16526019)(426003)(16576012)(110136005)(31686004)(41300700001)(186003)(336012)(47076005)(83380400001)(70586007)(36756003)(8676002)(82740400003)(316002)(921005)(31696002)(44832011)(40460700003)(70206006)(5660300002)(26005)(478600001)(36860700001)(86362001)(8936002)(53546011)(356005)(2906002)(81166007)(7416002)(4744005)(2101003)(83996005)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 08:10:38.3448
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b68bc2c6-faed-4f60-8f02-08da54efdba5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3728
 
-The board is unmaintained and unused, according to Joel, so simply let's
-remove it.
 
-Link: https://lore.kernel.org/all/CACPK8XfxXi8kQr+vxta8rD6SBgxLf_oBjAH0UkPBacQta552YQ@mail.gmail.com/
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/Makefile                    |   1 -
- .../dts/aspeed-bmc-arm-centriq2400-rep.dts    | 225 ------------------
- 2 files changed, 226 deletions(-)
- delete mode 100644 arch/arm/boot/dts/aspeed-bmc-arm-centriq2400-rep.dts
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 03f5b3a15415..6c36b7610c57 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1556,7 +1556,6 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-ast2600-evb.dtb \
- 	aspeed-bmc-amd-ethanolx.dtb \
- 	aspeed-bmc-ampere-mtjade.dtb \
--	aspeed-bmc-arm-centriq2400-rep.dtb \
- 	aspeed-bmc-arm-stardragon4800-rep2.dtb \
- 	aspeed-bmc-asrock-e3c246d4i.dtb \
- 	aspeed-bmc-asrock-romed8hm3.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-arm-centriq2400-rep.dts b/arch/arm/boot/dts/aspeed-bmc-arm-centriq2400-rep.dts
-deleted file mode 100644
-index 3395de96ee11..000000000000
---- a/arch/arm/boot/dts/aspeed-bmc-arm-centriq2400-rep.dts
-+++ /dev/null
-@@ -1,225 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/dts-v1/;
--
--#include "aspeed-g5.dtsi"
--#include <dt-bindings/gpio/aspeed-gpio.h>
--
--/ {
--	model = "Qualcomm Centriq 2400  REP AST2520";
--	compatible = "qualcomm,centriq2400-rep-bmc", "aspeed,ast2500";
--
--	chosen {
--		stdout-path = &uart5;
--		bootargs = "console=ttyS4,115200 earlycon";
--	};
--
--	memory@80000000 {
--		reg = <0x80000000 0x40000000>;
--	};
--
--	iio-hwmon {
--		compatible = "iio-hwmon";
--		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
--                        <&adc 4>, <&adc 5>, <&adc 6>, <&adc 8>;
--	};
--
--	iio-hwmon-battery {
--		compatible = "iio-hwmon";
--		io-channels = <&adc 7>;
--	};
--
--	leds {
--		compatible = "gpio-leds";
--
--		uid_led {
--			label = "UID_LED";
--			gpios = <&gpio ASPEED_GPIO(Q, 5) GPIO_ACTIVE_LOW>;
--		};
--
--		ras_error_led {
--			label = "RAS_ERROR_LED";
--			gpios = <&gpio ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
--		};
--
--		system_fault {
--			label = "System_fault";
--			gpios = <&gpio ASPEED_GPIO(A, 1) GPIO_ACTIVE_LOW>;
--		};
--	};
--};
--
--&fmc {
--	status = "okay";
--	flash@0 {
--		status = "okay";
--		m25p,fast-read;
--		label = "bmc";
--#include "openbmc-flash-layout.dtsi"
--	};
--};
--
--&spi1 {
--	status = "okay";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_spi1_default>;
--	flash@0 {
--		status = "okay";
--	};
--};
--
--&spi2 {
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_spi2ck_default
--			&pinctrl_spi2miso_default
--			&pinctrl_spi2mosi_default
--			&pinctrl_spi2cs0_default>;
--};
--
--&uart3 {
--	status = "okay";
--
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_txd3_default &pinctrl_rxd3_default>;
--	current-speed = <115200>;
--};
--
--&uart5 {
--	status = "okay";
--};
--
--&mac0 {
--	status = "okay";
--
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
--};
--
--&i2c0 {
--	status = "okay";
--};
--
--&i2c1 {
--	status = "okay";
--
--	tmp421@1e {
--		compatible = "ti,tmp421";
--		reg = <0x1e>;
--	};
--	tmp421@2a {
--		compatible = "ti,tmp421";
--		reg = <0x2a>;
--	};
--	tmp421@4e {
--		compatible = "ti,tmp421";
--		reg = <0x4e>;
--	};
--	tmp421@1c {
--		compatible = "ti,tmp421";
--		reg = <0x1c>;
--	};
--};
--
--&i2c2 {
--	status = "okay";
--};
--
--&i2c3 {
--	status = "okay";
--};
--
--&i2c4 {
--	status = "okay";
--};
--
--&i2c5 {
--	status = "okay";
--};
--
--&i2c6 {
--	status = "okay";
--
--	tmp421@1d {
--		compatible = "ti,tmp421";
--		reg = <0x1d>;
--	};
--	tmp421@1f {
--		compatible = "ti,tmp421";
--		reg = <0x1f>;
--	};
--	tmp421@4d {
--		compatible = "ti,tmp421";
--		reg = <0x4d>;
--	};
--	tmp421@4f {
--		compatible = "ti,tmp421";
--		reg = <0x4f>;
--	};
--	nvt210@4c {
--		compatible = "nvt210";
--		reg = <0x4c>;
--	};
--	eeprom@50 {
--		compatible = "atmel,24c128";
--		reg = <0x50>;
--		pagesize = <128>;
--	};
--};
--
--&i2c7 {
--	status = "okay";
--};
--
--&i2c8 {
--	status = "okay";
--
--	pca9641@70 {
--		compatible = "nxp,pca9641";
--		reg = <0x70>;
--		i2c-arb {
--			#address-cells = <1>;
--			#size-cells = <0>;
--			tmp421@1d {
--				compatible = "tmp421";
--				reg = <0x1d>;
--			};
--			adm1278@12 {
--				compatible = "adi,adm1278";
--				reg = <0x12>;
--				Rsense = <500>;
--			};
--			eeprom@50 {
--				compatible = "atmel,24c02";
--				reg = <0x50>;
--			};
--			ds1100@58 {
--				compatible = "ds1100";
--				reg = <0x58>;
--			};
--		};
--	};
--};
--
--&i2c9 {
--	status = "okay";
--};
--
--&vuart {
--	status = "okay";
--};
--
--&gfx {
--	status = "okay";
--};
--
--&pinctrl {
--	aspeed,external-nodes = <&gfx &lhc>;
--};
--
--&gpio {
--	pin_gpio_c7 {
--		gpio-hog;
--		gpios = <ASPEED_GPIO(C, 7) GPIO_ACTIVE_HIGH>;
--		output;
--		line-name = "BIOS_SPI_MUX_S";
--	};
--};
--- 
-2.34.1
+On 6/16/22 02:53, Krzysztof Kozlowski wrote:
+> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+> 
+> 
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm/boot/dts/zynq-zc702.dts         | 4 ++--
+>   arch/arm/boot/dts/zynq-zturn-common.dtsi | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 
+Applied.
+M
