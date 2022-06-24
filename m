@@ -4,59 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D5E5CCA47E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E93CCA481
 	for <soc@archiver.kernel.org>; Fri, 24 Jun 2022 16:00:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 265BBC3411C; Fri, 24 Jun 2022 16:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0522BC341CB;
-	Fri, 24 Jun 2022 16:00:14 +0000 (UTC)
+	id 114F3C341CE; Fri, 24 Jun 2022 16:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9AE3C3411C
+	for <soc@kernel.org>; Fri, 24 Jun 2022 16:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656086414;
-	bh=jCNrgppmXECkVvYIl02wrHcwlm9X0xmEpBtjKaQ/qJY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Z/WC8vIpWZN7+/JXMIREFJmq5WryMOuXPMiIsrxkmKpyQpIhNwfAGx1btOBOom93k
-	 fRqGBWRVpniAxuRiu2RMmxRmBFiq9Os73ls+p5kkyx7RdnDnvZNV1zovWxPqcqkfkq
-	 frVOVLFPFTIPftDUG0w9MiIuylpyQvfqobsj/P6Ogi71bmV+JW9osMAZoDiweJ+PiG
-	 Dfh4x/rR/oUsRXCXzjT6U1BGgtLUU2jugGyRNBLtNDurdECzJDIJsbgyJnYFbrBXxf
-	 jf6GgtKliTmxHtW6RlRdY9wKO1ZNT6OJVsmzJ011a9MV3l5+YDJg5R+/qcdijth6yO
-	 CU+/p76ZfXzbw==
+	bh=BImar5V9fxRILQzKBz+48CFNklv00wsL9eEKSN+rM7M=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=D5L89k/rHM/rPjXndVmwGcmo9GwvJlnSTffCdywHm6OKBb2OPEsXTv9mokwMT0TB4
+	 JJjmUJLTntkyCIup2tS7MM0TEZq2JGvduttXcMoDMJBWSM75CKxPD29kTVx0DJulUZ
+	 FDmPkrXO4AKjHn0biHLEu5WLn3ZXiVAqt9Q2iny06Aga30U9q3RRfModQinCqdWUJq
+	 41vXsxOS+FQ7GyrXFnGBBk7PDMTLBg784qdyjZ7wh7+VwJ8ty1AbSGdD4q2s5ZrhrF
+	 DjjnkrL+hi2WUdh8qNo5em5J6eKlB4J0tlvEEzx0G/OXVaMT88NMm737/XGre7gC1L
+	 PtZ2SNp1h2JFQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E18DFE8DBEE;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C02B3E574DA;
 	Fri, 24 Jun 2022 16:00:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165608641392.3411.5656740492744517789.git-patchwork-notify@kernel.org>
+ <165608641371.3411.17669885978824514952.git-patchwork-summary@kernel.org>
 Date: Fri, 24 Jun 2022 16:00:13 +0000
-References: <20220624070511.4070659-1-joel@jms.id.au>
-In-Reply-To: <20220624070511.4070659-1-joel@jms.id.au>
-To: Joel Stanley <joel@jms.id.au>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 24 Jun 2022 16:35:11 +0930 you wrote:
-> From: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-> 
-> Nuvia has been acquired by Qualcomm and the vendor name 'nuvia' will
-> not be used anymore so rename aspeed-bmc-nuvia-dc-scm.dts to
-> aspeed-bmc-qcom-dc-scm-v1.dts and change 'nuvia' to 'qcom' as its vendor
-> name in the file.
-> 
-> [...]
+Patch: [GIT,PULL] Broadcom devicetree fixes for 5.19
+  Submitter: Florian Fainelli <f.fainelli@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=652074
+  Lore link: https://lore.kernel.org/r/20220620170745.2485199-1-f.fainelli@gmail.com
 
-Here is the summary with links:
-  - ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom
-    https://git.kernel.org/soc/soc/c/7f058112873e
+Patch: [v2] arm: mach-spear: Add missing of_node_put() in time.c
+  Submitter: Liang He <windhl@126.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=650943
+  Lore link: https://lore.kernel.org/r/20220616093027.3984903-1-windhl@126.com
 
-You are awesome, thank you!
+Patch: [GIT,PULL] arm64: dts: TI K3 fixes for v5.19
+  Submitter: Nishanth Menon <nm@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=651624
+  Lore link: https://lore.kernel.org/r/20220618031627.xxvscc22c6doaa3t@kahuna
+
+Patch: ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom
+  Submitter: Joel Stanley <joel@jms.id.au>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=653458
+  Lore link: https://lore.kernel.org/r/20220624070511.4070659-1-joel@jms.id.au
+
+
+Total patches: 4
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
