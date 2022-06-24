@@ -1,65 +1,149 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=HB8/=W7=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E43CCA473
-	for <soc@archiver.kernel.org>; Fri, 24 Jun 2022 16:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E4C2C43334
+	for <soc@archiver.kernel.org>; Fri, 24 Jun 2022 16:08:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A643C341CD; Fri, 24 Jun 2022 16:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EF2E2C341C6;
-	Fri, 24 Jun 2022 16:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656086414;
-	bh=eUa7euVofAhkfOMWurExiFE0Fe/A8/HqDpUh1N/3axE=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=PUx+gseo0fz48Yi8ziEbz3kHynMOqd8qMjxc8667oeEpOVAltughSMD3PHbhuv6Oi
-	 7aYBHqEbPk2pT+pv6S+gtfFa6du2hudbUh2wvV5q1V4EE3gkkZhgpdehyhJhF+TZ/J
-	 t/N7cAAHjvMWS6K8aElehKbOrcz1+vSdT5qfYNX5IEy0pG6jnzCVfPm3zJnk3e1sVy
-	 /MXuF2uhNGJYcHI7xyTjIRmfUAENoUoomSS6dOfWx1A3V8AKWsoLkmtWW9W8UPuW6U
-	 16NB+hOG42KnolK1xeyfkZgK1sXCrcVexYkWew6Sdtx1phI1dQBtgRFO9VOR1u1YyZ
-	 TpsW4NXt2PSNw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0CF0E8DBCB;
-	Fri, 24 Jun 2022 16:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] arm: mach-spear: Add missing of_node_put() in time.c
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165608641385.3411.14846732936120198725.git-patchwork-notify@kernel.org>
-Date: Fri, 24 Jun 2022 16:00:13 +0000
-References: <20220616093027.3984903-1-windhl@126.com>
-In-Reply-To: <20220616093027.3984903-1-windhl@126.com>
-To: Liang He <windhl@126.com>
+	id 74CAFC3411C; Fri, 24 Jun 2022 16:08:20 +0000 (UTC)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id D2A1FC34114;
+	Fri, 24 Jun 2022 16:08:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2A1FC34114
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id s1so3725048wra.9;
+        Fri, 24 Jun 2022 09:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5QCcsp/oxE/4aK5lzsCff9T90roPIhhHgQz79caNMm0=;
+        b=nywWrqoT7S5Iyyh6SqrQzlKQY3X52hZhoqeseTw4TA8PjHqSWGls0lr1Z1GG45wc7T
+         ilRYO5/HwDZbE3W/0rSQIrNNlj+oN1rP8X4SqejxGw27dcv/kU6HKNpa0sbhyDb7/8kg
+         SltLregODjAMirVz2CHXo5xeU+fk8TxpNFGj9NeBNA9NoOXPZNla98xGKAsb1A+9VQn3
+         Rcrrjtl1mKTGLGzE8udQvPqy2tO5FEq6SPVaWmSzqGHfR9kwdd5il1OoaNUf4sI0i4DY
+         D7pzczpeRNXkRhtf5bQp/ZWyQhIOUoePOl9kHicutao1JEibogxhZjlK3drqv7GMbpi/
+         jM1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5QCcsp/oxE/4aK5lzsCff9T90roPIhhHgQz79caNMm0=;
+        b=Z7NamtlKKbjne38dxllIqOe5mONIY0fG2J72lzfKa6RugUHstQxwHqR+2Jve8ki3Op
+         S/q7MAFiwM9xiG7mqYlOHpdASOPdbPABAWdx59nAJXjxp0zsaErkl5t5VV8/ZKcUsg8U
+         Vgw7iTfRKapdj8Kx5iEKhAH6pDCX7DrvKqqGeudACUBiFaRZKUon663MwrPYsuHSyDyL
+         e1aon76LVizdkkrzn1psrvZh4QaQuDdLg3+QRL3ewhHpRKxwUDxitRnnpktbnWT/mfvk
+         j8onN1gUMO50ZqGLYkZKPy0cQvSrQK1Avy6bglvlwAD6fabHKb57FiiyX/Af0q9QW2qC
+         hNgg==
+X-Gm-Message-State: AJIora+m9XnbOHDC8JofZDoGWX/OAIH11TVDbpI6o8TtjnId8P7NLcpu
+	uZub790gA8oxVQujeEKX8Vg=
+X-Google-Smtp-Source: AGRyM1v8XWD6eMjxLPwbRD8oLlGN4gejnKJChEge19xr58Opj+b/4OXgyBk18OXlqG5Rd2aDHkMkjQ==
+X-Received: by 2002:adf:eb88:0:b0:219:b9dd:af57 with SMTP id t8-20020adfeb88000000b00219b9ddaf57mr14093882wrn.7.1656086897824;
+        Fri, 24 Jun 2022 09:08:17 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id d9-20020a05600c3ac900b003a03be22f9fsm2460104wms.18.2022.06.24.09.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 09:08:17 -0700 (PDT)
+Date: Fri, 24 Jun 2022 18:08:15 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
-
-Hello:
-
-This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Thu, 16 Jun 2022 17:30:27 +0800 you wrote:
-> In spear_setup_of_timer(), of_find_matching_node() will return a
-> node pointer with refcount incrementd. We should use of_node_put()
-> in each fail path or when it is not used anymore.
-> 
-> Signed-off-by: Liang He <windhl@126.com>
-> ---
->  changelog:
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2] arm: mach-spear: Add missing of_node_put() in time.c
-    https://git.kernel.org/soc/soc/c/2c629dd2d14f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Cc: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 19/40] arm64: dts: tegra: align gpio-key node names
+ with dtschema
+Message-ID: <YrXhb5izGPNXEmMK@orome>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-19-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="IyLVWPIxofCPGlpx"
+Content-Disposition: inline
+In-Reply-To: <20220616005333.18491-19-krzysztof.kozlowski@linaro.org>
+User-Agent: Mutt/2.2.6 (2022-06-05)
 
 
+--IyLVWPIxofCPGlpx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jun 15, 2022 at 05:53:12PM -0700, Krzysztof Kozlowski wrote:
+[...]
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts b/arch/arm64/=
+boot/dts/nvidia/tegra132-norrin.dts
+> index f16acb4cabaa..62d58221ad3c 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
+> +++ b/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
+> @@ -1030,7 +1030,7 @@ clk32k_in: clock-32k {
+>  	gpio-keys {
+>  		compatible =3D "gpio-keys";
+> =20
+> -		lid {
+> +		switch-lid {
+>  			label =3D "Lid";
+>  			gpios =3D <&gpio TEGRA_GPIO(R, 4) GPIO_ACTIVE_LOW>;
+>  			linux,input-type =3D <5>;
+> @@ -1039,7 +1039,7 @@ lid {
+>  			wakeup-source;
+>  		};
+> =20
+> -		power {
+> +		switch-power {
+
+This one is actually a key.
+
+[...]
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/b=
+oot/dts/nvidia/tegra210-smaug.dts
+> index a263d51882ee..8494c7b2961b 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
+[...]
+> @@ -1772,7 +1772,7 @@ lid {
+>  			wakeup-source;
+>  		};
+> =20
+> -		tablet_mode {
+> +		key-tablet-mode {
+>  			label =3D "Tablet Mode";
+>  			gpios =3D <&gpio TEGRA_GPIO(Z, 2) GPIO_ACTIVE_HIGH>;
+>  			linux,input-type =3D <EV_SW>;
+
+And this one more like a switch since it's triggered by a magnet, as far
+as I understand.
+
+No need to resend, I can fix these up when I apply. Just let me know if
+you have any objections to me making those changes.
+
+Thierry
+
+--IyLVWPIxofCPGlpx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmK14W8ACgkQ3SOs138+
+s6GuoRAAs/Bh3zBxhYqqU+0xHTMaroNOhMkFFFzlQ+JOw+7Wg4AybDOEUQZCU5gP
+YFxNy1JsHoPso+15Y32LoJ3NVwQ82HW3+KBPyPUFHmsuoj8BbNhTJEsc2yht8JV+
+sUbVDThkZu7Tth7i+jrX20VfUPuUK4WveSvRrC3/WY6tzkwWbsEk/lSbP+m5Dir1
+e59WpNyCa41llMSQZzGyOwY2cZ6Y9e64wrqORHrOQxyboVmmeYvtoQADR3a/geF4
+boqK/shRCZDo/ysmfdMfZLjc1XOs5pMYAaOV+xw9VWAhAL8Z7CuOI6sPjHgzBx6q
+SrbW0PVm7fMhWu5YDDUXoKNC2zVmdpWR18AE7zXOUc4aVlVfpWZR02/o9z1/CkYM
+3wpV7DjQWjFWnlUB0Tm0m9mvBLRoH8mjNYcwtPH8g0C4xtPOWrzgl6bFne+cUqBG
+QLNqbqPv+EEvcFOUT2QTO5xEbQaUO9YaF4kNj3dqO0ERT6FFU2z8j/lqmrP5JIuS
++da5kfHfnMQPYVy/OiWmzCjk+GqQ4apF0DllkRFMFkCqjhiV3QsOF4oX/mUuU4UJ
+gg6DMIE2rF9RikECb/TSspTQHhtFv+0bsb1yYxj7qks8cZAezxSreVnUwWJimEpW
+aspfZ6S6xv3QuBOBP8UyFcWhhgwrBbGgMkQvtNt3KrSnr2C7TUA=
+=ykpI
+-----END PGP SIGNATURE-----
+
+--IyLVWPIxofCPGlpx--
