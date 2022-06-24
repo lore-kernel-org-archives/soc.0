@@ -1,125 +1,266 @@
-Return-Path: <SRS0=2i9b=W6=amd.com=michal.simek@kernel.org>
+Return-Path: <SRS0=0XYO=W7=willspowerchem.com=info@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D961C43334
-	for <soc@archiver.kernel.org>; Thu, 23 Jun 2022 08:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F325FC43334
+	for <soc@archiver.kernel.org>; Fri, 24 Jun 2022 06:11:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 07FC1C341C5; Thu, 23 Jun 2022 08:10:57 +0000 (UTC)
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+	id BEAC1C341C6; Fri, 24 Jun 2022 06:11:37 +0000 (UTC)
+Received: from slot0.willspowerchem.com (slot0.willspowerchem.com [136.144.41.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 08036C3411B;
-	Thu, 23 Jun 2022 08:10:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08036C3411B
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QMKRf/y2wKD9ROdcPPdpeIBsE7zRfTOzNl42tyxVGUrLTHg+qZ2W216kcHKSBcpeioxTvJM40E3ybdszE7oXVUO9hDR8IpmQoolv3fwjOMzrQC9V4GnuIg6+ZZTb0FB/dSjzw2oHt/6BqLlu1Rg6bcJNc78LyOs8y+xz9aV98loS/TypUd/j8NEcJwCP71UrzE8heiLy3gAzyjicJlsyuepdNqPTHpgUQPM6mu8L+G0cDWLYlDFt2mnzqIt+LPQvjAaaUY1WT7ZtDjBy3nbtvI3BEIyYpnWj5Z8R6t7KTiyQFNwQnrCQzlwurKrGKUi1TtoAXCTCy951CeYhhci6JQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VoOy9yiPzj3OCKIHNjLWoRcFQL/iqbRq7WWtueqn6Fw=;
- b=fVqow5uRlBGtDbG1ydR3RiPXcvfyulfvc0xWTY0R1/AbvhMI7ucoa+4CatHHkyZCkefTyTzhWQoqm5P8l1ipA++BemCKQemkzLKZa3XzWmR8uLo8snelODhovnZiKQe5r8dMz6s2MMCvUo2hmMXoQ8Plwk7T8syy/D7YMAYEFuKdpEeKGmWylfhwVeCs+G4iHkeAYQsExuhl58nY8WyBx5byJJt9qIU8xVhuK7pKfd3BBVFjsuHBbmyJxYWXCtCFX4CqHcXue+p5yZEaBhdcKipj8XvnrMC+vBvjL7XvSHHfM96jd1gANrZhUrgSNZbGcQ8vrKFzL+qkcYyiJagNQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VoOy9yiPzj3OCKIHNjLWoRcFQL/iqbRq7WWtueqn6Fw=;
- b=dZ+0Pladw/DNKh9AEZGUH0J4CRNjjy0k7Ig3IEX0DLgEJoG7CqHDi1Kk4AQ+Di+22G0yuiSU0OHz40durcVOU9F50jHcbCfHhxepcmOKYwFl8iTvKITvpqIoJhQA6+UVIFOLYZpoftm0lMUHZ8K123XN78vJ+pq16/T5hShzfR8=
-Received: from MWHPR01CA0031.prod.exchangelabs.com (2603:10b6:300:101::17) by
- BL0PR12MB5507.namprd12.prod.outlook.com (2603:10b6:208:1c4::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 23 Jun
- 2022 08:10:49 +0000
-Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:101:cafe::8e) by MWHPR01CA0031.outlook.office365.com
- (2603:10b6:300:101::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16 via Frontend
- Transport; Thu, 23 Jun 2022 08:10:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5373.15 via Frontend Transport; Thu, 23 Jun 2022 08:10:48 +0000
-Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
- 2022 03:10:44 -0500
-Message-ID: <d931f674-1a36-d98d-5ddc-434e1e1c4e27@amd.com>
-Date: Thu, 23 Jun 2022 10:10:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 30/40] arm64: dts: xilinx: align gpio-key node names
- with dtschema
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id C5A8CC34114
+	for <soc@kernel.org>; Fri, 24 Jun 2022 06:11:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5A8CC34114
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=willspowerchem.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=willspowerchem.com
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=willspowerchem.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; i=info@willspowerchem.com;
+ bh=LBSfwnNGHEhStNxloq1tIjlff0E=;
+ b=AlPI/mQbK0eNuPn6i71YNSPQnu/GiAx8yJA7UUkSFFXGdAkczaLWUy2TXc3bjNELV7rki8ReJ1bb
+   t8+d9xJTDXIEAyIrWNjb6xT7QUH7lox9VoDVhYInN5J/N2NjfmHy+3LuIxyRiriIYS+vcefL3zAC
+   b78ATtiiYrY+g5bbu3mjiphCUCERUa+se3Y2u6v+jqp4LOe7c4Y+EvC7j3Col9qKnZccnAs6m6fN
+   uBB9FDUW7hOlLCR5VOxUNEs6ritZ+ptct4wM02/hpzGzNGJSNyQNCYgFU9W9OfuB7oyun0nyZWYd
+   hS5oIbEH7aq0vt2d88OpqcJT8C0BPdVcVfkCnQ==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=willspowerchem.com;
+ b=dSKWZC4OHIch1yB+GGtu4ZV5EpZHIRVIYuyXf6SPUs1CwZJ6ydd+Ajybhu6gsXaJ4yU27A3jtdmZ
+   1n2iF+WOUyIG8KOLNGW45xaZvK3kY9lXVJ33yFzxEATgkSRTr+WJue7L2X3TXui2JJFHnp2TUsnD
+   x7BJLF7JAgHVfzis1vcOktb2PZuFL+7A5EPap/LNXCxGrPZCMVZ0jOjPdV6/yYJmT7YbldqbjCtM
+   t+XsJkx7Shji+s7nbb3mm/2SLRRqULDtBFwMZzRRDbyWBLgcXxITWCLEXw9y+vXag8QCFrAevhOv
+   gfB3h/eJzAp8APi1Zi//xu7fGsmQ0th1suD2Ng==;
+Reply-To: sunfunllcint@sunfunglobal.com
+From: "SunFun Global International"<info@willspowerchem.com>
 List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <arm@kernel.org>,
-	<soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson
-	<olof@lixom.net>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Michal Simek <michal.simek@xilinx.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-30-krzysztof.kozlowski@linaro.org>
-From: Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20220616005333.18491-30-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 42378de2-f8f5-4257-83cf-08da54efe1b6
-X-MS-TrafficTypeDiagnostic: BL0PR12MB5507:EE_
-X-Microsoft-Antispam-PRVS:
- <BL0PR12MB5507964C2465EBB97D1A2CB988B59@BL0PR12MB5507.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	uhQnkgCQMoD29BsquWmEiMwoOmNtSm3rqGXd0R6dUqSnT8NyHGZAAIs0/FGdepnqd/qoKtT/V1KO2GBXoDHlaoaZPVvKoeFR3Pgbc/ajlqv80zjGAA29TBemJyPb3tkJ49nF2iOPi9AmO738I+6wvgEKvcXOK9Rxv9irmY9wT+tLe3JBz7G2Szrk47tEp5/EyjykNibnjPOvjEZny0UmPni0Dw0symB1Nkf139001eIbPnhbeRI97OnMlMRbkx8QbsFD2ezlFsi87kNwSyFsC++nB3D8MepDsXNnXUEyUrJ9TTZHASyvpVc43MQ4KFRwt2vF5bN7fB/+kjwztA4uu8cMp++t04ieGCtLkcSKRscQ1R0PISgKmjYvgxUxd/bOwFVHij2id73wfkcDps6PY/KTxFX7oNZdxvSbfutE6fNjzk7RS4Bpkux0FfS5Yu7bQxMwt90RZkeAhQ09J08sFIwD40hIXLE83TfKlQV7YOAnWzGHpjA+5iVMpdCY6b4wFuogNOQ1YTQ6FXB2keoaXbiPDbc3+xN+C/eEg+EWzlCjtZIkoyf8lEI/sEo/3ucKCYHulI0sOgbHBFY9yQSFLZStJKZfJIvG+yPKEjfetzzOFcD3+AIeybesMnHmNR/iuBQmg/FIVD30x2kJVdNx5GxUZLHhl3LNxr9p+P/qi9AO+Qns+oaDLtMxVrABRleDQ7jjffHdwuVFaWVkZHC1D5chpzhPc2Iy56vkOVv2gLIVsPYC5A74hptANgMBmW+LPk+6qrnqAGEuA2ONU9mwvyse3OtypZS8Y/VNbMxLPxfxfvE6t8b3U3fzpGkDUqb/Z9VIMzEs7ofGj46+abstfdcr7tTehzXOnoY9iIq0gyWAynOnGCygLDINIc+Uu9YONVDKrSr314eIoCGc6smGMg==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(39860400002)(136003)(396003)(36840700001)(46966006)(40470700004)(478600001)(44832011)(4744005)(2906002)(36860700001)(316002)(70586007)(16576012)(110136005)(7416002)(36756003)(31696002)(26005)(86362001)(53546011)(5660300002)(31686004)(41300700001)(2616005)(70206006)(8676002)(8936002)(47076005)(40480700001)(40460700003)(83380400001)(186003)(336012)(82310400005)(82740400003)(16526019)(81166007)(426003)(921005)(356005)(36900700001)(83996005)(43740500002)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 08:10:48.5223
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42378de2-f8f5-4257-83cf-08da54efe1b6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5507
+To: soc@kernel.org
+Subject: P.O
+Date: 23 Jun 2022 23:11:17 -0700
+Message-ID: <20220623231117.B535E63101295164@willspowerchem.com>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0012_EAE9C5D8.BD2C13CD"
+
+
+------=_NextPart_000_0012_EAE9C5D8.BD2C13CD
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
 
 
 
-On 6/16/22 02:53, Krzysztof Kozlowski wrote:
-> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
-> 
-> 
-> The node names should be generic and DT schema expects certain pattern
-> (e.g. with key/button/switch).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts | 2 +-
->   arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts | 2 +-
->   arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts | 2 +-
->   arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts | 2 +-
->   arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts | 2 +-
->   5 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied.
-M
+We are interested on your products.
+
+kindly get back to us with catalogue, best price CIF and FOB.
+
+Await your immediate respond
+
+Thanks
+
+
+
+Finn.
+Manager
+SunFun Global Int.
+Emai: sunfunllcint@sunfunglobal.com
+------=_NextPart_000_0012_EAE9C5D8.BD2C13CD
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML>
+
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<p>
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">Hello,</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">We&nbsp;are&nbsp;interested&nbsp;on&nbsp;y=
+our&nbsp;products.</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">kindly&nbsp;get&nbsp;back&nbsp;to&nbsp;us&=
+nbsp;with&nbsp;catalogue,&nbsp;best&nbsp;price&nbsp;CIF&nbsp;and&nbsp;FOB.<=
+/span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">Await&nbsp;your&nbsp;immediate&nbsp;respon=
+d</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; float:=
+ none; display: inline !important; white-space: normal; orphans: 2; widows:=
+ 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; f=
+ont-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-t=
+hickness: initial; text-decoration-style: initial;=20
+text-decoration-color: initial;">Thanks</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">Finn.</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; float:=
+ none; display: inline !important; white-space: normal; orphans: 2; widows:=
+ 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; f=
+ont-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-t=
+hickness: initial; text-decoration-style: initial;=20
+text-decoration-color: initial;">Manager</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">SunFun&nbsp;Global&nbsp;Int.</span>
+<br style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-si=
+ze: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-sp=
+ace: normal; box-sizing: border-box; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; =
+text-decoration-style: initial;=20
+text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: monospace; font-=
+size: 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
+space: nowrap; box-sizing: border-box; orphans: 2; widows: 2; background-co=
+lor: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps:=
+ normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial=
+; text-decoration-style: initial;=20
+text-decoration-color: initial;">Emai:&nbsp;<a style=3D"color: rgb(0, 172, =
+255); text-decoration: none; box-sizing: border-box; background-color: tran=
+sparent;" href=3D"mailto:sunfunllcint@sunfunglobal.com">sunfunllcint@sunfun=
+global.com</a></span></p>
+
+
+</body></html>
+------=_NextPart_000_0012_EAE9C5D8.BD2C13CD--
