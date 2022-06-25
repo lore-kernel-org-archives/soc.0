@@ -1,104 +1,78 @@
-Return-Path: <SRS0=AAlf=W7=baikalelectronics.ru=Sergey.Semin@kernel.org>
+Return-Path: <SRS0=C9JC=XA=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2EC5C433EF
-	for <soc@archiver.kernel.org>; Fri, 24 Jun 2022 21:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 285F2C433EF
+	for <soc@archiver.kernel.org>; Sat, 25 Jun 2022 23:28:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B482C34114; Fri, 24 Jun 2022 21:12:53 +0000 (UTC)
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-	by smtp.kernel.org (Postfix) with ESMTP id 872EBC3411C
-	for <soc@kernel.org>; Fri, 24 Jun 2022 21:12:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 872EBC3411C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=baikalelectronics.ru
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baikalelectronics.ru
-Received: from mail (mail.baikal.int [192.168.51.25])
-	by mail.baikalelectronics.com (Postfix) with ESMTP id 3DB9B16CF;
-	Sat, 25 Jun 2022 00:14:10 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 3DB9B16CF
+	id E8D4EC3411C; Sat, 25 Jun 2022 23:28:47 +0000 (UTC)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4971AC341C7
+	for <soc@kernel.org>; Sat, 25 Jun 2022 23:28:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4971AC341C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ef5380669cso54993197b3.9
+        for <soc@kernel.org>; Sat, 25 Jun 2022 16:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=baikalelectronics.ru; s=mail; t=1656105250;
-	bh=EVjSlxO14l8e2kikyRC3XsnI7trVHKvpd6yQROJjrNI=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-	b=OqoNP7o33DjMdg1MucEEQUwgO9V3dACdAmJyRQbS+NuVHdtSDOuq13cZEWPkYVlH/
-	 igxFCz/JO/zZmRkmIv+nmS8aGWmoC8CsfuLqQa7qutxYhe9T9LEjzEvX956FVbyX1p
-	 yfUdmUj5hT/lbK92Pgb3njIYOPJzP56Xbb5YCW64=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 25 Jun 2022 00:12:49 +0300
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To: Arnd Bergmann <arnd@arndb.de>, Philipp Zabel <p.zabel@pengutronix.de>
-List-Id: <soc.lore.kernel.org>
-CC: Serge Semin <Sergey.Semin@baikalelectronics.ru>, Serge Semin
-	<fancer.lancer@gmail.com>, Alexey Malahov
-	<Alexey.Malahov@baikalelectronics.ru>, Pavel Parkhomenko
-	<Pavel.Parkhomenko@baikalelectronics.ru>, <soc@kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v3 2/2] bus: bt1-axi: Don't print error on -EPROBE_DEFER
-Date: Sat, 25 Jun 2022 00:12:33 +0300
-Message-ID: <20220624211233.7529-2-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220624211233.7529-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220624211233.7529-1-Sergey.Semin@baikalelectronics.ru>
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2ZHbHCzgoQABSLSyZg/clIwjQ3dcNnkQ5dXPgPYxATQ=;
+        b=N4D4Xi/ZkS3g3tlO204tZ0mkKhnIOSd0acgAfI4W+ZQommQ6v+6ziiA9vaKLZB1zm3
+         ylk5U6EcbKo2nBk3LV4euELboUgU97u10+M1vva8j1SQ9NaOUirt1OsOICRsZxACg39f
+         lgjgv0snIW55QwjgLDiw+ocE7KVu13CPv/p2Qtk6lVq6Ub5vFMo9cuwQoJE4N06H78Hm
+         tGRrQnvm18hSZ4Z4tIHIAyTHJz2gIfo/cPqp9gfycDseZ35TW5OgJ3cGaPs6XzYWAJSC
+         LR1o3zCklx/ZCZPlE4JK6uVQOh1UlN9XUpSz9K7shEAVGA8y9CmkSSZoICDXatuWfoqw
+         2LRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2ZHbHCzgoQABSLSyZg/clIwjQ3dcNnkQ5dXPgPYxATQ=;
+        b=RRoja6IpVs8Zy1bEfRDx5EjfKMY7TCN9mC1MeCzw9TLD7j19+xeQozWV4QBmFPsoNR
+         QrlRBCc0V9x542N9cjhe3CgqIlj8nV1GE4+ev8K7oONOalmslhWjujc/Rd9o+yg1pfYI
+         BGlGq4H4SSUjfAOvDPUpmbiZhlrgjGQuCG+sgHBMp/YjK9rnQPrxG6zcJ9L1F3FACOcb
+         MUbm5DMJi1saKS3TM/zTVrKcQyvTXGOPNQ9SUcOzARPFTgYwYRfdsevns1bmU6D/7n2V
+         uGpiXt6fW5jRE85N0JOKUknzXdbRhzKZI0lypjXaqWPTHXc3dZffYOvQ/vTH2LtdgNOY
+         kDjA==
+X-Gm-Message-State: AJIora/nvWQ4gcahDTp+nFFq4+APg7Ze/RwA8yHPR1atSWIzESBczods
+	JB5ES09fFruto+qRdyOfxdrnVdZ/GJgIJ2YwEEEBguMlZTo=
+X-Google-Smtp-Source: AGRyM1spnHk4DL1GaXxVekSrkt1iH996cdrejY3FYGxU0SDg1CbcxSaWPwj2DH8lacg9auY41J3Ys1RDyCcjq6nVpWg=
+X-Received: by 2002:a0d:e20a:0:b0:317:ce36:a3a0 with SMTP id
+ l10-20020a0de20a000000b00317ce36a3a0mr6969123ywe.448.1656199726318; Sat, 25
+ Jun 2022 16:28:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Sun, 26 Jun 2022 01:28:35 +0200
+Message-ID: <CACRpkdYVPeEtKKA9xdiSAP6oJrX5eAKoOVaLnrELTv_ZQOEMUw@mail.gmail.com>
+Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
+ align key node name
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, openbmc@lists.ozlabs.org, 
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The Baikal-T1 AXI bus driver correctly handles the deferred probe
-situation, but still pollutes the system log with a misleading error
-message. Let's fix that by using the dev_err_probe() method to print the
-log message in case of the clocks/resets request errors.
+On Thu, Jun 16, 2022 at 2:54 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> gpio-keys schema requires keys to have more generic name.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
+OK, do you want me to apply this one patch to the pinctrl tree or
+will you collect a series?
 
-Link: https://lore.kernel.org/lkml/20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru/
-Changelog v2:
-- Use the dev_err_probe() return value as the return status of the
-  corresponding method. (@Philipp)
-
-Link: https://lore.kernel.org/lkml/20220610104030.28399-2-Sergey.Semin@baikalelectronics.ru/
-Changelog v3:
-- Just resend.
-- Rebase onto the kernel v5.19-rcX.
----
- drivers/bus/bt1-axi.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/bus/bt1-axi.c b/drivers/bus/bt1-axi.c
-index e7a6744acc7b..70e49a6e5374 100644
---- a/drivers/bus/bt1-axi.c
-+++ b/drivers/bus/bt1-axi.c
-@@ -135,10 +135,9 @@ static int bt1_axi_request_rst(struct bt1_axi *axi)
- 	int ret;
- 
- 	axi->arst = devm_reset_control_get_optional_exclusive(axi->dev, "arst");
--	if (IS_ERR(axi->arst)) {
--		dev_warn(axi->dev, "Couldn't get reset control line\n");
--		return PTR_ERR(axi->arst);
--	}
-+	if (IS_ERR(axi->arst))
-+		return dev_err_probe(axi->dev, PTR_ERR(axi->arst),
-+				     "Couldn't get reset control line\n");
- 
- 	ret = reset_control_deassert(axi->arst);
- 	if (ret)
-@@ -159,10 +158,9 @@ static int bt1_axi_request_clk(struct bt1_axi *axi)
- 	int ret;
- 
- 	axi->aclk = devm_clk_get(axi->dev, "aclk");
--	if (IS_ERR(axi->aclk)) {
--		dev_err(axi->dev, "Couldn't get AXI Interconnect clock\n");
--		return PTR_ERR(axi->aclk);
--	}
-+	if (IS_ERR(axi->aclk))
-+		return dev_err_probe(axi->dev, PTR_ERR(axi->aclk),
-+				     "Couldn't get AXI Interconnect clock\n");
- 
- 	ret = clk_prepare_enable(axi->aclk);
- 	if (ret) {
--- 
-2.35.1
-
+Yours,
+Linus Walleij
