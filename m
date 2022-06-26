@@ -1,95 +1,228 @@
-Return-Path: <SRS0=a3Ev=XB=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C14C433EF
-	for <soc@archiver.kernel.org>; Sun, 26 Jun 2022 10:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D896CC43334
+	for <soc@archiver.kernel.org>; Sun, 26 Jun 2022 20:59:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3F8A7C341CB; Sun, 26 Jun 2022 10:29:00 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 76130C341CA
-	for <soc@kernel.org>; Sun, 26 Jun 2022 10:28:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76130C341CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id fi2so13282476ejb.9
-        for <soc@kernel.org>; Sun, 26 Jun 2022 03:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UryUvcXWPpBXfvIflu4cxT9Q9H+kMYtJGeIQndtNQSc=;
-        b=J9tW/hh8Vxxadht/p2/HAMoeJuD8BWvbcQU5buW1oPKBF4wwnwGo/ZM3n8OW6CQXuD
-         5mjg0BBbRFeYvbBBswoKiH8Nbz81NRywcdfXpQYOxtZLI1dT8LzI4cFstgjEiZJhz8VM
-         driBZpRUvCocFX4X+8w8SS5DlKb/V8wHXD+128Tu9R8bCYuJ8Z/BPKyw8gv//AwYV9/G
-         PPhsFg1QKpoAYqdaJVlzvI0T3S9gfR4fwWSd5Us7/0luZ357gQTHlBtZFBOJ7J8YJ+Dr
-         fL3wNWwKTak0D+5iZ9XIr1LkoaOR8IHORl3UPQy5QiDc4PoVTaMiT3IuhuLbBuZOnbvF
-         6m4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UryUvcXWPpBXfvIflu4cxT9Q9H+kMYtJGeIQndtNQSc=;
-        b=MBmdu6UXfTQUAVbYzVOzeAGUjn6terL1+Ki/tW8CkpTXJW3jX+qcqQxQTPpbWT9UWT
-         /A4Kq5+0Tj1CXSJhMuNiROCI11fwWZ+HMz7AvuaXMDSEW8Ors40NhjUifW5gMujh4e8S
-         4eN8xGEgeDPZqTaxs6zUlBYU8jsCZzOCRHGWuW0d8XoFtpX2VAiu4Yuy5XmiJ6EI4xjY
-         ZC/sZ3H4cwmyyUuzTF7IbRs1L/fsevmcwvBHE+FEaASrUDdR3Q5tIv7E1tXu/EsWQ14u
-         2nsEJN1xAXex87Na/BZHqB20JYv5ifmeBeAjrWaxcvOuXpSqAdYDER65gWxooH/7XGV2
-         Y1TQ==
-X-Gm-Message-State: AJIora8Fxi/EKV9ZlJ+TJe97uIAEnMN8kpd9rA39bIexiSjy4CK7UW+4
-	7IdnNDnMccnF6ScosPMUNTPE/w==
-X-Google-Smtp-Source: AGRyM1sblJgmEXbxMeGf+RD2dHMi4zVazxPkN9rudj8RaT/bHUJavjCmx8LIYG68F1Q3UPK3+2Rsgg==
-X-Received: by 2002:a17:906:7303:b0:722:f008:2970 with SMTP id di3-20020a170906730300b00722f0082970mr7234670ejc.491.1656239337624;
-        Sun, 26 Jun 2022 03:28:57 -0700 (PDT)
-Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170906298a00b00705cd37fd5asm3637815eje.72.2022.06.26.03.28.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 03:28:57 -0700 (PDT)
-Message-ID: <ec660b83-998e-3a53-ce17-8f7d9d8728cc@linaro.org>
-Date: Sun, 26 Jun 2022 12:28:56 +0200
+	id 9B10EC341CD; Sun, 26 Jun 2022 20:59:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 863AAC341CC
+	for <soc@kernel.org>; Sun, 26 Jun 2022 20:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1656277181;
+	bh=CZjrKVfPY/7nkbpxPbFAPK16kKhcMcQeR0evrITbRAI=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=q/7nIjayRISmFXThikQ65hMuj4BczSNkosrFFK5gIWqCnBPp9bcL7plQ4mAjT6al4
+	 3wVSvReEmLQH0V6+BXoNmvBPYt/IV+SfnkFdeWQw8dtmQqWC8YZfEZ/nbGeFdSSB7M
+	 Mih0re/OpVoGDRVEyKlbCyXXHE3e4zwteSKjtcXHLoCk9G96uBuJKohS3QfKUiSw7n
+	 E4bc4ZrV/H3pDCGDnekbVxEYFhDnnaw6MhEJcdLbZNzBFar05jSTXKLVuAGx6gxwKy
+	 Pgzo9gA7Uxwh/5u0Hc85fECUJHdV1KfadohXbpsNp/uxYoQKo5UHxd3C+XDzxex5Er
+	 rU0+1jt2ikhxQ==
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-317741c86fdso68562697b3.2
+        for <soc@kernel.org>; Sun, 26 Jun 2022 13:59:41 -0700 (PDT)
+X-Gm-Message-State: AJIora9/b7aI1qRRFuem+08vfhxcfqbXvXNhydm9yMiQdiIyqxHmMCt8
+	yj2TqXII6ooJJGKTneOcYqk5T9PMugtfqWJG3Rg=
+X-Google-Smtp-Source: AGRyM1sPcmPQ057/Pn98Vj5uvRCc6cNfZWnjJOwWJiw8cMZn8m6/TtMxXZUbeJHOwijUSIAQcgS46fy/vslzmwc3Lgo=
+X-Received: by 2002:a81:c08:0:b0:317:8131:2b21 with SMTP id
+ 8-20020a810c08000000b0031781312b21mr11584939ywm.249.1656277180531; Sun, 26
+ Jun 2022 13:59:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
- align key node name
-Content-Language: en-US
-To: Linus Walleij <linus.walleij@linaro.org>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Sun, 26 Jun 2022 22:59:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0htht-S_P-CpvvO+2Nbjp_ofUbchV8MWXrO09rnzRdjA@mail.gmail.com>
+Message-ID: <CAK8P3a0htht-S_P-CpvvO+2Nbjp_ofUbchV8MWXrO09rnzRdjA@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for 5.19
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?=
- <j.neuschaefer@gmx.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
- <CACRpkdYVPeEtKKA9xdiSAP6oJrX5eAKoOVaLnrELTv_ZQOEMUw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdYVPeEtKKA9xdiSAP6oJrX5eAKoOVaLnrELTv_ZQOEMUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 26/06/2022 01:28, Linus Walleij wrote:
-> On Thu, Jun 16, 2022 at 2:54 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> gpio-keys schema requires keys to have more generic name.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> OK, do you want me to apply this one patch to the pinctrl tree or
-> will you collect a series?
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3=
+:
 
-I would prefer if you picked it up. I am not aware of any conflicts.
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
 
-I am picking up only some left-overs and in general better if the
-subsystem maintainer takes these.
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-=
+5.19
 
-Best regards,
-Krzysztof
+for you to fetch changes up to 7f058112873e86ca760f2d2b0e1ccc2ab111f418:
+
+  ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom (2022-06-24
+17:57:13 +0200)
+
+----------------------------------------------------------------
+ARM: SoC fixes for 5.19
+
+A number of fixes have accumulated, but they are largely for
+harmless issues:
+
+ - Several OF node leak fixes
+
+ - A fix to the Exynos7885 UART clock description
+
+ - DTS fixes to prevent boot failures on TI AM64 and J721s2
+
+ - Bus probe error handling fixes for Baikal-T1
+
+ - A fixup to the way STM32 SoCs use separate dts files for
+   different firmware stacks
+
+ - Multiple code fixes for Arm SCMI firmware, all dealing with
+   robustness of the implementation
+
+ - Multiple NXP i.MX devicetree fixes, addressing incorrect
+   data in DT nodes
+
+ - Three updates to the MAINTAINERS file, including Florian
+   Fainelli taking over BCM283x/BCM2711 (Raspberry Pi)
+   from Nicolas Saenz Julienne
+
+----------------------------------------------------------------
+Alexander Stein (2):
+      ARM: dts: imx7: Move hsic_phy power domain to HSIC PHY node
+      soc: imx: imx8m-blk-ctrl: fix display clock for LCDIF2 power domain
+
+Alexandre Torgue (1):
+      ARM: dts: stm32: move SCMI related nodes in a dedicated file for stm3=
+2mp15
+
+Arnd Bergmann (9):
+      Merge tag 'imx-fixes-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes
+      Merge tag 'scmi-fixes-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into
+arm/fixes
+      Merge tag 's32g2-fixes-5.19' of
+https://github.com/chesterlintw/linux-s32g into arm/fixes
+      Merge tag 'arm-soc/for-5.19/drivers-fixes' of
+https://github.com/Broadcom/stblinux into arm/fixes
+      Merge tag 'arm-soc/for-5.19/maintainers-fixes' of
+https://github.com/Broadcom/stblinux into arm/fixes
+      Merge tag 'ti-k3-dt-fixes-for-v5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/fixes
+      Merge tag 'arm-soc/for-5.19/devicetree-fixes' of
+https://github.com/Broadcom/stblinux into arm/fixes
+      Merge tag 'samsung-fixes-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux into
+arm/fixes
+      Merge tag 'memory-controller-drv-fixes-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl into
+arm/fixes
+
+Aswath Govindraju (1):
+      arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
+
+Chester Lin (1):
+      MAINTAINERS: add a new reviewer for S32G
+
+Cristian Marussi (4):
+      firmware: arm_scmi: Relax base protocol sanity checks on the protocol=
+ list
+      firmware: arm_scmi: Remove all the unused local variables
+      firmware: arm_scmi: Fix SENSOR_AXIS_NAME_GET behaviour when unsupport=
+ed
+      firmware: arm_scmi: Avoid using extended string-buffers sizes if
+not necessary
+
+David Virag (1):
+      arm64: dts: exynos: Correct UART clocks on Exynos7885
+
+Fabio Estevam (1):
+      arm64: s32g2: Pass unit name to soc node
+
+Geert Uytterhoeven (1):
+      memory: omap-gpmc: OMAP_GPMC should depend on ARCH_OMAP2PLUS ||
+ARCH_KEYSTONE || ARCH_K3
+
+Jae Hyun Yoo (1):
+      ARM: dts: aspeed: nuvia: rename vendor nuvia to qcom
+
+Liang He (1):
+      arm: mach-spear: Add missing of_node_put() in time.c
+
+Lucas Stach (1):
+      ARM: dts: imx6qdl: correct PU regulator ramp delay
+
+Ludvig P=C3=A4rsson (1):
+      firmware: arm_scmi: Fix incorrect error propagation in
+scmi_voltage_descriptors_get
+
+Matt Ranostay (1):
+      arm64: dts: ti: k3-j721s2: Fix overlapping GICD memory region
+
+Max Krummenacher (1):
+      ARM: dts: imx6qdl-colibri: Fix capacitive touch reset polarity
+
+Miaoqian Lin (6):
+      ARM: exynos: Fix refcount leak in exynos_map_pmu
+      memory: mtk-smi: add missing put_device() call in
+mtk_smi_device_link_common
+      memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_tim=
+ings
+      soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in brcmstb_pm_probe
+      ARM: Fix refcount leak in axxia_boot_secondary
+      ARM: cns3xxx: Fix refcount leak in cns3xxx_init
+
+Nicolas Saenz Julienne (1):
+      MAINTAINERS: Update BCM2711/BCM2835 maintainer
+
+Serge Semin (2):
+      bus: bt1-apb: Don't print error on -EPROBE_DEFER
+      bus: bt1-axi: Don't print error on -EPROBE_DEFER
+
+Stefan Wahren (1):
+      ARM: dts: bcm2711-rpi-400: Fix GPIO line names
+
+Thara Gopinath (1):
+      MAINTAINERS: Update email address
+
+ MAINTAINERS                                        |  9 +--
+ arch/arm/boot/dts/Makefile                         |  2 +-
+ ...ia-dc-scm.dts =3D> aspeed-bmc-qcom-dc-scm-v1.dts} |  4 +-
+ arch/arm/boot/dts/bcm2711-rpi-400.dts              |  6 +-
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi             |  2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                     |  2 +-
+ arch/arm/boot/dts/imx7s.dtsi                       |  2 +-
+ arch/arm/boot/dts/stm32mp15-scmi.dtsi              | 47 +++++++++++++++
+ arch/arm/boot/dts/stm32mp151.dtsi                  | 41 -------------
+ arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts         | 13 +----
+ arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts         | 13 +----
+ arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts         | 13 +----
+ arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts         | 13 +----
+ arch/arm/mach-axxia/platsmp.c                      |  1 +
+ arch/arm/mach-cns3xxx/core.c                       |  2 +
+ arch/arm/mach-exynos/exynos.c                      |  1 +
+ arch/arm/mach-spear/time.c                         |  8 ++-
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi         | 12 ++--
+ arch/arm64/boot/dts/freescale/s32g2.dtsi           |  2 +-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi           |  2 -
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi         |  2 +-
+ drivers/bus/bt1-apb.c                              | 14 ++---
+ drivers/bus/bt1-axi.c                              | 14 ++---
+ drivers/firmware/arm_scmi/base.c                   | 24 +++++---
+ drivers/firmware/arm_scmi/clock.c                  |  7 +--
+ drivers/firmware/arm_scmi/perf.c                   |  6 +-
+ drivers/firmware/arm_scmi/power.c                  |  2 +-
+ drivers/firmware/arm_scmi/protocols.h              |  2 -
+ drivers/firmware/arm_scmi/reset.c                  |  2 +-
+ drivers/firmware/arm_scmi/sensors.c                | 68 +++++++++++++++++-=
+----
+ drivers/firmware/arm_scmi/voltage.c                | 15 ++---
+ drivers/memory/Kconfig                             |  1 +
+ drivers/memory/mtk-smi.c                           |  5 +-
+ drivers/memory/samsung/exynos5422-dmc.c            | 29 +++++----
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c                |  1 +
+ drivers/soc/imx/imx8m-blk-ctrl.c                   |  2 +-
+ include/linux/scmi_protocol.h                      |  9 +--
+ 37 files changed, 205 insertions(+), 193 deletions(-)
+ rename arch/arm/boot/dts/{aspeed-bmc-nuvia-dc-scm.dts =3D>
+aspeed-bmc-qcom-dc-scm-v1.dts} (97%)
+ create mode 100644 arch/arm/boot/dts/stm32mp15-scmi.dtsi
