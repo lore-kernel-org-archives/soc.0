@@ -1,98 +1,99 @@
-Return-Path: <dinguyen@kernel.org>
+Return-Path: <SRS0=Bt3X=XB=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BE6EC433EF
-	for <soc@archiver.kernel.org>; Sun, 26 Jun 2022 00:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8A83C433EF
+	for <soc@archiver.kernel.org>; Sun, 26 Jun 2022 07:45:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E5653C341CB; Sun, 26 Jun 2022 00:44:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 706B1C3411C;
-	Sun, 26 Jun 2022 00:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656204279;
-	bh=LWjrSjZr4GgE3OEqd7gebZLddhSNEPvS0C4NbgskPwA=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=a/gqG2B6Gtc6hE4iyDSYdv0eLvowuZSiWBRomFmaC/oHFtXdmv6tZpgi/H9MPCxIT
-	 2o4Lm1PCnoWb/61Cx4iCfxMfmMaKdlW8mHWmuazUVRz2JtxU5tSYVjRBz3L6l64W6j
-	 f2mwz6jg4Ku2SIzfN6m0+7mv/ro973sSolhuO2BBBgJmAlMmaPZNp4JKMgYPy+TzUs
-	 fjpi2m/kCytAYzWp11rNPs4YzfQ4AcoZOkbIEWq1FG0eEjVLxEFLOTOsxPg/UFycn+
-	 0JHBAZaZACugh9n2ULi3sSvcESC9ElHFHvsMDdJ5//rtIsjqn8HbvVdpyJ4Pkik+fp
-	 vB5+meZQzd9wg==
-From: Dinh Nguyen <dinguyen@kernel.org>
+	id A4C4CC341CC; Sun, 26 Jun 2022 07:45:22 +0000 (UTC)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 37735C34114
+	for <soc@kernel.org>; Sun, 26 Jun 2022 07:45:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37735C34114
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id x3so11547898lfd.2
+        for <soc@kernel.org>; Sun, 26 Jun 2022 00:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YlM9GiprgFOyNtROO1ii7MARSHvqwDSW1NlgCyjOuPk=;
+        b=GLxMbuxt+jS4rZDPC+JeePZyQk+2rew3/BnygEIbRyxgzLavwMAFiOzesNm4v5dXTP
+         Kk6zlfa41+CIneERbm7J5/ZTTmfZPeyLfjiGjAxS8OXIFTMUaAAIcp3RZan3886r9/WZ
+         xXKoQHID/Xujf/ofwesvGEwgckJRcoFfvOswqxg9x64grZcht5lSZgNPzKebgS80r+LX
+         f45x2NnWvfJx0yrhWqIOIiOsstjnuYewFhv/lalmxE+x8JdHwhmKjKhlnq8RA8A2P2fB
+         Y19JvE/rmSFNLMnrd0luqFJhvuZrZxj5UbZvE2Iia6UsdCEJnMdIltiSO8Y3mRIX3XFq
+         oueg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YlM9GiprgFOyNtROO1ii7MARSHvqwDSW1NlgCyjOuPk=;
+        b=vGCQlycGpzUpEpXJ+KggGTczpMND6p0TVq1qDoIPs2dIxd8f/wJSAoVy9epktVRKaB
+         QYVWiZy0xuXWdglQBu9iYgF+N0pGcM4pDsOKnarv/zGPzT4GG6hXGG9l2HRmQTuhI748
+         tCKrKrYTuFOh/m+qcL0utF5otc3Hxnz08tWIt/bWG0K5Mi2pCoAI7sgoU7iYGsQ2qVdg
+         ZPRmY76TVb64uNvzy8RisCPcL/BIy2KXyld97PochVfKUrjft0D/OTVvhdA+bIC36ghy
+         1JuJ7vOVs2zUofZGfSN9MYMWDE9RBZfnOYd3vDaq71xWthPIu9+q64eckQG5yfuivue1
+         M0Dg==
+X-Gm-Message-State: AJIora8gifOS7FMqDg6/bdaWnmM9W7RFM1Ggt2IBWy55Ka9v7Z46xyX+
+	dJo+NO1y1LDfPvjSmA40iyn56Q==
+X-Google-Smtp-Source: AGRyM1vKfXolfvfRjTppTkRN4uSJUpOChHM1lu3FJ/fmxtVj9qEn9YcVgaugtLwXfQVDSpypomHbOA==
+X-Received: by 2002:ac2:4f03:0:b0:47f:4c43:b4f with SMTP id k3-20020ac24f03000000b0047f4c430b4fmr4553496lfr.303.1656229518120;
+        Sun, 26 Jun 2022 00:45:18 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id e16-20020a196910000000b0047f6ab55fdbsm1240045lfc.267.2022.06.26.00.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 00:45:17 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	soc@kernel.org
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm64: dts: socfpga: dts updates for v5.20
-Date: Sat, 25 Jun 2022 19:44:37 -0500
-Message-Id: <20220626004437.1224820-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] soc: ixp4xx/npe: Fix unused match warning
+Date: Sun, 26 Jun 2022 09:43:15 +0200
+Message-Id: <20220626074315.61209-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
 Content-Transfer-Encoding: 8bit
 
-Hi Arnd/Olof,
+The kernel test robot found this inconsistency:
 
-Please pull in these updates for v5.20.
+  drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning:
+  'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
+     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
 
-Thanks,
-Dinh
+This is because the match is enclosed in the of_match_ptr()
+which compiles into NULL when OF is disabled and this
+is unnecessary.
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+Fix it by dropping of_match_ptr() around the match.
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+SoC folks: please apply this directly for fixes.
+---
+ drivers/soc/ixp4xx/ixp4xx-npe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-are available in the Git repository at:
+diff --git a/drivers/soc/ixp4xx/ixp4xx-npe.c b/drivers/soc/ixp4xx/ixp4xx-npe.c
+index 613935cb6a48..58240e320c13 100644
+--- a/drivers/soc/ixp4xx/ixp4xx-npe.c
++++ b/drivers/soc/ixp4xx/ixp4xx-npe.c
+@@ -758,7 +758,7 @@ static const struct of_device_id ixp4xx_npe_of_match[] = {
+ static struct platform_driver ixp4xx_npe_driver = {
+ 	.driver = {
+ 		.name           = "ixp4xx-npe",
+-		.of_match_table = of_match_ptr(ixp4xx_npe_of_match),
++		.of_match_table = ixp4xx_npe_of_match,
+ 	},
+ 	.probe = ixp4xx_npe_probe,
+ 	.remove = ixp4xx_npe_remove,
+-- 
+2.36.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v5.20
-
-for you to fetch changes up to 357513c052e10945427dd341bdf7a7ee5bf065a9:
-
-  arm64: dts: altera: socfpga_stratix10: move clocks out of soc node (2022-06-24 14:10:04 -0500)
-
-----------------------------------------------------------------
-SoCFPGA dts updates for v5.20
-- Clean up the Mercury++ AA1 dts
-- Add support the Google Chameleon v3 board
-- Add defined GIC interrupt type for Agilex ECC
-- Fix coding style around Stratix10 QSPI dts entry
-- Add support for Stratix10 SW Virtual platform
-- Move clocks entry out of the Stratix10 soc node
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      arm64: dts: altera: adjust whitespace around '='
-
-Niravkumar L Rabara (2):
-      arm64: dts: intel: socfpga_agilex: use defined GIC interrupt type for ECC
-      arm64: dts: altera: socfpga_stratix10: move clocks out of soc node
-
-Paweł Anikiel (5):
-      ARM: dts: socfpga: Change Mercury+ AA1 dts to dtsi
-      ARM: dts: socfpga: Move sdmmc-ecc node to Arria 10 dts
-      ARM: dts: socfpga: Add atsha204a node to Mercury+ AA1 dts
-      ARM: dts: socfpga: Add Google Chameleon v3 devicetree
-      dt-bindings: altera: Add Chameleon v3 board
-
-Teh Wen Ping (2):
-      dt-bindings: altera: document Stratix 10 SWVP compatibles
-      arm64: dts: Add support for Stratix 10 Software Virtual Platform
-
- Documentation/devicetree/bindings/arm/altera.yaml  |  10 +-
- arch/arm/boot/dts/Makefile                         |   2 +-
- arch/arm/boot/dts/socfpga_arria10.dtsi             |  10 ++
- arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts  |  90 ++++++++++++++++
- ...ry_aa1.dts => socfpga_arria10_mercury_aa1.dtsi} |  48 ++-------
- arch/arm64/Kconfig.platforms                       |   3 +-
- arch/arm64/boot/dts/altera/Makefile                |   3 +-
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  |  58 +++++-----
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    |  10 +-
- .../dts/altera/socfpga_stratix10_socdk_nand.dts    |  10 +-
- .../boot/dts/altera/socfpga_stratix10_swvp.dts     | 117 +++++++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  14 +--
- 12 files changed, 283 insertions(+), 92 deletions(-)
- create mode 100644 arch/arm/boot/dts/socfpga_arria10_chameleonv3.dts
- rename arch/arm/boot/dts/{socfpga_arria10_mercury_aa1.dts => socfpga_arria10_mercury_aa1.dtsi} (70%)
- create mode 100644 arch/arm64/boot/dts/altera/socfpga_stratix10_swvp.dts
