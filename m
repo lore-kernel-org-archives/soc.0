@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F2DCCA47F
-	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 09:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10BABC43334
+	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 09:16:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C41F2C341C7; Mon, 27 Jun 2022 09:16:21 +0000 (UTC)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	id F22C9C341C7; Mon, 27 Jun 2022 09:16:22 +0000 (UTC)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 44AB3C341CE
-	for <soc@kernel.org>; Mon, 27 Jun 2022 09:16:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 44AB3C341CE
+	by smtp.kernel.org (Postfix) with ESMTPS id 53537C3411D
+	for <soc@kernel.org>; Mon, 27 Jun 2022 09:16:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53537C3411D
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id u15so17734470ejc.10
-        for <soc@kernel.org>; Mon, 27 Jun 2022 02:16:21 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id pk21so17812739ejb.2
+        for <soc@kernel.org>; Mon, 27 Jun 2022 02:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=t3b+jqU8GZl0EFABg0x/c17eyO7t957ugRR9BD9/610=;
-        b=ClQbzClzPWCdY6KlKQ665ptjCuPobjuYbF5+PcFCTSWc8Y58h090V+C1srpISQOyU1
-         sPJrDmbjuUDL+NYTY1Zxqus5iDpmAe0J9eYyV8H9uRO1fJfwPynKi7AUo+sT2Wkc3qA/
-         +2XKnjINT1tBokbmhl8hVXAG6oXaKzq6e3qzv2yKgDrjeJolXV2bysPQiOL8S0Tc0gmK
-         0TMHYj8jD0Ib/YplEsnPIQ1dtuKs3N+046uv7cKXSDYnijB0MbWhqm5wD6OGP1t7kTUp
-         lbeWc7ffftR+zabFtI57XrwS1TLe7i40mh9AmpujJczAUWNRhTU6oLQt+PPtzfITWmvb
-         oUdg==
+        bh=0MCWeM5fSAUN7KzvyvAXYoghiEdCZV4+8RpEEX0d71E=;
+        b=z3N30FGmS7oL/0ACcSCAro2Pv18Kv+Up91/2Np/lvE6F7X4satw5OZOMRW+C6DLHqq
+         eADjlRfKkj9pSr1PPNFt/nPV/hdq4v93If0blPDnunTyagAXZBiY/R/Zlp8YIpjx0Gbz
+         Ei6K+VtZwgMqf7LsZaEVBGBZzUk2/a5WYrLbDhSWenxzb2iwJUfa+wqp7FqWmW8nCHS2
+         Di+gln8dw3/CUDTLvywEhelQQG5Gj+/fRXMDCnWJzQQZgnjBhap2cAVxm+HzLVSmR0/E
+         yb1b1EVQqMstPWdKg/qmUqwThB0bTJ4VzhhY11rG4/ekRo27tXhDOFGROgJhNis0wY+a
+         b40g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=t3b+jqU8GZl0EFABg0x/c17eyO7t957ugRR9BD9/610=;
-        b=Uct0feyNjKTQjt9RNX1JTmCn9vCbEYBpFJEItLhmSikWJMhosk8ce48fIqaCJBEuqi
-         /VkMNnbG+qRCE6FDAVbTgUeFdmnx1akcJHsY1MQTqz8lCyYDLzWIbQDbfRcSKNwDEFTO
-         ibW5pDKeezmKoHxwf1wAmMcOvraMAxPlEzhr7T7rpL1WHzZ4bt5c+fzuFm5/gkuSvVas
-         YoaOjWE4RnOv2+cxOAuzW0P6RbN9VdihpnZZVgjZlrc/FQhnNN5RJxQcCrpsTQpLnOvs
-         yLTu7qx+2dK0TARwq7oH8XLvjqOBpry+dlBi53hBscyLRxp8uLVmz9SeFZGNppSzpdEt
-         qK/Q==
-X-Gm-Message-State: AJIora+lCE5yhOreV7FBjLe+dzjOXwMj53WYecwcBfRD29hSrFtNn4Hc
-	gCwfh0NC4Go6roVHlo0Iq3fNuNoPEhRyVA==
-X-Google-Smtp-Source: AGRyM1seK6am1qPGVlXKvE26Oe7a/3cikFyA5HjSozFlnKf4dp0lSN28TvTzTIbIHajj45li1fV+Dg==
-X-Received: by 2002:a17:907:969f:b0:726:94a0:26fd with SMTP id hd31-20020a170907969f00b0072694a026fdmr8304630ejc.234.1656321379246;
-        Mon, 27 Jun 2022 02:16:19 -0700 (PDT)
+        bh=0MCWeM5fSAUN7KzvyvAXYoghiEdCZV4+8RpEEX0d71E=;
+        b=OzSljS56ELHXTkAHyycgEPvbm+eu43GuXKhluB0DEQNcL5ae6THAvz4r+7r90V/mN/
+         Sq73i9KaR5H31CIMMeUqx82HtvWgdIhg6YwlAtjHj8cm+7fyxmG1w9QIMA7yBNH79Zhq
+         N0OCjTRL/kJ1N3uFWPNy8ReVJvBzHZv0vsFPMik89GJXB3FIf17+nkGGh/1iRKR7wtJN
+         1VJkfO8rMIyks0xHxgbRdf9vyBItkM/ZCCY/A/pl/d7pSi21FChXNG0F2PZg2Q21XzaD
+         3v2DKHacJlyNSMlx7139d4V0OrACaZe+5SvhGzLM8BAGBFej9Mgj8+lthYoPr/SP/7HQ
+         MRxQ==
+X-Gm-Message-State: AJIora+8Tki6QEDb8PAKmwriYHTfWcy8u4ioxKQ20mXcJ57luSF19RJG
+	k7snXc2ielmBBHYD/Fc663lh400qzggTXg==
+X-Google-Smtp-Source: AGRyM1ts4Tg9UABy9P4W6KiJiUjWxMpM1KC7YAbt8WjmTehU/m5TJ7uzBLdW/oqZoMzbfMIpyC4pQg==
+X-Received: by 2002:a17:907:3e94:b0:726:3b46:ba20 with SMTP id hs20-20020a1709073e9400b007263b46ba20mr11854749ejc.314.1656321381591;
+        Mon, 27 Jun 2022 02:16:21 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.18
+        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:16:18 -0700 (PDT)
+        Mon, 27 Jun 2022 02:16:21 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -63,25 +63,26 @@ To: soc@kernel.org,
 	robh+dt@kernel.org,
 	olof@lixom.net,
 	bjorn.andersson@linaro.org
-Subject: Re: (subset) [PATCH v3 23/40] arm64: dts: qcom: sdm630-sony-xperia-nile: drop unneeded status from gpio-keys
-Date: Mon, 27 Jun 2022 11:15:53 +0200
-Message-Id: <165632135505.81841.3584331837885550426.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v3 25/40] ARM: dts: qcom: align gpio-key node names with dtschema
+Date: Mon, 27 Jun 2022 11:15:55 +0200
+Message-Id: <165632135505.81841.15098382258100030823.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220616005333.18491-23-krzysztof.kozlowski@linaro.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-23-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-25-krzysztof.kozlowski@linaro.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-25-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Wed, 15 Jun 2022 17:53:16 -0700, Krzysztof Kozlowski wrote:
-> Nodes do not need explicit status=okay.
+On Wed, 15 Jun 2022 17:53:18 -0700, Krzysztof Kozlowski wrote:
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
 > 
 > 
 
 Applied, thanks!
 
-[23/40] arm64: dts: qcom: sdm630-sony-xperia-nile: drop unneeded status from gpio-keys
-        https://git.kernel.org/krzk/linux/c/aa30ba37ebb4c66c9d0e6b6bddbeda7f84ac806e
+[25/40] ARM: dts: qcom: align gpio-key node names with dtschema
+        https://git.kernel.org/krzk/linux/c/7ccf54f23a1453d07c67dc000d1ab1fb8b3581c6
 
 Best regards,
 -- 
