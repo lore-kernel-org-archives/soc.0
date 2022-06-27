@@ -1,91 +1,72 @@
-Return-Path: <SRS0=T0cT=XC=microchip.com=Kavyasree.Kotagiri@kernel.org>
+Return-Path: <SRS0=BEay=XC=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C87EAC433EF
-	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 11:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3911C43334
+	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 22:18:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 89CF5C341C8; Mon, 27 Jun 2022 11:06:06 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 66C26C341C8; Mon, 27 Jun 2022 22:18:16 +0000 (UTC)
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01F66C3411D;
-	Mon, 27 Jun 2022 11:06:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01F66C3411D
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656327964; x=1687863964;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=OoPFRHqikt/yBEHB9HcY/GvSuduX5hDNnHB8YUjJssg=;
-  b=kAEjeXR6YJ9WA69Y5G91TIrmURyObm5EMHG4HmfD9RBvEeb/GXYoX4cl
-   h6sSHl66A1DNCk3B3OZWEqATlD3s6mBfcNjwTFFPq6/QtIjNrUMl1ryoF
-   ZsZbLlPcbEV3NUPhZ2+UxwZll97OE1Lx11qzW7oWAwbdSN/W4ZJblKMPX
-   4bM3TlWSzKp6AkHoz0nwFHTcDgmyhKstWEeul728uEwLwMrWOIsEUudlE
-   fuKQS8WW5zIJwleXwC8KeWTXdX5eKDRDP4hCg2Lekh840uqeaWK4Zk7jS
-   n+0/sWg8p79GDMayXBaXB4L+0Mt/1pCaGvgXpMkDoi1K8N6KWTTzhw+cz
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="101875529"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2022 04:06:02 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 27 Jun 2022 04:05:58 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 27 Jun 2022 04:05:54 -0700
-From: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To: <alexandre.belloni@bootlin.com>, <krzysztof.kozlowski+dt@linaro.org>,
-	<robh+dt@kernel.org>, <nicolas.ferre@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 97135C34115;
+	Mon, 27 Jun 2022 22:18:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 97135C34115
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f42.google.com with SMTP id v185so4430164ioe.11;
+        Mon, 27 Jun 2022 15:18:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YibwpeFlLUAXldT3IcMtZUEv7yVm8RZ87dZAwMJufVw=;
+        b=2RAuMMqhEKGgZhbcwRkjY/u+05AIXZuKZJmKzTPUEdSGbwyJdbL8ye7c5V4X62eBlt
+         70ogyxRMUkKC/v1TJxNZuEhgw1OuxDiIupOdVeOoaodssaBY8g8dZr6BddB51dFR260Y
+         FVoLXRBqjoU4t1r0mDEbC7sNltOqVtB4/oRz0U270GDDfKDCzW+gQjR9u/u1vUbjgNZ4
+         BCcPNIWa9uY5duwIs4iRhb0l8IRxxLiblEmO7Dkjbu2uVKS6T96pNdqNTChI/gPA5Zpe
+         qUfs5wynKd3QDI+4WcmEDMcNzC5jEFqhvUwBSrQ5DrLWhYKGW9HjsiwqlYHjTeAjUZhN
+         +LKg==
+X-Gm-Message-State: AJIora+LSw2JqfPvQUWjmAw7CLteOPW04NFZMTbmz4Bz0dC1ANkqPqGi
+	Vo6fCybpz6UD64lowhlT4A==
+X-Google-Smtp-Source: AGRyM1v1uMcYY0sXxp0P098New6WbDFXGNit8XNV3ZEYVn08nGYcoSP532Tx60bnDX9w8a+/DBwomQ==
+X-Received: by 2002:a05:6602:13c3:b0:672:6e5b:f91d with SMTP id o3-20020a05660213c300b006726e5bf91dmr7538403iov.68.1656368294681;
+        Mon, 27 Jun 2022 15:18:14 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id z18-20020a92bf12000000b002d11c598e12sm5052398ilh.61.2022.06.27.15.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 15:18:14 -0700 (PDT)
+Received: (nullmailer pid 3065966 invoked by uid 1000);
+	Mon, 27 Jun 2022 22:18:12 -0000
+Date: Mon, 27 Jun 2022 16:18:12 -0600
+From: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-CC: <arnd@arndb.de>, <soc@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH] ARM: dts: lan966x: Add mcan1 node.
-Date: Mon, 27 Jun 2022 16:35:52 +0530
-Message-ID: <20220627110552.26315-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+Cc: Rob Herring <robh+dt@kernel.org>, arm@kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Olof Johansson <olof@lixom.net>, linux-gpio@vger.kernel.org, Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>, linux-kernel@vger.kernel.org, soc@kernel.org, Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
+ align key node name
+Message-ID: <20220627221812.GA3065912-robh@kernel.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
 
-Add the mcan1 node. By default, keep it disabled.
+On Wed, 15 Jun 2022 17:52:57 -0700, Krzysztof Kozlowski wrote:
+> gpio-keys schema requires keys to have more generic name.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v2:
+> 1. Name it "button-uid"
+> ---
+>  .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
- arch/arm/boot/dts/lan966x.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 3cb02fffe716..25cfa89dde7b 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -473,6 +473,21 @@
- 			status = "disabled";
- 		};
- 
-+		can1: can@e0820000 {
-+			compatible = "bosch,m_can";
-+			reg = <0xe0820000 0xfc>, <0x00100000 0x8000>;
-+			reg-names = "m_can", "message_ram";
-+			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "int0", "int1";
-+			clocks = <&clks GCK_ID_MCAN1>, <&clks GCK_ID_MCAN1>;
-+			clock-names = "hclk", "cclk";
-+			assigned-clocks = <&clks GCK_ID_MCAN1>;
-+			assigned-clock-rates = <40000000>;
-+			bosch,mram-cfg = <0x4000 0 0 64 0 0 32 32>;
-+			status = "disabled";
-+		};
-+
- 		reset: reset-controller@e200400c {
- 			compatible = "microchip,lan966x-switch-reset";
- 			reg = <0xe200400c 0x4>;
--- 
-2.17.1
-
+Acked-by: Rob Herring <robh@kernel.org>
