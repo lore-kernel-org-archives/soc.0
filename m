@@ -4,89 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84737CCA485
-	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 09:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5AADCCA483
+	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 09:16:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6BE24C3411D; Mon, 27 Jun 2022 09:16:12 +0000 (UTC)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	id D020EC341CE; Mon, 27 Jun 2022 09:16:14 +0000 (UTC)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DD99AC341C8
-	for <soc@kernel.org>; Mon, 27 Jun 2022 09:16:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DD99AC341C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 01204C341CB
+	for <soc@kernel.org>; Mon, 27 Jun 2022 09:16:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01204C341CB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id pk21so17812739ejb.2
-        for <soc@kernel.org>; Mon, 27 Jun 2022 02:16:11 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id o10so12075124edi.1
+        for <soc@kernel.org>; Mon, 27 Jun 2022 02:16:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=r+10y73o1BlNJF4WUvITZIfLalgDbNqsds0+u16dD8k=;
-        b=DicwTKV87HX1b2VwlyEDHhg3G92yZFYVbjdox8Ym61HX63HfvQpst/3EoNW6U9xRPM
-         4Yu+AJ6Pj40mAVN2l/Ph05zkEhHY1Nv+QxEEAgb85l8DHoUn1bCKx5G4iLJ1Zkv/Olnv
-         06VCZOFs9e6LNmQ59XnzgW3CndZyMj4JukJ7+/14QByLaisb1b0PKgYpMv/Pksr1dQ5t
-         qArhbUkRWZ48dU8aDy+pBXP8AnwVOtizrcnazgi1+dUUVmgSWXRCO2iAVVHooS0akgVM
-         LXhaReUxOugOtGrgvDldNCh5Q04m2HbcfbImD+vIAG0Uv0xWTwjgFsdUWdVyl3HifXXR
-         mGyA==
+        bh=8AGcZ+2eVzx8CQxwRFiOnjpZff3Qrmt80tq4f3m10qA=;
+        b=EY/FsAZ9MUqu2tmQKlrqeL3MQtb2qow9UjGy1oQFy8Ta6/pKLVDbLWlmTHHd95AjkL
+         Cdg0ah3rIYh43TJ+gAD77PcoH5lx2rltLT3rN30TRcIoCwz+HRC6Oj0lhGTjm1sfJjw7
+         ffjJjtHr5+1Cv3JduMVi5Zxy7Mp+Q4j1d/iA3btcPuJ5oKsfTtOEcFof2aUXP5DxCYGs
+         hRcbf//f1v7Lsr0U3tSL0qtLmsBesAVhhY2Gog4mOVs3HLRYYSbYs/cH1uIbhklNnMIn
+         WmT8AMjh+D/HIsCDlexjRJTBEGYFl1ZEB3YAOoRxbO2LT8v62XF7+p2mSMyYb3C0aHd0
+         +Alw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=r+10y73o1BlNJF4WUvITZIfLalgDbNqsds0+u16dD8k=;
-        b=sUxM4QVMrXWUKqatFQJ/a3wv30P+dDSVSA7G6Vu7VVj8JI8yJb1gTPHalZDfL6YiV6
-         fuMACQapBOSAey3Pq0ryxOjqIjJoiu0u196n6o5o4NjHNTINfOIHhjGL46dX1TOHU9hn
-         aBSKqhUPn2og3TDUjA1GyytDZjSlE+ZYZIPMY0oaDDpCkp25Fygr7vRxK9dZJk+LApMW
-         haZU24RYXFMgBJOOEGqTThOKqEdu7NqlIM99GAaFTbf3gTF+mQmUMuDEa6v0HLltxAh1
-         /rnh+kJ6J2zyaaBx9DFeBJdYul3Tar+28Rrh14Zgcuo9WtJvy57pWfaBfktYgZoeEmZV
-         RoAQ==
-X-Gm-Message-State: AJIora9rburyUR8HwCJk7Z1qpxVZRsZ7IQnj3+Dr3OZR6zKFthfidSmW
-	dU31kwiZGHLyrMgQI7BhoYB8l9/pujmGRQ==
-X-Google-Smtp-Source: AGRyM1uJKt77ujhXY8C3Qv1IH9qJa1kIEBOAMSFnKXQP0cMKiWlYx0QyySFAR6ZdVoQHLMvpZ8gNSQ==
-X-Received: by 2002:a17:906:5d07:b0:722:e1e3:ab6b with SMTP id g7-20020a1709065d0700b00722e1e3ab6bmr12086465ejt.674.1656321371160;
-        Mon, 27 Jun 2022 02:16:11 -0700 (PDT)
+        bh=8AGcZ+2eVzx8CQxwRFiOnjpZff3Qrmt80tq4f3m10qA=;
+        b=A5mbNhUixlpQi/QzzwzvLwtHFxRxSu1N8SgJWw5fdsvF5C/UAITbPTJmyAuqZC2erH
+         AlN7vWh25WmcAcOXFzv/4CaS1Ir7HxcMtT6JzPHw3WQ14OxrbLDt40xl74Li3qyuW5Aq
+         MLtXyCj8rYZGK8/WgMfJyY6ce26wNNLoJtfyxHnPNZgLzYCIE7cfiXHjWn3IAUDHK4aC
+         KoU/nyQ2KLbPfBgzu7ucnYHitOD8xoSmoxkyGRmzFaqE4PTB7nzkzEyD+1NJriYSvzsi
+         u04GhQpgnAPhTiEib6nhhqW+SWFqBmUN+z4FrXpb14qYD1yQOT8Nj/Yd+pMEnhdy/EOZ
+         R8Nw==
+X-Gm-Message-State: AJIora9Ujmb2umxUKSD9JE3yPrw7FTJmEI6MJ0vbqCp8hqZMlQZRVdic
+	w/wqrlpzgYntGhYzbtxPLKHtYw==
+X-Google-Smtp-Source: AGRyM1vwOzRQhpL/5CfLml8f3UY+LuxdyTcYTCwppkE/+TVpqVtwXJLrxAGV0NEPNB+mvswe6ACKJA==
+X-Received: by 2002:a05:6402:1941:b0:435:5972:7811 with SMTP id f1-20020a056402194100b0043559727811mr15053978edz.234.1656321372321;
+        Mon, 27 Jun 2022 02:16:12 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.10
+        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:16:10 -0700 (PDT)
+        Mon, 27 Jun 2022 02:16:11 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
+To: gregory.clement@bootlin.com,
+	soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	tony@atomide.com,
-	linux-omap@vger.kernel.org,
-	eballetbo@gmail.com,
-	bcousson@baylibre.com,
+	andrew@lunn.ch,
 	linux-kernel@vger.kernel.org,
 	krzysztof.kozlowski@linaro.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	krzysztof.kozlowski+dt@linaro.org,
 	devicetree@vger.kernel.org,
 	arm@kernel.org,
-	javier@dowhile0.org,
+	sebastian.hesselbarth@gmail.com,
 	robh+dt@kernel.org,
 	olof@lixom.net
-Subject: Re: [PATCH] ARM: dts: omap: adjust whitespace around '='
-Date: Mon, 27 Jun 2022 11:15:46 +0200
-Message-Id: <165632135504.81841.12609886451846241256.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v3 11/40] arm64: dts: marvell: align gpio-key node names with dtschema
+Date: Mon, 27 Jun 2022 11:15:47 +0200
+Message-Id: <165632135505.81841.15489151456935534847.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526204044.831656-1-krzysztof.kozlowski@linaro.org>
-References: <20220526204044.831656-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-11-krzysztof.kozlowski@linaro.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-11-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Thu, 26 May 2022 22:40:44 +0200, Krzysztof Kozlowski wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
+On Wed, 15 Jun 2022 17:53:04 -0700, Krzysztof Kozlowski wrote:
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
 > 
 > 
 
 Applied, thanks!
 
-[1/1] ARM: dts: omap: adjust whitespace around '='
-      https://git.kernel.org/krzk/linux/c/eef3af89b6b66ad61df636464ce92f5deabbc4a4
+[11/40] arm64: dts: marvell: align gpio-key node names with dtschema
+        https://git.kernel.org/krzk/linux/c/ebb8ba54950a1c6382647e573ab597e2b7b4af1b
 
 Best regards,
 -- 
