@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20AB1C43334
-	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 08:28:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70B08C433EF
+	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 08:28:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DD285C341CF; Mon, 27 Jun 2022 08:28:48 +0000 (UTC)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	id 5BEBFC3411D; Mon, 27 Jun 2022 08:28:49 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 605F1C3411D
-	for <soc@kernel.org>; Mon, 27 Jun 2022 08:28:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 605F1C3411D
+	by smtp.kernel.org (Postfix) with ESMTPS id 60A45C341CB
+	for <soc@kernel.org>; Mon, 27 Jun 2022 08:28:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60A45C341CB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f42.google.com with SMTP id d2so5754201ejy.1
-        for <soc@kernel.org>; Mon, 27 Jun 2022 01:28:47 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id eo8so11931564edb.0
+        for <soc@kernel.org>; Mon, 27 Jun 2022 01:28:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PTln65IiWVFNI8/zs4JVrceMHpafS1zMofC+vruC3r4=;
-        b=e/Jz9vr6NuUOQgCo1uUznJgL19mPh39TCDjsuXf4BGdZc8mhm9xsuNJjwIFPZtb56K
-         m7YlT2KAoycYxIAvdXREbvjlE9/1bBj1J5VWE6q29H63i0NBRO2zedqEb9d0s22m8491
-         EY0wKxcnjZ0xmKHdqaYlpTYt4fkbvj/2abnUm5b4Bk0yUdRTEO55eo4AKb47PnuiAhLw
-         L+e+gbIB/HU9nqGC/aZgEp9KbH6C1T3bGj2bFMw3+VIxI8ki2ZE0F4KJGbVEkIjZozEh
-         y6FZGGqx+psxgZRHzkKQ6wYSt4RuzX6GvwVXmGYVpyutkSjYzzUcCLjALAg0rXvDjptA
-         GnUA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zKH3Tesbl/NGDeaepzYHkR+mNGiL5G7Vu+6CzYaCN2o=;
+        b=F25vIrBxmoT+FqoFT+BJgJXfFRfmp5rXW6x++VWyI+l1agAgoTzazB0zSRZvFk4WGQ
+         Gi0Gzy1OfPiwBWLawwQMt1DTfBPSjoxyzEyb6nb1SuZj3gKM4/PjwkHYuClu1aHpn3X+
+         CJ573A4j6mKreJO7Vo4+UIC6dwNmDEXX6Cn8DYoR5Y3oCsihFLDtqwEXmqEJRnfVgAr1
+         J5r+C9+rco5T/OyoUanoNQnBXH/QJYokCltWCVLwz6aA1SNfcwyF9mJm3xKU5sPn16tD
+         XooSPjZh6cOa/VnZysy0VBrxTAhSruv4TBorYxJbtrG2Fv/omMWxXYVFE3E3OGlO5FaY
+         Baxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PTln65IiWVFNI8/zs4JVrceMHpafS1zMofC+vruC3r4=;
-        b=w97MyUpkhSg1/CZBCf8oX5c/omJs2SXcXpwnsz8Qx85zofMohazgBdIvAdDlHIOQ5G
-         YTmniv2HeOWJat/mI6oYLcbgZne5RQEcCh2MrwiV+cFq+MK0gcUoTKPDGRTVhwtrCqxz
-         2UOysunXGUadEoG8lkLeKqzlibMbMgC48zwYo0B2LlgxDdJMy18yxxesBU4IBaTXZEnH
-         VGsA2qQ+fzeIng1KMzHfBpBjP2HItdnlI2S/IARpnR+2MPlXjkbErmRgtm8I6TR1fmK1
-         PgDTRLER7OdLfxLJV8owDq0O3TVTtSwWfro2Fx9sTp36TbzR8tsvilOoMrdNMgOd+biv
-         583w==
-X-Gm-Message-State: AJIora82Yfdz+Lef4hMkviegQhHBVf67qXjUrEyScqRzPRAtrWphBFyy
-	87IUE9SKvWI8XxuIXAhmXhYQa8wr3LO6mQ==
-X-Google-Smtp-Source: AGRyM1sUEuXrrmm9VnutdGTV08Io2RWyQq9OFou8JEFVz3+lo/yFQYCJCyPLiZXgjRUjD276CjkIfw==
-X-Received: by 2002:a17:906:8501:b0:711:bf65:2a47 with SMTP id i1-20020a170906850100b00711bf652a47mr11904262ejx.150.1656318525636;
-        Mon, 27 Jun 2022 01:28:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zKH3Tesbl/NGDeaepzYHkR+mNGiL5G7Vu+6CzYaCN2o=;
+        b=YwjURBsgBJ3C4x+3cf3cyEQz/79NhC5eycgxgsuVLTQt2FJ6lysnD97/S4Z/ltu94+
+         rJY1gcUUm5cscsZFAdD+ugt3Y71sgZ2nJX6DnmeNMnXJWC6ifSzbZXH9mWATW0K2oRgy
+         YMTuawptpuSWJYGcm1bJzYJYnY/pk5Ksu7o2NNIec3/ZUG3b5LG64Z1ylx/Ae/Jtoa5S
+         nZJ5rMgqOqq9pruPs/kMKeSOYCex3lnPnXtuIFxJa4toYJ17FNznHXUmt0gqBkWncPPb
+         SR/+NyEgdjCapHzZBVTQFEbhpxew+bcXqJL/Afb7AGavez12mjhxc2sdihFaCOgZuNfr
+         XP+Q==
+X-Gm-Message-State: AJIora9aibX5VY5GtnQVtk4lCoLAm/I7Pce7s2ykuJfoesIdED0OoiNS
+	/pXKTpw30GD/vP/Q0TzVj2m3sw==
+X-Google-Smtp-Source: AGRyM1tlVPIJ6klFHkYwpNQXzMcs+I+DRlK2Z0x6pNXWJZeMS6/VYBEC8jkniI09RJJvpD0+4c2M0w==
+X-Received: by 2002:a05:6402:2402:b0:435:3418:61b5 with SMTP id t2-20020a056402240200b00435341861b5mr14505258eda.82.1656318526712;
+        Mon, 27 Jun 2022 01:28:46 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o9-20020aa7c7c9000000b004356e90d13esm7056364eds.83.2022.06.27.01.28.44
+        by smtp.gmail.com with ESMTPSA id o9-20020aa7c7c9000000b004356e90d13esm7056364eds.83.2022.06.27.01.28.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 01:28:45 -0700 (PDT)
+        Mon, 27 Jun 2022 01:28:46 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -59,10 +59,12 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] arm64: dts: cleanup for v5.20
-Date: Mon, 27 Jun 2022 10:28:41 +0200
-Message-Id: <20220627082842.50508-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/2] ARM: dts: cleanup for v5.20
+Date: Mon, 27 Jun 2022 10:28:42 +0200
+Message-Id: <20220627082842.50508-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220627082842.50508-1-krzysztof.kozlowski@linaro.org>
+References: <20220627082842.50508-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -71,7 +73,8 @@ Hi,
 These cleanups were part of my set, which partially was taken by other
 maintainers.  For some here I have acks, but for most not.
 
-It also includes parts of very old patchset from Serge, in similar style.
+It also includes documenting compatibles for Aspeed boards, for which I was not
+sure whether they will be applied by Aspeed maintainer or not.
 
 The series bring us closer to clean `make dtbs_check`.
 
@@ -85,59 +88,79 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt64-cleanup-5.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt-cleanup-5.20
 
-for you to fetch changes up to 87ccc38e2f8e55853ddfe633d9934bc7ca74b21c:
+for you to fetch changes up to 2f7a7f941d770c03942fefe1d91ce954cb329c7e:
 
-  arm64: dts: apm: Harmonize DWC USB3 DT nodes name (2022-06-27 10:15:20 +0200)
-
-----------------------------------------------------------------
-Cleanup of ARM64 DTS for v5.20
-
-Series of cleanups for ARM64 DTS: White-spaces, gpio-key subnode names,
-USB DWC3/EHCI node names.
+  Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup (2022-06-27 10:19:57 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (11):
-      arm64: dts: amd: adjust whitespace around '='
-      arm64: dts: apm: adjust whitespace around '='
-      arm64: dts: lg: adjust whitespace around '='
-      arm64: dts: marvell: adjust whitespace around '='
-      arm64: dts: hisilicon: adjust whitespace around '='
-      arm64: dts: sprd: adjust whitespace around '='
-      arm64: dts: microchip: adjust whitespace around '='
-      arm64: dts: apm: correct gpio-keys properties
-      arm64: dts: broadcom: align gpio-key node names with dtschema
-      arm64: dts: hisilicon: align gpio-key node names with dtschema
-      arm64: dts: hisilicon: correct gpio-keys properties
+Cleanup of ARM DTS for v5.20
 
-Serge Semin (1):
-      arm64: dts: apm: Harmonize DWC USB3 DT nodes name
+Series of cleanups for ARM DTS:
+1. White-spaces, gpio-key subnode names, USB DWC3/EHCI node names,
+2. Add board-level compatibles to Aspeed evaluation boards.
 
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts   |   4 +-
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts   |   4 +-
- arch/arm64/boot/dts/apm/apm-merlin.dts             |   2 +-
- arch/arm64/boot/dts/apm/apm-mustang.dts            |   2 +-
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |   6 +-
- arch/arm64/boot/dts/apm/apm-storm.dtsi             |  10 +-
- .../bcm4908/bcm4906-tplink-archer-c2300-v1.dts     |   8 +-
- .../broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts    |   8 +-
- arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts  |  14 +-
- arch/arm64/boot/dts/hisilicon/hi3660.dtsi          |   8 +-
- arch/arm64/boot/dts/hisilicon/hi3670.dtsi          |   2 +-
- arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts     |  12 +-
- arch/arm64/boot/dts/hisilicon/hip05-d02.dts        |   6 +-
- arch/arm64/boot/dts/hisilicon/hip06.dtsi           |   6 +-
- arch/arm64/boot/dts/hisilicon/hip07.dtsi           |   6 +-
- arch/arm64/boot/dts/lg/lg1312.dtsi                 |  38 ++--
- arch/arm64/boot/dts/lg/lg1313.dtsi                 |  38 ++--
- .../boot/dts/marvell/armada-7040-mochabin.dts      |   4 +-
- arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi |   2 +-
- .../boot/dts/marvell/armada-8040-puzzle-m801.dts   |   4 +-
- arch/arm64/boot/dts/marvell/cn9130-db.dtsi         |   2 +-
- .../boot/dts/microchip/sparx5_pcb134_board.dtsi    | 200 ++++++++++-----------
- .../boot/dts/microchip/sparx5_pcb135_board.dtsi    |  48 ++---
- arch/arm64/boot/dts/sprd/sc9836.dtsi               |  10 +-
- arch/arm64/boot/dts/sprd/sc9863a.dtsi              |   4 +-
- arch/arm64/boot/dts/sprd/whale2.dtsi               |   2 +-
- 26 files changed, 224 insertions(+), 226 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (18):
+      ARM: dts: pxa: adjust whitespace around '='
+      ARM: dts: aspeed: adjust whitespace around '='
+      ARM: dts: at91: adjust whitespace around '='
+      ARM: dts: axm: adjust whitespace around '='
+      ARM: dts: spear: adjust whitespace around '='
+      ARM: dts: alpine: adjust whitespace around '='
+      ARM: dts: ecx: adjust whitespace around '='
+      ARM: dts: lpc: adjust whitespace around '='
+      ARM: dts: nuvoton: adjust whitespace around '='
+      ARM: dts: ste: adjust whitespace around '='
+      ARM: dts: sti: adjust whitespace around '='
+      ARM: dts: sd: adjust whitespace around '='
+      ARM: dts: animeo: align gpio-key node names with dtschema
+      ARM: dts: animeo: correct gpio-keys properties
+      ARM: dts: ast2500-evb: fix board compatible
+      ARM: dts: ast2600-evb: fix board compatible
+      ARM: dts: ast2600-evb-a1: fix board compatible
+      Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup
+
+Serge Semin (2):
+      ARM: dts: lpc18xx: Harmonize EHCI/OHCI DT nodes name
+      ARM: dts: stih407-family: Harmonize DWC USB3 DT nodes name
+
+ arch/arm/boot/dts/alpine.dtsi                     |   2 +-
+ arch/arm/boot/dts/animeo_ip.dts                   |  10 +-
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts          |   2 +-
+ arch/arm/boot/dts/aspeed-ast2600-evb-a1.dts       |   1 +
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts          |   2 +-
+ arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts |   6 +-
+ arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts       |   6 +-
+ arch/arm/boot/dts/at91-kizbox3-hs.dts             |   2 +-
+ arch/arm/boot/dts/at91-sam9x60ek.dts              |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi         |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts       |   4 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts     |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts            |   4 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts         |   6 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts       |   6 +-
+ arch/arm/boot/dts/axm5516-cpus.dtsi               |  32 ++--
+ arch/arm/boot/dts/ecx-common.dtsi                 |  10 +-
+ arch/arm/boot/dts/lpc18xx.dtsi                    |   6 +-
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi     |   2 +-
+ arch/arm/boot/dts/nuvoton-npcm750.dtsi            |   2 +-
+ arch/arm/boot/dts/pxa300-raumfeld-common.dtsi     |  10 +-
+ arch/arm/boot/dts/sam9x60.dtsi                    |   2 +-
+ arch/arm/boot/dts/sd5203.dts                      |   2 +-
+ arch/arm/boot/dts/spear1310-evb.dts               |   2 +-
+ arch/arm/boot/dts/spear1340-evb.dts               |   2 +-
+ arch/arm/boot/dts/spear1340.dtsi                  |   2 +-
+ arch/arm/boot/dts/spear300-evb.dts                |   2 +-
+ arch/arm/boot/dts/spear310-evb.dts                |   2 +-
+ arch/arm/boot/dts/spear320-evb.dts                |   2 +-
+ arch/arm/boot/dts/spear320-hmi.dts                |   2 +-
+ arch/arm/boot/dts/spear320.dtsi                   |   2 +-
+ arch/arm/boot/dts/ste-ab8500.dtsi                 |   6 +-
+ arch/arm/boot/dts/ste-hrefv60plus.dtsi            |   4 +-
+ arch/arm/boot/dts/stih407-family.dtsi             | 176 +++++++++++-----------
+ arch/arm/boot/dts/stih407.dtsi                    |   4 +-
+ arch/arm/boot/dts/stih410.dtsi                    |   4 +-
+ arch/arm/boot/dts/stihxxx-b2120.dtsi              |   8 +-
+ 37 files changed, 170 insertions(+), 171 deletions(-)
