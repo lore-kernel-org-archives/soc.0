@@ -4,129 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82733C43334
-	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 08:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB7AC433EF
+	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 08:49:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 54751C341CD; Mon, 27 Jun 2022 08:45:08 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	id 680ACC341CD; Mon, 27 Jun 2022 08:49:54 +0000 (UTC)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7B37AC341C8
-	for <soc@kernel.org>; Mon, 27 Jun 2022 08:45:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B37AC341C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 96299C341C8
+	for <soc@kernel.org>; Mon, 27 Jun 2022 08:49:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 96299C341C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id cw10so17628351ejb.3
-        for <soc@kernel.org>; Mon, 27 Jun 2022 01:45:07 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id c65so11940138edf.4
+        for <soc@kernel.org>; Mon, 27 Jun 2022 01:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=NGASEu1UuSCF/KBZiD+Xxr1++0cQqP/bZ9atPVdxcAE=;
-        b=zwOiD2QKTBHyIkb8zfy5wq7S5Mww4LyKRvCXX8L0AZh2gXCJhELBJ8f0A/XkDSVso8
-         L7FBqCQ1oH/jJ7cFNnDxOLM/sxfKCUrrkCofLhaw/momIYZMHhEHZpJOHEGUvzLRPMh4
-         rqABqqzgmYQTAm8yw7R/n9Gp1l3nYBMiMTmNfrZEKRXHZTTnQcnweoEk611FTXs1sScD
-         bvalF3SeBbnDxo1XZ1qikeONNl6gzZMDT5bG46uL+RNIiPovs1XXqW+jtfcH05Uy5ReG
-         T8MCvFHPt4EpHEJr1g0CDlWrQK1ioh748xirTzj8Kbs2i655NcUaO0jeW/cPQxhpyMJi
-         brBw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:cc:from:in-reply-to:content-transfer-encoding;
+        bh=FP/GaPcBvGjggyyQ1dCEEdUzjPdfMITFn6wRnSlyWGg=;
+        b=yjbLzOF5j+urN6XfJzvyPM94OzRtbJ+8bFayxKEE6RW2z5v6WIFQgMaz/BKF/+PGiX
+         MQWIwRZh9zhvFB4Bvy8mwM2Fiw8cEH0O8PxPodp9w3Z+rAcO8C+163DcL57nJO0+D6gF
+         9NfyKJ34gwqAvt9G944h4LBPedW6fLjvGONSuT1JGZXt+5wY340l1OGCF/gk8xsaD2Y7
+         dtavos2IiyqFEL7qHS9C4OzA1kvPT7Lo3ICQy8XHVBUylKFt5vcOBpBe62Ns+ts+5bCc
+         YIf30U9DAP/DIn5vdQG0pRCorA4Ghv80NGfhsKEEKlKuNwqH09aPAvpw0KF/f2fUNZsa
+         iuVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:references:cc:from:in-reply-to
          :content-transfer-encoding;
-        bh=NGASEu1UuSCF/KBZiD+Xxr1++0cQqP/bZ9atPVdxcAE=;
-        b=4t3z6kr+7T7779JE8/QW7qW1fU+lkO9L2nuFJsiU0sXFnbvJ39pyeGqgXdzjwqIDai
-         0G9KvFbxsZu93wb6ZJTeUMuIdCGh6pZQ33wFQ87jC6HFaq7G9JXV37LLtP9gRMzTve3Q
-         bGFI34vM9ugfxJEkyiEg2el224XSe9J/7YNXyh4kYnMWpwe/NLbDyZFtzb5kUvPPLMF7
-         0swnXNCe4jobMNVSG7Wu9O2rI1SjGJ52hppOGeOPEXmcLG0EJL0aMU/CnGyw2g5SMo4W
-         L+scvw0bXgv9/HPkW0rojMuH59rNdK6T+UByCza1N1igQyYbYkGDmEVdGs5xHfbnFC6r
-         7sYA==
-X-Gm-Message-State: AJIora/T5clxpml4IehQbNmhCfjjeLsCPlphCt4mxMA6+30t/kz2petJ
-	XJHeSmLRZAXENoin+j2ftV0V6w==
-X-Google-Smtp-Source: AGRyM1v5eWfRK0YQoqHluU652Yu0VL9rjqD1R4mOxvp/6i3wbLE6ekpCxsFI+Ofij4URWX6raZwyEA==
-X-Received: by 2002:a17:906:8315:b0:726:38da:f0f with SMTP id j21-20020a170906831500b0072638da0f0fmr11685646ejx.462.1656319505768;
-        Mon, 27 Jun 2022 01:45:05 -0700 (PDT)
+        bh=FP/GaPcBvGjggyyQ1dCEEdUzjPdfMITFn6wRnSlyWGg=;
+        b=tKNVO7d8klFHcXHBOITzuiL/XDIUJkyJ3HMHUDrsErnq2CkuLgAfWJZJDdrf9HhNHN
+         ZIyUqL8ZUVWs8QU3YF1nK64bmb7Wss6PkvEw73vws+AMOlb8v9Osx0gKDfkdMFVscnt5
+         PoQFjSnJ8r9/5OKMi8M8kSfvMhpE9Qb211WJXYLTmQycCEOqnTMggSXr8El5sFmFZCY7
+         Bk0hXVUC7894JnGwjTiVhfHks3QLtI5lbwZSCkE+6C7adTaOs6DRZSAmnQpbYHmzUzXq
+         S4qpUl5gLQAu36PkTPU3xPTUursioYdNb+CuZGQmbc+CRCk/ZkiGt0qyFoKGinBbtdXr
+         8OTw==
+X-Gm-Message-State: AJIora+4hlCsexTw/wno4BZTL874jfzcDkAFgj32BxQJC0vx3rCyH5M4
+	mSZopgkIWjuOuQNX+B0oz1+TxA==
+X-Google-Smtp-Source: AGRyM1vWeJVmejaOPOyVJ0lfNvFasd3Lk5cx3A4395nD73h1yXyEWVIEMiYkIg8YEEoeEq8raaeW5A==
+X-Received: by 2002:aa7:c881:0:b0:435:5dc4:5832 with SMTP id p1-20020aa7c881000000b004355dc45832mr15297321eds.265.1656319791931;
+        Mon, 27 Jun 2022 01:49:51 -0700 (PDT)
 Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g18-20020a170906595200b006f3ef214e20sm4685683ejr.134.2022.06.27.01.45.04
+        by smtp.gmail.com with ESMTPSA id j12-20020a1709062a0c00b00722e1bca239sm4810194eje.204.2022.06.27.01.49.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 01:45:05 -0700 (PDT)
-Message-ID: <724bca0f-2474-0aba-35df-6733bb5597d3@linaro.org>
-Date: Mon, 27 Jun 2022 10:45:04 +0200
+        Mon, 27 Jun 2022 01:49:51 -0700 (PDT)
+Message-ID: <5e0d5cca-c4a8-6651-0e67-47b5fc23c5c7@linaro.org>
+Date: Mon, 27 Jun 2022 10:49:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 19/40] arm64: dts: tegra: align gpio-key node names
- with dtschema
+Subject: Re: [PATCH v3 36/40] ARM: dts: aspeed: align gpio-key node names with
+ dtschema
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Thierry Reding <thierry.reding@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
 References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-19-krzysztof.kozlowski@linaro.org>
- <YrXhb5izGPNXEmMK@orome> <dcd4be85-21ab-beb9-e6dc-bd7f570459fd@linaro.org>
-In-Reply-To: <dcd4be85-21ab-beb9-e6dc-bd7f570459fd@linaro.org>
+ <20220616005333.18491-36-krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, arm@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+ Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-36-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 24/06/2022 18:09, Krzysztof Kozlowski wrote:
-> On 24/06/2022 18:08, Thierry Reding wrote:
->> On Wed, Jun 15, 2022 at 05:53:12PM -0700, Krzysztof Kozlowski wrote:
->> [...]
->>> diff --git a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts b/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
->>> index f16acb4cabaa..62d58221ad3c 100644
->>> --- a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
->>> +++ b/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
->>> @@ -1030,7 +1030,7 @@ clk32k_in: clock-32k {
->>>  	gpio-keys {
->>>  		compatible = "gpio-keys";
->>>  
->>> -		lid {
->>> +		switch-lid {
->>>  			label = "Lid";
->>>  			gpios = <&gpio TEGRA_GPIO(R, 4) GPIO_ACTIVE_LOW>;
->>>  			linux,input-type = <5>;
->>> @@ -1039,7 +1039,7 @@ lid {
->>>  			wakeup-source;
->>>  		};
->>>  
->>> -		power {
->>> +		switch-power {
->>
->> This one is actually a key.
->>
->> [...]
->>> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->>> index a263d51882ee..8494c7b2961b 100644
->>> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->>> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->> [...]
->>> @@ -1772,7 +1772,7 @@ lid {
->>>  			wakeup-source;
->>>  		};
->>>  
->>> -		tablet_mode {
->>> +		key-tablet-mode {
->>>  			label = "Tablet Mode";
->>>  			gpios = <&gpio TEGRA_GPIO(Z, 2) GPIO_ACTIVE_HIGH>;
->>>  			linux,input-type = <EV_SW>;
->>
->> And this one more like a switch since it's triggered by a magnet, as far
->> as I understand.
->>
->> No need to resend, I can fix these up when I apply. Just let me know if
->> you have any objections to me making those changes.
+On 16/06/2022 02:53, Krzysztof Kozlowski wrote:
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
 > 
-> Sounds good, thanks for catching these.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../arm/boot/dts/aspeed-bmc-ampere-mtjade.dts | 30 ++++++------
+>  .../boot/dts/aspeed-bmc-bytedance-g220a.dts   | 48 +++++++++----------
+>  arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts  |  8 ++--
+>  arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts  | 12 ++---
+>  .../boot/dts/aspeed-bmc-inspur-fp5280g2.dts   | 22 ++++-----
+>  arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts   | 23 ++++-----
+>  arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts   | 20 ++++----
+>  arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts   |  2 +-
+>  arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts |  2 +-
+>  arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts  |  2 +-
+>  arch/arm/boot/dts/aspeed-bmc-opp-swift.dts    | 30 ++++++------
+>  arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts   | 12 ++---
+>  arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts   |  4 +-
+>  .../boot/dts/aspeed-bmc-opp-witherspoon.dts   | 16 +++----
+>  arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts    |  4 +-
+>  15 files changed, 118 insertions(+), 117 deletions(-)
+> 
 
+Joel,
 
-Hi Thierry,
-
-To be more explicit - no objects for taking these, please apply.
+Any comments on the Aspeed patches? Do you intend to take them or shall
+I handle them with the rest?
 
 Best regards,
 Krzysztof
