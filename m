@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2718CCA473
-	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 09:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B277CCA47F
+	for <soc@archiver.kernel.org>; Mon, 27 Jun 2022 09:16:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BBDFEC341C7; Mon, 27 Jun 2022 09:16:16 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	id 05B41C341CD; Mon, 27 Jun 2022 09:16:17 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1E517C3411D
-	for <soc@kernel.org>; Mon, 27 Jun 2022 09:16:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E517C3411D
+	by smtp.kernel.org (Postfix) with ESMTPS id 6D9BEC36AE5
+	for <soc@kernel.org>; Mon, 27 Jun 2022 09:16:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D9BEC36AE5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id d2so6013503ejy.1
-        for <soc@kernel.org>; Mon, 27 Jun 2022 02:16:14 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id h23so17709328ejj.12
+        for <soc@kernel.org>; Mon, 27 Jun 2022 02:16:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=smmwNGmUXsCa92fGpwEoty8rEolknH2O6aTGzJhLQMg=;
-        b=aNtE9OtuA8bLYEkNplbQ0YykPTb9NDTmDYIvP/NdzIMgyitUVU+KB3kHmC9ZAP7QSF
-         avgzZjuYA5+mdHKtzSMAtSeHrE00CuHalgol33BsDFnDKE/Wp/Yucf1zSfEJtTzHhPpI
-         085uvHht4emZucRPBRsZ40LIRh1SSv1XP6I3aeXRKEKERPKm/S6I3iMGK2JaW5Ld/ucA
-         3Szou6aPWGJxIPXhI4w/Yt6+byVJ/8xpcE9+de4BiKPo6FnTk1AeRG1hBdsDHyeQTP+Y
-         DbDWPkwTUC4Df8d4SM/Xy+rO3Vh2tRRm5I0PkaWgcEJNb9/cwDQk24SJiR1SiqJu0O1c
-         s5UQ==
+        bh=AJB4XMjx8N7mxha/eRfRwMbPoUvU5kmk+YfkrCxetGo=;
+        b=eLz5pYGmqMUxRVWr3SvOwRgDbTVch01ias9Bqz6lN/Y8pYB7FCbUjuVOwW8X5qUpEu
+         2cIkViktKJoZgpxnF5jBjqP1QVeM5gYWXcUsfbxBQg6may+cDxFbtWWASlmcTxT2N1TF
+         P80Owzqoll3uyE4sijdCnT5i7qIdInDJi8XR2AYVfwnSLB7stPEKVoB87f8xDgl6Pk1v
+         4ETkPhiU6hQMWnlpSneAtY5vfU/BykoVu2Ano7yz/2FM1dgg+tGuq6b94oqR4ohT9hgJ
+         GslFvycltsZzwkKjGb8yyJJNB6sbnlPxffrHXpPFMwTheYirXi3My3zEvo1WhJmvsFaW
+         5XOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=smmwNGmUXsCa92fGpwEoty8rEolknH2O6aTGzJhLQMg=;
-        b=CJN4CYgO/RNZm0UCJveVZA156EAnAgfFubJAg06lT+KfD7mjFwzi3rAgp0BexDwvEN
-         JoEBGwBIeU+x0hgHsXyB3xFRiik3B7B93ZqB3P3WMIXj1dHZWQ1XQTYKvKF3Fa/KReYE
-         sQjOBdK1ImC+niuQCUt1scGyAlWe3CdvQZSHNiWV2u0vsgmu6DdZYrTorxT860zp5B6B
-         ZYody+9iUPr3s1vcNmDC0t/hcm/9aQ+83XIX2PAd99TsQIJPuIwSHalp+lUVzeSvmpGI
-         dxCEKJ5Cv3PqcEFCJVUD0ivSXhQ+J6jfPO1d7BtvICBiMHtNUfcbNQQ0qlMQpO7L/M6E
-         HIMw==
-X-Gm-Message-State: AJIora82vuaZZ362ZCpj63QmG7sWPg7IdfL57R/s1gd/Icbiqv3jc982
-	aUwVg/mLIR7WEsQpt3MKeMYXdw==
-X-Google-Smtp-Source: AGRyM1sDNGNOV4ayuZr7c+UjYlt9z2D3MBwBlQVgI4EFdhElj+/ICeFNPCHfJAt9Ps43C5hC7M1eeQ==
-X-Received: by 2002:a17:906:2088:b0:711:f512:837a with SMTP id 8-20020a170906208800b00711f512837amr11727626ejq.113.1656321373384;
-        Mon, 27 Jun 2022 02:16:13 -0700 (PDT)
+        bh=AJB4XMjx8N7mxha/eRfRwMbPoUvU5kmk+YfkrCxetGo=;
+        b=m0U7yfTMY0u8NtE9RQCtEh/gZItLYXm590yC41kASNFrbwILPyHNfB5YBV9jFHhgC1
+         Vf4RDHQgm2I9+v0/0ho9pKlZcAYWLpNyhLvQ2v+ris+MICxzgmG0MmAAoDY+MBhvZS1A
+         uau9y9oG5i6OiqsC80JjUDQBOsIBZzrPip7udNj9Rfjh94gT8FzYFYZrbxD/clFnYPTW
+         A0xt7Z31o0VxR/QuQ9CZJLHkf91Jop8I4a5kOTFusZJp7bCK5j3W5wHlYChjEYmoXLZH
+         sQo1vic2ATFN38SNC8tgp5MEYpOuVzKGkXHraUabou7QiBKPeo1VvpTXrBsvVXcxkauT
+         5DPg==
+X-Gm-Message-State: AJIora+ihNjpPeL2jtF4POAprEq8EJF68er9RB/nX2VFc3tiaIoaYxRT
+	xGig3+iqrl3M8JDMrm0ybHK2cQ==
+X-Google-Smtp-Source: AGRyM1toh45jc3hLb+Tcn7tJOu1lC+sxr5r8HQC9Gpqg3nJSm1MWi8AXnpzO8kPqoU3vW2hRRHii5A==
+X-Received: by 2002:a17:907:6ea8:b0:726:a8bb:5a3e with SMTP id sh40-20020a1709076ea800b00726a8bb5a3emr2801872ejc.753.1656321374723;
+        Mon, 27 Jun 2022 02:16:14 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.12
+        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:16:12 -0700 (PDT)
+        Mon, 27 Jun 2022 02:16:14 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: gregory.clement@bootlin.com,
@@ -60,30 +60,31 @@ To: gregory.clement@bootlin.com,
 	Arnd Bergmann <arnd@arndb.de>,
 	krzysztof.kozlowski+dt@linaro.org,
 	devicetree@vger.kernel.org,
+	linux@armlinux.org.uk,
 	arm@kernel.org,
 	sebastian.hesselbarth@gmail.com,
 	robh+dt@kernel.org,
 	olof@lixom.net
-Subject: Re: (subset) [PATCH v3 12/40] arm64: dts: marvell: armada-3720: align lednode names with dtschema
-Date: Mon, 27 Jun 2022 11:15:48 +0200
-Message-Id: <165632135505.81841.1881294272439246471.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v3 13/40] ARM: dts: marvell: align gpio-key node names with dtschema
+Date: Mon, 27 Jun 2022 11:15:49 +0200
+Message-Id: <165632135505.81841.17659876356619463285.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220616005333.18491-12-krzysztof.kozlowski@linaro.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-12-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-13-krzysztof.kozlowski@linaro.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-13-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Wed, 15 Jun 2022 17:53:05 -0700, Krzysztof Kozlowski wrote:
+On Wed, 15 Jun 2022 17:53:06 -0700, Krzysztof Kozlowski wrote:
 > The node names should be generic and DT schema expects certain pattern
-> with 'led'.
+> (e.g. with key/button/switch).
 > 
 > 
 
 Applied, thanks!
 
-[12/40] arm64: dts: marvell: armada-3720: align lednode names with dtschema
-        https://git.kernel.org/krzk/linux/c/2b090180dced85ccf27f276c1b6c9521d4c4120e
+[13/40] ARM: dts: marvell: align gpio-key node names with dtschema
+        https://git.kernel.org/krzk/linux/c/41340053cc72180e9095ca02418a5ab80794983c
 
 Best regards,
 -- 
