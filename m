@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EABF2C433EF
-	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 02:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C0B4C43334
+	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 02:25:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0A6AC341CB; Tue, 28 Jun 2022 02:24:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE87C341CA;
-	Tue, 28 Jun 2022 02:24:11 +0000 (UTC)
+	id 68522C341CD; Tue, 28 Jun 2022 02:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26ED0C385A2;
+	Tue, 28 Jun 2022 02:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656383052;
-	bh=4b2HMmvlf7NXYlP78oUShEcmXVWe526VfpbWjHp/+fQ=;
+	s=k20201202; t=1656383117;
+	bh=9VsapHYo2tU4CgPhLYgYIkxQ2l1Fr2KCRwEjZPbMERE=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WTZ5S5IH4FwFEV5f6hzyfGfKwoIlUjXtw178Irt7GyEhfuKqU/H103TaPW5DFESK4
-	 dNpmjeUo8pkPYmaEQrK/1wEOFH7z1ijdLh9NMTAM64fKfTFQkeM69JtUlJfct1Ezfd
-	 YQBynllFe/GhjfFTsOgKWyl7EYaba2CWBwCcG8cDh9EBxkKArRnINGOISXfsb7db8c
-	 O612DglKPYYxtIcZHK5NuWUzqVHZsD69ah0QTXEACzBNacWjK22OV9Jtyzp4OiGXrO
-	 0GutalOWSBFdHEyPHaAeFW52SFdPvHo5+1ZB5D0qZAhoGk3koolJnRGGz4KPq7YtOh
-	 cy5p2lFAxXAkw==
+	b=nBvf8FI+ua1/Oh17fwgNVnxtsIYW7O2Gn3KhpezBFcXX29YWc6oc/ioadnrEn0h4v
+	 171em6tR7lMlTOicALimNMlD4FWS8vDfjxilvb2ExBgMyiK/sOeJVVyd62mMs9x7Cb
+	 DkuTU/rlmjGOZ7D/vEzquy4tK6NKlA+q+lXhlj+jP26NtnXT5uGa9PQANu/WYBgaV9
+	 23g7tria1gIbCKUawEY4OHxbE0JV9cwwgSfwaCo6G+gjlINWqEoza4PfWze8Q23zrR
+	 KhJs9CMpCpXxiZDDeCh3Ao7iXlKolMHq7rIOr9PHQL3MUTsMzL0HOwWO5QOVsFE0Ud
+	 muzrmwvlIWg8A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -33,12 +33,12 @@ Cc: Liang He <windhl@126.com>,
 	soc@kernel.org,
 	linux@armlinux.org.uk,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 34/34] arm: mach-spear: Add missing of_node_put() in time.c
-Date: Mon, 27 Jun 2022 22:22:41 -0400
-Message-Id: <20220628022241.595835-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 27/27] arm: mach-spear: Add missing of_node_put() in time.c
+Date: Mon, 27 Jun 2022 22:24:13 -0400
+Message-Id: <20220628022413.596341-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628022241.595835-1-sashal@kernel.org>
-References: <20220628022241.595835-1-sashal@kernel.org>
+In-Reply-To: <20220628022413.596341-1-sashal@kernel.org>
+References: <20220628022413.596341-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
-index d1fdb6066f7b..c7c17c0f936c 100644
+index 289e036c9c30..6a77ba2c1c50 100644
 --- a/arch/arm/mach-spear/time.c
 +++ b/arch/arm/mach-spear/time.c
-@@ -218,13 +218,13 @@ void __init spear_setup_of_timer(void)
+@@ -223,13 +223,13 @@ void __init spear_setup_of_timer(void)
  	irq = irq_of_parse_and_map(np, 0);
  	if (!irq) {
  		pr_err("%s: No irq passed for timer via DT\n", __func__);
@@ -81,7 +81,7 @@ index d1fdb6066f7b..c7c17c0f936c 100644
  	}
  
  	gpt_clk = clk_get_sys("gpt0", NULL);
-@@ -239,6 +239,8 @@ void __init spear_setup_of_timer(void)
+@@ -244,6 +244,8 @@ void __init spear_setup_of_timer(void)
  		goto err_prepare_enable_clk;
  	}
  
@@ -90,7 +90,7 @@ index d1fdb6066f7b..c7c17c0f936c 100644
  	spear_clockevent_init(irq);
  	spear_clocksource_init();
  
-@@ -248,4 +250,6 @@ void __init spear_setup_of_timer(void)
+@@ -253,4 +255,6 @@ void __init spear_setup_of_timer(void)
  	clk_put(gpt_clk);
  err_iomap:
  	iounmap(gpt_base);
