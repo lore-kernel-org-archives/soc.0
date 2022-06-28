@@ -1,228 +1,98 @@
-Return-Path: <SRS0=mjGj=XD=cqplus1.com=prvs=11763A8F71=qinjian@kernel.org>
+Return-Path: <SRS0=dP6n=XD=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55A2DC43334
-	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 06:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43868C43334
+	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 13:33:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3C1C8C341C6; Tue, 28 Jun 2022 06:27:19 +0000 (UTC)
-Received: from mx1.cqplus1.com (mx1.cqplus1.com [113.204.237.245])
-	by smtp.kernel.org (Postfix) with ESMTP id 7C1E8C341D1
-	for <soc@kernel.org>; Tue, 28 Jun 2022 06:27:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C1E8C341D1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cqplus1.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cqplus1.com
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-	LIVER,40,3)
-Received: from 172.28.114.216
-	by mx1.cqplus1.com with MailGates ESMTP Server V5.0(20103:0:AUTH_RELAY)
-	(envelope-from <qinjian@cqplus1.com>); Tue, 28 Jun 2022 14:26:59 +0800 (CST)
-From: Qin Jian <qinjian@cqplus1.com>
-To: sboyd@kernel.org
+	id 00F58C3411D; Tue, 28 Jun 2022 13:33:26 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id DC1E2C341CB;
+	Tue, 28 Jun 2022 13:33:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC1E2C341CB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D776152B;
+	Tue, 28 Jun 2022 06:33:20 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 43B0D3F5A1;
+	Tue, 28 Jun 2022 06:33:19 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: krzysztof.kozlowski+dt@linaro.org,
-	robh+dt@kernel.org,
-	mturquette@baylibre.com,
-	linux@armlinux.org.uk,
-	arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v20 00/11] Add Sunplus SP7021 SoC Support
-Date: Tue, 28 Jun 2022 14:26:40 +0800
-Message-Id: <cover.1656396767.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] firmware: arm_scmi: Fixes for v5.19(Round 2)
+Date: Tue, 28 Jun 2022 14:33:15 +0100
+Message-Id: <20220628133315.699803-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series add Sunplus SP7021 SoC support.
+Hi ARM SoC Team,
 
-Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
-peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
-single chip. It is designed for industrial control.
+Please pull !
 
-SP7021 consists of two chips (dies) in a package. One is called C-chip
-(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
-process (22 nm) for high performance computing. The other is called P-
-chip (peripheral chip). It has many peripherals and an ARM A926 added
-especially for real-time control. P-chip is made for customers. It adopts
-low-level process (ex: 0.11 um) to reduce cost.
+We pushed several extra conformance checks in the SCMI driver and quite a few
+firmware bugs have been discovered with that. Due to absence of formal
+conformace test suite for SCMI, we have to workaround them in the kernel for
+now :(.
 
-Refer to (for documentations):
-https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+Regards,
+Sudeep
 
-Refer to (applications):
-https://tibbo.com/store/plus1.html
+-->8
 
-Refer to (applications):
-http://www.sinovoip.com.cn/ecp_view.asp?id=586
+The following changes since commit 44dbdf3bb3f44bf08897ed5f22eb262edcf3d926:
 
-Changes in v20:
-- Based on 5.19-rc4 & resend
+  firmware: arm_scmi: Fix incorrect error propagation in scmi_voltage_descriptors_get (2022-06-12 19:59:55 +0100)
 
-Changes in v19:
-- clk-provider.h: Add devm_clk_hw_register_gate_parent_data()
-- clk-sp7021.c: Addressed Stephen's comments
-- board dts: Addressed Arnd's comments
+are available in the Git repository at:
 
-Changes in v18:
-- Fixed the tags
-- board dts: Fix the comments from Krzysztof
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-5.19-2
 
-Changes in v17:
-- Based on 5.18.1 & resend
+for you to fetch changes up to 4ce7e51dc712f8a006ce6abcc49f788c79287c03:
 
-Changes in v16:
-- clk-sp7021.c: Fix the comments from Stephen Boyd
-- board dts: Fix the comments from Krzysztof
+  firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API (2022-06-27 16:58:14 +0100)
 
-Changes in v15:
-- Add Sunplus SP7021-demo-v3 board dts
-- Refine yaml title
-- Rename dt-binding header filename to match compatible string
+----------------------------------------------------------------
+Arm SCMI firmware driver fixes for v5.19
 
-Changes in v14:
-- clock/sp-sp7021.h: Fix the comments from Krzysztof
-- sunplus,sp7021-clkc.yaml: Fix the comments from Rob
+Few more fixes to address:
+1. Issue reported on Juno with HDLCD clock which turned out to be yet
+   another firmware issue. The firmware is not conformant to the spec and
+   we now have to workaround as this may be copied to other platforms as
+   well. The spec expects to return size of 3 for a range clock rate
+   description while the firmware returns 1. We have other ways to validate
+   all the 3 entries the driver reads are polpulated and we use the same
+   to workaround this firmware bug.
 
-Changes in v13:
-- reset/sp-sp7021.h: Move HW mapping from dt-binding header to driver
-- reset-sunplus.c: Move HW mapping from dt-binding header to driver
-- clock/sp-sp7021.h: Move HW mapping from dt-binding header to driver
-- clk-sp7021.c: Fix the comments from Arnd
-- irq-sp7021-intc.c: Remove empty set_affinity callback function
-- sp7021_defconfig: Fix the comments from Arnd
+2. Optee transport not setting the correct reponse length which is similar
+   to the one reported earlier on Rockchip platform.
 
-Changes in v12:
-- sunplus,sp7021-clkc.yaml: Move 'reg' after 'compatible'
-- sunplus,sp7021-intc.yaml: Move 'reg' after 'compatible'
-- sunplus,reset.yaml: Move 'reg' after 'compatible'
-- Remove wrong reviewed-tags
+3. Drop the usage of the deprecated ida_simple_{get,remove} and migrate to the
+   ida_{alloc,free}
 
-Changes in v11:
-- clk-sp7021.c: Remove the dead code
+----------------------------------------------------------------
+Bo Liu (1):
+      firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API
 
-Changes in v10:
-- arm/sunplus,sp7021.yaml: Add SoC compatible: "sunplus,sp7021"
-- clock/sunplus,sp7021-clkc.yaml: Remove the internal clock parent from DTS
-- clk-sp7021.c: Refine the macro DBG_CLK
-- clk-sp7021.c: Refine the clock_parent_data
+Cristian Marussi (1):
+      firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES out-of-spec checks
 
-Changes in v9:
-- clk/Kconfig: fix the comments form Stephen Boyd
-- clk-sp7021.c: fix the comments form Stephen Boyd
+Vincent Guittot (1):
+      firmware: arm_scmi: Fix response size warning for OPTEE transport
 
-Changes in v8:
-- clk-sp7021.c: fix the comments form Stephen Boyd
-
-Changes in v7:
-- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
-- clk-sp7021.c: fix the comments form Stephen Boyd
-- irq-sp7021-intc.c: fix the comments from Marc
-
-Changes in v6:
-- reset-sunplus.c: fix the comments from Philipp
-- irq-sp7021-intc.c: fix the comments from Marc
-- mach-sunplus: fix the comments from Arnd
-
-Changes in v5:
-- reset-sunplus.c: fix strict checks
-- clk/Kconfig: fix spell
-- clk-sp7021.c: using bitfield ops, fix strict checks
-- irqchip/Kconfig: fix spell
-- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
-- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
-- mach-sunplus/Kconfig: fix typo
-- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
-
-Changes in v4:
-- mach-sunplus: add initial support for SP7021
-- sp7021_defconfig: add generic SP7021 defconfig
-- reset-sunplus: remove Q645 support
-- reset-sunplus.c: refine code based on Philipp's review
-- clk-sp7021: clock defines add prefix, more clean up
-
-Changes in v3:
-- sp7021-intc: remove primary controller mode due to P-chip running Linux
-  not supported any more.
-- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
-- sunplus,sp7021-intc.yaml: update descriptions for above changes
-- irq-sp7021-intc.c: more cleanup based on Marc's review
-- all driver's Kconfig removed default, it's selected by platform config
-
-Changes in v2:
-- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
-- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
-- sunplus,sp7021-intc.yaml: fix example.dt too long error
-- irq-sp7021-intc.c: major rewrite
-- all files with dual license
-
-Qin Jian (11):
-  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
-  dt-bindings: reset: Add bindings for SP7021 reset driver
-  reset: Add Sunplus SP7021 reset driver
-  dt-bindings: clock: Add bindings for SP7021 clock driver
-  clk: gate: Add devm_clk_hw_register_gate_parent_data()
-  clk: Add Sunplus SP7021 clock driver
-  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
-    controller
-  irqchip: Add Sunplus SP7021 interrupt controller driver
-  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
-  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-  ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
-
- .../bindings/arm/sunplus,sp7021.yaml          |  29 +
- .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
- .../sunplus,sp7021-intc.yaml                  |  62 ++
- .../bindings/reset/sunplus,reset.yaml         |  38 +
- MAINTAINERS                                   |  18 +
- arch/arm/Kconfig                              |   2 +
- arch/arm/Makefile                             |   1 +
- arch/arm/boot/dts/Makefile                    |   2 +
- arch/arm/boot/dts/sunplus-sp7021-achip.dtsi   |  84 +++
- arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts  |  30 +
- arch/arm/boot/dts/sunplus-sp7021.dtsi         | 310 ++++++++
- arch/arm/configs/multi_v7_defconfig           |   1 +
- arch/arm/configs/sp7021_defconfig             |  59 ++
- arch/arm/mach-sunplus/Kconfig                 |  27 +
- arch/arm/mach-sunplus/Makefile                |   8 +
- arch/arm/mach-sunplus/sp7021.c                |  16 +
- drivers/clk/Kconfig                           |  10 +
- drivers/clk/Makefile                          |   1 +
- drivers/clk/clk-sp7021.c                      | 713 ++++++++++++++++++
- drivers/irqchip/Kconfig                       |   9 +
- drivers/irqchip/Makefile                      |   1 +
- drivers/irqchip/irq-sp7021-intc.c             | 278 +++++++
- drivers/reset/Kconfig                         |   9 +
- drivers/reset/Makefile                        |   1 +
- drivers/reset/reset-sunplus.c                 | 212 ++++++
- .../dt-bindings/clock/sunplus,sp7021-clkc.h   |  88 +++
- .../dt-bindings/reset/sunplus,sp7021-reset.h  |  87 +++
- include/linux/clk-provider.h                  |  17 +
- 28 files changed, 2165 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
- create mode 100644 arch/arm/configs/sp7021_defconfig
- create mode 100644 arch/arm/mach-sunplus/Kconfig
- create mode 100644 arch/arm/mach-sunplus/Makefile
- create mode 100644 arch/arm/mach-sunplus/sp7021.c
- create mode 100644 drivers/clk/clk-sp7021.c
- create mode 100644 drivers/irqchip/irq-sp7021-intc.c
- create mode 100644 drivers/reset/reset-sunplus.c
- create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
- create mode 100644 include/dt-bindings/reset/sunplus,sp7021-reset.h
-
--- 
-2.33.1
-
+ drivers/firmware/arm_scmi/bus.c       |  6 +++---
+ drivers/firmware/arm_scmi/clock.c     | 26 +++++++++++++++++++++++++-
+ drivers/firmware/arm_scmi/driver.c    |  1 +
+ drivers/firmware/arm_scmi/optee.c     |  7 ++++++-
+ drivers/firmware/arm_scmi/protocols.h |  3 +++
+ 5 files changed, 38 insertions(+), 5 deletions(-)
