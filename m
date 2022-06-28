@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E189CCA47B
-	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 02:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A68D9C43334
+	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 02:22:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C45F2C36AE5; Tue, 28 Jun 2022 02:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54314C341CA;
-	Tue, 28 Jun 2022 02:20:58 +0000 (UTC)
+	id 75503C34115; Tue, 28 Jun 2022 02:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 311E8C341CE;
+	Tue, 28 Jun 2022 02:22:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656382859;
+	s=k20201202; t=1656382960;
 	bh=4b2HMmvlf7NXYlP78oUShEcmXVWe526VfpbWjHp/+fQ=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qBLEnuoga4RfLMRKgNRY19Hrap0DT3YSFIGqU1H2tcKY8a9pvvjEeJgVHaqZlMXYj
-	 yiQtNz+E7X+yzVF2zzcZZEhGMo4t5597bDe2gZyKECOAcGl/kYd428273l2sy+1wgv
-	 0SVOPL5St8obPpfPoHoCcEsMSzkrqWGvZc9Y3mt72Gtf2BdwYOsf7zJSLnc9DsqLo2
-	 6wKwxnb3rUa6BoG6jtiVuygQorXgOLVD7O6BJTFSwpoMH3at/2b1kM/39w7Jpbdzv1
-	 B/NMC+m91PSjPawzEjWWbY8TQkbb+S4CtFY8w4Y73i9InNOHG93lsBueVLvS9CxhXg
-	 9vC0JGlkXuJvA==
+	b=Z6xe2x48BARInt3b4zSwVNBg5S5rvQzRFifPbbHQeLyG+pu+Qp1c8Q9LUYuTue6Lb
+	 Bw248zyyfzpKZ1ZnCg2Mza/gy1RWntLYD5hzkid4XG47JlMlIiwx18VNXPNIX98nci
+	 i1YzlaW8WY9IYRItR0i5thFEyuqE/Se2XFhvMviyo3VpRXiMiYtKxTIb3aDlgf7Jon
+	 jJKJtwlFkCQoSJg2bQOgdXJWLOqqdh23BKdhADKRfhAuDVhtNdgLpLzzFOYk/TjGlK
+	 O5hGRv00Jzc5hmKrKKwcGGHicARCRR/bzY2is02uNH5gtA7I0f04a9OPGRSYGQdKmW
+	 Wba6hrQ0xfrXQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -33,12 +33,12 @@ Cc: Liang He <windhl@126.com>,
 	soc@kernel.org,
 	linux@armlinux.org.uk,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.18 53/53] arm: mach-spear: Add missing of_node_put() in time.c
-Date: Mon, 27 Jun 2022 22:18:39 -0400
-Message-Id: <20220628021839.594423-53-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 41/41] arm: mach-spear: Add missing of_node_put() in time.c
+Date: Mon, 27 Jun 2022 22:21:00 -0400
+Message-Id: <20220628022100.595243-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628021839.594423-1-sashal@kernel.org>
-References: <20220628021839.594423-1-sashal@kernel.org>
+In-Reply-To: <20220628022100.595243-1-sashal@kernel.org>
+References: <20220628022100.595243-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
