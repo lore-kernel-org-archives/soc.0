@@ -1,102 +1,145 @@
-Return-Path: <sashal@kernel.org>
+Return-Path: <SRS0=mjGj=XD=cqplus1.com=prvs=11763A8F71=qinjian@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C3D6C43334
-	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 02:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E522C433EF
+	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 06:27:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1725FC385A2; Tue, 28 Jun 2022 02:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F7DC341CA;
-	Tue, 28 Jun 2022 02:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1656383250;
-	bh=KZ2/UYyi2UeRP/7S3TXv7BylaBfnuZkXyL4LhPepjYQ=;
-	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C2/zli+ZjQs/bLCi94ryInJgLLuHBd5U8f4EKllBAXudAOaE+jIb6Z9FTEkvRwf9w
-	 6ZJLnLbUAkRdR+1G6GbmsJtK+cvPTJ5Cp4Y6UnvBf/706gvR8vPiP9cgrwdBNTNSe9
-	 INVFtLuQhSp8d04KyD62nLonDjfI73zWJplfGlgSueEmff9Bt7thd53PjwqCKB7/uJ
-	 rNEWmOinVN4LOy2abyVa3RyOXhpoMsQK4ylZBgQwIwUfbjyVNoIdfLFEXL1sw3+Wov
-	 KauW/eBmC9+M/kZEMwktCPI1ZbuvTS8fWUpCEd5Q711sLviTdfyxF+PPgk5yWfNVVf
-	 FvK1TYIC/Xh0g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
+	id 2C3FAC341D3; Tue, 28 Jun 2022 06:27:14 +0000 (UTC)
+Received: from mx1.cqplus1.com (mx1.cqplus1.com [113.204.237.245])
+	by smtp.kernel.org (Postfix) with ESMTP id B2BA7C341D1
+	for <soc@kernel.org>; Tue, 28 Jun 2022 06:27:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B2BA7C341D1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=cqplus1.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=cqplus1.com
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+	LIVER,40,3)
+Received: from 172.28.114.216
+	by mx1.cqplus1.com with MailGates ESMTP Server V5.0(20103:0:AUTH_RELAY)
+	(envelope-from <qinjian@cqplus1.com>); Tue, 28 Jun 2022 14:27:00 +0800 (CST)
+From: Qin Jian <qinjian@cqplus1.com>
+To: sboyd@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Liang He <windhl@126.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Sasha Levin <sashal@kernel.org>,
-	vireshk@kernel.org,
-	shiraz.linux.kernel@gmail.com,
-	soc@kernel.org,
+Cc: krzysztof.kozlowski+dt@linaro.org,
+	robh+dt@kernel.org,
+	mturquette@baylibre.com,
 	linux@armlinux.org.uk,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.9 13/13] arm: mach-spear: Add missing of_node_put() in time.c
-Date: Mon, 27 Jun 2022 22:26:57 -0400
-Message-Id: <20220628022657.597208-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628022657.597208-1-sashal@kernel.org>
-References: <20220628022657.597208-1-sashal@kernel.org>
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Qin Jian <qinjian@cqplus1.com>,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v20 07/11] dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt controller
+Date: Tue, 28 Jun 2022 14:26:47 +0800
+Message-Id: <86d703e52fd9380f0973c539c1e12d8860def0ea.1656396767.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1656396767.git.qinjian@cqplus1.com>
+References: <cover.1656396767.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Liang He <windhl@126.com>
+Add documentation to describe Sunplus SP7021 interrupt controller bindings.
 
-[ Upstream commit 2c629dd2d14fd7f64a553f809eda6d0b3a4f615a ]
-
-In spear_setup_of_timer(), of_find_matching_node() will return a
-node pointer with refcount incrementd. We should use of_node_put()
-in each fail path or when it is not used anymore.
-
-Signed-off-by: Liang He <windhl@126.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20220616093027.3984903-1-windhl@126.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Qin Jian <qinjian@cqplus1.com>
 ---
- arch/arm/mach-spear/time.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ .../sunplus,sp7021-intc.yaml                  | 62 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
 
-diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
-index aaaa6781b9fe..57b77c7effa9 100644
---- a/arch/arm/mach-spear/time.c
-+++ b/arch/arm/mach-spear/time.c
-@@ -223,13 +223,13 @@ void __init spear_setup_of_timer(void)
- 	irq = irq_of_parse_and_map(np, 0);
- 	if (!irq) {
- 		pr_err("%s: No irq passed for timer via DT\n", __func__);
--		return;
-+		goto err_put_np;
- 	}
- 
- 	gpt_base = of_iomap(np, 0);
- 	if (!gpt_base) {
- 		pr_err("%s: of iomap failed\n", __func__);
--		return;
-+		goto err_put_np;
- 	}
- 
- 	gpt_clk = clk_get_sys("gpt0", NULL);
-@@ -244,6 +244,8 @@ void __init spear_setup_of_timer(void)
- 		goto err_prepare_enable_clk;
- 	}
- 
-+	of_node_put(np);
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+new file mode 100644
+index 000000000..bd0021dba
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd. 2021
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/sunplus,sp7021-intc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	spear_clockevent_init(irq);
- 	spear_clocksource_init();
- 
-@@ -253,4 +255,6 @@ void __init spear_setup_of_timer(void)
- 	clk_put(gpt_clk);
- err_iomap:
- 	iounmap(gpt_base);
-+err_put_np:
-+	of_node_put(np);
- }
++title: Sunplus SP7021 SoC Interrupt Controller
++
++maintainers:
++  - Qin Jian <qinjian@cqplus1.com>
++
++properties:
++  compatible:
++    items:
++      - const: sunplus,sp7021-intc
++
++  reg:
++    maxItems: 2
++    description:
++      Specifies base physical address(s) and size of the controller regs.
++      The 1st region include type/polarity/priority/mask regs.
++      The 2nd region include clear/masked_ext0/masked_ext1/group regs.
++
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    const: 2
++    description:
++      The first cell is the IRQ number, the second cell is the trigger
++      type as defined in interrupt.txt in this directory.
++
++  interrupts:
++    maxItems: 2
++    description:
++      EXT_INT0 & EXT_INT1, 2 interrupts references to primary interrupt
++      controller.
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - "#interrupt-cells"
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    intc: interrupt-controller@9c000780 {
++        compatible = "sunplus,sp7021-intc";
++        reg = <0x9c000780 0x80>, <0x9c000a80 0x80>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++        interrupt-parent = <&gic>;
++        interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>, /* EXT_INT0 */
++                     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>; /* EXT_INT1 */
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 63aa492a4..ca11740e8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2832,8 +2832,13 @@ S:	Maintained
+ W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
++F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
++F:	arch/arm/boot/dts/sunplus-sp7021*.dts*
++F:	arch/arm/configs/sp7021_*defconfig
++F:	arch/arm/mach-sunplus/
+ F:	drivers/clk/clk-sp7021.c
++F:	drivers/irqchip/irq-sp7021-intc.c
+ F:	drivers/reset/reset-sunplus.c
+ F:	include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ F:	include/dt-bindings/reset/sunplus,sp7021-reset.h
 -- 
-2.35.1
+2.33.1
 
