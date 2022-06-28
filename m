@@ -1,98 +1,108 @@
-Return-Path: <SRS0=dP6n=XD=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=DNWo=XD=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43868C43334
-	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 13:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5782C43334
+	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 13:49:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 00F58C3411D; Tue, 28 Jun 2022 13:33:26 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id DC1E2C341CB;
-	Tue, 28 Jun 2022 13:33:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC1E2C341CB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D776152B;
-	Tue, 28 Jun 2022 06:33:20 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 43B0D3F5A1;
-	Tue, 28 Jun 2022 06:33:19 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	id 9D4F0C341CB; Tue, 28 Jun 2022 13:49:09 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 023BCC3411D;
+	Tue, 28 Jun 2022 13:49:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 023BCC3411D
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656424148; x=1687960148;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8Mfoa7XBIJajd+Vj3ReaDjEFsciZ6yUYqRM9HOhXHq4=;
+  b=R7LKmFLFcCr9LeWb5KE57VaghSrUz99OGE/6W+9KoAqK0patWVeD3sMR
+   XZYBFf2ob3+HC8KHarJpSOAnZ3IYvCd3VNesgIXEmZce9jo1jRC89c5QH
+   DwgUuIdbPhLjypO0x/0iKH79so6eerm2X0kuPtN3vsRywjwrvv4FTNdGe
+   lr/myy1RdDbsx7wcRjIZg8JIdOKDy0L52cJdgC+JhErZ8MhP1VEbfI3Gr
+   5LqEHR0OnLO+yVAauPdL0sk8EEv1ipkWl4LQtQDQjTj6/l/DAm2dVxVSB
+   H5TNbnM3LImuNalIh07UxWDnCl/SntNitQth9JG5WesujBdSGVUCZ3xSO
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="162404105"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2022 06:49:06 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 28 Jun 2022 06:49:03 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 28 Jun 2022 06:49:01 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Fixes for v5.19(Round 2)
-Date: Tue, 28 Jun 2022 14:33:15 +0100
-Message-Id: <20220628133315.699803-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.37.0
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] ARM: at91: fixes for 5.19
+Date: Tue, 28 Jun 2022 16:51:30 +0300
+Message-ID: <20220628135130.3114878-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC Team,
+Hi, Arnd, Olof, ARM SoC maintainers,
 
-Please pull !
+Please pull the following AT91 fixes for 5.19.
 
-We pushed several extra conformance checks in the SCMI driver and quite a few
-firmware bugs have been discovered with that. Due to absence of formal
-conformace test suite for SCMI, we have to workaround them in the kernel for
-now :(.
+Thank you,
+Claudiu Beznea
 
-Regards,
-Sudeep
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
--->8
-
-The following changes since commit 44dbdf3bb3f44bf08897ed5f22eb262edcf3d926:
-
-  firmware: arm_scmi: Fix incorrect error propagation in scmi_voltage_descriptors_get (2022-06-12 19:59:55 +0100)
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-5.19-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git/ tags/at91-fixes-5.19
 
-for you to fetch changes up to 4ce7e51dc712f8a006ce6abcc49f788c79287c03:
+for you to fetch changes up to 91d60e259c0f58c855f88f3fe5b7909aec563525:
 
-  firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API (2022-06-27 16:58:14 +0100)
-
-----------------------------------------------------------------
-Arm SCMI firmware driver fixes for v5.19
-
-Few more fixes to address:
-1. Issue reported on Juno with HDLCD clock which turned out to be yet
-   another firmware issue. The firmware is not conformant to the spec and
-   we now have to workaround as this may be copied to other platforms as
-   well. The spec expects to return size of 3 for a range clock rate
-   description while the firmware returns 1. We have other ways to validate
-   all the 3 entries the driver reads are polpulated and we use the same
-   to workaround this firmware bug.
-
-2. Optee transport not setting the correct reponse length which is similar
-   to the one reported earlier on Rockchip platform.
-
-3. Drop the usage of the deprecated ida_simple_{get,remove} and migrate to the
-   ida_{alloc,free}
+  ARM: at91: pm: Mark at91_pm_secure_init as __init (2022-06-28 12:55:32 +0300)
 
 ----------------------------------------------------------------
-Bo Liu (1):
-      firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API
+AT91 fixes for 5.19
 
-Cristian Marussi (1):
-      firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES out-of-spec checks
+It contains 3 SoC fixes and 2 DT fixes:
+SoC:
+- fix the wakeup from RTC and RTT for ULP1 mode
+- fix section mismatch warning
+- fix SAM9X60 SiP detection
 
-Vincent Guittot (1):
-      firmware: arm_scmi: Fix response size warning for OPTEE transport
+DT:
+- fixes the EEPROMs compatibles for sama5d2_icp and sam9x60ek and EEPROM
+  size for sam9x60ek
 
- drivers/firmware/arm_scmi/bus.c       |  6 +++---
- drivers/firmware/arm_scmi/clock.c     | 26 +++++++++++++++++++++++++-
- drivers/firmware/arm_scmi/driver.c    |  1 +
- drivers/firmware/arm_scmi/optee.c     |  7 ++++++-
- drivers/firmware/arm_scmi/protocols.h |  3 +++
- 5 files changed, 38 insertions(+), 5 deletions(-)
+----------------------------------------------------------------
+Claudiu Beznea (3):
+      ARM: at91: pm: use proper compatible for sama5d2's rtc
+      ARM: at91: pm: use proper compatibles for sam9x60's rtc and rtt
+      ARM: at91: pm: use proper compatibles for sama7g5's rtc and rtt
+
+Eugen Hristev (2):
+      ARM: dts: at91: sam9x60ek: fix eeprom compatible and size
+      ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
+
+Fabio Estevam (1):
+      ARM: at91: pm: Mark at91_pm_secure_init as __init
+
+Mihai Sain (1):
+      ARM: at91: fix soc detection for SAM9X60 SiPs
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts   |  3 +--
+ arch/arm/boot/dts/at91-sama5d2_icp.dts |  6 +++---
+ arch/arm/mach-at91/pm.c                | 12 ++++++------
+ drivers/soc/atmel/soc.c                | 12 ++++++------
+ 4 files changed, 16 insertions(+), 17 deletions(-)
