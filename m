@@ -1,77 +1,91 @@
-Return-Path: <SRS0=ZVtb=XD=linaro.org=linus.walleij@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C855C43334
-	for <soc@archiver.kernel.org>; Tue, 28 Jun 2022 19:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D15F1C43334
+	for <soc@archiver.kernel.org>; Wed, 29 Jun 2022 02:12:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0F94C341C6; Tue, 28 Jun 2022 19:26:56 +0000 (UTC)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8BF88C341CA
-	for <soc@kernel.org>; Tue, 28 Jun 2022 19:26:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8BF88C341CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id g4so12375078ybg.9
-        for <soc@kernel.org>; Tue, 28 Jun 2022 12:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=walg9+X25Qf0Q2kOl7EPuRRmD7l8R+TPYwiRkuq/taA=;
-        b=r5dhjikOjoOSTxH7twYmSKEfHqErqjhxkSM9McqWoCouOgLOQB7kvkMdEEzxx/BDX6
-         TQrjLVB6hMIfuOa9g8Jq2JmzE97r9+o77os7tKeNZgQG+gQR3fBWEr5T9i+X01s9wRKF
-         poqPtQCKU93338RDg9n0sUG/ZEqcMMUZPZnDwkORaC63HcYlFTRnittAcohjRCM8pOOF
-         g/UPD7ABIbEWrLq01pVgh4ii12ETWhUPrCA8/9LHWHuLKXXESxjWthvXPWzyjMNL6Oot
-         Hlc8iuNIiurItn418+oTScTJhM5C5ncPhx/nMRn5oHIDm7HNscLwCkwchgANUMMiViBr
-         lmvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=walg9+X25Qf0Q2kOl7EPuRRmD7l8R+TPYwiRkuq/taA=;
-        b=ueXlFQ5oeu0eIKCYOp1ap92W0pcZXcvdf86L9Zu0PU28Ph2SKvz15x2lxfZDMVmztG
-         /Nrdd3avXUiKaTX+9Gd6Mfct67+1cB9I0yeo62cEi+Qoa4siul1GSJJRbDIeX/lfLJHy
-         bm46CfzceIo+2cnROF6H3crlC/yzSr9RMTCAq9lo8Qziu+AirA3yIDTMYHuRvmmCJb+M
-         I4ZXTG3vGZB2SrEbWO1UYcSVNA4Fpa/2jJX5NcUNxLRXxr9iNVURNzVPjG45oVpUjbLf
-         EA/fFsEY1wTekxhmRLqWniLZSzRVatkrvYoYAC1KvJAfc0qcHsP3DCrOByPgJmsa2Aqb
-         xwew==
-X-Gm-Message-State: AJIora/GIdioP6nIVq80gND39Ni39IWWDOP0iwn/TmNXCIpAyd0fwb2w
-	F4egnOS417y4/3Wt4M9AUZCHGcQA3mtag4p5milsgQ==
-X-Google-Smtp-Source: AGRyM1tix/MDbYpAocLhXqNa2cuD1sSvJJYVbcVLzqD1nAvkTSC00uKkSWSEB65C4UY4pgJ8yatan7ZYC8uyX2aYtAw=
-X-Received: by 2002:a25:e7d4:0:b0:66c:899b:49c6 with SMTP id
- e203-20020a25e7d4000000b0066c899b49c6mr21915704ybh.291.1656444414438; Tue, 28
- Jun 2022 12:26:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 28 Jun 2022 21:26:43 +0200
-Message-ID: <CACRpkdawFWN_3EYV0p2AAgu54Lu1s0YgqiSiV3136wOSfSGhrg@mail.gmail.com>
-Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
- align key node name
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 98454C341CB; Wed, 29 Jun 2022 02:12:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0956EC341C8;
+	Wed, 29 Jun 2022 02:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1656468770;
+	bh=vlTzIAWdjzMlxKEVPo0jINxMb90nhkdPWOMVRtd4csA=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=CbQ6nYjr14l7x02UoyufaxGVH9M7POIkPqjt+Tm34lj2q8UJZ9pmkwIlncQK7BqGZ
+	 d8HYOxhYwMXXt2UGar0L0d72ejExyoO9hOTAPhaDgMebkFCV1Gw6dxtcPld9QeQvxQ
+	 GBLsY+9cS2F7/1pDQv5tcnCn6Zq1YecAds3OJZNWG6ARSzgjxURSPeeUOjPoNcHE1J
+	 2G+TtMIgJ6aw3wbgTctcJF2RDe4BBguAqrbU6rHgX0d3Qh3OLyZaLwZHq36y4RUCm3
+	 jwUJxjNc8drzfTWi1jDPV1HmLtXq7IV7ziGfokc0NPUuagyDVU7cA98/EzyHOJS8nt
+	 Wl4V5nlgyDGQQ==
+Date: Wed, 29 Jun 2022 10:12:44 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, openbmc@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 5.19, round 2
+Message-ID: <20220629021244.GL819983@dragon>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Jun 16, 2022 at 2:54 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+The following changes since commit 7c7eaeefb0ae226da9233d5db265652d900e1fcb:
 
-> gpio-keys schema requires keys to have more generic name.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  soc: imx: imx8m-blk-ctrl: fix display clock for LCDIF2 power domain (2022-06-14 11:53:42 +0800)
 
-Patch applied!
+are available in the Git repository at:
 
-Yours,
-Linus Walleij
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.19-2
+
+for you to fetch changes up to 8630354f42bef90f51e003a7ce62b69aceb735ca:
+
+  arm64: dts: imx8mp-icore-mx8mp-edim2.2: correct pad settings (2022-06-27 15:55:41 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 5.19, round 2:
+
+- Fix the SDIO description for imx7d-smegw01 board to ensure there is
+  no communication made at 1.8V.
+- Fix pgc_ispdwp power-domain clock, which should be
+  IMX8MP_CLK_MEDIA_ISP_ROOT.
+- Re-enable framebuffer support in mxs_defconfig to fix a Kconfig
+  regression.
+- A series from Peng Fan (and Sherry Sun) fixing various pads on i.MX8MP
+  based boards to leave reserved bits untouched.
+
+----------------------------------------------------------------
+Fabio Estevam (2):
+      ARM: dts: imx7d-smegw01: Fix the SDIO description
+      ARM: mxs_defconfig: Enable the framebuffer
+
+Peng Fan (14):
+      arm64: dts: imx8mp: correct clock of pgc_ispdwp
+      arm64: dts: imx8mp-evk: correct mmc pad settings
+      arm64: dts: imx8mp-evk: correct gpio-led pad settings
+      arm64: dts: imx8mp-evk: correct vbus pad settings
+      arm64: dts: imx8mp-evk: correct eqos pad settings
+      arm64: dts: imx8mp-evk: correct vbus pad settings
+      arm64: dts: imx8mp-evk: correct I2C5 pad settings
+      arm64: dts: imx8mp-evk: correct I2C1 pad settings
+      arm64: dts: imx8mp-evk: correct I2C3 pad settings
+      arm64: dts: imx8mp-venice-gw74xx: correct pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct uart pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct eqos pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct i2c2 & mmc settings
+      arm64: dts: imx8mp-icore-mx8mp-edim2.2: correct pad settings
+
+Sherry Sun (1):
+      arm64: dts: imx8mp-evk: correct the uart2 pinctl value
+
+ arch/arm/boot/dts/imx7d-smegw01.dts                |   4 +-
+ arch/arm/configs/mxs_defconfig                     |   1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |  88 ++++++++--------
+ .../dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts  |  40 +++----
+ .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |  48 ++++-----
+ .../boot/dts/freescale/imx8mp-venice-gw74xx.dts    | 116 ++++++++++-----------
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   2 +-
+ 7 files changed, 149 insertions(+), 150 deletions(-)
