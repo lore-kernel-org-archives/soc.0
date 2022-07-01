@@ -4,65 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30D07CCA479
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5785CCCA47F
 	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 195D7C341D0; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01358C341CA;
+	id 4AB17C341D3; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 25B95C341D2;
 	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656708097;
-	bh=2XDj7o6wLQFMBjkTxYq/+CFV67wBfJ4PmJWn6Zm96bQ=;
+	bh=0QPTmlZtmqXx21EGDw9sgLd/mxl0IFkH1NNBkRj2cow=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=TsgayT18CelAEP8rya81Drvww6eiRgJpF3yDFhViuxGqENw7TqpAWl03KdpA5T3BA
-	 aPWian/MSsrxOc2+PiLtWbp7JLypkiIAKAiaXtqECTWA9BWmv8lTKPQ2eCxbkyI2iE
-	 q5M6v3b8tTVTJQ0yJSpCa943lwNI2v+r6q4gfsd2kGPLGXNEdnAlPuh9QAlnq53Khy
-	 P6HX+NiFWtW6Vnbcil2B4m/vuPJgP+edpiWBNVRXZuO3q9IdQz45Gu/uKkdqJqhiiR
-	 eVdtBArdg/be91EQCNRQUqz3ta3Y5VA77M0ignnHEAMdmZxv0Ci6ikNLrkECAHsRtV
-	 BgKFwXqGNMPSA==
+	b=B2EcvLYZQI+rcGCRSsB1lqfS3KYMKPp1yC8BMuEQkCzZJwLtyVu8h28aVztmOFuRO
+	 uskpi51igLcjyYQhwDTiE7LJFZ6rPgX9oOTd2Lh6rt4cL1toVQE5r80LKXAw9LA/BR
+	 QgdUeoBS90pyb/tqJnctfZ+nUQQO5bdH7hhf9FTukX9KL0Q/avZ+twzwzG5k63npOy
+	 woq92+12RWXx8Jj7vjsDKeADQX1GkM5LRm8ww/9efoI0RE+QGTOO+lkU22Ov9ldp0t
+	 RKysQ1jQLTuZEZudeuqhvVBRWvFlit+leuUU6RRuAT9x7PaHsjQrc+oCb60Wpl3UtE
+	 F0+Owtw6V1QDQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0A49E49FA1;
-	Fri,  1 Jul 2022 20:41:36 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1044DE49BBC;
+	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/5] arm64: dts: altera: adjust whitespace around '='
+Subject: Re: [GIT PULL] i.MX fixes for 5.19, round 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165670809691.26141.5545209147548720150.git-patchwork-notify@kernel.org>
-Date: Fri, 01 Jul 2022 20:41:36 +0000
-References: <20220526204606.833054-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220526204606.833054-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <165670809706.26141.5715124165579064666.git-patchwork-notify@kernel.org>
+Date: Fri, 01 Jul 2022 20:41:37 +0000
+References: <20220629021244.GL819983@dragon>
+In-Reply-To: <20220629021244.GL819983@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
-by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 26 May 2022 22:46:02 +0200 you wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
+On Wed, 29 Jun 2022 10:12:44 +0800 you wrote:
+> The following changes since commit 7c7eaeefb0ae226da9233d5db265652d900e1fcb:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>   soc: imx: imx8m-blk-ctrl: fix display clock for LCDIF2 power domain (2022-06-14 11:53:42 +0800)
 > 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.19-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [1/5] arm64: dts: altera: adjust whitespace around '='
-    https://git.kernel.org/soc/soc/c/85d616dd19ac
-  - [2/5] arm64: dts: amd: adjust whitespace around '='
-    https://git.kernel.org/soc/soc/c/dec1c62e91ba
-  - [3/5] arm64: dts: apm: adjust whitespace around '='
-    https://git.kernel.org/soc/soc/c/d57cc3b903db
-  - [4/5] arm64: dts: toshiba: adjust whitespace around '='
-    (no matching commit)
-  - [5/5] arm64: dts: lg: adjust whitespace around '='
-    https://git.kernel.org/soc/soc/c/b88d11f84da6
+  - [GIT,PULL] i.MX fixes for 5.19, round 2
+    https://git.kernel.org/soc/soc/c/1f66f63c7312
 
 You are awesome, thank you!
 -- 
