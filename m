@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5785CCCA47F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51376CCA483
 	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4AB17C341D3; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 25B95C341D2;
+	id 3E933C341D4; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 23D59C341D3;
 	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656708097;
-	bh=0QPTmlZtmqXx21EGDw9sgLd/mxl0IFkH1NNBkRj2cow=;
+	bh=HxXqZG+Tmar1AKAjT5fxGBYB9BL8WUihhOotVdFeTc8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=B2EcvLYZQI+rcGCRSsB1lqfS3KYMKPp1yC8BMuEQkCzZJwLtyVu8h28aVztmOFuRO
-	 uskpi51igLcjyYQhwDTiE7LJFZ6rPgX9oOTd2Lh6rt4cL1toVQE5r80LKXAw9LA/BR
-	 QgdUeoBS90pyb/tqJnctfZ+nUQQO5bdH7hhf9FTukX9KL0Q/avZ+twzwzG5k63npOy
-	 woq92+12RWXx8Jj7vjsDKeADQX1GkM5LRm8ww/9efoI0RE+QGTOO+lkU22Ov9ldp0t
-	 RKysQ1jQLTuZEZudeuqhvVBRWvFlit+leuUU6RRuAT9x7PaHsjQrc+oCb60Wpl3UtE
-	 F0+Owtw6V1QDQ==
+	b=IhebHyvuJqWokUbX11oqhajm/H5whwX9zDNW2hxw8gPttxLswQOX/E/Orl/TYRor0
+	 SCeIImjZZD4k2/fxWXVJEs5OF8gfRRjU7l6PHBFtLM9YJBQsNVqk8rXX33JDQCm6Af
+	 WztIaK0XgLqEdi0why7mHYVcpNSqKjfFBIkcTWorN7zxRazDgsOLb7W2p8inRl/+Hz
+	 oKFLlEQsJBvrTl4YH6zxIy3pjDRQjIIdCyFxR4RJJ3261rD7gTd5mz95HNiVJwQbu1
+	 wBFRHuGg3BVAAVo/brK+qn7Z6ClvMqK/q05dp9lex0Vyc1B7aKKro5s1b/Z6M9tqXL
+	 ZoNNQuKFppYfA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1044DE49BBC;
-	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F218CE49FA3;
+	Fri,  1 Jul 2022 20:41:36 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 5.19, round 2
+Subject: Re: [GIT PULL] arm64: dts: socfpga: dts updates for v5.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165670809706.26141.5715124165579064666.git-patchwork-notify@kernel.org>
-Date: Fri, 01 Jul 2022 20:41:37 +0000
-References: <20220629021244.GL819983@dragon>
-In-Reply-To: <20220629021244.GL819983@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+ <165670809698.26141.9097807626278208639.git-patchwork-notify@kernel.org>
+Date: Fri, 01 Jul 2022 20:41:36 +0000
+References: <20220626004437.1224820-1-dinguyen@kernel.org>
+In-Reply-To: <20220626004437.1224820-1-dinguyen@kernel.org>
+To: Dinh Nguyen <dinguyen@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 29 Jun 2022 10:12:44 +0800 you wrote:
-> The following changes since commit 7c7eaeefb0ae226da9233d5db265652d900e1fcb:
+On Sat, 25 Jun 2022 19:44:37 -0500 you wrote:
+> Hi Arnd/Olof,
 > 
->   soc: imx: imx8m-blk-ctrl: fix display clock for LCDIF2 power domain (2022-06-14 11:53:42 +0800)
+> Please pull in these updates for v5.20.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.19-2
+> Thanks,
+> Dinh
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 5.19, round 2
-    https://git.kernel.org/soc/soc/c/1f66f63c7312
+  - [GIT,PULL] arm64: dts: socfpga: dts updates for v5.20
+    https://git.kernel.org/soc/soc/c/3966af40559d
 
 You are awesome, thank you!
 -- 
