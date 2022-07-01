@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24271CCA480
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 237CECCA479
 	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 20:41:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E6736C341CE; Fri,  1 Jul 2022 20:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CF43EC341C8;
+	id E208AC341CA; Fri,  1 Jul 2022 20:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C31CDC341CB;
 	Fri,  1 Jul 2022 20:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656708059;
-	bh=zfKCKp4WIo1iHVPP/js56AelUZp8juk8uisqRMvkH/w=;
+	bh=1w9y/qYi8/QpcP6kbAlaNUnG/mK0H73+PtKzOh4x3zk=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=gXL0oMGLzSHeMgrebJvUYBBHAriZGg5fwz81WJBfr3lzjBhD+oprO186wovt2ZmAn
-	 SdcVq+QxWGl8nGT0UxBszSYLas2ZueXA1vZM3SU+SXSV6433LHr+nm2CSQ2rw5c1VA
-	 OExYiww6fcKsS+nonb6pqia2+PpLTO5zOqXCy4phlii1yjGTRll4P5MHfVxEAoUCum
-	 5n+yTQvls63IXMHjBkkjgxs/Ajiu2xC92PwQ9iMRAeXLgWrP/+POIV3NKSaEy5kgrh
-	 Z6mjZMsLwhtq4FujfRmHzRbk1uidFtCYSjYWO1PpIiXJ4UrPiOyJTDat8yvKqVRltV
-	 2CPwAnCZBvV5A==
+	b=QCs3CtPqEu9l8GwYBZhqnSX/CV5ETS5hPysfMPjRaCyer5b+0ytcaQK1Z+y0F8dyG
+	 /THySb50hxRQC407tWOOnDlWTDJI7mB5k3mQJGcgT5AUVlqNE3QfBhcQhxQl/cXDcC
+	 L3WinTUscgk62rKCzCdoF/zGNOXLovWQplSQcfP+346oz8/73/ynpj2q28iA/HkhuI
+	 1IQOpjg8lulqSGe/uSCvA36zhZL0QYmut6G9JrMXvo3Dwww7Q+elKSTl+v8Z7rKIhJ
+	 M3y/IvGDPgYbDO6tywvdvf3MumeVFkKpKPXGUEkKNrnQxwHe8m4rDKpDY5Ml3lppVU
+	 p5wP7AeTBwFjA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9FD5E49FA1;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A093CE49BBC;
 	Fri,  1 Jul 2022 20:40:59 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] soc: ixp4xx/npe: Fix unused match warning
+Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v5.19(Round 2)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165670805968.26141.13550758360915055499.git-patchwork-notify@kernel.org>
+ <165670805964.26141.117477654761400799.git-patchwork-notify@kernel.org>
 Date: Fri, 01 Jul 2022 20:40:59 +0000
-References: <20220626074315.61209-1-linus.walleij@linaro.org>
-In-Reply-To: <20220626074315.61209-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <20220628133315.699803-1-sudeep.holla@arm.com>
+In-Reply-To: <20220628133315.699803-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 26 Jun 2022 09:43:15 +0200 you wrote:
-> The kernel test robot found this inconsistency:
+On Tue, 28 Jun 2022 14:33:15 +0100 you wrote:
+> Hi ARM SoC Team,
 > 
->   drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning:
->   'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
->      737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
+> Please pull !
 > 
-> This is because the match is enclosed in the of_match_ptr()
-> which compiles into NULL when OF is disabled and this
-> is unnecessary.
+> We pushed several extra conformance checks in the SCMI driver and quite a few
+> firmware bugs have been discovered with that. Due to absence of formal
+> conformace test suite for SCMI, we have to workaround them in the kernel for
+> now :(.
 > 
 > [...]
 
 Here is the summary with links:
-  - soc: ixp4xx/npe: Fix unused match warning
-    https://git.kernel.org/soc/soc/c/620f83b8326c
+  - [GIT,PULL] firmware: arm_scmi: Fixes for v5.19(Round 2)
+    https://git.kernel.org/soc/soc/c/d95ce66d4cc3
 
 You are awesome, thank you!
 -- 
