@@ -4,57 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6825BC3F2D4
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9060ACCA48C
 	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5D0FBC341E0; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4598BC341DB;
+	id 6A46AC36AE2; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55112C341DE;
 	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656708097;
-	bh=+61IpoQtxYeubBNC0rd0aPiHp56O5CiDP7EXruECahg=;
+	bh=lbZQxzZEx5+ZXSjYIcukjG1lnLMsweqj8UkgJy2fmgs=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=N2xGE/qIZGud7goYdfVw9pskVmv2BPrbvZf2HqvvSnKwbblwo3WgprHqMrFvDJU5n
-	 Q7Nxku+RbK3YacryzghaPaDauU31VmWN6ii4X1HN/IQUNRaNxtVRe3Bn2/+fRjCvua
-	 LWX8tKyY86TG/y3+dBgEchreT5Zo9OdOM+YzRQX5Hg8tri1uhr+/LLcAk1a/Ir4+b4
-	 VmIhVDiJr+M+FO9I/h5LRCOWCTY7x6Z/6FN5BFAar1MvIlYvaWr7/y21KXipKFAzan
-	 797eOaPweUPGQ97LvMr3fUHl3Z17X2wo7RmxrgXfvU7fbCprorEPNXS50jwSMEE4Ap
-	 31pBXVW2IhOtw==
+	b=CEecp/y5OiTq1LoLbBbOouwqz/BeCQHDIhmsqerPu0ifMtrQzIoxonj0iZQq57kNP
+	 GvF8sYvS3PL6zRi2yTgdVwaEa2h5wLqIRHeinTHWkL95sdfqfqzhpdfjH9cFdCg+IK
+	 QVgl+Z4u3xyuFrXaa+cGHJJNgYBPR0t02PVCZsBsIqyd0Y3pLJpAIDZSDEbpWqVbLk
+	 ImEz7G8S7S8aORHZYC1Ytwl+FMrtEEKAFcqOHCrta8z/WXb31lqAqP593lyCJukpLq
+	 ki5THYlgvbvd+1U8rhW5/QGkvG6yyiW9f19s6zWjr0G+sETSSW/79QX5ldOO9B7HoS
+	 eIU8rhIQ9GtQw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2F917E49FA4;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3ED28E49FA0;
 	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: axm: adjust whitespace around '='
+Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v5.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165670809719.26141.10678086157012669776.git-patchwork-notify@kernel.org>
+ <165670809725.26141.2450452591851357361.git-patchwork-notify@kernel.org>
 Date: Fri, 01 Jul 2022 20:41:37 +0000
-References: <20220526204100.831742-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220526204100.831742-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <cover.1656069631.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1656069631.git.geert+renesas@glider.be>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
-by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+This series was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 26 May 2022 22:41:00 +0200 you wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
+On Fri, 24 Jun 2022 14:01:28 +0200 you wrote:
+> Hi SoC folks,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> This is my first pull request for the inclusion of Renesas SoC updates
+> for v5.20.
 > 
+> It consists of 4 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: dts: axm: adjust whitespace around '='
-    https://git.kernel.org/soc/soc/c/06e00a512d0a
+  - [GIT,PULL,1/4] Renesas ARM defconfig updates for v5.20
+    https://git.kernel.org/soc/soc/c/89a24d7d85bd
+  - [GIT,PULL,2/4] Renesas ARM DT updates for v5.20
+    https://git.kernel.org/soc/soc/c/4505bb959ad2
+  - [GIT,PULL,3/4] Renesas driver updates for v5.20
+    https://git.kernel.org/soc/soc/c/92a1691b9db8
+  - [GIT,PULL,4/4] Renesas DT binding updates for v5.20
+    https://git.kernel.org/soc/soc/c/6c0534397d87
 
 You are awesome, thank you!
 -- 
