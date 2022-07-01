@@ -1,127 +1,91 @@
-Return-Path: <SRS0=wXeV=XG=foss.st.com=prvs=3181019c1f=alexandre.torgue@kernel.org>
+Return-Path: <SRS0=5S2w=XG=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A28BCC43334
-	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 12:05:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43124C433EF
+	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 13:25:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 70D9FC341C7; Fri,  1 Jul 2022 12:05:41 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	id 05889C341CA; Fri,  1 Jul 2022 13:25:55 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 12A43C3411E;
-	Fri,  1 Jul 2022 12:05:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12A43C3411E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2619AACU011403;
-	Fri, 1 Jul 2022 14:05:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : from : subject : to : cc : content-type :
- content-transfer-encoding; s=selector1;
- bh=M8hVZSBWHsDZEIxHPV0grc51guofkoifLN7jNbuYaUg=;
- b=T7/e8SnD5N8H9YISwQERIgnnNIlo6Fhn4+HDrHhAaXnAaQrLueN3BD+8XCpfTNOdKiwk
- +DUkG0HjTysFMoUmR1mHk6l33eqo15llifaqWLkf3MBhKVB72k5u5m5ESDDprs6GHDSw
- 6nKin4Q0+zxqZvSkvU31e8ZmsCF2ZqaiAErF0HE3N7aRl2IU9sWKj96nbcQoyH8E7AQK
- Q97mxOI3DjpaXWKQ7Rc1OGAMnSsE1mtc0J4EQPzt8MOIhuudXO5AgZlpvBP48mF+ckGO
- dV++qDs9MSPorMQyt0iuWA5ebDuLMK0bYowtQJwDK+vU32hmV9uZHqnIDx+M9tMYDSju Qw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h1x2brycf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 01 Jul 2022 14:05:36 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EC07A10002A;
-	Fri,  1 Jul 2022 14:05:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CCE7921BF4A;
-	Fri,  1 Jul 2022 14:05:34 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.49) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 1 Jul
- 2022 14:05:34 +0200
-Message-ID: <85e47007-bfba-7a64-db75-893b0d20d025@foss.st.com>
-Date: Fri, 1 Jul 2022 14:05:34 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 7B189C3411E;
+	Fri,  1 Jul 2022 13:25:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B189C3411E
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f178.google.com ([209.85.219.178]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mfpf7-1nRb6c1ZXN-00gJuo; Fri, 01 Jul 2022 15:25:51 +0200
+Received: by mail-yb1-f178.google.com with SMTP id 205so1609540ybe.3;
+        Fri, 01 Jul 2022 06:25:51 -0700 (PDT)
+X-Gm-Message-State: AJIora+8jGnc2tzYzV3ToodWyAJClBu3Q7Hds8RIknSEODarxGfrVahq
+	ffbikEv4LPtLM2fqlmoYLbXmmXl3rWewc/BT5qY=
+X-Google-Smtp-Source: AGRyM1v50P5NPGozA3wyPyk4TcCAReOb9wjqGQSZyh2WJyG0U+W5GErPSuI2I+An1Dwcn17/8FW8lW4eU5gRRNDEo3g=
+X-Received: by 2002:a25:8202:0:b0:66b:15cc:cacd with SMTP id
+ q2-20020a258202000000b0066b15cccacdmr15837633ybk.452.1656681950096; Fri, 01
+ Jul 2022 06:25:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 DT fixes for v5.19 #2
+References: <85e47007-bfba-7a64-db75-893b0d20d025@foss.st.com>
+In-Reply-To: <85e47007-bfba-7a64-db75-893b0d20d025@foss.st.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Fri, 1 Jul 2022 15:25:33 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2OC=G-gw_Nny-ATj5dHtVcLrGHTK9qvs+QPUw52RWxhw@mail.gmail.com>
+Message-ID: <CAK8P3a2OC=G-gw_Nny-ATj5dHtVcLrGHTK9qvs+QPUw52RWxhw@mail.gmail.com>
+Subject: Re: [GIT PULL] STM32 DT fixes for v5.19 #2
+To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Kevin
- Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
-        arm-soc
-	<arm@kernel.org>
-CC: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-01_06,2022-06-28_01,2022-06-22_01
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>, 
+	SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
+	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:hsSVrbi8XKP52sHaoacbiR8DXan6A/FEcwKaCkXfkBgTgc2qSsY
+ fjBATS0zbyF08jeBHqdUOOJZzFFmp+ucRQD3+OkQt+mIoxiYxvIb4bdFkdQVF2NIc3pXJrc
+ ZdLlJ3A6JwXRHKwgdVCyqZMeeBs9DMCHq2BfaA01h/I3b+NTrWWse+Hj7iF/5WfM080HvkK
+ IrSojhn1EiJ5AzFMT1vNA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e1GhUGQaKFE=:IoqyGw5+xDT1DRdkbLU6/3
+ gacfcBQSW9F3wkXHccgeLEOOabKII0u0GlfDiJ486JobiNZb/wzWiohQrkriRPGz6qtXpSOkf
+ pKfkxlWXWuFDx6DvQztKdcalJIrjyhMqayhdHmD5eof7wyghCKckgRHvJa6mWG1VuDoMndB3j
+ SXy+Gu5TLYj1BmP0TdjGHi4FARgkwT3GlM0MxoletUNMTxkFPxzwbT1MotQgZklXQvLZEHSsZ
+ lEgrVmNXaBd/k07pLNS2/4sseQLhnEDT/WmfMKOeO+5Y7d4EMTCihCy3nWp/mG7dhwoZXEBNn
+ rwSbTOcYzQntSDWsyHbTAOpvD/bzztHsd9yEpTvIuVGwAI3tR9Q8LiFTaErZLdoxFv2GQgh1P
+ 8sGwz8AMw7JG/2ieWSub77BFS0geTSnEF4211LQ0o/oWT93BkypTeN6ucm+K1YsveSFQWafyH
+ dTSeptOqUXaq11nBD4SMLd/8WgkA3Mtt2rkBcJkjeuZY7hG0816rPGxyZCNziuuej2KwkAYWO
+ j+1yFhoKMYSpVSUrIzfwhcnaD3PQ8hq/7LQoWkv4Nf/YMaLvRjGIAKVZYp7NrX+bUe2pv5vKQ
+ 8a4RssVCT1GX3sjL0NXst777375T4aAb0cdxrQ77jPfHiKKtS8E28B72vqNcAzaHgk1kfRVF8
+ Af14K4dxx+OC1jBD21dGMh5POmWg3YtqG4pUhxewMM72HH08N7vf+JO5Ry7Aw7xuvGb0b5tLY
+ 6+AlqTBlK9lxtG0qwyQoM3bjXqQWCigtSlpHGA==
 
-Hi ARM SoC maintainers,
+On Fri, Jul 1, 2022 at 2:05 PM Alexandre TORGUE
+<alexandre.torgue@foss.st.com> wrote:
+>
+> Hi ARM SoC maintainers,
+>
+> Please consider this second round of STM32 DT fixes for v5.19 cycle. It
+> mainly concerns fixes for SCMI version of ST boards introduced in v5.19-rc1.
+>
+> The following changes since commit ea3414e1249ea35bc02debe28d4cbfeb6261657c:
+>
+>    ARM: dts: stm32: move SCMI related nodes in a dedicated file for
+> stm32mp15 (2022-06-07 17:22:21 +0200)
+>
+> are available in the Git repository at:
 
-Please consider this second round of STM32 DT fixes for v5.19 cycle. It 
-mainly concerns fixes for SCMI version of ST boards introduced in v5.19-rc1.
+Hi Alex,
 
-Thanks
-Alex
+I get a merge conflict because I had picked up the "ARM: dts: stm32: move SCMI
+related nodes in a dedicated file for stm32mp15" commit from the mailing
+list, so it now has a different commit ID from the one you are based on.
 
-The following changes since commit ea3414e1249ea35bc02debe28d4cbfeb6261657c:
+As far as I can tell, the patches are identical, but since the files
+are modified
+further in your tree, this confuses the git merge algorithm and leads to a
+somewhat ugly git history with two identical commits if I fix it up.
 
-   ARM: dts: stm32: move SCMI related nodes in a dedicated file for 
-stm32mp15 (2022-06-07 17:22:21 +0200)
+Can you rebase this pull request on top of v5.19-rc4 and resend?
+(note: don't rebase the non-fixes pull requests unless you have to).
 
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-dt-for-v5.19-fixes-2
-
-for you to fetch changes up to 779a1e6596a1f88e2a8d88544bb704babd35921f:
-
-   ARM: dts: stm32: add missing usbh clock and fix clk order on 
-stm32mp15 (2022-07-01 12:25:11 +0200)
-
-----------------------------------------------------------------
-STM32 DT fixes for v5.19, round 2
-
-Highlights:
------------
-
-  -Fixes STM32MP15:
-   - Add missing usbh clock and fix clk order for usbh to avoid PLL
-     issue.
-   - Fix SCMI version: use scmi regulator and update missing SCMI
-     clocks to be able to correcly boot.
-
-----------------------------------------------------------------
-Etienne Carriere (1):
-       ARM: dts: stm32: fix pwr regulators references to use scmi
-
-Fabrice Gasnier (1):
-       ARM: dts: stm32: add missing usbh clock and fix clk order on 
-stm32mp15
-
-Gabriel Fernandez (3):
-       ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
-       ARM: dts: stm32: DSI should use LSE SCMI clock on DK1/ED1 STM32 board
-       ARM: dts: stm32: delete fixed clock node on STM32MP15-SCMI
-
-  arch/arm/boot/dts/stm32mp15-scmi.dtsi      | 58 
-++++++++++++++++++++++++++++++
-  arch/arm/boot/dts/stm32mp151.dtsi          |  6 ++--
-  arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts |  4 +++
-  arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts |  1 +
-  arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts |  4 +++
-  arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts |  1 +
-  6 files changed, 71 insertions(+), 3 deletions(-)
+      Arnd
