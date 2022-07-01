@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67FB1CCA489
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67F31CCA486
 	for <soc@archiver.kernel.org>; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4FD76C341DC; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3706FC341D7;
+	id 5E78EC385A9; Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E9EDC341DA;
 	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656708097;
-	bh=7n0l1X8OeuCMjnhD7GdC5R+WIDarvnijD+RUMolIHRU=;
+	bh=OISH1FiiAVvkrWQAyFxOTrng4/+my4KM9gW4q6xKq6Q=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=DkOIRVO3JdEGPWZ1GKxxpO4F4Z0+ckFYi/p51IccOfyHyv0497zXqFhbKgZgj1v5e
-	 JhpCVtjSDcfSrUKQrgzvGzigQvr3/fllw8HFvdl6eOtmre0L31ZnWdGZsTKb8ipypC
-	 bP+I2RYo06Aj5QRX2lk9URaNUgJYWIYbsyf16Ygq5YB0rm44Z0P8DSLjfkvXEp6giC
-	 4zb598Bg3P3CRAHyzZs8AF4x3h3hZtGG6y4mq0h0XvBMWSpafRzoU6NA5g+y1Q8ChL
-	 si/DIBn5E5FIP3ZK21yZ+wDfIlGBG4B0lMZM/L8TlyJmXYWSkiINH73yxYBne359km
-	 nnia0+MHcDNKw==
+	b=mONoziYGXS2p4Bv3EyICnCpwFd8sRz49WN8FRs5M2j81GdyB/3XgrXQdMxMOEULQ4
+	 GwgcGaw0Cb3kJf6+y47U4lLIiizoaIDakTBuZzswpq5RfEb4ShEhjD3ib8ce2KYKID
+	 f6HdLQ19zs2oDxxwDbTIqxlu7gRBwWpqqkTu//rsXSPZSjjfmUVre1zdgxG7FkA82v
+	 OKXE37EiEVmoiVmQSDvmdk/ESRYla0Czqgs78znJnD3DERnfKdDARjpfrtAbvPafHw
+	 QilyhIigNk9LFz/uG1VvHAi84uiIw+lM4qps6rddI2GgsOQEebnPZxW0YEC3m3ANji
+	 hHV1YFwsysINw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2022DE49FA1;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 27B2BE49F61;
 	Fri,  1 Jul 2022 20:41:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v5.19(Round 2)
+Subject: Re: [PATCH 1/2] arm64: dts: microchip: adjust whitespace around '='
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165670809712.26141.15602256196802213873.git-patchwork-notify@kernel.org>
+ <165670809715.26141.16998916947533680058.git-patchwork-notify@kernel.org>
 Date: Fri, 01 Jul 2022 20:41:37 +0000
-References: <20220628133315.699803-1-sudeep.holla@arm.com>
-In-Reply-To: <20220628133315.699803-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This series was applied to soc/soc.git (for-next)
+by Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
 
-On Tue, 28 Jun 2022 14:33:15 +0100 you wrote:
-> Hi ARM SoC Team,
+On Thu, 26 May 2022 22:41:08 +0200 you wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
 > 
-> Please pull !
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> We pushed several extra conformance checks in the SCMI driver and quite a few
-> firmware bugs have been discovered with that. Due to absence of formal
-> conformace test suite for SCMI, we have to workaround them in the kernel for
-> now :(.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Fixes for v5.19(Round 2)
-    https://git.kernel.org/soc/soc/c/d95ce66d4cc3
+  - [1/2] arm64: dts: microchip: adjust whitespace around '='
+    https://git.kernel.org/soc/soc/c/09f4933a4fd9
+  - [2/2] ARM: dts: at91: adjust whitespace around '='
+    https://git.kernel.org/soc/soc/c/bc5187b427dd
 
 You are awesome, thank you!
 -- 
