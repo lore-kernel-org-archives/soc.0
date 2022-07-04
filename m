@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DD0DCCA481
-	for <soc@archiver.kernel.org>; Mon,  4 Jul 2022 15:00:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03936CCA47C
+	for <soc@archiver.kernel.org>; Mon,  4 Jul 2022 15:00:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E9E2EC3411E; Mon,  4 Jul 2022 15:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CF6DBC341C7;
+	id E203FC341D1; Mon,  4 Jul 2022 15:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C16A5C341CE;
 	Mon,  4 Jul 2022 15:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1656946815;
-	bh=QwdTXX6Q0b7sRgJMuPajL69G0vI3z17UDS8LA2P8J50=;
+	bh=R2J2Zq5KSXOc3YlouQtp2L5jutSO+ptI8PEv9v2bZb8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ibXfq5aCZm/OEzsqzznU5rfgxvSB7r0kBLpODn/HICoudX4f4P+TmjJ1j52tQmixW
-	 G1yY4jyilYUM1CgiRHwt3vnwIcAhmb1Y1NxVAd81a3/AMrCvUD9yqyr1J7Jx/M1ODf
-	 U45ggJOAZ+eOuA4n+s/hxKMYKiMkAg0o+rNYH9qCTuSKa61NQuJ1IRutE2JWuIwSE8
-	 8KC8ZyY11Zz1UbRco7iLHD5oZSkIaKkoWsI21rAjQzgGg11BZ3p9IzTkUw9XeVLmhd
-	 M5vTGKQe9lUR1QDg4rz4KR1WeJWkMQQANbFrNcZm4E2AyR0D6jJHlSqVlN9a1CnanY
-	 4Y3/C3SFjxRRA==
+	b=qUyiK9CPy6ZFNUnfheJulK1439FoVo45HocwQTfd/yQHz03KgG/JzwCQFOS/NKom/
+	 VAoKrQ6JQRn8S8GtKYUJxmcGKtdGtFEg5ujcw6IPBv8h2KsaT1i8CqU0sxAMokni2N
+	 52G+jUq/raK1BLt0bfBMWa9P4LH1GgMzuyb5bi/elfYIy160brBpMRoncWlj8AaeV0
+	 eKj8Zx+NTu6eRLB3H4KE7kthBhde0luO1to9gONlR9JFv1AKuoduzwnHhSN9lY+4WI
+	 McMhv2bTna18GbUnB+nQnfRYsDHJXJHJn4p6v6l6wKouoh5cc41YiLzhO9MiPnD19s
+	 FabXkgYl37Q+g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B3B2CE45BDA;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ABEB4E45BDF;
 	Mon,  4 Jul 2022 15:00:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Soc changes for omaps
+Subject: Re: [GIT PULL - V2] STM32 DT fixes for v5.19 #2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165694681573.26251.11836878787077910342.git-patchwork-notify@kernel.org>
+ <165694681570.26251.16297223625216823437.git-patchwork-notify@kernel.org>
 Date: Mon, 04 Jul 2022 15:00:15 +0000
-References: <pull-1656918583-2801@atomide.com>
-In-Reply-To: <pull-1656918583-2801@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <1259e082-a3a4-96a5-ec9c-05dbb893a746@foss.st.com>
+In-Reply-To: <1259e082-a3a4-96a5-ec9c-05dbb893a746@foss.st.com>
+To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon,  4 Jul 2022 10:10:53 +0300 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Mon, 4 Jul 2022 09:55:38 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+> Please consider this second round of STM32 DT fixes for v5.19 cycle. It
+> mainly concerns fixes for SCMI version of ST boards introduced in v5.19-rc1.
 > 
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> 
-> are available in the Git repository at:
+> Changes since V1:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Soc changes for omaps
-    https://git.kernel.org/soc/soc/c/e0ed9e672565
+  - [GIT,PULL,-,V2] STM32 DT fixes for v5.19 #2
+    https://git.kernel.org/soc/soc/c/c0d1a7bd6574
 
 You are awesome, thank you!
 -- 
