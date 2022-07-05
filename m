@@ -1,112 +1,180 @@
-Return-Path: <SRS0=kUks=XK=somsomsom.com=marc_d@kernel.org>
+Return-Path: <SRS0=jiom=XK=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 195A2C43334
-	for <soc@archiver.kernel.org>; Tue,  5 Jul 2022 06:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67210C433EF
+	for <soc@archiver.kernel.org>; Tue,  5 Jul 2022 07:41:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D0C55C341CA; Tue,  5 Jul 2022 06:19:32 +0000 (UTC)
-Received: from box.somsomsom.com (box.somsomsom.com [51.79.207.94])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 326BEC341C7
-	for <soc@kernel.org>; Tue,  5 Jul 2022 06:19:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 326BEC341C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=somsomsom.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=somsomsom.com
-Received: from authenticated-user (box.somsomsom.com [51.79.207.94])
+	id 313F1C341CB; Tue,  5 Jul 2022 07:41:22 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by box.somsomsom.com (Postfix) with ESMTPSA id B7183101B1A
-	for <soc@kernel.org>; Tue,  5 Jul 2022 14:19:26 +0800 (+08)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=somsomsom.com;
-	s=mail; t=1657001967;
-	bh=VI5U0Y2ASXHcAfopNssAoGZUrgUzyzXJixM37Ikht4s=;
-	h=Date:Subject:From:To:Reply-To:From;
-	b=YwwEIHOp+wyEEnj8fj5V1u8IxKO+AIrnIxramv8SaHqCZhfBf0GPEz8ow2r11HIZp
-	 uLw9JicN2jJfPzAICHIEOvkPJcHKRtnGc6khqdXwIH2Y/l9s77AGclnvf2bhfMIce/
-	 sPSP6z9uui5/wOF1JgrxqxCblD2p4iXaU0A4FfOzQadw4yJHCpEPj0j7gqG1ObMYS5
-	 x+AzkeqphZK3YOpTaWy6rfx2KYaW9Rbg/9QrR+8wkBciXmvWxrRE6DxO46espot7cF
-	 DKEHjVx9TIM5jcVBe/EQn1G+sVPCXd6jA2aw8UdcbkfhGBMRwif16H+JSp3Y4YI03S
-	 Q3liGwi7rSL7Q==
-MIME-Version: 1.0
-Date: Tue, 05 Jul 2022 06:19:26 +0000
-Message-ID: <81b23a9f8f3a44b3a30fde97b18dffe3_CAPo8PGqX8TjvyEXv2r4yhDqqgnLLvpi1PYs4=FxR4yGxnbY6Kw@mail.gmail.com>
-Subject: Greetings From Marc Denzel
-From: Marc Denzel <marc_d@somsomsom.com>
-Content-Type: multipart/alternative; boundary="000000000000952eb505e2f34ee4"
+	by smtp.kernel.org (Postfix) with ESMTPS id 4FF02C341C7;
+	Tue,  5 Jul 2022 07:41:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4FF02C341C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657006880; x=1688542880;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=zXRLjAYO91ieDPCCSrjWo4qwZuxJIYVUAu7gDkH5338=;
+  b=hUXqS5C4nn0fdkMz4//u/dnc2afkfyqyadBcqKurZGfIEJxG/aFVA+Ow
+   exbWcKWzkjMKufnpiY23bOuC9nZS6qdq7iwsktIvv1vymxQulcSqgiKcU
+   z6F4B6JNf0HtHciSXgDKjqIrUTEIcaqy2NUcWeElut9Ad+WTjVxULu7Dx
+   H/vYslCRWCvmZdaTT+ngmI7GHT+8kurN35xRQOdaapOFwXbJbG83YBMPX
+   RSx1Z89hgTmMOlFPxyhW0sQFIvQLA3w5uG+ueeFTJDNgpocWzwJ2n6oCZ
+   TXsDgjyWe0bsGR3XMfAoevnfEMREUCM+9tYpZiPk6QlxKl0FRe0oE7By8
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
+   d="scan'208";a="166379787"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2022 00:41:18 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 5 Jul 2022 00:41:18 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Tue, 5 Jul 2022 00:41:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LCTxHhNykFk8skL/sdVDb+a1VXXN8P9hiPZxqqxe4G0wmnyzwwHy6SnJ9wQg8D21+yO4A3zmT59UaY6R1nikOCpagDdvHdIG72GjuKRBbFcEHPnExzKWuE8PLX05aNWFYr8IzPbD/jqfxts4rFrs4Pguj/X5BvKMYEJ/+MPx8j4w5uX96i14/qsCBj/0DW++ZwSwbnZ7I+XD+HxrfmQ5j/6vjUuzVCUGuJTb0UC3fCNNxe7v6o1oq3ATY7oEnxHzb01OhUxE/wBWdQQR0mU1aWVCp+VavLZAJLDaAiTA9rppEU2bXnlkmCbatw0pt9InC25GOFLS09AR4CkijyZGqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zXRLjAYO91ieDPCCSrjWo4qwZuxJIYVUAu7gDkH5338=;
+ b=Aky25SzTPPlsjxOB3cDwfCQ6wh3Tf7IJWwi96DGJRb/1vKLnQmxxszrTsLUHSbIuNns1Ua0eB5KNT6hcFJq5EkDWHt4HgKHXAzhgHBIWJp8Xrcl7XlZT5DcmaQSaTuaTUsnlngtsWG8gswlvHkhFLsHJossu578vKCuMRluhE62O+bJr1/x/5Of8ka3H+/HuYssU2Qm1oWjC3fSKYwb2zngVw1r+HZDZlLeq8raoyv5teWJZVs4QqE3E62N7rIJ4iqzhtgC/nQy8OtkLKSeGWFXwAXbPHz6kf4NKdEiLxAJjNxTUg16cOJ3vIjA08og3w6piHsETNOUG93myjmmuHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zXRLjAYO91ieDPCCSrjWo4qwZuxJIYVUAu7gDkH5338=;
+ b=QczRRrl7TvonSwxTgfMCxG3vjMnSyxJLsfJg2z3pjgd48MLzSAMnrV39HoMq1gdBut5m41We4IhsI+FPpmSbu/q1RGSj5el5uWR45m/rvpCwxYUyzyb98encfwlQrCLfgpFTyeEBFLzswI2jnJJTutH7gim9Ximqw+xZaHkynTw=
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
+ by PH0PR11MB4968.namprd11.prod.outlook.com (2603:10b6:510:39::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Tue, 5 Jul
+ 2022 07:41:08 +0000
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::5c8c:c31f:454d:824c]) by BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::5c8c:c31f:454d:824c%8]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
+ 07:41:08 +0000
+From: <Claudiu.Beznea@microchip.com>
+To: <Kavyasree.Kotagiri@microchip.com>, <arnd@arndb.de>,
+	<alexandre.belloni@bootlin.com>, <krzysztof.kozlowski+dt@linaro.org>,
+	<Nicolas.Ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Reply-To: jholwt50@gmail.com
+CC: <soc@kernel.org>, <robh+dt@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH v2] ARM: dts: lan966x: Cleanup flexcom3 usart pinctrl
+ settings.
+Thread-Topic: [PATCH v2] ARM: dts: lan966x: Cleanup flexcom3 usart pinctrl
+ settings.
+Thread-Index: AQHYkEKWrGfs4hTPlUWpl0ulUoZ2LA==
+Date: Tue, 5 Jul 2022 07:41:08 +0000
+Message-ID: <57ecf9ce-3616-1df2-8c5c-99ecd13eef6c@microchip.com>
+References: <20220704135809.6952-1-kavyasree.kotagiri@microchip.com>
+In-Reply-To: <20220704135809.6952-1-kavyasree.kotagiri@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cdf8255f-14e4-43f6-8119-08da5e59b95e
+x-ms-traffictypediagnostic: PH0PR11MB4968:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FC8XJKaiukq3WKXtT47TxOICxEVMzoImh4WWA6VmWsNeOnhY6RYdutVfYgEDaBXDxfwtr0U29L2TW7yVHcmFkMAd2hdWLjL/rCLP5E9hFYrPqzf/Tm6MmXJ77ZC2SoGyXHCcQGbSKyShWSupCe7Ke9D7csd+k+N2d8X9PkDjZUH9WTKj+Zt3lNvcKiVr3qyuza8MmkLgkGpyMWN7Wl/aMWCCYOU6vWJvMlWkAQqW9v6CPV5dRIhQnZMxALjkeh4ECQitOP5LPNqvVmMwJ4Dq/gAdaBtRJEKuAOEqj00rq47gZoBYzNIG04nUMBOP9Uqda4KxRkWo5Aa8QXHw1Wewtwe+9LT7VJmItIM4hbNJOFUvBj9LKxQyLV2IaSUKfx4ezmI03h56vb19Ef+3th5tEeiYpzfi4DJNkcGxYgwxjXZlOrT/eADfWhruFXrx4uIxahsP/Zl+DvXZezjj+oERkkOj+IOIybFRrhwv48xj895TTlsvc9svrc2XacT42lPbyFQmzbRTqQ/mpmDpMq+RH2Ki4WmmbCNvkc9HFMRILUlIqjtrTlpaKzhPKuIXPWwTHO0ZNCHhSm5ROV9o1PsKdvGGrA+B79XP1FnH+Cq9g8Xv/3H2Gwzi6X3VRaxgT5g1Gtqal4TqpRRcQrefzZ+cFtcXQiUxmqGDPCLt/oXdLtXjsM2eyl7A00QPFkRbFScNLt7jVSQ62k34OZjVWJcihEb4DkHt6eXUiHcKGLvTCAOgRiceEl1il/6BLWvXCk8hllVI7YlAk2mHt8UMiYL8NezLBw8Hy/nKj9x1971F5ZnRTgAMmmfr9WA3PPig2rlvM+fQ2xn4AZOl9ZYQJA9hcS0kDXHb1X1aOu0Zxv7Y/YKFVuWcur4WE2dH2LjD4WiV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(136003)(366004)(346002)(376002)(6506007)(41300700001)(31686004)(38070700005)(71200400001)(8936002)(316002)(122000001)(6486002)(478600001)(107886003)(8676002)(110136005)(54906003)(38100700002)(76116006)(186003)(86362001)(2906002)(5660300002)(83380400001)(6636002)(31696002)(2616005)(66946007)(6512007)(26005)(64756008)(66556008)(66476007)(53546011)(66446008)(36756003)(91956017)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WUFMNURDNmx1Ym0vM1BTS0hHa0xzVzIxR0hhcGtCVGNvRHFiOGpTZ3VaUnRI?=
+ =?utf-8?B?OGQ2Rk9TVWhwL3Z2T0xNTHg5SnR5N3B3S1ZEZTdIc1FnWitTcG0zUEp1QUtj?=
+ =?utf-8?B?dUhNcFNNR3VXTzJlQWd5V1pCOEtwc0FiK2ZsVXhjdVhoM3lTVUtRdG45bmZX?=
+ =?utf-8?B?Yk8zZDFFdjFhYnI5ZWczYnlmNkJVQ01vZmNnVkdHMFoyaVpyd3lxcG10U2dQ?=
+ =?utf-8?B?a2VvSVNhZU84Qm1BaTZiOUtkZm1COUw1Q3lRUG03NXVISjg5QllRc2lJOFdP?=
+ =?utf-8?B?VURjWDM4WE5BL2xSRWlPL1BZRk1mRmZDa3g4Zkk0UWlWU3ZYdk9yUFcwVEtV?=
+ =?utf-8?B?QUgwQmlVMGdwaVRsMVViK0NqeHdmV3NaMEk4cHlZbVNUYVRVandlTFBReno5?=
+ =?utf-8?B?MDRtY0R1WVpOYXljMlVLR3VxRitHYzdkRUpCOUZ5TWVHMXBaUnJTbTE0WnNU?=
+ =?utf-8?B?M21FNEJWclAwNUdYcFBOZkxsbjliMVpGUk5ydGxMZjl1WFVHRXh3cGhZU2pT?=
+ =?utf-8?B?aklhVXJOY2U1NkNjTjFTNWRsbnJsa3NnRDFWVTh5ckJiL0lMblFid080ck9m?=
+ =?utf-8?B?TXFTWTQ2cXlQd0prREdYNDdwdFY2ZXNtQzRTdDZtd2JySEt2dUpMbEVPTGdo?=
+ =?utf-8?B?aGRiOVY1d1lvK3J0aWdkcmxmZzlWS1FZOGYxYkpvYWdtbXRqbDEvOTlJWU54?=
+ =?utf-8?B?TnBibXRocnFiNHJrNWovcFlwMTFCeEl5RG91OFBvTE82QTZ3ZTd4RlhWa0Fw?=
+ =?utf-8?B?TGJBL2pOYTUxZW9HRk1kVEduMkQ3emNrNC9jMXRGVnlDcjRtUHdMbm1TM0Vu?=
+ =?utf-8?B?U0VWdndHVTQwVFFRdzQ3cWY2bzRTOVB3WCt6dXZuMStXTkExRWpXUU1rVEQ1?=
+ =?utf-8?B?UEwwODV4S00zRjE1UWN3VzZ3d3UzMG9hYWU0cHpaOGptQ2ZFNFJZVC9zVE5S?=
+ =?utf-8?B?dzNRaHd0cVgxNW5BNXFmcld3S292TVo4empPU1g3ZkVPMEdSeENiZFlldkNV?=
+ =?utf-8?B?MlEwUDRjVklsc3F3YXRTT0tPY3hYR3FZTGF6WmFxc29pNmFGVEtab3E5L3hy?=
+ =?utf-8?B?ZmVacG9XQnNzMUM3Z0VKeThvSDVQSzVTYWIvUVJmNEJLWitBYlRwbWtCa0h1?=
+ =?utf-8?B?OFlqMUdhck9NWlRyWmNMUTlmeTZqdnZENHBGZHNMU3VsK3RlWjkwZEV2Y3BI?=
+ =?utf-8?B?TlA1UDNlNmhqMnNickRPaVo1MENYOTdKdTdPUk1EWnVpUExLdVBvZkh4WlNT?=
+ =?utf-8?B?ejVvQXhvbTFNR21Jd2VJM0x4MHJEdFN3Tkorc1ZkK1VXcm9CY1FuY2l5QXhz?=
+ =?utf-8?B?Y0ZJQUQ1OVNqZ3pmcWEwelNiR2ZSR0NvWjNXUzJObmZOc1d6MjB2UEtSYk8y?=
+ =?utf-8?B?K2w5V1NWejI3Q0pWY2tpMXRPdGZhK1czRWh0RFVpN2JkWm9ScUJxL01UaEZC?=
+ =?utf-8?B?RTZPWUt3N3B4VU0xYlpLWFJ0dHNvdVdyS01sazZHSkZaWGhBS3ozVlBoeHRY?=
+ =?utf-8?B?emwwcG1pSzROOG1BcHJwYkM1bnVUTy9pd0VWU2s4RTRSdTkvdjJTdWJ2eWIv?=
+ =?utf-8?B?U2hlZGdhcjVIcFUxU2JYNWQ4Y29mUWZ2NTI1UjNiemhuajNENFhBc2lsK21X?=
+ =?utf-8?B?ZTZFWkNNM3hJVmxGYTk5cHVuUkY2Vnh2eFdaOVloTUJxN1hvU1lhR24rWjN6?=
+ =?utf-8?B?Zkp3TW1HeFNnNXUxc3MxRnh4NTNheEJrWDBxTjFpMzNhU2Zla3VyV3YxckRL?=
+ =?utf-8?B?K2NVQXVGNCtZbUE1UzlCTE5nNlVvU0ZSUGxIcEkyZkxCNEJwelFOWWVONVY5?=
+ =?utf-8?B?cjZISTZqK1crV0FCejc2SEtxaFRTVFlVS2IxYVVyZ2toYnA2MHJGWWMwMlgz?=
+ =?utf-8?B?MzZaMHNMWXN5cE50Vm1XYWdlOFJJQmY0STBkTXEzVmhmMTRYQ1YwYzRSczFv?=
+ =?utf-8?B?ZlZESVRraThOUmJySHExMEl4czA1bmtBWm5ObGhpUDBmdkkxMSt2cGNhRjA0?=
+ =?utf-8?B?TlBKUEkrUUs4V1ZUTnZzazZVek1nVlg3a3Y1QytOaXJveGlmdzJ6YW1uYlE2?=
+ =?utf-8?B?RWplcUx1bTZURzMxL25IUzQrNDQ4alpQN0prRTllZnVEOEh6R1d6MjR4K3NG?=
+ =?utf-8?B?bG5MWGU2MUNpN3grZDV2bGJYMUNyN3JGRmtKampzMk85SHVwV0p3WHJWOFUx?=
+ =?utf-8?B?MGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DC43B416EE7F954A94D232F1939CCF74@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdf8255f-14e4-43f6-8119-08da5e59b95e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2022 07:41:08.0800
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zU9LQXYMldmjFzuKFJoFrMfA2ehcmwwYiDQaULIU4xA5ke2oisKigRGlox5x3l1Y45AHp0PS4oTskogiAE7S/zM63HPruTvUf0OfWAC4o48=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4968
 
---000000000000952eb505e2f34ee4
-Content-Type: text/plain; charset=utf-8
-
-
-
-Hey, good day to you.
-
-
-I've been trying to reach you. Please did you receive my previous email?
-
- 
-
-I'm interested in discussing good cooperation with you.
-
-Please let me know if you're interested so I can enclose the proposal for 
-your reference.
-
-Sincerely,
-
-Marc Denzel.
-
---000000000000952eb505e2f34ee4
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><p class=3D"MsoNormal" style=3D"margin:0in;line-heigh=
-t:normal;background-image:initial;background-position:initial;backgrou=
-nd-size:initial;background-repeat:initial;background-origin:initial;ba=
-ckground-clip:initial"><font face=3D"garamond, times new roman, serif"=
- size=3D"4"><span style=3D"color:rgb(44,54,58)">Hey, good day to you.<=
-/span></font></p><p class=3D"MsoNormal" style=3D"margin:0in;line-heigh=
-t:normal;background-image:initial;background-position:initial;backgrou=
-nd-size:initial;background-repeat:initial;background-origin:initial;ba=
-ckground-clip:initial"><span style=3D"color:rgb(44,54,58)"><font face=3D=
-"garamond, times new roman, serif" size=3D"4"><br></font></span></p><p=
- class=3D"MsoNormal" style=3D"margin:0in;line-height:normal;background=
--image:initial;background-position:initial;background-size:initial;bac=
-kground-repeat:initial;background-origin:initial;background-clip:initi=
-al"><font size=3D"4" face=3D"garamond, times new roman, serif">I&#39;v=
-e been trying to reach you.</font>=C2=A0<span style=3D"font-family:gar=
-amond,&quot;times new roman&quot;,serif;font-size:large">Please did yo=
-u receive my=C2=A0previous email?</span><br></p><p class=3D"MsoNormal"=
- style=3D"margin:0in;line-height:normal;background-image:initial;backg=
-round-position:initial;background-size:initial;background-repeat:initi=
-al;background-origin:initial;background-clip:initial"><span style=3D"c=
-olor:rgb(44,54,58)"><font face=3D"garamond, times new roman, serif" si=
-ze=3D"4">=C2=A0</font></span></p><p class=3D"MsoNormal" style=3D"margi=
-n:0in;line-height:normal"><font face=3D"garamond, times new roman, ser=
-if" size=3D"4"><span style=3D"color:rgb(44,54,58);background-image:ini=
-tial;background-position:initial;background-size:initial;background-re=
-peat:initial;background-origin:initial;background-clip:initial">I&#39;=
-m interested in discussing good cooperation with you.</span><span styl=
-e=3D"color:rgb(44,54,58)"><br><br><span style=3D"background-image:init=
-ial;background-position:initial;background-size:initial;background-rep=
-eat:initial;background-origin:initial;background-clip:initial">Please =
-let me know if you&#39;re interested so I can enclose the proposal for=
- your reference.</span><br><br><span style=3D"background-image:initial=
-;background-position:initial;background-size:initial;background-repeat=
-:initial;background-origin:initial;background-clip:initial">Sincerely,=
-</span><br><br><span style=3D"background-image:initial;background-posi=
-tion:initial;background-size:initial;background-repeat:initial;backgro=
-und-origin:initial;background-clip:initial">Marc Denzel.</span></span>=
-</font></p></div>
-<img src=3D"http://ec2-34-220-251-39.us-west-2.compute.amazonaws.com/O=
-zqNT9U_4GWwWja0p6FyDMwkamp2sm0rP4aciTNMKnCCi5vIZR2hTcuHUofzuIzl5ZDI5Am=
-bU9OLwrc0MtUKDqnb0zDayuB4U8i8XJzw1KTzkJreA224H9V4Ngj8WOIiywumDfA0wEdkn=
-2kp9AnfVtoGAhgmxSulJ6wwShUI2goajgmxrm1EiT6v2goDDnPg7xLRZiGr5KG74wyDHkd=
-SThvzJmXgt-UlreOG9EJsU">
---000000000000952eb505e2f34ee4--
+T24gMDQuMDcuMjAyMiAxNjo1OCwgS2F2eWFzcmVlIEtvdGFnaXJpIHdyb3RlOg0KPiBPbiBwY2I4
+MjkxLCBGbGV4Y29tMyB1c2FydCBoYXMgb25seSB0eCBhbmQgcnggcGlucy4NCj4gQ2xlYW5pbmd1
+cCB1c2FydDMgcGluY3RybCBzZXR0aW5ncy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEthdnlhc3Jl
+ZSBLb3RhZ2lyaSA8a2F2eWFzcmVlLmtvdGFnaXJpQG1pY3JvY2hpcC5jb20+DQoNCkFwcGxpZWQg
+dG8gYXQ5MS1kdCwgdGhhbmtzIQ0KDQo+IC0tLQ0KPiB2MSAtPiB2MjoNCj4gLSBLZWVwIGJvdGgg
+dHggYW5kIHJ4IHBpbnMgaW50byBvbmUgbm9kZS4NCj4gDQo+ICBhcmNoL2FybS9ib290L2R0cy9s
+YW45NjZ4LXBjYjgyOTEuZHRzIHwgMTggKysrKy0tLS0tLS0tLS0tLS0tDQo+ICAxIGZpbGUgY2hh
+bmdlZCwgNCBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
+YS9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LXBjYjgyOTEuZHRzIGIvYXJjaC9hcm0vYm9vdC9k
+dHMvbGFuOTY2eC1wY2I4MjkxLmR0cw0KPiBpbmRleCAzYzdlM2E3ZDZmMTQuLmQ1NmQyMDU0YzM4
+ZCAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvbGFuOTY2eC1wY2I4MjkxLmR0cw0K
+PiArKysgYi9hcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LXBjYjgyOTEuZHRzDQo+IEBAIC0xOSwx
+OSArMTksOSBAQCBhbGlhc2VzIHsNCj4gIH07DQo+ICANCj4gICZncGlvIHsNCj4gLQlmY19zaHJk
+N19waW5zOiBmY19zaHJkNy1waW5zIHsNCj4gLQkJcGlucyA9ICJHUElPXzQ5IjsNCj4gLQkJZnVu
+Y3Rpb24gPSAiZmNfc2hyZDciOw0KPiAtCX07DQo+IC0NCj4gLQlmY19zaHJkOF9waW5zOiBmY19z
+aHJkOC1waW5zIHsNCj4gLQkJcGlucyA9ICJHUElPXzU0IjsNCj4gLQkJZnVuY3Rpb24gPSAiZmNf
+c2hyZDgiOw0KPiAtCX07DQo+IC0NCj4gLQlmYzNfYl9waW5zOiBmY2IzLXNwaS1waW5zIHsNCj4g
+LQkJLyogU0NLLCBSWEQsIFRYRCAqLw0KPiAtCQlwaW5zID0gIkdQSU9fNTEiLCAiR1BJT181MiIs
+ICJHUElPXzUzIjsNCj4gKwlmYzNfYl9waW5zOiBmYzMtYi1waW5zIHsNCj4gKwkJLyogUlgsIFRY
+ICovDQo+ICsJCXBpbnMgPSAiR1BJT181MiIsICJHUElPXzUzIjsNCj4gIAkJZnVuY3Rpb24gPSAi
+ZmMzX2IiOw0KPiAgCX07DQo+ICANCj4gQEAgLTUzLDcgKzQzLDcgQEAgJmZseDMgew0KPiAgCXN0
+YXR1cyA9ICJva2F5IjsNCj4gIA0KPiAgCXVzYXJ0Mzogc2VyaWFsQDIwMCB7DQo+IC0JCXBpbmN0
+cmwtMCA9IDwmZmMzX2JfcGlucz4sIDwmZmNfc2hyZDdfcGlucz4sIDwmZmNfc2hyZDhfcGlucz47
+DQo+ICsJCXBpbmN0cmwtMCA9IDwmZmMzX2JfcGlucz47DQo+ICAJCXBpbmN0cmwtbmFtZXMgPSAi
+ZGVmYXVsdCI7DQo+ICAJCXN0YXR1cyA9ICJva2F5IjsNCj4gIAl9Ow0KDQo=
