@@ -1,208 +1,181 @@
-Return-Path: <SRS0=jiom=XK=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <SRS0=+xSr=XK=foss.st.com=prvs=3185bb9d68=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0E29C433EF
-	for <soc@archiver.kernel.org>; Tue,  5 Jul 2022 09:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C742CC433EF
+	for <soc@archiver.kernel.org>; Tue,  5 Jul 2022 10:17:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 836F5C341CD; Tue,  5 Jul 2022 09:17:24 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id 96E69C341CB; Tue,  5 Jul 2022 10:17:19 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 81C55C341C7;
-	Tue,  5 Jul 2022 09:17:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 81C55C341C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657012642; x=1688548642;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=rtXQxnduyTTcm2lhaAPpue6dJVzdw/SjRNiERiXVkxo=;
-  b=bYcmvVtNGB0sev0ljzuGpvdOdOdM0np7aiBxSuW4/uxEAIwmqcwCbDJc
-   QNVXFXnka0ugJM19uvBNgl1j2OcWqiRO2Tig/7BCLflLhvb8vOEhLZI8a
-   fUomrAYSR1v8lwvhd2lz6JrlEOqTstpMAW3qzuA6yAJZjhID7XZNbhEN+
-   25NW8QoMYQ9lXdOqrw2y15NjVIIO0NAJhL4biFIzVSLvMGtNGcLylwZJQ
-   sJcMm585wSRQrzBIAYoQ/7tEE8S1HIg1kuaM246e3VWZUCCV0ONcGI0MC
-   AONRaMT1Q2cOniJFa0WwIyOpWyPi51//NvF1q/jA4PXoXLZtIm/HPf1JY
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,245,1650956400"; 
-   d="scan'208";a="166391599"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jul 2022 02:17:18 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 5 Jul 2022 02:17:17 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 5 Jul 2022 02:17:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GH/Z1TGaTao2MxM00I7f5ePhEOw7OgCpCuHr9nrVApFpw/1hFpEawdU4i2Z5fJlMtMVWNue9IFydU5DvXMjrUMhs/GympAC0cgldelNarwc7iWkADbUwb9gNEMfsAOUSoX0Y76FH7Zjy9gWPp+J9Mtps/b2iMgXXjZ5dadRk4r7QdVgshFR2DYdf05pJppqv+vUQoHD5fwShkYgkbvvmsmzeeAWIJYUaE/B5GbL5jEQYLLn6xA6Bz+8BAxug/5oe3diiToZIDg0NolTHn1keHi4hFHYhHXdlRxHU55EO6L8ESGaXew2uaERuaJpfGZMUYU25XXAMAolXO3hcCqsRuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rtXQxnduyTTcm2lhaAPpue6dJVzdw/SjRNiERiXVkxo=;
- b=WmgWJJUC0PX4g3InUbxFab9dKsEwyp+TDnrahVM95jqqrhaLphWkiPgwsyMQug5Dj10h5xBOO5KQRd8eIwXao8+4x6BKIVylYWvMdgrCmfZiRXh+l2D1pPPeDsjQHms0UzZdb2TxrXKYGNylffpX9nRuos1EuEBou9+g1Nzc5YCWt5XFBjtjtqeKrkWuDwboIKdGkUcBCPueVjavQFyJ0YZHnZoMd7KJ0wv2I4OYum3c83mvQJhJJ9r0mRBvb6t7mYs/UWYePMNYsmqw1hh6qiM09C9eu87ZSFzsP4JQvUDAn0CwoherHqzFUQUvr6UkjBxPGGE1VrC7ZhPgSELlmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rtXQxnduyTTcm2lhaAPpue6dJVzdw/SjRNiERiXVkxo=;
- b=knI6Kqg060fSN6yH6cXdhXVYEhK2yrMlxt0FLfktc6A8haAPRFt4NTU2cdQHZBh8XzcHPOhHDYPzA7Z7xgL8u93OvdrfDO73Ro8szKLzoT7/hd7Sm6yDgNCnUPuKwBeQvi2SzruJnjpmiKNoOnywNA9BCRMw5kNBuG57z9UFK4Y=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by CH2PR11MB4358.namprd11.prod.outlook.com (2603:10b6:610:39::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.15; Tue, 5 Jul
- 2022 09:17:15 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::5c8c:c31f:454d:824c]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::5c8c:c31f:454d:824c%8]) with mapi id 15.20.5395.021; Tue, 5 Jul 2022
- 09:17:14 +0000
-From: <Claudiu.Beznea@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
-CC: <alexandre.belloni@bootlin.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] AT91 device tree changes for v5.20
-Thread-Topic: [GIT PULL] AT91 device tree changes for v5.20
-Thread-Index: AQHYkFAEtlTXdzBpsESbnKI3soK1HA==
-Date: Tue, 5 Jul 2022 09:17:14 +0000
-Message-ID: <b7eff1a6-3063-a06d-4363-70ae429a89f6@microchip.com>
-References: <20220705084637.818216-1-claudiu.beznea@microchip.com>
-In-Reply-To: <20220705084637.818216-1-claudiu.beznea@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e6541164-7416-49dc-819a-08da5e67268c
-x-ms-traffictypediagnostic: CH2PR11MB4358:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 33O3RycQPT0XVQEIkrs+uv5/zVxWwLQd4xAKLqg/HKSDyWMMsdzscatX/Qur61zr6x1LNqJb7IDeMEXUeAxZKRd8o4cHOvIasb5dtcwlsU5TFXH+ZDzGhmSUG6TTkWyUKUOCNW/GnkCVR4thh0l5h5Mjs2WsKGsnnjvJqbowjbS25bQ8CeoyC+1Csw7mKACeTHGc5cCvtzoKbYOHPN/o6z933Y419eSs8S0Ml4WlRvpjzNSijcw/GpYx/c6W9a9mNOR71JeClE18ueECwKCdE/9ZcITgFLyHjYK+gcrvmT2hJD+gsKD/JGdkho40wx7scn4mrQSG8iVzTRsNioi7BeC9lu5Iwbs+r9WYYoKldiaSluviPh102KWOlRuA2TjKpz0hmoQMHEz23JMMxf4Jii0lnrbR0KegwEPC79JQwQhR/53H+wt1upLMrhmJSuq1AnjxPCMzI9/2eFBSIZd/QAz4LM5dTiDeGuAfvYHvrZnkZTEHM9NWEk67VF5xofOEiS0u0Z7yZgYhpYjGS8Zf1tt2rihsrXpsD06/YsjEUk288lGx9fAivLvuIqewSuzA1a/pv1uWSA1bqaEyTZsIIeyTzkfZr3HPr+X5tu6Lee1pl1n3FTaRwv9cduravBpyQehlkzoO2B98rsfdSEaVAQ+A+r6zpyyQaL6LVCtxFmhkSNNP9mICQnrO8yojdUqfJpzVnl2wFJvvG/AZYkE2y7UIho/a4t7ig40EOjwwCNdai7cA8wWm2tCyOnvVTlU16YUZbMD8raYkL6q53//3N+cZbD9Jx1ebM1uVYgDrPf0fKeUizgWa5YjMQCPJSFTzx4OkRbL4zvl5jVtPQSRFWe336TdNB4/JkkT51q5WPj9eQtZP9sR/K1Q+r8Stm5K8mv2QHO9QSGzXrKAdrYlPA4bbD9QtDW7vsERzHVDcCUEg7xawIYTeVL+o3wqr7mzm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39860400002)(346002)(366004)(376002)(6512007)(316002)(6486002)(110136005)(966005)(26005)(38070700005)(8936002)(53546011)(5660300002)(31696002)(86362001)(41300700001)(122000001)(478600001)(54906003)(91956017)(31686004)(8676002)(83380400001)(2906002)(66946007)(64756008)(76116006)(36756003)(186003)(38100700002)(66556008)(66476007)(2616005)(4326008)(66446008)(6506007)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V1oxNVpueDBHa2s4NkVBNzg2d3BBemxia0V3Qzd0VUFYNUZnT0xEb3pBWkww?=
- =?utf-8?B?MHhaRlkrNmhCYTFmamU1b3g5RU1MY29KRTlLQ3lWUE4wMnpWUDV6Y2d0SGZz?=
- =?utf-8?B?VnJjWTQrcC9idjF1Ykp1OVRhUjNaaGtFM0FNTG85T1NUekRVaVVJbnRZbWdJ?=
- =?utf-8?B?MjJRQ0NuQzZZWWVZR2VySlE5ZG15M09qM1hDUllld3lSWW1pMUFEQklRRnpE?=
- =?utf-8?B?REszR3RibjNtelZ5bGJNajh6TXhtVWVvZ2RZTS9FYmV4TzFtUjVPbFF3aW5m?=
- =?utf-8?B?VElNNVFKNzIxS2dUS3hpclA0anRPWXFTenRBODM4QkphZUg0LzZWSHN2dGVW?=
- =?utf-8?B?cUpyU0hLVVVlbHRTWnZyTlFRNVhMeElJNDl4RkpIZ0dlRjBhMEhtUm5EcnNO?=
- =?utf-8?B?SUJqek1ld2pVWks1Q2xudVJzN3hjYnpEN2NCSWJ4NytJdnE1amJodmJYeFBF?=
- =?utf-8?B?TkxXaE1oN2w0b3dnckdtc1BxenFRZEl5Ky8yc094SG5nTzA0QUdUc2tMUisx?=
- =?utf-8?B?THlvQkZmTUYvZUxYb21Gc1pDc1puZWtFSnlDTktCYVBVcW9YZVAyMG9RaEpl?=
- =?utf-8?B?TDBwQUV4VE1uSG1RYU51L0tKWGxycmlIaHNBK1hKN1lsSlpyc2wrYkVZUnJL?=
- =?utf-8?B?bnUzcHBlWEI5WVI5ZTh5Vmw3UWZnRnhFa2FVSVl2TmJxdU1VSS9GT3NnVUYx?=
- =?utf-8?B?bkU2dTlJODhRdFI0OHRXMHc5RjUyVFluaHpyTk43OUV1T0NiVG9WVE41WWNU?=
- =?utf-8?B?dEFIb0Voc0dRSmdqdHJXR0VpZ2NkOWx5WjN6VEVHbjhtQU9iTHlKZnFLdWRt?=
- =?utf-8?B?NGJXaTZya2FOMHlSREtJcUd0dnZqc2Y5VitLYlA0Ym9ENG1sdEh2TWRJdmVa?=
- =?utf-8?B?M083Y1prSk1iKzk1d3RMRXlVOHFXczlLdzJDNUtyUVJvcHBibGtWbjZ5OFVH?=
- =?utf-8?B?TUZWd0FHcjhRTC9OS0w2clhFUDBSZTBIRDIxNCthZk9rZ0w5QUpXZjRlNVNl?=
- =?utf-8?B?Mk1BTHppU0dZbjY4bVhmQVFzZDE2Mmg1N3ZHSzl5MEdJSzhyQUFyeXZJazEy?=
- =?utf-8?B?YUlaaVI0Sld5bkFtOTB5RGIydFFPUWZKUWU3TTNxYUlXYmljVUhxeTdtd2Zh?=
- =?utf-8?B?ejFVV0F2TzZabnFxdzcwbGNPc0ZIcTlpQ1V5dFJxa1B0eWtwY01nRlFUTkRO?=
- =?utf-8?B?Z0ZFc1FvNjgxVnkwSWZXVjVrK3BCTmR5R1c1Snk2VGRDT0FNZXBzcW1LaSt4?=
- =?utf-8?B?ZzRyK0h5UUZhcFBQbFppSExkVDFBaVllMlRtZVFjNmpHWHpRRG9BZzFFZXp5?=
- =?utf-8?B?aTVZZEYvUXJYWUNBQi9ob2VISlBzNXlGNnZTTHA1eW9kQXpFdmpiSlZWelN5?=
- =?utf-8?B?c2UzQ0x2YTFnVnNBWW9PbWpjRERyZE5UVHFmZndQSFVkcHg3b2U4LzNHWk9v?=
- =?utf-8?B?NkxiWDAyR3hLQ3lPMEFva2t2RkRZd2ozdkJ4czI3d2VNa1hXa3kyTmcraEVD?=
- =?utf-8?B?TTFCaFBFcGcySmR1cmRHSHhFaEhxVHNRRzVkMHBacnUxSEk2anFMRWVNU3dm?=
- =?utf-8?B?NC9oNFgxeHUwZWtpendERnJ6dTlHSDcyUDNsZXlGZm5Kb0x4WWw4NGtPYnRD?=
- =?utf-8?B?NHhaaVNSbXllUldZcWZBdTB5T1k0YndtVEpxSWp4Q0R5bzdMcW1QWVhnWm93?=
- =?utf-8?B?dzlKTTgxRVpBYjYxNTZ3Y1FkNHNJZTh5NGUyOFBTOEF2NVNYYzREWHlqWHQv?=
- =?utf-8?B?dEtMUTNVcTMrR3JNQVVtTTlESHlBTmFwUUVoTjlDaGs1WjVSZkl4eDJiQ2VB?=
- =?utf-8?B?QjJ6V2NSd1oyREE5djZMNHpWNDdzSlBIN3M1MXh6VzB3YlhLdXVJdzNCYWRJ?=
- =?utf-8?B?T2pNN29QK0lkMThGcUFhT2daaXZOcWVUbTZIcUg1Mlg4TVh3OXlQN3l5U3pW?=
- =?utf-8?B?cmZpQ3hIaUxneFduWTBiekpZUEFMdkI0OXkvc084WndCUXh0c3kzNDJDK0Zy?=
- =?utf-8?B?SHk0VjlKRjV0bXY0QkV2SGI1ZVZaZ01RenNoVEtrMEhkdzBaOS9tcFA2dEhs?=
- =?utf-8?B?c2pNQVNISVlyYmxpOCt1T3lLNEx1b2ZXSXZrOUtmakFWYy8rRUtSMHdja2Zl?=
- =?utf-8?B?R0RrdXFFTDVmQzVNTFBVT1ZQVHFoMmYyVlpwQjhkREhoMmhkNjJaSEUxWDFa?=
- =?utf-8?B?QUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3C9663EAA1F8BD40862246D7752C9E2F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.kernel.org (Postfix) with ESMTPS id AEAAAC341C7;
+	Tue,  5 Jul 2022 10:17:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AEAAAC341C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26593Bb3007813;
+	Tue, 5 Jul 2022 12:17:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : from : subject : to : cc : content-type :
+ content-transfer-encoding; s=selector1;
+ bh=o6YsxP/OCipW+Jn/MvOSlmSg78huV5S6y373JluOE9M=;
+ b=HkB/bqI2U+S8WG9fdiIlqYvsd+IZQZir3ZNJFo5+BIfoCGSelUXIl66UD+YVfKlXNCYV
+ seGkQMjQbpniJ8zqCJZq0fo8WwXv6/MFWPlx7cuBpgB1NYAO4DVjsO8xuSHZhth+47wg
+ Ks3D7fjNScQse257ok8EjDCd0MLCcUeU0PQILeJPD+B4ernkwzRHryufszcfK5Y+kA53
+ ncDgZNMzLUBh4C/adgK3FqzC4dRp/DqCfy2GBH329GP8vfJUIX+hhk1DydFmHk97VnHP
+ wVhLvo2WLbZwYHSwk+LZyE8uvsh2VYqNaHqLUXjJK1BGKd4we7XsauyQFFe4bTPGUy6m 8g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3h2cwj01yk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Jul 2022 12:17:09 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5131610002A;
+	Tue,  5 Jul 2022 12:17:08 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3AFC421BF51;
+	Tue,  5 Jul 2022 12:17:08 +0200 (CEST)
+Received: from [10.201.21.93] (10.75.127.48) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 5 Jul
+ 2022 12:17:07 +0200
+Message-ID: <a250f32b-f67c-2922-0748-e39dc791e95c@foss.st.com>
+Date: Tue, 5 Jul 2022 12:17:07 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6541164-7416-49dc-819a-08da5e67268c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jul 2022 09:17:14.7418
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vyZ3zGoxJ/Kmswcb7qusM/XJhvVtd1LdB4WZThVu4XrctwG9GK1lDlb4snZWP0EOYzrO0v0cjvISc6TGjzTsg1bgPyJ8OS1nr7urp0TkFZY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4358
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Subject: [GIT PULL] STM32 DT changes for v5.20 #1
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, SoC Team <soc@kernel.org>,
+        arm-soc
+	<arm@kernel.org>
+CC: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-05_08,2022-06-28_01,2022-06-22_01
 
-T24gMDUuMDcuMjAyMiAxMTo0NiwgQ2xhdWRpdSBCZXpuZWEgd3JvdGU6DQo+IEVYVEVSTkFMIEVN
-QUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtu
-b3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gSGksIEFybmQsIE9sb2YsIEFSTSBTb0MgbWFp
-bnRhaW5lcnMsDQo+IA0KPiBQbGVhc2UgcHVsbCB0aGUgZm9sbG93aW5nIEFUOTEgZml4ZXMgZm9y
-IHY1LjIwLg0KDQpzL2ZpeGVzL3VwZGF0ZXMNCg0KPiANCj4gVGhhbmsgeW91LA0KPiBDbGF1ZGl1
-IEJlem5lYQ0KPiANCj4gVGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCBmMjkwNmFh
-ODYzMzgxYWZiMDAxNWE5ZWI3ZmVmYWQ4ODVkNGU1YTU2Og0KPiANCj4gICBMaW51eCA1LjE5LXJj
-MSAoMjAyMi0wNi0wNSAxNzoxODo1NCAtMDcwMCkNCj4gDQo+IGFyZSBhdmFpbGFibGUgaW4gdGhl
-IEdpdCByZXBvc2l0b3J5IGF0Og0KPiANCj4gICBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9z
-Y20vbGludXgva2VybmVsL2dpdC9hdDkxL2xpbnV4LmdpdCB0YWdzL2F0OTEtZHQtNS4yMA0KPiAN
-Cj4gZm9yIHlvdSB0byBmZXRjaCBjaGFuZ2VzIHVwIHRvIDRkZDFhNjEzZTQ2NGU5MDM2ZDUxNjNm
-YzhlYzVmN2RjNmUzOTRiNTM6DQo+IA0KPiAgIEFSTTogZHRzOiBsYW45NjZ4OiBBZGQgVURQSFMg
-c3VwcG9ydCAoMjAyMi0wNy0wNSAxMDo0MjoxOCArMDMwMCkNCj4gDQo+IC0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gQVQ5
-MSBEVCBmb3IgdjUuMjANCj4gDQo+IEl0IGNvbnRhaW5zOg0KPiAtIGNvbXBpbGF0aW9uIHdhcm5p
-bmcgZml4ZXMgZm9yIFNBTUE1RDINCj4gLSB1cGRhdGVzIGZvciBhbGwgQVQ5MSBkZXZpY2UgdHJl
-ZSB0byB1c2UgZ2VuZXJpYyBuYW1lIGZvciByZXNldA0KPiAgIGNvbnRyb2xsZXINCj4gLSByZXNl
-dCBjb250cm9sbGVyIG5vZGUgZm9yIFNBTUE3RzUNCj4gLSBNQ0FOMSBhbmQgVURQSFMgbm9kZXMg
-Zm9yIExBTjk2NiBTb0NzDQo+IC0gRmxleGNvbTMgYmluZGluZ3Mgd2VyZSB1cGRhdGVkIGZvciBs
-YW45NjZ4LXBjYjgyOTEuZHRzIGJvYXJkIHRvIGNvcGUNCj4gICB3aXRoIHJlYWxpdHkNCj4gDQo+
-IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0NCj4gQ2xhdWRpdSBCZXpuZWEgKDQpOg0KPiAgICAgICBBUk06IGR0czogYXQ5MTog
-c2FtYTVkMjogZml4IGNvbXBpbGF0aW9uIHdhcm5pbmcNCj4gICAgICAgQVJNOiBkdHM6IGF0OTE6
-IHNhbWE1ZDI6IGZpeCBjb21waWxhdGlvbiB3YXJuaW5nDQo+ICAgICAgIEFSTTogZHRzOiBhdDkx
-OiB1c2UgZ2VuZXJpYyBuYW1lIGZvciByZXNldCBjb250cm9sbGVyDQo+ICAgICAgIEFSTTogZHRz
-OiBhdDkxOiBzYW1hN2c1OiBhZGQgcmVzZXQtY29udHJvbGxlciBub2RlDQo+IA0KPiBIZXJ2ZSBD
-b2RpbmEgKDIpOg0KPiAgICAgICBkdC1iaW5kaW5nczogdXNiOiBhdG1lbDogQWRkIE1pY3JvY2hp
-cCBMQU45NjYyIGNvbXBhdGlibGUgc3RyaW5nDQo+ICAgICAgIEFSTTogZHRzOiBsYW45NjZ4OiBB
-ZGQgVURQSFMgc3VwcG9ydA0KPiANCj4gS2F2eWFzcmVlIEtvdGFnaXJpICgyKToNCj4gICAgICAg
-QVJNOiBkdHM6IGxhbjk2Nng6IEFkZCBtY2FuMSBub2RlLg0KPiAgICAgICBBUk06IGR0czogbGFu
-OTY2eDogQ2xlYW51cCBmbGV4Y29tMyB1c2FydCBwaW5jdHJsIHNldHRpbmdzLg0KPiANCj4gIC4u
-Li9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9hdG1lbC11c2IudHh0ICAgICAgICAgIHwgIDMgKysr
-DQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1ZDI3X3NvbTEuZHRzaSAgICAgICAgICB8
-ICAyICsrDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1ZDI3X3dsc29tMS5kdHNpICAg
-ICAgICB8ICAyICsrDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1ZDJfcHRjX2VrLmR0
-cyAgICAgICAgICB8ICAyICsrDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbWE1ZDJfeHBs
-YWluZWQuZHRzICAgICAgICB8ICAyICsrDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxc2FtOTI2
-MC5kdHNpICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkx
-c2FtOTI2MS5kdHNpICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICBhcmNoL2FybS9ib290L2R0
-cy9hdDkxc2FtOTI2My5kdHNpICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICBhcmNoL2FybS9i
-b290L2R0cy9hdDkxc2FtOWc0NS5kdHNpICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICBhcmNo
-L2FybS9ib290L2R0cy9hdDkxc2FtOW4xMi5kdHNpICAgICAgICAgICAgICAgICB8ICAyICstDQo+
-ICBhcmNoL2FybS9ib290L2R0cy9hdDkxc2FtOXJsLmR0c2kgICAgICAgICAgICAgICAgICB8ICAy
-ICstDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxc2FtOXg1LmR0c2kgICAgICAgICAgICAgICAg
-ICB8ICAyICstDQo+ICBhcmNoL2FybS9ib290L2R0cy9sYW45NjZ4LXBjYjgyOTEuZHRzICAgICAg
-ICAgICAgICB8IDE4ICsrKystLS0tLS0tLS0tLQ0KPiAgYXJjaC9hcm0vYm9vdC9kdHMvbGFuOTY2
-eC5kdHNpICAgICAgICAgICAgICAgICAgICAgfCAyNiArKysrKysrKysrKysrKysrKysrKysrDQo+
-ICBhcmNoL2FybS9ib290L2R0cy9zYW05eDYwLmR0c2kgICAgICAgICAgICAgICAgICAgICB8ICAy
-ICstDQo+ICBhcmNoL2FybS9ib290L2R0cy9zYW1hNWQyLmR0c2kgICAgICAgICAgICAgICAgICAg
-ICB8IDI0ICsrKysrKysrKy0tLS0tLS0tLS0tDQo+ICBhcmNoL2FybS9ib290L2R0cy9zYW1hNWQz
-LmR0c2kgICAgICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICBhcmNoL2FybS9ib290L2R0cy9z
-YW1hNWQ0LmR0c2kgICAgICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICBhcmNoL2FybS9ib290
-L2R0cy9zYW1hN2c1LmR0c2kgICAgICAgICAgICAgICAgICAgICB8ICA3ICsrKysrKw0KPiAgMTkg
-ZmlsZXMgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKSwgMzcgZGVsZXRpb25zKC0pDQo+IA0KPiBf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KPiBsaW51eC1h
-cm0ta2VybmVsIG1haWxpbmcgbGlzdA0KPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVh
-ZC5vcmcNCj4gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51
-eC1hcm0ta2VybmVsDQoNCg==
+Hi ARM SoC maintainers,
+
+Please consider this first round of STM32 DT updates for v5.20. It 
+mainly adds a new DH board and enables SCMI / OPTEE for STM32MP13.
+This PR is based on the PR sent for fixes (tag: stm32-dt-for-v5.19-fixes-2).
+
+Thanks
+Alex
+
+The following changes since commit 1d0c1aadf1fd9f3de95d1532b3651e8634546e71:
+
+   ARM: dts: stm32: add missing usbh clock and fix clk order on 
+stm32mp15 (2022-07-04 09:10:24 +0200)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
+tags/stm32-dt-for-v5.20-1
+
+for you to fetch changes up to cc6280cf885ce9ab923b9f9779aa8fbe10983d20:
+
+   ARM: dts: stm32: Add ST MIPID02 bindings to AV96 (2022-07-05 11:42:11 
++0200)
+
+----------------------------------------------------------------
+STM32 DT for v5.20, round 1
+
+Highlights:
+----------
+
+- MCU:
+   -Fix whitespace coding style. No functional changes.
+
+- MPU:
+   - General:
+     - Remove specific IPCC wakeup interrupt on STM32MP15.
+     - Enable OPTEE firmware and scmi support (clock/reset) on
+       STM32MP13. It allows to enable RCC clock driver.
+     - Add new pins configurations groups.
+
+   - DH boards:
+     - Add DHCOR based DRC Compact board. It embeds: 2xETH, 1xCAN,
+       uSD, USB, eMMC and SDIO wifi.
+     - Add ST MIPID02 bindings to AV96 (not enabled by default)
+
+   - OSD32:
+     - Correct vcc-supply for eeprom.
+     - fix missing internally connected voltage regulator (ldo3
+       supplied by vdd_ddr).
+
+----------------------------------------------------------------
+Alexandre Torgue (1):
+       dt-bindings: rcc: stm32: select the "secure" path for stm32mp13
+
+Fabien Dessenne (1):
+       ARM: dts: stm32: remove the IPCC "wakeup" IRQ on stm32mp151
+
+Gabriel Fernandez (3):
+       ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP13
+       ARM: dts: stm32: add RCC on STM32MP13x SoC family
+       ARM: dts: stm32: add optee reserved memory on stm32mp135f-dk
+
+Krzysztof Kozlowski (1):
+       ARM: dts: stm32: adjust whitespace around '=' on MCU boards
+
+Leonard Göhrs (2):
+       ARM: dts: stm32: fix missing internally connected voltage 
+regulator for OSD32MP1
+       ARM: dts: stm32: correct vcc-supply for eeprom on stm32mp15xx-osd32
+
+Marek Vasut (12):
+       ARM: dts: stm32: Move DHCOR BUCK3 VDD 2V9 adjustment to 1V8 DTSI
+       ARM: dts: stm32: Fix SPI2 pinmux pin comments on stm32mp15
+       dt-bindings: arm: stm32: Add compatible string for DH electronics 
+DHCOR DRC Compact
+       ARM: dts: stm32: Add alternate pinmux for CAN1 pins
+       ARM: dts: stm32: Add alternate pinmux for SPI2 pins
+       ARM: dts: stm32: Add alternate pinmux for UART3 pins
+       ARM: dts: stm32: Add alternate pinmux for UART4 pins
+       ARM: dts: stm32: Add alternate pinmux for UART5 pins
+       ARM: dts: stm32: Add DHCOR based DRC Compact board
+       ARM: dts: stm32: Add alternate pinmux for DCMI pins
+       ARM: dts: stm32: Add alternate pinmux for RCC pin
+       ARM: dts: stm32: Add ST MIPID02 bindings to AV96
+
+  .../devicetree/bindings/arm/stm32/stm32.yaml       |   8 +-
+  .../devicetree/bindings/clock/st,stm32mp1-rcc.yaml |   1 +
+  arch/arm/boot/dts/Makefile                         |   1 +
+  arch/arm/boot/dts/stm32429i-eval.dts               |   8 +-
+  arch/arm/boot/dts/stm32h743.dtsi                   |   4 +-
+  arch/arm/boot/dts/stm32h743i-disco.dts             |   8 +-
+  arch/arm/boot/dts/stm32h743i-eval.dts              |   8 +-
+  arch/arm/boot/dts/stm32h750i-art-pi.dts            |   8 +-
+  arch/arm/boot/dts/stm32mp131.dtsi                  | 140 ++++-----
+  arch/arm/boot/dts/stm32mp133.dtsi                  |   4 +-
+  arch/arm/boot/dts/stm32mp135f-dk.dts               |  11 +
+  arch/arm/boot/dts/stm32mp13xc.dtsi                 |   3 +-
+  arch/arm/boot/dts/stm32mp13xf.dtsi                 |   3 +-
+  arch/arm/boot/dts/stm32mp15-pinctrl.dtsi           | 177 ++++++++++-
+  arch/arm/boot/dts/stm32mp151.dtsi                  |   7 +-
+  .../arm/boot/dts/stm32mp153c-dhcor-drc-compact.dts |  30 ++
+  arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi |  55 ++++
+  .../boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi    | 322 
++++++++++++++++++++++
+  arch/arm/boot/dts/stm32mp15xx-dhcor-io1v8.dtsi     |   5 +
+  arch/arm/boot/dts/stm32mp15xx-dhcor-som.dtsi       |   4 +-
+  arch/arm/boot/dts/stm32mp15xx-osd32.dtsi           |   9 +-
+  21 files changed, 709 insertions(+), 107 deletions(-)
+  create mode 100644 arch/arm/boot/dts/stm32mp153c-dhcor-drc-compact.dts
+  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
