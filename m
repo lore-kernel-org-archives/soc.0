@@ -1,49 +1,87 @@
-Return-Path: <SRS0=EJxI=XL=mail.webdomaincontrol.com=nafed8751@kernel.org>
+Return-Path: <SRS0=5G/g=XL=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C02F0CCA47B
-	for <soc@archiver.kernel.org>; Wed,  6 Jul 2022 01:56:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39762C43334
+	for <soc@archiver.kernel.org>; Wed,  6 Jul 2022 11:50:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 87E66C341CA; Wed,  6 Jul 2022 01:56:02 +0000 (UTC)
-Received: from mail.webdomaincontrol.com (mail.webdomaincontrol.com [13.127.99.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 003F7C341C7
-	for <soc@kernel.org>; Wed,  6 Jul 2022 01:55:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 003F7C341C7
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=nafedbazaar.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=mail.webdomaincontrol.com
-Received: by mail.webdomaincontrol.com (Postfix, from userid 1023)
-	id EC9A347765; Wed,  6 Jul 2022 07:25:32 +0530 (IST)
+	id 04340C341CA; Wed,  6 Jul 2022 11:50:40 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id B3D08C341C0;
+	Wed,  6 Jul 2022 11:50:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3D08C341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35D3A106F;
+	Wed,  6 Jul 2022 04:50:37 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8AB283F66F;
+	Wed,  6 Jul 2022 04:50:35 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: Nafed Bazaar Feedback
-Date: Wed, 6 Jul 2022 01:55:32 +0000
-From: Nafed Bazaar <noreply@nafedbazaar.com>
-Reply-To: soc@kernel.org
-Message-ID: <gm0H9hUpyjxULatWu7kRtoMvUVjyEd9gYoLuRQpc@www.nafedbazaar.com>
-X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] arm64: dts: juno: Updates for v5.20
+Date: Wed,  6 Jul 2022 12:50:26 +0100
+Message-Id: <20220706115026.2272643-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-Information: Please contact the ISP for more information
-X-yoursite-MailScanner-ID: EC9A347765.AF2C7
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
-	score=2.235, required 6, HEADER_FROM_DIFFERENT_DOMAINS 0.25,
-	NO_RELAYS -0.00, SHORT_SHORTNER 2.00, T_SCC_BODY_TEXT_LINE -0.01)
-X-yoursite-MailScanner-SpamScore: 2
-X-yoursite-MailScanner-From: nafed8751@mail.webdomaincontrol.com
 
-Hello 😘 Eliza want to play with you! Start Play: https://letsg0dancing.page.link/go?m61oz 😘,
+Hi ARM SoC Team,
 
-We have received your feedback. We will get back to you ASAP.
+Please pull !
 
+Regards,
+Sudeep
 
+-->8
 
--- 
-This e-mail was sent from a contact form on Nafed Bazaar (https://www.nafedbazaar.com)
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/juno-updates-5.20
+
+for you to fetch changes up to 156c90415b5c96b49a1ce59e48a702445a340229:
+
+  arm64: dts: juno: Add cache-level property to L2 caches (2022-06-29 11:52:09 +0100)
+
+----------------------------------------------------------------
+Armv8 Juno/FVP updates for v5.20
+
+Just a small bunch of miscellaneous updates: addition of missing
+cache-level property to L2 caches on Juno, whitespace adjustments
+and removal of erroneous 'mbox-name' and 'panel-dpi' compatible in
+the device tree nodes.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      arm64: dts: arm: adjust whitespace around '='
+
+Rob Herring (2):
+      arm64: dts: arm/fvp-base-revc: Remove 'panel-dpi' compatible
+      arm64: dts: arm/juno: Drop erroneous 'mbox-name' property
+
+Sudeep Holla (1):
+      arm64: dts: juno: Add cache-level property to L2 caches
+
+ arch/arm64/boot/dts/arm/fvp-base-revc.dts |  2 +-
+ arch/arm64/boot/dts/arm/juno-base.dtsi    | 44 +++++++++++++++----------------
+ arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi | 16 +++++------
+ arch/arm64/boot/dts/arm/juno-r1.dts       |  2 ++
+ arch/arm64/boot/dts/arm/juno-r2.dts       |  2 ++
+ arch/arm64/boot/dts/arm/juno-scmi.dtsi    |  1 -
+ arch/arm64/boot/dts/arm/juno.dts          |  2 ++
+ 7 files changed, 37 insertions(+), 32 deletions(-)
