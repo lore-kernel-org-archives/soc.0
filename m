@@ -1,205 +1,74 @@
-Return-Path: <SRS0=qfr8=XL=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=xyye=XL=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8DD6CCA473
-	for <soc@archiver.kernel.org>; Wed,  6 Jul 2022 16:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E13BCCA480
+	for <soc@archiver.kernel.org>; Wed,  6 Jul 2022 20:36:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D1616C341C8; Wed,  6 Jul 2022 16:38:02 +0000 (UTC)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id B85C1C341CD; Wed,  6 Jul 2022 20:36:47 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 40380C341D0
-	for <soc@kernel.org>; Wed,  6 Jul 2022 16:38:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40380C341D0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id r9so19129122ljp.9
-        for <soc@kernel.org>; Wed, 06 Jul 2022 09:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BbnF7h70YkDmP9ErED0ng5loM2AwPwzyHrzbSSQ3P9k=;
-        b=ProhIAPeKWYYTZO+06j73QlKlAil3gMuBFiaYbqddtRKOkrOxJ/GN5y7paxFRA8ISS
-         P/rD5b/Noxn19mWS580dDRSJuOYSYbdqfzKZ/vWERB/s1vrHL6C5Iv3uN+iar2ayOy6k
-         wJsGvTXzotAicEJqn7PVeDvc8NEJV8JxCEDruYI48TnX+Yn3xdKZilcL4D/58c2X9f+e
-         G9paddKkXzTaOg/c5cOtuW/YTx1zKYTHvgnRgl9q5yWW0DWAWraNf/w3eyv+kHMI0B9F
-         6THHJOLmsPzqQnX5OP8AbyPbj+KPhSYLRHyotLbZLdS8wdTfDRjIzhY/CLBK667uRqxt
-         0frQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BbnF7h70YkDmP9ErED0ng5loM2AwPwzyHrzbSSQ3P9k=;
-        b=tz67Ip+CF8lVIVPgWIYeJ9UhvC86wu2oOckBHdMIGqAYbURFhKJGNB7FaGRzg0sNaW
-         wDfGqInyHgU1lULAYjpOZAsvBuA9NVQRQaNIgK3XEJ501GmBJKQ1y+OUYIgiJryVxMMx
-         m8d21AVwUnl1eRkflunyHbG0azn/sdr3/OS9RoVPEW/Dus9ghg+MbYMwOlc0bNxkJ2r/
-         zdKazhjfVHXmJwPWxT9FtpGycj9/4PonPncgT4DB6dAkPemqOmgfhgAS6OWZxCCP/LPQ
-         3kiUbDTULqWvKJHq8dWuX7Mx+OdpWG+L0PBuarX9QA6TCQgBtJxZGGfWVFCvLoo7RKs9
-         /XQg==
-X-Gm-Message-State: AJIora822ftBhzBsXnuhPga6Y2WqK5OCGRTamepqCARmSRHkZvTT+uu7
-	iCMtqyFw4Gd0V+hVJsBkGk1/Fg==
-X-Google-Smtp-Source: AGRyM1sDCHefX4WYIuajRhYSYoVSRX5euAvMxSTHGI0Y3Afj0rqHcog4kbAvaRTEQRTKa2relR527w==
-X-Received: by 2002:a2e:b94a:0:b0:25c:271:5253 with SMTP id 10-20020a2eb94a000000b0025c02715253mr16611856ljs.16.1657125479124;
-        Wed, 06 Jul 2022 09:37:59 -0700 (PDT)
-Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id v12-20020a056512096c00b004831cc659ffsm1168063lft.125.2022.07.06.09.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 09:37:58 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] ARM: dts: cleanup for v5.20, second round
-Date: Wed,  6 Jul 2022 18:37:54 +0200
-Message-Id: <20220706163754.33064-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220706163754.33064-1-krzysztof.kozlowski@linaro.org>
-References: <20220706163754.33064-1-krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 26EE7C3411C;
+	Wed,  6 Jul 2022 20:36:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26EE7C3411C
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f177.google.com ([209.85.219.177]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N5W0q-1nY5dx2rwg-016xKI; Wed, 06 Jul 2022 22:36:43 +0200
+Received: by mail-yb1-f177.google.com with SMTP id j7so22849710ybj.10;
+        Wed, 06 Jul 2022 13:36:43 -0700 (PDT)
+X-Gm-Message-State: AJIora+OkHtekQ192pog1In4ekB4LwUifWfWu3EF+alUOwjDYcMBb8IP
+	vfBVJnRlrjp7hZq7IVk4NFgJY3QlRSCibxwoIbs=
+X-Google-Smtp-Source: AGRyM1sqECDY6Ty2JVXKP7IDdD1y1TQ6Py0CtljndDWu3dH5J2zxLu0EXVa9MU25ZG+FhT8oJ3JCsFYoCYm6EiiYqo0=
+X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
+ b7-20020a5b0b47000000b0066e3617d262mr23033810ybr.106.1657139802201; Wed, 06
+ Jul 2022 13:36:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220706163754.33064-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220706163754.33064-1-krzysztof.kozlowski@linaro.org>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 6 Jul 2022 22:36:25 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3rwOBA=Pp+jin7PF4YifoihEyGAUsfuyBy1jFBnhPakg@mail.gmail.com>
+Message-ID: <CAK8P3a3rwOBA=Pp+jin7PF4YifoihEyGAUsfuyBy1jFBnhPakg@mail.gmail.com>
+Subject: Re: [GIT PULL 1/2] arm64: dts: cleanup for v5.20, second round
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+	SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:twtEqaD130w49Uw9ntDBfIaOsYvJd6+IJ3QVK4AT8zQKjTvrQ+m
+ eee0vEgcl+4isdeBVIrPXn6ozAebEZKgSe+3z5aNTdSQ0LzBAB87AQFLFXsCNs4cO5bLA02
+ 6yKFQfSzqgtn/1XSNLvc/NNOtoCLJe358xU2XbWOWLbipxKR5HUxjV+znJ9anVq4A9sFR3T
+ vDIJ79uBsovFJRLerU5OA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4grmPQ3cJ9M=:oaPvbUtruE+hWSn9+jKLQw
+ zyTCq2Og/6/Fv5CkeHGqL3zhAXtg3rRvlp0Yg/XG+e7oQuxqd8OxZgi5baSYo8YyUB09r9QeZ
+ TFBfqIAxQfBC5N8QsIpKIDqx1uJD8FSsB78O4Waeemc1gHbIS4gGmMORoTQuzxpwFhbIHLa/K
+ 1WwGZ2HYm2kDkkZmIqaw0Lr6vrzTYI1/SFpqvJWoutKOgWGNQB85/21zhuHaiHP+w10xhIFiW
+ bX9+UXKnzE8gm2U0qgtkJ4i0U79hkqGdn68Am6W6JeDCzrXkQI1Aa60fpUQcbfpyPo8gVl8Jd
+ X2EfXsI40r/A0nK/WcKIDTmHmNmfS0hSNCLS9Y1mSCXmjGhRsLRZE2IKoCv0eA0gpS+7TiWM3
+ GAMZ90KtMOna2n8srFy6kVzURHOrAfLFi59n/c3D21IHnlq30OVTnNUCmEStBzY460nVW3VTM
+ wGJc+vQjGOu3nTzgm+ocK8FYsRR30RwCBz1/VCxt5GYHerPPrqg0KvQj2Sd6/WCLEVN38oVBD
+ wJO3ujcwUkob39FYzZTFECqqYf7T7DPme3kbkIqJKPmoX2+DmDq/tWF1bFUMOS9ufqsvp6TQM
+ RrovY1dK/y1CD55bv7/reUZq0Ng/TCduhTqctOIj7L8/6cbyVueyrrYZq++BvTOXytm+hGis7
+ RDZKYQOshNLsy5BC5VGB2En7z/PQNK3p6WjE2kbWFi6aI2YHvdRpB7DFGJZnvfbmGWu5Zvvq7
+ IxJ2kZNQ/e0spVfuTIQkwt9CyBk+IgEUx3D+Kg==
 
-Hi,
+On Wed, Jul 6, 2022 at 6:37 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Hi,
+>
+> This should conclude my cleanup session for ARM/ARM64.
+>
+> On top of previous pull request.
 
-On top of previous pull request.
+Pulled both, thanks!
 
-Best regards,
-Krzysztof
-
-
-The following changes since commit 2f7a7f941d770c03942fefe1d91ce954cb329c7e:
-
-  Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup (2022-06-27 10:19:57 +0200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt-cleanup-5.20-2
-
-for you to fetch changes up to 3d34cae102b0612dcce0bd4603a4d6302b8039ed:
-
-  Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup (2022-07-05 13:44:14 +0200)
-
-----------------------------------------------------------------
-Cleanup of ARM DTS for v5.20, part two
-
-Series of cleanups for ARM DTS - white-spaces, gpio-key subnode names
-and gpio-key properties for more boards: TI, Marvell, AT91 and Aspeed.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (12):
-      ARM: dts: ti: adjust whitespace around '='
-      ARM: dts: omap: adjust whitespace around '='
-      ARM: dts: marvell: align gpio-key node names with dtschema
-      ARM: dts: marvell: correct gpio-keys properties
-      ARM: dts: omap: align gpio-key node names with dtschema
-      ARM: dts: omap: correct gpio-keys properties
-      ARM: dts: at91: align gpio-key node names with dtschema
-      ARM: dts: at91: correct gpio-keys properties
-      ARM: dts: at91: drop unneeded status from gpio-keys
-      ARM: dts: aspeed: align gpio-key node names with dtschema
-      ARM: dts: aspeed: correct gpio-keys properties
-      Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup
-
- arch/arm/boot/dts/am335x-boneblack-wireless.dts    |  2 +-
- arch/arm/boot/dts/am335x-boneblue.dts              |  2 +-
- arch/arm/boot/dts/am335x-bonegreen-wireless.dts    |  2 +-
- arch/arm/boot/dts/am335x-cm-t335.dts               |  4 +-
- arch/arm/boot/dts/am335x-evm.dts                   |  8 ++--
- arch/arm/boot/dts/am335x-guardian.dts              |  2 -
- arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi  |  4 +-
- arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi  |  4 +-
- arch/arm/boot/dts/am335x-pcm-953.dtsi              |  4 +-
- arch/arm/boot/dts/am335x-pepper.dts                |  8 ++--
- .../boot/dts/am335x-sancloud-bbe-extended-wifi.dts |  2 +-
- arch/arm/boot/dts/am335x-shc.dts                   |  6 +--
- arch/arm/boot/dts/am3517-evm-ui.dtsi               | 26 ++++++------
- arch/arm/boot/dts/am3517-evm.dts                   | 18 ++++----
- arch/arm/boot/dts/am3874-iceboard.dts              |  4 +-
- arch/arm/boot/dts/am437x-idk-evm.dts               |  6 +--
- arch/arm/boot/dts/am437x-l4.dtsi                   |  2 +-
- arch/arm/boot/dts/armada-370-c200-v2.dts           |  8 ++--
- arch/arm/boot/dts/armada-370-rd.dts                |  2 -
- arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi |  8 ++--
- .../dts/armada-370-seagate-personal-cloud.dtsi     |  8 ++--
- arch/arm/boot/dts/armada-381-netgear-gs110emx.dts  |  2 +-
- arch/arm/boot/dts/armada-385-clearfog-gtr.dtsi     |  4 +-
- arch/arm/boot/dts/armada-385-linksys.dtsi          |  4 +-
- arch/arm/boot/dts/armada-388-clearfog-base.dts     |  2 +-
- arch/arm/boot/dts/armada-388-clearfog.dts          |  2 +-
- arch/arm/boot/dts/armada-xp-axpwifiap.dts          |  6 +--
- arch/arm/boot/dts/armada-xp-linksys-mamba.dts      |  8 ++--
- arch/arm/boot/dts/armada-xp-openblocks-ax3-4.dts   |  6 +--
- arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     | 30 +++++++-------
- arch/arm/boot/dts/aspeed-bmc-bytedance-g220a.dts   | 48 +++++++++++-----------
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       | 10 ++---
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       | 14 +++----
- arch/arm/boot/dts/aspeed-bmc-inspur-fp5280g2.dts   | 22 +++++-----
- arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts        | 23 ++++++-----
- arch/arm/boot/dts/aspeed-bmc-opp-mowgli.dts        | 20 ++++-----
- arch/arm/boot/dts/aspeed-bmc-opp-nicole.dts        |  2 +-
- arch/arm/boot/dts/aspeed-bmc-opp-palmetto.dts      |  2 +-
- arch/arm/boot/dts/aspeed-bmc-opp-romulus.dts       |  2 +-
- arch/arm/boot/dts/aspeed-bmc-opp-swift.dts         | 30 +++++++-------
- arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts        | 14 +++----
- arch/arm/boot/dts/aspeed-bmc-opp-vesnin.dts        |  4 +-
- arch/arm/boot/dts/aspeed-bmc-opp-witherspoon.dts   | 16 ++++----
- arch/arm/boot/dts/aspeed-bmc-opp-zaius.dts         |  4 +-
- arch/arm/boot/dts/at91-foxg20.dts                  |  4 +-
- arch/arm/boot/dts/at91-gatwick.dts                 |  2 +-
- arch/arm/boot/dts/at91-kizbox.dts                  |  8 ++--
- arch/arm/boot/dts/at91-kizbox2-common.dtsi         | 10 ++---
- arch/arm/boot/dts/at91-kizbox3-hs.dts              | 12 +++---
- arch/arm/boot/dts/at91-kizboxmini-common.dtsi      |  6 +--
- arch/arm/boot/dts/at91-nattis-2-natte-2.dts        |  2 +-
- arch/arm/boot/dts/at91-qil_a9260.dts               |  4 +-
- arch/arm/boot/dts/at91-sam9x60ek.dts               |  5 +--
- arch/arm/boot/dts/at91-sama5d27_som1_ek.dts        |  4 +-
- arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts      |  5 +--
- arch/arm/boot/dts/at91-sama5d2_icp.dts             |  5 +--
- arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts          |  4 +-
- arch/arm/boot/dts/at91-sama5d2_xplained.dts        |  4 +-
- arch/arm/boot/dts/at91-sama5d3_xplained.dts        |  4 +-
- arch/arm/boot/dts/at91-sama5d4_xplained.dts        |  4 +-
- arch/arm/boot/dts/at91-sama5d4ek.dts               |  4 +-
- arch/arm/boot/dts/at91-sama7g5ek.dts               |  4 +-
- arch/arm/boot/dts/at91-wb45n.dts                   |  7 +---
- arch/arm/boot/dts/at91-wb50n.dts                   | 10 ++---
- arch/arm/boot/dts/at91sam9260ek.dts                |  6 +--
- arch/arm/boot/dts/at91sam9261ek.dts                | 10 ++---
- arch/arm/boot/dts/at91sam9263ek.dts                |  6 +--
- arch/arm/boot/dts/at91sam9g20ek_common.dtsi        |  6 +--
- .../boot/dts/at91sam9g25-gardena-smart-gateway.dts |  2 +-
- arch/arm/boot/dts/at91sam9m10g45ek.dts             | 16 ++++----
- arch/arm/boot/dts/at91sam9n12ek.dts                |  4 +-
- arch/arm/boot/dts/at91sam9rlek.dts                 |  6 +--
- arch/arm/boot/dts/da850-evm.dts                    | 18 ++++----
- arch/arm/boot/dts/da850.dtsi                       | 12 +++---
- arch/arm/boot/dts/dm8148-evm.dts                   |  2 +-
- arch/arm/boot/dts/dm8168-evm.dts                   |  2 +-
- arch/arm/boot/dts/dra62x-j5eco-evm.dts             |  2 +-
- arch/arm/boot/dts/dra76x.dtsi                      |  6 +--
- arch/arm/boot/dts/omap2420-h4.dts                  |  2 +-
- arch/arm/boot/dts/omap3-evm-37xx.dts               |  2 +-
- arch/arm/boot/dts/omap3-evm.dts                    |  2 +-
- arch/arm/boot/dts/omap3-gta04.dtsi                 |  2 +-
- arch/arm/boot/dts/omap3-igep.dtsi                  |  2 +-
- arch/arm/boot/dts/omap3-ldp.dts                    |  6 +--
- arch/arm/boot/dts/omap3-lilly-a83x.dtsi            |  2 +-
- arch/arm/boot/dts/omap3-n900.dts                   |  4 +-
- arch/arm/boot/dts/omap3-n950-n9.dtsi               |  4 +-
- arch/arm/boot/dts/omap3-overo-base.dtsi            |  2 +-
- arch/arm/boot/dts/omap3-pandora-common.dtsi        |  2 +-
- arch/arm/boot/dts/omap3430-sdp.dts                 |  6 +--
- arch/arm/boot/dts/omap5-l4.dtsi                    |  2 +-
- 91 files changed, 301 insertions(+), 348 deletions(-)
+        Arnd
