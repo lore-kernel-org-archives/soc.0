@@ -1,86 +1,106 @@
-Return-Path: <SRS0=xyye=XL=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=qfr8=XL=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 559A5C43334
-	for <soc@archiver.kernel.org>; Wed,  6 Jul 2022 15:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF81C43334
+	for <soc@archiver.kernel.org>; Wed,  6 Jul 2022 16:38:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1129AC341C6; Wed,  6 Jul 2022 15:01:35 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 3E2E6C341CA; Wed,  6 Jul 2022 16:38:01 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 70AF4C3411C;
-	Wed,  6 Jul 2022 15:01:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70AF4C3411C
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f182.google.com ([209.85.219.182]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2VKr-1nSO781Bz5-013wcn; Wed, 06 Jul 2022 17:01:25 +0200
-Received: by mail-yb1-f182.google.com with SMTP id 76so12160423ybd.0;
-        Wed, 06 Jul 2022 08:01:24 -0700 (PDT)
-X-Gm-Message-State: AJIora/vIgNNrOGTFZXyvQB99EFmYRkI3J+mRxteIqGvGqp9BntgLsfd
-	DJ96otLBoi88ZuZNuEt2eQBdPj29SmGvzuzkl0E=
-X-Google-Smtp-Source: AGRyM1umUC3WLeZlmJt9WhhCXt632xH5c1TSYZPaema52uTt6F/+nW7yUSNfOjLzvYo07C+MTUQ72TTNkGVtiR4Edpk=
-X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
- x62-20020a257c41000000b0066d766a4815mr41195052ybc.480.1657119683920; Wed, 06
- Jul 2022 08:01:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1656396767.git.qinjian@cqplus1.com>
-In-Reply-To: <cover.1656396767.git.qinjian@cqplus1.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 6 Jul 2022 17:01:07 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1HoB74TA9EKJFuPLuw_zJfy_p7fwkm0M45+jaGkK6ivA@mail.gmail.com>
-Message-ID: <CAK8P3a1HoB74TA9EKJFuPLuw_zJfy_p7fwkm0M45+jaGkK6ivA@mail.gmail.com>
-Subject: Re: [PATCH v20 00/11] Add Sunplus SP7021 SoC Support
-To: Qin Jian <qinjian@cqplus1.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E693AC3411C
+	for <soc@kernel.org>; Wed,  6 Jul 2022 16:37:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E693AC3411C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id z25so9292068lfr.2
+        for <soc@kernel.org>; Wed, 06 Jul 2022 09:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3JIvP1fLoUDaPL2KDH7rBxoB2fmHYy4Oyai7s7FblzM=;
+        b=z8QpHD2g9KR0gRs38I9tQHxuBxZcFspVly256PoFHFttb5ZU65VHEVxW4zL0jDIk1N
+         OHb8Ke2HlLC1wovgg8KpnrshVxdq54tWma9NzHHxB9JdIPUAXdZYZh6CmiIeW1v+rZXR
+         jeYwxXa7VTcudWJvGa/mR8mye9YsFGb6RJkF2QDk8uy+gAIMoW4HYYv4A55lkYrTtkXV
+         PmOKeRTYsepmCpXtJgZZpqF8Yk8QD3m3Q0xZURpBd6rOMfC4FVj/mtrr5FtlHA8syOvu
+         a5xEmQo+a6vRc7+gcNgXhUhZ7Y2ftV1f4OBHaorAuNOGyxHbjZ1C0J7GrWxiWojD1Wyy
+         55vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3JIvP1fLoUDaPL2KDH7rBxoB2fmHYy4Oyai7s7FblzM=;
+        b=y2/eNSWEaClzNJy2yESc3XWRmRvUf47gzrY4RbxfOV7t44VH6qkR8WiBStvitMMahI
+         m74Hj7P9zXdkOmlf3MmEX+352CmAHsHZ6sy/h2fgHG/mCrsNUSmrgff/cIsdOnxLsTJO
+         FBgtH/5YjvhGpgTQr/fDhcm6fz4PHcATrm2FGn29a86qy62AATtFZ1+HY2jMp0BXpxqm
+         xNolW+Tn5oo8m4teLGJug3kCpkeh2nJW7b0iY6qrFfOFHt7Y5WudFaIgWxw8tf/9eCu6
+         rU7MvOeOQu1cvmTh5pPENSrl4SZO46/1mVxktiT8F4Tngg5apVbAhH/iaZv1W6GtieXI
+         t2iw==
+X-Gm-Message-State: AJIora/jhQkA6gRw41t2gKq8g+kEyKSe7DtKOnEBF3/RCN2LYO1I18/s
+	qf2BVBZN90h03X1tLv3tyeWxcQ==
+X-Google-Smtp-Source: AGRyM1u0vGXTJ6VoG+UpXo1yuYiOQ2/csLw8KHFNtxpsN2sGIuYba6SJoaBHEAs8+lbsIADjsYgTBg==
+X-Received: by 2002:a05:6512:929:b0:485:5918:7a8f with SMTP id f9-20020a056512092900b0048559187a8fmr3617198lft.463.1657125478033;
+        Wed, 06 Jul 2022 09:37:58 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id v12-20020a056512096c00b004831cc659ffsm1168063lft.125.2022.07.06.09.37.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 09:37:57 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Stephen Boyd <sboyd@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Russell King - ARM Linux <linux@armlinux.org.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:uTyST7ZRtbP5npjvox/kYsCreznDzPN64AQWmMKwiUTxFdKZURe
- TAn8AwgFv8qfT8uAfeuV98K/Ik/zP/Mb49OrzxMwQxBOpveiEKlnoVJOTZRUQQRgwauv3jN
- KLrnzECSHx6h5by7XCliZaJgj7tlMYsMUVWe6Cq8FkLPjFFeCmiTCkOLm3NZ81cyUjBnL2y
- hDNAJgcovkbNerZqCgjeA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2WCLEJVZfLo=:KEwUAxC8n2riJbR5oSfXlm
- JmAAjrixnQkbff0xm5TXKL6pQ5o2gL1TVST2zsKSKmzQB/3wGB7SqeDdfL4oUlZCBJHIMdB1j
- hk3z0lrRwvsRlI+/OQVMn7yO4k0JOug4wbQqzc1zO+ewBwkXOL5DSv/5DT++0oG+UsxoHeNTA
- NtGf6Bqb1Yc+IxYUug/nrZGYsxSmV1U8qCQHgbCPLmaUu6IFkoykbU6pD/HIvuPa1jVfEaxuQ
- KdsTSThvBx9ss0oQw7OPxDtgqrXe2lD9JfR54ts9SiQtcaQ57CPzj8KqCG+rB6+CKyZdfcnS2
- Qu+UkiRqXPJ8SJP7IK61kwbFKJULOAI44SosbwwqGx0i5Fns4c1lkX03YfFlz5wXg+ua5znIi
- KFQ4a5Sc+hGOd4IxQwbYta05lKn1N/BAz8XYHbLw6ahy2j4gLvcnF6KYP6pBjMSr27fKeFWfA
- F0rq3TD6vVHlrNF9kwgYZOqXa1mHbq1bp4Fi+gyG1KfFh++xyiNpqPmptcq5g/Ks4pRtfgZcj
- XQTXrlv9/kaL3I3M4Xwh0p769RHrMOOLVlZodASPOQsFw+XeKSyMwhin+erceiY3PLgHfVMPg
- TDlYGLfb8BCJWWLKeRuBid6PMEsQ2H0F/HsK62AWYJDUoN2Q46quv2e/Vu3X3CiTt5iaZkWZG
- 6VvJSzoW3qUaO8R9MtN+uk6MVvgP6BmCdhcgUybt1PVGZLwYwgHpEX2nkZArGwBuFZ9pl2thE
- vsfyQlQjL7Oz/dTffB0bAelWNH2+nLQy4/xQUCt01+4E7aJnf6T6oGPEuw6Kzh2YtO7Ojp1MF
- WezeQc4hhnG/qxwVbl3lbQm/RENR2RYlipPh1TaRgIWYCINR+/C7CZ5SsgqctbcnFspBmm6dp
- 89HNCzwLo9s0C9HCHXkg==
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] arm64: dts: cleanup for v5.20, second round
+Date: Wed,  6 Jul 2022 18:37:53 +0200
+Message-Id: <20220706163754.33064-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 28, 2022 at 8:26 AM Qin Jian <qinjian@cqplus1.com> wrote:
->
-> This patch series add Sunplus SP7021 SoC support.
->
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
-> peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
-> single chip. It is designed for industrial control.
->
-> SP7021 consists of two chips (dies) in a package. One is called C-chip
-> (computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
-> process (22 nm) for high performance computing. The other is called P-
-> chip (peripheral chip). It has many peripherals and an ARM A926 added
-> especially for real-time control. P-chip is made for customers. It adopts
-> low-level process (ex: 0.11 um) to reduce cost.
->
+Hi,
 
-As far as I can tell, all review comments have been fully addressed,
-but I'm missing an Ack from Stephen Boyd so I can apply it through
-the SoC tree.
+This should conclude my cleanup session for ARM/ARM64.
 
-        Arnd
+On top of previous pull request.
+
+Best regards,
+Krzysztof
+
+
+The following changes since commit 87ccc38e2f8e55853ddfe633d9934bc7ca74b21c:
+
+  arm64: dts: apm: Harmonize DWC USB3 DT nodes name (2022-06-27 10:15:20 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt64-cleanup-5.20-2
+
+for you to fetch changes up to 2b090180dced85ccf27f276c1b6c9521d4c4120e:
+
+  arm64: dts: marvell: armada-3720: align lednode names with dtschema (2022-06-27 10:44:03 +0200)
+
+----------------------------------------------------------------
+Cleanup of ARM64 DTS for v5.20, part two
+
+Remaining cleanups for ARM64 DTS: gpio-keys and led node names on Marvel
+platforms.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (2):
+      arm64: dts: marvell: align gpio-key node names with dtschema
+      arm64: dts: marvell: armada-3720: align lednode names with dtschema
+
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts     | 4 ++--
+ arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dts | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
