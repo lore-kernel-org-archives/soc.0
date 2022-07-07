@@ -1,91 +1,204 @@
-Return-Path: <SRS0=7j7m=XM=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=oBkS=XM=broadcom.com=william.zhang@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 755CAC43334
-	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 06:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD600C433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 07:02:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4801DC341CA; Thu,  7 Jul 2022 06:50:54 +0000 (UTC)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	id A3EC6C341CA; Thu,  7 Jul 2022 07:02:01 +0000 (UTC)
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7FE26C341C8
-	for <soc@kernel.org>; Thu,  7 Jul 2022 06:50:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7FE26C341C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id z25so11959131lfr.2
-        for <soc@kernel.org>; Wed, 06 Jul 2022 23:50:53 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D72B1C341D0
+	for <soc@kernel.org>; Thu,  7 Jul 2022 07:02:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D72B1C341D0
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pg1-f176.google.com with SMTP id 73so1437495pgb.10
+        for <soc@kernel.org>; Thu, 07 Jul 2022 00:02:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uK70/rhYUGhSJlSjNPURMjDiBCpuf2mNsuNaQulD/Iw=;
-        b=UWPAlyaKtQ/n/u96Fq3tibzMJr1bxsYkWgSS14eH9FJzkIs35O9O1XF/OfMsmBXwdW
-         edt8ncYGqUFWxoDLP90CSdmtZ8lGEwkD2OSr6c5Z9VjMVW4xVTKHsE8vcxTfAFEg7MTh
-         Q/7sOhvT8xtVHwS9hNQo4LiV7KfTKwiaXJAAY45yp8Ti59TPgpi5RZhz5lMPdkbAYbNj
-         j9ljUL8ydPr3rzKvMLx99jGJpuXpzKzqP2xTV0/XlAzJl/vanWk/W9CGHygWILpBe221
-         Ub6Ym+UTutaBgEh+8EsUDZtE2qA+ag6ikaPzwuoGqmxD/L6jPTWuav/1HquoV9JK1G37
-         qf9w==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=/hGG74NVsAuJz5yFzNGBa3R7ZTWSExY7os1fWq8cJN8=;
+        b=cyJcX1aC71Hr4XLnoI8cJ6vjYeF7cDasF46YVKoqZcKeDMWOHNLoqHiAsafGod7nXy
+         yg5IpIZRALy/xILIQ6C4EgnmfUvIQ209Xq8LSQRL+mzQ5OBHmaI37PdmEMaZAerfvNRA
+         +fTzt08VL6d/gkJg03o1+5KCgVTk7qtJF3fSY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uK70/rhYUGhSJlSjNPURMjDiBCpuf2mNsuNaQulD/Iw=;
-        b=L+l+5LFVboOnyjF9448OYqQHyi2nfmrTf9A2ay1GO4fAX3OtRtqYoa6a6FL6blaLst
-         Bvhk4kpaRFntf2qnJqNxjDpwqcf/FgTTOrnzx5CAn1ym7Le4EZZ5opHklDdwoSU6M1o3
-         jxDgM/q0Lw5KZRmRt80mHT3BTW8Sl55cqLYSbTH9t8NGogidR0wRvux/i7p+Bvy2P96p
-         oLbtvbYbrycIKRkOlNMgLtLR2o0KIufxuX31z8i8m1ZohptzD3LAUJYhuwl9AI1J67cB
-         q+AgiLMfwnoki1P+tXrd6pHkNhTOYnLdvyf1doHJDfuvTdSMt9iz0JyJ3qwAF+h0KlZv
-         WPEg==
-X-Gm-Message-State: AJIora9bkkTFohUlQIi31GXkZRyFkctonc2L1lopw//TswHgG/5xANM8
-	wsa2g06x6Y4uW0EpIdaGMCyI1w==
-X-Google-Smtp-Source: AGRyM1sEsLyBbfJ3jKEqStiC0eOawgxH/iIZByD8cbK1YXAhZMMZMX9ltXPSJ+cj1909p8pwapQW8w==
-X-Received: by 2002:a05:6512:39d0:b0:481:ed:666 with SMTP id k16-20020a05651239d000b0048100ed0666mr30929880lfu.379.1657176651600;
-        Wed, 06 Jul 2022 23:50:51 -0700 (PDT)
-Received: from [192.168.1.52] ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id k26-20020a05651c10ba00b0025a736f5a41sm6661009ljn.9.2022.07.06.23.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jul 2022 23:50:51 -0700 (PDT)
-Message-ID: <4108a1d1-7e30-4b02-b614-984d185681c7@linaro.org>
-Date: Thu, 7 Jul 2022 08:50:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] ARM: dts: imx7d: add dts for UC-8210/8220 hardware
-Content-Language: en-US
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=/hGG74NVsAuJz5yFzNGBa3R7ZTWSExY7os1fWq8cJN8=;
+        b=mjt95l+TXWBSn0YqE+la6eLeCxvrwXmcqDl/zx7OgCX67+aRjpeO2R+cAgiIxiLryB
+         3tWA5FaY9U/bM9I3N/Z/QMYSKlqLIgiVtBl2yQeD76DXvQlffXcFuK6fPuDf7+t1H2zB
+         RhUEn+o7uWpq6zmZP7ETqxLrpU1Oix0aef80IZ4CAkD9fmohXNhjeZ1Xj/9Lr7pAjOQp
+         4XOaVdguWVPHy8GSPWCnMZLGrq0lJNx8b3SZHe3xym1kWwDRD93ZdmS3wYgR0awUlzcD
+         vgfXvbqo8lJ/0p5202Rtikhyzff1iN8LMk6nsVYRqbZGhuf8B/9+3P0wX9qnuQGHmACa
+         yjKw==
+X-Gm-Message-State: AJIora872P3DFDAwWVzM9XOFNhyMcE8nlEfi9A2xFRaGaZTKdm+ka0NI
+	0PuVg1RWgvESb0oVTr+krDzElQ==
+X-Google-Smtp-Source: AGRyM1tig2LQmbSkpJs42nBCHDzte6ZGm+EcQB3Nj+xqv7KLKTMU7TtRGq9ZRCGlIh96TuabSYkDhw==
+X-Received: by 2002:a63:2a4e:0:b0:412:518c:213 with SMTP id q75-20020a632a4e000000b00412518c0213mr16279046pgq.42.1657177320274;
+        Thu, 07 Jul 2022 00:02:00 -0700 (PDT)
+Received: from ubuntu-22.localdomain ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id d21-20020a17090abf9500b001ec9b7efec2sm18291626pjs.5.2022.07.07.00.01.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 00:01:59 -0700 (PDT)
+From: William Zhang <william.zhang@broadcom.com>
+To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-To: Jimmy Chen <u7702045@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
-Cc: Jimmy Chen <jimmy.chen@moxa.com>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220707053954.22168-1-jimmy.chen@moxa.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707053954.22168-1-jimmy.chen@moxa.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+	joel.peshkin@broadcom.com,
+	dan.beygelman@broadcom.com,
+	kursad.oney@broadcom.com,
+	f.fainelli@gmail.com,
+	anand.gore@broadcom.com,
+	William Zhang <william.zhang@broadcom.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	Michael Walle <michael@walle.cc>,
+	Olof Johansson <olof@lixom.net>,
+	Ray Jui <rjui@broadcom.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Scott Branden <sbranden@broadcom.com>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Thierry Reding <treding@nvidia.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH v2 0/8] arm: bcmbca: Move BCM63138 SoC support under ARCH_BCMBCA
+Date: Thu,  7 Jul 2022 00:00:30 -0700
+Message-Id: <20220707070037.261532-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="00000000000085936405e331a988"
 
-On 07/07/2022 07:39, Jimmy Chen wrote:
-> Add 2 models hardware dts provided by MOXA company
-> 
-> Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
+--00000000000085936405e331a988
+Content-Transfer-Encoding: 8bit
 
-Version your patchset. You already sent v1, didn't you? So this is v2.
-Add changelog in each patch after '---' describing changes.
+Now that Broadcom Broadband arch ARCH_BCMBCA is in the kernel, this change
+migrates the existing broadband chip BCM63138 support to ARCH_BCMBCA. It
+also delete the old ARCH_BCM_63XX config as no other chip uses it.
 
-We have the entire process documented:
-https://elixir.bootlin.com/linux/v5.19-rc5/source/Documentation/process/submitting-patches.rst#L308
+Verified on BCM963138REF board with ramdisk boot.
 
-https://elixir.bootlin.com/linux/v5.19-rc5/source/Documentation/process
+Changes in v2:
+- Remove the unrelated node and and uart clock name changes
+- Move patch 5 to a separate patchset with one patch per subsystem.
+  See [1] and its following patches.
+
+William Zhang (8):
+  dt-bindings: arm: add BCM63138 SoC
+  ARM: dts: Move BCM963138DVT board dts to ARCH_BCMBCA
+  ARM: dts: update dts files for bcmbca SoC BCM63138
+  ARM: dts: Add BCM63138 generic board dts
+  arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA
+  arm: bcmbca: Add BCMBCA sub platforms
+  MAINTAINERS: Move BCM63138 to bcmbca arch entry
+  ARM: multi_v7_defconfig: Update configs for BCM63138
+
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         |  8 +++
+ MAINTAINERS                                   | 10 +--
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ arch/arm/boot/dts/bcm63138.dtsi               |  4 +-
+ arch/arm/boot/dts/bcm963138.dts               | 27 ++++++++
+ arch/arm/boot/dts/bcm963138dvt.dts            |  2 +-
+ arch/arm/configs/multi_v7_defconfig           |  4 +-
+ arch/arm/mach-bcm/Kconfig                     | 61 +++++++++++++------
+ arch/arm/mach-bcm/Makefile                    |  7 +--
+ arch/arm/mach-bcm/bcm63xx.c                   | 17 ------
+ 10 files changed, 89 insertions(+), 55 deletions(-)
+ create mode 100644 arch/arm/boot/dts/bcm963138.dts
+ delete mode 100644 arch/arm/mach-bcm/bcm63xx.c
+
+[1]: https://lists.infradead.org/pipermail/linux-arm-kernel/2022-July/758522.html
+-- 
+2.34.1
 
 
-Best regards,
-Krzysztof
+--00000000000085936405e331a988
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDi6a1p6jd8HJssYKr8ELUL2JR4b
+F//fvgC3Q13eA29KMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcwNzA3MDIwMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBwKKGFJo0r6VcvcuZkD5N74yL/ZJRZWlhHXrKW9yQqsUUi
+JK439vPO+acOCgopJV6wPxexfR5tszR4Bg5PBF0G1JnzGLJ0oNx1ez1Nath9EcJNNIY2VNfdaV1e
+16VpwSwOXkb/g67KhNN7cAaFbDshSnMs6zCgUVqB5hmXc4UMh0xKulAqTRRWkN4dOTaqP213KYXm
+m2feHo9VNeKFkQDUx+UZ0AOnHFXUbDBhCw5UxeClVPYDUaAhm4hEM6kvzlooKjObiO0G4xcqJ9Up
+O7VSJCh3hkJcdEENkCen2UoyZzNZ6Sg86nzon7+yQ0HU35gvuDC3grmw1v529OZb8f90
+--00000000000085936405e331a988--
