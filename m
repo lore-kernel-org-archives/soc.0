@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D4BC433EF
-	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 08:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C61ACCA479
+	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 08:04:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5CA1DC341C8; Thu,  7 Jul 2022 08:04:18 +0000 (UTC)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	id D34F8C341CA; Thu,  7 Jul 2022 08:04:19 +0000 (UTC)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8E9E0C341C0
-	for <soc@kernel.org>; Thu,  7 Jul 2022 08:04:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E9E0C341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 9394AC341CB
+	for <soc@kernel.org>; Thu,  7 Jul 2022 08:04:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9394AC341CB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id t25so29771845lfg.7
-        for <soc@kernel.org>; Thu, 07 Jul 2022 01:04:17 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id e12so29776416lfr.6
+        for <soc@kernel.org>; Thu, 07 Jul 2022 01:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t9dYgQ35cdd5QcwdHZmKr6Q8Vl0RugkCrkWrdr8ld24=;
-        b=AeV56w8X6d0UUFxOQOh6iNGq9TyUYX8ofNmERk0UhTdG9g3q6Rd8ibW7E60fMU73N/
-         E/HlUkN/PpEXf1DM786OvOL7jyPe4cDT63s//co2l2T3vtIxbVNy+Jzm49G2nCMu7wxC
-         U5jOYRdmdvIy6sVDYyjEGqUb3P04X/1iK2UTTbyoBqZ+X1aJLgHCEekcW895rw0Dekhb
-         CeiFBn9raIWf/7ACKj2h/05hz/TKzzaFob3nEcs0p2c8tC+tA/lnMUKrgMm/yYTOXaOe
-         TWLrSJWQrLkFHIva/c9meAiKyZvUYQDLgiftcbMLwtiCP5vytl4iA4dg4HBhW3NrLauf
-         VFRg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Z5ssFYeQl7V2JJ54NmhIzC4kevK2DFEIrlaz+FamJ4o=;
+        b=nQyKLogTPnRG/buW57rEKh/p4nVI47DT4almuA9zdgse7ZnePqyIwZragdTmyL5Zkk
+         Yp09663+gJTNo6qUACiFo0ItN4bQo+s4TS0rCPM2pDXCJPJX25HqaZZJNmvGB/j31Aq1
+         aS3fWZ/H1HJmLrZV6uu9kUzNZlxk3eDVOBZXpwg0A10QMvW12iLmccF1dNE1rlP9sVtl
+         Vq+JSBAzqzBEd5oPAnKpx18289Y2MSIz3mUyK+RGsBHrAhfB3FRo+SQj5UXSSaTGKfPM
+         04k1TMBLdFVVsLPv9IxxFCW4Wh1/EQOusbiWmRBRv29+eVjtV9XMLbhofx+RqjB9ebGE
+         QFsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t9dYgQ35cdd5QcwdHZmKr6Q8Vl0RugkCrkWrdr8ld24=;
-        b=TSJGZzXQmLKnBm/nu756vkQT+HUi+r1uQ+rgExdARjPahGWuxAUUUHwLCGDQ+rglcn
-         pDrkvtpIcB/I3LyU7ASTzUlTv05dA/R85wbZjmyFTT+PIpj1wNiBIhI+OMjdk0mZuaw/
-         t2qHXOFsU3diyq2eGcTEFX1K3wt6UtuKxb5XA8wkRltcJROGOKGMJAtijHysVexBjdWo
-         EGnW8cYypeOcanXXnn3rgvrxjDVX/d/2yUtv76t6kDJXpAwAwobfpUPdAEI3IBgro80z
-         gWaIu5sljs35UOOx9lEVeIbZ1e8/szL5N7KdDptjr68AMT9GtjsRPu0tRH4a+FfD/BZZ
-         f1Kg==
-X-Gm-Message-State: AJIora/7osOm22ONyaE1jVbKErcjqoMIIPWRyeyHruCApcNJwa4sa07p
-	y1ER3lkA8GD29xIIJnC2j5Q5tw==
-X-Google-Smtp-Source: AGRyM1sFsafUoEd5OpC5bdbiu44MmM3ARKbnb0/kpVDSpu/pZHsf52Uy0hJBrMCVvqCZac/uRBLmBg==
-X-Received: by 2002:a05:6512:3051:b0:47f:7945:83d0 with SMTP id b17-20020a056512305100b0047f794583d0mr26620431lfb.99.1657181055571;
-        Thu, 07 Jul 2022 01:04:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Z5ssFYeQl7V2JJ54NmhIzC4kevK2DFEIrlaz+FamJ4o=;
+        b=W1IBLBFRnHaj6IMdYZQE4ATP/5LPJCM5LtBcO6CN5B0IKcmEtZj3FMI8dow0sKDo0Y
+         rcahCTPhhS/kDLsm5S/tboIJ356O/MPGSJaA9NqKWXR9UKW1NRKPt5wE4uJUUAQtRbwU
+         HQqGAgixRLYTc6zBzCBZVVRUBkd+d519NdSl5EXsof44GNceQ0upedRryIdHr2Xr649V
+         klER2in2gMHStlQzn5UhFWO7XwjLv5gskiuYja/ZFFAPhNZj9aDrUaJ0wC/yMrM6389x
+         afziqthcFXbAStZ0vW7O6vD0XdiQHeQ3ONFvuhRPYLccJbBvq7D3VpBxxTXBd9OazLuA
+         ha6g==
+X-Gm-Message-State: AJIora+f+6fu2YbhX2SiT65Bu0JHReZAj+4sywqU6v2+jnxoAxbrJK9s
+	2XiUw5OohisD+xW8vWFJWfvblA==
+X-Google-Smtp-Source: AGRyM1uBT3p2me4ed88jdqAaeNxgZQVJKSTxRZJFJljooGEjRoS8yamieK3o3TdtSIRerorKAVhrTw==
+X-Received: by 2002:a05:6512:3c96:b0:488:c36d:b336 with SMTP id h22-20020a0565123c9600b00488c36db336mr623077lfv.410.1657181056637;
+        Thu, 07 Jul 2022 01:04:16 -0700 (PDT)
 Received: from krzk-bin.home ([84.20.121.239])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05651220d000b00478ea0e4f66sm6702687lfr.169.2022.07.07.01.04.14
+        by smtp.gmail.com with ESMTPSA id u16-20020a05651220d000b00478ea0e4f66sm6702687lfr.169.2022.07.07.01.04.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 01:04:14 -0700 (PDT)
+        Thu, 07 Jul 2022 01:04:16 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -61,57 +61,51 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-kernel@vger.kernel.org,
 	Alim Akhtar <alim.akhtar@samsung.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] ARM: dts: samsung: 2nd round for v5.20
-Date: Thu,  7 Jul 2022 10:04:07 +0200
-Message-Id: <20220707080408.69251-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/2] arm64: dts: samsung: 2nd round for v5.20
+Date: Thu,  7 Jul 2022 10:04:08 +0200
+Message-Id: <20220707080408.69251-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220707080408.69251-1-krzysztof.kozlowski@linaro.org>
+References: <20220707080408.69251-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Hi,
 
-On top of previous pull request. This also includes DT bindings for
-convenience, although nothing depends on the bindings itself.
+On top of previous pull request.
 
 Best regards,
 Krzysztof
 
 
-The following changes since commit 82cd16902a51773cfc0ee05bbd1ab470db5181ab:
+The following changes since commit 1a4f20cab6411c6e73dd22d28b6595b728cc2829:
 
-  ARM: dts: exynos: add function and color to LED nodes in Odroid XU/XU3 (2022-06-22 13:58:01 +0200)
+  Merge branch 'for-v5.20/exynos7885-emmc-clk' into next/dt64 (2022-06-24 09:12:47 +0200)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.20-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.20-2
 
-for you to fetch changes up to 3e27bf719303b1b19edd37bd04e9e586c73f6511:
+for you to fetch changes up to 1ba1fd7d775dbccf43951671a7331c561408e72b:
 
-  dt-bindings: soc: samsung: exynos-pmu: add reboot-mode (2022-07-06 18:24:32 +0200)
-
-----------------------------------------------------------------
-Samsung DTS ARM changes for v5.20, part two
-
-1. Cleanups: align SDHCI node names.
-2. DT bindings: Document preferred compatible naming schema.
-3. DT bindings: fixes and improvements to Exynos PMU bindings.
+  arm64: dts: exynosautov9: add usi device tree nodes (2022-07-05 12:34:36 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (8):
-      ARM: dts: exynos: align SDHCI node name with dtschema
-      ARM: dts: s3c24xx: align SDHCI node name with dtschema
-      ARM: dts: s3c64xx: align SDHCI node name with dtschema
-      ARM: dts: s5pv210: align SDHCI node name with dtschema
-      dt-bindings: samsung: document preferred compatible naming
-      dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
-      dt-bindings: soc: samsung: exynos-pmu: use abolute ref paths
-      dt-bindings: soc: samsung: exynos-pmu: add reboot-mode
+Samsung DTS ARM64 changes for v5.20, part two
 
- .../bindings/arm/samsung/samsung-soc.yaml          | 40 ++++++++++++++++++++++
- .../bindings/soc/samsung/exynos-pmu.yaml           | 13 ++++---
- arch/arm/boot/dts/exynos4.dtsi                     |  8 ++---
- arch/arm/boot/dts/s3c2416.dtsi                     |  4 +--
- arch/arm/boot/dts/s3c64xx.dtsi                     |  6 ++--
- arch/arm/boot/dts/s5pv210.dtsi                     |  8 ++---
- 6 files changed, 61 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/samsung/samsung-soc.yaml
+1. Correct SPI11 pin names on ExynosAutov9.
+2. Add more USI (I2C/SPI/UART) devices to ExynosAutov9.
+
+----------------------------------------------------------------
+Chanho Park (5):
+      arm64: dts: exynosautov9: correct spi11 pin names
+      dt-bindings: soc: samsung: usi: add exynosautov9-usi compatible
+      arm64: dts: exynosautov9: add pdma0 device tree node
+      arm64: dts: exynosautov9: prepare usi0 changes
+      arm64: dts: exynosautov9: add usi device tree nodes
+
+ .../bindings/soc/samsung/exynos-usi.yaml           |    8 +-
+ .../boot/dts/exynos/exynosautov9-pinctrl.dtsi      |    6 +-
+ arch/arm64/boot/dts/exynos/exynosautov9-sadk.dts   |    2 +
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi       | 1087 +++++++++++++++++++-
+ 4 files changed, 1093 insertions(+), 10 deletions(-)
