@@ -1,220 +1,117 @@
-Return-Path: <SRS0=oBkS=XM=broadcom.com=william.zhang@kernel.org>
+Return-Path: <SRS0=7j7m=XM=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A2CBC43334
-	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 07:02:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D4BC433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 08:04:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 329CDC341C8; Thu,  7 Jul 2022 07:02:12 +0000 (UTC)
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	id 5CA1DC341C8; Thu,  7 Jul 2022 08:04:18 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8B0E7C341C0
-	for <soc@kernel.org>; Thu,  7 Jul 2022 07:02:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B0E7C341C0
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pg1-f175.google.com with SMTP id bh13so10910556pgb.4
-        for <soc@kernel.org>; Thu, 07 Jul 2022 00:02:11 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E9E0C341C0
+	for <soc@kernel.org>; Thu,  7 Jul 2022 08:04:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E9E0C341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id t25so29771845lfg.7
+        for <soc@kernel.org>; Thu, 07 Jul 2022 01:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=gmP5Pl/wMi+YECB6O+2FfoEBWPQ01bPhmrSfRgy1CrA=;
-        b=Ij1QqHG7asYRZwUNNBjoq7eCALuvCtdUNUL3TulwnMB4JJnZ2DqBxxbk0LddrTdhyI
-         rG98YnBtuIGauyZ1KyA0kubUtEJLokz5MFFgrU7Ig4ldL7QjXoz+CrnoZKEnt7DV+xgQ
-         MqdsEOxs0c2kKEA2WhQd/Sluk4Eu3L67bb39k=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=t9dYgQ35cdd5QcwdHZmKr6Q8Vl0RugkCrkWrdr8ld24=;
+        b=AeV56w8X6d0UUFxOQOh6iNGq9TyUYX8ofNmERk0UhTdG9g3q6Rd8ibW7E60fMU73N/
+         E/HlUkN/PpEXf1DM786OvOL7jyPe4cDT63s//co2l2T3vtIxbVNy+Jzm49G2nCMu7wxC
+         U5jOYRdmdvIy6sVDYyjEGqUb3P04X/1iK2UTTbyoBqZ+X1aJLgHCEekcW895rw0Dekhb
+         CeiFBn9raIWf/7ACKj2h/05hz/TKzzaFob3nEcs0p2c8tC+tA/lnMUKrgMm/yYTOXaOe
+         TWLrSJWQrLkFHIva/c9meAiKyZvUYQDLgiftcbMLwtiCP5vytl4iA4dg4HBhW3NrLauf
+         VFRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=gmP5Pl/wMi+YECB6O+2FfoEBWPQ01bPhmrSfRgy1CrA=;
-        b=43WG4Th+7fxnS2P4JKkUYTF5pKZfIyeRNUUBOwyOr/wPbUH3HFenrYyq0G9oEPaU33
-         kUwP0eXQRB44LYxvCcgV99ZlvcIenR8bkkvbP02oXFeknhpbI6wFiYlxa44XaApc43Uk
-         q7XuaNA3gZuI5WjnZDJo0B/XeUbDZ4yzczED0GRUcbAqoGggVRF+l2npyQn2WRNwCqzx
-         AcbICEfNZn6XXmO1EnE9T1TLEUvSjI/w2+1cmn47GrvU83/Tb+xJD08xFOurIA9JcBjn
-         6Od1ku7jpOaYM4YfZTnDGZxIE7Px9CLMorhp9Dj7+4buewump5LMODzZ3PmxBKAFnlD5
-         JJ9A==
-X-Gm-Message-State: AJIora98ZkVYByd5qhOz3j3bglC3mDytwL89a4nCl2zZdjY5HhJDd2NI
-	1CXT2s4ROHiavoAElCbfTHZ9PQ==
-X-Google-Smtp-Source: AGRyM1t6kKbUr8zsa604nilce/jhegTpiOkGy1yJnZXB6uSU8Ow/WdkShitUzX9FE1ocqfUOsRqXDA==
-X-Received: by 2002:a63:80c8:0:b0:411:73dd:809b with SMTP id j191-20020a6380c8000000b0041173dd809bmr37687321pgd.441.1657177330979;
-        Thu, 07 Jul 2022 00:02:10 -0700 (PDT)
-Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id d21-20020a17090abf9500b001ec9b7efec2sm18291626pjs.5.2022.07.07.00.02.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=t9dYgQ35cdd5QcwdHZmKr6Q8Vl0RugkCrkWrdr8ld24=;
+        b=TSJGZzXQmLKnBm/nu756vkQT+HUi+r1uQ+rgExdARjPahGWuxAUUUHwLCGDQ+rglcn
+         pDrkvtpIcB/I3LyU7ASTzUlTv05dA/R85wbZjmyFTT+PIpj1wNiBIhI+OMjdk0mZuaw/
+         t2qHXOFsU3diyq2eGcTEFX1K3wt6UtuKxb5XA8wkRltcJROGOKGMJAtijHysVexBjdWo
+         EGnW8cYypeOcanXXnn3rgvrxjDVX/d/2yUtv76t6kDJXpAwAwobfpUPdAEI3IBgro80z
+         gWaIu5sljs35UOOx9lEVeIbZ1e8/szL5N7KdDptjr68AMT9GtjsRPu0tRH4a+FfD/BZZ
+         f1Kg==
+X-Gm-Message-State: AJIora/7osOm22ONyaE1jVbKErcjqoMIIPWRyeyHruCApcNJwa4sa07p
+	y1ER3lkA8GD29xIIJnC2j5Q5tw==
+X-Google-Smtp-Source: AGRyM1sFsafUoEd5OpC5bdbiu44MmM3ARKbnb0/kpVDSpu/pZHsf52Uy0hJBrMCVvqCZac/uRBLmBg==
+X-Received: by 2002:a05:6512:3051:b0:47f:7945:83d0 with SMTP id b17-20020a056512305100b0047f794583d0mr26620431lfb.99.1657181055571;
+        Thu, 07 Jul 2022 01:04:15 -0700 (PDT)
+Received: from krzk-bin.home ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05651220d000b00478ea0e4f66sm6702687lfr.169.2022.07.07.01.04.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 00:02:09 -0700 (PDT)
-From: William Zhang <william.zhang@broadcom.com>
-To: Linux ARM List <linux-arm-kernel@lists.infradead.org>
+        Thu, 07 Jul 2022 01:04:14 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-	joel.peshkin@broadcom.com,
-	dan.beygelman@broadcom.com,
-	kursad.oney@broadcom.com,
-	f.fainelli@gmail.com,
-	anand.gore@broadcom.com,
-	William Zhang <william.zhang@broadcom.com>,
+To: Olof Johansson <olof@lixom.net>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	arm@kernel.org,
 	soc@kernel.org
-Subject: [PATCH v2 4/8] ARM: dts: Add BCM63138 generic board dts
-Date: Thu,  7 Jul 2022 00:00:34 -0700
-Message-Id: <20220707070037.261532-5-william.zhang@broadcom.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] ARM: dts: samsung: 2nd round for v5.20
+Date: Thu,  7 Jul 2022 10:04:07 +0200
+Message-Id: <20220707080408.69251-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220707070037.261532-1-william.zhang@broadcom.com>
-References: <20220707070037.261532-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002a421205e331aacd"
-
---0000000000002a421205e331aacd
 Content-Transfer-Encoding: 8bit
 
-Add generic bcm963138.dts file.
+Hi,
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
----
+On top of previous pull request. This also includes DT bindings for
+convenience, although nothing depends on the bindings itself.
 
-(no changes since v1)
-
- arch/arm/boot/dts/Makefile      |  1 +
- arch/arm/boot/dts/bcm963138.dts | 27 +++++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm963138.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 1bf8e2f8ee68..d2b64aaf2874 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -182,6 +182,7 @@ dtb-$(CONFIG_ARCH_BRCMSTB) += \
- 	bcm7445-bcm97445svmb.dtb
- dtb-$(CONFIG_ARCH_BCMBCA) += \
- 	bcm947622.dtb \
-+	bcm963138.dtb \
- 	bcm963138dvt.dtb \
- 	bcm963148.dtb \
- 	bcm963178.dtb \
-diff --git a/arch/arm/boot/dts/bcm963138.dts b/arch/arm/boot/dts/bcm963138.dts
-new file mode 100644
-index 000000000000..d28c4f130ca2
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm963138.dts
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022 Broadcom Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "bcm63138.dtsi"
-+
-+/ {
-+	model = "Broadcom BCM963138 Reference Board";
-+	compatible = "brcm,bcm963138", "brcm,bcm63138", "brcm,bcmbca";
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200";
-+		stdout-path = &serial0;
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x08000000>;
-+	};
-+};
-+
-+&serial0 {
-+	status = "okay";
-+};
--- 
-2.34.1
+Best regards,
+Krzysztof
 
 
---0000000000002a421205e331aacd
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+The following changes since commit 82cd16902a51773cfc0ee05bbd1ab470db5181ab:
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEID7l0AVh4nMkYwyFlDn70BT5R/RP
-a42bMOe1B96iceiUMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcwNzA3MDIxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQDVr/PzJNBwC/spGvqWjfJy5RhGcRmGufX2gHMPUA68z+Bx
-0ak5Zgkz4Aio8rgw7liXYe6pf8kJWj/lo6/YUnZiJL9nkked1fbXVj9c/Gh31xRAglydNgS6dM8H
-jsxkmi6dPtqBuNn+WOMzog453v4PBUuBovaTypYJOnPUBuFcz7GYo6N3hKtv2Jl2qLVGDHFcO3mi
-nJwGKwB1tNQ5LTlDUdsrMFD7Fb3IalXymPcXRjzPhyRrqD+gVAu4c39KZ9Ur2TXw8oJtoaWXjOVL
-O0iHhfVPuPTXi+IttcD01h2JQV4HiOIzBFzcp5ibdPFR18j6g/TERB79OonHKW1GBnsn
---0000000000002a421205e331aacd--
+  ARM: dts: exynos: add function and color to LED nodes in Odroid XU/XU3 (2022-06-22 13:58:01 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.20-2
+
+for you to fetch changes up to 3e27bf719303b1b19edd37bd04e9e586c73f6511:
+
+  dt-bindings: soc: samsung: exynos-pmu: add reboot-mode (2022-07-06 18:24:32 +0200)
+
+----------------------------------------------------------------
+Samsung DTS ARM changes for v5.20, part two
+
+1. Cleanups: align SDHCI node names.
+2. DT bindings: Document preferred compatible naming schema.
+3. DT bindings: fixes and improvements to Exynos PMU bindings.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (8):
+      ARM: dts: exynos: align SDHCI node name with dtschema
+      ARM: dts: s3c24xx: align SDHCI node name with dtschema
+      ARM: dts: s3c64xx: align SDHCI node name with dtschema
+      ARM: dts: s5pv210: align SDHCI node name with dtschema
+      dt-bindings: samsung: document preferred compatible naming
+      dt-bindings: soc: samsung: exynos-pmu: cleanup assigned clocks
+      dt-bindings: soc: samsung: exynos-pmu: use abolute ref paths
+      dt-bindings: soc: samsung: exynos-pmu: add reboot-mode
+
+ .../bindings/arm/samsung/samsung-soc.yaml          | 40 ++++++++++++++++++++++
+ .../bindings/soc/samsung/exynos-pmu.yaml           | 13 ++++---
+ arch/arm/boot/dts/exynos4.dtsi                     |  8 ++---
+ arch/arm/boot/dts/s3c2416.dtsi                     |  4 +--
+ arch/arm/boot/dts/s3c64xx.dtsi                     |  6 ++--
+ arch/arm/boot/dts/s5pv210.dtsi                     |  8 ++---
+ 6 files changed, 61 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/samsung/samsung-soc.yaml
