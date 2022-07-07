@@ -1,375 +1,107 @@
-Return-Path: <SRS0=SMgh=XM=gmail.com=logananth13.hcl@kernel.org>
+Return-Path: <SRS0=wHrc=XM=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DECBC43334
-	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 13:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97251C433EF
+	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 13:34:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 08FC6C341C8; Thu,  7 Jul 2022 13:21:05 +0000 (UTC)
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 653CFC341C6; Thu,  7 Jul 2022 13:34:10 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0375FC3411E;
-	Thu,  7 Jul 2022 13:21:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0375FC3411E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id x184so5950202pfx.2;
-        Thu, 07 Jul 2022 06:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=+caqaU2jwST9KjN/1/t0QJXzQd9mk2HRl/4WLQkOIpE=;
-        b=qj1jUTa+a16S+5xt1vMAZXARDDSWN3npWT1MmERzCIpdpE0MhmAmf89PevNTj8wnPr
-         OTp0d19UaiaslgInZDHUP8H7KYzAd9fbJUM3xFvljQ3Iiolk9wq09ehO9PT6VAf+h1RD
-         6WSTOpO4u19LbmRxRK9x2P/j3v99EmAo9OtZqe+4oW05en50lj9tE8E88ieMZT++4eez
-         knS8pxOGzkol+8+/hBKQWHh4UevAPec8NCZzpy4992MU8naUC8KAY4bYRusf7lbCJmrY
-         eu8cpOWV9XpbJOwP6cfdtLVUWKZ5fwl3ySspU+V0zCIcjaCDLupOWuVg7dI1p4TGiLCL
-         P9eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=+caqaU2jwST9KjN/1/t0QJXzQd9mk2HRl/4WLQkOIpE=;
-        b=L78Xh9GbcUK3K0QLukiIQa9TdnAmcVIXAg46d/ghRXagZxDpHRPKp2ytIpWBy9tNPE
-         KPl2W9TVObLpVkoFvXbcy0p2kw2vQqOBEghfc2VkhbVhTPj2JbfOKoi+0doZmyxRdhc1
-         bMpXhQP0q2eWy9lUIWGInVpdZMwMR/S/O1EmuzVxBmiBr0Qw+XP5YU06jRH9UQ10FqTf
-         pN3xWYf0WFchrcXLgBP/r2EujtYYBGMdMhOG6gnf4gM77nt2VLyGW7sUmPuLolH7hh2y
-         80b78P6djT9FKSVn1gsYs0KvaNtwgcGpi4QYsL2K9N5PWfN+tu/0VLmWpTSe1jZRdbFH
-         NRLQ==
-X-Gm-Message-State: AJIora/lLv+/ZqdwS7CCHhr2Zo8G1Em4+NkabGQ1hu83rcABsx7HGhGj
-	r7qYeApGTGidJRA6tRREQTk=
-X-Google-Smtp-Source: AGRyM1s3wvKu78PUF+WXF3NMQ9GECIokSiccqeMC9d7E21f6skakUIT71qtz1xi8mB6rHtSMVnrRVw==
-X-Received: by 2002:a05:6a00:240a:b0:528:5bbc:aa1b with SMTP id z10-20020a056a00240a00b005285bbcaa1bmr25954547pfh.70.1657200063324;
-        Thu, 07 Jul 2022 06:21:03 -0700 (PDT)
-Received: from logan-ThinkPad-T14-Gen-1 ([117.253.178.206])
-        by smtp.gmail.com with ESMTPSA id bk21-20020aa78315000000b005254e44b748sm26633625pfb.84.2022.07.07.06.20.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 Jul 2022 06:21:02 -0700 (PDT)
-From: Logananth Sundararaj <logananth13.hcl@gmail.com>
-X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
-Date: Thu, 7 Jul 2022 18:50:54 +0530
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org
-Cc: garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
-	patrick@stwcx.xyz, velumanit@hcl.com
-Subject: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
+	by smtp.kernel.org (Postfix) with ESMTPS id E73A9C3411E;
+	Thu,  7 Jul 2022 13:34:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E73A9C3411E
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f173.google.com ([209.85.219.173]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MBDva-1oIm6y3TeY-00ClDS; Thu, 07 Jul 2022 15:34:07 +0200
+Received: by mail-yb1-f173.google.com with SMTP id g4so32536490ybg.9;
+        Thu, 07 Jul 2022 06:34:06 -0700 (PDT)
+X-Gm-Message-State: AJIora8JbqfAKRStoW5YSnrBK6xxCQe7m4QUlmJ+QjQ9IaBjCdcsy+f8
+	pN0nHNFYssybqIrEWM37ZJYFf1vNInWLR80tCzg=
+X-Google-Smtp-Source: AGRyM1uVpCRoROO6rAh+vA5ak8N4SGshcVRH0JW9GvyB4UqceUAu6tZ1eCC16Bwe+GMTjR8QSqM1egSeZk3ZR5FMhlQ=
+X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
+ x62-20020a257c41000000b0066d766a4815mr46624953ybc.480.1657200845543; Thu, 07
+ Jul 2022 06:34:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+In-Reply-To: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 7 Jul 2022 15:33:48 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
+Message-ID: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
+Subject: Re: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
  platform that host four OCP server. The BMC in the Yosemite V3.5 platform
  based on AST2600 SoC.
-Message-ID: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+To: Logananth Sundararaj <logananth13.hcl@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	OpenBMC Maillist <openbmc@lists.ozlabs.org>, garnermic@gmail.com, thangavel.k@hcl.com, 
+	naveen.mosess@hcl.com, patrick@stwcx.xyz, velumanit@hcl.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:HQ3iWQe663O2T+7tUxh2rarX0DT2BNwWOSgU3QcELxLTeJyQrGb
+ j7xqsetvIx27wzF3f6gg6UI+jG9rM7S0q8ro/BpSUdh3DiS1vFCIrHyRR1qhw8N7XH3uhIM
+ yQWFOUm8Gfbo41jYPNCkl4k+/k1P24/c54mC9X+k6qCbFlEX737BMftFAlE3AdzM7s0ZKz1
+ GDcejkpd7ktXFkTMe+aSw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9pWTvk6EVEs=:63B5w3lDweuFz1n2WgyEvI
+ 93VgOHmqJPpw4PdkWuvJjLryApwo6mp9fBjcHqQSdTZZqfBY8bbmCvM/2x/jI+VASD1EV7WIq
+ PKUiU5MQIlxhb75hWXxYlKyqAvgfkHwcSkscZdnqmef6Q3JN5DtMCY2ViTypkNXDWnSTk/99f
+ g8Mj5gYvBgz0mVkj8bLDj+VhIDNv6s0w5fG5uc3yGmi8mDDG8GmB3xWlvrE6+xZd9S/V1UdCi
+ 8NoXfLKV6KDMUT+xftcchzusDx7Qp7Ggu98pyrMcM0LKkCcFAw8G9A7P9P29bTjRpcnLav3bR
+ vbywvKE8IBvsFP3PtyYMRDuORVdUFQwgJUDiVWjswrGviQW6Sw1emI56ReZR+d7ecvg1kTsWd
+ jAiz6+anaLAhwvl49dRt6X5CUVTLIPP/AKxbHSKfHR1DT95cwEXPw7iz1Nax+7s8PxApdkw6x
+ a7fdnP+B9Lql0i+hGZzy6T8LVwzlABHKwKWHyAktKDRPrm9Hf43DQoqvAXS7kHoMSknbQSSpP
+ fl81f2q9mKEemn6yRmPeE6mXlem1F9YHrJLs3+FRRKckCgvjUh2SitQMGBs9TiaFU2j8WHBIM
+ COeYU1NNkhpCVuqON94GV6tZeRSTFoVVDBUn0hSwc406gjeIfIl/JN246EyTUqdEvtc9PiG8A
+ m/g8ZP9MB4RTmXEA22H8ouZYUjzxHJRKD7sqHzZBv0CYtUD8UcbZRg5Gdy5yLp4S5HfNxXtuQ
+ il6NoU5Ydq3J9vhJdVAsTk9J3BNOnsCCU2rCFLunIpwpjk/k4rPujvxag63DPpVBIGZYEXDAM
+ VElrYEhxjBbqCmqpt5WAWzkKiZhrAqVGF5Z7+/vtUClIEIg/+i/4oPdjYar3hd7PPMKxgukOP
+ rr1Rtj0zJtZhl6FivalKhjlaFvg1fc+t62sRS8uQs=
 
-This patch adds linux device tree entry related to
-Yosemite V3.5 specific devices connected to BMC SoC.
+On Thu, Jul 7, 2022 at 3:20 PM Logananth Sundararaj
+<logananth13.hcl@gmail.com> wrote:
+>
+> This patch adds linux device tree entry related to
+> Yosemite V3.5 specific devices connected to BMC SoC.
+>
+> Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
 
-Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
 
----
---- v3 - addressed v2 patch comments.
---- v2 - Enabled i2c drivers.
---- v1 - Initial draft.
----
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 266 ++++++++++++++++++
- 2 files changed, 267 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+Something went wrong with the patch description, it looks like you dropped
+the subject and sent the first paragraph as the subject instead.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..58add093e5fb 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
- 	aspeed-bmc-facebook-elbert.dtb \
-+	aspeed-bmc-facebook-fby35.dtb \
- 	aspeed-bmc-facebook-fuji.dtb \
- 	aspeed-bmc-facebook-galaxy100.dtb \
- 	aspeed-bmc-facebook-minipack.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-new file mode 100644
-index 000000000000..32262cf1d9ea
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-@@ -0,0 +1,266 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2020 Facebook Inc.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/i2c/i2c.h>
-+
-+/ {
-+	model = "Facebook fby35";
-+	compatible = "facebook,fby35", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+		bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			<&adc1 4>, <&adc1 5>, <&adc1 6>;
-+	};
-+	spi_gpio: spi-gpio {
-+		status = "okay";
-+		compatible = "spi-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
-+		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
-+		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
-+		num-chipselects = <1>;
-+		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
-+
-+		tpmdev@0 {
-+			compatible = "tcg,tpm_tis-spi";
-+			spi-max-frequency = <33000000>;
-+			reg = <0>;
-+		};
-+	};
-+
-+};
-+
-+&mac3 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	no-hw-checksum;
-+	use-ncsi;
-+	mlx,multi-host;
-+	ncsi-ctrl,start-redo-probe;
-+	ncsi-ctrl,no-channel-monitor;
-+	ncsi-package = <1>;
-+	ncsi-channel = <1>;
-+	ncsi-rexmit = <1>;
-+	ncsi-timeout = <2>;
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+	compatible = "snps,dw-apb-uart";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+	aspeed,reset-type = "soc";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+	aspeed,ext-pulse-duration = <256>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.1";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout-128.dtsi"
-+	};
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.0";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&i2c0 {
-+	//Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb0@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c1 {
-+	//Host2 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb1@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c2 {
-+	//Host3 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb2@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c3 {
-+	//Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb3@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	//NIC SENSOR TEMP
-+	status = "okay";
-+	tmp421@1f {
-+		compatible = "ti,tmp421";
-+		reg = <0x1f>;
-+	};
-+};
-+
-+&i2c9 {
-+	// Debug-Card IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb9@30 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+	//FRU EEPROM
-+	eeprom@51 {
-+		compatible = "atmel,24c64";
-+		reg = <0x51>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	//INLET TEMP
-+	tmp75@4e {
-+		compatible = "ti,tmp75";
-+		reg = <0x4e>;
-+	};
-+	//OUTLET TEMP
-+	tmp75@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default>;
-+};
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
--- 
-2.17.1
+> +/ {
+> +       model = "Facebook fby35";
+> +       compatible = "facebook,fby35", "aspeed,ast2600";
+> +
+> +       aliases {
+> +               serial4 = &uart5;
+> +       };
 
+Why not start at serial0 here?
+
+> +       chosen {
+> +               stdout-path = &uart5;
+> +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
+> +       };
+
+The bootargs should really come from the boot loader.
+
+Why do you need the vmalloc=384M? That seems excessive.
+
+> +
+> +       memory@80000000 {
+> +               device_type = "memory";
+> +               reg = <0x80000000 0x80000000>;
+> +       };
+
+The memory location and size is usually also set by the boot loader
+
+        Arnd
