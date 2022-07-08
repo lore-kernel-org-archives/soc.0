@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B7DCC43334
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 18:56:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05E0AC433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 18:56:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 341A1C341C7; Fri,  8 Jul 2022 18:56:22 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id E4DFBC341CD; Fri,  8 Jul 2022 18:56:23 +0000 (UTC)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8BC94C341C6;
-	Fri,  8 Jul 2022 18:56:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8BC94C341C6
+	by smtp.kernel.org (Postfix) with ESMTPS id 09882C341C0;
+	Fri,  8 Jul 2022 18:56:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 09882C341C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id os14so8899951ejb.4;
-        Fri, 08 Jul 2022 11:56:21 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id fd6so27891829edb.5;
+        Fri, 08 Jul 2022 11:56:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Lcigr+7qhzmX48vBaS4O1yAbIqvGgXz8MJ5tWHzkL2w=;
-        b=S7AZl82CjuxiguT8yH+IFQMzWBMKUHi5kkHvoxX5KISdc610SmqyLGqjoS2/XfxHGj
-         6IPc/es5+zy8wMXE4JpF1jgU34lPNqVXEyIN7JcuJZS/PuGO8gA4JgXANbmmTW2dK9jS
-         vXl6gSYcjwPZM4ZEFmHFEjtR6miQheizlB07AvinpaaxTb/MwyZPcDt5C1KGzNC/ve3J
-         CfSVgRe5y1l0kWxh+lG4qe7iFXfDOem8zjgIyxTfoRD3/sIQh5tqjJ7u1/zHg3QI7sBg
-         ZSbnrm597NUddEwm8XW8qNl9bE7kGtgLSm6ESp+NyL76d3dH/xvqIs7kSEjaUrsiX7zq
-         MB3Q==
+        bh=uHrfk7LI7wY2eWl6J0xRT5eHLHw4uNlNuRzQ0IvUbyE=;
+        b=K/+cHWyPKOwWnCgUBDrCKtOfztKwmz6zr5+8qhRQdrDTMTviQUnmXih9VGJzS9O4vp
+         qGzx4Tz93t5CiCqIV+dCviH05TTkNr4QVfYTKCIIMNIE64wLHKLp7/UX/iXNUYZSnq1+
+         NQz0t0ncHT0Z/Cs2Or56Qwd2bGqXb1zOesMMpqrRV5xsNya1aq0oT2iKAL2I/2PAEdl/
+         YbzQvstxbZ/bJ1RIZDMsE1fbVuq7xab3W6mwJJjpqX7O3Zc0T91cNHnqPw+EjOrybWjN
+         eUHmx4YNyVWjYRIM+LsD5eb0VhRKH2rFFUbqsGGYNQeWIo7kA3hvyi3r5fM+M9vTqXOl
+         7qfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Lcigr+7qhzmX48vBaS4O1yAbIqvGgXz8MJ5tWHzkL2w=;
-        b=e0FVQJZzYR2Z2EjeQAM2hvrs2l8TPK1zBVQQRK6GldRe8sQIMvkiECD3UteO2MnvL7
-         PdaXx7u8NYAt285B45X/4Wx5/byHpnePYMzxhwewofObv+CX9NIgPcWCYOnE6tufWAtw
-         7ANWGEPzSkyoYefPKoukzNGUf7o7RRiiYQK8/suSZfDkAvT1EONmBXL/VdZpYZthy+Vy
-         1r20kcMehl32cv1TuxRKw8MVloya5fJCw70+5XiWMVvzYMjGQOaAsySCfwBXk/Z3lFK2
-         bq9WQR/twFqDYSl8KscDlevQcID0h3dJ8oJQaWZEMHUwYNgRqoR+cH+5q1K+ENCocqPz
-         DvqQ==
-X-Gm-Message-State: AJIora/zL7NfcFtDUY30IgeCo94llYJt8XLtsQiCub+8M9w08h/OA/Qk
-	w7k+F8+7IRkwQUjR0vRfsakpHet94po=
-X-Google-Smtp-Source: AGRyM1s8q5iyATcoXfEIULl8Ta0Z7t1epXgBJKL1vldly5xR4qRLy9Wcg+osHSxjBFohwlVXnTYa2g==
-X-Received: by 2002:a17:907:28d4:b0:72b:307d:fb53 with SMTP id en20-20020a17090728d400b0072b307dfb53mr2035803ejc.84.1657306579287;
-        Fri, 08 Jul 2022 11:56:19 -0700 (PDT)
+        bh=uHrfk7LI7wY2eWl6J0xRT5eHLHw4uNlNuRzQ0IvUbyE=;
+        b=Y4SXqULaLmrL5+g0n9mu25TfqE3J6J7xvpK6LxzbTdFixqsYzlhQIt+2FDRVH6opUs
+         lYnwjBdCSGl4KF+SpnymyEpT2EY/j37Hm7NybwIQYo+U0nriIp2LfQrwtZYi3UuVQ/2l
+         GbqvBSAjRpxb50hWDM2HWVGABonfDM0ZzGBTtiziLBR++FU22tAwWYYEo0Ra0QUKduqu
+         pymfpWqB0EbM8k8GQkmSQmVCq6mD53EFXHR90PqaTKYOu19M5kAAmFPP0VuxaMkCh5kW
+         /2RJQvttZ7w1pHapMIYMxsTcHxyz4d5WSx8Q464wnDFiKKrJuGSqyakHHt5lgr18j5eu
+         vZiA==
+X-Gm-Message-State: AJIora/bFbruXxTwsTwFxwf7ebQIVH6mHN2xNIzS0ZK5bXWb5RFFhqXw
+	7lbUF0N/X7OHNG4j/rON+Bhsir16Ad4=
+X-Google-Smtp-Source: AGRyM1sjwLRosHhGfK5wYDGLNPyZvUj6pzH6TVgnH7fYGeh1AN0vwiwCZ8qJyeAB/u6zkz8MM0cfWA==
+X-Received: by 2002:a05:6402:3907:b0:431:6776:64e7 with SMTP id fe7-20020a056402390700b00431677664e7mr6798242edb.0.1657306580905;
+        Fri, 08 Jul 2022 11:56:20 -0700 (PDT)
 Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id k13-20020a170906a38d00b006fed787478asm20782991ejz.92.2022.07.08.11.56.18
+        by smtp.gmail.com with ESMTPSA id v17-20020aa7dbd1000000b0043586bee560sm29912939edt.68.2022.07.08.11.56.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 11:56:18 -0700 (PDT)
+        Fri, 08 Jul 2022 11:56:20 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,9 +57,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/7] memory: tegra: Changes for v5.20-rc1
-Date: Fri,  8 Jul 2022 20:56:05 +0200
-Message-Id: <20220708185608.676474-5-thierry.reding@gmail.com>
+Subject: [GIT PULL 5/7] ARM: tegra: Device tree changes for v5.20-rc1
+Date: Fri,  8 Jul 2022 20:56:06 +0200
+Message-Id: <20220708185608.676474-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220708185608.676474-1-thierry.reding@gmail.com>
 References: <20220708185608.676474-1-thierry.reding@gmail.com>
@@ -75,46 +75,51 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.20-memory
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.20-arm-dt
 
-for you to fetch changes up to 5060237b0ee1b1c70fcd9a8048664905b74ba6a4:
+for you to fetch changes up to 799270e9b8be0846d418ed6c3f61408aef8059a1:
 
-  memory: tegra: Add MGBE memory clients for Tegra234 (2022-07-08 10:29:40 +0200)
+  ARM: tegra: Align gpio-keys node names with dtschema (2022-06-24 18:15:53 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-memory: tegra: Changes for v5.20-rc1
+ARM: tegra: Device tree changes for v5.20-rc1
 
-Add memory client definitions for the Multi-Gigabit Ethernet (MGBE)
-controllers found on Tegra234.
+Two minor fixes to help reduce the noise from the DT validation tooling.
 
 ----------------------------------------------------------------
-Akhil R (1):
-      dt-bindings: Add headers for Tegra234 GPCDMA
+Krzysztof Kozlowski (2):
+      ARM: tegra: Adjust whitespace around '='
+      ARM: tegra: Align gpio-keys node names with dtschema
 
-Sumit Gupta (3):
-      dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB 1.0 binding
-      dt-bindings: arm: tegra: Add NVIDIA Tegra194 AXI2APB binding
-      dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB 2.0 binding
-
-Thierry Reding (5):
-      dt-bindings: power: Add Tegra234 MGBE power domains
-      dt-bindings: Add Tegra234 MGBE clocks and resets
-      dt-bindings: memory: Add Tegra234 MGBE memory clients
-      Merge branch 'for-5.20/dt-bindings' into for-5.20/memory
-      memory: tegra: Add MGBE memory clients for Tegra234
-
- .../arm/tegra/nvidia,tegra194-axi2apb.yaml         |  40 ++++++++
- .../bindings/arm/tegra/nvidia,tegra194-cbb.yaml    |  97 ++++++++++++++++++++
- .../bindings/arm/tegra/nvidia,tegra234-cbb.yaml    |  74 +++++++++++++++
- drivers/memory/tegra/tegra234.c                    |  80 ++++++++++++++++
- include/dt-bindings/clock/tegra234-clock.h         | 101 +++++++++++++++++++++
- include/dt-bindings/memory/tegra234-mc.h           |  21 +++++
- include/dt-bindings/power/tegra234-powergate.h     |   1 +
- include/dt-bindings/reset/tegra234-reset.h         |   9 ++
- 8 files changed, 423 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
- create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
- create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
+ arch/arm/boot/dts/tegra114-asus-tf701t.dts                |  8 ++++----
+ arch/arm/boot/dts/tegra114-dalmore.dts                    |  8 ++++----
+ arch/arm/boot/dts/tegra114-roth.dts                       |  6 +++---
+ arch/arm/boot/dts/tegra114-tn7.dts                        |  6 +++---
+ arch/arm/boot/dts/tegra124-apalis-eval.dts                |  2 +-
+ arch/arm/boot/dts/tegra124-apalis-v1.2-eval.dts           |  2 +-
+ arch/arm/boot/dts/tegra124-jetson-tk1.dts                 |  2 +-
+ arch/arm/boot/dts/tegra124-nyan.dtsi                      |  4 ++--
+ arch/arm/boot/dts/tegra124-venice2.dts                    |  2 +-
+ arch/arm/boot/dts/tegra20-acer-a500-picasso.dts           | 10 +++++-----
+ arch/arm/boot/dts/tegra20-asus-tf101.dts                  | 10 +++++-----
+ arch/arm/boot/dts/tegra20-colibri-eval-v3.dts             |  2 +-
+ arch/arm/boot/dts/tegra20-colibri-iris.dts                |  2 +-
+ arch/arm/boot/dts/tegra20-harmony.dts                     |  2 +-
+ arch/arm/boot/dts/tegra20-paz00.dts                       |  2 +-
+ arch/arm/boot/dts/tegra20-seaboard.dts                    |  4 ++--
+ arch/arm/boot/dts/tegra20-trimslice.dts                   |  2 +-
+ arch/arm/boot/dts/tegra20-ventana.dts                     |  2 +-
+ arch/arm/boot/dts/tegra30-apalis-eval.dts                 |  2 +-
+ arch/arm/boot/dts/tegra30-apalis-v1.1-eval.dts            |  2 +-
+ arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi | 14 +++++++-------
+ arch/arm/boot/dts/tegra30-asus-nexus7-tilapia.dtsi        |  2 +-
+ arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi    | 10 +++++-----
+ arch/arm/boot/dts/tegra30-cardhu.dtsi                     |  6 +++---
+ arch/arm/boot/dts/tegra30-colibri-eval-v3.dts             |  2 +-
+ arch/arm/boot/dts/tegra30-colibri.dtsi                    |  6 +++---
+ arch/arm/boot/dts/tegra30-ouya.dts                        |  2 +-
+ arch/arm/boot/dts/tegra30-pegatron-chagall.dts            | 10 +++++-----
+ 28 files changed, 66 insertions(+), 66 deletions(-)
