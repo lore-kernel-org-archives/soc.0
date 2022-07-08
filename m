@@ -4,58 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA41BC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C62EBCCA47B
 	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 07:50:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8FB38C341CD; Fri,  8 Jul 2022 07:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 76C6DC341CA
-	for <soc@kernel.org>; Fri,  8 Jul 2022 07:50:13 +0000 (UTC)
+	id 9884FC341C8; Fri,  8 Jul 2022 07:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 80259C341CB;
+	Fri,  8 Jul 2022 07:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1657266613;
-	bh=RjfbGrODXwnAFEJdMZuQvCyUN5iGKrSmuvBDgvd73jU=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=SkMcJ/WJbu7gEEcqwzcGPA2yfc+eDUrpWJfiq3XcUtEEzfj/4LwymJ8OPLeF11XwM
-	 zWdoVTplR7iqP3heB0dkmXnSK5wq9qwP3UZvTUJFOzm5UK1MBgsmzvX8K8nxodh1Uf
-	 seiggPsT9cyEA+684LsknmTYhPRe7nNKjNUV0uQGWWYAWKWZ4DX8h2IGY8O9E3f5QU
-	 1bISDljKfJCttURw2O47zKgOGlrbVoxOs0N65dxoF27nCg/O1686yItFxZTkoAv+/a
-	 7BcYZ+tQhTJoqjf3nURu15aAM8R59DIxe+vG4d4XVnjphE5Xcab05YWodR3cd1RLAZ
-	 I37Fk+d64gvOg==
+	bh=Qk+4cEkW5oIi6n+JIn2dUVfS5SX8QXmwmPpEH67wfCI=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=P89utB9Jp1HQTn8LEqgLYcSQtfJq4AXs3qcfSbzzFnmQReKLterRsrwOGgF+I6CsP
+	 WdZjUZJ7sCyUo9X6H2O2aOWx1FBmvUmmP7bf9ENSpU3g5KGpdTxL4BTyf86dseFeGT
+	 7t//kTeTmXbNE60NBBMx/zijb8uRuhKGKVRaEQDSI3QZmy+IjoBvcYrxN9LcItFPsx
+	 1shmqPNjve8l/IgN0BTAqXv2yM89WOWE6/c7djiZD56cH+4ib97fqApY6pN23A7IHW
+	 /nJwQlKoUmPxf/uft7bs/AH8OWqXU8I5TmfQ5nors6+/dmXEyKqWznTFYdpimbiL2R
+	 oaUv+7NYhyFTA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4AA44E45BDA;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5C391E45BDB;
 	Fri,  8 Jul 2022 07:50:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Reset controller fixes for v5.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165726661324.10888.16748062846121412723.git-patchwork-summary@kernel.org>
+ <165726661337.10888.16108308275291665597.git-patchwork-notify@kernel.org>
 Date: Fri, 08 Jul 2022 07:50:13 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20220707101344.3329314-1-p.zabel@pengutronix.de>
+In-Reply-To: <20220707101344.3329314-1-p.zabel@pengutronix.de>
+To: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [RESEND#2,v4] MAINTAINERS: add polarfire rng, pci and clock drivers
-  Submitter: Conor Dooley <conor.dooley@microchip.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657451
-  Lore link: https://lore.kernel.org/r/20220707142041.4096246-1-conor.dooley@microchip.com
+On Thu,  7 Jul 2022 12:13:44 +0200 you wrote:
+> Dear arm-soc maintainers,
+> 
+> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+> 
+>   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Patch: [GIT,PULL] Reset controller fixes for v5.19
-  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657354
-  Lore link: https://lore.kernel.org/r/20220707101344.3329314-1-p.zabel@pengutronix.de
+Here is the summary with links:
+  - [GIT,PULL] Reset controller fixes for v5.19
+    https://git.kernel.org/soc/soc/c/a902fa8eccaf
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
