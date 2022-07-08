@@ -4,37 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10499C433EF
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 16:45:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD0B7C433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 16:58:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ECCE7C341C6; Fri,  8 Jul 2022 16:45:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C18C4C341C0;
-	Fri,  8 Jul 2022 16:45:53 +0000 (UTC)
+	id 72632C341C8; Fri,  8 Jul 2022 16:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DE6C341C0;
+	Fri,  8 Jul 2022 16:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657298755;
-	bh=Nxh/HJOIUK9VB1rO0Z3HXHNlnvZT6n4Ybx4iuj48Cdo=;
+	s=k20201202; t=1657299520;
+	bh=NwK/cMvuYLFQX7b9qiBhy4uyusgGZfGDj2CbHD2r7S8=;
 	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=ARj2NYR9waiR2/JBkOQyvS4ET7B+7mGulnqeF2VOG4Ugq1QHP9HTFcx0qofFPI9Nz
-	 ZTVIdEBuk8yZQEw24E1S93DZxI7d53xFmYy/MI5EAqHrZnez5WojFTena1tz7sfTjl
-	 oUz/O4ujzvbdvaphLMBCKD+G9cGHNBL1+rMGyVnxX3PlS91kts14h3Vwl5ET3rV8x3
-	 yI709PGqkS5C9mXoEyg+n81s2E2FAUQiLpyGvzDBi6LiTuA5Xt676uydix20Zhs6CV
-	 pVQdl47YZmQb1mpc1vcEGFZ6hG9YW+bfAcd1frkY9bRDudLPor3PRcfZX1WcgW/Xq8
-	 rDarvGXFDop8Q==
-Date: Fri, 8 Jul 2022 18:45:50 +0200
+	b=Gw7/rrj9P9gUq9cnWmPEW0JLJYwF5ezdWsPAu5MDCUKjB7m7IW/fJj59x5R1Mgg0e
+	 /qBhutHgYZGm+ZXCKqU03yEa4m7TQYpY2cxZtBF5ZLIMwZ9u8LaJ4dty+NpAtrOWSY
+	 yF8SnyJ46XEAlYP8KVqoFtjBZinPpUhzXDfT+/lDVx8opC8dIyoczLM+FXMS88YeLE
+	 M9F1GRrWPq8MNQROpLwjfI7Or0U4ObNslMpd6S1fDz5s1GsYbTiFYaZ1OteWOpL9lj
+	 Lefiqs/WoAVvel3NUAmhSgAIsQ+tUxDhJbW3q4M32soYSJlTzwsyyXj5SCaqT/rMFA
+	 /cQ4aDzeDLRtA==
+Date: Fri, 8 Jul 2022 18:58:36 +0200
 From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org, soc@kernel.org
 Cc: wens@csie.org, samuel@sholland.org,
 	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [GIT PULL] Allwinner drivers changes for 5.20
-Message-ID: <YshfPux1c2x9S7Fi@kista.localdomain>
+Subject: [GIT PULL] Allwinner DT fixes for 5.19
+Message-ID: <YshiPKZRq6NHxPzO@kista.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi!
 
-Please pull following drivers changes for 5.20.
+Please pull following DT binding fix for 5.19.
 
 Best regards,
 Jernej
@@ -45,18 +45,18 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-drivers-for-5.20-1
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-fixes-for-5.19-1
 
-for you to fetch changes up to db1bfbd60e325abddc824c49b2fd45a39a10b2f5:
+for you to fetch changes up to 79471f29ec4870bc02b4fea844e86669a8a4f2a5:
 
-  soc: sunxi: mbus: Only build the driver on ARM/ARM64 (2022-07-05 22:05:59 +0200)
+  dt-bindings: display: sun4i: Fix D1 pipeline count (2022-07-04 22:41:26 +0200)
 
 ----------------------------------------------------------------
-- build mbus driver only for ARM/ARM64
+- fix binding for D1 display pipeline
 
 ----------------------------------------------------------------
 Samuel Holland (1):
-      soc: sunxi: mbus: Only build the driver on ARM/ARM64
+      dt-bindings: display: sun4i: Fix D1 pipeline count
 
- drivers/soc/sunxi/Kconfig | 1 +
+ .../devicetree/bindings/display/allwinner,sun4i-a10-display-engine.yaml  | 1 +
  1 file changed, 1 insertion(+)
