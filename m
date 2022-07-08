@@ -4,76 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09C7BCCA47F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A5ECCA481
 	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E6526C341CB; Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CCD15C341CA
-	for <soc@kernel.org>; Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
+	id 1A18CC341D4; Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 03A37C341D0;
+	Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657266614;
-	bh=wBq8OpYaIfhJGc8rwQwZvAoRQ27k+lKphi2JyO2jCII=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=aC1VnZKW5/V8Nl9QdOHJQFkIWpmcpGIhlrEbk0IrtMbwqtw8S23t1Cz9vvfcHYdt0
-	 Uf78tNK0fk4yoO0Dc8a893oBwonwfd2EN4FiQhugmseiJPGAmogVuBRTTf7huVCA1E
-	 iAuBoNolHIcXZWu8HIKvKVHIT0QFMu3VC0VV8D20rLxFnwYygfXg+5llV/5PYaZ/me
-	 Gd7wpVj2oGN8+zNWf+C45z87dbJpTvAHGXddrWjZvutQAOHYH0s73+UOzouLCpCqJ4
-	 ZMdvTwpGuUaDSpmlJ0SRGSKPHEYjLKYwid/2+qytl46pUVchuphyOvPtRZZAhg/JKI
-	 +45bizyH+78Tg==
+	s=k20201202; t=1657266615;
+	bh=HwpZWAEWzkbjxIX+keAhPk8Y17Q0+OJgf10LVCD8+lY=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Q+N8d/C81F9EOIFPv4zzLjIE0G0RWiw04BFb+oHbIraTTLBXtj15dUtBYl60SBUi1
+	 HsM5sy2K8pjjlXTo/tW0wTldH0buQxzIkHIpynxE64dVYOZiS676kPgw2A+/Uldu5C
+	 7l0d4KzNY7ljE05hKJK6ET/0g/5pi6mXHyRT67MV0JHwpRGo6hC0F2sOnekrK/0xQB
+	 Fq7VljwkPwT38cYsM8MbAqfdngM/c0Dbvn+fRtB17pyDPQf+NCHYb2BqG7lew2yfIq
+	 EOIeVL8oLv+t+0whKtwB/95Vjlm3Dy6jDYsVrwmbkpl0jYUD/mYzVKrxzpR8lD9Dec
+	 e0gfw91Ac/gMg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4CD7E45BDB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0E87E45BDB;
 	Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] ARM: soc: Zynq SoC changes for v5.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165726661473.10888.4353124721902763282.git-patchwork-summary@kernel.org>
+ <165726661491.10888.11133003624007208308.git-patchwork-notify@kernel.org>
 Date: Fri, 08 Jul 2022 07:50:14 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <e1d0a721-afa4-93a0-7119-0e4481a0624b@monstr.eu>
+In-Reply-To: <e1d0a721-afa4-93a0-7119-0e4481a0624b@monstr.eu>
+To: Michal Simek <monstr@monstr.eu>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] arm64: soc: ZynqMP SoC changes for v5.20
-  Submitter: Michal Simek <monstr@monstr.eu>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657444
-  Lore link: https://lore.kernel.org/r/0196d1f3-e9c7-ef51-143d-e98b14980f63@monstr.eu
+On Thu, 7 Jul 2022 16:16:39 +0200 you wrote:
+> Hi,
+> 
+> please pull the following fix to your tree.
+> 
+> Thanks,
+> Michal
+> 
+> [...]
 
-Patch: [GIT,PULL] Reset controller fixes for v5.19
-  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657354
-  Lore link: https://lore.kernel.org/r/20220707101344.3329314-1-p.zabel@pengutronix.de
+Here is the summary with links:
+  - [GIT,PULL] ARM: soc: Zynq SoC changes for v5.20
+    https://git.kernel.org/soc/soc/c/a2668c1500e3
 
-Patch: [GIT,PULL] ARM: dts: Zynq DT changes for v5.20
-  Submitter: Michal Simek <monstr@monstr.eu>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657450
-  Lore link: https://lore.kernel.org/r/87d2bd4a-b90d-6396-17c5-c95ac64d17d0@monstr.eu
-
-Patch: [GIT,PULL] arm64: dts: ZynqMP DT changes for v5.20
-  Submitter: Michal Simek <monstr@monstr.eu>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657458
-  Lore link: https://lore.kernel.org/r/452e8c68-b63b-f4f6-a937-67f65c64a8a0@monstr.eu
-
-Patch: [GIT,PULL] ARM: soc: Zynq SoC changes for v5.20
-  Submitter: Michal Simek <monstr@monstr.eu>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=657447
-  Lore link: https://lore.kernel.org/r/e1d0a721-afa4-93a0-7119-0e4481a0624b@monstr.eu
-
-
-Total patches: 5
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
