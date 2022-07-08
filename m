@@ -1,126 +1,70 @@
-Return-Path: <SRS0=7UwO=XM=monstr.eu=monstr@kernel.org>
+Return-Path: <SRS0=fEdA=XN=gwoccmed.com=ayv.mor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A2AFC43334
-	for <soc@archiver.kernel.org>; Thu,  7 Jul 2022 14:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13531C433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 01:28:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B3A09C341C8; Thu,  7 Jul 2022 14:30:21 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id BD8D9C341C0; Fri,  8 Jul 2022 01:28:41 +0000 (UTC)
+Received: from egonorta.gwoccmed.com (egonorta.gwoccmed.com [45.130.138.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 06AC9C3411E
-	for <soc@kernel.org>; Thu,  7 Jul 2022 14:30:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06AC9C3411E
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-ej1-f50.google.com with SMTP id u15so8321669ejx.9
-        for <soc@kernel.org>; Thu, 07 Jul 2022 07:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=YozCDGheS6rcl72wsPSf5Zvk7xN97uSc4RBWmFtaB5g=;
-        b=lm4lVfiHISR2Lr6nWJLGvCwR8zbJrI0JYfbNjp8vSGM+3AzGTFKXnM9hXvMUdYtWqf
-         TOxt0JKck0LD3W7/2q7KcsXqI0GH5M5nKq1B0qwsLlYA+XZB1Jp4SkZb3C/JDTeTBS6j
-         XCgiitSf+iFacCb3AtYQ3aifFFkGg6U4YJ/lNSULrozy4tjh8CBswGLsKUgXmJNUCpAl
-         j/zgFk6elVbaXqWvIVTbtjwqzUjZ/YXm++X/KA4DCFzSHAuCSstrmhMk2IXVplUShQFK
-         6yAoT3/6shkuaOrHjqhaYgjqVNj2E/WuEBDxHf9t4V8zGx7uLmndWkCpfAF5/gn70huR
-         0PGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=YozCDGheS6rcl72wsPSf5Zvk7xN97uSc4RBWmFtaB5g=;
-        b=G5qpZh+WWzhHdPFsSU5VrKnMDHanPSbNBfL1aDoFliVZq215XXGIMnG0CfZCMnrEnD
-         7XPTSqDjybEP0t7twPacNmkTYoJvJdPnu/1CmoJvoQZylt3esKKjFnOLHSuJQpHVmijV
-         YWSaMsW9hV/LZlAZbhGmb2GKkWMHbzooWcRNvDLBT3BWRqVJPCpUXjJjsv2n/jyAjceM
-         qI/0+Q2gM9N6s/xMRyCVPhRUNiOOWRn3AaY150TiMdgYAZfD4o2Y/HygEU8ZlcQ1mZ2E
-         Ll696+77vx8k0Vd4ZeAZYlQy1rP4KWkiC/RDw0YZBQoFCmP+gyWRU02CZ5oRvQbIF+h8
-         dVFg==
-X-Gm-Message-State: AJIora+7X0fz4CkSHxHeAHDiKENb+GzZT8bFx59OWEpuyKDKPitro/nG
-	NhSf//VjY2J5t+r/yeecSijPvXyA5j8zjg==
-X-Google-Smtp-Source: AGRyM1sNpDnsafd+ypuYnS2SMsp517va+8mUxRxtunUSVBrol3gjPdBUM0x/xZyXbEH4HZxL/hNWNA==
-X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id g4-20020a1709065d0400b00722f46cb891mr46108806ejt.4.1657204217690;
-        Thu, 07 Jul 2022 07:30:17 -0700 (PDT)
-Received: from ?IPV6:2a02:768:2307:40d6::f9e? ([2a02:768:2307:40d6::f9e])
-        by smtp.gmail.com with ESMTPSA id v5-20020a170906338500b006fed85c1a8fsm18879748eja.202.2022.07.07.07.30.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Jul 2022 07:30:16 -0700 (PDT)
-Message-ID: <452e8c68-b63b-f4f6-a937-67f65c64a8a0@monstr.eu>
-Date: Thu, 7 Jul 2022 16:30:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id B36FFC3411E
+	for <soc@kernel.org>; Fri,  8 Jul 2022 01:28:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B36FFC3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gwoccmed.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gwoccmed.com
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=gwoccmed.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ayv.mor@gwoccmed.com;
+ bh=tHxJhmd5emc+swjEtQwoNO5xmuo=;
+ b=a98Jx68T3GWelZ3JPBdRZrYoHKAPD5znRKNcpc0xWfZgeMFWnfIQyeWiUSZAelJ/vAzefqplPxKz
+   cDjZM8CHiUOFMbvUtYzK9T1NXTvyebbWdOSgbXRdqCEA930YWrxQWmSKrI+BIiaXP8wNpjeK9A/I
+   fG2AFrgwZcSOX7bkD+pr5arsgOGBbXKNOGxlA5rqeG6eoogtnGQ0Z66VOpv/6qKWDceOarYwIKjZ
+   NvIPH+ukvMexQdUIP0R7BbKYBesTDI2npT1Ws3Sv+lLo1EhZQ0Rsy3P0L+M0YHnflH857dPMp1j6
+   k/QqmG4JiP+JORkOVaJQV65fdYnkElsus6hftw==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=gwoccmed.com;
+ b=XsiogZEbVgKbQ5mXr+ws89LJtmKlMD9aaqof1C8OENnpNSS1B+ovpp4QL5LbdwhdJDDcUBY3AM37
+   OWJ6zAF53IDY6wuU50N+VwQzTwrg1WdOB8PeFiDyPRd1nvM6RJwQh6zv/zkBXUv88AIT729TLg3d
+   i0vBK4MUcRmOCHQ3xowcHgy+jF4yhmaQdQHob8ZxYl/KM0nfgnNN6o8vJyMBZVdqwh1zBKIXU/R3
+   vT41AX3eR3xHT9uBZckcifyHgd0/rR3nJjCkND5pUdmNT80TI851kkFYnsKy+k2qgYjvs7zQQz3X
+   uPOYSYFB8cUXrgpL6W/lWwqU/SVExqZz9kCPzg==;
+Reply-To: mackenziescott@scotts-foundation.org
+From: ayv.mor@gwoccmed.com
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: git <git@xilinx.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-From: Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.20
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: soc@kernel.org
+Subject: CONGRATULATIONS...
+Date: 7 Jul 2022 18:28:37 -0700
+Message-ID: <20220707182836.FCBB2348AF36D650@gwoccmed.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hello,
 
-please pull these DT patches to your tree. The part of pull request are also 3 
-patches which targets zynq gpio DT binding. All of them are reviewed by Linus or 
-Rob or both.
+I'm Mackenzie Scott, Ex-wife to Jeff Bezos (Amazon Founder and=20
+CEO). I'm donating $4 billion to charities, churches,=20
+individuals, colleges and businesses across the globe from The=20
+Scott's Foundation to provide immediate support to people and=20
+businesses suffering economically from the impact of COVID-19=20
+pandemic, the current inflation and the ongoing war in Ukraine.=20
+Your email emerged as one of the lucky winners after an=20
+electronically conducted ballot process.
 
-Thanks,
-Michal
+I have a donation grant worth $8,500,000.00 Dollars for you. You=20
+are to contact Mr. BRADLEY WRUBEL for more information if you're
+interested.
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+MR. BRADLEY WRUBEL
+bradleywrubel@scotts-foundation.org
 
-   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+Congratulations.
 
-are available in the Git repository at:
-
-   https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-v5.20
-
-for you to fetch changes up to 228e8a88b1915a2b467c83d8d0976605f1272fae:
-
-   arm64: dts: xilinx: align gpio-key node names with dtschema (2022-06-23 
-10:11:19 +0200)
-
-----------------------------------------------------------------
-arm64: dts: ZynqMP DT changes for v5.20
-
-- Extend gpio-zynq DT binding (compatible, power-domains, gpio-line-names)
-- Fix sm-k26 gpio comment
-- Wire AMS device
-- Align gpio-keys node names with dtschema
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-       arm64: dts: xilinx: align gpio-key node names with dtschema
-
-Michal Simek (4):
-       dt-bindings: gpio: zynq: Add missing compatible strings
-       dt-bindings: gpio: zynq: Add power-domains
-       arm64: zynqmp: Fix comment about number of gpio line names
-       dt-bindings: gpio: zynq: Describe gpio-line-names
-
-Robert Hancock (1):
-       arm64: dts: zynqmp: add AMS driver to device tree
-
-  Documentation/devicetree/bindings/gpio/gpio-zynq.yaml | 59 +++++++++++++++++++-
-  arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi        |  4 ++
-  arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts     |  4 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts     |  2 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts     |  2 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts     |  2 +-
-  arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts     |  2 +-
-  arch/arm64/boot/dts/xilinx/zynqmp.dtsi                | 26 +++++++++
-  8 files changed, 94 insertions(+), 7 deletions(-)
-
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
-
+Yours Sincerely
+Mackenzie Scott
+The Scott Foundation
+P.O. Box 1513
+Los Gatos, CA 95031-1513
+USA.
