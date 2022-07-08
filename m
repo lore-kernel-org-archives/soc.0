@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C69C433EF
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 20:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD05C433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 21:00:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D92D2C341C6; Fri,  8 Jul 2022 20:59:13 +0000 (UTC)
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	id 10FB8C341C6; Fri,  8 Jul 2022 21:00:51 +0000 (UTC)
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F2EFFC341C0;
-	Fri,  8 Jul 2022 20:59:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2EFFC341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 5E6E7C341C0;
+	Fri,  8 Jul 2022 21:00:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E6E7C341C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id bf13so10248878pgb.11;
-        Fri, 08 Jul 2022 13:59:12 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id s206so23318696pgs.3;
+        Fri, 08 Jul 2022 14:00:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e/3oKcB1HpOXBSEaR0skiGfARHg3dQFArZCpwpkcA1o=;
-        b=ERGg5YFQ6YWxFIGrUYJsMwmHWFy1ey5WdE8zNzL32fZaHt9sxRGywgvrxIUPbph//n
-         lJVAVXfusGN7QiNz1dmzfxM1X9co3ET6Qf/utP087Hw2hvgCj4VzTvX7qtfQKMv7CGMy
-         7GivN7D2G9ywC2/zlGQdf1ro9iDRK1BQYIC4ROgXUHVfBR+OhfcQOUSH/d8uzZh+sMIF
-         3c0tOy0zHiRVeUKA7itNkPk510oNjr+86sEuDA96KXBRulGtu3NH+Dm4jz4kS48Hp62V
-         eRBVaX1dDixzlrpBcvqzehzvYGkejDsB8VPP5df1aCei/GvS6lAXpt2yRoQVj5ujmb/l
-         C0BA==
+        bh=eiJSmomcbHamte6wVYKlfnPmeVECX+cd/OIOwALCfbs=;
+        b=Y7JXD9tKxLp/rIH8LwnmsaWTmblzBxuRwjNJQU9DzsYTLZXwkE9MkgSDH+BC66EzrE
+         92CJRClPfy1c0dgMzisTNKV3g1wf/wCzQ7rmtQE2es+Nxg1OiU9D9rOkeUulCL8qSe84
+         DE9AzAHPjmNc7jAjK94mUht/3RQMOI/vGe9/stlA3pFsDArGxByAo8FwYt59wRtSdTqe
+         B/oYaoQtHfgz01k3bd8QKmyhd3yFAAnEEK0QQPg5+TL7AP53RHCCa8OvzAqbybR7pnFK
+         OQ3KlVLIzRDRREDZ01js7iwI/yrThtOxacRJkw6N9meMRMB7WeRpNQ/wkK1KmkePaD3L
+         iNPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e/3oKcB1HpOXBSEaR0skiGfARHg3dQFArZCpwpkcA1o=;
-        b=VyMaeLvaRfTQxosFgC0fQSnoq+EGjRO05YFUuW/2fj4v8P3fgJRqmpg7jsUg+ev+Z1
-         k6erUKR5L+sSuB6dxN5H4eD7mxBmc4tO2MXOLg6162ll030Keb1CNdBcf4MU3ePHnsYQ
-         X09giw87D4R4L4FvsUXPIMsLoDKBCCTPaSpU5sf8P6ZgqpZeVcOfTub+DdCauJxNRpdS
-         +5PrFP4JabzpZKU1W6zzHsmxeCJxOoQhBAV1JCKuUax9KH2zskcz67rt8BR8H6Pk2Qx7
-         7zEo4tdX56SRjFp4I4Zo8jvxQzSnIQ1uV1bJWGfKmd7k9vYtbyZtGTJvE6RcAKhXGn00
-         dSyg==
-X-Gm-Message-State: AJIora+mbd9e7BCI/zU05CP7LZTDrlAZiBvTTGMdU8IEyjy+x09IXKUw
-	v4XNHNrEdzDHuOBAtPDqbtk=
-X-Google-Smtp-Source: AGRyM1vLMjkdzPTs/IQ94lre7gNFopfB20P52k7OoZki89NasntfkzDs7TGQa9TfGfekErL80gh5Tg==
-X-Received: by 2002:a05:6a00:c84:b0:528:a24f:60f3 with SMTP id a4-20020a056a000c8400b00528a24f60f3mr5830333pfv.66.1657313952513;
-        Fri, 08 Jul 2022 13:59:12 -0700 (PDT)
+        bh=eiJSmomcbHamte6wVYKlfnPmeVECX+cd/OIOwALCfbs=;
+        b=f2vPdCBGIKGW4ZUVN4Dx/3zhYhC2vyOXSVsTR8qt8gBXZ6/Nb/TV1kp60PcvBo+sXS
+         UZmf4mIJei7iBwpKlONsdiDGhMVRujMu6iplOw+k3P6dhmgYp01zfpjgyKojUabwxkpZ
+         UVoU64AJwxgTbJuxgsA7be+cda7Pz3nFs+9yv8JOQF3K45dIdrY53DFe4E70bUhz/jEh
+         uYzG0R9TJi374bEXyrFZFOwMQqxn2ifXoLKg2utNLpQPcVRGsNQ7gD5oNBvHJE9G9kKm
+         hoAe6bVaazgILmpQnFDsxWLqy8ZLWMCit/9QfcdNpkC56J9aoFIjptrkKqYp3tGYZzaf
+         A0Hg==
+X-Gm-Message-State: AJIora+6W4zWZICU4vBBOlqyDwMlWKx88fgxPtTgN5fxNdKjs/prPTO6
+	1Rssb+ZfJesR5TNLKZkx9x8=
+X-Google-Smtp-Source: AGRyM1sDEsLmN38LuJJdCcccO2oNjMj/Z40bKcO+y3pr98pU2dKeP6r07wU+lEsPu7l1hAqbvzljmw==
+X-Received: by 2002:a63:258:0:b0:40d:3156:6d61 with SMTP id 85-20020a630258000000b0040d31566d61mr4903970pgc.190.1657314049823;
+        Fri, 08 Jul 2022 14:00:49 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v1-20020a17090a0e0100b001eafa265869sm2043201pje.56.2022.07.08.13.59.11
+        by smtp.gmail.com with ESMTPSA id h23-20020a632117000000b0041245ccb6b1sm9576927pgh.62.2022.07.08.14.00.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 13:59:12 -0700 (PDT)
+        Fri, 08 Jul 2022 14:00:49 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 To: bcm-kernel-feedback-list@broadcom.com,
 	William Zhang <william.zhang@broadcom.com>,
@@ -65,18 +65,17 @@ Cc: joel.peshkin@broadcom.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	soc@kernel.org
-Subject: Re: [PATCH v2 2/8] ARM: dts: Move BCM963138DVT board dts to ARCH_BCMBCA
-Date: Fri,  8 Jul 2022 13:59:10 -0700
-Message-Id: <20220708205910.2422527-1-f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 4/8] ARM: dts: Add BCM63138 generic board dts
+Date: Fri,  8 Jul 2022 14:00:47 -0700
+Message-Id: <20220708210047.2477279-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707070037.261532-3-william.zhang@broadcom.com>
-References: <20220707070037.261532-1-william.zhang@broadcom.com> <20220707070037.261532-3-william.zhang@broadcom.com>
+In-Reply-To: <20220707070037.261532-5-william.zhang@broadcom.com>
+References: <20220707070037.261532-1-william.zhang@broadcom.com> <20220707070037.261532-5-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Thu,  7 Jul 2022 00:00:32 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Use CONFIG_ARCH_BCMBCA to build all the BCMBCA SoC dts and remove
-> CONFIG_ARCH_BCM_63XX from the makefile
+On Thu,  7 Jul 2022 00:00:34 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> Add generic bcm963138.dts file.
 > 
 > Signed-off-by: William Zhang <william.zhang@broadcom.com>
 > ---
