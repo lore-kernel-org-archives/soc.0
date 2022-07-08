@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83AB1C433EF
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 18:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE929CCA47B
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 18:56:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 66947C341C7; Fri,  8 Jul 2022 18:56:19 +0000 (UTC)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	id 95AA7C341CB; Fri,  8 Jul 2022 18:56:20 +0000 (UTC)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B8E03C341C0;
-	Fri,  8 Jul 2022 18:56:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8E03C341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id D6ACAC341CD;
+	Fri,  8 Jul 2022 18:56:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6ACAC341CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id l23so7335478ejr.5;
-        Fri, 08 Jul 2022 11:56:18 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id x10so20546383edd.13;
+        Fri, 08 Jul 2022 11:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=r0JEUoJ9sLpu19V7f0ElwVX49+IBRyb0Lpv1dEzhHh8=;
-        b=VmpweFDi+OafWV5aWSH9HtVEJYnuHfM44Efd6dSa2MkVwF4y+n7N0IsJkcu9M1Pc5y
-         4nUvQ1dQ7aOijk6OX9eH78VewXu32I0X6bBZexP9WAWBt88Irzc0APifYxzs9wjvmV3Y
-         P7BqO4ryIz1+S1yi42h/4G2/6J3455sxN9SuuByZAKMLz9W8cY+8GGuznIOiJ+M5Zj7v
-         3vMEZYb1cnENSXKVSuzcVwpAyrug9eNwl5wi2qKIRwitFJ8e5PCAR5APDWN9AKzzoxeS
-         TuHFEazUvj+Ueio/NFo421CLTv9oK8WZa/Bp7LYf6k5buGQp5FlQMuzlVGTZ/i47q6Nb
-         LLwQ==
+        bh=dGzh3xxv9eIKKsR5DrTrjHmPQwa7yROT9Jik8yh6Oio=;
+        b=ltNzYg2lnwhqnpCr4W8Lq4YNpjtmVBforOx6ZlZiMMmbKbftsdt6IBPVeyGymggBcH
+         Phfkt/sURuhOPKAQcH1agBHdJ/QLfL5FjNgQLTkj3rTo46dwF/tuDKikqh3y9iGgmOH+
+         IafqKcnq6aPvFVlkGBWgwniGls7b3a9KNquOv1X23K33gQiLzGV6IQBRxGEWjvbqk8Wb
+         It7FEid1Kh3w1cOHdaE+adyo9VRURcqmYxOOY/IglTSk7oAqKljVKpaaHDEZ9eSmc7ON
+         mRxp6VlULkNOW2NQZf+v0xvBle0jKXeptTfw8xt19RDqy/hzyiRMX3yrrbjcz8XzSgBI
+         fE/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=r0JEUoJ9sLpu19V7f0ElwVX49+IBRyb0Lpv1dEzhHh8=;
-        b=JqRvlwVc+rShyJlploRNNTYI405oeqttkoBH+ZHiW2Fpn7lyOJvrtvzVJTkPWY1Mgj
-         51HG+w9AbAvMeDOz6/prMBJWHehkUVn+bcCpMANR9qX3yUkbiVHuFdg165ZTWFsgk1Fx
-         JVnjfcO2KiC93S5B+xhjoIUyuRgD87UqGzgqdfcQk81+gBo2qIj95l4hzX2ILRTrm9t7
-         EbjlyftfAkPL5rTjIP3fwcdfZhMlcHOQ5pT1ddq2uYq8RmcWF+KDBX533EOKpBkk403m
-         WZiqcFtGSgV4Ze8vCQBC5w1B1fbVeVEKpeZ2QXq3kGRZLLMfVlirSQ1tOt5H6Amf2SGv
-         rD9g==
-X-Gm-Message-State: AJIora8AfAWbiluzHEAUc2Mar1gXI1ytADowL8UkrSrfLNZzKlvIoj78
-	x3d5wPLFB9IOEDhJ4ZLtImTHcVKLPQA=
-X-Google-Smtp-Source: AGRyM1uRj3lk2FdQ9Ud+l7xbThhBTVjVsoNCB5hV86Gzx8jafj4F/5EbmBtdiNCWfmXDjd86IW+Ugw==
-X-Received: by 2002:a17:906:99c1:b0:6fe:b01d:134 with SMTP id s1-20020a17090699c100b006feb01d0134mr5093379ejn.598.1657306576430;
-        Fri, 08 Jul 2022 11:56:16 -0700 (PDT)
+        bh=dGzh3xxv9eIKKsR5DrTrjHmPQwa7yROT9Jik8yh6Oio=;
+        b=Qe0dDkxA7TIY8D0rHTfrIH1Jtt+4LxWTORZqBaxl1Cn/cHsyVyc0pk6rzAtJqd6yu/
+         2guGGE8t1yYaGtZcz6lxE1scXyAYKLtVXElTjgxVKZx2sx9nblL2ReBb0xX7p6oWP4Y6
+         cv+I7f37sWc4NyT0FVA2Hw/9rFHI3cTWxdbViyKtsmVVLGZFIMWfRlP8vcn8fbA062Bs
+         CrsWOHkqG8WSWjBWtK1w9YcTjKy3AWjxH7Q8eA05l3OexFAv+DW3Jns5RkRFD4NC6nhg
+         VuW0Ef3OHLiJi8V5BnNsiI2dAL1q5OStAK6c/rhWbR0NCTL2/Sx3IEKJpIEm1o6IEJCl
+         SjFA==
+X-Gm-Message-State: AJIora9/HZe/rI/h95vDBXZvQ2nSE9h0hbyMgCqUIM+hdNpXML7SFP2q
+	KfcPPx/5R+AZsqVo0IH95EQnt92I8HI=
+X-Google-Smtp-Source: AGRyM1uAdivH2IpbsFx1x1So9O4Gex8cwyIsLXicnSZK6fMruqs4t50zDdJGAFbEnyGzAd1qYz/t2Q==
+X-Received: by 2002:aa7:db50:0:b0:43a:6319:e2bc with SMTP id n16-20020aa7db50000000b0043a6319e2bcmr6714193edt.237.1657306577786;
+        Fri, 08 Jul 2022 11:56:17 -0700 (PDT)
 Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906304d00b0072b31123174sm350717ejd.62.2022.07.08.11.56.15
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0072b145124f4sm2268358ejf.155.2022.07.08.11.56.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 11:56:15 -0700 (PDT)
+        Fri, 08 Jul 2022 11:56:17 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -57,9 +57,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/7] firmware: tegra: Changes for v5.20-rc1
-Date: Fri,  8 Jul 2022 20:56:03 +0200
-Message-Id: <20220708185608.676474-3-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/7] dt-bindings: Changes for v5.20-rc1
+Date: Fri,  8 Jul 2022 20:56:04 +0200
+Message-Id: <20220708185608.676474-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220708185608.676474-1-thierry.reding@gmail.com>
 References: <20220708185608.676474-1-thierry.reding@gmail.com>
@@ -75,30 +75,54 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.20-firmware
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.20-dt-bindings
 
-for you to fetch changes up to afcdb8e55c91c6ff0700ab272fd0f74e899ab884:
+for you to fetch changes up to 015a166368d72e3bd22368aa9fc793db953ec9c4:
 
-  firmware: tegra: Fix error check return value of debugfs_create_file() (2022-07-08 17:56:03 +0200)
+  dt-bindings: tegra-ccplex-cluster: Remove status from required properties (2022-07-08 16:50:30 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-firmware: tegra: Changes for v5.20-rc1
+dt-bindings: Changes for v5.20-rc1
 
-Contains a fix that avoids unaligned accesses to IPC memory, which in
-turn helps in suppressing speculative reads from out-of-bounds memory.
-
-Another patch performs some minor cleanup around debugfs API usage.
+These changes add clock, reset, memory client and power domain
+definitions for various devices found on Tegra234 along with a few
+device tree bindings for new hardware.
 
 ----------------------------------------------------------------
-Lv Ruyi (1):
-      firmware: tegra: Fix error check return value of debugfs_create_file()
+Akhil R (1):
+      dt-bindings: Add headers for Tegra234 GPCDMA
 
-Timo Alho (1):
-      firmware: tegra: bpmp: Do only aligned access to IPC memory area
+Kartik (1):
+      dt-bindings: timer: Add Tegra186 & Tegra234 Timer
 
- drivers/firmware/tegra/bpmp-debugfs.c | 10 +++++-----
- drivers/firmware/tegra/bpmp.c         |  6 +++---
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Mikko Perttunen (1):
+      dt-bindings: Add headers for Host1x and VIC on Tegra234
+
+Sumit Gupta (3):
+      dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB 1.0 binding
+      dt-bindings: arm: tegra: Add NVIDIA Tegra194 AXI2APB binding
+      dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB 2.0 binding
+
+Thierry Reding (4):
+      dt-bindings: power: Add Tegra234 MGBE power domains
+      dt-bindings: Add Tegra234 MGBE clocks and resets
+      dt-bindings: memory: Add Tegra234 MGBE memory clients
+      dt-bindings: tegra-ccplex-cluster: Remove status from required properties
+
+ .../arm/tegra/nvidia,tegra-ccplex-cluster.yaml     |   1 -
+ .../arm/tegra/nvidia,tegra194-axi2apb.yaml         |  40 ++++++++
+ .../bindings/arm/tegra/nvidia,tegra194-cbb.yaml    |  97 ++++++++++++++++++
+ .../bindings/arm/tegra/nvidia,tegra234-cbb.yaml    |  74 ++++++++++++++
+ .../bindings/timer/nvidia,tegra186-timer.yaml      | 109 +++++++++++++++++++++
+ include/dt-bindings/clock/tegra234-clock.h         | 105 ++++++++++++++++++++
+ include/dt-bindings/memory/tegra234-mc.h           |  26 +++++
+ include/dt-bindings/power/tegra234-powergate.h     |   2 +
+ include/dt-bindings/reset/tegra234-reset.h         |  10 ++
+ 9 files changed, 463 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra186-timer.yaml
