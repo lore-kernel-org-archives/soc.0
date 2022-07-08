@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 048FBC43334
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 11:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FB8C433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 11:26:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B952EC341D0; Fri,  8 Jul 2022 11:26:53 +0000 (UTC)
+	id B0BE9C341CA; Fri,  8 Jul 2022 11:26:55 +0000 (UTC)
 Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 076F0C341C7
-	for <soc@kernel.org>; Fri,  8 Jul 2022 11:26:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 076F0C341C7
+	by smtp.kernel.org (Postfix) with ESMTPS id 6DD88C341CE
+	for <soc@kernel.org>; Fri,  8 Jul 2022 11:26:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6DD88C341CE
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([84.195.186.194])
 	by albert.telenet-ops.be with bizsmtp
-	id sbSj2700S4C55Sk06bSjTv; Fri, 08 Jul 2022 13:26:43 +0200
+	id sbSk2700W4C55Sk06bSkUW; Fri, 08 Jul 2022 13:26:44 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1o9m8B-002baL-8M; Fri, 08 Jul 2022 13:26:43 +0200
+	id 1o9m8C-002baI-3o; Fri, 08 Jul 2022 13:26:44 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1o9m8A-00BLWK-QD; Fri, 08 Jul 2022 13:26:42 +0200
+	id 1o9m8A-00BLW6-Oz; Fri, 08 Jul 2022 13:26:42 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -35,40 +35,82 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DT binding updates for v5.20 (take two)
-Date: Fri,  8 Jul 2022 13:26:36 +0200
-Message-Id: <cover.1657278851.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/3] Renesas ARM DT updates for v5.20 (take two)
+Date: Fri,  8 Jul 2022 13:26:34 +0200
+Message-Id: <cover.1657278845.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1657278843.git.geert+renesas@glider.be>
 References: <cover.1657278843.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 774fecc7ece1d5b7c604402ac2daede14825a467:
+The following changes since commit 3c7742a45c170430001c5a1767d9dd76686dc14d:
 
-  dt-bindings: soc: renesas: Move renesas,prr from arm to soc (2022-06-17 09:18:33 +0200)
+  ARM: dts: rza2mevb: Fix LED node names (2022-06-17 09:46:20 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v5.20-tag2
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-dt-for-v5.20-tag2
 
-for you to fetch changes up to d955cf3df3c26097aeab5712bc76f1c62a4ce86f:
+for you to fetch changes up to fec6d133cee53971841159c33e95b17b421dd0a1:
 
-  dt-bindings: hwinfo: renesas,prr: move from soc directory (2022-07-07 10:54:13 +0200)
+  arm64: dts: renesas: Add panel overlay for Draak and Ebisu boards (2022-07-07 11:05:00 +0200)
 
 ----------------------------------------------------------------
-Renesas DT binding updates for v5.20 (take two)
+Renesas ARM DT updates for v5.20 (take two)
 
+  - Ethernet MAC and switch support for the RZ/N1 SoC on the RZN1D-DB
+    development board,
+  - AA1024XD12 panel overlay support for the Draak, Ebisu, and
+    Salvator-X(S) development boards,
   - Miscellaneous fixes and improvements.
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      MAINTAINERS: Add Renesas SoC DT bindings to Renesas Architecture sections
+Chris Paterson (1):
+      arm64: dts: renesas: r9a07g054l2-smarc: Correct SoC name in comment
 
-Krzysztof Kozlowski (1):
-      dt-bindings: hwinfo: renesas,prr: move from soc directory
+Clément Léger (5):
+      ARM: dts: r9a06g032: Describe MII converter
+      ARM: dts: r9a06g032: Describe GMAC2
+      ARM: dts: r9a06g032: Describe switch
+      dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
+      ARM: dts: r9a06g032-rzn1d400-db: Add switch description
 
- .../devicetree/bindings/{soc/renesas => hwinfo}/renesas,prr.yaml       | 2 +-
- MAINTAINERS                                                            | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
- rename Documentation/devicetree/bindings/{soc/renesas => hwinfo}/renesas,prr.yaml (92%)
+Geert Uytterhoeven (3):
+      arm64: dts: renesas: r8a779m8: Drop operating points above 1.5 GHz
+      ARM: dts: renesas: Fix DA9063 watchdog subnode names
+      arm64: dts: renesas: spider-cpu: Fix scif0/scif3 sort order
+
+Laurent Pinchart (3):
+      arm64: dts: renesas: Prepare AA1024XD12 panel .dtsi for overlay support
+      arm64: dts: renesas: Add panel overlay for Salvator-X(S) boards
+      arm64: dts: renesas: Add panel overlay for Draak and Ebisu boards
+
+ .../bindings/net/pcs/renesas,rzn1-miic.yaml        | 171 +++++++++++++++++++++
+ arch/arm/boot/dts/r8a7790-lager.dts                |   2 +-
+ arch/arm/boot/dts/r8a7790-stout.dts                |   2 +-
+ arch/arm/boot/dts/r8a7791-koelsch.dts              |   2 +-
+ arch/arm/boot/dts/r8a7791-porter.dts               |   2 +-
+ arch/arm/boot/dts/r8a7792-blanche.dts              |   2 +-
+ arch/arm/boot/dts/r8a7793-gose.dts                 |   2 +-
+ arch/arm/boot/dts/r8a7794-alt.dts                  |   2 +-
+ arch/arm/boot/dts/r8a7794-silk.dts                 |   2 +-
+ arch/arm/boot/dts/r8a77xx-aa104xd12-panel.dtsi     |  39 -----
+ arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts        | 115 ++++++++++++++
+ arch/arm/boot/dts/r9a06g032.dtsi                   | 108 +++++++++++++
+ arch/arm64/boot/dts/renesas/Makefile               |   3 +
+ .../dts/renesas/draak-ebisu-panel-aa104xd12.dts    |  36 +++++
+ arch/arm64/boot/dts/renesas/panel-aa104xd12.dtsi   |  30 ++++
+ .../boot/dts/renesas/r8a779f0-spider-cpu.dtsi      |  18 +--
+ arch/arm64/boot/dts/renesas/r8a779m8.dtsi          |   5 +
+ arch/arm64/boot/dts/renesas/r9a07g054l2-smarc.dts  |   2 +-
+ .../boot/dts/renesas/salvator-panel-aa104xd12.dts  |  36 +++++
+ include/dt-bindings/net/pcs-rzn1-miic.h            |  33 ++++
+ 20 files changed, 555 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+ delete mode 100644 arch/arm/boot/dts/r8a77xx-aa104xd12-panel.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/draak-ebisu-panel-aa104xd12.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/panel-aa104xd12.dtsi
+ create mode 100644 arch/arm64/boot/dts/renesas/salvator-panel-aa104xd12.dts
+ create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
