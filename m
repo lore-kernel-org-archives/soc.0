@@ -1,105 +1,95 @@
-Return-Path: <SRS0=cXzf=XN=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=QgZb=XN=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A16BC43334
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 13:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5DFECCA47B
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 15:14:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 66539C341C6; Fri,  8 Jul 2022 13:46:12 +0000 (UTC)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id A8318C341D2; Fri,  8 Jul 2022 15:14:02 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7A65EC341C0
-	for <soc@kernel.org>; Fri,  8 Jul 2022 13:46:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A65EC341C0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id m16so4128868ljh.10
-        for <soc@kernel.org>; Fri, 08 Jul 2022 06:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=ftCQgL1IH5y3XBplqV417/ir/b+4fi5ovTGrT24Sbrg=;
-        b=XvzotjOmwUMkwmQCk6CPPiN8GmYCTOGrvE+49z1IZJ4hG+aLC//O1xUhtGVYz3N/+v
-         WzV2qHB5lsvqxhvw4OXHvOEK4m+FSIYo+ADgxoeKmQngq/wQemhmN6OWKnQLbcC5wbh4
-         Y43Vzaw6/xC99ARj/8JpAqatDCHqXRFkhT1ojY+C0F81cDeYq3E4IZnEj/P0r2Q6MFoT
-         kYkY2zaHx6zz6eIg7lKHhDDGJgY7OX+ILHAqzd0ibBfjpIH9fk+/AHK+FvY8JDrMPb3f
-         dKtKulWGrNxNW/7gYhkvQI1XLGj1uK7e5UEZxOh21vCQdJWHEzKkxZfj3ctpyqlDZlUq
-         fMLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ftCQgL1IH5y3XBplqV417/ir/b+4fi5ovTGrT24Sbrg=;
-        b=fCnC5H/03G8ppRQJ1OTbW/6RK4Dh5BVUkkUPRK0yLLpCqM4E4hXE/yxQpLiJnnlCMg
-         e4QkrPERwfeFLorLkBmm9EDThmGJs+OtcWf/vgSJqpVR2N71xPp1kpDB/4sgwoBgtH/Y
-         44T+kF4bhwXpi9VlbimsXNAq8VzOqCGvx8HDo0fk4bimf2VuflJUjhthTP3Xhki5pmGB
-         N4v3g/jEC9+WHSpvxmKTsoi4KxDKH/LUhKUAbjsSwRFyysWEMwGKMj0HIdEWiSBLsZQu
-         UKacQbGjsnn0rTiivnD0MK2jOhWLwH48iMxOHwseGKgnncRrIrzQGD/lhPMOf+/VtQx8
-         OGlA==
-X-Gm-Message-State: AJIora+WcX+S4BUUBcuiIW0aumOwnkdGNOtU9MHXQ6Y+k77lcXA16y4O
-	1kKPkkHJjitHw7KYuuCHeXCL3A==
-X-Google-Smtp-Source: AGRyM1saYxhEp3LUGYaX461stWYeGJkKo1DfCNWmUKpN2FBs85Vqv9mvQUqJqW133/eB7oRP6K9qsQ==
-X-Received: by 2002:a2e:b8c2:0:b0:25b:6b0c:34e with SMTP id s2-20020a2eb8c2000000b0025b6b0c034emr2047024ljp.397.1657287969517;
-        Fri, 08 Jul 2022 06:46:09 -0700 (PDT)
-Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
-        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b0048957b0c58fsm583953lfr.47.2022.07.08.06.46.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 06:46:09 -0700 (PDT)
-Date: Fri, 8 Jul 2022 15:46:07 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 516F7C341C0;
+	Fri,  8 Jul 2022 15:14:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 516F7C341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657293241; x=1688829241;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BzeOzLqO978xxyCov4it/ZgIZwyg61Vim6TdwwrQ678=;
+  b=0sLgjXp18kdEDauySt+Pc0HeMMzWRpvvaHMHfwv25zPgT9fHsHLt2cx+
+   sG77TdSsw7MsRjmBAN5UKk5XzS8NBf0QsQPcztqsnA8UAAbCFTQhbrlt5
+   OYu3gxdhP6GOK3jUIxyWyLebQYwZsAWPi8c0LXqiobKWzoT25A3v49nXT
+   3MwTjXqcIKLgU6YvkdOub5s6nILhoXD8ypGStqGi8hoHeFVD+7TiZZEsH
+   v7fEAdpOvUoWW4dRRcfraBsiiDCmUq+2uMCUlv2QLrW8jGNIe8sAq6RGt
+   72JxFZpD6vT72NxIJDWSmAlEYoHXK5Bdf20+P8/0dus5qGIgs39Kr6371
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="167018455"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 08:13:55 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 8 Jul 2022 08:13:55 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 8 Jul 2022 08:13:53 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE Fixes for v5.19
-Message-ID: <20220708134607.GA901814@jade>
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] AT91 fixes for v5.19 #2
+Date: Fri, 8 Jul 2022 18:16:21 +0300
+Message-ID: <20220708151621.860339-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hello arm-soc maintainers,
+Hi, Arnd, Olof, ARM SoC maintainers,
 
-Please pull these small fixes in the TEE subssytem. The OP-TEE driver
-patch fixes an error which was introduced during the merge window. I'm
-not sure if the error really can be triggered, but it would be nice to
-have it fixed before the release.
+In case it is not too late, please pull these 2 fixes for 5.19.
+They are necessary for proper working of:
+- I2S1 interface on SAMA5D2
+- switch available on kswitch-d10 based boards.
 
-Thanks,
-Jens
+Thank you,
+Claudiu Beznea
 
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+The following changes since commit 91d60e259c0f58c855f88f3fe5b7909aec563525:
 
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
+  ARM: at91: pm: Mark at91_pm_secure_init as __init (2022-06-28 12:55:32 +0300)
 
 are available in the Git repository at:
 
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git/ tags/tee-fixes-for-v5.19
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-5.19-2
 
-for you to fetch changes up to e5ce073c8a1e01b215a5eb32ba48f8d17ded3bd5:
+for you to fetch changes up to 2fdf15b50a46e366740df4cccbe2343269b4ff55:
 
-  tee: tee_get_drvdata(): fix description of return value (2022-07-08 10:51:24 +0200)
-
-----------------------------------------------------------------
-Fixes for TEE subsystem
-
-A fix for the recently merged commit ed8faf6c8f8c ("optee: add
-OPTEE_SMC_CALL_WITH_RPC_ARG and OPTEE_SMC_CALL_WITH_REGD_ARG").
-Two small fixes in comment, repeated words etc.
+  ARM: dts: at91: sama5d2: Fix typo in i2s1 node (2022-07-08 17:44:33 +0300)
 
 ----------------------------------------------------------------
-Jiang Jian (1):
-      optee: Remove duplicate 'of' in two places.
+AT91 fixes for 5.19 #2
 
-Marc Kleine-Budde (1):
-      tee: tee_get_drvdata(): fix description of return value
+It contains 2 DT fixes:
+- one for SAMA5D2 to fix the i2s1 assigned-clock-parents property
+- one for kswitch-d10 (LAN966 based) enforcing proper settings
+  on GPIO pins
 
-Yang Yingliang (1):
-      optee: smc_abi.c: fix wrong pointer passed to IS_ERR/PTR_ERR()
+----------------------------------------------------------------
+Michael Walle (1):
+      ARM: dts: kswitch-d10: use open drain mode for coma-mode pins
 
- drivers/tee/optee/optee_smc.h | 2 +-
- drivers/tee/optee/smc_abi.c   | 4 ++--
- drivers/tee/tee_core.c        | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Ryan Wanner (1):
+      ARM: dts: at91: sama5d2: Fix typo in i2s1 node
+
+ arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi | 8 ++++----
+ arch/arm/boot/dts/sama5d2.dtsi                         | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
