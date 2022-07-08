@@ -1,66 +1,102 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=D8hL=XN=winglobalresearch.com=leslie_a@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30FA7CCA486
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74FB3C433EF
+	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 09:18:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1022AC341D3; Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EEE32C341CA;
-	Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657266615;
-	bh=8854Cta5yY2PHcNSnEQWmHZD4dpSIzsJlCyPudKwp0U=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=iwQIF3sQ2msh0vEIzR3E/n6W+qRMoRGsBXeLBh/XFmC9hxwqUJByeibEgXPAnyw9C
-	 kuutXaGENFqkISFq2wxOyKDgz3or1Hytjko4Es8eok/qdrI4uCfvMPY67zSE+DG/g3
-	 lWa8x86GBvHVhDERIZRW/w+jqqIkG+0BFbaieucSGMLQT5xsGE8pZbdhrOqgIdNZ2I
-	 IMoHJgY+yeM1cUWEButFLys//tNMV5t4RhvESnpUViOk+6ioBAqg0EFTwGgNeBMHth
-	 0XE8QbXLNxWs6AkGrEx02WkF/QELrZU80fm6RAMOjs7HiHb1XBVIDVBRUDbC2xCKyU
-	 jqTzv6dMfr+cg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7A38E45BE1;
-	Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: ZynqMP DT changes for v5.20
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165726661487.10888.6544398057265096799.git-patchwork-notify@kernel.org>
-Date: Fri, 08 Jul 2022 07:50:14 +0000
-References: <452e8c68-b63b-f4f6-a937-67f65c64a8a0@monstr.eu>
-In-Reply-To: <452e8c68-b63b-f4f6-a937-67f65c64a8a0@monstr.eu>
-To: Michal Simek <monstr@monstr.eu>
+	id 413D5C341C8; Fri,  8 Jul 2022 09:18:57 +0000 (UTC)
+Received: from mail-m127136.qiye.163.com (mail-m127136.qiye.163.com [115.236.127.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 88941C341C0
+	for <soc@kernel.org>; Fri,  8 Jul 2022 09:18:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 88941C341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=winglobalresearch.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=winglobalresearch.com
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: <soc@kernel.org>
+Received: from winglobalresearch.com (localhost [127.0.0.1])
+	by mail-m12746.qiye.163.com (Hmail) with ESMTP id C86E9BC02A0;
+	Fri,  8 Jul 2022 17:18:15 +0800 (CST)
+Content-Type: multipart/alternative; BOUNDARY="=_Part_130979_897088093.1657271895812"
+Message-ID: <AH2AbQBGFBCd1trhkyTzLqoh.1.1657271895812.Hmail.leslie_a@winglobalresearch.com>
+Subject: =?UTF-8?B?QXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IEtleSBpbmZvcm1hdGlvbg==?=
+X-Priority: 3
+X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
+X-Originating-IP: 113.83.151.87
+MIME-Version: 1.0
+Received: from leslie_a@winglobalresearch.com( [113.83.151.87) ] by ajax-webmail ( [127.0.0.1] ) ; Fri, 8 Jul 2022 17:18:15 +0800 (GMT+08:00)
+From: Elaine <leslie_a@winglobalresearch.com>
+Date: Fri, 8 Jul 2022 17:18:15 +0800 (GMT+08:00)
+X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCS0pOVh5NQxhIGktPTkhPTlUTARMWGhIXJBQOD1
+	lXWRgSC1lBWUpKSFVDSFVKTkpVQ0xZV1kWGg8SFR0UWUFZT0tIVUpKS09IT1VPWQY+
+X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzozSToZKjk8PTk4H0oPCRMQAi8B
+	NwoUE1VKVUpNTkxJTEpDQk1PQ0xVMxYaEhdVFx4IFxIeJBo7DBIVHBcUGRoXCR4IHhoJGBNVGBQW
+	RVlXWRQVHgkYCw9ZQUpXWRILWUFZSkpIVUNIVUpOSlVDTFlXWQgBWUFKTUNITzcG
+X-HM-Tid: 0a81dd1a4704b219kuuu181d3093fa6
 
-Hello:
+--=_Part_130979_897088093.1657271895812
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+SGkuSG9wZSB5b3UgYXJlIGRvaW5nIHdlbGwuCiBXZSBwdWJsaXNoZWQgQSBHbG9iYWwgTWFya2V0
+IFJlcG9ydCBvbiBBcnRpZmljaWFsIEludGVsbGlnZW5jZSAoQUkpIENoaXBzZXQgMjAyMiBmb3Ig
+WW91IGFuZCBDb21wZXRpdG9ycy4gSWYgeW91IGhhdmUgZnVydGhlciBpbnRlcmVzdCBpbiB0aGlz
+IHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMsIHdlIHdvdWxkIGJlIGhhcHB5IHRvIHNoYXJlIHRo
+ZSBzYW1wbGUgcmVwb3J0IGZvciB5b3VyIHJlZmVyZW5jZS4KVGhlIGZvbGxvd2luZyBtYW51ZmFj
+dHVyZXJzIGFyZSBjb3ZlcmVkOgpOdmlkaWEKSW50ZWwoTW92aWRpdXMpCkFNRApYaWxpbngoRGVl
+cGhpIFRlY2gpCkFXUyBJbmZlcmVudGlhCklCTQpIdWF3ZWkKR29vZ2xlClF1YWxjb21tCk1lZGlh
+VGVrClNhbXN1bmcKSW1hZ2luYXRpb24gVGVjaG5vbG9naWVzCkZ1aml0c3UKV2F2ZSBDb21wdXRp
+bmcKR2VuZXJhbCBWaXNpb24KR3JhcGhjb3JlCk1pY3JvbiBUZWNobm9sb2d5CkNhbWJyaWNvbgpT
+ZW5zZVRpbWUKSG9yaXpvbiBSb2JvdGljcwpCYWlkdQpTeW5vcHN5cwp3ZXN0d2VsbApCcm9hZGNv
+bQpTb2Z0YmFuawpBbGliYWJhClJvY2tjaGlwCk15dGhpYwpOWFAKVmVyaVNpbGljb24KQVJNClVO
+SVNPQwpCaXRtYWluCi4uLi4uLgoKClRoaXMgcmVwb3J0IHdpbGwgd2FsayB5b3UgdGhyb3VnaCB0
+aGUgQXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IG1hcmtldCBmcm9tIHRoZSBm
+b2xsb3dpbmcgYXNwZWN0cyBpbjogQ29uc3VtcHRpb24sIFNhbGVzLCBSZXZlbnVlLCBQcmljZSwg
+Q29zdCwgR3Jvc3MgTWFyZ2luLCBNYXJrZXQgc2l6ZSwgTWFya2V0IHNoYXJlLCBHcm93dGggUmF0
+ZSwgVHJlbmRzLCBldGMuCgoKTWF5YmUgaXQgd2lsbCBiZSBoZWxwZnVsIHRvIHRoZSBtYXJrZXRp
+bmcgZGVwYXJ0bWVudCBvciB0aGUgcGVyc29uIGluIGNoYXJnZSBvZiB5b3VyIGNvbXBhbnkuIFdl
+IHdvdWxkIGJlIGdyYXRlZnVsIGlmIHlvdSBjb3VsZCBmb3J3YXJkIGl0LgoKCldhcm0gUmVnYXJk
+cywKRWxhaW5lIExpIHwgTWFuYWdlci1HbG9iYWwgU2FsZXMKV2luIE1hcmtldCBSZXNlYXJjaCBD
+by4sTHRkLgpFOiBlbGFpbmVAd2lubWFya2V0cmVzZWFyY2guY29tClRlbDogKzg2LTE4MDIyMzEx
+MjU1Ck1vcmUgTWFya2V0IFN1cnZleXMgYW5kIFJlc2VhcmNoZXMgb24gV2luIE1hcmtldCBSZXNl
+YXJjaCwga2VlcCBpdCBmb3IgdW5leHBlY3RlZCBuZWVkcy4KCgoNCg0K
+--=_Part_130979_897088093.1657271895812
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-On Thu, 7 Jul 2022 16:30:15 +0200 you wrote:
-> Hi,
-> 
-> please pull these DT patches to your tree. The part of pull request are also 3
-> patches which targets zynq gpio DT binding. All of them are reviewed by Linus or
-> Rob or both.
-> 
-> Thanks,
-> Michal
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] arm64: dts: ZynqMP DT changes for v5.20
-    https://git.kernel.org/soc/soc/c/d67fe5e3b2ca
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS43O2NvbG9yOiMwMDAwMDA7Zm9udC1zaXplOjE0cHg7
+Zm9udC1mYW1pbHk6QXJpYWwiPjxwPkhpLkhvcGUgeW91IGFyZSBkb2luZyB3ZWxsLjwvcD48cD4m
+bmJzcDtXZSBwdWJsaXNoZWQgQSBHbG9iYWwgTWFya2V0IFJlcG9ydCBvbiA8c3BhbiBzdHlsZT0i
+Zm9udC1zaXplOiAxOHB4OyBiYWNrZ3JvdW5kLWNvbG9yOiByZ2IoMjAwLCAyMjAsIDI0MCk7Ij48
+Yj5BcnRpZmljaWFsIEludGVsbGlnZW5jZSAoQUkpIENoaXBzZXQ8L2I+PC9zcGFuPiAyMDIyIGZv
+ciBZb3UgYW5kIENvbXBldGl0b3JzLiBJZiB5b3UgaGF2ZSBmdXJ0aGVyIGludGVyZXN0IGluIHRo
+aXMgcmVwb3J0IG9yIHJlbGF0ZWQgcmVwb3J0cywgd2Ugd291bGQgYmUgaGFwcHkgdG8gc2hhcmUg
+dGhlIHNhbXBsZSByZXBvcnQgZm9yIHlvdXIgcmVmZXJlbmNlLjwvcD48cD5UaGUgZm9sbG93aW5n
+IG1hbnVmYWN0dXJlcnMgYXJlIGNvdmVyZWQ6PC9wPjxwPk52aWRpYTwvcD48cD5JbnRlbChNb3Zp
+ZGl1cyk8L3A+PHA+QU1EPC9wPjxwPlhpbGlueChEZWVwaGkgVGVjaCk8L3A+PHA+QVdTIEluZmVy
+ZW50aWE8L3A+PHA+SUJNPC9wPjxwPkh1YXdlaTwvcD48cD5Hb29nbGU8L3A+PHA+UXVhbGNvbW08
+L3A+PHA+TWVkaWFUZWs8L3A+PHA+U2Ftc3VuZzwvcD48cD5JbWFnaW5hdGlvbiBUZWNobm9sb2dp
+ZXM8L3A+PHA+RnVqaXRzdTwvcD48cD5XYXZlIENvbXB1dGluZzwvcD48cD5HZW5lcmFsIFZpc2lv
+bjwvcD48cD5HcmFwaGNvcmU8L3A+PHA+TWljcm9uIFRlY2hub2xvZ3k8L3A+PHA+Q2FtYnJpY29u
+PC9wPjxwPlNlbnNlVGltZTwvcD48cD5Ib3Jpem9uIFJvYm90aWNzPC9wPjxwPkJhaWR1PC9wPjxw
+PlN5bm9wc3lzPC9wPjxwPndlc3R3ZWxsPC9wPjxwPkJyb2FkY29tPC9wPjxwPlNvZnRiYW5rPC9w
+PjxwPkFsaWJhYmE8L3A+PHA+Um9ja2NoaXA8L3A+PHA+TXl0aGljPC9wPjxwPk5YUDwvcD48cD5W
+ZXJpU2lsaWNvbjwvcD48cD5BUk08L3A+PHA+VU5JU09DPC9wPjxwPkJpdG1haW48L3A+PHA+Li4u
+Li4uPC9wPjxwPjxicj48L3A+PHA+VGhpcyByZXBvcnQgd2lsbCB3YWxrIHlvdSB0aHJvdWdoIHRo
+ZSBBcnRpZmljaWFsIEludGVsbGlnZW5jZSAoQUkpIENoaXBzZXQgbWFya2V0IGZyb20gdGhlIGZv
+bGxvd2luZyBhc3BlY3RzIGluOiBDb25zdW1wdGlvbiwgU2FsZXMsIFJldmVudWUsIFByaWNlLCBD
+b3N0LCBHcm9zcyBNYXJnaW4sIE1hcmtldCBzaXplLCBNYXJrZXQgc2hhcmUsIEdyb3d0aCBSYXRl
+LCBUcmVuZHMsIGV0Yy48L3A+PHA+PGJyPjwvcD48cD5NYXliZSBpdCB3aWxsIGJlIGhlbHBmdWwg
+dG8gdGhlIG1hcmtldGluZyBkZXBhcnRtZW50IG9yIHRoZSBwZXJzb24gaW4gY2hhcmdlIG9mIHlv
+dXIgY29tcGFueS4gV2Ugd291bGQgYmUgZ3JhdGVmdWwgaWYgeW91IGNvdWxkIGZvcndhcmQgaXQu
+PC9wPjxwPjxicj48L3A+PHA+V2FybSBSZWdhcmRzLDwvcD48cD5FbGFpbmUgTGkgfCBNYW5hZ2Vy
+LUdsb2JhbCBTYWxlczwvcD48cD5XaW4gTWFya2V0IFJlc2VhcmNoIENvLixMdGQuPC9wPjxwPkU6
+IGVsYWluZUB3aW5tYXJrZXRyZXNlYXJjaC5jb208L3A+PHA+VGVsOiArODYtMTgwMjIzMTEyNTU8
+L3A+PHA+TW9yZSBNYXJrZXQgU3VydmV5cyBhbmQgUmVzZWFyY2hlcyBvbiBXaW4gTWFya2V0IFJl
+c2VhcmNoLCBrZWVwIGl0IGZvciB1bmV4cGVjdGVkIG5lZWRzLjwvcD48L2Rpdj48YnI+
+--=_Part_130979_897088093.1657271895812--
