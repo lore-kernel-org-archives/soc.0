@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A5ECCA481
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A488CCA485
 	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A18CC341D4; Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03A37C341D0;
-	Fri,  8 Jul 2022 07:50:15 +0000 (UTC)
+	id F2FEEC341D1; Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D935DC341CD;
+	Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657266615;
-	bh=HwpZWAEWzkbjxIX+keAhPk8Y17Q0+OJgf10LVCD8+lY=;
+	s=k20201202; t=1657266614;
+	bh=J4gOV1bcoN2hmGjGoRD2VKpsNSjFPgbvjywplx0mXpg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Q+N8d/C81F9EOIFPv4zzLjIE0G0RWiw04BFb+oHbIraTTLBXtj15dUtBYl60SBUi1
-	 HsM5sy2K8pjjlXTo/tW0wTldH0buQxzIkHIpynxE64dVYOZiS676kPgw2A+/Uldu5C
-	 7l0d4KzNY7ljE05hKJK6ET/0g/5pi6mXHyRT67MV0JHwpRGo6hC0F2sOnekrK/0xQB
-	 Fq7VljwkPwT38cYsM8MbAqfdngM/c0Dbvn+fRtB17pyDPQf+NCHYb2BqG7lew2yfIq
-	 EOIeVL8oLv+t+0whKtwB/95Vjlm3Dy6jDYsVrwmbkpl0jYUD/mYzVKrxzpR8lD9Dec
-	 e0gfw91Ac/gMg==
+	b=Bm1KAupdftkAUu00bhObOlmgbf+JhaboMf+PWiZvUlaHjqeBBkNpcpYWwHxuZafRG
+	 6bey+SdePKlwUzm7ZRWx0GXkKCbsRb69z62MjRbraR7+Bu5IZQ3S4CCYksjJofL6MP
+	 p0lN9xYYw+Xp57YL2htaEAcBvZHlY3wzsBVoKvcEvjO1eglfzTfL5lBWuCiTi5EuMq
+	 GUh3V0+Hnv6xlAllfITY57+CkA/oKDfF1DGfiDbLAPxgB1bZyPBKdB8UqqGfuyNkC8
+	 rQ55HVI7JZpNs7EA86FxHk/b1iNrgzLTfxNGXaRO1v++NSWw0wnoTBcJVTtJ/Gku/2
+	 u7XY5axYLYoEw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0E87E45BDB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7A0AE45BDF;
 	Fri,  8 Jul 2022 07:50:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: soc: Zynq SoC changes for v5.20
+Subject: Re: [GIT PULL] Reset controller fixes for v5.19
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165726661491.10888.11133003624007208308.git-patchwork-notify@kernel.org>
+ <165726661481.10888.10971544020756898873.git-patchwork-notify@kernel.org>
 Date: Fri, 08 Jul 2022 07:50:14 +0000
-References: <e1d0a721-afa4-93a0-7119-0e4481a0624b@monstr.eu>
-In-Reply-To: <e1d0a721-afa4-93a0-7119-0e4481a0624b@monstr.eu>
-To: Michal Simek <monstr@monstr.eu>
+References: <20220707101344.3329314-1-p.zabel@pengutronix.de>
+In-Reply-To: <20220707101344.3329314-1-p.zabel@pengutronix.de>
+To: Philipp Zabel <p.zabel@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 7 Jul 2022 16:16:39 +0200 you wrote:
-> Hi,
+On Thu,  7 Jul 2022 12:13:44 +0200 you wrote:
+> Dear arm-soc maintainers,
 > 
-> please pull the following fix to your tree.
+> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 > 
-> Thanks,
-> Michal
+>   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: soc: Zynq SoC changes for v5.20
-    https://git.kernel.org/soc/soc/c/a2668c1500e3
+  - [GIT,PULL] Reset controller fixes for v5.19
+    https://git.kernel.org/soc/soc/c/a902fa8eccaf
 
 You are awesome, thank you!
 -- 
