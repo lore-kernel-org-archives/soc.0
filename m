@@ -1,70 +1,85 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 466A9C433EF
-	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 08:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F78C43334
+	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 18:16:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2D222C341CA; Sat,  9 Jul 2022 08:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C6AC341C7;
-	Sat,  9 Jul 2022 08:30:23 +0000 (UTC)
+	id 891DBC341CB; Sat,  9 Jul 2022 18:16:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CCFC3411C;
+	Sat,  9 Jul 2022 18:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657355425;
-	bh=LymLj6WIv9ORl2RXVnRj+9x+8ynV6NwyG4gYu7OAVhU=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IiuTD5TFG4qObLn26ate9jhpTMiWgDpo6DxVfW7frQvWa1uF68t+5gOxAYOcwrcFF
-	 pxCfQZ0hTQsn67NUY45bFVArHJg7N3NwWYzqFf97Gdr3OPovHxIYVrPxThnUFADnay
-	 e+vYs75lrywd44fHjNrGndSvYc2pJT+PwwEwA/Tk5j7hftfnxOH5xlJsivn+7naxyW
-	 B1oHnK8UW6ynApr6WDeQlbVTz91nukvGOPxc+qF+almuJOfBqnPlJi+X8cnhR7H0iT
-	 OPxs2v56eQUTZIybhv7caoaNZpvvbiUQhuAdWTg4Azwo3fpmlplx0Yqkqe/9yrcCFs
-	 cwmmCqyWrK+Xw==
-From: Shawn Guo <shawnguo@kernel.org>
+	s=k20201202; t=1657390585;
+	bh=se8frCnsFxeLIYGKdeWSwhvcOngONRyCg/WBWgwYgM0=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=SyykrdrflDXEYskkRcQW0a6dRmxMbqfsuKP7n+jXZ7MuNlL2WYXxefUL9KTiQ5brK
+	 HEEsmwhLwm14MxhTI8354AehD+EBK3qXN/bde0yX5UWufgKQo+0e4kBdSviTDuhVYe
+	 oBelvCB6cZ4VgDGIVCT+eyQtl7X5q/19AN3b2kSKMlD61Yf+0QZwBEGZEhjaJkucHk
+	 u4I1TdyVzZLAFIQPk9pCVJdZVemRX68N9i8yautxjUtqqU/+9+5VIrium4v+CR2zjl
+	 /ybt1nmFnsZtmnBJr/QUwI4Z2SNUhN5FasuzbdX4tKAEP1KX3SjJvK9U2hUFVJu0Ap
+	 3+tTAzdTv3cLg==
+Date: Sat, 9 Jul 2022 20:16:21 +0200
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>,
-	kernel@pengutronix.de,
-	linux-imx@nxp.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] i.MX defconfig update for 5.20
-Date: Sat,  9 Jul 2022 16:29:51 +0800
-Message-Id: <20220709082951.15123-6-shawnguo@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220709082951.15123-1-shawnguo@kernel.org>
-References: <20220709082951.15123-1-shawnguo@kernel.org>
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner device tree changes for 5.20, part 2
+Message-ID: <YsnF9cm/qniIOklj@kista.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+Hi!
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+Please pull following DT changes for 5.20. This was almost ready to be
+sent in first PR, but it needed one small adjustment, so I'm sending
+this as second pull request.
+
+Best regards,
+Jernej
+
+The following changes since commit aab941b8c3cfb020baf2218e9e39706e05bf4877:
+
+  arm64: dts: allwinner: pinephone: Enable internal HMIC bias (2022-07-08 18:52:08 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-5.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-5.20-2
 
-for you to fetch changes up to afff3d3aef14c9775a154584a8becce1d33f9446:
+for you to fetch changes up to 2c1e62992981c4d8fe7bc183877aec2a189bd387:
 
-  arm64: defconfig: Enable gpio-fan support (2022-06-27 15:38:19 +0800)
-
-----------------------------------------------------------------
-i.MX defconfig update for 5.20:
-
-- Enable i.MX93 clock and pinctrl driver in arm64 defconfig.
-- Enable gpio-fan driver in arm64 defconfig, as it's needed by
-  phyBOARD-Polis-i.MX8M Mini board.
+  arm64: dts: allwinner: h616: Add X96 Mate TV box support (2022-07-09 20:08:53 +0200)
 
 ----------------------------------------------------------------
-Peng Fan (1):
-      arm64: defconfig: enable i.MX93 clk & pinctrl
+- added H616 EMAC compatible
+- make pinctrl interrupts optionals in DT binding
+- initial H616 DTSI
+- added OrangePi Zero 2 board
+- added X96 Mate TV box
+- add VCC PI supply in pinctrl DT binding
 
-Teresa Remmet (1):
-      arm64: defconfig: Enable gpio-fan support
+----------------------------------------------------------------
+Andre Przywara (7):
+      dt-bindings: arm: sunxi: Add H616 EMAC0 compatible
+      dt-bindings: pinctrl: sunxi: Make interrupts optional
+      arm64: dts: allwinner: Add Allwinner H616 .dtsi file
+      dt-bindings: pinctrl: sunxi: allow vcc-pi-supply
+      dt-bindings: arm: sunxi: Add two H616 board compatible strings
+      arm64: dts: allwinner: h616: Add OrangePi Zero 2 board support
+      arm64: dts: allwinner: h616: Add X96 Mate TV box support
 
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |  10 +
+ .../bindings/net/allwinner,sun8i-a83t-emac.yaml    |   1 +
+ .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml       |  18 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/arm64/boot/dts/allwinner/Makefile             |   2 +
+ .../dts/allwinner/sun50i-h616-orangepi-zero2.dts   | 213 ++++++++
+ .../boot/dts/allwinner/sun50i-h616-x96-mate.dts    | 177 ++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     | 591 +++++++++++++++++++++
+ 8 files changed, 1010 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
