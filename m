@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F84C43334
-	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 08:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B824C43334
+	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 08:30:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E9FB1C385A5; Sat,  9 Jul 2022 08:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1987EC341CE;
-	Sat,  9 Jul 2022 08:30:18 +0000 (UTC)
+	id 22B7CC341CA; Sat,  9 Jul 2022 08:30:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494B9C341CB;
+	Sat,  9 Jul 2022 08:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657355420;
-	bh=QRz7l5fly0asX+Ump7K4RBQg9jV2MZsy1FTBKlSiAuQ=;
+	s=k20201202; t=1657355423;
+	bh=x9/406rfyPtIFI0wT/1m7327TFEwkbg9oUhhsf8uPUY=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y1ruR1OogQqI8DOc7Gso9K+OzrS9fR7SsQ6ZdRo+hjClJTqDMfkJY0ecX0D3yS+XE
-	 SL9wF+3KeVJ4GZDhOI2JD2w15Po9V7WqZt+8jBzgAo+HjFbnPNdVkJ65cUcEYVVdaJ
-	 JMJZb/DTTxsKV+NXAsdQ2VEjCMqacrH/tzADmRXpoNzNixRMz1oL+vIjZNv6vR2Wbr
-	 gRzK5Lo79s4YQovmKg/ec7y0xwaqVcdxc+vG34lKDqgzxqooYTfSmOKRDq+jeK7u2L
-	 vAcGE8IIiGiprJbcgVgS4lRBBLEKAjIgSdQ4J8tGKeiZArJT+FYi5YmCr3qpwcxfrW
-	 2sXlj9qsQCHlA==
+	b=WInwcXobM5U5g9IU77MY344KhR8Oh3rwc2Ovopj3/2YpsPAR9jJTZZCOr2itYwKyp
+	 Olm0pLKf4HoAoUU/ulPAbzm2wcq7AIkRg845PKB0fD8oNhJ3LgMQx5xgWWzSACf0us
+	 0qsXjz7i9I+rS0QFB19df5eeXAI2Fo+5O66urK+EgGL/NMobmlAIvmaN6rbrsaLdHp
+	 OPpJG6p3MqZuvC8EWDBEe4/PfhKkTp7igSBptZnSe7yl1Us4kZOZfCjkCIL2zexC+H
+	 BjbTi8H8MwAaCRs2D0ONCJZb8s6NdwvcpYWXcF1k1G7siDIcNO6OLl1dHeatRu8Wtn
+	 Qu/rGfmlaVRWA==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -31,9 +31,9 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 4/6] i.MX device tree change for 5.20
-Date: Sat,  9 Jul 2022 16:29:49 +0800
-Message-Id: <20220709082951.15123-4-shawnguo@kernel.org>
+Subject: [GIT PULL 5/6] i.MX arm64 device tree update for 5.20
+Date: Sat,  9 Jul 2022 16:29:50 +0800
+Message-Id: <20220709082951.15123-5-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220709082951.15123-1-shawnguo@kernel.org>
 References: <20220709082951.15123-1-shawnguo@kernel.org>
@@ -47,195 +47,156 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt-5.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-dt64-5.20
 
-for you to fetch changes up to 04069a86bf9650f82ee29715322165bd7739a7c2:
+for you to fetch changes up to 418d1d840e42183ac7f4dbaf40eca316b90fdd53:
 
-  ARM: dts: layerscape: Add SFP node for TA 2.1 devices (2022-07-05 09:04:14 +0800)
-
-----------------------------------------------------------------
-i.MX device tree change for 5.20:
-
-- A series from Alexander Stein to fix some i.MX6UL dt_binding_check
-  warnings.
-- Replace deprecated 'enable-sdio-wakeup' property with 'wakeup-source'
-  for a couple of boards.
-- A set of imx7-colibri device tree updates from Marcel Ziswiler to
-  improve devices Display, Touch, Ethernet and SD/MMC, and also adds
-  Toradex Iris carrier board.
-- A few improvements on imx6qdl-colibri board, correct SGTL5000 MCLK
-  handling, simplify handling of inverted PWM backlight.
-- A series from Max Krummenacher (and Oleksandr Suvorov) to improve the
-  existing i.MX6 Apalis carrier board device trees and adds a new device
-  tree for the Ixora V1.2 carrier board.
-- Add USB dual-role switching using extcon for imx7-colibri board.
-- Add SFP node for TA 2.1 devices for LayerScape SoCs.
-- Other small and random updates on various boards.
+  arm64: dts: freescale: add initial device tree for TQMa8MPQL with i.MX8MP (2022-07-09 10:49:39 +0800)
 
 ----------------------------------------------------------------
-Alexander Stein (6):
-      ARM: dts: imx6ul: add missing properties for sram
-      ARM: dts: imx6ul: change operating-points to uint32-matrix
-      ARM: dts: imx6ul: fix keypad compatible
-      ARM: dts: imx6ul: fix csi node compatible
-      ARM: dts: imx6ul: fix lcdif node compatible
-      ARM: dts: imx6ul: fix qspi node compatible
+i.MX arm64 device tree update for 5.20:
 
-Andreas Kemnade (2):
-      ARM: dts: imx6sl-tolino-shine2hd: fix led node name.
-      ARM: dts: imx6: fix node names for ebook reader keys
+- Add device tree support for i.MX93 SoC.
+- New board device tree: TQMa8MPQL, DH electronics i.MX8M Plus DHCOM and
+  PDK2, i.MX93 11x11 EVK, phyBOARD-Polis-i.MX8MM.
+- A series from Abel Vesa and Viorel Suman to fix i.MX8QXP device tree
+  to comply with DT schema.
+- Disable job ring 0 device for i.MX8MM to avoid caam_jr probe error, due
+  to that JR0 reservation is done in both upstream (v2.7) and downstream
+  (NXP lf_v2.4) TF-A.
+- A series from Krzysztof Kozlowski to align gpio-key and LED node names
+  with dtschema.
+- Add SNVS LPGPR device for i.MX8MM so that some preserving registers
+  becomes available as NVMEM.
+- Add NoC device support for i.MX8MP SoC.
+- A couple of changes from Sean Anderson to add SFP node for TA devices
+  for LayerScape SoCs.
+- A series from Shengjiu Wang to enable bt-sco sound card support for
+  NXP i.MX8M EVK boards.
+- Other small and random board updates.
 
-Baruch Siach (1):
-      ARM: imx6ul: drop the adc num-channels property
+----------------------------------------------------------------
+Abel Vesa (4):
+      arm64: dts: freescale: imx8qxp: Fix thermal zone name for cpu0
+      arm64: dts: freescale: imx8: Fix power controller name
+      arm64: dts: freescale: imx8qxp: Add fallback compatible for clock controller
+      arm64: dts: freescale: imx8qxp: Fix the keys node name
 
-Denys Drozdov (1):
-      ARM: dts: imx6q-apalis: Clean-up sd card support
+Alexander Stein (1):
+      arm64: dts: freescale: add initial device tree for TQMa8MPQL with i.MX8MP
 
 Fabio Estevam (4):
-      ARM: dts: imx: Pass a label to the soc node
-      ARM: dts: imx: Pass a label to the AIPS nodes
-      ARM: dts: imx7d-smegw01: Replace 'enable-sdio-wakeup'
-      ARM: dts: imx6q-bosch-acc: Replace 'enable-sdio-wakeup'
+      arm64: dts: mba8mx: Remove unneeded comments
+      arm64: dts: imx8m: Disable job ring 0 nodes
+      arm64: dts: imx8m: Pass a label to the soc node
+      arm64: dts: imx8mq: Pass a label to the AIPS nodes
 
-Krzysztof Kozlowski (1):
-      ARM: dts: fsl: adjust whitespace around '='
+Krzysztof Kozlowski (4):
+      arm64: dts: fsl: ls1012a: fix Micron SPI NOR compatible
+      arm64: dts: fsl: adjust whitespace around '='
+      arm64: dts: freescale: align gpio-key node names with dtschema
+      arm64: dts: freescale: align led node names with dtschema
 
-Marcel Ziswiler (17):
-      ARM: dts: imx7-colibri: overhaul display/touch functionality
-      ARM: dts: imx7-colibri: add mdio phy node
-      ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys
-      ARM: dts: imx7-colibri: move regulators
-      ARM: dts: imx7-colibri: clean-up usdhc1 and add sleep config
-      ARM: dts: imx7-colibri: move rtc node
-      ARM: dts: imx7d-colibri-emmc: add cpu1 supply
-      ARM: dts: imx7-colibri-eval-v3: correct can controller comment
-      ARM: dts: imx7-colibri: disable adc2
-      ARM: dts: imx7-colibri-aster: add ssp aka spi cs aka ss pins
-      ARM: dts: imx7-colibri: add clarifying comments
-      ARM: dts: imx7-colibri: alphabetical re-order
-      ARM: dts: imx7-colibri: clean-up device enabling/disabling
-      ARM: dts: imx7-colibri: remove leading zero from reg address
-      ARM: dts: imx7-colibri: set regulator-name properties
-      ARM: dts: imx7-colibri: clean-up iomuxc pinctrl group naming
-      ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
+Lucas Stach (1):
+      arm64: dts: imx8mp-evk: add regulator supply to CPU nodes
 
-Max Krummenacher (14):
-      ARM: dts: imx6qdl-colibri: Mux mclk for sgtl5000 with the codec node
-      ARM: dts: imx6qdl-colibri: backlight pwm: Simplify inverted backlight
-      ARM: dts: imx6qdl-colibri: backlight pwm: Adapt brightness steps
-      ARM: dts: imx7-colibri: add ethernet aliases
-      Revert "ARM: dts: imx6qdl-apalis: Avoid underscore in node name"
-      ARM: dts: imx6q-apalis: Add gpio-line-names
-      ARM: dts: imx6q-apalis: Command pmic to standby for poweroff
-      ARM: dts: imx6q-apalis: Move Atmel MXT touch ctrl to SoM dtsi
-      ARM: dts: imx6q-apalis: move gpio-keys to SoM dtsi
-      ARM: dts: imx6q-apalis: Disable HDMI
-      ARM: dts: imx6q-apalis: Add support for Toradex Ixora V1.2 carrier boards
-      ARM: dts: imx6q-apalis: backlight pwm: Simplify inverted backlight
-      ARM: dts: imx6q-apalis: backlight pwm: Adapt brightness steps
-      ARM: dts: imx6q-apalis: Cleanup
+Marek Vasut (2):
+      arm64: dts: imx8mm: Add SNVS LPGPR
+      arm64: dts: imx8mp: Add support for DH electronics i.MX8M Plus DHCOM and PDK2
 
-Oleksandr Suvorov (9):
-      ARM: dts: imx7-colibri: improve licensing and compatible strings
-      ARM: dts: imx7-colibri: improve wake-up with gpio key
-      ARM: dts: imx7-colibri: add delay for on-module phy supply
-      ARM: dts: imx6q-apalis: Move parallel rgb interface to SoM dtsi
-      ARM: dts: imx6q-apalis: Move pinmux groups to SoM dtsi
-      ARM: dts: imx6q-apalis: Add LVDS panel support
-      ARM: dts: imx6q-apalis: Disable stmpe touchscreen
-      ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
-      ARM: dts: imx6q-apalis: Add adv7280 video input
+Peng Fan (5):
+      arm64: dts: freescale: Add i.MX93 dtsi support
+      arm64: dts: freescale: add i.MX93 11x11 EVK basic support
+      arm64: dts: imx8ulp: address build warning
+      arm64: dts: fsl-ls10xx: use generic dma node name
+      arm64: dts: imx8mp: add NoC node
 
 Philippe Schenker (1):
-      ARM: dts: imx7-colibri: add usb dual-role switching using extcon
+      arm64: dts: imx8m{m,p}-verdin: use IT temperatures
 
-Robin van der Gracht (1):
-      ARM: dts: imx6qdl-prti6q.dtsi: Add applicable properties to usdhc3
+Sean Anderson (2):
+      arm64: dts: layerscape: Add SFP node for TA 2.1 devices
+      arm64: dts: Add SFP node for TA 3.0 devices
 
-Sean Anderson (1):
-      ARM: dts: layerscape: Add SFP node for TA 2.1 devices
+Shengjiu Wang (3):
+      arm64: dts: imx8mm-evk: add bt-sco sound card support
+      arm64: dts: imx8mq-evk: add bt-sco sound card support
+      arm64: dts: imx8mn-evk: add bt-sco sound card support
 
-Simon Holesch (1):
-      ARM: dts: imx6ulz-bsh-smm-m2: Support proper board power off
+Teresa Remmet (1):
+      arm64: dts: freescale: Add phyBOARD-Polis-i.MX8MM support
 
-Stefan Agner (1):
-      ARM: dts: imx7-colibri: set lcdif clock source to video pll
+Tim Harvey (1):
+      arm64: dts: imx8mm-venice-gw7902: fix UART1 CTS
 
-Ulrich Ölmann (1):
-      ARM: dts: imx6: skov: add pwm-regulator to control the panel's VCOM
+Uwe Kleine-König (1):
+      arm64: freescale/imx8mp-evk.dts: reorder nodes alphabetically
 
- arch/arm/boot/dts/Makefile                         |   7 +
- arch/arm/boot/dts/e60k02.dtsi                      |   4 +-
- arch/arm/boot/dts/e70k02.dtsi                      |   8 +-
- arch/arm/boot/dts/imx25.dtsi                       |   2 +-
- arch/arm/boot/dts/imx27.dtsi                       |   6 +-
- arch/arm/boot/dts/imx31.dtsi                       |   4 +-
- arch/arm/boot/dts/imx50.dtsi                       |   6 +-
- arch/arm/boot/dts/imx51-ts4800.dts                 |   2 +-
- arch/arm/boot/dts/imx51.dtsi                       |   6 +-
- arch/arm/boot/dts/imx53.dtsi                       |   6 +-
- arch/arm/boot/dts/imx6dl-plym2m.dts                |   2 +-
- arch/arm/boot/dts/imx6dl-prtvt7.dts                |   2 +-
- arch/arm/boot/dts/imx6dl-victgo.dts                |   2 +-
- arch/arm/boot/dts/imx6dl.dtsi                      |   2 +-
- arch/arm/boot/dts/imx6q-apalis-eval.dts            | 127 +---
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts      | 263 +------
- arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts      | 276 +++++++
- arch/arm/boot/dts/imx6q-apalis-ixora.dts           | 113 +--
- arch/arm/boot/dts/imx6q-bosch-acc.dts              |   4 +-
- .../boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts    |   6 +
- arch/arm/boot/dts/imx6q.dtsi                       |   4 +-
- arch/arm/boot/dts/imx6qdl-apalis.dtsi              | 638 +++++++++++++---
- arch/arm/boot/dts/imx6qdl-colibri.dtsi             |  19 +-
- arch/arm/boot/dts/imx6qdl-prti6q.dtsi              |   3 +
- arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi       |   4 +-
- arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi            |  10 +
- arch/arm/boot/dts/imx6qdl.dtsi                     |   6 +-
- arch/arm/boot/dts/imx6sl-tolino-shine2hd.dts       |  10 +-
- arch/arm/boot/dts/imx6sx.dtsi                      |   2 +-
- arch/arm/boot/dts/imx6ul-kontron-n6x1x-s.dtsi      |   1 -
- arch/arm/boot/dts/imx6ul-phytec-segin.dtsi         |   5 -
- arch/arm/boot/dts/imx6ul-tqma6ul2l.dtsi            |   2 +-
- arch/arm/boot/dts/imx6ul.dtsi                      |  36 +-
- arch/arm/boot/dts/imx6ull-colibri.dtsi             |   1 -
- arch/arm/boot/dts/imx6ull-tqma6ull2.dtsi           |   2 +-
- arch/arm/boot/dts/imx6ull-tqma6ull2l.dtsi          |   2 +-
- arch/arm/boot/dts/imx6ull.dtsi                     |   2 +-
- arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts           |   4 +
- arch/arm/boot/dts/imx7-colibri-aster.dtsi          | 142 +---
- arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi        | 156 +---
- arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi        | 112 +++
- arch/arm/boot/dts/imx7-colibri-iris.dtsi           | 108 +++
- arch/arm/boot/dts/imx7-colibri.dtsi                | 830 +++++++++++++--------
- arch/arm/boot/dts/imx7d-colibri-aster.dts          |  30 +-
- arch/arm/boot/dts/imx7d-colibri-emmc-aster.dts     |  10 +-
- arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dts   |  10 +-
- arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts   |  21 +
- arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts      |  21 +
- arch/arm/boot/dts/imx7d-colibri-emmc.dtsi          |  17 +-
- arch/arm/boot/dts/imx7d-colibri-eval-v3.dts        |  45 +-
- arch/arm/boot/dts/imx7d-colibri-iris-v2.dts        |  83 +++
- arch/arm/boot/dts/imx7d-colibri-iris.dts           |  56 ++
- arch/arm/boot/dts/imx7d-colibri.dtsi               |  13 +-
- arch/arm/boot/dts/imx7d-sdb.dts                    |   2 +-
- arch/arm/boot/dts/imx7d-smegw01.dts                |   4 +-
- arch/arm/boot/dts/imx7d.dtsi                       |   2 +-
- arch/arm/boot/dts/imx7s-colibri-aster.dts          |  27 +-
- arch/arm/boot/dts/imx7s-colibri-eval-v3.dts        |  43 +-
- arch/arm/boot/dts/imx7s-colibri-iris-v2.dts        |  78 ++
- arch/arm/boot/dts/imx7s-colibri-iris.dts           |  51 ++
- arch/arm/boot/dts/imx7s-colibri.dtsi               |   5 +-
- arch/arm/boot/dts/imx7s.dtsi                       |   2 +-
- arch/arm/boot/dts/imxrt1050.dtsi                   |   4 +-
- arch/arm/boot/dts/ls1021a-iot.dts                  |   2 +-
- arch/arm/boot/dts/ls1021a.dtsi                     |   7 +
- 65 files changed, 2235 insertions(+), 1245 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dts
- create mode 100644 arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
- create mode 100644 arch/arm/boot/dts/imx7-colibri-iris.dtsi
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris.dts
- create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris.dts
+Viorel Suman (3):
+      arm64: dts: freescale: imx8qxp: Remove unnecessary clock related entries
+      arm64: dts: freescale: imx8qxp: Fix the ocotp node name
+      arm64: dts: freescale: imx8: Fix the system-controller node name
+
+ arch/arm64/boot/dts/freescale/Makefile             |    4 +
+ arch/arm64/boot/dts/freescale/fsl-ls1012a-qds.dts  |    2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi     |   18 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts  |    2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |   16 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi     |   20 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi     |   20 +-
+ .../arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts |   10 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi     |   16 +-
+ arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi     |   18 +-
+ arch/arm64/boot/dts/freescale/fsl-lx2160a-qds.dts  |    4 +-
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi     |   16 +-
+ arch/arm64/boot/dts/freescale/fsl-lx2162a-qds.dts  |    4 +-
+ arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi    |   10 +-
+ .../dts/freescale/imx8mm-beacon-baseboard.dtsi     |    4 +-
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi      |   43 +
+ .../boot/dts/freescale/imx8mm-icore-mx8mm.dtsi     |   12 +-
+ arch/arm64/boot/dts/freescale/imx8mm-mx8menlo.dts  |    4 +-
+ .../dts/freescale/imx8mm-phyboard-polis-rdk.dts    |  450 +++++++++
+ .../boot/dts/freescale/imx8mm-phycore-som.dtsi     |  440 +++++++++
+ .../boot/dts/freescale/imx8mm-var-som-symphony.dts |    6 +-
+ .../boot/dts/freescale/imx8mm-venice-gw700x.dtsi   |   24 +-
+ .../boot/dts/freescale/imx8mm-venice-gw7901.dts    |    8 +-
+ .../boot/dts/freescale/imx8mm-venice-gw7902.dts    |   10 +-
+ .../boot/dts/freescale/imx8mm-venice-gw7903.dts    |    6 +-
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi   |   10 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi          |   16 +-
+ .../dts/freescale/imx8mn-beacon-baseboard.dtsi     |    4 +-
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi      |   45 +-
+ .../boot/dts/freescale/imx8mn-var-som-symphony.dts |    6 +-
+ .../boot/dts/freescale/imx8mn-venice-gw7902.dts    |    8 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          |   13 +-
+ .../arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts |  163 ++++
+ .../arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 1030 ++++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |   38 +-
+ .../dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts    |  702 +++++++++++++
+ .../arm64/boot/dts/freescale/imx8mp-tqma8mpql.dtsi |  284 ++++++
+ arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi   |   10 +-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   31 +-
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts       |   43 +
+ .../boot/dts/freescale/imx8mq-librem5-devkit.dts   |    6 +-
+ arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi  |    4 +-
+ arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dts  |    6 +-
+ .../arm64/boot/dts/freescale/imx8mq-zii-ultra.dtsi |    2 +-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi          |   15 +-
+ arch/arm64/boot/dts/freescale/imx8qm.dtsi          |    4 +-
+ .../dts/freescale/imx8qxp-colibri-eval-v3.dtsi     |    8 +-
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi         |   14 +-
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi         |   14 +-
+ arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts  |  114 +++
+ arch/arm64/boot/dts/freescale/imx93-pinfunc.h      |  623 ++++++++++++
+ arch/arm64/boot/dts/freescale/imx93.dtsi           |  334 +++++++
+ arch/arm64/boot/dts/freescale/mba8mx.dtsi          |    8 +-
+ 53 files changed, 4550 insertions(+), 172 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-phyboard-polis-rdk.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-phycore-som.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-mba8mpxl.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts
+ create mode 100755 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93.dtsi
