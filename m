@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0A78C43334
-	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 08:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6AE9C43334
+	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 08:30:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DFACC341CB; Sat,  9 Jul 2022 08:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C227BC341C7;
-	Sat,  9 Jul 2022 08:30:12 +0000 (UTC)
+	id 8CBD2C3411C; Sat,  9 Jul 2022 08:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B55C341CE;
+	Sat,  9 Jul 2022 08:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657355414;
-	bh=+vHPPHOF81xWioEbWiN6gM47bS6zVzpWsD9lOZlXafo=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=kxj2upW3bCDoIafFExK+rW/G8FbYjH656fN1AfwSTabOLCT8tU4VRpBMXMx0hycKu
-	 qsSIb9nDG+Aywm6u+r/3dCNNXDV3prIOL3y0ZCd9CK3SjrWwUDlNE106sGcDjvTets
-	 WDXDdwyyN3Y8d1cWOJAkzYuffu4xjtiFICz2yXyJkJSdrsz7A0f6T278VvzCVcLvGu
-	 BPaUElPIrH8wgtHNkHXq/U3TQ52MUZ1CjuVP8XLO9AcO1LbdOpMxKWcTAlRsgKN7+n
-	 fBWOjcRjmA7gI7YjdC1SPTdKCK0Jq4AtDC8UZ7DChkE4uLciFGtRUJDCJP6NtWoj37
-	 CnQgJC3IxPq1w==
+	s=k20201202; t=1657355416;
+	bh=4VXNpZ+1c0HYLqUy66CY+WX1n+S60Ih+iZzQnEwO4t8=;
+	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=StFkLJycBOKxnPQnu2UwCsiKpTry9ZkHGT4nrXPLyUTiL+RQV2uuFf3Byhlxd/20+
+	 Y2B2rsNjGjlWOMK/yN0bLMf1JJMFz0zG4pc0iFQgQ1u4do9g+/C7oBr8E/8zm41rS3
+	 sXllZqEgk2qQOjcZXtnUYcQVZK+PJv/hpuEiUz6xDf+c9wJi/684pz3dqn5jjKlwCv
+	 YDnQIvyzX8i68auL8eJlhTTEFCFWKygACHd2xpXgbOBZ8wLE0JfT7rUitW13CLkZyx
+	 Z4LUOn3YRJfCvYmAIT2P7zlZKHP2rzdurnAuWdMrp+pR1BQWwFZW4vynpNpZxAUffC
+	 2kuDrrT2niEGQ==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -31,10 +31,12 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] i.MX drivers change for 5.20
-Date: Sat,  9 Jul 2022 16:29:46 +0800
-Message-Id: <20220709082951.15123-1-shawnguo@kernel.org>
+Subject: [GIT PULL 2/6] i.MX SoC update for 5.20
+Date: Sat,  9 Jul 2022 16:29:47 +0800
+Message-Id: <20220709082951.15123-2-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220709082951.15123-1-shawnguo@kernel.org>
+References: <20220709082951.15123-1-shawnguo@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -44,45 +46,26 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-5.20
 
-for you to fetch changes up to 63f98153075167a6c88d8ac90bfd26f1887c670c:
+for you to fetch changes up to 9fc792e596f17a1440dfeffb52e6786d6e53d90b:
 
-  soc: fsl: guts: check return value after calling of_iomap() in fsl_guts_get_soc_uid() (2022-07-05 08:41:55 +0800)
-
-----------------------------------------------------------------
-i.MX drivers change for 5.20:
-
-- Update imx8m-blk-ctrl driver to print the name of the power domain,
-  so that the error message becomes more useful.
-- Update the error messages in gpcv2 driver by printing the reason why
-  a regulator fails to be enabled or disabled.
-- A series from Michael Walle to convert the guts driver from a platform
-  driver to an core_initcall for getting rid of all those global static
-  variables.
-- A couple of follow-up fixes on guts driver series.
+  ARM: imx25: support silicon revision 1.2 (2022-06-19 11:40:00 +0800)
 
 ----------------------------------------------------------------
-Marek Vasut (1):
-      soc: imx: imx8m-blk-ctrl: Make error prints useful
+i.MX SoC update for 5.20:
 
-Martin Kepplinger (1):
-      soc: imx: gpcv2: print errno for regulator errors
+- Update the mx25_read_cpu_rev() function to support silicon revision 1.2
+  for i.MX25 SoC.
+- A minor indentation fix in Kconfig file.
 
-Michael Walle (7):
-      soc: fsl: guts: machine variable might be unset
-      soc: fsl: guts: remove module_exit() and fsl_guts_remove()
-      soc: fsl: guts: embed fsl_guts_get_svr() in probe()
-      soc: fsl: guts: allocate soc_dev_attr on the heap
-      soc: fsl: guts: use of_root instead of own reference
-      soc: fsl: guts: drop platform driver
-      soc: fsl: guts: add serial_number support
+----------------------------------------------------------------
+Juerg Haefliger (1):
+      ARM: imx: Kconfig: Fix indentation
 
-Yang Yingliang (2):
-      soc: fsl: guts: fix return value check in fsl_guts_init()
-      soc: fsl: guts: check return value after calling of_iomap() in fsl_guts_get_soc_uid()
+Martin Kaiser (1):
+      ARM: imx25: support silicon revision 1.2
 
- drivers/soc/fsl/guts.c           | 221 +++++++++++++++++++++------------------
- drivers/soc/imx/gpcv2.c          |   8 +-
- drivers/soc/imx/imx8m-blk-ctrl.c |   9 +-
- 3 files changed, 133 insertions(+), 105 deletions(-)
+ arch/arm/mach-imx/Kconfig     | 6 +++---
+ arch/arm/mach-imx/cpu-imx25.c | 2 ++
+ 2 files changed, 5 insertions(+), 3 deletions(-)
