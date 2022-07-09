@@ -1,131 +1,69 @@
-Return-Path: <SRS0=cimL=XN=ti.com=nm@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A067DC433EF
-	for <soc@archiver.kernel.org>; Fri,  8 Jul 2022 23:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92CA1C43334
+	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 03:27:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8670AC341C0; Fri,  8 Jul 2022 23:27:14 +0000 (UTC)
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC262C341CA;
-	Fri,  8 Jul 2022 23:27:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC262C341CA
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 268NRAUa048679;
-	Fri, 8 Jul 2022 18:27:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1657322830;
-	bh=qIbjL05PQMumEnQYc+oAO4pidbgefASidT5Db2Pp2zM=;
-	h=Date:From:To:CC:Subject;
-	b=e0xOF+UmbP7r9YJlr2KnLgTG5EihiborfSakLH0wuuyZSaF/ctE2PF1nbwh95LnFs
-	 rdooHSY2KqnQhrIDNv9qBlARXbMQx0Dj7cVrrTIdmzqrjWaHV7/AKKZVHngLPOa4eP
-	 Bb2Bk5Ez8bwnPdz5jMeh6MRJ0BcwhhFUzo59b2WU=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 268NRAJW050899
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 8 Jul 2022 18:27:10 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
- Jul 2022 18:27:09 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 8 Jul 2022 18:27:09 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-	by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 268NR9RM112793;
-	Fri, 8 Jul 2022 18:27:09 -0500
-Date: Fri, 8 Jul 2022 18:27:09 -0500
-From: Nishanth Menon <nm@ti.com>
+	id 38254C341CA; Sat,  9 Jul 2022 03:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FED6C341C0;
+	Sat,  9 Jul 2022 03:27:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657337243;
+	bh=f//QSfOQe0zOVYUgw0WdiMXRd+eQIjciYke4yk0bSz4=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=PvMRGWO79F469JK3gI+EQHzbFociIaW5JnzqINdfr2XuIcj1BCsnFgDckzXm0O6Gg
+	 b3TWsT1BG8BWsZ79nWpq2y4E3OabPj31T5jvHed2l1gwFalQM5dCVT9tpMXKhkHgxd
+	 VB7qz12FYBbQj/i1P+OkOsYbh8T3elFWIFp6fQtiWbjYeUGTYrybZ3mBxZzxurL0qv
+	 RcOlEEOmdb06Sp8IcnNwo8Lo9f18uwFeO5WPN2tqgCgvbjSwZSdlcvsGYw1nurSxl8
+	 2+nSx4Fx7jDQbel8bmrzvjpsyY90EUf0u1qqpqz6O6TfsrCdmX5wEmAougjdp7WcDv
+	 JLU6vrmG7ve0A==
+Date: Sat, 9 Jul 2022 11:27:16 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd <arnd@arndb.de>, Olof <olof@lixom.net>, SoC <soc@kernel.org>
-CC: <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tony
- Lindgren <tony@atomide.com>
-Subject: [GIT PULL 3/3] ARM: dts: TI K2 updates for v5.20
-Message-ID: <20220708232709.rrpzbrpv7jbipyym@eldest>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 5.19, round 3
+Message-ID: <20220709032716.GA9868@dragon>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ea6yopqo7hq57gmy"
-Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-
---ea6yopqo7hq57gmy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi ARM SoC maintainers,
+The following changes since commit 8630354f42bef90f51e003a7ce62b69aceb735ca:
 
-Please pull
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+  arm64: dts: imx8mp-icore-mx8mp-edim2.2: correct pad settings (2022-06-27 15:55:41 +0800)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-keysto=
-ne-dt-for-v5.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.19-3
 
-for you to fetch changes up to 3ea73bf02225ad433e7cfbf8427b08aa8c593775:
+for you to fetch changes up to 6177a50fd32c6fd956c7265bc5297e725d221bfc:
 
-  ARM: dts: keystone: Adjust whitespace around '=3D' (2022-06-17 20:24:35 -=
-0500)
+  ARM: dts: colibri-imx6ull: fix snvs pinmux group (2022-07-08 16:12:48 +0800)
 
 ----------------------------------------------------------------
-Keystone2 device tree updates for v5.20
+i.MX fixes for 5.19, round 3:
 
-* Whitespace cleanups.
+- Fix GPIO property for imx6qdl-ts7970 board.
+- Fix touchscreen pinctrl for imx6ull-colibri board by moving iomuxc-snvs
+  pin to the correct controller device.
+- Fix SFP node of fsl-ls1028a to have a required clock property.
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      ARM: dts: keystone: Adjust whitespace around '=3D'
+Kris Bahnsen (1):
+      ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
 
- arch/arm/boot/dts/keystone-k2e-netcp.dtsi  | 26 +++++++++++++-------------
- arch/arm/boot/dts/keystone-k2e.dtsi        |  6 +++---
- arch/arm/boot/dts/keystone-k2g-netcp.dtsi  |  2 +-
- arch/arm/boot/dts/keystone-k2g.dtsi        | 18 +++++++++---------
- arch/arm/boot/dts/keystone-k2hk-netcp.dtsi | 12 ++++++------
- arch/arm/boot/dts/keystone-k2hk.dtsi       |  4 ++--
- arch/arm/boot/dts/keystone-k2l-netcp.dtsi  | 18 +++++++++---------
- arch/arm/boot/dts/keystone-k2l.dtsi        |  8 ++++----
- arch/arm/boot/dts/keystone.dtsi            | 18 +++++++++---------
- 9 files changed, 56 insertions(+), 56 deletions(-)
+Max Krummenacher (1):
+      ARM: dts: colibri-imx6ull: fix snvs pinmux group
 
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
- 849D 1736 249D
+Sean Anderson (1):
+      arm64: dts: ls1028a: Update SFP node to include clock
 
---ea6yopqo7hq57gmy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmLIvUUACgkQ3bWEnRc2
-JJ0Zwg//SLRdliH3Iqad1C2OSP/SdfXLNvZtr+E9wCNGkYxWTYyx8WOuHXmztCNb
-CKh95k5xucLAdOnvaG8fyQnYHqSYKO1YBi0N2WQudEEmt1Gp4x9JfkqNWpfkOzym
-5WRysmyHWBWbqf2Nf2+L5DXiepS8L0lnaQEqrquEP9oEcCe8fcwW3nOsTI2CQ29r
-gJ7/d/hWgNhvokSSC94XyVCvyWH0Kn33FgMfjKY5zJxvYFxIw47JHuqKEh9gGlsW
-ufrHyuQD1kCmhnG9chJ1KUciRU/n91MxXdZKls+KSAUHydkNsDX+skLcA6POwGH7
-TuKYqFYpRX0G3OKxtoo7qTj/tfWAetOa+zp+YmzFY/57c4mb/CKZms/LBPFN4FIz
-iNaabJGLHZ4ynTZQ9GLgbOrP9gLfgwPkts6NUQstOZkpZkgKM7z7N5xw3vmvGH/5
-VoOjPLQ3amHb9F09kE4tm1o8T8sbvJIqphkQTqu+cGcHgCqEyCY0mgQGjw0iRppS
-VC4Kf5OLE2gkk5QcQkmb6o2lu5kspLicza4Q+5QGbVZziWqvv8EuTojZF/+qecWQ
-x5d02xrcKZu3yrpbElxRozRZhfXO/988SYw4GAcr1+i/xmwLauQ0BdDUjj5wAAdx
-SSSMpwn32BQNlTH9A9p25EJjvz7nS6QBwsjXHS6cjK3nRlKNZbo=
-=iuhX
------END PGP SIGNATURE-----
-
---ea6yopqo7hq57gmy--
+ arch/arm/boot/dts/imx6qdl-ts7970.dtsi          | 2 +-
+ arch/arm/boot/dts/imx6ull-colibri.dtsi         | 9 +++++++--
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 5 ++++-
+ 3 files changed, 12 insertions(+), 4 deletions(-)
