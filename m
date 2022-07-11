@@ -1,106 +1,84 @@
-Return-Path: <SRS0=fVYF=XQ=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=VZIs=XQ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74ABDC43334
-	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 08:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8ADC433EF
+	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 10:44:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3864EC341CA; Mon, 11 Jul 2022 08:11:32 +0000 (UTC)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5DF8FC341C8; Mon, 11 Jul 2022 10:44:32 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5F77EC341C0
-	for <soc@kernel.org>; Mon, 11 Jul 2022 08:11:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5F77EC341C0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31c89111f23so41517437b3.0
-        for <soc@kernel.org>; Mon, 11 Jul 2022 01:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=mndZJna0iGt+5GGBdAG9aRx23s8at6jbdvXdUOdtfE0=;
-        b=MOg8kA+Yxg384ZFFK3qlxA8gRqkG2ttnouSWC1uATLOAVb1XD5Cxw48JcwsZGbvCzf
-         UaW4+QQr36kcRP6HpxqDNkc9/753IECr/inE8P1AAPH4m9VmVZxA9DMnHsdoL87WK/pZ
-         7zQwayx38+IKAXqmSWHy0HO0SKoJC4cWjXG+FetnUgo45dekWqCkm3gFNL8VzutjDEEp
-         T0JNMhN8VmOr/X1PoxcDxR+39jAxpXiLi6rPBWIZk6j+TVi6m5KuwrYXSKN0yNc5NgaH
-         DtaTpphVvXg/U7DRs2MsT5bsNQ2UPLzRTR4yf9nFVuoLi/GVhjOqxld4iqjPlgdCk7Ak
-         ev8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=mndZJna0iGt+5GGBdAG9aRx23s8at6jbdvXdUOdtfE0=;
-        b=FA8+yogODfpriC1hfIxmu+XARAM8poXcIo5NHiVVswrO1FFRD5DOvKGNG5/79/Dn9i
-         Xst/SmJqJE/8Dzt7QIgSoKSLvx0H8N4K6ujHk/V3FX0IO6x/ydDjQCmGQRQ5XnnI9IFv
-         FEUJ8XNDtpnSrx7k0Mo+lbsi+F9948Xxhw4zCG/xWZejtAw4lCHSS8UWxA651o5p+Gfn
-         egaGsxgas7/lQzC1lOnopPgMN756ZouMDv+Zhx2XsuyBAgRdo9lOQ4plEu8veAKKOeP1
-         vIvcnXrgUajbt5g68Ob1jZJXv/mIe0jBNDwSs8HsytEfg1/w7tC2RL1vF2UnIivJD89y
-         QD7A==
-X-Gm-Message-State: AJIora8YhKIYRABZOtJ03jpT4sizzEl2nVTmhFFI+PJZSNUTNdth92M7
-	LXjfisWvZol1pBKQGlrrouCYuxVyPH9FnY4RGsReozxTQI0/3w==
-X-Google-Smtp-Source: AGRyM1tVOhVi7iH1Zp327FfOYfwy79gbXZJz76ncwN4JkmQAnUl9j2DI3smQ7sTNtKYaU7pJktih1ZaO+6E/DEbzjL0=
-X-Received: by 2002:a81:cc4:0:b0:31c:839c:7e27 with SMTP id
- 187-20020a810cc4000000b0031c839c7e27mr18511166ywm.151.1657527090041; Mon, 11
- Jul 2022 01:11:30 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id C8ADEC34115;
+	Mon, 11 Jul 2022 10:44:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8ADEC34115
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MsZif-1nGoVD1v7z-00tyEQ; Mon, 11 Jul 2022 12:44:28 +0200
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31c8a1e9e33so44492787b3.5;
+        Mon, 11 Jul 2022 03:44:28 -0700 (PDT)
+X-Gm-Message-State: AJIora/fYBmgv7LhP41XMRVzguGHB0YsRWE5AICURT1SgN22SP8Sl6RC
+	thjarziUapwxqE/YRg7PcG4QeKpP5qiPLLS9cAE=
+X-Google-Smtp-Source: AGRyM1vvpnydJuBuZ35e57VYKLYJlK3F9wmwi5iEtf6XXv1REA+2TljVDJkpWUvo95W6zxTJYTwcZkl0b9VfsC7j7ms=
+X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
+ i15-20020a0ddf0f000000b0031be0007942mr18059301ywe.320.1657536267137; Mon, 11
+ Jul 2022 03:44:27 -0700 (PDT)
 MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 11 Jul 2022 10:11:19 +0200
-Message-ID: <CACRpkdZh8GdZzGsJ=h_E8RPgAHX8HqXs1871w95TVZD0SXHbkA@mail.gmail.com>
-Subject: [GIT PULL] Delete two DaVinci boards
+References: <CACRpkdZh8GdZzGsJ=h_E8RPgAHX8HqXs1871w95TVZD0SXHbkA@mail.gmail.com>
+In-Reply-To: <CACRpkdZh8GdZzGsJ=h_E8RPgAHX8HqXs1871w95TVZD0SXHbkA@mail.gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 11 Jul 2022 12:44:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2fXtAHJL7-Qs0dm3fwjFn0NvmotfpeW2zUOqh9ymK2cw@mail.gmail.com>
+Message-ID: <CAK8P3a2fXtAHJL7-Qs0dm3fwjFn0NvmotfpeW2zUOqh9ymK2cw@mail.gmail.com>
+Subject: Re: [GIT PULL] Delete two DaVinci boards
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Sekhar Nori <nsekhar@ti.com>, 
+Cc: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Sekhar Nori <nsekhar@ti.com>, 
 	Bartosz Golaszewski <brgl@bgdev.pl>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:jJnlq0NOv4LTmJoyVt8U7iOKUSuR1h73ZPdYU1+Rya6a3B141Bn
+ ux5eXis4EsYtHbY0o/Y8T4L/CBahR0zuxh5JlH/YOTMVoJ1y7eDZHIlA0rIgfMoNo6DENgT
+ NBJffh0eXufrn/A878s39L4/y1+3tBtTKv1S1hPGadlhMdA0MEjGnrrKt7/LBoALDZsCl+j
+ tw64zuKb5RxL69RRwsWOQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NP/3XVmFUw0=:xUslaVSG5mDENWmMKLhpA9
+ tn9bcJccOQvreGmrRH/nj6uuPey+4iz+MMTmYRhOB0kwTWC/l58pPQazpDDx2p0CsWiRg88T7
+ H5APJPdcmvfP639RyXL18JdiAOVaMNt/xQCNNFoMzQkKUftcu2A6i1ywrtKj6ABXCY3YnK98B
+ ZtdznE337driEGAZH7W2IuTFjD+ySPM0ghKRGmPpD3GfL3Ga6YrASF/qGhAWKJdFT8KhcxMOp
+ m63zvso1T20X27RtY/3NHqBGDRY52L4iY7U0u2Jnr6hYAqHJs7sXfHl4KSLJ+6kXh8Z1fhcj6
+ 3ihxfhxrJlvZos/OPZ1MJRBqfIIa88RvYL3Ickd+hUubE0cVNmzXozQyeK4CtcbNs+9qKK39Z
+ lo7taq/gPyTaW6EDn4kT/MgoSM7EVX96GPykEdrIpixsu3MC8OAEFpXFJJStUrmHlAEd9xw/R
+ ivEpjVj0FrRXBgYV0FvLAQNX2EnNCQ1Ok1ZnLh6JwmbRsjKTc0B3x5txWyNHKuAomUxQaqJcv
+ mnWTLLmLCrMMsdRI37XriLabDClqoFU0kAK91TSZ1jSRdP1UkHizzXpouGtlQHbzORa8Ex81H
+ hkC8i4jVCBaPbn9TJgZzWhK+FT1JEehZxCQQBGPGumY2ocd14nG+uSXorTIUDraPN/HCxu2r3
+ 5iVvetJjROdsy/x2Haf0Pp9fJyomxpRNM4j7KpvdCi51+LSaHHAnEP1NGM3HLst1aHzY58aZ6
+ Xxlfn8YgRPdRx4zhyyzGqsE8G4p+u9noC2WlsQ==
 
-Hi SoC folks,
+On Mon, Jul 11, 2022 at 10:11 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> Hi SoC folks,
+>
+> two patches deleting two unmainatined DaVinci boards.
+> The patches describe how I tried to update these boards
+> but there is no interest in that so now I am deleting them
+> as unused and unmaintained,
+>
+> Please pull it in unless the DaVinci maintainers step in
+> and says no.
 
-two patches deleting two unmainatined DaVinci boards.
-The patches describe how I tried to update these boards
-but there is no interest in that so now I am deleting them
-as unused and unmaintained,
+I'll give them a few days to reply. In the discussion about deprecating
+board files we already decided that only the DT-based davinci
+machines are really needed, so I don't expect much objection to
+removing them now, but otherwise they are going away in six months
+anyway.
 
-Please pull it in unless the DaVinci maintainers step in
-and says no.
+Your git tag description however needs a little more background,
+I don't want to pull this and bypass the maintainers with a one-line
+commit text. Can you update the tag to describe more about why
+speeding up the removal is important to you?
 
-Yours,
-Linus Wallej
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
-tags/davinci-boards-delete-v5.20
-
-for you to fetch changes up to b4aed01de48652928c8299f793625936f14d1739:
-
-  ARM: davinci: Delete DM646x board files (2022-07-01 14:10:20 +0200)
-
-----------------------------------------------------------------
-This deletes two unmaintained DaVinci boards.
-
-----------------------------------------------------------------
-Linus Walleij (2):
-      ARM: davinci: Delete DM644x board files
-      ARM: davinci: Delete DM646x board files
-
- arch/arm/mach-davinci/Kconfig             |  44 --
- arch/arm/mach-davinci/Makefile            |   6 -
- arch/arm/mach-davinci/board-dm644x-evm.c  | 928 ------------------------------
- arch/arm/mach-davinci/board-dm646x-evm.c  | 873 ----------------------------
- arch/arm/mach-davinci/board-neuros-osd2.c | 238 --------
- arch/arm/mach-davinci/board-sffsdr.c      | 151 -----
- arch/arm/mach-davinci/dm644x.c            | 765 ------------------------
- arch/arm/mach-davinci/dm646x.c            | 726 -----------------------
- 8 files changed, 3731 deletions(-)
- delete mode 100644 arch/arm/mach-davinci/board-dm644x-evm.c
- delete mode 100644 arch/arm/mach-davinci/board-dm646x-evm.c
- delete mode 100644 arch/arm/mach-davinci/board-neuros-osd2.c
- delete mode 100644 arch/arm/mach-davinci/board-sffsdr.c
- delete mode 100644 arch/arm/mach-davinci/dm644x.c
- delete mode 100644 arch/arm/mach-davinci/dm646x.c
+       Arnd
