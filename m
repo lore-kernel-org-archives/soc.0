@@ -4,66 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38929C43334
-	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 16:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D1A4C433EF
+	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 16:45:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 205A4C341CF; Mon, 11 Jul 2022 16:45:13 +0000 (UTC)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	id 33541C34115; Mon, 11 Jul 2022 16:45:15 +0000 (UTC)
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 49215C341CA;
-	Mon, 11 Jul 2022 16:45:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 49215C341CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 459D5C341C8;
+	Mon, 11 Jul 2022 16:45:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 459D5C341C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f176.google.com with SMTP id 72so5250862pge.0;
-        Mon, 11 Jul 2022 09:45:12 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id b9so5224701pfp.10;
+        Mon, 11 Jul 2022 09:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MIuswtQIknunxRlx2LZT8SAtUohtCTMYbduVcp0c5kc=;
-        b=JwT9f8B4rPVYRrR/4Sz6VZZpAeOWfArYM8hzDlzZzQFKXqb3mLlmDO27rt9AWxWgbf
-         ZxFHE+pssUKPOb8i0Z3SClP1lsxUveZybVgSY17lzNtMkeiCykVOStylyAD0OD14ajgZ
-         +GblVk6QDKee0cfQwOC74ZccF+G+oaz3cwn5/TVG/fwr7b/CNAqKmytodhE9unwnSIAY
-         mtr/BeFGqum0oEsSwOCDdchy7P12aJO7NrArnLe667mL0nS1AnY7LcYq+qo7nzoOG+R0
-         kYGXuthWfVBLGYdFyD0MZnKU9C4eRn1iej4Chc4VeksLhSwaqZtye+CHwvPp7bDD8Hc0
-         sz+g==
+        bh=0YB8njkT+jmGf5UJpj4fLZRYdH8i+T0PjbK3aknvxKw=;
+        b=jOBOemgJWVwTYPkm+472BhcXS4jTnIAsb7oUdProCLYxcsKCqeBNi1Fd2kswPB0jLp
+         gDZ12HS6Nj6z3pw0uYDDWKvHyKNOUx36p4/AngFGo1vI8o71qCEzQojVB6fPW+A/LFYN
+         CeZ6omKE/DwDZnXq+gxssjzeS/yLtyFwDIHnswfa6mHDGzuZ4HGYQYBLAj/S2cCvH24L
+         5efkH3EP7xTNVZCi2dJxzlfqhMb+/LS3Hf83Z45g05EiZrCPctLodGsOUP/OSdBx/Q3j
+         wup/tGdk+ALCCWojokLyLg8AbO4+R3F0C8Nm7uqEIMrTfff99Lhx4zfFxZJ1GjkMTAIR
+         TTXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MIuswtQIknunxRlx2LZT8SAtUohtCTMYbduVcp0c5kc=;
-        b=TJX7OfFJJ4kcp8QbnlMs9YGk6mH9SAenERjJBL+satM5xR5Xa1uoDH4hkdsWzbdWSo
-         m6TZ4FiYQf+rR4ghzAH8qV80O/DfaNTuEGzXpOfrCRm4S95m1xwlRRjLPVZMo5qY7fBa
-         59ZrGkeprQ2ydMR0oJV04iNEqVWWBZDjULgm3EnPIjXh+qJ47b1i8J1tURYRbz1pwDsT
-         ftsyVwNnGF+Q+Y77zmfG0FRpTqzJsYBtxroAYEgw0CoMYjA6HYX2Wrzxkf3fwH8p8ov/
-         MCfKGPsjrLJ6EeL2OhT+vDUroBSephxp/48rQGjT0SZ3rfDYbqNFiYp8g2wN9z0X1VTL
-         znRw==
-X-Gm-Message-State: AJIora/aVMwgFqpQgyAZ5sX4czu+t3Lmu2i6waACyOZzCUmv1zUsK3Cg
-	abAqbPJq1E2fa2daO38i5135xQsNEy4=
-X-Google-Smtp-Source: AGRyM1vzNLISRp0zb82WwdizHZ1POYqZ8dP335+Xl3z0bxL9ngYw5OOkx7lJvdlPUGHtgEHgHGFHbg==
-X-Received: by 2002:a63:480b:0:b0:40d:d4d1:7daf with SMTP id v11-20020a63480b000000b0040dd4d17dafmr16769949pga.512.1657557911307;
-        Mon, 11 Jul 2022 09:45:11 -0700 (PDT)
+        bh=0YB8njkT+jmGf5UJpj4fLZRYdH8i+T0PjbK3aknvxKw=;
+        b=st83KO7nnihTW/k1ADWt+nIL5OIPp5x74mpGuEGTIXaHFSuwzmb4j9flP3baPtvHt8
+         Cb0cz1hSvKbmkDMoBSRLqESB7XDWMdiNGmIiQFCNX8DDPrmkFjIjgbMcxrzkgwNyR45m
+         HIfrpUtXiRxOTgjNxIJ5pPzviZT7gj+JbXAOkkIwLHnTzj2BaqHwzEQSv+E2H5tQubPn
+         hECIKe37in7Kh8eq3QXUuJGvaNMhimf8h9CbTp67NrZZ+zQwE7IPrCyu4Gfn4RhOtxSE
+         EKfnR3YtEOdlsCEEiuCg/WTlqYEhkgOqP2ehcljkth+hipmbOAkk05F9BQuF2mb+XIUc
+         cm9w==
+X-Gm-Message-State: AJIora8Zv75CMzoUlVmBWQHQGyE9Oep/JD6lqOzWZqy/RXYaji8SuqZX
+	quUgFVD7Z29r/0pSy1LAoXWogQCYx34=
+X-Google-Smtp-Source: AGRyM1s7a2P3KPDwMktiqJ5wem4WRkPoVakobIOFdbq2Zs2+mKHC7qDGq0rdv/OWG3qTC14iVhdP2A==
+X-Received: by 2002:a62:864f:0:b0:52a:be82:6b60 with SMTP id x76-20020a62864f000000b0052abe826b60mr12084344pfd.48.1657557913310;
+        Mon, 11 Jul 2022 09:45:13 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v3-20020aa799c3000000b0052ab9f1fe45sm4961266pfi.120.2022.07.11.09.45.09
+        by smtp.gmail.com with ESMTPSA id v3-20020aa799c3000000b0052ab9f1fe45sm4961266pfi.120.2022.07.11.09.45.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 09:45:10 -0700 (PDT)
+        Mon, 11 Jul 2022 09:45:12 -0700 (PDT)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: William Zhang <william.zhang@broadcom.com>,
 	Florian Fainelli <f.fainelli@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Anand Gore <anand.gore@broadcom.com>,
+	Mark Brown <broonie@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Wolfram Sang <wsa@kernel.org>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	Stefan Wahren <stefan.wahren@i2se.com>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	Lee Jones <lee.jones@linaro.org>,
+	Liang He <windhl@126.com>,
+	Julia Lawall <Julia.Lawall@inria.fr>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 4/7] Broadcom devicetree-arm64 changes for 5.20
-Date: Mon, 11 Jul 2022 09:44:48 -0700
-Message-Id: <20220711164451.3542127-5-f.fainelli@gmail.com>
+Subject: [GIT PULL 5/7] Broadcom drivers changes for 5.20
+Date: Mon, 11 Jul 2022 09:44:49 -0700
+Message-Id: <20220711164451.3542127-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220711164451.3542127-1-f.fainelli@gmail.com>
 References: <20220711164451.3542127-1-f.fainelli@gmail.com>
@@ -76,67 +84,70 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.20/devicetree-arm64
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.20/drivers
 
-for you to fetch changes up to eab6bb0994b806525fc5e362e8b865f61c4a9e20:
+for you to fetch changes up to ef4ef28acb42ec77829e842c6f30a33526daf520:
 
-  arm64: dts: Add DTS files for bcmbca SoC BCM6813 (2022-06-15 10:40:02 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom ARM64-based SocS Device Tree
-updates for 5.20, please pull the following:
-
-- William adds the ARCH_BCMBCA Kconfig entry to follow the ARM 32-bit
-  counter part and adds basic support for these DSL/PON SoCs: 63158,
-  4912, 63146, 6856, 6813
-
-- Anand adds basic support for the 6858 SoC
-
-- Krzysztof fixes a missing space between a property name and its value
-  in a number of DTS files
+  tty: serial: bcm63xx: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA (2022-07-11 09:14:11 -0700)
 
 ----------------------------------------------------------------
-Anand Gore (1):
-      ARM64: dts: Add DTS files for bcmbca SoC BCM6858
+This pull request contains Broadcom SoC drivers updatse for 5.20, please
+pull the following:
 
-Krzysztof Kozlowski (1):
-      arm64: dts: broadcom: adjust whitespace around '='
+- Julia fixes a typo in the Broadcom STB legacy power management code
 
-William Zhang (6):
-      arm64: bcmbca: add arch bcmbca machine entry
-      arm64: dts: Add DTS files for bcmbca SoC BCM63158
-      arm64: dts: Add DTS files for bcmbca SoC BCM4912
-      arm64: dts: Add DTS files for bcmbca SoC BCM63146
-      arm64: dts: Add DTS files for bcmbca SoC BCM6856
-      arm64: dts: Add DTS files for bcmbca SoC BCM6813
+- Liang fixes a device_node reference count leak in the Broadcom STB BIU
+  driver code error path(s)
 
- arch/arm64/Kconfig.platforms                       |   9 ++
- arch/arm64/boot/dts/broadcom/Makefile              |   1 +
- arch/arm64/boot/dts/broadcom/bcmbca/Makefile       |   7 ++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm4912.dtsi   | 128 +++++++++++++++++++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm63146.dtsi  | 110 ++++++++++++++++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm63158.dtsi  | 128 +++++++++++++++++++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm6813.dtsi   | 128 +++++++++++++++++++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm6856.dtsi   | 103 +++++++++++++++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi   | 121 +++++++++++++++++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm94912.dts   |  30 +++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm963146.dts  |  30 +++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm963158.dts  |  30 +++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm96813.dts   |  30 +++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm96856.dts   |  30 +++++
- arch/arm64/boot/dts/broadcom/bcmbca/bcm96858.dts   |  30 +++++
- .../arm64/boot/dts/broadcom/stingray/stingray.dtsi |   2 +-
- 16 files changed, 916 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/Makefile
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm4912.dtsi
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm63146.dtsi
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm63158.dtsi
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm6813.dtsi
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm6856.dtsi
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm94912.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm963146.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm963158.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm96813.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm96856.dts
- create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm96858.dts
+- Nicolas and Stefan provide updates to the BCM2835 power management
+  driver allowing its use on BCM2711 (Raspberry Pi 4) and to enable the
+  use of the V3D GPU driver on such platforms. This is a merge of an
+  immutable branch from Lee Jones' MFD tree
+
+- William removes the use of CONFIG_ARCH_BCM_63XX which is removed and
+  replaces the dependencies with CONFIG_ARCH_BCMBCA which is how all of
+  the DSL/PON SoCs from Broadcom are now supported in the upstream
+  kernel.
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      Merge tag 'tags/ib-mfd-soc-bcm-v5.20' into drivers/next
+
+Julia Lawall (1):
+      soc: bcm: brcmstb: pm: pm-arm: fix typo in comment
+
+Liang He (1):
+      soc: bcm: brcmstb: biuctrl: Add missing of_node_put()
+
+Nicolas Saenz Julienne (2):
+      mfd: bcm2835-pm: Use 'reg-names' to get resources
+      soc: bcm: bcm2835-power: Bypass power_on/off() calls
+
+Stefan Wahren (4):
+      mfd: bcm2835-pm: Add support for BCM2711
+      soc: bcm: bcm2835-power: Refactor ASB control
+      soc: bcm: bcm2835-power: Resolve ASB register macros
+      soc: bcm: bcm2835-power: Add support for BCM2711's RPiVid ASB
+
+William Zhang (7):
+      ata: ahci_brcm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+      i2c: brcmstb: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+      phy: brcm-sata: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+      hwrng: bcm2835: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+      clk: bcm: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+      spi: bcm63xx-hsspi: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+      tty: serial: bcm63xx: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
+
+ drivers/ata/Kconfig                 |  2 +-
+ drivers/char/hw_random/Kconfig      |  2 +-
+ drivers/clk/bcm/Kconfig             |  4 +-
+ drivers/i2c/busses/Kconfig          |  2 +-
+ drivers/mfd/bcm2835-pm.c            | 74 +++++++++++++++++++++++++++----------
+ drivers/phy/broadcom/Kconfig        |  2 +-
+ drivers/soc/bcm/bcm2835-power.c     | 72 ++++++++++++++++++++++++------------
+ drivers/soc/bcm/brcmstb/biuctrl.c   |  9 +++--
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c |  2 +-
+ drivers/spi/Kconfig                 |  2 +-
+ drivers/tty/serial/Kconfig          |  4 +-
+ include/linux/mfd/bcm2835-pm.h      |  1 +
+ 12 files changed, 119 insertions(+), 57 deletions(-)
