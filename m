@@ -1,111 +1,78 @@
-Return-Path: <SRS0=WXVb=XQ=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=VZIs=XQ=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABCD0C433EF
-	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 16:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D6B6C433EF
+	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 18:54:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 956ADC341C8; Mon, 11 Jul 2022 16:45:19 +0000 (UTC)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 42DA8C341CA; Mon, 11 Jul 2022 18:54:48 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5B87C34115;
-	Mon, 11 Jul 2022 16:45:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5B87C34115
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id s21so5287192pjq.4;
-        Mon, 11 Jul 2022 09:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Gvq9fRocj1mv6TDsG70Rw7WPOwdlIYO2EV775Kn6cYk=;
-        b=HYD1qirsbo/HdEtwANxIt1hBprhFivEtbVyyYjfF1u8t3/yV7v9QXz/32XtXHG+w+0
-         26ezlLlDgK5C12I46GkokoqYzf1lB7OVb/ZcuCzLc05nYCiY/VX/QjCdOPlFXdsBvbmy
-         oaPDsvHAkg4wmm3yd0UX63rXE1otyGj2EiwcEJwmqhhVpBdnTbj2OlEgkNZIwvC98yU3
-         hUGLWbam3uLNMQWlJ1x7qeGSErFWySFemlO8hqFMoRQu/XWJM0qx1ineHJCTLB/TTlqv
-         2ieqx2Kc1+U7ep9B/cIcCjTy37FwBsYwazr+KOJrdQ9T8knyTq0Pt0iLHHjCnrszWyK/
-         Uk1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Gvq9fRocj1mv6TDsG70Rw7WPOwdlIYO2EV775Kn6cYk=;
-        b=E3f/gIBknY8k+hAd7L3AwTh3znqgLdPkMuwAfkq1TrvQSB5/5CNX03SdsORHSuc6KF
-         5xy4GSjYnP5gpw/pQQKGqjtsDGrRjANBwKFmId2tk6a59DEByP58kIBHy8UjqOfnSFwO
-         LQIGbOd/IVlqP3KWDuNWzcdTSaF7qrKMJWu5Rhr50GJSizmJyDfuMZsLnpImY9tLWs9m
-         8dWMJd+1PXnNqYnzEUCFeLmoP5AUMApOhsuxH8nQOaJiJuJTirPngl2rqx4GqIH/3Rlb
-         nHGZpYDr/poLp07DqDmWtfzGzVAGpzY65CZNx+wfDsdvZs6GwMAUyqLCaQA4J40Xb8Kp
-         bV8w==
-X-Gm-Message-State: AJIora+ke0TpFQ+mHSRevSzrKsHgjl3rWC99R1TFShm1eakiTYESl6/9
-	q4RU6s/1zRKjD8W166P++jdYQwZsekY=
-X-Google-Smtp-Source: AGRyM1uhImqejHVtqYUd3puZvB6zOT8Z3fNCwmmZVFB92HXoRVxwb1+208PCziB3Qf283JwI9DcMpw==
-X-Received: by 2002:a17:90a:890e:b0:1ef:85d5:515d with SMTP id u14-20020a17090a890e00b001ef85d5515dmr18997241pjn.109.1657557918054;
-        Mon, 11 Jul 2022 09:45:18 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v3-20020aa799c3000000b0052ab9f1fe45sm4961266pfi.120.2022.07.11.09.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 09:45:16 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: William Zhang <william.zhang@broadcom.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Miaoqian Lin <linmq006@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 7/7] Broadcom soc changes for 5.20
-Date: Mon, 11 Jul 2022 09:44:51 -0700
-Message-Id: <20220711164451.3542127-8-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220711164451.3542127-1-f.fainelli@gmail.com>
-References: <20220711164451.3542127-1-f.fainelli@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 98E12C34115
+	for <soc@kernel.org>; Mon, 11 Jul 2022 18:54:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 98E12C34115
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f178.google.com ([209.85.219.178]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MY6TD-1o3RTl18E1-00YRb1 for <soc@kernel.org>; Mon, 11 Jul 2022 20:54:44
+ +0200
+Received: by mail-yb1-f178.google.com with SMTP id f73so10196472yba.10
+        for <soc@kernel.org>; Mon, 11 Jul 2022 11:54:44 -0700 (PDT)
+X-Gm-Message-State: AJIora8PBk9t/SDUBmuz7OupLFs60PMLEREyzk8Zh+hIb3A5Lm6zIX5v
+	a21zWtqnifvFTdWFw3KmwM4+dnzVUWBY4nzGbFg=
+X-Google-Smtp-Source: AGRyM1teQ9by6wwYpEa4TUiw+qV+gY/b/EQAj5dDeWf1gTsk/iOKJ37ZYiJsFa3tHVGbiKmMuKCKz+TO3trwL567zV4=
+X-Received: by 2002:a25:7c41:0:b0:66d:766a:4815 with SMTP id
+ x62-20020a257c41000000b0066d766a4815mr18584569ybc.480.1657565683096; Mon, 11
+ Jul 2022 11:54:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220708194448.10700-1-Sergey.Semin@baikalelectronics.ru> <20220711155335.ltctlk66vylwcpcj@mobilestation>
+In-Reply-To: <20220711155335.ltctlk66vylwcpcj@mobilestation>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 11 Jul 2022 20:54:26 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2H0+LDO18onn3F469t4ci=VbL+EZV83dct74Ce8tqfqg@mail.gmail.com>
+Message-ID: <CAK8P3a2H0+LDO18onn3F469t4ci=VbL+EZV83dct74Ce8tqfqg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v4 1/2] bus: bt1-apb: Don't print error on -EPROBE_DEFER
+To: Serge Semin <fancer.lancer@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Serge Semin <Sergey.Semin@baikalelectronics.ru>, 
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
+	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>, SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:t/rN2L1J5yLf/V6TFsXDxa431m/c/vPDrQ9D78WJLNkTxbYF9qp
+ K17mmQg79Bivdrf3Ps6XPkfRr48HbIUDCmhcnbirZ3QUYFnLTwbhMFQqoTAzvgLfn/aeJfz
+ hCMPynTTqlxBhlDL4DPidgYRNh5UcxLmQJ5ZJZxMgNTUjqT4StjTIAelRFanrQ098VQpTlB
+ FZUm009hQ9+6ffK67C0Fg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zaMX+Y/ivMc=:QYiCGWIc5g3gr+3hj2pTmJ
+ rsgel4WrvjlCD471boLGX48nZeX5Jpfysuu8vljgxPzWLLbk/O4I7CO+5Ipybzq+2RuilfYKq
+ 0gv4pGNTUjPC5KoiIN5JfCrQvzLQXlK8wTrsFawLzPQy+MHvcmOsJKuqotvUZUe626iEN1jjd
+ OaHn+Yf89/j6Ryf2hnj7i9Tvdvv8E1KsRxGM1+iy4SzFKn0Uh6p8v8RxCPwCbfoZ6aZUC9v33
+ gFCPZjoEWIZ1kY5alH45mxyojQ9BKYwu0K7pU1yx1lWHwTdX1LDwiw82rqKi6QIsB1XTnTlNA
+ YS3e8FomR988KThryCwTL7GiQxpV4abc+RhGcg3GJeH57Nx24CmtFf3I0Ydf6NDMuWHEmUSUU
+ 7Rr1dqW1OStTyDVsZCmx16e1JCzLNDntxkTII7rPsiCzHGx52QxJ3bI/oD2ishGj0Z8pBNZNM
+ sVg0F0TzO9yjnFudoPj3eQb1s69g0bDpkwtYI/DW+WyEgjr5lPT2lnBJchD7RZ1V0L6i7rZj+
+ LlNsSQlANF++PGvNJtgmvbra0FCrh8nVUEePNFapqXsB4LSh5dlHJROLtDWGEUjfEhcNLD0Sk
+ r3JzupkuSdpxgHj4Jdcs6XSUjinkge7/iI55tfzlm60RYQRIq95SWiZUH+VJWa2PKibZOnCzz
+ NxnroD7AkQwjUj+pzbVKJ2oF2pMWkQRHGYHiEF3yFR3zZPhw3PmXfqtuRZJ9xRJHA7Twc8oE6
+ qoSB+rG7c3uirX8BNScn8mdc+hfxm5/8NE0bvQ==
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+On Mon, Jul 11, 2022 at 5:53 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> Hi Arnd, Philipp
+>
+> Since no comments have been posted for the patches lately and the @Philipp
+> notes have been fixed way on v2, could you please consider merge the
+> patchset in through any of your repos?
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-are available in the Git repository at:
+Hi Sergey,
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.20/soc
+I already merged these into the arm/drivers tree on June 10, I suppose
+something went wrong with the notification email.
 
-for you to fetch changes up to fa0ef5a086a05306fc5322bbda73459725eda923:
-
-  ARM: debug: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA (2022-07-08 14:08:51 -0700)
-
-----------------------------------------------------------------
-This pull request contains Broadcom SoC drivers changes for 5.20, please
-pull the following:
-
-- Miaoqian fixes a device_node reference count leak in the Kona SMC
-  initialization code
-
-- William moves the 63138 support code to use CONFIG_ARCH_BCMBCA which
-  is how all of those similar SoCs from the BCA division are supported
-  moving forward. This includes machine code and UART low-level debug
-  code.
-
-----------------------------------------------------------------
-Miaoqian Lin (1):
-      ARM: bcm: Fix refcount leak in bcm_kona_smc_init
-
-William Zhang (3):
-      arm: bcmbca: Move BCM63138 ARCH_BCM_63XX to ARCH_BCMBCA
-      arm: bcmbca: Add BCMBCA sub platforms
-      ARM: debug: bcmbca: Replace ARCH_BCM_63XX with ARCH_BCMBCA
-
- arch/arm/Kconfig.debug           |  2 +-
- arch/arm/mach-bcm/Kconfig        | 61 ++++++++++++++++++++++++++++------------
- arch/arm/mach-bcm/Makefile       | 11 ++++----
- arch/arm/mach-bcm/bcm63xx.c      | 27 ------------------
- arch/arm/mach-bcm/bcm_kona_smc.c |  1 +
- 5 files changed, 50 insertions(+), 52 deletions(-)
- delete mode 100644 arch/arm/mach-bcm/bcm63xx.c
+      Arnd
