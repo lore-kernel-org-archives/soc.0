@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC3FCCA480
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13457C433EF
 	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 16:20:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D85B3C341D0; Mon, 11 Jul 2022 16:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C0E71C341CA;
+	id DCD67C341CE; Mon, 11 Jul 2022 16:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6331C385A2;
 	Mon, 11 Jul 2022 16:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1657556427;
-	bh=XwPMb301t1qBhQhXQ9kdFFDWWf9Rm4s30KiHEkKtyDE=;
+	bh=4ST534LidlkFNX2maWdj6YrPdNCr5DXbvWMSe3OWlhU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=e11iAknuRvFBJiqKPO904eTIPSipLE9Camk7JYFmv4qus02EqRp1DO93xjvN5EsVu
-	 dL03L7Z2RnrfCklkDx24XLrR+i1vJhGqua4KDGTrgQPWj9UP9z43T23+cgrcsyT1tt
-	 7tBc24BO5ek73t5cLw3ya9XKfUmVdg3Wodla/fBBAeA48akM/pSKm1ZKFXyMH7fvHW
-	 jm3DyPEKx7oGVvJ1P8hOi1Gq/ZlrV+HnhCVaQOYZq6KuFu5929NRn4GQBKeawNugvY
-	 AERwlvgB5oFIWgGdfEcjHIUogp1Rr/sZUP0vDVj4AxJJ0AVTWSzYu4xyQfyfHW1mch
-	 gfodB9XPBNsRw==
+	b=iKXLoJBEGiK3d77sk/Ck6KdofFb+aeSG0CpaJLf8GGhL21FEuu22GmeRPQTe7hPE2
+	 w3UCHCktGjMA81vShw6bTACzDXd+9VhqAA/bzhhb3hAObLXM9hVIbml8kLdZILRD9C
+	 nqgKldzxXxA+qzFYjQrkI1nsrHNS4rjg6LVF6Uxvj95IRmmfhJw01HGorbRf70PCIP
+	 2gHy5fvKboI25d7isjZSvc9qXolFCnlaMgtihhhB41mzg+oXmrmro1e2zk9Wda6TxW
+	 mhvOfRMh+rVGXk/FTeWL0gSWudsFWowEmyA/vn37gKVeaWFbetwKAbjY8C810JmOqY
+	 imkVDdM7HXuxQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A352DE45223;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AA7DEE4522B;
 	Mon, 11 Jul 2022 16:20:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] TI SoC driver updates for v5.20
+Subject: Re: [GIT PULL] i.MX fixes for 5.19, round 3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165755642766.9192.2314324270786095708.git-patchwork-notify@kernel.org>
+ <165755642769.9192.2301838957786903765.git-patchwork-notify@kernel.org>
 Date: Mon, 11 Jul 2022 16:20:27 +0000
-References: <20220708232655.reqjdbib52ejdja4@unadvised>
-In-Reply-To: <20220708232655.reqjdbib52ejdja4@unadvised>
-To: Nishanth Menon <nm@ti.com>
+References: <20220709032716.GA9868@dragon>
+In-Reply-To: <20220709032716.GA9868@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,24 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 8 Jul 2022 18:26:55 -0500 you wrote:
-> Hi ARM SoC maintainers,
+On Sat, 9 Jul 2022 11:27:16 +0800 you wrote:
+> The following changes since commit 8630354f42bef90f51e003a7ce62b69aceb735ca:
 > 
-> Please pull
+>   arm64: dts: imx8mp-icore-mx8mp-edim2.2: correct pad settings (2022-06-27 15:55:41 +0800)
 > 
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+> are available in the Git repository at:
 > 
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-5.19-3
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] TI SoC driver updates for v5.20
-    (no matching commit)
-  - [GIT,PULL,2/3] arm64: dts: TI K3 updates for v5.20
-    https://git.kernel.org/soc/soc/c/7310e458ac5e
-  - [GIT,PULL,3/3] ARM: dts: TI K2 updates for v5.20
-    https://git.kernel.org/soc/soc/c/bfcfa1bdc45e
+  - [GIT,PULL] i.MX fixes for 5.19, round 3
+    https://git.kernel.org/soc/soc/c/01277737e9be
 
 You are awesome, thank you!
 -- 
