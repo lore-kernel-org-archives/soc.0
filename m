@@ -1,85 +1,106 @@
-Return-Path: <jernej@kernel.org>
+Return-Path: <SRS0=fVYF=XQ=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F78C43334
-	for <soc@archiver.kernel.org>; Sat,  9 Jul 2022 18:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74ABDC43334
+	for <soc@archiver.kernel.org>; Mon, 11 Jul 2022 08:11:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 891DBC341CB; Sat,  9 Jul 2022 18:16:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CCFC3411C;
-	Sat,  9 Jul 2022 18:16:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657390585;
-	bh=se8frCnsFxeLIYGKdeWSwhvcOngONRyCg/WBWgwYgM0=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=SyykrdrflDXEYskkRcQW0a6dRmxMbqfsuKP7n+jXZ7MuNlL2WYXxefUL9KTiQ5brK
-	 HEEsmwhLwm14MxhTI8354AehD+EBK3qXN/bde0yX5UWufgKQo+0e4kBdSviTDuhVYe
-	 oBelvCB6cZ4VgDGIVCT+eyQtl7X5q/19AN3b2kSKMlD61Yf+0QZwBEGZEhjaJkucHk
-	 u4I1TdyVzZLAFIQPk9pCVJdZVemRX68N9i8yautxjUtqqU/+9+5VIrium4v+CR2zjl
-	 /ybt1nmFnsZtmnBJr/QUwI4Z2SNUhN5FasuzbdX4tKAEP1KX3SjJvK9U2hUFVJu0Ap
-	 3+tTAzdTv3cLg==
-Date: Sat, 9 Jul 2022 20:16:21 +0200
-From: Jernej Skrabec <jernej@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: wens@csie.org, samuel@sholland.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [GIT PULL] Allwinner device tree changes for 5.20, part 2
-Message-ID: <YsnF9cm/qniIOklj@kista.localdomain>
+	id 3864EC341CA; Mon, 11 Jul 2022 08:11:32 +0000 (UTC)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5F77EC341C0
+	for <soc@kernel.org>; Mon, 11 Jul 2022 08:11:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5F77EC341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31c89111f23so41517437b3.0
+        for <soc@kernel.org>; Mon, 11 Jul 2022 01:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=mndZJna0iGt+5GGBdAG9aRx23s8at6jbdvXdUOdtfE0=;
+        b=MOg8kA+Yxg384ZFFK3qlxA8gRqkG2ttnouSWC1uATLOAVb1XD5Cxw48JcwsZGbvCzf
+         UaW4+QQr36kcRP6HpxqDNkc9/753IECr/inE8P1AAPH4m9VmVZxA9DMnHsdoL87WK/pZ
+         7zQwayx38+IKAXqmSWHy0HO0SKoJC4cWjXG+FetnUgo45dekWqCkm3gFNL8VzutjDEEp
+         T0JNMhN8VmOr/X1PoxcDxR+39jAxpXiLi6rPBWIZk6j+TVi6m5KuwrYXSKN0yNc5NgaH
+         DtaTpphVvXg/U7DRs2MsT5bsNQ2UPLzRTR4yf9nFVuoLi/GVhjOqxld4iqjPlgdCk7Ak
+         ev8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=mndZJna0iGt+5GGBdAG9aRx23s8at6jbdvXdUOdtfE0=;
+        b=FA8+yogODfpriC1hfIxmu+XARAM8poXcIo5NHiVVswrO1FFRD5DOvKGNG5/79/Dn9i
+         Xst/SmJqJE/8Dzt7QIgSoKSLvx0H8N4K6ujHk/V3FX0IO6x/ydDjQCmGQRQ5XnnI9IFv
+         FEUJ8XNDtpnSrx7k0Mo+lbsi+F9948Xxhw4zCG/xWZejtAw4lCHSS8UWxA651o5p+Gfn
+         egaGsxgas7/lQzC1lOnopPgMN756ZouMDv+Zhx2XsuyBAgRdo9lOQ4plEu8veAKKOeP1
+         vIvcnXrgUajbt5g68Ob1jZJXv/mIe0jBNDwSs8HsytEfg1/w7tC2RL1vF2UnIivJD89y
+         QD7A==
+X-Gm-Message-State: AJIora8YhKIYRABZOtJ03jpT4sizzEl2nVTmhFFI+PJZSNUTNdth92M7
+	LXjfisWvZol1pBKQGlrrouCYuxVyPH9FnY4RGsReozxTQI0/3w==
+X-Google-Smtp-Source: AGRyM1tVOhVi7iH1Zp327FfOYfwy79gbXZJz76ncwN4JkmQAnUl9j2DI3smQ7sTNtKYaU7pJktih1ZaO+6E/DEbzjL0=
+X-Received: by 2002:a81:cc4:0:b0:31c:839c:7e27 with SMTP id
+ 187-20020a810cc4000000b0031c839c7e27mr18511166ywm.151.1657527090041; Mon, 11
+ Jul 2022 01:11:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 11 Jul 2022 10:11:19 +0200
+Message-ID: <CACRpkdZh8GdZzGsJ=h_E8RPgAHX8HqXs1871w95TVZD0SXHbkA@mail.gmail.com>
+Subject: [GIT PULL] Delete two DaVinci boards
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Sekhar Nori <nsekhar@ti.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi!
+Hi SoC folks,
 
-Please pull following DT changes for 5.20. This was almost ready to be
-sent in first PR, but it needed one small adjustment, so I'm sending
-this as second pull request.
+two patches deleting two unmainatined DaVinci boards.
+The patches describe how I tried to update these boards
+but there is no interest in that so now I am deleting them
+as unused and unmaintained,
 
-Best regards,
-Jernej
+Please pull it in unless the DaVinci maintainers step in
+and says no.
 
-The following changes since commit aab941b8c3cfb020baf2218e9e39706e05bf4877:
+Yours,
+Linus Wallej
 
-  arm64: dts: allwinner: pinephone: Enable internal HMIC bias (2022-07-08 18:52:08 +0200)
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-5.20-2
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+tags/davinci-boards-delete-v5.20
 
-for you to fetch changes up to 2c1e62992981c4d8fe7bc183877aec2a189bd387:
+for you to fetch changes up to b4aed01de48652928c8299f793625936f14d1739:
 
-  arm64: dts: allwinner: h616: Add X96 Mate TV box support (2022-07-09 20:08:53 +0200)
-
-----------------------------------------------------------------
-- added H616 EMAC compatible
-- make pinctrl interrupts optionals in DT binding
-- initial H616 DTSI
-- added OrangePi Zero 2 board
-- added X96 Mate TV box
-- add VCC PI supply in pinctrl DT binding
+  ARM: davinci: Delete DM646x board files (2022-07-01 14:10:20 +0200)
 
 ----------------------------------------------------------------
-Andre Przywara (7):
-      dt-bindings: arm: sunxi: Add H616 EMAC0 compatible
-      dt-bindings: pinctrl: sunxi: Make interrupts optional
-      arm64: dts: allwinner: Add Allwinner H616 .dtsi file
-      dt-bindings: pinctrl: sunxi: allow vcc-pi-supply
-      dt-bindings: arm: sunxi: Add two H616 board compatible strings
-      arm64: dts: allwinner: h616: Add OrangePi Zero 2 board support
-      arm64: dts: allwinner: h616: Add X96 Mate TV box support
+This deletes two unmaintained DaVinci boards.
 
- Documentation/devicetree/bindings/arm/sunxi.yaml   |  10 +
- .../bindings/net/allwinner,sun8i-a83t-emac.yaml    |   1 +
- .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml       |  18 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm64/boot/dts/allwinner/Makefile             |   2 +
- .../dts/allwinner/sun50i-h616-orangepi-zero2.dts   | 213 ++++++++
- .../boot/dts/allwinner/sun50i-h616-x96-mate.dts    | 177 ++++++
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     | 591 +++++++++++++++++++++
- 8 files changed, 1010 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+----------------------------------------------------------------
+Linus Walleij (2):
+      ARM: davinci: Delete DM644x board files
+      ARM: davinci: Delete DM646x board files
+
+ arch/arm/mach-davinci/Kconfig             |  44 --
+ arch/arm/mach-davinci/Makefile            |   6 -
+ arch/arm/mach-davinci/board-dm644x-evm.c  | 928 ------------------------------
+ arch/arm/mach-davinci/board-dm646x-evm.c  | 873 ----------------------------
+ arch/arm/mach-davinci/board-neuros-osd2.c | 238 --------
+ arch/arm/mach-davinci/board-sffsdr.c      | 151 -----
+ arch/arm/mach-davinci/dm644x.c            | 765 ------------------------
+ arch/arm/mach-davinci/dm646x.c            | 726 -----------------------
+ 8 files changed, 3731 deletions(-)
+ delete mode 100644 arch/arm/mach-davinci/board-dm644x-evm.c
+ delete mode 100644 arch/arm/mach-davinci/board-dm646x-evm.c
+ delete mode 100644 arch/arm/mach-davinci/board-neuros-osd2.c
+ delete mode 100644 arch/arm/mach-davinci/board-sffsdr.c
+ delete mode 100644 arch/arm/mach-davinci/dm644x.c
+ delete mode 100644 arch/arm/mach-davinci/dm646x.c
