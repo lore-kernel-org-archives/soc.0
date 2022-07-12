@@ -1,110 +1,138 @@
-Return-Path: <SRS0=km/W=XR=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=saSd=XR=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4FC5C433EF
-	for <soc@archiver.kernel.org>; Tue, 12 Jul 2022 13:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D405C43334
+	for <soc@archiver.kernel.org>; Tue, 12 Jul 2022 16:42:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9DA25C341CB; Tue, 12 Jul 2022 13:27:38 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 3F273C3411E; Tue, 12 Jul 2022 16:42:43 +0000 (UTC)
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2BB41C3411C;
-	Tue, 12 Jul 2022 13:27:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2BB41C3411C
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M5Qhx-1o9sTj3tob-001UHk; Tue, 12 Jul 2022 15:27:35 +0200
-Received: by mail-yb1-f172.google.com with SMTP id n74so13915096yba.3;
-        Tue, 12 Jul 2022 06:27:34 -0700 (PDT)
-X-Gm-Message-State: AJIora/GIDs8dvwzao9O2VqbsGohvM6lN4xxEeiZB+eQglEf+eK7eRPI
-	wZoCpnQNs0XDsWJT9MDWnvzYIeRHnJbmqFkpo/E=
-X-Google-Smtp-Source: AGRyM1uXh17pWsKX+Lt0fZNfqCjvNyiaSb6/cGIjflgREtQ0O3M/xH24ftkEVDT58/8HfALKjaLufIJ+KNAVd7QIuNI=
-X-Received: by 2002:a25:73d1:0:b0:66e:aee4:feb3 with SMTP id
- o200-20020a2573d1000000b0066eaee4feb3mr23156338ybc.452.1657632453362; Tue, 12
- Jul 2022 06:27:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220708185608.676474-1-thierry.reding@gmail.com> <20220708185608.676474-2-thierry.reding@gmail.com>
-In-Reply-To: <20220708185608.676474-2-thierry.reding@gmail.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 12 Jul 2022 15:27:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
-Message-ID: <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
-Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
-To: Thierry Reding <thierry.reding@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 833C0C3411C;
+	Tue, 12 Jul 2022 16:42:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 833C0C3411C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso8785027pjk.3;
+        Tue, 12 Jul 2022 09:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=38qVWGdU7HKJkL6IeCHeQKdX+0uOfPHorBf46EI1KJs=;
+        b=nVBSoT3GWPU4E9j6+KwPb2GXTEMNqck6Lio7zEkhgrmsW4lsa0rlm9nUQaVaF0XaIp
+         bFiKfAHlnEMwbcNJjb/ZIBNaBcWiR13sXTVSW3l2G72ri0vIBrdmz0Wqf+gSU6oq99+y
+         SNxe+8FbAENRA35QJLfQlf+JA7ii4Ka7N98XKEc0NFaxeUxN2h/TS4mZ/LkUVTJGw6eF
+         JpTCyzwcrbDR1NUGVdsOvZtY+jiJbqLw1NI1HAJnQAWCaG8oWrwls3appxJ40EPz6yLc
+         3wGiuSsiSAb3V+cjwx+mSoB1DDpycEQr2k/CzCKj/bpJ8hkToVo9QxAgrCQhmodDenXK
+         VSKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=38qVWGdU7HKJkL6IeCHeQKdX+0uOfPHorBf46EI1KJs=;
+        b=PKQUZbAQ+7cmv113rRvTwjpbygwUaSQLSF3UcrDvDDnJst9XmG6cBcuPEl3zbByzdd
+         3q6oyeJeEnUnaqnCCugbGVfyb+nQXGOg7C3MpBAZNBT7X2IH4hTmJ4xwg0Mmeo61cqv2
+         pQsUpGJ7/0sfY1mJ71hSE6npYxXkrbEUkMO4dMa6rCN7vOneZsl1pcHYLbqwOOK95szJ
+         UZyy2G3vS4qDv9EW9hDSaVRz+407cDcLjpasxq3pYYnJA4jXJ7tqVFo7tgrixetq4Wyt
+         Nhlu4JGc3PAZkl8bTcw7Osg+fQFc3K8XlW+2foOTLVkyb7Iy3vjX5+OiWmQtcA1jDteA
+         5Fcg==
+X-Gm-Message-State: AJIora9Qb6Axf2SN0y8JuYTJxxvtOE784h4m8knl34uhpxQD/2+4qWDj
+	4n/9woN2sG1lfMAmORJ3FdM=
+X-Google-Smtp-Source: AGRyM1vM/uufGxIf0o5rDefUv4yeq7W+vjifZQYSEdFtEs1ZztI71WgQjYPptMY8+ctn++udD323Mw==
+X-Received: by 2002:a17:90b:4ad2:b0:1f0:3395:6427 with SMTP id mh18-20020a17090b4ad200b001f033956427mr5166794pjb.93.1657644161878;
+        Tue, 12 Jul 2022 09:42:41 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id n5-20020a622705000000b005254c71df0esm7050562pfn.86.2022.07.12.09.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 09:42:40 -0700 (PDT)
+From: Florian Fainelli <f.fainelli@gmail.com>
+To: linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, Jon Hunter <jonathanh@nvidia.com>, 
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, linux-edac@vger.kernel.org, 
-	Borislav Petkov <bp@alien8.de>, Mauro Carvalho Chehab <mchehab@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Robert Richter <rric@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lMGBr5EEW5j6yf/ncl0o1KrhmbcBa2hGddHOyKlAp36ptWhGxSG
- Qr7B9Eb8h4gQA1VenS47j9jDzXQRcIeep8/pqzuWfuA0mHkz4dg6B5sT54LZNpeIGBvWboH
- 2nAXQwB/ks/LnT6BLDRcXwi2By/Sl3jYAWGIRWr1PNBc39sq0+pmdYhpE7WAaDOtVJNl2hh
- +HezT9ooyZlAh2tURcCcg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Xd5KqdFfkuk=:4l4emE52DDCEeABEGsXVeC
- z6NHfgHRt7/hheLKiNFg8yvguGSfH3DAwwEMVuWSQJn30i7JQmOizjquJwlnQTRYYJTv8Uofp
- ev042VQCx/SM5da8Cu+/m0GVI8q8nrj4lgwKIxKQYJT3HAwXBwemz0HNDtDbWaq0PjcoCzKyi
- 7Vn6T05NTCNpDE5qAAlmXDSXlaiE3MCKUAnP0CoQh1qTxFoOKMtM1GkvY5CR87iBJJZfcW+lJ
- sRu2j1HTdqIBEs0PjgLSApoTpNNfD3rr1OB9islfuprjKgb+GMqGGrlZbS7mn9SciMArszoTy
- hHSzPjsPhYySMm+jQC0mxeBDpK/cHemcyjZ0oAf9nr98GiGupVzSLSPlzMVYNfdDo/2HCPbDo
- 7cCRjXqvd/8xxSnVxvlU6vUXUssLxHu48PlEDXS+EXjAhFgSPKK75sX2s6PQ6Clqw+2FyJBe7
- Es9LmTU54ZSz88xn+Wx5lqKSSoOvRhRjvl+Zd/edkcHjk6CQBTksEh2N4Me14HdxlTKLZds3G
- 5JrN2l1mqK1UH2Kz3AiMGr2ndDqxQMAplkIjL/MWhBECRWw/TVHoynWHS2wvaeacyjQP+0P0X
- WjhC7y4JiX/UWBBdfOkNVPI2S8RffM9nShYoobSEqkRIKcoPQ/Jb7LdETmEX1TkFOUbaLNIcG
- LMnDsn93YGyyt6+UlU/N6RD4qAf44G7OblM6EIrw0MyrYKl/CBKXyWO3b9XH6yHbedawAPvlv
- Jyv5nVSgkWImagq8vvO36v9b3I/sOGAwHMgQAg==
+Cc: soc@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	william.zhang@broadcom.com,
+	krzysztof.kozlowski@linaro.org,
+	anand.gore@broadcom.com,
+	arnd@arndb.de,
+	olof@lixom.net,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
+Date: Tue, 12 Jul 2022 09:42:35 -0700
+Message-Id: <20220712164235.40293-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jul 8, 2022 at 8:56 PM Thierry Reding <thierry.reding@gmail.com> wrote:
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.20-soc
-...
-> ----------------------------------------------------------------
-> soc/tegra: Changes for v5.20-rc1
->
-> The bulk of these changes is the new CBB driver which is used to provide
-> (a lot of) information about SErrors when things go wrong, instead of
-> the kernel just crashing or hanging.
->
-> In addition more SoC information is exposed to sysfs and various minor
-> issues are fixed.
->
+There are now multiple Broadcom SoCs supported so group them under their
+own menu such that the selection is visually more appealing and we can
+easily add new platforms there in the future. This allows us to move
+ARCH_BRCMSTB back to its siblings.
 
-Hi Thierry,
+No functional changes introduced.
 
-I fear I'm going to skip this for the current merge window. It looks like
-the CBB driver you add here would fit into the existing drivers/edac/
-subsystem, or at the minimum should have been reviewed by the
-corresponding maintainers (added to Cc)  to decide whether it goes
-there or not.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
 
-I had not previously seen this driver, but I'll let them have a look first.
+Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
 
-For the other patches, I found two more problems:
+ arch/arm64/Kconfig.platforms | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-> Bitan Biswas (1):
->       soc/tegra: fuse: Expose Tegra production status
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 88ddc2e5b152..c8c15f611d4e 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -33,6 +33,11 @@ config ARCH_APPLE
+ 	  This enables support for Apple's in-house ARM SoC family, starting
+ 	  with the Apple M1.
+ 
++menuconfig ARCH_BCM
++	bool "Broadcom SoC Support"
++
++if ARCH_BCM
++
+ config ARCH_BCM2835
+ 	bool "Broadcom BCM2835 family"
+ 	select TIMER_OF
+@@ -72,6 +77,16 @@ config ARCH_BCMBCA
+ 	  This enables support for Broadcom BCA ARM-based broadband chipsets,
+ 	  including the DSL, PON and Wireless family of chips.
+ 
++config ARCH_BRCMSTB
++	bool "Broadcom Set-Top-Box SoCs"
++	select ARCH_HAS_RESET_CONTROLLER
++	select GENERIC_IRQ_CHIP
++	select PINCTRL
++	help
++	  This enables support for Broadcom's ARMv8 Set Top Box SoCs
++
++endif
++
+ config ARCH_BERLIN
+ 	bool "Marvell Berlin SoC Family"
+ 	select DW_APB_ICTL
+@@ -86,14 +101,6 @@ config ARCH_BITMAIN
+ 	help
+ 	  This enables support for the Bitmain SoC Family.
+ 
+-config ARCH_BRCMSTB
+-	bool "Broadcom Set-Top-Box SoCs"
+-	select ARCH_HAS_RESET_CONTROLLER
+-	select GENERIC_IRQ_CHIP
+-	select PINCTRL
+-	help
+-	  This enables support for Broadcom's ARMv8 Set Top Box SoCs
+-
+ config ARCH_EXYNOS
+ 	bool "ARMv8 based Samsung Exynos SoC family"
+ 	select COMMON_CLK_SAMSUNG
+-- 
+2.25.1
 
-Please don't just add random attributes in the soc device infrastructure.
-This one has a completely generic name but a SoC specific
-meaning, and it lacks a description in Documentation/ABI.
-Not sure what the right ABI is here, but this is something that needs
-to be discussed more broadly when you send a new version.
-
-I see there are already some custom attributes in the same device,
-we should probably not have added those either, but I suppose
-we are stuck with those, so please add the missing documentation.
-
-> YueHaibing (1):
->      soc/tegra: fuse: Add missing DMADEVICES dependency
-
-This one fixes the warning the wrong way: we don't 'select' random
-drivers from other subsystems, and selecting the entire
-subsystem makes it worse. Just drop the 'select' here and
-enable the drivers in the defconfig.
-
-         Arnd
