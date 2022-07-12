@@ -1,83 +1,97 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=saSd=XR=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D45DCCA485
-	for <soc@archiver.kernel.org>; Tue, 12 Jul 2022 21:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E6DC433EF
+	for <soc@archiver.kernel.org>; Tue, 12 Jul 2022 23:12:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 68239C3411E; Tue, 12 Jul 2022 21:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4DA8EC3411C
-	for <soc@kernel.org>; Tue, 12 Jul 2022 21:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657661421;
-	bh=4BVCEzos626TSGtUNsY/wiRJrmjUSo+zCNxKKuxMBR4=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=J1QPIMl9ir0BpqzzuXrr08jb0o/p1wuGeFWtAIgMmMBgbDISI+vrvm0Pd11vfObzN
-	 kRBBxqTOTJ214COOAgq8+3YIpTdHBUTdScEMkNmibC7vQcQBvJ+TrLVRjNMt1GNuJi
-	 b+HV4qfQw7dpGaOLoDKa6XQazO2aNegt6M3/lwhSv71X0CCFK7bH5UzS7aXAjAq2ZG
-	 MohbmV36VCIGX0q7HMaYQSgjqzdgAwg+6kln5nczJY1NUpgorXEeVDOzsrM084efwF
-	 7wnSQN/bScICYaNPbVNPV++4q0iqeD2d0Ux4HdgqAdVUhHEtTv+JVdoOlWDDRskBpO
-	 4A6KJjBJo013A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DE57E45224;
-	Tue, 12 Jul 2022 21:30:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165766142012.32298.5251429659273951508.git-patchwork-summary@kernel.org>
-Date: Tue, 12 Jul 2022 21:30:20 +0000
+	id 453D4C341C0; Tue, 12 Jul 2022 23:12:28 +0000 (UTC)
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A1EEEC3411E;
+	Tue, 12 Jul 2022 23:12:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1EEEC3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id bf13so8890323pgb.11;
+        Tue, 12 Jul 2022 16:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lDiitXxE1DmEGj1J+FVvG2DXe+GoPkm+jGUnS5nGtwE=;
+        b=HClpqevHNpRBouQz+A/qIDsGTVOAe8yWvA+jo+wGEshRIc+XbTctCYVhUN0m1e9qnC
+         bidkOp5qnMSwXNNgVwpFx0EykgY8Gx/xwMNJlbV1ST/zg4PwCk2IFuqqZKMZ20N4unSK
+         EPM4CkmlmUVXS9x74Fbfu5cVKzDgCpswTPnf4bLLr1XoUTwF/waeNYuGkPcJI+6qnR9W
+         rbd2b9CXTUxLc55qKsHnmScqgtf1FvKuDHYGQdVfB4PW3kXDzVm+IUWenqWhOareDw1L
+         BClgEcHzjyj/NHlj55uEmyBqzGKfhst5Jp9F+8ytxdmpEyKzU3SAk2tWROwusKL7Ywag
+         04Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lDiitXxE1DmEGj1J+FVvG2DXe+GoPkm+jGUnS5nGtwE=;
+        b=RDerrFl9Q5C3KY/fM9AUAp3tHEobJUsqNcMdqO2UM6QMj+64SwJCANJ113894sWAAU
+         beNwbzMGQbOQ8fhM1ONnOeQRJxTJFs/2k7Lv3E2/FgknRn/mji6eh8J85FLAQlm0PCgv
+         kUkyHOiUtcI9yXYJ/YWPYpRGweSkVon0mYxEtmTIC197JmutDoIOx/mBAn15tFPa419B
+         caFih3FSwy5NIhwuV8F8DbhNFxrttECoK/bHvUUK8T1RqcR5S3R1l7IdHbOKHvfYbB+T
+         7snThy8Ng6cKCm/VquYQDEy8sZGyUUPnMNETCyh247znZ5r5yncZltMi+ZoH/nP8RKxq
+         fU/Q==
+X-Gm-Message-State: AJIora+Vi5cdq6tLrauGnBHp/yHr8yB3lFYNlr0wAnIQxCBIOTukhi2y
+	07HvVaPZaMyfysrMgxA7jxKsvXFlq+U=
+X-Google-Smtp-Source: AGRyM1sw8ovK/KDSowlpjUrANSHFAaGnm9+nINJ7ANRHvvagc5F1y6+z7TL073cRwG6+vnxlANiEdQ==
+X-Received: by 2002:a05:6a00:2487:b0:525:7c72:ee73 with SMTP id c7-20020a056a00248700b005257c72ee73mr408137pfv.47.1657667546606;
+        Tue, 12 Jul 2022 16:12:26 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u5-20020a62d445000000b0052896629f66sm7297367pfl.208.2022.07.12.16.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 16:12:26 -0700 (PDT)
+From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: William Zhang <william.zhang@broadcom.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	khilman@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [GIT PULL 1/1] Broadcom devicetree-arm64 fixes for 5.19
+Date: Tue, 12 Jul 2022 16:12:22 -0700
+Message-Id: <20220712231222.97850-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello:
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-Series: Broadcom SoC updates for 5.20
-  Submitter: Florian Fainelli <f.fainelli@gmail.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=658639
-  Lore link: https://lore.kernel.org/r/20220711164451.3542127-1-f.fainelli@gmail.com
-    Patches: [GIT,PULL,1/7] Broadcom defconfig changes for 5.20
-             [GIT,PULL,2/7] Broadcom defconfig-arm64 changes for 5.20
-             [GIT,PULL,5/7] Broadcom drivers changes for 5.20
+are available in the Git repository at:
 
-Series: NVIDIA Tegra changes for v5.20-rc1
-  Submitter: Thierry Reding <thierry.reding@gmail.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=658015
-  Lore link: https://lore.kernel.org/r/20220708185608.676474-1-thierry.reding@gmail.com
-    Patches: [GIT,PULL,1/7] soc/tegra: Changes for v5.20-rc1
-             [GIT,PULL,2/7] firmware: tegra: Changes for v5.20-rc1
-             [GIT,PULL,4/7] memory: tegra: Changes for v5.20-rc1
-             [GIT,PULL,7/7] arm64: tegra: Default configuration updates for v5.20-rc1
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/devicetree-arm64-fixes
 
-Series: [GIT,PULL,1/6] i.MX drivers change for 5.20
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=658116
-  Lore link: https://lore.kernel.org/r/20220709082951.15123-1-shawnguo@kernel.org
-    Patches: [GIT,PULL,1/6] i.MX drivers change for 5.20
-             [GIT,PULL,6/6] i.MX defconfig update for 5.20
+for you to fetch changes up to 8bd582ae9a71d7f14c4e0c735b2eacaf7516d626:
 
-Series: [GIT,PULL,1/3] TI SoC driver updates for v5.20
-  Submitter: Nishanth Menon <nm@ti.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=658069
-  Lore link: https://lore.kernel.org/r/20220708232655.reqjdbib52ejdja4@unadvised
-    Patches: [GIT,PULL,1/3] TI SoC driver updates for v5.20
+  arm64: dts: broadcom: bcm4908: Fix cpu node for smp boot (2022-07-08 12:47:25 -0700)
 
+----------------------------------------------------------------
+This pull request contains Broadcom ARM64-based SoCs Device Tree fixes
+for 5.19, please pull the following:
 
-Total patches: 10
+- William corrects the BCM4906 DTS to have an armv8-timer Device Tree,
+  necessary for booting, and fixes the BCM4908 DTS to have a proper
+  'enable-method' and 'cpu-release-addr' properties for the kernel to boot
+  when using u-boot
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+----------------------------------------------------------------
+William Zhang (2):
+      arm64: dts: broadcom: bcm4908: Fix timer node for BCM4906 SoC
+      arm64: dts: broadcom: bcm4908: Fix cpu node for smp boot
 
-
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi | 8 ++++++++
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi | 2 ++
+ 2 files changed, 10 insertions(+)
