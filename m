@@ -1,105 +1,319 @@
-Return-Path: <SRS0=xdQ+=XR=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <SRS0=t6Gp=XR=gmail.com=u7702045@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 960C3C433EF
-	for <soc@archiver.kernel.org>; Tue, 12 Jul 2022 03:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAAABC433EF
+	for <soc@archiver.kernel.org>; Tue, 12 Jul 2022 04:55:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 57DF3C341CE; Tue, 12 Jul 2022 03:18:15 +0000 (UTC)
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	id 92CD4C341C0; Tue, 12 Jul 2022 04:55:36 +0000 (UTC)
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 82A10C341C8
-	for <soc@kernel.org>; Tue, 12 Jul 2022 03:18:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82A10C341C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f177.google.com with SMTP id w83so9053811oiw.1
-        for <soc@kernel.org>; Mon, 11 Jul 2022 20:18:14 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9D404C3411E;
+	Tue, 12 Jul 2022 04:55:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9D404C3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id g4so6609239pgc.1;
+        Mon, 11 Jul 2022 21:55:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=32e9w7H/YZWGbr9gX3MxrH+QEmq87aGcQE2gV4/SJnk=;
-        b=IP2JpeJ4y5Hz3arOc8BXbzqMWOhDhhY9QolRaN1SCjFIxa9oveysbISh8EJtOU+HiV
-         v0NJHxgzkS+m1P3oMXpsWkY/k/gZOx0tTcETUHfKLo4xFLcp66kiWW8o8f5sw5UdchgQ
-         mu4bvvld/rtmiByau1n27UbbVK+bwR0WvG5qrfREh/9OgVWi3cXUjy7BiqF0A27xhDQG
-         QOlGByS6WgJTn+hGanrHTlAWKdUDsd1auRjAfUoJTiqq32okpm3ZnRYMsBHwK08LSxXO
-         TLPWDhYO+pVojLXo+Jbm4CW5EyyH2YZ/6PH6J3Cc5Eg6s6wgtcrKf0zBPkNRR2L+itG3
-         yijA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=77BUSe2BkrJUgvgUa+mDPJmO1iOtAHRgAhKgQ/Q+1Xg=;
+        b=kYPw7JJdDkYTIcgyAXE7tOFEHJqnp4vD3CGyhIeFaXyStFFB6oQyG6pvz0+S0xf0uC
+         sRfjnEBlg+BPfMvtX372P7XdZQ8ofZpKCR30GzmnPY3UoZ01UPrX+9rXmC/fw5ybgRmt
+         rLwuGSRX2RPjSmDytA1wQVM4kk2Jo4gl+a0p8HHdEeCzrFTdsHKk+a8Lac5TOGB3gCFL
+         v7XxloPvtxtcwhMYFWl0Osuh8pwZtPRTTVyTRLAENtQgEGSIyiFTxfo1g0JRoVCpUwit
+         I/cY5u3Ed9Enpg5T3VmSp/9FD9ReoigzZ6gdHwHAUQ8K219W8IduodlttgKUqGdwX5U+
+         08FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=32e9w7H/YZWGbr9gX3MxrH+QEmq87aGcQE2gV4/SJnk=;
-        b=DBA+fPL4UF5dTXUbyIlx3ryZccUMMQKh/3lc0jmDqEjDu7d5JKWrQHz1NZR5uL1DQ7
-         qA9fqh/cKdVfgTuLlJ802gGq7SqF8IOnqzhCMz+xEFElezzAk5zmA8tFqB9Nyaj4cyqo
-         JVA6NvN/bmTnq4ucNtcJLDPMD1nY/CjW31SDoY+cqFdTkVxwntkGXJjhICQeXU1qWKFF
-         rI60kb4HLiC8DakbVRk12uJpKb16Oy0y0NCNLkkWfW044ge64YGq9cso8p+Ij1BA0x42
-         P5ffOhEaX5cGJcP022GYJMdrQIBgLR4G0qoHvvz2dWJLEj2K0YyNmVfM02Mhdt9zLrGa
-         NVGQ==
-X-Gm-Message-State: AJIora8aT5Om9xUntQU+FUjL5Q+lIkPW5BOGXk14zgi/vUUM2yw+nR3Q
-	2jpYPP5/CRPS1m8QXsnOjR1Vog==
-X-Google-Smtp-Source: AGRyM1tx652Yw/r/fiijIIbJzi2YD3iutE2V9+Lz2qF8Axy228G+uuKPPm/66rRKjOA2Jf/YfKZ5sw==
-X-Received: by 2002:a54:4e8d:0:b0:325:988d:afaf with SMTP id c13-20020a544e8d000000b00325988dafafmr825016oiy.135.1657595893397;
-        Mon, 11 Jul 2022 20:18:13 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id c128-20020aca3586000000b00338869042fdsm3517878oia.32.2022.07.11.20.18.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=77BUSe2BkrJUgvgUa+mDPJmO1iOtAHRgAhKgQ/Q+1Xg=;
+        b=K2oVSJnofErHpvLU/96q+O3EJsBjB+SN1ne7LreEnCtUFMEYqc9TcYPvxhfBmGZ8mL
+         RnQSHSnFYLT5VQXTOYCzD0T1BCULtc+jK5qUEvZVflPdbBmJkQIQ8amUH6VvuOQ9vEtc
+         Q3B3aA74CwvnHs2hGNmcHcOfkDhZ2SGix1NBpUx5z0Ch2NbgQS8yFXkAQZvYhn00GpJc
+         K/0VkxSsaHGbk0+5Ng+fd+MHj2Zupi0+JEE7UUjTGQTSx80ofUiI14I4LDi90HUOm010
+         Qi4MV6+GRoXgoFm3G4FXyHdfQcIciTDLX7C3MEhJ1IYWUukCuDd2tN7531sTyrumjBgx
+         UzWw==
+X-Gm-Message-State: AJIora/au+6tz8PoN/5jJCsn/+dBuU2j1h8dQllTKQUQmds0vTbjF6e3
+	uV9FLD6GOxX1JtJs0uvlp+o=
+X-Google-Smtp-Source: AGRyM1sQf+oXA3S+ukzsL4R87qHBPz3J0rydgsyZmKMuaVCqv9OKWGoudVYBFLDIyZWLM/C7xz/wWw==
+X-Received: by 2002:a05:6a00:170a:b0:52a:d3d4:3852 with SMTP id h10-20020a056a00170a00b0052ad3d43852mr7727970pfc.19.1657601735091;
+        Mon, 11 Jul 2022 21:55:35 -0700 (PDT)
+Received: from debian.moxa.com ([123.51.145.104])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b0016be0d5483asm5664677plh.252.2022.07.11.21.55.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 20:18:12 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+        Mon, 11 Jul 2022 21:55:34 -0700 (PDT)
+From: Jimmy Chen <u7702045@gmail.com>
+X-Google-Original-From: Jimmy Chen <jimmy.chen@moxa.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
+To: Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [GIT PULL] Qualcomm ARM64 defconfig updates for v5.20
-Date: Mon, 11 Jul 2022 22:18:12 -0500
-Message-Id: <20220712031812.1275182-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.32.0
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>
+Cc: Jimmy Chen <jimmy.chen@moxa.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/3] ARM: dts: imx7d: fixed dts for UC-8210/8220 hardware
+Date: Tue, 12 Jul 2022 12:55:04 +0800
+Message-Id: <20220712045505.4500-3-jimmy.chen@moxa.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220712045505.4500-1-jimmy.chen@moxa.com>
+References: <20220712045505.4500-1-jimmy.chen@moxa.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+fix compatible string reference to fsl.yaml
+change regulator node name
+replace underscore to dash
+replace node name
+remove 'status' attribute from node
+add board compatible and model to ixm7d-moxa-uc-8210.dts
+rearrange 82XX alphabet order in Makefile
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
+---
+ arch/arm/boot/dts/Makefile               |  4 +--
+ arch/arm/boot/dts/imx7d-moxa-uc-8210.dts | 46 +++++++++++-------------
+ arch/arm/boot/dts/imx7d-moxa-uc-8220.dts |  9 +++--
+ 3 files changed, 29 insertions(+), 30 deletions(-)
 
-are available in the Git repository at:
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 37db3b60ba43..c9c57626876c 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -747,6 +747,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ 	imx7d-flex-concentrator-mfg.dtb \
+ 	imx7d-mba7.dtb \
+ 	imx7d-meerkat96.dtb \
++	imx7d-moxa-uc-8210.dtb \
++	imx7d-moxa-uc-8220.dtb \
+ 	imx7d-nitrogen7.dtb \
+ 	imx7d-pico-dwarf.dtb \
+ 	imx7d-pico-hobbit.dtb \
+@@ -755,8 +757,6 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ 	imx7d-remarkable2.dtb \
+ 	imx7d-sbc-imx7.dtb \
+ 	imx7d-sdb.dtb \
+-	imx7d-moxa-uc-8210.dtb \
+-	imx7d-moxa-uc-8220.dtb \
+ 	imx7d-sdb-reva.dtb \
+ 	imx7d-sdb-sht11.dtb \
+ 	imx7d-smegw01.dtb \
+diff --git a/arch/arm/boot/dts/imx7d-moxa-uc-8210.dts b/arch/arm/boot/dts/imx7d-moxa-uc-8210.dts
+index 9ec62d8b510d..fc5a0c7ff295 100644
+--- a/arch/arm/boot/dts/imx7d-moxa-uc-8210.dts
++++ b/arch/arm/boot/dts/imx7d-moxa-uc-8210.dts
+@@ -1,5 +1,5 @@
+-/* SPDX-License-Identifier: GPL-2.0+ OR MIT
+- * Copyright (C) 2022 MOXA Inc. - https://www.moxa.com/
++// SPDX-License-Identifier: GPL-2.0+ OR MIT
++/* Copyright (C) MOXA Inc. All rights reserved.
+  * Authors: TungYu TY Yang <TungyuTY.Yang@moxa.com>
+  */
+ 
+@@ -9,7 +9,7 @@
+ 
+ / {
+ 	model = "Moxa UC-8210";
+-	compatible = "moxa,uc-8210", "fsl,imx7d-sdb", "fsl,imx7d";
++	compatible = "moxa,uc-8210", "fsl,imx7d";
+ 
+ 	chosen {
+ 		stdout-path = &uart1;
+@@ -56,7 +56,7 @@
+ 		startup-delay-us = <100>;
+ 	};
+ 
+-	reg_sd1_vmmc: regulator@5 {
++	reg_sd1_vmmc: regulator-sd1-3v3 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "VDD_SD1";
+ 		regulator-min-microvolt = <3300000>;
+@@ -79,58 +79,58 @@
+ 
+ 	leds {
+ 		compatible = "gpio-leds";
+-		signal_led_1_1 {
++		signal-led-1-1 {
+ 			label = "UC8200:YELLOW:SGN1-1";
+ 			gpios = <&i2cgpio2 4 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-		signal_led_1_2 {
++		signal-led-1-2 {
+ 			label = "UC8200:YELLOW:SGN1-2";
+ 			gpios = <&i2cgpio2 5 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-		signal_led_1_3 {
++		signal-led-1-3 {
+ 			label = "UC8200:YELLOW:SGN1-3";
+ 			gpios = <&i2cgpio2 12 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-		signal_led_2_1 {
++		signal-led-2-1 {
+ 			label = "UC8200:YELLOW:SGN2-1";
+ 			gpios = <&i2cgpio2 13 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-		signal_led_2_2 {
++		signal-led-2-2 {
+ 			label = "UC8200:YELLOW:SGN2-2";
+ 			gpios = <&i2cgpio2 14 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-		signal_led_2_3 {
++		signal-led-2-3 {
+ 			label = "UC8200:YELLOW:SGN2-3";
+ 			gpios = <&i2cgpio2 15 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 
+-		user_led_1_1 {
++		user-led-1-1 {
+ 			label = "UC8200:YELLOW:USR";
+ 			gpios = <&i2cgpio1 9 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+-		user_led_1_2 {
++		user-led-1-2 {
+ 			label = "UC8200:GREEN:USR";
+ 			gpios = <&i2cgpio1 10 GPIO_ACTIVE_HIGH>;
+ 			default-state = "off";
+ 		};
+ 	};
+ 
+-	buttons: push_button {
++	buttons: gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+-		push_button0 {
++		button {
+ 			label = "Reset key";
+ 			gpios = <&gpio5 11 1>;
+ 			linux,code = <0x100>;
+@@ -164,7 +164,7 @@
+ 	cs-gpios = <&gpio4 19 GPIO_ACTIVE_HIGH>;
+ 	status = "okay";
+ 
+-	tpm_spi_tis@0{
++	tpm-spi-tis@0 {
+ 		compatible = "tcg,tpm_tis-spi";
+ 		reg = <0>;
+ 		spi-max-frequency = <500000>;
+@@ -344,7 +344,6 @@
+ 	rtc@68 {
+ 		compatible = "dallas,ds1374";
+ 		reg = <0x68>;
+-		status = "okay";
+ 	};
+ };
+ 
+@@ -395,9 +394,6 @@
+ 	pinctrl-0 = <&pinctrl_uart5>;
+ 	assigned-clocks = <&clks IMX7D_UART5_ROOT_SRC>;
+ 	assigned-clock-parents = <&clks IMX7D_PLL_SYS_MAIN_240M_CLK>;
+-	/* for DTE mode, add below change */
+-	/* fsl,dte-mode; */
+-	/* pinctrl-0 = <&pinctrl_uart5dte>; */
+ 	status = "okay";
+ };
+ 
+@@ -465,7 +461,7 @@
+ 	status = "okay";
+ 
+ 	flash0: mx25l12805d@0 {
+-		compatible = "macronix,mx25l12805d";
++		compatible = "mxicy,mx25l12805d", "jedec,spi-nor";
+ 		spi-max-frequency = <20000000>;
+ 		reg = <0>;
+ 		partitions {
+@@ -584,7 +580,7 @@
+ 			>;
+ 		};
+ 
+-		pinctrl_gpio_keys: gpio_keysgrp {
++		pinctrl_gpio_keys: gpio-keysgrp {
+ 			fsl,pins = <
+ 				MX7D_PAD_SD2_RESET_B__GPIO5_IO11	0x59
+ 				MX7D_PAD_SD2_WP__GPIO5_IO10		0x59
+@@ -729,7 +725,7 @@
+ 			>;
+ 		};
+ 
+-		pinctrl_usdhc1_100mhz: usdhc1grp_100mhz {
++		pinctrl_usdhc1_100mhz: usdhc1-100mhzgrp {
+ 			fsl,pins = <
+ 				MX7D_PAD_SD1_CMD__SD1_CMD		0x5a
+ 				MX7D_PAD_SD1_CLK__SD1_CLK		0x1a
+@@ -771,7 +767,7 @@
+ 			>;
+ 		};
+ 
+-		pinctrl_usdhc2_100mhz: usdhc2grp_100mhz {
++		pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
+ 			fsl,pins = <
+ 				MX7D_PAD_SD2_CMD__SD2_CMD		0x5a
+ 				MX7D_PAD_SD2_CLK__SD2_CLK		0x1a
+@@ -810,7 +806,7 @@
+ 			>;
+ 		};
+ 
+-		pinctrl_usdhc3_100mhz: usdhc3grp_100mhz {
++		pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
+ 			fsl,pins = <
+ 				MX7D_PAD_SD3_CMD__SD3_CMD		0x5a
+ 				MX7D_PAD_SD3_CLK__SD3_CLK		0x1a
+@@ -863,6 +859,4 @@
+ 			MX7D_PAD_LPSR_GPIO1_IO00__WDOG1_WDOG_B		0x74
+ 		>;
+ 	};
+-
+-
+ };
+diff --git a/arch/arm/boot/dts/imx7d-moxa-uc-8220.dts b/arch/arm/boot/dts/imx7d-moxa-uc-8220.dts
+index 6a41cd9e13c6..e66accceeb82 100644
+--- a/arch/arm/boot/dts/imx7d-moxa-uc-8220.dts
++++ b/arch/arm/boot/dts/imx7d-moxa-uc-8220.dts
+@@ -1,11 +1,16 @@
+-/* SPDX-License-Identifier: GPL-2.0
+- * Copyright (C) 2019 MOXA Inc. - https://www.moxa.com/
++// SPDX-License-Identifier: GPL-2.0+ OR MIT
++/* Copyright (C) MOXA Inc. All rights reserved.
+  * Authors: Fero JD Zhou (周俊達) <FeroJD.Zhou@moxa.com>
+  *	    Harry YJ Jhou (周亞諄) <HarryYJ.Jhou@moxa.com>
+  */
+ 
+ #include "imx7d-moxa-uc-8210.dts"
+ 
++/ {
++	model = "Moxa UC-8220";
++	compatible = "moxa,uc-8220", "fsl,imx7d";
++};
++
+ &pcie_phy{
+ 	status = "okay";
+ };
+-- 
+2.20.1
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-5.20
-
-for you to fetch changes up to 76f11e77f919397f31198354cd0e0bd8e76f8748:
-
-  arm64: defconfig: enable Qualcomm Bandwidth Monitor (2022-07-06 15:58:13 -0500)
-
-----------------------------------------------------------------
-Qualcomm ARM64 defconfig updates for v5.20
-
-This enables the drivers for the Light Pulse Generator and Bandwidth
-Monitor hardware, found in a wide variety of Qualcomm PMICs and SoCs.
-
-It enables interconnect providers for MSM8996, QCS404 and SC7180 and it
-enables the USB PHYs for the QCS404 platform.
-
-----------------------------------------------------------------
-Dmitry Baryshkov (1):
-      arm64: defconfig: enable Qualcomm LPG leds driver
-
-Krzysztof Kozlowski (1):
-      arm64: defconfig: enable Qualcomm Bandwidth Monitor
-
-Vinod Koul (2):
-      arm64: defconfig: Enable qcom ss & hs usb phy
-      arm64: defconfig: Enable qcom interconnect drivers
-
- arch/arm64/configs/defconfig | 8 ++++++++
- 1 file changed, 8 insertions(+)
