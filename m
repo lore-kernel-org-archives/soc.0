@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 963ABC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA4C4CCA47C
 	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7BB37C341C8; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65D87C3411E
-	for <soc@kernel.org>; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
+	id 9169FC36AE3; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 74BB6C341C0;
+	Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1657746023;
-	bh=AqraR/BtWXV29sSz4OJrlEmWnJNqYFfMWgU/XdxqB0g=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=l2oDlQj6D86txavkl3I4f6FQra73dhAZE9mjom3muEoXXXuapwE5RzMQY7uRTIQ/x
-	 hkxA/gqt8XB+MI2ZI6DM/PQmGdSVvYaF8re2IA4Y+ReOB5ZvPjN5hYfXPwN4j9nKmZ
-	 OwwiNrbZyFy7zD/oXOxR2GZmgWeiDvJvN78Vr9/xVw/ujP9HSSpALvHlOS8r1a6FjM
-	 tLMMsXY1cKjwRSpEdy4xye2YB8vSMGMrg6tKGG8H/XC1VQdODtJjMQf9LCDpHQglV4
-	 I7nb2fYSVn/u/OdVWPc/aXHOu84jwU0mqraC36MV92Fj0FxfS3956pNcpEKkdP4Rm9
-	 fYVL4/Oyb0efA==
+	bh=QpMnvp4p9CxVj279chy0M3GhroTydHsWdozHocufAgU=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=ZCG9KSVX/sYoV5E+9VYSRJNz3Qt1VDRA8oosHXQbYX4yLBhukIHEOwKDDtAzkp92L
+	 MjdXKQhOQIU6yxyxlBsg8fbf5qq9w9BfLldGjiWPgPQity4XG/pbHz72YaU4F8UoqY
+	 8IhqF356ZJxw8d36N9EL7vSSa4S97ytMtWnrF+xq/c8qJqKnNlIR7aARYxFqsakW9R
+	 6eTEy4Ex486uvqVcgXJ2GCxX2bA4XyT4JYI1xUny6H70n4c6IVdtwgdKTCSCq+KdgK
+	 t7Y2ZRnzsGnz+ZskjSObJy+XDF95/UDXZh4lbBzI5tYuJBDoB5vRif47YLqclXccLX
+	 Q120dHsMPcxPQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 49A96E4521F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5858FE4522F;
 	Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [PATCH 0/7] Broadcom SoC updates for 5.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165774602329.1051.17290466857380485458.git-patchwork-summary@kernel.org>
+ <165774602335.1051.15193748318789432037.git-patchwork-notify@kernel.org>
 Date: Wed, 13 Jul 2022 21:00:23 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20220711164451.3542127-1-f.fainelli@gmail.com>
+In-Reply-To: <20220711164451.3542127-1-f.fainelli@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This series was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] AT91 device tree updates for v5.20 #2
-  Submitter: Claudiu Beznea <claudiu.beznea@microchip.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=659178
-  Lore link: https://lore.kernel.org/r/20220713070602.1652118-1-claudiu.beznea@microchip.com
+On Mon, 11 Jul 2022 09:44:44 -0700 you wrote:
+> Hi Arnd, Olof,
+> 
+> The highlights of the pull requests are:
+> 
+> - William and Anand add support for a large number of Broadband Carrier
+>   Access (BCA) DSL/PON/Wi-Fi router chips under the ARCH_BCMBCA umbrella
+>   and we expect to see more activity in the future on these chips.
+> 
+> [...]
 
-Series: Broadcom SoC updates for 5.20
-  Submitter: Florian Fainelli <f.fainelli@gmail.com>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=658639
-  Lore link: https://lore.kernel.org/r/20220711164451.3542127-1-f.fainelli@gmail.com
-    Patches: [GIT,PULL,1/7] Broadcom defconfig changes for 5.20
-             [GIT,PULL,6/7] Broadcom maintainers changes for 5.20
-             [GIT,PULL,7/7] Broadcom soc changes for 5.20
+Here is the summary with links:
+  - [GIT,PULL,1/7] Broadcom defconfig changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,2/7] Broadcom defconfig-arm64 changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,3/7] Broadcom devicetree changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,4/7] Broadcom devicetree-arm64 changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,5/7] Broadcom drivers changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,6/7] Broadcom maintainers changes for 5.20
+    https://git.kernel.org/soc/soc/c/c67af87178f2
+  - [GIT,PULL,7/7] Broadcom soc changes for 5.20
+    https://git.kernel.org/soc/soc/c/aa68ce3bcb0a
 
-Series: [GIT,PULL,1/6] i.MX drivers change for 5.20
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=658116
-  Lore link: https://lore.kernel.org/r/20220709082951.15123-1-shawnguo@kernel.org
-    Patches: [GIT,PULL,1/6] i.MX drivers change for 5.20
-             [GIT,PULL,2/6] i.MX SoC update for 5.20
-
-Patch: [GIT,PULL,1/1] Broadcom devicetree-arm64 fixes for 5.19
-  Submitter: Florian Fainelli <f.fainelli@gmail.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=659082
-  Lore link: https://lore.kernel.org/r/20220712231222.97850-1-f.fainelli@gmail.com
-
-
-Total patches: 7
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
