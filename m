@@ -1,110 +1,115 @@
-Return-Path: <SRS0=se3b=XS=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=rJqD=XS=gmail.com=zajec5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37431C433EF
-	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 12:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED0F2C433EF
+	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 15:26:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 06987C341C0; Wed, 13 Jul 2022 12:36:58 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id BA7ABC34114; Wed, 13 Jul 2022 15:26:48 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 64F7BC34114;
-	Wed, 13 Jul 2022 12:36:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 64F7BC34114
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yw1-f170.google.com ([209.85.128.170]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mg6mM-1ncnEG0qqs-00hgN9; Wed, 13 Jul 2022 14:36:54 +0200
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31c9b70c382so111083097b3.6;
-        Wed, 13 Jul 2022 05:36:53 -0700 (PDT)
-X-Gm-Message-State: AJIora8nblJfyf4yOY7IrbviEVczjaUmNI7vrrL7qwvdeXVN9WJDlcTS
-	71Yre5mvIE6uKVBhAGnY2byNtjQ148QKqIFJE0k=
-X-Google-Smtp-Source: AGRyM1sh6y2Q78V+7SEHOa4+tSkaz/9F3euOrnSe3woF61Ndiv4noQe+HMpJi5sccU+Otl07Nje5B04oP8knpINAaJ0=
-X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
- i15-20020a0ddf0f000000b0031be0007942mr3819236ywe.320.1657715812648; Wed, 13
- Jul 2022 05:36:52 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D537BC3411E;
+	Wed, 13 Jul 2022 15:26:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D537BC3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id bp15so10218375ejb.6;
+        Wed, 13 Jul 2022 08:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=kzxlcZi7f09uxzv1rHERdurRhsF4h+KpHejIZNkN6qs=;
+        b=PsC622FxZFBDQOCQvYNUeIA/Yj2Pus0JFG2MtQUPE1AWqF/6SMV+HObPyO9XeBNBGV
+         ETK6zX0s6ydwbz8LcNXgFngZHNMLf9PvTFCXAU4DZLyZW4WQ50LGvHFqaRFULVvjUhrJ
+         xchpdta58xXRV8qL5fHWTWKnM4dy4JXCN3tASpkbyRbFKtQ1LMFS95e3j3shhwe7Gf8i
+         f4pF7tzGCB9DzmLlZMbjwB4tXIIdRuJbk5hTee5rLiUCnOin8rX8cWNGZmX2QayoKYx7
+         ++hFJ2xyxN7im6gf8eZhNA5kwIJyRbnp/GKsu7yB8yD6WLHqLKl4V7ND8GaWtkPIZKyY
+         URow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kzxlcZi7f09uxzv1rHERdurRhsF4h+KpHejIZNkN6qs=;
+        b=w1mR7DiTUz0+AdWTtYpHtuOqr+r+P2JlidoNkuzDS/3iK3fQt9PMoVVu7//13zeBb0
+         vMJY58UBNPUGvEoDnkV4DECL/IOYCesubfAdrgQAynwc4e5j0FaXNV/+1qWQ/GdI5xYF
+         c1Sr6dHvWal3C3dgDM8uxr8+SJkqhuYGfOwJQ5w8MWCK1Xfm8e8lh+gn1t1AN+HMNbyj
+         v9vhmgsUgUtKXBXDH/JrU+K2IwQi8gdWqvzDURLKugmsc9k3KsHHj3eapkYxPQePj16v
+         FtnTmwVe8L09N17YKZDofo0L/8bgxqemvhmxXpntrwlIp7FWB7UQrmYtBEip+5txKDKU
+         kS4A==
+X-Gm-Message-State: AJIora+2A3haO47w24QKT2NE2xbOkf3zAh73sSZU2UoqYLCqXu4fQooR
+	jax82QJsrqe8yN4X1/TSpxU=
+X-Google-Smtp-Source: AGRyM1sFoaG6MHmbm4bR0mniczE6xP/FYB4PAOFc3Y1NHX7ZS+t/NGK9re79B7JJdKwLGBDyLh2qOw==
+X-Received: by 2002:a17:906:58cf:b0:726:97db:4f6d with SMTP id e15-20020a17090658cf00b0072697db4f6dmr4031917ejs.261.1657726006002;
+        Wed, 13 Jul 2022 08:26:46 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id ch15-20020a0564021bcf00b0043a71c376a2sm8116926edb.33.2022.07.13.08.26.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 08:26:45 -0700 (PDT)
+Message-ID: <304678bb-f49c-9c3b-e15e-df6c9e8a4ea2@gmail.com>
+Date: Wed, 13 Jul 2022 17:26:44 +0200
 MIME-Version: 1.0
-References: <20220708185608.676474-1-thierry.reding@gmail.com>
- <20220708185608.676474-2-thierry.reding@gmail.com> <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
- <Ys6lXD6BSxjH02mW@orome> <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
- <d12fa14a-bf0d-4e98-acd8-69229315d660@nvidia.com>
-In-Reply-To: <d12fa14a-bf0d-4e98-acd8-69229315d660@nvidia.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Wed, 13 Jul 2022 14:36:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1sDbtEUaT7Z5k_SfUcA7OBUxkny7kmKOMFaE96qaGeXg@mail.gmail.com>
-Message-ID: <CAK8P3a1sDbtEUaT7Z5k_SfUcA7OBUxkny7kmKOMFaE96qaGeXg@mail.gmail.com>
-Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
-To: Jon Hunter <jonathanh@nvidia.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH v2 2/8] ARM: dts: Move BCM963138DVT board dts to
+ ARCH_BCMBCA
+To: William Zhang <william.zhang@broadcom.com>,
+ Linux ARM List <linux-arm-kernel@lists.infradead.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Thierry Reding <thierry.reding@gmail.com>, arm-soc <arm@kernel.org>, 
-	SoC Team <soc@kernel.org>, 
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, linux-edac@vger.kernel.org, 
-	Borislav Petkov <bp@alien8.de>, Mauro Carvalho Chehab <mchehab@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Robert Richter <rric@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:E1IMx+UL/tENdXVZSXXaVg1CgG9Ahzn7Vofel49i3XnYiEDXUNh
- +zYLnrQqxdDQPoT+ErTc/9Dx4G7tJfPS2aHszwW2wAaLjIzJPWmkSvYmpZIKCurWE9gmMYn
- emmSxt7HX5Im10aM697v+GmN+8I56QTorpbf07oOMZQ/K0/DYqEmgET64Gup87Px6tCG557
- Pp7Y4ycjMCtCjmRdZMlMw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O1Qg/sz8tDM=:VaqRc5gwTwWECQ/CG1IfQj
- BW3IxisCuC8zlTUtS8U6/tjJaTgyVFuFKe6RkWmItyapzfZeUXqVjo72dmzSjG9WWS2+G5xE+
- hSaXKoM0Q1aSnUYIu7xtqq0AJeh7QwfxdojXkgl3YLcd25iXjQAUYUr6P/lfHGhPG8mAtU4Nc
- SuJpGjm9SUQdpAWvMxO8TTmFpI9HWskuzxPWxicEV/Y7w17R/Lmrt/bUs2yUJHt4VvcxgczkD
- lgiHcffDI/Pimxy2OUpGqgiKc48Afpjta0eH63fI2S4d4N4ZsCJ5pEkJMSOB2YE4PRMhL3ej4
- gsF5y4yDcI9jnuzjM0g286tVSiTLZMK11MYBaPIgetXfJRaTQSqxhJW3ftmMTDCjhouFIDOyh
- WoktWChD7apLa6bMEm+eyxzO5Amr/NEJ13HSJzlXVVXeaI351tzCMGIyI0suqvLtMSmonY0AP
- QDcfG0lHAG0pQQjfbfEBaQTZgbC6M1ns4Qa8/b4YL8VvYTn8F6gvthqIVQ9e/Ufk1LrFgQbW+
- 16r0QvdcWCoha/xXl6Rb4DoUArtUWjatitigNhz8mXIP+C7+q0stvbRiAcfRPctjC4OpivE7+
- vVKsRaXRDliIfETGI9X5DoMgPf9+HaDW2Pql6ED75cNF7h00jAQ6iatKir07DsAvv/iTevjrF
- P8J2Jf0sIhtusEmYaclTqdTRzmC9mR7ttaVkYyIqSbfCOCyiNtY3n2ODCl5XWy/dGLI/6iGU9
- oXyQIhWqcFzgMd2uYCR6GIot8lb/WzLR5SaGg/HE4SyKPt/LXFKqz5hKxqlBJe27Lhn+R0veB
- 69LUyPSliqBcMKuroncjIZU+3qrKCBdPumjNC93vxd8tLE2Bs7JlJTNWnJtSdV0Dy8R1YwYfp
- lDF6LsV2wHt6dDuGKbZQ==
+Cc: Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+ joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
+ kursad.oney@broadcom.com, f.fainelli@gmail.com, anand.gore@broadcom.com,
+ Arnd Bergmann <arnd@arndb.de>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org
+References: <20220707070037.261532-1-william.zhang@broadcom.com>
+ <20220707070037.261532-3-william.zhang@broadcom.com>
+From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220707070037.261532-3-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 13, 2022 at 2:19 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> On 13/07/2022 13:14, Arnd Bergmann wrote:
-> >>> For the other patches, I found two more problems:
-> >>>
-> >>>> Bitan Biswas (1):
-> >>>>        soc/tegra: fuse: Expose Tegra production status
-> >>>
-> >>> Please don't just add random attributes in the soc device infrastructure.
-> >>> This one has a completely generic name but a SoC specific
-> >>> meaning, and it lacks a description in Documentation/ABI.
-> >>> Not sure what the right ABI is here, but this is something that needs
-> >>> to be discussed more broadly when you send a new version.
-> >>
-> >> I wasn't aware that the SoC device infrastructure was restricted to only
-> >> standardized attributes. Looks like there are a few other outliers that
-> >> add custom attributes: UX500, ARM Integrator and RealView, and OMAP2.
-> >>
-> >> Do we have some other place where this kind of thing can be exposed? Or
-> >> do we just need to come up with some better way of namespacing these?
-> >> Perhaps it would also be sufficient if all of these were better
-> >> documented so that people know what to look for on their platform of
-> >> interest.
-> >
-> > It's not a 100% strict rule, I've just tried to limit it as much as possible,
-> > and sometimes missed drivers doing it anyway. My main goal here is
-> > to make things consistent between SoC families, so if one piece of
-> > information is provided by a number of them, I'd rather have a standard
-> > attribute, or a common way of encoding this in the existing attributes
-> > than to have too many custom attributes with similar names.
->
->
-> Makes sense. Any recommendations for this specific attribute? I could
-> imagine other vendors may have engineering devices and production
-> versions. This is slightly different from the silicon version.
+On 7.07.2022 09:00, William Zhang wrote:
+> Use CONFIG_ARCH_BCMBCA to build all the BCMBCA SoC dts and remove
+> CONFIG_ARCH_BCM_63XX from the makefile
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
+> 
+> (no changes since v1)
+> 
+>   arch/arm/boot/dts/Makefile | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 38d9c60aece7..1bf8e2f8ee68 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -147,8 +147,6 @@ dtb-$(CONFIG_ARCH_BCM_53573) += \
+>   	bcm47189-luxul-xap-810.dtb \
+>   	bcm47189-tenda-ac9.dtb \
+>   	bcm947189acdbmr.dtb
+> -dtb-$(CONFIG_ARCH_BCM_63XX) += \
+> -	bcm963138dvt.dtb
+>   dtb-$(CONFIG_ARCH_BCM_CYGNUS) += \
+>   	bcm911360_entphn.dtb \
+>   	bcm911360k.dtb \
+> @@ -184,6 +182,7 @@ dtb-$(CONFIG_ARCH_BRCMSTB) += \
+>   	bcm7445-bcm97445svmb.dtb
+>   dtb-$(CONFIG_ARCH_BCMBCA) += \
+>   	bcm947622.dtb \
+> +	bcm963138dvt.dtb \
+>   	bcm963148.dtb \
+>   	bcm963178.dtb \
+>   	bcm96756.dtb \
 
-Not sure, I haven't seen this one referenced elsewhere so far.
+Do we want to mix all that DT files? Are ARCH_BCM_63XX (ex-)users
+interested in compiling all of them?
 
-What is the actual information this encodes in your case? Is this fused
-down in a way that production devices lose access to certain features
-that could be security critical but are useful for development?
-
-         Arnd
+For IPROC SoCs we have separated symbols: ARCH_BCM_CYGNUS / ARCH_BCM_HR2
+/ ARCH_BCM_NSP / ARCH_BCM_5301X and we compile arch specific DT files
+only.
