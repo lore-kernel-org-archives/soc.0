@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA4C4CCA47C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFC73CCA480
 	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9169FC36AE3; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74BB6C341C0;
+	id 97628C36AE5; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81A47C385A9;
 	Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1657746023;
-	bh=QpMnvp4p9CxVj279chy0M3GhroTydHsWdozHocufAgU=;
+	bh=rNdStNU8XVbXoms5p2Kg1ZyBDZsrEJxZFiO4WeN4XTU=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ZCG9KSVX/sYoV5E+9VYSRJNz3Qt1VDRA8oosHXQbYX4yLBhukIHEOwKDDtAzkp92L
-	 MjdXKQhOQIU6yxyxlBsg8fbf5qq9w9BfLldGjiWPgPQity4XG/pbHz72YaU4F8UoqY
-	 8IhqF356ZJxw8d36N9EL7vSSa4S97ytMtWnrF+xq/c8qJqKnNlIR7aARYxFqsakW9R
-	 6eTEy4Ex486uvqVcgXJ2GCxX2bA4XyT4JYI1xUny6H70n4c6IVdtwgdKTCSCq+KdgK
-	 t7Y2ZRnzsGnz+ZskjSObJy+XDF95/UDXZh4lbBzI5tYuJBDoB5vRif47YLqclXccLX
-	 Q120dHsMPcxPQ==
+	b=sCIc+fxZ/JnWacyPlbUJUyVWiXqP4ycZYuL/HKyvjbM69RaqYM0iOf6czpHS7Vr5X
+	 EI//nZv+tkM2RGASYpz4mIUeXIYuX14osHz9WATrlv8zOLIp0s0U7+zUp0cOGM6FjG
+	 ng+FEV5SY5exBPQ3DLIu9zDlom+d7sjNe/mvshV9kyMo8LTRUgfpEi4F2yjG4NFyOq
+	 r3o+3906yfB/Ccxah2xd8wW3jvjLYgrqg4T3PR0YI2mQc5pkhWYdUxhdfH/iP+hdB1
+	 3OEXZlCDNptctT4Q709433w5oJIWyYTNts9azxng6dhadERJJreY6a3D1vOcSsLYrI
+	 3P1dle9LO4ltQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5858FE4522F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 605FEE45223;
 	Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/7] Broadcom SoC updates for 5.20
+Subject: Re: [GIT PULL 1/6] i.MX drivers change for 5.20
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165774602335.1051.15193748318789432037.git-patchwork-notify@kernel.org>
+ <165774602338.1051.16139469362025544066.git-patchwork-notify@kernel.org>
 Date: Wed, 13 Jul 2022 21:00:23 +0000
-References: <20220711164451.3542127-1-f.fainelli@gmail.com>
-In-Reply-To: <20220711164451.3542127-1-f.fainelli@gmail.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
+References: <20220709082951.15123-1-shawnguo@kernel.org>
+In-Reply-To: <20220709082951.15123-1-shawnguo@kernel.org>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 11 Jul 2022 09:44:44 -0700 you wrote:
-> Hi Arnd, Olof,
+On Sat,  9 Jul 2022 16:29:46 +0800 you wrote:
+> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 > 
-> The highlights of the pull requests are:
+>   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 > 
-> - William and Anand add support for a large number of Broadband Carrier
->   Access (BCA) DSL/PON/Wi-Fi router chips under the ARCH_BCMBCA umbrella
->   and we expect to see more activity in the future on these chips.
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-5.20
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/7] Broadcom defconfig changes for 5.20
+  - [GIT,PULL,1/6] i.MX drivers change for 5.20
     (no matching commit)
-  - [GIT,PULL,2/7] Broadcom defconfig-arm64 changes for 5.20
+  - [GIT,PULL,2/6] i.MX SoC update for 5.20
+    https://git.kernel.org/soc/soc/c/4ea087841733
+  - [GIT,PULL,3/6] i.MX DT bindings update for 5.20
     (no matching commit)
-  - [GIT,PULL,3/7] Broadcom devicetree changes for 5.20
+  - [GIT,PULL,4/6] i.MX device tree change for 5.20
     (no matching commit)
-  - [GIT,PULL,4/7] Broadcom devicetree-arm64 changes for 5.20
+  - [GIT,PULL,5/6] i.MX arm64 device tree update for 5.20
     (no matching commit)
-  - [GIT,PULL,5/7] Broadcom drivers changes for 5.20
+  - [GIT,PULL,6/6] i.MX defconfig update for 5.20
     (no matching commit)
-  - [GIT,PULL,6/7] Broadcom maintainers changes for 5.20
-    https://git.kernel.org/soc/soc/c/c67af87178f2
-  - [GIT,PULL,7/7] Broadcom soc changes for 5.20
-    https://git.kernel.org/soc/soc/c/aa68ce3bcb0a
 
 You are awesome, thank you!
 -- 
