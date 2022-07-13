@@ -1,65 +1,156 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=Fy8E=XS=gmail.com=f.fainelli@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD7C6CCA479
-	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06C5DC433EF
+	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 22:05:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9E3B1C36AE9; Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 84052C36AE2;
-	Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657746023;
-	bh=Fstz8vImm0ooGTeOmUb8qYTw6B/npQ7EQYaA1GvLz9Y=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=dfnEkFFn5aABLfhHBHo3VGkeNnqc1WB/lFHg/GbLClPT+yCapghqthZMH59DoPTzU
-	 7wGHzloIDiTLAHIIMl6EztJ7ecUNa6mb+DAfz2LYKfqMKEkOfHrxC9++Qj/wfhjrhd
-	 gf66xHRUTjOj9PKCDNY7wISh9QoeanwUNG3HiApEFbsbGqTSPGrKTShplKlO6enTt1
-	 GQ762XPgKznstHLoprYq9veWZXthjrv4yFvphVhBzKMM0/umOO24JrTjFEoEDCSG/X
-	 NwFKOJfTLaah754D1snlRVj6HzObWZ5N8155GFxTYrtxrY88wWPsA/gPv0+rlROYcZ
-	 pf1o15zda52sQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68AB9E45231;
-	Wed, 13 Jul 2022 21:00:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id B7F03C34114; Wed, 13 Jul 2022 22:05:28 +0000 (UTC)
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id DD51AC3411E;
+	Wed, 13 Jul 2022 22:05:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DD51AC3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id e132so11662320pgc.5;
+        Wed, 13 Jul 2022 15:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uOBKq9yzkPX8ihcF5QdXtzsKbLEa/eP+OCHtDKfv5N0=;
+        b=hk176+zLssVNRft8dirHFUQSzDMI0whOu6+6yXw9L8L7d0wLw7U16maq1hJRXPZTq/
+         Gz/tk/9k5ncT0FkQbbwWFHn+Pbt8O7O5TawARP5Ey5PdgOfYEEgoTvfNvjwaKlC2Fp+u
+         /yc6TfI2wpFGrTa7ELUtOTilQC8x/WO/N5T2D8R57dpFGws1xuiH5hYBGa0wwi3eo4hN
+         f5S77L0OFyouEIHVUdo1qtgyMETHSDVdDO9i7srid340U9uCEKObdUPpsjKnJGrtF46J
+         gnb7/zaBOGh40U273oDZM0oA/ohc98tEWGZ+o/mSmHyWI2/5r6+mUVZip7FZc9yew0w6
+         weVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uOBKq9yzkPX8ihcF5QdXtzsKbLEa/eP+OCHtDKfv5N0=;
+        b=Xwnm0WvHXtizuiohe/OIYMZ9kif1l3VWjUBSCk+8HB4HErZWOD+nD2PjClv72hZvXC
+         pGq2Ycje64qvSL3Mvn4THyXCf/yFvxSEexGVmVz1SSkGWh62ZpS14vQzCfFlhScQUO6F
+         kA5NJjHIHPxY485wdB8oHPBT2VQreYsMObuiRK4SyrfPNVKG4pzaMqGW1eCLnCHmg0z8
+         4w4Bp1ffUPsdQ+xI1uEDYvbRjR0lwbXZbPPqIcZug+4r8xBIzF+vCuXbqZvXquRe5bXo
+         gkxYrGK4Slky+470aQcbRdi7RAe9uUStLdkCemMf+CZ+E9pahxzWm+z78Lr+TF8k0X6c
+         Vj2w==
+X-Gm-Message-State: AJIora+0X2omS5al6pMCvvqqJ8wKsIuXOyAoDvBWdCoJB9Dq9+JmEpTM
+	JUFXeChPJrqLWL17tflsWDI=
+X-Google-Smtp-Source: AGRyM1uFY5sq0uRq7vOEVCZc6Mt9dWUHaZVFaEt9VTaYlh+WdsLMFRrjoUXRSVp/xtwuLE8Bc1hpsw==
+X-Received: by 2002:a65:4501:0:b0:3fc:4895:283b with SMTP id n1-20020a654501000000b003fc4895283bmr4726104pgq.231.1657749927276;
+        Wed, 13 Jul 2022 15:05:27 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id x7-20020a634847000000b0040c97f0057dsm7946127pgk.17.2022.07.13.15.05.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Jul 2022 15:05:26 -0700 (PDT)
+Message-ID: <fb4f4444-20c2-0e35-bb83-79a419ec87a7@gmail.com>
+Date: Wed, 13 Jul 2022 15:05:23 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/1] Broadcom devicetree-arm64 fixes for 5.19
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165774602342.1051.9606371321124530151.git-patchwork-notify@kernel.org>
-Date: Wed, 13 Jul 2022 21:00:23 +0000
-References: <20220712231222.97850-1-f.fainelli@gmail.com>
-In-Reply-To: <20220712231222.97850-1-f.fainelli@gmail.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Florian Fainelli <f.fainelli@gmail.com>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>,
+ bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+ william.zhang@broadcom.com, anand.gore@broadcom.com,
+ Olof Johansson <olof@lixom.net>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+ Wei Xu <xuwei5@hisilicon.com>, Andrew Lunn <andrew@lunn.ch>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ "moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>,
+ Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+ Matthias Brugger <mbrugger@suse.com>,
+ linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES"
+ <linux-samsung-soc@vger.kernel.org>, Dinh Nguyen <dinguyen@kernel.org>
+References: <20220712164235.40293-1-f.fainelli@gmail.com>
+ <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
+ <0131e1d6-09c0-31a4-5b9d-0e2fc49d61ac@linaro.org>
+ <CAMuHMdWDDY_72y3WYt401hG122xg1s7_VRCG9Vyhhkzco-nBYw@mail.gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAMuHMdWDDY_72y3WYt401hG122xg1s7_VRCG9Vyhhkzco-nBYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Tue, 12 Jul 2022 16:12:22 -0700 you wrote:
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+On 7/13/22 02:17, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
 > 
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+> On Wed, Jul 13, 2022 at 10:40 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 13/07/2022 10:25, Arnd Bergmann wrote:
+>>> On Tue, Jul 12, 2022 at 6:42 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>> There are now multiple Broadcom SoCs supported so group them under their
+>>>> own menu such that the selection is visually more appealing and we can
+>>>> easily add new platforms there in the future. This allows us to move
+>>>> ARCH_BRCMSTB back to its siblings.
+>>>>
+>>>> No functional changes introduced.
+>>>>
+>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>> ---
+>>>>
+>>>> Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
+>>>
+>>> Hi Florian,
+>>>
+>>> So far, we have tried to keep the Kconfig.platforms file rather coarse-grained,
+>>> mainly limiting it to company names and high-level families, but avoiding
+>>> sub-menus or adding too many sub-families.
+>>>
+>>> If we add per-vendor submenus, we should probably first decide how we
+>>> want to structure this across vendors. I've added maintainers and lists to
+>>> Cc for a couple of the ones that are in a similar situation.
+>>>
+>>> I can see a couple of ways we can do this:
+>>>
+>>> a) keep the list of platforms as short as possible, combining related
+>>>    SoC families from a single vendor wherever possible, but no sub-menus
+>>>    (same as today)
+>>>
+>>> b) Always use sub-menus when there is more than one family, but
+>>>     keep relatively coarse platform selection.
+>>>
+>>> c) Use sub-menus and also move to a more fine-grained SoC
+>>>      selection, similar to what we have on 32-bit arm.
+>>>
+>>> I would not really want to go to c), but a) and b) both make sense to
+>>> me as long as do it consistently across all platforms.
+>>>
+>>> Any other ideas or opinions?
+>>
+>> Whatever we decide here, the SoC can override in drivers/soc, just like
+>> Renesas did. I think Renesas chose option c), but made it in
+>> drivers/soc. I would vote to have consistent policy, so if arch/arm64 is
+>> a) or b), sub-archs should not redefine it in drivers/soc.
 > 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-5.19/devicetree-arm64-fixes
-> 
-> [...]
+> We did so because of the "only a single symbol in
+> arch/arm64/Kconfig.platforms"-policy.
 
-Here is the summary with links:
-  - [GIT,PULL,1/1] Broadcom devicetree-arm64 fixes for 5.19
-    https://git.kernel.org/soc/soc/c/52905140c3ed
+I was not aware of that rule.
 
-You are awesome, thank you!
+It is a bit of a mixed situation with Broadcom SoCs but in essence, each 
+Kconfig entry denotes a deeply different SoC architecture at the memory 
+subsystem, bus, security or product space that you might not want to 
+enable in your kernel. There is definitively sharing of drivers between 
+all of the platforms and a lot of cross pollination too but usually 
+these are deeply different that different kernel images do make sense.
+
+The itch that I wanted to calm was that ARCH_BRCMSTB was after the other 
+Broadcom platforms separated by ARCH_BERLIN. if you prefer a pair of 
+KConfig comments to delineate them and flatten the platform selection, 
+that works for me, too.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Florian
