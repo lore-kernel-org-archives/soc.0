@@ -1,78 +1,114 @@
-Return-Path: <SRS0=u1x9=XS=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <SRS0=se3b=XS=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A9C0C43334
-	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 07:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED65DCCA479
+	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 08:26:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D1CC6C341C8; Wed, 13 Jul 2022 07:03:43 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id BC2F7C341CA; Wed, 13 Jul 2022 08:26:07 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 86615C34114;
-	Wed, 13 Jul 2022 07:03:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86615C34114
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657695822; x=1689231822;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9qt8csHkgYNrS5Oi1qBJfWGmXxYwaOhVFbXfJFXRZm8=;
-  b=03HFyjG+Ly1Y/i5el+1ZEQ9a0jLz75DXKxxUhEqQ45LmRrxYu43udukX
-   6oKgWfJ8aLXtxiEzdSDjY7dzSSOvr56HvibHaAz8ASy2pNCoECqjb/6CA
-   Zip9EKycNnjsRykK5yPlIeYg3uVWw70mMS8VZlM8JEfqACHVZpeW3QN+j
-   l9/ifc5iNQQmVe69aIwLGs+DeigiSoETiahR98q1KKItOB+3uZeDs8HFH
-   tWcSi00s0zUHuH3dek6earvINaAAXkUVF5FID132w73uisn5jEgT1gcTF
-   LHRupYj3PBrQohTEzA9gVf4mdyfGU/yUPn/HctevSI2JQqIPCzCh0/PYj
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="104226152"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jul 2022 00:03:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Jul 2022 00:03:37 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 13 Jul 2022 00:03:35 -0700
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
-CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] AT91 device tree updates for v5.20 #2
-Date: Wed, 13 Jul 2022 10:06:02 +0300
-Message-ID: <20220713070602.1652118-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 30531C3411E;
+	Wed, 13 Jul 2022 08:26:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30531C3411E
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MNss4-1nwEpH41MW-00ODR5; Wed, 13 Jul 2022 10:26:04 +0200
+Received: by mail-yb1-f172.google.com with SMTP id p129so18093272yba.7;
+        Wed, 13 Jul 2022 01:26:03 -0700 (PDT)
+X-Gm-Message-State: AJIora/khOKyRScLWPS+4PV6WtmtIyYcS2g2wvDz70gTU5A0iJucYd1R
+	9Eke/deejWr4rR3tEuvXHeaL7T1J2pkD+XvQQTo=
+X-Google-Smtp-Source: AGRyM1s5ctXDWESPghTwunvKDjAPfvsYu2kacgrA/MPXviowltYXdPpskedj7zs4LJm1sUX08EXGIUpvgkI0AhSfMmA=
+X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
+ b7-20020a5b0b47000000b0066e3617d262mr2405858ybr.106.1657700762384; Wed, 13
+ Jul 2022 01:26:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20220712164235.40293-1-f.fainelli@gmail.com>
+In-Reply-To: <20220712164235.40293-1-f.fainelli@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Wed, 13 Jul 2022 10:25:45 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
+Message-ID: <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
+To: Florian Fainelli <f.fainelli@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
+	bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>, william.zhang@broadcom.com, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, anand.gore@broadcom.com, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Li Yang <leoyang.li@nxp.com>, Wei Xu <xuwei5@hisilicon.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	"moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, 
+	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>, Matthias Brugger <mbrugger@suse.com>, 
+	linux-arm-msm <linux-arm-msm@vger.kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, 
+	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, Dinh Nguyen <dinguyen@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:vIA/ySl7nsiXcXd5LH2lJqtIsiyCjGejCqOWcve9e86eWzD2JbC
+ hWISm2WfHoMk0qqbWjOnKbHFAJSyMrabn5triSwb6TpIubuJIruox5S60z/r4J7r/EAbn/V
+ 0MIkt8tCHY9KuPVHu/PChCm33jx6jx+tpbVk5YTcSU+2eTM5KoN59I3aUKKKMzAp+18ho3d
+ Wn7MNElNvRq+ITVN6dewg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bl9xlGut+e4=:hLil1YlW+OXg8uO4r206Go
+ sUeU2/Z+q4WUuW18UL02w+UYXTdmePHdAj242/7S9eRPn3vzt09r2jjd1jfAvmG7Z54JPCCEL
+ vktivgGKUVrZ6cvJ/ShWFjKKR/sdi5AfQTHMAdqA4jAYgJ3/CrKv97sv5l6hjXIZKXDCTkX3K
+ g7Hdc4zkpUx5DLfEgcb2oBTyhv+/dKNRRHRjDGCQjmlJeNwjN/HGTCQsK2gTMudBg/z6splWY
+ 5/Xu4U/LJERrcmMSpa4ad4zpN5P/Q5wYGkTsGX4Nn0EHCy0Xf4MtHcUtdME9aqH91N1rX6BCW
+ be3jIhkWFLQST2dc9apX7uYCMuumVTYkR+p1bQVFb3hKliVctsmyw0pk0rGOtRCsTbHw+Hts6
+ pnHkYiddbYAz4kSd09isglIS+k01/SwmSgV8Q9Z44PdH/rxTwgkl0xsUma4qdQ0zFmxL45SGM
+ +xJ6ztf/TY81KCN+EG5J1PfAnSosF11+8ZJ2LL7ziss9XCm6IdCMDSPNnJIOI4CJ05TIYtLTa
+ oePnMhveirqGpvI2IPvmsFupTgfxWyNAXq2wGnoWVRhmUA4PxFXv2ripF9sqOqJDqwM+dCuHt
+ +hgzpVhFeepNtSRz1HQ07gTUp7Q2OeVl3NQkCemJUbWfK9Wng9jTtQ5bf2DXzoB0CktT7nDL3
+ vXzOWEB6ZSapd3V0mtrdZK3rqabd+H1iW8UuJmvwJZtUmUmMPnkLyQKcqYLFW12TzrV14dKIM
+ l9xPR3V5maUYIOX6tVlECMtVYBHnJvL4kyU48usv7GoDPtYB2Jr0xyKS7YNmES5a38m96kFep
+ 32tRovXcO0jBpmkrgYFlJogHTQFqVSDRmjnwWkSgeibeilZoigr7IhY29UTviIJRaRgvlZnwA
+ 8TrXhj+L1f4dzmZGPNug==
 
-The following changes since commit 4dd1a613e464e9036d5163fc8ec5f7dc6e394b53:
+On Tue, Jul 12, 2022 at 6:42 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> There are now multiple Broadcom SoCs supported so group them under their
+> own menu such that the selection is visually more appealing and we can
+> easily add new platforms there in the future. This allows us to move
+> ARCH_BRCMSTB back to its siblings.
+>
+> No functional changes introduced.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>
+> Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
 
-  ARM: dts: lan966x: Add UDPHS support (2022-07-05 10:42:18 +0300)
+Hi Florian,
 
-are available in the Git repository at:
+So far, we have tried to keep the Kconfig.platforms file rather coarse-grained,
+mainly limiting it to company names and high-level families, but avoiding
+sub-menus or adding too many sub-families.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.20-2
+If we add per-vendor submenus, we should probably first decide how we
+want to structure this across vendors. I've added maintainers and lists to
+Cc for a couple of the ones that are in a similar situation.
 
-for you to fetch changes up to be16285265868aa371378132fe37df2bc14ceb78:
+I can see a couple of ways we can do this:
 
-  ARM: dts: kswitch-d10: enable the USB device port (2022-07-12 10:12:30 +0300)
+a) keep the list of platforms as short as possible, combining related
+  SoC families from a single vendor wherever possible, but no sub-menus
+  (same as today)
 
-----------------------------------------------------------------
-AT91 DT for v5.20 #2
+b) Always use sub-menus when there is more than one family, but
+   keep relatively coarse platform selection.
 
-It contains only the enablement of USB device port.
+c) Use sub-menus and also move to a more fine-grained SoC
+    selection, similar to what we have on 32-bit arm.
 
-----------------------------------------------------------------
-Michael Walle (1):
-      ARM: dts: kswitch-d10: enable the USB device port
+I would not really want to go to c), but a) and b) both make sense to
+me as long as do it consistently across all platforms.
 
- arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Any other ideas or opinions?
+
+        Arnd
