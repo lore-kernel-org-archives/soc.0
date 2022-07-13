@@ -1,154 +1,183 @@
-Return-Path: <SRS0=o0gk=XS=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=xQP4=XS=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43114C433EF
-	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 09:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6900BC43334
+	for <soc@archiver.kernel.org>; Wed, 13 Jul 2022 10:58:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 01CF0C341C0; Wed, 13 Jul 2022 09:17:21 +0000 (UTC)
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	id 2F3E7C385A5; Wed, 13 Jul 2022 10:58:43 +0000 (UTC)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5FF55C34114;
-	Wed, 13 Jul 2022 09:17:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5FF55C34114
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 53D34C34114;
+	Wed, 13 Jul 2022 10:58:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53D34C34114
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id d17so4404857qvs.0;
-        Wed, 13 Jul 2022 02:17:19 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id bu42so18517509lfb.0;
+        Wed, 13 Jul 2022 03:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=a7EdAL1phybyF7skcIdHDSL8TqoETJjf/TfW70qlhQE=;
+        b=CmsqdFZkajcNWb4IErlxXvHJd2aIeR7WpcoDNsQIfxeOJc22txKTrcbrdZ0dGVV2+7
+         3b7gsgj7TmTLAsJ3B5AK5T8gaLFqJreAvmhJcilnwyaAPhQf6gInX9bg/bBwdbeMGDwK
+         28uWAvs6Fxn3MJPM4/+y9L+9vu3nbzkCgkJ2cwWEoMM0c/r4vacKwjBjog5FrMFRQ1MX
+         ExXvhxnfPVCtfFZSke56lYbvzpf8zfBJ92VaB0J82Ssr6gkhq84X5PFQTVHW+Eg0WfHr
+         ypf/I82xn6wcDzPEO0WXud2EXlrdem57gqlMTaK8tVjAm2o/IyoGJpG+gG8hV+HTspoY
+         ez+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zby97TNc1ghpjXRqZzrsX3Uiwj/4uwx2MsSKfbl6g7E=;
-        b=eSZHNaoxhsqy1baJzjpyK7bBM7YUALGxZUVO3bCmquSPWCPqN270Yf79xL/HxnnZcB
-         rC1udUHrymhoBi2K6gDHJykjtTx6xU1BWhUwTr4GC4OmfCSyVr5WR05SUqRUWjhye41E
-         dvnVmWzbZvftOTjGyFfwXY/SrmFkGWAccIB/H3ITnRpgu2X9TLjZwRhZlAvCz3BibY7o
-         wjpOVY/EJpXohOB+8qZn06zDmHS8QUF2H7N9iiR1XQIuC7IQgxybgJ7acZFZ3B4GfxXg
-         1mM/l5fWT3tJ6DsqVfxEmhmgNBFE4Z2XfXPnQ8AFzvBhlsjYo8x7dwThOdYlc65s0CTK
-         8Guw==
-X-Gm-Message-State: AJIora86h7XTuBubY7cs69GyIXMANElk4aYhoQa/yin90lcg9qk+Kf2x
-	PgLq6kBXxv4GhZCCXmxxPnkano5gyVGIfg==
-X-Google-Smtp-Source: AGRyM1tyuhaeAUapgK1+/w4PLFibIFzq4WcdafaMw8kPLP7dLwli6ois76D2ZsviA8s5s/kC0GM/ig==
-X-Received: by 2002:ad4:5949:0:b0:473:75ec:9f6e with SMTP id eo9-20020ad45949000000b0047375ec9f6emr2060525qvb.17.1657703838107;
-        Wed, 13 Jul 2022 02:17:18 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a254a00b006a6d74f8fc9sm12372896qko.127.2022.07.13.02.17.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 02:17:16 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id i206so1206100ybc.5;
-        Wed, 13 Jul 2022 02:17:15 -0700 (PDT)
-X-Received: by 2002:a25:bc8e:0:b0:66e:fe43:645c with SMTP id
- e14-20020a25bc8e000000b0066efe43645cmr2777562ybk.202.1657703835228; Wed, 13
- Jul 2022 02:17:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220712164235.40293-1-f.fainelli@gmail.com> <CAK8P3a2QrYbWOqV+CG-W0ZkzW6ORgw8R6Dv-L3o2ZAtJs-B3Kw@mail.gmail.com>
- <0131e1d6-09c0-31a4-5b9d-0e2fc49d61ac@linaro.org>
-In-Reply-To: <0131e1d6-09c0-31a4-5b9d-0e2fc49d61ac@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 13 Jul 2022 11:17:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDDY_72y3WYt401hG122xg1s7_VRCG9Vyhhkzco-nBYw@mail.gmail.com>
-Message-ID: <CAMuHMdWDDY_72y3WYt401hG122xg1s7_VRCG9Vyhhkzco-nBYw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Kconfig.platforms: Re-organized Broadcom menu
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=a7EdAL1phybyF7skcIdHDSL8TqoETJjf/TfW70qlhQE=;
+        b=2tVTZHcYOBVdvdXcx5QwhP6Rb8T2ZUIxd59irmRayZMl4riIpvDruV3ZpOG2W8HXrp
+         f5eyw9C9ivb+CJCJciP3RGYBE0auLqHZ9i5Tsvs0TZRmuOLODUvg0bfuK5FHGhhtPyXF
+         PL+1GHeLuUjQsA7kR0FUhMj7IyzoQJw3nU1Z9ShECvP4NLP1lgH7As5M7CEhhwXy58S4
+         uc+HCKLZArO1521MZ7v5UMB1k2GeinKR4M3QR6wntYoh1evUaYsQNfXi2mJ7uBG7j1WV
+         pmni8w/HL357BLNa3EDqDYw30zso7h73kK3YOgLkQojfHC0jM/GCYI8djTm1w/zuPc2a
+         UuZQ==
+X-Gm-Message-State: AJIora9Mn4f62nvBfuRfio3pzxmtj4xhiP8g6euULsGmVEvK/HrwHEWa
+	y1kp7X4p5SHiombyQmwzFtQ=
+X-Google-Smtp-Source: AGRyM1tiNi7tM+jPk95JdtfLPm+/s8q30CPmWWNXCMmYZzbl5lIlM6TOUtjwhjklfgMb0cCoqIVQnA==
+X-Received: by 2002:a05:6512:3c96:b0:489:e6c1:a5a7 with SMTP id h22-20020a0565123c9600b00489e6c1a5a7mr1797738lfv.38.1657709919880;
+        Wed, 13 Jul 2022 03:58:39 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p23-20020a2e9ad7000000b0025d6f3f40b2sm1762183ljj.21.2022.07.13.03.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 03:58:38 -0700 (PDT)
+Date: Wed, 13 Jul 2022 12:58:36 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Florian Fainelli <f.fainelli@gmail.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
-	bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>, william.zhang@broadcom.com, 
-	anand.gore@broadcom.com, Olof Johansson <olof@lixom.net>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Li Yang <leoyang.li@nxp.com>, Wei Xu <xuwei5@hisilicon.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	"moderated list:ARM/Mediatek SoC..." <linux-mediatek@lists.infradead.org>, 
-	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>, Matthias Brugger <mbrugger@suse.com>, 
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	"moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" <linux-samsung-soc@vger.kernel.org>, Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Robert Richter <rric@kernel.org>
+Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
+Message-ID: <Ys6lXD6BSxjH02mW@orome>
+References: <20220708185608.676474-1-thierry.reding@gmail.com>
+ <20220708185608.676474-2-thierry.reding@gmail.com>
+ <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="TIZRcbYAEqhPciQf"
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
 
-Hi Krzysztof,
 
-On Wed, Jul 13, 2022 at 10:40 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 13/07/2022 10:25, Arnd Bergmann wrote:
-> > On Tue, Jul 12, 2022 at 6:42 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >> There are now multiple Broadcom SoCs supported so group them under their
-> >> own menu such that the selection is visually more appealing and we can
-> >> easily add new platforms there in the future. This allows us to move
-> >> ARCH_BRCMSTB back to its siblings.
-> >>
-> >> No functional changes introduced.
-> >>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >>
-> >> Note this is based on "arm64: bcmbca: add arch bcmbca machine entry"
+--TIZRcbYAEqhPciQf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jul 12, 2022 at 03:27:16PM +0200, Arnd Bergmann wrote:
+> On Fri, Jul 8, 2022 at 8:56 PM Thierry Reding <thierry.reding@gmail.com> =
+wrote:
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/te=
+gra-for-5.20-soc
+> ...
+> > ----------------------------------------------------------------
+> > soc/tegra: Changes for v5.20-rc1
 > >
-> > Hi Florian,
+> > The bulk of these changes is the new CBB driver which is used to provide
+> > (a lot of) information about SErrors when things go wrong, instead of
+> > the kernel just crashing or hanging.
 > >
-> > So far, we have tried to keep the Kconfig.platforms file rather coarse-grained,
-> > mainly limiting it to company names and high-level families, but avoiding
-> > sub-menus or adding too many sub-families.
+> > In addition more SoC information is exposed to sysfs and various minor
+> > issues are fixed.
 > >
-> > If we add per-vendor submenus, we should probably first decide how we
-> > want to structure this across vendors. I've added maintainers and lists to
-> > Cc for a couple of the ones that are in a similar situation.
-> >
-> > I can see a couple of ways we can do this:
-> >
-> > a) keep the list of platforms as short as possible, combining related
-> >   SoC families from a single vendor wherever possible, but no sub-menus
-> >   (same as today)
-> >
-> > b) Always use sub-menus when there is more than one family, but
-> >    keep relatively coarse platform selection.
-> >
-> > c) Use sub-menus and also move to a more fine-grained SoC
-> >     selection, similar to what we have on 32-bit arm.
-> >
-> > I would not really want to go to c), but a) and b) both make sense to
-> > me as long as do it consistently across all platforms.
-> >
-> > Any other ideas or opinions?
->
-> Whatever we decide here, the SoC can override in drivers/soc, just like
-> Renesas did. I think Renesas chose option c), but made it in
-> drivers/soc. I would vote to have consistent policy, so if arch/arm64 is
-> a) or b), sub-archs should not redefine it in drivers/soc.
+>=20
+> Hi Thierry,
+>=20
+> I fear I'm going to skip this for the current merge window. It looks like
+> the CBB driver you add here would fit into the existing drivers/edac/
+> subsystem, or at the minimum should have been reviewed by the
+> corresponding maintainers (added to Cc)  to decide whether it goes
+> there or not.
+>=20
+> I had not previously seen this driver, but I'll let them have a look firs=
+t.
 
-We did so because of the "only a single symbol in
-arch/arm64/Kconfig.platforms"-policy.
+EDAC looks like it's used primarily for memory controllers, which this
+is not. But then I also see explicit references to non-memory-controller
+references in the infrastructure, so perhaps this does fit in there. The
+CBB driver is primarily a means to provide additional information about
+runtime errors, so it's not directly a means of discovering the errors
+(they would be detected anyway and cause a crash) and I don't think we
+have a means of correcting any of these errors.
 
-> Or we could choose d)
-> d) keep arch/arm64 list of platforms as short as possible, but sub-archs
-> can do whatever they like on drivers/soc.
->
-> Personally, I find fine-grained SoC selection a bit ridiculous
-> optimization, like compiling kernel, Glibc and userspace with -O3,
-> -funroll-loops and many other flags. One gets smaller size but looses
-> multi-platform and ability to test one kernel on different boards.
-> Therefore I would vote for b) with disallowing drivers/soc defining more
-> ARCH_ and more SOC_.
+I'll ask Sumit to work with the EDAC maintainers on this.
 
-No one prevents you from selecting multiple SoCs, they are not
-mutually-exclusive...
+> For the other patches, I found two more problems:
+>=20
+> > Bitan Biswas (1):
+> >       soc/tegra: fuse: Expose Tegra production status
+>=20
+> Please don't just add random attributes in the soc device infrastructure.
+> This one has a completely generic name but a SoC specific
+> meaning, and it lacks a description in Documentation/ABI.
+> Not sure what the right ABI is here, but this is something that needs
+> to be discussed more broadly when you send a new version.
 
-With arm64 (or risc-v ;-) instead of arm32 being used for all new
-SoCs,  I expect the real small ones (with a few MiB of embedded
-SRAM) to enter the arm64 realm soon.  No point in including e.g. all
-pinctrl drivers from the vendor if you have barely enough RAM to run
-Linux and your app...
+I wasn't aware that the SoC device infrastructure was restricted to only
+standardized attributes. Looks like there are a few other outliers that
+add custom attributes: UX500, ARM Integrator and RealView, and OMAP2.
 
-Gr{oetje,eeting}s,
+Do we have some other place where this kind of thing can be exposed? Or
+do we just need to come up with some better way of namespacing these?
+Perhaps it would also be sufficient if all of these were better
+documented so that people know what to look for on their platform of
+interest.
 
-                        Geert
+> I see there are already some custom attributes in the same device,
+> we should probably not have added those either, but I suppose
+> we are stuck with those, so please add the missing documentation.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Yeah, that's a good point. These should definitely be documented
+properly.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>=20
+> > YueHaibing (1):
+> >      soc/tegra: fuse: Add missing DMADEVICES dependency
+>=20
+> This one fixes the warning the wrong way: we don't 'select' random
+> drivers from other subsystems, and selecting the entire
+> subsystem makes it worse. Just drop the 'select' here and
+> enable the drivers in the defconfig.
+
+This doesn't actually select the DMADEVICES property. It adds a
+dependency on DMADEVICES and if that is met it will select
+TEGRA20_APB_DMA.
+
+Thierry
+
+--TIZRcbYAEqhPciQf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLOpVkACgkQ3SOs138+
+s6HhfBAAr9dY2YR9GztcArzoolgqZsRvoAUpxcSx+Ht9WbmOw1o/FwryrFxIzMUL
+R2IdmvNdO7a6ZegRSIVKNADbrmTkENserrulCZmY0A92Izc2T3yxWvFR1f54GFc0
+CAtlHk2N7+v9f54yn3+OAz3CxX94oryjGvbfor9scNGbKZpIZ7HRu3gXAqXXeA3X
+HWpcRRJRIwYSSaDA27cd9g5q5fb7Dm2WJXwosVqsG9dzndMEqFRC4PssQDBV3G+7
+AobVS4Z1svgk1vsX++ATpz3FpNNDA+BbwGcos5SNNPyRe+Pk5IEMCY5ecRidH5cQ
+L/4C2EYu9+PiBL+tjX3hI8Go/9uRPI2F90K5uZdKQcNObu+YlfU/icbjIXMCUz6v
+s9MeTIk+yYIqmolxPeJalcGyvOR7v5St5WnAZYOKg53H75WKyVk8xJ5s9fysZHNg
+ooVk9BJl/LMio94lk58GYLePpS+SBxMF04+8QhPAYdKv0nBdsiZPkNwTK+t9o6+d
+VuyRMHZwHW5nOTLUKdo1CW59KspA8g1g8Wkp008+sCo5wUDGca3ueSeYjl5Fcy3Q
+bBPI6T+beYVzgdXzaIjU4vQ9bGs4bZWaCiJPfX0E8hcPxZE9drcppoAOjE+ROQ8Z
+hQxjbxcSah5MdAM2ICYjRzkfHoMVzWOiR9EhtZi6cLJFdAOPPYM=
+=Bpjo
+-----END PGP SIGNATURE-----
+
+--TIZRcbYAEqhPciQf--
