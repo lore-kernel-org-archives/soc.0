@@ -1,176 +1,121 @@
-Return-Path: <SRS0=nMo8=XT=pjd.dev=peter@kernel.org>
+Return-Path: <SRS0=QacK=XT=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B817C433EF
-	for <soc@archiver.kernel.org>; Thu, 14 Jul 2022 18:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 152B2C43334
+	for <soc@archiver.kernel.org>; Thu, 14 Jul 2022 20:15:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1561CC34115; Thu, 14 Jul 2022 18:05:10 +0000 (UTC)
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+	id CADAEC341C6; Thu, 14 Jul 2022 20:15:37 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DDCF0C34114;
-	Thu, 14 Jul 2022 18:05:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DDCF0C34114
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pjd.dev
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pjd.dev
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id B46A62B0597F;
-	Thu, 14 Jul 2022 14:05:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 14 Jul 2022 14:05:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
-	:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1657821906; x=1657825506; bh=/iwEYxigdE
-	FuJz5vUQfpajKlKQ642prMXuR8LsWTJx4=; b=dsP1dcOwic3v090lBty7m6YW4K
-	atHGONu7Led0sjHJZWelPCHgNq9BtvCXoAlawZinMH7q+4MLV+52lyecfKvPC8fo
-	zDfpaHKoD7N4x9QIEogUA3YYhUPI042cDS3aVqc9eYzN2bQnV2YPDegWsrwQZwSY
-	RhM57rkIgthJXPb4Wy1ZOBg0+bWYEsEv0YEfGaIJT016haemk3WFPXeACzgkZ7qG
-	sy2nB6v9CtYohh4fKzjj4BAWOupA0ZjkEoB3UU9ad/DQHG3PoPrlNZZVJwputKnW
-	LjZ2+/f1VO9Q0MfgWXf//Ho20NDcsQ0qaoNE6wp8RN5gWaZGWA2XpqCknHkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1657821906; x=1657825506; bh=/iwEYxigdEFuJz5vUQfpajKlKQ64
-	2prMXuR8LsWTJx4=; b=uiftyfxJnwG7Wl8vGOUO9ZiZhGBb7O5yZVTr+YdQmAC9
-	cTNgOu9DZTtAOac1txGWodXuHV3b6JEDgm0s7X01WTzoLieBZiO1GFhd0N/gqppM
-	sVid7qPRakRVkow4ZFiOPrQnfWReuW5I9pyV0NWeIwWdfE9JnL6YN+Aa1Biq0e05
-	A1WWLT/D4dKfeJn7f8ORNcmbpE1JcmVdbQykxPHPp7kjXkv7fncj2t61M12n5Xko
-	V1/PcGuPHiGSPdfd9G+DTTnOhFGbcRVXKIAQEbno6LBnkcXjgsOzIK4nRjbm8XYf
-	7wIj5LvH0PmfXt7bDLYCo9LF8V4j/hVdfS7BYcRCtg==
-X-ME-Sender: <xms:0VrQYjyHiWXVZBbaR8bHz7yfS7_8NklA2UspznsHItCUqOGkJdS7yA>
-    <xme:0VrQYrSYVManhJiKOK4dcMB70ICfjHzQ9-wampgNgNkYXvWPgLEXumjCuxD3Bf417
-    xnKuIaWXwJI6UKg5H4>
-X-ME-Received: <xmr:0VrQYtUUh0hJCG9yHDccVve4wtQQB_gEMvOqrh4XPm7N1QMRddT7T9PHBQqd>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejledguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefrvght
-    vghrucffvghlvghvohhrhigrshcuoehpvghtvghrsehpjhgurdguvghvqeenucggtffrrg
-    htthgvrhhnpeevgfehgedvvdekveeifeekjeduueetieegvdeitedvffdvgffhjeekveek
-    tdehfeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepphgvthgvrhesphhjugdruggvvh
-X-ME-Proxy: <xmx:0VrQYtioem0RvXqwb80HhYC7sd8amseCPfy2JJeOq9Dj7AU02vodxA>
-    <xmx:0VrQYlC4TwTpUizVdKPXOnHZULWLG-O20y0mnMoKNWIHmhFLQOpzlQ>
-    <xmx:0VrQYmL2L0AILy7TtR5-w9MOaztDtt9xcaKoxpM3WkVJEeSTRQ91rg>
-    <xmx:0lrQYtYtfCsKbstjPAbkTtiUDy_lO1pVxG2CP284ecVn-GZ-SDG-cOInk5w>
-Feedback-ID: i9e814621:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Jul 2022 14:05:03 -0400 (EDT)
-Date: Thu, 14 Jul 2022 11:05:01 -0700
-From: Peter Delevoryas <peter@pjd.dev>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Logananth Sundararaj <logananth13.hcl@gmail.com>,
-	DTML <devicetree@vger.kernel.org>,
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	naveen.mosess@hcl.com, thangavel.k@hcl.com,
-	SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Olof Johansson <olof@lixom.net>,
-	garnermic@gmail.com, velumanit@hcl.com,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 31F6DC3411C;
+	Thu, 14 Jul 2022 20:15:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31F6DC3411C
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MsJXG-1nO6E32tb8-00tj3g; Thu, 14 Jul 2022 22:15:33 +0200
+Received: by mail-yb1-f179.google.com with SMTP id y195so5232397yby.0;
+        Thu, 14 Jul 2022 13:15:33 -0700 (PDT)
+X-Gm-Message-State: AJIora8pmRGGCAO3yZfai3X5WVhD4GHMzmajti3CzBRdX+FlT9T+EvVF
+	xtX4IZnoEamn/zcUkGHTGFzmcJy6edzk/YvJMDE=
+X-Google-Smtp-Source: AGRyM1ufLR1tXyfyrelM5ysCbbKNSHqOWqFASMdGq5/rYwOY4jOjwUqmCRVpkzIQCCqnubMWRWU8c8ZFrp1nxf+t2A0=
+X-Received: by 2002:a05:6902:120f:b0:668:2228:9627 with SMTP id
+ s15-20020a056902120f00b0066822289627mr11089451ybu.134.1657829732313; Thu, 14
+ Jul 2022 13:15:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
+ <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com> <YtBazSo/uJzFeF+L@pdel-mbp>
+In-Reply-To: <YtBazSo/uJzFeF+L@pdel-mbp>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 14 Jul 2022 22:15:15 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1juHV6N2QtXaEcobWs6kQHBqqUn9MynvobyJtFFyOsfg@mail.gmail.com>
+Message-ID: <CAK8P3a1juHV6N2QtXaEcobWs6kQHBqqUn9MynvobyJtFFyOsfg@mail.gmail.com>
 Subject: Re: [PATCH v3] The Yosemite V3.5 is a facebook multi-node server
  platform that host four OCP server. The BMC in the Yosemite V3.5 platform
  based on AST2600 SoC.
-Message-ID: <YtBazSo/uJzFeF+L@pdel-mbp>
-References: <20220707132054.GA10610@logan-ThinkPad-T14-Gen-1>
- <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0P2u+LdXcU7As=dfNbg_J2eWfhgB9TT1-xVyH0v6OM5Q@mail.gmail.com>
+To: peter@pjd.dev
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Logananth Sundararaj <logananth13.hcl@gmail.com>, 
+	DTML <devicetree@vger.kernel.org>, linux-aspeed <linux-aspeed@lists.ozlabs.org>, 
+	Andrew Jeffery <andrew@aj.id.au>, OpenBMC Maillist <openbmc@lists.ozlabs.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, naveen.mosess@hcl.com, thangavel.k@hcl.com, 
+	SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, 
+	Olof Johansson <olof@lixom.net>, garnermic@gmail.com, velumanit@hcl.com, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:TeQY4NWa/y5sgLhwdrY07O+SB1sqrkHvyAFBdi1KLy+F/Q8bHEg
+ kkmk3u2cCS58iR5t/zzTwZ9jVX5oRQ2z3Eu0LqEFo0AGBKji+o3iefIqlm9NQolYTFiweG1
+ f4jzXI+s5r80LDahIQE6V/ACANTnwmPbx6oXWAU2bZLfdXs6R+H6bBW4DsJZp1le/YGMAUj
+ 0LPkU/I3cGxVAB4twi0Ag==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gl5Hmc9xV0U=:VeqMC36YuBmCA0q4yFPhEb
+ XnhRb+17eUExMc2IreRDbwKyTWEcJDS5PdNeQsL6O0UQjaoQ9kMTydw4f7Gi7/te1z+q6vtNk
+ 444ZwoQvAg4VAyDSd/iVjtPB2Wl/uRF5Gy0x57i3Y6kJlrJQLSaPu/m0Gu5/QBOaJgvuQIlct
+ mSVxcwCdr31ioj2mKxZUqCLNRBXSikV8ylTy6eovO26eclKYmbKz55oEj5ctnAALFbupgn4d9
+ iewpyAs8Yp+pqF1A0Ig6g8Y74SfcB/Y9lPgj6nfilBr0D4hgHYvVGQbJsKP0t2D8nW6FEdswv
+ kejh1o/Zgldb8SrosqGK3dFguE0occjT/Oy/v9B76izdoNGxSSy/9qYI7FRZGGsP/Qkciier5
+ 29FI3jkLfcEJEpsIj1lIoE6yaL3CHnyYkDB6Tu9LXAsIjvnLEhDvEeQwyTaW3JSgpPAoUtAv8
+ OuwZte6UMyTsTNuSve+nlYwT1l1cjWPKed5cCBV/i162oVz3kWh+O0dQjrHoKB43TapDbZvMP
+ sdIgwaxtCXL3Rf7p0kJr6YB/+IQSfu7IsIV6vXxmpTeZXoWnyS69VhX9Xpk0DfHDoFJNalQcT
+ taU8N8SXq91IhJjuvf79eaihB28LcEN5tH0ZYVozkkE3pcWl/9gNCkZ9YFbmmzUpT0/bggWoR
+ Fagz8m+83ECtT6E779wdzIj3sTgJbSzR/QcY4VLcOBLTBdTaXla7A4YZ3ot4CuxeRHzcPSz+f
+ 1XC5XlZ7ElXlQ8zBYrMe64WQdeRFnKCSKvMiz0mkv96y1fTkyZp2tIBsV3U6EaUDDo982Nmvi
+ ucvxf+2qWqnE4fKnfTnEENGd7qmyvE/LOMdp6IwsOczHeNo6N8yNimJxFcwUpvo9Plbh7vMYW
+ 5cyLH4Bbc5jC40wZcYzA==
 
-On Thu, Jul 07, 2022 at 03:33:48PM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 7, 2022 at 3:20 PM Logananth Sundararaj
-> <logananth13.hcl@gmail.com> wrote:
+On Thu, Jul 14, 2022 at 8:05 PM Peter Delevoryas <peter@pjd.dev> wrote:
+> On Thu, Jul 07, 2022 at 03:33:48PM +0200, Arnd Bergmann wrote:
+> > > +       model = "Facebook fby35";
+> > > +       compatible = "facebook,fby35", "aspeed,ast2600";
+> > > +
+> > > +       aliases {
+> > > +               serial4 = &uart5;
+> > > +       };
 > >
-> > This patch adds linux device tree entry related to
-> > Yosemite V3.5 specific devices connected to BMC SoC.
+> > Why not start at serial0 here?
+>
+> Hey, Facebook person jumping in here (using a personal email):
+>
+> I think you're right, it should be like this:
+>
+>         aliases {
+>                 serial0 = &uart5;
+>                 serial1 = &uart1;
+>                 serial2 = &uart2;
+>                 serial3 = &uart3;
+>                 serial4 = &uart4;
+>         };
+
+Are you actually using all five uarts though?
+
+> > > +       chosen {
+> > > +               stdout-path = &uart5;
+> > > +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
+> > > +       };
+>
+> Also: if we do serial0 = &uart5, it should be console=ttyS0, not ttyS4.
+>
 > >
-> > Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
-> 
-> 
-> Something went wrong with the patch description, it looks like you dropped
-> the subject and sent the first paragraph as the subject instead.
-> 
-> > +/ {
-> > +       model = "Facebook fby35";
-> > +       compatible = "facebook,fby35", "aspeed,ast2600";
-> > +
-> > +       aliases {
-> > +               serial4 = &uart5;
-> > +       };
-> 
-> Why not start at serial0 here?
+> > The bootargs should really come from the boot loader.
+>
+> What if we want to boot the kernel by itself with QEMU? It's kinda annoying to
+> have to specify '-append "console=ttyS0,57600n8...' everytime, or to have to use
+> a wrapper script. But, it's also a source of bugs: I realized yesterday the
+> dts we were using here:
+>
+> https://github.com/facebook/openbmc-linux/blob/e26c76992e0761d9e440ff514538009384c094b4/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+>
+> Has the wrong console setting.
 
-Hey, Facebook person jumping in here (using a personal email):
+You can encode the uart settings like
 
-I think you're right, it should be like this:
+           stdout-path = "serial0:115200n8"
 
-	aliases {
-		serial0 = &uart5;
-		serial1 = &uart1;
-		serial2 = &uart2;
-		serial3 = &uart3;
-		serial4 = &uart4;
-	};
+the rest really should be passed on the command line, not in
+the DT shipped with the kernel.
 
-> 
-> > +       chosen {
-> > +               stdout-path = &uart5;
-> > +               bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
-> > +       };
-
-Also: if we do serial0 = &uart5, it should be console=ttyS0, not ttyS4.
-
-> 
-> The bootargs should really come from the boot loader.
-
-What if we want to boot the kernel by itself with QEMU? It's kinda annoying to
-have to specify '-append "console=ttyS0,57600n8...' everytime, or to have to use
-a wrapper script. But, it's also a source of bugs: I realized yesterday the
-dts we were using here:
-
-https://github.com/facebook/openbmc-linux/blob/e26c76992e0761d9e440ff514538009384c094b4/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-
-Has the wrong console setting.
-
-Booting the kernel directly is actualy really useful for us, because U-Boot
-literally takes 4+ minutes in QEMU because we execute in-place from flash for
-most of it.
-
-> 
-> Why do you need the vmalloc=384M? That seems excessive.
-
-Yeah I'm not sure what that is about, would need to find
-the person who wrote this originally. Speaking of which:
-
-The dts I linked above, from our repo, how come this patch is not just a copy of
-that?
-
-> 
-> > +
-> > +       memory@80000000 {
-> > +               device_type = "memory";
-> > +               reg = <0x80000000 0x80000000>;
-> > +       };
-> 
-> The memory location and size is usually also set by the boot loader
-
-Yeah not sure what happens if I remove this and boot the kernel directly in
-QEMU, would we need to specify the RAM size explicitly in console args? Hmmm,
-I'll check it out.
-
-Thanks for your comments!
-Peter
-
-> 
->         Arnd
+        Arnd
