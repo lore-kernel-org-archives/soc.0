@@ -1,77 +1,77 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37402C43334
-	for <soc@archiver.kernel.org>; Thu, 14 Jul 2022 16:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CB04C43334
+	for <soc@archiver.kernel.org>; Thu, 14 Jul 2022 16:10:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1EB37C341CF; Thu, 14 Jul 2022 16:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07658C341C6;
-	Thu, 14 Jul 2022 16:06:17 +0000 (UTC)
+	id 7318EC34115; Thu, 14 Jul 2022 16:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56066C34114;
+	Thu, 14 Jul 2022 16:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1657814778;
-	bh=D+KyPbiZw/JOdUc0aKu3DvDfjfE78T1gy4PuRReGoqM=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=dQHUla8SroldZg4VLTB6S7a9X/MZZQltY/nnRWOiLKtgRo2SU7my69dRRMtNy2Ld7
-	 TPpL66byNdxG5hXLp+B0X04DR7iTMsdxsfXrGf/IIh9Xgp6p79TnOfcdSps49woS/q
-	 qQAWROQzG8oTnHmga/jrExZxHLb4EBPVfwI3UYa3Xou68H8DDowEPrFdcNcvkCoWog
-	 AHAZ7I9JcGdgZl0VZ4SMEFxYel4Scbh9dr6TN25uTycmQYW+GuQoIgtR0DN7XWeCGN
-	 yABGm2EmP4EWzknW0LGAL0Kta7UgY7jP+kkmfhzoKCZxJAnNWQd5xRDEjKJHZmhfL/
-	 FqBauy/h2+sWA==
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31cac89d8d6so22055897b3.2;
-        Thu, 14 Jul 2022 09:06:17 -0700 (PDT)
-X-Gm-Message-State: AJIora9O+ZCgLy7xB7zmJmYbEo043dAb1MEJ9NKB9GFM1hhc7l9WCiit
-	/9pD2Xrr+Y47/sh8jxePYzcVEJ2uVc2KdFV3zdM=
-X-Google-Smtp-Source: AGRyM1sNGuMtM2ZDuvC2+WChABHFd+ogJnKciS+BxIRFFkfGIPQVDHU3G2Mh7D9zoSXkDef0M3km6+Y3IQk0B4ZeDIE=
-X-Received: by 2002:a81:1e4d:0:b0:31c:86f1:95b1 with SMTP id
- e74-20020a811e4d000000b0031c86f195b1mr10435712ywe.42.1657814777011; Thu, 14
- Jul 2022 09:06:17 -0700 (PDT)
+	s=k20201202; t=1657815030;
+	bh=My59zynGfF04DHm31KCI/JWWlqqmnkuvRPE1U9MpF9w=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=PM4m/7nE5x++StAQ2AjWURUCyCSGUN911WCjN80XDbCK53eBhaxWextTeG61YQ0oI
+	 BKXm0C0qxxKVPGxROUlSYvzWTLndae+NmhkHuIx00DpHHwCFLMNRX87czLDl5yGRXL
+	 0oGLrvdsAVJiKfF5yvry1p5lfDUX+etf/DRi2GeoqwoMREmsp4IN2uPFRLBuGej6r4
+	 0RIOb9yEr07TMPYXJJtYj/gDF2ewzKQtrXHKqrNLjY5+t/FKUNxb3Wi3+gXgef0qRC
+	 3mTWEi9DU26RLA5jSCsmFqKW2V6oBbNSywSDyEu4jU8ztNIeOqa95GH4qL6eaWv+Cb
+	 sb8itcb374mHA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41AC2E45225;
+	Thu, 14 Jul 2022 16:10:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <YsheC0hgyJB9kPsS@kista.localdomain> <165781258677.3193274.3635616027978236662.b4-ty@arndb.de>
- <5838152.lOV4Wx5bFT@jernej-laptop>
-In-Reply-To: <5838152.lOV4Wx5bFT@jernej-laptop>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Thu, 14 Jul 2022 18:06:00 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a14rwmwjEQJX-Z5tj_1-N1CBgf10Arx+e1=ufhTNk6Mzg@mail.gmail.com>
-Message-ID: <CAK8P3a14rwmwjEQJX-Z5tj_1-N1CBgf10Arx+e1=ufhTNk6Mzg@mail.gmail.com>
-Subject: Re: [GIT PULL] Allwinner config64 changes for 5.20
-To: =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/7] Broadcom SoC updates for 5.20
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <165781503026.2313.16321610168750623234.git-patchwork-notify@kernel.org>
+Date: Thu, 14 Jul 2022 16:10:30 +0000
+References: <20220711164451.3542127-1-f.fainelli@gmail.com>
+In-Reply-To: <20220711164451.3542127-1-f.fainelli@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>, Jernej Skrabec <jernej@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: soc@kernel.org
 
-On Thu, Jul 14, 2022 at 5:45 PM Jernej =C5=A0krabec <jernej.skrabec@gmail.c=
-om> wrote:
-> Dne =C4=8Detrtek, 14. julij 2022 ob 17:31:23 CEST je Arnd Bergmann napisa=
-l(a):
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > On Fri, 8 Jul 2022 18:40:43 +0200, Jernej Skrabec wrote:
-> > > Please pull following config64 changes for 5.20.
-> > >
-> > > Best regards,
-> > > Jernej
-> > >
-> > > The following changes since commit
-> f2906aa863381afb0015a9eb7fefad885d4e5a56:
-> > >   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-> > >
-> > > [...]
-> >
-> > Merged into arm/defconfig, thanks!
-> >
-> > merge commit: 2b4b612638b8e87719f82ab7a9cda8925375eef6
-> >
->
-> Thanks! For the future, can I send changes to 32-bit and 64-bit configs i=
-n
-> single pull request?
+Hello:
 
-Yes, definitely.
+This series was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-       Arnd
+On Mon, 11 Jul 2022 09:44:44 -0700 you wrote:
+> Hi Arnd, Olof,
+> 
+> The highlights of the pull requests are:
+> 
+> - William and Anand add support for a large number of Broadband Carrier
+>   Access (BCA) DSL/PON/Wi-Fi router chips under the ARCH_BCMBCA umbrella
+>   and we expect to see more activity in the future on these chips.
+> 
+> [...]
+
+Here is the summary with links:
+  - [GIT,PULL,1/7] Broadcom defconfig changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,2/7] Broadcom defconfig-arm64 changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,3/7] Broadcom devicetree changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,4/7] Broadcom devicetree-arm64 changes for 5.20
+    https://git.kernel.org/soc/soc/c/3476ccbd0ae6
+  - [GIT,PULL,5/7] Broadcom drivers changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,6/7] Broadcom maintainers changes for 5.20
+    (no matching commit)
+  - [GIT,PULL,7/7] Broadcom soc changes for 5.20
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
