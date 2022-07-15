@@ -1,197 +1,331 @@
-Return-Path: <SRS0=0pSm=XU=nvidia.com=sumitg@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 303E5C433EF
-	for <soc@archiver.kernel.org>; Fri, 15 Jul 2022 08:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D2BC43334
+	for <soc@archiver.kernel.org>; Fri, 15 Jul 2022 12:29:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED6AFC341C0; Fri, 15 Jul 2022 08:06:34 +0000 (UTC)
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B9E92C34115;
-	Fri, 15 Jul 2022 08:06:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B9E92C34115
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Su2ml//NGqQFLeOn0CLMxlrka3/4X3UvLTxtEK+absRuLqWKnHMu3hlf0QFp4ozXr0JAsz7NE/UFMUahkupd7aNJx93dSCxBJoX+jrsOvdYO6yKTTph8ytHdYPyVr/dY+CAuxBoxp21RjYBvpqTdieUkqAovkdPj7+xpoVyRmQgCWdjDVoiO1EjtHJQDBXAYEshDA2Lgmvw5cirrHUjHz3uztUFnXdObAEMyB1DvhGmWKZBiFtD+n/8vagvzWSI14U5zWMuuw0OQ5A01OtaKG41+xfmxp9rISE0kii5muc+2hXYEZG5nw59dHvhhtTGJTBLPzopyPG613loHoWGxmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UkLieEmu7/sA1axLo0voLQrZ/JfehGznPfDYEa5pAMk=;
- b=HUfhXfEeRhMBNTWR1t9VG9PEJllNT4xFvr2OhX+RMjbHHMx23B6xMUvu/TDsf9nfU0S5PLes9eRTWMRnBS953YED1nTNuJ6aTr2DrkYZ0XQ2uVdGDhXZBcoOijTj/SD9yyBkwCv7ijKEV9n0AT3FEV/R1Or42f6VafStm9J4rLxMZCaHNAsmu0ZMaRZtJXF440MUlghpBvCezs2QHNSyDM6aAlW6N5zBejc7O2n8GgwWcdzVOCPiJmgVWWZfbEwTcFDsWmoq0G0dvwTvaaON1DaMhHZxgQNESdMGM3uRWV31VxqVjraWE026NQQLggQYj+7mqJT9UnU3FhXJpG4aHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UkLieEmu7/sA1axLo0voLQrZ/JfehGznPfDYEa5pAMk=;
- b=JBQAwO6IQJR4YqT5B/0QHIFH3XP8lWuOyXVI26jE1g1jW2gb717rbJEjirn/SJyscAgGNGVNsVODUwg0HWkf3WYUDpYJt7UchgjgVFr85xLahzCLjlmEHVLB3msat+9Kqe+IWCxBiQDofRHWAtA/XXZRq4GhXnpgoKGjZfpm+OrC6FAlh6Ho2ulegxoTe/JJhOdaHB+UmCY+O99PMHtSj0xzL2yopfeIN7QYJmZpLYvpYfShrLxemp/oGIR+F9Jf5XVIqblK/sOFWjl7ncGneoc+b7slWgub6bwYYkcHbSPs4QfwhRGTx0wAszOkLK/yOTDsMhRVLk1+Kq+F3O5Iqg==
-Received: from DM6PR12CA0015.namprd12.prod.outlook.com (2603:10b6:5:1c0::28)
- by DM5PR12MB1882.namprd12.prod.outlook.com (2603:10b6:3:112::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Fri, 15 Jul
- 2022 08:06:30 +0000
-Received: from DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1c0:cafe::15) by DM6PR12CA0015.outlook.office365.com
- (2603:10b6:5:1c0::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12 via Frontend
- Transport; Fri, 15 Jul 2022 08:06:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- DM6NAM11FT037.mail.protection.outlook.com (10.13.172.122) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5438.12 via Frontend Transport; Fri, 15 Jul 2022 08:06:29 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 15 Jul
- 2022 08:06:29 +0000
-Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 15 Jul
- 2022 01:06:24 -0700
-Message-ID: <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
-Date: Fri, 15 Jul 2022 13:36:16 +0530
+	id 0B5D0C341CA; Fri, 15 Jul 2022 12:29:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E98B7C3411E
+	for <soc@kernel.org>; Fri, 15 Jul 2022 12:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1657888148;
+	bh=rQqgK5CPHSffhcNqLFwvkwfk9rH0xelDO4b32bO+s98=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=ImquOw9Bo+4TxubTi+3WINhOg3W+EZkpwar2NZzpVEYStIa9HJ1nJHrbxermFQ4QG
+	 cM4V/fbQgtrQQxEQgqykU1OU3Cy7sBA9f4vsC7pVrenL+Q8RYW7tHdjE1TFfJTm/Ba
+	 gbn60B+dk0NrJdk++0MpQ05Ud7Hy74RV+DWAp4aU6yxs3RrqaHWk4ykRV1/dHVsp8V
+	 KK1m2Tlhvy4ZbdRNb43ZDeM/8nH9GWeHskyEq4M4G7BtwWkuGbV6ns0JthdzgYlY9A
+	 WUMCvZ0GcCn92ssqczOdW4aJp5Nkuv7USsk/CTy5y+AS+nWz4P+u79ODp3ccuGqDL3
+	 arxfE+oHA2+xw==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31c8a1e9e33so45341257b3.5
+        for <soc@kernel.org>; Fri, 15 Jul 2022 05:29:08 -0700 (PDT)
+X-Gm-Message-State: AJIora819ocBlK+B85KRz8GTt4HQbkqgxTt8wjLEk1HcXmVNVyU9z8Bl
+	f4YdnvFqQezw5KaGY1uH6/KLJDmCq0o5HJTIZcw=
+X-Google-Smtp-Source: AGRyM1sYEgA7yLT7SmpD1AadquEiZ2+pB2PDFnHOgeDNc1aE1PH6S1lNfYNqG/XrRl9JY8/w29fQqmY1cUy+Nmn7g84=
+X-Received: by 2002:a81:d93:0:b0:31c:d32d:4d76 with SMTP id
+ 141-20020a810d93000000b0031cd32d4d76mr16517070ywn.135.1657888147902; Fri, 15
+ Jul 2022 05:29:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
-Content-Language: en-US
-To: Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 15 Jul 2022 14:28:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3jSNJfJxkbqJ4Bfa0bkhNsF0CY+bGJMGKJOaFPm_Me5A@mail.gmail.com>
+Message-ID: <CAK8P3a3jSNJfJxkbqJ4Bfa0bkhNsF0CY+bGJMGKJOaFPm_Me5A@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC fixes for 5.19, part 3
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-CC: Thierry Reding <thierry.reding@gmail.com>, arm-soc <arm@kernel.org>, "SoC
- Team" <soc@kernel.org>, Jon Hunter <jonathanh@nvidia.com>, "open list:TEGRA
- ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>, Linux ARM
-	<linux-arm-kernel@lists.infradead.org>, <linux-edac@vger.kernel.org>, "Mauro
- Carvalho Chehab" <mchehab@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"James Morse" <james.morse@arm.com>, Robert Richter <rric@kernel.org>, Sumit
- Gupta <sumitg@nvidia.com>, <bbasu@nvidia.com>, Vikram Sethi
-	<vsethi@nvidia.com>
-References: <20220708185608.676474-1-thierry.reding@gmail.com>
- <20220708185608.676474-2-thierry.reding@gmail.com>
- <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
- <Ys6lXD6BSxjH02mW@orome>
- <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
- <YtAajDYfcVHRGl1U@nazgul.tnic>
-From: Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <YtAajDYfcVHRGl1U@nazgul.tnic>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a9fdbb20-944a-4eab-136f-08da6638eca3
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1882:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?V1NSR3RNd0FBajc2akZZK3RhTUVvN1JDRi9YUUpCTGR5ZlVpTVQrL2lYa2E4?=
- =?utf-8?B?OXRrTmpIOEI2dk05RW9nNGV3dk8vL09aVlpobWlKaStIakszZmVpU0xzaHB3?=
- =?utf-8?B?b1VoeDhlME5RbUZTWkNkcUJoOXA4M2hIWHR6U1lVVTBtaFFTVTE1ZmZIZDNK?=
- =?utf-8?B?bDE4M3h3R2UzcDZsdDZiYTUrWVhYQlk0cVBOTTVCWTl4cWhjRURjdURqcCs3?=
- =?utf-8?B?cU1FZ1BwSlM0M2dMUTk3VXF0WFAvZVJaU2EwOElaNjlnSTBQcnBoNWVhRTBt?=
- =?utf-8?B?YWdqdm5DUUViNE5aaDYxV0kyNFUyd1p5dVhmblNYWC9WYU5JQ1ZpWktiNTRR?=
- =?utf-8?B?cTFzMDJ1d1ZHUU1vczVQaHBBVDNjamNKbzdBdGlLVkFKMmhURm4xenBDdVE1?=
- =?utf-8?B?SnRuOUtVSUtNRGoyL1E4Mm1TeEFvMlEwc1NqK3Z5VWxFV1RpVk5NeTI5Ri93?=
- =?utf-8?B?NVZra1NuWGdUeXF4dkJCcXlUWHM1T3pnM0xRdHB2dmhxdS8zaFMrb3hHQzFE?=
- =?utf-8?B?Z0pLckRJdElRRkV5bW5RbEtOWEJFTS9LWkNqR0NCQTZDYm81MEhoSG9sZGMz?=
- =?utf-8?B?dkhRV3RyU0ExdzZRTWZwWmxObk1hbFhTdkNFNnc0SzFRVGJIaU1JQW4rT3kw?=
- =?utf-8?B?ak92bm8yYmYrNDhBZFdXOXY1RHJYdm9TQ0Zsc0huOTNZdFRiNjRvblVZRnJ6?=
- =?utf-8?B?S0p3TGc4N2V6c3QxM2F5aGRXbENzejA0M0tMem5RbXR5Vnp2K3k0Rklmb21n?=
- =?utf-8?B?Ty9XaHFqb2hPNittQUpScE1kWEpBODRrMUxYeUQyV3VRQlpoSU4zSXdFRU8z?=
- =?utf-8?B?QjU3bExmbWt1NUtXSmpmanpRejNJY0srdkMzMUJxcDlET2tGOVBJOUkrWWVq?=
- =?utf-8?B?dnNML0tDZHB4ZWtzK1N4RGdDQnJFaUpXY2M5MUtaa21VMHorQzFTL2w1Wkdr?=
- =?utf-8?B?RWgyV1ptdUw5WGlJKys5dll3QitXbWM5ZWg2Ynd2WFVqZnYzM1dXaHZXbkhh?=
- =?utf-8?B?V1h1Y3d1RExZYnVaVUNUZlMydkpzWGtqVGVWaG5uaFBIa1RYM2VSUWhtN2kv?=
- =?utf-8?B?TTc5TmxTZFZ6OTZPWW5sRmhySGI2NXZQRWdxL1U4aGFQWlQ4bFNDSGNyR0FZ?=
- =?utf-8?B?MDVFc3dxZTBjNVAraHNLTVJBb2UxRkxkQk9FU2ZsTXdRd09mdTJMbGlrbHZr?=
- =?utf-8?B?eU5WWCtiK01rWVNFTGI4UGxERHRMVFNOQkhNU3NMekRzWDZIM2VBWVljU2k0?=
- =?utf-8?B?Z0tqT2pXR2ZROEtwRzBzRDV3VTJ5eHNiZGZTcXIrWDk3bUtvdz09?=
-X-Forefront-Antispam-Report:
-	CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(376002)(39860400002)(36840700001)(40470700004)(46966006)(47076005)(7416002)(478600001)(8936002)(5660300002)(81166007)(356005)(82740400003)(54906003)(31696002)(316002)(16576012)(86362001)(40460700003)(966005)(70206006)(110136005)(4326008)(70586007)(426003)(336012)(8676002)(83380400001)(107886003)(16526019)(186003)(26005)(2616005)(82310400005)(36860700001)(2906002)(6666004)(40480700001)(41300700001)(36756003)(31686004)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2022 08:06:29.9564
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9fdbb20-944a-4eab-136f-08da6638eca3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1882
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Arnd, Boris,
+The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
 
-Thank you for your inputs.
+  Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
 
->> I think this is just a reflection of what other hardware can do:
->> most machines only detect memory errors, but the EDAC subsystem
->> can work with any type in principle. There are also a lot of
->> conditions elsewhere that can be detected but not corrected.
-> 
-> Just a couple of thoughts from looking at this:
-> 
-> So the EDAC thing reports *hardware* errors by using the RAS
-> capabilities built into an IP block. So it started with memory
-> controllers but it is getting extended to other blocks. AMD are looking
-> at how to integrate GPU hw errors reporting into it, for example.
-> 
-> Looking at that CBB thing, it looks like it is supposed to report not
-> so much hardware errors but operational errors. Some of the hw errors
-> reported by RAS hw are also operation-related but not the majority.
-> 
+are available in the Git repository at:
 
-CBB driver reports errors due to bad MMIO accesses within software.
-The vast majority of the CBB errors tend to be programming errors in 
-setting up address windows leading to decode errors.
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+tags/soc-fixes-5.19-3
 
-> Then, EDAC has this counters exposed in:
-> 
-> $ grep -r . /sys/devices/system/edac/
-> /sys/devices/system/edac/power/runtime_active_time:0
-> /sys/devices/system/edac/power/runtime_status:unsupported
-> /sys/devices/system/edac/power/runtime_suspended_time:0
-> /sys/devices/system/edac/power/control:auto
-> /sys/devices/system/edac/pci/edac_pci_log_pe:1
-> /sys/devices/system/edac/pci/pci0/pe_count:0
-> /sys/devices/system/edac/pci/pci0/npe_count:0
-> /sys/devices/system/edac/pci/pci_parity_count:0
-> /sys/devices/system/edac/pci/pci_nonparity_count:0
-> /sys/devices/system/edac/pci/edac_pci_log_npe:1
-> /sys/devices/system/edac/pci/edac_pci_panic_on_pe:0
-> /sys/devices/system/edac/pci/check_pci_errors:0
-> /sys/devices/system/edac/mc/power/runtime_active_time:0
-> /sys/devices/system/edac/mc/power/runtime_status:unsupported
-> ...
-> 
-> with the respective hierarchy: memory controllers, PCI errors, etc.
-> 
-> So the main question is, does it make sense for you to fit this into the
-> EDAC hierarchy and what would even be the advantage of making it part of
-> EDAC?
-> 
+for you to fetch changes up to d332a1f6b4c4b07bf984f04df897818c7c7fce8f:
 
-I also think this doesn't seem to fit with the errors reported by EDAC 
-which are mainly hardware errors as Boris explained.
-Please share your thoughts and if we can merge the patches as it is.
+  Merge tag 'qcom-dts-fixes-for-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
+arm/fixes (2022-07-13 09:37:20 +0200)
 
-> HTH.
-> 
-> --
-> Regards/Gruss,
->      Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+----------------------------------------------------------------
+ARM: SoC fixes for 5.19, part 3
+
+Most of the contents are bug fixes for the devicetree files:
+
+ - A Qualcomm MSM8974 pin controller regression, caused by a cleanup
+   patch that gets partially reverted here.
+
+ - Missing properties for Broadcom BCM49xx to fix timer detection and
+   SMP boot.
+
+ - Fix touchscreen pinctrl for imx6ull-colibri board
+
+ - Multiple fixes for Rockchip rk3399 based machines including the
+   vdu clock-rate fix, otg port fix on Quartz64-A and ethernet
+   on Quartz64-B
+
+ - Fixes for misspelled DT contents causing minor problems on
+   imx6qdl-ts7970m, orangepi-zero, sama5d2, kontron-kswitch-d10,
+   and ls1028a
+
+And a couple of changes elsewhere:
+
+ - Fix binding for Allwinner D1 display pipeline
+
+ - Trivial code fixes to the TEE and reset controller driver subsystems
+   and the rockchip platform code.
+
+ - Multiple updates to the MAINTAINERS files, marking the Palm Treo
+   support as orphaned, and fixing some entries for added or changed
+   file names.
+
+----------------------------------------------------------------
+Arnd Bergmann (16):
+      Merge tag 'at91-fixes-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into
+arm/fixes
+      Merge tag 'imx-fixes-5.19-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes
+      Merge tag 'scmi-fixes-5.19-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into
+arm/fixes
+      Merge tag 'amlogic-arm-for-v5.20' of
+git://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into
+arm/fixes
+      Merge tag 'qcom-arm64-fixes-for-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
+arm/fixes
+      Merge tag 'stm32-dt-for-v5.19-fixes-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32 into
+arm/fixes
+      Merge tag 'v5.19-rockchip-dtsfixes1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/fixes
+      Merge tag 'v5.19-rockchip-socfixes1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip
+into arm/fixes
+      Merge tag 'reset-fixes-for-v5.19' of
+git://git.pengutronix.de/pza/linux into arm/fixes
+      Merge tag 'tee-fixes-for-v5.19' of
+https://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
+      Merge tag 'at91-fixes-5.19-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into
+arm/fixes
+      Merge tag 'sunxi-fixes-for-5.19-1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into
+arm/fixes
+      Merge tag 'sunxi-fixes-for-5.19-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into
+arm/fixes
+      Merge tag 'imx-fixes-5.19-3' of
+git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
+arm/fixes
+      Merge tag 'arm-soc/for-5.19/devicetree-arm64-fixes' of
+https://github.com/Broadcom/stblinux into arm/fixes
+      Merge tag 'qcom-dts-fixes-for-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
+arm/fixes
+
+Bill Wendling (1):
+      soc: qcom: smem: use correct format characters
+
+Bo Liu (1):
+      firmware: arm_scmi: Remove usage of the deprecated ida_simple_xxx API
+
+Brian Norris (1):
+      arm64: dts: rockchip: Assign RK3399 VDU clock rate
+
+Claudiu Beznea (3):
+      ARM: at91: pm: use proper compatible for sama5d2's rtc
+      ARM: at91: pm: use proper compatibles for sam9x60's rtc and rtt
+      ARM: at91: pm: use proper compatibles for sama7g5's rtc and rtt
+
+Conor Dooley (1):
+      MAINTAINERS: add polarfire rng, pci and clock drivers
+
+Cristian Marussi (1):
+      firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES out-of-spec checks
+
+Dmitry Baryshkov (2):
+      arm64: dts: qcom: sm8450 add ITS device tree node
+      arm64: dts: qcom: sdm845: use dispcc AHB clock for mdss node
+
+Etienne Carriere (1):
+      ARM: dts: stm32: fix pwr regulators references to use scmi
+
+Eugen Hristev (2):
+      ARM: dts: at91: sam9x60ek: fix eeprom compatible and size
+      ARM: dts: at91: sama5d2_icp: fix eeprom compatibles
+
+Fabio Estevam (3):
+      ARM: dts: imx7d-smegw01: Fix the SDIO description
+      ARM: mxs_defconfig: Enable the framebuffer
+      ARM: at91: pm: Mark at91_pm_secure_init as __init
+
+Fabrice Gasnier (1):
+      ARM: dts: stm32: add missing usbh clock and fix clk order on stm32mp15
+
+Gabriel Fernandez (3):
+      ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
+      ARM: dts: stm32: DSI should use LSE SCMI clock on DK1/ED1 STM32 board
+      ARM: dts: stm32: delete fixed clock node on STM32MP15-SCMI
+
+Jiang Jian (1):
+      optee: Remove duplicate 'of' in two places.
+
+Konrad Dybcio (2):
+      arm64: dts: qcom: msm8994: Fix CPU6/7 reg values
+      MAINTAINERS: Add myself as a reviewer for Qualcomm ARM/64 support
+
+Kris Bahnsen (1):
+      ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
+
+Liang He (1):
+      ARM: rockchip: Add missing of_node_put() in rockchip_suspend_init()
+
+Linus Walleij (1):
+      soc: ixp4xx/npe: Fix unused match warning
+
+Luca Weiss (1):
+      ARM: dts: qcom: msm8974: re-add missing pinctrl
+
+Lukas Bulwahn (2):
+      MAINTAINERS: rectify entry for SYNOPSYS AXS10x RESET CONTROLLER DRIVER
+      MAINTAINERS: mark ARM/PALM TREO SUPPORT orphan
+
+Marc Kleine-Budde (1):
+      tee: tee_get_drvdata(): fix description of return value
+
+Max Krummenacher (1):
+      ARM: dts: colibri-imx6ull: fix snvs pinmux group
+
+Miaoqian Lin (1):
+      ARM: meson: Fix refcount leak in meson_smp_prepare_cpus
+
+Michael Walle (1):
+      ARM: dts: kswitch-d10: use open drain mode for coma-mode pins
+
+Michal Suchanek (1):
+      ARM: dts: sunxi: Fix SPI NOR campatible on Orange Pi Zero
+
+Mihai Sain (1):
+      ARM: at91: fix soc detection for SAM9X60 SiPs
+
+Peng Fan (14):
+      arm64: dts: imx8mp: correct clock of pgc_ispdwp
+      arm64: dts: imx8mp-evk: correct mmc pad settings
+      arm64: dts: imx8mp-evk: correct gpio-led pad settings
+      arm64: dts: imx8mp-evk: correct vbus pad settings
+      arm64: dts: imx8mp-evk: correct eqos pad settings
+      arm64: dts: imx8mp-evk: correct vbus pad settings
+      arm64: dts: imx8mp-evk: correct I2C5 pad settings
+      arm64: dts: imx8mp-evk: correct I2C1 pad settings
+      arm64: dts: imx8mp-evk: correct I2C3 pad settings
+      arm64: dts: imx8mp-venice-gw74xx: correct pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct uart pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct eqos pad settings
+      arm64: dts: imx8mp-phyboard-pollux-rdk: correct i2c2 & mmc settings
+      arm64: dts: imx8mp-icore-mx8mp-edim2.2: correct pad settings
+
+Peter Geis (2):
+      arm64: dts: rockchip: Fix ethernet on production Quartz64-B
+      arm64: dts: rockchip: Fix Quartz64-A dwc3 otg port behavior
+
+Ryan Wanner (1):
+      ARM: dts: at91: sama5d2: Fix typo in i2s1 node
+
+Samuel Holland (1):
+      dt-bindings: display: sun4i: Fix D1 pipeline count
+
+Sean Anderson (1):
+      arm64: dts: ls1028a: Update SFP node to include clock
+
+Serge Semin (1):
+      reset: Fix devm bulk optional exclusive control getter
+
+Sherry Sun (1):
+      arm64: dts: imx8mp-evk: correct the uart2 pinctl value
+
+Stephan Gerhold (1):
+      arm64: dts: qcom: msm8992-*: Fix vdd_lvs1_2-supply typo
+
+Stephen Boyd (1):
+      arm64: dts: qcom: Remove duplicate sc7180-trogdor include on
+lazor/homestar
+
+Vincent Guittot (1):
+      firmware: arm_scmi: Fix response size warning for OPTEE transport
+
+Vladimir Zapolskiy (1):
+      arm64: dts: qcom: sm8450: fix interconnects property of UFS node
+
+William Zhang (2):
+      arm64: dts: broadcom: bcm4908: Fix timer node for BCM4906 SoC
+      arm64: dts: broadcom: bcm4908: Fix cpu node for smp boot
+
+Yang Yingliang (1):
+      optee: smc_abi.c: fix wrong pointer passed to IS_ERR/PTR_ERR()
+
+ CREDITS                                            |   4 +
+ .../allwinner,sun4i-a10-display-engine.yaml        |   1 +
+ MAINTAINERS                                        |  10 +-
+ arch/arm/boot/dts/at91-sam9x60ek.dts               |   3 +-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts             |   6 +-
+ arch/arm/boot/dts/imx6qdl-ts7970.dtsi              |   2 +-
+ arch/arm/boot/dts/imx6ull-colibri.dtsi             |   9 +-
+ arch/arm/boot/dts/imx7d-smegw01.dts                |   4 +-
+ .../boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi  |   8 +-
+ arch/arm/boot/dts/qcom-msm8974.dtsi                |  30 +++++-
+ arch/arm/boot/dts/sama5d2.dtsi                     |   2 +-
+ arch/arm/boot/dts/stm32mp15-scmi.dtsi              |  58 +++++++++++
+ arch/arm/boot/dts/stm32mp151.dtsi                  |   6 +-
+ arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts         |   4 +
+ arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts         |   1 +
+ arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts         |   4 +
+ arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts         |   1 +
+ arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts  |   2 +-
+ arch/arm/configs/mxs_defconfig                     |   1 +
+ arch/arm/mach-at91/pm.c                            |  12 +--
+ arch/arm/mach-meson/platsmp.c                      |   2 +
+ arch/arm/mach-rockchip/pm.c                        |   7 +-
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi  |   8 ++
+ arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi  |   2 +
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi     |   5 +-
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts       |  88 ++++++++--------
+ .../dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts  |  40 +++----
+ .../dts/freescale/imx8mp-phyboard-pollux-rdk.dts   |  48 ++++-----
+ .../boot/dts/freescale/imx8mp-venice-gw74xx.dts    | 116 ++++++++++-----------
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi  |   2 +-
+ arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts  |   2 +-
+ arch/arm64/boot/dts/qcom/msm8994.dtsi              |   4 +-
+ .../boot/dts/qcom/sc7180-trogdor-homestar.dtsi     |   2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi |   2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   2 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  14 ++-
+ .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi      |   4 +-
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi           |   6 +-
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts |   1 +
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts |   2 +-
+ drivers/firmware/arm_scmi/bus.c                    |   6 +-
+ drivers/firmware/arm_scmi/clock.c                  |  26 ++++-
+ drivers/firmware/arm_scmi/driver.c                 |   1 +
+ drivers/firmware/arm_scmi/optee.c                  |   7 +-
+ drivers/firmware/arm_scmi/protocols.h              |   3 +
+ drivers/soc/atmel/soc.c                            |  12 +--
+ drivers/soc/ixp4xx/ixp4xx-npe.c                    |   2 +-
+ drivers/soc/qcom/smem.c                            |   6 +-
+ drivers/tee/optee/optee_smc.h                      |   2 +-
+ drivers/tee/optee/smc_abi.c                        |   4 +-
+ drivers/tee/tee_core.c                             |   2 +-
+ include/linux/reset.h                              |   2 +-
+ 53 files changed, 383 insertions(+), 217 deletions(-)
