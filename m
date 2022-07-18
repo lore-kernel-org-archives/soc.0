@@ -4,61 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EAEDC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D8E1C43334
 	for <soc@archiver.kernel.org>; Mon, 18 Jul 2022 08:20:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E43F6C341CA; Mon, 18 Jul 2022 08:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE6D2C341C8;
-	Mon, 18 Jul 2022 08:20:50 +0000 (UTC)
+	id E1DF2C341CD; Mon, 18 Jul 2022 08:20:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CBE54C341C0
+	for <soc@kernel.org>; Mon, 18 Jul 2022 08:20:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1658132450;
-	bh=Zs9vO0SIFOlfUnPrjmqGvaI00CfyfGHj0C+0/oACrEs=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=VGk/NyZCLqjmPQ51j2t+y0T1TK0nx1PSlraehIFuxMZCwAnLX8FhyktQLbQ9fKpfR
-	 bYL49SneY4tZu+spCgQ4FOuLWh0M+LU2To4INFyzz97qi5ESKxkedzo2/kxKNKE166
-	 9NWnN100VzZQnb5QoJ6T7nQgXXqIUNdRiBGPbQlS29COaRPH1X8enIRYeBZBqcVQHJ
-	 eSYzY3jpNqRzF8sfdV1vrE2bwKwfHpCYGc3/Xi9gKioVZmW4jLMiR05oVW118qYhpg
-	 +ce2WO4ZFag4WFQi6MH0RJ3T1IPpfGr2ICuaG3ANtOi0+Axntj0Tt7mbnT5QpYtGE8
-	 /PV5uEpPKbMqw==
+	bh=HFTZ4Ixi8RR2THFyJwGAtVQvMzYW1hf/QYw3b3Io69w=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=GtP2PFneaehd3XFYOEmGWSBYjRC+FC1CR+W2ZX0i0P+ALmA2Lk/QzBNtAfyR/YHFU
+	 ewJsxiJ8VzHaFoifEjEKOCudsuHYjhHxETGvqWEE4QsVaMjXZkoYlIQYb+6VCiNlDc
+	 Xs6lV1dtOpjPhgK8TdB/p5SNRR0+f98eBXNbjVR5uylWu0ebRa8RGTgupgR7rwo+Ic
+	 JgpwnrP9xte4obWaFUrJ81+eyT0DaMULKYZsQmLRbkLw6mgMya1LSZ42bIPn5/DGvZ
+	 btG2WRpbftltlySOhsN4RbiCW7NM0FmHOl/WY3pqQcTW+H0G0pQ4DbZ4gzlcqKZEAf
+	 cQbgWw7OiUEQg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AE0F1E45086;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A39D9E451B0;
 	Mon, 18 Jul 2022 08:20:50 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: SoC fixes for 5.19, part 3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165813245070.27582.8948180371625509948.git-patchwork-notify@kernel.org>
+ <165813245058.27582.11579089531560963566.git-patchwork-summary@kernel.org>
 Date: Mon, 18 Jul 2022 08:20:50 +0000
-References: <CAK8P3a3jSNJfJxkbqJ4Bfa0bkhNsF0CY+bGJMGKJOaFPm_Me5A@mail.gmail.com>
-In-Reply-To: <CAK8P3a3jSNJfJxkbqJ4Bfa0bkhNsF0CY+bGJMGKJOaFPm_Me5A@mail.gmail.com>
-To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Fri, 15 Jul 2022 14:28:51 +0200 you wrote:
-> The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
-> 
->   Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-> tags/soc-fixes-5.19-3
-> 
-> [...]
+Patch: [GIT,PULL] ARM: SoC fixes for 5.19, part 3
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Linus Torvalds <torvalds@linux-foundation.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=660074
+  Lore link: https://lore.kernel.org/r/CAK8P3a3jSNJfJxkbqJ4Bfa0bkhNsF0CY+bGJMGKJOaFPm_Me5A@mail.gmail.com
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: SoC fixes for 5.19, part 3
-    https://git.kernel.org/soc/soc/c/1c49f281c9b7
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
