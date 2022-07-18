@@ -4,82 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD479C43334
-	for <soc@archiver.kernel.org>; Mon, 18 Jul 2022 13:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C230BC43334
+	for <soc@archiver.kernel.org>; Mon, 18 Jul 2022 13:45:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85557C341C0; Mon, 18 Jul 2022 13:44:05 +0000 (UTC)
+	id 8A5ACC341CB; Mon, 18 Jul 2022 13:45:48 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 163E4C341CE;
-	Mon, 18 Jul 2022 13:44:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 163E4C341CE
+	by smtp.kernel.org (Postfix) with ESMTPS id 361A4C341C0;
+	Mon, 18 Jul 2022 13:45:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 361A4C341C0
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ot1-f50.google.com ([209.85.210.50]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MdNTs-1neNGr3RPU-00ZPZF; Mon, 18 Jul 2022 15:44:02 +0200
-Received: by mail-ot1-f50.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so9164648otb.5;
-        Mon, 18 Jul 2022 06:44:01 -0700 (PDT)
-X-Gm-Message-State: AJIora+NfQ1Lw322rraGcd4kfIRQz59+wT7OlDA0YRq6SuXHT+gH2j3d
-	exHSja7Q5RMLlAEGCK85ZPkOIfJsKsHoA/EMbLE=
-X-Google-Smtp-Source: AGRyM1txCh5KSHFufIxKnjrUsQfdXMF5DhA1iW62NG52SJqnf8FXUR7Q6wJLhAzG6EEmYmN/Lvx4Nc0/ujPqwaXi97Q=
-X-Received: by 2002:a81:1914:0:b0:31c:e12a:f33a with SMTP id
- 20-20020a811914000000b0031ce12af33amr29924965ywz.209.1658144567116; Mon, 18
- Jul 2022 04:42:47 -0700 (PDT)
+Received: from mail-yb1-f169.google.com ([209.85.219.169]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N1x6X-1nXPN20BVx-012Jby; Mon, 18 Jul 2022 15:45:45 +0200
+Received: by mail-yb1-f169.google.com with SMTP id 75so20829062ybf.4;
+        Mon, 18 Jul 2022 06:45:44 -0700 (PDT)
+X-Gm-Message-State: AJIora980/VGCYYIQqhl0SKj+EJ0abpfOT0fN6TWqU+/h98qnVUIU/J0
+	14mhndL67IVxXvKW6bfQFqvJhgiwzjavFech508=
+X-Google-Smtp-Source: AGRyM1tlfrIWQ27LaIQl/6mu0rRs4G76HYr7k0PQYYpyx690oIm4QFJdUoMC9YrecCv4ZDO88YsTwA6PwQ+1hlp/zgg=
+X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
+ b7-20020a5b0b47000000b0066e3617d262mr25157237ybr.106.1658144362159; Mon, 18
+ Jul 2022 04:39:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623072428.33697-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220623072428.33697-1-krzysztof.kozlowski@linaro.org>
+References: <20220520074119.3574753-1-hasegawa-hitomi@fujitsu.com> <OSZPR01MB7050362B7F7B072AF5304A4DEBAC9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSZPR01MB7050362B7F7B072AF5304A4DEBAC9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
 From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 18 Jul 2022 13:42:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0ob26oEL=af0KpyCqA4nxHW_PaaK3azKT504Q+VrFctA@mail.gmail.com>
-Message-ID: <CAK8P3a0ob26oEL=af0KpyCqA4nxHW_PaaK3azKT504Q+VrFctA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: aspeed: centriq2400: drop the board
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Mon, 18 Jul 2022 13:39:04 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a14-j_EKpssvZaKar-vf2=BcLD-Dxzq8dhca9fqtobwgw@mail.gmail.com>
+Message-ID: <CAK8P3a14-j_EKpssvZaKar-vf2=BcLD-Dxzq8dhca9fqtobwgw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@aj.id.au>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	DTML <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-aspeed <linux-aspeed@lists.ozlabs.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>, 
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>, 
+	"sumit.garg@linaro.org" <sumit.garg@linaro.org>, 
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, "jirislaby@kernel.org" <jirislaby@kernel.org>, 
+	"daniel.thompson@linaro.org" <daniel.thompson@linaro.org>, 
+	"dianders@chromium.org" <dianders@chromium.org>, "soc@kernel.org" <soc@kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:itagdtLqmmYa85HRGpMKKRtERfKx3jKFcu79Ytvhi+eirp3WLsS
- l9yGtZfp7c078+eY2ag9cy+O83Cue9/VfkqpW53X6TWoV5U/UKBNwlLGiJoCWgCWujzfSsX
- lSud/14DH48T9CCOv1cDtFg48AU2MSUopbbHoj7eCTvOw1Fv0XgKHdYxo2IOoWzVi8a2mBv
- 9Fn+YEJA0JpGyTluD8mew==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:y8Cu37XK1OY=:afW/WoOgTj1IREO4e0Rd5T
- W7Y0MB/Zq6WyBOU74LytZWDeTZW30Swxti4wTRxs4/oBVwyeQgeS0l78v6O9e8pplvDDOxiNP
- TB37m9D4hc+Fy2T+bQW0+4p9lzK75wT+0MLKnccQLO4y4HxD9EgE+s0/HGtUmAFaRwTqDkyTM
- 9aiYOd/k+XGgjY3FAHzGhbPI2chrF259/3mRNsvYC2MJX3kSTkVLXOzjNRyGeGkULwQCxN4Zh
- 0roDziyNTVbj3x1iOPFrphWZLvW1DM2S64u/5Ka2oCip1SDoEdR+tjWscVA5Qo9O0SXcCYtpt
- TSpG26ZUoYANGsguK0ogLcm5sSQhNiSOd8yuv1++reprLX+89N8dhWLuDe2AcPduks6MDXXQv
- IJv8B0Eg5960zZZmvPZGrGP74dVApc0+ZJ7woVatZnxqrI4w2vlRSC9Jf/bjYLzfOGKVWZMYS
- pvTMwI/Kml8cksdSYN+SLc4815E0kmqg1VNNN4u5QkQEPNN2676z/KqESTkZQddSNsjcs/ec7
- F16mLe6JrzWuFRIgRppizgSw4wud2G5jxXfHNOF5Q0DgLZs2S68st64nmeZVR4UE0Aq6TvkvK
- uCMEUAN4PQThqu4L04+sQHWkQbBChL1Xwq20O8A9WOGca2S4FpiRV9YgAXG3JWaesnZ6XQ3UM
- banHxMyBpUMt7IUES7n+hHn6TQ82BMGko55ujcUgCSZlGUza1td3Ytb/gUX59vgIEnmPTfPsU
- x/CIlVDnN0bRcDx2OnEvgpifxZxYqlEbviSXQly1DIa75KrIV5TFGdBDaaiyuTovV6qBPtZ9d
- wNW+hVb7KJdVjDWxsfSs4wTLXhtPpx5TqtUfRndZEV4brzD3LmGM+glHqaElmvCZxixhY5U9t
- cGy/10eNMHr4HU2jciPg==
+X-Provags-ID: V03:K1:dZBPWnkehRXolwRrHY3NR02NrmC1a48OcsKrk0tCl5NT8vryPVt
+ x+PXZi2q+oqFFpK9muknsNGU3Bzbcglw9I1Oo2v/1D+1Heod/XadtNI0vcjE0VkvCV12ZUY
+ XyamK79Y3GzRPXCHPuJ8eSQgpHUGbbqmXVL5JAiTeedB9cjj16qseverA2f9yledr7Kmb+g
+ fQf41rjgUbRD1NeX9AQ2w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5imcyCj9XIw=:bpy0JXKp4dqyaxA2ylrn+m
+ Q7rlIfuyH42yJcfzOgCsDU6+XS4NkGeOe9XRoZxTzMQJOxaKZK8q08RFe18+wSiw5mh9bS+h1
+ hTMay9zrafw1a+xttLDid4dvxeT90yun7D2HVyR5WNbJ9L1bW/J0bp+QvbRD77rhoyDQzHiAw
+ P04oC4g6DdaCxvqlG5Uv8dj83Hy60UVNSZwqmAPc195B30EMq6nf5Zdanoo7sNMYpDZK9soPZ
+ Mu7iM83q3FV6yOX1T7fN5oDAsUCD+7LF+XuBF/3DBDjB3Dg/053lSlyjJE1iudg3YDJM7GZAO
+ 0HGmfYxLwsUM4nDAHKL4tmM79gqbUoZow7ROYJKsfH76LmHdLJ4/v4f7WeYaRZjfc3cnHTA0k
+ Z4zzu9XLYT7RgT15VuIesI6j8KYghKlQv+6VNgXwZjG6WGh9fbV0nBSIOhxc37kGj1R9rWlHp
+ CK+jvTBWU+j6TzA9z9JcW2IE38QKa8ndtDEZppihpDnMbAiqMoVb0GzYszrMCBG+lxGqtBLiH
+ 93ORitZLGRuc+C7SPW+YHUHuYZs01hvQfekLrzZpI6T8y1o9TuRnTyPDTlIj1jUSFfud1+rk4
+ 5z1a0rtApdoAlGi+aKXv2t/cUU8baTzKB+ClGIXtyWcYolfiQQNkINpqUs+RtMMpDV57R8s27
+ tvL6PvIjzHG1lMie46L2Kr9696cEjbTiJCXUKBDtXn7UsZsKSen8US3nNc9ZwmjYsWWvIFH+k
+ mdtf/43TVJHiNd9fvzBwggtiT5zfxyqz2QRk5GIhqI7855eeWcnJ7Oa9VyoGyxSDHK8Br2iua
+ XXhwloEV8movoeltwmv67F7Ijl07S6b4/UDlB/bqQ/iLKKUgO81o/ROGJr8ifp2F82R0C3zCd
+ zAm1lz5DmJJlshcS2f2TBtF00RQoDh9zeRhR4wFw4=
 
-On Thu, Jun 23, 2022 at 9:24 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Jun 16, 2022 at 11:02 AM hasegawa-hitomi@fujitsu.com
+<hasegawa-hitomi@fujitsu.com> wrote:
 >
-> The board is unmaintained and unused, according to Joel, so simply let's
-> remove it.
+> Hi Arnd,
 >
-> Link: https://lore.kernel.org/all/CACPK8XfxXi8kQr+vxta8rD6SBgxLf_oBjAH0UkPBacQta552YQ@mail.gmail.com/
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 -
->  .../dts/aspeed-bmc-arm-centriq2400-rep.dts    | 225 ------------------
+> There seems to be no comment in particular, but what should I do
+> in order to be accepted?
 
-I found this one in my patchwork backlog. I had expected Joel it pick it up, but
-it's not in linux-next yet.
+Sorry for the delay, I was planning to apply it last month and it fell
+through the cracks.
+Found it again while going through my backlog and applied your patch to the
+arm/drivers branch of the soc tree. It should be part of the linu-next tree from
+tomorrow and my pull requests for the coming merge window.
 
-Joel, should I just apply it for 5.20 or do you want to send me a pull
-request with
-this included?
-
-         Arnd
+        Arnd
