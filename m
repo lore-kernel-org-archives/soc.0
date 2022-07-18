@@ -1,81 +1,285 @@
-Return-Path: <SRS0=6tPc=XX=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=QNeB=XX=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C230BC43334
-	for <soc@archiver.kernel.org>; Mon, 18 Jul 2022 13:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9272C433EF
+	for <soc@archiver.kernel.org>; Mon, 18 Jul 2022 13:51:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8A5ACC341CB; Mon, 18 Jul 2022 13:45:48 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9E6FCC341CF; Mon, 18 Jul 2022 13:51:58 +0000 (UTC)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 361A4C341C0;
-	Mon, 18 Jul 2022 13:45:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 361A4C341C0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-yb1-f169.google.com ([209.85.219.169]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N1x6X-1nXPN20BVx-012Jby; Mon, 18 Jul 2022 15:45:45 +0200
-Received: by mail-yb1-f169.google.com with SMTP id 75so20829062ybf.4;
-        Mon, 18 Jul 2022 06:45:44 -0700 (PDT)
-X-Gm-Message-State: AJIora980/VGCYYIQqhl0SKj+EJ0abpfOT0fN6TWqU+/h98qnVUIU/J0
-	14mhndL67IVxXvKW6bfQFqvJhgiwzjavFech508=
-X-Google-Smtp-Source: AGRyM1tlfrIWQ27LaIQl/6mu0rRs4G76HYr7k0PQYYpyx690oIm4QFJdUoMC9YrecCv4ZDO88YsTwA6PwQ+1hlp/zgg=
-X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
- b7-20020a5b0b47000000b0066e3617d262mr25157237ybr.106.1658144362159; Mon, 18
- Jul 2022 04:39:22 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id AB46BC341CB
+	for <soc@kernel.org>; Mon, 18 Jul 2022 13:51:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AB46BC341CB
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id u13so19447717lfn.5
+        for <soc@kernel.org>; Mon, 18 Jul 2022 06:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NXepRwCmHXNEdV0q8fO4cx6qihndjDIfVD2iW8c3B2I=;
+        b=lQz2MxiTEf9TZD7FzZAXQLlRkoy35pVVvzoGsVi9W719l1ocMKcztIuY4ZvhVEG5NK
+         +EspkvHKwE8im2Xr3MFYhET6v9f1ujeGYQaHzr4dMycjUOxRwXhVZL8VRmYXNDzLTuAy
+         g1DopHi+HyKmslpcLeMJs9y/9He6+w7c2Ei8vOouPo7hQYI0x0GJExRNVIvkN64Bu8D/
+         JhjUGkQYV/INlrDDKuSeG0gPI8bfrrsdC7UOza62gwAUApgBXJDjfg+nZan0c1oUNWEq
+         OqSpihd7rCAXgDKMkYKJs/ZZUVD65D4etll/DexCJL3KW1IlKD2vDwB4fIhQTfYjf0SS
+         slew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NXepRwCmHXNEdV0q8fO4cx6qihndjDIfVD2iW8c3B2I=;
+        b=aEQiwtslaMVFIm6Ej6TlElgKU3x7SPyqZvrYjCB60FvzEhw/fODOfxqIx5k3Eop+vl
+         KfHj4rV5J4b6lxCnCi4z62o+e9Uxu1lQb0kqlWzYkFGjGNJ9t2dqBqMVfK7+rVqTEXXl
+         qDf0+SvbxthFM9L+5G+ix61LxiFc3h6StX4SA7J8+4y/g2m0vpwucmEpkyszCXhPG+FL
+         2qwaeWyfzAX0XqqB+iNmUSzZT8kqqXVvG0gXzqPOunuKF/yQmUgT9zVxGBbabXnBm8lB
+         pExROiz5OchcHVvUY5QxAqzOhaGTfRiytzYxOGGki6tLsXcJd3VE0HEk3fjycWm59poB
+         2RTg==
+X-Gm-Message-State: AJIora/7PiaV+C1HHKGE0QgWpyIATYeY38r4zM7oo/ZwnbJfwVYfUlik
+	p/woGg+HKwwT/uMYVDj8r8JIIw==
+X-Google-Smtp-Source: AGRyM1u8biS5A5stNNex26D8tk1YTjCm5oCNp2FTG+A4GdkeFJhuRmurktf4iXWZeIzn8veGEh/Dbg==
+X-Received: by 2002:a05:6512:4029:b0:489:c7a7:42c8 with SMTP id br41-20020a056512402900b00489c7a742c8mr14325013lfb.461.1658152315795;
+        Mon, 18 Jul 2022 06:51:55 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id k6-20020a0565123d8600b0047255d211c7sm2609276lfv.246.2022.07.18.06.51.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 06:51:55 -0700 (PDT)
+Message-ID: <dc19c084-633d-9777-6dfd-b9633ac9c4ae@linaro.org>
+Date: Mon, 18 Jul 2022 15:51:54 +0200
 MIME-Version: 1.0
-References: <20220520074119.3574753-1-hasegawa-hitomi@fujitsu.com> <OSZPR01MB7050362B7F7B072AF5304A4DEBAC9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSZPR01MB7050362B7F7B072AF5304A4DEBAC9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 18 Jul 2022 13:39:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a14-j_EKpssvZaKar-vf2=BcLD-Dxzq8dhca9fqtobwgw@mail.gmail.com>
-Message-ID: <CAK8P3a14-j_EKpssvZaKar-vf2=BcLD-Dxzq8dhca9fqtobwgw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
-To: "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4
+ 10.1 (SM-T530)
+Content-Language: en-US
+To: =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
+ linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>, 
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>, 
-	"sumit.garg@linaro.org" <sumit.garg@linaro.org>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, "jirislaby@kernel.org" <jirislaby@kernel.org>, 
-	"daniel.thompson@linaro.org" <daniel.thompson@linaro.org>, 
-	"dianders@chromium.org" <dianders@chromium.org>, "soc@kernel.org" <soc@kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:dZBPWnkehRXolwRrHY3NR02NrmC1a48OcsKrk0tCl5NT8vryPVt
- x+PXZi2q+oqFFpK9muknsNGU3Bzbcglw9I1Oo2v/1D+1Heod/XadtNI0vcjE0VkvCV12ZUY
- XyamK79Y3GzRPXCHPuJ8eSQgpHUGbbqmXVL5JAiTeedB9cjj16qseverA2f9yledr7Kmb+g
- fQf41rjgUbRD1NeX9AQ2w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5imcyCj9XIw=:bpy0JXKp4dqyaxA2ylrn+m
- Q7rlIfuyH42yJcfzOgCsDU6+XS4NkGeOe9XRoZxTzMQJOxaKZK8q08RFe18+wSiw5mh9bS+h1
- hTMay9zrafw1a+xttLDid4dvxeT90yun7D2HVyR5WNbJ9L1bW/J0bp+QvbRD77rhoyDQzHiAw
- P04oC4g6DdaCxvqlG5Uv8dj83Hy60UVNSZwqmAPc195B30EMq6nf5Zdanoo7sNMYpDZK9soPZ
- Mu7iM83q3FV6yOX1T7fN5oDAsUCD+7LF+XuBF/3DBDjB3Dg/053lSlyjJE1iudg3YDJM7GZAO
- 0HGmfYxLwsUM4nDAHKL4tmM79gqbUoZow7ROYJKsfH76LmHdLJ4/v4f7WeYaRZjfc3cnHTA0k
- Z4zzu9XLYT7RgT15VuIesI6j8KYghKlQv+6VNgXwZjG6WGh9fbV0nBSIOhxc37kGj1R9rWlHp
- CK+jvTBWU+j6TzA9z9JcW2IE38QKa8ndtDEZppihpDnMbAiqMoVb0GzYszrMCBG+lxGqtBLiH
- 93ORitZLGRuc+C7SPW+YHUHuYZs01hvQfekLrzZpI6T8y1o9TuRnTyPDTlIj1jUSFfud1+rk4
- 5z1a0rtApdoAlGi+aKXv2t/cUU8baTzKB+ClGIXtyWcYolfiQQNkINpqUs+RtMMpDV57R8s27
- tvL6PvIjzHG1lMie46L2Kr9696cEjbTiJCXUKBDtXn7UsZsKSen8US3nNc9ZwmjYsWWvIFH+k
- mdtf/43TVJHiNd9fvzBwggtiT5zfxyqz2QRk5GIhqI7855eeWcnJ7Oa9VyoGyxSDHK8Br2iua
- XXhwloEV8movoeltwmv67F7Ijl07S6b4/UDlB/bqQ/iLKKUgO81o/ROGJr8ifp2F82R0C3zCd
- zAm1lz5DmJJlshcS2f2TBtF00RQoDh9zeRhR4wFw4=
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson
+ <bjorn.andersson@linaro.org>, Konrad Dybcio <konrad.dybcio@somainline.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20220717213432.134486-1-matti.lehtimaki@gmail.com>
+ <20220717213432.134486-4-matti.lehtimaki@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220717213432.134486-4-matti.lehtimaki@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 16, 2022 at 11:02 AM hasegawa-hitomi@fujitsu.com
-<hasegawa-hitomi@fujitsu.com> wrote:
->
-> Hi Arnd,
->
-> There seems to be no comment in particular, but what should I do
-> in order to be accepted?
+On 17/07/2022 23:34, Matti Lehtimäki wrote:
+> Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
+> based on the apq8026 platform.
+> 
+> Currently supported are accelerometer sensor, hall sensor, internal storage, physical
+> buttons (power & volume), screen (based on simple-framebuffer set up by
+> the bootloader) sdcard, touchscreen and USB.
+> 
+> Signed-off-by: Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
 
-Sorry for the delay, I was planning to apply it last month and it fell
-through the cracks.
-Found it again while going through my backlog and applied your patch to the
-arm/drivers branch of the soc tree. It should be part of the linu-next tree from
-tomorrow and my pull requests for the coming merge window.
+Thank you for your patch. There is something to discuss/improve.
 
-        Arnd
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../dts/qcom-apq8026-samsung-matissewifi.dts  | 475 ++++++++++++++++++
+>  2 files changed, 476 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 5112f493f494..4d02a1740079 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
+>  	qcom-apq8016-sbc.dtb \
+>  	qcom-apq8026-asus-sparrow.dtb \
+>  	qcom-apq8026-lg-lenok.dtb \
+> +	qcom-apq8026-samsung-matissewifi.dtb \
+>  	qcom-apq8060-dragonboard.dtb \
+>  	qcom-apq8064-cm-qs600.dtb \
+>  	qcom-apq8064-ifc6410.dtb \
+> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
+> new file mode 100644
+> index 000000000000..f4c5eb9db11c
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
+> @@ -0,0 +1,475 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2022, Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "qcom-msm8226.dtsi"
+> +#include "qcom-pm8226.dtsi"
+> +#include <dt-bindings/input/input.h>
+> +
+> +/delete-node/ &smem_region;
+> +
+> +/ {
+> +	model = "Samsung Galaxy Tab 4 10.1";
+> +	compatible = "samsung,matissewifi", "qcom,apq8026";
+> +	chassis-type = "tablet";
+> +
+> +	qcom,msm-id = <0xC708FF01 0 0x20000>,
+> +		      <0xC708FF01 1 0x20000>,
+> +		      <0xC708FF01 2 0x20000>,
+> +		      <0xC708FF01 3 0x20000>;
+
+Lower case hex and does not match bindings.
+https://lore.kernel.org/all/20220705130300.100882-2-krzysztof.kozlowski@linaro.org/
+
+This would need detailed explanation because it really does not look
+correct.
+
+> +
+> +	aliases {
+> +		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
+> +		mmc1 = &sdhc_2; /* SDC2 SD card slot */
+> +		display0 = &framebuffer0;
+> +	};
+> +
+> +	chosen {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		stdout-path = "display0";
+> +
+> +		framebuffer0: framebuffer@3200000 {
+> +			compatible = "simple-framebuffer";
+> +			reg = <0x3200000 0x800000>;
+> +			width = <1280>;
+> +			height = <800>;
+> +			stride = <(1280 * 3)>;
+> +			format = "r8g8b8";
+> +			status = "okay";
+> +		};
+> +	};
+> +
+> +	gpio-hall-sensor {
+> +		compatible = "gpio-keys";
+> +
+> +		event-hall-sensor {
+> +			label = "Hall Effect Sensor";
+> +			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
+> +			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
+> +			linux,input-type = <EV_SW>;
+> +			linux,code = <SW_LID>;
+> +			debounce-interval = <15>;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		autorepeat;
+> +
+> +		key-home {
+> +			label = "Home";
+> +			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_HOMEPAGE>;
+> +			debounce-interval = <15>;
+> +		};
+> +
+> +		key-volume-down {
+> +			label = "Volume Down";
+> +			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_VOLUMEDOWN>;
+> +			debounce-interval = <15>;
+> +		};
+> +
+> +		key-volume-up {
+> +			label = "Volume Up";
+> +			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			debounce-interval = <15>;
+> +		};
+> +	};
+> +
+> +	i2c-muic {
+> +		compatible = "i2c-gpio";
+> +		sda-gpios = <&tlmm 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+> +		scl-gpios = <&tlmm 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&muic_i2c_default_state>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		muic: extcon@25 {
+
+extcon is Linux specific, need some generic name instead.
+
+> +			compatible = "siliconmitus,sm5502-muic";
+> +			reg = <0x25>;
+> +
+> +			interrupt-parent = <&tlmm>;
+> +			interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&muic_int_default_state>;
+> +		};
+> +	};
+> +
+> +	reg_tsp_1p8v: regulator-tsp-1p8v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "tsp_1p8v";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +
+> +		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&tsp_en_default_state>;
+> +	};
+> +
+> +	reg_tsp_3p3v: regulator-tsp-3p3v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "tsp_3p3v";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +
+> +		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&tsp_en1_default_state>;
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		framebuffer@3200000 {
+
+Generic node names, so memory@
+
+> +			reg = <0x3200000 0x800000>;
+> +			no-map;
+> +		};
+> +
+> +		mpss_region: mpss@8400000 {
+
+The same and so on...
+
+> +			reg = <0x08400000 0x1f00000>;
+> +			no-map;
+> +		};
+> +
+> +		mba_region: mba@a300000 {
+
+Best regards,
+Krzysztof
