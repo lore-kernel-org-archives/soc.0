@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0BCACCA481
-	for <soc@archiver.kernel.org>; Tue, 19 Jul 2022 12:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA554C43334
+	for <soc@archiver.kernel.org>; Tue, 19 Jul 2022 12:56:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 99807C341D0; Tue, 19 Jul 2022 12:55:37 +0000 (UTC)
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+	id A67C8C341CB; Tue, 19 Jul 2022 12:56:22 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B4F36C341C6;
-	Tue, 19 Jul 2022 12:55:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B4F36C341C6
+	by smtp.kernel.org (Postfix) with ESMTPS id 9C7E8C341C6;
+	Tue, 19 Jul 2022 12:56:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9C7E8C341C6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: (Authenticated sender: gregory.clement@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 7957324000D;
-	Tue, 19 Jul 2022 12:55:27 +0000 (UTC)
+	by mail.gandi.net (Postfix) with ESMTPSA id 7A32520007;
+	Tue, 19 Jul 2022 12:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1658235328;
+	t=1658235378;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=glNsks0O4B4pMwjoIQ1McMHKapt05EJSATb+zAoOHC8=;
-	b=cKZB6JjoulklJExEuwWgDRngGS7+HM6zlfjkfXfYCjAUe4xSOjioq7NXrlDlTl/xmyMsmD
-	9LcrV4uE2x5WXCjEZcFgNNfK2u1j2YTIYTsDWAaZ25laLtYtv+j7Q1XjEWCx0EbRTly1iJ
-	Vy8oBK8fHIGKvqJa1ZVTcRf+vOQBb2x+p/ARi4qdwouK608Q8+4Kvb6pm5+ES+JeJfd1W2
-	yN700vN7Rs8wfKdpHv1OP7BmtOjOsKXYbEyIRDaeyvx73Z2gFpSjc439s8rJcw5Fk9nIR5
-	lNi6GZq4tQptBxFzSTdZgUhft9FCS2nN0r9wcrtL0UY+GEin2twK7aKdwAkuOQ==
+	bh=6q2Llhdg8Zb2GItKO9j5ZdwaCaqwA+Iu+jkQAME68a0=;
+	b=oaF9s+p2HMO+EhiVH+cy0A8t/1Af2hL563X6k7vKHWUS7aD80thl0fSwKwEXVtoIB15e0W
+	EUiDcNnhpwV4XW8WKB5sARoCB5uJcSj32QlR0fWgtCCsADFPNmgouh2CcdRuQf7OTnUjge
+	AFCFS6B+/LQsJcahUUkSz27krueOrOxgr9ynQSNbTCYgwNJ6VVluvrRLgyVVYRJicIvo+P
+	QOzlABgGEEGRDVjT3r2b+l1+uC+TUBBI8t1VNC409Mtr9sl/nvXDM5qEGIwqD+ftaCB6GM
+	3JSg0MBgrnKt8Rrwv+5xZyvI04ZqMr3JCC1yrvq2JqA1+RLKtxtVlWjr4UwUYQ==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v5.20 (#1)
-Date: Tue, 19 Jul 2022 14:55:27 +0200
-Message-ID: <87lespqn28.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: arm for v5.20 (#1)
+Date: Tue, 19 Jul 2022 14:56:16 +0200
+Message-ID: <87ilntqn0v.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Here is the first pull request for dt for mvebu for v5.20.
+Here is the first pull request for arm for mvebu for v5.20.
 
 Sorry to be late, actually I've just realized this week we were already
 at -rc7.
@@ -59,25 +59,27 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 are available in the Git repository at:
 
   git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt-5.20-1
+bu-arm-5.20-1
 
-for you to fetch changes up to 40624346b7ae0c2b1209fc9993ea30699e512c50:
+for you to fetch changes up to fdaa3725831972284ef2779ddba00491d9dbbfca:
 
-  ARM: dts: turris-omnia: enable LED controller node (2022-07-18 12:42:18 +=
-0200)
-
-----------------------------------------------------------------
-mvebu dt for 5.20 (part 1)
-
-Enable LED to link/activity on turris-omnia (Armada 385 based)
+  ARM: Marvell: Update PCIe fixup (2022-07-18 12:32:01 +0200)
 
 ----------------------------------------------------------------
-Marek Beh=C3=BAn (2):
-      ARM: dts: turris-omnia: configure LED[0] pin function to link/activity
-      ARM: dts: turris-omnia: enable LED controller node
+mvebu arm for 5.20 (part 1)
 
- arch/arm/boot/dts/armada-385-turris-omnia.dts | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Update PCIe fixup for old Marvell SoCs: dove, orion5 and mv78xx0.
+
+----------------------------------------------------------------
+Pali Roh=C3=A1r (1):
+      ARM: Marvell: Update PCIe fixup
+
+ arch/arm/mach-dove/Kconfig    |  1 +
+ arch/arm/mach-dove/pcie.c     | 11 ++++++++---
+ arch/arm/mach-mv78xx0/pcie.c  | 11 ++++++++---
+ arch/arm/mach-orion5x/Kconfig |  1 +
+ arch/arm/mach-orion5x/pci.c   | 12 +++++++++---
+ 5 files changed, 27 insertions(+), 9 deletions(-)
 
 --=20
 Gregory Clement, Bootlin
