@@ -4,61 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8B3ECCA483
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F25CCA481
 	for <soc@archiver.kernel.org>; Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BA610C341CE; Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CF96C341D4;
+	id A7A00C341D5; Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A200C341D1;
 	Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1658239815;
-	bh=GDlQSrhJqyocQ+FC5TU6egnv+z286JEMzoJZ4eDtmgw=;
+	bh=ERIcFDnrJkBe3dg1k2L03oA/IKdphq219lNG14v9md0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Cz3w/QRmtg1xrFtWMsK1UNogxgEmWk33jVF/O8IECCLGUnxJJ4zrI0hRj9HXjifw8
-	 csGZsqXcIPVhdbaKe86ccSsmlnc/F6nvcmQzWCa0PGiwF+x8/O1zT2QuTrH07Ax0NY
-	 ZRKSJzlsxDN64ZO2iLUieHB8QagAx41ViwqKdGWg9+vDm0N+jiTWRlcBDU+QOlFU64
-	 YpenTYXhZgi1FVAw/TUMp3bbJ//Im1thzZpZdYzKqdF8IyVb8Co50Ir1GX1LuUbgyM
-	 QnGpwGVL5/NT3tZ3MH7AESu3u+l1oXR0kCzm2oIq7eYodXngJD9WwxvZ5iEhyPDnHT
-	 Hn7DLqDkfctSQ==
+	b=LdRZl5TCjh9XNYcUE000cR2Fvh3sMWsmNEe0eMXBYirwLqgGbMftTICA8hFbW6a9A
+	 MKNfNXiRo7lQbyfewYI3Pwyy6U693E6z7wOdVufR2y+w7c5yenGqzklDJUspRhlQNl
+	 BZjEIKoZqrsNAXDqEi2ZA1WZNjuuP5SWgVi5LtegKDu+oxrGFt69I9Ew2J4jsX6QzL
+	 bSiZ179vpT5fKuK82CNaJi/YPGz4DIaz9vvaXJmX4vDB5/KX+DKyEyjXtXBLDm43j/
+	 DfedUuKjktfSrsvuVRZ7lsIOqvxsRXXLSsOyXOj/D+fthOerICGMy+iL+WTkGE/fWq
+	 cTtkcHRT9I+OA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 79FEBE451BC;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 696D9E451B3;
 	Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 0/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v5.20 (#1) (replacing previous one)
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165823981549.7750.3171524918425351359.git-patchwork-notify@kernel.org>
+ <165823981542.7750.5900756005438662357.git-patchwork-notify@kernel.org>
 Date: Tue, 19 Jul 2022 14:10:15 +0000
-References: <20220520074119.3574753-1-hasegawa-hitomi@fujitsu.com>
-In-Reply-To: <20220520074119.3574753-1-hasegawa-hitomi@fujitsu.com>
-To: hasegawa-hitomi@fujitsu.com <hasegawa-hitomi@fujitsu.com>
+References: <87cze1qlg3.fsf@BL-laptop>
+In-Reply-To: <87cze1qlg3.fsf@BL-laptop>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 20 May 2022 16:41:18 +0900 you wrote:
-> The interrupt is set using pseudo-NMI if it is available. Arm has a
-> diagnostic interrupt feature called "Arm Generic Diagnostic Dump and
-> Reset device", but the A64FX does not support this feature and instead
-> has its own device definition.
+On Tue, 19 Jul 2022 15:30:20 +0200 you wrote:
+> Hi,
 > 
-> I tested on FX700:
-> $ echo HARDLOCKUP > /sys/kernel/debug/provoke-crash/DIRECT
-> [   86.259226] lkdtm: Performing direct entry HARDLOCKUP
-> :
-> :
+> Here is the first pull request for dt64 for mvebu for v5.20.
+> 
+> As seen with Arnd on IRC this pull request is replacing the previous
+> one. Now the cpu type in cpu nodes are fixed: cortex-a55 instead of
+> armv8.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v5,1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
-    https://git.kernel.org/soc/soc/c/64f89dfaa4f1
+  - [GIT,PULL] ARM: mvebu: dt64 for v5.20 (#1) (replacing previous one)
+    https://git.kernel.org/soc/soc/c/26c350fe7ae0
 
 You are awesome, thank you!
 -- 
