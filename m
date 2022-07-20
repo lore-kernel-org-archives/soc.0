@@ -1,65 +1,149 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=jbP3=XZ=os.amperecomputing.com=quan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F25CCA481
-	for <soc@archiver.kernel.org>; Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FD63C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 08:52:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A7A00C341D5; Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A200C341D1;
-	Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658239815;
-	bh=ERIcFDnrJkBe3dg1k2L03oA/IKdphq219lNG14v9md0=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=LdRZl5TCjh9XNYcUE000cR2Fvh3sMWsmNEe0eMXBYirwLqgGbMftTICA8hFbW6a9A
-	 MKNfNXiRo7lQbyfewYI3Pwyy6U693E6z7wOdVufR2y+w7c5yenGqzklDJUspRhlQNl
-	 BZjEIKoZqrsNAXDqEi2ZA1WZNjuuP5SWgVi5LtegKDu+oxrGFt69I9Ew2J4jsX6QzL
-	 bSiZ179vpT5fKuK82CNaJi/YPGz4DIaz9vvaXJmX4vDB5/KX+DKyEyjXtXBLDm43j/
-	 DfedUuKjktfSrsvuVRZ7lsIOqvxsRXXLSsOyXOj/D+fthOerICGMy+iL+WTkGE/fWq
-	 cTtkcHRT9I+OA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 696D9E451B3;
-	Tue, 19 Jul 2022 14:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: dt64 for v5.20 (#1) (replacing previous one)
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165823981542.7750.5900756005438662357.git-patchwork-notify@kernel.org>
-Date: Tue, 19 Jul 2022 14:10:15 +0000
-References: <87cze1qlg3.fsf@BL-laptop>
-In-Reply-To: <87cze1qlg3.fsf@BL-laptop>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+	id F252EC341CA; Wed, 20 Jul 2022 08:52:58 +0000 (UTC)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2100.outbound.protection.outlook.com [40.107.94.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9801EC3411E;
+	Wed, 20 Jul 2022 08:52:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9801EC3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ttas4Vea5hOE+JQ4u29xglfSiSGYv6XH4cmE/+CRlSrV66dcqRhoKBN3R2sSOXPG9+k3488HqB06o5cn9fF//ioXFD2AxOdcvkO+x94QYYDYb3mJ+7UcofroAG/RD9XtROYFVTIYK5IfxU0AZdX3YuX20u6holLDzeWMemxQ4e+M4yjVpjSYWKjZPMye8NxUz/CyNMwar1epwIRMamyVLpyQA2k2HzFOGq8HoN2t6YM9g0N34OSUptliif7dLp7Ik/7vwnbxkxV0cN7DPZYcn4A2fx7+NNrhDV7kw/ngZ9mBCW7jEnb6/z3tNObBu62MS5X4+3lLdsivOA3Mpbq3vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=To1G1FEBPYFr58GlU/ov47m3x9qZj+aQh5Sv+w5JJFQ=;
+ b=fHaqwAd6qOcZWKWzL8bEYEsvhkMP5im7z5nU5ExL+DzF/OHX3UlSqYY4cdH4xCchvr6Y4hxiOxeHrfGEQ0SfNabUr64pGLQbmgtjKEl6+gVS3UsuWllqEult5TClbYe7CEDALlvapl2fd5+N2tHvdOq2hc+UtWd0w4UHX53JiIyvidr0FmGXmCN7PNzjAwddWjdaOgADoiwCa2p7486AtLn5WZupegObo/cQfKT4JDLZ1Yqa8GmH699WwHNFdz9wio7NA1ZYwfmrTXkWSaPplqCXipJnX+xFuq8HVgnTUWA03MzPhS5v0QDLBgfKe/+2iIhVxMiFzCFmND8cMKfb6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=To1G1FEBPYFr58GlU/ov47m3x9qZj+aQh5Sv+w5JJFQ=;
+ b=vM5tFHX58b6MjMHQDFD5WZ1MM+yvVEes+IP4aFbE/QECq0tNY74u9+q8lt8BVVzvmaB7IsZlbRG2D1vIpn9SRs51VuCG9o7iRU+Q6hT9TT0uSGmih78a+o4pcfvPZitdNrrCZF0Yw/CgFivhCTNX1yZyi3drDBXmtwHrqGwfM6E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ DM6PR01MB5289.prod.exchangelabs.com (2603:10b6:5:63::16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5438.17; Wed, 20 Jul 2022 08:52:55 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e%9]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 08:52:55 +0000
+From: Quan Nguyen <quan@os.amperecomputing.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: Quan Nguyen <quan@os.amperecomputing.com>,
+	openbmc@lists.ozlabs.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>,
+	thang@os.amperecomputing.com
+Subject: [PATCH v2 0/2] Add device tree for Ampere's Mt. Mitchell BMC
+Date: Wed, 20 Jul 2022 15:52:28 +0700
+Message-Id: <20220720085230.3801945-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0158.apcprd04.prod.outlook.com (2603:1096:4::20)
+ To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c8e5bc83-cb6d-4ea8-c082-08da6a2d3c5d
+X-MS-TrafficTypeDiagnostic: DM6PR01MB5289:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	TUJYVH3I6lzBVGlsTr6koP60f9DP/OCDjzuMmiAWKE2NAxeIDOtp+oeW3jkb48OpR8r0IyTdO4KlcH6rJNm10sZph/li4kO3hoJGBdIHTwaUFdyQ7J9Zlscr+Mv1/4z3CnlbHEsr6WDV7F5rSW3mlFmWW41ju7aoOfketbY4Ei7tTrtmmfmsrM8Hwr+Delll4rsjPh75PmCpLRV8UdWFoOW9ZhBc22/9rLPWh5JZlwUIqcUuy+PcI0pDY+magzoZ/0kGHZVqSJHLdZVi8CaJ0SLWJ0griZVRLWKXQaAqd6B5oDdHs4ikc7Ns8y3IHnhKrjbXehnmgl3Rf/J1DpzF8e8ZV8T8L0oRxn9wFbPhe/Gi93HBf/bEYRKnylAE/CUNlCbLcsH2AQI1J4RxlDONMwklrV6+i4WQ211Z201is+SJnQ+0Ze6dkI/mxe2kvAZIed9TRRhBFDe8Hldwfjo8ULGGS/8MdKTwnqFXp0JsCZFTchRftm6JVgUS8E2NEh1U6IksZ/9wLclxV3HwuV3c7IsKtvn+/55wsam4q8F6kFnRNlNofFAEtOlw1cA//YXDYl3yRbKpKOEmD7X/YVsUUoz0vhT13jGXLiXGiXysi5LQZNwnTwko15WQ7ACy8JU2oex4/pAUmp4q1WHMU3MQg8KxYr8oIvnFREvRA5Kbpct5er38Ixfe8fV71RMZeROjTlHzX+2RNNjwDS1Ira7/O64Fi7P5gnAW6vSQ4k9ew1cLXSOKGeIGk/C/QGoeIJszovb+JkA2CncEqHvdr7tXx1zSdzQyRDQlYSNRch63klSg7eTpSUrgCch+7k+GWfgA
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(366004)(376002)(346002)(136003)(396003)(7416002)(110136005)(38350700002)(6506007)(41300700001)(5660300002)(38100700002)(316002)(921005)(66946007)(66574015)(66476007)(8676002)(66556008)(4326008)(2616005)(186003)(52116002)(6486002)(478600001)(86362001)(6666004)(1076003)(8936002)(4744005)(2906002)(26005)(107886003)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?r031WIgWA36ROm1myubz11Bxtc4fCd5H7BUQYpBAT6Zf1yk/yp8zgnIyyARK?=
+ =?us-ascii?Q?MF54ldWaknJj/PAAEMGT9iUhsyBJJ1C1YD/EDSKKHwyjW6GuLu+kQunC9sdM?=
+ =?us-ascii?Q?jKHQlDZIfEzY+fTPhSK77c34QEGLHIaekxubMYawUlJjo2ePpHsF+w80SQpy?=
+ =?us-ascii?Q?uigcAnm5zwNTg/yQGXE+MGsbbUy1CLsE6SX3xCX66hCbkx9nmVFA52UnVEkV?=
+ =?us-ascii?Q?7U8+BkrJRHwAqyMok5rmpE2qqPKEfw22fWl2Uw77QjlsXuHlsHyjXEYMZI/P?=
+ =?us-ascii?Q?HCktO8UgpQlLIWHIHWVVTxfGOdJl+GA2csnFRE6y+/N6yHLMx4a+yi3FQCci?=
+ =?us-ascii?Q?d3nnZngjhraFvKS8iOnEvgKoWoW+WR0FqR/ThXft4DeBONBVhw2xCWnyYvkN?=
+ =?us-ascii?Q?RQOadGahi0AUaqPvRncS/YzHYFhhpQDD07qGJGZKVZ9nd4xQB/SwpJ8P6ymr?=
+ =?us-ascii?Q?ATBaxTAtj6rxCQqo+QeKIDYhUqBf2afb1oAJQ5a6JDqHrpeHRJb60y/0OM8S?=
+ =?us-ascii?Q?K7Owh+nmxh/ditJ0MRFGTlbMmddCyTZhU2tBr+7obP3XrPO9B6Q0ELpA3eSm?=
+ =?us-ascii?Q?7lZ4IJzOd63j3Ak+2Kwz1y89pasOeXqvZIw9nMcqeZtD+4ClfX4AbYlIsi4E?=
+ =?us-ascii?Q?osoKbqTEcLqTGUxApWHjN3jp935rvHCUJPwo1AWFgIgpQV9Mfrh4JL+UIvoL?=
+ =?us-ascii?Q?9acuVmSVDC6vMbWush9r6wFNqxo1MbPUjIkaAaaVJ9z8f5kzvRibWNg2RIxV?=
+ =?us-ascii?Q?Qdvl32f+N7WXBFwt5jZiCn2SqQcCTL4QNuT1/Np54/dPpqaHd6a0qgLO1kM3?=
+ =?us-ascii?Q?oP669wX5jystJeUVVZz4HDzMajjuDjeJ+bwPPS/QobekmTkjvWVQ9OfAQ2th?=
+ =?us-ascii?Q?Nc2xoDumwSwuCh6mz3vevc4vW55dUMWANOaGL5jGoUnoMn22SCV4yE0p+PsJ?=
+ =?us-ascii?Q?tfJQgthELD76BZgicHiZnapuEE+c2cRpsoaU40NY2RZPF4191Py56umZAEnQ?=
+ =?us-ascii?Q?Bl3d9kFnkMq8NfM6xCXEGrHAotJfa3vAKgPpTVhBNS3lsIPCHqcYk0YCY4Ay?=
+ =?us-ascii?Q?6tabvvDzbwXmnWx9cjFE7OdwXWEgxUQ4YCQkdkGqzFhCftGDuODjlskF8Nys?=
+ =?us-ascii?Q?rYjGaDQuLcCJbOPhiE/J9Nl9S7arKplcVu3/U5GzHstK21RhdVv2cBnui1L3?=
+ =?us-ascii?Q?FGxZFmhbnyqGwL0467xci5Inr2BUOL0CVHvplLmqZ7JpTmotJgCzNpYuFEYQ?=
+ =?us-ascii?Q?TBjsi3v2JOlho4QI4KvXeZkdd1xNqdfNvW0RsQL2UFJA8PX+2mfySE1luszL?=
+ =?us-ascii?Q?0INnD8ni6iOYmwrgZGNO16IAgYi1jujKMm/c6kCeeCX2iXDDRMSJpHU4M0e7?=
+ =?us-ascii?Q?+nwYilaHNLq6RJKBIPBs8xel/BoWJyNZtmIzLWL7yxk19c7Tcd48V4bgsMy4?=
+ =?us-ascii?Q?rwnWJMMc6Ftee7vIfy8k1cRQDyxbpMB1mM/Uiywo6PGceFCQflX7OKYo9Dai?=
+ =?us-ascii?Q?yAbXwOltMVh/3AXdes/ZZsHH/yqUrEq4+NI6amZRO8F5IB41KwI9XrMoI6py?=
+ =?us-ascii?Q?zynSSYES7hugYSMv07bDpUy9uWYKaxUiFbhE/GSQoqe1S9leAbuV/nSbxCYg?=
+ =?us-ascii?Q?tMuFYps3mtLm7lhrsGxrUf4=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8e5bc83-cb6d-4ea8-c082-08da6a2d3c5d
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 08:52:55.0507
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DwtpoDcb1IruIjGrg6xNwbZBZFlUEgQx3qVLpJmngwfbGIB4N8vJTMwwlH47E1n5o64dKyJBLmXkFvTTsZLy9lbWwogt5xI84vor6yUCh5c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5289
 
-Hello:
+The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
+hardware reference platform with AmpereOne(TM) processor.
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+v2 :
+  + Add Ampere Mt. Mitchell BMC compatible                [Krzysztof]
+  + Remove bootargs                                       [Krzysztof]
+  + Fix gpio-keys nodes name to conform with device tree binding
+  documents                                               [Krzysztof]
+  + Fix some nodes to use generic name                    [Krzysztof]
+  + Remove unnecessary blank line                         [Krzysztof]
+  + Fix typo "LTC" to "LLC" in license info and corrected license
+  info to GPL-2.0-only
 
-On Tue, 19 Jul 2022 15:30:20 +0200 you wrote:
-> Hi,
-> 
-> Here is the first pull request for dt64 for mvebu for v5.20.
-> 
-> As seen with Arnd on IRC this pull request is replacing the previous
-> one. Now the cpu type in cpu nodes are fixed: cortex-a55 instead of
-> armv8.
-> 
-> [...]
+Quan Nguyen (2):
+  dt-bindings: arm: aspeed: document Ampere Mt.Mitchell BMC compatibles
+  ARM: dts: aspeed: Add device tree for Ampere's Mt. Mitchell BMC
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: dt64 for v5.20 (#1) (replacing previous one)
-    https://git.kernel.org/soc/soc/c/26c350fe7ae0
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
+ 3 files changed, 579 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 
