@@ -1,150 +1,372 @@
-Return-Path: <SRS0=b8ul=XZ=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=a6rv=XZ=gmail.com=logananth13.hcl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F812C43334
-	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 10:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 069AFC433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 10:53:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4752BC3411E; Wed, 20 Jul 2022 10:36:41 +0000 (UTC)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	id BF46CC341C7; Wed, 20 Jul 2022 10:53:41 +0000 (UTC)
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6A45EC341C7
-	for <soc@kernel.org>; Wed, 20 Jul 2022 10:36:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6A45EC341C7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 19so20652722ljz.4
-        for <soc@kernel.org>; Wed, 20 Jul 2022 03:36:40 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id ACDFDC3411E;
+	Wed, 20 Jul 2022 10:53:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ACDFDC3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id pc13so427007pjb.4;
+        Wed, 20 Jul 2022 03:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eOQs/h3TvmwMGsHYWl9U3/WtYoMV9gdMa1dgDXwlbSQ=;
-        b=fkB0BJqfPCtZaMfiYdGb3bdOxfiLSBeYykX2v5HfeUI0qT9RCYWjYKZwN2H2/Lcklg
-         5AtcySUHDocU/gfgqQ6VWa5vXLUeoBByLaXwcyqmEMHN/lC6o1LBfrPHatb2VG1Eheoj
-         uLEPyQzCB8wzzWwIqTO9fAzIK81bYmX8sZuKQn2O6Eqk08vYjGUGX0zg1BDxszd2cGwH
-         BJHeSB3ql3PnNoCjParSAlqbboMcvdkkApwZgirbZGwvTV8dh4aky4QdjnMkgpQ2pCFD
-         mUH0PJziq/T1HRPDay71Oiw5Rxu6yMU2spGr7/T+3+rh0cKImMnmNv8XOtmuAJk5lfk4
-         QQBw==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=Mhscre5ApuF2HLF9SvgHNFOW7TSIpt1lI87XGb9QgEk=;
+        b=Vx3ArBaj06YNGRzw3bIkp29i3TbvBW7AhKEroeY0bdYRJCS5ylMDCFwYOF6t0w4/+5
+         J4aNvyjFyvoHsd3J4jg3wWRU6cpdAzSKPMYmlbpZ5qNnrrKwpfPs5ls3GHT56+B76qlX
+         rsUFutlvRiYpP1gStiI9isgWRPkf3Asowi/rHFO8hWCZX0OkyotILnidhK16RdCRvMvv
+         KPr1eDl4quaXmk7fFAL5dx/6o+vblbAVM6QPVQ4jk0qUhfT6uGl7RnPOpDmNIKzbALBw
+         9ZC9F9sqSsqtgHD7xS86eXssorW8nnNUGBNYMamNxQNBjGtt7R805dr4qLjkGOGOQD2N
+         D+JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eOQs/h3TvmwMGsHYWl9U3/WtYoMV9gdMa1dgDXwlbSQ=;
-        b=x/OORQqDZ+qDmIFOja8Nj4S88Urv2xGDGBEBOe48xaOMmALW1FYAoFsOWlI/SCWjo1
-         UcvRec64BprtmMZomVWalCiTdnhEOEBvtIrtlYSXY1RYZgtQ1Z/38qOwyL7h0SE9imWP
-         ye9BlINpWkvQXjuDpu93f7aU7qcPohHpy2Hv4CrWn4QvoSY/hF9FigEfNtQXX/Wla10d
-         L1tORZDZtRbd1Q9tUkHRZr+DEXTNeDAZkgwm/kKxSeBU1XBwi7Q90l8UxfQ9yei/tvxZ
-         JWlQgtioym7j02Zxm6G62Z/6eUbnoqKiJU58oRXDmCaAzppP5wvY5Nk5/Rom6K5bVmnY
-         GSlw==
-X-Gm-Message-State: AJIora/q8oBbJg5yw9PKgBrX7Lca2ZDlDk93VhyQCKurw8kiS9jaKTsI
-	OyRZNnv2bpmpw8Ip+q89lq5UhQ==
-X-Google-Smtp-Source: AGRyM1shKllIGiUnXHGiJLH6+O6rAfySNJxSL+EK7w+lV4RU9sESPdtwOwhOZz2Yrya3DaMVYGje0w==
-X-Received: by 2002:a2e:a788:0:b0:25d:94fd:1a84 with SMTP id c8-20020a2ea788000000b0025d94fd1a84mr14986884ljf.177.1658313398531;
-        Wed, 20 Jul 2022 03:36:38 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id d29-20020a0565123d1d00b0047255d21124sm3752136lfv.83.2022.07.20.03.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 03:36:38 -0700 (PDT)
-Message-ID: <ab78f85c-dd0a-9176-103f-8e4abe01b8f9@linaro.org>
-Date: Wed, 20 Jul 2022 12:36:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt.
- Mitchell BMC
-Content-Language: en-US
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=Mhscre5ApuF2HLF9SvgHNFOW7TSIpt1lI87XGb9QgEk=;
+        b=jbXLLOnNZ+rrpahrHZBntJfos5lFWyml+pRiJs2EjULViMooGMdlxjBVJW5KCk3+JW
+         yUmR/Syxla4yQ0/He6CAhY0UVap5P4zxaLxJLnXTgPJUgJm1PT1Z2TesF5xf4HhkyCtd
+         16eCx5+ivtFpsFgHWkivBM4VwMe9tzCSaeL/cXnSqwlfKjTiAr6fJPLMqhL1DTJ5DcHl
+         to5gcREJmjlVJqoRtdsKKgreq1qhC9Zh793Ti5z1Oo7ONZ2O44cZlvhOejejOygp5pnf
+         DsWrD96AdecqDamZp0RyJBdfEYfTHrylEC1fgmfhK+sVrW9MbIHQeno9oy+Aq2hxvqbX
+         PGmg==
+X-Gm-Message-State: AJIora9dzKbHg8umZjQ2+pDfhgbkLBkBJPWsTs/5s8iwR2qDFSaQ3GM0
+	F5vGE7VWt4E2ws86taYqGms=
+X-Google-Smtp-Source: AGRyM1umoS76A2PCTrBwJuvfac+pH1JwJoVe1Fzduqb2TLUkr2jdunjgEYihu2f1l0JRsXX0ThtPLQ==
+X-Received: by 2002:a17:90a:6e46:b0:1f2:f04:a173 with SMTP id s6-20020a17090a6e4600b001f20f04a173mr4639203pjm.23.1658314419816;
+        Wed, 20 Jul 2022 03:53:39 -0700 (PDT)
+Received: from logan-ThinkPad-T14-Gen-1 ([59.93.6.68])
+        by smtp.gmail.com with ESMTPSA id t186-20020a625fc3000000b00528c3ad8e09sm13328684pfb.66.2022.07.20.03.53.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 Jul 2022 03:53:39 -0700 (PDT)
+From: Logananth Sundararaj <logananth13.hcl@gmail.com>
+X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
+Date: Wed, 20 Jul 2022 16:23:31 +0530
 List-Id: <soc.lore.kernel.org>
-To: Quan Nguyen <quan@os.amperecomputing.com>, openbmc@lists.ozlabs.org,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>, thang@os.amperecomputing.com
-References: <20220720085230.3801945-1-quan@os.amperecomputing.com>
- <20220720085230.3801945-3-quan@os.amperecomputing.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720085230.3801945-3-quan@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	openbmc@lists.ozlabs.org
+Cc: garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
+	patrick@stwcx.xyz, velumanit@hcl.com
+Subject: [PATCH v4] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
+Message-ID: <20220720105331.GA23472@logan-ThinkPad-T14-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On 20/07/2022 10:52, Quan Nguyen wrote:
-> The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
-> hardware reference platform with AmpereOne(TM) processor.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> Signed-off-by: Phong Vo <phong@os.amperecomputing.com>
-> Signed-off-by: Thang Q. Nguyen <thang@os.amperecomputing.com>
-> ---
-> v2 :
->   + Remove bootargs                                       [Krzysztof]
->   + Fix gpio-keys nodes name to conform with device tree binding
->   documents                                               [Krzysztof]
->   + Fix some nodes to use generic name                    [Krzysztof]
->   + Remove unnecessary blank line                         [Krzysztof]
->   + Fix typo "LTC" to "LLC" in license info and corrected license
->   info to GPL-2.0-only
-> 
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
->  2 files changed, 578 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> 
+The Yosemite V3.5 is a facebook multi-node server
+platform that host four OCP server. The BMC
+in the Yosemite V3.5 platform based on AST2600 SoC.
 
-(...)
+This patch adds linux device tree entry related to
+Yosemite V3.5 specific devices connected to BMC SoC.
 
-> +
-> +&i2c3 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c4 {
-> +	status = "okay";
-> +
-> +	adc_i2c: adc-i2c@16 {
+Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
 
-Node name: just "adc"
+---
+--- v4 - Bootagrs and memory removed.
+--- v3 - Addressed v2 patch comments.
+--- v2 - Enabled i2c drivers.
+--- v1 - Initial draft.
+---
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 260 ++++++++++++++++++
+ 2 files changed, 261 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
 
-> +		compatible = "lltc,ltc2497";
-> +		reg = <0x16>;
-> +		vref-supply = <&voltage_mon_reg>;
-> +		#io-channel-cells = <1>;
-> +		status = "okay";
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..58add093e5fb 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-facebook-cloudripper.dtb \
+ 	aspeed-bmc-facebook-cmm.dtb \
+ 	aspeed-bmc-facebook-elbert.dtb \
++	aspeed-bmc-facebook-fby35.dtb \
+ 	aspeed-bmc-facebook-fuji.dtb \
+ 	aspeed-bmc-facebook-galaxy100.dtb \
+ 	aspeed-bmc-facebook-minipack.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+new file mode 100644
+index 000000000000..05efba7117a8
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+@@ -0,0 +1,260 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++// Copyright (c) 2020 Facebook Inc.
++
++/dts-v1/;
++
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/i2c/i2c.h>
++
++/ {
++	model = "Facebook fby35";
++	compatible = "facebook,fby35", "aspeed,ast2600";
++
++	aliases {
++		serial4 = &uart5;
++	};
++
++	chosen {
++		stdout-path = &uart5;
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
++			<&adc1 4>, <&adc1 5>, <&adc1 6>;
++	};
++	spi_gpio: spi-gpio {
++		status = "okay";
++		compatible = "spi-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
++		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
++		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
++		num-chipselects = <1>;
++		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
++
++		tpmdev@0 {
++			compatible = "tcg,tpm_tis-spi";
++			spi-max-frequency = <33000000>;
++			reg = <0>;
++		};
++	};
++
++};
++
++&mac3 {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rmii4_default>;
++	no-hw-checksum;
++	use-ncsi;
++	mlx,multi-host;
++	ncsi-ctrl,start-redo-probe;
++	ncsi-ctrl,no-channel-monitor;
++	ncsi-package = <1>;
++	ncsi-channel = <1>;
++	ncsi-rexmit = <1>;
++	ncsi-timeout = <2>;
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&uart3 {
++	status = "okay";
++};
++
++&uart4 {
++	status = "okay";
++};
++
++&uart5 {
++	status = "okay";
++	compatible = "snps,dw-apb-uart";
++};
++
++&wdt1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdtrst1_default>;
++	aspeed,reset-type = "soc";
++	aspeed,external-signal;
++	aspeed,ext-push-pull;
++	aspeed,ext-active-high;
++	aspeed,ext-pulse-duration = <256>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "spi0.1";
++		spi-max-frequency = <50000000>;
++		#include "openbmc-flash-layout-128.dtsi"
++	};
++	flash@1 {
++		status = "okay";
++		m25p,fast-read;
++		label = "spi0.0";
++		spi-max-frequency = <50000000>;
++		#include "openbmc-flash-layout.dtsi"
++	};
++};
++
++&i2c0 {
++	//Host1 IPMB bus
++	status = "okay";
++	multi-master;
++	ipmb0@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c1 {
++	//Host2 IPMB bus
++	status = "okay";
++	multi-master;
++	ipmb1@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c2 {
++	//Host3 IPMB bus
++	status = "okay";
++	multi-master;
++	ipmb2@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c3 {
++	//Host1 IPMB bus
++	status = "okay";
++	multi-master;
++	ipmb3@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	//NIC SENSOR TEMP
++	status = "okay";
++	tmp421@1f {
++		compatible = "ti,tmp421";
++		reg = <0x1f>;
++	};
++};
++
++&i2c9 {
++	// Debug-Card IPMB bus
++	status = "okay";
++	multi-master;
++	ipmb9@30 {
++		compatible = "ipmb-dev";
++		reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c10 {
++	status = "okay";
++};
++
++&i2c11 {
++	status = "okay";
++	//FRU EEPROM
++	eeprom@51 {
++		compatible = "atmel,24c64";
++		reg = <0x51>;
++		pagesize = <32>;
++	};
++};
++
++&i2c12 {
++	status = "okay";
++	//INLET TEMP
++	tmp75@4e {
++		compatible = "ti,tmp75";
++		reg = <0x4e>;
++	};
++	//OUTLET TEMP
++	tmp75@4f {
++		compatible = "ti,tmp75";
++		reg = <0x4f>;
++	};
++};
++
++&i2c13 {
++	status = "okay";
++};
++
++&adc0 {
++	ref_voltage = <2500>;
++	status = "okay";
++
++	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
++		&pinctrl_adc2_default &pinctrl_adc3_default
++		&pinctrl_adc4_default &pinctrl_adc5_default
++		&pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++	ref_voltage = <2500>;
++	status = "okay";
++
++	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
++		&pinctrl_adc10_default &pinctrl_adc11_default
++		&pinctrl_adc12_default &pinctrl_adc13_default>;
++};
++&ehci0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&uhci {
++	status = "okay";
++};
+-- 
+2.17.1
 
-Isn't this new node? Why do you need status here?
-
-> +	 };
-> +
-> +	eeprom@50 {
-> +		compatible = "atmel,24c64";
-> +		reg = <0x50>;
-> +		pagesize = <32>;
-> +	};
-> +
-
-(...)
-
-> +
-> +&gpio1 {
-> +	gpio-line-names =
-> +	/*18A0-18A7*/	"","","","","","","","",
-> +	/*18B0-18B7*/	"","","","","emmc-rst-n","","s0-soc-pgood","",
-> +	/*18C0-18C7*/	"uart1-mode0","uart1-mode1","uart2-mode0","uart2-mode1",
-> +			"uart3-mode0","uart3-mode1","uart4-mode0","uart4-mode1",
-> +	/*18D0-18D7*/	"","","","","","","","",
-> +	/*18E0-18E3*/	"","","","";
-> +};
-> +
-
-You have a trailing line error.
-
-
-Best regards,
-Krzysztof
