@@ -1,216 +1,473 @@
-Return-Path: <SRS0=FYTr=XZ=linaro.org=bjorn.andersson@kernel.org>
+Return-Path: <SRS0=cB9u=XZ=equinix.com=prvs=020080160e=zweiss@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3408BC43334
-	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 23:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F81C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 23:16:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1C780C341D1; Wed, 20 Jul 2022 23:16:52 +0000 (UTC)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 3D5FBC341C7; Wed, 20 Jul 2022 23:16:53 +0000 (UTC)
+Received: from mx0b-00268f01.pphosted.com (mx0b-00268f01.pphosted.com [148.163.159.192])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8B638C385A2
-	for <soc@kernel.org>; Wed, 20 Jul 2022 23:16:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B638C385A2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f176.google.com with SMTP id u76so12622112oie.3
-        for <soc@kernel.org>; Wed, 20 Jul 2022 16:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XtUXjWr3nvEpuUJ9HGQXmhmB9khI9IHogmZuxZSRVaY=;
-        b=ts55i+bya+LPIvtTxAebkZURdWOpACmPRus9H6iabf50nkTd3D9FtU6bZ7zZeYaDP5
-         qr2KMDAVinLggd6OpcsL7kWFCxh+JqGgQ8dmYdOTpUYAyvFWhLw0sWdAzTxFE1JsZyjr
-         XoWvjWzAvL04sTmTFgiS+UH3GxKwBeLJBPtk6lgIXZcO90+XsTubfAMttNPXK3FX3Zw9
-         AYfdgx274vq7gt0IahHf9xCJpM4DU6APbmSfWTLpjX9bmiBlmBYmqXdJaFd7PpUoAp9c
-         NvH7l4kW2DWi2/z1e0k6dGGfvixTG+XAwDCkJx8ZGI0PTAU8bgtKZqkhhNhdXIej2neD
-         H2pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XtUXjWr3nvEpuUJ9HGQXmhmB9khI9IHogmZuxZSRVaY=;
-        b=xjF7c401e+0qMImkNzsvZv/HHv0YfyjrJDWW12G1C1tRs/wFK9EEjhXcwpAEf21mEK
-         Ij3EUXfUsDSEFpJy2ug6aqmA+Tanh7rffEa38VPdgFVaWOiYrRiSXnYsYE9sxyAThrtO
-         Y2ygq7eE9yi6pSkw0i+nDzY0qc3lB7XMcsbmINKbPraCAfywM3irJXKHfRDqVJ94pfgS
-         hcqlXBwsiGWfV3QOishA5yaBZWy5vjIoixfbX3535kkPShEkUv20h5agJDVBuqB0FnLh
-         NcpLRG9dBukFW737rYdZH4FGKyymEjD0JbxEva+8QfPJedaCab9kKcdpm8mHeqjFex3R
-         F6jg==
-X-Gm-Message-State: AJIora/C+sIdiG2B8sWS3S8tnvnwVE2/LU3b39DhlWqX3zG5IrBxUEmL
-	Q/7yYF6lQuAnuunhlAkzf7IXkg==
-X-Google-Smtp-Source: AGRyM1tGH/c7OcUAx4BB+ccgxatJGuV2dvkH5U3vgII9ikg8UIEB9KL2glsuEXDmqGB63X1IHHTQiA==
-X-Received: by 2002:a05:6808:f92:b0:33a:441e:979b with SMTP id o18-20020a0568080f9200b0033a441e979bmr3476215oiw.220.1658359004729;
-        Wed, 20 Jul 2022 16:16:44 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056871054600b0010d645d9f1asm125515oal.1.2022.07.20.16.16.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:16:44 -0700 (PDT)
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 07684C385A9;
+	Wed, 20 Jul 2022 23:16:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 07684C385A9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=equinix.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=equinix.com
+Received: from pps.filterd (m0165121.ppops.net [127.0.0.1])
+	by mx0b-00268f01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KN0E7I002687;
+	Wed, 20 Jul 2022 23:16:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equinix.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pps202002;
+ bh=pQQcu4Ck6drl0VpE5lb16AiJ8yqFwhEXVcpo6olWCQ4=;
+ b=mvY5D9vKWSlt3nGRYsvmvTpvktAzUEmOyZ7XDtj7DPRIDmvd3WiBW+5ecxVQnAzVh+YA
+ cbbutP34ipxTIsA3j8t+gcBQPnocvDqtlhUc0WhUbd8Qkbr4XSoub81mN2aa92N8zJOL
+ Jk0qmlW0ayPetgPXcR6hSfT7FaYjHY/8+U0TOMdJE/pwxEvxKFCa0DVxIsED37ZxbePv
+ OaHDnj2fi0UBJwCP+K2lUuetF3UbDcTPXJoFMyg2YNOVTAwfwum4jgecqOXKfE77Uoqy
+ YQs/9WIWfFeyIK+qrbs4AVxpPcAP96QjBEUhqFsHFi7d11Gkgmx6l+Zm0U7KgilLQ5Fq sg== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2104.outbound.protection.outlook.com [104.47.70.104])
+	by mx0b-00268f01.pphosted.com (PPS) with ESMTPS id 3hemx69869-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Jul 2022 23:16:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZImg3/kjSsgqWnyEv+8+mqkClZOqt0icbr+IomUhmp71Cqtx/AV6U2lGIpl5Lrbk1nN0MXcgobFZi+kdTKkkM6i/M/aYJxR+kpqOMFxboTVP/kYtlVDaO/bLRPiDVUQJdySS5VdhRHJAsrlrWRntbfQdYnpMu1ZU9dRLc7tCD6JBZXuZ7cMuYfwlBBNSxWgfFmC23ljZOjOI2jxLT/TYhrcaGotiGsjr21ll1JyFVlClzKvfEBD8Ms43QHxACzlADOYLrT0egPBBUHOegJKnu/7dwOAF2yE7+LSMC3Z/pACxJtwVZEr3aQlNUhOqwIwurswgFGph7iYst4SrD6xe0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pQQcu4Ck6drl0VpE5lb16AiJ8yqFwhEXVcpo6olWCQ4=;
+ b=P6ZVlEMmwuDFdNVpM4rLAkidBwAp4T87JgDQk6Gz4xp4mHh55XTdb1m8JJ8vDqj3CLJzAUXZQtG88gztL7C6KasKKj65Cv0pqihWB7+W6iAgjfRlv6QDd6zyjELI+tgpZuLNkrqiPakz66PMW/ksDsYSJCiuLsgIn2W2cH+4fhx6VvLVqvnO9G/ey7tTmnGi2vgJGOiHyQwGJCx+TCOqrSR536Q5KELiHp/zkCfgcnODlFM73UQCEOEhVHVYVWED7Rck6T1hZ6y4bfjPQuVRi88884wYpyMhaf6p1fBOhAhQjbhgqGBvvhk/OYf3aBNAUcsTugqck/dt0sy1Y6I4Xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
+ dkim=pass header.d=equinix.com; arc=none
+Received: from DM8PR04MB8007.namprd04.prod.outlook.com (2603:10b6:5:314::20)
+ by SN6PR04MB5230.namprd04.prod.outlook.com (2603:10b6:805:f9::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.22; Wed, 20 Jul
+ 2022 23:16:31 +0000
+Received: from DM8PR04MB8007.namprd04.prod.outlook.com
+ ([fe80::9890:b657:c8a:cffe]) by DM8PR04MB8007.namprd04.prod.outlook.com
+ ([fe80::9890:b657:c8a:cffe%7]) with mapi id 15.20.5438.024; Wed, 20 Jul 2022
+ 23:16:31 +0000
+From: Zev Weiss <zweiss@equinix.com>
+To: Logananth Sundararaj <logananth13.hcl@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Robert Marko <robimarko@gmail.com>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Molly Sophia <mollysophia379@gmail.com>,
-	Steev Klimaszewski <steev@kali.org>,
-	Kuogee Hsieh <quic_khsieh@quicinc.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Parikshit Pareek <quic_ppareek@quicinc.com>,
-	Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-	Stefan Hansson <newbie13xd@gmail.com>,
-	Sumit Garg <sumit.garg@linaro.org>
-Subject: [GIT PULL] More Qualcomm ARM64 DTS updates for v5.20
-Date: Wed, 20 Jul 2022 18:16:43 -0500
-Message-Id: <20220720231643.2114565-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.37.1
+CC: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Joel
+ Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>,
+        "openbmc@lists.ozlabs.org"
+	<openbmc@lists.ozlabs.org>,
+        "thangavel.k@hcl.com" <thangavel.k@hcl.com>,
+        "garnermic@gmail.com" <garnermic@gmail.com>,
+        "velumanit@hcl.com"
+	<velumanit@hcl.com>,
+        "naveen.mosess@hcl.com" <naveen.mosess@hcl.com>
+Subject: Re: [PATCH v4] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
+Thread-Topic: [PATCH v4] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
+Thread-Index: AQHYnI6+U8uG9DI9MU63PhVdLCGfIg==
+Date: Wed, 20 Jul 2022 23:16:31 +0000
+Message-ID: <20220720231605.GA30806@packtop>
+References: <20220720105331.GA23472@logan-ThinkPad-T14-Gen-1>
+In-Reply-To: <20220720105331.GA23472@logan-ThinkPad-T14-Gen-1>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bee171b3-19d0-44f9-0bd4-08da6aa5e1a4
+x-ms-traffictypediagnostic: SN6PR04MB5230:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ wmH6UKLWUZ5H+iMkPGvdFP8I6PZBaDp8ydaCCwNqV/ziSSqkTnSk45Ttt7xoctgX7z25pbRsHhTkHgrCYvrnwjnXNwnx+Clb9vZlCdwhyLGsDjeYRE4JOIrI1tJs1BYcWk3LmACNqXMElPlW/xA0QQgPPKcH61r0XkpgFfoEA4+OG4ypD3lU1gdI/sDLpDF9+Oad2XcIMasf7ToPkZ0nFtyBUbQ5JEvLiRVkL8qnCf5jfWZ0EElTF/jxG8qoOVebdcoJELGOuPVx3/Clxwi56cC83VuQk6KjJkdN2NVo5RqEFpJmfYXi8NvBZiQJrHTPTaz5qi0tLZkOIFJ/wEZN3thFLtcNre4dfbSlE9xDbFLvIY6DMnQABV1dR9RsPzuYhTHHl6sr39+INbKP1Zt480E0vfUc1d8vCd0NYyaxeZ+ThbvsccdR2U5MphaOaxvxXJQyxM91AgNxYSQhXbeTXFYDWT5vPv+WhctAfXGb66S8U6IbcVswoTDCZKtcCogVMPtGMr3nEI+ROqWbE3Hbi2cAOCRlNowFKqBELLlKRtc4XQZ/8wo18aAuv4gHr19uNw/VsJ5mUpOvXdYI2OPWXgcypJhAF/nUm9iSTLHhbQ1umC946eq27dqx+w5rbAmGu8aqSeyhu09+2rdkZU0vbe3nlHtpuZffFv9th99b2jCq6kjGS62hDcmRN9HMW2JapEjHl+K4pVs2oCDE1pferZ2FDc4DaZW18fr6pnPjHucnwpH3oQYKIygf2dgnQ6/SadJ3plZL25tA6xdVTg4xupCsRlnA6OEPwYgZZXuUv7QQ++3gdNrIIJWm+wxacMXf
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8007.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(39860400002)(346002)(136003)(366004)(376002)(396003)(47680400002)(8936002)(122000001)(7416002)(5660300002)(38070700005)(38100700002)(6506007)(6512007)(478600001)(26005)(1076003)(6916009)(316002)(54906003)(9686003)(8676002)(66556008)(71200400001)(6486002)(2906002)(66446008)(64756008)(76116006)(4326008)(66946007)(66476007)(91956017)(186003)(33656002)(41300700001)(86362001)(33716001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?ZURFkXNLFZp/RCW72qJbcBKMipP/bNmKRBebNQ7cjobCV+BjcGiYiXZ3jSfS?=
+ =?us-ascii?Q?VMkbR8kJ14bmdvE7sDy+ebIsT51RouGA8ZikQ0qD2PymQ9VYVcHuvznk6BJQ?=
+ =?us-ascii?Q?4A6KMNgBNzx6GBS6wiosxQBofbd5jv/vEEPzMIuGvFxwfCKKK2xtfrxGQ4sS?=
+ =?us-ascii?Q?LxqLezNlJTquqJy8rYxxqqufdq8mtwRm7Z3yIGT3ni4z1YOO68KQ3eESYRww?=
+ =?us-ascii?Q?M+agFArJjRdgGPQTI78FQqQ4/+ZrDhX5Cgz2kf48M+LIl5sn6at/K9MNaVoa?=
+ =?us-ascii?Q?JZb2caQjqHkPTQ+Ckxvm7kC2rVlQeuStp1+/QPSk0Tzgm9moJkvfzeNAmW6H?=
+ =?us-ascii?Q?lwkl5bHetvPxl7F7k+atHBivl7d/nEbItmwxnnu1j7HjHmR9BiY/u0KxfbFh?=
+ =?us-ascii?Q?IaHnYtD5shTWAfhldCoDEXuEzATduD6P4mUN8znkB7e/GB3xNWQmtPzwlvd0?=
+ =?us-ascii?Q?yRqWcHn5Lw5xH/aGxN4KEjx/mYWZAw3xauoUkPcAT2KlmkGLaHNw6EQwX514?=
+ =?us-ascii?Q?3zZgz9KtwZudMvweYjnCoosIJdWlnYxXjrAgE1kXjxFkorBkSHbxWS7li2CI?=
+ =?us-ascii?Q?CWQTTR9e33l+7p/bmEeetQ9ns1tjKgY4L5tt+mLsCVGSRRGYdDhXwMym8Kia?=
+ =?us-ascii?Q?bdGSf7kkXD9+IsASiDeZ+87MznX1UMjEc0zlcA/1zJch3Gv5ZBGLkVyOkbEh?=
+ =?us-ascii?Q?1Z4P1xCingz52jsO89BS4TgFfKQJT3tu+R3BeOtGXBO1URIrmNT6C2iOVclS?=
+ =?us-ascii?Q?DaZlYvp9ZLEePtIQN9O6fjNrToIMoLcH3cw6cjR3xG14smZn2ykNF2k1mj5s?=
+ =?us-ascii?Q?MEAuxlajrPMWMdnQiTECMNJwT8D/jbRuu3HO9ctBdlIMw2C4hChC5Mt0OAyJ?=
+ =?us-ascii?Q?5HhKuuslnOHEomS54MXwthpydIl02F+pC1UHBZIN6UFxmHhjPTihcdKkJha4?=
+ =?us-ascii?Q?1lfp+wKcAZ/yTDNcwJ8zXqsYrH8i2YRBuFgmAHpH/7OEvwgz1b9AK15BF01a?=
+ =?us-ascii?Q?8/+dk0hW0g6lZd+UngY3LKdQeMVTY2xl5hqiN7ZGbo6TgBqiy089rVaZiJkJ?=
+ =?us-ascii?Q?eo02fiJYPI+D5Tb9Fs8gm1HdfTwt9KyqGOIaH+J7j8CtgSI3zxhJ5X1eSw/x?=
+ =?us-ascii?Q?PPrpIXb6WB+AdTwg3BKlcJJqt0CvJNOHcZ0h/yp1aLHx74dsC+0Z/do5GqGi?=
+ =?us-ascii?Q?sE9prrq9JEroxQCIImEdfKOfoA4dbsfbcapX6HjbdnmpJ0dJ3gUkz3mp+DB1?=
+ =?us-ascii?Q?UIwl+5HraibzOS8+yP+E2WmHaunjY/W7RNM0uqVOuFSpBkO+z/pAlVojO+7x?=
+ =?us-ascii?Q?v9H2Q/46+N2mFJYFpEITtzCmXlF3SXWkxeuflf8ugc5JFi67LhYBt1kFzM3X?=
+ =?us-ascii?Q?UkC8fNKsTZuEYXA1s6zAOCq0FLD7cFzVeSiQJKtgDC29xZYjGX9SLPSYwrLD?=
+ =?us-ascii?Q?G87Bmq2kVKwhcCad6Wnv7OVABcV5Fokf6JMTNDc+HWUOjssmzdtAArQMrkHF?=
+ =?us-ascii?Q?RZEk4B219wQ2rlrRAsAba+ZypiuXlkYqWZZhwxQVmvOw3+W1MPpDWH+ToQ9O?=
+ =?us-ascii?Q?6/5W7hzRlcPQCs6AKtpaWR2esEfaoz3vUzzLjG/S8tZZ20KtPizit8JAndcs?=
+ =?us-ascii?Q?sQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7D972B41ABEB0844A1D1F7A458235263@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: equinix.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8007.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bee171b3-19d0-44f9-0bd4-08da6aa5e1a4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 23:16:31.3962
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uttH3aYhQfGBsTpkJ2WAHYPiJdXCpc0qcpueEJVdxX1kl1+eb7txRwfiyqgPmM8qDRlqKfdJZB1yUHgGT2onJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB5230
+X-Proofpoint-GUID: hSxpeyguU42IL41FAutE6R35yADKV5-c
+X-Proofpoint-ORIG-GUID: hSxpeyguU42IL41FAutE6R35yADKV5-c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207200094
 
-The following changes since commit abf61f7e66c15e00f40ca7e10367f4149639bc57:
+On Wed, Jul 20, 2022 at 03:53:31AM PDT, Logananth Sundararaj wrote:
+>The Yosemite V3.5 is a facebook multi-node server
+>platform that host four OCP server. The BMC
+>in the Yosemite V3.5 platform based on AST2600 SoC.
+>
+>This patch adds linux device tree entry related to
+>Yosemite V3.5 specific devices connected to BMC SoC.
+>
+>Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+>
+>---
+>--- v4 - Bootagrs and memory removed.
+>--- v3 - Addressed v2 patch comments.
+>--- v2 - Enabled i2c drivers.
+>--- v1 - Initial draft.
+>---
+>---
+> arch/arm/boot/dts/Makefile                    |   1 +
+> .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 260 ++++++++++++++++++
+> 2 files changed, 261 insertions(+)
+> create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+>
+>diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>index 7e0934180724..58add093e5fb 100644
+>--- a/arch/arm/boot/dts/Makefile
+>+++ b/arch/arm/boot/dts/Makefile
+>@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) +=3D \
+> 	aspeed-bmc-facebook-cloudripper.dtb \
+> 	aspeed-bmc-facebook-cmm.dtb \
+> 	aspeed-bmc-facebook-elbert.dtb \
+>+	aspeed-bmc-facebook-fby35.dtb \
+> 	aspeed-bmc-facebook-fuji.dtb \
+> 	aspeed-bmc-facebook-galaxy100.dtb \
+> 	aspeed-bmc-facebook-minipack.dtb \
+>diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/bo=
+ot/dts/aspeed-bmc-facebook-fby35.dts
+>new file mode 100644
+>index 000000000000..05efba7117a8
+>--- /dev/null
+>+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+>@@ -0,0 +1,260 @@
+>+// SPDX-License-Identifier: GPL-2.0-or-later
+>+// Copyright (c) 2020 Facebook Inc.
+>+
+>+/dts-v1/;
+>+
+>+#include "aspeed-g6.dtsi"
+>+#include <dt-bindings/gpio/aspeed-gpio.h>
+>+#include <dt-bindings/i2c/i2c.h>
+>+
+>+/ {
+>+	model =3D "Facebook fby35";
+>+	compatible =3D "facebook,fby35", "aspeed,ast2600";
+>+
+>+	aliases {
+>+		serial4 =3D &uart5;
+>+	};
+>+
+>+	chosen {
+>+		stdout-path =3D &uart5;
+>+	};
+>+
+>+	iio-hwmon {
+>+		compatible =3D "iio-hwmon";
+>+		io-channels =3D <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+>+			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+>+			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
+>+			<&adc1 4>, <&adc1 5>, <&adc1 6>;
+>+	};
 
-  arm64: dts: qcom: sc8280xp: fix DP PHY node unit addresses (2022-07-08 17:03:03 -0500)
+A blank line here would be nice for formatting consistency...
 
-are available in the Git repository at:
+>+	spi_gpio: spi-gpio {
+>+		status =3D "okay";
+>+		compatible =3D "spi-gpio";
+>+		#address-cells =3D <1>;
+>+		#size-cells =3D <0>;
+>+
+>+		gpio-sck =3D <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
+>+		gpio-mosi =3D <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
+>+		gpio-miso =3D <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
+>+		num-chipselects =3D <1>;
+>+		cs-gpios =3D <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
+>+
+>+		tpmdev@0 {
+>+			compatible =3D "tcg,tpm_tis-spi";
+>+			spi-max-frequency =3D <33000000>;
+>+			reg =3D <0>;
+>+		};
+>+	};
+>+
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.20-2
+...and this one could be removed.
 
-for you to fetch changes up to be497abe19bf08fba549dd236624e7bb90597323:
+>+};
+>+
+>+&mac3 {
+>+	status =3D "okay";
+>+
+>+	pinctrl-names =3D "default";
+>+	pinctrl-0 =3D <&pinctrl_rmii4_default>;
+>+	no-hw-checksum;
+>+	use-ncsi;
+>+	mlx,multi-host;
+>+	ncsi-ctrl,start-redo-probe;
+>+	ncsi-ctrl,no-channel-monitor;
+>+	ncsi-package =3D <1>;
+>+	ncsi-channel =3D <1>;
+>+	ncsi-rexmit =3D <1>;
+>+	ncsi-timeout =3D <2>;
+>+};
+>+
+>+&uart1 {
+>+	status =3D "okay";
+>+};
+>+
+>+&uart2 {
+>+	status =3D "okay";
+>+};
+>+
+>+&uart3 {
+>+	status =3D "okay";
+>+};
+>+
+>+&uart4 {
+>+	status =3D "okay";
+>+};
+>+
+>+&uart5 {
+>+	status =3D "okay";
+>+	compatible =3D "snps,dw-apb-uart";
+>+};
+>+
+>+&wdt1 {
+>+	status =3D "okay";
+>+	pinctrl-names =3D "default";
+>+	pinctrl-0 =3D <&pinctrl_wdtrst1_default>;
+>+	aspeed,reset-type =3D "soc";
+>+	aspeed,external-signal;
+>+	aspeed,ext-push-pull;
+>+	aspeed,ext-active-high;
+>+	aspeed,ext-pulse-duration =3D <256>;
+>+};
+>+
+>+&rtc {
+>+	status =3D "okay";
+>+};
+>+
+>+&fmc {
+>+	status =3D "okay";
+>+	flash@0 {
+>+		status =3D "okay";
+>+		m25p,fast-read;
+>+		label =3D "spi0.1";
+>+		spi-max-frequency =3D <50000000>;
+>+		#include "openbmc-flash-layout-128.dtsi"
+>+	};
+>+	flash@1 {
+>+		status =3D "okay";
+>+		m25p,fast-read;
+>+		label =3D "spi0.0";
+>+		spi-max-frequency =3D <50000000>;
+>+		#include "openbmc-flash-layout.dtsi"
+>+	};
 
-  arm64: dts: qcom: Add support for Xiaomi Mi Mix2s (2022-07-20 13:08:42 -0500)
+The labels on these look backwards from what I'd guess was probably
+intended (flash@0 is spi0.1 and flash@1 is spi0.0).
 
-----------------------------------------------------------------
-More Qualcomm ARM64 DTS updates for v5.20
+>+};
+>+
+>+&i2c0 {
+>+	//Host1 IPMB bus
 
-Related to SDM845, the Xiaomi Mi Mix2s is introduced, the DB845c on
-SDM845 gains support for the second GPI DMA controller and has the GENI
-I2C and SPI instances wired up to their respective GPI DMA controller.
+While it's not currently 100% consistent, I think the generally
+preferred style is to put a space after '//' (here and elsewhere).
 
-QCS404 USB controller and PHY assignment is corrected and IPQ8074 gains
-APCS definition to handle outgoing IPC interrupts.
+>+	status =3D "okay";
+>+	multi-master;
+>+	ipmb0@10 {
+>+		compatible =3D "ipmb-dev";
+>+		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+>+		i2c-protocol;
+>+	};
+>+};
+>+
+>+&i2c1 {
+>+	//Host2 IPMB bus
+>+	status =3D "okay";
+>+	multi-master;
+>+	ipmb1@10 {
+>+		compatible =3D "ipmb-dev";
+>+		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+>+		i2c-protocol;
+>+	};
+>+};
+>+
+>+&i2c2 {
+>+	//Host3 IPMB bus
+>+	status =3D "okay";
+>+	multi-master;
+>+	ipmb2@10 {
+>+		compatible =3D "ipmb-dev";
+>+		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+>+		i2c-protocol;
+>+	};
+>+};
+>+
+>+&i2c3 {
+>+	//Host1 IPMB bus
+>+	status =3D "okay";
+>+	multi-master;
+>+	ipmb3@10 {
+>+		compatible =3D "ipmb-dev";
+>+		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+>+		i2c-protocol;
+>+	};
+>+};
+>+
+>+&i2c4 {
+>+	status =3D "okay";
+>+};
+>+
+>+&i2c5 {
+>+	status =3D "okay";
+>+};
+>+
+>+&i2c6 {
+>+	status =3D "okay";
+>+};
+>+
+>+&i2c7 {
+>+	status =3D "okay";
+>+};
+>+
+>+&i2c8 {
+>+	//NIC SENSOR TEMP
+>+	status =3D "okay";
+>+	tmp421@1f {
+>+		compatible =3D "ti,tmp421";
+>+		reg =3D <0x1f>;
+>+	};
+>+};
+>+
+>+&i2c9 {
+>+	// Debug-Card IPMB bus
+>+	status =3D "okay";
+>+	multi-master;
+>+	ipmb9@30 {
+>+		compatible =3D "ipmb-dev";
+>+		reg =3D <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
+>+		i2c-protocol;
+>+	};
+>+};
+>+
+>+&i2c10 {
+>+	status =3D "okay";
+>+};
+>+
+>+&i2c11 {
+>+	status =3D "okay";
+>+	//FRU EEPROM
+>+	eeprom@51 {
+>+		compatible =3D "atmel,24c64";
+>+		reg =3D <0x51>;
+>+		pagesize =3D <32>;
+>+	};
+>+};
+>+
+>+&i2c12 {
+>+	status =3D "okay";
+>+	//INLET TEMP
+>+	tmp75@4e {
+>+		compatible =3D "ti,tmp75";
+>+		reg =3D <0x4e>;
+>+	};
+>+	//OUTLET TEMP
+>+	tmp75@4f {
+>+		compatible =3D "ti,tmp75";
+>+		reg =3D <0x4f>;
+>+	};
+>+};
+>+
+>+&i2c13 {
+>+	status =3D "okay";
+>+};
+>+
+>+&adc0 {
+>+	ref_voltage =3D <2500>;
+>+	status =3D "okay";
+>+
+>+	pinctrl-0 =3D <&pinctrl_adc0_default &pinctrl_adc1_default
+>+		&pinctrl_adc2_default &pinctrl_adc3_default
+>+		&pinctrl_adc4_default &pinctrl_adc5_default
+>+		&pinctrl_adc6_default &pinctrl_adc7_default>;
+>+};
+>+
+>+&adc1 {
+>+	ref_voltage =3D <2500>;
+>+	status =3D "okay";
+>+
+>+	pinctrl-0 =3D <&pinctrl_adc8_default &pinctrl_adc9_default
+>+		&pinctrl_adc10_default &pinctrl_adc11_default
+>+		&pinctrl_adc12_default &pinctrl_adc13_default>;
+>+};
 
-Lastly a range of Devicetree validation issues are addressed.
+Missing blank line.
 
-----------------------------------------------------------------
-Bhupesh Sharma (2):
-      arm64: dts: qcom: qrb5165-rb5: Fix 'dtbs_check' error for lpg nodes
-      arm64: dts: qcom: qrb5165-rb5: Fix 'dtbs_check' error for led nodes
-
-Bjorn Andersson (4):
-      arm64: dts: qcom: sc8280xp: Add lost ranges for timer
-      arm64: dts: qcom: sdm845: Fill in GENI DMA references
-      arm64: dts: qcom: sdm845-db845c: Enable gpi_dma1
-      arm64: dts: qcom: sdm845-db845c: Specify a i2c bus clocks
-
-Dmitry Baryshkov (9):
-      arm64: dts: qcom: sdm845: rename DPU device node
-      arm64: dts: qcom: sc7180: rename DPU device node
-      arm64: dts: qcom: sm8250: rename DPU device node
-      arm64: dts: qcom: sc7180: split register block for DP controller
-      arm64: dts: qcom: sc7180: drop #clock-cells from displayport-controller
-      arm64: dts: qcom: sc7280: split register block for DP controller
-      arm64: dts: qcom: sc7280: drop #clock-cells from displayport-controller
-      arm64: dts: qcom: sc7280: drop address/size-cells from eDP node
-      arm64: dts: qcom: sc7280: drop unused clocks from eDP node
-
-Johan Hovold (5):
-      arm64: dts: qcom: sc8280xp: fix usb_1 ssphy irq
-      arm64: dts: qcom: sc8280xp: fix USB clock order and naming
-      arm64: dts: qcom: sc8280xp: fix USB interrupts
-      arm64: dts: qcom: sc7280: reorder USB interrupts
-      arm64: dts: qcom: reorder USB interrupts
-
-Krzysztof Kozlowski (18):
-      dt-bindings: arm: qcom: fix Alcatel OneTouch Idol 3 compatibles
-      dt-bindings: arm: qcom: fix Longcheer L8150 compatibles
-      dt-bindings: arm: qcom: fix MSM8916 MTP compatibles
-      dt-bindings: arm: qcom: fix MSM8994 boards compatibles
-      dt-bindings: arm: qcom: add missing MSM8916 board compatibles
-      dt-bindings: arm: qcom: add missing MSM8994 board compatibles
-      dt-bindings: arm: qcom: add missing SM8150 board compatibles
-      dt-bindings: arm: qcom: add missing SM8250 board compatibles
-      dt-bindings: arm: qcom: add missing SM8350 board compatibles
-      dt-bindings: vendor-prefixes: add Shift GmbH
-      dt-bindings: arm: qcom: add missing MSM8998 board compatibles
-      dt-bindings: arm: qcom: add missing MSM8992 board compatibles
-      dt-bindings: arm: qcom: add missing QCS404 board compatibles
-      dt-bindings: arm: qcom: add missing SDM630 board compatibles
-      dt-bindings: arm: qcom: add missing SDM636 board compatibles
-      dt-bindings: arm: qcom: add missing SDM845 board compatibles
-      dt-bindings: arm: qcom: add missing SM6125 board compatibles
-      dt-bindings: arm: qcom: add missing SM6350 board compatibles
-
-Kuogee Hsieh (1):
-      arm64: dts: qcom: sc7280: delete vdda-1p2 and vdda-0p9 from both dp and edp
-
-Manivannan Sadhasivam (1):
-      arm64: dts: qcom: sc8280xp: Fix PMU interrupt
-
-Marijn Suijten (2):
-      arm64: dts: qcom: sm6350: Replace literal rpmhpd indices with constants
-      arm64: dts: qcom: msm8998: Make regulator voltages multiple of step-size
-
-Molly Sophia (2):
-      dt-bindings: arm: qcom: Add Xiaomi Mi Mix2s bindings
-      arm64: dts: qcom: Add support for Xiaomi Mi Mix2s
-
-Parikshit Pareek (1):
-      arm64: dts: qcom: sc8280xp: fix the smmu interrupt values
-
-Robert Marko (3):
-      arm64: dts: qcom: ipq8074: add APCS node
-      arm64: dts: qcom: ipq8074: add #size/address-cells to DTSI
-      arm64: dts: qcom: ipq8074: add interrupt-parent to DTSI
-
-Srinivasa Rao Mandadapu (1):
-      arm64: dts: qcom: sc7280: Move wcd specific pin conf to common file
-
-Steev Klimaszewski (2):
-      arm64: dts: qcom: sc8280xp: add missing 300MHz
-      arm64: dts: sdm850: Remove unnecessary turbo-mode
-
-Stefan Hansson (1):
-      dt-bindings: arm: qcom: Document lg,judyln and lg,judyp devices
-
-Sumit Garg (1):
-      arm64: dts: qcom: qcs404: Fix incorrect USB2 PHYs assignment
-
- Documentation/devicetree/bindings/arm/qcom.yaml    | 111 ++-
- .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       |   4 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- arch/arm64/boot/dts/qcom/Makefile                  |   1 +
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts          |   3 -
- arch/arm64/boot/dts/qcom/ipq8074-hk10.dtsi         |   5 -
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  12 +
- .../qcom/msm8998-sony-xperia-yoshino-poplar.dts    |  10 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi               |   4 +-
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |  10 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               |   9 +-
- .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   |  64 ++
- arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts  |  61 --
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |   2 -
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi         |   3 -
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  34 +-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |  40 +-
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |   6 +
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 762 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sdm845.dtsi               |  92 ++-
- arch/arm64/boot/dts/qcom/sdm850.dtsi               |   1 -
- arch/arm64/boot/dts/qcom/sm6350.dtsi               |   4 +-
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |  22 +-
- arch/arm64/boot/dts/qcom/sm8350.dtsi               |  20 +-
- 24 files changed, 1131 insertions(+), 151 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+>+&ehci0 {
+>+	status =3D "okay";
+>+};
+>+
+>+&ehci1 {
+>+	status =3D "okay";
+>+};
+>+
+>+&uhci {
+>+	status =3D "okay";
+>+};
+>--=20
+>2.17.1
+>=
