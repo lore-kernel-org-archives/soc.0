@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA5CC433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 23:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1D0EC43334
+	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 23:11:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 23EA0C341C7; Wed, 20 Jul 2022 23:06:52 +0000 (UTC)
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	id 68D47C3411E; Wed, 20 Jul 2022 23:11:15 +0000 (UTC)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3F27DC341CA
-	for <soc@kernel.org>; Wed, 20 Jul 2022 23:06:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F27DC341CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 10F80C341CB
+	for <soc@kernel.org>; Wed, 20 Jul 2022 23:11:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 10F80C341CB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f50.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso15294749otv.3
-        for <soc@kernel.org>; Wed, 20 Jul 2022 16:06:51 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id r22-20020a056830419600b0061c6edc5dcfso15262884otu.12
+        for <soc@kernel.org>; Wed, 20 Jul 2022 16:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9l1HeQDiotjqJIv5Il7K5ATLOcCGvQ53f+vdiVnWUvY=;
-        b=Qk7zS8c0PgkoGxfjIoIPmT+Jj4O8j4dX9JWQkAgBDhsVZXps/h11yjwALceKU+NH+l
-         dsIiRw1a3LVLZevDTSq+Fe7L+zTC+XPHsuLKLoPsrpUHlZ6fsT1eG74L9eqI/Ai9mr7b
-         ptJBvi3+zbz5ba+VKs9eZrjcR1WK1i9haqEZSJwCeugcBNHjkCQ/cT0UgHfQTbC+j0NN
-         vhVevwg7WcsHFIyaVDb1Mr4iEtU79QdVdPSE7ZuJ0ZLIIcAo26ne8443pTjoeByU5/+A
-         N+KGnUFnM5NPUs+UmglRENjS+ek2lYQust8wTTXCn0F7i9MdnH+iZzssEk/ym5qwB/5l
-         r+9Q==
+        bh=PWbj+WdashVU5oWstvpqXfj4EqNczmYpHmyzxnmVob4=;
+        b=NRDLscyIJxUh++e16LUmbeGMzIF3XUqFrkWSFkTTz+OB0jjM0EJ9MgPI97I/79dWfx
+         f5JfBoOg9HS+RtC2ucaQxsBn1ibi20+bDZP4EHZeoYcDMBIOkgAqd/BCkrxteg57bgnQ
+         pdVS5TWDsj8AGzTW0gxbOgiZkmfYNKLWF8LK2/551GX37jaQ074RR9EP8QZzn4QPxenh
+         LItYj1fFppy5lOxtKmErLfhlauoD3l283y/MMuFlSEPuN/JhhtcOEFurnir1J+gx530Z
+         pSpidCQ29E/dZrxbq+Z3yeFx8329JRggv/8qJfAwjDmSb0vS0zA5y4AYNhdDgDjxabmM
+         WOrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9l1HeQDiotjqJIv5Il7K5ATLOcCGvQ53f+vdiVnWUvY=;
-        b=JGkC6aFNX4owPzAc87Xc9i/fslHDnwBHHjnLKNsj+RI/k/zqJhGx+Fx5HezoHPIWPE
-         xgoFYjB+JfX/UFH8zOmm+t5LcPkl99uL0hlDBZ4sQ+KzBadHWy+3gMj1yYjNwebxfMMY
-         np89E+BZJNJ8PosxWuI9NvMLJ6wYwV4m2G0mph3wSNX5NKYSTplJJwj+HanlmGrWWx17
-         70lwWYQ2nTXY+HttFoTLFVkRypF5+l2gyS72yN4B2miwqZGua/oiYWRGlE5RtjbvIouj
-         FPg56X+i+YpTTu1u4sZ8ENKTPoG3OSHe3Uenpy3TCvb4yl5/1nrxMnkAnIWs0JrdXpuG
-         BXnA==
-X-Gm-Message-State: AJIora9LtHKk6Lp7lcBI1u3YoaHB9AyCIgrbvseWmch14IOWSyuPS4uq
-	X5J0rvKMiWcSYB43My9cWKz1dQ==
-X-Google-Smtp-Source: AGRyM1teuAqc54sPbqVd5WQINGjAiYqQewnHwR8RmMeDUacYjp5xeL+BxSYUyX17DbixxSurTrHW2w==
-X-Received: by 2002:a05:6830:314f:b0:61c:bb6e:331 with SMTP id c15-20020a056830314f00b0061cbb6e0331mr2864558ots.283.1658358410185;
-        Wed, 20 Jul 2022 16:06:50 -0700 (PDT)
+        bh=PWbj+WdashVU5oWstvpqXfj4EqNczmYpHmyzxnmVob4=;
+        b=sbAA4XqCQ6K4pGyAzLuvU3RwZ9Fhs38xmC/ZGvk+4pPWVJm10Rq2TkJ4lyJoQuSMHi
+         HnmkD0yeEfZR61niKTjCLg/+9F+FhqZxqLzufzDUCv5mVXkDW33o/81F39qMJ5a/Wl4k
+         aXleQ2BLOhn3f2URqxq5D5sTgxG5ZswwmOY3bkv+v3JeAS7R0V+90fO5ZUwBgukeF5q2
+         i4T43oyTrh0PBtjOqQxr/PZVB/RkcZ5ozOId4Qd9EXDcQmSSVFwQVuBTYkB9HilkSXQE
+         z0I8giIx7nkv/ZR4EN/KM83/Z9zNb9H/Q8MSqThjUSDZwfFgMudnrb5orXR8OsL1EpIO
+         bdxw==
+X-Gm-Message-State: AJIora/at3ilyI0vzTz7buT2m1f/7AZDuN+6r0PKtKpWkkk7Ga7B9H/h
+	Ehiwn1BAx6pB1wWfn5MO2awuPg==
+X-Google-Smtp-Source: AGRyM1uVaxwaNIyQs36PmfqQl7+MUh123utCPioKOiWOQj/Ta/xyBierJyzhy+B43fXyB3OJCBMfRw==
+X-Received: by 2002:a9d:6385:0:b0:61c:81ad:8817 with SMTP id w5-20020a9d6385000000b0061c81ad8817mr12191172otk.218.1658358673129;
+        Wed, 20 Jul 2022 16:11:13 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r1-20020acaa801000000b0032e548d96e0sm20976oie.23.2022.07.20.16.06.49
+        by smtp.gmail.com with ESMTPSA id v188-20020a4a5ac5000000b00435b646f160sm165522ooa.5.2022.07.20.16.11.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:06:49 -0700 (PDT)
+        Wed, 20 Jul 2022 16:11:12 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -59,80 +59,90 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Parikshit Pareek <quic_ppareek@quicinc.com>,
-	Yang Li <yang.lee@linux.alibaba.com>
-Subject: [GIT PULL] More Qualcomm driver changes for v5.20
-Date: Wed, 20 Jul 2022 18:06:48 -0500
-Message-Id: <20220720230648.2113609-1-bjorn.andersson@linaro.org>
+	Christian Marangi <ansuelsmth@gmail.com>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Luca Weiss <luca@z3ntu.xyz>,
+	Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [GIT PULL] More Qualcomm DTS updates for v5.20
+Date: Wed, 20 Jul 2022 18:11:11 -0500
+Message-Id: <20220720231111.2114025-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit b9c2ae6cac403dee3195fda9eb28d8ee733b225b:
+The following changes since commit 864cfdeb76735909a9afcc314416ccaa1ce82a1a:
 
-  soc: qcom: icc-bwmon: Add bandwidth monitoring driver (2022-07-06 15:57:51 -0500)
+  ARM: dts: qcom: msm8974: rename GPU's OPP table node (2022-07-06 16:04:22 -0500)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.20-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-5.20-2
 
-for you to fetch changes up to c23b7d4967892430674f03f97d5fbd2f37a6732a:
+for you to fetch changes up to aa7fd3bb6017b343585e97a909f9b7d2fe174018:
 
-  dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller (2022-07-20 10:12:03 -0500)
-
-----------------------------------------------------------------
-More Qualcomm driver changes for v5.20
-
-This adds support for booting secondary cores, SPM, SMD-RPM and RPM
-power-domain support for the MSM8909 platform.
-
-It drops an unnecessary print in icc-bwmon, corrects SA8540P entries in
-socinfo and a Kconfig build dependency for QCOM_RPMPD.
-
-Lastly it continues to clean up up the Devicetree bindings for the
-Qualcomm drivers.
+  ARM: dts: qcom: add rpmcc missing clocks for apq/ipq8064 and msm8660 (2022-07-18 19:13:44 -0500)
 
 ----------------------------------------------------------------
-Konrad Dybcio (1):
-      soc: qcom: Make QCOM_RPMPD depend on PM
+More Qualcomm DTS updates for v5.20
 
-Krzysztof Kozlowski (3):
-      dt-bindings: soc: qcom,rpmh-rsc: simplify qcom,tcs-config
-      dt-bindings: soc: qcom: aoss: document qcom,sm8450-aoss-qmp
-      dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller
+This adds an additional GSBI, hwclock, smem and tsens nodes for IPQ8064,
+in addition to fixing up and improving the existing descriptions of the
+platform.
 
-Parikshit Pareek (1):
-      soc: qcom: socinfo: Fix the id of SA8540P SoC
+USB interrupts are reordered to please the Devicetree binding.
 
-Stephan Gerhold (8):
-      dt-bindings: soc: qcom: smd-rpm: Add MSM8909
-      soc: qcom: smd-rpm: Add compatible for MSM8909
-      dt-bindings: power: qcom-rpmpd: Add MSM8909 power domains
-      soc: qcom: rpmpd: Add compatible for MSM8909
-      dt-bindings: soc: qcom: spm: Add MSM8909 CPU compatible
-      soc: qcom: spm: Add CPU data for MSM8909
-      dt-bindings: arm: cpus: Document "qcom,msm8909-smp" enable-method
-      ARM: mach-qcom: Add support for MSM8909
+The Light Pulse Generator is defined for PM8941 and LEDs are defined for
+the FairPhone2, Nexus 5 and Sony Xperia devices.
 
-Yang Li (1):
-      soc: qcom: icc-bwmon: Remove unnecessary print function dev_err()
+----------------------------------------------------------------
+André Almeida (1):
+      ARM: dts: qcom: msm8974-hammerhead: Add notification LED
 
- Documentation/devicetree/bindings/arm/cpus.yaml    |  1 +
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
- .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |  1 +
- .../bindings/soc/qcom/qcom,rpmh-rsc.yaml           | 33 ++++++++--------------
- .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |  4 +++
- .../devicetree/bindings/soc/qcom/qcom,spm.yaml     |  1 +
- arch/arm/mach-qcom/Kconfig                         |  4 +++
- arch/arm/mach-qcom/platsmp.c                       |  1 +
- drivers/soc/qcom/Kconfig                           |  1 +
- drivers/soc/qcom/icc-bwmon.c                       |  4 +--
- drivers/soc/qcom/rpmpd.c                           |  1 +
- drivers/soc/qcom/smd-rpm.c                         |  1 +
- drivers/soc/qcom/socinfo.c                         |  3 +-
- drivers/soc/qcom/spm.c                             | 14 +++++++++
- include/dt-bindings/power/qcom-rpmpd.h             |  7 +++++
- 15 files changed, 51 insertions(+), 26 deletions(-)
+Bjorn Andersson (2):
+      ARM: dts: qcom: Add LPG node to pm8941
+      ARM: dts: qcom: msm8974-sony: Enable LPG
+
+Christian Marangi (11):
+      ARM: dts: qcom: ipq8064: add multiple missing pin definition
+      ARM: dts: qcom: ipq8064: add gsbi6 missing definition
+      ARM: dts: qcom: ipq8064: add specific dtsi with smb208 rpm regulators
+      ARM: dts: qcom: ipq8064: add missing snps,dwmac compatible for gmac
+      ARM: dts: qcom: ipq8064: disable usb phy by default
+      ARM: dts: qcom: ipq8064: reduce pci IO size to 64K
+      ARM: dts: qcom: ipq8064: fix and add some missing gsbi node
+      ARM: dts: qcom: ipq8064: add speedbin efuse nvmem node
+      ARM: dts: qcom: ipq8064: add missing hwlock
+      ARM: dts: qcom: ipq8064: add missing smem compatible
+      ARM: dts: qcom: add rpmcc missing clocks for apq/ipq8064 and msm8660
+
+Dmitry Baryshkov (1):
+      ARM: dts: qcom: apq8064: create tsens device node
+
+Johan Hovold (1):
+      ARM: dts: qcom: sdx65: reorder USB interrupts
+
+Luca Weiss (1):
+      ARM: dts: qcom: msm8974-FP2: Add notification LED
+
+Stephan Gerhold (1):
+      ARM: dts: qcom: msm8974: Disable remoteprocs by default
+
+ arch/arm/boot/dts/qcom-apq8064.dtsi                |  27 +++-
+ arch/arm/boot/dts/qcom-ipq8064-ap148.dts           |   6 -
+ arch/arm/boot/dts/qcom-ipq8064-rb3011.dts          |   9 --
+ arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi         |  37 +++++
+ arch/arm/boot/dts/qcom-ipq8064.dtsi                | 162 ++++++++++++++++++++-
+ arch/arm/boot/dts/qcom-msm8660.dtsi                |   4 +-
+ .../dts/qcom-msm8974-lge-nexus5-hammerhead.dts     |  30 ++++
+ .../boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi   |  30 ++++
+ arch/arm/boot/dts/qcom-msm8974.dtsi                |   4 +
+ .../arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts |  32 ++++
+ arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts |   2 +
+ .../qcom-msm8974pro-sony-xperia-shinano-castor.dts |  30 ++++
+ arch/arm/boot/dts/qcom-pm8941.dtsi                 |  10 ++
+ arch/arm/boot/dts/qcom-sdx65.dtsi                  |  10 +-
+ 14 files changed, 357 insertions(+), 36 deletions(-)
+ create mode 100644 arch/arm/boot/dts/qcom-ipq8064-smb208.dtsi
