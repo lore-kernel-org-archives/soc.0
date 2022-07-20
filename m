@@ -1,372 +1,640 @@
-Return-Path: <SRS0=a6rv=XZ=gmail.com=logananth13.hcl@kernel.org>
+Return-Path: <SRS0=ef9U=XZ=eu-central-1.amazonses.com=010701821c3da8ce-97f5f982-f141-49d6-9fb8-3920d4934ed1-000000@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 069AFC433EF
-	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 10:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ACD8C433EF
+	for <soc@archiver.kernel.org>; Wed, 20 Jul 2022 15:33:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BF46CC341C7; Wed, 20 Jul 2022 10:53:41 +0000 (UTC)
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 47938C3411E; Wed, 20 Jul 2022 15:33:02 +0000 (UTC)
+Received: from b224-57.smtp-out.eu-central-1.amazonses.com (b224-57.smtp-out.eu-central-1.amazonses.com [69.169.224.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ACDFDC3411E;
-	Wed, 20 Jul 2022 10:53:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ACDFDC3411E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id pc13so427007pjb.4;
-        Wed, 20 Jul 2022 03:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=Mhscre5ApuF2HLF9SvgHNFOW7TSIpt1lI87XGb9QgEk=;
-        b=Vx3ArBaj06YNGRzw3bIkp29i3TbvBW7AhKEroeY0bdYRJCS5ylMDCFwYOF6t0w4/+5
-         J4aNvyjFyvoHsd3J4jg3wWRU6cpdAzSKPMYmlbpZ5qNnrrKwpfPs5ls3GHT56+B76qlX
-         rsUFutlvRiYpP1gStiI9isgWRPkf3Asowi/rHFO8hWCZX0OkyotILnidhK16RdCRvMvv
-         KPr1eDl4quaXmk7fFAL5dx/6o+vblbAVM6QPVQ4jk0qUhfT6uGl7RnPOpDmNIKzbALBw
-         9ZC9F9sqSsqtgHD7xS86eXssorW8nnNUGBNYMamNxQNBjGtt7R805dr4qLjkGOGOQD2N
-         D+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=Mhscre5ApuF2HLF9SvgHNFOW7TSIpt1lI87XGb9QgEk=;
-        b=jbXLLOnNZ+rrpahrHZBntJfos5lFWyml+pRiJs2EjULViMooGMdlxjBVJW5KCk3+JW
-         yUmR/Syxla4yQ0/He6CAhY0UVap5P4zxaLxJLnXTgPJUgJm1PT1Z2TesF5xf4HhkyCtd
-         16eCx5+ivtFpsFgHWkivBM4VwMe9tzCSaeL/cXnSqwlfKjTiAr6fJPLMqhL1DTJ5DcHl
-         to5gcREJmjlVJqoRtdsKKgreq1qhC9Zh793Ti5z1Oo7ONZ2O44cZlvhOejejOygp5pnf
-         DsWrD96AdecqDamZp0RyJBdfEYfTHrylEC1fgmfhK+sVrW9MbIHQeno9oy+Aq2hxvqbX
-         PGmg==
-X-Gm-Message-State: AJIora9dzKbHg8umZjQ2+pDfhgbkLBkBJPWsTs/5s8iwR2qDFSaQ3GM0
-	F5vGE7VWt4E2ws86taYqGms=
-X-Google-Smtp-Source: AGRyM1umoS76A2PCTrBwJuvfac+pH1JwJoVe1Fzduqb2TLUkr2jdunjgEYihu2f1l0JRsXX0ThtPLQ==
-X-Received: by 2002:a17:90a:6e46:b0:1f2:f04:a173 with SMTP id s6-20020a17090a6e4600b001f20f04a173mr4639203pjm.23.1658314419816;
-        Wed, 20 Jul 2022 03:53:39 -0700 (PDT)
-Received: from logan-ThinkPad-T14-Gen-1 ([59.93.6.68])
-        by smtp.gmail.com with ESMTPSA id t186-20020a625fc3000000b00528c3ad8e09sm13328684pfb.66.2022.07.20.03.53.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Jul 2022 03:53:39 -0700 (PDT)
-From: Logananth Sundararaj <logananth13.hcl@gmail.com>
-X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
-Date: Wed, 20 Jul 2022 16:23:31 +0530
+	by smtp.kernel.org (Postfix) with ESMTPS id 1B518C341C7
+	for <soc@kernel.org>; Wed, 20 Jul 2022 15:33:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B518C341C7
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=ingatlan.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=eu-central-1.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=obj6q5jgj3wioecvu5dhs3wq3pltmime; d=ingatlan.com; t=1658331179;
+	h=Message-ID:Date:Subject:From:Reply-To:To:MIME-Version:Content-Type;
+	bh=2pPCpBeCuxD40/rLv/a1rQcgUN3+osGzf06hKB5Eemk=;
+	b=T1GTOuPg/BpredSGDqBc8e7ndWCsw/3K2LVd1mE+inGr7VM9+5IOKE/rFCx6UFJ4
+	Y/rkeZC/I6YHV95/SA6eyondlYfstTs4sNI1oXpozKtE1ebrc5Qhrx4yuI1/3TRYPE8
+	SdBp7ukreoSTdotuzk9UhefBiyS72icJuCY9YJhA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=54ecsf3zk7z4mwxwwox7z7bg6e5gwjsz; d=amazonses.com; t=1658331179;
+	h=Message-ID:Date:Subject:From:Reply-To:To:MIME-Version:Content-Type:Feedback-ID;
+	bh=2pPCpBeCuxD40/rLv/a1rQcgUN3+osGzf06hKB5Eemk=;
+	b=gvwVyS2MMatvT9gqqlnoyYJy94UW7SKsVyIWuRs19/vtSJEw9e2kY4q6CGEPDcEb
+	bistJNTvjFSrsPhlGxjcIRNwMXgJ4zWBw96TCW8SLr0tUFzCyfYi3dh1DrGehvt42AU
+	V1smSC2nZoikkog5AfKM030yKuxR9QFViEbu76dY=
+Message-ID: <010701821c3da8ce-97f5f982-f141-49d6-9fb8-3920d4934ed1-000000@eu-central-1.amazonses.com>
+Date: Wed, 20 Jul 2022 15:32:59 +0000
+Subject: =?utf-8?Q?H=C3=ADrlev=C3=A9l_feliratkoz=C3=A1s_meger=C5=91?=
+ =?utf-8?Q?s=C3=ADt=C3=A9s?=
+From: info@ingatlan.com
+Reply-To: info@ingatlan.com
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org
-Cc: garnermic@gmail.com, thangavel.k@hcl.com, naveen.mosess@hcl.com,
-	patrick@stwcx.xyz, velumanit@hcl.com
-Subject: [PATCH v4] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
-Message-ID: <20220720105331.GA23472@logan-ThinkPad-T14-Gen-1>
+To: soc@kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/alternative;
+ boundary="_=_swift_1658331179_945f99f45a10340967217170657ede38_=_"
+Feedback-ID: 1.eu-central-1.0ZHDp8OrfHKgz/YFKJoTxc5CjElNubHB4mrp02lYW3A=:AmazonSES
+X-SES-Outgoing: 2022.07.20-69.169.224.57
 
-The Yosemite V3.5 is a facebook multi-node server
-platform that host four OCP server. The BMC
-in the Yosemite V3.5 platform based on AST2600 SoC.
 
-This patch adds linux device tree entry related to
-Yosemite V3.5 specific devices connected to BMC SoC.
+--_=_swift_1658331179_945f99f45a10340967217170657ede38_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+H=C3=ADrlev=C3=A9l feliratkoz=C3=A1s meger=C5=91s=C3=ADt=C3=A9s
 
----
---- v4 - Bootagrs and memory removed.
---- v3 - Addressed v2 patch comments.
---- v2 - Enabled i2c drivers.
---- v1 - Initial draft.
----
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 260 ++++++++++++++++++
- 2 files changed, 261 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+Kedves=
+ =E2=9D=A4=EF=B8=8F All the girls from next door are here with their cams! =
+Visit Cam: https://letsg0dancing.page.link/go?wivv3 =E2=9D=A4=EF=B8=8F!
+=
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e0934180724..58add093e5fb 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
- 	aspeed-bmc-facebook-elbert.dtb \
-+	aspeed-bmc-facebook-fby35.dtb \
- 	aspeed-bmc-facebook-fuji.dtb \
- 	aspeed-bmc-facebook-galaxy100.dtb \
- 	aspeed-bmc-facebook-minipack.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-new file mode 100644
-index 000000000000..05efba7117a8
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
-@@ -0,0 +1,260 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2020 Facebook Inc.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/i2c/i2c.h>
-+
-+/ {
-+	model = "Facebook fby35";
-+	compatible = "facebook,fby35", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			<&adc1 4>, <&adc1 5>, <&adc1 6>;
-+	};
-+	spi_gpio: spi-gpio {
-+		status = "okay";
-+		compatible = "spi-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
-+		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
-+		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
-+		num-chipselects = <1>;
-+		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
-+
-+		tpmdev@0 {
-+			compatible = "tcg,tpm_tis-spi";
-+			spi-max-frequency = <33000000>;
-+			reg = <0>;
-+		};
-+	};
-+
-+};
-+
-+&mac3 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	no-hw-checksum;
-+	use-ncsi;
-+	mlx,multi-host;
-+	ncsi-ctrl,start-redo-probe;
-+	ncsi-ctrl,no-channel-monitor;
-+	ncsi-package = <1>;
-+	ncsi-channel = <1>;
-+	ncsi-rexmit = <1>;
-+	ncsi-timeout = <2>;
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+	compatible = "snps,dw-apb-uart";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+	aspeed,reset-type = "soc";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+	aspeed,ext-pulse-duration = <256>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.1";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout-128.dtsi"
-+	};
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "spi0.0";
-+		spi-max-frequency = <50000000>;
-+		#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&i2c0 {
-+	//Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb0@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c1 {
-+	//Host2 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb1@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c2 {
-+	//Host3 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb2@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c3 {
-+	//Host1 IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb3@10 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	//NIC SENSOR TEMP
-+	status = "okay";
-+	tmp421@1f {
-+		compatible = "ti,tmp421";
-+		reg = <0x1f>;
-+	};
-+};
-+
-+&i2c9 {
-+	// Debug-Card IPMB bus
-+	status = "okay";
-+	multi-master;
-+	ipmb9@30 {
-+		compatible = "ipmb-dev";
-+		reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
-+		i2c-protocol;
-+	};
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+	//FRU EEPROM
-+	eeprom@51 {
-+		compatible = "atmel,24c64";
-+		reg = <0x51>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	//INLET TEMP
-+	tmp75@4e {
-+		compatible = "ti,tmp75";
-+		reg = <0x4e>;
-+	};
-+	//OUTLET TEMP
-+	tmp75@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	ref_voltage = <2500>;
-+	status = "okay";
-+
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default>;
-+};
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
--- 
-2.17.1
+K=C3=B6sz=C3=B6nj=C3=BCk a regisztr=C3=A1ci=C3=B3t a lakopark.ingatlan.c=
+om h=C3=ADrfigyel=C5=91j=C3=A9re.
+
+V=C3=A9gleges=C3=ADt=C3=A9shez k=
+=C3=A9rj=C3=BCk er=C5=91s=C3=ADtsd meg feliratkoz=C3=A1sod az al=C3=A1bbi g=
+ombra kattintva:
+
+FELIRATKOZ=C3=81S MEGER=C5=90S=C3=8DT=C3=89S         =
+                                  =20
+
+=C3=9Cdv=C3=B6zlettel,
+A lak=
+=C3=B3park.ingatlan.com csapata
+
+ingatlan.com =C2=A9 1999-2022
+
+--_=_swift_1658331179_945f99f45a10340967217170657ede38_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns=3D"http://www.=
+w3.org/1999/xhtml" xml:lang=3D"hu" lang=3D"hu">
+<head>
+    <meta http-e=
+quiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8" />
+    <meta=
+ name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1" />=
+
+    <title>H=C3=ADrlev=C3=A9l feliratkoz=C3=A1s meger=C5=91s=C3=ADt=
+=C3=A9s</title>
+</head>
+<style>
+body,
+table,
+tr,
+td,
+img {
+=
+    border: 0;
+    font-size: 0;
+    line-height: 0;
+}
+a {
+    co=
+lor: #0069ff;
+    text-decoration: none;
+}
+a:hover {
+    text-decor=
+ation: underline;
+}
+a img {
+    border: 0;
+    display: block;
+}=
+
+
+body,
+table {
+    font-family: Helvetica, Arial, sans-serif;
+  =
+  font-size: 0;
+    line-height: 0;
+    Margin: 0;
+    padding: 0;
+=
+    width: 100%;
+}
+img {
+    border: 0;
+}
+ol,
+ul {
+    paddin=
+g-left: 30px;
+}
+li {
+    Margin-top: 10px;
+}
+.icom_top_logo {
+ =
+   Margin-bottom: 20px;
+    Margin-top: 20px;
+}
+.outer-container {
+=
+    display: block !important;
+    Margin-left: auto !important;
+    Ma=
+rgin-right: auto !important;
+    max-width: 450px !important;
+    width=
+: 100%;
+}
+.top-box,
+.bottom-box {
+    -webkit-box-shadow: 0 1px 5px=
+ 0 rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2);
+ =
+   box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+.main-container {
+    p=
+adding-left: 6%;
+    padding-right: 6%;
+    width: 100%;
+}
+.bottom-=
+box .main-container {
+    padding-top: 15px;
+    padding-bottom: 15px;=
+
+}
+.preview-message {
+    color: #bbbbbb;
+    font-size: 10px;
+  =
+  line-height: 130%;
+}
+.preview-message p {
+    Margin-bottom: 5px;=
+
+    Margin-top: 15px;
+}
+.font-default,
+.font-title,
+.font-infos =
+{
+    color: #404041;
+}
+.font-default {
+    font-size: 14px;
+    =
+line-height: 130%;
+}
+.font-title {
+    font-size: 24px;
+    font-we=
+ight: bold;
+    line-height: 130%;
+}
+.font-infos {
+    font-size: 1=
+2px;
+    line-height: 145%;
+}
+.font-footer {
+    color: #888888;
+=
+    font-size: 12px;
+    line-height: 145%
+}
+.personalization {
+   =
+ Margin-bottom: 15px;
+    Margin-top: 10px;
+}
+.footer-infos,
+.foote=
+r-contact{
+    Margin-bottom: 15px;
+    Margin-top: 15px;
+}
+.footer=
+-account-info {
+    Margin-bottom: 15px;
+    Margin-top: 20px;
+}
+.f=
+ooter-copyright {
+    Margin-bottom: 40px;
+    Margin-top: 8px;
+}
+.=
+signature {
+    Margin-bottom: 30px;
+    Margin-top: 25px;
+}
+.invis=
+-link {
+    color: #404041;
+    text-decoration: none;
+}
+.invis-lin=
+k:hover {
+    text-decoration: none;
+}
+.account-email {
+    color: =
+#888888;
+}
+
+/* VARIABLE BLOCK STYLES */
+.variable_block {
+    col=
+or: #404041;
+    font-size: 14px;
+    line-height: 130%;
+}
+.variabl=
+e_block > table {
+    Margin-bottom:18px;
+}
+h1 {
+    font-size: 24p=
+x;
+    font-weight: bold;
+    line-height: 120%;
+    Margin-bottom: 1=
+5px;
+    Margin-top: 30px;
+}
+h1:first-child {
+    Margin-top: 0;
+=
+}
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    line-height:=
+ 120%;
+    Margin-bottom: 10px;
+    Margin-top: 10px;
+    text-align:=
+ center;
+}
+h3 {
+    font-size: 18px;
+    margin: 0;
+}
+p {
+   =
+ Margin-top: 0;
+    Margin-bottom: 18px;
+}
+.subtitle_sm {
+    Margi=
+n-bottom: 30px;
+}
+.price-highlight {
+    font-size: 36px;
+    font-=
+weight: bold;
+    line-height: 110%;
+    text-align: center;
+}
+.cov=
+er-img td {
+    background-color: #404041;
+    background-repeat: no-re=
+peat;
+    background-position: 50% 0;
+    background-size: 100% auto;=
+
+    color: #ffffff;
+    font-size: 20px;
+    height: auto;
+    lin=
+e-height: 130%;
+    padding-left: 6%;
+    padding-right: 6%;
+    padd=
+ing-top: 70px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+.cover-=
+heading {
+    font-size: 26px;
+    line-height: 130%;
+    Margin-bott=
+om: 10px;
+    Margin-top: 10px;
+}
+.variable_block table td,
+.variab=
+le_block table th {
+    font-size: 14px;
+    line-height: 130%;
+    v=
+ertical-align: top;
+}
+.variable_block .details-table-2col td,
+.variab=
+le_block .details-table-2col th {
+    padding-bottom: 1px;
+    padding-=
+top: 1px;
+    padding-right: 15px;
+    padding-left: 0;
+}
+.variable=
+_block .details-table-2col td:last-child {
+    font-weight: bold;
+    p=
+adding-right: 0;
+}
+.details-table-2col {
+    color: #404041;
+    wi=
+dth: 100%;
+}
+.variable_block .details-table-2col th {
+    font-weight=
+: normal;
+    padding-bottom: 5px;
+    text-align: left;
+}
+.details=
+-table-2col td:first-child {
+    padding-right: 15px;
+    white-space: =
+nowrap;
+    width: 1px;
+}
+.quote {
+    color: #606061;
+}
+.quote=
+ .details-table-2col {
+    color: #606061;
+}
+.quote-border {
+    bo=
+rder-left: 5px solid #e9eaed;
+    width: 5%;
+}
+.quote-box {
+    pad=
+ding-top: 10px;
+    width: 93%;
+}
+.quote .details-table-2col {
+    =
+Margin-top: 20px;
+}
+.button-container {
+    text-align: center;
+}=
+
+.button-container + p {
+    Margin-top: 30px;
+}
+.cta-button {
+  =
+  background-color: #f1592a;
+    background: #f1592a;
+    background: -=
+moz-linear-gradient(top, #f98e4e 0%, #f86530 100%);
+    background: -webk=
+it-gradient(linear, left top, left bottom, color-stop(0%,#f98e4e), color-st=
+op(100%,#f86530));
+    background: -webkit-linear-gradient(top, #f98e4e 0=
+%,#f86530 100%);
+    background: -o-linear-gradient(top, #f98e4e 0%,#f865=
+30 100%);
+    background: -ms-linear-gradient(top, #f98e4e 0%,#f86530 100=
+%);
+    background: linear-gradient(to bottom, #f98e4e 0%,#f86530 100%);=
+
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=3D=
+'#f98e4e', endColorstr=3D'#f86530',GradientType=3D0 );
+    border: 1px so=
+lid #a44523;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5p=
+x;
+    border-radius: 5px;
+    display: inline-block;
+    Margin-bott=
+om: 0;
+    Margin-top: 12px;
+    Margin-left: auto;
+    Margin-right:=
+ auto;
+    width: auto;
+}
+.cta-button a {
+    -webkit-border-radius=
+: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color=
+: #ffffff;
+    display: inline-block;
+    font-family: Helvetica, Arial=
+, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    line-he=
+ight: 125%;
+    padding: 18px;
+    text-decoration: none;
+}
+.subtit=
+le_sm + .button-container > .cta-button {
+    Margin-top: 0;;
+}
+.cove=
+r-img + tr > .main-container {
+    padding-top: 7%;
+}
+</style>
+<bod=
+y bgcolor=3D"#e9eaed" link=3D"#0069ff" alink=3D"#0069ff" vlink=3D"#0069ff">=
+
+<table width=3D"100%" bgcolor=3D"#e9eaed" border=3D"0" cellpadding=3D"10=
+" cellspacing=3D"0">
+    <tr>
+        <td width=3D"100%" bgcolor=3D"#e9=
+eaed" align=3D"center">
+
+            <!-- OUTER CONTAINER - for layout =
+-->
+            <table width=3D"450" bgcolor=3D"#e9eaed" border=3D"0" cel=
+lpadding=3D"0" cellspacing=3D"0" class=3D"outer-container">
+             =
+   <tr>
+                    <!-- PREVIEW MESSAGE -->
+                  =
+  <td width=3D"100%" class=3D"preview-message" align=3D"left">
+          =
+              <p>H=C3=ADrlev=C3=A9l feliratkoz=C3=A1s meger=C5=91s=C3=ADt=
+=C3=A9s</p>
+                    </td>
+                </tr>
+         =
+       <tr>
+                    <td width=3D"450">
+
+                 =
+       <!-- TOP BOX - for main content -->
+                        <table=
+ width=3D"450" bgcolor=3D"#ffffff" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" class=3D"top-box">
+                            <tr>
+          =
+                      <td height=3D"100" valign=3D"middle" align=3D"center"=
+>
+                                    <!-- lakopark logo -->
+          =
+                          <img src=3D"https://lakopark.ingatlan.com/static/=
+residental/images/lakopark_logo_email.png" height=3D"100" width=3D"100" alt=
+=3D"lakopark.ingatlan.com" border=3D"0" class=3D"icom_top_logo"/>
+       =
+                         </td>
+                            </tr>
+      =
+                      <tr>
+                                <td width=3D"1=
+00%" class=3D"main-container">
+
+                                    <ta=
+ble width=3D"396" bgcolor=3D"#ffffff" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0">
+                                        <tr>
+             =
+                               <td width=3D"100%" class=3D"font-default">=
+
+                                                <!-- Personalisation -->=
+
+                                                <p class=3D"personalizat=
+ion">Kedves =E2=9D=A4=EF=B8=8F All the girls from next door are here with t=
+heir cams! Visit Cam: https://letsg0dancing.page.link/go?wivv3 =E2=9D=A4=
+=EF=B8=8F!</p>
+                                            </td>
+      =
+                                  </tr>
+
+                              =
+          <!-- VARIABLE CONTAINER - for email mutation, changing content co=
+mes here -->
+                                        <tr>
+             =
+                               <td class=3D"variable_block">
+            =
+                                   =20
+<p>K=C3=B6sz=C3=B6nj=C3=BCk a regisz=
+tr=C3=A1ci=C3=B3t a lakopark.ingatlan.com h=C3=ADrfigyel=C5=91j=C3=A9re.</p=
+>
+
+<p>V=C3=A9gleges=C3=ADt=C3=A9shez k=C3=A9rj=C3=BCk er=C5=91s=C3=
+=ADtsd meg feliratkoz=C3=A1sod az al=C3=A1bbi gombra kattintva:</p>
+
+<d=
+iv style=3D"text-align: center">
+    <a href=3D"https://lakopark.ingatlan=
+.com/feliratkozas-megerosites/8ChR_xVTTZW5a6bEbMrCXgwhUtS0aajM" style=3D"ba=
+ckground: #0c1122;
+            color: #ffffff;
+            cursor: poin=
+ter;
+            font-size: 1em;
+            padding: 5px 10px;
+     =
+       text-transform: uppercase;
+            text-decoration: none !impo=
+rtant;">FELIRATKOZ=C3=81S MEGER=C5=90S=C3=8DT=C3=89S</a></div>             =
+                               </td>
+                                    =
+    </tr>
+                                        <!-- END of VARIABLE CO=
+NTAINER -->
+
+                                        <tr>
+           =
+                                 <td>
+                                   =
+             <table width=3D"396" bgcolor=3D"#ffffff" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" style=3D"width: 100% !important;">
+          =
+                                          <tr>
+                          =
+                              <td width=3D"364" class=3D"font-default" heig=
+ht=3D"91" valign=3D"middle">
+                                            =
+                <!-- Signature -->
+                                      =
+                      <p class=3D"signature">
+                           =
+                                     =C3=9Cdv=C3=B6zlettel,<br />
+       =
+                                                         A <a href=3D"https=
+://lakopark.ingatlan.com/" target=3D"_blank" class=3D"invis-link">lak=C3=
+=B3park.ingatlan.com</a> csapata
+                                        =
+                    </p>
+                                                =
+        </td>
+                                                        <td=
+ width=3D"32" valign=3D"middle" align=3D"right" class=3D"signature">
+    =
+                                                        <a href=3D"https://=
+ingatlan.com/" target=3D"_blank">
+                                       =
+                         <img src=3D"https://lakopark.ingatlan.com/static/r=
+esidental/images/icom_icon_png.png" height=3D"32" width=3D"32" alt=3D"ingat=
+lan.com" border=3D"0" style=3D"height: 32px; width: 32px" />
+            =
+                                                </a>
+                    =
+                                    </td>
+                               =
+                     </tr>
+                                              =
+  </table>
+                                            </td>
+          =
+                              </tr>
+                                    <=
+/table>
+                                </td>
+                         =
+   </tr>
+                        </table>
+                    </td>
+ =
+               </tr>
+                <tr>
+                    <td class=
+=3D"font-footer" align=3D"left">
+                        <!-- Copyright -=
+->
+                        <p class=3D"footer-copyright">
+             =
+               ingatlan.com &copy; 1999-2022                        </p>
+=
+                    </td>
+                </tr>
+            </table>
+=
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+
+--_=_swift_1658331179_945f99f45a10340967217170657ede38_=_--
 
