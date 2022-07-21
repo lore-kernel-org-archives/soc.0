@@ -1,204 +1,81 @@
-Return-Path: <SRS0=i+5e=X2=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=QQ92=X2=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E6D1C43334
-	for <soc@archiver.kernel.org>; Thu, 21 Jul 2022 09:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A32EC43334
+	for <soc@archiver.kernel.org>; Thu, 21 Jul 2022 12:55:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3B6D1C3411E; Thu, 21 Jul 2022 09:25:34 +0000 (UTC)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 27F03C385A2; Thu, 21 Jul 2022 12:55:29 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 851F4C341CB
-	for <soc@kernel.org>; Thu, 21 Jul 2022 09:25:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 851F4C341CB
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id m12so748414lfj.4
-        for <soc@kernel.org>; Thu, 21 Jul 2022 02:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n96RspemHv4TX65Onfw5EgIeU668Xeh3IJ491ButWDA=;
-        b=aGUJ8Wwql3nBndT7r92NSLtZoQUn0/fNuBuA222WSsO2c8VIx5qTqRivY9R6SoTnHY
-         fwJ5Rh9ppUze5NxxfJ1rElwXXc2nSbzr3Mj7jcpBgfDCMFlZF5YkrREmzZzs9IzWSFzA
-         1UZ0tfryvJwlBgwY5O0Nw+O+HwlNlsmAhw9PWZ44SP6Zkvqe4wihFgJIuvp3Nph1e7Ix
-         AcMbF9PHYxzq75P89IlZT5UMaGq8rNjQ/guySEc2s4cmEoFe0aydwOnJrqJj8pZnMoL5
-         wODjhAxsNJBmqzlIIHvKCWwF5dmM6zLNrJADeGU08F8ntkUmVHz36ZfzN+UGhF1HnQYj
-         SzlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n96RspemHv4TX65Onfw5EgIeU668Xeh3IJ491ButWDA=;
-        b=BbY3HdTp5TOlS9+FKr4nB4keEPge+89EYacL2iJ9oq4YMYoE0AQvB/230Nb5Qff0fx
-         Jng4kre4A/CqqvGKU+KlCY6LlKs5oEoPItbuOlsixYFljYlirFwHeUffxNXX0kL0Ss9U
-         PDFgOgn1HDoxtkzSd3+3vXJl7oavC6L30KKGWeOQncY56H1Fr0iEVTOS5xUQr5+OHHnR
-         njDfO+tYRlBT8KMMdn25VFbwIE255y+dp6S0/SbSLWdD4TUp139trJFN/wN4cCCAdZp2
-         gLXsKR20vNbfixnPh+XnHZ9IKxLWfOxZFs0euazToU/xSvOBGriI9gRyVvujp3oCuK9k
-         ebJg==
-X-Gm-Message-State: AJIora8dBWsXHkkqt8N2L6aRiaqFSMyWszRJ4A5G5UgqQBnqizQ7aKSn
-	RgkdgFl6+K9LsucdlfyHoKuvow==
-X-Google-Smtp-Source: AGRyM1sQnHRfTHcPmZmra8mx6Bo0N5OMSaNYFB8TJDTyOp/6lIJ4d9p50U6fT4RliWE31XApjfyHYA==
-X-Received: by 2002:a05:6512:10c4:b0:489:de26:cef7 with SMTP id k4-20020a05651210c400b00489de26cef7mr23654431lfg.216.1658395530472;
-        Thu, 21 Jul 2022 02:25:30 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id q8-20020a056512210800b00488e50527e0sm323037lfr.112.2022.07.21.02.25.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 02:25:29 -0700 (PDT)
-Message-ID: <995c7d48-68d1-6c61-4f86-cdd2968b5156@linaro.org>
-Date: Thu, 21 Jul 2022 11:25:27 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 2C454C3411E;
+	Thu, 21 Jul 2022 12:55:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2C454C3411E
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MV5KC-1o7KBE2mqU-00S6vc; Thu, 21 Jul 2022 14:55:18 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31d85f82f0bso15982187b3.7;
+        Thu, 21 Jul 2022 05:55:18 -0700 (PDT)
+X-Gm-Message-State: AJIora+cUnhb0Lag26Kwb/TwWRELbCEYSZWybRjA0OfyJbIlScK7oR+0
+	KiothYwPSCVjQM7oIiK2JXwtO+M6NMEBBv0Oh/s=
+X-Google-Smtp-Source: AGRyM1viYGlLryja/5f/h+YZGqrEBl07fhm4RYssoWdw+dgSQElSnDMEgUoIgmmN+X2tZwirCrjFYbJdyF9Tq6ztqcQ=
+X-Received: by 2002:a81:6742:0:b0:31e:7064:9205 with SMTP id
+ b63-20020a816742000000b0031e70649205mr6722307ywc.249.1658408117110; Thu, 21
+ Jul 2022 05:55:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4
- 10.1 (SM-T530)
-Content-Language: en-US
-To: Stephan Gerhold <stephan@gerhold.net>
+References: <20220721072415.11424-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220721072415.11424-1-krzysztof.kozlowski@linaro.org>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 21 Jul 2022 14:55:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1j=WUq8=VZz9aY5zkPeEMaF11w4PJF7evmY_JTsFoFZQ@mail.gmail.com>
+Message-ID: <CAK8P3a1j=WUq8=VZz9aY5zkPeEMaF11w4PJF7evmY_JTsFoFZQ@mail.gmail.com>
+Subject: Re: [GIT PULL] ARM: dt-bindings: aspeed for v5.20
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
- linux-arm-msm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
- phone-devel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson
- <bjorn.andersson@linaro.org>, Konrad Dybcio <konrad.dybcio@somainline.org>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20220717213432.134486-1-matti.lehtimaki@gmail.com>
- <20220717213432.134486-4-matti.lehtimaki@gmail.com>
- <dc19c084-633d-9777-6dfd-b9633ac9c4ae@linaro.org>
- <YtWiMP2O9BymNG7/@gerhold.net>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YtWiMP2O9BymNG7/@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm-soc <arm@kernel.org>, 
+	SoC Team <soc@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>, 
+	Rob Herring <robh@kernel.org>, DTML <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:uK7HFhQ5ubwH59WhXwlXNRqi9ySjY2nEeuCQqZetkrYcJlsacPy
+ FBkOaMXNkiB65BLrlegiAN1Z2xE5LMr1doqNO1ODkFrHMzWXEDUFtfL81P30JTJcjTpC9yo
+ EyvjE/rlg46a7+/PPAK4Z1FXByPHy2aHNn3+OFLt0DPlCqpy0rDqUrgXsYJq+sOTgcnp/kw
+ OT4uVxj4lABzs6+c1AmAA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UCVItXwVhZs=:AHcCSiQ8iqpp8YZmGYSUJl
+ 8f6ikzaN82yLrod4HvISUbxFFDT6r1t2gYFFuwRE+vkhdDRViW2dZpGed+pDsO5rcZkQVBGuM
+ lmomgnA1zZ5mqpLs78Jq9PLmOkoBpg2SOrHoV+LRcIy5MCeK5b346yI+R3CuBthP95czXnlQj
+ v7P8KOsK0PcDkROeN3YHGIogOyhqJdNx6rPsHLERVKmMFE1wyxywM42ymrGIRHqftosrZ1Sg5
+ ln9NpYczssVaATv+BOKGOXJfhomY0B7jSmWfPejK/dDXJ7HOgKaW1Ot44YPZX0jin3nN+yP2m
+ 6eS8FgA1zQjQIJd8TUYpgMI+V44lVcWCM7gdGby45QiOJab/EVxn9x/ol13AUGyptgNOPOyIL
+ rjV/KRnn9SZN+BWxCZCQAFhiWVzFC9MuHMu+cUXjWn31E5BJsmov42CbxLeC4xrMK3rICheoJ
+ 0QoDZv6RrKB2W/xMGan2k0SHM6yMJ16vIpl8zfNnxC0p9vxGQR00yUqI+SS/pAMzSrWvOym9R
+ mRzee9EHhBdumDJauaTlJSbnVYxutrLArkG8/XR5B+bsin1aCWxPoh/QF3pNitm73iypOm7MU
+ F06pUATMTszKy4/NGDWxE8PBXuxHDx4mC/roKWNzc2ggH38j1sYkA/5vxFdM/jLJRoTFBMlOl
+ 1147iTKIjNgsyOx1Ge43apSr8vigmykHao71CQLy0vmhSsQVcjj24QcfFXkENJ4I2apgu/rGa
+ DXm9bGQTua8oWZyyJm+IATe/6WMpfMT7/qJWWQ==
 
-On 18/07/2022 20:10, Stephan Gerhold wrote:
-> On Mon, Jul 18, 2022 at 03:51:54PM +0200, Krzysztof Kozlowski wrote:
->> On 17/07/2022 23:34, Matti Lehtimäki wrote:
->>> Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
->>> based on the apq8026 platform.
->>>
->>> Currently supported are accelerometer sensor, hall sensor, internal storage, physical
->>> buttons (power & volume), screen (based on simple-framebuffer set up by
->>> the bootloader) sdcard, touchscreen and USB.
->>>
->>> Signed-off-by: Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> ---
->>>  arch/arm/boot/dts/Makefile                    |   1 +
->>>  .../dts/qcom-apq8026-samsung-matissewifi.dts  | 475 ++++++++++++++++++
->>>  2 files changed, 476 insertions(+)
->>>  create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
->>>
->>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->>> index 5112f493f494..4d02a1740079 100644
->>> --- a/arch/arm/boot/dts/Makefile
->>> +++ b/arch/arm/boot/dts/Makefile
->>> @@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
->>>  	qcom-apq8016-sbc.dtb \
->>>  	qcom-apq8026-asus-sparrow.dtb \
->>>  	qcom-apq8026-lg-lenok.dtb \
->>> +	qcom-apq8026-samsung-matissewifi.dtb \
->>>  	qcom-apq8060-dragonboard.dtb \
->>>  	qcom-apq8064-cm-qs600.dtb \
->>>  	qcom-apq8064-ifc6410.dtb \
->>> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
->>> new file mode 100644
->>> index 000000000000..f4c5eb9db11c
->>> --- /dev/null
->>> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
->>> @@ -0,0 +1,475 @@
->>> +// SPDX-License-Identifier: BSD-3-Clause
->>> +/*
->>> + * Copyright (c) 2022, Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include "qcom-msm8226.dtsi"
->>> +#include "qcom-pm8226.dtsi"
->>> +#include <dt-bindings/input/input.h>
->>> +
->>> +/delete-node/ &smem_region;
->>> +
->>> +/ {
->>> +	model = "Samsung Galaxy Tab 4 10.1";
->>> +	compatible = "samsung,matissewifi", "qcom,apq8026";
->>> +	chassis-type = "tablet";
->>> +
->>> +	qcom,msm-id = <0xC708FF01 0 0x20000>,
->>> +		      <0xC708FF01 1 0x20000>,
->>> +		      <0xC708FF01 2 0x20000>,
->>> +		      <0xC708FF01 3 0x20000>;
->>
->> Lower case hex and does not match bindings.
->> https://lore.kernel.org/all/20220705130300.100882-2-krzysztof.kozlowski@linaro.org/
->>
->> This would need detailed explanation because it really does not look
->> correct.
->>
-> 
-> Just to give the explanation for reference: In general, qcom,msm-id with
-> three elements is something Qualcomm used for some old platforms before
-> introducing qcom,board-id.
-> 
-> qcom,msm-id = <X Y Z> should be equivalent to:
->   qcom,msm-id = <X Z>;
->   qcom,board-id = <Y 0>;
-> 
-> e.g. for apq8026-v2-mtp.dts Qualcomm used:
->    qcom,msm-id = <199 8 0x20000>;
->  = qcom,msm-id = <QCOM_ID_MSM8026 QCOM_BOARD_ID_MTP 0x20000>;
->  = qcom,msm-id = <QCOM_ID_MSM8026 0x20000>;
->    qcom,board-id = <QCOM_BOARD_ID_MTP 0>;
-> 
-> I guess old bootloaders may or may not accept the new form, depending on
-> the age of their code base.
-> 
-> Then Samsung took this and made it a lot worse, by replacing the SoC ID
-> with some random magic number (the 0xC708FF01). And what's even worse is
-> that all devices with the same SoC from Samsung use the same magic number
-> there. It is completely useless for dynamically matching the device.
-> 
-> In this case, I suggest just dropping the property because the device is
-> supported by lk2nd [1] which can be loaded as intermediary bootloader to
-> have a more standard boot process for mainline Linux. When booting
-> through lk2nd no qcom,msm-id/qcom,board-id is required, and it also adds
-> MAC addresses for WiFi/Bluetooth etc etc. :-)
-> 
-> [1]: https://github.com/msm8916-mainline/lk2nd
-> 
->> [...]
->>> +	reserved-memory {
->>> +		#address-cells = <1>;
->>> +		#size-cells = <1>;
->>> +		ranges;
->>> +
->>> +		framebuffer@3200000 {
->>
->> Generic node names, so memory@
->>
-> 
-> Rob specifically mentioned at some point that memory@ should not be used
-> in reserved-memory [1]. The device tree specification actually recommends
-> doing it like it is done here (at least for "framebuffer"):
-> 
->> 3.5.2 /reserved-memory/ child nodes
->> Following the generic-names recommended practice, node names should
->> reflect the purpose of the node (ie. “framebuffer” or “dma-pool”).
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/CAL_Jsq+66j8Y5y+PQ+mezkaxN1pfHFKz524YUF4Lz_OU5E-mZQ@mail.gmail.com/
+On Thu, Jul 21, 2022 at 9:24 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Hi Arnd and Olof,
+>
+> My two patches documenting existing Aspeed board compatibles were waiting for
+> some time, so a month ago I decided to pick them up and include in the
+> linux-next, so other developers - like David - can base their work on these.
+> Unfortunately the responsibility for the patches was not cleared as I was
+> waiting for some replies Joel and Andrew, so I also did not push them out to
+> you. And then rc7 appeared and it is quite late now. That's my mistake, I
+> should sort it out earlier.
+>
+> But anyway these were for a month in linux-next and other work [1] will need it.
+>
+> Can you grab them last minute? If not, could you queue it for v5.21?
 
-Thanks, makes sense a lot!
+Merged into arm/dt for 5.20 now.
 
-Best regards,
-Krzysztof
+      Arnd
