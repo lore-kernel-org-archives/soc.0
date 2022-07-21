@@ -1,740 +1,216 @@
-Return-Path: <SRS0=bi4V=X2=aj.id.au=andrew@kernel.org>
+Return-Path: <SRS0=z22a=X2=os.amperecomputing.com=quan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A33D3C433EF
-	for <soc@archiver.kernel.org>; Thu, 21 Jul 2022 02:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C43DC433EF
+	for <soc@archiver.kernel.org>; Thu, 21 Jul 2022 02:46:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 64EFDC341C7; Thu, 21 Jul 2022 02:02:42 +0000 (UTC)
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	id E78C1C341CA; Thu, 21 Jul 2022 02:46:41 +0000 (UTC)
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2130.outbound.protection.outlook.com [40.107.93.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5D460C341CE;
-	Thu, 21 Jul 2022 02:02:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D460C341CE
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=aj.id.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=aj.id.au
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 338575C00A9;
-	Wed, 20 Jul 2022 22:02:39 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Wed, 20 Jul 2022 22:02:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1658368959; x=1658455359; bh=r3+JDGTNJO
-	gzSGE4CA0LUBJwMoqknUY8ZAPkLJyv/aI=; b=IHcKb6VM/FHUK/ZiL6aLfp1ZgK
-	+1IWdRC8tVYa8/zTnalp6tsYI43GMzdcv71wOKc19LfwLbMyPh/NdyCs2JcnJV9Q
-	87or2BWcsQp8gPq/Q8jG7dd6aytWRmqCw9FVx1ujT407bEJpu+YsmPPD/HI20P7+
-	cIzrcHASAv08P3JSLUGblaME2Y2EsON8ZHdd9BSxZ5mXH6Ze4odk2LpDSfCpJet+
-	ZAaDeK4h6QXSpDCfgLdmOf9LQ92Pm6yuG3snjq2txbD/9kl4r83I/Y1ihHDUH5A2
-	jZDZjC+FdebQuMoR/mW27GCTNXA0koYYP477DVth7kIJBRvNpLnO/3wPx8OA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1658368959; x=1658455359; bh=r3+JDGTNJOgzSGE4CA0LUBJwMoqk
-	nUY8ZAPkLJyv/aI=; b=nZmgCo0oCvdVGK65dppsqi3/cNei8EibmbZqC8sn/5YP
-	oqZD0ivETcqziuQyb1SE8UstptkErnPvtdIKcDsQZibIEIB2jHoyQvU2PU8Z66oe
-	JGP7xHTLmf+Iyo7TRuO74hYXF3V/qJlIOah7D6o3Ci6FrMnQlPLPqdO8kw4rMDOy
-	xpyuDQyId2+pVSpL/j0G/EWYeICZPj03vABcpTQyY2r6V7QLQPBKKqIfjjS2bAch
-	c7AR0eYPrFKESeaUDHDvnAerkBRRqRXj2h/lZLeXOAvAoBRoHrDB94V1FwUjVblB
-	arCSnhTyS0TKM+OW5BNSYwERyhHDhP4ZUY1SKrIlwg==
-X-ME-Sender: <xms:vrPYYv3ExOWdzJH9hGEbfmQfWbKbORZ8Ix6d-mdh5VC034xJY_0QAA>
-    <xme:vrPYYuFJ9eQGz_rE3dKJk2S6allYbN3a5QEhMgdiTbUw2fyB90R-NGoQvDZ63cEPV
-    AmFjRVWtQ98tADGzA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudelfedgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpeeuuddugfdtfeekffffudffgedvffetjeeiieefteevteejiedtteek
-    ffeiieekvdenucffohhmrghinhepohhpvghnsghmtgdrohhrghdpkhgvrhhnvghlrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghn
-    ughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:vrPYYv7ynA2scC_DjNr2grqtCWR6EYSOBbs6ItPo3cmuwyqgM2eeAw>
-    <xmx:vrPYYk0WL1lBHkB9-avDokMlUhnhyKVxnSSo3fWNuMXz3M429yKbrw>
-    <xmx:vrPYYiFxVdhx_R7_KE_esJBgSVGq9IRYONk-Vl5NrAfQrJzJ_4TZ7w>
-    <xmx:v7PYYpetxx6-dHhk3F8AUfYvaXMcJQ3UUvNSBrEbk_cKcngPM2H2OQ>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 7B77C170007E; Wed, 20 Jul 2022 22:02:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-755-g3e1da8b93f-fm-20220708.002-g3e1da8b9
-Mime-Version: 1.0
-Message-Id: <5848e2d7-33e1-4093-b70f-b52ef9068083@www.fastmail.com>
-In-Reply-To: <20220720085230.3801945-3-quan@os.amperecomputing.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id AC01BC341C7;
+	Thu, 21 Jul 2022 02:46:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC01BC341C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SyWU5pPAFv5Xl8Cm/PMouD/iEty4oCpFaoEwnuMGXSBR4+lhbuUO853J4GVb1khVDu/I1HouPEnJlM1DClh4/D3Gjd46qvS7FugBC9U541i0xqt7vv6rq7uzqGmIcDGCIdZGGoWYLRa+xRpIdEUeC/Lc/5VSVJlYm8tb2w4Bq7yq8DFGx6X4CtYvealXb4foz8NsrSG3FHjsYQLQfF8Z/Dv1f5Ayn13FmCmAa01laUstmO/sUZ7JzTyPERzmIqAwVs9aA+Rc2w1GwbnUDXMariwg6/Sad7Vlnh4QGdITf8QZIJeNdDEafxanWMXv12wExKaFOlvP1LgLIsfKrmsneA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uyk7zFcJPwv8UJK+/6SJhuJznSKY4hWn0sZ69jpxb8c=;
+ b=nl680NJ9986WOX2wpm1U+hXMyWyimD2XWmSmelcThmX6sA/YXRZujoBXrKB9ETgg+rzR1YhIxxlWeeLzS7K0zvkxe1cSkOgUm++mHbMWaHq1GrROy0dVRYRHI5s68NOtz1var2fYJubYPgjxiVJWDYUTMa+nPicfb9t3E4Bm4IqRj646hhYNUKVuITqASVXZjHQTioMds+lVddF/oT7EFiudjB/mEM0WMUH8z3yKR3Diga67sTJsT9GrMU7UJKcZ0yzDFM9SDUJTTfIOpsqmu8atdBjEQg3u+bzb5HzXIK4ZLJ6Az4SUo7tk7QnOq986Fq8eDzZOxmHbY4xKbhXTHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uyk7zFcJPwv8UJK+/6SJhuJznSKY4hWn0sZ69jpxb8c=;
+ b=Kc8uZrfNQEDmcofcX5xBDZIhg2wn/6kwOv1DubGvUTo94Mvhn0RnUMSSysvFA9Gozc+XusYtdxR0/BtbkdoCjf3s9DgBhN/AmRpVenN+9Vh0rtdm7h3ClIO6lQ5We1qhy8Kk1q0XfI7/1S6rFlpAT5O7HfJMp7nQmaBQ5LERP/M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ DM5PR01MB2668.prod.exchangelabs.com (2603:10b6:3:f3::10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5458.18; Thu, 21 Jul 2022 02:46:27 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e%9]) with mapi id 15.20.5438.023; Thu, 21 Jul 2022
+ 02:46:27 +0000
+Message-ID: <878f9889-0255-96d8-77c8-19b0542932f4@os.amperecomputing.com>
+Date: Thu, 21 Jul 2022 09:46:10 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.2
+Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt.
+ Mitchell BMC
+Content-Language: en-CA
+List-Id: <soc.lore.kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+ Open Source Submission <patches@amperecomputing.com>
+Cc: Phong Vo <phong@os.amperecomputing.com>, thang@os.amperecomputing.com
 References: <20220720085230.3801945-1-quan@os.amperecomputing.com>
  <20220720085230.3801945-3-quan@os.amperecomputing.com>
-Date: Thu, 21 Jul 2022 11:32:18 +0930
-From: "Andrew Jeffery" <andrew@aj.id.au>
-List-Id: <soc.lore.kernel.org>
-To: "Quan Nguyen" <quan@os.amperecomputing.com>, openbmc@lists.ozlabs.org,
- "Arnd Bergmann" <arnd@arndb.de>, "Olof Johansson" <olof@lixom.net>,
- soc@kernel.org, "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Joel Stanley" <joel@jms.id.au>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-aspeed@lists.ozlabs.org,
- "Open Source Submission" <patches@amperecomputing.com>
-Cc: "Phong Vo" <phong@os.amperecomputing.com>,
- "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt. Mitchell
- BMC
-Content-Type: text/plain
+ <ab78f85c-dd0a-9176-103f-8e4abe01b8f9@linaro.org>
+From: Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <ab78f85c-dd0a-9176-103f-8e4abe01b8f9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0003.apcprd02.prod.outlook.com
+ (2603:1096:3:17::15) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ef0cb55-be58-445c-9d3a-08da6ac3351e
+X-MS-TrafficTypeDiagnostic: DM5PR01MB2668:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Al3xa+uT/8SWPw2oEOLYPyo0WDJ2tNXeeBIMbRKi0MHYJ2Z/Gt32eYP/so5ZE0TnQ5JWyvURLtfx6UHzys8efr8+DyK0NmvA5Gg1mVkPjAgDRXPe3CSqgcFV+eg0zkVyoiGKWYqeif5HeBxeaS5LDx3GMtXOSavWr7gV5SU3lwQgmSFmk/PSgZvVsiX/5hAJ/y5VUoe4LQ/9XoZjU2tsVTUQFImK6PLR1h1kBSr8kn2tWVM6VHMSXv8R6267cnMDMcls64qBuOwV2ct2B+5RfGAmHcYnZS0+Wmewg7KFji6jNYWtB3hM0WR7cR2t1z7QOy4iObk9LLds2V7NUkzFJxLKjZFiKK6fA4PiAw49BQbA8Z3RJejkQGuKA0nzLVXNEezCvqr8d40Xm/CIMPbtSxlUI0yIs3fcxOHKY0jWsMOqI+tbXc/zxLBFmTeoTaMIXvrq/02y9+1qqm1GJh63H24gXNhrEje+q8N7JyIrxX9mjb0+FkrK2sKNfi/wTtzoDQOgCoSt+ANL7BUMG2U9EXLqYfPXzW5N9FXB1bSNyFEndoRIefw5Bfju3A2gG9St2Tqx7swMswzZhaIzikUBoAxw9EOYoXxzj38vFTDCAzGHegv/X8+WlEI6XMWU+iV0KpZs0bCLsELMn4gHx3nXD4xD7SBg/i9mndEGdlzBShmBbxOHDu6wspFhtBrGwEsQiDFfwhvWpIgyZ0ywcKBfgWwoljRyB/11wg9/nKbhI24ZFnUguoRb37acQuH/TtG9LfJMImQv0g5K84COLeWFFx8Z9DV7WQ9wtEg18CDwZFsigvLFwkXCJQOuaIW36t/5qlvJbBlhEGwELkkHBdKGADXi+T6tywHcyCLVB32CYCc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(136003)(366004)(346002)(376002)(7416002)(8676002)(8936002)(5660300002)(4326008)(66946007)(66556008)(66476007)(2906002)(83380400001)(86362001)(38350700002)(38100700002)(6486002)(921005)(6506007)(6512007)(316002)(107886003)(2616005)(110136005)(52116002)(66574015)(478600001)(26005)(186003)(41300700001)(31686004)(31696002)(53546011)(6666004)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?L0drSUtidmQ5U3ZzYjVmektmZmE1UXZHNjlCOVoxL000Rk1VQkV4QlFLbkNP?=
+ =?utf-8?B?TWdkSDVIb1VrY0NpL2t5V1FFRzJCTU9McmxHZkh2LzdOeFhaRGpja2JPc0Y2?=
+ =?utf-8?B?eHU1RTdlaVhja1VBNk8wTUFmekZ4ZFFXTXNkOWRPdHMwYVVOejBEOGVLRURQ?=
+ =?utf-8?B?MXhvMHpmSyt5encxWjh3Z242SzM1OFBDOTZmc2NSNm1JbEhVT2ZEQU1IejNk?=
+ =?utf-8?B?WFpORGFlOWFGUmpCWUIwREY2cFlVQUlFTktGbHppcDYzVkZsdGV5WWtVN2VS?=
+ =?utf-8?B?MmlXdmwwYzdITEFOUm5QMHdlUlBkZGhKWERLRTZlbHpMRllJaEU0WnhjSkZZ?=
+ =?utf-8?B?bEtlUnVpLzdsY05iWG80N0xKMWx4eWhENEVmWnVRb3ljR3YyUFJiTDdYaURa?=
+ =?utf-8?B?bHE5U0ZlMkFObms4aUZjUEhzdm5KTzY2ZEJYTlIvMWUxV29TQ3haSm1IME9S?=
+ =?utf-8?B?dDM1aURnbFdqKzA5Q01nU3VhcWs4R2lpbEcrSU42MWg5K1hHbUV5cWVEcjNW?=
+ =?utf-8?B?OVhkdlN5eUNqK2ZNMnFtck5TMWJwSEZlRjJOZy9NM0RQWm9vMitzdjl2cUtr?=
+ =?utf-8?B?QjFjRkppcHIyRDdISHpvVHFac0g3UG0vNHdWVEkrL015cW9jdi9hWitQalBN?=
+ =?utf-8?B?RjVZdmRTZUxMWEtic05jVHU4Kzd3c1NaaVRVUW1qdnlIVmw1Y3pKcVFqaEsw?=
+ =?utf-8?B?MDVXSHRJLzVIRDVUaW5OaEZ0ZTZscWV1VDBoS0laQlhFRjFQQ0g1SUtiQnRp?=
+ =?utf-8?B?aVJqeW9VOEFldi9TU3J5MWpERVJSRENYZVdKU2NOQm9ZcnFXaWk0dXNSK3RP?=
+ =?utf-8?B?dVhPbWhlNDg1QnhoRzJGc2N4V2RabnBuck9NZCtFYkJBMkg4STJadTNuQVdO?=
+ =?utf-8?B?WFYzeEVQc0Ixa1QvQXpFcG5iSEtpdU5mZHh0TmRnNWtWRXo2eWY4eWRWL1NR?=
+ =?utf-8?B?djdScGNLbEhwT1BFbWpXOVdMcmxpTHJuTlZScXRReE0veWJYajdWdWVCdmtE?=
+ =?utf-8?B?WVdZem0yek4ra3VBRjd5WUxWdDFzcU1ja1YxR2lwWlNrc3JQS2Q5NVQ4TnZJ?=
+ =?utf-8?B?WnNPenFVWVRJUlFOaTdheWhES1VsMHc2N1ZOZ2VhRGhCc2xYNlhQcjZMV2g2?=
+ =?utf-8?B?YkRmUkFVNTRlY3FMUTcydHhTNzR3czNoOWtYMHVrZDRNQ2ozNmtTYWpHMEJD?=
+ =?utf-8?B?TUpxNkM2SkpTakx4b2pGaTRGMXhNS2VPU1dNRjdFY1BZZUcwRkt4SmwySFQ2?=
+ =?utf-8?B?NFB2U09Fb3Z1cWEwblIyVGd3OGpPNXJpczdEU2JycktGYWNiOE5nS0lnZEFI?=
+ =?utf-8?B?ZmpGdWJDODZuOW9UWU9kU002VFdONDBnQkk0K2xWR25vd2t0UXI1SmlMYWw3?=
+ =?utf-8?B?VzNUdXJjajA1dWF2QmZGOGpiYjRja0xnWTVyaVpXSERpd0lLVUpPd29FZkRR?=
+ =?utf-8?B?TXFlSkVMSG8rZDhPUU5JR3VBVUZOa2twZGF6ZGZkL0NSL2diQXlFUVVBcmZR?=
+ =?utf-8?B?RjRxcXRXTERxUzM2Slh6ZmJzV0wyZlRCRXk4R2Y5SDhBVE5hUnJvWnRiNkg2?=
+ =?utf-8?B?a2JJRGVNUTJ4SjhrOHBPb2FlRDdUOFlLL2hRWUZkL1ZVUUs5L01xNjI2Z04w?=
+ =?utf-8?B?VksrSEV1VWpuVlJWRXFNeHIwOVRFY2VZM2Q4TXVzSmxPZWRoUXkrTGFIKzJn?=
+ =?utf-8?B?d2kraUFEeFhSSE12MmUrMnlmc0xVUFFMZlptcFFEY3VpSmxUWmk5Nll3dVRH?=
+ =?utf-8?B?aHpwdURsK1N4R3lLTEwyekFXalp1Z1hZc3FwR2lSbWE4TUdZbHZ5U3FOQWdF?=
+ =?utf-8?B?aDAxaG50Y2UrYURiNG9tVHYxaHVTKzMrYkJSVU95WWVwT0I0UGtwYXJZNEsw?=
+ =?utf-8?B?UWdMSG4ycnZyOHZGWlVNYXVTTUFFMTYwUVg1L1k4RVFBbjdndnNubmJrV0Q2?=
+ =?utf-8?B?MHlYRXRFRWhlYTBaOVhwK0lJOGhvWHA3MlpYMmYvdVE3Uk1BY0N3OFA5Nldz?=
+ =?utf-8?B?MFdQeVlFdkh2cVB6ZEdIRGt3REJWNzUxMVlzK3pDSTNwSzFYUVpYMjZ2Rmhs?=
+ =?utf-8?B?TitKVWNHU0EvZUVXcklpcHFOU3BRV2JrNmhpR1NLc0c5bFZQNTNCdG1WVVls?=
+ =?utf-8?B?NWREWFhCNXBWaW9oMENpNEJyRWJNYjc4Q2Z6N3ZOQXlMbG50U2YzNkV1THAx?=
+ =?utf-8?Q?zsTK1u66DIOOsJex+e0riSo=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ef0cb55-be58-445c-9d3a-08da6ac3351e
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 02:46:27.3555
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qCHY19RCpVpK6q/DHbT5gi9NXagbndByBRukwjJ/fxI1410a+MPKsCc8jL2PXRcohA/HRSDO8l0D9vXRffdPMChYDDwgiNr7C8SoBhvFw+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR01MB2668
 
-Hello,
 
-On Wed, 20 Jul 2022, at 18:22, Quan Nguyen wrote:
-> The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
-> hardware reference platform with AmpereOne(TM) processor.
->
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> Signed-off-by: Phong Vo <phong@os.amperecomputing.com>
-> Signed-off-by: Thang Q. Nguyen <thang@os.amperecomputing.com>
-> ---
-> v2 :
->   + Remove bootargs                                       [Krzysztof]
->   + Fix gpio-keys nodes name to conform with device tree binding
->   documents                                               [Krzysztof]
->   + Fix some nodes to use generic name                    [Krzysztof]
->   + Remove unnecessary blank line                         [Krzysztof]
->   + Fix typo "LTC" to "LLC" in license info and corrected license
->   info to GPL-2.0-only
->
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
->  2 files changed, 578 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index f9484f5ef126..ecb9dafb8f1a 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1573,6 +1573,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-ast2600-evb.dtb \
->  	aspeed-bmc-amd-ethanolx.dtb \
->  	aspeed-bmc-ampere-mtjade.dtb \
-> +	aspeed-bmc-ampere-mtmitchell.dtb \
->  	aspeed-bmc-arm-centriq2400-rep.dtb \
->  	aspeed-bmc-arm-stardragon4800-rep2.dtb \
->  	aspeed-bmc-asrock-e3c246d4i.dtb \
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts 
-> b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> new file mode 100644
-> index 000000000000..2e68f5264bb1
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> @@ -0,0 +1,577 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +// Copyright (c) 2022, Ampere Computing LLC
-> +
-> +/dts-v1/;
-> +
-> +#include "aspeed-g6.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +
-> +/ {
-> +	model = "Ampere Mt.Mitchell BMC";
-> +	compatible = "ampere,mtmitchell-bmc", "aspeed,ast2600";
-> +
-> +	chosen {
-> +		stdout-path = &uart5;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x80000000>;
 
-This is 2GB of memory
+On 20/07/2022 17:36, Krzysztof Kozlowski wrote:
+> On 20/07/2022 10:52, Quan Nguyen wrote:
+>> The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
+>> hardware reference platform with AmpereOne(TM) processor.
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> Signed-off-by: Phong Vo <phong@os.amperecomputing.com>
+>> Signed-off-by: Thang Q. Nguyen <thang@os.amperecomputing.com>
+>> ---
+>> v2 :
+>>    + Remove bootargs                                       [Krzysztof]
+>>    + Fix gpio-keys nodes name to conform with device tree binding
+>>    documents                                               [Krzysztof]
+>>    + Fix some nodes to use generic name                    [Krzysztof]
+>>    + Remove unnecessary blank line                         [Krzysztof]
+>>    + Fix typo "LTC" to "LLC" in license info and corrected license
+>>    info to GPL-2.0-only
+>>
+>>   arch/arm/boot/dts/Makefile                    |   1 +
+>>   .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
+>>   2 files changed, 578 insertions(+)
+>>   create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
+>>
+> 
+> (...)
+> 
+>> +
+>> +&i2c3 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c4 {
+>> +	status = "okay";
+>> +
+>> +	adc_i2c: adc-i2c@16 {
+> 
+> Node name: just "adc"
+> 
 
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		gfx_memory: framebuffer {
-> +			size = <0x01000000>;
-> +			alignment = <0x01000000>;
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-> +		};
-> +
-> +		video_engine_memory: video {
-> +			size = <0x04000000>;
-> +			alignment = <0x01000000>;
-> +			compatible = "shared-dma-pool";
-> +			reusable;
-> +		};
-> +
-> +		/* 1GB memory */
+Thanks, will fix.
 
-But you say 1GB of memory here
+>> +		compatible = "lltc,ltc2497";
+>> +		reg = <0x16>;
+>> +		vref-supply = <&voltage_mon_reg>;
+>> +		#io-channel-cells = <1>;
+>> +		status = "okay";
+> 
+> Isn't this new node? Why do you need status here?
+> 
+Thanks for the comment. The drivers/iio/adc/ltc2497.c does not check for 
+the status indeed. Will remove it.
 
-> +		vga_memory: region@bf000000 {
-> +			no-map;
-> +			compatible = "shared-dma-pool";
-> +			reg = <0xbf000000 0x01000000>;  /* 16M */
-
-And this makes sense for 1GB.
-
-So I think your memory node has the wrong length in reg?
-
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		s0-overtemp-event {
-> +			label = "S0_OVERTEMP";
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 7) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(V, 7)>;
-> +		};
-> +
-> +		s0-hightemp-event {
-> +			label = "S0_HIGHTEMP";
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 0) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(V, 0)>;
-> +		};
-> +
-> +		s1-overtemp-event {
-> +			label = "S1_OVERTEMP";
-> +			gpios = <&gpio0 ASPEED_GPIO(X, 6) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(X, 6)>;
-> +		};
-> +
-> +		s1-hightemp-event {
-> +			label = "S1_HIGHTEMP";
-> +			gpios = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(X, 3)>;
-> +		};
-> +	};
-
-I really want us to stop using GPIO keys and just poll the GPIO in userspace if necessary.
-
-The discussion here might help, eventually:
-
-https://gerrit.openbmc.org/c/openbmc/dbus-sensors/+/54740
-
-> +
-> +	voltage_mon_reg: voltage-mon-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "ltc2497_reg";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	gpioI5mux: mux-controller {
-> +		compatible = "gpio-mux";
-> +		#mux-control-cells = <0>;
-> +		mux-gpios = <&gpio0 ASPEED_GPIO(I, 5) GPIO_ACTIVE_HIGH>;
-> +	};
-> +
-> +	adc0mux: adc0mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 0>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc1mux: adc1mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 1>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc2mux: adc2mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 2>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc3mux: adc3mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 3>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc4mux: adc4mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 4>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc5mux: adc5mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 5>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc6mux: adc6mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 6>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc7mux: adc7mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc0 7>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc8mux: adc8mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 0>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc9mux: adc9mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 1>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc10mux: adc10mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 2>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc11mux: adc11mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 3>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc12mux: adc12mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 4>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc13mux: adc13mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 5>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc14mux: adc14mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 6>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	adc15mux: adc15mux {
-> +		compatible = "io-channel-mux";
-> +		io-channels = <&adc1 7>;
-> +		#io-channel-cells = <1>;
-> +		io-channel-names = "parent";
-> +		mux-controls = <&gpioI5mux>;
-> +		channels = "s0", "s1";
-> +	};
-> +
-> +	iio-hwmon {
-> +		compatible = "iio-hwmon";
-> +		io-channels = <&adc0mux 0>, <&adc0mux 1>,
-> +			<&adc1mux 0>, <&adc1mux 1>,
-> +			<&adc2mux 0>, <&adc2mux 1>,
-> +			<&adc3mux 0>, <&adc3mux 1>,
-> +			<&adc4mux 0>, <&adc4mux 1>,
-> +			<&adc5mux 0>, <&adc5mux 1>,
-> +			<&adc6mux 0>, <&adc6mux 1>,
-> +			<&adc7mux 0>, <&adc7mux 1>,
-> +			<&adc8mux 0>, <&adc8mux 1>,
-> +			<&adc9mux 0>, <&adc9mux 1>,
-> +			<&adc10mux 0>, <&adc10mux 1>,
-> +			<&adc11mux 0>, <&adc11mux 1>,
-> +			<&adc12mux 0>, <&adc12mux 1>,
-> +			<&adc13mux 0>, <&adc13mux 1>,
-> +			<&adc14mux 0>, <&adc14mux 1>,
-> +			<&adc15mux 0>, <&adc15mux 1>,
-> +			<&adc_i2c 0>, <&adc_i2c 1>,
-> +			<&adc_i2c 2>, <&adc_i2c 3>,
-> +			<&adc_i2c 4>, <&adc_i2c 5>,
-> +			<&adc_i2c 6>, <&adc_i2c 7>,
-> +			<&adc_i2c 8>, <&adc_i2c 9>,
-> +			<&adc_i2c 10>, <&adc_i2c 11>,
-> +			<&adc_i2c 12>, <&adc_i2c 13>,
-> +			<&adc_i2c 14>, <&adc_i2c 15>;
-> +	};
-> +};
-> +
-> +&mdio0 {
-> +	status = "okay";
-> +
-> +	ethphy0: ethernet-phy@0 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&mac0 {
-> +	status = "okay";
-> +
-> +	phy-mode = "rgmii";
-> +	phy-handle = <&ethphy0>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rgmii1_default>;
-> +};
-> +
-> +&fmc {
-> +	status = "okay";
-> +	flash@0 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "bmc";
-> +		spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-64.dtsi"
-> +	};
-> +
-> +	flash@1 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "alt-bmc";
-> +		spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-64-alt.dtsi"
-> +	};
-> +};
-> +
-> +&spi1 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_spi1_default>;
-> +
-> +	flash@0 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "pnor";
-> +		spi-max-frequency = <20000000>;
-> +	};
-> +};
-> +
-> +&uart1 {
-> +	status = "okay";
-> +};
-> +
-> +&uart2 {
-> +	status = "okay";
-> +};
-> +
-> +&uart3 {
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +
-> +	temperature-sensor@2e {
-> +		compatible = "adi,adt7490";
-> +		reg = <0x2e>;
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c2 {
-> +	status = "okay";
-> +
-> +	psu@58 {
-> +		compatible = "pmbus";
-> +		reg = <0x58>;
-> +	};
-> +
-> +	psu@59 {
-> +		compatible = "pmbus";
-> +		reg = <0x59>;
-> +	};
-> +};
-> +
-> +&i2c3 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c4 {
-> +	status = "okay";
-> +
-> +	adc_i2c: adc-i2c@16 {
-> +		compatible = "lltc,ltc2497";
-> +		reg = <0x16>;
-> +		vref-supply = <&voltage_mon_reg>;
-> +		#io-channel-cells = <1>;
-> +		status = "okay";
-> +	 };
-> +
-> +	eeprom@50 {
-> +		compatible = "atmel,24c64";
-> +		reg = <0x50>;
-> +		pagesize = <32>;
-> +	};
-> +
-> +	i2c-mux@70 {
-> +		compatible = "nxp,pca9545";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		reg = <0x70>;
-> +		i2c-mux-idle-disconnect;
-> +
-> +		i2c4_bus70_chn0: i2c@0 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x0>;
-> +
-> +			outlet_temp1: temperature-sensor@48 {
-> +				compatible = "ti,tmp75";
-> +				reg = <0x48>;
-> +			};
-> +			psu1_inlet_temp2: temperature-sensor@49 {
-> +				compatible = "ti,tmp75";
-> +				reg = <0x49>;
-> +			};
-> +		};
-> +
-> +		i2c4_bus70_chn1: i2c@1 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x1>;
-> +
-> +			pcie_zone_temp1: temperature-sensor@48 {
-> +				compatible = "ti,tmp75";
-> +				reg = <0x48>;
-> +			};
-> +			psu0_inlet_temp2: temperature-sensor@49 {
-> +				compatible = "ti,tmp75";
-> +				reg = <0x49>;
-> +			};
-> +		};
-> +
-> +		i2c4_bus70_chn2: i2c@2 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x2>;
-> +
-> +			pcie_zone_temp2: temperature-sensor@48 {
-> +				compatible = "ti,tmp75";
-> +				reg = <0x48>;
-> +			};
-> +			outlet_temp2: temperature-sensor@49 {
-> +				compatible = "ti,tmp75";
-> +				reg = <0x49>;
-> +			};
-> +		};
-> +
-> +		i2c4_bus70_chn3: i2c@3 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x3>;
-> +
-> +			mb_inlet_temp1: temperature-sensor@7c {
-> +				compatible = "microchip,emc1413";
-> +				reg = <0x7c>;
-> +			};
-> +			mb_inlet_temp2: temperature-sensor@4c {
-> +				compatible = "microchip,emc1413";
-> +				reg = <0x4c>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&i2c5 {
-> +	status = "okay";
-> +
-> +	i2c-mux@70 {
-> +		compatible = "nxp,pca9548";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		reg = <0x70>;
-> +		i2c-mux-idle-disconnect;
-> +	};
-> +};
-> +
-> +&i2c6 {
-> +	status = "okay";
-> +	rtc@51 {
-> +		compatible = "nxp,pcf85063a";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&i2c7 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c9 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c11 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c14 {
-> +	status = "okay";
-> +	eeprom@50 {
-> +		compatible = "atmel,24c64";
-> +		reg = <0x50>;
-> +		pagesize = <32>;
-> +	};
-> +
-> +	bmc_ast2600_cpu: temperature-sensor@35 {
-> +		compatible = "ti,tmp175";
-> +		reg = <0x35>;
-> +	};
-> +};
-> +
-> +&adc0 {
-> +	ref_voltage = <2500>;
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-> +		&pinctrl_adc2_default &pinctrl_adc3_default
-> +		&pinctrl_adc4_default &pinctrl_adc5_default
-> +		&pinctrl_adc6_default &pinctrl_adc7_default>;
-> +};
-> +
-> +&adc1 {
-> +	ref_voltage = <2500>;
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-> +		&pinctrl_adc10_default &pinctrl_adc11_default
-> +		&pinctrl_adc12_default &pinctrl_adc13_default
-> +		&pinctrl_adc14_default &pinctrl_adc15_default>;
-> +};
-> +
-> +&vhub {
-> +	status = "okay";
-> +};
-> +
-> +&video {
-> +	status = "okay";
-> +	memory-region = <&video_engine_memory>;
-> +};
-> +
-> +&gpio0 {
-> +	gpio-line-names =
-> +	/*A0-A7*/	"","","","","","i2c2-reset-n","i2c6-reset-n","i2c4-reset-n",
-> +	/*B0-B7*/	"","","","","host0-sysreset-n","host0-pmin-n","","",
-> +	/*C0-C7*/	"s0-vrd-fault-n","s1-vrd-fault-n","bmc-debug-mode","",
-
-Mildly interested in the functionality of "bmc-debug-mode" :)
-
-> +			"irq-n","","vrd-sel","spd-sel",
-> +	/*D0-D7*/	"presence-ps0","presence-ps1","hsc-12vmain-alt2-n","ext-high-temp-n",
-> +			"","bmc-ncsi-txen","","",
-
-Is "bmc-ncsi-txen" something that should be associated with the MAC?
-
-> +	/*E0-E7*/	"eth-phy-rst-n","eth-phy-int-n","clk50m-bmc-ncsi","","","","","",
-
-Same question for eth-phy-rst-n and eth-phy-int-n.
-
-> +	/*F0-F7*/	"s0-pcp-oc-warn-n","s1-pcp-oc-warn-n","power-chassis-control",
-> +			"cpu-bios-recover","cpld-done","hs-scout-proc-hot",
-> +			"s0-vr-hot-n","s1-vr-hot-n",
-> +	/*G0-G7*/	"","","hsc-12vmain-alt1-n","bmc-salt12-s0-ssif-n","","","","",
-> +	/*H0-H7*/	"","fpga-program-b","wd-disable-n","power-chassis-good","","","","",
-> +	/*I0-I7*/	"","","","","","adc-sw","power-button","rtc-battery-voltage-read-enable",
-> +	/*J0-J7*/	"","","","","","","","",
-> +	/*K0-K7*/	"","","","","","","","",
-> +	/*L0-L7*/	"","","","","","","","",
-> +	/*M0-M7*/	"bmc-uart-cts1","s0-ddr-save","soc-spi-nor-access","presence-cpu0",
-> +			"s0-rtc-lock","","","",
-
-Why isn't "bmc-uart-cts1" muxed into the associated UART? Why is it a GPIO?
-
-> +	/*N0-N7*/	"hpm-fw-recovery","hpm-stby-rst-n","jtag-sel-s0","led-sw-hb",
-> +			"jtag-dbgr-prsnt-n","","","",
-> +	/*O0-O7*/	"","","","","","","","",
-> +	/*P0-P7*/	"ps0-ac-loss-n","ps1-ac-loss-n","","",
-> +			"led-fault","cpld-user-mode","jtag-srst-n","led-bmc-hb",
-> +	/*Q0-Q7*/	"","","","","","","","",
-> +	/*R0-R7*/	"","","","","","","","",
-> +	/*S0-S7*/	"","","identify-button","led-identify",
-> +			"s1-ddr-save","spi-nor-access","sys-pgood","presence-cpu1",
-> +	/*T0-T7*/	"","","","","","","","",
-> +	/*U0-U7*/	"","","","","","","","",
-> +	/*V0-V7*/	"s0-hightemp-n","s0-fault-alert","s0-sys-auth-failure-n",
-> +			"host0-reboot-ack-n","host0-ready","host0-shd-req-n",
-> +			"host0-shd-ack-n","s0-overtemp-n",
-> +	/*W0-W7*/	"ocp-aux-pwren","ocp-main-pwren","ocp-pgood","",
-> +			"bmc-ok","bmc-ready","spi0-program-sel","spi0-backup-sel",
-> +	/*X0-X7*/	"i2c-backup-sel","s1-fault-alert","s1-fw-boot-ok",
-> +			"s1-hightemp-n","s0-spi-auth-fail-n","s1-sys-auth-failure-n",
-> +			"s1-overtemp-n","cpld-s1-spi-auth-fail-n",
-> +	/*Y0-Y7*/	"","","","","","","bmc-spi-fm-boot-abr-pd","host0-special-boot",
-> +	/*Z0-Z7*/	"reset-button","ps0-pgood","ps1-pgood","","","","","";
-> +};
-> +
-> +&gpio1 {
-> +	gpio-line-names =
-> +	/*18A0-18A7*/	"","","","","","","","",
-> +	/*18B0-18B7*/	"","","","","emmc-rst-n","","s0-soc-pgood","",
-
-"emmc-rst-n" should be specified as part of mmc-pwrseq-emmc, right?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml?h=v5.19-rc7
-
-Cheers,
-
-Andrew
+>> +	 };
+>> +
+>> +	eeprom@50 {
+>> +		compatible = "atmel,24c64";
+>> +		reg = <0x50>;
+>> +		pagesize = <32>;
+>> +	};
+>> +
+> 
+> (...)
+> 
+>> +
+>> +&gpio1 {
+>> +	gpio-line-names =
+>> +	/*18A0-18A7*/	"","","","","","","","",
+>> +	/*18B0-18B7*/	"","","","","emmc-rst-n","","s0-soc-pgood","",
+>> +	/*18C0-18C7*/	"uart1-mode0","uart1-mode1","uart2-mode0","uart2-mode1",
+>> +			"uart3-mode0","uart3-mode1","uart4-mode0","uart4-mode1",
+>> +	/*18D0-18D7*/	"","","","","","","","",
+>> +	/*18E0-18E3*/	"","","","";
+>> +};
+>> +
+> 
+> You have a trailing line error.
+> 
+> 
+Thanks, will fix
+- Quan
