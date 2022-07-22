@@ -1,251 +1,215 @@
-Return-Path: <SRS0=rmAa=X3=quanlongmarketresearch.com=jack@kernel.org>
+Return-Path: <SRS0=7sPJ=X3=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10054C43334
-	for <soc@archiver.kernel.org>; Fri, 22 Jul 2022 06:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4C69C43334
+	for <soc@archiver.kernel.org>; Fri, 22 Jul 2022 11:48:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D362AC341C7; Fri, 22 Jul 2022 06:04:38 +0000 (UTC)
-Received: from mail-m127136.qiye.163.com (mail-m127136.qiye.163.com [115.236.127.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 75DB8C341C7; Fri, 22 Jul 2022 11:48:18 +0000 (UTC)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 27E7AC341C6
-	for <soc@kernel.org>; Fri, 22 Jul 2022 06:04:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 27E7AC341C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=quanlongmarketresearch.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=quanlongmarketresearch.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 5CEF1C341C6
+	for <soc@kernel.org>; Fri, 22 Jul 2022 11:48:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5CEF1C341C6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f52.google.com with SMTP id t22so806419lfg.1
+        for <soc@kernel.org>; Fri, 22 Jul 2022 04:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q8iRoPPBKHKoGo4hL8GS/tRv9Gd3DvFPlZTbpKRwuI4=;
+        b=x78LAqLQ+c7oEZFhMztPt5dsAvSM3qQVd0QG41YgPP8Vm6fHbd9uYCHOdyOAwy76Bx
+         PdwsofK+JZBrpimHkvkcF0IEjoIKfsWpHrfCfbIiv/qLXdJFVafRM3ahCMiLLo04fjiq
+         YatZd1STTImM4KXp+r51KpieK+tAizQ0wp/hxTiyV8X4dVPFWCpkl+GSMsNHQqhZz8Ri
+         5BckFAgO/ODAbmA0QIaqmUKhlL1FVn445tRPTfUC7ja+zYI7JvXukhUrArMhX0JUtusN
+         zjJyFo+oWAePhbLzeFGkWpP12lZ781O02prOdb4N7bubIWtnK9+x9vgR0kMVjqN37Lr3
+         tnqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q8iRoPPBKHKoGo4hL8GS/tRv9Gd3DvFPlZTbpKRwuI4=;
+        b=kAbCURow92yAZREDPmPU6z2kRwuWikhkoFBgln1v+Wt+THLAd8oxpQHGbUxAK5wPVR
+         EADkNlDBchSCzbupzmi957mwteF1pSDYVhk8jOEt32W0eNBeJMjcWibqbW8KgscYW0UE
+         r/VqHIZuEkNwwl2HXsC7WOQ0/sRjOC7hpr4LOtfpW29X8qxzgWEkoZ9S0rsgEFnet28x
+         b9BdM1G+ZQXWzyxcL/uKJSGwhSkg/7U+RSLZg1z3qn5dIsHB2+xxVqCj0f+A6nuWLCpf
+         pJ1RIB35+Gx6V/khHs4kkwNffZLCSRVCtlcsKODzPHJ/kdIqxPQ9EWnV11VzR5nlnrG3
+         RHVg==
+X-Gm-Message-State: AJIora88xK8gbBFGBL7wf04sSF3FX5M7EtpDfFoJswCYCwce/87u8cS8
+	znV67egZb60jt640HtiEi1RoKg==
+X-Google-Smtp-Source: AGRyM1ueFJXNrByg4ku/ovEFrt3BbnNhd6zLtKDM7DQqotMlGdqLqNCCdGlCzmqV+cLv1Ua2FohSiw==
+X-Received: by 2002:a05:6512:128e:b0:489:e63d:3042 with SMTP id u14-20020a056512128e00b00489e63d3042mr45492lfs.302.1658490495291;
+        Fri, 22 Jul 2022 04:48:15 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id m13-20020a056512358d00b004793b9c2c12sm1013102lfr.124.2022.07.22.04.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 04:48:14 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org<soc@kernel.org>
-Received: from quanlongmarketresearch.com (localhost [127.0.0.1])
-	by mail-m12766.qiye.163.com (Hmail) with ESMTP id 421D3D00DA1;
-	Fri, 22 Jul 2022 14:04:26 +0800 (CST)
-Content-Type: multipart/alternative; BOUNDARY="=_Part_91853_967779566.1658469866260"
-Message-ID: <AEwATwAUFOy0QXNC0TBT9arL.1.1658469866260.Hmail.jack@quanlongmarketresearch.com>
-Subject: =?UTF-8?B?SGVyZSBpcyBhIGNvcHkgb2YgdGhlIGxhdGVzdCBtYXJrZXQgYW5hbHlzaXMgcmVwb3J0IG9mIENhcGFjaXRpdmUgVG91Y2ggQ29udHJvbGxlcnMgd2hpY2ggSSdtIHN1cmUgeW91IHdpbGwgYmUgaW50ZXJlc3RlZCBpbg==?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com MailMasterPC\4.17.4.1009 Win10 RS5
-X-Originating-IP: 121.32.176.59
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	stable@vger.kernel.org,
+	Laurence de Bruxelles <lfdebrux@gmail.com>
+Subject: [PATCH] ARM: pxa2xx: Fix GPIO descriptor tables
+Date: Fri, 22 Jul 2022 13:46:11 +0200
+Message-Id: <20220722114611.1517414-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Received: from jack@quanlongmarketresearch.com( [121.32.176.59) ] by ajax-webmail ( [127.0.0.1] ) ; Fri, 22 Jul 2022 14:04:26 +0800 (GMT+08:00)
-From: Jack <jack@quanlongmarketresearch.com>
-Date: Fri, 22 Jul 2022 14:04:26 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTxpPVkxNGU5PSEJLHkxPTFUTARMWGhIXJBQOD1
-	lXWRgSC1lBWUpJSlVISVVKTE1VTkJZV1kWGg8SFR0UWUFZT0tIVUpKS09IT1VPWQY+
-X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzo#DDovDDouPTQCSyojNThLLzkv
-	QhoJN1VKVUpNTkNPTUJDTUxIQ0pVMxYaEhdVERoYEDsKDhoVFxQVHBYaCRAeDwkeCB4aCRgTVRgU
-	FkVZV1kUFR4JGAsPWUFKV1kSC1lBWUpJSlVISVVKTE1VTkJZV1kIAVlBTUlOTEw3Bg++
-X-HM-Tid: 0a822481d8b6b22dkuuu18216e3e930
+Content-Transfer-Encoding: 8bit
 
---=_Part_91853_967779566.1658469866260
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Laurence reports:
 
-CgoKCgpIaSwgV2UgcHVibGlzaGVkIEEgTWFya2V0IFJlcG9ydCBPbiBDYXBhY2l0aXZlIFRvdWNo
-IENvbnRyb2xsZXJzIDIwMjIgZm9yIHlvdSBhbmQgQ29tcGV0aXRvcnMuSWYgeW91IGhhdmUgZnVy
-dGhlciBpbnRlcmVzdCBpbiB0aGlzIHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMsIHdlIHdvdWxk
-IGJlIGhhcHB5IHRvIHNoYXJlIHRoZSBGcmVlIHNhbXBsZSByZXBvcnQgZm9yIHlvdXIgcmVmZXJl
-bmNlLgoKVGhlIGZvbGxvd2luZyBtYW51ZmFjdHVyZXJzIGFyZSBjb3ZlcmVkOgpTeW5hcHRpY3MK
-SW5maW5lb24KQW5hbG9nIERldmljZXMKTWljcm9DaGlwCkF6b3RlcQpTaWxpY29uIExhYnMKT25z
-ZW1pClJlbmVzYXMKTWVsZmFzCkdvb2RpeApGb2NhbFRlY2ggU3lzdGVtcwpNU3RhciBTZW1pY29u
-ZHVjdG9yClNpbGVhZGluYwpCZXR0ZXJsaWZlIEVsZWN0cm9uaWMgU2NpZW5jZSBhbmQgVGVjaG5v
-bG9neQpIaW1heCBUZWNobm9sb2dpZXMKQnlkIFNlbWljb25kdWN0b3IKQ0hJUE9ORUlDCkh5Y29u
-IFRlY2hub2xvZ3kKQXBleCBNYXRlcmlhbCBUZWNobm9sb2d5CkVMQU4gTWljcm9lbGVjdHJvbmlj
-cwpaRUlURUMgU2VtaWNvbmR1Y3RvcgpTaXRyb25peCBUZWNobm9sb2d5CklsaXRlawouLi4uLi4u
-Li4uLi4uCgpNYXliZSBpdCB3aWxsIGJlIGhlbHBmdWwgdG8gdGhlIG1hcmtldGluZyBkZXBhcnRt
-ZW50IG9yIHRoZSBwZXJzb24gaW4gY2hhcmdlIG9mIHlvdXIgY29tcGFueS4KCldlIHdvdWxkIGJl
-IGdyYXRlZnVsIGlmIHlvdSBjb3VsZCBmb3J3YXJkIGl0LgpFLW1haWw6IHZlcmFAdmljbWFya2V0
-cmVzZWFyY2guY29tCgoKCgoKCg0KDQo=
---=_Part_91853_967779566.1658469866260
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+"Kernel >5.18 on Zaurus has a bug where the power management code can't
+talk to devices, emitting the following errors:
 
-PGh0bWw+DQo8aGVhZD4NCiAgICA8bWV0YSBodHRwLWVxdWl2PSdDb250ZW50LVR5cGUnIGNvbnRl
-bnQ9J3RleHQvaHRtbDsgY2hhcnNldD1VVEYtOCc+DQo8L2hlYWQ+DQo8Ym9keT4NCjxzdHlsZT4N
-CiAgICBmb250ew0KICAgICAgICBsaW5lLWhlaWdodDogMS42Ow0KICAgIH0NCiAgICB1bCxvbHsN
-CiAgICAgICAgcGFkZGluZy1sZWZ0OiAyMHB4Ow0KICAgICAgICBsaXN0LXN0eWxlLXBvc2l0aW9u
-OiBpbnNpZGU7DQogICAgfQ0KPC9zdHlsZT4NCjxkaXYgc3R5bGUgPSAnZm9udC1mYW1pbHk65b6u
-6L2v6ZuF6buRLFZlcmRhbmEsJnF1b3Q7TWljcm9zb2Z0IFlhaGVpJnF1b3Q7LFNpbVN1bixzYW5z
-LXNlcmlmO2ZvbnQtc2l6ZToxNHB4OyBsaW5lLWhlaWdodDoxLjY7Jz4NCiAgICA8ZGl2ID48L2Rp
-dj48ZGl2IHN0eWxlPSJmb250LWZhbWlseTrlvq7ova/pm4Xpu5EsVmVyZGFuYSwmcXVvdDtNaWNy
-b3NvZnQgWWFoZWkmcXVvdDssU2ltU3VuLHNhbnMtc2VyaWY7Zm9udC1zaXplOjE0cHg7IGxpbmUt
-aGVpZ2h0OjEuNjsiPgogICAgPGRpdj48ZGl2PjwvZGl2PjwvZGl2PjxkaXY+CiAgICA8ZGl2Pjxk
-aXYgY2xhc3M9Im9rci1ibG9jay1jbGlwYm9hcmQiIGRhdGEtb2tyPSIlN0IlMjJva3JEZWx0YSUy
-MiUzQSU1QiU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25zJTIy
-JTNBJTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0ElMjJ0
-ZXh0JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJIZXJlJTIwaXMlMjBh
-JTIwY29weSUyMG9mJTIwdGhlJTIwbGF0ZXN0JTIwbWFya2V0JTIwYW5hbHlzaXMlMjByZXBvcnQl
-MjBvZiUyMENhcGFjaXRpdmUlMjBUb3VjaCUyMENvbnRyb2xsZXJzJTIwd2hpY2glMjBJJ20lMjBz
-dXJlJTIweW91JTIwd2lsbCUyMGJlJTIwaW50ZXJlc3RlZCUyMGluJTIyJTdEJTdEJTVEJTdEJTJD
-JTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0ElN0Il
-N0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRleHQlMjIl
-MkMlMjJvcHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMkhpJTJDJTIwJTIwV2UlMjBwdWJs
-aXNoZWQlMjBBJTIwTWFya2V0JTIwUmVwb3J0JTIwT24lMjAlMjBDYXBhY2l0aXZlJTIwVG91Y2gl
-MjBDb250cm9sbGVycyUyMDIwMjIlMjBmb3IlMjB5b3UlMjBhbmQlMjAlMjBDb21wZXRpdG9ycy5J
-ZiUyMHlvdSUyMGhhdmUlMjBmdXJ0aGVyJTIwaW50ZXJlc3QlMjBpbiUyMHRoaXMlMjAlMjByZXBv
-cnQlMjBvciUyMHJlbGF0ZWQlMjByZXBvcnRzJTJDJTIwd2UlMjB3b3VsZCUyMGJlJTIwaGFwcHkl
-MjB0byUyMHNoYXJlJTIwdGhlJTIwRnJlZSUyMHNhbXBsZSUyMHJlcG9ydCUyMGZvciUyMHlvdXIl
-MjByZWZlcmVuY2UuJTIyJTdEJTdEJTVEJTdEJTJDJTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0
-JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1
-QiU1RCU3RCUyQyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25z
-JTIyJTNBJTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0El
-MjJ0ZXh0JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJUaGUlMjBmb2xs
-b3dpbmclMjBtYW51ZmFjdHVyZXJzJTIwYXJlJTIwY292ZXJlZCUzQSUyMiU3RCU3RCU1RCU3RCUy
-QyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25zJTIyJTNBJTdC
-JTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0ElMjJ0ZXh0JTIy
-JTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJTeW5hcHRpY3MlMjIlN0QlN0Ql
-NUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUy
-MiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIy
-dGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIySW5maW5lb24lMjIl
-N0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0
-aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIy
-JTNBJTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIyQW5hbG9n
-JTIwRGV2aWNlcyUyMiU3RCU3RCU1RCU3RCUyQyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUy
-MiUyQyUyMmxpbmVPcHRpb25zJTIyJTNBJTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIl
-N0IlMjJvcFR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQl
-MjIlM0ElMjJNaWNyb0NoaXAlMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUy
-MnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIy
-JTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0Il
-MjJ0ZXh0JTIyJTNBJTIyQXpvdGVxJTIyJTdEJTdEJTVEJTdEJTJDJTdCJTIybGluZVR5cGUlMjIl
-M0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0QlMkMlMjJsaW5lQ29udGVu
-dCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJvcHRpb25zJTIyJTNB
-JTdCJTIydGV4dCUyMiUzQSUyMlNpbGljb24lMjBMYWJzJTIyJTdEJTdEJTVEJTdEJTJDJTdCJTIy
-bGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0QlMkMl
-MjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJv
-cHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMk9uc2VtaSUyMiU3RCU3RCU1RCU3RCUyQyU3
-QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25zJTIyJTNBJTdCJTdE
-JTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJD
-JTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJSZW5lc2FzJTIyJTdEJTdEJTVEJTdE
-JTJDJTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0El
-N0IlN0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRleHQl
-MjIlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMk1lbGZhcyUyMiU3RCU3RCU1
-RCU3RCUyQyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25zJTIy
-JTNBJTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0ElMjJ0
-ZXh0JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJHb29kaXglMjIlN0Ql
-N0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0aW9u
-cyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNB
-JTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIyRm9jYWxUZWNo
-JTIwU3lzdGVtcyUyMiU3RCU3RCU1RCU3RCUyQyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUy
-MiUyQyUyMmxpbmVPcHRpb25zJTIyJTNBJTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIl
-N0IlMjJvcFR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQl
-MjIlM0ElMjJNU3RhciUyMFNlbWljb25kdWN0b3IlMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5l
-VHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxp
-bmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlv
-bnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIyU2lsZWFkaW5jJTIyJTdEJTdEJTVEJTdEJTJDJTdC
-JTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0Ql
-MkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMl
-MjJvcHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMkJldHRlcmxpZmUlMjBFbGVjdHJvbmlj
-JTIwU2NpZW5jZSUyMGFuZCUyMFRlY2hub2xvZ3klMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5l
-VHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxp
-bmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlv
-bnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIySGltYXglMjBUZWNobm9sb2dpZXMlMjIlN0QlN0Ql
-NUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUy
-MiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIy
-dGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIyQnlkJTIwU2VtaWNv
-bmR1Y3RvciUyMiU3RCU3RCU1RCU3RCUyQyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUy
-QyUyMmxpbmVPcHRpb25zJTIyJTNBJTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0Il
-MjJvcFR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIl
-M0ElMjJDSElQT05FSUMlMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRl
-eHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNB
-JTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0
-ZXh0JTIyJTNBJTIySHljb24lMjBUZWNobm9sb2d5JTIyJTdEJTdEJTVEJTdEJTJDJTdCJTIybGlu
-ZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0QlMkMlMjJs
-aW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJvcHRp
-b25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMkFwZXglMjBNYXRlcmlhbCUyMFRlY2hub2xvZ3kl
-MjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJsaW5l
-T3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BUeXBl
-JTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIyRUxB
-TiUyME1pY3JvZWxlY3Ryb25pY3MlMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUz
-QSUyMnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50
-JTIyJTNBJTVCJTdCJTIyb3BUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0El
-N0IlMjJ0ZXh0JTIyJTNBJTIyWkVJVEVDJTIwU2VtaWNvbmR1Y3RvciUyMiU3RCU3RCU1RCU3RCUy
-QyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25zJTIyJTNBJTdC
-JTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0ElMjJ0ZXh0JTIy
-JTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJTaXRyb25peCUyMFRlY2hub2xv
-Z3klMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJs
-aW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIyJTNBJTVCJTdCJTIyb3BU
-eXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMm9wdGlvbnMlMjIlM0ElN0IlMjJ0ZXh0JTIyJTNBJTIy
-SWxpdGVrJTIyJTdEJTdEJTVEJTdEJTJDJTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJD
-JTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUy
-Mm9wVHlwZSUyMiUzQSUyMnRleHQlMjIlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUz
-QSUyMi4uLi4uLi4uLi4uLi4lMjIlN0QlN0QlNUQlN0QlMkMlN0IlMjJsaW5lVHlwZSUyMiUzQSUy
-MnRleHQlMjIlMkMlMjJsaW5lT3B0aW9ucyUyMiUzQSU3QiU3RCUyQyUyMmxpbmVDb250ZW50JTIy
-JTNBJTVCJTVEJTdEJTJDJTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9w
-dGlvbnMlMjIlM0ElN0IlN0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUy
-MiUzQSUyMnRleHQlMjIlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMk1heWJl
-JTIwaXQlMjB3aWxsJTIwYmUlMjBoZWxwZnVsJTIwdG8lMjB0aGUlMjBtYXJrZXRpbmclMjBkZXBh
-cnRtZW50JTIwb3IlMjB0aGUlMjBwZXJzb24lMjBpbiUyMGNoYXJnZSUyMG9mJTIweW91ciUyMGNv
-bXBhbnkuJTIyJTdEJTdEJTVEJTdEJTJDJTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJD
-JTIybGluZU9wdGlvbnMlMjIlM0ElN0IlN0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU1RCU3
-RCUyQyU3QiUyMmxpbmVUeXBlJTIyJTNBJTIydGV4dCUyMiUyQyUyMmxpbmVPcHRpb25zJTIyJTNB
-JTdCJTdEJTJDJTIybGluZUNvbnRlbnQlMjIlM0ElNUIlN0IlMjJvcFR5cGUlMjIlM0ElMjJ0ZXh0
-JTIyJTJDJTIyb3B0aW9ucyUyMiUzQSU3QiUyMnRleHQlMjIlM0ElMjJXZSUyMHdvdWxkJTIwYmUl
-MjBncmF0ZWZ1bCUyMGlmJTIweW91JTIwY291bGQlMjBmb3J3YXJkJTIwaXQuJTIyJTdEJTdEJTVE
-JTdEJTJDJTdCJTIybGluZVR5cGUlMjIlM0ElMjJ0ZXh0JTIyJTJDJTIybGluZU9wdGlvbnMlMjIl
-M0ElN0IlN0QlMkMlMjJsaW5lQ29udGVudCUyMiUzQSU1QiU3QiUyMm9wVHlwZSUyMiUzQSUyMnRl
-eHQlMjIlMkMlMjJvcHRpb25zJTIyJTNBJTdCJTIydGV4dCUyMiUzQSUyMkUtbWFpbCUzQSUyMHZl
-cmElNDB2aWNtYXJrZXRyZXNlYXJjaC5jb20lMjAlMjIlN0QlN0QlNUQlN0QlNUQlMkMlMjJidXNp
-bmVzc0tleSUyMiUzQSUyMmxhcmstZG9jJTIyJTdEIj48L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0i
-MCIgZGF0YS1saW5lLWluZGV4PSIwIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPgo8L2Rpdj48
-ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWluZGV4PSIxIiBzdHlsZT0id2hpdGUtc3Bh
-Y2U6IHByZTsiPkhpLCAgV2UgcHVibGlzaGVkIEEgTWFya2V0IFJlcG9ydCBPbiAgQ2FwYWNpdGl2
-ZSBUb3VjaCBDb250cm9sbGVycyAyMDIyIGZvciB5b3UgYW5kICBDb21wZXRpdG9ycy5JZiB5b3Ug
-aGF2ZSBmdXJ0aGVyIGludGVyZXN0IGluIHRoaXMgIHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMs
-IHdlIHdvdWxkIGJlIGhhcHB5IHRvIHNoYXJlIHRoZSBGcmVlIHNhbXBsZSByZXBvcnQgZm9yIHlv
-dXIgcmVmZXJlbmNlLgo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWluZGV4
-PSIyIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPgo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0i
-MCIgZGF0YS1saW5lLWluZGV4PSIzIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPlRoZSBmb2xs
-b3dpbmcgbWFudWZhY3R1cmVycyBhcmUgY292ZXJlZDoKPC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9
-IjAiIGRhdGEtbGluZS1pbmRleD0iNCIgc3R5bGU9IndoaXRlLXNwYWNlOiBwcmU7Ij5TeW5hcHRp
-Y3MKPC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iNSIgc3R5bGU9
-IndoaXRlLXNwYWNlOiBwcmU7Ij5JbmZpbmVvbgo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0iMCIg
-ZGF0YS1saW5lLWluZGV4PSI2IiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPkFuYWxvZyBEZXZp
-Y2VzCjwvZGl2PjxkaXYgZGF0YS16b25lLWlkPSIwIiBkYXRhLWxpbmUtaW5kZXg9IjciIHN0eWxl
-PSJ3aGl0ZS1zcGFjZTogcHJlOyI+TWljcm9DaGlwCjwvZGl2PjxkaXYgZGF0YS16b25lLWlkPSIw
-IiBkYXRhLWxpbmUtaW5kZXg9IjgiIHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyI+QXpvdGVxCjwv
-ZGl2PjxkaXYgZGF0YS16b25lLWlkPSIwIiBkYXRhLWxpbmUtaW5kZXg9IjkiIHN0eWxlPSJ3aGl0
-ZS1zcGFjZTogcHJlOyI+U2lsaWNvbiBMYWJzCjwvZGl2PjxkaXYgZGF0YS16b25lLWlkPSIwIiBk
-YXRhLWxpbmUtaW5kZXg9IjEwIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPk9uc2VtaQo8L2Rp
-dj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWluZGV4PSIxMSIgc3R5bGU9IndoaXRl
-LXNwYWNlOiBwcmU7Ij5SZW5lc2FzCjwvZGl2PjxkaXYgZGF0YS16b25lLWlkPSIwIiBkYXRhLWxp
-bmUtaW5kZXg9IjEyIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPk1lbGZhcwo8L2Rpdj48ZGl2
-IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWluZGV4PSIxMyIgc3R5bGU9IndoaXRlLXNwYWNl
-OiBwcmU7Ij5Hb29kaXgKPC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRl
-eD0iMTQiIHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyI+Rm9jYWxUZWNoIFN5c3RlbXMKPC9kaXY+
-PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMTUiIHN0eWxlPSJ3aGl0ZS1z
-cGFjZTogcHJlOyI+TVN0YXIgU2VtaWNvbmR1Y3Rvcgo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0i
-MCIgZGF0YS1saW5lLWluZGV4PSIxNiIgc3R5bGU9IndoaXRlLXNwYWNlOiBwcmU7Ij5TaWxlYWRp
-bmMKPC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMTciIHN0eWxl
-PSJ3aGl0ZS1zcGFjZTogcHJlOyI+QmV0dGVybGlmZSBFbGVjdHJvbmljIFNjaWVuY2UgYW5kIFRl
-Y2hub2xvZ3kKPC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMTgi
-IHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyI+SGltYXggVGVjaG5vbG9naWVzCjwvZGl2PjxkaXYg
-ZGF0YS16b25lLWlkPSIwIiBkYXRhLWxpbmUtaW5kZXg9IjE5IiBzdHlsZT0id2hpdGUtc3BhY2U6
-IHByZTsiPkJ5ZCBTZW1pY29uZHVjdG9yCjwvZGl2PjxkaXYgZGF0YS16b25lLWlkPSIwIiBkYXRh
-LWxpbmUtaW5kZXg9IjIwIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPkNISVBPTkVJQwo8L2Rp
-dj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWluZGV4PSIyMSIgc3R5bGU9IndoaXRl
-LXNwYWNlOiBwcmU7Ij5IeWNvbiBUZWNobm9sb2d5CjwvZGl2PjxkaXYgZGF0YS16b25lLWlkPSIw
-IiBkYXRhLWxpbmUtaW5kZXg9IjIyIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPkFwZXggTWF0
-ZXJpYWwgVGVjaG5vbG9neQo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWlu
-ZGV4PSIyMyIgc3R5bGU9IndoaXRlLXNwYWNlOiBwcmU7Ij5FTEFOIE1pY3JvZWxlY3Ryb25pY3MK
-PC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMjQiIHN0eWxlPSJ3
-aGl0ZS1zcGFjZTogcHJlOyI+WkVJVEVDIFNlbWljb25kdWN0b3IKPC9kaXY+PGRpdiBkYXRhLXpv
-bmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMjUiIHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyI+
-U2l0cm9uaXggVGVjaG5vbG9neQo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5l
-LWluZGV4PSIyNiIgc3R5bGU9IndoaXRlLXNwYWNlOiBwcmU7Ij5JbGl0ZWsKPC9kaXY+PGRpdiBk
-YXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMjciIHN0eWxlPSJ3aGl0ZS1zcGFjZTog
-cHJlOyI+Li4uLi4uLi4uLi4uLgo8L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5l
-LWluZGV4PSIyOCIgc3R5bGU9IndoaXRlLXNwYWNlOiBwcmU7Ij4KPC9kaXY+PGRpdiBkYXRhLXpv
-bmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMjkiIHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyI+
-TWF5YmUgaXQgd2lsbCBiZSBoZWxwZnVsIHRvIHRoZSBtYXJrZXRpbmcgZGVwYXJ0bWVudCBvciB0
-aGUgcGVyc29uIGluIGNoYXJnZSBvZiB5b3VyIGNvbXBhbnkuCjwvZGl2PjxkaXYgZGF0YS16b25l
-LWlkPSIwIiBkYXRhLWxpbmUtaW5kZXg9IjMwIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPgo8
-L2Rpdj48ZGl2IGRhdGEtem9uZS1pZD0iMCIgZGF0YS1saW5lLWluZGV4PSIzMSIgc3R5bGU9Indo
-aXRlLXNwYWNlOiBwcmU7Ij5XZSB3b3VsZCBiZSBncmF0ZWZ1bCBpZiB5b3UgY291bGQgZm9yd2Fy
-ZCBpdC4KPC9kaXY+PGRpdiBkYXRhLXpvbmUtaWQ9IjAiIGRhdGEtbGluZS1pbmRleD0iMzIiIHN0
-eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyI+RS1tYWlsOiB2ZXJhQHZpY21hcmtldHJlc2VhcmNoLmNv
-bSAKPC9kaXY+PC9kaXY+PGRpdiBpZD0ibnRlcy1wY21hYy1zaWduYXR1cmUiIHN0eWxlPSJmb250
-LWZhbWlseTon5b6u6L2v6ZuF6buRJyI+CiA8L2Rpdj4KPC9kaXY+PCEtLfCfmIAtLT4KPC9kaXY+
-PCEtLfCfmIAtLT4NCjwvZGl2Pg0KPGJyPjwvYm9keT4NCjwvaHRtbD4=
---=_Part_91853_967779566.1658469866260--
+sharpsl-pm sharpsl-pm: Error: AC check failed: voltage -22.
+sharpsl-pm sharpsl-pm: Charging Error!
+sharpsl-pm sharpsl-pm: Warning: Cannot read main battery!
+
+Looking at the recent changes, I found that commit 31455bbda208 ("spi:
+pxa2xx_spi: Convert to use GPIO descriptors") replaced the deprecated
+SPI chip select platform device code with a gpiod lookup table. However,
+this didn't seem to work until I changed the `dev_id` member from the
+device name to the bus id. I'm not entirely sure why this is necessary,
+but I suspect it is related to the fact that in sysfs SPI devices are
+attached under /sys/devices/.../dev_name/spi_master/spiB/spiB.C, rather
+than directly to the device."
+
+After reviewing the change I conclude that the same fix is needed
+for all affected boards.
+
+Fixes: 31455bbda208 ("spi: pxa2xx_spi: Convert to use GPIO descriptors")
+Cc: stable@vger.kernel.org
+Reported-by: Laurence de Bruxelles <lfdebrux@gmail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+SoC people: please apply this directly for fixes.
+---
+ arch/arm/mach-pxa/corgi.c     | 2 +-
+ arch/arm/mach-pxa/hx4700.c    | 2 +-
+ arch/arm/mach-pxa/icontrol.c  | 4 ++--
+ arch/arm/mach-pxa/littleton.c | 2 +-
+ arch/arm/mach-pxa/magician.c  | 2 +-
+ arch/arm/mach-pxa/spitz.c     | 2 +-
+ arch/arm/mach-pxa/z2.c        | 4 ++--
+ 7 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/mach-pxa/corgi.c b/arch/arm/mach-pxa/corgi.c
+index c546356d0f02..5738496717e2 100644
+--- a/arch/arm/mach-pxa/corgi.c
++++ b/arch/arm/mach-pxa/corgi.c
+@@ -549,7 +549,7 @@ static struct pxa2xx_spi_controller corgi_spi_info = {
+ };
+ 
+ static struct gpiod_lookup_table corgi_spi_gpio_table = {
+-	.dev_id = "pxa2xx-spi.1",
++	.dev_id = "spi1",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", CORGI_GPIO_ADS7846_CS, "cs", 0, GPIO_ACTIVE_LOW),
+ 		GPIO_LOOKUP_IDX("gpio-pxa", CORGI_GPIO_LCDCON_CS, "cs", 1, GPIO_ACTIVE_LOW),
+diff --git a/arch/arm/mach-pxa/hx4700.c b/arch/arm/mach-pxa/hx4700.c
+index 2ae06edf413c..2fd665944103 100644
+--- a/arch/arm/mach-pxa/hx4700.c
++++ b/arch/arm/mach-pxa/hx4700.c
+@@ -635,7 +635,7 @@ static struct pxa2xx_spi_controller pxa_ssp2_master_info = {
+ };
+ 
+ static struct gpiod_lookup_table pxa_ssp2_gpio_table = {
+-	.dev_id = "pxa2xx-spi.2",
++	.dev_id = "spi2",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", GPIO88_HX4700_TSC2046_CS, "cs", 0, GPIO_ACTIVE_LOW),
+ 		{ },
+diff --git a/arch/arm/mach-pxa/icontrol.c b/arch/arm/mach-pxa/icontrol.c
+index 753fe166ab68..624088257cfc 100644
+--- a/arch/arm/mach-pxa/icontrol.c
++++ b/arch/arm/mach-pxa/icontrol.c
+@@ -140,7 +140,7 @@ struct platform_device pxa_spi_ssp4 = {
+ };
+ 
+ static struct gpiod_lookup_table pxa_ssp3_gpio_table = {
+-	.dev_id = "pxa2xx-spi.3",
++	.dev_id = "spi3",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", ICONTROL_MCP251x_nCS1, "cs", 0, GPIO_ACTIVE_LOW),
+ 		GPIO_LOOKUP_IDX("gpio-pxa", ICONTROL_MCP251x_nCS2, "cs", 1, GPIO_ACTIVE_LOW),
+@@ -149,7 +149,7 @@ static struct gpiod_lookup_table pxa_ssp3_gpio_table = {
+ };
+ 
+ static struct gpiod_lookup_table pxa_ssp4_gpio_table = {
+-	.dev_id = "pxa2xx-spi.4",
++	.dev_id = "spi4",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", ICONTROL_MCP251x_nCS3, "cs", 0, GPIO_ACTIVE_LOW),
+ 		GPIO_LOOKUP_IDX("gpio-pxa", ICONTROL_MCP251x_nCS4, "cs", 1, GPIO_ACTIVE_LOW),
+diff --git a/arch/arm/mach-pxa/littleton.c b/arch/arm/mach-pxa/littleton.c
+index f98dc61e87af..98423a96f440 100644
+--- a/arch/arm/mach-pxa/littleton.c
++++ b/arch/arm/mach-pxa/littleton.c
+@@ -207,7 +207,7 @@ static struct spi_board_info littleton_spi_devices[] __initdata = {
+ };
+ 
+ static struct gpiod_lookup_table littleton_spi_gpio_table = {
+-	.dev_id = "pxa2xx-spi.2",
++	.dev_id = "spi2",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", LITTLETON_GPIO_LCD_CS, "cs", 0, GPIO_ACTIVE_LOW),
+ 		{ },
+diff --git a/arch/arm/mach-pxa/magician.c b/arch/arm/mach-pxa/magician.c
+index 20456a55c4c5..0827ebca1d38 100644
+--- a/arch/arm/mach-pxa/magician.c
++++ b/arch/arm/mach-pxa/magician.c
+@@ -994,7 +994,7 @@ static struct pxa2xx_spi_controller magician_spi_info = {
+ };
+ 
+ static struct gpiod_lookup_table magician_spi_gpio_table = {
+-	.dev_id = "pxa2xx-spi.2",
++	.dev_id = "spi2",
+ 	.table = {
+ 		/* NOTICE must be GPIO, incompatibility with hw PXA SPI framing */
+ 		GPIO_LOOKUP_IDX("gpio-pxa", GPIO14_MAGICIAN_TSC2046_CS, "cs", 0, GPIO_ACTIVE_LOW),
+diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
+index dd88953adc9d..9964729cd428 100644
+--- a/arch/arm/mach-pxa/spitz.c
++++ b/arch/arm/mach-pxa/spitz.c
+@@ -578,7 +578,7 @@ static struct pxa2xx_spi_controller spitz_spi_info = {
+ };
+ 
+ static struct gpiod_lookup_table spitz_spi_gpio_table = {
+-	.dev_id = "pxa2xx-spi.2",
++	.dev_id = "spi2",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", SPITZ_GPIO_ADS7846_CS, "cs", 0, GPIO_ACTIVE_LOW),
+ 		GPIO_LOOKUP_IDX("gpio-pxa", SPITZ_GPIO_LCDCON_CS, "cs", 1, GPIO_ACTIVE_LOW),
+diff --git a/arch/arm/mach-pxa/z2.c b/arch/arm/mach-pxa/z2.c
+index d03520555497..c4d4162a7e6e 100644
+--- a/arch/arm/mach-pxa/z2.c
++++ b/arch/arm/mach-pxa/z2.c
+@@ -623,7 +623,7 @@ static struct pxa2xx_spi_controller pxa_ssp2_master_info = {
+ };
+ 
+ static struct gpiod_lookup_table pxa_ssp1_gpio_table = {
+-	.dev_id = "pxa2xx-spi.1",
++	.dev_id = "spi1",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", GPIO24_ZIPITZ2_WIFI_CS, "cs", 0, GPIO_ACTIVE_LOW),
+ 		{ },
+@@ -631,7 +631,7 @@ static struct gpiod_lookup_table pxa_ssp1_gpio_table = {
+ };
+ 
+ static struct gpiod_lookup_table pxa_ssp2_gpio_table = {
+-	.dev_id = "pxa2xx-spi.2",
++	.dev_id = "spi2",
+ 	.table = {
+ 		GPIO_LOOKUP_IDX("gpio-pxa", GPIO88_ZIPITZ2_LCD_CS, "cs", 0, GPIO_ACTIVE_LOW),
+ 		{ },
+-- 
+2.36.1
+
