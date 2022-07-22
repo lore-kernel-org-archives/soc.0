@@ -4,61 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0563CCA473
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF9C7C43334
 	for <soc@archiver.kernel.org>; Fri, 22 Jul 2022 20:50:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AA335C341C7; Fri, 22 Jul 2022 20:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 88CEEC341CA;
-	Fri, 22 Jul 2022 20:50:55 +0000 (UTC)
+	id A1F84C341CE; Fri, 22 Jul 2022 20:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85AABC341C7
+	for <soc@kernel.org>; Fri, 22 Jul 2022 20:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1658523055;
-	bh=TKIvEfXpVZyG/2gaDDlCBoOQxALP92XcvNaXtdq8OkY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rmR2qxBVmCsMtS/RahlffaQ73qrYlQVRbwFzczi0hz+QPeG2F3GSX1Pz088yhpTlb
-	 Z8R8neVI9h4kFJe7zPqGIY7zv82A+C40dZs/rnOgJckx988w8d92vr6fsdCNTSRnxy
-	 QzunuiS6cKYxwYnLYdeM9x8lpu1QEj2akQh04+Ys1pYDQKbuODkz4zlJ5h71cAxgSn
-	 rgeHin2VSiIkyY8JUuryDxX+pRdM9uonV4Rp3an8Tohd9ym0/sTkTco2EbD9wJbtAa
-	 lOSM8cw0Pqcc0+huS3+R20aBnbOGDRMIoxlDNBQrkJ7QHKyyjmRhhIyRniAzkQxI63
-	 LTE2NonIHzOZg==
+	bh=aLkVtlz9RfZOnnSM/mHJmzWNg2j9h2HFxN60G7p4f4s=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=NGK2nuSBGhHQKHud1cWMyHX/Xrn1H+ndW7breS5u7vPM95IMjBxWhuymDaRO1xVxx
+	 7wxcl8tZD3iyhyEkbCcF4fVWJXa3Joc4wa67dOHAMcCA734NJWnEwnA6VAdW98QV8Q
+	 WQInDrVloTz65cZdGQg3Sm2+bMyH1G2VmObFiuu1zdizmPlAdj6FAc45vl2Qc2RBb8
+	 WaUhwB9Lt0bT8g9Zmrsic0rFLhUvneMoRNoC7KLb6uC5+uiuVNDmuCc2enkAHZoKbS
+	 arr+50UgRuJbU2H6n2FXSLsPcEc6dZsQAtYJO9qgBKjIL82N4cseQ9xKbeiE9szsfK
+	 PS+j3Fj9AFKdQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6647BE451BB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E180E451B3;
 	Fri, 22 Jul 2022 20:50:55 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: pxa2xx: Fix GPIO descriptor tables
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <165852305541.6683.14622673836950139630.git-patchwork-notify@kernel.org>
+ <165852305532.6683.13129947881248433452.git-patchwork-summary@kernel.org>
 Date: Fri, 22 Jul 2022 20:50:55 +0000
-References: <20220722114611.1517414-1-linus.walleij@linaro.org>
-In-Reply-To: <20220722114611.1517414-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 22 Jul 2022 13:46:11 +0200 you wrote:
-> Laurence reports:
-> 
-> "Kernel >5.18 on Zaurus has a bug where the power management code can't
-> talk to devices, emitting the following errors:
-> 
-> sharpsl-pm sharpsl-pm: Error: AC check failed: voltage -22.
-> sharpsl-pm sharpsl-pm: Charging Error!
-> sharpsl-pm sharpsl-pm: Warning: Cannot read main battery!
-> 
-> [...]
+Patch: ARM: pxa2xx: Fix GPIO descriptor tables
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=662221
+  Lore link: https://lore.kernel.org/r/20220722114611.1517414-1-linus.walleij@linaro.org
 
-Here is the summary with links:
-  - ARM: pxa2xx: Fix GPIO descriptor tables
-    https://git.kernel.org/soc/soc/c/c5cdb9286913
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
