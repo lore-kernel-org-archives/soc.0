@@ -4,117 +4,193 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C85C43334
-	for <soc@archiver.kernel.org>; Fri, 22 Jul 2022 12:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73AB8C433EF
+	for <soc@archiver.kernel.org>; Fri, 22 Jul 2022 12:44:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 264EBC341C7; Fri, 22 Jul 2022 12:42:18 +0000 (UTC)
+	id 36B6BC341C7; Fri, 22 Jul 2022 12:44:12 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 813C8C341C6;
-	Fri, 22 Jul 2022 12:42:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 813C8C341C6
+	by smtp.kernel.org (Postfix) with ESMTPS id B64D9C341C6;
+	Fri, 22 Jul 2022 12:44:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B64D9C341C6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658493736; x=1690029736;
+  t=1658493850; x=1690029850;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=khPSA7SdeZvexVlLJVFq2jEQ1fN3eCp5D1jxG3kOEnY=;
-  b=maZxbnYE3oZrd/JdAEIFEY65R69ooM4aUnt8ibtp2BaDsxyQgY4wuqoy
-   Is4JmGce8tp8Uvz+ghskdnMV0C9IgR420RZ6eWcdn9FFHMevoBTTG972P
-   QcI0SjqvPqA/Ts3y6p/bjAN7vijafDFZvOf0Kzr7Gw+prHPqneijySIFH
-   Ly5rQzC7euVW4lghYUN9HI5y/SWpNR3lGEsJU1p/0gc6Q4tSxqygtOkU8
-   n1MuSSISwZ6J1bF+5USVsSYxI7mH8zQtAiyQxtM2OVp82q/EnH34aVLOn
-   qMCctrQPegttDBGoTuWJLLuTe7dXOKhm4jJcSFMC0pH+X5Ln22SdA4PQ/
-   g==;
+  bh=W0sFA/l5oPmT6yt5Cj3SdBXAuDc79F8wDLQNYoDx+VI=;
+  b=A+5uIvtQtLEPF7HHc17fyfUThTx/gZ577Zv/Gzt7n5jLiNAHpQG7SiMq
+   I8FxEBauw5gm5L/Z//+gFDEwO/jO2H2wPv2watwRqNaURW6dpfkGg/PIY
+   Aap8JACNCDPDLWsgwPIMQm8FLlq0Om0AK0H/lsLkYey/xIOvTX+4AO+6B
+   g+fqGMaEvq+KevXLFADAybDqRjTu39hTc+DQgDKRcJXCOwxYbgYhwOZTv
+   AMyVEg03SJ8dEw24FlfuOFU9TljMe7jfDUJtxJt3KHnFcCuIDqVfpOL2P
+   GMDNp4Op5T6HTZG64lnLTxD1AroC6TFjdJ88A4viqClSUDNblEs2KY9Ds
+   A==;
 X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="169063672"
+   d="scan'208";a="105696875"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jul 2022 05:42:13 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jul 2022 05:44:09 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 22 Jul 2022 05:42:12 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 22 Jul 2022 05:42:12 -0700
-Date: Fri, 22 Jul 2022 14:46:20 +0200
+ 15.1.2375.17; Fri, 22 Jul 2022 05:44:09 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Fri, 22 Jul 2022 05:44:09 -0700
+Date: Fri, 22 Jul 2022 14:48:18 +0200
 From: Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
-To: Kavyasree Kotagiri - I30978 <Kavyasree.Kotagiri@microchip.com>
+To: Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-CC: "robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
-	"alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>, "Claudiu
- Beznea - M18063" <Claudiu.Beznea@microchip.com>, "arnd@arndb.de"
-	<arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>, "soc@kernel.org"
-	<soc@kernel.org>, UNGLinuxDriver <UNGLinuxDriver@microchip.com>,
-	"maxime.chevallier@bootlin.com" <maxime.chevallier@bootlin.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
 	"linux-arm-kernel@lists.infradead.org"
 	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
+	<linux-kernel@vger.kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
+	"alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+	"soc@kernel.org" <soc@kernel.org>, UNGLinuxDriver
+	<UNGLinuxDriver@microchip.com>, "maxime.chevallier@bootlin.com"
+	<maxime.chevallier@bootlin.com>
 Subject: Re: [PATCH 2/2] ARM: dts: lan966x: add support for pcb8309
-Message-ID: <20220722124620.khueuxinijmwgot5@soft-dev3-1.localhost>
+Message-ID: <20220722124818.k42twnzd6wpz3inp@soft-dev3-1.localhost>
 References: <20220720194904.2025384-1-horatiu.vultur@microchip.com>
  <20220720194904.2025384-3-horatiu.vultur@microchip.com>
- <CO1PR11MB4865A1118ACB74B06408BBC792919@CO1PR11MB4865.namprd11.prod.outlook.com>
+ <89d7f6cc-a22d-b428-4677-f918df25901d@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <CO1PR11MB4865A1118ACB74B06408BBC792919@CO1PR11MB4865.namprd11.prod.outlook.com>
+In-Reply-To: <89d7f6cc-a22d-b428-4677-f918df25901d@microchip.com>
 
-The 07/21/2022 06:08, Kavyasree Kotagiri - I30978 wrote:
-> > +	i2c-mux {
-> > +		compatible = "i2c-mux";
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +		mux-controls = <&mux>;
-> > +		i2c-parent = <&i2c4>;
-> > +
-> > +		i2c102: i2c-sfp@1 {
-> > +			reg = <1>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
+The 07/21/2022 07:39, Claudiu Beznea - M18063 wrote:
+> > +&flx4 {
+> > +	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+> > +	status = "okay";
 > 
-> Why do you need #address-cells and #size-cells here?
-> > +		};
+> Embed i2c4 node here as you did for usart3 above. It's easy to follow the
+> connection b/w flx node and it's enabled child.
+
+Yes, I will do that.
+
+> 
+> > +};
 > > +
-> > +		i2c103: i2c-sfp@2 {
-> > +			reg = <2>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> Same here
-> > +		};
+> > +&gpio {
+> > +	fc3_b_pins: fc3-b-pins {
+> > +		/* RXD, TXD */
+> > +		pins = "GPIO_52", "GPIO_53";
+> > +		function = "fc3_b";
 > > +	};
-
-They are not needed. I will remove them in the next version.
 > > +
-> > +	mux: mux-controller {
-> > +		compatible = "gpio-mux";
-> > +		#mux-control-cells = <0>;
-> > +
-> > +		mux-gpios = <&sgpio_out 11 0 GPIO_ACTIVE_HIGH>, /*
-> > p11b0 */
-> > +			    <&sgpio_out 11 1 GPIO_ACTIVE_HIGH>; /* p11b1
-> > */
+> > +	fc4_b_pins: fc4-b-pins {
+> > +		/* SCL, SDA */
+> > +		pins = "GPIO_57", "GPIO_58";
+> > +		function = "fc4_b";
 > > +	};
-
-...
-
+> > +
+> > +	sgpio_a_pins: sgpio-a-pins {
+> > +		/* SCK, D0, D1, LD */
+> > +		pins = "GPIO_32", "GPIO_33", "GPIO_34", "GPIO_35";
+> > +		function = "sgpio_a";
+> > +	};
+> > +};
+> > +
 > > +&i2c4 {
 > > +	compatible = "microchip,sam9x60-i2c";
 > > +	reg = <0x600 0x200>;
 > > +	interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
 > > +	#address-cells = <1>;
 > > +	#size-cells = <0>;
+> > +	clocks = <&nic_clk>;
+> > +	pinctrl-0 = <&fc4_b_pins>;
+> > +	pinctrl-names = "default";
+> > +	i2c-analog-filter;
+> > +	i2c-digital-filter;
+> > +	i2c-digital-filter-width-ns = <35>;
+> > +	i2c-sda-hold-time-ns = <1500>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&mdio1 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&phy0 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&phy1 {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port0 {
+> > +	status = "okay";
 > 
-> Same here 
-> 
+> Keep status at the end of node description for uniformity with the nodes
+> enabled above. Same for the rest of nodes below.
 
-Also here.
+OK. I will do that in the next version.
+
+> 
+> > +	phy-handle = <&phy0>;
+> > +	phy-mode = "gmii";
+> > +	phys = <&serdes 0 CU(0)>;
+> > +};
+> > +
+> > +&port1 {
+> > +	status = "okay";
+> > +	phy-handle = <&phy1>;
+> > +	phy-mode = "gmii";
+> > +	phys = <&serdes 1 CU(1)>;
+> > +};
+> > +
+> > +&port2 {
+> > +	status = "okay";
+> > +	sfp = <&sfp2>;
+> > +	managed = "in-band-status";
+> > +	phy-mode = "sgmii";
+> > +	phys = <&serdes 2 SERDES6G(0)>;
+> > +};
+> > +
+> > +&port3 {
+> > +	status = "okay";
+> > +	sfp = <&sfp3>;
+> > +	managed = "in-band-status";
+> > +	phy-mode = "sgmii";
+> > +	phys = <&serdes 3 SERDES6G(1)>;
+> > +};
+> > +
+> > +&serdes {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&sgpio {
+> > +	status = "okay";
+> > +	pinctrl-0 = <&sgpio_a_pins>;
+> > +	pinctrl-names = "default";
+> > +	microchip,sgpio-port-ranges = <0 3>, <8 11>;
+> 
+> Except this one. For this would be nice to have status here before
+> describing childs.
+
+OK. I will do that in the next version.
+
+> 
+> > +	gpio@0 {
+> > +		ngpios = <64>;
+> > +	};
+> > +	gpio@1 {
+> > +		ngpios = <64>;
+> > +	};
+> > +};
+> > +
+> > +&switch {
+> > +	status = "okay";
+> > +};
+> 
 
 -- 
 /Horatiu
