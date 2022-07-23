@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C30CDC433EF
-	for <soc@archiver.kernel.org>; Sat, 23 Jul 2022 16:05:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B4CC43334
+	for <soc@archiver.kernel.org>; Sat, 23 Jul 2022 16:05:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 920A1C341C7; Sat, 23 Jul 2022 16:05:24 +0000 (UTC)
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	id B9CD6C341C7; Sat, 23 Jul 2022 16:05:26 +0000 (UTC)
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E51A1C341C0;
-	Sat, 23 Jul 2022 16:05:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E51A1C341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id EF0BCC341C0;
+	Sat, 23 Jul 2022 16:05:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF0BCC341C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id b11so912743qvo.11;
-        Sat, 23 Jul 2022 09:05:23 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id x11so5426007qts.13;
+        Sat, 23 Jul 2022 09:05:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=InRXohvCnMAhmT8u+oEgogA0v2wkFEAz3q2k5R/fqSM=;
-        b=GgUat65VKsK0ZfRj3q0oBW1CkoIxu7E+MrqgpBUEm2grTGs4eOFzTDGV6ULXDRIgwG
-         HAbl1U/fHF+h+Wq96YysjLLqZFfen2ImAAjHbqzYNc+T2Fl6Fe6YPsnilshk+f8rEXMH
-         te/1Ef5Rlfw9d7z6TKt2anIYBnvjN/NpXu24WhOPXE3sKw0275znEekL9CpGbF78EtkK
-         fMbQFA2e2kF9Pa3CNgy5eGWhOZQ804VywFTjvwudP8eIImO/mQ471l5IXGVWYntbJhNV
-         OVavlOfcCyd2LfoGE9LEi+/HUOhVeBE4tFYknVTriYkZvf4C4X/EjCLtmCcafZZtP3Vo
-         tVNw==
+        bh=jK1g6CKi8TGVEXtmQQp5ePb9oV0aBgQX1WSc/ZWjGNc=;
+        b=GQ0LXoz16pb+BYb0RYEMcaylvWKYAa8sbH7tNP4qaYXmHQ4vfvIDFFzFaZeDwJNhkA
+         JRkAu18I87FSi1PmxFfMgZi9WYd9B707Id2gwgJNH3InLY7ABu8ENNS3HxCBnhJUFeP4
+         PjsBt78fC3NmHrt1q8n5bIEvO3yh+qDhyM+vxpgRnTcsMlOGG64gCPlzLiyp3TEGSVoM
+         qeedapYa9+3VBlLprjdRvECKgGidNwpPJ0kg90g0uxHzNLFNMIxOIIwCUquaYDCs9z+E
+         UBCxJnFfkmDdRtVVK03+pv9o/hdADx0Q6xLaJyA4i7IB6N8QRiUZPHh1SyRhXCO7Lvpc
+         wA7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=InRXohvCnMAhmT8u+oEgogA0v2wkFEAz3q2k5R/fqSM=;
-        b=HR1FzV2BkW/+1/ccSEIpVipAPEOWQs4iBAXLee+D6+089IoN49HujIktPS7DCOuwCn
-         32rOknBdbMml9Y8hWOge7x0yYnp0fehT1kAGmClx4wWNRunwlcUd0b2n+8Onqx4qfFHW
-         9yCykp+dearwhx/Ldi9t+II/bfVxQQdwKXS0nfq3wwDiSiIaPW8zOdzd5YMGrYyeTYs+
-         fbPQPAx75zyzZXecb3jq3MOZkVpar9DXc9+zZ1SL9YaNEDDxT05hhCFDlXQYWQczGfV3
-         0ovM8Fr6FbafjCU37EJmlABKQXZjTjWbC0mNOuGnueZjwxh0ZeyN5T9VMsDydRBhxc6K
-         vYDw==
-X-Gm-Message-State: AJIora+llQSj9QVXcoSeK2SjxdaxJKTu51s04jpZy6PXywHKJ7Li27wf
-	CtvNsVkKEGBdfIlY1NAdB1s=
-X-Google-Smtp-Source: AGRyM1vw/+m2KQwJeidQXdDWly0QGmIWFNzrcAVU3JJcEdM246sNweIz4yvWIYO6yOqG2saax+vE0g==
-X-Received: by 2002:ad4:5c62:0:b0:474:1267:14fd with SMTP id i2-20020ad45c62000000b00474126714fdmr4439378qvh.68.1658592322732;
-        Sat, 23 Jul 2022 09:05:22 -0700 (PDT)
+        bh=jK1g6CKi8TGVEXtmQQp5ePb9oV0aBgQX1WSc/ZWjGNc=;
+        b=x6wwuiDhG/v8b0eX4JKRAp6VWl5xY8zGJqrk5MeIHH3R9FKseJ9aMGrZMnb3Q7bS2K
+         4w+OQ1qOPpaTOYZguliYzoagdlJao7BGMplxMnVs1ciqzaMK73SfUODvO5iflI5g/p1z
+         C/IDnG8TlON5v1KcO51KPMz/GofD3zA4PknmA3+G9/khThLwrYJmhBvbHQDejhSfSlwu
+         /Mmd7nn4JjPf9R4gaO4B/y3Au4mmMld47cVP9PbjnSQoUXdaKqabFmj86Uip5aJ6miVE
+         6l9+dUYQuXi7dcdZCxcaBZnrzw29CLX7R/9dadLB7tg5XW7luIqDXaELBcPMFeSb9Ivj
+         uSBQ==
+X-Gm-Message-State: AJIora8KoZmD9jdU7Tc1otpiFHa++rRjSndQCeJakBhmKz8nF+1Sa3Go
+	31rMC344xRkus3Vs6O1kYW4=
+X-Google-Smtp-Source: AGRyM1uYTCjmmVj7ECql86XkacltEYujgSy09r9BhU6t7MjcYTmX4zbhUggyKQnVGkKuHfyGoMZGSg==
+X-Received: by 2002:a05:622a:24e:b0:31e:fec2:d0d7 with SMTP id c14-20020a05622a024e00b0031efec2d0d7mr4400777qtx.222.1658592324787;
+        Sat, 23 Jul 2022 09:05:24 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.20
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 09:05:22 -0700 (PDT)
+        Sat, 23 Jul 2022 09:05:24 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -85,46 +85,49 @@ Cc: robh+dt@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org,
 	Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 03/12] dt-bindings: gpio: fsl-imx-gpio: Add i.MXRT compatibles
-Date: Sat, 23 Jul 2022 12:05:04 -0400
-Message-Id: <20220723160513.271692-4-Mr.Bossman075@gmail.com>
+Subject: [PATCH v5 04/12] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT1170 compatible
+Date: Sat, 23 Jul 2022 12:05:05 -0400
+Message-Id: <20220723160513.271692-5-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
 References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Both the i.MXRT1170 and 1050 have the same gpio controller as
-"fsl,imx35-gpio". Add i.MXRT to the compatible list.
+Add i.MXRT1170 compatible string to Documentation.
 
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
 V1 -> V2:
  - New commit to fix dtbs_check
 V2 -> V3:
- - Nothing done
+ - Fix typo
+ - Remove unused const
 V3 -> V4:
  - Nothing done
 V4 -> V5:
  - Nothing done
 ---
- Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-index f57d22d1ebd6..ae18603697d7 100644
---- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-@@ -37,6 +37,8 @@ properties:
-               - fsl,imx8mp-gpio
-               - fsl,imx8mq-gpio
-               - fsl,imx8qxp-gpio
-+              - fsl,imxrt1050-gpio
-+              - fsl,imxrt1170-gpio
-           - const: fsl,imx35-gpio
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index 29339d0196ec..0e7833478869 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -75,6 +75,10 @@ properties:
+           - const: fsl,imx8qxp-usdhc
+           - const: fsl,imx7d-usdhc
+         deprecated: true
++      - items:
++          - enum:
++              - fsl,imxrt1170-usdhc
++          - const: fsl,imxrt1050-usdhc
  
    reg:
+     maxItems: 1
 -- 
 2.36.1
 
