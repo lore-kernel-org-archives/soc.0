@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01080C43334
-	for <soc@archiver.kernel.org>; Sat, 23 Jul 2022 16:05:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 851ADC43334
+	for <soc@archiver.kernel.org>; Sat, 23 Jul 2022 16:05:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DEAFBC341D0; Sat, 23 Jul 2022 16:05:20 +0000 (UTC)
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	id 6F871C341C7; Sat, 23 Jul 2022 16:05:22 +0000 (UTC)
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 23B64C341C0;
-	Sat, 23 Jul 2022 16:05:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 23B64C341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id CAFA4C341C0;
+	Sat, 23 Jul 2022 16:05:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CAFA4C341C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f170.google.com with SMTP id f14so5706048qkm.0;
-        Sat, 23 Jul 2022 09:05:19 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id e16so5662883qka.5;
+        Sat, 23 Jul 2022 09:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/eLH0yog0Bw3hBDbRM0s90v+9InNOx9Xe/vOmOIYLbo=;
-        b=QsvevnAfSaOAESS2pqob5ExJCfuhq8ERdGh1JIbzftti/uF5xgwFd66/BtJ5xKA8iG
-         wM1lzri4ASIdyvHxC0+N0QRJJoGzq+OcGZbgOCimn0ynAzTeDHEQ0uYbdnAfbGZBFFHh
-         chy8nISvhn+kINVzn4Yb62GTQnu+JqjCIKpGg0sObm2DCOdMAjg6PFJbpK/FVDTpPl5E
-         7veMxkmRV6P4p/GLwhyzC0lF84u2EcRWs57zCKFtpCFsX6TxtyteI64WwcFlQmM3av2J
-         iut/TJjomjkiwVdqDi10AkpNBgAgsO5iQjfD5eQO34/qx9OZFZrkOE/HplVVkRivfVOv
-         nAXA==
+        bh=oM+J6LQU47Ll5cBvglPrj/8sNA6JWNYmjwfp5l6F0ec=;
+        b=cB+D6tFZxjNwwMQAdR7bB/aqZsiIAZVbh/5GRQIwpERHhBFDShRd5e5X3bU3XjVZaI
+         lyZlVUy8ViCqLrwANiJ76x1UGZsWGwM9kZ+wzMyFUHLkAmdjFSI9Jd1CU9UgFcsTIpgh
+         2EbjFi+yqjwU/00jei4KX2StYRpNkNUQyngSFf/jx/v8BiTbNNE4Emv5yHeTK3JwzheR
+         7bFwNANlOjTl250em41TcMDLI5j9xylhcf49WGaDWHEOSfM4+QMBx7ILcExeeqfEMuIC
+         fl2VaRkFq1yX167nuCNIAEfOrJ0PefsoQ7KRhFElOrnlyaSYav3+xlXAFZGybiFRiIKk
+         snDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/eLH0yog0Bw3hBDbRM0s90v+9InNOx9Xe/vOmOIYLbo=;
-        b=O/mhxQJFaF580abzqK0PRJVjI99BxJxFQje2ouytYCznodwL7qT9gxuevP4XhubCaf
-         E/Vwq9u+Yf3AoTF1uAVD88WqFxLsKKhWJJCareM7Zf1t2zbS2MZyu5RwFK33tPI9Y/ka
-         LJX08kSWa05olOIdSWjg9HGCfBzy4uyA8oENoeKdfuKOwpRw/cX+kIvM9N+S3RTsJO0Y
-         I43AKOGT88WzQAJ0qRdiCRWTKX6RNmebrmrmRmli4233xpluY2ISzetoH0rSSmb5oUam
-         7826fPjmATqUZcOqnUqFmuAIz62mQBR9ZKJgs7bLwnFzBCyg9kN+mBSQ1umswHIFJxu2
-         taoA==
-X-Gm-Message-State: AJIora+JmcjZnKTebMkJkSivb+W4k9VxTaDuv1BPVe7FL04AQ9X8hmj7
-	p1zMJHDbuERQRteef7ISfRs=
-X-Google-Smtp-Source: AGRyM1ugzQFqbvUOtNQn2VtC93LwY/YIDuaLe/OWEY2+qiBkxiz65vTaYQXWhERPI4O+ETyOey2WJw==
-X-Received: by 2002:a37:8a44:0:b0:6b5:f371:a183 with SMTP id m65-20020a378a44000000b006b5f371a183mr3853203qkd.492.1658592318886;
-        Sat, 23 Jul 2022 09:05:18 -0700 (PDT)
+        bh=oM+J6LQU47Ll5cBvglPrj/8sNA6JWNYmjwfp5l6F0ec=;
+        b=SFhDqy69C6npgF0E31hFqdStLjAnG0LRQYubvR+9Tc1Ezo5hNm9ljL66Ila6YJnAE7
+         BJ8cRpEET3xsNBBtA5Dn/RG+IjhaxzWYbNdQdnc+hKcryT50vdpwmErMCYz++HCPJ6Tf
+         YBOWGs77v5qU1MWrN4cYAZ3NIU4j7WM97XE3HkRTf2bWpg3fAMb7TrmdNun6oiqGL7ra
+         F7omt9uoAFot/tfE70UjV3tAXRASN0ZU8htrvgt6IdCAJXmhfo+BnmXM/eFG5GLhxL/k
+         xvUUAyzcf177ormCfvWDm3NndlSDbQJ+R5SiQhoydVn5B69QbeQN55qPBxhb+uzuIN6o
+         j8Zw==
+X-Gm-Message-State: AJIora8pbNI6W4tMXXSLR6n+aiifhK6M4eNAil7lSRjj2PFWj3J6RJ/N
+	AR6aLhrMpTGM3FHXZcuG3JU=
+X-Google-Smtp-Source: AGRyM1sh3TrQGE4W8az/u94k8nMU0iL06oazAZ1/ltgN7HHBlzFufvmZxLkCZp6G8L8Z6PQ/bZleIg==
+X-Received: by 2002:a05:620a:270e:b0:6b4:8425:d03c with SMTP id b14-20020a05620a270e00b006b48425d03cmr3820941qkp.732.1658592320736;
+        Sat, 23 Jul 2022 09:05:20 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.16
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 09:05:18 -0700 (PDT)
+        Sat, 23 Jul 2022 09:05:20 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -84,24 +84,24 @@ Cc: robh+dt@kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org,
-	Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 01/12] dt-bindings: arm: imx: Add i.MXRT compatible Documentation
-Date: Sat, 23 Jul 2022 12:05:02 -0400
-Message-Id: <20220723160513.271692-2-Mr.Bossman075@gmail.com>
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v5 02/12] dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
+Date: Sat, 23 Jul 2022 12:05:03 -0400
+Message-Id: <20220723160513.271692-3-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
 References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Recently the imxrt1050 was added but the cpu compatible node wasn't
-added. Add both i.MXRT1170 and 1050 compatibles to fsl.yaml.
+Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
+Add i.MXRT to the compatible list.
 
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
 V1 -> V2:
- - Swap order of soc's
+ - Nothing done
 V2 -> V3:
  - Nothing done
 V3 -> V4:
@@ -109,32 +109,22 @@ V3 -> V4:
 V4 -> V5:
  - Nothing done
 ---
- Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index ef524378d449..875f136010ae 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -1020,6 +1020,18 @@ properties:
-               - fsl,imx8ulp-evk           # i.MX8ULP EVK Board
-           - const: fsl,imx8ulp
+diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+index a4f51f46b7a1..716c6afcca1f 100644
+--- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
++++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+@@ -31,6 +31,8 @@ properties:
+           - enum:
+               - fsl,imx6sl-gpt
+               - fsl,imx6sx-gpt
++              - fsl,imxrt1050-gpt
++              - fsl,imxrt1170-gpt
+           - const: fsl,imx6dl-gpt
  
-+      - description: i.MXRT1050 based Boards
-+        items:
-+          - enum:
-+              - fsl,imxrt1050-evk         # i.MXRT1050 EVK Board
-+          - const: fsl,imxrt1050
-+
-+      - description: i.MXRT1170 based Boards
-+        items:
-+          - enum:
-+              - fsl,imxrt1170-evk         # i.MXRT1170 EVK Board
-+          - const: fsl,imxrt1170
-+
-       - description:
-           Freescale Vybrid Platform Device Tree Bindings
- 
+   reg:
 -- 
 2.36.1
 
