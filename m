@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D2F4C43334
-	for <soc@archiver.kernel.org>; Sat, 23 Jul 2022 16:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01080C43334
+	for <soc@archiver.kernel.org>; Sat, 23 Jul 2022 16:05:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B6F6BC341C7; Sat, 23 Jul 2022 16:05:18 +0000 (UTC)
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	id DEAFBC341D0; Sat, 23 Jul 2022 16:05:20 +0000 (UTC)
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EABA2C341C0;
-	Sat, 23 Jul 2022 16:05:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EABA2C341C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 23B64C341C0;
+	Sat, 23 Jul 2022 16:05:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 23B64C341C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id i13so5464824qvo.3;
-        Sat, 23 Jul 2022 09:05:17 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id f14so5706048qkm.0;
+        Sat, 23 Jul 2022 09:05:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NiBXHZtiNNzM7sHjjwSiAophF4Tu0dmf3XqMGID1JOM=;
-        b=gRlQXzeTLOdtN2sYz2mwN+kdfbohHDPBoWrR0vt1QqZOpEJf8qWYqJRApWT4AkkEHB
-         6ZoJLwk8Y1qqD13NypUe8ZMHXPlF1Xwmc2i5NmYyBHI0y4TvgsSgalxdx6dUL8EywhSp
-         4/aWAKZZgvp04WaLmJDXV8yuQuriLEYblcQYgGrLRJ7xeGvJeIP0wPmXhABQ5YVhoRE0
-         xhfn+BdA2s6sKDw+gBi5LY99iqqIAfJY7rdx8YiiaWSGvGoeS8/iG04REyKb6sydRN1E
-         TH+iAD9qOBlL+3KlUuK3K7/tqGMQOF4YBW0rbsfTla3SQYI9WhINmzVgIMgDTDwmVJs8
-         uQ0w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/eLH0yog0Bw3hBDbRM0s90v+9InNOx9Xe/vOmOIYLbo=;
+        b=QsvevnAfSaOAESS2pqob5ExJCfuhq8ERdGh1JIbzftti/uF5xgwFd66/BtJ5xKA8iG
+         wM1lzri4ASIdyvHxC0+N0QRJJoGzq+OcGZbgOCimn0ynAzTeDHEQ0uYbdnAfbGZBFFHh
+         chy8nISvhn+kINVzn4Yb62GTQnu+JqjCIKpGg0sObm2DCOdMAjg6PFJbpK/FVDTpPl5E
+         7veMxkmRV6P4p/GLwhyzC0lF84u2EcRWs57zCKFtpCFsX6TxtyteI64WwcFlQmM3av2J
+         iut/TJjomjkiwVdqDi10AkpNBgAgsO5iQjfD5eQO34/qx9OZFZrkOE/HplVVkRivfVOv
+         nAXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NiBXHZtiNNzM7sHjjwSiAophF4Tu0dmf3XqMGID1JOM=;
-        b=mxo0SLFjrSR0j6VLSdf3Hqa5knkUmG9ygXMyuvF7OIahjFMIQ/IenwG9Cl7+orrYnl
-         /YXzC1xmxStCP4qItxnhyQj0R5/BCa/P0V7ippldkJeCKeSEMSxF6We7dL2TDtQ5rslq
-         jd4eBGCk+eu1q0mc6M9E6lPmeA5Igj9V9WNEkZBG3eCbAE9lcHQu9BTVqf+22kIOlYyq
-         mI9JhZQoi8q4GA7jBvYIih6pf6UMP8XRfWWZPp1wSZLx6FRHlZt/fgYr0CLzGBAN8IgI
-         bJe95ElgvaKORajvqARsJUMUb5KOLVNglrP37olE1zo6h/FUVVFmWduySpoKPNi8LfR9
-         AR/A==
-X-Gm-Message-State: AJIora9zBZRt/olaUAALt5qAhqAfqnWKrFlrkDDrHahkhRPOq/ZUqmP5
-	ZdzYWkkNJmMR+uXqd3+rEk0=
-X-Google-Smtp-Source: AGRyM1tFGvEAl9/tyu4hF4NNXrnTxNm3w9+iEprFORt+uxL5yPCUzTz4QtHT1LgBfv2VcIgWE/nRvw==
-X-Received: by 2002:ad4:5c62:0:b0:473:4585:292f with SMTP id i2-20020ad45c62000000b004734585292fmr4330419qvh.16.1658592316875;
-        Sat, 23 Jul 2022 09:05:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/eLH0yog0Bw3hBDbRM0s90v+9InNOx9Xe/vOmOIYLbo=;
+        b=O/mhxQJFaF580abzqK0PRJVjI99BxJxFQje2ouytYCznodwL7qT9gxuevP4XhubCaf
+         E/Vwq9u+Yf3AoTF1uAVD88WqFxLsKKhWJJCareM7Zf1t2zbS2MZyu5RwFK33tPI9Y/ka
+         LJX08kSWa05olOIdSWjg9HGCfBzy4uyA8oENoeKdfuKOwpRw/cX+kIvM9N+S3RTsJO0Y
+         I43AKOGT88WzQAJ0qRdiCRWTKX6RNmebrmrmRmli4233xpluY2ISzetoH0rSSmb5oUam
+         7826fPjmATqUZcOqnUqFmuAIz62mQBR9ZKJgs7bLwnFzBCyg9kN+mBSQ1umswHIFJxu2
+         taoA==
+X-Gm-Message-State: AJIora+JmcjZnKTebMkJkSivb+W4k9VxTaDuv1BPVe7FL04AQ9X8hmj7
+	p1zMJHDbuERQRteef7ISfRs=
+X-Google-Smtp-Source: AGRyM1ugzQFqbvUOtNQn2VtC93LwY/YIDuaLe/OWEY2+qiBkxiz65vTaYQXWhERPI4O+ETyOey2WJw==
+X-Received: by 2002:a37:8a44:0:b0:6b5:f371:a183 with SMTP id m65-20020a378a44000000b006b5f371a183mr3853203qkd.492.1658592318886;
+        Sat, 23 Jul 2022 09:05:18 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.14
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 09:05:15 -0700 (PDT)
+        Sat, 23 Jul 2022 09:05:18 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -83,75 +83,58 @@ Cc: robh+dt@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v5 00/12] Add support for the i.MXRT1170-evk
-Date: Sat, 23 Jul 2022 12:05:01 -0400
-Message-Id: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
+	linux-gpio@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 01/12] dt-bindings: arm: imx: Add i.MXRT compatible Documentation
+Date: Sat, 23 Jul 2022 12:05:02 -0400
+Message-Id: <20220723160513.271692-2-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
+References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch continues support for the imxrt series now with the imxrt1170
+Recently the imxrt1050 was added but the cpu compatible node wasn't
+added. Add both i.MXRT1170 and 1050 compatibles to fsl.yaml.
 
-This patch contains:
-- Update to imxrt_defconfig
-- Devicetree
-- Clock driver
-- Pinctrl driver
-- New pll
-
-This patch also updates some documentation for both imxrt1170 an 1050.
-
-The i.MXRT1170 has a vast array of features including two cores. 2 Ethernet, 2 USB phy, and a 2d gpu.
-
-It also is featured in a new google coral board
-https://coral.ai/products/dev-board-micro
-Not affiliated unfortunately.
-
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
 V1 -> V2:
- - Add 3 new commits in documentation
- - Fix spelling
+ - Swap order of soc's
+V2 -> V3:
+ - Nothing done
+V3 -> V4:
+ - Nothing done
+V4 -> V5:
+ - Nothing done
 ---
+ Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Jesse Taube (12):
-  dt-bindings: arm: imx: Add i.MXRT compatible Documentation
-  dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
-  dt-bindings: gpio: fsl-imx-gpio: Add i.MXRT compatibles
-  dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT1170 compatible
-  dt-bindings: serial: fsl-lpuart: add i.MXRT1170 compatible
-  ARM: mach-imx: Add support for i.MXRT1170
-  clk: imx: Update pllv3 to support i.MXRT1170
-  dt-bindings: imx: Add clock binding for i.MXRT1170
-  clk: imx: Add initial support for i.MXRT1170 clock driver
-  ARM: dts: imxrt1170-pinfunc: Add pinctrl binding header
-  ARM: dts: imx: Add i.MXRT1170-EVK support
-  ARM: imxrt_defconfig: Add i.MXRT1170
-
- .../devicetree/bindings/arm/fsl.yaml          |   12 +
- .../bindings/gpio/fsl-imx-gpio.yaml           |    2 +
- .../bindings/mmc/fsl-imx-esdhc.yaml           |    4 +
- .../bindings/serial/fsl-lpuart.yaml           |    3 +
- .../devicetree/bindings/timer/fsl,imxgpt.yaml |    2 +
- arch/arm/boot/dts/Makefile                    |    3 +-
- arch/arm/boot/dts/imxrt1170-evk.dts           |  110 ++
- arch/arm/boot/dts/imxrt1170-pinfunc.h         | 1561 +++++++++++++++++
- arch/arm/boot/dts/imxrt1170.dtsi              |  276 +++
- arch/arm/configs/imxrt_defconfig              |   17 +
- arch/arm/mach-imx/mach-imxrt.c                |    1 +
- drivers/clk/imx/Kconfig                       |    7 +
- drivers/clk/imx/Makefile                      |    1 +
- drivers/clk/imx/clk-imxrt1170.c               |  749 ++++++++
- drivers/clk/imx/clk-pllv3.c                   |   57 +-
- drivers/clk/imx/clk.h                         |   11 +
- include/dt-bindings/clock/imxrt1170-clock.h   |  282 +++
- 17 files changed, 3091 insertions(+), 7 deletions(-)
- create mode 100644 arch/arm/boot/dts/imxrt1170-evk.dts
- create mode 100644 arch/arm/boot/dts/imxrt1170-pinfunc.h
- create mode 100644 arch/arm/boot/dts/imxrt1170.dtsi
- create mode 100644 drivers/clk/imx/clk-imxrt1170.c
- create mode 100644 include/dt-bindings/clock/imxrt1170-clock.h
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index ef524378d449..875f136010ae 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -1020,6 +1020,18 @@ properties:
+               - fsl,imx8ulp-evk           # i.MX8ULP EVK Board
+           - const: fsl,imx8ulp
+ 
++      - description: i.MXRT1050 based Boards
++        items:
++          - enum:
++              - fsl,imxrt1050-evk         # i.MXRT1050 EVK Board
++          - const: fsl,imxrt1050
++
++      - description: i.MXRT1170 based Boards
++        items:
++          - enum:
++              - fsl,imxrt1170-evk         # i.MXRT1170 EVK Board
++          - const: fsl,imxrt1170
++
+       - description:
+           Freescale Vybrid Platform Device Tree Bindings
+ 
 -- 
 2.36.1
 
