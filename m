@@ -1,76 +1,593 @@
-Return-Path: <SRS0=GZ1f=X5=huawei.com=john.garry@kernel.org>
+Return-Path: <SRS0=mK9O=X5=gmail.com=matti.lehtimaki@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A278BC43334
-	for <soc@archiver.kernel.org>; Sun, 24 Jul 2022 16:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFFFAC43334
+	for <soc@archiver.kernel.org>; Sun, 24 Jul 2022 17:25:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85681C3411E; Sun, 24 Jul 2022 16:49:57 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 7F89CC385A2; Sun, 24 Jul 2022 17:25:03 +0000 (UTC)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 14DEBC341C0;
-	Sun, 24 Jul 2022 16:49:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 14DEBC341C0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LrTYd0ZvQz67Kvx;
-	Mon, 25 Jul 2022 00:45:09 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Jul 2022 18:49:47 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Jul 2022 17:49:44 +0100
-From: John Garry <john.garry@huawei.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 37457C36AE5;
+	Sun, 24 Jul 2022 17:25:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37457C36AE5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id p10so7345858lfd.9;
+        Sun, 24 Jul 2022 10:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6GRiW2zkx25/goI4FZW0/S+Tv9QEr9m8FlebSmvbDHo=;
+        b=oCV7jnmT2Mn3GzR8zuZrmsR54vl1bceoXVXZGlmgCKwYkFi7FFhLyhSPWYizu0TkDC
+         YzbhDoxeZsydWWdVh8rSmUJys/Km9r01e0veLHkpZNIA5kFw3i6BdLl8BJ2s0CKRR7jp
+         HIFiUMTZQNy0DzvElv9bJHoZhoFSMyraPsvkT1sFNe9pDbxMw6b374SBiq11lLIm6+SJ
+         Bu4XVPyQid1tSn0gA+e02HQK6k1qKmEfcK8E3a+/7/yROIPyp01la6a7KerXaOEvNyx1
+         i8WJVy60Ion4+Im9c9VdgducZmfCKI/7Ux9Fhdc6Jg7CCWh6ZMSnc6N76Jm7QNhVsanl
+         r15w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6GRiW2zkx25/goI4FZW0/S+Tv9QEr9m8FlebSmvbDHo=;
+        b=oXtOL0H4DCfZRmOnUH8ZWHkruRquin/UTODcKt6A5NVnURGJ9rCrFvYqi7JTlRMC79
+         KNG+rZYycisHt0L7IvqcKPHf/BBjVC5j0lNs+G+4ItsM0RimMgMeBerXN4ia+C3uYeiA
+         PGotjKGw7FcNcpjzFs0+JObHthk01+tZi7mQ7tDxqFvaUWMcKVaD7gsthG2vrSwqvjuo
+         Gy1PDqqnOPfT00MpgfEr35g9hfUwHvPaBZzpAGEEXtzlW83YlJeOn8zCoqxnHZ+UsJsu
+         a1rT6u+NmdlY1XpdEjGr1HcmY7QjZ+buJa+gHFCVXKQ3XeN7RQ6oghnzaUrzS/2dLCiU
+         mGLQ==
+X-Gm-Message-State: AJIora/aMxOciubT7zPkGZoV3UmZ4ibvLkz3+X8JzIQSF6/X9TzFZuBl
+	fLrgOljMX2dTt4JvLzzZtew=
+X-Google-Smtp-Source: AGRyM1sVJKHPCbU/lFubT0Gz2Y/V9cLgOJEUvlvhXCEphn7A+Ff4fO0BdhdPdktXxhEHHufGAXN7Mg==
+X-Received: by 2002:a05:6512:1092:b0:48a:766e:7e20 with SMTP id j18-20020a056512109200b0048a766e7e20mr3438776lfg.646.1658683500229;
+        Sun, 24 Jul 2022 10:25:00 -0700 (PDT)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
+        by smtp.gmail.com with ESMTPSA id d7-20020a19f247000000b0048a73d83b7csm1928322lfk.133.2022.07.24.10.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 10:24:59 -0700 (PDT)
+From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To: linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-To: <will@kernel.org>, <catalin.marinas@arm.com>,
-	<linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>, <olof@lixom.net>,
-	<soc@kernel.org>
-CC: <jpoimboe@kernel.org>, <linux-kernel@vger.kernel.org>, John Garry
-	<john.garry@huawei.com>
-Subject: [PATCH 2/2] arm64: defconfig: Enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-Date: Mon, 25 Jul 2022 00:43:24 +0800
-Message-ID: <1658681004-132191-3-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4 10.1 (SM-T530)
+Date: Sun, 24 Jul 2022 20:24:41 +0300
+Message-Id: <20220724172442.87830-4-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
+References: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Since commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable
-from a choice") faddr2line has stopped working by default as it relies
-on CONFIG_DEBUG_INFO.
+Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
+based on the apq8026 platform.
 
-Enable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT to get it working again,
-which seems the sensible config option to use.
+Currently supported are accelerometer sensor, hall sensor,
+internal storage, physical buttons (power & volume), screen
+(based on simple-framebuffer set up by the bootloader), sdcard,
+touchscreen and USB.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v3:
+  - Fix sdhc_2 bus width
+  - Reorder includes
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index de662de0bb4d..43e3550afa45 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1311,6 +1311,7 @@ CONFIG_CRYPTO_DEV_HISI_TRNG=m
- CONFIG_CMA_SIZE_MBYTES=32
- CONFIG_PRINTK_TIME=y
- CONFIG_DEBUG_KERNEL=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
+Changes in v2:
+  - Change codename to matisse-wifi
+  - Remove msm-id, not needed when lk2nd is used
+  - Remove unused labels from reserved memory regions
+  - Rename muic node
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 469 ++++++++++++++++++
+ 2 files changed, 470 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 5112f493f494..8bac4f4f8656 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-apq8016-sbc.dtb \
+ 	qcom-apq8026-asus-sparrow.dtb \
+ 	qcom-apq8026-lg-lenok.dtb \
++	qcom-apq8026-samsung-matisse-wifi.dtb \
+ 	qcom-apq8060-dragonboard.dtb \
+ 	qcom-apq8064-cm-qs600.dtb \
+ 	qcom-apq8064-ifc6410.dtb \
+diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+new file mode 100644
+index 000000000000..78a119107069
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+@@ -0,0 +1,469 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2022, Matti Lehtimäki <matti.lehtimaki@gmail.com>
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/input/input.h>
++#include "qcom-msm8226.dtsi"
++#include "qcom-pm8226.dtsi"
++
++/delete-node/ &smem_region;
++
++/ {
++	model = "Samsung Galaxy Tab 4 10.1";
++	compatible = "samsung,matisse-wifi", "qcom,apq8026";
++	chassis-type = "tablet";
++
++	aliases {
++		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
++		mmc1 = &sdhc_2; /* SDC2 SD card slot */
++		display0 = &framebuffer0;
++	};
++
++	chosen {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		stdout-path = "display0";
++
++		framebuffer0: framebuffer@3200000 {
++			compatible = "simple-framebuffer";
++			reg = <0x3200000 0x800000>;
++			width = <1280>;
++			height = <800>;
++			stride = <(1280 * 3)>;
++			format = "r8g8b8";
++		};
++	};
++
++	gpio-hall-sensor {
++		compatible = "gpio-keys";
++
++		event-hall-sensor {
++			label = "Hall Effect Sensor";
++			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
++			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
++			linux,input-type = <EV_SW>;
++			linux,code = <SW_LID>;
++			debounce-interval = <15>;
++			wakeup-source;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		autorepeat;
++
++		key-home {
++			label = "Home";
++			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_HOMEPAGE>;
++			debounce-interval = <15>;
++		};
++
++		key-volume-down {
++			label = "Volume Down";
++			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEDOWN>;
++			debounce-interval = <15>;
++		};
++
++		key-volume-up {
++			label = "Volume Up";
++			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEUP>;
++			debounce-interval = <15>;
++		};
++	};
++
++	i2c-muic {
++		compatible = "i2c-gpio";
++		sda-gpios = <&tlmm 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
++		scl-gpios = <&tlmm 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&muic_i2c_default_state>;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		muic: usb-switch@25 {
++			compatible = "siliconmitus,sm5502-muic";
++			reg = <0x25>;
++
++			interrupt-parent = <&tlmm>;
++			interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
++
++			pinctrl-names = "default";
++			pinctrl-0 = <&muic_int_default_state>;
++		};
++	};
++
++	reg_tsp_1p8v: regulator-tsp-1p8v {
++		compatible = "regulator-fixed";
++		regulator-name = "tsp_1p8v";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++
++		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&tsp_en_default_state>;
++	};
++
++	reg_tsp_3p3v: regulator-tsp-3p3v {
++		compatible = "regulator-fixed";
++		regulator-name = "tsp_3p3v";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++
++		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&tsp_en1_default_state>;
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		framebuffer@3200000 {
++			reg = <0x3200000 0x800000>;
++			no-map;
++		};
++
++		mpss@8400000 {
++			reg = <0x08400000 0x1f00000>;
++			no-map;
++		};
++
++		mba@a300000 {
++			reg = <0x0a300000 0x100000>;
++			no-map;
++		};
++
++		reserved@cb00000 {
++			reg = <0x0cb00000 0x700000>;
++			no-map;
++		};
++
++		wcnss@d200000 {
++			reg = <0x0d200000 0x700000>;
++			no-map;
++		};
++
++		adsp@d900000 {
++			reg = <0x0d900000 0x1800000>;
++			no-map;
++		};
++
++		venus@f100000 {
++			reg = <0x0f100000 0x500000>;
++			no-map;
++		};
++
++		smem_region: smem@fa00000 {
++			reg = <0xfa00000 0x100000>;
++			no-map;
++		};
++
++		reserved@fb00000 {
++			reg = <0x0fb00000 0x260000>;
++			no-map;
++		};
++
++		rfsa@fd60000 {
++			reg = <0x0fd60000 0x20000>;
++			no-map;
++		};
++
++		rmtfs@fd80000 {
++			compatible = "qcom,rmtfs-mem";
++			reg = <0x0fd80000 0x180000>;
++			no-map;
++
++			qcom,client-id = <1>;
++		};
++	};
++};
++
++&blsp1_i2c2 {
++	status = "okay";
++
++	accelerometer@1d {
++		compatible = "st,lis2hh12";
++		reg = <0x1d>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&accel_int_default_state>;
++
++		st,drdy-int-pin = <1>;
++
++		vdd-supply = <&pm8226_l19>;
++		vddio-supply = <&pm8226_lvs1>;
++	};
++};
++
++&blsp1_i2c5 {
++	status = "okay";
++
++	touchscreen@4a {
++		compatible = "atmel,maxtouch";
++		reg = <0x4a>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&tsp_int_rst_default_state>;
++
++		reset-gpios = <&pm8226_gpios 6 GPIO_ACTIVE_LOW>;
++
++		vdd-supply = <&reg_tsp_1p8v>;
++		vdda-supply = <&reg_tsp_3p3v>;
++	};
++};
++
++&rpm_requests {
++	pm8226-regulators {
++		compatible = "qcom,rpm-pm8226-regulators";
++
++		pm8226_s3: s3 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1300000>;
++		};
++
++		pm8226_s4: s4 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_s5: s5 {
++			regulator-min-microvolt = <1150000>;
++			regulator-max-microvolt = <1150000>;
++		};
++
++		pm8226_l1: l1 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++
++		pm8226_l2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8226_l3: l3 {
++			regulator-min-microvolt = <750000>;
++			regulator-max-microvolt = <1337500>;
++			regulator-always-on;
++		};
++
++		pm8226_l4: l4 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8226_l5: l5 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8226_l6: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++
++		pm8226_l7: l7 {
++			regulator-min-microvolt = <1850000>;
++			regulator-max-microvolt = <1850000>;
++		};
++
++		pm8226_l8: l8 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++
++		pm8226_l9: l9 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++
++		pm8226_l10: l10 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_l12: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_l14: l14 {
++			regulator-min-microvolt = <2750000>;
++			regulator-max-microvolt = <2750000>;
++		};
++
++		pm8226_l15: l15 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		pm8226_l16: l16 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3350000>;
++		};
++
++		pm8226_l17: l17 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++
++			regulator-system-load = <200000>;
++			regulator-allow-set-load;
++			regulator-always-on;
++		};
++
++		pm8226_l18: l18 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_l19: l19 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <3000000>;
++		};
++
++		pm8226_l20: l20 {
++			regulator-min-microvolt = <3075000>;
++			regulator-max-microvolt = <3075000>;
++		};
++
++		pm8226_l21: l21 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_l22: l22 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3000000>;
++		};
++
++		pm8226_l23: l23 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		pm8226_l24: l24 {
++			regulator-min-microvolt = <1300000>;
++			regulator-max-microvolt = <1350000>;
++		};
++
++		pm8226_l25: l25 {
++			regulator-min-microvolt = <1775000>;
++			regulator-max-microvolt = <2125000>;
++		};
++
++		pm8226_l26: l26 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1300000>;
++		};
++
++		pm8226_l27: l27 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_l28: l28 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_lvs1: lvs1 {};
++	};
++};
++
++&sdhc_1 {
++	status = "okay";
++
++	vmmc-supply = <&pm8226_l17>;
++	vqmmc-supply = <&pm8226_l6>;
++
++	bus-width = <8>;
++	non-removable;
++};
++
++&sdhc_2 {
++	status = "okay";
++
++	vmmc-supply = <&pm8226_l18>;
++	vqmmc-supply = <&pm8226_l21>;
++
++	bus-width = <4>;
++	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
++};
++
++&tlmm {
++	accel_int_default_state: accel-int-default-state {
++		pins = "gpio54";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	muic_i2c_default_state: muic-i2c-default-state {
++		pins = "gpio14", "gpio15";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	muic_int_default_state: muic-int-default-state {
++		pins = "gpio67";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	tsp_en_default_state: tsp-en-default-state {
++		pins = "gpio31";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	tsp_en1_default_state: tsp-en1-default-state {
++		pins = "gpio73";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	tsp_int_rst_default_state: tsp-int-rst-default-state {
++		pins = "gpio17";
++		function = "gpio";
++		drive-strength = <10>;
++		bias-pull-up;
++	};
++};
++
++&usb {
++	status = "okay";
++	extcon = <&muic>, <&muic>;
++};
++
++&usb_hs_phy {
++	extcon = <&muic>;
++	v1p8-supply = <&pm8226_l10>;
++	v3p3-supply = <&pm8226_l20>;
++};
 -- 
-2.35.3
+2.34.1
 
