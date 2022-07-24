@@ -1,125 +1,84 @@
-Return-Path: <SRS0=nxGl=X5=protonmail.com=linmengbo0689@kernel.org>
+Return-Path: <SRS0=GZ1f=X5=huawei.com=john.garry@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25C6DCCA47C
-	for <soc@archiver.kernel.org>; Sun, 24 Jul 2022 09:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89DD5C43334
+	for <soc@archiver.kernel.org>; Sun, 24 Jul 2022 16:49:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0FA07C341C0; Sun, 24 Jul 2022 09:55:58 +0000 (UTC)
-Received: from mail-40132.protonmail.ch (mail-40132.protonmail.ch [185.70.40.132])
+	id 46EFDC341D0; Sun, 24 Jul 2022 16:49:54 +0000 (UTC)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3293BC341DD
-	for <soc@kernel.org>; Sun, 24 Jul 2022 09:55:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3293BC341DD
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-Date: Sun, 24 Jul 2022 09:55:43 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1658656554; x=1658915754;
-	bh=FEF5AAiMS4gD8qsqPLEZ7xhLZ3WtoMjzRd22rrrxYf4=;
-	h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-	 References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-	 Feedback-ID:Message-ID;
-	b=bbTAC0eGK0IsA02e6NpZaAKsH8aw6uHMRcwaz1R9tvUkTIY0MHBz35dyT+c8Ej5Au
-	 KWYsJAT3IB2nLHVMTCiWuvBQU3BWr+/KxdYJlfzc5dNCS71dOeg5tvzfNkTMpilGWH
-	 P2gRiQNby5uB2GmPREutQAQn84twp8gd70V0vGp/rPjxjHFt96EDfjL+t5bGhG1FTR
-	 fENX7i13Vlq/wISFTasvVs9ncgg6ZQkit+cUbi/uWZlypx6FTPjmLTgZO5/FUBLWZo
-	 UScWBhECWTdxi7e6aAbNaiNeVkUEMAv09NXVnTj1fKjlBc/VIjatNCLeLt9CMNv9n8
-	 A/ZVDKItArixQ==
-To: devicetree@vger.kernel.org
-From: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E5103C3411E;
+	Sun, 24 Jul 2022 16:49:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5103C3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.206])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LrTZg4dxWz67Mxp;
+	Mon, 25 Jul 2022 00:46:03 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Sun, 24 Jul 2022 18:49:42 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 24 Jul 2022 17:49:39 +0100
+From: John Garry <john.garry@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <bjorn.andersson@linaro.org>, Konrad Dybcio <konrad.dybcio@somainline.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Stephen Boyd <sboyd@codeaurora.org>, Stephan Gerhold <stephan@gerhold.net>, Nikita Travkin <nikita@trvn.ru>, soc@kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, ~postmarketos/upstreaming@lists.sr.ht
-Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH v7 4/5] arm64: dts: qcom: msm8916-samsung-e2015: Add touchkey
-Message-ID: <20220724095426.14189-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20220724095039.13568-1-linmengbo0689@protonmail.com>
-References: <20220724095039.13568-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+To: <will@kernel.org>, <catalin.marinas@arm.com>,
+	<linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>, <olof@lixom.net>,
+	<soc@kernel.org>
+CC: <jpoimboe@kernel.org>, <linux-kernel@vger.kernel.org>, John Garry
+	<john.garry@huawei.com>
+Subject: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+Date: Mon, 25 Jul 2022 00:43:22 +0800
+Message-ID: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 
-On the Samsung Galaxy E5 and E7 the touch key is supplied by a single
-fixed regulator (enabled via GPIO 97) that supplies both MCU and LED.
-Add it to the device tree.
+scripts/faddr2line has not worked by default for arm64 since 5.17
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
----
- .../qcom/msm8916-samsung-e2015-common.dtsi    | 26 +++++++++++++++++++
- .../dts/qcom/msm8916-samsung-grandmax.dts     |  4 +++
- 2 files changed, 30 insertions(+)
+Firstly, since commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO
+selectable from a choice"), CONFIG_DEBUG_INFO was not getting enabled by
+default (and this is required for faddr2line to work).
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-index 9caa8a161d31..542010fdfb8a 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-@@ -38,6 +38,19 @@ reg_motor_vdd: regulator-motor-vdd {
- =09=09pinctrl-names =3D "default";
- =09=09pinctrl-0 =3D <&motor_en_default>;
- =09};
-+
-+=09reg_touch_key: regulator-touch-key {
-+=09=09compatible =3D "regulator-fixed";
-+=09=09regulator-name =3D "touch_key";
-+=09=09regulator-min-microvolt =3D <3300000>;
-+=09=09regulator-max-microvolt =3D <3300000>;
-+
-+=09=09gpio =3D <&msmgpio 97 GPIO_ACTIVE_HIGH>;
-+=09=09enable-active-high;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&tkey_en_default>;
-+=09};
- };
+Secondly, commit dcea997beed6 ("faddr2line: Fix overlapping text section
+failures, the sequel") caused a breakage for arm64, as reported at the
+following:
+https://lore.kernel.org/lkml/3bd9817d-1959-c081-e5d0-8b0e70b3f41e@huawei.com/
 
- &blsp_i2c2 {
-@@ -48,6 +61,11 @@ &blsp_i2c2 {
- =09/delete-node/ magnetometer@12;
- };
+Josh has sent fixes/improvements for faddr2line at the following:
+https://lore.kernel.org/lkml/cover.1658426357.git.jpoimboe@kernel.org/
 
-+&touchkey {
-+=09vcc-supply =3D <&reg_touch_key>;
-+=09vdd-supply =3D <&reg_touch_key>;
-+};
-+
- &msmgpio {
- =09motor_en_default: motor-en-default {
- =09=09pins =3D "gpio76";
-@@ -56,4 +74,12 @@ motor_en_default: motor-en-default {
- =09=09drive-strength =3D <2>;
- =09=09bias-disable;
- =09};
-+
-+=09tkey_en_default: tkey-en-default {
-+=09=09pins =3D "gpio97";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts b/arch/a=
-rm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
-index 4c1becdb9428..bc7134698978 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
-@@ -41,6 +41,10 @@ &reg_motor_vdd {
- =09gpio =3D <&msmgpio 72 GPIO_ACTIVE_HIGH>;
- };
+In this series I enable CONFIG_DEBUG_INFO by enabling
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, which seems the sensible
+option.
 
-+&reg_touch_key {
-+=09status =3D "disabled";
-+};
-+
- &msmgpio {
- =09gpio_leds_default: gpio-led-default {
- =09=09pins =3D "gpio60";
---
-2.30.2
+As for merging this, I am not sure who would pick it up - any takers
+welcome.
 
+Note: this is based on next-20220722 and it may be wiser to sync the
+defconfig manually (instead of using 1/2). Indeed I am not sure what is
+the policy is of sync'ing this anyway.
+
+Thanks! 
+
+John Garry (2):
+  arm64: defconfig: Sync with savedefconfig
+  arm64: defconfig: Enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+
+ arch/arm64/configs/defconfig | 85 ++++++++++++++++--------------------
+ 1 file changed, 37 insertions(+), 48 deletions(-)
+
+-- 
+2.35.3
 
