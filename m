@@ -1,130 +1,100 @@
-Return-Path: <SRS0=Q9oe=X5=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=mK9O=X5=gmail.com=matti.lehtimaki@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C85D8C433EF
-	for <soc@archiver.kernel.org>; Sun, 24 Jul 2022 20:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C64CC433EF
+	for <soc@archiver.kernel.org>; Sun, 24 Jul 2022 20:43:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8037DC341C7; Sun, 24 Jul 2022 20:36:15 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 46BB2C341C0; Sun, 24 Jul 2022 20:43:05 +0000 (UTC)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A8366C3411E;
-	Sun, 24 Jul 2022 20:36:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8366C3411E
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-oa1-f53.google.com ([209.85.160.53]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mwwhv-1nIXCK1Tcx-00ySUa; Sun, 24 Jul 2022 22:36:11 +0200
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-10d6e8990b9so12502477fac.7;
-        Sun, 24 Jul 2022 13:36:10 -0700 (PDT)
-X-Gm-Message-State: AJIora/1QAoojCMT3HwwjRyMfhxh9Gf/pU3llKong/N1ifuQLEkJVBox
-	u8APzoCbR4Sxk3h0nqDhXJhB6oPsHKc+HTvhaU4=
-X-Google-Smtp-Source: AGRyM1tnVuoxBPd70oeqOmGfhtFKVZUyeBTN+CqYz+FbOrB3rGMUkpEDV43Dv/RGnkLnCN8S2/MMawjNcUf3ekkgaU8=
-X-Received: by 2002:a05:6870:6195:b0:100:ee8a:ce6d with SMTP id
- a21-20020a056870619500b00100ee8ace6dmr4688274oah.155.1658694969838; Sun, 24
- Jul 2022 13:36:09 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8B327C3411E;
+	Sun, 24 Jul 2022 20:43:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B327C3411E
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id a23so12968795lfm.10;
+        Sun, 24 Jul 2022 13:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pA5BfuMOUHYHwO3N3zLiAEa59H7++ZYtYbgRtUC4lS4=;
+        b=lJXN7Mz3DhZbhXRMSD1q7ouCf+C/Tq2lVQRBhzyr81PRVogA1pF7cWdnJk2GGE6BEi
+         cNWiQECTbjrN8BXsDsfKAIwp3/FqrEmEw4lAMXKd5uMn1ONVR4h7jdD/Lp5J7wO1CZvu
+         IKEu1Ui9mjZiVngVLJfsnRUtgh6zg/HCDXZqWE5iqtOfEL8hlVgOg+xoEwOru6aMsUVv
+         8ny32y+fgPncX00nKUoKhAlDs3uGaQ0rRNhrLOL7qd85rYwLhQEtynAeUbqHOGb9aCS0
+         BS0yooKkzjmULCG2M7VjKIAX1+5qKJLvlpvdaPzMgiQ/GhjOhTNDl76RVLJuE07pNQoc
+         wZgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pA5BfuMOUHYHwO3N3zLiAEa59H7++ZYtYbgRtUC4lS4=;
+        b=UOV+9HR6S5AJxkGoy+NqdX9WHu22JWYVPROQJw30QGE+AsDjQWpSTmRyRUPi6NJpVj
+         HiSPCFOlyN13qcP0cYmpI2lE/BQ0UZNfOFaaXUgfd3eLfzgVQj8ao7a+0BsdpCV+2qJf
+         Nj08DiM56Yk87kAcarMR/jqIZKlrcCe/QXX+VyhZho84BGzDn0anj5VeCLYWtAKjdGAr
+         64JmqiG2cTCr7hk4O+imxFrKfXnSoCTiWrcpyRjDzIOc65n5y7QK712FWrzTl4eZuJ3D
+         yngV7mHSK3qRzri32nV4rFKbVA5U2UMjIKUoBFeNVVr9775ZKtDG4RGo8XrZYz61z+vR
+         bk4A==
+X-Gm-Message-State: AJIora8vtkSbvhjrUEBDrgRWWjZqoFxp5h/cqmsvEKbPT6iKeSjJkf+o
+	YBFc0sopsdw/OjeEwFhmxJU=
+X-Google-Smtp-Source: AGRyM1vz4PlnN9YFCrpKpPzMIUBnbgCXz3iqng6JaKTnN1dOdYoY0ESf4MOXCwwUG0M3IxQAjIOkvQ==
+X-Received: by 2002:a05:6512:2284:b0:48a:7c35:2729 with SMTP id f4-20020a056512228400b0048a7c352729mr3654822lfu.397.1658695382591;
+        Sun, 24 Jul 2022 13:43:02 -0700 (PDT)
+Received: from [192.168.0.108] (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
+        by smtp.googlemail.com with ESMTPSA id r12-20020ac252ac000000b0048a833a14edsm908766lfm.201.2022.07.24.13.43.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 13:43:02 -0700 (PDT)
+Message-ID: <5d500d42-3926-20f1-a677-3b77c4b2e8ca@gmail.com>
+Date: Sun, 24 Jul 2022 23:43:01 +0300
 MIME-Version: 1.0
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Sun, 24 Jul 2022 22:35:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
-Message-ID: <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
-To: John Garry <john.garry@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab
+ 4 10.1 (SM-T530)
+Content-Language: en-US
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, jpoimboe@kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:a3W+nLtx5BUc+HCO/3GpZYppwFep+pHbOxVfTjCVjMdEZpOPU9m
- Oayfw66xKsAToBlJCsLIz6K7PfD83B52IeUeh5pO6ZV4rLQRDCQ1EXyS1graE1oCe7/V6Lm
- /GFHhnJQmODyG4XbbFi/pgcWxgY/A9KtPfR8uojYFdz29lU10pLNFLM8V0bvfjvMKPLITH3
- nP+SHqtfw/UFr/2GtMWfw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8foB9NikOso=:0GJ3wndh9f0KyObfun2Akq
- e01zAXDEMXvNSVISU7rH1XNkS4VK7G0b3rz6URxkc86NSPXuA6Y2cDxhGXo3CPR7l5rXmoXHn
- XaF6PcJM0hIaSSRxCG0QtvNF7OiuXvIvzhpvfMpicnAYQwNrpZLy1wqyFM3RcodnbNWGoIoCc
- OMkH4wpsEJOTVvUZhoNSYv0OHzpxklvfeKTX6UoVDvySBfKzzR3gSVh0ichweKzlxA8Vk1nbA
- aucwkXqat2wydbZ0CiOgBa/ELWh0EWLHei/dolRuBulNlD+C3HXxouohqaVWw91xxdncu1hx/
- PDdjomKM+KjNpzbmAU9Uiei4TduP608JdvrL6a2pjokvni3MZayrLAGgFio0yleaRlZjsYdro
- MMTCXcfiA4x4UmaOwXbDIMkAAKWLkqAkZ/9G/2a9j5KjEii7OodvmRrKvZRP1tiH1MXlt4XSI
- fQ6OWiNY/gl9YIPpnxqDpKP+GDImhZMi383YpcOB/AMtZJSbHKu/AZaQEboSE/7PDfrQJP+Et
- L2cMxdpevLKoVQJIiGBVPKX1+o+Vd+BWZ1KAhVCjZ5fWm1hdvkFwi49LshnoS1jMV0UyNOR7g
- vXzocbRFOe2uBcP2v2nocolnUqqtbbMxTDBGleSb7IaUg+KUwGaInM7i0q7r2obGoooKXLIoX
- ETqmyTWD1Z5ZhARLlKWd9v8dYfk+SYNPvgvB9rgm/wMfEmD6JOufFtuLi9bd7bXMgrBS662+a
- LJkUn7FATrCEh/Mjlt+/tA2piBBArEGmK5reLQ==
+Cc: linux-arm-msm@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+ phone-devel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson
+ <bjorn.andersson@linaro.org>, Konrad Dybcio <konrad.dybcio@somainline.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
+ <20220724172442.87830-4-matti.lehtimaki@gmail.com>
+ <CAA8EJpqUH_v1GXEYF62Z3DBtFu_305_h4D36aCnBr38bo5HoJw@mail.gmail.com>
+From: =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
+In-Reply-To: <CAA8EJpqUH_v1GXEYF62Z3DBtFu_305_h4D36aCnBr38bo5HoJw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jul 24, 2022 at 6:43 PM John Garry <john.garry@huawei.com> wrote:
->
-> scripts/faddr2line has not worked by default for arm64 since 5.17
->
-> Firstly, since commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO
-> selectable from a choice"), CONFIG_DEBUG_INFO was not getting enabled by
-> default (and this is required for faddr2line to work).
+On 24.7.2022 21.55, Dmitry Baryshkov wrote:
+> On Sun, 24 Jul 2022 at 20:25, Matti Lehtimäki <matti.lehtimaki@gmail.com> wrote:
+>> +/delete-node/ &smem_region;
+> 
+> Please move this to the /reserved-memory node. having it there would
+> help understanding that we are just changing the address.
 
-I just noticed this the other day and applied a patch for it in the
-arm/defconfig
-branch.
+I can move this to /reserved-memory node in next version. Other option
+would be to have a comment here, it seems both ways are used.
 
-> Secondly, commit dcea997beed6 ("faddr2line: Fix overlapping text section
-> failures, the sequel") caused a breakage for arm64, as reported at the
-> following:
-> https://lore.kernel.org/lkml/3bd9817d-1959-c081-e5d0-8b0e70b3f41e@huawei.com/
->
-> Josh has sent fixes/improvements for faddr2line at the following:
-> https://lore.kernel.org/lkml/cover.1658426357.git.jpoimboe@kernel.org/
->
-> In this series I enable CONFIG_DEBUG_INFO by enabling
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, which seems the sensible
-> option.
->
-> As for merging this, I am not sure who would pick it up - any takers
-> welcome.
->
-> Note: this is based on next-20220722 and it may be wiser to sync the
-> defconfig manually (instead of using 1/2). Indeed I am not sure what is
-> the policy is of sync'ing this anyway.
+>> +       i2c-muic {
+>> +               compatible = "i2c-gpio";
+> 
+> Is there any reason for using i2c-gpio rather than blsp_i2c4?
+> According to the pinctrl-msm8226, gpio14/15 can be mapped to the blsp.
 
-I only synchronized the 32-bit defconfig files in my tree, not the 64-bit
-one. However, I can't really apply your patch 2/2 because you appear
-to  mix refreshing the order of the options with changes that remove
-options that are gone after a 'savedefconfig', risking that we miss
-other bugs as well, as seen from your diffstat:
+The reason to use i2c-gpio for this was using the other devices with
+similar node as an example. I tested and having the muic node in
+blsp_i2c4 worked the same.
 
- 1 file changed, 36 insertions(+), 48 deletions(-)
-
-I have refreshed this one as well now, which on my tree gives me
-
- 1 file changed, 31 insertions(+), 31 deletions(-)
-
-for a nonfunction change. I have left the other ones untouched
-for the moment:
-
-CONFIG_ARCH_BCMBCA=y
-CONFIG_SECCOMP=y
-CONFIG_QRTR=m
-CONFIG_PINCTRL_MSM=y
-CONFIG_SND_SOC_TEGRA210_OPE=m
-CONFIG_MAILBOX=y
-CONFIG_QCOM_ICC_BWMON=m
-CONFIG_SLIMBUS=m
-CONFIG_INTERCONNECT=y
-CONFIG_CONFIGFS_FS=y
-
-These should be checked manually to find out why savedefconfig
-no longer shows them, it could be either a bug (a new dependency,
-renamed option, a driver randomly selects another subsystem, etc)
-that we need to fix, or a harmless change (driver was removed,
-option is now intended to be default-enabled, ...)
-
-If you want to help more, can you check some or all of the above
-and send patches to either re-enable the options or remove them
-individually with explanations about why they are no longer
-part of the savedefconfig output?
-
-          Arnd
+-Matti
