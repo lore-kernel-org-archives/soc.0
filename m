@@ -1,124 +1,192 @@
-Return-Path: <SRS0=wDrw=X6=linaro.org=daniel.lezcano@kernel.org>
+Return-Path: <SRS0=WEIr=X6=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70A39C433EF
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 12:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 358DDC433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 12:51:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 33091C341C8; Mon, 25 Jul 2022 12:36:21 +0000 (UTC)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id E85A9C341C8; Mon, 25 Jul 2022 12:51:20 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5976AC341C6
-	for <soc@kernel.org>; Mon, 25 Jul 2022 12:36:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5976AC341C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id w8-20020a05600c014800b003a32e89bc4eso6263960wmm.5
-        for <soc@kernel.org>; Mon, 25 Jul 2022 05:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eR0GeLumhM91/TCzD0goe53MjMncNfAoNQMHeoEkQV8=;
-        b=x9mwngfikol7my2J8AreAMA61Jfh0SZy+MqkNIZ0E580llka84AcNAUgYfxeHRzMeu
-         MxeVRAtwmB6xZygLXJxkhw3QzbmskycEHylnjx0ZvM4fI/Fz+uQ6F/zQp3Dd9ehMIdIs
-         isz6x9bLsh0kuVCC5G/qkM0bSyxA7vwbSDUqVpvvqWlt6ZqcsJ2ZoJc+LWUDHTGqYxl4
-         N7fa8MQ3ylJ/GObIejynK33wt+Ck9d1rrPdvGKa7Uh68B1r3reP05BSy1CH4noZCFIXR
-         SW6tmTeb6TRnTRQL0QwYY9zzPpB14hI+Q9rP7KtTlSS8g5et7g/KbUNai+VTM4g+vYKC
-         U1ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eR0GeLumhM91/TCzD0goe53MjMncNfAoNQMHeoEkQV8=;
-        b=ofgImd+Wwe4+U+dxO3RCsKOiFa8ZMn6GdyrgejvsDNvQBANtZprO6LPU0OPO3DxIFO
-         sjrKZTbfL5CpNRWaUE8f0yMrUYHhRhmrsXjFqCNgnAjmkpqzKxwrIbjfR1hLkGOVN8Jb
-         jwR6otLwhYX3sB3G4Z0frF0qwU4yFLhUz7Dqew9GImZ3dKU4GMIFQ3Drkg1gGzJubTw2
-         j0Vax9mwQAQIK0//fab2pBhLjwBoj1jCiy3Xq9MWkiVoJurwegWPNGQUR3Xwa0vh1rXM
-         8Nvi1XF0zQ37Uu8IYPszBW/3Eo59DrJf1kSUqRvZYa4GUKU7x9kWrUA2KFu9VHhihAwh
-         5dJw==
-X-Gm-Message-State: AJIora9bKIeSh+5RJZ52aNZvUe/bR1ViYhrg5tBp4uQ1TYFUFwIGGzUx
-	jevDBDOHfKDDp8GQ3+wlVoAMiQ==
-X-Google-Smtp-Source: AGRyM1s6geEfXSHGYaVDq14Sx9ppzfsFySaD/JaN0xkvki2bCUkGIZlt1FARgPm3BXG4IuShwYQXYg==
-X-Received: by 2002:a05:600c:2652:b0:3a3:2a3e:a2de with SMTP id 18-20020a05600c265200b003a32a3ea2demr19979264wmy.174.1658752578639;
-        Mon, 25 Jul 2022 05:36:18 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:1780:8e54:dd38:6668? ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
-        by smtp.googlemail.com with ESMTPSA id g18-20020a05600c4ed200b003a3199c243bsm24698309wmq.0.2022.07.25.05.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 05:36:18 -0700 (PDT)
-Message-ID: <f34c9583-7d00-0adc-1cb8-f4fe8a8dcae6@linaro.org>
-Date: Mon, 25 Jul 2022 14:36:15 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 2DDCBC341C6;
+	Mon, 25 Jul 2022 12:51:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2DDCBC341C6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-ej1-f49.google.com ([209.85.218.49]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mt7st-1nNAyb41iz-00tR3y; Mon, 25 Jul 2022 14:51:17 +0200
+Received: by mail-ej1-f49.google.com with SMTP id mf4so20425805ejc.3;
+        Mon, 25 Jul 2022 05:51:16 -0700 (PDT)
+X-Gm-Message-State: AJIora+5DZjhMDlrJKF9BcR9Xx8oEQeXAlwGxzKeW2ROf5JxJVJiKLTe
+	9jmzIcbYvK0GmQlGaPI4/0BS5b+/PFHcc+lawfw=
+X-Google-Smtp-Source: AGRyM1ujhhY1O1VjhzWjSGchJVlAUzNSHu3b8hjAjKdb2T2ZkFPQmlV+7/Q8PwmW7bopcRw3+cSD7IXE44152T9smDs=
+X-Received: by 2002:a17:907:97cd:b0:72f:2df:274f with SMTP id
+ js13-20020a17090797cd00b0072f02df274fmr9717512ejc.766.1658753476486; Mon, 25
+ Jul 2022 05:51:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 02/12] dt-bindings: timer: gpt: Add i.MXRT compatible
- Documentation
-Content-Language: en-US
-To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com> <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+In-Reply-To: <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 25 Jul 2022 14:51:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+Message-ID: <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+To: John Garry <john.garry@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
- linus.walleij@linaro.org, tglx@linutronix.de, arnd@arndb.de, olof@lixom.net,
- soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
- marcel.ziswiler@toradex.com, tharvey@gateworks.com, leoyang.li@nxp.com,
- sebastian.reichel@collabora.com, cniedermaier@dh-electronics.com,
- clin@suse.com, giulio.benetti@benettiengineering.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
- <20220723160513.271692-3-Mr.Bossman075@gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220723160513.271692-3-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, jpoimboe@kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:RGolJ4MDG/ox9Jb7rWNOwqtIlql+9o9vRDGHa2GmToRvkzSJeYP
+ HczGkTDZ1JxVHpI65b+jK+HA5rYcLn9oIow1dJ+zcgeDzYOcqHU6E8TdYx1yCZFOrXbzbCN
+ n8ZoQy4F5oqNM2MB8luEUDofA4Cvb5qIlZQjz26FfF4AaSZ8h9pQZqSJch4vOT3d8aLymRf
+ TDFKsb5067TMDC1L0L1Fg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:t5kt8nzZUtU=:m9cGnM9HjLmQU4D1UxonCW
+ lV31fPjYDdvtLWBaHop/eIC7t69ymTsJX6fx+X1SzqoS45QdvKAk/uTKnp5U//kNHzeoi5bf0
+ YEd5EbS9bivs5waYLPI/+CjemTZFzKV7hX5j+/6zGdCmrgntHorDKRREQgDtqZWSYQEVPzdTm
+ 8PZGl6O6bvidhx163HNhSWsMXrG7KJZ+1G66w2s050XmbfTk9IpMNSFKGtK81EPLO1WsoPpjf
+ CI6eEVxV5w/M8dl83apO7OJNBAVhg9+dWdu89pXLBl9e0IuUfVOB8GvEL+zZQu6Z2NxDEKIOh
+ T6MXLOSjZCm2T8yxg2nQU1nvX48/g+iOc55HSLR+X4fdIQrMOhz2RnJPf+zyh+nUnqxQnD+zS
+ 30QXRZjNnQbFC+oz+sBQ1Qc5en0xYdpaWAfulUoeFVyqEgS5vJUa7HFBOagKlJMKHerFVf92G
+ YWwiN2dOiCC3FbcOVJGR9SeHKu2teikTRe6kpPSQrPUb4zQGqgVkmxeoc1kymxHsz9EE741KY
+ ZllBaiTMkeF5WATxRVUzdVZ6mmn1n4x1pBvH1vlW2bFDw6clGn96DSTv/zhtN/OXhUmBQKmyd
+ d6HKk5PA6EdR2a1iWbRoqCo7iy9XmIsRpdqouivzHTBupjsIyhYuKnzu/aanl0/mldegTLcx7
+ t3ZK+bJrsLBGGw8tbwMbjtqk3bSMn7TXw+0V3l5PlHtdzIC54KePUJpiVwG62JAoZbmM1nGOl
+ hFVppffO+h5p5ZqubCvDeDNl6x5kxhaqNMd4Rw==
 
-On 23/07/2022 18:05, Jesse Taube wrote:
-> Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
-> Add i.MXRT to the compatible list.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+On Mon, Jul 25, 2022 at 1:57 PM John Garry <john.garry@huawei.com> wrote:
+>
+> On 24/07/2022 21:35, Arnd Bergmann wrote:
+>
+> Here's a brief'ish summary for why it's ok to delete these mentioned
+> configs:
+>
+> > CONFIG_ARCH_BCMBCA=y
+>
+> On next-20220722, config ARCH_BCMBCA is selected by config ARCH_BCM4908
+> from arch/arm64/Kconfig.platforms and the latter is enabled in the
+> defconfig, so no need to explicitly enable in the defconfig.
+>
+> On arm-soc arm/defconfig, config ARCH_BCMBCA does not exist for arm64
+> platforms yet, so this is why we see this config deleted for the sync.
+>
+> > CONFIG_SECCOMP=y
+>
+> Since commit 282a181b1a0d, config SECCOMP was changed to def_bool y, so
+> no need to explicitly enable in the defconfig.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Ok
 
+> > CONFIG_QRTR=m
+>
+>  From commit fdf4632aa834, we enable config ATH11K_PCI, which selects
+> config QRTR, so no need to explicitly enable in the defconfig.
 
-> ---
-> V1 -> V2:
->   - Nothing done
-> V2 -> V3:
->   - Nothing done
-> V3 -> V4:
->   - Nothing done
-> V4 -> V5:
->   - Nothing done
-> ---
->   Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-> index a4f51f46b7a1..716c6afcca1f 100644
-> --- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-> +++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-> @@ -31,6 +31,8 @@ properties:
->             - enum:
->                 - fsl,imx6sl-gpt
->                 - fsl,imx6sx-gpt
-> +              - fsl,imxrt1050-gpt
-> +              - fsl,imxrt1170-gpt
->             - const: fsl,imx6dl-gpt
->   
->     reg:
+Something is wrong here, as qrtr is used the same way in both ath10k and
+ath11k, but only one of them selects the symbol. My guess is that there is
+no actual hard requirement to enable it.
 
+> > CONFIG_PINCTRL_MSM=y
+>
+>  From commit c807a335d3b1, config PINCTRL_SM8450 is enabled, which
+> selects PINCTRL_MSM, so no need to explicitly enable in the defconfig.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+This looks like a bug, where the driver should have used 'depends on'
+rather than 'select'.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> > CONFIG_SND_SOC_TEGRA210_OPE=m
+>
+> There is no issue on next-20220722.
+>
+> On arm-soc arm/defconfig, config SND_SOC_TEGRA210_OPE just does not yet
+> exist, so that's why it get removed from the sync of the defconfig.
+
+Ok
+
+> > CONFIG_MAILBOX=y
+>
+> In commit fc739069aa92, config MAILBOX was enabled in the defconfig but
+> it was already being enabled from elsewhere. There was definitely no
+> sync of the savedefconfig going on there :)
+
+I see it's selected by a couple of drivers using mailboxes, and I
+agree we shouldn't
+need it here. It might be good to just hide the symbol in this case
+and select it
+consistently from all drivers using it.
+
+> > CONFIG_QCOM_ICC_BWMON=m
+>
+> Commit 76f11e77f919 enabled config QCOM_ICC_BWMON, but like config
+> ARCH_BCMBCA, that config does not exist on arm-soc arm/defconfig branch
+>
+> On next-20220722, no sync is required
+
+ok
+
+> > CONFIG_SLIMBUS=m
+>
+> Config 5bd773242f75 added a kconfig "imply" on config SLIMBUS from
+> config SOUNDWIRE_QCOM, and this happens to mean that we don't explicitly
+> require config SLIMBUS enabled in the defconfig.
+
+That 'imply' looks like it was added to solve a problem using the old 'imply'
+semantics that are not what this keyword does today. I suspect it's still
+broken when CONFIG=SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m,
+and the correct fix is to use a dependency like
+
+      depends on SLIMBUS || !SLIMBUS
+
+so the defconfig symbol should stay.
+
+> > CONFIG_INTERCONNECT=y
+>
+> Since commit 06f079816d4c, config TEGRA_MC added a kconfig select on
+> config INTERCONNECT, so no need to explicitly enable from the kconfig
+
+We have one driver using 'depends on INTERCONNECT' and two drivers
+using 'select INTERCONNECT', so at least one of them is wrong.
+
+There are also a couple of drivers that use neither and instead rely on the
+IS_ENABLED() check in include/linux/interconnect.h, but this is potentially
+wrong in the same way as the SLIMBUS dependency above.
+
+This clearly needs some more discussion. I would suggest removing the
+#iff check in the header and forcing all users to use 'depends on', leaving
+the defconfig symbol.
+
+> > CONFIG_CONFIGFS_FS=y
+>
+>  From commit cd8bc7d4eb66, config PCI_ENDPOINT_CONFIGFS is enabled in
+> the defconfig, and this selects CONFIG_CONFIGFS_FS, so no need to have
+> explicit enabling in the defconfig.
+
+Again, half the users of CONFIGFS_FS use 'depends on', the other half use
+'select'. We should be consistent here and always use the same method,
+probably 'depends on' if we want to keep it as user-visible.
+
+> We still have issues on next-22072022:
+> CONFIG_ARM_CPUIDE
+> CONFIG_DEBUG_INFO
+> CONFIG_DEBUG_INFO_REDUCED
+>
+> The latter two are not an issue on the arm-soc arm/defconfig.
+
+Ok.
+
+> So let me know if any comments or how to proceed.
+>
+> And would each config item deletion merit a separate patch?
+
+You send a combined patch for the obvious ones (secccomp
+and mailbox AFAICT) or send them separately. For the other ones I think
+we should try fixing the Kconfig files first, otherwise we just end up
+putting them back afterwards.
+
+        Arnd
