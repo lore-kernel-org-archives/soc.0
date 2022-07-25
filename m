@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 327D5C433EF
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 15:44:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0918C433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 15:44:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB1F7C341C8; Mon, 25 Jul 2022 15:44:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA75C341CD;
-	Mon, 25 Jul 2022 15:44:31 +0000 (UTC)
+	id 8B5A5C385A2; Mon, 25 Jul 2022 15:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5170AC341CE;
+	Mon, 25 Jul 2022 15:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658763874;
-	bh=u7yPy3yl0Fxoy64KRob7uWOhOPpqYFpU21AgTiq4bdg=;
+	s=k20201202; t=1658763878;
+	bh=AAealKp4VQVDcPiqiUZcvfdDX4c5BZeToXNinl3BRxk=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iYRfGAeGPb0TdFBXXNogTZ1XSwNEmNPuHfdzal9hCt1dJ2qTfcPJEZ6xj5KHN+6Jy
-	 DHAiQXDDTGI374HfMIHC2ZelxAPf5RJDwLaNbaZIv0Qm66b0rzBwph7y9qqORg0I1D
-	 wC9yoUcxHNdl/yhO45y34wygqUkAIlDjvnWy9mwBJ3CB4kjLj/SQ9Y2hZc4P6wM3xJ
-	 N3GViteLLF2MJSrGG5zFGH4hEI9ic/LEV/ZLvANWvzBlOYCX8LH4sONJw7Zumsdi+W
-	 NryDHgnj8WR0MoEPYYAKtGbVqe3FpneLGHZxg/YioFRv5skCxPmbZHu39g/v6lNpkw
-	 i99TltBYi+3Ag==
+	b=rANzYTZoOgvd55usl8RY60xGo07N15IoLZl8xG5dbfBxB3Nu6nvy5PvjoKWozemlt
+	 iyjgvCJFkJkjI7P2yO1vEYjyjGZ7w1JY9ih6KrsOVnPaas6eJah79+EbAGYmEvUauj
+	 /MK2eCIYmPZLU5NmbYH1E+Yk3BvIt/7jyYibidl1co+VnFJB02Xm4HioXl8cloK+dP
+	 GvvmQZRrK8tn2HDuU6Z/icrJutOS6G5mqU9xD1YmFvustX8Lapk3lPLfOZ/9/pbJoi
+	 NQG3U0NeH/jHtkjHEIuqkiqe5E+vhJqsP9Cj7BF5LW8nxFieaz8Ut+ctLPSW89ymAi
+	 6V6+rvqCeoNsQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	Bjorn Andersson <bjorn.andersson@linaro.org>,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Yang Li <yang.lee@linux.alibaba.com>,
-	Parikshit Pareek <quic_ppareek@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
 	Andy Gross <agross@kernel.org>,
 	linux-arm-msm@vger.kernel.org,
-	Olof Johansson <olof@lixom.net>
-Subject: Re: [GIT PULL] More Qualcomm driver changes for v5.20
-Date: Mon, 25 Jul 2022 17:44:14 +0200
-Message-Id: <165876383744.2817697.5086121138634324716.b4-ty@arndb.de>
+	Olof Johansson <olof@lixom.net>,
+	Luca Weiss <luca@z3ntu.xyz>
+Subject: Re: [GIT PULL] More Qualcomm DTS updates for v5.20
+Date: Mon, 25 Jul 2022 17:44:15 +0200
+Message-Id: <165876383675.2817697.7004456203940930306.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220720230648.2113609-1-bjorn.andersson@linaro.org>
-References: <20220720230648.2113609-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20220720231111.2114025-1-bjorn.andersson@linaro.org>
+References: <20220720231111.2114025-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 20 Jul 2022 18:06:48 -0500, Bjorn Andersson wrote:
-> The following changes since commit b9c2ae6cac403dee3195fda9eb28d8ee733b225b:
+On Wed, 20 Jul 2022 18:11:11 -0500, Bjorn Andersson wrote:
+> The following changes since commit 864cfdeb76735909a9afcc314416ccaa1ce82a1a:
 > 
->   soc: qcom: icc-bwmon: Add bandwidth monitoring driver (2022-07-06 15:57:51 -0500)
+>   ARM: dts: qcom: msm8974: rename GPU's OPP table node (2022-07-06 16:04:22 -0500)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.20-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-5.20-2
 > 
 > [...]
 
 Merged into for-next, thanks!
 
-merge commit: 99978d2fd90b9a43d187dae7b0f3266ccd980c5c
+merge commit: 3d2b5fddd067080c8930bd51f72cf3a21a310c4c
 
        Arnd
