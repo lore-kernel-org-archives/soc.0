@@ -1,130 +1,124 @@
-Return-Path: <SRS0=S9At=X6=huawei.com=john.garry@kernel.org>
+Return-Path: <SRS0=wDrw=X6=linaro.org=daniel.lezcano@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D2DC433EF
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 11:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70A39C433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 12:36:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 39AFDC341C8; Mon, 25 Jul 2022 11:57:38 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 33091C341C8; Mon, 25 Jul 2022 12:36:21 +0000 (UTC)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 77418C341C6;
-	Mon, 25 Jul 2022 11:57:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77418C341C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lrz510NF2z67sTc;
-	Mon, 25 Jul 2022 19:55:33 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Jul 2022 13:57:32 +0200
-Received: from [10.126.173.156] (10.126.173.156) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Jul 2022 12:57:31 +0100
-Message-ID: <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
-Date: Mon, 25 Jul 2022 12:57:30 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 5976AC341C6
+	for <soc@kernel.org>; Mon, 25 Jul 2022 12:36:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5976AC341C6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id w8-20020a05600c014800b003a32e89bc4eso6263960wmm.5
+        for <soc@kernel.org>; Mon, 25 Jul 2022 05:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eR0GeLumhM91/TCzD0goe53MjMncNfAoNQMHeoEkQV8=;
+        b=x9mwngfikol7my2J8AreAMA61Jfh0SZy+MqkNIZ0E580llka84AcNAUgYfxeHRzMeu
+         MxeVRAtwmB6xZygLXJxkhw3QzbmskycEHylnjx0ZvM4fI/Fz+uQ6F/zQp3Dd9ehMIdIs
+         isz6x9bLsh0kuVCC5G/qkM0bSyxA7vwbSDUqVpvvqWlt6ZqcsJ2ZoJc+LWUDHTGqYxl4
+         N7fa8MQ3ylJ/GObIejynK33wt+Ck9d1rrPdvGKa7Uh68B1r3reP05BSy1CH4noZCFIXR
+         SW6tmTeb6TRnTRQL0QwYY9zzPpB14hI+Q9rP7KtTlSS8g5et7g/KbUNai+VTM4g+vYKC
+         U1ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eR0GeLumhM91/TCzD0goe53MjMncNfAoNQMHeoEkQV8=;
+        b=ofgImd+Wwe4+U+dxO3RCsKOiFa8ZMn6GdyrgejvsDNvQBANtZprO6LPU0OPO3DxIFO
+         sjrKZTbfL5CpNRWaUE8f0yMrUYHhRhmrsXjFqCNgnAjmkpqzKxwrIbjfR1hLkGOVN8Jb
+         jwR6otLwhYX3sB3G4Z0frF0qwU4yFLhUz7Dqew9GImZ3dKU4GMIFQ3Drkg1gGzJubTw2
+         j0Vax9mwQAQIK0//fab2pBhLjwBoj1jCiy3Xq9MWkiVoJurwegWPNGQUR3Xwa0vh1rXM
+         8Nvi1XF0zQ37Uu8IYPszBW/3Eo59DrJf1kSUqRvZYa4GUKU7x9kWrUA2KFu9VHhihAwh
+         5dJw==
+X-Gm-Message-State: AJIora9bKIeSh+5RJZ52aNZvUe/bR1ViYhrg5tBp4uQ1TYFUFwIGGzUx
+	jevDBDOHfKDDp8GQ3+wlVoAMiQ==
+X-Google-Smtp-Source: AGRyM1s6geEfXSHGYaVDq14Sx9ppzfsFySaD/JaN0xkvki2bCUkGIZlt1FARgPm3BXG4IuShwYQXYg==
+X-Received: by 2002:a05:600c:2652:b0:3a3:2a3e:a2de with SMTP id 18-20020a05600c265200b003a32a3ea2demr19979264wmy.174.1658752578639;
+        Mon, 25 Jul 2022 05:36:18 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:1780:8e54:dd38:6668? ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
+        by smtp.googlemail.com with ESMTPSA id g18-20020a05600c4ed200b003a3199c243bsm24698309wmq.0.2022.07.25.05.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 05:36:18 -0700 (PDT)
+Message-ID: <f34c9583-7d00-0adc-1cb8-f4fe8a8dcae6@linaro.org>
+Date: Mon, 25 Jul 2022 14:36:15 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From: John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
-To: Arnd Bergmann <arnd@arndb.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 02/12] dt-bindings: timer: gpt: Add i.MXRT compatible
+ Documentation
+Content-Language: en-US
+To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-CC: Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Olof Johansson
-	<olof@lixom.net>, SoC Team <soc@kernel.org>, <jpoimboe@kernel.org>, "Linux
- Kernel Mailing List" <linux-kernel@vger.kernel.org>
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
- <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
-In-Reply-To: <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.173.156]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Cc: robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
+ linus.walleij@linaro.org, tglx@linutronix.de, arnd@arndb.de, olof@lixom.net,
+ soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+ marcel.ziswiler@toradex.com, tharvey@gateworks.com, leoyang.li@nxp.com,
+ sebastian.reichel@collabora.com, cniedermaier@dh-electronics.com,
+ clin@suse.com, giulio.benetti@benettiengineering.com,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
+ <20220723160513.271692-3-Mr.Bossman075@gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220723160513.271692-3-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 24/07/2022 21:35, Arnd Bergmann wrote:
+On 23/07/2022 18:05, Jesse Taube wrote:
+> Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
+> Add i.MXRT to the compatible list.
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Here's a brief'ish summary for why it's ok to delete these mentioned 
-configs:
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-> CONFIG_ARCH_BCMBCA=y
 
-On next-20220722, config ARCH_BCMBCA is selected by config ARCH_BCM4908 
-from arch/arm64/Kconfig.platforms and the latter is enabled in the 
-defconfig, so no need to explicitly enable in the defconfig.
+> ---
+> V1 -> V2:
+>   - Nothing done
+> V2 -> V3:
+>   - Nothing done
+> V3 -> V4:
+>   - Nothing done
+> V4 -> V5:
+>   - Nothing done
+> ---
+>   Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+> index a4f51f46b7a1..716c6afcca1f 100644
+> --- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+> +++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
+> @@ -31,6 +31,8 @@ properties:
+>             - enum:
+>                 - fsl,imx6sl-gpt
+>                 - fsl,imx6sx-gpt
+> +              - fsl,imxrt1050-gpt
+> +              - fsl,imxrt1170-gpt
+>             - const: fsl,imx6dl-gpt
+>   
+>     reg:
 
-On arm-soc arm/defconfig, config ARCH_BCMBCA does not exist for arm64 
-platforms yet, so this is why we see this config deleted for the sync.
-> CONFIG_SECCOMP=y
 
-Since commit 282a181b1a0d, config SECCOMP was changed to def_bool y, so 
-no need to explicitly enable in the defconfig.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> CONFIG_QRTR=m
-
- From commit fdf4632aa834, we enable config ATH11K_PCI, which selects 
-config QRTR, so no need to explicitly enable in the defconfig.
-
-> CONFIG_PINCTRL_MSM=y
-
- From commit c807a335d3b1, config PINCTRL_SM8450 is enabled, which 
-selects PINCTRL_MSM, so no need to explicitly enable in the defconfig.
-
-> CONFIG_SND_SOC_TEGRA210_OPE=m
-
-There is no issue on next-20220722.
-
-On arm-soc arm/defconfig, config SND_SOC_TEGRA210_OPE just does not yet 
-exist, so that's why it get removed from the sync of the defconfig.
-
-> CONFIG_MAILBOX=y
-
-In commit fc739069aa92, config MAILBOX was enabled in the defconfig but 
-it was already being enabled from elsewhere. There was definitely no 
-sync of the savedefconfig going on there :)
-
-> CONFIG_QCOM_ICC_BWMON=m
-
-Commit 76f11e77f919 enabled config QCOM_ICC_BWMON, but like config 
-ARCH_BCMBCA, that config does not exist on arm-soc arm/defconfig branch
-
-On next-20220722, no sync is required
-
-> CONFIG_SLIMBUS=m
-
-Config 5bd773242f75 added a kconfig "imply" on config SLIMBUS from 
-config SOUNDWIRE_QCOM, and this happens to mean that we don't explicitly 
-require config SLIMBUS enabled in the defconfig.
-
-> CONFIG_INTERCONNECT=y
-
-Since commit 06f079816d4c, config TEGRA_MC added a kconfig select on 
-config INTERCONNECT, so no need to explicitly enable from the kconfig
-
-> CONFIG_CONFIGFS_FS=y
-
- From commit cd8bc7d4eb66, config PCI_ENDPOINT_CONFIGFS is enabled in 
-the defconfig, and this selects CONFIG_CONFIGFS_FS, so no need to have 
-explicit enabling in the defconfig.
-
-We still have issues on next-22072022:
-CONFIG_ARM_CPUIDE
-CONFIG_DEBUG_INFO
-CONFIG_DEBUG_INFO_REDUCED
-
-The latter two are not an issue on the arm-soc arm/defconfig.
-
-So let me know if any comments or how to proceed.
-
-And would each config item deletion merit a separate patch?
-
-Thanks,
-John
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
