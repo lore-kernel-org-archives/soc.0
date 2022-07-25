@@ -1,108 +1,130 @@
-Return-Path: <SRS0=WEIr=X6=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=S9At=X6=huawei.com=john.garry@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31CD3C43334
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 07:08:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D2DC433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 11:57:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EE1E6C341C7; Mon, 25 Jul 2022 07:08:42 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+	id 39AFDC341C8; Mon, 25 Jul 2022 11:57:38 +0000 (UTC)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 76334C341C6;
-	Mon, 25 Jul 2022 07:08:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76334C341C6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ed1-f52.google.com ([209.85.208.52]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M7ehh-1o8TgA0Pe9-0080uP; Mon, 25 Jul 2022 09:08:39 +0200
-Received: by mail-ed1-f52.google.com with SMTP id z22so12680454edd.6;
-        Mon, 25 Jul 2022 00:08:39 -0700 (PDT)
-X-Gm-Message-State: AJIora+5VWD1tNPUV8y/ehT/NDsZMW8nZLQ/LrssGwZlvKhqdYxljMSQ
-	PulS2CwWx5XO3iqKUg6ZsZ7DrcA19D93GkLuWJQ=
-X-Google-Smtp-Source: AGRyM1tlBDTGYGMdEtAzM8YjBusv7obdsIb0Rh2X5JBZzixsvidrbXN3KXbGdXtRFdoyYjFOeu/a5YbjrMzzkCrbpV0=
-X-Received: by 2002:a05:6402:331d:b0:43b:ee33:8a5e with SMTP id
- e29-20020a056402331d00b0043bee338a5emr5364735eda.49.1658732918750; Mon, 25
- Jul 2022 00:08:38 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 77418C341C6;
+	Mon, 25 Jul 2022 11:57:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77418C341C6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lrz510NF2z67sTc;
+	Mon, 25 Jul 2022 19:55:33 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Jul 2022 13:57:32 +0200
+Received: from [10.126.173.156] (10.126.173.156) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Jul 2022 12:57:31 +0100
+Message-ID: <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+Date: Mon, 25 Jul 2022 12:57:30 +0100
 MIME-Version: 1.0
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
- <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com> <6a85baa4-80cc-a715-b5f5-fcc276d44010@huawei.com>
-In-Reply-To: <6a85baa4-80cc-a715-b5f5-fcc276d44010@huawei.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Mon, 25 Jul 2022 09:08:22 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2VaG1UB4pB0=9K=qfS_Mjyiiuy+ngOU4ttKMoZTQ4Tbw@mail.gmail.com>
-Message-ID: <CAK8P3a2VaG1UB4pB0=9K=qfS_Mjyiiuy+ngOU4ttKMoZTQ4Tbw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From: John Garry <john.garry@huawei.com>
 Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
-To: John Garry <john.garry@huawei.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, jpoimboe@kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:RxV5ym+YYXdUGorW3c6DiHlllU5jY/Pu+TO1jZgXShK4zpPcsts
- jj6TITmRR/fhynBDaHNWEK5ie6OqaMyer5JJ0W2aN5IbtL7kgLX/mw9RtcFbN7/wUTq/UDt
- xx3g9T2Pr+KOMS/2AyFFduDiwImmW+IgqegBQbaxyqowDPAH+T1J7ZFzSsLIPLFFkuWcOOo
- 6lZNkhIad6fhF+41rzsZw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+q9B7VGO1Gc=:o5Mkh/KNfCFAYSek+QnCgS
- YgJs8UFOJAPoi29L3kz4zVuZhHjVftsirri+VWoqLp7QPHcQmTPDO1R3AHNNV4n81yZX6ipzy
- oDMdLcI/jXqVar7dwUsBy1V6qvUOm2tX1YakPzf9pXVaXc5gzc42TVvf0CXB1+9LVM91NHLxw
- zT+lWFNGDh8yRtCQ9R388FTBm86RM274+0wqecBrQ6zzRzPaBqHEnSSVNRQYkaeUnwd/K2I4v
- EGeUeTNQzXOYiaOFIn/q7LQsDbK5rtZJo8IrC78odd3WpVURAIjDnUVJj5L4fb+y6keDezJ6i
- VpYbJKpgY8hTMPPrTxo9VVhTYa+MSmsJpPtMb/+pVttpciBN0VsMEDU3HX6W6/TK8Km5TD8cX
- RPjQZkx3kYX5aSowxgF3pAEbXLvmt0eFcDiUAG4OGyqgbvqChra0ATZGF1EU3K370pT8toT3g
- 0HaA5vWmxWmcQUcw8tS1dfs6IMzlItCYAWclybywCWuuY39v/MBBtzec8//9R/ye5BIh4POjO
- Vq/9e0O/9g9PD/vLnp6ZoigU+gbYT40Db/DHxXKcGdQ6eSHw7SH26npfafTzFpts6sZabGlsJ
- jnb3M2JF0j12Z+yAXgSUgMT5ri+PI8MdpgzBkP5iquc0Df1dTTL97nZhHhSo22gUGXuRIIcXh
- We/Wy2Z3UnZH3kkiOl98J6ANleLFVP6kyZVCqEaVyFZfEJPOLmzy5MJerxStwGJ7gIiaUOyb6
- nEoYnD4gvqT9eouBv36jDVRTqTV0zQKlywrQEjkxdeeaG/L6lcGG8NwmCa78oD903a8QDOE1w
- IkPKyjMPe57AQ53ebTZH9HVU6WaCEK9w3i/nBVCc6PsNU5YkZcFP3HCt2XLUR6DoDPeC3duJF
- Ae7sWrNWIK2+V7MIZMIA==
+CC: Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Olof Johansson
+	<olof@lixom.net>, SoC Team <soc@kernel.org>, <jpoimboe@kernel.org>, "Linux
+ Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.173.156]
+X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 
-On Mon, Jul 25, 2022 at 8:50 AM John Garry <john.garry@huawei.com> wrote:
-> On 24/07/2022 21:35, Arnd Bergmann wrote:
-> >> Note: this is based on next-20220722 and it may be wiser to sync the
-> >> defconfig manually (instead of using 1/2). Indeed I am not sure what is
-> >> the policy is of sync'ing this anyway.
-> > I only synchronized the 32-bit defconfig files in my tree, not the 64-bit
-> > one. However, I can't really apply your patch 2/2 because you appear
-> > to  mix refreshing the order of the options with changes that remove
-> > options that are gone after a 'savedefconfig', risking that we miss
-> > other bugs as well, as seen from your diffstat:
-> >
-> >   1 file changed, 36 insertions(+), 48 deletions(-)
-> >
-> > I have refreshed this one as well now, which on my tree gives me
-> >
-> >   1 file changed, 31 insertions(+), 31 deletions(-)
->
-> I am not sure what you are doing in this refresh - can you share the
-> steps? I guess that you sync with the savedefconfig and then manually
-> edit the resultant defconfig to restore the configs which were getting
-> deleting (and not just moved around).
+On 24/07/2022 21:35, Arnd Bergmann wrote:
 
-Yes, I did it manually using vimdiff here. I had scripted this for the
-arm32 defconfigs, but my script was a bit fragile so this seemed easier.
+Here's a brief'ish summary for why it's ok to delete these mentioned 
+configs:
 
-You can find my commit at
-https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=arm/defconfig&id=abf73c76121d8417998356a1cccfccd17f5cfd11
+> CONFIG_ARCH_BCMBCA=y
 
-> > These should be checked manually to find out why savedefconfig
-> > no longer shows them, it could be either a bug (a new dependency,
-> > renamed option, a driver randomly selects another subsystem, etc)
-> > that we need to fix, or a harmless change (driver was removed,
-> > option is now intended to be default-enabled, ...)
-> >
-> > If you want to help more, can you check some or all of the above
-> > and send patches to either re-enable the options or remove them
-> > individually with explanations about why they are no longer
-> > part of the savedefconfig output?
->
-> ok, I can check them.
+On next-20220722, config ARCH_BCMBCA is selected by config ARCH_BCM4908 
+from arch/arm64/Kconfig.platforms and the latter is enabled in the 
+defconfig, so no need to explicitly enable in the defconfig.
 
-Thanks!
+On arm-soc arm/defconfig, config ARCH_BCMBCA does not exist for arm64 
+platforms yet, so this is why we see this config deleted for the sync.
+> CONFIG_SECCOMP=y
 
-        Arnd
+Since commit 282a181b1a0d, config SECCOMP was changed to def_bool y, so 
+no need to explicitly enable in the defconfig.
+
+> CONFIG_QRTR=m
+
+ From commit fdf4632aa834, we enable config ATH11K_PCI, which selects 
+config QRTR, so no need to explicitly enable in the defconfig.
+
+> CONFIG_PINCTRL_MSM=y
+
+ From commit c807a335d3b1, config PINCTRL_SM8450 is enabled, which 
+selects PINCTRL_MSM, so no need to explicitly enable in the defconfig.
+
+> CONFIG_SND_SOC_TEGRA210_OPE=m
+
+There is no issue on next-20220722.
+
+On arm-soc arm/defconfig, config SND_SOC_TEGRA210_OPE just does not yet 
+exist, so that's why it get removed from the sync of the defconfig.
+
+> CONFIG_MAILBOX=y
+
+In commit fc739069aa92, config MAILBOX was enabled in the defconfig but 
+it was already being enabled from elsewhere. There was definitely no 
+sync of the savedefconfig going on there :)
+
+> CONFIG_QCOM_ICC_BWMON=m
+
+Commit 76f11e77f919 enabled config QCOM_ICC_BWMON, but like config 
+ARCH_BCMBCA, that config does not exist on arm-soc arm/defconfig branch
+
+On next-20220722, no sync is required
+
+> CONFIG_SLIMBUS=m
+
+Config 5bd773242f75 added a kconfig "imply" on config SLIMBUS from 
+config SOUNDWIRE_QCOM, and this happens to mean that we don't explicitly 
+require config SLIMBUS enabled in the defconfig.
+
+> CONFIG_INTERCONNECT=y
+
+Since commit 06f079816d4c, config TEGRA_MC added a kconfig select on 
+config INTERCONNECT, so no need to explicitly enable from the kconfig
+
+> CONFIG_CONFIGFS_FS=y
+
+ From commit cd8bc7d4eb66, config PCI_ENDPOINT_CONFIGFS is enabled in 
+the defconfig, and this selects CONFIG_CONFIGFS_FS, so no need to have 
+explicit enabling in the defconfig.
+
+We still have issues on next-22072022:
+CONFIG_ARM_CPUIDE
+CONFIG_DEBUG_INFO
+CONFIG_DEBUG_INFO_REDUCED
+
+The latter two are not an issue on the arm-soc arm/defconfig.
+
+So let me know if any comments or how to proceed.
+
+And would each config item deletion merit a separate patch?
+
+Thanks,
+John
