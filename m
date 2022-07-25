@@ -4,72 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D856BC43334
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 15:44:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 327D5C433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 15:44:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 86372C385A5; Mon, 25 Jul 2022 15:44:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38C8C341C6;
-	Mon, 25 Jul 2022 15:44:26 +0000 (UTC)
+	id EB1F7C341C8; Mon, 25 Jul 2022 15:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA75C341CD;
+	Mon, 25 Jul 2022 15:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658763871;
-	bh=pvJcAEDzrrhhFL306m3HFCG2LB02l8s9LzqrcEW2Lik=;
+	s=k20201202; t=1658763874;
+	bh=u7yPy3yl0Fxoy64KRob7uWOhOPpqYFpU21AgTiq4bdg=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GOLNd80VaV6Z77JGOCvo8wFA/pUYswARyLG3QPjLzNCKC3mMuKxswk7wN2+RmDtI1
-	 EbFuAm1fcGsV9Arcf0kslvo+3lZOvhZnbVCU8nczepWfwjWfVzpnw7H0YpBjFTPXo9
-	 SkVCoXe7FWWwt3UC2YaKZw4P+g5BLaSj2apfRV9MoFAHbLvz/mzcezT49LMia2Fhfe
-	 LlXg1kckkOF/0bYEFzuEexJgN3tEP53NskzKtb3uf/4nYrHLJnbcuYl9vC5V7hlJ/5
-	 UdlUjE7C4RX5nImWKNedKElI4Uqo1xLGRl86mdO5nW3v2cnYDqTs5IRRKgpDup2jOo
-	 JZGrFjyPHq90g==
+	b=iYRfGAeGPb0TdFBXXNogTZ1XSwNEmNPuHfdzal9hCt1dJ2qTfcPJEZ6xj5KHN+6Jy
+	 DHAiQXDDTGI374HfMIHC2ZelxAPf5RJDwLaNbaZIv0Qm66b0rzBwph7y9qqORg0I1D
+	 wC9yoUcxHNdl/yhO45y34wygqUkAIlDjvnWy9mwBJ3CB4kjLj/SQ9Y2hZc4P6wM3xJ
+	 N3GViteLLF2MJSrGG5zFGH4hEI9ic/LEV/ZLvANWvzBlOYCX8LH4sONJw7Zumsdi+W
+	 NryDHgnj8WR0MoEPYYAKtGbVqe3FpneLGHZxg/YioFRv5skCxPmbZHu39g/v6lNpkw
+	 i99TltBYi+3Ag==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
 	Bjorn Andersson <bjorn.andersson@linaro.org>,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Stefan Hansson <newbie13xd@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org,
-	Kuogee Hsieh <quic_khsieh@quicinc.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Steev Klimaszewski <steev@kali.org>,
-	Sumit Garg <sumit.garg@linaro.org>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	Yang Li <yang.lee@linux.alibaba.com>,
 	Parikshit Pareek <quic_ppareek@quicinc.com>,
-	Olof Johansson <olof@lixom.net>,
-	Robert Marko <robimarko@gmail.com>,
-	Molly Sophia <mollysophia379@gmail.com>
-Subject: Re: [GIT PULL] More Qualcomm ARM64 DTS updates for v5.20
-Date: Mon, 25 Jul 2022 17:44:13 +0200
-Message-Id: <165876383710.2817697.3902201804342716870.b4-ty@arndb.de>
+	Kevin Hilman <khilman@baylibre.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+	Andy Gross <agross@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	Olof Johansson <olof@lixom.net>
+Subject: Re: [GIT PULL] More Qualcomm driver changes for v5.20
+Date: Mon, 25 Jul 2022 17:44:14 +0200
+Message-Id: <165876383744.2817697.5086121138634324716.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220720231643.2114565-1-bjorn.andersson@linaro.org>
-References: <20220720231643.2114565-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20220720230648.2113609-1-bjorn.andersson@linaro.org>
+References: <20220720230648.2113609-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 20 Jul 2022 18:16:43 -0500, Bjorn Andersson wrote:
-> The following changes since commit abf61f7e66c15e00f40ca7e10367f4149639bc57:
+On Wed, 20 Jul 2022 18:06:48 -0500, Bjorn Andersson wrote:
+> The following changes since commit b9c2ae6cac403dee3195fda9eb28d8ee733b225b:
 > 
->   arm64: dts: qcom: sc8280xp: fix DP PHY node unit addresses (2022-07-08 17:03:03 -0500)
+>   soc: qcom: icc-bwmon: Add bandwidth monitoring driver (2022-07-06 15:57:51 -0500)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-5.20-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-5.20-2
 > 
 > [...]
 
 Merged into for-next, thanks!
 
-merge commit: 2c947cd63bfb90456d3daecaf8c3d0f6b8661739
+merge commit: 99978d2fd90b9a43d187dae7b0f3266ccd980c5c
 
        Arnd
