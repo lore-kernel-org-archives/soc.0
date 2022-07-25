@@ -4,64 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0918C433EF
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 15:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EADBFC433EF
+	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 15:44:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B5A5C385A2; Mon, 25 Jul 2022 15:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5170AC341CE;
-	Mon, 25 Jul 2022 15:44:35 +0000 (UTC)
+	id D3B4AC341C6; Mon, 25 Jul 2022 15:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E60C341CD;
+	Mon, 25 Jul 2022 15:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658763878;
-	bh=AAealKp4VQVDcPiqiUZcvfdDX4c5BZeToXNinl3BRxk=;
+	s=k20201202; t=1658763880;
+	bh=crjDuuScKQndWp3g6KcUoi46L8WJETTV/FlIky82/fM=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rANzYTZoOgvd55usl8RY60xGo07N15IoLZl8xG5dbfBxB3Nu6nvy5PvjoKWozemlt
-	 iyjgvCJFkJkjI7P2yO1vEYjyjGZ7w1JY9ih6KrsOVnPaas6eJah79+EbAGYmEvUauj
-	 /MK2eCIYmPZLU5NmbYH1E+Yk3BvIt/7jyYibidl1co+VnFJB02Xm4HioXl8cloK+dP
-	 GvvmQZRrK8tn2HDuU6Z/icrJutOS6G5mqU9xD1YmFvustX8Lapk3lPLfOZ/9/pbJoi
-	 NQG3U0NeH/jHtkjHEIuqkiqe5E+vhJqsP9Cj7BF5LW8nxFieaz8Ut+ctLPSW89ymAi
-	 6V6+rvqCeoNsQ==
+	b=qRwzst5XAvmlfAtrc7eR8V76P/GWBxgjc24D3vASdfk49sYjIngXDbogx5MJrQfor
+	 URGU7b1cvu45EcnUlA0VYSLDfB3E6jssKBxxtcgVnve54QG6EwvmnNNQUrMhxa2zlJ
+	 pU1RNXoPSVgSfc971pcPJ9ny6i0VXeqL/7HbOif+h75iahPbc7rndbt/B2PQ+QbRrg
+	 Bp+NVu2H+FtFsJzTGNGXdUbh82GXVzOpGGbsTMGnfoowOkieEyv3ZpYBKFf+rD9QLC
+	 tuM8mz0sSXhZymoPxyHWct7mx88VlL1nVAcoZ6kIJSu9vMOk9GzXg6YO8pBaj9TlrD
+	 Ftkfz5RBxvR7w==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
+To: Claudiu Beznea <claudiu.beznea@microchip.com>,
+	arm@kernel.org,
+	olof@lixom.net,
 	soc@kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
+	alexandre.belloni@bootlin.com,
 	linux-arm-kernel@lists.infradead.org,
-	Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-	Andy Gross <agross@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	Olof Johansson <olof@lixom.net>,
-	Luca Weiss <luca@z3ntu.xyz>
-Subject: Re: [GIT PULL] More Qualcomm DTS updates for v5.20
-Date: Mon, 25 Jul 2022 17:44:15 +0200
-Message-Id: <165876383675.2817697.7004456203940930306.b4-ty@arndb.de>
+	nicolas.ferre@microchip.com
+Subject: Re: [GIT PULL] AT91 device tree updates for v5.20 #3
+Date: Mon, 25 Jul 2022 17:44:16 +0200
+Message-Id: <165876383642.2817697.12620859946374513791.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220720231111.2114025-1-bjorn.andersson@linaro.org>
-References: <20220720231111.2114025-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20220722152041.1752962-1-claudiu.beznea@microchip.com>
+References: <20220722152041.1752962-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, 20 Jul 2022 18:11:11 -0500, Bjorn Andersson wrote:
-> The following changes since commit 864cfdeb76735909a9afcc314416ccaa1ce82a1a:
+On Fri, 22 Jul 2022 18:20:41 +0300, Claudiu Beznea wrote:
+> The following changes since commit be16285265868aa371378132fe37df2bc14ceb78:
 > 
->   ARM: dts: qcom: msm8974: rename GPU's OPP table node (2022-07-06 16:04:22 -0500)
+>   ARM: dts: kswitch-d10: enable the USB device port (2022-07-12 10:12:30 +0300)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-5.20-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-5.20-3
 > 
 > [...]
 
 Merged into for-next, thanks!
 
-merge commit: 3d2b5fddd067080c8930bd51f72cf3a21a310c4c
+merge commit: 10c4c5279b76ecf46816354b06e0d5cb0e84dfde
 
        Arnd
