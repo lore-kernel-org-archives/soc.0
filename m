@@ -1,126 +1,98 @@
-Return-Path: <SRS0=MVBx=X7=stwcx.xyz=patrick@kernel.org>
+Return-Path: <SRS0=xttv=X7=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F11A3C00144
-	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 16:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3462EC3F6B0
+	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 17:31:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D9B1EC433D7; Tue, 26 Jul 2022 16:04:43 +0000 (UTC)
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E0D80C433C1; Tue, 26 Jul 2022 17:31:54 +0000 (UTC)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DDA00C433D6;
-	Tue, 26 Jul 2022 16:04:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DDA00C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=stwcx.xyz
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=stwcx.xyz
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id A22025C0144;
-	Tue, 26 Jul 2022 12:04:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 26 Jul 2022 12:04:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1658851480; x=1658937880; bh=a6f1CrYBK3
-	cjjtgqfVGH2IZkfk4izkWqCxCWdm306FM=; b=UFuOY2TSZfah37xjC8T4IpQ7+Z
-	8gSsFs8TwmGzqvaB4aY7WDi7ZGeXI1nLQ35ukRhcH4zFDERxLQmYrqAQJJddWglc
-	TowMxf4BbjiSw22twSXlHj01yDIt/wiguMRtoJDJijyWUGnlKYRfulnYtwN26Qhh
-	4FoZEXXbcSmqVOHQSC1t+W4XaRLNPXBogWGS+tvFyFvcsPF3ACMXHrmy7LVvoglb
-	Is+WCvLN4zY5fKmVVmImMWaExLh4SpbWc2/nGthfqzE7Kc+MBWwjoAH1ZZ1wPxft
-	cqhceFRswIbjHseSPwJTkzkMM7W5eHEFUlO2uUdW5ZDrd75ifKHBFSR46wag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1658851480; x=1658937880; bh=a6f1CrYBK3cjjtgqfVGH2IZkfk4i
-	zkWqCxCWdm306FM=; b=WCdZd1MTT8Kk+U94GnteZyW2cfL6zjjWkShB8Wa0jNpx
-	4IpZKNQW3BNde4rogqyYyo14TOMutX941FEaZy4PwFby32evm+Zasjc65l2V0c2q
-	7cpyzzIRJNu7wOE4PNbfUZEFhTuc0jK0Gi1nePk3XZLNaBUDcwVaAEcCl7Yk31fO
-	XljGpW/Fyz/vfLbaxfFJ1HjlGdhBTkGo9qW794sb04Bxy/5OLXxZw3zEvIMlAGUx
-	pTvvRAIH2z7ElB+WDGUvIW04iox4m9ED8eVc1d1WIggOnnEqYnCme2n8eMwdZ7Ve
-	kUOlJ7YbGTgN8PjATkU1hfr3gjdw240UyRACWH+qxw==
-X-ME-Sender: <xms:lhDgYpuiJmBk9PJ9QSWiWegpeACkZNU2DEFtiIZFnbJ1SK8vDAfdiw>
-    <xme:lhDgYieaZD_TsC7wbT6zUaPxsd7h7ma_bTGlPQr6S55B4LbxK0idzsMq7_H1tG66j
-    enj4sIemLq48AwhQmI>
-X-ME-Received: <xmr:lhDgYswEqUW7Pb9yuZga61jlTCtOHkO1RhD-C1crubDc5SBF-cvRMTwuP_3ms33sSQVOPNQAhMTHUfb2JUJ8fp6jzaW2s2xn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddutddgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
-    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
-    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
-    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:lxDgYgO_ORzrGfx89uXBOqLX9fYWqBgmlYtFVBBybYtjG1pUry7XyA>
-    <xmx:lxDgYp_KOtP7x6vCfY72gCIOxwI94vz8oEx2yONZ_g_SbeXH9sw2FQ>
-    <xmx:lxDgYgW8je86Gx4X5dDEuhdw4tkvs9E0GJgfy-V8mRtrl5qf0sNDeg>
-    <xmx:mBDgYtVD9lWRLecMlTHoxsIv21dK01w73RY8H4KkeVRkqN6sMAixPw>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Jul 2022 12:04:38 -0400 (EDT)
-Date: Tue, 26 Jul 2022 11:04:37 -0500
-From: Patrick Williams <patrick@stwcx.xyz>
-To: Logananth Sundararaj <logananth13.hcl@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org, garnermic@gmail.com, thangavel.k@hcl.com,
-	naveen.mosess@hcl.com, velumanit@hcl.com
-Subject: Re: [PATCH v5] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
-Message-ID: <YuAQlU8IfBK4zI9R@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220726132445.GA22389@logan-ThinkPad-T14-Gen-1>
+	by smtp.kernel.org (Postfix) with ESMTPS id 29BFBC43470
+	for <soc@kernel.org>; Tue, 26 Jul 2022 17:31:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29BFBC43470
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id m12so22585155lfj.4
+        for <soc@kernel.org>; Tue, 26 Jul 2022 10:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=nUsqrIcncbnAblsl66lT/lEZJ2lw+9ku+eiTV2ZWI6Y=;
+        b=OyRS/08wVlN551H9uCmoUeTFl2tMNki5reqZdw3CT81GT8LgTsXqk1jO57wdUodH2g
+         xc0iJX8XCvFuVYwQ/TJofmliTWDifgjexn294tm1ofBY/7Dkr9wcE3a0RHERg68yW0BF
+         9rS2N2dGVl2hPGLGPNDHr4BhG02/Gg1a0TpywMqZI2oScVjP9Q+tPkdGhZgbwHdPPlw+
+         2mRzXFRQhiBmN/gldSjIrf6WnAU3VupQ4N9v0FxN/F02J9FkTy/8S8QqfDQFAnS3T9vT
+         vybmAQ/bonklLF/sgF594c5gQRduNdZpShCNQ4bnixqwS575JB57AADT1wqextDJ1JFc
+         qQqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nUsqrIcncbnAblsl66lT/lEZJ2lw+9ku+eiTV2ZWI6Y=;
+        b=Q37Bw4UCwkO99vrxDs+v40SeGI81ZNky4o1FwkmvAqq10ZO6UdTqbb11VyLag9tcoG
+         pBdABD9s1EObJz3DeXDVMG3MZ6n81yGsD3BGZqAVt9ucIK1wiiuLAL9QW38hQEVgRzEJ
+         AmhCQ6t/hjO79ugk+3U/G+YwncTaKexs/tRwCw4YU2xZTjfQi/m8n93T3VMl7+wOZ9wN
+         qk7bkpjkKxUhrhIwSql0K2awdjwM8a6BqNS4l/PX0ENnAQ0aXz387lRWpTFUHbeg4cYW
+         WrppKgFkd3W9tshPxQQnq1WdcRfHCmlL+9SsAucpjWCav5yQmi6elPT4v1LyUnjai39z
+         ukGg==
+X-Gm-Message-State: AJIora98WnFJJQR4b5XLv4N3f1vJvBNkFpJJLA3OR2pIfcus8U41RxHt
+	C3pal0njJ0TcfH2wIsQHdqNikw==
+X-Google-Smtp-Source: AGRyM1thhHPJv1gCsMqopzoDCU3kSSNaevw3WpkoAl9o10A2PSZBRyQoWCrT5Ve7WL8oKcVOHuWQbg==
+X-Received: by 2002:a05:6512:1092:b0:48a:766e:7e20 with SMTP id j18-20020a056512109200b0048a766e7e20mr7071165lfg.646.1658856711127;
+        Tue, 26 Jul 2022 10:31:51 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id t12-20020a19dc0c000000b0047f9cfa914csm3319933lfg.18.2022.07.26.10.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 10:31:50 -0700 (PDT)
+Message-ID: <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
+Date: Tue, 26 Jul 2022 19:31:49 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="oJH/1hxiws+0ENCW"
-Content-Disposition: inline
-In-Reply-To: <20220726132445.GA22389@logan-ThinkPad-T14-Gen-1>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: use absolute path to other
+ schema
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Florian Fainelli <f.fainelli@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@microchip.com>,
+ Saenz Julienne <nsaenz@kernel.org>, Conor Dooley
+ <conor.dooley@microchip.com>, devicetree@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
+ <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
+ <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 26/07/2022 17:59, Florian Fainelli wrote:
+> On 7/26/22 04:58, Krzysztof Kozlowski wrote:
+>> Absolute path to other DT schema is preferred over relative one.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Are you applying those patches or do you want the SoC maintainer to do that?
 
---oJH/1hxiws+0ENCW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The best if  you (SoC maintainer) would pick them up. If you cannot or
+it is too late for this, maybe arm-soc could grab them (already Cced).
 
-On Tue, Jul 26, 2022 at 06:54:45PM +0530, Logananth Sundararaj wrote:
-> The Yosemite V3.5 is a facebook multi-node server
-> platform that host four OCP server. The BMC
-> in the Yosemite V3.5 platform based on AST2600 SoC.
->=20
-> This patch adds linux device tree entry related to
-> Yosemite V3.5 specific devices connected to BMC SoC.
->=20
-> Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
-
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
-
---=20
-Patrick Williams
-
---oJH/1hxiws+0ENCW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmLgEJUACgkQqwNHzC0A
-wRneRA//ZQzNIoyRePI4dlJRvGZUaMFxkV/lNgQ5tvL+Zqo6Eu80BE6LekfIvSQ5
-n0NXmbveTLyp6G5ZxN2FCxOuuPV/HFgnabM6GN6J+DUjmaaFEAH1TW2e2FTdC8su
-T4JtaRNVIFpQfKE5U1x23wvVtjhqy+KtE2sNdE/TVxlXZF8bMjsz15LPfExtGBId
-1Dyh4tkEX1vbrUGuaELTRc7jkl9R5BecViN1CyKUngapW+lE2hNAvfzy4uwvGyi9
-8cf/V55a+XqEq7AUoyRJC4grswnKrs3FTItQfiwJLbq4mp/7pJSP2ooboprFdXQL
-3QlmiFOsV2Uq3nPlC6U4Tuj8pq7nGxdG4OL/140Rb1c6don1JjlnfCQMRhDyYgnU
-GKomtike5wFRxMzKF7YVC1KEauWFXPeh6aQJtXg0cTL+wwN1Aav86EOrZrd6LpTO
-YTLBRHr50R0bnKZfos/ZFwuKYsU/4XF24GUp6WwqiqYSSZo+ZUJLT/txKmLZNKbZ
-Bqpz89bmvHnN2vkaFXJt/YMo4M1v5QJIXcfqEMLxr/IgH89bUuiP8asTJXYPXQUq
-LbbnMAJWafdQhgnBnXPtZDLx4BeBTZ/nzLK4dHtOeDqVZpWIewVjhNWHDUNp4iuS
-jwubG8I1zIiHJBe6VC+36Ru2JXv6V5e5CEiUUSTHnZ0YbSqlRV0=
-=guU1
------END PGP SIGNATURE-----
-
---oJH/1hxiws+0ENCW--
+Best regards,
+Krzysztof
