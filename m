@@ -4,58 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B088DC00140
-	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 15:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59116C00140
+	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 15:59:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6BF09C433D7; Tue, 26 Jul 2022 15:58:57 +0000 (UTC)
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	id 2B776C433B5; Tue, 26 Jul 2022 15:59:23 +0000 (UTC)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A7A1DC433D6;
-	Tue, 26 Jul 2022 15:58:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A7A1DC433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 5A3BBC433D6;
+	Tue, 26 Jul 2022 15:59:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A3BBC433D6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so385631pjk.1;
-        Tue, 26 Jul 2022 08:58:56 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id y15so13707803plp.10;
+        Tue, 26 Jul 2022 08:59:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=vceTr9PbHgS7inYnpxj9pAebnTFEc9gOhZMQ08CgBlU=;
-        b=QOwMzncj8BYBPgQW3UQwzOEZKrMXb/Ew5zDbZXaxXSuu2i/4Pn3iqO58tA0J2ffDYC
-         hjY5u6ENlKNfjZeDzNZXJhL2DXznhHB4aLsjiX+MD3TlkrQAtSGl2cQi/gbfSCBWJlTe
-         SjvgmrdF11fkZyStx10amU6gUKVaE4kgG7yTZSFbrb+2kmYSz6k0TokSb1IOj23F61dQ
-         tFSWMxaVR4Q9f/tSmFbIW8VySxoIRnSdE3OD0JfJ2jNz5jccimkAkaOP4R0wximIZzjO
-         gHEp3fMWcLJuHORo2ZVygwfixILSaEvcgx9sf7aXZ0Xb7OTsojUCMxxaUzgzTd1duqQj
-         J7cQ==
+        bh=57o1v3WV4ubipwS3abJpah9hJJPNNRgMDiHh3namw3I=;
+        b=WcVN2HanxONRGtLe8KqmdrJozSjLhVzY+wmRxSjqz1fQWrfLaSUfT1Oic9Fz/sJAWD
+         8K4kHje+I2el/DpNX1yqJH0zDrf2aqvCsArGN5jMyadNrU1nEYvJb3kcINX4Afll2IMi
+         53yIun0jyE9Lqvp0+O6P8vxzMSkCcRIlc8bzFrZoeQV+3qJbcqv9xOxRsi8ByCe9EGSs
+         3Z4HOkjU2TJduL2tSpxiFFLku1qLy8Zm9PERgLpCaxkFS//p/dHtR/UP6EOPEmWJUAtV
+         38zTl4meS1Woeqrd8NxGvHP96rQVfjR+KFKnmJ2kiNFB/l6q2QTHooj1EVAbzqrg66CH
+         LK8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=vceTr9PbHgS7inYnpxj9pAebnTFEc9gOhZMQ08CgBlU=;
-        b=veAXBjPucRTICrnFuDhXwiWHGWGowD373g3SOusc4DHB/t9Vn3w6gKGz89FxpW51uc
-         1oQEAO2o8EU/3CsnjnK9lkuI12X5XTL9KEUaV+etrKhKu73VoNQTizs4x4gwKf/m74dN
-         zUYUeloyCeeyVgzR/DmUdBSQ6/diyTm4NjimGuWRsTX6iCc9sFifWkPIXRulwl3QBQsD
-         p/+r/EK3afRSwe8EDEVta9ZZO1WPVRNHnPJAUjgSbssrzEqQ0rypTPfHu/J2S+hryTIv
-         gRB7/wiXdw7uXgAWF/ES0NfzCg9A2XNcll06GTi9B7FBCsHqYfHB8nM206tCKeZEt+fX
-         UcWQ==
-X-Gm-Message-State: AJIora8NdGzDvMIH497X0Q26bKBhHkNIClQEIxmEl8BumFCwAX3rmRpQ
-	Yskp+3d6KeYgNBUnvcW+jg4=
-X-Google-Smtp-Source: AGRyM1vq/iJIGqBfIpH7h2igFX/YIJ3gqQDe3IIPX87H2wR84iDbN004uwu9hRfn13qOFsg0Kov5XQ==
-X-Received: by 2002:a17:902:e5c7:b0:16d:82dd:8c3d with SMTP id u7-20020a170902e5c700b0016d82dd8c3dmr7989689plf.62.1658851136039;
-        Tue, 26 Jul 2022 08:58:56 -0700 (PDT)
+        bh=57o1v3WV4ubipwS3abJpah9hJJPNNRgMDiHh3namw3I=;
+        b=N67vapztSJurMo1OJqPqi7MRrVziTqEzWNlJArVQT1i2KUCDdoyClEgVoFXCMBJZA0
+         nTbTtyMbGl3YDqOcMPrYu+ntAWqWB3TBSjhSjvU2lSycFT8TsaqIALVeavIUTEPzutDS
+         0iF92vFStUyCD223ZYXyqRzTe0VDLremhpdHhlp162ifPk1yUQB8AUaQDlJYagUFrfPA
+         enyiYSo/MjUjJt0EAyehBuGcGxDYrfPJv4U/Pe6b+7JdBm6H0SlN2nZpVIpraYYMoayH
+         OWk1lxTBf4m//cjHj0scFff8CM4SR+/S6sCGlc0yptpaDqEB939fcowaXvlZ2h3u+tCd
+         XRgg==
+X-Gm-Message-State: AJIora+ji5jRbcwtqf9TR0uelB96o3FI5zxCny8mzQubeYjGOqMEb4ut
+	T6hFismCXC+wrIAm/q4ynBM=
+X-Google-Smtp-Source: AGRyM1tbdXRJNvLagf6KQtq7gWhtRWdov/3CcSwRZ96bA4SvoNXcT+j2yMwVGZ8DxvVKa0R7hq9NQA==
+X-Received: by 2002:a17:902:cf09:b0:16d:69ad:e496 with SMTP id i9-20020a170902cf0900b0016d69ade496mr12248813plg.6.1658851161643;
+        Tue, 26 Jul 2022 08:59:21 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w1-20020a17090a028100b001f216a9d021sm13343952pja.40.2022.07.26.08.58.54
+        by smtp.googlemail.com with ESMTPSA id i29-20020aa796fd000000b0052b94e74e45sm11792118pfq.204.2022.07.26.08.59.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 08:58:55 -0700 (PDT)
-Message-ID: <d46287c3-42b0-8138-9a4d-0428133cb9df@gmail.com>
-Date: Tue, 26 Jul 2022 08:58:51 -0700
+        Tue, 26 Jul 2022 08:59:21 -0700 (PDT)
+Message-ID: <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
+Date: Tue, 26 Jul 2022 08:59:15 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/4] dt-bindings: soc: bcm: drop quotes when not needed
+Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: use absolute path to other
+ schema
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -73,16 +74,19 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
 References: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
+ <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
 From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 7/26/22 04:58, Krzysztof Kozlowski wrote:
-> Id and schema fields do not need quotes.
+> Absolute path to other DT schema is preferred over relative one.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Are you applying those patches or do you want the SoC maintainer to do that?
 -- 
 Florian
