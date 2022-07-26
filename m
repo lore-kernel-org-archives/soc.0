@@ -1,99 +1,816 @@
-Return-Path: <SRS0=d5Nh=X7=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=EOuU=X7=gmail.com=logananth13.hcl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B86F9C43334
-	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 11:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E50A8C43334
+	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 11:37:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 764BEC341CE; Tue, 26 Jul 2022 11:09:39 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id A5C98C341C8; Tue, 26 Jul 2022 11:37:19 +0000 (UTC)
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 81AEDC341CD
-	for <soc@kernel.org>; Tue, 26 Jul 2022 11:09:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 81AEDC341CD
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ej1-f51.google.com ([209.85.218.51]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N3Kc8-1nXZjp1Vxa-010Ld3 for <soc@kernel.org>; Tue, 26 Jul 2022 13:09:35
- +0200
-Received: by mail-ej1-f51.google.com with SMTP id b11so25437852eju.10
-        for <soc@kernel.org>; Tue, 26 Jul 2022 04:09:35 -0700 (PDT)
-X-Gm-Message-State: AJIora+gVygQVFH7r+4KfEvqMjVyPs7fi9ha7XOSXz/Xacgv0+PJsbMX
-	v+1u6PCMwyrc1Jh2tXC10HdDcQUpZO3VERk3Ens=
-X-Google-Smtp-Source: AGRyM1svEFK3QuJgIG7EovBpgpBPKsCTAANQazaPyhHiWewFu8xsda49KH0hRZs0xgdSZeCGQX2Ke88H3MR7SA186BQ=
-X-Received: by 2002:a17:906:98c7:b0:72b:20fe:807d with SMTP id
- zd7-20020a17090698c700b0072b20fe807dmr13918385ejb.75.1658833774982; Tue, 26
- Jul 2022 04:09:34 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4963EC341C0;
+	Tue, 26 Jul 2022 11:37:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4963EC341C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 6so12868666pgb.13;
+        Tue, 26 Jul 2022 04:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oIx6UQIy+Kcx2wptGKqvJKx+Yj7JR9CskwtKF8hf9aA=;
+        b=aavlwnCXrs+XyVcZvrauOZSXy5pk6YRAqgkxg+a+8tcb6L+vp1u5izB/W/BI5OO0FN
+         ZNnNmkGcHThlXPNxWf92oSV6Y9hsLx6O2O0v9XmJ1iaWueDfAvpX5v7f5HDWf0Q1QkMv
+         9wgBTvAXReMT+1V64NowL4Ms892OQiAtXkmPXF2KoGgbrylpj3p+MXaESlqgXuMGCXkI
+         /d5GI+KtElcJPGWxHrYt8Jz7obVtgw0mQ3wvNz90FD/15ZBBzkGaOOkR44mMYb3xGVXt
+         uJezN0jRW4YGh8WPcAYRrI9TN1JQhhjj8v+7ELuMXidhkDL02MJIGzOfIXjE9+fv42A2
+         Bn5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oIx6UQIy+Kcx2wptGKqvJKx+Yj7JR9CskwtKF8hf9aA=;
+        b=4tpVlqgXNzfRFXH3jtbwMcdKWUVWTcVLIzHmyOa0YQi6jU93ngaQkYUyj+PxQNa9Pc
+         /rvmEf145S++ls301uWZqiQrWpY0ycYObQBRaVhvDq2m4D0CqPF1q1Zgux7s9d7B4ZUS
+         Q+K82rFBTd4VlbZRWr6pt19IlcWBAy0EpDD/x0durR8GQ94NgiAIepMtmF7PI7DpBId8
+         lcegS+psDxj3BTsGY5Co6F9LijTR3kTY+iJNaYa2u4LEF5TH8snkW5hQ6NTr/fd+FcNK
+         A02Gvta7VannWrv2JXNYsRMGNcjNsqsbROMAwitMtftqInBLJ45eSLTOO4w6o/f1TjNB
+         yFRw==
+X-Gm-Message-State: AJIora9FoZqbaiV5jkLOAAusBKS1PWr0/7UrRA+bAeikamHjDCJTcK5R
+	V9EvscSU1ADdQfNPWgRtqtv8JQKdCvj/wnUOaJI=
+X-Google-Smtp-Source: AGRyM1ulgc57vOTGFUbyJd2M+S5NBD9mZ1jZmKGaAyJz1wyNARUVs2X/Zg74fAq/2CrDUeE2sUrZqda4iP1HwlWhwM0=
+X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id
+ b11-20020a056a000a8b00b004e152db9e5cmr16918851pfl.38.1658835437685; Tue, 26
+ Jul 2022 04:37:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <1658827473-121156-1-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1658827473-121156-1-git-send-email-john.garry@huawei.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Tue, 26 Jul 2022 13:09:18 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1=W6VisgRcx=Xf65PrG+2pyb3ehOQQ6F32Qr6Agp_9tg@mail.gmail.com>
-Message-ID: <CAK8P3a1=W6VisgRcx=Xf65PrG+2pyb3ehOQQ6F32Qr6Agp_9tg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: defconfig: Sync some configs with savedefconfig
-To: John Garry <john.garry@huawei.com>
+References: <20220720105331.GA23472@logan-ThinkPad-T14-Gen-1> <20220720231605.GA30806@packtop>
+In-Reply-To: <20220720231605.GA30806@packtop>
+From: logananth hcl <logananth13.hcl@gmail.com>
+Date: Tue, 26 Jul 2022 17:07:06 +0530
+Message-ID: <CAGpPFEGs5BHPvY0VCMJofASTLd5hCD5uovDpfLembX+EMs+rnw@mail.gmail.com>
+Subject: Re: [PATCH v4] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
+To: Zev Weiss <zweiss@equinix.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, SoC Team <soc@kernel.org>, 
-	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Florian Fainelli <f.fainelli@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>, 
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>, "thangavel.k@hcl.com" <thangavel.k@hcl.com>, 
+	"garnermic@gmail.com" <garnermic@gmail.com>, "velumanit@hcl.com" <velumanit@hcl.com>, 
+	"naveen.mosess@hcl.com" <naveen.mosess@hcl.com>
+Content-Type: multipart/alternative; boundary="00000000000001107905e4b3b900"
+
+--00000000000001107905e4b3b900
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:grKvJpDYbJOE8RjKfVA8PY+xCJ+qjOcCiYfBrNoqZiqoVze5FVM
- 58TQ4DJsOMqX9tDDEmakbmvGh0bZkHIymcVwau7/KkC8/2R0t0kQChxqxewwNdaOSyTVdGJ
- GhTUB+SVqjRW8vFI1Gg9K7+16OlMSD3fdYnMStyvJN9J9QawwXvKYaIcMZofgFMT5r5+qL2
- C2MuImOgsX6mlOI/UJPTA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hNQbVisBF3o=:doBbjENLoJR/4O+0PzjLbu
- KprhEc2E+iiYC2zDQ7LYWgJhrP43IGhJMfxTAQ4KWN60AUACoCGAA58Oimx3DwGTexqObyEVU
- Grf5YINdG0P8aWAVmSpkgXyiuEP231lGmUNYojJqeUWUDHE4WSaxl0XtMtG6RE5VCnOr0IOpk
- p9vrdovmriPYdtKiL7RRrpQzv9o9+gzen0ULcLLX4o/JRWHe4R1kkmuwZYIdZa6pgrYlaNdHs
- nCOxQN3auf8VPUsx59trsnfyEPxtBcrz9nrlZS3lQGkBBbBe7AsOVbmQsBPuBII2vG+FkmNnq
- BZzx7YKZZi9i+Rvo4ofXaj28q2CIeTCsb3cuVSlqihT9iGCRsoXtuC9j4Iw+B1YWEipivYU8t
- mh66tqQaDp4fceN69VGsqLjX8VUoFEfbGxRnSfnDzZVGaqmXiHqfv/C8k8Km44/w3EzVMjiou
- 7G1kgNN3mp++tAq/KbJh2CEY318M5RBndltULtcbtcyUg+Uyq6KQE1b9KEpGnCI103KXNe5AZ
- nHMskvu6FKh7A1OtokFepEDliuDRcMj0NeJW9gejqwrAFI3FQ0XCkElwc4cQc/v2xwQP/lQt4
- 5UzdJtPiflOdaNeOHZPd2dPjpsyucY8Da66R/1iino3pZQUWRJNXulqYzMPz9e1H7YwJ4yOsB
- uBp4Nn/KFLX4koEQqnkf4gw/MsoyRnpezd+ydUFvN6ErSWQbqHtlK1ghr6QbNwNozdsy4f+dA
- gArpHzLMlG8VjZEabH9M2gGdKkEepYf3AV8LFNH2njIjHIiO2nf7SkMm5K+frm/8v4vyR2AqO
- arC7ym8fDSbzVOkWTjIwfPinDAoHltC9JWHx4MM91cJEikD9iKe9coyh+0kZIXjP0v0mM9VGQ
- DGa2PtomVyBppZZ6/Tjw==
 
-On Tue, Jul 26, 2022 at 11:24 AM John Garry <john.garry@huawei.com> wrote:
+On Thu, Jul 21, 2022 at 4:46 AM Zev Weiss <zweiss@equinix.com> wrote:
+
+> On Wed, Jul 20, 2022 at 03:53:31AM PDT, Logananth Sundararaj wrote:
+> >The Yosemite V3.5 is a facebook multi-node server
+> >platform that host four OCP server. The BMC
+> >in the Yosemite V3.5 platform based on AST2600 SoC.
+> >
+> >This patch adds linux device tree entry related to
+> >Yosemite V3.5 specific devices connected to BMC SoC.
+> >
+> >Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+> >
+> >---
+> >--- v4 - Bootagrs and memory removed.
+> >--- v3 - Addressed v2 patch comments.
+> >--- v2 - Enabled i2c drivers.
+> >--- v1 - Initial draft.
+> >---
+> >---
+> > arch/arm/boot/dts/Makefile                    |   1 +
+> > .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 260 ++++++++++++++++++
+> > 2 files changed, 261 insertions(+)
+> > create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+> >
+> >diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> >index 7e0934180724..58add093e5fb 100644
+> >--- a/arch/arm/boot/dts/Makefile
+> >+++ b/arch/arm/boot/dts/Makefile
+> >@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+> >       aspeed-bmc-facebook-cloudripper.dtb \
+> >       aspeed-bmc-facebook-cmm.dtb \
+> >       aspeed-bmc-facebook-elbert.dtb \
+> >+      aspeed-bmc-facebook-fby35.dtb \
+> >       aspeed-bmc-facebook-fuji.dtb \
+> >       aspeed-bmc-facebook-galaxy100.dtb \
+> >       aspeed-bmc-facebook-minipack.dtb \
+> >diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+> b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+> >new file mode 100644
+> >index 000000000000..05efba7117a8
+> >--- /dev/null
+> >+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+> >@@ -0,0 +1,260 @@
+> >+// SPDX-License-Identifier: GPL-2.0-or-later
+> >+// Copyright (c) 2020 Facebook Inc.
+> >+
+> >+/dts-v1/;
+> >+
+> >+#include "aspeed-g6.dtsi"
+> >+#include <dt-bindings/gpio/aspeed-gpio.h>
+> >+#include <dt-bindings/i2c/i2c.h>
+> >+
+> >+/ {
+> >+      model = "Facebook fby35";
+> >+      compatible = "facebook,fby35", "aspeed,ast2600";
+> >+
+> >+      aliases {
+> >+              serial4 = &uart5;
+> >+      };
+> >+
+> >+      chosen {
+> >+              stdout-path = &uart5;
+> >+      };
+> >+
+> >+      iio-hwmon {
+> >+              compatible = "iio-hwmon";
+> >+              io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
+> >+                      <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
+> >+                      <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
+> >+                      <&adc1 4>, <&adc1 5>, <&adc1 6>;
+> >+      };
 >
-> Some configs can obviously be removed when sync'ing with savedefconfig, as
-> follows:
+> A blank line here would be nice for formatting consistency...
 >
-> - config ARCH_BCMBCA is selected by config ARCH_BCM4908 from
->   arch/arm64/Kconfig.platforms, and the latter is enabled in the defconfig,
->   so no need to explicitly enable in the defconfig.
+> will fix it.
 
-I double-checked this one and found that this was just added to the defconfig
-as a transitional entry, with the ARCH_BCM4908 being the one that is
-the one to go away, as described in 32d3da7d2f44 ("arm64: make
-ARCH_BCM4908 select ARCH_BCMBCA"), so I think we should leave this
-one out.
-
-> - config SECCOMP was changed to def_bool y in commit 282a181b1a0d ("
->   seccomp: Move config option SECCOMP to arch/Kconfig"), so no need to
->   explicitly enable in the defconfig.
+> >+      spi_gpio: spi-gpio {
+> >+              status = "okay";
+> >+              compatible = "spi-gpio";
+> >+              #address-cells = <1>;
+> >+              #size-cells = <0>;
+> >+
+> >+              gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
+> >+              gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
+> >+              gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
+> >+              num-chipselects = <1>;
+> >+              cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
+> >+
+> >+              tpmdev@0 {
+> >+                      compatible = "tcg,tpm_tis-spi";
+> >+                      spi-max-frequency = <33000000>;
+> >+                      reg = <0>;
+> >+              };
+> >+      };
+> >+
 >
-> - config MAILBOX is already selected by some drivers enabled in the
->   defconfig, so no need to explicitly enable.
+> ...and this one could be removed.
 >
-> - config QRTR was enabled in the defconfig from commit 1bdf91fd2ae82 ("
->   arm64: defconfig: Enable Qualcomm QRTR"). However until many kernel
->   versions later in commit 231a136fdf46 ("arm64: defconfig: enable ath11k
->   driver"), no driver depended on config QRTR - not for building anyway.
->   In commit 231a136fdf46, config ATH11K_PCI was enabled and this selects
->   config QRTR, so there is no need to explicitly enable in the defconfig.
+> will fix it.
 
-The rest is fine. If it's ok with you, I'll just apply the other three bits
-and drop the ARCH_BCMBCA part from the patch and the description.
+> >+};
+> >+
+> >+&mac3 {
+> >+      status = "okay";
+> >+
+> >+      pinctrl-names = "default";
+> >+      pinctrl-0 = <&pinctrl_rmii4_default>;
+> >+      no-hw-checksum;
+> >+      use-ncsi;
+> >+      mlx,multi-host;
+> >+      ncsi-ctrl,start-redo-probe;
+> >+      ncsi-ctrl,no-channel-monitor;
+> >+      ncsi-package = <1>;
+> >+      ncsi-channel = <1>;
+> >+      ncsi-rexmit = <1>;
+> >+      ncsi-timeout = <2>;
+> >+};
+> >+
+> >+&uart1 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&uart2 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&uart3 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&uart4 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&uart5 {
+> >+      status = "okay";
+> >+      compatible = "snps,dw-apb-uart";
+> >+};
+> >+
+> >+&wdt1 {
+> >+      status = "okay";
+> >+      pinctrl-names = "default";
+> >+      pinctrl-0 = <&pinctrl_wdtrst1_default>;
+> >+      aspeed,reset-type = "soc";
+> >+      aspeed,external-signal;
+> >+      aspeed,ext-push-pull;
+> >+      aspeed,ext-active-high;
+> >+      aspeed,ext-pulse-duration = <256>;
+> >+};
+> >+
+> >+&rtc {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&fmc {
+> >+      status = "okay";
+> >+      flash@0 {
+> >+              status = "okay";
+> >+              m25p,fast-read;
+> >+              label = "spi0.1";
+> >+              spi-max-frequency = <50000000>;
+> >+              #include "openbmc-flash-layout-128.dtsi"
+> >+      };
+> >+      flash@1 {
+> >+              status = "okay";
+> >+              m25p,fast-read;
+> >+              label = "spi0.0";
+> >+              spi-max-frequency = <50000000>;
+> >+              #include "openbmc-flash-layout.dtsi"
+> >+      };
+>
+> The labels on these look backwards from what I'd guess was probably
+> intended (flash@0 is spi0.1 and flash@1 is spi0.0).
+>
+> Let's check into this, and fix it.
 
-Thanks,
+> >+};
+> >+
+> >+&i2c0 {
+> >+      //Host1 IPMB bus
+>
+> While it's not currently 100% consistent, I think the generally
+> preferred style is to put a space after '//' (here and elsewhere).
+>
+will fix it.
 
-       Arnd
+>
+> >+      status = "okay";
+> >+      multi-master;
+> >+      ipmb0@10 {
+> >+              compatible = "ipmb-dev";
+> >+              reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> >+              i2c-protocol;
+> >+      };
+> >+};
+> >+
+> >+&i2c1 {
+> >+      //Host2 IPMB bus
+> >+      status = "okay";
+> >+      multi-master;
+> >+      ipmb1@10 {
+> >+              compatible = "ipmb-dev";
+> >+              reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> >+              i2c-protocol;
+> >+      };
+> >+};
+> >+
+> >+&i2c2 {
+> >+      //Host3 IPMB bus
+> >+      status = "okay";
+> >+      multi-master;
+> >+      ipmb2@10 {
+> >+              compatible = "ipmb-dev";
+> >+              reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> >+              i2c-protocol;
+> >+      };
+> >+};
+> >+
+> >+&i2c3 {
+> >+      //Host1 IPMB bus
+> >+      status = "okay";
+> >+      multi-master;
+> >+      ipmb3@10 {
+> >+              compatible = "ipmb-dev";
+> >+              reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> >+              i2c-protocol;
+> >+      };
+> >+};
+> >+
+> >+&i2c4 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&i2c5 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&i2c6 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&i2c7 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&i2c8 {
+> >+      //NIC SENSOR TEMP
+> >+      status = "okay";
+> >+      tmp421@1f {
+> >+              compatible = "ti,tmp421";
+> >+              reg = <0x1f>;
+> >+      };
+> >+};
+> >+
+> >+&i2c9 {
+> >+      // Debug-Card IPMB bus
+> >+      status = "okay";
+> >+      multi-master;
+> >+      ipmb9@30 {
+> >+              compatible = "ipmb-dev";
+> >+              reg = <(0x30 | I2C_OWN_SLAVE_ADDRESS)>;
+> >+              i2c-protocol;
+> >+      };
+> >+};
+> >+
+> >+&i2c10 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&i2c11 {
+> >+      status = "okay";
+> >+      //FRU EEPROM
+> >+      eeprom@51 {
+> >+              compatible = "atmel,24c64";
+> >+              reg = <0x51>;
+> >+              pagesize = <32>;
+> >+      };
+> >+};
+> >+
+> >+&i2c12 {
+> >+      status = "okay";
+> >+      //INLET TEMP
+> >+      tmp75@4e {
+> >+              compatible = "ti,tmp75";
+> >+              reg = <0x4e>;
+> >+      };
+> >+      //OUTLET TEMP
+> >+      tmp75@4f {
+> >+              compatible = "ti,tmp75";
+> >+              reg = <0x4f>;
+> >+      };
+> >+};
+> >+
+> >+&i2c13 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&adc0 {
+> >+      ref_voltage = <2500>;
+> >+      status = "okay";
+> >+
+> >+      pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
+> >+              &pinctrl_adc2_default &pinctrl_adc3_default
+> >+              &pinctrl_adc4_default &pinctrl_adc5_default
+> >+              &pinctrl_adc6_default &pinctrl_adc7_default>;
+> >+};
+> >+
+> >+&adc1 {
+> >+      ref_voltage = <2500>;
+> >+      status = "okay";
+> >+
+> >+      pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
+> >+              &pinctrl_adc10_default &pinctrl_adc11_default
+> >+              &pinctrl_adc12_default &pinctrl_adc13_default>;
+> >+};
+>
+> Missing blank line.
+>
+> will fix.
+
+> >+&ehci0 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&ehci1 {
+> >+      status = "okay";
+> >+};
+> >+
+> >+&uhci {
+> >+      status = "okay";
+> >+};
+> >--
+> >2.17.1
+> >
+
+Thanks
+-Logananth
+
+--00000000000001107905e4b3b900
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Thu, Jul 21, 2022 at 4:46 AM Zev W=
+eiss &lt;<a href=3D"mailto:zweiss@equinix.com">zweiss@equinix.com</a>&gt; w=
+rote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0p=
+x 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">On Wed, Ju=
+l 20, 2022 at 03:53:31AM PDT, Logananth Sundararaj wrote:<br>
+&gt;The Yosemite V3.5 is a facebook multi-node server<br>
+&gt;platform that host four OCP server. The BMC<br>
+&gt;in the Yosemite V3.5 platform based on AST2600 SoC.<br>
+&gt;<br>
+&gt;This patch adds linux device tree entry related to<br>
+&gt;Yosemite V3.5 specific devices connected to BMC SoC.<br>
+&gt;<br>
+&gt;Signed-off-by: Logananth Sundararaj &lt;<a href=3D"mailto:logananth_s@h=
+cl.com" target=3D"_blank">logananth_s@hcl.com</a>&gt;<br>
+&gt;<br>
+&gt;---<br>
+&gt;--- v4 - Bootagrs and memory removed.<br>
+&gt;--- v3 - Addressed v2 patch comments.<br>
+&gt;--- v2 - Enabled i2c drivers.<br>
+&gt;--- v1 - Initial draft.<br>
+&gt;---<br>
+&gt;---<br>
+&gt; arch/arm/boot/dts/Makefile=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A01 +<br>
+&gt; .../boot/dts/aspeed-bmc-facebook-fby35.dts=C2=A0 =C2=A0 | 260 ++++++++=
+++++++++++<br>
+&gt; 2 files changed, 261 insertions(+)<br>
+&gt; create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts<br>
+&gt;<br>
+&gt;diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile<br=
+>
+&gt;index 7e0934180724..58add093e5fb 100644<br>
+&gt;--- a/arch/arm/boot/dts/Makefile<br>
+&gt;+++ b/arch/arm/boot/dts/Makefile<br>
+&gt;@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) +=3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0aspeed-bmc-facebook-cloudripper.dtb \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0aspeed-bmc-facebook-cmm.dtb \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0aspeed-bmc-facebook-elbert.dtb \<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aspeed-bmc-facebook-fby35.dtb \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0aspeed-bmc-facebook-fuji.dtb \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0aspeed-bmc-facebook-galaxy100.dtb \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0aspeed-bmc-facebook-minipack.dtb \<br>
+&gt;diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm=
+/boot/dts/aspeed-bmc-facebook-fby35.dts<br>
+&gt;new file mode 100644<br>
+&gt;index 000000000000..05efba7117a8<br>
+&gt;--- /dev/null<br>
+&gt;+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts<br>
+&gt;@@ -0,0 +1,260 @@<br>
+&gt;+// SPDX-License-Identifier: GPL-2.0-or-later<br>
+&gt;+// Copyright (c) 2020 Facebook Inc.<br>
+&gt;+<br>
+&gt;+/dts-v1/;<br>
+&gt;+<br>
+&gt;+#include &quot;aspeed-g6.dtsi&quot;<br>
+&gt;+#include &lt;dt-bindings/gpio/aspeed-gpio.h&gt;<br>
+&gt;+#include &lt;dt-bindings/i2c/i2c.h&gt;<br>
+&gt;+<br>
+&gt;+/ {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 model =3D &quot;Facebook fby35&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;facebook,fby35&quot;, &quot;=
+aspeed,ast2600&quot;;<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aliases {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 serial4 =3D &amp;uart=
+5;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 chosen {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 stdout-path =3D &amp;=
+uart5;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 iio-hwmon {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+iio-hwmon&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 io-channels =3D &lt;&=
+amp;adc0 0&gt;, &lt;&amp;adc0 1&gt;, &lt;&amp;adc0 2&gt;, &lt;&amp;adc0 3&g=
+t;,<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 &lt;&amp;adc0 4&gt;, &lt;&amp;adc0 5&gt;, &lt;&amp;adc0 6&gt;, &lt;&=
+amp;adc0 7&gt;,<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 &lt;&amp;adc1 0&gt;, &lt;&amp;adc1 1&gt;, &lt;&amp;adc1 2&gt;, &lt;&=
+amp;adc1 3&gt;,<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 &lt;&amp;adc1 4&gt;, &lt;&amp;adc1 5&gt;, &lt;&amp;adc1 6&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+<br>
+A blank line here would be nice for formatting consistency...<br>
+<br></blockquote><div>will fix it. <br></div><blockquote class=3D"gmail_quo=
+te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
+);padding-left:1ex">
+&gt;+=C2=A0 =C2=A0 =C2=A0 spi_gpio: spi-gpio {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay=
+&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+spi-gpio&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #address-cells =3D &l=
+t;1&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #size-cells =3D &lt;0=
+&gt;;<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 gpio-sck =3D &lt;&amp=
+;gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 gpio-mosi =3D &lt;&am=
+p;gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 gpio-miso =3D &lt;&am=
+p;gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 num-chipselects =3D &=
+lt;1&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 cs-gpios =3D &lt;&amp=
+;gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW&gt;;<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 tpmdev@0 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 compatible =3D &quot;tcg,tpm_tis-spi&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 spi-max-frequency =3D &lt;33000000&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 reg =3D &lt;0&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+<br>
+<br>
+...and this one could be removed.<br>
+<br></blockquote><div>will fix it. <br></div><blockquote class=3D"gmail_quo=
+te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
+);padding-left:1ex">
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;mac3 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 pinctrl-names =3D &quot;default&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 pinctrl-0 =3D &lt;&amp;pinctrl_rmii4_default&gt;;=
+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 no-hw-checksum;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 use-ncsi;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 mlx,multi-host;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ncsi-ctrl,start-redo-probe;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ncsi-ctrl,no-channel-monitor;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ncsi-package =3D &lt;1&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ncsi-channel =3D &lt;1&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ncsi-rexmit =3D &lt;1&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ncsi-timeout =3D &lt;2&gt;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;uart1 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;uart2 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;uart3 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;uart4 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;uart5 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;snps,dw-apb-uart&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;wdt1 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 pinctrl-names =3D &quot;default&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 pinctrl-0 =3D &lt;&amp;pinctrl_wdtrst1_default&gt=
+;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aspeed,reset-type =3D &quot;soc&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aspeed,external-signal;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aspeed,ext-push-pull;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aspeed,ext-active-high;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 aspeed,ext-pulse-duration =3D &lt;256&gt;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;rtc {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;fmc {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 flash@0 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay=
+&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 m25p,fast-read;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 label =3D &quot;spi0.=
+1&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 spi-max-frequency =3D=
+ &lt;50000000&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #include &quot;openbm=
+c-flash-layout-128.dtsi&quot;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 flash@1 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay=
+&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 m25p,fast-read;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 label =3D &quot;spi0.=
+0&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 spi-max-frequency =3D=
+ &lt;50000000&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #include &quot;openbm=
+c-flash-layout.dtsi&quot;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+<br>
+The labels on these look backwards from what I&#39;d guess was probably<br>
+intended (flash@0 is spi0.1 and flash@1 is spi0.0).<br>
+<br></blockquote><div>Let&#39;s check into this, and fix it. <br></div><blo=
+ckquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left=
+:1px solid rgb(204,204,204);padding-left:1ex">
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c0 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //Host1 IPMB bus<br>
+<br>
+While it&#39;s not currently 100% consistent, I think the generally<br>
+preferred style is to put a space after &#39;//&#39; (here and elsewhere).<=
+br></blockquote><div>will fix it. <br></div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex">
+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 multi-master;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ipmb0@10 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ipmb-dev&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;(0x10 | I=
+2C_OWN_SLAVE_ADDRESS)&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 i2c-protocol;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c1 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //Host2 IPMB bus<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 multi-master;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ipmb1@10 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ipmb-dev&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;(0x10 | I=
+2C_OWN_SLAVE_ADDRESS)&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 i2c-protocol;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c2 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //Host3 IPMB bus<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 multi-master;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ipmb2@10 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ipmb-dev&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;(0x10 | I=
+2C_OWN_SLAVE_ADDRESS)&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 i2c-protocol;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c3 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //Host1 IPMB bus<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 multi-master;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ipmb3@10 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ipmb-dev&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;(0x10 | I=
+2C_OWN_SLAVE_ADDRESS)&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 i2c-protocol;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c4 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c5 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c6 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c7 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c8 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //NIC SENSOR TEMP<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 tmp421@1f {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ti,tmp421&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;0x1f&gt;;=
+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c9 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 // Debug-Card IPMB bus<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 multi-master;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ipmb9@30 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ipmb-dev&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;(0x30 | I=
+2C_OWN_SLAVE_ADDRESS)&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 i2c-protocol;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c10 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c11 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //FRU EEPROM<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 eeprom@51 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+atmel,24c64&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;0x51&gt;;=
+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 pagesize =3D &lt;32&g=
+t;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c12 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //INLET TEMP<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 tmp75@4e {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ti,tmp75&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;0x4e&gt;;=
+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 //OUTLET TEMP<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 tmp75@4f {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 compatible =3D &quot;=
+ti,tmp75&quot;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg =3D &lt;0x4f&gt;;=
+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 };<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;i2c13 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;adc0 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ref_voltage =3D &lt;2500&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 pinctrl-0 =3D &lt;&amp;pinctrl_adc0_default &amp;=
+pinctrl_adc1_default<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &amp;pinctrl_adc2_def=
+ault &amp;pinctrl_adc3_default<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &amp;pinctrl_adc4_def=
+ault &amp;pinctrl_adc5_default<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &amp;pinctrl_adc6_def=
+ault &amp;pinctrl_adc7_default&gt;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;adc1 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 ref_voltage =3D &lt;2500&gt;;<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 pinctrl-0 =3D &lt;&amp;pinctrl_adc8_default &amp;=
+pinctrl_adc9_default<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &amp;pinctrl_adc10_de=
+fault &amp;pinctrl_adc11_default<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &amp;pinctrl_adc12_de=
+fault &amp;pinctrl_adc13_default&gt;;<br>
+&gt;+};<br>
+<br>
+Missing blank line.<br>
+<br></blockquote><div>will fix. <br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex">
+&gt;+&amp;ehci0 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;ehci1 {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;+<br>
+&gt;+&amp;uhci {<br>
+&gt;+=C2=A0 =C2=A0 =C2=A0 status =3D &quot;okay&quot;;<br>
+&gt;+};<br>
+&gt;-- <br>
+&gt;2.17.1<br>
+&gt;</blockquote><div>Thanks <br></div><div>-Logananth <br></div></div></di=
+v>
+
+--00000000000001107905e4b3b900--
