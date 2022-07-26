@@ -1,103 +1,1034 @@
-Return-Path: <SRS0=S9At=X6=huawei.com=john.garry@kernel.org>
+Return-Path: <SRS0=hij3=X7=olv.in.ua=info@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D95BC43334
-	for <soc@archiver.kernel.org>; Mon, 25 Jul 2022 17:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9BE0C433EF
+	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 02:24:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27D5AC341C8; Mon, 25 Jul 2022 17:39:58 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	id 97C98C341C8; Tue, 26 Jul 2022 02:24:37 +0000 (UTC)
+Received: from olv.in.ua (olv.in.ua [91.232.21.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EED48C341C6;
-	Mon, 25 Jul 2022 17:39:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EED48C341C6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ls6gs17tnz68737;
-	Tue, 26 Jul 2022 01:37:45 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 25 Jul 2022 19:39:44 +0200
-Received: from [10.126.173.156] (10.126.173.156) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Jul 2022 18:39:44 +0100
-Message-ID: <c2f91d00-96d2-c1f4-c858-5619515a30ed@huawei.com>
-Date: Mon, 25 Jul 2022 18:39:43 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id E4144C341C6
+	for <soc@kernel.org>; Tue, 26 Jul 2022 02:24:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4144C341C6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=olv.in.ua
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=olv.in.ua
+Message-ID: <a02861c8765c76e7f45e17ddd9117b18f84b@olv.in.ua>
+Reply-To: Tatiana <reply@olv.in.ua>
+From: Tatiana <info@olv.in.ua>
 List-Id: <soc.lore.kernel.org>
-CC: Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Olof Johansson
-	<olof@lixom.net>, SoC Team <soc@kernel.org>, <jpoimboe@kernel.org>, "Linux
- Kernel Mailing List" <linux-kernel@vger.kernel.org>
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
- <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
- <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
- <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
- <4d5c9bfc-dc10-7019-cad4-751e21f02a18@huawei.com>
- <CAK8P3a3QNjOSodb-ND=nZ=ThC9xZhEyUOaUsWCDF70s9g80r-w@mail.gmail.com>
-From: John Garry <john.garry@huawei.com>
-In-Reply-To: <CAK8P3a3QNjOSodb-ND=nZ=ThC9xZhEyUOaUsWCDF70s9g80r-w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.173.156]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+To: soc@kernel.org
+Subject: =?utf-8?B?0J/RgNC+0YTQtdGB0ZbQudC90ZYg0L/RgNC+0LTQsNC20ZY=?=
+Date: Tue, 26 Jul 2022 05:24:32 +0300
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="a90348a9b377c7fcdf755d06fe7abd2423"
+List-Unsubscribe: <http://otbc.in.ua/Server-Side/amsweb.php?mD6t6hf9lIY8VT6LEe5x7Ke8FPERtARqOJYCxNJFgbJtkscBtlCKME%2Fkm1kazS1WpQK40SXHiH%2Bg%2F%2BYnsbvuGasKqO%2Bnlw7yCg%2FYovsmuez6s6SaZECy6TvR4aGOhHKpj8Sz13j5qZXzhAllJRP%2BvR5lX9UzNiMspK4n9shRMWA%3D>
+DKIM-Signature: v=1; c=relaxed/relaxed; a=rsa-sha256; s=mail; d=olv.in.ua;
+	t=1658802272; h=message-id:from:to:subject:date:mime-version:list-unsubscribe;
+	bh=9EX5W4tLwuaGmpVVSjLbG/czNRl+gq3zVki8+T5dpI4=;
+	b=BkgLpfrg1N9m04HSdZPXwwqY0IvV9yDo+gAuWXVahKAWaK6Oi0HrNFlzFZBebkHRO3m3Nh4
+	+hRS2rpYqJc0lmWQAwJarzENvB2m6yJEtR0/eEuqVeVDQ4IU0cK4AtwcW2PhBJSRotKIQOL3H
+	LUEHwqA0ifHC0qxbvogYQPM6fnQ=
 
-On 25/07/2022 15:22, Arnd Bergmann wrote:
->> INTERCONNECT has no dependencies, so "select" - like for MAILBOX -
->> should be fine, I suppose
-> There are a couple of trade-offs between the two approaches.
-> The main advantage of 'select' is that you can enable drivers more
-> easily and all the required subsystems are there automatically.
-> The advantage of 'depends on' is that it becomes easier to disable
-> entire subsystems that one may not need.
-> 
-> Which of those two is more important is of course a matter of perspective,
-> I like to be able to turn things off more easily because that makes it
-> possible to test the corner cases with randconfig more easily, and it
-> helps produce size-reduced kernels for embedded systems.
-> 
-> Another aspect is that we overall have more 'depends on' than 'select',
-> and sticking with the more common way avoids circular dependencies,
-> both within an area of the kernel and overall.
-> 
-> The rule that I tend to follow with 'select' is to only use it on symbols
-> that you don't even want to show to users. If a feature is part of
-> a library (think zlib), then each user just needs to select the symbol
-> but you never actually have to decide whether to show it or not.
+--a90348a9b377c7fcdf755d06fe7abd2423
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-ok, seems reasonable. Personally I dislike 'select' for all the common 
-reasons.
+=D0=9F=D1=80=D0=BE=D1=84=D0=B5=D1=81=D1=96=D0=B9=D0=BD=D1=96 =D0=BF=D1=80=
+=D0=BE=D0=B4=D0=B0=D0=B6=D1=96 =D0=922=D0=92: =D0=B2=D1=96=D0=B4 =D0=BF=D0=
+=B5=D1=80=D1=88=D0=BE=D0=B3=D0=BE =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=
+=82=D1=83 =D0=B4=D0=BE =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=B8=D1=
+=85 =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96=D0=B2
 
-> 
->>>> And would each config item deletion merit a separate patch?
->>> You send a combined patch for the obvious ones (secccomp
->>> and mailbox AFAICT) or send them separately. For the other ones I think
->>> we should try fixing the Kconfig files first, otherwise we just end up
->>> putting them back afterwards.
->> ok, fine. I'll deal with the obvious changes first plus
->> CONFIG_DEBUG_INFO and then the non-obvious, non-trivial ones. I'll base
->> on your arm/defconfig branch (for defconfig changes).
-> The CONFIG_DEBUG_INFO one should be fixed by my series from
-> last week already, do you still see another issue with that?
+Online 9-10 =D1=81=D0=B5=D1=80=D0=BF=D0=BD=D1=8F
 
-Ah, I thought that you re-enabled CONFIG_DEBUG_INFO for only the arm32 
-configs but see that you also re-enabled for arm64 defconfig as well.
+=D0=A6=D1=96=D0=BB=D1=8C =D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC=D0=B8=
+: =C2=A0=C2=A0=C2=A0
+- =D0=B2=D0=B8=D0=B1=D1=83=D0=B4=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=B0=D0=B4=
+=D0=B0=D0=BF=D1=82=D0=BE=D0=B2=D0=B0=D0=BD=D1=83 =D0=BF=D1=96=D0=B4 =D1=81=
+=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=D0=BA=D1=83 =D0=B1=D1=96=D0=B7=D0=BD=
+=D0=B5=D1=81=D1=83 =D1=81=D1=82=D1=80=D0=B0=D1=82=D0=B5=D0=B3=D1=96=D1=8E=
+ =D0=B7=D0=B0=D0=BB=D1=83=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D1=81=D1=83=
+=D0=BF=D1=80=D0=BE=D0=B2=D0=BE=D0=B4=D1=83 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=B0; =C2=A0=C2=A0=C2=A0
+- =D0=B5=D1=84=D0=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE =D0=B7=D0=B1=D0=B8=
+=D1=80=D0=B0=D1=82=D0=B8 =D1=96=D0=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=
+=D1=96=D1=8E =D1=96 =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D1=8E=
+=D0=B2=D0=B0=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7=
+ =D0=BF=D0=BE=D1=82=D0=B5=D0=BD=D1=86=D1=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8=
+ =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0=D0=BC=D0=B8;
+- =D1=82=D0=BE=D1=87=D0=BD=D0=BE =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D1=8F=D1=82=
+=D0=B8 =D1=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81=D0=B8, =D0=BF=D0=BE=D1=82=
+=D1=80=D0=B5=D0=B1=D0=B8 =D1=96 =D0=B2=D0=B8=D0=B3=D0=BE=D0=B4=D0=B8 =D1=80=
+=D1=96=D0=B7=D0=BD=D0=B8=D1=85 "=D0=B0=D0=B3=D0=B5=D0=BD=D1=82=D1=96=D0=B2=
+ =D0=B2=D0=BF=D0=BB=D0=B8=D0=B2=D1=83" =D0=B2 =D0=9A=D0=BE=D0=BC=D0=BF=D0=
+=B0=D0=BD=D1=96=D1=97
+- =D1=84=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=BF=D0=B5=D1=80=
+=D1=81=D0=BE=D0=BD=D0=B0=D0=BB=D1=96=D0=B7=D0=BE=D0=B2=D0=B0=D0=BD=D1=96 =
+=D0=BA=D0=BE=D0=BC=D0=B5=D1=80=D1=86=D1=96=D0=B9=D0=BD=D1=96 =D0=BF=D1=80=
+=D0=BE=D0=BF=D0=BE=D0=B7=D0=B8=D1=86=D1=96=D1=97; =C2=A0=C2=A0=C2=A0
+- =D1=83=D1=81=D0=BF=D1=96=D1=88=D0=BD=D0=BE =D0=B2=D0=B5=D1=81=D1=82=D0=B8=
+ =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =D0=BF=D0=BE=
+ =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =D1=96 =D0=BF=D1=80=D0=B8=
+ =D0=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96; =C2=A0=C2=A0=C2=A0
+- =D0=B2=D0=B8=D0=BA=D0=BE=D1=80=D0=B8=D1=81=D1=82=D0=BE=D0=B2=D1=83=D0=B2=
+=D0=B0=D1=82=D0=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=
+=D0=BD=D1=8F =D1=96 =D1=81=D1=83=D0=BC=D0=BD=D1=96=D0=B2=D0=B8 =D0=BA=D0=BB=
+=D1=96=D1=94=D0=BD=D1=82=D0=B0, =D1=8F=D0=BA =D0=BC=D0=BE=D0=B6=D0=BB=D0=B8=
+=D0=B2=D1=96=D1=81=D1=82=D1=8C =D0=B4=D0=BB=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=
+=D0=B0=D0=B6=D1=83;
+- =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=B0=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D0=B0 =D0=B4=D0=BE =D0=B7=D0=B4=D1=96=D0=B9=D1=81=D0=BD=
+=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=BE=D0=BA=D1=83=D0=BF=D0=BA=D0=B8 =D1=96=
+ =D0=B4=D0=BE=D0=B2=D0=BE=D0=B4=D0=B8=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=
+=D0=BD=D1=82=D0=B0 =D0=B4=D0=BE =D0=B7=D0=B0=D0=B2=D0=B5=D1=80=D1=88=D0=B5=
+=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83 / =D1=83=D0=
+=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=
+=B8;
+- =D1=80=D0=BE=D0=B7=D1=83=D0=BC=D1=96=D1=82=D0=B8 =D0=B2=D0=B0=D0=B6=D0=BB=
+=D0=B8=D0=B2=D1=96=D1=81=D1=82=D1=8C =D0=BF=D1=96=D1=81=D0=BB=D1=8F=D0=BF=
+=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D0=B5=D1=80=
+=D0=B2=D1=96=D1=81=D1=83 =D1=96 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=
+=D0=BE=D0=B3=D0=BE =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83.
 
-> I actually
-> have another patch to fix up all the non-Arm defconfigs for this one as
-> well, but haven't sent that one yet.
+=D0=9F=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC=D0=B0: =C2=A0=C2=A0=C2=A0
+=D0=92=D1=81=D1=82=D1=83=D0=BF =D0=B2 =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=
+=D1=96 =D0=922=D0=92 =C2=A0=C2=A0=C2=A0
+- =D0=A2=D0=B0=D0=BA=D1=82=D0=B8=D0=BA=D0=B0 =D1=96 =D1=81=D1=82=D1=80=D0=
+=B0=D1=82=D0=B5=D0=B3=D1=96=D1=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=
+=96=D0=B2 =D0=922=D0=92 =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=B8 =D0=B2=D1=82=D1=80=D0=B0=D1=82=
+=D0=B8 =D1=96 =D1=84=D0=B0=D0=BA=D1=82=D0=BE=D1=80=D0=B8 =D1=83=D1=82=D1=80=
+=D0=B8=D0=BC=D0=B0=D0=BD=D0=BD=D1=8F =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=
+=D1=96=D0=B2 =C2=A0=C2=A0=C2=A0
+- =D0=9A=D1=80=D0=B8=D1=82=D0=B5=D1=80=D1=96=D1=97 =D1=82=D0=B0 =D0=BF=D1=
+=96=D0=B4=D1=85=D0=BE=D0=B4=D0=B8 =D0=B4=D0=BE =D1=81=D0=B5=D0=B3=D0=BC=D0=
+=B5=D0=BD=D1=82=D0=B0=D1=86=D1=96=D1=97 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=
+=82=D1=81=D1=8C=D0=BA=D0=BE=D1=97 =D0=B1=D0=B0=D0=B7=D0=B8 =C2=A0=C2=A0=C2=
+=A0
+- =D0=9A=D0=BE=D0=BC=D0=BF=D0=BB=D0=B5=D0=BA=D1=81=D0=BD=D0=B8=D0=B9 =D0=BA=
+=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=BE=D0=BC =C2=A0=C2=A0=C2=A0
+=D0=AF=D0=BA =D0=BF=D1=80=D0=B8=D0=B2=D0=B5=D1=80=D0=BD=D1=83=D1=82=D0=B8=
+ =D1=83=D0=B2=D0=B0=D0=B3=D1=83 =D1=96 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=
+=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=
+=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=
+=D1=84=D0=BE=D0=BD=D1=83
+- =D0=94=D0=B5=D1=81=D1=8F=D1=82=D1=8C =D0=BF=D0=BE=D0=BC=D0=B8=D0=BB=D0=BE=
+=D0=BA =D0=BF=D1=80=D0=B8 =D1=81=D0=BF=D1=96=D0=BB=D0=BA=D1=83=D0=B2=D0=B0=
+=D0=BD=D0=BD=D1=96 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=
+=D1=83 =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=81=D0=B8=D1=85=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=87=D0=BD=D1=96=
+ =D0=B0=D1=81=D0=BF=D0=B5=D0=BA=D1=82=D0=B8 =D1=83=D1=81=D0=BF=D1=96=D1=88=
+=D0=BD=D0=BE=D0=B3=D0=BE =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=
+=D0=B5=D0=BD=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83=
+ =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC
+- =D0=AF=D0=BA =D0=B2=D0=B5=D1=81=D1=82=D0=B8 "=D0=BA=D0=B5=D1=80=D0=BE=D0=
+=B2=D0=B0=D0=BD=D0=B8=D0=B9 =D0=B4=D1=96=D0=B0=D0=BB=D0=BE=D0=B3" =D0=B7 =
+=D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC: =D0=BF=D0=BE=D0=BA=D1=80=
+=D0=BE=D0=BA=D0=BE=D0=B2=D0=B8=D0=B9 =D0=B0=D0=BB=D0=B3=D0=BE=D1=80=D0=B8=
+=D1=82=D0=BC =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=80=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=B7=
+=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=
+=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =C2=A0=C2=A0=C2=A0
+=D0=92=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =
+=D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83 =D0=B7 =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D1=80=D0=B8 =D0=BF=D1=80=D0=BE=D0=B4=
+=D0=B0=D0=B6=D1=96 "=D0=9E=D0=B1=D0=BB=D0=B8=D1=87=D1=87=D1=8F=D0=BC =D0=B4=
+=D0=BE =D0=BE=D0=B1=D0=BB=D0=B8=D1=87=D1=87=D1=8F"
+- =D0=A0=D0=B0=D0=BF=D0=BE=D1=80=D1=82 =D1=96 =D1=82=D0=B5=D1=85=D0=BD=D1=
+=96=D0=BA=D0=B8 =D0=BF=D1=96=D0=B4=D0=BB=D0=B0=D1=88=D1=82=D1=83=D0=B2=D0=
+=B0=D0=BD=D0=BD=D1=8F =C2=A0=C2=A0=C2=A0
+- =D0=9F=D0=BE=D0=B7=D0=B8=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D1=96 =D0=BD=D0=
+=B5=D0=B3=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D0=BC=D0=BE=D1=82=D0=B8=D0=
+=B2=D0=B0=D1=86=D1=96=D1=8F. =D0=92=D0=BF=D0=BB=D0=B8=D0=B2 =D0=BD=D0=B0 =
+=D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B2 =D0=BF=D1=80=D0=BE=D1=86=
+=D0=B5=D1=81=D1=96 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83
+- =D0=9A=D1=80=D0=BE=D0=BA=D0=B8 =D1=96 "=D1=80=D0=B0=D0=BC=D0=BA=D0=B0" =
+=D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2 =C2=A0=
+=C2=A0=C2=A0
+- =D0=AF=D0=BA =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=B0=D1=82=D0=B8 =D1=
+=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81 =D1=81=D0=BF=D1=96=D0=B2=D1=80=D0=
+=BE=D0=B7=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D0=B0 =C2=A0=C2=A0=C2=A0
+=D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D1=96=D0=B7 =D0=B7=D0=B0=D0=BF=D0=B5=
+=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D0=BD=D1=8F=D0=BC=D0=B8 =D1=96 =D1=81=D1=83=
+=D0=BC=D0=BD=D1=96=D0=B2=D0=B0=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=B0 =C2=A0=C2=A0=C2=A0
+- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=B8 =D1=96 =D1=82=D0=B8=D0=BF=D0=
+=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =C2=A0=C2=
+=A0=C2=A0
+- =D0=92=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=B8=
+=D1=85=D0=BE=D0=B2=D0=B0=D0=BD=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=
+=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =D1=96 =D0=BF=D1=80=D0=B8=D1=85=D0=BE=D0=B2=
+=D0=B0=D0=BD=D0=B8=D1=85 =D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC =C2=A0=
+=C2=A0=C2=A0
+- =D0=90 =D1=8F=D0=BA=D1=89=D0=BE =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82 =D0=
+=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8=D1=82=D1=8C "=D0=BD=D1=96" =C2=A0=C2=A0=
+=C2=A0
+- =D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=BF=D0=B5=D1=80=D0=B5=D0=B4=
+=D0=B1=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D0=B7=D0=BD=D1=8F=D1=82=
+=D1=82=D1=8F =D1=82=D0=B8=D0=BF=D0=BE=D0=B2=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=
+=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =C2=A0=C2=A0=C2=A0
+=D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=B7=D0=B0=D0=B2=D0=B5=D1=80=
+=D1=88=D0=B5=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=B8 =C2=A0=C2=A0=
+=C2=A0
+- =D0=AF=D0=BA =D0=BF=D0=BE=D0=BB=D0=B5=D0=B3=D1=88=D0=B8=D1=82=D0=B8 =D0=
+=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=83 =D0=BF=D1=80=D0=BE=D1=86=D0=B5=D1=
+=81 =D0=BF=D1=80=D0=B8=D0=B9=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D1=80=D1=96=D1=
+=88=D0=B5=D0=BD=D0=BD=D1=8F =C2=A0=C2=A0=C2=A0
+- =D0=A9=D0=BE =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B2 =D1=81=D1=82=D0=
+=B0=D0=BD=D1=96 =D0=BD=D0=B5=D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=
+=BD=D0=BE=D1=81=D1=82=D1=96 =C2=A0=C2=A0=C2=A0
+- =D0=A9=D0=BE =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B7 =D0=BA=D0=BB=D1=
+=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC, =D1=8F=D0=BA=D0=B8=D0=B9 =D0=BD=D0=B5 =
+=D0=BA=D1=83=D0=BF=D0=B8=D0=B2 =D0=B2=D1=96=D0=B4=D1=80=D0=B0=D0=B7=D1=83=
+ =C2=A0=C2=A0=C2=A0
+=D0=9F=D1=96=D1=81=D0=BB=D1=8F=D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D0=BD=D0=
+=B8=D0=B9 =D1=81=D0=B5=D1=80=D0=B2=D1=96=D1=81 =D1=96 =D1=96=D0=B4=D0=B5=D0=
+=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=8F =D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D0=
+=BE=D0=B4=D1=83=C2=A0=C2=A0=C2=A0=C2=A0
+- =D0=A1=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 =D1=83=D0=B3=D0=BE=D0=B4=
+=D0=B8 =C2=A0=C2=A0=C2=A0
+- =D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D1=
+=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=
+=B0=D0=BC=D0=B8 =C2=A0=C2=A0=C2=A0
+- =D0=9C=D0=B5=D1=82=D0=BE=D0=B4=D0=B8 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=
+=D0=BD=D0=BD=D1=8F =C2=A0=C2=A0=C2=A0
+- VIP-=D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 =C2=A0=C2=A0=C2=A0
 
-Thanks,
-John
+=D0=97=D0=B0=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D0=BF=D1=80=D0=BE=D0=B2=D0=BE=
+=D0=B4=D0=B8=D1=82=D1=8C: =C2=A0=C2=A0=C2=A0
+
+=D0=9D=D0=B0=D1=82=D0=B0=D0=BB=D1=96=D1=8F =D0=94=D0=B5=D0=B3=D1=82=D1=8F=
+=D1=80=D1=8C=D0=BE=D0=B2=D0=B0=C2=A0-=C2=A0=D0=B1=D1=96=D0=B7=D0=BD=D0=B5=
+=D1=81-=D1=82=D1=80=D0=B5=D0=BD=D0=B5=D1=80=C2=A0=D0=B7 16-=D1=82=D0=B8 =D1=
+=80=D1=96=D1=87=D0=BD=D0=B8=D0=BC =D0=B4=D0=BE=D1=81=D0=B2=D1=96=D0=B4=D0=
+=BE=D0=BC =D1=80=D0=BE=D0=B7=D1=80=D0=BE=D0=B1=D0=BA=D0=B8 =D0=BF=D1=80=D0=
+=BE=D0=B3=D1=80=D0=B0=D0=BC =D0=BD=D0=B0=D0=B2=D1=87=D0=B0=D0=BD=D0=BD=D1=
+=8F =D1=82=D0=B0 =D0=BE=D1=86=D1=96=D0=BD=D0=BA=D0=B8 =D1=97=D1=85 =D0=B5=
+=D1=84=D0=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=D1=81=D1=82=D1=96, =D0=BF=
+=D1=80=D0=BE=D0=B2=D0=B5=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=
+=D1=84=D0=B5=D1=80=D0=B5=D0=BD=D1=86=D1=96=D0=B9, =D1=81=D0=B5=D0=BC=D1=96=
+=D0=BD=D0=B0=D1=80=D1=96=D0=B2, =D1=82=D1=80=D0=B5=D0=BD=D1=96=D0=BD=D0=B3=
+=D1=96=D0=B2 =D1=82=D0=B0 =D0=BC=D0=B0=D0=B9=D1=81=D1=82=D0=B5=D1=80-=D0=BA=
+=D0=BB=D0=B0=D1=81=D1=96=D0=B2 =D1=83 =D0=B1=D1=96=D0=B7=D0=BD=D0=B5=D1=81=
+ =D1=81=D1=84=D0=B5=D1=80=D1=96. =D0=92=D0=B8=D1=89=D0=B0 =D0=BE=D1=81=D0=
+=B2=D1=96=D1=82=D0=B0 =D1=83 =D0=B3=D0=B0=D0=BB=D1=83=D0=B7=D1=96 =D0=BF=D1=
+=81=D0=B8=D1=85=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=97, =D0=B5=D0=BA=D0=BE=D0=
+=BD=D0=BE=D0=BC=D1=96=D0=BA=D0=B8 =D1=82=D0=B0 =D0=BC=D0=B0=D1=80=D0=BA=D0=
+=B5=D1=82=D0=B8=D0=BD=D0=B3=D1=83.
+
+=D0=94=D0=B5=D1=82=D0=B0=D0=BB=D1=8C=D0=BD=D1=96=D1=88=D0=B5 =D0=BD=D0=B0=
+ =D1=81=D0=B0=D0=B9=D1=82=D1=96>
+
+=D0=AF=D0=BA=D1=89=D0=BE =D1=83 =D0=92=D0=B0=D1=81 =D0=B2=D0=B8=D0=BD=D0=B8=
+=D0=BA=D0=BD=D1=83=D1=82=D1=8C =D0=B4=D0=BE=D0=B4=D0=B0=D1=82=D0=BA=D0=BE=
+=D0=B2=D1=96 =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=D1=8F - =D0=B7=D0=B2=D0=
+=B5=D1=80=D1=82=D0=B0=D0=B9=D1=82=D0=B5=D1=81=D1=8C, =D0=BC=D0=B8 =D0=B7=D0=
+=B0=D0=B2=D0=B6=D0=B4=D0=B8 =D1=80=D0=B0=D0=B4=D1=96 =D0=92=D0=B0=D0=BC =D0=
+=B4=D0=BE=D0=BF=D0=BE=D0=BC=D0=BE=D0=B3=D1=82=D0=B8! =C2=A0=C2=A0=C2=A0
+=D0=9E=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=81=
+=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=86=D1=96=D1=8E =D0=BC=D0=B5=D0=BD=D0=B5=
+=D0=B4=D0=B6=D0=B5=D1=80=D0=B0: +38(063) 2=D0=97=D0=97-=D0=A76-69
+Web:=C2=A0www.otbc.in.ua
+Email: b2b.sales@meta.ua
+-- =C2=A0=C2=A0=C2=A0
+=D0=97 =D0=BF=D0=BE=D0=B2=D0=B0=D0=B3=D0=BE=D1=8E, =C2=A0=C2=A0=C2=A0
+=D0=A2=D0=B5=D1=82=D1=8F=D0=BD=D0=B0 =C2=A0=C2=A0=C2=A0
+email-=D0=BC=D0=B0=D1=80=D0=BA=D0=B5=D1=82=D0=BE=D0=BB=D0=BE=D0=B3 =C2=A0=
+=C2=A0=C2=A0
+
+=D0=92=D0=B8 =D0=BE=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D0=BB=D0=B8 =D0=B4=D0=B0=
+=D0=BD=D1=83 =D1=80=D0=BE=D0=B7=D1=81=D0=B8=D0=BB=D0=BA=D1=83, =D0=BE=D1=81=
+=D0=BA=D1=96=D0=BB=D1=8C=D0=BA=D0=B8 =D1=94 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=BE=D0=BC =D0=B0=D0=B1=D0=BE =D0=BF=D0=B5=D1=80=D0=B5=D0=B4=D0=BF=
+=D0=BB=D0=B0=D1=82=D0=BD=D0=B8=D0=BA=D0=BE=D0=BC.
+
+=D0=B2=D1=96=D0=B4=D0=BC=D0=BE=D0=B2=D0=B0 =D0=B2=D1=96=D0=B4 =D0=BF=D1=96=
+=D0=B4=D0=BF=D0=B8=D1=81=D0=BA=D0=B8=20
+
+--a90348a9b377c7fcdf755d06fe7abd2423
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+</head>
+<body style=3D'FONT-SIZE: 14px; FONT-FAMILY: Arial, "Helvetica Neue", Hel=
+vetica, sans-serif; COLOR: rgb(46,46,46); MARGIN: 0px; LINE-HEIGHT: 1.5; =
+BACKGROUND-COLOR: rgb(255,255,255)' bgColor=3D"#ffffff">
+<table style=3D"FONT-SIZE: 14px; BACKGROUND-IMAGE: url(http://otbc.in.ua/=
+/logo/event-texture.png); BORDER-COLLAPSE: collapse; BACKGROUND-REPEAT: r=
+epeat-x; LINE-HEIGHT: 1.5; BACKGROUND-COLOR: rgb(0,218,132)" cellSpacing=3D=
+0 cellPadding=3D0 width=3D"98%" align=3Dleft bgColor=3D"#00da84" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" align=3Dcenter>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5" cellSpacing=3D0 cellPadding=3D0 width=3D600 bgColor=3D"#ffffff" bord=
+er=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" height=3D2370 border=3D0 cellpadding=3D0 cellspac=
+ing=3D0>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D600 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(249,249,249)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#f9f9f9" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(249,249,249)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#f9f9f9" border=3D0>
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: top; BORDER-C=
+OLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; PADDING-BOTTOM: 10px; =
+BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 15px; PADDING-LEFT: 15px; =
+BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px" vAlign=3Dtop width=3D=
+175>
+<div id=3Dwout_block_0_element_0 style=3D"FONT-SIZE: 14px; WIDTH: 100%; T=
+EXT-ALIGN: center; DISPLAY: block; LINE-HEIGHT: 1.5" align=3Dcenter heigh=
+t=3D88 width=3D"100%"><a style=3D"TEXT-DECORATION: none; COLOR: rgb(0,176=
+,109); DISPLAY: block" href=3D"http://otbc.in.ua/Server-Side/amsweb.php?l=
+CRk6AjgNHkkfma4UdSsqKC4U2u%2FRBTf7BVoF%2BGZQxtz%2BBK2bypUgdxoG5fbdUpNSJeF=
+1f%2Fm8wiIki8wrGl0Jnm494jTXEIHRdBFo9mLwAqmutTdyDtKn7XLhjP266EypjujjlZwyZw=
+%2BdazmE0KYGQ%3D%3D">
+<center><img border=3D0 hspace=3D0 alt=3D"logonbc" src=3D"http://otbc.in.=
+ua/logo/logo.png" align=3Dmiddle></center></a></div>
+<div style=3D"FONT-SIZE: 14px; CLEAR: both; LINE-HEIGHT: 1.5"></div></td>
+<td style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: top; BORDER-C=
+OLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; PADDING-BOTTOM: 10px; =
+BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 15px; PADDING-LEFT: 15px; =
+BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px" vAlign=3Dtop width=3D=
+457>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px' align=
+=3Dcenter><span style=3D"FONT-SIZE: 18px"><strong><font color=3D"#cc3300"=
+>=D0=9F=D1=80=D0=BE=D1=84=D0=B5=D1=81=D1=96=D0=B9=D0=BD=D1=96 =D0=BF=D1=80=
+=D0=BE=D0=B4=D0=B0=D0=B6=D1=96 =D0=922=D0=92: =D0=B2=D1=96=D0=B4 =D0=BF=D0=
+=B5=D1=80=D1=88=D0=BE=D0=B3=D0=BE =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=
+=82=D1=83 =D0=B4=D0=BE =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=B8=D1=
+=85 =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96=D0=B2</font></strong></spa=
+n></p>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px' align=
+=3Dcenter><span style=3D"FONT-SIZE: 18px; COLOR: rgb(153,153,153)"><span =
+style=3D"COLOR: rgb(46,46,46)">Online 9-10 =D1=81=D0=B5=D1=80=D0=BF=D0=BD=
+=D1=8F</span></span></p></td></tr></tbody></table></td></tr></tbody></tab=
+le></th></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D600 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<div class=3Dblock-divider style=3D"FONT-SIZE: 14px; PADDING-BOTTOM: 15px=
+; PADDING-TOP: 15px; PADDING-LEFT: 60px; LINE-HEIGHT: 1.5; PADDING-RIGHT:=
+ 60px">
+<hr id=3Diout_block_5_element_0 style=3D"BORDER-LEFT-WIDTH: 0px; BORDER-T=
+OP: rgb(200,240,218) 2px solid; BORDER-RIGHT-WIDTH: 0px; BORDER-BOTTOM-WI=
+DTH: 0px; MARGIN: 0px">
+</div></td></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table id=3Dwout_block_out_block_20 style=3D"FONT-SIZE: 14px; BORDER-COLL=
+APSE: collapse; FONT-WEIGHT: normal; MARGIN: 0px; LINE-HEIGHT: 1.5; text-=
+color: black" cellSpacing=3D0 cellPadding=3D0 width=3D"100%">
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3Dcontent-cell style=3D"BORDER-TOP-COLOR: transparent; VERTICAL=
+-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; P=
+ADDING-BOTTOM: 15px; BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 15px;=
+ PADDING-LEFT: 15px; BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px=
+" vAlign=3Dtop width=3D570>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT:=
+ 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px'><span style=3D"FONT-SIZE:=
+ 16px"><strong><font color=3D"#006b9f">=D0=A6=D1=96=D0=BB=D1=8C =D0=BF=D1=
+=80=D0=BE=D0=B3=D1=80=D0=B0=D0=BC=D0=B8: &nbsp;&nbsp;&nbsp;</font></stron=
+g></span><br>&nbsp;&nbsp;&nbsp;<br>- =D0=B2=D0=B8=D0=B1=D1=83=D0=B4=D1=83=
+=D0=B2=D0=B0=D1=82=D0=B8 =D0=B0=D0=B4=D0=B0=D0=BF=D1=82=D0=BE=D0=B2=D0=B0=
+=D0=BD=D1=83 =D0=BF=D1=96=D0=B4 =D1=81=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=
+=D0=BA=D1=83 =D0=B1=D1=96=D0=B7=D0=BD=D0=B5=D1=81=D1=83 =D1=81=D1=82=D1=80=
+=D0=B0=D1=82=D0=B5=D0=B3=D1=96=D1=8E =D0=B7=D0=B0=D0=BB=D1=83=D1=87=D0=B5=
+=D0=BD=D0=BD=D1=8F =D1=96 =D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D0=BE=D0=B4=
+=D1=83 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0; &nbsp;&nbsp;&nbsp;<br>=
+- =D0=B5=D1=84=D0=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE =D0=B7=D0=B1=D0=B8=
+=D1=80=D0=B0=D1=82=D0=B8 =D1=96=D0=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=
+=D1=96=D1=8E =D1=96 =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D1=8E=
+=D0=B2=D0=B0=D1=82=D0=B8 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7=
+ =D0=BF=D0=BE=D1=82=D0=B5=D0=BD=D1=86=D1=96=D0=B9=D0=BD=D0=B8=D0=BC=D0=B8=
+ =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0=D0=BC=D0=B8;<br>- =D1=82=D0=BE=
+=D1=87=D0=BD=D0=BE =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D1=8F=D1=82=D0=B8 =D1=96=
+=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81=D0=B8, =D0=BF=D0=BE=D1=82=D1=80=D0=B5=
+=D0=B1=D0=B8 =D1=96 =D0=B2=D0=B8=D0=B3=D0=BE=D0=B4=D0=B8 =D1=80=D1=96=D0=B7=
+=D0=BD=D0=B8=D1=85 &quot;=D0=B0=D0=B3=D0=B5=D0=BD=D1=82=D1=96=D0=B2 =D0=B2=
+=D0=BF=D0=BB=D0=B8=D0=B2=D1=83&quot; =D0=B2 =D0=9A=D0=BE=D0=BC=D0=BF=D0=B0=
+=D0=BD=D1=96=D1=97<br>- =D1=84=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=
+=B8 =D0=BF=D0=B5=D1=80=D1=81=D0=BE=D0=BD=D0=B0=D0=BB=D1=96=D0=B7=D0=BE=D0=
+=B2=D0=B0=D0=BD=D1=96 =D0=BA=D0=BE=D0=BC=D0=B5=D1=80=D1=86=D1=96=D0=B9=D0=
+=BD=D1=96 =D0=BF=D1=80=D0=BE=D0=BF=D0=BE=D0=B7=D0=B8=D1=86=D1=96=D1=97; &=
+nbsp;&nbsp;&nbsp;<br>- =D1=83=D1=81=D0=BF=D1=96=D1=88=D0=BD=D0=BE =D0=B2=D0=
+=B5=D1=81=D1=82=D0=B8 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=
+=80=D0=B8 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =D1=
+=96 =D0=BF=D1=80=D0=B8 =D0=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96; =
+&nbsp;&nbsp;&nbsp;<br>- =D0=B2=D0=B8=D0=BA=D0=BE=D1=80=D0=B8=D1=81=D1=82=D0=
+=BE=D0=B2=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=
+=B5=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D1=81=D1=83=D0=BC=D0=BD=D1=96=D0=
+=B2=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0, =D1=8F=D0=BA =D0=BC=
+=D0=BE=D0=B6=D0=BB=D0=B8=D0=B2=D1=96=D1=81=D1=82=D1=8C =D0=B4=D0=BB=D1=8F=
+ =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83;<br>- =D1=81=D0=BF=D0=BE=D0=BD=
+=D1=83=D0=BA=D0=B0=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0=
+ =D0=B4=D0=BE =D0=B7=D0=B4=D1=96=D0=B9=D1=81=D0=BD=D0=B5=D0=BD=D0=BD=D1=8F=
+ =D0=BF=D0=BE=D0=BA=D1=83=D0=BF=D0=BA=D0=B8 =D1=96 =D0=B4=D0=BE=D0=B2=D0=BE=
+=D0=B4=D0=B8=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B4=
+=D0=BE =D0=B7=D0=B0=D0=B2=D0=B5=D1=80=D1=88=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=
+=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83 / =D1=83=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=
+=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=B8;<br>- =D1=80=D0=BE=D0=B7=
+=D1=83=D0=BC=D1=96=D1=82=D0=B8 =D0=B2=D0=B0=D0=B6=D0=BB=D0=B8=D0=B2=D1=96=
+=D1=81=D1=82=D1=8C =D0=BF=D1=96=D1=81=D0=BB=D1=8F=D0=BF=D1=80=D0=BE=D0=B4=
+=D0=B0=D0=B6=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D0=B5=D1=80=D0=B2=D1=96=D1=81=
+=D1=83 =D1=96 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=BE=D0=B3=D0=BE=
+ =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=83.</p>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT:=
+ 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px'>&nbsp;&nbsp;&nbsp;</p>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT:=
+ 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px'><span style=3D"FONT-SIZE:=
+ 16px"><strong><font color=3D"#006b9f">=D0=9F=D1=80=D0=BE=D0=B3=D1=80=D0=B0=
+=D0=BC=D0=B0:</font></strong></span> &nbsp;&nbsp;&nbsp;<br><strong>=D0=92=
+=D1=81=D1=82=D1=83=D0=BF =D0=B2 =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96=
+ =D0=922=D0=92 &nbsp;&nbsp;&nbsp;</strong><br>- =D0=A2=D0=B0=D0=BA=D1=82=D0=
+=B8=D0=BA=D0=B0 =D1=96 =D1=81=D1=82=D1=80=D0=B0=D1=82=D0=B5=D0=B3=D1=96=D1=
+=8F =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96=D0=B2 =D0=922=D0=92 &nbsp;=
+&nbsp;&nbsp;<br>- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=B8 =D0=B2=D1=82=
+=D1=80=D0=B0=D1=82=D0=B8 =D1=96 =D1=84=D0=B0=D0=BA=D1=82=D0=BE=D1=80=D0=B8=
+ =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D0=BD=D0=BD=D1=8F =D0=BA=D0=BB=D1=96=
+=D1=94=D0=BD=D1=82=D1=96=D0=B2 &nbsp;&nbsp;&nbsp;<br>- =D0=9A=D1=80=D0=B8=
+=D1=82=D0=B5=D1=80=D1=96=D1=97 =D1=82=D0=B0 =D0=BF=D1=96=D0=B4=D1=85=D0=BE=
+=D0=B4=D0=B8 =D0=B4=D0=BE =D1=81=D0=B5=D0=B3=D0=BC=D0=B5=D0=BD=D1=82=D0=B0=
+=D1=86=D1=96=D1=97 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=81=D1=8C=D0=BA=
+=D0=BE=D1=97 =D0=B1=D0=B0=D0=B7=D0=B8 &nbsp;&nbsp;&nbsp;<br>- =D0=9A=D0=BE=
+=D0=BC=D0=BF=D0=BB=D0=B5=D0=BA=D1=81=D0=BD=D0=B8=D0=B9 =D0=BA=D0=BE=D0=BD=
+=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=
+=D0=BC &nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;<br><strong>=D0=AF=D0=BA =D0=
+=BF=D1=80=D0=B8=D0=B2=D0=B5=D1=80=D0=BD=D1=83=D1=82=D0=B8 =D1=83=D0=B2=D0=
+=B0=D0=B3=D1=83 =D1=96 =D1=83=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D1=82=D0=B8 =D0=
+=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=
+=BD=D1=82=D0=BE=D0=BC =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=
+=BD=D1=83</strong><br>- =D0=94=D0=B5=D1=81=D1=8F=D1=82=D1=8C =D0=BF=D0=BE=
+=D0=BC=D0=B8=D0=BB=D0=BE=D0=BA =D0=BF=D1=80=D0=B8 =D1=81=D0=BF=D1=96=D0=BB=
+=D0=BA=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=96 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=
+=D0=B5=D1=84=D0=BE=D0=BD=D1=83 &nbsp;&nbsp;&nbsp;<br>- =D0=9F=D1=81=D0=B8=
+=D1=85=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=87=D0=BD=D1=96 =D0=B0=D1=81=D0=BF=
+=D0=B5=D0=BA=D1=82=D0=B8 =D1=83=D1=81=D0=BF=D1=96=D1=88=D0=BD=D0=BE=D0=B3=
+=D0=BE =D0=B2=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=
+=D1=8F =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83 =D0=B7 =D0=BA=D0=BB=
+=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC<br>- =D0=AF=D0=BA =D0=B2=D0=B5=D1=81=
+=D1=82=D0=B8 &quot;=D0=BA=D0=B5=D1=80=D0=BE=D0=B2=D0=B0=D0=BD=D0=B8=D0=B9=
+ =D0=B4=D1=96=D0=B0=D0=BB=D0=BE=D0=B3&quot; =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=
+=D0=BD=D1=82=D0=BE=D0=BC: =D0=BF=D0=BE=D0=BA=D1=80=D0=BE=D0=BA=D0=BE=D0=B2=
+=D0=B8=D0=B9 =D0=B0=D0=BB=D0=B3=D0=BE=D1=80=D0=B8=D1=82=D0=BC &nbsp;&nbsp=
+;&nbsp;<br>- =D0=9F=D1=80=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=
+=D1=8F =D0=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D1=96 =D0=BF=D0=BE =D1=82=
+=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 &nbsp;&nbsp;&nbsp; <br>&nbsp;&=
+nbsp;&nbsp;<br><strong>=D0=92=D1=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=BB=D0=
+=B5=D0=BD=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83 =D0=
+=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=BE=D0=BC =D0=BF=D1=80=D0=B8 =D0=
+=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D1=96 &quot;=D0=9E=D0=B1=D0=BB=D0=B8=D1=
+=87=D1=87=D1=8F=D0=BC =D0=B4=D0=BE =D0=BE=D0=B1=D0=BB=D0=B8=D1=87=D1=87=D1=
+=8F&quot; </strong><br>- =D0=A0=D0=B0=D0=BF=D0=BE=D1=80=D1=82 =D1=96 =D1=82=
+=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=BF=D1=96=D0=B4=D0=BB=D0=B0=D1=88=
+=D1=82=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F &nbsp;&nbsp;&nbsp;<br>- =D0=9F=
+=D0=BE=D0=B7=D0=B8=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D1=96 =D0=BD=D0=B5=D0=B3=
+=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D0=B0 =D0=BC=D0=BE=D1=82=D0=B8=D0=B2=D0=B0=
+=D1=86=D1=96=D1=8F. =D0=92=D0=BF=D0=BB=D0=B8=D0=B2 =D0=BD=D0=B0 =D0=BA=D0=
+=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 =D0=B2 =D0=BF=D1=80=D0=BE=D1=86=D0=B5=D1=
+=81=D1=96 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D1=83<br>- =D0=9A=D1=
+=80=D0=BE=D0=BA=D0=B8 =D1=96 &quot;=D1=80=D0=B0=D0=BC=D0=BA=D0=B0&quot; =D0=
+=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2 &nbsp;&nb=
+sp;&nbsp;<br>- =D0=AF=D0=BA =D1=81=D0=BF=D0=BE=D0=BD=D1=83=D0=BA=D0=B0=D1=
+=82=D0=B8 =D1=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81 =D1=81=D0=BF=D1=96=D0=
+=B2=D1=80=D0=BE=D0=B7=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D0=B0 &nbsp;&nb=
+sp;&nbsp;<br>&nbsp;&nbsp;&nbsp;<br><strong>=D0=A0=D0=BE=D0=B1=D0=BE=D1=82=
+=D0=B0 =D1=96=D0=B7 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=
+=D0=BD=D1=8F=D0=BC=D0=B8 =D1=96 =D1=81=D1=83=D0=BC=D0=BD=D1=96=D0=B2=D0=B0=
+=D0=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0 &nbsp;&nbsp;&nbsp=
+;</strong><br>- =D0=9F=D1=80=D0=B8=D1=87=D0=B8=D0=BD=D0=B8 =D1=96 =D1=82=D0=
+=B8=D0=BF=D0=B8 =D0=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=
+=8C &nbsp;&nbsp;&nbsp;<br>- =D0=92=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=
+=BD=D1=8F =D0=BF=D1=80=D0=B8=D1=85=D0=BE=D0=B2=D0=B0=D0=BD=D0=B8=D1=85 =D0=
+=B7=D0=B0=D0=BF=D0=B5=D1=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C =D1=96 =D0=BF=D1=
+=80=D0=B8=D1=85=D0=BE=D0=B2=D0=B0=D0=BD=D0=B8=D1=85 =D0=BF=D1=80=D0=BE=D0=
+=B3=D1=80=D0=B0=D0=BC &nbsp;&nbsp;&nbsp;<br>- =D0=90 =D1=8F=D0=BA=D1=89=D0=
+=BE =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82 =D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=
+=B8=D1=82=D1=8C &quot;=D0=BD=D1=96&quot; &nbsp;&nbsp;&nbsp;<br>- =D0=A2=D0=
+=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=BF=D0=B5=D1=80=D0=B5=D0=B4=D0=B1=D0=
+=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=96 =D0=B7=D0=BD=D1=8F=D1=82=D1=82=D1=
+=8F =D1=82=D0=B8=D0=BF=D0=BE=D0=B2=D0=B8=D1=85 =D0=B7=D0=B0=D0=BF=D0=B5=D1=
+=80=D0=B5=D1=87=D0=B5=D0=BD=D1=8C &nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp=
+; <br><strong>=D0=A2=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D0=B7=D0=B0=D0=B2=
+=D0=B5=D1=80=D1=88=D0=B5=D0=BD=D0=BD=D1=8F =D1=83=D0=B3=D0=BE=D0=B4=D0=B8=
+ &nbsp;&nbsp;&nbsp;</strong><br>- =D0=AF=D0=BA =D0=BF=D0=BE=D0=BB=D0=B5=D0=
+=B3=D1=88=D0=B8=D1=82=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D1=83 =D0=
+=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81 =D0=BF=D1=80=D0=B8=D0=B9=D0=BD=D1=8F=D1=
+=82=D1=82=D1=8F =D1=80=D1=96=D1=88=D0=B5=D0=BD=D0=BD=D1=8F &nbsp;&nbsp;&n=
+bsp;<br>- =D0=A9=D0=BE =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B2 =D1=81=
+=D1=82=D0=B0=D0=BD=D1=96 =D0=BD=D0=B5=D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=
+=D0=B5=D0=BD=D0=BE=D1=81=D1=82=D1=96 &nbsp;&nbsp;&nbsp;<br>- =D0=A9=D0=BE=
+ =D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D0=B7 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=BE=D0=BC, =D1=8F=D0=BA=D0=B8=D0=B9 =D0=BD=D0=B5 =D0=BA=D1=83=D0=
+=BF=D0=B8=D0=B2 =D0=B2=D1=96=D0=B4=D1=80=D0=B0=D0=B7=D1=83 &nbsp;&nbsp;&n=
+bsp;<br>&nbsp;&nbsp;&nbsp;<br><strong>=D0=9F=D1=96=D1=81=D0=BB=D1=8F=D0=BF=
+=D1=80=D0=BE=D0=B4=D0=B0=D0=B6=D0=BD=D0=B8=D0=B9 =D1=81=D0=B5=D1=80=D0=B2=
+=D1=96=D1=81 =D1=96 =D1=96=D0=B4=D0=B5=D0=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=8F=
+ =D1=81=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D0=BE=D0=B4=D1=83&nbsp;&nbsp;&nbsp;=
+&nbsp;</strong><br>- =D0=A1=D1=83=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 =D1=
+=83=D0=B3=D0=BE=D0=B4=D0=B8 &nbsp;&nbsp;&nbsp;<br>- =D0=A0=D0=BE=D0=B1=D0=
+=BE=D1=82=D0=B0 =D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D1=96=D0=B9=D0=BD=D0=B8=D0=
+=BC=D0=B8 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=D1=82=D0=B0=D0=BC=D0=B8 &nbsp;&n=
+bsp;&nbsp;<br>- =D0=9C=D0=B5=D1=82=D0=BE=D0=B4=D0=B8 =D1=83=D1=82=D1=80=D0=
+=B8=D0=BC=D0=B0=D0=BD=D0=BD=D1=8F &nbsp;&nbsp;&nbsp;<br>- VIP-=D1=81=D1=83=
+=D0=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4 &nbsp;&nbsp;&nbsp;</p></td></tr></tb=
+ody></table></td></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<div class=3Dblock-divider style=3D"FONT-SIZE: 14px; PADDING-BOTTOM: 15px=
+; PADDING-TOP: 15px; PADDING-LEFT: 60px; LINE-HEIGHT: 1.5; PADDING-RIGHT:=
+ 60px">
+<hr id=3Diout_block_5_element_0 style=3D"BORDER-LEFT-WIDTH: 0px; BORDER-T=
+OP: rgb(200,240,218) 2px solid; BORDER-RIGHT-WIDTH: 0px; BORDER-BOTTOM-WI=
+DTH: 0px; MARGIN: 0px">
+</div></td></tr></tbody></table></th></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D600 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table id=3Dwout_block_out_block_20 style=3D"FONT-SIZE: 14px; HEIGHT: 40p=
+x; BORDER-COLLAPSE: collapse; FONT-WEIGHT: normal; MARGIN: 0px; LINE-HEIG=
+HT: 1.5; text-color: black" height=3D40 cellSpacing=3D0 cellPadding=3D0 w=
+idth=3D"100%">
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3Dcontent-cell style=3D"BORDER-TOP-COLOR: transparent; VERTICAL=
+-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; P=
+ADDING-BOTTOM: 5px; BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 5px; P=
+ADDING-LEFT: 15px; BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px" =
+height=3D30 vAlign=3Dtop width=3D570>
+<hr id=3Diout_block_22_element_0 style=3D"BORDER-LEFT-WIDTH: 0px; BORDER-=
+TOP: rgb(178,178,178) 1px solid; BORDER-RIGHT-WIDTH: 0px; BORDER-BOTTOM-W=
+IDTH: 0px; MARGIN: 0px">
+
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px' align=
+=3Dcenter><span style=3D"FONT-SIZE: 20px"><b><font color=3D"#006b9f">=D0=97=
+=D0=B0=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D0=BF=D1=80=D0=BE=D0=B2=D0=BE=D0=B4=
+=D0=B8=D1=82=D1=8C: &nbsp;&nbsp;&nbsp;</font></b></span></p>
+<div style=3D"FONT-SIZE: 14px; CLEAR: both; LINE-HEIGHT: 1.5"></div></td>=
+</tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D200 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(231,245,239)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#e7f5ef" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table id=3Dwout_block_29_element_0 style=3D"FONT-SIZE: 14px; HEIGHT: 165=
+px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: 1.5; BACKGROUND-COLOR: rgb(23=
+1,245,239)" height=3D165 cellSpacing=3D5 cellPadding=3D5 width=3D"100%" a=
+lign=3Dleft bgColor=3D"#e7f5ef" border=3D0>
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3D"content-cell padding-lr-0" style=3D"BORDER-TOP-COLOR: transp=
+arent; VERTICAL-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR:=
+ transparent; PADDING-BOTTOM: 6px; BORDER-BOTTOM-COLOR: transparent; PADD=
+ING-TOP: 6px; PADDING-LEFT: 0px; BORDER-RIGHT-COLOR: transparent; PADDING=
+-RIGHT: 0px" height=3D153 vAlign=3Dtop width=3D200>
+<div id=3Dwout_block_29_element_0 style=3D"FONT-SIZE: 14px; WIDTH: 100%; =
+TEXT-ALIGN: center; DISPLAY: block; LINE-HEIGHT: 1.5" align=3Dcenter heig=
+ht=3D153 width=3D"100%">
+<center><a href=3D"http://otbc.in.ua/Server-Side/amsweb.php?mD6t6hf9lIY8V=
+T6LEe5x7Ke8FPERtARqOJYCxNJFgbJtkscBtlCKME%2Fkm1kazS1WpQK40SXHiH%2Bg%2F%2B=
+YnsbvuGVYuVltOXWXXaZZ%2FknIcZLoA%2BwCi41iyphDrLs6ypnFmMnyLVkSUlcs%2B%2BWz=
+NI59LiKvTDAZw8JNoqKFCFs5Hl%2FRrS22u%2FF5p3C3L4yfuc6gqdMUZDjR3emQm1%2F5ksW=
+ubKA%3D%3D"><img border=3D0 hspace=3D0 alt=3D"degtyareva" src=3D"http://o=
+tbc.in.ua/design/img/articles/8/thumbs/8.jpg" width=3D123 align=3Dmiddle =
+height=3D169></a></center></div>
+<div style=3D"FONT-SIZE: 14px; CLEAR: both; LINE-HEIGHT: 1.5"></div></td>=
+</tr></tbody></table></td></tr></tbody></table></th>
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D400 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(231,245,239)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#e7f5ef" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table id=3Dwout_block_out_block_28 style=3D"FONT-SIZE: 14px; HEIGHT: 165=
+px; BORDER-COLLAPSE: collapse; FONT-WEIGHT: normal; MARGIN: 0px; LINE-HEI=
+GHT: 1.5; BACKGROUND-COLOR: rgb(231,245,239); text-color: black" height=3D=
+165 cellSpacing=3D5 cellPadding=3D5 width=3D"100%" bgColor=3D"#e7f5ef" bo=
+rder=3D0>
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3Dcontent-cell style=3D"BORDER-TOP-COLOR: transparent; VERTICAL=
+-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; P=
+ADDING-BOTTOM: 15px; BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 15px;=
+ PADDING-LEFT: 1px; BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px"=
+ height=3D135 vAlign=3Dtop width=3D384>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT:=
+ 0px; MARGIN: 0px 0px 10px; PADDING-RIGHT: 0px'><span style=3D"COLOR: rgb=
+(0,0,255)"><strong><em><a href=3D"http://otbc.in.ua/Server-Side/amsweb.ph=
+p?mD6t6hf9lIY8VT6LEe5x7Ke8FPERtARqOJYCxNJFgbJtkscBtlCKME%2Fkm1kazS1WpQK40=
+SXHiH%2Bg%2F%2BYnsbvuGVYuVltOXWXXaZZ%2FknIcZLoA%2BwCi41iyphDrLs6ypnFmMnyL=
+VkSUlcs%2B%2BWzNI59LiKvTDAZw8JNoqKFCFs5Hl%2FRrS22u%2FF5p3C3L4yfuc6gqdMUZD=
+jR3emQm1%2F5ksWubKA%3D%3D">=D0=9D=D0=B0=D1=82=D0=B0=D0=BB=D1=96=D1=8F =D0=
+=94=D0=B5=D0=B3=D1=82=D1=8F=D1=80=D1=8C=D0=BE=D0=B2=D0=B0</a></em></stron=
+g></span>&nbsp;-&nbsp;=D0=B1=D1=96=D0=B7=D0=BD=D0=B5=D1=81-=D1=82=D1=80=D0=
+=B5=D0=BD=D0=B5=D1=80&nbsp;=D0=B7 16-=D1=82=D0=B8 =D1=80=D1=96=D1=87=D0=BD=
+=D0=B8=D0=BC =D0=B4=D0=BE=D1=81=D0=B2=D1=96=D0=B4=D0=BE=D0=BC =D1=80=D0=BE=
+=D0=B7=D1=80=D0=BE=D0=B1=D0=BA=D0=B8 =D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=
+=D0=BC =D0=BD=D0=B0=D0=B2=D1=87=D0=B0=D0=BD=D0=BD=D1=8F =D1=82=D0=B0 =D0=BE=
+=D1=86=D1=96=D0=BD=D0=BA=D0=B8 =D1=97=D1=85 =D0=B5=D1=84=D0=B5=D0=BA=D1=82=
+=D0=B8=D0=B2=D0=BD=D0=BE=D1=81=D1=82=D1=96, =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=
+=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D0=BA=D0=BE=D0=BD=D1=84=D0=B5=D1=80=D0=B5=
+=D0=BD=D1=86=D1=96=D0=B9, =D1=81=D0=B5=D0=BC=D1=96=D0=BD=D0=B0=D1=80=D1=96=
+=D0=B2, =D1=82=D1=80=D0=B5=D0=BD=D1=96=D0=BD=D0=B3=D1=96=D0=B2 =D1=82=D0=B0=
+ =D0=BC=D0=B0=D0=B9=D1=81=D1=82=D0=B5=D1=80-=D0=BA=D0=BB=D0=B0=D1=81=D1=96=
+=D0=B2 =D1=83 =D0=B1=D1=96=D0=B7=D0=BD=D0=B5=D1=81 =D1=81=D1=84=D0=B5=D1=80=
+=D1=96. =D0=92=D0=B8=D1=89=D0=B0 =D0=BE=D1=81=D0=B2=D1=96=D1=82=D0=B0 =D1=
+=83 =D0=B3=D0=B0=D0=BB=D1=83=D0=B7=D1=96 =D0=BF=D1=81=D0=B8=D1=85=D0=BE=D0=
+=BB=D0=BE=D0=B3=D1=96=D1=97, =D0=B5=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=D1=96=D0=
+=BA=D0=B8 =D1=82=D0=B0 =D0=BC=D0=B0=D1=80=D0=BA=D0=B5=D1=82=D0=B8=D0=BD=D0=
+=B3=D1=83.</p>
+<div style=3D"FONT-SIZE: 14px; CLEAR: both; LINE-HEIGHT: 1.5"></div></td>=
+</tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D600 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<div class=3Dblock-divider style=3D"FONT-SIZE: 14px; PADDING-BOTTOM: 10px=
+; PADDING-TOP: 10px; PADDING-LEFT: 15px; LINE-HEIGHT: 1.5; PADDING-RIGHT:=
+ 15px">
+<hr id=3Dundefined>
+</div></td></tr></tbody></table></th></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D600 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; HEIGHT: 50px; BORDER-COLLAPSE: collapse;=
+ LINE-HEIGHT: 1.5" height=3D91 cellSpacing=3D0 cellPadding=3D0 width=3D"1=
+00%">
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3Dcontent-cell style=3D"BORDER-TOP-COLOR: transparent; VERTICAL=
+-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; P=
+ADDING-BOTTOM: 42px; BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 5px; =
+PADDING-LEFT: 60px; BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 60px"=
+ height=3D89 vAlign=3Dtop width=3D480>
+<center>
+<table class=3D"sp-button flat auto-width" style=3D"BORDER-LEFT-WIDTH: 0p=
+x; FONT-SIZE: 14px; BORDER-RIGHT-WIDTH: 0px; WIDTH: auto !important; BACK=
+GROUND: rgb(255,164,0); BORDER-BOTTOM-WIDTH: 0px; BORDER-COLLAPSE: collap=
+se; MARGIN-LEFT: auto; LINE-HEIGHT: 1.5; BORDER-TOP-WIDTH: 0px; MARGIN-RI=
+GHT: auto; border-radius: 0px; box-shadow: none" cellSpacing=3D0 cellPadd=
+ing=3D0 border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td class=3Dsp-button-text style=3D"BORDER-TOP: transparent 0px; HEIGHT: =
+40px; BORDER-RIGHT: transparent 0px; WIDTH: auto; VERTICAL-ALIGN: middle;=
+ BORDER-COLLAPSE: collapse; BORDER-BOTTOM: transparent 0px; PADDING-BOTTO=
+M: 0px; TEXT-ALIGN: center; PADDING-TOP: 0px; PADDING-LEFT: 0px; BORDER-L=
+EFT: transparent 0px; PADDING-RIGHT: 0px; border-radius: 0px; border-imag=
+e: none; align: center" height=3D40 vAlign=3Dmiddle align=3Dcenter>
+<table style=3D"BORDER-LEFT-WIDTH: 0px; FONT-SIZE: 14px; BORDER-RIGHT-WID=
+TH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-COLLAPSE: collapse; LINE-HEIGHT=
+: 1.5; BORDER-TOP-WIDTH: 0px" cellSpacing=3D0 cellPadding=3D0 width=3D"10=
+0%" align=3Dcenter border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-=
+COLOR: transparent; BORDER-BOTTOM-WIDTH: 0px; BORDER-COLLAPSE: collapse; =
+BORDER-LEFT-COLOR: transparent; PADDING-BOTTOM: 0px; BORDER-BOTTOM-COLOR:=
+ transparent; PADDING-TOP: 0px; PADDING-LEFT: 0px; BORDER-RIGHT-COLOR: tr=
+ansparent; LINE-HEIGHT: 1; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px" ali=
+gn=3Dcenter><a style=3D'FONT-SIZE: 16px; TEXT-DECORATION: none; FONT-FAMI=
+LY: Arial, "Helvetica Neue", Helvetica, sans-serif; FONT-WEIGHT: normal; =
+COLOR: rgb(255,255,255); PADDING-BOTTOM: 12px; PADDING-TOP: 12px; PADDING=
+-LEFT: 18px; DISPLAY: block; PADDING-RIGHT: 18px; font-family-short: aria=
+l' href=3D"http://otbc.in.ua/Server-Side/amsweb.php?sP6CF77%2BHvcHEX67%2F=
+2k5pQ%2FkVk2bqeXy2Nl%2FTFVOtcSVL%2BehXpb367Xz4owAnbwqbnmw3FlonB1i%2BQbwLd=
+MmcZMXkn4%2B9tYS66t80X7oO5UYAUw%2BJ2KDCz83r%2FoEUFTvAGdG4yOpXZJHZX19nXcVT=
+RrvXoaN8dieUGnQQt%2FfoatHPFxdR4%2Bd%2BCBgWmVfskh6H%2FDgEGGQ%2FXuG955jeRw8=
+T%2BKx186ircDPMhf%2BUDpFOblOBi4uFfPjohZZNiiXGgrA">=D0=94=D0=B5=D1=82=D0=B0=
+=D0=BB=D1=8C=D0=BD=D1=96=D1=88=D0=B5 =D0=BD=D0=B0 =D1=81=D0=B0=D0=B9=D1=82=
+=D1=96></a></td></tr></tbody></table></td></tr></tbody></table></center><=
+/td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></ta=
+ble>
+<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
+LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top width=3D600 align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table id=3Dw style=3D"FONT-SIZE: 14px; HEIGHT: 50px; BORDER-COLLAPSE: co=
+llapse; FONT-WEIGHT: normal; MARGIN: 0px; LINE-HEIGHT: 1.5; text-color: b=
+lack" height=3D50 cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
+0>
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3D"content-cell padding-bottom-0" style=3D"BORDER-TOP-COLOR: tr=
+ansparent; VERTICAL-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-CO=
+LOR: transparent; PADDING-BOTTOM: 0px; BORDER-BOTTOM-COLOR: transparent; =
+PADDING-TOP: 5px; PADDING-LEFT: 30px; BORDER-RIGHT-COLOR: transparent; PA=
+DDING-RIGHT: 30px" height=3D45 vAlign=3Dtop width=3D540>
+<div style=3D"FONT-SIZE: 14px; CLEAR: both; LINE-HEIGHT: 1.5"><b><font co=
+lor=3D"#f3460c" size=3D5><em>
+<hr id=3Dundefined>
+<font color=3D"#0080ff" size=3D4>=D0=AF=D0=BA=D1=89=D0=BE =D1=83 =D0=92=D0=
+=B0=D1=81 =D0=B2=D0=B8=D0=BD=D0=B8=D0=BA=D0=BD=D1=83=D1=82=D1=8C =D0=B4=D0=
+=BE=D0=B4=D0=B0=D1=82=D0=BA=D0=BE=D0=B2=D1=96 =D0=BF=D0=B8=D1=82=D0=B0=D0=
+=BD=D0=BD=D1=8F - =D0=B7=D0=B2=D0=B5=D1=80=D1=82=D0=B0=D0=B9=D1=82=D0=B5=D1=
+=81=D1=8C, =D0=BC=D0=B8 =D0=B7=D0=B0=D0=B2=D0=B6=D0=B4=D0=B8 =D1=80=D0=B0=
+=D0=B4=D1=96 =D0=92=D0=B0=D0=BC =D0=B4=D0=BE=D0=BF=D0=BE=D0=BC=D0=BE=D0=B3=
+=D1=82=D0=B8! &nbsp;&nbsp;&nbsp;</font></em></font></b><br>&nbsp;&nbsp;&n=
+bsp;<br>&nbsp;&nbsp;&nbsp;<br><font size=3D3><font size=3D4><b><font colo=
+r=3D"#006b9f">=D0=9E=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D1=82=D0=B8 =D0=BA=D0=BE=
+=D0=BD=D1=81=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=86=D1=96=D1=8E =D0=BC=D0=B5=
+=D0=BD=D0=B5=D0=B4=D0=B6=D0=B5=D1=80=D0=B0:</font> +38(063) 2=D0=97=D0=97=
+-=D0=A76-69</b><br>&nbsp;&nbsp;&nbsp;<br><b><font color=3D"#006b9f">Web:<=
+/font>&nbsp;<a href=3D"http://otbc.in.ua/Server-Side/amsweb.php?lCRk6AjgN=
+Hkkfma4UdSsqKC4U2u%2FRBTf7BVoF%2BGZQxtz%2BBK2bypUgdxoG5fbdUpNSJeF1f%2Fm8w=
+iIki8wrGl0Jnm494jTXEIHRdBFo9mLwArgIS%2BX3WIBmD4UOdc1Xt9bDPGJEGU3nYnQ%2F0m=
+FwxrLqA%3D%3D">www.otbc.in.ua</a></b><br>&nbsp;&nbsp;&nbsp;<br><b><font c=
+olor=3D"#006b9f">Email:</font> <a href=3D"mailto:b2b.sales@meta.ua">b2b.s=
+ales@meta.ua</a></b></font></font><br>&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&=
+nbsp;<br><a href=3D"http://otbc.in.ua/Server-Side/amsweb.php?sP6CF77%2BHv=
+cHEX67%2F2k5pQ%2FkVk2bqeXy2Nl%2FTFVOtcSVL%2BehXpb367Xz4owAnbwqbnmw3FlonB1=
+i%2BQbwLdMmcZMXkn4%2B9tYS66t80X7oO5UYAUw%2BJ2KDCz83r%2FoEUFTvuuxKcuXXwAkZ=
+sGqE7vmDi0oGI6sFV13IL5k%2FDajf7CQ%3D"><em><font color=3D"#006b9f" size=3D=
+3 face=3D"Comic Sans MS">--</font></em></a><em><font color=3D"#006b9f" si=
+ze=3D3 face=3D"Comic Sans MS"> &nbsp;&nbsp;&nbsp;<br>=D0=97 =D0=BF=D0=BE=D0=
+=B2=D0=B0=D0=B3=D0=BE=D1=8E, &nbsp;&nbsp;&nbsp;<br>=D0=A2=D0=B5=D1=82=D1=8F=
+=D0=BD=D0=B0 &nbsp;&nbsp;&nbsp;<br>email-=D0=BC=D0=B0=D1=80=D0=BA=D0=B5=D1=
+=82=D0=BE=D0=BB=D0=BE=D0=B3 &nbsp;&nbsp;&nbsp;</font></em></div></td></tr=
+></tbody></table></td></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>&nbsp;</td></tr><=
+/tbody></table>
+<div align=3Dcenter>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
+width=3D"100%" align=3Dcenter bgColor=3D"#ffffff" border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
+RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
+GHT-COLOR: transparent" cellpadding=3D0 cellspacing=3D0>
+<table id=3Dw style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; FONT-W=
+EIGHT: normal; MARGIN: 0px; LINE-HEIGHT: 1.5; text-color: black" cellSpac=
+ing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3D"content-cell padding-top-0" style=3D"BORDER-TOP-COLOR: trans=
+parent; VERTICAL-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR=
+: transparent; PADDING-BOTTOM: 2px; BORDER-BOTTOM-COLOR: transparent; PAD=
+DING-TOP: 0px; PADDING-LEFT: 30px; BORDER-RIGHT-COLOR: transparent; PADDI=
+NG-RIGHT: 30px" vAlign=3Dtop width=3D540>
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px 0px 10px; LINE-HEIGHT: 1.5; PADDING=
+-RIGHT: 0px' align=3Dcenter>
+<hr id=3Dundefined>
+=D0=92=D0=B8 =D0=BE=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D0=BB=D0=B8 =D0=B4=D0=B0=
+=D0=BD=D1=83 =D1=80=D0=BE=D0=B7=D1=81=D0=B8=D0=BB=D0=BA=D1=83, =D0=BE=D1=81=
+=D0=BA=D1=96=D0=BB=D1=8C=D0=BA=D0=B8 =D1=94 =D0=BA=D0=BB=D1=96=D1=94=D0=BD=
+=D1=82=D0=BE=D0=BC =D0=B0=D0=B1=D0=BE =D0=BF=D0=B5=D1=80=D0=B5=D0=B4=D0=BF=
+=D0=BB=D0=B0=D1=82=D0=BD=D0=B8=D0=BA=D0=BE=D0=BC.=20
+<p style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif; =
+FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px 0px 10px; LINE-HEIGHT: 1.5; PADDING=
+-RIGHT: 0px' align=3Dcenter><strong><font color=3D"#ff0000"><a href=3D"ht=
+tp://otbc.in.ua/Server-Side/amsweb.php?1HtuOsgqIfJmqa7582%2FV5Cwfbv2USg4d=
+sXUAxLDhNyZYrRAU%2BBT7Jy%2Fo3UIjrjXZBEIwvGaSgqsSFV1P8ip5nuheXgpElfem3wyM2=
+QR7xuGHRm4r5tvp06GeOiHuNr4pvhFjSIM8WW6yFJwrUGe4qPL0b2clnFgQPkWrQ8DYFbY%3D=
+">=D0=B2=D1=96=D0=B4=D0=BC=D0=BE=D0=B2=D0=B0 =D0=B2=D1=96=D0=B4 =D0=BF=D1=
+=96=D0=B4=D0=BF=D0=B8=D1=81=D0=BA=D0=B8</a></font></strong>=20
+<hr id=3Dundefined>
+
+<div style=3D'FONT-FAMILY: Arial, "Helvetica Neue", Helvetica, sans-serif=
+; FONT-WEIGHT: normal; PADDING-BOTTOM: 0px; TEXT-ALIGN: center; PADDING-T=
+OP: 0px; PADDING-LEFT: 0px; MARGIN: 0px 0px 10px; LINE-HEIGHT: 1.5; PADDI=
+NG-RIGHT: 0px' align=3Dcenter><span style=3D"FONT-SIZE: 13px"><a href=3D"=
+http://otbc.in.ua/Server-Side/amsweb.php?1HtuOsgqIfJmqa7582%2FV5Cwfbv2USg=
+4dsXUAxLDhNyZYrRAU%2BBT7Jy%2Fo3UIjrjXZBEIwvGaSgqsSFV1P8ip5nuheXgpElfem3wy=
+M2QR7xuGHRm4r5tvp06GeOiHuNr4pvhFjSIM8WW6yFJwrUGe4qPL0b2clnFgQPkWrQ8DYFbY%=
+3D"></a></span></div></td></tr></tbody></table></td></tr></tbody></table>=
+</div>
+<div align=3Dcenter></div></th></tr>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
+p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: 400; BORDER-BOTTOM-COLOR:=
+ transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlign=3D=
+top align=3Dleft cellpadding=3D0 cellspacing=3D0>
+<table style=3D"FONT-SIZE: 14px; HEIGHT: 45px; BORDER-COLLAPSE: collapse;=
+ TEXT-ALIGN: center; LINE-HEIGHT: 1.5; order: 1; size: 32px" height=3D45 =
+cellSpacing=3D0 cellPadding=3D0 width=3D"100%" align=3Dcenter border=3D0>
+<tbody>
+<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
+lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
+ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
+-RIGHT-COLOR: transparent'>
+<td class=3D"content-cell padding-top-0" style=3D"BORDER-TOP-COLOR: trans=
+parent; VERTICAL-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR=
+: transparent; PADDING-BOTTOM: 5px; BORDER-BOTTOM-COLOR: transparent; PAD=
+DING-TOP: 0px; PADDING-LEFT: 30px; BORDER-RIGHT-COLOR: transparent; PADDI=
+NG-RIGHT: 30px" bgColor=3D"#333333" height=3D40 vAlign=3Dtop width=3D540>
+<table class=3Dsocial style=3D"FONT-SIZE: 14px; BORDER-TOP: transparent 0=
+px; BORDER-RIGHT: transparent 0px; BORDER-COLLAPSE: collapse; BORDER-BOTT=
+OM: transparent 0px; BORDER-SPACING: 0; BORDER-LEFT: transparent 0px; DIS=
+PLAY: inline-block; LINE-HEIGHT: 1; border-image: none" cellSpacing=3D0 c=
+ellPadding=3D5 border=3D0>
+<tbody>
+<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
+t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
+<th class=3D"social_element social_element_h_i" style=3D"FONT-SIZE: 13px;=
+ BORDER-TOP: transparent 0px; FONT-FAMILY: Arial, sans-serif; BORDER-RIGH=
+T: transparent 0px; BORDER-BOTTOM: transparent 0px; FONT-WEIGHT: 400; PAD=
+DING-BOTTOM: 2px; TEXT-ALIGN: left; PADDING-TOP: 2px; PADDING-LEFT: 5px; =
+BORDER-LEFT: transparent 0px; LINE-HEIGHT: 32px; PADDING-RIGHT: 5px; bord=
+er-image: none" align=3Dleft><a href=3D"http://otbc.in.ua/Server-Side/ams=
+web.php?CIuetgorvBJ0KrSZ0sjJv%2BDwTN%2BAfh1gnaXLB1%2Bdu9h9s%2F1PeLdE07ayP=
+vzzS6ry278aP1Pt%2BdBhp5PtGlCx1b1ULnfMBov1zUVYXQS0vYdsDjg2w3h0l6p99HsZ%2FS=
+fDG0SMm%2BvLspkNd1IyLVbR2sTInKSLgf8p9KP5roQk3%2FZC5wvw0EKp36lELgxIyesa"><=
+img border=3D0 hspace=3D5 alt=3D"facebook" vspace=3D5 src=3D"http://otbc.=
+in.ua/images/logo-facebook.png"></a><a style=3D"TEXT-DECORATION: none; CO=
+LOR: rgb(0,176,109)" href=3D"http://otbc.in.ua/Server-Side/amsweb.php?CIu=
+etgorvBJ0KrSZ0sjJv%2BDwTN%2BAfh1gnaXLB1%2Bdu9h9s%2F1PeLdE07ayPvzzS6ry278a=
+P1Pt%2BdBhp5PtGlCx1b1ULnfMBov1zUVYXQS0vYdsDjg2w3h0l6p99HsZ%2FSfDG0SMm%2Bv=
+LspkNd1IyLVbR2sTInKSLgf8p9KP5roQk3%2FZC5wvw0EKp36lELgxIyesa"></a></th>
+<th class=3D"social_element social_element_h_i" style=3D"FONT-SIZE: 13px;=
+ BORDER-TOP: transparent 0px; FONT-FAMILY: Arial, sans-serif; BORDER-RIGH=
+T: transparent 0px; BORDER-BOTTOM: transparent 0px; FONT-WEIGHT: 400; PAD=
+DING-BOTTOM: 2px; TEXT-ALIGN: left; PADDING-TOP: 2px; PADDING-LEFT: 5px; =
+BORDER-LEFT: transparent 0px; LINE-HEIGHT: 32px; PADDING-RIGHT: 5px; bord=
+er-image: none" align=3Dleft><a href=3D"http://otbc.in.ua/Server-Side/ams=
+web.php?lCRk6AjgNHkkfma4UdSsqKC4U2u%2FRBTf7BVoF%2BGZQxtz%2BBK2bypUgdxoG5f=
+bdUpNSJeF1f%2Fm8wiIki8wrGl0Jnm494jTXEIHRdBFo9mLwAqmutTdyDtKn7XLhjP266Eyfg=
+VuVJfkyBMGcOvlYFU0j%2BZ41FzKyPWU1bwnuZxrRUM%3D"><img border=3D0 hspace=3D=
+5 alt=3D"twiter" vspace=3D5 src=3D"http://otbc.in.ua/images/logo-twiter.p=
+ng"></a><a style=3D"TEXT-DECORATION: none; COLOR: rgb(0,176,109)" href=3D=
+"http://otbc.in.ua/Server-Side/amsweb.php?QV0i6pAGQxsbV%2Bf30%2Bjcwn%2B%2=
+FPB6IYy3fORxg68VQMTEFSlq06xCPyumNhTTRvCyffYlSc2P52nRqcXNefnjqRqc0m8z3ms5m=
+6XJP35TvZiKH3K%2FUL8lI7MMd33HV4fgjPdfsAJ7HvgviLq2XGhmbpDBnW5Ps6rrCOT4P%2B=
+X0dyFM%3D"></a></th>
+<th class=3D"social_element social_element_h_i" style=3D"FONT-SIZE: 13px;=
+ BORDER-TOP: transparent 0px; FONT-FAMILY: Arial, sans-serif; BORDER-RIGH=
+T: transparent 0px; BORDER-BOTTOM: transparent 0px; FONT-WEIGHT: 400; PAD=
+DING-BOTTOM: 2px; TEXT-ALIGN: left; PADDING-TOP: 2px; PADDING-LEFT: 5px; =
+BORDER-LEFT: transparent 0px; LINE-HEIGHT: 32px; PADDING-RIGHT: 5px; bord=
+er-image: none" align=3Dleft><a href=3D"http://otbc.in.ua/Server-Side/ams=
+web.php?sP6CF77%2BHvcHEX67%2F2k5pQ%2FkVk2bqeXy2Nl%2FTFVOtcSVL%2BehXpb367X=
+z4owAnbwqbnmw3FlonB1i%2BQbwLdMmcZMXkn4%2B9tYS66t80X7oO5UYAUw%2BJ2KDCz83r%=
+2FoEUFTv9gEc%2F2R1y3ZRgmoghSSSxgl8ZGSAuMMskOmekHawWG4%3D"><img border=3D0=
+ hspace=3D5 alt=3D"youtubeicon" vspace=3D5 src=3D"http://otbc.in.ua/image=
+s/youtubeicon.png"></a><a style=3D"TEXT-DECORATION: none; COLOR: rgb(0,17=
+6,109)" href=3D"http://otbc.in.ua/Server-Side/amsweb.php?mD6t6hf9lIY8VT6L=
+Ee5x7Ke8FPERtARqOJYCxNJFgbJtkscBtlCKME%2Fkm1kazS1WpQK40SXHiH%2Bg%2F%2BYns=
+bvuGVYuVltOXWXXaZZ%2FknIcZLoA%2BwCi41iyphDrLs6ypnFmgtNFTf0%2BC6ZBTkO9XgXh=
+e6vvxwAbEQvcwAIK2TwHRQc%3D"></a></th>
+<th class=3D"social_element social_element_h_i" style=3D"FONT-SIZE: 13px;=
+ BORDER-TOP: transparent 0px; FONT-FAMILY: Arial, sans-serif; BORDER-RIGH=
+T: transparent 0px; BORDER-BOTTOM: transparent 0px; FONT-WEIGHT: 400; PAD=
+DING-BOTTOM: 2px; TEXT-ALIGN: left; PADDING-TOP: 2px; PADDING-LEFT: 5px; =
+BORDER-LEFT: transparent 0px; LINE-HEIGHT: 32px; PADDING-RIGHT: 5px; bord=
+er-image: none" align=3Dleft><a style=3D"TEXT-DECORATION: none; COLOR: rg=
+b(0,176,109)" href=3D"http://otbc.in.ua/Server-Side/amsweb.php?lCRk6AjgNH=
+kkfma4UdSsqKC4U2u%2FRBTf7BVoF%2BGZQxtz%2BBK2bypUgdxoG5fbdUpNSJeF1f%2Fm8wi=
+Iki8wrGl0Jnm494jTXEIHRdBFo9mLwAqmutTdyDtKn7XLhjP266EyP%2FRY9oVQkrrqNITSb4=
+U4FeKb3uCIomMzFoOL6QYeQBw%2BD6eJflORcpW1LqX4sLYD"><br></a></th>
+<th class=3D"social_element social_element_h_i" style=3D"FONT-SIZE: 13px;=
+ BORDER-TOP: transparent 0px; FONT-FAMILY: Arial, sans-serif; BORDER-RIGH=
+T: transparent 0px; BORDER-BOTTOM: transparent 0px; FONT-WEIGHT: 400; PAD=
+DING-BOTTOM: 2px; TEXT-ALIGN: left; PADDING-TOP: 2px; PADDING-LEFT: 5px; =
+BORDER-LEFT: transparent 0px; LINE-HEIGHT: 32px; PADDING-RIGHT: 5px; bord=
+er-image: none" align=3Dleft><a href=3D"http://otbc.in.ua/Server-Side/ams=
+web.php?rtcfY3OIC8v3mDXbKPvQI9YvNGGkG%2FUNpoWnGQlprwo1%2BZyu%2FMjCwi88LWz=
+DoqTzxwkGUeQ14vTaJla13uRr7%2Fcl8J4kX2R8CBr2A9UGAwZeHi1rWr0BT%2Fk%2FgGNUC%=
+2BGFK09WwJ96lBqUMZyQXWn76vOlySDAb3L29DjU683dG67XQEAKtMr1ERZdBROVoSLG"><im=
+g border=3D0 hspace=3D5 alt=3D"instagram" vspace=3D5 src=3D"http://otbc.i=
+n.ua/images/instagram.png"></a></th></tr></tbody></table>
+<div style=3D"FONT-SIZE: 14px; CLEAR: both; LINE-HEIGHT: 1.5"></div></td>=
+</tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>
+<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
+1.5" width=3D600>
+<tbody></tbody></table></td></tr></tbody></table></body></html>
+
+--a90348a9b377c7fcdf755d06fe7abd2423--
