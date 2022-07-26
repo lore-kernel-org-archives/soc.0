@@ -1,209 +1,287 @@
-Return-Path: <SRS0=seBV=X7=eu-central-1.amazonses.com=010701823a836e7a-84c79565-9962-46b5-8f3f-57f7e6cc777c-000000@kernel.org>
+Return-Path: <SRS0=EOuU=X7=gmail.com=logananth13.hcl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EFCFC43334
-	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 12:37:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D397CC433EF
+	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 13:07:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1895EC341CD; Tue, 26 Jul 2022 12:37:51 +0000 (UTC)
-Received: from b224-51.smtp-out.eu-central-1.amazonses.com (b224-51.smtp-out.eu-central-1.amazonses.com [69.169.224.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+	id 9238AC341C8; Tue, 26 Jul 2022 13:07:10 +0000 (UTC)
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0A966C341C8
-	for <soc@kernel.org>; Tue, 26 Jul 2022 12:37:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A966C341C8
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=ingatlan.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=eu-central-1.amazonses.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=obj6q5jgj3wioecvu5dhs3wq3pltmime; d=ingatlan.com; t=1658839068;
-	h=Date:To:From:Reply-To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=zbK2/8CNRIl99CizPws/6zoNBvNMvZdc4r5PEgbu/rQ=;
-	b=McZY99P1xHpiEx+y5yO40Su7RtM58b/03zm01eGPi/8EC5cBaO12nxF9cJZSCSW/
-	wkCdCRCBLsgo+9UDVtV3Laqm6iGfdz5ZG/9Yp8lGrqpMQNu866WOskPgcQ4IJEA2OKG
-	h/Pc1jSl5YfLSLqGQPZKmMhnPtVHxi67COiWQR4E=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=54ecsf3zk7z4mwxwwox7z7bg6e5gwjsz; d=amazonses.com; t=1658839068;
-	h=Date:To:From:Reply-To:Subject:Message-ID:MIME-Version:Content-Type:Feedback-ID;
-	bh=zbK2/8CNRIl99CizPws/6zoNBvNMvZdc4r5PEgbu/rQ=;
-	b=b8RKLBv7fS8DvpuhIETkwP/iPTQydnSf66AZqhnAw6FAQnO7C99EXQaYl2jy2mv5
-	bbSsaR2Q49XbBEo4BxTvuICj2Ki8BR9n00Y5dFjDGZ7uUmdwMvT1tsqfNcRt9H6x1QR
-	mk0TVNpWXeRBMewwYXGvp8m90q92G+pKXZfBta7Y=
-Date: Tue, 26 Jul 2022 12:37:48 +0000
-List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?Q?=E2=9D=A4=EF=B8=8F_All_the_girls_from_next_door_are_here_with_their_cams!_Visit_Cam=3A_https=3A//letsg0dancing=2Epage=2Elink/go=3Fwivv3_=E2=9D=A4=EF=B8=8F?= <soc@kernel.org>
-From: "ingatlan.com" <segitunk@ingatlan.com>
-Reply-To: "ingatlan.com" <segitunk@ingatlan.com>
-Subject: =?UTF-8?Q?=C3=9Ajdons=C3=A1gok_a_lakopark.ingatlan.com_-on?=
-Message-ID: <010701823a836e7a-84c79565-9962-46b5-8f3f-57f7e6cc777c-000000@eu-central-1.amazonses.com>
-X-Mailer: PHPMailer 6.1.6 (https://github.com/PHPMailer/PHPMailer)
+	by smtp.kernel.org (Postfix) with ESMTPS id B7A19C341CE;
+	Tue, 26 Jul 2022 13:07:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7A19C341CE
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id e16so13141445pfm.11;
+        Tue, 26 Jul 2022 06:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AYnTicV7YhiJhZ5zJUtgk+2kyMXJ+WN1kn3VWj6vYfw=;
+        b=auvi3aVZA+ye5Xdi51jWUr3woiY990y7uPwyvQVFKIdp6aMWuA754pO9LPVzItKwPr
+         NwKtEqC5W6gewX1RiHF6iAlSCdqjJIcCVWhaSHpdaFZR8xRDJfDBIG6XrpcsoH4Zy+0T
+         7Rk4Gl+79FilEqAGA/TMjY5tVZMTj7Ucl8M1rcrFduQfK+ZaQHdm/UD21CEaKNsLuWeg
+         zWpE6qahdG23MDrgH+PsJ/7exRZMg/kLl6xFxuuhtvqYhLALvC57A084FBU7MSLXV+QY
+         VYcvK9DJa44THsbQqz7n2sNamqIc0FIL8TBkIovIz/M8fw2PXllEilgbl1lDacuybcU8
+         4z7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AYnTicV7YhiJhZ5zJUtgk+2kyMXJ+WN1kn3VWj6vYfw=;
+        b=0g3GBy36+oo40FmJe3droA8aEJ2BC+9mXjjj33Yr+pih3Xbcab3Z43PoMvxK/S1SN6
+         XX60LElfRYq1Rpwd3daSuCTWsw8RVA0UBEAC78eV8No4yUCl9it/Z38zJzARsZrpuPCp
+         1Gc2UUgWwUKn24+Blx+ETJulUCZyi648f3LErD1dBUVPasF2SLBIGXZkBS9jEwu5ew0q
+         ru+Jko9FAitUx8CGjOo2wxVlviM38useP+/tgX1vs1p8yM4+RrirurCrsYitjucejp8F
+         XW8pA7hnL+B7J8YZ7YvLDXw0AthhEReUJYWIMLGpVssjNKXonR8tJILkjTogFLorjDUv
+         ZncA==
+X-Gm-Message-State: AJIora8aFJcllkIfP6wn3aG2HQGuKAZgOK5KbgCkCiIpJgujJRPHYEtj
+	R3bVPbgwWX+aCa0AUuwxVV7vlZolGT58INvD2YA=
+X-Google-Smtp-Source: AGRyM1tlzfVIVfnvy5VZgT7QJWP6gqDOzk28dyKA3xu3qdLE9V8Cn3Jibn//tqCc59V+W+Pakhz7a/GkU1Kk0+0WsiU=
+X-Received: by 2002:a63:81c2:0:b0:415:d873:ec18 with SMTP id
+ t185-20020a6381c2000000b00415d873ec18mr14584987pgd.501.1658840829052; Tue, 26
+ Jul 2022 06:07:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
- boundary="b1_MP8dCPpNZOTyQLfBuK9NvdXNEqSjIFtedpk83zaU"
-Feedback-ID: 1.eu-central-1.0ZHDp8OrfHKgz/YFKJoTxc5CjElNubHB4mrp02lYW3A=:AmazonSES
-X-SES-Outgoing: 2022.07.26-69.169.224.51
+References: <20220616120707.GA22590@logan-ThinkPad-T14-Gen-1> <Yqyu+y9ms/DmFCbJ@heinlein.stwcx.org.github.beta.tailscale.net>
+In-Reply-To: <Yqyu+y9ms/DmFCbJ@heinlein.stwcx.org.github.beta.tailscale.net>
+From: logananth hcl <logananth13.hcl@gmail.com>
+Date: Tue, 26 Jul 2022 18:36:56 +0530
+Message-ID: <CAGpPFEFUKxRQSZtToysgeGXQquE4y2sx=3XJdCKfQfLfHEO0Xg@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
+To: Patrick Williams <patrick@stwcx.xyz>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org, garnermic@gmail.com, 
+	thangavel.k@hcl.com, naveen.mosess@hcl.com
+Content-Type: multipart/alternative; boundary="0000000000005ac9b105e4b4fada"
 
-This is a multi-part message in MIME format.
+--0000000000005ac9b105e4b4fada
+Content-Type: text/plain; charset="UTF-8"
 
---b1_MP8dCPpNZOTyQLfBuK9NvdXNEqSjIFtedpk83zaU
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+The comments have been addressed and the new patch has been added,
 
-S2VkdmVzIFBhcnRuZXLDvG5rISBcblxuSMOtcmxldmVsw7xuayBtZWd0ZWtpbnTDqXPDqWhleiBr
-w6lybGVrLCBsw6F0b2dhc3MgZWwgYXogYWzDoWJiaSB3ZWJjw61tcmU6IGh0dHBzOi8vaGlybGV2
-ZWwuYmhzMi5taW5lLm51L21haWx2aWV3ZXIucGhwP3ByaWQ9MzQwJnVpZD02NzMzNSZyaWQ9Njc3
-MjFhOTkwOVxuXG7DnGR2w7Z6bGV0dGVsOlxuQXogaW5nYXRsYW4uY29tIGNzYXBhdGE=
+On Fri, Jun 17, 2022 at 10:12 PM Patrick Williams <patrick@stwcx.xyz> wrote:
 
---b1_MP8dCPpNZOTyQLfBuK9NvdXNEqSjIFtedpk83zaU
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: base64
-
-ICAgICAgICAgICAgICAgICAgICA8IURPQ1RZUEUgaHRtbCBQVUJMSUMgIi0vL1czQy8vRFREIFhI
-VE1MIDEuMCBUcmFuc2l0aW9uYWwvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvVFIveGh0bWwxL0RU
-RC94aHRtbDEtdHJhbnNpdGlvbmFsLmR0ZCI+IDxodG1sIHhtbG5zPSJodHRwOi8vd3d3LnczLm9y
-Zy8xOTk5L3hodG1sIj4KICAgICAgICA8aGVhZD4KICAgICAgICAgIDxtZXRhIGh0dHAtZXF1aXY9
-IkNvbnRlbnQtVHlwZSIgY29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PVVURi04IiAvPgogICAg
-ICAgICAgPHRpdGxlPmluZ2F0bGFuLmNvbSBow61ybGV2w6lsPC90aXRsZT4KICAgICAgICAgIDxt
-ZXRhIG5hbWU9InZpZXdwb3J0IiBjb250ZW50PSJ3aWR0aD1kZXZpY2Utd2lkdGgsIGluaXRpYWwt
-c2NhbGU9MS4wIi8+CiAgICAgICAgPC9oZWFkPgogICAgICAgIDxib2R5IHN0eWxlPSJtYXJnaW46
-IDA7IHBhZGRpbmc6IDA7Ij48aW1nIHNyYz0naHR0cHM6Ly9oaXJsZXZlbC5iaHMyLm1pbmUubnUv
-b25lcGl4ZWwucGhwP3ByaWQ9MzQwJnVpZD02NzMzNSZyaWQ9Njc3MjFhOTkwOScgYWx0PSdvbmVw
-aXhlbCc+PHAgc3R5bGU9ImZvbnQtc2l6ZTogOHB4OyBmb250LWZhbWlseTogVmVyZGFuYTsgY29s
-b3I6IGJsYWNrOyB0ZXh0LWFsaWduOiBjZW50ZXI7Ij48YSBocmVmPSdodHRwczovL2hpcmxldmVs
-LmJoczIubWluZS5udS9tYWlsdmlld2VyLnBocD9wcmlkPTM0MCZ1aWQ9NjczMzUmcmlkPTY3NzIx
-YTk5MDknIHN0eWxlPSJ0ZXh0LWRlY29yYXRpb246IG5vbmU7IGNvbG9yOiBibGFjazsgZm9udC1z
-aXplOiA4cHg7IGZvbnQtZmFtaWx5OiBWZXJkYW5hOyI+TmVtIG1lZ2ZlbGVsxZFlbiBqZWxlbmlr
-IG1lZyBhIGxldsOpbD8gS2F0dGludHMgaWRlLjwvYT48L3A+CiAgICAgICAgICA8dGFibGUgYm9y
-ZGVyPSIwIiBjZWxscGFkZGluZz0iMCIgY2VsbHNwYWNpbmc9IjAiIHdpZHRoPSIxMDAlIiBzdHls
-ZT0iYmFja2dyb3VuZC1pbWFnZTogdXJsKCdodHRwczovL2hpcmxldmVsLmJoczIubWluZS5udS90
-ZW1wbGF0ZXMvbGFrb3BhcmtfdWpkb25zYWcvYmcuanBnJyk7IG1pbi1oZWlnaHQ6IDgwMHB4OyI+
-CiAgICAgICAgICAgIDx0cj4KICAgICAgICAgICAgICA8dGQgYWxpZ249ImNlbnRlciIgdmFsaWdu
-PSJ0b3AiPgogICAgICAgICAgICAgICAgPHRhYmxlIGJvcmRlcj0iMCIgY2VsbHBhZGRpbmc9IjAi
-IGNlbGxzcGFjaW5nPSIwIiB3aWR0aD0iODUlIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjogd2hp
-dGU7IG1hcmdpbi10b3A6IDIwcHg7IG1hcmdpbi1ib3R0b206IDIwcHg7IG1pbi1oZWlnaHQ6IDEw
-MHB4OyBtYXgtd2lkdGg6IDcwMHB4OyI+CiAgICAgICAgICAgICAgICAgIDx0cj4KICAgICAgICAg
-ICAgICAgICAgICA8dGQgc3R5bGU9InBhZGRpbmctbGVmdDogMjBweDsgcGFkZGluZy10b3A6IDIw
-cHg7IHdpZHRoOiAxMDAlOyI+CiAgICAgICAgICAgICAgICAgICAgICA8YSBocmVmPSJodHRwczov
-L2xha29wYXJrLmluZ2F0bGFuLmNvbSIgdGFyZ2V0PSJfYmxhbmsiPgogICAgICAgICAgICAgICAg
-ICAgICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9oaXJsZXZlbC5iaHMyLm1pbmUubnUvdGVtcGxhdGVz
-L2xha29wYXJrX3VqZG9uc2FnL2xha29wYXJrX2hlYWRlci5qcGciIGFsdD0iaW5nYXRsYW4uY29t
-IG9mZmljZSIgc3R5bGU9IndpZHRoOiA5NyU7IGhlaWdodDogYXV0bzsgbWFyZ2luLWxlZnQ6IGF1
-dG87IG1hcmdpbi1yaWdodDogYXV0bzsiLz4KICAgICAgICAgICAgICAgICAgICAgIDwvYT4KICAg
-ICAgICAgICAgICAgICAgICA8L3RkPgogICAgICAgICAgICAgICAgICA8L3RyPgogICAgICAgICAg
-ICAgICAgICA8dHI+CiAgICAgICAgICAgICAgICAgICAgPHRkIHN0eWxlPSJwYWRkaW5nLWxlZnQ6
-IDIwcHg7IGZvbnQtZmFtaWx5OiBWZXJkYW5hOyBmb250LXNpemU6IDE4cHg7IHBhZGRpbmctdG9w
-OiAyMHB4OyBwYWRkaW5nLWJvdHRvbTogMjBweDsiPgogICAgICAgICAgICAgICAgICAgICAgS2Vk
-dmVzIMOcZ3lmZWzDvG5rIQogICAgICAgICAgICAgICAgICAgIDwvdGQ+CiAgICAgICAgICAgICAg
-ICAgIDwvdHI+CiAgICAgICAgICAgICAgICAgIDx0cj4KICAgICAgICAgICAgICAgICAgICA8dGQg
-c3R5bGU9ImZvbnQtZmFtaWx5OiBWZXJkYW5hOyBmb250LXNpemU6IDEycHg7IHBhZGRpbmctbGVm
-dDogMjBweDsgcGFkZGluZy1yaWdodDogMjBweDsgcGFkZGluZy1ib3R0b206IDIwcHg7IHRleHQt
-YWxpZ246IGp1c3RpZnkiPgogICAgICAgICAgICAgICAgICAgICAgICAgIDxiPiBFemVrZXQgYSBs
-YWvDs3Bhcmtva2F0IGzDoXR0YWQgbcOhcj88L2I+PGJyPiBNZWd0YWzDoWxvZCDFkWtldCBhIDxh
-IHN0eWxlPSJ0ZXh0LWRlY29yYXRpb246IG5vbmU7IGNvbG9yOiAjZDM1NjMwOyBmb250LXdlaWdo
-dDogYm9sZDsiIGhyZWY9Imh0dHBzOi8vbGFrb3BhcmsuaW5nYXRsYW4uY29tIiB0YXJnZXQ9Il9i
-bGFuayI+bGFrb3BhcmsuaW5nYXRsYW4uY29tPC9hPi1vbiwgYWhvbCBtw6lnIHNvayDDumogw6lw
-w610w6lzxbEgbGFrw6FzIGvDtnrDtnR0IHbDoWxvZ2F0aGF0c3ohCiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgPGJyLz48YnIvPjxkaXYgc3R5bGU9IndpZHRoOiA5MCU7IG1pbi1oZWlnaHQ6IDEw
-MHB4OyBtYXJnaW4tdG9wOiAyNXB4OyBtYXJnaW4tbGVmdDogYXV0bzsgbWFyZ2luLXJpZ2h0OiBh
-dXRvOyBvdmVyZmxvdzogaGlkZGVuOyI+CiAgICAgICAgPGEgaHJlZj0iaHR0cHM6Ly9sYWtvcGFy
-ay5pbmdhdGxhbi5jb20vd2F2ZWxha29wYXJrIiB0YXJnZXQ9Il9ibGFuayI+CiAgICAgICAgICA8
-ZGl2IHN0eWxlPSJ3aWR0aDogMzAlOyBtaW4taGVpZ2h0OiAxMDBweDsgZmxvYXQ6IGxlZnQ7IGJh
-Y2tncm91bmQtaW1hZ2U6IHVybCgnaHR0cHM6Ly9sby5pbmdhdGxhbmNkbi5jb20vY29ycG9yYXRl
-LXByb2plY3QvNjU0L0NfNjJjN2YwYzdhNzIwODUuMjEwNjA5MzIuanBnPzE2NTcyODQxMTMnKTsg
-YmFja2dyb3VuZC1wb3NpdGlvbjogY2VudGVyOyBiYWNrZ3JvdW5kLXNpemU6IGNvdmVyOyI+CiAg
-ICAgICAgICAgIMKgCiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2E+CiAgICAgICAgPGRpdiBz
-dHlsZT0id2lkdGg6IDcwJTsgZmxvYXQ6IGxlZnQ7Ij4KICAgICAgICAgIDxwIHN0eWxlPSJtYXJn
-aW4tbGVmdDogNSU7IG1hcmdpbi10b3A6IDBweDsgdGV4dC1hbGlnbjogbGVmdDsiPgogICAgICAg
-ICAgICA8YSBocmVmPSJodHRwczovL2xha29wYXJrLmluZ2F0bGFuLmNvbS93YXZlbGFrb3Bhcmsi
-IHRhcmdldD0iX2JsYW5rIiBzdHlsZT0idGV4dC1kZWNvcmF0aW9uOiBub25lOyI+CiAgICAgICAg
-ICAgICAgPGI+V2F2ZSBMYWvDs3Bhcms8L2I+CiAgICAgICAgICAgIDwvYT4KICAgICAgICAgIDwv
-cD4KICAgICAgICAgIDxwIHN0eWxlPSJtYXJnaW4tbGVmdDogNSU7Ij5TacOzZm9rIHwgNTEsODYt
-MTkwLDczIE0gRnQgfCAzMy04NCBtwrIgPC9wPgogICAgICAgICAgPHAgc3R5bGU9Im1hcmdpbi1s
-ZWZ0OiA1JTsgdGV4dC1hbGlnbjogbGVmdDsiPgogICAgICAgICAgICA8YSBzdHlsZT0iY29sb3I6
-ICNkMzU2MzA7IGZvbnQtd2VpZ2h0OiBib2xkOyB0ZXh0LWRlY29yYXRpb246IG5vbmU7IiBocmVm
-PSJodHRwczovL2xha29wYXJrLmluZ2F0bGFuLmNvbS93YXZlbGFrb3BhcmsiIHRhcmdldD0iX2Js
-YW5rIj4KICAgICAgICAgICAgICBNRUdOw4laRU0KICAgICAgICAgICAgPC9hPgogICAgICAgICAg
-PC9wPgogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj48ZGl2IHN0eWxlPSJ3aWR0aDogOTAlOyBt
-aW4taGVpZ2h0OiAxMDBweDsgbWFyZ2luLXRvcDogMjVweDsgbWFyZ2luLWxlZnQ6IGF1dG87IG1h
-cmdpbi1yaWdodDogYXV0bzsgb3ZlcmZsb3c6IGhpZGRlbjsiPgogICAgICAgIDxhIGhyZWY9Imh0
-dHBzOi8vbGFrb3BhcmsuaW5nYXRsYW4uY29tL2VsaXRlcGFyazIzIiB0YXJnZXQ9Il9ibGFuayI+
-CiAgICAgICAgICA8ZGl2IHN0eWxlPSJ3aWR0aDogMzAlOyBtaW4taGVpZ2h0OiAxMDBweDsgZmxv
-YXQ6IGxlZnQ7IGJhY2tncm91bmQtaW1hZ2U6IHVybCgnaHR0cHM6Ly9sby5pbmdhdGxhbmNkbi5j
-b20vY29ycG9yYXRlLXByb2plY3QvNjU2L0NfNjJkNTU3N2E3OTY3MjguODkzMzkwMjIuanBnPzE2
-NTgxNDg3MzAnKTsgYmFja2dyb3VuZC1wb3NpdGlvbjogY2VudGVyOyBiYWNrZ3JvdW5kLXNpemU6
-IGNvdmVyOyI+CiAgICAgICAgICAgIMKgCiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2E+CiAg
-ICAgICAgPGRpdiBzdHlsZT0id2lkdGg6IDcwJTsgZmxvYXQ6IGxlZnQ7Ij4KICAgICAgICAgIDxw
-IHN0eWxlPSJtYXJnaW4tbGVmdDogNSU7IG1hcmdpbi10b3A6IDBweDsgdGV4dC1hbGlnbjogbGVm
-dDsiPgogICAgICAgICAgICA8YSBocmVmPSJodHRwczovL2xha29wYXJrLmluZ2F0bGFuLmNvbS9l
-bGl0ZXBhcmsyMyIgdGFyZ2V0PSJfYmxhbmsiIHN0eWxlPSJ0ZXh0LWRlY29yYXRpb246IG5vbmU7
-Ij4KICAgICAgICAgICAgICA8Yj5FbGl0ZSBQYXJrIDItMzwvYj4KICAgICAgICAgICAgPC9hPgog
-ICAgICAgICAgPC9wPgogICAgICAgICAgPHAgc3R5bGU9Im1hcmdpbi1sZWZ0OiA1JTsiPktlbGVu
-ZsO2bGQgfCA0NCwwMS0xNzIsNzYgTSBGdCB8IDI5LTExMCBtwrIgPC9wPgogICAgICAgICAgPHAg
-c3R5bGU9Im1hcmdpbi1sZWZ0OiA1JTsgdGV4dC1hbGlnbjogbGVmdDsiPgogICAgICAgICAgICA8
-YSBzdHlsZT0iY29sb3I6ICNkMzU2MzA7IGZvbnQtd2VpZ2h0OiBib2xkOyB0ZXh0LWRlY29yYXRp
-b246IG5vbmU7IiBocmVmPSJodHRwczovL2xha29wYXJrLmluZ2F0bGFuLmNvbS9lbGl0ZXBhcmsy
-MyIgdGFyZ2V0PSJfYmxhbmsiPgogICAgICAgICAgICAgIE1FR07DiVpFTQogICAgICAgICAgICA8
-L2E+CiAgICAgICAgICA8L3A+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvZGl2PjxkaXYgc3R5bGU9
-IndpZHRoOiA5MCU7IG1pbi1oZWlnaHQ6IDEwMHB4OyBtYXJnaW4tdG9wOiAyNXB4OyBtYXJnaW4t
-bGVmdDogYXV0bzsgbWFyZ2luLXJpZ2h0OiBhdXRvOyBvdmVyZmxvdzogaGlkZGVuOyI+CiAgICAg
-ICAgPGEgaHJlZj0iaHR0cHM6Ly9sYWtvcGFyay5pbmdhdGxhbi5jb20vbWV0cm9kb21yaXZlciIg
-dGFyZ2V0PSJfYmxhbmsiPgogICAgICAgICAgPGRpdiBzdHlsZT0id2lkdGg6IDMwJTsgbWluLWhl
-aWdodDogMTAwcHg7IGZsb2F0OiBsZWZ0OyBiYWNrZ3JvdW5kLWltYWdlOiB1cmwoJ2h0dHBzOi8v
-bG8uaW5nYXRsYW5jZG4uY29tL2NvcnBvcmF0ZS1wcm9qZWN0LzU1Ny9DXzYxYWZlNmI0YTM1OGIy
-LjU3NjQ2MzU0LmpwZz8xNjM4OTE3ODEyJyk7IGJhY2tncm91bmQtcG9zaXRpb246IGNlbnRlcjsg
-YmFja2dyb3VuZC1zaXplOiBjb3ZlcjsiPgogICAgICAgICAgICDCoAogICAgICAgICAgPC9kaXY+
-CiAgICAgICAgPC9hPgogICAgICAgIDxkaXYgc3R5bGU9IndpZHRoOiA3MCU7IGZsb2F0OiBsZWZ0
-OyI+CiAgICAgICAgICA8cCBzdHlsZT0ibWFyZ2luLWxlZnQ6IDUlOyBtYXJnaW4tdG9wOiAwcHg7
-IHRleHQtYWxpZ246IGxlZnQ7Ij4KICAgICAgICAgICAgPGEgaHJlZj0iaHR0cHM6Ly9sYWtvcGFy
-ay5pbmdhdGxhbi5jb20vbWV0cm9kb21yaXZlciIgdGFyZ2V0PSJfYmxhbmsiIHN0eWxlPSJ0ZXh0
-LWRlY29yYXRpb246IG5vbmU7Ij4KICAgICAgICAgICAgICA8Yj5NZXRyb2RvbSBSaXZlcjwvYj4K
-ICAgICAgICAgICAgPC9hPgogICAgICAgICAgPC9wPgogICAgICAgICAgPHAgc3R5bGU9Im1hcmdp
-bi1sZWZ0OiA1JTsiPktlbGVuZsO2bGQgfCA1Niw4OS0yNjEsODkgTSBGdCB8IDI4LTExMSBtwrIg
-PC9wPgogICAgICAgICAgPHAgc3R5bGU9Im1hcmdpbi1sZWZ0OiA1JTsgdGV4dC1hbGlnbjogbGVm
-dDsiPgogICAgICAgICAgICA8YSBzdHlsZT0iY29sb3I6ICNkMzU2MzA7IGZvbnQtd2VpZ2h0OiBi
-b2xkOyB0ZXh0LWRlY29yYXRpb246IG5vbmU7IiBocmVmPSJodHRwczovL2xha29wYXJrLmluZ2F0
-bGFuLmNvbS9tZXRyb2RvbXJpdmVyIiB0YXJnZXQ9Il9ibGFuayI+CiAgICAgICAgICAgICAgTUVH
-TsOJWkVNCiAgICAgICAgICAgIDwvYT4KICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KICAg
-ICAgPC9kaXY+PGRpdiBzdHlsZT0id2lkdGg6IDkwJTsgbWluLWhlaWdodDogMTAwcHg7IG1hcmdp
-bi10b3A6IDI1cHg7IG1hcmdpbi1sZWZ0OiBhdXRvOyBtYXJnaW4tcmlnaHQ6IGF1dG87IG92ZXJm
-bG93OiBoaWRkZW47Ij4KICAgICAgICA8YSBocmVmPSJodHRwczovL2xha29wYXJrLmluZ2F0bGFu
-LmNvbS9uZW1lc2J1a3RhcnNhc2hheiIgdGFyZ2V0PSJfYmxhbmsiPgogICAgICAgICAgPGRpdiBz
-dHlsZT0id2lkdGg6IDMwJTsgbWluLWhlaWdodDogMTAwcHg7IGZsb2F0OiBsZWZ0OyBiYWNrZ3Jv
-dW5kLWltYWdlOiB1cmwoJ2h0dHBzOi8vbG8uaW5nYXRsYW5jZG4uY29tL2NvcnBvcmF0ZS1wcm9q
-ZWN0LzY1Ny9DXzYyZDY3OWVjOTdmOTI4LjIzNDYyMTMyLmpwZz8xNjU4MjIzMjUzJyk7IGJhY2tn
-cm91bmQtcG9zaXRpb246IGNlbnRlcjsgYmFja2dyb3VuZC1zaXplOiBjb3ZlcjsiPgogICAgICAg
-ICAgICDCoAogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9hPgogICAgICAgIDxkaXYgc3R5bGU9
-IndpZHRoOiA3MCU7IGZsb2F0OiBsZWZ0OyI+CiAgICAgICAgICA8cCBzdHlsZT0ibWFyZ2luLWxl
-ZnQ6IDUlOyBtYXJnaW4tdG9wOiAwcHg7IHRleHQtYWxpZ246IGxlZnQ7Ij4KICAgICAgICAgICAg
-PGEgaHJlZj0iaHR0cHM6Ly9sYWtvcGFyay5pbmdhdGxhbi5jb20vbmVtZXNidWt0YXJzYXNoYXoi
-IHRhcmdldD0iX2JsYW5rIiBzdHlsZT0idGV4dC1kZWNvcmF0aW9uOiBub25lOyI+CiAgICAgICAg
-ICAgICAgPGI+TmVtZXNiw7xrIFTDoXJzYXNow6F6PC9iPgogICAgICAgICAgICA8L2E+CiAgICAg
-ICAgICA8L3A+CiAgICAgICAgICA8cCBzdHlsZT0ibWFyZ2luLWxlZnQ6IDUlOyI+TmVtZXNiw7xr
-IHwgNDgsMS0xNDYgTSBGdCB8IDQzLTk3IG3CsiA8L3A+CiAgICAgICAgICA8cCBzdHlsZT0ibWFy
-Z2luLWxlZnQ6IDUlOyB0ZXh0LWFsaWduOiBsZWZ0OyI+CiAgICAgICAgICAgIDxhIHN0eWxlPSJj
-b2xvcjogI2QzNTYzMDsgZm9udC13ZWlnaHQ6IGJvbGQ7IHRleHQtZGVjb3JhdGlvbjogbm9uZTsi
-IGhyZWY9Imh0dHBzOi8vbGFrb3BhcmsuaW5nYXRsYW4uY29tL25lbWVzYnVrdGFyc2FzaGF6IiB0
-YXJnZXQ9Il9ibGFuayI+CiAgICAgICAgICAgICAgTUVHTsOJWkVNCiAgICAgICAgICAgIDwvYT4K
-ICAgICAgICAgIDwvcD4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+ICAgICAgICAgICAgICAg
-ICAgPGRpdiBzdHlsZT0ibWFyZ2luLXRvcDogMjVweDsgd2lkdGg6IDEwMCU7IGJhY2tncm91bmQt
-Y29sb3I6ICMwZDE0Mjg7IGhlaWdodDogOTBweDsgdGV4dC1hbGlnbjogY2VudGVyOyI+CiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj0iaHR0cHM6Ly9sYWtvcGFyay5pbmdhdGxhbi5j
-b20iIHRhcmdldD0iX2JsYW5rIj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpbWcgc3R5
-bGU9Im1hcmdpbi1sZWZ0OiBhdXRvOyBtYXJnaW4tcmlnaHQ6IGF1dG87IG1heC1oZWlnaHQ6IDgw
-cHg7IiBzcmM9Imh0dHBzOi8vaGlybGV2ZWwuYmhzMi5taW5lLm51L3RlbXBsYXRlcy9sYWtvcGFy
-a191amRvbnNhZy9sb2dvLnBuZyI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgPC9hPgogICAg
-ICAgICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgICAgICAgIDwvdGQ+CiAg
-ICAgICAgICAgICAgICAgICAgPC90cj4KICAgICAgICAgICAgICAgICAgPC90YWJsZT4KICAgICAg
-ICAgICAgICAgIDwvdGQ+CiAgICAgICAgICAgICAgPC90cj4KICAgICAgICAgICAgPC90YWJsZT4K
-ICAgICAgICAgIDxwIHN0eWxlPSJmb250LXNpemU6IDhweDsgbWFyZ2luLXRvcDogMTBweDsgZm9u
-dC1mYW1pbHk6IFZlcmRhbmE7IHRleHQtYWxpZ246IGNlbnRlcjsgY29sb3I6IGJsYWNrOyI+PGEg
-aHJlZj0naHR0cHM6Ly9oaXJsZXZlbC5iaHMyLm1pbmUubnUvdW5zdWJzY3JpYmUucGhwP3ByaWQ9
-MzQwJnVpZD02NzMzNSZyaWQ9Njc3MjFhOTkwOScgc3R5bGU9InRleHQtZGVjb3JhdGlvbjogbm9u
-ZTsgY29sb3I6IGJsYWNrOyBmb250LXNpemU6IDdweDsgZm9udC1mYW1pbHk6IFZlcmRhbmE7Ij5M
-ZWlyYXRrb3rDoXM8L2E+PC9wPjwvYm9keT4KICAgICAgICAgIDwvaHRtbD4gICAgICAgICAgICAg
-ICAg
+> On Thu, Jun 16, 2022 at 05:37:07PM +0530, Logananth Sundararaj wrote:
+> > The Yosemite V3.5 is a facebook multi-node server
+> > platform that host four OCP server. The BMC
+> > in the Yosemite V3.5 platform based on AST2600 SoC.
+> >
+> > This patch adds linux device tree entry related to
+> > Yosemite V3.5 specific devices connected to BMC SoC.
+> >
+> > Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+> >
+> > ---
+> > --- v2 - Enabled i2c drivers.
+> > --- v1 - Initial draft.
+> > ---
+> >  arch/arm/boot/dts/Makefile                    |   1 +
+> >  .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 277 ++++++++++++++++++
+> >  2 files changed, 278 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+>
+> A few comments below.
+>
+> ...
+> > +&uart5 {
+> > +     status = "okay";
+> > +     /* Workaround for AST2600 A0 */
+> > +     compatible = "snps,dw-apb-uart";
+> > +};
+>
+> Is this comment accurate?  Are we using A0 hardware on this system?
+>
+>
+Done.
 
 
---b1_MP8dCPpNZOTyQLfBuK9NvdXNEqSjIFtedpk83zaU--
+> > +&fmc {
+> > +     status = "okay";
+> > +     reg = <0x1e620000 0xc4>, <0x20000000 0x8000000>;
+> > +     flash@0 {
+> > +             status = "okay";
+> > +             m25p,fast-read;
+> > +             label = "spi0.1";
+> > +             spi-max-frequency = <50000000>;
+> > +             spi-tx-bus-width = <2>;
+> > +             spi-rx-bus-width = <2>;
+> > +             #include "openbmc-flash-layout-64.dtsi"
+> > +     };
+> > +};
+>
+> Aren't there two SPI flashes?  It seems like it based on:
+>
+> https://github.com/facebook/openbmc-linux/blob/dev-5.10/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts#L162
+>
+>
+yes, two flashes have been added.
 
+
+> > +
+> > +&spi1 {
+> > +     status = "okay";
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&pinctrl_spi1_default>;
+> > +
+> > +     flash@0 {
+> > +             status = "okay";
+> > +             m25p,fast-read;
+> > +             label = "pnor";
+> > +             spi-rx-bus-width = <4>;
+> > +             spi-max-frequency = <100000000>;
+> > +     };
+> > +};
+>
+> What is SPI1 used for?  I don't see it in the facebook/openbmc-linux
+> DTS.
+>
+>
+Done.
+
+
+> > --
+> > 2.17.1
+> >
+>
+> Are we missing the pwm/tach support?  Or is that still not upstream from
+> Aspeed?
+>
+>
+yes, pwm/tach support is haven't been upstream from the Aspeed for ast2600.
+
+
+> --
+> Patrick Williams
+>
+
+Sorry for the late reply Patrick, missed replying.
+Thanks.
+Logananth
+
+--0000000000005ac9b105e4b4fada
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>The comments have been addressed and the new patch ha=
+s been added,<br></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" clas=
+s=3D"gmail_attr">On Fri, Jun 17, 2022 at 10:12 PM Patrick Williams &lt;<a h=
+ref=3D"mailto:patrick@stwcx.xyz">patrick@stwcx.xyz</a>&gt; wrote:<br></div>=
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">On Thu, Jun 16, 2022 at 0=
+5:37:07PM +0530, Logananth Sundararaj wrote:<br>
+&gt; The Yosemite V3.5 is a facebook multi-node server<br>
+&gt; platform that host four OCP server. The BMC<br>
+&gt; in the Yosemite V3.5 platform based on AST2600 SoC.<br>
+&gt; <br>
+&gt; This patch adds linux device tree entry related to<br>
+&gt; Yosemite V3.5 specific devices connected to BMC SoC.<br>
+&gt; <br>
+&gt; Signed-off-by: Logananth Sundararaj &lt;<a href=3D"mailto:logananth_s@=
+hcl.com" target=3D"_blank">logananth_s@hcl.com</a>&gt;<br>
+&gt; <br>
+&gt; ---<br>
+&gt; --- v2 - Enabled i2c drivers.<br>
+&gt; --- v1 - Initial draft.<br>
+&gt; ---<br>
+&gt;=C2=A0 arch/arm/boot/dts/Makefile=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A01 +<br>
+&gt;=C2=A0 .../boot/dts/aspeed-bmc-facebook-fby35.dts=C2=A0 =C2=A0 | 277 ++=
+++++++++++++++++<br>
+&gt;=C2=A0 2 files changed, 278 insertions(+)<br>
+&gt;=C2=A0 create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.d=
+ts<br>
+<br>
+A few comments below.<br>
+<br>
+...<br>
+&gt; +&amp;uart5 {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0status =3D &quot;okay&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0/* Workaround for AST2600 A0 */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0compatible =3D &quot;snps,dw-apb-uart&quot;;<br>
+&gt; +};<br>
+<br>
+Is this comment accurate?=C2=A0 Are we using A0 hardware on this system?<br=
+>
+<br></blockquote><div><br></div><div>Done.<br></div><div>=C2=A0</div><block=
+quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
+px solid rgb(204,204,204);padding-left:1ex">
+&gt; +&amp;fmc {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0status =3D &quot;okay&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0reg =3D &lt;0x1e620000 0xc4&gt;, &lt;0x20000000 0=
+x8000000&gt;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0flash@0 {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0status =3D &quot;okay=
+&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0m25p,fast-read;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0label =3D &quot;spi0.=
+1&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0spi-max-frequency =3D=
+ &lt;50000000&gt;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0spi-tx-bus-width =3D =
+&lt;2&gt;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0spi-rx-bus-width =3D =
+&lt;2&gt;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0#include &quot;openbm=
+c-flash-layout-64.dtsi&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0};<br>
+&gt; +};<br>
+<br>
+Aren&#39;t there two SPI flashes?=C2=A0 It seems like it based on:<br>
+<a href=3D"https://github.com/facebook/openbmc-linux/blob/dev-5.10/arch/arm=
+/boot/dts/aspeed-bmc-facebook-fby35.dts#L162" rel=3D"noreferrer" target=3D"=
+_blank">https://github.com/facebook/openbmc-linux/blob/dev-5.10/arch/arm/bo=
+ot/dts/aspeed-bmc-facebook-fby35.dts#L162</a><br>
+<br></blockquote><div><br></div><div>yes, two flashes have been added.<br><=
+/div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px=
+ 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; +<br>
+&gt; +&amp;spi1 {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0status =3D &quot;okay&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0pinctrl-names =3D &quot;default&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0pinctrl-0 =3D &lt;&amp;pinctrl_spi1_default&gt;;<=
+br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0flash@0 {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0status =3D &quot;okay=
+&quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0m25p,fast-read;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0label =3D &quot;pnor&=
+quot;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0spi-rx-bus-width =3D =
+&lt;4&gt;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0spi-max-frequency =3D=
+ &lt;100000000&gt;;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0};<br>
+&gt; +};<br>
+<br>
+What is SPI1 used for?=C2=A0 I don&#39;t see it in the facebook/openbmc-lin=
+ux<br>
+DTS.<br>
+<br></blockquote><div><br></div><div>Done.<br></div><div>=C2=A0</div><block=
+quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
+px solid rgb(204,204,204);padding-left:1ex">
+&gt; -- <br>
+&gt; 2.17.1<br>
+&gt; <br>
+<br>
+Are we missing the pwm/tach support?=C2=A0 Or is that still not upstream fr=
+om<br>
+Aspeed?<br>
+<br></blockquote><div><br></div><div>yes, pwm/tach support is haven&#39;t b=
+een upstream from the Aspeed for ast2600.<br></div><div>=C2=A0</div><blockq=
+uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1p=
+x solid rgb(204,204,204);padding-left:1ex">
+-- <br>
+Patrick Williams<br></blockquote><div><br></div><div>Sorry for the late rep=
+ly Patrick, missed replying.</div><div>Thanks.<br></div><div>Logananth<br><=
+/div></div></div>
+
+--0000000000005ac9b105e4b4fada--
