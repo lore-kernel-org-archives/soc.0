@@ -1,98 +1,299 @@
-Return-Path: <SRS0=xttv=X7=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=z9hc=YA=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3462EC3F6B0
-	for <soc@archiver.kernel.org>; Tue, 26 Jul 2022 17:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C1D0C00144
+	for <soc@archiver.kernel.org>; Wed, 27 Jul 2022 02:06:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E0D80C433C1; Tue, 26 Jul 2022 17:31:54 +0000 (UTC)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id CC183C43140; Wed, 27 Jul 2022 02:06:45 +0000 (UTC)
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 29BFBC43470
-	for <soc@kernel.org>; Tue, 26 Jul 2022 17:31:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29BFBC43470
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id m12so22585155lfj.4
-        for <soc@kernel.org>; Tue, 26 Jul 2022 10:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=nUsqrIcncbnAblsl66lT/lEZJ2lw+9ku+eiTV2ZWI6Y=;
-        b=OyRS/08wVlN551H9uCmoUeTFl2tMNki5reqZdw3CT81GT8LgTsXqk1jO57wdUodH2g
-         xc0iJX8XCvFuVYwQ/TJofmliTWDifgjexn294tm1ofBY/7Dkr9wcE3a0RHERg68yW0BF
-         9rS2N2dGVl2hPGLGPNDHr4BhG02/Gg1a0TpywMqZI2oScVjP9Q+tPkdGhZgbwHdPPlw+
-         2mRzXFRQhiBmN/gldSjIrf6WnAU3VupQ4N9v0FxN/F02J9FkTy/8S8QqfDQFAnS3T9vT
-         vybmAQ/bonklLF/sgF594c5gQRduNdZpShCNQ4bnixqwS575JB57AADT1wqextDJ1JFc
-         qQqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nUsqrIcncbnAblsl66lT/lEZJ2lw+9ku+eiTV2ZWI6Y=;
-        b=Q37Bw4UCwkO99vrxDs+v40SeGI81ZNky4o1FwkmvAqq10ZO6UdTqbb11VyLag9tcoG
-         pBdABD9s1EObJz3DeXDVMG3MZ6n81yGsD3BGZqAVt9ucIK1wiiuLAL9QW38hQEVgRzEJ
-         AmhCQ6t/hjO79ugk+3U/G+YwncTaKexs/tRwCw4YU2xZTjfQi/m8n93T3VMl7+wOZ9wN
-         qk7bkpjkKxUhrhIwSql0K2awdjwM8a6BqNS4l/PX0ENnAQ0aXz387lRWpTFUHbeg4cYW
-         WrppKgFkd3W9tshPxQQnq1WdcRfHCmlL+9SsAucpjWCav5yQmi6elPT4v1LyUnjai39z
-         ukGg==
-X-Gm-Message-State: AJIora98WnFJJQR4b5XLv4N3f1vJvBNkFpJJLA3OR2pIfcus8U41RxHt
-	C3pal0njJ0TcfH2wIsQHdqNikw==
-X-Google-Smtp-Source: AGRyM1thhHPJv1gCsMqopzoDCU3kSSNaevw3WpkoAl9o10A2PSZBRyQoWCrT5Ve7WL8oKcVOHuWQbg==
-X-Received: by 2002:a05:6512:1092:b0:48a:766e:7e20 with SMTP id j18-20020a056512109200b0048a766e7e20mr7071165lfg.646.1658856711127;
-        Tue, 26 Jul 2022 10:31:51 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id t12-20020a19dc0c000000b0047f9cfa914csm3319933lfg.18.2022.07.26.10.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 10:31:50 -0700 (PDT)
-Message-ID: <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
-Date: Tue, 26 Jul 2022 19:31:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: use absolute path to other
- schema
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 8ADB1C433C1;
+	Wed, 27 Jul 2022 02:06:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8ADB1C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658887602; x=1690423602;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HiZZmB3zhZMrYRQqM73N/5JPYTEqt0xeA6+nfmKQHKM=;
+  b=HIGdqbagZSNHyBcqzfKi1JsOBlaYV5VbYykSL4UFT0qYnx3oS7UIHN9f
+   mftKC3VaGdIVgyJhVCQ5DG13FIc1wQOJUp4lmt7pHg/HW1IsLe07sXPmJ
+   zX1oCMn5rHDR4EPZFalC1A1Sg0/KzF5a8ONNKnhmJCQVf/bmhgFaWDDFQ
+   AH+O0awyeA/1y9ae0sg7MEdLvhgFG/QT3P9RcvstS4NcsMx4lXs1L1Kr5
+   VH9ckOSDWJP9YZKbtKmR8LlInPy81KV9pfBqO4rPwrANyPCEMCxZXPNKC
+   rBs9Rog9WHq0+5SMUZEtAnwCTUMwzXvABSqmYWtQCEV/4FBWkA++kX9mS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="352117597"
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="352117597"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 19:06:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
+   d="scan'208";a="703132242"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 26 Jul 2022 19:06:34 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oGWRW-0008AY-06;
+	Wed, 27 Jul 2022 02:06:34 +0000
+Date: Wed, 27 Jul 2022 10:05:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-To: Florian Fainelli <f.fainelli@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
- Saenz Julienne <nsaenz@kernel.org>, Conor Dooley
- <conor.dooley@microchip.com>, devicetree@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
- <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
- <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, robh+dt@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org,
+	daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
+	abel.vesa@nxp.com, dev@lynxeye.de, marcel.ziswiler@toradex.com,
+	tharvey@gateworks.com, leoyang.li@nxp.com,
+	sebastian.reichel@collabora.com, cniedermaier@dh-electronics.com,
+	Mr.Bossman075@gmail.com, clin@suse.com,
+	giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 07/12] clk: imx: Update pllv3 to support i.MXRT1170
+Message-ID: <202207270909.VypZ4wfI-lkp@intel.com>
+References: <20220723160513.271692-8-Mr.Bossman075@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220723160513.271692-8-Mr.Bossman075@gmail.com>
 
-On 26/07/2022 17:59, Florian Fainelli wrote:
-> On 7/26/22 04:58, Krzysztof Kozlowski wrote:
->> Absolute path to other DT schema is preferred over relative one.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Are you applying those patches or do you want the SoC maintainer to do that?
+Hi Jesse,
 
-The best if  you (SoC maintainer) would pick them up. If you cannot or
-it is too late for this, maybe arm-soc could grab them (already Cced).
+Thank you for the patch! Yet something to improve:
 
-Best regards,
-Krzysztof
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on abelvesa/clk/imx linus/master v5.19-rc8]
+[cannot apply to soc/for-next next-20220726]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jesse-Taube/Add-support-for-the-i-MXRT1170-evk/20220724-000710
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm-randconfig-c002-20220726 (https://download.01.org/0day-ci/archive/20220727/202207270909.VypZ4wfI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/96413cc0300321ec18d27ca9983f349a41f99706
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jesse-Taube/Add-support-for-the-i-MXRT1170-evk/20220724-000710
+        git checkout 96413cc0300321ec18d27ca9983f349a41f99706
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/imx/ drivers/firmware/efi/libstub/ drivers/pci/ drivers/soc/fsl/qe/ fs/ecryptfs/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/clk/imx/clk-imx6sl.c:16:
+   drivers/clk/imx/clk.h:268:60: error: too few arguments provided to function-like macro invocation
+                   const char *parent_name, void __iomem *base, u32 div_mask);
+                                                                            ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+>> drivers/clk/imx/clk-imx6sl.c:217:93: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
+                                                                                                      ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sl.c:218:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sl.c:219:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll3", "osc", base + 0x10, 0x3);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sl.c:220:93: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll4", "osc", base + 0x70, 0x7f);
+                                                                                                      ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sl.c:221:93: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll5", "osc", base + 0xa0, 0x7f);
+                                                                                                      ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sl.c:222:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,    "pll6", "osc", base + 0xe0, 0x3);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sl.c:223:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SL_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll7", "osc", base + 0x20, 0x3);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   8 errors generated.
+--
+   In file included from drivers/clk/imx/clk-imx6sx.c:19:
+   drivers/clk/imx/clk.h:268:60: error: too few arguments provided to function-like macro invocation
+                   const char *parent_name, void __iomem *base, u32 div_mask);
+                                                                            ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+>> drivers/clk/imx/clk-imx6sx.c:160:93: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
+                                                                                                      ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sx.c:161:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sx.c:162:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll3", "osc", base + 0x10, 0x3);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sx.c:163:93: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll4", "osc", base + 0x70, 0x7f);
+                                                                                                      ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sx.c:164:93: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll5", "osc", base + 0xa0, 0x7f);
+                                                                                                      ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sx.c:165:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,    "pll6", "osc", base + 0xe0, 0x3);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6sx.c:166:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6SX_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll7", "osc", base + 0x20, 0x3);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   8 errors generated.
+--
+   In file included from drivers/clk/imx/clk-imx6ul.c:18:
+   drivers/clk/imx/clk.h:268:60: error: too few arguments provided to function-like macro invocation
+                   const char *parent_name, void __iomem *base, u32 div_mask);
+                                                                            ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+>> drivers/clk/imx/clk-imx6ul.c:149:90: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,   "pll1", "osc", base + 0x00, 0x7f);
+                                                                                                    ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6ul.c:150:92: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+                                                                                                     ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6ul.c:151:89: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,   "pll3", "osc", base + 0x10, 0x3);
+                                                                                                   ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6ul.c:152:89: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,    "pll4", "osc", base + 0x70, 0x7f);
+                                                                                                    ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6ul.c:153:89: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,    "pll5", "osc", base + 0xa0, 0x7f);
+                                                                                                    ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6ul.c:154:90: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,  "pll6", "osc", base + 0xe0, 0x3);
+                                                                                                   ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   drivers/clk/imx/clk-imx6ul.c:155:89: error: too few arguments provided to function-like macro invocation
+           hws[IMX6UL_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,   "pll7", "osc", base + 0x20, 0x3);
+                                                                                                   ^
+   drivers/clk/imx/clk.h:107:9: note: macro 'imx_clk_hw_pllv3' defined here
+   #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+           ^
+   8 errors generated.
+
+
+vim +217 drivers/clk/imx/clk-imx6sl.c
+
+751f7e999afcef1 arch/arm/mach-imx/clk-imx6sl.c Anson Huang 2014-01-09  181  
+53bb71da1c5c142 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-21  182  static void __init imx6sl_clocks_init(struct device_node *ccm_node)
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  183  {
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  184  	struct device_node *np;
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  185  	void __iomem *base;
+848db4a0a17aaf9 arch/arm/mach-imx/clk-imx6sl.c Anson Huang 2014-01-07  186  	int ret;
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  187  
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  188  	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  189  					  IMX6SL_CLK_END), GFP_KERNEL);
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  190  	if (WARN_ON(!clk_hw_data))
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  191  		return;
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  192  
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  193  	clk_hw_data->num = IMX6SL_CLK_END;
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  194  	hws = clk_hw_data->hws;
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  195  
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  196  	hws[IMX6SL_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0);
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  197  	hws[IMX6SL_CLK_CKIL] = imx_obtain_fixed_clock_hw("ckil", 0);
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  198  	hws[IMX6SL_CLK_OSC] = imx_obtain_fixed_clock_hw("osc", 0);
+e90f41990dce355 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2014-09-01  199  	/* Clock source from external clock via CLK1 PAD */
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  200  	hws[IMX6SL_CLK_ANACLK1] = imx_obtain_fixed_clock_hw("anaclk1", 0);
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  201  
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  202  	np = of_find_compatible_node(NULL, NULL, "fsl,imx6sl-anatop");
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  203  	base = of_iomap(np, 0);
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  204  	WARN_ON(!base);
+8b1a3c0ba9b1cec drivers/clk/imx/clk-imx6sl.c   Anson Huang 2020-02-12  205  	of_node_put(np);
+6e6cdf66563086c arch/arm/mach-imx/clk-imx6sl.c Anson Huang 2014-02-11  206  	anatop_base = base;
+45fe6810347b0a8 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2013-05-03  207  
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  208  	hws[IMX6SL_PLL1_BYPASS_SRC] = imx_clk_hw_mux("pll1_bypass_src", base + 0x00, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  209  	hws[IMX6SL_PLL2_BYPASS_SRC] = imx_clk_hw_mux("pll2_bypass_src", base + 0x30, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  210  	hws[IMX6SL_PLL3_BYPASS_SRC] = imx_clk_hw_mux("pll3_bypass_src", base + 0x10, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  211  	hws[IMX6SL_PLL4_BYPASS_SRC] = imx_clk_hw_mux("pll4_bypass_src", base + 0x70, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  212  	hws[IMX6SL_PLL5_BYPASS_SRC] = imx_clk_hw_mux("pll5_bypass_src", base + 0xa0, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  213  	hws[IMX6SL_PLL6_BYPASS_SRC] = imx_clk_hw_mux("pll6_bypass_src", base + 0xe0, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29  214  	hws[IMX6SL_PLL7_BYPASS_SRC] = imx_clk_hw_mux("pll7_bypass_src", base + 0x20, 14, 1, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+e90f41990dce355 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2014-09-01  215  
+e90f41990dce355 arch/arm/mach-imx/clk-imx6sl.c Shawn Guo   2014-09-01  216  	/*                                    type               name    parent_name        base         div_mask */
+3a1d8fe6f445b13 drivers/clk/imx/clk-imx6sl.c   Abel Vesa   2019-05-29 @217  	hws[IMX6SL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
