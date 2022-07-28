@@ -1,177 +1,102 @@
-Return-Path: <SRS0=mIYl=YB=gmail.com=thierry.reding@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C88EDC04A68
-	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 17:34:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A7E5C04A68
+	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 22:28:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 86BA4C433B5; Thu, 28 Jul 2022 17:34:54 +0000 (UTC)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7A569C433D6;
-	Thu, 28 Jul 2022 17:34:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A569C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id q18so3148887wrx.8;
-        Thu, 28 Jul 2022 10:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XZ4zIVvfcCsidkeWaZTdSTzaHcuDeTcNOjLwNCugDn8=;
-        b=gTHGJkgG1gude+JyHmX79TwGE73T2WZ9MFmNcKNHi30BzronT1LCyMcUDr/MqkoI5W
-         l04zpUFC92TcohG3T8lTEOUoIfo+qifgK8EtwRAme3upF5EmGtikt4Llltdtj9koqqt+
-         cp6otSuWw7/pJ4b6rz3Zpvckkm78stmSt2L3sORIM/YjuOPA9xdjcCbMhSDQ1qi6Gv6d
-         6oMQlGM/RzcHoEwB5FJ7xN9fz7Vrgfs05PvMkPWyynkrriEA/OdNY2DCpcpBD2S0r9iL
-         3MMjOtQZ3pF8VQP/8iRPpfpNF9H1eUTu9/ANn0rE4Mb7l5yTxX2dMF1Jb9E86as498rM
-         +KBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XZ4zIVvfcCsidkeWaZTdSTzaHcuDeTcNOjLwNCugDn8=;
-        b=EHc2UEpSrvaHWx6Qy1M1q3n0KKkx3irsXgLGaf3feiAmX9gny2cSi2g+l4Xcesx7nG
-         VqzyH2mbzwhRet9rSi10dnGcG57b5W+xu4xK/ctWmaCrWK2ITG7iFwUuPhuZzYQNgriM
-         8dlQ9jHoUmjIdj5VA0XcPch+Zylz8aOsxTAbqUlpMr621gEhn2LhY7YqS1FJ+sQWN8Sq
-         EEIvPC1FV0AroEaJbNli7YRt3Rd/z8jCQUMz/vrMe6VWQQoDaMe55yrVzRTsDZi/FL1f
-         7pjYVTrFH5v491zvxTM24A2E4HPd+XTlQOsoRaNPM0+pjkLV1Awztqng/ypypZ0oEbAI
-         9qJw==
-X-Gm-Message-State: ACgBeo0PgGB51HXihmyZ2DMnD08gu1221q0DFhSRX74BlhlbKoHw6LMR
-	y/S+HWYe5XkBPUXrjD8j4FQ=
-X-Google-Smtp-Source: AA6agR7/84BmZcJNcafcDcy5qOLjcy7UeHN75LEvTL+0j34k59OqIlFN5YLWf2olSxSoRNl7Q51BiQ==
-X-Received: by 2002:adf:d4c2:0:b0:21e:ddf3:8b14 with SMTP id w2-20020adfd4c2000000b0021eddf38b14mr6866wrk.355.1659029690542;
-        Thu, 28 Jul 2022 10:34:50 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id j20-20020a5d6e54000000b0021e5e5cd3a8sm1548650wrz.87.2022.07.28.10.34.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jul 2022 10:34:49 -0700 (PDT)
-Date: Thu, 28 Jul 2022 19:34:47 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Sumit Gupta <sumitg@nvidia.com>, Borislav Petkov <bp@alien8.de>,
-	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	linux-edac@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Robert Richter <rric@kernel.org>, bbasu@nvidia.com,
-	Vikram Sethi <vsethi@nvidia.com>
-Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
-Message-ID: <YuLItw2p9k4TgoH2@orome>
-References: <20220708185608.676474-1-thierry.reding@gmail.com>
- <20220708185608.676474-2-thierry.reding@gmail.com>
- <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
- <Ys6lXD6BSxjH02mW@orome>
- <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
- <YtAajDYfcVHRGl1U@nazgul.tnic>
- <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
+	id 45C2EC43470; Thu, 28 Jul 2022 22:28:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FEE0C433C1
+	for <soc@kernel.org>; Thu, 28 Jul 2022 22:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659047305;
+	bh=U6v4Ig/viG4vOwfuGRr2WjJ6SHtwrnaHCIocysqrlMs=;
+	h=From:Date:Subject:List-Id:To:From;
+	b=TiHsWg5w9HOJX4mkxqhLutqdpgSSta+dii7YRpHzZVzHLDIDqSKVLxP7jd+KvOQjv
+	 nJOCz3ZXDzQPWyByyqe6UeWOhFCjwEOsburtfEhaDn4JmGlRzwas4jXzsDgbWHhwee
+	 GSt+CmNhgHEztGET9X5zPnQVnx/HxxYMLg+9+4+Rq9EyAQ1I7B0aDWz3aK+/efYqh0
+	 ho0vMprZ9TMRwlQ9g/3x57EapH8fKSWK4/rC7g2QQyyjwR25j1+9SZmV2q5uMUhQtb
+	 GJHVn2jR2hj1hZbdUc/6e1nG5ZQDYL6OZgD1JF/Ja3RW2gP//9kGdQ944g1U4zlzWF
+	 z68oQ8u+Z8mXA==
+Received: by mail-ed1-f49.google.com with SMTP id m8so3841343edd.9
+        for <soc@kernel.org>; Thu, 28 Jul 2022 15:28:25 -0700 (PDT)
+X-Gm-Message-State: AJIora86x4Wz99pum7CXWODrmNiuNuvlFgjpWmXOfxU92gYgiLiECN1M
+	APOKZN8dVJPc+QYUzXJ7yksthpLO4D59BTC41aw=
+X-Google-Smtp-Source: AGRyM1uNifgxwWQLNtOrOzN4WVp4eDHaKCkxpwyBRf8Dvxgd+onNwBHLhjs2oPzY8bFBGLkpsbZf8uZHxV+t8GGyrwI=
+X-Received: by 2002:aa7:cd99:0:b0:43c:4f9c:4977 with SMTP id
+ x25-20020aa7cd99000000b0043c4f9c4977mr982702edv.303.1659047303399; Thu, 28
+ Jul 2022 15:28:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4Boa0tNoBXKDLUKH"
-Content-Disposition: inline
-In-Reply-To: <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-
-
---4Boa0tNoBXKDLUKH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 29 Jul 2022 00:28:07 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
+Message-ID: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
+Subject: [GIT PULL 0/6] SoC branches for 5.20
+List-Id: <soc.lore.kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 15, 2022 at 01:36:16PM +0530, Sumit Gupta wrote:
-> Hi Arnd, Boris,
->=20
-> Thank you for your inputs.
->=20
-> > > I think this is just a reflection of what other hardware can do:
-> > > most machines only detect memory errors, but the EDAC subsystem
-> > > can work with any type in principle. There are also a lot of
-> > > conditions elsewhere that can be detected but not corrected.
-> >=20
-> > Just a couple of thoughts from looking at this:
-> >=20
-> > So the EDAC thing reports *hardware* errors by using the RAS
-> > capabilities built into an IP block. So it started with memory
-> > controllers but it is getting extended to other blocks. AMD are looking
-> > at how to integrate GPU hw errors reporting into it, for example.
-> >=20
-> > Looking at that CBB thing, it looks like it is supposed to report not
-> > so much hardware errors but operational errors. Some of the hw errors
-> > reported by RAS hw are also operation-related but not the majority.
-> >=20
->=20
-> CBB driver reports errors due to bad MMIO accesses within software.
-> The vast majority of the CBB errors tend to be programming errors in sett=
-ing
-> up address windows leading to decode errors.
->=20
-> > Then, EDAC has this counters exposed in:
-> >=20
-> > $ grep -r . /sys/devices/system/edac/
-> > /sys/devices/system/edac/power/runtime_active_time:0
-> > /sys/devices/system/edac/power/runtime_status:unsupported
-> > /sys/devices/system/edac/power/runtime_suspended_time:0
-> > /sys/devices/system/edac/power/control:auto
-> > /sys/devices/system/edac/pci/edac_pci_log_pe:1
-> > /sys/devices/system/edac/pci/pci0/pe_count:0
-> > /sys/devices/system/edac/pci/pci0/npe_count:0
-> > /sys/devices/system/edac/pci/pci_parity_count:0
-> > /sys/devices/system/edac/pci/pci_nonparity_count:0
-> > /sys/devices/system/edac/pci/edac_pci_log_npe:1
-> > /sys/devices/system/edac/pci/edac_pci_panic_on_pe:0
-> > /sys/devices/system/edac/pci/check_pci_errors:0
-> > /sys/devices/system/edac/mc/power/runtime_active_time:0
-> > /sys/devices/system/edac/mc/power/runtime_status:unsupported
-> > ...
-> >=20
-> > with the respective hierarchy: memory controllers, PCI errors, etc.
-> >=20
-> > So the main question is, does it make sense for you to fit this into the
-> > EDAC hierarchy and what would even be the advantage of making it part of
-> > EDAC?
-> >=20
->=20
-> I also think this doesn't seem to fit with the errors reported by EDAC wh=
-ich
-> are mainly hardware errors as Boris explained.
-> Please share your thoughts and if we can merge the patches as it is.
+This is another large merge window for us, with over 1000 patches from 177
+contributors. I'm sending these early since I'll be out of office for the n=
+ext
+few days.
 
-Arnd,
+The main highlights are the addition of two new SoC platforms (Nuvoton
+NPCM8XX and Sunplus SP7021), marking 80% of the remaining pre-DT
+board files as unused for later removal, and a ton of new hardware support
+in particular for Qualcomm and Broadcom SoC platforms.
 
-any more thoughts on this? Looks like there is no consensus on where
-this should go. If it's okay for this to go in via ARM SoC after all,
-I could prepare another pull request including only the CBB changes
-along with some of the reference count fixes. I could possibly also
-rework the DMADEVICES dependency patch as discussed, or we could defer
-it if it's too risky at this point.
+The main contributors by number of patches this time are:
+    208 Krzysztof Kozlowski
+     46 William Zhang
+     42 Dmitry Baryshkov
+     36 AngeloGioacchino Del Regno
+     26 Arnd Bergmann
+     22 Johan Hovold
+     21 N=C3=ADcolas F. R. A. Prado
+     19 Marcel Ziswiler
+     19 Konrad Dybcio
+     18 Geert Uytterhoeven
+     17 Bjorn Andersson
+     16 Marek Vasut
+     15 Tomer Maimon
+     15 Max Krummenacher
+     14 Abel Vesa
+     13 Samuel Holland
+     13 Rohit Agarwal
+     12 Cristian Marussi
+     11 Douglas Anderson
+     11 Christian Marangi
+     11 Chanho Park
+     10 Michael Walle
+     10 Fabio Estevam
 
-Thierry
-
---4Boa0tNoBXKDLUKH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLiyLcACgkQ3SOs138+
-s6FTbhAAo04Ge2JStIVBs0J6WC1LlVc7vETptyeF5ISXjOh8JFDuqQgmrTOW+iLD
-hgw4V4ID1B8Y0LJzKJoWOHus9eXqLWvo4oWVeAjZ5foCYoh4hEmiP3n+iKxqJyyD
-CLOa/nlDeQrGWU+X46hN2pTRF5GyBQlhySviRd7Ub/VpeBrRjD7Tngz1vUXt8Qpw
-UKxhKZCYcPYu+509DJFRbBM5clzW1gS1wEEmdrUaHuRcxl/jbIZtWE5uR58R/4e6
-/mlFXWE9p5dcNmNkKbFNXNV5HtBAuo3wyNqMqXRdQrIuhh0Jqb4zxF2EmlEeJMhI
-bqpbRPqQGYVM0TgW9Jq15JOw4raTj5tIw+yEUWd39f9m67ohqsYjOTZdsU+tvLOU
-N7Zq3tMl5eGQSttzxO149bfmKMsnL7PUy/QfjDfZ0MXkv4QliQMZXWF3B3izb0xu
-B0Y6MVrVNSm6xWk0vU0nhFDq7FigXPLCWfUXSOGNpLNNXjGPcmIw4qwdL09QGJHy
-bNm9a8dmSVvurgYWwvsreWd/BlLNhiU/8+KC3MFFIr9K0dC8NRraUL0qSeKsjEGf
-Tb90vgsCLtnJ9hSKzkCjA3SI4jk/ShwiW8Bbrak86EzhbyqEosEkyAaO2KZBeqG4
-oXdAP76UtXa7BP/C9a3fRxAlTbjdeuwpaMY6+sD9/OlsURNLLOo=
-=tTDm
------END PGP SIGNATURE-----
-
---4Boa0tNoBXKDLUKH--
+Dirstat:
+   2.9% Documentation/devicetree/bindings/arm/
+   3.2% Documentation/devicetree/bindings/
+  18.9% arch/arm/boot/dts/
+   1.0% arch/arm/configs/
+   6.5% arch/arm/mach-davinci/
+   1.7% arch/arm/
+   1.7% arch/arm64/boot/dts/allwinner/
+   1.3% arch/arm64/boot/dts/broadcom/bcmbca/
+   3.1% arch/arm64/boot/dts/exynos/
+  11.1% arch/arm64/boot/dts/freescale/
+   4.2% arch/arm64/boot/dts/mediatek/
+   1.2% arch/arm64/boot/dts/nvidia/
+  20.1% arch/arm64/boot/dts/qcom/
+   1.5% arch/arm64/boot/dts/renesas/
+   1.2% arch/arm64/boot/dts/rockchip/
+   3.7% arch/arm64/boot/dts/
+   3.4% drivers/firmware/arm_scmi/
+   5.6% drivers/soc/mediatek/
+   1.1% drivers/soc/qcom/
+   2.8% drivers/
+   1.2% include/dt-bindings/clock/
+   1.0% include/
+ 1297 files changed, 45609 insertions(+), 12448 deletions(-)
