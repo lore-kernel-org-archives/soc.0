@@ -1,54 +1,78 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=v+Z0=YB=huawei.com=john.garry@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2637CC19F2B
-	for <soc@archiver.kernel.org>; Wed, 27 Jul 2022 17:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A482DC04A68
+	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 08:07:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0AEF7C43143; Wed, 27 Jul 2022 17:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E92F3C43141;
-	Wed, 27 Jul 2022 17:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1658941225;
-	bh=sfBgyVHZLW8y9aTxKgdpcUIkxChoFCjLxO3JefukrTo=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=QJmDGnRM8DUMLrFrncIGwfliM7sPlOjMMYAAB5X5kiBsdlmY94zAKaZQJ9LD40wZK
-	 jkCwVgt5/qr+EBriqvHAz49TJdqX5hFdZazYmSWlUPtlR/+wuE9XtaCnC6FJchJMgF
-	 JkvUN3w/rVW8Bx/8T2Or+cB6pAJO9BpwwC2/Ub4ufXvRYg2p+av4GC9/CrhA3o7HVJ
-	 uzkPqCKzos8x2cSstAk7XgTehq5lzmb8fjc9qAaf3LnDZvjx5YadTx+vsaCpFffqA+
-	 TFmrqROAx28sMBnJ3dGZ1UlO/Ty4BybNfvTnAYov9sME8f/vlLi3c5ySdONCXZnvVI
-	 ce0Nr+wrP8UWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D142AC43142;
-	Wed, 27 Jul 2022 17:00:25 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 5.19, part 4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a3PK8+V7N2rNiD2VvygUwtJmY1rs1JCAGiUeDsQB6=f1A@mail.gmail.com>
-References: <CAK8P3a3PK8+V7N2rNiD2VvygUwtJmY1rs1JCAGiUeDsQB6=f1A@mail.gmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a3PK8+V7N2rNiD2VvygUwtJmY1rs1JCAGiUeDsQB6=f1A@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-5.19-4
-X-PR-Tracked-Commit-Id: c5cdb9286913aa5a5ebb81bcca0c17df3b0e2c79
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9d8a8616ee47f478a9f78ab97f55c3fbf71bb5f0
-Message-Id: <165894122583.29306.13120194394644612066.pr-tracker-bot@kernel.org>
-Date: Wed, 27 Jul 2022 17:00:25 +0000
-To: Arnd Bergmann <arnd@kernel.org>
+	id 69DB7C433D6; Thu, 28 Jul 2022 08:07:06 +0000 (UTC)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 94879C433C1
+	for <soc@kernel.org>; Thu, 28 Jul 2022 08:07:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 94879C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.206])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LtjnQ1NTCz67Lgb;
+	Thu, 28 Jul 2022 16:03:06 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 10:06:56 +0200
+Received: from [10.126.174.188] (10.126.174.188) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Jul 2022 09:06:56 +0100
+Message-ID: <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
+Date: Thu, 28 Jul 2022 09:06:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, Linux ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+CC: Linux ARM <linux-arm-kernel@lists.infradead.org>, Olof Johansson
+	<olof@lixom.net>, SoC Team <soc@kernel.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+ <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+From: John Garry <john.garry@huawei.com>
+In-Reply-To: <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.174.188]
+X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
 
-The pull request you sent on Wed, 27 Jul 2022 17:21:00 +0200:
+trim list
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-5.19-4
+On 25/07/2022 13:51, Arnd Bergmann wrote:
+>>> CONFIG_SLIMBUS=m
+>> Config 5bd773242f75 added a kconfig "imply" on config SLIMBUS from
+>> config SOUNDWIRE_QCOM, and this happens to mean that we don't explicitly
+>> require config SLIMBUS enabled in the defconfig.
+> That 'imply' looks like it was added to solve a problem using the old 'imply'
+> semantics that are not what this keyword does today. I suspect it's still
+> broken when CONFIG=SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m,
+> and the correct fix is to use a dependency like
+> 
+>        depends on SLIMBUS || !SLIMBUS
+> 
+> so the defconfig symbol should stay.
+> 
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9d8a8616ee47f478a9f78ab97f55c3fbf71bb5f0
+JFYI, building for CONFIG_SOUNDWIRE_QCOM=y and CONFIG_SLIBMUS=m is ok. 
+The driver has a runtime check for CONFIG_SLIMBUS in qcom_swrm_probe().
 
-Thank you!
+That implementation seems consistent with guidance in 
+kconfig-language.rst - so do you think that there is still a problem?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+thanks,
+John
