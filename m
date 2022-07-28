@@ -1,96 +1,177 @@
-Return-Path: <SRS0=Sq5O=YB=bgdev.pl=brgl@kernel.org>
+Return-Path: <SRS0=mIYl=YB=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86A90C04A68
-	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 13:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C88EDC04A68
+	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 17:34:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 58046C433D6; Thu, 28 Jul 2022 13:50:33 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	id 86BA4C433B5; Thu, 28 Jul 2022 17:34:54 +0000 (UTC)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17CFFC433D7
-	for <soc@kernel.org>; Thu, 28 Jul 2022 13:50:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17CFFC433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-ej1-f44.google.com with SMTP id l23so3271952ejr.5
-        for <soc@kernel.org>; Thu, 28 Jul 2022 06:50:31 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7A569C433D6;
+	Thu, 28 Jul 2022 17:34:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A569C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id q18so3148887wrx.8;
+        Thu, 28 Jul 2022 10:34:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vxq8TONSE00HXKwla5aOrD7/8grrZxrUZOEScjMYlXo=;
-        b=I6w8bTdjtiWIAiiIyaZ8AqDCot6M72QWjJBec1p0ARnt8AHMFhDNL//ZXHs6Aj4TcJ
-         /igAyJV2zhTPOL5+D4ckDgbeeKGK3pDFJZ+uLHafanehs6HrIAZgeCEw8EHOns5jIFk+
-         kyjl9Ue4ngXTZEorTt7u464GVRsyPj5c8vMftb95KYLL3gFvZNpyv6A5Zo94ZzGwndM3
-         7+JncdsyRgSX7u3FMswQZT3L7jNW+jf0yxlZ6ZPCMyQTccQP9r8yzYtBQR4prpLllOTd
-         4gUdCmFwmc7lUNriFAqKS368bnIz7FImfmejvwn+pqMKb/5uwMK0Lacm33F2cCXgb+o5
-         MBUQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XZ4zIVvfcCsidkeWaZTdSTzaHcuDeTcNOjLwNCugDn8=;
+        b=gTHGJkgG1gude+JyHmX79TwGE73T2WZ9MFmNcKNHi30BzronT1LCyMcUDr/MqkoI5W
+         l04zpUFC92TcohG3T8lTEOUoIfo+qifgK8EtwRAme3upF5EmGtikt4Llltdtj9koqqt+
+         cp6otSuWw7/pJ4b6rz3Zpvckkm78stmSt2L3sORIM/YjuOPA9xdjcCbMhSDQ1qi6Gv6d
+         6oMQlGM/RzcHoEwB5FJ7xN9fz7Vrgfs05PvMkPWyynkrriEA/OdNY2DCpcpBD2S0r9iL
+         3MMjOtQZ3pF8VQP/8iRPpfpNF9H1eUTu9/ANn0rE4Mb7l5yTxX2dMF1Jb9E86as498rM
+         +KBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vxq8TONSE00HXKwla5aOrD7/8grrZxrUZOEScjMYlXo=;
-        b=JS4sMYCCbjgkVhQXM9QfC+M7pgHVse5VMbR2yT9K5gNCP73UD1sn5mdXpZUdITi8Eb
-         VWSpZQXCYqpd9vNUqJntDFly/5xKle3+NirNwFKsO27qvTV2AMxhHOzouNpzW+3/fayu
-         98jCd/Ysjj9otT0fr4WLJvRnB+Bw2Z50JrHDqRi39T1pdoRQ9kvTHbSVh5+fCuANr02f
-         AxFYQ1uhOjFLQat4FaoL8hIJcyU2fnyqD+o5dZGPvNS2XG2G1JT4xdeT7q8YOxypr/20
-         0rnlKr4TyT4aYAQBJwKONxkUnQVbhfnJrPjL8u5pdCoR7lb4/BY4Zg4y001TUCFvTGRF
-         Bfgg==
-X-Gm-Message-State: AJIora8p1QYPapKilyiK/5nIDxQwpA8FAlQZSKDS8guQ7rVJw4DzYXKT
-	NX4CD5KKDJ0tGTe3eCVWFOiQtOdwpVvdK+gB0F9AlA==
-X-Google-Smtp-Source: AGRyM1vd13k6pgor+DlHJHQfDA7PQXuMPPW6KeHGTUbH0ZXwLGn62yE4jjI826yPI+uPcZiWt3sa3ZGDqeczrsLkYNM=
-X-Received: by 2002:a17:907:9482:b0:72b:8c16:dac0 with SMTP id
- dm2-20020a170907948200b0072b8c16dac0mr18135736ejc.286.1659016230136; Thu, 28
- Jul 2022 06:50:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
- <20220723160513.271692-4-Mr.Bossman075@gmail.com> <CACRpkdZMFdYDssk9B7R-MH7xG8Ukp+ZQpXCRVtPRCS=SFh34mA@mail.gmail.com>
-In-Reply-To: <CACRpkdZMFdYDssk9B7R-MH7xG8Ukp+ZQpXCRVtPRCS=SFh34mA@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 28 Jul 2022 15:50:19 +0200
-Message-ID: <CAMRc=Mf02_L1Msf3Wynqu1EROq+nsizhdEWEBJR0DpTybQ=KWA@mail.gmail.com>
-Subject: Re: [PATCH v5 03/12] dt-bindings: gpio: fsl-imx-gpio: Add i.MXRT compatibles
-To: Linus Walleij <linus.walleij@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XZ4zIVvfcCsidkeWaZTdSTzaHcuDeTcNOjLwNCugDn8=;
+        b=EHc2UEpSrvaHWx6Qy1M1q3n0KKkx3irsXgLGaf3feiAmX9gny2cSi2g+l4Xcesx7nG
+         VqzyH2mbzwhRet9rSi10dnGcG57b5W+xu4xK/ctWmaCrWK2ITG7iFwUuPhuZzYQNgriM
+         8dlQ9jHoUmjIdj5VA0XcPch+Zylz8aOsxTAbqUlpMr621gEhn2LhY7YqS1FJ+sQWN8Sq
+         EEIvPC1FV0AroEaJbNli7YRt3Rd/z8jCQUMz/vrMe6VWQQoDaMe55yrVzRTsDZi/FL1f
+         7pjYVTrFH5v491zvxTM24A2E4HPd+XTlQOsoRaNPM0+pjkLV1Awztqng/ypypZ0oEbAI
+         9qJw==
+X-Gm-Message-State: ACgBeo0PgGB51HXihmyZ2DMnD08gu1221q0DFhSRX74BlhlbKoHw6LMR
+	y/S+HWYe5XkBPUXrjD8j4FQ=
+X-Google-Smtp-Source: AA6agR7/84BmZcJNcafcDcy5qOLjcy7UeHN75LEvTL+0j34k59OqIlFN5YLWf2olSxSoRNl7Q51BiQ==
+X-Received: by 2002:adf:d4c2:0:b0:21e:ddf3:8b14 with SMTP id w2-20020adfd4c2000000b0021eddf38b14mr6866wrk.355.1659029690542;
+        Thu, 28 Jul 2022 10:34:50 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id j20-20020a5d6e54000000b0021e5e5cd3a8sm1548650wrz.87.2022.07.28.10.34.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 10:34:49 -0700 (PDT)
+Date: Thu, 28 Jul 2022 19:34:47 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Jesse Taube <mr.bossman075@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
-	Rob Herring <robh+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Aisheng Dong <aisheng.dong@nxp.com>, stefan@agner.ch, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Arnd Bergmann <arnd@arndb.de>, olof@lixom.net, soc@kernel.org, 
-	Russell King <linux@armlinux.org.uk>, abel.vesa@nxp.com, dev@lynxeye.de, 
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>, Tim Harvey <tharvey@gateworks.com>, 
-	Leo Li <leoyang.li@nxp.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	cniedermaier@dh-electronics.com, clin@suse.com, 
-	giulio.benetti@benettiengineering.com, 
-	devicetree <devicetree@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Sumit Gupta <sumitg@nvidia.com>, Borislav Petkov <bp@alien8.de>,
+	arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	linux-edac@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Robert Richter <rric@kernel.org>, bbasu@nvidia.com,
+	Vikram Sethi <vsethi@nvidia.com>
+Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
+Message-ID: <YuLItw2p9k4TgoH2@orome>
+References: <20220708185608.676474-1-thierry.reding@gmail.com>
+ <20220708185608.676474-2-thierry.reding@gmail.com>
+ <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
+ <Ys6lXD6BSxjH02mW@orome>
+ <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
+ <YtAajDYfcVHRGl1U@nazgul.tnic>
+ <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="4Boa0tNoBXKDLUKH"
+Content-Disposition: inline
+In-Reply-To: <8dd2310d-cf1d-600e-0bd3-7b16c7b4ac18@nvidia.com>
+User-Agent: Mutt/2.2.6 (2022-06-05)
 
-On Tue, Jul 26, 2022 at 10:04 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Sat, Jul 23, 2022 at 6:05 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
->
-> > Both the i.MXRT1170 and 1050 have the same gpio controller as
-> > "fsl,imx35-gpio". Add i.MXRT to the compatible list.
-> >
-> > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> > Acked-by: Rob Herring <robh@kernel.org>
->
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Bartosz needs to apply this to the GPIO tree, I think it can just be applied
-> directly without regard for the rest of the patches.
->
-> Yours,
-> Linus Waleij
 
-Applied, thanks!
+--4Boa0tNoBXKDLUKH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bart
+On Fri, Jul 15, 2022 at 01:36:16PM +0530, Sumit Gupta wrote:
+> Hi Arnd, Boris,
+>=20
+> Thank you for your inputs.
+>=20
+> > > I think this is just a reflection of what other hardware can do:
+> > > most machines only detect memory errors, but the EDAC subsystem
+> > > can work with any type in principle. There are also a lot of
+> > > conditions elsewhere that can be detected but not corrected.
+> >=20
+> > Just a couple of thoughts from looking at this:
+> >=20
+> > So the EDAC thing reports *hardware* errors by using the RAS
+> > capabilities built into an IP block. So it started with memory
+> > controllers but it is getting extended to other blocks. AMD are looking
+> > at how to integrate GPU hw errors reporting into it, for example.
+> >=20
+> > Looking at that CBB thing, it looks like it is supposed to report not
+> > so much hardware errors but operational errors. Some of the hw errors
+> > reported by RAS hw are also operation-related but not the majority.
+> >=20
+>=20
+> CBB driver reports errors due to bad MMIO accesses within software.
+> The vast majority of the CBB errors tend to be programming errors in sett=
+ing
+> up address windows leading to decode errors.
+>=20
+> > Then, EDAC has this counters exposed in:
+> >=20
+> > $ grep -r . /sys/devices/system/edac/
+> > /sys/devices/system/edac/power/runtime_active_time:0
+> > /sys/devices/system/edac/power/runtime_status:unsupported
+> > /sys/devices/system/edac/power/runtime_suspended_time:0
+> > /sys/devices/system/edac/power/control:auto
+> > /sys/devices/system/edac/pci/edac_pci_log_pe:1
+> > /sys/devices/system/edac/pci/pci0/pe_count:0
+> > /sys/devices/system/edac/pci/pci0/npe_count:0
+> > /sys/devices/system/edac/pci/pci_parity_count:0
+> > /sys/devices/system/edac/pci/pci_nonparity_count:0
+> > /sys/devices/system/edac/pci/edac_pci_log_npe:1
+> > /sys/devices/system/edac/pci/edac_pci_panic_on_pe:0
+> > /sys/devices/system/edac/pci/check_pci_errors:0
+> > /sys/devices/system/edac/mc/power/runtime_active_time:0
+> > /sys/devices/system/edac/mc/power/runtime_status:unsupported
+> > ...
+> >=20
+> > with the respective hierarchy: memory controllers, PCI errors, etc.
+> >=20
+> > So the main question is, does it make sense for you to fit this into the
+> > EDAC hierarchy and what would even be the advantage of making it part of
+> > EDAC?
+> >=20
+>=20
+> I also think this doesn't seem to fit with the errors reported by EDAC wh=
+ich
+> are mainly hardware errors as Boris explained.
+> Please share your thoughts and if we can merge the patches as it is.
+
+Arnd,
+
+any more thoughts on this? Looks like there is no consensus on where
+this should go. If it's okay for this to go in via ARM SoC after all,
+I could prepare another pull request including only the CBB changes
+along with some of the reference count fixes. I could possibly also
+rework the DMADEVICES dependency patch as discussed, or we could defer
+it if it's too risky at this point.
+
+Thierry
+
+--4Boa0tNoBXKDLUKH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmLiyLcACgkQ3SOs138+
+s6FTbhAAo04Ge2JStIVBs0J6WC1LlVc7vETptyeF5ISXjOh8JFDuqQgmrTOW+iLD
+hgw4V4ID1B8Y0LJzKJoWOHus9eXqLWvo4oWVeAjZ5foCYoh4hEmiP3n+iKxqJyyD
+CLOa/nlDeQrGWU+X46hN2pTRF5GyBQlhySviRd7Ub/VpeBrRjD7Tngz1vUXt8Qpw
+UKxhKZCYcPYu+509DJFRbBM5clzW1gS1wEEmdrUaHuRcxl/jbIZtWE5uR58R/4e6
+/mlFXWE9p5dcNmNkKbFNXNV5HtBAuo3wyNqMqXRdQrIuhh0Jqb4zxF2EmlEeJMhI
+bqpbRPqQGYVM0TgW9Jq15JOw4raTj5tIw+yEUWd39f9m67ohqsYjOTZdsU+tvLOU
+N7Zq3tMl5eGQSttzxO149bfmKMsnL7PUy/QfjDfZ0MXkv4QliQMZXWF3B3izb0xu
+B0Y6MVrVNSm6xWk0vU0nhFDq7FigXPLCWfUXSOGNpLNNXjGPcmIw4qwdL09QGJHy
+bNm9a8dmSVvurgYWwvsreWd/BlLNhiU/8+KC3MFFIr9K0dC8NRraUL0qSeKsjEGf
+Tb90vgsCLtnJ9hSKzkCjA3SI4jk/ShwiW8Bbrak86EzhbyqEosEkyAaO2KZBeqG4
+oXdAP76UtXa7BP/C9a3fRxAlTbjdeuwpaMY6+sD9/OlsURNLLOo=
+=tTDm
+-----END PGP SIGNATURE-----
+
+--4Boa0tNoBXKDLUKH--
