@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F189AC04A68
-	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 22:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5573C19F2C
+	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 22:35:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BB211C43470; Thu, 28 Jul 2022 22:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CEDC4347C
-	for <soc@kernel.org>; Thu, 28 Jul 2022 22:32:59 +0000 (UTC)
+	id 89E98C43142; Thu, 28 Jul 2022 22:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A81C43140
+	for <soc@kernel.org>; Thu, 28 Jul 2022 22:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659047579;
-	bh=pFcFk6RMgO+cSRh5lcLWiEmuxgRmH1eKd1+7ROyam3A=;
+	s=k20201202; t=1659047718;
+	bh=/f1yYATtnLSqzMSC9yCEg7zS1unWpFzKtBiZDLC9RGE=;
 	h=References:In-Reply-To:From:Date:Subject:List-Id:To:From;
-	b=bgZWb4OYt0Y4Zk1nm+Ry50CV2cCPf/9UYlhjHWt+6RQm2K8RF7+G+ATS7n9eL8sqi
-	 8fQZqekN6pf8Gu4VUtUQ10G9vB4Cbyu7VwJWq8ccp/ZGntO5ZZLymMta5MxV4A7+0y
-	 ZaFf1ETFJwc4PJ7YbHj+Qe7pzSoNlis1vumOIQfLQYtqSxFEScsUaPemT8O/uWXM4X
-	 Dqi6QNkLhNlk7BnEG+hK2OkQRqktLYxiXK+5x0U8KFEEDxUkCTUjLF7cE1j9fbTjNv
-	 nhZ1ORzJhqTy/q5/ToCSmSM+yXo7c7epGjr46iDBe5dTjhAzspAJcWfN3jJg5RgMp1
-	 wRXz0qQcVvrHw==
-Received: by mail-ed1-f51.google.com with SMTP id m8so3851082edd.9
-        for <soc@kernel.org>; Thu, 28 Jul 2022 15:32:59 -0700 (PDT)
-X-Gm-Message-State: AJIora8xpMPhtDJwZ78ScLTgBwvVIxQdyHAMi7pLNnS/RCFz+QGONRYm
-	QJv9V627YD/b+2CTXiAyJHyqF+A8tcJK6DKv9zs=
-X-Google-Smtp-Source: AGRyM1sb9oOCt+nVzoCh/xHOW0ohRUyYbQSImpBrxp4C0PRsMvFkl/eOR/9BtrkRhPtGVl2pbM1WF9cEmf3gQ61POjY=
-X-Received: by 2002:a05:6402:28c4:b0:43a:cdde:e047 with SMTP id
- ef4-20020a05640228c400b0043acddee047mr1044904edb.368.1659047577830; Thu, 28
- Jul 2022 15:32:57 -0700 (PDT)
+	b=eWbnF93ks+z5QbmjP4uiivEXa63ChAhngtFOI8HmjdWm3k99MIGIn/liZAxiDTzmB
+	 AISXEUCJYozvPOyCkSBSZ7ZAXr2FawH0azztnDUhujMy7joWu1Mv2oF9kJgVHRbriJ
+	 rPql+jqSp0HhTuKtPCVPGGF27lA5VTRbTuQRLnCHDF6uSoTH9Tlit7+GBUudD4OQBT
+	 tpIGrGH31wVgssQnoTYQWTzr8bwQu4/udpaAlqbnG8/jDzhzKC2QhM+QzSnUamtWyl
+	 UuiNIosISZCFq+qC6jLPJgk0P+6cXDHXkAW9buYPq2GubBVux2nIIWg2owXGuagH6q
+	 5uOtwe2wPmirg==
+Received: by mail-ej1-f53.google.com with SMTP id os14so5500574ejb.4
+        for <soc@kernel.org>; Thu, 28 Jul 2022 15:35:18 -0700 (PDT)
+X-Gm-Message-State: AJIora8OI02ABKVhLrqINeTISyr1z47D3kZR+xMCs4PY/A7lsY+q3iDz
+	VZ3BiYSv9tZDgykwcu92J9xGUWRJ6hcfsq3h3eI=
+X-Google-Smtp-Source: AGRyM1sOEXLBswFnz7mfk5J6ldVbZIhArQuS1P8kV4cvtlAPowYFmyzNtqsbwNVOSI8RkKHOKvLSS28Mf+QVQBIppFo=
+X-Received: by 2002:a17:907:97cd:b0:72f:2df:274f with SMTP id
+ js13-20020a17090797cd00b0072f02df274fmr740990ejc.766.1659047716668; Thu, 28
+ Jul 2022 15:35:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
 In-Reply-To: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
 From: Arnd Bergmann <arnd@kernel.org>
-Date: Fri, 29 Jul 2022 00:32:42 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2VY8n16XU6+dxxGPSO0gkCwd8JiMj-g_8g-cG4ayWcyA@mail.gmail.com>
-Message-ID: <CAK8P3a2VY8n16XU6+dxxGPSO0gkCwd8JiMj-g_8g-cG4ayWcyA@mail.gmail.com>
-Subject: [GIT PULL 4/6] ARM: SoC defconfig updates for 5.20
+Date: Fri, 29 Jul 2022 00:35:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0qtt4t4rm7nQ51Z=gQVPyZ+MWV_Zi2Rai3xCLjBFspyQ@mail.gmail.com>
+Message-ID: <CAK8P3a0qtt4t4rm7nQ51Z=gQVPyZ+MWV_Zi2Rai3xCLjBFspyQ@mail.gmail.com>
+Subject: [GIT PULL 5/6] ARM: new SoC support for 5.20
 List-Id: <soc.lore.kernel.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>, SoC Team <soc@kernel.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
@@ -48,204 +48,130 @@ The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-tags/arm-defconfig-5.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-newsoc-5.20
 
-for you to fetch changes up to c95a5712beee635c4626f78218e52b978f075a17:
+for you to fetch changes up to bccd70a73db2061fc849928ad20a424afbaf3a45:
 
-  arm64: defconfig: Sync some configs with savedefconfig (2022-07-27
-15:46:11 +0200)
-
-----------------------------------------------------------------
-ARM: SoC defconfig updates for 5.20
-
-This branch includes the usual updates to defconfig files, enabling
-additional driver support for the supported platforms.
-
-There is also a global refresh for all of them that reorders the
-lines according to the 'savedefconfig' output, but without removing
-lines that are no longer part of the refresh.
-
-I went through the most common removed lines to also address them
-while making sure to catch renamed options and add them back
-under the new name.
-
-The boardfile deprecation branch is based on top of this to avoid
-conflicts against removing the unused boardfile configs from the
-generic defconfig files.
+  MAINTAINERS: rectify entry for ARM/NUVOTON NPCM ARCHITECTURE
+(2022-07-22 14:59:23 +0200)
 
 ----------------------------------------------------------------
-Arnd Bergmann (15):
-      Merge tag 'renesas-arm-defconfig-for-v5.20-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into
-arm/defconfig
-      Merge tag 'sunxi-config64-for-5.20-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into
-arm/defconfig
-      Merge tag 'tegra-for-5.20-arm64-defconfig' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into
-arm/defconfig
-      Merge tag 'imx-defconfig-5.20' of
-git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into
-arm/defconfig
-      Merge tag 'arm-soc/for-5.20/defconfig' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'arm-soc/for-5.20/defconfig-arm64' of
-https://github.com/Broadcom/stblinux into arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-5.20' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
-arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-5.20-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into
-arm/defconfig
-      ARM: refresh defconfig files
-      ARM: defconfig: remove irda remnants
-      ARM: defconfig: remove stale CONFIG_ZBOOT_ROM entries
-      ARM: defconfig: address renamed CONFIG_DEBUG_INFO=y
-      ARM: defconfig: remove broken CONFIG_THUMB disables
-      ARM: defconfig: kill remnants of CONFIG_LEDS
-      arm64: refresh defconfig file
+ARM: new SoC support for 5.20
 
-Bjorn Andersson (2):
-      arm64: defconfig: Enable Qualcomm SC8280XP providers
-      arm64: defconfig: Demote Qualcomm USB PHYs to modules
+This adds initial support for two SoC families that have been under
+review for a while. In both cases, the origonal idea was to have a
+minimally functional version, but we ended up leaving out the clk drivers
+that are still under review and will be merged through the corresponding
+subsystem tree.
 
-Dmitry Baryshkov (1):
-      arm64: defconfig: enable Qualcomm LPG leds driver
+The Nuvoton NPCM8xx is a 64-bit Baseboard Management Controller and
+based on the 32-bit NPCM7xx family but is now getting added to
+arch/arm64 as well.
 
-Geert Uytterhoeven (2):
-      ARM: shmobile: defconfig: Refresh for v5.19-rc1
-      arm64: defconfig: Enable R8A779G0 SoC
+Sunplus SP7021, also known as Plus1, is a general-purpose
+System-in-Package design based on the 32-bit Cortex-A7 SoC
+on the main chip, plus an I/O chip and memory in the same
+package.
 
-John Garry (1):
-      arm64: defconfig: Sync some configs with savedefconfig
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      Merge branch 'sunplus/newsoc' into arm/newsoc
+      Merge branch 'nuvoton/newsoc' into arm/newsoc
 
-Krzysztof Kozlowski (1):
-      arm64: defconfig: enable Qualcomm Bandwidth Monitor
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify entry for ARM/NUVOTON NPCM ARCHITECTURE
 
-Mark Brown (1):
-      arm64: defconfig: Enable Allwinner built in CODECs
+Qin Jian (9):
+      dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+      dt-bindings: reset: Add bindings for SP7021 reset driver
+      reset: Add Sunplus SP7021 reset driver
+      dt-bindings: clock: Add bindings for SP7021 clock driver
+      dt-bindings: interrupt-controller: Add bindings for SP7021
+interrupt controller
+      irqchip: Add Sunplus SP7021 interrupt controller driver
+      ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+      ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+      ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
 
-Nicolas Saenz Julienne (1):
-      arm64: defconfig: Enable DRM_V3D
+Tomer Maimon (15):
+      dt-bindings: timer: npcm: Add npcm845 compatible string
+      dt-bindings: watchdog: npcm: Add npcm845 compatible string
+      dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+      dt-bindings: reset: npcm: add GCR syscon property
+      ARM: dts: nuvoton: add reset syscon property
+      reset: npcm: using syscon instead of device data
+      dt-bindings: reset: npcm: Add support for NPCM8XX
+      reset: npcm: Add NPCM8XX support
+      dt-bindings: arm: npcm: Add maintainer
+      dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+      dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+      arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+      arm64: dts: nuvoton: Add initial NPCM8XX device tree
+      arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+      arm64: defconfig: Add Nuvoton NPCM family support
 
-Peng Fan (1):
-      arm64: defconfig: enable i.MX93 clk & pinctrl
-
-Peter Robinson (1):
-      ARM: configs: Enable DRM_V3D
-
-Sameer Pujar (1):
-      arm64: defconfig: Build Tegra OPE module
-
-Teresa Remmet (1):
-      arm64: defconfig: Enable gpio-fan support
-
-Vinod Koul (2):
-      arm64: defconfig: Enable qcom ss & hs usb phy
-      arm64: defconfig: Enable qcom interconnect drivers
-
-William Zhang (2):
-      arm64: defconfig: enable bcmbca soc support
-      ARM: multi_v7_defconfig: Update configs for BCM63138
-
- arch/arm/configs/am200epdkit_defconfig    |  28 +++---
- arch/arm/configs/aspeed_g4_defconfig      |  17 ++--
- arch/arm/configs/aspeed_g5_defconfig      |  17 ++--
- arch/arm/configs/assabet_defconfig        |  19 ++--
- arch/arm/configs/at91_dt_defconfig        |  10 +--
- arch/arm/configs/axm55xx_defconfig        |  26 +++---
- arch/arm/configs/badge4_defconfig         |  17 ++--
- arch/arm/configs/bcm2835_defconfig        |  39 +++++----
- arch/arm/configs/cerfcube_defconfig       |  24 ++---
- arch/arm/configs/clps711x_defconfig       |   6 +-
- arch/arm/configs/cm_x300_defconfig        |  28 +++---
- arch/arm/configs/cns3420vb_defconfig      |  20 ++---
- arch/arm/configs/colibri_pxa270_defconfig |  41 ++++-----
- arch/arm/configs/colibri_pxa300_defconfig |  12 +--
- arch/arm/configs/collie_defconfig         |  22 +++--
- arch/arm/configs/corgi_defconfig          |  51 +++++------
- arch/arm/configs/davinci_all_defconfig    |  28 +++---
- arch/arm/configs/dove_defconfig           |  32 ++++---
- arch/arm/configs/ep93xx_defconfig         |  18 ++--
- arch/arm/configs/eseries_pxa_defconfig    |  36 +++-----
- arch/arm/configs/exynos_defconfig         |  24 +++--
- arch/arm/configs/ezx_defconfig            |  74 ++++++++--------
- arch/arm/configs/footbridge_defconfig     |  31 +++----
- arch/arm/configs/h3600_defconfig          |  16 ++--
- arch/arm/configs/h5000_defconfig          |  20 ++---
- arch/arm/configs/hackkit_defconfig        |  12 +--
- arch/arm/configs/hisi_defconfig           |  24 ++---
- arch/arm/configs/imx_v4_v5_defconfig      |  10 +--
- arch/arm/configs/imx_v6_v7_defconfig      |   8 +-
- arch/arm/configs/integrator_defconfig     |   2 +-
- arch/arm/configs/iop32x_defconfig         |  23 +++--
- arch/arm/configs/ixp4xx_defconfig         |   1 -
- arch/arm/configs/jornada720_defconfig     |  16 ++--
- arch/arm/configs/keystone_defconfig       |  64 +++++++-------
- arch/arm/configs/lart_defconfig           |  21 ++---
- arch/arm/configs/lpc18xx_defconfig        |  16 ++--
- arch/arm/configs/lpc32xx_defconfig        |  12 ++-
- arch/arm/configs/lpd270_defconfig         |  11 +--
- arch/arm/configs/lubbock_defconfig        |  21 +++--
- arch/arm/configs/magician_defconfig       |  41 ++++-----
- arch/arm/configs/mainstone_defconfig      |  15 ++--
- arch/arm/configs/milbeaut_m10v_defconfig  |   6 +-
- arch/arm/configs/mini2440_defconfig       |   8 +-
- arch/arm/configs/mmp2_defconfig           |  32 ++++---
- arch/arm/configs/moxart_defconfig         |  20 ++---
- arch/arm/configs/mps2_defconfig           |  18 ++--
- arch/arm/configs/multi_v4t_defconfig      |   6 +-
- arch/arm/configs/multi_v5_defconfig       |  14 +--
- arch/arm/configs/multi_v7_defconfig       |  67 +++++++-------
- arch/arm/configs/mv78xx0_defconfig        |  36 ++++----
- arch/arm/configs/mvebu_v5_defconfig       |  32 ++++---
- arch/arm/configs/mvebu_v7_defconfig       |   4 +-
- arch/arm/configs/mxs_defconfig            |   6 +-
- arch/arm/configs/neponset_defconfig       |  30 ++++---
- arch/arm/configs/netwinder_defconfig      |  18 ++--
- arch/arm/configs/nhk8815_defconfig        |   8 +-
- arch/arm/configs/omap1_defconfig          |  80 ++++++++---------
- arch/arm/configs/omap2plus_defconfig      |  17 ++--
- arch/arm/configs/orion5x_defconfig        |  36 ++++----
- arch/arm/configs/oxnas_v6_defconfig       |  14 +--
- arch/arm/configs/palmz72_defconfig        |  16 ++--
- arch/arm/configs/pcm027_defconfig         |  24 +++--
- arch/arm/configs/pleb_defconfig           |   8 +-
- arch/arm/configs/pxa168_defconfig         |  22 +++--
- arch/arm/configs/pxa255-idp_defconfig     |  21 +++--
- arch/arm/configs/pxa3xx_defconfig         |  20 ++---
- arch/arm/configs/pxa910_defconfig         |  26 +++---
- arch/arm/configs/pxa_defconfig            | 140 ++++++++++++++----------------
- arch/arm/configs/qcom_defconfig           |  62 ++++++-------
- arch/arm/configs/realview_defconfig       |   8 +-
- arch/arm/configs/rpc_defconfig            |  20 ++---
- arch/arm/configs/s3c2410_defconfig        |  12 ++-
- arch/arm/configs/s3c6400_defconfig        |   4 +-
- arch/arm/configs/s5pv210_defconfig        |   6 +-
- arch/arm/configs/sama5_defconfig          |   8 +-
- arch/arm/configs/sama7_defconfig          |   8 +-
- arch/arm/configs/shannon_defconfig        |  10 +--
- arch/arm/configs/shmobile_defconfig       |   4 +-
- arch/arm/configs/simpad_defconfig         |  29 +++----
- arch/arm/configs/socfpga_defconfig        |   8 +-
- arch/arm/configs/spear13xx_defconfig      |  18 ++--
- arch/arm/configs/spear3xx_defconfig       |  12 +--
- arch/arm/configs/spear6xx_defconfig       |  10 +--
- arch/arm/configs/spitz_defconfig          |  51 +++++------
- arch/arm/configs/stm32_defconfig          |  18 ++--
- arch/arm/configs/sunxi_defconfig          |   2 +-
- arch/arm/configs/tct_hammer_defconfig     |  14 ++-
- arch/arm/configs/tegra_defconfig          |  20 ++---
- arch/arm/configs/trizeps4_defconfig       |  66 +++++++-------
- arch/arm/configs/u8500_defconfig          |   2 +-
- arch/arm/configs/versatile_defconfig      |   4 +-
- arch/arm/configs/vexpress_defconfig       |   8 +-
- arch/arm/configs/vf610m4_defconfig        |   2 +-
- arch/arm/configs/viper_defconfig          |  30 +++----
- arch/arm/configs/vt8500_v6_v7_defconfig   |   2 +-
- arch/arm/configs/xcep_defconfig           |  32 ++++---
- arch/arm/configs/zeus_defconfig           |  28 +++---
- arch/arm64/configs/defconfig              |  82 ++++++++++-------
- arch/sh/configs/ecovec24_defconfig        |   2 -
- 99 files changed, 1044 insertions(+), 1220 deletions(-)
+ .../devicetree/bindings/arm/npcm/npcm.yaml         |   7 +
+ .../devicetree/bindings/arm/npcm/nuvoton,gcr.yaml  |   2 +
+ .../devicetree/bindings/arm/sunplus,sp7021.yaml    |  29 ++
+ .../bindings/clock/nuvoton,npcm845-clk.yaml        |  49 ++++
+ .../bindings/clock/sunplus,sp7021-clkc.yaml        |  52 ++++
+ .../interrupt-controller/sunplus,sp7021-intc.yaml  |  62 +++++
+ .../bindings/reset/nuvoton,npcm750-reset.yaml      |  10 +-
+ .../devicetree/bindings/reset/sunplus,reset.yaml   |  38 +++
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml      |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt         |   3 +-
+ MAINTAINERS                                        |  19 ++
+ arch/arm/Kconfig                                   |   2 +
+ arch/arm/Makefile                                  |   1 +
+ arch/arm/boot/dts/Makefile                         |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi      |   1 +
+ arch/arm/boot/dts/sunplus-sp7021-achip.dtsi        |  84 ++++++
+ arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts       |  30 ++
+ arch/arm/boot/dts/sunplus-sp7021.dtsi              | 310 +++++++++++++++++++++
+ arch/arm/configs/multi_v7_defconfig                |   1 +
+ arch/arm/configs/sp7021_defconfig                  |  59 ++++
+ arch/arm/mach-sunplus/Kconfig                      |  27 ++
+ arch/arm/mach-sunplus/Makefile                     |   8 +
+ arch/arm/mach-sunplus/sp7021.c                     |  16 ++
+ arch/arm64/Kconfig.platforms                       |  11 +
+ arch/arm64/boot/dts/Makefile                       |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile               |   2 +
+ .../boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 170 +++++++++++
+ .../arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts |  30 ++
+ arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi   |  76 +++++
+ arch/arm64/configs/defconfig                       |   3 +
+ drivers/irqchip/Kconfig                            |   9 +
+ drivers/irqchip/Makefile                           |   1 +
+ drivers/irqchip/irq-sp7021-intc.c                  | 278 ++++++++++++++++++
+ drivers/reset/Kconfig                              |   9 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-npcm.c                         | 207 +++++++++++---
+ drivers/reset/reset-sunplus.c                      | 212 ++++++++++++++
+ include/dt-bindings/clock/nuvoton,npcm845-clk.h    |  49 ++++
+ include/dt-bindings/clock/sunplus,sp7021-clkc.h    |  88 ++++++
+ include/dt-bindings/reset/sunplus,sp7021-reset.h   |  87 ++++++
+ 40 files changed, 2012 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644
+Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644
+Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644
+Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
+ create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ create mode 100644 include/dt-bindings/reset/sunplus,sp7021-reset.h
