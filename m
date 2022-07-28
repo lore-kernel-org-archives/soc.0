@@ -1,97 +1,96 @@
-Return-Path: <SRS0=ZCVf=YB=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Sq5O=YB=bgdev.pl=brgl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F7CAC04A68
-	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 12:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86A90C04A68
+	for <soc@archiver.kernel.org>; Thu, 28 Jul 2022 13:50:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 161F8C433C1; Thu, 28 Jul 2022 12:08:38 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 58046C433D6; Thu, 28 Jul 2022 13:50:33 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9E5E4C433D6;
-	Thu, 28 Jul 2022 12:08:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E5E4C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ej1-f52.google.com ([209.85.218.52]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MyKYE-1nXzCJ0qT6-00ykgN; Thu, 28 Jul 2022 14:03:23 +0200
-Received: by mail-ej1-f52.google.com with SMTP id l23so2779357ejr.5;
-        Thu, 28 Jul 2022 05:03:22 -0700 (PDT)
-X-Gm-Message-State: AJIora+vZqoRi5FAYReqIOPYB/tJ88A8niTDOiq82q1acX5w2lrZSeBe
-	WkK5z8KkL3pUnYKbls0L6u/ZIwtdr8kyhR1WA5M=
-X-Google-Smtp-Source: AGRyM1vbcZtXff9wdVPPzf+JJ956N9jBi6RVLMTg4p5oOr7chFDjRAgayypXIkN9s9OCY7Rbo+VZ/Wqd9spSTPDDM/I=
-X-Received: by 2002:a17:907:d0f:b0:72e:db1f:9b91 with SMTP id
- gn15-20020a1709070d0f00b0072edb1f9b91mr21266735ejc.470.1659009802540; Thu, 28
- Jul 2022 05:03:22 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 17CFFC433D7
+	for <soc@kernel.org>; Thu, 28 Jul 2022 13:50:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17CFFC433D7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-ej1-f44.google.com with SMTP id l23so3271952ejr.5
+        for <soc@kernel.org>; Thu, 28 Jul 2022 06:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vxq8TONSE00HXKwla5aOrD7/8grrZxrUZOEScjMYlXo=;
+        b=I6w8bTdjtiWIAiiIyaZ8AqDCot6M72QWjJBec1p0ARnt8AHMFhDNL//ZXHs6Aj4TcJ
+         /igAyJV2zhTPOL5+D4ckDgbeeKGK3pDFJZ+uLHafanehs6HrIAZgeCEw8EHOns5jIFk+
+         kyjl9Ue4ngXTZEorTt7u464GVRsyPj5c8vMftb95KYLL3gFvZNpyv6A5Zo94ZzGwndM3
+         7+JncdsyRgSX7u3FMswQZT3L7jNW+jf0yxlZ6ZPCMyQTccQP9r8yzYtBQR4prpLllOTd
+         4gUdCmFwmc7lUNriFAqKS368bnIz7FImfmejvwn+pqMKb/5uwMK0Lacm33F2cCXgb+o5
+         MBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vxq8TONSE00HXKwla5aOrD7/8grrZxrUZOEScjMYlXo=;
+        b=JS4sMYCCbjgkVhQXM9QfC+M7pgHVse5VMbR2yT9K5gNCP73UD1sn5mdXpZUdITi8Eb
+         VWSpZQXCYqpd9vNUqJntDFly/5xKle3+NirNwFKsO27qvTV2AMxhHOzouNpzW+3/fayu
+         98jCd/Ysjj9otT0fr4WLJvRnB+Bw2Z50JrHDqRi39T1pdoRQ9kvTHbSVh5+fCuANr02f
+         AxFYQ1uhOjFLQat4FaoL8hIJcyU2fnyqD+o5dZGPvNS2XG2G1JT4xdeT7q8YOxypr/20
+         0rnlKr4TyT4aYAQBJwKONxkUnQVbhfnJrPjL8u5pdCoR7lb4/BY4Zg4y001TUCFvTGRF
+         Bfgg==
+X-Gm-Message-State: AJIora8p1QYPapKilyiK/5nIDxQwpA8FAlQZSKDS8guQ7rVJw4DzYXKT
+	NX4CD5KKDJ0tGTe3eCVWFOiQtOdwpVvdK+gB0F9AlA==
+X-Google-Smtp-Source: AGRyM1vd13k6pgor+DlHJHQfDA7PQXuMPPW6KeHGTUbH0ZXwLGn62yE4jjI826yPI+uPcZiWt3sa3ZGDqeczrsLkYNM=
+X-Received: by 2002:a17:907:9482:b0:72b:8c16:dac0 with SMTP id
+ dm2-20020a170907948200b0072b8c16dac0mr18135736ejc.286.1659016230136; Thu, 28
+ Jul 2022 06:50:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
- <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
- <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com> <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
- <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com> <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
- <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org> <CAK8P3a38uGGGLA4b2bi=v8cV6-dH5yEcvBYcwr5ChzkwMTX9_Q@mail.gmail.com>
- <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
-In-Reply-To: <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Thu, 28 Jul 2022 14:03:06 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
-Message-ID: <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
-To: Jonathan Marek <jonathan@marek.ca>
+References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
+ <20220723160513.271692-4-Mr.Bossman075@gmail.com> <CACRpkdZMFdYDssk9B7R-MH7xG8Ukp+ZQpXCRVtPRCS=SFh34mA@mail.gmail.com>
+In-Reply-To: <CACRpkdZMFdYDssk9B7R-MH7xG8Ukp+ZQpXCRVtPRCS=SFh34mA@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 28 Jul 2022 15:50:19 +0200
+Message-ID: <CAMRc=Mf02_L1Msf3Wynqu1EROq+nsizhdEWEBJR0DpTybQ=KWA@mail.gmail.com>
+Subject: Re: [PATCH v5 03/12] dt-bindings: gpio: fsl-imx-gpio: Add i.MXRT compatibles
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	John Garry <john.garry@huawei.com>, Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>
+Cc: Jesse Taube <mr.bossman075@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+	Rob Herring <robh+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Sascha Hauer <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Aisheng Dong <aisheng.dong@nxp.com>, stefan@agner.ch, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Arnd Bergmann <arnd@arndb.de>, olof@lixom.net, soc@kernel.org, 
+	Russell King <linux@armlinux.org.uk>, abel.vesa@nxp.com, dev@lynxeye.de, 
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>, Tim Harvey <tharvey@gateworks.com>, 
+	Leo Li <leoyang.li@nxp.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	cniedermaier@dh-electronics.com, clin@suse.com, 
+	giulio.benetti@benettiengineering.com, 
+	devicetree <devicetree@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:PkZILWH2N2gjuU9308dN7dF/qdlkvmeGXcsSMH5K5D2Req5btB6
- lpo6wGGgjMszu00/cz862Hnnb3iSoZY7ot/UxTUr5lDNBP/R3SZBPScPEfDdknVwkUvVs/a
- O1p9eIp2Fpnu/o2NadBabBC4EyMNBYk5NTZkjyeau+QrvRrKujVrI5q6LQXfuvEcAPsPgMw
- ywQDXKO1neUkySIDJB7dw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9mMBVIE2Q0g=:16Vptcv2EdTGTsb3IsAFTZ
- NoMW+fTcUmT4xEgBvzJ70hwxH98KmgCFXWeUCyEs8QJVKpq8GH4ALGvKw5xLfN32zzPe883Cb
- nc0huOoB210mzj7Uiv5TkSBjO/TzyM+erANtLioLkFMt76uZen+8f2pnUSz3C74Cf41H3qtmK
- 0TMZ1CFwJtogEoZruJ4w1NvT3hDzlUlHvW3uONBY1tiBWTnUPvUt2EARK2fzRzg3eNaVWpnQc
- GzhNFfdU3fnj5eU1nP71n1D0dhj9+PVMzc6mur2MyK9LF5KSQu+gIApToDNmKYXGSJH/nYple
- y/npjx0crzKI+6jy8ES0AQRBM23YXIJeDkO/TjaGeF5zP7VWiZGw7pxSdYvYbMS6KSwWvT9hH
- yQN98/nL3CM4sPWIj+IgjBKrGLE2OAxr2zydx/CrvcSPs7bCP9vIDkDFHeGkhGuni3AFZBuaU
- +9V00S4SZNimShTKAWrU7ik42Fh+eSo39j7d8Oh+WM+BJ0wn7/eBD1om7CIRuhbJmU2ZjypbI
- xehUWIAeVV0j8m3XBAtU3UJ8lQvVYaTbsLLEQs88wnuOuksDLd4IlEd6iLidcyfE8s9cNrlaS
- 89GECjuDsjbedjQT2mtSvMOKi0WXyXlpm/pbvK9vUMxiunSkudGP9ilNv6+CNgHBKcOmcjXMk
- i0cIkZ93sowT910XQpkrkO+2Hv9EunUqYU2HK4ixnSfq2xLKWcqhdDgIiXahTGX6xWhPlhHf0
- 77j9gC0Clq4tlwrSxaFbOgIJjqgUzUGX4zNclBhEOa0EqtxjOlLBsMbM1GZwIylCqpKiEkpwX
- W/l7Y47Cb/0EKsALmyc5sjXdPxJ43XmDM3y9qLn4qcDR1tydloyBUn5fXoQ+Bo6Wl9m3Q3t1U
- MKmS1vJfTpbEDA2lT7cw==
 
-On Thu, Jul 28, 2022 at 1:57 PM Jonathan Marek <jonathan@marek.ca> wrote:
-> On 7/28/22 5:09 AM, Arnd Bergmann wrote:
-> > diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> > index 22b706350ead..f65c7737c2db 100644
-> > --- a/drivers/soundwire/qcom.c
-> > +++ b/drivers/soundwire/qcom.c
-> > @@ -1289,11 +1289,7 @@ static int qcom_swrm_probe(struct platform_device *pdev)
-> >          data = of_device_get_match_data(dev);
-> >          ctrl->rows_index = sdw_find_row_index(data->default_rows);
-> >          ctrl->cols_index = sdw_find_col_index(data->default_cols);
-> > -#if IS_REACHABLE(CONFIG_SLIMBUS)
-> > -       if (dev->parent->bus == &slimbus_bus) {
-> > -#else
-> > -       if (false) {
-> > -#endif
-> > +       if (IS_ENABLED(CONFIG_SLIMBUS) && dev->parent->bus == &slimbus_bus) {
-> >                  ctrl->reg_read = qcom_swrm_ahb_reg_read;
-> >                  ctrl->reg_write = qcom_swrm_ahb_reg_write;
-> >                  ctrl->regmap = dev_get_regmap(dev->parent, NULL);
-> >
+On Tue, Jul 26, 2022 at 10:04 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> This relies on the compiler optimizing out the reference to slimbus_bus,
-> which doesn't exist in the CONFIG_SLIMBUS=n case (not tested, but I
-> think this means an O0 build will fail?).
+> On Sat, Jul 23, 2022 at 6:05 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+>
+> > Both the i.MXRT1170 and 1050 have the same gpio controller as
+> > "fsl,imx35-gpio". Add i.MXRT to the compatible list.
+> >
+> > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> > Acked-by: Rob Herring <robh@kernel.org>
+>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Bartosz needs to apply this to the GPIO tree, I think it can just be applied
+> directly without regard for the rest of the patches.
+>
+> Yours,
+> Linus Waleij
 
-That is correct: We rely on this everywhere in the kernel, which is why
-it is impossible to build kernels with -O0.
+Applied, thanks!
 
-       Arnd
+Bart
