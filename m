@@ -1,81 +1,88 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=/Y4A=YE=marcan.st=marcan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBC32C04A68
-	for <soc@archiver.kernel.org>; Sat, 30 Jul 2022 09:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F5B3C00140
+	for <soc@archiver.kernel.org>; Sun, 31 Jul 2022 06:58:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7401BC433C1; Sat, 30 Jul 2022 09:50:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4857BC43470
-	for <soc@kernel.org>; Sat, 30 Jul 2022 09:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659174606;
-	bh=eJdYl+7HTz6rvJ5y4KauiwXp8QgyJ4pKM0LFjwd5jvE=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=KlMHK7jR51Ko4KtD/Q+MW9zG+X5M8FQwZ7M5TcH2ycojOa0ULZLTlUj1IxD8P2W+G
-	 7Ror97PSYp1NH76ik+QlhjGA23DHKJ/HsDrU9yQjeZcdDrQIvfCT6RvPsSWHC3HICv
-	 fEYNU1og0UVmBb7sh6n5M6aoqEGVAibuA3wszvCKWThq/PglcjYbkbbzdIvb3sDbcy
-	 OtDIS9xSWaBL/qOgLv8iS2dW/xWJsDnd48OPhvYu8YOi8bHi70uYqjvCVsefkTYrT0
-	 ZSlqRXRCHvucdSBkZ/dgvPacYAXJrGqb+fsOFo0kz5RCnzTe+XElnE9hyEFItLesFf
-	 hBeq2homDTnCg==
-Received: by mail-ej1-f53.google.com with SMTP id sz17so12242798ejc.9
-        for <soc@kernel.org>; Sat, 30 Jul 2022 02:50:06 -0700 (PDT)
-X-Gm-Message-State: AJIora/uJYpOIDDtazj+34fOJDpVeDQxVKcr8DiH2v63Umfug42oMIOk
-	trAhc2J6tC8d/YE5LaQqA8U5cXKVN23eJTZvU1s=
-X-Google-Smtp-Source: AGRyM1spCL6f8KRU/I4MUfqoI1Jvg3+Pgtg5WhSIuxvscGUE7ABsYMk8dE87oDsMxXYWHoTOccVigM5FMLWV/kD9f48=
-X-Received: by 2002:a17:906:98c7:b0:72b:20fe:807d with SMTP id
- zd7-20020a17090698c700b0072b20fe807dmr5793125ejb.75.1659174604488; Sat, 30
- Jul 2022 02:50:04 -0700 (PDT)
+	id A020CC433D7; Sun, 31 Jul 2022 06:58:06 +0000 (UTC)
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 84B85C433C1
+	for <soc@kernel.org>; Sun, 31 Jul 2022 06:58:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 84B85C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 9ED0B42597;
+	Sun, 31 Jul 2022 06:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1659250677; bh=wo3zwsLqb7d3BVzIjjvK8kaM4Ku2pHX15rGYZj2LALE=;
+	h=Date:From:Subject:To:Cc;
+	b=LKLnjpm847nv+/hrh2NmToLOvXPXobw6H5DtHtpaInUqpQvef8O5rDsufwb+3YBgW
+	 8XyFYxc835//GAaKOh241RbX8MjFHZUoexFs21f6JAAZi5B0fPf0iRehmnUGhLx1t0
+	 fS2DPpOwSj18BdJDb8mkVjBEdlaiQoSYtyvdsZ//aQ8mpWfn2VSSiGnp9xH590yzxm
+	 0yerYY9qPFiyth+xuUfbonMYyMY9P9WqE4ID5nddAfhJeLSBmuboICSV1ZdNk/jOrC
+	 UbJl5s8ROM/hb2RoiqDKt7DS1Izes0rTggaSk3Rlavejcb9Tl6cWkauZDqpvZq+72w
+	 PgzdEgNUn70Eg==
+Message-ID: <6de8649c-9795-54a1-fa45-8dd50355061f@marcan.st>
+Date: Sun, 31 Jul 2022 15:57:53 +0900
 MIME-Version: 1.0
-References: <CAK8P3a3GTzeJUdcjVv-1fL7h7e6XRFPA65-5xseQ4=tyZE8UDg@mail.gmail.com>
- <CAHk-=wgdnnAmDopTKXbS5u3Ty8GgAfuFOSOycsCfe6pSAqunHg@mail.gmail.com>
- <CAK8P3a0L24AxQD_72bHYY7CKvnvcYi4e_+Zq_n6KqWXzD7-G9g@mail.gmail.com> <CAHk-=wjPm7q4ikoErhEn3dgGsO_-RSyYuRYox2oHp+Z0z8FUGA@mail.gmail.com>
-In-Reply-To: <CAHk-=wjPm7q4ikoErhEn3dgGsO_-RSyYuRYox2oHp+Z0z8FUGA@mail.gmail.com>
-From: Arnd Bergmann <arnd@kernel.org>
-Date: Sat, 30 Jul 2022 11:49:45 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1DVcc=AV29AJJxMzBVoU-grFaNet0ndxPgPFvpK-ZANQ@mail.gmail.com>
-Message-ID: <CAK8P3a1DVcc=AV29AJJxMzBVoU-grFaNet0ndxPgPFvpK-ZANQ@mail.gmail.com>
-Subject: Re: [GIT PULL 0/6] SoC branches for 5.20
-To: Linus Torvalds <torvalds@linux-foundation.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From: Hector Martin <marcan@marcan.st>
+Subject: [GIT PULL] Apple SoC DT updates for 5.20
 List-Id: <soc.lore.kernel.org>
-Cc: SoC Team <soc@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+To: SoC Team <soc@kernel.org>
+Content-Language: es-ES
+Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 29, 2022 at 6:15 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Jul 29, 2022 at 12:15 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > On Fri, Jul 29, 2022 at 1:15 AM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > Hmm. I'm missing 2/6. I don't see it on lore either, so I don't think
-> > > the problem is on my end..
-> >
-> > I got a reject from the mailing list because of the size limit, not sure why you
-> > didn't get it though. Sent a smaller version of the email now.
->
-> You resent 3/6. Which I had.
->
-> It's 2/6 that I'm missing.
 
-Damn, I guess that's what I get for trying to fix it on the way out the
-door. It looks like the arm-dt-5.20 pull request is the one that bounced,
-so I resent that thinking you meant this one, but arm-drivers-5.20 never
-got sent at all.
+Hi SoC folks,
 
-The order of the first five does not matter, only the 6/6 (arm-boardfiles-5.20)
-has a dependency on the arm-defconfig-5.20 tag. None of this is urgent
-as I can send a new formal 2/6 pull request when I'm home on Tuesday,
-or you can just pull it from
+Please merge these DT changes for 5.20.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git arm-drivers-5.20
+I know I'm late with this one... hopefully it won't be too much trouble,
+since it's quite trivial.
 
-with the commit message from the tag. Sorry again for messing this up
-twice.
+-Hector
 
-        Arnd
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-5.20
+
+for you to fetch changes up to 5316d73ba81b5dd7fe5ecfcd4ad494a0a68ae138:
+
+  arm64: dts: apple: t8103: Add ANS2 NVMe nodes (2022-07-31 15:38:42 +0900)
+
+----------------------------------------------------------------
+Apple SoC DT updates for 5.20.
+
+This round just adds the NVMe controller nodes, since that driver is
+finally upstream. Includes one related power domain fixup.
+
+----------------------------------------------------------------
+Hector Martin (1):
+      arm64: dts: apple: Re-parent ANS2 power domains
+
+Sven Peter (1):
+      arm64: dts: apple: t8103: Add ANS2 NVMe nodes
+
+ arch/arm64/boot/dts/apple/t8103-pmgr.dtsi |  7 +------
+ arch/arm64/boot/dts/apple/t8103.dtsi      | 34 +++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+), 6 deletions(-)
+
