@@ -1,80 +1,66 @@
-Return-Path: <SRS0=8lna=YG=arm.com=sudeep.holla@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B54EC00140
-	for <soc@archiver.kernel.org>; Tue,  2 Aug 2022 13:52:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0E05C00140
+	for <soc@archiver.kernel.org>; Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 68FDBC43140; Tue,  2 Aug 2022 13:52:56 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 40614C43144;
-	Tue,  2 Aug 2022 13:52:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40614C43144
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57625D6E;
-	Tue,  2 Aug 2022 06:52:54 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 575BA3F70D;
-	Tue,  2 Aug 2022 06:52:52 -0700 (PDT)
-Date: Tue, 2 Aug 2022 14:52:49 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>, arm-soc <arm@kernel.org>,
-	SoC Team <soc@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
-	linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	Andy Gross <agross@kernel.org>, Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [GIT PULL] Qualcomm ARM64 defconfig more updates for v5.20
-Message-ID: <20220802135249.ytdq4owz3rsosvjy@bogus>
-References: <20220720230140.2113129-1-bjorn.andersson@linaro.org>
- <CAOCOHw5vj7WExi2opJ+ZvxLroq9UScHMMTuyyysMs3zJEfxgEQ@mail.gmail.com>
- <CAK8P3a2KeNRSfVdd8F5cVp4oU+K+Nwo0bVx_kEVHXEx_0AkZAQ@mail.gmail.com>
- <20220802095357.uibssv3s72rvlj7p@bogus>
- <CAK8P3a1acYba+g+6zLm1F8o=9U6BdKNDMgapQT-vrV+7hGHg4w@mail.gmail.com>
+	id D4D4AC433D6; Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BEC23C433D7;
+	Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659448829;
+	bh=STe1VTh5CnLhkzer5rcMCQf3cTNPOYS9geu+p3V9E14=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=gvM+dj6CfSGWGJZ+djkYSpzwoWWGfA0akEg/syDZ0Z27zsml7thb3YhklbD1PfY1H
+	 Ll7ER9WbHzMKpvO9o4OWtVFL7ROu2aoK3fXpBEu8Sa9cB6B99RAal0m6aHotKQDR8g
+	 qHzm3WnFsXv/JCdTdu/FQiHZeb8/3CAz3ae0JCQZOOpHphGvWx5DYINSFi8DOf/pXi
+	 Tw9UO5ogSy2Xr+JUOCJHxJiYqzY2IpdMENwLRMrnt+XBk4dHRz1+05zkWx8MVvGon1
+	 IGwfktQQNlXu0ReRyNNIFB4OEs0+lf/KvMd7kmjUhHzow08hTETFc3jqcDqVv6zy4n
+	 fHKDPj7NH/+Sg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97CABC43143;
+	Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a1acYba+g+6zLm1F8o=9U6BdKNDMgapQT-vrV+7hGHg4w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] ARM: SoC fixes for 5.19, part 4
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <165944882961.23404.7605191415317485092.git-patchwork-notify@kernel.org>
+Date: Tue, 02 Aug 2022 14:00:29 +0000
+References: <CAK8P3a3PK8+V7N2rNiD2VvygUwtJmY1rs1JCAGiUeDsQB6=f1A@mail.gmail.com>
+In-Reply-To: <CAK8P3a3PK8+V7N2rNiD2VvygUwtJmY1rs1JCAGiUeDsQB6=f1A@mail.gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Tue, Aug 02, 2022 at 12:22:33PM +0200, Arnd Bergmann wrote:
-> On Tue, Aug 2, 2022 at 11:53 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+Hello:
 
-[...]
+This pull request was applied to soc/soc.git (arm/fixes)
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-> > Ah that explains why I didn't receive notification as well. I noticed
-> > the changes were pulled. I didn't bother to ask, but now that you mention
-> > it is likely to be the sender address as I can't send you email to your
-> > @arndb.de and hence I always use kernel.org. Are these automated emails
-> > sent via arnd@arndb.de ?
->
-> I don't think it has anything to do with my email address. This is about pull
-> requests that get sent to the soc@kernel.org alias. Patchwork monitors these
-> and puts them into https://patchwork.kernel.org/project/linux-soc/list/ from
-> where I can pick them up or reject them using pwclient. Anything sent there
-> requires an action to get it out of the list of 'New' entries.
->
-> In most cases patchwork will then notice when I push out the merge commit
-> to the for-next branch of the soc tree. However for some senders (Bjorn and
-> Krzysztof notably), this only works for patch emails but not pull requests, so
-> I have to use 'b4' to to send an 'applied, thanks' message myself, which I send
-> using gmail with my kernel.org address as sender.
->
+On Wed, 27 Jul 2022 17:21:00 +0200 you wrote:
+> The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
+> 
+>   Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+> tags/soc-fixes-5.19-4
+> 
+> [...]
 
-Thanks for the details. I have received those automated "merged" emails in
-the past for sure(e.g. my PR for v5.19) but I didn't get this time(PRs for
-v5.20).
+Here is the summary with links:
+  - [GIT,PULL] ARM: SoC fixes for 5.19, part 4
+    https://git.kernel.org/soc/soc/c/9d8a8616ee47
 
-I assumed it wasn't working that day as I didn't see emails for other PRs
-that got merged more or less at the same time. Anyways I have soc tree as
-remote and generally check the contents of next especially if I have pending
-PR, so I don't rely much on the emails.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---
-Regards,
-Sudeep
+
