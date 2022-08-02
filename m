@@ -1,64 +1,109 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 131E3C3F6B0
-	for <soc@archiver.kernel.org>; Tue,  2 Aug 2022 14:00:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CBF1C19F28
+	for <soc@archiver.kernel.org>; Tue,  2 Aug 2022 14:02:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DCBB5C433B5; Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C2A9AC433C1;
-	Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
+	id 4675FC433D7; Tue,  2 Aug 2022 14:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC6CC43140;
+	Tue,  2 Aug 2022 14:02:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659448829;
-	bh=s6uZCvbge3l05Y3XI8JpyHRXjXtug9Wy64NyTfao7tY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=JNokWAPnV9VYIytm2tCpby/jh3xpH45denPL+MjNzldLa48BXHFKF5RV95whpbLUl
-	 2zyCz9puk4rmL93Jh38KKHl6ff1XTOLkdRTCqCEgsN6HC10gLyDrEtWMMUZMCGCWU7
-	 qxt0AWpIOGBxFTpl5Xn0cG/juRyK6SY7eSTdKZUFzqqCwVKroDW7ffJ7do40vTGKwX
-	 tiKl4fGl27hJwv0Gh0DPdJmEozM5zKIHFapTFKn3Uh0b4Zd9de/z1zDxTIf+XIItKm
-	 X6o+Xt9+GS4aMXEtWMz4Z2DbvmrnpHzGbrJFOhEP1c91EONqpcSH7r3V1FSd9InnBT
-	 3sifE18ySIRxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A04D4C43142;
-	Tue,  2 Aug 2022 14:00:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Apple SoC MAINTAINERS updates for 5.20
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <165944882964.23404.12148855611121878836.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Aug 2022 14:00:29 +0000
-References: <308defdf-8873-63ed-dc9c-a88cd7a3cc2f@marcan.st>
-In-Reply-To: <308defdf-8873-63ed-dc9c-a88cd7a3cc2f@marcan.st>
-To: Hector Martin <marcan@marcan.st>
+	s=k20201202; t=1659448924;
+	bh=ftaDza9JOwFBXgyzsweemBRCFuC1pJDgWy5ByxgdCyA=;
+	h=From:To:List-Id:Cc:Subject:Date:From;
+	b=hhZzX/5OxsTr0Nzr1FGG8IdXvHpfWaNikd67mRAzY2jXkLfZDhamhLaww69jeu4Vx
+	 QkS1phIdfo7C0PZThOpMcvTtF4YStIFDQOB9sd+x/T5SbHLG523m8elrF3kwN1zcr8
+	 aL3+Gx7UumIGfHC+/VPU4WbC/CD/3bZ2DY9G2dS0go3ykQVTelK7Y1QJ/EDsRCbsaP
+	 B+zabJPwCJp+aLMu8GqJqzUOAZ1DQ2ovTzMZeP8ubZ3Kr/ghH1RQkpr8R2tUvhrRnW
+	 5aupr7iUN9tC/6uTup1puU4Ti9diBxmz36zA4SrM+nhC6CTPG73r2mm9bZmgt6y8Gc
+	 CrDtM6ubbTwdg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: soc@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 0/6] SoC branches for 6.0, second try
+Date: Tue,  2 Aug 2022 16:01:54 +0200
+Message-Id: <20220802140200.3987874-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello:
+I screwed up the pull requests when I sent them out before being away
+for a few days. These are the exact same contents, but I double-checked
+everything and used a little more scripting to generate these instead
+of sending the emails manually. I hope this works better.
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+This is another large merge window for us, with over 1000 patches from
+177 contributors. I'm sending these early since I'll be out of office
+for the next few days.
 
-On Sun, 31 Jul 2022 15:59:45 +0900 you wrote:
-> Hi SoC folks,
-> 
-> Please merge these MAINTAINERS changes for 5.20.
-> 
-> This one is trivial, so hopefully being this late won't cause you too
-> much trouble... My apologies.
-> 
-> [...]
+The main highlights are the addition of two new SoC platforms (Nuvoton
+NPCM8XX and Sunplus SP7021), marking 80% of the remaining pre-DT board
+files as unused for later removal, and a ton of new hardware support in
+particular for Qualcomm and Broadcom SoC platforms.
 
-Here is the summary with links:
-  - [GIT,PULL] Apple SoC MAINTAINERS updates for 5.20
-    https://git.kernel.org/soc/soc/c/879bcfc4e536
+The main contributors by number of patches this time are:
+    208 Krzysztof Kozlowski
+     46 William Zhang
+     42 Dmitry Baryshkov
+     36 AngeloGioacchino Del Regno
+     26 Arnd Bergmann
+     22 Johan Hovold
+     21 Nícolas F. R. A. Prado
+     19 Marcel Ziswiler
+     19 Konrad Dybcio
+     18 Geert Uytterhoeven
+     17 Bjorn Andersson
+     16 Marek Vasut
+     15 Tomer Maimon
+     15 Max Krummenacher
+     14 Abel Vesa
+     13 Samuel Holland
+     13 Rohit Agarwal
+     12 Cristian Marussi
+     11 Douglas Anderson
+     11 Christian Marangi
+     11 Chanho Park
+     10 Michael Walle
+     10 Fabio Estevam
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Included branches:
 
+[GIT PULL 1/6] ARM: SoC updates for 6.0
+[GIT PULL 2/6] ARM: SoC drivers for 6.0
+[GIT PULL 3/6] ARM: DT changes for 6.0
+[GIT PULL 4/6] ARM: SoC defconfig updates for 6.0
+[GIT PULL 5/6] ARM: new SoC support for 6.0
+[GIT PULL 6/6] ARM: boardfile deprecation for 6.0
+
+Dirstat:
+   2.9% Documentation/devicetree/bindings/arm/
+   3.2% Documentation/devicetree/bindings/
+  18.9% arch/arm/boot/dts/
+   1.0% arch/arm/configs/
+   6.5% arch/arm/mach-davinci/
+   1.7% arch/arm/
+   1.7% arch/arm64/boot/dts/allwinner/
+   1.3% arch/arm64/boot/dts/broadcom/bcmbca/
+   3.1% arch/arm64/boot/dts/exynos/
+  11.1% arch/arm64/boot/dts/freescale/
+   4.2% arch/arm64/boot/dts/mediatek/
+   1.2% arch/arm64/boot/dts/nvidia/
+  20.1% arch/arm64/boot/dts/qcom/
+   1.5% arch/arm64/boot/dts/renesas/
+   1.2% arch/arm64/boot/dts/rockchip/
+   3.7% arch/arm64/boot/dts/
+   3.4% drivers/firmware/arm_scmi/
+   5.6% drivers/soc/mediatek/
+   1.1% drivers/soc/qcom/
+   2.8% drivers/
+   1.2% include/dt-bindings/clock/
+   1.0% include/
+ 1297 files changed, 45609 insertions(+), 12448 deletions(-)
 
