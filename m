@@ -1,89 +1,96 @@
-Return-Path: <SRS0=9mgv=YI=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=AcIN=YI=huawei.com=john.garry@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9C5BC00144
-	for <soc@archiver.kernel.org>; Thu,  4 Aug 2022 07:05:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB07C19F2B
+	for <soc@archiver.kernel.org>; Thu,  4 Aug 2022 10:35:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9FA51C43470; Thu,  4 Aug 2022 07:05:27 +0000 (UTC)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 88E9CC433B5; Thu,  4 Aug 2022 10:35:29 +0000 (UTC)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C7B8BC433D6
-	for <soc@kernel.org>; Thu,  4 Aug 2022 07:05:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7B8BC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id y11so29492514lfs.6
-        for <soc@kernel.org>; Thu, 04 Aug 2022 00:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8nMuzVeetPyhe+M16iIwrFxgbYWe0kXYut8sK7EQU0Y=;
-        b=lD5CSRtXzBY36OaOtiXdl27m3c6V+TNn43Zwl1Qv7zaK2KULIMLwbv9FPsoBFXB4aE
-         lqMoIcQqEdiaokJTtdDxsOgsrBGqKhdhoVK/ry0euHC47RtoWG8/KBwiBm21OYPBC1Z2
-         4PkLG0prwBsvAWEz5xjzPmMV95G7Gs+lzBKGQOd6l2j1mfYG1Ux+vbykdn0gVyIlosAW
-         OYsBRENhh0zzL35Q7xQMQyapfUnAAHddd3qhB75JQTVEwpZg9yQdrD9+lmfzZg5mOomk
-         uiTE0X+bT6VXPoynAUprQ2I28PZEvw6jE+MYtoo397KAxc/bgmh3FASAQ4HpPTK91y41
-         evHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8nMuzVeetPyhe+M16iIwrFxgbYWe0kXYut8sK7EQU0Y=;
-        b=OjOsZ44/JnRTS35+b1Cm7DsiofqJnmytlalwveEmLXr5ZizBDOGNpAXBXax5BU/6uh
-         IftzZkpY6K9WtQAThmx0VY4/p5flPzXn9SsmSr0QiKTEXVkc8xmO6An8JmRdhZV9i76j
-         /3re/RkY3gXGZ8Eoj3lh2ArbKl/xguZRJRs/scY9afgkFfcpYImq01hHU0fXUF4H2FOY
-         ckNp2jlwMFeO+TNIjDEFmheBVAGFsQx8wD8bSV6YVfrNDkijdLgAiAIX6Or0FfrGY/o6
-         deC8JzrMTgpKoftWnSYaOedql6TD5XCLeqRDKonGJrQM2RsczyqG10Q9BzGfli3u8z/X
-         8jxQ==
-X-Gm-Message-State: ACgBeo3qv3SBZ8XIs1S38yQ20oCR7mDNbVOxGRqGDj29M3gPVY1XJeDX
-	5qyuigTaZpK4k3GixL542IU3JA==
-X-Google-Smtp-Source: AA6agR4nu7I3vhsmogjlzU0lvqxd4qGusLqm2g20Ed9y4Ai1CgW6tIioiBSmBvwIuInJs6NkltBZeQ==
-X-Received: by 2002:a05:6512:33ca:b0:48a:779b:fbe2 with SMTP id d10-20020a05651233ca00b0048a779bfbe2mr239568lfg.557.1659596724770;
-        Thu, 04 Aug 2022 00:05:24 -0700 (PDT)
-Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id v14-20020a2e2f0e000000b0025e436214c8sm15160ljv.78.2022.08.04.00.05.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 00:05:24 -0700 (PDT)
-Message-ID: <535f97e5-5a79-5d62-fba4-419a451eb14a@linaro.org>
-Date: Thu, 4 Aug 2022 09:05:22 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 59C16C433D7;
+	Thu,  4 Aug 2022 10:35:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 59C16C433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lz4l34tRkz67Nl1;
+	Thu,  4 Aug 2022 18:31:11 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 4 Aug 2022 12:35:24 +0200
+Received: from [10.195.34.58] (10.195.34.58) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
+ 2022 11:35:23 +0100
+Message-ID: <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
+Date: Thu, 4 Aug 2022 11:35:26 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 1/2] ARM: dts: imx7d: add dts for UC-8210/8220 hardware
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: soundwire qcom slimbus dependency (was Re: [PATCH 0/2] arm64
+ defconfig: Get faddr2line working)
+To: Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>
 List-Id: <soc.lore.kernel.org>
-To: =?UTF-8?B?SmltbXkgQ2hlbiAo6Zmz5rC46YGUKQ==?= <jimmy.chen@moxa.com>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- "soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
-Cc: "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220719030718.28826-1-jimmy.chen@moxa.com>
- <SEYPR01MB4272BC601A478A322F964AFEFA9F9@SEYPR01MB4272.apcprd01.prod.exchangelabs.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SEYPR01MB4272BC601A478A322F964AFEFA9F9@SEYPR01MB4272.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+CC: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Linux ARM
+	<linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>, "SoC
+ Team" <soc@kernel.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+ <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+ <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
+ <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
+ <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org>
+ <CAK8P3a38uGGGLA4b2bi=v8cV6-dH5yEcvBYcwr5ChzkwMTX9_Q@mail.gmail.com>
+ <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
+ <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
+From: John Garry <john.garry@huawei.com>
+In-Reply-To: <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.34.58]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
 
-On 04/08/2022 08:53, Jimmy Chen (陳永達) wrote:
-> Any advice is appreciated for this patch?
+On 28/07/2022 13:03, Arnd Bergmann wrote:
+> On Thu, Jul 28, 2022 at 1:57 PM Jonathan Marek <jonathan@marek.ca> wrote:
+>> On 7/28/22 5:09 AM, Arnd Bergmann wrote:
+>>> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+>>> index 22b706350ead..f65c7737c2db 100644
+>>> --- a/drivers/soundwire/qcom.c
+>>> +++ b/drivers/soundwire/qcom.c
+>>> @@ -1289,11 +1289,7 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>>>           data = of_device_get_match_data(dev);
+>>>           ctrl->rows_index = sdw_find_row_index(data->default_rows);
+>>>           ctrl->cols_index = sdw_find_col_index(data->default_cols);
+>>> -#if IS_REACHABLE(CONFIG_SLIMBUS)
+>>> -       if (dev->parent->bus == &slimbus_bus) {
+>>> -#else
+>>> -       if (false) {
+>>> -#endif
+>>> +       if (IS_ENABLED(CONFIG_SLIMBUS) && dev->parent->bus == &slimbus_bus) {
+>>>                   ctrl->reg_read = qcom_swrm_ahb_reg_read;
+>>>                   ctrl->reg_write = qcom_swrm_ahb_reg_write;
+>>>                   ctrl->regmap = dev_get_regmap(dev->parent, NULL);
+>>>
+>>
+>> This relies on the compiler optimizing out the reference to slimbus_bus,
+>> which doesn't exist in the CONFIG_SLIMBUS=n case (not tested, but I
+>> think this means an O0 build will fail?).
+> 
+> That is correct: We rely on this everywhere in the kernel, which is why
+> it is impossible to build kernels with -O0.
+> 
 
-You already received comments and did not implement them.
-https://lore.kernel.org/all/df14931e-847e-4776-74ae-8c35a1cd863d@linaro.org/
+Was there any patch sent to fix/improve this? I could not see any. Or 
+any plan to do so?
 
-Implement first all the feedback.
-
-
-Best regards,
-Krzysztof
+Thanks,
+John
