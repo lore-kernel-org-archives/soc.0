@@ -1,103 +1,140 @@
-Return-Path: <SRS0=2uS4=YI=gmail.com=f.fainelli@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F05C19F2A
-	for <soc@archiver.kernel.org>; Thu,  4 Aug 2022 18:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE295C00140
+	for <soc@archiver.kernel.org>; Fri,  5 Aug 2022 10:21:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3EC37C433D6; Thu,  4 Aug 2022 18:11:30 +0000 (UTC)
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4CC21C433C1;
-	Thu,  4 Aug 2022 18:11:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4CC21C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f181.google.com with SMTP id c3so211952qko.1;
-        Thu, 04 Aug 2022 11:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=37y1pNEyQ+ddREX5K3poWhk+osrjYe1S/O8gGeEYV/s=;
-        b=XcUgUM14PB1rlQx8PWU05XJdYwxpGH95vXAU1vNxBwwBGgsb5J9xX61pPBfV5V0ddc
-         B7uuHsIwFNy5VdzmEYs4+v0lNIQlUJ6IzCg7B7ZWaqgKH4X7jJRzYmPjW/FR/1C07hGo
-         FKzCQMGlZWq+oqTg8J7e1JhAo+VZI5vqD5FPqDoSnHqrx73iRxwiN/AvprUf7LNTAU1X
-         4Q7Sven4ksdBwjhdXUYtHz7xsS6X2PwGc8/ZTzGxwninwdSkfyx3kgn4/ReO+Iqf7FGh
-         mbLetj4EdRfGkqqGzSfpDINsGjm8KWaH37ksejtLjGWJ0IvHnBU2zckAVGIHuWW2CGJ+
-         JX3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=37y1pNEyQ+ddREX5K3poWhk+osrjYe1S/O8gGeEYV/s=;
-        b=xJVDIdv7vl0soZkn/inQpmg+c/oayl22gavJWk7bv3Vmg4vJ1k9TpV6/3KfLU9gY8Z
-         K+qUh0DB3Do5OoE4UJUD5E1tbV91UHYwYLYUrW01wzhxuD/PLxGlKC/KD5CUhNQPOxL6
-         1uJSr0ip2U/kAVkqGpBNnEEjMi5xFNgCz1FY1gs0fYKaszq+gyKl2r/4x5pnIP5hrpUk
-         jqPEwpVFZ+TzjbO/KyDffR7bE71nAJXuVu2I4aku8pUHyUUd7L8LKHcEPkwdvgaqax7T
-         t8we27O+kyJPHkFV7HsW0t3bzlc7qFFR12Qma+00TQZDU1fWj+HtUR55hA8X3nYwvRjl
-         nMyw==
-X-Gm-Message-State: ACgBeo3AvV3iXjuyO6lT5qNtbzj2rLt84lA03JB4JzwycBUyyZtig6yK
-	wm7R3QcvxKI2fgT1aQ1X2Zg=
-X-Google-Smtp-Source: AA6agR4EMHKVAO4xz80mWJI5XkyalMXnqJMhr9DdtUfGt7By7jtilYYT3BzC5TDnMIh6vEefcLO2sQ==
-X-Received: by 2002:a05:620a:bcc:b0:6b6:5746:f8f9 with SMTP id s12-20020a05620a0bcc00b006b65746f8f9mr2334700qki.729.1659636688203;
-        Thu, 04 Aug 2022 11:11:28 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bx7-20020a05622a090700b0031ef67386a5sm998062qtb.68.2022.08.04.11.11.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 11:11:26 -0700 (PDT)
-Message-ID: <143a7faf-70fc-010f-bdbd-9f96f918c280@gmail.com>
-Date: Thu, 4 Aug 2022 11:11:23 -0700
+	id BE7F8C43470; Fri,  5 Aug 2022 10:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B61C433C1
+	for <soc@kernel.org>; Fri,  5 Aug 2022 10:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1659694910;
+	bh=RAysyoRQpKeBdDuaSKztvDwO/0wZqcvSMggtWzuQ5sE=;
+	h=From:Date:Subject:To:List-Id:Cc:From;
+	b=qMZXaQoUp5XG8bXNW6Yf/b59I4w4pzamPpc5c2NxVehHATsuntNrWOwGqpCg4ECgA
+	 kMhqRqL8qvTXZies2J0tUGel3MO50WZ4TOY1tKqKP1ET7fOQAgads/60HAyxFemGL5
+	 6MuNAvFoC3izUbTKKzzIsTTMCm+LByq2OZqVpWgEM96HUpFCOM6B6anEmWIzb8Og5t
+	 AAupkL75oXl/26S69pohKbfRUs9/h92Z0/ftYwhWZjVa+07knFwoI1GUnR12ffQjo4
+	 3WOMjFW46cnnt5GtKv6qjVXb5On0Fz1Zo8LWHu/9VsZ0Q9KLipb7k/7CtMvdqCV2fV
+	 NScA0PHmZXdXg==
+Received: by mail-ej1-f54.google.com with SMTP id dc19so4153625ejb.12
+        for <soc@kernel.org>; Fri, 05 Aug 2022 03:21:50 -0700 (PDT)
+X-Gm-Message-State: ACgBeo394bsUJNhIik7nnxHHvk8GAOsrUkcHcVw21yZSAqXRzaq7WvKm
+	+G7h5K63/AQTy51ZrVwPSDoUUO9PX96PcaMW3Q8=
+X-Google-Smtp-Source: AA6agR79ANyfF5x2ZK8oLS8A4zTCaxyJ/qcRLi84KkYxaRg/QroP0u1cuVsMUHty0FWsEm7SMgNItS526gmi9ZE48eQ=
+X-Received: by 2002:a17:907:960f:b0:731:1e3:b198 with SMTP id
+ gb15-20020a170907960f00b0073101e3b198mr1024234ejc.470.1659694908826; Fri, 05
+ Aug 2022 03:21:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/4] dt-bindings: soc: bcm: use absolute path to other
- schema
-Content-Language: en-US
+From: Arnd Bergmann <arnd@kernel.org>
+Date: Fri, 5 Aug 2022 12:21:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a012ZLQZ4MKkheitdoV9k_eKkp3BZGxFV1COWwZr1-T9g@mail.gmail.com>
+Message-ID: <CAK8P3a012ZLQZ4MKkheitdoV9k_eKkp3BZGxFV1COWwZr1-T9g@mail.gmail.com>
+Subject: [GIT PULL] ARM: SoC: late updates for 6.0
+To: Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Florian Fainelli <f.fainelli@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, arm@kernel.org, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
- Saenz Julienne <nsaenz@kernel.org>, Conor Dooley
- <conor.dooley@microchip.com>, devicetree@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20220726115841.101249-1-krzysztof.kozlowski@linaro.org>
- <20220726115841.101249-2-krzysztof.kozlowski@linaro.org>
- <a70148d3-c87f-969a-b743-11c679d161d3@gmail.com>
- <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <d83f7689-303f-cecd-882a-ed6e03a8db5b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: SoC Team <soc@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/26/22 10:31, Krzysztof Kozlowski wrote:
-> On 26/07/2022 17:59, Florian Fainelli wrote:
->> On 7/26/22 04:58, Krzysztof Kozlowski wrote:
->>> Absolute path to other DT schema is preferred over relative one.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
->>
->> Are you applying those patches or do you want the SoC maintainer to do that?
-> 
-> The best if  you (SoC maintainer) would pick them up. If you cannot or
-> it is too late for this, maybe arm-soc could grab them (already Cced).
+The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd=
+:
 
-Arnd ended up picking up patches 1 and 2, FWIW.
--- 
-Florian
+  Linux 5.19 (2022-07-31 14:03:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-late-6=
+.0
+
+for you to fetch changes up to 1630eee2d4e77d8c121ab955d31befacb720bb99:
+
+  Merge branch 'arm/fixes' into arm/late (2022-08-05 11:33:33 +0200)
+
+----------------------------------------------------------------
+ARM: SoC: late updates for 6.0
+
+These updates came in after I had already tagged the branches,
+but they still seem appropriate for 6.0 and most of them were
+part of linux-next through other trees.
+
+ - The reset controller tree adds one new driver for the TI TPS380x
+   power management chip and a few minor changes in other drivers
+
+ - Apple M1 now has a DT entry for the NVMe controller after the
+   driver was merged, and has a new mailing list in the MAINTAINERS
+   file.
+
+ - Fixes for USB on the Socionext Uniphier platforms and the
+   network controller on Intel Cyclone5.
+
+----------------------------------------------------------------
+Arnd Bergmann (5):
+      Merge tag 'asahi-soc-maintainers-5.20' of
+https://github.com/AsahiLinux/linux into arm/fixes
+      Merge tag 'reset-for-v5.20' of
+git://git.pengutronix.de/pza/linux into arm/late
+      Merge tag 'asahi-soc-dt-5.20' of
+https://github.com/AsahiLinux/linux into arm/late
+      Merge tag 'socfpga_updates_for_v5.20_part2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux into
+arm/late
+      Merge branch 'arm/fixes' into arm/late
+
+Ben Dooks (2):
+      reset: allow building of reset simple driver if expert config selecte=
+d
+      reset: reset-simple should depends on HAS_IOMEM
+
+Biju Das (1):
+      dt-bindings: reset: renesas,rzg2l-usbphy-ctrl: Document RZ/G2UL
+USBPHY Control bindings
+
+Cl=C3=A9ment L=C3=A9ger (1):
+      reset: microchip-sparx5: allow building as a module
+
+Colin Ian King (1):
+      reset: tps380x: Fix spelling mistake "Voltags" -> "Voltage"
+
+Dinh Nguyen (1):
+      ARM: dts: add EMAC AXI settings for Cyclone5
+
+Hector Martin (1):
+      arm64: dts: apple: Re-parent ANS2 power domains
+
+Kunihiko Hayashi (2):
+      ARM: dts: uniphier: Fix USB interrupts for PXs2 SoC
+      arm64: dts: uniphier: Fix USB interrupts for PXs3 SoC
+
+Marco Felsch (2):
+      dt-bindings: reset: Add TPS380x documentation
+      reset: tps380x: Add TPS380x device driver supprt
+
+Philipp Zabel (2):
+      reset: a10sr: allow building under COMPILE_TEST
+      Revert "reset: microchip-sparx5: allow building as a module"
+
+Sven Peter (2):
+      MAINTAINERS: add ARM/APPLE MACHINE mailing list
+      arm64: dts: apple: t8103: Add ANS2 NVMe nodes
+
+
+ .../bindings/reset/renesas,rzg2l-usbphy-ctrl.yaml  |   1 +
+ .../bindings/reset/ti,tps380x-reset.yaml           |  49 ++++++++
+ MAINTAINERS                                        |   1 +
+ arch/arm/boot/dts/socfpga.dtsi                     |   8 ++
+ arch/arm/boot/dts/uniphier-pxs2.dtsi               |   8 +-
+ arch/arm64/boot/dts/apple/t8103-pmgr.dtsi          |   7 +-
+ arch/arm64/boot/dts/apple/t8103.dtsi               |  34 ++++++
+ arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi   |   8 +-
+ drivers/reset/Kconfig                              |  13 ++-
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-tps380x.c                      | 126 +++++++++++++++++=
+++++
+ 11 files changed, 240 insertions(+), 16 deletions(-)
+ create mode 100644 drivers/reset/reset-tps380x.c
