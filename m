@@ -1,303 +1,99 @@
-Return-Path: <sashal@kernel.org>
+Return-Path: <SRS0=fqwV=YM=gmail.com=ray.taylor5533@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21212C19F2A
-	for <soc@archiver.kernel.org>; Mon,  8 Aug 2022 01:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF885C00140
+	for <soc@archiver.kernel.org>; Mon,  8 Aug 2022 18:14:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 05709C433B5; Mon,  8 Aug 2022 01:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978DCC433C1;
-	Mon,  8 Aug 2022 01:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659922689;
-	bh=SXREVnzvqO8wUcxrg5jZC/93em7pLk39sNUu34k5Td8=;
-	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GIIQ8wAeTgjYfzMfhBtnL043JSYF8mVDM6czxvM9VP0YmlEHnY+ec+eVQeY8cb7C0
-	 5zfgfVRUfHf/UoukomGzOmAtmm/3OAo2RYMXip6ht1JveKEXSQyZyviECGJZmH3FfV
-	 Ny9CdKBoG0ZznSA2iMg9fZY9uay9q65w6aiDFdN00NQidqQeEYWM2mnhjhWKJte57e
-	 vOX6v9VZXGXiE+3ASaW5Bw9yzchlmAVV/yfpuXzeMLBn/8iudF7vH/0mf2N4Pv0wLz
-	 GudNVLnjCn+8drEeCrbjDatSC7jHjKGLLq7c9RW+kTraUqzrI8uMH/mG7lWlMyS1q+
-	 2qLVD71FFmUJg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
+	id 95859C433D7; Mon,  8 Aug 2022 18:14:00 +0000 (UTC)
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id BB43EC433D6
+	for <soc@kernel.org>; Mon,  8 Aug 2022 18:13:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BB43EC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f66.google.com with SMTP id p10so11761737wru.8
+        for <soc@kernel.org>; Mon, 08 Aug 2022 11:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:mime-version:subject:to:from:date:from:to:cc;
+        bh=N7NQD4tMuh8xOVAcPfkQgKHyDBEcWCrH4VZeEixcaUA=;
+        b=R6wOl6eR34bnK5c9/eOPUssvLpyfWeRcdLvbtSBqUuwljGgq47vS4OxCop4guwvUXk
+         oaUkT6vn/CJ6HNkyXxJSVYDIOiB+IeWMEMmFtN/gRN7Os1bttVKvZClkOF2gb8gezKAG
+         l4M2O0ZkcB5KBjsv6LPWtThUd2mtQqsMpWJFo1j3jxm+O+UbNLL6+82VuDKbGq4gA46r
+         BbMLr4q+Q1z2ol+NQGpfgCiXHvK1nnqnd0EkuZ3epWn7qrenj7OjuKAPQYNKXBU8C0zs
+         YEPyZL9ApARkPtABGUyu/dOCqDgOWQN/dKnJW//5fZsJskUTCMxTNdQEq9SvSvrtdAsO
+         Yhug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:mime-version:subject:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=N7NQD4tMuh8xOVAcPfkQgKHyDBEcWCrH4VZeEixcaUA=;
+        b=zTf2BNHNi8fsFVOVqGdsPQCzpJJaMrLYmPsNnAVC6UG8evK3287u84Ye5oSRxni9iL
+         vYT1iEevVlvAk6YHraMiJV0/FKP8wZ8GdtrFp5fshQFeWGDredjiGQ+241dCGaDCoeV9
+         qHASJqgI0TgFSB1aBjhsU6m6c/NJbmJMv9jXFc8Yj9twWyWgIahTJ3uHINA3/HPTthDP
+         1lIea73yOxjdfrMm+exeMq7MFKjRnyD/Z85fxl8bD9GZlF75u0nBB+0M/k9ed7gnomyl
+         yTKn/a2Eyx90Ph7s9iOX+3Ld/MLYVCqy8HKY7QesAe0C44x3ok/KfGr0KgAIWNI52uMF
+         zWxA==
+X-Gm-Message-State: ACgBeo2ItWknFnl5uJ/5DwdjxMtfcDVWgI1o7Fu+hYj4qlCTWi6Kt5IE
+	25QzdKc3VNbVBTWbDrTchUcMezcthCMoS0RD
+X-Google-Smtp-Source: AA6agR7bmIzymTRDLe64ijbhIuId2lgD8kHtfFQIQX7Koqo9rVF52w5kjlFJG3PGHW6kwdxyzHvI/w==
+X-Received: by 2002:a5d:47aa:0:b0:21e:e1aa:2542 with SMTP id 10-20020a5d47aa000000b0021ee1aa2542mr11924736wrb.19.1659982437819;
+        Mon, 08 Aug 2022 11:13:57 -0700 (PDT)
+Received: from user-PC ([103.209.253.16])
+        by smtp.gmail.com with ESMTPSA id ck19-20020a5d5e93000000b0021ee65426a2sm11863665wrb.65.2022.08.08.11.13.55
+        for <soc@kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Aug 2022 11:13:57 -0700 (PDT)
+Date: Mon, 8 Aug 2022 22:02:29 +0400
+From: =?UTF-8?B?2LPYp9mF2Yog2KfZhNi52KfZhdix2Yo=?= <ray.taylor5533@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Christian Lamparter <chunkeey@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Sasha Levin <sashal@kernel.org>,
-	olof@lixom.net,
-	soc@kernel.org,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	hauke@hauke-m.de,
-	zajec5@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 16/29] ARM: dts: BCM5301X: Add DT for Meraki MR26
-Date: Sun,  7 Aug 2022 21:37:26 -0400
-Message-Id: <20220808013741.316026-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013741.316026-1-sashal@kernel.org>
-References: <20220808013741.316026-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+To: soc <soc@kernel.org>
+Subject: Re: Reminder of my previous letter.
+X-Priority: 3
+X-GUID: 360E734A-6FCD-4BA7-99F5-121E3A18D98E
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.23.121[en]
+Mime-Version: 1.0
+Message-ID: <2022080821431245637436@gmail.com>
+Content-Type: multipart/alternative;
+	boundary="----=_001_NextPart413703443542_=----"
 
-From: Christian Lamparter <chunkeey@gmail.com>
+This is a multi-part message in MIME format.
 
-[ Upstream commit 935327a73553001f8d81375c76985d05f604507f ]
+------=_001_NextPart413703443542_=----
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-Meraki MR26 is an EOL wireless access point featuring a
-PoE ethernet port and two dual-band 3x3 MIMO 802.11n
-radios and 1x1 dual-band WIFI dedicated to scanning.
+R29vZCBkYXkgbXkgRnJpZW5kLCBJIGhvcGUgeW91IHJlY2VpdmVkIG15IHByZXZpb3VzIGxldHRl
+cj8gSSBiZWxpZXZlIHlvdeKAmXJlIHNtYXJ0IGFuZCBhIGJ1c2luZXNzIG15c3RlcmlvdXMgcGVy
+c29uLiBJdCB3b3VsZCBiZSBhbiBob25vciBpZiB3ZSBjYW4gYmUgZnJpZW5kcy4gSSBhbSBBbC1B
+bXJpLCBmcm9tIER1YmFpLiBQbGVhc2UgY2FuIHdlIGhhdmUgYSBidXNpbmVzcyBkaXNjdXNzaW9u
+IHRoYXQgY2FuIGJlbmVmaXQgYm90aCBvZiB1cz8gSSB3aWxsIGV4cGxhaW4gdGhlIGRldGFpbHMg
+dG8geW91ciB1bmRlcnN0YW5kaW5nLg0KDQo=
 
-Thank you Amir for the unit and PSU.
+------=_001_NextPart413703443542_=----
+Content-Type: text/html;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hardware info:
-SOC   : Broadcom BCM53015A1KFEBG (dual-core Cortex-A9 CPU at 800 MHz)
-RAM   : SK Hynix Inc. H5TQ1G63EFR, 1 GBit DDR3 SDRAM = 128 MiB
-NAND  : Spansion S34ML01G100TF100, 1 GBit SLC NAND Flash = 128 MiB
-ETH   : 1 GBit Ethernet Port - PoE (TPS23754 PoE Interface)
-WIFI0 : Broadcom BCM43431KMLG, BCM43431 802.11 abgn (3x3:3)
-WIFI1 : Broadcom BCM43431KMLG, BCM43431 802.11 abgn (3x3:3)
-WIFI2 : Broadcom BCM43428 "Air Marshal" 802.11 abgn (1x1:1)
-BUTTON: One reset key behind a small hole next to the Ethernet Port
-LEDS  : One amber (fault), one white (indicator) LED, separate RGB-LED
-MISC  : Atmel AT24C64 8KiB EEPROM i2c
-      : Ti INA219 26V, 12-bit, i2c output current/voltage/power monitor
-
-SERIAL:
-      WARNING: The serial port needs a TTL/RS-232 3V3 level converter!
-      The Serial setting is 115200-8-N-1. The board has a populated
-      right angle 1x4 0.1" pinheader.
-      The pinout is: VCC (next to J3, has the pin 1 indicator), RX, TX, GND.
-
-Odd stuff:
-
-- uboot does not support lzma compression, but gzip'd uImage/DTB work.
-- uboot claims to support FIT, but fails to pass the DTB to the kernel.
-  Appending the dtb after the kernel image works.
-- RGB-controller is supported through an external userspace program.
-- The ubi partition contains a "board-config" volume. It stores the
-  MAC Address (0x66 in binary) and Serial No. (0x7c alpha-numerical).
-- SoC's temperature sensor always reports that it is on fire.
-  This causes the system to immediately shutdown! Looking at reported
-  "418 degree Celsius" suggests that this sensor is not working.
-
-WIFI:
-b43 is able to initialize all three WIFIs @ 802.11bg.
-| b43-phy0: Broadcom 43431 WLAN found (core revision 29)
-| bcma-pci-bridge 0000:01:00.0: bus1: Switched to core: 0x812
-| b43-phy0: Found PHY: Analog 9, Type 7 (HT), Revision 1
-| b43-phy0: Found Radio: Manuf 0x17F, ID 0x2059, Revision 0, Version 1
-| b43-phy0 warning: 5 GHz band is unsupported on this PHY
-| b43-phy1: Broadcom 43431 WLAN found (core revision 29)
-| bcma-pci-bridge 0001:01:00.0: bus2: Switched to core: 0x812
-| b43-phy1: Found PHY: Analog 9, Type 7 (HT), Revision 1
-| b43-phy1: Found Radio: Manuf 0x17F, ID 0x2059, Revision 0, Version 1
-| b43-phy1 warning: 5 GHz band is unsupported on this PHY
-| b43-phy2: Broadcom 43228 WLAN found (core revision 30)
-| bcma-pci-bridge 0002:01:00.0: bus3: Switched to core: 0x812
-| b43-phy2: Found PHY: Analog 9, Type 4 (N), Revision 16
-| b43-phy2: Found Radio: Manuf 0x17F, ID 0x2057, Revision 9, Version 1
-| Broadcom 43xx driver loaded [ Features: NL ]
-
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm/boot/dts/Makefile                 |   1 +
- arch/arm/boot/dts/bcm53015-meraki-mr26.dts | 166 +++++++++++++++++++++
- 2 files changed, 167 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm53015-meraki-mr26.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e8151681597..d93f01dddc3f 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -128,6 +128,7 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
- 	bcm47094-luxul-xwr-3150-v1.dtb \
- 	bcm47094-netgear-r8500.dtb \
- 	bcm47094-phicomm-k3.dtb \
-+	bcm53015-meraki-mr26.dtb \
- 	bcm53016-meraki-mr32.dtb \
- 	bcm94708.dtb \
- 	bcm94709.dtb \
-diff --git a/arch/arm/boot/dts/bcm53015-meraki-mr26.dts b/arch/arm/boot/dts/bcm53015-meraki-mr26.dts
-new file mode 100644
-index 000000000000..14f58033efeb
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm53015-meraki-mr26.dts
-@@ -0,0 +1,166 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Broadcom BCM470X / BCM5301X ARM platform code.
-+ * DTS for Meraki MR26 / Codename: Venom
-+ *
-+ * Copyright (C) 2022 Christian Lamparter <chunkeey@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "bcm4708.dtsi"
-+#include "bcm5301x-nand-cs0-bch8.dtsi"
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	compatible = "meraki,mr26", "brcm,bcm53015", "brcm,bcm4708";
-+	model = "Meraki MR26";
-+
-+	memory@0 {
-+		reg = <0x00000000 0x08000000>;
-+		device_type = "memory";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_FAULT;
-+			color = <LED_COLOR_ID_AMBER>;
-+			gpios = <&chipcommon 13 GPIO_ACTIVE_HIGH>;
-+			panic-indicator;
-+		};
-+		led-1 {
-+			function = LED_FUNCTION_INDICATOR;
-+			color = <LED_COLOR_ID_WHITE>;
-+			gpios = <&chipcommon 12 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	keys {
-+		compatible = "gpio-keys";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		key-restart {
-+			label = "Reset";
-+			linux,code = <KEY_RESTART>;
-+			gpios = <&chipcommon 11 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	clock-frequency = <50000000>;
-+	/delete-property/ clocks;
-+};
-+
-+&uart1 {
-+	status = "disabled";
-+};
-+
-+&gmac0 {
-+	status = "okay";
-+};
-+
-+&gmac1 {
-+	status = "disabled";
-+};
-+&gmac2 {
-+	status = "disabled";
-+};
-+&gmac3 {
-+	status = "disabled";
-+};
-+
-+&nandcs {
-+	nand-ecc-algo = "hw";
-+
-+	partitions {
-+		compatible = "fixed-partitions";
-+		#address-cells = <0x1>;
-+		#size-cells = <0x1>;
-+
-+		partition@0 {
-+			label = "u-boot";
-+			reg = <0x0 0x200000>;
-+			read-only;
-+		};
-+
-+		partition@200000 {
-+			label = "u-boot-env";
-+			reg = <0x200000 0x200000>;
-+			/* empty */
-+		};
-+
-+		partition@400000 {
-+			label = "u-boot-backup";
-+			reg = <0x400000 0x200000>;
-+			/* empty */
-+		};
-+
-+		partition@600000 {
-+			label = "u-boot-env-backup";
-+			reg = <0x600000 0x200000>;
-+			/* empty */
-+		};
-+
-+		partition@800000 {
-+			label = "ubi";
-+			reg = <0x800000 0x7780000>;
-+		};
-+	};
-+};
-+
-+&srab {
-+	status = "okay";
-+
-+	ports {
-+		port@0 {
-+			reg = <0>;
-+			label = "poe";
-+		};
-+
-+		port@5 {
-+			reg = <5>;
-+			label = "cpu";
-+			ethernet = <&gmac0>;
-+
-+			fixed-link {
-+				speed = <1000>;
-+				duplex-full;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinmux_i2c>;
-+
-+	clock-frequency = <100000>;
-+
-+	ina219@40 {
-+		compatible = "ti,ina219"; /* PoE power */
-+		reg = <0x40>;
-+		shunt-resistor = <60000>; /* = 60 mOhms */
-+	};
-+
-+	eeprom@56 {
-+		compatible = "atmel,24c64";
-+		reg = <0x56>;
-+		pagesize = <32>;
-+		read-only;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		/* it's empty */
-+	};
-+};
-+
-+&thermal {
-+	status = "disabled";
-+	/* does not work, reads 418 degree Celsius */
-+};
--- 
-2.35.1
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charse=
+t=3DUTF-8"><style>body { line-height: 1.5; }body { font-size: 14px; font-f=
+amily: "Segoe UI"; color: rgb(0, 0, 0); line-height: 1.5; }body { font-siz=
+e: 14px; font-family: "Segoe UI"; color: rgb(0, 0, 0); line-height: 1.5; }=
+</style></head><body>=0A<div><span></span></div><div><span><div style=3D"m=
+argin: 10px;"><div style=3D""><font face=3D"verdana"><span style=3D"font-s=
+ize: 13.3333px;">Good day my Friend, I hope you received my previous lette=
+r? I believe you=E2=80=99re smart and a business mysterious person. It wou=
+ld be an honor if we can be friends. I am Al-Amri, from Dubai. Please can =
+we have a business discussion that can benefit both of us? I will explain =
+the details to your understanding.</span></font></div><div style=3D"font-f=
+amily: verdana; font-size: 10pt;"><br></div></div></span></div>=0A</body><=
+/html>
+------=_001_NextPart413703443542_=------
 
