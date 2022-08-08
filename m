@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1949C19F2A
-	for <soc@archiver.kernel.org>; Mon,  8 Aug 2022 01:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A085C19F2A
+	for <soc@archiver.kernel.org>; Mon,  8 Aug 2022 01:35:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7B4D9C433D7; Mon,  8 Aug 2022 01:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DECF7C433C1;
-	Mon,  8 Aug 2022 01:32:49 +0000 (UTC)
+	id E57DCC433D6; Mon,  8 Aug 2022 01:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1BDC433C1;
+	Mon,  8 Aug 2022 01:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1659922371;
-	bh=MOvtGiMoYwIYVJR+7YLmztgfXnun9fymk2/KDu70Jb4=;
+	s=k20201202; t=1659922508;
+	bh=aDI9oW5FMeFpnrkw6D49LnTsjyQ1UqWavKcDu30KMDY=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ev9vhuW6zQaGTQfcRYJz1jGARum6FlrDDeSa0b7GLdHULS7N/tBP6zi/hna3WBIPz
-	 iV3hyRAbty4f+nkTFr3lWcLM74E7s5fq2QkEC83CBlVCW9hrlV+B+ndraMWkz51hqU
-	 iI8B/LD3YLEf6VXRj52j4mJGSM2HehITU/euxPR/WFLM01hzBEsEW32HhpffaEGfMd
-	 ih8P0XO30OiPcGTXC965E7r/eK1m3eXWo9gyI0GI+OtzEcJnJdIhoRDo8jWFOOqad3
-	 lEEz4PlWaFDY/cyAGGNxcMAJr435kKrjlRUw3q6O8oQmPX/K1B/8LWBdjI98DfTnZ8
-	 hlIT0LlK9EHCQ==
+	b=MSJzyOWQtNrjJyQtg+oyiiFhVxgh0qN/rX4IS1kgsNpTK0n9i83ZGo0qUZCvnquP9
+	 nu333AYhi5kqnqK3OaUx6xbxDZ27IhK3Mr17Ayxn0uM+JdZ+HAznnIm9O626rygoqF
+	 8ANjkM8mBSd/4DV8wvipA/ZTPaCX/wnpem575stbp9ai/Kb062DR4+ZcJzgiD1Q6U8
+	 mA3h7OgCGITI2HIjRsDJbwscVi3e7iZ3jjErOcmyU1+3U6r9Hi5vU15QMqhclLgy5/
+	 6OD4SCdh3Fy+sbog4Poiwy2xQMCG5vmSEwPQJibKY2sTet6QViplTxMyjRep133C76
+	 qajz1bc8KkKeA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,12 +35,12 @@ Cc: Christian Lamparter <chunkeey@gmail.com>,
 	zajec5@gmail.com,
 	linux-arm-kernel@lists.infradead.org,
 	devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 29/58] ARM: dts: BCM5301X: Add DT for Meraki MR26
-Date: Sun,  7 Aug 2022 21:30:47 -0400
-Message-Id: <20220808013118.313965-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 28/53] ARM: dts: BCM5301X: Add DT for Meraki MR26
+Date: Sun,  7 Aug 2022 21:33:23 -0400
+Message-Id: <20220808013350.314757-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220808013118.313965-1-sashal@kernel.org>
-References: <20220808013118.313965-1-sashal@kernel.org>
+In-Reply-To: <20220808013350.314757-1-sashal@kernel.org>
+References: <20220808013350.314757-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -115,10 +115,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  create mode 100644 arch/arm/boot/dts/bcm53015-meraki-mr26.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 5112f493f494..27eec8e670ec 100644
+index 7c16f8a2b738..13d788d1e6dc 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -135,6 +135,7 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
+@@ -133,6 +133,7 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
  	bcm47094-luxul-xwr-3150-v1.dtb \
  	bcm47094-netgear-r8500.dtb \
  	bcm47094-phicomm-k3.dtb \
