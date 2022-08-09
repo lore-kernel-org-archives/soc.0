@@ -1,92 +1,91 @@
-Return-Path: <SRS0=Ky3p=YN=huawei.com=john.garry@kernel.org>
+Return-Path: <SRS0=BO7e=YN=fris.de=frieder@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C47C6C19F2D
-	for <soc@archiver.kernel.org>; Tue,  9 Aug 2022 08:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9189C25B07
+	for <soc@archiver.kernel.org>; Tue,  9 Aug 2022 15:26:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 804B8C433C1; Tue,  9 Aug 2022 08:28:58 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	id 65092C433D6; Tue,  9 Aug 2022 15:26:00 +0000 (UTC)
+Received: from mail.fris.de (mail.fris.de [116.203.77.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D8CC7C433D6;
-	Tue,  9 Aug 2022 08:28:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D8CC7C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M25kW1FNvz687vm;
-	Tue,  9 Aug 2022 16:26:11 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 10:28:52 +0200
-Received: from [10.195.245.222] (10.195.245.222) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 09:28:51 +0100
-Message-ID: <f0c0d56e-5cbc-4337-6339-778883393b1c@huawei.com>
-Date: Tue, 9 Aug 2022 09:28:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: soundwire qcom slimbus dependency (was Re: [PATCH 0/2] arm64
- defconfig: Get faddr2line working)
-From: John Garry <john.garry@huawei.com>
-To: Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>
+	by smtp.kernel.org (Postfix) with ESMTPS id 08552C433C1;
+	Tue,  9 Aug 2022 15:25:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08552C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fris.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fris.de
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A4CF3BFADC;
+	Tue,  9 Aug 2022 17:25:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+	t=1660058746; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=YoX4ep1S3jq9Mf8bS1Qiiua+QDySidTu567sIIExWhE=;
+	b=wU9yxr+HFqkN5FMq2QIPANZNdPogLIea6bkDJAN5aaXaPq03IZzQeoVdVkzdTgxUqR+pcd
+	unSZVb6PMaUt5ZQfidaR/+RT6dCZ8Xz9BGpvWTO0eWv80MkNFDBaZu1d1njxDaOn2OeaHk
+	4tqM4877wNmdlQHrkqiYqip8sQoBqG28HC6RyDvmysp5pw0kT9A+sricNdxrdB9UVfHMf3
+	kjRSFU7hl8ps37A641VTfKAVoYu4IyclGrskaBqx2GKtFcKEIOW2u8B++1dKXzW/6cK386
+	iWYIGSjhF84+EC71NYtX2JSAkJohYdT0iD+veCS6eC+rXQKtNl1UDWb/p7TV4w==
+From: Frieder Schrempf <frieder@fris.de>
+To: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Li Yang <leoyang.li@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-CC: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Linux ARM
-	<linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>, "SoC
- Team" <soc@kernel.org>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
- <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
- <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
- <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
- <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
- <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
- <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org>
- <CAK8P3a38uGGGLA4b2bi=v8cV6-dH5yEcvBYcwr5ChzkwMTX9_Q@mail.gmail.com>
- <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
- <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
- <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
-In-Reply-To: <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	soc@kernel.org
+Subject: [PATCH 0/4] ARM: dts: imx6ul-kontron: Improve devicetrees
+Date: Tue,  9 Aug 2022 17:25:27 +0200
+Message-Id: <20220809152534.292034-1-frieder@fris.de>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.195.245.222]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 04/08/2022 11:35, John Garry wrote:
->>>>           ctrl->cols_index = sdw_find_col_index(data->default_cols);
->>>> -#if IS_REACHABLE(CONFIG_SLIMBUS)
->>>> -       if (dev->parent->bus == &slimbus_bus) {
->>>> -#else
->>>> -       if (false) {
->>>> -#endif
->>>> +       if (IS_ENABLED(CONFIG_SLIMBUS) && dev->parent->bus == 
->>>> &slimbus_bus) {
->>>>                   ctrl->reg_read = qcom_swrm_ahb_reg_read;
->>>>                   ctrl->reg_write = qcom_swrm_ahb_reg_write;
->>>>                   ctrl->regmap = dev_get_regmap(dev->parent, NULL);
->>>>
->>>
->>> This relies on the compiler optimizing out the reference to slimbus_bus,
->>> which doesn't exist in the CONFIG_SLIMBUS=n case (not tested, but I
->>> think this means an O0 build will fail?).
->>
->> That is correct: We rely on this everywhere in the kernel, which is why
->> it is impossible to build kernels with -O0.
->>
-> 
-> Was there any patch sent to fix/improve this? I could not see any. Or 
-> any plan to do so?
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-Since I got no response, I'll assume 'no'. So I'll look to do this when 
-I get a chance.
+This series contains some simplifications to the devicetree file structure
+and updates the model names of the boards to match what is used officially
+by the Kontron marketing.
 
-Thanks,
-John
+The first patch also updates the bindings to match up with the changes applied
+in the following patches.
+
+This series doesn't contain any functional changes.
+
+Frieder Schrempf (4):
+  dt-bindings: arm: fsl: imx6ul-kontron: Update bindings
+  ARM: dts: imx6ul-kontron: Simplify devicetree structure
+  ARM: dts: imx6ul-kontron: Add imx6ull-kontron-n641x-s to Makefile
+  ARM: dts: imx6ul-kontron: Adjust board and SoM model strings
+
+ .../devicetree/bindings/arm/fsl.yaml          | 31 ++++++--------
+ arch/arm/boot/dts/Makefile                    |  5 ++-
+ .../boot/dts/imx6ul-kontron-n6310-som.dtsi    | 41 -------------------
+ arch/arm/boot/dts/imx6ul-kontron-n6311-s.dts  | 16 --------
+ .../boot/dts/imx6ul-kontron-n6311-som.dtsi    | 40 ------------------
+ ...s-43.dts => imx6ul-kontron-n631x-s-43.dts} |  8 ++--
+ ...n6310-s.dts => imx6ul-kontron-n631x-s.dts} |  6 +--
+ .../boot/dts/imx6ul-kontron-n631x-som.dtsi    | 14 +++++++
+ .../dts/imx6ul-kontron-n6x1x-som-common.dtsi  | 15 +++++++
+ .../boot/dts/imx6ull-kontron-n6411-som.dtsi   | 40 ------------------
+ ...6411-s.dts => imx6ull-kontron-n641x-s.dts} |  6 +--
+ .../boot/dts/imx6ull-kontron-n641x-som.dtsi   | 13 ++++++
+ 12 files changed, 67 insertions(+), 168 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/imx6ul-kontron-n6310-som.dtsi
+ delete mode 100644 arch/arm/boot/dts/imx6ul-kontron-n6311-s.dts
+ delete mode 100644 arch/arm/boot/dts/imx6ul-kontron-n6311-som.dtsi
+ rename arch/arm/boot/dts/{imx6ul-kontron-n6310-s-43.dts => imx6ul-kontron-n631x-s-43.dts} (93%)
+ rename arch/arm/boot/dts/{imx6ul-kontron-n6310-s.dts => imx6ul-kontron-n631x-s.dts} (65%)
+ create mode 100644 arch/arm/boot/dts/imx6ul-kontron-n631x-som.dtsi
+ delete mode 100644 arch/arm/boot/dts/imx6ull-kontron-n6411-som.dtsi
+ rename arch/arm/boot/dts/{imx6ull-kontron-n6411-s.dts => imx6ull-kontron-n641x-s.dts} (60%)
+ create mode 100644 arch/arm/boot/dts/imx6ull-kontron-n641x-som.dtsi
+
+-- 
+2.37.1
