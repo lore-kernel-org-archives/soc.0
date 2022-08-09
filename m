@@ -1,99 +1,92 @@
-Return-Path: <SRS0=fqwV=YM=gmail.com=ray.taylor5533@kernel.org>
+Return-Path: <SRS0=Ky3p=YN=huawei.com=john.garry@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF885C00140
-	for <soc@archiver.kernel.org>; Mon,  8 Aug 2022 18:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C47C6C19F2D
+	for <soc@archiver.kernel.org>; Tue,  9 Aug 2022 08:28:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95859C433D7; Mon,  8 Aug 2022 18:14:00 +0000 (UTC)
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 804B8C433C1; Tue,  9 Aug 2022 08:28:58 +0000 (UTC)
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BB43EC433D6
-	for <soc@kernel.org>; Mon,  8 Aug 2022 18:13:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BB43EC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f66.google.com with SMTP id p10so11761737wru.8
-        for <soc@kernel.org>; Mon, 08 Aug 2022 11:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:mime-version:subject:to:from:date:from:to:cc;
-        bh=N7NQD4tMuh8xOVAcPfkQgKHyDBEcWCrH4VZeEixcaUA=;
-        b=R6wOl6eR34bnK5c9/eOPUssvLpyfWeRcdLvbtSBqUuwljGgq47vS4OxCop4guwvUXk
-         oaUkT6vn/CJ6HNkyXxJSVYDIOiB+IeWMEMmFtN/gRN7Os1bttVKvZClkOF2gb8gezKAG
-         l4M2O0ZkcB5KBjsv6LPWtThUd2mtQqsMpWJFo1j3jxm+O+UbNLL6+82VuDKbGq4gA46r
-         BbMLr4q+Q1z2ol+NQGpfgCiXHvK1nnqnd0EkuZ3epWn7qrenj7OjuKAPQYNKXBU8C0zs
-         YEPyZL9ApARkPtABGUyu/dOCqDgOWQN/dKnJW//5fZsJskUTCMxTNdQEq9SvSvrtdAsO
-         Yhug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:mime-version:subject:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=N7NQD4tMuh8xOVAcPfkQgKHyDBEcWCrH4VZeEixcaUA=;
-        b=zTf2BNHNi8fsFVOVqGdsPQCzpJJaMrLYmPsNnAVC6UG8evK3287u84Ye5oSRxni9iL
-         vYT1iEevVlvAk6YHraMiJV0/FKP8wZ8GdtrFp5fshQFeWGDredjiGQ+241dCGaDCoeV9
-         qHASJqgI0TgFSB1aBjhsU6m6c/NJbmJMv9jXFc8Yj9twWyWgIahTJ3uHINA3/HPTthDP
-         1lIea73yOxjdfrMm+exeMq7MFKjRnyD/Z85fxl8bD9GZlF75u0nBB+0M/k9ed7gnomyl
-         yTKn/a2Eyx90Ph7s9iOX+3Ld/MLYVCqy8HKY7QesAe0C44x3ok/KfGr0KgAIWNI52uMF
-         zWxA==
-X-Gm-Message-State: ACgBeo2ItWknFnl5uJ/5DwdjxMtfcDVWgI1o7Fu+hYj4qlCTWi6Kt5IE
-	25QzdKc3VNbVBTWbDrTchUcMezcthCMoS0RD
-X-Google-Smtp-Source: AA6agR7bmIzymTRDLe64ijbhIuId2lgD8kHtfFQIQX7Koqo9rVF52w5kjlFJG3PGHW6kwdxyzHvI/w==
-X-Received: by 2002:a5d:47aa:0:b0:21e:e1aa:2542 with SMTP id 10-20020a5d47aa000000b0021ee1aa2542mr11924736wrb.19.1659982437819;
-        Mon, 08 Aug 2022 11:13:57 -0700 (PDT)
-Received: from user-PC ([103.209.253.16])
-        by smtp.gmail.com with ESMTPSA id ck19-20020a5d5e93000000b0021ee65426a2sm11863665wrb.65.2022.08.08.11.13.55
-        for <soc@kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Aug 2022 11:13:57 -0700 (PDT)
-Date: Mon, 8 Aug 2022 22:02:29 +0400
-From: =?UTF-8?B?2LPYp9mF2Yog2KfZhNi52KfZhdix2Yo=?= <ray.taylor5533@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D8CC7C433D6;
+	Tue,  9 Aug 2022 08:28:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D8CC7C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M25kW1FNvz687vm;
+	Tue,  9 Aug 2022 16:26:11 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 10:28:52 +0200
+Received: from [10.195.245.222] (10.195.245.222) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 9 Aug 2022 09:28:51 +0100
+Message-ID: <f0c0d56e-5cbc-4337-6339-778883393b1c@huawei.com>
+Date: Tue, 9 Aug 2022 09:28:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: soundwire qcom slimbus dependency (was Re: [PATCH 0/2] arm64
+ defconfig: Get faddr2line working)
+From: John Garry <john.garry@huawei.com>
+To: Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>
 List-Id: <soc.lore.kernel.org>
-To: soc <soc@kernel.org>
-Subject: Re: Reminder of my previous letter.
-X-Priority: 3
-X-GUID: 360E734A-6FCD-4BA7-99F5-121E3A18D98E
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.23.121[en]
-Mime-Version: 1.0
-Message-ID: <2022080821431245637436@gmail.com>
-Content-Type: multipart/alternative;
-	boundary="----=_001_NextPart413703443542_=----"
+CC: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Linux ARM
+	<linux-arm-kernel@lists.infradead.org>, Olof Johansson <olof@lixom.net>, "SoC
+ Team" <soc@kernel.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Vinod Koul <vkoul@kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+ <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+ <b39bf8c4-c702-8f49-12aa-d3ac05889b80@huawei.com>
+ <CAK8P3a0w+_MLOjJAKMENe6MYvBcXWXSir47Hz34WbtdEeAmaBw@mail.gmail.com>
+ <4d010f40-6c4c-32c7-2772-1bbfa02c03b7@linaro.org>
+ <CAK8P3a38uGGGLA4b2bi=v8cV6-dH5yEcvBYcwr5ChzkwMTX9_Q@mail.gmail.com>
+ <966a62da-52b6-1789-13d6-5fe06b62c7fe@marek.ca>
+ <CAK8P3a2HGYJZvcXM+9fROys5A6c40zFWD2qATT4xssSJf6hRfQ@mail.gmail.com>
+ <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
+In-Reply-To: <dba4385e-87ef-01ee-af59-6daade4a9a24@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.195.245.222]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
 
-This is a multi-part message in MIME format.
+On 04/08/2022 11:35, John Garry wrote:
+>>>>           ctrl->cols_index = sdw_find_col_index(data->default_cols);
+>>>> -#if IS_REACHABLE(CONFIG_SLIMBUS)
+>>>> -       if (dev->parent->bus == &slimbus_bus) {
+>>>> -#else
+>>>> -       if (false) {
+>>>> -#endif
+>>>> +       if (IS_ENABLED(CONFIG_SLIMBUS) && dev->parent->bus == 
+>>>> &slimbus_bus) {
+>>>>                   ctrl->reg_read = qcom_swrm_ahb_reg_read;
+>>>>                   ctrl->reg_write = qcom_swrm_ahb_reg_write;
+>>>>                   ctrl->regmap = dev_get_regmap(dev->parent, NULL);
+>>>>
+>>>
+>>> This relies on the compiler optimizing out the reference to slimbus_bus,
+>>> which doesn't exist in the CONFIG_SLIMBUS=n case (not tested, but I
+>>> think this means an O0 build will fail?).
+>>
+>> That is correct: We rely on this everywhere in the kernel, which is why
+>> it is impossible to build kernels with -O0.
+>>
+> 
+> Was there any patch sent to fix/improve this? I could not see any. Or 
+> any plan to do so?
 
-------=_001_NextPart413703443542_=----
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+Since I got no response, I'll assume 'no'. So I'll look to do this when 
+I get a chance.
 
-R29vZCBkYXkgbXkgRnJpZW5kLCBJIGhvcGUgeW91IHJlY2VpdmVkIG15IHByZXZpb3VzIGxldHRl
-cj8gSSBiZWxpZXZlIHlvdeKAmXJlIHNtYXJ0IGFuZCBhIGJ1c2luZXNzIG15c3RlcmlvdXMgcGVy
-c29uLiBJdCB3b3VsZCBiZSBhbiBob25vciBpZiB3ZSBjYW4gYmUgZnJpZW5kcy4gSSBhbSBBbC1B
-bXJpLCBmcm9tIER1YmFpLiBQbGVhc2UgY2FuIHdlIGhhdmUgYSBidXNpbmVzcyBkaXNjdXNzaW9u
-IHRoYXQgY2FuIGJlbmVmaXQgYm90aCBvZiB1cz8gSSB3aWxsIGV4cGxhaW4gdGhlIGRldGFpbHMg
-dG8geW91ciB1bmRlcnN0YW5kaW5nLg0KDQo=
-
-------=_001_NextPart413703443542_=----
-Content-Type: text/html;
-	charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charse=
-t=3DUTF-8"><style>body { line-height: 1.5; }body { font-size: 14px; font-f=
-amily: "Segoe UI"; color: rgb(0, 0, 0); line-height: 1.5; }body { font-siz=
-e: 14px; font-family: "Segoe UI"; color: rgb(0, 0, 0); line-height: 1.5; }=
-</style></head><body>=0A<div><span></span></div><div><span><div style=3D"m=
-argin: 10px;"><div style=3D""><font face=3D"verdana"><span style=3D"font-s=
-ize: 13.3333px;">Good day my Friend, I hope you received my previous lette=
-r? I believe you=E2=80=99re smart and a business mysterious person. It wou=
-ld be an honor if we can be friends. I am Al-Amri, from Dubai. Please can =
-we have a business discussion that can benefit both of us? I will explain =
-the details to your understanding.</span></font></div><div style=3D"font-f=
-amily: verdana; font-size: 10pt;"><br></div></div></span></div>=0A</body><=
-/html>
-------=_001_NextPart413703443542_=------
-
+Thanks,
+John
