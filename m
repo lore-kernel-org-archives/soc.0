@@ -4,103 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73F05C25B08
-	for <soc@archiver.kernel.org>; Wed, 10 Aug 2022 08:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84DFCC25B08
+	for <soc@archiver.kernel.org>; Wed, 10 Aug 2022 08:19:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2DA3BC433B5; Wed, 10 Aug 2022 08:18:50 +0000 (UTC)
+	id 6CE2CC433D6; Wed, 10 Aug 2022 08:19:14 +0000 (UTC)
 Received: from mail.fris.de (mail.fris.de [116.203.77.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D7355C433D6;
-	Wed, 10 Aug 2022 08:18:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D7355C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 12015C433D7;
+	Wed, 10 Aug 2022 08:19:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12015C433D7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fris.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=fris.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AD0E9C010E;
-	Wed, 10 Aug 2022 10:18:41 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6D57FC021C;
+	Wed, 10 Aug 2022 10:19:10 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-	t=1660119523; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=FnhAaCJj1LfrfmWPWI224zJGw++9nfoQ3otxs6xa9sk=;
-	b=expopMW6lTTRTWKJgkWkHMOZdxUEPMG5+b2CHBxTapdhP0reEruuL+EChoNl/NM0fu/gOh
-	Q+mVilMmiddGMlx/KlKMRUWTw6pZ361Tvgehg75QqR1HQHBKMVDgqGtxoL5bRSw7QHNDdm
-	NO5jf6ZqmwdmW2GO74jPMVhwnzNVElNoJ625cUy6dm4KG80snqhnmHEOmRz1zmPyR0GCWw
-	DblkRvsuYJ78qZUK6nVgsLSXEIasm49exRMii1QuS4SzVs1McYikqFA2Ltr3hdfn3cKn4s
-	u4wf0DSNs4V9TlyPDIyJdq4cOJDEAdcn2a0xM4SWuPj9c91An8sOO89YQBkUVQ==
+	t=1660119551; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=24xyn2EcGe3/F2/wyHYU1Hh1pGAy3aJpsHHcjneCMio=;
+	b=NqwTyR2kfa0wGCkAne1TYHGK/yRNVixnb5DTYIyZhueX7/TGnX3CutYDAcT83viZqzVdBS
+	7VW9mRz4dglK/gzRXoMZ5n5+Z2IPsG5GcUKpGRqpPEjwZOuoYBXkwuoi799LElcxJLxbcu
+	7F53yYKpLyn0ETvX7GYH4qlHsGJOA+sWnpHQm6uNvdbB8toq4sovXp1KRdi/2uQQxUSxTY
+	dZGifT7Waei7lqb4JzVblgdffFPm+pjafjriooiKhLoV2ZwsVo6tayx90SaW0kxb8Hp3Bt
+	vl3ua0lOoR9FrLVdk4d/FspDxOZNKV6Xy9bhhrDqp8YW73uePakvuqTc8UE4gw==
 From: Frieder Schrempf <frieder@fris.de>
-To: devicetree@vger.kernel.org,
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Li Yang <leoyang.li@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Olof Johansson <olof@lixom.net>,
 	Rob Herring <robh+dt@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
 	soc@kernel.org
-Subject: [PATCH v2 0/3] ARM: dts: imx6ul-kontron: Improve devicetrees
-Date: Wed, 10 Aug 2022 10:18:20 +0200
-Message-Id: <20220810081825.19051-1-frieder@fris.de>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Denys Drozdov <denys.drozdov@toradex.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Luca Weiss <luca@z3ntu.xyz>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Thierry Reding <treding@nvidia.com>
+Subject: [PATCH v2 3/3] ARM: dts: imx6ul-kontron: Add imx6ull-kontron-bl to Makefile
+Date: Wed, 10 Aug 2022 10:18:23 +0200
+Message-Id: <20220810081825.19051-4-frieder@fris.de>
+In-Reply-To: <20220810081825.19051-1-frieder@fris.de>
+References: <20220810081825.19051-1-frieder@fris.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-This series contains some simplifications to the devicetree file structure
-and updates the model names, compatibles and devicetree file names to match
-what is used officially by the Kontron marketing.
+The imx6ull-kontron-bl.dtb wasn't build as part of the
+CONFIG_SOC_IMX6UL option. Add it to the list.
 
-This is a somewhat breaking change (for out-of-tree devicetrees that include
-the SoM files) but it reduces the complexity quite a bit, makes things easier
-to read and lets people discover the devicetree matching their hardware more
-easily.
-
-The first patch also updates the bindings to match up with the changes applied
-in the following patches.
-
-This series doesn't contain any functional changes.
+Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 ---
-Changes in v2:
-* Also rename compatibles to get rid of N6xxx notation
-* Also rename devicetree files for consistency
-* Squash model renaming patch into patch 2
-* Move part of Makefile changes to patch 2
+ arch/arm/boot/dts/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-Frieder Schrempf (3):
-  dt-bindings: arm: fsl: imx6ul-kontron: Update bindings
-  ARM: dts: imx6ul-kontron: Simplify devicetree structure
-  ARM: dts: imx6ul-kontron: Add imx6ull-kontron-bl to Makefile
-
- .../devicetree/bindings/arm/fsl.yaml          | 31 ++++++--------
- arch/arm/boot/dts/Makefile                    |  5 ++-
- ...6310-s-43.dts => imx6ul-kontron-bl-43.dts} |  8 ++--
- ...x-s.dtsi => imx6ul-kontron-bl-common.dtsi} |  0
- ...tron-n6310-s.dts => imx6ul-kontron-bl.dts} |  9 ++--
- .../boot/dts/imx6ul-kontron-n6310-som.dtsi    | 41 -------------------
- arch/arm/boot/dts/imx6ul-kontron-n6311-s.dts  | 16 --------
- .../boot/dts/imx6ul-kontron-n6311-som.dtsi    | 40 ------------------
- ...mon.dtsi => imx6ul-kontron-sl-common.dtsi} | 15 +++++++
- arch/arm/boot/dts/imx6ul-kontron-sl.dtsi      | 14 +++++++
- arch/arm/boot/dts/imx6ull-kontron-bl.dts      | 15 +++++++
- arch/arm/boot/dts/imx6ull-kontron-n6411-s.dts | 16 --------
- .../boot/dts/imx6ull-kontron-n6411-som.dtsi   | 40 ------------------
- arch/arm/boot/dts/imx6ull-kontron-sl.dtsi     | 13 ++++++
- 14 files changed, 80 insertions(+), 183 deletions(-)
- rename arch/arm/boot/dts/{imx6ul-kontron-n6310-s-43.dts => imx6ul-kontron-bl-43.dts} (93%)
- rename arch/arm/boot/dts/{imx6ul-kontron-n6x1x-s.dtsi => imx6ul-kontron-bl-common.dtsi} (100%)
- rename arch/arm/boot/dts/{imx6ul-kontron-n6310-s.dts => imx6ul-kontron-bl.dts} (52%)
- delete mode 100644 arch/arm/boot/dts/imx6ul-kontron-n6310-som.dtsi
- delete mode 100644 arch/arm/boot/dts/imx6ul-kontron-n6311-s.dts
- delete mode 100644 arch/arm/boot/dts/imx6ul-kontron-n6311-som.dtsi
- rename arch/arm/boot/dts/{imx6ul-kontron-n6x1x-som-common.dtsi => imx6ul-kontron-sl-common.dtsi} (90%)
- create mode 100644 arch/arm/boot/dts/imx6ul-kontron-sl.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-kontron-bl.dts
- delete mode 100644 arch/arm/boot/dts/imx6ull-kontron-n6411-s.dts
- delete mode 100644 arch/arm/boot/dts/imx6ull-kontron-n6411-som.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-kontron-sl.dtsi
-
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 6627aed26fd6..1d0c79f61072 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -726,6 +726,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+ 	imx6ull-colibri-wifi-iris.dtb \
+ 	imx6ull-colibri-wifi-iris-v2.dtb \
+ 	imx6ull-jozacp.dtb \
++	imx6ull-kontron-bl.dtb \
+ 	imx6ull-myir-mys-6ulx-eval.dtb \
+ 	imx6ull-opos6uldev.dtb \
+ 	imx6ull-phytec-segin-ff-rdk-nand.dtb \
 -- 
 2.37.1
+
