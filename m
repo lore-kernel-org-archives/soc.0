@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D552BC19F2D
-	for <soc@archiver.kernel.org>; Sat, 13 Aug 2022 20:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDB5EC19F2D
+	for <soc@archiver.kernel.org>; Sat, 13 Aug 2022 21:15:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 844F7C433D7; Sat, 13 Aug 2022 20:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9A9C433D6;
-	Sat, 13 Aug 2022 20:28:38 +0000 (UTC)
+	id 9FBDAC433D6; Sat, 13 Aug 2022 21:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6606BC433C1;
+	Sat, 13 Aug 2022 21:15:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660422519;
-	bh=fxRGdN2zI6MR2aXE1v5l+HFG9ovaOtPOTYzhV8x614g=;
+	s=k20201202; t=1660425315;
+	bh=W8eyC89XiUTeilcpES099+YDYkZqLTvotu5CiW4bDds=;
 	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=JIHGaN2KHlYcfgL9mFRddP7Mm21x7Snji/5ehG+14ELzQQq9QeZa2d0wBURDlN8Rq
-	 7X5fNcAFNAZcW44th7+a/gt9ENr7vEYOVsX3TVJbms8uhJEjvVnlvGpRSgTJe9PxN7
-	 VCWSBL42DK8rZEAWz0MZ8rxZEMNQpjMZnclRMF17qDY7NTho8sBcrHg28R5P8bAGa9
-	 gd8z0rXD75Zf4O1c3imIglGurBYmf1cMRRGHNHpJl0yQCppdP9e+8q6Jy9TD2Zz0XP
-	 ZikEiF5oPT4abcFF6sUpEdbH5h8gqpsEVktORYPlEV/tUeMA945m8XkTh6X/26/y8Z
-	 mu91KS9rx475w==
+	b=Rx7kB8Oq0bv9WBMvrgTQjMDkn1bpUSHQny3h9olQEGfrcsmCoZrWVAm33IL0WaY2h
+	 UXnRx3iW8IxW5NVA9NSKCk6dSSXwql9B+cEiFXbJXlwFhTiAISuzqrZfroPwS+DdFj
+	 3nIDcHVConIJtwhWtxVzHkA3qfZsCWEKPCDm1sjzXe/N0TvZGy3/7AOIXmD7l/i2IY
+	 EwVx7Qmbm4Hm7fxI/pEcjQFw33bkY5xm4ksxYhi/XuBB4ikU98+16IK8HqVFljjVLS
+	 Ii9wmRPQaF/ncOHx9V0XVd4+ZjEpJkua7xi/1D54HnRyP54KJk4nxhWm1+0H3LXoIX
+	 lW9WVHM3jsI8w==
 From: Sasha Levin <sashal@kernel.org>
 To: stable-commits@vger.kernel.org,
 	chunkeey@gmail.com
@@ -33,9 +33,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Hauke Mehrtens <hauke@hauke-m.de>,
 	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-Subject: Patch "ARM: dts: BCM5301X: Add DT for Meraki MR26" has been added to the 5.19-stable tree
-Date: Sat, 13 Aug 2022 16:28:36 -0400
-Message-Id: <20220813202836.1905727-1-sashal@kernel.org>
+Subject: Patch "ARM: dts: BCM5301X: Add DT for Meraki MR26" has been added to the 5.18-stable tree
+Date: Sat, 13 Aug 2022 17:15:12 -0400
+Message-Id: <20220813211512.1942625-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Patchwork-Hint: ignore
@@ -46,19 +46,19 @@ This is a note to let you know that I've just added the patch titled
 
     ARM: dts: BCM5301X: Add DT for Meraki MR26
 
-to the 5.19-stable tree which can be found at:
+to the 5.18-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      arm-dts-bcm5301x-add-dt-for-meraki-mr26.patch
-and it can be found in the queue-5.19 subdirectory.
+and it can be found in the queue-5.18 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
 
-commit f82daa184fcea3f93e8be5a2d79a94b5ba7c11e2
+commit 8d04e8b836613e96d60511af107176589e50c899
 Author: Christian Lamparter <chunkeey@gmail.com>
 Date:   Sat Jun 18 00:00:29 2022 +0200
 
@@ -126,10 +126,10 @@ Date:   Sat Jun 18 00:00:29 2022 +0200
     Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 5112f493f494..27eec8e670ec 100644
+index 7c16f8a2b738..13d788d1e6dc 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -135,6 +135,7 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
+@@ -133,6 +133,7 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
  	bcm47094-luxul-xwr-3150-v1.dtb \
  	bcm47094-netgear-r8500.dtb \
  	bcm47094-phicomm-k3.dtb \
