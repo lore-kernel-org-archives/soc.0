@@ -1,311 +1,506 @@
-Return-Path: <sashal@kernel.org>
+Return-Path: <SRS0=97eM=YS=intel.com=lkp@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F97C19F2D
-	for <soc@archiver.kernel.org>; Sat, 13 Aug 2022 22:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CEEAC25B06
+	for <soc@archiver.kernel.org>; Sun, 14 Aug 2022 14:45:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9D9FAC433D7; Sat, 13 Aug 2022 22:31:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6188AC433D6;
-	Sat, 13 Aug 2022 22:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1660429906;
-	bh=KGShgHfLdZ2qHni0qe86N+YB7WTBRMU6xELxvDHVUTk=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=qVWROVA6PcSXj4d7vTv3ulzcRkNQDFz4170Ud0fe9FxaQWNpyQfKxYKUN+iMqNV/s
-	 IRHxbP4x6KIMR6gt4xyoU/yt1iSaVDqAIKxaBtz2RNYFcdxc8nrdx90jF0biYvVxtq
-	 6HuXF+FGdfRE5siq5D4FOjVOMsYcZ6EzwT8JnvyRxvU/3+t3WX2NZkpBjQvSB2L+4w
-	 xOdCBTxNT+KgylHorqG/TN0UFSMsMVpDLCE2dae4ioM3rxxxfmre0Om7f3PmBfDXgz
-	 YY9lNJrwS5rRU6M9REyKlqvEGy6zFle6nPK05vhLKi+b0v4hJxNcnwj+Vq1HH/JgYA
-	 6anjOSpbXO+Wg==
-From: Sasha Levin <sashal@kernel.org>
-To: stable-commits@vger.kernel.org,
-	chunkeey@gmail.com
+	id 5DAB1C433B5; Sun, 14 Aug 2022 14:45:12 +0000 (UTC)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id AB819C433D6;
+	Sun, 14 Aug 2022 14:45:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AB819C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660488308; x=1692024308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AYYB80h5J0hH7YIzGUq77C10XX9XcCKmL2B3VlWTR9M=;
+  b=VCH5dxcP98W5kdGVjpgvJdqFmoIDfrbMSpR2ot9VCxCMqqMDUorP3Cnx
+   Oyek7eVoLL3H/MyEnKmYQaGoGkgJcpjvO7MUEumqOiCI+rMROp64wM4Fh
+   icqUIp6iCNA+NeVO5LkV6pT30kyky1UwFn5guQ287BEg/WNxKqtAU+YDx
+   u9Qh8sbZnbpcAqcA5pQlb9NzYsKOSPjTgUCKE6w4t0KGy2ITIwrIkZS0c
+   olXEmKViZ0D1XUbCpEnyCDXAbcj7UABTkDNXBe4qmh4ajm67UOnql2aV1
+   EojrXj61VKweB5aYP0CDNmdSDkcqWyc6LqKldOZ84kqZuwYer6DJQq2mm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="289399515"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="289399515"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 07:45:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="709510885"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Aug 2022 07:45:00 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oNErL-0000Be-1j;
+	Sun, 14 Aug 2022 14:44:59 +0000
+Date: Sun, 14 Aug 2022 22:44:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-Subject: Patch "ARM: dts: BCM5301X: Add DT for Meraki MR26" has been added to the 5.10-stable tree
-Date: Sat, 13 Aug 2022 18:31:43 -0400
-Message-Id: <20220813223143.2000752-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
+Cc: kbuild-all@lists.01.org, robh+dt@kernel.org, mturquette@baylibre.com,
+	sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com,
+	stefan@agner.ch, linus.walleij@linaro.org,
+	daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
+	olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk,
+	abel.vesa@nxp.com, dev@lynxeye.de, marcel.ziswiler@toradex.com,
+	tharvey@gateworks.com, leoyang.li@nxp.com,
+	sebastian.reichel@collabora.com, cniedermaier@dh-electronics.com,
+	Mr.Bossman075@gmail.com, clin@suse.com,
+	giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 07/12] clk: imx: Update pllv3 to support i.MXRT1170
+Message-ID: <202208142248.DFj3YiOA-lkp@intel.com>
+References: <20220723160513.271692-8-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220723160513.271692-8-Mr.Bossman075@gmail.com>
 
-This is a note to let you know that I've just added the patch titled
+Hi Jesse,
 
-    ARM: dts: BCM5301X: Add DT for Meraki MR26
+Thank you for the patch! Yet something to improve:
 
-to the 5.10-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on abelvesa/clk/imx v5.19]
+[cannot apply to soc/for-next linus/master next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The filename of the patch is:
-     arm-dts-bcm5301x-add-dt-for-meraki-mr26.patch
-and it can be found in the queue-5.10 subdirectory.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jesse-Taube/Add-support-for-the-i-MXRT1170-evk/20220724-000710
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20220814/202208142248.DFj3YiOA-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/96413cc0300321ec18d27ca9983f349a41f99706
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jesse-Taube/Add-support-for-the-i-MXRT1170-evk/20220724-000710
+        git checkout 96413cc0300321ec18d27ca9983f349a41f99706
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/clk/imx/clk-imx6q.c:21:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c: In function 'imx6q_clocks_init':
+>> drivers/clk/imx/clk-imx6q.c:477:101: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     477 |         hws[IMX6QDL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
+         |                                                                                                     ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c:478:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     478 |         hws[IMX6QDL_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c:479:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     479 |         hws[IMX6QDL_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll3", "osc", base + 0x10, 0x3);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c:480:101: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     480 |         hws[IMX6QDL_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll4", "osc", base + 0x70, 0x7f);
+         |                                                                                                     ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c:481:101: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     481 |         hws[IMX6QDL_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll5", "osc", base + 0xa0, 0x7f);
+         |                                                                                                     ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c:482:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     482 |         hws[IMX6QDL_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,    "pll6", "osc", base + 0xe0, 0x3);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6q.c:483:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     483 |         hws[IMX6QDL_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll7", "osc", base + 0x20, 0x3);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+--
+   In file included from drivers/clk/imx/clk-imx6sl.c:16:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c: In function 'imx6sl_clocks_init':
+>> drivers/clk/imx/clk-imx6sl.c:217:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     217 |         hws[IMX6SL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c:218:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     218 |         hws[IMX6SL_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c:219:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     219 |         hws[IMX6SL_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll3", "osc", base + 0x10, 0x3);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c:220:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     220 |         hws[IMX6SL_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll4", "osc", base + 0x70, 0x7f);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c:221:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     221 |         hws[IMX6SL_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll5", "osc", base + 0xa0, 0x7f);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c:222:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     222 |         hws[IMX6SL_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,    "pll6", "osc", base + 0xe0, 0x3);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sl.c:223:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     223 |         hws[IMX6SL_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll7", "osc", base + 0x20, 0x3);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+--
+   In file included from drivers/clk/imx/clk-imx6sll.c:17:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c: In function 'imx6sll_clocks_init':
+>> drivers/clk/imx/clk-imx6sll.c:123:110: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     123 |         hws[IMX6SLL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,  "pll1", "pll1_bypass_src", base + 0x00, 0x7f);
+         |                                                                                                              ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c:124:112: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     124 |         hws[IMX6SLL_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "pll2_bypass_src", base + 0x30, 0x1);
+         |                                                                                                                ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c:125:109: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     125 |         hws[IMX6SLL_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,  "pll3", "pll3_bypass_src", base + 0x10, 0x3);
+         |                                                                                                             ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c:126:110: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     126 |         hws[IMX6SLL_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,   "pll4", "pll4_bypass_src", base + 0x70, 0x7f);
+         |                                                                                                              ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c:127:110: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     127 |         hws[IMX6SLL_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,   "pll5", "pll5_bypass_src", base + 0xa0, 0x7f);
+         |                                                                                                              ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c:128:117: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     128 |         hws[IMX6SLL_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,         "pll6", "pll6_bypass_src", base + 0xe0, 0x3);
+         |                                                                                                                     ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sll.c:129:109: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     129 |         hws[IMX6SLL_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,  "pll7", "pll7_bypass_src", base + 0x20, 0x3);
+         |                                                                                                             ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+--
+   In file included from drivers/clk/imx/clk-imx6sx.c:19:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c: In function 'imx6sx_clocks_init':
+>> drivers/clk/imx/clk-imx6sx.c:160:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     160 |         hws[IMX6SX_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c:161:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     161 |         hws[IMX6SX_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c:162:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     162 |         hws[IMX6SX_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll3", "osc", base + 0x10, 0x3);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c:163:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     163 |         hws[IMX6SX_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll4", "osc", base + 0x70, 0x7f);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c:164:100: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     164 |         hws[IMX6SX_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,      "pll5", "osc", base + 0xa0, 0x7f);
+         |                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c:165:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     165 |         hws[IMX6SX_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,    "pll6", "osc", base + 0xe0, 0x3);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6sx.c:166:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     166 |         hws[IMX6SX_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,     "pll7", "osc", base + 0x20, 0x3);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+--
+   In file included from drivers/clk/imx/clk-imx6ul.c:18:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c: In function 'imx6ul_clocks_init':
+>> drivers/clk/imx/clk-imx6ul.c:149:98: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     149 |         hws[IMX6UL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,   "pll1", "osc", base + 0x00, 0x7f);
+         |                                                                                                  ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c:150:99: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     150 |         hws[IMX6UL_CLK_PLL2] = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll2", "osc", base + 0x30, 0x1);
+         |                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c:151:97: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     151 |         hws[IMX6UL_CLK_PLL3] = imx_clk_hw_pllv3(IMX_PLLV3_USB,   "pll3", "osc", base + 0x10, 0x3);
+         |                                                                                                 ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c:152:98: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     152 |         hws[IMX6UL_CLK_PLL4] = imx_clk_hw_pllv3(IMX_PLLV3_AV,    "pll4", "osc", base + 0x70, 0x7f);
+         |                                                                                                  ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c:153:98: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     153 |         hws[IMX6UL_CLK_PLL5] = imx_clk_hw_pllv3(IMX_PLLV3_AV,    "pll5", "osc", base + 0xa0, 0x7f);
+         |                                                                                                  ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c:154:97: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     154 |         hws[IMX6UL_CLK_PLL6] = imx_clk_hw_pllv3(IMX_PLLV3_ENET,  "pll6", "osc", base + 0xe0, 0x3);
+         |                                                                                                 ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx6ul.c:155:97: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     155 |         hws[IMX6UL_CLK_PLL7] = imx_clk_hw_pllv3(IMX_PLLV3_USB,   "pll7", "osc", base + 0x20, 0x3);
+         |                                                                                                 ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+--
+   In file included from drivers/clk/imx/clk-imx7d.c:19:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx7d.c: In function 'imx7d_clocks_init':
+>> drivers/clk/imx/clk-imx7d.c:409:108: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     409 |         hws[IMX7D_PLL_ARM_MAIN]  = imx_clk_hw_pllv3(IMX_PLLV3_SYS, "pll_arm_main", "osc", base + 0x60, 0x7f);
+         |                                                                                                            ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx7d.c:410:114: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     410 |         hws[IMX7D_PLL_DRAM_MAIN] = imx_clk_hw_pllv3(IMX_PLLV3_DDR_IMX7, "pll_dram_main", "osc", base + 0x70, 0x7f);
+         |                                                                                                                  ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx7d.c:411:111: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     411 |         hws[IMX7D_PLL_SYS_MAIN]  = imx_clk_hw_pllv3(IMX_PLLV3_GENERIC, "pll_sys_main", "osc", base + 0xb0, 0x1);
+         |                                                                                                               ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx7d.c:412:114: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     412 |         hws[IMX7D_PLL_ENET_MAIN] = imx_clk_hw_pllv3(IMX_PLLV3_ENET_IMX7, "pll_enet_main", "osc", base + 0xe0, 0x0);
+         |                                                                                                                  ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx7d.c:413:115: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     413 |         hws[IMX7D_PLL_AUDIO_MAIN] = imx_clk_hw_pllv3(IMX_PLLV3_AV_IMX7, "pll_audio_main", "osc", base + 0xf0, 0x7f);
+         |                                                                                                                   ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-imx7d.c:414:116: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     414 |         hws[IMX7D_PLL_VIDEO_MAIN] = imx_clk_hw_pllv3(IMX_PLLV3_AV_IMX7, "pll_video_main", "osc", base + 0x130, 0x7f);
+         |                                                                                                                    ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+--
+   In file included from drivers/clk/imx/clk-vf610.c:12:
+   drivers/clk/imx/clk.h:268:74: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     268 |                 const char *parent_name, void __iomem *base, u32 div_mask);
+         |                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c: In function 'vf610_clocks_init':
+>> drivers/clk/imx/clk-vf610.c:219:107: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     219 |         clk[VF610_CLK_PLL1] = imx_clk_pllv3(IMX_PLLV3_SYS_VF610, "pll1", "pll1_bypass_src", PLL1_CTRL, 0x1);
+         |                                                                                                           ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c:220:107: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     220 |         clk[VF610_CLK_PLL2] = imx_clk_pllv3(IMX_PLLV3_SYS_VF610, "pll2", "pll2_bypass_src", PLL2_CTRL, 0x1);
+         |                                                                                                           ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c:221:111: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     221 |         clk[VF610_CLK_PLL3] = imx_clk_pllv3(IMX_PLLV3_USB_VF610,     "pll3", "pll3_bypass_src", PLL3_CTRL, 0x2);
+         |                                                                                                               ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c:222:106: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     222 |         clk[VF610_CLK_PLL4] = imx_clk_pllv3(IMX_PLLV3_AV,      "pll4", "pll4_bypass_src", PLL4_CTRL, 0x7f);
+         |                                                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c:223:105: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     223 |         clk[VF610_CLK_PLL5] = imx_clk_pllv3(IMX_PLLV3_ENET,    "pll5", "pll5_bypass_src", PLL5_CTRL, 0x3);
+         |                                                                                                         ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c:224:106: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     224 |         clk[VF610_CLK_PLL6] = imx_clk_pllv3(IMX_PLLV3_AV,      "pll6", "pll6_bypass_src", PLL6_CTRL, 0x7f);
+         |                                                                                                          ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
+   drivers/clk/imx/clk-vf610.c:225:111: error: macro "imx_clk_hw_pllv3" requires 8 arguments, but only 5 given
+     225 |         clk[VF610_CLK_PLL7] = imx_clk_pllv3(IMX_PLLV3_USB_VF610,     "pll7", "pll7_bypass_src", PLL7_CTRL, 0x2);
+         |                                                                                                               ^
+   drivers/clk/imx/clk.h:107: note: macro "imx_clk_hw_pllv3" defined here
+     107 | #define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
+         | 
 
 
+vim +/imx_clk_hw_pllv3 +477 drivers/clk/imx/clk-imx6q.c
 
-commit 480e02f5f2ad365c2db01a627dacf448bca570e4
-Author: Christian Lamparter <chunkeey@gmail.com>
-Date:   Sat Jun 18 00:00:29 2022 +0200
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  430  
+53bb71da1c5c14 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2013-05-21  431  static void __init imx6q_clocks_init(struct device_node *ccm_node)
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  432  {
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  433  	struct device_node *np;
+5d283b08380086 drivers/clk/imx/clk-imx6q.c   Fabio Estevam 2016-10-17  434  	void __iomem *anatop_base, *base;
+a94f8ecb2f778f arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2013-07-18  435  	int ret;
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  436  
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  437  	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  438  					  IMX6QDL_CLK_END), GFP_KERNEL);
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  439  	if (WARN_ON(!clk_hw_data))
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  440  		return;
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  441  
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  442  	clk_hw_data->num = IMX6QDL_CLK_END;
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  443  	hws = clk_hw_data->hws;
+a29be9185d195b drivers/clk/imx/clk-imx6q.c   Lucas Stach   2018-11-15  444  
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  445  	hws[IMX6QDL_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0);
+a29be9185d195b drivers/clk/imx/clk-imx6q.c   Lucas Stach   2018-11-15  446  
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  447  	hws[IMX6QDL_CLK_CKIL] = imx6q_obtain_fixed_clk_hw(ccm_node, "ckil", 0);
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  448  	hws[IMX6QDL_CLK_CKIH] = imx6q_obtain_fixed_clk_hw(ccm_node, "ckih1", 0);
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  449  	hws[IMX6QDL_CLK_OSC] = imx6q_obtain_fixed_clk_hw(ccm_node, "osc", 0);
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  450  
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  451  	/* Clock source from external clock via CLK1/2 PADs */
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  452  	hws[IMX6QDL_CLK_ANACLK1] = imx6q_obtain_fixed_clk_hw(ccm_node, "anaclk1", 0);
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  453  	hws[IMX6QDL_CLK_ANACLK2] = imx6q_obtain_fixed_clk_hw(ccm_node, "anaclk2", 0);
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  454  
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  455  	np = of_find_compatible_node(NULL, NULL, "fsl,imx6q-anatop");
+5d283b08380086 drivers/clk/imx/clk-imx6q.c   Fabio Estevam 2016-10-17  456  	anatop_base = base = of_iomap(np, 0);
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  457  	WARN_ON(!base);
+c9ec1d8fef31b5 drivers/clk/imx/clk-imx6q.c   Yangtao Li    2018-12-26  458  	of_node_put(np);
+2acd1b6f889c04 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2012-04-04  459  
+2df1d026edc11e arch/arm/mach-imx/clk-imx6q.c Philipp Zabel 2013-03-29  460  	/* Audio/video PLL post dividers do not work on i.MX6q revision 1.0 */
+961dfd37fa165c arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2015-04-26  461  	if (clk_on_imx6q() && imx_get_soc_revision() == IMX_CHIP_REVISION_1_0) {
+2df1d026edc11e arch/arm/mach-imx/clk-imx6q.c Philipp Zabel 2013-03-29  462  		post_div_table[1].div = 1;
+2df1d026edc11e arch/arm/mach-imx/clk-imx6q.c Philipp Zabel 2013-03-29  463  		post_div_table[2].div = 1;
+2df1d026edc11e arch/arm/mach-imx/clk-imx6q.c Philipp Zabel 2013-03-29  464  		video_div_table[1].div = 1;
+81ef447950bf09 arch/arm/mach-imx/clk-imx6q.c Gary Bisson   2014-12-03  465  		video_div_table[3].div = 1;
+d2a10a1727b394 arch/arm/mach-imx/clk-imx6q.c Dmitry Voytik 2014-11-06  466  	}
+2df1d026edc11e arch/arm/mach-imx/clk-imx6q.c Philipp Zabel 2013-03-29  467  
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  468  	hws[IMX6QDL_PLL1_BYPASS_SRC] = imx_clk_hw_mux("pll1_bypass_src", base + 0x00, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  469  	hws[IMX6QDL_PLL2_BYPASS_SRC] = imx_clk_hw_mux("pll2_bypass_src", base + 0x30, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  470  	hws[IMX6QDL_PLL3_BYPASS_SRC] = imx_clk_hw_mux("pll3_bypass_src", base + 0x10, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  471  	hws[IMX6QDL_PLL4_BYPASS_SRC] = imx_clk_hw_mux("pll4_bypass_src", base + 0x70, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  472  	hws[IMX6QDL_PLL5_BYPASS_SRC] = imx_clk_hw_mux("pll5_bypass_src", base + 0xa0, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  473  	hws[IMX6QDL_PLL6_BYPASS_SRC] = imx_clk_hw_mux("pll6_bypass_src", base + 0xe0, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29  474  	hws[IMX6QDL_PLL7_BYPASS_SRC] = imx_clk_hw_mux("pll7_bypass_src", base + 0x20, 14, 2, pll_bypass_src_sels, ARRAY_SIZE(pll_bypass_src_sels));
+b1f156db47ae91 arch/arm/mach-imx/clk-imx6q.c Shawn Guo     2014-09-01  475  
+2b254693bef4f1 arch/arm/mach-imx/clk-imx6q.c Sascha Hauer  2012-11-22  476  	/*                                    type               name    parent_name        base         div_mask */
+992b703b5b3897 drivers/clk/imx/clk-imx6q.c   Abel Vesa     2019-05-29 @477  	hws[IMX6QDL_CLK_PLL1] = imx_clk_hw_pllv3(IMX_PLLV3_SYS,     "pll1", "osc", base + 0x00, 0x7f);
 
-    ARM: dts: BCM5301X: Add DT for Meraki MR26
-    
-    [ Upstream commit 935327a73553001f8d81375c76985d05f604507f ]
-    
-    Meraki MR26 is an EOL wireless access point featuring a
-    PoE ethernet port and two dual-band 3x3 MIMO 802.11n
-    radios and 1x1 dual-band WIFI dedicated to scanning.
-    
-    Thank you Amir for the unit and PSU.
-    
-    Hardware info:
-    SOC   : Broadcom BCM53015A1KFEBG (dual-core Cortex-A9 CPU at 800 MHz)
-    RAM   : SK Hynix Inc. H5TQ1G63EFR, 1 GBit DDR3 SDRAM = 128 MiB
-    NAND  : Spansion S34ML01G100TF100, 1 GBit SLC NAND Flash = 128 MiB
-    ETH   : 1 GBit Ethernet Port - PoE (TPS23754 PoE Interface)
-    WIFI0 : Broadcom BCM43431KMLG, BCM43431 802.11 abgn (3x3:3)
-    WIFI1 : Broadcom BCM43431KMLG, BCM43431 802.11 abgn (3x3:3)
-    WIFI2 : Broadcom BCM43428 "Air Marshal" 802.11 abgn (1x1:1)
-    BUTTON: One reset key behind a small hole next to the Ethernet Port
-    LEDS  : One amber (fault), one white (indicator) LED, separate RGB-LED
-    MISC  : Atmel AT24C64 8KiB EEPROM i2c
-          : Ti INA219 26V, 12-bit, i2c output current/voltage/power monitor
-    
-    SERIAL:
-          WARNING: The serial port needs a TTL/RS-232 3V3 level converter!
-          The Serial setting is 115200-8-N-1. The board has a populated
-          right angle 1x4 0.1" pinheader.
-          The pinout is: VCC (next to J3, has the pin 1 indicator), RX, TX, GND.
-    
-    Odd stuff:
-    
-    - uboot does not support lzma compression, but gzip'd uImage/DTB work.
-    - uboot claims to support FIT, but fails to pass the DTB to the kernel.
-      Appending the dtb after the kernel image works.
-    - RGB-controller is supported through an external userspace program.
-    - The ubi partition contains a "board-config" volume. It stores the
-      MAC Address (0x66 in binary) and Serial No. (0x7c alpha-numerical).
-    - SoC's temperature sensor always reports that it is on fire.
-      This causes the system to immediately shutdown! Looking at reported
-      "418 degree Celsius" suggests that this sensor is not working.
-    
-    WIFI:
-    b43 is able to initialize all three WIFIs @ 802.11bg.
-    | b43-phy0: Broadcom 43431 WLAN found (core revision 29)
-    | bcma-pci-bridge 0000:01:00.0: bus1: Switched to core: 0x812
-    | b43-phy0: Found PHY: Analog 9, Type 7 (HT), Revision 1
-    | b43-phy0: Found Radio: Manuf 0x17F, ID 0x2059, Revision 0, Version 1
-    | b43-phy0 warning: 5 GHz band is unsupported on this PHY
-    | b43-phy1: Broadcom 43431 WLAN found (core revision 29)
-    | bcma-pci-bridge 0001:01:00.0: bus2: Switched to core: 0x812
-    | b43-phy1: Found PHY: Analog 9, Type 7 (HT), Revision 1
-    | b43-phy1: Found Radio: Manuf 0x17F, ID 0x2059, Revision 0, Version 1
-    | b43-phy1 warning: 5 GHz band is unsupported on this PHY
-    | b43-phy2: Broadcom 43228 WLAN found (core revision 30)
-    | bcma-pci-bridge 0002:01:00.0: bus3: Switched to core: 0x812
-    | b43-phy2: Found PHY: Analog 9, Type 4 (N), Revision 16
-    | b43-phy2: Found Radio: Manuf 0x17F, ID 0x2057, Revision 9, Version 1
-    | Broadcom 43xx driver loaded [ Features: NL ]
-    
-    Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-    Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-    Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7e8151681597..d93f01dddc3f 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -128,6 +128,7 @@ dtb-$(CONFIG_ARCH_BCM_5301X) += \
- 	bcm47094-luxul-xwr-3150-v1.dtb \
- 	bcm47094-netgear-r8500.dtb \
- 	bcm47094-phicomm-k3.dtb \
-+	bcm53015-meraki-mr26.dtb \
- 	bcm53016-meraki-mr32.dtb \
- 	bcm94708.dtb \
- 	bcm94709.dtb \
-diff --git a/arch/arm/boot/dts/bcm53015-meraki-mr26.dts b/arch/arm/boot/dts/bcm53015-meraki-mr26.dts
-new file mode 100644
-index 000000000000..14f58033efeb
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm53015-meraki-mr26.dts
-@@ -0,0 +1,166 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Broadcom BCM470X / BCM5301X ARM platform code.
-+ * DTS for Meraki MR26 / Codename: Venom
-+ *
-+ * Copyright (C) 2022 Christian Lamparter <chunkeey@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "bcm4708.dtsi"
-+#include "bcm5301x-nand-cs0-bch8.dtsi"
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	compatible = "meraki,mr26", "brcm,bcm53015", "brcm,bcm4708";
-+	model = "Meraki MR26";
-+
-+	memory@0 {
-+		reg = <0x00000000 0x08000000>;
-+		device_type = "memory";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_FAULT;
-+			color = <LED_COLOR_ID_AMBER>;
-+			gpios = <&chipcommon 13 GPIO_ACTIVE_HIGH>;
-+			panic-indicator;
-+		};
-+		led-1 {
-+			function = LED_FUNCTION_INDICATOR;
-+			color = <LED_COLOR_ID_WHITE>;
-+			gpios = <&chipcommon 12 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	keys {
-+		compatible = "gpio-keys";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		key-restart {
-+			label = "Reset";
-+			linux,code = <KEY_RESTART>;
-+			gpios = <&chipcommon 11 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	clock-frequency = <50000000>;
-+	/delete-property/ clocks;
-+};
-+
-+&uart1 {
-+	status = "disabled";
-+};
-+
-+&gmac0 {
-+	status = "okay";
-+};
-+
-+&gmac1 {
-+	status = "disabled";
-+};
-+&gmac2 {
-+	status = "disabled";
-+};
-+&gmac3 {
-+	status = "disabled";
-+};
-+
-+&nandcs {
-+	nand-ecc-algo = "hw";
-+
-+	partitions {
-+		compatible = "fixed-partitions";
-+		#address-cells = <0x1>;
-+		#size-cells = <0x1>;
-+
-+		partition@0 {
-+			label = "u-boot";
-+			reg = <0x0 0x200000>;
-+			read-only;
-+		};
-+
-+		partition@200000 {
-+			label = "u-boot-env";
-+			reg = <0x200000 0x200000>;
-+			/* empty */
-+		};
-+
-+		partition@400000 {
-+			label = "u-boot-backup";
-+			reg = <0x400000 0x200000>;
-+			/* empty */
-+		};
-+
-+		partition@600000 {
-+			label = "u-boot-env-backup";
-+			reg = <0x600000 0x200000>;
-+			/* empty */
-+		};
-+
-+		partition@800000 {
-+			label = "ubi";
-+			reg = <0x800000 0x7780000>;
-+		};
-+	};
-+};
-+
-+&srab {
-+	status = "okay";
-+
-+	ports {
-+		port@0 {
-+			reg = <0>;
-+			label = "poe";
-+		};
-+
-+		port@5 {
-+			reg = <5>;
-+			label = "cpu";
-+			ethernet = <&gmac0>;
-+
-+			fixed-link {
-+				speed = <1000>;
-+				duplex-full;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinmux_i2c>;
-+
-+	clock-frequency = <100000>;
-+
-+	ina219@40 {
-+		compatible = "ti,ina219"; /* PoE power */
-+		reg = <0x40>;
-+		shunt-resistor = <60000>; /* = 60 mOhms */
-+	};
-+
-+	eeprom@56 {
-+		compatible = "atmel,24c64";
-+		reg = <0x56>;
-+		pagesize = <32>;
-+		read-only;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		/* it's empty */
-+	};
-+};
-+
-+&thermal {
-+	status = "disabled";
-+	/* does not work, reads 418 degree Celsius */
-+};
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
