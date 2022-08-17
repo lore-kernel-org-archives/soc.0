@@ -1,89 +1,259 @@
-Return-Path: <SRS0=zmPw=YV=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=3ocw=YV=microchip.com=Horatiu.Vultur@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02EA1C25B08
-	for <soc@archiver.kernel.org>; Wed, 17 Aug 2022 07:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C934DC32772
+	for <soc@archiver.kernel.org>; Wed, 17 Aug 2022 18:56:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BEB21C433B5; Wed, 17 Aug 2022 07:46:34 +0000 (UTC)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 8982AC433B5; Wed, 17 Aug 2022 18:56:56 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DFB60C433D6
-	for <soc@kernel.org>; Wed, 17 Aug 2022 07:46:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DFB60C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id w15so12804235ljw.1
-        for <soc@kernel.org>; Wed, 17 Aug 2022 00:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=6BuNS9KqOjvtc7XbSSlIG6uXhAeWvKuL+ywpXemmpt4=;
-        b=NEIEFh84FTjEE3hoQnBHGsHnaml+UzRG01ulZUBdBSPLfmtu9cAh9yB3kLXEb7LJeE
-         yN0LDW4bsQPRBtJ3VdL5/mNd8P1D9WPPFwsiUq6PHZNEEBcc2cj2FMGm+AdQf6j/X0Pq
-         br/nZF42BY83RTe61zGApXTy8rFTrDP3Vq4N781RggEjZZIlKg2tV9LTlsMIYdgeyVXY
-         djq7euigLcDRRwW/Sze5J6+Ez4khEzp4dfQeDzZDK6eHwymbd83ILn/6dNQIsYxEv/Qv
-         LPwZ7gLsUWhcYjq+ljDrIRDVlJsEj8acd5WDj1tx024HECd3+5RmVRH935EPwTvT/jLe
-         9TVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=6BuNS9KqOjvtc7XbSSlIG6uXhAeWvKuL+ywpXemmpt4=;
-        b=EMJ4htVPPTzgiHOOv0g3AXT3nsZ90G27/ysI1/c+V3GbTylOYEMXMC67vyNUhzdBEW
-         7e6lWPHpva+prR/XVA2qwu5O5Q+96ZLo6t5bFkdr3VbBzC95+1CCJ1Poln1ItLvl3CSI
-         j3lOFrt7yQttceDJc+XzLUvQpe78FGZTyz/gvMpcczLfdBfMLNRIBJg/hTGxw09P499B
-         K3IxJuxLrYuNqugFiPQ3NK2FRXSIqD/X1aljU2LhRznyB4vyBcUJjHzpwx+3k17qi56M
-         MW9VUymJ9pXn7n6BAarIwYm5BNnSKQJZdpS9iRc0knXhBELHXBANLBfjVRTiI+OzlQiw
-         41yg==
-X-Gm-Message-State: ACgBeo2SwFv/0y6DP2LmkrlHRTqH2mIG1eKbbSXwG6koWfBmtHrEbdKQ
-	1ffx0lKH0ej0jiuf7esGkPnWbg==
-X-Google-Smtp-Source: AA6agR7+bPFR57iuqYAZKnMHO1NMowGeL+VPcAK4pDjgtRZ+eqZjZeD9JBI30m3jn8ov9firTW4gGA==
-X-Received: by 2002:a05:651c:4d1:b0:25e:5c72:43f0 with SMTP id e17-20020a05651c04d100b0025e5c7243f0mr7916432lji.164.1660722391873;
-        Wed, 17 Aug 2022 00:46:31 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1b1c:14b7:109b:ed76? (d15l54h48cw7vbh-qr4-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1b1c:14b7:109b:ed76])
-        by smtp.gmail.com with ESMTPSA id b25-20020a05651c033900b0025e4ca99066sm2094142ljp.139.2022.08.17.00.46.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 00:46:31 -0700 (PDT)
-Message-ID: <ee117d95-615a-e63b-64c9-c11f89b51123@linaro.org>
-Date: Wed, 17 Aug 2022 10:46:29 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: aspeed: document Ampere
- Mt.Mitchell BMC compatibles
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 869BFC433C1;
+	Wed, 17 Aug 2022 18:56:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 869BFC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660762614; x=1692298614;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tfwde/kyN/bFY8hzKEkEEPkf7iKEEJwDE2PzikWguLs=;
+  b=TETKLXSof85FBTVWls9tp3Bfx0TJtTJ+TvgPuCo4cWdtMeSq+miR7VnM
+   +mAb5F27BeMRh/aslaFZ8jCZ5Ee3FQR6KrV0oIqv1v9LrDkCjkeJeKv+S
+   xbWEhMKruy4MAw5lYo2Pwmx4k/2hVjUW8umxvZDw61VZ9lw8if+qSX8Mw
+   KcjoS+iq44s4tjKf0uydO04AAjRnK3bz/ZR8a3UbEXchFwtFTUCvNxivz
+   yedViCeO21LFLnI/xaFPO/GKZjh/1LeBncL6+qfpJfhYSM295wCuehBqL
+   uLPBzA9oemS3SAS3lrmDUL3oyWfe+xJX/F1jqqWiLv7jd9JJlYPJNlQ9a
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="186915940"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Aug 2022 11:56:53 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 17 Aug 2022 11:56:53 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 17 Aug 2022 11:56:50 -0700
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+To: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Quan Nguyen <quan@os.amperecomputing.com>, openbmc@lists.ozlabs.org,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
- Open Source Submission <patches@amperecomputing.com>
-Cc: Phong Vo <phong@os.amperecomputing.com>, thang@os.amperecomputing.com
-References: <20220817071539.176110-1-quan@os.amperecomputing.com>
- <20220817071539.176110-2-quan@os.amperecomputing.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220817071539.176110-2-quan@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+CC: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
+	<nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+	<UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>, "Horatiu
+ Vultur" <horatiu.vultur@microchip.com>
+Subject: [PATCH] ARM: dts: lan966x: add support for pcb8290
+Date: Wed, 17 Aug 2022 21:00:27 +0200
+Message-ID: <20220817190027.1632721-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 17/08/2022 10:15, Quan Nguyen wrote:
-> Document Ampere Mt.Mitchell BMC board compatible.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+Add basic support for pcb8290. It has 8 lan8814 PHYS on the external
+MDIO bus and no SFP ports.
 
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ arch/arm/boot/dts/Makefile            |   1 +
+ arch/arm/boot/dts/lan966x-pcb8290.dts | 169 ++++++++++++++++++++++++++
+ 2 files changed, 170 insertions(+)
+ create mode 100644 arch/arm/boot/dts/lan966x-pcb8290.dts
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..595e870750cd 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -788,6 +788,7 @@ dtb-$(CONFIG_SOC_IMXRT) += \
+ dtb-$(CONFIG_SOC_LAN966) += \
+ 	lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb \
+ 	lan966x-kontron-kswitch-d10-mmt-8g.dtb \
++	lan966x-pcb8290.dtb \
+ 	lan966x-pcb8291.dtb \
+ 	lan966x-pcb8309.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+diff --git a/arch/arm/boot/dts/lan966x-pcb8290.dts b/arch/arm/boot/dts/lan966x-pcb8290.dts
+new file mode 100644
+index 000000000000..ea5267aca6b4
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x-pcb8290.dts
+@@ -0,0 +1,169 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x_pcb8290.dts - Device Tree file for PCB8290
++ */
++/dts-v1/;
++#include "lan966x.dtsi"
++#include "dt-bindings/phy/phy-lan966x-serdes.h"
++
++/ {
++	model = "Microchip EVB LAN9668";
++	compatible = "microchip,lan9668-pcb8290", "microchip,lan9668", "microchip,lan966";
++
++	gpio-restart {
++		compatible = "gpio-restart";
++		gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
++		priority = <200>;
++	};
++};
++
++&gpio {
++	miim_a_pins: mdio-pins {
++		/* MDC, MDIO */
++		pins =  "GPIO_28", "GPIO_29";
++		function = "miim_a";
++	};
++
++	pps_out_pins: pps-out-pins {
++		pins = "GPIO_38";
++		function = "ptpsync_3";
++	};
++
++	ptp_ext_pins: ptp-ext-pins {
++		pins = "GPIO_35";
++		function = "ptpsync_0";
++	};
++
++	udc_pins: ucd-pins {
++		/* VBUS_DET B */
++		pins = "GPIO_8";
++		function = "usb_slave_b";
++	};
++};
++
++&mdio0 {
++	pinctrl-0 = <&miim_a_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++
++	ext_phy0: ethernet-phy@7 {
++		reg = <7>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy1: ethernet-phy@8 {
++		reg = <8>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy2: ethernet-phy@9 {
++		reg = <9>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy3: ethernet-phy@10 {
++		reg = <10>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy4: ethernet-phy@15 {
++		reg = <15>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy5: ethernet-phy@16 {
++		reg = <16>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy6: ethernet-phy@17 {
++		reg = <17>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++
++	ext_phy7: ethernet-phy@18 {
++		reg = <18>;
++		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&port0 {
++	reg = <2>;
++	phy-handle = <&ext_phy2>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 0 SERDES6G(1)>;
++	status = "okay";
++};
++
++&port1 {
++	reg = <3>;
++	phy-handle = <&ext_phy3>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 1 SERDES6G(1)>;
++	status = "okay";
++};
++
++&port2 {
++	reg = <0>;
++	phy-handle = <&ext_phy0>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 2 SERDES6G(1)>;
++	status = "okay";
++};
++
++&port3 {
++	reg = <1>;
++	phy-handle = <&ext_phy1>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 3 SERDES6G(1)>;
++	status = "okay";
++};
++
++&port4 {
++	reg = <6>;
++	phy-handle = <&ext_phy6>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 4 SERDES6G(2)>;
++	status = "okay";
++};
++
++&port5 {
++	reg = <7>;
++	phy-handle = <&ext_phy7>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 5 SERDES6G(2)>;
++	status = "okay";
++};
++
++&port6 {
++	reg = <4>;
++	phy-handle = <&ext_phy4>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 6 SERDES6G(2)>;
++	status = "okay";
++};
++
++&port7 {
++	reg = <5>;
++	phy-handle = <&ext_phy5>;
++	phy-mode = "qsgmii";
++	phys = <&serdes 7 SERDES6G(2)>;
++	status = "okay";
++};
++
++&serdes {
++	status = "okay";
++};
++
++&switch {
++	pinctrl-0 = <&pps_out_pins>, <&ptp_ext_pins>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&udc {
++	pinctrl-0 = <&udc_pins>;
++	pinctrl-names = "default";
++	atmel,vbus-gpio = <&gpio 8 GPIO_ACTIVE_HIGH>;
++	status = "okay";
++};
+-- 
+2.33.0
 
-
-Best regards,
-Krzysztof
