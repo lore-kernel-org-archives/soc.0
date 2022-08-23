@@ -1,114 +1,237 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=BRl/=Y3=microchip.com=Horatiu.Vultur@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42EF4C32772
-	for <soc@archiver.kernel.org>; Tue, 23 Aug 2022 09:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5FEDC32772
+	for <soc@archiver.kernel.org>; Tue, 23 Aug 2022 19:18:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0C552C433D6; Tue, 23 Aug 2022 09:26:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1F8C433C1;
-	Tue, 23 Aug 2022 09:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661246798;
-	bh=230swWdIKHhtddcRArowETTp21Wj+wqdKayt3kSa4zc=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=gRmm1ZGTSm80elNHqo9zh8ReopC/TZEfOs6O/TOlwrjBWbipoxkvzBEIyI0p19VMf
-	 v97J8SvyZoRQmudxgWcHxDk1xIdKYU4wUS0DNlgPUyUoqv4FCij1sZJAGd0lCohUVG
-	 6PjxktPKooX4pMQhWGtjNdzoqDCbSWrE5V0JEzm7tx3Rtpc2zRdElY/5V4nArLbGp4
-	 wjPHL56ERL5dBZspFeSkvLHV+1tl6q29dSJs1htRrbDjWYqegGeTtsMgj4CoVrKbnn
-	 ctbQ/66wZT/s001hwVKjGRABKPG4RDasllyVlktmjhOffVIU39q532o4iIFN7lRXXo
-	 /G/N3PQbnfW4g==
-Date: Tue, 23 Aug 2022 17:26:31 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	id 60487C433D6; Tue, 23 Aug 2022 19:18:09 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A0A4BC433C1;
+	Tue, 23 Aug 2022 19:18:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A0A4BC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661282284; x=1692818284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=od9EKCDhRArRaGPV2RxuCjiGWzeVGL06v4Tyo/Ik6Ls=;
+  b=Xxf+eBrlAuptI6k8uWDU0IsEgKTwoCancFa7WoxYxBVbvdLJBf8Ge87b
+   1axyLiRbl1aKOgCm2l0dmjwUKpOx0N2Nua2TSLCyWMe14Pxz2RRJ5NkFu
+   U7f31Ch5FiMY/ND2mdObRZ1O8z1mODABE7Q0oaebRuS0Kp9IDbRGqXach
+   v1OSFfVCGui0qnrAtM/qKzsNTdabUSMl8tl70zdLCoAereRLwMr+89ejC
+   j7RK1mKJiB4242bRzujQ5KA1Ke/vgw9CWMfBIkJBNrRXYeOK01uNgenUO
+   /xJCMShZnAhPaS1CmL0srW4zAYPTMxLvm62rTQFQgkN6PLoXmvGinWI55
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
+   d="scan'208";a="187761601"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Aug 2022 12:17:57 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 23 Aug 2022 12:17:56 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 23 Aug 2022 12:17:56 -0700
+Date: Tue, 23 Aug 2022 21:22:10 +0200
+From: Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
+To: Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.0
-Message-ID: <20220823092631.GV149610@dragon>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+	"soc@kernel.org" <soc@kernel.org>, Nicolas Ferre - M43238
+	<Nicolas.Ferre@microchip.com>, UNGLinuxDriver <UNGLinuxDriver@microchip.com>,
+	"maxime.chevallier@bootlin.com" <maxime.chevallier@bootlin.com>
+Subject: Re: [PATCH] ARM: dts: lan966x: add support for pcb8290
+Message-ID: <20220823192210.cnkxmdb2eryg4hnz@soft-dev3-1.localhost>
+References: <20220817190027.1632721-1-horatiu.vultur@microchip.com>
+ <8e6c780e-28ee-1f37-c14c-f0ca5f590743@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
+In-Reply-To: <8e6c780e-28ee-1f37-c14c-f0ca5f590743@microchip.com>
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+The 08/23/2022 07:11, Claudiu Beznea - M18063 wrote:
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+Hi Claudiu,
 
-are available in the Git repository at:
+> > +&gpio {
+> > +	miim_a_pins: mdio-pins {
+> > +		/* MDC, MDIO */
+> > +		pins =  "GPIO_28", "GPIO_29";
+> > +		function = "miim_a";
+> > +	};
+> > +
+> > +	pps_out_pins: pps-out-pins {
+> 
+> Can you also document this one as well? I can do it while applying if you
+> provide the strings.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.0
+Yes, I will do that.
+I will send a new version because I have seen that there is also a small
+error in the commit message.
 
-for you to fetch changes up to 8f143b9f3849828870bb2a7f28288095ad9a329d:
+> 
+> > +		pins = "GPIO_38";
+> > +		function = "ptpsync_3";
+> > +	};
+> > +
+> > +	ptp_ext_pins: ptp-ext-pins {
+> 
+> Ditto
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> > +		pins = "GPIO_35";
+> > +		function = "ptpsync_0";
+> > +	};
+> > +
+> > +	udc_pins: ucd-pins {
+> > +		/* VBUS_DET B */
+> > +		pins = "GPIO_8";
+> > +		function = "usb_slave_b";
+> > +	};
+> > +};
+> > +
+> > +&mdio0 {
+> > +	pinctrl-0 = <&miim_a_pins>;
+> > +	pinctrl-names = "default";
+> > +	status = "okay";
+> > +
+> > +	ext_phy0: ethernet-phy@7 {
+> > +		reg = <7>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy1: ethernet-phy@8 {
+> > +		reg = <8>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy2: ethernet-phy@9 {
+> > +		reg = <9>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy3: ethernet-phy@10 {
+> > +		reg = <10>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy4: ethernet-phy@15 {
+> > +		reg = <15>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy5: ethernet-phy@16 {
+> > +		reg = <16>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy6: ethernet-phy@17 {
+> > +		reg = <17>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +
+> > +	ext_phy7: ethernet-phy@18 {
+> > +		reg = <18>;
+> > +		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
+> > +	};
+> > +};
+> > +
+> > +&port0 {
+> > +	reg = <2>;
+> > +	phy-handle = <&ext_phy2>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 0 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port1 {
+> > +	reg = <3>;
+> > +	phy-handle = <&ext_phy3>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 1 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port2 {
+> > +	reg = <0>;
+> > +	phy-handle = <&ext_phy0>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 2 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port3 {
+> > +	reg = <1>;
+> > +	phy-handle = <&ext_phy1>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 3 SERDES6G(1)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port4 {
+> > +	reg = <6>;
+> > +	phy-handle = <&ext_phy6>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 4 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port5 {
+> > +	reg = <7>;
+> > +	phy-handle = <&ext_phy7>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 5 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port6 {
+> > +	reg = <4>;
+> > +	phy-handle = <&ext_phy4>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 6 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&port7 {
+> > +	reg = <5>;
+> > +	phy-handle = <&ext_phy5>;
+> > +	phy-mode = "qsgmii";
+> > +	phys = <&serdes 7 SERDES6G(2)>;
+> > +	status = "okay";
+> > +};
+> > +
+> > +&serdes {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&switch {
+> > +	pinctrl-0 = <&pps_out_pins>, <&ptp_ext_pins>;
+> > +	pinctrl-names = "default";
+> > +	status = "okay";
+> > +};
+> > +
+> > +&udc {
+> > +	pinctrl-0 = <&udc_pins>;
+> > +	pinctrl-names = "default";
+> > +	atmel,vbus-gpio = <&gpio 8 GPIO_ACTIVE_HIGH>;
+> > +	status = "okay";
+> > +};
+> 
 
-  arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity (2022-08-22 10:07:46 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 6.0:
-
-- Remove superfluous interrupt-names from imx8mq-tqma8mq RTC device to
-  silence dtbs_check warning.
-- A few Verdin board fixes on CAN clock frequency, mcp251xfd interrupt,
-  atmel_mxt_ts reset polarity and USB PHY.
-- Remove duplicated node and fix spi-flash compatible for
-  imx6qdl-kontron-samx6i.
-- A couple of i.MX8M Plus DHCOM fixes from Marek Vasut on ECSPI1 pinmux
-  and I2C5 GPIO assignment.
-- A couple of Venice fixes on SAI2 pin settings and phy-mode.
-- Drop in-band autoneg for 2500base-x phy-mode on ls1028a-qds-65bb
-  board.
-- Revert the power device name setting change from imx8m-blk-ctrl
-  driver, as it causes issue for sysfs cleanup path.
-- Fix gpcv2 driver to assert reset before ungating clock.
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: imx8mq-tqma8mq: Remove superfluous interrupt-names
-
-Andrejs Cainikovs (2):
-      arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
-      arm64: dts: imx8mm-verdin: use level interrupt for mcp251xfd
-
-David Jander (1):
-      ARM: dts: imx6qdl-vicut1.dtsi: Fix node name backlight_led
-
-Marcel Ziswiler (2):
-      arm64: dts: freescale: verdin-imx8mm: fix atmel_mxt_ts reset polarity
-      arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity
-
-Marco Felsch (3):
-      Revert "soc: imx: imx8m-blk-ctrl: set power device name"
-      ARM: dts: imx6qdl-kontron-samx6i: remove duplicated node
-      ARM: dts: imx6qdl-kontron-samx6i: fix spi-flash compatible
-
-Marek Vasut (3):
-      arm64: dts: imx8mp: Adjust ECSPI1 pinmux on i.MX8M Plus DHCOM
-      soc: imx: gpcv2: Assert reset before ungating clock
-      arm64: dts: imx8mp: Fix I2C5 GPIO assignment on i.MX8M Plus DHCOM
-
-Peng Fan (1):
-      arm64: dts: imx8mp-venice-gw74xx: fix sai2 pin settings
-
-Philippe Schenker (1):
-      arm64: dts: verdin-imx8mm: add otg2 pd to usbphy
-
-Tim Harvey (1):
-      arm64: dts: imx8mm-venice-gw7901: fix port/phy validation
-
-Vladimir Oltean (1):
-      arm64: dts: ls1028a-qds-65bb: don't use in-band autoneg for 2500base-x
-
- arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi          | 12 +-----------
- arch/arm/boot/dts/imx6qdl-vicut1.dtsi                  |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts |  1 -
- arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts |  4 ++++
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi       | 11 ++++++-----
- arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi    | 14 +++++++-------
- arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts |  8 ++++----
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi       |  4 ++--
- arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi      |  1 -
- drivers/soc/imx/gpcv2.c                                |  5 ++++-
- drivers/soc/imx/imx8m-blk-ctrl.c                       |  1 -
- 11 files changed, 29 insertions(+), 34 deletions(-)
+-- 
+/Horatiu
