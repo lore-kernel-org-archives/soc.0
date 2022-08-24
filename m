@@ -1,146 +1,101 @@
-Return-Path: <SRS0=9zbJ=Y4=microchip.com=Nicolas.Ferre@kernel.org>
+Return-Path: <SRS0=QfHf=Y4=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB691C00140
-	for <soc@archiver.kernel.org>; Wed, 24 Aug 2022 07:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61E95C3F6B0
+	for <soc@archiver.kernel.org>; Wed, 24 Aug 2022 22:22:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A728AC433B5; Wed, 24 Aug 2022 07:54:04 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 14D22C433C1; Wed, 24 Aug 2022 22:22:59 +0000 (UTC)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B7577C433C1;
-	Wed, 24 Aug 2022 07:54:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7577C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661327642; x=1692863642;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vQMwGd63+sQ5EkTMmrWM2sJXCbIqYhrCDbQUP/40uTE=;
-  b=KhSAixViyrITQZKeQNg+1sF2R7QMCzM6LpRYhAUrhyBsisl4JcXUChzm
-   lHEKYsXR22EmSo57znzBrI1luTzhKCUUKOX2EegzsxMY06Fa8vPKhhT8o
-   Og1T8Gmk0Ava9GbxcZF0+ZN/Ioycxp7B15TIDYzzio/psSHjYRe1TiXxn
-   V0oNC6ottes5ujuuqHcCW7IUrAjWQn407sVqLk7Wpjuvo7qKnZ4hSX6XS
-   Mq98f3ccyp0d2mXonSfvn18XiTMJ3Gmt7+AMRTihSz7KfZ9HUOJaMbVjF
-   nYz5XrfYUrfi4Mi5/fYEIdwDzr7jTd9XwzoA7NevDZSVev1+PRtMoQsmT
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
-   d="scan'208";a="110461175"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2022 00:54:01 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 24 Aug 2022 00:53:57 -0700
-Received: from [10.12.67.249] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 24 Aug 2022 00:53:55 -0700
-Message-ID: <4fd71594-5e48-a365-d969-857ff8bb15cf@microchip.com>
-Date: Wed, 24 Aug 2022 09:53:54 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 989F9C433B5
+	for <soc@kernel.org>; Wed, 24 Aug 2022 22:22:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 989F9C433B5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f51.google.com with SMTP id w20so8082652edd.10
+        for <soc@kernel.org>; Wed, 24 Aug 2022 15:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=+BMgjgzGOXgGsMIfSAXBTJaYENdE9nKFfILcBfbOuCA=;
+        b=AQ/yn6RPiLKCRemOfgnjvszYZm62R/RsYu7CssIMdoiSpMPhNvsSLJD3WXEbMkmY5R
+         UuFjSpushiRED2NyGO8AdEKEQH0xdKN1QltGyYeGtE+aoqOVHRKB2iuveud4RCidlAYi
+         6A0gJedbZaCudIuVXTTYJFe/Dl8KN2Ayc+VgqNpM+Z4L5yFFMV4Da71NDm64bFQGiScB
+         A6o0cqlSTcIpegpR/qum6dfYgvYS9KsAPNj9wS4pvARA6A/a1NP7LhyhiDA1FxWoljbg
+         02sfnAXxdtu5Kri3xtDUziYDLxjONmOfLZ5l6e9Zkxsw/iUDL3cNWnGgmgwSJaZ+H/kW
+         XR+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=+BMgjgzGOXgGsMIfSAXBTJaYENdE9nKFfILcBfbOuCA=;
+        b=q9oLZ9up0KMaWAg43nB4AEEf0YpnSd8QBk7FDn9VO6j7myWOZeRvOTl4GoTktvc9FZ
+         9uWghx/6g6CO04cMMw3mWD0pQRlj2VCy9AVgOGl6loQhUzvUumZADA7zSRmwzbrgPKyN
+         eyFt8lK+aqPyzqPrh5wfLQ/lykDJNuyr+zU0KF3fP8hTbcXEtbdTtA0FUOL8ePa9fYoU
+         a+7RwBvTPR5aILFMfWiEd5s2wyP8g8a/7JYcgD4J/xEqmI6rvlzUXrTtIVamc38yhb+P
+         tzWXUIp6yF5KoGPyWJW1yUokbX7g6sbyLajD26S8CDEA/b8bf7UmKATvhhRWBe57xt2Y
+         q4IA==
+X-Gm-Message-State: ACgBeo0ayZs5t1YoG0VunmuoCh+xaFe9isahFzXB+yK2AnoZK3ekFrgp
+	aFBfIrP4rKgUo4/if1mfONg6HeXzcrKamMV0NxgSfW0gb3wUaHhE
+X-Google-Smtp-Source: AA6agR5uiWqqNOP4zx5N0xqu3f75ZK3nS7D3KG/76pkgbEAkFFQmJpxqz8fMQJFoWM8KPmmHT7fL3cRvPHc4xnMmVBE=
+X-Received: by 2002:a05:6402:50d4:b0:447:85f:52d5 with SMTP id
+ h20-20020a05640250d400b00447085f52d5mr860237edb.205.1661379775497; Wed, 24
+ Aug 2022 15:22:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] ARM: dts: lan966x: add support for pcb8290
-Content-Language: en-US
-To: Horatiu Vultur <horatiu.vultur@microchip.com>,
-	<linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 25 Aug 2022 00:22:44 +0200
+Message-ID: <CACRpkdZfTe8NSGR2ZCkn-1JcNobjfWeXqajSqcJMp8+WtY+2Xw@mail.gmail.com>
+Subject: [GIT PULL] DTS fixes for the Versatile family
 List-Id: <soc.lore.kernel.org>
-CC: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-	<arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
-	<claudiu.beznea@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<maxime.chevallier@bootlin.com>
-References: <20220824065527.157334-1-horatiu.vultur@microchip.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220824065527.157334-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>, 
+	Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Horatiu,
+Hi SoC folks,
 
-On 24/08/2022 at 08:55, Horatiu Vultur wrote:
-> Add basic support for pcb8290. It has 2 lan8814 phys(each phy is a
-> quad-port) on the external MDIO bus and no SFP ports.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
-> v2->v3:
-> - update coma-mode-gpios, set them to OPEN_DRAIN
-> 
-> v1->v2:
-> - add comments for pps_out_pins and ptp_ext_pins pins
-> - fix commit message.
-> ---
->   arch/arm/boot/dts/Makefile            |   1 +
->   arch/arm/boot/dts/lan966x-pcb8290.dts | 171 ++++++++++++++++++++++++++
->   2 files changed, 172 insertions(+)
->   create mode 100644 arch/arm/boot/dts/lan966x-pcb8290.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..595e870750cd 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -788,6 +788,7 @@ dtb-$(CONFIG_SOC_IMXRT) += \
->   dtb-$(CONFIG_SOC_LAN966) += \
->   	lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb \
->   	lan966x-kontron-kswitch-d10-mmt-8g.dtb \
-> +	lan966x-pcb8290.dtb \
->   	lan966x-pcb8291.dtb \
->   	lan966x-pcb8309.dtb
->   dtb-$(CONFIG_SOC_LS1021A) += \
-> diff --git a/arch/arm/boot/dts/lan966x-pcb8290.dts b/arch/arm/boot/dts/lan966x-pcb8290.dts
-> new file mode 100644
-> index 000000000000..3d93049fdf57
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/lan966x-pcb8290.dts
-> @@ -0,0 +1,171 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * lan966x_pcb8290.dts - Device Tree file for PCB8290
+these DTS fixes for the Versatile family missed the last merge
+window because I forgot to send them.
 
-Copyright missing from this file. Can you apply the header model below?
+Mea culpa.
 
-// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-/*
-   * Brief description goes here.
-   *
-   * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-   *
-   * Author: John Doe <john.doe@microchip.com>
-   *
-   * Longer description goes here.
-   * Even on multiple lines.
-   */
+Please pull it in for v6.1!
 
-Maybe it's not align with other board files for lan966x, sorry if I 
-didn't mention this earlier then ;-)
+Yours,
+Linus Walleij
 
-Regards,
-   Nicolas
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-> + */
-> +/dts-v1/;
-> +#include "lan966x.dtsi"
-> +#include "dt-bindings/phy/phy-lan966x-serdes.h"
-> +
-> +/ {
-> +	model = "Microchip EVB LAN9668";
-> +	compatible = "microchip,lan9668-pcb8290", "microchip,lan9668", "microchip,lan966";
-> +
-> +	gpio-restart {
-> +		compatible = "gpio-restart";
-> +		gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
-> +		priority = <200>;
-> +	};
-> +};
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-[..]
+are available in the Git repository at:
 
--- 
-Nicolas Ferre
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+tags/versatile-dts-v6.1
+
+for you to fetch changes up to 6c939e28b192075e1d3b9b267100a3dd9d6a7cf7:
+
+  ARM: dts: versatile: Update spi clock-names property (2022-08-19
+10:51:13 +0200)
+
+----------------------------------------------------------------
+These are some Versatile family DTS fixes, fixing some
+node names and clock names related to SPI.
+
+----------------------------------------------------------------
+Kuldeep Singh (3):
+      ARM: dts: integratorap: Update spi node properties
+      ARM: dts: realview: Update spi clock-names property
+      ARM: dts: versatile: Update spi clock-names property
+
+ arch/arm/boot/dts/arm-realview-eb.dtsi    | 2 +-
+ arch/arm/boot/dts/arm-realview-pb1176.dts | 2 +-
+ arch/arm/boot/dts/arm-realview-pb11mp.dts | 2 +-
+ arch/arm/boot/dts/arm-realview-pbx.dtsi   | 2 +-
+ arch/arm/boot/dts/integratorap-im-pd1.dts | 4 ++--
+ arch/arm/boot/dts/versatile-ab.dts        | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
