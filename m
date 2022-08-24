@@ -1,45 +1,45 @@
-Return-Path: <SRS0=BRl/=Y3=microchip.com=Horatiu.Vultur@kernel.org>
+Return-Path: <SRS0=TYLH=Y4=microchip.com=Horatiu.Vultur@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C9E2C32772
-	for <soc@archiver.kernel.org>; Tue, 23 Aug 2022 19:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFA95C00140
+	for <soc@archiver.kernel.org>; Wed, 24 Aug 2022 06:51:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3444BC433B5; Tue, 23 Aug 2022 19:27:50 +0000 (UTC)
+	id 96463C433D6; Wed, 24 Aug 2022 06:51:51 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3FE71C433C1;
-	Tue, 23 Aug 2022 19:27:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FE71C433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 83086C433C1;
+	Wed, 24 Aug 2022 06:51:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83086C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661282868; x=1692818868;
+  t=1661323910; x=1692859910;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=Cv8ZzX9wuinNQiDdGTMmLlXb+4MCLabp/vcMmPSWYdI=;
-  b=g5tggvogFOASuiRPRawRF37BSOZURe2oh+pvUegCKs9oJwmwBhvnzynP
-   jYPkzOHVOSMtT6yHe4r6M98oEA4XAxphx/XLoy7o1GFjCl96jQWSmyNYx
-   cgjbHG3hrrNB2iloo4WfOya1rg684EZGiI+RqSym+uU+bY4sL5jSbF/mc
-   Pb/yk3xvMc8hwXhjEeIlhUQ3tALDfmf4gLaJrFT2uGnc/WW45uRpB9su0
-   pMcpRq0XwCLe+sk8LxNVGzElVylJ5WyvfQwAr6WlZBo6fVla3yyJ2jiXP
-   oC7Te0jHVeyzrJTtOGQu5b7XQD7HXiP0Hv+1JYTtkaALpmBJtFpQz3yaT
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,258,1654585200"; 
-   d="scan'208";a="173789794"
+  bh=i089sQETkF6czyTsAQidiBQG3A22dMjUG/Oyhy6+DLA=;
+  b=w44415RoHmf9gS5BUCEOfw4QRDYWg/5hAygCOu16fvifojmnUaAW6d3K
+   qWLsEym2HcjPsXiA29gA1WdoAEGzxyZ/FNGgy8D3CkihsnzVE5DKNqOMH
+   J/nWkBSB1HAYLm5JE6vc359gCKjW+Ft2gD0bVk/qZLocT/UaQTWTIOip4
+   mf/8sOqbMdSUMmicJYitIvhKzopZq8mkjxp5tyUbz9QCC3WE0MJap8kF5
+   l3ypGSDbIH3rJqxzswvPHdpxjs4FvzuTal9Fjt+Z0nVwd2QPJuJKQWHaL
+   3NMx6bEbKUH4EgpzVS2A8MLJ2jxKrSj6h9a8dyG0xwErdG9hJj1HwF3cR
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="170673958"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Aug 2022 12:27:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Aug 2022 23:51:36 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 23 Aug 2022 12:27:36 -0700
+ 15.1.2507.12; Tue, 23 Aug 2022 23:51:35 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 23 Aug 2022 12:27:34 -0700
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 23 Aug 2022 23:51:32 -0700
 From: Horatiu Vultur <horatiu.vultur@microchip.com>
 To: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>
@@ -49,9 +49,9 @@ CC: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
 	<nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
 	<UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>, "Horatiu
  Vultur" <horatiu.vultur@microchip.com>
-Subject: [PATCH v2] ARM: dts: lan966x: add support for pcb8290
-Date: Tue, 23 Aug 2022 21:29:07 +0200
-Message-ID: <20220823192907.86506-1-horatiu.vultur@microchip.com>
+Subject: [PATCH v3] ARM: dts: lan966x: add support for pcb8290
+Date: Wed, 24 Aug 2022 08:55:27 +0200
+Message-ID: <20220824065527.157334-1-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,6 +62,9 @@ quad-port) on the external MDIO bus and no SFP ports.
 
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
+v2->v3:
+- update coma-mode-gpios, set them to OPEN_DRAIN
+
 v1->v2:
 - add comments for pps_out_pins and ptp_ext_pins pins
 - fix commit message.
@@ -85,7 +88,7 @@ index 05d8aef6e5d2..595e870750cd 100644
  dtb-$(CONFIG_SOC_LS1021A) += \
 diff --git a/arch/arm/boot/dts/lan966x-pcb8290.dts b/arch/arm/boot/dts/lan966x-pcb8290.dts
 new file mode 100644
-index 000000000000..a78e3eba0b55
+index 000000000000..3d93049fdf57
 --- /dev/null
 +++ b/arch/arm/boot/dts/lan966x-pcb8290.dts
 @@ -0,0 +1,171 @@
@@ -141,42 +144,42 @@ index 000000000000..a78e3eba0b55
 +
 +	ext_phy0: ethernet-phy@7 {
 +		reg = <7>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy1: ethernet-phy@8 {
 +		reg = <8>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy2: ethernet-phy@9 {
 +		reg = <9>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy3: ethernet-phy@10 {
 +		reg = <10>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy4: ethernet-phy@15 {
 +		reg = <15>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy5: ethernet-phy@16 {
 +		reg = <16>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy6: ethernet-phy@17 {
 +		reg = <17>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +
 +	ext_phy7: ethernet-phy@18 {
 +		reg = <18>;
-+		coma-mode-gpios = <&gpio 60 GPIO_ACTIVE_HIGH>;
++		coma-mode-gpios = <&gpio 60 GPIO_OPEN_DRAIN>;
 +	};
 +};
 +
