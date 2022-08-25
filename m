@@ -1,92 +1,87 @@
-Return-Path: <SRS0=Klnk=Y5=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=6XfY=Y5=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B54C04AA5
-	for <soc@archiver.kernel.org>; Thu, 25 Aug 2022 09:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 183C8C28D13
+	for <soc@archiver.kernel.org>; Thu, 25 Aug 2022 12:35:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 07796C43470; Thu, 25 Aug 2022 09:57:11 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id D6845C433D7; Thu, 25 Aug 2022 12:35:51 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D1665C433B5
-	for <soc@kernel.org>; Thu, 25 Aug 2022 09:57:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1665C433B5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id m5so16855814lfj.4
-        for <soc@kernel.org>; Thu, 25 Aug 2022 02:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=yPQTjek19dVxANcg2e3WvPol3YwRVRICz8w3fymbirY=;
-        b=ahhl9xUT7wWMaxQJsVd/s12OzETtJzJFtjCcd2xC/A415hBGBmjvEelSL4KaeG/5eQ
-         QPgCLbWagwJn/qtv5HclgmhTZp1Pxh2R0Igvz1AZDiggkWJaXnY9IGDKU1GNf1mYMn0I
-         gLXLBva7qKA62qcxMVcJEj6T25tv1rCywpWodT4//PHvXItxVSoC0d/XbdtB7wDOTWMH
-         61pnT1doMDledkZQYI4TfOlH9Z8TNhnjo+NvkshX9szI935uLCkZC4wtYNu9mEprOUL4
-         E418SN71jLRgA8NCwQRv17MkCOhL1c0svsGewijZZbdMCHc7QTV0BoJWCOvYeg8hLq0G
-         yitA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=yPQTjek19dVxANcg2e3WvPol3YwRVRICz8w3fymbirY=;
-        b=YVIS5+e8T8G8T5PXYyE2Am89sybHK7LNzRb+q6tFraNRd0kcOCHnEWSm9HuvLxooMG
-         XbKGVqKh05t5j22S+H8PwEyhByq3IE97R7nNX0uPJMAbsPTcbb9+JRdMVM4UMuPcSZxB
-         77MjxZh8ESrBXejGQzrFhtWhZ6h6uZ423sAEQogOaen0ndXAxo+KSCDrjvKQOBoqFV3J
-         WRhoadV/r8M0RV49+jd8tL5wJOm0ue1U33mWTxh/gCzFxkKdZHRzJuXHVO8c4kBShfoj
-         8pazJjnJWRQ/vNkldylqeRKfN3Q8N8VYSs0J/N6AcnmaqfKJBd7lcwtQK6YPKifGMpdO
-         Z7Ww==
-X-Gm-Message-State: ACgBeo1WZQCyqh8zH8rnwa2TGQmHI5F3i1LK9LHZixzOGifksvKUrseE
-	1YGhSy7I67QHUflq3jDQdka4nQ==
-X-Google-Smtp-Source: AA6agR6d5FacAMHe4GmbVd8uFGIcTWuWpvV14leXcjzWEufYUIWFu+RUixDMXPJq3HROWsi5uM+tqg==
-X-Received: by 2002:a05:6512:39c2:b0:492:d15f:d246 with SMTP id k2-20020a05651239c200b00492d15fd246mr1022150lfu.517.1661421428010;
-        Thu, 25 Aug 2022 02:57:08 -0700 (PDT)
-Received: from jade ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id w25-20020ac254b9000000b0048b06f34566sm414602lfk.76.2022.08.25.02.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 02:57:07 -0700 (PDT)
-Date: Thu, 25 Aug 2022 11:57:05 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] Fix TEE system compiler warning fo4r v6.0
-Message-ID: <YwdHcdEUib7obbbW@jade>
+	by smtp.kernel.org (Postfix) with ESMTPS id 48480C433D6;
+	Thu, 25 Aug 2022 12:35:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 48480C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
+Received: from mail-ej1-f48.google.com ([209.85.218.48]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MTAJr-1orkqZ0hiR-00UbOc; Thu, 25 Aug 2022 14:35:48 +0200
+Received: by mail-ej1-f48.google.com with SMTP id gb36so39208986ejc.10;
+        Thu, 25 Aug 2022 05:35:48 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2WMqy24SPYgDsjLHLNAZQ7p/LUC33Npvc693jXEVm+PgfAZYi7
+	aYZqlaU9ngHyQvjz3BfAmhjWVAJM482TOZxSjpo=
+X-Google-Smtp-Source: AA6agR7fgaLb9s7H5/Li4IutxFIzar492nAzVxOsAVeMPK8zWfEAvRnEz1Shj5SNAoM6ETiorM4CGcoYPkDi98xLJSQ=
+X-Received: by 2002:a17:906:8458:b0:73d:d0e9:4b27 with SMTP id
+ e24-20020a170906845800b0073dd0e94b27mr1897590ejy.766.1661430947749; Thu, 25
+ Aug 2022 05:35:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20220817071539.176110-1-quan@os.amperecomputing.com>
+ <20220817071539.176110-3-quan@os.amperecomputing.com> <CACPK8XdDpG3ONM1=-E6qvHL1FgMNWSMPoL_sVGJK6BmmnT3w_w@mail.gmail.com>
+ <CAK8P3a2LZKfZpdTQ-R4o9mJ6dk52VRF+Bxj=PJEx-1MA4yH8+w@mail.gmail.com> <673e200f-f458-7866-f956-3d5bd7160a49@os.amperecomputing.com>
+In-Reply-To: <673e200f-f458-7866-f956-3d5bd7160a49@os.amperecomputing.com>
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Thu, 25 Aug 2022 14:35:31 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3MU7shuBpcpRNC5L6xxQmSy8FXCX1jvYXhv-NT3PMYOw@mail.gmail.com>
+Message-ID: <CAK8P3a3MU7shuBpcpRNC5L6xxQmSy8FXCX1jvYXhv-NT3PMYOw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt.
+ Mitchell BMC
+To: Quan Nguyen <quan@os.amperecomputing.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org, 
+	Olof Johansson <olof@lixom.net>, soc@kernel.org, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Andrew Jeffery <andrew@aj.id.au>, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	Open Source Submission <patches@amperecomputing.com>, Phong Vo <phong@os.amperecomputing.com>, 
+	thang@os.amperecomputing.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:zS/G0UOpGn3FzcVasQWxCaXf1RO1R4FJnLhS8cJWKjg9Rvss24S
+ JIySXS3VkKhKyaYtN6a24CA1YaTn3wWFYAa13aa9DNqwZJwf/ZTgYz4zuIcfOWx5y3ITGHn
+ NDmSbPB2W9rRZ9Xy/Jwukp1Jd6dHItzCcW9IsD60PWrfNI0k+H5nnAR5L6ZWBXXhdM7rBKq
+ cMD/psjcAX/R7yVnKebNg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7oIwi5AqHEs=:3krLjS3Ux41G4vToiES0bE
+ GEEWbUx1DTidILDJWPMI1V94m0dYZ+K9LoG4pgC9B852+eVqljINc5LeDDQ+wEHxmUXiD+Kau
+ +d9Rb9Nm0Q26XXZ6cH6rtUbiEGAUHVJGNOITw7N3CdIz8AcyamyhptWrMzM81ls7jJq8sGbSr
+ bVZJMVmaZPqbV1HxOpZvC63uI6QhmaEe3U0nLkwgEAXfDvmi4aoEGdupgNQsJZogXoEQrGVw3
+ WpIOccxzeIRu9oQ+p3hlnRdpBnHN6fx+72PLcLvgbxEzpSjCZFHXBPfEXftP2msptHjkjANge
+ O8TtmmrB05cMM9HyiPubEIwxPTsGhXEfR+UpWVtAUmf47Rajf5G9z8AW9vQlkZAEU4nowanam
+ HGfkcergz6ukUhFE0gQjZsVqm/xMi1JrtHJM4KOLN45/E4eoe+3Up+Y/MmvRFHfKk1z5hWJyV
+ BZF2g6TEtKQuKzSjlFvS2msyE8cuvyZXJ3Ow9MAcNXBA93OFZi/ezWKnhCAIyxktojF/Gw7Eg
+ rQmHXh50TdKMwmHJSU46xH+ESVvPI3FakbbpFYs3r1+QEgvxAcdwCSh6hjUpSM4jBV4+t2cGB
+ YWzw19MItSSObLmj+sJenQ7MkixYO95nud8lO1Uc2IJkN1PGl7/4qENpCSY+iCO8k4OuscTgm
+ bCN3gP7+/sVDqyPIBr2b0thkvV2xt4GQAAfigpRwksj4UucQXvZUMcecbmthDyLTUqpkTVZxs
+ UspP5CG3htw/CpuHmfGz+ZBbm5cmjJa8lVThzB0GEsLhj05AWi/lYJigCmHATfbyVAT2crSun
+ 8snLproWexyABdeskNIrvlUN3C12AwNSsXwdSfsPAJg7RA0cqYhV9cfIkrK5Yvl5FVVui9Qkv
+ m2FPvlWyrXAIhdG4ZyIA==
 
-Hello arm-soc maintainers,
+On Tue, Aug 23, 2022 at 10:27 AM Quan Nguyen
+<quan@os.amperecomputing.com> wrote:
+> On 18/08/2022 19:06, Arnd Bergmann wrote:
+>
+> Thanks Arnd for the comment.
+>
+> I think adding -append could solve the issue.
+>
+> But as the bootargs still exist in all other
+> arch/arm/boot/dts/aspeed-bmc-*.dts should we still keep bootargs for
+> this dts?
 
-Please pull this small patch which fixes a recently introduced compiler
-warning the TEE subsystem.
+I think it should still be removed. Only 238 of 2547 set the console using
+bootargs, so that would make it more consistent with the other files.
 
-Thanks,
-Jens
+Changing the files that have the same issue is a separate matter.
 
-The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
-
-  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-fix-for-v6.0
-
-for you to fetch changes up to eccd7439709810127563e7e3e49b8b44c7b2791d:
-
-  tee: fix compiler warning in tee_shm_register() (2022-08-25 11:40:06 +0200)
-
-----------------------------------------------------------------
-Add a missing include in the TEE subsystem
-
-----------------------------------------------------------------
-Jens Wiklander (1):
-      tee: fix compiler warning in tee_shm_register()
-
- drivers/tee/tee_shm.c | 1 +
- 1 file changed, 1 insertion(+)
+      Arnd
