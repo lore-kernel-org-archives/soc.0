@@ -1,87 +1,543 @@
-Return-Path: <SRS0=6XfY=Y5=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=xipk=Y5=gmail.com=newbie13xd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 183C8C28D13
-	for <soc@archiver.kernel.org>; Thu, 25 Aug 2022 12:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFAAAECAA25
+	for <soc@archiver.kernel.org>; Thu, 25 Aug 2022 16:21:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6845C433D7; Thu, 25 Aug 2022 12:35:51 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id A9307C433B5; Thu, 25 Aug 2022 16:21:00 +0000 (UTC)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 48480C433D6;
-	Thu, 25 Aug 2022 12:35:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 48480C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=arndb.de
-Received: from mail-ej1-f48.google.com ([209.85.218.48]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MTAJr-1orkqZ0hiR-00UbOc; Thu, 25 Aug 2022 14:35:48 +0200
-Received: by mail-ej1-f48.google.com with SMTP id gb36so39208986ejc.10;
-        Thu, 25 Aug 2022 05:35:48 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2WMqy24SPYgDsjLHLNAZQ7p/LUC33Npvc693jXEVm+PgfAZYi7
-	aYZqlaU9ngHyQvjz3BfAmhjWVAJM482TOZxSjpo=
-X-Google-Smtp-Source: AA6agR7fgaLb9s7H5/Li4IutxFIzar492nAzVxOsAVeMPK8zWfEAvRnEz1Shj5SNAoM6ETiorM4CGcoYPkDi98xLJSQ=
-X-Received: by 2002:a17:906:8458:b0:73d:d0e9:4b27 with SMTP id
- e24-20020a170906845800b0073dd0e94b27mr1897590ejy.766.1661430947749; Thu, 25
- Aug 2022 05:35:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220817071539.176110-1-quan@os.amperecomputing.com>
- <20220817071539.176110-3-quan@os.amperecomputing.com> <CACPK8XdDpG3ONM1=-E6qvHL1FgMNWSMPoL_sVGJK6BmmnT3w_w@mail.gmail.com>
- <CAK8P3a2LZKfZpdTQ-R4o9mJ6dk52VRF+Bxj=PJEx-1MA4yH8+w@mail.gmail.com> <673e200f-f458-7866-f956-3d5bd7160a49@os.amperecomputing.com>
-In-Reply-To: <673e200f-f458-7866-f956-3d5bd7160a49@os.amperecomputing.com>
-From: Arnd Bergmann <arnd@arndb.de>
-Date: Thu, 25 Aug 2022 14:35:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3MU7shuBpcpRNC5L6xxQmSy8FXCX1jvYXhv-NT3PMYOw@mail.gmail.com>
-Message-ID: <CAK8P3a3MU7shuBpcpRNC5L6xxQmSy8FXCX1jvYXhv-NT3PMYOw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt.
- Mitchell BMC
-To: Quan Nguyen <quan@os.amperecomputing.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 1014DC433D6;
+	Thu, 25 Aug 2022 16:20:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1014DC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id z6so28896332lfu.9;
+        Thu, 25 Aug 2022 09:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=mUYPXlQOQOnvqcx8ioEudx6RfnF80tz1ErnV2NXlaQM=;
+        b=Hg1XpZK239x8hTzWIxSxRexEy3SARIHEM0X1EnWNHe8vyhowi+jFqQUJszg4JXQrgl
+         FNtpnzTTs5IOT2IT2JmZ6IzOnPo2IewDc3OmJH8Sr0TQzMsMXRstlnG5ItgMQrK5IqWf
+         xKRWU1iX09h4iCZW9MXnYXF/M4hCa8G0R+EEWBJcEdPWedGHEJor9KgceTMRg6YiS8cp
+         qj8Cn5Hn9iwPPgCidk/xM7i5XBde+4wjzoCzD6WqFlDTTZUr5tj/KSzKRnzPt92OryoK
+         K3uMUFsjl+fcmHngYgFvBuygJBaoNddUuFMOoECennDnmt7WtnJZH75X3iJ3Eer6UhJ5
+         ZO2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=mUYPXlQOQOnvqcx8ioEudx6RfnF80tz1ErnV2NXlaQM=;
+        b=GAgVDmbaRbzwTAUzoB7W+Ddk7KYyjgPAs4sIxxCMgL0Zf6q9d90E9BjrQhkwsf2C/7
+         x5S+/hhEu3ExezO93LkdML5rBIEvtU3MXZ3m8BCXvqXd6zRUIcQMXkqjNlXMjEQchcHX
+         Vgl/ZOZZcHSW1giSXCPe4HribX+zMxg85RL1F3Gv7JDJhDo/PdrcIQo71bGgYI1o8V2I
+         k4wUj/k2SSg5LeET4CRIOvRG5GIUfyNdlUJ0gv7hx6QMF5gh955Df0BqqjZU4MPSnFhv
+         ZXUYEyG1iJFsGgfBnM8KaYJxzSt0Ex49wPwTHM/iU28AZsLbjPzyPJaOdYD6Z/11zgLI
+         sa/w==
+X-Gm-Message-State: ACgBeo1v/3EuPF7z6UtW8qpz5Pbm55iAiv9IKCj93WV8uKz7J2b0mbhR
+	iqgz/GV5sQ6R3iLaCfmucLg=
+X-Google-Smtp-Source: AA6agR4mSuqcHou86H5PRd3w0x0ClNJWnY0N8wkNiwNAgVrBHrlbFCRC5nVYCmBc/1azSWmunU60hw==
+X-Received: by 2002:a05:6512:3e09:b0:492:f8e5:5eb5 with SMTP id i9-20020a0565123e0900b00492f8e55eb5mr1365521lfv.498.1661444457036;
+        Thu, 25 Aug 2022 09:20:57 -0700 (PDT)
+Received: from numbers.lan ([2001:2002:2f8:bfc5:2dd2:9869:8c01:77b2])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac257c1000000b00492df838a40sm556267lfo.280.2022.08.25.09.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 09:20:56 -0700 (PDT)
+From: Stefan Hansson <newbie13xd@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Andrew Jeffery <andrew@aj.id.au>, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
-	Open Source Submission <patches@amperecomputing.com>, Phong Vo <phong@os.amperecomputing.com>, 
-	thang@os.amperecomputing.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zS/G0UOpGn3FzcVasQWxCaXf1RO1R4FJnLhS8cJWKjg9Rvss24S
- JIySXS3VkKhKyaYtN6a24CA1YaTn3wWFYAa13aa9DNqwZJwf/ZTgYz4zuIcfOWx5y3ITGHn
- NDmSbPB2W9rRZ9Xy/Jwukp1Jd6dHItzCcW9IsD60PWrfNI0k+H5nnAR5L6ZWBXXhdM7rBKq
- cMD/psjcAX/R7yVnKebNg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7oIwi5AqHEs=:3krLjS3Ux41G4vToiES0bE
- GEEWbUx1DTidILDJWPMI1V94m0dYZ+K9LoG4pgC9B852+eVqljINc5LeDDQ+wEHxmUXiD+Kau
- +d9Rb9Nm0Q26XXZ6cH6rtUbiEGAUHVJGNOITw7N3CdIz8AcyamyhptWrMzM81ls7jJq8sGbSr
- bVZJMVmaZPqbV1HxOpZvC63uI6QhmaEe3U0nLkwgEAXfDvmi4aoEGdupgNQsJZogXoEQrGVw3
- WpIOccxzeIRu9oQ+p3hlnRdpBnHN6fx+72PLcLvgbxEzpSjCZFHXBPfEXftP2msptHjkjANge
- O8TtmmrB05cMM9HyiPubEIwxPTsGhXEfR+UpWVtAUmf47Rajf5G9z8AW9vQlkZAEU4nowanam
- HGfkcergz6ukUhFE0gQjZsVqm/xMi1JrtHJM4KOLN45/E4eoe+3Up+Y/MmvRFHfKk1z5hWJyV
- BZF2g6TEtKQuKzSjlFvS2msyE8cuvyZXJ3Ow9MAcNXBA93OFZi/ezWKnhCAIyxktojF/Gw7Eg
- rQmHXh50TdKMwmHJSU46xH+ESVvPI3FakbbpFYs3r1+QEgvxAcdwCSh6hjUpSM4jBV4+t2cGB
- YWzw19MItSSObLmj+sJenQ7MkixYO95nud8lO1Uc2IJkN1PGl7/4qENpCSY+iCO8k4OuscTgm
- bCN3gP7+/sVDqyPIBr2b0thkvV2xt4GQAAfigpRwksj4UucQXvZUMcecbmthDyLTUqpkTVZxs
- UspP5CG3htw/CpuHmfGz+ZBbm5cmjJa8lVThzB0GEsLhj05AWi/lYJigCmHATfbyVAT2crSun
- 8snLproWexyABdeskNIrvlUN3C12AwNSsXwdSfsPAJg7RA0cqYhV9cfIkrK5Yvl5FVVui9Qkv
- m2FPvlWyrXAIhdG4ZyIA==
+To: Russell King <linux@armlinux.org.uk>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-oxnas@groups.io,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org
+Cc: Stefan Hansson <newbie13xd@gmail.com>
+Subject: [RESEND PATCH] ARM: configs: replace CONFIG_NO_HZ=y with CONFIG_NO_HZ_IDLE=y
+Date: Thu, 25 Aug 2022 18:20:35 +0200
+Message-Id: <20220825162034.5901-1-newbie13xd@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 23, 2022 at 10:27 AM Quan Nguyen
-<quan@os.amperecomputing.com> wrote:
-> On 18/08/2022 19:06, Arnd Bergmann wrote:
->
-> Thanks Arnd for the comment.
->
-> I think adding -append could solve the issue.
->
-> But as the bootargs still exist in all other
-> arch/arm/boot/dts/aspeed-bmc-*.dts should we still keep bootargs for
-> this dts?
+According to https://www.kernel.org/doc/html/latest/timers/no_hz.html,
+CONFIG_NO_HZ=y should be replaced by CONFIG_NO_HZ_IDLE=y for newer
+kernels, so let's reflect that in the 32-bit ARM defconfigs.
 
-I think it should still be removed. Only 238 of 2547 set the console using
-bootargs, so that would make it more consistent with the other files.
+Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> # Samsung
+---
+ arch/arm/configs/bcm2835_defconfig       | 2 +-
+ arch/arm/configs/cm_x300_defconfig       | 2 +-
+ arch/arm/configs/davinci_all_defconfig   | 2 +-
+ arch/arm/configs/dove_defconfig          | 2 +-
+ arch/arm/configs/exynos_defconfig        | 2 +-
+ arch/arm/configs/ezx_defconfig           | 2 +-
+ arch/arm/configs/hisi_defconfig          | 2 +-
+ arch/arm/configs/imx_v4_v5_defconfig     | 2 +-
+ arch/arm/configs/imx_v6_v7_defconfig     | 2 +-
+ arch/arm/configs/integrator_defconfig    | 2 +-
+ arch/arm/configs/lpc32xx_defconfig       | 2 +-
+ arch/arm/configs/magician_defconfig      | 2 +-
+ arch/arm/configs/milbeaut_m10v_defconfig | 2 +-
+ arch/arm/configs/moxart_defconfig        | 2 +-
+ arch/arm/configs/multi_v5_defconfig      | 2 +-
+ arch/arm/configs/multi_v7_defconfig      | 2 +-
+ arch/arm/configs/mv78xx0_defconfig       | 2 +-
+ arch/arm/configs/mvebu_v5_defconfig      | 2 +-
+ arch/arm/configs/mxs_defconfig           | 2 +-
+ arch/arm/configs/omap1_defconfig         | 2 +-
+ arch/arm/configs/omap2plus_defconfig     | 2 +-
+ arch/arm/configs/orion5x_defconfig       | 2 +-
+ arch/arm/configs/oxnas_v6_defconfig      | 2 +-
+ arch/arm/configs/pcm027_defconfig        | 2 +-
+ arch/arm/configs/pxa168_defconfig        | 2 +-
+ arch/arm/configs/pxa910_defconfig        | 2 +-
+ arch/arm/configs/pxa_defconfig           | 2 +-
+ arch/arm/configs/qcom_defconfig          | 2 +-
+ arch/arm/configs/s5pv210_defconfig       | 2 +-
+ arch/arm/configs/shmobile_defconfig      | 2 +-
+ arch/arm/configs/sunxi_defconfig         | 2 +-
+ arch/arm/configs/tegra_defconfig         | 2 +-
+ arch/arm/configs/vt8500_v6_v7_defconfig  | 2 +-
+ arch/arm/configs/xcep_defconfig          | 2 +-
+ 34 files changed, 34 insertions(+), 34 deletions(-)
 
-Changing the files that have the same issue is a separate matter.
+diff --git a/arch/arm/configs/bcm2835_defconfig b/arch/arm/configs/bcm2835_defconfig
+index c4d2e2334b6e..a51babd178c2 100644
+--- a/arch/arm/configs/bcm2835_defconfig
++++ b/arch/arm/configs/bcm2835_defconfig
+@@ -1,6 +1,6 @@
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT_VOLUNTARY=y
+ CONFIG_BSD_PROCESS_ACCT=y
+diff --git a/arch/arm/configs/cm_x300_defconfig b/arch/arm/configs/cm_x300_defconfig
+index 31f41159bef2..95144e380b4b 100644
+--- a/arch/arm/configs/cm_x300_defconfig
++++ b/arch/arm/configs/cm_x300_defconfig
+@@ -1,7 +1,7 @@
+ CONFIG_LOCALVERSION="-cm-x300"
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+ CONFIG_LOG_BUF_SHIFT=18
+diff --git a/arch/arm/configs/davinci_all_defconfig b/arch/arm/configs/davinci_all_defconfig
+index fc71a03a9c8c..821d966c95a5 100644
+--- a/arch/arm/configs/davinci_all_defconfig
++++ b/arch/arm/configs/davinci_all_defconfig
+@@ -1,6 +1,6 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
+index 16ed5c110e8d..233da1101aa0 100644
+--- a/arch/arm/configs/dove_defconfig
++++ b/arch/arm/configs/dove_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_LOG_BUF_SHIFT=14
+ CONFIG_EXPERT=y
+diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
+index 1ce74f46e114..17a968e5d706 100644
+--- a/arch/arm/configs/exynos_defconfig
++++ b/arch/arm/configs/exynos_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_CGROUPS=y
+diff --git a/arch/arm/configs/ezx_defconfig b/arch/arm/configs/ezx_defconfig
+index 1a41391d7367..d6cc84048622 100644
+--- a/arch/arm/configs/ezx_defconfig
++++ b/arch/arm/configs/ezx_defconfig
+@@ -1,7 +1,7 @@
+ CONFIG_LOCALVERSION="-ezx200910312315"
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=14
+diff --git a/arch/arm/configs/hisi_defconfig b/arch/arm/configs/hisi_defconfig
+index 1db5356b1ccd..0376a65e8bc1 100644
+--- a/arch/arm/configs/hisi_defconfig
++++ b/arch/arm/configs/hisi_defconfig
+@@ -1,4 +1,4 @@
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_BLK_DEV_INITRD=y
+diff --git a/arch/arm/configs/imx_v4_v5_defconfig b/arch/arm/configs/imx_v4_v5_defconfig
+index bfa2a95638af..711a79e9be00 100644
+--- a/arch/arm/configs/imx_v4_v5_defconfig
++++ b/arch/arm/configs/imx_v4_v5_defconfig
+@@ -1,6 +1,6 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=14
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index fb283059daa0..6407f3a588f4 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -1,6 +1,6 @@
+ CONFIG_KERNEL_LZO=y
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_BPF_SYSCALL=y
+ CONFIG_PREEMPT_VOLUNTARY=y
+diff --git a/arch/arm/configs/integrator_defconfig b/arch/arm/configs/integrator_defconfig
+index 9ca43c84b452..61711d4bbf74 100644
+--- a/arch/arm/configs/integrator_defconfig
++++ b/arch/arm/configs/integrator_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+diff --git a/arch/arm/configs/lpc32xx_defconfig b/arch/arm/configs/lpc32xx_defconfig
+index 8a41fe4e62f1..fabb66a53350 100644
+--- a/arch/arm/configs/lpc32xx_defconfig
++++ b/arch/arm/configs/lpc32xx_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+diff --git a/arch/arm/configs/magician_defconfig b/arch/arm/configs/magician_defconfig
+index 9cbb63c69436..5a8776f6aba3 100644
+--- a/arch/arm/configs/magician_defconfig
++++ b/arch/arm/configs/magician_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+diff --git a/arch/arm/configs/milbeaut_m10v_defconfig b/arch/arm/configs/milbeaut_m10v_defconfig
+index 8620061e19a8..03e7e8969fc9 100644
+--- a/arch/arm/configs/milbeaut_m10v_defconfig
++++ b/arch/arm/configs/milbeaut_m10v_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_CGROUPS=y
+ CONFIG_BLK_DEV_INITRD=y
+diff --git a/arch/arm/configs/moxart_defconfig b/arch/arm/configs/moxart_defconfig
+index 082a38a14c12..ea31f116d577 100644
+--- a/arch/arm/configs/moxart_defconfig
++++ b/arch/arm/configs/moxart_defconfig
+@@ -1,6 +1,6 @@
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
+index e0be0e0023f3..1d97179c1e55 100644
+--- a/arch/arm/configs/multi_v5_defconfig
++++ b/arch/arm/configs/multi_v5_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=19
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index d9257854c941..4278468e5093 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_CGROUPS=y
+ CONFIG_BLK_DEV_INITRD=y
+diff --git a/arch/arm/configs/mv78xx0_defconfig b/arch/arm/configs/mv78xx0_defconfig
+index a53ccd49f8ff..877c5150a987 100644
+--- a/arch/arm/configs/mv78xx0_defconfig
++++ b/arch/arm/configs/mv78xx0_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=14
+diff --git a/arch/arm/configs/mvebu_v5_defconfig b/arch/arm/configs/mvebu_v5_defconfig
+index ef3a33ebc29a..0b0017ab598c 100644
+--- a/arch/arm/configs/mvebu_v5_defconfig
++++ b/arch/arm/configs/mvebu_v5_defconfig
+@@ -1,6 +1,6 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_FHANDLE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=19
+diff --git a/arch/arm/configs/mxs_defconfig b/arch/arm/configs/mxs_defconfig
+index 155553ee06f4..c874662c2ee9 100644
+--- a/arch/arm/configs/mxs_defconfig
++++ b/arch/arm/configs/mxs_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT_VOLUNTARY=y
+ CONFIG_TASKSTATS=y
+diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
+index 54a9f50122af..ac6628b234be 100644
+--- a/arch/arm/configs/omap1_defconfig
++++ b/arch/arm/configs/omap1_defconfig
+@@ -1,6 +1,6 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_BSD_PROCESS_ACCT=y
+diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
+index 99d015cf8919..e2cb19da033a 100644
+--- a/arch/arm/configs/omap2plus_defconfig
++++ b/arch/arm/configs/omap2plus_defconfig
+@@ -2,7 +2,7 @@ CONFIG_KERNEL_LZMA=y
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+ CONFIG_AUDIT=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_BSD_PROCESS_ACCT=y
+ CONFIG_IKCONFIG=y
+diff --git a/arch/arm/configs/orion5x_defconfig b/arch/arm/configs/orion5x_defconfig
+index 1311d9583fcc..e2da9a8e28a4 100644
+--- a/arch/arm/configs/orion5x_defconfig
++++ b/arch/arm/configs/orion5x_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=14
+diff --git a/arch/arm/configs/oxnas_v6_defconfig b/arch/arm/configs/oxnas_v6_defconfig
+index 5c163a9d1429..70a67b3fc91b 100644
+--- a/arch/arm/configs/oxnas_v6_defconfig
++++ b/arch/arm/configs/oxnas_v6_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_CGROUPS=y
+ CONFIG_BLK_DEV_INITRD=y
+diff --git a/arch/arm/configs/pcm027_defconfig b/arch/arm/configs/pcm027_defconfig
+index 06bc9a8fef90..a392312a13ce 100644
+--- a/arch/arm/configs/pcm027_defconfig
++++ b/arch/arm/configs/pcm027_defconfig
+@@ -1,6 +1,6 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_BSD_PROCESS_ACCT=y
+diff --git a/arch/arm/configs/pxa168_defconfig b/arch/arm/configs/pxa168_defconfig
+index 70d327895ccf..b4768f873b87 100644
+--- a/arch/arm/configs/pxa168_defconfig
++++ b/arch/arm/configs/pxa168_defconfig
+@@ -4,7 +4,7 @@ CONFIG_SYSFS_DEPRECATED_V2=y
+ CONFIG_MACH_ASPENITE=y
+ CONFIG_MACH_ZYLONITE2=y
+ CONFIG_MACH_AVENGERS_LITE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_AEABI=y
+diff --git a/arch/arm/configs/pxa910_defconfig b/arch/arm/configs/pxa910_defconfig
+index 5072bde71508..d61a1e5c8e37 100644
+--- a/arch/arm/configs/pxa910_defconfig
++++ b/arch/arm/configs/pxa910_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_LOG_BUF_SHIFT=14
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index ce3f4ed50498..efc2fe7c50b0 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -1,7 +1,7 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+ CONFIG_FHANDLE=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_BSD_PROCESS_ACCT=y
+diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+index 0eeefbe60d06..12b82c662359 100644
+--- a/arch/arm/configs/qcom_defconfig
++++ b/arch/arm/configs/qcom_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+diff --git a/arch/arm/configs/s5pv210_defconfig b/arch/arm/configs/s5pv210_defconfig
+index 789e900a8a08..d5daef2a966c 100644
+--- a/arch/arm/configs/s5pv210_defconfig
++++ b/arch/arm/configs/s5pv210_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_CGROUPS=y
+diff --git a/arch/arm/configs/shmobile_defconfig b/arch/arm/configs/shmobile_defconfig
+index a29bebb3742e..ecf004ece838 100644
+--- a/arch/arm/configs/shmobile_defconfig
++++ b/arch/arm/configs/shmobile_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+ CONFIG_CGROUPS=y
+diff --git a/arch/arm/configs/sunxi_defconfig b/arch/arm/configs/sunxi_defconfig
+index 3d14827e0a31..5c0806103a6f 100644
+--- a/arch/arm/configs/sunxi_defconfig
++++ b/arch/arm/configs/sunxi_defconfig
+@@ -1,4 +1,4 @@
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_CGROUPS=y
+ CONFIG_BLK_DEV_INITRD=y
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index 71400af6cef4..ea9178a38b97 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -1,5 +1,5 @@
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_PREEMPT=y
+ CONFIG_IKCONFIG=y
+diff --git a/arch/arm/configs/vt8500_v6_v7_defconfig b/arch/arm/configs/vt8500_v6_v7_defconfig
+index cb8d38e9562a..41607a84abc8 100644
+--- a/arch/arm/configs/vt8500_v6_v7_defconfig
++++ b/arch/arm/configs/vt8500_v6_v7_defconfig
+@@ -1,4 +1,4 @@
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_ARCH_MULTI_V6=y
+diff --git a/arch/arm/configs/xcep_defconfig b/arch/arm/configs/xcep_defconfig
+index 0453948d52ef..ea59e4b6bfc5 100644
+--- a/arch/arm/configs/xcep_defconfig
++++ b/arch/arm/configs/xcep_defconfig
+@@ -1,7 +1,7 @@
+ CONFIG_LOCALVERSION=".xcep-itech"
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
++CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_BSD_PROCESS_ACCT=y
+ CONFIG_IKCONFIG=y
+-- 
+2.37.2
 
-      Arnd
