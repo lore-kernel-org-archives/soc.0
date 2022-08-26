@@ -1,139 +1,94 @@
-Return-Path: <SRS0=o3NM=Y5=gmail.com=jernej.skrabec@kernel.org>
+Return-Path: <SRS0=OFv+=Y6=dabbelt.com=palmer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77416ECAA2B
-	for <soc@archiver.kernel.org>; Thu, 25 Aug 2022 19:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 166D8ECAAA2
+	for <soc@archiver.kernel.org>; Fri, 26 Aug 2022 00:15:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 478A5C433D7; Thu, 25 Aug 2022 19:48:58 +0000 (UTC)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	id D26E5C43142; Fri, 26 Aug 2022 00:15:39 +0000 (UTC)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 53FF3C433C1;
-	Thu, 25 Aug 2022 19:48:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53FF3C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id a4so25932806wrq.1;
-        Thu, 25 Aug 2022 12:48:57 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6F2BAC43143
+	for <soc@kernel.org>; Fri, 26 Aug 2022 00:15:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F2BAC43143
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pj1-f44.google.com with SMTP id h11-20020a17090a470b00b001fbc5ba5224so1917pjg.2
+        for <soc@kernel.org>; Thu, 25 Aug 2022 17:15:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=EEQaOMPMio1TV/1T2nsXijwtVuTW2Re2GSl+fTHb2hE=;
-        b=EOSwTGoA0nee7KFDbY0hqShMabo5lvAZLhzj+GVpXhf++Nzj9OmUn1OmWPoyWldHhh
-         dbnv+/P4Q5eGuNwR8TRpA5vnA71y/Ce1/+KcGBQ6tdxjU8neWPGCvfemSOgYsxBw8wWD
-         /r9CrCVNubmy7oRWc7HuFASont4/bo0USnvpHoPD4sH8l2EyTnNC/e/T0T/K21K+q93v
-         ZgCFsmmoNiygJD27wzIH2Y0gk2krAVmjCcEsgBCs8+912zcjpv5PrvliOdMBJuwshUXM
-         5AuVZDl8hY1dUgNxix/rwOXM95rTapj4RVl6B2/HXjH88mM8Vf/D4YhYMVe3E0VrWWyE
-         q9Hg==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:to:from:cc:in-reply-to:subject:date:from:to:cc;
+        bh=A0gsvt1poQ+VylNfnig8Ot0cE//z5t+eeDWuqhE1fpQ=;
+        b=excq8S0Pt6bKvgJnrWBZCNZ9Yh3t/50NeXMnSOTwuOBCtZsNIQdwl9ASMdPHIGNAaQ
+         sOB/cpwuDO94Cyskva/FtB2eKHqYi4Po0TWlmF086nL4G6Fu35SwQTGmhJRMbeOzIW6h
+         iT3icaST3kuPPU/vPzer0orCVtMNa0UtMmzL4lazp1JxEislW3UyGHcaQ6zIivhU7zTF
+         Bg78IHc1JyerrGDMS07VytlhlOmtIdXJDTqcgQ6lhUJfiZpHZWwwSeaMCxDnoWMeO2Ek
+         c6alIJXM6k5bHjt49FkTTO1dWD1YXpEVz8xCewz/Ox9A9T9LU4hrymagamHTUM0dTvjl
+         PiIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=EEQaOMPMio1TV/1T2nsXijwtVuTW2Re2GSl+fTHb2hE=;
-        b=LO/upxOc6rvhTMjG5cNuLPZpTOlWuLAsN+z3FY3YWTOA/6RdeIYCgTpuVqMFNnfbxy
-         xfRmikZc2k7QqAg1QttN47g5/AMM5EAqaNr/+bxNtDnGSQpEiZCa9W3DE7V4N40YXhYU
-         OFhK+TCWB34tU0hvKa/ZjAcgykG6GqBNIh+U6UqLpDZA7AJsM62xqe2wHRHVqrx0MtRa
-         v28u7Pq3RLHQozL8Sr9dGWCcKtAtuvYnWuLG5Y4sG4gL3DH//r3BIbVHeT+VTquZqVta
-         isilrs0mOb0dXRWxIvEjjj8OeDMpcemQOI/6XQe+UpVgyCkasTn+J8q1VuKMMtZjggw1
-         hl8A==
-X-Gm-Message-State: ACgBeo0p4wiTOyjMu7AE09oSKwXfFQWzXK1KwHnW24uRX8m6cXZn1jlj
-	b0j7xBIH5m2+6Md2pFN0w9Q=
-X-Google-Smtp-Source: AA6agR6a+jB85i972kXbhLkKKpllW7496fpWqVVpOsWOvIO65uvf0tz0QQyG4Bto1DkO00QbeWBtGA==
-X-Received: by 2002:a5d:514d:0:b0:225:3507:79e6 with SMTP id u13-20020a5d514d000000b00225350779e6mr3063920wrt.85.1661456935527;
-        Thu, 25 Aug 2022 12:48:55 -0700 (PDT)
-Received: from kista.localnet (82-149-1-172.dynamic.telemach.net. [82.149.1.172])
-        by smtp.gmail.com with ESMTPSA id f5-20020a5d4dc5000000b002235eb9d200sm120536wru.10.2022.08.25.12.48.53
+        h=message-id:to:from:cc:in-reply-to:subject:date:x-gm-message-state
+         :from:to:cc;
+        bh=A0gsvt1poQ+VylNfnig8Ot0cE//z5t+eeDWuqhE1fpQ=;
+        b=49rE36zimXYbX+jo5E3SbRwoY5ivOOsVhUJ21Kag/BvlwsEMFRNKf4/oOHUKZ1oZu9
+         SxkQPkSDO6DK/pMv56BU4dY71r9wAxNxP6mYR57R00JGNHkHscmItAiygkongk+VDQ2r
+         IuAFchxh/lSnCYLap+Zw1gkGz/iXxnx1WdlmYOzN4Qv/Lnq8gDm3m/QlLKCAVgeqPMLj
+         +TDDxiBAMQBEPdkHx+VrRg1BrtEBMEEFhnFz6BeeQ3DgKnZGLyWv2d1UL8ImT7kLMMrI
+         CAYAZQr1KYYkWRaTQCHdDYWQsMj6ZPer7W6mHTBzxxTxndo/k+MY2ajzhXNDX8JXbSjU
+         rbjA==
+X-Gm-Message-State: ACgBeo2Evyws23tmxHQGLlPg8IpADk8OZGjLlaXE2Lnk1gfnTO1KdCb+
+	HjOu1Ro/YPJKJGTW78TlJawkLbvcqYfy9w==
+X-Google-Smtp-Source: AA6agR7avLLMBjCkQ+XBTGDBoNHD8IObfC9EMTEilFGiA40oEt07P4n5+N3r+nAhZXHYuS+LR+T0+A==
+X-Received: by 2002:a17:90a:c02:b0:1fb:b69d:140f with SMTP id 2-20020a17090a0c0200b001fbb69d140fmr1520190pjs.139.1661472937514;
+        Thu, 25 Aug 2022 17:15:37 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b00172cb8b97a8sm170479plh.5.2022.08.25.17.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 12:48:54 -0700 (PDT)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+        Thu, 25 Aug 2022 17:15:37 -0700 (PDT)
+Date: Thu, 25 Aug 2022 17:15:37 -0700 (PDT)
+X-Google-Original-Date: Thu, 25 Aug 2022 16:49:08 PDT (-0700)
+Subject:     Re: [RESEND/PULL PATCH 0/2] MAINTAINERS updates for PolarFire SoC
+In-Reply-To: <20220810140243.2685416-1-conor.dooley@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: Russell King <linux@armlinux.org.uk>, Florian Fainelli <f.fainelli@gmail.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
-	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Konrad Dybcio <konrad.dybcio@somainline.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-oxnas@groups.io, 
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, arnd@arndb.de, 
-	olof@lixom.net, soc@kernel.org, Stefan Hansson <newbie13xd@gmail.com>
-Cc: Stefan Hansson <newbie13xd@gmail.com>
-Subject: Re: [RESEND PATCH] ARM: configs: replace CONFIG_NO_HZ=y with CONFIG_NO_HZ_IDLE=y
-Date: Thu, 25 Aug 2022 21:48:52 +0200
-Message-ID: <2642863.mvXUDI8C0e@kista>
-In-Reply-To: <20220825162034.5901-1-newbie13xd@gmail.com>
-References: <20220825162034.5901-1-newbie13xd@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+CC: soc@kernel.org, daire.mcnamara@microchip.com, broonie@kernel.org, wsa@kernel.org,
+  thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de, jassisinghbrar@gmail.com,
+  linus.walleij@linaro.org, brgl@bgdev.pl, Greg KH <gregkh@linuxfoundation.org>,
+  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, mturquette@baylibre.com, sboyd@kernel.org,
+  devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, conor.dooley@microchip.com
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: conor.dooley@microchip.com
+Message-ID: <mhng-9fab66cf-3d6c-417b-9233-8030c256aea9@palmer-mbp2014>
 
-Dne =C4=8Detrtek, 25. avgust 2022 ob 18:20:35 CEST je Stefan Hansson napisa=
-l(a):
-> According to https://www.kernel.org/doc/html/latest/timers/no_hz.html,
-> CONFIG_NO_HZ=3Dy should be replaced by CONFIG_NO_HZ_IDLE=3Dy for newer
-> kernels, so let's reflect that in the 32-bit ARM defconfigs.
->=20
-> Signed-off-by: Stefan Hansson <newbie13xd@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> # Samsung
-> ---
->  arch/arm/configs/bcm2835_defconfig       | 2 +-
->  arch/arm/configs/cm_x300_defconfig       | 2 +-
->  arch/arm/configs/davinci_all_defconfig   | 2 +-
->  arch/arm/configs/dove_defconfig          | 2 +-
->  arch/arm/configs/exynos_defconfig        | 2 +-
->  arch/arm/configs/ezx_defconfig           | 2 +-
->  arch/arm/configs/hisi_defconfig          | 2 +-
->  arch/arm/configs/imx_v4_v5_defconfig     | 2 +-
->  arch/arm/configs/imx_v6_v7_defconfig     | 2 +-
->  arch/arm/configs/integrator_defconfig    | 2 +-
->  arch/arm/configs/lpc32xx_defconfig       | 2 +-
->  arch/arm/configs/magician_defconfig      | 2 +-
->  arch/arm/configs/milbeaut_m10v_defconfig | 2 +-
->  arch/arm/configs/moxart_defconfig        | 2 +-
->  arch/arm/configs/multi_v5_defconfig      | 2 +-
->  arch/arm/configs/multi_v7_defconfig      | 2 +-
->  arch/arm/configs/mv78xx0_defconfig       | 2 +-
->  arch/arm/configs/mvebu_v5_defconfig      | 2 +-
->  arch/arm/configs/mxs_defconfig           | 2 +-
->  arch/arm/configs/omap1_defconfig         | 2 +-
->  arch/arm/configs/omap2plus_defconfig     | 2 +-
->  arch/arm/configs/orion5x_defconfig       | 2 +-
->  arch/arm/configs/oxnas_v6_defconfig      | 2 +-
->  arch/arm/configs/pcm027_defconfig        | 2 +-
->  arch/arm/configs/pxa168_defconfig        | 2 +-
->  arch/arm/configs/pxa910_defconfig        | 2 +-
->  arch/arm/configs/pxa_defconfig           | 2 +-
->  arch/arm/configs/qcom_defconfig          | 2 +-
->  arch/arm/configs/s5pv210_defconfig       | 2 +-
->  arch/arm/configs/shmobile_defconfig      | 2 +-
->  arch/arm/configs/sunxi_defconfig         | 2 +-
+On Wed, 10 Aug 2022 07:02:42 PDT (-0700), conor.dooley@microchip.com wrote:
+> Hey Arnd,
+>
+> Could you please take the following two patches via the soc tree when
+> you get a chance?
+>
+> The first is adding coverage for "my" dt-bindings as suggested by Mark.
+> I CCed all the subsystem maintainers on a V1 a week ago & I've added
+> them explicity to the patch text this time as CCs. Correct me if I am
+> wrong, but I am operating on the assumption that their Acks are not
+> required here. Hopefully increasing the binding coverage is non
+> controversial!
+>
+> The second patch is a resend of a patch that was deferred to later in
+> the merge window avoid messing about with a 4th conflict in the entry.
+>
+> Thanks,
+> Conor.
+>
+> Conor Dooley (2):
+>   MAINTAINERS: add PolarFire SoC dt bindings
+>   MAINTAINERS: add the Polarfire SoC's i2c driver
+>
+>  MAINTAINERS | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+>
+> base-commit: 4e23eeebb2e57f5a28b36221aa776b5a1122dde5
 
-=46or sunxi:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
->  arch/arm/configs/tegra_defconfig         | 2 +-
->  arch/arm/configs/vt8500_v6_v7_defconfig  | 2 +-
->  arch/arm/configs/xcep_defconfig          | 2 +-
->  34 files changed, 34 insertions(+), 34 deletions(-)
-
-
-
+Thanks, these are on fixes.
