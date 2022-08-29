@@ -4,90 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9F02ECAAD2
-	for <soc@archiver.kernel.org>; Mon, 29 Aug 2022 09:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCF5ECAAD5
+	for <soc@archiver.kernel.org>; Mon, 29 Aug 2022 09:42:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CE11BC433B5; Mon, 29 Aug 2022 09:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAB0C433C1;
-	Mon, 29 Aug 2022 09:42:43 +0000 (UTC)
+	id C440BC433B5; Mon, 29 Aug 2022 09:42:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D922C433D6;
+	Mon, 29 Aug 2022 09:42:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661766172;
-	bh=ih6IcClzDh+9YhRELNL3SpJIptvLt19plqo3VbHdwwQ=;
+	s=k20201202; t=1661766174;
+	bh=EFmDW0lNNy+phVo8D42MeT7H4eaj9CXR9RDHLb1MMcw=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gqn0cqxfTgzrn0h26mvc7qiunpLt6qstH7DSXfrcZ1zImjaXU4WGHB+8HTVdWcQKm
-	 yPpTx9uHkSQWZR7SRMEKWWYdMm2whwrQ7/MkHtj5NUHme5+OVzzNl0or5vBRyt00ZO
-	 Tbm01MDTCfjea8v8hFeJ3Tx8gd4mnqfO9CwmUNEOVcfEEXwGsJziLN4LtLyCYcQPaa
-	 n6IcYK/P8JDNNPk0Zbf/7sA8PH0fSGy37sMGmlw5+avvx9sz0ZOcp7wC+wT94zn22G
-	 nY7FxeAMvw0ob1I/MQdtAeoLtEF2bDFuDqDi77jbwamgPMYklq3vdmsxhtyCA+jvVC
-	 +/968EKus/yIw==
+	b=NRmnVfmucdN+3TABrNfrmWxtit612evZvHDX7StQMSykpsz+8PJbZHjUlwnHkLMII
+	 fwSHi4TTQ9vDMeCysybJroeym2H8O1pTRdNmH8/EW9XeawE2PpsyV0K+kjQdvMMguA
+	 hHhiqDxSgM8kqy6Rjw5GccsBWydMRrxNy/xtDpNU4w/XlE4QKyZ9m5Eq9G59n981dE
+	 S7uVvi1laYDfBc346dass5cAIu/tdMW8ykVvGrYzMdwyYMSOprFBTqEDEwqsjYPo0q
+	 cZB7YNv4LZ6Sc6HjcMiRqjg8q0xgTheSFl9eKHwF/iw9epUOQvg8IS/NXNvtBSVYH/
+	 M2ZLnLn6uOxoQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	olof@lixom.net,
+To: soc@kernel.org,
+	arm@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Stefan Hansson <newbie13xd@gmail.com>,
-	linux-arm-msm@vger.kernel.org,
-	Andy Gross <agross@kernel.org>,
-	linux-rpi-kernel@lists.infradead.org,
-	Takao Orito <orito.takao@socionext.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-renesas-soc@vger.kernel.org,
-	Andrew Lunn <andrew@lunn.ch>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	linux-oxnas@groups.io,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	linux-samsung-soc@vger.kernel.org,
-	Samuel Holland <samuel@sholland.org>,
-	soc@kernel.org,
-	Tony Lindgren <tony@atomide.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	linux-omap@vger.kernel.org,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	linux-kernel@vger.kernel.org,
-	Taichi Sugaya <sugaya.taichi@socionext.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RESEND PATCH] ARM: configs: replace CONFIG_NO_HZ=y with CONFIG_NO_HZ_IDLE=y
-Date: Mon, 29 Aug 2022 11:42:38 +0200
-Message-Id: <166176606750.192368.4738422285067111975.b4-ty@arndb.de>
+	Sudeep Holla <sudeep.holla@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH] arm64: defconfig: Drop ARM_CPUIDLE(generic idle driver) config
+Date: Mon, 29 Aug 2022 11:42:39 +0200
+Message-Id: <166176606750.192368.18029115177408721770.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220825162034.5901-1-newbie13xd@gmail.com>
-References: <20220825162034.5901-1-newbie13xd@gmail.com>
+In-Reply-To: <20220822121604.2213778-1-sudeep.holla@arm.com>
+References: <20220822121604.2213778-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Thu, 25 Aug 2022 18:20:35 +0200, Stefan Hansson wrote:
-> According to https://www.kernel.org/doc/html/latest/timers/no_hz.html,
-> CONFIG_NO_HZ=y should be replaced by CONFIG_NO_HZ_IDLE=y for newer
-> kernels, so let's reflect that in the 32-bit ARM defconfigs.
+On Mon, 22 Aug 2022 13:16:04 +0100, Sudeep Holla wrote:
+> Since commit 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle
+> driver") the generic ARM cpuidle driver probe no longer worked on
+> ARM64. It was however left enabled with the driver failing to probe
+> successfully. However the commit 51280acad855 ("cpuidle: cpuidle-arm:
+> remove arm64 support") removed the Kconfig option so that it is no
+> longer enabled for arm64 platforms.
+> 
+> [...]
 
 Applied to arm/defconfig, thanks!
 
-[1/1] ARM: configs: replace CONFIG_NO_HZ=y with CONFIG_NO_HZ_IDLE=y
-      commit: 5b8e894163bedd81dacdf517a6aa49625aa98d1f
+[1/1] arm64: defconfig: Drop ARM_CPUIDLE(generic idle driver) config
+      commit: 853ff6c3215070c38cfe2b1bedee3ccb21e29b52
 
        Arnd
