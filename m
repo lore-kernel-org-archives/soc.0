@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCF5ECAAD5
-	for <soc@archiver.kernel.org>; Mon, 29 Aug 2022 09:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C7D5ECAAD4
+	for <soc@archiver.kernel.org>; Mon, 29 Aug 2022 09:44:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C440BC433B5; Mon, 29 Aug 2022 09:42:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D922C433D6;
-	Mon, 29 Aug 2022 09:42:52 +0000 (UTC)
+	id 0B134C43470; Mon, 29 Aug 2022 09:44:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F382C433D6;
+	Mon, 29 Aug 2022 09:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1661766174;
-	bh=EFmDW0lNNy+phVo8D42MeT7H4eaj9CXR9RDHLb1MMcw=;
+	s=k20201202; t=1661766261;
+	bh=ZjYkrsDmXs9UNvlFPv1sryuSfJlaigqBDsrTr1exmgA=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NRmnVfmucdN+3TABrNfrmWxtit612evZvHDX7StQMSykpsz+8PJbZHjUlwnHkLMII
-	 fwSHi4TTQ9vDMeCysybJroeym2H8O1pTRdNmH8/EW9XeawE2PpsyV0K+kjQdvMMguA
-	 hHhiqDxSgM8kqy6Rjw5GccsBWydMRrxNy/xtDpNU4w/XlE4QKyZ9m5Eq9G59n981dE
-	 S7uVvi1laYDfBc346dass5cAIu/tdMW8ykVvGrYzMdwyYMSOprFBTqEDEwqsjYPo0q
-	 cZB7YNv4LZ6Sc6HjcMiRqjg8q0xgTheSFl9eKHwF/iw9epUOQvg8IS/NXNvtBSVYH/
-	 M2ZLnLn6uOxoQ==
+	b=TW+J1CVlurPQIUh7tvwtAVkB3XyQ1rlBBtIh4vmTtMdwXA879AEEo+TVYfefzRlJv
+	 memopbAovU/2z0bLzIVVoJipXXRY8DVcI5zRpEr9HmE7gH3P28wSKSakQVvlPlpDSf
+	 XGIKpa6zLYJObQMh2QtkunTC4xL/rYdZF0nWKIoWt/OcjXlOiHwE/mYZmAdrUoZVMQ
+	 LR0LBqcqF0nELnRTSzCjILKFO/oBEYwAfTlk88dMeOCpouiTE8vsz7ME37o1VYCyaX
+	 dXmFsedakIaWqXWO0YLbR7vp+nhFH854wFx8sKZBMX9SV5aNcb7UE0zoiRIL4nrwH0
+	 fweok1g8KFjHw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Sudeep Holla <sudeep.holla@arm.com>
+To: SoC Team <soc@kernel.org>,
+	arm-soc <arm@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
-	Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH] arm64: defconfig: Drop ARM_CPUIDLE(generic idle driver) config
-Date: Mon, 29 Aug 2022 11:42:39 +0200
-Message-Id: <166176606750.192368.18029115177408721770.b4-ty@arndb.de>
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [GIT PULL] Some Gemini DTS updates for v6.1
+Date: Mon, 29 Aug 2022 11:44:17 +0200
+Message-Id: <166176624329.193145.21170237941169688.b4-ty@arndb.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220822121604.2213778-1-sudeep.holla@arm.com>
-References: <20220822121604.2213778-1-sudeep.holla@arm.com>
+In-Reply-To: <CACRpkdZt58ExwG+6EicODLhuVc8NSgCGUj4uNQmtnES8Cnf5uQ@mail.gmail.com>
+References: <CACRpkdZt58ExwG+6EicODLhuVc8NSgCGUj4uNQmtnES8Cnf5uQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, 22 Aug 2022 13:16:04 +0100, Sudeep Holla wrote:
-> Since commit 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle
-> driver") the generic ARM cpuidle driver probe no longer worked on
-> ARM64. It was however left enabled with the driver failing to probe
-> successfully. However the commit 51280acad855 ("cpuidle: cpuidle-arm:
-> remove arm64 support") removed the Kconfig option so that it is no
-> longer enabled for arm64 platforms.
+On Fri, 26 Aug 2022 14:32:17 +0200, Linus Walleij wrote:
+> here are some minor Gemini DTS updates that should be queued
+> up for v6.1, details in the signed tag.
+> 
+> Please pull it in!
+> 
+> Yours,
+> Linus Walleij
 > 
 > [...]
 
-Applied to arm/defconfig, thanks!
+Merged into arm/dt, thanks!
 
-[1/1] arm64: defconfig: Drop ARM_CPUIDLE(generic idle driver) config
-      commit: 853ff6c3215070c38cfe2b1bedee3ccb21e29b52
+merge commit: 1db560169211e66f12f24707e30403468847c44b
 
        Arnd
