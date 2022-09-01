@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E6EECAAD5
-	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 18:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62EAFC6FA81
+	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 18:34:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 43206C43147; Thu,  1 Sep 2022 18:34:03 +0000 (UTC)
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	id 4EB3BC433C1; Thu,  1 Sep 2022 18:34:09 +0000 (UTC)
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E488DC433C1;
-	Thu,  1 Sep 2022 18:34:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E488DC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 83EBBC43142;
+	Thu,  1 Sep 2022 18:34:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83EBBC43142
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f178.google.com with SMTP id cr9so14125267qtb.13;
-        Thu, 01 Sep 2022 11:34:01 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id g14so14138850qto.11;
+        Thu, 01 Sep 2022 11:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=fiG6CZJzW2InilbNLyTvHbl5YEY50HV4HIG2tj4VBGI=;
-        b=PQkvK9NBoRr1B4Y5Ob8xvInZ+mN5vOKk/qIdZY6Jt9Tx9ieLZ91/3UB+cSVf8H/syk
-         eFTrxYv8p2fZTs/+Nxl/Tm5fP+Bvo8YmksLQHCjqSODE9B0OgHZliiR5Z90k4RltFnNr
-         Q1q8czQoJPjJzAU4N+j5Rod4uwIlxCvu/bEpmUdLU33rrO9e7+7A6wGuTCe2ZL6WEI4P
-         V4UquAuqR4VuCDkETTGNuXbszrWzdUpdoz+s0iarjpMDXCTf+xmAD0oblgsnh/7ELsSV
-         a9381oBWQVNOqqsNVlts75uIwcDjKfSpuGxhfirMlBc3c3UX7lPaUWBJ9PNo2HiEdEG/
-         u0Gg==
+        bh=srjwgoxmTPtEe1SG1ioq7pVoriIcXpcyIEaZ6dlPwow=;
+        b=oPcfxYFfUEbKFc5jxdBrsrBmYV2HVkMlK0gbV1WbanHdaSbp5PqrCr8Sovw7MIK8li
+         Sb4yq8jNQkC/oaGnHVQK7RTOFHHfz/UwO76xQkMGuQoi7owPwYib/R35QSzXQfmmwgV8
+         DJzdNzI+DGQ+9GSXQi+MrBoGmov73HaDupIRxaHLPtMKrX+pPvN6i3zEYOANuMD3hMaH
+         gfEqY+H/HbP6Pg05+9boZCDqmIjCh6zWO9dmW/hxFV8+n5f69TpUvE7ngCsY7FNmjjAc
+         wlIKv8Vidc21VClpHf6k62FeRV6IPWjShWigq9EDva4lUdy3V8NIPkgczfwyat2JLpG1
+         oDPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=fiG6CZJzW2InilbNLyTvHbl5YEY50HV4HIG2tj4VBGI=;
-        b=QAFXLCUhldCxzoHFq4mTsInzUdsTDKjNSbfxZG2klWCatsVBhyVGdE3pZvv5/bBRTi
-         fZC/X4DdM1DAJTVVzvQzw++S6Uig5Hx9tX4C0Jtg+O6jbCqgayF1DFiNFuI4DpTojV3G
-         XXUh1AGnDgJdeIDI0zNjll8k35LTneBka3uRKNI5fJlblmnLSEvqIxKc2t3xTqK/8egt
-         CXxJXMdE3QkSdVAFjk18XIgUOBjhYWmQMgItw6CctTJI4z0nAt+gRh/2lvIBPYRJfhJ+
-         Vh1p7UJDzycDDT2FZLbShuSeCldkDTvM6lmLNhrvqLZVWMxgCaLZ7c9JsonygvZliuuW
-         Haow==
-X-Gm-Message-State: ACgBeo0GHIL+Re1dKBXXnnpCKOaQqQnVQ+y6TAyoA8+ERDxNWAr7i8BM
-	aWI5tQbarqrSyIq7Kv9w2xA=
-X-Google-Smtp-Source: AA6agR7lDU8XG1l4S9f9TUqiHbuLiviJmV898OyS+liYkadkg66z4jEiWpih9fyCoyfTnTVe0pNG5Q==
-X-Received: by 2002:ac8:5f54:0:b0:344:a210:3f64 with SMTP id y20-20020ac85f54000000b00344a2103f64mr24735672qta.683.1662057241539;
-        Thu, 01 Sep 2022 11:34:01 -0700 (PDT)
+        bh=srjwgoxmTPtEe1SG1ioq7pVoriIcXpcyIEaZ6dlPwow=;
+        b=fedhu+45RG4cx91Ti4WVUDgScPdM+2ZK/upFMEJwhJJavzL+QkfTUMRQRtqWh7ks8N
+         2VFDqaoaSaXtSxTilffSLp/0AN7Cme8MsymBMP3AeRyNt2CYaKnOsPnp0mHxH7Zkv++y
+         y+paRqRlgFbDBIpUw2KEr+fY1zgGyo1+Q/t4e4ttx5uu2Bj+qHlo2yEB54yM8Yen2Xl3
+         /ZdtJ+w2w0rPsbEIAp1q1vHvmr8lO+3sxqOhyGzAIPfGetjjZ30pK2gIe0WEVuaNn85u
+         NH+jDnQd5I1fMaSDONjv4yOg3TAyzKECAk9G7oXEidODABz++5r5EyibEiWHrXsMVCql
+         2CEg==
+X-Gm-Message-State: ACgBeo0P+bo6oc5lQDdXouZhMimjBYNgSqAlvTvjgHh3zYRjX6EVsFRd
+	0HM6/nvizU+nvl/yt5oxYYs=
+X-Google-Smtp-Source: AA6agR6o7CS7icax6eFSi4NvO9mtX22KZNWQeIDJHaBWd9apWTu5vPPEA0am6oTpHsjEMPKmcc5yZw==
+X-Received: by 2002:ac8:5d49:0:b0:342:f7df:dbd9 with SMTP id g9-20020ac85d49000000b00342f7dfdbd9mr24461247qtx.449.1662057248159;
+        Thu, 01 Sep 2022 11:34:08 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.59
+        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 11:34:00 -0700 (PDT)
+        Thu, 01 Sep 2022 11:34:07 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -83,27 +83,26 @@ Cc: robh+dt@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org,
-	Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 07/10] dt-bindings: imx: Add clock binding for i.MXRT1170
-Date: Thu,  1 Sep 2022 14:33:40 -0400
-Message-Id: <20220901183343.3188903-8-Mr.Bossman075@gmail.com>
+	linux-gpio@vger.kernel.org
+Subject: [PATCH v6 10/10] ARM: imxrt_defconfig: Add i.MXRT1170
+Date: Thu,  1 Sep 2022 14:33:43 -0400
+Message-Id: <20220901183343.3188903-11-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
 References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the clock binding doc for i.MXRT1170.
+Add i.MXRT1170 pinctrl, clocks imxrt_defconfig.
+Add support for CHIPIDEA usb host and usb gadget and other usb drives.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 V1 -> V2:
- - Change to GPL-2.0-only
+ - Remove USB_CONFIGFS*
 V2 -> V3:
- - Change to (GPL-2.0-only OR BSD-2-Clause)
+ - Nothing done
 V3 -> V4:
  - Nothing done
 V4 -> V5:
@@ -111,298 +110,45 @@ V4 -> V5:
 V5 -> V6:
  - Nothing done
 ---
- include/dt-bindings/clock/imxrt1170-clock.h | 282 ++++++++++++++++++++
- 1 file changed, 282 insertions(+)
- create mode 100644 include/dt-bindings/clock/imxrt1170-clock.h
+ arch/arm/configs/imxrt_defconfig | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/include/dt-bindings/clock/imxrt1170-clock.h b/include/dt-bindings/clock/imxrt1170-clock.h
-new file mode 100644
-index 000000000000..be0dd6089059
---- /dev/null
-+++ b/include/dt-bindings/clock/imxrt1170-clock.h
-@@ -0,0 +1,282 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright(C) 2022
-+ * Author(s): Jesse Taube <Mr.Bossman075@gmail.com>
-+ */
-+
-+#ifndef __DT_BINDINGS_CLOCK_IMXRT1170_H
-+#define __DT_BINDINGS_CLOCK_IMXRT1170_H
-+
-+#define IMXRT1170_CLK_DUMMY			0
-+#define IMXRT1170_CLK_OSC			1
-+#define IMXRT1170_CLK_OSC_32K			2
-+#define IMXRT1170_CLK_RCOSC_16M			3
-+#define IMXRT1170_CLK_RCOSC_48M			4
-+#define IMXRT1170_CLK_RCOSC_48M_DIV2		5
-+#define IMXRT1170_CLK_RCOSC_400M		6
-+#define IMXRT1170_CLK_PLL_ARM_PRE		7
-+#define IMXRT1170_CLK_PLL_ARM_BYPASS		8
-+#define IMXRT1170_CLK_PLL_ARM_DIV		9
-+#define IMXRT1170_CLK_PLL_ARM			10
-+#define IMXRT1170_CLK_PLL_AUDIO			11
-+#define IMXRT1170_CLK_PLL_VIDEO			12
-+#define IMXRT1170_CLK_PLL1			13
-+#define IMXRT1170_CLK_PLL1_DIV2			14
-+#define IMXRT1170_CLK_PLL1_DIV5			15
-+#define IMXRT1170_CLK_PLL2_PRE			16
-+#define IMXRT1170_CLK_PLL2_BYPASS		17
-+#define IMXRT1170_CLK_PLL2			18
-+#define IMXRT1170_CLK_PLL2_PFD0			19
-+#define IMXRT1170_CLK_PLL2_PFD1			20
-+#define IMXRT1170_CLK_PLL2_PFD2			21
-+#define IMXRT1170_CLK_PLL2_PFD3			22
-+#define IMXRT1170_CLK_PLL3_PRE			23
-+#define IMXRT1170_CLK_PLL3_BYPASS		24
-+#define IMXRT1170_CLK_PLL3			25
-+#define IMXRT1170_CLK_PLL3_DIV2_GATE		26
-+#define IMXRT1170_CLK_PLL3_DIV2			27
-+#define IMXRT1170_CLK_PLL3_PFD0			28
-+#define IMXRT1170_CLK_PLL3_PFD1			29
-+#define IMXRT1170_CLK_PLL3_PFD2			30
-+#define IMXRT1170_CLK_PLL3_PFD3			31
-+#define IMXRT1170_CLK_M7_SEL			32
-+#define IMXRT1170_CLK_M7_GATE			33
-+#define IMXRT1170_CLK_M7			34
-+#define IMXRT1170_CLK_M4_SEL			35
-+#define IMXRT1170_CLK_M4_GATE			36
-+#define IMXRT1170_CLK_M4			37
-+#define IMXRT1170_CLK_BUS_SEL			38
-+#define IMXRT1170_CLK_BUS_GATE			39
-+#define IMXRT1170_CLK_BUS			40
-+#define IMXRT1170_CLK_BUS_LPSR_SEL		41
-+#define IMXRT1170_CLK_BUS_LPSR_GATE		42
-+#define IMXRT1170_CLK_BUS_LPSR			43
-+#define IMXRT1170_CLK_SEMC_SEL			44
-+#define IMXRT1170_CLK_SEMC_GATE			45
-+#define IMXRT1170_CLK_SEMC			46
-+#define IMXRT1170_CLK_CSSYS_SEL			47
-+#define IMXRT1170_CLK_CSSYS_GATE		48
-+#define IMXRT1170_CLK_CSSYS			49
-+#define IMXRT1170_CLK_CSTRACE_SEL		50
-+#define IMXRT1170_CLK_CSTRACE_GATE		51
-+#define IMXRT1170_CLK_CSTRACE			52
-+#define IMXRT1170_CLK_M4_SYSTICK_SEL		53
-+#define IMXRT1170_CLK_M4_SYSTICK_GATE		54
-+#define IMXRT1170_CLK_M4_SYSTICK		55
-+#define IMXRT1170_CLK_M7_SYSTICK_SEL		56
-+#define IMXRT1170_CLK_M7_SYSTICK_GATE		57
-+#define IMXRT1170_CLK_M7_SYSTICK		58
-+#define IMXRT1170_CLK_ADC1_SEL			59
-+#define IMXRT1170_CLK_ADC1_GATE			60
-+#define IMXRT1170_CLK_ADC1			61
-+#define IMXRT1170_CLK_ADC2_SEL			62
-+#define IMXRT1170_CLK_ADC2_GATE			63
-+#define IMXRT1170_CLK_ADC2			64
-+#define IMXRT1170_CLK_ACMP_SEL			65
-+#define IMXRT1170_CLK_ACMP_GATE			66
-+#define IMXRT1170_CLK_ACMP			67
-+#define IMXRT1170_CLK_FLEXIO1_SEL		68
-+#define IMXRT1170_CLK_FLEXIO1_GATE		69
-+#define IMXRT1170_CLK_FLEXIO1			70
-+#define IMXRT1170_CLK_FLEXIO2_SEL		71
-+#define IMXRT1170_CLK_FLEXIO2_GATE		72
-+#define IMXRT1170_CLK_FLEXIO2			73
-+#define IMXRT1170_CLK_GPT1_SEL			74
-+#define IMXRT1170_CLK_GPT1_GATE			75
-+#define IMXRT1170_CLK_GPT1			76
-+#define IMXRT1170_CLK_GPT2_SEL			77
-+#define IMXRT1170_CLK_GPT2_GATE			78
-+#define IMXRT1170_CLK_GPT2			79
-+#define IMXRT1170_CLK_GPT3_SEL			80
-+#define IMXRT1170_CLK_GPT3_GATE			81
-+#define IMXRT1170_CLK_GPT3			82
-+#define IMXRT1170_CLK_GPT4_SEL			83
-+#define IMXRT1170_CLK_GPT4_GATE			84
-+#define IMXRT1170_CLK_GPT4			85
-+#define IMXRT1170_CLK_GPT5_SEL			86
-+#define IMXRT1170_CLK_GPT5_GATE			87
-+#define IMXRT1170_CLK_GPT5			88
-+#define IMXRT1170_CLK_GPT6_SEL			89
-+#define IMXRT1170_CLK_GPT6_GATE			90
-+#define IMXRT1170_CLK_GPT6			91
-+#define IMXRT1170_CLK_FLEXSPI1_SEL		92
-+#define IMXRT1170_CLK_FLEXSPI1_GATE		93
-+#define IMXRT1170_CLK_FLEXSPI1			94
-+#define IMXRT1170_CLK_FLEXSPI2_SEL		95
-+#define IMXRT1170_CLK_FLEXSPI2_GATE		96
-+#define IMXRT1170_CLK_FLEXSPI2			97
-+#define IMXRT1170_CLK_CAN1_SEL			98
-+#define IMXRT1170_CLK_CAN1_GATE			99
-+#define IMXRT1170_CLK_CAN1			100
-+#define IMXRT1170_CLK_CAN2_SEL			101
-+#define IMXRT1170_CLK_CAN2_GATE			102
-+#define IMXRT1170_CLK_CAN2			103
-+#define IMXRT1170_CLK_CAN3_SEL			104
-+#define IMXRT1170_CLK_CAN3_GATE			105
-+#define IMXRT1170_CLK_CAN3			106
-+#define IMXRT1170_CLK_LPUART1_SEL		107
-+#define IMXRT1170_CLK_LPUART1_GATE		108
-+#define IMXRT1170_CLK_LPUART1			109
-+#define IMXRT1170_CLK_LPUART2_SEL		110
-+#define IMXRT1170_CLK_LPUART2_GATE		111
-+#define IMXRT1170_CLK_LPUART2			112
-+#define IMXRT1170_CLK_LPUART3_SEL		113
-+#define IMXRT1170_CLK_LPUART3_GATE		114
-+#define IMXRT1170_CLK_LPUART3			115
-+#define IMXRT1170_CLK_LPUART4_SEL		116
-+#define IMXRT1170_CLK_LPUART4_GATE		117
-+#define IMXRT1170_CLK_LPUART4			118
-+#define IMXRT1170_CLK_LPUART5_SEL		119
-+#define IMXRT1170_CLK_LPUART5_GATE		120
-+#define IMXRT1170_CLK_LPUART5			121
-+#define IMXRT1170_CLK_LPUART6_SEL		122
-+#define IMXRT1170_CLK_LPUART6_GATE		123
-+#define IMXRT1170_CLK_LPUART6			124
-+#define IMXRT1170_CLK_LPUART7_SEL		125
-+#define IMXRT1170_CLK_LPUART7_GATE		126
-+#define IMXRT1170_CLK_LPUART7			127
-+#define IMXRT1170_CLK_LPUART8_SEL		128
-+#define IMXRT1170_CLK_LPUART8_GATE		129
-+#define IMXRT1170_CLK_LPUART8			130
-+#define IMXRT1170_CLK_LPUART9_SEL		131
-+#define IMXRT1170_CLK_LPUART9_GATE		132
-+#define IMXRT1170_CLK_LPUART9			133
-+#define IMXRT1170_CLK_LPUART10_SEL		134
-+#define IMXRT1170_CLK_LPUART10_GATE		135
-+#define IMXRT1170_CLK_LPUART10			136
-+#define IMXRT1170_CLK_LPUART11_SEL		137
-+#define IMXRT1170_CLK_LPUART11_GATE		138
-+#define IMXRT1170_CLK_LPUART11			139
-+#define IMXRT1170_CLK_LPUART12_SEL		140
-+#define IMXRT1170_CLK_LPUART12_GATE		141
-+#define IMXRT1170_CLK_LPUART12			142
-+#define IMXRT1170_CLK_LPI2C1_SEL		143
-+#define IMXRT1170_CLK_LPI2C1_GATE		144
-+#define IMXRT1170_CLK_LPI2C1			145
-+#define IMXRT1170_CLK_LPI2C2_SEL		146
-+#define IMXRT1170_CLK_LPI2C2_GATE		147
-+#define IMXRT1170_CLK_LPI2C2			148
-+#define IMXRT1170_CLK_LPI2C3_SEL		149
-+#define IMXRT1170_CLK_LPI2C3_GATE		150
-+#define IMXRT1170_CLK_LPI2C3			151
-+#define IMXRT1170_CLK_LPI2C4_SEL		152
-+#define IMXRT1170_CLK_LPI2C4_GATE		153
-+#define IMXRT1170_CLK_LPI2C4			154
-+#define IMXRT1170_CLK_LPI2C5_SEL		155
-+#define IMXRT1170_CLK_LPI2C5_GATE		156
-+#define IMXRT1170_CLK_LPI2C5			157
-+#define IMXRT1170_CLK_LPI2C6_SEL		158
-+#define IMXRT1170_CLK_LPI2C6_GATE		159
-+#define IMXRT1170_CLK_LPI2C6			160
-+#define IMXRT1170_CLK_LPSPI1_SEL		161
-+#define IMXRT1170_CLK_LPSPI1_GATE		162
-+#define IMXRT1170_CLK_LPSPI1			163
-+#define IMXRT1170_CLK_LPSPI2_SEL		164
-+#define IMXRT1170_CLK_LPSPI2_GATE		165
-+#define IMXRT1170_CLK_LPSPI2			166
-+#define IMXRT1170_CLK_LPSPI3_SEL		167
-+#define IMXRT1170_CLK_LPSPI3_GATE		168
-+#define IMXRT1170_CLK_LPSPI3			169
-+#define IMXRT1170_CLK_LPSPI4_SEL		170
-+#define IMXRT1170_CLK_LPSPI4_GATE		171
-+#define IMXRT1170_CLK_LPSPI4			172
-+#define IMXRT1170_CLK_LPSPI5_SEL		173
-+#define IMXRT1170_CLK_LPSPI5_GATE		174
-+#define IMXRT1170_CLK_LPSPI5			175
-+#define IMXRT1170_CLK_LPSPI6_SEL		176
-+#define IMXRT1170_CLK_LPSPI6_GATE		177
-+#define IMXRT1170_CLK_LPSPI6			178
-+#define IMXRT1170_CLK_EMV1_SEL			179
-+#define IMXRT1170_CLK_EMV1_GATE			180
-+#define IMXRT1170_CLK_EMV1			181
-+#define IMXRT1170_CLK_EMV2_SEL			182
-+#define IMXRT1170_CLK_EMV2_GATE			183
-+#define IMXRT1170_CLK_EMV2			184
-+#define IMXRT1170_CLK_ENET1_SEL			185
-+#define IMXRT1170_CLK_ENET1_GATE		186
-+#define IMXRT1170_CLK_ENET1			187
-+#define IMXRT1170_CLK_ENET2_SEL			188
-+#define IMXRT1170_CLK_ENET2_GATE		189
-+#define IMXRT1170_CLK_ENET2			190
-+#define IMXRT1170_CLK_ENET_QOS_SEL		191
-+#define IMXRT1170_CLK_ENET_QOS_GATE		192
-+#define IMXRT1170_CLK_ENET_QOS			193
-+#define IMXRT1170_CLK_ENET_25M_SEL		194
-+#define IMXRT1170_CLK_ENET_25M_GATE		195
-+#define IMXRT1170_CLK_ENET_25M			196
-+#define IMXRT1170_CLK_ENET_TIMER1_SEL		197
-+#define IMXRT1170_CLK_ENET_TIMER1_GATE		198
-+#define IMXRT1170_CLK_ENET_TIMER1		199
-+#define IMXRT1170_CLK_ENET_TIMER2_SEL		200
-+#define IMXRT1170_CLK_ENET_TIMER2_GATE		201
-+#define IMXRT1170_CLK_ENET_TIMER2		202
-+#define IMXRT1170_CLK_ENET_TIMER3_SEL		203
-+#define IMXRT1170_CLK_ENET_TIMER3_GATE		204
-+#define IMXRT1170_CLK_ENET_TIMER3		205
-+#define IMXRT1170_CLK_USDHC1_SEL		206
-+#define IMXRT1170_CLK_USDHC1_GATE		207
-+#define IMXRT1170_CLK_USDHC1			208
-+#define IMXRT1170_CLK_USDHC2_SEL		209
-+#define IMXRT1170_CLK_USDHC2_GATE		210
-+#define IMXRT1170_CLK_USDHC2			211
-+#define IMXRT1170_CLK_ASRC_SEL			212
-+#define IMXRT1170_CLK_ASRC_GATE			213
-+#define IMXRT1170_CLK_ASRC			214
-+#define IMXRT1170_CLK_MQS_SEL			215
-+#define IMXRT1170_CLK_MQS_GATE			216
-+#define IMXRT1170_CLK_MQS			217
-+#define IMXRT1170_CLK_MIC_SEL			218
-+#define IMXRT1170_CLK_MIC_GATE			219
-+#define IMXRT1170_CLK_MIC			220
-+#define IMXRT1170_CLK_SPDIF_SEL			221
-+#define IMXRT1170_CLK_SPDIF_GATE		222
-+#define IMXRT1170_CLK_SPDIF			223
-+#define IMXRT1170_CLK_SAI1_SEL			224
-+#define IMXRT1170_CLK_SAI1_GATE			225
-+#define IMXRT1170_CLK_SAI1			226
-+#define IMXRT1170_CLK_SAI2_SEL			227
-+#define IMXRT1170_CLK_SAI2_GATE			228
-+#define IMXRT1170_CLK_SAI2			229
-+#define IMXRT1170_CLK_SAI3_SEL			230
-+#define IMXRT1170_CLK_SAI3_GATE			231
-+#define IMXRT1170_CLK_SAI3			232
-+#define IMXRT1170_CLK_SAI4_SEL			233
-+#define IMXRT1170_CLK_SAI4_GATE			234
-+#define IMXRT1170_CLK_SAI4			235
-+#define IMXRT1170_CLK_GC355_SEL			236
-+#define IMXRT1170_CLK_GC355_GATE		237
-+#define IMXRT1170_CLK_GC355			238
-+#define IMXRT1170_CLK_LCDIF_SEL			239
-+#define IMXRT1170_CLK_LCDIF_GATE		240
-+#define IMXRT1170_CLK_LCDIF			241
-+#define IMXRT1170_CLK_LCDIFV2_SEL		242
-+#define IMXRT1170_CLK_LCDIFV2_GATE		243
-+#define IMXRT1170_CLK_LCDIFV2			244
-+#define IMXRT1170_CLK_MIPI_REF_SEL		245
-+#define IMXRT1170_CLK_MIPI_REF_GATE		246
-+#define IMXRT1170_CLK_MIPI_REF			247
-+#define IMXRT1170_CLK_MIPI_ESC_SEL		248
-+#define IMXRT1170_CLK_MIPI_ESC_GATE		249
-+#define IMXRT1170_CLK_MIPI_ESC			250
-+#define IMXRT1170_CLK_CSI2_SEL			251
-+#define IMXRT1170_CLK_CSI2_GATE			252
-+#define IMXRT1170_CLK_CSI2			253
-+#define IMXRT1170_CLK_CSI2_ESC_SEL		254
-+#define IMXRT1170_CLK_CSI2_ESC_GATE		255
-+#define IMXRT1170_CLK_CSI2_ESC			256
-+#define IMXRT1170_CLK_CSI2_UI_SEL		257
-+#define IMXRT1170_CLK_CSI2_UI_GATE		258
-+#define IMXRT1170_CLK_CSI2_UI			259
-+#define IMXRT1170_CLK_CSI_SEL			260
-+#define IMXRT1170_CLK_CSI_GATE			261
-+#define IMXRT1170_CLK_CSI			262
-+#define IMXRT1170_CLK_CKO1_SEL			263
-+#define IMXRT1170_CLK_CKO1_GATE			264
-+#define IMXRT1170_CLK_CKO1			265
-+#define IMXRT1170_CLK_CKO2_SEL			266
-+#define IMXRT1170_CLK_CKO2_GATE			267
-+#define IMXRT1170_CLK_CKO2			268
-+#define IMXRT1170_CLK_USB			269
-+#define IMXRT1170_CLK_END			270
-+
-+#endif /* __DT_BINDINGS_CLOCK_IMXRT1170_H */
+diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
+index 52dba3762996..b3a013686255 100644
+--- a/arch/arm/configs/imxrt_defconfig
++++ b/arch/arm/configs/imxrt_defconfig
+@@ -17,7 +17,23 @@ CONFIG_SERIAL_FSL_LPUART=y
+ CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+ CONFIG_SERIAL_DEV_BUS=y
+ CONFIG_PINCTRL_IMXRT1050=y
++CONFIG_PINCTRL_IMXRT1170=y
+ CONFIG_GPIO_MXC=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_DYNAMIC_MINORS=y
++CONFIG_USB_OTG=y
++CONFIG_USB_OTG_FSM=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_FSL=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_UDC=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_USB_MXS_PHY=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_MASS_STORAGE=y
+ CONFIG_MMC=y
+ CONFIG_MMC_SDHCI=y
+ CONFIG_MMC_SDHCI_PLTFM=y
+@@ -25,6 +41,7 @@ CONFIG_MMC_SDHCI_ESDHC_IMX=y
+ CONFIG_DMADEVICES=y
+ CONFIG_FSL_EDMA=y
+ CONFIG_CLK_IMXRT1050=y
++CONFIG_CLK_IMXRT1170=y
+ CONFIG_EXT4_FS=y
+ CONFIG_EXT4_FS_POSIX_ACL=y
+ CONFIG_EXT4_FS_SECURITY=y
 -- 
 2.36.1
 
