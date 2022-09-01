@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A2BC67868
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9071AC65C0D
 	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 11:21:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BA90BC433B5; Thu,  1 Sep 2022 11:21:15 +0000 (UTC)
+	id 78C0AC433D7; Thu,  1 Sep 2022 11:21:15 +0000 (UTC)
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A8B18C43140
+	by smtp.kernel.org (Postfix) with ESMTPS id 73994C4347C
 	for <soc@kernel.org>; Thu,  1 Sep 2022 11:21:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8B18C43140
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73994C4347C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.207])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJJVv5Wkcz67Nl1;
-	Thu,  1 Sep 2022 19:20:23 +0800 (CST)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJJW81QP1z682sP;
+	Thu,  1 Sep 2022 19:20:36 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 13:21:05 +0200
+ 15.1.2375.31; Thu, 1 Sep 2022 13:21:11 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 1 Sep 2022 12:21:02 +0100
+ 15.1.2375.24; Thu, 1 Sep 2022 12:21:09 +0100
 From: John Garry <john.garry@huawei.com>
 To: <xuwei5@hisilicon.com>
 List-Id: <soc.lore.kernel.org>
@@ -34,9 +34,9 @@ CC: <andriy.shevchenko@linux.intel.com>, <linuxarm@huawei.com>,
 	<rafael.j.wysocki@intel.com>, <linux-kernel@vger.kernel.org>,
 	<soc@kernel.org>, <yangyingliang@huawei.com>, John Garry
 	<john.garry@huawei.com>
-Subject: [PATCH 2/5] bus: hisi_lpc: Use devm_platform_ioremap_resource
-Date: Thu, 1 Sep 2022 19:14:28 +0800
-Message-ID: <1662030871-182688-3-git-send-email-john.garry@huawei.com>
+Subject: [PATCH 5/5] bus: hisi_lpc: Use platform_device_register_full()
+Date: Thu, 1 Sep 2022 19:14:31 +0800
+Message-ID: <1662030871-182688-6-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1662030871-182688-1-git-send-email-john.garry@huawei.com>
 References: <1662030871-182688-1-git-send-email-john.garry@huawei.com>
@@ -47,40 +47,127 @@ X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  lhrpeml500003.china.huawei.com (7.191.162.67)
 X-CFilter-Loop: Reflected
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The code to create the child platform device is essentially the same as
+what platform_device_register_full() does, so change over to use
+that same function to reduce duplication.
 
-The struct resource is not used for anything else, so we can simplify
-the code a bit by using the helper function.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/bus/hisi_lpc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/bus/hisi_lpc.c | 70 ++++++++++++++++++++++--------------------
+ 1 file changed, 36 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
-index 6d432a07cbba..03d4d96ff794 100644
+index 74f4448bff9d..2203ee57eaaf 100644
 --- a/drivers/bus/hisi_lpc.c
 +++ b/drivers/bus/hisi_lpc.c
-@@ -618,7 +618,6 @@ static int hisi_lpc_probe(struct platform_device *pdev)
- 	struct logic_pio_hwaddr *range;
- 	struct hisi_lpc_dev *lpcdev;
- 	resource_size_t io_end;
--	struct resource *res;
- 	int ret;
+@@ -472,9 +472,7 @@ static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_us
  
- 	lpcdev = devm_kzalloc(dev, sizeof(*lpcdev), GFP_KERNEL);
-@@ -627,8 +626,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
+ struct hisi_lpc_acpi_cell {
+ 	const char *hid;
+-	const char *name;
+-	void *pdata;
+-	size_t pdata_size;
++	const struct platform_device_info *pdevinfo;
+ };
  
- 	spin_lock_init(&lpcdev->cycle_lock);
+ static void hisi_lpc_acpi_remove(struct device *hostdev)
+@@ -505,28 +503,51 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
+ 		/* ipmi */
+ 		{
+ 			.hid = "IPI0001",
+-			.name = "hisi-lpc-ipmi",
++			.pdevinfo = (struct platform_device_info []) {
++				{
++					.parent = hostdev,
++					.fwnode = acpi_fwnode_handle(child),
++
++					.name = "hisi-lpc-ipmi",
++					.id = PLATFORM_DEVID_AUTO,
++
++					.res = res,
++					.num_res = num_res,
++				},
++			},
+ 		},
+ 		/* 8250-compatible uart */
+ 		{
+ 			.hid = "HISI1031",
+-			.name = "serial8250",
+-			.pdata = (struct plat_serial8250_port []) {
++			.pdevinfo = (struct platform_device_info []) {
+ 				{
+-					.iobase = res->start,
+-					.uartclk = 1843200,
+-					.iotype = UPIO_PORT,
+-					.flags = UPF_BOOT_AUTOCONF,
++					.parent = hostdev,
++					.fwnode = acpi_fwnode_handle(child),
++
++					.name = "serial8250",
++					.id = PLATFORM_DEVID_AUTO,
++
++					.res = res,
++					.num_res = num_res,
++
++					.data = (struct plat_serial8250_port []) {
++						{
++							.iobase = res->start,
++							.uartclk = 1843200,
++							.iotype = UPIO_PORT,
++							.flags = UPF_BOOT_AUTOCONF,
++						},
++						{}
++					},
++					.size_data =  2 *
++						sizeof(struct plat_serial8250_port),
+ 				},
+-				{}
+ 			},
+-			.pdata_size = 2 *
+-				sizeof(struct plat_serial8250_port),
+ 		},
+ 		{}
+ 	};
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	lpcdev->membase = devm_ioremap_resource(dev, res);
-+	lpcdev->membase = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(lpcdev->membase))
- 		return PTR_ERR(lpcdev->membase);
+-	for (; cell && cell->name; cell++) {
++	for (; cell && cell->hid; cell++) {
+ 		if (!strcmp(cell->hid, hid)) {
+ 			found = true;
+ 			break;
+@@ -540,31 +561,12 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
+ 		return 0;
+ 	}
  
+-	pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
++	pdev = platform_device_register_full(cell->pdevinfo);
+ 	if (!pdev)
+ 		return -ENOMEM;
+ 
+-	pdev->dev.parent = hostdev;
+-	ACPI_COMPANION_SET(&pdev->dev, child);
+-
+-	ret = platform_device_add_resources(pdev, res, num_res);
+-	if (ret)
+-		goto fail;
+-
+-	ret = platform_device_add_data(pdev, cell->pdata, cell->pdata_size);
+-	if (ret)
+-		goto fail;
+-
+-	ret = platform_device_add(pdev);
+-	if (ret)
+-		goto fail;
+-
+ 	acpi_device_set_enumerated(child);
+ 	return 0;
+-
+-fail:
+-	platform_device_put(pdev);
+-	return ret;
+ }
+ 
+ /*
 -- 
 2.35.3
 
