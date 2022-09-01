@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAEF6ECAAD5
-	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 18:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C09ECAAD3
+	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 18:33:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A4F74C43143; Thu,  1 Sep 2022 18:33:55 +0000 (UTC)
+	id DF33EC433D7; Thu,  1 Sep 2022 18:33:56 +0000 (UTC)
 Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9FC82C433C1;
-	Thu,  1 Sep 2022 18:33:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9FC82C433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 03287C433C1;
+	Thu,  1 Sep 2022 18:33:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 03287C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id h27so13970924qkk.9;
-        Thu, 01 Sep 2022 11:33:54 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id h27so13971008qkk.9;
+        Thu, 01 Sep 2022 11:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=WQ1Q0mz9FFzqj4DZ/mjMEZ15Ws6UL1GezqnQ2p7zS64=;
-        b=UM51+arlg6z/CCre6QPOKyXnLdhVedrQVQT4q1qYMERqndsL0vqFdZxRK6fHfiD5vR
-         p2fGC+qIRw4yd8hPKMl2PY3J+TlLj9VkJeaJT4YMYVUEMjAZIVsr8WJCYJUeIcKJTHPY
-         OgH0c4LuWAsGoBl4pSAjTW6sYKAxngaN9pvI/OvElZRVZtCmni5xQ7RUhlRHBNSpPKF8
-         lXwbef53MF/0m5so3LokRkX6+dwrY0kRhRGPHvDUwJL0R//qkAHISL4wsGXTk5aMDlLQ
-         sKz0jlc7893EdDWW0QOKXdEmgsMBBLv/kri1qptyani3GrXl8V86UwQ9/aFb0kX0icqj
-         Y1gw==
+        bh=Tv2a7wU2lhgN97bYzJfah37NqTdtlxQ5678kEaFGvZM=;
+        b=F4sesasecjX/JIjBPB1nFlGezzl2EeRQ8PgoBgGj3g4d6Ns1fXzIk41ieUigoQ+yjT
+         0uFYW0xf/DD7010ylr5FjsS0DHRTt0g9rGc7hL90W5t9Welnd3LBoB25th+9/3oIYE0G
+         sC5Ssv8s0j1vMM1VASi2/yVOZ5U+HHy6j2Ji8RM9k1O/DueagTExMiqdtnESMfTTO3xe
+         UTUjFxEZJ0ecmo+4nnv2/HuDfWjdvhzFkMudTqcPZNnn5xpgDshWi0CNWZmkXrr8oXcR
+         ZXH4vXPeTqEpK99/4uvTo5ZOoRkn171FhULAPIIOL0kxJOPOsQeNM8m8jt6fRLw+Bzrp
+         ohtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=WQ1Q0mz9FFzqj4DZ/mjMEZ15Ws6UL1GezqnQ2p7zS64=;
-        b=K9xeAEnkwELNzTIrfspdcX+E9hoACiOQ8SQYZYihsWYO26B/OstE4ug0/dZ9eRwKay
-         v0OymPwRqgTpoxuUajdNMuRltGC/LY4HWFmR4GYCtCeFE4kK7Ov+/pzVzzJihkfn5dfc
-         /zmGJC1MQ0xjxEOT40GkttCR0JUl4dhcW31oMBhrfuXM9sIWL3BBOr9f1EXouWtuWApq
-         ARyH1tvF5JlQjO7Y1xUPUHHxi3x8J9kLCTxgoSTMDXHqD6dAC0nyVz6+UOl4PTJu7tRB
-         TO6YZxVFNtqbV26K8AsuGmEcYGPRZG874W1BdHY/JGasl6LONYMyZBtktCXj3Wv8aBFk
-         9NGQ==
-X-Gm-Message-State: ACgBeo22wY8MFsOmLRqBeySq4tTRkjbrLEqS7GXtWGg5OXMc5kSMvLIC
-	QY8ucsnGFsp+QSSkktdLXFQ=
-X-Google-Smtp-Source: AA6agR6pT51eIYfYIyYoIomfGEmepLPuLA7x8eDUHmhlaEnFi4XboSuLFgKSOOhCsW5nCmXv4bc7Ew==
-X-Received: by 2002:a05:620a:c50:b0:6b9:6e6:428d with SMTP id u16-20020a05620a0c5000b006b906e6428dmr20469297qki.280.1662057233500;
-        Thu, 01 Sep 2022 11:33:53 -0700 (PDT)
+        bh=Tv2a7wU2lhgN97bYzJfah37NqTdtlxQ5678kEaFGvZM=;
+        b=u2tktRA/UzSij0Krx4ALHFbw+qYtrxdPvqsxTofAVG1KQl09gbmfuAimwLR6vqH6TN
+         ev50lWDaS6Def52xgEtm2k9FcBx9Xc1ykfZg3SrSIKnO6iWN6Gtc8FR9xmBx44O6Du0s
+         3wSyUIju0xzWAAaDLcXIsOFL22EhI+KAGn+Fy30QQmchCtOKwe5IpbWuZ3zGR1R1vFaT
+         XgLsw3i7CsbpcL5r7c8N+4ee8kLtZHlVGfIBYxSw/E8+bRiVRUnucU0/GA3ghDY/a1Yu
+         MpZK3SnqPe1D3rGoGytQC7LKXeEK5SYGffVFeAtB7HXm705Fr2vZ9F4xuVZ4az1WrDv8
+         fFHw==
+X-Gm-Message-State: ACgBeo0JfYrR56GiXgPg5QiszAIcWCWqNoMFnfS4jlybzWbu2Vzuu0ia
+	9NgPkDEmlPnSpVl2F3WJq+g=
+X-Google-Smtp-Source: AA6agR7f87gfbRhIG1C0yYL3bG7qyjKY2RU+B86kNZIwcfhp5tMMsI2JVVyb5GHrZ2AsPNa+rWfgIg==
+X-Received: by 2002:a05:620a:2890:b0:6bc:6ecd:2c4a with SMTP id j16-20020a05620a289000b006bc6ecd2c4amr20912427qkp.603.1662057235658;
+        Thu, 01 Sep 2022 11:33:55 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.51
+        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 11:33:52 -0700 (PDT)
+        Thu, 01 Sep 2022 11:33:54 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: linux-imx@nxp.com
@@ -85,9 +85,9 @@ Cc: robh+dt@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org,
 	Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 03/10] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT1170 compatible
-Date: Thu,  1 Sep 2022 14:33:36 -0400
-Message-Id: <20220901183343.3188903-4-Mr.Bossman075@gmail.com>
+Subject: [PATCH v6 04/10] dt-bindings: serial: fsl-lpuart: add i.MXRT1170 compatible
+Date: Thu,  1 Sep 2022 14:33:37 -0400
+Message-Id: <20220901183343.3188903-5-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
 References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
@@ -97,36 +97,34 @@ Content-Transfer-Encoding: 8bit
 Add i.MXRT1170 compatible string to Documentation.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
 V1 -> V2:
  - New commit to fix dtbs_check
 V2 -> V3:
- - Fix typo
- - Remove unused const
-V3 -> V4:
  - Nothing done
+V3 -> V4:
+ - Fix rebase artifact
 V4 -> V5:
  - Nothing done
 V5 -> V6:
  - Nothing done
 ---
- Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-index 29339d0196ec..0e7833478869 100644
---- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-@@ -75,6 +75,10 @@ properties:
-           - const: fsl,imx8qxp-usdhc
-           - const: fsl,imx7d-usdhc
-         deprecated: true
+diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+index 30eaa62e1aed..2c2f3c97a125 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+@@ -32,6 +32,9 @@ properties:
+               - fsl,imx8qm-lpuart
+               - fsl,imx8dxl-lpuart
+           - const: fsl,imx8qxp-lpuart
 +      - items:
-+          - enum:
-+              - fsl,imxrt1170-usdhc
-+          - const: fsl,imxrt1050-usdhc
++          - const: fsl,imxrt1170-lpuart
++          - const: fsl,imxrt1050-lpuart
  
    reg:
      maxItems: 1
