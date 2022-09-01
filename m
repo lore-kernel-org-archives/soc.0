@@ -1,173 +1,141 @@
-Return-Path: <SRS0=Ed/2=ZE=huawei.com=john.garry@kernel.org>
+Return-Path: <SRS0=/1gN=ZE=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9071AC65C0D
-	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 11:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC724ECAAD3
+	for <soc@archiver.kernel.org>; Thu,  1 Sep 2022 17:48:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 78C0AC433D7; Thu,  1 Sep 2022 11:21:15 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 73DFEC433C1; Thu,  1 Sep 2022 17:48:14 +0000 (UTC)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 73994C4347C
-	for <soc@kernel.org>; Thu,  1 Sep 2022 11:21:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73994C4347C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJJW81QP1z682sP;
-	Thu,  1 Sep 2022 19:20:36 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 13:21:11 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 1 Sep 2022 12:21:09 +0100
-From: John Garry <john.garry@huawei.com>
-To: <xuwei5@hisilicon.com>
-List-Id: <soc.lore.kernel.org>
-CC: <andriy.shevchenko@linux.intel.com>, <linuxarm@huawei.com>,
-	<rafael.j.wysocki@intel.com>, <linux-kernel@vger.kernel.org>,
-	<soc@kernel.org>, <yangyingliang@huawei.com>, John Garry
-	<john.garry@huawei.com>
-Subject: [PATCH 5/5] bus: hisi_lpc: Use platform_device_register_full()
-Date: Thu, 1 Sep 2022 19:14:31 +0800
-Message-ID: <1662030871-182688-6-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1662030871-182688-1-git-send-email-john.garry@huawei.com>
-References: <1662030871-182688-1-git-send-email-john.garry@huawei.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 814ABC433D6
+	for <soc@kernel.org>; Thu,  1 Sep 2022 17:48:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 814ABC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id f9so10353582qvw.11
+        for <soc@kernel.org>; Thu, 01 Sep 2022 10:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=XxzGcZxEvn6lqn3S+ejnJxVLBGgsRsaccRc4Cve+wRs=;
+        b=eX+c4tvw+WP34P9+Oh9i7JI4DrcHsssLX1AvxveMSyuN7PeNb6jogtV+DB1Y1RUnx/
+         ESMV3E/e1BKYQmnOIFBrB5oKGfevKZyyY/gw0nsWkh/TbVvDnXY6WT8cjvMw6DAY1NAy
+         aLiUawpXGB5/QTab5VA/SAVvBjrjiOb064t/RmDy3xtm7HE85VaP95IWlkkPJTDvoheg
+         fDoKUXFFZJ/PTE2vHHaw24TRhIl70y0DSnVs7C0U72n6SeEgQSMu2y9ScwCzH9UC6fQG
+         nrNk/P3AYp6F8OM7kGikbrk9hi9Rn6H5PhF2S3CNC/JGMlkC/ch/K/iCB7QcoFR2t/EY
+         8B8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=XxzGcZxEvn6lqn3S+ejnJxVLBGgsRsaccRc4Cve+wRs=;
+        b=KE008MNERmC7ez+27O4O7ht+Mg50xm2jK91PlKZ+TrOkzVfq3yrzzx5I4Pap1iovES
+         fJM2DyBxqkvUyAa46irvFjxGYzUjWlOcYkK2zW4tkbJNowIKUAX2RoHxio7tQQbbmao5
+         hLTaUKp1B+2S5/TDL4U39pRfzUue068JbaHJBW0Z3x/3ejNhiVIdZ3IkeVNKYBrDu/Ux
+         9n6ZDW+7A6uLmktf+IXwxx5haWksj6eJLGQMAY2wCh5MC0Kr68GGUmF2HP+0iApKKc7T
+         49lRmJoIQat7SGD/3zkJS9lz+sT1fjoAGaoDmBIAVbTopEi06LSGsvO4YZ4N4czvKFIr
+         wkxg==
+X-Gm-Message-State: ACgBeo0xYX46OkfCiDvT+GfZw4V2Ql2sg2W+qzKKT5/KqR+jju4+GfOG
+	GdKhSmvrp14RwPJDo2BNRXC+tyEoKezVjrqmGfA=
+X-Google-Smtp-Source: AA6agR5W6544mL7LWhnEioeV9p9alWGGjlSQTDFcYNtuZrEzZjzNO9Xin13cgi9cinfMtgiZlyMHCL4An3SJpU2YsoI=
+X-Received: by 2002:a05:6214:27ca:b0:499:95f:6379 with SMTP id
+ ge10-20020a05621427ca00b00499095f6379mr16365873qvb.82.1662054492332; Thu, 01
+ Sep 2022 10:48:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
+References: <1662030871-182688-1-git-send-email-john.garry@huawei.com> <1662030871-182688-6-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1662030871-182688-6-git-send-email-john.garry@huawei.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 1 Sep 2022 20:47:36 +0300
+Message-ID: <CAHp75Vcg79sZjv24DD3ZhYf9aC-zoEZ59gfagS1Jw1-GYhpQug@mail.gmail.com>
+Subject: Re: [PATCH 5/5] bus: hisi_lpc: Use platform_device_register_full()
+To: John Garry <john.garry@huawei.com>
+List-Id: <soc.lore.kernel.org>
+Cc: "xuwei (O)" <xuwei5@hisilicon.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Linuxarm <linuxarm@huawei.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Yang Yingliang <yangyingliang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The code to create the child platform device is essentially the same as
-what platform_device_register_full() does, so change over to use
-that same function to reduce duplication.
+On Thu, Sep 1, 2022 at 2:37 PM John Garry <john.garry@huawei.com> wrote:
+>
+> The code to create the child platform device is essentially the same as
+> what platform_device_register_full() does, so change over to use
+> that same function to reduce duplication.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/bus/hisi_lpc.c | 70 ++++++++++++++++++++++--------------------
- 1 file changed, 36 insertions(+), 34 deletions(-)
+Thanks!
 
-diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
-index 74f4448bff9d..2203ee57eaaf 100644
---- a/drivers/bus/hisi_lpc.c
-+++ b/drivers/bus/hisi_lpc.c
-@@ -472,9 +472,7 @@ static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_us
- 
- struct hisi_lpc_acpi_cell {
- 	const char *hid;
--	const char *name;
--	void *pdata;
--	size_t pdata_size;
-+	const struct platform_device_info *pdevinfo;
- };
- 
- static void hisi_lpc_acpi_remove(struct device *hostdev)
-@@ -505,28 +503,51 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
- 		/* ipmi */
- 		{
- 			.hid = "IPI0001",
--			.name = "hisi-lpc-ipmi",
-+			.pdevinfo = (struct platform_device_info []) {
-+				{
-+					.parent = hostdev,
-+					.fwnode = acpi_fwnode_handle(child),
-+
-+					.name = "hisi-lpc-ipmi",
-+					.id = PLATFORM_DEVID_AUTO,
-+
-+					.res = res,
-+					.num_res = num_res,
-+				},
-+			},
- 		},
- 		/* 8250-compatible uart */
- 		{
- 			.hid = "HISI1031",
--			.name = "serial8250",
--			.pdata = (struct plat_serial8250_port []) {
-+			.pdevinfo = (struct platform_device_info []) {
- 				{
--					.iobase = res->start,
--					.uartclk = 1843200,
--					.iotype = UPIO_PORT,
--					.flags = UPF_BOOT_AUTOCONF,
-+					.parent = hostdev,
-+					.fwnode = acpi_fwnode_handle(child),
-+
-+					.name = "serial8250",
-+					.id = PLATFORM_DEVID_AUTO,
-+
-+					.res = res,
-+					.num_res = num_res,
-+
-+					.data = (struct plat_serial8250_port []) {
-+						{
-+							.iobase = res->start,
-+							.uartclk = 1843200,
-+							.iotype = UPIO_PORT,
-+							.flags = UPF_BOOT_AUTOCONF,
-+						},
-+						{}
-+					},
-+					.size_data =  2 *
-+						sizeof(struct plat_serial8250_port),
- 				},
--				{}
- 			},
--			.pdata_size = 2 *
--				sizeof(struct plat_serial8250_port),
- 		},
- 		{}
- 	};
- 
--	for (; cell && cell->name; cell++) {
-+	for (; cell && cell->hid; cell++) {
- 		if (!strcmp(cell->hid, hid)) {
- 			found = true;
- 			break;
-@@ -540,31 +561,12 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
- 		return 0;
- 	}
- 
--	pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
-+	pdev = platform_device_register_full(cell->pdevinfo);
- 	if (!pdev)
- 		return -ENOMEM;
- 
--	pdev->dev.parent = hostdev;
--	ACPI_COMPANION_SET(&pdev->dev, child);
--
--	ret = platform_device_add_resources(pdev, res, num_res);
--	if (ret)
--		goto fail;
--
--	ret = platform_device_add_data(pdev, cell->pdata, cell->pdata_size);
--	if (ret)
--		goto fail;
--
--	ret = platform_device_add(pdev);
--	if (ret)
--		goto fail;
--
- 	acpi_device_set_enumerated(child);
- 	return 0;
--
--fail:
--	platform_device_put(pdev);
--	return ret;
- }
- 
- /*
+>  drivers/bus/hisi_lpc.c | 70 ++++++++++++++++++++++--------------------
+>  1 file changed, 36 insertions(+), 34 deletions(-)
+
+Looking at the statistics I thought it was a scary "improvement", but...
+
+...
+
+>                 /* ipmi */
+>                 {
+>                         .hid = "IPI0001",
+> -                       .name = "hisi-lpc-ipmi",
+> +                       .pdevinfo = (struct platform_device_info []) {
+> +                               {
+> +                                       .parent = hostdev,
+> +                                       .fwnode = acpi_fwnode_handle(child),
+> +
+> +                                       .name = "hisi-lpc-ipmi",
+> +                                       .id = PLATFORM_DEVID_AUTO,
+> +
+> +                                       .res = res,
+> +                                       .num_res = num_res,
+> +                               },
+
+...here and in the other cases you have a lot of blank lines, can we
+just get rid of them?
+
+> +                       },
+>                 },
+>                 /* 8250-compatible uart */
+>                 {
+>                         .hid = "HISI1031",
+> -                       .name = "serial8250",
+> -                       .pdata = (struct plat_serial8250_port []) {
+> +                       .pdevinfo = (struct platform_device_info []) {
+>                                 {
+> -                                       .iobase = res->start,
+> -                                       .uartclk = 1843200,
+> -                                       .iotype = UPIO_PORT,
+> -                                       .flags = UPF_BOOT_AUTOCONF,
+> +                                       .parent = hostdev,
+> +                                       .fwnode = acpi_fwnode_handle(child),
+> +
+> +                                       .name = "serial8250",
+> +                                       .id = PLATFORM_DEVID_AUTO,
+> +
+> +                                       .res = res,
+> +                                       .num_res = num_res,
+> +
+> +                                       .data = (struct plat_serial8250_port []) {
+> +                                               {
+> +                                                       .iobase = res->start,
+> +                                                       .uartclk = 1843200,
+> +                                                       .iotype = UPIO_PORT,
+> +                                                       .flags = UPF_BOOT_AUTOCONF,
+> +                                               },
+> +                                               {}
+> +                                       },
+
+> +                                       .size_data =  2 *
+> +                                               sizeof(struct plat_serial8250_port),
+
+I believe this can be one line.
+
+>                                 },
+>                         },
+
 -- 
-2.35.3
-
+With Best Regards,
+Andy Shevchenko
