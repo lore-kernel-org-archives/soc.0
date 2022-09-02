@@ -1,75 +1,80 @@
-Return-Path: <SRS0=Zopu=ZF=huawei.com=john.garry@kernel.org>
+Return-Path: <SRS0=BlQ1=ZF=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 491FCC38145
-	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 09:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C621FECAAD5
+	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 09:37:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2ED46C433C1; Fri,  2 Sep 2022 09:35:53 +0000 (UTC)
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id A1E57C43146; Fri,  2 Sep 2022 09:37:14 +0000 (UTC)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1881BC433D6
-	for <soc@kernel.org>; Fri,  2 Sep 2022 09:35:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1881BC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.206])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJt3L1Tj2z67NKY;
-	Fri,  2 Sep 2022 17:31:58 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 2 Sep 2022 11:35:47 +0200
-Received: from [10.195.34.23] (10.195.34.23) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 2 Sep
- 2022 10:35:47 +0100
-Message-ID: <ce2312ef-fffa-2467-f6b3-98ac31244065@huawei.com>
-Date: Fri, 2 Sep 2022 10:35:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 5/5] bus: hisi_lpc: Use platform_device_register_full()
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8391AC43141
+	for <soc@kernel.org>; Fri,  2 Sep 2022 09:37:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8391AC43141
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([84.195.186.194])
+	by michel.telenet-ops.be with bizsmtp
+	id Exd32800r4C55Sk06xd3Wn; Fri, 02 Sep 2022 11:37:05 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1oU36l-003hap-Br; Fri, 02 Sep 2022 11:37:03 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1oU36k-007eRQ-Pk; Fri, 02 Sep 2022 11:37:02 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-CC: "xuwei (O)" <xuwei5@hisilicon.com>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Linuxarm <linuxarm@huawei.com>, "Rafael
- J. Wysocki" <rafael.j.wysocki@intel.com>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, Yang Yingliang
-	<yangyingliang@huawei.com>
-References: <1662104841-55360-1-git-send-email-john.garry@huawei.com>
- <1662104841-55360-6-git-send-email-john.garry@huawei.com>
- <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
- <CAHp75VeE2OZHzwG-KbTHYks+G=sLfyx9Yy1W=RxORTtet-vDnQ@mail.gmail.com>
-From: John Garry <john.garry@huawei.com>
-In-Reply-To: <CAHp75VeE2OZHzwG-KbTHYks+G=sLfyx9Yy1W=RxORTtet-vDnQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.34.23]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 4/4] Renesas DT binding updates for v6.1
+Date: Fri,  2 Sep 2022 11:36:52 +0200
+Message-Id: <cover.1662111137.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1662111124.git.geert+renesas@glider.be>
+References: <cover.1662111124.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 02/09/2022 10:21, Andy Shevchenko wrote:
->> Reviewed-by: Andy Shevchenko<andy.shevchenko@gmail.com>
-> Too fast to give a tag, see below (keep tag if addressing it)
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-thanks
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-> 
-> ...
-> 
->>> -       pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
->>> +       pdev = platform_device_register_full(cell->pdevinfo);
->>>          if (!pdev)
->>>                  return -ENOMEM;
-> As per kernel doc:
->   * Returns &struct platform_device pointer on success, or ERR_PTR() on error.
+are available in the Git repository at:
 
-ah, right, I thought that I got that correct....
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.1-tag1
 
-John
+for you to fetch changes up to fddccbcb4de7ae734977da1a4c6d4c04a36a8f62:
 
+  dt-bindings: arm: renesas: Document Renesas R-Car V3H2 SoC and board (2022-08-30 09:52:32 +0200)
+
+----------------------------------------------------------------
+Renesas DT binding updates for v6.1
+
+  - Document support for the R-Car H3Ne-1.7G SoC on the Salvator-XS and
+    ULCB development boards,
+  - Document system controller support for the RZ/Five SoC,
+  - Document support for the R-Car V3H2 SoC and the Condor-I development
+    board.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      dt-bindings: arm: renesas: Document R-Car H3Ne-1.7G SoC and boards
+
+Kuninori Morimoto (1):
+      dt-bindings: arm: renesas: Document Renesas R-Car V3H2 SoC and board
+
+Lad Prabhakar (1):
+      dt-bindings: soc: renesas: renesas,rzg2l-sysc: Document RZ/Five SoC
+
+ Documentation/devicetree/bindings/arm/renesas.yaml       | 16 ++++++++++++++++
+ .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml         |  4 +---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
