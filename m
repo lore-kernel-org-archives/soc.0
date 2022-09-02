@@ -1,90 +1,192 @@
-Return-Path: <SRS0=b33T=ZF=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <SRS0=llEl=ZF=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68741C54EE9
-	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 08:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA5BBECAAD5
+	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 09:19:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4F490C43470; Fri,  2 Sep 2022 08:56:35 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 88D9EC433B5; Fri,  2 Sep 2022 09:19:16 +0000 (UTC)
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6F7F7C433D7;
-	Fri,  2 Sep 2022 08:56:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F7F7C433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662108993; x=1693644993;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Pg3WjXJAxkTowVVJmhAAbzrSkL/eQLHyA6yqIAoIaq4=;
-  b=hwXqPCv8tWXJsddY5sSHoTKr/84yHohR43dTlSUBCdjRNnT/qHkKRIm7
-   kbBDl2NsLRFNzF3lyXaUuDM4v7N7N17SXTehe4DmgiWMi966QqtvapnDW
-   Ncdt8J8g0W21Jbz/o5iqQwIGNa4auOU38wN7Xt+xqyYfxXPgyNf7guLBS
-   PZTCXfJ3McVq4REjqBjIr+ZkabzVFU8iKlUW9ReQuhh4Fa4QAjzYOzEcH
-   Z8+KYBCVKApZOqUgEYM/vJxsD4Kn7CZTq+PEg+07/b1Eis8jcpmk5OCa0
-   suywsOwzvpfOEs7/LZaLTWQ00lO2QBliimYyA/HpN8IAg2cs6JqfMU5ua
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="111892811"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 01:56:27 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 2 Sep 2022 01:56:25 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 01:56:23 -0700
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
-CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] AT91 device tree updates for 6.1
-Date: Fri, 2 Sep 2022 11:58:45 +0300
-Message-ID: <20220902085845.4193579-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
+	by smtp.kernel.org (Postfix) with ESMTPS id 7D2DFC433D6
+	for <soc@kernel.org>; Fri,  2 Sep 2022 09:19:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D2DFC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f181.google.com with SMTP id m5so1269430qkk.1
+        for <soc@kernel.org>; Fri, 02 Sep 2022 02:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=wN1g1xDoFb13lisdj6+cGYCXIaptZ92KuDnigLzcS88=;
+        b=a7Nge74CosWKyQX1L03O/zbvmcA1xfA3j0HobwDvTY31WHlj98Ami8ApDE3Ae+E6Cc
+         ROPMyJZcA0GBUu5jtF9amoi5RYqXj0R8N1E/Dn+rqAD+2y0WzOP6taxRKJJU5RTrUKR0
+         v+wDPXvgvT/tk1DZpGS55Tfd1pNLTLZIGJ8Rc92BHhik0ZuKdWSPj3b339CZlid0j2Em
+         pcg1HRkyCZ6lV+KiFQQR1uDEOFqAXYxXib3rlh+PQQwgzOvkWDoiaFJkAnfpGRwzpZaS
+         Xp9QAiO/I3HFV32a8ToZZWBLAKTySV5GLJKg9SV07TO47ihBDKK0dEDxc5pVczClFyEA
+         prZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=wN1g1xDoFb13lisdj6+cGYCXIaptZ92KuDnigLzcS88=;
+        b=7Zywwigxq3P/gt2/5ZpR7J08L24zSsq7f7QOP9a8RF5vrkSFEz0zb81Wvr/0lL65SY
+         3Qw9MqDNJeMseDRnbUbtqveSBkr9TGyY5PzFSus5WxSD63aMOHUsq88dmkkFqeWUGHKl
+         ZYeQVwW8x3W/EHIJia5o4+6Zjeaq5tX6Kc+ojOkHIIgmD0Sx5INYQ4xOFLU55XkAhL0V
+         YSbGWR8HVaLF4t0SiFYXI8zskGDkhAVcihe/IjJ9c5I2mCBOZWDB2FNmXbGTlVvMlsIz
+         2QlrebKzsLfpCbGLrrOXubSoh6OATvVLllBzXTSABVFdIpcKU8ENgUpO9ViDp+zPe6Gj
+         nuyA==
+X-Gm-Message-State: ACgBeo0Dywo0ISzBwViNdtoxt/NjUydxUIJF6wwer1l5VP9u1YOhOJQ1
+	8ilauELQLrvhAeJ8dABDsoshC0x5VbhjKN34EAo=
+X-Google-Smtp-Source: AA6agR4katP00xVnTBW1U3/ZYh4xrZjbooFVNdP9HS5rJOykScomj2tHnTG8Rp6K5pKrfE1jskOuqDsLxWm/F5h9TcM=
+X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
+ j10-20020a05620a288a00b006b8fcfedb02mr23120785qkp.504.1662110354404; Fri, 02
+ Sep 2022 02:19:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <1662104841-55360-1-git-send-email-john.garry@huawei.com> <1662104841-55360-6-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1662104841-55360-6-git-send-email-john.garry@huawei.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 2 Sep 2022 12:18:38 +0300
+Message-ID: <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] bus: hisi_lpc: Use platform_device_register_full()
+To: John Garry <john.garry@huawei.com>
+List-Id: <soc.lore.kernel.org>
+Cc: "xuwei (O)" <xuwei5@hisilicon.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Linuxarm <linuxarm@huawei.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
+	Yang Yingliang <yangyingliang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+On Fri, Sep 2, 2022 at 11:10 AM John Garry <john.garry@huawei.com> wrote:
+>
+> The code to create the child platform device is essentially the same as
+> what platform_device_register_full() does, so change over to use
+> that same function to reduce duplication.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+Now statistics plays for you and not against.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-are available in the Git repository at:
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/bus/hisi_lpc.c | 64 ++++++++++++++++++++----------------------
+>  1 file changed, 30 insertions(+), 34 deletions(-)
+>
+> diff --git a/drivers/bus/hisi_lpc.c b/drivers/bus/hisi_lpc.c
+> index 74f4448bff9d..3555a6857214 100644
+> --- a/drivers/bus/hisi_lpc.c
+> +++ b/drivers/bus/hisi_lpc.c
+> @@ -472,9 +472,7 @@ static int hisi_lpc_acpi_clear_enumerated(struct acpi_device *adev, void *not_us
+>
+>  struct hisi_lpc_acpi_cell {
+>         const char *hid;
+> -       const char *name;
+> -       void *pdata;
+> -       size_t pdata_size;
+> +       const struct platform_device_info *pdevinfo;
+>  };
+>
+>  static void hisi_lpc_acpi_remove(struct device *hostdev)
+> @@ -505,28 +503,45 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
+>                 /* ipmi */
+>                 {
+>                         .hid = "IPI0001",
+> -                       .name = "hisi-lpc-ipmi",
+> +                       .pdevinfo = (struct platform_device_info []) {
+> +                               {
+> +                                       .parent = hostdev,
+> +                                       .fwnode = acpi_fwnode_handle(child),
+> +                                       .name = "hisi-lpc-ipmi",
+> +                                       .id = PLATFORM_DEVID_AUTO,
+> +                                       .res = res,
+> +                                       .num_res = num_res,
+> +                               },
+> +                       },
+>                 },
+>                 /* 8250-compatible uart */
+>                 {
+>                         .hid = "HISI1031",
+> -                       .name = "serial8250",
+> -                       .pdata = (struct plat_serial8250_port []) {
+> +                       .pdevinfo = (struct platform_device_info []) {
+>                                 {
+> -                                       .iobase = res->start,
+> -                                       .uartclk = 1843200,
+> -                                       .iotype = UPIO_PORT,
+> -                                       .flags = UPF_BOOT_AUTOCONF,
+> +                                       .parent = hostdev,
+> +                                       .fwnode = acpi_fwnode_handle(child),
+> +                                       .name = "serial8250",
+> +                                       .id = PLATFORM_DEVID_AUTO,
+> +                                       .res = res,
+> +                                       .num_res = num_res,
+> +                                       .data = (struct plat_serial8250_port []) {
+> +                                               {
+> +                                                       .iobase = res->start,
+> +                                                       .uartclk = 1843200,
+> +                                                       .iotype = UPIO_PORT,
+> +                                                       .flags = UPF_BOOT_AUTOCONF,
+> +                                               },
+> +                                               {}
+> +                                       },
+> +                                       .size_data =  2 * sizeof(struct plat_serial8250_port),
+>                                 },
+> -                               {}
+>                         },
+> -                       .pdata_size = 2 *
+> -                               sizeof(struct plat_serial8250_port),
+>                 },
+>                 {}
+>         };
+>
+> -       for (; cell && cell->name; cell++) {
+> +       for (; cell && cell->hid; cell++) {
+>                 if (!strcmp(cell->hid, hid)) {
+>                         found = true;
+>                         break;
+> @@ -540,31 +555,12 @@ static int hisi_lpc_acpi_add_child(struct acpi_device *child, void *data)
+>                 return 0;
+>         }
+>
+> -       pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
+> +       pdev = platform_device_register_full(cell->pdevinfo);
+>         if (!pdev)
+>                 return -ENOMEM;
+>
+> -       pdev->dev.parent = hostdev;
+> -       ACPI_COMPANION_SET(&pdev->dev, child);
+> -
+> -       ret = platform_device_add_resources(pdev, res, num_res);
+> -       if (ret)
+> -               goto fail;
+> -
+> -       ret = platform_device_add_data(pdev, cell->pdata, cell->pdata_size);
+> -       if (ret)
+> -               goto fail;
+> -
+> -       ret = platform_device_add(pdev);
+> -       if (ret)
+> -               goto fail;
+> -
+>         acpi_device_set_enumerated(child);
+>         return 0;
+> -
+> -fail:
+> -       platform_device_put(pdev);
+> -       return ret;
+>  }
+>
+>  /*
+> --
+> 2.35.3
+>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.1
 
-for you to fetch changes up to 0b7baa1a307fcc66f66d7ca34244ee7a3899f92d:
-
-  ARM: dts: lan966x: add led configuration (2022-09-02 10:55:00 +0300)
-
-----------------------------------------------------------------
-AT91 DT for v6.1
-
-It contains:
-- one new LAN966X based board, namely lan966x-pcb8290
-- gpio leds support for lan966x-pcb8291 and lan966x-pcb8309
-- a cleanup for sam9x60ek to avoid DT compilation warning due to regulators
-
-----------------------------------------------------------------
-Claudiu Beznea (1):
-      ARM: dts: at91: sam9x60ek: remove simple-bus for regulators
-
-Horatiu Vultur (2):
-      ARM: dts: lan966x: add support for pcb8290
-      ARM: dts: lan966x: add led configuration
-
- arch/arm/boot/dts/Makefile            |   1 +
- arch/arm/boot/dts/at91-sam9x60ek.dts  |  78 +++++++--------
- arch/arm/boot/dts/lan966x-pcb8290.dts | 175 ++++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/lan966x-pcb8291.dts |  28 ++++++
- arch/arm/boot/dts/lan966x-pcb8309.dts |  28 ++++++
- 5 files changed, 268 insertions(+), 42 deletions(-)
- create mode 100644 arch/arm/boot/dts/lan966x-pcb8290.dts
+-- 
+With Best Regards,
+Andy Shevchenko
