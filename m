@@ -1,91 +1,103 @@
-Return-Path: <SRS0=fnla=ZF=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=b33T=ZF=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49FBBECAAA1
-	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 08:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FB94ECAAD5
+	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 08:55:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0A35BC433C1; Fri,  2 Sep 2022 08:06:54 +0000 (UTC)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id DF3B1C433C1; Fri,  2 Sep 2022 08:55:27 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 64697C4347C
-	for <soc@kernel.org>; Fri,  2 Sep 2022 08:06:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 64697C4347C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f42.google.com with SMTP id h5so2296660ejb.3
-        for <soc@kernel.org>; Fri, 02 Sep 2022 01:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=/CPr7XRW/l7oJ5TwQnKLmZtSswvlFBKkXS84mHDGoF0=;
-        b=ov9NKalAZFyh2hTY2dbXszqArzlqn9GnZwUCyustVqEGsjRHlE2B+lEHUci2QWsq5O
-         VvRpapuuUtNowNTe1SZ4hx+1GXq2MsAAyusyFMW9cEccUaf19D+PYWzInE+depRigNqo
-         RyD/qbrxA4hF7KA0juayqdEYvFYUG6nTLg320DRnMC6jzYnBpi517gmkeDtm6g5RAhOd
-         eGTFZ3np6jsUxmDuGP0G7W15ecBq5ntTGoO7p4zWgAdrckvsw4OtNVud1rPCvJe6GJVt
-         WV0u3j98H9paeuHfEXZNjdT5hgUrIaWaGHpWeuOgdW3/V1mvGNCzHyTbhcIOrI2OajEu
-         Lkcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=/CPr7XRW/l7oJ5TwQnKLmZtSswvlFBKkXS84mHDGoF0=;
-        b=piJ2sgOmHjV2bdfSzpd7yVkMoXROGzlJQ3yloTGaPZeCETy/6zFsggZ2ms5H58SrpN
-         wad8CQjU4rOlHj+3Oh/qepeuAHoRb+2MOZzMFOjy6MsQop23ZxzJjlYZfzEGCyUiZXFG
-         sBwxlWSqpkqL2ifwgOZ9kdS53esmFHjmJsglRWPlGKGOSBSlCLoE7q/ReocNZIzxGikj
-         vvWlfNz4YxJAX3jtXqkuaIrosTHy/SrWjF/9+fZXGFA32f2Pu6A1vy2j8BzgQsEM676v
-         aVoAuroy33Dqbz7HrdmuWUrYXaZVTpigN1lvrwBtMxrvcV7ZO6qYGNCdhpgwLfDnEUJT
-         Wb0w==
-X-Gm-Message-State: ACgBeo1wPcT4GIdJYLVR2QN2FMBKSZfSOCdvyxkES65/3FcQs8Px/W0V
-	3uHvuE16y1gXvS89NC1QGjFKf1vEggVh0gposbzaXA==
-X-Google-Smtp-Source: AA6agR4LDNciPZtaUjUX6+2rGeSXUZhhZ0jz4kn1NPhxmpYPCdK4njNDmYFI/PgmcfJA4C22nLg5rswmxoKXLO8pMgM=
-X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
- dd6-20020a1709069b8600b0073d72cf72afmr26775363ejc.440.1662106010529; Fri, 02
- Sep 2022 01:06:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
-In-Reply-To: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 2 Sep 2022 10:06:39 +0200
-Message-ID: <CACRpkdb25ikL4F499NDCrv1kf2FGvJxqDW2wk9GNQCqrbX9kKQ@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] Add support for i.MXRT1170-evk
-To: Jesse Taube <mr.bossman075@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id C9BB0C43470;
+	Fri,  2 Sep 2022 08:55:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C9BB0C43470
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662108927; x=1693644927;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p/dOcwFjX+f137i057a7V51Oku9kSnO9nq6D+HMnZ+o=;
+  b=P4KG2i/xstiC4g52SdgxBC4pJvZBwJo5RglxA7Qx1ysveyyk/8soqbYO
+   Y8k7GH37TpIggLXBp8h/tRKpp7LpC6a0+/fXZ3IvKVqwh5APqIY4Myfkb
+   UluEofaXtYhQoHvd0DgSuX31dnMiLHtLvzypIMy0k3fOIpLhwUrUJPIza
+   Y0F5h96BPac1/bw/LDs2SDkhSlsX6A68SbPyZNwbBwqEvyMzDtGaILqxx
+   PijRCvtiNVpOSwhD4tXAr41zkIOLnRnXSClwtlvUM8Anflthw1Ck1QaTz
+   GTzNfIYKBDc9jgAvKnNIvFDzKypBuJsY24nBD7IdV+VhkxynWgRN/lUUS
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="178765127"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Sep 2022 01:55:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 2 Sep 2022 01:55:24 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 2 Sep 2022 01:55:22 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, robh+dt@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com, 
-	stefan@agner.ch, daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de, 
-	olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com, 
-	dev@lynxeye.de, marcel.ziswiler@toradex.com, tharvey@gateworks.com, 
-	leoyang.li@nxp.com, sebastian.reichel@collabora.com, 
-	cniedermaier@dh-electronics.com, clin@suse.com, 
-	giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 fixes for 6.0
+Date: Fri, 2 Sep 2022 11:57:44 +0300
+Message-ID: <20220902085744.4193554-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Thu, Sep 1, 2022 at 8:33 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-> This patch contains:
-> - Update to imxrt_defconfig
-> - Devicetree
-> - Clock driver
-> - Pinctrl driver
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-No it does not, I already merged that.
+are available in the Git repository at:
 
-I think you should probably split up your series per-subsystem so the
-clock bindings and changes can be merged separately etc.
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.0
 
-Then the DTS files can be added to the ARM SoC tree as a final step.
+for you to fetch changes up to 3d074b750d2b4c91962f10ea1df1c289ce0d3ce8:
 
-When you send everything in one bundle like this subsystem maintainers
-don't know if they can merge e.g. just the clock patches separately
-and be done with their part (like what I did with pinctrl).
+  ARM: dts: at91: sama5d2_icp: don't keep vdd_other enabled all the time (2022-08-31 10:28:19 +0300)
 
-Yours.
-Linus Walleij
+----------------------------------------------------------------
+AT91 fixes for 6.0
+
+It contains:
+- fixes for self-refresh on SAMA7G5 while in AT91 power management modes:
+  one disabling a DDR PHY controller DLL which has been proved to be buggy
+  and can introduce glitches that can cause unexpected behavior; one
+  fixing the DDR PHY recalibration which cannot work for all possible
+  cases (due to hardware bug) while using backup and self-refresh AT91
+  power management mode;
+- one defconfig fix to remove CONFIG_MICROCHIP_PIT64B from all AT91
+  defconfigs;
+- multiple device tree fixes for regulators to avoid having some of them
+  enabled all the time and to describe min and max output ranges
+  according to board capabilities.
+
+----------------------------------------------------------------
+Claudiu Beznea (8):
+      ARM: configs: at91: remove CONFIG_MICROCHIP_PIT64B
+      ARM: at91: pm: fix self-refresh for sama7g5
+      ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
+      ARM: dts: at91: sama5d27_wlsom1: specify proper regulator output ranges
+      ARM: dts: at91: sama5d2_icp: specify proper regulator output ranges
+      ARM: dts: at91: sama7g5ek: specify proper regulator output ranges
+      ARM: dts: at91: sama5d27_wlsom1: don't keep ldo2 enabled all the time
+      ARM: dts: at91: sama5d2_icp: don't keep vdd_other enabled all the time
+
+ arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 21 ++++++++---------
+ arch/arm/boot/dts/at91-sama5d2_icp.dts      | 21 ++++++++---------
+ arch/arm/boot/dts/at91-sama7g5ek.dts        | 18 +++++++--------
+ arch/arm/configs/at91_dt_defconfig          |  1 -
+ arch/arm/configs/sama7_defconfig            |  1 -
+ arch/arm/mach-at91/pm.c                     | 36 +++++++++++++++++++++++++----
+ arch/arm/mach-at91/pm_suspend.S             | 24 +++++++++++++------
+ include/soc/at91/sama7-ddr.h                |  8 +++++++
+ 8 files changed, 86 insertions(+), 44 deletions(-)
