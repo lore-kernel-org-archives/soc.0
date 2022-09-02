@@ -1,93 +1,94 @@
-Return-Path: <SRS0=llEl=ZF=gmail.com=andy.shevchenko@kernel.org>
+Return-Path: <SRS0=XPTm=ZF=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75019C54EE9
-	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 09:22:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9873BECAAD5
+	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 09:34:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3CC6EC433B5; Fri,  2 Sep 2022 09:22:31 +0000 (UTC)
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 74FD3C433B5; Fri,  2 Sep 2022 09:34:59 +0000 (UTC)
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 61775C433D6
-	for <soc@kernel.org>; Fri,  2 Sep 2022 09:22:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 61775C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id g21so1252718qka.5
-        for <soc@kernel.org>; Fri, 02 Sep 2022 02:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=L9O5decV2/N6JOI8M13p/L7aDc3oKkUKc7b1+iVr6Ns=;
-        b=n8pH9KVWUwdC05ORursrzQoLTB97iTUEuehPv0ggTG2QfBGg4nhiwfUPI/g+QGH3zT
-         r9xBeHoditdJ7HHhnwz0AeDSPO8cfpprt8M7agSmx3x6JQS5ZWR1kvT3LsYcbVnvpvwm
-         omAtNUkcO62GYE8XSPDGGD5cVtwdCjlLJ2fJD01v4N1jRJZv/Fxvo2StNLMikWN/6ods
-         0H5mdHSLTjgbx77KBirRUlzPEWeDgPxO3CE1inI1PJ8QqlMTwyG+Kig104RY9g4hIx1w
-         ju4WuFunjO25RTn99gp3+OZWHMLi58Zn5cjvS7v9Iw6GkeavE3qAUE4yDKd1VotFCsTp
-         l2EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=L9O5decV2/N6JOI8M13p/L7aDc3oKkUKc7b1+iVr6Ns=;
-        b=t4TdFc/fRsw6rhQb0gxAu/4sR/kXfg0V51mUO1LorgooNtpQ54zvlJBRgURb3Ds3aA
-         FNjmNtWGBRNOp7whhZQxomL/AtLlFUmcnQqW57X8b9Q2mGnq1gbwfJHLmxNl6J8xD2dU
-         NVN8QslSNae9RZ2ccOJG9oln5zEE3RTCfzukfvaiFnytZ6I/rgmrqgw+MhA4L+q89GjH
-         6j/SpJECWfWpypoxq5bFiBZduTO/Pb6p1Fion9K1t39fWGX3i7kmeZKy7+TE2YbTWNg9
-         KMhR257s4fk1PKBSLJU0Epd6u+LJs8wJ8b8aUuFv8Vz5mPVJt9NxBOoO6YGnx8WcX8+p
-         74+g==
-X-Gm-Message-State: ACgBeo36EeqkiPTZuUzAWVpNns+J/02v6Oi0zPgD7cZ2qdToUip2RNIp
-	DDFybq+HxDvxoHvqmPsnnxXoDrXR112G6vmOwaw=
-X-Google-Smtp-Source: AA6agR5D3GHip/lU9Aj+WQapz0eupiIvUYun+mL3ehqHavPF9Osvco/OW9GJftX+j+YzjPj7xn78DqEhKYcPwbahytE=
-X-Received: by 2002:a05:620a:410e:b0:6bc:5cdc:88ec with SMTP id
- j14-20020a05620a410e00b006bc5cdc88ecmr22866476qko.734.1662110549331; Fri, 02
- Sep 2022 02:22:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <1662104841-55360-1-git-send-email-john.garry@huawei.com>
- <1662104841-55360-6-git-send-email-john.garry@huawei.com> <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
-In-Reply-To: <CAHp75VdfwGCUpZN3b1AD1kARc=FhyA4EDWDuZ8+1DKN3u73DeA@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 2 Sep 2022 12:21:53 +0300
-Message-ID: <CAHp75VeE2OZHzwG-KbTHYks+G=sLfyx9Yy1W=RxORTtet-vDnQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] bus: hisi_lpc: Use platform_device_register_full()
-To: John Garry <john.garry@huawei.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 36BF3C433C1;
+	Fri,  2 Sep 2022 09:34:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 36BF3C433C1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.west.internal (Postfix) with ESMTP id 871352B05965;
+	Fri,  2 Sep 2022 05:34:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 02 Sep 2022 05:34:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1662111296; x=1662114896; bh=uzP2BTOvx9
+	B1JqfpE816Vor6uj+jKwcwYjNS21O8AC8=; b=OqYzw3jv6r/dQ7IyYO/ABg5QV6
+	2PaXmd4idaKmu+9pMGyza+Nc93Nxzsb1aDXzja6QClzCFvRIpOYGciAwVYEKDB8D
+	AwggKFTYAu8kvp3qI1Hi5A7V3VEjkX4AG09TYHKYc1lRPuRUyJbI3EQJwwWBCub0
+	3CB/BBgd4yO0sWpZ8AzghfUZYcne93EeHmyEdwddkxAlcl0mwa+vJUsmrqtBQ3X2
+	U/DQy48zmWcfcIIuwiyUhBlzV4it3GyCo2708o8E63usOoCRJTTIFM0lcPJm8SO+
+	ZmqXRsBOTEMX29TCWYIYMwONGNg/dSmolGrffFjjNmIlV9sRp3TTi8rUSIrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	i56a14606.fm1; t=1662111296; x=1662114896; bh=uzP2BTOvx9B1JqfpE8
+	16Vor6uj+jKwcwYjNS21O8AC8=; b=FYGPnO/FLMJCHzB07bHkt0aAdbsjQ/1MSb
+	4r1YV0NXhv2JwV0icU++Sj8SYpMKGNtg+FhUnl13sbEVpDpKh3A3J+nKbvH51foL
+	lGj+PBCDA/b0a5ty4GpL4H5taxxfwSiCJCteN2ziG9xkd+OnjRAYkfwM91+SNgcx
+	ETOJyigDa2Mg60Hu2kHX/9tiTeoT/p11uG9WIDr4sXGvFzhfKST1KDN6ilosjaz2
+	0Ix9MzPuuomKO+C3D/v60dAxvwkkClmyh6UlOaHp98+onPdZuAqCQZdxkoPcrq/4
+	1AuPzXVfy2ZvoH6QkfbkRftTl2WDvhGeDBrUySD5sXnzN1aKtnVQ==
+X-ME-Sender: <xms:P84RY4wwzJwd9ByesmKSVZlRa89Uu_XWD-4wHVjJ0oXPdZfINEZnxw>
+    <xme:P84RY8SPlKfNSqG3iEnAIwqsCo18ypP6VskXDQf83IwrluyxYR-CvAhRl5wYR4ah2
+    Smnk7I6ZjoVjMMnLSo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeltddgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffgeffuddtvdehffefleethfejjeegvdelffejieegueetledvtedtudelgfdu
+    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:P84RY6Wme0tsYzXkC4FcAPI8cyij5t7MEmFEJJ952DEMkFgGqsaHZA>
+    <xmx:P84RY2ieXTYpanCAxPYPK46WfLfrB2cPHlvk9g_TxkpBQhUR6d5G6w>
+    <xmx:P84RY6CmUbYZtZ-rPnvDKc1RA3Wg6u452jwFHo7xXRxlqNV69JLhlw>
+    <xmx:P84RYyspN20-QlDhOuzLnuGQKZLCzuLNMHFfZBDmlkPU-YQPF3FyXGOXZFc>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7D91FB60083; Fri,  2 Sep 2022 05:34:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <81ed8e35-fa70-4b0e-9601-131c9d0c46d4@www.fastmail.com>
+In-Reply-To: <20220831141218.516100-1-krzysztof.kozlowski@linaro.org>
+References: <20220831141218.516100-1-krzysztof.kozlowski@linaro.org>
+Date: Fri, 02 Sep 2022 11:34:34 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: "xuwei (O)" <xuwei5@hisilicon.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Linuxarm <linuxarm@huawei.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, SoC Team <soc@kernel.org>, 
-	Yang Yingliang <yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Andy Gross" <agross@kernel.org>, "Bjorn Andersson" <andersson@kernel.org>,
+ "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, arm@kernel.org, soc@kernel.org,
+ "Olof Johansson" <olof@lixom.net>
+Subject: Re: [RESEND PATCH] arm64: defconfig: enable newer Qualcomm SoC sound drivers
+Content-Type: text/plain
 
-On Fri, Sep 2, 2022 at 12:18 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Wed, Aug 31, 2022, at 4:12 PM, Krzysztof Kozlowski wrote:
+> Enable sound support (machine drivers) for Qualcomm SC7180 and SC7280
+> SoCs.
 >
-> On Fri, Sep 2, 2022 at 11:10 AM John Garry <john.garry@huawei.com> wrote:
-> >
-> > The code to create the child platform device is essentially the same as
-> > what platform_device_register_full() does, so change over to use
-> > that same function to reduce duplication.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 >
-> Now statistics plays for you and not against.
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Resending because I missed ARM SoC maintainers and Bjorn.
 
-Too fast to give a tag, see below (keep tag if addressing it)
-
-...
-
-> > -       pdev = platform_device_alloc(cell->name, PLATFORM_DEVID_AUTO);
-> > +       pdev = platform_device_register_full(cell->pdevinfo);
-
-> >         if (!pdev)
-> >                 return -ENOMEM;
-
-As per kernel doc:
- * Returns &struct platform_device pointer on success, or ERR_PTR() on error.
-
--- 
-With Best Regards,
-Andy Shevchenko
+No objections to the patch, but I'm unsure what I'm supposed to
+do with it. Is this for Bjorn or me to pick up? Do we need it
+as a 6.0 fix or should this wait for 6.1?
