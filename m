@@ -4,58 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F846C6FA83
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F7FC6FA87
 	for <soc@archiver.kernel.org>; Fri,  2 Sep 2022 11:00:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7D2B3C43142; Fri,  2 Sep 2022 11:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 653D7C433B5;
+	id 83DF5C43141; Fri,  2 Sep 2022 11:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6CF4CC433C1;
 	Fri,  2 Sep 2022 11:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1662116424;
-	bh=jnfuKUFmB1IK4RlfgUuVVK+ehLAe8G2xbMAJG8JEn9M=;
+	bh=ca+Z5XIeCcBLmZYO3OQqDXpKMUflYeeQxB4pGDymceQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=c+ZFgEDv1r8JM8n2ehfqumPgw3ClFZlFCn/E7jZYtDM28mVF9k4/SFnLA5DQd1SXx
-	 MO2coUwBZ0/U0cP1K/9rYiwgwxNGELCc2JSh2uDHahePMGRD87IEIA1jCk8yCC4BNA
-	 2sb+fMWxG9Oaph9TpIRYnE4Ydh3dEUArDLTyvIt8SpX8GJtTODkJs/glPzQB+0A9wn
-	 8l3qIa7v/k2+M+CjavtoUF0bBWzTmMJbh0ImOitRBw1T+QSAO59Fyi4NAIcOEQuQS5
-	 vhO/AXjVPzqiikaQ12KqHZzTzkT69iCfGOQ8Er2TQ+k9Lhi4pEfU3IWZabBsBCgBJO
-	 g7ymo/cWopKlg==
+	b=ZOXI+aFxn88z4wNTp88N433x6duYrzotQmjuydL+5KeaXg+u3wECiqfT5J8NeIRVJ
+	 mZHwpd1hmxLLZmqzsU51GU27AQzsMRqxv7mQ2LnT5cUmLlmEqjsV9u8E2RIKypimXp
+	 wmWTD6NcbK/G1LoPmJOESA2gA2bw8N1nrucw/GxC+dEXbbczeuBz/iLJznn7YYTprR
+	 E8s7YhwiHEeZxnokC4UeNJl03+z0YaVA4Vcni+htNtZtM52g6TgEX9oZl36XkvYoDX
+	 NzMxxDQZXGPDMgF0L9GIIyVJcSMJ2FagHCANUkvzD3hi7vIgCYDnk4ZcoWj9koQE1h
+	 AXF1lgWCp5iSA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51C15E924E6;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5A86CE924E4;
 	Fri,  2 Sep 2022 11:00:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Renesas fixes for v6.0
+Subject: Re: [GIT PULL 0/4] Renesas SoC updates for v6.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166211642433.12856.4078580895762283787.git-patchwork-notify@kernel.org>
+ <166211642436.12856.18414737081332088238.git-patchwork-notify@kernel.org>
 Date: Fri, 02 Sep 2022 11:00:24 +0000
-References: <ab2866f12ca18747413ba41409231d44e0c6149b.1662111547.git.geert+renesas@glider.be>
-In-Reply-To: <ab2866f12ca18747413ba41409231d44e0c6149b.1662111547.git.geert+renesas@glider.be>
+References: <cover.1662111124.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1662111124.git.geert+renesas@glider.be>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri,  2 Sep 2022 11:43:45 +0200 you wrote:
-> Hi soc folks,
+On Fri,  2 Sep 2022 11:36:48 +0200 you wrote:
+> Hi SoC folks,
 > 
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+> This is my first pull request for the inclusion of Renesas SoC updates
+> for v6.1.
 > 
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-> 
-> are available in the Git repository at:
+> It consists of 3 parts:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Renesas fixes for v6.0
-    https://git.kernel.org/soc/soc/c/12f09234bde5
+  - [GIT,PULL,1/4] Renesas ARM defconfig updates for v6.1
+    https://git.kernel.org/soc/soc/c/853ca4bb741c
+  - [GIT,PULL,2/4] Renesas ARM DT updates for v6.1
+    https://git.kernel.org/soc/soc/c/73bf60ba7c18
+  - [GIT,PULL,3/4] Renesas driver updates for v6.1
+    https://git.kernel.org/soc/soc/c/c9a2577d417c
+  - [GIT,PULL,4/4] Renesas DT binding updates for v6.1
+    https://git.kernel.org/soc/soc/c/71772aa7dd2b
 
 You are awesome, thank you!
 -- 
