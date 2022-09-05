@@ -1,250 +1,54 @@
-Return-Path: <SRS0=KEZh=ZI=arndb.de=arnd@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3D96ECAAD3
-	for <soc@archiver.kernel.org>; Mon,  5 Sep 2022 16:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E79ECAAA1
+	for <soc@archiver.kernel.org>; Mon,  5 Sep 2022 21:53:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9FDF3C433C1; Mon,  5 Sep 2022 16:21:27 +0000 (UTC)
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B84F6C433D6
-	for <soc@kernel.org>; Mon,  5 Sep 2022 16:21:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B84F6C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 95491580230;
-	Mon,  5 Sep 2022 12:21:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 05 Sep 2022 12:21:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:message-id
-	:mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1662394884; x=1662398484; bh=jPjDs/nQydsuWc7+zdDVn5uW0GkDc/+2RNe
-	DCYWA06w=; b=Qphw9wDlxkhAQXBemSjB/3oLF2NRdmS87Z3z8ajxxPS7ltzSMXB
-	xE+1XGjrVNuU+L5o6S1jcPJG2o7uUKqygfyuL3cx6AIPsWWXN2pKGW6ZN4YoDjM3
-	OxQsL0oWBE//I2gflWKOuIdIUml1q3E/D53rEEw4ST58M2gKIMy5vF819+7M0raq
-	76K6KMQ4bcB4G360WMqP158xQyM08FSTGRXcE+wn9sCG6nauK4Z4M09wNgOqnI78
-	ESMjuRuTXVOgwI5x+PICcsEtJ4NsP2WDbe242GG/jgcuNs2DtC9eLmECvuWcnVVA
-	bejYDgw4SfFSsn/FmHSxYbaveV3XKTC2anw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:message-id:mime-version
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662394884; x=
-	1662398484; bh=jPjDs/nQydsuWc7+zdDVn5uW0GkDc/+2RNeDCYWA06w=; b=w
-	lxB6DbFg30LASx6TCeUQHhDHKY7WJW50xfqFU4ew63URpbGOzsiZt8UuLD8AnB5J
-	baOy72lhYI/5Cc+gkavNl7zxPBBVYl4Pw5HkPqEvW4UGoBVfFQZ8TgV0J6Fc84V+
-	DVfWTBck645CARtiDfFSRyMRk8LwRgdZwSs+77JxwNO3MuGgx2SfggwkGFKD80wo
-	gYnE+JpHBQN4eTZXkSC6OcBJJ0cNtOY8WXhX7t2DdC5YDSa6cxC7PDQ3KjD077bN
-	7kXefintstc3jwEDlJqgtRFHV0CyuREM3ZEEkUrgIhCGIsVRRvyL4quz/j/CqBrw
-	4+2TmWOMapQs7g541G7og==
-X-ME-Sender: <xms:BCIWY6UHRoBfNn1vXUPn2TVjaQDPa7-vC3B4ynFdGil4Qo4Qwiymgw>
-    <xme:BCIWY2mbwfJ82POusnyjPNSZbiZrWNQwoTDrenE8Ddh4SEw-T8UtNew2nAm-u0W8j
-    xF5eV535lCHOm_htKA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeliedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeelteelgefhvdejuefgieetkeehteevgfdvkeeiffdujefghedugeefjeeutdfg
-    geenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhlihhnrghrohdrohhrghdpghhith
-    hhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:BCIWY-bZO5gKIi_jfsabVCY5CucPaIczao_Ef-TYDGZ2w3X25LBZDw>
-    <xmx:BCIWYxXXKzBm_Er6Ri0ND399lAaKSDdye-3WsNF-GawfGeFxhjS5IA>
-    <xmx:BCIWY0k2h5-RyIlsWgwVqLd25emtMcE0i7rGkAfpbVSrME1nd85UKw>
-    <xmx:BCIWYwvQnKwlXo_GgIxioamiWpqEs1Y6zbFMjcqQz5wHpgs6VhN9FA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 0169EB60083; Mon,  5 Sep 2022 12:21:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <d518e7f7-ea7a-4bff-aa8c-7786bed62d69@www.fastmail.com>
-Date: Mon, 05 Sep 2022 18:21:03 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+	id BF6E3C433D6; Mon,  5 Sep 2022 21:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0558C433D7;
+	Mon,  5 Sep 2022 21:53:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1662414808;
+	bh=qJmgdfGi2pfXZ/CjkRB9Tuxoz1RB8blCzzzB/0L9MQI=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=kfw56JXsG9Hj5opIZbWv6jDTZ2rNdq89BN+7q3+p0JnxMly7X96LLm6azesERCpfi
+	 FaWHlqenQw0RmHwaOTrJFeSmP3uHafpj+z/HGDcmtywFa1r0Q3EwRLzre9cl2kJCoD
+	 EmBz+fFw/PqbGM4B462pRwIMOdIxaXGltg41VBI5G1/0nfFrAF4ZJNIkdJkOt2oJSV
+	 VN0zJ5nZ01ycW+jmRqhZ9V7EM5FceJSkixFeXJUTNT+IKheKxuBSjFatO2SCa4exfK
+	 0cjDizbKeFWhZbeXaRtM9qQpgPJ/F3LXRUIAhLW/8h0i21KgYEO/9nuFJvVqX6yIvY
+	 NipNjSF+bD0Ng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C31EC73FE0;
+	Mon,  5 Sep 2022 21:53:28 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for 6.0
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <d518e7f7-ea7a-4bff-aa8c-7786bed62d69@www.fastmail.com>
+References: <d518e7f7-ea7a-4bff-aa8c-7786bed62d69@www.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lore.kernel.org>
+X-PR-Tracked-Message-Id: <d518e7f7-ea7a-4bff-aa8c-7786bed62d69@www.fastmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.0-rc4
+X-PR-Tracked-Commit-Id: 12f09234bde51810b3f7412b2b5c84af4c07cfb1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 53e99dcff61e1523ec1c3628b2d564ba15d32eb7
+Message-Id: <166241480856.25048.8253334627519028502.pr-tracker-bot@kernel.org>
+Date: Mon, 05 Sep 2022 21:53:28 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.0
-Content-Type: text/plain
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+The pull request you sent on Mon, 05 Sep 2022 18:21:03 +0200:
 
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.0-rc4
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/53e99dcff61e1523ec1c3628b2d564ba15d32eb7
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.0-rc4
+Thank you!
 
-for you to fetch changes up to 12f09234bde51810b3f7412b2b5c84af4c07cfb1:
-
-  Merge tag 'renesas-fixes-for-v6.0-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/fixes (2022-09-02 12:05:28 +0200)
-
-----------------------------------------------------------------
-ARM: SoC fixes for 6.0
-
-These are the expected fixes for the SoC tree. I have let the
-patches pile up a little too long, so this is bigger than I
-would have liked.
-
- - Minor build fixes for Broadcom STB and NXP i.MX8M SoCs as well\
-   as TEE firmware
-
- - Updates to the MAINTAINERS file for the PolarFire SoC
-
- - Minor DT fixes for Renesas White Hawk and Arm Versatile and
-   Juno platforms
-
- - A fix for a missing dependnecy in the NXP DPIO driver
-
- - Broadcom BCA fixes to the newly added devicetree files
-
- - Multiple fixes for Microchip AT91 based SoCs, dealing with
-   self-refresh timings and regulator settings in DT
-
- - Several DT fixes for NXP i.MX platforms, dealing with incorrect
-   GPIO settings, extraneous nodes, and a wrong clock setting.
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: imx8mq-tqma8mq: Remove superfluous interrupt-names
-
-Andrejs Cainikovs (2):
-      arm64: dts: imx8mm-verdin: update CAN clock to 40MHz
-      arm64: dts: imx8mm-verdin: use level interrupt for mcp251xfd
-
-Arnd Bergmann (9):
-      Merge branch 'polarfire/fixes' into arm/fixes
-      Merge tag 'imx-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
-      Merge tag 'versatile-dts-v6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator into arm/fixes
-      Merge tag 'tee-fix-for-v6.0' of https://git.linaro.org/people/jens.wiklander/linux-tee into arm/fixes
-      Merge tag 'juno-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes
-      Merge tag 'arm-soc/for-6.0/devicetree' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'arm-soc/for-6.0/drivers-fixes' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'at91-fixes-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
-      Merge tag 'renesas-fixes-for-v6.0-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/fixes
-
-Claudiu Beznea (8):
-      ARM: configs: at91: remove CONFIG_MICROCHIP_PIT64B
-      ARM: at91: pm: fix self-refresh for sama7g5
-      ARM: at91: pm: fix DDR recalibration when resuming from backup and self-refresh
-      ARM: dts: at91: sama5d27_wlsom1: specify proper regulator output ranges
-      ARM: dts: at91: sama5d2_icp: specify proper regulator output ranges
-      ARM: dts: at91: sama7g5ek: specify proper regulator output ranges
-      ARM: dts: at91: sama5d27_wlsom1: don't keep ldo2 enabled all the time
-      ARM: dts: at91: sama5d2_icp: don't keep vdd_other enabled all the time
-
-Conor Dooley (2):
-      MAINTAINERS: add PolarFire SoC dt bindings
-      MAINTAINERS: add the Polarfire SoC's i2c driver
-
-David Jander (1):
-      ARM: dts: imx6qdl-vicut1.dtsi: Fix node name backlight_led
-
-Geert Uytterhoeven (1):
-      arm64: dts: renesas: r8a779g0: Fix HSCIF0 interrupt number
-
-Jassi Brar (1):
-      arm64: dts: juno: Add missing MHU secure-irq
-
-Jens Wiklander (1):
-      tee: fix compiler warning in tee_shm_register()
-
-Julia Lawall (1):
-      ARM: ixp4xx: fix typos in comments
-
-Kuldeep Singh (3):
-      ARM: dts: integratorap: Update spi node properties
-      ARM: dts: realview: Update spi clock-names property
-      ARM: dts: versatile: Update spi clock-names property
-
-Liang He (1):
-      soc: brcmstb: pm-arm: Fix refcount leak and __iomem leak bugs
-
-Marcel Ziswiler (2):
-      arm64: dts: freescale: verdin-imx8mm: fix atmel_mxt_ts reset polarity
-      arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity
-
-Marco Felsch (3):
-      Revert "soc: imx: imx8m-blk-ctrl: set power device name"
-      ARM: dts: imx6qdl-kontron-samx6i: remove duplicated node
-      ARM: dts: imx6qdl-kontron-samx6i: fix spi-flash compatible
-
-Marek Vasut (3):
-      arm64: dts: imx8mp: Adjust ECSPI1 pinmux on i.MX8M Plus DHCOM
-      soc: imx: gpcv2: Assert reset before ungating clock
-      arm64: dts: imx8mp: Fix I2C5 GPIO assignment on i.MX8M Plus DHCOM
-
-Mathew McBride (1):
-      soc: fsl: select FSL_GUTS driver for DPIO
-
-Peng Fan (1):
-      arm64: dts: imx8mp-venice-gw74xx: fix sai2 pin settings
-
-Philippe Schenker (1):
-      arm64: dts: verdin-imx8mm: add otg2 pd to usbphy
-
-Rob Herring (1):
-      arm64: dts: arm: juno: Remove legacy Coresight 'slave-mode' property
-
-Tim Harvey (1):
-      arm64: dts: imx8mm-venice-gw7901: fix port/phy validation
-
-Vladimir Oltean (1):
-      arm64: dts: ls1028a-qds-65bb: don't use in-band autoneg for 2500base-x
-
-William Zhang (9):
-      ARM: dts: bcmbca: bcm63178: fix timer node cpu mask flag
-      ARM: dts: bcmbca: bcm63178: clean up psci node
-      ARM: dts: bcmbca: bcm63178: fix interrupt controller node
-      ARM: dts: bcmbca: bcm63178: cosmetic change
-      ARM: dts: bcmbca: bcm6846: fix timer node cpu mask flag
-      ARM: dts: bcmbca: bcm6846: clean up psci node
-      ARM: dts: bcmbca: bcm6846: fix interrupt controller node
-      ARM: dts: bcmbca: bcm6878: fix timer node cpu mask flag
-      ARM: dts: bcmbca: bcm6878: cosmetic change
-
- MAINTAINERS                                        | 10 +++++
- arch/arm/boot/dts/arm-realview-eb.dtsi             |  2 +-
- arch/arm/boot/dts/arm-realview-pb1176.dts          |  2 +-
- arch/arm/boot/dts/arm-realview-pb11mp.dts          |  2 +-
- arch/arm/boot/dts/arm-realview-pbx.dtsi            |  2 +-
- arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi        | 21 +++++----
- arch/arm/boot/dts/at91-sama5d2_icp.dts             | 21 +++++----
- arch/arm/boot/dts/at91-sama7g5ek.dts               | 18 ++++----
- arch/arm/boot/dts/bcm63178.dtsi                    | 20 +++++----
- arch/arm/boot/dts/bcm6846.dtsi                     | 18 ++++----
- arch/arm/boot/dts/bcm6878.dtsi                     |  9 ++--
- arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi      | 12 +-----
- arch/arm/boot/dts/imx6qdl-vicut1.dtsi              |  2 +-
- arch/arm/boot/dts/integratorap-im-pd1.dts          |  4 +-
- arch/arm/boot/dts/versatile-ab.dts                 |  2 +-
- arch/arm/configs/at91_dt_defconfig                 |  1 -
- arch/arm/configs/sama7_defconfig                   |  1 -
- arch/arm/mach-at91/pm.c                            | 36 ++++++++++++++--
- arch/arm/mach-at91/pm_suspend.S                    | 24 ++++++++---
- arch/arm/mach-ixp4xx/ixp4xx-of.c                   |  2 +-
- arch/arm64/boot/dts/arm/juno-base.dtsi             |  3 +-
- arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi          |  2 -
- .../boot/dts/freescale/fsl-ls1028a-qds-65bb.dts    |  1 -
- .../boot/dts/freescale/imx8mm-venice-gw7901.dts    |  4 ++
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi   | 11 ++---
- .../arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 14 +++---
- .../boot/dts/freescale/imx8mp-venice-gw74xx.dts    |  8 ++--
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi   |  4 +-
- arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi  |  1 -
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi          |  2 +-
- drivers/soc/bcm/brcmstb/pm/pm-arm.c                | 50 +++++++++++++++++-----
- drivers/soc/fsl/Kconfig                            |  1 +
- drivers/soc/imx/gpcv2.c                            |  5 ++-
- drivers/soc/imx/imx8m-blk-ctrl.c                   |  1 -
- drivers/tee/tee_shm.c                              |  1 +
- include/soc/at91/sama7-ddr.h                       |  8 ++++
- 36 files changed, 202 insertions(+), 123 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
