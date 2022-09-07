@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB9BFECAAD3
-	for <soc@archiver.kernel.org>; Wed,  7 Sep 2022 09:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F34FC38145
+	for <soc@archiver.kernel.org>; Wed,  7 Sep 2022 09:21:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 91BFEC433D6; Wed,  7 Sep 2022 09:21:23 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id 62C55C433D7; Wed,  7 Sep 2022 09:21:24 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0730AC433C1
-	for <soc@kernel.org>; Wed,  7 Sep 2022 09:21:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0730AC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id A55E3C43141
+	for <soc@kernel.org>; Wed,  7 Sep 2022 09:21:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A55E3C43141
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662542481; x=1694078481;
+  t=1662542482; x=1694078482;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=SRf39MiEqJa3areQ7kyn/5mObXp0ZhdiIBrwyioA++I=;
-  b=RBHroSqxda8cLoUKCPf0eb7rW7d3h1cOv4zCGEBZ+HLX0o0qguhEm5xo
-   iKmJ+pHpyZmD8XX8Dc6Aah2hmsL6sYfRPMvRdMOqNNj06XR4YsNRaLJMH
-   AJZMv7nbHwLk1nGpwdiJl0PEvdAzYIim5+6AUEaE1jiTb0ChkIQHs3DSD
-   m1/cXfNcWemSb/xS1SY7QhKV2gtuDtsrIfutn9rIWuWdHh3pxl3vo15D8
-   rWrhAIKP98szByN/M7m0EPIfofg4NOzHpeqF2/pFVanasxeCvF6oSIotY
-   5eyD/6QeWnWL7nS1s2Vps//sn/+uIvRpunsImJWlXYvOPNjEl0LafJjbw
-   w==;
+  bh=GuFBZXXxj5JZvk7OWi1+kSXB5Q/GhtyNc2SsO4+S5jQ=;
+  b=xuQ7eyIhwwoAfRk8wIqXvcIOBdGbcjErKEjle6guPjPbzFRFS4PY2hZm
+   C9zcElnXMXJPsQutNGreMQaKbpzhZgI+yMecvUGD3xnFISOzQ73YZZVTv
+   9M3B3aomUFdg7PLKIqoyKJ/uw1XNwv7kgI/VGfGGQz8qXOWhHpXefV322
+   9eINbGP5p4S09JTvhEeW8iJQfhDrX+yXFvKQCKelIxu7sraXPral/kZg+
+   xTmDrQMNLcicrhu4eBc5pmIDS8dRxlu09H5lN4cNB7a/K2UGe5oI3/H0X
+   26afeSQdvwxT9MGKpD4S4jHppBd2pyaU+/r+zgRwQ8UF2Pd7O4gN4bqaO
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="179494581"
+   d="scan'208";a="112520797"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 02:21:20 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 02:21:19 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 7 Sep 2022 02:21:11 -0700
+ 15.1.2507.12; Wed, 7 Sep 2022 02:21:18 -0700
 Received: from che-lt-i63539lx.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 7 Sep 2022 02:21:05 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 7 Sep 2022 02:21:12 -0700
 From: Hari Prasath <Hari.PrasathGE@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
@@ -50,91 +50,190 @@ To: <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
 	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <durai.manickamkr@microchip.com>
 CC: <Hari.PrasathGE@microchip.com>
-Subject: [linux][PATCH 1/6] ARM: dts: at91: sam9x60: Fix the label numbering for the flexcom functions
-Date: Wed, 7 Sep 2022 14:50:49 +0530
-Message-ID: <20220907092054.29915-2-Hari.PrasathGE@microchip.com>
+Subject: [linux][PATCH 2/6] ARM: dts: at91: sam9x60: Move flexcom definitions to the SoC dtsi
+Date: Wed, 7 Sep 2022 14:50:50 +0530
+Message-ID: <20220907092054.29915-3-Hari.PrasathGE@microchip.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220907092054.29915-1-Hari.PrasathGE@microchip.com>
 References: <20220907092054.29915-1-Hari.PrasathGE@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-From: Manikandan M <manikandan.m@microchip.com>
+Move the flexcom definitions to the SoC specifc DTSI file retaining only
+the pinmux and desired functions in the board specific DTS file of
+sam9x60ek.
 
-Fixed the label numbering of the flexcom functions so that all
-13 flexcom functions of sam9x60 are in the following order when the missing
-flexcom functions are added:
-
-flx0: uart0, spi0, i2c0
-flx1: uart1, spi1, i2c1
-flx2: uart2, spi2, i2c2
-flx3: uart3, spi3, i2c3
-flx4: uart4, spi4, i2c4
-flx5: uart5, spi5, i2c5
-flx6: uart6, i2c6
-flx7: uart7, i2c7
-flx8: uart8, i2c8
-flx9: uart9, i2c9
-flx10: uart10, i2c10
-flx11: uart11, i2c11
-flx12: uart12, i2c12
-
+Signed-off-by: Hari Prasath <Hari.PrasathGE@microchip.com>
 Signed-off-by: Manikandan M <manikandan.m@microchip.com>
+Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
 ---
- arch/arm/boot/dts/at91-sam9x60ek.dts | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 34 +-----------------
+ arch/arm/boot/dts/sam9x60.dtsi       | 52 ++++++++++++++++++++++++++--
+ 2 files changed, 51 insertions(+), 35 deletions(-)
 
 diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index 7ade9979e1c6..b9b7a235ef89 100644
+index b9b7a235ef89..9d9e50c77794 100644
 --- a/arch/arm/boot/dts/at91-sam9x60ek.dts
 +++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -16,8 +16,8 @@
+@@ -211,15 +211,10 @@
+ 	status = "okay";
  
- 	aliases {
- 		i2c0 = &i2c0;
--		i2c1 = &i2c1;
--		serial1 = &uart1;
-+		i2c1 = &i2c6;
-+		serial1 = &uart5;
- 	};
- 
- 	chosen {
-@@ -238,7 +238,7 @@
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+ 	i2c0: i2c@600 {
+-		compatible = "microchip,sam9x60-i2c";
+-		reg = <0x600 0x200>;
+-		interrupts = <5 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 5>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_flx0_default>;
+-		atmel,fifo-size = <16>;
+ 		i2c-analog-filter;
+ 		i2c-digital-filter;
+ 		i2c-digital-filter-width-ns = <35>;
+@@ -239,16 +234,8 @@
  	status = "disabled";
  
--	spi0: spi@400 {
-+	spi4: spi@400 {
- 		compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
- 		reg = <0x400 0x200>;
- 		interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
-@@ -257,7 +257,7 @@
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+ 	spi4: spi@400 {
+-		compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
+-		reg = <0x400 0x200>;
+-		interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 13>;
+-		clock-names = "spi_clk";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_flx4_default>;
+-		atmel,fifo-size = <16>;
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+ 		status = "disabled";
+ 	};
+ };
+@@ -258,22 +245,8 @@
  	status = "okay";
  
--	uart1: serial@200 {
-+	uart5: serial@200 {
- 		compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
- 		reg = <0x200 0x200>;
- 		interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
-@@ -282,7 +282,7 @@
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+ 	uart5: serial@200 {
+-		compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
+-		reg = <0x200 0x200>;
+-		interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
+-		dmas = <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
+-			 AT91_XDMAC_DT_PERID(10))>,
+-		       <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
+-			 AT91_XDMAC_DT_PERID(11))>;
+-		dma-names = "tx", "rx";
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 14>;
+-		clock-names = "usart";
+-		pinctrl-0 = <&pinctrl_flx5_default>;
+ 		pinctrl-names = "default";
+-		atmel,use-dma-rx;
+-		atmel,use-dma-tx;
++		pinctrl-0 = <&pinctrl_flx5_default>;
+ 		status = "okay";
+ 	};
+ };
+@@ -283,15 +256,10 @@
  	status = "okay";
  
--	i2c1: i2c@600 {
-+	i2c6: i2c@600 {
- 		compatible = "microchip,sam9x60-i2c";
- 		reg = <0x600 0x200>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
-@@ -442,7 +442,7 @@
- 				 AT91_PIOA 14 AT91_PERIPH_A AT91_PINCTRL_NONE>;
- 		};
+ 	i2c6: i2c@600 {
+-		compatible = "microchip,sam9x60-i2c";
+-		reg = <0x600 0x200>;
+-		interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 9>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_flx6_default>;
+-		atmel,fifo-size = <16>;
+ 		i2c-analog-filter;
+ 		i2c-digital-filter;
+ 		i2c-digital-filter-width-ns = <35>;
+diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
+index d3f60f6a456d..f0e0dc20de1b 100644
+--- a/arch/arm/boot/dts/sam9x60.dtsi
++++ b/arch/arm/boot/dts/sam9x60.dtsi
+@@ -169,6 +169,16 @@
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf0000000 0x800>;
+ 				status = "disabled";
++
++				spi4: spi@400 {
++					compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
++					reg = <0x400 0x200>;
++					interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 13>;
++					clock-names = "spi_clk";
++					atmel,fifo-size = <16>;
++					status = "disabled";
++				};
+ 			};
  
--		pinctrl_flx5_default: flx_uart {
-+		pinctrl_flx5_default: flx5_uart {
- 			atmel,pins =
- 				<AT91_PIOA 7 AT91_PERIPH_C AT91_PINCTRL_NONE
- 				 AT91_PIOA 8 AT91_PERIPH_B AT91_PINCTRL_NONE
+ 			flx5: flexcom@f0004000 {
+@@ -179,6 +189,26 @@
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf0004000 0x800>;
+ 				status = "disabled";
++
++				uart5: serial@200 {
++					compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
++					reg = <0x200 0x200>;
++					interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
++					dmas = <&dma0
++						(AT91_XDMAC_DT_MEM_IF(0) |
++						 AT91_XDMAC_DT_PER_IF(1) |
++						 AT91_XDMAC_DT_PERID(10))>,
++						<&dma0
++						(AT91_XDMAC_DT_MEM_IF(0) |
++						 AT91_XDMAC_DT_PER_IF(1) |
++						 AT91_XDMAC_DT_PERID(11))>;
++					dma-names = "tx", "rx";
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 14>;
++					clock-names = "usart";
++					atmel,use-dma-rx;
++					atmel,use-dma-tx;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			dma0: dma-controller@f0008000 {
+@@ -378,6 +408,15 @@
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf8010000 0x800>;
+ 				status = "disabled";
++
++				i2c6: i2c@600 {
++					compatible = "microchip,sam9x60-i2c";
++					reg = <0x600 0x200>;
++					interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 9>;
++					atmel,fifo-size = <16>;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			flx7: flexcom@f8014000 {
+@@ -404,10 +443,19 @@
+ 				compatible = "atmel,sama5d2-flexcom";
+ 				reg = <0xf801c000 0x200>;
+ 				clocks = <&pmc PMC_TYPE_PERIPHERAL 5>;
+-				#address-cells = <1>;
+-				#size-cells = <1>;
+ 				ranges = <0x0 0xf801c000 0x800>;
+ 				status = "disabled";
++
++				i2c0: i2c@600 {
++					compatible = "microchip,sam9x60-i2c";
++					reg = <0x600 0x200>;
++					interrupts = <5 IRQ_TYPE_LEVEL_HIGH 7>;
++					#address-cells = <1>;
++					#size-cells = <0>;
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 5>;
++					atmel,fifo-size = <16>;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			flx1: flexcom@f8020000 {
 -- 
 2.17.1
 
