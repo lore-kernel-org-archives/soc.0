@@ -1,645 +1,132 @@
-Return-Path: <SRS0=ZUzB=ZK=microchip.com=Hari.PrasathGE@kernel.org>
+Return-Path: <SRS0=kTxA=ZK=gmail.com=saproj@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E77BECAAD3
-	for <soc@archiver.kernel.org>; Wed,  7 Sep 2022 09:21:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F99C38145
+	for <soc@archiver.kernel.org>; Wed,  7 Sep 2022 17:54:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 05CCEC433C1; Wed,  7 Sep 2022 09:21:52 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 7CD38C433D7; Wed,  7 Sep 2022 17:54:05 +0000 (UTC)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 21588C433D7
-	for <soc@kernel.org>; Wed,  7 Sep 2022 09:21:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21588C433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662542510; x=1694078510;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=7wmw36a8KugfV7YznzGR5A5/hDGBeGb1Rx1sONhZU7w=;
-  b=pPjfoHK6fgEdx8tPcYsaAdtFzxsqrSalUmL4uZNix/b8BviBRxP94QcP
-   sIR3U9Bzw7/T0ebg/QbBTLX4wBt9grr3aTEwdbUZBSr25zqu/DleeT8ia
-   jrtV7CgdtwZ4ASiD3sl04/R0YwA5OJfFu+tWmkx9WXYqalVN7ImUPd8xE
-   pd9Xem90NzKHg/dKVmdXMQvzLlELQMPfNpHNphnrs1cxJieNDqkmn5Hmy
-   32TNZMYMM7kvyEx9obsX9ig2oI869vxsMWLwig7KQy/ykG33llQVYV8zw
-   NOnWF33w6ayI4DkteDExYSC6fGLP/eTKrtYDTEaRA6otPelF4Nb7ya0A7
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,296,1654585200"; 
-   d="scan'208";a="172733042"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Sep 2022 02:21:48 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 7 Sep 2022 02:21:47 -0700
-Received: from che-lt-i63539lx.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 7 Sep 2022 02:21:41 -0700
-From: Hari Prasath <Hari.PrasathGE@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 76B69C433D6
+	for <soc@kernel.org>; Wed,  7 Sep 2022 17:54:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76B69C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id b19so16866840ljf.8
+        for <soc@kernel.org>; Wed, 07 Sep 2022 10:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=zYU9e6+rW3YlNt9/cxNc1/gsizy2sZMh8xlX3YWM9ak=;
+        b=Exl1ow4AX3EGWJT5QnfxeA2RKjRmlP4BTPhr3C/gX+JBSQ7uotqrFWkfi82RwyaKBi
+         ibL18Q+YfB/DJVsepARdyLUq8/9j7qOGvrnTZJzthp9kZ2A2FvkcrLm7ejnQT5O+B53g
+         a/9cQmlY9gMUfwEyOMvhjJsfWzC0a+4tW2MkAxcg2sT52ZGqopaNKAth3+2oNQQnxikS
+         aL1qwaIS6oVsQ+SAY25etTDdjZ/c7V2nZ6qXRHWJmSCtHKNlGqItyEUDjkoBtV7ts/eh
+         ScZ+3MZjreqEwTfz7N90XkD/+Uodqt35O7VDeRXl9lNfytiwIwb8U04zbWYBCU8D8/1B
+         rcIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=zYU9e6+rW3YlNt9/cxNc1/gsizy2sZMh8xlX3YWM9ak=;
+        b=ylDWHSaS8Z8et7uBAVzBn1SowP4JtN4Zqf5GsFOsy/TKkfw2ArMPq2GidpPuFfMjxF
+         1Dgg3Krj1jOfMwyW4ZruvuWKMejBpjhtJNUP4nLnQr5npyFmq9DS02b0zAxT0tebqood
+         XJquyN/Kiesw2bpeX02R557tycH6qLafwGSQlpSYr0BFRlB+XeN8ikeS36abKEy5HEpZ
+         AsO8HUaqTcZPBkOjPMSQv1/JmNDWXl/S+1mV3G7TCz5AG6BtMlXLzleZ63A6Y91t5pIh
+         xFWp+Jb5ohxM2RNpsPog/tOSfn+utnpURCaM2fekDSSJUWKANaagrYLojwykxbkOFkx6
+         /Zhg==
+X-Gm-Message-State: ACgBeo1UPEv4VQ9UKsVUNOeTvj5jQVLp42AU4aCUcXo37XpUkhP5J1Z9
+	Dv3TfZI0Ddd0YuyfzGe8GG3hcMCUwfmcBA==
+X-Google-Smtp-Source: AA6agR6wbbL8TVZJPHS1JEv5zkQdgRR0ARJ0qBSVdTnzAl2pVWQ59/N5C6UzxaWIF8YrPtVwjca01Q==
+X-Received: by 2002:a05:651c:549:b0:268:e0b3:4795 with SMTP id q9-20020a05651c054900b00268e0b34795mr1405884ljp.313.1662573242605;
+        Wed, 07 Sep 2022 10:54:02 -0700 (PDT)
+Received: from saproj-Latitude-5501.yandex.net ([2a02:6b8:0:40c:b01c:9ff4:8f8e:3acd])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac24c4a000000b0048cf43c3a85sm555529lfk.238.2022.09.07.10.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 10:54:01 -0700 (PDT)
+From: Sergei Antonov <saproj@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-	<davem@davemloft.net>, <krzysztof.kozlowski+dt@linaro.org>,
-	<alexandre.belloni@bootlin.com>, <arnd@arndb.de>, <olof@lixom.net>,
-	<soc@kernel.org>, <manikandan.m@microchip.com>, <michael@walle.cc>,
-	<horatiu.vultur@microchip.com>, <kavyasree.kotagiri@microchip.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <durai.manickamkr@microchip.com>
-CC: <Hari.PrasathGE@microchip.com>
-Subject: [linux][PATCH 6/6] ARM: dts: at91: sam9x60_curiosity: Add device tree for sam9x60_curiosity board
-Date: Wed, 7 Sep 2022 14:50:54 +0530
-Message-ID: <20220907092054.29915-7-Hari.PrasathGE@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220907092054.29915-1-Hari.PrasathGE@microchip.com>
-References: <20220907092054.29915-1-Hari.PrasathGE@microchip.com>
+To: soc@kernel.org
+Cc: Sergei Antonov <saproj@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jonas Jensen <jonas.jensen@gmail.com>
+Subject: [PATCH v2] ARM: dts: fix Moxa SDIO 'compatible', remove 'sdhci' misnomer
+Date: Wed,  7 Sep 2022 20:53:41 +0300
+Message-Id: <20220907175341.1477383-1-saproj@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-From: Manikandan M <manikandan.m@microchip.com>
+Driver moxart-mmc.c has .compatible = "moxa,moxart-mmc".
 
-Add device tree file for sam9x60_curiosity board.
+But moxart .dts/.dtsi and the documentation file moxa,moxart-dma.txt
+contain compatible = "moxa,moxart-sdhci".
 
-Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
-Signed-off-by: Manikandan M <manikandan.m@microchip.com>
-Signed-off-by: Hari Prasath <Hari.PrasathGE@microchip.com>
+Change moxart .dts/.dtsi files and moxa,moxart-dma.txt to match the driver.
+
+Replace 'sdhci' with 'mmc' in names too, since SDHCI is a different
+controller from FTSDC010.
+
+Signed-off-by: Sergei Antonov <saproj@gmail.com>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Jonas Jensen <jonas.jensen@gmail.com>
 ---
- .../devicetree/bindings/arm/atmel-at91.yaml   |   6 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/at91-sam9x60_curiosity.dts  | 532 ++++++++++++++++++
- 3 files changed, 539 insertions(+)
- create mode 100644 arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+v1 -> v2:
+Per Arnd Bergmann's suggestion, replaced sdhci with mmc in names too.
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-index 2b7848bb7769..fae3a3090fbd 100644
---- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-+++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-@@ -97,6 +97,12 @@ properties:
-           - const: microchip,sam9x60
-           - const: atmel,at91sam9
+ Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt | 4 ++--
+ arch/arm/boot/dts/moxart-uc7112lx.dts                     | 2 +-
+ arch/arm/boot/dts/moxart.dtsi                             | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
+index 8a9f3559335b..7e14e26676ec 100644
+--- a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
++++ b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
+@@ -34,8 +34,8 @@ Example:
+ Use specific request line passing from dma
+ For example, MMC request line is 5
  
-+      - description: SAM9X60 Curiosity board
-+        items:
-+          - const: microchip,sam9x60-curiosity
-+          - const: microchip,sam9x60
-+          - const: atmel,at91sam9
-+
-       - description: Nattis v2 board with Natte v2 power board
-         items:
-           - const: axentia,nattis-2
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 595e870750cd..cd60cda5d187 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -51,6 +51,7 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
- 	at91sam9x25ek.dtb \
- 	at91sam9x35ek.dtb
- dtb-$(CONFIG_SOC_SAM9X60) += \
-+	at91-sam9x60_curiosity.dtb \
- 	at91-sam9x60ek.dtb
- dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-kizbox2-2.dtb \
-diff --git a/arch/arm/boot/dts/at91-sam9x60_curiosity.dts b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-new file mode 100644
-index 000000000000..75e6727b5e3a
---- /dev/null
-+++ b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-@@ -0,0 +1,532 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * at91-sam9x60_curiosity.dts - Device Tree file for Microchip SAM9X60 CURIOSITY board
-+ *
-+ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Author: Manikandan M <manikandan.m@microchip.com>
-+ */
-+/dts-v1/;
-+#include "sam9x60.dtsi"
-+#include <dt-bindings/input/input.h>
-+
-+/ {
-+	model = "Microchip SAM9X60 CURIOSITY";
-+	compatible = "microchip,sam9x60-curiosity", "microchip,sam9x60", "atmel,at91sam9";
-+
-+	aliases {
-+		i2c0 = &i2c0;
-+		i2c1 = &i2c6;
-+		serial2 = &uart7;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@20000000 {
-+		reg = <0x20000000 0x8000000>;
-+	};
-+
-+	clocks {
-+		slow_xtal {
-+			clock-frequency = <32768>;
-+		};
-+
-+		main_xtal {
-+			clock-frequency = <24000000>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_key_gpio_default>;
-+		status = "okay";
-+
-+		button-user {
-+			label = "PB_USER";
-+			gpios = <&pioA 29 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_PROG1>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+		status = "okay";
-+
-+		red {
-+			label = "red";
-+			gpios = <&pioD 17 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		green {
-+			label = "green";
-+			gpios = <&pioD 19 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		blue {
-+			label = "blue";
-+			gpios = <&pioD 21 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	regulators: regulators {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		vdd_1v8: fixed-regulator-vdd_1v8@0 {
-+			compatible = "regulator-fixed";
-+			regulator-name = "VDD_1V8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			status = "okay";
-+		};
-+
-+		vdd_1v15: fixed-regulator-vdd_1v15@1 {
-+			compatible = "regulator-fixed";
-+			regulator-name = "VDD_1V15";
-+			regulator-min-microvolt = <1150000>;
-+			regulator-max-microvolt = <1150000>;
-+			regulator-always-on;
-+			status = "okay";
-+		};
-+
-+		vdd1_3v3: fixed-regulator-vdd1_3v3@2 {
-+			compatible = "regulator-fixed";
-+			regulator-name = "VDD1_3V3";
-+			regulator-min-microvolt = <3300000>;
-+			regulator-max-microvolt = <3300000>;
-+			regulator-always-on;
-+			status = "okay";
-+		};
-+	};
-+};
-+
-+&adc {
-+	vddana-supply = <&vdd1_3v3>;
-+	vref-supply = <&vdd1_3v3>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc_default &pinctrl_adtrg_default>;
-+	status = "okay";
-+};
-+
-+&can0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_can0_rx_tx>;
-+	status = "disabled"; /* Conflict with dbgu. */
-+};
-+
-+&can1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_can1_rx_tx>;
-+	status = "okay";
-+};
-+
-+&dbgu {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_dbgu>;
-+	status = "okay"; /* Conflict with can0. */
-+};
-+
-+&ebi {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_ebi_addr_nand &pinctrl_ebi_data_0_7>;
-+	status = "okay";
-+
-+	nand_controller: nand-controller {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_nand_oe_we &pinctrl_nand_cs &pinctrl_nand_rb>;
-+		status = "okay";
-+
-+		nand@3 {
-+			reg = <0x3 0x0 0x800000>;
-+			rb-gpios = <&pioD 5 GPIO_ACTIVE_HIGH>;
-+			cs-gpios = <&pioD 4 GPIO_ACTIVE_HIGH>;
-+			nand-bus-width = <8>;
-+			nand-ecc-mode = "hw";
-+			nand-ecc-strength = <8>;
-+			nand-ecc-step-size = <512>;
-+			nand-on-flash-bbt;
-+			label = "atmel_nand";
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				at91bootstrap@0 {
-+					label = "at91bootstrap";
-+					reg = <0x0 0x40000>;
-+				};
-+
-+				uboot@40000 {
-+					label = "u-boot";
-+					reg = <0x40000 0xc0000>;
-+				};
-+
-+				ubootenvred@100000 {
-+					label = "U-Boot Env Redundant";
-+					reg = <0x100000 0x40000>;
-+				};
-+
-+				ubootenv@140000 {
-+					label = "U-Boot Env";
-+					reg = <0x140000 0x40000>;
-+				};
-+
-+				dtb@180000 {
-+					label = "device tree";
-+					reg = <0x180000 0x80000>;
-+				};
-+
-+				kernel@200000 {
-+					label = "kernel";
-+					reg = <0x200000 0x600000>;
-+				};
-+
-+				rootfs@800000 {
-+					label = "rootfs";
-+					reg = <0x800000 0x1f800000>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&flx0 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c0: i2c@600 {
-+		dmas = <0>, <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx0_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "okay";
-+
-+		eeprom@53 {
-+			compatible = "atmel,24c02";
-+			reg = <0x53>;
-+			pagesize = <16>;
-+			status = "okay";
-+		};
-+	};
-+};
-+
-+&flx6 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c6: i2c@600 {
-+		dmas = <0>, <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx6_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "disabled";
-+	};
-+};
-+
-+&flx7 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	uart7: serial@200 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx7_default>;
-+		status = "okay";
-+	};
-+};
-+
-+&macb0 {
-+	phy-mode = "rmii";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_macb0_rmii>;
-+	status = "okay";
-+
-+	ethernet-phy@0 {
-+		reg = <0x0>;
-+	};
-+};
-+
-+&pinctrl {
-+	adc {
-+		pinctrl_adc_default: adc_default {
-+			atmel,pins = <AT91_PIOB 14 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_adtrg_default: adtrg_default {
-+			atmel,pins = <AT91_PIOB 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	can0 {
-+		pinctrl_can0_rx_tx: can0_rx_tx {
-+			atmel,pins =
-+				<AT91_PIOA 9 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANRX0 */
-+				 AT91_PIOA 10 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANTX0 */
-+				 AT91_PIOC 9 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_DOWN>;	/* Enable CAN Transceivers */
-+		};
-+	};
-+
-+	can1 {
-+		pinctrl_can1_rx_tx: can1_rx_tx {
-+			atmel,pins =
-+				<AT91_PIOA 6 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANRX1 */
-+				 AT91_PIOA 5 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANTX1 */
-+				 AT91_PIOB 17 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_DOWN>;	/* Enable CAN Transceivers */
-+		};
-+	};
-+
-+	dbgu {
-+		pinctrl_dbgu: dbgu-0 {
-+			atmel,pins = <AT91_PIOA 9 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				      AT91_PIOA 10 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	ebi {
-+		pinctrl_ebi_data_0_7: ebi-data-lsb-0 {
-+			atmel,pins =
-+				<AT91_PIOD 6 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 7 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 8 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 9 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 10 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 11 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 12 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 13 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+
-+		pinctrl_ebi_data_0_15: ebi-data-msb-0 {
-+			atmel,pins =
-+				<AT91_PIOD 6 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 7 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 8 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 9 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 10 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 11 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 12 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 13 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 14 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 15 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 16 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 17 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 18 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 19 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 20 AT91_PERIPH_A AT91_PINCTRL_NONE
-+				 AT91_PIOD 21 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_ebi_addr_nand: ebi-addr-0 {
-+			atmel,pins =
-+				<AT91_PIOD 2 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 3 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+	};
-+
-+	flexcom {
-+		pinctrl_flx0_default: flx0_twi {
-+			atmel,pins =
-+				<AT91_PIOA 0 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 1 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx6_default: flx6_twi {
-+			atmel,pins =
-+				<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx7_default: flx7_usart {
-+			atmel,pins =
-+				<AT91_PIOC 0 AT91_PERIPH_C AT91_PINCTRL_NONE
-+				 AT91_PIOC 1 AT91_PERIPH_C AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	gpio_keys {
-+		pinctrl_key_gpio_default: pinctrl_key_gpio {
-+			atmel,pins = <AT91_PIOA 29 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	leds {
-+		pinctrl_gpio_leds: gpio_leds {
-+			atmel,pins = <AT91_PIOD 17 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 19 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 21 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	macb0 {
-+		pinctrl_macb0_rmii: macb0_rmii-0 {
-+			atmel,pins =
-+				<AT91_PIOB 0 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB0 periph A */
-+				 AT91_PIOB 1 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB1 periph A */
-+				 AT91_PIOB 2 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB2 periph A */
-+				 AT91_PIOB 3 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB3 periph A */
-+				 AT91_PIOB 4 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB4 periph A */
-+				 AT91_PIOB 5 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB5 periph A */
-+				 AT91_PIOB 6 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB6 periph A */
-+				 AT91_PIOB 7 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB7 periph A */
-+				 AT91_PIOB 9 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB9 periph A */
-+				 AT91_PIOB 10 AT91_PERIPH_A AT91_PINCTRL_NONE>;	/* PB10 periph A */
-+		};
-+	};
-+
-+	nand {
-+		pinctrl_nand_oe_we: nand-oe-we-0 {
-+			atmel,pins =
-+				<AT91_PIOD 0 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 1 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+
-+		pinctrl_nand_rb: nand-rb-0 {
-+			atmel,pins =
-+				<AT91_PIOD 5 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_nand_cs: nand-cs-0 {
-+			atmel,pins =
-+				<AT91_PIOD 4 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	pwm0 {
-+		pinctrl_pwm0_0: pwm0_0 {
-+			atmel,pins = <AT91_PIOB 12 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_pwm0_1: pwm0_1 {
-+			atmel,pins = <AT91_PIOB 13 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_pwm0_2: pwm0_2 {
-+			atmel,pins = <AT91_PIOD 16 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc0 {
-+		pinctrl_sdmmc0_default: sdmmc0 {
-+			atmel,pins =
-+				<AT91_PIOA 17 AT91_PERIPH_A (AT91_PINCTRL_DRIVE_STRENGTH_HI)				/* PA17 CK  periph A with pullup */
-+				 AT91_PIOA 16 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA16 CMD periph A with pullup */
-+				 AT91_PIOA 15 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA15 DAT0 periph A */
-+				 AT91_PIOA 18 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA18 DAT1 periph A with pullup */
-+				 AT91_PIOA 19 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA19 DAT2 periph A with pullup */
-+				 AT91_PIOA 20 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)>;	/* PA20 DAT3 periph A with pullup */
-+		};
-+		pinctrl_sdmmc0_cd: sdmmc0_cd {
-+			atmel,pins =
-+				<AT91_PIOA 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc1 {
-+		pinctrl_sdmmc1_default: sdmmc1 {
-+			atmel,pins =
-+				<AT91_PIOA 13 AT91_PERIPH_B (AT91_PINCTRL_DRIVE_STRENGTH_HI)				/* PA13 CK periph B */
-+				 AT91_PIOA 12 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA12 CMD periph B with pullup */
-+				 AT91_PIOA 11 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA11 DAT0 periph B with pullup */
-+				 AT91_PIOA  2 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA2 DAT1 periph B with pullup */
-+				 AT91_PIOA  3 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA3 DAT2 periph B with pullup */
-+				 AT91_PIOA  4 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)>;	/* PA4 DAT3 periph B with pullup */
-+		};
-+	};
-+
-+	usb0 {
-+		pinctrl_usba_vbus: usba_vbus {
-+			atmel,pins = <AT91_PIOA 27 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	usb1 {
-+		pinctrl_usb_default: usb_default {
-+			atmel,pins = <AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 15 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+}; /* pinctrl */
-+
-+&pwm0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_0 &pinctrl_pwm0_1 &pinctrl_pwm0_2>;
-+	status = "okay";
-+};
-+
-+&sdmmc0 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc0_default &pinctrl_sdmmc0_cd>;
-+	cd-gpios = <&pioA 25 GPIO_ACTIVE_LOW>;
-+	disable-wp;
-+	status = "okay";
-+};
-+
-+&sdmmc1 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc1_default>;
-+	status = "disabled";
-+};
-+
-+&shutdown_controller {
-+	debounce-delay-us = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
-+};
-+
-+&tcb0 {
-+	timer0: timer@0 {
-+		compatible = "atmel,tcb-timer";
-+		reg = <0>;
-+	};
-+
-+	timer1: timer@1 {
-+		compatible = "atmel,tcb-timer";
-+		reg = <1>;
-+	};
-+};
-+
-+&usb0 {
-+	atmel,vbus-gpio = <&pioA 27 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usba_vbus>;
-+	status = "okay";
-+};
-+
-+&usb1 {
-+	num-ports = <3>;
-+	atmel,vbus-gpio = <0
-+			   &pioD 18 GPIO_ACTIVE_HIGH
-+			   &pioD 15 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb_default>;
-+	status = "okay";
-+};
-+
-+&usb2 {
-+	status = "okay";
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
+-	sdhci: sdhci@98e00000 {
+-		compatible = "moxa,moxart-sdhci";
++	mmc: mmc@98e00000 {
++		compatible = "moxa,moxart-mmc";
+ 		reg = <0x98e00000 0x5C>;
+ 		interrupts = <5 0>;
+ 		clocks = <&clk_apb>;
+diff --git a/arch/arm/boot/dts/moxart-uc7112lx.dts b/arch/arm/boot/dts/moxart-uc7112lx.dts
+index eb5291b0ee3a..e07b807b4cec 100644
+--- a/arch/arm/boot/dts/moxart-uc7112lx.dts
++++ b/arch/arm/boot/dts/moxart-uc7112lx.dts
+@@ -79,7 +79,7 @@ &clk_pll {
+ 	clocks = <&ref12>;
+ };
+ 
+-&sdhci {
++&mmc {
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm/boot/dts/moxart.dtsi b/arch/arm/boot/dts/moxart.dtsi
+index f5f070a87482..764832ddfa78 100644
+--- a/arch/arm/boot/dts/moxart.dtsi
++++ b/arch/arm/boot/dts/moxart.dtsi
+@@ -93,8 +93,8 @@ watchdog: watchdog@98500000 {
+ 			clock-names = "PCLK";
+ 		};
+ 
+-		sdhci: sdhci@98e00000 {
+-			compatible = "moxa,moxart-sdhci";
++		mmc: mmc@98e00000 {
++			compatible = "moxa,moxart-mmc";
+ 			reg = <0x98e00000 0x5C>;
+ 			interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clk_apb>;
 -- 
-2.17.1
+2.34.1
 
