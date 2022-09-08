@@ -1,259 +1,433 @@
-Return-Path: <SRS0=EIRI=ZL=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <SRS0=ObDS=ZL=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DE3BC54EE9
-	for <soc@archiver.kernel.org>; Thu,  8 Sep 2022 07:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD0D1C38145
+	for <soc@archiver.kernel.org>; Thu,  8 Sep 2022 11:04:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4E2DFC43470; Thu,  8 Sep 2022 07:59:58 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 8FB2DC433D6; Thu,  8 Sep 2022 11:04:49 +0000 (UTC)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BEDF3C433D6
-	for <soc@kernel.org>; Thu,  8 Sep 2022 07:59:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BEDF3C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662623996; x=1694159996;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=4EwQRekZRM6OeQliAKCjLnr3kmKjkZcC3qRgvReZ09k=;
-  b=XunYb1oJ3NvKLo3fElR8jvT8stl5ozZTGiQU2sKXCPK6pT3w0DPsyETS
-   L7PuzUvIgoQ5J9owBl1/Nx1bGYNhhQ8EidM9xm6CQZwNdKB+hs67RQjBc
-   O2d25qgft05bHSF5YMob+5EA5SibjirHEL04c4SPoLyt2Q865AGvJMoYI
-   QOXbQfgMViQoMa0RXBpRlh/mJ6DevuqsncaetskLRs2m761/Hv2JyxcAG
-   woF+bbBmehC5qbtI04iKUr5BQ5cClSp6HE8LhUjhKOq4KI7JG5KolZMpc
-   HXXGGO+YhASGyTHpQHNr2dy1UnGjq3zOtknLw9IeMGCKHQq8bF9Ap8hfb
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,299,1654585200"; 
-   d="scan'208";a="179650856"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Sep 2022 00:59:55 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 8 Sep 2022 00:59:55 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Thu, 8 Sep 2022 00:59:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MUiGstvW56L5o5F2pXIl5r8tX6DPqv//h6qdmqE69NU/kgGntylZ4DvaphDiHSsP4EHbfypZFFftZdwZ7ofa7g8CK23fPfrhIE0HMe34zM2MyW6pVb8Y95GjHz7xLpCl9kWNcZdydAhxaSl9uTx8OAWFu9NyE4ndeeZQ4+L0jVZH4wnMu7ZAcTsbYYwN7X3pFkKB2wz1IsFzdq/CsaSLZggj2gUQvUvf7zwT9TOHo/Djyi+RHju6VuN5JYzN/sRAmOZgWYTGS1hcTOJclCreEvFoqKiFtryfHIgGG4X0UGCFihFJ7Jp3KB4a58/w78buzDHJ3IHw3Tl5N42ckEnAEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4EwQRekZRM6OeQliAKCjLnr3kmKjkZcC3qRgvReZ09k=;
- b=Cl9Z5K9NOgeLBM8tUeUlXhIeDwsI6Inur+jPn8GvD+IWxCAhxbRF3aP6quAXbfeMJ+LgaZcHyQB1NgZf/eTjFXQp8CXf/PwOLO4fastuEE8o7fZVlVgk/86vbwdXoxogUpM8K+B0ahmSNoO0iu1Gx7EDVFEBA0JLWJ9QqEfaQKxMJUXOBsofMJnyu8ZrE9kdY5lgbpXc0CL2pRBNZJmFy7+2IXYgVUNSIcMFqFAxhnTE6z609MmdklA/LaMqJz+WmLM5SuNdS3E0p3V4mIyVhlQn2FnOydjqyq7/iJT1WHgjo+KO5iTt5qCkjDZLGvDYlQzHne6DCziFIQ42MvkjpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+	by smtp.kernel.org (Postfix) with ESMTPS id 038FBC433C1
+	for <soc@kernel.org>; Thu,  8 Sep 2022 11:04:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 038FBC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id u18so14808648lfo.8
+        for <soc@kernel.org>; Thu, 08 Sep 2022 04:04:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4EwQRekZRM6OeQliAKCjLnr3kmKjkZcC3qRgvReZ09k=;
- b=oJ7T2YBvgzuUmiskfKxNwWMCSHg6rNkss71tMSE/Ji321FVn+6kz9Y3CiAFHNFe73he3bNA7NN+Prk9aX2D8R6FkzzhqRSUhq5CvusGjZaRRS7IZVSSUMSWzyObgnoUBmoinQV2ruah4sdS1J8hCTILy/lHn01CsROxkcMFuHdE=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by BN6PR11MB4017.namprd11.prod.outlook.com (2603:10b6:405:79::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.16; Thu, 8 Sep
- 2022 07:59:41 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::a159:97ec:24bc:6610]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::a159:97ec:24bc:6610%11]) with mapi id 15.20.5588.014; Thu, 8 Sep 2022
- 07:59:41 +0000
-From: <Claudiu.Beznea@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: <Hari.PrasathGE@microchip.com>, <Nicolas.Ferre@microchip.com>,
-	<davem@davemloft.net>, <krzysztof.kozlowski+dt@linaro.org>,
-	<alexandre.belloni@bootlin.com>, <arnd@arndb.de>, <olof@lixom.net>,
-	<soc@kernel.org>, <Manikandan.M@microchip.com>, <michael@walle.cc>,
-	<Horatiu.Vultur@microchip.com>, <Kavyasree.Kotagiri@microchip.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <Durai.ManickamKR@microchip.com>
-Subject: Re: [linux][PATCH 2/6] ARM: dts: at91: sam9x60: Move flexcom
- definitions to the SoC dtsi
-Thread-Topic: [linux][PATCH 2/6] ARM: dts: at91: sam9x60: Move flexcom
- definitions to the SoC dtsi
-Thread-Index: AQHYw1jy6TUISGE3q0G5fsfvcJqDhQ==
-Date: Thu, 8 Sep 2022 07:59:41 +0000
-Message-ID: <66ae978a-1356-555f-3e43-1e17021ceae7@microchip.com>
-References: <20220907092054.29915-1-Hari.PrasathGE@microchip.com>
- <20220907092054.29915-3-Hari.PrasathGE@microchip.com>
-In-Reply-To: <20220907092054.29915-3-Hari.PrasathGE@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 623ccf43-7cc1-47f8-b0ad-08da917015af
-x-ms-traffictypediagnostic: BN6PR11MB4017:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xZ+vIWJCcJAWjfNrvCy+qZUmbto6w35DsERbDpBbt7c8ITy9U0QCt2xziKCLmzku7unkzyrBd7p8MOdSNsHR4ylL9+JVuclpgS6JzyLs6m4BMU4pYsWdK8lnGvZ367K1py0X7oY+2V3UmgHTE1ZQ+2fhhXQs5+V2ZI1A6VNTpKKTRLH71g/93sa90+t33u4sOchZOlITFK7ZMPfLJUuGy4gLdyYOb3ozhtYHZuPumuF4UM7Bet1/u49rTRZdMb0V3Ywc2wYD830RIYNPS7d1UdESdGJ3aOLM8P+fNMfo4pORts6BVjc9GGn4wDhbCHRE74jjVPn0xhNoxQe4taEu8XVIqUUGOk6ieurV7eoOaTL+dFWO0jA+glacLx6zTA/Zhcan+zqy/0mqwiUuYTHTvYl0R99Ml9FEkYMRNZzxNGpRHfRJyKgkOgs/8AV1P8+hs+X4e5JTVUFRbqann1+L2HL7Ddx4RmAxLr0F2IRqG0eWTs6MsqXitnQpkYWlIkFS2F0g1sAbU5Q2M7c4jdj0EiQBBfnyYwxrkaThHF916jWjdiHmGeqE6ZaBo3sr2GQCRWGegMsiSDYG2lo3f5NkseDOzQwJzJ73Gm+eHEv95Ta6IrEV/ZI6kO2uOW3j9tvzs5vBdx8WHdyu7OZSAZSUiEGpLk05HxyW66BqfrE0XChpErOzPiXKKHDAVhybcHLtAG8jWhIqHzJfud4pSK0STKXGjhgOdkn70HRQBexk6etgwc3LCVl4IJsDU8NT+2+w3X6WeRQJ+j9SZEDpCjlxWyJN/7caabfl9t6h/XjHC3WVI6fDiwHbYtfMOYlAIFi27nzDQ1q3EgyDHBZ5krRHPTkozhN0sJHuPUqsYtn8yKI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(396003)(39860400002)(376002)(366004)(41300700001)(26005)(6506007)(71200400001)(478600001)(66446008)(76116006)(91956017)(64756008)(66556008)(66476007)(2906002)(6636002)(921005)(86362001)(31696002)(38070700005)(31686004)(36756003)(316002)(110136005)(6512007)(6486002)(53546011)(38100700002)(122000001)(66946007)(186003)(2616005)(8676002)(8936002)(7416002)(5660300002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cG1ic0FOSzdPYzJLaDlrNmh6QStycTRlQ0ViWklxU3NPZERLZTM4ZUtGSDli?=
- =?utf-8?B?NXRlT0g2WCtYaTd6cXJxRUFadEtIRFFWY05yY1NwbzFPaEc0R3E0TWU3K203?=
- =?utf-8?B?YzZXL3NTVzNSbDVoandCMlVPM1plMFd3ZDIyb1FIMS9ReHM0OC9sbGNzVXN4?=
- =?utf-8?B?WVlpUzh5dU5PbU8rNlk2SXIvWSt1NElxWTVKclA0RS9ZbHFDMmlZRXlLWWE0?=
- =?utf-8?B?ejdNK3JQeGZ1cnVLYU9EL2wxekJQaFJ2OFJvV2hGUVFIWVZsU0NodXRLdHZL?=
- =?utf-8?B?RlFYYWVORTA2a0M3RVoxU1BjZXZPbHBiWlh6bnhEK3A3T2hCNGFtQWFSRVRZ?=
- =?utf-8?B?aHluaTVPSWN1U3QwU21wNVlDMXVNc1ZXbnU2RUZXeU9hWkljZWRJT1pqM0hE?=
- =?utf-8?B?RlVKK013KytUdWQ2aFBIbmNhSHc3SktLV3BNaktveGtqVnh3QkFsS0FvS004?=
- =?utf-8?B?Vlc0dmtsRUZSVys4RS81cGV0cytkUXc2L0RmTUZIL2w5SmZaNHdGOTl2MDk4?=
- =?utf-8?B?NTR1eU1XU3ErVGl1NzZRaTJxRjBhbTRTY29PeXhUMnVoRnBEMkFVbG5Ud1lQ?=
- =?utf-8?B?bjVYRm5ndHY3anRsL3FzRjdoZDVjMzBYakplL3dnWkVKazFFcVZNdVBNa2c4?=
- =?utf-8?B?b1ZGbDFxdEhyTDRNUEtOcmFBTjI5bVBldzVmQ09BYmxlVkQzcWY1ZlU3MHg5?=
- =?utf-8?B?YTdjeXZldXZMcUt0MWk0Y3Q1TUlqUUQ2Y2NyWjE1TnowUzJlV0tSYnBSNFNF?=
- =?utf-8?B?a0ZmOWZLZGMrZ1h0ck1ESS9zV1FrR3JqQzNUM0RtTEN0NG9VeU1XaWVJQW1Q?=
- =?utf-8?B?aDhERTNPdCtIMHMrLzczdkRJK1RLd2lUOVY4MHpEZE5maHExVmgxU3JwVElO?=
- =?utf-8?B?bkI2Vk1yMWxMK1RkVzdGcC9ieEZZTnJaYVM5TUN1UFVJem5NZDJOSHNnVWMr?=
- =?utf-8?B?bHFOSFNlVXVKSzB4N1d1TFhvLy95YkYwcENhZ3pQSGpaelBPYTJBYXdhRGds?=
- =?utf-8?B?RHpqU3NjbEl1dGRpd2l4a2l1L0dYbjI5ZjJqQ3NmVHdUc2V3NVJ5bExMUG9B?=
- =?utf-8?B?YzNMczduY1FzVndVV2hTUHpXcExjSzBxRkMvQS9BUzUxbVc3SVFkVkc5eHpG?=
- =?utf-8?B?ZXQydWdrRmZmWkY3UWxmRjJKSlQ0Q0d2ajFYRDhnRU9hbEN6T09yY21mY1M5?=
- =?utf-8?B?VGtvV1VabDE4N0c0d3diK1R5M0NUeGQ1SW13ZDdxNmFiY2h3OXJkQm9ZSlNj?=
- =?utf-8?B?bGMrVmNqdEt2Ukp5eWdoZXJmbjRpNUNNZFdQUnpkdUlkTGJkUS93ODBJMTFW?=
- =?utf-8?B?OUR0VWFucDkrTjJmNWRycngxYk9MUVROZjRGMXFoSys3d1pqbUUwc2RRS2tB?=
- =?utf-8?B?THFuY1ZMV0hvNEw2MWZxTTFsaTZRNFg0cUhWWTJTWUNhSk42ODlVUHBGdmFD?=
- =?utf-8?B?RjdhS1ArSWJKTU9objEwMVZZekh2elQ4UVRjc1RpWkZmZ1k3YlZqb01OWGd2?=
- =?utf-8?B?V2ZDM25vd2t1eXlDMWcwdXF3WHNpNW1qaU1pRnB3blIyVG1maW10Nm5vMWNo?=
- =?utf-8?B?ZVJ4dUV0b0RrNHJoNDBUYWdLYjhDNDlKRlBqTTdUM002VUwwMVpLZXdDdWFL?=
- =?utf-8?B?TVJ4Ky9nUFh0a3hhMFhFSVl1Tk5RUWNJeDViaEE2b2JKV2tGNGlYeC9JOWc4?=
- =?utf-8?B?MlNsbW56Mkg5cDBZQ0QwR3BmbWpXL2RXajcvT3BwZUY0TUVHRm10MUlFSGcy?=
- =?utf-8?B?UlRiYjNGOFpFc2UvV2EweVlmcnZzSXN0ZWxRZVBLdVRlU1FtMnZqQmRPamJJ?=
- =?utf-8?B?UldsLzNTVTBtMlpNUWM0Zm1CWTJ0UnhyaUEzMVdRNHFrRFAvV0hJbkhsS2xy?=
- =?utf-8?B?US9iNnFoY1B5dG1naWdQVnVRTlFnM3N6Tk4vNUhVT3k4czduMTRuNzRPY1ND?=
- =?utf-8?B?UWR0bU5YenYwZGd5TEtXV25NWit6OGR4YmFUbmNvWkQwWCtiT3V0MmF0dlFN?=
- =?utf-8?B?RW4ydVoyZ3l5RzVQeUFaRXRuUmdkaWRlcWxRcTZDRHAvV1dZeVc2WEhNSjBx?=
- =?utf-8?B?WXdpd3dSN0pacm4ySjdQNEVaSzdJa0tXeEtNb1B0R3FweVl6ZEE4TDhlTEZl?=
- =?utf-8?B?VFVGbGdRSE9pZmdyejNYTnRxVEpzS3NUZlhaZzhValJQQ1ZmRGpCQlB3UVov?=
- =?utf-8?B?eGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8B66DBF05C70EF4EB0E71BDCF11D1DFD@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=U4E7tvJ0cK6VylVw75NAe0M7sqnMkBPhRkEg5cBpB4Y=;
+        b=DohWmCgRefLemL54TzZRKIj5xLPKl6IPiXNAa9OuNmmdark+xppfaPLU7NpuAFy1nq
+         oyc1MC3uT3O7ddArgCfluyiPhnzDzABpncwD3xJJcQKlM4LhQ2S3txnmp2zVoBFyLVTj
+         4LReIBy79oXTx0hVeS7pnNIAsXVJdtKJRRK7mg7O6ffTIJKCA5CWS8QL4apCqncFKbip
+         AjkIBXUCjQZ6RhrOw5hZplfy4jQ0IDulTHLUy5pZlLk4mKRh8XZ8azBcwrWei7Ntpsbw
+         d3qsEyBux9BNpyKgfabLcAmYJcPCN1jd/s1E/9WlSej4aBHcsfhx33Smzi3jzYALRwBu
+         VAxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=U4E7tvJ0cK6VylVw75NAe0M7sqnMkBPhRkEg5cBpB4Y=;
+        b=FWaqsK+DsYCuySL7Lk1q0GYzPyEbY6dur9J9mAUq9vBy2CTTOhKoSYqJGargwkZx5r
+         FAJKS3o3wqqNam/fCFfBR6eSxh6qVzcPaW1mZkNxzrBfONiIEM5BI7jbFZFI+K03eeGc
+         D/cofMEK9Cv+26mPxX0T5hEdTHzrMdVCoLYyPJnmqCFcnh7GxPMUYvz4+bQYCvIYle/d
+         RE+Mi8LN4FvSZ17DJkx1K9+ztpkS+6RyGLD5qYC/lsX6a4Xcbg+qcO2TPTqji6aRDk03
+         jKsB/HOZZz+fZj7thHWFfthFIPHvaWcS/ShXy5CKecsIm3za72T0MgCCqnlClzWvmwO4
+         EZnw==
+X-Gm-Message-State: ACgBeo0CTHMAQ0offbJInhH3VeQv/KJWZDxkng93/EYz+2evWd38CAof
+	eZbel80D5mw69g2Phm5d+c+MNQ==
+X-Google-Smtp-Source: AA6agR5SGVF6aJThZOB+TPEqq+DmSy6UlYhXoGhAsv7SukTqjP2ylbQ97Rru1D8uRX1+WNfrnAOJXQ==
+X-Received: by 2002:a05:6512:555:b0:497:9dda:6e91 with SMTP id h21-20020a056512055500b004979dda6e91mr2875046lfl.78.1662635086049;
+        Thu, 08 Sep 2022 04:04:46 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a12-20020a05651c210c00b0026ac7cd51afsm1225181ljq.57.2022.09.08.04.04.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Sep 2022 04:04:45 -0700 (PDT)
+Message-ID: <6fb37c95-1bb3-aef0-eca8-3f6e3b868e3e@linaro.org>
+Date: Thu, 8 Sep 2022 13:04:18 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 623ccf43-7cc1-47f8-b0ad-08da917015af
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2022 07:59:41.2078
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UHD01Oz/c860sB//50z3IDnVEm9uHHV2PyJyJ3xJmPlyd+TNUbQLNTkIguQR3sRGlFYoFaZxMrg3NIgnCgRQzpf6tbaZ6w81GRcPQWptKkU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB4017
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [linux][PATCH 6/6] ARM: dts: at91: sam9x60_curiosity: Add device
+ tree for sam9x60_curiosity board
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Hari Prasath <Hari.PrasathGE@microchip.com>, nicolas.ferre@microchip.com,
+ claudiu.beznea@microchip.com, davem@davemloft.net,
+ krzysztof.kozlowski+dt@linaro.org, alexandre.belloni@bootlin.com,
+ arnd@arndb.de, olof@lixom.net, soc@kernel.org, manikandan.m@microchip.com,
+ michael@walle.cc, horatiu.vultur@microchip.com,
+ kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ durai.manickamkr@microchip.com
+References: <20220907092054.29915-1-Hari.PrasathGE@microchip.com>
+ <20220907092054.29915-7-Hari.PrasathGE@microchip.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220907092054.29915-7-Hari.PrasathGE@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-T24gMDcuMDkuMjAyMiAxMjoyMCwgSGFyaSBQcmFzYXRoIHdyb3RlOg0KPiBNb3ZlIHRoZSBmbGV4
-Y29tIGRlZmluaXRpb25zIHRvIHRoZSBTb0Mgc3BlY2lmYyBEVFNJIGZpbGUgcmV0YWluaW5nIG9u
-bHkNCj4gdGhlIHBpbm11eCBhbmQgZGVzaXJlZCBmdW5jdGlvbnMgaW4gdGhlIGJvYXJkIHNwZWNp
-ZmljIERUUyBmaWxlIG9mDQo+IHNhbTl4NjBlay4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEhhcmkg
-UHJhc2F0aCA8SGFyaS5QcmFzYXRoR0VAbWljcm9jaGlwLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTog
-TWFuaWthbmRhbiBNIDxtYW5pa2FuZGFuLm1AbWljcm9jaGlwLmNvbT4NCj4gU2lnbmVkLW9mZi1i
-eTogRHVyYWkgTWFuaWNrYW0gS1IgPGR1cmFpLm1hbmlja2Fta3JAbWljcm9jaGlwLmNvbT4NCj4g
-LS0tDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbTl4NjBlay5kdHMgfCAzNCArLS0tLS0t
-LS0tLS0tLS0tLS0NCj4gIGFyY2gvYXJtL2Jvb3QvZHRzL3NhbTl4NjAuZHRzaSAgICAgICB8IDUy
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrLS0NCj4gIDIgZmlsZXMgY2hhbmdlZCwgNTEgaW5z
-ZXJ0aW9ucygrKSwgMzUgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0v
-Ym9vdC9kdHMvYXQ5MS1zYW05eDYwZWsuZHRzIGIvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1zYW05
-eDYwZWsuZHRzDQo+IGluZGV4IGI5YjdhMjM1ZWY4OS4uOWQ5ZTUwYzc3Nzk0IDEwMDY0NA0KPiAt
-LS0gYS9hcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbTl4NjBlay5kdHMNCj4gKysrIGIvYXJjaC9h
-cm0vYm9vdC9kdHMvYXQ5MS1zYW05eDYwZWsuZHRzDQo+IEBAIC0yMTEsMTUgKzIxMSwxMCBAQA0K
-PiAgCXN0YXR1cyA9ICJva2F5IjsNCj4gIA0KPiAgCWkyYzA6IGkyY0A2MDAgew0KPiAtCQljb21w
-YXRpYmxlID0gIm1pY3JvY2hpcCxzYW05eDYwLWkyYyI7DQo+IC0JCXJlZyA9IDwweDYwMCAweDIw
-MD47DQo+IC0JCWludGVycnVwdHMgPSA8NSBJUlFfVFlQRV9MRVZFTF9ISUdIIDc+Ow0KPiAgCQkj
-YWRkcmVzcy1jZWxscyA9IDwxPjsNCj4gIAkJI3NpemUtY2VsbHMgPSA8MD47DQo+IC0JCWNsb2Nr
-cyA9IDwmcG1jIFBNQ19UWVBFX1BFUklQSEVSQUwgNT47DQo+ICAJCXBpbmN0cmwtbmFtZXMgPSAi
-ZGVmYXVsdCI7DQo+ICAJCXBpbmN0cmwtMCA9IDwmcGluY3RybF9mbHgwX2RlZmF1bHQ+Ow0KPiAt
-CQlhdG1lbCxmaWZvLXNpemUgPSA8MTY+Ow0KPiAgCQlpMmMtYW5hbG9nLWZpbHRlcjsNCj4gIAkJ
-aTJjLWRpZ2l0YWwtZmlsdGVyOw0KPiAgCQlpMmMtZGlnaXRhbC1maWx0ZXItd2lkdGgtbnMgPSA8
-MzU+Ow0KPiBAQCAtMjM5LDE2ICsyMzQsOCBAQA0KPiAgCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+
-ICANCj4gIAlzcGk0OiBzcGlANDAwIHsNCj4gLQkJY29tcGF0aWJsZSA9ICJtaWNyb2NoaXAsc2Ft
-OXg2MC1zcGkiLCAiYXRtZWwsYXQ5MXJtOTIwMC1zcGkiOw0KPiAtCQlyZWcgPSA8MHg0MDAgMHgy
-MDA+Ow0KPiAtCQlpbnRlcnJ1cHRzID0gPDEzIElSUV9UWVBFX0xFVkVMX0hJR0ggNz47DQo+IC0J
-CWNsb2NrcyA9IDwmcG1jIFBNQ19UWVBFX1BFUklQSEVSQUwgMTM+Ow0KPiAtCQljbG9jay1uYW1l
-cyA9ICJzcGlfY2xrIjsNCj4gIAkJcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gIAkJcGlu
-Y3RybC0wID0gPCZwaW5jdHJsX2ZseDRfZGVmYXVsdD47DQo+IC0JCWF0bWVsLGZpZm8tc2l6ZSA9
-IDwxNj47DQo+IC0JCSNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiAtCQkjc2l6ZS1jZWxscyA9IDww
-PjsNCg0KVGhpcyBpcyBub3QgbW92ZWQgaXQgaXMgZGVsZXRlZCwgaXQgc2hvdWxkIGdvIGluIGEg
-ZGlmZmVyZW50IHBhdGNoLg0KDQo+ICAJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICAJfTsNCj4g
-IH07DQo+IEBAIC0yNTgsMjIgKzI0NSw4IEBADQo+ICAJc3RhdHVzID0gIm9rYXkiOw0KPiAgDQo+
-ICAJdWFydDU6IHNlcmlhbEAyMDAgew0KPiAtCQljb21wYXRpYmxlID0gIm1pY3JvY2hpcCxzYW05
-eDYwLXVzYXJ0IiwgImF0bWVsLGF0OTFzYW05MjYwLXVzYXJ0IjsNCj4gLQkJcmVnID0gPDB4MjAw
-IDB4MjAwPjsNCj4gLQkJaW50ZXJydXB0cyA9IDwxNCBJUlFfVFlQRV9MRVZFTF9ISUdIIDc+Ow0K
-PiAtCQlkbWFzID0gPCZkbWEwDQo+IC0JCQkoQVQ5MV9YRE1BQ19EVF9NRU1fSUYoMCkgfCBBVDkx
-X1hETUFDX0RUX1BFUl9JRigxKSB8DQo+IC0JCQkgQVQ5MV9YRE1BQ19EVF9QRVJJRCgxMCkpPiwN
-Cj4gLQkJICAgICAgIDwmZG1hMA0KPiAtCQkJKEFUOTFfWERNQUNfRFRfTUVNX0lGKDApIHwgQVQ5
-MV9YRE1BQ19EVF9QRVJfSUYoMSkgfA0KPiAtCQkJIEFUOTFfWERNQUNfRFRfUEVSSUQoMTEpKT47
-DQo+IC0JCWRtYS1uYW1lcyA9ICJ0eCIsICJyeCI7DQo+IC0JCWNsb2NrcyA9IDwmcG1jIFBNQ19U
-WVBFX1BFUklQSEVSQUwgMTQ+Ow0KPiAtCQljbG9jay1uYW1lcyA9ICJ1c2FydCI7DQo+IC0JCXBp
-bmN0cmwtMCA9IDwmcGluY3RybF9mbHg1X2RlZmF1bHQ+Ow0KPiAgCQlwaW5jdHJsLW5hbWVzID0g
-ImRlZmF1bHQiOw0KPiAtCQlhdG1lbCx1c2UtZG1hLXJ4Ow0KPiAtCQlhdG1lbCx1c2UtZG1hLXR4
-Ow0KPiArCQlwaW5jdHJsLTAgPSA8JnBpbmN0cmxfZmx4NV9kZWZhdWx0PjsNCj4gIAkJc3RhdHVz
-ID0gIm9rYXkiOw0KPiAgCX07DQo+ICB9Ow0KPiBAQCAtMjgzLDE1ICsyNTYsMTAgQEANCj4gIAlz
-dGF0dXMgPSAib2theSI7DQo+ICANCj4gIAlpMmM2OiBpMmNANjAwIHsNCj4gLQkJY29tcGF0aWJs
-ZSA9ICJtaWNyb2NoaXAsc2FtOXg2MC1pMmMiOw0KPiAtCQlyZWcgPSA8MHg2MDAgMHgyMDA+Ow0K
-PiAtCQlpbnRlcnJ1cHRzID0gPDkgSVJRX1RZUEVfTEVWRUxfSElHSCA3PjsNCj4gIAkJI2FkZHJl
-c3MtY2VsbHMgPSA8MT47DQo+ICAJCSNzaXplLWNlbGxzID0gPDA+Ow0KPiAtCQljbG9ja3MgPSA8
-JnBtYyBQTUNfVFlQRV9QRVJJUEhFUkFMIDk+Ow0KPiAgCQlwaW5jdHJsLW5hbWVzID0gImRlZmF1
-bHQiOw0KPiAgCQlwaW5jdHJsLTAgPSA8JnBpbmN0cmxfZmx4Nl9kZWZhdWx0PjsNCj4gLQkJYXRt
-ZWwsZmlmby1zaXplID0gPDE2PjsNCj4gIAkJaTJjLWFuYWxvZy1maWx0ZXI7DQo+ICAJCWkyYy1k
-aWdpdGFsLWZpbHRlcjsNCj4gIAkJaTJjLWRpZ2l0YWwtZmlsdGVyLXdpZHRoLW5zID0gPDM1PjsN
-Cj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL3NhbTl4NjAuZHRzaSBiL2FyY2gvYXJt
-L2Jvb3QvZHRzL3NhbTl4NjAuZHRzaQ0KPiBpbmRleCBkM2Y2MGY2YTQ1NmQuLmYwZTBkYzIwZGUx
-YiAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vYm9vdC9kdHMvc2FtOXg2MC5kdHNpDQo+ICsrKyBi
-L2FyY2gvYXJtL2Jvb3QvZHRzL3NhbTl4NjAuZHRzaQ0KPiBAQCAtMTY5LDYgKzE2OSwxNiBAQA0K
-PiAgCQkJCSNzaXplLWNlbGxzID0gPDE+Ow0KPiAgCQkJCXJhbmdlcyA9IDwweDAgMHhmMDAwMDAw
-MCAweDgwMD47DQo+ICAJCQkJc3RhdHVzID0gImRpc2FibGVkIjsNCj4gKw0KPiArCQkJCXNwaTQ6
-IHNwaUA0MDAgew0KPiArCQkJCQljb21wYXRpYmxlID0gIm1pY3JvY2hpcCxzYW05eDYwLXNwaSIs
-ICJhdG1lbCxhdDkxcm05MjAwLXNwaSI7DQo+ICsJCQkJCXJlZyA9IDwweDQwMCAweDIwMD47DQo+
-ICsJCQkJCWludGVycnVwdHMgPSA8MTMgSVJRX1RZUEVfTEVWRUxfSElHSCA3PjsNCj4gKwkJCQkJ
-Y2xvY2tzID0gPCZwbWMgUE1DX1RZUEVfUEVSSVBIRVJBTCAxMz47DQo+ICsJCQkJCWNsb2NrLW5h
-bWVzID0gInNwaV9jbGsiOw0KPiArCQkJCQlhdG1lbCxmaWZvLXNpemUgPSA8MTY+Ow0KPiArCQkJ
-CQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiArCQkJCX07DQo+ICAJCQl9Ow0KPiAgDQo+ICAJCQlm
-bHg1OiBmbGV4Y29tQGYwMDA0MDAwIHsNCj4gQEAgLTE3OSw2ICsxODksMjYgQEANCj4gIAkJCQkj
-c2l6ZS1jZWxscyA9IDwxPjsNCj4gIAkJCQlyYW5nZXMgPSA8MHgwIDB4ZjAwMDQwMDAgMHg4MDA+
-Ow0KPiAgCQkJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICsNCj4gKwkJCQl1YXJ0NTogc2VyaWFs
-QDIwMCB7DQo+ICsJCQkJCWNvbXBhdGlibGUgPSAibWljcm9jaGlwLHNhbTl4NjAtdXNhcnQiLCAi
-YXRtZWwsYXQ5MXNhbTkyNjAtdXNhcnQiOw0KPiArCQkJCQlyZWcgPSA8MHgyMDAgMHgyMDA+Ow0K
-PiArCQkJCQlpbnRlcnJ1cHRzID0gPDE0IElSUV9UWVBFX0xFVkVMX0hJR0ggNz47DQo+ICsJCQkJ
-CWRtYXMgPSA8JmRtYTANCj4gKwkJCQkJCShBVDkxX1hETUFDX0RUX01FTV9JRigwKSB8DQo+ICsJ
-CQkJCQkgQVQ5MV9YRE1BQ19EVF9QRVJfSUYoMSkgfA0KPiArCQkJCQkJIEFUOTFfWERNQUNfRFRf
-UEVSSUQoMTApKT4sDQo+ICsJCQkJCQk8JmRtYTANCj4gKwkJCQkJCShBVDkxX1hETUFDX0RUX01F
-TV9JRigwKSB8DQo+ICsJCQkJCQkgQVQ5MV9YRE1BQ19EVF9QRVJfSUYoMSkgfA0KPiArCQkJCQkJ
-IEFUOTFfWERNQUNfRFRfUEVSSUQoMTEpKT47DQo+ICsJCQkJCWRtYS1uYW1lcyA9ICJ0eCIsICJy
-eCI7DQo+ICsJCQkJCWNsb2NrcyA9IDwmcG1jIFBNQ19UWVBFX1BFUklQSEVSQUwgMTQ+Ow0KPiAr
-CQkJCQljbG9jay1uYW1lcyA9ICJ1c2FydCI7DQo+ICsJCQkJCWF0bWVsLHVzZS1kbWEtcng7DQo+
-ICsJCQkJCWF0bWVsLHVzZS1kbWEtdHg7DQo+ICsJCQkJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+
-ICsJCQkJfTsNCj4gIAkJCX07DQo+ICANCj4gIAkJCWRtYTA6IGRtYS1jb250cm9sbGVyQGYwMDA4
-MDAwIHsNCj4gQEAgLTM3OCw2ICs0MDgsMTUgQEANCj4gIAkJCQkjc2l6ZS1jZWxscyA9IDwxPjsN
-Cj4gIAkJCQlyYW5nZXMgPSA8MHgwIDB4ZjgwMTAwMDAgMHg4MDA+Ow0KPiAgCQkJCXN0YXR1cyA9
-ICJkaXNhYmxlZCI7DQo+ICsNCj4gKwkJCQlpMmM2OiBpMmNANjAwIHsNCj4gKwkJCQkJY29tcGF0
-aWJsZSA9ICJtaWNyb2NoaXAsc2FtOXg2MC1pMmMiOw0KPiArCQkJCQlyZWcgPSA8MHg2MDAgMHgy
-MDA+Ow0KPiArCQkJCQlpbnRlcnJ1cHRzID0gPDkgSVJRX1RZUEVfTEVWRUxfSElHSCA3PjsNCj4g
-KwkJCQkJY2xvY2tzID0gPCZwbWMgUE1DX1RZUEVfUEVSSVBIRVJBTCA5PjsNCj4gKwkJCQkJYXRt
-ZWwsZmlmby1zaXplID0gPDE2PjsNCj4gKwkJCQkJc3RhdHVzID0gImRpc2FibGVkIjsNCj4gKwkJ
-CQl9Ow0KPiAgCQkJfTsNCj4gIA0KPiAgCQkJZmx4NzogZmxleGNvbUBmODAxNDAwMCB7DQo+IEBA
-IC00MDQsMTAgKzQ0MywxOSBAQA0KPiAgCQkJCWNvbXBhdGlibGUgPSAiYXRtZWwsc2FtYTVkMi1m
-bGV4Y29tIjsNCj4gIAkJCQlyZWcgPSA8MHhmODAxYzAwMCAweDIwMD47DQo+ICAJCQkJY2xvY2tz
-ID0gPCZwbWMgUE1DX1RZUEVfUEVSSVBIRVJBTCA1PjsNCj4gLQkJCQkjYWRkcmVzcy1jZWxscyA9
-IDwxPjsNCj4gLQkJCQkjc2l6ZS1jZWxscyA9IDwxPjsNCg0KVGhpcyBzaG91bGQgcmVtYWluIGhl
-cmUuDQoNCj4gIAkJCQlyYW5nZXMgPSA8MHgwIDB4ZjgwMWMwMDAgMHg4MDA+Ow0KPiAgCQkJCXN0
-YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICsNCj4gKwkJCQlpMmMwOiBpMmNANjAwIHsNCj4gKwkJCQkJ
-Y29tcGF0aWJsZSA9ICJtaWNyb2NoaXAsc2FtOXg2MC1pMmMiOw0KPiArCQkJCQlyZWcgPSA8MHg2
-MDAgMHgyMDA+Ow0KPiArCQkJCQlpbnRlcnJ1cHRzID0gPDUgSVJRX1RZUEVfTEVWRUxfSElHSCA3
-PjsNCj4gKwkJCQkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ICsJCQkJCSNzaXplLWNlbGxzID0g
-PDA+Ow0KPiArCQkJCQljbG9ja3MgPSA8JnBtYyBQTUNfVFlQRV9QRVJJUEhFUkFMIDU+Ow0KPiAr
-CQkJCQlhdG1lbCxmaWZvLXNpemUgPSA8MTY+Ow0KPiArCQkJCQlzdGF0dXMgPSAiZGlzYWJsZWQi
-Ow0KPiArCQkJCX07DQo+ICAJCQl9Ow0KPiAgDQo+ICAJCQlmbHgxOiBmbGV4Y29tQGY4MDIwMDAw
-IHsNCg0K
+On 07/09/2022 11:20, Hari Prasath wrote:
+> From: Manikandan M <manikandan.m@microchip.com>
+> 
+> Add device tree file for sam9x60_curiosity board.
+> 
+> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+> Signed-off-by: Manikandan M <manikandan.m@microchip.com>
+> Signed-off-by: Hari Prasath <Hari.PrasathGE@microchip.com>
+> ---
+>  .../devicetree/bindings/arm/atmel-at91.yaml   |   6 +
+
+Bindings are separate patches.
+
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  arch/arm/boot/dts/at91-sam9x60_curiosity.dts  | 532 ++++++++++++++++++
+>  3 files changed, 539 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> index 2b7848bb7769..fae3a3090fbd 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> +++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> @@ -97,6 +97,12 @@ properties:
+>            - const: microchip,sam9x60
+>            - const: atmel,at91sam9
+>  
+> +      - description: SAM9X60 Curiosity board
+> +        items:
+> +          - const: microchip,sam9x60-curiosity
+> +          - const: microchip,sam9x60
+> +          - const: atmel,at91sam9
+
+This should be rather together with previous entry as an enum.
+
+> +
+>        - description: Nattis v2 board with Natte v2 power board
+>          items:
+>            - const: axentia,nattis-2
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 595e870750cd..cd60cda5d187 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -51,6 +51,7 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
+>  	at91sam9x25ek.dtb \
+>  	at91sam9x35ek.dtb
+>  dtb-$(CONFIG_SOC_SAM9X60) += \
+> +	at91-sam9x60_curiosity.dtb \
+>  	at91-sam9x60ek.dtb
+>  dtb-$(CONFIG_SOC_SAM_V7) += \
+>  	at91-kizbox2-2.dtb \
+> diff --git a/arch/arm/boot/dts/at91-sam9x60_curiosity.dts b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+> new file mode 100644
+> index 000000000000..75e6727b5e3a
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+> @@ -0,0 +1,532 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * at91-sam9x60_curiosity.dts - Device Tree file for Microchip SAM9X60 CURIOSITY board
+> + *
+> + * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
+> + *
+> + * Author: Manikandan M <manikandan.m@microchip.com>
+> + */
+> +/dts-v1/;
+> +#include "sam9x60.dtsi"
+> +#include <dt-bindings/input/input.h>
+> +
+> +/ {
+> +	model = "Microchip SAM9X60 CURIOSITY";
+> +	compatible = "microchip,sam9x60-curiosity", "microchip,sam9x60", "atmel,at91sam9";
+> +
+> +	aliases {
+> +		i2c0 = &i2c0;
+> +		i2c1 = &i2c6;
+> +		serial2 = &uart7;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	memory@20000000 {
+> +		reg = <0x20000000 0x8000000>;
+> +	};
+> +
+> +	clocks {
+> +		slow_xtal {
+
+No underscores in node names... If you override nodes, do it via label.
+
+> +			clock-frequency = <32768>;
+> +		};
+> +
+> +		main_xtal {
+> +			clock-frequency = <24000000>;
+> +		};
+> +	};
+> +
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_key_gpio_default>;
+> +		status = "okay";
+
+Okay is by default.
+
+> +
+> +		button-user {
+> +			label = "PB_USER";
+> +			gpios = <&pioA 29 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_PROG1>;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_gpio_leds>;
+> +		status = "okay";
+
+Ditto
+
+> +
+> +		red {
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+You need to fix all warnings in your DTS.
+> +			label = "red";
+> +			gpios = <&pioD 17 GPIO_ACTIVE_HIGH>;
+> +		};
+> +
+> +		green {
+> +			label = "green";
+> +			gpios = <&pioD 19 GPIO_ACTIVE_HIGH>;
+> +		};
+> +
+> +		blue {
+> +			label = "blue";
+> +			gpios = <&pioD 21 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +	};
+> +
+> +	regulators: regulators {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		vdd_1v8: fixed-regulator-vdd_1v8@0 {
+
+
+No underscores in node names. No prefix "fixed-". This is just a  regulator.
+
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VDD_1V8";
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1800000>;
+> +			regulator-always-on;
+> +			status = "okay";
+
+Really?
+
+> +		};
+> +
+> +		vdd_1v15: fixed-regulator-vdd_1v15@1 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VDD_1V15";
+> +			regulator-min-microvolt = <1150000>;
+> +			regulator-max-microvolt = <1150000>;
+> +			regulator-always-on;
+> +			status = "okay";
+> +		};
+> +
+> +		vdd1_3v3: fixed-regulator-vdd1_3v3@2 {
+> +			compatible = "regulator-fixed";
+> +			regulator-name = "VDD1_3V3";
+> +			regulator-min-microvolt = <3300000>;
+> +			regulator-max-microvolt = <3300000>;
+> +			regulator-always-on;
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> +
+> +&adc {
+> +	vddana-supply = <&vdd1_3v3>;
+> +	vref-supply = <&vdd1_3v3>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_adc_default &pinctrl_adtrg_default>;
+> +	status = "okay";
+> +};
+> +
+> +&can0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_can0_rx_tx>;
+> +	status = "disabled"; /* Conflict with dbgu. */
+> +};
+> +
+> +&can1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_can1_rx_tx>;
+> +	status = "okay";
+> +};
+> +
+> +&dbgu {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_dbgu>;
+> +	status = "okay"; /* Conflict with can0. */
+> +};
+> +
+> +&ebi {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_ebi_addr_nand &pinctrl_ebi_data_0_7>;
+> +	status = "okay";
+> +
+> +	nand_controller: nand-controller {
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_nand_oe_we &pinctrl_nand_cs &pinctrl_nand_rb>;
+> +		status = "okay";
+> +
+> +		nand@3 {
+> +			reg = <0x3 0x0 0x800000>;
+> +			rb-gpios = <&pioD 5 GPIO_ACTIVE_HIGH>;
+> +			cs-gpios = <&pioD 4 GPIO_ACTIVE_HIGH>;
+> +			nand-bus-width = <8>;
+> +			nand-ecc-mode = "hw";
+> +			nand-ecc-strength = <8>;
+> +			nand-ecc-step-size = <512>;
+> +			nand-on-flash-bbt;
+> +			label = "atmel_nand";
+> +
+> +			partitions {
+> +				compatible = "fixed-partitions";
+> +				#address-cells = <1>;
+> +				#size-cells = <1>;
+> +
+> +				at91bootstrap@0 {
+> +					label = "at91bootstrap";
+> +					reg = <0x0 0x40000>;
+> +				};
+> +
+> +				uboot@40000 {
+> +					label = "u-boot";
+> +					reg = <0x40000 0xc0000>;
+> +				};
+> +
+> +				ubootenvred@100000 {
+> +					label = "U-Boot Env Redundant";
+> +					reg = <0x100000 0x40000>;
+> +				};
+> +
+> +				ubootenv@140000 {
+> +					label = "U-Boot Env";
+> +					reg = <0x140000 0x40000>;
+> +				};
+> +
+> +				dtb@180000 {
+> +					label = "device tree";
+> +					reg = <0x180000 0x80000>;
+> +				};
+> +
+> +				kernel@200000 {
+> +					label = "kernel";
+> +					reg = <0x200000 0x600000>;
+> +				};
+> +
+> +				rootfs@800000 {
+> +					label = "rootfs";
+> +					reg = <0x800000 0x1f800000>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&flx0 {
+> +	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+> +	status = "okay";
+> +
+> +	i2c0: i2c@600 {
+> +		dmas = <0>, <0>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_flx0_default>;
+> +		i2c-analog-filter;
+> +		i2c-digital-filter;
+> +		i2c-digital-filter-width-ns = <35>;
+> +		status = "okay";
+
+??
+
+> +
+> +		eeprom@53 {
+> +			compatible = "atmel,24c02";
+> +			reg = <0x53>;
+> +			pagesize = <16>;
+> +			status = "okay";
+> +		};
+> +	};
+> +};
+> +
+> +&flx6 {
+> +	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+> +	status = "okay";
+> +
+> +	i2c6: i2c@600 {
+> +		dmas = <0>, <0>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_flx6_default>;
+> +		i2c-analog-filter;
+> +		i2c-digital-filter;
+> +		i2c-digital-filter-width-ns = <35>;
+> +		status = "disabled";
+> +	};
+> +};
+> +
+> +&flx7 {
+> +	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+> +	status = "okay";
+> +
+> +	uart7: serial@200 {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_flx7_default>;
+> +		status = "okay";
+> +	};
+> +};
+> +
+> +&macb0 {
+> +	phy-mode = "rmii";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_macb0_rmii>;
+> +	status = "okay";
+> +
+> +	ethernet-phy@0 {
+> +		reg = <0x0>;
+> +	};
+> +};
+> +
+> +&pinctrl {
+> +	adc {
+> +		pinctrl_adc_default: adc_default {
+
+No underscores in node names.
+
+
+
+Best regards,
+Krzysztof
