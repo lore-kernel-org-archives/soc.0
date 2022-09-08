@@ -1,96 +1,117 @@
-Return-Path: <SRS0=TV3V=ZL=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=0O52=ZL=linaro.org=anders.roxell@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E28A2C54EE9
-	for <soc@archiver.kernel.org>; Thu,  8 Sep 2022 16:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DABECC54EE9
+	for <soc@archiver.kernel.org>; Thu,  8 Sep 2022 18:17:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B960DC433D6; Thu,  8 Sep 2022 16:43:38 +0000 (UTC)
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	id 9E8E5C433C1; Thu,  8 Sep 2022 18:17:48 +0000 (UTC)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 004EBC433D7;
-	Thu,  8 Sep 2022 16:43:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 004EBC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id k12so671136qkj.8;
-        Thu, 08 Sep 2022 09:43:37 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2F8F9C433B5
+	for <soc@kernel.org>; Thu,  8 Sep 2022 18:17:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2F8F9C433B5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f171.google.com with SMTP id l12so12497185ljg.9
+        for <soc@kernel.org>; Thu, 08 Sep 2022 11:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=0XsbLIO6zVoDWhejmU39Vgqhd4Id8+NIThNM5fDQGJ8=;
-        b=dkIclgXFiQcPf63niixCbV1YB5e+2rmvMam+EBVqIO1AxOXeaqrbCjSRsEk/6+vQTP
-         3WOA1TsjypG9xgqrSg08UZM6fEE1Eh2eoFk9sd1p96MSvp0LkmnVuHrolbBlVFMhb6DI
-         DmQST4dXAkhHDP/giELuIVyhMbCi1MWhYQRAWjeCN3nTsho87oOibbV9wEik2LnXjN3j
-         8aNWwVhxEZXDPXi1xOaRZQnL57f5znNfqEZPEd/SXbKlvHt5I7cRyWlPYYvfu1k9nLVH
-         guF5vd0UjRGSCorXoN9t1eZCWrnK16HBbLCWpZ4tdVtt4i+u6I/h7NuwEC5xKM6jRdxO
-         pHjw==
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vHTTeB+5l7uNHvfzSP9bEhvHS2VR7qKzMkrLhrmym2o=;
+        b=ebynjaknAItswLH0ca5KRpPDT+8Gmin2NRF8pHEmYJFJxSzxHDiMnF5hSFF1pqI+6H
+         AAwclXdZ9kym+xAvf+qmLMuEGSrXoW5UuTnJ7SYtZfOaGxKebmjTMtJ3Fn+lYDPxnqDC
+         TSjwYv9svQ+8g+BOqsvEDSO61O7COW2LHZg5UnX61jHk/8euroaqfm1H88FnezHFO0K7
+         HiVGjNGdEzPAC6ihr89/IDmmSJh101c58bJNWtFSVZ0Xrwl4zB+64BfQKpppZRma3B6F
+         egqFZx628xRUNXM04yL9CU68VT9T//twTXxwPjDyeGKnsC9SZi6sW/Ar+LWK8A6/ub1G
+         untA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=0XsbLIO6zVoDWhejmU39Vgqhd4Id8+NIThNM5fDQGJ8=;
-        b=SyBXklziDvKjVok/xmrW5/JPspcQky4RTIb0FrrBRJKJoEHYpsV83NT4/YnNz+HV8o
-         QjVfGPpihHxqbkgToEmCivmwXuo0LSsloZPYlaDlSfWIX6RJ+LCzEO9nfoJgJWk+94zy
-         BxB+5c6Gi55fSPcAbivY2uIey58Wl+lygoJprNpFhWI39ylEYsfpKfOX1WcVRyQLIVB/
-         y6iDhJ0pWsrKUEVxDBZGEY9rzv6utFeUQ6sFYAGCcRksLotiWdlr1QpUEzy0kjaa/4GR
-         egIcPYOxwTU291zTaTWyO6vTKA+EgJkd1TL8lRbyP+qNdHLSppwCT1cwKc6ZAinKYRwZ
-         JOxg==
-X-Gm-Message-State: ACgBeo22iKJLx+ZS+SudbGtcSU5SfMD9JFt9fEyQDXFZfw724PXbHeOK
-	vq9s+lwY36K+GPjBYrEQ6P0=
-X-Google-Smtp-Source: AA6agR7g3zVAk7I9S7IVnTFx/3++VjeSP7TWm1Mv2UB0P/n9uSMqp0mScOrZ9lRAtC/kZJW9Jz1X3g==
-X-Received: by 2002:a05:620a:248f:b0:6bb:89d1:3e85 with SMTP id i15-20020a05620a248f00b006bb89d13e85mr7084450qkn.408.1662655416764;
-        Thu, 08 Sep 2022 09:43:36 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id hf9-20020a05622a608900b00342fb07944fsm13911957qtb.82.2022.09.08.09.43.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 09:43:36 -0700 (PDT)
-Message-ID: <588be35f-9293-0d26-1e89-5ba3a0f9bbc5@gmail.com>
-Date: Thu, 8 Sep 2022 09:43:33 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: arm64: Kconfig.platforms: Re-organized Broadcom menu
-Content-Language: en-US
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vHTTeB+5l7uNHvfzSP9bEhvHS2VR7qKzMkrLhrmym2o=;
+        b=aHSRFkgVp0KsE0WlawnrPc3CBCekkPLiscESGdWtBoDbDZCE55byXFwxMHEYsHPNMy
+         1yzvcG/p8y0d3hyLw0FJyUhnsEcSLOYFyiHU1h6KvFe12/cwaG3cckwR5kxiDvvsd5iX
+         lHvTRYNHTey7qnlL1TaDDBHEjc2lor3jXTNvndgq0hvGI2L1qssHyhf+JMIT7YRETVmz
+         eC8dWbf3cd2TpKQYjFwLtKmYN6Zw4D5xzCf5I8ing/mc+3o33U++AQ+L5+kfpWbZiVIh
+         OOajpupRlFW3m5FMT6p75HXQzo8Hp/bpO7Bfk1jYx9FfbM5a+zE1BeVfcbmTLiI9Q1nz
+         r0aw==
+X-Gm-Message-State: ACgBeo2axsl6VE7mSRypyrR2N78H9raEkV+IOF4PLq/ifgBjW9qh891b
+	mOicYvwQoUPo4r8n7ijTi+6vrg==
+X-Google-Smtp-Source: AA6agR6Ex7n8iF7H0X4UPk5I9N9WPNpWVDGhFyrsVCfzPjIYINq5UWayVSWQXlINNonGWply1KJtWA==
+X-Received: by 2002:a2e:3a09:0:b0:25e:4212:5628 with SMTP id h9-20020a2e3a09000000b0025e42125628mr2712563lja.68.1662661065170;
+        Thu, 08 Sep 2022 11:17:45 -0700 (PDT)
+Received: from mutt (c-e429e555.07-21-73746f28.bbcust.telenor.se. [85.229.41.228])
+        by smtp.gmail.com with ESMTPSA id b3-20020a056512070300b00492e3c8a986sm3121418lfs.264.2022.09.08.11.17.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 11:17:44 -0700 (PDT)
+Date: Thu, 8 Sep 2022 20:17:42 +0200
+From: Anders Roxell <anders.roxell@linaro.org>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: anand.gore@broadcom.com, arnd@arndb.de,
- bcm-kernel-feedback-list@broadcom.com, catalin.marinas@arm.com,
- krzysztof.kozlowski@linaro.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, olof@lixom.net, soc@kernel.org,
- will@kernel.org, william.zhang@broadcom.com, anders.roxell@linaro.org,
- lkft@linaro.org
-References: <20220712164235.40293-1-f.fainelli@gmail.com>
- <20220908110451.66564-1-naresh.kamboju@linaro.org>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220908110451.66564-1-naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: linux-arm-kernel@lists.infradead.org, soc@kernel.org, michael@walle.cc,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: defconfig: enable ARCH_BCM
+Message-ID: <20220908181742.GA69385@mutt>
+References: <20220906033957.4377-1-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220906033957.4377-1-f.fainelli@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-
-
-On 9/8/2022 4:04 AM, Naresh Kamboju wrote:
-> From: lkft@linaro.org
+On 2022-09-05 20:39, Florian Fainelli wrote:
+> Commit 96796c914b84 ("arm64: Kconfig.platforms: Re-organized Broadcom
+> menu") introduced a new symbol ARCH_BCM and made all of the Broadcom
+> SoCs Kconfig depend on it, but did not enable it in the defconfig.
+> Thus, now the defconfig doesn't include support for any Broadcom
+> architectures anymore. Fix it.
 > 
-> LKFT test farm found that Linux next-20220906 onwards the Broadcom DTB
-> builds are not happening. And after bisecting we found this patch is
-> the reason [1].
+> Fixes: 96796c914b84 ("arm64: Kconfig.platforms: Re-organized Broadcom menu")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Tested-by: Anders Roxell <anders.roxell@linaro.org>
+
+Cheers,
+Anders
+
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 91e58cf59c99..4c8b09c6b49f 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -33,6 +33,7 @@ CONFIG_ARCH_ACTIONS=y
+>  CONFIG_ARCH_SUNXI=y
+>  CONFIG_ARCH_ALPINE=y
+>  CONFIG_ARCH_APPLE=y
+> +CONFIG_ARCH_BCM=y
+>  CONFIG_ARCH_BCM2835=y
+>  CONFIG_ARCH_BCMBCA=y
+>  CONFIG_ARCH_BCM_IPROC=y
+> -- 
+> 2.25.1
 > 
-> FYI, We have not changed any kernel configs.
-> [1] http://ix.io/49Wq
-
-Fixed with:
-
-https://lore.kernel.org/all/20220906033957.4377-1-f.fainelli@gmail.com/
-
-sorry about the breakage and thanks for reporting!
--- 
-Florian
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
