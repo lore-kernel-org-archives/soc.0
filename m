@@ -1,109 +1,100 @@
-Return-Path: <SRS0=6JUn=ZM=linaro.org=naresh.kamboju@kernel.org>
+Return-Path: <SRS0=6vKs=ZM=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB6EFECAAD3
-	for <soc@archiver.kernel.org>; Fri,  9 Sep 2022 12:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9F86ECAAA1
+	for <soc@archiver.kernel.org>; Fri,  9 Sep 2022 15:08:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 81A65C43142; Fri,  9 Sep 2022 12:24:27 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 5C82EC433C1; Fri,  9 Sep 2022 15:08:58 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B6478C433D6
-	for <soc@kernel.org>; Fri,  9 Sep 2022 12:24:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B6478C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 6D748C433D7
+	for <soc@kernel.org>; Fri,  9 Sep 2022 15:08:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D748C433D7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id r17so3549988ejy.9
-        for <soc@kernel.org>; Fri, 09 Sep 2022 05:24:25 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id bt10so3231447lfb.1
+        for <soc@kernel.org>; Fri, 09 Sep 2022 08:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=a/QNA2ugiBfj/JrsH5nr1chbYMfF/AQ6Nq2ohVefuQc=;
-        b=kV/tDS1JyHz3VU/TqzB+feXF1OCVJcIc5v9iVYTFXzJwqOsH1FakFl2RNzNZCU33Lb
-         jxemN1hOMw7PFj5I5kdnA7JEHVDvGDuFc53N8df9RFwJbWlqadh9HasFEvfh8p9Cv8SH
-         A1YFANiXbANkckWpFZsZglWHxFJlmRFYj7FnrrKF5tR8p1PgznfXlVIwKEhMAjuDF5Do
-         YvyOhVgDcFa1JdtzDi6+mhqOxBq0MpUK4fz7Ok45dkIZiH2P11dhFE24Y//RD9CD6nrO
-         gy0bn93/o3wP0/GchWvQ9yrVMIYKM+h2RS7XTfJlpsCWctbGH4yKy3p1vWHBaML6YlHi
-         zC7g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=OFl3KVYMwoKCA5gQPOAWcRrgWousLHFPlPzosiKMPAM=;
+        b=X5XTx6S2KgWJ+JA+QRFDx0RWr6e+TRPp2Sz7f2lqt58qI0bknyk/ct/kzhYdwWAGOr
+         cXki5Cd4jWF9eGcYSfEiP95rItylMlwow/f5sll94gGtKRix65HFNAjOxrv4PfjXd9lx
+         NOYPp7ww3TEULP3xu6K+vHFBk8m/Iw6LVULJ44pRObr4sLlxm1GXPJmXKtkXeyrrfVdI
+         pymQFmLzGBw1YgOkaiLGC5bd1QQt+Glv+rpI9ESOq2Xxo/Ya5pe8IpNZ5JzLxp/0m5hT
+         bOlMiPK5Y3l+BamGwbB95p6AVcgubMlRgx27+WVHxdm3zAwjNwO4kdUxSETXBL/dBduS
+         Hmbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=a/QNA2ugiBfj/JrsH5nr1chbYMfF/AQ6Nq2ohVefuQc=;
-        b=vZ2HTnNDH3ro1zSrnfYTtPpri2ZIPc6YwpWFGxk+cHZA9TiMOyZXFC/rYAYJmRy4sO
-         E3xRRmmQ4oFoNVpYsFv+lbFmxdpZfQ6w1NsxkdFfVhCd9dm5wcOzs1Tf0ioXXv0dAj6F
-         SGxYusMTjFQdeRtx0Esx+NAd9N2l1LE/rv0aL8eBvI/oEs4uIM6yICOfP7GGGXBxWbrs
-         jUkYTrgyk8nFbCFqCgJgJRJcM1LKXRHUYuhbsZUEqNSUf+zxMuXoMl/SzcKnqXDl0wrR
-         P9lzqrVtcSXhHbfMECN3dDGJjp7g3OVGJQs6hT0FGUq5nwQYQ4ym3sDptwDy0g2/qP09
-         SfSg==
-X-Gm-Message-State: ACgBeo2KW9sYw1Z0cKS/DJqjTZhW013ARnU82WzUi/YnrGywcODepQJC
-	9p2d8iZ2xFBG7fModvKMRP2pvfpAcUMK2LQHuIWT+A==
-X-Google-Smtp-Source: AA6agR4bp4ordUFJ9GfA6ar/9KhgIrwvHc/u68mfz0ax5EIwsCIWX1EnWnS0FZ9Qe2l6IlTyI52iyZt+TCDrz/uUXsg=
-X-Received: by 2002:a17:907:7f8e:b0:770:7c67:f522 with SMTP id
- qk14-20020a1709077f8e00b007707c67f522mr9648310ejc.366.1662726263875; Fri, 09
- Sep 2022 05:24:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220906033957.4377-1-f.fainelli@gmail.com> <20220909073509.301363-1-naresh.kamboju@linaro.org>
- <51e6ea21-8af4-775d-1561-6671cfc50ecf@linaro.org>
-In-Reply-To: <51e6ea21-8af4-775d-1561-6671cfc50ecf@linaro.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 9 Sep 2022 17:54:11 +0530
-Message-ID: <CA+G9fYv79_BrWT28DVfu4JHasiOKMeL-Wr_MJapU5xeB5VomBA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: defconfig: enable ARCH_BCM
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=OFl3KVYMwoKCA5gQPOAWcRrgWousLHFPlPzosiKMPAM=;
+        b=AwDfuTpbydxgZHyCv9E4WZHeEOQu09gXWUEycorzsW0X/RqYy1CPduB/jnoq6cPT1A
+         9Q4zUP+VU/zoAryOGzPgeZ4K1YUZbbR6/tuIQVnlHF65zYgvV97kEw1BJBcsKaQumu1Z
+         YPF/Rdkv3izEcpoPZZERD6Bem7nO2H8RBiJuivfJhiIEil9uXDkFhOPZxH8QEaDsOfXR
+         Z/rpTMDeuzUyExXvwAlb2pS/wYRglDGmLkc3U4e4PbTxuqFaSO5hnQuquDq0uEZSYK/T
+         BrisjEz33DlcZBo7NBihkA2E7bIoubon4TGqiCp120lgqEo4G7gYFUcGYDVFAQyfPvcx
+         FaFw==
+X-Gm-Message-State: ACgBeo0CqJbsOggkYkmIdLR6mSWa9Pdgks7T6pOndI2J5Vzg0wpal3Ef
+	BVqKhoslO3ASfk0K+9UV4P025A==
+X-Google-Smtp-Source: AA6agR4FN4UZ1MeD4KdaYCws73kSEI+YhbT4w0FFcJ1iRYXsiaN6wwY9/EcHgX9n1reM0ZKfCjRY2Q==
+X-Received: by 2002:a05:6512:3daa:b0:494:8270:f6b9 with SMTP id k42-20020a0565123daa00b004948270f6b9mr4718992lfv.486.1662736134564;
+        Fri, 09 Sep 2022 08:08:54 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d26-20020a2e361a000000b0026ab83298d6sm110605lja.77.2022.09.09.08.08.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 08:08:54 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: f.fainelli@gmail.com, andersson@kernel.org, arnd@arndb.de, 
-	biju.das.jz@bp.renesas.com, catalin.marinas@arm.com, 
-	dmitry.baryshkov@linaro.org, geert+renesas@glider.be, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	marcel.ziswiler@toradex.com, michael@walle.cc, shawnguo@kernel.org, 
-	soc@kernel.org, vkoul@kernel.org, will@kernel.org, 
-	lkft-triage@lists.linaro.org, 
-	Linux Kernel Functional Testing <lkft@linaro.org>, Benjamin Copeland <ben.copeland@linaro.org>, 
-	Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] Samsung SoC driver for v6.1
+Date: Fri,  9 Sep 2022 17:08:48 +0200
+Message-Id: <20220909150849.820523-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 9 Sept 2022 at 13:08, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 09/09/2022 09:35, Naresh Kamboju wrote:
-> > From: Naresh kamboju <naresh.kamboju@linaro.org>
-> >
-> >
-> > On 2022-09-05 20:39, Florian Fainelli wrote:
-> >> Commit 96796c914b84 ("arm64: Kconfig.platforms: Re-organized Broadcom
-> >> menu") introduced a new symbol ARCH_BCM and made all of the Broadcom
-> >> SoCs Kconfig depend on it, but did not enable it in the defconfig.
-> >> Thus, now the defconfig doesn't include support for any Broadcom
-> >> architectures anymore. Fix it.
-> >>
-> >> Fixes: 96796c914b84 ("arm64: Kconfig.platforms: Re-organized Broadcom menu")
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> The patch was sent on 6th of September. Your report on 8th of September...
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Understood !
-Maybe off-topic,
-Testing Linux next seems to be a bit late to report the regressions.
-Our testing would have build and boot test devicetree/for-next or
-devicetree / master branches to find early regressions.
-or Any other well known maintainers trees.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Your suggestions are most welcome for improving Linux kernel quality.
+are available in the Git repository at:
 
-Best regards
-Naresh Kamboju
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.1
 
---
-Linaro LKFT
-https://lkft.linaro.org
+for you to fetch changes up to 6212d2d9bbde60171d0c534e5f43932f84a06d5e:
 
->
-> Best regards,
-> Krzysztof
+  MAINTAINERS: Drop Bartlomiej Zolnierkiewicz (2022-09-09 16:59:25 +0200)
+
+----------------------------------------------------------------
+Samsung SoC drivers changes for v6.1
+
+1. Convert Samsung Exynos G-Scaler bindings to DT schema.
+2. Maintainers update (drop Bartlomiej Zolnierkiewicz).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (3):
+      dt-bindings: media: samsung,exynos5250-gsc: convert to dtschema
+      MAINTAINERS: pwm-fan: Drop Bartlomiej Zolnierkiewicz
+      MAINTAINERS: Drop Bartlomiej Zolnierkiewicz
+
+ .../devicetree/bindings/media/exynos5-gsc.txt      |  38 -------
+ .../bindings/media/samsung,exynos5250-gsc.yaml     | 109 +++++++++++++++++++++
+ MAINTAINERS                                        |  13 +--
+ 3 files changed, 110 insertions(+), 50 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/exynos5-gsc.txt
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos5250-gsc.yaml
