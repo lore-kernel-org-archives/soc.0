@@ -1,108 +1,88 @@
-Return-Path: <broonie@kernel.org>
+Return-Path: <SRS0=3mQs=ZN=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85B36ECAAA1
-	for <soc@archiver.kernel.org>; Fri,  9 Sep 2022 16:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D6CECAAA1
+	for <soc@archiver.kernel.org>; Sat, 10 Sep 2022 01:19:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46C8AC433B5; Fri,  9 Sep 2022 16:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 040F0C433D6;
-	Fri,  9 Sep 2022 16:25:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1662740741;
-	bh=nLTkFs9z8j1QAUfnVyzo6vGLqtoch+RIOPyCMCcl2uw=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=J5FVvyH1EVRXOTwPE0BauShMbiB5bdTn7RohDVmb1aMx4Fhz9ELsV5LD3hQeTSJq6
-	 5W5AbwtymicTxHkpjaEfYq6PLt9HzZ/8plvaMKJIroqS8JJAEpbOLU+SlwUaDd7cX+
-	 Tia03tbbyQVWQyqHTRgfARMKvdYS9HAIOykt/VWRc1YUogF7jxk6CgABc66pLr48Fi
-	 h5xHdK1b2xNKoxasupM0n5AmhbW48cg10uo1mBjBfB5R7eVQOtd4azaxTEGNs3UBRi
-	 6559jUxqZz7g4sO7ilRGnyJrESsy7VFq8zCCSpxgz1ZzKqQ7YkF8RAIBKKcWZYAP7Y
-	 lNTCMkvWaGnqg==
-Date: Fri, 9 Sep 2022 17:25:33 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
+	id 30C50C433B5; Sat, 10 Sep 2022 01:19:42 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id A7400C433D6;
+	Sat, 10 Sep 2022 01:19:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A7400C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1oWp9l-00018O-6y; Sat, 10 Sep 2022 03:19:37 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	f.fainelli@gmail.com, andersson@kernel.org, arnd@arndb.de,
-	biju.das.jz@bp.renesas.com, catalin.marinas@arm.com,
-	dmitry.baryshkov@linaro.org, geert+renesas@glider.be,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	marcel.ziswiler@toradex.com, michael@walle.cc, shawnguo@kernel.org,
-	soc@kernel.org, vkoul@kernel.org, will@kernel.org,
-	lkft-triage@lists.linaro.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Benjamin Copeland <ben.copeland@linaro.org>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH] arm64: defconfig: enable ARCH_BCM
-Message-ID: <Yxto/ZSqhxvkxu6v@sirena.org.uk>
-References: <20220906033957.4377-1-f.fainelli@gmail.com>
- <20220909073509.301363-1-naresh.kamboju@linaro.org>
- <51e6ea21-8af4-775d-1561-6671cfc50ecf@linaro.org>
- <CA+G9fYv79_BrWT28DVfu4JHasiOKMeL-Wr_MJapU5xeB5VomBA@mail.gmail.com>
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.0
+Date: Sat, 10 Sep 2022 03:19:36 +0200
+Message-ID: <2645885.mvXUDI8C0e@phil>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FtJCDRPKOZ+t0pWK"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYv79_BrWT28DVfu4JHasiOKMeL-Wr_MJapU5xeB5VomBA@mail.gmail.com>
-X-Cookie: FORTH IF HONK THEN
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+
+The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
+
+  Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.0-rockchip-dtsfixes1
+
+for you to fetch changes up to ea89926d9690f055fd8da929f6621a760e8e0f14:
+
+  arm64: dts: rockchip: Remove 'enable-active-low' from rk3566-quartz64-a (2022-09-05 12:18:20 +0200)
+
+----------------------------------------------------------------
+Drop some not-specified properties, fix phy-supply properties,
+fix edp clock on Gru, fix usb port on BPI-R2-Pro, fix license typo,
+fix wlan-wake-pin on Gru-Bob and lower the sd-card speed on Quartz64-B
+
+----------------------------------------------------------------
+Brian Norris (1):
+      arm64: dts: rockchip: Pull up wlan wake# on Gru-Bob
+
+Fabio Estevam (2):
+      arm64: dts: rockchip: Remove 'enable-active-low' from rk3399-puma
+      arm64: dts: rockchip: Remove 'enable-active-low' from rk3566-quartz64-a
+
+Frank Wunderlich (1):
+      arm64: dts: rockchip: fix upper usb port on BPI-R2-Pro
+
+Jagan Teki (1):
+      arm64: dts: rockchip: Fix typo in lisense text for PX30.Core
+
+Michael Riesch (2):
+      arm64: dts: rockchip: fix property for usb2 phy supply on rock-3a
+      arm64: dts: rockchip: fix property for usb2 phy supply on rk3568-evb1-v10
+
+Nicolas Frattaroli (1):
+      arm64: dts: rockchip: Lower sd speed on quartz64-b
+
+zain wang (1):
+      arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
+
+ arch/arm64/boot/dts/rockchip/px30-engicam-px30-core.dtsi | 4 ++--
+ arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts          | 5 +++++
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi  | 9 +++++++++
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi            | 1 -
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts       | 1 -
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts       | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts       | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts         | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts          | 2 +-
+ 9 files changed, 20 insertions(+), 8 deletions(-)
 
 
---FtJCDRPKOZ+t0pWK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 09, 2022 at 05:54:11PM +0530, Naresh Kamboju wrote:
-> On Fri, 9 Sept 2022 at 13:08, Krzysztof Kozlowski
-> > On 09/09/2022 09:35, Naresh Kamboju wrote:
-
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-> > The patch was sent on 6th of September. Your report on 8th of September=
-=2E..
-
-> Understood !
-
-> Maybe off-topic,
-> Testing Linux next seems to be a bit late to report the regressions.
-> Our testing would have build and boot test devicetree/for-next or
-> devicetree / master branches to find early regressions.
-> or Any other well known maintainers trees.
->=20
-> Your suggestions are most welcome for improving Linux kernel quality.
-
-Checking maintainer trees in addition to -next isn't going to be that
-substantially faster except at weekends, the whole thing with -next is
-that it gets built daily so depending on when patches appear in the
-maintainer trees and how long -next takes to build you'll be running
-tests less than two days earlier, the way people's timezones work out
-it's often under a day for many maintainer trees.  It can reduce
-turnaround time for the specific tree, and it can be useful for
-identifying where problems come from, but on the other hand the
-integration that -next offers is important, some critical stuff only
-appears in -next and obviously each individual tree that gets covered
-separately is more load on your systems and triage.
-
-The key thing with -next is that it's a moving target so it's useful to
-turn around results as fast as possible so they arrive before it gets
-rebuilt, or if you've seen something on an older -next check that it's
-still relevant when you do report it.
-
---FtJCDRPKOZ+t0pWK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMbaPwACgkQJNaLcl1U
-h9Aviwf/bDwMY5MXtBzrvxkPJEUsVcJb7x0Owkq0b0OQqrQRkAZg7MqOa84hOm0Z
-EiMVHZNqWLYPB4sn7dXrZsoqx8q/yjbRSZmd3VD9tLxnZZMbNTISLMbhLB7HpYrL
-siQVtgST7v5sviKAfGFc0sLz1JkQGShnT7zidkgjsVqybGHvlv3mHb8uLPpHtEXu
-RN7znotv2WyiaRqUR72MsWn8mcsjMvwE8SztGeK+wluhjM1M9G+1pRlQBHxD0YDq
-7cSAVfdplTdCur0018aysh7GaEleIBVo7nfZSEtnGuGFno4D90cmrBbI6352z3Io
-HLsqRGgbcQRSNbW4rA2+7s6eDxXRVA==
-=QUMJ
------END PGP SIGNATURE-----
-
---FtJCDRPKOZ+t0pWK--
