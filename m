@@ -4,66 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DAE2C6FA82
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E68DECAAD5
 	for <soc@archiver.kernel.org>; Mon, 12 Sep 2022 15:30:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AF43C4347C; Mon, 12 Sep 2022 15:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 055B1C433D6;
-	Mon, 12 Sep 2022 15:30:16 +0000 (UTC)
+	id 1A18AC433B5; Mon, 12 Sep 2022 15:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 02F7CC433C1
+	for <soc@kernel.org>; Mon, 12 Sep 2022 15:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1662996617;
-	bh=FZWlF2PZvM83EU+atZJZ2AFyVgqSk5g8gp8PllTGrPs=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=U0G1RSaTnTmYOG8R/SkOHngo31mQsVe1xNkeOjNyYu3wR/+S8gqx8i37eh3CESAV1
-	 XqqIl72UQbZUaSctZS2lS0g9t1esIh3IRYxN3uj5IeLvb+InHjgTGpd3CKYEYmDIiP
-	 X9CrkBVfbRIIfx5ld+phnMoFLJ9UoJ/eAtTyuhJvZgSyUrrkey4SA4dNpAQidCaaSH
-	 o5wDSuiZ1t1GMkVo88o4SqisCB18Z+2OPtczmXZD+iopE/JJ+P9jiqivZsofyOyULx
-	 yGhTakaOR23frfCD1YGWaRazpM5K+q3p+AsPpBwUf5VvfNLkjFraQfYYjTIixZ0bw4
-	 3jbk9XTT1zg9w==
+	bh=Ge3XApvfRTedNBVYd0otMxCQWD/JFgNpx2crEcVLuOw=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=k9yyQNNSbsCLO+L7/4gLEU4w7XZrs/rgH+68o8oK8WPrLe6rkhH64cMUJIUPy64kn
+	 UFqu5kxkdUfExRDPiK5j9Y2vSOWySIoJCjX74m5mPjQygx6iF9FkxiSnm50G7crSJL
+	 moV6TnX2COUZFi/jKzJFawK90wNYtvYJwT+HNmVSwC55Nnl/BuNxsWh6HdB0ofuRvK
+	 wCODC9m5gYHFTZ5wdKZ00rvsiL5A5/F74woDxYFH0y5JFkoNaA8KmoeRqMoO0ivbAN
+	 Z9llZYZMFDJ/oKlJo/4AKlHk2+nYuOEY+3iERp+TLj4WDsa9RNccIWB7T9CcEfD+Om
+	 tfATwKemZqLvA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8D53C73FE9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBFBFC4166F;
 	Mon, 12 Sep 2022 15:30:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH PULL fixes 1/4] dt-bindings: memory-controllers:
- fsl,imx8m-ddrc: drop Leonard Crestez
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166299661687.5098.10246744412026566143.git-patchwork-notify@kernel.org>
+ <166299661673.5098.13579617060459119173.git-patchwork-summary@kernel.org>
 Date: Mon, 12 Sep 2022 15:30:16 +0000
-References: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri,  9 Sep 2022 17:30:34 +0200 you wrote:
-> Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
-> Access denied:), so change maintainer to Peng Fan from NXP.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Link: https://lore.kernel.org/r/20220817065946.24303-2-krzysztof.kozlowski@linaro.org
-> Acked-by: Peng Fan <peng.fan@nxp.com>
-> 
-> [...]
+Series: [PULL,fixes,1/4] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=675752
+  Lore link: https://lore.kernel.org/r/20220909153037.824092-1-krzysztof.kozlowski@linaro.org
+    Patches: [PULL,fixes,1/4] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
 
-Here is the summary with links:
-  - [PULL,fixes,1/4] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
-    https://git.kernel.org/soc/soc/c/96c9b511fc0f
-  - [GIT,PULL,2/4] memory: drivers for v6.1
-    (no matching commit)
-  - [GIT,PULL,3/4] memory: brcm for v6.1
-    (no matching commit)
-  - [GIT,PULL,4/4] memory: mediatek for v6.1
-    (no matching commit)
+Patch: [GIT,PULL] Rockchip dts fixes for 6.0
+  Submitter: Heiko Stübner <heiko@sntech.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=675874
+  Lore link: https://lore.kernel.org/r/2645885.mvXUDI8C0e@phil
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
