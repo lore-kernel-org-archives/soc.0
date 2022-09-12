@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 285FDC6FA8D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D8C2C6FA89
 	for <soc@archiver.kernel.org>; Mon, 12 Sep 2022 07:16:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 05AD2C43140; Mon, 12 Sep 2022 07:16:27 +0000 (UTC)
+	id E9E30C43141; Mon, 12 Sep 2022 07:16:26 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id A1F6BC4347C;
+	by smtp.kernel.org (Postfix) with ESMTP id 9454AC43146;
 	Mon, 12 Sep 2022 07:16:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1F6BC4347C
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9454AC43146
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 12 Sep 2022 16:15:14 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 4F85C20584CE;
-	Mon, 12 Sep 2022 16:15:14 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Sep 2022 16:15:14 +0900
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 12 Sep 2022 16:15:15 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 727FB2059027;
+	Mon, 12 Sep 2022 16:15:15 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Sep 2022 16:15:15 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id 98605B62A4;
-	Mon, 12 Sep 2022 16:15:13 +0900 (JST)
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 08007B62AE;
+	Mon, 12 Sep 2022 16:15:15 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -35,45 +35,48 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v2 0/8] Update UniPhier armv7 devicetree
-Date: Mon, 12 Sep 2022 16:15:03 +0900
-Message-Id: <20220912071511.1385-1-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 7/8] ARM: dts: uniphier: Move interrupt-parent property to each child node in uniphier-support-card
+Date: Mon, 12 Sep 2022 16:15:10 +0900
+Message-Id: <20220912071511.1385-8-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220912071511.1385-1-hayashi.kunihiko@socionext.com>
+References: <20220912071511.1385-1-hayashi.kunihiko@socionext.com>
 
-Update devicetree sources for UniPhier armv7 SoCs to remove dtschema
-warnings, add support existing features that haven't yet been
-described, and replace constants with macros.
+The dtschema warning:
+  uniphier-ld11-ref.dt.yaml: system-bus@58c00000: 'interrupt-parent' does not
+  match any of the regexes: '^.*@[1-5],[1-9a-f][0-9a-f]+$', 'pinctrl-[0-9]+'
 
-Changes since v1:
-- Exclude usb fixed patch (already applied)
-- Describe the reason why removing generic pcie-ep compatible
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ arch/arm/boot/dts/uniphier-support-card.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Kunihiko Hayashi (8):
-  ARM: dts: uniphier: Rename pvtctl node to thermal-sensor
-  ARM: dts: uniphier: Rename usb-phy node to usb-glue
-  ARM: dts: uniphier: Rename gpio-hog node
-  ARM: dts: uniphier: Use GIC interrupt definitions
-  ARM: dts: uniphier: Add ahci controller and glue layer nodes for Pro4
-  ARM: dts: uniphier: Add ahci controller and glue layer nodes for PXs2
-  ARM: dts: uniphier: Move interrupt-parent property to each child node
-    in uniphier-support-card
-  ARM: dts: uniphier: Remove compatible "snps,dw-pcie-ep" from pcie-ep
-    node
-
- arch/arm/boot/dts/uniphier-ld4-ref.dts       |   6 +-
- arch/arm/boot/dts/uniphier-ld4.dtsi          |  49 +++---
- arch/arm/boot/dts/uniphier-ld6b-ref.dts      |   6 +-
- arch/arm/boot/dts/uniphier-pro4-ace.dts      |   8 +
- arch/arm/boot/dts/uniphier-pro4-ref.dts      |  14 +-
- arch/arm/boot/dts/uniphier-pro4.dtsi         | 163 ++++++++++++++++---
- arch/arm/boot/dts/uniphier-pro5.dtsi         |  53 +++---
- arch/arm/boot/dts/uniphier-pxs2-gentil.dts   |   4 +
- arch/arm/boot/dts/uniphier-pxs2.dtsi         |  98 ++++++++---
- arch/arm/boot/dts/uniphier-sld8-ref.dts      |   6 +-
- arch/arm/boot/dts/uniphier-sld8.dtsi         |  49 +++---
- arch/arm/boot/dts/uniphier-support-card.dtsi |   3 +-
- 12 files changed, 329 insertions(+), 130 deletions(-)
-
+diff --git a/arch/arm/boot/dts/uniphier-support-card.dtsi b/arch/arm/boot/dts/uniphier-support-card.dtsi
+index 444802fee9fb..97e7d5db8eb8 100644
+--- a/arch/arm/boot/dts/uniphier-support-card.dtsi
++++ b/arch/arm/boot/dts/uniphier-support-card.dtsi
+@@ -8,13 +8,13 @@
+ &system_bus {
+ 	status = "okay";
+ 	ranges = <1 0x00000000 0x42000000 0x02000000>;
+-	interrupt-parent = <&gpio>;
+ 
+ 	ethsc: ethernet@1,1f00000 {
+ 		compatible = "smsc,lan9118", "smsc,lan9115";
+ 		reg = <1 0x01f00000 0x1000>;
+ 		phy-mode = "mii";
+ 		reg-io-width = <4>;
++		interrupt-parent = <&gpio>;
+ 	};
+ 
+ 	serialsc: serial@1,1fb0000 {
+@@ -22,5 +22,6 @@ serialsc: serial@1,1fb0000 {
+ 		reg = <1 0x01fb0000 0x20>;
+ 		clock-frequency = <12288000>;
+ 		reg-shift = <1>;
++		interrupt-parent = <&gpio>;
+ 	};
+ };
 -- 
 2.25.1
 
