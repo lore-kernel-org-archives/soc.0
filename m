@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BA69C6FA8B
-	for <soc@archiver.kernel.org>; Mon, 12 Sep 2022 07:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 285FDC6FA8D
+	for <soc@archiver.kernel.org>; Mon, 12 Sep 2022 07:16:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3351CC43470; Mon, 12 Sep 2022 07:16:26 +0000 (UTC)
+	id 05AD2C43140; Mon, 12 Sep 2022 07:16:27 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id 089BCC433D7;
-	Mon, 12 Sep 2022 07:16:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 089BCC433D7
+	by smtp.kernel.org (Postfix) with ESMTP id A1F6BC4347C;
+	Mon, 12 Sep 2022 07:16:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1F6BC4347C
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 12 Sep 2022 16:15:59 +0900
+  by mx.socionext.com with ESMTP; 12 Sep 2022 16:15:14 +0900
 Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 3A3C720584CE;
-	Mon, 12 Sep 2022 16:15:59 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Sep 2022 16:15:59 +0900
+	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 4F85C20584CE;
+	Mon, 12 Sep 2022 16:15:14 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Sep 2022 16:15:14 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id BF672B62AE;
-	Mon, 12 Sep 2022 16:15:58 +0900 (JST)
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 98605B62A4;
+	Mon, 12 Sep 2022 16:15:13 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -35,45 +35,45 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v2 7/9] arm64: dts: uniphier: Fix opp-table node name for LD20
-Date: Mon, 12 Sep 2022 16:15:52 +0900
-Message-Id: <20220912071554.1480-8-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 0/8] Update UniPhier armv7 devicetree
+Date: Mon, 12 Sep 2022 16:15:03 +0900
+Message-Id: <20220912071511.1385-1-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220912071554.1480-1-hayashi.kunihiko@socionext.com>
-References: <20220912071554.1480-1-hayashi.kunihiko@socionext.com>
 
-To fix dtbs_check warning:
+Update devicetree sources for UniPhier armv7 SoCs to remove dtschema
+warnings, add support existing features that haven't yet been
+described, and replace constants with macros.
 
-uniphier-ld20-akebi96.dt.yaml: opp-table0: $nodename:0: 'opp-table0' does not match '^opp-table(-[a-z0-9]+)?$'
-        From schema: Documentation/devicetree/bindings/opp/opp-v2.yaml
+Changes since v1:
+- Exclude usb fixed patch (already applied)
+- Describe the reason why removing generic pcie-ep compatible
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Kunihiko Hayashi (8):
+  ARM: dts: uniphier: Rename pvtctl node to thermal-sensor
+  ARM: dts: uniphier: Rename usb-phy node to usb-glue
+  ARM: dts: uniphier: Rename gpio-hog node
+  ARM: dts: uniphier: Use GIC interrupt definitions
+  ARM: dts: uniphier: Add ahci controller and glue layer nodes for Pro4
+  ARM: dts: uniphier: Add ahci controller and glue layer nodes for PXs2
+  ARM: dts: uniphier: Move interrupt-parent property to each child node
+    in uniphier-support-card
+  ARM: dts: uniphier: Remove compatible "snps,dw-pcie-ep" from pcie-ep
+    node
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-index 62e5892b4f8e..0d75a90d1342 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-@@ -81,7 +81,7 @@ cpu3: cpu@101 {
- 		};
- 	};
- 
--	cluster0_opp: opp-table0 {
-+	cluster0_opp: opp-table-0 {
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
-@@ -119,7 +119,7 @@ opp-1100000000 {
- 		};
- 	};
- 
--	cluster1_opp: opp-table1 {
-+	cluster1_opp: opp-table-1 {
- 		compatible = "operating-points-v2";
- 		opp-shared;
- 
+ arch/arm/boot/dts/uniphier-ld4-ref.dts       |   6 +-
+ arch/arm/boot/dts/uniphier-ld4.dtsi          |  49 +++---
+ arch/arm/boot/dts/uniphier-ld6b-ref.dts      |   6 +-
+ arch/arm/boot/dts/uniphier-pro4-ace.dts      |   8 +
+ arch/arm/boot/dts/uniphier-pro4-ref.dts      |  14 +-
+ arch/arm/boot/dts/uniphier-pro4.dtsi         | 163 ++++++++++++++++---
+ arch/arm/boot/dts/uniphier-pro5.dtsi         |  53 +++---
+ arch/arm/boot/dts/uniphier-pxs2-gentil.dts   |   4 +
+ arch/arm/boot/dts/uniphier-pxs2.dtsi         |  98 ++++++++---
+ arch/arm/boot/dts/uniphier-sld8-ref.dts      |   6 +-
+ arch/arm/boot/dts/uniphier-sld8.dtsi         |  49 +++---
+ arch/arm/boot/dts/uniphier-support-card.dtsi |   3 +-
+ 12 files changed, 329 insertions(+), 130 deletions(-)
+
 -- 
 2.25.1
 
