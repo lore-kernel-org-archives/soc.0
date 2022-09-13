@@ -4,24 +4,24 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00570C6FA86
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E94D0C6FA82
 	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 04:22:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CD252C43470; Tue, 13 Sep 2022 04:22:55 +0000 (UTC)
+	id AC7ABC4347C; Tue, 13 Sep 2022 04:22:55 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id B8CA3C433C1;
+	by smtp.kernel.org (Postfix) with ESMTP id BF111C433D7;
 	Tue, 13 Sep 2022 04:22:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8CA3C433C1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BF111C433D7
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
   by mx.socionext.com with ESMTP; 13 Sep 2022 13:22:52 +0900
 Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 60CE320584CE;
+	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id E20A720584CE;
 	Tue, 13 Sep 2022 13:22:52 +0900 (JST)
 Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:22:52 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id 1301DB62A4;
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 41BA0B62AE;
 	Tue, 13 Sep 2022 13:22:52 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
@@ -35,50 +35,34 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 0/9] Update UniPhier armv7 devicetree
-Date: Tue, 13 Sep 2022 13:22:40 +0900
-Message-Id: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 1/9] ARM: dts: uniphier: Rename pvtctl node to thermal-sensor
+Date: Tue, 13 Sep 2022 13:22:41 +0900
+Message-Id: <20220913042249.4708-2-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
+References: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
 
-Update devicetree sources for UniPhier armv7 SoCs to remove dtschema
-warnings, add support existing features that haven't yet been
-described, and replace constants with macros.
+The pvtctl node belongs to thermal-sensor, so the node name should be
+renamed to thermal-sensor.
 
-Changes since v2:
-- Rename the nodes for usb external controller to "usb-controller"
-- Fix the node names for sata
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ arch/arm/boot/dts/uniphier-pxs2.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v1:
-- Exclude usb fixed patch (already applied)
-- Describe the reason why removing generic pcie-ep compatible
-
-Kunihiko Hayashi (9):
-  ARM: dts: uniphier: Rename pvtctl node to thermal-sensor
-  ARM: dts: uniphier: Rename usb-phy node for USB2 to usb-controller
-  ARM: dts: uniphier: Rename usb-glue node for USB3 to usb-controller
-  ARM: dts: uniphier: Rename gpio-hog node
-  ARM: dts: uniphier: Use GIC interrupt definitions
-  ARM: dts: uniphier: Add ahci controller nodes for Pro4
-  ARM: dts: uniphier: Add ahci controller nodes for PXs2
-  ARM: dts: uniphier: Move interrupt-parent property to each child node
-    in uniphier-support-card
-  ARM: dts: uniphier: Remove compatible "snps,dw-pcie-ep" from pcie-ep
-    node
-
- arch/arm/boot/dts/uniphier-ld4-ref.dts       |   6 +-
- arch/arm/boot/dts/uniphier-ld4.dtsi          |  49 +++---
- arch/arm/boot/dts/uniphier-ld6b-ref.dts      |   6 +-
- arch/arm/boot/dts/uniphier-pro4-ace.dts      |   8 +
- arch/arm/boot/dts/uniphier-pro4-ref.dts      |  14 +-
- arch/arm/boot/dts/uniphier-pro4.dtsi         | 167 +++++++++++++++----
- arch/arm/boot/dts/uniphier-pro5.dtsi         |  57 ++++---
- arch/arm/boot/dts/uniphier-pxs2-gentil.dts   |   4 +
- arch/arm/boot/dts/uniphier-pxs2.dtsi         | 102 +++++++----
- arch/arm/boot/dts/uniphier-sld8-ref.dts      |   6 +-
- arch/arm/boot/dts/uniphier-sld8.dtsi         |  49 +++---
- arch/arm/boot/dts/uniphier-support-card.dtsi |   3 +-
- 12 files changed, 335 insertions(+), 136 deletions(-)
-
+diff --git a/arch/arm/boot/dts/uniphier-pxs2.dtsi b/arch/arm/boot/dts/uniphier-pxs2.dtsi
+index 03301ddb3403..c6288c772a7d 100644
+--- a/arch/arm/boot/dts/uniphier-pxs2.dtsi
++++ b/arch/arm/boot/dts/uniphier-pxs2.dtsi
+@@ -564,7 +564,7 @@ sys_rst: reset {
+ 				#reset-cells = <1>;
+ 			};
+ 
+-			pvtctl: pvtctl {
++			pvtctl: thermal-sensor {
+ 				compatible = "socionext,uniphier-pxs2-thermal";
+ 				interrupts = <0 3 4>;
+ 				#thermal-sensor-cells = <0>;
 -- 
 2.25.1
 
