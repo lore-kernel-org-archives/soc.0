@@ -1,71 +1,88 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=lB4r=ZQ=huawei.com=xuwei5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C31DC6FA91
-	for <soc@archiver.kernel.org>; Mon, 12 Sep 2022 15:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F4DECAAA1
+	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 01:47:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3B74FC43142; Mon, 12 Sep 2022 15:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 25932C43145;
-	Mon, 12 Sep 2022 15:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1662996625;
-	bh=S5OtpDwazpFpPFyAudvD0pIJiT9I4H3cK0/scJQC4po=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=IBSY3AGItK0dTcDbHCc1KBPqu9AUqI4Hy5TljXfgSN2MUzr8IjDRUrjxfdpS81ZQa
-	 MeAjXtjyLcxFF2TNDeHoOQOLFmtd5n5VbW77u41/B9xMXtElkJ3ZkOhGXhh+2TfEQu
-	 71DoauSIVCBonYQoDTcdLxuR4cq+qIjxyABXqjSsxSXLBl25lU5V+FTNygMZjkIzxq
-	 iH1dHVqllsbPi5hxxGM6S6kstIWubOvPpYLQEGFnkiWfMJQZKpqNqJBYSReaUIcy5/
-	 XYSjpp2DaqFixaQzC5jLJom4GWKf76RpxkAe8Yurs7am7d6OoadvUehN6kLzwXeZkp
-	 Geahug6mlgN2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED281C73FFA;
-	Mon, 12 Sep 2022 15:30:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 97274C433D7; Tue, 13 Sep 2022 01:47:40 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B6FAAC433C1
+	for <soc@kernel.org>; Tue, 13 Sep 2022 01:47:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B6FAAC433C1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.53])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MRR9M1P5ZznVFq;
+	Tue, 13 Sep 2022 09:44:55 +0800 (CST)
+Received: from [10.67.102.125] (10.67.102.125) by
+ kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 13 Sep 2022 09:47:34 +0800
+Message-ID: <631FE136.6020409@hisilicon.com>
+Date: Tue, 13 Sep 2022 09:47:34 +0800
+From: Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH PULL fixes 1/4] dt-bindings: memory-controllers:
- fsl,imx8m-ddrc: drop Leonard Crestez
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <166299662496.5098.1124394949458463107.git-patchwork-notify@kernel.org>
-Date: Mon, 12 Sep 2022 15:30:24 +0000
-References: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220909153037.824092-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: John Garry <john.garry@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+CC: <andriy.shevchenko@linux.intel.com>, <linuxarm@huawei.com>,
+	<rafael.j.wysocki@intel.com>, <linux-kernel@vger.kernel.org>,
+	<soc@kernel.org>, <yangyingliang@huawei.com>, <xuwei5@hisilicon.com>
+Subject: Re: [PATCH v3 0/5] Misc hisi_lpc changes
+References: <1662366186-233933-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1662366186-233933-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500011.china.huawei.com (7.221.188.124)
+X-CFilter-Loop: Reflected
 
-Hello:
+Hi John,
 
-This series was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
-
-On Fri,  9 Sep 2022 17:30:34 +0200 you wrote:
-> Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
-> Access denied:), so change maintainer to Peng Fan from NXP.
+On 2022/9/5 16:23, John Garry wrote:
+> Hi Xu Wei,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Link: https://lore.kernel.org/r/20220817065946.24303-2-krzysztof.kozlowski@linaro.org
-> Acked-by: Peng Fan <peng.fan@nxp.com>
+> This is a series of small improvements to the driver from Andy
+> and myself.
 > 
-> [...]
+> Andy sent his patches originally in the following:
+> https://lore.kernel.org/lkml/20220708210859.6774-1-andriy.shevchenko@linux.intel.com/
+> 
+> Please consider sending through the arm-soc tree for v6.1 .
+> 
+> Based on v6.0-rc3.
+> 
+> Differences to v2:
+> - Fix handling of platform_device_register_full() error (Andy)
+> - Add Andy's RB tag (thanks!)
+> 
+> Differences to v1:
+> - remove blank lines in patch 5/5, as requested by Andy
+> 
+> Thanks,
+> John
+> 
+> Andy Shevchenko (4):
+>   bus: hisi_lpc: Don't dereference fwnode handle
+>   bus: hisi_lpc: Use devm_platform_ioremap_resource
+>   bus: hisi_lpc: Correct error code for timeout
+>   bus: hisi_lpc: Don't guard ACPI IDs with ACPI_PTR()
+> 
+> John Garry (1):
+>   bus: hisi_lpc: Use platform_device_register_full()
+> 
+>  drivers/bus/hisi_lpc.c | 96 +++++++++++++++++++-----------------------
+>  1 file changed, 44 insertions(+), 52 deletions(-)
+> 
 
-Here is the summary with links:
-  - [PULL,fixes,1/4] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
-    (no matching commit)
-  - [GIT,PULL,2/4] memory: drivers for v6.1
-    https://git.kernel.org/soc/soc/c/d551bdf349ba
-  - [GIT,PULL,3/4] memory: brcm for v6.1
-    https://git.kernel.org/soc/soc/c/4da90678a686
-  - [GIT,PULL,4/4] memory: mediatek for v6.1
-    https://git.kernel.org/soc/soc/c/c457d9a580fb
+Thanks!
+Series applied to the hisilicon driver tree.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best Regards,
+Wei
