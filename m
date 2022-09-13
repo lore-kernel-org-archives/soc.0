@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB26CC6FA8E
-	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 04:22:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66E38C6FA90
+	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 04:22:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B1694C43141; Tue, 13 Sep 2022 04:22:57 +0000 (UTC)
+	id 4EAF9C433C1; Tue, 13 Sep 2022 04:22:59 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id 1D8A7C43144;
-	Tue, 13 Sep 2022 04:22:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1D8A7C43144
+	by smtp.kernel.org (Postfix) with ESMTP id 0201EC43470;
+	Tue, 13 Sep 2022 04:22:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0201EC43470
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 13 Sep 2022 13:22:53 +0900
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 13 Sep 2022 13:22:54 +0900
 Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 1DE6D2059027;
-	Tue, 13 Sep 2022 13:22:53 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:22:53 +0900
+	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 2670E20584CE;
+	Tue, 13 Sep 2022 13:22:54 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:22:54 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id AEF60B62AE;
-	Tue, 13 Sep 2022 13:22:52 +0900 (JST)
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id A8DF0B62A4;
+	Tue, 13 Sep 2022 13:22:53 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -35,89 +35,48 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 3/9] ARM: dts: uniphier: Rename usb-glue node for USB3 to usb-controller
-Date: Tue, 13 Sep 2022 13:22:43 +0900
-Message-Id: <20220913042249.4708-4-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 8/9] ARM: dts: uniphier: Move interrupt-parent property to each child node in uniphier-support-card
+Date: Tue, 13 Sep 2022 13:22:48 +0900
+Message-Id: <20220913042249.4708-9-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
 References: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
 
-This "usb-glue" stands for an external controller associated with USB core,
-however, this is not common. So rename to "usb-controller".
+The dtschema warning:
+  uniphier-ld11-ref.dt.yaml: system-bus@58c00000: 'interrupt-parent' does not
+  match any of the regexes: '^.*@[1-5],[1-9a-f][0-9a-f]+$', 'pinctrl-[0-9]+'
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- arch/arm/boot/dts/uniphier-pro4.dtsi | 4 ++--
- arch/arm/boot/dts/uniphier-pro5.dtsi | 4 ++--
- arch/arm/boot/dts/uniphier-pxs2.dtsi | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/uniphier-support-card.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/uniphier-pro4.dtsi b/arch/arm/boot/dts/uniphier-pro4.dtsi
-index 6140eb42c42a..2232c67134a0 100644
---- a/arch/arm/boot/dts/uniphier-pro4.dtsi
-+++ b/arch/arm/boot/dts/uniphier-pro4.dtsi
-@@ -518,7 +518,7 @@ usb0: usb@65a00000 {
- 			dr_mode = "host";
- 		};
+diff --git a/arch/arm/boot/dts/uniphier-support-card.dtsi b/arch/arm/boot/dts/uniphier-support-card.dtsi
+index 444802fee9fb..97e7d5db8eb8 100644
+--- a/arch/arm/boot/dts/uniphier-support-card.dtsi
++++ b/arch/arm/boot/dts/uniphier-support-card.dtsi
+@@ -8,13 +8,13 @@
+ &system_bus {
+ 	status = "okay";
+ 	ranges = <1 0x00000000 0x42000000 0x02000000>;
+-	interrupt-parent = <&gpio>;
  
--		usb-glue@65b00000 {
-+		usb-controller@65b00000 {
- 			compatible = "socionext,uniphier-pro4-dwc3-glue",
- 				     "simple-mfd";
- 			#address-cells = <1>;
-@@ -571,7 +571,7 @@ usb1: usb@65c00000 {
- 			dr_mode = "host";
- 		};
+ 	ethsc: ethernet@1,1f00000 {
+ 		compatible = "smsc,lan9118", "smsc,lan9115";
+ 		reg = <1 0x01f00000 0x1000>;
+ 		phy-mode = "mii";
+ 		reg-io-width = <4>;
++		interrupt-parent = <&gpio>;
+ 	};
  
--		usb-glue@65d00000 {
-+		usb-controller@65d00000 {
- 			compatible = "socionext,uniphier-pro4-dwc3-glue",
- 				     "simple-mfd";
- 			#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/uniphier-pro5.dtsi b/arch/arm/boot/dts/uniphier-pro5.dtsi
-index 3525125832dd..afc225f3b4b8 100644
---- a/arch/arm/boot/dts/uniphier-pro5.dtsi
-+++ b/arch/arm/boot/dts/uniphier-pro5.dtsi
-@@ -480,7 +480,7 @@ usb0: usb@65a00000 {
- 			dr_mode = "host";
- 		};
- 
--		usb-glue@65b00000 {
-+		usb-controller@65b00000 {
- 			compatible = "socionext,uniphier-pro5-dwc3-glue",
- 				     "simple-mfd";
- 			#address-cells = <1>;
-@@ -544,7 +544,7 @@ usb1: usb@65c00000 {
- 			dr_mode = "host";
- 		};
- 
--		usb-glue@65d00000 {
-+		usb-controller@65d00000 {
- 			compatible = "socionext,uniphier-pro5-dwc3-glue",
- 				     "simple-mfd";
- 			#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/uniphier-pxs2.dtsi b/arch/arm/boot/dts/uniphier-pxs2.dtsi
-index c6288c772a7d..2602503e2275 100644
---- a/arch/arm/boot/dts/uniphier-pxs2.dtsi
-+++ b/arch/arm/boot/dts/uniphier-pxs2.dtsi
-@@ -609,7 +609,7 @@ usb0: usb@65a00000 {
- 			dr_mode = "host";
- 		};
- 
--		usb-glue@65b00000 {
-+		usb-controller@65b00000 {
- 			compatible = "socionext,uniphier-pxs2-dwc3-glue",
- 				     "simple-mfd";
- 			#address-cells = <1>;
-@@ -704,7 +704,7 @@ usb1: usb@65c00000 {
- 			dr_mode = "host";
- 		};
- 
--		usb-glue@65d00000 {
-+		usb-controller@65d00000 {
- 			compatible = "socionext,uniphier-pxs2-dwc3-glue",
- 				     "simple-mfd";
- 			#address-cells = <1>;
+ 	serialsc: serial@1,1fb0000 {
+@@ -22,5 +22,6 @@ serialsc: serial@1,1fb0000 {
+ 		reg = <1 0x01fb0000 0x20>;
+ 		clock-frequency = <12288000>;
+ 		reg-shift = <1>;
++		interrupt-parent = <&gpio>;
+ 	};
+ };
 -- 
 2.25.1
 
