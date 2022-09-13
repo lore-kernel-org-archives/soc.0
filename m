@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF338C6FA82
-	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 04:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55AE3C6FA8E
+	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 04:23:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 98577C433D6; Tue, 13 Sep 2022 04:23:31 +0000 (UTC)
+	id 3CD28C433B5; Tue, 13 Sep 2022 04:23:33 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id A8686C433D7;
-	Tue, 13 Sep 2022 04:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8686C433D7
+	by smtp.kernel.org (Postfix) with ESMTP id D9E9EC43148;
+	Tue, 13 Sep 2022 04:23:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9E9EC43148
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:28 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 8371A20584CE;
-	Tue, 13 Sep 2022 13:23:28 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:28 +0900
+  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:30 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 4072C20584CE;
+	Tue, 13 Sep 2022 13:23:30 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:30 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id 1D004B62A4;
-	Tue, 13 Sep 2022 13:23:28 +0900 (JST)
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id B3A2DB62A4;
+	Tue, 13 Sep 2022 13:23:29 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -35,51 +35,45 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 00/10] Update UniPhier armv8 devicetree
-Date: Tue, 13 Sep 2022 13:23:11 +0900
-Message-Id: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 08/10] arm64: dts: uniphier: Fix opp-table node name for LD20
+Date: Tue, 13 Sep 2022 13:23:19 +0900
+Message-Id: <20220913042321.4817-9-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
+References: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
 
-Update devicetree sources for UniPhier armv8 SoCs to remove dtschema
-warnings, add support existing features that haven't yet been
-described, and replace constants with macros.
+To fix dtbs_check warning:
 
-Changes since v2:
-- Rename the nodes for usb external controller to "usb-controller"
-- Fix the node names for sata
+uniphier-ld20-akebi96.dt.yaml: opp-table0: $nodename:0: 'opp-table0' does not match '^opp-table(-[a-z0-9]+)?$'
+        From schema: Documentation/devicetree/bindings/opp/opp-v2.yaml
 
-Changes since v1:
-- Exclude usb fixed patch (already applied)
-- Describe the reason why removing generic pcie compatible
-- Add L2 cache node patch
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Kunihiko Hayashi (10):
-  arm64: dts: uniphier: Rename pvtctl node to thermal-sensor
-  arm64: dts: uniphier: Rename usb-phy node for USB2 to usb-controller
-  arm64: dts: uniphier: Rename usb-glue node for USB3 to usb-controller
-  arm64: dts: uniphier: Rename gpio-hog nodes
-  arm64: dts: uniphier: Use GIC interrupt definitions
-  arm64: dts: uniphier: Add ahci controller nodes for PXs3
-  arm64: dts: uniphier: Add USB-device support for PXs3 reference board
-  arm64: dts: uniphier: Fix opp-table node name for LD20
-  arm64: dts: uniphier: Remove compatible "snps,dw-pcie" from pcie node
-  arm64: dts: uniphier: Add L2 cache node
-
- arch/arm/boot/dts/uniphier-pinctrl.dtsi       |  10 ++
- arch/arm64/boot/dts/socionext/Makefile        |   4 +-
- .../boot/dts/socionext/uniphier-ld11-ref.dts  |   6 +-
- .../boot/dts/socionext/uniphier-ld11.dtsi     |  59 ++++---
- .../dts/socionext/uniphier-ld20-akebi96.dts   |   6 +-
- .../boot/dts/socionext/uniphier-ld20-ref.dts  |   6 +-
- .../boot/dts/socionext/uniphier-ld20.dtsi     |  82 ++++++----
- .../socionext/uniphier-pxs3-ref-gadget0.dts   |  41 +++++
- .../socionext/uniphier-pxs3-ref-gadget1.dts   |  40 +++++
- .../boot/dts/socionext/uniphier-pxs3-ref.dts  |  14 +-
- .../boot/dts/socionext/uniphier-pxs3.dtsi     | 152 ++++++++++++++----
- 11 files changed, 316 insertions(+), 104 deletions(-)
- create mode 100644 arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dts
- create mode 100644 arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dts
-
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+index b7896541d7c1..bb52dcb45777 100644
+--- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
++++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+@@ -81,7 +81,7 @@ cpu3: cpu@101 {
+ 		};
+ 	};
+ 
+-	cluster0_opp: opp-table0 {
++	cluster0_opp: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
+@@ -119,7 +119,7 @@ opp-1100000000 {
+ 		};
+ 	};
+ 
+-	cluster1_opp: opp-table1 {
++	cluster1_opp: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
+ 
 -- 
 2.25.1
 
