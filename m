@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F214C54EE9
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8161AC6FA8D
 	for <soc@archiver.kernel.org>; Tue, 13 Sep 2022 04:23:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 35B18C433D6; Tue, 13 Sep 2022 04:23:33 +0000 (UTC)
+	id 5C49AC43140; Tue, 13 Sep 2022 04:23:33 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id AA465C433B5;
+	by smtp.kernel.org (Postfix) with ESMTP id D9E5FC43147;
 	Tue, 13 Sep 2022 04:23:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA465C433B5
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9E5FC43147
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
 Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:29 +0900
+  by mx.socionext.com with ESMTP; 13 Sep 2022 13:23:30 +0900
 Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id B76212059027;
-	Tue, 13 Sep 2022 13:23:29 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:29 +0900
+	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id BEAB02059027;
+	Tue, 13 Sep 2022 13:23:30 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Sep 2022 13:23:30 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id 55F5FB62A4;
-	Tue, 13 Sep 2022 13:23:29 +0900 (JST)
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 23BEDB62A4;
+	Tue, 13 Sep 2022 13:23:30 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -35,134 +35,142 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 06/10] arm64: dts: uniphier: Add ahci controller nodes for PXs3
-Date: Tue, 13 Sep 2022 13:23:17 +0900
-Message-Id: <20220913042321.4817-7-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 10/10] arm64: dts: uniphier: Add L2 cache node
+Date: Tue, 13 Sep 2022 13:23:21 +0900
+Message-Id: <20220913042321.4817-11-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
 References: <20220913042321.4817-1-hayashi.kunihiko@socionext.com>
 
-Add ahci core controller and glue layer nodes including reset-controller
-and sata-phy.
+Add a L2 cache node referenced from CPU nodes as the missing cache hierarchy
+information because the following warning was issued.
 
-This supports for PXs3 and the boards.
+  cacheinfo: Unable to detect cache hierarchy for CPU 0
+  Early cacheinfo failed, ret = -2
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../boot/dts/socionext/uniphier-pxs3-ref.dts  |  8 ++
- .../boot/dts/socionext/uniphier-pxs3.dtsi     | 80 +++++++++++++++++++
- 2 files changed, 88 insertions(+)
+ arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi |  6 ++++++
+ arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 12 ++++++++++++
+ arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi |  8 ++++++++
+ 3 files changed, 26 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts
-index 506c7b9ff50d..1ced6190ab2b 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dts
-@@ -137,6 +137,14 @@ nand@0 {
- 	};
- };
- 
-+&ahci0 {
-+	status = "okay";
-+};
-+
-+&ahci1 {
-+	status = "okay";
-+};
-+
- &pinctrl_ether_rgmii {
- 	tx {
- 		pins = "RGMII0_TXCLK", "RGMII0_TXD0", "RGMII0_TXD1",
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index bd5c1e3b64b0..c93b380fce94 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -596,6 +596,86 @@ mdio1: mdio {
- 			};
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+index 525bff79efea..1c76b4375b2e 100644
+--- a/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
++++ b/arch/arm64/boot/dts/socionext/uniphier-ld11.dtsi
+@@ -36,6 +36,7 @@ cpu0: cpu@0 {
+ 			reg = <0 0x000>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
  		};
  
-+		ahci0: sata@65600000 {
-+			compatible = "socionext,uniphier-pxs3-ahci",
-+				     "generic-ahci";
-+			status = "disabled";
-+			reg = <0x65600000 0x10000>;
-+			interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&sys_clk 28>;
-+			resets = <&sys_rst 28>, <&ahci0_rst 0>;
-+			ports-implemented = <1>;
-+			phys = <&ahci0_phy>;
+@@ -45,8 +46,13 @@ cpu1: cpu@1 {
+ 			reg = <0 0x001>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 		};
++
++		l2: l2-cache {
++			compatible = "cache";
++		};
+ 	};
+ 
+ 	cluster0_opp: opp-table {
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+index 938753ded7c0..9308458f9611 100644
+--- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
++++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+@@ -46,6 +46,7 @@ cpu0: cpu@0 {
+ 			reg = <0 0x000>;
+ 			clocks = <&sys_clk 32>;
+ 			enable-method = "psci";
++			next-level-cache = <&a72_l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 		};
+@@ -56,6 +57,7 @@ cpu1: cpu@1 {
+ 			reg = <0 0x001>;
+ 			clocks = <&sys_clk 32>;
+ 			enable-method = "psci";
++			next-level-cache = <&a72_l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 		};
+@@ -66,6 +68,7 @@ cpu2: cpu@100 {
+ 			reg = <0 0x100>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&a53_l2>;
+ 			operating-points-v2 = <&cluster1_opp>;
+ 			#cooling-cells = <2>;
+ 		};
+@@ -76,9 +79,18 @@ cpu3: cpu@101 {
+ 			reg = <0 0x101>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&a53_l2>;
+ 			operating-points-v2 = <&cluster1_opp>;
+ 			#cooling-cells = <2>;
+ 		};
++
++		a72_l2: l2-cache0 {
++			compatible = "cache";
 +		};
 +
-+		sata-controller@65700000 {
-+			compatible = "socionext,uniphier-pxs3-ahci-glue",
-+				     "simple-mfd";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x65700000 0x100>;
-+
-+			ahci0_rst: reset-controller@0 {
-+				compatible = "socionext,uniphier-pxs3-ahci-reset";
-+				reg = <0x0 0x4>;
-+				clock-names = "link";
-+				clocks = <&sys_clk 28>;
-+				reset-names = "link";
-+				resets = <&sys_rst 28>;
-+				#reset-cells = <1>;
-+			};
-+
-+			ahci0_phy: sata-phy@10 {
-+				compatible = "socionext,uniphier-pxs3-ahci-phy";
-+				reg = <0x10 0x10>;
-+				clock-names = "link", "phy";
-+				clocks = <&sys_clk 28>, <&sys_clk 30>;
-+				reset-names = "link", "phy";
-+				resets = <&sys_rst 28>, <&sys_rst 30>;
-+				#phy-cells = <0>;
-+			};
++		a53_l2: l2-cache1 {
++			compatible = "cache";
 +		};
+ 	};
+ 
+ 	cluster0_opp: opp-table-0 {
+diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
+index f10685625b6a..b0c29510a7da 100644
+--- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
++++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
+@@ -43,6 +43,7 @@ cpu0: cpu@0 {
+ 			reg = <0 0x000>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 		};
+@@ -53,6 +54,7 @@ cpu1: cpu@1 {
+ 			reg = <0 0x001>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 		};
+@@ -63,6 +65,7 @@ cpu2: cpu@2 {
+ 			reg = <0 0x002>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 		};
+@@ -73,9 +76,14 @@ cpu3: cpu@3 {
+ 			reg = <0 0x003>;
+ 			clocks = <&sys_clk 33>;
+ 			enable-method = "psci";
++			next-level-cache = <&l2>;
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			#cooling-cells = <2>;
+ 		};
 +
-+		ahci1: sata@65800000 {
-+			compatible = "socionext,uniphier-pxs3-ahci",
-+				     "generic-ahci";
-+			status = "disabled";
-+			reg = <0x65800000 0x10000>;
-+			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&sys_clk 29>;
-+			resets = <&sys_rst 29>, <&ahci1_rst 0>;
-+			ports-implemented = <1>;
-+			phys = <&ahci1_phy>;
++		l2: l2-cache {
++			compatible = "cache";
 +		};
-+
-+		sata-controller@65900000 {
-+			compatible = "socionext,uniphier-pxs3-ahci-glue",
-+				     "simple-mfd";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x65900000 0x100>;
-+
-+			ahci1_rst: reset-controller@0 {
-+				compatible = "socionext,uniphier-pxs3-ahci-reset";
-+				reg = <0x0 0x4>;
-+				clock-names = "link";
-+				clocks = <&sys_clk 29>;
-+				reset-names = "link";
-+				resets = <&sys_rst 29>;
-+				#reset-cells = <1>;
-+			};
-+
-+			ahci1_phy: sata-phy@10 {
-+				compatible = "socionext,uniphier-pxs3-ahci-phy";
-+				reg = <0x10 0x10>;
-+				clock-names = "link", "phy";
-+				clocks = <&sys_clk 29>, <&sys_clk 30>;
-+				reset-names = "link", "phy";
-+				resets = <&sys_rst 29>, <&sys_rst 30>;
-+				#phy-cells = <0>;
-+			};
-+		};
-+
- 		usb0: usb@65a00000 {
- 			compatible = "socionext,uniphier-dwc3", "snps,dwc3";
- 			status = "disabled";
+ 	};
+ 
+ 	cluster0_opp: opp-table {
 -- 
 2.25.1
 
