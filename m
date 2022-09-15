@@ -1,97 +1,104 @@
-Return-Path: <SRS0=XNjI=ZS=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=BI6M=ZS=lixom.net=olof@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A180ECAAA1
-	for <soc@archiver.kernel.org>; Thu, 15 Sep 2022 20:52:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 781EFECAAA1
+	for <soc@archiver.kernel.org>; Thu, 15 Sep 2022 23:57:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3BC4CC433B5; Thu, 15 Sep 2022 20:52:20 +0000 (UTC)
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	id 2652DC43470; Thu, 15 Sep 2022 23:57:15 +0000 (UTC)
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AF1D2C433D7;
-	Thu, 15 Sep 2022 20:52:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF1D2C433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id m9so15178345qvv.7;
-        Thu, 15 Sep 2022 13:52:18 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0762FC433D7
+	for <soc@kernel.org>; Thu, 15 Sep 2022 23:57:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0762FC433D7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=lixom.net
+Received: by mail-ej1-f49.google.com with SMTP id y3so45751988ejc.1
+        for <soc@kernel.org>; Thu, 15 Sep 2022 16:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=h6GP7OMr98DgtTyeApOsh0thg3e2Q1uN92gwxmTHO34=;
-        b=E8Ap1REycdzFe39/XRMw1m1jAGKPXO/Uq4k6BR2syVJGth1OWVrqSyDtMVnyFx6j1P
-         RrlIKjS/XINphFZXfY7elpDMuu55ePnAnFjoo7gmStlr/a/7ugzN2xA4/kdxBPcIePYU
-         4RdkcoDZZ42InaqgiRbungzUAuoKNt+MBEaKxUag6+VZ7zHRdmTfROd+nIaup5CVeHVW
-         FzrEHpQZWhj9gF/leIwJm57jv/Jka26UbRJUjc70GE7PJsFVgr34cXtvZ2i3Np35ZMnH
-         s4RdZfH4kUSdVD5wV/rqixuKJeL7VmG3rmhpi85EhcaP58MPFvJHQivgoD9LV+K29xSJ
-         nC3Q==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=RsQe7nphqHbU0PAhl5+uvSXohwaK5GRUowgk9iZmnMU=;
+        b=HzLQ0C8YNtKK238UtoGDCLXb9p2pNbvNAUaFmiJhQE2F7+LJWTIQJWfHOWC+5Pp6P2
+         tfY9xMV5A0bL+psxgczMAPdBzlIOs1kcSKjYkHt1D1IyIGnPaoTcv0zbNLxBO3Uf/fTz
+         GjdyS33axKfIOtI4S3iOEzeLEr+noyI5GGy+taah+z98TR1f56ys/QfjnaiuhbQj3edI
+         PtcKq9vocIdQZfQVx9j9/RTRvkOdDAe9V5wNFfsm5KFOfnrOU2OrDidC8uzC+/QRp390
+         kYXAtdE2kJ4jAOp+lyozMpAqMIW4Y0Rni6YtQh/QGBdxExgFIKISqmB/zsxRFxVoO7CI
+         qpvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=h6GP7OMr98DgtTyeApOsh0thg3e2Q1uN92gwxmTHO34=;
-        b=Zf/8adZJHN3Ie+xfegho3QfLoSjCHBJCYOJrRuQnR86NDaoHxhUdU5Boz/uU2IiCKo
-         sX4ir9WjYK2ySf5GK0knyhoeEJqQ9i8lB47m2GuAV0HBV2FVpG6mcyfiXwSR2leA02KU
-         3QX+iywIF5OnN425HAYtOXOBGzF+vgOYc5ckxQ4rsWnxN2wWhaEVg+nraoC0b+yfpiqW
-         X7X9i/RFPW6DwZQFjtYWQY3MHHJfRvpboVZddKaRoDjWtnzzD74Bk5SIxuy6FYGb45IA
-         s89mtRQ6W3U8BI8Dg7rErQtGAxWi16kgLiemHBjgu/X+Z6/aLWCzil6VgOZfKOiMU2Y6
-         VfjQ==
-X-Gm-Message-State: ACrzQf0BTJHJWief8E/RzQmtWVcEma1H58kpQ24AAAN6Py2oy5YRNeGD
-	jaO1HuxVSCFuI6A6jc8yMy0=
-X-Google-Smtp-Source: AMsMyM4Z5cKWgJDetP3HbLHXQcRthknzjqVa+UA9gJLy0QHWAFQ+GqDV40URFEaPLuktx3ogjxJ7Hg==
-X-Received: by 2002:ad4:5ae8:0:b0:4aa:af21:b43c with SMTP id c8-20020ad45ae8000000b004aaaf21b43cmr1266892qvh.36.1663275137671;
-        Thu, 15 Sep 2022 13:52:17 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w8-20020a05620a424800b006ce5fe31c2dsm5069897qko.65.2022.09.15.13.52.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Sep 2022 13:52:17 -0700 (PDT)
-Message-ID: <3dc9d86d-7b98-33ab-880e-a9584b8fac4b@gmail.com>
-Date: Thu, 15 Sep 2022 13:52:12 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=RsQe7nphqHbU0PAhl5+uvSXohwaK5GRUowgk9iZmnMU=;
+        b=pcX4pgk2SJO6Y5Imrzgz0RkU8BdXydp/U0SzqUepzJGh/OnqF4m9aVjg7YQLoA/7vY
+         pK78gzD8HNVZ6gyx3giWXoPF/1+kFMUUNEcRP9Ydvej4KtCgQ/gN1cLyG1tVEhsauMMF
+         /lOoCLyoJ5NaMGX+emMFRtEH4Bv8vb7c/uphivZ/+C6QYmu+LDDKRrnbxIwSuqA8mhkT
+         96NEglkmg3WEipvxAYh7z98KK6QrmsJ4UcBVowkOHz5YBZj41TXfjKU2UPmmocBaZRPZ
+         bqJX3XDanPNDQyL/hIGswlEWloZeiP/dVlXpkf/AQ3lW+bcFviomBUfk5lTs7WXXUChD
+         Obpw==
+X-Gm-Message-State: ACrzQf0RMntRmAMMtuDQdtqT52N8lTortkFB4JW2SKpHTNSlRroIWQ01
+	JSiyQQdb/G95zkiOjvR/8wqBSNU7eD8VRppCiFVxQdXHU8s=
+X-Google-Smtp-Source: AMsMyM4Rndho8mlic/vcoNp7Cbmzxg0scU8YjgroeXWWcgexuw3ccGmisz/E1lqc7voWrBwlgj5kYWE+bMgOItYphLU=
+X-Received: by 2002:a17:907:7f07:b0:779:7f94:d259 with SMTP id
+ qf7-20020a1709077f0700b007797f94d259mr1584691ejc.525.1663286232160; Thu, 15
+ Sep 2022 16:57:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] arm64: Kconfig.platforms: Group NXP platforms
- together
-Content-Language: en-US
-To: Olof Johansson <olof@lixom.net>
-List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, soc@kernel.org,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- open list <linux-kernel@vger.kernel.org>, krzysztof.kozlowski@linaro.org,
- arnd@arndb.de, Geert Uytterhoeven <geert@linux-m68k.org>,
- william.zhang@broadcom.com, anand.gore@broadcom.com
 References: <20220829173830.3567047-1-f.fainelli@gmail.com>
- <20220829173830.3567047-3-f.fainelli@gmail.com> <YyNN/IZgOAlbSHnF@lx2k>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <YyNN/IZgOAlbSHnF@lx2k>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <20220829173830.3567047-3-f.fainelli@gmail.com> <YyNN/IZgOAlbSHnF@lx2k> <3dc9d86d-7b98-33ab-880e-a9584b8fac4b@gmail.com>
+In-Reply-To: <3dc9d86d-7b98-33ab-880e-a9584b8fac4b@gmail.com>
+From: Olof Johansson <olof@lixom.net>
+Date: Thu, 15 Sep 2022 16:57:00 -0700
+Message-ID: <CAOesGMghG46a8V-VAbaR8+g2kZPDvEV3=_ejGr=14zvdWCjyfA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] arm64: Kconfig.platforms: Group NXP platforms together
+To: Florian Fainelli <f.fainelli@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, soc@kernel.org, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, krzysztof.kozlowski@linaro.org, 
+	arnd@arndb.de, Geert Uytterhoeven <geert@linux-m68k.org>, william.zhang@broadcom.com, 
+	anand.gore@broadcom.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/15/22 09:08, Olof Johansson wrote:
-> On Mon, Aug 29, 2022 at 10:38:29AM -0700, Florian Fainelli wrote:
->> Group the three NXP platforms under an ARCH_NXP menuconfig symbol to
->> make make selection of similar vendor SoCs visually nicer.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Hi,
-> 
-> While these are convenient if they're done right from the beginning, the result
-> of adding a new dependency like this is that old defconfigs stop working if you
-> just go with the default.
-> 
-> Was there a reason to group these now and cause this config churn for
-> downstream users?
+On Thu, Sep 15, 2022 at 1:52 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 9/15/22 09:08, Olof Johansson wrote:
+> > On Mon, Aug 29, 2022 at 10:38:29AM -0700, Florian Fainelli wrote:
+> >> Group the three NXP platforms under an ARCH_NXP menuconfig symbol to
+> >> make make selection of similar vendor SoCs visually nicer.
+> >>
+> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> >
+> > Hi,
+> >
+> > While these are convenient if they're done right from the beginning, the result
+> > of adding a new dependency like this is that old defconfigs stop working if you
+> > just go with the default.
+> >
+> > Was there a reason to group these now and cause this config churn for
+> > downstream users?
+>
+> No reason to cause churn, and no specific reason other than visually and
+> logically group options from the same vendors. I had clearly not
+> anticipated the defconfig breakage, too bad that Kconfig does not allow
+> menuconfig items to be enabled by default, or does it?
 
-No reason to cause churn, and no specific reason other than visually and 
-logically group options from the same vendors. I had clearly not 
-anticipated the defconfig breakage, too bad that Kconfig does not allow 
-menuconfig items to be enabled by default, or does it?
--- 
-Florian
+My local workflow is normally that I update my trees, then run a "make
+oldconfig" and go with the defaults on new options. When I do that,
+the layerscape arch option drops off, which turned out to be
+unfortunate since it was the machine I was running on.
+
+It's less of an issue if you use an in-tree defconfig (presuming they
+get updated). I worry that distros will have similar issues if they
+supply their own config.
+
+Again, this is a one-time thing but it's easier for everybody if we
+find ways to avoid them. Giving these new groups a "default y" might
+not help either, since that would need to come off at some point, and
+at that time the same issue will arise.
+
+
+-Olof
