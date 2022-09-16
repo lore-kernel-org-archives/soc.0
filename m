@@ -1,104 +1,115 @@
-Return-Path: <SRS0=BI6M=ZS=lixom.net=olof@kernel.org>
+Return-Path: <SRS0=nkI+=ZT=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 781EFECAAA1
-	for <soc@archiver.kernel.org>; Thu, 15 Sep 2022 23:57:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D702ECAAD8
+	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 10:20:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2652DC43470; Thu, 15 Sep 2022 23:57:15 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id 1B62BC43143; Fri, 16 Sep 2022 10:20:05 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0762FC433D7
-	for <soc@kernel.org>; Thu, 15 Sep 2022 23:57:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0762FC433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=lixom.net
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=lixom.net
-Received: by mail-ej1-f49.google.com with SMTP id y3so45751988ejc.1
-        for <soc@kernel.org>; Thu, 15 Sep 2022 16:57:13 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 24C5DC43470;
+	Fri, 16 Sep 2022 10:20:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24C5DC43470
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id lc7so48458985ejb.0;
+        Fri, 16 Sep 2022 03:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=RsQe7nphqHbU0PAhl5+uvSXohwaK5GRUowgk9iZmnMU=;
-        b=HzLQ0C8YNtKK238UtoGDCLXb9p2pNbvNAUaFmiJhQE2F7+LJWTIQJWfHOWC+5Pp6P2
-         tfY9xMV5A0bL+psxgczMAPdBzlIOs1kcSKjYkHt1D1IyIGnPaoTcv0zbNLxBO3Uf/fTz
-         GjdyS33axKfIOtI4S3iOEzeLEr+noyI5GGy+taah+z98TR1f56ys/QfjnaiuhbQj3edI
-         PtcKq9vocIdQZfQVx9j9/RTRvkOdDAe9V5wNFfsm5KFOfnrOU2OrDidC8uzC+/QRp390
-         kYXAtdE2kJ4jAOp+lyozMpAqMIW4Y0Rni6YtQh/QGBdxExgFIKISqmB/zsxRFxVoO7CI
-         qpvA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=+Qwh9Fiu09wuBBgjyS2RCt9cQRNgS7gUGyaRZ+a59cc=;
+        b=nzM+z3hahlB24FjW+Ir6yks4MrsDDNqghwdJ9ObGZBL6XavyJINbs3GX+79ZpJyen9
+         uphbHqCjL4jf4NabpVXP161NeLtOaarli9Y47iubL2OqBiMTga62OjHoPwaeQd5UUCZZ
+         GRvocSie2TX0Mobvmb9SXPx/lqd4C9IvyUl3HMmrYLKwkqwGMkIDwLE3AmyIG3pbjC98
+         rDxgDR0f8IlbgixR3FQlk3uy2G7OslRFYjyYFcySv5wMcuevdtsrv9laHmT8Q4xTEkvo
+         Tb0cDAZ2rk7LKdu8MIEWR/TrNxfJGpaR/oK1iXFv2bilCmQiNTwviQWaXjCXurmUFsri
+         qnjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=RsQe7nphqHbU0PAhl5+uvSXohwaK5GRUowgk9iZmnMU=;
-        b=pcX4pgk2SJO6Y5Imrzgz0RkU8BdXydp/U0SzqUepzJGh/OnqF4m9aVjg7YQLoA/7vY
-         pK78gzD8HNVZ6gyx3giWXoPF/1+kFMUUNEcRP9Ydvej4KtCgQ/gN1cLyG1tVEhsauMMF
-         /lOoCLyoJ5NaMGX+emMFRtEH4Bv8vb7c/uphivZ/+C6QYmu+LDDKRrnbxIwSuqA8mhkT
-         96NEglkmg3WEipvxAYh7z98KK6QrmsJ4UcBVowkOHz5YBZj41TXfjKU2UPmmocBaZRPZ
-         bqJX3XDanPNDQyL/hIGswlEWloZeiP/dVlXpkf/AQ3lW+bcFviomBUfk5lTs7WXXUChD
-         Obpw==
-X-Gm-Message-State: ACrzQf0RMntRmAMMtuDQdtqT52N8lTortkFB4JW2SKpHTNSlRroIWQ01
-	JSiyQQdb/G95zkiOjvR/8wqBSNU7eD8VRppCiFVxQdXHU8s=
-X-Google-Smtp-Source: AMsMyM4Rndho8mlic/vcoNp7Cbmzxg0scU8YjgroeXWWcgexuw3ccGmisz/E1lqc7voWrBwlgj5kYWE+bMgOItYphLU=
-X-Received: by 2002:a17:907:7f07:b0:779:7f94:d259 with SMTP id
- qf7-20020a1709077f0700b007797f94d259mr1584691ejc.525.1663286232160; Thu, 15
- Sep 2022 16:57:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829173830.3567047-1-f.fainelli@gmail.com>
- <20220829173830.3567047-3-f.fainelli@gmail.com> <YyNN/IZgOAlbSHnF@lx2k> <3dc9d86d-7b98-33ab-880e-a9584b8fac4b@gmail.com>
-In-Reply-To: <3dc9d86d-7b98-33ab-880e-a9584b8fac4b@gmail.com>
-From: Olof Johansson <olof@lixom.net>
-Date: Thu, 15 Sep 2022 16:57:00 -0700
-Message-ID: <CAOesGMghG46a8V-VAbaR8+g2kZPDvEV3=_ejGr=14zvdWCjyfA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: Kconfig.platforms: Group NXP platforms together
-To: Florian Fainelli <f.fainelli@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=+Qwh9Fiu09wuBBgjyS2RCt9cQRNgS7gUGyaRZ+a59cc=;
+        b=D61dSlRyjrINWvA87JuGDBzL3pD7t78M3rO4Wuon+mo2gYu68/dY5UDH7mga23mPbq
+         q41ipF2iTiV+QXz3aAl2rl1qF8GNTHGa3ETMpCwrF00KmoUljzZkFipYwY8Zk+aY3RRb
+         gfCZ5A5iXLlJn7UsKu1Y5/XbmNrg94yqVDY6Dh/mNV2La1N1hXwgR3laNjKpD60iICNJ
+         zOZcf4UDjPh4o5QRNHbDoL6QYifN31498hKrxNR0Frf5QaSGSlbbIrgBfU35oXmwIxee
+         YZEqbEexWys2hcOz4hJQ4ax+6rkbWw4ySECqj8FZOkFyfc7dHGI59rzH0oh43ii8vdnu
+         q+cQ==
+X-Gm-Message-State: ACrzQf3olNlCWnbKQ1epWPTuVsWvhgDB0MtSgkXbzoqiNk5gksmuIMyM
+	kHagA7WtffcB8+dC/V4twoUFjnv5PfQ=
+X-Google-Smtp-Source: AMsMyM4s4izcB6Dd9WAvU+HE15lJeBLAMLoYLrMTubz283dqy1O7KRU5go4bdLQDFRJWyI+AjtC68w==
+X-Received: by 2002:a17:907:948f:b0:780:4c66:6689 with SMTP id dm15-20020a170907948f00b007804c666689mr3096844ejc.401.1663323601732;
+        Fri, 16 Sep 2022 03:20:01 -0700 (PDT)
+Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ci25-20020a170906c35900b0072b3406e9c2sm10309783ejb.95.2022.09.16.03.20.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 03:20:00 -0700 (PDT)
+From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, soc@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, krzysztof.kozlowski@linaro.org, 
-	arnd@arndb.de, Geert Uytterhoeven <geert@linux-m68k.org>, william.zhang@broadcom.com, 
-	anand.gore@broadcom.com
-Content-Type: text/plain; charset="UTF-8"
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/6] soc/tegra: Changes for v6.1-rc1
+Date: Fri, 16 Sep 2022 12:19:52 +0200
+Message-Id: <20220916101957.1635854-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 15, 2022 at 1:52 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> On 9/15/22 09:08, Olof Johansson wrote:
-> > On Mon, Aug 29, 2022 at 10:38:29AM -0700, Florian Fainelli wrote:
-> >> Group the three NXP platforms under an ARCH_NXP menuconfig symbol to
-> >> make make selection of similar vendor SoCs visually nicer.
-> >>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >
-> > Hi,
-> >
-> > While these are convenient if they're done right from the beginning, the result
-> > of adding a new dependency like this is that old defconfigs stop working if you
-> > just go with the default.
-> >
-> > Was there a reason to group these now and cause this config churn for
-> > downstream users?
->
-> No reason to cause churn, and no specific reason other than visually and
-> logically group options from the same vendors. I had clearly not
-> anticipated the defconfig breakage, too bad that Kconfig does not allow
-> menuconfig items to be enabled by default, or does it?
+Hi ARM SoC maintainers,
 
-My local workflow is normally that I update my trees, then run a "make
-oldconfig" and go with the defaults on new options. When I do that,
-the layerscape arch option drops off, which turned out to be
-unfortunate since it was the machine I was running on.
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-It's less of an issue if you use an in-tree defconfig (presuming they
-get updated). I worry that distros will have similar issues if they
-supply their own config.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Again, this is a one-time thing but it's easier for everybody if we
-find ways to avoid them. Giving these new groups a "default y" might
-not help either, since that would need to come off at some point, and
-at that time the same issue will arise.
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.1-soc
 
--Olof
+for you to fetch changes up to 74f7f183d81c26a53c2b1708364069d391b1b4d6:
+
+  soc/tegra: pmc: Check device node status property (2022-09-15 14:10:49 +0200)
+
+Thanks,
+Thierry
+
+----------------------------------------------------------------
+soc/tegra: Changes for v6.1-rc1
+
+This contains an assortment of small fixes and cleanups. One new feature
+is introduced in the form of simple wake events which are needed to wake
+the system from sleep on USB port events.
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      soc/tegra: pmc: Use devm_clk_get_optional()
+
+Dmitry Osipenko (1):
+      soc/tegra: fuse: Drop Kconfig dependency on TEGRA20_APB_DMA
+
+Liang He (2):
+      soc/tegra: fuse: Add missing of_node_put() in tegra_init_fuse()
+      soc/tegra: fuse: Add missing of_node_put()
+
+Petlozu Pravareshwar (1):
+      soc/tegra: pmc: Check device node status property
+
+Thierry Reding (3):
+      soc/tegra: pmc: Remove leading space
+      soc/tegra: pmc: Add support for simple wake events
+      soc/tegra: pmc: Add USB port wake events for Tegra194
+
+ drivers/soc/tegra/Kconfig              |  1 -
+ drivers/soc/tegra/fuse/fuse-tegra.c    |  1 +
+ drivers/soc/tegra/fuse/tegra-apbmisc.c |  7 ++++--
+ drivers/soc/tegra/pmc.c                | 45 ++++++++++++++++++++++++----------
+ 4 files changed, 38 insertions(+), 16 deletions(-)
