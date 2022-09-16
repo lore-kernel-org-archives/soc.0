@@ -1,107 +1,115 @@
-Return-Path: <SRS0=nkI+=ZT=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=+JNq=ZT=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC168ECAAD8
-	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 10:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F10E5ECAAD8
+	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 10:51:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C068AC433B5; Fri, 16 Sep 2022 10:20:13 +0000 (UTC)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id BEF22C433D7; Fri, 16 Sep 2022 10:51:53 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DBB0FC433C1;
-	Fri, 16 Sep 2022 10:20:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DBB0FC433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 29so30805695edv.2;
-        Fri, 16 Sep 2022 03:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=5K/jTI7fjuDW4G/VqPOVZ9ue0kSth/V/PzuxFr/qC+g=;
-        b=S/JMXXmH9Zy6To5nOJq6ZR0ij3lS+NVTUJHgFx8rxpgsJacw+FJwEadgrLfb+JZ3a0
-         qhjwPba5hJ+8TRI3Xt8vOM+3dAg5rjNys6UeND+ot+F5hpgvJhCmLiPido+IsEdiEcdQ
-         OHYhqReTuFavRANuj5Phwt7Pxl7zRHNpREsldyW0r6J3vjIsWM20DbJKnJ3CTw82iWab
-         ZqR8q1PGl/9umXYyo5J/GWac0jA6IU5TPjWAGK9n0Ez0kE+caBGKQ6QbEvVFIr7/bP/+
-         kJLrgHB9XKzymQ5wIueIXjEUbsbzpMgUf7VY6bZTJ7GFoRbrdcFSA2KmiuoTnjdtEpCq
-         EZqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=5K/jTI7fjuDW4G/VqPOVZ9ue0kSth/V/PzuxFr/qC+g=;
-        b=rOCgAy66KHGodaEtfvUsUwMBuwukQZ+Zp57Ozjmy6cQMfemm1G4xYxcGq7pXz+UFi8
-         xK/xEVL7+MaTWVBqHXizXuVMoOUmcJnR0SW66P7G7W7OkAxXwgjwLJXgkJcEKwk5If/A
-         tTZX3H0tW8w7AL5gzD8+ZNf9Bqg+moHScH3KDSbVHkaVeicQqt/O62pZsHFaD/N7Ogqk
-         PjVjw1eiTjNNKRe/beUNkh4k0Z2K6Cb0tYC0196i8BOlW8DwsToYbbIMPhWFiYZrUASk
-         wmCfcdgqTc+80BxYftyajfCy2rv2lUwdc52iENo3BPXM/CZ2QQknG4MKJIDpwOj+NDzA
-         66XA==
-X-Gm-Message-State: ACrzQf1FRwL008KQyqTtQu2gkHu5fkac2eHu0bNZEZN3IZPW6H/PlVDj
-	d9MFTxOi2X7Kxi6yaumbW/wXT4RXz9A=
-X-Google-Smtp-Source: AMsMyM75Nl7uONh5kfRDrG/I0m+0hj63axO4VVaXJFU3ADb+1LWIXuXeElQImsAj0uP8Ea48HWS8bg==
-X-Received: by 2002:a05:6402:448b:b0:43b:5ec6:8863 with SMTP id er11-20020a056402448b00b0043b5ec68863mr3296514edb.377.1663323610676;
-        Fri, 16 Sep 2022 03:20:10 -0700 (PDT)
-Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id s1-20020a05640217c100b0044ec76521a1sm13230860edy.55.2022.09.16.03.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 03:20:09 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id B3F21C433C1;
+	Fri, 16 Sep 2022 10:51:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3F21C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663325513; x=1694861513;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Gill2Jxfv5RPobjr+S8sRrYdyedPa0QwnLd1Wvta0Ac=;
+  b=XEYCQtXMIriFFto7B6uQ3qFZxxM93zZUw4ej9z9pmhpRj/YETBxBSZJV
+   tdCvkyxqkzPYKuQ69jWxAGJzxAfsupFF2WaB/Mdx/nBZNWx/nV9YXKpd4
+   iYQzC/rQq0eaRp9aa8XMd7f9/s6uR4NazstM8Jx1S5h6n5IIeSVuhtJPS
+   wapg0lJeamV8Kza6d4IzivtJggVthVsgxMc81REbWO49YAd44SpdvDbrB
+   YHhReGEx9IBY2HGulVoYlmdEWhMb//dlCzIqlu5KN4F//RLqrhp3wuLZ4
+   KzBo2HonpOD0dOnvp7FJJHhALLON3tXQA3GwRw0lBzLAUMiU/GO9U2M1L
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
+   d="scan'208";a="174184396"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 03:51:50 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 16 Sep 2022 03:51:48 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 16 Sep 2022 03:51:46 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] arm64: tegra: Default configuration changes for v6.1-rc1
-Date: Fri, 16 Sep 2022 12:19:57 +0200
-Message-Id: <20220916101957.1635854-6-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220916101957.1635854-1-thierry.reding@gmail.com>
-References: <20220916101957.1635854-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 device tree updates for v6.1 #2
+Date: Fri, 16 Sep 2022 13:54:07 +0300
+Message-ID: <20220916105407.1287452-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi ARM SoC maintainers,
+The following changes since commit 0b7baa1a307fcc66f66d7ca34244ee7a3899f92d:
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+  ARM: dts: lan966x: add led configuration (2022-09-02 10:55:00 +0300)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.1-arm64-defconfig
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.1-2
 
-for you to fetch changes up to 747c39f0ebfaee9cf699dd3c35ac6462db847667:
+for you to fetch changes up to 0b2eafe1167e756935f293aa7212626d8f89952f:
 
-  arm64: defconfig: Make TEGRA186_GPC_DMA built-in (2022-09-15 15:51:47 +0200)
-
-Thanks,
-Thierry
+  spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties (2022-09-16 10:52:24 +0300)
 
 ----------------------------------------------------------------
-arm64: tegra: Default configuration changes for v6.1-rc1
+AT91 DT for v6.1 #2
 
-Enables the new MGBE driver, as well as the existing SPI and QSPI
-drivers on 64-bit ARM. The GPC DMA driver is now also built into the
-kernel by default to avoid needless probe deferrals that would slow
-down the boot process significantly.
+It contains:
+- new SAMA5D3 based board, namely SAMA5D3-EDS
+- adjustments to pass the DT binding validations
+- disable AES on some LAN966 based boards as they are reserverd by
+  secure OS
 
 ----------------------------------------------------------------
-Akhil R (1):
-      arm64: defconfig: Make TEGRA186_GPC_DMA built-in
+Horatiu Vultur (1):
+      ARM: dts: lan966x: disable aes
 
-Bhadram Varka (1):
-      arm64: defconfig: Enable Tegra MGBE driver
+Jerry Ray (2):
+      dt-bindings: arm: at91: Add info on SAMA5D3-EDS
+      dts: arm: at91: Add SAMA5D3-EDS Board
 
-Krishna Yarlagadda (1):
-      arm64: tegra: Enable Tegra SPI & QSPI in deconfig
+Sergiu Moga (4):
+      ARM: dts: at91: sama7g5: Swap rx and tx for spi11
+      ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
+      ARM: dts: at91: Add `atmel,usart-mode` required property to serial nodes
+      spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties
 
- arch/arm64/configs/defconfig | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/arm/atmel-at91.yaml        |   7 +
+ .../bindings/spi/atmel,at91rm9200-spi.yaml         |  10 +
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/at91-sam9x60ek.dts               |   3 +-
+ arch/arm/boot/dts/at91-sama5d3_eds.dts             | 307 +++++++++++++++++++++
+ arch/arm/boot/dts/at91rm9200.dtsi                  |   6 +
+ arch/arm/boot/dts/at91sam9260.dtsi                 |   8 +
+ arch/arm/boot/dts/at91sam9261.dtsi                 |   5 +
+ arch/arm/boot/dts/at91sam9263.dtsi                 |   5 +
+ arch/arm/boot/dts/at91sam9g45.dtsi                 |   6 +
+ arch/arm/boot/dts/at91sam9n12.dtsi                 |   6 +
+ arch/arm/boot/dts/at91sam9rl.dtsi                  |   6 +
+ arch/arm/boot/dts/at91sam9x5.dtsi                  |   7 +
+ arch/arm/boot/dts/at91sam9x5_usart3.dtsi           |   2 +
+ arch/arm/boot/dts/lan966x-pcb8290.dts              |   4 +
+ arch/arm/boot/dts/lan966x-pcb8291.dts              |   4 +
+ arch/arm/boot/dts/lan966x-pcb8309.dts              |   4 +
+ arch/arm/boot/dts/sam9x60.dtsi                     |   2 +
+ arch/arm/boot/dts/sama5d2.dtsi                     |  11 +
+ arch/arm/boot/dts/sama5d3.dtsi                     |   7 +
+ arch/arm/boot/dts/sama5d3_uart.dtsi                |   3 +
+ arch/arm/boot/dts/sama5d4.dtsi                     |   9 +
+ arch/arm/boot/dts/sama7g5.dtsi                     |  11 +-
+ 23 files changed, 430 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
