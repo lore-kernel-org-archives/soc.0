@@ -1,116 +1,255 @@
-Return-Path: <SRS0=WZ/d=ZT=hobartrestaurants.com=dar.ols@kernel.org>
+Return-Path: <SRS0=kAVc=ZT=collabora.com=ariel.dalessandro@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D7D8ECAAD8
-	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 13:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85842ECAAD8
+	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 15:32:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 50CE0C433D7; Fri, 16 Sep 2022 13:38:26 +0000 (UTC)
-Received: from hutykzdn.hobartrestaurants.com (hutykzdn.hobartrestaurants.com [194.87.231.156])
+	id 36FD9C433D7; Fri, 16 Sep 2022 15:32:35 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 110A0C433C1
-	for <soc@kernel.org>; Fri, 16 Sep 2022 13:38:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 110A0C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hobartrestaurants.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hobartrestaurants.com
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=hobartrestaurants.com;
- h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; i=dar.ols@hobartrestaurants.com;
- bh=em9ipgpNwVr3qpSD4doKikwEVlA=;
- b=WGr1xec6QUVupt1OHHnYrd9f/DeGoqRAYr3cJe28k0oJDz3WUfWhbVL24v1hBoHPnYrwbpJRDFqT
-   QAeAx1L4av07RBYWCAik9G8HR6SeuV3D7CJKGptr2jjGMdatNTDkobM+RQJiBD9nrX5BkYm4A7i4
-   7Z9bqq3BPXYnVDpEPfVp87/AnXT23sGC8LAxB5lRQsQhaPQ/VeInfs3LaLfSjxPcofk1S3uPGflR
-   MHGy36Rb9jU6/OY2FONa8Zh7EFYrw9bnVB4VjA3BqeptpJIh656e111ycLopaN8T72B/JgBUS/iy
-   yFSDrtiHFUeBDsJcmtvkTTeAO5rstg3hEHmZPA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=hobartrestaurants.com;
- b=J3kOuqe7YpcpwCVDMuUKq4/KfGiS9MvfnxuGNjYZUunzrgKovJemy1bVE7+uBoIss9TwuhcO0Brr
-   hBLkckLw71XsJyMX2IbxY9Bry5yj/0neXtHrXqc+tlr0M3eYnDGX8pR5YZbP2bEBCXGNVvMx3T89
-   TeB6hHO6ZiCMo/VyZNnoEHCJ7xEG5vCoL1oOzZBIiLbuAk/DKT6dRQHZc7N5urH67xxXMmkTI+KW
-   VLeMhDHg/CkynnIjj+vk1U86pZ8gj3a2dNZ28vcqbrD6R0rJwqvNiVDecaT6y6q8eZDKtuit+pzR
-   6ECxSs5b93o/uCjeaQuEXzy9njgF/4tuxgrjXA==;
-From: kernel.org <dar.ols@hobartrestaurants.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E207EC433C1;
+	Fri, 16 Sep 2022 15:32:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E207EC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Received: from localhost.localdomain (unknown [186.189.224.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: adalessandro)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AB8B6601FAA;
+	Fri, 16 Sep 2022 16:32:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1663342350;
+	bh=SDfL43uN7TS0CIFsjEl56ILa0pLZzGPF0gpzroZOqo4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dnioMijY8E0B3dPuLCOzUrpMDx9NKdoQemIUis94V24SH6whLLgLCmGJEiOe3b9gg
+	 p7jgGdjUHDiYORI7STU8m9Y++hQTCp1rAzzpftGE0k4xmCu85pCANlKyIF/e1890Bs
+	 P4FHFzwvqgaERnsfTZH2bQ0+BktwVqd620FQsEVsSeQYgddbSA7kPR2CslUPYf79ot
+	 9cca6llq0kZd/GdsfVymoyq4wxASSBxZ2uAU678Bg6Zr6q7oFHYBi0kymCA0lDmM+S
+	 M78yDTZRj64skUcYI6YD5lRaLptzsVtR7LfEDo6R7tDgqR8Npg5+pHvNmVGDvOa4Ry
+	 jbskuXoZ04ClQ==
+From: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+To: bcm-kernel-feedback-list@broadcom.com,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: soc@kernel.org EMAIL VERIFICATION
-Date: 16 Sep 2022 15:34:10 +0200
-Message-ID: <20220916153410.7DE201FE9850438D@hobartrestaurants.com>
+Cc: ariel.dalessandro@collabora.com,
+	arnd@arndb.de,
+	f.fainelli@gmail.com,
+	krzyszccf.kozlowski+dt@linaro.org,
+	nsaenz@kernel.org,
+	olof@lixom.net,
+	robh+dt@kernel.org,
+	soc@kernel.org,
+	stefan.wahren@i2se.com,
+	william.zhang@broadcom.com
+Subject: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
+Date: Fri, 16 Sep 2022 12:31:56 -0300
+Message-Id: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_000_0012_E68914A6.150ABFAE"
+Content-Transfer-Encoding: 8bit
 
+The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
+Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
+MCP251xFD based CAN-FD interfaces.
 
-------=_NextPart_000_0012_E68914A6.150ABFAE
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+[0] https://github.com/boschresearch/kuksa.hardware
 
-EMAIL VERIFICATION
+Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
+ arch/arm64/boot/dts/broadcom/Makefile         |   1 +
+ .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
+ 4 files changed, 143 insertions(+)
+ create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
 
-Hello soc,
-please validate your=C2=A0=C2=A0soc@kernel.org=C2=A0=C2=A0address
-as we are going through new server upgrade
-=C2=A0
-CLICK HERE TO VALIDATE=20
-(=C2=A0https://lorritroughton.com/VvheItV--UBKhDQ--WacTwUq/oQRrV--JyHha--BZ=
-qavaIqZu/index.html#soc@kernel.org=C2=A0)
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..8930ab2c132c 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
+ 	bcm2837-rpi-zero-2-w.dtb \
+ 	bcm2711-rpi-400.dtb \
+ 	bcm2711-rpi-4-b.dtb \
++	bcm2711-rpi-cm4-canopi.dtb \
+ 	bcm2711-rpi-cm4-io.dtb \
+ 	bcm2835-rpi-zero.dtb \
+ 	bcm2835-rpi-zero-w.dtb
+diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
+new file mode 100644
+index 000000000000..52ec5908883c
+--- /dev/null
++++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
+@@ -0,0 +1,139 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "bcm2711-rpi-cm4.dtsi"
++
++/ {
++	model = "Raspberry Pi Compute Module 4 CANOPi Board";
++
++	clocks {
++		clk_mcp251xfd_osc: mcp251xfd-osc {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <20000000>;
++		};
++	};
++
++	leds {
++		led-act {
++			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-pwr {
++			label = "PWR";
++			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
++			default-state = "keep";
++			linux,default-trigger = "default-on";
++		};
++	};
++};
++
++&ddc0 {
++	status = "okay";
++};
++
++&ddc1 {
++	status = "okay";
++};
++
++&hdmi0 {
++	status = "okay";
++};
++
++&hdmi1 {
++	status = "okay";
++};
++
++&i2c0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c0_gpio44>;
++	status = "okay";
++	clock-frequency = <100000>;
++
++	pcf85063a@51 {
++		compatible = "nxp,pcf85063a";
++		reg = <0x51>;
++	};
++};
++
++&pcie0 {
++	pci@0,0 {
++		device_type = "pci";
++		#address-cells = <3>;
++		#size-cells = <2>;
++		ranges;
++
++		reg = <0 0 0 0 0>;
++
++		usb@0,0 {
++			reg = <0 0 0 0 0>;
++			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
++		};
++	};
++};
++
++&pixelvalve0 {
++	status = "okay";
++};
++
++&pixelvalve1 {
++	status = "okay";
++};
++
++&pixelvalve2 {
++	status = "okay";
++};
++
++&pixelvalve4 {
++	status = "okay";
++};
++
++&spi {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi0_gpio7>;
++	cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
++	dmas = <&dma 6>, <&dma 7>;
++	dma-names = "tx", "rx";
++
++	mcp251xfd0: mcp251xfd@0 {
++		compatible = "microchip,mcp251xfd";
++		reg = <0>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&mcp251xfd0_pins>;
++		spi-max-frequency = <20000000>;
++		interrupt-parent = <&gpio>;
++		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
++		clocks = <&clk_mcp251xfd_osc>;
++	};
++
++	mcp251xfd1: mcp251xfd@1 {
++		compatible = "microchip,mcp251xfd";
++		reg = <1>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&mcp251xfd1_pins>;
++		spi-max-frequency = <20000000>;
++		interrupt-parent = <&gpio>;
++		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
++		clocks = <&clk_mcp251xfd_osc>;
++	};
++};
++
++&gpio {
++	mcp251xfd0_pins: mcp251xfd0_pins {
++		brcm,pins = <27>;
++		brcm,function = <BCM2835_FSEL_GPIO_IN>;
++	};
++
++	mcp251xfd1_pins: mcp251xfd1_pins {
++		brcm,pins = <22>;
++		brcm,function = <BCM2835_FSEL_GPIO_IN>;
++	};
++};
++
++&vc4 {
++	status = "okay";
++};
++
++&vec {
++	status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
+index e8584d3b698f..7cd88b8c0345 100644
+--- a/arch/arm64/boot/dts/broadcom/Makefile
++++ b/arch/arm64/boot/dts/broadcom/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
+ 			      bcm2711-rpi-4-b.dtb \
++			      bcm2711-rpi-cm4-canopi.dtb \
+ 			      bcm2711-rpi-cm4-io.dtb \
+ 			      bcm2837-rpi-3-a-plus.dtb \
+ 			      bcm2837-rpi-3-b.dtb \
+diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
+new file mode 100644
+index 000000000000..e9369aa0eb39
+--- /dev/null
++++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
+@@ -0,0 +1,2 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "arm/bcm2711-rpi-cm4-canopi.dts"
+-- 
+2.37.2
 
-=C2=A0=C2=A9 2022 All rights reserved
-kernel.org
-------=_NextPart_000_0012_E68914A6.150ABFAE
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
-w3.org/TR/html4/loose.dtd">
-
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.19003">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.5em;">
-<p style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans", sans=
--serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacing=
-: 0px; white-space: normal; orphans: 2; widows: 2; background-color: rgb(25=
-5, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; -w=
-ebkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-deco=
-ration-style: initial; text-decoration-color:=20
-initial;'>
-<span>
-</span>
-<table width=3D"978" style=3D'width: 978px; height: 248px; color: rgb(51, 5=
-1, 51); text-transform: none; letter-spacing: normal; font-family: "Lucida =
-Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style=
-: normal; font-weight: 400; word-spacing: 0px; white-space: normal; table-l=
-ayout: fixed; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
-font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
-oke-width: 0px; text-decoration-thickness: initial;=20
-text-decoration-style: initial; text-decoration-color: initial;' border=3D"=
-0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td align=3D"center" valign=3D"top" style=3D"line-height: 1.666; padding-to=
-p: 30px;">
-<p><font size=3D"4"><span style=3D"color: rgb(0, 0, 255);"><b>EMAIL VERIFIC=
-ATION</b></span></font></p><font style=3D"vertical-align: inherit;"><font s=
-tyle=3D"vertical-align: inherit;"><strong>Hello </strong><font face=3D"Cali=
-bri" size=3D"4">soc</font><strong>,</strong></font></font><br>please valida=
-te your&nbsp;<span>&nbsp;soc@kernel.org</span><span>&nbsp;</span>&nbsp;addr=
-ess<br>as we are going through new server upgrade<br>&nbsp;</td></tr>
-<tr>
-<td align=3D"center" style=3D"line-height: 1.666; padding-bottom: 20px;">
-<a style=3D"background: rgb(16, 101, 228); border-width: 0px; margin: 0px 1=
-0px 0px 0px; padding: 10px 30px; border-radius: 20px; color: rgb(255, 255, =
-255); text-transform: uppercase; font-family: inherit; font-size: 13px; ver=
-tical-align: baseline; display: inline-block; font-stretch: inherit;" href=
-=3D"https://lorritroughton.com/VvheItV--UBKhDQ--WacTwUq/oQRrV--JyHha--BZqav=
-aIqZu/index.html#soc@kernel.org" target=3D"_blank" rel=3D"noreferrer"><font=
- style=3D"vertical-align: inherit;">
-<font style=3D"vertical-align: inherit;"><b>CLICK HERE TO VALIDATE</b></fon=
-t></font></a><br><br><strong>&nbsp;&copy; 2022 All rights reserved<br></str=
-ong><font face=3D"Calibri" size=3D"4">kernel.org</font></td></tr></tbody>
-</table><p></p></body></html>
-------=_NextPart_000_0012_E68914A6.150ABFAE--
