@@ -1,297 +1,434 @@
-Return-Path: <SRS0=tSj5=ZU=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=//0c=ZU=z3ntu.xyz=luca@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7FECC54EE9
-	for <soc@archiver.kernel.org>; Sat, 17 Sep 2022 10:18:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F358ECAAD3
+	for <soc@archiver.kernel.org>; Sat, 17 Sep 2022 15:28:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 81656C433D6; Sat, 17 Sep 2022 10:18:44 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+	id 5D54CC43470; Sat, 17 Sep 2022 15:28:54 +0000 (UTC)
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8593DC433C1;
-	Sat, 17 Sep 2022 10:18:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8593DC433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.138] ([37.4.248.23]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MsqMq-1pSPqD2nXM-00tCDJ; Sat, 17 Sep 2022 12:18:25 +0200
-Message-ID: <e2c081b0-080e-fd96-c277-deec63c5f822@i2se.com>
-Date: Sat, 17 Sep 2022 12:18:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
-Content-Language: en-US
-To: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E61DC433C1;
+	Sat, 17 Sep 2022 15:28:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E61DC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=z3ntu.xyz
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
+Received: from g550jk.fritz.box (212095005231.public.telering.at [212.95.5.231])
+	by mail.z3ntu.xyz (Postfix) with ESMTPSA id 795EBC7914;
+	Sat, 17 Sep 2022 15:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+	t=1663428525; bh=FrbpeSbXHJ57lhuPzvgeFv9ITEgA5zL8mietl4k/UTY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=sxQnMZz1p/yEXpj91IQKDSZp5HsCvM19tUCQI/w5vY59HuLkeP2Zi5kLTVlHffX+b
+	 ffAv/GHHJus1v2FmomKtCEXdVNzs673rs1Dd+sMCR2QxMdzyJgXNa8Q4R5hioP3i0w
+	 xVSxoU6qntQa5CV+EdHcRntsGSIwcueOdVn7TiGg=
+From: Luca Weiss <luca@z3ntu.xyz>
+To: linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, f.fainelli@gmail.com, krzyszccf.kozlowski+dt@linaro.org,
- devicetree@vger.kernel.org, olof@lixom.net, robh+dt@kernel.org,
- soc@kernel.org, linux-arm-kernel@lists.infradead.org,
- william.zhang@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
- linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
-From: Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	Luca Weiss <luca@z3ntu.xyz>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] ARM: dts: qcom: Add support for Huawei Watch
+Date: Sat, 17 Sep 2022 17:28:28 +0200
+Message-Id: <20220917152829.23568-2-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220917152829.23568-1-luca@z3ntu.xyz>
+References: <20220917152829.23568-1-luca@z3ntu.xyz>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:bWgkOWAUfG9XTpNhMLKrOflaI6yMpSZR0LRfPFf41oxosY9/8OU
- ys5xr3J1ogBEP/EcWQamHJT9n8H3avVgEV65M+4QkcS5fXDx/DXE1G1TBkhDO66KO/W8p5v
- E5qM7utfqsxvnWt5XukzdGnUjlyCKcJHQUryCgQFwZFfmve7OvNWbqt9TaRmgh5eaXDE3nI
- t5ptC24JJP0M0cCIXX1nA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oCsjlzjt2YM=:x4ztgspVp6Sc/Qo2O56PKU
- 5R9pXpN3eWR4o0xGEz6atj1AdhCHT8Em9AG9oOz/rNfawuXyLgdnwrKVcnEpJwI8o9ZjAt162
- 7Vt4M1vY1XxcgNB9Ps7ANjM1282kyj4wk82CCm+lkWaX26NjEkWt5LcRcyF77aQyNEL9S57hl
- yeYgiHrT4Zd4AKU8IAQs0d7e1SJQyxzzFgshGkfpxUca6s+mO+oI1IfcQ1zcrhVTrKPpYU6j3
- 1Cj7/sKNAnjHQqJvukk1jkBpk8xfQrFf7/eYFyAZrUVRLThGmYfuYNR1roHqvnV/l3Zz+oeDu
- JzjMqiU4T3UOcgEZWZvvSEc9KeUydGGS+f9zooa89v7n07xDEbXFUT7I9OuFHXbMKI1ANjzUz
- Omk79VKpuphegWSg8kW8XMYisgxHZwxI19KhPCkyURmnvFwqATvn4TUGSCz/jBxJ45ZulPcmz
- vnF75rI827O/DvOKGvnbChM6AhTRBMDi1ZiXuPBzPlq6+DaeUcsSej6BqfSaNyfq5kYB82Ecz
- aYlBdmu6hU49hYwIcnztOkdTCDtV4HxLWh3LLAmC0uThVB3s3bixzd8tQXBIaHFgl9lJsA3OF
- FAHCWzmwe6t9qBvCUN3YJ7pJauxykoknwaTzF9PXqY+FTqJRNSDbdzFyS0Lki6GuG29I1zmHK
- Az7BOslEbUmWCvv0rHTjdDRnjJo4s3AQcDcaU4DzfR43A6xBwVVed3mF2jy81kE1doIuRY+Bs
- oQFXqM1NQo+gv7HI8ARpvshw9CDwDbqMcD7QFip3486/oWCx7l/7ft3Y09Xc7215jJHCwQrE4
- nqxsRJE
 
-Hi Ariel,
+Add support for this smartwatch, based on Snapdragon 400 SoC.
 
-Am 16.09.22 um 17:31 schrieb Ariel D'Alessandro:
-> The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
-> Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
-> MCP251xFD based CAN-FD interfaces.
+Currently supported functionality:
+* Internal storage
+* USB
+* Charger
+* Power button
+* Bluetooth
+* Wifi
 
-this is a cool piece of hardware :-)
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/qcom-apq8026-huawei-sturgeon.dts | 343 ++++++++++++++++++
+ 2 files changed, 344 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
 
-Is it correct this baseboard is only intended for Compute Modules 
-without Wifi/BT? Otherwise we get conflicts with UART0. The 
-bcm2711-rpi-cm4.dtsi is currently written for all Compute Module 
-variants. A possible solution is to use delete-node, another cleaner 
-ones is to split bcm2711-rpi-cm4 into wifi and non-wifi variants and 
-include the non-wifi one in your case.
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 3bc6bd5c8238..55087f16d718 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1026,6 +1026,7 @@ dtb-$(CONFIG_ARCH_OXNAS) += \
+ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-apq8016-sbc.dtb \
+ 	qcom-apq8026-asus-sparrow.dtb \
++	qcom-apq8026-huawei-sturgeon.dtb \
+ 	qcom-apq8026-lg-lenok.dtb \
+ 	qcom-apq8060-dragonboard.dtb \
+ 	qcom-apq8064-cm-qs600.dtb \
+diff --git a/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
+new file mode 100644
+index 000000000000..e43fcef7144c
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
+@@ -0,0 +1,343 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2022, Luca Weiss <luca@z3ntu.xyz>
++ */
++
++/dts-v1/;
++
++#include "qcom-msm8226.dtsi"
++#include "qcom-pm8226.dtsi"
++
++/delete-node/ &adsp_region;
++
++/ {
++	model = "Huawei Watch";
++	compatible = "huawei,sturgeon", "qcom,apq8026";
++	chassis-type = "watch";
++	qcom,msm-id = <199 0x20000>;
++	qcom,board-id = <8 4>;
++
++	reserved-memory {
++		sbl_region: sbl@2f00000 {
++			reg = <0x02f00000 0x100000>;
++			no-map;
++		};
++		external_image_region: external-image@3100000 {
++			reg = <0x3100000 0x200000>;
++			no-map;
++		};
++		peripheral_region: peripheral@3300000 {
++			reg = <0x3300000 0x600000>;
++			no-map;
++		};
++		adsp_region: adsp@3900000 {
++			reg = <0x3900000 0x1400000>;
++			no-map;
++		};
++		modem_region: modem@4d00000 {
++			reg = <0x4d00000 0x1b00000>;
++			no-map;
++		};
++		modem_efs_region: modem-efs@7f00000 {
++			reg = <0x7f00000 0x100000>;
++			no-map;
++		};
++	};
++
++	vreg_wlan: wlan-regulator {
++		compatible = "regulator-fixed";
++
++		regulator-name = "wl-reg";
++		regulator-min-microvolt = <2950000>;
++		regulator-max-microvolt = <2950000>;
++
++		gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&wlan_regulator_default_state>;
++	};
++};
++
++&adsp {
++	status = "okay";
++};
++
++&blsp1_i2c5 {
++	status = "okay";
++	clock-frequency = <384000>;
++
++	touchscreen@20 {
++		compatible = "syna,rmi4-i2c";
++		reg = <0x20>;
++
++		interrupts-extended = <&tlmm 17 IRQ_TYPE_EDGE_FALLING>;
++		vdd-supply = <&pm8226_l19>;
++		vio-supply = <&pm8226_lvs1>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&touch_default_state>;
++
++		syna,startup-delay-ms = <160>;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		rmi4-f01@1 {
++			reg = <0x1>;
++			syna,nosleep-mode = <1>;
++		};
++
++		rmi4-f12@12 {
++			reg = <0x12>;
++			syna,sensor-type = <1>;
++		};
++	};
++};
++
++&blsp1_uart4 {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&blsp1_uart4_default_state>;
++
++	bluetooth {
++		compatible = "brcm,bcm43430a0-bt";
++		max-speed = <3000000>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&bluetooth_default_state>;
++
++		host-wakeup-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
++		device-wakeup-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
++		shutdown-gpios = <&tlmm 67 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&rpm_requests {
++	pm8226-regulators {
++		compatible = "qcom,rpm-pm8226-regulators";
++
++		pm8226_s3: s3 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1300000>;
++		};
++		pm8226_s4: s4 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2200000>;
++		};
++		pm8226_s5: s5 {
++			regulator-min-microvolt = <1150000>;
++			regulator-max-microvolt = <1150000>;
++		};
++
++		pm8226_l1: l1 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++		pm8226_l2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++		pm8226_l3: l3 {
++			regulator-min-microvolt = <750000>;
++			regulator-max-microvolt = <1337500>;
++		};
++		pm8226_l4: l4 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++		pm8226_l5: l5 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++		pm8226_l6: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l7: l7 {
++			regulator-min-microvolt = <1850000>;
++			regulator-max-microvolt = <1850000>;
++		};
++		pm8226_l8: l8 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l9: l9 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++		pm8226_l10: l10 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l12: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++		pm8226_l14: l14 {
++			regulator-min-microvolt = <2750000>;
++			regulator-max-microvolt = <2750000>;
++		};
++		pm8226_l15: l15 {
++			regulator-min-microvolt = <2800000>;
++			regulator-max-microvolt = <2800000>;
++		};
++		pm8226_l16: l16 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3350000>;
++		};
++		pm8226_l17: l17 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l18: l18 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l19: l19 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <2850000>;
++		};
++		pm8226_l20: l20 {
++			regulator-min-microvolt = <3075000>;
++			regulator-max-microvolt = <3075000>;
++		};
++		pm8226_l21: l21 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l22: l22 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l23: l23 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++		pm8226_l24: l24 {
++			regulator-min-microvolt = <1300000>;
++			regulator-max-microvolt = <1350000>;
++		};
++		pm8226_l25: l25 {
++			regulator-min-microvolt = <1775000>;
++			regulator-max-microvolt = <2125000>;
++		};
++		pm8226_l26: l26 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++		pm8226_l27: l27 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++		pm8226_l28: l28 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_lvs1: lvs1 {};
++	};
++};
++
++&sdhc_1 {
++	status = "okay";
++
++	vmmc-supply = <&pm8226_l17>;
++	vqmmc-supply = <&pm8226_l6>;
++
++	bus-width = <8>;
++	non-removable;
++};
++
++&sdhc_3 {
++	status = "okay";
++
++	max-frequency = <100000000>;
++	non-removable;
++
++	vmmc-supply = <&vreg_wlan>;
++	vqmmc-supply = <&pm8226_l6>;
++
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	wifi@1 {
++		compatible = "brcm,bcm43430a0-fmac", "brcm,bcm4329-fmac";
++		reg = <1>;
++
++		interrupts-extended = <&tlmm 66 IRQ_TYPE_EDGE_FALLING>;
++		interrupt-names = "host-wake";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&wlan_hostwake_default_state>;
++	};
++};
++
++&smbb {
++	qcom,fast-charge-safe-voltage = <4370000>;
++	qcom,fast-charge-high-threshold-voltage = <4350000>;
++	qcom,minimum-input-voltage = <4350000>;
++	qcom,fast-charge-current-limit = <300000>;
++	qcom,fast-charge-safe-current = <600000>;
++	qcom,auto-recharge-threshold-voltage = <4240000>;
++};
++
++&tlmm {
++	blsp1_uart4_default_state: blsp1-uart4-default-state {
++		pins = "gpio12", "gpio13", "gpio14", "gpio15";
++		function = "blsp_uart4";
++		drive-strength = <8>;
++		bias-disable;
++	};
++
++	bluetooth_default_state: bluetooth-default-state {
++		pins = "gpio63", "gpio64";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	touch_default_state: touch-default-state {
++		irq {
++			pins = "gpio17";
++			function = "gpio";
++			drive-strength = <8>;
++			bias-pull-up;
++		};
++
++		reset {
++			pins = "gpio16";
++			function = "gpio";
++			drive-strength = <6>;
++			bias-pull-up;
++		};
++	};
++
++	wlan_hostwake_default_state: wlan-hostwake-default-state {
++		pins = "gpio66";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++		input-enable;
++	};
++
++	wlan_regulator_default_state: wlan-regulator-default-state {
++		pins = "gpio110";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++};
++
++&usb {
++	status = "okay";
++	extcon = <&smbb>;
++	dr_mode = "peripheral";
++};
++
++&usb_hs_phy {
++	extcon = <&smbb>;
++	v1p8-supply = <&pm8226_l10>;
++	v3p3-supply = <&pm8226_l20>;
++};
+-- 
+2.37.3
 
->
-> [0] https://github.com/boschresearch/kuksa.hardware
->
-> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-> ---
->   arch/arm/boot/dts/Makefile                    |   1 +
->   arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
->   arch/arm64/boot/dts/broadcom/Makefile         |   1 +
->   .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
->   4 files changed, 143 insertions(+)
->   create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
->   create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..8930ab2c132c 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
->   	bcm2837-rpi-zero-2-w.dtb \
->   	bcm2711-rpi-400.dtb \
->   	bcm2711-rpi-4-b.dtb \
-> +	bcm2711-rpi-cm4-canopi.dtb \
->   	bcm2711-rpi-cm4-io.dtb \
->   	bcm2835-rpi-zero.dtb \
->   	bcm2835-rpi-zero-w.dtb
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> new file mode 100644
-> index 000000000000..52ec5908883c
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> @@ -0,0 +1,139 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/dts-v1/;
-> +#include "bcm2711-rpi-cm4.dtsi"
-> +
-> +/ {
-> +	model = "Raspberry Pi Compute Module 4 CANOPi Board";
-> +
-> +	clocks {
-> +		clk_mcp251xfd_osc: mcp251xfd-osc {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <20000000>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		led-act {
-> +			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-pwr {
-> +			label = "PWR";
-> +			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
-> +			default-state = "keep";
-> +			linux,default-trigger = "default-on";
-> +		};
-> +	};
-are these LEDs really populated and wired to the BCM2711? The schematics 
-suggests that they are connected to the STN2120.
-> +};
-> +
-> +&ddc0 {
-> +	status = "okay";
-> +};
-> +
-> +&ddc1 {
-> +	status = "okay";
-> +};
-> +
-> +&hdmi0 {
-> +	status = "okay";
-> +};
-> +
-> +&hdmi1 {
-> +	status = "okay";
-> +};
-I cannot see any graphical interface in the schematics. So why they are 
-enabled?
-> +
-> +&i2c0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c0_gpio44>;
-> +	status = "okay";
-> +	clock-frequency = <100000>;
-> +
-> +	pcf85063a@51 {
-Please use the actual function for the node name like rtc@51
-> +		compatible = "nxp,pcf85063a";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&pcie0 {
-> +	pci@0,0 {
-> +		device_type = "pci";
-> +		#address-cells = <3>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		reg = <0 0 0 0 0>;
-> +
-> +		usb@0,0 {
-> +			reg = <0 0 0 0 0>;
-> +			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
-> +		};
-> +	};
-> +};
-> +
-> +&pixelvalve0 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve1 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve2 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve4 {
-> +	status = "okay";
-> +};
-Without a graphical interface they shouldn't be necessary?
-> +
-> +&spi {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi0_gpio7>;
-> +	cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
-> +	dmas = <&dma 6>, <&dma 7>;
-> +	dma-names = "tx", "rx";
-> +
-> +	mcp251xfd0: mcp251xfd@0 {
-mcp251xfd0: can@0
-> +		compatible = "microchip,mcp251xfd";
-> +		reg = <0>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&mcp251xfd0_pins>;
-> +		spi-max-frequency = <20000000>;
-
-I wasn't good at physics, but having spi-max-frequency equal to the 
-oscillator frequency seems wrong. Is it because of the hack in the 
-downstream kernel which halves the SPI frequency?
-
-Just guessing because imx6qp-prtwd3.dts uses 10 MHz.
-
-> +		interrupt-parent = <&gpio>;
-> +		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
-> +		clocks = <&clk_mcp251xfd_osc>;
-> +	};
-> +
-> +	mcp251xfd1: mcp251xfd@1 {
-mcp251xfd1: can@1
-> +		compatible = "microchip,mcp251xfd";
-> +		reg = <1>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&mcp251xfd1_pins>;
-> +		spi-max-frequency = <20000000>;
-> +		interrupt-parent = <&gpio>;
-> +		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
-> +		clocks = <&clk_mcp251xfd_osc>;
-> +	};
-> +};
-> +
-> +&gpio {
-
-In case there are any GPIOs which should be controlled via user space 
-(like LTE or FAN control), it would be nice to describe them via 
-gpio-line-names.
-
-> +	mcp251xfd0_pins: mcp251xfd0_pins {
-> +		brcm,pins = <27>;
-> +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-> +	};
-
-The vendor specific pin properties are deprecated for BCM2711. We have 
-generic ones for this:
-
-mcp251xfd0_pins: mcp251xfd0_pins {
-         pin-irq {
-             pins = "gpio27";
-             function = "gpio_in";
-         };
-     };
-
-> +
-> +	mcp251xfd1_pins: mcp251xfd1_pins {
-> +		brcm,pins = <22>;
-> +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-> +	};
-dito
-> +};
-> +
-> +&vc4 {
-> +	status = "okay";
-> +};
-I think this is also not necessary for a headless device.
-> +
-> +&vec {
-> +	status = "disabled";
-> +};
-> diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-> index e8584d3b698f..7cd88b8c0345 100644
-> --- a/arch/arm64/boot/dts/broadcom/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> @@ -1,6 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0
->   dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
->   			      bcm2711-rpi-4-b.dtb \
-> +			      bcm2711-rpi-cm4-canopi.dtb \
->   			      bcm2711-rpi-cm4-io.dtb \
->   			      bcm2837-rpi-3-a-plus.dtb \
->   			      bcm2837-rpi-3-b.dtb \
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> new file mode 100644
-> index 000000000000..e9369aa0eb39
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> @@ -0,0 +1,2 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "arm/bcm2711-rpi-cm4-canopi.dts"
