@@ -1,465 +1,110 @@
-Return-Path: <SRS0=pkPs=ZU=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BA23ECAAD3
-	for <soc@archiver.kernel.org>; Sat, 17 Sep 2022 17:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44377C54EE9
+	for <soc@archiver.kernel.org>; Sun, 18 Sep 2022 09:28:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 82762C43470; Sat, 17 Sep 2022 17:06:13 +0000 (UTC)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 56BC0C433B5
-	for <soc@kernel.org>; Sat, 17 Sep 2022 17:06:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 56BC0C433B5
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id s6so29137585lfo.7
-        for <soc@kernel.org>; Sat, 17 Sep 2022 10:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=aOhRJm/wnhI58kMCMcTqCulmL0KdgvuvW1CJN1yVB/M=;
-        b=aKv3Le0YVUplkAj8yG0/xCB+gx4KThICjUmUiwMQBQJWVsL9RHIM7HUeJiMj1liGsJ
-         S8eGOsZph7Tgq/pZBbwXyjFsb5SlbJpv0fPcX2DEjXMxnsCMBXI1J1jdrqQghuwxOoa7
-         U8WGPVfacoiPQo7H44Zgfw+1hdwjmspYw52kd62EfnH3Qpv5SEyyVh1SZOoUhJ2SIcDj
-         FFTbw2Zrl3gEMOAfANd02BznUHzl5tUqb9JP4UUsouXqXrNjKSGzT/IkHUfNaXUrj+ZI
-         1EbmFMInGdE6uXDFenhn1lhaEUdP0WfChYICFsxaoeTdAhCW7NQJLhZvy/jS9tQYmQ5u
-         XVaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=aOhRJm/wnhI58kMCMcTqCulmL0KdgvuvW1CJN1yVB/M=;
-        b=FZXqL09O2DXS9JIXNK2vyrSmpxH0j/CXhmgANZjXZiUTmRqOrK4S3JLns7K9Dr4/C6
-         18OQpHeL+QTtFzTb+uCpxsBoSUheisT6xcn2hR/2ao55YUrHW3fWnrRWm2IvxF3LdGTV
-         AQVbmwJigc5S8wz2w5KrcDXz6lcNZUxvhjegGEWqQfjvLTf3vx5x8/BbLxEhaVIgoBtF
-         ml2EGLzgho/AhMDZhhRyR3D9vxXy6iEPiLw6H1P3vKb56iD1LkQv+vMSNqe0W9YzRDMw
-         izAyTQoCZagX+Bag98VdByZueG6XqqbfwKwG0NkRhmjTHp19Q3bcw/L0HCv7amW5I5N2
-         Torw==
-X-Gm-Message-State: ACrzQf21i+7QXAVSi3oFsSVdQQ2K4fsY9S1Y8z/O7/X7O47/8JMv8MIZ
-	NVJ/2RPqi0gAHHF52uXk0+qqgA==
-X-Google-Smtp-Source: AMsMyM5kt9pVpJyhQZGxHfUg3ogWePogwbXLV8v/gysMa4k66VFDg7NrlJBoehOQJr3q+uP35Bx6ig==
-X-Received: by 2002:a05:6512:3e14:b0:499:1f71:1680 with SMTP id i20-20020a0565123e1400b004991f711680mr3321370lfv.114.1663434369298;
-        Sat, 17 Sep 2022 10:06:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o5-20020ac24e85000000b004946a1e045fsm1663012lfr.197.2022.09.17.10.06.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 10:06:08 -0700 (PDT)
-Message-ID: <0af42a45-a2f1-51d9-680e-5c770288dfe5@linaro.org>
-Date: Sat, 17 Sep 2022 18:06:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/2] ARM: dts: qcom: Add support for Huawei Watch
-Content-Language: en-US
-To: Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+	id D9D20C43141; Sun, 18 Sep 2022 09:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94A2C433C1;
+	Sun, 18 Sep 2022 09:28:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663493311;
+	bh=yslJbxb8Vum7JAX4OpwVlSomKX2Cl2U156Ri7rCL2JI=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=jbIPBqO9x1TKV/Yg2YtV90fuxmr/AliNgsGetSxWKCG6L5fIwYtcaAnzk1oKU49QI
+	 LrK9cm0YUvUzKQX45GuV9tV7EXKPj2zRTfVN5BISdzLnP1YIttAfWrB76r/EquFTqa
+	 t0hfLhUlu7bk/XaPUE0ylO/Y3/tKqdoF6J1funi+jt5/BSBPHy9T09TEOidB+FxYPm
+	 cGE2/2G+qFYlSygT78GjyM1br3bLc5XNQ5ALzXN6HMdkYyTJSJQc852bYHHHxFuhVh
+	 i6AZH1HMX/AydyDDC1jXVv9nWXMXCHBdoJ4nkIVKRGKvRUJfwBkWj5RmEi3zQB2h4k
+	 NovmU6LzrQi6w==
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@somainline.org>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20220917152829.23568-1-luca@z3ntu.xyz>
- <20220917152829.23568-2-luca@z3ntu.xyz>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220917152829.23568-2-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>,
+	kernel@pengutronix.de,
+	linux-imx@nxp.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/4] i.MX DT bindings update for 6.1
+Date: Sun, 18 Sep 2022 17:28:03 +0800
+Message-Id: <20220918092806.2152700-1-shawnguo@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 17/09/2022 16:28, Luca Weiss wrote:
-> Add support for this smartwatch, based on Snapdragon 400 SoC.
-> 
-> Currently supported functionality:
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-Thank you for your patch. There is something to discuss/improve.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-> * Internal storage
-> * USB
-> * Charger
-> * Power button
-> * Bluetooth
-> * Wifi
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/qcom-apq8026-huawei-sturgeon.dts | 343 ++++++++++++++++++
->  2 files changed, 344 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 3bc6bd5c8238..55087f16d718 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1026,6 +1026,7 @@ dtb-$(CONFIG_ARCH_OXNAS) += \
->  dtb-$(CONFIG_ARCH_QCOM) += \
->  	qcom-apq8016-sbc.dtb \
->  	qcom-apq8026-asus-sparrow.dtb \
-> +	qcom-apq8026-huawei-sturgeon.dtb \
->  	qcom-apq8026-lg-lenok.dtb \
->  	qcom-apq8060-dragonboard.dtb \
->  	qcom-apq8064-cm-qs600.dtb \
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-> new file mode 100644
-> index 000000000000..e43fcef7144c
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-> @@ -0,0 +1,343 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
+are available in the Git repository at:
 
-No GPL at all?
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.1
 
-> +/*
-> + * Copyright (c) 2022, Luca Weiss <luca@z3ntu.xyz>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "qcom-msm8226.dtsi"
-> +#include "qcom-pm8226.dtsi"
-> +
-> +/delete-node/ &adsp_region;
-> +
-> +/ {
-> +	model = "Huawei Watch";
-> +	compatible = "huawei,sturgeon", "qcom,apq8026";
-> +	chassis-type = "watch";
-> +	qcom,msm-id = <199 0x20000>;
-> +	qcom,board-id = <8 4>;
-> +
-> +	reserved-memory {
-> +		sbl_region: sbl@2f00000 {
-> +			reg = <0x02f00000 0x100000>;
-> +			no-map;
-> +		};
-> +		external_image_region: external-image@3100000 {
-> +			reg = <0x3100000 0x200000>;
-> +			no-map;
-> +		};
-> +		peripheral_region: peripheral@3300000 {
-> +			reg = <0x3300000 0x600000>;
-> +			no-map;
-> +		};
-> +		adsp_region: adsp@3900000 {
-> +			reg = <0x3900000 0x1400000>;
-> +			no-map;
-> +		};
-> +		modem_region: modem@4d00000 {
-> +			reg = <0x4d00000 0x1b00000>;
-> +			no-map;
-> +		};
-> +		modem_efs_region: modem-efs@7f00000 {
-> +			reg = <0x7f00000 0x100000>;
-> +			no-map;
-> +		};
-> +	};
-> +
-> +	vreg_wlan: wlan-regulator {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "wl-reg";
-> +		regulator-min-microvolt = <2950000>;
-> +		regulator-max-microvolt = <2950000>;
-> +
-> +		gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wlan_regulator_default_state>;
-> +	};
-> +};
-> +
-> +&adsp {
-> +	status = "okay";
-> +};
-> +
-> +&blsp1_i2c5 {
-> +	status = "okay";
-> +	clock-frequency = <384000>;
-> +
-> +	touchscreen@20 {
-> +		compatible = "syna,rmi4-i2c";
-> +		reg = <0x20>;
-> +
-> +		interrupts-extended = <&tlmm 17 IRQ_TYPE_EDGE_FALLING>;
-> +		vdd-supply = <&pm8226_l19>;
-> +		vio-supply = <&pm8226_lvs1>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&touch_default_state>;
-> +
-> +		syna,startup-delay-ms = <160>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		rmi4-f01@1 {
-> +			reg = <0x1>;
-> +			syna,nosleep-mode = <1>;
-> +		};
-> +
-> +		rmi4-f12@12 {
-> +			reg = <0x12>;
-> +			syna,sensor-type = <1>;
-> +		};
-> +	};
-> +};
-> +
-> +&blsp1_uart4 {
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&blsp1_uart4_default_state>;
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm43430a0-bt";
-> +		max-speed = <3000000>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&bluetooth_default_state>;
-> +
-> +		host-wakeup-gpios = <&tlmm 64 GPIO_ACTIVE_HIGH>;
-> +		device-wakeup-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-> +		shutdown-gpios = <&tlmm 67 GPIO_ACTIVE_HIGH>;
-> +	};
-> +};
-> +
-> +&rpm_requests {
-> +	pm8226-regulators {
+for you to fetch changes up to 64e61a940d96184d294f431848a28765f44525fa:
 
-This should be just regulators:
-https://lore.kernel.org/all/20220901093243.134288-1-krzysztof.kozlowski@linaro.org/
+  dt-bindings: arm: imx: update fsl.yaml for imx8dxl (2022-09-17 16:25:50 +0800)
 
-Not yet merged but old node is also not documented.
+----------------------------------------------------------------
+i.MX DT bindings for 6.1:
 
-> +		compatible = "qcom,rpm-pm8226-regulators";
-> +
-> +		pm8226_s3: s3 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1300000>;
-> +		};
-> +		pm8226_s4: s4 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2200000>;
-> +		};
-> +		pm8226_s5: s5 {
-> +			regulator-min-microvolt = <1150000>;
-> +			regulator-max-microvolt = <1150000>;
-> +		};
-> +
-> +		pm8226_l1: l1 {
-> +			regulator-min-microvolt = <1225000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +		pm8226_l2: l2 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +		pm8226_l3: l3 {
-> +			regulator-min-microvolt = <750000>;
-> +			regulator-max-microvolt = <1337500>;
-> +		};
-> +		pm8226_l4: l4 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +		pm8226_l5: l5 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +		pm8226_l6: l6 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +		pm8226_l7: l7 {
-> +			regulator-min-microvolt = <1850000>;
-> +			regulator-max-microvolt = <1850000>;
-> +		};
-> +		pm8226_l8: l8 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +		pm8226_l9: l9 {
-> +			regulator-min-microvolt = <2050000>;
-> +			regulator-max-microvolt = <2050000>;
-> +		};
-> +		pm8226_l10: l10 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +		pm8226_l12: l12 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +		pm8226_l14: l14 {
-> +			regulator-min-microvolt = <2750000>;
-> +			regulator-max-microvolt = <2750000>;
-> +		};
-> +		pm8226_l15: l15 {
-> +			regulator-min-microvolt = <2800000>;
-> +			regulator-max-microvolt = <2800000>;
-> +		};
-> +		pm8226_l16: l16 {
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3350000>;
-> +		};
-> +		pm8226_l17: l17 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +		pm8226_l18: l18 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +		pm8226_l19: l19 {
-> +			regulator-min-microvolt = <2850000>;
-> +			regulator-max-microvolt = <2850000>;
-> +		};
-> +		pm8226_l20: l20 {
-> +			regulator-min-microvolt = <3075000>;
-> +			regulator-max-microvolt = <3075000>;
-> +		};
-> +		pm8226_l21: l21 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +		pm8226_l22: l22 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +		pm8226_l23: l23 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +		pm8226_l24: l24 {
-> +			regulator-min-microvolt = <1300000>;
-> +			regulator-max-microvolt = <1350000>;
-> +		};
-> +		pm8226_l25: l25 {
-> +			regulator-min-microvolt = <1775000>;
-> +			regulator-max-microvolt = <2125000>;
-> +		};
-> +		pm8226_l26: l26 {
-> +			regulator-min-microvolt = <1225000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +		pm8226_l27: l27 {
-> +			regulator-min-microvolt = <2050000>;
-> +			regulator-max-microvolt = <2050000>;
-> +		};
-> +		pm8226_l28: l28 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8226_lvs1: lvs1 {};
-> +	};
-> +};
-> +
-> +&sdhc_1 {
-> +	status = "okay";
-> +
-> +	vmmc-supply = <&pm8226_l17>;
-> +	vqmmc-supply = <&pm8226_l6>;
-> +
-> +	bus-width = <8>;
-> +	non-removable;
-> +};
-> +
-> +&sdhc_3 {
-> +	status = "okay";
-> +
-> +	max-frequency = <100000000>;
-> +	non-removable;
-> +
-> +	vmmc-supply = <&vreg_wlan>;
-> +	vqmmc-supply = <&pm8226_l6>;
-> +
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	wifi@1 {
-> +		compatible = "brcm,bcm43430a0-fmac", "brcm,bcm4329-fmac";
-> +		reg = <1>;
-> +
-> +		interrupts-extended = <&tlmm 66 IRQ_TYPE_EDGE_FALLING>;
-> +		interrupt-names = "host-wake";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wlan_hostwake_default_state>;
-> +	};
-> +};
-> +
-> +&smbb {
-> +	qcom,fast-charge-safe-voltage = <4370000>;
-> +	qcom,fast-charge-high-threshold-voltage = <4350000>;
-> +	qcom,minimum-input-voltage = <4350000>;
-> +	qcom,fast-charge-current-limit = <300000>;
-> +	qcom,fast-charge-safe-current = <600000>;
-> +	qcom,auto-recharge-threshold-voltage = <4240000>;
-> +};
-> +
-> +&tlmm {
-> +	blsp1_uart4_default_state: blsp1-uart4-default-state {
-> +		pins = "gpio12", "gpio13", "gpio14", "gpio15";
-> +		function = "blsp_uart4";
-> +		drive-strength = <8>;
-> +		bias-disable;
-> +	};
-> +
-> +	bluetooth_default_state: bluetooth-default-state {
-> +		pins = "gpio63", "gpio64";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-down;
-> +	};
-> +
-> +	touch_default_state: touch-default-state {
-> +		irq {
+- Add compatible for new boards: Kontron BL i.MX8MM OSM-S, MSC
+  SM2S-IMX8PLUS SoM and SM2-MB-EP1 Carrier, i.MX8M Mini Gateworks
+  GW7904 board, i.MX8DXL EVK Board.
+- Add add interconnect property for i.MX8MP various blk-ctrl devices.
+- Add i.MX8MP HDMI HDCP and HRV power domain DT IDs.
+- Add bindings for i.MX93 SRC and MEDIAMIX blk-ctrl.
+- A minor style fix on i.MX8MM clock binding header.
 
-Suffix: -pins
+----------------------------------------------------------------
+Frieder Schrempf (3):
+      dt-bindings: arm: fsl: imx6ul-kontron: Update bindings
+      dt-bindings: arm: fsl: Rename compatibles for Kontron i.MX8MM SoM/board
+      dt-bindings: arm: fsl: Add Kontron BL i.MX8MM OSM-S board
 
-> +			pins = "gpio17";
-> +			function = "gpio";
-> +			drive-strength = <8>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		reset {
+Marcel Ziswiler (1):
+      dt-bindings: clk: imx8mm: don't use multiple blank lines
 
-Ditto
+Martyn Welch (1):
+      dt-bindings: arm: fsl: Add MSC SM2S-IMX8PLUS SoM and SM2-MB-EP1 Carrier
 
-> +			pins = "gpio16";
-> +			function = "gpio";
-> +			drive-strength = <6>;
-> +			bias-pull-up;
-> +		};
-> +	};
-> +
-> +	wlan_hostwake_default_state: wlan-hostwake-default-state {
-> +		pins = "gpio66";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +		input-enable;
-> +	};
-> +
-> +	wlan_regulator_default_state: wlan-regulator-default-state {
-> +		pins = "gpio110";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-down;
-> +	};
-> +};
+Peng Fan (10):
+      dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk ctrl
+      dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk ctrl
+      dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk ctrl
+      dt-bindings: power: imx8mp-power: add HDMI HDCP/HRV
+      dt-bindings: soc: imx: drop minItems for i.MX8MM vpu blk ctrl
+      dt-bindings: soc: imx: add interconnect property for i.MX8MM vpu blk ctrl
+      dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+      dt-bindings: mfd: syscon: Add i.MX93 blk ctrl system registers
+      dt-bindings: soc: add i.MX93 SRC
+      dt-bindings: soc: add i.MX93 mediamix blk ctrl
 
-Best regards,
-Krzysztof
+Shenwei Wang (2):
+      dt-bindings: firmware: add missing resource IDs for imx8dxl
+      dt-bindings: arm: imx: update fsl.yaml for imx8dxl
+
+Tim Harvey (1):
+      dt-bindings: arm: Add i.MX8M Mini Gateworks GW7904 board
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     |  58 ++++++-----
+ Documentation/devicetree/bindings/mfd/syscon.yaml  |   2 +
+ .../bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml  | 110 ++++++++++++++++++---
+ .../bindings/soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml |   9 ++
+ .../bindings/soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml |  10 ++
+ .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml         |  14 +++
+ .../bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml |  80 +++++++++++++++
+ .../devicetree/bindings/soc/imx/fsl,imx93-src.yaml |  96 ++++++++++++++++++
+ include/dt-bindings/clock/imx8mm-clock.h           |   1 -
+ include/dt-bindings/firmware/imx/rsrc.h            |   7 ++
+ include/dt-bindings/power/fsl,imx93-power.h        |  15 +++
+ include/dt-bindings/power/imx8mp-power.h           |   6 ++
+ 12 files changed, 374 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
+ create mode 100644 include/dt-bindings/power/fsl,imx93-power.h
