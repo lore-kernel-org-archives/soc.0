@@ -1,167 +1,299 @@
-Return-Path: <SRS0=rU4/=ZW=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=3B52=ZW=i2se.com=stefan.wahren@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E61BBC54EE9
-	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 10:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE3DECAAD3
+	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 11:18:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CD137C433D7; Mon, 19 Sep 2022 10:54:38 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 0D658C433B5; Mon, 19 Sep 2022 11:18:40 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CA41FC433D6;
-	Mon, 19 Sep 2022 10:54:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA41FC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id bq9so46906294wrb.4;
-        Mon, 19 Sep 2022 03:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=CZ0mR94UcNRwzJdy6hZjjG35nbIA/4JhGrEA4EFuTvY=;
-        b=DLCjWrOxPK2f0H+PbIL9nC2iE3mBY22Iiel1lj9cZnn1YoEQm+GUYgb23lrrFzLc34
-         6S7agCUYOOeBPwINyQEiCtqbA/wvlSTE83H3tWV8svQgcoEc97hHl4TawHPlg9tV1qt4
-         ZzNDmcTy5yP6Rc6/SnkxvX8WuHD+dYs8OsiC3WeivEVoTW+M28ZfdP7ErucQBcSXjKxe
-         o/H8IF96QnvlAgc4fylaRtVOiyBNDvvOAyeqYLx62YBmCHuB0duIpHc0FpfnmkuIXZn1
-         2Xh8xZlTSb+GRsqN1Aye5FmpBliaWQXf88eBcICfgCN+7e383GhnoiIn3usiyfHGoykE
-         NpEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=CZ0mR94UcNRwzJdy6hZjjG35nbIA/4JhGrEA4EFuTvY=;
-        b=roVOx/9ZqPAZ8dnzp/IViCUNPl1ugYqPj9nV/WnSdNzLWx1TqnG1sSZ/VOgW2+JrJu
-         H9wdeH1694vUdfORe8CdeZqBqwGD6IXGVTjvKj4bIcjSlC7oQJYoZKlISlG4zxKR1A8+
-         VkPbk+3b1yKviYz8JPSOUxv8qzTmfLHFAbrmGzuAct5lo0mApXmT43pz8Zzs5Cy4/R2x
-         t+5v+HuqsboK09L4ZUaZttNgqHD13WXf4MeTWeCmP4YYoKvO9HLvuVfHDB8KVA6Ys0j5
-         Zt7ZVTS6Zlr8oukAHmOkyafIB3HyxdEaknNyeUHSv6ylOGroDYPZA1LkThW2vSdBvAhY
-         LS9A==
-X-Gm-Message-State: ACrzQf0rat5a4MARw0VXef9V1Cn6xTaI2v/c0QjEUpIatbR2bVpY1dxA
-	n7ZqmucYb2W1HWY0AX5DXy9hdA/vhg4=
-X-Google-Smtp-Source: AMsMyM5WuGQb/dpvWM/Fp5nw736lQDHyZXjbWoCTvKziJ9HtGOMU/N7SWgQ9nPxpblcVQHg1Zwn72g==
-X-Received: by 2002:a05:6000:1788:b0:22b:2ce:c6ae with SMTP id e8-20020a056000178800b0022b02cec6aemr1630868wrg.236.1663584875960;
-        Mon, 19 Sep 2022 03:54:35 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l32-20020a05600c1d2000b003a845fa1edfsm21646289wms.3.2022.09.19.03.54.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 03:54:34 -0700 (PDT)
-Message-ID: <498fe3e5-a237-121a-d500-fbb0994906cb@gmail.com>
-Date: Mon, 19 Sep 2022 12:54:33 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 68247C433D7;
+	Mon, 19 Sep 2022 11:18:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 68247C433D7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
+Received: from [192.168.1.138] ([37.4.248.23]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N0WwO-1pWcAM0qCS-00wT8W; Mon, 19 Sep 2022 13:18:22 +0200
+Message-ID: <354a3ef2-c2df-e8fb-da15-b2271581959b@i2se.com>
+Date: Mon, 19 Sep 2022 13:18:21 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-Cc: "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Jean Delvare <jdelvare@suse.de>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Sen Chu <sen.chu@mediatek.com>, Tinghan Shen <tinghan.shen@mediatek.com>,
- xinlei.lee@mediatek.com
-From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] ARM: soc: MediaTek related SoC diver updates for v6.1
+To: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+ bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, arnd@arndb.de, f.fainelli@gmail.com,
+ nsaenz@kernel.org, olof@lixom.net, robh+dt@kernel.org, soc@kernel.org,
+ william.zhang@broadcom.com,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
+ <YygeqySPtiAEN8EH@ada.ifak-system.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <YygeqySPtiAEN8EH@ada.ifak-system.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:SpJSE1oXnkAPLm3tb9XKYnK40VVR6C6bPT2VaBgpISD9CljmcMs
+ +nR/Lcr5NNq33Bukl4URqmZnYOFvbpi4+vHDq95Hy99MyNWoqYCZV02gUdBkbiQYMBm8+h/
+ mGeI594nOHlsHK+JBSSeBWQUkZcOOxzWW6/KCGh63i5IDya9sRa+FhahV87kCEKk2bxvV4M
+ S75Hri2YnjaK5JbfVUhHQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VwCrV8Yl8Ps=:MJ8ITIZwW0T6bVwgs8OosT
+ V611IWMVLsHLzzvDJMHs/vys5Zu9lKipXlhyV3sbpLGqtRJ4B96xpSo+DxwaXU4iyGv6gR3Ia
+ GTQXaPsrD8HI4SE81ewj8Qqu5KeOZk3XfMOfrFjp5o1J449zrZNHx6wpckDF7zmCsVovDZsTP
+ 9Ez+jwqIL+5xDPVVxJ5AMgu/yja0JU/Xbl7uB9kiJ1KJm75v6ZgzvjbNbUrOij8IqURT0/ewR
+ isjzbPEQ4EwlxJVUKv8+XZ/2pd2iJLDraIStIl3h2zvt3UZqZ9Gr0esU9gPsZV6M+BvYoMTks
+ H3pXK0RiTTBa2qcUUh4Y1knsSkH3QVVV5349fmmv64edBku3Xif54spFUDejZmkRHk3DJug5n
+ cryG7Wqh/y149suxAswECI800zjJYsY2XDXS3oIXhoVv0tVJ2nHLzJMFMcwC+c39rXVXx4oUQ
+ 7a0/cJ0JEkaEIhV8lQ+q51cBk8F5SHjPGWtf6wJUsgrDZStsUSj4Z7BfEWmBgG/4BfnYHEdoq
+ QS5cjRcVGpnPQfkeBW49ihi1DMqmzUmkWFfiqgDWt9ZS0iVBMhdj0Oi2H6dT0EBHUCjR52p5F
+ 4pENFZcRFs4EyoA8gqW8QzQODyC6R95FKKakr/aLzc95w4UdazkB5AnIma4CjRzUe+I7fbXf7
+ OOlj2faAbNYXEKIco4bel7Rkc0DIaO6NkLdQ+iIV2vsdPOktke1vRxH4eJNURb9umSoBZiAeY
+ Xo4IRROVu4/hfNo8vk88SdNs0r0m5znavd/cyx9wPBeVsTUjou3k1BYd45J8/JkmQgjbMvmzn
+ slHbSagvWT0ZDuxwVz7FKlnUXschA==
 
-Hi Arnd and Olof,
+Hi Alexander,
 
-Hopefully not too late, see below the MediaTek updates for v6.1.
+[fix address of Krzysztof]
 
-The most important updates are support for the PMIC wrapper on MT8183. MT6795 
-got support for the display mutex part and MT8186 for the MDP3 mutex.
+Am 19.09.22 um 09:47 schrieb Alexander Dahl:
+> Hei hei,
+>
+> Am Fri, Sep 16, 2022 at 12:31:56PM -0300 schrieb Ariel D'Alessandro:
+>> The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
+>> Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
+>> MCP251xFD based CAN-FD interfaces.
+>>
+>> [0] https://github.com/boschresearch/kuksa.hardware
+>>
+>> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+>> ---
+>>   arch/arm/boot/dts/Makefile                    |   1 +
+>>   arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
+>>   arch/arm64/boot/dts/broadcom/Makefile         |   1 +
+>>   .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
+>>   4 files changed, 143 insertions(+)
+>>   create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
+>>   create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
+>>
+>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+>> index 05d8aef6e5d2..8930ab2c132c 100644
+>> --- a/arch/arm/boot/dts/Makefile
+>> +++ b/arch/arm/boot/dts/Makefile
+>> @@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
+>>   	bcm2837-rpi-zero-2-w.dtb \
+>>   	bcm2711-rpi-400.dtb \
+>>   	bcm2711-rpi-4-b.dtb \
+>> +	bcm2711-rpi-cm4-canopi.dtb \
+>>   	bcm2711-rpi-cm4-io.dtb \
+>>   	bcm2835-rpi-zero.dtb \
+>>   	bcm2835-rpi-zero-w.dtb
+>> diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
+>> new file mode 100644
+>> index 000000000000..52ec5908883c
+>> --- /dev/null
+>> +++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
+>> @@ -0,0 +1,139 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/dts-v1/;
+>> +#include "bcm2711-rpi-cm4.dtsi"
+>> +
+>> +/ {
+>> +	model = "Raspberry Pi Compute Module 4 CANOPi Board";
+>> +
+>> +	clocks {
+>> +		clk_mcp251xfd_osc: mcp251xfd-osc {
+>> +			#clock-cells = <0>;
+>> +			compatible = "fixed-clock";
+>> +			clock-frequency = <20000000>;
+>> +		};
+>> +	};
+>> +
+>> +	leds {
+>> +		led-act {
+>> +			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
+>> +		};
+>> +
+>> +		led-pwr {
+>> +			label = "PWR";
+>> +			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
+>> +			default-state = "keep";
+>> +			linux,default-trigger = "default-on";
+>> +		};
+>> +	};
+> This looks like using the node name and the deprecated "label"
+> property for LED naming.  Please see
+> Documentation/devicetree/bindings/leds/common.yaml and use the
+> properties "function" and "color" instead.  Also check the node names
+> itself, see the example in that binding or the leds-gpio binding for
+> reference.
 
-Best regards,
-Matthias
+Oops, i didn't noticed this.
 
----
+Unfortunately the ACT-LED is already a little bit opaque defined in 
+bcm2835-rpi.dtsi:
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+leds {
+         compatible = "gpio-leds";
 
-   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+         led-act {
+             label = "ACT";
+             default-state = "keep";
+             linux,default-trigger = "heartbeat";
+         };
+};
 
-are available in the Git repository at:
+So a reference (currently missing) would have make it clear that the 
+ACT-LED is common for all Raspberry Pi boards.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v6.0-next-soc
+So you wish that this is fixed for the CANOPi board or all Raspberry Pi 
+boards?
 
-for you to fetch changes up to b404cb45990bf24d41c29fe856aafb0746a7b81f:
+I'm asking because switching to function would change the sysfs path and 
+breaking userspace ABI.
 
-   soc: mediatek: Add mmsys func to adapt to dpi output for MT8186 (2022-09-15 
-23:50:28 +0200)
-
-----------------------------------------------------------------
-pmic-wrapper:
-- add support for mt8188
-
-SVS:
-- several driver cleanups
-
-power-domain:
-- several cleanups of the dt-bindings and driver
-
-mutex:
-- add support to mt6795 disp mutex
-- add support for mt8186 mdp3 mutex
-
-----------------------------------------------------------------
-Allen-KH Cheng (2):
-       dt-bindings: soc: mediatek: Add mdp3 mutex support for mt8186
-       soc: mediatek: mutex: Add mt8186 mutex mod settings for mdp3
-
-AngeloGioacchino Del Regno (8):
-       soc: mediatek: mtk-svs: Switch to platform_get_irq()
-       soc: mediatek: mtk-svs: Remove hardcoded irqflags
-       soc: mediatek: mtk-svs: Drop of_match_ptr() for of_match_table
-       soc: mediatek: mtk-svs: Use devm variant for dev_pm_opp_of_add_table()
-       soc: mediatek: mtk-svs: Commonize t-calibration-data fuse array read
-       soc: mediatek: mtk-svs: Use bitfield access macros where possible
-       dt-bindings: soc: mediatek: Add display mutex support for MT6795
-       soc: mediatek: mutex: Add support for MT6795 Helio X10 display mutex
-
-Christophe JAILLET (1):
-       soc: mediatek: pm-domains: Simplify some error message
-
-Jean Delvare (1):
-       soc: mediatek: Let PMIC Wrapper and SCPSYS depend on OF
-
-Nícolas F. R. A. Prado (1):
-       soc: mediatek: mtk-svs: Explicitly include bitfield header
-
-Sen Chu (1):
-       dt-bindings: soc: mediatek: pwrap: add compatible for mt8188
-
-Tinghan Shen (3):
-       dt-bindings: power: mediatek: Refine multiple level power domain nodes
-       dt-bindings: power: mediatek: Support naming power controller node with 
-unit address
-       dt-bindings: power: mediatek: Update maintainer list
-
-Xinlei Lee (1):
-       soc: mediatek: Add mmsys func to adapt to dpi output for MT8186
-
-  .../bindings/power/mediatek,power-controller.yaml  | 135 ++--------
-  .../bindings/soc/mediatek/mediatek,mutex.yaml      |   2 +
-  .../devicetree/bindings/soc/mediatek/pwrap.txt     |   1 +
-  drivers/soc/mediatek/Kconfig                       |   2 +
-  drivers/soc/mediatek/mt8186-mmsys.h                |   6 +
-  drivers/soc/mediatek/mtk-mmsys.c                   |  20 ++
-  drivers/soc/mediatek/mtk-mutex.c                   |  44 ++++
-  drivers/soc/mediatek/mtk-pm-domains.c              |   6 +-
-  drivers/soc/mediatek/mtk-pmic-wrap.c               |   2 +-
-  drivers/soc/mediatek/mtk-scpsys.c                  |   2 +-
-  drivers/soc/mediatek/mtk-svs.c                     | 284 +++++++++++++--------
-  include/linux/soc/mediatek/mtk-mmsys.h             |   2 +
-  include/linux/soc/mediatek/mtk-mutex.h             |   2 +
-  13 files changed, 274 insertions(+), 234 deletions(-)
+>
+> Greets
+> Alex
+>
+>> +};
+>> +
+>> +&ddc0 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&ddc1 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&hdmi0 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&hdmi1 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c0 {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&i2c0_gpio44>;
+>> +	status = "okay";
+>> +	clock-frequency = <100000>;
+>> +
+>> +	pcf85063a@51 {
+>> +		compatible = "nxp,pcf85063a";
+>> +		reg = <0x51>;
+>> +	};
+>> +};
+>> +
+>> +&pcie0 {
+>> +	pci@0,0 {
+>> +		device_type = "pci";
+>> +		#address-cells = <3>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		reg = <0 0 0 0 0>;
+>> +
+>> +		usb@0,0 {
+>> +			reg = <0 0 0 0 0>;
+>> +			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +&pixelvalve0 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pixelvalve1 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pixelvalve2 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pixelvalve4 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&spi {
+>> +	status = "okay";
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&spi0_gpio7>;
+>> +	cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
+>> +	dmas = <&dma 6>, <&dma 7>;
+>> +	dma-names = "tx", "rx";
+>> +
+>> +	mcp251xfd0: mcp251xfd@0 {
+>> +		compatible = "microchip,mcp251xfd";
+>> +		reg = <0>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&mcp251xfd0_pins>;
+>> +		spi-max-frequency = <20000000>;
+>> +		interrupt-parent = <&gpio>;
+>> +		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
+>> +		clocks = <&clk_mcp251xfd_osc>;
+>> +	};
+>> +
+>> +	mcp251xfd1: mcp251xfd@1 {
+>> +		compatible = "microchip,mcp251xfd";
+>> +		reg = <1>;
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&mcp251xfd1_pins>;
+>> +		spi-max-frequency = <20000000>;
+>> +		interrupt-parent = <&gpio>;
+>> +		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
+>> +		clocks = <&clk_mcp251xfd_osc>;
+>> +	};
+>> +};
+>> +
+>> +&gpio {
+>> +	mcp251xfd0_pins: mcp251xfd0_pins {
+>> +		brcm,pins = <27>;
+>> +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
+>> +	};
+>> +
+>> +	mcp251xfd1_pins: mcp251xfd1_pins {
+>> +		brcm,pins = <22>;
+>> +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
+>> +	};
+>> +};
+>> +
+>> +&vc4 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&vec {
+>> +	status = "disabled";
+>> +};
+>> diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
+>> index e8584d3b698f..7cd88b8c0345 100644
+>> --- a/arch/arm64/boot/dts/broadcom/Makefile
+>> +++ b/arch/arm64/boot/dts/broadcom/Makefile
+>> @@ -1,6 +1,7 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
+>>   			      bcm2711-rpi-4-b.dtb \
+>> +			      bcm2711-rpi-cm4-canopi.dtb \
+>>   			      bcm2711-rpi-cm4-io.dtb \
+>>   			      bcm2837-rpi-3-a-plus.dtb \
+>>   			      bcm2837-rpi-3-b.dtb \
+>> diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
+>> new file mode 100644
+>> index 000000000000..e9369aa0eb39
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
+>> @@ -0,0 +1,2 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#include "arm/bcm2711-rpi-cm4-canopi.dts"
+>> -- 
+>> 2.37.2
+>>
