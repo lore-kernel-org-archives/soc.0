@@ -1,71 +1,76 @@
-Return-Path: <SRS0=1WsQ=ZW=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=xMIe=ZW=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA75DECAAD3
-	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 11:42:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D92D9C6FA8B
+	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 12:04:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A5390C433B5; Mon, 19 Sep 2022 11:42:43 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 7021AC433D6;
-	Mon, 19 Sep 2022 11:42:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7021AC433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 21C488050;
-	Mon, 19 Sep 2022 11:34:37 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	id BEA70C433D6; Mon, 19 Sep 2022 12:04:13 +0000 (UTC)
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E45ABC433C1
+	for <soc@kernel.org>; Mon, 19 Sep 2022 12:04:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E45ABC433C1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:ed67:3be8:ebe5:696d])
+	by xavier.telenet-ops.be with bizsmtp
+	id Mo422800J0GZoLL01o422x; Mon, 19 Sep 2022 14:04:02 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1oaFVK-005cI1-8H; Mon, 19 Sep 2022 14:04:02 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1oaFVJ-00GClc-I3; Mon, 19 Sep 2022 14:04:01 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Devicetree changes for omaps
-Date: Mon, 19 Sep 2022 14:42:37 +0300
-Message-Id: <pull-1663587735-853102@atomide.com>
-X-Mailer: git-send-email 2.37.1
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 0/2] Renesas SoC updates for v6.1 (take two)
+Date: Mon, 19 Sep 2022 14:03:53 +0200
+Message-Id: <cover.1663588772.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: "Tony Lindgren" <tony@atomide.com>
+	Hi SoC folks,
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+This is my second pull request for the inclusion of Renesas SoC updates
+for v6.1.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+It consists of 2 parts:
 
-are available in the Git repository at:
+  [GIT PULL 1/2] Renesas ARM DT updates for v6.1 (take two)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-6.1/dt-signed
+    - Merge Renesas ARM/ARM64 maintainers entries,
+    - CAN support for the RZ/N1 SoC and the RZN1D-DB development board,
+    - Watchdog, pin control, I2C (EEPROM), GPIO (LEDS/switches), and
+      Ethernet support for the R-Car V4H SoC and the White Hawk
+      development board,
+    - Miscellaneous fixes and improvements.
 
-for you to fetch changes up to 8e9d75fd2ec2ad6c7b19dbafe1be966fd13e0f1d:
+  [GIT PULL 2/2] Renesas ARM SoC updates for v6.1
 
-  ARM: dts: am335x-netcom: add GPIO names for NetCom Plus 2-port devices (2022-09-07 08:18:45 +0300)
+    - Drop superfluous selects of SOC_BUS.
 
-----------------------------------------------------------------
-Devicetree changes for omaps
+Thanks for pulling!
 
-A series of changes for am335x baltos and netcom devices to update nand
-transfer type and configure gpio-line-names.
+Gr{oetje,eeting}s,
 
-----------------------------------------------------------------
-Yegor Yefremov (6):
-      ARM: dts: am335x-baltos: change nand-xfer-type
-      ARM: dts: am335x-baltos: add GPIO names for ir3220 and ir5221 devices
-      ARM: dts: am335x-baltos: add GPIO names for ir2110 device
-      ARM: dts: am335x-netcan: add GPIO names for NetCAN Plus device
-      ARM: dts: am335x-netcom: add GPIO names for NetCom Plus 8-port devices
-      ARM: dts: am335x-netcom: add GPIO names for NetCom Plus 2-port devices
+						Geert
 
- arch/arm/boot/dts/am335x-baltos-ir2110.dts   | 144 +++++++++++++++++++++++++
- arch/arm/boot/dts/am335x-baltos-ir3220.dts   | 148 +++++++++++++++++++++++++
- arch/arm/boot/dts/am335x-baltos-ir5221.dts   | 148 +++++++++++++++++++++++++
- arch/arm/boot/dts/am335x-baltos.dtsi         |   2 +-
- arch/arm/boot/dts/am335x-netcan-plus-1xx.dts | 144 +++++++++++++++++++++++++
- arch/arm/boot/dts/am335x-netcom-plus-2xx.dts | 144 +++++++++++++++++++++++++
- arch/arm/boot/dts/am335x-netcom-plus-8xx.dts | 156 +++++++++++++++++++++++++++
- 7 files changed, 885 insertions(+), 1 deletion(-)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
