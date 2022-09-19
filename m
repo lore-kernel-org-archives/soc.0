@@ -1,92 +1,211 @@
-Return-Path: <SRS0=Z+3y=ZW=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=rU4/=ZW=gmail.com=matthias.bgg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B456AECAAD3
-	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 09:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E7DECAAD3
+	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 10:50:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 75E69C433D7; Mon, 19 Sep 2022 09:26:16 +0000 (UTC)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	id 426E9C433D6; Mon, 19 Sep 2022 10:50:20 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DB5D3C433D6
-	for <soc@kernel.org>; Mon, 19 Sep 2022 09:26:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB5D3C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id a3so33928928lfk.9
-        for <soc@kernel.org>; Mon, 19 Sep 2022 02:26:14 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1E8F5C433D7;
+	Mon, 19 Sep 2022 10:50:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E8F5C433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id c2-20020a1c3502000000b003b2973dafb7so4405693wma.2;
+        Mon, 19 Sep 2022 03:50:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=jY+Ll13EtSRSZqnmg84nXEpRI5JPJFL45ThtkhHD7KI=;
-        b=iPQXCgVBFXLvMxnb88A4Y4RN5PzkIam2LLZcTdRInoXsFgMvIObqNBroT5awBiVcie
-         O+6QZAHwTU3Vobun0dFUoyqIFjwOEFSSRPWRQuKLQ3dMRxDJ5mkhoGQDVUpFKN73wXlz
-         Ewh0gLZ2/fgNEOVMVMCihScz9/kCxWfRQ4YP0ivCwwQQhB97xMIE+17+09a6zC4VhI9U
-         V7mtNW8OKatFR0FnNZfmD9mrU2Jhad6EBQRJ8I33ttkvrdOzL/No7GtN3L1E2FNDHBxL
-         2WlP8c8WhlPHe6ksnOZg47vq2OgM+jHEXxSMgR5UzBfNwmS63X8i7C/sgTz3KDGOoqGv
-         2c2A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=zt9/L7mv46x+tMkdan6S1TWVTWPJHerYZbSiTiF39Bk=;
+        b=eGlGfPlVwAfj5fVHptbsSk3lNVQfRHcbdNcnYKmguMxticjb3UzOqlD0Hs1hdq/xUt
+         mJAmis2r01KXGfo3ilQL2XfqKzGxOzcZt6BTJLzSS6aw7ycwpx63Hq/J25yco8+XCoZR
+         r2H6vrFqjLFbI2xsDIPj3/5F/pp2HZ5dS8PLxfCsu0CMXHcpAiczDk5Ns/R2n56cNAZe
+         MzcUPPrGyPpDmKtbRK00ZL1Rdv8JT69Z7ziTEJzdnpt0s+jmNWQehcczL5y+Qe1xQaBP
+         imgt5Jng/8QP1PbBXVdBiCLMEOeePcf2Rad/pu35UdwOy0yC1wSh6OIzlmU0oa6dO2kl
+         LaZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=jY+Ll13EtSRSZqnmg84nXEpRI5JPJFL45ThtkhHD7KI=;
-        b=GyJLSJtV8dc7TC1vCqk0Xq1FeffqI+69qmNB0BdJft9nop3YNqLyIJpOhO1ZB4kdNm
-         kmEe0PQM21pkGBDF6q9g0mznoS1cJoXYgnqJIGLJho1PhatYKKTw4DzyzoNiePAgq2be
-         47D0f3rTrkaAs4p2Xz7M86qPQeRg4vAepewAWmLkgNL1/RzBK8drSWwGVDQ5Aw6CV0Nz
-         ZIg9pGUtac7+eTZZVRl763W57c7z1iiOxyYXGtH2MV/QQ9Z63Z6d2zatCOuCB2GAaXjL
-         gi2TITSb8GR5l4enma6FzdiXuBjBf2AlFLIlAH+BnyB5xReN9cyYPdZWogoy+87wZn69
-         1swQ==
-X-Gm-Message-State: ACrzQf2fF9K2wjfRrdmADZgUPPoblp0rizlWkGI87sSzIvStzcXOAtJz
-	/O8Hu1OkwqlqEH1pIe6vIz2gGA==
-X-Google-Smtp-Source: AMsMyM5MJF/RfYu/oQl/cdxpkdj09uQXUbkrbUPkQ8D7A7YH66uz6kxyHI2Xt1ZWdna8RAWRIJ5kbQ==
-X-Received: by 2002:a05:6512:3403:b0:48c:9727:50b0 with SMTP id i3-20020a056512340300b0048c972750b0mr5623241lfr.309.1663579572956;
-        Mon, 19 Sep 2022 02:26:12 -0700 (PDT)
-Received: from fedora.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id o20-20020ac24bd4000000b0049c29292250sm3829456lfq.149.2022.09.19.02.26.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 02:26:12 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] ARM: dts: integrator: Tag PCI host with device_type
-Date: Mon, 19 Sep 2022 11:26:08 +0200
-Message-Id: <20220919092608.813511-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=zt9/L7mv46x+tMkdan6S1TWVTWPJHerYZbSiTiF39Bk=;
+        b=zY772hNZ6Kf79ZyDgHc+cmhEhBqHtFLqm4ILr0FoLVDJY9gvpYomQ4mfJRNjilF0it
+         t1gEnI7kRUmilRbh3zeLzKnjU6+HnXtRkT4iGLh6pv/6TN6LR1qmK6UhGDG8peqdQPD1
+         I7b3ol9QIkv2SfkgEt9iowMONNs2gYiKJXfTk9l5+gPIY9FW4/0futKHrqWGHs06iHp1
+         9QBvEmzo4L1TdOTz7/S3KmYI08d27JmzvON+/sb3dr20E9kbwLiJAYPLEO7XgXXdaRu+
+         GIUZFJfzou6VEuoE9wLnnKB80F5iByV5KMnR3dbl4CsKZI1AyysB/KpePlt85zX6gfqc
+         MpaA==
+X-Gm-Message-State: ACrzQf0yMOGYBdnB9nKKZ3ur9IVFANtemCELTt72JMLzQIM8I+aHTEGi
+	INAZg0vw4JVCVMk1mnHDUAk74Kq7D2M=
+X-Google-Smtp-Source: AMsMyM7O37kNCtN4XEKZro5zQsRxPHEhO5SYR8+u84l1OSSgFdbTICmLLc9gdww8tJ5CmvfAVAXtsw==
+X-Received: by 2002:a05:600c:4f0f:b0:3b4:c09b:37c5 with SMTP id l15-20020a05600c4f0f00b003b4c09b37c5mr8865197wmq.181.1663584617271;
+        Mon, 19 Sep 2022 03:50:17 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id ay9-20020a05600c1e0900b003a5c7a942edsm13427829wmb.28.2022.09.19.03.50.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 03:50:16 -0700 (PDT)
+Message-ID: <3b915692-c8a9-c508-5a4a-0fdb49355e99@gmail.com>
+Date: Mon, 19 Sep 2022 12:50:14 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
+Cc: "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Fabien Parent <fparent@baylibre.com>,
+ "jason-jh.lin" <jason-jh.lin@mediatek.com>, Moudy Ho
+ <moudy.ho@mediatek.com>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
+ <nfraprado@collabora.com>, Peter Chiu <chui-hao.chiu@mediatek.com>,
+ Tinghan Shen <tinghan.shen@mediatek.com>, trevor.wu@mediatek.com,
+ Tzung-Bi Shih <tzungbi@chromium.org>, YC Hung <yc.hung@mediatek.com>,
+ YT Lee <yt.lee@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [GIT PULL] arm64: dts: MediaTek updates for v6.1
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The DT parser is dependent on the PCI device being tagged as
-device_type = "pci" in order to parse memory ranges properly.
-Fix this up.
+Hi Olof and Arnd,
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+unfortunately a bit late, but hopefully still in time the updates for the DTS 64 
+bit.
+
+The most important updates are support for the MT8186, up to now only the EVB, 
+but I hope we will see more board with that SoC later one. Apart from that we 
+have a huge update for the MT8195 supported IP blocks, especially tied to the 
+Acer Chromebook Spin 513 series.
+Apart from that we have some more support for MT8192, especially for graphics 
+support.
+
+Regards,
+Matthias
+
 ---
-ARM SoC folks: please apply this directly for fixes.
----
- arch/arm/boot/dts/integratorap.dts | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/integratorap.dts b/arch/arm/boot/dts/integratorap.dts
-index 9b652cc27b14..c983435ed492 100644
---- a/arch/arm/boot/dts/integratorap.dts
-+++ b/arch/arm/boot/dts/integratorap.dts
-@@ -160,6 +160,7 @@ pic: pic@14000000 {
- 
- 	pci: pciv3@62000000 {
- 		compatible = "arm,integrator-ap-pci", "v3,v360epc-pci";
-+		device_type = "pci";
- 		#interrupt-cells = <1>;
- 		#size-cells = <2>;
- 		#address-cells = <3>;
--- 
-2.37.3
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
+   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
+tags/v6.0-next-dts64
+
+for you to fetch changes up to 5ebb14aa5a193b3a6a5c359bdd4d3573cb14bdf1:
+
+   arm64: dts: mediatek: mt6795: Add CPUX system timer node (2022-09-15 18:18:53 
++0200)
+
+----------------------------------------------------------------
+mt6795:
+- add add system timer node
+
+mt7986a:
+- add wifi support
+
+mt8183:
+- add MDP3 and keypad
+
+mt8186:
+- basic support for the Evaluation Board including, i2c, usb and uart.
+
+mt8192:
+- add nodes to support PWM, MIPI transciever, display with GCE and DSI.
+
+mt8195:
+- disable nodes not used on all boards
+- Add support for CPU freq, clocks, power domain controller, spmi, scp.
+- Enable audio decoder, DSP, IOMMU, mailbox.
+- Add display nodes for vdosys0.
+- On Cherry based chromebooks, enable the system companion processor,
+   Cross EC, Google Security Chip, secondary MMC controller, trackpad and
+   a few regulators.
+
+----------------------------------------------------------------
+Allen-KH Cheng (6):
+       arm64: dts: Add MediaTek MT8186 dts and evaluation board and Makefile
+       arm64: dts: mt8192: Add pwm node
+       arm64: dts: mt8192: Add mipi_tx node
+       arm64: dts: mediatek: Add mmsys #reset-cells property for mt8192
+       arm64: dts: mt8192: Add display nodes
+       arm64: dts: mt8192: Add dsi node
+
+AngeloGioacchino Del Regno (8):
+       arm64: dts: mediatek: cherry: Enable the System Companion Processor
+       arm64: dts: mediatek: cherry: Wire up the ChromeOS Embedded Controller
+       arm64: dts: mediatek: cherry: Add Google Security Chip (GSC) TPM
+       arm64: dts: mediatek: cherry: Add keyboard mapping for the top row
+       arm64: dts: mediatek: cherry: Enable secondary SD/MMC controller
+       arm64: dts: mediatek: cherry: Enable Elantech eKTH3000 i2c trackpad
+       arm64: dts: mediatek: cherry: Enable MT6315 regulators on SPMI bus
+       arm64: dts: mediatek: mt6795: Add CPUX system timer node
+
+Fabien Parent (2):
+       arm64: dts: mediatek: mt8183: add keyboard node
+       arm64: dts: mediatek: mt8183-pumpkin: add keypad support
+
+Jason-JH.Lin (2):
+       arm64: dts: mt8195: Add gce node
+       arm64: dts: mt8195: Add display node for vdosys0
+
+Moudy Ho (1):
+       arm64: dts: mt8183: add MediaTek MDP3 nodes
+
+Nícolas F. R. A. Prado (1):
+       arm64: dts: mediatek: Add missing xHCI clocks for mt8192 and mt8195
+
+Peter Chiu (1):
+       arm64: dts: mt7986: add built-in Wi-Fi device nodes
+
+Tinghan Shen (9):
+       arm64: dts: mediatek: Update mt81xx scpsys node to align with dt-bindings
+       arm64: dts: mt8195: Disable watchdog external reset signal
+       arm64: dts: mt8195: Add vdosys and vppsys clock nodes
+       arm64: dts: mt8195: Add power domains controller
+       arm64: dts: mt8195: Add spmi node
+       arm64: dts: mt8195: Add scp node
+       arm64: dts: mt8195: Add audio related nodes
+       arm64: dts: mt8195: Add iommu and smi nodes
+       arm64: dts: mediatek: Fix build warnings of mt8173 vcodec nodes
+
+Trevor Wu (1):
+       arm64: dts: mt8195: Specify audio reset controller
+
+Tzung-Bi Shih (1):
+       arm64: dts: mt8195: Disable I2C0 node
+
+YC Hung (1):
+       arm64: dts: mt8195: Add adsp node and adsp mailbox nodes
+
+YT Lee (1):
+       arm64: dts: mt8195: Add cpufreq node
+
+  arch/arm64/boot/dts/mediatek/Makefile           |    1 +
+  arch/arm64/boot/dts/mediatek/mt6795.dtsi        |    8 +
+  arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts    |   38 +
+  arch/arm64/boot/dts/mediatek/mt7986a.dtsi       |   23 +
+  arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts    |   40 +
+  arch/arm64/boot/dts/mediatek/mt8167.dtsi        |    3 +-
+  arch/arm64/boot/dts/mediatek/mt8173.dtsi        |    7 +-
+  arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts |   21 +
+  arch/arm64/boot/dts/mediatek/mt8183.dtsi        |   75 +-
+  arch/arm64/boot/dts/mediatek/mt8186-evb.dts     |  220 +++++
+  arch/arm64/boot/dts/mediatek/mt8186.dtsi        |  819 +++++++++++++++++
+  arch/arm64/boot/dts/mediatek/mt8192.dtsi        |  200 ++++-
+  arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi |  256 ++++++
+  arch/arm64/boot/dts/mediatek/mt8195.dtsi        | 1072 ++++++++++++++++++++++-
+  14 files changed, 2765 insertions(+), 18 deletions(-)
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
+  create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
