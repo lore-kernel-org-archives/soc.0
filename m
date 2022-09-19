@@ -1,262 +1,92 @@
-Return-Path: <SRS0=mQBA=ZW=thorsis.com=ada@kernel.org>
+Return-Path: <SRS0=Z+3y=ZW=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664AEC54EE9
-	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 07:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B456AECAAD3
+	for <soc@archiver.kernel.org>; Mon, 19 Sep 2022 09:26:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 33C9AC433D7; Mon, 19 Sep 2022 07:48:16 +0000 (UTC)
-Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 75E69C433D7; Mon, 19 Sep 2022 09:26:16 +0000 (UTC)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 65A45C433D6;
-	Mon, 19 Sep 2022 07:48:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65A45C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Date: Mon, 19 Sep 2022 09:47:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=default;
-	t=1663573681;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:content-type:content-type:in-reply-to:in-reply-to:
-	 references:references; bh=FUzULdujfHx+XvOmBlWfZijqfqCB/CCQSJMlgY6iG5Y=;
-	b=tpTfDwTjK2BYAl86UxbpwNKaCvkAwbKnoWS41DW6jVTx+bkTzxuA1uavAPUKpkV+dKKTPW
-	AWIhS9jjCQE8N0swDmVqflFPZLQ2dSnSfCH7VLrx/uTgrGWLEqvtnRtOhcGrE5NvSywMks
-	gZvYU5LE8L2ZESUcS0+uj5DXz93UlCX4N1x6p1dE5zSYL33I5ADAJt7jogtTtWDLp33EmM
-	BObH+OqIIoKUAFKR5T9Od5ve5AyoClqwaZgqRo1i7wsj71g3FXlW/8LPUaeA2w/v02Gbp5
-	2mxpW0bJ6SzMAg5R9Bvwp5qEJIE4efS6fPVrVHgDoaxxnlR/xgxpbbb+sZ8e2g==
-From: Alexander Dahl <ada@thorsis.com>
-To: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id DB5D3C433D6
+	for <soc@kernel.org>; Mon, 19 Sep 2022 09:26:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB5D3C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id a3so33928928lfk.9
+        for <soc@kernel.org>; Mon, 19 Sep 2022 02:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=jY+Ll13EtSRSZqnmg84nXEpRI5JPJFL45ThtkhHD7KI=;
+        b=iPQXCgVBFXLvMxnb88A4Y4RN5PzkIam2LLZcTdRInoXsFgMvIObqNBroT5awBiVcie
+         O+6QZAHwTU3Vobun0dFUoyqIFjwOEFSSRPWRQuKLQ3dMRxDJ5mkhoGQDVUpFKN73wXlz
+         Ewh0gLZ2/fgNEOVMVMCihScz9/kCxWfRQ4YP0ivCwwQQhB97xMIE+17+09a6zC4VhI9U
+         V7mtNW8OKatFR0FnNZfmD9mrU2Jhad6EBQRJ8I33ttkvrdOzL/No7GtN3L1E2FNDHBxL
+         2WlP8c8WhlPHe6ksnOZg47vq2OgM+jHEXxSMgR5UzBfNwmS63X8i7C/sgTz3KDGOoqGv
+         2c2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=jY+Ll13EtSRSZqnmg84nXEpRI5JPJFL45ThtkhHD7KI=;
+        b=GyJLSJtV8dc7TC1vCqk0Xq1FeffqI+69qmNB0BdJft9nop3YNqLyIJpOhO1ZB4kdNm
+         kmEe0PQM21pkGBDF6q9g0mznoS1cJoXYgnqJIGLJho1PhatYKKTw4DzyzoNiePAgq2be
+         47D0f3rTrkaAs4p2Xz7M86qPQeRg4vAepewAWmLkgNL1/RzBK8drSWwGVDQ5Aw6CV0Nz
+         ZIg9pGUtac7+eTZZVRl763W57c7z1iiOxyYXGtH2MV/QQ9Z63Z6d2zatCOuCB2GAaXjL
+         gi2TITSb8GR5l4enma6FzdiXuBjBf2AlFLIlAH+BnyB5xReN9cyYPdZWogoy+87wZn69
+         1swQ==
+X-Gm-Message-State: ACrzQf2fF9K2wjfRrdmADZgUPPoblp0rizlWkGI87sSzIvStzcXOAtJz
+	/O8Hu1OkwqlqEH1pIe6vIz2gGA==
+X-Google-Smtp-Source: AMsMyM5MJF/RfYu/oQl/cdxpkdj09uQXUbkrbUPkQ8D7A7YH66uz6kxyHI2Xt1ZWdna8RAWRIJ5kbQ==
+X-Received: by 2002:a05:6512:3403:b0:48c:9727:50b0 with SMTP id i3-20020a056512340300b0048c972750b0mr5623241lfr.309.1663579572956;
+        Mon, 19 Sep 2022 02:26:12 -0700 (PDT)
+Received: from fedora.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id o20-20020ac24bd4000000b0049c29292250sm3829456lfq.149.2022.09.19.02.26.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 02:26:12 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org, arnd@arndb.de,
-	f.fainelli@gmail.com, krzyszccf.kozlowski+dt@linaro.org,
-	nsaenz@kernel.org, olof@lixom.net, robh+dt@kernel.org,
-	soc@kernel.org, stefan.wahren@i2se.com, william.zhang@broadcom.com
-Subject: Re: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
-Message-ID: <YygeqySPtiAEN8EH@ada.ifak-system.com>
-Mail-Followup-To: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-	bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org, arnd@arndb.de,
-	f.fainelli@gmail.com, krzyszccf.kozlowski+dt@linaro.org,
-	nsaenz@kernel.org, olof@lixom.net, robh+dt@kernel.org,
-	soc@kernel.org, stefan.wahren@i2se.com, william.zhang@broadcom.com
-References: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] ARM: dts: integrator: Tag PCI host with device_type
+Date: Mon, 19 Sep 2022 11:26:08 +0200
+Message-Id: <20220919092608.813511-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hei hei,
+The DT parser is dependent on the PCI device being tagged as
+device_type = "pci" in order to parse memory ranges properly.
+Fix this up.
 
-Am Fri, Sep 16, 2022 at 12:31:56PM -0300 schrieb Ariel D'Alessandro:
-> The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
-> Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
-> MCP251xFD based CAN-FD interfaces.
-> 
-> [0] https://github.com/boschresearch/kuksa.hardware
-> 
-> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
->  arch/arm64/boot/dts/broadcom/Makefile         |   1 +
->  .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
->  4 files changed, 143 insertions(+)
->  create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
->  create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..8930ab2c132c 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
->  	bcm2837-rpi-zero-2-w.dtb \
->  	bcm2711-rpi-400.dtb \
->  	bcm2711-rpi-4-b.dtb \
-> +	bcm2711-rpi-cm4-canopi.dtb \
->  	bcm2711-rpi-cm4-io.dtb \
->  	bcm2835-rpi-zero.dtb \
->  	bcm2835-rpi-zero-w.dtb
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> new file mode 100644
-> index 000000000000..52ec5908883c
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
-> @@ -0,0 +1,139 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/dts-v1/;
-> +#include "bcm2711-rpi-cm4.dtsi"
-> +
-> +/ {
-> +	model = "Raspberry Pi Compute Module 4 CANOPi Board";
-> +
-> +	clocks {
-> +		clk_mcp251xfd_osc: mcp251xfd-osc {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <20000000>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		led-act {
-> +			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-pwr {
-> +			label = "PWR";
-> +			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
-> +			default-state = "keep";
-> +			linux,default-trigger = "default-on";
-> +		};
-> +	};
+Cc: stable@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ARM SoC folks: please apply this directly for fixes.
+---
+ arch/arm/boot/dts/integratorap.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-This looks like using the node name and the deprecated "label"
-property for LED naming.  Please see
-Documentation/devicetree/bindings/leds/common.yaml and use the
-properties "function" and "color" instead.  Also check the node names
-itself, see the example in that binding or the leds-gpio binding for
-reference.
+diff --git a/arch/arm/boot/dts/integratorap.dts b/arch/arm/boot/dts/integratorap.dts
+index 9b652cc27b14..c983435ed492 100644
+--- a/arch/arm/boot/dts/integratorap.dts
++++ b/arch/arm/boot/dts/integratorap.dts
+@@ -160,6 +160,7 @@ pic: pic@14000000 {
+ 
+ 	pci: pciv3@62000000 {
+ 		compatible = "arm,integrator-ap-pci", "v3,v360epc-pci";
++		device_type = "pci";
+ 		#interrupt-cells = <1>;
+ 		#size-cells = <2>;
+ 		#address-cells = <3>;
+-- 
+2.37.3
 
-Greets
-Alex
-
-> +};
-> +
-> +&ddc0 {
-> +	status = "okay";
-> +};
-> +
-> +&ddc1 {
-> +	status = "okay";
-> +};
-> +
-> +&hdmi0 {
-> +	status = "okay";
-> +};
-> +
-> +&hdmi1 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2c0_gpio44>;
-> +	status = "okay";
-> +	clock-frequency = <100000>;
-> +
-> +	pcf85063a@51 {
-> +		compatible = "nxp,pcf85063a";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&pcie0 {
-> +	pci@0,0 {
-> +		device_type = "pci";
-> +		#address-cells = <3>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		reg = <0 0 0 0 0>;
-> +
-> +		usb@0,0 {
-> +			reg = <0 0 0 0 0>;
-> +			resets = <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
-> +		};
-> +	};
-> +};
-> +
-> +&pixelvalve0 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve1 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve2 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve4 {
-> +	status = "okay";
-> +};
-> +
-> +&spi {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi0_gpio7>;
-> +	cs-gpios = <&gpio 8 1>, <&gpio 7 1>;
-> +	dmas = <&dma 6>, <&dma 7>;
-> +	dma-names = "tx", "rx";
-> +
-> +	mcp251xfd0: mcp251xfd@0 {
-> +		compatible = "microchip,mcp251xfd";
-> +		reg = <0>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&mcp251xfd0_pins>;
-> +		spi-max-frequency = <20000000>;
-> +		interrupt-parent = <&gpio>;
-> +		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
-> +		clocks = <&clk_mcp251xfd_osc>;
-> +	};
-> +
-> +	mcp251xfd1: mcp251xfd@1 {
-> +		compatible = "microchip,mcp251xfd";
-> +		reg = <1>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&mcp251xfd1_pins>;
-> +		spi-max-frequency = <20000000>;
-> +		interrupt-parent = <&gpio>;
-> +		interrupts = <22 IRQ_TYPE_LEVEL_LOW>;
-> +		clocks = <&clk_mcp251xfd_osc>;
-> +	};
-> +};
-> +
-> +&gpio {
-> +	mcp251xfd0_pins: mcp251xfd0_pins {
-> +		brcm,pins = <27>;
-> +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-> +	};
-> +
-> +	mcp251xfd1_pins: mcp251xfd1_pins {
-> +		brcm,pins = <22>;
-> +		brcm,function = <BCM2835_FSEL_GPIO_IN>;
-> +	};
-> +};
-> +
-> +&vc4 {
-> +	status = "okay";
-> +};
-> +
-> +&vec {
-> +	status = "disabled";
-> +};
-> diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-> index e8584d3b698f..7cd88b8c0345 100644
-> --- a/arch/arm64/boot/dts/broadcom/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
->  			      bcm2711-rpi-4-b.dtb \
-> +			      bcm2711-rpi-cm4-canopi.dtb \
->  			      bcm2711-rpi-cm4-io.dtb \
->  			      bcm2837-rpi-3-a-plus.dtb \
->  			      bcm2837-rpi-3-b.dtb \
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> new file mode 100644
-> index 000000000000..e9369aa0eb39
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
-> @@ -0,0 +1,2 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "arm/bcm2711-rpi-cm4-canopi.dts"
-> -- 
-> 2.37.2
-> 
