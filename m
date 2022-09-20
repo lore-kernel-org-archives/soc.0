@@ -1,195 +1,203 @@
-Return-Path: <SRS0=IqTQ=ZX=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=4tTZ=ZX=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8095BC54EE9
-	for <soc@archiver.kernel.org>; Tue, 20 Sep 2022 15:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8332FECAAD8
+	for <soc@archiver.kernel.org>; Tue, 20 Sep 2022 16:04:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 39313C433D7; Tue, 20 Sep 2022 15:41:38 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 43A2EC433B5; Tue, 20 Sep 2022 16:04:28 +0000 (UTC)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B691FC433D6;
-	Tue, 20 Sep 2022 15:41:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B691FC433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.138] ([37.4.248.18]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MBV6n-1oR3nW2vp1-00CzKX; Tue, 20 Sep 2022 17:41:17 +0200
-Message-ID: <4e378923-6107-2ed3-3bc2-31e861f525f1@i2se.com>
-Date: Tue, 20 Sep 2022 17:41:16 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 2998AC433C1
+	for <soc@kernel.org>; Tue, 20 Sep 2022 16:04:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2998AC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id a2so4577767lfb.6
+        for <soc@kernel.org>; Tue, 20 Sep 2022 09:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=FogWB2FGGdAF/PqnPcBa4/GS/a8YaiRAD23uITPI7zk=;
+        b=VPtjkI+boNwBC+sWLXnbJiTs2CsMQODoEZj3Q0kXubJ1OMA7atWZnTUQo3A21KFhr5
+         2o0mBVwGdsOseRpFB9A1MaP7T2wiTTdIX5iZVi6gKOMbKZDwowN+qRS/d+vmr+6BL+DR
+         7upD5DidRQEW3/rzdkH3bfkK37GfiNWqULvwc004e+79nXstNxRmTJ0yIUdnXYZtBFzs
+         1nc3H2BXgkJdpkNwirulQqMZj8A89XOI4U55svfxzpVdXLfm/ny3GyuCWsxm7sKmDHYO
+         CMVfkQBkI+DzzAFJkAUZyk+nHI1YTRaJiQhBwILXjciTBDCs2Fc5chhz6PzVuIZ4hCbe
+         WVbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FogWB2FGGdAF/PqnPcBa4/GS/a8YaiRAD23uITPI7zk=;
+        b=d3V/4REOc995p8WYb80ecSTBcEP2LJfjjhq57e82hw8FU+DhNCD9deooVpHq0NoqXp
+         MBI/BzitgfWVI40yCnihL//ELQAq8HRJRrimc9wgLyq7CzsMeJVvnMqF+pSU5sh4rK7h
+         g7AH4hG8evPn6Xv/0niBXHelxW5PbG7sJBEt0qbJqfW+1oP3C/3u0N+hQkU2cxE3r/4e
+         0obHMZz1teLT26pgcFeQM8ccfl12mebyWgsh0TIHGfYw4xwJfwjMxnToaYfw0UrMKEdi
+         V91ngsLv+aJOeNQRrYt+8t2vxD74DSyckrE7SQXYK0Lw3XQpknmCZTeBaxggsABv8gnr
+         YhjQ==
+X-Gm-Message-State: ACrzQf0DaA3zrD+ZKURjj0pJcHPEnPntyysWucOrvrdLYsZfiSv9WFTQ
+	ccnTWFJ37a+XceEcbleGhnQYSg==
+X-Google-Smtp-Source: AMsMyM6sD1Pr9eVFc6gnNTiuKWVfGjowPR9KRj0qBDptnRoLcvnkhKYp34+NmU7ATCCjXNm5ebQrWg==
+X-Received: by 2002:a05:6512:3e26:b0:497:3a4f:d1f with SMTP id i38-20020a0565123e2600b004973a4f0d1fmr9455339lfv.31.1663689865187;
+        Tue, 20 Sep 2022 09:04:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z13-20020a2e8e8d000000b00261a8e56fe4sm23885ljk.55.2022.09.20.09.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Sep 2022 09:04:24 -0700 (PDT)
+Message-ID: <62aab493-fe9b-07af-2d9a-a85ba1d1060f@linaro.org>
+Date: Tue, 20 Sep 2022 18:04:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ARM: dts: Add Raspberry Pi Compute Module 4 CANOPi Board
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2] ARM: dts: aspeed: Add AMD DaytonaX BMC
 Content-Language: en-US
+To: Konstantin Aladyshev <aladyshev22@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
- bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, arnd@arndb.de, f.fainelli@gmail.com,
- nsaenz@kernel.org, olof@lixom.net, robh+dt@kernel.org, soc@kernel.org,
- william.zhang@broadcom.com,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220916153156.30412-1-ariel.dalessandro@collabora.com>
- <YygeqySPtiAEN8EH@ada.ifak-system.com>
- <354a3ef2-c2df-e8fb-da15-b2271581959b@i2se.com>
- <Yyl6aD7jXigk9UFX@ada.ifak-system.com>
-From: Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <Yyl6aD7jXigk9UFX@ada.ifak-system.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:yNLjCv5Zwpuih1IkL5D+u++ZhYFuYhIIK0V5Ii8uf6IVfcqE9kG
- rWaXfXksss/z6Dxly+7y9zalRZkkf8APN6aM1DMYhD4Wd2My/CemwkC05dlC6ZW4zQYNZP+
- AiLkrxLIqTG1RRSjctJ1r52LS6P1d1vDTkJgR//U+BcLdvernHdgX4V76PKX2UIPpkU4ob6
- 3iYuh84fUFMHqvnHgUgZA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tDfEjoZD0VA=:pTNGJRsHA9rgiTmpGHKu9Y
- M13QnC7ySK3USJ1tiWHP3/ntADuumUPXbbFyDvTSlNKMibTAoPCgtuerSwtYKtx5aY1lGWWAB
- Rs3AWCTAbqKhiVl4zH+GUW5qinPpfHO/m9NM5bP+KZDJDMK2ONKJzFSPiyqDrLN+2r3CHd6e3
- XcOOxeWDnlANVr3hRUaDOC/a5posxci6AkgUZYzZhap24P010f3ag4dCPZ+VhoGKWMuzDzG/6
- 91Kvy3j+m8o4mrdjSJ6bybZ7q24x3/LSx6TCufJfCqj1ZW7MCa9x5JmDEPIAH8BbZsN8EhlYI
- J+mVGooG/juaVOed/UxxEvZxm1kTRcQJwP/JcSSnjyDFtWzF2/IBIY8RyS1b9pkgQYEsKAbR5
- inIVgdqPtn9P22SdzCbb2aIyOIasA39klwZgaBcH2/6ZbO/zqZOAnUR5QiqnTjrUGwe49fLj1
- DtQz4rqxX7FP8aXAfgmFlsQbD2DzriQjWkx2PrxRv0yAeZagbQjJXj8dkbA67eTUR0uDcypcj
- 0vaA5/Cm2Y04dcanqALim2nTDBsZUscpxpv80Tp35Hc+Aurrdi6fX1TazbC37PM75pW6QRxqi
- GIIQDzo3y6hRVhPWnXTDIqtKYAyrhuKnVvMoZuEMejvm2S+nZ6KVwfOG/2lwQQPJAbmpkMdz+
- xS2h6VcSyoXENPYPyqh+KbXpWPtAuK/aIBKUX73KCZdASXVPVQohi0zErZ30HsY5DqW8rQfxJ
- MWvYRi+h/6d7VLNHigzG3491ZUD+Nk3ayU+xAxWwo0/ECvtxZtlE92UH/MjBLBgWu6u3vVcSO
- r/mT/AC
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+References: <20220920153928.6454-1-aladyshev22@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220920153928.6454-1-aladyshev22@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Alexander,
+On 20/09/2022 17:39, Konstantin Aladyshev wrote:
+> Add initial version of device tree for the BMC in the AMD DaytonaX
+> platform.
 
-Am 20.09.22 um 10:31 schrieb Alexander Dahl:
-> Hello Stefan,
->
-> Am Mon, Sep 19, 2022 at 01:18:21PM +0200 schrieb Stefan Wahren:
->> Hi Alexander,
->>
->> [fix address of Krzysztof]
->>
->> Am 19.09.22 um 09:47 schrieb Alexander Dahl:
->>> Hei hei,
->>>
->>> Am Fri, Sep 16, 2022 at 12:31:56PM -0300 schrieb Ariel D'Alessandro:
->>>> The Eclipse KUKSA CANOPi [0] is a baseboard for the Raspberry Compute
->>>> Module 4 (CM4). It contains a VIA VL805 4 Port USB controller and two
->>>> MCP251xFD based CAN-FD interfaces.
->>>>
->>>> [0] https://github.com/boschresearch/kuksa.hardware
->>>>
->>>> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
->>>> ---
->>>>    arch/arm/boot/dts/Makefile                    |   1 +
->>>>    arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts  | 139 ++++++++++++++++++
->>>>    arch/arm64/boot/dts/broadcom/Makefile         |   1 +
->>>>    .../dts/broadcom/bcm2711-rpi-cm4-canopi.dts   |   2 +
->>>>    4 files changed, 143 insertions(+)
->>>>    create mode 100644 arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
->>>>    create mode 100644 arch/arm64/boot/dts/broadcom/bcm2711-rpi-cm4-canopi.dts
->>>>
->>>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->>>> index 05d8aef6e5d2..8930ab2c132c 100644
->>>> --- a/arch/arm/boot/dts/Makefile
->>>> +++ b/arch/arm/boot/dts/Makefile
->>>> @@ -98,6 +98,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += \
->>>>    	bcm2837-rpi-zero-2-w.dtb \
->>>>    	bcm2711-rpi-400.dtb \
->>>>    	bcm2711-rpi-4-b.dtb \
->>>> +	bcm2711-rpi-cm4-canopi.dtb \
->>>>    	bcm2711-rpi-cm4-io.dtb \
->>>>    	bcm2835-rpi-zero.dtb \
->>>>    	bcm2835-rpi-zero-w.dtb
->>>> diff --git a/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
->>>> new file mode 100644
->>>> index 000000000000..52ec5908883c
->>>> --- /dev/null
->>>> +++ b/arch/arm/boot/dts/bcm2711-rpi-cm4-canopi.dts
->>>> @@ -0,0 +1,139 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/dts-v1/;
->>>> +#include "bcm2711-rpi-cm4.dtsi"
->>>> +
->>>> +/ {
->>>> +	model = "Raspberry Pi Compute Module 4 CANOPi Board";
->>>> +
->>>> +	clocks {
->>>> +		clk_mcp251xfd_osc: mcp251xfd-osc {
->>>> +			#clock-cells = <0>;
->>>> +			compatible = "fixed-clock";
->>>> +			clock-frequency = <20000000>;
->>>> +		};
->>>> +	};
->>>> +
->>>> +	leds {
->>>> +		led-act {
->>>> +			gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
->>>> +		};
->>>> +
->>>> +		led-pwr {
->>>> +			label = "PWR";
->>>> +			gpios = <&expgpio 2 GPIO_ACTIVE_LOW>;
->>>> +			default-state = "keep";
->>>> +			linux,default-trigger = "default-on";
->>>> +		};
->>>> +	};
->>> This looks like using the node name and the deprecated "label"
->>> property for LED naming.  Please see
->>> Documentation/devicetree/bindings/leds/common.yaml and use the
->>> properties "function" and "color" instead.  Also check the node names
->>> itself, see the example in that binding or the leds-gpio binding for
->>> reference.
->> Oops, i didn't noticed this.
->>
->> Unfortunately the ACT-LED is already a little bit opaque defined in
->> bcm2835-rpi.dtsi:
->>
->> leds {
->>          compatible = "gpio-leds";
->>
->>          led-act {
->>              label = "ACT";
->>              default-state = "keep";
->>              linux,default-trigger = "heartbeat";
->>          };
->> };
->>
->> So a reference (currently missing) would have make it clear that the ACT-LED
->> is common for all Raspberry Pi boards.
-> Yes, a reference would probably good, would make it easier to spot
-> this is already defined in the dtsi.
-I will take care of this.
->
->> So you wish that this is fixed for the CANOPi board or all Raspberry Pi
->> boards?
->>
->> I'm asking because switching to function would change the sysfs path and
->> breaking userspace ABI.
-> You're right, and the effective label should stay as is for existing
-> boards to not break userspace.
->
-> Not sure what the policy is for baseboards with compute modules.  Are
-> those LEDs on the compute module?  Or does the CM just expose those
-> GPIOs?
-These are GPIOs expose by the Compute Module. Since these are 
-initialized by the VC4 firmware, it's not the best idea to use them for 
-other functions.
->    Is there some policy all baseboards must use them for LEDs?
-> An what about additional LEDs on the baseboard?  Is this allowed?
-Definitely
-> (I don't think there a generic rules for that, but maybe some best
-> practices for certain SoMs like the RPi CM?)
-I think we should for Ariel's reponse.
-> IMHO for new independent boards though, new LEDs should not be
-> introduced the old way. I thought this is the case here, but it seems
-> I was wrong due to that baseboard vs. SoM thing.
 
-Without your comment i hadn't noticed this :-)
+Thank you for your patch. There is something to discuss/improve.
 
-I'm thinking of a dtsi file in order to encapsulate the deprecated LED 
-stuff, remove the global ACT-LED from bcm2835-rpi.dtsi and include the 
-dtsi from all board files.
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 05d8aef6e5d2..9eff88d410aa 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1575,6 +1575,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>  	aspeed-ast2600-evb-a1.dtb \
+>  	aspeed-ast2600-evb.dtb \
+>  	aspeed-bmc-amd-ethanolx.dtb \
+> +	aspeed-bmc-amd-daytonax.dtb \
+>  	aspeed-bmc-ampere-mtjade.dtb \
+>  	aspeed-bmc-arm-stardragon4800-rep2.dtb \
+>  	aspeed-bmc-asrock-e3c246d4i.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+> new file mode 100644
+> index 000000000000..0e066b5ae0fb
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
+> @@ -0,0 +1,320 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +
+> +#include "aspeed-g5.dtsi"
+> +#include <dt-bindings/gpio/aspeed-gpio.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	model = "AMD DaytonaX BMC";
+> +	compatible = "amd,daytonax-bmc", "aspeed,ast2500";
 
-Best regards
+Missing bindings documentation.
+
+> +
+> +	memory@80000000 {
+> +		reg = <0x80000000 0x20000000>;
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		video_engine_memory: jpegbuffer {
+> +			size = <0x02000000>;	/* 32M */
+> +			alignment = <0x01000000>;
+> +			compatible = "shared-dma-pool";
+> +			reusable;
+> +		};
+> +	};
+> +
+> +	aliases {
+> +		serial0 = &uart1;
+> +		serial4 = &uart5;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = &uart5;
+> +		bootargs = "console=ttyS4,115200 earlycon";
+
+bootargs do not belong to mainline DTS. earlycon for sure.
+
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		fault {
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+Nodes are wrong.
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			gpios = <&gpio ASPEED_GPIO(A, 2) GPIO_ACTIVE_LOW>;
+> +		};
+> +
+> +		identify {
+
+Ditto
+
+> +			gpios = <&gpio ASPEED_GPIO(A, 3) GPIO_ACTIVE_LOW>;
+> +		};
+> +	};
+> +
+> +	iio-hwmon {
+> +		compatible = "iio-hwmon";
+> +		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
+> +			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>,
+> +			<&adc 10>, <&adc 11>, <&adc 12>, <&adc 13>, <&adc 14>,
+> +			<&adc 15>;
+> +	};
+> +};
+> +
+> +&fmc {
+
+(...)
+
+
+> +	fan@15 {
+> +		reg = <0x07>;
+> +		aspeed,fan-tach-ch = /bits/ 8 <0x0f>;
+> +	};
+> +};
+> +
+> +&video {
+> +	status = "okay";
+> +	memory-region = <&video_engine_memory>;
+> +};
+> +
+> +&vhub {
+> +	status = "okay";
+> +};
+> +
+
+No need for trailing new line.
+
+Best regards,
+Krzysztof
