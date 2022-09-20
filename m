@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD6EC54EE9
-	for <soc@archiver.kernel.org>; Tue, 20 Sep 2022 15:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7AAAC54EE9
+	for <soc@archiver.kernel.org>; Tue, 20 Sep 2022 15:39:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 20013C433D7; Tue, 20 Sep 2022 15:35:19 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	id BD659C433C1; Tue, 20 Sep 2022 15:39:38 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BB995C433C1;
-	Tue, 20 Sep 2022 15:35:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BB995C433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 9EC6FC43470;
+	Tue, 20 Sep 2022 15:39:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9EC6FC43470
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id o2so4401089lfc.10;
-        Tue, 20 Sep 2022 08:35:17 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id b6so3455287ljr.10;
+        Tue, 20 Sep 2022 08:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=Ecl+PWLDeZRsl3HvJzzHIyYVRQuW/pyjkIJTbZd04H8=;
-        b=RNlHVAjfkoyBRu0CwzveM4sC8XOt7QdKhURZQmrGi9sDmLvnDaukL9mWZ6T/B99XzQ
-         4thoznu8SkHt7oJsk7e9m99Yx0jEAnjYbhZdyTMkGbMmEC1vItv1iYR3Jeu79aaJMFlf
-         m5BoiRws36L4oQQFl1nO85lhvoaIENxmubWqSPBkMOPmUCJbswVeCM0xPDLcnv8vbAXP
-         KGn8XBcDM6wno37VibaVvXKMWzLdFECNrDugOcs/KAVCPPQgP2JMK2cTBjr0tc4aFH8P
-         99Hwdex0iehySTrmGBDpd7kepLRjKD5oAA/xR8x5jDqIC3Rwixy6Jhj5Etol+y3q8jOG
-         wD1g==
+        bh=0mIUpg849MzBV+X66Bb81RCZlV8Kq/NjqMnhqZGN04E=;
+        b=d3mQDc6cklh29PFwTTqZzD7EHVGVN2PjDILc0jVBHDy/IoXXcMUGgb/SNs4sA1DZSj
+         e0hZY0hcbXviXJFpoiXZJd682YvmNL/WbxzlPBUfXpbBwMtffNudH/TgnSG9pSckS0bQ
+         sku+3HtqBhcE7b9C34oelOGMDV0kGsoocQmzFKEreCcsF+sy2GKNw9zEWmH764nLpHSF
+         KolE/O6R4XPKAsR7dAxbLfWIt9lTjqN3OnBVUilXv9WguDh87alW6fYMm1xgOwke867E
+         8K3BEQhUwHotA43JL4ke9zEVntpup6h4e2vMIR27qhAknzaZqWtd7jlAaQIEwE0NhLty
+         bLLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ecl+PWLDeZRsl3HvJzzHIyYVRQuW/pyjkIJTbZd04H8=;
-        b=nf9uuyTMBuCSpuM8/BhXjfEamtlAp+kOypMLp4GPI/Nn7mEwsSrx/hj0mPeeMds27a
-         uCEN+Q+jXYe/lIGZRkNlmJA/UAGget/q3UMHuSIn7MUN+Mqr6/WNhRGJyti5mP5/OcEE
-         9sIWA+7/KwnlkZ8ulBCL3DKDfAhGWheLfImdP05e8/tyZ+I3LEQ/DEIpCj7n3yt2L4a2
-         6p7c/TO9QI6ltdVmzYIvXgjgQmyKJq36jCzrJ4HUEKqYXIdG2v0rGqo7C8mAUthsF0r6
-         j+sDAIvaxEKNLmuApMBx8J3hsJU32nw/7RgUhlVIg/Dn8LBCyDf2QnGFjKxtp45feV8S
-         uPnQ==
-X-Gm-Message-State: ACrzQf2keeEpTlbojVwO1EhBODfoCxIx5RkKh6heuTUQTLR9MQnh3rc2
-	cN67GIVxV6B31plFXaXqteY=
-X-Google-Smtp-Source: AMsMyM5ln4dVFz2FBFN9t5bsti+KvFWOTbsMIIZKTLUUE+kGN0MohjETWnEfiIu3TOxgZQTcIF1oCQ==
-X-Received: by 2002:ac2:5d26:0:b0:49e:cc05:cc4b with SMTP id i6-20020ac25d26000000b0049ecc05cc4bmr7970690lfb.621.1663688115657;
-        Tue, 20 Sep 2022 08:35:15 -0700 (PDT)
+        bh=0mIUpg849MzBV+X66Bb81RCZlV8Kq/NjqMnhqZGN04E=;
+        b=iesMgwW1ILvcK/mW9f6P4owpSdRCIHE3Z6uuIacBM/RY8gW3QOkuGd7MsDA3kJeTjH
+         DaAOxFo1NsbrPKapOX/vSMGgIO8ohajYS+HOHVNefeYgheIBds/NFGV2yRkn19El4lnH
+         f1RJzY0zG2KOH8M0svOhtwcYikv6qJ1WRPe4j7+7XzGKuz8X04uiNBITYpHrQEct+muv
+         12BLP0QScFZEq4zKwFqI4WnqQNx4rBnS471AL0GgJBoBzH0hIw+sspyv2m3E+gV9H3qX
+         hjKN53dXLwTCofjjr2xE5nGlYOBIatQCTtg+SAr+IIF/ivCnX3Ix2aQPS8GQ96NA5+8y
+         /fxw==
+X-Gm-Message-State: ACrzQf3x6ZhP0HtU0VyI8KXixTuq9TnXIMalpFjkVF4tlpMc8URWktte
+	8WGv67pZR/06hOc4pfuSQik=
+X-Google-Smtp-Source: AMsMyM5djkogT0KcIWxhM1PPxL+fYM+++yX0dFg+uiqXVjwtniIqt1K9nZVgdRSDnwL3iPBDQ/G+Jg==
+X-Received: by 2002:a2e:9650:0:b0:26b:ef42:7168 with SMTP id z16-20020a2e9650000000b0026bef427168mr6865212ljh.346.1663688375664;
+        Tue, 20 Sep 2022 08:39:35 -0700 (PDT)
 Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-176.ip.moscow.rt.ru. [46.242.10.176])
-        by smtp.gmail.com with ESMTPSA id b22-20020a05651c033600b00268bfa6ffacsm6248ljp.108.2022.09.20.08.35.14
+        by smtp.gmail.com with ESMTPSA id u24-20020ac24c38000000b0048afbe8a6a1sm9402lfq.241.2022.09.20.08.39.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:35:15 -0700 (PDT)
+        Tue, 20 Sep 2022 08:39:35 -0700 (PDT)
 From: Konstantin Aladyshev <aladyshev22@gmail.com>
 To: 
 List-Id: <soc.lore.kernel.org>
@@ -64,9 +64,9 @@ Cc: Konstantin Aladyshev <aladyshev22@gmail.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-aspeed@lists.ozlabs.org
-Subject: [PATCH] ARM: dts: aspeed: Add AMD DaytonaX BMC
-Date: Tue, 20 Sep 2022 18:34:07 +0300
-Message-Id: <20220920153409.6288-1-aladyshev22@gmail.com>
+Subject: [PATCH v2] ARM: dts: aspeed: Add AMD DaytonaX BMC
+Date: Tue, 20 Sep 2022 18:39:26 +0300
+Message-Id: <20220920153928.6454-1-aladyshev22@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,8 +81,7 @@ Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
 ---
  arch/arm/boot/dts/Makefile                    |   1 +
  arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 320 ++++++++++++++++++
- arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts |  14 +-
- 3 files changed, 333 insertions(+), 2 deletions(-)
+ 2 files changed, 321 insertions(+)
  create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
@@ -423,59 +422,6 @@ index 000000000000..0e066b5ae0fb
 +	status = "okay";
 +};
 +
-diff --git a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-index 6406a0f080ee..90feac5ec628 100644
---- a/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-amd-ethanolx.dts
-@@ -5,6 +5,7 @@
- 
- #include "aspeed-g5.dtsi"
- #include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- / {
- 	model = "AMD EthanolX BMC";
-@@ -58,6 +59,7 @@ &fmc {
- 	flash@0 {
- 		status = "okay";
- 		m25p,fast-read;
-+		label = "bmc";
- 		#include "openbmc-flash-layout.dtsi"
- 	};
- };
-@@ -78,7 +80,9 @@ &uart1 {
- 	status = "okay";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_txd1_default
--		     &pinctrl_rxd1_default>;
-+		     &pinctrl_rxd1_default
-+		     &pinctrl_nrts1_default
-+		     &pinctrl_ncts1_default>;
- };
- 
- &uart5 {
-@@ -160,7 +164,7 @@ &i2c2 {
- &i2c3 {
- 	status = "okay";
- 	eeprom@50 {
--		compatible = "atmel,24c256";
-+		compatible = "atmel,24c128";
- 		reg = <0x50>;
- 		pagesize = <64>;
- 	};
-@@ -261,6 +265,12 @@ &lpc_ctrl {
- 	status = "okay";
- };
- 
-+&vuart {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0x3f8>;
-+	aspeed,lpc-interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
-+};
-+
- &pwm_tacho {
- 	status = "okay";
- 	pinctrl-names = "default";
 -- 
 2.25.1
 
