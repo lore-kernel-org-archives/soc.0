@@ -1,162 +1,95 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <SRS0=vXQJ=ZY=gmail.com=aladyshev22@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D73C6FA82
-	for <soc@archiver.kernel.org>; Wed, 21 Sep 2022 15:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4902CC32771
+	for <soc@archiver.kernel.org>; Wed, 21 Sep 2022 21:10:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 54FB7C4347C; Wed, 21 Sep 2022 15:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD45C433D6;
-	Wed, 21 Sep 2022 15:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663775875;
-	bh=finwfsZojULhllCotko7SAALSZ3CgmEeOhMeX+XJI7A=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=oZSP3EEtEXxM6ybjvkmS5zCkP5ew3Fa42dI6jE1ioKjcD+5IRx6VerhTjhZYYUYJU
-	 ePSxggghyvdmczl1Qf+rxHp8LDmFA0owVlUH6r+/yt2ZZ0IIRXKi1ZdYD87zlit49/
-	 a3d/XEnuuWdelhAOCcjSlMUO159V1gwFAJmUKWKR6GSW6Wd88oDNKIcaWSgDetHtfB
-	 oFe0hzlsjwFxqCsjw/zPeIS/uTgT9UBcsuMGgxez6ATdbPW75DUYMPkkS2Ndnh1avp
-	 HeghAem/wBfLkYICYs6tNRhr0zo7RiTvpyLLDJPt9DAEyFuM2f8lszgGiyKYLOA9Y4
-	 fHyJ8FVUTmd/Q==
-From: Bjorn Andersson <andersson@kernel.org>
+	id 08B62C433D7; Wed, 21 Sep 2022 21:10:04 +0000 (UTC)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 108ACC433D6;
+	Wed, 21 Sep 2022 21:10:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 108ACC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id k10so11336867lfm.4;
+        Wed, 21 Sep 2022 14:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=RfoS4oNSl3iLm9QkSJWnFYEHwL243tVfavoKrg1T0Yk=;
+        b=ZLrVi3gkesY3f5rBqcgro6CMPhda3lfN+tvhwrlra74SdGidbOb0IITpJNFdVxHbRb
+         cr0T/Ak7pmh8hciLZteZ2Vd43eXLDC8YRxUPH/N39duj/2dSq2o4JIh22IaouWxO645z
+         tOJjARv599o/6owL6+Aj63mtYNX9znFnl3StMvONNzu/LDdLwIkuQbiEul7ngFFagYuP
+         lP9vGPA4YzjDzdv4KFhWEZrq1TUwuPHQLI6rxVMaVhT6AyIcpQvdS457nyZgXb7+3b8g
+         rKdV4tgVlTACzKmD+sBTC0z3NyLqCJp4aotEjnfvLZ5kHSXSaJyA7fbrMAkMBmVgJT8/
+         zvYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=RfoS4oNSl3iLm9QkSJWnFYEHwL243tVfavoKrg1T0Yk=;
+        b=u5KREQEjtPKLHWHO8D5YiLrNeRE7rl/fxCn4KQy8FfKEYvbvgRvBJQYzLhDpYRTJoH
+         f1OBxsTH1Gw1g03FILoi8+j7RSVRqZ25/O4S8npe8I9VxqKxWAmEj4Iuv9B8whn8Uh+2
+         0Gjn5tGglJ9Z+WZPtMgpo+rx0xf0RHTS135XlswNjhK6NjZ5lRj3AYkt17tssXzEwQje
+         b3TAwTA4z8inh3+OB10ZMt38kH25FMbzwqz5vcdw5V0Ivf/Xh5Ga1lWrn8KTPiHAq1B7
+         O5h/+Xj+6aW638qJO/tj6gzDqK+ntYbL5VPrpPs+/JubglbBiSJXDTIc3PvcRNfYIdGD
+         ofRQ==
+X-Gm-Message-State: ACrzQf0RrTCH6xr1968UpPZQ/05DkKuuUXx6bYggvw/WBsz+iEol+4Jo
+	Cpf/lKmr9uTncpjLuwqIsEk=
+X-Google-Smtp-Source: AMsMyM5Ki08t3TG6Pk2qQd8w4vkm6laOpa8ltLFD+v+d+zb9XxFVHDhHFN5aPkWp8FaP1wpeOj82Pg==
+X-Received: by 2002:a19:4315:0:b0:497:7488:7a76 with SMTP id q21-20020a194315000000b0049774887a76mr12056lfa.286.1663794601048;
+        Wed, 21 Sep 2022 14:10:01 -0700 (PDT)
+Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-176.ip.moscow.rt.ru. [46.242.10.176])
+        by smtp.gmail.com with ESMTPSA id z18-20020a19f712000000b0049adbc24b99sm599260lfe.24.2022.09.21.14.09.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 14:10:00 -0700 (PDT)
+From: Konstantin Aladyshev <aladyshev22@gmail.com>
+To: 
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
+Cc: Konstantin Aladyshev <aladyshev22@gmail.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Liang He <windhl@126.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Adam Skladowski <a39.skl@gmail.com>,
-	David Heidelberg <david@ixit.cz>,
-	Gaosheng Cui <cuigaosheng1@huawei.com>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-	YueHaibing <yuehaibing@huawei.com>
-Subject: [GIT PULL] Qualcomm driver updates for 6.1
-Date: Wed, 21 Sep 2022 10:57:53 -0500
-Message-Id: <20220921155753.1316308-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.37.1
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org
+Subject: [PATCH v4 0/2] Add AMD DaytonaX BMC
+Date: Thu, 22 Sep 2022 00:09:45 +0300
+Message-Id: <20220921210950.10568-1-aladyshev22@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220920165404.14099-1-aladyshev22@gmail.com>
+References: <20220920165404.14099-1-aladyshev22@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+Add initial version of device tree for the BMC in the AMD DaytonaX
+platform.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+AMD DaytonaX platform is a customer reference board (CRB) with an
+Aspeed ast2500 BMC manufactured by AMD.
 
-are available in the Git repository at:
+Konstantin Aladyshev (2):
+  dt-bindings: arm: aspeed: document AMD DaytonaX
+  ARM: dts: aspeed: Add AMD DaytonaX BMC
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-drivers-for-6.1
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 319 ++++++++++++++++++
+ 3 files changed, 321 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts
 
-for you to fetch changes up to df646a17f103c6f18ab85c5e3773763d18dc528b:
+-- 
+2.25.1
 
-  soc: qcom: rpmpd: Add SM6375 support (2022-09-13 22:25:35 -0500)
-
-----------------------------------------------------------------
-Qualcomm driver updates for 6.1
-
-The icc-bwmon driver is expected to support measuring LLCC/DDR bandwidth
-on SDM845 and SC7280.
-
-The LLCC driver is extended to provide per-platform register mappings to
-the LLCC EDAC driver. The QMI encoder/decoder is updated to allow the
-passed qmi_elem_info to be const.
-
-Support for SDM845 is added to the sleep stats driver. Power-domains for
-the SM6375 platform is added to RPMPD and the platform is added to
-socinfo, together with the PM6125 pmic id.
-
-A couple of of_node reference issues are corrected in the smem state and
-smsm drivers.
-
-The Qualcomm SCM driver binding is converted to YAML.
-
-----------------------------------------------------------------
-Abel Vesa (2):
-      soc: qcom: stats: Add SDM845 stats config and compatible
-      dt-bindings: soc: qcom: stats: Document SDM845 compatible
-
-Adam Skladowski (1):
-      dt-bindings: firmware: document Qualcomm SM6115 SCM
-
-Bjorn Andersson (1):
-      Merge tag '20220825043859.30066-3-manivannan.sadhasivam@linaro.org' into drivers-for-6.1
-
-David Heidelberg (1):
-      dt-bindings: firmware: convert Qualcomm SCM binding to the yaml
-
-Gaosheng Cui (1):
-      firmware: qcom: scm: remove unused __qcom_scm_init declaration
-
-Jeff Johnson (1):
-      soc: qcom: qmi: use const for struct qmi_elem_info
-
-Jinpeng Cui (1):
-      soc: qcom: icc-bwmon: remove redundant ret variable
-
-Konrad Dybcio (4):
-      soc: qcom: socinfo: Add an ID for SM6375
-      soc: qcom: socinfo: Add PM6125 ID
-      dt-bindings: power: rpmpd: Add SM6375 power domains
-      soc: qcom: rpmpd: Add SM6375 support
-
-Krzysztof Kozlowski (10):
-      dt-bindings: interconnect: qcom,msm8998-bwmon: add support for SDM845 LLCC BWMON
-      soc: qcom: icc-bwmon: re-use IRQ enable/clear define
-      soc: qcom: icc-bwmon: drop unused registers
-      soc: qcom: icc-bwmon: store reference to variant data in container
-      soc: qcom: icc-bwmon: clear all registers on init
-      soc: qcom: icc-bwmon: store count unit per variant
-      soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5
-      soc: qcom: icc-bwmon: add per-variant quirks
-      soc: qcom: icc-bwmon: add support for SDM845 LLCC BWMON
-      dt-bindings: power: qcom,rpmpd: drop non-working codeaurora.org emails
-
-Liang He (2):
-      soc: qcom: smsm: Fix refcount leak bugs in qcom_smsm_probe()
-      soc: qcom: smem_state: Add refcounting for the 'state->of_node'
-
-Manivannan Sadhasivam (2):
-      soc: qcom: llcc: Rename reg_offset structs to reflect LLCC version
-      soc: qcom: llcc: Pass LLCC version based register offsets to EDAC driver
-
-Rajendra Nayak (3):
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs
-      soc: qcom: icc-bwmon: add support for sc7280 LLCC BWMON
-      soc: qcom: icc-bwmon: force clear counter/irq registers
-
-YueHaibing (1):
-      soc: qcom: Make QCOM_RPMPD depend on OF
-
- .../devicetree/bindings/firmware/qcom,scm.txt      |  61 ---
- .../devicetree/bindings/firmware/qcom,scm.yaml     | 148 +++++++
- .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |   3 +
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |   3 +-
- .../devicetree/bindings/soc/qcom/qcom-stats.yaml   |   1 +
- drivers/firmware/qcom_scm.h                        |   2 -
- drivers/soc/qcom/Kconfig                           |   2 +-
- drivers/soc/qcom/icc-bwmon.c                       | 479 ++++++++++++++++-----
- drivers/soc/qcom/llcc-qcom.c                       |  92 +++-
- drivers/soc/qcom/qcom_stats.c                      |   9 +
- drivers/soc/qcom/qmi_encdec.c                      |  50 +--
- drivers/soc/qcom/qmi_interface.c                   |  12 +-
- drivers/soc/qcom/rpmpd.c                           |  22 +
- drivers/soc/qcom/smem_state.c                      |   3 +-
- drivers/soc/qcom/smsm.c                            |  20 +-
- drivers/soc/qcom/socinfo.c                         |   2 +
- include/dt-bindings/power/qcom-rpmpd.h             |  12 +
- include/linux/soc/qcom/llcc-qcom.h                 |  30 ++
- include/linux/soc/qcom/qmi.h                       |  20 +-
- samples/qmi/qmi_sample_client.c                    |  10 +-
- 20 files changed, 753 insertions(+), 228 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
- create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
