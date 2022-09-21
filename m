@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F3D7C6FA82
-	for <soc@archiver.kernel.org>; Wed, 21 Sep 2022 15:56:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D73C6FA82
+	for <soc@archiver.kernel.org>; Wed, 21 Sep 2022 15:57:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27D25C43470; Wed, 21 Sep 2022 15:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F48C433D6;
-	Wed, 21 Sep 2022 15:56:31 +0000 (UTC)
+	id 54FB7C4347C; Wed, 21 Sep 2022 15:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD45C433D6;
+	Wed, 21 Sep 2022 15:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663775793;
+	s=k20201202; t=1663775875;
 	bh=finwfsZojULhllCotko7SAALSZ3CgmEeOhMeX+XJI7A=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=bL4SVvQ0cNWykxXRl3IqcTrBtiJtBEPOFziEjGBP47dfLNnHVsS0eEdDMRx4qwYxH
-	 v+GdHMG5HZznILbIwS1uvOyTsOj8L3jswCj8T2BIjkBDZRYDr4m+n5BdPFJJtTP35Y
-	 O9o5Uk38QCB2AlG0lPlKx/4WHYe9qtNrBV+ZhLxaKoelsp1g4umGkCjkgrCObF2Jz6
-	 YtkWkjAfEaHwDATa4LQ/bNHUZJ2r2seiJ8Lbqs2MCKMvBeFgvQ1O3sVW1rVOZoQrs6
-	 6BIvjTOmOHhlrJNzA1BX09ZMyWoCZ77xK5Kk7+zzVhcRAIQC8jD+674P0ZPQGt11AD
-	 71pXpSZdba+ww==
+	b=oZSP3EEtEXxM6ybjvkmS5zCkP5ew3Fa42dI6jE1ioKjcD+5IRx6VerhTjhZYYUYJU
+	 ePSxggghyvdmczl1Qf+rxHp8LDmFA0owVlUH6r+/yt2ZZ0IIRXKi1ZdYD87zlit49/
+	 a3d/XEnuuWdelhAOCcjSlMUO159V1gwFAJmUKWKR6GSW6Wd88oDNKIcaWSgDetHtfB
+	 oFe0hzlsjwFxqCsjw/zPeIS/uTgT9UBcsuMGgxez6ATdbPW75DUYMPkkS2Ndnh1avp
+	 HeghAem/wBfLkYICYs6tNRhr0zo7RiTvpyLLDJPt9DAEyFuM2f8lszgGiyKYLOA9Y4
+	 fHyJ8FVUTmd/Q==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -43,8 +43,8 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
 	YueHaibing <yuehaibing@huawei.com>
 Subject: [GIT PULL] Qualcomm driver updates for 6.1
-Date: Wed, 21 Sep 2022 10:56:30 -0500
-Message-Id: <20220921155630.1316236-1-andersson@kernel.org>
+Date: Wed, 21 Sep 2022 10:57:53 -0500
+Message-Id: <20220921155753.1316308-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
