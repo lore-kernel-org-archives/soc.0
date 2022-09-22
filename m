@@ -4,90 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE60C6FA90
-	for <soc@archiver.kernel.org>; Thu, 22 Sep 2022 06:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9F1C6FA8B
+	for <soc@archiver.kernel.org>; Thu, 22 Sep 2022 06:46:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 14CA7C433D7; Thu, 22 Sep 2022 06:35:21 +0000 (UTC)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	id 9DB9DC433B5; Thu, 22 Sep 2022 06:46:54 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5221FC433D6
-	for <soc@kernel.org>; Thu, 22 Sep 2022 06:35:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5221FC433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 849FDC433D6
+	for <soc@kernel.org>; Thu, 22 Sep 2022 06:46:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 849FDC433D6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id j16so13067201lfg.1
-        for <soc@kernel.org>; Wed, 21 Sep 2022 23:35:19 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id w8so13034500lft.12
+        for <soc@kernel.org>; Wed, 21 Sep 2022 23:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=UG9ohaYNGjC0P5to2hQtJ2st/GFJ8zFpPwv7fQeTI1k=;
-        b=n3xOBDivLy1P/8Qh+2k2b/mOB3/VRhF473LRc4JGPdzNBlSF1OkbJ39YpcAVU46+4O
-         e4mZDBFykkFRfu7cchV5yKHAbpd4X7WoYgGZQfL/s7JC3M6pP5SJMUsXkppM5rOE4qdB
-         aPsPaVBhsXXDQ4NzCKjQquB4uR20DOepMSCgX5CNGwcn6S1zQp8b8smzPKnvzt7VkrlY
-         HClXXM9LgJVEffrwYuUepFu5hRDt+orUHOgE4D/F6R1kspEYuEcTRENkRa5ngZm8zo3R
-         BqJPAebADqZ0IZ6HJ5ME+ChcZPMayp9mROGN8r1zZ7/xITDNkmVxFM8oObuleYv+JYbN
-         wc9g==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=lD7eGEkv9NNmbwuFNSY5wNAY2Knw/AnArDcDD7Ihsks=;
+        b=YT4rwaGsNKJG3KJBaTg7AUI0lTcs5pu9cde18uITqorpKfQXMhgzunwhvvBDo9PKhC
+         Qf9hYFBQWxbBaPKIpB/KhzBCCG2TPOcVFr0FNlkpyyaGJDT42yhiemFHusfEtY0LVWVa
+         FNZVQ03Ncc2PhW19hQ47E8a0WhjnsAWJNPT9MVwI72MYgAqdZr4WYAzzPXEsliKFJuHA
+         DdErzWJQk0NN6oPn1IxJhox2r9ZcjANslzC2xURXaooUD8aco5iN1Ai8Q0g7wm60qdNT
+         IPP2luoHMWMh+0t6J4ni3MdF8Y78D3tpN635v0AsB2oXsMjym34mt5Mc7oujN6RLsCTy
+         VmHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=UG9ohaYNGjC0P5to2hQtJ2st/GFJ8zFpPwv7fQeTI1k=;
-        b=6KTkAUIWkZMsvY3qmIQm6T0G27EP7PWpmdGJrQzWN9G2SJzsOJiRL0zrkXHmV4gM6C
-         /ZVW+s2g5kTq9cDKtY3kruBeXWDElw7nGprsA8HCoS7bRCp0cS/y24Aj8dZJlQYb2jt3
-         VvVwqceR2zmTW+tmcquh85jkAUC+EjsIRL4kZBcdLSSeAWcfbVz/CqNo9gppPUmOUPT8
-         M+afDec8I4lzkaoxABhfY/YXJK8wcaGjQnq8B/LEDQe1ct7FGI37lMAI5b2XZEQZRuaw
-         WlXa5lWWFAbx+rBt4h6YQ3DRqONNxTMURkjzaWdLZHkWbelzsS5qPyzCMRj1rimT8PQP
-         BZ3w==
-X-Gm-Message-State: ACrzQf20kmmuphbXdE0Zwd7YD/RP3kjV/8nnIiM3ULttjSNhvUW1Hb6B
-	nCs410g+50P/3fz/uc8KTNKuXg==
-X-Google-Smtp-Source: AMsMyM59bw9pdu973etIE/LLkjusQ6+VNSmZkxPOGlt5AQZzoXXZEBZhwZRYoa3QPGWJREsy0jV1IA==
-X-Received: by 2002:a19:e050:0:b0:49f:5464:71d3 with SMTP id g16-20020a19e050000000b0049f546471d3mr719382lfj.558.1663828517506;
-        Wed, 21 Sep 2022 23:35:17 -0700 (PDT)
-Received: from krzk-bin (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p22-20020a2eb7d6000000b0025dfd2f66d6sm745682ljo.95.2022.09.21.23.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 23:35:16 -0700 (PDT)
-Date: Thu, 22 Sep 2022 08:35:14 +0200
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lD7eGEkv9NNmbwuFNSY5wNAY2Knw/AnArDcDD7Ihsks=;
+        b=jZhWxNJfSP/WsURbMpFCd9zHSbkRfREIxUU+XXQ/JL43199o4EWJLmsY3IoC6P1gn3
+         xRUYp4ppmm3+P0zaECSbXU/le/b4g75nfsmqTiLdmw/Mr1q7nN9Zgbg5kQSxf0TfjCaX
+         X94VBJHWPm6rC8XlumyIUnDT8md2z0vHx90Bqm7LJn8jhMR244x5r143i7rXMhFthj0p
+         jkBN+dEblBqsaChuhnomueVyvWy1OjLWouDVSpHnDyVAYX6i3MRpSMs0s1dXm8x40rmw
+         vMJnfq3Js30VGa8IjvsiLqRgvQRfvUMWfqMggrqMpPOBmPE3LVT52BBEmaGfGQdl6qaU
+         BK4A==
+X-Gm-Message-State: ACrzQf1WwBV7bJFhE+kvNHiyy006ztcxNoxLUPTJ0EjuCOzvBEYeqB6Q
+	pELvXX7+H3jkW22vzzR9lqcRHQ==
+X-Google-Smtp-Source: AMsMyM6BxgcSAwVtLlEKusvSWmnmLV6poxPCMlvtdabspSYBYoJIoYD1EYIbi1fGCHJMsVaqCxy8eg==
+X-Received: by 2002:a19:7406:0:b0:49d:d448:59c3 with SMTP id v6-20020a197406000000b0049dd44859c3mr630832lfe.300.1663829211573;
+        Wed, 21 Sep 2022 23:46:51 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 8-20020a2eb948000000b00261e7244887sm733355ljs.60.2022.09.21.23.46.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Sep 2022 23:46:51 -0700 (PDT)
+Message-ID: <87800017-a620-041e-15af-3386ca671eda@linaro.org>
+Date: Thu, 22 Sep 2022 08:46:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: aspeed: document AMD DaytonaX
+Content-Language: en-US
 To: Konstantin Aladyshev <aladyshev22@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-aspeed@lists.ozlabs.org, Andrew Jeffery <andrew@aj.id.au>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	soc@kernel.org, Olof Johansson <olof@lixom.net>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: aspeed: document AMD DaytonaX
-Message-ID: <20220922063514.f6euqlw35jrkpee4@krzk-bin>
+Cc: Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org
 References: <20220920165404.14099-1-aladyshev22@gmail.com>
  <20220921210950.10568-1-aladyshev22@gmail.com>
  <20220921210950.10568-2-aladyshev22@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <20220921210950.10568-2-aladyshev22@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 22 Sep 2022 00:09:46 +0300, Konstantin Aladyshev wrote:
+On 21/09/2022 23:09, Konstantin Aladyshev wrote:
 > Document AMD DaytonaX board compatible.
 > 
 > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1680833
 
 
-/: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/aspeed-bmc-qcom-dc-scm-v1.dtb
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
