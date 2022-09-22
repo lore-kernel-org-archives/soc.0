@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB10C6FA8B
-	for <soc@archiver.kernel.org>; Thu, 22 Sep 2022 06:52:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA31CC6FA82
+	for <soc@archiver.kernel.org>; Thu, 22 Sep 2022 06:52:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 75A28C433D7; Thu, 22 Sep 2022 06:52:14 +0000 (UTC)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	id 9BEC8C433D6; Thu, 22 Sep 2022 06:52:37 +0000 (UTC)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5F982C433D6
-	for <soc@kernel.org>; Thu, 22 Sep 2022 06:52:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5F982C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 98B1EC433C1
+	for <soc@kernel.org>; Thu, 22 Sep 2022 06:52:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 98B1EC433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id f14so13115978lfg.5
-        for <soc@kernel.org>; Wed, 21 Sep 2022 23:52:13 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id q17so9777072lji.11
+        for <soc@kernel.org>; Wed, 21 Sep 2022 23:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=R4By1A4vsqkhsX1zQ9Pp9D5cDY7oXVIoxYX95+DT5PE=;
-        b=tTATpAtRVwjlDYTCT7pL1pRJbq5m1acku+1Ba7Zt53sySs6UkSNrUaB0GLEOrrFETm
-         9G+iZtHyPR6SvFXlXV2hcpvCw5gr9fSriZL7EMWe9I5UyUJ4cHdctXvAQHMWiwYS6uEk
-         Qxel41eu2KSTH4QJp9KIBjN6mZz8rZYGYZxRNlURYri7cxs4SptLwa7H2ncezI86NorG
-         wrAWseYtHfxWGryE/asWzRiw8bohgI3b3IRIAch0x6RE4u4C1c5u3TX2ZAr8s1rreqrG
-         cET7sqTGbNafXUKexSsxYPGdCVE8O1ZtqH79YslvG1W5Jj+aDQcuBnB+eJ3VpzbGAQQ5
-         w85A==
+        bh=HpPp0BHUrPNweVTZtr7NErbLRKsWdneVoqjGlBiJPh8=;
+        b=NKMnWZgS5BSvCK945ZAajPqZeW1VEAPF/K92kxSO4ojFqEyhY8uY9CH+GHuAXdXtOd
+         SfSN5wRHjrXBzsEv2ctbxRIk+0qiV8ELcEryUMxTeLdWAxOYJhtm4pVh4nX611N262zw
+         btTtSVEQlc5bzd8yrbHKYbpE+5XChRGCVaGtbwozWlmXAF70qot5gRQS8AhJ+KwdGUtV
+         BAv7WxehOAK1Go0BWI1ZwmbfAD66AxqIxc5g/1txVRCAqFK/Ar1RKkdYZig5/oV8jbjz
+         S0NAZ5x8Uk5mvit51bkHuua9/6uHPIy150GK6No/16fjALgvzhVK1961Gf4rf4YawyYC
+         SiZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=R4By1A4vsqkhsX1zQ9Pp9D5cDY7oXVIoxYX95+DT5PE=;
-        b=l28zA/TBSOYF5bgnwoStW1ezGYyfwkAlxFbBcj2qRskKJmkEhTP+riW5/DtjKmUi2c
-         YY9TwQUgth8Q3hZrAEvn7MIpLwibn3zwDXWOdihBS1CQU76rqulFx+iRuYep+Ssp6HAz
-         PUOQGnokZhS/LHShRgC5F1bNEeu8UdH57wfq/4Uiga9lN0TYYtMD7iIS6b0eMd/ScPsk
-         MHJwpogCqe72Z9TcBAzKtlit1u8sLyuxRxtq8RWW4z4sp4P2i6/Wva4Q6S6DAlaajiZf
-         c4mQIJYCRhIaTBM2shOTHU6qdf3ynzKsKmVkq/UmxwYBXA8pTNVMDMyy01Om1SuX2JX/
-         OdSA==
-X-Gm-Message-State: ACrzQf0H8yUvL64YBj2uUw3K3zwHcGSadafnqqW/xaEnOzTYEHa3LjCo
-	RKRtrj7pWHM5u2mZovKEdK6n0Q==
-X-Google-Smtp-Source: AMsMyM44wyfp1zLUX8FNiyQhFVz7FEelPJEjwbKiOGbAcJVd0bCqI3GEzVjpnk4pR++aYr0d+UdfqA==
-X-Received: by 2002:a05:6512:3183:b0:498:fa29:35fe with SMTP id i3-20020a056512318300b00498fa2935femr645077lfe.523.1663829531533;
-        Wed, 21 Sep 2022 23:52:11 -0700 (PDT)
+        bh=HpPp0BHUrPNweVTZtr7NErbLRKsWdneVoqjGlBiJPh8=;
+        b=HA9cu6km095dimeaBQWqjY9AweUuKndWrt6D/Nov4gz3LgXQ3eDlq7ZjI1Mhgd8r5W
+         pPqrliXVkuyFnB2kLt0KTYPC3qCKVnnrk2FSgyNY2QROCTMmFYbjitS1gCYwYJp9V9wG
+         oOApO360PSmHXxhZeMNB7cN+icyWVj+8DGMpDYj85FidU/egASDJ75li/4kB+iuv/q5o
+         9nTxR0v/U3vZ9Wd0vLlgmXKkw55loEopuYWbqKBvbbccoOw3PbAeMr6WwPIwTMeg3Oxl
+         5ombAGEY/bwUfa3yHucCFsgiQJ4uFJyKDnqzUF8BPKhf1ekpOhDEHKJSVrinP3WvH/cY
+         Z5Pw==
+X-Gm-Message-State: ACrzQf2kjfPvJcylvojm6CjD69W9wgnQn4H9W0IcZ5MOQ9vUR4NKqaXr
+	zZB9xHMB/kZx9Dmi4x5KTHBA1g==
+X-Google-Smtp-Source: AMsMyM78If/cBNQ1SnC+v6xychOd6uY7sVFoQMHHASjrPCwbCyMRcKsSoHMRnkbuxCvoylYmkrHGyw==
+X-Received: by 2002:a2e:7309:0:b0:26c:3db7:8fe2 with SMTP id o9-20020a2e7309000000b0026c3db78fe2mr525386ljc.387.1663829554770;
+        Wed, 21 Sep 2022 23:52:34 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 1-20020ac25f01000000b0049f5358062dsm786705lfq.98.2022.09.21.23.52.10
+        by smtp.gmail.com with ESMTPSA id a7-20020ac25e67000000b00499b57032c1sm784269lfr.144.2022.09.21.23.52.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Sep 2022 23:52:11 -0700 (PDT)
-Message-ID: <6f727f9b-aa1a-3eba-87ec-3e36eeb15351@linaro.org>
-Date: Thu, 22 Sep 2022 08:52:10 +0200
+        Wed, 21 Sep 2022 23:52:34 -0700 (PDT)
+Message-ID: <f84250e7-39fe-80d9-9e50-700f9752367a@linaro.org>
+Date: Thu, 22 Sep 2022 08:52:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
@@ -61,58 +61,34 @@ Content-Language: en-US
 To: Konstantin Aladyshev <aladyshev22@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- devicetree <devicetree@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-aspeed <linux-aspeed@lists.ozlabs.org>
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
 References: <20220920165404.14099-1-aladyshev22@gmail.com>
  <20220921210950.10568-1-aladyshev22@gmail.com>
  <20220921210950.10568-3-aladyshev22@gmail.com>
- <CACSj6VWg+QfSYqeeUR5vtgJFLJg5us5-=D_Esj5NK-uvtH2B3g@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACSj6VWg+QfSYqeeUR5vtgJFLJg5us5-=D_Esj5NK-uvtH2B3g@mail.gmail.com>
+In-Reply-To: <20220921210950.10568-3-aladyshev22@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/09/2022 23:15, Konstantin Aladyshev wrote:
-> Sorry, I still have some questions, can you please help me?
+On 21/09/2022 23:09, Konstantin Aladyshev wrote:
+> Add initial version of device tree for the BMC in the AMD DaytonaX
+> platform.
 > 
-> I work with kernel in the context of the OpenBMC project, and it is
-> not possible to run 'make dtbs_check' in the linux kernel devshell
-> (Yocto). So I've tried to download upstream kernel and have performed
-> the following commands to make the dtbs_check:
-> ```
-> $ make ARCH=arm aspeed_g5_defconfig && make ARCH=arm dtbs_check
-> ```
-> This gave me a ton of output regarding all the problems in all of the
-> aspeed boards. 'wc -l' says that the log file is about 7080 lines
-> long. Is it possible to get the output only for my target DTS? The
-> article that you've referred to
-> (https://www.kernel.org/doc/Documentation/devicetree/writing-schema.rst)
-> only have the information about how to run checks against one schema
-> (DT_SCHEMA_FILES), but it is not the same thing.
-
-You can limit it per target. See slide 11:
-https://osseu2022.sched.com/event/15z0W
-
-This might miss some warnings, so better way is to:
-make ARCH=arm dtbs_check
-touch your-dts
-make ARCH=arm dtbs_check
-
-You will get only your errors.
-
+> AMD DaytonaX platform is a customer reference board (CRB) with an
+> Aspeed ast2500 BMC manufactured by AMD.
 > 
-> I've manually tried to split the output regarding my DTS file, but
-> even so the output is overwhelming - https://pastebin.com/b92rnBt0. I
-> just don't understand if the mentioned things are about the common
-> "aspeed-g5.dtsi" file that I should ignore or the things regarding
-> errors in my submitted DTS file. Can you give me some advice on that?
+> Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  arch/arm/boot/dts/aspeed-bmc-amd-daytonax.dts | 319 ++++++++++++++++++
+>  2 files changed, 320 insertions(+)
 
-Yes, you can ignore errors from dtsi.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
