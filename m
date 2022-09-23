@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FB6EC6FA95
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A064C6FA96
 	for <soc@archiver.kernel.org>; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 56985C43149; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3832FC43141;
+	id 5E8A4C4314A; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 48CD1C43145;
 	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1663944728;
-	bh=v7bxoC6xzRWj+R5hzpJyDNBvXbe6deRiZK0NkLDz2uQ=;
+	bh=4RiyXi8z2+T1FkBZoiYRT2UvKLXQ/Si5JdaXOOvgg8o=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=oDggnKr9Xdy+hfudVsCW0pz2FEiHsrccISfk5Rj82XeZDFVMdkTcLkLPv1UsdEk+s
-	 +tlw1EWLmszk9KqCm0aYCkDf+tr69GXfuDQPFD9hd1ZndWiICQ/HCeRZ0MLdjXNnIc
-	 HLWT8L158FrMUF+D8zW9YwTiWcXATVYqeJh+7am8yZvzdvxS+aK4RhG0p9pJG+nCr1
-	 CZuP10lBQbGjE6vwXRu5jGKaxOXrdfcLRgXLdU9VqVUGHf2xLOuerbo44hzSyqWdaK
-	 R4uILqbwgcz0ASiHK459bprO8wb9A8mJUu47UgTW9u7/96MPr33m9dKaKT6AyXD4y1
-	 zSS0mmV8yRa0g==
+	b=inPHmmQCobHcw6hIlOnxWeT5l9ugq8mv4j/eGbHFKyOBFyLx3lKyu77ySW32dts4s
+	 LfqYEeLmTwEznMk+n7Qo8GvI8w0mxh4vxlKDt7bU58TjkvBoV19HYA8EXx0QMX4Xvn
+	 LLJJopjrOIIzuU2s4zGJ9dNiHOiZHo8NKa5eO/LoBPB1oUteGwqiNNXIthYhhxAhAZ
+	 9yF0kSyrhad2XVSoBWS3/i1ekaTuIFXiHu4bGG3WM6N4yqEUwoX0YK86WPbG8ch0R6
+	 xHzAm4bZ8QX4tc+tmbdwHQohlNYueqDftprla68oZdeEz2l3UZuOAi1Dxsq1vJuszo
+	 DTLByWEVVcjmQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 225A3E4D03B;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34E27E4D03D;
 	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: MediaTek updates for v6.1
+Subject: Re: [GIT PULL] SoC fixes for omaps
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166394472813.12526.1938571182426612519.git-patchwork-notify@kernel.org>
+ <166394472821.12526.6158304234365139343.git-patchwork-notify@kernel.org>
 Date: Fri, 23 Sep 2022 14:52:08 +0000
-References: <3b915692-c8a9-c508-5a4a-0fdb49355e99@gmail.com>
-In-Reply-To: <3b915692-c8a9-c508-5a4a-0fdb49355e99@gmail.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>
+References: <pull-1663140667-273537@atomide.com>
+In-Reply-To: <pull-1663140667-273537@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,24 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 19 Sep 2022 12:50:14 +0200 you wrote:
-> Hi Olof and Arnd,
+On Wed, 14 Sep 2022 10:32:16 +0300 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
 > 
-> unfortunately a bit late, but hopefully still in time the updates for the DTS 64
-> bit.
+> The following changes since commit 0b3acd1cc0222953035d18176b1e4aa06624fd6e:
 > 
-> The most important updates are support for the MT8186, up to now only the EVB,
-> but I hope we will see more board with that SoC later one. Apart from that we
-> have a huge update for the MT8195 supported IP blocks, especially tied to the
-> Acer Chromebook Spin 513 series.
-> Apart from that we have some more support for MT8192, especially for graphics
-> support.
+>   Merge tag 'driver-core-6.0-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core (2022-09-02 10:55:23 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: MediaTek updates for v6.1
-    https://git.kernel.org/soc/soc/c/9cc2df424a95
+  - [GIT,PULL] SoC fixes for omaps
+    https://git.kernel.org/soc/soc/c/415da412257b
 
 You are awesome, thank you!
 -- 
