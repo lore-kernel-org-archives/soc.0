@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84DE6C6FA98
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95677C6FA99
 	for <soc@archiver.kernel.org>; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6D6D9C43150; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 57BB3C4314C;
+	id 7C9EEC43148; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6336FC4314E;
 	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1663944728;
-	bh=vvDvyqTJNxy2u0SC9g8wZCbym9aFNm/cu9kKHTrqivA=;
+	bh=wmaJ8x6SuByTpy6Y2XvBvzz0K72PMzK3VStfs604v9I=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=KMfF8ToHWwMbdREXFq6UuLaaUwxn53ARxpwh0q6Li3dCgss2H3xvBa1srWSQiPCWc
-	 0bPxEshvdXhPTYiYi0ctspNvroYij2+X+Thyqh5L+d/7iC9s9+/lyK4j2Z5yn1EWae
-	 L6YfaMPI2OIoVrTvP65RsLlGev0qfgJY6eE8YxPprctUUZIUHo8z6pFIuDBCKGJl6U
-	 5bbQnaYZwtEKX0Tfo3ohKltuNssWsMXylDdi299TeXfzADzpWBYsmbkWWLf1l0mvKx
-	 SmbXFOvqDjmF1J9CqmHxE2v2ufOgxx/9KVTfe2f0TU2Dj7vObJVs8izaC3xPAC1+6E
-	 iA2QUY+aBJx0A==
+	b=EoUJ0GQwQk2qvY4r/esqU5BEzp1dpMj97eXq2aCsVytzYIJZ/Q0dht1z6yAD8G8tL
+	 S6TBmkum/rEEpYeJQgiybbAcwEeBoRNTQIUwYg1zwa87aok/g2HznXDgFf2m0ku5Ej
+	 sT3RH+MhYSuXGWZh3opmQnrPYIMuwvDy6jnnuDv34iW+jL/nKGkBh0N7Uxv3t4Twwe
+	 AEKdQ0eFL8s3SLEoIyVouTnqjrUNHZlW0c87gRf/FUB9ZvcoLeJRXKFIuw5gVqlN36
+	 hiFiV4uNRuQuCpnSX8X9Pt/AtbFDHG5quJTvxRGqP9k4+pZJwMXHlw7e6jvWsJGkR7
+	 9KH0hgnoeAC2g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47307E50D70;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50179E50D6F;
 	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] TI K3 device tree updates for v6.1
+Subject: Re: [GIT PULL] Allwinner device tree changes for 6.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166394472828.12526.522782908196478179.git-patchwork-notify@kernel.org>
+ <166394472832.12526.10683161253799913107.git-patchwork-notify@kernel.org>
 Date: Fri, 23 Sep 2022 14:52:08 +0000
-References: <44729b46-27f9-94a0-17ed-8868649a4a0a@ti.com>
-In-Reply-To: <44729b46-27f9-94a0-17ed-8868649a4a0a@ti.com>
-To: Vignesh Raghavendra <vigneshr@ti.com>
+References: <YyePKDnOeP8Tdt5n@kista.localdomain>
+In-Reply-To: <YyePKDnOeP8Tdt5n@kista.localdomain>
+To: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 21 Sep 2022 19:47:21 +0530 you wrote:
-> Hi ARM SoC maintainers,
+On Sun, 18 Sep 2022 23:35:36 +0200 you wrote:
+> Hi!
 > 
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+> Please pull following device tree changes for 6.1.
 > 
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-> 
-> are available in the Git repository at:
+> Best regards,
+> Jernej
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] TI K3 device tree updates for v6.1
-    https://git.kernel.org/soc/soc/c/aa577af3de3b
+  - [GIT,PULL] Allwinner device tree changes for 6.1
+    https://git.kernel.org/soc/soc/c/9f1fe339ef27
 
 You are awesome, thank you!
 -- 
