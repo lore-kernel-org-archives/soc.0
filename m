@@ -4,66 +4,124 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4163CECAAD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44020C6FA90
 	for <soc@archiver.kernel.org>; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2C2D9C43142; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11B70C433C1;
-	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
+	id 241FAC43470; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B5CAC433D6
+	for <soc@kernel.org>; Fri, 23 Sep 2022 14:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1663944728;
-	bh=CSjh7JaIHk2XXoxTUIozBhbwXS4FXTDS2zDQGR78zEM=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=MsDL57Wp4OZf7oWSav5dZM0u/I0cAJfidBeKKsFqKM8NEYMO+vIRBA6e6GQdK9lx7
-	 3IUEr6DF4lARoFzRsAIegjS23MKgRcqj4yC1k+l3d2zynAe3FCUTlOUn/LkBYE/s00
-	 1f6J1g4za5Y7D6s/wIpr4GprLRH0FNbrWkpTyBHNneJzkwrwld0jQ+d6iVUxtXr8Ar
-	 Vu6E2o/vlKiYeNpnbTaW0qWujocFBWKc+YPDGYdiK3TbIRLjqlfw0IbZlwDpfHzBjz
-	 WgRAVFSdKxykjMPhHZs2G/lnC7KeajgflKeksAGUZY5aZgat57km1iEFev6zUGqA7U
-	 A4ZclHl/V5Bow==
+	bh=VJqEr8dCY+4CPOJOj32v9gM0er+RPaUrxpfPduZDdD4=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=H0vYAQBPvfDOxKGciq213FOvEmmH7G9Eyw5T5fuwZNCJ+OJlCbOAfVm5De0GMtZGq
+	 kSju3ohNdUs96osGaDYFGQyDJk+UQavbmCB13jLnbAKyZLJC+rW1wtKpXdMTrs2BFJ
+	 DNQwhxGgyWp+bhNgKb4eL7kBcRDFk5Wj2qe1BCH7HuTBPTHWBeo45MZP9WXjUs0FQW
+	 0fe7P3eFdA1NFQr4Wmv6l4/uPBPvEWvT5gXGjDhSBfTA5g8gA4EbLgKLO7mbkTLc5Y
+	 jmQu76uTQ9b9O1BoVUWJKs3t4z+FmFoCM9m57RxcHnAw8Y++pU4hBsS9rLAGH0Edpy
+	 pxDH9egdp8luQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7CAEE4D03A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB1CAE4D03B;
 	Fri, 23 Sep 2022 14:52:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/4] i.MX DT bindings update for 6.1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166394472794.12526.463270226013303463.git-patchwork-notify@kernel.org>
+ <166394472789.12526.4162593674268442054.git-patchwork-summary@kernel.org>
 Date: Fri, 23 Sep 2022 14:52:07 +0000
-References: <20220918092806.2152700-1-shawnguo@kernel.org>
-In-Reply-To: <20220918092806.2152700-1-shawnguo@kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Sun, 18 Sep 2022 17:28:03 +0800 you wrote:
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-> 
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.1
-> 
-> [...]
+Series: [GIT,PULL,1/4] i.MX DT bindings update for 6.1
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=677941
+  Lore link: https://lore.kernel.org/r/20220918092806.2152700-1-shawnguo@kernel.org
+    Patches: [GIT,PULL,1/4] i.MX DT bindings update for 6.1
+             [GIT,PULL,3/4] i.MX device tree change for 6.1
+             [GIT,PULL,4/4] i.MX arm64 device tree update for 6.1
 
-Here is the summary with links:
-  - [GIT,PULL,1/4] i.MX DT bindings update for 6.1
-    https://git.kernel.org/soc/soc/c/2b14d7da6500
-  - [GIT,PULL,2/4] i.MX drivers change for 6.1
-    (no matching commit)
-  - [GIT,PULL,3/4] i.MX device tree change for 6.1
-    https://git.kernel.org/soc/soc/c/07d0db46b3d2
-  - [GIT,PULL,4/4] i.MX arm64 device tree update for 6.1
-    https://git.kernel.org/soc/soc/c/b805cc89bd39
+Patch: [GIT,PULL] Qualcomm ARM64 DTS fixes for 6.0
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=679062
+  Lore link: https://lore.kernel.org/r/20220921142939.1310163-1-andersson@kernel.org
 
-You are awesome, thank you!
+Series: [GIT,PULL,1/6] soc/tegra: Changes for v6.1-rc1
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=677602
+  Lore link: https://lore.kernel.org/r/20220916101957.1635854-1-thierry.reding@gmail.com
+    Patches: [GIT,PULL,1/6] soc/tegra: Changes for v6.1-rc1
+             [GIT,PULL,4/6] dt-bindings: Changes for v6.1-rc1
+             [GIT,PULL,5/6] arm64: tegra: Device tree changes for v6.1-rc1
+
+Patch: [GIT,PULL] Allwinner drivers fixes for 6.0
+  Submitter: Jernej Skrabec <jernej@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=677986
+  Lore link: https://lore.kernel.org/r/YyeN0m78+m9nNEah@kista.localdomain
+
+Series: Renesas SoC updates for v6.1 (take two)
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=678182
+  Lore link: https://lore.kernel.org/r/cover.1663588772.git.geert+renesas@glider.be
+    Patches: [GIT,PULL,1/2] Renesas ARM DT updates for v6.1 (take two)
+
+Patch: [GIT,PULL] arm64: dts: MediaTek updates for v6.1
+  Submitter: Matthias Brugger <matthias.bgg@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=678139
+  Lore link: https://lore.kernel.org/r/3b915692-c8a9-c508-5a4a-0fdb49355e99@gmail.com
+
+Patch: [GIT,PULL] Qualcomm ARM DTS updates for 6.1
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=679184
+  Lore link: https://lore.kernel.org/r/20220921222619.1338380-1-andersson@kernel.org
+
+Patch: [GIT,PULL] SoC fixes for omaps
+  Submitter: Tony Lindgren <tony@atomide.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=676837
+  Lore link: https://lore.kernel.org/r/pull-1663140667-273537@atomide.com
+
+Patch: [GIT,PULL] Qualcomm ARM64 DTS updates for 6.1
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=679195
+  Lore link: https://lore.kernel.org/r/20220921234854.1343238-1-andersson@kernel.org
+
+Patch: [GIT,PULL] TI K3 device tree updates for v6.1
+  Submitter: Vignesh Raghavendra <vigneshr@ti.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=679059
+  Lore link: https://lore.kernel.org/r/44729b46-27f9-94a0-17ed-8868649a4a0a@ti.com
+
+Patch: [GIT,PULL] Allwinner device tree changes for 6.1
+  Submitter: Jernej Skrabec <jernej@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=677990
+  Lore link: https://lore.kernel.org/r/YyePKDnOeP8Tdt5n@kista.localdomain
+
+Patch: [GIT,PULL,1/1] Broadcom drivers fixes for 6.0
+  Submitter: Florian Fainelli <f.fainelli@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=677983
+  Lore link: https://lore.kernel.org/r/20220918205038.3017866-1-f.fainelli@gmail.com
+
+
+Total patches: 16
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
