@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51649C6FA91
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 516E7C6FA92
 	for <soc@archiver.kernel.org>; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3CAC5C43144; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 244EDC43140;
+	id 370D2C433B5; Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 181C5C433D7;
 	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1663944728;
-	bh=a65PI99wFlsqxave9LBrZOXx7fwz9jzHOGdGIxTu8KU=;
+	bh=xAZRAtAgoQ+UOR2rcZoG3MKgARyUuRGAh9S8ApRsuwY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=PiOEv4ebMY6f2mCumuF6oCLaeBYGkRC8eq+izg8FfJVHbDrvyv5DJKtoqNLtD//Rj
-	 l7a4G7Shdz3SrDxRWeRpSjj1wQWsdn9jamkXXZufvv6Q61IFw1axiIS81mWmPk+tFh
-	 99jH5QOkSypfsA0nwPJm5eEXMV/lS8QLDHp7rgN409cMtb/Zomk+LEnzHOXoVunEOB
-	 HR4i7EQmj48Vsy1iC7QdPeZl1eWjAJa5zdAqx9/j26GvFM3F/pOpt3AmnX5HriZQdr
-	 D8al07v3Z6bvy1j3upQXX0Q+dRs88R5/dg581/L37hI7uXIJyEGjRj1kIHIrTOiey6
-	 h6sMPNbo1CPdA==
+	b=ZMxD0D6Y2H/p/Y4NQXyUwrdFArNrgfBTuqOuM6a5scn67hCOJQ1E36FwgMLvwyssY
+	 g4Y+SzmuyVpGUaZyrbPkAN9EmN1zFew8GE1WxUqnYw8tnq1f5qX+xH3yW4ZU5nJHJB
+	 mItcYjmpbYH/C2PcK0QsOrc+6nTUySU6htJWS/85x4h2cP3iNTReTgnEywwnLSvAyQ
+	 a9I1hQSDtDl5eeMjU9yaN+abYjL7nb1QAh8zaeNsnObIyFppRCP8xGcTKiq80GKKEA
+	 AV5NYAHr/vHRS9Bo9mw2LYuhJ0o+09TJIB3sjdSUrvP9OM86oMPABkfIbuxNUsGoO4
+	 +woYKeGgmeyJQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F509E50D70;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05CCCE4D03D;
 	Fri, 23 Sep 2022 14:52:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Allwinner drivers fixes for 6.0
+Subject: Re: [GIT PULL 1/6] soc/tegra: Changes for v6.1-rc1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166394472806.12526.8640824259311274886.git-patchwork-notify@kernel.org>
+ <166394472802.12526.8987701011328962228.git-patchwork-notify@kernel.org>
 Date: Fri, 23 Sep 2022 14:52:08 +0000
-References: <YyeN0m78+m9nNEah@kista.localdomain>
-In-Reply-To: <YyeN0m78+m9nNEah@kista.localdomain>
-To: Jernej Skrabec <jernej@kernel.org>
+References: <20220916101957.1635854-1-thierry.reding@gmail.com>
+In-Reply-To: <20220916101957.1635854-1-thierry.reding@gmail.com>
+To: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,30 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 18 Sep 2022 23:29:54 +0200 you wrote:
-> Hi!
+On Fri, 16 Sep 2022 12:19:52 +0200 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> Please pull following driver fixes for 6.0.
+> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 > 
-> Best regards,
-> Jernej
+>   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Allwinner drivers fixes for 6.0
-    https://git.kernel.org/soc/soc/c/7e1e2acb7b16
+  - [GIT,PULL,1/6] soc/tegra: Changes for v6.1-rc1
+    (no matching commit)
+  - [GIT,PULL,2/6] soc/tegra: cbb: Changes for v6.1-rc1
+    (no matching commit)
+  - [GIT,PULL,3/6] firmware: tegra: Changes for v6.1-rc1
+    (no matching commit)
+  - [GIT,PULL,4/6] dt-bindings: Changes for v6.1-rc1
+    https://git.kernel.org/soc/soc/c/195571f342ae
+  - [GIT,PULL,5/6] arm64: tegra: Device tree changes for v6.1-rc1
+    https://git.kernel.org/soc/soc/c/f58ec42950d6
+  - [GIT,PULL,6/6] arm64: tegra: Default configuration changes for v6.1-rc1
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
