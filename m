@@ -1,58 +1,80 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=Vr61=Z2=kemnade.info=andreas@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57024C04A95
-	for <soc@archiver.kernel.org>; Fri, 23 Sep 2022 20:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 512C6C04A95
+	for <soc@archiver.kernel.org>; Fri, 23 Sep 2022 22:11:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 12006C433B5; Fri, 23 Sep 2022 20:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EC98BC433C1
-	for <soc@kernel.org>; Fri, 23 Sep 2022 20:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663966216;
-	bh=340Tk6h4CKuGjB8UkiVayK/kS4ptIMBX6x8ccac56dE=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=ds+Mi8cDclx4axXdB0EQ6cfzraBmebbOL98NNh4n2ydjyospZGVCrzjV/ZmQJxRLR
-	 e33opZR7WRxKEE1mV4ztxMhftWKfXHnl9qiuyZarXRluOhoUKsCSj43bs6qvReziNq
-	 98mvy+qJR2+HIa/+g+heiTXGGJFCh8bJ2s1T23F640tFaRQ5z+GEZ1NxNjz/zwLKMJ
-	 3OBSL3xRXykFD0/i5x1L7UBv5WFcYuTi4WEvSCHOkSJvMEHUnx1Q60deGkUn6jcxXe
-	 FJL8TtR0efpRjizlWXy/CySYEQvscefkswv+QsGkWXS3A8t7hhDQSNpalTN05ZbE8A
-	 zYenk5Wxuaqzw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC7C9C072E7;
-	Fri, 23 Sep 2022 20:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 23D96C433B5; Fri, 23 Sep 2022 22:11:30 +0000 (UTC)
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 317D8C433D6;
+	Fri, 23 Sep 2022 22:11:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 317D8C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=pfvJ513xEuv8iXDNoGYIRg2YAS3obpRNQdZvIOCM8eg=; b=o+Gkqdq4QWxrzQO/05DchGBbyl
+	oo6f/Q2IWcIG8f9EujS6xysMoWGeZIgJs8VZe3bxWxZ3uqQr2YNR6Ukwp3qREsBBl4kDTvq9a3McU
+	+VkNPaBGUpCQxbCTxTGBjncKtYHPIkvk62soprDu1EO55cKnrcn4pgT6PjhPiTMJfVjoU35jy08Tl
+	TSDwI1KoW3tXisGQQ8K9Cze34ncq4uFFsAyRP7HxYyhc/0lwY7FgBv4qWq5S68ItmGIpllKfbcCeE
+	9EStNx/62sfWvJ/n7gXpRH0jcZvE1PZuodfAsf8+0eNVUxDqZXQwG8tq4zfowpiWBmOXb96WK3Wy/
+	IJF9Cm4g==;
+Received: from p200300ccff0974001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff09:7400:1a3d:a2ff:febf:d33a] helo=aktux)
+	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.89)
+	(envelope-from <andreas@kemnade.info>)
+	id 1obqt9-0004Jq-Lk; Sat, 24 Sep 2022 00:11:15 +0200
+Received: from andi by aktux with local (Exim 4.94.2)
+	(envelope-from <andreas@kemnade.info>)
+	id 1obqt9-0070ol-5h; Sat, 24 Sep 2022 00:11:15 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+List-Id: <soc.lore.kernel.org>
+To: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-imx@nxp.com,
+	marcel.ziswiler@toradex.com,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	nicolecrivain@gmail.com,
+	m.felsch@pengutronix.de
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v3 0/2] ARM: dts: add Kobo Aura 2
+Date: Sat, 24 Sep 2022 00:11:10 +0200
+Message-Id: <20220923221112.1671392-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <166396621570.24262.6859087735410477991.git-patchwork-summary@kernel.org>
-Date: Fri, 23 Sep 2022 20:50:15 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+This adds a basic device tree for the Kobo Aura 2 Ebook reader.
+It is equipped with an i.MX6SL SoC.
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+Andreas Kemnade (2):
+  dt-bindings: arm: fsl: add compatible string for Kobo Aura 2
+  ARM: dts: imx: Add devicetree for Kobo Aura 2
 
-Series: Renesas SoC updates for v6.1 (take two)
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=678182
-  Lore link: https://lore.kernel.org/r/cover.1663588772.git.geert+renesas@glider.be
-    Patches: [GIT,PULL,1/2] Renesas ARM DT updates for v6.1 (take two)
-             [GIT,PULL,2/2] Renesas ARM SoC updates for v6.1
-
-
-Total patches: 2
+ .../devicetree/bindings/arm/fsl.yaml          |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/imx6sl-kobo-aura2.dts       | 556 ++++++++++++++++++
+ 3 files changed, 558 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6sl-kobo-aura2.dts
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
