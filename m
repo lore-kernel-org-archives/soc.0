@@ -1,174 +1,162 @@
-Return-Path: <SRS0=rGsr=Z5=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=zxqS=Z5=os.amperecomputing.com=quan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879D5C07E9D
-	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 07:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7DEDC07E9D
+	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 07:59:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 41BEBC433D7; Mon, 26 Sep 2022 07:33:23 +0000 (UTC)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 7AF20C433C1; Mon, 26 Sep 2022 07:59:21 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2110.outbound.protection.outlook.com [40.107.244.110])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 12C18C433D6
-	for <soc@kernel.org>; Mon, 26 Sep 2022 07:33:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12C18C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id l12so6393939ljg.9
-        for <soc@kernel.org>; Mon, 26 Sep 2022 00:33:21 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1ABC9C433D6;
+	Mon, 26 Sep 2022 07:59:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1ABC9C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=os.amperecomputing.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VgdDrihKhtWjxkMT7HoGbn1jBNh61wbKlGmI5qG8Md4oje5NozO+sQoy06SykQAhhNvdmgV5bsVcKPi8mfN1MaWq+/FpMO5SpTJeJzfzNX6AAunrYTzDBhzsbgu8nwbQijrZ3upviGKTExJm40u2O0kfJQNXW3/gw9FghesHP6ZFfRChVCu4lQfV0eZSczmhC161ekQlfw1K+mDwLVTxH7HLZkAg+0uxbE7OU172ODgl0DWghWUaCaK81d8/iEGZxscbJK0dclYfc5ESxcPjuUHbEoTE2DG8ZaKYe9EuQe666KuT15SbEhCew1E0CokcE18NBCz8NrWdjsr2rwX2JQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R8A8efsndowdMBNoJsnkZ1LEc/rTlAmrxqdPIq1X66E=;
+ b=FrkSELdt4tEF55dctHsOCvhD68YUUlHn+yiAGGHqHqfn20spwMvHXJL7rA3jOZ4wmii/EyfDKzc/Xi28Dp3MlpuOB6JOtmfWrp7UlnpUHSevARsACRIkraNgmh5oQk4m68NkcPoBHA+U9hwT0kgJ9Jd5dOBSdKtWZ1v2PhtvxDysdBeZwoOX+DS6aWS60UagKBmfhLNz4VwDlXU574In2mOfOuy4fVKGDmJgP+U0qPzksSH133P3vVMPNIXKPYPVGEs+j9UUYe5cibzbyo6kFcVxHX+rgRrW13u3j0jw+HtcUrEUevayM04MF0yundwBV0+l9i7NdiOoBz+RBX9fYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=bdmIJt6rQNjlh0yiDVLdX9e0561sbzxHw5aFIA/IaNo=;
-        b=v79cy6oXnn6jFvsaen77Mg6VdE701cIGEaHuQTENaKPOGUgN9B7BSimv2dbnyULTr1
-         /zKvGRHQYgZuaceUwXKyZ+TBqSHHNguVYPpScdrvDR5+40XaNOls7rfwOjyqmxidXKZl
-         nyDSYayYQfBQJfq+FQPGsvpQUUzMfJ7/tr03QW22jNI+EmTXC+tpXGN3QStZCe15lpTL
-         nx551+rzSYOKLyqRBPZhR0sOxEiwYpCnnjDChekA0IS2mv/7XPSGZBRcsyI8mtgV0jDC
-         GbY/CWP3VHkDfo4l1/n3bgKsLlbJDfnSVQB+9070z9ftiMfjm/BH5ITCXszUztRuT5LL
-         NhvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=bdmIJt6rQNjlh0yiDVLdX9e0561sbzxHw5aFIA/IaNo=;
-        b=2IqBKM6q5yDOE+EqR0OBUO8tRrcKTJsYSCpOlgEF9iReHAseSL2/EapFR3WUn/x1il
-         ATiKrGmkdDNFAN5SQJ0CVN/JqFdrV3UlKvaEHtUakU2TwwRmKAjfLHUly+8QbXWm7mPL
-         dHQq0pMCG+1tCtDbxpqFYFDRZQptYiHw57EdZ6qtH7SVi7q2syDrXWCfJaUGOLOCgce/
-         3sy/tS1sTIDxE5OgH2Fd0fE6ASu54xYu6GFSOhon3gOglcOF6jy0UIpXDqsM7fUgMD2r
-         R4JvtBPTFF2ZaL9hJ+ejj0ERRZ/Zh6gLdiMc017JBU/+j2LZQtKTUFgy8W2XPAf1Hq5/
-         g25Q==
-X-Gm-Message-State: ACrzQf23qgEnNCpHNxZDH/8rxvQ+P7XwuDGmZvq18+W10z9UKOJ9xuqM
-	9TimOgsy5heuRw2t5pvcnCb66w==
-X-Google-Smtp-Source: AMsMyM6+bHOUKcKPn0fKD6bzf9pjyryrPSsSP+eheRR0ZtKMCuofYdlbGJLB+iKpVhBqQ6BwgXkt8Q==
-X-Received: by 2002:a2e:8917:0:b0:26a:a520:db52 with SMTP id d23-20020a2e8917000000b0026aa520db52mr6804043lji.289.1664177599969;
-        Mon, 26 Sep 2022 00:33:19 -0700 (PDT)
-Received: from fedora.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id v12-20020a19740c000000b00497a2815d8dsm2442477lfe.195.2022.09.26.00.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 00:33:19 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R8A8efsndowdMBNoJsnkZ1LEc/rTlAmrxqdPIq1X66E=;
+ b=p1VGHIRTm/Z1qhczKpS/VfoadmxnfHukRFna+MJLCKVAPuNaBjOE1DU2FLsGKJoQq+ZvsWskAqLXf12zzM/XaWOyLfVltoXP/jeYBSHHCZHFMABRkUna4B9FLX9B+rbY7tlWAL6iEk08mttICAFrEt981flLruLM9tTEVZjVSOY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BL0PR01MB5235.prod.exchangelabs.com (2603:10b6:208:31::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.20; Mon, 26 Sep 2022 07:59:16 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7d50:e907:8e2e:1ff0]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7d50:e907:8e2e:1ff0%3]) with mapi id 15.20.5654.025; Mon, 26 Sep 2022
+ 07:59:16 +0000
+From: Quan Nguyen <quan@os.amperecomputing.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Christoph Hellwig <hch@lst.de>,
+To: openbmc@lists.ozlabs.org,
 	Arnd Bergmann <arnd@arndb.de>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] ARM: dts: integrator: Fix DMA ranges
-Date: Mon, 26 Sep 2022 09:33:11 +0200
-Message-Id: <20220926073311.1610568-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	Open Source Submission <patches@amperecomputing.com>
+Cc: Quan Nguyen <quan@os.amperecomputing.com>,
+	Phong Vo <phong@os.amperecomputing.com>,
+	thang@os.amperecomputing.com
+Subject: [PATCH v3 RESEND 0/2] Add device tree for Ampere's Mt. Mitchell BMC
+Date: Mon, 26 Sep 2022 14:58:46 +0700
+Message-Id: <20220926075848.206918-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGXP274CA0017.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::29)
+ To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR01MB7282:EE_|BL0PR01MB5235:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3c265167-59f0-4161-1bc1-08da9f950221
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	fYpbOB8AoLAwJhTxumGZE4lr3/i+ehRidEoGF+1gRdu0j06dqNQCy7pwX0fOHptS9JEMW+8P5PgO8h3Av+QwpuWW5bnwKDkuuusNOaL3tjFivTfz7RNfeypmMPeDl0dEM7F1M9z32i8HkIRUTxaXIU82QvptidvmKP6meeG8XfS7pGnT8iibyBDYNtydblA6qLkBlNcRbyECfbkySiugI7pxsoojfjCkP2960LSjo1X6cA6uCSiND1y9byAs8WnFYpxsjNdXDiyqHW25hHuo1j507g0APhiuKghJBXt0i1OuTv85Inre5oo8VfaGUybo8hbqkfVEo+LfpJoBT+Hsl+XO7Tr1NiavHQm2oXGiT2hWpdYQTeAsbiHycsbIQNgYHDnGJqj/r/dQROX+ASEDAPvR440yMSWG0HTsGXj/7FZrdEfj7/grb3z2eDlx7htdpFF8AD6PotUBvoO1bIvetat/mTcirx6yerkLEnJujYrnJeGO8XWH/c2DUWN+pXnMMzvVeZE2SV9hR88z/WEc/Iuc8sI0Oyz7j4qljdJznAQ4nj4+PnuG0bgBfkEWNJDsEVlKGLDVpiKy5t27IQqF931Pe7DANz2emkzbYvxF7ty2lyaU+yEVKmHEgWkLhGlVip3KOpoBV48Fg4+QVkaLw852ZOAfWwqjTgfRkAhRYRFCaZjm8K8ES4DOUZ3UJVLqgo00U/88BoPEOuPz11TTex3jkEzXmlQFRGx1TPGW4CPWcrwcs6+DHstAm7ajLcX4tQ7a2j6hrr1hUeuI27tNfP0AwwqV4Vc7FDP7b63czNM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39840400004)(376002)(396003)(366004)(136003)(451199015)(7416002)(26005)(6512007)(5660300002)(6506007)(8936002)(52116002)(41300700001)(107886003)(6666004)(38350700002)(83380400001)(2616005)(1076003)(186003)(2906002)(66574015)(921005)(54906003)(110136005)(38100700002)(86362001)(4326008)(66946007)(8676002)(6486002)(316002)(66556008)(478600001)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/v/wQpkcZDDEO/CU7raeIROdoZMx0BIUGqc7NnFUs2r9Wy/pvASRd5tN9+tC?=
+ =?us-ascii?Q?MnSqf1dJCnMSdlTOV5YEYpZTb+GwMVmpE8M+cYJUN7lqzyIjAzHUgR8nSjFx?=
+ =?us-ascii?Q?Gam4fXvCqcXxXW0Jx0RQRjQC5TFwScDxysbjplxV92LSWyaZk2sbdVsaNxgw?=
+ =?us-ascii?Q?Rd/ORLdJsGsyO3BBRUaqAcuvszxnNSf9EG7OZs9tg7kDIuDnjqbYFFiZ/py7?=
+ =?us-ascii?Q?GTBPmbdvn/yC2vNUQuZFqna5RAiSVG9OuHrKfnn222b5at1TlCBoZqg6FI/x?=
+ =?us-ascii?Q?mLR3yIZYmh9hDCKVQjku5Jt/Siw3oUTbHOkCUBFxttGQwVFnHIP6F2acV9Z8?=
+ =?us-ascii?Q?1Ajdd5T9RYC+bb7XjO9jeCIZkBXK3dCQ488qtsivv7PwMKo2pDwUVgob2qie?=
+ =?us-ascii?Q?n/8GBgzZB5eXedA8KtAqIji53VQUgbQOJq8FGGHl/vHjlI01tyG/r+nnfndS?=
+ =?us-ascii?Q?M7J7he0dYhb3+qOhj5CmP8vrZ5zHkV5MJUIxnB9eEtQ0nKkcitR89B/3r4sT?=
+ =?us-ascii?Q?mmdOWo/WPlzFQBNqrOgMNpOqjs2ugm5kIcBiKM9nhHm1WKQy0+C6nnq9zqn+?=
+ =?us-ascii?Q?V2krbMNpPV+xWrBlq2KGSZJxcuJD918/NR8XldWK/KbDWM9cqUDQHYUuqbxL?=
+ =?us-ascii?Q?ciXTsZ182nuKpD5G7Xro9Eq1xpIIjsxZVlCczBk8DnhmDNxdwFGTeAUBmwPn?=
+ =?us-ascii?Q?kuZLYoKhMOuat6z4Ee7oElZx1AAbTXTP508FKx2JEWbMuNdytZwEeS/Wu4i9?=
+ =?us-ascii?Q?h1bQv0cSMK4viUxz5MwPWzqGngITHyNa+O/iXU/kVMHnoU1ydoMy7sFziWBQ?=
+ =?us-ascii?Q?8uliL7chuIiH62OYQopXUPfT0fhpKuithxUy9ROc/XpM/UQsa0kIL5OGUF5d?=
+ =?us-ascii?Q?C32mGeMlyPOg2fc2mHD28s3gne+YGM4pJ7Q5amiiIcTzTSWQjj6A39osFKVO?=
+ =?us-ascii?Q?9hVEWhYlwt1zLxKcVmHloLn09m5zqbA0Z7uvpWXItdT9YMO1bszqUPML6wee?=
+ =?us-ascii?Q?Qt1tnNbmNjzCvu7Fw4w4SGdq6UBs0dB9OYw78SY/0osnCNyCiL07/LtDztJS?=
+ =?us-ascii?Q?gwV/8/ANZHc0OpRDcjGXk5bPCvMRtCH/Kph7DwyatCCSylIhIkmbhJKanFfK?=
+ =?us-ascii?Q?hYxZOe/pf1yxeAQVP+UxVT1lXHYIHf6gL7q9DEVwOdIgq1oKQKcHKZs9/Bp4?=
+ =?us-ascii?Q?8h0ympLT3PiSDFK1E5FBHzf3Ny2amhrv63H4Klzcq20QMmP89RWSVL7YYRBl?=
+ =?us-ascii?Q?GpgLq4IH6kWgKzBb5pXE83hqo/F/otP+RQ9/w1MNEH+t2w59jiXmK2d6VYv0?=
+ =?us-ascii?Q?akssjz9pF9uZSFIgbxNF6Vg0FpOjWXrGympR1dEt+MVVoXVAA2gcPm4QVTDt?=
+ =?us-ascii?Q?oBSkebD/d33Sg/MB4TXTd3Yx2dzPrtM9FaT4OSjl0rhWbRcG+BtCEQWhxo7b?=
+ =?us-ascii?Q?/t2k6vBcK3F1rgjjdsBLRrBAQFphBs6jDJ6sr1TKX5t4ZvD3M9mD52j+1mz9?=
+ =?us-ascii?Q?BgXfj04x5+CAWCOWpXOfG+k049PRGsl0ImDA/IpFrL5uWZsxkyVA8ae/x2LV?=
+ =?us-ascii?Q?T7vqV8Pmms1y+oTF+xRyum5UWh2Ruzsnft4zF7Gkdh4vJZdZdNQUUVMyhTCt?=
+ =?us-ascii?Q?SkuBolBnat+TSQn9oPOYE40=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c265167-59f0-4161-1bc1-08da9f950221
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2022 07:59:16.3669
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Nmyg9WtRFef+QFfZXnEqDHYJSRHBUKqhUwnY1PNScr8/s2X4RuyAjH0qpN/6GHKfKbONRKjHlAy56tm8KS4mSNqu1Hyd+iDBP0IALcTKD5I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR01MB5235
 
-A recent change affecting the behaviour of phys_to_dma() to
-actually require the device tree ranges to work unmasked a
-bug in the Integrator DMA ranges.
+The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
+hardware reference platform with AmpereOne(TM) processor.
 
-The PL110 uses the CMA allocator to obtain coherent allocations
-from a dedicated 1MB video memory, leading to the following
-call chain:
+v3 :
+  + Change adc-i2c node to generic adc node               [Krzysztof]
+  + Remove unused status property in adc node             [Krzysztof]
+  + Remove trailing blank line at the end of file         [Krzysztof]
+  + Fix alphabetical order in dt-binding documentation    [Krzysztof]
+  + Remove the wrong comment on vga_memory nodes             [Andrew]
+  + Remove gpio-keys                                         [Andrew]
+  + Remove the line-name for bmc-debug-mode, eth-phy-rst-n,
+    eth-phy-int-n, bmc-salt12-s0-ssif-n, fpga-program-b,
+    bmc-uart-cts1, bmc-spi-fm-boot-abr-pd, emmc-rst-n gpios  [Andrew]
+  + Update line-name for hs-csout-prochot, s1-spi-auth-fail-n  [Quan]
+  + Add line-name [s0|s1]-heartbeat                            [Quan]
 
-drm_gem_cma_create()
-  dma_alloc_attrs()
-    dma_alloc_from_dev_coherent()
-      __dma_alloc_from_coherent()
-        dma_get_device_base()
-          phys_to_dma()
-            translate_phys_to_dma()
+v2 :
+  + Add Ampere Mt. Mitchell BMC compatible                [Krzysztof]
+  + Remove bootargs                                       [Krzysztof]
+  + Fix gpio-keys nodes name to conform with device tree binding
+  documents                                               [Krzysztof]
+  + Fix some nodes to use generic name                    [Krzysztof]
+  + Remove unnecessary blank line                         [Krzysztof]
+  + Fix typo "LTC" to "LLC" in license info and corrected license
+  info to GPL-2.0-only
 
-phys_to_dma() by way of translate_phys_to_dma() will nowadays not
-provide 1:1 mappings unless the ranges are properly defined in
-the device tree and reflected into the dev->dma_range_map.
+Quan Nguyen (2):
+  dt-bindings: arm: aspeed: document Ampere Mt.Mitchell BMC compatibles
+  ARM: dts: aspeed: Add device tree for Ampere's Mt. Mitchell BMC
 
-There is a bug in the device trees because the DMA ranges are
-incorrectly specified, and the patch uncovers this bug.
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 546 ++++++++++++++++++
+ 3 files changed, 548 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
 
-Solution:
-
-- Fix the LB (logic bus) ranges to be 1-to-1 like they should
-  have always been.
-- Provide a 1:1 dma-ranges attribute to the PL110.
-- Mark the PL110 display controller as DMA coherent.
-
-This makes the DMA ranges work right and makes the PL110
-framebuffer work again.
-
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: stable@vger.kernel.org
-Fixes: af6f23b88e95 ("ARM/dma-mapping: use the generic versions of dma_to_phys/phys_to_dma by default")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Drom dma-coherent, this device is not cache coherent
-  whatsoever, just my misunderstanding.
-- Change Fixes: tag to a hopefully more appropriate one.
-- Update commit message.
-
-SoC folks: please apply this directly for fixes if it seems
-to be the right thing to do.
----
- arch/arm/boot/dts/integratorap-im-pd1.dts | 1 +
- arch/arm/boot/dts/integratorap.dts        | 8 ++++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm/boot/dts/integratorap-im-pd1.dts b/arch/arm/boot/dts/integratorap-im-pd1.dts
-index 31724753d3f3..14fab499f0fa 100644
---- a/arch/arm/boot/dts/integratorap-im-pd1.dts
-+++ b/arch/arm/boot/dts/integratorap-im-pd1.dts
-@@ -248,6 +248,7 @@ display@1000000 {
- 		/* 640x480 16bpp @ 25.175MHz is 36827428 bytes/s */
- 		max-memory-bandwidth = <40000000>;
- 		memory-region = <&impd1_ram>;
-+		dma-ranges;
- 
- 		port@0 {
- 			#address-cells = <1>;
-diff --git a/arch/arm/boot/dts/integratorap.dts b/arch/arm/boot/dts/integratorap.dts
-index c983435ed492..9148287fa0a9 100644
---- a/arch/arm/boot/dts/integratorap.dts
-+++ b/arch/arm/boot/dts/integratorap.dts
-@@ -262,7 +262,7 @@ bus@c0000000 {
- 		lm0: bus@c0000000 {
- 			compatible = "simple-bus";
- 			ranges = <0x00000000 0xc0000000 0x10000000>;
--			dma-ranges = <0x00000000 0x80000000 0x10000000>;
-+			dma-ranges = <0x00000000 0xc0000000 0x10000000>;
- 			reg = <0xc0000000 0x10000000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -270,7 +270,7 @@ lm0: bus@c0000000 {
- 		lm1: bus@d0000000 {
- 			compatible = "simple-bus";
- 			ranges = <0x00000000 0xd0000000 0x10000000>;
--			dma-ranges = <0x00000000 0x80000000 0x10000000>;
-+			dma-ranges = <0x00000000 0xd0000000 0x10000000>;
- 			reg = <0xd0000000 0x10000000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -278,7 +278,7 @@ lm1: bus@d0000000 {
- 		lm2: bus@e0000000 {
- 			compatible = "simple-bus";
- 			ranges = <0x00000000 0xe0000000 0x10000000>;
--			dma-ranges = <0x00000000 0x80000000 0x10000000>;
-+			dma-ranges = <0x00000000 0xe0000000 0x10000000>;
- 			reg = <0xe0000000 0x10000000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -286,7 +286,7 @@ lm2: bus@e0000000 {
- 		lm3: bus@f0000000 {
- 			compatible = "simple-bus";
- 			ranges = <0x00000000 0xf0000000 0x10000000>;
--			dma-ranges = <0x00000000 0x80000000 0x10000000>;
-+			dma-ranges = <0x00000000 0xf0000000 0x10000000>;
- 			reg = <0xf0000000 0x10000000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
 -- 
-2.37.3
+2.35.1
 
