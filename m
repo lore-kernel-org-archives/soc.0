@@ -4,109 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B842C32771
-	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 10:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4BEC32771
+	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 10:50:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1C40AC4347C; Mon, 26 Sep 2022 10:44:12 +0000 (UTC)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	id BC5D5C433D7; Mon, 26 Sep 2022 10:50:35 +0000 (UTC)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17A4AC433D7
-	for <soc@kernel.org>; Mon, 26 Sep 2022 10:44:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17A4AC433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id 10EC6C43140
+	for <soc@kernel.org>; Mon, 26 Sep 2022 10:50:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 10EC6C43140
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id a14so6923118ljj.8
-        for <soc@kernel.org>; Mon, 26 Sep 2022 03:44:10 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id o2so10139804lfc.10
+        for <soc@kernel.org>; Mon, 26 Sep 2022 03:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=zT9HYnywBLKAnKj+znnUDQxqf7HMsI+nwdK6gxUUKog=;
-        b=nnwMFktu6Mzy49U0FD2s+8Z4fRTD91ziKmoRUTM3H8NByk5c+iYEF0H4nly5PKKAJb
-         0XtvTB7/iX2VrdGEwfRbKXNtxvUNNjB6xgsiE9VDMW1oBRgxhUHWCq8hM45Foj+QhCBQ
-         kSsS991r9ijmdvr9hIQC+sF9wYUtp8jF8Un3uyxpZHaQNGzN46RKUIkM8cElkzXObzsB
-         w2kEtScKAqxKrvXJoZcEsSdTgDIgyYlBpS2gZVdM4VXrV1LDTF56yoV0csuBPC5u0z6o
-         9kjVOu7hzVAnlG9iXluVY8vuelDtrdIk/3wxbptt5McOENOmIAftdbKRioqC162s1cfE
-         SsFg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=sduujl6DN3SaLa2Y/Z6Vcki+0Q9QqbCZHpdlm19R0rM=;
+        b=HClTHAMIFLCVpN//cX5WfolUCp9f5W8XmUg56K+JFJnIwNX/lYJWCoQ5LILmvgomLh
+         C4CjPZopxlEoI5Um32N8WfnhzJaFu673dK75xzxf9azpwx9iDHPeacw3NEm2wgSd4j0X
+         eTYDF1Getx1o+K3IyfbEKGjnAwRM/Tm8RaE8DfnFDbcn/b7SzcyqB8OE0xHUXJcHFI6F
+         rg8uUU6GetaJBaEOO7MAhmiSzkNpKxVFBaRfNLnPEH+VSsQIFKSmoIJshVz3nN5vEUpk
+         60FHyAT4TrNTEbL3gTn3T0zvUNuVJYzpw4FsxDbZJbaGibyBvm1S/pt02rMwHYkmIc4/
+         7pzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=zT9HYnywBLKAnKj+znnUDQxqf7HMsI+nwdK6gxUUKog=;
-        b=05JBoYCs0Xz/WrLc0ObLSVWl+M8NY9YMrGuPJ8xLs3swWcznnSqG3Y0ihcU1i3KtKg
-         BPXy5b1StHJtkSOWzXSKmJWIKQZM7dJ/0lXGNET1ks5wkJFqIq9fkAFUgWxucGH7pC1+
-         /2zF48duKzK4Lo4oJQz3I319aPHZ/JJdQzzo3lruYYhdwq5yTFpqc2Drw6lfRef42waN
-         O87U/qVCrcsQbT2lLSERd915XLOlHjtjFB38rYKhNTierulVK5lNy3mHSTqtmw8FYd3D
-         fgR9n4O435FR9GCW84zB/lFMGJsX2D/HKn6w/cF/rpVdB6Zx2hDf8fwiWA5ZtyAYg3I9
-         nTHQ==
-X-Gm-Message-State: ACrzQf2SplvkrxqsjxJ2ktL7CR68GKTqtNnr13GH5a54y48MTafiuF8S
-	hY9f93QTbZRslylN5vc0CpBbDw==
-X-Google-Smtp-Source: AMsMyM4CI56MoPkBYHfKNTWWd82vbJ9ouSxHTzz89N+BnGbFsWbsGBpY753rS4H1VwrtNhHaGqKUAA==
-X-Received: by 2002:a2e:a801:0:b0:261:91a3:bc44 with SMTP id l1-20020a2ea801000000b0026191a3bc44mr7213846ljq.497.1664189049185;
-        Mon, 26 Sep 2022 03:44:09 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=sduujl6DN3SaLa2Y/Z6Vcki+0Q9QqbCZHpdlm19R0rM=;
+        b=0UioNbFxpugW0BfZKvI43WBxFYdYZ1eujqGkhqbs1oUP0CaiUXbZithubIpH0Gb9PB
+         Yyyq/ar5jW9Vd/Wt/lcCGN9sWhYw+c8x7zYfNLxxTKeiZ4WH1ONrquM0wSvgy8oRrygg
+         oZoS/8oUq3Yxfuj1nRRcHqRJzWmm4R9fxrByKokAQ90YqS0VrM3NV+XuuNMudYI7R8Kj
+         vN3uUzaR3pt78HuwSSrdQjsVXmY1ro7Qn0Et3j4eB15BDUuPuJNFhlv6KzOfCgMrxAIO
+         iP6427t5nT40jfBN61BA/qKk77sASISmJ5YsHhTtaucW/QQFjQ+Qsa+4VX7BjbW0yu/0
+         roUw==
+X-Gm-Message-State: ACrzQf2MwH/o40GSZCunVxgzr79NR3zyM8xKhqeTswxbmFT/VCh1G7Ix
+	n7hMz04jPqO5DFbcjS9XT+GQVA==
+X-Google-Smtp-Source: AMsMyM4b3s9UOlbwdHOcusBcEnFj1C2J/V/PMZte/5G+lp2fXQHMBGTCPDUbre0H5aFETqL4hgiYgQ==
+X-Received: by 2002:a19:651e:0:b0:497:aaa5:44c with SMTP id z30-20020a19651e000000b00497aaa5044cmr8211896lfb.280.1664189432064;
+        Mon, 26 Sep 2022 03:50:32 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id y1-20020a05651c020100b0026c423959desm2313408ljn.25.2022.09.26.03.44.06
+        by smtp.gmail.com with ESMTPSA id o4-20020a198c04000000b0049f54a976efsm2492936lfd.29.2022.09.26.03.50.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 03:44:07 -0700 (PDT)
+        Mon, 26 Sep 2022 03:50:31 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Kukjin Kim <kgene.kim@samsung.com>,
-	Tomasz Figa <t.figa@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	devicetree@vger.kernel.org,
+To: Matthias Brugger <matthias.bgg@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
 	Olof Johansson <olof@lixom.net>,
 	Arnd Bergmann <arnd@arndb.de>,
 	arm@kernel.org,
 	soc@kernel.org
-Cc: Gaosheng Cui <cuigaosheng1@huawei.com>,
-	Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH PULL 2/2] ARM: s3c: remove orphan declarations from arch/arm/mach-s3c/devs.h
-Date: Mon, 26 Sep 2022 12:43:54 +0200
-Message-Id: <20220926104354.118578-3-krzysztof.kozlowski@linaro.org>
+Cc: linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: Second round for v6.1
+Date: Mon, 26 Sep 2022 12:50:23 +0200
+Message-Id: <20220926105023.119781-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926104354.118578-1-krzysztof.kozlowski@linaro.org>
-References: <20220926104354.118578-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Gaosheng Cui <cuigaosheng1@huawei.com>
+Hi,
 
-s3c64xx_device_spi1 and s3c64xx_device_spi2 were removed by
-commit f1ba938e4f98 ("spi: s3c64xx: Delete unused boardfile
-helpers"), so remove the declaration, too.
+On top of previous pull request.
 
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220914034615.1240860-3-cuigaosheng1@huawei.com
----
- arch/arm/mach-s3c/devs.h | 2 --
- 1 file changed, 2 deletions(-)
+Best regards,
+Krzysztof
 
-diff --git a/arch/arm/mach-s3c/devs.h b/arch/arm/mach-s3c/devs.h
-index 02b0c5750572..991b9b2006a1 100644
---- a/arch/arm/mach-s3c/devs.h
-+++ b/arch/arm/mach-s3c/devs.h
-@@ -33,8 +33,6 @@ extern struct platform_device s3c64xx_device_onenand1;
- extern struct platform_device s3c64xx_device_pcm0;
- extern struct platform_device s3c64xx_device_pcm1;
- extern struct platform_device s3c64xx_device_spi0;
--extern struct platform_device s3c64xx_device_spi1;
--extern struct platform_device s3c64xx_device_spi2;
- 
- extern struct platform_device s3c_device_adc;
- extern struct platform_device s3c_device_cfcon;
--- 
-2.34.1
 
+The following changes since commit 9f8fb8032febf594914999c33493c682eaf138cb:
+
+  dt-bindings: memory: mediatek,smi: Update condition for mt8195 smi node (2022-08-16 12:21:14 +0300)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.1-2
+
+for you to fetch changes up to 5514acb0dd030356e628cdd88b266efaa0a22315:
+
+  dt-bindings: memory: snps,dw-umctl2-ddrc: Extend schema with IRQs/resets/clocks props (2022-09-21 20:34:58 +0200)
+
+----------------------------------------------------------------
+Memory controller drivers for v6.1, part 2
+
+Improvements in Synopsys DesignWare Universal Multi-Protocol Memory
+Controller Devicetree bindings.  The bindings are being split into
+one related to Synopsys core and into quite different derivative Zynq
+A05 DDR Memory Controller.  Extend the Synopsys bindings with additional
+properties to match upcoming new device support (Baikal-T1 support).
+
+----------------------------------------------------------------
+Serge Semin (4):
+      dt-bindings: memory: synopsys,ddrc-ecc: Detach Zynq DDRC controller support
+      dt-bindings: memory: snps,dw-umctl2-ddrc: Use more descriptive device name
+      dt-bindings: memory: snps,dw-umctl2-ddrc: Replace opencoded numbers with macros
+      dt-bindings: memory: snps,dw-umctl2-ddrc: Extend schema with IRQs/resets/clocks props
+
+ .../memory-controllers/snps,dw-umctl2-ddrc.yaml    | 118 +++++++++++++++++++++
+ .../memory-controllers/synopsys,ddrc-ecc.yaml      |  76 -------------
+ .../memory-controllers/xlnx,zynq-ddrc-a05.yaml     |  38 +++++++
+ MAINTAINERS                                        |   2 +
+ 4 files changed, 158 insertions(+), 76 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/synopsys,ddrc-ecc.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
