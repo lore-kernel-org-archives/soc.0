@@ -1,585 +1,174 @@
-Return-Path: <SRS0=0vG+=Z4=gmail.com=matti.lehtimaki@kernel.org>
+Return-Path: <SRS0=rGsr=Z5=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55496C6FA90
-	for <soc@archiver.kernel.org>; Sun, 25 Sep 2022 20:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879D5C07E9D
+	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 07:33:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 14F7EC433C1; Sun, 25 Sep 2022 20:47:27 +0000 (UTC)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	id 41BEBC433D7; Mon, 26 Sep 2022 07:33:23 +0000 (UTC)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AA13BC43470;
-	Sun, 25 Sep 2022 20:47:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA13BC43470
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id s6so7964314lfo.7;
-        Sun, 25 Sep 2022 13:47:25 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 12C18C433D6
+	for <soc@kernel.org>; Mon, 26 Sep 2022 07:33:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 12C18C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id l12so6393939ljg.9
+        for <soc@kernel.org>; Mon, 26 Sep 2022 00:33:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=w9n5hA+zCQPnRUU0Y0WeWbcf+dsd5Y1yMjO2ClZKx1A=;
-        b=oB/f/KDWQm2e0JcR0ZaIAgnEm2tNwyE+43LlEyiTnpF/EhHBAwaP3DRFe3UxR7JuPz
-         sihFikA2t9jYQ/62WBQAJKIxjxgb4hVC1BSRzDNXFpWq61gVRl2hPh1mvJwnk0L+KPFD
-         k/y39E4YExxdSwxEdrrRRw5yQ4dAPNp5HtG5mInSwzWlKWCTYG+a0KM1IWa7aCtow7QZ
-         0goPnZPKZIQQS09JWyw8rZdr5Qpm9+sCR4Iuavdoo35tufACuSY/ROI3Ko01350k4V1V
-         p7bZogQtF1whVkkrI8IO6yc8KmQrSM0mOqfipr3f20i2aIFrt81unLk65Jz1U72KZek6
-         JGiA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=bdmIJt6rQNjlh0yiDVLdX9e0561sbzxHw5aFIA/IaNo=;
+        b=v79cy6oXnn6jFvsaen77Mg6VdE701cIGEaHuQTENaKPOGUgN9B7BSimv2dbnyULTr1
+         /zKvGRHQYgZuaceUwXKyZ+TBqSHHNguVYPpScdrvDR5+40XaNOls7rfwOjyqmxidXKZl
+         nyDSYayYQfBQJfq+FQPGsvpQUUzMfJ7/tr03QW22jNI+EmTXC+tpXGN3QStZCe15lpTL
+         nx551+rzSYOKLyqRBPZhR0sOxEiwYpCnnjDChekA0IS2mv/7XPSGZBRcsyI8mtgV0jDC
+         GbY/CWP3VHkDfo4l1/n3bgKsLlbJDfnSVQB+9070z9ftiMfjm/BH5ITCXszUztRuT5LL
+         NhvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=w9n5hA+zCQPnRUU0Y0WeWbcf+dsd5Y1yMjO2ClZKx1A=;
-        b=eEdADjJpBQLRRKX4XaoMCYGndyRBga0CYwCZlt+alcHnc5GbYejod6tlCA6b8/YL00
-         wZdspvVVTVHnlthykxw+fPHEO6bD32yECRhlLWBykB2dKtGzYKlDAlHnyjKIfNIX5cuE
-         Uz7khRcSaQ9doC6AL46atjFBoa/YqLnhMgSG4Jdu+YDUqmfUgHJ7iPrK7QVt/GBEqwG4
-         S65g2YhXRKkyYEOxj9D2nGc9wQHbbEw0YBilIt3O6jncb9vLoH0LrpaINv+2uGoLzUL0
-         Su7QRH3Io4MCl4DvmyDfCDgmQRR8q9W9WEp6Z1sZJmOujV1RivYFmyzyyPFdXFrZKsFw
-         z63Q==
-X-Gm-Message-State: ACrzQf3XEqXfe8aOF0oydqjYPMw2vFkvMFKp1ZR7eCjatoXmHGqfGVyJ
-	BLYXhu1+CSJSs64xCPk1D7I=
-X-Google-Smtp-Source: AMsMyM7iAwCbqsHXGNDRnjKi6A8yM6FJFMG0zTE1Gl0n3hYDebVp0oBs0PDjHabOFGG5afnqvjoNsw==
-X-Received: by 2002:ac2:5b0f:0:b0:49c:949e:d8f7 with SMTP id v15-20020ac25b0f000000b0049c949ed8f7mr7273937lfn.336.1664138843774;
-        Sun, 25 Sep 2022 13:47:23 -0700 (PDT)
-Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
-        by smtp.gmail.com with ESMTPSA id c24-20020a196558000000b0049472efaf7asm2297667lfj.244.2022.09.25.13.47.22
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=bdmIJt6rQNjlh0yiDVLdX9e0561sbzxHw5aFIA/IaNo=;
+        b=2IqBKM6q5yDOE+EqR0OBUO8tRrcKTJsYSCpOlgEF9iReHAseSL2/EapFR3WUn/x1il
+         ATiKrGmkdDNFAN5SQJ0CVN/JqFdrV3UlKvaEHtUakU2TwwRmKAjfLHUly+8QbXWm7mPL
+         dHQq0pMCG+1tCtDbxpqFYFDRZQptYiHw57EdZ6qtH7SVi7q2syDrXWCfJaUGOLOCgce/
+         3sy/tS1sTIDxE5OgH2Fd0fE6ASu54xYu6GFSOhon3gOglcOF6jy0UIpXDqsM7fUgMD2r
+         R4JvtBPTFF2ZaL9hJ+ejj0ERRZ/Zh6gLdiMc017JBU/+j2LZQtKTUFgy8W2XPAf1Hq5/
+         g25Q==
+X-Gm-Message-State: ACrzQf23qgEnNCpHNxZDH/8rxvQ+P7XwuDGmZvq18+W10z9UKOJ9xuqM
+	9TimOgsy5heuRw2t5pvcnCb66w==
+X-Google-Smtp-Source: AMsMyM6+bHOUKcKPn0fKD6bzf9pjyryrPSsSP+eheRR0ZtKMCuofYdlbGJLB+iKpVhBqQ6BwgXkt8Q==
+X-Received: by 2002:a2e:8917:0:b0:26a:a520:db52 with SMTP id d23-20020a2e8917000000b0026aa520db52mr6804043lji.289.1664177599969;
+        Mon, 26 Sep 2022 00:33:19 -0700 (PDT)
+Received: from fedora.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id v12-20020a19740c000000b00497a2815d8dsm2442477lfe.195.2022.09.26.00.33.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 13:47:23 -0700 (PDT)
-From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-To: linux-arm-msm@vger.kernel.org
+        Mon, 26 Sep 2022 00:33:19 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Christoph Hellwig <hch@lst.de>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4 10.1 (SM-T530)
-Date: Sun, 25 Sep 2022 23:44:15 +0300
-Message-Id: <20220925204416.715687-4-matti.lehtimaki@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220925204416.715687-1-matti.lehtimaki@gmail.com>
-References: <20220925204416.715687-1-matti.lehtimaki@gmail.com>
+	stable@vger.kernel.org
+Subject: [PATCH v2] ARM: dts: integrator: Fix DMA ranges
+Date: Mon, 26 Sep 2022 09:33:11 +0200
+Message-Id: <20220926073311.1610568-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
-based on the apq8026 platform.
+A recent change affecting the behaviour of phys_to_dma() to
+actually require the device tree ranges to work unmasked a
+bug in the Integrator DMA ranges.
 
-Currently supported are accelerometer sensor, hall sensor,
-internal storage, physical buttons (power & volume), screen
-(based on simple-framebuffer set up by the bootloader), sdcard,
-touchscreen and USB.
+The PL110 uses the CMA allocator to obtain coherent allocations
+from a dedicated 1MB video memory, leading to the following
+call chain:
 
-Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+drm_gem_cma_create()
+  dma_alloc_attrs()
+    dma_alloc_from_dev_coherent()
+      __dma_alloc_from_coherent()
+        dma_get_device_base()
+          phys_to_dma()
+            translate_phys_to_dma()
+
+phys_to_dma() by way of translate_phys_to_dma() will nowadays not
+provide 1:1 mappings unless the ranges are properly defined in
+the device tree and reflected into the dev->dma_range_map.
+
+There is a bug in the device trees because the DMA ranges are
+incorrectly specified, and the patch uncovers this bug.
+
+Solution:
+
+- Fix the LB (logic bus) ranges to be 1-to-1 like they should
+  have always been.
+- Provide a 1:1 dma-ranges attribute to the PL110.
+- Mark the PL110 display controller as DMA coherent.
+
+This makes the DMA ranges work right and makes the PL110
+framebuffer work again.
+
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: stable@vger.kernel.org
+Fixes: af6f23b88e95 ("ARM/dma-mapping: use the generic versions of dma_to_phys/phys_to_dma by default")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-Changes in v5:
-  - Rename pm8226-regulators node to fix issue reported by make dtbs_check
+ChangeLog v1->v2:
+- Drom dma-coherent, this device is not cache coherent
+  whatsoever, just my misunderstanding.
+- Change Fixes: tag to a hopefully more appropriate one.
+- Update commit message.
 
-Changes in v4:
-  - Move delete-node to memory-region
-  - Move usb-switch node to blsp_i2c4
-
-Changes in v3:
-  - Fix sdhc_2 bus width
-  - Reorder includes
-
-Changes in v2:
-  - Change codename to matisse-wifi
-  - Remove msm-id, not needed when lk2nd is used
-  - Remove unused labels from reserved memory regions
-  - Rename muic node
+SoC folks: please apply this directly for fixes if it seems
+to be the right thing to do.
 ---
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 453 ++++++++++++++++++
- 2 files changed, 454 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+ arch/arm/boot/dts/integratorap-im-pd1.dts | 1 +
+ arch/arm/boot/dts/integratorap.dts        | 8 ++++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 05d8aef6e5d2..69f6bbcf90c6 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1027,6 +1027,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
- 	qcom-apq8016-sbc.dtb \
- 	qcom-apq8026-asus-sparrow.dtb \
- 	qcom-apq8026-lg-lenok.dtb \
-+	qcom-apq8026-samsung-matisse-wifi.dtb \
- 	qcom-apq8060-dragonboard.dtb \
- 	qcom-apq8064-cm-qs600.dtb \
- 	qcom-apq8064-ifc6410.dtb \
-diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-new file mode 100644
-index 000000000000..3029bc566832
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-@@ -0,0 +1,453 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Matti Lehtimäki <matti.lehtimaki@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/input/input.h>
-+#include "qcom-msm8226.dtsi"
-+#include "qcom-pm8226.dtsi"
-+
-+/ {
-+	model = "Samsung Galaxy Tab 4 10.1";
-+	compatible = "samsung,matisse-wifi", "qcom,apq8026";
-+	chassis-type = "tablet";
-+
-+	aliases {
-+		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-+		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-+		display0 = &framebuffer0;
-+	};
-+
-+	chosen {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		stdout-path = "display0";
-+
-+		framebuffer0: framebuffer@3200000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x3200000 0x800000>;
-+			width = <1280>;
-+			height = <800>;
-+			stride = <(1280 * 3)>;
-+			format = "r8g8b8";
-+		};
-+	};
-+
-+	gpio-hall-sensor {
-+		compatible = "gpio-keys";
-+
-+		event-hall-sensor {
-+			label = "Hall Effect Sensor";
-+			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-+			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
-+			linux,input-type = <EV_SW>;
-+			linux,code = <SW_LID>;
-+			debounce-interval = <15>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		autorepeat;
-+
-+		key-home {
-+			label = "Home";
-+			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_HOMEPAGE>;
-+			debounce-interval = <15>;
-+		};
-+
-+		key-volume-down {
-+			label = "Volume Down";
-+			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			debounce-interval = <15>;
-+		};
-+
-+		key-volume-up {
-+			label = "Volume Up";
-+			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEUP>;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	reg_tsp_1p8v: regulator-tsp-1p8v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "tsp_1p8v";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+
-+		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tsp_en_default_state>;
-+	};
-+
-+	reg_tsp_3p3v: regulator-tsp-3p3v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "tsp_3p3v";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tsp_en1_default_state>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		framebuffer@3200000 {
-+			reg = <0x3200000 0x800000>;
-+			no-map;
-+		};
-+
-+		mpss@8400000 {
-+			reg = <0x08400000 0x1f00000>;
-+			no-map;
-+		};
-+
-+		mba@a300000 {
-+			reg = <0x0a300000 0x100000>;
-+			no-map;
-+		};
-+
-+		reserved@cb00000 {
-+			reg = <0x0cb00000 0x700000>;
-+			no-map;
-+		};
-+
-+		wcnss@d200000 {
-+			reg = <0x0d200000 0x700000>;
-+			no-map;
-+		};
-+
-+		adsp@d900000 {
-+			reg = <0x0d900000 0x1800000>;
-+			no-map;
-+		};
-+
-+		venus@f100000 {
-+			reg = <0x0f100000 0x500000>;
-+			no-map;
-+		};
-+
-+		/delete-node/ smem@3000000;
-+		smem_region: smem@fa00000 {
-+			reg = <0xfa00000 0x100000>;
-+			no-map;
-+		};
-+
-+		reserved@fb00000 {
-+			reg = <0x0fb00000 0x260000>;
-+			no-map;
-+		};
-+
-+		rfsa@fd60000 {
-+			reg = <0x0fd60000 0x20000>;
-+			no-map;
-+		};
-+
-+		rmtfs@fd80000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0x0fd80000 0x180000>;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c2 {
-+	status = "okay";
-+
-+	accelerometer@1d {
-+		compatible = "st,lis2hh12";
-+		reg = <0x1d>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&accel_int_default_state>;
-+
-+		st,drdy-int-pin = <1>;
-+
-+		vdd-supply = <&pm8226_l19>;
-+		vddio-supply = <&pm8226_lvs1>;
-+	};
-+};
-+
-+&blsp1_i2c4 {
-+	status = "okay";
-+
-+	muic: usb-switch@25 {
-+		compatible = "siliconmitus,sm5502-muic";
-+		reg = <0x25>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&muic_int_default_state>;
-+	};
-+};
-+
-+&blsp1_i2c5 {
-+	status = "okay";
-+
-+	touchscreen@4a {
-+		compatible = "atmel,maxtouch";
-+		reg = <0x4a>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tsp_int_rst_default_state>;
-+
-+		reset-gpios = <&pm8226_gpios 6 GPIO_ACTIVE_LOW>;
-+
-+		vdd-supply = <&reg_tsp_1p8v>;
-+		vdda-supply = <&reg_tsp_3p3v>;
-+	};
-+};
-+
-+&rpm_requests {
-+	regulators {
-+		compatible = "qcom,rpm-pm8226-regulators";
-+
-+		pm8226_s3: s3 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8226_s4: s4 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_s5: s5 {
-+			regulator-min-microvolt = <1150000>;
-+			regulator-max-microvolt = <1150000>;
-+		};
-+
-+		pm8226_l1: l1 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8226_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8226_l3: l3 {
-+			regulator-min-microvolt = <750000>;
-+			regulator-max-microvolt = <1337500>;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l4: l4 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8226_l5: l5 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8226_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l7: l7 {
-+			regulator-min-microvolt = <1850000>;
-+			regulator-max-microvolt = <1850000>;
-+		};
-+
-+		pm8226_l8: l8 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l9: l9 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8226_l10: l10 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_l14: l14 {
-+			regulator-min-microvolt = <2750000>;
-+			regulator-max-microvolt = <2750000>;
-+		};
-+
-+		pm8226_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8226_l16: l16 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3350000>;
-+		};
-+
-+		pm8226_l17: l17 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+
-+			regulator-system-load = <200000>;
-+			regulator-allow-set-load;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l18: l18 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_l19: l19 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8226_l20: l20 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+
-+		pm8226_l21: l21 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_l22: l22 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8226_l23: l23 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8226_l24: l24 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8226_l25: l25 {
-+			regulator-min-microvolt = <1775000>;
-+			regulator-max-microvolt = <2125000>;
-+		};
-+
-+		pm8226_l26: l26 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8226_l27: l27 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_l28: l28 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_lvs1: lvs1 {};
-+	};
-+};
-+
-+&sdhc_1 {
-+	status = "okay";
-+
-+	vmmc-supply = <&pm8226_l17>;
-+	vqmmc-supply = <&pm8226_l6>;
-+
-+	bus-width = <8>;
-+	non-removable;
-+};
-+
-+&sdhc_2 {
-+	status = "okay";
-+
-+	vmmc-supply = <&pm8226_l18>;
-+	vqmmc-supply = <&pm8226_l21>;
-+
-+	bus-width = <4>;
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
-+};
-+
-+&tlmm {
-+	accel_int_default_state: accel-int-default-state {
-+		pins = "gpio54";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	muic_int_default_state: muic-int-default-state {
-+		pins = "gpio67";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_en_default_state: tsp-en-default-state {
-+		pins = "gpio31";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_en1_default_state: tsp-en1-default-state {
-+		pins = "gpio73";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_int_rst_default_state: tsp-int-rst-default-state {
-+		pins = "gpio17";
-+		function = "gpio";
-+		drive-strength = <10>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&usb {
-+	status = "okay";
-+	extcon = <&muic>, <&muic>;
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&muic>;
-+	v1p8-supply = <&pm8226_l10>;
-+	v3p3-supply = <&pm8226_l20>;
-+};
+diff --git a/arch/arm/boot/dts/integratorap-im-pd1.dts b/arch/arm/boot/dts/integratorap-im-pd1.dts
+index 31724753d3f3..14fab499f0fa 100644
+--- a/arch/arm/boot/dts/integratorap-im-pd1.dts
++++ b/arch/arm/boot/dts/integratorap-im-pd1.dts
+@@ -248,6 +248,7 @@ display@1000000 {
+ 		/* 640x480 16bpp @ 25.175MHz is 36827428 bytes/s */
+ 		max-memory-bandwidth = <40000000>;
+ 		memory-region = <&impd1_ram>;
++		dma-ranges;
+ 
+ 		port@0 {
+ 			#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/integratorap.dts b/arch/arm/boot/dts/integratorap.dts
+index c983435ed492..9148287fa0a9 100644
+--- a/arch/arm/boot/dts/integratorap.dts
++++ b/arch/arm/boot/dts/integratorap.dts
+@@ -262,7 +262,7 @@ bus@c0000000 {
+ 		lm0: bus@c0000000 {
+ 			compatible = "simple-bus";
+ 			ranges = <0x00000000 0xc0000000 0x10000000>;
+-			dma-ranges = <0x00000000 0x80000000 0x10000000>;
++			dma-ranges = <0x00000000 0xc0000000 0x10000000>;
+ 			reg = <0xc0000000 0x10000000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -270,7 +270,7 @@ lm0: bus@c0000000 {
+ 		lm1: bus@d0000000 {
+ 			compatible = "simple-bus";
+ 			ranges = <0x00000000 0xd0000000 0x10000000>;
+-			dma-ranges = <0x00000000 0x80000000 0x10000000>;
++			dma-ranges = <0x00000000 0xd0000000 0x10000000>;
+ 			reg = <0xd0000000 0x10000000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -278,7 +278,7 @@ lm1: bus@d0000000 {
+ 		lm2: bus@e0000000 {
+ 			compatible = "simple-bus";
+ 			ranges = <0x00000000 0xe0000000 0x10000000>;
+-			dma-ranges = <0x00000000 0x80000000 0x10000000>;
++			dma-ranges = <0x00000000 0xe0000000 0x10000000>;
+ 			reg = <0xe0000000 0x10000000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -286,7 +286,7 @@ lm2: bus@e0000000 {
+ 		lm3: bus@f0000000 {
+ 			compatible = "simple-bus";
+ 			ranges = <0x00000000 0xf0000000 0x10000000>;
+-			dma-ranges = <0x00000000 0x80000000 0x10000000>;
++			dma-ranges = <0x00000000 0xf0000000 0x10000000>;
+ 			reg = <0xf0000000 0x10000000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
 -- 
-2.34.1
+2.37.3
 
