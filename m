@@ -1,114 +1,122 @@
-Return-Path: <SRS0=MT2l=Z5=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=kd9Q=Z5=linaro.org=dmitry.baryshkov@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4BEC32771
-	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 10:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C4FEC6FA83
+	for <soc@archiver.kernel.org>; Mon, 26 Sep 2022 11:02:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BC5D5C433D7; Mon, 26 Sep 2022 10:50:35 +0000 (UTC)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	id 49C6AC433B5; Mon, 26 Sep 2022 11:02:54 +0000 (UTC)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 10EC6C43140
-	for <soc@kernel.org>; Mon, 26 Sep 2022 10:50:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 10EC6C43140
+	by smtp.kernel.org (Postfix) with ESMTPS id 54A97C433C1
+	for <soc@kernel.org>; Mon, 26 Sep 2022 11:02:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 54A97C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id o2so10139804lfc.10
-        for <soc@kernel.org>; Mon, 26 Sep 2022 03:50:33 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id s6so10218360lfo.7
+        for <soc@kernel.org>; Mon, 26 Sep 2022 04:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=sduujl6DN3SaLa2Y/Z6Vcki+0Q9QqbCZHpdlm19R0rM=;
-        b=HClTHAMIFLCVpN//cX5WfolUCp9f5W8XmUg56K+JFJnIwNX/lYJWCoQ5LILmvgomLh
-         C4CjPZopxlEoI5Um32N8WfnhzJaFu673dK75xzxf9azpwx9iDHPeacw3NEm2wgSd4j0X
-         eTYDF1Getx1o+K3IyfbEKGjnAwRM/Tm8RaE8DfnFDbcn/b7SzcyqB8OE0xHUXJcHFI6F
-         rg8uUU6GetaJBaEOO7MAhmiSzkNpKxVFBaRfNLnPEH+VSsQIFKSmoIJshVz3nN5vEUpk
-         60FHyAT4TrNTEbL3gTn3T0zvUNuVJYzpw4FsxDbZJbaGibyBvm1S/pt02rMwHYkmIc4/
-         7pzQ==
+        bh=SzZdZTQ9yg2AYbF63Q9RIKM+cK8iwb2vn6Xllzfi3yo=;
+        b=BZ4NJ8aK1BgwIAhIVdY8A/zCCyu7QbeE9dWRBMGaIkGg+ELHSmCe4byrX8+PBAYnm7
+         K5uFMloJ+xJstiZ+k1GYZBhUQPj4v60kjYBBowRJn3q2lmPKcCi8LUdjWrkL83G5MWxu
+         AytppXnTlAO+KUO5lfrr6Ap3OLyxWhN0Q+atmwRJodwXTx5akWYQbqBnS6sH3bQmKBrD
+         Z+AkpzyAwkIdytl7Xf4JlSJzwrwJMSZoPPprlUyzF3jOqDSUpY4URezpp728CRRV0aF2
+         mfwetJKV23rNE2XQCRNRUYz1WXWAdt7IkLTWhVcxKkgvfv/C/tObii+iT3KWfBQnmo2A
+         uY1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=sduujl6DN3SaLa2Y/Z6Vcki+0Q9QqbCZHpdlm19R0rM=;
-        b=0UioNbFxpugW0BfZKvI43WBxFYdYZ1eujqGkhqbs1oUP0CaiUXbZithubIpH0Gb9PB
-         Yyyq/ar5jW9Vd/Wt/lcCGN9sWhYw+c8x7zYfNLxxTKeiZ4WH1ONrquM0wSvgy8oRrygg
-         oZoS/8oUq3Yxfuj1nRRcHqRJzWmm4R9fxrByKokAQ90YqS0VrM3NV+XuuNMudYI7R8Kj
-         vN3uUzaR3pt78HuwSSrdQjsVXmY1ro7Qn0Et3j4eB15BDUuPuJNFhlv6KzOfCgMrxAIO
-         iP6427t5nT40jfBN61BA/qKk77sASISmJ5YsHhTtaucW/QQFjQ+Qsa+4VX7BjbW0yu/0
-         roUw==
-X-Gm-Message-State: ACrzQf2MwH/o40GSZCunVxgzr79NR3zyM8xKhqeTswxbmFT/VCh1G7Ix
-	n7hMz04jPqO5DFbcjS9XT+GQVA==
-X-Google-Smtp-Source: AMsMyM4b3s9UOlbwdHOcusBcEnFj1C2J/V/PMZte/5G+lp2fXQHMBGTCPDUbre0H5aFETqL4hgiYgQ==
-X-Received: by 2002:a19:651e:0:b0:497:aaa5:44c with SMTP id z30-20020a19651e000000b00497aaa5044cmr8211896lfb.280.1664189432064;
-        Mon, 26 Sep 2022 03:50:32 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o4-20020a198c04000000b0049f54a976efsm2492936lfd.29.2022.09.26.03.50.30
+        bh=SzZdZTQ9yg2AYbF63Q9RIKM+cK8iwb2vn6Xllzfi3yo=;
+        b=RKaxUTCBkdD/t56XEYPgJ50ORM8oeDFqbJAYYw8NWUIb9cZjAajxOPu50kKx+8tayQ
+         bnqotRn0GMTQF5ettS5P05/RZRFuv1S5+I8mnN3wW+8mmUYamxa2VR+SYn4Lpm/Mseai
+         6/j3EoPBUFIBF3a1ephImH3Vbw/lJpSVTeBxL8f+XDVSL0BcC4P+/qFvaSSVuq0G9lJr
+         5mXxKYhKE4toaxgN9wtJQ57fmylCw6cZ0mwVp7J8XAHexmhHN2F9faFodthHjkTtfG0W
+         VcMLwj/xo51z3KirJ+/9MiPU0eRXbyw8afkdIqwFv0lybjRp9jftnhxUBV2fK+M1U9NQ
+         X/cg==
+X-Gm-Message-State: ACrzQf15igglSHP0MkrBLLW00CZwj5iiNJY3nMl91gz9mqNTYqZk4JeI
+	SoPVhxqWtQugfK98iRzTEwNBPg==
+X-Google-Smtp-Source: AMsMyM5W3WeYQ1XboE++c1vd8Cjn+/5cGjGtRWycEk85pI6L0lEjCrPisCtUyVfjBs9CX+6uOkYJqg==
+X-Received: by 2002:ac2:4e16:0:b0:49a:d15c:c3e1 with SMTP id e22-20020ac24e16000000b0049ad15cc3e1mr9154341lfr.648.1664190171290;
+        Mon, 26 Sep 2022 04:02:51 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id 1-20020ac25f01000000b0049f5358062dsm2497955lfq.98.2022.09.26.04.02.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 03:50:31 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Mon, 26 Sep 2022 04:02:50 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: Second round for v6.1
-Date: Mon, 26 Sep 2022 12:50:23 +0200
-Message-Id: <20220926105023.119781-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Cc: linux-arm-kernel@lists.infradead.org,
+	soc@kernel.org,
+	linux-pm@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: [RESEND PATCH v2] firmware/psci: Print a warning if PSCI doesn't accept PC mode
+Date: Mon, 26 Sep 2022 14:02:49 +0300
+Message-Id: <20220926110249.666813-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+The function psci_pd_try_set_osi_mode() will print an error if enabling
+OSI mode fails. To ease debugging PSCI issues print corresponding
+message if switching to PC mode fails too.
 
-On top of previous pull request.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+This is a replacement for [1], now moving the warning from
+psci_set_osi_mode() callers to the function iself.
 
-Best regards,
-Krzysztof
+The patch is resent to include soc@kernel.org
 
+[1] https://lore.kernel.org/all/20220727182034.983727-1-dmitry.baryshkov@linaro.org/
 
-The following changes since commit 9f8fb8032febf594914999c33493c682eaf138cb:
+---
+ drivers/cpuidle/cpuidle-psci-domain.c | 4 +---
+ drivers/firmware/psci/psci.c          | 2 ++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  dt-bindings: memory: mediatek,smi: Update condition for mt8195 smi node (2022-08-16 12:21:14 +0300)
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index 3db4fca1172b..821984947ed9 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -124,10 +124,8 @@ static bool psci_pd_try_set_osi_mode(void)
+ 		return false;
+ 
+ 	ret = psci_set_osi_mode(true);
+-	if (ret) {
+-		pr_warn("failed to enable OSI mode: %d\n", ret);
++	if (ret)
+ 		return false;
+-	}
+ 
+ 	return true;
+ }
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index 9fdcb6bff403..42cae0ba10e2 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -164,6 +164,8 @@ int psci_set_osi_mode(bool enable)
+ 			PSCI_1_0_SUSPEND_MODE_PC;
+ 
+ 	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
++	if (err < 0)
++		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+ 	return psci_to_linux_errno(err);
+ }
+ 
+-- 
+2.35.1
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.1-2
-
-for you to fetch changes up to 5514acb0dd030356e628cdd88b266efaa0a22315:
-
-  dt-bindings: memory: snps,dw-umctl2-ddrc: Extend schema with IRQs/resets/clocks props (2022-09-21 20:34:58 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.1, part 2
-
-Improvements in Synopsys DesignWare Universal Multi-Protocol Memory
-Controller Devicetree bindings.  The bindings are being split into
-one related to Synopsys core and into quite different derivative Zynq
-A05 DDR Memory Controller.  Extend the Synopsys bindings with additional
-properties to match upcoming new device support (Baikal-T1 support).
-
-----------------------------------------------------------------
-Serge Semin (4):
-      dt-bindings: memory: synopsys,ddrc-ecc: Detach Zynq DDRC controller support
-      dt-bindings: memory: snps,dw-umctl2-ddrc: Use more descriptive device name
-      dt-bindings: memory: snps,dw-umctl2-ddrc: Replace opencoded numbers with macros
-      dt-bindings: memory: snps,dw-umctl2-ddrc: Extend schema with IRQs/resets/clocks props
-
- .../memory-controllers/snps,dw-umctl2-ddrc.yaml    | 118 +++++++++++++++++++++
- .../memory-controllers/synopsys,ddrc-ecc.yaml      |  76 -------------
- .../memory-controllers/xlnx,zynq-ddrc-a05.yaml     |  38 +++++++
- MAINTAINERS                                        |   2 +
- 4 files changed, 158 insertions(+), 76 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
- delete mode 100644 Documentation/devicetree/bindings/memory-controllers/synopsys,ddrc-ecc.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
