@@ -1,191 +1,589 @@
-Return-Path: <SRS0=DfF4=Z6=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=GW4z=Z6=gmail.com=matti.lehtimaki@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 109EDC54EE9
-	for <soc@archiver.kernel.org>; Tue, 27 Sep 2022 21:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5EFC54EE9
+	for <soc@archiver.kernel.org>; Tue, 27 Sep 2022 21:50:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D3D1CC433D7; Tue, 27 Sep 2022 21:38:26 +0000 (UTC)
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 08F15C433D6; Tue, 27 Sep 2022 21:50:02 +0000 (UTC)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 73054C433C1
-	for <soc@kernel.org>; Tue, 27 Sep 2022 21:38:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 73054C433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 6B8FF580B68;
-	Tue, 27 Sep 2022 17:38:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 27 Sep 2022 17:38:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:message-id
-	:mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1664314704; x=1664318304; bh=zvol/GHM5c6R7Ut0JXbmy+UmAuDUUDOhOAP
-	i+O/Y+vQ=; b=j2HrporFekUvjGjgxKPv4UyBGubxTW/Xpmieh+l9FZvNadQYUdO
-	e5svWcHjmitpJpIZEvH1lLkLGOVdlwV+UNbCeOHPkKtFAkjks62l+LIqNGaljeXL
-	WK8ySOnl59ODmjvlVX9ezgcxDfMrg2AqRz1y+MOjwBlENVDK13K+9dNaqL4lWLe5
-	0OK9a8/uwonk9RLCjLzbuVJlvbDGp5LK41IYVpVSy6H02a1u18mpu9h5VnPjtS5c
-	QPSIA7xaBXaoYgKXXbXy7zAtf4MyYq/GMaXslHn5cjN2Hjr+MPC2ElKLolhi7T0j
-	a+qWcfctT/4sBaL1Y48owaVXmkdYarWm0zA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:message-id:mime-version
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664314704; x=
-	1664318304; bh=zvol/GHM5c6R7Ut0JXbmy+UmAuDUUDOhOAPi+O/Y+vQ=; b=I
-	C53jPTyHdE4gcelJNYcSbgX417kn6avKeCITHZpSZM8GqxSNGtKzHdiZAgyxutHv
-	BK5D/1222viVTIX7Cf+z+NYWhWiP5kq3+5hrSc1EaALsifraB7nh6W348zXVcxf+
-	Jnu9Ju8b+KzoP+3VPcT3UN0foFZFxqRt5+2WY+1ang2/gIS3loa4SqRSFvk/YYJI
-	SqgsGWC1E9ryefFyyM4u7TaR4et/FmdcsuhVX40bHz3viF/W20rseV9vcvnFFfcw
-	1fXLPExCMP5BB9xkWbG3UDeDYkqPOyL0oHBHroFRaOaJVNL3Hh/JVPX24hrBmQj5
-	zZ/LM5ejEPNh8aYXnqQZw==
-X-ME-Sender: <xms:T20zYxhCTRYfUQ6WbF7fM4ydKMvZ9ZTygbgOzRnmaEBs2hKPfa67OQ>
-    <xme:T20zY2DQXO6XT253DXu00B5S_y0ogPMmiKP-oWeiEUbqoDkAIrfDwnJl-MxmzI-VP
-    ZCSlqf3WISICLge4DU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegjedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepueehudefffejkeduhedtvedvuddugeffgeefleeuhfethfeuuefhueetfefgkeev
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmpdhpvghngh
-    huthhrohhnihigrdguvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:T20zYxFRmzCKvG8zNRJisJsIshLy230C2MFoIlDTBw0WkGl_xagp3A>
-    <xmx:T20zY2Q2hvsEE6iJ9R1CNlSWovgZCCT6WtqPwu6EeXb-5Pb1B2YaOw>
-    <xmx:T20zY-zEdsVERVhN94PUuHbjbREBu_yjhglwS2l6rT0azrwtO-8d-A>
-    <xmx:T20zYzoq4NsPDYFIB3Ze5C-LH3fPtChiyflNfNpBPQrP87t7jyoEww>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 98AF4B60089; Tue, 27 Sep 2022 17:38:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
-Mime-Version: 1.0
-Message-Id: <74c1ce25-e6c9-430a-bc03-e1acab0cb818@www.fastmail.com>
-Date: Tue, 27 Sep 2022 23:37:31 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 77B58C433C1;
+	Tue, 27 Sep 2022 21:50:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77B58C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id t16so8372374ljh.3;
+        Tue, 27 Sep 2022 14:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=fX8vXmb3nLnVt1B17kjgCPqgJ57wIFhg/9plrIVXuzc=;
+        b=AgTcDk3a5wWUJUAf6IJXXNChw+uOYs5jr2bBAqS4Lq4AoAK42cQCkbImp/7dBGLtWY
+         YU7NA3TstqLk/HN87Wrb/OkeU6jc2DuXWd84BLtHIV2e+bWksy6HyadJu19tvexmnokv
+         hizXNpMsQWqidKCeh8UPOOUsYGHhsi/Hu1A30UDnDEoVinu0f9pYQyIdyxAygLraoJXr
+         6zfH2NA+OAUWivdZq/qyJlyGvBHVK11hbfMK6eVP/91IqisqwJP66mCko6tyXzySmCR7
+         YFrlX/xXLRgBLcyIqXW13QeCI1Wd2Vji15mUIMsyxMUKAnar3KTQKvwrDjAWFV7wvHfM
+         pBcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=fX8vXmb3nLnVt1B17kjgCPqgJ57wIFhg/9plrIVXuzc=;
+        b=zDDQFX2SetusUZeioDNwc8LVtKHG4sVkksxM2Qcz0mY5u10jo7zL4HF7OuyEupyj+n
+         RXPjRNB0GJTQanhGQHwOjZd2L/12wBOl0JEr0cXbLKK2hf8Dsb4JfSOO0ik9tbKy3bC3
+         fvLhaiuaf+zF6ggh2lnkRh1YWmNxroG2EdRc+d145dQCfFFm6iyim/2Hh7imCbMHhICo
+         nGsCLpsGIE/Q1fxKSzhlLf26iq4zYfZWcLUk03XzYVpcMwJj1XBq/Iq2vs2zf/pKguxN
+         CKzK8Ks/DvpXhvtWH0nUiJV67y1l1w+IMt/UHev8fLKynbnhrfHyXlwvZCkutLuKiYVl
+         wThA==
+X-Gm-Message-State: ACrzQf0UMJHoJe9HEQgEVZ24HUJhds5hfcAaJEhPgx6N0URYsHvGQPTv
+	7vWYyv0HdJ8953Rgp4CybGw=
+X-Google-Smtp-Source: AMsMyM7NhKm114d4OpQqc+X02fdMdBoASFAlWylIyqLez7vNCciuBMQfFnM92y7puIVbdxR63e/iVg==
+X-Received: by 2002:a2e:b0d7:0:b0:26b:e586:86e9 with SMTP id g23-20020a2eb0d7000000b0026be58686e9mr10163073ljl.229.1664315398511;
+        Tue, 27 Sep 2022 14:49:58 -0700 (PDT)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
+        by smtp.gmail.com with ESMTPSA id u25-20020a2e2e19000000b0025fe7f33bc4sm279901lju.49.2022.09.27.14.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 14:49:58 -0700 (PDT)
+From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To: linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.0-rc7
-Content-Type: text/plain
+Cc: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4 10.1 (SM-T530)
+Date: Wed, 28 Sep 2022 00:49:39 +0300
+Message-Id: <20220927214940.244480-4-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220927214940.244480-1-matti.lehtimaki@gmail.com>
+References: <20220927214940.244480-1-matti.lehtimaki@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
+Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
+based on the apq8026 platform.
 
-  Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
+Currently supported are accelerometer sensor, hall sensor,
+internal storage, physical buttons (power & volume), screen
+(based on simple-framebuffer set up by the bootloader), sdcard,
+touchscreen and USB.
 
-are available in the Git repository at:
+Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+---
+Changes in v6:
+  - Set status as last property in nodes
+  - Pad register addresses to 8 hex digits
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git soc-fixes-6.0-rc7
+Changes in v5:
+  - Rename pm8226-regulators node to fix issue reported by make dtbs_check
 
-for you to fetch changes up to 7bea67a994300c7dff827d1eb2344c180d1ffd93:
+Changes in v4:
+  - Move delete-node to memory-region
+  - Move usb-switch node to blsp_i2c4
 
-  ARM: dts: integrator: Fix DMA ranges (2022-09-26 23:05:58 +0200)
+Changes in v3:
+  - Fix sdhc_2 bus width
+  - Reorder includes
 
-----------------------------------------------------------------
-ARM: SoC fixes for 6.0-rc7
+Changes in v2:
+  - Change codename to matisse-wifi
+  - Remove msm-id, not needed when lk2nd is used
+  - Remove unused labels from reserved memory regions
+  - Rename muic node
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 453 ++++++++++++++++++
+ 2 files changed, 454 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
 
-This should be the last set of bugfixes in the SoC tree:
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..69f6bbcf90c6 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1027,6 +1027,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-apq8016-sbc.dtb \
+ 	qcom-apq8026-asus-sparrow.dtb \
+ 	qcom-apq8026-lg-lenok.dtb \
++	qcom-apq8026-samsung-matisse-wifi.dtb \
+ 	qcom-apq8060-dragonboard.dtb \
+ 	qcom-apq8064-cm-qs600.dtb \
+ 	qcom-apq8064-ifc6410.dtb \
+diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+new file mode 100644
+index 000000000000..1c52337af560
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+@@ -0,0 +1,453 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2022, Matti Lehtimäki <matti.lehtimaki@gmail.com>
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/input/input.h>
++#include "qcom-msm8226.dtsi"
++#include "qcom-pm8226.dtsi"
++
++/ {
++	model = "Samsung Galaxy Tab 4 10.1";
++	compatible = "samsung,matisse-wifi", "qcom,apq8026";
++	chassis-type = "tablet";
++
++	aliases {
++		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
++		mmc1 = &sdhc_2; /* SDC2 SD card slot */
++		display0 = &framebuffer0;
++	};
++
++	chosen {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		stdout-path = "display0";
++
++		framebuffer0: framebuffer@3200000 {
++			compatible = "simple-framebuffer";
++			reg = <0x03200000 0x800000>;
++			width = <1280>;
++			height = <800>;
++			stride = <(1280 * 3)>;
++			format = "r8g8b8";
++		};
++	};
++
++	gpio-hall-sensor {
++		compatible = "gpio-keys";
++
++		event-hall-sensor {
++			label = "Hall Effect Sensor";
++			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
++			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
++			linux,input-type = <EV_SW>;
++			linux,code = <SW_LID>;
++			debounce-interval = <15>;
++			wakeup-source;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		autorepeat;
++
++		key-home {
++			label = "Home";
++			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_HOMEPAGE>;
++			debounce-interval = <15>;
++		};
++
++		key-volume-down {
++			label = "Volume Down";
++			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEDOWN>;
++			debounce-interval = <15>;
++		};
++
++		key-volume-up {
++			label = "Volume Up";
++			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEUP>;
++			debounce-interval = <15>;
++		};
++	};
++
++	reg_tsp_1p8v: regulator-tsp-1p8v {
++		compatible = "regulator-fixed";
++		regulator-name = "tsp_1p8v";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++
++		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&tsp_en_default_state>;
++	};
++
++	reg_tsp_3p3v: regulator-tsp-3p3v {
++		compatible = "regulator-fixed";
++		regulator-name = "tsp_3p3v";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++
++		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&tsp_en1_default_state>;
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		framebuffer@3200000 {
++			reg = <0x03200000 0x800000>;
++			no-map;
++		};
++
++		mpss@8400000 {
++			reg = <0x08400000 0x1f00000>;
++			no-map;
++		};
++
++		mba@a300000 {
++			reg = <0x0a300000 0x100000>;
++			no-map;
++		};
++
++		reserved@cb00000 {
++			reg = <0x0cb00000 0x700000>;
++			no-map;
++		};
++
++		wcnss@d200000 {
++			reg = <0x0d200000 0x700000>;
++			no-map;
++		};
++
++		adsp@d900000 {
++			reg = <0x0d900000 0x1800000>;
++			no-map;
++		};
++
++		venus@f100000 {
++			reg = <0x0f100000 0x500000>;
++			no-map;
++		};
++
++		/delete-node/ smem@3000000;
++		smem_region: smem@fa00000 {
++			reg = <0x0fa00000 0x100000>;
++			no-map;
++		};
++
++		reserved@fb00000 {
++			reg = <0x0fb00000 0x260000>;
++			no-map;
++		};
++
++		rfsa@fd60000 {
++			reg = <0x0fd60000 0x20000>;
++			no-map;
++		};
++
++		rmtfs@fd80000 {
++			compatible = "qcom,rmtfs-mem";
++			reg = <0x0fd80000 0x180000>;
++			no-map;
++
++			qcom,client-id = <1>;
++		};
++	};
++};
++
++&blsp1_i2c2 {
++	status = "okay";
++
++	accelerometer@1d {
++		compatible = "st,lis2hh12";
++		reg = <0x1d>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&accel_int_default_state>;
++
++		st,drdy-int-pin = <1>;
++
++		vdd-supply = <&pm8226_l19>;
++		vddio-supply = <&pm8226_lvs1>;
++	};
++};
++
++&blsp1_i2c4 {
++	status = "okay";
++
++	muic: usb-switch@25 {
++		compatible = "siliconmitus,sm5502-muic";
++		reg = <0x25>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&muic_int_default_state>;
++	};
++};
++
++&blsp1_i2c5 {
++	status = "okay";
++
++	touchscreen@4a {
++		compatible = "atmel,maxtouch";
++		reg = <0x4a>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&tsp_int_rst_default_state>;
++
++		reset-gpios = <&pm8226_gpios 6 GPIO_ACTIVE_LOW>;
++
++		vdd-supply = <&reg_tsp_1p8v>;
++		vdda-supply = <&reg_tsp_3p3v>;
++	};
++};
++
++&rpm_requests {
++	regulators {
++		compatible = "qcom,rpm-pm8226-regulators";
++
++		pm8226_s3: s3 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1300000>;
++		};
++
++		pm8226_s4: s4 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_s5: s5 {
++			regulator-min-microvolt = <1150000>;
++			regulator-max-microvolt = <1150000>;
++		};
++
++		pm8226_l1: l1 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++
++		pm8226_l2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8226_l3: l3 {
++			regulator-min-microvolt = <750000>;
++			regulator-max-microvolt = <1337500>;
++			regulator-always-on;
++		};
++
++		pm8226_l4: l4 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8226_l5: l5 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8226_l6: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++
++		pm8226_l7: l7 {
++			regulator-min-microvolt = <1850000>;
++			regulator-max-microvolt = <1850000>;
++		};
++
++		pm8226_l8: l8 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-always-on;
++		};
++
++		pm8226_l9: l9 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++
++		pm8226_l10: l10 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_l12: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_l14: l14 {
++			regulator-min-microvolt = <2750000>;
++			regulator-max-microvolt = <2750000>;
++		};
++
++		pm8226_l15: l15 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		pm8226_l16: l16 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3350000>;
++		};
++
++		pm8226_l17: l17 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++
++			regulator-system-load = <200000>;
++			regulator-allow-set-load;
++			regulator-always-on;
++		};
++
++		pm8226_l18: l18 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_l19: l19 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <3000000>;
++		};
++
++		pm8226_l20: l20 {
++			regulator-min-microvolt = <3075000>;
++			regulator-max-microvolt = <3075000>;
++		};
++
++		pm8226_l21: l21 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_l22: l22 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3000000>;
++		};
++
++		pm8226_l23: l23 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		pm8226_l24: l24 {
++			regulator-min-microvolt = <1300000>;
++			regulator-max-microvolt = <1350000>;
++		};
++
++		pm8226_l25: l25 {
++			regulator-min-microvolt = <1775000>;
++			regulator-max-microvolt = <2125000>;
++		};
++
++		pm8226_l26: l26 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1300000>;
++		};
++
++		pm8226_l27: l27 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8226_l28: l28 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8226_lvs1: lvs1 {};
++	};
++};
++
++&sdhc_1 {
++	vmmc-supply = <&pm8226_l17>;
++	vqmmc-supply = <&pm8226_l6>;
++
++	bus-width = <8>;
++	non-removable;
++
++	status = "okay";
++};
++
++&sdhc_2 {
++	vmmc-supply = <&pm8226_l18>;
++	vqmmc-supply = <&pm8226_l21>;
++
++	bus-width = <4>;
++	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
++};
++
++&tlmm {
++	accel_int_default_state: accel-int-default-state {
++		pins = "gpio54";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	muic_int_default_state: muic-int-default-state {
++		pins = "gpio67";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	tsp_en_default_state: tsp-en-default-state {
++		pins = "gpio31";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	tsp_en1_default_state: tsp-en1-default-state {
++		pins = "gpio73";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	tsp_int_rst_default_state: tsp-int-rst-default-state {
++		pins = "gpio17";
++		function = "gpio";
++		drive-strength = <10>;
++		bias-pull-up;
++	};
++};
++
++&usb {
++	extcon = <&muic>, <&muic>;
++	status = "okay";
++};
++
++&usb_hs_phy {
++	extcon = <&muic>;
++	v1p8-supply = <&pm8226_l10>;
++	v3p3-supply = <&pm8226_l20>;
++};
+-- 
+2.34.1
 
- - Two fixes for Arm integrator, dealing with a regression caused
-   by invalid DT properties combined with a change in dma address
-   translation, and missing device_type annotations on the PCI
-   bus.
-
- - Fixes for drivers/reset/, addressing bugs in i.MX8MP, Sparx5 and
-   NPCM8XX platforms.
-
- - Bjorn Andersson's email address changes in the MAINTAINERS file
-
- - Multiple minor fixes to Qualcomm dts files, and a change to the
-   remoteproc firmware filename that did not match the actual
-   path in the linux-firmware package.
-
- - Minor code fixes for the Allwinner/sunxi SRAM driver, and the
-   broadcom STB Bus Interface Unit driver
-
- - A build fix for the sunplus sp7021 platform
-
- - Two dts fixes for TI OMAP family SoCs, addressing an extraneous
-   usb4 device node and an incorrect DMA handle.
-
-----------------------------------------------------------------
-Arnd Bergmann (5):
-      Merge tag 'omap-for-6.0/fixes-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap into arm/fixes
-      Merge tag 'arm-soc/for-6.0/drivers-fixes-v2' of https://github.com/Broadcom/stblinux into arm/fixes
-      Merge tag 'sunxi-drivers-fixes-for-6.0-1' of https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux into arm/fixes
-      Merge tag 'qcom-arm64-fixes-for-6.0' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-      Merge tag 'reset-fixes-for-v6.0' of git://git.pengutronix.de/pza/linux into arm/fixes
-
-Bhupesh Sharma (1):
-      arm64: dts: qcom: sm8150: Fix fastrpc iommu values
-
-Bjorn Andersson (1):
-      MAINTAINERS: Update Bjorn's email address
-
-Florian Fainelli (1):
-      soc: bcm: brcmstb: biuctrl: Avoid double of_node_put()
-
-Johan Hovold (2):
-      arm64: dts: qcom: sc7280: move USB wakeup-source property
-      arm64: dts: qcom: sm8350: fix UFS PHY serdes size
-
-Linus Walleij (2):
-      ARM: dts: integrator: Tag PCI host with device_type
-      ARM: dts: integrator: Fix DMA ranges
-
-Manivannan Sadhasivam (1):
-      arm64: dts: qcom: sc8280xp-x13s: Update firmware location
-
-Michael Walle (1):
-      reset: microchip-sparx5: issue a reset on startup
-
-Randy Dunlap (1):
-      ARM: sunplus: fix serial console kconfig and build problems
-
-Richard Zhu (1):
-      reset: imx7: Fix the iMX8MP PCIe PHY PERST support
-
-Romain Naour (1):
-      ARM: dts: am5748: keep usb4_tm disabled
-
-Samuel Holland (4):
-      soc: sunxi: sram: Actually claim SRAM regions
-      soc: sunxi: sram: Prevent the driver from being unbound
-      soc: sunxi: sram: Fix probe function ordering issues
-      soc: sunxi: sram: Fix debugfs info for A64 SRAM C
-
-Steev Klimaszewski (1):
-      arm64: dts: qcom: thinkpad-x13s: Fix firmware location
-
-Tomer Maimon (1):
-      reset: npcm: fix iprst2 and iprst4 setting
-
-Tony Lindgren (1):
-      Merge branch 'am5748-fix' into fixes
-
-YuTong Chang (1):
-      ARM: dts: am33xx: Fix MMCHS0 dma properties
-
- .mailmap                                           |  3 +++
- MAINTAINERS                                        | 12 +++++------
- arch/arm/boot/dts/am33xx-l4.dtsi                   |  3 +--
- arch/arm/boot/dts/am5748.dtsi                      |  4 ++++
- arch/arm/boot/dts/integratorap-im-pd1.dts          |  1 +
- arch/arm/boot/dts/integratorap.dts                 |  9 ++++----
- arch/arm/mach-sunplus/Kconfig                      |  4 ++--
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 ++-
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |  4 ++--
- arch/arm64/boot/dts/qcom/sm8150.dtsi               | 24 ++++++++--------------
- arch/arm64/boot/dts/qcom/sm8350.dtsi               |  2 +-
- drivers/reset/reset-imx7.c                         |  1 +
- drivers/reset/reset-microchip-sparx5.c             | 22 +++++++++++++++-----
- drivers/reset/reset-npcm.c                         |  2 +-
- drivers/soc/bcm/brcmstb/biuctrl.c                  |  1 -
- drivers/soc/sunxi/sunxi_sram.c                     | 23 +++++++++------------
- 16 files changed, 64 insertions(+), 54 deletions(-)
