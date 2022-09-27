@@ -1,82 +1,178 @@
-Return-Path: <ardb@kernel.org>
+Return-Path: <SRS0=DVpK=Z6=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E32C54EE9
-	for <soc@archiver.kernel.org>; Tue, 27 Sep 2022 13:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A25EC07E9D
+	for <soc@archiver.kernel.org>; Tue, 27 Sep 2022 16:00:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2C95FC43143; Tue, 27 Sep 2022 13:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1778FC433D7
-	for <soc@kernel.org>; Tue, 27 Sep 2022 13:36:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664285765;
-	bh=KF4ygSdoBEgFR9c95ykoGxx1nq7hRUsiYDGtXOQ60/g=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=Cupc1LEG0QvgtutTKOAF/DAtypyBFh14RvLBlaD9mL3VOGfIF8J2Ch4dUs+mw1vcl
-	 GZlTqJV8LEo36piRyTLhxYNnx6sz1+0Ua5svEUXEimOBdWxiK0ATygn6/u07IgmDE4
-	 wOy/+CUN2L5xuTJp9kF40ZDcTWxFNq2PhNGXQwSrwOAlPs6Fqlycvyo+P4nlY/Y1J3
-	 ROSYyjjTGdCKUKh3Vo55Pn/FCpFgACTtwPPlFDbkkF9UwF5ChypPyOh3iqCUEYa5ie
-	 6XLaR9792tHq3+PxmIJ2MGlKEK+oMzLOX/czw9L1VQVgyRSJ8fUwvQ4gGBlXuGD03S
-	 BM+iNyuQ/0UCQ==
-Received: by mail-lf1-f48.google.com with SMTP id a2so15735292lfb.6
-        for <soc@kernel.org>; Tue, 27 Sep 2022 06:36:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3qzY5aV1rjzIYB54dnXohKdsDkw24vS7bHZkrwa1yhWXPhhvde
-	Ah3NIc4ZnvyfxVnPHQRWYqA+24544aSvOa7GtgA=
-X-Google-Smtp-Source: AMsMyM4Y3Wje5KdfbbiBTLtF+Lwy068okUSJfsDGYICgGYo+0fhgfZ9ubhir7T5qaij+lYPWdvn4Ga22vo3gi+Iu1qg=
-X-Received: by 2002:a05:6512:3d09:b0:497:ab35:fd12 with SMTP id
- d9-20020a0565123d0900b00497ab35fd12mr11478651lfv.539.1664285763056; Tue, 27
- Sep 2022 06:36:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <c557b149780faa2299700585afc9d270ede7f78b.1664285062.git.geert+renesas@glider.be>
-In-Reply-To: <c557b149780faa2299700585afc9d270ede7f78b.1664285062.git.geert+renesas@glider.be>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 27 Sep 2022 15:35:51 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEK340azdrrf8T225gGTSBVgCW2NH6jkteVcqWzcnc8Xw@mail.gmail.com>
-Message-ID: <CAMj1kXEK340azdrrf8T225gGTSBVgCW2NH6jkteVcqWzcnc8Xw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Drop CMDLINE_FORCE dependency on !ARCH_MULTIPLATFORM
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+	id 5C9F4C4347C; Tue, 27 Sep 2022 16:00:25 +0000 (UTC)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3169AC433C1;
+	Tue, 27 Sep 2022 16:00:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3169AC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id y8so13819657edc.10;
+        Tue, 27 Sep 2022 09:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=aJuVRn2ynJ1wXVYFYmSjthXIebM45gjx5lMxq4i3RYU=;
+        b=nLdsiPS0LfTl0r4gKIVJQw3DFA6Qymnb+9UxbtB7/hFgQTrRV6WuOGZmsNQ5pkN0Qq
+         lU1TWVrdLl8TbgEY2EBVTrgRQpzp3czCcdBJO+uXk81oovA0vrk1bUOfd4VJOWyZ73Nd
+         +fdcxik/Ae2eRONez+34XbxLFOYMdt5B50bhZggBcmJWBztRARNz3U6NqiY84uVmz+iB
+         1LN9YZfU6iHgwvKMM2qGKSry2fb6d0PEc5QlqTW7IY5XNsWMqcq/sQCKVmII6GCImUHw
+         2THSZIfDoYp4RAFpocaWNf5/fkfncr3FpKThfrual81nTw9cNOMVSNY1B+P7xOj58yUh
+         EHtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=aJuVRn2ynJ1wXVYFYmSjthXIebM45gjx5lMxq4i3RYU=;
+        b=2v+yoZkfSOMvyy0z+7dn5T9CxxSE0tT2oVt5RUHDbGXUAygJk+kcm1G6NNNkqC5YFD
+         1F3hAe4VmecqoKme8tVhz56Aav3hCzA2jTP26iNWZRzWmOPD4eqjhoT0vwfVEG2ZLwpV
+         //cVAV4jvk/AgJWxl/NM0ps6bAAxIzZpgCEdC2zO9JnZQMOPNASTquwzTCJ3OwprVCa1
+         U27yvSOj2rRGCsya44NdMYF/RxHEjEwl1krEf81ZCDS0xY7bf6njNgwFRlq+8xeqPE8F
+         zYjc9TsMl2y0UOmbI50AaovEN8Zob+9tqn6PsPyPtT9eT+vtFoxh3N6k7z2xUKiZT0Tb
+         kvjw==
+X-Gm-Message-State: ACrzQf0kkGubLfrYaC17esrk4Q36hIgSjHIMFi4KZJR43x7qNkiYtMqY
+	7/IW+vWcT6K0oCfbsPuRwu8=
+X-Google-Smtp-Source: AMsMyM5yL2bZzFqp/CZGyeLzDMFRkqmHp3vo2ulfm1un/c9MP9lSWKMrVthKTc+9rpj3zqjzijDGsw==
+X-Received: by 2002:aa7:dd57:0:b0:453:2d35:70bb with SMTP id o23-20020aa7dd57000000b004532d3570bbmr29223064edw.26.1664294422229;
+        Tue, 27 Sep 2022 09:00:22 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ku18-20020a170907789200b0073100dfa7b0sm1013854ejc.8.2022.09.27.09.00.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 09:00:20 -0700 (PDT)
+Date: Tue, 27 Sep 2022 18:00:19 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, 
-	Linus Walleij <linus.walleij@linaro.org>, Russell King <rmk+kernel@armlinux.org.uk>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc: arm@kernel.org, soc@kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-edac@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
+	Robert Richter <rric@kernel.org>,
+	Rahul Bedarkar <rabedarkar@nvidia.com>
+Subject: Re: [GIT PULL 1/7] soc/tegra: Changes for v5.20-rc1
+Message-ID: <YzMeE2HKOd5WaNqd@orome>
+References: <20220708185608.676474-1-thierry.reding@gmail.com>
+ <20220708185608.676474-2-thierry.reding@gmail.com>
+ <CAK8P3a1bKUr77t9xkNAX=-RqzRme6Hymr3V=36MSHT_sOFEW5A@mail.gmail.com>
+ <Ys6lXD6BSxjH02mW@orome>
+ <CAK8P3a0cSq47B=acZ854TVu=RckJNfyfKdqQUMzCX7SsV7Wt0g@mail.gmail.com>
+ <YtAajDYfcVHRGl1U@nazgul.tnic>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="XRzEosQ5RA2jqi3s"
+Content-Disposition: inline
+In-Reply-To: <YtAajDYfcVHRGl1U@nazgul.tnic>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 
-On Tue, 27 Sept 2022 at 15:26, Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> On older platforms that boot an image with an appended DTB, or where
-> the boot loader has no support for updating chosen/bootargs, it is
-> common to rely on CMDLINE_FORCE.
->
-> While a fixed command line can make the kernel unbootable on other
-> platforms, it is not guaranteed to cause that.  E.g. all Renesas boards
-> use the same chosen/bootargs in upstream DTS, which works fine if your
-> DHCP server hands out proper nfsroot parameters.
->
-> Fixes: 84fc863606239d8b ("ARM: make ARCH_MULTIPLATFORM user-visible")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+--XRzEosQ5RA2jqi3s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  arch/arm/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 22f62ad919bfd831..ea8adbf25651438a 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -1616,7 +1616,6 @@ config CMDLINE_EXTEND
->
->  config CMDLINE_FORCE
->         bool "Always use the default kernel command string"
-> -       depends on !ARCH_MULTIPLATFORM
->         help
->           Always use the default kernel command string, even if the boot
->           loader passes other arguments to the kernel.
-> --
-> 2.25.1
->
+On Thu, Jul 14, 2022 at 03:31:07PM +0200, Borislav Petkov wrote:
+> On Wed, Jul 13, 2022 at 02:14:27PM +0200, Arnd Bergmann wrote:
+> > I think this is just a reflection of what other hardware can do:
+> > most machines only detect memory errors, but the EDAC subsystem
+> > can work with any type in principle. There are also a lot of
+> > conditions elsewhere that can be detected but not corrected.
+>=20
+> Just a couple of thoughts from looking at this:
+>=20
+> So the EDAC thing reports *hardware* errors by using the RAS
+> capabilities built into an IP block. So it started with memory
+> controllers but it is getting extended to other blocks. AMD are looking
+> at how to integrate GPU hw errors reporting into it, for example.
+>=20
+> Looking at that CBB thing, it looks like it is supposed to report not
+> so much hardware errors but operational errors. Some of the hw errors
+> reported by RAS hw are also operation-related but not the majority.
+>=20
+> Then, EDAC has this counters exposed in:
+>=20
+> $ grep -r . /sys/devices/system/edac/
+> /sys/devices/system/edac/power/runtime_active_time:0
+> /sys/devices/system/edac/power/runtime_status:unsupported
+> /sys/devices/system/edac/power/runtime_suspended_time:0
+> /sys/devices/system/edac/power/control:auto
+> /sys/devices/system/edac/pci/edac_pci_log_pe:1
+> /sys/devices/system/edac/pci/pci0/pe_count:0
+> /sys/devices/system/edac/pci/pci0/npe_count:0
+> /sys/devices/system/edac/pci/pci_parity_count:0
+> /sys/devices/system/edac/pci/pci_nonparity_count:0
+> /sys/devices/system/edac/pci/edac_pci_log_npe:1
+> /sys/devices/system/edac/pci/edac_pci_panic_on_pe:0
+> /sys/devices/system/edac/pci/check_pci_errors:0
+> /sys/devices/system/edac/mc/power/runtime_active_time:0
+> /sys/devices/system/edac/mc/power/runtime_status:unsupported
+> ...
+>=20
+> with the respective hierarchy: memory controllers, PCI errors, etc.
+>=20
+> So the main question is, does it make sense for you to fit this into the
+> EDAC hierarchy and what would even be the advantage of making it part of
+> EDAC?
+
+Closing the loop on this: we've decided to keep this in drivers/soc for
+now, with the option of re-evaluating when we encounter similar
+functionality on other hardware.
+
+I'm also going to hijack the thread because something else came up
+recently that fits the audience here and it's up the same alley: on
+Tegra234 a mechanism, called FSI (Functional Safety Island), exists
+to report failures to an external MCU that's monitoring the system.
+
+Special hardware exists in the SoC that can send these errors to the
+MCU via different transports, and the idea is to report software-
+detected failures from kernel drivers such as I2C or PCI via this
+mechanism, so appropriate action can be taken. So essentially we're
+looking at adding some new API, preferably something generic, to these
+bus drivers along with "provider" drivers that get notified of these
+reports so that they can be forwarded to the FSI (and then the MCU).
+
+This again doesn't seem to be a great fit for EDAC as it is today, but
+I can also not find anything better looking around the kernel. So I'm
+wondering if this is something that others have encountered and might
+have solved already and I just haven't found it, or if this is something
+that would be worth creating a new subsystem for. Or perhaps this could
+be integrated into EDAC somehow? I'm a bit reluctant to add yet another
+custom infrastructure for this, given that it's functionality that
+likely exists in other SoCs as well.
+
+Any thoughts on this?
+
+Thierry
+
+--XRzEosQ5RA2jqi3s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmMzHhAACgkQ3SOs138+
+s6G4wxAAnW+S0l13pKsw2U4zZ5sNcYSoEgHdCR8jCxsO0W4Lc3b8L/xQkfxIleZW
+9/6fKDe6sygRujnqnYgBGIUUC6SjgklTDMpQaI39oFK6XglyFsFaYVyZpKBfFISc
+UbVFT71QClax5nUbOXmftPPMSHp7OUQzql3ANq2gT5r9usHIqtE3cDamJv1p/CRA
+TMPQSakOv9cI+CtQHWPMV7b9DUG9e6SNzsHhpC/JZsbySATcsTW0IyTBY2pNTBf7
+Rqe/uCh8jlJx42rCuY/GVGl0TGDO/Im1GjrII5M3OoSkb1aTH0VaSCa4KQhi5WRS
+Jh2tnMCkKwwmjpuuNnUc2K6+OUHl2Iya2Gfa+Q0OVhTvi+stpjImpG5xjLpyBj3W
+KHFdE1tzXSn1yxwYhe7WS1vd4ZsHWeP19oo6VRFsav+51e1qyXsj2I7PoucD67bG
+o+NjiVIZxNg/lnaf2za/6qZ7qMT9kJAXDeH4oUmYhDsydnpLvQZ6aPkDl3X11qaK
+BejA3/XatDIk/hL8sqFiVTvgyiqaZJzaVYdEGrr0yJRpuDVCXkCHrG9njyLOYtdH
+LQ2aTmFIgunI+r2tDLoEjR8bjxEvV+C9kwhRVAySSYC9Pdwz+Dnb2yWE6AYt8EnR
+ZV3aVTGFyjc5OByFB3KBIptfB/syLfnnq9ZcKcWfQvDyI2EMS8E=
+=UI0x
+-----END PGP SIGNATURE-----
+
+--XRzEosQ5RA2jqi3s--
