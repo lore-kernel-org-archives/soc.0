@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D80B8C6FA98
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2C93C6FA9A
 	for <soc@archiver.kernel.org>; Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CA415C43155; Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B46A9C43151;
+	id D40CCC43158; Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE693C43152;
 	Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1664398829;
-	bh=zb+287A56FHf4KBvN4fkeTeenFMXzjHbKkkztft5ImM=;
+	bh=RX5j1mv++gVf62qKYEhN+S1smA8uvTqbBSiJOFcHU98=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=KAOpRU+XQFojJzhNe5Xg+3G6otjbdnPGwKyPpLUwRo9d0t6/4h7QFVlxbBHNyhaWk
-	 0YUTOhwRUYL3A6vT0NYXXKg25ms9y9GKB8AC46EedT8DMmbEe979TmeIfgrGTAga+0
-	 UNBa/n5eFqvSKE7zGfFpOb6tD2lE7cKT3y5seIinByjUAaT+/5XZ2P3dLjKhz1oTBL
-	 SH9DfXCG31Qwi+DCK5D7LBe2gIQecXLpx+ldxrtM+qcbJfvuyeiVDORAV+if+yS1al
-	 rykt0JgK9zZW6NoNaOeRsXUvYcKD5Y3tFdwZo3tBI0ema4F9lK8voHekDkpqucuX/D
-	 Ef1UxptxlAMlw==
+	b=dq74wF4+d5s7TJqHZsq6fYydLqC7N8c6OwEvQyEJ+sJDHlU3FbimQsqOKtnMPuUd8
+	 m0FLjJ7XGaIiJIdz90c/MG8KDGpMNZHW8h9UUsfTNu75JVRgOBtwhZxnI4rCWFXT7e
+	 y32G9HAI65ElE3kmLfq/QHioPsitOznbCKADN+rBQdWjav8/+mHlDKKmweBUPb16QX
+	 j6hDzcpESQIjgRWiJ8V1rEcuw3zP/+o1Qipyb1l0Q+z3XZt2cc5f3M3982Y6D6P4s0
+	 n6gU5LW6PvI/pWhNKfFssErvjA4yOwySCysjGOJK/lGxQ1dEn2szqdbrejM7+cYJ2a
+	 djeN9a9WYEi7w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A2A2DE4D023;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ACE05E4D01B;
 	Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] memory: Second round for v6.1
+Subject: Re: [GIT PULL] Rockchip defconfig64 changes for 6.1 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166439882966.18494.7464822193737901725.git-patchwork-notify@kernel.org>
+ <166439882970.18494.15181764753184629514.git-patchwork-notify@kernel.org>
 Date: Wed, 28 Sep 2022 21:00:29 +0000
-References: <20220926105023.119781-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220926105023.119781-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <1989419.QkHrqEjB74@phil>
+In-Reply-To: <1989419.QkHrqEjB74@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 26 Sep 2022 12:50:23 +0200 you wrote:
-> Hi,
+On Sat, 24 Sep 2022 21:01:09 +0200 you wrote:
+> The following changes since commit 1c23f9e627a7b412978b4e852793c5e3c3efc555:
 > 
-> On top of previous pull request.
+>   Linux 6.0-rc2 (2022-08-21 17:32:54 -0700)
 > 
-> Best regards,
-> Krzysztof
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.1-rockchip-defconfig64-1
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] memory: Second round for v6.1
-    https://git.kernel.org/soc/soc/c/f6f7d870c5b6
+  - [GIT,PULL] Rockchip defconfig64 changes for 6.1 #1
+    https://git.kernel.org/soc/soc/c/25631f1fec2a
 
 You are awesome, thank you!
 -- 
