@@ -4,61 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2656C6FA82
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E5C7C6FA90
 	for <soc@archiver.kernel.org>; Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6D93CC43142; Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56DCBC43143;
+	id 55820C43141; Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 40540C43470;
 	Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1664398829;
-	bh=9Q+tDn3/dHClgSFICCz0rl2Tx2pus16skeWh9PTc/Ls=;
+	bh=OpIBLgq6394TN7ZQ+KnBRedMH3e4XWwWPPcShwf89Lg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=IVCSOH7trxR4/lMMY+Sgd/8RieFu0yLRnKGH/MwSW+RWEYm1mX4TZZMS24oZOZKIs
-	 W+pBgBCuET/pzgSVHiR34iD4VSFrCCXk6WDmn+JukBoQNwCFF3/ChJuUtzDPcdOgJ6
-	 Rf7ZMuoD96uuv1xPvqolIQSl+YjwcnUDDMpA/qYKoTlAnULaGd6SWD9eiMZaQQlQts
-	 QzAM7Aj8Pvbo1tMhTVnWWCjq8/q2m/8zjjdJGj4WaY89euy/RpEY0zm93TltSqxqSR
-	 Cnnit1gPf+Y6ozU7gPt4nsdL8qMynjwK6Nzs5v8VLlwf7b/fiLM9U9+ZIl2HKtQvhW
-	 GlStFS6i5GVrw==
+	b=HyxMvk8OdYu+mv8A6wynyW2t5Rh6uiR7u1bseiLDK1og4xDkZFnRzyGN871AOxELQ
+	 Bjw8/+dsIznP80CpG4S8oDjB2qXfSdMM56QKc1YkDdNxNiiUJfp+xPGp/b5ZCJcRaI
+	 Tk440UJEksTvktzhOa4jSMyl4e1rmfGMqYvEQncb24qhOdBetr11kHgMY+QrQ064oJ
+	 vGUb/Zshjf8ySLWpESAdtpIgC+qjrL1COon/asH6+Ub/mHZO2dpGtkzq/MMxFKXo9T
+	 6jGVhMlQMdo80rxHkcXKhMpCa1vaVmcja6ijKcl9bADetSpXCUto66NlWdnJoa8lws
+	 pEI1si/Z79TjA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3E494E4D022;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1E3CFE4D021;
 	Wed, 28 Sep 2022 21:00:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: aspeed: Kconfig: Fix indentation
+Subject: Re: [PATCH v3 0/9] Update UniPhier armv7 devicetree
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166439882925.18494.10347863055292197576.git-patchwork-notify@kernel.org>
+ <166439882911.18494.18323946843768414129.git-patchwork-notify@kernel.org>
 Date: Wed, 28 Sep 2022 21:00:29 +0000
-References: <20220928025926.2592030-1-joel@jms.id.au>
-In-Reply-To: <20220928025926.2592030-1-joel@jms.id.au>
-To: Joel Stanley <joel@jms.id.au>
+References: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
+In-Reply-To: <20220913042249.4708-1-hayashi.kunihiko@socionext.com>
+To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 28 Sep 2022 12:29:26 +0930 you wrote:
-> From: Juerg Haefliger <juerg.haefliger@canonical.com>
+On Tue, 13 Sep 2022 13:22:40 +0900 you wrote:
+> Update devicetree sources for UniPhier armv7 SoCs to remove dtschema
+> warnings, add support existing features that haven't yet been
+> described, and replace constants with macros.
 > 
-> The convention for indentation seems to be a single tab. Help text is
-> further indented by an additional two whitespaces. Fix the lines that
-> violate these rules.
-> 
-> Signed-off-by: Juerg Haefliger <juergh@canonical.com>
-> Acked-by: Andrew Jeffery <andrew@aj.id.au>
-> Link: https://lore.kernel.org/r/20220523060532.7864-1-juergh@canonical.com
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Changes since v2:
+> - Rename the nodes for usb external controller to "usb-controller"
+> - Fix the node names for sata
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: aspeed: Kconfig: Fix indentation
-    https://git.kernel.org/soc/soc/c/ef2fb84c130b
+  - [v3,1/9] ARM: dts: uniphier: Rename pvtctl node to thermal-sensor
+    https://git.kernel.org/soc/soc/c/2681eed29b9e
+  - [v3,2/9] ARM: dts: uniphier: Rename usb-phy node for USB2 to usb-controller
+    https://git.kernel.org/soc/soc/c/242c78ff62ff
+  - [v3,3/9] ARM: dts: uniphier: Rename usb-glue node for USB3 to usb-controller
+    https://git.kernel.org/soc/soc/c/7e115bdd4f64
+  - [v3,4/9] ARM: dts: uniphier: Rename gpio-hog node
+    https://git.kernel.org/soc/soc/c/888c701754a8
+  - [v3,5/9] ARM: dts: uniphier: Use GIC interrupt definitions
+    https://git.kernel.org/soc/soc/c/c9c50dfdf6e4
+  - [v3,6/9] ARM: dts: uniphier: Add ahci controller nodes for Pro4
+    https://git.kernel.org/soc/soc/c/d5566de59bdd
+  - [v3,7/9] ARM: dts: uniphier: Add ahci controller nodes for PXs2
+    https://git.kernel.org/soc/soc/c/97837505f067
+  - [v3,8/9] ARM: dts: uniphier: Move interrupt-parent property to each child node in uniphier-support-card
+    https://git.kernel.org/soc/soc/c/0aca3912ce31
+  - [v3,9/9] ARM: dts: uniphier: Remove compatible "snps,dw-pcie-ep" from pcie-ep node
+    https://git.kernel.org/soc/soc/c/86b20827bece
 
 You are awesome, thank you!
 -- 
