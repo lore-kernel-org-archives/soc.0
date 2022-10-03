@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40367C433FE
-	for <soc@archiver.kernel.org>; Mon,  3 Oct 2022 07:32:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB4C0C433F5
+	for <soc@archiver.kernel.org>; Mon,  3 Oct 2022 07:39:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 07835C433D7; Mon,  3 Oct 2022 07:32:45 +0000 (UTC)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	id BB2E3C433D7; Mon,  3 Oct 2022 07:39:22 +0000 (UTC)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5E056C433B5
-	for <soc@kernel.org>; Mon,  3 Oct 2022 07:32:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E056C433B5
+	by smtp.kernel.org (Postfix) with ESMTPS id 423ACC433C1
+	for <soc@kernel.org>; Mon,  3 Oct 2022 07:39:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 423ACC433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id x40so141686ljq.9
-        for <soc@kernel.org>; Mon, 03 Oct 2022 00:32:43 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id o7so8088729lfk.7
+        for <soc@kernel.org>; Mon, 03 Oct 2022 00:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=77DQW3lsofQQZnwFkOSE0jlhaIOSR4ZhDsIQytSJOII=;
-        b=m49J/G2VqOQiRmROweFuYDGFPT7u+OwT6ePg4e+sgGCz81USX+C/ryBf3dTanLStbb
-         MuBqBxrPV1ZrETAq+9zYJMw6aCXO/o5idY9nE0Bz7uo5jm/YiNONNcW4zAEi3awBf+K4
-         K54ql3FylCtnoMTp98BSkpMU3czLkraNBot3doE71ARS16lRKxq6WxUqvPtnS1jAVXoZ
-         HfdmPfYc+6mprt5inhAjGoRaowd/C6z1Qp2h/1DMYKT6Kb8dSyqFxxgYkU5Qa/hv1bv7
-         uwZcwLXttWWMr3tsGwcIogLfIi6sAQTS8JV/2+tQmaY/FMa+4Mo+ByCfzDyLdEv03GZ8
-         a6cw==
+        bh=fSpMO7Q7ztMkeSMVfIkdP3tgEsFHMk6ik3iJDreqgKk=;
+        b=xsJPA1MYeKwG/NkMGQFDx6CFF+4DZWrdboI6deotot+SkpJtzdCX5g+dqpXMD7lWwH
+         HQ2mpHglJ7d/doU0mitPoaRH82+8Wf3Wu4H0HQHBHlq1cIFkkQsZ7SG/tc+68IBWnMIo
+         cLOzN3m1ej/ceKYcg8ufIWb84/qDHhAUNn9uCx+mJIZkqP7k315ZVDkvrAqz5hvbE90f
+         lPbQtM76/HXzbg3X4Nz4huiHoBXUIetjdjY9ocFgsngSP074QxwU+Sa3PM8kdFy3oN28
+         40JRdYRMc9Mw6JVyAxXi1+6GkCKOHxJ8o6GX2vk/OkwNEiWqis+GEUwoqpz8tfGoUgb6
+         AJiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=77DQW3lsofQQZnwFkOSE0jlhaIOSR4ZhDsIQytSJOII=;
-        b=b6ZhJO9KJJsMNPPJ0Ke2ddCNXOaXaJJks5cq9JuAfDNXYn/z5daYnGwllXesprZdFt
-         R7BGGZsOhmuJHKIfzYRtoltIyJ9i58iILsCZQEK/BOsT4xCoCUDFGPQzVbjWyP7uuFKu
-         Y8ZrOo+svMqVyGXnyL//fIvZ5btfiGXG6goD8cGO1XLFduTcgyb7TVxuIzv2nKtNZ5H9
-         aBKDR4wmPyzWa5SROVZepZ51mU+MPzKbKSMk3Eh9jaC5jPA1Vq5CSFhV0LiawOA++RGN
-         XJuaTXODgVKASII7nSIrA2Fb2Yxb3ZP3Cb2XVmPP4gG/TTg0+UBT26b4dUUyb+VzAWUX
-         KxxA==
-X-Gm-Message-State: ACrzQf0u+65YFpc49LtpZo5spuAedlwHsD1BH9GVvBi2+biBfPQob7vN
-	eRLfkcimppJmkxdepBWvvPnTcQ==
-X-Google-Smtp-Source: AMsMyM6qceEYubm9CXUHhRWKO97jTt1fHDzHiVVhvvvXLjxHA5bZC4Jiy7begCXZ60W2LAc8Rfi0lA==
-X-Received: by 2002:a2e:a9a9:0:b0:261:bf5a:8ff3 with SMTP id x41-20020a2ea9a9000000b00261bf5a8ff3mr5926333ljq.252.1664782361354;
-        Mon, 03 Oct 2022 00:32:41 -0700 (PDT)
+        bh=fSpMO7Q7ztMkeSMVfIkdP3tgEsFHMk6ik3iJDreqgKk=;
+        b=uOGy9mQi7W5xb9ylCooufDN1N6aGrwsY6CYr0AUOsOmYYPSaafXjPIj23zGkovaogh
+         C0wYOvgRJPg+x70XJeSFG+db1V+zDwFbvIq01wXOIf83eBFVV4SysUDCbc6/Xld2BLjW
+         K9KaReen9uTdkz9VQuf0UjFEa6smdKBLVfgApYmYRKl5o9O2QkLl7xf/7J7TFBdnkRuE
+         t/pR8FJN6zxNn4WyUwfdaOZJlppQrCb4F+gNI77vPMnA8uRN78cdQPNqeU/he4xgfZ6/
+         QftlvCqj0Q8Y8rWmmBNw/06yM+n9wiDsdr+eplTNloPaAY+LPD4AAuRStqZhNMjAqxqj
+         eTtA==
+X-Gm-Message-State: ACrzQf2xUd+PkHQziTU4ez4ldIU/bY3lqdDaCrUXC5in4gSo23BhX5IV
+	K1QLYt/LZ1hrEcnwMsLDM9ZKkg==
+X-Google-Smtp-Source: AMsMyM7NIQMLyCL91JNcZS0wsarQdgReHoMPkFKv0DwxtJZ8MqlxMbVCPH2TtS9XOneObUd3TPmdQg==
+X-Received: by 2002:a05:6512:33c3:b0:4a2:4c1a:a07 with SMTP id d3-20020a05651233c300b004a24c1a0a07mr108251lfg.551.1664782759257;
+        Mon, 03 Oct 2022 00:39:19 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id bi39-20020a0565120ea700b0048b26d4bb64sm1357833lfb.40.2022.10.03.00.32.40
+        by smtp.gmail.com with ESMTPSA id g22-20020a056512119600b00499f9aaa9desm1347678lfr.179.2022.10.03.00.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 00:32:40 -0700 (PDT)
+        Mon, 03 Oct 2022 00:39:18 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -56,56 +56,60 @@ To: Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: late (3rd) for v6.1
-Date: Mon,  3 Oct 2022 09:32:37 +0200
-Message-Id: <20221003073237.11488-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] ARM/arm64: dts: samsung: Late round for v6.1
+Date: Mon,  3 Oct 2022 09:39:16 +0200
+Message-Id: <20221003073916.12588-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Hi,
 
-Late pull for v6.1 with minor stuff - cleanups and bindings fix.
+Late pull of fixes for v6.1 for DTS: both ARM and ARM64.  The pull is based on
+master (not previous pull).  If it is too late, please consider this for fixes
+after v6.1 merge window.
 
 Best regards,
 Krzysztof
 
 
-The following changes since commit 5514acb0dd030356e628cdd88b266efaa0a22315:
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-  dt-bindings: memory: snps,dw-umctl2-ddrc: Extend schema with IRQs/resets/clocks props (2022-09-21 20:34:58 +0200)
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.1-3
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-dt64-6.1-2
 
-for you to fetch changes up to 56efd6435c6890a3a38a33d192a0f9d5c835a24b:
+for you to fetch changes up to 17fffac44943a619ec76463655b1ed7fccd8bea7:
 
-  memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code (2022-09-28 09:30:23 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.1, part 3
-
-1. STM32 FMC2: correct in bindings the name of property for address
-   setup duration. The DTS and driver were already using proper name,
-   so it is only alignment of bindings with real usage.
-2. Tegra MC: simplify with DEFINE_SHOW_ATTRIBUTE.
+  ARM: dts: s5pv210: correct double "pins" in pinmux node (2022-09-30 17:14:24 +0200)
 
 ----------------------------------------------------------------
-Liu Shixin (4):
-      memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+Samsung DTS ARM and ARM64 changes for v6.1
 
-Marek Vasut (1):
-      dt-bindings: memory-controller: st,stm32: Fix st,fmc2_ebi-cs-write-address-setup-ns
+Late cleanup and fixes for Samsung DTS:
+1. Fix polarity of pins:
+   - enable GPIO of NFC chip in Exynos5433 TM2 boards,
+   - vbus GPIO of EHCI in Exynos4412 Origen board.
+2. Correct name of pin configuration nodes - redundant "pins" in the
+   name (no functional impact).
 
- .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml    |  2 +-
- drivers/memory/tegra/tegra186-emc.c                       | 15 +--------------
- drivers/memory/tegra/tegra20-emc.c                        | 15 +--------------
- drivers/memory/tegra/tegra210-emc-core.c                  | 15 +--------------
- drivers/memory/tegra/tegra30-emc.c                        | 15 +--------------
- 5 files changed, 5 insertions(+), 57 deletions(-)
+----------------------------------------------------------------
+Dmitry Torokhov (2):
+      arm64: dts: exynos: fix polarity of "enable" line of NFC chip in TM2
+      ARM: dts: exynos: fix polarity of VBUS GPIO of Origen
+
+Krzysztof Kozlowski (1):
+      ARM: dts: s5pv210: correct double "pins" in pinmux node
+
+ arch/arm/boot/dts/exynos4412-origen.dts               | 2 +-
+ arch/arm/boot/dts/s5pv210-aries.dtsi                  | 4 ++--
+ arch/arm/boot/dts/s5pv210-galaxys.dts                 | 2 +-
+ arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
