@@ -1,292 +1,111 @@
-Return-Path: <SRS0=ZAqV=2C=gmail.com=mr.bossman075@kernel.org>
+Return-Path: <SRS0=5Ucw=2E=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E138C433F5
-	for <soc@archiver.kernel.org>; Sat,  1 Oct 2022 16:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40367C433FE
+	for <soc@archiver.kernel.org>; Mon,  3 Oct 2022 07:32:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DB19DC433D6; Sat,  1 Oct 2022 16:15:44 +0000 (UTC)
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	id 07835C433D7; Mon,  3 Oct 2022 07:32:45 +0000 (UTC)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6D0F3C433C1;
-	Sat,  1 Oct 2022 16:15:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D0F3C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id a20so4328898qtw.10;
-        Sat, 01 Oct 2022 09:15:43 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5E056C433B5
+	for <soc@kernel.org>; Mon,  3 Oct 2022 07:32:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5E056C433B5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f169.google.com with SMTP id x40so141686ljq.9
+        for <soc@kernel.org>; Mon, 03 Oct 2022 00:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Ha6B3XmIQavZcAX8rwS3D2xw7x1dMSuhKPQxayTs/z0=;
-        b=l8nmniL8Twky1uQgMGJf0eBv026RjD2l9MpLG7M1Dvw073Q9WV4cCYFcdGK/D9A0kr
-         HAb4j4IVLmO+u7BgUdotltZlrxeOfm+7lTNbL6fz+ezMHc2gSdo1VeiyGtCoeJSuVrZw
-         FvB/UmId/Sc+uICpzLRYCdTHwKJ1pTc3ZnG7JqD1I+QhNkxzwq9ktQj5gFELG4r1JSx/
-         DvQosNIsIxUFBIQ53emEW87boejSInuoSm3m084vbIeniu+1Z/IJOiVRIc5Em6mpz70E
-         RSNFy8cka4/oA3rkzKPMl6iovwGPWYeBPm6jMUoTdy2aRaBCfpyBGx8JqkW6NkiY3SV/
-         36hA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=77DQW3lsofQQZnwFkOSE0jlhaIOSR4ZhDsIQytSJOII=;
+        b=m49J/G2VqOQiRmROweFuYDGFPT7u+OwT6ePg4e+sgGCz81USX+C/ryBf3dTanLStbb
+         MuBqBxrPV1ZrETAq+9zYJMw6aCXO/o5idY9nE0Bz7uo5jm/YiNONNcW4zAEi3awBf+K4
+         K54ql3FylCtnoMTp98BSkpMU3czLkraNBot3doE71ARS16lRKxq6WxUqvPtnS1jAVXoZ
+         HfdmPfYc+6mprt5inhAjGoRaowd/C6z1Qp2h/1DMYKT6Kb8dSyqFxxgYkU5Qa/hv1bv7
+         uwZcwLXttWWMr3tsGwcIogLfIi6sAQTS8JV/2+tQmaY/FMa+4Mo+ByCfzDyLdEv03GZ8
+         a6cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Ha6B3XmIQavZcAX8rwS3D2xw7x1dMSuhKPQxayTs/z0=;
-        b=f9qoCp1pOjOEWTMxt6y6E765zJjAVA/L4B5x9BPuYfjOqXdiOUphrT++j8RWKis5va
-         ++Si/2bstoDI8m8UPhe6TVYlXNBFSuus2znWG376SUQEd009KaJN3FI//IOGS64p37Wv
-         pifNv2w7hlLh6WXYR+UR25VMUBDn4Lz1ySlhzNPssp88Ote4YlTWNOCe7vfj6Oa2po76
-         izEljw708Lse557z8GdfJ/LZhtigIoHdFQ3Q6UHEjYAVW91DEXdAl9tiKdurSDoXIPph
-         qQpZxQI3HieHNIgAIDVWmnn0vsGMidtebDutQkBkz8GZDsHbp4Xq7ZRDRFUlHLL7vdDB
-         quVg==
-X-Gm-Message-State: ACrzQf1ogueV7S6I0DSJwijwSGAIfDre/BILgvrUfNLijelqgwmWyIba
-	vtgby2LFnoajrFH51zaPRP+bECZhWLwUc07N
-X-Google-Smtp-Source: AMsMyM4mTsU2g9OQJZcy+BZdtO+tVtsLGnUG3upRe7XaVzNLzop7f7aoqzNmcPITGmoZqmOpZhBWnA==
-X-Received: by 2002:a05:622a:48c:b0:35d:489c:1ef6 with SMTP id p12-20020a05622a048c00b0035d489c1ef6mr11026074qtx.150.1664640941875;
-        Sat, 01 Oct 2022 09:15:41 -0700 (PDT)
-Received: from [10.4.10.38] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id bm34-20020a05620a19a200b006cbd92ca141sm6000900qkb.133.2022.10.01.09.15.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Oct 2022 09:15:41 -0700 (PDT)
-Message-ID: <663cdebe-755f-3a93-07f4-da662ccb5a43@gmail.com>
-Date: Sat, 1 Oct 2022 12:15:38 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v6 08/10] clk: imx: Add initial support for i.MXRT1170
- clock driver
-Content-Language: en-US
-To: Stephen Boyd <sboyd@kernel.org>, linux-imx@nxp.com
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=77DQW3lsofQQZnwFkOSE0jlhaIOSR4ZhDsIQytSJOII=;
+        b=b6ZhJO9KJJsMNPPJ0Ke2ddCNXOaXaJJks5cq9JuAfDNXYn/z5daYnGwllXesprZdFt
+         R7BGGZsOhmuJHKIfzYRtoltIyJ9i58iILsCZQEK/BOsT4xCoCUDFGPQzVbjWyP7uuFKu
+         Y8ZrOo+svMqVyGXnyL//fIvZ5btfiGXG6goD8cGO1XLFduTcgyb7TVxuIzv2nKtNZ5H9
+         aBKDR4wmPyzWa5SROVZepZ51mU+MPzKbKSMk3Eh9jaC5jPA1Vq5CSFhV0LiawOA++RGN
+         XJuaTXODgVKASII7nSIrA2Fb2Yxb3ZP3Cb2XVmPP4gG/TTg0+UBT26b4dUUyb+VzAWUX
+         KxxA==
+X-Gm-Message-State: ACrzQf0u+65YFpc49LtpZo5spuAedlwHsD1BH9GVvBi2+biBfPQob7vN
+	eRLfkcimppJmkxdepBWvvPnTcQ==
+X-Google-Smtp-Source: AMsMyM6qceEYubm9CXUHhRWKO97jTt1fHDzHiVVhvvvXLjxHA5bZC4Jiy7begCXZ60W2LAc8Rfi0lA==
+X-Received: by 2002:a2e:a9a9:0:b0:261:bf5a:8ff3 with SMTP id x41-20020a2ea9a9000000b00261bf5a8ff3mr5926333ljq.252.1664782361354;
+        Mon, 03 Oct 2022 00:32:41 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bi39-20020a0565120ea700b0048b26d4bb64sm1357833lfb.40.2022.10.03.00.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 00:32:40 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, mturquette@baylibre.com, shawnguo@kernel.org,
- s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
- aisheng.dong@nxp.com, stefan@agner.ch, linus.walleij@linaro.org,
- daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
- olof@lixom.net, soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
- dev@lynxeye.de, marcel.ziswiler@toradex.com, tharvey@gateworks.com,
- leoyang.li@nxp.com, sebastian.reichel@collabora.com,
- cniedermaier@dh-electronics.com, clin@suse.com,
- giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
- <20220901183343.3188903-9-Mr.Bossman075@gmail.com>
- <20220930202819.C4952C433D6@smtp.kernel.org>
-From: Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <20220930202819.C4952C433D6@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: late (3rd) for v6.1
+Date: Mon,  3 Oct 2022 09:32:37 +0200
+Message-Id: <20221003073237.11488-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+Hi,
+
+Late pull for v6.1 with minor stuff - cleanups and bindings fix.
+
+Best regards,
+Krzysztof
 
 
+The following changes since commit 5514acb0dd030356e628cdd88b266efaa0a22315:
 
-On 9/30/22 16:28, Stephen Boyd wrote:
-> Quoting Jesse Taube (2022-09-01 11:33:41)
->> Add clock driver support for i.MXRT1170.
->>
->> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->> ---
->> V1 -> V2:
->>   - Add slab.h and clock-provider.h
->>   - Add spaces in `root_clocks`
->>   - Expand and sort macro
->>   - Move `clk_hw` structs to `clocks_probe`
->>   - Remove of_irq.h
->>   - Remove unused code/comments
->> V2 -> V3:
->>   - Expand root_clocks names array
->>   - Remove root_clock_names enum
->> V3 -> V4:
->>   - Nothing done
->> V4 -> V5:
->>   - Use __imx_clk_hw_pllv3 to change power bit
->> V5 -> V6:
->>   - Nothing done
->> ---
->>   drivers/clk/imx/Kconfig         |   7 +
->>   drivers/clk/imx/Makefile        |   1 +
->>   drivers/clk/imx/clk-imxrt1170.c | 749 ++++++++++++++++++++++++++++++++
->>   3 files changed, 757 insertions(+)
->>   create mode 100644 drivers/clk/imx/clk-imxrt1170.c
->>
->> diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
->> index 25785ec9c276..704a7777af4f 100644
->> --- a/drivers/clk/imx/Kconfig
->> +++ b/drivers/clk/imx/Kconfig
->> @@ -119,3 +119,10 @@ config CLK_IMXRT1050
->>          select MXC_CLK
->>          help
->>              Build the driver for i.MXRT1050 CCM Clock Driver
->> +
->> +config CLK_IMXRT1170
->> +       tristate "IMXRT1170 CCM Clock Driver"
->> +       depends on SOC_IMXRT
->> +       select MXC_CLK
->> +       help
->> +           Build the driver for i.MXRT1170 CCM Clock Driver
->> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
->> index 88b9b9285d22..d607a6d8138a 100644
->> --- a/drivers/clk/imx/Makefile
->> +++ b/drivers/clk/imx/Makefile
->> @@ -52,4 +52,5 @@ obj-$(CONFIG_CLK_IMX6UL) += clk-imx6ul.o
->>   obj-$(CONFIG_CLK_IMX7D)  += clk-imx7d.o
->>   obj-$(CONFIG_CLK_IMX7ULP) += clk-imx7ulp.o
->>   obj-$(CONFIG_CLK_IMXRT1050)  += clk-imxrt1050.o
->> +obj-$(CONFIG_CLK_IMXRT1170)  += clk-imxrt1170.o
->>   obj-$(CONFIG_CLK_VF610)  += clk-vf610.o
->> diff --git a/drivers/clk/imx/clk-imxrt1170.c b/drivers/clk/imx/clk-imxrt1170.c
->> new file mode 100644
->> index 000000000000..71d9aacf9751
->> --- /dev/null
->> +++ b/drivers/clk/imx/clk-imxrt1170.c
->> @@ -0,0 +1,749 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
->> +/*
->> + * Copyright (C) 2022
->> + * Author(s):
->> + * Jesse Taube <Mr.Bossman075@gmail.com>
->> + */
->> +#include <linux/clk.h>
-> 
-> Please don't include clk.h unless you use consumer clk APIs. Doesn't
-> look like it is used here?
-> 
->> +#include <linux/of_address.h>
->> +#include <linux/slab.h>
->> +#include <linux/clk-provider.h>
->> +#include <linux/platform_device.h>
-> 
-> Sorting alphabetically is nice.
-Oh my bad, will fix.
+  dt-bindings: memory: snps,dw-umctl2-ddrc: Extend schema with IRQs/resets/clocks props (2022-09-21 20:34:58 +0200)
 
->> +#include <dt-bindings/clock/imxrt1170-clock.h>
->> +
->> +#include "clk.h"
->> +
->> +#define CLOCK_MUX_DEFAULT "rcosc48M_div2", "osc", "rcosc400M", "rcosc16M"
-> [...]
->> +
->> +static int imxrt1170_clocks_probe(struct platform_device *pdev)
->> +{
->> +       void __iomem *ccm_base;
->> +       void __iomem *pll_base;
->> +       struct clk_hw **hws;
->> +       struct clk_hw_onecell_data *clk_hw_data;
->> +       struct device *dev = &pdev->dev;
->> +       struct device_node *np = dev->of_node;
->> +       struct device_node *anp;
->> +       int ret;
->> +
->> +       clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
->> +                                         IMXRT1170_CLK_END), GFP_KERNEL);
->> +       if (WARN_ON(!clk_hw_data))
->> +               return -ENOMEM;
->> +
->> +       clk_hw_data->num = IMXRT1170_CLK_END;
->> +       hws = clk_hw_data->hws;
->> +
->> +       hws[IMXRT1170_CLK_OSC] = imx_obtain_fixed_clk_hw(np, "osc");
->> +       hws[IMXRT1170_CLK_RCOSC_16M] = imx_obtain_fixed_clk_hw(np, "rcosc16M");
->> +       hws[IMXRT1170_CLK_OSC_32K] = imx_obtain_fixed_clk_hw(np, "osc32k");
->> +
->> +       hws[IMXRT1170_CLK_RCOSC_48M] = imx_clk_hw_fixed_factor("rcosc48M",  "rcosc16M", 3, 1);
->> +       hws[IMXRT1170_CLK_RCOSC_400M] = imx_clk_hw_fixed_factor("rcosc400M",  "rcosc16M", 25, 1);
->> +       hws[IMXRT1170_CLK_RCOSC_48M_DIV2] = imx_clk_hw_fixed_factor("rcosc48M_div2",  "rcosc48M", 1, 2);
->> +
->> +       anp = of_find_compatible_node(NULL, NULL, "fsl,imxrt-anatop");
->> +       pll_base = of_iomap(anp, 0);
->> +       of_node_put(anp);
->> +       if (WARN_ON(!pll_base))
->> +               return -ENOMEM;
-> 
-> The kzalloc() leaked.
-LOL `grep -r of_find_compatible_node drivers/clk/imx`...
-Shall I send patches for the rest of IMX.
+are available in the Git repository at:
 
-> 
->> +
->> +       /* Anatop clocks */
->> +       hws[IMXRT1170_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0UL);
->> +
->> +       hws[IMXRT1170_CLK_PLL_ARM_PRE] = __imx_clk_hw_pllv3(IMX_PLLV3_SYSV2, "pll_arm_pre", "osc",
->> +                                                           pll_base + 0x200, 0xff, 13);
->> +       hws[IMXRT1170_CLK_PLL_ARM_BYPASS] = imx_clk_hw_mux("pll_arm_bypass", pll_base + 0x200, 17,
->> +                                                          1, pll_arm_mux, 2);
->> +       hws[IMXRT1170_CLK_PLL_ARM_DIV] = clk_hw_register_divider_table(NULL, "pll_arm_div",
->> +               "pll_arm_bypass", CLK_SET_RATE_PARENT | CLK_SET_RATE_GATE,
->> +               pll_base + 0x200, 15, 2, 0, post_div_table, &imx_ccm_lock);
->> +       hws[IMXRT1170_CLK_PLL_ARM] = imx_clk_hw_gate("pll_arm", "pll_arm_div", pll_base + 0x200, 14);
->> +
->> +       hws[IMXRT1170_CLK_PLL3_PRE] = __imx_clk_hw_pllv3(IMX_PLLV3_GENERICV2, "pll3_pre", "osc",
->> +                                                        pll_base + 0x210, 0x1, 21);
->> +       hws[IMXRT1170_CLK_PLL3_BYPASS] = imx_clk_hw_mux("pll3_bypass",
->> +                                                       pll_base + 0x210, 16, 1, pll3_mux, 2);
->> +       hws[IMXRT1170_CLK_PLL3] = imx_clk_hw_gate("pll3_sys", "pll3_bypass", pll_base + 0x210, 13);
->> +
->> +       hws[IMXRT1170_CLK_PLL2_PRE] = __imx_clk_hw_pllv3(IMX_PLLV3_GENERICV2, "pll2_pre", "osc",
->> +                                                        pll_base + 0x240, 0x1, 23);
->> +       hws[IMXRT1170_CLK_PLL2_BYPASS] = imx_clk_hw_mux("pll2_bypass",
->> +                                                       pll_base + 0x240, 16, 1, pll2_mux, 2);
->> +       hws[IMXRT1170_CLK_PLL2] = imx_clk_hw_gate("pll2_sys", "pll2_bypass", pll_base + 0x240, 13);
->> +
->> +       hws[IMXRT1170_CLK_PLL3_PFD0] = imx_clk_hw_pfd("pll3_pfd0", "pll3_sys", pll_base + 0x230, 0);
->> +       hws[IMXRT1170_CLK_PLL3_PFD1] = imx_clk_hw_pfd("pll3_pfd1", "pll3_sys", pll_base + 0x230, 1);
->> +       hws[IMXRT1170_CLK_PLL3_PFD2] = imx_clk_hw_pfd("pll3_pfd2", "pll3_sys", pll_base + 0x230, 2);
->> +       hws[IMXRT1170_CLK_PLL3_PFD3] = imx_clk_hw_pfd("pll3_pfd3", "pll3_sys", pll_base + 0x230, 3);
->> +       hws[IMXRT1170_CLK_PLL3_DIV2_GATE] = imx_clk_hw_fixed_factor("pll3_div2_gate", "pll3_sys", 1, 2);
->> +       hws[IMXRT1170_CLK_PLL3_DIV2] = imx_clk_hw_gate("pll3_div2", "pll3_sys", pll_base + 0x210, 3);
->> +
->> +       hws[IMXRT1170_CLK_PLL2_PFD0] = imx_clk_hw_pfd("pll2_pfd0", "pll2_sys", pll_base + 0x270, 0);
->> +       hws[IMXRT1170_CLK_PLL2_PFD1] = imx_clk_hw_pfd("pll2_pfd1", "pll2_sys", pll_base + 0x270, 1);
->> +       hws[IMXRT1170_CLK_PLL2_PFD2] = imx_clk_hw_pfd("pll2_pfd2", "pll2_sys", pll_base + 0x270, 2);
->> +       hws[IMXRT1170_CLK_PLL2_PFD3] = imx_clk_hw_pfd("pll2_pfd3", "pll2_sys", pll_base + 0x270, 3);
->> +
->> +       /* CCM clocks */
->> +       ccm_base = devm_platform_ioremap_resource(pdev, 0);
->> +       if (WARN_ON(IS_ERR(ccm_base)))
->> +               return PTR_ERR(ccm_base);
->> +
->> +       hws[IMXRT1170_CLK_M7_SEL] = imx_clk_hw_mux("m7_sel", ccm_base + (1 * 0x80),
-> [....]
->> +       hws[IMXRT1170_CLK_CSI2_UI] = imx_clk_hw_divider("csi2_ui", "csi2_ui_gate", ccm_base +
->> +                                                       (76 * 0x80), 0, 8);
->> +       hws[IMXRT1170_CLK_CSI] = imx_clk_hw_divider("csi", "csi_gate", ccm_base + (77 * 0x80), 0, 8);
->> +       hws[IMXRT1170_CLK_CKO1] = imx_clk_hw_divider("cko1", "cko1_gate", ccm_base + (78 * 0x80), 0, 8);
->> +       hws[IMXRT1170_CLK_CKO2] = imx_clk_hw_divider("cko2", "cko2_gate", ccm_base + (79 * 0x80), 0, 8);
->> +
->> +       hws[IMXRT1170_CLK_USB] = imx_clk_hw_gate("usb", "bus", ccm_base + LPCG_GATE(115), 0);
->> +
->> +       imx_check_clk_hws(hws, IMXRT1170_CLK_END);
->> +
->> +       ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
-> 
-> Use devm? Or implement a driver remove function?
-Uh this is the same in the rest of imx could you explain a bit more?
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.1-3
 
-Very sorry for the low quality code :(
+for you to fetch changes up to 56efd6435c6890a3a38a33d192a0f9d5c835a24b:
 
-Thanks,
-Jesse Taube
+  memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code (2022-09-28 09:30:23 +0200)
 
->> +       if (ret < 0) {
->> +               dev_err(dev, "Failed to register clks for i.MXRT1170.\n");
->> +               imx_unregister_hw_clocks(hws, IMXRT1170_CLK_END);
->> +       }
->> +       return ret;
->> +}
->> +
->> +static const struct of_device_id imxrt1170_clk_of_match[] = {
->> +       { .compatible = "fsl,imxrt1170-ccm" },
->> +       { /* Sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, imxrt1170_clk_of_match);
->> +
->> +static struct platform_driver imxrt1170_clk_driver = {
->> +       .probe = imxrt1170_clocks_probe,
->> +       .driver = {
->> +               .name = "imxrt1170-ccm",
->> +               .of_match_table = imxrt1170_clk_of_match,
->> +       },
+----------------------------------------------------------------
+Memory controller drivers for v6.1, part 3
+
+1. STM32 FMC2: correct in bindings the name of property for address
+   setup duration. The DTS and driver were already using proper name,
+   so it is only alignment of bindings with real usage.
+2. Tegra MC: simplify with DEFINE_SHOW_ATTRIBUTE.
+
+----------------------------------------------------------------
+Liu Shixin (4):
+      memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+
+Marek Vasut (1):
+      dt-bindings: memory-controller: st,stm32: Fix st,fmc2_ebi-cs-write-address-setup-ns
+
+ .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml    |  2 +-
+ drivers/memory/tegra/tegra186-emc.c                       | 15 +--------------
+ drivers/memory/tegra/tegra20-emc.c                        | 15 +--------------
+ drivers/memory/tegra/tegra210-emc-core.c                  | 15 +--------------
+ drivers/memory/tegra/tegra30-emc.c                        | 15 +--------------
+ 5 files changed, 5 insertions(+), 57 deletions(-)
