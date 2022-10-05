@@ -1,195 +1,303 @@
-Return-Path: <SRS0=KXfd=2F=in-advantage.com=colin.Foster@kernel.org>
+Return-Path: <SRS0=NfG2=2G=wiwynn.com=Delphine_CC_Chiu@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08D79C433F5
-	for <soc@archiver.kernel.org>; Tue,  4 Oct 2022 23:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E386C433FE
+	for <soc@archiver.kernel.org>; Wed,  5 Oct 2022 08:43:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BA1CFC433C1; Tue,  4 Oct 2022 23:01:34 +0000 (UTC)
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2091.outbound.protection.outlook.com [40.107.220.91])
+	id 109D3C433D7; Wed,  5 Oct 2022 08:43:41 +0000 (UTC)
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2072.outbound.protection.outlook.com [40.107.255.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E5AEEC433D6;
-	Tue,  4 Oct 2022 23:01:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E5AEEC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
+	by smtp.kernel.org (Postfix) with ESMTPS id EF1C7C433C1;
+	Wed,  5 Oct 2022 08:43:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF1C7C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wiwynn.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R7P+tZqLUrLQ5B3zU1ixVFyiZe0pWrAb3DHfK5WAKWFceoCYW1TiU8FFza0FoMzlWSPEC86FVTB9QBKpvbx3QxZbANwttJ+yrih3bp1agZXeyOL7izkfiuZA8+sC1UT6UK8RZaFnK/CYiRrvZhcyQuVCv3FCtJVVDr5Gh1c8R5/DeO+gQwQmrlS2Q3NFICocmVt7q43qo4HDD7MhRXOo2RCKAOwNjnBFGJso3EMbUThSMrLwYaIFRiqLG3BADpedJYDfpqmuXHDR10+DP3Rl+N/MAmdmOLsfGuIWLmgvVBWIxGD1UBOQZRoq1kpVRO23H97oQcyCj8gHexe/oopgig==
+ b=jP2s9jy2ATVvsNSAyk6Kk56oVFTdlVdFYiGHfoperIt3geOa81ItpU+Vr7Wm1wHysoojhcm90qyYfKcvP6p5QaI1usCauaLHvJ9oxtj1qbfgxkCI54E8RmKQUZgInBWzO7+dVTe3qyP6PCmdaU5ZEI92MwBZLqHrez4WE6rWlISVy3pfIlw4Udyw6rFabK6IYTSp4Xh7uvD9LclbDnGhNQcBf3buq6ojtKH4KXUdQ53KqNyFpTp+lt4MBsWfvRbNZqnoXJlS79spoVVK3zABBcg2a/ehDsz7f5S3w/4crrZrDzcqYi0LaOSC4wMCocbgliUgb0fqbvcUPP0xfnh0Gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=slti70yEuo46lTlcNsXGVfzKmsd0EGhBmthC2Hc7caU=;
- b=OL0z3raqtq7IIqzmaRnoSuGLBDLefPQTTprL6+705IjL3qByX9uhF/X83TJtCsxpFGEjfs700NL+FKWAiCbXIe8xSTjCYpFlwSVhH+024Doi0k2lV2lw/qsn1gkX4NuokJdwmOxLmv0QtFZA+YNnvqXKyRVuJ64IHTM7kw9PuIhN1yFlnJdG96C1Ua81dzOp2byEjPjmya8urRfVa5x/sE6hJyiDwX6jTseYMGtbyPTbzcYJeA+yg/OA82bKv7Jee1CVaHHYUN7poY7TdiC83Fo+4dWxP9RxdbdNEpJVjp+Js/BRO2KbPauFHNuH7rcLVFV1n+tZzXcfbACdJPIa/A==
+ bh=sO7HuSC+qG699Jg1NZkrtCG9Xq/rBo6JUpAUSXfC38I=;
+ b=WkefzcGAIeqHrlVPcrmdXEP2tDqN5XIywfzTWau+xCwOMwGZTkcsbiPdkx5z/KxuYmprPzT4SjVpTijnZIu582WxRwzjDuPfLr82zWXa7d5qXyzeGDkNFztDQYghMhEbmGNTGvinN0UiCjQlTvYCAwX2ivuMxFc08n3yf2G0bIXalFXCka0WVMudinHe4VKQqBBz6j4OtK7xn/I93aQyK4pVlPVdhLTLCRQ94pP9rA00NJ1JQ5FobAeafoYcIjmotvmZYAtf8Q5wJ6wjHyPRSdLHKg8iVfSk6T7hLldtudV3SI4xc2gs973K3OLR1pAawQIMDvZLmRaq61m4hgsIwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
+ dkim=pass header.d=wiwynn.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=slti70yEuo46lTlcNsXGVfzKmsd0EGhBmthC2Hc7caU=;
- b=tkO47knQPXpknf2q8bVQQrJPy5yjXmzLlYvuYxgSEyBEJwCwj8d9RGOr0zfnMPq31THR4BvQUNKCxRNwLpnydcAgYnWy+V/f8WkewT7NxI9i2CT3rSyBQbMFevfPaCzYKaql2nd1ht7lLvwT9TyjPccL9sTX3wN3jc/uFkrLTHs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MW4PR10MB6679.namprd10.prod.outlook.com
- (2603:10b6:303:227::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Tue, 4 Oct
- 2022 23:01:30 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::ee5e:cbf9:e304:942f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::ee5e:cbf9:e304:942f%7]) with mapi id 15.20.5676.028; Tue, 4 Oct 2022
- 23:01:30 +0000
-Date: Tue, 4 Oct 2022 16:01:26 -0700
-From: Colin Foster <colin.foster@in-advantage.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ bh=sO7HuSC+qG699Jg1NZkrtCG9Xq/rBo6JUpAUSXfC38I=;
+ b=jdTH7mbBPqGooeNYtKIv9J5aKv0YMQTouFihZkmrA+4YRydVJSdaNuZEFt55uIGYulorOn7vmMpj3jE5PAcvTaRI6V0Pfb7ABWezbjpm1bsrw9wItL92XD0tKLjJ00KB+a8SPGgmRPf06rsEkwxSFZqxc+EUlnyHYeb58a34/nFQNgADFCcCHklxBsIxoIm5af4s+dWZSrpnIriLSZJIEOKN070eGX78Ckcp67EtjnCmXFSlYh1teumUyD5SouzW13l19Doy6ZZcajcZ2uYSJi7IIbrWG8UJ8VX/tPzRKAlnE1nvnPYqrijNbT+mzOCn2NHrYyTpAp3pvEA2/v8ouw==
+Received: from HK0PR04MB3105.apcprd04.prod.outlook.com (2603:1096:203:8e::20)
+ by TYZPR04MB6636.apcprd04.prod.outlook.com (2603:1096:400:334::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23; Wed, 5 Oct
+ 2022 08:43:35 +0000
+Received: from HK0PR04MB3105.apcprd04.prod.outlook.com
+ ([fe80::6b9a:1628:86cd:af11]) by HK0PR04MB3105.apcprd04.prod.outlook.com
+ ([fe80::6b9a:1628:86cd:af11%6]) with mapi id 15.20.5676.031; Wed, 5 Oct 2022
+ 08:43:35 +0000
+From: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, "joel@jms.id.au"
+	<joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Tony Lindgren <tony@atomide.com>,
-	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>, soc@kernel.org,
-	Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC v1 1/1] arm: dts: omap4: pcm959: add initial support for
- phytec pcm959
-Message-ID: <Yzy7RjffvnQF6Geo@colin-ia-desktop>
-References: <20221004024012.1386218-1-colin.foster@in-advantage.com>
- <20221004024012.1386218-2-colin.foster@in-advantage.com>
- <6d58c08e-1537-f1ab-2883-baf869650ef2@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6d58c08e-1537-f1ab-2883-baf869650ef2@linaro.org>
-X-ClientProxiedBy: MW4PR03CA0286.namprd03.prod.outlook.com
- (2603:10b6:303:b5::21) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+CC: "patrickw3@fb.com" <patrickw3@fb.com>, "garnermic@fb.com"
+	<garnermic@fb.com>, Delphine Chiu/WYHQ/Wiwynn <DELPHINE_CHIU@wiwynn.com>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	"soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Andrew Jeffery
+	<andrew@aj.id.au>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, Bonnie Lo/WYHQ/Wiwynn <Bonnie_Lo@wiwynn.com>
+Subject: RE: [PATCH] greatlakes: dts: Add Facebook greatlakes (AST2600) BMC
+Thread-Topic: [PATCH] greatlakes: dts: Add Facebook greatlakes (AST2600) BMC
+Thread-Index: AQHYyNQMAFo+dL1NvU+j1+FW6/gp2q3j24EAgAQacrCAAA07AIAXlyMA
+Date: Wed, 5 Oct 2022 08:43:35 +0000
+Message-ID:
+ <HK0PR04MB3105AE7BA97942C160A6939AF85D9@HK0PR04MB3105.apcprd04.prod.outlook.com>
+References: <20220915072304.1438-1-Bonnie_Lo@Wiwynn.com>
+ <10176630-3ff7-54f7-8836-779e5a2bf6d4@linaro.org>
+ <HK0PR04MB3105F759F43FEDE24C24FB3AF84C9@HK0PR04MB3105.apcprd04.prod.outlook.com>
+ <61de4c6c-84e9-345a-495d-4d44d9351d84@linaro.org>
+In-Reply-To: <61de4c6c-84e9-345a-495d-4d44d9351d84@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wiwynn.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HK0PR04MB3105:EE_|TYZPR04MB6636:EE_
+x-ms-office365-filtering-correlation-id: 69c18ddf-874a-4a37-a955-08daa6adb0b4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ kzE3yqRRLEEsknQBTNXhZnLu+wk60rpaHBJByI+eRfZ/nR4qB+MZWOs2dvxOZW93dj7yOqBAlo5cVSQI9XwLqp1NeDvC2hIEwlJSxwK63kdAYw7TKf0TKIrWD1O5mF1tQkVbbxoex2tB1WQSWH8/sXh29+ur6x10vGq7CP5C1USgSwr6czds09pnVG6KbvF+82MlfLttIzgF9hnUKbGNHUdFDiLQNvgjL8Y7GJzjFkkvs7XpFuHu61UepBnrXbGxJLju9EMa24Jf9Aze0xIOWEQvnSzBC6gZt0+oQqDZ6G9Y8CpsFV/Uqm+bh2l8RhU6Xqg2MgedKsUK5PpjM0ECxJIalxU5G+6tedxg/chmcIC7kREqJ3DirPIME/G2BSlPC14QtSHtY6pjAFeGIdzkRhLxaQzJ/0aGemBzcAG6woy8+A950Ri/lWSv+gJKh4cMaLze2IKCMo1RmeMD3FV/DYpdgwtfaVoj9pQHIG22Q5ZEhtHTGTuDD5mfcKve4R0Z73tmhqCx/i0dDyCKSYCOVcpEylKh0DjFy87h4iP72ndji1DMZTF8in+pCjuC0GMbmS5k6A0ZXeYzv3PNdmSvwMoflWt/P7SgqQI+uJRPSponyiY6+8NRyEIVR685FdoVNNpztgAWieFX+6UmIh2U/loAJBjWJxqFhr20fK3YqjnMQ25E7/04NE0fEqYeoSgmfnnSGO0K16tAsCUDLxxabPG795IQPvSFk0rfXkOmWWD04oU3Ie8KSOnQIuwHYI7haV63p9CIMKwu/JJO4pNlAZgXaQDMGrhE1ZlYf4ZWtHc=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3105.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(136003)(376002)(346002)(396003)(366004)(47680400002)(451199015)(71200400001)(7696005)(45080400002)(52536014)(107886003)(6506007)(2906002)(53546011)(478600001)(966005)(26005)(8936002)(4326008)(9686003)(64756008)(66556008)(66446008)(66476007)(66946007)(76116006)(83380400001)(41300700001)(186003)(7416002)(5660300002)(8676002)(110136005)(122000001)(33656002)(38100700002)(55016003)(86362001)(38070700005)(54906003)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?8s7fGkypg2g2kZHNFhtb+yddbpNJ4PgUz76y9oTc0lWwbFGuEMGtIvc19lxL?=
+ =?us-ascii?Q?rYQ6lgve+p+5+iOBPD9SixP7OM6B07vO9dD4WEdP70KWzIvMIImBEzHArR79?=
+ =?us-ascii?Q?k10m13XNjVWKMIHOZ4v+E7vvzBTfbeNS/z4APDlq4UcjypuJHUMe/qIHnR4D?=
+ =?us-ascii?Q?abV+YKn8J9aKao4fykDKyjUM4vBxvznmix/Ix4a6cgs1WEv+SAZlvgFghNpo?=
+ =?us-ascii?Q?aBPP4nbN45I0TVwN4CpVSBmjmPt/Zrcgca1O3tCKmDr+lzn9pyn+fj/dMzAl?=
+ =?us-ascii?Q?u1NDLzNQhl38m5C5p7SRpgmSzgGTkeA2NYSiH+pWoPgeQBV5jttQU4o1dkYY?=
+ =?us-ascii?Q?nhKhhvaFxUKXrSeQBmZq085WTlSABSFKo/tBAt8t9PbeoZ0jbRtrjulZTZtt?=
+ =?us-ascii?Q?9d/9qSpklJaqlxGVv+IKe3dlO1xAEA989oLNAq09GaXo4Z6fW3tj0uwFD087?=
+ =?us-ascii?Q?LMfO23s1bSccqIFZno4oYSDlNukAlhO6YynHt4sRZaC2Hj5RzK6RCo5GPcRg?=
+ =?us-ascii?Q?/skDpXOg0Us3JOjBVx75TycakHmA7b8dxxBWkJ2qQntIZyHZvX7svwX11BEK?=
+ =?us-ascii?Q?X+tnLaEIwZ62qLGRiEsVddyezpM5+ZDfmIjctiazDS4mnIjGfjlXDGPIqoQ2?=
+ =?us-ascii?Q?2gh96FEnfw0abGcggz2RgTS4wLmKB1p4axPZGgb8KIUW3236/XV3JQR0Jnxc?=
+ =?us-ascii?Q?9aE8o52bkIqOaFXfXFy2Hy6A6k6Vo/g0+rOvJ/KfXRIG3fGtna7AL5itJdVy?=
+ =?us-ascii?Q?XU9ETvlyHKhm5B4RL/bGh3OchQ2tVRVpiRtoQjAxlmEUsccGkkVWuiYcVWPF?=
+ =?us-ascii?Q?r9WTL9qc7SOvqnA1SN8WfDB0uqEks1Fxa1HIHwEesLxz9XDIYkk0yT8tc1hq?=
+ =?us-ascii?Q?jJ/i1cnrecDHtPQQBxbAbOaAhxo9xJehKQNrbwGZAbEdGjFq9EDmuA6KGfZ6?=
+ =?us-ascii?Q?Rm89oiQuBp6XxWn5BL5x9Jry1KSAK1FhirIrTyY+bgTU2/JibVL4LyTTTYhr?=
+ =?us-ascii?Q?0ygF/nTBCs8ERpNOuI2KOIbdVv0htKoiVeu4puSXvQMUY5XbUq5JEiz0QK2R?=
+ =?us-ascii?Q?Ev01v1WlJHflJUDnP2TRnLdh+9SsEnjLw+IB4+PXL1KR5N97klMe7dywIk+c?=
+ =?us-ascii?Q?kTsQpbKa+tHTUyWzihXMgENidduLLQ9aPkuyw4Ffc5rKZIuIL/EfZ8fWD7rk?=
+ =?us-ascii?Q?cGk9Q6hJ9lAazWdnsDRVO1P/o2SAtu4VQNklBiUB5CsIWePgNL+3QYQRhOPZ?=
+ =?us-ascii?Q?r+aLpZNWVll9mVIHkkFNYzsfbomWnyTzNnZhxgQLCrUzkTLKklk43/W21YR5?=
+ =?us-ascii?Q?kp8auMUkQgfxHnNGJqUt+iUQO+/omsoO686+HzoCOO8YpcM5Ww4y72nLgELn?=
+ =?us-ascii?Q?QHooXpTFbGJd/9bwMhvk2fvvJQYqpM193UeOznhAagzfjTf34tBe9qiSm0Xw?=
+ =?us-ascii?Q?Pv94BzWnuaerfHLhBkOWX2TzUt3A0OD8zvgj5Nwy/ZlJ5Dn6vEJtsibMhjn1?=
+ =?us-ascii?Q?WI/6SDjrwwdvbmEx6EnpHgmuNFTZKEbQ0K54Txsm/l2MnujU6Ir4cPdnXlpX?=
+ =?us-ascii?Q?CXGj9lOcNDZos7FuNlaR8HAcPWTHjv4zJVbjbHXo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|MW4PR10MB6679:EE_
-X-MS-Office365-Filtering-Correlation-Id: 482c7248-0aab-46b4-dd50-08daa65c5fb7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	NkKRyflLcwmko1qZW2uY+q/dgboOVEwFuujUZDQ2xI83gXIBo0sH9nyShyQTTgf1rL2PtyzV+UMy1svQUFiQGlUSRCQAz12DY2TL3pSD6CaRiMTrmGO10O/FmrdlUEOTTufbpfO+7UlnqkLS/QaKZO8ueDbnsHsVTmrPmjWHJtgUA97H/YOYI4hgBrzlW0lEK8nGBXNdNF7dDnPsHBqpUO/uQTe3hVVFCbF8AOq6EcEHEzN5RRGVdlccfSMlljihqodx+e+2Dz+uqeG7Qs1dFfXb0wxMicYVk9oA/5dl42sp1rrazb3UdY7XaRuFcaYHPPJOHGYmfudbgBLHFF4SX+eES+Ajle2MlbK1p1+fHQzE9s0etGrvtKCwVWwZSdYzAPFQZDMtPZ9HQZ21PYBOM+WcfUh1rVMiM6nkrW1qGHOtlA4102clXUWiuuTuVntDDce+fsJga/3nTkdZkfSJoIO2SLwifJrTtZrNqj9arVB7rXAk/3HkDlVwd8lFsQlTnHkLVFL097hgV44AfjCZ7d7QgEaK6ms0mUvZF4bsy7ABtJisQAtfiSrqeMEs9zskXJuCCkaXK9pGtpd1G2sVLZCsdltUSRgb/w4xwOWekP7QzrMjBG6iuFtEQn04hYAo8wzQFZOlnIuzGUXXcRDFhZadv4JMm49pHqqXTngCiwSBUcsOZCOOanx1Jnc4bb2DGie9HQbL9UTqpUsx9OzaGA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(366004)(396003)(39840400004)(376002)(451199015)(44832011)(7416002)(26005)(9686003)(6512007)(53546011)(6666004)(6486002)(2906002)(6506007)(5660300002)(478600001)(86362001)(33716001)(4326008)(8676002)(66476007)(66946007)(8936002)(83380400001)(6916009)(54906003)(186003)(41300700001)(316002)(66556008)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aIyOvsKs2W/IMlrdC3pD0b428BnlDAsF2wWIHFqD1nRgNOtPyATJ0k4sWp8N?=
- =?us-ascii?Q?IyqoSeCciWi5VNuya1hCAIB9Dhw+fPEvgNFo5wIgxh8zZ3ok0hKOu02e2Jjd?=
- =?us-ascii?Q?0+75kmaaaAjQSzYx/5wH/ViE1HnNdLZBoq2er5DNaVAe93Aa3zszGVQH9b6a?=
- =?us-ascii?Q?tT73iEQaJndYRZ8F59PZVG6Jy+of9j5zYS7oZI0JWXPPQi141eFY6mcxmcRa?=
- =?us-ascii?Q?TQ8g+uDyfaNoEii501FTalNVm2OZ6UvHwDFkqls0R5VyIAN2qt07R1+xdZZp?=
- =?us-ascii?Q?B8w6jCPo1u6iQr4WBbQgWS1hHWZg2FF2MFOZdHYAMVgCfxpypoZM9h3NY8LL?=
- =?us-ascii?Q?f1EzVjeTRBcpLQ+Wz8W1sTbuae2E4GnK37oxuMTMz7YeJ4qGPMu6eSmqQpZr?=
- =?us-ascii?Q?VyPTQ7Hm9jBJQAY7bSooIMkPq6Qmo+APvtERQotGKPuwxQw/3Qouw75lp5BX?=
- =?us-ascii?Q?HdPG5mhQLRiIIZEw92w00X9GRgnpmXI9CLiKBvP3npPjcV+H7/fLy4FnD/e3?=
- =?us-ascii?Q?2xjX5b6BkrVl8SZAt2N6WggvROJ5Japu4s1KuaLk5p3bV3gIDa1iuZ9s/r29?=
- =?us-ascii?Q?TndX3xCmMYlsnsQuJ0pHzb4c+ZJuu/7qYKDtvGigIvrmVT4mLDK+sEMQJvQV?=
- =?us-ascii?Q?yVdIDsxHJAtB/oX6S+7xQwTuS4qjJ4l54fAiVa+rrXAO1g6F/JjoDfJ75u2Y?=
- =?us-ascii?Q?OqxdelWZpicZwKk9Y5YE8z6fFiqgjXhF5Vf6mvfCgW0i6pGOBIuYbD/xjr2r?=
- =?us-ascii?Q?dfKYWX5gPlnZ5bpm36KMJn9sGT6gJ7cAPYZgzribMJmdpMvhksStuuw8wD6N?=
- =?us-ascii?Q?CMYqR2ihR7D1zGIycQ9CcWYx4oR2Pwv/mCUHAN8Lfs93mj+LtLwMsE0545/C?=
- =?us-ascii?Q?UUQUksn6lBRdEQy+Fyphz65Dfr2j2Vzjo6tyPWmh4SI4VnULMQn50ncPFaHk?=
- =?us-ascii?Q?nXYGvd85WLXYm/6+hgpxsjNsG3nBFEvLZXyTli6iRXDhPp1fl4iEmWFGFQgQ?=
- =?us-ascii?Q?/XYJ7OTJFbk3+HN9BMI7b6tXrDVpcKP04Ltm165XRsCgt63TILrWQ88JIsEx?=
- =?us-ascii?Q?fPfyZMYJCzho5fWr4ATWJKuG+lp052dNISXgXIz3b4YgQLivd7ZXUz9WjM7+?=
- =?us-ascii?Q?1sz0k7pppd09wJzi5c1x8ejetbivzU5vcRrMHZqVxkopr4bcc/cRpz77WgMJ?=
- =?us-ascii?Q?CPlDM9RZOks+lVxTGjayHvg3Xhz0bOodbPl/7RlL751S8enQSozYeXmaNug+?=
- =?us-ascii?Q?0j86IYIxI+pGdlRVH3cc+3IQcDSaghi7Jdn5eKVDe+jNzvhzHWvlJ0heZ9YO?=
- =?us-ascii?Q?7Yuo6X5LxdrDemxEB7PgSE+VBCkjsNVPrHVuU1Pz9VGurjGac0b6/rpNlm0q?=
- =?us-ascii?Q?Eyt7JJ6FeCVYfdVG6MBf2XJw8ueGZc+eeTEYlBBEJzOKGxEnytiCl7xVXyLs?=
- =?us-ascii?Q?hzmVNZxh8TrCU8XY5CyBZLp4RA8ieC9oiYYrmAzAmmzZBmMFZbczgLkVREeF?=
- =?us-ascii?Q?L2hZrQwlX00vn/6vTxyr5z1QFtlUX8JoT+daYItkAUnbe463U/v0D99jHwcU?=
- =?us-ascii?Q?4ooy+Mr3Uu367wRT6xGvG5Cv49gDjgFrhK2z+ihIlZcPGyu9EE5dhoRHpgvQ?=
- =?us-ascii?Q?CQ=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 482c7248-0aab-46b4-dd50-08daa65c5fb7
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-OriginatorOrg: wiwynn.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 23:01:30.1933
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3105.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69c18ddf-874a-4a37-a955-08daa6adb0b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2022 08:43:35.0373
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fgBC81IdkBOpYcUvVVryFlBmr50GmIlcoq2HNMnhltrrntE4jcs3ZYAkiFzxRivbGJBqNzdeyfoJUV2iHuf0WPpBtSOk3907p9OJHk3P8IQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6679
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RExotmK4Qp3N/aLv3FwE4cj6l5p+mdZoyFp3LLwBO+cMUDI8wJ9RmoHdRL5io00w6eBGdsK2bQoMVpOV7GGNtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR04MB6636
 
-Hi Krzysztof,
-On Tue, Oct 04, 2022 at 09:04:15AM +0200, Krzysztof Kozlowski wrote:
-> On 04/10/2022 04:40, Colin Foster wrote:
-> > The Phytec PCM-959 is a development platform for the Phytec PCM-049 SOM.
-> > Add initial functionality for the board. The verified interfaces and
-> > peripherals are listed below for the SOM (PCM-049) and the dev board
-> > (PCM-959)
-> > 
-> > The omap2plus_defconfig was used for testing. Only the On-board LEDs
-> > required CONFIG_LEDS_PCA9532 addition.
-> > 
-> > PCM-049:
-> > i2c1
-> >   * EEPROM at 0x50
-> >   * TMP102 (hwmon) at 0x4b
-> > twl6030
-> > GPMC
-> >   * Ethernet
-> >   * Flash
-> > Serial (ttyS2 console)
-> > 
-> > PCM959:
-> > MMC1
-> > On-board LEDs (with CONFIG_LEDS_PCA9532)
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > ---
-> >  arch/arm/boot/dts/Makefile                  |   1 +
-> >  arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi | 352 ++++++++++++++++++++
-> >  arch/arm/boot/dts/omap4-phytec-pcm-959.dts  | 130 ++++++++
-> >  3 files changed, 483 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
-> >  create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-959.dts
-> > 
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index 27eec8e670ec..ef225150c5d7 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -949,6 +949,7 @@ dtb-$(CONFIG_ARCH_OMAP4) += \
-> >  	omap4-panda.dtb \
-> >  	omap4-panda-a4.dtb \
-> >  	omap4-panda-es.dtb \
-> > +	omap4-phytec-pcm-959.dtb \
-> >  	omap4-sdp.dtb \
-> >  	omap4-sdp-es23plus.dtb \
-> >  	omap4-var-dvk-om44.dtb \
-> > diff --git a/arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi b/arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
-> > new file mode 100644
-> > index 000000000000..05b5cd581f15
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
-> > @@ -0,0 +1,352 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > +		stdout-path = &uart3;
-> > +	};
-> > +
-> > +	leds: leds {
-> 
-> Does not look like you tested the DTS against bindings. Please run `make
-> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> for instructions).
+> On 20/09/2022 09:45, Bonnie Lo/WYHQ/Wiwynn wrote:
+> > Hi Krzysztof,
+> >
+> > I revise the device tree as following and resend the mail.
+> > It create a new mail thread " [PATCH] ARM: dts: aspeed: greatlakes: Add
+> Facebook greatlakes (AST2600) BMC".
+> > Kindly to correct me, if there is any problem.
+> >
+> >> Use subject prefixes matching the subsystem (git log --oneline -- ...)=
+.
+> >>
+> >>>
+> >>> Add linux device tree entry related to greatlakes specific devices
+> >>> connected to BMC SoC.
+> >>
+> >> Please wrap commit message according to Linux coding style /
+> >> submission
+> >> process:
+> >> https://apc01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fel=
+i
+> >>
+> xir.b%2F&amp;data=3D05%7C01%7CBonnie_Lo%40wiwynn.com%7Ca2eecb3c2d
+> ff4eff
+> >>
+> 361b08da9ae190fd%7Cda6e0628fc834caf9dd273061cbab167%7C0%7C0%7C6
+> 379925
+> >>
+> 90848633103%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQI
+> joiV2luM
+> >>
+> zIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DMJn
+> u2iv19
+> >> dvbcMH7SJSExKOFV18dUtGRFSKO6Au2tFg%3D&amp;reserved=3D0
+> >>
+> ootlin.com%2Flinux%2Fv5.18-rc4%2Fsource%2FDocumentation%2Fprocess%2
+> >>
+> Fsubmitting-patches.rst%23L586&amp;data=3D05%7C01%7CBonnie_Lo%40wiw
+> >>
+> ynn.com%7C1dee8dcb540a49522fb608da98cdba6f%7Cda6e0628fc834caf9dd
+> >>
+> 273061cbab167%7C0%7C0%7C637990306620286314%7CUnknown%7CTWFp
+> >>
+> bGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
+> >>
+> 6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DmC2E3dJbuYgXklS%2Fw8s2w%2
+> >> BKH%2BZ3CsZSndFTgPBjyvpw%3D&amp;reserved=3D0
+> >>
+> >
+> > I have add " ARM: dts: aspeed: greatlakes:".
+> >
+> >>>
+> >>> Signed-off-by: Bonnie Lo <Bonnie_Lo@wiwynn.com>
+> >>> ---
+> >>>  arch/arm/boot/dts/Makefile                    |   1 +
+> >>>  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 248
+> >> ++++++++++++++++++
+> >>
+> >> Missing documentation of board compatible (bindings) as first patch.
+>
+> Why did you ignore it?
 
-Ahh, I see that now. I had started with
-arch/arm/boot/dts/omap4-panda-{es,common} as my inspiration. I'll review
-the documentation and be sure to run make dtbs_check before my next
-submission.
+We need to look at this more. There might be something under the Documentat=
+ion tree.
+Could you guide us an example for adding the document?
 
-And thank you for all your other points. They're all valid, and I'll
-be sure to implement all of your suggestions before a future submission.
-There isn't much use for me to acknowledge each suggestion one-by-one.
-
-
-Thank you very much.
-
+>
+> >>
+> >>>  2 files changed, 249 insertions(+)
+> >>>  create mode 100644
+> >>> arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> >>>
+> >>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> >>> index 05d8aef6e5d2..40fa906ab17f 100644
+> >>> --- a/arch/arm/boot/dts/Makefile
+> >>> +++ b/arch/arm/boot/dts/Makefile
+> >>> @@ -1580,6 +1580,7 @@ dtb-$(CONFIG_ARCH_ASPEED) +=3D \
+> >>>         aspeed-bmc-asrock-e3c246d4i.dtb \
+> >>>         aspeed-bmc-asrock-romed8hm3.dtb \
+> >>>         aspeed-bmc-bytedance-g220a.dtb \
+> >>> +       aspeed-bmc-facebook-greatlakes.dtb \
+> >>
+> >> Wrong order.
+> >
+> > I have reordered it.
+> >
+> >>
+> >>>         aspeed-bmc-facebook-bletchley.dtb \
+> >>>         aspeed-bmc-facebook-cloudripper.dtb \
+> >>>         aspeed-bmc-facebook-cmm.dtb \ diff --git
+> >>> a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> >>> b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> >>> new file mode 100644
+> >>> index 000000000000..f011cc4d370f
+> >>> --- /dev/null
+> >>> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+> >>> @@ -0,0 +1,248 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0-or-later // Copyright 2022
+> >>> +Facebook Inc.
+> >>> +
+> >>> +/dts-v1/;
+> >>> +#include "aspeed-g6.dtsi"
+> >>> +#include <dt-bindings/gpio/aspeed-gpio.h> #include
+> >>> +<dt-bindings/i2c/i2c.h> #include <dt-bindings/leds/leds-pca955x.h>
+> >>> +
+> >>> +/ {
+> >>> +       model =3D "AST2600 EVB";
+> >>
+> >> Wrong name.
+> >
+> > I have revies the model name " Facebook Greatlakes BMC ".
+> >
+> >>
+> >>> +       compatible =3D "aspeed,ast2600";
+> >>
+> >> Missing board compatible.
+> >>
+> >
+> > I add board compatible " facebook,greatlakes-bmc"
+>
+> And what is the output of the checkpatch?
+>
+> >
+> >>> +
+> >>> +       aliases {
+> >>> +               serial4 =3D &uart5;
+> >>> +       };
+> >>> +
+> >>> +       chosen {
+> >>> +               stdout-path =3D &uart5;
+> >>> +               bootargs =3D "console=3DttyS4,57600n8 root=3D/dev/ram
+> rw
+> >>> + vmalloc=3D384M";
+> >>
+> >> Bootargs usually do not belong to mainline DTS.
+> >
+> > Removed.
+>
+> I still saw bootargs.
+>
+> (...)
+>
+> >>>
+> >>> WIWYNN PROPRIETARY This email (and any attachments) contains
+> >> proprietary or confidential information and is for the sole use of
+> >> its intended recipient. Any unauthorized review, use, copying or
+> >> distribution of this email or the content of this email is strictly
+> >> prohibited. If you are not the intended recipient, please notify the s=
+ender
+> and delete this email immediately.
+> >>
+> >> This means we cannot take this patch. Proprietary and/or confidential
+> >> patches cannot be merged.
+> >>
+> >> Please license the patch as you wrote in SPDX header.
+> >>
+> >> Best regards,
+> >> Krzysztof
+> > WIWYNN PROPRIETARY
+> > This email (and any attachments) contains proprietary or confidential
+> information and is for the sole use of its intended recipient. Any
+> unauthorized review, use, copying or distribution of this email or the
+> content of this email is strictly prohibited. If you are not the intended
+> recipient, please notify the sender and delete this email immediately.
+>
+> Your company is still adding proprietary license. Since I am not intended
+> recipient, I will remove your messages.
+>
+> Best regards,
+> Krzysztof
+WIWYNN PROPRIETARY
+This email (and any attachments) contains proprietary or confidential infor=
+mation and is for the sole use of its intended recipient. Any unauthorized =
+review, use, copying or distribution of this email or the content of this e=
+mail is strictly prohibited. If you are not the intended recipient, please =
+notify the sender and delete this email immediately.
