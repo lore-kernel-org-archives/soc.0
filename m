@@ -1,390 +1,154 @@
-Return-Path: <SRS0=jc5J=2H=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=1Slh=2H=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B2EEC433FE
-	for <soc@archiver.kernel.org>; Thu,  6 Oct 2022 07:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96980C433FE
+	for <soc@archiver.kernel.org>; Thu,  6 Oct 2022 09:22:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2495CC433D7; Thu,  6 Oct 2022 07:10:27 +0000 (UTC)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 65660C433C1; Thu,  6 Oct 2022 09:22:28 +0000 (UTC)
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DC5F4C433C1
-	for <soc@kernel.org>; Thu,  6 Oct 2022 07:10:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC5F4C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id b6so1160808ljr.10
-        for <soc@kernel.org>; Thu, 06 Oct 2022 00:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=2I/1QzQAyhs03U6EUbvdD9mrpDPgHGLdtO/kjkRzvpE=;
-        b=PMmRUTc4YkNKV0tKu19tFM5wTJveTHPgqco/cfnP78Q1gRa5s/fGleDx+6TmialXfe
-         AqEBUqEmNp2wZoGoZL9spUrszdbqPhgQVt0bn+tsNHtszuBW5cVNyk+LHXs6pHSFhCak
-         56zoya76Gx8eDzbgSKEfldJiRyzHFyqpU8llVFy0WQjMXo858HCHwbnqASR8vPndWT8W
-         iXnqcgRoMK12cGQgFRZbOjdyyFLuZbvP8BU+1Fmpk9NPGVthn00q9vtG5EQ54E0H2ujd
-         5w+d/Hg7m/FsLITyoDvFvKxBqwK5cC1d6uNJMiNuFOR9tGA+iXhUaM8DjvkytS9q9W99
-         Sz8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=2I/1QzQAyhs03U6EUbvdD9mrpDPgHGLdtO/kjkRzvpE=;
-        b=fA7EQ0ciE280scg/flVW1FmYGVA+jqN6mPPuWyBwDgaXiSsWE/LMAU1JkH/oQapxkl
-         hBw1iOuKfg49iBh5grXw/Tcw+2IZVlfPhgKXXOuKHkRyVsBKhM5+OVNwhUQQbJApv0xu
-         lOF7+q1wnAG3CU475wdK04jP2vJTzhOoDmJ9/L0NtVjtq8hg1nZazzoNvc6C0glVTyQc
-         fcApbE9GhONX6l1oPO/PDq8INHcmW4tynBdyuhdCqwiMX5g6BplowUOlfACVhhEHNEP4
-         nisrxFWlPkO+3p2hjjjGSxVbkRQ/jsrEGWSUldomVlNZWQkXhPQRZr1K7guRj2mgC/5a
-         3dsQ==
-X-Gm-Message-State: ACrzQf0dAf9Q4hNYOjK+mPog5v99bE5Sz8CuZeBLLJgqY1Tt1GVkTg1O
-	Bvq2MEsOagzpb5UCLLdBQMOalw==
-X-Google-Smtp-Source: AMsMyM7t0L4tSiNO8/WleoyInpCKagr+hmERnfJ+UdQDQjy3KxVKaSqD+N7nG5HG3VYX5V/Ybo67vw==
-X-Received: by 2002:a2e:be9e:0:b0:26c:2d48:5c98 with SMTP id a30-20020a2ebe9e000000b0026c2d485c98mr1226092ljr.395.1665040223888;
-        Thu, 06 Oct 2022 00:10:23 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac24886000000b00498f570aef2sm2604118lfc.209.2022.10.06.00.10.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 00:10:23 -0700 (PDT)
-Message-ID: <a8854c8e-8868-461d-9f7b-d5b44f7288c7@linaro.org>
-Date: Thu, 6 Oct 2022 09:10:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v1 2/2] greatlakes: dts: Add Facebook greatlakes (AST2600)
- BMC
-Content-Language: en-US
-To: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
- krzysztof.kozlowski@linaro.or
+	by smtp.kernel.org (Postfix) with ESMTPS id AD223C433D6
+	for <soc@kernel.org>; Thu,  6 Oct 2022 09:22:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD223C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 7A0385809F4;
+	Thu,  6 Oct 2022 05:22:24 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 05:22:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1665048144; x=1665051744; bh=29UDqV5vYg
+	sI+WWZHeC9KRtscHTUXdUaQr8Wyq+BuTM=; b=jFmHrol8f3LoVS64fTQrjxd6eR
+	QF73JAg12vaOCVsxcJ4d654MaJJ7gQZTr67xxvzuBMNXO+4ZE3UUbDYRbfJ5C2EH
+	ihg2ZYs+fnZj9ZMkQIStbRuXdGSeloLuDN9fzss+JxYJVl1bUD4VdUCt3OTCodvY
+	5o3HfZTyuxnoaFCVbiY2dVD4PeSgCIB4vqLnVxpaDontY2o6v7bp/xcaHzAte5ar
+	b8Xd5o8chPVRA3ES/kMSu1pz3pyJd3mRnnrGToBKQ6ZbdqWwe0b/YlYIw0fVbII6
+	zGdTjXfwYHQ6FCiyz5NJX/xVuggUUnn/mXYA6k77bOMfN82z6VzOO/Pwto+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1665048144; x=1665051744; bh=29UDqV5vYgsI+
+	WWZHeC9KRtscHTUXdUaQr8Wyq+BuTM=; b=slX5ZrTQyCd4D8HDiMtoqP52saxn2
+	FaP1AXtoyKoquTXQXwiaRgipc1Ic0TQQVE4oO7BXHNYznxgo78mbQA/vZQyAwDwV
+	BhjQF0MKXVFTOLL6VXiqivjRixVC+xUPsLxifjnvZ68wUuj6zDMSqbe8bMpNeauG
+	LeCM+FWJeZxdmO/uFnj7KsKHZOK1FBfukbvnUAZlyqMyyzRRw4sIge9/vkn5Aev+
+	E/0OzjcsUKx8p37jey48WOyYOiqQtuPSr+YI5sOVGs+dKyViGgRtddgFOLf+Q76Q
+	BINhLwAkvN+P2vFt8+TxGdTy+cdBFSEJI8iecm6rL5af35JaFEgk5e/3w==
+X-ME-Sender: <xms:UJ4-Yx98En902q9MUo2TFJUpZHRJxQwHkoTQoeSZZdgXM-hUWm2ISg>
+    <xme:UJ4-Y1vP7Ewds0xcWuNl8BxOCpzQLGULTHr03-F2V62Uvf6JH53i_0NhBEtdAIQqZ
+    hFKINnZOTaWZMy2nwY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeefheelfeetheelvdeiieeffeethfekvdehheduleetveeikeehhfeghfevkeff
+    ueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:UJ4-Y_BjZIynMiDN274RApzIqpkY0k-x8qRQHvNWNgmIR-4tGW187A>
+    <xmx:UJ4-Y1eZq37Djk8wKbYkOdmGdfAbD-AG0-yNVcf-Tc0FUgH66vjRGw>
+    <xmx:UJ4-Y2M4TCXhnBcchGCJNhSk_k7Aosh3PoEsF3oXtgxuwg8lHitZYQ>
+    <xmx:UJ4-Y43YRTbjKRImF0fz6QSLilAZaKRP5UoSa5p1NHdahUNTl1-xQA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 33BC2B60086; Thu,  6 Oct 2022 05:22:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <70d8e5d8-6fa4-496d-88d6-2604d0c3e982@app.fastmail.com>
+Date: Thu, 06 Oct 2022 11:22:03 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: patrick@stwcx.xyz, garnermic@fb.com, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-References: <20221006063527.2007802-1-Delphine_CC_Chiu@Wiwynn.com>
- <20221006063527.2007802-2-Delphine_CC_Chiu@Wiwynn.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221006063527.2007802-2-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Subject: [GIT PULL 0/4] ARM SoC updates for 6.1
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 06/10/2022 08:35, Delphine CC Chiu wrote:
-> Add linux device tree entry related to
-> greatlakes specific devices connected to BMC SoC.
-> 
-> ---
-> --- v1 - Add documentation of board compatible (bindings)
-> ---    - Add board compatible
-> ---    - Remove the bootargs
-> ---    - Revise the DTS node name
-> ---
+Hi Linus,
 
-This is v3, not v1, because you resent first patch twice Changelog does
-not go above SoB. You can see the problem easily - save your patch, git
-am xxx.mbox, git show
+This merge window is a again a little quieter for us, with 838 non-merge
+changesets including fewer noteworthy updates in the devicetree files, b=
+ut a
+little more activity in SoC specific drivers than usual. The interesting
+changes are back to overwhelmingly for 64-bit platforms, which is of
+course the expected trend.
 
-Subject is wrong. Use subject prefixes matching the subsystem (git log
---oneline -- ...).
+The top contributors by number of patches this time are:
+     88 Krzysztof Kozlowski
+     37 Peng Fan
+     30 Arnd Bergmann
+     27 Geert Uytterhoeven
+     20 Dmitry Baryshkov
+     19 Kunihiko Hayashi
+     18 Marcel Ziswiler
+     16 Pali Roh=C3=A1r
+     16 AngeloGioacchino Del Regno
+     15 Lad Prabhakar
+     14 Johan Hovold
+     13 Tinghan Shen
+     13 Joel Stanley
+     12 Srinivasa Rao Mandadapu
+     12 Li Yang
+     11 Wolfram Sang
+     11 Sudeep Holla
+     11 Jagan Teki
+     11 Frieder Schrempf
+     10 Tim Harvey
+     10 Robert Marko
 
-
-> 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 243 ++++++++++++++++++
->  2 files changed, 244 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..d9f417f2d7df 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1586,6 +1586,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-bmc-facebook-elbert.dtb \
->  	aspeed-bmc-facebook-fuji.dtb \
->  	aspeed-bmc-facebook-galaxy100.dtb \
-> +	aspeed-bmc-facebook-greatlakes.dtb \
->  	aspeed-bmc-facebook-minipack.dtb \
->  	aspeed-bmc-facebook-tiogapass.dtb \
->  	aspeed-bmc-facebook-wedge40.dtb \
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
-> new file mode 100644
-> index 000000000000..29c46d0e003e
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
-> @@ -0,0 +1,243 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +// Copyright 2022 Facebook Inc.
-> +
-> +/dts-v1/;
-> +#include "aspeed-g6.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +#include <dt-bindings/leds/leds-pca955x.h>
-> +#include <dt-bindings/i2c/i2c.h>
-> +
-> +/ {
-> +	model = "Facebook Greatlakes BMC";
-> +	compatible = "facebook,greatlakes-bmc", "aspeed,ast2600";
-> +
-> +	aliases {
-> +		serial4 = &uart5;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x80000000>;
-> +	};
-> +
-> +	iio-hwmon {
-> +		compatible = "iio-hwmon";
-> +		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-> +				<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-> +				<&adc1 0>, <&adc1 2>, <&adc1 3>, <&adc1 4>,
-> +				<&adc1 5>, <&adc1 6>;
-> +	};
-> +};
-> +
-> +&uart1 {
-> +	status = "okay";
-> +};
-> +
-> +&uart2 {
-> +	status = "okay";
-> +};
-> +
-> +&uart3 {
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	status = "okay";
-> +};
-> +
-> +&uart5 {
-> +	status = "okay";
-> +};
-> +
-> +&wdt1 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-> +	aspeed,reset-type = "soc";
-> +	aspeed,external-signal;
-> +	aspeed,ext-push-pull;
-> +	aspeed,ext-active-high;
-> +	aspeed,ext-pulse-duration = <256>;
-> +};
-> +
-> +&mac3 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rmii4_default>;
-> +	no-hw-checksum;
-> +	use-ncsi;
-> +	mlx,multi-host;
-> +	ncsi-ctrl,start-redo-probe;
-> +	ncsi-ctrl,no-channel-monitor;
-> +	ncsi-package = <1>;
-> +	ncsi-channel = <1>;
-> +	ncsi-rexmit = <1>;
-> +	ncsi-timeout = <2>;
-> +};
-> +
-> +&rtc {
-> +	status = "okay";
-> +};
-> +
-> +&fmc {
-> +	status = "okay";
-> +	flash@0 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "bmc";
-> +		spi-rx-bus-width = <4>;
-> +		spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-64.dtsi"
-> +	};
-> +	flash@1 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "bmc2";
-> +		spi-rx-bus-width = <4>;
-> +		spi-max-frequency = <50000000>;
-> +	};
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +	multi-master;
-> +	ipmb0@10 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Therefore: ipmb@10
-
-> +		compatible = "ipmb-dev";
-> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +	multi-master;
-> +	ipmb1@10 {
-
-ipmb@10
-
-> +		compatible = "ipmb-dev";
-> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	status = "okay";
-> +	multi-master;
-> +	ipmb2@10 {
-
-ipmb@10
-
-> +		compatible = "ipmb-dev";
-> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
-> +&i2c3 {
-> +	status = "okay";
-> +	multi-master;
-> +	ipmb3@10 {
-
-ipmb@10
-
-> +		compatible = "ipmb-dev";
-> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
-> +&i2c4 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c5 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c6 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c7 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c8 {
-> +	status = "okay";
-> +	temperature-sensor@1f {
-> +		compatible = "ti,tmp421";
-> +		reg = <0x1f>;
-> +	};
-> +	// NIC EEPROM
-> +	eeprom@50 {
-> +		compatible = "st,24c32";
-> +		reg = <0x50>;
-> +	};
-> +};
-> +
-> +&i2c9 {
-> +	status = "okay";
-> +	multi-master;
-> +	ipmb9@10 {
-
-ipmb@10
-
-> +		compatible = "ipmb-dev";
-> +		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +		i2c-protocol;
-> +	};
-> +};
-> +
-> +&i2c10 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c11 {
-> +	status = "okay";
-> +	eeprom@51 {
-> +		compatible = "atmel,24c128";
-> +		reg = <0x51>;
-> +	};
-> +	eeprom@54 {
-> +		compatible = "atmel,24c128";
-> +		reg = <0x54>;
-> +	};
-> +};
-> +
-> +&i2c12 {
-> +	status = "okay";
-> +	temperature-sensor@4f {
-> +		compatible = "lm75";
-> +		reg = <0x4f>;
-> +	};
-> +};
-> +
-> +&i2c13 {
-> +	status = "okay";
-> +};
-> +
-> +&adc0 {
-> +	ref_voltage = <2500>;
-> +	status = "okay";
-> +	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-> +			&pinctrl_adc2_default &pinctrl_adc3_default
-> +			&pinctrl_adc4_default &pinctrl_adc5_default
-> +			&pinctrl_adc6_default &pinctrl_adc7_default>;
-> +};
-> +
-> +&adc1 {
-> +	ref_voltage = <2500>;
-> +	status = "okay";
-> +	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc10_default
-> +			&pinctrl_adc11_default &pinctrl_adc12_default
-> +			&pinctrl_adc13_default &pinctrl_adc14_default>;
-> +};
-> +
-> +
-> +&ehci0 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci1 {
-> +	status = "okay";
-> +};
-> +
-> +&uhci {
-> +	status = "okay";
-> +};
-> +
-> +&gpio0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
-> +};
-> +
-> +
-
-No need for two blank lines at the end. Drop both.
-
-Best regards,
-Krzysztof
-
+The overall dirstat looks like
+   0.9% Documentation/devicetree/bindings/arm/
+   0.3% Documentation/devicetree/bindings/clock/
+   0.4% Documentation/devicetree/bindings/firmware/
+   0.3% Documentation/devicetree/bindings/media/
+   0.7% Documentation/devicetree/bindings/memory-controllers/
+   0.3% Documentation/devicetree/bindings/net/
+   0.5% Documentation/devicetree/bindings/power/
+   0.6% Documentation/devicetree/bindings/soc/imx/
+   0.3% Documentation/devicetree/bindings/sram/
+   0.2% Documentation/
+  14.4% arch/arm/boot/dts/
+   0.3% arch/arm/configs/
+   0.8% arch/arm/mach-footbridge/
+   2.0% arch/arm/
+   0.3% arch/arm64/boot/dts/allwinner/
+   1.6% arch/arm64/boot/dts/amlogic/
+   0.3% arch/arm64/boot/dts/broadcom/bcmbca/
+   0.2% arch/arm64/boot/dts/exynos/
+  11.5% arch/arm64/boot/dts/freescale/
+   0.6% arch/arm64/boot/dts/marvell/
+   7.2% arch/arm64/boot/dts/mediatek/
+   3.9% arch/arm64/boot/dts/nvidia/
+  10.4% arch/arm64/boot/dts/qcom/
+   5.1% arch/arm64/boot/dts/renesas/
+   8.1% arch/arm64/boot/dts/rockchip/
+   1.0% arch/arm64/boot/dts/socionext/
+   2.7% arch/arm64/boot/dts/ti/
+   0.2% drivers/bus/
+   0.3% drivers/firmware/arm_ffa/
+   0.3% drivers/firmware/psci/
+   1.3% drivers/memory/
+   1.9% drivers/soc/imx/
+   1.1% drivers/soc/mediatek/
+   2.4% drivers/soc/qcom/
+   0.6% drivers/soc/rockchip/
+  12.0% drivers/soc/tegra/cbb/
+   0.2% drivers/soc/tegra/
+   0.3% drivers/soc/
+   0.3% drivers/
+   0.8% include/dt-bindings/clock/
+   0.2% include/dt-bindings/power/
+   0.2% include/linux/soc/
+   0.4% include/
+ 798 files changed, 36028 insertions(+), 6182 deletions(-)
