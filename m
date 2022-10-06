@@ -4,151 +4,261 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96980C433FE
-	for <soc@archiver.kernel.org>; Thu,  6 Oct 2022 09:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E751C433FE
+	for <soc@archiver.kernel.org>; Thu,  6 Oct 2022 09:23:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 65660C433C1; Thu,  6 Oct 2022 09:22:28 +0000 (UTC)
+	id 4C38EC433D7; Thu,  6 Oct 2022 09:23:35 +0000 (UTC)
 Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AD223C433D6
-	for <soc@kernel.org>; Thu,  6 Oct 2022 09:22:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD223C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id E62ADC433D6
+	for <soc@kernel.org>; Thu,  6 Oct 2022 09:23:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E62ADC433D6
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 7A0385809F4;
-	Thu,  6 Oct 2022 05:22:24 -0400 (EDT)
+	by mailnew.nyi.internal (Postfix) with ESMTP id D5E325809F7;
+	Thu,  6 Oct 2022 05:23:32 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 06 Oct 2022 05:22:24 -0400
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 05:23:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1665048144; x=1665051744; bh=29UDqV5vYg
-	sI+WWZHeC9KRtscHTUXdUaQr8Wyq+BuTM=; b=jFmHrol8f3LoVS64fTQrjxd6eR
-	QF73JAg12vaOCVsxcJ4d654MaJJ7gQZTr67xxvzuBMNXO+4ZE3UUbDYRbfJ5C2EH
-	ihg2ZYs+fnZj9ZMkQIStbRuXdGSeloLuDN9fzss+JxYJVl1bUD4VdUCt3OTCodvY
-	5o3HfZTyuxnoaFCVbiY2dVD4PeSgCIB4vqLnVxpaDontY2o6v7bp/xcaHzAte5ar
-	b8Xd5o8chPVRA3ES/kMSu1pz3pyJd3mRnnrGToBKQ6ZbdqWwe0b/YlYIw0fVbII6
-	zGdTjXfwYHQ6FCiyz5NJX/xVuggUUnn/mXYA6k77bOMfN82z6VzOO/Pwto+g==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm2; t=1665048212; x=
+	1665051812; bh=bS9GSfsqnBckfu2+xToKJg32bk9j3WbzABpIvpJCp+w=; b=O
+	RGhg/YfTU5JGe6FQl2PX1ZMu2LxZQ6JQzS5yjTV+txKhmoRuvbMA0Tj9d1HPg+CZ
+	DW1+/K7YoES5fHQGr7gnI/JWnFmMWnQcDG/w6S0ctlRomwte4MnbFjLQiUEUGrzS
+	qGTxxVYVS41dSBNyjLv2sz5FAwN234k2btUAOmIZSErHhrNSsGH0QEL9WVnMOkWI
+	tEYUyOhXxJzaC/KZkthhAsHmSjAtHR8CyZJfIeBEwJ3uF3wtfQUorP01IItzXhim
+	XnYxJWY/RCIK0XrDN28basINZkpE078NT3kC066VjF7591KT0kCwKSd4B0M1grLv
+	2tsuVFx/DEefGISdubEJg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1665048144; x=1665051744; bh=29UDqV5vYgsI+
-	WWZHeC9KRtscHTUXdUaQr8Wyq+BuTM=; b=slX5ZrTQyCd4D8HDiMtoqP52saxn2
-	FaP1AXtoyKoquTXQXwiaRgipc1Ic0TQQVE4oO7BXHNYznxgo78mbQA/vZQyAwDwV
-	BhjQF0MKXVFTOLL6VXiqivjRixVC+xUPsLxifjnvZ68wUuj6zDMSqbe8bMpNeauG
-	LeCM+FWJeZxdmO/uFnj7KsKHZOK1FBfukbvnUAZlyqMyyzRRw4sIge9/vkn5Aev+
-	E/0OzjcsUKx8p37jey48WOyYOiqQtuPSr+YI5sOVGs+dKyViGgRtddgFOLf+Q76Q
-	BINhLwAkvN+P2vFt8+TxGdTy+cdBFSEJI8iecm6rL5af35JaFEgk5e/3w==
-X-ME-Sender: <xms:UJ4-Yx98En902q9MUo2TFJUpZHRJxQwHkoTQoeSZZdgXM-hUWm2ISg>
-    <xme:UJ4-Y1vP7Ewds0xcWuNl8BxOCpzQLGULTHr03-F2V62Uvf6JH53i_0NhBEtdAIQqZ
-    hFKINnZOTaWZMy2nwY>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1665048212; x=
+	1665051812; bh=bS9GSfsqnBckfu2+xToKJg32bk9j3WbzABpIvpJCp+w=; b=D
+	ghVb76i6/zuhC9CfYW2iI3MqNTceb0rRL4rrv2jK+p3TS7nJgz8GvihYVssDW7n0
+	p1Zw9f9LIzrfnygUV029HMo0c0YHs5EQzG6R+TdD0vO40H0NIxrDGO9NXfoG9DoU
+	NMLaFbnIqbHcPsd6zhwTxHcpX6D766q+uVqimxgVZqLGP0M9o9MYijaPgwve4gag
+	WvMYqBdN1H3JODAxVjeKcNTKV4hViK3wpbJ24qWrKotLo0HiWFl1qFSrIhyM3cRB
+	G89Ac3d2yshTJzC6bxLjjqJNmKcrX6DoOUxfa2WsxjJX8qqM3UxfkU4lOxCUtbcM
+	YfHllmg76Fqwas6VfDfMg==
+X-ME-Sender: <xms:lJ4-Yw16wmJAncd7FGSfPQMErRVSh-bknAJxTXmTpgL2eOORm0q7tQ>
+    <xme:lJ4-Y7HBZ9htLtnIvDS71gGMQM48ZGEbBBBQjIRTd3BHbOdM-9lmieIcBDGt1mKhw
+    ib9rfe-iVyA-wBJg_g>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgudegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeefheelfeetheelvdeiieeffeethfekvdehheduleetveeikeehhfeghfevkeff
-    ueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:UJ4-Y_BjZIynMiDN274RApzIqpkY0k-x8qRQHvNWNgmIR-4tGW187A>
-    <xmx:UJ4-Y1eZq37Djk8wKbYkOdmGdfAbD-AG0-yNVcf-Tc0FUgH66vjRGw>
-    <xmx:UJ4-Y2M4TCXhnBcchGCJNhSk_k7Aosh3PoEsF3oXtgxuwg8lHitZYQ>
-    <xmx:UJ4-Y43YRTbjKRImF0fz6QSLilAZaKRP5UoSa5p1NHdahUNTl1-xQA>
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkefhheetvdethfejkeeigfehtdffieevfeefteffteejffehlefhtdeu
+    veejueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggv
+X-ME-Proxy: <xmx:lJ4-Y47WvmDb_6wRjcqaOdF0Hto8sxNFq4WQ4G56lupzoWQyyEZNZA>
+    <xmx:lJ4-Y51a0Nmtg_B2eKKKsW_nJSKXTEGsfE0skXK3VIKiq2WhRl2SuQ>
+    <xmx:lJ4-YzFnH9qI9-b8jXFZ1gqwMIYbli2M8ZvuoImDpZo3nt6dnmmKgg>
+    <xmx:lJ4-Y5M8KzNY5EW0xHx_4MskhlFmCmxDpruESrqlVTjuRrmzoX9urQ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 33BC2B60086; Thu,  6 Oct 2022 05:22:24 -0400 (EDT)
+	id 7628DB60089; Thu,  6 Oct 2022 05:23:32 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
 Mime-Version: 1.0
-Message-Id: <70d8e5d8-6fa4-496d-88d6-2604d0c3e982@app.fastmail.com>
-Date: Thu, 06 Oct 2022 11:22:03 +0200
+Message-Id: <eb58dfb5-294a-4e78-922a-412e388ef813@app.fastmail.com>
+In-Reply-To: <70d8e5d8-6fa4-496d-88d6-2604d0c3e982@app.fastmail.com>
+References: <70d8e5d8-6fa4-496d-88d6-2604d0c3e982@app.fastmail.com>
+Date: Thu, 06 Oct 2022 11:23:09 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
-Subject: [GIT PULL 0/4] ARM SoC updates for 6.1
+Subject: [GIT PULL 1/4] ARM: defconfig updates for 6.1
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc06=
+3c5:
 
-This merge window is a again a little quieter for us, with 838 non-merge
-changesets including fewer noteworthy updates in the devicetree files, b=
-ut a
-little more activity in SoC specific drivers than usual. The interesting
-changes are back to overwhelmingly for 64-bit platforms, which is of
-course the expected trend.
+  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
 
-The top contributors by number of patches this time are:
-     88 Krzysztof Kozlowski
-     37 Peng Fan
-     30 Arnd Bergmann
-     27 Geert Uytterhoeven
-     20 Dmitry Baryshkov
-     19 Kunihiko Hayashi
-     18 Marcel Ziswiler
-     16 Pali Roh=C3=A1r
-     16 AngeloGioacchino Del Regno
-     15 Lad Prabhakar
-     14 Johan Hovold
-     13 Tinghan Shen
-     13 Joel Stanley
-     12 Srinivasa Rao Mandadapu
-     12 Li Yang
-     11 Wolfram Sang
-     11 Sudeep Holla
-     11 Jagan Teki
-     11 Frieder Schrempf
-     10 Tim Harvey
-     10 Robert Marko
+are available in the Git repository at:
 
-The overall dirstat looks like
-   0.9% Documentation/devicetree/bindings/arm/
-   0.3% Documentation/devicetree/bindings/clock/
-   0.4% Documentation/devicetree/bindings/firmware/
-   0.3% Documentation/devicetree/bindings/media/
-   0.7% Documentation/devicetree/bindings/memory-controllers/
-   0.3% Documentation/devicetree/bindings/net/
-   0.5% Documentation/devicetree/bindings/power/
-   0.6% Documentation/devicetree/bindings/soc/imx/
-   0.3% Documentation/devicetree/bindings/sram/
-   0.2% Documentation/
-  14.4% arch/arm/boot/dts/
-   0.3% arch/arm/configs/
-   0.8% arch/arm/mach-footbridge/
-   2.0% arch/arm/
-   0.3% arch/arm64/boot/dts/allwinner/
-   1.6% arch/arm64/boot/dts/amlogic/
-   0.3% arch/arm64/boot/dts/broadcom/bcmbca/
-   0.2% arch/arm64/boot/dts/exynos/
-  11.5% arch/arm64/boot/dts/freescale/
-   0.6% arch/arm64/boot/dts/marvell/
-   7.2% arch/arm64/boot/dts/mediatek/
-   3.9% arch/arm64/boot/dts/nvidia/
-  10.4% arch/arm64/boot/dts/qcom/
-   5.1% arch/arm64/boot/dts/renesas/
-   8.1% arch/arm64/boot/dts/rockchip/
-   1.0% arch/arm64/boot/dts/socionext/
-   2.7% arch/arm64/boot/dts/ti/
-   0.2% drivers/bus/
-   0.3% drivers/firmware/arm_ffa/
-   0.3% drivers/firmware/psci/
-   1.3% drivers/memory/
-   1.9% drivers/soc/imx/
-   1.1% drivers/soc/mediatek/
-   2.4% drivers/soc/qcom/
-   0.6% drivers/soc/rockchip/
-  12.0% drivers/soc/tegra/cbb/
-   0.2% drivers/soc/tegra/
-   0.3% drivers/soc/
-   0.3% drivers/
-   0.8% include/dt-bindings/clock/
-   0.2% include/dt-bindings/power/
-   0.2% include/linux/soc/
-   0.4% include/
- 798 files changed, 36028 insertions(+), 6182 deletions(-)
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-d=
+efconfig-6.1
+
+for you to fetch changes up to 25631f1fec2a1e1aa93811fe7af2b29d49d79874:
+
+  Merge tag 'v6.1-rockchip-defconfig64-1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/mmind/linux-rockchip into arm/defconfig (2022-09-28 2=
+2:35:15 +0200)
+
+----------------------------------------------------------------
+ARM: defconfig updates for 6.1
+
+As usual, we enable newly added device drivers in the various
+defconfig files. This time, there is also a larger cleanup
+series that just reorders symbols according to what 'make
+savedefconfig' outputs and then tracks down the most common
+removed or renamed symbols on top.
+
+----------------------------------------------------------------
+Adriana Kobylak (1):
+      ARM: configs: aspeed: Add support for USB flash drives
+
+Akhil R (1):
+      arm64: defconfig: Make TEGRA186_GPC_DMA built-in
+
+Anand Moon (1):
+      arm64: defconfig: Enable Synopsys DWC MSHC driver
+
+Arnaud Pouliquen (2):
+      arm: configs: Configs that had RPMSG_CHAR now get RPMSG_CTRL
+      arm64: defconfig: Config that had RPMSG_CHAR now gets RPMSG_CTRL
+
+Arnd Bergmann (19):
+      ARM: defconfig: reorder defconfig files
+      ARM: defconfig: clean up multi_v4t and multi_v5 configs
+      ARM: defconfig: drop CONFIG_NET_VENDOR_ASIX=3Dy
+      ARM: defconfig: drop CONFIG_SERIAL_OMAP references
+      ARM: defconfig: drop CONFIG_DRM_RCAR_LVDS
+      ARM: defconfig: drop CONFIG_PTP_1588_CLOCK=3Dy
+      ARM: defconfig: drop CONFIG_SND_SOC_FSL_SAI
+      ARM: defconfig: drop CONFIG_USB_FSL_USB2
+      ARM: defconfig: drop CONFIG_MICROCHIP_PIT64B
+      ARM: defconfig: fix CONFIG_SND_SOC_AC97_CODEC name
+      Merge branch 'arm/defconfig-cleanup' into arm/defconfig
+      Merge tag 'renesas-arm-defconfig-for-v6.1-tag1' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/defconfig
+      Merge tag 'arm-soc/for-6.1/defconfig-arm64' of https://github.com/=
+Broadcom/stblinux into arm/defconfig
+      Merge tag 'tegra-for-6.1-arm64-defconfig' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/tegra/linux into arm/defconfig
+      Merge tag 'sunxi-config-for-6.1-1' of https://git.kernel.org/pub/s=
+cm/linux/kernel/git/sunxi/linux into arm/defconfig
+      Merge tag 'qcom-arm64-defconfig-for-6.1' of https://git.kernel.org=
+/pub/scm/linux/kernel/git/qcom/linux into arm/defconfig
+      Merge tag 'qcom-defconfig-for-6.1' of https://git.kernel.org/pub/s=
+cm/linux/kernel/git/qcom/linux into arm/defconfig
+      Merge tag 'aspeed-6.1-defconfig' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/joel/bmc into arm/defconfig
+      Merge tag 'v6.1-rockchip-defconfig64-1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/mmind/linux-rockchip into arm/defconfig
+
+Bhadram Varka (1):
+      arm64: defconfig: Enable Tegra MGBE driver
+
+Cl=C3=A9ment P=C3=A9ron (1):
+      arm64: defconfig: Enable devfreq cooling device
+
+Florian Fainelli (1):
+      arm64: defconfig: enable ARCH_BCM
+
+Geert Uytterhoeven (2):
+      ARM: shmobile: defconfig: Refresh for v6.0-rc1
+      arm64: defconfig: Enable additional support for Renesas platforms
+
+Joel Stanley (10):
+      ARM: configs: aspeed_g5: Add mp5023 driver
+      ARM: configs: aspeed_g5: Add TPM TIS I2C driver
+      ARM: configs: aspeed_g5: Add PL2303 USB serial driver
+      ARM: configs: aspeed_g5: Enable MCTP stack
+      ARM: configs: aspeed_g4: Enable OCC and NBD drivers
+      ARM: configs: aspeed_g4: Enable IPV6 options
+      ARM: config: aspeed: Enable namespaces
+      ARM: configs: aspeed: Refresh defconfigs
+      ARM: configs: aspeed_g4: Remove appended DTB and ATAG
+      ARM: config: aspeed_g5: Enable PECI
+
+Krishna Yarlagadda (1):
+      arm64: tegra: Enable Tegra SPI & QSPI in deconfig
+
+Krzysztof Kozlowski (5):
+      arm64: defconfig: enable more Qualcomm drivers
+      ARM: qcom_defconfig: enable more Qualcomm drivers
+      ARM: multi_v7_defconfig: enable more Qualcomm drivers
+      ARM: qcom: include defconfig in MAINTAINERS
+      arm64: defconfig: enable newer Qualcomm SoC sound drivers
+
+Linus Walleij (1):
+      ARM: config: ixp4xx: Disable legacy EEPROM driver
+
+Mark Brown (1):
+      arm64: configs: Enable all PMUs provided by Arm
+
+Michael Walle (1):
+      arm64: defconfig: enable ARCH_NXP
+
+Stefan Hansson (1):
+      ARM: configs: replace CONFIG_NO_HZ=3Dy with CONFIG_NO_HZ_IDLE=3Dy
+
+Sudeep Holla (1):
+      arm64: defconfig: Drop ARM_CPUIDLE(generic idle driver) config
+
+Vinod Koul (1):
+      arm64: defconfig: Enabled SC8180x configs
+
+William Zhang (1):
+      arm64: defconfig: remove BCM4908
+
+ MAINTAINERS                              |  1 +
+ arch/arm/configs/aspeed_g4_defconfig     | 10 +++++++---
+ arch/arm/configs/aspeed_g5_defconfig     | 20 +++++++++++++++++++-
+ arch/arm/configs/at91_dt_defconfig       |  2 +-
+ arch/arm/configs/bcm2835_defconfig       |  2 +-
+ arch/arm/configs/cm_x300_defconfig       |  2 +-
+ arch/arm/configs/davinci_all_defconfig   |  2 +-
+ arch/arm/configs/dove_defconfig          |  4 ++--
+ arch/arm/configs/exynos_defconfig        |  4 ++--
+ arch/arm/configs/ezx_defconfig           |  2 +-
+ arch/arm/configs/hisi_defconfig          |  2 +-
+ arch/arm/configs/imx_v4_v5_defconfig     |  2 +-
+ arch/arm/configs/imx_v6_v7_defconfig     |  4 ++--
+ arch/arm/configs/integrator_defconfig    |  2 +-
+ arch/arm/configs/ixp4xx_defconfig        |  2 +-
+ arch/arm/configs/keystone_defconfig      |  7 +++----
+ arch/arm/configs/lpc18xx_defconfig       |  2 +-
+ arch/arm/configs/lpc32xx_defconfig       |  2 +-
+ arch/arm/configs/magician_defconfig      |  2 +-
+ arch/arm/configs/milbeaut_m10v_defconfig |  2 +-
+ arch/arm/configs/mmp2_defconfig          |  2 +-
+ arch/arm/configs/moxart_defconfig        |  2 +-
+ arch/arm/configs/mps2_defconfig          |  2 +-
+ arch/arm/configs/multi_v4t_defconfig     |  2 --
+ arch/arm/configs/multi_v5_defconfig      |  5 ++---
+ arch/arm/configs/multi_v7_defconfig      | 28 ++++++++++++-------------=
+---
+ arch/arm/configs/mv78xx0_defconfig       |  2 +-
+ arch/arm/configs/mvebu_v5_defconfig      |  4 ++--
+ arch/arm/configs/mxs_defconfig           |  6 +++---
+ arch/arm/configs/omap1_defconfig         |  4 ++--
+ arch/arm/configs/omap2plus_defconfig     |  9 +++------
+ arch/arm/configs/orion5x_defconfig       |  4 ++--
+ arch/arm/configs/oxnas_v6_defconfig      |  2 +-
+ arch/arm/configs/pcm027_defconfig        |  2 +-
+ arch/arm/configs/pxa168_defconfig        |  4 ++--
+ arch/arm/configs/pxa910_defconfig        |  4 ++--
+ arch/arm/configs/pxa_defconfig           |  4 ++--
+ arch/arm/configs/qcom_defconfig          |  7 ++++++-
+ arch/arm/configs/s3c6400_defconfig       |  2 +-
+ arch/arm/configs/s5pv210_defconfig       |  4 ++--
+ arch/arm/configs/sama5_defconfig         |  6 +++---
+ arch/arm/configs/sama7_defconfig         |  4 ++--
+ arch/arm/configs/shmobile_defconfig      | 10 ++++++++--
+ arch/arm/configs/socfpga_defconfig       |  6 +++---
+ arch/arm/configs/sp7021_defconfig        |  2 +-
+ arch/arm/configs/spear13xx_defconfig     |  2 +-
+ arch/arm/configs/spear3xx_defconfig      |  2 +-
+ arch/arm/configs/spear6xx_defconfig      |  2 +-
+ arch/arm/configs/stm32_defconfig         |  2 +-
+ arch/arm/configs/sunxi_defconfig         |  4 ++--
+ arch/arm/configs/tegra_defconfig         |  4 ++--
+ arch/arm/configs/vexpress_defconfig      |  2 +-
+ arch/arm/configs/vt8500_v6_v7_defconfig  |  2 +-
+ arch/arm/configs/xcep_defconfig          |  2 +-
+ arch/arm64/configs/defconfig             | 30 +++++++++++++++++++++++++=
+++---
+ 55 files changed, 151 insertions(+), 104 deletions(-)
