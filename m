@@ -1,237 +1,384 @@
-Return-Path: <SRS0=qPP2=2H=globeinfo-db.com=erica.turner@kernel.org>
+Return-Path: <SRS0=IHYZ=2I=wiwynn.com=Delphine_CC_Chiu@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4A26C433FE
-	for <soc@archiver.kernel.org>; Thu,  6 Oct 2022 21:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DDBCC433FE
+	for <soc@archiver.kernel.org>; Fri,  7 Oct 2022 05:55:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8501BC433D7; Thu,  6 Oct 2022 21:04:34 +0000 (UTC)
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2067.outbound.protection.outlook.com [40.107.239.67])
+	id 3DF72C433D7; Fri,  7 Oct 2022 05:55:17 +0000 (UTC)
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2055.outbound.protection.outlook.com [40.107.255.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DEB18C433C1
-	for <soc@kernel.org>; Thu,  6 Oct 2022 21:04:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DEB18C433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=globeinfo-db.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=globeinfo-db.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 6E639C433C1;
+	Fri,  7 Oct 2022 05:55:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E639C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Wiwynn.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=wiwynn.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JyuBC4dE5JFyZNXQ38V4oObcRvNJqxVAPCCPTY5x0DxZjzXvIlu7UNJQbYB8yWcKxzwuFgUVbV2969kMfg5CsTHBxc8X7SxbEjdtuyLZAncF+K/pd6cR/AGdJ8m2c3HqZhfj/XrFSs0ezDRgBp9wGsa90Akv86vb0hsgJdGOwFl9BS5qlMvKBZFIT9Aj5IFvTg4aGS5UEVwp3MDiM1Cr4gS2HlM6nCaoVnNaw8I2A2/NfzCC/sTMbuzEh5v/bkFt3wvlkTw5x1CHRG0jbZTvmWcZpQtVds++iuhS1fmp3seCMvtA18sHitE5tTyiIQAJHgGyzLVTRefdIjp5mcylJg==
+ b=bsSEypmpGwKIHy2rf7XP6ZCstm3f+9xanLsYnsAncymh8k7VhQnCjFzQD7Udm3bwhzWxiqiYPNvJLiiTuoHPkSSLOvDxG/DqcWYTvdmFk26Wo7Cy+hDAxtYSIo15CKAp2eI+TxapDMSl9WyXNX6mEarb3U2m1iLqOTvaEmxVpUuyWvxxj3Lx3F/CXfNILyqAPIh1ASYZUflmUrA9QA/liL8NO0OdWJ2taaUF/TZahVzY4ZxlshLZfO5qWL3cveLj91IeciSwjLnmBOMLeuC0O56GQEU9opmJrIvQBbvTZb5FXPHLA8QjZeLS1gGXOdKZT3SoCehxQn6S+aXx8bYv4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TsLCk4V1Ob1I51z6JyKHSUOZqirOrdIOKtUS8o0e+QE=;
- b=ct9XVUJQS3grWf4zCJYHuX5q3ACDV2fZNweJGDHIgNUG8L39fRL9DIgWbazqkpzK1xTwD3xSgjFnFFNyNta1Ff4irlbQnwXCX3iVKHDg7UdXUV9Y9gIelCBcCCiHaaPYl3PLKIvUf/0OI5ASKbgUP/wPk8rhtXXEX/12GpDIGXdy3bV96U80jxWSjqTYqNrcl+OhSMAQ1YWJWkvwNdYsz/3cafEgBKVVDiYuPulPlyUua6YalONlYCAd2blf6Fs0yGERE8FXxCSWvlHfSMy42O7VYtMTR7blafhHwE7D1FpWUTEooPZ6k41vZVSBylrHidlPVBOKQF9IEbRzssZfug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=globeinfo-db.com; dmarc=pass action=none
- header.from=globeinfo-db.com; dkim=pass header.d=globeinfo-db.com; arc=none
-Received: from BM1PR01MB3346.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:6a::22)
- by PN3PR01MB7581.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:ce::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.38; Thu, 6 Oct
- 2022 21:04:29 +0000
-Received: from BM1PR01MB3346.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::a135:b82f:f92d:ad96]) by BM1PR01MB3346.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::a135:b82f:f92d:ad96%5]) with mapi id 15.20.5676.034; Thu, 6 Oct 2022
- 21:04:29 +0000
-From: Erica Turner <erica.turner@globeinfo-db.com>
+ bh=uQMz1hVZMicFHw73g1vElVHjNCasi0lD2dYdaynVkNQ=;
+ b=jdBg6lrYSmZXdhyhVIs8/1SmUIK3XIGlJ7st0ug90+I+ZH2Zl9DYfHJjHkeX1JqgLL2CHldscpg/vkdd/B+DBQ3PGevFGKnxeyYcmLzL53nzmiV7V0o482SR88lfPKw7HDDo7JnbjMPjHP//NmNsTXn+Atb4jabYJhX7hJvRSQAQwUp80sftsoqavfsfndhlOhLjyzmdpBhdjiuyzQljQhornouTd0hE4kgPAk1aJjxKY7ljsrQZGri2Ie2Yx4d1vVRCUD3teqE1hryurRJB0vnn0XBU9BjFzkaJf39OgdPIc/M6oz3rWIdNvDoqc7HVxIWUxByLTuvpVQ0XzSfCVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 211.20.1.79) smtp.rcpttodomain=linaro.or smtp.mailfrom=wiwynn.com; dmarc=fail
+ (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=wiwynn.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uQMz1hVZMicFHw73g1vElVHjNCasi0lD2dYdaynVkNQ=;
+ b=qT3F6p/wtC1uSnE0Jf4bXuMOIKUPejRtv208mxaiGBBXlTbXcgGBwGPJWRp8JEeZHpYCfTeWQLgaZ1CVpTkAwDsiywgrg7bLeO/TtuBPmnq2nVvu7OUllVlI0N9/2c9TiRiJXnGfeLJ3S11eZ4n6Z8fHRFmbCSZS9bEUHstPlW3dyNoupLbwdWaDR217MjJ0Nnc9UAT2KBL1Tjbp4EJKxeObA4IDW2mxShPzG71YjH9ig3j72VKEq+/FCW4MnZphhlI2dj529/htQWZRuf1asS6/wKjD5jTkS0iPv0jkL9eeOUEciLTBrtTQcDApMpAZorqkOsCFMl8nN73mxDMGIg==
+Received: from SG2PR02CA0078.apcprd02.prod.outlook.com (2603:1096:4:90::18) by
+ SEYPR04MB5883.apcprd04.prod.outlook.com (2603:1096:101:6a::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.31; Fri, 7 Oct 2022 05:55:11 +0000
+Received: from SG2APC01FT0047.eop-APC01.prod.protection.outlook.com
+ (2603:1096:4:90:cafe::8e) by SG2PR02CA0078.outlook.office365.com
+ (2603:1096:4:90::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.34 via Frontend
+ Transport; Fri, 7 Oct 2022 05:55:11 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
+ smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
+Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
+ designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.20.1.79; helo=localhost.localdomain;
+Received: from localhost.localdomain (211.20.1.79) by
+ SG2APC01FT0047.mail.protection.outlook.com (10.13.36.133) with Microsoft SMTP
+ Server id 15.20.5709.10 via Frontend Transport; Fri, 7 Oct 2022 05:55:09
+ +0000
+From: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+To: krzysztof.kozlowski@linaro.or
 List-Id: <soc.lore.kernel.org>
-To: "soc@kernel.org" <soc@kernel.org>
-Subject: Linux Customers List
-Thread-Topic: Linux Customers List
-Thread-Index: AdjZxdcceRgR25bnRNSyQJXUmgHrpw==
-Date: Thu, 6 Oct 2022 20:56:54 +0000
-Message-ID:
- <BM1PR01MB3346BC76543991668245E4F0AB5C9@BM1PR01MB3346.INDPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=globeinfo-db.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB3346:EE_|PN3PR01MB7581:EE_
-x-ms-office365-filtering-correlation-id: d5bdaa76-c4f0-47da-469d-08daa7de5c33
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- +fGFrVHZXRZQoYvo1YnN+1ZqJreeg26MJ78uvrEYgc3gmK4DILlBq5wWEumjQ1mqwat9RZJgpRgr0aYaIih7d9K7Kkkcg76X3yzrbG1YT1j2thEyIq6ThIYWiohSMJs7pBus4HGvF9OJKKVMofpGaZ8xgSEq2CIvsNDLxZ7MGffU8czxt7XKyKjt8UWMK0utaKWf1G3bNy1JSsamcWVZbooDcHMuCJdmBnUqgCzZkm4g+Axhm8zBwCI+OGNd6pR9o+AByREExJQnB31E2lC8/lDsBK/UPz6R1XKzJaC3a6Cu4/cJGLIBrDEYoxEJRTmryBRks9MpH5bUQaybdvC2mlhh/KL9adqyX6mVrCkb+2jkiwNYFBSaNgn6DjwyGNNv4F/8o+Bj83BNzzAZlStGWAxJe39w7DtPwhJw5/hMefs5jaie/Gnyt5r5u7mMMppsjUbJjUHaVep+E9sILKLDUMOZzCe/T6QVAioQgi+jUKOBoIvOgAw2Yzvjf5No+acLL+El6WKBdc0y0zHxRbnZngLRMx5UleCsoavMkO605TwqlP3NhglE6Cj8cSYehALARCp3RvPSze7LaUyWD51WTHOBogVLipLkUKtoZitIX6Du5+Vp5SM016NGVzLiyE/dyTH8h0uiHvezVbqqHjqr9EAS6srj5IY2HoVxE+9+Ed+SC1UnE0iE33VXSF0rlWpyWl2GgH9Tk5EH3G5jbpgG5tvEX0qChGQbUriF7NgeCRqr18FBkREaRzKclECxXupi
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BM1PR01MB3346.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199015)(66899015)(38100700002)(122000001)(52536014)(38070700005)(3480700007)(86362001)(186003)(33656002)(4744005)(6506007)(26005)(9686003)(6666004)(478600001)(2906002)(44832011)(9326002)(5660300002)(7116003)(6916009)(316002)(71200400001)(41300700001)(8936002)(66946007)(66556008)(64756008)(66446008)(66476007)(7696005)(55016003)(8676002)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?RqfS2HgeitCKAzNm5Xj2zkeTKEJJNyooN36zmZfTudmAfv/9VAIKzhE1I1LH?=
- =?us-ascii?Q?cnE+13llYjrG1Sw+4jwrN1yhkNBK9oH4aMmJpg+NMvE3ZcQe+fGLZB6CizaK?=
- =?us-ascii?Q?4YzsmaagNQk0+M7hhKEPbvdKHomVuIx3Vta/SL+AtlPXI3OgXM0XbLTXIr4l?=
- =?us-ascii?Q?S0c1tzgbCaBtOvBHNChMgLxLV25pTB/JUEjqdIy9qvzFGqt9fUxgY1FFqYFh?=
- =?us-ascii?Q?qAgb4VXp2lMYTvNLk8IM7BovojdnYeG5LRiVDk5X65mRYYM+YXIXNW/f3Uaz?=
- =?us-ascii?Q?7fGNkR3+70oLqGmI7xGtq3nKsuErRixpdC0/JkrJahEzVbExQOeOY6z3V/QB?=
- =?us-ascii?Q?vN3WsdCSfjh+Iuphr+FeSiofXIfPA/nEhuZMnRPrUwiFCqAjcMaiVnRP1bcW?=
- =?us-ascii?Q?9htYL7d1709313gLHAE98yZ0kqqjbB4vnnx875R/Cym62Vp3GwcS4QwEBmVN?=
- =?us-ascii?Q?P1E939zdf0vvwpgraoq5mh4SUW7r0LkC3o0CwTE6/+z0wLbTJWr1rdlDwKuq?=
- =?us-ascii?Q?Jb/bTq7F+5390IGZzv3s3RT8tl1FaEw80/MDVS4xbaHVuTqFgA1Pxlz3bYL/?=
- =?us-ascii?Q?YJIpNBTUOjgosfa0I89TCBs6gm8J/Qo2o9VqpSgRmpZwjYHLYYNnkYmElYv3?=
- =?us-ascii?Q?MVOjG93zfnxCcBfmbVxCuAJAe+TNPPbXJ32IBxl7z8jjlPaEOWGz9CLqXnCa?=
- =?us-ascii?Q?u6M/D9gbMI1qMbNVdipRfz7fl7jvJ2xlc/y44oKxtroe1R4WFVxzPV8ndVMb?=
- =?us-ascii?Q?Xb8sgWFbuWxivHMn4ELwAdHsKO7qByegFjXJJJ3+F0mcvfzzXBmmhh4IYqlX?=
- =?us-ascii?Q?JAVpfBI/c6SchWpSAiGy8zPb65/suofGCnWazhQ9iZ4tqOAoxgtGAhxW3Nce?=
- =?us-ascii?Q?Irgo+9lxNWrR0Qsum/W29bj1RbJbGcPb+4yAsNi3WyxF9tUtOG+HcsHGOmG7?=
- =?us-ascii?Q?mtob98xxep+fMe67P6UNPRSm1mlWNI6Lmk86W3aOMrNwkMugnryRMKqzXmgq?=
- =?us-ascii?Q?LuckO6bAQUoQ9g3j2H8RrTP1ZVNjfLX0+1uqcyjZX3oPaIOToQ5OjRUG5DRf?=
- =?us-ascii?Q?5uexCTSkhlZ4TzJ2phlcNkVZNmNc0+BOrfvGOFY8dfn1jDnRzNSkvPTwnNek?=
- =?us-ascii?Q?4B98wrAXgrlTq04ElOMR3XA1FHXXpWG7xbHOYBWs2fFCVmcfbgrJp6xhjdaq?=
- =?us-ascii?Q?TsMvqiH8McTJQC9Iv4cd8sXU0FYazWL8xXDRR9bM74AELDrMT0RNLrMG+DWI?=
- =?us-ascii?Q?x41P22mErM9mVmqHnk3jZVTEm5qEDK5WqZQ86U6yFTMVV+WNyDRwD/vPPQN4?=
- =?us-ascii?Q?f2wc5yXlttv+/L3uwtElWivkH/X+1803uENmZosrrw7hWwssgAD2ZDRWobXb?=
- =?us-ascii?Q?DdUFYyZPCJU8yHRnEmoORrk0YzI2OMVQG4XnfO0bXO+FZRd2BSRmDm4khLZZ?=
- =?us-ascii?Q?3N+o7B65SiN9h++cuWNTzT4GjinotEWZyorqwretQSLsOc7Mwwd3rWu+0Uoi?=
- =?us-ascii?Q?A1Fyq6gN2KoQ4OQG01TTXpRv3F2OCKQlhOLaD3vZ/zdsX7+HLXRTamTnKKix?=
- =?us-ascii?Q?vhtOCgkbzroMJeqry4NhH5Ngf1h+S7LhHepuhEAcgVmk/cmapXAly0zpioAz?=
- =?us-ascii?Q?XQ=3D=3D?=
-Content-Type: multipart/alternative;
-	boundary="_000_BM1PR01MB3346BC76543991668245E4F0AB5C9BM1PR01MB3346INDP_"
+Cc: patrick@stwcx.xyz,
+	garnermic@fb.com,
+	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+	Bonnie Lo <Bonnie_Lo@Wiwynn.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@aj.id.au>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org
+Subject: [PATCH v3] greatlakes: dts: Add Facebook greatlakes (AST2600) BMC
+Date: Fri,  7 Oct 2022 13:53:39 +0800
+Message-Id: <20221007055346.3484180-1-Delphine_CC_Chiu@Wiwynn.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: globeinfo-db.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB3346.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5bdaa76-c4f0-47da-469d-08daa7de5c33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Oct 2022 20:56:54.7966
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2APC01FT0047:EE_|SEYPR04MB5883:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: e60bed13-96f7-4800-eda1-08daa8287eea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	sNScBUSzpwrgOVDPViezKxyAtKhFG0wU6f8H+8RREC0TNL3npsrGrnDOCn8B5mChkCImGMqKQ5gC6IsKRgecVHOHArsT8l5aSirV4iBeMavLX/e/nr7gIo+lVChOsYaNZBo5bn0FQce8ApKINFkkNpHm//60ceHPXBopb2XZjlT3sTAFsTCrRo9o1vVROXsJxlv1FO27xZG9TGC/HSQrK7K7kIj2k7ZspwKlQRIRISZ9WM+sB7Fqn8Ox+oWbKBJpFa4zWIbcXJK3SEKQ+CU26TY9/qSNEnjFSokYPb1lheLMSSzRFhYpa7JyOD3zhwMdZlkreNi31Yq7wWjzBCA8ggrZ3I4EEa/iztOHtaw4TLIlm/fgs7sWomEzgCM5o4xaGMN38JpEZcsX5UHCUDpfNpdiy4VUu/JrbvXdct1t/ZkmQsFHZaLuUbmvEOYj7HcS1UM+9yj8E3Gwe5rko7rE07DOWZDkDMhhTWx5Mn7bJ4CSWcxKxCyYUKucGBRFsCsfEs4OugBcGYA5QKt4TQKbR4xFodIp9tEngxOtN6oLbuSCH2xT0aIH9ZIcm0Tt3DtpvAF7uS0m02qa/9za38Fv+HMxz/zTEof7yD8TYVS28I6oE31ARj9oXLxbueE2ZuMUO/njdRFCfEF5TuZBLB770vi/B7GMIWE+7KFeJ5PhEduf6SGbkOH0y3e93nUIUADTWpVDxgmqJ6SKhFSAUGO6Hv2X7ardm8ESw57esw4LrBYAx4iaYPSyPTvKSBfY82Fw
+X-Forefront-Antispam-Report:
+	CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230022)(6069001)(4636009)(136003)(346002)(396003)(39860400002)(376002)(47680400002)(451199015)(46966006)(36840700001)(6486002)(81166007)(82740400003)(6506007)(1076003)(26005)(36860700001)(2616005)(336012)(47076005)(478600001)(6666004)(956004)(356005)(186003)(36736006)(6916009)(36906005)(316002)(54906003)(6512007)(7416002)(8936002)(41300700001)(86362001)(70206006)(5660300002)(70586007)(2906002)(8676002)(36756003)(4326008)(82310400005)(40480700001)(9316004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wiwynn.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 05:55:09.7829
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 86ddcae0-ef95-4504-93e8-2ecf0a7a58a5
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1irz5OCTqOLeHp1yL5LcH7Y9nTd8UyL30zfeDWWW6Z2pIy47/GiO10cjQoQh7KcQnvnPnqtea2tw+4pE4j+jPGGfNWe4XiYAM3EkUdNEboA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB7581
+X-MS-Exchange-CrossTenant-Network-Message-Id: e60bed13-96f7-4800-eda1-08daa8287eea
+X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SG2APC01FT0047.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR04MB5883
 
---_000_BM1PR01MB3346BC76543991668245E4F0AB5C9BM1PR01MB3346INDP_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Add linux device tree entry related to
+greatlakes specific devices connected to BMC SoC.
 
-Hi,
+---
+--- v3 - Add documentation of board compatible (bindings)
+---    - Add board compatible
+---    - Remove the bootargs
+---    - Revise the DTS node name
+---
+--- v2 - Add binding document
+---
+--- v1 - Initial draft
+---
 
-Hope you are doing well.
+Signed-off-by: Bonnie Lo <Bonnie_Lo@Wiwynn.com>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/aspeed-bmc-facebook-greatlakes.dts    | 241 ++++++++++++++++++
+ 2 files changed, 242 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
 
-Are you looking for Linux with email, phone and complete details?
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 05d8aef6e5d2..d9f417f2d7df 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1586,6 +1586,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-facebook-elbert.dtb \
+ 	aspeed-bmc-facebook-fuji.dtb \
+ 	aspeed-bmc-facebook-galaxy100.dtb \
++	aspeed-bmc-facebook-greatlakes.dtb \
+ 	aspeed-bmc-facebook-minipack.dtb \
+ 	aspeed-bmc-facebook-tiogapass.dtb \
+ 	aspeed-bmc-facebook-wedge40.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+new file mode 100644
+index 000000000000..8c05bd56ce1e
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-greatlakes.dts
+@@ -0,0 +1,241 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++// Copyright 2022 Facebook Inc.
++
++/dts-v1/;
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/leds/leds-pca955x.h>
++#include <dt-bindings/i2c/i2c.h>
++
++/ {
++	model = "Facebook Greatlakes BMC";
++	compatible = "facebook,greatlakes-bmc", "aspeed,ast2600";
++
++	aliases {
++		serial4 = &uart5;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x80000000>;
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++				<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++				<&adc1 0>, <&adc1 2>, <&adc1 3>, <&adc1 4>,
++				<&adc1 5>, <&adc1 6>;
++	};
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&uart3 {
++	status = "okay";
++};
++
++&uart4 {
++	status = "okay";
++};
++
++&uart5 {
++	status = "okay";
++};
++
++&wdt1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdtrst1_default>;
++	aspeed,reset-type = "soc";
++	aspeed,external-signal;
++	aspeed,ext-push-pull;
++	aspeed,ext-active-high;
++	aspeed,ext-pulse-duration = <256>;
++};
++
++&mac3 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rmii4_default>;
++	no-hw-checksum;
++	use-ncsi;
++	mlx,multi-host;
++	ncsi-ctrl,start-redo-probe;
++	ncsi-ctrl,no-channel-monitor;
++	ncsi-package = <1>;
++	ncsi-channel = <1>;
++	ncsi-rexmit = <1>;
++	ncsi-timeout = <2>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		spi-rx-bus-width = <4>;
++		spi-max-frequency = <50000000>;
++#include "openbmc-flash-layout-64.dtsi"
++	};
++	flash@1 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc2";
++		spi-rx-bus-width = <4>;
++		spi-max-frequency = <50000000>;
++	};
++};
++
++&i2c0 {
++	status = "okay";
++	multi-master;
++	ipmb@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c1 {
++	status = "okay";
++	multi-master;
++	ipmb@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c2 {
++	status = "okay";
++	multi-master;
++	ipmb@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c3 {
++	status = "okay";
++	multi-master;
++	ipmb@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	status = "okay";
++	temperature-sensor@1f {
++		compatible = "ti,tmp421";
++		reg = <0x1f>;
++	};
++	// NIC EEPROM
++	eeprom@50 {
++		compatible = "st,24c32";
++		reg = <0x50>;
++	};
++};
++
++&i2c9 {
++	status = "okay";
++	multi-master;
++	ipmb@10 {
++		compatible = "ipmb-dev";
++		reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
++		i2c-protocol;
++	};
++};
++
++&i2c10 {
++	status = "okay";
++};
++
++&i2c11 {
++	status = "okay";
++	eeprom@51 {
++		compatible = "atmel,24c128";
++		reg = <0x51>;
++	};
++	eeprom@54 {
++		compatible = "atmel,24c128";
++		reg = <0x54>;
++	};
++};
++
++&i2c12 {
++	status = "okay";
++	temperature-sensor@4f {
++		compatible = "lm75";
++		reg = <0x4f>;
++	};
++};
++
++&i2c13 {
++	status = "okay";
++};
++
++&adc0 {
++	ref_voltage = <2500>;
++	status = "okay";
++	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
++			&pinctrl_adc2_default &pinctrl_adc3_default
++			&pinctrl_adc4_default &pinctrl_adc5_default
++			&pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++	ref_voltage = <2500>;
++	status = "okay";
++	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc10_default
++			&pinctrl_adc11_default &pinctrl_adc12_default
++			&pinctrl_adc13_default &pinctrl_adc14_default>;
++};
++
++
++&ehci0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&uhci {
++	status = "okay";
++};
++
++&gpio0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpiu1_default &pinctrl_gpiu7_default>;
++};
+-- 
+2.25.1
 
-Titles like - IT Decision Makers, CEO, CFO, IT Engineers and many more.
-
-Let me know your geography so that I can get back with counts, pricing and =
-more information on your interest.
-
-Regards,
-Erica Turner
-Sales Consultant
-Lead Gen Marketing LLC
-
-
-To opt out, please response Outs.
-
-
---_000_BM1PR01MB3346BC76543991668245E4F0AB5C9BM1PR01MB3346INDP_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:Cambria;
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;}
-.MsoPapDefault
-	{mso-style-type:export-only;
-	margin-bottom:8.0pt;
-	line-height:107%;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-">Hi,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-">Hope you are doing well.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-">Are you looking for
-</span><b><u><span style=3D"font-family:&quot;Cambria&quot;,serif;color:bla=
-ck;background:white">Linux</span></u></b><b><span style=3D"font-family:&quo=
-t;Cambria&quot;,serif">
-</span></b><span style=3D"font-family:&quot;Cambria&quot;,serif">with email=
-, phone and complete details?<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><b><span style=3D"font-family:&quot;Cambria&quot;,se=
-rif">Titles like</span></b><span style=3D"font-family:&quot;Cambria&quot;,s=
-erif"> - IT Decision Makers, CEO, CFO, IT Engineers and many more.<o:p></o:=
-p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-">Let me know your geography so that I can get back with counts, pricing an=
-d more information on your interest.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Cambria&quot;,serif=
-"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><a name=3D"_Hlk109915644"><b><span style=3D"font-fam=
-ily:&quot;Cambria&quot;,serif">Regards,<o:p></o:p></span></b></a></p>
-<p class=3D"MsoNormal"><span style=3D"mso-bookmark:_Hlk109915644"><b><span =
-style=3D"font-family:&quot;Cambria&quot;,serif">Erica Turner<o:p></o:p></sp=
-an></b></span></p>
-<p class=3D"MsoNormal"><span style=3D"mso-bookmark:_Hlk109915644"><a name=
-=3D"_Hlk110529554"><b><span style=3D"font-family:&quot;Cambria&quot;,serif"=
->Sales Consultant<o:p></o:p></span></b></a></span></p>
-<p class=3D"MsoNormal"><span style=3D"mso-bookmark:_Hlk109915644"><span sty=
-le=3D"mso-bookmark:_Hlk110529554"><b><span style=3D"font-family:&quot;Cambr=
-ia&quot;,serif">Lead Gen Marketing LLC<o:p></o:p></span></b></span></span><=
-/p>
-<span style=3D"mso-bookmark:_Hlk110529554"></span>
-<p class=3D"MsoNormal"><span style=3D"mso-bookmark:_Hlk109915644"><b><span =
-style=3D"font-family:&quot;Cambria&quot;,serif"><o:p>&nbsp;</o:p></span></b=
-></span></p>
-<p class=3D"MsoNormal"><span style=3D"mso-bookmark:_Hlk109915644"><o:p>&nbs=
-p;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"mso-bookmark:_Hlk109915644"><span sty=
-le=3D"font-size:8.0pt;color:#E7E6E6">To opt out, please response Outs.<o:p>=
-</o:p></span></span></p>
-<span style=3D"mso-bookmark:_Hlk109915644"></span>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_BM1PR01MB3346BC76543991668245E4F0AB5C9BM1PR01MB3346INDP_--
