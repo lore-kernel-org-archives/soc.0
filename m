@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7444C433F5
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6133C433F5
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8DEF4C43147; Mon, 10 Oct 2022 20:15:05 +0000 (UTC)
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	id 86A92C43470; Mon, 10 Oct 2022 20:15:12 +0000 (UTC)
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EF28DC433D7;
-	Mon, 10 Oct 2022 20:15:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF28DC433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id 9DF22C433D6;
+	Mon, 10 Oct 2022 20:15:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DF22C433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432904; x=1696968904;
+  t=1665432911; x=1696968911;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kjXzGbYDAGDzUThAUri+8VVRFkkuppwpSy0/gaNxk3U=;
-  b=BSP29r6nPQbQEsTP4OXRplY0E9NVC7Np4nI3CCJHXJjwyyWbtSbt1Z0H
-   Ebf2BmIT7CaWIAqJg/ctJ2uuzJp8DcCfywy4FzjhfHdckRw+VsjYbSBqg
-   gGVu4eLqm0zvmIRse2qmvFGz1M475BSIm2v2EUhGzXT3ytFC3Q5h62c1N
-   nxit2r5/C67JyP7F6G6fe3uii45NWjE5ZxxEZHQ7PvWMjYOex+yFP9Nyo
-   lDWXMs3X5M/ZQb5koqrxKT4E1zhmmk0LuRnOa+Drmw3vaT5WNQxGUUx7F
-   +3ds9+fzpkwaZQW+AkYZPhz66BBEhtmxp89jp/Qna/rhn8UorIR9MAWDC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590332"
+  bh=5aMlx8MjwRboHF89NLa+7LtdxT0Jr0b4GEWJm8cGkaQ=;
+  b=LpQ2Y0iU/n/ZHSCDhhzX5SCI29neICx8CzVBQg+srgZSEDW6dFRq+nNI
+   R7/ioMvw0TX33/PctToNi0Y6zlU1Z33q8K/5e3/owSlTz1waVuSh5fhHD
+   L2rwXF/mkurGyOrQYeIYSO//geNbc17TnhbZ/jwJBh7MLlWvW7H6AhFHq
+   HfUpXwG/Hk3bXtgk1G9+d23wH5AShbGL4UXRcqbIRmrdtaEkA7QJ4JEGr
+   CyvPksuUSd0IGZ/Q6lVM8t9X0d02RfP1Wf3iPYc08lTX/j4hhaKyLmPp+
+   P7T+XTLvTjNFjXXyMZIM3xjQLB+rJklpaNvE57BHmCSiguOcqHtzS8gIC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="390633972"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="287590332"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:02 -0700
+   d="scan'208";a="390633972"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862739"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240661"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862739"
+   d="scan'208";a="715240661"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:14:50 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:14:59 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 778C82B0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
+	id 8B04A30B; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:18 +0300
-Message-Id: <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 03/36] media: c8sectpfe: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:19 +0300
+Message-Id: <20221010201453.77401-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,38 +159,35 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpiolib-cdev.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index f8041d4898d1..60a60e2d60c5 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -10,8 +10,9 @@
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/file.h>
--#include <linux/gpio.h>
- #include <linux/gpio/driver.h>
-+#include <linux/gpio.h>
-+#include <linux/hte.h>
- #include <linux/interrupt.h>
- #include <linux/irqreturn.h>
- #include <linux/kernel.h>
-@@ -20,11 +21,12 @@
- #include <linux/mutex.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/poll.h>
-+#include <linux/seq_file.h>
- #include <linux/spinlock.h>
- #include <linux/timekeeping.h>
- #include <linux/uaccess.h>
- #include <linux/workqueue.h>
--#include <linux/hte.h>
-+
- #include <uapi/linux/gpio.h>
+diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+index cefe6b7bfdc4..4c5027a0480d 100644
+--- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+@@ -24,16 +24,18 @@
+ #include <linux/module.h>
+ #include <linux/of_gpio.h>
+ #include <linux/of_platform.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/pinctrl.h>
+ #include <linux/platform_device.h>
+-#include <linux/usb.h>
+ #include <linux/slab.h>
+ #include <linux/time.h>
++#include <linux/usb.h>
+ #include <linux/wait.h>
+-#include <linux/pinctrl/pinctrl.h>
  
- #include "gpiolib.h"
+-#include "c8sectpfe-core.h"
+ #include "c8sectpfe-common.h"
++#include "c8sectpfe-core.h"
+ #include "c8sectpfe-debugfs.h"
++
+ #include <media/dmxdev.h>
+ #include <media/dvb_demux.h>
+ #include <media/dvb_frontend.h>
 -- 
 2.35.1
 
