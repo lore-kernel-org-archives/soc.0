@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7FAFC4167D
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670DDC433F5
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3EF9C43148; Mon, 10 Oct 2022 20:15:47 +0000 (UTC)
+	id 4E55DC433B5; Mon, 10 Oct 2022 20:15:49 +0000 (UTC)
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 52C9FC433C1;
-	Mon, 10 Oct 2022 20:15:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52C9FC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id E69E7C433C1;
+	Mon, 10 Oct 2022 20:15:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E69E7C433C1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432946; x=1696968946;
+  t=1665432948; x=1696968948;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=w1/kvmeLUt8gwDrObLJzCXhPObwbFU9g7+Q9R8U/qNg=;
-  b=B6m2CryuiqOPU0IRPIag6tmpqffFgEqtfC9doTIKrckgfl56LdQk3fx/
-   pwlafiAtIg512G4feMhLHtqQuOFSkGLbeTKCNXHrY5lyzRgeI4tiZUWqf
-   s7iBQIf2JdemfooEkGwHzejHQUTI4kMCuPa72SWROcOCM9bfvAagMybry
-   kM7/84hqa07hxabLMw1lc1l/2jWUeSgdiw0oGIh42WAVA+UyuhTObcKrn
-   sC4f9ACKutSSw7mQYJzOjIl2kbBEX8xV978OU3283Xu97S3IEOPat6H4M
-   Zqh0GP0Qv0OHTjulioOELuPhrNduQK5r/y3JzvPKar+/recoy883wFPDu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054785"
+  bh=hQG6OaJlbxIbFx3vF4WcvOlnEf177H4lL2btu1IfLVo=;
+  b=RY/g2Qk5OS5FosBNVX/qppz1dzUIzcEaXIB7Ezxx1SYpT4d8rC8fQZFS
+   XQtlZuGMsGTC+SgNfrbTsjUBT+SPFaEv472KsOBP3JnIiRkW8IgK4DRvK
+   pDhvbuWd4HBhDvamHC5pfGEN7QRWsF0/zpmoTF8gsqbC8l0TMvrW0ZzUJ
+   PadMCHVwNst7KTKv3nIOK2qaF7F3ZPVzpbnVMHCHqIDcbK//5TiEdbGw0
+   59/6gALa+g+t0WK8sgt2VWTrQoDyziKoLQugEiiTtZmwHbjtxTOGFfgdY
+   nUErZFIwMRkNrQzrLTueQ3Gwf+2VRJiAONLjv6h/c8B4437aU2TgXB8Yz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054797"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284054785"
+   d="scan'208";a="284054797"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:46 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240857"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240863"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="715240857"
+   d="scan'208";a="715240863"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:35 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:36 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 29A5EB86; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
+	id 44D84B97; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 31/36] pinctrl: zynqmp: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:47 +0300
-Message-Id: <20221010201453.77401-32-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 33/36] pinctrl: lynxpoint: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:49 +0300
+Message-Id: <20221010201453.77401-34-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,27 +159,31 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/pinctrl-zynqmp.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/pinctrl/intel/pinctrl-lynxpoint.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-zynqmp.c b/drivers/pinctrl/pinctrl-zynqmp.c
-index 7d2fbf8a02cd..1a94db1ffa4f 100644
---- a/drivers/pinctrl/pinctrl-zynqmp.c
-+++ b/drivers/pinctrl/pinctrl-zynqmp.c
-@@ -14,10 +14,12 @@
+diff --git a/drivers/pinctrl/intel/pinctrl-lynxpoint.c b/drivers/pinctrl/intel/pinctrl-lynxpoint.c
+index 5d1abee30f8f..8d05dad38556 100644
+--- a/drivers/pinctrl/intel/pinctrl-lynxpoint.c
++++ b/drivers/pinctrl/intel/pinctrl-lynxpoint.c
+@@ -16,13 +16,15 @@
  #include <linux/module.h>
- #include <linux/of_address.h>
  #include <linux/platform_device.h>
-+
- #include <linux/firmware/xlnx-zynqmp.h>
+ #include <linux/pm_runtime.h>
++#include <linux/seq_file.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
  
--#include <linux/pinctrl/pinmux.h>
- #include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+-#include <linux/pinctrl/pinconf.h>
+-#include <linux/pinctrl/pinconf-generic.h>
  
- #include "core.h"
- #include "pinctrl-utils.h"
+ #include "pinctrl-intel.h"
+ 
 -- 
 2.35.1
 
