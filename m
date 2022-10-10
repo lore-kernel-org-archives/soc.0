@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C677CC43217
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69CE7C4332F
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 979FFC43146; Mon, 10 Oct 2022 20:15:34 +0000 (UTC)
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	id 51629C433D6; Mon, 10 Oct 2022 20:15:36 +0000 (UTC)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2CA07C433D6;
-	Mon, 10 Oct 2022 20:15:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2CA07C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 11DBEC433C1;
+	Mon, 10 Oct 2022 20:15:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 11DBEC433C1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432933; x=1696968933;
+  t=1665432935; x=1696968935;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RVFrUEXuSld0nkWuLc5y3Izxz33brkaj0hm5K7SscxY=;
-  b=l3RhBXYMSSpXj1mzzgjvN7+hcGSwzYtIlru9sIHMpZ62/bF3RT9mHXqF
-   0N8gcoPY1qvZyNFRd4O1mDZCuAOUf1bkdqBU+csDHmvuQe5Us+a6A3A2t
-   TqYr0kzAXh6RK1AxN4T40qoTtipk6+wgyupHrxUE9MDlrku1vM1b8JGGB
-   VVFhHsh9KZatExcSEIjD9aRpIWFv3VAdhWxH+5A1bm1lCLdHgI3cKYxVy
-   cAIUdiWUPkZCbGFfUEDwcIHfj7gguuzuGJPIOPX/tjd3cLRStG2MNmdgE
-   qa8VN/kQXYBgxM1BTLGhKaIXfgzRDUC1SnPMrZfviHzse03W1es+v2efB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="303066139"
+  bh=xi/Nfv8WtOYvT0HZPT8w43GxR/eWjmHTHS8mPgZHjTw=;
+  b=KowiFUJYYFl9eZKZp5UBiNgpG8gPI3peGUWcHasulRP960SDbT9qPwoM
+   W6B+MzEARHYcTiY0OynniwrAzDbbS8jcQQhFxLnfzYlcaaQtoAFSXd85J
+   2vyA2XmggP6FSqbc0+l1M8zm0gBVIG8Fp6rUY8jDW19UxYtcpF4xlDVhH
+   02D6umKWoQ+TnPM1boTiHNQC9r2TJz58hxdKTO92y6AUt8jR04DrgWDcm
+   Z69oxFmL1uZkOSBwAj3adLHQjMjmAG0rYudOEwmAsLukAEHTdPLNLqRxN
+   OanlSvtWi7PWQcCMIbx6kfAJu9M4O/EF8TDDOHKudOUGI0u2xRCgAY1ee
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314224"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="303066139"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:32 -0700
+   d="scan'208";a="304314224"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240790"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862932"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="715240790"
+   d="scan'208";a="603862932"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:22 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:23 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 564CE752; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id 75476781; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 18/36] pinctrl: qcom: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:34 +0300
-Message-Id: <20221010201453.77401-19-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 20/36] pinctrl: samsung: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:36 +0300
+Message-Id: <20221010201453.77401-21-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,57 +159,33 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 8 +++++---
- drivers/pinctrl/qcom/pinctrl-spmi-mpp.c  | 8 +++++---
- 2 files changed, 10 insertions(+), 6 deletions(-)
+ drivers/pinctrl/samsung/pinctrl-samsung.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-index 8c31a8f6b7e4..89695b5a2ce7 100644
---- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-+++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-@@ -9,15 +9,17 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_irq.h>
--#include <linux/pinctrl/pinconf-generic.h>
--#include <linux/pinctrl/pinconf.h>
--#include <linux/pinctrl/pinmux.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
+diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+index bd13b5ef246d..5736761927cb 100644
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.c
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+@@ -15,15 +15,16 @@
+ // but provides extensions to which platform specific implementation of the gpio
+ // and wakeup interrupts can be hooked to.
+ 
+-#include <linux/init.h>
+-#include <linux/platform_device.h>
+-#include <linux/io.h>
+-#include <linux/property.h>
+-#include <linux/slab.h>
+ #include <linux/err.h>
+ #include <linux/gpio/driver.h>
++#include <linux/init.h>
++#include <linux/io.h>
+ #include <linux/irqdomain.h>
+ #include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
 +#include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/spmi.h>
- #include <linux/types.h>
- 
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinmux.h>
-+
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- 
- #include "../core.h"
-diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c b/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
-index 6937157f50b3..063177b79927 100644
---- a/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
-+++ b/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
-@@ -7,14 +7,16 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_irq.h>
--#include <linux/pinctrl/pinconf-generic.h>
--#include <linux/pinctrl/pinconf.h>
--#include <linux/pinctrl/pinmux.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- 
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinmux.h>
-+
- #include <dt-bindings/pinctrl/qcom,pmic-mpp.h>
++#include <linux/slab.h>
+ #include <linux/spinlock.h>
  
  #include "../core.h"
 -- 
