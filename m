@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A228C07E9D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4010C41535
 	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46E66C43145; Mon, 10 Oct 2022 20:15:48 +0000 (UTC)
+	id BB722C4314A; Mon, 10 Oct 2022 20:15:48 +0000 (UTC)
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CD7CCC433D7;
+	by smtp.kernel.org (Postfix) with ESMTPS id DEF8EC433D6;
 	Mon, 10 Oct 2022 20:15:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD7CCC433D7
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DEF8EC433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -21,27 +21,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1665432947; x=1696968947;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NQX2BVWLlvVYkedYPDWHm8jdtnPz/k4sPUqYMIaGnls=;
-  b=OFmvL/zhwJODX6gFxOUsQ6V4zgl08vW16bhFCC302GI4BflTjbhaFsfk
-   JbYQgvgrWtURQS8mFW99sKEoEzAbaebgrFbhJRH6CyqhAZgAjxavK2F0c
-   ijQBXi/1ty0p/1t+9kQ1YIJczvQZZh4skPjWMLECiZFNMX4AGNkZ9pjTo
-   GrzLi4mCvFCYszg8azOLk61v8ow6pFBqx1kds5BIjT9fLk1I0DgmZLP8T
-   ZuLvOB/nzNf28bd+jGjYUn79E9rOomK9jk362xihNGaKh7Cs9sk2PlMwV
-   QTG9j5MfQwyQsARC4Z2GYj08x40qOY02XStNQ0T3AojZDCOtBuNhrflRi
+  bh=LMyddcBhxz6+trtgMyJ41Na0xLjaX4lOrKyKro8EzDM=;
+  b=PMFtcBOheWtsVJKKDFMiC4TwPXgfXA5pGM9f/JGEdjvtwkYQfJrfEajY
+   ItC+qULsHnxv5/6qoh11OsyaipOdWz3fraJ+FLPy4qyDJoQULwdwCjedL
+   yCLycLtDCeXHf+QmtR2FtEUbSstgdcqY0V3xGHHwO6P7F35UT2WQlirzP
+   kC2Vb142wBCA49YPxf6FxFCwDoasVKw2A2eGR3VSVUUTlEKrc0pGUIL3+
+   KbN/haJNZCW7wUr3R+AFFoJlvbtM9YG7B7BbiASWhxHdwduMYj+YXLhD/
+   VUKp/N8fjtXG/S7NpyQ44pj1INTEuAGbEgUb0VqLWsui4sx9AqhL25EF6
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054789"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054790"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284054789"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+   d="scan'208";a="284054790"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240859"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603863026"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="715240859"
+   d="scan'208";a="603863026"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:35 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:34 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 31B363CB; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
+	id 1CA98B68; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 32/36] pinctrl: cherryview: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:48 +0300
-Message-Id: <20221010201453.77401-33-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 30/36] pinctrl: uniphier: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:46 +0300
+Message-Id: <20221010201453.77401-31-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,30 +159,31 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-cherryview.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/pinctrl/uniphier/pinctrl-uniphier-core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-cherryview.c b/drivers/pinctrl/intel/pinctrl-cherryview.c
-index 5c4fd16e5b01..11b81213922d 100644
---- a/drivers/pinctrl/intel/pinctrl-cherryview.c
-+++ b/drivers/pinctrl/intel/pinctrl-cherryview.c
-@@ -16,12 +16,14 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
+diff --git a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
+index ade348b49b31..18d3a4f69e63 100644
+--- a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
++++ b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
+@@ -6,12 +6,14 @@
+ #include <linux/list.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/of.h>
+-#include <linux/pinctrl/pinconf.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
 +#include <linux/seq_file.h>
- #include <linux/types.h>
- 
-+#include <linux/pinctrl/consumer.h>
-+#include <linux/pinctrl/pinconf-generic.h>
++
+ #include <linux/pinctrl/pinconf-generic.h>
 +#include <linux/pinctrl/pinconf.h>
  #include <linux/pinctrl/pinctrl.h>
  #include <linux/pinctrl/pinmux.h>
--#include <linux/pinctrl/pinconf.h>
--#include <linux/pinctrl/pinconf-generic.h>
+-#include <linux/platform_device.h>
+-#include <linux/regmap.h>
  
- #include "pinctrl-intel.h"
- 
+ #include "../core.h"
+ #include "../pinctrl-utils.h"
 -- 
 2.35.1
 
