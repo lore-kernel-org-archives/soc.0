@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F9B0ECAAD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B94C4332F
 	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7D311C4314C; Mon, 10 Oct 2022 20:15:28 +0000 (UTC)
+	id AA5C2C43155; Mon, 10 Oct 2022 20:15:28 +0000 (UTC)
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A313BC43143;
-	Mon, 10 Oct 2022 20:15:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A313BC43143
+	by smtp.kernel.org (Postfix) with ESMTPS id 7B4B4C433C1;
+	Mon, 10 Oct 2022 20:15:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B4B4C433C1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432926; x=1696968926;
+  t=1665432927; x=1696968927;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EI3ceZXYty9gjK1PLdDuhvwA1gJ4tOeASXXEi62lTKs=;
-  b=S34ZHfayUmCNHwVO9cH3Dt0hplgpHEIjA8jT5+hhLWrc/+IzuceK782F
-   1cWJl5MSeFtntoxZ5WwmqIIIMAnTBAYvCCRLSabAvLa/CWHDswq5sXygy
-   drby7dz4Qb6qGcy1S8tk93HkKKTZMT3mvf0BZkKosdB1R/X9MxAeKs3EA
-   Bdpu4oiVV31tUR/aknB+y6Sj+Q00FY34A8MZo4mAszCCj3dz3OfP+h09v
-   sz8zeSJzBzp5MqhoDCwiIg0FqUwJWIPu167Pm14GUUfJSFfatovBFG1bf
-   08w/D0YJT0+xzaL2YZ/06HVzpYMrJjP/wkYTtoG3pqGB5Tr6QHNHoBiVx
+  bh=NgSs7A9A8KMf/DfrWRc1FgI7mSPlPgzqAlVE32GJbJs=;
+  b=CYPcScBq9PCjnxEZKOMdJwCgy9omd2w6o4TTI/hhhPDjES7JIT3HG4ha
+   dY8+/alIN6k1QSXKL0561vgU2g1RkDp/g+J9psRUyR/8LAylqiglyPwJ/
+   hvyMmzXr2oB0T75NTFtLC03IfBznT58upi3ysHfEgEBrwd0HjYKkb2/Y+
+   h00mfAt9Dkisocc75xONh1pXFKFSD79J73SCOOuVEoXNNmTVBfqmd90Kc
+   qGh1w+IF/lYVXTIn1e8W75uLcMJkO4Wgk/Mn4ji+OlQqGU08qeRbaxTAv
+   nqgshdKq9ZdJOrEtSznvp9GvNu1EgCNj7R2cqnH4CfQlVkcochdtgGshT
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590454"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590459"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="287590454"
+   d="scan'208";a="287590459"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:26 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862908"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862911"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862908"
+   d="scan'208";a="603862911"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:15 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 2DCC1710; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id 3BD1F725; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 15/36] pinctrl: mvebu: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:31 +0300
-Message-Id: <20221010201453.77401-16-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 16/36] pinctrl: npcm7xx: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:32 +0300
+Message-Id: <20221010201453.77401-17-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,42 +159,35 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/mvebu/pinctrl-mvebu.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/mvebu/pinctrl-mvebu.c b/drivers/pinctrl/mvebu/pinctrl-mvebu.c
-index 8ef0a97d2bf5..8e6aac4164df 100644
---- a/drivers/pinctrl/mvebu/pinctrl-mvebu.c
-+++ b/drivers/pinctrl/mvebu/pinctrl-mvebu.c
-@@ -6,20 +6,22 @@
-  *          Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  */
- 
--#include <linux/platform_device.h>
--#include <linux/slab.h>
-+#include <linux/err.h>
-+#include <linux/gpio/driver.h>
- #include <linux/io.h>
-+#include <linux/mfd/syscon.h>
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+index 1c4e89b046de..ff5bcea172e8 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -11,14 +11,17 @@
  #include <linux/of.h>
  #include <linux/of_address.h>
- #include <linux/of_platform.h>
--#include <linux/err.h>
--#include <linux/gpio/driver.h>
+ #include <linux/of_irq.h>
 +#include <linux/platform_device.h>
++#include <linux/property.h>
 +#include <linux/regmap.h>
 +#include <linux/seq_file.h>
-+#include <linux/slab.h>
 +
++#include <linux/pinctrl/consumer.h>
  #include <linux/pinctrl/machine.h>
- #include <linux/pinctrl/pinconf.h>
+-#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
  #include <linux/pinctrl/pinctrl.h>
  #include <linux/pinctrl/pinmux.h>
--#include <linux/mfd/syscon.h>
+-#include <linux/platform_device.h>
+-#include <linux/property.h>
 -#include <linux/regmap.h>
  
- #include "pinctrl-mvebu.h"
- 
+ /* GCR registers */
+ #define NPCM7XX_GCR_PDID	0x00
 -- 
 2.35.1
 
