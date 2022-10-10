@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30617C43219
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17B2FC4167B
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 105E0C43144; Mon, 10 Oct 2022 20:15:55 +0000 (UTC)
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	id 01606C43143; Mon, 10 Oct 2022 20:15:57 +0000 (UTC)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 84B33C433D7;
-	Mon, 10 Oct 2022 20:15:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 84B33C433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id A7E08C433C1;
+	Mon, 10 Oct 2022 20:15:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A7E08C433C1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432953; x=1696968953;
+  t=1665432955; x=1696968955;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Tf5HMyINHxFQlOxe7sNfUovjvJBQR4fB/T4gNf5jpyw=;
-  b=bSczMdXH9YKZy9JxTMTbLD5QKi0Ye366LjFd1/tVvIg30p8ddSQQg1hM
-   yQuJprwhKBJ/KHFNj7fOyZG8TzszWp5gn3OHyNRr46/0dpvr5rxKsrV5v
-   ymIXHvNkRHcD+2rK2BdenrivfWwpIDQTqvShasvfapY9kQMJ6n/kQv4mk
-   5mplbpBLFr6weRhvrq1LCADoce2lL4mR/zxFjZHGNYTkDbZSmE3tKAsBH
-   JE2fXCbXyQJ4XoMRauRqZljncD7GJtwVU9ZIiJkAcEh0WiRkdC/QIa3bA
-   A7ETFNZpwVN5TcMOC3gC9vRmqlN4RryHkQvHxskYVTOxdi7hAXSrv9pQV
+  bh=HiJ3kShFlkDP9iaZndKWubW2yhoVYrH5epJitLVO3NM=;
+  b=gqZ6gzUqs0AwyunSBR1XopMHY2GtBgcPXAgj0VHOHDICowFHH6Q1rwhs
+   wKHDI6kvBi0XlCCFQuEZOGF/GqeX4dTVSegTopY05GPspg1YxQ1oP83LX
+   bClIX3DR5dwOuIAQmElj2ddn+PgrD+kon0ELJd9lRIs2bHduMFTItglR1
+   0RafmCV69NqW6yLX52HTGRh0ql/Dxjkt1SSqRddiXTK1eGuT+COXDprne
+   +e0z3JUrvyAEbSgoa5vcioXRBzEQnwn3NzOeFck5JN0TKZef/JnFGDefW
+   sd5ClKsINPAq6lGeL5LJRLUk2gsICyLlfnbF/jSMvKtTE8FaSaficQEzX
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314295"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590562"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="304314295"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:52 -0700
+   d="scan'208";a="287590562"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="694786637"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="628424328"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="694786637"
+   d="scan'208";a="628424328"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Oct 2022 13:15:49 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 10 Oct 2022 13:15:50 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 4D144B94; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
+	id 601BCBC6; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 34/36] pinctrl: merrifield: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:50 +0300
-Message-Id: <20221010201453.77401-35-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 35/36] pinctrl: intel: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:51 +0300
+Message-Id: <20221010201453.77401-36-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,25 +159,30 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-merrifield.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/pinctrl/intel/pinctrl-intel.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-merrifield.c b/drivers/pinctrl/intel/pinctrl-merrifield.c
-index 5e752818adb4..527957ea35b7 100644
---- a/drivers/pinctrl/intel/pinctrl-merrifield.c
-+++ b/drivers/pinctrl/intel/pinctrl-merrifield.c
-@@ -12,8 +12,10 @@
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
+index 52ecd66ce357..b85140eaa9c4 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.c
++++ b/drivers/pinctrl/intel/pinctrl-intel.c
+@@ -14,12 +14,14 @@
  #include <linux/module.h>
- #include <linux/mod_devicetable.h>
  #include <linux/platform_device.h>
--#include <linux/pinctrl/pinconf.h>
+ #include <linux/property.h>
 +#include <linux/seq_file.h>
-+
- #include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
+ #include <linux/time.h>
  
+-#include <linux/pinctrl/pinctrl.h>
+-#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
+ 
+ #include "../core.h"
+ #include "pinctrl-intel.h"
 -- 
 2.35.1
 
