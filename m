@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD337C4332F
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA61BC433F5
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BEB6FC43147; Mon, 10 Oct 2022 20:15:45 +0000 (UTC)
+	id D0C65C43149; Mon, 10 Oct 2022 20:15:46 +0000 (UTC)
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2826BC433C1;
-	Mon, 10 Oct 2022 20:15:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2826BC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 42161C433D6;
+	Mon, 10 Oct 2022 20:15:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 42161C433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432944; x=1696968944;
+  t=1665432945; x=1696968945;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=t1xRFnUPElYqDjMs4zdDsLQygWvuck9itzpGsx3MSs8=;
-  b=h7eBSXbbslA6TyAZUbsfmkuxNnhrcorCH6cYYuCHg53yYA+TnGGiK5nT
-   w71JxT3u91CIQ/vSDIVbQ/pj1TPXXWTUvFfZ5/XBppQl8u4I1HNvnY/4N
-   we6feidIoqkUEEa8v3sSXrGPktdK9zXchKA5yA9MKzBeouwVrFgQdvqcq
-   vK4lyW9CazEy5pF/MSn41nTISnqpuo7vLg75GSXipspwa8fUPA7WhV5Vy
-   W7wnMb7sb9zT/Gni16aXbsaejjV7xJ0gWSgml1LsKODqMZeqkyx1UFs7z
-   thAWDXKBhkXvkKbrY5K+DAtJXH2vfKB7qBsTZh7QbyEBGJ+oE3RApvrDB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054765"
+  bh=Si7wDpbS9KwlNX1piad7oAOPmvrQnEzt80p46GXK7is=;
+  b=lqilYJB09HnhQrNCbExr4+wEMwtHr0TU2W+TVypf4nvX22c7bDS8119N
+   Z5oYq9cw4NudGcfmUuoCVk1Wjepetlk+tBVUAABVBwPk+kANECV33WTi7
+   cs0vWkmBhKk2FL5/rK07krSs/KWHjJS4aSCEn8KFlzj17fYhCu/HNOD8q
+   We+zDdAzuSwRtsMSbpTGugO4vOMYSlp8GdvVsFhx9l8Dq7r+ap71hx6qg
+   Lsvy+ht7I5GH4kWIbGRxmZb7viIuMzca7VKtSzK2sn40E0x+t5s+aoTqL
+   DQim1b1+s1kpCz5LPXqBWd2XH0BQoL7W/F+Ge2FES6bngvARePr7zyBAR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054773"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284054765"
+   d="scan'208";a="284054773"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:43 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240838"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240843"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="715240838"
+   d="scan'208";a="715240843"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:33 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:34 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id F17429F6; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id 0D0CFAF6; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 28/36] pinctrl: tegra: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:44 +0300
-Message-Id: <20221010201453.77401-29-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 29/36] pinctrl: ti-iodelay: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:45 +0300
+Message-Id: <20221010201453.77401-30-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,29 +159,31 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/tegra/pinctrl-tegra.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/pinctrl/ti/pinctrl-ti-iodelay.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
-index 50bd26a30ac0..834a2d50f89b 100644
---- a/drivers/pinctrl/tegra/pinctrl-tegra.c
-+++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-@@ -15,11 +15,13 @@
- #include <linux/io.h>
+diff --git a/drivers/pinctrl/ti/pinctrl-ti-iodelay.c b/drivers/pinctrl/ti/pinctrl-ti-iodelay.c
+index 4e2382778d38..53abddaebce1 100644
+--- a/drivers/pinctrl/ti/pinctrl-ti-iodelay.c
++++ b/drivers/pinctrl/ti/pinctrl-ti-iodelay.c
+@@ -15,12 +15,14 @@
+ #include <linux/module.h>
  #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/seq_file.h>
-+#include <linux/slab.h>
-+
- #include <linux/pinctrl/machine.h>
-+#include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
+ #include <linux/of_device.h>
 -#include <linux/pinctrl/pinconf.h>
--#include <linux/slab.h>
+-#include <linux/pinctrl/pinconf-generic.h>
+-#include <linux/pinctrl/pinctrl.h>
+ #include <linux/regmap.h>
++#include <linux/seq_file.h>
+ #include <linux/slab.h>
  
++#include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
++#include <linux/pinctrl/pinctrl.h>
++
  #include "../core.h"
- #include "../pinctrl-utils.h"
+ #include "../devicetree.h"
+ 
 -- 
 2.35.1
 
