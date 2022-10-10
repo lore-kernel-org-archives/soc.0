@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B94C4332F
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E248C07E9D
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AA5C2C43155; Mon, 10 Oct 2022 20:15:28 +0000 (UTC)
+	id ED5FAC43144; Mon, 10 Oct 2022 20:15:28 +0000 (UTC)
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7B4B4C433C1;
+	by smtp.kernel.org (Postfix) with ESMTPS id C4BFAC433D6;
 	Mon, 10 Oct 2022 20:15:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B4B4C433C1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C4BFAC433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -21,27 +21,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1665432927; x=1696968927;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NgSs7A9A8KMf/DfrWRc1FgI7mSPlPgzqAlVE32GJbJs=;
-  b=CYPcScBq9PCjnxEZKOMdJwCgy9omd2w6o4TTI/hhhPDjES7JIT3HG4ha
-   dY8+/alIN6k1QSXKL0561vgU2g1RkDp/g+J9psRUyR/8LAylqiglyPwJ/
-   hvyMmzXr2oB0T75NTFtLC03IfBznT58upi3ysHfEgEBrwd0HjYKkb2/Y+
-   h00mfAt9Dkisocc75xONh1pXFKFSD79J73SCOOuVEoXNNmTVBfqmd90Kc
-   qGh1w+IF/lYVXTIn1e8W75uLcMJkO4Wgk/Mn4ji+OlQqGU08qeRbaxTAv
-   nqgshdKq9ZdJOrEtSznvp9GvNu1EgCNj7R2cqnH4CfQlVkcochdtgGshT
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590459"
+  bh=D50Fpx/QUeI7xzc5HEtIUNC+GJQEBGOhEZ+fp/HQeyE=;
+  b=DxTmyvRxjHW5Tt0q+abSsEoOTltnIHg2OzKZXe0Y/vKmbUoeFvdaKZsq
+   SacXTK1i/kNnuMbv/V6vcgCEmevwk2IiCM2D4HqlFq9TB5lMmqbKGD5tC
+   4t4/zuyfqVqVuV6qvGdDrxJiyW/oGgCGJvHRTuggeTEFfFXNDlCen4hWg
+   MBPz5gBwu+pZ3CZOKOrL64Lm4uBBEkaJqvxy8Msd8ZnCifUUtNXI9jKlO
+   MqkkU+JnuGGH6rIGq4oQVM2owAdDHfoMxcEaIWu57imc61Ht+uI/GCzY/
+   hdPdFpaAb0u6pOqUogeKVpabQ4uGSZjAFev0+sA2gY3Si54tj/ykQIGqH
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590461"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="287590459"
+   d="scan'208";a="287590461"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862911"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862912"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862911"
+   d="scan'208";a="603862912"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:15 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:16 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 3BD1F725; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id 48E2074F; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 16/36] pinctrl: npcm7xx: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:32 +0300
-Message-Id: <20221010201453.77401-17-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 17/36] pinctrl: ocelot: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:33 +0300
+Message-Id: <20221010201453.77401-18-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,35 +159,35 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/pinctrl/pinctrl-ocelot.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-index 1c4e89b046de..ff5bcea172e8 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-@@ -11,14 +11,17 @@
- #include <linux/of.h>
- #include <linux/of_address.h>
+diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
+index 647e91490bac..a9343c242cd5 100644
+--- a/drivers/pinctrl/pinctrl-ocelot.c
++++ b/drivers/pinctrl/pinctrl-ocelot.c
+@@ -13,15 +13,17 @@
+ #include <linux/of_device.h>
  #include <linux/of_irq.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/seq_file.h>
-+
-+#include <linux/pinctrl/consumer.h>
- #include <linux/pinctrl/machine.h>
+ #include <linux/of_platform.h>
+-#include <linux/pinctrl/pinctrl.h>
+-#include <linux/pinctrl/pinmux.h>
 -#include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
--#include <linux/platform_device.h>
--#include <linux/property.h>
--#include <linux/regmap.h>
+-#include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ #include <linux/slab.h>
  
- /* GCR registers */
- #define NPCM7XX_GCR_PDID	0x00
++#include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
++
+ #include "core.h"
+ #include "pinconf.h"
+ #include "pinmux.h"
 -- 
 2.35.1
 
