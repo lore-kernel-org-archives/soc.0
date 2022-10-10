@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 997E0C43217
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B22C43219
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DEBFC43151; Mon, 10 Oct 2022 20:15:16 +0000 (UTC)
+	id 19D47C43158; Mon, 10 Oct 2022 20:15:17 +0000 (UTC)
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B12EEC433B5;
-	Mon, 10 Oct 2022 20:15:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B12EEC433B5
+	by smtp.kernel.org (Postfix) with ESMTPS id 7316DC43470;
+	Mon, 10 Oct 2022 20:15:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7316DC43470
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -21,27 +21,27 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1665432915; x=1696968915;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+IG7voHhSJy2wALLTCzE+UfbKUfIMwykh9YQ3tA6sww=;
-  b=Ro4IN+mgi/D5ZK8IcDihhjzf7KvwCpR7vj6/CBLjZIpMZQ6K4uctAErZ
-   vNKcpJMkwlVrqXjfLLyIPHBGo23hKn1mibJ+ki/DiMu/CIwlghQnxmkol
-   SF4+75TqZnFJjSc4+DflI0CD81nhxlJG4VwqjlhCkh1n7oklxIwHsYvEW
-   i1feK1elFiO49xcOleTtdMbzQUjYT56Eu1i8Lrk87MWuO/U/hGfq2LrpF
-   pyxLaZ9IGRLnb987nwLmB1Ednz6dj52xHqRztfrtOnIQepXkE30VJaG+q
-   xVvgJWw1CUIPbLGdj2bGwkAgPl+RA1B1Qt4RFPOu4hckCWe28jx+TPssv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="330798945"
+  bh=uF7xBeu93M354EETrHSJuoNGE435FvYms9ki+0pIZb8=;
+  b=W5NhvbTiSsA7gVgbNxD/Wqq+pTraTPsXNAv1HVGDFR6/H//PlBNxVu0H
+   Kkmr9GVlBEPsWRX2EvmhXng5iuHDJpB3haN20Yyi8ZGHV3FX8/8OOydVL
+   +IuvEyZkev4YNYPlvSetnwG8ByPNOstnayQNKuLR/JqSONB7GfdxOt/os
+   kocpIspu6MQGl7QfVcbtfzFzF9n1JP/AbC3yOo/BViZSCjvxr1xksPqW1
+   ulIDlwanXXQWkBVKo06LZd6dKu/rTArLfArIvkuQCd4/kwlj94OkYNZ02
+   INofgs9NcQp7kj3b0UMAd7FF9ChSq9ypQDLVMaaAsNDWLdqhZNIQzOleu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="330798953"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="330798945"
+   d="scan'208";a="330798953"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862806"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862814"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862806"
+   d="scan'208";a="603862814"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:02 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:03 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id EEB513ED; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
+	id 30918443; Mon, 10 Oct 2022 23:15:12 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 06/36] pinctrl: at91: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:22 +0300
-Message-Id: <20221010201453.77401-7-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 07/36] pinctrl: axp209: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:23 +0300
+Message-Id: <20221010201453.77401-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,76 +159,32 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/pinctrl-at91-pio4.c | 10 +++++++---
- drivers/pinctrl/pinctrl-at91.c      | 16 +++++++++-------
- 2 files changed, 16 insertions(+), 10 deletions(-)
+ drivers/pinctrl/pinctrl-axp209.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-at91-pio4.c b/drivers/pinctrl/pinctrl-at91-pio4.c
-index 82b921fd630d..e38c683aba09 100644
---- a/drivers/pinctrl/pinctrl-at91-pio4.c
-+++ b/drivers/pinctrl/pinctrl-at91-pio4.c
-@@ -7,18 +7,22 @@
-  */
- 
- #include <dt-bindings/pinctrl/at91.h>
-+
- #include <linux/clk.h>
- #include <linux/gpio/driver.h>
-+#include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
--#include <linux/init.h>
+diff --git a/drivers/pinctrl/pinctrl-axp209.c b/drivers/pinctrl/pinctrl-axp209.c
+index 7ab20ac15391..0bc1b381a2b8 100644
+--- a/drivers/pinctrl/pinctrl-axp209.c
++++ b/drivers/pinctrl/pinctrl-axp209.c
+@@ -16,13 +16,15 @@
+ #include <linux/module.h>
  #include <linux/of.h>
+ #include <linux/of_device.h>
+-#include <linux/pinctrl/pinconf-generic.h>
+-#include <linux/pinctrl/pinctrl.h>
+-#include <linux/pinctrl/pinmux.h>
  #include <linux/platform_device.h>
--#include <linux/pinctrl/pinconf.h>
-+#include <linux/seq_file.h>
-+#include <linux/slab.h>
-+
- #include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
--#include <linux/slab.h>
-+
- #include "core.h"
- #include "pinconf.h"
- #include "pinctrl-utils.h"
-diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
-index 81dbffab621f..1e1813d7c550 100644
---- a/drivers/pinctrl/pinctrl-at91.c
-+++ b/drivers/pinctrl/pinctrl-at91.c
-@@ -7,22 +7,24 @@
- 
- #include <linux/clk.h>
- #include <linux/err.h>
-+#include <linux/gpio/driver.h>
- #include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/of_irq.h>
-+#include <linux/pm.h>
-+#include <linux/seq_file.h>
+ #include <linux/regmap.h>
  #include <linux/slab.h>
--#include <linux/interrupt.h>
--#include <linux/io.h>
--#include <linux/gpio/driver.h>
-+
-+/* Since we request GPIOs from ourself */
-+#include <linux/pinctrl/consumer.h>
- #include <linux/pinctrl/machine.h>
- #include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/pinctrl/pinmux.h>
--/* Since we request GPIOs from ourself */
--#include <linux/pinctrl/consumer.h>
--#include <linux/pm.h>
  
- #include "pinctrl-at91.h"
- #include "core.h"
++#include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
++
+ #define AXP20X_GPIO_FUNCTIONS		0x7
+ #define AXP20X_GPIO_FUNCTION_OUT_LOW	0
+ #define AXP20X_GPIO_FUNCTION_OUT_HIGH	1
 -- 
 2.35.1
 
