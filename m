@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B48DC433FE
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7444C433F5
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E9D7EC43145; Mon, 10 Oct 2022 20:15:03 +0000 (UTC)
+	id 8DEF4C43147; Mon, 10 Oct 2022 20:15:05 +0000 (UTC)
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 52CCEC433D7;
-	Mon, 10 Oct 2022 20:15:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 52CCEC433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id EF28DC433D7;
+	Mon, 10 Oct 2022 20:15:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EF28DC433D7
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432902; x=1696968902;
+  t=1665432904; x=1696968904;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b/f5qnk86K8IvDMxiisJG/aX+sY4tlL8aHadR4IA4AY=;
-  b=gdr9Tv6GJ3d9Ea/JZ3py6M/FTtBexMkD4Y2xo98wnHU/zadS8LZV/8X2
-   897ch0fdg2CzKbfbbwLrVf2Se/OOy3dC6wPtSnGHhY+hM79HUTthWMaQp
-   HD8Cch2hzAJ8XUUPd6lTJbed7+ND275KNjY3bQkKzO65WCOCdCGFmUJGE
-   pHaxuHFd9m+WEez+wCNZNey/FFiuhMsS9yoyyGwxTNDi03l9tFjjQ83BN
-   BatHe9yXoWKiYOShxlSQvmi+7Qw6+kpVTho9pGWNUlcio3Q5yAdZt03Ij
-   7MdoqEay093Da+tMS0eePNUxkfmkmMTa1erF0ki1kazr0W+3TzfI3ZvcU
+  bh=kjXzGbYDAGDzUThAUri+8VVRFkkuppwpSy0/gaNxk3U=;
+  b=BSP29r6nPQbQEsTP4OXRplY0E9NVC7Np4nI3CCJHXJjwyyWbtSbt1Z0H
+   Ebf2BmIT7CaWIAqJg/ctJ2uuzJp8DcCfywy4FzjhfHdckRw+VsjYbSBqg
+   gGVu4eLqm0zvmIRse2qmvFGz1M475BSIm2v2EUhGzXT3ytFC3Q5h62c1N
+   nxit2r5/C67JyP7F6G6fe3uii45NWjE5ZxxEZHQ7PvWMjYOex+yFP9Nyo
+   lDWXMs3X5M/ZQb5koqrxKT4E1zhmmk0LuRnOa+Drmw3vaT5WNQxGUUx7F
+   +3ds9+fzpkwaZQW+AkYZPhz66BBEhtmxp89jp/Qna/rhn8UorIR9MAWDC
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590327"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590332"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="287590327"
+   d="scan'208";a="287590332"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:01 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862737"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862739"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862737"
+   d="scan'208";a="603862739"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:14:50 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 5DBF01E0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
+	id 778C82B0; Mon, 10 Oct 2022 23:15:11 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 01/36] gpiolib: tegra186: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:17 +0300
-Message-Id: <20221010201453.77401-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:18 +0300
+Message-Id: <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,28 +159,38 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-tegra186.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/gpiolib-cdev.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
-index 54d9fa7da9c1..fdc5bdcd5638 100644
---- a/drivers/gpio/gpio-tegra186.c
-+++ b/drivers/gpio/gpio-tegra186.c
-@@ -7,12 +7,13 @@
-  */
- 
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index f8041d4898d1..60a60e2d60c5 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -10,8 +10,9 @@
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/file.h>
+-#include <linux/gpio.h>
  #include <linux/gpio/driver.h>
++#include <linux/gpio.h>
 +#include <linux/hte.h>
  #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
--#include <linux/hte.h>
+ #include <linux/irqreturn.h>
+ #include <linux/kernel.h>
+@@ -20,11 +21,12 @@
+ #include <linux/mutex.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/poll.h>
 +#include <linux/seq_file.h>
+ #include <linux/spinlock.h>
+ #include <linux/timekeeping.h>
+ #include <linux/uaccess.h>
+ #include <linux/workqueue.h>
+-#include <linux/hte.h>
++
+ #include <uapi/linux/gpio.h>
  
- #include <dt-bindings/gpio/tegra186-gpio.h>
- #include <dt-bindings/gpio/tegra194-gpio.h>
+ #include "gpiolib.h"
 -- 
 2.35.1
 
