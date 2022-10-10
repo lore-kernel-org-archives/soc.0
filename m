@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4010C41535
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30617C43219
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BB722C4314A; Mon, 10 Oct 2022 20:15:48 +0000 (UTC)
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	id 105E0C43144; Mon, 10 Oct 2022 20:15:55 +0000 (UTC)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DEF8EC433D6;
-	Mon, 10 Oct 2022 20:15:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DEF8EC433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 84B33C433D7;
+	Mon, 10 Oct 2022 20:15:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 84B33C433D7
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432947; x=1696968947;
+  t=1665432953; x=1696968953;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LMyddcBhxz6+trtgMyJ41Na0xLjaX4lOrKyKro8EzDM=;
-  b=PMFtcBOheWtsVJKKDFMiC4TwPXgfXA5pGM9f/JGEdjvtwkYQfJrfEajY
-   ItC+qULsHnxv5/6qoh11OsyaipOdWz3fraJ+FLPy4qyDJoQULwdwCjedL
-   yCLycLtDCeXHf+QmtR2FtEUbSstgdcqY0V3xGHHwO6P7F35UT2WQlirzP
-   kC2Vb142wBCA49YPxf6FxFCwDoasVKw2A2eGR3VSVUUTlEKrc0pGUIL3+
-   KbN/haJNZCW7wUr3R+AFFoJlvbtM9YG7B7BbiASWhxHdwduMYj+YXLhD/
-   VUKp/N8fjtXG/S7NpyQ44pj1INTEuAGbEgUb0VqLWsui4sx9AqhL25EF6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="284054790"
+  bh=Tf5HMyINHxFQlOxe7sNfUovjvJBQR4fB/T4gNf5jpyw=;
+  b=bSczMdXH9YKZy9JxTMTbLD5QKi0Ye366LjFd1/tVvIg30p8ddSQQg1hM
+   yQuJprwhKBJ/KHFNj7fOyZG8TzszWp5gn3OHyNRr46/0dpvr5rxKsrV5v
+   ymIXHvNkRHcD+2rK2BdenrivfWwpIDQTqvShasvfapY9kQMJ6n/kQv4mk
+   5mplbpBLFr6weRhvrq1LCADoce2lL4mR/zxFjZHGNYTkDbZSmE3tKAsBH
+   JE2fXCbXyQJ4XoMRauRqZljncD7GJtwVU9ZIiJkAcEh0WiRkdC/QIa3bA
+   A7ETFNZpwVN5TcMOC3gC9vRmqlN4RryHkQvHxskYVTOxdi7hAXSrv9pQV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314295"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="284054790"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:46 -0700
+   d="scan'208";a="304314295"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603863026"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="694786637"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603863026"
+   d="scan'208";a="694786637"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:34 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 10 Oct 2022 13:15:49 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 1CA98B68; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
+	id 4D144B94; Mon, 10 Oct 2022 23:15:14 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 30/36] pinctrl: uniphier: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:46 +0300
-Message-Id: <20221010201453.77401-31-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 34/36] pinctrl: merrifield: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:50 +0300
+Message-Id: <20221010201453.77401-35-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,31 +159,25 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/uniphier/pinctrl-uniphier-core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/pinctrl/intel/pinctrl-merrifield.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-index ade348b49b31..18d3a4f69e63 100644
---- a/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-+++ b/drivers/pinctrl/uniphier/pinctrl-uniphier-core.c
-@@ -6,12 +6,14 @@
- #include <linux/list.h>
- #include <linux/mfd/syscon.h>
- #include <linux/of.h>
+diff --git a/drivers/pinctrl/intel/pinctrl-merrifield.c b/drivers/pinctrl/intel/pinctrl-merrifield.c
+index 5e752818adb4..527957ea35b7 100644
+--- a/drivers/pinctrl/intel/pinctrl-merrifield.c
++++ b/drivers/pinctrl/intel/pinctrl-merrifield.c
+@@ -12,8 +12,10 @@
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
 -#include <linux/pinctrl/pinconf.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
 +#include <linux/seq_file.h>
 +
  #include <linux/pinctrl/pinconf-generic.h>
 +#include <linux/pinctrl/pinconf.h>
  #include <linux/pinctrl/pinctrl.h>
  #include <linux/pinctrl/pinmux.h>
--#include <linux/platform_device.h>
--#include <linux/regmap.h>
  
- #include "../core.h"
- #include "../pinctrl-utils.h"
 -- 
 2.35.1
 
