@@ -1,114 +1,127 @@
-Return-Path: <SRS0=ghQ0=2I=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=YheT=2L=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE88C433FE
-	for <soc@archiver.kernel.org>; Fri,  7 Oct 2022 07:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B571CC433F5
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 04:11:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 563B3C433B5; Fri,  7 Oct 2022 07:06:41 +0000 (UTC)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	id 65B85C433B5; Mon, 10 Oct 2022 04:11:14 +0000 (UTC)
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4A7EAC433D6
-	for <soc@kernel.org>; Fri,  7 Oct 2022 07:06:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A7EAC433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 77583C433C1
+	for <soc@kernel.org>; Mon, 10 Oct 2022 04:11:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77583C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id m14so4702481ljg.2
-        for <soc@kernel.org>; Fri, 07 Oct 2022 00:06:40 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id fw14so8868353pjb.3
+        for <soc@kernel.org>; Sun, 09 Oct 2022 21:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=FSmGNYPsHl9Ro1MJ7SK0qxA2b0opEEGQTUXyGcDbh9o=;
-        b=foHGxaipVhE4g1J2J3AKimMGWlMyYJ94BYSHus4iZXvHzycxZHOaxVIcx75vQhOkhM
-         RUVn3+LF8DvwQqMfdRMsxSMAJQngOWfZ6Svfr2JJ+G/4EvJx4bwVbjnmBY4t8CWfPni/
-         aOR68VVLHTz7M7lPiPwoxWld9aXAT2/zkWVus3Zvn8q61bqVvRZ33+lRHBUNJTqjTFbs
-         7XOGhE0fGA7qyBmXMZYY+mSQ5mFW34rU2W0UDjJGmxSIG+Y43UQsQLQ/lMx7EWFebWB4
-         /P3j0y4pT6ICbE7mbZW5+cWBwZvsuC95D1CrY8tVaGHo0rW8nIQJiv1qvS6CfpB+hnHJ
-         9lwA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TRNiX2YBGFaGbEOW9EW2m4IMgeIOR/vpdS0qnuva6kA=;
+        b=XWjcevQXwJ689afJUD94+6DLRPa301SxsBfqSn9+7DNTRD49nXgJJdFOUu8xZK9Pf1
+         DU/KiC0GiL5EylVYuQPsH4Wi/no9QwcRROwZABJJLZPg5pydzhJZBUkuAX3t/H+sI6Fk
+         2pV1a1mhRymiCLqfk6Vh0SbCqG8L0KK8dpxAx8iZCzU7GjHB1DL1R8WfpZwoti/bgrzN
+         JOAUa/LUXLUVy3E02VOmz3YA/ct2YEbCnmuyOPO++eEwc8uu/3Di7EOUTw0xM9ExbRTQ
+         eiFcqr7nMaSGAs5HxMN0MIE/R8vlAAWXKBnscgYa7n4xyzaSsN2BqNUTTsHjOQbozb/Z
+         mrBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FSmGNYPsHl9Ro1MJ7SK0qxA2b0opEEGQTUXyGcDbh9o=;
-        b=Zv+rkiQ2z/INwJxGa04/M8MdXyucxUJaeo9EjDmBNT22zo3U++GYyLrE2Zs7bZ28IT
-         cW+JGlBDn3cYMVVyn7QipGbtBzHU5eIWLGpvKr3x2aF0JUv93iNhADhvdMpktJP5dMa9
-         cdS08Myn3a5jBx2fIJCknR95xQwa/gV3cDl0MPSreOAb0/MokdLw7mYL8uE9CCWOBWy7
-         1OzG6R+0n4S4K1ZNBVXtPD5EwhIQNAyH3VnH8NvASOlQmMeWKU1EGlynKovddBI96ZMx
-         GfevN09icrM408yW9Mq2spGJnJgce9pMvH5GCV2UDqQgXF2ziXEXAuG8d4l3uvOU71dU
-         G9zw==
-X-Gm-Message-State: ACrzQf0E78VY6k+6LepES9Re/ywvQjLoWycgGess5nQws1P56A3YB5aD
-	rcHNbzM437T8QEZ9qR21dglYaY3RowZL/w==
-X-Google-Smtp-Source: AMsMyM7eIvv5GKIgDiCZIjDDnCooaDnHvZD7wBLGQTTRpllEwxZlb9pUXT4af4QcZRMvuZKVS512JA==
-X-Received: by 2002:a2e:92c8:0:b0:25d:6ddf:e71d with SMTP id k8-20020a2e92c8000000b0025d6ddfe71dmr1129408ljh.170.1665126398407;
-        Fri, 07 Oct 2022 00:06:38 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056512201100b004a27bb1ad62sm173557lfb.205.2022.10.07.00.06.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Oct 2022 00:06:38 -0700 (PDT)
-Message-ID: <4b861177-df32-ab9c-c746-f32f0ee6438d@linaro.org>
-Date: Fri, 7 Oct 2022 09:06:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3] greatlakes: dts: Add Facebook greatlakes (AST2600) BMC
-Content-Language: en-US
-To: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
- krzysztof.kozlowski@linaro.or
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TRNiX2YBGFaGbEOW9EW2m4IMgeIOR/vpdS0qnuva6kA=;
+        b=EJOe87YzgxoWQ2XLjn4c0ZLld0+WtAmo/6GZP5xikmJsfBIXL9bzmP86CpsifCOfTS
+         7VTUWbDTfVAXAKrcEb1SI4m/IWskB5StabadGwJM5IXDBMpPbU9nkYHx7C/F7HqzsUD0
+         qfFnekrAyYV1/qbvyJ7hOOwe6VrgA2awna4X8LvmBmpirAR8uIb7UcAW+UARDdayH4La
+         /1t64//g6wIk+ezlquTulykswRwoz5GiRAb5o9IDSAzCJeMylFtgs8m4OaqB25+5li40
+         aOIcjcCKzFnqbluih09twO2buedHSr9XHCIuSIlL7GQEanmyq0HMpisCf/k8we7ZyuLH
+         knAQ==
+X-Gm-Message-State: ACrzQf38gXlau5yfyC6PFQDsyqA9EYjzmAxqzgst7PrPD0NhY4dJRdXd
+	D1Ee+nJglAmiDDo/Z70tQhU94Q==
+X-Google-Smtp-Source: AMsMyM4jJikAaITTAHASRrm9j75yPxdyU/MK6wS0mYulFpYaLBuEsRB9ClYyW3qkQiQDYoluqnSsbQ==
+X-Received: by 2002:a17:90a:e7ce:b0:20a:c658:c183 with SMTP id kb14-20020a17090ae7ce00b0020ac658c183mr18818066pjb.5.1665375071917;
+        Sun, 09 Oct 2022 21:11:11 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id z18-20020a170903019200b00176c6738d13sm1863104plg.169.2022.10.09.21.11.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 21:11:11 -0700 (PDT)
+From: Viresh Kumar <viresh.kumar@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: patrick@stwcx.xyz, garnermic@fb.com, Bonnie Lo <Bonnie_Lo@Wiwynn.com>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-References: <20221007055346.3484180-1-Delphine_CC_Chiu@Wiwynn.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221007055346.3484180-1-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@kernel.org,
+	Russell King <linux@armlinux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	kernel test robot <lkp@intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] ARM: spear6xx: Staticize few definitions
+Date: Mon, 10 Oct 2022 09:41:07 +0530
+Message-Id: <bd3872ce5125477ea80b1131ad9a34c98aa1a796.1665375018.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 07/10/2022 07:53, Delphine CC Chiu wrote:
-> Add linux device tree entry related to
-> greatlakes specific devices connected to BMC SoC.
-> 
-> ---
-> --- v3 - Add documentation of board compatible (bindings)
-> ---    - Add board compatible
-> ---    - Remove the bootargs
-> ---    - Revise the DTS node name
-> ---
-> --- v2 - Add binding document
-> ---
-> --- v1 - Initial draft
+Fix warnings with clang like:
 
-This is a friendly reminder during the review process.
+arch/arm/mach-spear/spear6xx.c:365:13: warning: no previous prototype for function 'spear6xx_map_io' [-Wmissing-prototypes]
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+by making few definitions static.
 
-Thank you.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Rebased on v6.0.
 
-> ---
-> 
-> Signed-off-by: Bonnie Lo <Bonnie_Lo@Wiwynn.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/aspeed-bmc-facebook-greatlakes.dts    | 241 ++++++++++++++++++
+ arch/arm/mach-spear/spear6xx.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-You need to document the binding. I think you already did, but then
-submitted without it. Read the process:
-
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst
-
-Best regards,
-Krzysztof
+diff --git a/arch/arm/mach-spear/spear6xx.c b/arch/arm/mach-spear/spear6xx.c
+index 58183493e06d..7a5fff134872 100644
+--- a/arch/arm/mach-spear/spear6xx.c
++++ b/arch/arm/mach-spear/spear6xx.c
+@@ -339,7 +339,7 @@ static struct pl08x_platform_data spear6xx_pl080_plat_data = {
+  * 0xD0000000		0xFD000000
+  * 0xFC000000		0xFC000000
+  */
+-struct map_desc spear6xx_io_desc[] __initdata = {
++static struct map_desc spear6xx_io_desc[] __initdata = {
+ 	{
+ 		.virtual	= (unsigned long)VA_SPEAR6XX_ML_CPU_BASE,
+ 		.pfn		= __phys_to_pfn(SPEAR_ICM3_ML1_2_BASE),
+@@ -359,12 +359,12 @@ struct map_desc spear6xx_io_desc[] __initdata = {
+ };
+ 
+ /* This will create static memory mapping for selected devices */
+-void __init spear6xx_map_io(void)
++static void __init spear6xx_map_io(void)
+ {
+ 	iotable_init(spear6xx_io_desc, ARRAY_SIZE(spear6xx_io_desc));
+ }
+ 
+-void __init spear6xx_timer_init(void)
++static void __init spear6xx_timer_init(void)
+ {
+ 	char pclk_name[] = "pll3_clk";
+ 	struct clk *gpt_clk, *pclk;
+@@ -394,7 +394,7 @@ void __init spear6xx_timer_init(void)
+ }
+ 
+ /* Add auxdata to pass platform data */
+-struct of_dev_auxdata spear6xx_auxdata_lookup[] __initdata = {
++static struct of_dev_auxdata spear6xx_auxdata_lookup[] __initdata = {
+ 	OF_DEV_AUXDATA("arm,pl080", SPEAR_ICM3_DMA_BASE, NULL,
+ 			&spear6xx_pl080_plat_data),
+ 	{}
+-- 
+2.31.1.272.g89b43f80a514
 
