@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B4F8C43219
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB54DC433F5
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3EB75C43147; Mon, 10 Oct 2022 20:15:26 +0000 (UTC)
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	id AE635C43141; Mon, 10 Oct 2022 20:15:25 +0000 (UTC)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CAA6FC43142;
+	by smtp.kernel.org (Postfix) with ESMTPS id 7EF94C433D6;
 	Mon, 10 Oct 2022 20:15:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CAA6FC43142
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7EF94C433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432925; x=1696968925;
+  t=1665432924; x=1696968924;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mywQvBjWPzHdeWDwbOdj9RNfPWL33cKj0x+3gKEqnbA=;
-  b=NugK4WUMyFS+TtfwjfSwaMX8gMDFZ37lbiI7CwoPHbaMV4wCSRQgIPPO
-   yuTUnFtelmy5FlKw7kUHLaiZMe/qpUH2sPzPcUGfhEv9cyn/CMQvbjGqn
-   awDx+xfxYA4ktQQvjY8gqycM5NCLkh2H1g+PDBVtbVfG0okw//PGo48Sf
-   rRAI9MEzXrC7mhmFrwZ1oIR+gFFB1aV3DZtbPzH4LJUd9wOxtRiP6MoH0
-   HjZZhXhzPFe4N2gwXl205oAsqqdp+EFNV1OjSgRWpwi8Tha/N2k7R6oOw
-   L9SJeaaFmRsbIeGLulBFjK8+CxN6jvKUUhlos18MfondK6ctaR2IlCmGX
+  bh=QU8q1TdhcwFhA7ytmA6B/UZPU6N+DU0FERGHf4j81U8=;
+  b=dDqOlxAH/iEC+5aoJsqBSVgo4lo+O0YLr1p37XYI7IoTtXGzjKP2Sj64
+   TMf7xgZwa8o6HocR0sy+KTJtkgfBiF+SppU6DPHtKk1GnkawiaKaxWH2t
+   RWGMlDNI183xxTyzPVHqarbJYHKh4ZWpVW8tAs7FBPf5/JIqIg1DnQ1tU
+   fk9EB1Mj0QcGYoY+XkL1xyHrdCU21veuHOxDY+2DOx5SSJF361Xsy4Dty
+   gMGOGohlpLQDmdbBGwqtepUzCnv5CRaDXhnMeSeI1SaM0O/3B1zmwGkN/
+   t6Sf6Xx88gcpyGQYNS+hCjMUYe5txhTUVrTYqTbwL55bjf4nbW7XdtfQy
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314181"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="287590431"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="304314181"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:24 -0700
+   d="scan'208";a="287590431"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240751"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862883"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="715240751"
+   d="scan'208";a="603862883"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:14 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:11 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 105AD5D2; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id 9333756D; Mon, 10 Oct 2022 23:15:12 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 13/36] pinctrl: lochnagar: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:29 +0300
-Message-Id: <20221010201453.77401-14-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 10/36] pinctrl: imx: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:26 +0300
+Message-Id: <20221010201453.77401-11-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,28 +159,33 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/cirrus/pinctrl-lochnagar.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/pinctrl/freescale/pinctrl-imx.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/cirrus/pinctrl-lochnagar.c b/drivers/pinctrl/cirrus/pinctrl-lochnagar.c
-index 3fda4446d70b..0b78cf611afe 100644
---- a/drivers/pinctrl/cirrus/pinctrl-lochnagar.c
-+++ b/drivers/pinctrl/cirrus/pinctrl-lochnagar.c
-@@ -15,10 +15,12 @@
+diff --git a/drivers/pinctrl/freescale/pinctrl-imx.c b/drivers/pinctrl/freescale/pinctrl-imx.c
+index 3a7d2de10b13..e9aef764138f 100644
+--- a/drivers/pinctrl/freescale/pinctrl-imx.c
++++ b/drivers/pinctrl/freescale/pinctrl-imx.c
+@@ -13,14 +13,16 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
  #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
+-#include <linux/of_device.h>
+ #include <linux/of_address.h>
++#include <linux/of_device.h>
++#include <linux/regmap.h>
++#include <linux/seq_file.h>
++#include <linux/slab.h>
 +
-+#include <linux/pinctrl/consumer.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/machine.h>
+ #include <linux/pinctrl/pinconf.h>
  #include <linux/pinctrl/pinctrl.h>
  #include <linux/pinctrl/pinmux.h>
--#include <linux/pinctrl/pinconf.h>
--#include <linux/pinctrl/pinconf-generic.h>
+-#include <linux/slab.h>
+-#include <linux/regmap.h>
  
- #include <linux/mfd/lochnagar.h>
- #include <linux/mfd/lochnagar1_regs.h>
+ #include "../core.h"
+ #include "../pinconf.h"
 -- 
 2.35.1
 
