@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A1C2C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89247C433F5
 	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 12532C43147; Mon, 10 Oct 2022 20:15:40 +0000 (UTC)
+	id 70F96C4314C; Mon, 10 Oct 2022 20:15:40 +0000 (UTC)
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4A829C433D6;
+	by smtp.kernel.org (Postfix) with ESMTPS id CA433C433C1;
 	Mon, 10 Oct 2022 20:15:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A829C433D6
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA433C433C1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432938; x=1696968938;
+  t=1665432939; x=1696968939;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tzfMJ0+ACRnxRmcXeKB37BEH/TZzYy5SHS5JK+oMIQY=;
-  b=JFM2gOk+TOToFTg/GXZZwqqLbThvA+ZEjAw8d+FHMty64PxflDNvdVai
-   HhcUwIRrHNQtRYHZszizsezWjQozr/mhxIpn5/pI+A/aotEyJLjtCRYpy
-   QsA29lj8S9YHUscPIHgs/L3rwsCPCiE+cDg90CcM8KZVik9GkuaQu0G70
-   1o7LUmpi0Z4aTGxOb+n35xbPYAIAW7LA4+HnBsTG35Xi3xGXzKkUKl9Mf
-   HQVHgoRg2fHNp1usvVwDuoWjsg5UNIZp7M02V0KFC3Xw1g0BCY/NcsxwE
-   A79sdCyI6XU2WVUeLL7XTCEzI+f5h678G1tyMBwK/FrXdF2AJCTnD2XhS
+  bh=V5LElSNyhQKrAlq5Wy8yAbor1UnFq6eJo+JhPVoOZ9c=;
+  b=ZRqSRADLVAWVa311AXnrrTOV35ZyOkyO3kvI9S0TTasy4j+vTksd1Axl
+   L92Z3J4xOek8YE4EPSTcWa37dBb4bySMmSKpdsi600U9aVBU6Dfs31GXD
+   y8L9UZYdWRoKwyf9xE1M7ZtObKSTM20J+HhVZkUAaVi6iA1YqWr2HBmeh
+   22DH6pkC+JDVOev1fnmYQZYkOnwpupXAVMSc58gQdmJf6QDvchnTL0Hs5
+   4RlxiixcxQAmcCn4jParuKfDAGaC/WvIxIHe07RD7zR8pgoeL1uU2bXq+
+   Xhw24DWGWgKYOaaCrrKsBzsfYKX9+fHaZ6iPmjEj4onQPpjAL6HySJquD
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314244"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314249"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="304314244"
+   d="scan'208";a="304314249"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:37 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862955"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862962"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862955"
+   d="scan'208";a="603862962"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:26 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:27 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B177D89F; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id C1AB58A8; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 24/36] pinctrl: st: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:40 +0300
-Message-Id: <20221010201453.77401-25-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 25/36] pinctrl: starfive: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:41 +0300
+Message-Id: <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,48 +159,24 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/pinctrl-st.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
-index cf7f9cbe6044..985dfceb127d 100644
---- a/drivers/pinctrl/pinctrl-st.c
-+++ b/drivers/pinctrl/pinctrl-st.c
-@@ -5,21 +5,26 @@
-  *	Srinivas Kandagatla <srinivas.kandagatla@st.com>
-  */
- 
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/slab.h>
- #include <linux/err.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/init.h>
- #include <linux/io.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
+diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+index 5b544fb7f3d8..6a8a9cfe8965 100644
+--- a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
++++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+@@ -15,8 +15,10 @@
  #include <linux/of.h>
--#include <linux/of_irq.h>
- #include <linux/of_address.h>
--#include <linux/gpio/driver.h>
-+#include <linux/of_irq.h>
-+#include <linux/platform_device.h>
- #include <linux/regmap.h>
--#include <linux/mfd/syscon.h>
+ #include <linux/platform_device.h>
+ #include <linux/reset.h>
 +#include <linux/seq_file.h>
-+#include <linux/slab.h>
-+#include <linux/string_helpers.h>
-+
+ #include <linux/spinlock.h>
+ 
 +#include <linux/pinctrl/consumer.h>
-+#include <linux/pinctrl/pinconf.h>
  #include <linux/pinctrl/pinctrl.h>
  #include <linux/pinctrl/pinmux.h>
--#include <linux/pinctrl/pinconf.h>
--#include <linux/platform_device.h>
-+
- #include "core.h"
  
- /* PIO Block registers */
 -- 
 2.35.1
 
