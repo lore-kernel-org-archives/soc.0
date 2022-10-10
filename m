@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69CE7C4332F
-	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E30C4321E
+	for <soc@archiver.kernel.org>; Mon, 10 Oct 2022 20:15:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 51629C433D6; Mon, 10 Oct 2022 20:15:36 +0000 (UTC)
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	id 8DCE5C43158; Mon, 10 Oct 2022 20:15:35 +0000 (UTC)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 11DBEC433C1;
+	by smtp.kernel.org (Postfix) with ESMTPS id 180A6C433D7;
 	Mon, 10 Oct 2022 20:15:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 11DBEC433C1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 180A6C433D7
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665432935; x=1696968935;
+  t=1665432934; x=1696968934;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xi/Nfv8WtOYvT0HZPT8w43GxR/eWjmHTHS8mPgZHjTw=;
-  b=KowiFUJYYFl9eZKZp5UBiNgpG8gPI3peGUWcHasulRP960SDbT9qPwoM
-   W6B+MzEARHYcTiY0OynniwrAzDbbS8jcQQhFxLnfzYlcaaQtoAFSXd85J
-   2vyA2XmggP6FSqbc0+l1M8zm0gBVIG8Fp6rUY8jDW19UxYtcpF4xlDVhH
-   02D6umKWoQ+TnPM1boTiHNQC9r2TJz58hxdKTO92y6AUt8jR04DrgWDcm
-   Z69oxFmL1uZkOSBwAj3adLHQjMjmAG0rYudOEwmAsLukAEHTdPLNLqRxN
-   OanlSvtWi7PWQcCMIbx6kfAJu9M4O/EF8TDDOHKudOUGI0u2xRCgAY1ee
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="304314224"
+  bh=eZ0nLr7k71p8hXdbh21/wdsvbcpSOALoNnQYnblRInI=;
+  b=VcVAWbsJb81yVXvefGZSiz4g6VTY4abjmAhOGzZVvlO6c16A66NIXafa
+   RXLg7PeO1Ivpa8gvhG8F9njgTYAHN8G1+nYtoEHw6lhEvHSgnGqQ9d2Vw
+   AZWCQgGPVL5fCcDzhcHInyS0M2VNd72Q+yljMDliOhzKHH8PLTqV/I8zr
+   ibGO2b7/JOfK2hUIGBFZWzqKGxFHY7Y4OXclwkvvTIwO1SEEJBn8Zm0D6
+   1fI0t26FIfEuaTV518KclNWCfmNKKdaZ0QgY0hcFmiqyZ8MQEuCSR8t2C
+   BxfROdYgC4rU0CEsOMmrQslRYIM5Bi2G9yL5Be4ISVgyMGKWcLs7cjO3Q
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="303066142"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="304314224"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:34 -0700
+   d="scan'208";a="303066142"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2022 13:15:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="603862932"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="715240796"
 X-IronPort-AV: E=Sophos;i="5.95,173,1661842800"; 
-   d="scan'208";a="603862932"
+   d="scan'208";a="715240796"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 10 Oct 2022 13:15:23 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Oct 2022 13:15:22 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 75476781; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
+	id 66097766; Mon, 10 Oct 2022 23:15:13 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Marc Zyngier <maz@kernel.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -143,9 +143,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v2 20/36] pinctrl: samsung: Add missed header(s)
-Date: Mon, 10 Oct 2022 23:14:36 +0300
-Message-Id: <20221010201453.77401-21-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 19/36] pinctrl: renesas: Add missed header(s)
+Date: Mon, 10 Oct 2022 23:14:35 +0300
+Message-Id: <20221010201453.77401-20-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
@@ -159,34 +159,79 @@ While at it, sort headers alphabetically.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/samsung/pinctrl-samsung.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/pinctrl/renesas/pinctrl-rzg2l.c | 7 +++++--
+ drivers/pinctrl/renesas/pinctrl-rzv2m.c | 4 +++-
+ drivers/pinctrl/renesas/pinctrl.c       | 8 +++++---
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index bd13b5ef246d..5736761927cb 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -15,15 +15,16 @@
- // but provides extensions to which platform specific implementation of the gpio
- // and wakeup interrupts can be hooked to.
- 
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/io.h>
--#include <linux/property.h>
--#include <linux/slab.h>
- #include <linux/err.h>
+diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+index a43824fd9505..a08eee092430 100644
+--- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
++++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
+@@ -8,16 +8,19 @@
+ #include <linux/bitops.h>
+ #include <linux/clk.h>
  #include <linux/gpio/driver.h>
-+#include <linux/init.h>
+-#include <linux/io.h>
+ #include <linux/interrupt.h>
 +#include <linux/io.h>
- #include <linux/irqdomain.h>
+ #include <linux/module.h>
  #include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
+ #include <linux/of_irq.h>
++#include <linux/seq_file.h>
++#include <linux/spinlock.h>
++
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+-#include <linux/spinlock.h>
+ 
+ #include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
+ 
+diff --git a/drivers/pinctrl/renesas/pinctrl-rzv2m.c b/drivers/pinctrl/renesas/pinctrl-rzv2m.c
+index e8c18198bebd..061f16c77304 100644
+--- a/drivers/pinctrl/renesas/pinctrl-rzv2m.c
++++ b/drivers/pinctrl/renesas/pinctrl-rzv2m.c
+@@ -15,11 +15,13 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
++#include <linux/spinlock.h>
++
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+-#include <linux/spinlock.h>
+ 
+ #include <dt-bindings/pinctrl/rzv2m-pinctrl.h>
+ 
+diff --git a/drivers/pinctrl/renesas/pinctrl.c b/drivers/pinctrl/renesas/pinctrl.c
+index b438d24c13b5..b74147800319 100644
+--- a/drivers/pinctrl/renesas/pinctrl.c
++++ b/drivers/pinctrl/renesas/pinctrl.c
+@@ -12,14 +12,16 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
 +#include <linux/seq_file.h>
 +#include <linux/slab.h>
- #include <linux/spinlock.h>
++#include <linux/spinlock.h>
++
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/machine.h>
+-#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinconf-generic.h>
++#include <linux/pinctrl/pinconf.h>
+ #include <linux/pinctrl/pinctrl.h>
+ #include <linux/pinctrl/pinmux.h>
+-#include <linux/slab.h>
+-#include <linux/spinlock.h>
  
+ #include "core.h"
  #include "../core.h"
 -- 
 2.35.1
