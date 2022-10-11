@@ -1,203 +1,68 @@
-Return-Path: <SRS0=wA0z=2M=gmail.com=warthog618@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91930C433FE
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 00:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 103FCC433F5
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 01:01:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5E179C43146; Tue, 11 Oct 2022 00:02:02 +0000 (UTC)
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 22E36C433C1;
-	Tue, 11 Oct 2022 00:02:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22E36C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id h185so4425334pgc.10;
-        Mon, 10 Oct 2022 17:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HDvDPLCLAPPvF5TVvL+FWbJtEqmbYVODvwDkJg3SqIo=;
-        b=BMj8f33/fyuY4YUgfzIsC8MB079NtlG/lc5y1lSPpCGAsz+jvSYZCTpuRzKVZGf2GY
-         nZi6ZRgOudbzROz6pHhHElsWmoKQQy847SVQHPP6Lzs+V2eA/brEnXLuDstKnq7MW7Ih
-         TzHZfV7XKs3PD0GAaAkJAXCvXBlxf5lB+KS3lhnFICm9Tq4yaQhhQQax921FRXOWW/if
-         /toe/pDvQON4HdgY5CGmbYgif/tTyjDjkjRdKQFAulnURnCwp8NMFdEBa3NYmPI0A+fB
-         fhamlfjudZxMTaB+1mSMxDuObe1ocZe7cQbErJKQBTAEur2a0QkUbRoT5VJEglEdMX1y
-         d2HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HDvDPLCLAPPvF5TVvL+FWbJtEqmbYVODvwDkJg3SqIo=;
-        b=BZPZ5xYNWYH1ztm8kvt4NvzA+cS/RqzS7keB3zzN+jpCaChURnCYYaVwxKgGNsNYkQ
-         p8Whfq61uHdDbAQZwNpXnC13e02ikoml+0DReu/wmEaiWKoKQNpr1GztqmNsAez4AN36
-         OM4f5F8JesVyvqh7xijmVHe9G9ocatqaNQJrnbsuA4WvonOeXx0CZVkzDonct1SqWSYx
-         1uTJgy2lfaAUmPL9Hm7aMbLBPjBsp6pd9UZA9rvOohOD5f8ifG8Ftgd6SnXWs5R10X9Z
-         fZloCKKwGW/5dB1mxL3OPFtawEiRjwHSXdd9FVkbNfAmvQkPs0tS+vEFSTh1xG9OpwtY
-         buBQ==
-X-Gm-Message-State: ACrzQf3wduOt0+INpYOt5wRGO2MhcKASsV0p5LWqsFjtn0cMbsF1gzff
-	3aKmhFS3gyaYCEHFA2hjJ04=
-X-Google-Smtp-Source: AMsMyM7Y6pAnL5W1EJS9G7oSUu8S6FVrr9k2c5r6QKOELR9o0pNGH3yk7s3YJUqb5vMyZxDtzUjxCg==
-X-Received: by 2002:a63:4949:0:b0:442:b733:2fae with SMTP id y9-20020a634949000000b00442b7332faemr18227721pgk.424.1665446520354;
-        Mon, 10 Oct 2022 17:02:00 -0700 (PDT)
-Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
-        by smtp.gmail.com with ESMTPSA id v29-20020aa799dd000000b0056258a3606csm7454081pfi.215.2022.10.10.17.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 17:01:59 -0700 (PDT)
-Date: Tue, 11 Oct 2022 08:01:27 +0800
-From: Kent Gibson <warthog618@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Billy Tsai <billy_tsai@aspeedtech.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Phil Edworthy <phil.edworthy@renesas.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Fabien Dessenne <fabien.dessenne@foss.st.com>,
-	Prathamesh Shete <pshete@nvidia.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-	linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-	linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-omap@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Andy Shevchenko <andy@kernel.org>, Sean Wang <sean.wang@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Chen-Yu Tsai <wens@csie.org>, Paul Cercueil <paul@crapouillou.net>,
-	Damien Le Moal <damien.lemoal@wdc.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Michal Simek <michal.simek@xilinx.com>,
-	Andy Gross <agross@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 02/36] gpiolib: cdev: Add missed header(s)
-Message-ID: <Y0SyVwjDl7NGfTPn@sol>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+	id CB881C43470; Tue, 11 Oct 2022 01:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6245C433C1;
+	Tue, 11 Oct 2022 01:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1665450076;
+	bh=zxJYT5ycVFhBgH4yblE9JhcDtsnHB0kvpqIUWjbYkk8=;
+	h=In-Reply-To:References:Subject:From:Cc:List-Id:To:Date:From;
+	b=ISiIv29GNFnuiufbYk7G6jhYGTWdwA4hnHBrFAFh+POBIB1RQeB3l+vAycDM3G1OQ
+	 0Zpc+GXAfiwJZoyDi70kCADXdW1jgDuTtAvkD0T/g8EgPYbpZKB1TWo1cbQ/ms1pB9
+	 sJw4CPb0nTxRaz06j3hqQbZyNmuwNoifBnO18pMcl1EiE3buxFDszW88sUCIIcXHRs
+	 XNhlu+D2O5ZLEQqhmJ1sv+Lq2GbbGvoY1RPlSXbLe4raz2E8ByAr5jiNGyjryg8qbo
+	 xeqp1C7bx2DzkWRcyRtpLJYUqptIis9cgcDMb/k/nwuLgXaHW4JiAjq1BWknrBycvn
+	 uoJStHYC3zK9w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010201453.77401-3-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f334e8bcc22fde795de9c8067898d4c0522d44ae.1665375739.git.viresh.kumar@linaro.org>
+References: <f334e8bcc22fde795de9c8067898d4c0522d44ae.1665375739.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH] clk: spear: Move prototype to accessible header
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+List-Id: <soc.lore.kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>, Russell King <linux@armlinux.org.uk>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>, Viresh Kumar <vireshk@kernel.org>, soc@kernel.org
+Date: Mon, 10 Oct 2022 18:01:14 -0700
+User-Agent: alot/0.10
+Message-Id: <20221011010116.A6245C433C1@smtp.kernel.org>
 
-On Mon, Oct 10, 2022 at 11:14:18PM +0300, Andy Shevchenko wrote:
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
-> 
-> While at it, sort headers alphabetically.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Quoting Viresh Kumar (2022-10-09 21:22:37)
+> Fixes the following W=3D1 kernel build warning(s):
+>=20
+>  drivers/clk/spear/spear6xx_clock.c:116:13: warning: no previous prototyp=
+e for function 'spear6xx_clk_init' [-Wmissing-prototypes]
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/gpio/gpiolib-cdev.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index f8041d4898d1..60a60e2d60c5 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -10,8 +10,9 @@
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/file.h>
-> -#include <linux/gpio.h>
->  #include <linux/gpio/driver.h>
-> +#include <linux/gpio.h>
-> +#include <linux/hte.h>
 
-Ok with the hte re-order.
+Acked-by: Stephen Boyd <sboyd@kernel.org>
 
-But moving the gpio subsystem header after the gpio/driver is not
-alphabetical ('.' precedes '/') and it read better and made more sense
-to me the way it was.
+> diff --git a/include/linux/clk/spear.h b/include/linux/clk/spear.h
+> index a64d034ceddd..eaf95ca656f8 100644
+> --- a/include/linux/clk/spear.h
+> +++ b/include/linux/clk/spear.h
+> @@ -8,6 +8,20 @@
+>  #ifndef __LINUX_CLK_SPEAR_H
+>  #define __LINUX_CLK_SPEAR_H
+> =20
+> +#ifdef CONFIG_ARCH_SPEAR3XX
+> +void __init spear3xx_clk_init(void __iomem *misc_base,
 
->  #include <linux/interrupt.h>
->  #include <linux/irqreturn.h>
->  #include <linux/kernel.h>
-> @@ -20,11 +21,12 @@
->  #include <linux/mutex.h>
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/poll.h>
-> +#include <linux/seq_file.h>
+__init is meaningless in header files
 
-I wasn't aware that we use anything from seq_file.
-What am I missing?
-
-Cheers,
-Kent.
-
->  #include <linux/spinlock.h>
->  #include <linux/timekeeping.h>
->  #include <linux/uaccess.h>
->  #include <linux/workqueue.h>
-> -#include <linux/hte.h>
+> +                             void __iomem *soc_config_base);
+> +#else
+> +static inline void __init spear3xx_clk_init(void __iomem *misc_base,
+> +                                           void __iomem *soc_config_base=
+) {}
+> +#endif
 > +
->  #include <uapi/linux/gpio.h>
->  
->  #include "gpiolib.h"
-> -- 
-> 2.35.1
-> 
