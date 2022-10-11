@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B91C3C433F5
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 09:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79779C433FE
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 09:06:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A0E71C433C1; Tue, 11 Oct 2022 09:05:03 +0000 (UTC)
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	id 4D524C43142; Tue, 11 Oct 2022 09:06:46 +0000 (UTC)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2B98CC433D7;
-	Tue, 11 Oct 2022 09:05:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2B98CC433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id D9E89C433D6;
+	Tue, 11 Oct 2022 09:06:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9E89C433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665479102; x=1697015102;
+  t=1665479205; x=1697015205;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ph4t/XlDBkX7oHU07HBNp4WniF3GSEowp5Yspa5Yt60=;
-  b=LI6AdDcCB2LUyjk0ezqAJl6iEXxV5IybxZebiLnXzDTA86Aq2eNy9QoN
-   Ganw8uTIg3oL1y1koBaFeusG2UtRzcNPMJu58r8OfAcbN7+lMtc0vzYBW
-   HgO1J+dMyDZICbCA2LwisbxMoLgZB2ROo3QLN18+W3ayJ+g3HATcfmDzi
-   2jvQLWq9obI3wf9Wu2OWS8i3q5mzlZCAY6oMvPrJIyJF3xKx5IkeZbY82
-   dCtV2OcQOTGVl8o6Ys/PxjefbNlFgVoeLBuxljg4IkSe6TqlQiOkl7LWq
-   M1X0Lq7EggvG2ksYhE5ypp7tpQXLd+2gQ4H6FNh1UYY/wAv4ydfif90uB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="366443383"
+   mime-version:in-reply-to;
+  bh=EDe69pp5/h3Ee30GI4SHuwJ5qjyCZy1LPPLfzPY94CE=;
+  b=gRYdK+8mHNWYZe7jLjznZshOtK8s3zXcDEEokXfOmPzcixlAsqGi7ki2
+   o3WcYiC1pZjwgBzBCjMSmkzGOncArjuaQtox/7QvMHQjRS+Oa46RrhlXf
+   bzYuYuzmAamtlN24D/Fe+wAe9JMPHr3W5S7GIE2BA7+RMdgvl8ug2G8r9
+   T5J7Oeh7d/7CRTWkNR9Z77YFcBe8fJ3ZCL4qVEQYopd06KWLtpz92+QNP
+   12oh8Z6dxFLzl4HrI9lcK2+8UwgVMyF5PszRMGV56FYSifmdmJtQNXNIn
+   SDXj44SL1w7jL+1HyKCWRDnkCUO2Pp6TZD4gqAAWrNBhIhVo8273ZyjGq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="302061952"
 X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="366443383"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:05:01 -0700
+   d="scan'208";a="302061952"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:06:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="621337854"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="659467328"
 X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="621337854"
+   d="scan'208";a="659467328"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 11 Oct 2022 02:04:39 -0700
+  by orsmga001.jf.intel.com with ESMTP; 11 Oct 2022 02:06:21 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1oiBBh-005EeG-1H;
-	Tue, 11 Oct 2022 12:04:33 +0300
-Date: Tue, 11 Oct 2022 12:04:33 +0300
+	id 1oiBDL-005Eh1-1p;
+	Tue, 11 Oct 2022 12:06:15 +0300
+Date: Tue, 11 Oct 2022 12:06:15 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Basavaraj Natikar <bnatikar@amd.com>
+To: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
 	Kent Gibson <warthog618@gmail.com>,
@@ -129,38 +129,34 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 36/36] pinctrl: Clean up headers
-Message-ID: <Y0UxoV+zn5MadWbm@smile.fi.intel.com>
+Subject: Re: [PATCH v2 25/36] pinctrl: starfive: Add missed header(s)
+Message-ID: <Y0UyB8n52Nma8UWz@smile.fi.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-37-andriy.shevchenko@linux.intel.com>
- <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
+ <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
+ <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
+In-Reply-To: <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Oct 11, 2022 at 01:00:11PM +0530, Basavaraj Natikar wrote:
-> On 10/11/2022 1:44 AM, Andy Shevchenko wrote:
-
-...
-
-> > --- a/drivers/pinctrl/core.h
-> > +++ b/drivers/pinctrl/core.h
-
-> > -#include <linux/pinctrl/pinconf.h>
+On Tue, Oct 11, 2022 at 10:31:33AM +0200, Emil Renner Berthing wrote:
+> On Mon, 10 Oct 2022 at 22:26, Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > Do not imply that some of the generic headers may be always included.
+> > Instead, include explicitly what we are direct user of.
+> >
+> > While at it, sort headers alphabetically.
 > 
-> Removing pinconf.h from the core.h may cause build failure in other files
-> because where-ever core.h is included to use “struct pinconf_ops”, there
-> is a need to include pinconf.h.
+> The patch is fine, but I don't see any sorting other than just adding
+> the headers at the appropriate place.
 
-Yes, I compiled only few drivers with the core changes. Still I got a few
-reports by LKP. Thank you for spotting this!
+I will amend commit message here.
 
-> With that fixed,
+> In any case
 > 
-> Reviewed-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> Acked-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 
 Thank you!
 
