@@ -1,57 +1,68 @@
-Return-Path: <SRS0=Y0ko=2M=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=C3b2=2M=canonical.com=emil.renner.berthing@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 135A7C433F5
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 08:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B79CC433FE
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 08:32:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C7C4BC433D7; Tue, 11 Oct 2022 08:11:01 +0000 (UTC)
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id E71BAC43470; Tue, 11 Oct 2022 08:32:11 +0000 (UTC)
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 01C95C433D6;
-	Tue, 11 Oct 2022 08:10:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01C95C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f179.google.com with SMTP id cj27so7805716qtb.7;
-        Tue, 11 Oct 2022 01:10:59 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8F46DC43143
+	for <soc@kernel.org>; Tue, 11 Oct 2022 08:32:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F46DC43143
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AEFDC3F475
+	for <soc@kernel.org>; Tue, 11 Oct 2022 08:32:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1665477128;
+	bh=suNkJ2gh7pPN1oyqI64kbmW+brydF4+SF1qphpgiy1g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=NlNxcnf4Xw1t30eSqP3ie/OaSjR5AHx/QjsRRVddA9uDMd4xN652y3sgrom7jMZMi
+	 izvXUWmwmkeVRk0nlRY+aj7PLpF/9jyOYRUDcwSaoLGLnUcgYeqzaiz3p87dG5aw6H
+	 tIOGhvSsJvZ2SWOHNMJ5oq9jhxsu6FrT913g0AQ89XCGoZXGeQVl6Mk6p9pE4wdIrM
+	 ns5Lwnki4hKQAz4gZLauQqXj0mU320sShSh2sB7mDwIF4wKQ4AdOpg9wCq2VIRpHTy
+	 OvarLB7N4ubbPDLxcBcAtGTqOzje8IlQjMAyqFjKG6ZYPd/sOI4TYEi2ookx1etCvE
+	 v4Jso0DA2ciNg==
+Received: by mail-io1-f70.google.com with SMTP id z6-20020a6be206000000b006bbebf8f872so4291713ioc.2
+        for <soc@kernel.org>; Tue, 11 Oct 2022 01:32:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/lX+/OOwDGA/EkvK0KhDO9ADs/gc/7w2DlDG3ggMBVQ=;
-        b=70se5Kb5V4kd6zWTzXVugF1ZwIaxGJxntiotWrk2KxPdjZwzvBVglb95J9rbodetOr
-         +0uAFFPIzP6RKSRnKxRYFeiSsi7narKxWWPtULSUlEsAZ7Jsu1jwqLX/tdteae5bcwuJ
-         LejWwgUabEZhVS9Yn6s+yIqiI82ktH/onzGWjeJy8WYZeZp3NVAxIWsiHOVBDLDru2Ax
-         v4Qa6t5Tb69fGGBxHHdsLFgv6apdUKo26RnDWkm2Vz4ftihWEQsW65FMPl7OwFRghfPa
-         mNtzlbTNlVwI0dOoNlNX9iG1tWByIQijPvPxfWSz3P6zpvgE7e8OAHxA+axRw1k0tGtW
-         xfvQ==
-X-Gm-Message-State: ACrzQf0FrKOdKLgkgJuwow8GnCppLm3gS6YSLpgQISFrQ9JzFY+w65D1
-	A61Ei+rc2hxBJy7T7WaeECYD67BpQkai/1i6
-X-Google-Smtp-Source: AMsMyM7BsxC1Y4QSZtsC0W87HYtkBROlp2+FFB2DTDoG9GWa9LsU6sbVfkb8+9zjllu5oAp7i+QG1A==
-X-Received: by 2002:a05:622a:1d3:b0:38b:41c8:5a51 with SMTP id t19-20020a05622a01d300b0038b41c85a51mr18157248qtw.550.1665475858426;
-        Tue, 11 Oct 2022 01:10:58 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id y204-20020a3764d5000000b006ecfb2c86d3sm4722472qkb.130.2022.10.11.01.10.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:10:54 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id b145so15658003yba.0;
-        Tue, 11 Oct 2022 01:10:53 -0700 (PDT)
-X-Received: by 2002:a25:4fc2:0:b0:6be:afb4:d392 with SMTP id
- d185-20020a254fc2000000b006beafb4d392mr20469390ybb.604.1665475852958; Tue, 11
- Oct 2022 01:10:52 -0700 (PDT)
+        bh=suNkJ2gh7pPN1oyqI64kbmW+brydF4+SF1qphpgiy1g=;
+        b=sUUBmbplMuHJaR1xJ5+6UnGJYxuQTNCytx21vNXsTrGKqowlkgxJfK9uq9IvZCJDza
+         fKJ9TQGlFoQ+E8mjupsmAP4EdcTx3s3dex3f8TF6wmhaRnCdv67q4asrW05xHBYWyV/f
+         DQKtcfMY5ctYyUkEjLiiVkIkFbGPKvTk+vicTNaXnh3s8SBjjteTyG0GIRVy9FANmPwm
+         45Ihr9anSVdnOY9PxnN/u3MAGQ8rgmaPMiPtkfs05zrZQrDLBGgm6+uy/ETkGG9dQRz6
+         DN7Pev2v4OEK8QGVG4b4hx9GnHSA/OBqCBLo+91rcXhzTaZEUlub6fSWHmHP5Fu/KdUQ
+         nJAw==
+X-Gm-Message-State: ACrzQf2wt90BL8HqIg8v4p3JULq7MRUP9zYPjJOn4NaSFqNQ7RdqHLtw
+	yCu+hVMWeXP5HkBw9dY675s3srx1F5vvr3gOMB/48Kh3bjB4qweOuyIy/i18D0EQ7rO1INtmlPT
+	K1bEVPct+IpkMxI/JppbufVzt7a9XcipjQSeKj9k=
+X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id j15-20020a05620a410f00b006cfc34b3c64mr15570293qko.52.1665477109330;
+        Tue, 11 Oct 2022 01:31:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7DFTDHgNX/wrj8IAoSXEmta8ySJnv0knkcfflaxkZri8xCwukQw9Ji8irmUndHqkaXm0MlF8+pHua64xb11kk=
+X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id
+ j15-20020a05620a410f00b006cfc34b3c64mr15570191qko.52.1665477109055; Tue, 11
+ Oct 2022 01:31:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-20-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-20-andriy.shevchenko@linux.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 11 Oct 2022 10:10:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUMLEpZrEU0EviCRqRB9tX4iNGAVx2XPR5KbCMGWZetAQ@mail.gmail.com>
-Message-ID: <CAMuHMdUMLEpZrEU0EviCRqRB9tX4iNGAVx2XPR5KbCMGWZetAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 19/36] pinctrl: renesas: Add missed header(s)
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date: Tue, 11 Oct 2022 10:31:33 +0200
+Message-ID: <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
+Subject: Re: [PATCH v2 25/36] pinctrl: starfive: Add missed header(s)
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gibson <warthog618@gmail.com>, 
@@ -62,6 +73,7 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gib
 	Claudiu Beznea <claudiu.beznea@microchip.com>, Samuel Holland <samuel@sholland.org>, 
 	Horatiu Vultur <horatiu.vultur@microchip.com>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
 	Bjorn Andersson <bjorn.andersson@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, 
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
 	Phil Edworthy <phil.edworthy@renesas.com>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
@@ -107,25 +119,45 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gib
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+On Mon, 10 Oct 2022 at 22:26, Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
+>
 > Do not imply that some of the generic headers may be always included.
 > Instead, include explicitly what we are direct user of.
 >
 > While at it, sort headers alphabetically.
->
+
+The patch is fine, but I don't see any sorting other than just adding
+the headers at the appropriate place.
+In any case
+
+Acked-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+> index 5b544fb7f3d8..6a8a9cfe8965 100644
+> --- a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+> +++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
+> @@ -15,8 +15,10 @@
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/reset.h>
+> +#include <linux/seq_file.h>
+>  #include <linux/spinlock.h>
+>
+> +#include <linux/pinctrl/consumer.h>
+>  #include <linux/pinctrl/pinctrl.h>
+>  #include <linux/pinctrl/pinmux.h>
+>
+> --
+> 2.35.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
