@@ -1,45 +1,62 @@
-Return-Path: <SRS0=nLqy=2M=collabora.com=angelogioacchino.delregno@kernel.org>
+Return-Path: <SRS0=oRQk=2M=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5099AC433F5
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 14:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51244C433F5
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 16:08:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 04934C43141; Tue, 11 Oct 2022 14:50:00 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 06E47C43147; Tue, 11 Oct 2022 16:08:11 +0000 (UTC)
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 94854C433C1;
-	Tue, 11 Oct 2022 14:49:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 94854C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 3DECE660235B;
-	Tue, 11 Oct 2022 15:49:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1665499795;
-	bh=WjWfvO7t5fdyGrI6m+hgGbT3QH4QBKj79I/hqKmON7Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JOT+AnjvhQZ3vD+INlRyJUZGm23CWRspXdxuJNoFNT/2BU3BDi5IDkH2Yrh9cl34H
-	 N8tYn0ib9h2NSJZ2wAIfZfryQVLEoNCgFUyUgtoeB3uep2/6DEsQ7yGEO0febOyHvI
-	 hMQps4hKjRpiDfHJVubm1kSgDODcE0fxz35XL3pmTQUoBsYWlj52rSQaBN3or/Qysa
-	 Nnl5TlEZJvEM/mGOVrA3G338yKAO4fX3D/W0mLbDZJMGmbluyKM/eYT4wVNA1RFmtD
-	 w5vR7Uu6LnwTML9dH9/oGV1Cci4KZACKsyC/Ihfwo8y3IRLkhbhb0iRzW5ZY4Zwh1d
-	 X736PHBsaUIKg==
-Message-ID: <74cdcd93-a528-ec8c-0808-0d698b86e47d@collabora.com>
-Date: Tue, 11 Oct 2022 16:49:48 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 7F7ACC433D6
+	for <soc@kernel.org>; Tue, 11 Oct 2022 16:08:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F7ACC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qt1-f173.google.com with SMTP id a24so980850qto.10
+        for <soc@kernel.org>; Tue, 11 Oct 2022 09:08:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GWYVEJdoqXnCQWtfT0bzkIP+70WLbsk9ZN19JnMQZx0=;
+        b=knWzrFxaglSBiHlwLMrZK+zOgKEtnU3K72eEGnOpfBMOKDwTCB1o5DFjMAX/q0UhNY
+         QtDdN11oGw+99XS3Ki30jbEV3wnK3M/RZFgBzC756EJj6Qzp7bRwpx0xVlVivFLLMSoT
+         OeFfvcAMzeUvMG2gk+zcXMcyojW/wbwfJ302GKQQDum8iO4SLMQHN5VVV6Lek8K2nrim
+         ey4zQ7XwZHcjBefqfLYDvCN8aZemyW2QsFCvMONV+AY8yi+43sfWfso0dPvhCbF12v5/
+         Zm2LP1ZxvniRrJK8KUjh3/YEL2QeZJReWqzdLohiEOSis5AiXvm/BDGrcU0o48e583KX
+         k3Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GWYVEJdoqXnCQWtfT0bzkIP+70WLbsk9ZN19JnMQZx0=;
+        b=YcBDjAGsCyc2TyUKTtNyPEGvHrjq191tQa5s4dRkuB6spp88rrowQ4cJhg0DSE7izJ
+         YlWW7keZSqvyfx4S89kJIRFFiTdGkoGSpGCg+2jNPyAPa7rRtUNghxl4LKrLgQKeo6rW
+         mxRPS4ZaQSrGlF5NLpgZKjdrlgyKrN3fJ5idCNytOXhRMUsr2zVVf3jYERRHhvGuxgTS
+         5RQxXtZhbgchkDqT0XAvpRvSgEPSZZqoZr7s3fWVvE7H4zmkm9AKlqqguzhFja0ZSYEF
+         hHv+3KRfAZY9WcEEpYR2d6HnmQeDJ+uHXNByQDL3ymEj8HcYl+1Ygmt1JVUjrbvrSEaa
+         hvsw==
+X-Gm-Message-State: ACrzQf35c7D89vH8ClTqlpWgakBwrJ9p3t/B2rTFpnlJoqoqe43B4YM7
+	0DpZngCdOEGsJejasQtwJ6Xmzw==
+X-Google-Smtp-Source: AMsMyM4tb/82A1JDAzYalVciziTjce/S19vvHsKcNbs5jARqscG7vKxacamXR2e1H5XtfAKSXhInbA==
+X-Received: by 2002:ac8:7d49:0:b0:399:d201:840b with SMTP id h9-20020ac87d49000000b00399d201840bmr9746570qtb.309.1665504487275;
+        Tue, 11 Oct 2022 09:08:07 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id w8-20020ac84d08000000b00399813f4d5bsm5725686qtv.72.2022.10.11.09.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 09:08:06 -0700 (PDT)
+Message-ID: <a9e5197d-78aa-4395-23bc-d7c3141f109a@linaro.org>
+Date: Tue, 11 Oct 2022 12:05:51 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 14/36] pinctrl: mediatek: Add missed header(s)
-Content-Language: en-US
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 20/36] pinctrl: samsung: Add missed header(s)
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
  Kent Gibson <warthog618@gmail.com>,
@@ -47,6 +64,7 @@ To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Billy Tsai <billy_tsai@aspeedtech.com>, Thomas Gleixner
  <tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
  Mika Westerberg <mika.westerberg@linux.intel.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  Chen-Yu Tsai <wenst@chromium.org>,
  Claudiu Beznea <claudiu.beznea@microchip.com>,
  Samuel Holland <samuel@sholland.org>,
@@ -57,7 +75,6 @@ To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
  Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
  Phil Edworthy <phil.edworthy@renesas.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  Fabien Dessenne <fabien.dessenne@foss.st.com>,
  Prathamesh Shete <pshete@nvidia.com>,
  Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-gpio@vger.kernel.org,
@@ -112,13 +129,14 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
  Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
  Masami Hiramatsu <mhiramat@kernel.org>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-15-andriy.shevchenko@linux.intel.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221010201453.77401-15-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20221010201453.77401-21-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221010201453.77401-21-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Il 10/10/22 22:14, Andy Shevchenko ha scritto:
+On 10/10/2022 16:14, Andy Shevchenko wrote:
 > Do not imply that some of the generic headers may be always included.
 > Instead, include explicitly what we are direct user of.
 > 
@@ -126,22 +144,11 @@ Il 10/10/22 22:14, Andy Shevchenko ha scritto:
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->   drivers/pinctrl/mediatek/pinctrl-moore.c | 3 +++
->   drivers/pinctrl/mediatek/pinctrl-paris.c | 5 +++++
->   2 files changed, 8 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c b/drivers/pinctrl/mediatek/pinctrl-moore.c
-> index 526faaebaf77..9474ada5addb 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-moore.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
-> @@ -9,6 +9,9 @@
->    */
->   
->   #include <linux/gpio/driver.h>
-> +
+>  drivers/pinctrl/samsung/pinctrl-samsung.c | 11 ++++++-----
 
-Apart from this blank line that I deem unnecessary....
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
