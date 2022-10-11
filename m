@@ -1,71 +1,62 @@
-Return-Path: <SRS0=C3b2=2M=canonical.com=emil.renner.berthing@kernel.org>
+Return-Path: <SRS0=Y0ko=2M=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B79CC433FE
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 08:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C61C433FE
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 08:53:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E71BAC43470; Tue, 11 Oct 2022 08:32:11 +0000 (UTC)
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 85DDAC43142; Tue, 11 Oct 2022 08:53:49 +0000 (UTC)
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8F46DC43143
-	for <soc@kernel.org>; Tue, 11 Oct 2022 08:32:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F46DC43143
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AEFDC3F475
-	for <soc@kernel.org>; Tue, 11 Oct 2022 08:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1665477128;
-	bh=suNkJ2gh7pPN1oyqI64kbmW+brydF4+SF1qphpgiy1g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=NlNxcnf4Xw1t30eSqP3ie/OaSjR5AHx/QjsRRVddA9uDMd4xN652y3sgrom7jMZMi
-	 izvXUWmwmkeVRk0nlRY+aj7PLpF/9jyOYRUDcwSaoLGLnUcgYeqzaiz3p87dG5aw6H
-	 tIOGhvSsJvZ2SWOHNMJ5oq9jhxsu6FrT913g0AQ89XCGoZXGeQVl6Mk6p9pE4wdIrM
-	 ns5Lwnki4hKQAz4gZLauQqXj0mU320sShSh2sB7mDwIF4wKQ4AdOpg9wCq2VIRpHTy
-	 OvarLB7N4ubbPDLxcBcAtGTqOzje8IlQjMAyqFjKG6ZYPd/sOI4TYEi2ookx1etCvE
-	 v4Jso0DA2ciNg==
-Received: by mail-io1-f70.google.com with SMTP id z6-20020a6be206000000b006bbebf8f872so4291713ioc.2
-        for <soc@kernel.org>; Tue, 11 Oct 2022 01:32:08 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D2788C433C1;
+	Tue, 11 Oct 2022 08:53:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2788C433C1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f174.google.com with SMTP id g10so7935366oif.10;
+        Tue, 11 Oct 2022 01:53:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=suNkJ2gh7pPN1oyqI64kbmW+brydF4+SF1qphpgiy1g=;
-        b=sUUBmbplMuHJaR1xJ5+6UnGJYxuQTNCytx21vNXsTrGKqowlkgxJfK9uq9IvZCJDza
-         fKJ9TQGlFoQ+E8mjupsmAP4EdcTx3s3dex3f8TF6wmhaRnCdv67q4asrW05xHBYWyV/f
-         DQKtcfMY5ctYyUkEjLiiVkIkFbGPKvTk+vicTNaXnh3s8SBjjteTyG0GIRVy9FANmPwm
-         45Ihr9anSVdnOY9PxnN/u3MAGQ8rgmaPMiPtkfs05zrZQrDLBGgm6+uy/ETkGG9dQRz6
-         DN7Pev2v4OEK8QGVG4b4hx9GnHSA/OBqCBLo+91rcXhzTaZEUlub6fSWHmHP5Fu/KdUQ
-         nJAw==
-X-Gm-Message-State: ACrzQf2wt90BL8HqIg8v4p3JULq7MRUP9zYPjJOn4NaSFqNQ7RdqHLtw
-	yCu+hVMWeXP5HkBw9dY675s3srx1F5vvr3gOMB/48Kh3bjB4qweOuyIy/i18D0EQ7rO1INtmlPT
-	K1bEVPct+IpkMxI/JppbufVzt7a9XcipjQSeKj9k=
-X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id j15-20020a05620a410f00b006cfc34b3c64mr15570293qko.52.1665477109330;
-        Tue, 11 Oct 2022 01:31:49 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7DFTDHgNX/wrj8IAoSXEmta8ySJnv0knkcfflaxkZri8xCwukQw9Ji8irmUndHqkaXm0MlF8+pHua64xb11kk=
-X-Received: by 2002:a05:620a:410f:b0:6cf:c34b:3c64 with SMTP id
- j15-20020a05620a410f00b006cfc34b3c64mr15570191qko.52.1665477109055; Tue, 11
- Oct 2022 01:31:49 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RG7je/SPkrUeGbyJflxBun3+ZBOYqWehWXWhY9Ywba0=;
+        b=OM6nWekLZWRYm8j7alSBDBZKJ9gT1EUsNWj5OkWbiLEAjRDY/GtXdX/u4Mh8waqprT
+         daeIzu6TeG9cJTalPrV5AOlo+6NIl4ijdhlyVYJk7ONZ90SrRwrqkrQT/+BJfByrjHIU
+         WuOXLc3J8QHIrPbqEBm8u5/lni133MGYV0yvVVYxm6DXzvhs8jZGxfB95o2GyZBedjYL
+         Kq3FexF/8NTvkzP+DeXcY4zrzO/kgEnbCngkiMZUoYlnE2l6vVfp0H3K1WKuopj2ItQz
+         i6LbOj4PRQeHHH0qnV+eAFBdRWUgweVqpOBN0cLxmbaapYhwfYMLGJgIwj7+yNyWShf4
+         OR+Q==
+X-Gm-Message-State: ACrzQf1Da4dF+1s9RwomQjXvzZBVt1mKUcWcWkZ0h8M9maQOOfbpDgUU
+	hxCmNisFD3N5+Qyy2BWzucwvktJ5xZfzpTo1
+X-Google-Smtp-Source: AMsMyM5glhUQzndTliXonLorgrI+yjCbw04Zzk/NabIdvKnG54U/eSpN4UWlyDTtQLzjmD/zwq9Bjg==
+X-Received: by 2002:a05:6808:23c5:b0:34f:bba7:2949 with SMTP id bq5-20020a05680823c500b0034fbba72949mr16350841oib.101.1665478426786;
+        Tue, 11 Oct 2022 01:53:46 -0700 (PDT)
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com. [209.85.161.44])
+        by smtp.gmail.com with ESMTPSA id z36-20020a056870c22400b0012d130c2fdasm6103166oae.48.2022.10.11.01.53.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 01:53:46 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so9573367ooo.8;
+        Tue, 11 Oct 2022 01:53:46 -0700 (PDT)
+X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
+ h64-20020a0dde43000000b0034931bde8d5mr20151543ywe.283.1665478004869; Tue, 11
+ Oct 2022 01:46:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
-From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date: Tue, 11 Oct 2022 10:31:33 +0200
-Message-ID: <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
-Subject: Re: [PATCH v2 25/36] pinctrl: starfive: Add missed header(s)
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <20221010201453.77401-37-andriy.shevchenko@linux.intel.com> <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
+In-Reply-To: <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 11 Oct 2022 10:46:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
+Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 36/36] pinctrl: Clean up headers
+To: Basavaraj Natikar <bnatikar@amd.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gibson <warthog618@gmail.com>, 
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Marc Zyngier <maz@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gibson <warthog618@gmail.com>, 
 	Mauro Carvalho Chehab <mchehab@kernel.org>, Billy Tsai <billy_tsai@aspeedtech.com>, 
 	Thomas Gleixner <tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>, 
 	Mika Westerberg <mika.westerberg@linux.intel.com>, 
@@ -118,46 +109,117 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gib
 	Chunyan Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>, 
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 10 Oct 2022 at 22:26, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Tue, Oct 11, 2022 at 9:31 AM Basavaraj Natikar <bnatikar@amd.com> wrote:
+> On 10/11/2022 1:44 AM, Andy Shevchenko wrote:
+> > There is a few things done:
+> > - include only the headers we are direct user of
+> > - when pointer is in use, provide a forward declaration
+> > - add missed headers
+> > - group generic headers and subsystem headers
+> > - sort each group alphabetically
+> >
+> > While at it, fix some awkward indentations.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >  drivers/pinctrl/core.c                  | 19 ++++++++-------
+> >  drivers/pinctrl/core.h                  | 12 +++++++++-
+> >  drivers/pinctrl/devicetree.h            |  6 +++++
+> >  drivers/pinctrl/pinconf.h               | 10 ++++++++
+> >  drivers/pinctrl/pinctrl-utils.h         |  5 ++++
+> >  drivers/pinctrl/pinmux.c                | 17 ++++++++------
+> >  drivers/pinctrl/pinmux.h                | 11 +++++++++
+> >  include/linux/pinctrl/consumer.h        | 31 +++++++++++--------------
+> >  include/linux/pinctrl/devinfo.h         |  6 +++--
+> >  include/linux/pinctrl/machine.h         |  8 ++++---
+> >  include/linux/pinctrl/pinconf-generic.h | 23 ++++++++++--------
+> >  include/linux/pinctrl/pinctrl.h         | 18 +++++++-------
+> >  include/linux/pinctrl/pinmux.h          |  5 ++--
+> >  13 files changed, 110 insertions(+), 61 deletions(-)
+> >
+> > diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
+> > index 9e57f4c62e60..655f9502e73f 100644
+> > --- a/drivers/pinctrl/core.c
+> > +++ b/drivers/pinctrl/core.c
+> > @@ -12,19 +12,21 @@
+> >   */
+> >  #define pr_fmt(fmt) "pinctrl core: " fmt
+> >
+> > -#include <linux/kernel.h>
+> > -#include <linux/kref.h>
+> > -#include <linux/export.h>
+> > -#include <linux/init.h>
+> > +#include <linux/debugfs.h>
+> >  #include <linux/device.h>
+> > -#include <linux/slab.h>
+> >  #include <linux/err.h>
+> > +#include <linux/export.h>
+> > +#include <linux/init.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/kref.h>
+> >  #include <linux/list.h>
+> > -#include <linux/debugfs.h>
+> >  #include <linux/seq_file.h>
+> > +#include <linux/slab.h>
+> > +
+> >  #include <linux/pinctrl/consumer.h>
+> > -#include <linux/pinctrl/pinctrl.h>
+> > +#include <linux/pinctrl/devinfo.h>
+> >  #include <linux/pinctrl/machine.h>
+> > +#include <linux/pinctrl/pinctrl.h>
+> >
+> >  #ifdef CONFIG_GPIOLIB
+> >  #include "../gpio/gpiolib.h"
+> > @@ -33,9 +35,8 @@
+> >
+> >  #include "core.h"
+> >  #include "devicetree.h"
+> > -#include "pinmux.h"
+> >  #include "pinconf.h"
+> > -
+> > +#include "pinmux.h"
+> >
+> >  static bool pinctrl_dummy_state;
+> >
+> > diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
+> > index 840103c40c14..4d0bdb9fb99b 100644
+> > --- a/drivers/pinctrl/core.h
+> > +++ b/drivers/pinctrl/core.h
+> > @@ -9,12 +9,22 @@
+> >   */
+> >
+> >  #include <linux/kref.h>
+> > +#include <linux/list.h>
+> >  #include <linux/mutex.h>
+> >  #include <linux/radix-tree.h>
+> > -#include <linux/pinctrl/pinconf.h>
 >
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
->
-> While at it, sort headers alphabetically.
+> Removing pinconf.h from the core.h may cause build failure in other files
+> because where-ever core.h is included to use =E2=80=9Cstruct pinconf_ops=
+=E2=80=9D, there
+> is a need to include pinconf.h.
 
-The patch is fine, but I don't see any sorting other than just adding
-the headers at the appropriate place.
-In any case
+I can confirm adding
 
-Acked-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+    #include <linux/pinctrl/pinconf.h>
 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
-> index 5b544fb7f3d8..6a8a9cfe8965 100644
-> --- a/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
-> +++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c
-> @@ -15,8 +15,10 @@
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/reset.h>
-> +#include <linux/seq_file.h>
->  #include <linux/spinlock.h>
->
-> +#include <linux/pinctrl/consumer.h>
->  #include <linux/pinctrl/pinctrl.h>
->  #include <linux/pinctrl/pinmux.h>
->
-> --
-> 2.35.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+to drivers/pinctrl/renesas/pinctrl-rzn1.c and drivers/pinctrl/pinctrl-singl=
+e.c
+fixes the issues I was seeing with shmobile_defconfig and (out-of-tree)
+renesas_defconfig.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
