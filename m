@@ -1,225 +1,175 @@
-Return-Path: <SRS0=Y0ko=2M=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=JROY=2M=linux.intel.com=andriy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C61C433FE
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 08:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F9E2C433F5
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 09:03:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85DDAC43142; Tue, 11 Oct 2022 08:53:49 +0000 (UTC)
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5E917C43144; Tue, 11 Oct 2022 09:03:23 +0000 (UTC)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D2788C433C1;
-	Tue, 11 Oct 2022 08:53:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2788C433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f174.google.com with SMTP id g10so7935366oif.10;
-        Tue, 11 Oct 2022 01:53:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RG7je/SPkrUeGbyJflxBun3+ZBOYqWehWXWhY9Ywba0=;
-        b=OM6nWekLZWRYm8j7alSBDBZKJ9gT1EUsNWj5OkWbiLEAjRDY/GtXdX/u4Mh8waqprT
-         daeIzu6TeG9cJTalPrV5AOlo+6NIl4ijdhlyVYJk7ONZ90SrRwrqkrQT/+BJfByrjHIU
-         WuOXLc3J8QHIrPbqEBm8u5/lni133MGYV0yvVVYxm6DXzvhs8jZGxfB95o2GyZBedjYL
-         Kq3FexF/8NTvkzP+DeXcY4zrzO/kgEnbCngkiMZUoYlnE2l6vVfp0H3K1WKuopj2ItQz
-         i6LbOj4PRQeHHH0qnV+eAFBdRWUgweVqpOBN0cLxmbaapYhwfYMLGJgIwj7+yNyWShf4
-         OR+Q==
-X-Gm-Message-State: ACrzQf1Da4dF+1s9RwomQjXvzZBVt1mKUcWcWkZ0h8M9maQOOfbpDgUU
-	hxCmNisFD3N5+Qyy2BWzucwvktJ5xZfzpTo1
-X-Google-Smtp-Source: AMsMyM5glhUQzndTliXonLorgrI+yjCbw04Zzk/NabIdvKnG54U/eSpN4UWlyDTtQLzjmD/zwq9Bjg==
-X-Received: by 2002:a05:6808:23c5:b0:34f:bba7:2949 with SMTP id bq5-20020a05680823c500b0034fbba72949mr16350841oib.101.1665478426786;
-        Tue, 11 Oct 2022 01:53:46 -0700 (PDT)
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com. [209.85.161.44])
-        by smtp.gmail.com with ESMTPSA id z36-20020a056870c22400b0012d130c2fdasm6103166oae.48.2022.10.11.01.53.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 01:53:46 -0700 (PDT)
-Received: by mail-oo1-f44.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so9573367ooo.8;
-        Tue, 11 Oct 2022 01:53:46 -0700 (PDT)
-X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
- h64-20020a0dde43000000b0034931bde8d5mr20151543ywe.283.1665478004869; Tue, 11
- Oct 2022 01:46:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-37-andriy.shevchenko@linux.intel.com> <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
-In-Reply-To: <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 11 Oct 2022 10:46:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
-Message-ID: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 36/36] pinctrl: Clean up headers
-To: Basavaraj Natikar <bnatikar@amd.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id B5843C433C1;
+	Tue, 11 Oct 2022 09:03:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5843C433C1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665479002; x=1697015002;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0PPZbXGZc/otGlsl/WtJVqlTEnu2olMpmz0ywKjSmEM=;
+  b=QDTvZrYHRIZXtt2wcLEwr1i3CENRnhwYSU1uxuSGxAvJZCeddXhBJnVs
+   kgEjt36ftYDlxg9cMOjfDDom7BQI5phNnoRbXlufCQz4G1FX+tscj8son
+   HMyP6mV7K94VT+Tg4v0I6KYLcWeVNQuw28RtmrTBn3IVvFiKqG4TD+z9e
+   +nFlVjtxtCGqSQIZ/nSk3LTc/rt8U4W2f+rvwPaUb/kZOl2yOo3sR/N5V
+   C44kopIt/zXhDQ4JJCghbC0IAU/CLTk8b28thFilCVUsr4TZy7QjwSmdj
+   bABkIMc3/ZPwf0b3qghRs7N/i7ZFTEwxkY9z2ciifMFyKqyylhEr6eZvF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="302061182"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="302061182"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:03:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="621337447"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="621337447"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 11 Oct 2022 02:02:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1oiBA3-005Eco-0E;
+	Tue, 11 Oct 2022 12:02:51 +0300
+Date: Tue, 11 Oct 2022 12:02:50 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
 List-Id: <soc.lore.kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Marc Zyngier <maz@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gibson <warthog618@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Billy Tsai <billy_tsai@aspeedtech.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>, 
-	Claudiu Beznea <claudiu.beznea@microchip.com>, Samuel Holland <samuel@sholland.org>, 
-	Horatiu Vultur <horatiu.vultur@microchip.com>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Bjorn Andersson <bjorn.andersson@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Phil Edworthy <phil.edworthy@renesas.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Fabien Dessenne <fabien.dessenne@foss.st.com>, Prathamesh Shete <pshete@nvidia.com>, 
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-gpio@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org, 
-	linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org, 
-	alsa-devel@alsa-project.org, patches@opensource.cirrus.com, 
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Patrice Chotard <patrice.chotard@foss.st.com>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>, 
-	Florian Fainelli <f.fainelli@gmail.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	NXP Linux Team <linux-imx@nxp.com>, Andy Shevchenko <andy@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
-	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Avi Fishman <avifishman70@gmail.com>, 
-	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, 
-	Ludovic Desroches <ludovic.desroches@microchip.com>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Damien Le Moal <damien.lemoal@wdc.com>, 
-	Tony Lindgren <tony@atomide.com>, Haojian Zhuang <haojian.zhuang@linaro.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Michal Simek <michal.simek@xilinx.com>, Andy Gross <agross@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@somainline.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, 
-	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Chunyan Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>, 
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Marc Zyngier <maz@kernel.org>, Kent Gibson <warthog618@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Billy Tsai <billy_tsai@aspeedtech.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Phil Edworthy <phil.edworthy@renesas.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Fabien Dessenne <fabien.dessenne@foss.st.com>,
+	Prathamesh Shete <pshete@nvidia.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+	linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-omap@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Chen-Yu Tsai <wens@csie.org>, Paul Cercueil <paul@crapouillou.net>,
+	Damien Le Moal <damien.lemoal@wdc.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Michal Simek <michal.simek@xilinx.com>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
+Message-ID: <Y0UxOrhpsHngiuAk@smile.fi.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=Mc5t=R2pJYfHUntJj_UA3sL=sKGOQDL-Kf5=dfNJEKyvg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Mc5t=R2pJYfHUntJj_UA3sL=sKGOQDL-Kf5=dfNJEKyvg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Oct 11, 2022 at 9:31 AM Basavaraj Natikar <bnatikar@amd.com> wrote:
-> On 10/11/2022 1:44 AM, Andy Shevchenko wrote:
-> > There is a few things done:
-> > - include only the headers we are direct user of
-> > - when pointer is in use, provide a forward declaration
-> > - add missed headers
-> > - group generic headers and subsystem headers
-> > - sort each group alphabetically
+On Tue, Oct 11, 2022 at 09:10:07AM +0200, Bartosz Golaszewski wrote:
+> On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 > >
-> > While at it, fix some awkward indentations.
+> > Currently the header inclusion inside the pinctrl headers seems more arbitrary
+> > than logical. This series is basically out of two parts:
+> > - add missed headers to the pin control drivers / users
+> > - clean up the headers of pin control subsystem
 > >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/pinctrl/core.c                  | 19 ++++++++-------
-> >  drivers/pinctrl/core.h                  | 12 +++++++++-
-> >  drivers/pinctrl/devicetree.h            |  6 +++++
-> >  drivers/pinctrl/pinconf.h               | 10 ++++++++
-> >  drivers/pinctrl/pinctrl-utils.h         |  5 ++++
-> >  drivers/pinctrl/pinmux.c                | 17 ++++++++------
-> >  drivers/pinctrl/pinmux.h                | 11 +++++++++
-> >  include/linux/pinctrl/consumer.h        | 31 +++++++++++--------------
-> >  include/linux/pinctrl/devinfo.h         |  6 +++--
-> >  include/linux/pinctrl/machine.h         |  8 ++++---
-> >  include/linux/pinctrl/pinconf-generic.h | 23 ++++++++++--------
-> >  include/linux/pinctrl/pinctrl.h         | 18 +++++++-------
-> >  include/linux/pinctrl/pinmux.h          |  5 ++--
-> >  13 files changed, 110 insertions(+), 61 deletions(-)
+> > The idea is to have this series to be pulled after -rc1 by the GPIO and
+> > pin control subsystems, so all new drivers will utilize cleaned up headers
+> > of the pin control.
 > >
-> > diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-> > index 9e57f4c62e60..655f9502e73f 100644
-> > --- a/drivers/pinctrl/core.c
-> > +++ b/drivers/pinctrl/core.c
-> > @@ -12,19 +12,21 @@
-> >   */
-> >  #define pr_fmt(fmt) "pinctrl core: " fmt
+> > Please, review and comment.
 > >
-> > -#include <linux/kernel.h>
-> > -#include <linux/kref.h>
-> > -#include <linux/export.h>
-> > -#include <linux/init.h>
-> > +#include <linux/debugfs.h>
-> >  #include <linux/device.h>
-> > -#include <linux/slab.h>
-> >  #include <linux/err.h>
-> > +#include <linux/export.h>
-> > +#include <linux/init.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/kref.h>
-> >  #include <linux/list.h>
-> > -#include <linux/debugfs.h>
-> >  #include <linux/seq_file.h>
-> > +#include <linux/slab.h>
-> > +
-> >  #include <linux/pinctrl/consumer.h>
-> > -#include <linux/pinctrl/pinctrl.h>
-> > +#include <linux/pinctrl/devinfo.h>
-> >  #include <linux/pinctrl/machine.h>
-> > +#include <linux/pinctrl/pinctrl.h>
-> >
-> >  #ifdef CONFIG_GPIOLIB
-> >  #include "../gpio/gpiolib.h"
-> > @@ -33,9 +35,8 @@
-> >
-> >  #include "core.h"
-> >  #include "devicetree.h"
-> > -#include "pinmux.h"
-> >  #include "pinconf.h"
-> > -
-> > +#include "pinmux.h"
-> >
-> >  static bool pinctrl_dummy_state;
-> >
-> > diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
-> > index 840103c40c14..4d0bdb9fb99b 100644
-> > --- a/drivers/pinctrl/core.h
-> > +++ b/drivers/pinctrl/core.h
-> > @@ -9,12 +9,22 @@
-> >   */
-> >
-> >  #include <linux/kref.h>
-> > +#include <linux/list.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/radix-tree.h>
-> > -#include <linux/pinctrl/pinconf.h>
->
-> Removing pinconf.h from the core.h may cause build failure in other files
-> because where-ever core.h is included to use =E2=80=9Cstruct pinconf_ops=
-=E2=80=9D, there
-> is a need to include pinconf.h.
+> > Changelog v2:
+> > - added preparatory patches: all, but last (LKP)
+> > - added missed forward declaration to the last patch (LKP)
+> 
+> Thanks for doing this.
 
-I can confirm adding
+You're welcome!
 
-    #include <linux/pinctrl/pinconf.h>
+> Did you use any kind of automation for
+> detecting for which symbols the headers are missing?
 
-to drivers/pinctrl/renesas/pinctrl-rzn1.c and drivers/pinctrl/pinctrl-singl=
-e.c
-fixes the issues I was seeing with shmobile_defconfig and (out-of-tree)
-renesas_defconfig.
+No, it's manual + what CI(s) reported back to me, that's why even in this
+series I have got a few compile breakages. I have very limited compile-testing
+cycle.
 
-Gr{oetje,eeting}s,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
