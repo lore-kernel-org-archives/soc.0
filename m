@@ -4,51 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79779C433FE
-	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 09:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C56A2C433FE
+	for <soc@archiver.kernel.org>; Tue, 11 Oct 2022 09:07:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4D524C43142; Tue, 11 Oct 2022 09:06:46 +0000 (UTC)
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	id A9139C43142; Tue, 11 Oct 2022 09:07:34 +0000 (UTC)
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D9E89C433D6;
-	Tue, 11 Oct 2022 09:06:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9E89C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 7AC8CC433C1;
+	Tue, 11 Oct 2022 09:07:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7AC8CC433C1
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665479205; x=1697015205;
+  t=1665479253; x=1697015253;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EDe69pp5/h3Ee30GI4SHuwJ5qjyCZy1LPPLfzPY94CE=;
-  b=gRYdK+8mHNWYZe7jLjznZshOtK8s3zXcDEEokXfOmPzcixlAsqGi7ki2
-   o3WcYiC1pZjwgBzBCjMSmkzGOncArjuaQtox/7QvMHQjRS+Oa46RrhlXf
-   bzYuYuzmAamtlN24D/Fe+wAe9JMPHr3W5S7GIE2BA7+RMdgvl8ug2G8r9
-   T5J7Oeh7d/7CRTWkNR9Z77YFcBe8fJ3ZCL4qVEQYopd06KWLtpz92+QNP
-   12oh8Z6dxFLzl4HrI9lcK2+8UwgVMyF5PszRMGV56FYSifmdmJtQNXNIn
-   SDXj44SL1w7jL+1HyKCWRDnkCUO2Pp6TZD4gqAAWrNBhIhVo8273ZyjGq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="302061952"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=U6Q0eqDO5XKNfPO1gS4tfAxW8aSXRLRmUbuizVaigrU=;
+  b=KJ1hWgUoJueGsT1kB1BMADWZ8TRSmMH1lULOu9izZcMoVET1iuLdebxx
+   Bq/AqfXXoXuXSEKosgnnknH51Z2HbEij4dZC9wezdAi2VK3Bep2nPVF5g
+   N+oYMPF9x//YONE+dXuRmRcnpBWRPNrM4kplR4Lk/G0iV2U5ojQehGJkc
+   JBGCcweO/x7i4UcaJS+fmuMwxlaPAI9TTobTByovbEtXa8l7QYVvoRIPs
+   j/16B9+YqU51mJsvQG5GJGf15y15vuuDXi6gGeFejf1uk8AnPpUr9jZp+
+   j+Sc2fqGM5CtQFM/7AYRbHnR5fPT/Kn8NjDUzRo7wd3RU2oEbYIcPp58r
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="368616852"
 X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="302061952"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:06:43 -0700
+   d="scan'208";a="368616852"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:07:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="659467328"
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="871436201"
 X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
-   d="scan'208";a="659467328"
+   d="scan'208";a="871436201"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 11 Oct 2022 02:06:21 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 11 Oct 2022 02:07:11 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1oiBDL-005Eh1-1p;
-	Tue, 11 Oct 2022 12:06:15 +0300
-Date: Tue, 11 Oct 2022 12:06:15 +0300
+	id 1oiBEA-005EiK-07;
+	Tue, 11 Oct 2022 12:07:06 +0300
+Date: Tue, 11 Oct 2022 12:07:05 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+Cc: Basavaraj Natikar <bnatikar@amd.com>, Marc Zyngier <maz@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
 	Kent Gibson <warthog618@gmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Billy Tsai <billy_tsai@aspeedtech.com>,
@@ -129,36 +130,40 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
 	Emil Renner Berthing <kernel@esmil.dk>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 25/36] pinctrl: starfive: Add missed header(s)
-Message-ID: <Y0UyB8n52Nma8UWz@smile.fi.intel.com>
+Subject: Re: [PATCH v2 36/36] pinctrl: Clean up headers
+Message-ID: <Y0UyOWALxSFai2w6@smile.fi.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-26-andriy.shevchenko@linux.intel.com>
- <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
+ <20221010201453.77401-37-andriy.shevchenko@linux.intel.com>
+ <d63088d7-202b-a550-01e5-345a22de5f7d@amd.com>
+ <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJM55Z_ApPowttZrjn_0dUs81H4FfByDfv=fbhvmHquipULANg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdUfdQnisexfs4yLjeKs-LUPY1HjChrgeNjNL1qSErir9Q@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Oct 11, 2022 at 10:31:33AM +0200, Emil Renner Berthing wrote:
-> On Mon, 10 Oct 2022 at 22:26, Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+On Tue, Oct 11, 2022 at 10:46:30AM +0200, Geert Uytterhoeven wrote:
+> On Tue, Oct 11, 2022 at 9:31 AM Basavaraj Natikar <bnatikar@amd.com> wrote:
+> > On 10/11/2022 1:44 AM, Andy Shevchenko wrote:
+
+> > > +++ b/drivers/pinctrl/core.h
+
+> > > -#include <linux/pinctrl/pinconf.h>
 > >
-> > Do not imply that some of the generic headers may be always included.
-> > Instead, include explicitly what we are direct user of.
-> >
-> > While at it, sort headers alphabetically.
+> > Removing pinconf.h from the core.h may cause build failure in other files
+> > because where-ever core.h is included to use “struct pinconf_ops”, there
+> > is a need to include pinconf.h.
 > 
-> The patch is fine, but I don't see any sorting other than just adding
-> the headers at the appropriate place.
-
-I will amend commit message here.
-
-> In any case
+> I can confirm adding
 > 
-> Acked-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+>     #include <linux/pinctrl/pinconf.h>
+> 
+> to drivers/pinctrl/renesas/pinctrl-rzn1.c and drivers/pinctrl/pinctrl-single.c
+> fixes the issues I was seeing with shmobile_defconfig and (out-of-tree)
+> renesas_defconfig.
 
-Thank you!
+I will add this, thank you for reporting.
 
 -- 
 With Best Regards,
