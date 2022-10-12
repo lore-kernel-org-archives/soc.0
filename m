@@ -1,153 +1,218 @@
-Return-Path: <SRS0=MLrV=2N=crapouillou.net=paul@kernel.org>
+Return-Path: <SRS0=gNmJ=2N=gmail.com=peron.clem@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C2FAC4332F
-	for <soc@archiver.kernel.org>; Wed, 12 Oct 2022 09:16:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44525C4332F
+	for <soc@archiver.kernel.org>; Wed, 12 Oct 2022 09:34:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EADF8C43144; Wed, 12 Oct 2022 09:16:10 +0000 (UTC)
-Received: from aposti.net (aposti.net [89.234.176.197])
+	id F21CDC433D6; Wed, 12 Oct 2022 09:34:17 +0000 (UTC)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 00A39C433C1;
-	Wed, 12 Oct 2022 09:16:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 00A39C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1665566157; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s+g0+ssYTgL3cZkE5/H6taOX78xERs3DGn3pyH5uewU=;
-	b=q1TTDkSv+2wywK6AIXiGaOkH7iZ2YU3VEKYOBAZiyQM7JBPfmc8c6P2ZhHrYUGYo8pdYOS
-	dts7t4kZKIQ9e1u3iLHUzQuRMcbtwmO5Z8KpYm4wJCUKd79SLah8Tf9+RyDQWaVWq5AUrm
-	d0C/wxgx1Yk/JFU/GDZxLIKL5vEmKNw=
-Date: Wed, 12 Oct 2022 10:15:29 +0100
-From: Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 11/36] pinctrl: ingenic: Add missed header(s)
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Kent Gibson <warthog618@gmail.com>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Billy Tsai <billy_tsai@aspeedtech.com>, Thomas Gleixner
-	<tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>, Samuel Holland
-	<samuel@sholland.org>, Horatiu Vultur <horatiu.vultur@microchip.com>,
-	=?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>, Bjorn Andersson
-	<bjorn.andersson@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>, Lad Prabhakar
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, Phil Edworthy
-	<phil.edworthy@renesas.com>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Fabien Dessenne
-	<fabien.dessenne@foss.st.com>, Prathamesh Shete <pshete@nvidia.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-gpio@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
-	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter
-	<jonathanh@nvidia.com>, Patrice Chotard <patrice.chotard@foss.st.com>,
-	Andreas =?iso-8859-1?q?F=E4rber?= <afaerber@suse.de>, Manivannan Sadhasivam
-	<mani@kernel.org>, Andrew Jeffery <andrew@aj.id.au>, Joel Stanley
-	<joel@jms.id.au>, Florian Fainelli <f.fainelli@gmail.com>, Ray Jui
-	<rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
-	<rf@opensource.cirrus.com>, Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>, Pengutronix Kernel Team
-	<kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>, Andy Shevchenko <andy@kernel.org>,
-	Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth
-	<sebastian.hesselbarth@gmail.com>, Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>, Ludovic Desroches
-	<ludovic.desroches@microchip.com>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Chen-Yu Tsai <wens@csie.org>, Damien Le Moal
-	<damien.lemoal@wdc.com>, Tony Lindgren <tony@atomide.com>, Haojian Zhuang
-	<haojian.zhuang@linaro.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek
-	<michal.simek@xilinx.com>, Andy Gross <agross@kernel.org>, Konrad Dybcio
-	<konrad.dybcio@somainline.org>, Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim
-	<shiraz.linux.kernel@gmail.com>, soc@kernel.org, Orson Zhai
-	<orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu
-	<mhiramat@kernel.org>
-Message-Id: <T1VMJR.YAQIRYFT8EC22@crapouillou.net>
-In-Reply-To: <20221010201453.77401-12-andriy.shevchenko@linux.intel.com>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
-	<20221010201453.77401-12-andriy.shevchenko@linux.intel.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id E595CC433C1;
+	Wed, 12 Oct 2022 09:34:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E595CC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id r14so9327408edc.7;
+        Wed, 12 Oct 2022 02:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5hwOC37cPRVT+Lgt6Q6oTRESj5g4dMDJkms4UxcNz6o=;
+        b=gOWYd7cgiPSqMjcd2my2MAjZEF7vcSQs4HKRsvLSimpo/ry33sb15M2wKdnw5mprZf
+         wyCAKHyDGHBg6aRI0Z4ASWUB2qKF+CVeEAGnKxQZ/EPSwgQgDcVhXZ6ufR/DSMalG3h/
+         zdC5ggB3s9GDURjFRSohw+//Bys+Chny2WD0uRMCLATGn49f8YSkd/yNgOswbV8DH2lv
+         fXwOHd4Fw8Kim8LQyRAaXNuLHyNurQ+ysnFyK9xGWAosMx/iU5oGMCu6wkgzexqr1I+p
+         4iNVSgeThfrUSL55uW885yBO9c6DC2BpDHdYIPW6NDd1t+3/hebys9Eif5WNCEVuyXaG
+         leOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5hwOC37cPRVT+Lgt6Q6oTRESj5g4dMDJkms4UxcNz6o=;
+        b=rgb6ae+wr5XgULXNtv78p6fPiM2lEeDaKqqA3Xiv2FrkN4g/YbvsOGcb/8SUV5DsLw
+         UVs4TgDZv2RvARMCtN43HZLLnjQIGOr4vA/aO8P23DONoN4rgWqO/e937hDGVtppOPyc
+         XFXFPxw8xl3q4Wdr8qgeYuot9R8Fnbd4LByg4JTBKA42mBBKAE+JARhbx/sqAHaMGqnP
+         3gkomoY/qvBXA1GKAiBTC5IjNGHw5wBxJQ1BVsREW/5HuPqzl5wCoaukRgvskvGpiJ8g
+         D9eBOEPHDINp8yNiw9Di5aXCjvZNCuwatFYE+NXJBtR63QHBH7Yn/kYYDB7a4T38EGzw
+         xhhA==
+X-Gm-Message-State: ACrzQf0tT/lmo/TcV/eKn+CFnqG3CRtPtB1ROwXzeL9P8qDrjfgPPhJa
+	XFXtbUqetnfPsPGZcN5apmzNAt9f72TvKeRf0dE=
+X-Google-Smtp-Source: AMsMyM7np7gDeepsDAM0PBQ0jBNtCsz3pC/4X0bx7r4wpvQb4BioUS97iasxlET2qoc9ejtvGFICpqJzcRu6OHtLSE0=
+X-Received: by 2002:a05:6402:46:b0:45c:bd68:6ab0 with SMTP id
+ f6-20020a056402004600b0045cbd686ab0mr924498edu.16.1665567255027; Wed, 12 Oct
+ 2022 02:34:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20221012055602.1544944-1-uwu@icenowy.me> <20221012055602.1544944-11-uwu@icenowy.me>
+In-Reply-To: <20221012055602.1544944-11-uwu@icenowy.me>
+From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date: Wed, 12 Oct 2022 11:34:03 +0200
+Message-ID: <CAJiuCcfSPaX_boxUjLUVdUKf7eENbOjX96aw=fTOUPEe=4cSwg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick v1.1
+To: Icenowy Zheng <uwu@icenowy.me>
+List-Id: <soc.lore.kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andre Przywara <andre.przywara@arm.com>, soc@kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Icenowy,
 
-
-Le lun., oct. 10 2022 at 23:14:27 +0300, Andy Shevchenko=20
-<andriy.shevchenko@linux.intel.com> a =E9crit :
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
->=20
-> While at it, sort headers alphabetically.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
+On Wed, 12 Oct 2022 at 07:57, Icenowy Zheng <uwu@icenowy.me> wrote:
+>
+> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
+> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
+> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
+>
+> Add a device tree for it. As F1C200s is just F1C100s with a different
+> DRAM chip co-packaged, directly use F1C100s DTSI here.
+>
+> This commit covers the v1.1 version of this board, which is now shipped.
+> v1.0 is some internal sample that have not been shipped at all.
+>
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 > ---
->  drivers/pinctrl/pinctrl-ingenic.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 7e732076dedf..dbc25a60fbff 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -14,16 +14,18 @@
->  #include <linux/kernel.h>
->  #include <linux/mod_devicetable.h>
->  #include <linux/of.h>
-> -#include <linux/pinctrl/pinctrl.h>
-> -#include <linux/pinctrl/pinmux.h>
-> -#include <linux/pinctrl/pinconf.h>
-> -#include <linux/pinctrl/pinconf-generic.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/seq_file.h>
->  #include <linux/slab.h>
->=20
-> +#include <linux/pinctrl/consumer.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinconf.h>
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
+> New patch introduced in v2.
+>
+>  arch/arm/boot/dts/Makefile                    |   3 +-
+>  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 101 ++++++++++++++++++
+>  2 files changed, 103 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+>
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 6aa7dc4db2fc..0249c07bd8a6 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
+>         sun9i-a80-optimus.dtb \
+>         sun9i-a80-cubieboard4.dtb
+>  dtb-$(CONFIG_MACH_SUNIV) += \
+> -       suniv-f1c100s-licheepi-nano.dtb
+> +       suniv-f1c100s-licheepi-nano.dtb \
+> +       suniv-f1c200s-popstick-v1.1.dtb
+>  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
+>         tegra20-acer-a500-picasso.dtb \
+>         tegra20-asus-tf101.dtb \
+> diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> new file mode 100644
+> index 000000000000..121dfc6f609d
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> @@ -0,0 +1,101 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
+> + */
 > +
->  #include "core.h"
->  #include "pinconf.h"
->  #include "pinmux.h"
+> +/dts-v1/;
+> +#include "suniv-f1c100s.dtsi"
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +/ {
+> +       model = "Popcorn Computer PopStick v1.1";
+> +       compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
+> +                    "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
+> +
+> +       aliases {
+> +               mmc0 = &mmc0;
+> +               serial0 = &uart0;
+> +               spi0 = &spi0;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = "serial0:115200n8";
+> +       };
+> +
+> +       leds {
+> +               compatible = "gpio-leds";
+> +
+> +               led {
+> +                       function = LED_FUNCTION_STATUS;
+> +                       color = <LED_COLOR_ID_GREEN>;
+> +                       gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
+> +                       linux,default-trigger = "heartbeat";
+> +               };
+> +       };
+> +
+> +       reg_vcc3v3: vcc3v3 {
+> +               compatible = "regulator-fixed";
+> +               regulator-name = "vcc3v3";
+> +               regulator-min-microvolt = <3300000>;
+> +               regulator-max-microvolt = <3300000>;
+> +       };
+> +};
+> +
+> +&mmc0 {
+> +       cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
+> +       bus-width = <4>;
+> +       disable-wp;
+> +       status = "okay";
+> +       vmmc-supply = <&reg_vcc3v3>;
+> +};
+> +
+> +&spi0 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&spi0_pc_pins>;
+> +       status = "okay";
+> +
+> +       flash@0 {
+> +               #address-cells = <1>;
+> +               #size-cells = <1>;
+> +               compatible = "spi-nand";
+> +               reg = <0>;
+> +               spi-max-frequency = <40000000>;
+> +
+> +               partitions {
+> +                       compatible = "fixed-partitions";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +
+> +                       partition@0 {
+> +                               label = "u-boot-with-spl";
+> +                               reg = <0x0 0x100000>;
+> +                       };
+> +
+> +                       ubi@100000 {
+> +                               label = "ubi";
+> +                               reg = <0x100000 0x7f00000>;
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+> +&otg_sram {
+
+Nitpick, but this should be alphabetically ordered no?
+
+> +       status = "okay";
+> +};
+> +
+> +&uart0 {
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&uart0_pe_pins>;
+> +       status = "okay";
+> +};
+> +
+> +&usb_otg {
+> +       dr_mode = "peripheral";
+> +       status = "okay";
+> +};
+> +
+> +&usbphy {
+> +       status = "okay";
+> +};
 > --
-> 2.35.1
->=20
-
-
+> 2.37.1
+>
+>
