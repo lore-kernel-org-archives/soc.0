@@ -4,126 +4,120 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22468C433FE
-	for <soc@archiver.kernel.org>; Wed, 12 Oct 2022 21:21:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ED2DC433FE
+	for <soc@archiver.kernel.org>; Wed, 12 Oct 2022 21:24:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E3AD3C433C1; Wed, 12 Oct 2022 21:21:55 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	id 2F5CAC433D7; Wed, 12 Oct 2022 21:24:10 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E75B4C433D6;
-	Wed, 12 Oct 2022 21:21:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E75B4C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 2BE11C433C1;
+	Wed, 12 Oct 2022 21:24:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2BE11C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id s30so94471eds.1;
-        Wed, 12 Oct 2022 14:21:54 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id d26so1599809ejc.8;
+        Wed, 12 Oct 2022 14:24:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QQfpRIt3DFuqO+zX1CeFTtSVeijb+PJxpHgqxCSADR0=;
-        b=al3lXHrUDVuQJuNML3yc9OTVp8mBm1fceF0wyeRVT7rVZewHTS45N+wEDJE03RPt86
-         whlP9ZfSGJADr+jLrP9hcsriMOhuem5pNu2pOAlJGKbIkvgU4vsvgsKImKxmYnPqvZ04
-         Gy0dYOkAtFViIUJWCib2vOru/oXpiU2R5sCA5tIc9DrsT7nZUBEfhbCav1Ts2VeHxZg1
-         3UPQI7BMu+saxhG/f9BQK7IpFypRaaRBR+D1hcpKxTgFSXFoUMQDXQQyxHYxn8zeyDbc
-         JihcfTeXH5CI+eDdEWIsUu1fJgdoFDJYMUGCYlO33DjjtXQR6WbTQO4WMHCbg/3j38Sx
-         57KA==
+        bh=AeJANbhYyBwy4ZbmnuIiUtzQb03C3ow/09NmLLrUl6A=;
+        b=JPL4aQt1cmlonH9wzqkdGwGX4yiWzBYuoNUgmryEg9d/JOfQlDrmkcICVOC/33yqcl
+         s0mTrzMYEWAgpf0uUa7YeZFD7CZ68ey2ehAGfeag4Z2kxjakghVUyBtUToFJmxKe+1wG
+         yJTCP2EuO/e6a8snlf+yd6pfpqoYRtMGSRyL3dmp7H0rzxos9JYoRmle2O3h9lHUA/DC
+         +K7hxS8Pn4f3tUSLLAPFIUxmVCpr/sSqr25uP6x3TlKVAwyzLB+POxUi2ZY8CECqmyKi
+         2HKXnaZIbOLLDoX2ntROXy4GRbnHUyek0QBvzOilU9uZ2dpSccEDOhCzPMmlsvSxPiLM
+         9ysg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QQfpRIt3DFuqO+zX1CeFTtSVeijb+PJxpHgqxCSADR0=;
-        b=x57pNzsdJE5sINAjjBq60kDZZ++Dr+2uro+XmDwheUb2tPz+PKTnW8dOyVnpP9TzFr
-         MxVNbTdcSmTFR1rNzPr4qBEtcNTktStgXBvvY6miS+/3py+4+ZdynqznqSeZXD+aU+cj
-         gSGOc75joBnZRnh/1g5rW2BqSlGOSQ4MTK4hVW8gFxXALN9HYjv3PhSelU8a7INw/R73
-         uK1C2dVpYqsQtOIMHVGWEPyeK/U9ZzsuP4X4lu+G/TGCGzl8OTRpacdw+u6nresmWJl2
-         YIjearClKL+2Pmboby+S+mOVVYysgLp+tKup2a0JPcwPUVHxH2k6fK+k5CRk6C8d728L
-         tmGA==
-X-Gm-Message-State: ACrzQf3VyJHdUAFyws0UIIr1oJvLnf4GB0Dcv43z58v76kpFKNKzWu74
-	PgS2RhEiUqw3E7J6nl9JWRwZ4vBsp7fBVA==
-X-Google-Smtp-Source: AMsMyM7ztgB9rREL8AMYuGYCWQ376iRMzD7aUi2+lPvEwK2yjjBdeM84G3oYxHblooq1M66KBII06A==
-X-Received: by 2002:a50:fd16:0:b0:458:bf43:8dc7 with SMTP id i22-20020a50fd16000000b00458bf438dc7mr28513321eds.400.1665609712898;
-        Wed, 12 Oct 2022 14:21:52 -0700 (PDT)
+        bh=AeJANbhYyBwy4ZbmnuIiUtzQb03C3ow/09NmLLrUl6A=;
+        b=xBjaHu9RVmI5j4NtftHSawIdnwgOKmOXG19wwbWCXQEcRATiA2dkP7dKTgH8xF05N2
+         rV87FbwTwZMpjDeei8Sg5OHTnodnMJGhX9fqY5sscbJqt9YqhBMEpa7jFIZ5TDv+zcic
+         ck8oHmIPbpRk1A55uNkWNSvR/yt3rJMBQnLMyeVbdsH7mLrIr+ESBCk0DIqYdmknkaCG
+         uMVRo+2L5prN0RfxwjAE0E+jkDxSJ5gPl3530m7zC1k6fcGROgmx0ErqGI1fEqa2c2zy
+         rnrRx1hEAw3OST49BWuoqaqYE1BWB/bCWmyV2fynARiKKw3Z0b8R2m6K7C2JHG+Lbqt1
+         mb0g==
+X-Gm-Message-State: ACrzQf2U6SQ5Z3Tkc1sMqKjF+eVt9bv9uE0ALv4INbykvk4lknjWGahI
+	+0Bz3QdYrSn/oyj1RO2E+kpOK7xct6PREHi7
+X-Google-Smtp-Source: AMsMyM7BxsquvcB3WVD34NXGQwFZsJW43aw77Eq7EcPTf+1OXMK4gIIlb5g5xCn3wdhAQzLGAw7V7w==
+X-Received: by 2002:a17:907:8688:b0:78b:eaa5:8a9d with SMTP id qa8-20020a170907868800b0078beaa58a9dmr24591147ejc.509.1665609846821;
+        Wed, 12 Oct 2022 14:24:06 -0700 (PDT)
 Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id a20-20020aa7cf14000000b00458dc7e8ecasm12009298edy.72.2022.10.12.14.21.51
+        by smtp.gmail.com with ESMTPSA id kw24-20020a170907771800b0073d87068042sm1807772ejc.110.2022.10.12.14.24.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 14:21:52 -0700 (PDT)
+        Wed, 12 Oct 2022 14:24:06 -0700 (PDT)
 From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andre Przywara <andre.przywara@arm.com>, Icenowy Zheng <uwu@icenowy.me>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH v2 04/10] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
-Date: Wed, 12 Oct 2022 23:21:50 +0200
-Message-ID: <4218006.ejJDZkT8p0@kista>
-In-Reply-To: <20221012055602.1544944-5-uwu@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me> <20221012055602.1544944-5-uwu@icenowy.me>
+Subject: Re: [PATCH v2 05/10] musb: sunxi: add support for the F1C100s MUSB controller
+Date: Wed, 12 Oct 2022 23:24:04 +0200
+Message-ID: <3515217.R56niFO833@kista>
+In-Reply-To: <20221012055602.1544944-6-uwu@icenowy.me>
+References: <20221012055602.1544944-1-uwu@icenowy.me> <20221012055602.1544944-6-uwu@icenowy.me>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
 Hi Icenowy,
 
-Dne sreda, 12. oktober 2022 ob 07:55:56 CEST je Icenowy Zheng napisal(a):
-> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
+Dne sreda, 12. oktober 2022 ob 07:55:57 CEST je Icenowy Zheng napisal(a):
+> The suniv SoC has a MUSB controller like the one in A33, but with a SRAM
+> region to be claimed.
 > 
-> Add support for its USB PHY.
+> Add support for it.
 > 
 > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 > ---
 > No changes since v1.
 > 
->  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/usb/musb/sunxi.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
-> b/drivers/phy/allwinner/phy-sun4i-usb.c index 3a3831f6059a..2f94cb77637b
-> 100644
-> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> @@ -109,6 +109,7 @@ enum sun4i_usb_phy_type {
->  	sun8i_v3s_phy,
->  	sun50i_a64_phy,
->  	sun50i_h6_phy,
-> +	suniv_f1c100s_phy,
->  };
+> diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
+> index 7f9a999cd5ff..4b368d16a73a 100644
+> --- a/drivers/usb/musb/sunxi.c
+> +++ b/drivers/usb/musb/sunxi.c
+> @@ -722,14 +722,17 @@ static int sunxi_musb_probe(struct platform_device
+> *pdev) INIT_WORK(&glue->work, sunxi_musb_work);
+>  	glue->host_nb.notifier_call = sunxi_musb_host_notifier;
 > 
->  struct sun4i_usb_phy_cfg {
-> @@ -859,6 +860,14 @@ static int sun4i_usb_phy_probe(struct platform_device
-> *pdev) return 0;
->  }
+> -	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb"))
+> +	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb") ||
+> +	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
+>  		set_bit(SUNXI_MUSB_FL_HAS_SRAM, &glue->flags);
+> +	}
 > 
-> +static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg = {
-> +	.num_phys = 1,
-> +	.type = suniv_f1c100s_phy,
+>  	if (of_device_is_compatible(np, "allwinner,sun6i-a31-musb"))
+>  		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
+> 
+>  	if (of_device_is_compatible(np, "allwinner,sun8i-a33-musb") ||
+> -	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb")) {
+> +	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb") ||
+> +	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
 
-I think you should just use sun4i_a10_phy. It has no special handling. I don't 
-see a point adding new phy types if there is no special cases for it.
+All that should be eventually converted to quirks. But for now:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
 
-> +	.disc_thresh = 3,
-> +	.phyctl_offset = REG_PHYCTL_A10,
-> +	.dedicated_clocks = true,
-> +};
-> +
->  static const struct sun4i_usb_phy_cfg sun4i_a10_cfg = {
->  	.num_phys = 3,
->  	.type = sun4i_a10_phy,
-> @@ -988,6 +997,8 @@ static const struct of_device_id
-> sun4i_usb_phy_of_match[] = { { .compatible =
-> "allwinner,sun50i-a64-usb-phy",
->  	  .data = &sun50i_a64_cfg},
->  	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = 
-&sun50i_h6_cfg },
-> +	{ .compatible = "allwinner,suniv-f1c100s-usb-phy",
-> +	  .data = &suniv_f1c100s_cfg },
->  	{ },
+>  		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
+>  		set_bit(SUNXI_MUSB_FL_NO_CONFIGDATA, &glue->flags);
+>  	}
+> @@ -815,6 +818,7 @@ static const struct of_device_id sunxi_musb_match[] = {
+>  	{ .compatible = "allwinner,sun6i-a31-musb", },
+>  	{ .compatible = "allwinner,sun8i-a33-musb", },
+>  	{ .compatible = "allwinner,sun8i-h3-musb", },
+> +	{ .compatible = "allwinner,suniv-f1c100s-musb", },
+>  	{}
 >  };
->  MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
+>  MODULE_DEVICE_TABLE(of, sunxi_musb_match);
 > --
 > 2.37.1
 
