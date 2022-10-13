@@ -1,50 +1,52 @@
-Return-Path: <SRS0=OTZ+=2O=linux.intel.com=mika.westerberg@kernel.org>
+Return-Path: <SRS0=S3Qq=2O=linux.intel.com=andriy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A8BC4332F
-	for <soc@archiver.kernel.org>; Thu, 13 Oct 2022 14:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CADDC4332F
+	for <soc@archiver.kernel.org>; Thu, 13 Oct 2022 16:09:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB499C43144; Thu, 13 Oct 2022 14:53:32 +0000 (UTC)
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	id CC801C43470; Thu, 13 Oct 2022 16:09:24 +0000 (UTC)
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 31D26C433D6;
-	Thu, 13 Oct 2022 14:53:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31D26C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 76A96C433D6;
+	Thu, 13 Oct 2022 16:09:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76A96C433D6
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665672811; x=1697208811;
+  t=1665677363; x=1697213363;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=r+A85jTxRgf0CRicOayM4dLLN5VzvuhrenYOP1O6oTU=;
-  b=ZbmXbvHGvZzizHEdJdQB159tWbVMaXF2LT1Vt2Nvw5mFRv5T/9JtLxkx
-   bqbrjJq8G4j9/e5+v0YvefgpPJlP7FbFOFJpssvUUKbHX8GV9Vhs0NKpf
-   YwnRmle9VLllp79yv33aQROwdLhsk3SQY4TsB9SorcoILxSJfK8ic+i7G
-   UNVFj4h9yvnToYnGVQX3xu4Pm58TbDJzKIpOUk9rfKmOZDnhQYjCAg6D1
-   rSWPC6zyIQ2Wu8jDo8y8KzhL+JywpAxI/erbIbl3tdWqm8o+RyQhYRune
-   EzhB5uC3Duz7xHlrr64O/O87Id7dVtzjcWsw8JQGIpqpw9Q+nGS3MZ9+H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="391407999"
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="391407999"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 07:53:22 -0700
+  bh=OPQmeZ5uzAfg/Yu3vsd+t3FuvAOQsHliIP9WOqPYQKw=;
+  b=d+1BpUfrFNX96tIwBQAhR5X938mWwzH03Up7K1nKmpA6FCrxXx4RGh9u
+   xfkmyie4gAZ9Uf0Iwt84GWUy2LDCdYtgN0X0n1DoLR8k+Z15bYBU2ZxG3
+   6CfqmQ8k98mflfiDwnoh64dh1hPtDljlERspA0bjX5kTOOR/eC6pp+j6Z
+   Mp6no+EATh5rv4aV3kaqN0K5Qpx6dcnm+xhjcvD/Dp8vEBgMRcWeYrO6M
+   PV9MKP8WmtXpcfrhEWqc+oBBlSc3lt6d1Av+kkpTXNNNo9xktmwW4wC5i
+   zDlf/zTl7Z31FydiC+y7GyllPBrRg4+bxg52JdfT4ZWoUrZ9xE7LIt1IS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="331630044"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="331630044"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 09:05:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="731891101"
-X-IronPort-AV: E=Sophos;i="5.95,180,1661842800"; 
-   d="scan'208";a="731891101"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Oct 2022 07:53:11 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id DC55F26D; Thu, 13 Oct 2022 17:53:31 +0300 (EEST)
-Date: Thu, 13 Oct 2022 17:53:31 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="802296581"
+X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
+   d="scan'208";a="802296581"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2022 09:05:20 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1oj0hv-006V2r-0F;
+	Thu, 13 Oct 2022 19:05:15 +0300
+Date: Thu, 13 Oct 2022 19:05:14 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
 	Kent Gibson <warthog618@gmail.com>,
@@ -95,8 +97,7 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	NXP Linux Team <linux-imx@nxp.com>,
-	Andy Shevchenko <andy@kernel.org>, Sean Wang <sean.wang@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
+	Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
 	Gregory Clement <gregory.clement@bootlin.com>,
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
 	Avi Fishman <avifishman70@gmail.com>,
@@ -128,22 +129,33 @@ Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>
 Subject: Re: [PATCH v2 35/36] pinctrl: intel: Add missed header(s)
-Message-ID: <Y0gma4fmhWISrKHe@black.fi.intel.com>
+Message-ID: <Y0g3OiL/9oQlcovJ@smile.fi.intel.com>
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
  <20221010201453.77401-36-andriy.shevchenko@linux.intel.com>
+ <Y0gma4fmhWISrKHe@black.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010201453.77401-36-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <Y0gma4fmhWISrKHe@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Oct 10, 2022 at 11:14:51PM +0300, Andy Shevchenko wrote:
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
+On Thu, Oct 13, 2022 at 05:53:31PM +0300, Mika Westerberg wrote:
+> On Mon, Oct 10, 2022 at 11:14:51PM +0300, Andy Shevchenko wrote:
+> > Do not imply that some of the generic headers may be always included.
+> > Instead, include explicitly what we are direct user of.
+> > 
+> > While at it, sort headers alphabetically.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> While at it, sort headers alphabetically.
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> For all the intel pinctrl changes.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Thank you, I have added it to the 4 Intel related patches.
 
-For all the intel pinctrl changes.
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
