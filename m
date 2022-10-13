@@ -1,161 +1,149 @@
-Return-Path: <SRS0=S3Qq=2O=linux.intel.com=andriy.shevchenko@kernel.org>
+Return-Path: <SRS0=N1y2=2O=gmail.com=jernej.skrabec@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CADDC4332F
-	for <soc@archiver.kernel.org>; Thu, 13 Oct 2022 16:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AC88C433FE
+	for <soc@archiver.kernel.org>; Thu, 13 Oct 2022 18:25:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CC801C43470; Thu, 13 Oct 2022 16:09:24 +0000 (UTC)
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id EBF0FC433D7; Thu, 13 Oct 2022 18:25:22 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 76A96C433D6;
-	Thu, 13 Oct 2022 16:09:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76A96C433D6
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665677363; x=1697213363;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OPQmeZ5uzAfg/Yu3vsd+t3FuvAOQsHliIP9WOqPYQKw=;
-  b=d+1BpUfrFNX96tIwBQAhR5X938mWwzH03Up7K1nKmpA6FCrxXx4RGh9u
-   xfkmyie4gAZ9Uf0Iwt84GWUy2LDCdYtgN0X0n1DoLR8k+Z15bYBU2ZxG3
-   6CfqmQ8k98mflfiDwnoh64dh1hPtDljlERspA0bjX5kTOOR/eC6pp+j6Z
-   Mp6no+EATh5rv4aV3kaqN0K5Qpx6dcnm+xhjcvD/Dp8vEBgMRcWeYrO6M
-   PV9MKP8WmtXpcfrhEWqc+oBBlSc3lt6d1Av+kkpTXNNNo9xktmwW4wC5i
-   zDlf/zTl7Z31FydiC+y7GyllPBrRg4+bxg52JdfT4ZWoUrZ9xE7LIt1IS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="331630044"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="331630044"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 09:05:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="802296581"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="802296581"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 13 Oct 2022 09:05:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1oj0hv-006V2r-0F;
-	Thu, 13 Oct 2022 19:05:15 +0300
-Date: Thu, 13 Oct 2022 19:05:14 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id DA6A8C433D6;
+	Thu, 13 Oct 2022 18:25:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DA6A8C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id bj12so5677134ejb.13;
+        Thu, 13 Oct 2022 11:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B5L/tN8Nk5G1hFHXmpnHlaxEzIusr004HXV2igjx6Dg=;
+        b=WaMkAHVPl8AWTlsWCOn5940xJ4n2+DGuI4BNxlNTPRVWDmpiouz4lLGIdgOc56G/S6
+         iSHRYRPLpu31hPIR2oj21xQEuSdwrLDTdg/IugpMzX8dl4YOSahc+Yqf4kLYlruz8JzY
+         64PxNCx8ufShrGobabHugKDumGeDPrBw9+AWABQqzAidTIT/coJDU4Tn5zSPLWr8sdEf
+         oNp8J+itnMQD5L8G24GuDwqs4kj/GWhSmrVNWx4UmvfjtfwYAlO3E248VRJATnUSBFyS
+         20aXm6B8tZUCaWd3U1V2l5NDledETwN6ROnHCmJiV5fH9PIprBjM0gH3bh3kAWQdj8xr
+         54IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B5L/tN8Nk5G1hFHXmpnHlaxEzIusr004HXV2igjx6Dg=;
+        b=UAk9FSGu/Lc1gqvQ2nIo6u1bd27q5zb2shhQW4fVCAxkm9J6U6iG+1J9rwCtS7PvVP
+         G1qvR3Tp74m5dTYs3j64wc9QOg7EBYZS+/OzLDs7S26UJcJTCZ4n6O2/kKoVjRIINUt2
+         4enYtvk11ZpCeV+Co27LA40eR7WyUCsCTy2etuBw4kkXAhTJMuA3Rbr0ix+Wvnan3fGV
+         h7ATgYPsgk45nWZYXgeeE5WhM07d9dszvWYRbDzc3ORE8Q+aeI+JUzdP5g7LOHblIvUI
+         hacqgpVHySsydUiA0QXeD5upVy5taAVdXdIo6dRW+viRyG1aFTEvEEujojA/hW+TBReY
+         B0Xw==
+X-Gm-Message-State: ACrzQf36t8SidXZo1sesywb8tHCufWAxwPpbVGFtuYRmPi3QWVc/h/e5
+	50gHXA9nFkATnPNLu9c7Q3FMZoM5S638wcew
+X-Google-Smtp-Source: AMsMyM5D9VcyYdymrteUFP/uy7fZdMK47gw4RIDknOofM1/3bcKBsARkwBkRONaV/eI3T52TMYs+Xg==
+X-Received: by 2002:a17:907:75ed:b0:78d:97ed:2894 with SMTP id jz13-20020a17090775ed00b0078d97ed2894mr732203ejc.739.1665685520104;
+        Thu, 13 Oct 2022 11:25:20 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id i24-20020a056402055800b004588ef795easm283249edx.34.2022.10.13.11.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 11:25:19 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andre Przywara <andre.przywara@arm.com>, Icenowy Zheng <uwu@icenowy.me>
 List-Id: <soc.lore.kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Kent Gibson <warthog618@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Billy Tsai <billy_tsai@aspeedtech.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Rafa?? Mi??ecki <rafal@milecki.pl>,
-	Bjorn Andersson <bjorn.andersson@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Phil Edworthy <phil.edworthy@renesas.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Fabien Dessenne <fabien.dessenne@foss.st.com>,
-	Prathamesh Shete <pshete@nvidia.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-	linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-media@vger.kernel.org, linux-actions@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-	linux-rpi-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-omap@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Andreas F??rber <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Sean Wang <sean.wang@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Chen-Yu Tsai <wens@csie.org>, Paul Cercueil <paul@crapouillou.net>,
-	Damien Le Moal <damien.lemoal@wdc.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Michal Simek <michal.simek@xilinx.com>,
-	Andy Gross <agross@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 35/36] pinctrl: intel: Add missed header(s)
-Message-ID: <Y0g3OiL/9oQlcovJ@smile.fi.intel.com>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-36-andriy.shevchenko@linux.intel.com>
- <Y0gma4fmhWISrKHe@black.fi.intel.com>
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: Re: [PATCH v2 04/10] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
+Date: Thu, 13 Oct 2022 20:25:18 +0200
+Message-ID: <3442772.V25eIC5XRa@kista>
+In-Reply-To: <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
+References: <20221012055602.1544944-1-uwu@icenowy.me> <4218006.ejJDZkT8p0@kista> <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0gma4fmhWISrKHe@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 13, 2022 at 05:53:31PM +0300, Mika Westerberg wrote:
-> On Mon, Oct 10, 2022 at 11:14:51PM +0300, Andy Shevchenko wrote:
-> > Do not imply that some of the generic headers may be always included.
-> > Instead, include explicitly what we are direct user of.
-> > 
-> > While at it, sort headers alphabetically.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> For all the intel pinctrl changes.
+Dne =C4=8Detrtek, 13. oktober 2022 ob 10:49:51 CEST je Icenowy Zheng napisa=
+l(a):
+> =E5=9C=A8 2022-10-12=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 23:21 +0200=EF=
+=BC=8CJernej =C5=A0krabec=E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> > Hi Icenowy,
+> >=20
+> > Dne sreda, 12. oktober 2022 ob 07:55:56 CEST je Icenowy Zheng
+> >=20
+> > napisal(a):
+> > > The F1C100s SoC has one USB OTG port connected to a MUSB
+> > > controller.
+> > >=20
+> > > Add support for its USB PHY.
+> > >=20
+> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > > ---
+> > > No changes since v1.
+> > >=20
+> > >  drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
+> > >  1 file changed, 11 insertions(+)
+> > >=20
+> > > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > > b/drivers/phy/allwinner/phy-sun4i-usb.c index
+> > > 3a3831f6059a..2f94cb77637b
+> > > 100644
+> > > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> > > @@ -109,6 +109,7 @@ enum sun4i_usb_phy_type {
+> > >         sun8i_v3s_phy,
+> > >         sun50i_a64_phy,
+> > >         sun50i_h6_phy,
+> > > +       suniv_f1c100s_phy,
+> > >  };
+> > >=20
+> > >  struct sun4i_usb_phy_cfg {
+> > > @@ -859,6 +860,14 @@ static int sun4i_usb_phy_probe(struct
+> > > platform_device
+> > > *pdev) return 0;
+> > >  }
+> > >=20
+> > > +static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg =3D {
+> > > +       .num_phys =3D 1,
+> > > +       .type =3D suniv_f1c100s_phy,
+> >=20
+> > I think you should just use sun4i_a10_phy. It has no special
+> > handling. I don't
+> > see a point adding new phy types if there is no special cases for it.
+>=20
+> Sounds reasonable, although I think we should finally drop .type and
+> use only describing items.
 
-Thank you, I have added it to the 4 Intel related patches.
+That would be even better. Will you do it?
 
--- 
-With Best Regards,
-Andy Shevchenko
+>=20
+> > Best regards,
+> > Jernej
+> >=20
+> > > +       .disc_thresh =3D 3,
+> > > +       .phyctl_offset =3D REG_PHYCTL_A10,
+> > > +       .dedicated_clocks =3D true,
+> > > +};
+> > > +
+> > >  static const struct sun4i_usb_phy_cfg sun4i_a10_cfg =3D {
+> > >         .num_phys =3D 3,
+> > >         .type =3D sun4i_a10_phy,
+> > > @@ -988,6 +997,8 @@ static const struct of_device_id
+> > > sun4i_usb_phy_of_match[] =3D { { .compatible =3D
+> > > "allwinner,sun50i-a64-usb-phy",
+> > >           .data =3D &sun50i_a64_cfg},
+> > >         { .compatible =3D "allwinner,sun50i-h6-usb-phy", .data =3D
+> >=20
+> > &sun50i_h6_cfg },
+> >=20
+> > > +       { .compatible =3D "allwinner,suniv-f1c100s-usb-phy",
+> > > +         .data =3D &suniv_f1c100s_cfg },
+> > >         { },
+> > >  };
+> > >  MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
+> > > --
+> > > 2.37.1
 
 
