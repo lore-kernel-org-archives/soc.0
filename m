@@ -1,144 +1,146 @@
-Return-Path: <SRS0=DqFu=2O=linux.alibaba.com=baolin.wang@kernel.org>
+Return-Path: <SRS0=1TfX=2O=icenowy.me=uwu@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F674C433FE
-	for <soc@archiver.kernel.org>; Thu, 13 Oct 2022 01:23:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F08B3C433FE
+	for <soc@archiver.kernel.org>; Thu, 13 Oct 2022 08:50:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 185E4C43146; Thu, 13 Oct 2022 01:23:23 +0000 (UTC)
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+	id B94DEC433D7; Thu, 13 Oct 2022 08:50:22 +0000 (UTC)
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1711BC433D6;
-	Thu, 13 Oct 2022 01:23:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1711BC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=98;SR=0;TI=SMTPD_---0VS19mRS_1665624179;
-Received: from 30.97.48.54(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VS19mRS_1665624179)
-          by smtp.aliyun-inc.com;
-          Thu, 13 Oct 2022 09:23:04 +0800
-Message-ID: <b7c8afe1-af89-9b5a-2c2c-82a2810ca9f1@linux.alibaba.com>
-Date: Thu, 13 Oct 2022 09:23:27 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 23/36] pinctrl: sprd: Add missed header(s)
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Kent Gibson <warthog618@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Billy Tsai <billy_tsai@aspeedtech.com>, Thomas Gleixner
- <tglx@linutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Chen-Yu Tsai <wenst@chromium.org>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
- Samuel Holland <samuel@sholland.org>,
- Horatiu Vultur <horatiu.vultur@microchip.com>,
- =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
- Bjorn Andersson <bjorn.andersson@linaro.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Phil Edworthy <phil.edworthy@renesas.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Fabien Dessenne <fabien.dessenne@foss.st.com>,
- Prathamesh Shete <pshete@nvidia.com>,
- Basavaraj Natikar <Basavaraj.Natikar@amd.com>, linux-gpio@vger.kernel.org,
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
- linux-actions@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- openbmc@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
- alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
- linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-omap@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-arm-msm@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 9185BC433D6;
+	Thu, 13 Oct 2022 08:50:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9185BC433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=icenowy.me
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=icenowy.me
+ARC-Seal: i=1; a=rsa-sha256; t=1665650999; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=mAXTfNQx4KK9U3hKLTy2Vu1XiBfkJTEQgI+t2gr+tHIZwjiSpe4WpePGfugU5vLm0UjfgYLh/SKAzQydZT/N7Q+ARKGxowo6xQkyQqMPwBsQjgueCM/UrelMUsCzNstnuSlNpnPSlLvj85maTN16f/ucdiqI8IUTCET2TlEyRM4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1665650999; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+	bh=h+wv9BWVpxAEeVBWGF8N5xlC4ECUzHofGlXe/WmnrJs=; 
+	b=NUVJ6aPmn6fBNHnE3dW3SY0oM6InJa+Qx1d9G69TNW7K2WImfpRyXCQ3dnHdPPT7mLFwIaNj06VS49jmfG/6WjSEph0pmNtfV226t9Eic/MRKfOv4HGHzpTN7YnLLvIC4fp6T9t6JzcDpSX9a/tpfkzNxyZVBV4cluY+FLaYANY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=icenowy.me;
+	spf=pass  smtp.mailfrom=uwu@icenowy.me;
+	dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1665650999;
+	s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+	bh=h+wv9BWVpxAEeVBWGF8N5xlC4ECUzHofGlXe/WmnrJs=;
+	b=LVp9SE8gVJU1f+WjTS3Iw7cWc4QspHdlvHzXmf9Oxy3mwzclD9hQpgVAJO0UcDLd
+	xUSytzEPrRsDSJEiGYdItiKU4uah204LZhup02JQBBQsAXQWycS/jKZMEfHL9btMKbR
+	IeNrlMDLpJHFsiS/E9YRJ33+x3KnuIOAo+fFeDxY=
+Received: from edelgard.fodlan.icenowy.me (112.94.102.144 [112.94.102.144]) by mx.zohomail.com
+	with SMTPS id 1665650997135403.57608440342176; Thu, 13 Oct 2022 01:49:57 -0700 (PDT)
+Message-ID: <439b685e3aada19021d94669f6f855f1fc81d08e.camel@icenowy.me>
+Subject: Re: [PATCH v2 04/10] phy: sun4i-usb: add support for the USB PHY on
+ F1C100s SoC
+From: Icenowy Zheng <uwu@icenowy.me>
+To: Jernej =?gb2312?Q?=810=947krabec?= <jernej.skrabec@gmail.com>, Rob
+ Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Samuel
+ Holland <samuel@sholland.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Andre Przywara <andre.przywara@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>,
- =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
- Manivannan Sadhasivam <mani@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
- Joel Stanley <joel@jms.id.au>, Florian Fainelli <f.fainelli@gmail.com>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>,
- Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Sascha Hauer <s.hauer@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>,
- Andy Shevchenko <andy@kernel.org>, Sean Wang <sean.wang@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
- Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chen-Yu Tsai <wens@csie.org>, Paul Cercueil <paul@crapouillou.net>,
- Damien Le Moal <damien.lemoal@wdc.com>, Tony Lindgren <tony@atomide.com>,
- Haojian Zhuang <haojian.zhuang@linaro.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Michal Simek <michal.simek@xilinx.com>, Andy Gross <agross@kernel.org>,
- Konrad Dybcio <konrad.dybcio@somainline.org>,
- Tomasz Figa <tomasz.figa@gmail.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Alim Akhtar <alim.akhtar@samsung.com>, Viresh Kumar <vireshk@kernel.org>,
- Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
- Orson Zhai <orsonzhai@gmail.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- Emil Renner Berthing <kernel@esmil.dk>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-24-andriy.shevchenko@linux.intel.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20221010201453.77401-24-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev,  linux-phy@lists.infradead.org,
+ linux-usb@vger.kernel.org
+Date: Thu, 13 Oct 2022 16:49:51 +0800
+In-Reply-To: <4218006.ejJDZkT8p0@kista>
+References: <20221012055602.1544944-1-uwu@icenowy.me>
+	 <20221012055602.1544944-5-uwu@icenowy.me> <4218006.ejJDZkT8p0@kista>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
 
+=E5=9C=A8 2022-10-12=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 23:21 +0200=EF=BC=
+=8CJernej =C5=A0krabec=E5=86=99=E9=81=93=EF=BC=9A
+> Hi Icenowy,
+>=20
+> Dne sreda, 12. oktober 2022 ob 07:55:56 CEST je Icenowy Zheng
+> napisal(a):
+> > The F1C100s SoC has one USB OTG port connected to a MUSB
+> > controller.
+> >=20
+> > Add support for its USB PHY.
+> >=20
+> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > ---
+> > No changes since v1.
+> >=20
+> > =C2=A0drivers/phy/allwinner/phy-sun4i-usb.c | 11 +++++++++++
+> > =C2=A01 file changed, 11 insertions(+)
+> >=20
+> > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > b/drivers/phy/allwinner/phy-sun4i-usb.c index
+> > 3a3831f6059a..2f94cb77637b
+> > 100644
+> > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> > @@ -109,6 +109,7 @@ enum sun4i_usb_phy_type {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun8i_v3s_phy,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun50i_a64_phy,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun50i_h6_phy,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0suniv_f1c100s_phy,
+> > =C2=A0};
+> >=20
+> > =C2=A0struct sun4i_usb_phy_cfg {
+> > @@ -859,6 +860,14 @@ static int sun4i_usb_phy_probe(struct
+> > platform_device
+> > *pdev) return 0;
+> > =C2=A0}
+> >=20
+> > +static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg =3D {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 1,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D suniv_f1c100s_phy,
+>=20
+> I think you should just use sun4i_a10_phy. It has no special
+> handling. I don't=20
+> see a point adding new phy types if there is no special cases for it.
 
+Sounds reasonable, although I think we should finally drop .type and
+use only describing items.
 
-On 10/11/2022 4:14 AM, Andy Shevchenko wrote:
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
-> 
-> While at it, sort headers alphabetically.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>=20
+> Best regards,
+> Jernej
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D REG_PHYCT=
+L_A10,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =3D true,
+> > +};
+> > +
+> > =C2=A0static const struct sun4i_usb_phy_cfg sun4i_a10_cfg =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 3,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun4i_a10_phy=
+,
+> > @@ -988,6 +997,8 @@ static const struct of_device_id
+> > sun4i_usb_phy_of_match[] =3D { { .compatible =3D
+> > "allwinner,sun50i-a64-usb-phy",
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .data =3D &sun50=
+i_a64_cfg},
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allw=
+inner,sun50i-h6-usb-phy", .data =3D=20
+> &sun50i_h6_cfg },
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allwinner=
+,suniv-f1c100s-usb-phy",
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .data =3D &suniv_f1c1=
+00s_cfg },
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ },
+> > =C2=A0};
+> > =C2=A0MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
+> > --
+> > 2.37.1
+>=20
+>=20
+>=20
 
-LGTM. Thanks.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
-> ---
->   drivers/pinctrl/sprd/pinctrl-sprd.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/sprd/pinctrl-sprd.c b/drivers/pinctrl/sprd/pinctrl-sprd.c
-> index dca7a505d413..c1806b7dcf78 100644
-> --- a/drivers/pinctrl/sprd/pinctrl-sprd.c
-> +++ b/drivers/pinctrl/sprd/pinctrl-sprd.c
-> @@ -13,12 +13,14 @@
->   #include <linux/of.h>
->   #include <linux/of_device.h>
->   #include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#include <linux/pinctrl/consumer.h>
->   #include <linux/pinctrl/machine.h>
-> -#include <linux/pinctrl/pinconf.h>
->   #include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinconf.h>
->   #include <linux/pinctrl/pinctrl.h>
->   #include <linux/pinctrl/pinmux.h>
-> -#include <linux/slab.h>
->   
->   #include "../core.h"
->   #include "../pinmux.h"
