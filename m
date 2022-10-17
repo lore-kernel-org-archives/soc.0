@@ -1,63 +1,66 @@
-Return-Path: <SRS0=eWeu=2S=bgdev.pl=brgl@kernel.org>
+Return-Path: <SRS0=0s7l=2S=gmail.com=andy.shevchenko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7549C4332F
-	for <soc@archiver.kernel.org>; Mon, 17 Oct 2022 09:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33738C4332F
+	for <soc@archiver.kernel.org>; Mon, 17 Oct 2022 12:16:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 558A9C43146; Mon, 17 Oct 2022 09:35:30 +0000 (UTC)
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+	id EDC70C43147; Mon, 17 Oct 2022 12:16:29 +0000 (UTC)
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2D3E8C433C1
-	for <soc@kernel.org>; Mon, 17 Oct 2022 09:35:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D3E8C433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-vk1-f171.google.com with SMTP id w185so5049269vkb.7
-        for <soc@kernel.org>; Mon, 17 Oct 2022 02:35:29 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id BFD4BC433D7;
+	Mon, 17 Oct 2022 12:16:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BFD4BC433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f174.google.com with SMTP id hh9so7500047qtb.13;
+        Mon, 17 Oct 2022 05:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/piL+Cl5bNZ+cdgdtRq8tdPhqA168X72rjKGIcj1h4=;
-        b=frJwpnQ1m5aYZphVeeBe7Gk3obDQDvbUlm04wfHh9QiSL/PMF9tB/Oqsh+0kEGhfNO
-         IO0xDniqeVyzfdD+JQ/zRq4D21vh7ik7Um8ee3cn8CBCOToSaQ1ZGpd/a2Gve9yyVF34
-         ITfWo51grHozApCr0PrB6Bwe0SOYlzp6onCsTl/dTI9MCc6vgY4Nu541uAo++YYBs5A4
-         a0vKPtblJ4z5wLnNbmGOx+MINPdJQQEqi1diMlwjfz7XnWKZTtJr/JKwgIM6sTm2WKvz
-         GFI/MxIIypmMB3ZgmlItW4/UaPbdgeUgb5Ga5LgkDThgRnOzk/BQFLxn/5jf7fmdM9uK
-         /Naw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FViSSKwYNLFy/8i7voLq1fvEAiC2E4b3lKUtg6bhSNs=;
+        b=G4XBw7OtjlEVYhvq3ujakfFtUjrlMIkd5uVVPI4L3fSHgn9r2dYLTBKR1DSk55qy8/
+         vjDDH2t4lQErUrsZ81N0WmnCPAq1TAG4psbIGjoQRhntN5Cmq1aF/T5qp0/euyInLZPZ
+         /K8bnHyxQYrmvZCrh75klmy5Bz15Y/XvsM73Xs3LGuMo2izmCHPf5UYpUMbW37BEsOEV
+         sVucDgXlyB1YZt4pqPGa9U7E85eMuIK9JN+tGTbAMfTNB3gqhaNnxWOxBOHdWu8HWlhw
+         4OAFcfWlF4Cka/k2IMLMYdJ1w8Emhfeq9FKglqB57GbZ26ff4iD6Qp74edFo/4+10u7I
+         pv7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E/piL+Cl5bNZ+cdgdtRq8tdPhqA168X72rjKGIcj1h4=;
-        b=HtAN/GByMjzj9I/9Eo3NR5qP3z6pvcWx06kbm4fZAGOQn7QQ2revwwAqLJb9h1X91t
-         JpXlR9au7JDS3CvgZ0Hy+OGoqhC1UitzlGepCCFw6dhdeQEHmHW+UPoM6IIqCj5j+6LH
-         N6brjRRVmQ2U7p5mMLdUAzOG32+7bn8w3dhSDtu66T0D7KCn/6wcrXFl6wGAqHjXSWct
-         dmnhsAEVfGbngrpZCjxY8Xeoz8KeZobY5yoNwHPp5z799rff4mn8OPtEbsIVpgpvlD09
-         HadqUYlPgnW0gpLMQSPujOvaBg4HDzEhINaa9u6tayIy/wz3z1fGo3SDN9e4tkbsudJ5
-         jSng==
-X-Gm-Message-State: ACrzQf0/DHOcSYoX0rcKkUmp+i9DjSFqnRJj/8bBg6lwhOTr7bHzPBuu
-	50n4X9zBzn6uVU3TVKD0Rqg/K1o+db/2NOCPr0/w8Q==
-X-Google-Smtp-Source: AMsMyM6Q6nrL8lOCi83NdWMY6wKW/FytxI2676zCB6+Z2xX8cVC67C12vEdkRnmssQAcscBm4uxHwhyfQkZ6/acn8wI=
-X-Received: by 2002:a1f:4843:0:b0:3ae:c4a3:d653 with SMTP id
- v64-20020a1f4843000000b003aec4a3d653mr3536302vka.1.1665999328063; Mon, 17 Oct
- 2022 02:35:28 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FViSSKwYNLFy/8i7voLq1fvEAiC2E4b3lKUtg6bhSNs=;
+        b=qdh2r9HLrfvFWgPOvoFYy+NndfRlfX2ni7ohMwGw08Ypt5UFRbZahtdG3ssGtW6tTz
+         krtyebQ7CQiRMAtOJ/nredW1o1Kaw0iB6D5+m8h3oFHi2F1EsOXlyRcyP139BLP2Agzz
+         iHuD1XZurCNaOgOrZSqoHgdApcI0hBGvKlN9slxWhUFYM43L+xijyh+ivuhrNo9XNIkb
+         tiR8nYbrUimouwNVnhoYSQ4i029/tkV4qsJ0/nDgJzjkBquh5s8ldIMILG6P6d0wDrEh
+         VJHxjWzDQNxhlGhJP+N8/RSjkH/G7hQyrdkTcYtrMFJQRVpM9gGe1GVNXUTvkwO7Vwur
+         H0gw==
+X-Gm-Message-State: ACrzQf0hdsQPEIpJiOfbk1UUvElFX2/ZZUNQ41IFa0fmxOvzcWj/wkan
+	DAioJzDb9rJBMT1KWqtzKIg/NY6lYVEAxfMygaw=
+X-Google-Smtp-Source: AMsMyM5ONAbRwJ0mRV8lFkFN/+yOIGgrHcLBILWbhUW8XaqfnSolfxdkiScuiVdMZUaqcXP+J2a9nYR4SqM8sa8eRyQ=
+X-Received: by 2002:a05:622a:1045:b0:39c:e2e1:dc59 with SMTP id
+ f5-20020a05622a104500b0039ce2e1dc59mr7379719qte.195.1666008987610; Mon, 17
+ Oct 2022 05:16:27 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
- <20221010201453.77401-2-andriy.shevchenko@linux.intel.com> <CACRpkdbdzFR-a_xh8EjLMAshTeesOYhD3-_Bkc=vi7iK72ZKtA@mail.gmail.com>
-In-Reply-To: <CACRpkdbdzFR-a_xh8EjLMAshTeesOYhD3-_Bkc=vi7iK72ZKtA@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 17 Oct 2022 11:35:16 +0200
-Message-ID: <CAMRc=MexjuQw+hUDDfCVxiBEJ573jNb3Ko9SyOU-xJ03wOe8cQ@mail.gmail.com>
+ <20221010201453.77401-2-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbdzFR-a_xh8EjLMAshTeesOYhD3-_Bkc=vi7iK72ZKtA@mail.gmail.com> <CAMRc=MexjuQw+hUDDfCVxiBEJ573jNb3Ko9SyOU-xJ03wOe8cQ@mail.gmail.com>
+In-Reply-To: <CAMRc=MexjuQw+hUDDfCVxiBEJ573jNb3Ko9SyOU-xJ03wOe8cQ@mail.gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 17 Oct 2022 15:15:51 +0300
+Message-ID: <CAHp75VftkwPB-+jhCrhCdPRN0hLm5DLADMyAO45eBTRFfxiNuQ@mail.gmail.com>
 Subject: Re: [PATCH v2 01/36] gpiolib: tegra186: Add missed header(s)
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
 List-Id: <soc.lore.kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Marc Zyngier <maz@kernel.org>, 
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Marc Zyngier <maz@kernel.org>, 
 	Kent Gibson <warthog618@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
 	Billy Tsai <billy_tsai@aspeedtech.com>, Thomas Gleixner <tglx@linutronix.de>, 
 	Mika Westerberg <mika.westerberg@linux.intel.com>, 
@@ -110,25 +113,30 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Marc Zyngier <maz@kerne
 	Chunyan Zhang <zhang.lyra@gmail.com>, Emil Renner Berthing <kernel@esmil.dk>, 
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 17, 2022 at 10:52 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
->
-> > Do not imply that some of the generic headers may be always included.
-> > Instead, include explicitly what we are direct user of.
+On Mon, Oct 17, 2022 at 12:35 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> On Mon, Oct 17, 2022 at 10:52 AM Linus Walleij <linus.walleij@linaro.org>=
+ wrote:
+>>=C2=B7On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
 > >
-> > While at it, sort headers alphabetically.
+> > > Do not imply that some of the generic headers may be always included.
+> > > Instead, include explicitly what we are direct user of.
+> > >
+> > > While at it, sort headers alphabetically.
+> > >
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Yours,
-> Linus Walleij
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Andy: are you going to send it together with the corresponding pinctrl
-changes in a separate PR?
+> Andy: are you going to send it together with the corresponding pinctrl
+> changes in a separate PR?
 
-Bart
+Yes, this is the plan, but I want first to push it to Linux Next (via
+my tree) for a couple of days, so we will be sure there are no
+compilation issues.
+
+--=20
+With Best Regards,
+Andy Shevchenko
