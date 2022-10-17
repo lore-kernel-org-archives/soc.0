@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E2BC4332F
-	for <soc@archiver.kernel.org>; Mon, 17 Oct 2022 09:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65CAFC4332F
+	for <soc@archiver.kernel.org>; Mon, 17 Oct 2022 09:02:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CB550C4347C; Mon, 17 Oct 2022 09:00:49 +0000 (UTC)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	id 4CC24C433B5; Mon, 17 Oct 2022 09:02:25 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8173CC43142
-	for <soc@kernel.org>; Mon, 17 Oct 2022 09:00:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8173CC43142
+	by smtp.kernel.org (Postfix) with ESMTPS id D7490C43141
+	for <soc@kernel.org>; Mon, 17 Oct 2022 09:02:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D7490C43141
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id r14so15036007edc.7
-        for <soc@kernel.org>; Mon, 17 Oct 2022 02:00:47 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id bj12so23277530ejb.13
+        for <soc@kernel.org>; Mon, 17 Oct 2022 02:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=683v4hUy0SmafI83To+Isl3SKfGOBhxnh8RoSe2BfVE=;
-        b=baKbTregC3QhRdgmJUkHOf2bAAxxqlLwuEXARcNGa3/WqFVAKHDu91dlmMKFRVfyFw
-         s7c1IegnAd/ZA9suBgLZpR0L+BaX22/B3jmG+76M+E+k6juRwzMbuoY1EEK+2DFaFcQj
-         vHc0HMarKjxDZ2Rl+jhmlSY2HbAdhg3CinUqff9ZoO5rLuy9lkDCeuNKh6PLosoKElld
-         ygJbctlrPwFE96iJ1Qbz98jJJdKZ0fYFAZ3+TaiKi2i0SDYwzjKN2AYo1QYvZ+sWtX2p
-         M7eda4stYmZU1Rfm0Wf03Nj1MIR+gICsX2oOuXGWZrEvR9SsMZgZz6UrE8IWMJ3PhbRR
-         4DfA==
+        bh=+DzhSmH1cBeruDtFaVKaVattsEwc8q4hTsou+lcv6jY=;
+        b=Q+/ZCk5uKgheops7slfnvs8xurY8FEURvOhzY1eTrLbemXNWuo99WUD81VK+SpWCxY
+         kzFTgIjquxop1/2G9aP+Jc1kCFR8S4kpwj8bfbUkfgvulb3p97gFWTEKh91wZsvKLTym
+         IGt1H+AuIDwRoqtXQsNeJNwHocUiIbe3K3kYShul2xo1CQl7PNr7jxP/Mgn3ZFbkZlVO
+         J/03NK6UfMQfdp40SIbVe6sr9G0pZuHS/nb7XvkWBeDwVFOg7SA3FW+4r+22nfUcKvmM
+         0KiMdRaZT5lr/vOJbfahx9OfxFGmc5oyK0hcI+W0d917YHmMVMRNLZ2UqBGud/XBVBC3
+         GKCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=683v4hUy0SmafI83To+Isl3SKfGOBhxnh8RoSe2BfVE=;
-        b=Ln8I8LXBh13Ti4csS+Pyt2k60ynjwLFxTjMCLJOWJ3y2aCMruGg5YbbfqvF4mhCbyG
-         FDhf2Ncx9QSbG1s8GFKZV9ouE7K8XUAy+J6zzd9KAGfQUBBpgdAkqfqBCr6ePUeFGq9n
-         slJ/auQ0Z6+qQXRU4DH3akXO0I5o+EzEPZHQNMmq1wjB1LX+pZtl18Y7CyGOd9UdLbev
-         KzbdzqYrpn2RNtFghMrcVm68WNhQyT+i3jqyppBVkNEqEmYj9nr2wlUWsXkvpLwgbQLs
-         W00Zm8SOcWSHwUob5lefa4h7jtph8Kt4a4U7zrx1jI1leuldYP/fkJAOFZO66Si+SOZw
-         Fwxw==
-X-Gm-Message-State: ACrzQf159wcbY2KHHZKX3O3foh7Yj4LPVwNUO7k+ivC95llQsR86blIw
-	JEq665V1kqSVGuKU5ltDn2PcWy000BzULFdXh3134w==
-X-Google-Smtp-Source: AMsMyM7KLX1HAl4ni5IX/0ZUj/Z5Ng5V/LISTngsrYYu60h+W61fPfqDHKqOkVMzkfb8AN6gXeEI3n5jApzCVtxB1uY=
-X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
- eb11-20020a0564020d0b00b00458a2444e99mr9354686edb.46.1665997245656; Mon, 17
- Oct 2022 02:00:45 -0700 (PDT)
+        bh=+DzhSmH1cBeruDtFaVKaVattsEwc8q4hTsou+lcv6jY=;
+        b=Qn6C6M+tYWpb5ZyB1jPGWoAv909d/hwBahw8vEHUhY/nJTBuFrvJ1A+sUT4SLbqZUG
+         OQvxDsnXvjWmvkkLjQyrfnkWTdjfpqeYGMg6e1h+M+hox8x1wSb1KPTX1gZonFbnFPJK
+         Yxs2lrjkJYoHjZyNjHyaFgWrWrWcXPNuebqwYxkoFeuizVPacXiHkn6R0Sll//RMxnm6
+         4+2qisE6wkW1zzQ+lV5qmaaiIc3Du8X1H31nGAfMZz9X9WJVg9JCjJojYPE1NY4PPL+K
+         MSdnEfcbJkkc3Z5h5nKn+3yn0Hy06XqBnZKC7urBQ6H/gMOAIwigt8koZsbGchXOmoXe
+         rT5Q==
+X-Gm-Message-State: ACrzQf3sPb4f5JwHxHSTwKy4bmpMw4hz8EImGXEQl+plcnyWaFbiE8zQ
+	U3OTKpF1C9HX3K9ZwQcIDWp5hbTq4kXqaodPE370mA==
+X-Google-Smtp-Source: AMsMyM4UDyy4gIfLqRCo+xVdWhgvw2QqSAfU62C/zZi9P70aMTTtCFnk0FMes6AqIcJjw6kKWDVGE0urcJP2xkclA/A=
+X-Received: by 2002:a17:906:8a48:b0:78d:acdc:b7d9 with SMTP id
+ gx8-20020a1709068a4800b0078dacdcb7d9mr7921544ejc.500.1665997341068; Mon, 17
+ Oct 2022 02:02:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-12-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-12-andriy.shevchenko@linux.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 17 Oct 2022 11:00:34 +0200
-Message-ID: <CACRpkdZLfPKwsABYnz0fAhqTGDnE7ZJzFJ4v_M2XF6_DTjW0Mw@mail.gmail.com>
-Subject: Re: [PATCH v2 11/36] pinctrl: ingenic: Add missed header(s)
+Date: Mon, 17 Oct 2022 11:02:09 +0200
+Message-ID: <CACRpkdZ1M3ckw+jFgvMqG4jvR-t_44GPoZ6ZDXszwZCJr-cDpg@mail.gmail.com>
+Subject: Re: [rft, PATCH v2 00/36] pinctrl: Clean up and add missed headers
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gibson <warthog618@gmail.com>, 
@@ -112,14 +112,17 @@ Content-Type: text/plain; charset="UTF-8"
 On Mon, Oct 10, 2022 at 10:15 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 
-> Do not imply that some of the generic headers may be always included.
-> Instead, include explicitly what we are direct user of.
+> Currently the header inclusion inside the pinctrl headers seems more arbitrary
+> than logical. This series is basically out of two parts:
+> - add missed headers to the pin control drivers / users
+> - clean up the headers of pin control subsystem
 >
-> While at it, sort headers alphabetically.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> The idea is to have this series to be pulled after -rc1 by the GPIO and
+> pin control subsystems, so all new drivers will utilize cleaned up headers
+> of the pin control.
 
-Patch applied!
+Aha I see you want to send a pull request so I backed out the applied patches
+from the series for now.
 
 Yours,
 Linus Walleij
