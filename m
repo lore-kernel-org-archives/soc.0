@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE0C5C433FE
-	for <soc@archiver.kernel.org>; Mon, 17 Oct 2022 08:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95530C4332F
+	for <soc@archiver.kernel.org>; Mon, 17 Oct 2022 09:00:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B4706C433D6; Mon, 17 Oct 2022 08:59:29 +0000 (UTC)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	id 7F48BC43142; Mon, 17 Oct 2022 09:00:10 +0000 (UTC)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BA36CC43143
-	for <soc@kernel.org>; Mon, 17 Oct 2022 08:59:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BA36CC43143
+	by smtp.kernel.org (Postfix) with ESMTPS id E3105C43144
+	for <soc@kernel.org>; Mon, 17 Oct 2022 09:00:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3105C43144
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f49.google.com with SMTP id l22so15033477edj.5
-        for <soc@kernel.org>; Mon, 17 Oct 2022 01:59:27 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id e18so15036916edj.3
+        for <soc@kernel.org>; Mon, 17 Oct 2022 02:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
         bh=683v4hUy0SmafI83To+Isl3SKfGOBhxnh8RoSe2BfVE=;
-        b=lksiEjvW/nAWbEsO+blzNGlX655Up2aVmZ+qr0T9NR9G5GUsNcjQk105enmuN67BR7
-         UHuLmLhKHxaHkU36TaV9Xrzc4/1Mlhvz8HjOnUt2o2jQMYhw/AkxxpsY+KY9JqDIWmr8
-         d1N8XVJYpslnRfFjZ//gRs03NsDK+A8ODS8lqFRC9FLx2OTeFo8j/UonGbouh2xdQIF1
-         CAHcosPu7mJgfkyrQKLLzRcpcrZBYIJqNUVGjhEv6Dru9/97clFp4PixgHPrKN/KwWJx
-         EugpSAHDdmZ4VGm3mRypKMxek42bzXpjdM8R37iNxZxe8xCNEiF/voBmBrNuoLO4Wpal
-         gBNg==
+        b=dm/Nt6xeLy51NB8MVo7obwM+852oRrh6kv29Cep7deqc4s/4HdJl7FiZqfN9XWyFmq
+         PEiSQEJYH+PXHavxy/4td4Ss60zPdOW66Nm4OVHjJWGyeBDSTXFjenfxFIoUTymQ3Rmi
+         zS+6OYEcwrRB3dfWX2vjNRs25pwNYTvrfqJ3SUm+ySkbhzDW7NutV590fGsZMyVxBUW5
+         i7AvrrD/hPrDzjoDPE8R+2+YT6cSrnsXVMKDprnpXnZsn9nFCDUOIHKlu2F3zBs4hgdZ
+         5yNLaYhcJzRTDN/zpX4CqQC0HSH+aLSZLfgYA7gKNawTaAaj2kSOlyn/aoGzC+9McidO
+         9f4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=683v4hUy0SmafI83To+Isl3SKfGOBhxnh8RoSe2BfVE=;
-        b=ZVCQ+hxuz4jUT5ZL8x6aHzJgEqwYPk/atWlV/xzwr5iGNkVFclV2mT/TMdk1hvl4eD
-         5slMgtHc1RmnPoSvVF4Etj9XODlq/u4G2bm2hiNeC2/fBmQg3+7bSP2ZzMW4qoNxmN8J
-         88TzaULVhB+ws4P28abF+WJsFjeWytxBX+B9/diRFJOqIC4QrTRJdL2odPcvehzH8UGr
-         W2Uuw4LJ5EksOwa8E8TZ71kkM7iVkd6qC/7byMhbQ3FOwPllDr4nZbxa52F9mYiIAYsu
-         EKl99qZdeFdZhrCGGrt1wJJ6YBnvncnpLCzpkj4rGW9EbhyZp/2w5uGgK56za7jOmhqh
-         D8/A==
-X-Gm-Message-State: ACrzQf1+xwpTj/xT0DJBEROddCvNmg883FLKmwMXV6dgMUgcj5uwImbE
-	GMjTGm4OHLP2L2KUQAolBujSur5UrtyRfvDMnd1D4w==
-X-Google-Smtp-Source: AMsMyM5jBTN66KnJzjKTSQ9NNCRMfOP0MRN6i+02F0jpqhh3OWSW+zYUeHqWxB6Vbv6U2MMRu+t1W7ApKxmC8RZ+8R4=
-X-Received: by 2002:a05:6402:2694:b0:45c:a035:34bc with SMTP id
- w20-20020a056402269400b0045ca03534bcmr9170844edd.158.1665997165761; Mon, 17
- Oct 2022 01:59:25 -0700 (PDT)
+        b=UU3GU14GSj2AZPe2n678nll5/97mP/M78qa/ZSvlJqnlWbPCR5fOktVzPVPk+wN1Zj
+         e4xUsfzZHeWqXfCsLsLHr7aC/Svk3ucK8coR9Y0YSa8vY+HTnk2VF3IPA+mFk70UPkhy
+         EwuCdUgdH6ULgAEZDpUQ6eKKQWCIHgR7240a6zSLiwMHDtoMjVCuqwPg6fONuH2NyeKn
+         hG2l98SeGtLWOwvGOjKGS0A0AIe6TrONzObejpJKNAgfYwps56wyS7CLrw13IsxYy3/V
+         qiSffVv8iEy8sSSVLJgtonAOm/Gd+tlNkKx0r/17rd1kBGndnfoygS66bPdGfVC9lz9n
+         1bZQ==
+X-Gm-Message-State: ACrzQf21gZMvcEc5MFEYlIz9XMuFc1BZTQuXxeuXU8PdqK51mJOfgCaf
+	iZAhbA8F4JX6Y58ffYmSR+in1vik0MU8882K7X5Ang==
+X-Google-Smtp-Source: AMsMyM75VJRNXRWuH3xUBu8rTGOtseWXKYSI7NNSW4bcXZ4SIlOn8hiiyIMM/AoI9crYmm+7lTOfrLhKDqXw522JVF8=
+X-Received: by 2002:a05:6402:4029:b0:45b:d50c:b9b0 with SMTP id
+ d41-20020a056402402900b0045bd50cb9b0mr9161790eda.126.1665997206064; Mon, 17
+ Oct 2022 02:00:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-10-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221010201453.77401-10-andriy.shevchenko@linux.intel.com>
+References: <20221010201453.77401-1-andriy.shevchenko@linux.intel.com> <20221010201453.77401-11-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221010201453.77401-11-andriy.shevchenko@linux.intel.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 17 Oct 2022 10:59:14 +0200
-Message-ID: <CACRpkdaMdwurbFt-S63M_sGDS0L-VxPc+cee2Drj9h8iKtRXYw@mail.gmail.com>
-Subject: Re: [PATCH v2 09/36] pinctrl: cygnus-mux: Add missed header(s)
+Date: Mon, 17 Oct 2022 10:59:54 +0200
+Message-ID: <CACRpkdZ=0Uj7PxS-+AcQ+Z1xsV0n24xsSA0+upucZzbXVa2KHw@mail.gmail.com>
+Subject: Re: [PATCH v2 10/36] pinctrl: imx: Add missed header(s)
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Kent Gibson <warthog618@gmail.com>, 
