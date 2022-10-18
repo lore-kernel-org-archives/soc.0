@@ -1,89 +1,88 @@
-Return-Path: <SRS0=xrnp=2T=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=2WOw=2T=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF62C43217
-	for <soc@archiver.kernel.org>; Tue, 18 Oct 2022 07:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8465C433FE
+	for <soc@archiver.kernel.org>; Tue, 18 Oct 2022 12:45:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D2A4FC433C1; Tue, 18 Oct 2022 07:18:50 +0000 (UTC)
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id ACA60C433D6; Tue, 18 Oct 2022 12:45:55 +0000 (UTC)
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C204EC433D6;
-	Tue, 18 Oct 2022 07:18:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C204EC433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id BAB043200918;
-	Tue, 18 Oct 2022 03:18:48 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 18 Oct 2022 03:18:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1666077528; x=1666163928; bh=aitxup8K/Y
-	Z1XXuNLQpLGuiCQL0WdKiCm4vvciVjJ7c=; b=Bw2G/y+sn547ODQ7NTQq/l3EDO
-	+H9XEfRwxdTKLxIDbPe8PuQnwZhd2o7SK/A1klFZbgtsXRlSpY+eLhTVuKi7PWZe
-	RIzXBme8RHntl8xeq2Y6BlgN4r9ah99aaWhtJRPkjbRO6ivy/3SptPpA7NBvDESb
-	CbKLE7mDMcF1OBQgOVpEOLhMLbf05uu3EPHneKuk6UB11d55Vh6G8+uuFSkigxdm
-	ryUh5j/5Jol9T4Ju1o5ZfJCgAPgyjS50kf8UqWUdq04kGyBhYZOgeUawA7btCe1p
-	z4NTu4M+wmM6WbDAMTrNZrME4TXpktJnOJa8/mN6WkuLOUG4DIfm1prwFK+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1666077528; x=1666163928; bh=aitxup8K/YZ1XXuNLQpLGuiCQL0W
-	dKiCm4vvciVjJ7c=; b=ZtzSUvrIgkhVd0OEQxDkKJm1NPs9bomDv/sp3jEP+00o
-	fiWloIt06yvpQOffI+gxU9hiu4jU6sU7AQ1c4/+SxMCCqT59CU4CgmOCdl6wvylt
-	XqYb83fC0pVu666xvydCXRrM258ITDmyZgUpDTpLI72G+tigTWeNZCByErIOvb6P
-	EgJBYTuDxLagBUqUh6Cak1fuJmeAN///W89s/yRpb/1fFaKPfKNgss/6uzGiuW6o
-	fQUIyuCuZ35OrMg1+Dl5lw6EkTjqMzWp1YyJKKd0cR0Wbre3PXltfMCVE6y31U20
-	qEXgFlBZ/tkvTj3eJpdXoaTEiyMHNAjWJg8/jNZ3eQ==
-X-ME-Sender: <xms:WFNOY4M6il5Pbdpj8eOj_cqNLhhxCJIjzIUic-o7xnPP87Z3pER7wg>
-    <xme:WFNOY--3JkSFX0T-N5kRCRdc1E3xek-MyaUV4SwsU5ZJPyF1QwofrkkKAYtMJ6ZHS
-    TDyL8cMQ7HT8j1r5Bs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeltddguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:WFNOY_RicZfy4LU_VYtZDf8Ki31WbreCKkjJGVVrRn8gTEHPkZ9s0Q>
-    <xmx:WFNOYwvGAXB4kSxNXxZQneOq4aR3vJ67XfS2Eq1wH44JZSH_vYgoKQ>
-    <xmx:WFNOYwf5FqH4P29IvgYwB3BIHG3gGBqdRX9cWQCpiyUx40dr9huxVg>
-    <xmx:WFNOY47wh_ueaK5cQw7Gwnxum3v4mS7l8X3blH9MPVzYmvAONJpQfQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1F10CB60086; Tue, 18 Oct 2022 03:18:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <0991a91e-384b-4be1-ab41-e29f8ad88d84@app.fastmail.com>
-In-Reply-To: <79d9b77f-f7e1-61d9-2e86-301f07a03721@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id DB6C4C433B5
+	for <soc@kernel.org>; Tue, 18 Oct 2022 12:45:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB6C4C433B5
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qt1-f172.google.com with SMTP id w3so9500881qtv.9
+        for <soc@kernel.org>; Tue, 18 Oct 2022 05:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SWxKl23w6XMI7+5jEn1eePKGLm8+GZam2TRBB7nw/fU=;
+        b=GZcjHVztgYOJHB6mAJbvi8Th0/QGV94wcDkolAkngJuS8QoerJe/nBj/jmhdKXQzrX
+         gqxH1ttIA+M2ExM5khLwidXF1/n+PyXFRUjlnHq/rb2USCzW5TVrqRiGQrHZnVNWSixh
+         DzWnw6w8R8yrmfFh8JTGIz8IwATL4WA1MNANq3VNOii9gPuWK0eARjbBA2wNeMeKusSE
+         bwpRqROC7gfCVP9ufJEEfi8AblrCoUuGkCV+dFZild+XlG3GEvpT9+yg1aZ1jSeiuAAK
+         BeXrzEdSWQoCpJScpb7wGRinN+6jIxuWmqxlvSV7uRlUDhHm2l8H+TsX2/bZSx8f6LQ9
+         T+EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SWxKl23w6XMI7+5jEn1eePKGLm8+GZam2TRBB7nw/fU=;
+        b=UTAOVDmfTDMj90w6WYfvsGMpDjq4OnqXu1ULSEIYteT25Y+5pNOsfMUA1cEZugSpHM
+         OKe3yeWmeVH6ixqZVH5NPmzAjKz2aQ3Agqx96T8E48hxBrdJ/FdZ4XR7NUq2RXzIUzM1
+         twvgiZBMO6PPTpuI08dyU7md3nHYv4mVAuk6P7PsXUT0Up3wbRzPFglRwMPNdlY8ZRk/
+         saQOBoOadMsxYciviatHh0I4nSKIRRogPX0uZSa7vOuefgu2iPYOcLb7faO/K79sNVw/
+         U8xNGrTKLS3+YZBaAR+XKBWS6B6okjdpr0z2ljAFuy6yifzFKoLFu00KYWok+jdMyKRk
+         Vjqg==
+X-Gm-Message-State: ACrzQf1Wajy7t0MiHNV3RU6KzAxsTb977Pkx/xMzsRX6a59fWEY3KZhs
+	+pYmt7ypAp4NPs+bS9NqCpVHaw==
+X-Google-Smtp-Source: AMsMyM6Vm4QBG6EQYbErftl1Bfd4F9lOWC02IlvQ57Iue1RblKX7llB4Nn053ohiLxXnC+/4oqWTsQ==
+X-Received: by 2002:a05:622a:554:b0:39c:ef65:bc66 with SMTP id m20-20020a05622a055400b0039cef65bc66mr1892322qtx.550.1666097152810;
+        Tue, 18 Oct 2022 05:45:52 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id ay40-20020a05620a17a800b006bb78d095c5sm2212951qkb.79.2022.10.18.05.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 05:45:52 -0700 (PDT)
+Message-ID: <5f9515e3-aa46-eba6-4c2d-9cd4d2e585aa@linaro.org>
+Date: Tue, 18 Oct 2022 08:45:47 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [GIT PULL] memory: late (3rd) for v6.1
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ arm@kernel.org, soc@kernel.org
+Cc: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
 References: <20221003073237.11488-1-krzysztof.kozlowski@linaro.org>
  <79d9b77f-f7e1-61d9-2e86-301f07a03721@linaro.org>
-Date: Tue, 18 Oct 2022 09:18:23 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "Olof Johansson" <olof@lixom.net>, arm@kernel.org, soc@kernel.org
-Cc: linux-kernel@vger.kernel.org, "Krzysztof Kozlowski" <krzk@kernel.org>
-Subject: Re: [GIT PULL] memory: late (3rd) for v6.1
-Content-Type: text/plain
+ <0991a91e-384b-4be1-ab41-e29f8ad88d84@app.fastmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0991a91e-384b-4be1-ab41-e29f8ad88d84@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 17, 2022, at 11:51 PM, Krzysztof Kozlowski wrote:
-> On 03/10/2022 03:32, Krzysztof Kozlowski wrote:
->
-> This was a late pull and missed the merge window. It was based on
-> previous pulls. Shall I rebase on 6.1-rc1 and resubmit?
+On 18/10/2022 03:18, Arnd Bergmann wrote:
+> On Mon, Oct 17, 2022, at 11:51 PM, Krzysztof Kozlowski wrote:
+>> On 03/10/2022 03:32, Krzysztof Kozlowski wrote:
+>>
+>> This was a late pull and missed the merge window. It was based on
+>> previous pulls. Shall I rebase on 6.1-rc1 and resubmit?
+> 
+> I'd prefer a rebase to -rc1 before you resubmit, but sending the
+> same pull request again would work as well.
 
-I'd prefer a rebase to -rc1 before you resubmit, but sending the
-same pull request again would work as well.
 
-     Arnd
+Thanks, I'll rebase.
+
+Best regards,
+Krzysztof
+
