@@ -1,90 +1,115 @@
-Return-Path: <SRS0=xfH4=2U=bootlin.com=kory.maincent@kernel.org>
+Return-Path: <johan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E77F5C433FE
-	for <soc@archiver.kernel.org>; Wed, 19 Oct 2022 13:32:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C8B6C43217
+	for <soc@archiver.kernel.org>; Wed, 19 Oct 2022 14:14:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D01D4C433D6; Wed, 19 Oct 2022 13:32:28 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E8303C433C1;
-	Wed, 19 Oct 2022 13:32:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E8303C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: (Authenticated sender: kory.maincent@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 86302E0018;
-	Wed, 19 Oct 2022 13:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1666186345;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B4WZT0ijc4vr+yQWHuy8C2QHY5BLhRbeTNROpcFndPc=;
-	b=o3EnyrFn/BZ9wLYgskdr/Yz5E2HEnUC5VDVvCSe8kK/Cb+eCeTeiAOXfBVDsZsyN2MVyQP
-	aqWJDiXVy3b5y0ur4ojErVDDM0D3m8bfwbjaCEHHBJ8VV9y/DX627pFzvk9FWqgcKtkQWT
-	OcfkX6R5VEinSeWGSkfxXjIOUq7MKK9saWMOiVwa5i7TPWWfLWn90phJNE8Q89LlqYW9Yi
-	MgzEjUAObg+mIs6a31IHZljlVNygBUTGZXfjUwiDCjG1prvKn+jBd6ePiwCgyDTmPZNlWj
-	q0/18vCqFMUhdMyinLWf0/IoM3/pVCqOAKiulwoxmp264zzK09+50pSJoQOpkg==
-From: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+	id 01F4DC433B5; Wed, 19 Oct 2022 14:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85F0C433C1;
+	Wed, 19 Oct 2022 14:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1666188856;
+	bh=/6HxliF+O90I74ybFJn/y4dqB2sGJTLvlhB20rV8hUg=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=gmx/8MoVdje7U94zG8PcHLFNeZt3k0ywIZhFlKOqIgb9H10XfJXFNEiRjZZurlRrx
+	 N+V+uHpZv+HeQl3MMZmO21CCUChNDOKKmLCvRCo3W9dl2kie+5cPBO8xOXo9tA3WYM
+	 FLplIflSfm362Qp5AkOfnrrUrkz0qS7Gw7Q9yZQHo7ZHrdgUcSOQ8hBYNNKlTVC3VK
+	 qsktyGP4DIjidBRsH/tRf1ZfIC+IHNMcBXWPq2b7gNogF3bbOl5E3mqzJzL/XS7iWT
+	 rGHb9We7PUtFSTH6SWxOulvhDnS9nUZLHf3rx+wYBlJYg/7dn/PaGYre2Fb60aLXjO
+	 adVG/rSVIu2nA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+	(envelope-from <johan@kernel.org>)
+	id 1ol9pc-0002qm-7Z; Wed, 19 Oct 2022 16:14:04 +0200
+Date: Wed, 19 Oct 2022 16:14:04 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sudeep Holla <sudeep.holla@arm.com>, Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: thomas.petazzoni@bootlin.com,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	soc@kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 6/6] clk: spear: Fix SSP clock definition on SPEAr600
-Date: Wed, 19 Oct 2022 15:32:08 +0200
-Message-Id: <20221019133208.319626-7-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221019133208.319626-1-kory.maincent@bootlin.com>
-References: <20221019133208.319626-1-kory.maincent@bootlin.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] firmware/psci: Print a warning if PSCI doesn't
+ accept PC mode
+Message-ID: <Y1AGLPXWFOmjfdd0@hovoldconsulting.com>
+References: <20220926110249.666813-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926110249.666813-1-dmitry.baryshkov@linaro.org>
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+On Mon, Sep 26, 2022 at 02:02:49PM +0300, Dmitry Baryshkov wrote:
+> The function psci_pd_try_set_osi_mode() will print an error if enabling
+> OSI mode fails. To ease debugging PSCI issues print corresponding
+> message if switching to PC mode fails too.
+> 
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+> This is a replacement for [1], now moving the warning from
+> psci_set_osi_mode() callers to the function iself.
+> 
+> The patch is resent to include soc@kernel.org
+> 
+> [1] https://lore.kernel.org/all/20220727182034.983727-1-dmitry.baryshkov@linaro.org/
+> 
+> ---
+>  drivers/cpuidle/cpuidle-psci-domain.c | 4 +---
+>  drivers/firmware/psci/psci.c          | 2 ++
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index 3db4fca1172b..821984947ed9 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -124,10 +124,8 @@ static bool psci_pd_try_set_osi_mode(void)
+>  		return false;
+>  
+>  	ret = psci_set_osi_mode(true);
+> -	if (ret) {
+> -		pr_warn("failed to enable OSI mode: %d\n", ret);
+> +	if (ret)
+>  		return false;
+> -	}
+>  
+>  	return true;
+>  }
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index 9fdcb6bff403..42cae0ba10e2 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -164,6 +164,8 @@ int psci_set_osi_mode(bool enable)
+>  			PSCI_1_0_SUSPEND_MODE_PC;
+>  
+>  	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
+> +	if (err < 0)
+> +		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+>  	return psci_to_linux_errno(err);
+>  }
 
-There is no SPEAr600 device named "ssp-pl022.x". Instead, the description
-of the SSP (Synchronous Serial Port) was recently added to the Device Tree,
-and the device name is "xxx.spi", so we should associate the SSP gateable
-clock to these device names.
+When booting 6.1-rc1 I now see:
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- drivers/clk/spear/spear6xx_clock.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+	[    0.000000] psci: OSI mode supported.
+	[    0.000000] psci: failed to set PC mode: -3
 
-diff --git a/drivers/clk/spear/spear6xx_clock.c b/drivers/clk/spear/spear6xx_clock.c
-index ee0ed89f2954..adfa118520c3 100644
---- a/drivers/clk/spear/spear6xx_clock.c
-+++ b/drivers/clk/spear/spear6xx_clock.c
-@@ -326,13 +326,13 @@ void __init spear6xx_clk_init(void __iomem *misc_base)
- 
- 	clk = clk_register_gate(NULL, "ssp0_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP0_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.0");
-+	clk_register_clkdev(clk, NULL, "d0100000.spi");
- 
- 	clk = clk_register_gate(NULL, "ssp1_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP1_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.1");
-+	clk_register_clkdev(clk, NULL, "d0180000.spi");
- 
- 	clk = clk_register_gate(NULL, "ssp2_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP2_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.2");
-+	clk_register_clkdev(clk, NULL, "d8180000.spi");
- }
--- 
-2.25.1
+on every boot with sc8280xp, while later enabling OSI mode still works:
 
+	[    0.227358] CPUidle PSCI: psci_pd_try_set_osi_mode - success
+	[    0.227599] CPUidle PSCI: Initialized CPU PM domain topology
+
+Judging from Sudeep's comment on v1:
+
+	The platform must boot in PC mode, so even if it fails we ignore
+	so not sure if the logging is of much help here IMO.
+
+perhaps logging this as an error is not a good idea?
+
+Johan
