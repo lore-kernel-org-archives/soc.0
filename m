@@ -1,145 +1,42 @@
-Return-Path: <SRS0=15ei=2Z=marcan.st=marcan@kernel.org>
+Return-Path: <SRS0=+9E1=2Z=udec.com=pc016@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96838C3A59D
-	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 06:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC8FFC3A59D
+	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 07:36:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 496DAC4347C; Mon, 24 Oct 2022 06:21:12 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F2E6DC433D7
-	for <soc@kernel.org>; Mon, 24 Oct 2022 06:21:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2E6DC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 0888B42137;
-	Mon, 24 Oct 2022 06:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1666592466; bh=MWOe8I8q+lsn3KC3yEyEeeUlPMaoDKA+SDB384axbew=;
-	h=Date:From:Subject:To:Cc;
-	b=s13njybK5vMlyqvnEPoWt+yMX/7eumgrt53TjX/5GdEHIR/7gdB5eltPb4M01UZzf
-	 qRvG9zsxFkzPpu0O19aUBXL2wKJoqD4jZfV7kHQgrGaWAlywshLoDgz1OUu8OjUXAm
-	 XuzKwN/g7wCx4ML3OBhJidAN4kaVoUNWwR/68MaO6AqI4F5JgoOoXjJvCOOSLS4TG6
-	 PeIeiL1pXcm/4y3ZFK9bya3OiHMguYP9eo/HwBXpt4T3mK2Uum8I1pHAQ0KojfrpZ7
-	 Vo6uoea5V2FDxTAehF9mG+sq1+RZVsDbuas4c9zJrGHNeHvnplDa8PTEbVJNc+AjMK
-	 En6O3F8p85QPQ==
-Message-ID: <dea10860-2870-3a9e-fa51-21e493b1573a@marcan.st>
-Date: Mon, 24 Oct 2022 15:21:02 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From: Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC DT updates for 6.2
+	id BADABC433D7; Mon, 24 Oct 2022 07:36:34 +0000 (UTC)
+Received: from mail.devops-solutions.io (unknown [167.86.83.240])
+	by smtp.kernel.org (Postfix) with ESMTP id 9C017C433D6
+	for <soc@kernel.org>; Mon, 24 Oct 2022 07:36:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9C017C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=udec.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=udec.com
+Received: from [193.239.84.198] (unknown [193.239.84.198])
+	(Authenticated sender: test@mail.devops-solutions.io)
+	by mail.devops-solutions.io (Postfix) with ESMTPA id C722B17388F1
+	for <soc@kernel.org>; Mon, 24 Oct 2022 07:48:56 +0200 (CEST)
+Content-Type: text/plain; charset="iso-8859-1"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: 2% interest rate loan
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Content-Language: en-US
-Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: soc@kernel.org
+From: "Elina Shen" <pc016@udec.com>
+Date: Sun, 23 Oct 2022 22:48:55 -0700
+Reply-To: duroarellan@gmail.com
+Message-Id: <20221024062223.3A2541801B3E@mail.devops-solutions.io>
 
-Hi SoC folks,
+Good day,
 
-Please merge these DT changes for 6.2.
+New Business and Project Funding? Apply Now for Low interest with Legitimat=
+e Reputable Money Lender & Finance Company, We offer all kinds of loans wit=
+h the lowest interest rate of 2% commission.
 
-These are the t6000 device tree changes that got punted last cycle, and
-some audio stuff.
+Thanks
+Money Lender & Investment Finance Company.
 
--Hector
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.2
-
-for you to fetch changes up to 56fed763f6b2dc2578ea8c3e7d317722d8581cba:
-
-  arm64: dts: apple: Add ADMAC resets on t8103/t600x (2022-10-24 13:44:22 +0900)
-
-----------------------------------------------------------------
-Apple SoC DT updates for 6.2.
-
-This includes new device trees for Apple M1 Pro/Max/Ultra SoCs and the
-devices that contain them, as well as some audio-related changes.
-
-----------------------------------------------------------------
-Hector Martin (3):
-      arm64: dts: apple: Fix j45x model years
-      arm64: dts: apple: Add initial t6000/t6001/t6002 DTs
-      arm64: dts: apple: Add J314 and J316 devicetrees
-
-Janne Grunau (4):
-      dt-bindings: apple,aic2: Add CPU PMU per-cpu pseudo-interrupts
-      dt-bindings: arm: apple: Add t6001/t6002 Mac Studio compatibles
-      arm64: dts: apple: Add J375 devicetrees
-      arm64: dts: apple: t600x: Add MCA and its support
-
-Martin Povišer (4):
-      arm64: dts: apple: t8103: Add AUDIO_P parent to the SIO_ADMA power domain
-      arm64: dts: apple: t8103: Add MCA and its support
-      dt-bindings: dma: apple,admac: Add reset
-      arm64: dts: apple: Add ADMAC resets on t8103/t600x
-
-Sven Peter (1):
-      dt-bindings: iommu: dart: add t6000 compatible
-
- Documentation/devicetree/bindings/arm/apple.yaml   |   14 +-
- .../devicetree/bindings/dma/apple,admac.yaml       |    3 +
- .../bindings/interrupt-controller/apple,aic2.yaml  |   29 +
- .../devicetree/bindings/iommu/apple,dart.yaml      |    4 +-
- arch/arm64/boot/dts/apple/Makefile                 |    6 +
- arch/arm64/boot/dts/apple/multi-die-cpp.h          |   22 +
- arch/arm64/boot/dts/apple/t6000-j314s.dts          |   18 +
- arch/arm64/boot/dts/apple/t6000-j316s.dts          |   18 +
- arch/arm64/boot/dts/apple/t6000.dtsi               |   18 +
- arch/arm64/boot/dts/apple/t6001-j314c.dts          |   18 +
- arch/arm64/boot/dts/apple/t6001-j316c.dts          |   18 +
- arch/arm64/boot/dts/apple/t6001-j375c.dts          |   18 +
- arch/arm64/boot/dts/apple/t6001.dtsi               |   63 +
- arch/arm64/boot/dts/apple/t6002-j375d.dts          |   50 +
- arch/arm64/boot/dts/apple/t6002.dtsi               |  175 ++
- arch/arm64/boot/dts/apple/t600x-common.dtsi        |  137 ++
- arch/arm64/boot/dts/apple/t600x-die0.dtsi          |  361 ++++
- arch/arm64/boot/dts/apple/t600x-dieX.dtsi          |  103 +
- arch/arm64/boot/dts/apple/t600x-gpio-pins.dtsi     |   45 +
- arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi     |  114 ++
- arch/arm64/boot/dts/apple/t600x-j375.dtsi          |  117 ++
- arch/arm64/boot/dts/apple/t600x-nvme.dtsi          |   42 +
- arch/arm64/boot/dts/apple/t600x-pmgr.dtsi          | 2012 ++++++++++++++++++++
- arch/arm64/boot/dts/apple/t8103-j456.dts           |    2 +-
- arch/arm64/boot/dts/apple/t8103-j457.dts           |    2 +-
- arch/arm64/boot/dts/apple/t8103-jxxx.dtsi          |    4 +
- arch/arm64/boot/dts/apple/t8103-pmgr.dtsi          |    2 +-
- arch/arm64/boot/dts/apple/t8103.dtsi               |   74 +
- 28 files changed, 3484 insertions(+), 5 deletions(-)
- create mode 100644 arch/arm64/boot/dts/apple/multi-die-cpp.h
- create mode 100644 arch/arm64/boot/dts/apple/t6000-j314s.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6000-j316s.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6000.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t6001-j314c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6001-j316c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6001-j375c.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6001.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t6002-j375d.dts
- create mode 100644 arch/arm64/boot/dts/apple/t6002.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-common.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-die0.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-dieX.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-gpio-pins.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-j375.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-nvme.dtsi
- create mode 100644 arch/arm64/boot/dts/apple/t600x-pmgr.dtsi
-
+E-mail: applynlif@gmail.com=20
