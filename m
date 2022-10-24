@@ -1,659 +1,145 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=15ei=2Z=marcan.st=marcan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B12D9C3A59D
-	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 01:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96838C3A59D
+	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 06:21:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 698CCC433B5; Mon, 24 Oct 2022 01:18:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA47C433C1;
-	Mon, 24 Oct 2022 01:18:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1666574336;
-	bh=d5+qB1WL8Cb8nSn/Q5qLckTZehzcnq0refaoi0al9pg=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=e3vif0nXxHDgLVUV75/A5ZI0k/gjnQvSJQsdEwEPOHHNyI8i7swVJhsYMxMNqR7w2
-	 RaCS4X3rBl9xH6ts4KJahts++pT8uyYsKv4imOxqfjSrQ4mmqBZEwkreZe6L/L3ZCv
-	 X9BybKQX2KJ52ybw+v+ng5YwpH/gOC/aa1icol+h524BNi7x7nSCoXXA75yjNL7mF/
-	 +BDc3HwgT70SPxNejWguqp/KJqIt8BN4apeBgBDoOrC/QQJUr8JzW8IMkBrKp5w4v7
-	 a1i4sh1F2qaA+Ft+UXehFjVrP5uh01HCu92ZoYbwDc7ImtYa6w56C0xE2+OlYJ26TQ
-	 KienIZnGI2aEg==
-Date: Mon, 24 Oct 2022 09:18:46 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
-List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
-	olof@lixom.net, soc@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	marcel.ziswiler@toradex.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	nicolecrivain@gmail.com, m.felsch@pengutronix.de
-Subject: Re: [PATCH v3 2/2] ARM: dts: imx: Add devicetree for Kobo Aura 2
-Message-ID: <20221024011846.GS125525@dragon>
-References: <20220923221112.1671392-1-andreas@kemnade.info>
- <20220923221112.1671392-3-andreas@kemnade.info>
+	id 496DAC4347C; Mon, 24 Oct 2022 06:21:12 +0000 (UTC)
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id F2E6DC433D7
+	for <soc@kernel.org>; Mon, 24 Oct 2022 06:21:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2E6DC433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 0888B42137;
+	Mon, 24 Oct 2022 06:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1666592466; bh=MWOe8I8q+lsn3KC3yEyEeeUlPMaoDKA+SDB384axbew=;
+	h=Date:From:Subject:To:Cc;
+	b=s13njybK5vMlyqvnEPoWt+yMX/7eumgrt53TjX/5GdEHIR/7gdB5eltPb4M01UZzf
+	 qRvG9zsxFkzPpu0O19aUBXL2wKJoqD4jZfV7kHQgrGaWAlywshLoDgz1OUu8OjUXAm
+	 XuzKwN/g7wCx4ML3OBhJidAN4kaVoUNWwR/68MaO6AqI4F5JgoOoXjJvCOOSLS4TG6
+	 PeIeiL1pXcm/4y3ZFK9bya3OiHMguYP9eo/HwBXpt4T3mK2Uum8I1pHAQ0KojfrpZ7
+	 Vo6uoea5V2FDxTAehF9mG+sq1+RZVsDbuas4c9zJrGHNeHvnplDa8PTEbVJNc+AjMK
+	 En6O3F8p85QPQ==
+Message-ID: <dea10860-2870-3a9e-fa51-21e493b1573a@marcan.st>
+Date: Mon, 24 Oct 2022 15:21:02 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923221112.1671392-3-andreas@kemnade.info>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From: Hector Martin <marcan@marcan.st>
+Subject: [GIT PULL] Apple SoC DT updates for 6.2
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Content-Language: en-US
+Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Sep 24, 2022 at 12:11:12AM +0200, Andreas Kemnade wrote:
-> This adds a devicetree for the Kobo Aura 2 Ebook reader. It is based
-> on boards marked with "37NB-E60QL0+4B1". It is equipped with an i.MX6SL
-> SoC.
-> 
-> Expected to work:
->   - Buttons
->   - Wifi (with external module)
->   - LED
->   - uSD
->   - USB
->   - RTC
->   - Fuel Gauge
->   - Backlight (if the required regulator is probed before the backlight,
->     specifying a supply is not supported by backlightdriver)
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
-> Changes in V3:
-> - iomuxc put last
-> - remove hoggrp (vendor kernel/uboot does not touch these things)
-> 
-> Changes in V2:
-> - no underscores in node names
-> - fix key/led node names
-> - correct names for pinctl grps
-> 
->  arch/arm/boot/dts/Makefile              |   1 +
->  arch/arm/boot/dts/imx6sl-kobo-aura2.dts | 556 ++++++++++++++++++++++++
->  2 files changed, 557 insertions(+)
->  create mode 100644 arch/arm/boot/dts/imx6sl-kobo-aura2.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..2ee7753ef241 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -680,6 +680,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
->  	imx6s-dhcom-drc02.dtb
->  dtb-$(CONFIG_SOC_IMX6SL) += \
->  	imx6sl-evk.dtb \
-> +	imx6sl-kobo-aura2.dtb \
->  	imx6sl-tolino-shine2hd.dtb \
->  	imx6sl-tolino-shine3.dtb \
->  	imx6sl-tolino-vision5.dtb \
-> diff --git a/arch/arm/boot/dts/imx6sl-kobo-aura2.dts b/arch/arm/boot/dts/imx6sl-kobo-aura2.dts
-> new file mode 100644
-> index 000000000000..323eaecf2fe0
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/imx6sl-kobo-aura2.dts
-> @@ -0,0 +1,556 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device tree for the Kobo Aura 2 ebook reader
-> + *
-> + * Name on mainboard is: 37NB-E60QL0+4B1
-> + * Serials start with: E60QL2
-> + *
-> + * Copyright 2022 Andreas Kemnade
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include "imx6sl.dtsi"
-> +
-> +/ {
-> +	model = "Kobo Aura 2";
-> +	compatible = "kobo,aura2", "fsl,imx6sl";
-> +
-> +	aliases {
-> +		mmc0 = &usdhc2;
-> +		mmc1 = &usdhc3;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = &uart1;
-> +	};
-> +
-> +	gpio_keys: gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_gpio_keys>;
-> +
-> +		key-cover {
-> +			label = "Cover";
-> +			gpios = <&gpio5 12 GPIO_ACTIVE_LOW>;
-> +			linux,code = <SW_LID>;
-> +			linux,input-type = <EV_SW>;
-> +			wakeup-source;
-> +		};
-> +
-> +		key-power {
-> +			label = "Power";
-> +			gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_POWER>;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	leds: leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_led>;
-> +
-> +		led-0 {
-> +			label = "koboaura2:white:on";
-> +			gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			linux,default-trigger = "timer";
-> +		};
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x10000000>;
-> +	};
-> +
-> +	reg_wifi: regulator-wifi {
-> +		compatible = "regulator-fixed";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wifi_power>;
-> +		regulator-name = "SD3_SPWR";
-> +		regulator-min-microvolt = <3000000>;
-> +		regulator-max-microvolt = <3000000>;
-> +		gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
-> +	};
-> +
-> +	wifi_pwrseq: wifi-pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wifi_reset>;
-> +		post-power-on-delay-ms = <20>;
-> +		reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	pinctrl-names = "default","sleep";
+Hi SoC folks,
 
-Miss space after comma.
+Please merge these DT changes for 6.2.
 
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	pinctrl-1 = <&pinctrl_i2c1_sleep>;
-> +	status = "okay";
-> +
-> +	lm3630a: backlight@36 {
-> +		compatible = "ti,lm3630a";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_lm3630a_bl_gpio>;
-> +		reg = <0x36>;
-> +		enable-gpios = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		led@0 {
-> +			reg = <0>;
-> +			led-sources = <0>;
-> +			label = "backlight";
-> +			default-brightness = <0>;
-> +			max-brightness = <255>;
-> +		};
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	pinctrl-names = "default","sleep";
+These are the t6000 device tree changes that got punted last cycle, and
+some audio stuff.
 
-Ditto
+-Hector
 
-> +	pinctrl-0 = <&pinctrl_i2c2>;
-> +	pinctrl-1 = <&pinctrl_i2c2_sleep>;
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +
-> +	/* eKTF2232 at 0x15 */
-> +	/* FP9928 at 0x48 */
-> +};
-> +
-> +&i2c3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c3>;
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-> +
-> +	ricoh619: pmic@32 {
-> +		compatible = "ricoh,rc5t619";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_ricoh_gpio>;
-> +		reg = <0x32>;
-> +		interrupt-parent = <&gpio5>;
-> +		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-> +		system-power-controller;
-> +
-> +		regulators {
-> +			dcdc1_reg: DCDC1 {
-> +				regulator-name = "DCDC1";
-> +				regulator-min-microvolt = <300000>;
-> +				regulator-max-microvolt = <1875000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +
-> +				regulator-state-mem {
-> +					regulator-on-in-suspend;
-> +					regulator-suspend-max-microvolt = <900000>;
-> +					regulator-suspend-min-microvolt = <900000>;
-> +				};
-> +			};
-> +
-> +			/* Core3_3V3 */
-> +			dcdc2_reg: DCDC2 {
-> +				regulator-name = "DCDC2";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +
-> +				regulator-state-mem {
-> +					regulator-on-in-suspend;
-> +					regulator-suspend-max-microvolt = <3100000>;
-> +					regulator-suspend-min-microvolt = <3100000>;
-> +				};
-> +			};
-> +
-> +			dcdc3_reg: DCDC3 {
-> +				regulator-name = "DCDC3";
-> +				regulator-min-microvolt = <300000>;
-> +				regulator-max-microvolt = <1875000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +
-> +				regulator-state-mem {
-> +					regulator-on-in-suspend;
-> +					regulator-suspend-max-microvolt = <1140000>;
-> +					regulator-suspend-min-microvolt = <1140000>;
-> +				};
-> +			};
-> +
-> +			/* Core4_1V2 */
-> +			dcdc4_reg: DCDC4 {
-> +				regulator-name = "DCDC4";
-> +				regulator-min-microvolt = <1200000>;
-> +				regulator-max-microvolt = <1200000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +
-> +				regulator-state-mem {
-> +					regulator-on-in-suspend;
-> +					regulator-suspend-max-microvolt = <1140000>;
-> +					regulator-suspend-min-microvolt = <1140000>;
-> +				};
-> +			};
-> +
-> +			/* Core4_1V8 */
-> +			dcdc5_reg: DCDC5 {
-> +				regulator-name = "DCDC5";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +
-> +				regulator-state-mem {
-> +					regulator-on-in-suspend;
-> +					regulator-suspend-max-microvolt = <1700000>;
-> +					regulator-suspend-min-microvolt = <1700000>;
-> +				};
-> +			};
-> +
-> +			/* IR_3V3 */
-> +			ldo1_reg: LDO1  {
-> +				regulator-name = "LDO1";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			/* Core1_3V3 */
-> +			ldo2_reg: LDO2  {
-> +				regulator-name = "LDO2";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +
-> +				regulator-state-mem {
-> +					regulator-on-in-suspend;
-> +					regulator-suspend-max-microvolt = <3000000>;
-> +					regulator-suspend-min-microvolt = <3000000>;
-> +				};
-> +			};
-> +
-> +			/* Core5_1V2 */
-> +			ldo3_reg: LDO3  {
-> +				regulator-name = "LDO3";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			ldo4_reg: LDO4 {
-> +				regulator-name = "LDO4";
-> +				regulator-boot-on;
-> +			};
-> +
-> +			/* SPD_3V3 */
-> +			ldo5_reg: LDO5 {
-> +				regulator-name = "LDO5";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			/* DDR_0V6 */
-> +			ldo6_reg: LDO6 {
-> +				regulator-name = "LDO6";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			/* VDD_PWM */
-> +			ldo7_reg: LDO7 {
-> +				regulator-name = "LDO7";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			/* ldo_1v8 */
-> +			ldo8_reg: LDO8 {
-> +				regulator-name = "LDO8";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +
-> +			ldo9_reg: LDO9 {
-> +				regulator-name = "LDO9";
-> +				regulator-boot-on;
-> +			};
-> +
-> +			ldo10_reg: LDO10 {
-> +				regulator-name = "LDO10";
-> +				regulator-boot-on;
-> +			};
-> +
-> +			ldortc1_reg: LDORTC1  {
-> +				regulator-name = "LDORTC1";
-> +				regulator-always-on;
-> +				regulator-boot-on;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&reg_vdd1p1 {
-> +	vin-supply = <&dcdc2_reg>;
-> +};
-> +
-> +&reg_vdd2p5 {
-> +	vin-supply = <&dcdc2_reg>;
-> +};
-> +
-> +&reg_arm {
-> +	vin-supply = <&dcdc3_reg>;
-> +};
-> +
-> +&reg_soc {
-> +	vin-supply = <&dcdc1_reg>;
-> +};
-> +
-> +&reg_pu {
-> +	vin-supply = <&dcdc1_reg>;
-> +};
-> +
-> +&snvs_rtc {
-> +	/*
-> +	 * We are using the RTC in the PMIC, but this one is not disabled
-> +	 * in imx6sl.dtsi.
-> +	 */
-> +	status = "disabled";
-> +};
-> +
-> +&uart1 {
-> +	/* J4, through-holes */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart1>;
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	/* TP198, next to J4, SMD pads */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart4>;
-> +	status = "okay";
-> +};
-> +
-> +&usdhc2 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc2>;
-> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc2_sleep>;
-> +	non-removable;
-> +	status = "okay";
-> +
-> +	/* internal uSD card */
-> +};
-> +
-> +&usdhc3 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc3>;
-> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
-> +	vmmc-supply = <&reg_wifi>;
-> +	mmc-pwrseq = <&wifi_pwrseq>;
-> +	cap-power-off-card;
-> +	non-removable;
-> +	status = "okay";
-> +
-> +	/*
-> +	 * RTL8189F SDIO WiFi
-> +	 */
-> +};
-> +
-> +&usbotg1 {
-> +	disable-over-current;
-> +	srp-disable;
-> +	hnp-disable;
-> +	adp-disable;
-> +	status = "okay";
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl_gpio_keys: gpio-keysgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT1__GPIO5_IO08  0x17059
-> +			MX6SL_PAD_SD1_DAT4__GPIO5_IO12  0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1: i2c1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
-> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1_sleep: i2c1-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
-> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
-> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2_sleep: i2c2-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x400108b1
-> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x400108b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c3: i2c3grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_REF_CLK_24M__I2C3_SCL  0x4001f8b1
-> +			MX6SL_PAD_REF_CLK_32K__I2C3_SDA  0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_led: ledgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT6__GPIO5_IO07 0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_lm3630a_bl_gpio: lm3630a-bl-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10 0x10059 /* HWEN */
-> +		>;
-> +	};
-> +
-> +	pinctrl_ricoh_gpio: ricoh-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_CLK__GPIO5_IO15	0x1b8b1 /* ricoh619 chg */
-> +			MX6SL_PAD_SD1_DAT0__GPIO5_IO11	0x1b8b1 /* ricoh619 irq */
-> +			MX6SL_PAD_KEY_COL2__GPIO3_IO28	0x1b8b1 /* ricoh619 bat_low_int */
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart1: uart1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_UART1_TXD__UART1_TX_DATA 0x1b0b1
-> +			MX6SL_PAD_UART1_RXD__UART1_RX_DATA 0x1b0b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_uart4: uart4grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_KEY_ROW6__UART4_TX_DATA 0x1b0b1
-> +			MX6SL_PAD_KEY_COL6__UART4_RX_DATA 0x1b0b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_usbotg1: usbotg1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_EPDC_PWRCOM__USB_OTG1_ID 0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2: usdhc2grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x17059
-> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x13059
-> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x17059
-> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x17059
-> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x17059
-> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x17059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170b9
-> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130b9
-> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170b9
-> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170b9
-> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170b9
-> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170b9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170f9
-> +			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130f9
-> +			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170f9
-> +			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170f9
-> +			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170f9
-> +			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170f9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc2_sleep: usdhc2-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_CMD__GPIO5_IO04		0x100f9
-> +			MX6SL_PAD_SD2_CLK__GPIO5_IO05		0x100f9
-> +			MX6SL_PAD_SD2_DAT0__GPIO5_IO01		0x100f9
-> +			MX6SL_PAD_SD2_DAT1__GPIO4_IO30		0x100f9
-> +			MX6SL_PAD_SD2_DAT2__GPIO5_IO03		0x100f9
-> +			MX6SL_PAD_SD2_DAT3__GPIO4_IO28		0x100f9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3: usdhc3grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x11059
-> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x11059
-> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x11059
-> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x11059
-> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x11059
-> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x11059
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170b9
-> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170b9
-> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170b9
-> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170b9
-> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170b9
-> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170b9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170f9
-> +			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170f9
-> +			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170f9
-> +			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170f9
-> +			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170f9
-> +			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170f9
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_sleep: usdhc3-sleepgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
-> +			MX6SL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
-> +			MX6SL_PAD_SD3_DAT0__GPIO5_IO19	0x100c1
-> +			MX6SL_PAD_SD3_DAT1__GPIO5_IO20	0x100c1
-> +			MX6SL_PAD_SD3_DAT2__GPIO5_IO16	0x100c1
-> +			MX6SL_PAD_SD3_DAT3__GPIO5_IO17	0x100c1
-> +		>;
-> +	};
-> +
-> +	pinctrl_wifi_power: wifi-powergrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_DAT6__GPIO4_IO29	0x10059	/* WIFI_3V3_ON */
-> +		>;
-> +	};
-> +
-> +	pinctrl_wifi_reset: wifi-resetgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD2_DAT7__GPIO5_IO00	0x10059	/* WIFI_RST */
-> +		>;
-> +	};
-> +};
-> +
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-Newline at end of the file.
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-I fixed these minor things and applied both patches.
+are available in the Git repository at:
 
-Shawn
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.2
+
+for you to fetch changes up to 56fed763f6b2dc2578ea8c3e7d317722d8581cba:
+
+  arm64: dts: apple: Add ADMAC resets on t8103/t600x (2022-10-24 13:44:22 +0900)
+
+----------------------------------------------------------------
+Apple SoC DT updates for 6.2.
+
+This includes new device trees for Apple M1 Pro/Max/Ultra SoCs and the
+devices that contain them, as well as some audio-related changes.
+
+----------------------------------------------------------------
+Hector Martin (3):
+      arm64: dts: apple: Fix j45x model years
+      arm64: dts: apple: Add initial t6000/t6001/t6002 DTs
+      arm64: dts: apple: Add J314 and J316 devicetrees
+
+Janne Grunau (4):
+      dt-bindings: apple,aic2: Add CPU PMU per-cpu pseudo-interrupts
+      dt-bindings: arm: apple: Add t6001/t6002 Mac Studio compatibles
+      arm64: dts: apple: Add J375 devicetrees
+      arm64: dts: apple: t600x: Add MCA and its support
+
+Martin Povišer (4):
+      arm64: dts: apple: t8103: Add AUDIO_P parent to the SIO_ADMA power domain
+      arm64: dts: apple: t8103: Add MCA and its support
+      dt-bindings: dma: apple,admac: Add reset
+      arm64: dts: apple: Add ADMAC resets on t8103/t600x
+
+Sven Peter (1):
+      dt-bindings: iommu: dart: add t6000 compatible
+
+ Documentation/devicetree/bindings/arm/apple.yaml   |   14 +-
+ .../devicetree/bindings/dma/apple,admac.yaml       |    3 +
+ .../bindings/interrupt-controller/apple,aic2.yaml  |   29 +
+ .../devicetree/bindings/iommu/apple,dart.yaml      |    4 +-
+ arch/arm64/boot/dts/apple/Makefile                 |    6 +
+ arch/arm64/boot/dts/apple/multi-die-cpp.h          |   22 +
+ arch/arm64/boot/dts/apple/t6000-j314s.dts          |   18 +
+ arch/arm64/boot/dts/apple/t6000-j316s.dts          |   18 +
+ arch/arm64/boot/dts/apple/t6000.dtsi               |   18 +
+ arch/arm64/boot/dts/apple/t6001-j314c.dts          |   18 +
+ arch/arm64/boot/dts/apple/t6001-j316c.dts          |   18 +
+ arch/arm64/boot/dts/apple/t6001-j375c.dts          |   18 +
+ arch/arm64/boot/dts/apple/t6001.dtsi               |   63 +
+ arch/arm64/boot/dts/apple/t6002-j375d.dts          |   50 +
+ arch/arm64/boot/dts/apple/t6002.dtsi               |  175 ++
+ arch/arm64/boot/dts/apple/t600x-common.dtsi        |  137 ++
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi          |  361 ++++
+ arch/arm64/boot/dts/apple/t600x-dieX.dtsi          |  103 +
+ arch/arm64/boot/dts/apple/t600x-gpio-pins.dtsi     |   45 +
+ arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi     |  114 ++
+ arch/arm64/boot/dts/apple/t600x-j375.dtsi          |  117 ++
+ arch/arm64/boot/dts/apple/t600x-nvme.dtsi          |   42 +
+ arch/arm64/boot/dts/apple/t600x-pmgr.dtsi          | 2012 ++++++++++++++++++++
+ arch/arm64/boot/dts/apple/t8103-j456.dts           |    2 +-
+ arch/arm64/boot/dts/apple/t8103-j457.dts           |    2 +-
+ arch/arm64/boot/dts/apple/t8103-jxxx.dtsi          |    4 +
+ arch/arm64/boot/dts/apple/t8103-pmgr.dtsi          |    2 +-
+ arch/arm64/boot/dts/apple/t8103.dtsi               |   74 +
+ 28 files changed, 3484 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/apple/multi-die-cpp.h
+ create mode 100644 arch/arm64/boot/dts/apple/t6000-j314s.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t6000-j316s.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t6000.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t6001-j314c.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t6001-j316c.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t6001-j375c.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t6001.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t6002-j375d.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t6002.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-die0.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-dieX.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-gpio-pins.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-j375.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-nvme.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t600x-pmgr.dtsi
+
