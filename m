@@ -1,89 +1,137 @@
-Return-Path: <SRS0=Qv0O=2Z=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=KbT7=2Z=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10825FA3743
-	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 14:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A0BAECAAA1
+	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 14:27:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D41C5C43143; Mon, 24 Oct 2022 14:17:19 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 80078C433D6;
-	Mon, 24 Oct 2022 14:17:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 80078C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FCA61515;
-	Mon, 24 Oct 2022 07:17:24 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D63D3F792;
-	Mon, 24 Oct 2022 07:17:16 -0700 (PDT)
-Date: Mon, 24 Oct 2022 15:17:14 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Icenowy Zheng <uwu@icenowy.me>
+	id 0CD82C43470; Mon, 24 Oct 2022 14:27:58 +0000 (UTC)
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B75A8C433C1;
+	Mon, 24 Oct 2022 14:27:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B75A8C433C1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.west.internal (Postfix) with ESMTP id 382C32B066F1;
+	Mon, 24 Oct 2022 10:27:54 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 24 Oct 2022 10:27:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm2; t=1666621673; x=
+	1666628873; bh=j5Xmm1hIOnDXfjVvOH1nBH2jD1dezyQFcZOvqExQy/Q=; b=R
+	FOCrFIiTxT4VVyc9mEDQdkEn+wGl6bgl85vYTnOHs9SmkuBXihbN449jNzacB8jI
+	rTTZjSbMHEkOE6lva8OK7H+tWMs7X8EpOfrjmtb6/oVOGDu9QbZ0yoFBmwCcqV/f
+	OY2S9hiS5k+xnEniFrSzWv69cVnlbB0lhSbJ9CqHWVp9ya8AIfEqbYesbuFRq9Qd
+	PSVVASHWixWTm4BTrueGRqrr2qoyHEcyvUm2O9mtgTacw1X/e4TGUOI7spwRF4k8
+	NrLH6dKrsa3XnjqeccrXYuGDRxoUwvp7+h9Ls1LReoWuxJMTQSMuUwY2jFO3D+Jm
+	dHiTM/iSZCKnRNoHbTlJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666621673; x=
+	1666628873; bh=j5Xmm1hIOnDXfjVvOH1nBH2jD1dezyQFcZOvqExQy/Q=; b=j
+	bQ9YG0M5QUfhAMC5KcxlBfNv3OPZ3dcPqvAHDAkHJFJBtkG/oKiHEgB/CGkfd5D4
+	4WXIXCvh3vM6V7jLlWzrMUTV4Fpaa7SNUDAMOjP9/s26EtfpqJpXHuJvjncEf/Hb
+	l2A1rrOSEilHAzFog8P4c885b26rzqZmcbf/q5PoNykrPcDsbeuOwk+rlSf/XLVe
+	pO9o+yifsE2IWF0Wd9xtiS41jAXVVz31C3ZyF1314cL/e+AOiNL9MtukAPZEZ2j8
+	gZbNNP84mt+QmazljsROIuA11JsXMnAQOzsIvfqse5ElLjsQWYAznhJvSftlDiy8
+	UDnTIRgLvHwK0iMEY12aQ==
+X-ME-Sender: <xms:6KBWY_gwmdA9MhV8F7kI-IAT6RjoV8UyoY8vJd_im8nzMhPr-w5SEg>
+    <xme:6KBWY8DFzu_H1NXJNLoNcdftX0Fccg83xmP1gZ_Oo0PjdmKShBDqthVvsAPur-jjx
+    nKKucVvJWn2dHOfBYM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:6KBWY_EKFaUSxfmbFq4u45xHq3kzkmlHX7APZxOrmpX4NKAPPIVhLw>
+    <xmx:6KBWY8Sa2YoRcKoTYZV4cAVrgo3XWvtPHJE_rauldYzUHnGUJcpV8g>
+    <xmx:6KBWY8zBpoCDaeX7eS6StOnrb6kSgFjb8QNDCQkjBv4w_fjHvPPK9g>
+    <xmx:6aBWY7iVKZZZeLJhXB65ARrCr06Q6ReuiHPabu10swOp_0SKXFR2BwSFrZk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id F38B1B60086; Mon, 24 Oct 2022 10:27:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <8d6ddb0d-98be-4c4d-9523-f024c339c8d0@app.fastmail.com>
+In-Reply-To: <2204103.iZASKD2KPV@diego>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-1-arnd@kernel.org> <2204103.iZASKD2KPV@diego>
+Date: Mon, 24 Oct 2022 16:27:31 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ linux-arm-kernel@lists.infradead.org,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Arnd Bergmann" <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Chen-Yu Tsai <wens@csie.org>, Jernej
- Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, soc@kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 09/10] dt-binding: arm: sunxi: add compatible strings
- for PopStick v1.1
-Message-ID: <20221024151714.59968916@donnerap.cambridge.arm.com>
-In-Reply-To: <20221012055602.1544944-10-uwu@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me>
-	<20221012055602.1544944-10-uwu@icenowy.me>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Cc: linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
+ "Simtec Linux Team" <linux@simtec.co.uk>,
+ "Arnaud Patard" <arnaud.patard@rtp-net.org>,
+ "Christer Weinigel" <christer@weinigel.se>,
+ "Guillaume GOURAT" <guillaume.gourat@nexvision.tv>,
+ openmoko-kernel@lists.openmoko.org, "Jonathan Corbet" <corbet@lwn.net>,
+ "Alim Akhtar" <alim.akhtar@samsung.com>, "Olof Johansson" <olof@lixom.net>,
+ soc@kernel.org, "Rob Herring" <robh+dt@kernel.org>,
+ "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+ "Tomasz Figa" <tomasz.figa@gmail.com>,
+ "Chanwoo Choi" <cw00.choi@samsung.com>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, linux-doc@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 01/21] ARM: s3c: remove all s3c24xx support
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 12 Oct 2022 13:56:01 +0800
-Icenowy Zheng <uwu@icenowy.me> wrote:
+On Sat, Oct 22, 2022, at 22:56, Heiko St=C3=BCbner wrote:
+> Am Freitag, 21. Oktober 2022, 22:27:34 CEST schrieb Arnd Bergmann:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>=20
+>> The platform was deprecated in commit 6a5e69c7ddea ("ARM: s3c: mark
+>> as deprecated and schedule removal") and can be removed. This includes
+>> all files that are exclusively for s3c24xx and not shared with s3c64x=
+x,
+>> as well as the glue logic in Kconfig and the maintainer file entries.
+>>=20
+>> Cc: Arnaud Patard <arnaud.patard@rtp-net.org>
+>> Cc: Ben Dooks <ben-linux@fluff.org>
+>> Cc: Christer Weinigel <christer@weinigel.se>
+>> Cc: Guillaume GOURAT <guillaume.gourat@nexvision.tv>
+>> Cc: Heiko Stuebner <heiko@sntech.de>
+>> Cc: Simtec Linux Team <linux@simtec.co.uk>
+>> Cc: openmoko-kernel@lists.openmoko.org
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> So many memories of me starting out in the kernel on s3c24xx.
+> But it's no use trying to keep stuff around that nobody will likely
+> ever use again. So with a sad face
+>
+> Acked-by: Heiko Stuebner <heiko@sntech.de>
+>
+>
+> though you might want to also include
+> 	drivers/dma/s3c24xx-dma.c
 
-Hi Icenowy,
+This was in a separate patch that removes the driver:
 
-> SourceParts PopStick is a F1C200s-based stick-shaped SBC.
-> 
-> Add a compatible string list for its v1.1 version (the first public
-> one).
+https://lore.kernel.org/linux-arm-kernel/20221021203329.4143397-14-arnd@=
+kernel.org/
 
-If v1.0 (or anything prior) never made it to the outside world, I don't
-think we need to mention that in the public bindings.
-In general Linux seems to discourage support for unreleased hardware, so I
-think you can just drop the "sourceparts,popstick-v1.1" name.
+In the first patch, I only include references to removed
+Kconfig symbols that would not make sense to split out into
+separate patches.
 
-Cheers,
-Andre
-
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
-> New patch introduced in v2.
-> 
->  Documentation/devicetree/bindings/arm/sunxi.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> index 3ad1cd50e3fe..c6e0ad7f461d 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> @@ -807,6 +807,13 @@ properties:
->            - const: sinlinx,sina33
->            - const: allwinner,sun8i-a33
->  
-> +      - description: SourceParts PopStick v1.1
-> +        items:
-> +          - const: sourceparts,popstick-v1.1
-> +          - const: sourceparts,popstick
-> +          - const: allwinner,suniv-f1c200s
-> +          - const: allwinner,suniv-f1c100s
-> +
->        - description: SL631 Action Camera with IMX179
->          items:
->            - const: allwinner,sl631-imx179
-
+    Arnd
