@@ -1,77 +1,124 @@
-Return-Path: <SRS0=6Fiq=2Z=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=5hCm=22=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A15FA373F
-	for <soc@archiver.kernel.org>; Mon, 24 Oct 2022 15:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F81C04A95
+	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 11:41:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 985D1C433C1; Mon, 24 Oct 2022 15:46:24 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8AEBFC433D6;
-	Mon, 24 Oct 2022 15:46:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8AEBFC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1omzeK-00031R-RG; Mon, 24 Oct 2022 17:46:00 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: linux-arm-kernel@lists.infradead.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+	id E0E8DC433D7; Tue, 25 Oct 2022 11:41:48 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 63D40C433D6;
+	Tue, 25 Oct 2022 11:41:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 63D40C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E606ED6E;
+	Tue, 25 Oct 2022 04:41:51 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F57B3F7B4;
+	Tue, 25 Oct 2022 04:41:44 -0700 (PDT)
+Date: Tue, 25 Oct 2022 12:41:41 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Johan Hovold <johan@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>, Simtec Linux Team <linux@simtec.co.uk>, Arnaud Patard <arnaud.patard@rtp-net.org>, Christer Weinigel <christer@weinigel.se>, Guillaume GOURAT <guillaume.gourat@nexvision.tv>, openmoko-kernel@lists.openmoko.org, Jonathan Corbet <corbet@lwn.net>, Alim Akhtar <alim.akhtar@samsung.com>, Olof Johansson <olof@lixom.net>, soc@kernel.org, Rob Herring <robh+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 01/21] ARM: s3c: remove all s3c24xx support
-Date: Mon, 24 Oct 2022 17:45:59 +0200
-Message-ID: <2120112.irdbgypaU6@diego>
-In-Reply-To: <8d6ddb0d-98be-4c4d-9523-f024c339c8d0@app.fastmail.com>
-References: <20221021202254.4142411-1-arnd@kernel.org> <2204103.iZASKD2KPV@diego> <8d6ddb0d-98be-4c4d-9523-f024c339c8d0@app.fastmail.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] firmware/psci: Print a warning if PSCI doesn't
+ accept PC mode
+Message-ID: <20221025114141.2my5drpjhincjons@bogus>
+References: <20220926110249.666813-1-dmitry.baryshkov@linaro.org>
+ <Y1AGLPXWFOmjfdd0@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1AGLPXWFOmjfdd0@hovoldconsulting.com>
 
-Am Montag, 24. Oktober 2022, 16:27:31 CEST schrieb Arnd Bergmann:
-> On Sat, Oct 22, 2022, at 22:56, Heiko St=FCbner wrote:
-> > Am Freitag, 21. Oktober 2022, 22:27:34 CEST schrieb Arnd Bergmann:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >>=20
-> >> The platform was deprecated in commit 6a5e69c7ddea ("ARM: s3c: mark
-> >> as deprecated and schedule removal") and can be removed. This includes
-> >> all files that are exclusively for s3c24xx and not shared with s3c64xx,
-> >> as well as the glue logic in Kconfig and the maintainer file entries.
-> >>=20
-> >> Cc: Arnaud Patard <arnaud.patard@rtp-net.org>
-> >> Cc: Ben Dooks <ben-linux@fluff.org>
-> >> Cc: Christer Weinigel <christer@weinigel.se>
-> >> Cc: Guillaume GOURAT <guillaume.gourat@nexvision.tv>
-> >> Cc: Heiko Stuebner <heiko@sntech.de>
-> >> Cc: Simtec Linux Team <linux@simtec.co.uk>
-> >> Cc: openmoko-kernel@lists.openmoko.org
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Oct 19, 2022 at 04:14:04PM +0200, Johan Hovold wrote:
+> On Mon, Sep 26, 2022 at 02:02:49PM +0300, Dmitry Baryshkov wrote:
+> > The function psci_pd_try_set_osi_mode() will print an error if enabling
+> > OSI mode fails. To ease debugging PSCI issues print corresponding
+> > message if switching to PC mode fails too.
 > >
-> > So many memories of me starting out in the kernel on s3c24xx.
-> > But it's no use trying to keep stuff around that nobody will likely
-> > ever use again. So with a sad face
+> > Acked-by: Mark Rutland <mark.rutland@arm.com>
+> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> > This is a replacement for [1], now moving the warning from
+> > psci_set_osi_mode() callers to the function iself.
 > >
-> > Acked-by: Heiko Stuebner <heiko@sntech.de>
+> > The patch is resent to include soc@kernel.org
 > >
+> > [1] https://lore.kernel.org/all/20220727182034.983727-1-dmitry.baryshkov@linaro.org/
 > >
-> > though you might want to also include
-> > 	drivers/dma/s3c24xx-dma.c
->=20
-> This was in a separate patch that removes the driver:
->=20
-> https://lore.kernel.org/linux-arm-kernel/20221021203329.4143397-14-arnd@k=
-ernel.org/
+> > ---
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 4 +---
+> >  drivers/firmware/psci/psci.c          | 2 ++
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > index 3db4fca1172b..821984947ed9 100644
+> > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -124,10 +124,8 @@ static bool psci_pd_try_set_osi_mode(void)
+> >  		return false;
+> >
+> >  	ret = psci_set_osi_mode(true);
+> > -	if (ret) {
+> > -		pr_warn("failed to enable OSI mode: %d\n", ret);
+> > +	if (ret)
+> >  		return false;
+> > -	}
+> >
+> >  	return true;
+> >  }
+> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > index 9fdcb6bff403..42cae0ba10e2 100644
+> > --- a/drivers/firmware/psci/psci.c
+> > +++ b/drivers/firmware/psci/psci.c
+> > @@ -164,6 +164,8 @@ int psci_set_osi_mode(bool enable)
+> >  			PSCI_1_0_SUSPEND_MODE_PC;
+> >
+> >  	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
+> > +	if (err < 0)
+> > +		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+> >  	return psci_to_linux_errno(err);
+> >  }
+>
+> When booting 6.1-rc1 I now see:
+>
+> 	[    0.000000] psci: OSI mode supported.
+> 	[    0.000000] psci: failed to set PC mode: -3
+>
+> on every boot with sc8280xp, while later enabling OSI mode still works:
+>
+> 	[    0.227358] CPUidle PSCI: psci_pd_try_set_osi_mode - success
+> 	[    0.227599] CPUidle PSCI: Initialized CPU PM domain topology
+>
+> Judging from Sudeep's comment on v1:
+>
+> 	The platform must boot in PC mode, so even if it fails we ignore
+> 	so not sure if the logging is of much help here IMO.
+>
+> perhaps logging this as an error is not a good idea?
+>
 
-ah ok, I guess git-send-email didn't want to send me that patch.
-So all is good in that part then :-)
+Sorry I have forgotten about the discussion on this already. I may contradict
+myself, but it the platform is misbehaving, why is it not a good idea to
+log it as error. It can be ignored right if it is not an issue on the
+platform ? My main worry is no one will turn on debug unless they are
+debugging and new platforms with same issues may go unnoticed while we
+want them to be fixed, right ?
 
-
-Heiko
-
-
+--
+Regards,
+Sudeep
