@@ -1,122 +1,86 @@
-Return-Path: <SRS0=G1Et=22=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=jCS8=22=arm.com=andre.przywara@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4640BC38A2D
-	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 12:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A748EC38A2D
+	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 14:59:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0FE8AC433B5; Tue, 25 Oct 2022 12:42:41 +0000 (UTC)
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 33A18C433D7;
-	Tue, 25 Oct 2022 12:42:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 33A18C433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id x13so6954625qvn.6;
-        Tue, 25 Oct 2022 05:42:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OaYh77K+gCSv1Fw/DuS4kr5mhCxIMTP6JrJoQ/+vP5Q=;
-        b=z/FCSIpfDUhrXhIBqR7jI0tyA3LskjNIrFmbHPgC0FiJWTRLverDFGx9ueqWIMRoUM
-         eagrQLgfPbsOPwGplEM6yJ4y9miUuFTOmFhJzknRRhIOqR79BmRjSKIlq84HcRgQ7va6
-         gsKnEPi3V9f/wNYaQv9KSWtno3RMq6kf9qIjuQ51ZLA0y+t0ye8ymnoAVYszbYbJS0Iw
-         THVvHtXw1pIiPRFcK1dnSNAgez3L5IsiPGoStWQXn0TsBwsIvNYygv9YJflqpc/eZOXM
-         0+urlpIVDZwT8m28tZiIwOomptymi39PP/vcajxBnmOTOV7wwIAsriCKJ7/3ycSrGvBm
-         m/Ng==
-X-Gm-Message-State: ACrzQf2FgSAnL8MFqzhcf01JvZC2rA3iN+FEVs5SuIspn+uwpCZmHM/M
-	CGaWxy0JzLeim/2WMRtfsuKj1QmNDSoKtA==
-X-Google-Smtp-Source: AMsMyM5tFRQzMsaxxPuPgcH/7VLPfBaTwEiBdXpJyBJ+7L6lEAH5obleHyUi8Tn8aSzrLkvQiT8a8A==
-X-Received: by 2002:a05:6214:20c2:b0:4b1:316c:67a2 with SMTP id 2-20020a05621420c200b004b1316c67a2mr31638024qve.32.1666701758773;
-        Tue, 25 Oct 2022 05:42:38 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id bq44-20020a05620a46ac00b006ee77f1ecc3sm2004952qkb.31.2022.10.25.05.42.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 05:42:37 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id o70so14391077yba.7;
-        Tue, 25 Oct 2022 05:42:36 -0700 (PDT)
-X-Received: by 2002:a5b:52:0:b0:6cb:7584:1b20 with SMTP id e18-20020a5b0052000000b006cb75841b20mr1953298ybp.380.1666701756292;
- Tue, 25 Oct 2022 05:42:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 25 Oct 2022 14:42:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXcHWaUS3rq=3bQOeax1Vig4R1MpG8dDHbe5TDjkVYx0Q@mail.gmail.com>
-Message-ID: <CAMuHMdXcHWaUS3rq=3bQOeax1Vig4R1MpG8dDHbe5TDjkVYx0Q@mail.gmail.com>
-Subject: Re: [RFC RESEND PATCH 0/2] RZ/G2UL separate out SoC specific parts
-To: Prabhakar <prabhakar.csengg@gmail.com>
+	id 7248BC43470; Tue, 25 Oct 2022 14:59:21 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 1545DC433C1;
+	Tue, 25 Oct 2022 14:59:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1545DC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 810F2D6E;
+	Tue, 25 Oct 2022 07:59:24 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B312B3F71A;
+	Tue, 25 Oct 2022 07:59:16 -0700 (PDT)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel@sholland.org>, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	soc@kernel.org,
+	Icenowy Zheng <uwu@icenowy.me>,
+	=?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Subject: [PATCH 0/3] ARM: dts: Add Lctech Pi F1C200s board support
+Date: Tue, 25 Oct 2022 15:59:06 +0100
+Message-Id: <20221025145909.2837939-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Prabhakar,
+Hi,
 
-(now replying to the latest version)
+The Lctech Pi F1C200s is a small development board with the eponymous
+Allwinner SoC.
+It ships with SPI NAND flash, but I couldn't get that to work:
+============
+spi-nand spi0.0: unknown raw ID 00000000
+spi-nand: probe of spi0.0 failed with error -524
+============
+I leave in the DT node anyway (minus partitions), matching the schematic.
 
-On Mon, Oct 17, 2022 at 11:12 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> This patch series aims to split up the RZ/G2UL SoC DTSI into common parts
-> so that this can be shared with the RZ/Five SoC.
->
-> Implementation is based on the discussion [0] where I have used option#2.
->
-> The Renesas RZ/G2UL (ARM64) and RZ/Five (RISC-V) have almost the same
-> identical blocks to avoid duplication a base SoC dtsi (r9a07g043.dtsi) is
-> created which will be used by the RZ/G2UL (r9a07g043u.dtsi) and RZ/Five
-> (r9a07g043F.dtsi)
+The boards has two USB-C ports, one of which is connected to a USB
+serial adapter chip. Since the other one (connected to the MUSB
+controller) lacks any CC pin connections, I need to fix the OTG role
+here, and went with peripheral. Forcing host mode worked as well, but
+requires a separate power supply (although the other USB port works for
+that as well).
 
-Thanks for your series!
+The board was apparently also sold under the "Cherry Pi" brand before.
 
-> Sending this as an RFC to get some feedback.
->
-> r9a07g043f.dtsi will look something like below:
->
-> #include <dt-bindings/interrupt-controller/irq.h>
->
-> #define SOC_PERIPHERAL_IRQ_NUMBER(nr)   (nr + 32)
-> #define SOC_PERIPHERAL_IRQ(nr, na)      SOC_PERIPHERAL_IRQ_NUMBER(nr) na
+Patches 1 and 2 add the required DT bindings for the vendor and board
+name strings, patch 3 adds the .dts file.
 
-Originally, when I assumed incorrectly that dtc does not support
-arithmetic, I used "nr" and "na" in the macro I proposed to mean RISC-V
-("r") resp. ARM ("a") interrupt number.  Apparently the names stuck,
-although the second parameter now has a completely different meaning ;-)
+Please have a look!
 
-However, as the NCEPLIC does support interrupt flags, unlike the SiFive
-PLIC, there is no need to have the flags parameter in the macro.
+Cheers,
+Andre
 
-Moreover,  it looks like the SOC_PERIPHERAL_IRQ_NUMBER()
-intermediate is not needed, so you can just write:
+Andre Przywara (3):
+  dt-bindings: vendor-prefixes: add Lctech name
+  dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
+  ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
 
-    #define SOC_PERIPHERAL_IRQ(nr)  (nr + 32)
+ .../devicetree/bindings/arm/sunxi.yaml        |  6 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ arch/arm/boot/dts/Makefile                    |  1 +
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          |  5 ++
+ arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 80 +++++++++++++++++++
+ 5 files changed, 94 insertions(+)
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
 
-> #include <arm64/renesas/r9a07g043.dtsi>
->
-> / {
->    ...
->    ...
-> };
+-- 
+2.25.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
