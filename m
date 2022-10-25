@@ -4,115 +4,142 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AC41C38A2D
-	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 16:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C326DECDFA1
+	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 22:06:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4D332C433D7; Tue, 25 Oct 2022 16:15:31 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 81CF3C433D7; Tue, 25 Oct 2022 22:06:46 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51E26C433D6;
-	Tue, 25 Oct 2022 16:15:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51E26C433D6
+	by smtp.kernel.org (Postfix) with ESMTPS id 68409C433D6;
+	Tue, 25 Oct 2022 22:06:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 68409C433D6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id ud5so10310745ejc.4;
-        Tue, 25 Oct 2022 09:15:30 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id y16so12933282wrt.12;
+        Tue, 25 Oct 2022 15:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C6UbVAonXzXEF4tPDCKPCg7WA+lFJIW3l1l+LGaIaaE=;
-        b=RjpvOL7MSyyleyOkn8duD/qRqvUDoc6ReK96YgdY5m0G5KbDzB58n9ZiozO5uLkYzl
-         WGKrhs3fXBqlLFh2WalirQ+LuFXGXrw0T65oKEfXNv6vKU6fdrvf5mkPLCnqYg4GG9AD
-         zl3lgzL9PGDRBLuN1Dz3NdxNQIuTw1Zdb4eAtSKWLAcAUqVenhNFXJkDG3Td3vkrZqkI
-         +ZUIotgvcfu2D+YHA7WPGU+B7km+CGQsyfDuY5jkALCn7i7b67de2tO4HitSy7IBPvIX
-         YpEu8r8wj5RIoAkggInn9ZfemMGg677A4W2Dypf5py66SRM96J7/lypK2wDBhB9YQCyl
-         lMKg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SkWFdDFpA2ET/e9kHATFDJrw30e54fmgfWvyavm263M=;
+        b=A2RonXpa0rFb4YytEH1Z5+99MJaAl/mVWZzNqQ6EQRWGLl1Pco/PQ/opjEz0hTKxhC
+         uyn6V7aiH7V21Gw1DiODqEBSeLWqJ/vy1M4kQQ/JoCrZVmaWz8lZVJygGBePG0DFa9mI
+         KTt0s9CqhVkjTdFJrFMr6AR37vg9dnA0BrIJO7pD+3F6L2ZYzaii5WGqV1+4sQ4QCxX8
+         9RnATpPBanielQGojIwyXsmK3QndMiGyit62HUB7vsBzXseIlIEhenOn/9v3nJI6kGGI
+         jMz2yrTXtG6JqzDfUqXPhaMRobqyHLA9TlgbmxPKs2S4Gfl43mkbtSCgqX3OevAZ9OY6
+         CcpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C6UbVAonXzXEF4tPDCKPCg7WA+lFJIW3l1l+LGaIaaE=;
-        b=NF2bwjz8XVbOuA8dLNeed1J3Jv3MjUMGQyuFBma/j3CZL1AEbv0emYwwoaIP62na9Q
-         wUEK6RtQDWh4m+TaFkmHdG84lL5sQ06GsktnchO9z6+Yys/Qv92q4sbEe7t1tEj767LX
-         3GX2FTwvcF1m664nan9QaUHtDOs0he6hIOVtyD7eIGHcAEigOxOT5Sp3HkvgWbXB8MmN
-         DsU2iRpg7L9+sZLSn5f1PwBKNpwWPhT6ZWWQ/bTZYYupFdxvmEOFKPNKCa3quv/e5L5X
-         L3q0rGqh/0QceGrsDp0cN4iHnswdY1akJyp5E9FnPy9i1km6ZulOrTovgGNAXBJrk2QQ
-         IMSQ==
-X-Gm-Message-State: ACrzQf2qMeWAy48vVubg5AHBwJs66AfUHcyF2CQ8u37hziVpjGcIND6c
-	BoE8R2cVpzkKnGWZ6O1U8YSItvmIT2GhxwQ12Ac=
-X-Google-Smtp-Source: AMsMyM6vy+HKe105A0nfDnGKP7UgYHtFcSSQKGQ0dQB7bPXBOvkwm8XyyCyR6qhyWVIACh56BdQUdBIdPqCHtiZCRtc=
-X-Received: by 2002:a17:906:5a4b:b0:78d:4e5a:d101 with SMTP id
- my11-20020a1709065a4b00b0078d4e5ad101mr32495249ejc.196.1666714528655; Tue, 25
- Oct 2022 09:15:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXcHWaUS3rq=3bQOeax1Vig4R1MpG8dDHbe5TDjkVYx0Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdXcHWaUS3rq=3bQOeax1Vig4R1MpG8dDHbe5TDjkVYx0Q@mail.gmail.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Tue, 25 Oct 2022 17:15:02 +0100
-Message-ID: <CA+V-a8vGW9Vngo+Rs2=v=c6Q-iCxqh9DR=TT2i1K1-cRTza25A@mail.gmail.com>
-Subject: Re: [RFC RESEND PATCH 0/2] RZ/G2UL separate out SoC specific parts
-To: Geert Uytterhoeven <geert@linux-m68k.org>
+        bh=SkWFdDFpA2ET/e9kHATFDJrw30e54fmgfWvyavm263M=;
+        b=IeEpNAvwgfFIY7a8xDfSdxtJf/brQfhuCvWiknVxPVmYbiF47ed5N12P/JW/oq0QNq
+         9toYNfVnUIlc5RDEVb4BfH4OmNOldNJ8ATS5ixLh2mO9lKlyaFAgHwlTLPnbGoubv2/8
+         txiuu4skciLd2ZSlF1bLt5bCmzGy9g/wOKUgH73sEzvXdqPBOsB5Xj/lbA0nFvLTpost
+         ithP7jKL5yROsADkGtI3xK8qcWgH2bzAQJRIXb+7axUPvOJhREuFeuH/ATu8p4Lz96aL
+         2N5xCGteOqiRCvOgzOojYRUL+U1/ZaaAtqA2osMsj5ebYcHp18tGofFv4NcBSwIFQoC3
+         PQlw==
+X-Gm-Message-State: ACrzQf0vTEhSXNbeiP+wC6GhwYoZtxkHfGPuLv4slHGkteIST1HA8CVg
+	Q1wvRWV4jo6I0h8NA0UKRXA=
+X-Google-Smtp-Source: AMsMyM6S2hCm+V5CuUIkT7HUDf8wqISyruffcau/S2wjKVy5wCFulcnX5ktIboGrM8eoVZNxd0ohXw==
+X-Received: by 2002:a05:6000:1ac8:b0:231:909f:a4ba with SMTP id i8-20020a0560001ac800b00231909fa4bamr27793833wry.675.1666735603495;
+        Tue, 25 Oct 2022 15:06:43 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:1d2a:d2a2:361e:a475])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c1d1200b003a342933727sm210534wms.3.2022.10.25.15.06.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 15:06:42 -0700 (PDT)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>
 List-Id: <soc.lore.kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel@sholland.org>, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel@sholland.org>,
+	soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v2 0/2] RZ/G2UL separate out SoC specific parts
+Date: Tue, 25 Oct 2022 23:06:27 +0100
+Message-Id: <20221025220629.79321-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Geert.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Thank you for the review.
+Hi All,
 
-On Tue, Oct 25, 2022 at 1:42 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> (now replying to the latest version)
->
-> On Mon, Oct 17, 2022 at 11:12 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > This patch series aims to split up the RZ/G2UL SoC DTSI into common parts
-> > so that this can be shared with the RZ/Five SoC.
-> >
-> > Implementation is based on the discussion [0] where I have used option#2.
-> >
-> > The Renesas RZ/G2UL (ARM64) and RZ/Five (RISC-V) have almost the same
-> > identical blocks to avoid duplication a base SoC dtsi (r9a07g043.dtsi) is
-> > created which will be used by the RZ/G2UL (r9a07g043u.dtsi) and RZ/Five
-> > (r9a07g043F.dtsi)
->
-> Thanks for your series!
->
-> > Sending this as an RFC to get some feedback.
-> >
-> > r9a07g043f.dtsi will look something like below:
-> >
-> > #include <dt-bindings/interrupt-controller/irq.h>
-> >
-> > #define SOC_PERIPHERAL_IRQ_NUMBER(nr)   (nr + 32)
-> > #define SOC_PERIPHERAL_IRQ(nr, na)      SOC_PERIPHERAL_IRQ_NUMBER(nr) na
->
-> Originally, when I assumed incorrectly that dtc does not support
-> arithmetic, I used "nr" and "na" in the macro I proposed to mean RISC-V
-> ("r") resp. ARM ("a") interrupt number.  Apparently the names stuck,
-> although the second parameter now has a completely different meaning ;-)
->
-> However, as the NCEPLIC does support interrupt flags, unlike the SiFive
-> PLIC, there is no need to have the flags parameter in the macro.
->
-> Moreover,  it looks like the SOC_PERIPHERAL_IRQ_NUMBER()
-> intermediate is not needed, so you can just write:
->
->     #define SOC_PERIPHERAL_IRQ(nr)  (nr + 32)
->
-Agreed, I'll change it as per your suggestion and send a v2.
+This patch series aims to split up the RZ/G2UL SoC DTSI into common parts
+so that this can be shared with the RZ/Five SoC.
+
+Implementation is based on the discussion [0] where I have used option#2.
+
+The Renesas RZ/G2UL (ARM64) and RZ/Five (RISC-V) have almost the same
+identical blocks to avoid duplication a base SoC dtsi (r9a07g043.dtsi) is
+created which will be used by the RZ/G2UL (r9a07g043u.dtsi) and RZ/Five
+(r9a07g043f.dtsi)
+
+r9a07g043f.dtsi (RZ/Five SoC DTSI) will look something like below:
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+#define SOC_PERIPHERAL_IRQ(nr)	(nr + 32)
+
+#include <arm64/renesas/r9a07g043.dtsi>
+
+/ {
+   ...
+   ...   
+};
+
+Although patch#2 can be merged into patch#1 just wanted to keep them separated
+for easier review.
+
+Changes for v2:
+- Fixed review comments pointed by Geert
+ - Changed the SOC_PERIPHERAL_IRQ() macro
+
+RFC-> RESEND RFC
+* Patches rebased on top of renesas-arm-dt-for-v6.2 [1].
+
+RESEND:
+- https://patchwork.kernel.org/project/linux-renesas-soc/cover/20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+RFC:
+- https://patchwork.kernel.org/project/linux-renesas-soc/cover/20220929172356.301342-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+[0] https://lore.kernel.org/linux-arm-kernel/Yyt8s5+pyoysVNeC@spud/T/
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-arm-dt-for-v6.2
 
 Cheers,
 Prabhakar
+
+Lad Prabhakar (2):
+  arm64: dts: renesas: r9a07g043: Introduce SOC_PERIPHERAL_IRQ() macro
+    to specify interrupt property
+  arm64: dts: renesas: r9a07g043: Split out RZ/G2UL SoC specific parts
+
+ arch/arm64/boot/dts/renesas/r9a07g043.dtsi    | 347 ++++++++----------
+ arch/arm64/boot/dts/renesas/r9a07g043u.dtsi   |  72 ++++
+ .../boot/dts/renesas/r9a07g043u11-smarc.dts   |   2 +-
+ 3 files changed, 220 insertions(+), 201 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
+
+-- 
+2.25.1
+
