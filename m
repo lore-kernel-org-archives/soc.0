@@ -1,192 +1,121 @@
-Return-Path: <SRS0=tsMc=22=icenowy.me=uwu@kernel.org>
+Return-Path: <SRS0=pv8K=22=gmail.com=prabhakar.csengg@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4095AC38A2D
-	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 15:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8DA6C04A95
+	for <soc@archiver.kernel.org>; Tue, 25 Oct 2022 16:11:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 20F58C433D7; Tue, 25 Oct 2022 15:48:04 +0000 (UTC)
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id B16DBC433C1; Tue, 25 Oct 2022 16:11:24 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F8A9C433D6;
-	Tue, 25 Oct 2022 15:48:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F8A9C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=icenowy.me
-ARC-Seal: i=1; a=rsa-sha256; t=1666712868; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=XpElBdmhG95pvkRZTtu7NrokXpygpK3nj3LHpOqR18J9NJ17F3L6mo93OD8XnwdXeMuCzxmA5ejd2R2hTwDNsWdUC57ejEsIejBz483G+B/B9bBS2E1l4KxYbP3RhHmX9sSjET9gITmvMHnpYfjjBfy5HxbRYEnW3WLV9LDBTD4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1666712868; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-	bh=SFN3MHYwqgQ4syMrfHMBznZwgx3+83HJRzWEajE+UQA=; 
-	b=ON5T1N1al+QI9olfJNdmML8gv21j+x/+oRVlHoNHhcqB+bZFA05noNwD2Zl4C4Wyxqli75h7KH2XVGqV+6anHbW6nBvuuYTgzV58U/q0mw3zzWg6miSvKlPXmuznHOneAiojRqwzi4ug0ObgzciaxeIDA8b7wtHFjEi5IVUzoTU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666712868;
-	s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=SFN3MHYwqgQ4syMrfHMBznZwgx3+83HJRzWEajE+UQA=;
-	b=NUoeZAOGlwDppeGcRp4tRtXsH8vYqgXJEpj42ncgD4TclAD1+h/TjrV2AtBSwCh9
-	4dXPH2D91wbw2ZQ+WYTVIEYHUGi53/F5DYKAI2+5bJ5eqi76UQUSH8nrihJmDgNVXPE
-	+k4khj8AR3lQsIFp65i7Fy1/BFsBDCVCCPmkCClw=
-Received: from edelgard.fodlan.icenowy.me (112.94.102.105 [112.94.102.105]) by mx.zohomail.com
-	with SMTPS id 1666712866134332.719886075305; Tue, 25 Oct 2022 08:47:46 -0700 (PDT)
-Message-ID: <6ba37039524563be81a807df2f623a296e74c372.camel@icenowy.me>
-Subject: Re: [PATCH 3/3] ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Andre Przywara <andre.przywara@arm.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
- <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,  linux-sunxi@lists.linux.dev,
- soc@kernel.org, =?ISO-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
-Date: Tue, 25 Oct 2022 23:47:42 +0800
-In-Reply-To: <20221025164445.12f5f89c@donnerap.cambridge.arm.com>
-References: <20221025145909.2837939-1-andre.przywara@arm.com>
-	 <20221025145909.2837939-4-andre.przywara@arm.com>
-	 <73ea157f7e0c75f8bda16b3ac464be58fe7fb3ab.camel@icenowy.me>
-	 <20221025164445.12f5f89c@donnerap.cambridge.arm.com>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 
+	by smtp.kernel.org (Postfix) with ESMTPS id AA659C433D6;
+	Tue, 25 Oct 2022 16:11:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AA659C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id a67so36981561edf.12;
+        Tue, 25 Oct 2022 09:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlXbIDv9437lExc8ejab3R1D1/KjaGnyi1kzpCh97FY=;
+        b=gLjcHgW+H7vRYcAMMpizp/Ql0s90VR4SnYym1rTloiMZSZCth0n7GsoLxeVMBofFSS
+         fKW5dOM0xYdyi+G1CfGzjNYq9ldtyS/J+wetGAbPYOhde5gAjMMYi/YvfoBbGJb1+hAh
+         mOUQT9ilxzCCK/OLWaWFBzNKpQiPdeZTjOKrGSYZRQYxau7PMiq5bBwpbtJzZ5Ps1IrW
+         mWpOrApdt4w+Nmrn4+SjhC3eoJ+LzlrXCRSY671e0BoRbSyBDcvMhPqNzqcwip7kWzYQ
+         rSuVu/bZjF2NhLAamh8akKhlTWGtZuBioS7moKOJtYVyW9HAtmrKSSwRhLMj2TqD/Pde
+         bZgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JlXbIDv9437lExc8ejab3R1D1/KjaGnyi1kzpCh97FY=;
+        b=Y9KwVrLPDj8uKcseFY5oYvfgTJZPsSzf5h26rk+mZogDLpXiID/chFTbPozT+XRYbw
+         OYzW8z4XqyYDDXTOqCIXhgpfGBa5hTDy3ChHsVnazByQ3Ylp7nAG3UveszUtcqvX9fv4
+         CXVree9+YifBv9Es0opVRZ4ZXV8rLpNSs6NYwcSey2nTBeu1ZfCXLJxeLnUZS2/S6utd
+         ogrHNe9nFUa2VPNLtBn3z6ckid/zStQdLBZ15Op6Z7d8N/23XfSyOo/5iCHs9P21keZ6
+         /r9XOb9kW6aktzhgVxPOgagYyspCMSWEDKsoMqI4+X2Hus6xdyvKjjkJQoBP6un09N7C
+         ASJQ==
+X-Gm-Message-State: ACrzQf1ThTfIliYEbmPYrFGFJ05NOeIvtspFOrdWHIYA0yxe/NDyt2XK
+	8mvpcT6w4vXQ7T/fs42t4umHP8Yvr8widgVY1tY=
+X-Google-Smtp-Source: AMsMyM5IYA65H7Pr/6Jmn0rANYjXlWU97pLnIVRzuk9t3RJDMspuL/wBdeTH2rr9fzryGYGCc8oupzb6cw4vPMk3DVM=
+X-Received: by 2002:a05:6402:40c2:b0:461:a29c:4ac0 with SMTP id
+ z2-20020a05640240c200b00461a29c4ac0mr13289160edb.319.1666714281900; Tue, 25
+ Oct 2022 09:11:21 -0700 (PDT)
 MIME-Version: 1.0
-X-ZohoMailClient: External
+References: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221017091201.199457-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXiim0bDBxaGWi2GjAmKS1gKj8D8TUBPXnZtm0EphKsmQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdXiim0bDBxaGWi2GjAmKS1gKj8D8TUBPXnZtm0EphKsmQ@mail.gmail.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Tue, 25 Oct 2022 17:10:55 +0100
+Message-ID: <CA+V-a8s43vAhX4gf+AtgNoru_V4tq0e=cC+oB-VsSPJ_hWjj4A@mail.gmail.com>
+Subject: Re: [RFC RESEND PATCH 1/2] arm64: dts: renesas: r9a07g043: Introduce
+ SOC_PERIPHERAL_IRQ() macro to specify interrupt property
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org, 
+	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel@sholland.org>, 
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-5ZyoIDIwMjItMTAtMjXmmJ/mnJ/kuoznmoQgMTY6NDQgKzAxMDDvvIxBbmRyZSBQcnp5d2FyYeWG
-memBk++8mgo+IE9uIFR1ZSwgMjUgT2N0IDIwMjIgMjM6MzA6MjYgKzA4MDAKPiBJY2Vub3d5IFpo
-ZW5nIDx1d3VAaWNlbm93eS5tZT4gd3JvdGU6Cj4gCj4gSGkgSWNlbm93eSwKPiAKPiB0aGFua3Mg
-Zm9yIGhhdmluZyBhIGxvb2shCj4gQW5kIGJ0dywgZm9yZ290IHRvIG1lbnRpb24gaW4gdGhlIGNv
-dmVyIGxldHRlcjogdGhpcyByZWxpZXMgb24gdGhlCj4gVVNCIGJpdHMKPiBpbiB5b3VyIHNlcmll
-cy4gV2hpY2ggd29ya3MgbmljZWx5LCBldmVuIGluIGhvc3QgbW9kZS4KPiAKPiA+IOWcqCAyMDIy
-LTEwLTI15pif5pyf5LqM55qEIDE1OjU5ICswMTAw77yMQW5kcmUgUHJ6eXdhcmHlhpnpgZPvvJoK
-PiA+ID4gVGhlIExjdGVjaCBQaSBGMUMyMDBzIChhbHNvIHByZXZpb3VzbHkga25vd24gdW5kZXIg
-dGhlIENoZXJyeSBQaQo+ID4gPiBicmFuZCnCoCAKPiA+IAo+ID4gT2g/IEFyZSB0aGV5IHRoZSBz
-YW1lIGhhcmR3YXJlPwo+IAo+IE15IGJvYXJkIGxvb2tzIGlkZW50aWNhbCB0byB0aGlzIG9uZToK
-PiBodHRwczovL3d3dy5jbngtc29mdHdhcmUuY29tLzIwMjIvMDIvMDMvbW9yZS1hbGx3aW5uZXIt
-ZjFjMjAwcy1hcm05LWJvYXJkcy1tYW5nb3BpLXIzLWFuZC1jaGVycnlwaS1mMWMyMDBzLyNjaGVy
-cnlwaS1mMWMyMDBzCj4gCj4gVGhlIG9ubHkgZGlmZmVyZW5jZSBpcyB0aGUgc2lsa3NjcmVlbiwg
-dGhlcmUgaXMgbm8gY2hlcnJ5IGxvZ28gb24KPiBtaW5lLAo+IGJ1dCB0aGUgKG5vIGxvbmdlciB3
-b3JraW5nKSBVUkwgaXMgdGhlIHNhbWUsIHNvIGl0J3MgdGhlIHNhbWUgYm9hcmQKPiBmcm9tCj4g
-dGhlIHNhbWUgY29tcGFueS4gSSBndWVzcyBsZWdhbCB0cm91Ymxlcz8KPiAKPiA+ID4gaXMgYSBz
-bWFsbCBkZXZlbG9wbWVudCBib2FyZCB3aXRoIHRoZSBBbGx3aW5uZXIgRjFDMjAwcyBTb0MuIFRo
-aXMKPiA+ID4gaXMKPiA+ID4gdGhlCj4gPiA+IHNhbWUgYXMgdGhlIEYxQzEwMHMsIGJ1dCB3aXRo
-IDY0TUIgaW5zdGVhZCBvZiAzMk1CIGNvLXBhY2thZ2VkCj4gPiA+IERSQU0uCj4gPiA+IAo+ID4g
-PiBBbG9uZ3NpZGUgdGhlIG9ibGlnYXRvcnkgbWljcm8tU0QgY2FyZCBzbG90LCB0aGUgYm9hcmQg
-ZmVhdHVyZXMgYQo+ID4gPiBTUEktTkFORCBmbGFzaCBjaGlwLCBMQ0QgYW5kIHRvdWNoIGNvbm5l
-Y3RvcnMsIGFuZCB1bnBvcHVsYXRlZAo+ID4gPiBleHBhbnNpb24gaGVhZGVyIHBpbnMuCj4gPiA+
-IFRoZXJlIGFyZSB0d28gVVNCIFR5cGUtQyBwb3J0cyBvbiB0aGUgYm9hcmQ6IE9uZSBzdXBwbGll
-cyB0aGUKPiA+ID4gcG93ZXIsCj4gPiA+IGFsc28KPiA+ID4gY29ubmVjdHMgdG8gdGhlIFVTQiBN
-VVNCIE9URyBjb250cm9sbGVyIHBvcnQuIFRoZSBvdGhlciBvbmUgaXMKPiA+ID4gY29ubmVjdGVk
-Cj4gPiA+IHRvIGFuIENIMzQwIFVTQiBzZXJpYWwgY2hpcCwgd2hpY2ggaW4gdHVybiBpcyBjb25u
-ZWN0ZWQgdG8gVUFSVDEuCj4gPiA+IAo+ID4gPiBBZGQgYSBkZXZpY2V0cmVlIGZpbGUsIHNvIHRo
-YXQgdGhlIGJvYXJkIGNhbiBiZSB1c2VkIGVhc2lseS4KPiA+ID4gCj4gPiA+IFNpZ25lZC1vZmYt
-Ynk6IEFuZHJlIFByenl3YXJhIDxhbmRyZS5wcnp5d2FyYUBhcm0uY29tPgo+ID4gPiAtLS0KPiA+
-ID4gwqBhcmNoL2FybS9ib290L2R0cy9NYWtlZmlsZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHzCoCAxICsKPiA+ID4gwqBhcmNoL2FybS9ib290L2R0cy9zdW5pdi1mMWMx
-MDBzLmR0c2nCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDUgKysKPiA+ID4gwqBhcmNoL2FybS9ib290
-L2R0cy9zdW5pdi1mMWMyMDBzLWxjdGVjaC1waS5kdHMgfCA4MAo+ID4gPiArKysrKysrKysrKysr
-KysrKysrCj4gPiA+IMKgMyBmaWxlcyBjaGFuZ2VkLCA4NiBpbnNlcnRpb25zKCspCj4gPiA+IMKg
-Y3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtL2Jvb3QvZHRzL3N1bml2LWYxYzIwMHMtbGN0ZWNo
-LXBpLmR0cwo+ID4gPiAKPiA+ID4gZGlmZiAtLWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL01ha2Vm
-aWxlCj4gPiA+IGIvYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUKPiA+ID4gaW5kZXggNmFiZjY0
-MzRlYjM3Mi4uZjk5YzVjMjBiZjdlZiAxMDA2NDQKPiA+ID4gLS0tIGEvYXJjaC9hcm0vYm9vdC9k
-dHMvTWFrZWZpbGUKPiA+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvTWFrZWZpbGUKPiA+ID4g
-QEAgLTEzOTQsNiArMTM5NCw3IEBAIGR0Yi0kKENPTkZJR19NQUNIX1NVTjlJKSArPSBcCj4gPiA+
-IMKgwqDCoMKgwqDCoMKgwqBzdW45aS1hODAtY3ViaWVib2FyZDQuZHRiCj4gPiA+IMKgZHRiLSQo
-Q09ORklHX01BQ0hfU1VOSVYpICs9IFwKPiA+ID4gwqDCoMKgwqDCoMKgwqDCoHN1bml2LWYxYzEw
-MHMtbGljaGVlcGktbmFuby5kdGIgXAo+ID4gPiArwqDCoMKgwqDCoMKgwqBzdW5pdi1mMWMyMDBz
-LWxjdGVjaC1waS5kdGIgXAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgc3VuaXYtZjFjMjAwcy1wb3Bz
-dGljay12MS4xLmR0Ygo+ID4gPiDCoGR0Yi0kKENPTkZJR19BUkNIX1RFR1JBXzJ4X1NPQykgKz0g
-XAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgdGVncmEyMC1hY2VyLWE1MDAtcGljYXNzby5kdGIgXAo+
-ID4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvc3VuaXYtZjFjMTAwcy5kdHNpCj4g
-PiA+IGIvYXJjaC9hcm0vYm9vdC9kdHMvc3VuaXYtZjFjMTAwcy5kdHNpCj4gPiA+IGluZGV4IDBm
-MjRjNzY2YzlmYzUuLjJlYzAyMmU5MmVlYTggMTAwNjQ0Cj4gPiA+IC0tLSBhL2FyY2gvYXJtL2Jv
-b3QvZHRzL3N1bml2LWYxYzEwMHMuZHRzaQo+ID4gPiArKysgYi9hcmNoL2FybS9ib290L2R0cy9z
-dW5pdi1mMWMxMDBzLmR0c2kKPiA+ID4gQEAgLTIwMSw2ICsyMDEsMTEgQEAgdWFydDBfcGVfcGlu
-czogdWFydDAtcGUtcGlucyB7Cj4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaW5zID0gIlBFMCIsICJQRTEiOwo+ID4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgZnVuY3Rpb24gPSAidWFydDAiOwo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Owo+ID4gPiArCj4gPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdWFydDFfcGFfcGluczogdWFydDEtcGEt
-cGlucyB7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHBpbnMgPSAiUEEyIiwgIlBBMyI7Cj4gPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZ1bmN0
-aW9uID0gInVhcnQxIjsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqB9O8KgIAo+ID4gCj4gPiBTaG91bGQgdGhpcyBiZSBpbiBhIHNwbGl0dGVkIGNv
-bW1pdD8KPiAKPiBJIGRvbid0IGtub3cgaWYgdGhpcyBpcyByZWFsbHkgbmVjZXNzYXJ5LCBidXQg
-YW0gb2YgY291cnNlIGhhcHB5IHRvCj4gc3Bpbgo+IHRoaXMgb25lIG91dCwgaWYgbmVlZGVkLgo+
-IAo+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiA+IMKgCj4gPiA+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGltZXJAMWMyMGMwMCB7Cj4gPiA+IGRp
-ZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9zdW5pdi1mMWMyMDBzLWxjdGVjaC1waS5kdHMK
-PiA+ID4gYi9hcmNoL2FybS9ib290L2R0cy9zdW5pdi1mMWMyMDBzLWxjdGVjaC1waS5kdHMKPiA+
-ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+ID4gaW5kZXggMDAwMDAwMDAwMDAwMC4uYTlkMTc3
-ODM5NTQzOAo+ID4gPiAtLS0gL2Rldi9udWxsCj4gPiA+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRz
-L3N1bml2LWYxYzIwMHMtbGN0ZWNoLXBpLmR0cwo+ID4gPiBAQCAtMCwwICsxLDgwIEBACj4gPiA+
-ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjArIE9SIE1JVCkKPiA+ID4gKy8q
-Cj4gPiA+ICsgKiBDb3B5cmlnaHQgMjAyMiBBcm0gTHRkLAo+ID4gPiArICogYmFzZWQgb24gd29y
-azoKPiA+ID4gKyAqwqDCoCBDb3B5cmlnaHQgMjAyMiBJY2Vub3d5IFpoZW5nIDx1d3VAaWNlbm93
-eS5tZT4KPiA+ID4gKyAqLwo+ID4gPiArCj4gPiA+ICsvZHRzLXYxLzsKPiA+ID4gKyNpbmNsdWRl
-ICJzdW5pdi1mMWMxMDBzLmR0c2kiCj4gPiA+ICsKPiA+ID4gKyNpbmNsdWRlIDxkdC1iaW5kaW5n
-cy9ncGlvL2dwaW8uaD4KPiA+ID4gKwo+ID4gPiArLyB7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoG1v
-ZGVsID0gIkxjdGVjaCBQaSBGMUMyMDBzIjsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgY29tcGF0aWJs
-ZSA9ICJsY3RlY2gscGktZjFjMjAwcyIsICJhbGx3aW5uZXIsc3VuaXYtCj4gPiA+IGYxYzIwMHMi
-LAo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgImFsbHdpbm5l
-cixzdW5pdi1mMWMxMDBzIjsKPiA+ID4gKwo+ID4gPiArwqDCoMKgwqDCoMKgwqBhbGlhc2VzIHsK
-PiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG1tYzAgPSAmbW1jMDsKPiA+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNlcmlhbDAgPSAmdWFydDE7Cj4gPiA+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzcGkwID0gJnNwaTA7Cj4gPiA+ICvCoMKgwqDC
-oMKgwqDCoH07Cj4gPiA+ICsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgY2hvc2VuIHsKPiA+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHN0ZG91dC1wYXRoID0gInNlcmlhbDA6MTE1MjAw
-bjgiOwo+ID4gPiArwqDCoMKgwqDCoMKgwqB9Owo+ID4gPiArCj4gPiA+ICvCoMKgwqDCoMKgwqDC
-oHJlZ192Y2MzdjM6IHJlZ3VsYXRvci0zdjMgewo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgY29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOwo+ID4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVndWxhdG9yLW5hbWUgPSAidmNjM3YzIjsKPiA+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDMz
-MDAwMDA+Owo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVndWxhdG9yLW1h
-eC1taWNyb3ZvbHQgPSA8MzMwMDAwMD47Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoH07Cj4gPiA+ICt9
-Owo+ID4gPiArCj4gPiA+ICsmbW1jMCB7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoGJyb2tlbi1jZDsK
-PiA+ID4gK8KgwqDCoMKgwqDCoMKgYnVzLXdpZHRoID0gPDQ+Owo+ID4gPiArwqDCoMKgwqDCoMKg
-wqBkaXNhYmxlLXdwOwo+ID4gPiArwqDCoMKgwqDCoMKgwqB2bW1jLXN1cHBseSA9IDwmcmVnX3Zj
-YzN2Mz47Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoHN0YXR1cyA9ICJva2F5IjsKPiA+ID4gK307Cj4g
-PiA+ICsKPiA+ID4gKyZvdGdfc3JhbSB7Cj4gPiA+ICvCoMKgwqDCoMKgwqDCoHN0YXR1cyA9ICJv
-a2F5IjsKPiA+ID4gK307Cj4gPiA+ICsKPiA+ID4gKyZzcGkwIHsKPiA+ID4gK8KgwqDCoMKgwqDC
-oMKgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgcGluY3Ry
-bC0wID0gPCZzcGkwX3BjX3BpbnM+Owo+ID4gPiArwqDCoMKgwqDCoMKgwqBzdGF0dXMgPSAib2th
-eSI7Cj4gPiA+ICsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgZmxhc2hAMCB7Cj4gPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gInNwaS1uYW5kIjsKPiA+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9IDwwPjsKPiA+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCNhZGRyZXNzLWNlbGxzID0gPDE+Owo+ID4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgI3NpemUtY2VsbHMgPSA8MT47Cj4gPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBzcGktbWF4LWZyZXF1ZW5jeSA9IDw0MDAwMDAwMD47Cj4gPiA+
-ICvCoMKgwqDCoMKgwqDCoH07Cj4gPiA+ICt9Owo+ID4gPiArCj4gPiA+ICsmdWFydDEgewo+ID4g
-PiArwqDCoMKgwqDCoMKgwqBwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOwo+ID4gPiArwqDCoMKg
-wqDCoMKgwqBwaW5jdHJsLTAgPSA8JnVhcnQxX3BhX3BpbnM+Owo+ID4gPiArwqDCoMKgwqDCoMKg
-wqBzdGF0dXMgPSAib2theSI7Cj4gPiA+ICt9Owo+ID4gPiArCj4gPiA+ICsvKgo+ID4gPiArICog
-VGhpcyBpcyBhIFR5cGUtQyBzb2NrZXQsIGJ1dCBDQzEvMiBhcmUgbm90IGNvbm5lY3RlZCwgYW5k
-Cj4gPiA+IFZCVVMgaXMKPiA+ID4gY29ubmVjdGVkCj4gPiA+ICsgKiB0byBWaW4sIHdoaWNoIHN1
-cHBsaWVzIHRoZSBib2FyZC4gSG9zdCBtb2RlIHdvcmtzIChpZiB0aGUKPiA+ID4gYm9hcmQKPiA+
-ID4gaXMgcG93ZXJlZAo+ID4gPiArICogb3RoZXJ3aXNlKSwgYnV0IHBlcmlwaGVyYWwgaXMgcHJv
-YmFibHkgdGhlIGludGVudGlvbi4KPiA+ID4gKyAqLwo+ID4gPiArJnVzYl9vdGcgewo+ID4gPiAr
-wqDCoMKgwqDCoMKgwqBkcl9tb2RlID0gInBlcmlwaGVyYWwiOwo+ID4gPiArwqDCoMKgwqDCoMKg
-wqBzdGF0dXMgPSAib2theSI7Cj4gPiA+ICt9O8KgIAo+ID4gCj4gPiBGaW5hbGx5IHdlIHNob3Vs
-ZCBnZXQgYWJsZSB0byBvdmVycmlkZSBkcl9tb2RlIGp1c3QgYnkgSFcuCj4gCj4gRG8geW91IG1l
-YW4gYnkgc29mdHdhcmU/IFllYWgsIHRoYXQgd291bGQgYmUgdXNlZnVsLiBPdGhlcndpc2Ugb25l
-Cj4gY291bGQKClllcywgYnkgU1cuIEl0J3MgYSB0eXBvIChJIHRoaW5rIGl0J3Mgc29tZSBraW5k
-IG9mIG5lcnZlIGxpbmsgYml0LWZsaXAKd2hlbiBJIHdhcyB0eXBpbmcgdGhpcykuCgpCVFcgSSB0
-aGluayB0aGUgZnVydGhlciB1dGlsaXphdGlvbiBvZiBzb21ldGhpbmcgbGlrZSBhIHByb3BlciBU
-eXBlLUMKY29udHJvbGxlciAoZS5nLiBGVVNCMzAyKSBuZWVkcyB0aGUgZHJpdmVyIHRvIGltcGxl
-bWVudCBhIG5ldyBpbnRlcmZhY2UKaW4ga2VybmVsLCB1c2Igcm9sZSBzd2l0Y2guCgo+IGRlZGlj
-YXRlIGEgR1BJTyB0byBhIGZha2UgSURfREVUIHBpbiwgSSBndWVzcy4gT3IgdXNlIGEgRFQgb3Zl
-cmxheS4KPiAKPiBDaGVlcnMsCj4gQW5kcmUKPiAKPiA+ID4gKwo+ID4gPiArJnVzYnBoeSB7Cj4g
-PiA+ICvCoMKgwqDCoMKgwqDCoHN0YXR1cyA9ICJva2F5IjsKPiA+ID4gK307wqAgCj4gPiAKPiAK
-Cg==
+Hi Geert,
 
+Thank you for the review.
+
+On Tue, Oct 25, 2022 at 1:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Oct 17, 2022 at 11:12 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Introduce SOC_PERIPHERAL_IRQ() macro to specify interrupt property so
+> > that we can share the common parts of the SoC DTSI with the RZ/Five
+> > (RISC-V) SoC and the RZ/G2UL (ARM64) SoC.
+> >
+> > This patch adds a new file r9a07g043u.dtsi to separate out RZ/G2UL
+> > (ARM64) SoC specific parts. No functional changes (same DTB).
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
+> > @@ -0,0 +1,12 @@
+> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +/*
+> > + * Device Tree Source for the RZ/G2UL SoC
+> > + *
+> > + * Copyright (C) 2022 Renesas Electronics Corp.
+> > + */
+> > +
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +#define SOC_PERIPHERAL_IRQ(nr, na)     GIC_SPI nr na
+>
+> s/na/flags/
+>
+> Originally, when I assumed incorrectly that dtc does not support
+> arithmetic, I used "nr" and "na" in the macro I proposed to mean RISC-V
+> ("r") resp. ARM ("a") interrupt number.  Apparently the names stuck,
+> although the second parameter now has a completely different meaning ;-)
+>
+> However, as the NCEPLIC does support interrupt flags, unlike the SiFive
+> PLIC, there is no need to have the flags parameter in the macro.
+>
+Ok, I'll drop the second parameter.
+
+Cheers,
+Prabhakar
