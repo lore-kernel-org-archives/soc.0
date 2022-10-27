@@ -1,192 +1,158 @@
-Return-Path: <SRS0=atzn=23=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=a/FV=24=gmail.com=jbx6244@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFC7EC433FE
-	for <soc@archiver.kernel.org>; Wed, 26 Oct 2022 17:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7DC7C38A2D
+	for <soc@archiver.kernel.org>; Thu, 27 Oct 2022 00:50:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9B022C433D7; Wed, 26 Oct 2022 17:14:00 +0000 (UTC)
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	id AD805C433D6; Thu, 27 Oct 2022 00:50:33 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5297BC433D6
-	for <soc@kernel.org>; Wed, 26 Oct 2022 17:13:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5297BC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qv1-f44.google.com with SMTP id ml12so11037254qvb.0
-        for <soc@kernel.org>; Wed, 26 Oct 2022 10:13:58 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6A0CBC433C1;
+	Thu, 27 Oct 2022 00:50:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6A0CBC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id b12so167702edd.6;
+        Wed, 26 Oct 2022 17:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lfid/EGLi+19H4uwbSlhnu7zTXD1AOWmoY4BG7Csjzk=;
-        b=w2XLX71AJSDs08JMfr4J7+gBpYWssQnKF7mTjcseKI+gsVR28N0HH5u3aGnphmCS3t
-         gNXlxecVPdx1Hz4fjH+FuX6G1q1Y5MfQ+h9Kg12DgxFiL3peE/z05GcyQMfLoZBUOWCC
-         PEAhRRRZBEg58af5k53cS50uIhMsncd6gmOBaTExPC1cSuxxzvBa4IId0+kUBz//uo7I
-         QX1MlyriVfn14H7x0IPs/zCWdGuz0G5ROEKCDeNvJ6EET3oNYrOm0jla+Jfk0f9znfgl
-         d+a4togMkqaMYexyeW9uFEPMKAirv7wwiBMPpxVz1wWXT2hyJTZV9UvZrooMPQVXaHYo
-         Atng==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jt3MIRMKXjXJnnd81rELlMmSLDWwlHxTIiZ16VJwbbw=;
+        b=ldaVpeXnNCizOC81BoRZpy0h3vlJqWMvSMySEkRZ8RTWUhzLCXCG2mzZUhcQyWzYAp
+         +53PxdCtY+eC7j7sDd8eOPmBzNwH0Z5YDD9VlcE4HVmlDhAoo5lBwtbsCbkITU9ciGZ7
+         /RD97MuWjjKSnr3CJ9AEcU8efAWzwCWCLCfSxfDQI5lY0BkxBkq1TwEIhp0noV3G9Nka
+         f5CE8BMYF0vCYxm4Srcts/Tc9B5IGgfk5SdaqiXMPrH57jqggQHoY+XA7Mk4z8qHNb0E
+         z6ki+TvbuRhUjzcIFGcm0airNcaT5p4t8p7EpHEK2aj47IScVThsAu+BYehnss9igfcH
+         rSWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lfid/EGLi+19H4uwbSlhnu7zTXD1AOWmoY4BG7Csjzk=;
-        b=kXh6dsg3Gy4azyOKwBzXUZf7WsCR3ooQz5mi6svrrlmDYLI2Sfj6VDUVtUqsyABHW+
-         jRTPkz9scTdEIS22ziXRk6cnfDcStB6t6a7qwTwM3mliQlodqQR5iSFRPJ9w3B7dRZC5
-         TOxOX9axeT+thVWancEfMEtL7qrfiQozFwcFJIqahIEObbtiaev6ihlFpU+c7TpVEZJD
-         lZOaEyIzrju+2+rZPixfGyTVxyTGDWzOCBpHRjrmMpIxMNQ8xX5PZa2x9D9CLWFX0SR2
-         COtb/oTWpz2zoR12SodjC37tKXoBi2L2+EeYf2s2ybTU9KF9T5KZx6EZ+jUfbeQKlCUL
-         wQuw==
-X-Gm-Message-State: ACrzQf0vvS9k8fywtTk7QF4p9MxOQotCVi55eF4wYb2DHdzyC8ypVw1g
-	kn04Gn45VQXUMTXRBb45cH46ltKUIM+5Mw==
-X-Google-Smtp-Source: AMsMyM4lbAzJKd5Mezh97U/0X3vBaV6OnM4q8/MDRtjUu9awL48NOdaWCLRTpGuqhShNpdeZWhlB0g==
-X-Received: by 2002:ad4:5dea:0:b0:4b2:e813:7c35 with SMTP id jn10-20020ad45dea000000b004b2e8137c35mr37120067qvb.74.1666804437178;
-        Wed, 26 Oct 2022 10:13:57 -0700 (PDT)
-Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id bq14-20020a05622a1c0e00b0039cc64bcb53sm3467002qtb.27.2022.10.26.10.13.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 10:13:56 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.2
-Date: Wed, 26 Oct 2022 13:13:54 -0400
-Message-Id: <20221026171354.51877-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jt3MIRMKXjXJnnd81rELlMmSLDWwlHxTIiZ16VJwbbw=;
+        b=CjsReRTcceZYSwPmwr11V6YLz4nxuHAgfDHj2eUjhGrFWh1T/sPfcRSmTwl+JeCFcJ
+         q8KoAEkB70JOZniZMgTQsvia8eR/OHUug0OrZL9lLFObtr/frWiwUiBH4cOyW+i/onMd
+         1OjaMDqJeEU6WUL1sposinVRHsyz3rPPM63PoAUkEazo2E+Tp9V7nlWJrww0axf7V01/
+         JQZG3an0ffCbUvEssYlIzkOCuHwfsrpmVkhTYU6G6rYEP6JTrcJ4OH4ghazZQoN+7BQI
+         xJnh2DZNixw39IlqrHcv7Yk/F6fdjBCxBxdOs2pxv6Ir1N8b6z9tobY8l+Wi9LFMvZkx
+         TGTA==
+X-Gm-Message-State: ACrzQf1pxzC9ks/tKc/QGC1TbUD/I4Iry+FL/YTI+iKyV+udcvzyMgRv
+	KdmVj/k37/AaHfuMl7aqFpbYbUQD0ZU=
+X-Google-Smtp-Source: AMsMyM4UN8PRjyzxfcCMWbPkvysSgG57BxsgajhoMihbcJPaMRC9bTJ77a01K1tO4L3Qm2mElKka7w==
+X-Received: by 2002:a17:907:6e9e:b0:78c:5533:4158 with SMTP id sh30-20020a1709076e9e00b0078c55334158mr37883433ejc.417.1666831819650;
+        Wed, 26 Oct 2022 17:50:19 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170906724300b007a7f9b6318asm3632975ejk.50.2022.10.26.17.50.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 17:50:19 -0700 (PDT)
+Message-ID: <da1252eb-85e9-bdb8-0542-207173523523@gmail.com>
+Date: Thu, 27 Oct 2022 02:50:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From: Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 0/4] Add basic Rockchip rk3128 DT support
+To: kever.yang@rock-chips.com, heiko@sntech.de
+List-Id: <soc.lore.kernel.org>
+Cc: sjg@chromium.org, philipp.tomsich@vrull.eu, zhangqing@rock-chips.com,
+ hjc@rock-chips.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
+Add basic Rockchip rk3128 DT support.
 
-This includes pieces from late (3rd) pull for v6.1, which did not make that time.
+Features:
+  Quad-core ARM Cortex-A7MP Core processor
+  Clock & reset unit
+  Power management unit
+  Interrupt controller
+  DMAC
+  6x 64 bits Timers
+  4x PWMs
+  1x 32 bits watchdog
 
-Best regards,
-Krzysztof
+Internal memory:
+  Internal BootRom
+  Internal SRAM 8KB
 
+External memory:
+  Dynamic Memory Interface (DDR3/DDR3L/LPDDR2)
+  Nand Flash Interface
+  eMMC Interface
+  SD/MMC Interface
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+Connectivity:
+  SDIO interface
+  SPI Controller
+  3x UART controller
+  4x I2C controllers
+  4x groups of GPIO (GPIO0~GPIO3), 32 GPIOs per group
+  USB Host2.0
+  USB OTG2.0
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+===
 
-are available in the Git repository at:
+The Linux kernel has added a rk3128 clock driver in the past,
+but the DT is still missing.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.2
+In U-boot the rk3128 DT doesn't conform the latest bindings
+and also the pin definition don't match the TRM.
 
-for you to fetch changes up to a11a5debdf4b5b5c24e88a378b53b42cc4fe1bb9:
+On request from the U-boot maintainers I submit a basic rk3128 DT.
+https://lore.kernel.org/u-boot/258c2dbf-436d-5935-83f5-a2dbb8cf62d7@rock-chips.com/
 
-  dt-bindings: memory-controller: st,stm32: Split off MC properties (2022-10-18 13:05:18 -0400)
+Based on:
+https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/rk3128.dtsi
+https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi
 
-----------------------------------------------------------------
-Memory controller drivers for v6.2
+rk3128 TRM:
+https://rockchip.fr/RK312X%20TRM/
 
-1. STM32 FMC2:
-   a. Correct in bindings the name of property for address
-      setup duration. The DTS and driver were already using proper name,
-      so it is only alignment of bindings with real usage.
-   b. Split off STM32 memory controller bus peripheral properties into
-      generic ones (re-usable by multiple memory controllers) and STM32 bus
-      peripheral.  This way, the FMC2 controller properties in Micrel
-      KSZ8851MLL ethernet controller node can be properly validated.
+rk3128 datasheet:
+https://rockchip.fr/RK3128%20datasheet%20V1.2.pdf
 
-2. Tegra MC: simplify with DEFINE_SHOW_ATTRIBUTE.
+===
 
-3. Renesas RPC IF: add suppor tfor R-Car Gen4.
+NOT TESTED WITH HARDWARE
+NO THERMAL PROTECTION
 
-4. LPDDR bindings: refactor and extend with description of DDR channels.
-   Add also bindings for LPDDR4 and LPDDR5.
+===
 
-The rationale for (4) above - LPDDR bindings changes, wrote by Julius Werner:
+Request:
+  Review of nodes and pin definitions.
 
-"We (Chromium OS) have been trying to find a way to pass LPDDR memory
-chip information that is available to the firmware through the FDT
-(mostly for userspace informational purposes, for now). We have been
-using and expanding the existing "jedec,lpddr2" and "jedec,lpddr3"
-bindings for this (e.g. [1]). The goal is to be able to identify the
-memory layout of the system (how the parts look like, how they're tied
-together, how much capacity there is in total) as accurately as
-possible from software-probed values.
+  Help with testing on hardware.
 
-...
+  Help with correct "arm,armv7-timer" properties.
 
-The problem with this is that each individual LPDDR chip has its own
-set of mode registers (per rank) that only describe the density of
-that particular chip (rank). The host memory controller may have
-multiple channels (each of which is basically an entirely separate set
-of physical LPDDR pins on the board), a single channel may be
-connected to multiple LPDDR chips (e.g. if the memory controller has
-an outgoing 32-bit channel, that channel could be tied to two 16-bit
-LPDDR chips by tying the low 16 bits to one and the high 16 bits to
-the other), and then each of those chips may offer multiple
-independent ranks (which rank is being accessed at a given time is
-controlled by a separate chip select pin).
+===
 
-So if we just have one "io-width" and one "density" field in the FDT,
-there's no way to figure out how much memory there's actually
-connected in total, because that only describes a single LPDDR chip.
-Worse, there may be chips where different ranks have different
-densities (e.g. a 6GB dual-rank chip with one 4GB and one 2GB rank),
-and different channels could theoretically be connected to chips of
-completely different manufacturers."
+Johan Jonker (4):
+  dt-bindings: arm: rockchip: Add Rockchip RK3128 Evaluation board
+  dt-bindings: timer: rockchip: add rockchip,rk3128-timer
+  ARM: dts: rockchip: add rk3128.dtsi
+  ARM: dts: rockchip: add rk3128-evb.dts
 
-Link: https://lore.kernel.org/r/CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ .../bindings/timer/rockchip,rk-timer.yaml     |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/rk3128-evb.dts              | 105 ++
+ arch/arm/boot/dts/rk3128.dtsi                 | 930 ++++++++++++++++++
+ 5 files changed, 1042 insertions(+)
+ create mode 100644 arch/arm/boot/dts/rk3128-evb.dts
+ create mode 100644 arch/arm/boot/dts/rk3128.dtsi
 
-----------------------------------------------------------------
-Cong Dang (1):
-      memory: renesas-rpc-if: Clear HS bit during hardware initialization
+--
+2.20.1
 
-Geert Uytterhoeven (1):
-      memory: renesas-rpc-if: Add support for R-Car Gen4
-
-Hai Pham (1):
-      dt-bindings: memory: renesas,rpc-if: Document R-Car V4H support
-
-Julius Werner (4):
-      dt-bindings: memory: Factor out common properties of LPDDR bindings
-      dt-bindings: memory: Add numeric LPDDR compatible string variant
-      dt-bindings: memory: Add jedec,lpddr4 and jedec,lpddr5 bindings
-      dt-bindings: memory: Add jedec,lpddrX-channel binding
-
-Liu Shixin (4):
-      memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-
-Marek Vasut (2):
-      dt-bindings: memory-controller: st,stm32: Fix st,fmc2_ebi-cs-write-address-setup-ns
-      dt-bindings: memory-controller: st,stm32: Split off MC properties
-
- .../ddr/jedec,lpddr-channel.yaml                   | 146 +++++++++++++++++++++
- .../memory-controllers/ddr/jedec,lpddr-props.yaml  |  74 +++++++++++
- .../memory-controllers/ddr/jedec,lpddr2.yaml       |  48 ++-----
- .../memory-controllers/ddr/jedec,lpddr3.yaml       |  44 ++-----
- .../memory-controllers/ddr/jedec,lpddr4.yaml       |  35 +++++
- .../memory-controllers/ddr/jedec,lpddr5.yaml       |  46 +++++++
- .../memory-controllers/mc-peripheral-props.yaml    |  38 ++++++
- .../memory-controllers/renesas,rpc-if.yaml         |   5 +
- .../st,stm32-fmc2-ebi-props.yaml                   | 144 ++++++++++++++++++++
- .../memory-controllers/st,stm32-fmc2-ebi.yaml      | 138 +------------------
- .../devicetree/bindings/net/micrel,ks8851.yaml     |   1 +
- drivers/memory/renesas-rpc-if.c                    |  22 +++-
- drivers/memory/tegra/tegra186-emc.c                |  15 +--
- drivers/memory/tegra/tegra20-emc.c                 |  15 +--
- drivers/memory/tegra/tegra210-emc-core.c           |  15 +--
- drivers/memory/tegra/tegra30-emc.c                 |  15 +--
- include/memory/renesas-rpc-if.h                    |   1 +
- 17 files changed, 531 insertions(+), 271 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-channel.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/mc-peripheral-props.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi-props.yaml
