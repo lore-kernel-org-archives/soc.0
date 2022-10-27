@@ -1,112 +1,142 @@
-Return-Path: <SRS0=vL6j=24=gmail.com=prabhakar.csengg@kernel.org>
+Return-Path: <SRS0=FTzm=24=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FA08C38A2D
-	for <soc@archiver.kernel.org>; Thu, 27 Oct 2022 08:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87A2C67871
+	for <soc@archiver.kernel.org>; Thu, 27 Oct 2022 10:01:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 32DDEC433D6; Thu, 27 Oct 2022 08:20:55 +0000 (UTC)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 94A13C433D7; Thu, 27 Oct 2022 10:01:38 +0000 (UTC)
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3ED49C433C1;
-	Thu, 27 Oct 2022 08:20:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3ED49C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id q9so2486120ejd.0;
-        Thu, 27 Oct 2022 01:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLZb0eCEmPbt6XCImQLnWXa0g/D2mdCPENmM5h+0jwE=;
-        b=BllIFPs/F79nlMLuFBJOgtM2ZQfMVvi6XS/8ah6Tjyu9Vq+Dm4PguQPqRyc/Cv67a3
-         2PgTJZgqqNZbMRSJNVYRyW802BW1hkPwPggbWsOjdfSKUw6cw92OJTKu0R4ifOnoO5DT
-         heWxsIXcTPSrE7IKJGumD+szEYrf0qE+hb6dfuzy4/pz8N2AWH3xyYavBOwZFKRXrIsu
-         9JNpo1l2rz3KCYxARfdsxCFdbVknGjrAN63uYEWW80RcC17keEhk4P8FEep0OVpORf2e
-         mLBbqLZRYY2LBzgfWisFsKHl5B4Tu6jufyHns8YurJrRwicDOOGDqbJv+6CVEt0iGSzJ
-         SE/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yLZb0eCEmPbt6XCImQLnWXa0g/D2mdCPENmM5h+0jwE=;
-        b=QJMdWGG/UzkaLBuhJ3oi+/GAsps6IoECcXKocQdXwaXHJswahDYBclPkqzW4rfIkZB
-         2l6+J4gPSk4o+O8B7t4PdD+9su5o/RMRsDP70ZVhzjDNMZqb/UTvJ/R3l3Uwn/PDydF6
-         lTgtv5aqBOPB7jAs9S6MFU5sbDFsmXZ7KK8mQfSQIoDm4Elwmoc8kPyUoTSXvAhekdIv
-         rGGyrtcq7GGNadzZa/MDZnUSgRx5RBfRLekXUQzWUGVkFMjpJrrOIgNZ6N7OLuYOSCaj
-         ZJq5FihMJOvA6PWk15beoruAqV+vp5MfJZfbN1Uox9qxOQgj6jygOTxEvYz3KFqaTOiJ
-         jBmg==
-X-Gm-Message-State: ACrzQf2YFJgFxLJewWW2MXvspzsVV18oXM7qqUCpxuMXVrJ6j8eZcjtM
-	R7/QK3jK8izej/dW96mUuOfMu0v9imlydf7n6+A=
-X-Google-Smtp-Source: AMsMyM49+SK4g8rI8Gl/M2IN/uHmlHyw2onhRC25Y/4JSKYZfGwLi0DI3dmFQymh9tnjoOsDrWoUXSmVKKL0amALrhI=
-X-Received: by 2002:a17:907:b1c:b0:797:983a:7d97 with SMTP id
- h28-20020a1709070b1c00b00797983a7d97mr33693456ejl.267.1666858852484; Thu, 27
- Oct 2022 01:20:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221017091201.199457-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdXuiCne2NvCzu8x9LeM_W8rxwLX-0w=kHnGa30bdzFaDQ@mail.gmail.com> <CA+V-a8tm18pckkbquK+HHxV2tHAUTwdKZjwWOAiGS-GKKtbQsg@mail.gmail.com>
-In-Reply-To: <CA+V-a8tm18pckkbquK+HHxV2tHAUTwdKZjwWOAiGS-GKKtbQsg@mail.gmail.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Thu, 27 Oct 2022 09:20:24 +0100
-Message-ID: <CA+V-a8tK8qQHNnwgvUiMMHOuBfVmbLyMvT4RZjq055nrda8yPw@mail.gmail.com>
-Subject: Re: [RFC RESEND PATCH 2/2] arm64: dts: renesas: r9a07g043: Split out
- RZ/G2UL SoC specific parts
-To: Geert Uytterhoeven <geert@linux-m68k.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 443EAC433D6;
+	Thu, 27 Oct 2022 10:01:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 443EAC433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 3076B5C005D;
+	Thu, 27 Oct 2022 06:01:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 27 Oct 2022 06:01:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1666864896; x=1666951296; bh=pTBzfiN/cq
+	I+EVfvkMRfCsSejur5V8CXYx516yzh4es=; b=aUOiwPaqkUKJD8hhYho+/FBKXb
+	e6q+I8bNaTT0Fl+aVy6FB8X1+G6gZohBFErwvNbaC0aNhA4bJQKIWD9WLO8mshTd
+	5fLKZo0otbn9s06Q/0G0LSjw+Zx7uh8sQXMvHIICrlfzJsCey7S6KZWsQPTe37j9
+	gmeZ9PM+dE7FFs/q08Nt4RfEad29ir5tbBs+pOSQPIyinuhVtCJceLuNTVVYRnYo
+	LGwtoz65DdtUhrtjau5LeBvjWjlOtEghZAE/mMkhkmi3bWKmZ9mtO1wcUV/x9FQU
+	rXncviExNTv8pDiDeTctuJXgejG9Wg/yZGjaJ/HudrBcZemlQFK0cb9is0SQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1666864896; x=1666951296; bh=pTBzfiN/cqI+EVfvkMRfCsSejur5
+	V8CXYx516yzh4es=; b=OOjBnih++8fORBivy53qXkJqmjwqAnEbRvQ40zoR8w1q
+	lOLXfDCXQcncHJKVTsMZjX6lbwG/Sj7WsRH86vF1+jIWhJw69mnMRuMn+qiAdh3O
+	HID55Vw18iaShQXDNkjFNe/rF+jqDIb6TRgWh1iGc+t8BodHuvgN9GkhnK3fZzk1
+	7wa9VAo1ba3VX1AN4YC9/ggYsAS5nuLD0PtthODxdiv91sW4ttzEUsSc6VzNiwL2
+	33b3KEd+BtI9BCuF5o22RCEvq+DaZjlGVyTX5le+JwLULipNfiroie7gN3r0PUvx
+	/5arUiHXpd1YS77vrzCZQHoamv925ePpZ8LVgi89yg==
+X-ME-Sender: <xms:_1ZaY2TzLXyy5mUwLPqwbHlANQFMxqIgDtRloyTeOX5duOOT8eMl0w>
+    <xme:_1ZaY7yVYoj2dEtKGNKM2zvSSVSQWBoYGBYkvDba45aSdUGqkVyA51SWORQOUNmjo
+    1nzT6ZXsj_pIWTpmVs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:_1ZaYz0BMa2_0jXdCd2AMv56ubehlrnNxFIWBWadE2Flw-xDAA5FIg>
+    <xmx:_1ZaYyDBGRSGaEqxitJJIdavseHCgsvWZbnEXjfH5U9eBBEhOe0pOg>
+    <xmx:_1ZaY_i-PbgroUhPi2WValG2kM_Qo0IFCdFqa_WChhsjgRMN2OElYg>
+    <xmx:AFdaY6X5Tliil6Nyuk2luN2WMwdEEZqAg5crqlHnqQF522VpGfv7Nw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7BCB2B60089; Thu, 27 Oct 2022 06:01:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <b3c4f9ec-ba8e-4af1-b347-e07b06530d6c@app.fastmail.com>
+In-Reply-To: <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
+References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
+ <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
+Date: Thu, 27 Oct 2022 12:01:15 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Olof Johansson" <olof@lixom.net>, "Masami Hiramatsu" <mhiramat@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Olof Johansson <olof@lixom.net>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel@sholland.org>, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc: soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
+Content-Type: text/plain
 
-Hi Geert,
+On Thu, Oct 27, 2022, at 06:51, Kunihiko Hayashi wrote:
+> Initial version of devicetree sources for NX1 SoC and boards.
+>
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-On Tue, Oct 25, 2022 at 5:13 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> Hi Geert,
->
-> Thank you for the review.
->
-> On Tue, Oct 25, 2022 at 1:37 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > On Mon, Oct 17, 2022 at 11:12 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Move RZ/G2UL SoC specific parts to r9a07g043u.dtsi so that r9a07g043.dtsi
-> > > can be shared with RZ/Five (RISC-V SoC).
-> > >
-> > > Below are the changes due to which SoC specific parts are moved to
-> > > r9a07g043u.dtsi:
-> > > - RZ/G2UL has Cortex-A55 (ARM64) whereas the RZ/Five has AX45MP (RISC-V)
-> > > - RZ/G2UL has GICv3 as interrupt controller whereas the RZ/Five has PLIC
-> > > - RZ/G2UL has interrupts for SYSC block whereas interrupts are missing
-> > >   for SYSC block on RZ/Five
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > This assumes the operating points tables are the same for both variants?
-> > I guess that's OK.
-> >
-> Ive asked the HW team to confirm this. For the v2 I'll keep it as is
-> and later move it if required.
->
-Ive confirmed with the HW team the OPP table is the same for both the variants.
+Can you add more information here? When new SoCs get added, I
+usually provide more than this in my own pull requests sending
+the patches to Linus, so please add some background here, such as:
 
-Cheers,
-Prabhakar
+- is this a new SoC, or or something that has been around for a while
+  and only now gets upstreamed?
+
+- What is the target market for this SoC? Are there any products
+  one can buy with it?
+
+- What type of CPU cores does it use, or any other noteworthy
+  IP blocks that are relevant for its purpose?
+
+> +			usb_hsphy0: hs-phy@200 {
+> +				compatible = "socionext,uniphier-nx1-usb3-hsphy";
+> +				reg = <0x200 0x10>;
+
+> +			usb_ssphy0: ss-phy@300 {
+> +				compatible = "socionext,uniphier-nx1-usb3-ssphy";
+> +				reg = <0x300 0x10>;
+
+I think these are usually just named 'phy@' instead of 'hs-phy@'
+
+> +			ranges =
+> +			/* downstream I/O */
+> +				<0x81000000 0 0x00000000 0x0ffe0000 0 0x00010000>,
+> +			/* non-prefetchable memory */
+> +				<0x82000000 0 0x20000000 0x04200000 0 0x0bde0000>;
+
+200MB of memory space is rather small, is there no 64-bit range?
+
+> +			#interrupt-cells = <1>;
+> +			interrupt-names = "dma", "msi";
+> +			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-map-mask = <0 0 0 7>;
+> +			interrupt-map = <0 0 0 1 &pcie_intc 0>,	/* INTA */
+> +					<0 0 0 2 &pcie_intc 1>,	/* INTB */
+> +					<0 0 0 3 &pcie_intc 2>,	/* INTC */
+> +					<0 0 0 4 &pcie_intc 3>;	/* INTD */
+> +			phy-names = "pcie-phy";
+> +			phys = <&pcie_phy>;
+> +
+> +			pcie_intc: legacy-interrupt-controller {
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +				interrupt-parent = <&gic>;
+> +				interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+
+Shouldn't there be an "msi-map" or "msi-parent" property pointing at
+the GIC?
+
+   Arnd
