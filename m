@@ -1,99 +1,86 @@
-Return-Path: <SRS0=FTzm=24=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=QEF6=24=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25FA7FA3743
-	for <soc@archiver.kernel.org>; Thu, 27 Oct 2022 12:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BD66FA3740
+	for <soc@archiver.kernel.org>; Thu, 27 Oct 2022 13:28:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DEEC9C433B5; Thu, 27 Oct 2022 12:19:59 +0000 (UTC)
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 6A34BC433D6; Thu, 27 Oct 2022 13:28:53 +0000 (UTC)
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D233FC433C1;
-	Thu, 27 Oct 2022 12:19:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D233FC433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id CC0EE5C00E9;
-	Thu, 27 Oct 2022 08:19:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 27 Oct 2022 08:19:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1666873197; x=1666959597; bh=FUld14XjKn
-	KMFXv/UVH0lX7uw/zb5d/sjLEMjFLzqh8=; b=HVHCdmGvYA4PYVmDGHzMywaVOF
-	vdEo6lxLO3N9pnnp+gO0Kc0dAzh/I4lm0rNS0WmQ68pzAkvcpseP5RdK0xERwq0e
-	nV7eSguy33ncdHv6shVBKfwZygCZISXtsgzTvQsRs13Oq8W+lcTncI1FFRtX/he5
-	0spl/2ADAJe/6QuklzJJCkS0cXoBOTJpx5HuWkObDqrmB4bFs2MOX6QP+Cm6rsqs
-	Coxrp76G9XgBFvFmGKaQ5hpKcOaZqCzrZ8T16TDBhpOpFGTDfQZbeZhuq+oU3287
-	eKkcMMVhiuVVRJrDu922HNpFAuThHB14KzlUfeuTooVRfI/dTwHox1g8fOwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1666873197; x=1666959597; bh=FUld14XjKnKMFXv/UVH0lX7uw/zb
-	5d/sjLEMjFLzqh8=; b=fYyTK3eBb5rPWJfZGXg4jCphdK0z8TXh0XLZ8UnJaK6L
-	BYwTFAANvaWm89RqR8HCL8jAL4sqve++WLWJCRdQsNoaQOi4XVh4W93EawG59j5O
-	2S0IUBLGq+/ReQ5Nh5Evk9KMHURS0gl5NQtPYq7NimF/SFfQhNrRytailG3i/0dk
-	R6zrsG2OB0eN2D3UUx/LGFhQSTkUJqpUYDPE5LR1S+liRVfTcOfItorvu8CTv7Ii
-	GI3wX8eufk1oE9A6BYj/CZGyfYqHdrwlPsRVxo/jzc3NMuqbrGDFUHD+jaAJ2O/A
-	OAyy9j4xpiA+zWp5ov7u6NHC1cO0lK8xpIYAbZxkFw==
-X-ME-Sender: <xms:bXdaYx3n_WCnKCPI5BKKJ3ouJ598TcyOvIMeuZFQSp13MDkN9Nm8jg>
-    <xme:bXdaY4GRceZVeRNj1RAcgSUcjpwJIH2rrlJ7hdMP0PHp2HtAFfUQXWvHB6k5tc1hS
-    xxFK2ObtBomVTkF6Lg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdegkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:bXdaYx4yYR-11gMHlzbJHQOtO7_sN5Nj5DGCiC68d3mdcZ52TjSshQ>
-    <xmx:bXdaY-229CsyK99-0-lYP5UxPJfmUqojKeAPofBuIxX9_NWjCJ-KYA>
-    <xmx:bXdaY0GVSvhbGWlxLX5FFq-I67QxlPZYpnpEZ9z-3nn8U7VkvK6DoA>
-    <xmx:bXdaY55N1-DyPdQW8DqqAnKaauGSFA_DdL7_umGD5Mum6keTiXEg4w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id AFFF5B60086; Thu, 27 Oct 2022 08:19:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <43a50889-5229-463b-bf3b-349a48c21d94@app.fastmail.com>
-In-Reply-To: <fdf94c6b-0293-5dd0-1717-176d1a2056de@socionext.com>
-References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
- <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
- <b3c4f9ec-ba8e-4af1-b347-e07b06530d6c@app.fastmail.com>
- <8c11d7c4-dfc4-b84c-82cd-a9708bd79aab@socionext.com>
- <dcbbde62-fcf1-4435-8f65-665b25ec3b0a@app.fastmail.com>
- <fdf94c6b-0293-5dd0-1717-176d1a2056de@socionext.com>
-Date: Thu, 27 Oct 2022 14:19:27 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Kunihiko Hayashi" <hayashi.kunihiko@socionext.com>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Olof Johansson" <olof@lixom.net>, "Masami Hiramatsu" <mhiramat@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 5D2CAC433C1
+	for <soc@kernel.org>; Thu, 27 Oct 2022 13:28:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5D2CAC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qk1-f171.google.com with SMTP id l9so833427qkk.11
+        for <soc@kernel.org>; Thu, 27 Oct 2022 06:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B/X6pw5m37N9JyjzyTrby8bFniFs1zr3mi0NyZRLHRY=;
+        b=VUZlWUr+Ag7obPUd8aKoGYR46l6+gd9TJVwD4BPjVuu8Y48fJisDoOc76cYEzwQNTl
+         1jBohX+/PGHb+rSy2B7JSQqaMQ8e+QZ3G3mg2B4STb/B2sYVBbATbHmxj5NxEdJrp2I3
+         VkakIi8hq9C8x9KhMLSbU17M44gzfsVElyf/8YuntlaRBXp3Os+E9n34xDX88lYwbc7m
+         tyUb9yCkqsvk5TQoYqhT6wyXU+X/62+k7XYHVLjMsYEmHq4iVKzR1A5+GLbAs0yQa607
+         NwXXHh16ZDRIu0KNU6BsaJ9VBn6ykg1KoDKgSclTfukNnO/IWlJ0QxnktvZbJHQuiNu5
+         M68A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B/X6pw5m37N9JyjzyTrby8bFniFs1zr3mi0NyZRLHRY=;
+        b=FQ0SymeOzmX2kURssVIF8S5JU+sGwM0AacHP5sRjUwpeapp7vt2TwW42qVvo1FAt9V
+         bNGXRkWM19noJOvqBmpSComXQ0Qs3QMOc02eEyDSbMWT9M7QvTElEvGhP2FV8Y/XckbS
+         uCZgrNMoNQhXaqFPK3uKxwtFutcAXrcI1mbXj2i5IQNVQVkZqx12Dk+5oWDrN1gL9CVX
+         L6sNTZoXHwGAYnWlKjrRdq+KGWZAq1Pz5KbMLY5zw9dihwJ4f4KTFu6x36aF+C53aZOb
+         06yUvo4s3arjVJ0jSpsNylvwhhKTfnexnp5H6zujisW9WtlPbZxeTKOno6z2pCIYy+mT
+         4QcA==
+X-Gm-Message-State: ACrzQf3oN+srm+sUWyxG8IyA/mtOQaft7Ivzezyo1mN9Ed62/hDAKDiV
+	vl4QDLcQ3ZYEYf+7n+Dx6qVhBw==
+X-Google-Smtp-Source: AMsMyM4FD1Ftv1brgcf6lLCigCjMsCV+VaUuuweHjMHn5GqvPHhAupNbLWB1+PScixkKz99fTFwjfw==
+X-Received: by 2002:a05:620a:894:b0:6ef:759:5f9c with SMTP id b20-20020a05620a089400b006ef07595f9cmr27166942qka.499.1666877331347;
+        Thu, 27 Oct 2022 06:28:51 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id t6-20020ac85306000000b00398df095cf5sm874242qtn.34.2022.10.27.06.28.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 06:28:50 -0700 (PDT)
+Message-ID: <b0810bc1-cfd9-547a-6e6f-e1a180543429@linaro.org>
+Date: Thu, 27 Oct 2022 09:28:49 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/4] dt-bindings: arm: uniphier: Add Pro5 boards
+Content-Language: en-US
+To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
-Content-Type: text/plain
+References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
+ <20221027045157.23325-2-hayashi.kunihiko@socionext.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027045157.23325-2-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 27, 2022, at 13:58, Kunihiko Hayashi wrote:
-> On 2022/10/27 20:28, Arnd Bergmann wrote:
->> Using the GIC is preferred here, because otherwise you lose
->> all the benefits that MSIs offer, regarding latency and CPU
->> affinity.
->
-> I understand, however, unfortunately GIC-ITS (or something alternative)
-> isn't supported in this SoC, so I think it is difficult to use the GIC
-> itself as msi-parent.
+On 27/10/2022 00:51, Kunihiko Hayashi wrote:
+> Add compatible string for Pro5 EP-Core board and ProEX board support.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
 
-Ok, got it.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-     arnd
+Best regards,
+Krzysztof
+
