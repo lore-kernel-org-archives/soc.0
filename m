@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82271ECAAA1
-	for <soc@archiver.kernel.org>; Fri, 28 Oct 2022 14:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56F9AECAAA1
+	for <soc@archiver.kernel.org>; Fri, 28 Oct 2022 14:41:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 41F53C433C1; Fri, 28 Oct 2022 14:41:17 +0000 (UTC)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	id 3E30CC433D7; Fri, 28 Oct 2022 14:41:45 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2874CC4347C;
-	Fri, 28 Oct 2022 14:41:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2874CC4347C
+	by smtp.kernel.org (Postfix) with ESMTPS id 59023C433C1;
+	Fri, 28 Oct 2022 14:41:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 59023C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id d26so13373769eje.10;
-        Fri, 28 Oct 2022 07:41:15 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id d25so8214450lfb.7;
+        Fri, 28 Oct 2022 07:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
-        b=e8PuIJKYvVwZG8pMIVdsuACZ9hgCDCdCOOm6qZ9QEXRFloflT70eDzvCkEx02u8Eda
-         A9wmqY1bfVxFQ7oZGfaGC/LFp3NhBBLwH91Llp1msKGVILazbrSIe6cz1PnC2rbhAWuG
-         Lap2dQLywubkbNeFVdmBrX4fKMuAJfbKnLCuICMcD8nqoeoeEBFL6zO7Juarwj1CcA4A
-         vaCof7MQlpnqykdvT6ZcdfNYA4jnC9IAuW5VPOKgSFKZzBvnU3qQta5s3ZkcRxzvG5H4
-         5QCPzg0derVXMseJUguLo1RS7bwdblG31/bqP9a92i8FRKom98aLXGBHzvsYcTDY88Cm
-         URYQ==
+        bh=neowCr6oVr3vuPg1WjdiJZukZ1wtscf+gZ4yxqYQOrI=;
+        b=SHZTjrmp9L29dDhO6NAh0ZPr0eez3l/Oxd5GjIFS18GwLCGLpjYvOk0miK/lOxzIZQ
+         7Bb0siqxcEdzp0W3oRSh8Io0s0AMwR20GENJHCne0egP6cqfBfYMFWnTNwuNsknN2aC+
+         j0Q4cFeH8clH73Ej4qqWRQJYb+L96vPXHJEipua3ZVlsj3PfPZmCBQ/WXhXyZ3m9xczM
+         DnRwgdP+imsiKs/e+bW4TZfq6EaTivmNI7Dk5OcQ+gn8+2ezHmFAKUmX2SEF2zIADMr2
+         wdF6cm+Q6pp0Q4MH8TVgsUtZkhsjPVFNvbCg3GNhUqtB1ST7RcDl8ErxvH0GcqHn14OM
+         9uuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
-        b=1rmrTzqMG31XbrRnoy0Z9SCU0qvB4fu6tv6cweCzrYeRF3goJtON+jPoMIv4bdcGaG
-         Z8A1NxWJIi30bZtpKKt0YL0Wp+S7kXUqOU5dmtnOxEMrbOsOBERKYMJcU3QbbiNPu6KT
-         lZ866di5CpNqotEkaqvp4myeYjo/q24/WjfqfbSsPD1swQYV0Um5TzUKYktrF7HJtlkJ
-         s32sTHKvU25pgTeZiMexeeL64/tRArFxD6Ac4rvRk7ve5oWRl54Ryed5CtWRmCHqPlnO
-         WdrTHeCS2PqNAYjyvMIjYmxqObXlX8b9fHb2JuSxSiym/fAQK2jSlHFQTHZNeUviY74/
-         9Kvw==
-X-Gm-Message-State: ACrzQf2F5iTGJGF8HAxkjazAagZ983iowP+TEzRXzmNDHCeMeGuw6K3h
-	3xeM42b1iwr1fnKmc+r/8ww=
-X-Google-Smtp-Source: AMsMyM7HXQ72bbrXuPMgRLSwI+e9C5ONtGcWO383f1AvM3xeoYFRDCq0hKSnjGHViuvp1OXIqoWYtw==
-X-Received: by 2002:a17:906:730f:b0:791:9b75:2ca1 with SMTP id di15-20020a170906730f00b007919b752ca1mr45292306ejc.140.1666968074370;
-        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
+        bh=neowCr6oVr3vuPg1WjdiJZukZ1wtscf+gZ4yxqYQOrI=;
+        b=40/e0eRPD3yyDl8QgsnkvCUZpLTezI4xOchZTRmochF++xTaRma2XYazIZhyMzcVd5
+         Ys0vzJPk/csHuum1Er3n+kdNM8a2OmQbbokUuexeY9SIFIWCS0FEMinFVTTUht/WSU+j
+         1l8OO3RQ4bFAsYmTZOzaAM6NRCNh+59ggaH8RfpwI6MwMfLMJd+fYeiOrojueOvvAg3S
+         cyc/GA8xBzRj23uSVFy0BWSX8Z2Wkc/hugj3AGIG/lnV1RgkaQs40hu2U321flg4TN5v
+         bbIU+UeOWzyltxIzXKZK37MIiq7hZiJGwp4RAjZcuOPUI3U+ltqKIkBlhSxRp7lRNSfz
+         kM6g==
+X-Gm-Message-State: ACrzQf3L7/nVfHUZQDyePQUpa7U3+RrYMb+GUqxosWWqfOvtY32H2Uy1
+	u92pQvDDfKfPTU4PFJcoFtYowf5lfrg=
+X-Google-Smtp-Source: AMsMyM5OBcO+LDLOQHxISLu95CbLOxbNR+n9EWCWrV/yBJI/GkvE+GKGE/5SNpSkKQ4JuXH8kKV5yw==
+X-Received: by 2002:a17:907:8a24:b0:78d:cd60:1022 with SMTP id sc36-20020a1709078a2400b0078dcd601022mr46727644ejc.384.1666968092017;
+        Fri, 28 Oct 2022 07:41:32 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id my7-20020a1709065a4700b007417041fb2bsm2237114ejc.116.2022.10.28.07.41.13
+        by smtp.gmail.com with ESMTPSA id qh3-20020a170906eca300b0078dd4c89781sm2239439ejb.35.2022.10.28.07.41.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
-Message-ID: <dca18633-54d4-1264-725c-213d82fdf1c5@gmail.com>
-Date: Fri, 28 Oct 2022 16:41:12 +0200
+        Fri, 28 Oct 2022 07:41:31 -0700 (PDT)
+Message-ID: <0e57f38f-bace-8556-7258-aa0b3c0ac103@gmail.com>
+Date: Fri, 28 Oct 2022 16:41:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From: Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 1/4] dt-bindings: arm: rockchip: Add Rockchip RK3128
- Evaluation board
+Subject: [PATCH v2 2/4] dt-bindings: timer: rockchip: add
+ rockchip,rk3128-timer
 To: kever.yang@rock-chips.com, heiko@sntech.de
 List-Id: <soc.lore.kernel.org>
 Cc: sjg@chromium.org, philipp.tomsich@vrull.eu, zhangqing@rock-chips.com,
@@ -73,30 +73,27 @@ In-Reply-To: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Add Rockchip RK3128 Evaluation board.
+Add rockchip,rk3128-timer compatible string.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 72bf2fbfe..e81d9d1ef 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -662,6 +662,11 @@ properties:
-           - const: rockchip,rk3036-evb
-           - const: rockchip,rk3036
-
-+      - description: Rockchip RK3128 Evaluation board
-+        items:
-+          - const: rockchip,rk3128-evb
-+          - const: rockchip,rk3128
-+
-       - description: Rockchip RK3228 Evaluation board
-         items:
-           - const: rockchip,rk3228-evb
+diff --git a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+index dc3bc1e62..b61ed1a43 100644
+--- a/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
++++ b/Documentation/devicetree/bindings/timer/rockchip,rk-timer.yaml
+@@ -18,6 +18,7 @@ properties:
+           - enum:
+               - rockchip,rv1108-timer
+               - rockchip,rk3036-timer
++              - rockchip,rk3128-timer
+               - rockchip,rk3188-timer
+               - rockchip,rk3228-timer
+               - rockchip,rk3229-timer
 --
 2.20.1
 
