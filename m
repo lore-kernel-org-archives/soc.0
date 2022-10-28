@@ -1,108 +1,168 @@
-Return-Path: <SRS0=PinD=25=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=9oDq=25=gmail.com=jbx6244@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58C15ECAAA1
-	for <soc@archiver.kernel.org>; Fri, 28 Oct 2022 11:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD837C38A02
+	for <soc@archiver.kernel.org>; Fri, 28 Oct 2022 14:39:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3E6A7C433D6; Fri, 28 Oct 2022 11:43:15 +0000 (UTC)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	id AA255C433D7; Fri, 28 Oct 2022 14:39:19 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 22903C433D7;
-	Fri, 28 Oct 2022 11:43:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22903C433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 9F1DCC433C1;
+	Fri, 28 Oct 2022 14:39:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F1DCC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f182.google.com with SMTP id g10so5835972oif.10;
-        Fri, 28 Oct 2022 04:43:14 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id b2so8624876lfp.6;
+        Fri, 28 Oct 2022 07:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=438MwCH9BTrA9BcLzWtnTn0JobWEvRhTpMnkj9ZVmww=;
+        b=D6fblxQFn5vZbZOLKFcWYLtI+c5zEeyTAZFyxcD1/OuwZbjwiAe7Rx2XzqRykO7NB4
+         FD3Urrlg6EwzXqeeeBNgNG9L6NGUf7kpLhdjTANcQw2PJyshDO1qdJS3j9dfllmSO+iF
+         fitc0zBqXUiIdk3ZmY3elt03yduCSbxd8TDrrJ1EPruopt/jKNNHQf9V/ACPqJHvlXia
+         Ai7z3Ow9ZFsPEGz/dt5LHnZDFLU7Lw/HQV2e3+9Ta1gfOhN3LHYGmslCk+z29lv0Ds2J
+         5pdseKa35npP7brfhnpTl9nLjdYEbwiDiXAD3Kh7VYpGwghSFsUEAkd94mmCWgh+PtT3
+         hWLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yam5XYWQb6y7gKmWe0fD9G/82ZNnLxLp0NPkpKXtkPQ=;
-        b=OLoe6iGUnZ//OuPIkRUBSnlTyHTtx4FNoYTZK3ePPmhxpORFXzaaeinpemejaQ8dIH
-         AmyehNfysSt5QWSK03+waQ9ejGlWCh07IZmCHcxICcPZRarZZHssY36MhOAdtAr1qvTQ
-         LqayWzxI8lTNYomn45/S/gTJZdzN/cuWs7f+ShES1O9+8LgRPz2W60sJP3iS0VPuRF16
-         jr0O3yTUvaNOgulT268ehj8mG3OjJSEoyoGQ1yY0xlbL/pHYev9tFCF9AkCTt4STnte4
-         3zFG/fZXRsamQr0j6PqUhMuZhBRdVkC4iNbSI3VK0bDMg1JLUVBGoEUirwwckfciyD5r
-         4yFg==
-X-Gm-Message-State: ACrzQf1p5FMTQMVIsvax1shyQdws2jk0Teywd1aRNiHuAU4uPDCZAJlO
-	h8h82qDgPZRWKU+w0+gxZdogIqutg+rcBQ==
-X-Google-Smtp-Source: AMsMyM44bWMIYrvWlTo4uBHf5uk3yYphah4ycuMh0ZB5ZQwZ70zrQefX4FD/ggJwjI0I4PYSql1z1w==
-X-Received: by 2002:a05:6808:f14:b0:355:5204:dd6b with SMTP id m20-20020a0568080f1400b003555204dd6bmr7760366oiw.93.1666957392973;
-        Fri, 28 Oct 2022 04:43:12 -0700 (PDT)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
-        by smtp.gmail.com with ESMTPSA id x35-20020a05683040a300b006391adb6034sm1532200ott.72.2022.10.28.04.43.12
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=438MwCH9BTrA9BcLzWtnTn0JobWEvRhTpMnkj9ZVmww=;
+        b=5ITHsSFm6UxheatVu/7mjhTYjwGwkbszr5GUOUDoBPQtqoJtOU4lYcFZz+6aPk0xSu
+         SbLCjaZRtEVLwjXfE/yNT+nv5oWP3K3PNQ1oER7eFGbqUECjlh4dYCwbXQCypMiXELd0
+         iF4Kg2Y7rEPSFgULB0R3t7ODcMy53zDIw0etncIiVi+nTMKGJe4d/qG0W116VwYjcSPg
+         MJMQUWg9IcK46qYR56glZVX+QL7rluYI9gGlp7rkzDiXKJ0hkoMJawdwNsS3z6wLsSGU
+         VdK3WErL70yDw2Sead/sI+UlW5LJwxEmXPptvIAMaPXLw/L3xgAuesWI+4dsb5e1UiiQ
+         GpIA==
+X-Gm-Message-State: ACrzQf1x3vkz6Su8GwDs/CfSJ3Cplq60x+KgPANvSWGlhkcQc4RKbVBu
+	CFy4UgQtgP1w2+6vLfVALQAvgdVzZUA=
+X-Google-Smtp-Source: AMsMyM62WjvitZ/M1z2g9r8bWwHww4iANV4p1qKSM1aGXF74m8W47uJXLz8akxUC5+rl6g/WQgKGBg==
+X-Received: by 2002:a17:907:6288:b0:78d:ab30:c374 with SMTP id nd8-20020a170907628800b0078dab30c374mr48265363ejc.266.1666967946292;
+        Fri, 28 Oct 2022 07:39:06 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id e2-20020a170906314200b0077e6be40e4asm2293971eje.175.2022.10.28.07.39.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 04:43:12 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id v40-20020a056830092800b00661e37421c2so2835033ott.3;
-        Fri, 28 Oct 2022 04:43:12 -0700 (PDT)
-X-Received: by 2002:a25:d64e:0:b0:6cb:7faa:af94 with SMTP id
- n75-20020a25d64e000000b006cb7faaaf94mr16836632ybg.36.1666956913602; Fri, 28
- Oct 2022 04:35:13 -0700 (PDT)
+        Fri, 28 Oct 2022 07:39:05 -0700 (PDT)
+Message-ID: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
+Date: Fri, 28 Oct 2022 16:39:04 +0200
 MIME-Version: 1.0
-References: <20221025220629.79321-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221025220629.79321-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221025220629.79321-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 28 Oct 2022 13:35:01 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXw0DTAXFjqutP4X2E3gzkBQ579tHPfjtLC2X0j3R-+Lw@mail.gmail.com>
-Message-ID: <CAMuHMdXw0DTAXFjqutP4X2E3gzkBQ579tHPfjtLC2X0j3R-+Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: dts: renesas: r9a07g043: Split out RZ/G2UL
- SoC specific parts
-To: Prabhakar <prabhakar.csengg@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From: Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v2 0/4] Add basic Rockchip rk3128 DT support
+To: kever.yang@rock-chips.com, heiko@sntech.de
 List-Id: <soc.lore.kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel@sholland.org>, soc@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc: sjg@chromium.org, philipp.tomsich@vrull.eu, zhangqing@rock-chips.com,
+ hjc@rock-chips.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ daniel.lezcano@linaro.org, tglx@linutronix.de, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Prabhakar,
+Add basic Rockchip rk3128 DT support.
 
-On Wed, Oct 26, 2022 at 12:06 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Move RZ/G2UL SoC specific parts to r9a07g043u.dtsi so that r9a07g043.dtsi
-> can be shared with RZ/Five (RISC-V SoC).
->
-> Below are the changes due to which SoC specific parts are moved to
-> r9a07g043u.dtsi:
-> - RZ/G2UL has Cortex-A55 (ARM64) whereas the RZ/Five has AX45MP (RISC-V)
-> - RZ/G2UL has GICv3 as interrupt controller whereas the RZ/Five has PLIC
-> - RZ/G2UL has interrupts for SYSC block whereas interrupts are missing
->   for SYSC block on RZ/Five
-> - RZ/G2UL has armv8-timer whereas the RZ/Five has riscv-timer
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Features:
+  Quad-core ARM Cortex-A7MP Core processor
+  Clock & reset unit
+  Power management unit
+  Interrupt controller
+  DMAC
+  6x 64 bits Timers
+  4x PWMs
+  1x 32 bits watchdog
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.2.
+Internal memory:
+  Internal BootRom
+  Internal SRAM 8KB
 
-> ---
-> RFC->v2
-> * Updated commit message about timer
+External memory:
+  Dynamic Memory Interface (DDR3/DDR3L/LPDDR2)
+  Nand Flash Interface
+  eMMC Interface
+  SD/MMC Interface
 
-Right. And I'll add while applying:
+Connectivity:
+  SDIO interface
+  SPI Controller
+  3x UART controller
+  4x I2C controllers
+  4x groups of GPIO (GPIO0~GPIO3), 32 GPIOs per group
+  USB Host2.0
+  USB OTG2.0
 
-  - RZ/G2UL has PSCI whereas RZ/Five have OpenSBI
+===
 
+The Linux kernel has added a rk3128 clock driver in the past,
+but the DT is still missing.
 
-Gr{oetje,eeting}s,
+In U-boot the rk3128 DT doesn't conform the latest bindings
+and also the pin definition don't match the TRM.
 
-                        Geert
+On request from the U-boot maintainers I submit a basic rk3128 DT.
+https://lore.kernel.org/u-boot/258c2dbf-436d-5935-83f5-a2dbb8cf62d7@rock-chips.com/
+
+Based on:
+https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/rk3128.dtsi
+https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi
+
+rk3128 TRM:
+https://rockchip.fr/RK312X%20TRM/
+
+rk3128 datasheet:
+https://rockchip.fr/RK3128%20datasheet%20V1.2.pdf
+
+===
+
+NOT TESTED WITH HARDWARE
+NO THERMAL PROTECTION
+
+===
+
+Request:
+  Help with testing on hardware.
+
+===
+
+Changed V2:
+  rk3128.dtsi:
+    remove aliases
+    add gic interrupts mask defines
+    add virtual timer interrupts
+
+  rk3128-evb.dts:
+    use generic node names
+    remove underscores in node names
+    add more aliases
+    sort
+
+===
+
+Johan Jonker (4):
+  dt-bindings: arm: rockchip: Add Rockchip RK3128 Evaluation board
+  dt-bindings: timer: rockchip: add rockchip,rk3128-timer
+  ARM: dts: rockchip: add rk3128.dtsi
+  ARM: dts: rockchip: add rk3128-evb.dts
+
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ .../bindings/timer/rockchip,rk-timer.yaml     |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/rk3128-evb.dts              | 110 +++
+ arch/arm/boot/dts/rk3128.dtsi                 | 916 ++++++++++++++++++
+ 5 files changed, 1033 insertions(+)
+ create mode 100644 arch/arm/boot/dts/rk3128-evb.dts
+ create mode 100644 arch/arm/boot/dts/rk3128.dtsi
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.20.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
