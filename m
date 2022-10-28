@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD837C38A02
-	for <soc@archiver.kernel.org>; Fri, 28 Oct 2022 14:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82271ECAAA1
+	for <soc@archiver.kernel.org>; Fri, 28 Oct 2022 14:41:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AA255C433D7; Fri, 28 Oct 2022 14:39:19 +0000 (UTC)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	id 41F53C433C1; Fri, 28 Oct 2022 14:41:17 +0000 (UTC)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F1DCC433C1;
-	Fri, 28 Oct 2022 14:39:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F1DCC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 2874CC4347C;
+	Fri, 28 Oct 2022 14:41:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2874CC4347C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id b2so8624876lfp.6;
-        Fri, 28 Oct 2022 07:39:18 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id d26so13373769eje.10;
+        Fri, 28 Oct 2022 07:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=438MwCH9BTrA9BcLzWtnTn0JobWEvRhTpMnkj9ZVmww=;
-        b=D6fblxQFn5vZbZOLKFcWYLtI+c5zEeyTAZFyxcD1/OuwZbjwiAe7Rx2XzqRykO7NB4
-         FD3Urrlg6EwzXqeeeBNgNG9L6NGUf7kpLhdjTANcQw2PJyshDO1qdJS3j9dfllmSO+iF
-         fitc0zBqXUiIdk3ZmY3elt03yduCSbxd8TDrrJ1EPruopt/jKNNHQf9V/ACPqJHvlXia
-         Ai7z3Ow9ZFsPEGz/dt5LHnZDFLU7Lw/HQV2e3+9Ta1gfOhN3LHYGmslCk+z29lv0Ds2J
-         5pdseKa35npP7brfhnpTl9nLjdYEbwiDiXAD3Kh7VYpGwghSFsUEAkd94mmCWgh+PtT3
-         hWLA==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
+        b=e8PuIJKYvVwZG8pMIVdsuACZ9hgCDCdCOOm6qZ9QEXRFloflT70eDzvCkEx02u8Eda
+         A9wmqY1bfVxFQ7oZGfaGC/LFp3NhBBLwH91Llp1msKGVILazbrSIe6cz1PnC2rbhAWuG
+         Lap2dQLywubkbNeFVdmBrX4fKMuAJfbKnLCuICMcD8nqoeoeEBFL6zO7Juarwj1CcA4A
+         vaCof7MQlpnqykdvT6ZcdfNYA4jnC9IAuW5VPOKgSFKZzBvnU3qQta5s3ZkcRxzvG5H4
+         5QCPzg0derVXMseJUguLo1RS7bwdblG31/bqP9a92i8FRKom98aLXGBHzvsYcTDY88Cm
+         URYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=438MwCH9BTrA9BcLzWtnTn0JobWEvRhTpMnkj9ZVmww=;
-        b=5ITHsSFm6UxheatVu/7mjhTYjwGwkbszr5GUOUDoBPQtqoJtOU4lYcFZz+6aPk0xSu
-         SbLCjaZRtEVLwjXfE/yNT+nv5oWP3K3PNQ1oER7eFGbqUECjlh4dYCwbXQCypMiXELd0
-         iF4Kg2Y7rEPSFgULB0R3t7ODcMy53zDIw0etncIiVi+nTMKGJe4d/qG0W116VwYjcSPg
-         MJMQUWg9IcK46qYR56glZVX+QL7rluYI9gGlp7rkzDiXKJ0hkoMJawdwNsS3z6wLsSGU
-         VdK3WErL70yDw2Sead/sI+UlW5LJwxEmXPptvIAMaPXLw/L3xgAuesWI+4dsb5e1UiiQ
-         GpIA==
-X-Gm-Message-State: ACrzQf1x3vkz6Su8GwDs/CfSJ3Cplq60x+KgPANvSWGlhkcQc4RKbVBu
-	CFy4UgQtgP1w2+6vLfVALQAvgdVzZUA=
-X-Google-Smtp-Source: AMsMyM62WjvitZ/M1z2g9r8bWwHww4iANV4p1qKSM1aGXF74m8W47uJXLz8akxUC5+rl6g/WQgKGBg==
-X-Received: by 2002:a17:907:6288:b0:78d:ab30:c374 with SMTP id nd8-20020a170907628800b0078dab30c374mr48265363ejc.266.1666967946292;
-        Fri, 28 Oct 2022 07:39:06 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SVxJ12c1A+xM0aCvd/9/hnx+Wg8Tkv2AsxQ0FKrV7Fo=;
+        b=1rmrTzqMG31XbrRnoy0Z9SCU0qvB4fu6tv6cweCzrYeRF3goJtON+jPoMIv4bdcGaG
+         Z8A1NxWJIi30bZtpKKt0YL0Wp+S7kXUqOU5dmtnOxEMrbOsOBERKYMJcU3QbbiNPu6KT
+         lZ866di5CpNqotEkaqvp4myeYjo/q24/WjfqfbSsPD1swQYV0Um5TzUKYktrF7HJtlkJ
+         s32sTHKvU25pgTeZiMexeeL64/tRArFxD6Ac4rvRk7ve5oWRl54Ryed5CtWRmCHqPlnO
+         WdrTHeCS2PqNAYjyvMIjYmxqObXlX8b9fHb2JuSxSiym/fAQK2jSlHFQTHZNeUviY74/
+         9Kvw==
+X-Gm-Message-State: ACrzQf2F5iTGJGF8HAxkjazAagZ983iowP+TEzRXzmNDHCeMeGuw6K3h
+	3xeM42b1iwr1fnKmc+r/8ww=
+X-Google-Smtp-Source: AMsMyM7HXQ72bbrXuPMgRLSwI+e9C5ONtGcWO383f1AvM3xeoYFRDCq0hKSnjGHViuvp1OXIqoWYtw==
+X-Received: by 2002:a17:906:730f:b0:791:9b75:2ca1 with SMTP id di15-20020a170906730f00b007919b752ca1mr45292306ejc.140.1666968074370;
+        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id e2-20020a170906314200b0077e6be40e4asm2293971eje.175.2022.10.28.07.39.04
+        by smtp.gmail.com with ESMTPSA id my7-20020a1709065a4700b007417041fb2bsm2237114ejc.116.2022.10.28.07.41.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 07:39:05 -0700 (PDT)
-Message-ID: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
-Date: Fri, 28 Oct 2022 16:39:04 +0200
+        Fri, 28 Oct 2022 07:41:14 -0700 (PDT)
+Message-ID: <dca18633-54d4-1264-725c-213d82fdf1c5@gmail.com>
+Date: Fri, 28 Oct 2022 16:41:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From: Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 0/4] Add basic Rockchip rk3128 DT support
+Subject: [PATCH v2 1/4] dt-bindings: arm: rockchip: Add Rockchip RK3128
+ Evaluation board
 To: kever.yang@rock-chips.com, heiko@sntech.de
 List-Id: <soc.lore.kernel.org>
 Cc: sjg@chromium.org, philipp.tomsich@vrull.eu, zhangqing@rock-chips.com,
@@ -66,103 +67,36 @@ Cc: sjg@chromium.org, philipp.tomsich@vrull.eu, zhangqing@rock-chips.com,
  olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-rockchip@lists.infradead.org
+References: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
 Content-Language: en-US
+In-Reply-To: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Add basic Rockchip rk3128 DT support.
+Add Rockchip RK3128 Evaluation board.
 
-Features:
-  Quad-core ARM Cortex-A7MP Core processor
-  Clock & reset unit
-  Power management unit
-  Interrupt controller
-  DMAC
-  6x 64 bits Timers
-  4x PWMs
-  1x 32 bits watchdog
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Internal memory:
-  Internal BootRom
-  Internal SRAM 8KB
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index 72bf2fbfe..e81d9d1ef 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -662,6 +662,11 @@ properties:
+           - const: rockchip,rk3036-evb
+           - const: rockchip,rk3036
 
-External memory:
-  Dynamic Memory Interface (DDR3/DDR3L/LPDDR2)
-  Nand Flash Interface
-  eMMC Interface
-  SD/MMC Interface
-
-Connectivity:
-  SDIO interface
-  SPI Controller
-  3x UART controller
-  4x I2C controllers
-  4x groups of GPIO (GPIO0~GPIO3), 32 GPIOs per group
-  USB Host2.0
-  USB OTG2.0
-
-===
-
-The Linux kernel has added a rk3128 clock driver in the past,
-but the DT is still missing.
-
-In U-boot the rk3128 DT doesn't conform the latest bindings
-and also the pin definition don't match the TRM.
-
-On request from the U-boot maintainers I submit a basic rk3128 DT.
-https://lore.kernel.org/u-boot/258c2dbf-436d-5935-83f5-a2dbb8cf62d7@rock-chips.com/
-
-Based on:
-https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/dts/rk3128.dtsi
-https://github.com/rockchip-linux/kernel/blob/develop-4.4/arch/arm/boot/dts/rk312x.dtsi
-
-rk3128 TRM:
-https://rockchip.fr/RK312X%20TRM/
-
-rk3128 datasheet:
-https://rockchip.fr/RK3128%20datasheet%20V1.2.pdf
-
-===
-
-NOT TESTED WITH HARDWARE
-NO THERMAL PROTECTION
-
-===
-
-Request:
-  Help with testing on hardware.
-
-===
-
-Changed V2:
-  rk3128.dtsi:
-    remove aliases
-    add gic interrupts mask defines
-    add virtual timer interrupts
-
-  rk3128-evb.dts:
-    use generic node names
-    remove underscores in node names
-    add more aliases
-    sort
-
-===
-
-Johan Jonker (4):
-  dt-bindings: arm: rockchip: Add Rockchip RK3128 Evaluation board
-  dt-bindings: timer: rockchip: add rockchip,rk3128-timer
-  ARM: dts: rockchip: add rk3128.dtsi
-  ARM: dts: rockchip: add rk3128-evb.dts
-
- .../devicetree/bindings/arm/rockchip.yaml     |   5 +
- .../bindings/timer/rockchip,rk-timer.yaml     |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/rk3128-evb.dts              | 110 +++
- arch/arm/boot/dts/rk3128.dtsi                 | 916 ++++++++++++++++++
- 5 files changed, 1033 insertions(+)
- create mode 100644 arch/arm/boot/dts/rk3128-evb.dts
- create mode 100644 arch/arm/boot/dts/rk3128.dtsi
-
++      - description: Rockchip RK3128 Evaluation board
++        items:
++          - const: rockchip,rk3128-evb
++          - const: rockchip,rk3128
++
+       - description: Rockchip RK3228 Evaluation board
+         items:
+           - const: rockchip,rk3228-evb
 --
 2.20.1
 
