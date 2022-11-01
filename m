@@ -4,60 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08841FA3743
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 087FFC433FE
 	for <soc@archiver.kernel.org>; Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CAEAAC433C1; Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B5226C433D7;
-	Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
+	id C5F22C43470; Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B042CC433C1
+	for <soc@kernel.org>; Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1667302217;
-	bh=ksRmSxePIwf5DuddV6UFPhNKsIhlggSjv15TBbJJnio=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=l8yLtzK+PSBchtvEbjBKJe7YstSAvhBb7tbGoHprtjO6VK/rP8gyRgmXdRL17Ky7D
-	 EcVqgTJCEw0Oq/Cg2+RIMzviwIVqBeV4hHSbLNlb0SZB0Hn2ploNNpkBty1fbgw3OG
-	 UCqpbzH9mutH/TR9XzgzE8w5bbeGjzBwcyrLTUJuRXw6YPyoCgKVoDsaRzMuya2iEY
-	 wgZ/VLQtETu1cZhIiUNA4EJg5Xg+nEvafoik7h3ZakhqyAHTiwod+ut9+s8alkijt2
-	 ouu5Fnn9Yz1YxodQ8369CE16+1bg8Om9aLNMYoi8pIKJqoaw0Quqo9Lu3SEkIwYxc/
-	 ws8HVkhHS/r4Q==
+	bh=47PUC1HV1VoWYWlNBwQhNg0W5Ez/APD0WzoqRGmXi2Y=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=JxkfnQFBYAZnOXCUuEDvxzHGXTw+ZQwcIAHeg8yl2kZLOFpHM8DMLxcXGgr77lVZ9
+	 j9iK2lftmpYJgpm1b8E7ZhpQoDc/vMuTZCCm322gBcrRV6MQXcZQFps5+hZd4VYJMu
+	 yMFIRJBWwK9StqgkxlAy18LAUSertifAY67Lkc2czsH9vP2KBaLz10paH3T9RBGhWX
+	 OMjXkpmBjjM5rCEdfPvlZyzdElM2nTZjtlfocjYkR6+k94y0yVlDo2vT2nG0vEk/8+
+	 USkwF08F+igitH+NWkdo7aBlZSWkdgfHP49yIKjDYXjD4BTXc1RFBnLgj5bvk1S+YX
+	 yTgkAbREW0Ghg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98CD1E270D5;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C3F5E270D4;
 	Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166730221762.4100.7734717451617725552.git-patchwork-notify@kernel.org>
+ <166730221749.4100.8057021312770153658.git-patchwork-summary@kernel.org>
 Date: Tue, 01 Nov 2022 11:30:17 +0000
-References: <20221101031547.GB125525@dragon>
-In-Reply-To: <20221101031547.GB125525@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Tue, 1 Nov 2022 11:15:47 +0800 you wrote:
-> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-> 
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1
-> 
-> [...]
+Patch: [GIT,PULL] i.MX fixes for 6.1
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=690718
+  Lore link: https://lore.kernel.org/r/20221101031547.GB125525@dragon
 
-Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.1
-    https://git.kernel.org/soc/soc/c/c872f6ce2212
+Patch: [GIT,PULL,1/1] Broadcom maintainers fixes for 6.1
+  Submitter: Florian Fainelli <f.fainelli@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=686862
+  Lore link: https://lore.kernel.org/r/20221019185514.750684-1-f.fainelli@gmail.com
 
-You are awesome, thank you!
+Patch: ARM: dts: ux500: Add trips to battery thermal zones
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=690296
+  Lore link: https://lore.kernel.org/r/20221030210854.346662-1-linus.walleij@linaro.org
+
+Patch: MAINTAINERS: Update HiSilicon LPC BUS Driver maintainer
+  Submitter: Jay Fang <f.fangjian@huawei.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=689786
+  Lore link: https://lore.kernel.org/r/20221028105434.1661264-1-f.fangjian@huawei.com
+
+
+Total patches: 4
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
