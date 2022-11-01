@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15FEAFA3746
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15FB2FA373D
 	for <soc@archiver.kernel.org>; Tue,  1 Nov 2022 11:30:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DDC35C43144; Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C60CDC4347C;
+	id DB30DC433D7; Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD5D7C433B5;
 	Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1667302217;
-	bh=0KKx1hyO4jS4PdrIm0qAnb+7l1MqDlhxgkCDBp95dv8=;
+	bh=XsZg/0tyjJgwZ/LtGxzFiR5A2rHvEQufnboISjL/93I=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=SNPS5hN+Brp4tJS2TduT983rvD1fi99uYwFRx/rOVerkV9JM/Xgujl0zsx7LqTKva
-	 XXkYY0TPTZVOd18HXjv9mWdToZwqnHI5+/C3yFQh5Urjl1M735+5cdoex/TzwHVeGP
-	 elDC+1QJ6QXK8llT70CA2Hklks/K+BlQQX5AeHO7H4J05Np+DNzs3xihKciBjRPsEk
-	 gxHaZqW5pN+KJJ/cHMzJmldGQ8MZCBPCtvIUDnS9RA3dTAzaTY1PAmJ0uRucXSBrw3
-	 uMmVN7QfUiwIHZGr0WkNmPuCuGYcOGFNx1GOK0XbS07IHZIimnifSdl8SZYSiS5Xu8
-	 ll6SFeCTW9lVw==
+	b=jUPAwnxYrzIp29wpNyum4uck0p6jNRWnRNcTMxWq+HcbUzws6ilIw+xmoWSiawFin
+	 bd5hoOTRUcefO0iEanVSAdHxv+pF3g+CNKaMDX5YgukZk/dQ1aPyO1jpQAUtq13nZX
+	 IThul2kh2iJZWYmi31eW6IW+AaHsoi//Y4uOXA/ZbKzJ5XjR4qm8BiU6kUtEZrKDK/
+	 vqraLTOyt4lMkVKhBbo8nwreOpB2ajPOOJDBrYqATaDpfVUIOGxWBZj/q9HoQd00wF
+	 5rM12o8Xaffm0VLSZcLbXB5BZP56mudronLEjaHU1vzlmwdkZ8Ro/KXJP3ic9n4xfp
+	 +SdN3uQjPmfnQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADF0DE52504;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4055E270D3;
 	Tue,  1 Nov 2022 11:30:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: ux500: Add trips to battery thermal zones
+Subject: Re: [GIT PULL 1/1] Broadcom maintainers fixes for 6.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166730221770.4100.3112976412700227752.git-patchwork-notify@kernel.org>
+ <166730221766.4100.12076681175903605348.git-patchwork-notify@kernel.org>
 Date: Tue, 01 Nov 2022 11:30:17 +0000
-References: <20221030210854.346662-1-linus.walleij@linaro.org>
-In-Reply-To: <20221030210854.346662-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <20221019185514.750684-1-f.fainelli@gmail.com>
+In-Reply-To: <20221019185514.750684-1-f.fainelli@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 30 Oct 2022 22:08:54 +0100 you wrote:
-> Recent changes to the thermal framework has made the trip
-> points (trips) for thermal zones compulsory, which made
-> the Ux500 DTS files break validation and also stopped
-> probing because of similar changes to the code.
+On Wed, 19 Oct 2022 11:55:14 -0700 you wrote:
+> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 > 
-> Fix this by adding an "outer bounding box": battery thermal
-> zones should not get warmer than 70 degress, then we will
-> shut down.
+>   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.1/maintainers-fixes
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: dts: ux500: Add trips to battery thermal zones
-    https://git.kernel.org/soc/soc/c/cd73adcdbad3
+  - [GIT,PULL,1/1] Broadcom maintainers fixes for 6.1
+    https://git.kernel.org/soc/soc/c/2a5dc663e34e
 
 You are awesome, thank you!
 -- 
