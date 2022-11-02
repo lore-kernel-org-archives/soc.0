@@ -1,132 +1,98 @@
-Return-Path: <SRS0=DaLZ=3C=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=OCyK=3C=bootlin.com=kory.maincent@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D316C4332F
-	for <soc@archiver.kernel.org>; Wed,  2 Nov 2022 16:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42325C4332F
+	for <soc@archiver.kernel.org>; Wed,  2 Nov 2022 17:10:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BF9E1C433D7; Wed,  2 Nov 2022 16:48:58 +0000 (UTC)
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 026E7C433D7; Wed,  2 Nov 2022 17:10:23 +0000 (UTC)
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7EE00C433C1
-	for <soc@kernel.org>; Wed,  2 Nov 2022 16:48:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7EE00C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qk1-f181.google.com with SMTP id x21so5924344qkj.0
-        for <soc@kernel.org>; Wed, 02 Nov 2022 09:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uD30lAoArCayIjKDZVlL5ocMenNCJJq05otGcDZLCH8=;
-        b=zV8hhjYdbwHNiuh7M2h2tIRAFiosB9FrHDQ8qgjUuOpSzPQbfe4YhTNLXOps33072i
-         vPr6OGhsDK6pjD2bmauzBU3N1bf3DKQ4krKgAghhcQChr/j/TEBm+cNcYPQplEZmtsgS
-         MjtLD+wuijOdHRRalmyiqf3BBOV/cmxj6YXGyDUUrPAAZ2acn+eP4E2RwlhpVhoZzL0f
-         DI9E5YnUtPK3ddkozWRaj8YerG0Edb7IQD6EJVGmUHRBo/gzfQOHVt8saSUaFSuuD8rk
-         D/O3cFI4il8BU+lVZsMf+Dp5Ne3CzR3FcV7GYP2qv5NaRrJuX9t0dPTDQLxw38Dt84yl
-         hmZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uD30lAoArCayIjKDZVlL5ocMenNCJJq05otGcDZLCH8=;
-        b=sInIvf4GZNk6RziEVEdhcLAroMmq1gGlb8CJzUtSUFxKQuP5UPnXFcarRBXQzdQwFM
-         px7/hoJRQNuBfnwwScPZHM7gJNZ4llYwbQK9+QzRUxODlg7S81CqIp3mWHaRroJvwgaS
-         AmL1L1VvTQ11duNlXEUre5kCyEzgm+eyJvPfYm8h05/1fEerKA/3SHVR+WLbzz32Nbyp
-         d+zOweYgXjfWFmo8CQngWijIoNnWjhNf9OTgOGr0QPh5UBprOZ4CiiU/wuXvIdyh+aKT
-         mytGXoNZ7ocwte/4e+O2Jvz5Svg6e8+8x1DA110h09lC0SAPU+IpggSxvhLKlQ56ioGa
-         3DWQ==
-X-Gm-Message-State: ACrzQf09Jc6jiXtnonFHJ5VjuaJAOXd86Qjc33oN3bPNVvRSPqhmuWG2
-	0KkMnuqAmkm0VXqMKWaY5ZIajg==
-X-Google-Smtp-Source: AMsMyM7PzDCe2M/7OY5FK0VrVkM/8arnKOiYqHWjZB9+WRh5VmLBtqEycnm+UfJPynJ7cCkD4hsFOw==
-X-Received: by 2002:a05:620a:986:b0:6fa:3c74:e97f with SMTP id x6-20020a05620a098600b006fa3c74e97fmr9687890qkx.246.1667407736476;
-        Wed, 02 Nov 2022 09:48:56 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id x18-20020a05620a259200b006bc192d277csm8942567qko.10.2022.11.02.09.48.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 09:48:55 -0700 (PDT)
-Message-ID: <f1b5e138-e708-8aeb-9b59-96403f996fbd@linaro.org>
-Date: Wed, 2 Nov 2022 12:48:54 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
-Content-Language: en-US
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Masami Hiramatsu <mhiramat@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 20179C433D6;
+	Wed,  2 Nov 2022 17:10:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 20179C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id F03D210000B;
+	Wed,  2 Nov 2022 17:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1667409017;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MV9j9Bu5TXuRkblIFDbUBZYqzjooHXJ8S9umIGNR0lE=;
+	b=l5MiST3b7TjEP/Jwk5lnDNZVIU/J3RGUY2aVgpeb4zuzS85/k4xHlHaR82bH7/cWUb8wox
+	ZyvvOaM9DyxM3avB78UIho+ZCh5jHRxH+D/sYXzTTtMsn7WFtNytovE3WZSGl4Lbyg/rtW
+	Gqf5PBYOEt6QrONMGhtljv0yJf8EZcAxkyZlYtYJQhEfBXpHVZR6TSXBGKNNTb0xKtBKzg
+	34Lf88kYQlXSz0++22OZVHOCvJuMtyvAz6LnpAK9aT2+v28hYgS2C3R9/h5GzOCYqEgCnh
+	lBj8seKJCqAt9xLMu16el/KW3L0Czh4GRYCEPLPe4v+c0+8rMuGW4wewlCvKPA==
+From: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
+To: viresh.kumar@linaro.org,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	Vipin Kumar <vipin.kumar@st.com>,
+	Vijay Kumar Mishra <vijay.kumar@st.com>,
+	Deepak Sikri <deepak.sikri@st.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
- <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
- <a05535bc-ba18-0296-b387-d2c9c759d6f2@linaro.org>
- <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Kory Maincent <kory.maincent@bootlin.com>,
+	thomas.petazzoni@bootlin.com,
+	Viresh Kumar <vireshk@kernel.org>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+	Rajeev Kumar <rajeev-dlh.kumar@st.com>,
+	Vipul Kumar Samar <vipulkumar.samar@st.com>
+Subject: [PATCH v2 0/6] Support new features to the SPEAr600
+Date: Wed,  2 Nov 2022 18:10:04 +0100
+Message-Id: <20221102171012.49150-1-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 01/11/2022 05:02, Kunihiko Hayashi wrote:
-> Hi Krzysztof,
-> 
+From: Kory Maincent <kory.maincent@bootlin.com>
 
+This patches series adds two features of the SPEAr600 SOC:
 
->>> +				compatible = "socionext,uniphier-nx1-clock";
->>> +				#clock-cells = <1>;
->>> +			};
->>> +
->>> +			sys_rst: reset {
->>
->> reset-controller
->>
->>> +				compatible = "socionext,uniphier-nx1-reset";
->>> +				#reset-cells = <1>;
->>> +			};
->>> +
->>> +			watchdog {
->>> +				compatible = "socionext,uniphier-wdt";
->>> +			};
->>> +
->>> +			pvtctl: thermal-sensor {
->>> +				compatible = "socionext,uniphier-nx1-thermal";
->>> +				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
->>> +				#thermal-sensor-cells = <0>;
->>> +				socionext,tmod-calibration = <0x0f22 0x68ee>;
->>> +			};
->>> +		};
->>> +
->>> +		spi0: spi@14006000 {
->>> +			compatible = "socionext,uniphier-scssi";
->>> +			status = "disabled";
->>> +			reg = <0x14006000 0x100>;
->>
->> Reg is second property. Status goes last. The same in other nodes.
-> 
-> Hmm, I've put "status" here according to the existing (uniphier's) DT policy
-> and this should rewrite the policy. Is there documentation somewhere that
-> recommends the order? Or, should I refer to previous comments?
+- Enable the display controller
 
-Hm, your decision (as arch maintainer) is then preferred, not mine.
-Although it is quite unusual to find status, not reg, as the second
-property.
+- Enable the SPI buses using the SSP controller
 
-compatible followed by reg is not documented anywhere, it's just the
-most used style. And actually most sensible as it answers to questions
-from highest importance to lowest:
-1. What is this device? compatible
-2. Where is it? Does it match unit address? reg
-3. all other properties
-4. Is it off or on? status as optional property
+Changes in v2:
+- Keep the I2C_CONFIG in the spear6xx_defconfig while enabling DRM.
+- Send cover letter which was not sent in v1 due to a mistake in my git
+  mail config.
 
-Best regards,
-Krzysztof
+Viresh, will you take the patches and submit a pull request to the ARM SoC
+maintainers?
+
+Kory Maincent (6):
+  arm: configs: spear6xx: Refresh defconfig
+  arm: dts: spear600: Fix clcd interrupt
+  arm: configs: spear6xx: Enable PL110 display controller
+  clk: spear: Fix CLCD clock definition on SPEAr600
+  arm: dts: spear600: Add ssp controller nodes
+  clk: spear: Fix SSP clock definition on SPEAr600
+
+ arch/arm/boot/dts/spear600.dtsi     | 32 ++++++++++++++++++++++++++++-
+ arch/arm/configs/spear6xx_defconfig |  7 ++-----
+ drivers/clk/spear/spear6xx_clock.c  |  8 ++++----
+ 3 files changed, 37 insertions(+), 10 deletions(-)
+
+-- 
+2.25.1
 
