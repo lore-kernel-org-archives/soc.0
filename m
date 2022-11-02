@@ -1,75 +1,98 @@
-Return-Path: <SRS0=OCyK=3C=bootlin.com=kory.maincent@kernel.org>
+Return-Path: <SRS0=rxLu=3C=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0AAC4332F
-	for <soc@archiver.kernel.org>; Wed,  2 Nov 2022 08:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 255B8C4332F
+	for <soc@archiver.kernel.org>; Wed,  2 Nov 2022 14:01:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46C89C433D6; Wed,  2 Nov 2022 08:33:48 +0000 (UTC)
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D36AEC433C1;
-	Wed,  2 Nov 2022 08:33:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D36AEC433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: (Authenticated sender: kory.maincent@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id A89D2240009;
-	Wed,  2 Nov 2022 08:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1667378018;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fVX8Jh3XQV0EV4EibL1W+dUpdgCRz4sy7pqO+LZhTAM=;
-	b=b1y8FFI571ADTewH42OQryEGH1bX/FhLnWaVylK/pt0hFRMqIbTsoalk9RoIl+b6CDy95e
-	nmstYW4FIZUp6UlwECxO30AMgDo/DIphksyrswr70I5La6V57hqf9YSKjsTFh6CKHXj5lD
-	Wk/tt4kiU+RzOLgCi7mXOM6w4cQMky7SFExAJk/jWnHQwJCHa59s+f3v6EcM/V/1IJenYB
-	ITk8DD+id4TK8P0siKIuiaql6O6IaU25Q3DHBNFyqQGxP5u7MiLtktPeVRA8jrck+jVyil
-	heZ3IC9eNBNXikVK/ZFMkzygj206if4IuUCJVYBqf9Zbw6PNZQjVS7o7ph3dRw==
-Date: Wed, 2 Nov 2022 09:33:35 +0100
-From: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-To: Stephen Boyd <sboyd@kernel.org>
+	id E389DC43470; Wed,  2 Nov 2022 14:01:50 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 4A107C433D6;
+	Wed,  2 Nov 2022 14:01:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4A107C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D41231FB;
+	Wed,  2 Nov 2022 07:01:53 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8D1033F534;
+	Wed,  2 Nov 2022 07:01:46 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com, Viresh Kumar
- <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
- soc@kernel.org, Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH 4/6] clk: spear: Fix CLCD clock definition on SPEAr600
-Message-ID: <20221102093335.3a48b426@kmaincent-XPS-13-7390>
-In-Reply-To: <20221028002149.A6573C433D6@smtp.kernel.org>
-References: <20221019133208.319626-1-kory.maincent@bootlin.com>
-	<20221019133208.319626-5-kory.maincent@bootlin.com>
-	<20221028002149.A6573C433D6@smtp.kernel.org>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+To: ARM SoC Team <arm@kernel.org>,
+	SoC Team <soc@kernel.org>,
+	ALKML <linux-arm-kernel@lists.infradead.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Olof Johansson <olof@lixom.net>
+Subject: [GIT PULL] firmware: arm_scmi: Fixes for v6.1
+Date: Wed,  2 Nov 2022 14:01:42 +0000
+Message-Id: <20221102140142.2758107-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hello Stephan,
+Hi ARM SoC Team,
 
-On Thu, 27 Oct 2022 17:21:47 -0700
-Stephen Boyd <sboyd@kernel.org> wrote:
-
-> Quoting K=C3=B6ry Maincent (2022-10-19 06:32:06)
-> > From: Kory Maincent <kory.maincent@bootlin.com>
-> >=20
-> > There is no SPEAr600 device named "clcd". Instead, the description of t=
-he
-> > CLCD (color liquid crystal display controller) name is "fc200000.clcd",=
- so
-> > we should associate the CLCD gateable clock to this device name.
-> >=20
-> > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com> =20
->=20
-> Does this need a Fixes tag?
-
-The old commits on SEAr6xx clock names definition update did not have it,
-therefore I don't think so.
+Please pull !
 
 Regards,
+Sudeep
+
+-->8
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-fixes-6.1
+
+for you to fetch changes up to 1eff6929aff594fba3182660f7b6213ec0ceda0c:
+
+  firmware: arm_scmi: Fix deferred_tx_wq release on error paths (2022-11-01 11:36:20 +0000)
+
+----------------------------------------------------------------
+Arm SCMI fixes for v6.1
+
+A bunch of fixes to handle:
+1. A possible resource leak in scmi_remove(). The returned error
+   value gets ignored by the driver core and can remove the device and
+   free the devm-allocated resources. As a simple solution to be able to
+   easily backport, the bind attributes in the driver is suppressed as
+   there is no need to support it. Additionally the remove path is cleaned
+   up by adding device links between the core and the protocol devices
+   so that a proper and complete unbinding happens.
+2. A possible spin-loop in the SCMI transmit path in case of misbehaving
+   platform firmware. A timeout is added to the existing loop so that
+   the SCMI stack can bailout aborting the transmission with warnings.
+3. Optional Rx channel correctly by reporting any memory errors instead
+   of ignoring the same with other allowed errors.
+4. The use of proper device for all the device managed allocations in the
+   virtio transport.
+5. Incorrect deferred_tx_wq release on the error paths by using devres
+   API(devm_add_action_or_reset) to manage the release in the error path.
+
+----------------------------------------------------------------
+Cristian Marussi (6):
+      firmware: arm_scmi: Cleanup the core driver removal callback
+      firmware: arm_scmi: Suppress the driver's bind attributes
+      firmware: arm_scmi: Make tx_prepare time out eventually
+      firmware: arm_scmi: Make Rx chan_setup fail on memory errors
+      firmware: arm_scmi: Fix devres allocation device in virtio transport
+      firmware: arm_scmi: Fix deferred_tx_wq release on error paths
+
+ drivers/firmware/arm_scmi/bus.c     | 11 ++++++++++
+ drivers/firmware/arm_scmi/common.h  |  5 ++++-
+ drivers/firmware/arm_scmi/driver.c  | 41 ++++++++++++++++++++++++-------------
+ drivers/firmware/arm_scmi/mailbox.c |  2 +-
+ drivers/firmware/arm_scmi/optee.c   |  2 +-
+ drivers/firmware/arm_scmi/shmem.c   | 31 ++++++++++++++++++++++++----
+ drivers/firmware/arm_scmi/smc.c     |  2 +-
+ drivers/firmware/arm_scmi/virtio.c  | 26 ++++++++++++++---------
+ 8 files changed, 88 insertions(+), 32 deletions(-)
