@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE0BC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0EBCC4332F
 	for <soc@archiver.kernel.org>; Fri,  4 Nov 2022 10:50:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 12F9AC433B5; Fri,  4 Nov 2022 10:50:09 +0000 (UTC)
+	id 85C17C433B5; Fri,  4 Nov 2022 10:50:09 +0000 (UTC)
 Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E335CC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id E7285C43150
 	for <soc@kernel.org>; Fri,  4 Nov 2022 10:50:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E335CC433C1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E7285C43150
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:c5ee:bf27:9df:5172])
 	by laurent.telenet-ops.be with bizsmtp
-	id gAq4280122kjr6L01Aq4ST; Fri, 04 Nov 2022 11:50:04 +0100
+	id gAq4280132kjr6L01Aq4SS; Fri, 04 Nov 2022 11:50:04 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1oquGx-002mVI-9X; Fri, 04 Nov 2022 11:50:03 +0100
+	id 1oquGx-002mVM-Iu; Fri, 04 Nov 2022 11:50:03 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1oquGw-00HWEj-Mo; Fri, 04 Nov 2022 11:50:02 +0100
+	id 1oquGw-00HWF8-PG; Fri, 04 Nov 2022 11:50:02 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -35,58 +35,38 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/4] Renesas ARM DT updates for v6.2
-Date: Fri,  4 Nov 2022 11:49:53 +0100
-Message-Id: <cover.1667558738.git.geert+renesas@glider.be>
+Subject: [GIT PULL 4/4] Renesas DT binding updates for v6.2
+Date: Fri,  4 Nov 2022 11:49:57 +0100
+Message-Id: <cover.1667558749.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1667558738.git.geert+renesas@glider.be>
+References: <cover.1667558738.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-	Hi SoC folks,
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-This is my first pull request for the inclusion of Renesas SoC updates
-for v6.2.
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-It consists of 4 parts:
+are available in the Git repository at:
 
-  [GIT PULL 1/4] Renesas ARM DT updates for v6.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git renesas-dt-bindings-for-v6.2-tag1
 
-    - DMA, SPI (MSIOF), external interrupt (INTC-EX), PWM (PWM and TPU),
-      SDHI, HyperFLASH/QSPI (RPC), and serial ((H)SCIF) support for the
-      R-Car V4H SoC,
-    - I/O expander, eMMC, and QSPI FLASH support for the White Hawk
-      development board,
-    - Preparatory work to share r9a07g043.dtsi between the ARM-based
-      RZ/G2UL (R9A07G043U) and the RISC-V-based RZ/Five (R9A07G043F) SoCs,
-    - Miscellaneous fixes and improvements.
+for you to fetch changes up to 7dd1d57c052e88f98b9e9145461b13bca019d108:
 
-  [GIT PULL 2/4] Renesas ARM SoC updates for v6.2
+  dt-bindings: soc: renesas: renesas.yaml: Document Renesas RZ/Five SoC (2022-10-28 14:43:12 +0200)
 
-    - Drop selecting GPIOLIB and PINCTRL, which are already automatically
-      selected as part of the SOC_RENESAS config option in
-      drivers/soc/renesas/Kconfig.
+----------------------------------------------------------------
+Renesas DT binding updates for v6.2
 
-  [GIT PULL 3/4] Renesas driver updates for v6.2
+  - Move renesas.yaml from arm to soc, and document RZ/Five support.
 
-    - Let SOC_RENESAS select GPIOLIB and PINCTRL, so this does not have to
-      be handled in two (soon three: arm/arm64/riscv), places.
+----------------------------------------------------------------
+Lad Prabhakar (2):
+      dt-bindings: soc: renesas: Move renesas.yaml from arm to soc
+      dt-bindings: soc: renesas: renesas.yaml: Document Renesas RZ/Five SoC
 
-  [GIT PULL 4/4] Renesas DT binding updates for v6.2
-
-    - Move renesas.yaml from arm to soc, and document RZ/Five support.
-
-Note that the second pull request depends on the third, and thus is
-based on it.
-
-Thanks for pulling!
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+ Documentation/devicetree/bindings/{arm => soc/renesas}/renesas.yaml | 5 +++--
+ MAINTAINERS                                                         | 1 -
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename Documentation/devicetree/bindings/{arm => soc/renesas}/renesas.yaml (98%)
