@@ -1,86 +1,85 @@
-Return-Path: <SRS0=ZBZI=3H=gmail.com=jernej.skrabec@kernel.org>
+Return-Path: <krzk@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2C8C4332F
-	for <soc@archiver.kernel.org>; Mon,  7 Nov 2022 17:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B243C4332F
+	for <soc@archiver.kernel.org>; Mon,  7 Nov 2022 17:51:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1FB20C43470; Mon,  7 Nov 2022 17:44:17 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1AAF1C433D6;
-	Mon,  7 Nov 2022 17:44:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1AAF1C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id t25so32146533ejb.8;
-        Mon, 07 Nov 2022 09:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7eWjaoBznqoj2kM89mZeHCIKl3bnIdWJhw4wamO+Cyo=;
-        b=gQi8cQ8zlsuNHXSruqHBWQD7jzzllZymlS2SVI594uYKR2I2PAK8IcakFFIhp4s0sa
-         lplCEl40Iv5NK8qEomSZ2cy2dT8/yxbOf0ZegzW7Itqh3vbYTI5vcrmSCwmdWu49TRZa
-         ugoayL7w+pfrzqcrwVljsvaJRq2BaDEQEwOIIPGFQ/p2V0WvBcjfz11VYLswsRuAQqla
-         ii7YJSmTazshE9zf1sSJ1Hv559UsUxzgcwgUDKoIF9Ho2yFx+co//WLc7xaKXa6g62T5
-         eZLSUZUMAdlB70cagU28SAaXkI35MH7LaNSRCea0EXsT6zX+TtpvUwmZCaV5jpi0Ms5X
-         Rhfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7eWjaoBznqoj2kM89mZeHCIKl3bnIdWJhw4wamO+Cyo=;
-        b=60R/5bkVKk5XRPQZx26TUKXhwihkha1kEtySCjsq4r+FHCqJXn8mkDtGiqNN1YtHX2
-         kM0aLchPp/hCvOmWJgLi4iL4Boej8UTrxNwZaaMkSvX1ivcxlHWcxZsIksIMOvGMz3Wh
-         sOvJ1mtkDdQR4zeQf5I1aD0qj6enun5ggz69YCIlVZ2Dk90ILJRLis+twjW7EnJjvZ+i
-         V59fhMJ1oewrcgx4sjTzZMB6ZQBXjW8FqdQSKT3O03MOc6A0vJUcvs5xn6LSbAiHyOeQ
-         LYhfuwRIQK3A+98QLO+BD5eS+9YqMiMZ3xr4v0bxOC5Jhens3jKJBfSHGmyPTOEBsdPX
-         QkJA==
-X-Gm-Message-State: ACrzQf0IC2nz2VfvMJx+ZHE4umPb7G44C2uiEIGHSjgPgf+lgTzZciPy
-	qXFy2NXrcFFYaf54UfdDZwI=
-X-Google-Smtp-Source: AMsMyM5u1DyyUIQOXXJaLbM+lyY524+zMvhbc3473zPBgeiGrfroqdUpFBfrRcxzqBUKNFxQ4IT/5A==
-X-Received: by 2002:a17:907:60c8:b0:78d:bc8d:8457 with SMTP id hv8-20020a17090760c800b0078dbc8d8457mr47448621ejc.418.1667843054363;
-        Mon, 07 Nov 2022 09:44:14 -0800 (PST)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id u18-20020a509512000000b004611c230bd0sm4565884eda.37.2022.11.07.09.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 09:44:14 -0800 (PST)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Icenowy Zheng <uwu@icenowy.me>, Andre Przywara <andre.przywara@arm.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v3 10/11] phy: sun4i-usb: Replace types with explicit quirk flags
-Date: Mon, 07 Nov 2022 18:44:12 +0100
-Message-ID: <2120524.irdbgypaU6@kista>
-In-Reply-To: <20221106154826.6687-11-andre.przywara@arm.com>
-References: <20221106154826.6687-1-andre.przywara@arm.com> <20221106154826.6687-11-andre.przywara@arm.com>
+	id F2FF4C433C1; Mon,  7 Nov 2022 17:51:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75EFC433D6;
+	Mon,  7 Nov 2022 17:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1667843511;
+	bh=4UU7R5xt/AtOkizC3oO21TyvSGXzZpcNUYWl/Dq2IAU=;
+	h=Date:Subject:To:List-Id:Cc:References:From:In-Reply-To:From;
+	b=dleOm0uekrwWe4ql1vnB4tpwh2jViPLEixEbp24uuS5V/xmRdo14bF1if8+H1iJW5
+	 WvNU4rucn5ZWi9F2DMDfLeVS6Qy+O+Mqa7kzAR+LIVEoqQtnh5hJTHjKlfiDJw9XeB
+	 LQzXdGWCB2/I/a+rNqDES1zgPG3Gk2bt4cto+6XBiZqyL7w2cJBqeQVYekuE0b62W5
+	 IbYpv6EEMETizVJTxaBZIJHpfTI4zjok5L4loXaiwISX0ZXUGAukWFnoEZ8EWDSdIA
+	 swO1qyLKxVEQJKCcEoveI8YMuFkyitmHo0v5A8AbmkbAcs+MlGGhXgJ+ON8REKWG5t
+	 sIrpKHfqS2Ruw==
+Message-ID: <882e75f9-dc96-4084-a64b-ace4246c88ff@kernel.org>
+Date: Mon, 7 Nov 2022 18:51:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: Should we merge arch/riscv/boot/dts via the SOC tree?
+To: Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+ Conor Dooley <conor@kernel.org>, kernel@esmil.dk
+List-Id: <soc.lore.kernel.org>
+Cc: masahiroy@kernel.org, mkl@pengutronix.de, davem@davemloft.net,
+ linux-riscv@lists.infradead.org, soc@kernel.org
+References: <mhng-e4210f56-fcc3-4db8-abdb-d43b3ebe695d@palmer-ri-x1c9a>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <mhng-e4210f56-fcc3-4db8-abdb-d43b3ebe695d@palmer-ri-x1c9a>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Dne nedelja, 06. november 2022 ob 16:48:25 CET je Andre Przywara napisal(a):
-> So far we were assigning some crude "type" (SoC name, really) to each
-> Allwinner USB PHY model, then guarding certain quirks based on this.
-> This does not only look weird, but gets more or more cumbersome to
-> maintain.
+On 07/11/2022 17:46, Palmer Dabbelt wrote:
+> This has come up a bunch of times, but I don't think we've ever really
+> made a decision.  Historically that's not been such a big deal because
+> the RISC-V device trees were pretty inactive, but that's changed -- both
+> because Conor has been cleaning everything up, and also because there's
+> a bunch of SOCs showing up with RISC-V cores in them.  We talked about
+> this again at plumbers a few times, but Arnd wasn't around it person so
+> I figured it's best to just start an email thread and see how people
+> feel.
 > 
-> Remove the bogus type names altogether, instead introduce flags for each
-> quirk, and explicitly check for them.
-> This improves readability, and simplifies future extensions.
+> A lot of these new SOCs are based on Arm designs and the device trees
+> very much reflect that, so it makes sense to me to just keep the device
+> tree merges via as similar a path as possible.  
+
+Recent Renesas r9a07g043 (sharing between arm64 and riscv) is example of
+that. If changes to them start coming via different trees, we might have
+a lot of conflicts.
+
+> IIUC that happens via
+> the SOC tree these days, so it makes sense to me that we start handling
+> the RISC-V device trees that way as well.  That would make things easier
+> for contributors, as they'll have one workflow for all their SOCs, but
+> also easier for me as a lot of this SOC stuff touches bits I really
+> don't understand and thus get kind of lost trying to review.
 > 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Arnd: looks like you're handling most of the merges these days so this
+> would be increasing your workload.  I feel kind of bad just dumping a
+> bunch of stuff on you, but I think at least now the RISC-V DTS are in
+> reasonable shape so hopefully it's not that bad.  It'd certainly help
+> things on my end, and I'm happy to try and re-direct some of that saved
+> time to helping out in SOC land but I'm not sure how well that'd work
+> out in practice as I'm pretty buried.
+> 
+> On a somewhat related note, Conor has offered to pick up the otherwise
+> unmaintained RISC-V SOCs.  That's sort of its own discussion, but if we
+> change over to the SOC tree we might as well just do everything at the
+> same time.
+> 
 
-Thanks for working on that, nice cleanup!
-
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On the other hand MIPS DTS is not coming via SoC tree, so there is no
+yet such wide approach.
 
 Best regards,
-Jernej
-
+Krzysztof
 
