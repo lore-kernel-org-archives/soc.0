@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8516EC43219
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3420FC43217
 	for <soc@archiver.kernel.org>; Mon,  7 Nov 2022 10:34:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 48D0AC433D7; Mon,  7 Nov 2022 10:34:20 +0000 (UTC)
+	id F3174C433C1; Mon,  7 Nov 2022 10:34:19 +0000 (UTC)
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id 4B184C4314F;
+	by smtp.kernel.org (Postfix) with ESMTP id 3C442C433D7;
 	Mon,  7 Nov 2022 10:34:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4B184C4314F
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3C442C433D7
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 07 Nov 2022 19:34:15 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 347E920584CE;
-	Mon,  7 Nov 2022 19:34:15 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 7 Nov 2022 19:34:15 +0900
+  by mx.socionext.com with ESMTP; 07 Nov 2022 19:34:16 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+	by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id BD28A20584CE;
+	Mon,  7 Nov 2022 19:34:16 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 7 Nov 2022 19:34:16 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id A22CBB62B3;
-	Mon,  7 Nov 2022 19:34:14 +0900 (JST)
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 2AE7AB62A4;
+	Mon,  7 Nov 2022 19:34:16 +0900 (JST)
 From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -35,122 +35,192 @@ Cc: soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v2 1/5] dt-bindings: arm: uniphier: Add system controller bindings
-Date: Mon,  7 Nov 2022 19:34:06 +0900
-Message-Id: <20221107103410.3443-2-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 3/5] ARM: dts: uniphier: Add Pro5 board support
+Date: Mon,  7 Nov 2022 19:34:08 +0900
+Message-Id: <20221107103410.3443-4-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
 References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add DT binding schema for system controller implemented in UniPhier SoCs.
-This describes that the nodes defined here are treated as "syscon".
+Initial version of devicetree sources for Pro5 EPCORE and ProEX boards.
+
+Pro5 EPCORE board is a kind of Pro5 reference board with PCIe endpoint
+card edge connector.
+
+ProEX board also has PCIe endpoint card edge, and some peripherals are
+shared with other system and can't be used in Linux.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../socionext/socionext,uniphier-sysctrl.yaml | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
+ arch/arm/boot/dts/Makefile                 |  2 +
+ arch/arm/boot/dts/uniphier-pro5-epcore.dts | 76 ++++++++++++++++++++++
+ arch/arm/boot/dts/uniphier-pro5-proex.dts  | 59 +++++++++++++++++
+ 3 files changed, 137 insertions(+)
+ create mode 100644 arch/arm/boot/dts/uniphier-pro5-epcore.dts
+ create mode 100644 arch/arm/boot/dts/uniphier-pro5-proex.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml b/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 13ceb456e00f..474eba34ea7a 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1456,6 +1456,8 @@ dtb-$(CONFIG_ARCH_UNIPHIER) += \
+ 	uniphier-pro4-ace.dtb \
+ 	uniphier-pro4-ref.dtb \
+ 	uniphier-pro4-sanji.dtb \
++	uniphier-pro5-epcore.dtb \
++	uniphier-pro5-proex.dtb \
+ 	uniphier-pxs2-gentil.dtb \
+ 	uniphier-pxs2-vodka.dtb \
+ 	uniphier-sld8-ref.dtb
+diff --git a/arch/arm/boot/dts/uniphier-pro5-epcore.dts b/arch/arm/boot/dts/uniphier-pro5-epcore.dts
 new file mode 100644
-index 000000000000..be7cf72c232e
+index 000000000000..ed759dcc3216
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/socionext/socionext,uniphier-sysctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/arm/boot/dts/uniphier-pro5-epcore.dts
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Source for UniPhier Pro5 EP-CORE Board (Pro5-PCIe_EP-CORE)
++ *
++ * Copyright (C) 2021 Socionext Inc.
++ *   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++ */
 +
-+title: Socionext UniPhier system controller
++/dts-v1/;
++#include "uniphier-pro5.dtsi"
++#include "uniphier-support-card.dtsi"
 +
-+maintainers:
-+  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++/ {
++	model = "UniPhier Pro5 EP-CORE Board";
++	compatible = "socionext,uniphier-pro5-epcore", "socionext,uniphier-pro5";
 +
-+description: |+
-+  This describes the devicetree bindings for system controller
-+  implemented on Socionext UniPhier SoCs.
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              # sysctrl
-+              - socionext,uniphier-ld4-sysctrl
-+              - socionext,uniphier-pro4-sysctrl
-+              - socionext,uniphier-pro5-sysctrl
-+              - socionext,uniphier-pxs2-sysctrl
-+              - socionext,uniphier-ld6b-sysctrl
-+              - socionext,uniphier-sld8-sysctrl
-+              - socionext,uniphier-ld11-sysctrl
-+              - socionext,uniphier-ld20-sysctrl
-+              - socionext,uniphier-pxs3-sysctrl
-+              - socionext,uniphier-nx1-sysctrl
-+              - socionext,uniphier-sysctrl
-+              # soc-glue
-+              - socionext,uniphier-ld4-soc-glue
-+              - socionext,uniphier-pro4-soc-glue
-+              - socionext,uniphier-pro5-soc-glue
-+              - socionext,uniphier-pxs2-soc-glue
-+              - socionext,uniphier-ld6b-soc-glue
-+              - socionext,uniphier-sld8-soc-glue
-+              - socionext,uniphier-ld11-soc-glue
-+              - socionext,uniphier-ld20-soc-glue
-+              - socionext,uniphier-pxs3-soc-glue
-+              - socionext,uniphier-nx1-soc-glue
-+              - socionext,uniphier-soc-glue
-+              # perictrl
-+              - socionext,uniphier-ld4-perictrl
-+              - socionext,uniphier-pro4-perictrl
-+              - socionext,uniphier-pro5-perictrl
-+              - socionext,uniphier-pxs2-perictrl
-+              - socionext,uniphier-ld6b-perictrl
-+              - socionext,uniphier-sld8-perictrl
-+              - socionext,uniphier-ld11-perictrl
-+              - socionext,uniphier-ld20-perictrl
-+              - socionext,uniphier-pxs3-perictrl
-+              - socionext,uniphier-nx1-perictrl
-+              - socionext,uniphier-perictrl
-+              # sdctrl
-+              - socionext,uniphier-ld4-sdctrl
-+              - socionext,uniphier-pro4-sdctrl
-+              - socionext,uniphier-pro5-sdctrl
-+              - socionext,uniphier-pxs2-sdctrl
-+              - socionext,uniphier-ld6b-sdctrl
-+              - socionext,uniphier-sld8-sdctrl
-+              - socionext,uniphier-ld11-sdctrl
-+              - socionext,uniphier-ld20-sdctrl
-+              - socionext,uniphier-pxs3-sdctrl
-+              - socionext,uniphier-nx1-sdctrl
-+              - socionext,uniphier-sdctrl
-+              # mioctrl
-+              - socionext,uniphier-ld4-mioctrl
-+              - socionext,uniphier-pro4-mioctrl
-+              - socionext,uniphier-sld8-mioctrl
-+              - socionext,uniphier-ld11-mioctrl
-+              - socionext,uniphier-mioctrl
-+              # adamv
-+              - socionext,uniphier-ld11-adamv
-+              - socionext,uniphier-ld20-adamv
-+              - socionext,uniphier-adamv
-+          - const: simple-mfd
-+          - const: syscon
++	aliases {
++		serial0 = &serial0;
++		serial1 = &serial1;
++		serial2 = &serial2;
++		i2c0 = &i2c0;
++	};
 +
-+  reg:
-+    maxItems: 1
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x40000000>;
++	};
++};
 +
-+required:
-+  - compatible
-+  - reg
++&ethsc {
++	interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
++};
 +
-+additionalProperties:
-+  type: object
++&serialsc {
++	interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
++};
 +
-+...
++&serial0 {
++	status = "okay";
++};
++
++&serial1 {
++	status = "okay";
++};
++
++&serial2 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&usb0 {
++	status = "okay";
++};
++
++&usb1 {
++	status = "okay";
++};
++
++&emmc {
++	status = "okay";
++};
++
++&sd {
++	status = "okay";
++};
++
++&pcie_ep {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/uniphier-pro5-proex.dts b/arch/arm/boot/dts/uniphier-pro5-proex.dts
+new file mode 100644
+index 000000000000..2cfb84f73cc0
+--- /dev/null
++++ b/arch/arm/boot/dts/uniphier-pro5-proex.dts
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Device Tree Source for UniPhier Pro5 ProEX Board
++ *
++ * Copyright (C) 2021 Socionext Inc.
++ *   Author: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++ */
++
++/dts-v1/;
++#include "uniphier-pro5.dtsi"
++
++/ {
++	model = "UniPhier Pro5 ProEX Board";
++	compatible = "socionext,uniphier-pro5-proex", "socionext,uniphier-pro5";
++
++	chosen {
++		stdout-path = "serial2:115200n8";
++	};
++
++	aliases {
++		serial1 = &serial1;
++		serial2 = &serial2;
++		i2c0 = &i2c0;
++		i2c1 = &i2c3;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x40000000>;
++	};
++};
++
++&serial1 {
++	status = "okay";
++};
++
++&serial2 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&usb1 {
++	status = "okay";
++};
++
++&emmc {
++	status = "okay";
++};
++
++&pcie_ep {
++	status = "okay";
++};
 -- 
 2.25.1
 
