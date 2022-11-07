@@ -1,98 +1,82 @@
-Return-Path: <SRS0=KTsm=3H=dabbelt.com=palmer@kernel.org>
+Return-Path: <SRS0=ZBZI=3H=gmail.com=jernej.skrabec@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5FAEC4332F
-	for <soc@archiver.kernel.org>; Mon,  7 Nov 2022 16:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC6A5C43219
+	for <soc@archiver.kernel.org>; Mon,  7 Nov 2022 17:18:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7829AC43145; Mon,  7 Nov 2022 16:46:07 +0000 (UTC)
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	id B2716C433C1; Mon,  7 Nov 2022 17:18:31 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 47CCAC433D7
-	for <soc@kernel.org>; Mon,  7 Nov 2022 16:46:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 47CCAC433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f182.google.com with SMTP id b185so11156011pfb.9
-        for <soc@kernel.org>; Mon, 07 Nov 2022 08:46:02 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id C25EAC433D6;
+	Mon,  7 Nov 2022 17:18:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C25EAC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id ud5so32021977ejc.4;
+        Mon, 07 Nov 2022 09:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :subject:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EW0pwjVNjZMsjQ4rgo3AByKUdX34ffUMtNXivNYRjZU=;
-        b=iuQvd/SY4HMVO8eh2FDeRfmuFXB/dftHBIq6vItZQH6zH0DpbIYvd6ahKEbkfa6Yb9
-         aHkAKJ2Xe0oaoAwLXjHJy7GQ/oFQ1iRT9NkvUfKe0SypnzjNam7WX1+5yAYmjvtMPd4A
-         w339N/bXvC5+Y1UNy69e8BTYAzGEp4juIK6QiXIzpIa6dT93V0riYBdXXr08avijqhLd
-         /hMDJcuYAX0YEVoh+0F9I3NJlHGazT/N7Cf3dGx0+vsnDZKKih8QvkjbEcG2dZ3Y58dj
-         AY2EzYWWRNjUPn1WlzI6eKz3z0qYdViUhQ6fRY+qL6hUbMy87RUql2ZSP9KP9VadghCq
-         /MPQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m+FL3EYtmTevx+/qcGveIJl0H5e1m/91jGuQ0ro55J0=;
+        b=DUznBw1PxsVpisi4ux5m0ygNTpMneN6HgLhaY0gCqNr4zYyifoCpVqSKvsnwyJjnC2
+         i5Rhq2cJARubP2+64WPHBO9zDgjXOhXQkStEgAvSQ5hOYRhHA0wzA0jCNfBsFAdDoCb+
+         91Fg4uAoTzylUw59WfohWOi4vdAf67w5uROfVrPa6dseoQNYSZ1w071aLrDPRIMTtgtr
+         imE2N1dWD3HY9T227a0AIALk9499TodWKdOcKGqj/vOr0q3J+YFgzGPvR1ni6i8drW+c
+         17Sdtb6a5LyC++DUSUoGzYZLBujb5VtR65SCcDki4NZLNQme/ZnT1GrUKIA0+DOQeuoe
+         LVfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :subject:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EW0pwjVNjZMsjQ4rgo3AByKUdX34ffUMtNXivNYRjZU=;
-        b=3Fi1SXk1q1aBOo5L+Et3bZ23jLXg2B55CLAoplMHOiqbWlQApHirSr24cYzz+SLADs
-         T4iwAhlguLjEU8QDYDCuSnRTi8xPIHUpAowVBoulcmSy0gr//XfjkpV+TdmRvuX6l2Kp
-         DsE6LgwFeEoAIR7qmQKWNlByJKfGAXJytorNv4Qw5J/ox7fhRf2GIFZZ78rswHkA8e90
-         /hHYNwDQQW4jk5DAbkep/cY26LD/d95Jy8RMN48lat9lLCqKfWwUYnGI7x0QOhDLwrZ5
-         9KsyiBTQvb8UY6OA9rn9ss3QvHLyYeRe5nIDkeyJawsJndBIiiYRM80aodnrbVZHsonp
-         XCPA==
-X-Gm-Message-State: ANoB5pmChVLBVxqasxXVaYQUaWd+ajOQzrl8wEJC5pV4vKp6pK9jpKOR
-	BchdZijLqH+A/kT9zLxraQwXFQ==
-X-Google-Smtp-Source: AA0mqf4UDNIhvzVyN78Jom0q8JlAl+vfEHjgjMMkpb8O8b73d196gzQo4lTFKPuP0naElUpZOTx2mQ==
-X-Received: by 2002:a63:ef56:0:b0:470:6c2d:64eb with SMTP id c22-20020a63ef56000000b004706c2d64ebmr7236342pgk.49.1667839561438;
-        Mon, 07 Nov 2022 08:46:01 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b00186b0ac12c5sm5207034plh.172.2022.11.07.08.46.00
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m+FL3EYtmTevx+/qcGveIJl0H5e1m/91jGuQ0ro55J0=;
+        b=U+8NJMeg+zmApdlyh9AnKRt0c/XumDgVY8kn3VU8tkrAFpGf4fxpbIdwpDRnaIA8Jw
+         42awiRhcE3TjyEQfzT661pZlxFuMCwZBV6mF/E9tldN6v6b8P5Tyiaysiuz8e/HF/r3U
+         ehWiNMNC7XKgIule7nH9DKxrB+kqxmsMiNB6fhJnoVFQ+O2x3Woiy5D4L0Ty+TvKC5HW
+         Y5GT2HSh3FD5wFefqMu3isi6XuErxKZB1e0/qvaTcCSYk7qUMh8b2P9rMcA0aPn7YNXa
+         KjOv+nMopIrrPG2EuPihMOA5sI+jfr4TgM6gYnxjotW0nvqNF5lFU1Kmc1F5qHs19BeN
+         hQiQ==
+X-Gm-Message-State: ACrzQf0yABvifNwLOObYYHMl5y+Wqu5RrTUsq2JwUe3ytg2Fg6Lw60Gk
+	JqbN1YbTGU4jAtLHA/mFGS8=
+X-Google-Smtp-Source: AMsMyM6mV3aLso4CUT6uTdUiMHuu3LgcREAPDJpTwtCVBhcwZHXn3+qSLcJ2foQdm1a08lQY1XzMNQ==
+X-Received: by 2002:a17:907:720d:b0:7a9:b7e6:8612 with SMTP id dr13-20020a170907720d00b007a9b7e68612mr48312406ejc.435.1667841508935;
+        Mon, 07 Nov 2022 09:18:28 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id b18-20020a1709062b5200b00731582babcasm3698252ejg.71.2022.11.07.09.18.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 08:46:00 -0800 (PST)
-Date: Mon, 07 Nov 2022 08:46:00 -0800 (PST)
-X-Google-Original-Date: Mon, 07 Nov 2022 08:45:59 PST (-0800)
-Subject: Should we merge arch/riscv/boot/dts via the SOC tree?
+        Mon, 07 Nov 2022 09:18:27 -0800 (PST)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Icenowy Zheng <uwu@icenowy.me>, Andre Przywara <andre.przywara@arm.com>
 List-Id: <soc.lore.kernel.org>
-CC: krzk@kernel.org, masahiroy@kernel.org, mkl@pengutronix.de, davem@davemloft.net,
-          linux-riscv@lists.infradead.org, soc@kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Arnd Bergmann <arnd@arndb.de>, Conor Dooley <conor@kernel.org>, kernel@esmil.dk
-Message-ID: <mhng-e4210f56-fcc3-4db8-abdb-d43b3ebe695d@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on F1C100s SoC
+Date: Mon, 07 Nov 2022 18:18:26 +0100
+Message-ID: <2652859.mvXUDI8C0e@kista>
+In-Reply-To: <20221106154826.6687-4-andre.przywara@arm.com>
+References: <20221106154826.6687-1-andre.przywara@arm.com> <20221106154826.6687-4-andre.przywara@arm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-This has come up a bunch of times, but I don't think we've ever really
-made a decision.  Historically that's not been such a big deal because
-the RISC-V device trees were pretty inactive, but that's changed -- both
-because Conor has been cleaning everything up, and also because there's
-a bunch of SOCs showing up with RISC-V cores in them.  We talked about
-this again at plumbers a few times, but Arnd wasn't around it person so
-I figured it's best to just start an email thread and see how people
-feel.
+Dne nedelja, 06. november 2022 ob 16:48:18 CET je Andre Przywara napisal(a):
+> From: Icenowy Zheng <uwu@icenowy.me>
+> 
+> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
+> 
+> Add support for its USB PHY.
+> 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-A lot of these new SOCs are based on Arm designs and the device trees
-very much reflect that, so it makes sense to me to just keep the device
-tree merges via as similar a path as possible.  IIUC that happens via
-the SOC tree these days, so it makes sense to me that we start handling
-the RISC-V device trees that way as well.  That would make things easier
-for contributors, as they'll have one workflow for all their SOCs, but
-also easier for me as a lot of this SOC stuff touches bits I really
-don't understand and thus get kind of lost trying to review.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Arnd: looks like you're handling most of the merges these days so this
-would be increasing your workload.  I feel kind of bad just dumping a
-bunch of stuff on you, but I think at least now the RISC-V DTS are in
-reasonable shape so hopefully it's not that bad.  It'd certainly help
-things on my end, and I'm happy to try and re-direct some of that saved
-time to helping out in SOC land but I'm not sure how well that'd work
-out in practice as I'm pretty buried.
+Best regards,
+Jernej
 
-On a somewhat related note, Conor has offered to pick up the otherwise
-unmaintained RISC-V SOCs.  That's sort of its own discussion, but if we
-change over to the SOC tree we might as well just do everything at the
-same time.
 
-Presumably we'd want to adjust the MAINTAINERS file in a handful of ways
-to make sure patches end up in the right place.
