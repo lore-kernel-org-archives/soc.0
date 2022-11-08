@@ -1,137 +1,82 @@
-Return-Path: <SRS0=HpX/=3I=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=1a0t=3I=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 834F5C4332F
-	for <soc@archiver.kernel.org>; Tue,  8 Nov 2022 15:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2484C4332F
+	for <soc@archiver.kernel.org>; Tue,  8 Nov 2022 20:14:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 689ADC433D6; Tue,  8 Nov 2022 15:12:05 +0000 (UTC)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	id 9C9AAC433D6; Tue,  8 Nov 2022 20:14:40 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A9839C433B5
-	for <soc@kernel.org>; Tue,  8 Nov 2022 15:12:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9839C433B5
+	by smtp.kernel.org (Postfix) with ESMTPS id 61102C433C1
+	for <soc@kernel.org>; Tue,  8 Nov 2022 20:14:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 61102C433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id g12so21653506lfh.3
-        for <soc@kernel.org>; Tue, 08 Nov 2022 07:12:03 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id f27so41536844eje.1
+        for <soc@kernel.org>; Tue, 08 Nov 2022 12:14:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yke8ySwFT8yI9hYAW7UzkJ/JFVT+jZWZcHr39eO1G2w=;
-        b=yznuQ4k9GcH2KW7oxpjxJR1K/7uJiGBHPT8KXuTERVcAaUvEdVD8/KnbJvhli6Ohvj
-         MCuhUuInk8vWV+vJSKifas1QsDcOeUhbxkuqxFS0pA40drK7D8WcE3LsGRQq7wLnXKc1
-         jXLo+y34Gu/k3ZsKcyO5MtBFmtzV+EiWzKD55qeqrwNigXyiVlGLOFXYMj5jUwa6TivU
-         03RD4Y+FsglqWVoi/27DS9WxUYWuMxES7tzm50RKYonJ+irbedvPk9hUPhLgn6Y8keES
-         6+Ud4rL8mCGk+jwH5PX0BfqPTlLLPgRBm0MFw71uYZXG3KwX4UEZZ+J1exdxczlzs+WG
-         upFA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u17pHj0ChltDJ0D7lR/YzqX+TvSRsW0jbRS1U9lK73c=;
+        b=Ekbtiq+u5vZ33TKYFeiyykEfG/k2WG03QNInCOKnhJHvL40cpVYDu+KouEa/FVWFX2
+         FkYpe3Pvs73yUDEwDP9wI4zfCAN8+pT70TYsm8KvRt17pC7YBaYdD4XvILJuBXVrkPj+
+         9QvcZPGMohVO2tb0IkqrHlcEbGB4Tc4l8EJWm4mXcXVRw+uwizwLsRYwrfh4CG58hpDo
+         sFlpSxoNktbIrR79V196av1N53ABUaQA7ytfS4o+/p7RmZOMNsRWSZ438hD6V/ZNdj9d
+         5Nrn6+uzNu9UhnL7sNxs5Pq2L3bKjKq7uRMoTu9Yp3RB8PK3zkBKSnTlm3wK/95pAM0y
+         TnhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yke8ySwFT8yI9hYAW7UzkJ/JFVT+jZWZcHr39eO1G2w=;
-        b=KMou1z86ZvnFPr9uVZoWwi9F6h4gQ0g9U7i1oF7XfaWVDAR7G1WAamBMrf9cNcS7T4
-         5NdKmPph5gD2A3e+AG2DqHIwGVtw6vQXjEEa+RuiaRAMsoI9uSy6BN/kQqayRVKridLn
-         qHfEdvCt0bcbLpNrXhKFJVCH0Z2KNyGmEbnl/jZDgXERMqDaunkyE3pmiQTl7Ye5LYtu
-         NGEt2gSF30qHb+S1cFxrmYImL1lXl4Kmo7sLsOkC7mnRWazAqIf4e1tr9HvJCtvZ7WkM
-         O1Jp2onslJ5eGBCPs8BFl1mvdm89FhjJP0avsHfV4kaarxHatTd6xkJZ34tnZYtrvFxE
-         vA9Q==
-X-Gm-Message-State: ACrzQf1lVD7TZ3hR1zIV1y8rAb2TfDYaKFeD1Ao1SUCTTjWlNV6+/ORv
-	OsVNyL4t7gG69eZZjdLLPeuSGQ==
-X-Google-Smtp-Source: AMsMyM4Fi4XBlVQ4IJL2tNhKzXZ0y7c1f5CuFDM4E4y+/EYUr9aQPreBzZeARcVapFm76Z2e7MXQ5g==
-X-Received: by 2002:a19:6712:0:b0:4b1:b061:480e with SMTP id b18-20020a196712000000b004b1b061480emr8408066lfc.624.1667920321609;
-        Tue, 08 Nov 2022 07:12:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id p22-20020a2eb7d6000000b002774e7267a7sm1761146ljo.25.2022.11.08.07.12.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 07:12:00 -0800 (PST)
-Message-ID: <a1e4a039-3b65-2f2b-2196-340cc754b1c1@linaro.org>
-Date: Tue, 8 Nov 2022 16:11:59 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u17pHj0ChltDJ0D7lR/YzqX+TvSRsW0jbRS1U9lK73c=;
+        b=JmlgKzZcsfoWNjJLTYHruSpX66QffNefyb6vL5lgETYnGgvEP99K38dl4sbB+DriDA
+         eF51FpXTgHymQB5VVs0S4Mjn4OAVwCG5Q1i6adOpX8mjQDEhroKB+lUeKzx+0U4DXWC3
+         FINZ+YX2L/OLVAZIxS0KTFYITnnfpDGyv02OaAmu1IVGBhg9ilk9cInrBP8tIgsOzcZP
+         e9+11LuaByGLoFE9havo/7I0Q1r8cThvHbjQpwkWkvF9PYwSendwHT8mNqxdrlkMexA3
+         jvzmwqEtLBwlCs5XMTrDs0gcHG+R3BAmag8mlc/Pd//6e+uyRTNA4AddYDFRuyYhaiQI
+         gLHw==
+X-Gm-Message-State: ACrzQf09Je6kmB/hebtH7wMTlyZqpo/oqoGSXOlPNAo3oh0YHPw2bYTf
+	6OHQXqLRJULp4zeIUkTBaXYZi0bGQsVtVG5BxIQYZA==
+X-Google-Smtp-Source: AMsMyM7tH4y/W66k6uVPP2QuiuNld4WkKliXIdH3vkHSuRWLqcfdhprHYp74pblMG6J8HHOj0SB3Ot7mm/0XVEOpwZY=
+X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
+ d11-20020a1709064c4b00b007ada197b58emr55561181ejw.203.1667938477589; Tue, 08
+ Nov 2022 12:14:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 5/5] arm64: dts: uniphier: Add NX1 SoC and boards
- support
-Content-Language: en-US
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Masami Hiramatsu <mhiramat@kernel.org>
+References: <20221108123755.207438-1-Jason@zx2c4.com>
+In-Reply-To: <20221108123755.207438-1-Jason@zx2c4.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 8 Nov 2022 21:14:26 +0100
+Message-ID: <CACRpkdaxO_1w-7JqpVCcf0rt_J8xjw5Wx=NdnPsDZJR6aKvJmQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND] ARM: ux500: do not directly dereference __iomem
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
- <20221107103410.3443-6-hayashi.kunihiko@socionext.com>
- <f8f83839-2e76-e500-a16e-5fd2985a278d@linaro.org>
- <df21cfca-67ed-0c78-7f1e-13e321edabe1@socionext.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <df21cfca-67ed-0c78-7f1e-13e321edabe1@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: linux-arm-kernel@lists.infradead.org, arnd@arndb.de, olof@lixom.net, 
+	soc@kernel.org, linux@armlinux.org.uk, stable@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 08/11/2022 15:30, Kunihiko Hayashi wrote:
-> Hi Krzysztof,
-> 
-> On 2022/11/08 20:13, Krzysztof Kozlowski wrote:
->> On 07/11/2022 11:34, Kunihiko Hayashi wrote:
->>> Initial version of devicetree sources for NX1 SoC and boards.
->>>
->>> NX1 SoC belongs to the UniPhier armv8 architecture platform, and is
->>> designed for IoT and AI/ML application fields.
->>>
->>
->>> +
->>> +		soc_glue: syscon@1f800000 {
->>> +			compatible = "socionext,uniphier-nx1-soc-glue",
->>> +				     "simple-mfd", "syscon";
->>> +			reg = <0x1f800000 0x2000>;
->>> +
->>> +			pinctrl: pinctrl {
->>> +				compatible = "socionext,uniphier-nx1-pinctrl";
->>
->> So instead of documenting the hardware precisily, you have one big bag
->> for everything under simple-mfd. This is not how the SoC should be
->> described in DTS.
-> 
-> Sorry I don't understand. This is inherited from the previous descriptions,
-> but is there some example to express DTS correctly about that?
+On Tue, Nov 8, 2022 at 1:38 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 
-I think yes, although it actually depends what is this hardware.
-Generally speaking, do not use simple-mfd and syscon when these are not
-really simple devices. There are quite many in your DTS, which got my
-attention. Instead - have regular device with or without children.
+> Sparse reports that calling add_device_randomness() on `uid` is a
+> violation of address spaces. And indeed the next usage uses readl()
+> properly, but that was left out when passing it toadd_device_
+> randomness(). So instead copy the whole thing to the stack first.
+>
+> Fixes: 4040d10a3d44 ("ARM: ux500: add DB serial number to entropy pool")
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/all/202210230819.loF90KDh-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-There is no real need to have this a simple-mfd with one children
-without any resources (no address space, no clocks, no interrupts, nothing).
+Patch applied!
+Sorry for taking so long!
 
-Why this syscon/mfd and pinctrl is not a regular, one device?
-
-> 
->>
->>> +			};
->>> +		};
->>> +
->>> +		soc-glue@1f900000 {
->>> +			compatible = "simple-mfd";
->>
->> No, it is not allowed on its own. You need a specific compatible and
->> bindings describing its children.
-> 
-> I saw the definition of "simple-mfd" itself is only in mfd/mfd.txt.
-> 
-> Currently there are only efuse devices as children, and this space means
-> nothing. I think it had better define the devices directly.
-
-You need to start describe the hardware. efuse is an efuse, not MFD.
-pinctrl is pinctrl not MFD + pinctrl.
-
-Best regards,
-Krzysztof
-
+Yours,
+Linus Walleij
