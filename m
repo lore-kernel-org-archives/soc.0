@@ -1,109 +1,90 @@
-Return-Path: <SRS0=HpX/=3I=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=aDTb=3I=zx2c4.com=Jason@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0636C4332F
-	for <soc@archiver.kernel.org>; Tue,  8 Nov 2022 11:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 918F0C433FE
+	for <soc@archiver.kernel.org>; Tue,  8 Nov 2022 12:38:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AD975C433C1; Tue,  8 Nov 2022 11:13:30 +0000 (UTC)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A361FC433D7
-	for <soc@kernel.org>; Tue,  8 Nov 2022 11:13:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A361FC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id b9so20574207ljr.5
-        for <soc@kernel.org>; Tue, 08 Nov 2022 03:13:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b6jOxeuiN/P01zuIfksPvOeqYmxHvoXJTsaDxoCzoKc=;
-        b=AJWW7q3rfm8uJ5TAPfZceGmBAUYtgGRyVzRsBn9NKAmQkl07a0ZA9Z0sebEgvC4Qqj
-         h++Y2PeOi5je4QMztSNvVfQyfBHESw54AWECOf06LfbR0Zq/phtWTUjZVK2wpABXlI0p
-         8jStsY+gWu3bdmXhjNh8WSf0a8ez4apalpQ887SIIQ6PcSzSYaAhDR4Y2/MS7K7dcYtW
-         vIRu1DvBEnt3t7la1J980coDN+bggzpB3VblRVqxWuRoNsdaZYNqTIfsMj2pG6YfWMbb
-         zwrwTs5MN2EzDFL6J7s0l7VtIiC5e0YLVOKcI6+LTDRgAWU2x4YPpCJ85vu+RNfmgDMi
-         BfdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b6jOxeuiN/P01zuIfksPvOeqYmxHvoXJTsaDxoCzoKc=;
-        b=bP5fPyPhatIPQjJIp7layKIVBlM9BD7nDlmEf9ZCRzR9lr9odoqEowXlOQH9CKbU9H
-         46Sn0Po+NByQS8RJVIwXhcdsn0V2SuyzEUst1gSdn6B3INqvSamDX80pway2C3I6+nMy
-         M8l6IUb6z/ChV6qYJuasgBa3UsEFTDNIPX5McxoKDmWDyaN/P1PVYUIvBwiA57jWvFrY
-         xVnTJyT5pJLzaDNk+NnuQUKhd0wRlbXbaFMz6a5POTdbGa3bYKura41dLhAzgqCEcnsJ
-         Gx64HJbIXRzho2Hzb0yzHhfyhcNlIm5c1wTlT2jYrOerseGTuyzJMW9i4qll7RTJ5qW6
-         CngQ==
-X-Gm-Message-State: ACrzQf0IyHDHeGKZ/MCha2MbhPYpppjn5sPFN2E+lNuXnS9XFLHJes6r
-	hFLKuXvXWVPvexFYyxW3I5r2uw==
-X-Google-Smtp-Source: AMsMyM4BamTVwnVRVEzHMxTSWzVqGEy7NnZV4CojHp0kgr4RUINHxdiS3OTFIT2molBMkjMfY86rKg==
-X-Received: by 2002:a2e:9545:0:b0:277:8a06:fda2 with SMTP id t5-20020a2e9545000000b002778a06fda2mr5368558ljh.32.1667906007777;
-        Tue, 08 Nov 2022 03:13:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id p16-20020ac246d0000000b004acd6e441cesm1735642lfo.205.2022.11.08.03.13.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:13:27 -0800 (PST)
-Message-ID: <f8f83839-2e76-e500-a16e-5fd2985a278d@linaro.org>
-Date: Tue, 8 Nov 2022 12:13:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 5/5] arm64: dts: uniphier: Add NX1 SoC and boards
- support
-Content-Language: en-US
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Masami Hiramatsu <mhiramat@kernel.org>
+	id 5361EC433C1; Tue,  8 Nov 2022 12:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F421C433D6;
+	Tue,  8 Nov 2022 12:38:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OLxlnuHB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1667911092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9uRK7wMr7Y44nZE6XoPp8VtGCCuJKO228edFPqgNojo=;
+	b=OLxlnuHBDuXNTQOvr+YyCidRIfsBFwbL91Hy82KeAOIzDCsJD+YCfcpRpZn+Z1kmXAsJ74
+	dj+1Dk2XKV+1f4Xm/6XmoSklg6vTuvZK+VF6F5X/odNL05Y78Zt4Dcm7FIUvhRaONNyaWp
+	SaxK9jlqzgR0IvVgza8cphFR5WlKRxw=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4ac5c731 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Tue, 8 Nov 2022 12:38:11 +0000 (UTC)
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
- <20221107103410.3443-6-hayashi.kunihiko@socionext.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107103410.3443-6-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: linus.walleij@linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	soc@kernel.org,
+	linux@armlinux.org.uk
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	stable@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH RESEND] ARM: ux500: do not directly dereference __iomem
+Date: Tue,  8 Nov 2022 13:37:55 +0100
+Message-Id: <20221108123755.207438-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 07/11/2022 11:34, Kunihiko Hayashi wrote:
-> Initial version of devicetree sources for NX1 SoC and boards.
-> 
-> NX1 SoC belongs to the UniPhier armv8 architecture platform, and is
-> designed for IoT and AI/ML application fields.
-> 
+Sparse reports that calling add_device_randomness() on `uid` is a
+violation of address spaces. And indeed the next usage uses readl()
+properly, but that was left out when passing it toadd_device_
+randomness(). So instead copy the whole thing to the stack first.
 
-> +
-> +		soc_glue: syscon@1f800000 {
-> +			compatible = "socionext,uniphier-nx1-soc-glue",
-> +				     "simple-mfd", "syscon";
-> +			reg = <0x1f800000 0x2000>;
-> +
-> +			pinctrl: pinctrl {
-> +				compatible = "socionext,uniphier-nx1-pinctrl";
+Fixes: 4040d10a3d44 ("ARM: ux500: add DB serial number to entropy pool")
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/all/202210230819.loF90KDh-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/soc/ux500/ux500-soc-id.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-So instead of documenting the hardware precisily, you have one big bag
-for everything under simple-mfd. This is not how the SoC should be
-described in DTS.
-
-> +			};
-> +		};
-> +
-> +		soc-glue@1f900000 {
-> +			compatible = "simple-mfd";
-
-No, it is not allowed on its own. You need a specific compatible and
-bindings describing its children.
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/soc/ux500/ux500-soc-id.c b/drivers/soc/ux500/ux500-soc-id.c
+index a9472e0e5d61..27d6e25a0115 100644
+--- a/drivers/soc/ux500/ux500-soc-id.c
++++ b/drivers/soc/ux500/ux500-soc-id.c
+@@ -167,20 +167,18 @@ ATTRIBUTE_GROUPS(ux500_soc);
+ static const char *db8500_read_soc_id(struct device_node *backupram)
+ {
+ 	void __iomem *base;
+-	void __iomem *uid;
+ 	const char *retstr;
++	u32 uid[5];
+ 
+ 	base = of_iomap(backupram, 0);
+ 	if (!base)
+ 		return NULL;
+-	uid = base + 0x1fc0;
++	memcpy_fromio(uid, base + 0x1fc0, sizeof(uid));
+ 
+ 	/* Throw these device-specific numbers into the entropy pool */
+-	add_device_randomness(uid, 0x14);
++	add_device_randomness(uid, sizeof(uid));
+ 	retstr = kasprintf(GFP_KERNEL, "%08x%08x%08x%08x%08x",
+-			 readl((u32 *)uid+0),
+-			 readl((u32 *)uid+1), readl((u32 *)uid+2),
+-			 readl((u32 *)uid+3), readl((u32 *)uid+4));
++			   uid[0], uid[1], uid[2], uid[3], uid[4]);
+ 	iounmap(base);
+ 	return retstr;
+ }
+-- 
+2.38.1
 
