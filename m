@@ -1,507 +1,203 @@
-Return-Path: <SRS0=dEvG=3I=bewilderbeest.net=zev@kernel.org>
+Return-Path: <SRS0=HpX/=3I=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9395FC4321E
-	for <soc@archiver.kernel.org>; Tue,  8 Nov 2022 00:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6824DC4332F
+	for <soc@archiver.kernel.org>; Tue,  8 Nov 2022 11:09:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 761D2C433D6; Tue,  8 Nov 2022 00:16:09 +0000 (UTC)
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 0DDCBC433C1; Tue,  8 Nov 2022 11:09:40 +0000 (UTC)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 751FEC43145;
-	Tue,  8 Nov 2022 00:16:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 751FEC43145
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=bewilderbeest.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bewilderbeest.net
-Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: zev)
-	by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 12B2DB76;
-	Mon,  7 Nov 2022 16:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-	s=thorn; t=1667866561;
-	bh=3VhOcEvxFccvRIos7On0Hck2TyHvd6rH+W1YQcByc3w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Tp7F6FChc19LJVnti4xee0My7n/ntUElyCrEZiGdUs4Q8g9aouJkNtfDWwcHsMaa3
-	 4QaD+QWF9dR0lHHzpWVVEXcKm+PZ2h4K8bLcZj8mtC52cw446WUvlqVdxzyODhEseQ
-	 K0I8tD1AYTE//ergGoK/7EjHhWmQyYNz4wxJUYXo=
-From: Zev Weiss <zev@bewilderbeest.net>
-List-Id: <soc.lore.kernel.org>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	soc@kernel.org
-Cc: Zev Weiss <zev@bewilderbeest.net>,
-	Andrew Jeffery <andrew@aj.id.au>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Joel Stanley <joel@jms.id.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Olof Johansson <olof@lixom.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	openbmc@lists.ozlabs.org
-Subject: [PATCH v2 2/2] ARM: dts: aspeed: Add Delta AHE-50DC BMC
-Date: Mon,  7 Nov 2022 16:15:51 -0800
-Message-Id: <20221108001551.18175-3-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221108001551.18175-1-zev@bewilderbeest.net>
-References: <20221108001551.18175-1-zev@bewilderbeest.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id 9DE28C43151
+	for <soc@kernel.org>; Tue,  8 Nov 2022 11:09:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9DE28C43151
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f176.google.com with SMTP id b9so20559281ljr.5
+        for <soc@kernel.org>; Tue, 08 Nov 2022 03:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NUpbWABUTfzB/pi8dKsIix5VNK7uNSZkTxF1xyi8p6Q=;
+        b=daN5I+/5Xw346JyVPdd1+XPv2eW52SdEi5GCLbHumqVdyvfYvxcJhaIx34QQ5Dn7os
+         Fae392wuPFHszQMlyavcl29jJLneUBI8TK+Y6KRRu9xoBjwAtJD2swOVmH+ba/409k/S
+         Dn50bdnfGF4BOz6p2nml/ojfgtxOofgKyorrOpR3Yc6vq7DAMbfNxjBIRoS0wfglbZAI
+         CqjLQ3yfvB9BVugVfHxWYg5svx8ztRlkm1ePEz1U/O5t1g7/ypvKvMKDvVTOt55XLIzc
+         aQjj36nbMXMIApSQW6W8pR5W8a1QiFotDDmfqT/6zXxhLlENE3GemEtvSjMKgf42fYNA
+         MSyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NUpbWABUTfzB/pi8dKsIix5VNK7uNSZkTxF1xyi8p6Q=;
+        b=C4jbCpDp9zDCoCPRflkg+q17PpsLuT1iOOclrwc0Gnn0ZKvsDvdN5ufWqQv/yfhi1v
+         V0YkBj+FsEYoDhgvruFCpBP3sHlA5XNVlV1o+klhkLG1Nq5QlPvVI0OIqVu9vQw1urh6
+         Q+pzHYL3P3WNS0j6mYbEJzJ+5XXcNpz1/zoGIohL5M4tzW8w09mIiWDOkzqE0cKu9h/r
+         shfy7X7yx/84omLlfG6L/Y3Eg8mGCftIEmtsdBspgGS8wv4YgY634sz+eGOWL2Inkafx
+         /7So0pX53PCvqEZQMRLEjJST7vs70vpfJ/QIaXHBo/DbJvNRrliclhLviSnKhHqftfR+
+         SlVQ==
+X-Gm-Message-State: ACrzQf02hprdSGnuMYNDbKi6x59drAqr/dvd3K+8GIeC1bgiIYC82Qsy
+	tgSD8uCAtibsMPGGE1Zh0zFuig==
+X-Google-Smtp-Source: AMsMyM4r9X/im4Bovuy9Fj/WpKriNFPX2D47xTmO98ajKNR/1ytDR/C0epzDHfXxnbD43H3sSa6JuA==
+X-Received: by 2002:a05:651c:542:b0:277:fb6:b88a with SMTP id q2-20020a05651c054200b002770fb6b88amr20496260ljp.208.1667905772151;
+        Tue, 08 Nov 2022 03:09:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id bp9-20020a056512158900b004b19f766b07sm1745746lfb.91.2022.11.08.03.09.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 03:09:31 -0800 (PST)
+Message-ID: <48988a50-3c3d-7a85-af28-66f7842e5893@linaro.org>
+Date: Tue, 8 Nov 2022 12:09:30 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/5] dt-bindings: arm: uniphier: Add system controller
+ bindings
+To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
+ <20221107103410.3443-2-hayashi.kunihiko@socionext.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107103410.3443-2-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This is a 1U Open19 power shelf with six PSUs and 50 12VDC outputs via
-LM25066 efuses.  It's managed by a pair of AST1250 BMCs in a redundant
-active/active configuration using a PCA9541 on each I2C bus to
-arbitrate access between the two.
+On 07/11/2022 11:34, Kunihiko Hayashi wrote:
+> Add DT binding schema for system controller implemented in UniPhier SoCs.
+> This describes that the nodes defined here are treated as "syscon".
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../socionext/socionext,uniphier-sysctrl.yaml | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml b/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
+> new file mode 100644
+> index 000000000000..be7cf72c232e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts | 418 ++++++++++++++++++
- 2 files changed, 419 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
+arm is only for top-level stuff. System controllers go to soc.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc..8961fbb2c0bc 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1588,6 +1588,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-asrock-e3c246d4i.dtb \
- 	aspeed-bmc-asrock-romed8hm3.dtb \
- 	aspeed-bmc-bytedance-g220a.dtb \
-+	aspeed-bmc-delta-ahe50dc.dtb \
- 	aspeed-bmc-facebook-bletchley.dtb \
- 	aspeed-bmc-facebook-cloudripper.dtb \
- 	aspeed-bmc-facebook-cmm.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts b/arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
-new file mode 100644
-index 000000000000..6600f7e9bf5e
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
-@@ -0,0 +1,418 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/dts-v1/;
-+
-+#include "aspeed-g4.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+#define EFUSE_OUTPUT(n)					\
-+	efuse##n {					\
-+		compatible = "regulator-output";	\
-+		vout-supply = <&efuse##n>;		\
-+	}
-+
-+#define __stringify(x) #x
-+
-+#define EFUSE(hexaddr, num)							\
-+	efuse@##hexaddr {							\
-+		compatible = "lm25066";						\
-+		reg = <0x##hexaddr>;						\
-+		shunt-resistor-micro-ohms = <675>;				\
-+		regulators {							\
-+			efuse##num: vout0 {					\
-+				regulator-name = __stringify(efuse##num##-reg);	\
-+			};							\
-+		};								\
-+	}
-+
-+/{
-+	model = "Delta Power AHE-50DC";
-+	compatible = "delta,ahe50dc-bmc", "aspeed,ast2400";
-+
-+	aliases {
-+		serial4 = &uart5;
-+
-+		/*
-+		 * pca9541-arbitrated logical i2c buses are numbered as the
-+		 * corresponding physical bus plus 20
-+		 */
-+		i2c20 = &i2carb0;
-+		i2c21 = &i2carb1;
-+		i2c22 = &i2carb2;
-+		i2c23 = &i2carb3;
-+		i2c24 = &i2carb4;
-+		i2c26 = &i2carb6;
-+		i2c27 = &i2carb7;
-+		i2c28 = &i2carb8;
-+		i2c32 = &i2carb12;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart3;
-+		bootargs = "console=ttyS2,115200n8 earlycon";
-+	};
-+
-+	memory@40000000 {
-+		reg = <0x40000000 0x10000000>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		heartbeat {
-+			gpios = <&gpio ASPEED_GPIO(P, 0) GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		panic {
-+			gpios = <&gpio ASPEED_GPIO(P, 2) GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "panic";
-+		};
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>, <&adc 4>,
-+			<&adc 5>, <&adc 6>, <&adc 7>, <&adc 8>, <&adc 9>;
-+	};
-+
-+	EFUSE_OUTPUT(01);
-+	EFUSE_OUTPUT(02);
-+	EFUSE_OUTPUT(03);
-+	EFUSE_OUTPUT(04);
-+	EFUSE_OUTPUT(05);
-+	EFUSE_OUTPUT(06);
-+	EFUSE_OUTPUT(07);
-+	EFUSE_OUTPUT(08);
-+	EFUSE_OUTPUT(09);
-+	EFUSE_OUTPUT(10);
-+	EFUSE_OUTPUT(11);
-+	EFUSE_OUTPUT(12);
-+	EFUSE_OUTPUT(13);
-+	EFUSE_OUTPUT(14);
-+	EFUSE_OUTPUT(15);
-+	EFUSE_OUTPUT(16);
-+	EFUSE_OUTPUT(17);
-+	EFUSE_OUTPUT(18);
-+	EFUSE_OUTPUT(19);
-+	EFUSE_OUTPUT(20);
-+	EFUSE_OUTPUT(21);
-+	EFUSE_OUTPUT(22);
-+	EFUSE_OUTPUT(23);
-+	EFUSE_OUTPUT(24);
-+	EFUSE_OUTPUT(25);
-+	EFUSE_OUTPUT(26);
-+	EFUSE_OUTPUT(27);
-+	EFUSE_OUTPUT(28);
-+	EFUSE_OUTPUT(29);
-+	EFUSE_OUTPUT(30);
-+	EFUSE_OUTPUT(31);
-+	EFUSE_OUTPUT(32);
-+	EFUSE_OUTPUT(33);
-+	EFUSE_OUTPUT(34);
-+	EFUSE_OUTPUT(35);
-+	EFUSE_OUTPUT(36);
-+	EFUSE_OUTPUT(37);
-+	EFUSE_OUTPUT(38);
-+	EFUSE_OUTPUT(39);
-+	EFUSE_OUTPUT(40);
-+	EFUSE_OUTPUT(41);
-+	EFUSE_OUTPUT(42);
-+	EFUSE_OUTPUT(43);
-+	EFUSE_OUTPUT(44);
-+	EFUSE_OUTPUT(45);
-+	EFUSE_OUTPUT(46);
-+	EFUSE_OUTPUT(47);
-+	EFUSE_OUTPUT(48);
-+	EFUSE_OUTPUT(49);
-+	EFUSE_OUTPUT(50);
-+
-+};
-+
-+&fmc {
-+	status = "okay";
-+
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "flash0";
-+		spi-max-frequency = <50000000>; // 50 MHz
-+#include "openbmc-flash-layout.dtsi"
-+	};
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&mac1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@79 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x79>;
-+
-+		i2carb0: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* lm25066 efuses @ 10-17, 40-47, 50-57 */
-+			EFUSE(10, 03);
-+			EFUSE(11, 04);
-+			EFUSE(12, 01);
-+			EFUSE(13, 02);
-+			EFUSE(14, 13);
-+			EFUSE(15, 14);
-+			EFUSE(16, 15);
-+			EFUSE(17, 16);
-+			EFUSE(40, 12);
-+			EFUSE(41, 11);
-+			EFUSE(42, 10);
-+			EFUSE(43, 09);
-+			EFUSE(44, 08);
-+			EFUSE(45, 07);
-+			EFUSE(46, 05);
-+			EFUSE(47, 06);
-+			EFUSE(50, 17);
-+			EFUSE(51, 18);
-+			EFUSE(52, 20);
-+			EFUSE(53, 19);
-+			EFUSE(54, 22);
-+			EFUSE(55, 21);
-+			EFUSE(56, 24);
-+			EFUSE(57, 23);
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@72 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x72>;
-+
-+		i2carb1: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@73 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x73>;
-+
-+		i2carb2: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@74 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x74>;
-+
-+		i2carb3: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@7a {
-+		compatible = "nxp,pca9541";
-+		reg = <0x7a>;
-+
-+		i2carb4: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			gpio@20 {
-+				compatible = "nxp,pca9534";
-+				reg = <0x20>;
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+			};
-+
-+			/* lm25066 efuses @ 10-17, 40-47, 50-57, 59, 5a */
-+			EFUSE(10, 27);
-+			EFUSE(11, 28);
-+			EFUSE(12, 25);
-+			EFUSE(13, 26);
-+			EFUSE(14, 37);
-+			EFUSE(15, 38);
-+			EFUSE(16, 39);
-+			EFUSE(17, 40);
-+			EFUSE(40, 36);
-+			EFUSE(41, 35);
-+			EFUSE(42, 34);
-+			EFUSE(43, 33);
-+			EFUSE(44, 32);
-+			EFUSE(45, 31);
-+			EFUSE(46, 29);
-+			EFUSE(47, 30);
-+			EFUSE(50, 41);
-+			EFUSE(51, 42);
-+			EFUSE(52, 44);
-+			EFUSE(53, 43);
-+			EFUSE(54, 46);
-+			EFUSE(55, 45);
-+			EFUSE(56, 48);
-+			EFUSE(57, 47);
-+			EFUSE(59, 49);
-+			EFUSE(5a, 50);
-+		};
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@75 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x75>;
-+
-+		i2carb6: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@76 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x76>;
-+
-+		i2carb7: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@7c {
-+		compatible = "nxp,pca9541";
-+		reg = <0x7c>;
-+
-+		i2carb8: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			fancontrol@30 {
-+				compatible = "delta,ahe50dc-fan";
-+				reg = <0x30>;
-+			};
-+
-+			/* Baseboard FRU eeprom */
-+			eeprom@50 {
-+				compatible = "atmel,24c02";
-+				reg = <0x50>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	bus-frequency = <200000>;
-+
-+	pca9541@71 {
-+		compatible = "nxp,pca9541";
-+		reg = <0x71>;
-+
-+		i2carb12: i2c-arb {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+};
-+
-+&gpio {
-+	status = "okay";
-+	gpio-line-names =
-+		/*  A */ "", "", "", "", "", "", "", "",
-+		/*  B */ "", "", "", "", "", "", "", "",
-+		/*  C */ "RESET_PEER_N", "HEARTBEAT_OUT", "", "", "", "", "", "",
-+		/*  D */ "", "", "", "", "", "", "", "",
-+		/*  E */ "DOOM_N", "", "", "", "", "LED_PWR_BLUE", "", "",
-+		/*  F */ "", "", "", "", "", "", "", "",
-+		/*  G */ "", "", "", "", "", "", "", "",
-+		/*  H */ "", "", "", "", "", "", "", "",
-+		/*  I */ "", "", "", "", "", "", "", "",
-+		/*  J */ "", "", "BMC_ID", "", "", "", "", "",
-+		/*  K */ "", "", "", "", "", "", "", "",
-+		/*  L */ "", "", "", "", "", "", "", "",
-+		/*  M */ "", "", "", "", "", "", "", "",
-+		/*  N */ "", "", "", "", "", "", "", "",
-+		/*  O */ "", "", "", "", "", "", "", "",
-+		/*  P */ "LED_GREEN", "", "LED_RED", "", "", "", "", "",
-+		/*  Q */ "", "", "", "", "", "", "", "",
-+		/*  R */ "", "", "", "", "", "", "", "",
-+		/*  S */ "", "", "", "", "", "", "", "",
-+		/*  T */ "", "", "", "", "", "", "", "",
-+		/*  U */ "", "", "", "", "", "", "", "",
-+		/*  V */ "", "", "", "", "", "", "", "",
-+		/*  W */ "", "", "", "", "", "", "", "",
-+		/*  X */ "", "", "", "", "", "", "", "",
-+		/*  Y */ "HEARTBEAT_IN", "BOARDREV0", "BOARDREV1", "",
-+		/*  Z */ "", "", "", "", "", "", "", "",
-+		/* AA */ "", "", "", "", "", "", "", "",
-+		/* AB */ "", "", "", "";
-+
-+	/*
-+	 * I don't rightly know what this GPIO really *is*, but setting it to
-+	 * zero causes the fans to run at full speed, after which setting it
-+	 * back to one causes a power output glitch, so install a hog to keep
-+	 * it at one as a failsafe to ensure nothing accidentally touches it.
-+	 */
-+	doom-guardrail {
-+		gpio-hog;
-+		gpios = <ASPEED_GPIO(E, 0) GPIO_ACTIVE_LOW>;
-+		output-low;
-+	};
-+};
-+
-+&adc {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		&pinctrl_adc1_default
-+		&pinctrl_adc2_default
-+		&pinctrl_adc3_default
-+		&pinctrl_adc4_default
-+		&pinctrl_adc5_default
-+		&pinctrl_adc6_default
-+		&pinctrl_adc7_default
-+		&pinctrl_adc8_default
-+		&pinctrl_adc9_default>;
-+};
--- 
-2.38.1
+> @@ -0,0 +1,92 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/socionext/socionext,uniphier-sysctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Socionext UniPhier system controller
+> +
+> +maintainers:
+> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> +
+> +description: |+
+> +  This describes the devicetree bindings for system controller
+> +  implemented on Socionext UniPhier SoCs.
+
+Drop "This describes the devicetree bindings for" and instead describe
+the hardware.
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+
+You do not have more than one entry, so no need for oneOf.
+
+> +      - items:
+> +          - enum:
+> +              # sysctrl
+> +              - socionext,uniphier-ld4-sysctrl
+> +              - socionext,uniphier-pro4-sysctrl
+> +              - socionext,uniphier-pro5-sysctrl
+> +              - socionext,uniphier-pxs2-sysctrl
+> +              - socionext,uniphier-ld6b-sysctrl
+> +              - socionext,uniphier-sld8-sysctrl
+> +              - socionext,uniphier-ld11-sysctrl
+> +              - socionext,uniphier-ld20-sysctrl
+> +              - socionext,uniphier-pxs3-sysctrl
+> +              - socionext,uniphier-nx1-sysctrl
+> +              - socionext,uniphier-sysctrl
+> +              # soc-glue
+> +              - socionext,uniphier-ld4-soc-glue
+> +              - socionext,uniphier-pro4-soc-glue
+> +              - socionext,uniphier-pro5-soc-glue
+> +              - socionext,uniphier-pxs2-soc-glue
+> +              - socionext,uniphier-ld6b-soc-glue
+> +              - socionext,uniphier-sld8-soc-glue
+> +              - socionext,uniphier-ld11-soc-glue
+> +              - socionext,uniphier-ld20-soc-glue
+> +              - socionext,uniphier-pxs3-soc-glue
+> +              - socionext,uniphier-nx1-soc-glue
+> +              - socionext,uniphier-soc-glue
+> +              # perictrl
+> +              - socionext,uniphier-ld4-perictrl
+> +              - socionext,uniphier-pro4-perictrl
+> +              - socionext,uniphier-pro5-perictrl
+> +              - socionext,uniphier-pxs2-perictrl
+> +              - socionext,uniphier-ld6b-perictrl
+> +              - socionext,uniphier-sld8-perictrl
+> +              - socionext,uniphier-ld11-perictrl
+> +              - socionext,uniphier-ld20-perictrl
+> +              - socionext,uniphier-pxs3-perictrl
+> +              - socionext,uniphier-nx1-perictrl
+> +              - socionext,uniphier-perictrl
+> +              # sdctrl
+> +              - socionext,uniphier-ld4-sdctrl
+> +              - socionext,uniphier-pro4-sdctrl
+> +              - socionext,uniphier-pro5-sdctrl
+> +              - socionext,uniphier-pxs2-sdctrl
+> +              - socionext,uniphier-ld6b-sdctrl
+> +              - socionext,uniphier-sld8-sdctrl
+> +              - socionext,uniphier-ld11-sdctrl
+> +              - socionext,uniphier-ld20-sdctrl
+> +              - socionext,uniphier-pxs3-sdctrl
+> +              - socionext,uniphier-nx1-sdctrl
+> +              - socionext,uniphier-sdctrl
+> +              # mioctrl
+> +              - socionext,uniphier-ld4-mioctrl
+> +              - socionext,uniphier-pro4-mioctrl
+> +              - socionext,uniphier-sld8-mioctrl
+> +              - socionext,uniphier-ld11-mioctrl
+> +              - socionext,uniphier-mioctrl
+> +              # adamv
+> +              - socionext,uniphier-ld11-adamv
+> +              - socionext,uniphier-ld20-adamv
+> +              - socionext,uniphier-adamv
+> +          - const: simple-mfd
+> +          - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties:
+> +  type: object
+
+No, instead you should describe the children. This must me
+additionalProperties: false
+
+You also miss example.
+
+Start from example-schema as your template or guidance.
+
+Best regards,
+Krzysztof
 
