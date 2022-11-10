@@ -1,90 +1,171 @@
-Return-Path: <SRS0=hcv+=3K=gmail.com=emil.renner.berthing@kernel.org>
+Return-Path: <SRS0=m/+r=3K=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E09CEC433FE
-	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 08:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 884F4C433FE
+	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 09:21:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AAC4FC433D7; Thu, 10 Nov 2022 08:48:49 +0000 (UTC)
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	id 479A9C433B5; Thu, 10 Nov 2022 09:21:19 +0000 (UTC)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 678F0C433D6;
-	Thu, 10 Nov 2022 08:48:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 678F0C433D6
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=esmil.dk
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso4137512pjg.5;
-        Thu, 10 Nov 2022 00:48:47 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 690E7C433D6
+	for <soc@kernel.org>; Thu, 10 Nov 2022 09:21:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 690E7C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id p8so1996832lfu.11
+        for <soc@kernel.org>; Thu, 10 Nov 2022 01:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEVHYkNLaKaVRtKWsEFztX3vRYcFwb5P6qHusc9rNXA=;
+        b=KKS49WTtT6lta72rnCAUh3ESikVI5Y3HIqrgfHLaR6EgHNzRi6kWmkWd0xpN2+xtwG
+         JqYhwOi9VC+J6UTA872LagXNkLUI3IR7fGMgAjsirHl7M/Z8AVS0yNglzllEJCLh2Gdy
+         k66k0GYtOCEbPCebeN1HpbjWZpGypiqvO/F7xRPwFNBglEPe3oaIrUjrJaBNUPTAY/tF
+         c7BsAL9PdmIXeDLtRnx+aTLXHbg4JhM8T1jA0RmsM2TJKe15uufVDi8JCn3uKT5Vb2MJ
+         LeGPFSsxDR2RceH6pMPLs7rpf8OC35hQdC73x28CrYCBueHXhbmB785cnvCne1ZPR3ZL
+         btWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Nj08uoQ5xO490n/iqA+9r1f6MFaSsf/Keu+IuBN/mxc=;
-        b=N52BaJ4EQgu2MtYvjVDxuNeM6DVYO6Reopfl0ffxvip/p5gqC3TdpUWd8Sx6S3d+kY
-         Ct3jyvgGDZW1MUMDloWg1ZDss1CB9oLgYjs5FOKDbaPk1nyBr08HRoWn481s2MSMlGLZ
-         sgZtxzATjn18YTUBy7VHcxH5FBwOwWLOhugCJUZD0uwNsGnSrVYzzKTuYuoyXqXHya6t
-         grqzQbspkEi5kFuozhkQqMnOe3/uB9LW1e+a+TG2deIVFkqeynqjN8V8679KKR/9D6DO
-         zHGHvuvhnaexrwlLE0jySck6wyMXjTpDiTc8j4HhSqiOsRFVdJqZgym0xlYLIXtyjXr2
-         Rn9A==
-X-Gm-Message-State: ACrzQf3LGaqnzVfJqUc6ZtI5Wr15KcdkHNAwIXEnUL8qaMBULzKnmP5Q
-	jxAYVPqvp6qdsDzgNF8ftL+f3K0T9oA8XGZHv/oIRr8t
-X-Google-Smtp-Source: AMsMyM4/rxvFp8pqfGwJZsdJimYqWfkYUSxbisV3VoouRxT16X9f1iy+9n4YEmJzxdp6jMr+BSNbJGOtj09Hk7fZsyc=
-X-Received: by 2002:a17:90a:c917:b0:20a:a1a8:3719 with SMTP id
- v23-20020a17090ac91700b0020aa1a83719mr1301526pjt.225.1668070126727; Thu, 10
- Nov 2022 00:48:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20221109212219.1598355-1-conor@kernel.org> <20221109212219.1598355-4-conor@kernel.org>
-In-Reply-To: <20221109212219.1598355-4-conor@kernel.org>
-From: Emil Renner Berthing <kernel@esmil.dk>
-Date: Thu, 10 Nov 2022 09:48:35 +0100
-Message-ID: <CANBLGcx6HM=G+PCth8Pg75zuHrQpF5M2HUNdr849ac4ZsbXu0A@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] MAINTAINERS: add an entry for StarFive devicetrees
-To: Conor Dooley <conor@kernel.org>
+        bh=yEVHYkNLaKaVRtKWsEFztX3vRYcFwb5P6qHusc9rNXA=;
+        b=C5/K8oJhSF+TI1Z/XiXeqkCiHiNtbNxdPyWU6x/+znosczdPZApAyYgnPVJRlNXV9c
+         +x5cec/82Bc/rHfLbCEimIdxC/m2fGrpKGFDMCmYts39I2KElgARWy3zu/YJG7eHlJOP
+         rCOxoyCgKKpMPey3RNatKg47x+Fb1oEGstT8XgkgXnWQYi9R09kOvqwg3glzHmxE+zPK
+         a0++kEYyP72vbdKyzmUMRrPyC7tMGz0MgE0FSI1rOWBSGBqTCQFpjxUk1BwLTDev+29N
+         8ZNY9u8yjVPvi5UbWLCvKjwIiNdGv0Y2UDQ+SVx0FiAZvwUyv8t9ocbiQBxAcGaxms5d
+         nlXw==
+X-Gm-Message-State: ACrzQf0FjRJ5qtxQ+rh0P0QpaPiv04exlIU+ZudKqj2QEFAI/WmTYAyy
+	szCyVwHIKt2E8LrsXGxNcI/zng==
+X-Google-Smtp-Source: AMsMyM5vi7JtYPxbKQOwE53mcnrQPH9NtIclvr731Cak0G2jNM4Icnn66SdEBCOP8civ5KxBNGKKyA==
+X-Received: by 2002:a05:6512:532:b0:4af:e7d3:9478 with SMTP id o18-20020a056512053200b004afe7d39478mr20269727lfc.102.1668072074365;
+        Thu, 10 Nov 2022 01:21:14 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id u8-20020a2e2e08000000b0026dcf81d804sm2592082lju.31.2022.11.10.01.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 01:21:13 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, soc@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] ARM: dts: Cleanups for v6.2
+Date: Thu, 10 Nov 2022 10:21:11 +0100
+Message-Id: <20221110092111.18581-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 9 Nov 2022 at 22:23, Conor Dooley <conor@kernel.org> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Emil looks after the downstream StarFive stuff, and agreed to look after
-> the upstream ones too.
->
-> CC: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Hi,
 
-Thanks!
+Various cleanups missed or acked by maintainers.
 
-Acked-by: Emil Renner Berthing <kernel@esmil.dk>
+Best regards,
+Krzysztof
 
-> ---
->  MAINTAINERS | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a57c90be001f..040d49af9bdb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19622,6 +19622,11 @@ M:     Ion Badulescu <ionut@badula.org>
->  S:     Odd Fixes
->  F:     drivers/net/ethernet/adaptec/starfire*
->
-> +STARFIVE DEVICETREES
-> +M:     Emil Renner Berthing <kernel@esmil.dk>
-> +S:     Maintained
-> +F:     arch/riscv/boot/dts/starfive/
-> +
->  STARFIVE JH7100 CLOCK DRIVERS
->  M:     Emil Renner Berthing <kernel@esmil.dk>
->  S:     Maintained
-> --
-> 2.37.2
->
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.2
+
+for you to fetch changes up to 001b38cea30961e0f4e562a1872f2409a8024ff0:
+
+  dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename (2022-11-10 10:18:49 +0100)
+
+----------------------------------------------------------------
+Minor improvements in ARM DTS for v6.2
+
+1. Aspeed: fix qcom,dc-scm-v1-bmc compatible in the bindings.
+2. Marvell: include bindings in maintainers entry.
+3. Cleanup DTS according to bindings (panel endpoint unit address,
+   incorrect spi-max-frequency, generic node names).
+4. Few indentation fixes.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (10):
+      ARM: dts: am335x: drop panel endpoint unit address
+      ARM: dts: sunplus: sp7021: drop incorrect spi-max-frequency
+      MAINTAINERS: ARM: marvell: include bindings
+      ARM: dts: aspeed: align SPI node name with dtschema
+      ARM: dts: ti: correct indentation
+      ARM: dts: armada: correct indentation
+      ARM: dts: kirkwood: correct indentation
+      ARM: dts: omap: correct indentation
+      ARM: dts: sunxi: correct indentation
+      dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename
+
+ .../devicetree/bindings/arm/aspeed/aspeed.yaml     |  2 +-
+ MAINTAINERS                                        |  3 +
+ arch/arm/boot/dts/am335x-evm.dts                   |  2 +-
+ arch/arm/boot/dts/am335x-evmsk.dts                 |  2 +-
+ arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi  | 10 ++--
+ arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi  | 10 ++--
+ arch/arm/boot/dts/am335x-pepper.dts                |  4 +-
+ arch/arm/boot/dts/am3517-evm.dts                   | 16 +++---
+ arch/arm/boot/dts/armada-370-netgear-rn102.dts     | 10 ++--
+ arch/arm/boot/dts/armada-370-netgear-rn104.dts     | 10 ++--
+ arch/arm/boot/dts/armada-370-rd.dts                | 16 +++---
+ arch/arm/boot/dts/armada-370-synology-ds213j.dts   |  6 +-
+ arch/arm/boot/dts/armada-xp-netgear-rn2120.dts     | 10 ++--
+ .../boot/dts/aspeed-bmc-facebook-cloudripper.dts   |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts   |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-fuji.dts     |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts |  2 +-
+ .../boot/dts/ast2600-facebook-netbmc-common.dtsi   |  2 +-
+ arch/arm/boot/dts/kirkwood-b3.dts                  |  2 +-
+ arch/arm/boot/dts/kirkwood-db-88f6281.dts          |  2 +-
+ arch/arm/boot/dts/kirkwood-db-88f6282.dts          |  2 +-
+ arch/arm/boot/dts/kirkwood-dir665.dts              | 14 ++---
+ arch/arm/boot/dts/kirkwood-ds112.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-ds411.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-iconnect.dts            |  2 +-
+ arch/arm/boot/dts/kirkwood-km_common.dtsi          |  2 +-
+ arch/arm/boot/dts/kirkwood-l-50.dts                | 24 ++++----
+ arch/arm/boot/dts/kirkwood-laplug.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-linkstation.dtsi        |  2 +-
+ arch/arm/boot/dts/kirkwood-mplcec4.dts             | 16 +++---
+ arch/arm/boot/dts/kirkwood-mv88f6281gtw-ge.dts     |  2 +-
+ arch/arm/boot/dts/kirkwood-nas2big.dts             |  2 +-
+ arch/arm/boot/dts/kirkwood-net2big.dts             | 10 ++--
+ arch/arm/boot/dts/kirkwood-net5big.dts             | 10 ++--
+ .../boot/dts/kirkwood-netgear_readynas_nv+_v2.dts  | 12 ++--
+ arch/arm/boot/dts/kirkwood-nsa310.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-nsa320.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-nsa325.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-nsa3x0-common.dtsi      |  2 +-
+ arch/arm/boot/dts/kirkwood-rd88f6192.dts           | 60 ++++++++++----------
+ arch/arm/boot/dts/kirkwood-rd88f6281-z0.dts        |  2 +-
+ arch/arm/boot/dts/kirkwood-rd88f6281.dtsi          |  4 +-
+ arch/arm/boot/dts/kirkwood-rs212.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-synology.dtsi           |  2 +-
+ arch/arm/boot/dts/kirkwood-t5325.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-ts219.dtsi              |  4 +-
+ arch/arm/boot/dts/kirkwood.dtsi                    | 34 ++++++------
+ arch/arm/boot/dts/omap-gpmc-smsc911x.dtsi          |  6 +-
+ arch/arm/boot/dts/omap-gpmc-smsc9221.dtsi          |  6 +-
+ arch/arm/boot/dts/omap3-cm-t3517.dts               | 12 ++--
+ arch/arm/boot/dts/omap3-gta04.dtsi                 |  6 +-
+ arch/arm/boot/dts/omap3-ldp.dts                    |  2 +-
+ arch/arm/boot/dts/omap3-n900.dts                   | 38 ++++++-------
+ arch/arm/boot/dts/omap3-zoom3.dts                  | 44 +++++++--------
+ arch/arm/boot/dts/omap4-cpu-thermal.dtsi           | 24 ++++----
+ arch/arm/boot/dts/omap5-cm-t54.dts                 | 64 +++++++++++-----------
+ arch/arm/boot/dts/sunplus-sp7021.dtsi              |  3 -
+ arch/arm/boot/dts/sunxi-bananapi-m2-plus.dtsi      | 14 ++---
+ 58 files changed, 278 insertions(+), 278 deletions(-)
