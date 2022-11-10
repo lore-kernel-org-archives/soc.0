@@ -1,406 +1,156 @@
-Return-Path: <SRS0=/PLX=3K=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=k8p0=3K=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8814C43219
-	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 12:07:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B2FEC433FE
+	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 18:47:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95E49C43470; Thu, 10 Nov 2022 12:07:28 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id DA0FEC433C1;
-	Thu, 10 Nov 2022 12:07:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DA0FEC433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D71F1FB;
-	Thu, 10 Nov 2022 04:07:31 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EC553F534;
-	Thu, 10 Nov 2022 04:07:23 -0800 (PST)
-Date: Thu, 10 Nov 2022 12:07:20 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Icenowy Zheng <uwu@icenowy.me>
+	id BAB30C433C1; Thu, 10 Nov 2022 18:47:51 +0000 (UTC)
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 67490C433D7;
+	Thu, 10 Nov 2022 18:47:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 67490C433D7
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f52.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso1592860otf.13;
+        Thu, 10 Nov 2022 10:47:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=67MozYRSpJPpL2qvP40XMg8+ncMPDhHLkklopg68FPM=;
+        b=DGOqQFjBHxx03rJYrbTo40AR5n6tjLUsad66QPFNAFhJ4qyC4ccQz6TyZIbUikxtLG
+         dtAu3RYqPELF+BDr1a266RUcVCQG2GmNXf34zJPrHEMVfHOqbrMW+Nhx5STjjW52u2/n
+         2lpVQXfEhgTX4ZKKz5zGbhficlSsnhbfTn2e97RNib89wZ6fbkhAp2f5ONcOSEXZ+tvT
+         BEnqXLR4KAwT/+07paWO7bUDGEDYqgAPljDbKpL1XINYk3NqHxN9DtTajCLcgz3RjiRR
+         rmmL32EY8NVO6Jn+NIFpep0UeAolqUYCM3fU4KdOIAGCR4SdrfGjyEIS4zBVkDMXN3oU
+         1qDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=67MozYRSpJPpL2qvP40XMg8+ncMPDhHLkklopg68FPM=;
+        b=Vjyrkv7uOxuGUQPDASlMjH57dMEp8QKFEI9IeRWk6m+OrytzkcridjMYiyXzyKEX+9
+         6hJHT07lJ+FXYEYHWqwGLoUGC2WCWrKBI0JMAuMCM3rfOLDf8vTLY2FTSF72GF6HDCNF
+         wlZQyZ9p9WkOd+8erBlLX3ERm+4zbGENDfWrGNUOh7Hn6x0MPecIbWMKkIuKxe14fweW
+         z1Tb9pYqqeQRTcH3/9AAwU6yYu/N4+8fENS45iA0Vrg6dAncaZMSTq5SLtrXJlyysPLs
+         GokjLROv5uyLzIzMHT/ab+iaS5pbWl4z1uYySrB2Z0xReKoFIXQ1vpt2MgYHRDvp8YBB
+         3tjw==
+X-Gm-Message-State: ACrzQf1zZVpSbwO0uPtSzti+6hvARdwTw0vqObeFbw96A5/rTjuZtRY8
+	IKL1I0yljK94Po3oZT1NOxw=
+X-Google-Smtp-Source: AMsMyM63cAmW6nFvVFkw1Fs/CoJiriADIHk3UOQ3Sq/5CktzIOUZsKXa3bup8iKZeMVs3LUL5N7f3Q==
+X-Received: by 2002:a9d:6b90:0:b0:66c:4584:dd91 with SMTP id b16-20020a9d6b90000000b0066c4584dd91mr1891180otq.86.1668106069455;
+        Thu, 10 Nov 2022 10:47:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i2-20020a4ac502000000b00480816a5b8csm74846ooq.18.2022.11.10.10.47.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 10:47:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 10 Nov 2022 10:47:46 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Steven Rostedt <rostedt@goodmis.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Samuel
- Holland <samuel@sholland.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, Kishon Vijay
- Abraham I <kishon@ti.com>
-Subject: Re: [PATCH v3 10/11] phy: sun4i-usb: Replace types with explicit
- quirk flags
-Message-ID: <20221110120720.7fe272b2@donnerap.cambridge.arm.com>
-In-Reply-To: <bab3f8068d3ac26fc38048d0d540261d8e94053a.camel@icenowy.me>
-References: <20221106154826.6687-1-andre.przywara@arm.com>
-	<20221106154826.6687-11-andre.przywara@arm.com>
-	<D8382138-8943-46F7-B6A6-F83DF98E26AE@icenowy.me>
-	<Y2ype6fU6nKyIH1w@matsya>
-	<bab3f8068d3ac26fc38048d0d540261d8e94053a.camel@icenowy.me>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+Cc: linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Anna-Maria Gleixner <anna-maria@linutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Julia Lawall <Julia.Lawall@inria.fr>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	Russell King <linux@armlinux.org.uk>, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v6 1/6] ARM: spear: Do not use timer namespace for
+ timer_shutdown() function
+Message-ID: <20221110184746.GA3084458@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 10 Nov 2022 19:40:58 +0800
-Icenowy Zheng <uwu@icenowy.me> wrote:
+On Thu, Nov 10, 2022 at 01:41:02AM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> A new "shutdown" timer state is being added to the generic timer code. One
+> of the functions to change the timer into the state is called
+> "timer_shutdown()". This means that there can not be other functions
+> called "timer_shutdown()" as the timer code owns the "timer_*" name space.
+> 
+> Rename timer_shutdown() to spear_timer_shutdown() to avoid this conflict.
+> 
+> Link: https://lkml.kernel.org/r/20221106212701.822440504@goodmis.org
+> Link: https://lore.kernel.org/all/20221105060155.228348078@goodmis.org/
 
-Hi,
+Looks like those links are obsolete.
 
-> =E5=9C=A8 2022-11-10=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 13:04 +0530=EF=
-=BC=8CVinod Koul=E5=86=99=E9=81=93=EF=BC=9A
-> > On 06-11-22, 23:54, Icenowy Zheng wrote: =20
-> > >=20
-> > >=20
-> > > =E4=BA=8E 2022=E5=B9=B411=E6=9C=886=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=
-=8D=8811:48:25, Andre Przywara
-> > > <andre.przywara@arm.com> =E5=86=99=E5=88=B0: =20
-> > > > So far we were assigning some crude "type" (SoC name, really) to
-> > > > each
-> > > > Allwinner USB PHY model, then guarding certain quirks based on
-> > > > this.
-> > > > This does not only look weird, but gets more or more cumbersome
-> > > > to
-> > > > maintain.
-> > > >=20
-> > > > Remove the bogus type names altogether, instead introduce flags
-> > > > for each
-> > > > quirk, and explicitly check for them.
-> > > > This improves readability, and simplifies future extensions.
-> > > >=20
-> > > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > > > ---
-> > > > drivers/phy/allwinner/phy-sun4i-usb.c | 50 ++++++++--------------
-> > > > -----
-> > > > 1 file changed, 15 insertions(+), 35 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > > b/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > > index 51fb24c6dcb3..422129c66282 100644
-> > > > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> > > > @@ -99,27 +99,17 @@
-> > > > #define DEBOUNCE_TIME=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0msecs_=
-to_jiffies(50)
-> > > > #define POLL_TIME=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0msecs_to_jiffies(250)
-> > > >=20
-> > > > -enum sun4i_usb_phy_type {
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun4i_a10_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun6i_a31_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun8i_a33_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun8i_a83t_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun8i_h3_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun8i_r40_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun8i_v3s_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun50i_a64_phy,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun50i_h6_phy,
-> > > > -};
-> > > > -
-> > > > struct sun4i_usb_phy_cfg {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int num_phys;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int hsic_index;
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum sun4i_usb_phy_type =
-type;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 disc_thresh;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 hci_phy_ctl_cle=
-ar;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 phyctl_offset;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool dedicated_cloc=
-ks;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool phy0_dual_rout=
-e;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool phy2_is_hsic; =20
-> > >=20
-> > > Maybe use a `int hsic_phy` instead? But the problem is this
-> > > practice is
-> > > assuming USB0 could not be HSIC -- although USB0 is usually OTG. =20
-> >=20
-> > why should it be int.. dont think hsic_phy is improvement over
-> > phy2_is_hsic? =20
->=20
-> Yes because it may express phy1_is_hsic, etc (although this kind of
-> thing hadn't happened yet).
+Guenter
 
-Yeah, I tried to not interpret too much into this, instead just named it
-as it is used today. I don't have any insight into the A83T PHY or in
-Allwinner's plans regarding this. So far this seems like a one-off hack
-that is needed for this particular PHY on this particular SoC.
-It it code-internal anyway, so we can change it at any time later should
-the need arise.
-
-If people like another name better, I am of course happy to use that.
-
-Cheers,
-Andre
-
->=20
-> >  =20
-> > >  =20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool siddq_in_base;
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool poll_vbusen;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int missing_phys;
-> > > > };
-> > > >=20
-> > > > @@ -251,7 +241,7 @@ static void sun4i_usb_phy_passby(struct
-> > > > sun4i_usb_phy *phy, int enable)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SUNXI_AHB_INCRX_ALIGN_EN | SUNXI_ULPI_BYPASS_=
-EN;
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* A83T USB2 is HSI=
-C */
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (phy_data->cfg->type =
-=3D=3D sun8i_a83t_phy && phy->index
-> > > > =3D=3D 2)
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (phy_data->cfg->phy2_=
-is_hsic && phy->index =3D=3D 2)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bits |=3D SUNXI_EHCI_HS_FORCE |
-> > > > SUNXI_HSIC_CONNECT_INT |
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0SUNXI_HSIC;
-> > > >=20
-> > > > @@ -295,8 +285,7 @@ static int sun4i_usb_phy_init(struct phy
-> > > > *_phy)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(val, phy->pmu + REG_HCI_PHY_CTL);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > >=20
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data->cfg->type =3D=
-=3D sun8i_a83t_phy ||
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data-=
->cfg->type =3D=3D sun50i_h6_phy) {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data->cfg->siddq_in_=
-base) {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (phy->index =3D=3D 0) {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0val =3D readl(data->base + data->cfg- =20
-> > > > >phyctl_offset); =20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0val |=3D PHY_CTL_VBUSVLDEXT;
-> > > > @@ -340,8 +329,7 @@ static int sun4i_usb_phy_exit(struct phy
-> > > > *_phy)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct sun4i_usb_ph=
-y_data *data =3D
-> > > > to_sun4i_usb_phy_data(phy);
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (phy->index =3D=
-=3D 0) {
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0if (data->cfg->type =3D=3D sun8i_a83t_phy ||
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data->cfg->type =3D=3D sun50i_h6=
-_phy) {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0if (data->cfg->siddq_in_base) {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0void __iomem *phyctl =3D data->base +
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0data->cfg->phyctl_offset;
-> > > >=20
-> > > > @@ -414,9 +402,8 @@ static bool sun4i_usb_phy0_poll(struct
-> > > > sun4i_usb_phy_data *data)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * vbus using the N=
-_VBUSEN pin on the pmic, so we must
-> > > > poll
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * when using the p=
-mic for vbus-det _and_ we're driving
-> > > > vbus.
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if ((data->cfg->type =3D=
-=3D sun6i_a31_phy ||
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- data->cfg->type =3D=3D sun8i_a33_phy) &&
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data-=
->vbus_power_supply && data- =20
-> > > > >phys[0].regulator_on) =20
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (data->cfg->poll_vbus=
-en && data->vbus_power_supply &&
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data-=
->phys[0].regulator_on)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return true;
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return false;
-> > > > @@ -861,7 +848,6 @@ static int sun4i_usb_phy_probe(struct
-> > > > platform_device *pdev)
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg suniv_f1c100s_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 1,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun4i_a10_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A10,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > @@ -869,7 +855,6 @@ static const struct sun4i_usb_phy_cfg
-> > > > suniv_f1c100s_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun4i_a10_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 3,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun4i_a10_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A10,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D false,
-> > > > @@ -877,7 +862,6 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun4i_a10_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun5i_a13_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 2,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun4i_a10_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 2,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A10,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D false,
-> > > > @@ -885,15 +869,14 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun5i_a13_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun6i_a31_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 3,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun6i_a31_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A10,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.poll_vbusen =3D true,
-> > > > };
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun7i_a20_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 3,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun4i_a10_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 2,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A10,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D false,
-> > > > @@ -901,31 +884,31 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun7i_a20_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun8i_a23_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 2,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun6i_a31_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A10,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.poll_vbusen =3D true,
-> > > > };
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun8i_a33_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 2,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun8i_a33_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.poll_vbusen =3D true,
-> > > > };
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun8i_a83t_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.hsic_index =3D 2,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun8i_a83t_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.siddq_in_base =3D true,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phy2_is_hsic =3D true,
-> > > > };
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun8i_h3_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 4,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun8i_h3_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > @@ -935,7 +918,6 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun8i_h3_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun8i_r40_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 3,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun8i_r40_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > @@ -945,7 +927,6 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun8i_r40_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun8i_v3s_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 1,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun8i_v3s_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > @@ -955,16 +936,15 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun8i_v3s_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun20i_d1_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 2,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun50i_h6_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.hci_phy_ctl_clear =
-=3D PHY_CTL_SIDDQ,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phy0_dual_route =
-=3D true,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.siddq_in_base =3D true,
-> > > > };
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun50i_a64_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 2,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun50i_a64_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.disc_thresh =3D 3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > @@ -974,11 +954,11 @@ static const struct sun4i_usb_phy_cfg
-> > > > sun50i_a64_cfg =3D {
-> > > >=20
-> > > > static const struct sun4i_usb_phy_cfg sun50i_h6_cfg =3D {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.num_phys =3D 4,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.type =3D sun50i_h6_phy,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phyctl_offset =3D =
-REG_PHYCTL_A33,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.dedicated_clocks =
-=3D true,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.phy0_dual_route =
-=3D true,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.missing_phys =3D B=
-IT(1) | BIT(2),
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.siddq_in_base =3D true,
-> > > > };
-> > > >=20
-> > > > static const struct of_device_id sun4i_usb_phy_of_match[] =3D { =20
-> >  =20
->=20
-
+> 
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Anna-Maria Gleixner <anna-maria@linutronix.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Julia Lawall <Julia.Lawall@inria.fr>
+> Cc: Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: soc@kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  arch/arm/mach-spear/time.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
+> index e979e2197f8e..5371c824786d 100644
+> --- a/arch/arm/mach-spear/time.c
+> +++ b/arch/arm/mach-spear/time.c
+> @@ -90,7 +90,7 @@ static void __init spear_clocksource_init(void)
+>  		200, 16, clocksource_mmio_readw_up);
+>  }
+>  
+> -static inline void timer_shutdown(struct clock_event_device *evt)
+> +static inline void spear_timer_shutdown(struct clock_event_device *evt)
+>  {
+>  	u16 val = readw(gpt_base + CR(CLKEVT));
+>  
+> @@ -101,7 +101,7 @@ static inline void timer_shutdown(struct clock_event_device *evt)
+>  
+>  static int spear_shutdown(struct clock_event_device *evt)
+>  {
+> -	timer_shutdown(evt);
+> +	spear_timer_shutdown(evt);
+>  
+>  	return 0;
+>  }
+> @@ -111,7 +111,7 @@ static int spear_set_oneshot(struct clock_event_device *evt)
+>  	u16 val;
+>  
+>  	/* stop the timer */
+> -	timer_shutdown(evt);
+> +	spear_timer_shutdown(evt);
+>  
+>  	val = readw(gpt_base + CR(CLKEVT));
+>  	val |= CTRL_ONE_SHOT;
+> @@ -126,7 +126,7 @@ static int spear_set_periodic(struct clock_event_device *evt)
+>  	u16 val;
+>  
+>  	/* stop the timer */
+> -	timer_shutdown(evt);
+> +	spear_timer_shutdown(evt);
+>  
+>  	period = clk_get_rate(gpt_clk) / HZ;
+>  	period >>= CTRL_PRESCALER16;
+> -- 
+> 2.35.1
