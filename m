@@ -1,116 +1,123 @@
-Return-Path: <chenhuacai@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6613CC4332F
-	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 00:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E9A4C4332F
+	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 04:06:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F2DC5C43146; Thu, 10 Nov 2022 00:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE18C433B5;
-	Thu, 10 Nov 2022 00:41:19 +0000 (UTC)
+	id 48A5BC433C1; Thu, 10 Nov 2022 04:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 231DCC433D6;
+	Thu, 10 Nov 2022 04:06:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668040879;
-	bh=VjEtLrKzvgiLhEm+ej2iaT8NQcZGa3jjGonq3IJbJQQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=nuM5N4haGG66KC4/btGKfg9rFCz5/sgDwmLHziFjSFtxNIeV1u/xhA+hlF/hbSTLt
-	 vuCPcRsHV3bNRCMLwRdqGOZcfjTY+bz0Hu43yhNRDyd0foXvoQNNPL56p0ou0IWskZ
-	 WhvZIWMOLXImDNOLAiTp7Qk8kgr1TrdrrMH4GCMSWQ1FxiPhtIC6QaaZA7KdqqBQBm
-	 7xj2RBBk7Ia/UwD4QF2scKFPzOb2Xy0YZdPYd8uxB6PnEcDOyoz3l/eLHrtpPHsd8m
-	 8SfHDc37d/fEKMQfmguBAq9VwV0JS1QQPTKsLeb44rtvkTt6MzGqH076Aj7mhPEtIh
-	 XzLHfAKtgMbnw==
-Received: by mail-ed1-f49.google.com with SMTP id x2so756493edd.2;
-        Wed, 09 Nov 2022 16:41:19 -0800 (PST)
-X-Gm-Message-State: ACrzQf3hXkBQ5hoqB960pZATPaed1VmhpHo8AyYydS1xb8HOUEKzwJfZ
-	i1B8NRU94TOjV3ryijXeEXr3nHf4OduDMyWdUR8=
-X-Google-Smtp-Source: AMsMyM42tP13Sp94y9qkGoPYG7IJv7Z3aYG0AMLIJjkUDCvEbPvqe92Fu2keAeuXGqxYLRErZDBNs/jphgahMASxEZ4=
-X-Received: by 2002:a05:6402:c9a:b0:462:32bf:613a with SMTP id
- cm26-20020a0564020c9a00b0046232bf613amr1282679edb.78.1668040878061; Wed, 09
- Nov 2022 16:41:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20221104024835.3570-1-zhuyinbo@loongson.cn> <57c9f565-e75b-0c8f-fdce-9dc8c334d50f@loongson.cn>
- <CACRpkda=-_a+gWQVk1vi4QJ30j-hzeraX-wr86RcQ9xne4-d6Q@mail.gmail.com>
- <574d58b2-0e9a-4fa0-84a8-caf39a9bc37a@app.fastmail.com> <CAAhV-H64s-2gNMd0-F21kUzieh5G-MbBnA0k6J8EP2_7SpevaA@mail.gmail.com>
- <0b2ca852-61b2-4e88-b389-f102994d5b2d@app.fastmail.com>
-In-Reply-To: <0b2ca852-61b2-4e88-b389-f102994d5b2d@app.fastmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 10 Nov 2022 08:41:05 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4G0YFKhtOejQbs=F83JwOAbRCyTLpteA2yJ7d7kFPHPg@mail.gmail.com>
-Message-ID: <CAAhV-H4G0YFKhtOejQbs=F83JwOAbRCyTLpteA2yJ7d7kFPHPg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] soc: loongson: add GUTS driver for loongson-2 platforms
-To: Arnd Bergmann <arnd@arndb.de>
+	s=k20201202; t=1668053197;
+	bh=+eUM0x2xmmCPnRFzrYtnLSAiStVke1zulIuvV0l82LU=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=NU+ekzUWyrrsJkuWC3mkgg5K0b3zfgYvThgCJ0YZtSO6RUxmYPDGP5BIIvP6kCs4/
+	 hDmP/Ej5tmHZAbQHu8wS+ggQWl9Gmr1s3a4Ib4R2U1fJGybGWz6I7f/YguObIcG2tP
+	 wmacAqZJofhYeOfLfWAXr70PQ6CfFHwxuE5WCyCvGKiNlo5m0k1LgseOnjDsnDoszU
+	 sqHodZ16O046B5amUoDRfZ/dYqi8F/YPHbrLDANWB6bDpOt5OWMqTGyaEOBL/n6mtR
+	 VY68mNxForBpk8PXSAZ1fTzXBvr9sYFcMpKgPyjyPg3yEnhH5BYzMrZdvsas9Gnchl
+	 4fikh9HHfyBEA==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Yinbo Zhu <zhuyinbo@loongson.cn>, 
-	WANG Xuerui <kernel@xen0n.name>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Hector Martin <marcan@marcan.st>, 
-	Lubomir Rintel <lkundrak@v3.sk>, "Conor.Dooley" <conor.dooley@microchip.com>, 
-	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>, =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Brian Norris <briannorris@chromium.org>, Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Brian Masney <bmasney@redhat.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Robert Marko <robimarko@gmail.com>,
+	Satya Priya <quic_c_skakit@quicinc.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] Qualcomm ARM64 DTS fixes for 6.1
+Date: Wed,  9 Nov 2022 22:06:35 -0600
+Message-Id: <20221110040635.795921-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 9, 2022 at 11:08 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Nov 9, 2022, at 14:50, Huacai Chen wrote:
-> > On Wed, Nov 9, 2022 at 7:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Wed, Nov 9, 2022, at 11:15, Linus Walleij wrote:
-> >> > On Wed, Nov 9, 2022 at 11:03 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
-> >> >
-> >> >> Hi maintainer,
-> >> >>
-> >> >> This patch I had verified that base on mainline 6.1-rc3 tree, it is
-> >> >> okay, if no other issue, please you help me merge it to upstream.
-> >> >
-> >> > Aren't these loongarch maintainers listed in MAINTAINERS able to
-> >> > merge this? Certainly Huacai can merge stuff to drivers/soc as
-> >> > need be. drivers/soc is a bit shared between different archs.
-> >>
-> >> I'm generally happy to keep an eye on stuff in drivers/soc/ across
-> >> architectures and merge it through the soc tree, especially for
-> >> new platforms, but merging this through the loongarch tree works
-> >> as well.
-> > So drivers/soc is similar to drivers/platform that can be merged
-> > through corresponding architecture trees?
->
-> Right, I think in both cases, there is no top-level subsystem
-> maintainer, but the rules are specific to the second-level
-> hierarchy: most parts of drivers/platform/ happen to go
-> through the x86 platform maintainer trees, and for drivers/soc
-> we merge most stuff through the soc tree, but a few parts
-> of each have different maintainers.
->
-> >> Since the driver was already sent to soc@kernel.org, I can
-> >> simply pick it up through patchwork[1] when I do my next round
-> >> of merges. I'll leave this up to Huacai Chen and WANG Xuerui,
-> >> let me know if you prefer to merge it through the loongarch
-> >> tree.
-> > I'm happy that this series be merged through your linux-arch tree, but
-> > if it is better (I'm not sure which is better) to go through loongarch
-> > tree I can also merge it later. However, I have some comments about
-> > this version. :)
->
-> I would prefer the soc tree, and will just apply the
-> patches from Yinbo Zhu directly this time as I already
-> have them in my queue. If there are more than a few
-> drivers/soc/loongarch/ patches in the future, maybe you can
-> pick them up into a separate branch and forward those
-> to soc@kernel.org.
->
-> Note that I have two separate roles here: I have the
-> asm-generic tree that I maintain for patches to
-> include/asm-generic as well as the occasional new
-> architecture review as I did for loongarch.
->
-> The other one is the group maintained soc tree that
-> is mainly for Arm device tree files, but also contains
-> soc specific code (arch/arm/mach-*), defconfig files,
-> drivers (drivers/{soc,firmware,memory,reset}). This is
-> now extended to arch/riscv and occasionally other
-> architectures as well, so drivers/soc/loongson fits
-> well in here.
-OK, then let this series go through soc tree.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-Huacai
->
->      Arnd
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-fixes-for-6.1
+
+for you to fetch changes up to cadaa773bcf161184fa428180516bae33a7bc667:
+
+  arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state (2022-10-28 16:18:59 -0500)
+
+----------------------------------------------------------------
+Qualcomm ARM64 DTS fixes for 6.1
+
+This fixes the APCS register region on IPQ8074 to not overlap
+with adjacent nodes.
+
+It lists the valid LDO modes on a variety of platforms, as this is not
+required by the binding and implementation.
+
+The reference clocks for the two UFS instances on SC8280XP are
+corrected, to avoid relying on the state left by most versions of the
+bootloader.
+
+A number of issues are corrected with regards to the QMP PHY register
+ranges on SC8280XP.
+
+SC7280 gains a missing lpass reset region.
+
+Lastly cluster idle is termporarily disabled on SM8250 to avoid issues
+with booting the platform, until the last missing pieces lands.
+
+----------------------------------------------------------------
+Brian Masney (1):
+      arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy
+
+Dmitry Baryshkov (1):
+      Revert "arm64: dts: qcom: msm8996: add missing TCSR syscon compatible"
+
+Douglas Anderson (6):
+      arm64: dts: qcom: sa8155p-adp: Specify which LDO modes are allowed
+      arm64: dts: qcom: sa8295p-adp: Specify which LDO modes are allowed
+      arm64: dts: qcom: sc8280xp-crd: Specify which LDO modes are allowed
+      arm64: dts: qcom: sm8150-xperia-kumano: Specify which LDO modes are allowed
+      arm64: dts: qcom: sm8250-xperia-edo: Specify which LDO modes are allowed
+      arm64: dts: qcom: sm8350-hdk: Specify which LDO modes are allowed
+
+Johan Hovold (6):
+      arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
+      arm64: dts: qcom: sc8280xp: fix USB0 PHY PCS_MISC registers
+      arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1 registers
+      arm64: dts: qcom: sc8280xp: fix USB PHY PCS registers
+      arm64: dts: qcom: sc8280xp: drop broken DP PHY nodes
+      arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
+
+Robert Marko (1):
+      arm64: dts: qcom: ipq8074: correct APCS register space size
+
+Satya Priya (1):
+      arm64: dts: qcom: sc7280: Add the reset reg for lpass audiocc on SC7280
+
+Ulf Hansson (1):
+      arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state
+
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |  2 +-
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           | 13 +++++++-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts           | 12 ++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |  6 ++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 36 +++++-----------------
+ .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   |  6 ++++
+ .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      |  6 ++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |  1 +
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            | 12 ++++++++
+ 11 files changed, 67 insertions(+), 32 deletions(-)
