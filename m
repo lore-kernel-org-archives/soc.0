@@ -1,95 +1,116 @@
-Return-Path: <SRS0=H9dK=3J=gmail.com=joel.stan@kernel.org>
+Return-Path: <chenhuacai@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D67C8C433FE
-	for <soc@archiver.kernel.org>; Wed,  9 Nov 2022 23:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6613CC4332F
+	for <soc@archiver.kernel.org>; Thu, 10 Nov 2022 00:41:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 960BAC43470; Wed,  9 Nov 2022 23:55:35 +0000 (UTC)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 60071C433D7;
-	Wed,  9 Nov 2022 23:55:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60071C433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso120661wms.4;
-        Wed, 09 Nov 2022 15:55:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j51pcpmAt7rygikiVDfge95qbdKBtRf/PjFzkYZrMnc=;
-        b=Wd6ppp30utQntCUqz+qW2cMWBmwMs+rr95pprrQ4BHDRQxjd30vD6E/xLK0J4s5ygs
-         XFdDT1RYyNMEv8ooKTwg21fWqx4yPRayjTX94hEsCfgP+jITqGcRlT5SkL5BNMlzhTL4
-         KN621bpyhvV2Z759F5e+QYGQ6fKGmRLziziwM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j51pcpmAt7rygikiVDfge95qbdKBtRf/PjFzkYZrMnc=;
-        b=3miBnFZsy3ZFw9VxaVJ4PpPw2ZAGgIe54LGCROB9wSOPhX1DRAe9OBpxJToI23ZcLt
-         ntzH9/LksovGtlC6kQAN1FdveYyNLyk4GjZs3/NNALpW10wbWjbLKoiRKRXGQt2PPu/C
-         tiPovB89IP60bPzE0mDyo/lDyF+O0XF+CNpvvQaV49LsVbBT+m46+LxKXvu6bZ4q2YXT
-         3aWfTkCVcFgc7JD69b1kq7GiDk3vUiHLEEhNkP4bSNkM3w47XG+Q6txG0fIzZmhM2pC0
-         +uCgxqBSqsibV01GYPfFaIx9Kv2xQuXtDSUB/WfFp5RsofzT4LNqCVmufC+COyiLRCnk
-         zzCA==
-X-Gm-Message-State: ACrzQf3OOCY1bXs0oIAnZIcg3h/xoaqpj0pCa7B11ZZr57Po3lvaUsoi
-	1CBvPYhDwJ+IRKznnb/9qbEiHs5/3IcDP5MVKqE=
-X-Google-Smtp-Source: AMsMyM633cR3aqFZIJs92t3FJDeCnj/48LR9q/mCiFCWUWAAUvWB71S7IrPEET1nrwzBbJA7zpjBPNFK4ve3y4WY6Cg=
-X-Received: by 2002:a05:600c:a46:b0:3b9:9b97:9304 with SMTP id
- c6-20020a05600c0a4600b003b99b979304mr41506443wmq.34.1668038131488; Wed, 09
- Nov 2022 15:55:31 -0800 (PST)
+	id F2DC5C43146; Thu, 10 Nov 2022 00:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE18C433B5;
+	Thu, 10 Nov 2022 00:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1668040879;
+	bh=VjEtLrKzvgiLhEm+ej2iaT8NQcZGa3jjGonq3IJbJQQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=nuM5N4haGG66KC4/btGKfg9rFCz5/sgDwmLHziFjSFtxNIeV1u/xhA+hlF/hbSTLt
+	 vuCPcRsHV3bNRCMLwRdqGOZcfjTY+bz0Hu43yhNRDyd0foXvoQNNPL56p0ou0IWskZ
+	 WhvZIWMOLXImDNOLAiTp7Qk8kgr1TrdrrMH4GCMSWQ1FxiPhtIC6QaaZA7KdqqBQBm
+	 7xj2RBBk7Ia/UwD4QF2scKFPzOb2Xy0YZdPYd8uxB6PnEcDOyoz3l/eLHrtpPHsd8m
+	 8SfHDc37d/fEKMQfmguBAq9VwV0JS1QQPTKsLeb44rtvkTt6MzGqH076Aj7mhPEtIh
+	 XzLHfAKtgMbnw==
+Received: by mail-ed1-f49.google.com with SMTP id x2so756493edd.2;
+        Wed, 09 Nov 2022 16:41:19 -0800 (PST)
+X-Gm-Message-State: ACrzQf3hXkBQ5hoqB960pZATPaed1VmhpHo8AyYydS1xb8HOUEKzwJfZ
+	i1B8NRU94TOjV3ryijXeEXr3nHf4OduDMyWdUR8=
+X-Google-Smtp-Source: AMsMyM42tP13Sp94y9qkGoPYG7IJv7Z3aYG0AMLIJjkUDCvEbPvqe92Fu2keAeuXGqxYLRErZDBNs/jphgahMASxEZ4=
+X-Received: by 2002:a05:6402:c9a:b0:462:32bf:613a with SMTP id
+ cm26-20020a0564020c9a00b0046232bf613amr1282679edb.78.1668040878061; Wed, 09
+ Nov 2022 16:41:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20221108001551.18175-1-zev@bewilderbeest.net>
-In-Reply-To: <20221108001551.18175-1-zev@bewilderbeest.net>
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 9 Nov 2022 23:55:19 +0000
-Message-ID: <CACPK8XeKA+rFwOGCZam2XZh9v8OndyZeE2sk4-3nb-rKdNeDBA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] ARM: dts: aspeed: Add Delta AHE-50DC BMC
-To: Zev Weiss <zev@bewilderbeest.net>
+References: <20221104024835.3570-1-zhuyinbo@loongson.cn> <57c9f565-e75b-0c8f-fdce-9dc8c334d50f@loongson.cn>
+ <CACRpkda=-_a+gWQVk1vi4QJ30j-hzeraX-wr86RcQ9xne4-d6Q@mail.gmail.com>
+ <574d58b2-0e9a-4fa0-84a8-caf39a9bc37a@app.fastmail.com> <CAAhV-H64s-2gNMd0-F21kUzieh5G-MbBnA0k6J8EP2_7SpevaA@mail.gmail.com>
+ <0b2ca852-61b2-4e88-b389-f102994d5b2d@app.fastmail.com>
+In-Reply-To: <0b2ca852-61b2-4e88-b389-f102994d5b2d@app.fastmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 10 Nov 2022 08:41:05 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4G0YFKhtOejQbs=F83JwOAbRCyTLpteA2yJ7d7kFPHPg@mail.gmail.com>
+Message-ID: <CAAhV-H4G0YFKhtOejQbs=F83JwOAbRCyTLpteA2yJ7d7kFPHPg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] soc: loongson: add GUTS driver for loongson-2 platforms
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	soc@kernel.org, Andrew Jeffery <andrew@aj.id.au>, Arnd Bergmann <arnd@arndb.de>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Olof Johansson <olof@lixom.net>, 
-	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc: Linus Walleij <linus.walleij@linaro.org>, Yinbo Zhu <zhuyinbo@loongson.cn>, 
+	WANG Xuerui <kernel@xen0n.name>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Hector Martin <marcan@marcan.st>, 
+	Lubomir Rintel <lkundrak@v3.sk>, "Conor.Dooley" <conor.dooley@microchip.com>, 
+	Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>, =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+	Brian Norris <briannorris@chromium.org>, Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, soc@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 8 Nov 2022 at 00:16, Zev Weiss <zev@bewilderbeest.net> wrote:
+On Wed, Nov 9, 2022 at 11:08 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Hello,
+> On Wed, Nov 9, 2022, at 14:50, Huacai Chen wrote:
+> > On Wed, Nov 9, 2022 at 7:06 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >> On Wed, Nov 9, 2022, at 11:15, Linus Walleij wrote:
+> >> > On Wed, Nov 9, 2022 at 11:03 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> >> >
+> >> >> Hi maintainer,
+> >> >>
+> >> >> This patch I had verified that base on mainline 6.1-rc3 tree, it is
+> >> >> okay, if no other issue, please you help me merge it to upstream.
+> >> >
+> >> > Aren't these loongarch maintainers listed in MAINTAINERS able to
+> >> > merge this? Certainly Huacai can merge stuff to drivers/soc as
+> >> > need be. drivers/soc is a bit shared between different archs.
+> >>
+> >> I'm generally happy to keep an eye on stuff in drivers/soc/ across
+> >> architectures and merge it through the soc tree, especially for
+> >> new platforms, but merging this through the loongarch tree works
+> >> as well.
+> > So drivers/soc is similar to drivers/platform that can be merged
+> > through corresponding architecture trees?
 >
-> This series adds a device-tree for the BMCs of the Delta AHE-50DC
-> Open19 power shelf.  The first patch adds a compat entry to the Aspeed
-> bindings; the second adds the device-tree itself.
+> Right, I think in both cases, there is no top-level subsystem
+> maintainer, but the rules are specific to the second-level
+> hierarchy: most parts of drivers/platform/ happen to go
+> through the x86 platform maintainer trees, and for drivers/soc
+> we merge most stuff through the soc tree, but a few parts
+> of each have different maintainers.
 >
-> Changes since v1 [0]:
->  - rearranged patch 2 with macros to reduce boilerplate
->  - added ack from Krzysztof on patch 1
+> >> Since the driver was already sent to soc@kernel.org, I can
+> >> simply pick it up through patchwork[1] when I do my next round
+> >> of merges. I'll leave this up to Huacai Chen and WANG Xuerui,
+> >> let me know if you prefer to merge it through the loongarch
+> >> tree.
+> > I'm happy that this series be merged through your linux-arch tree, but
+> > if it is better (I'm not sure which is better) to go through loongarch
+> > tree I can also merge it later. However, I have some comments about
+> > this version. :)
+>
+> I would prefer the soc tree, and will just apply the
+> patches from Yinbo Zhu directly this time as I already
+> have them in my queue. If there are more than a few
+> drivers/soc/loongarch/ patches in the future, maybe you can
+> pick them up into a separate branch and forward those
+> to soc@kernel.org.
+>
+> Note that I have two separate roles here: I have the
+> asm-generic tree that I maintain for patches to
+> include/asm-generic as well as the occasional new
+> architecture review as I did for loongarch.
+>
+> The other one is the group maintained soc tree that
+> is mainly for Arm device tree files, but also contains
+> soc specific code (arch/arm/mach-*), defconfig files,
+> drivers (drivers/{soc,firmware,memory,reset}). This is
+> now extended to arch/riscv and occasionally other
+> architectures as well, so drivers/soc/loongson fits
+> well in here.
+OK, then let this series go through soc tree.
 
-Looks good to me, I've put it in the aspeed tree for 6.2.
-
+Huacai
 >
-> Thanks,
-> Zev
->
-> [0] https://lore.kernel.org/lkml/20221105013321.2719-1-zev@bewilderbeest.net/T/
->
-> Zev Weiss (2):
->   dt-bindings: arm: aspeed: document Delta AHE-50DC BMC
->   ARM: dts: aspeed: Add Delta AHE-50DC BMC
->
->  .../bindings/arm/aspeed/aspeed.yaml           |   1 +
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts | 418 ++++++++++++++++++
->  3 files changed, 420 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
->
-> --
-> 2.38.1
->
+>      Arnd
