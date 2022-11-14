@@ -4,58 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F197FC43219
-	for <soc@archiver.kernel.org>; Mon, 14 Nov 2022 15:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0399DC4167B
+	for <soc@archiver.kernel.org>; Mon, 14 Nov 2022 15:30:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C44AFC43146; Mon, 14 Nov 2022 15:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AD998C43140;
+	id DB929C43147; Mon, 14 Nov 2022 15:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C56ABC43149;
 	Mon, 14 Nov 2022 15:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1668439820;
-	bh=j6ygHCFuW+y3HxT8YtsazDnrom+2I61Gy2Yf9OjrhLk=;
+	bh=ZnkEkElJhE8lRre8cx94cL2vfydvuEImkM00fpAzhHI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=D+pmorz147ZSRnVO5RBuKVJj9+glbNZG1skgtOkyw2A6TvfZMu61GytAaSHYhJudw
-	 Lkm2KdxZnoZRaxDbeiGuh6HrqIAHTDJPat/ZLSXJ3SzbwjJVZYkwcYlTzk14z/ZeBW
-	 ePLnTKIh/FCCxv+yuU9Ns5qHTAqmMvgfXMHX/r1NukhmMaviSTYkwro9XPovxF6e14
-	 p8a+Ash5uPFIJ0PuPrsn7pZBbMja2YxpabrVbDRm547sdSFsWcxZx8Oii6vtE9vqZ/
-	 fGP9zdJNO9SCOufSDaD0WX9L4fE4gYx0Xnc2LLwzG4mA0Ee4/fPynXmvvZGf7d8Pzn
-	 gWmz8kxWwCVHg==
+	b=Abq29oLs+PIggCC61QyewUVhc1Xx2ZiJZHOn2Kjmbn8oKOpw4e0T4qNTduRzi0XMB
+	 dWx+EjZZNADHOAXdzUKtXN5DJ0Y9LyA+5sEZ/HLdy9yS2XURl8sTWCmLbyTIpaUN3Y
+	 4KPSYBFptTyUAlrlrYM6l1tuEEg965SiTHM5vZuWSdKdeR6q/IkXruh965IuydRt9f
+	 P/kbhNfN09uP7/IOZyG+J5DWu8yWojBaWlWp7KTsCM2Pep0mvk/38e8JRhb7QHp1r1
+	 BydXLK8c1DXhXay2d5/lS73wYXmYyMwXnNVy8k1sB5tsMU+kgmVE/66WBNvYC0qzGw
+	 vngHMbFjJDddg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8EBEFE50D99;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C1DCE50D9E;
 	Mon, 14 Nov 2022 15:30:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AT91 defconfig updates for 6.2
+Subject: Re: [PATCH v7 1/2] soc: loongson: add GUTS driver for loongson-2
+ platforms
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166843982058.12382.13554933562427897367.git-patchwork-notify@kernel.org>
+ <166843982063.12382.5702013296268460619.git-patchwork-notify@kernel.org>
 Date: Mon, 14 Nov 2022 15:30:20 +0000
-References: <20221110115422.180893-1-claudiu.beznea@microchip.com>
-In-Reply-To: <20221110115422.180893-1-claudiu.beznea@microchip.com>
-To: Claudiu Beznea <claudiu.beznea@microchip.com>
+References: <20221111054201.18528-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20221111054201.18528-1-zhuyinbo@loongson.cn>
+To: Yinbo Zhu <zhuyinbo@loongson.cn>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 10 Nov 2022 13:54:22 +0200 you wrote:
-> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+On Fri, 11 Nov 2022 13:42:00 +0800 you wrote:
+> The global utilities block controls PCIE device enabling, alternate
+> function selection for multiplexed signals, consistency of HDA, USB
+> and PCIE, configuration of memory controller, rtc controller, lio
+> controller, and clock control.
 > 
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-defconfig-6.2
+> This patch adds a driver to manage and access global utilities block
+> for LoongArch architecture Loongson-2 SoCs. Initially only reading SVR
+> and registering soc device are supported. Other guts accesses, such
+> as reading firmware configuration by default, should eventually be
+> added into this driver as well.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] AT91 defconfig updates for 6.2
-    https://git.kernel.org/soc/soc/c/8db131b29f9f
+  - [v7,1/2] soc: loongson: add GUTS driver for loongson-2 platforms
+    (no matching commit)
+  - [v7,2/2] dt-bindings: soc: add loongson-2 chipid
+    https://git.kernel.org/soc/soc/c/06ebd23a33ec
 
 You are awesome, thank you!
 -- 
