@@ -4,60 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8B4BC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD1E2C43219
 	for <soc@archiver.kernel.org>; Mon, 14 Nov 2022 13:00:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 93548C433D7; Mon, 14 Nov 2022 13:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BF9DC43145;
-	Mon, 14 Nov 2022 13:00:16 +0000 (UTC)
+	id 7F8DEC43140; Mon, 14 Nov 2022 13:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 696B9C433D7
+	for <soc@kernel.org>; Mon, 14 Nov 2022 13:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1668430816;
-	bh=BUwHVzceAa3sqPXs9M7AqXwQ8alchCFKgnxf6syrFgQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=oEwt/Kwza6DvvLnrVh9tPiizODUzmr9lF30ArwO285rsWWFZAbk9Mobtb+ZrapMVH
-	 tRA8Okm4hnTn7uk++JyPlm7rXnak3StnXogwnZvQ0LRcdmukWZQ/Y46i0M5UoR8bo6
-	 iLxgmZwsRQppX+q4dpCJdjnCu6V74j/FCf+yw9+f5WLKWdBLHmzml7K7ljCjzRxIsz
-	 JZ7ftbcofzuqlwhgsZSqFTrO6JG4BPhAV+5VzHf987HdExXtM1t6gDuI+tiFTemHxZ
-	 qqUvITltm9XxXNoSpcdp5C8ZsSJ2q05T4lPlYu0xaixTDbwWC/z8P7Ao9h4RaKrQJZ
-	 fbFqd3lPSAtZQ==
+	bh=AUeyJ5XnnIq9cy80Z/Ym+dgK6b7mYBrLaCv1DrKpVSM=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=XVi6Ik8ZtYryRf8e8ZbCk1TZfl790ARkFNBpDwQIS6FfkMroiQhxAZAVhv9F6asv8
+	 N+3+dA5PRWsM5qPpajiFmS97Gd5yBXx/PfafRClTdJVxxQDjaxrak7zdkuDGGXYHhn
+	 4jubDIOV8J9xjUkh+Me1blYamsBLDwZLLLaXHzEQlV+01XK6gpmOfTwRB4TZNcbANI
+	 ylvZ1oXYwpQeUJ+uXZNYKooNAFzz0OSR6FsSBAqwwEl8tX1B3QJldFXvNMdYS7az3e
+	 V/WbbmXraxV35mg+obibatl/GiTLTROhiK3b4WtO1JXGFkbWDecayQUNwK4fLf+2zT
+	 i0q4t6olK3bkg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5CB98E270C2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50B52C395FE;
 	Mon, 14 Nov 2022 13:00:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm ARM64 DTS fixes for 6.1
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166843081637.22003.12614863932706609579.git-patchwork-notify@kernel.org>
+ <166843081627.22003.16163050290703873808.git-patchwork-summary@kernel.org>
 Date: Mon, 14 Nov 2022 13:00:16 +0000
-References: <20221110040635.795921-1-andersson@kernel.org>
-In-Reply-To: <20221110040635.795921-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Wed,  9 Nov 2022 22:06:35 -0600 you wrote:
-> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-> 
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-fixes-for-6.1
-> 
-> [...]
+Series: Route RISC-V SoC drivers/firmware/DT via the soc tree
+  Submitter: Conor Dooley <conor@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=693800
+  Lore link: https://lore.kernel.org/r/20221109212219.1598355-1-conor@kernel.org
+    Patches: [v1,1/4] MAINTAINERS: add entries for misc. RISC-V SoC drivers and devicetrees
+             [v1,2/4] MAINTAINERS: generify the Microchip RISC-V entry name
+             [v1,3/4] MAINTAINERS: add an entry for StarFive devicetrees
+             [v1,4/4] MAINTAINERS: repair Microchip corei2c driver entry
 
-Here is the summary with links:
-  - [GIT,PULL] Qualcomm ARM64 DTS fixes for 6.1
-    https://git.kernel.org/soc/soc/c/67b745880792
+Patch: [GIT,PULL] Qualcomm ARM64 DTS fixes for 6.1
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=693889
+  Lore link: https://lore.kernel.org/r/20221110040635.795921-1-andersson@kernel.org
 
-You are awesome, thank you!
+Patch: [GIT,PULL] AT91 fixes for 6.1
+  Submitter: Claudiu Beznea <claudiu.beznea@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=694038
+  Lore link: https://lore.kernel.org/r/20221110115411.180876-1-claudiu.beznea@microchip.com
+
+
+Total patches: 6
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
