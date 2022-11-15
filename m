@@ -4,212 +4,159 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 102B0C4332F
-	for <soc@archiver.kernel.org>; Tue, 15 Nov 2022 16:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2230C43217
+	for <soc@archiver.kernel.org>; Tue, 15 Nov 2022 17:57:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CD78FC433D7; Tue, 15 Nov 2022 16:47:11 +0000 (UTC)
+	id 8DD17C433D7; Tue, 15 Nov 2022 17:57:16 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 22FDAC433C1;
-	Tue, 15 Nov 2022 16:47:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22FDAC433C1
+	by smtp.kernel.org (Postfix) with ESMTP id BC758C43145;
+	Tue, 15 Nov 2022 17:57:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BC758C43145
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E4FD13D5;
-	Tue, 15 Nov 2022 08:47:14 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3662F13D5;
+	Tue, 15 Nov 2022 09:57:19 -0800 (PST)
 Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB9273F587;
-	Tue, 15 Nov 2022 08:47:06 -0800 (PST)
-Date: Tue, 15 Nov 2022 16:47:04 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 023943F587;
+	Tue, 15 Nov 2022 09:57:10 -0800 (PST)
+Date: Tue, 15 Nov 2022 17:57:08 +0000
 From: Andre Przywara <andre.przywara@arm.com>
-To: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Rob
- Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman
+Cc: Vinod Koul <vkoul@kernel.org>, Jernej =?UTF-8?B?xaBrcmFiZWM=?=
+ <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland
+ <samuel@sholland.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman
  <gregkh@linuxfoundation.org>, Icenowy Zheng <uwu@icenowy.me>,
  soc@kernel.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
  linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 09/11] ARM: dts: suniv: add device tree for PopStick
- v1.1
-Message-ID: <20221115164704.1d9db428@donnerap.cambridge.arm.com>
-In-Reply-To: <4752971.GXAFRqVoOG@kista>
+Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
+ F1C100s SoC
+Message-ID: <20221115175708.3e69dcd8@donnerap.cambridge.arm.com>
+In-Reply-To: <e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
 References: <20221106154826.6687-1-andre.przywara@arm.com>
-	<20221106154826.6687-10-andre.przywara@arm.com>
-	<4752971.GXAFRqVoOG@kista>
+	<20221106154826.6687-4-andre.przywara@arm.com>
+	<Y2ypy0CM8rJGu2g4@matsya>
+	<4438485.LvFx2qVVIh@jernej-laptop>
+	<52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
+	<20221115104426.20728ba5@donnerap.cambridge.arm.com>
+	<4516dcfb-b928-d454-18a6-bd725f39cc24@linaro.org>
+	<20221115161917.328ec91a@donnerap.cambridge.arm.com>
+	<e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
 Organization: ARM
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 07 Nov 2022 18:35:09 +0100
-Jernej =C5=A0krabec <jernej.skrabec@gmail.com> wrote:
+On Tue, 15 Nov 2022 17:29:09 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Hi Jernej,
+Hi,
 
-> Dne nedelja, 06. november 2022 ob 16:48:24 CET je Andre Przywara napisal(=
-a):
-> > From: Icenowy Zheng <uwu@icenowy.me>
+> On 15/11/2022 17:19, Andre Przywara wrote:
+> > On Tue, 15 Nov 2022 16:00:54 +0100
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > >=20
-> > PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-> > wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-> > an on-board CH340 USB-UART converted connected to F1C200s's UART0.
+> > Hi,
+> >  =20
+> >> On 15/11/2022 11:44, Andre Przywara wrote: =20
+> >>> On Tue, 15 Nov 2022 11:03:24 +0100
+> >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>>
+> >>> Hi,
+> >>>    =20
+> >>>> On 15/11/2022 07:01, Jernej =C5=A0krabec wrote:   =20
+> >>>>> Dne =C4=8Detrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul n=
+apisal(a):     =20
+> >>>>>> On 06-11-22, 15:48, Andre Przywara wrote:     =20
+> >>>>>>> From: Icenowy Zheng <uwu@icenowy.me>
+> >>>>>>>
+> >>>>>>> The F1C100s SoC has one USB OTG port connected to a MUSB controll=
+er.
+> >>>>>>>
+> >>>>>>> Add support for its USB PHY.     =20
+> >>>>>>
+> >>>>>> This does not apply for me, please rebase and resend
+> >>>>>>
+> >>>>>> Also, consider splitting phy patches from this. I dont think there=
+ is
+> >>>>>> any dependency     =20
+> >>>>>
+> >>>>> DT patches in this series depend on functionality added here.
+> >>>>>      =20
+> >>>>
+> >>>> DTS always goes separately from driver changes because it is a hardw=
+are
+> >>>> description. Depending on driver means you have potential ABI break,=
+ so
+> >>>> it is already a warning sign.   =20
+> >>>
+> >>> We understand that ;-)
+> >>> What Jernej meant was that the DTS patches at the end depend on patch
+> >>> 01/10, which adds to the PHY binding doc. I am not sure if Vinod's
+> >>> suggestion was about splitting off 01/10, 03/10, and 10/10, or just t=
+he
+> >>> two latter which touch the driver.
+> >>>
+> >>> I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next=
+, and
+> >>> send that to Vinod.
+> >>> Then I would keep 01/10 in a respin of this series here, to satisfy t=
+he
+> >>> dependency of the later DTS patches, and Vinod can pick that one patc=
+h from
+> >>> there?   =20
+> >>
+> >> There is no hard dependency of DTS on bindings. You can split these (a=
+nd
+> >> some maintainers prefer that way) and in DTS patches just provide the
+> >> link to the bindings, saying it is in progress. =20
 > >=20
-> > Add a device tree for it. As F1C200s is just F1C100s with a different
-> > DRAM chip co-packaged, directly use F1C100s DTSI here.
-> >=20
-> > This commit covers the v1.1 version of this board, which is now shipped.
-> > v1.0 is some internal sample that have not been shipped at all.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> > ---
-> >  arch/arm/boot/dts/Makefile                    |  3 +-
-> >  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 99 +++++++++++++++++++
-> >  2 files changed, 101 insertions(+), 1 deletion(-)
-> >  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> >=20
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index 6aa7dc4db2fc..0249c07bd8a6 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) +=3D \
-> >  	sun9i-a80-optimus.dtb \
-> >  	sun9i-a80-cubieboard4.dtb
-> >  dtb-$(CONFIG_MACH_SUNIV) +=3D \
-> > -	suniv-f1c100s-licheepi-nano.dtb
-> > +	suniv-f1c100s-licheepi-nano.dtb \
-> > +	suniv-f1c200s-popstick-v1.1.dtb
-> >  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) +=3D \
-> >  	tegra20-acer-a500-picasso.dtb \
-> >  	tegra20-asus-tf101.dtb \
-> > diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> > b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts new file mode 100644
-> > index 000000000000..7d69b5fcb905
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> > @@ -0,0 +1,99 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > +/*
-> > + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +#include "suniv-f1c100s.dtsi"
-> > +
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/leds/common.h>
-> > +
-> > +/ {
-> > +	model =3D "Popcorn Computer PopStick v1.1";
-> > +	compatible =3D "sourceparts,popstick-v1.1", "sourceparts,popstick",
-> > +		     "allwinner,suniv-f1c200s", "allwinner,suniv- =20
-> f1c100s";
-> > +
-> > +	aliases {
-> > +		serial0 =3D &uart0;
-> > +	};
-> > +
-> > +	chosen {
-> > +		stdout-path =3D "serial0:115200n8";
-> > +	};
-> > +
-> > +	leds {
-> > +		compatible =3D "gpio-leds";
-> > +
-> > +		led {
-> > +			function =3D LED_FUNCTION_STATUS;
-> > +			color =3D <LED_COLOR_ID_GREEN>;
-> > +			gpios =3D <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6  =20
-> */
-> > +			linux,default-trigger =3D "heartbeat";
-> > +		};
-> > +	};
-> > +
-> > +	reg_vcc3v3: regulator-3v3 {
-> > +		compatible =3D "regulator-fixed";
-> > +		regulator-name =3D "vcc3v3";
-> > +		regulator-min-microvolt =3D <3300000>;
-> > +		regulator-max-microvolt =3D <3300000>;
-> > +	};
-> > +};
-> > +
-> > +&mmc0 {
-> > +	cd-gpios =3D <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-> > +	bus-width =3D <4>;
-> > +	disable-wp;
-> > +	vmmc-supply =3D <&reg_vcc3v3>;
-> > +	status =3D "okay";
-> > +};
-> > +
-> > +&otg_sram {
-> > +	status =3D "okay";
-> > +};
-> > +
-> > +&spi0 {
-> > +	pinctrl-names =3D "default";
-> > +	pinctrl-0 =3D <&spi0_pc_pins>;
-> > +	status =3D "okay";
-> > +
-> > +	flash@0 {
-> > +		compatible =3D "spi-nand";
-> > +		reg =3D <0>;
-> > +		spi-max-frequency =3D <40000000>;
-> > +		#address-cells =3D <1>;
-> > +		#size-cells =3D <1>;
-> > +
-> > +		partitions { =20
+> > But that breaks "make dtbs_check", doesn't it? =20
 >=20
-> "make dtbs_check" is not happy with cells and partitions. Do we really ne=
-ed=20
-> them? If yes, then binding needs to be updated beforehand.
+> The check will be broken anyway because binding goes via driver
+> subsystem and DTS goes via arm-soc.
+>=20
+> If both make to the linux-next and next release, then it's not a problem.
+>=20
+> >=20
+> > I would think that the DT bits - bindings first, then DTS files using i=
+t -
+> > should be bundled. This is how I imagine the future(TM), where DTs and
+> > bindings live outside the kernel repo. =20
+>=20
+> Yes, that's preferred. Therefore in DTS patch you say the binding is not
+> merged and it is here - lore link.
+>=20
+> >  =20
+> >> The bindings should be however kept with driver changes as it goes the
+> >> same way. =20
+> >=20
+> > I understand that the bindings describe the contract the driver acts on,
+> > but going forward I think driver changes would need to come later, then
+> > (since they will live in a separate repo at some day)?
+> > Maybe pointing to the binding changes in progress? =20
+>=20
+> Later as one commit later - yes. Later as other option - not really, why?
+>=20
+> > So with a separate repo we would actually need to upstream just the
+> > bindings first, then could push driver changes and .dts files
+> > independently? =20
+>=20
+> There is no separate repo, so we talk about Linux case now.
+>=20
+> > And for now it looks like we are stuck with putting everything in one
+> > series, to make both checkpatch and dtbs_check happy. =20
+>=20
+> You should rather make maintainers happy :) and here one asked to split.
 
-Right, my dt-validate run didn't initially complain, but does now, after
-updating dt-schema.git.
-So yes, I will just drop the partitions, for now. The partition scheme
-seems to be legit, as described in mtd/fixed-partitions.yaml, but it
-apparently just needs to be somehow included in spi-nand.yaml. Will do
-that later, then update this .dts.
+Well, he asked to split off the USB PHY patches from the rest of the
+series, since there is some conflict with the recently merged H616 USB PHY
+patches. It is still unclear to me whether this split includes the binding
+patch, or just the two patches touching the actual code.
 
 Cheers,
-Andre
-
->=20
-> > +			compatible =3D "fixed-partitions";
-> > +			#address-cells =3D <1>;
-> > +			#size-cells =3D <1>;
-> > +
-> > +			partition@0 {
-> > +				label =3D "u-boot-with-spl";
-> > +				reg =3D <0x0 0x100000>;
-> > +			};
-> > +
-> > +			ubi@100000 {
-> > +				label =3D "ubi";
-> > +				reg =3D <0x100000 0x7f00000>;
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&uart0 {
-> > +	pinctrl-names =3D "default";
-> > +	pinctrl-0 =3D <&uart0_pe_pins>;
-> > +	status =3D "okay";
-> > +};
-> > +
-> > +&usb_otg {
-> > +	dr_mode =3D "peripheral";
-> > +	status =3D "okay";
-> > +};
-> > +
-> > +&usbphy {
-> > +	status =3D "okay";
-> > +};
-> > --
-> > 2.35.5 =20
->=20
->=20
-
+Andre.
