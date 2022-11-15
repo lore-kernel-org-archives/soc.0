@@ -1,91 +1,78 @@
-Return-Path: <SRS0=Hciq=3P=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=veTA=3P=bootlin.com=kory.maincent@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEACCC4332F
-	for <soc@archiver.kernel.org>; Tue, 15 Nov 2022 10:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 957E3C43217
+	for <soc@archiver.kernel.org>; Tue, 15 Nov 2022 13:58:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BEE99C433B5; Tue, 15 Nov 2022 10:44:33 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 7F768C433D6;
-	Tue, 15 Nov 2022 10:44:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F768C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1232B13D5;
-	Tue, 15 Nov 2022 02:44:37 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 061473F73B;
-	Tue, 15 Nov 2022 02:44:28 -0800 (PST)
-Date: Tue, 15 Nov 2022 10:44:26 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Vinod Koul
- <vkoul@kernel.org>
+	id 5748BC43148; Tue, 15 Nov 2022 13:58:29 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C9FDCC4314F;
+	Tue, 15 Nov 2022 13:58:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C9FDCC4314F
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: (Authenticated sender: kory.maincent@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id 6FB381C001E;
+	Tue, 15 Nov 2022 13:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1668520699;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GbCsgekaHtIeV8Zu1tUsRWhr+2lncTq96b31p1AFJtw=;
+	b=H3hzWagYKQhAzCQ1+QMx4o4N6Sv+Ycu5jHgDd4f3KT2AdKbFFxlZMTSXQdKluGJs+uD5hu
+	79hn47FY7CuytoE30etuEECf6tg5kHSgMbZLHtWJIbJp6WO3Do1odm7luV+Vyn8277Rzw4
+	HmN3q6J1XWFgmoAXi1EVkdfOliXBJAU/YO5uPSTtl+ktuqVrTvb1utNgBUG/Hp7RH2Z9GP
+	3KxLHBhBaGTmokq8zpQ4cwNmi7VDK/cc2Vmm+9SmnMU1p8pkruuyiTr8ybVP1a+epn5xLd
+	sXY5XqeWf824+JAYcWk1m8U0vT7sBdGF53Gj6mDTmL0udgMEWPMws0kILrOoPg==
+From: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>, Chen-Yu Tsai
- <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Icenowy Zheng <uwu@icenowy.me>,
- soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
- F1C100s SoC
-Message-ID: <20221115104426.20728ba5@donnerap.cambridge.arm.com>
-In-Reply-To: <52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
-References: <20221106154826.6687-1-andre.przywara@arm.com>
-	<20221106154826.6687-4-andre.przywara@arm.com>
-	<Y2ypy0CM8rJGu2g4@matsya>
-	<4438485.LvFx2qVVIh@jernej-laptop>
-	<52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	thomas.petazzoni@bootlin.com,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	soc@kernel.org
+Subject: [PATCH v3 0/2] Support new features to the SPEAr600
+Date: Tue, 15 Nov 2022 14:58:11 +0100
+Message-Id: <20221115135814.214388-1-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Nov 2022 11:03:24 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+From: Kory Maincent <kory.maincent@bootlin.com>
 
-Hi,
+This patches series adds two features of the SPEAr600 SOC:
 
-> On 15/11/2022 07:01, Jernej =C5=A0krabec wrote:
-> > Dne =C4=8Detrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul napis=
-al(a): =20
-> >> On 06-11-22, 15:48, Andre Przywara wrote: =20
-> >>> From: Icenowy Zheng <uwu@icenowy.me>
-> >>>
-> >>> The F1C100s SoC has one USB OTG port connected to a MUSB controller.
-> >>>
-> >>> Add support for its USB PHY. =20
-> >>
-> >> This does not apply for me, please rebase and resend
-> >>
-> >> Also, consider splitting phy patches from this. I dont think there is
-> >> any dependency =20
-> >=20
-> > DT patches in this series depend on functionality added here.
-> >  =20
->=20
-> DTS always goes separately from driver changes because it is a hardware
-> description. Depending on driver means you have potential ABI break, so
-> it is already a warning sign.
+- Enable the display controller
 
-We understand that ;-)
-What Jernej meant was that the DTS patches at the end depend on patch
-01/10, which adds to the PHY binding doc. I am not sure if Vinod's
-suggestion was about splitting off 01/10, 03/10, and 10/10, or just the
-two latter which touch the driver.
+- Enable the SPI buses using the SSP controller
 
-I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next, and
-send that to Vinod.
-Then I would keep 01/10 in a respin of this series here, to satisfy the
-dependency of the later DTS patches, and Vinod can pick that one patch from
-there?
+Changes in v2:
+- Keep the I2C_CONFIG in the spear6xx_defconfig while enabling DRM.
+- Send cover letter which was not sent in v1 due to a mistake in my git
+  mail config.
 
-Cheers,
-Andre
+The arm patches have been merged thanks to Arnd. Could you deal with the
+clock patches to merged them through the clock tree?
+
+Kory Maincent (2):
+  clk: spear: Fix CLCD clock definition on SPEAr600
+  clk: spear: Fix SSP clock definition on SPEAr600
+
+ drivers/clk/spear/spear6xx_clock.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+
