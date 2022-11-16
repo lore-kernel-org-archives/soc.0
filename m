@@ -1,162 +1,78 @@
-Return-Path: <SRS0=Hciq=3P=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=B0BC=3Q=huawei.com=xuwei5@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2230C43217
-	for <soc@archiver.kernel.org>; Tue, 15 Nov 2022 17:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF362C4332F
+	for <soc@archiver.kernel.org>; Wed, 16 Nov 2022 02:32:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8DD17C433D7; Tue, 15 Nov 2022 17:57:16 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id BC758C43145;
-	Tue, 15 Nov 2022 17:57:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BC758C43145
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3662F13D5;
-	Tue, 15 Nov 2022 09:57:19 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 023943F587;
-	Tue, 15 Nov 2022 09:57:10 -0800 (PST)
-Date: Tue, 15 Nov 2022 17:57:08 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Jernej =?UTF-8?B?xaBrcmFiZWM=?=
- <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland
- <samuel@sholland.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Icenowy Zheng <uwu@icenowy.me>,
- soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 03/11] phy: sun4i-usb: add support for the USB PHY on
- F1C100s SoC
-Message-ID: <20221115175708.3e69dcd8@donnerap.cambridge.arm.com>
-In-Reply-To: <e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
-References: <20221106154826.6687-1-andre.przywara@arm.com>
-	<20221106154826.6687-4-andre.przywara@arm.com>
-	<Y2ypy0CM8rJGu2g4@matsya>
-	<4438485.LvFx2qVVIh@jernej-laptop>
-	<52920a00-8e29-f7f4-0cbd-ceb638ded970@linaro.org>
-	<20221115104426.20728ba5@donnerap.cambridge.arm.com>
-	<4516dcfb-b928-d454-18a6-bd725f39cc24@linaro.org>
-	<20221115161917.328ec91a@donnerap.cambridge.arm.com>
-	<e861e62f-4148-b867-0155-e71b1cee0b81@linaro.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	id 97BF4C433D7; Wed, 16 Nov 2022 02:32:18 +0000 (UTC)
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8D194C433C1;
+	Wed, 16 Nov 2022 02:32:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8D194C433C1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.54])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NBn6m3X2MzJnlf;
+	Wed, 16 Nov 2022 10:29:04 +0800 (CST)
+Received: from [10.67.103.39] (10.67.103.39) by kwepemi500011.china.huawei.com
+ (7.221.188.124) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
+ 2022 10:32:12 +0800
+Message-ID: <63744BAB.5020307@hisilicon.com>
+Date: Wed, 16 Nov 2022 10:32:11 +0800
+From: Wei Xu <xuwei5@hisilicon.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+List-Id: <soc.lore.kernel.org>
+To: <soc@kernel.org>, <arm@kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+	<xuwei5@hisilicon.com>, Palmer Dabbelt <palmer@rivosinc.com>,
+	<zhangyi.ac@huawei.com>, <tangkunshan@huawei.com>, <huangdaode@huawei.com>,
+	<Jonathan.Cameron@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>
+Subject: [GIT PULL] HiSilicon maintainers fixes for v6.1
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.39]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500011.china.huawei.com (7.221.188.124)
+X-CFilter-Loop: Reflected
 
-On Tue, 15 Nov 2022 17:29:09 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Hi ARM-SoC team,
 
-Hi,
+Please consider to pull the following changes.
+Thanks!
 
-> On 15/11/2022 17:19, Andre Przywara wrote:
-> > On Tue, 15 Nov 2022 16:00:54 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >=20
-> > Hi,
-> >  =20
-> >> On 15/11/2022 11:44, Andre Przywara wrote: =20
-> >>> On Tue, 15 Nov 2022 11:03:24 +0100
-> >>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >>>
-> >>> Hi,
-> >>>    =20
-> >>>> On 15/11/2022 07:01, Jernej =C5=A0krabec wrote:   =20
-> >>>>> Dne =C4=8Detrtek, 10. november 2022 ob 08:35:39 CET je Vinod Koul n=
-apisal(a):     =20
-> >>>>>> On 06-11-22, 15:48, Andre Przywara wrote:     =20
-> >>>>>>> From: Icenowy Zheng <uwu@icenowy.me>
-> >>>>>>>
-> >>>>>>> The F1C100s SoC has one USB OTG port connected to a MUSB controll=
-er.
-> >>>>>>>
-> >>>>>>> Add support for its USB PHY.     =20
-> >>>>>>
-> >>>>>> This does not apply for me, please rebase and resend
-> >>>>>>
-> >>>>>> Also, consider splitting phy patches from this. I dont think there=
- is
-> >>>>>> any dependency     =20
-> >>>>>
-> >>>>> DT patches in this series depend on functionality added here.
-> >>>>>      =20
-> >>>>
-> >>>> DTS always goes separately from driver changes because it is a hardw=
-are
-> >>>> description. Depending on driver means you have potential ABI break,=
- so
-> >>>> it is already a warning sign.   =20
-> >>>
-> >>> We understand that ;-)
-> >>> What Jernej meant was that the DTS patches at the end depend on patch
-> >>> 01/10, which adds to the PHY binding doc. I am not sure if Vinod's
-> >>> suggestion was about splitting off 01/10, 03/10, and 10/10, or just t=
-he
-> >>> two latter which touch the driver.
-> >>>
-> >>> I can split off 03/10 and 10/10, rebased on top of linux-phy.git/next=
-, and
-> >>> send that to Vinod.
-> >>> Then I would keep 01/10 in a respin of this series here, to satisfy t=
-he
-> >>> dependency of the later DTS patches, and Vinod can pick that one patc=
-h from
-> >>> there?   =20
-> >>
-> >> There is no hard dependency of DTS on bindings. You can split these (a=
-nd
-> >> some maintainers prefer that way) and in DTS patches just provide the
-> >> link to the bindings, saying it is in progress. =20
-> >=20
-> > But that breaks "make dtbs_check", doesn't it? =20
->=20
-> The check will be broken anyway because binding goes via driver
-> subsystem and DTS goes via arm-soc.
->=20
-> If both make to the linux-next and next release, then it's not a problem.
->=20
-> >=20
-> > I would think that the DT bits - bindings first, then DTS files using i=
-t -
-> > should be bundled. This is how I imagine the future(TM), where DTs and
-> > bindings live outside the kernel repo. =20
->=20
-> Yes, that's preferred. Therefore in DTS patch you say the binding is not
-> merged and it is here - lore link.
->=20
-> >  =20
-> >> The bindings should be however kept with driver changes as it goes the
-> >> same way. =20
-> >=20
-> > I understand that the bindings describe the contract the driver acts on,
-> > but going forward I think driver changes would need to come later, then
-> > (since they will live in a separate repo at some day)?
-> > Maybe pointing to the binding changes in progress? =20
->=20
-> Later as one commit later - yes. Later as other option - not really, why?
->=20
-> > So with a separate repo we would actually need to upstream just the
-> > bindings first, then could push driver changes and .dts files
-> > independently? =20
->=20
-> There is no separate repo, so we talk about Linux case now.
->=20
-> > And for now it looks like we are stuck with putting everything in one
-> > series, to make both checkpatch and dtbs_check happy. =20
->=20
-> You should rather make maintainers happy :) and here one asked to split.
+Best Regards,
+Wei
 
-Well, he asked to split off the USB PHY patches from the rest of the
-series, since there is some conflict with the recently merged H616 USB PHY
-patches. It is still unclear to me whether this split includes the binding
-patch, or just the two patches touching the actual code.
+---
 
-Cheers,
-Andre.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/hisilicon/linux-hisi.git tags/hisi-maintainer-fix
+
+for you to fetch changes up to fc2292bd01a25279bf3e29c99e60bfe52d900a91:
+
+  MAINTAINERS: git://github.com -> https://github.com for HiSilicon (2022-11-15 03:04:45 +0000)
+
+----------------------------------------------------------------
+MAINTAINERS file updates for HiSilicon sections
+
+- Use https instead of git for the git trees listed
+
+----------------------------------------------------------------
+Palmer Dabbelt (1):
+      MAINTAINERS: git://github.com -> https://github.com for HiSilicon
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
