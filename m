@@ -1,82 +1,104 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=a1DX=3Q=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E26CC4332F
-	for <soc@archiver.kernel.org>; Wed, 16 Nov 2022 09:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41352C4332F
+	for <soc@archiver.kernel.org>; Wed, 16 Nov 2022 09:30:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 49FD4C43141; Wed, 16 Nov 2022 09:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F85C43470;
-	Wed, 16 Nov 2022 09:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668589457;
-	bh=EMXzPlpQgLLEiUyX+tKzQhN61+m4VaoI4BKG2+qxn+s=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=WN5e1KLe9GjWCuMKWuTDsyw0eLC2aXIJtYvT/fWuS8SH8GNWZD7D8803QMLfyye5n
-	 MXeflyi+L90Sz609tIZ9+f8YUkpQ/CM8iN8H0tl/lQq2nDlcMPfcUVp3NbXiTlASTx
-	 En1hY4d2EPH99UrI00NvmWeCyvWjcSeIq/7JertiKb/C4TqzFje8igtZ7c+qlnXtjZ
-	 ccATjh0UB7PVxazMibbLazwWj/0oyR7wK8gaW6Wyq7cgDXoJAjMbH++O2unbJ9BvzM
-	 UZpHdY81/syJP05L0KV5Qlxa3xGDumgczSZYE8e0AwlicHU8+DdiCtfPNo6ZfVGZ+7
-	 rnf18b2gji7qA==
-Date: Wed, 16 Nov 2022 17:04:05 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	id 061B4C433C1; Wed, 16 Nov 2022 09:30:16 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 1B24FC433D6
+	for <soc@kernel.org>; Wed, 16 Nov 2022 09:30:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1B24FC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id b3so28580345lfv.2
+        for <soc@kernel.org>; Wed, 16 Nov 2022 01:30:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p3e80kgnaxg4MXziHxJJsTgEBFyzGcylgIj1o/AgplM=;
+        b=CGlYruraG4OiCZHNYNSlvKAT/Q8/ez0SB+Ky/Au694M3zNr7RgytxAa8tP+AEXNy39
+         e2LSg1tabY2x0k84Ag/lwt7M+B86zhIA1d+FmdnHHyaw5Urx5YU+VohX+wObEEbFI2Nz
+         spGxVLaeyX+TcRVVXZy84R7rf+Cx7KNoxyk8AN4Mf6p0L3kQ4qQEL/XwYhjXaUWq5zPX
+         eO/AEn1HMy7Jxl4tdjqCB6gKFuRYufOOTSxAPpKhyy2eDPfbremyIYfC8s7oOwZ2iJTF
+         4gtfAqRJ0NkjgtlnOpuSkUxCu03IfJMClgqgnHFe+0zLgD8bwDM0MKyMwCv5983/EDe7
+         UzpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p3e80kgnaxg4MXziHxJJsTgEBFyzGcylgIj1o/AgplM=;
+        b=ODh1VPFsKcuOHfzh3zzZUtaCxsH7CkdoXKvenpCm+uQLUFYhuNnvLrqbjAiPftM4cM
+         KbAKfDn0t3BAUe5AR23a+kgXRp3RUiMQvIUQ/xjYU+cmLVkLdmMUFlEz3euSfJjduOaI
+         367qQmKgPV/g889VrhXM7WdsoIKu1DNxaN9ZpLoJZZq2aUBduZfJC0TJBeo4Iq/hFy+b
+         +ioqyLv9JKP/xc+opGHEPCORH+Hwsqb3ygl7PyId5KR50VY1dVefrCQgFIlAqrR0j/VP
+         PX5RejeF4+Msp+IiTVFzirUgiqFsuSqPimG9swX7XtdRuWEszgfLFjBQ059wWHbMriFu
+         3f2g==
+X-Gm-Message-State: ANoB5pnwjq6+e1BritsJG+6dp1Hj2o7iHFGW1qB8JVILtYPjni2FCeAe
+	qw6ulVxb7TxDA2lF6wcLR8s2BGbqX5cvkrcD
+X-Google-Smtp-Source: AA0mqf6iHX/VzyUoSVJzK6NdVQwfR8ipXYy1UjpF4TQDlP45yV4k9FYmvZ7FZ5i/aF1fueyvD1nvbA==
+X-Received: by 2002:a05:6512:261f:b0:4b4:dd9:1880 with SMTP id bt31-20020a056512261f00b004b40dd91880mr6425311lfb.289.1668591012202;
+        Wed, 16 Nov 2022 01:30:12 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s18-20020a197712000000b004b18830af7asm2517325lfc.54.2022.11.16.01.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 01:30:11 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.1, 2nd round
-Message-ID: <20221116090402.GA1274@T480>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Aakarsh Jain <aakarsh.jain@samsung.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Subject: [GIT PULL 1/2 - PATCH] ARM: dts: exynos: Add new SoC specific compatible string for Exynos3250 SoC
+Date: Wed, 16 Nov 2022 10:30:09 +0100
+Message-Id: <20221116093010.18515-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit d5c921a53c80dfa942f6dff36253db5a50775a5f:
+From: Aakarsh Jain <aakarsh.jain@samsung.com>
 
-  arm64: dts: ls208xa: specify clock frequencies for the MDIO controllers (2022-10-29 20:31:24 +0800)
+Exynos3250 and Exynos5420 are using same compatible string for MFC codec
+device but they have different clock hierarchy and complexity.  Add new
+compatible string followed by mfc-v7 fallback for Exynos3250 SoC.
 
-are available in the Git repository at:
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
+Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+Link: https://lore.kernel.org/r/20221114115024.69591-4-aakarsh.jain@samsung.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm/boot/dts/exynos3250.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1-2
+diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
+index 326b9e0ed8d3..a2d6ee7fff08 100644
+--- a/arch/arm/boot/dts/exynos3250.dtsi
++++ b/arch/arm/boot/dts/exynos3250.dtsi
+@@ -485,7 +485,7 @@ gpu: gpu@13000000 {
+ 		};
+ 
+ 		mfc: codec@13400000 {
+-			compatible = "samsung,mfc-v7";
++			compatible = "samsung,exynos3250-mfc", "samsung,mfc-v7";
+ 			reg = <0x13400000 0x10000>;
+ 			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
+ 			clock-names = "mfc", "sclk_mfc";
+-- 
+2.34.1
 
-for you to fetch changes up to 836fb30949d9edf91d7de696a884ceeae7e426d2:
-
-  soc: imx8m: Enable OCOTP clock before reading the register (2022-11-14 15:52:53 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 6.1, 2nd round:
-
-- Switch to usb-role-switch for fixing USB device mode on
-  tqma8mqml-mba8mx board, so that Dual Role is fully functional.
-- A series from Marek Vasut to fix dt-schema warning caused by NAND
-  controller size-cells.
-- Fix file permission of imx93-pinfunc header.
-- Enable OCOTP clock in soc-imx8m driver to fix a kexec kernel hang
-  issue.
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: imx8mm-tqma8mqml-mba8mx: Fix USB DR
-
-Marek Vasut (3):
-      ARM: dts: imx7: Fix NAND controller size-cells
-      arm64: dts: imx8mm: Fix NAND controller size-cells
-      arm64: dts: imx8mn: Fix NAND controller size-cells
-
-Peng Fan (1):
-      arm64: dts: imx93-pinfunc: drop execution permission
-
-Xiaolei Wang (1):
-      soc: imx8m: Enable OCOTP clock before reading the register
-
- arch/arm/boot/dts/imx7s.dtsi                       |  4 +--
- .../boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts | 32 ++++++++++++++++++----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  4 +--
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  2 +-
- arch/arm64/boot/dts/freescale/imx93-pinfunc.h      |  0
- drivers/soc/imx/soc-imx8m.c                        | 11 ++++++++
- 6 files changed, 42 insertions(+), 11 deletions(-)
- mode change 100755 => 100644 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
