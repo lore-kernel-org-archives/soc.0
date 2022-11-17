@@ -1,182 +1,131 @@
-Return-Path: <SRS0=KQo7=3R=foss.st.com=prvs=73200a0741=alexandre.torgue@kernel.org>
+Return-Path: <SRS0=yGSj=3R=arm.com=andre.przywara@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D26BDC433FE
-	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 10:37:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66808C4332F
+	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 10:37:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 92F4CC433B5; Thu, 17 Nov 2022 10:37:00 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24357C433D6;
-	Thu, 17 Nov 2022 10:36:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24357C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH9NLtn012513;
-	Thu, 17 Nov 2022 11:36:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=selector1;
- bh=BoxFCTI8/iA9BmlwGAGKuBF2S5LIJUnk0VxZ2uhl7fo=;
- b=UC7VaRNNxG4rz1rqFdIikKqh3kyZqZh1wFhF4eCdZ+NJk2ctPB3qRzcXv3peNPpMTjxw
- HA/jNMkP/c37WkgtmHzbyUhAbYB96Di5VNKUtEy0keiWHlQB/J/EBChsfBZ2JJ5oF9sI
- GSLRp7I6Fdw9ekkYAdg9E/cCi3/24Y9qHAXhaMOw0JBc9nGW6OCEhJWW+Al2R5O96ubn
- 6pIAVLTsH/1oumqRhicymXM75ePrecHyd6/mXtdMEoPHLqn/NqyG/DdA0Qn+KBVujLRo
- g56R2of5eMzASEiEYH50TNud616jVwGBspl1AH4ZRNEsWxqDo7HDQIR1XEjUv2e+e1Ye PQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kv9ydp7yp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Nov 2022 11:36:53 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B83CC10002A;
-	Thu, 17 Nov 2022 11:36:47 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 85CF221B528;
-	Thu, 17 Nov 2022 11:36:47 +0100 (CET)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 17 Nov
- 2022 11:36:46 +0100
-Message-ID: <3235e5be-d89f-f76c-5e25-5d1210feb857@foss.st.com>
-Date: Thu, 17 Nov 2022 11:36:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
+	id 27907C433B5; Thu, 17 Nov 2022 10:37:05 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 0EAA8C433D6;
+	Thu, 17 Nov 2022 10:37:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0EAA8C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB436D6E;
+	Thu, 17 Nov 2022 02:37:08 -0800 (PST)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94EB63F73B;
+	Thu, 17 Nov 2022 02:37:00 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Chen-Yu Tsai <wens@csie.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Bin Liu <b-liu@ti.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Kevin
- Hilman <khilman@baylibre.com>, arm-soc <arm@kernel.org>,
-        SoC Team
-	<soc@kernel.org>
-CC: Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Subject: [GIT PULL] STM32 DT changes for v6.2 #1
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
+Cc: Icenowy Zheng <uwu@icenowy.me>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org,
+	soc@kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev
+Subject: [PATCH v4 00/11] ARM: suniv: USB and two new boards support
+Date: Thu, 17 Nov 2022 10:36:45 +0000
+Message-Id: <20221117103656.1085840-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+This is an update and rebase of the former v3 series.
+It now cleanly applies and builds on top of linux-sunxi/sunxi/for-next,
+this is also the tree those patches should go through.
+To make dtbs_check pass, we need three more binding patches, the LRADC
+and I2C ones are in linux-next, the PHY binding [1] should end up there
+hopefully soon.
+To get a working image, one needs linux-next, plus the PHY support patch
+[2]. Sorry for the mess, this is due to the PHY patches going through a
+different tree, and they depend on the H616 changes only available there.
+If there are any questions or advice how to solve this better, please
+approach me via email or IRC.
+I put a tree with all the requirements on top here:
+https://github.com/apritzel/linux/commits/f1c100s-usb-v4
 
-Hi ARM SoC maintainers,
+Code-wise there were only smaller changes, see the changelog below.
+I put my Lctech Pi DT series on top, since it has the same USB
+dependencies as the Popstick DT.
 
-Please consider this first round of STM32 DT updates for v6.2.
+[1] https://lore.kernel.org/linux-arm-kernel/20221116151603.819533-2-andre.przywara@arm.com/
+[2] https://lore.kernel.org/linux-arm-kernel/20221116151603.819533-3-andre.przywara@arm.com/
 
-Thanks
-Alex
+================
+This patchset introduces support for F1C100s' USB, and the SourceParts
+PopStick and Lctech Pi boards.
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+The DT binding and driver support for SUNIV USB MUSB device are added, in
+addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
+for the SourceParts PopStick v1.1 and Lctech Pi boards.
 
-   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Changelog v3 ... v4:
+- Dropped the PHY patches, they go via a different tree and need a
+  different base
+- rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
+- musb DT binding: use enum
+- musb cleanup: use musb_hdrc_config config pointer directly
+- musb cleanup: use const where possible
+- drop partitions from Popstick DTS file
+- clarify Popstick has a USB type-A *plug*
+- add tags
 
-are available in the Git repository at:
+Changelog v2 ... v3:
+- remove redundant "Device Tree Bindings" suffix in DT binding doc title
+- add BSD license to binding doc file (as per checkpatch)
+- fix some commit message title prefixes
+- use proper plural spelling for usb0_id_det-gpios
+- popstick.dts: Reorder otg_sram node reference alphabetically
+- popstick.dts: Add regulator- prefix to 3.3V regulator node name
+- popstick.dts: Fix status, compatible and reg property order
+- popstick.dts: Drop unneeded mmc0 and spi0 aliases
+- add patch to clean up sunxi MUSB driver
+- add Acks and Reviewed-by's
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git 
-tags/stm32-dt-for-v6.2-1
+Changelog v1 ... v2:
+- USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
+- Add Popstick binding and .dts patches
 
-for you to fetch changes up to d8515330a63eda80ac7ad8423de535b747bb2c46:
+Andre Przywara (4):
+  usb: musb: sunxi: Introduce config struct
+  dt-bindings: vendor-prefixes: add Lctech name
+  dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
+  ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
 
-   ARM: dts: stm32: Rename mdio0 to mdio on DHCOR Testbench board 
-(2022-11-17 11:16:05 +0100)
+Icenowy Zheng (7):
+  dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
+  usb: musb: sunxi: add support for the F1C100s MUSB controller
+  ARM: dts: suniv: add USB-related device nodes
+  ARM: dts: suniv: licheepi-nano: enable USB
+  dt-bindings: vendor-prefixes: add Source Parts
+  dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
+  ARM: dts: suniv: add device tree for PopStick v1.1
 
-----------------------------------------------------------------
-STM32 DT for v6.2, round 1
+ .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
+ .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
+ .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
+ arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
+ .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
+ drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
+ 9 files changed, 301 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
 
-Highlights:
-----------
+-- 
+2.25.1
 
-- MPU:
-   - ST boards:
-     - Add MCP23017 IO expander support on stm32mp135f-dk board.
-     - Add stm32g0 support for USB typeC on stm32mp135f-dk
-     - Add USB (EHCI / OTG) on stm32mp135f-dk
-     - Add ADC support on stm32mp135f-dk
-     - Add USB2514B onboard hub on stm32mp157c-ev1
-
-   - DH:
-     - Fix severals Yaml DT validation issues
-
-----------------------------------------------------------------
-Alexandre Torgue (1):
-       ARM: dts: stm32: add fake interrupt propoerty for ASync notif - 
-TEMP/TO REMOVE
-
-Amelie Delaunay (8):
-       ARM: dts: stm32: update vbus-supply of usbphyc_port0 on 
-stm32mp157c-ev1
-       ARM: dts: stm32: add USBPHYC and dual USB HS PHY support on 
-stm32mp131
-       ARM: dts: stm32: add UBSH EHCI and OHCI support on stm32mp131
-       ARM: dts: stm32: add USB OTG HS support on stm32mp131
-       ARM: dts: stm32: enable USB HS phys on stm32mp135f-dk
-       ARM: dts: stm32: enable USB Host EHCI on stm32mp135f-dk
-       ARM: dts: stm32: add mcp23017 pinctrl entry for stm32mp13
-       ARM: dts: stm32: add mcp23017 IO expander on I2C1 on stm32mp135f-dk
-
-Fabrice Gasnier (5):
-       ARM: dts: stm32: add support for USB2514B onboard hub on 
-stm32mp157c-ev1
-       ARM: dts: stm32: add PWR fixed regulators on stm32mp131
-       ARM: dts: stm32: add fixed regulators to support usb on 
-stm32mp135f-dk
-       ARM: dts: stm32: add pins for stm32g0 typec controller on stm32mp13
-       ARM: dts: stm32: enable USB OTG in dual role mode on stm32mp135f-dk
-
-Marek Vasut (9):
-       ARM: dts: stm32: Drop stm32mp15xc.dtsi from Avenger96
-       ARM: dts: stm32: Rename mdio0 to mdio
-       ARM: dts: stm32: Drop linux,default-trigger = "none" from AV96
-       ARM: dts: stm32: Replace SAI format with dai-format DT property
-       dt-bindings: arm: stm32: Add compatible string for DH electronics 
-DHCOR Testbench board
-       ARM: dts: stm32: Add DHCOR based Testbench board
-       ARM: dts: stm32: Drop MMCI interrupt-names
-       ARM: dts: stm32: Fix AV96 WLAN regulator gpio property
-       ARM: dts: stm32: Rename mdio0 to mdio on DHCOR Testbench board
-
-Olivier Moysan (4):
-       ARM: dts: stm32: add adc support to stm32mp13
-       ARM: dts: stm32: add adc pins muxing on stm32mp135f-dk
-       ARM: dts: stm32: add dummy vdd_adc regulator on stm32mp135f-dk
-       ARM: dts: stm32: add adc support on stm32mp135f-dk
-
-Yann Gautier (1):
-       ARM: dts: stm32: add sdmmc cd-gpios for STM32MP135F-DK
-
-  .../devicetree/bindings/arm/stm32/stm32.yaml       |   6 +
-  arch/arm/boot/dts/Makefile                         |   1 +
-  arch/arm/boot/dts/stm32h743.dtsi                   |   2 -
-  arch/arm/boot/dts/stm32mp13-pinctrl.dtsi           |  21 +++
-  arch/arm/boot/dts/stm32mp131.dtsi                  | 128 ++++++++++++++-
-  arch/arm/boot/dts/stm32mp133.dtsi                  |  31 ++++
-  arch/arm/boot/dts/stm32mp135f-dk.dts               | 144 ++++++++++++++++-
-  arch/arm/boot/dts/stm32mp151.dtsi                  |   3 -
-  arch/arm/boot/dts/stm32mp151a-dhcor-testbench.dts  |  17 ++
-  arch/arm/boot/dts/stm32mp157a-dhcor-avenger96.dts  |   1 -
-  arch/arm/boot/dts/stm32mp157c-emstamp-argon.dtsi   |   2 +-
-  arch/arm/boot/dts/stm32mp157c-ev1.dts              |  15 +-
-  arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts          |   2 +-
-  arch/arm/boot/dts/stm32mp157c-odyssey.dts          |   2 +-
-  arch/arm/boot/dts/stm32mp15xx-dhcom-pdk2.dtsi      |   4 +-
-  arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi       |   2 +-
-  arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi |   7 +-
-  .../boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi    |   2 +-
-  arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi | 171 
-+++++++++++++++++++++
-  arch/arm/boot/dts/stm32mp15xx-dkx.dtsi             |   6 +-
-  20 files changed, 543 insertions(+), 24 deletions(-)
-  create mode 100644 arch/arm/boot/dts/stm32mp151a-dhcor-testbench.dts
-  create mode 100644 arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi
