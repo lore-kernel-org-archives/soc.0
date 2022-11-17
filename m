@@ -1,75 +1,210 @@
-Return-Path: <SRS0=ZlBq=3R=socionext.com=hayashi.kunihiko@kernel.org>
+Return-Path: <SRS0=8yYY=3R=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1CD4C433FE
-	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 16:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 232F0C4332F
+	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 21:48:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6C3ABC433D7; Thu, 17 Nov 2022 16:32:36 +0000 (UTC)
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id CD947C43470;
-	Thu, 17 Nov 2022 16:32:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD947C43470
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 18 Nov 2022 01:32:25 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 9466420584CF;
-	Fri, 18 Nov 2022 01:32:25 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 18 Nov 2022 01:32:25 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id F0667B62A4;
-	Fri, 18 Nov 2022 01:32:24 +0900 (JST)
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>
+	id E0846C433B5; Thu, 17 Nov 2022 21:48:51 +0000 (UTC)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CED22C433D6;
+	Thu, 17 Nov 2022 21:48:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CED22C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 929CB5C0307;
+	Thu, 17 Nov 2022 16:48:48 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 17 Nov 2022 16:48:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1668721728; x=1668808128; bh=k7r8Nm8QPmd+lIGNswt/8URC6igmM5DGG+M
+	PZtrb/VE=; b=CQt5us1rkzcO5LloPfBKBgKmkSfuYH8E+NiQfqGML6khTboa00w
+	BMB83B72xgLqmaMEK+6hwvI8uZF3A4+rUCKGWp6KLim3Qtm5rYVbGF5KHTDjVsdR
+	NeQtDoFiWt7CmnyL72kPgDGXt3Y8U1gCnLSgTpx2cbPWJ3faloRU/fLxaQetG5Lt
+	d0xrAePF5gmaG1I4wEfY+OK78tgecUAiNZRjx/+p17N6ah3+yMjPibrvtdXxdRBX
+	YbXdvo0BOBX5SwKLT0zU0gzo2ivBPY4ZT2Ez5bLqoAYi/U/o2lQmwbjeYmNxi7Av
+	k7r4xiKFnVdDBJYtmhYeGwEn94CkCe395nA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:mime-version
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668721728; x=
+	1668808128; bh=k7r8Nm8QPmd+lIGNswt/8URC6igmM5DGG+MPZtrb/VE=; b=V
+	OGvwBGOfrxtgfUCybhrigA0XgcviGFC3iS0emJa4QNzUOqXMjFvLWNSiKaDiTcWf
+	+C6+DHhrZx6tvvMBv+WzVSWk/HIS5a1Dc2AX7wj94wr4rZCFvcAQ1MEeIh/Ux/Kv
+	Ob4rz/kYDgiiU1c9doH+SsY4wqXPvN1CFRJNESv4wjNpKZ5rCFKMy4aUMll2Rso2
+	qUegrTOJVbv3hAp9XfkYhOVfpFESgwEsrKM41OUIOPq+DVB07WQjuTrQKZdYMj+R
+	un2POxVzV48DTzYr8jWargfmJjigQGmfLPY0WTQh3y51+OIautVDQD8ZcG7FjKoc
+	7uC0alRm5uaJaU9c0ZVRA==
+X-ME-Sender: <xms:QKx2Y-cmxdAYxAk89o25H2QSqOyL2tZFoQEmN4hHsuLFLHAn9wQNzA>
+    <xme:QKx2Y4M2z3tmdlaL1fcUPNuRWRBGY-kUiwGru0cAa1v7DRq8s-CytQKt1HafAvaPH
+    BiQfJQcPudoyf5X1sY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdduhedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdeifedukedugeetfeejuefhhfdvudfflefhjefhhfektdeiiefggeeggeekgfeh
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
+    uggsrdguvg
+X-ME-Proxy: <xmx:QKx2Y_g_WLQlf_T9jcRkO40WIGnpgq2dejHluLl0C1swX5ue0thNOg>
+    <xmx:QKx2Y794j2D9tGJlDraAlMJ82dvN6eojoJ_0CQoSurlq6yjiGJT94w>
+    <xmx:QKx2Y6vH6TFA3VcpLVkpq5_aWdLXyOhjsKa9lQLwybk070G513Tr_Q>
+    <xmx:QKx2Y8W98Dgqn544Idw_hVOFJDK6I-k8_60s9f2fExLjspeLbGGf7w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 252D7B60086; Thu, 17 Nov 2022 16:48:48 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <f376fae3-fb50-4a79-9a90-1ee19cafe1ad@app.fastmail.com>
+Date: Thu, 17 Nov 2022 22:48:26 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] dt-bindings: arm: uniphier: Add Pro5 boards
-Date: Fri, 18 Nov 2022 01:32:18 +0900
-Message-Id: <20221117163219.3673-2-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117163219.3673-1-hayashi.kunihiko@socionext.com>
-References: <20221117163219.3673-1-hayashi.kunihiko@socionext.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org, "Conor Dooley" <conor@kernel.org>,
+ "Shawn Guo" <shawnguo@kernel.org>, "Bjorn Andersson" <andersson@kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 3
+Content-Type: text/plain
 
-Add compatible string for Pro5 EP-Core board and ProEX board support.
+The following changes since commit 5449cabd95bbf141e2b7471e8d3cedb6f3b92492:
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/arm/socionext/uniphier.yaml         | 6 ++++++
- 1 file changed, 6 insertions(+)
+  Merge tag 'juno-fix-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes (2022-11-02 21:58:46 +0100)
 
-diff --git a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-index 8c0e91658474..c2cea1c90f3c 100644
---- a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-+++ b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-@@ -26,6 +26,12 @@ properties:
-               - socionext,uniphier-pro4-ref
-               - socionext,uniphier-pro4-sanji
-           - const: socionext,uniphier-pro4
-+      - description: Pro5 SoC boards
-+        items:
-+          - enum:
-+              - socionext,uniphier-pro5-epcore
-+              - socionext,uniphier-pro5-proex
-+          - const: socionext,uniphier-pro5
-       - description: sLD8 SoC boards
-         items:
-           - enum:
--- 
-2.25.1
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-3
+
+for you to fetch changes up to 0d6a10dc2b971cc3a192b47721ee8270afc2d104:
+
+  Merge tag 'imx-fixes-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes (2022-11-16 22:08:11 +0100)
+
+----------------------------------------------------------------
+ARM: SoC fixes for 6.1, part 3
+
+Another set of devicetree and code changes for SoC platforms,
+notably:
+
+ - DT schema warning fixes for i.MX
+
+ - Functional fixes for i.MX tqma8mqml-mba8mx USB and
+   i.MX8M OCOTP
+
+ - MAINTAINERS updates for Hisilicon and RISC-V, documenting
+   which RISC-V SoC specific patches will now get merged through
+   the SoC tree in the future.
+
+ - A code fix for at91 suspend, to work around broken hardware
+
+ - A devicetree fix for lan966x/pcb8291 LED support
+
+ - Lots of DT fixes for Qualcomm SoCs, mostly fixing minor
+   problems like incorrect register sizes and schema warnings.
+   One fix makes the UFS controller work on sc8280xp, and
+   six fixes address the same regulator problem in a variety
+   of platforms.
+
+----------------------------------------------------------------
+Alexander Stein (1):
+      arm64: dts: imx8mm-tqma8mqml-mba8mx: Fix USB DR
+
+Arnd Bergmann (4):
+      Merge tag 'qcom-arm64-fixes-for-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
+      Merge tag 'at91-fixes-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
+      Merge tag 'hisi-maintainer-fix' of https://github.com/hisilicon/linux-hisi into arm/fixes
+      Merge tag 'imx-fixes-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
+
+Brian Masney (1):
+      arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy
+
+Claudiu Beznea (1):
+      ARM: at91: pm: avoid soft resetting AC DLL
+
+Conor Dooley (4):
+      MAINTAINERS: add entries for misc. RISC-V SoC drivers and devicetrees
+      MAINTAINERS: generify the Microchip RISC-V entry name
+      MAINTAINERS: add an entry for StarFive devicetrees
+      MAINTAINERS: repair Microchip corei2c driver entry
+
+Dmitry Baryshkov (1):
+      Revert "arm64: dts: qcom: msm8996: add missing TCSR syscon compatible"
+
+Douglas Anderson (6):
+      arm64: dts: qcom: sa8155p-adp: Specify which LDO modes are allowed
+      arm64: dts: qcom: sa8295p-adp: Specify which LDO modes are allowed
+      arm64: dts: qcom: sc8280xp-crd: Specify which LDO modes are allowed
+      arm64: dts: qcom: sm8150-xperia-kumano: Specify which LDO modes are allowed
+      arm64: dts: qcom: sm8250-xperia-edo: Specify which LDO modes are allowed
+      arm64: dts: qcom: sm8350-hdk: Specify which LDO modes are allowed
+
+Horatiu Vultur (1):
+      ARM: dts: lan966x: Enable sgpio on pcb8291
+
+Johan Hovold (6):
+      arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
+      arm64: dts: qcom: sc8280xp: fix USB0 PHY PCS_MISC registers
+      arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1 registers
+      arm64: dts: qcom: sc8280xp: fix USB PHY PCS registers
+      arm64: dts: qcom: sc8280xp: drop broken DP PHY nodes
+      arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
+
+Marek Vasut (3):
+      ARM: dts: imx7: Fix NAND controller size-cells
+      arm64: dts: imx8mm: Fix NAND controller size-cells
+      arm64: dts: imx8mn: Fix NAND controller size-cells
+
+Mihai Sain (1):
+      ARM: dts: at91: sama7g5: fix signal name of pin PB2
+
+Palmer Dabbelt (1):
+      MAINTAINERS: git://github.com -> https://github.com for HiSilicon
+
+Peng Fan (1):
+      arm64: dts: imx93-pinfunc: drop execution permission
+
+Robert Marko (1):
+      arm64: dts: qcom: ipq8074: correct APCS register space size
+
+Satya Priya (1):
+      arm64: dts: qcom: sc7280: Add the reset reg for lpass audiocc on SC7280
+
+Ulf Hansson (1):
+      arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state
+
+Xiaolei Wang (1):
+      soc: imx8m: Enable OCOTP clock before reading the register
+
+ MAINTAINERS                                        | 36 +++++++++++++++++++---
+ arch/arm/boot/dts/imx7s.dtsi                       |  4 +--
+ arch/arm/boot/dts/lan966x-pcb8291.dts              | 20 ++++++++++++
+ arch/arm/boot/dts/sama7g5-pinfunc.h                |  2 +-
+ arch/arm/mach-at91/pm_suspend.S                    |  7 ++++-
+ .../boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts | 32 +++++++++++++++----
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  4 +--
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  2 +-
+ arch/arm64/boot/dts/freescale/imx93-pinfunc.h      |  0
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |  2 +-
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           | 13 +++++++-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts           | 12 ++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |  6 ++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 36 +++++-----------------
+ .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   |  6 ++++
+ .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      |  6 ++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |  1 +
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            | 12 ++++++++
+ drivers/soc/imx/soc-imx8m.c                        | 11 +++++++
+ include/soc/at91/sama7-ddr.h                       |  5 ++-
+ 22 files changed, 171 insertions(+), 51 deletions(-)
+ mode change 100755 => 100644 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
