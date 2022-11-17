@@ -1,182 +1,98 @@
-Return-Path: <SRS0=yGSj=3R=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=KQo7=3R=foss.st.com=prvs=73200a0741=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC096C43219
-	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 10:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A7F5C433FE
+	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 10:39:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D56E0C4347C; Thu, 17 Nov 2022 10:37:25 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 4D2B7C433D6;
-	Thu, 17 Nov 2022 10:37:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D2B7C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A59C150C;
-	Thu, 17 Nov 2022 02:37:30 -0800 (PST)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 360613F73B;
-	Thu, 17 Nov 2022 02:37:22 -0800 (PST)
-From: Andre Przywara <andre.przywara@arm.com>
-To: Chen-Yu Tsai <wens@csie.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Bin Liu <b-liu@ti.com>
+	id 50CD6C433B5; Thu, 17 Nov 2022 10:39:45 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 0BE3FC433D7;
+	Thu, 17 Nov 2022 10:39:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0BE3FC433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH9Shhe012367;
+	Thu, 17 Nov 2022 11:39:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=EXvlua3C0YsN3Tv4O/Kaf4pDmpMUiAaTTPGAzHT2nzI=;
+ b=aYbv3L3M8+XdjwRUpZznBuNYbDn5AMkJjWDoISjZpIkXY08Tj2QeQQlbLBeutB4SsPqg
+ 75yhPxULbwm4pjpsZ0K0x2kF0eKcYe15mcdldDdVnj3wFfuAgkBsnaZlm/VXB988cYLL
+ eB8BzyaRYbNUb0sr7pT5FVgSru5z4VQ24rPEiMf0wYL6zW/WoSacBQfjQCHJoBcRlnqy
+ GhQCS1GaDfzjWz/Wwvek30rUqWlQjlcg91PBeFX1bdtvw9pz+xxfFkau17ZHstbqZb4I
+ g4dJPvFLd7d2JcdLOv2dcsHRhXhMHXSIIePvAj78q60uE9FCgqmc584wRrSyJe4cIVK6 9g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kv9ydp8pp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 17 Nov 2022 11:39:36 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2591B10003D;
+	Thu, 17 Nov 2022 11:39:32 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1F63321B531;
+	Thu, 17 Nov 2022 11:39:32 +0100 (CET)
+Received: from localhost (10.201.21.93) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 17 Nov
+ 2022 11:39:31 +0100
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Icenowy Zheng <uwu@icenowy.me>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	devicetree@vger.kernel.org,
-	soc@kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev
-Subject: [PATCH v4 11/11] ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
-Date: Thu, 17 Nov 2022 10:36:56 +0000
-Message-Id: <20221117103656.1085840-12-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221117103656.1085840-1-andre.przywara@arm.com>
-References: <20221117103656.1085840-1-andre.przywara@arm.com>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, <soc@kernel.org>,
+        <arm@kernel.org>
+CC: Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH] ARM: multi_v7_defconfig: enable Type-C UCSI and STM32G0 as modules
+Date: Thu, 17 Nov 2022 11:39:31 +0100
+Message-ID: <20221117103931.26174-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
 
-The Lctech Pi F1C200s (also previously known under the Cherry Pi brand)
-is a small development board with the Allwinner F1C200s SoC. This is the
-same as the F1C100s, but with 64MB instead of 32MB co-packaged DRAM.
+From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 
-Alongside the obligatory micro-SD card slot, the board features a
-SPI-NAND flash chip, LCD and touch connectors, and unpopulated
-expansion header pins.
-There are two USB Type-C ports on the board: One supplies the power, also
-connects to the USB MUSB OTG controller port. The other one is connected
-to an CH340 USB serial chip, which in turn is connected to UART1.
+Enable the USB Type-C UCSI, and the STM32G0 UCSI drivers as modules, since
+used on STM32MP13 board.
 
-Add a devicetree file, so that the board can be used easily.
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- arch/arm/boot/dts/Makefile                    |  1 +
- arch/arm/boot/dts/suniv-f1c100s.dtsi          |  6 ++
- arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 +++++++++++++++++++
- 3 files changed, 83 insertions(+)
- create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 0249c07bd8a6b..52f8ab0eacb29 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1392,6 +1392,7 @@ dtb-$(CONFIG_MACH_SUN9I) += \
- 	sun9i-a80-cubieboard4.dtb
- dtb-$(CONFIG_MACH_SUNIV) += \
- 	suniv-f1c100s-licheepi-nano.dtb \
-+	suniv-f1c200s-lctech-pi.dtb \
- 	suniv-f1c200s-popstick-v1.1.dtb
- dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
- 	tegra20-acer-a500-picasso.dtb \
-diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-index 111f8bbc2a805..3c61d59ab5f86 100644
---- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
-+++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
-@@ -207,6 +207,12 @@ uart0_pe_pins: uart0-pe-pins {
- 				pins = "PE0", "PE1";
- 				function = "uart0";
- 			};
-+
-+			/omit-if-no-ref/
-+			uart1_pa_pins: uart1-pa-pins {
-+				pins = "PA2", "PA3";
-+				function = "uart1";
-+			};
- 		};
- 
- 		i2c0: i2c@1c27000 {
-diff --git a/arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts b/arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
-new file mode 100644
-index 0000000000000..2d2a3f026df33
---- /dev/null
-+++ b/arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2022 Arm Ltd,
-+ * based on work:
-+ *   Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-+ */
-+
-+/dts-v1/;
-+#include "suniv-f1c100s.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	model = "Lctech Pi F1C200s";
-+	compatible = "lctech,pi-f1c200s", "allwinner,suniv-f1c200s",
-+		     "allwinner,suniv-f1c100s";
-+
-+	aliases {
-+		serial0 = &uart1;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	reg_vcc3v3: regulator-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+};
-+
-+&mmc0 {
-+	broken-cd;
-+	bus-width = <4>;
-+	disable-wp;
-+	vmmc-supply = <&reg_vcc3v3>;
-+	status = "okay";
-+};
-+
-+&otg_sram {
-+	status = "okay";
-+};
-+
-+&spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi0_pc_pins>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "spi-nand";
-+		reg = <0>;
-+		spi-max-frequency = <40000000>;
-+	};
-+};
-+
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart1_pa_pins>;
-+	status = "okay";
-+};
-+
-+/*
-+ * This is a Type-C socket, but CC1/2 are not connected, and VBUS is connected
-+ * to Vin, which supplies the board. Host mode works (if the board is powered
-+ * otherwise), but peripheral is probably the intention.
-+ */
-+&usb_otg {
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	status = "okay";
-+};
+Hi ARM SoC maintainers,
+
+Please consider this patch as STM32 configs updates for v6.2.
+
+Thanks
+Alex 
+
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index b61b2e3d116b..2b1de08b057e 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -891,6 +891,8 @@ CONFIG_USB_CONFIGFS_F_UVC=y
+ CONFIG_USB_CONFIGFS_F_PRINTER=y
+ CONFIG_USB_ETH=m
+ CONFIG_TYPEC=m
++CONFIG_TYPEC_UCSI=m
++CONFIG_UCSI_STM32G0=m
+ CONFIG_TYPEC_STUSB160X=m
+ CONFIG_MMC=y
+ CONFIG_MMC_BLOCK_MINORS=16
 -- 
-2.25.1
+2.17.1
 
