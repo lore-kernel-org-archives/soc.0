@@ -1,210 +1,54 @@
-Return-Path: <SRS0=8yYY=3R=arndb.de=arnd@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 232F0C4332F
-	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 21:48:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E9C1C4332F
+	for <soc@archiver.kernel.org>; Thu, 17 Nov 2022 22:20:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E0846C433B5; Thu, 17 Nov 2022 21:48:51 +0000 (UTC)
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CED22C433D6;
-	Thu, 17 Nov 2022 21:48:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CED22C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 929CB5C0307;
-	Thu, 17 Nov 2022 16:48:48 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 17 Nov 2022 16:48:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:message-id
-	:mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1668721728; x=1668808128; bh=k7r8Nm8QPmd+lIGNswt/8URC6igmM5DGG+M
-	PZtrb/VE=; b=CQt5us1rkzcO5LloPfBKBgKmkSfuYH8E+NiQfqGML6khTboa00w
-	BMB83B72xgLqmaMEK+6hwvI8uZF3A4+rUCKGWp6KLim3Qtm5rYVbGF5KHTDjVsdR
-	NeQtDoFiWt7CmnyL72kPgDGXt3Y8U1gCnLSgTpx2cbPWJ3faloRU/fLxaQetG5Lt
-	d0xrAePF5gmaG1I4wEfY+OK78tgecUAiNZRjx/+p17N6ah3+yMjPibrvtdXxdRBX
-	YbXdvo0BOBX5SwKLT0zU0gzo2ivBPY4ZT2Ez5bLqoAYi/U/o2lQmwbjeYmNxi7Av
-	k7r4xiKFnVdDBJYtmhYeGwEn94CkCe395nA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:message-id:mime-version
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668721728; x=
-	1668808128; bh=k7r8Nm8QPmd+lIGNswt/8URC6igmM5DGG+MPZtrb/VE=; b=V
-	OGvwBGOfrxtgfUCybhrigA0XgcviGFC3iS0emJa4QNzUOqXMjFvLWNSiKaDiTcWf
-	+C6+DHhrZx6tvvMBv+WzVSWk/HIS5a1Dc2AX7wj94wr4rZCFvcAQ1MEeIh/Ux/Kv
-	Ob4rz/kYDgiiU1c9doH+SsY4wqXPvN1CFRJNESv4wjNpKZ5rCFKMy4aUMll2Rso2
-	qUegrTOJVbv3hAp9XfkYhOVfpFESgwEsrKM41OUIOPq+DVB07WQjuTrQKZdYMj+R
-	un2POxVzV48DTzYr8jWargfmJjigQGmfLPY0WTQh3y51+OIautVDQD8ZcG7FjKoc
-	7uC0alRm5uaJaU9c0ZVRA==
-X-ME-Sender: <xms:QKx2Y-cmxdAYxAk89o25H2QSqOyL2tZFoQEmN4hHsuLFLHAn9wQNzA>
-    <xme:QKx2Y4M2z3tmdlaL1fcUPNuRWRBGY-kUiwGru0cAa1v7DRq8s-CytQKt1HafAvaPH
-    BiQfJQcPudoyf5X1sY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeekgdduhedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdeifedukedugeetfeejuefhhfdvudfflefhjefhhfektdeiiefggeeggeekgfeh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
-    uggsrdguvg
-X-ME-Proxy: <xmx:QKx2Y_g_WLQlf_T9jcRkO40WIGnpgq2dejHluLl0C1swX5ue0thNOg>
-    <xmx:QKx2Y794j2D9tGJlDraAlMJ82dvN6eojoJ_0CQoSurlq6yjiGJT94w>
-    <xmx:QKx2Y6vH6TFA3VcpLVkpq5_aWdLXyOhjsKa9lQLwybk070G513Tr_Q>
-    <xmx:QKx2Y8W98Dgqn544Idw_hVOFJDK6I-k8_60s9f2fExLjspeLbGGf7w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 252D7B60086; Thu, 17 Nov 2022 16:48:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <f376fae3-fb50-4a79-9a90-1ee19cafe1ad@app.fastmail.com>
-Date: Thu, 17 Nov 2022 22:48:26 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+	id 430E5C4347C; Thu, 17 Nov 2022 22:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22B2AC433C1;
+	Thu, 17 Nov 2022 22:20:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1668723640;
+	bh=rrKtlNK7P46kKtCfzbSBnIol3PtJWk2C8X6rYNdLo2I=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=rcvr2TmUvHiymQZ9f+986gUTT3XAygbaiERa1dbCNb81NYw/I/iNg1BsvDjzhJmyN
+	 6ztKxjxb9RjuTPNa4gs0+tk2cnhyrble5C6hCSNS7lZh6RHbV1Y93KwMAkjt/1qgVH
+	 jIL25Fy14eOkfH1o9yDU5gFkCnfI8F4/LIsFAU0sbK4yOxYpxTwcU1oeyanbLF9vxB
+	 inMaVJ9d7UaFf4OIGVI/mfgH/AhCa6YMviQFjvhYaA/TgzDN5aywrUqv8elCuAWUvl
+	 J/EUZhetfxAwwCWaiAkJcAO3gyURdjvjXHv+GttAuCz2LMjot3swGpxcNflBs/bmLv
+	 XMpGYsDquNl1Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0D113E21EFA;
+	Thu, 17 Nov 2022 22:20:40 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for 6.1, part 3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <f376fae3-fb50-4a79-9a90-1ee19cafe1ad@app.fastmail.com>
+References: <f376fae3-fb50-4a79-9a90-1ee19cafe1ad@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <f376fae3-fb50-4a79-9a90-1ee19cafe1ad@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-3
+X-PR-Tracked-Commit-Id: 0d6a10dc2b971cc3a192b47721ee8270afc2d104
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 84368d882b9688bfac77ce48d33b1e20a4e4a787
+Message-Id: <166872364003.24282.15521017055224742067.pr-tracker-bot@kernel.org>
+Date: Thu, 17 Nov 2022 22:20:40 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, "Conor Dooley" <conor@kernel.org>,
- "Shawn Guo" <shawnguo@kernel.org>, "Bjorn Andersson" <andersson@kernel.org>,
- linux-kernel@vger.kernel.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 3
-Content-Type: text/plain
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Bjorn Andersson <andersson@kernel.org>, linux-kernel@vger.kernel.org
 
-The following changes since commit 5449cabd95bbf141e2b7471e8d3cedb6f3b92492:
+The pull request you sent on Thu, 17 Nov 2022 22:48:26 +0100:
 
-  Merge tag 'juno-fix-6.1' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into arm/fixes (2022-11-02 21:58:46 +0100)
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-3
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/84368d882b9688bfac77ce48d33b1e20a4e4a787
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-3
+Thank you!
 
-for you to fetch changes up to 0d6a10dc2b971cc3a192b47721ee8270afc2d104:
-
-  Merge tag 'imx-fixes-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes (2022-11-16 22:08:11 +0100)
-
-----------------------------------------------------------------
-ARM: SoC fixes for 6.1, part 3
-
-Another set of devicetree and code changes for SoC platforms,
-notably:
-
- - DT schema warning fixes for i.MX
-
- - Functional fixes for i.MX tqma8mqml-mba8mx USB and
-   i.MX8M OCOTP
-
- - MAINTAINERS updates for Hisilicon and RISC-V, documenting
-   which RISC-V SoC specific patches will now get merged through
-   the SoC tree in the future.
-
- - A code fix for at91 suspend, to work around broken hardware
-
- - A devicetree fix for lan966x/pcb8291 LED support
-
- - Lots of DT fixes for Qualcomm SoCs, mostly fixing minor
-   problems like incorrect register sizes and schema warnings.
-   One fix makes the UFS controller work on sc8280xp, and
-   six fixes address the same regulator problem in a variety
-   of platforms.
-
-----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: dts: imx8mm-tqma8mqml-mba8mx: Fix USB DR
-
-Arnd Bergmann (4):
-      Merge tag 'qcom-arm64-fixes-for-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/fixes
-      Merge tag 'at91-fixes-6.1' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
-      Merge tag 'hisi-maintainer-fix' of https://github.com/hisilicon/linux-hisi into arm/fixes
-      Merge tag 'imx-fixes-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/fixes
-
-Brian Masney (1):
-      arm64: dts: qcom: sc8280xp: correct ref clock for ufs_mem_phy
-
-Claudiu Beznea (1):
-      ARM: at91: pm: avoid soft resetting AC DLL
-
-Conor Dooley (4):
-      MAINTAINERS: add entries for misc. RISC-V SoC drivers and devicetrees
-      MAINTAINERS: generify the Microchip RISC-V entry name
-      MAINTAINERS: add an entry for StarFive devicetrees
-      MAINTAINERS: repair Microchip corei2c driver entry
-
-Dmitry Baryshkov (1):
-      Revert "arm64: dts: qcom: msm8996: add missing TCSR syscon compatible"
-
-Douglas Anderson (6):
-      arm64: dts: qcom: sa8155p-adp: Specify which LDO modes are allowed
-      arm64: dts: qcom: sa8295p-adp: Specify which LDO modes are allowed
-      arm64: dts: qcom: sc8280xp-crd: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8150-xperia-kumano: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8250-xperia-edo: Specify which LDO modes are allowed
-      arm64: dts: qcom: sm8350-hdk: Specify which LDO modes are allowed
-
-Horatiu Vultur (1):
-      ARM: dts: lan966x: Enable sgpio on pcb8291
-
-Johan Hovold (6):
-      arm64: dts: qcom: sc8280xp: fix ufs_card_phy ref clock
-      arm64: dts: qcom: sc8280xp: fix USB0 PHY PCS_MISC registers
-      arm64: dts: qcom: sc8280xp: fix USB1 PHY RX1 registers
-      arm64: dts: qcom: sc8280xp: fix USB PHY PCS registers
-      arm64: dts: qcom: sc8280xp: drop broken DP PHY nodes
-      arm64: dts: qcom: sc8280xp: fix UFS PHY serdes size
-
-Marek Vasut (3):
-      ARM: dts: imx7: Fix NAND controller size-cells
-      arm64: dts: imx8mm: Fix NAND controller size-cells
-      arm64: dts: imx8mn: Fix NAND controller size-cells
-
-Mihai Sain (1):
-      ARM: dts: at91: sama7g5: fix signal name of pin PB2
-
-Palmer Dabbelt (1):
-      MAINTAINERS: git://github.com -> https://github.com for HiSilicon
-
-Peng Fan (1):
-      arm64: dts: imx93-pinfunc: drop execution permission
-
-Robert Marko (1):
-      arm64: dts: qcom: ipq8074: correct APCS register space size
-
-Satya Priya (1):
-      arm64: dts: qcom: sc7280: Add the reset reg for lpass audiocc on SC7280
-
-Ulf Hansson (1):
-      arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state
-
-Xiaolei Wang (1):
-      soc: imx8m: Enable OCOTP clock before reading the register
-
- MAINTAINERS                                        | 36 +++++++++++++++++++---
- arch/arm/boot/dts/imx7s.dtsi                       |  4 +--
- arch/arm/boot/dts/lan966x-pcb8291.dts              | 20 ++++++++++++
- arch/arm/boot/dts/sama7g5-pinfunc.h                |  2 +-
- arch/arm/mach-at91/pm_suspend.S                    |  7 ++++-
- .../boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts | 32 +++++++++++++++----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  4 +--
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          |  2 +-
- arch/arm64/boot/dts/freescale/imx93-pinfunc.h      |  0
- arch/arm64/boot/dts/qcom/ipq8074.dtsi              |  2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |  2 +-
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts           | 13 +++++++-
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts           | 12 ++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +-
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |  6 ++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             | 36 +++++-----------------
- .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   |  6 ++++
- .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      |  6 ++++
- arch/arm64/boot/dts/qcom/sm8250.dtsi               |  1 +
- arch/arm64/boot/dts/qcom/sm8350-hdk.dts            | 12 ++++++++
- drivers/soc/imx/soc-imx8m.c                        | 11 +++++++
- include/soc/at91/sama7-ddr.h                       |  5 ++-
- 22 files changed, 171 insertions(+), 51 deletions(-)
- mode change 100755 => 100644 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
