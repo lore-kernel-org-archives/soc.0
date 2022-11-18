@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7495BC4332F
-	for <soc@archiver.kernel.org>; Fri, 18 Nov 2022 16:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B6FC43219
+	for <soc@archiver.kernel.org>; Fri, 18 Nov 2022 16:45:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4803DC43145; Fri, 18 Nov 2022 16:45:33 +0000 (UTC)
-Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [195.130.137.81])
+	id 38971C433C1; Fri, 18 Nov 2022 16:45:34 +0000 (UTC)
+Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 55F79C433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 69025C433B5
 	for <soc@kernel.org>; Fri, 18 Nov 2022 16:45:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 55F79C433C1
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 69025C433B5
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-	by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4NDN1v2zQLz4x7k8
+	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4NDN1v2k8Dz4xBsj
 	for <soc@kernel.org>; Fri, 18 Nov 2022 17:45:23 +0100 (CET)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:d0b:c833:41f6:da0e])
 	by andre.telenet-ops.be with bizsmtp
-	id lslD2800229fmst01slDAx; Fri, 18 Nov 2022 17:45:14 +0100
+	id lslC2800Q29fmst01slCAh; Fri, 18 Nov 2022 17:45:14 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1ow4UK-000pAC-RR; Fri, 18 Nov 2022 17:45:12 +0100
+	id 1ow4UK-000pA8-Cx; Fri, 18 Nov 2022 17:45:12 +0100
 Received: from geert by rox.of.borg with local (Exim 4.93)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1ow4UJ-00Frgd-VK; Fri, 18 Nov 2022 17:45:11 +0100
+	id 1ow4UJ-00FrgE-SI; Fri, 18 Nov 2022 17:45:11 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
 To: arm-soc <arm@kernel.org>,
@@ -38,43 +38,74 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 4/7] Renesas DT binding updates for v6.2 (take two)
-Date: Fri, 18 Nov 2022 17:45:01 +0100
-Message-Id: <cover.1668788927.git.geert+renesas@glider.be>
+Subject: [GIT PULL 0/7] Renesas SoC updates for v6.2 (take two)
+Date: Fri, 18 Nov 2022 17:44:57 +0100
+Message-Id: <cover.1668788918.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1668788918.git.geert+renesas@glider.be>
-References: <cover.1668788918.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 7dd1d57c052e88f98b9e9145461b13bca019d108:
+	Hi SoC folks,
 
-  dt-bindings: soc: renesas: renesas.yaml: Document Renesas RZ/Five SoC (2022-10-28 14:43:12 +0200)
+This is my second pull request for the inclusion of Renesas SoC updates
+for v6.2, and the first one including support for an SoC with a RISC-V
+CPU core (and including no changes for SoCs with arm32 CPU cores).
 
-are available in the Git repository at:
+It consists of 7 parts:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.2-tag2
+  [GIT PULL 1/7] Renesas ARM defconfig updates for v6.2
 
-for you to fetch changes up to a884f187760ee0c6033296aa50845e2d1e0e8430:
+    - Enable support for Renesas R-Car S4-8 Spider Ethernet devices in the
+      arm64 defconfig.
 
-  dt-bindings: arm: renesas: Document Renesas RZ/V2M System Configuration (2022-11-17 20:18:21 +0100)
+  [GIT PULL 2/7] Renesas ARM DT updates for v6.2 (take two)
 
-----------------------------------------------------------------
-Renesas DT binding updates for v6.2 (take two)
+    - Timer (TMU and CMT) and quad Cortex-A76 CPU topology support for
+      the R-Car V4H SoC,
+    - Watchdog, L2 cache, and system controller support for the RZ/V2M
+      SoC on the RZ/V2M Evaluation Kit 2.0,
+    - Ethernet Switch and SERDES supports for the R-Car S4-8 SoC and the
+      Spider development board,
+    - Miscellaneous fixes and improvements.
 
-  - Document support for the Andes Technology AX45MP RISC-V CPU Core, as
-    used on the Renesas RZ/Five SoC,
-  - Document support for the Renesas RZ/V2M System Configuration.
+  [GIT PULL 3/7] Renesas driver updates for v6.2 (take two)
 
-----------------------------------------------------------------
-Lad Prabhakar (2):
-      dt-bindings: riscv: Sort the CPU core list alphabetically
-      dt-bindings: riscv: Add Andes AX45MP core to the list
+    - Add support for identifying the SoC revision on RZ/V2M.
 
-Phil Edworthy (1):
-      dt-bindings: arm: renesas: Document Renesas RZ/V2M System Configuration
+  [GIT PULL 4/7] Renesas DT binding updates for v6.2 (take two)
 
- Documentation/devicetree/bindings/riscv/cpus.yaml  | 11 +++---
- .../soc/renesas/renesas,r9a09g011-sys.yaml         | 43 ++++++++++++++++++++++
- 2 files changed, 49 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/soc/renesas/renesas,r9a09g011-sys.yaml
+    - Document support for the Andes Technology AX45MP RISC-V CPU Core, as
+      used on the Renesas RZ/Five SoC,
+    - Document support for the Renesas RZ/V2M System Configuration.
+
+  [GIT PULL 5/7] Renesas RISC-V defconfig updates for v6.2
+
+    - Enable support for the Renesas RZ/Five SoC and the RZ/Five SMARC EVK
+      board in the risc-v defconfig.
+
+  [GIT PULL 6/7] Renesas RISC-V DT updates for v6.2
+
+    - Add initial support for the Renesas RZ/Five SoC and the Renesas
+      RZ/Five SMARC EVK development board.
+
+  [GIT PULL 7/7] Renesas RISC-V SoC updates for v6.2
+
+    - Add Kconfig option for Renesas RISC-V SoCs.
+
+Thanks for pulling!
+
+P.S. I'm wondering if I should reduce the number of branches?
+     Probably it would make sense to (at least) use a single branch for
+     the DTS changes, as the RZ/Five DTS files share base SoC and board
+     DTS with RZ/G2UL through #include <arm64/renesas/...>.
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
