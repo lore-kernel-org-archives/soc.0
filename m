@@ -1,92 +1,79 @@
-Return-Path: <SRS0=sUSC=3S=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=MWgV=3S=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BECEC433FE
-	for <soc@archiver.kernel.org>; Fri, 18 Nov 2022 12:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BADAC433FE
+	for <soc@archiver.kernel.org>; Fri, 18 Nov 2022 13:07:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 167DAC433B5; Fri, 18 Nov 2022 12:18:22 +0000 (UTC)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 60AD9C43146; Fri, 18 Nov 2022 13:07:19 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 26DECC433D6
-	for <soc@kernel.org>; Fri, 18 Nov 2022 12:18:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26DECC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id c1so7921147lfi.7
-        for <soc@kernel.org>; Fri, 18 Nov 2022 04:18:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3Ww17wU4XE60JKwlSWPDqz6kaKQUbc+gNj6D8T4n4z4=;
-        b=CdY/jY/lkuKG4qpVE/hau8sU8G4Fp0U67Bd1POFH63wYcEEr4QC5XOtFacbi/JmPh6
-         1cyEbTu2K1gszHlDzuAmf5mzVChCUI51QLJf7ZwJNDrqI5IrpPC/GFX68kAbt+ZxYTzy
-         CrZRyZ0p7SLj63O673/r6AgATQhGhfecN2iEc9INPQG1BS8jIKX3EjUJDDUrWlai8XEA
-         ixl1/ONMpwZR0ys43aqa+khwmT/JNJHqIcwkJmKqkZXI2lAU/XMGhMrFEBQ6yiwoXJ8g
-         kpGbBKNxVQnl68AjB8mhZrD/GIiG5YLaLd87C9P5ZMpOg5+zXFzrgNuFCI87vakJ1086
-         ywhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Ww17wU4XE60JKwlSWPDqz6kaKQUbc+gNj6D8T4n4z4=;
-        b=X0YKX+UI0N4UBMi08w1RM6LfuUU1cqCmE5SSHEItcZbwRt3aPFNtVy7W37bzX+/y6Z
-         eGd7bvHOuHfWGq2E/10M1s+rKoDxJyhDczWnmpV9gIAPziw1K+Bgz7U+TlY7ka5TpqRC
-         Y7PEqy+u569rMJKy6xAuLSMqJSDagt35c5fnFD60aRuwnae2IS7Er+xXh4FWVyh6MzIx
-         dIW6xGDPgfDgg8jVsDebE00HjNjqBRsOoGIQOZOCpbCJrao4Taj/QKDU9VCe6i5MNUmx
-         HEaRUvcH4D146cPr5VYo8S7pjb4LZlp7GG5hHl+s6AJW+f11N3LeAHrMDWgBfH8vigLC
-         BBQQ==
-X-Gm-Message-State: ANoB5pltwGs3Bag5jL65endR9/20bPbI5iBcD68QJ4vioecJ0a+IWMdE
-	dibJA/A3CTzY49wy132ZInm4Gw==
-X-Google-Smtp-Source: AA0mqf7CHdPGUaTnQbcS7YC27XSAfVUWm39zaCxrwZQ4k+ZwVIgfeoyEov9b5E5kvT+xXnoC7xrpjQ==
-X-Received: by 2002:a19:5e58:0:b0:4a7:5a63:71e1 with SMTP id z24-20020a195e58000000b004a75a6371e1mr2441034lfi.399.1668773899111;
-        Fri, 18 Nov 2022 04:18:19 -0800 (PST)
-Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
-        by smtp.gmail.com with ESMTPSA id bt26-20020a056512261a00b004ab2cb8deb5sm640880lfb.18.2022.11.18.04.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 04:18:18 -0800 (PST)
-Date: Fri, 18 Nov 2022 13:18:16 +0100
-From: Jens Wiklander <jens.wiklander@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 89864C433D6;
+	Fri, 18 Nov 2022 13:07:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 89864C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668776838; x=1700312838;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mUiSAecyHmy/WU6RcOY8WjeD47iVxFOHpBchFcV35uI=;
+  b=bcgoprQzPn/9357KAluKr3ErFvofKWz3i1S9+4v2gezq+4QU5C9HOvEp
+   xa8eDLOrF1/Lt/POgrC6JCyPk0EjYBfRCpVMgSYI8et/PaWoRdrkZCZUr
+   JvXvv0emWn6vOgT7XTLQhtUWb/hF2yCFyYlq80Wf2XnRLucLKrCCQJL8G
+   DXBcLJQtXitHg+xKuP96dsIm4Eh1POKnZfeAkVTzb7F5v6LENMDWcTA4i
+   qE7b+QFTSys7KiKYx664Acc9hUpuZf2rPPJ4BxNGalYxRFHE3o0YViOfI
+   iZjaKaYxghGaWaJDGCoZkFLlPUDZi/ASfFjWJzx8deJAZT/cNJ+aUWP2I
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
+   d="scan'208";a="189539534"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Nov 2022 06:07:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 18 Nov 2022 06:07:16 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 18 Nov 2022 06:07:14 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] Add __init/__exit annotations OP-TEE driver for v6.2
-Message-ID: <Y3d4CHWl3Ofx5OrX@jade>
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 fixes for 6.1 #2
+Date: Fri, 18 Nov 2022 15:12:05 +0200
+Message-ID: <20221118131205.301662-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hello arm-soc maintainers,
+The following changes since commit cef8cdc0d0e7c701fe4dcfba4ed3fd25d28a6020:
 
-Please pull this small patch which adds __init/__exit annotations to the
-OP-TEE driver module.
-
-Thanks,
-Jens
-
-The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
-
-  Linux 6.0 (2022-10-02 14:09:07 -0700)
+  ARM: at91: pm: avoid soft resetting AC DLL (2022-11-01 12:25:19 +0200)
 
 are available in the Git repository at:
 
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-for-6.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.1-2
 
-for you to fetch changes up to bd52407221b4702af690456b2b6006fa6440e893:
+for you to fetch changes up to 40a2226e8bfacb79dd154dea68febeead9d847e9:
 
-  optee: Add __init/__exit annotations to module init/exit funcs (2022-10-11 11:20:16 +0200)
-
-----------------------------------------------------------------
-Add missing __init/__exit annotations to OP-TEE driver
+  ARM: dts: at91: sam9g20ek: enable udc vbus gpio pinctrl (2022-11-17 15:23:50 +0200)
 
 ----------------------------------------------------------------
-Xiu Jianfeng (1):
-      optee: Add __init/__exit annotations to module init/exit funcs
+AT91 fixes for 6.1 #2
 
- drivers/tee/optee/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It contains:
+- fix UDC on at91sam9g20ek boards by adding vbus pin
+
+----------------------------------------------------------------
+Michael Grzeschik (1):
+      ARM: dts: at91: sam9g20ek: enable udc vbus gpio pinctrl
+
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
