@@ -4,66 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A6DDC433FE
-	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 07:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C15C4332F
+	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 12:58:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F3B18C433C1; Sat, 19 Nov 2022 07:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F96C433D6;
-	Sat, 19 Nov 2022 07:38:22 +0000 (UTC)
+	id 2D77BC43470; Sat, 19 Nov 2022 12:58:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2CFC433C1;
+	Sat, 19 Nov 2022 12:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668843504;
-	bh=Arfs4nC8EQwl3s77HwqUmhC6Z1/J+/ce/20w3m9zmGc=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=lzZJ5nap7T4O+LZf3a2TeOvE0JrcuprdX/kbxpJtZ493cfKYjcC2Fdy+82ATkNJZz
-	 ABK70LEzIvc1KnfPr+E9B8OLEqWHw2SAxy0kIPcO4ehGlkxfEvhjwbjjFXd5KPvU0M
-	 99h5bwDOC7oxn4Ork8GE5Jk+mg06+nGRt2zIR8jMttRUeeB78gyEqiLy77ho/XKxTj
-	 s+at1yOarUBNRrslcJihU2LtItXxAFdnwrHgHRPpblzaDz5Lc8P4tZSCRMfeKEj7YZ
-	 YAeWYdP5KHE5f2umaDDKiTnbr9MPxLAkUQYC0sDEG54+iz66sYHZUVJN+beqwF+qyl
-	 r7ilv3ZVDxzfA==
-Date: Sat, 19 Nov 2022 15:38:13 +0800
+	s=k20201202; t=1668862683;
+	bh=5xfEOtaoSz4tR3KLNZ21u66j+gAxZ7dWCGljDVjR1HM=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=QOzUgailh521TOwiBnf28/fH8nlFWdBD7V0jOKqCk0ML8xQE2et9y2wnRuVXzNn/a
+	 n+AtsI9mbHvncW0NiagO9DXEEBe5PUN/peBTzrOOFykiKYakRp1j+rDcc80xkk5fkl
+	 FYHkYYFMgEVBh/FVkWeYEvbAj8U8FJrRSu1xYrnx8GJ/uSvgvMT2eY2MZseAWXEhIq
+	 2c3G2NDYf3TFS2XXr2l8Qa3QG0Gu1yJyQmMuA0UPGEslGMXdz1aRS7Ew8j2sDwENJx
+	 FalAusBxP/TzcGJ8sW1frE9s+J8DizDifUD4qzXoBw3f7qEWb7jI3wSQ9maXzjYN7B
+	 rInrXB7v9YF7w==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.1, part 3
-Message-ID: <20221119073812.GQ16229@T480>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+To: soc@kernel.org,
+	arm@kernel.org
+Cc: Shawn Guo <shawnguo@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>,
+	kernel@pengutronix.de,
+	linux-imx@nxp.com,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 1/6] i.MX drivers change for 6.2
+Date: Sat, 19 Nov 2022 20:57:28 +0800
+Message-Id: <20221119125733.32719-1-shawnguo@kernel.org>
+X-Mailer: git-send-email 2.17.1
 
-The following changes since commit 836fb30949d9edf91d7de696a884ceeae7e426d2:
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-  soc: imx8m: Enable OCOTP clock before reading the register (2022-11-14 15:52:53 +0800)
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1-3
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-6.2
 
-for you to fetch changes up to e68be7b39f21d8a9291a5a3019787cd3ca999dd7:
+for you to fetch changes up to 98572487e5c615ac9edfb105aca9b3f3bd1b4b7c:
 
-  ARM: dts: imx6q-prti6q: Fix ref/tcxo-clock-frequency properties (2022-11-19 11:20:15 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 6.1, part 3:
-
-- Fix a small memory leak in mach-mxs code.
-- Correct PCIe pad configuration for imx8mp-evk board.
-- Fix ref/tcxo clock frequency property for imx6q-prti6q board.
+  soc: imx: gpcv2: add GENPD_FLAG_ACTIVE_WAKEUP flag for usb of imx8mm/n (2022-10-29 16:20:49 +0800)
 
 ----------------------------------------------------------------
-Fabio Estevam (1):
-      ARM: dts: imx6q-prti6q: Fix ref/tcxo-clock-frequency properties
+i.MX drivers change for 6.2:
 
-Peng Fan (1):
-      arm64: dts: imx8mp-evk: correct pcie pad settings
+- Improve imx8m-blk-ctrl driver to allow deferred probe in case that
+  'bus' genpd is not yet ready.
+- Add missing USB_1_PHY PD for i.MX scu-pd firmware driver.
+- Add GENPD_FLAG_ACTIVE_WAKEUP flag for i.MX8MM/N in GPCv2 driver, so
+  that the power domain remains on if USB remote wakeup is enabled.
 
-Zheng Yongjun (1):
-      ARM: mxs: fix memory leak in mxs_machine_init()
+----------------------------------------------------------------
+Benjamin Gaignard (1):
+      soc: imx: imx8m-blk-ctrl: Defer probe if 'bus' genpd is not yet ready
 
- arch/arm/boot/dts/imx6q-prti6q.dts           | 4 ++--
- arch/arm/mach-mxs/mach-mxs.c                 | 4 +++-
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 6 +++---
- 3 files changed, 8 insertions(+), 6 deletions(-)
+Frank Li (1):
+      firmware: imx: scu-pd: add missed USB_1_PHY pd
+
+Li Jun (1):
+      soc: imx: gpcv2: add GENPD_FLAG_ACTIVE_WAKEUP flag for usb of imx8mm/n
+
+ drivers/firmware/imx/scu-pd.c    |  1 +
+ drivers/soc/imx/gpcv2.c          |  3 +++
+ drivers/soc/imx/imx8m-blk-ctrl.c | 11 ++++++++---
+ 3 files changed, 12 insertions(+), 3 deletions(-)
