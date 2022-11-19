@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91352C43219
-	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 01:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45666C43217
+	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 01:20:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 78868C4347C; Sat, 19 Nov 2022 01:20:35 +0000 (UTC)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	id 2D80FC433C1; Sat, 19 Nov 2022 01:20:36 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 58A4BC433D7;
-	Sat, 19 Nov 2022 01:20:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 58A4BC433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id 49FB2C433B5;
+	Sat, 19 Nov 2022 01:20:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 49FB2C433B5
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id f7so9392433edc.6;
-        Fri, 18 Nov 2022 17:20:34 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id ud5so16999214ejc.4;
+        Fri, 18 Nov 2022 17:20:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=acEsYiXCoqV1GznAxKVHxkzg29M8YO7XPSSAAJC1GdU=;
-        b=avBtfSj1RtG+PfH63iyJ1ukNNlKKBsocTZxjZzL3BPSo2sz7+bA1JAskIRGFUcYtKO
-         kVpru/5n8/+sbZN+Tznn5s3+vyEF3G87ocjePWqvXCssYG2nkdEzVXSdWKTKiQrK6vGn
-         gE2TUmnZ+Xgi/LrOR9TQNidGMudS2pIRg8DMVHBhgmmj5O3ffxSNQnM9gcVzYzF0SQJh
-         dQ0GugmnjRnhwsr1viRtlfVsQsoLFsCK5r6lmdCDU+xEtOOy+Lh5C5Y6on77MmqyMToK
-         VEMAFIvRcn9x80YpzxOmYAKkxW23oaJm21mI3tIWZibanCqz4BDAn4WeKaREL7VEXaLW
-         1jjw==
+        bh=rbfoB6c/UjNlcqISExBxrNR+Gfa67oAo9Qlc4W4UOAg=;
+        b=KSLhX264k+IOo0mAuAPfLH/1foRxs+K6tkJuDT098hpRXMY4tGQvh9KdYdkZX4Wmm9
+         bcEUkdVEylkFyGgFfgLeKv/0S4FquJnVjFKWjqv6njGuAqcSIOj1kBRa1r9I/cWmCWtx
+         eNPg+S2yvMemxZe112isBa0CO9cr+pM4DL6tTP4al38Ga4NKCx/OTKGYfqFOJ0WGdmVu
+         RXs5iPEZDOwIHtGR5YrhdP1P0Z3khSnDnwQVo2Iv7hnHKTDUzOlDGW+75G5+hAbftQa1
+         QnCKFkXvzCB6dVYnzpPbC5L09F2CVV5/PuAwhUm80cj8tTyDjaQhxdn8oGybznJKJ8ks
+         5/xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=acEsYiXCoqV1GznAxKVHxkzg29M8YO7XPSSAAJC1GdU=;
-        b=yoV38aGrrsZQJX+sqLXZuRVzAUvqSaFtfo1AlDRi487oZaj1wcjYTmZ4TjRCMwGcOp
-         gf8GJFRD9netPxQKyMyYvKCopTiehDxOD+v7Svr8nnl/m93ZiG67p1qvd/D/srzpwPNU
-         /MQxeg7RIj4Bwao1MX8Anq64WG0dcu59oV3m6DFaOR6mQtyLkXSIsf85tCm6HqxuM0L4
-         NXwyTEoYwZzRY4ASuZU0Zn166SLlY4zugrxKEJiba1AEuQw2ZqwNt6q3n2GeiTdUw82R
-         xUaOjho0CxWc3UBTmwKd8xOJa1GoPPoq+Bv2S1u3a/MtM9BpyVLjStR4pc0zG9seN/Oc
-         cFHw==
-X-Gm-Message-State: ANoB5pmcbRE8UZnE2BhzvfDJzYXm0cDj5Co52OZwGTIIzosdmxEqSmrg
-	dODdmzoEaW8EqcHPi3fyfd1H7W12OzY=
-X-Google-Smtp-Source: AA0mqf4OZ0Dzxyh8YmaV9rUzLT+rL5j3QeUyourkO/VhGMNzW/qOXNx61xaanjqg+LgymbbgMs0Vjw==
-X-Received: by 2002:a05:6402:b81:b0:45c:a651:8849 with SMTP id cf1-20020a0564020b8100b0045ca6518849mr8363214edb.209.1668820832263;
-        Fri, 18 Nov 2022 17:20:32 -0800 (PST)
+        bh=rbfoB6c/UjNlcqISExBxrNR+Gfa67oAo9Qlc4W4UOAg=;
+        b=DCYtH4UmYOtQfJxbNL6YJnWppIMAjhym+gwh4J52bdBlUnzgdV8Mix1OnN/LH/Na0g
+         kTu35Nm/Rw3YPEuRZhrcgHb4qtIGya2IkaiHNM/z/T1aFY62PhKcTB7w9qInpHkMp3iW
+         dO2YWF1y/Y9vUqtX1gUGHl0ixE3gm8o4u4TjZobnrcP5GnoawusxYLKs8fjwQZRaGyDB
+         EhWbyWLoS5IQQSCoc4Zyg2otJBJD3alOrTG+W4pJMNxuTY0BnBpm+2Wnm563en4Z/lNq
+         2tP04Tk439npMUu+9wXy3Iv/X1CdDKG/yptLsYr8iVkrJqecu+ejiU5QVQPimgRLIJG2
+         oiGA==
+X-Gm-Message-State: ANoB5pkUe/xcvmL2VUHuJNUwcS4k36YwRWhFFfMPmUpEvQZAMg1ssDZ7
+	1eP0V41t5f/mCKQA629iU5DzIp+Ze9w=
+X-Google-Smtp-Source: AA0mqf4ZhE+3dLywNGW4ArFee0NvtkX1VLVd3EKlZD8se5YYnR49unxuUUs1Y+nI1choMdLaYRel1A==
+X-Received: by 2002:a17:906:1641:b0:7ae:7d78:9fa1 with SMTP id n1-20020a170906164100b007ae7d789fa1mr7868452ejd.98.1668820833213;
+        Fri, 18 Nov 2022 17:20:33 -0800 (PST)
 Received: from localhost (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id x7-20020aa7d6c7000000b004623028c594sm2427254edr.49.2022.11.18.17.20.31
+        by smtp.gmail.com with ESMTPSA id d10-20020a170906344a00b0077b523d309asm2294476ejb.185.2022.11.18.17.20.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 17:20:31 -0800 (PST)
+        Fri, 18 Nov 2022 17:20:32 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -59,9 +59,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 7/8] arm64: tegra: Device tree changes for v6.2-rc1
-Date: Sat, 19 Nov 2022 02:20:24 +0100
-Message-Id: <20221119012025.3968358-7-thierry.reding@gmail.com>
+Subject: [GIT PULL 8/8] arm64: tegra: Default configuration updates for v6.2-rc1
+Date: Sat, 19 Nov 2022 02:20:25 +0100
+Message-Id: <20221119012025.3968358-8-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221119012025.3968358-1-thierry.reding@gmail.com>
 References: <20221119012025.3968358-1-thierry.reding@gmail.com>
@@ -77,95 +77,31 @@ The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.2-arm64-dt
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.2-arm64-defconfig
 
-for you to fetch changes up to db78f7ce427aa4be45d0e95daaa6e2cd73c7cd6c:
+for you to fetch changes up to b4c8adc40f4918d77ab851fbc06415fb313d6c7f:
 
-  arm64: tegra: Remove unneeded clock-names for Tegra132 PWM (2022-11-19 00:01:20 +0100)
-
-This also pulls in a partial for-6.2/dt-bindings branch to satisfy the
-build dependency on the memory client IDs.
+  arm64: defconfig: Enable HTE config (2022-11-11 15:51:29 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v6.2-rc1
+arm64: tegra: Default configuration updates for v6.2-rc1
 
-This contains many new additions, primarily for Tegra234, as well as a
-slew of cleanups for issues flagged by the DT validation tools.
+This enables several audio-related options, as well as the Tegra186
+timer and hardware timestamping engine drivers.
 
 ----------------------------------------------------------------
-Akhil R (1):
-      arm64: tegra: Add dma-channel-mask in GPCDMA node
-
 Dipen Patel (1):
-      arm64: tegra: Enable GTE nodes
+      arm64: defconfig: Enable HTE config
 
-Fabio Estevam (1):
-      arm64: tegra: Remove 'enable-active-low'
+Jon Hunter (1):
+      arm64: defconfig: Enable Tegra186 timer support
 
-Jon Hunter (7):
-      dt-bindings: tegra: Update headers for Tegra234
-      dt-bindings: memory: Fix typos and definitions for Tegra
-      arm64: tegra: Remove unused property for I2C
-      arm64: tegra: Populate Tegra234 PWMs
-      arm64: tegra: Add PWM fan for Jetson AGX Orin
-      arm64: tegra: Add SBSA UART for Tegra234
-      arm64: tegra: Update console for Jetson Xavier and Orin
+Sameer Pujar (2):
+      arm64: defconfig: Enable couple of audio codecs
+      arm64: defconfig: Enable SND_ALOOP
 
-Mikko Perttunen (3):
-      dt-bindings: Add headers for NVDEC on Tegra234
-      arm64: tegra: Fix ranges for host1x nodes
-      arm64: tegra: Add NVDEC on Tegra234
-
-Pierre Gondois (1):
-      arm64: tegra: Update cache properties
-
-Prathamesh Shete (1):
-      arm64: tegra: Add Tegra234 SDMMC1 device tree node
-
-Sandipan Patra (1):
-      arm64: tegra: Enable PWM users on Jetson AGX Orin
-
-Thierry Reding (15):
-      Merge commit for-6.2/dt-bindings into for-6.2/arm64/dt
-      arm64: tegra: Sort nodes by unit-address
-      arm64: tegra: Add missing whitespace
-      arm64: tegra: Remove clock-names from PWM nodes
-      arm64: tegra: Separate AON pinmux from main pinmux on Tegra194
-      arm64: tegra: Add missing compatible string to Ethernet USB device
-      arm64: tegra: Restructure Tegra210 PMC pinmux nodes
-      arm64: tegra: Use vbus-gpios property
-      arm64: tegra: Use correct compatible string for Tegra194 HDA
-      arm64: tegra: Use correct compatible string for Tegra234 HDA
-      arm64: tegra: Remove reset-names for QSPI
-      arm64: tegra: Fixup pinmux node names
-      arm64: tegra: Remove unused reset-names for QSPI
-      arm64: tegra: Fix up compatible string for SDMMC1 on Tegra234
-      arm64: tegra: Remove unneeded clock-names for Tegra132 PWM
-
-Vidya Sagar (3):
-      arm64: tegra: Fix Prefetchable aperture ranges of Tegra234 PCIe controllers
-      arm64: tegra: Add ECAM aperture info for all the PCIe controllers
-      arm64: tegra: Fix non-prefetchable aperture of PCIe C3 controller
-
- arch/arm64/boot/dts/nvidia/tegra132-norrin.dts     |   2 +-
- arch/arm64/boot/dts/nvidia/tegra132.dtsi           |   1 -
- arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  12 +-
- arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi     |   2 +-
- .../arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi |   4 +-
- arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi     |   2 +-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  70 ++-
- arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |   5 +-
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |   4 +-
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  61 +-
- .../arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi |   8 +-
- .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |  21 +-
- .../arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi |  14 +
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           | 666 ++++++++++++++-------
- include/dt-bindings/clock/tegra234-clock.h         | 639 +++++++++++++++++++-
- include/dt-bindings/memory/tegra234-mc.h           | 440 +++++++++++++-
- include/dt-bindings/power/tegra234-powergate.h     |  15 +
- include/dt-bindings/reset/tegra234-reset.h         | 111 +++-
- 18 files changed, 1751 insertions(+), 326 deletions(-)
+ arch/arm64/configs/defconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
