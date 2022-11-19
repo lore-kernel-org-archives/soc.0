@@ -4,58 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA64AC433FE
-	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 06:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A6DDC433FE
+	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 07:38:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7F9DEC433C1; Sat, 19 Nov 2022 06:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCDCC433D6;
-	Sat, 19 Nov 2022 06:35:33 +0000 (UTC)
+	id F3B18C433C1; Sat, 19 Nov 2022 07:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F96C433D6;
+	Sat, 19 Nov 2022 07:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668839737;
-	bh=2wsoE9+9qBsxfIYW8lGExV9HUGjJ5fBm4dHgEiC0EFA=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=SSlcjgO/LUTRp/u5sB+zNyUFOrE+IZL/yh+4M/hHzloZXWvzUqqg8RQOgJzUbm2/b
-	 /CUINwVLjBhWmoMpMP2Zkgoac6zjoizizpHXllncHEltj9o+tCd/gIuHfo0Zmi6aJT
-	 n5+9rphsIFXLykrevVB+gf/MMK8vWOZKMrtI+lRwjOj4x+DNZPOcyzX13kvSG1VBKK
-	 t6MQK2yg5vvG7D0vtNOYdKeW7TRPC/U7CLr3Ath9E5bnGPTJBhxfyEQMwX/hyi/fTY
-	 r/5sKUPdz7E7JbXhBdRXf23av1kbIObtd/Nb0boQloAvJYq5s5OC60zQQh78VFFgOI
-	 GSWVHnK9WMZ7Q==
-Date: Sat, 19 Nov 2022 14:35:24 +0800
+	s=k20201202; t=1668843504;
+	bh=Arfs4nC8EQwl3s77HwqUmhC6Z1/J+/ce/20w3m9zmGc=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=lzZJ5nap7T4O+LZf3a2TeOvE0JrcuprdX/kbxpJtZ493cfKYjcC2Fdy+82ATkNJZz
+	 ABK70LEzIvc1KnfPr+E9B8OLEqWHw2SAxy0kIPcO4ehGlkxfEvhjwbjjFXd5KPvU0M
+	 99h5bwDOC7oxn4Ork8GE5Jk+mg06+nGRt2zIR8jMttRUeeB78gyEqiLy77ho/XKxTj
+	 s+at1yOarUBNRrslcJihU2LtItXxAFdnwrHgHRPpblzaDz5Lc8P4tZSCRMfeKEj7YZ
+	 YAeWYdP5KHE5f2umaDDKiTnbr9MPxLAkUQYC0sDEG54+iz66sYHZUVJN+beqwF+qyl
+	 r7ilv3ZVDxzfA==
+Date: Sat, 19 Nov 2022 15:38:13 +0800
 From: Shawn Guo <shawnguo@kernel.org>
-To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Li Yang <leoyang.li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Andrew Davis <afd@ti.com>, Michal Simek <michal.simek@amd.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Frank Rowand <frowand.list@gmail.com>,
-	Frank Wunderlich <linux@fw-web.de>
-Subject: Re: [GIT PULL] Stable branch for .dts to .dtso rename
-Message-ID: <20221119063523.GP16229@T480>
-References: <20221118211103.GA1334449-robh@kernel.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.1, part 3
+Message-ID: <20221119073812.GQ16229@T480>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221118211103.GA1334449-robh@kernel.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Fri, Nov 18, 2022 at 03:11:03PM -0600, Rob Herring wrote:
-> .dts files for overlays are getting renamed to .dtso. The kbuild support 
-> for that in in this stable branch. The .dts patches that depend on this 
-> are here[1]. There's also some new .dts overlay files posted[2].
-> 
-> I'll leave it to the SoC and sub-arch maintainers to decide how you all 
-> want to handle it from here. Either SoC maintainers can take this branch 
-> and dependent rename patches or each sub-arch can. In any case, I would 
-> like it converted over in 6.2 so we can remove .dts -> .dtbo build 
-> support ASAP and not be carrying both.
-> 
-> Rob
-> 
-> [1] https://lore.kernel.org/all/20221024173434.32518-1-afd@ti.com/
+The following changes since commit 836fb30949d9edf91d7de696a884ceeae7e426d2:
 
-Thanks, Rob!  I pulled your branch and applied "freescale" one.
+  soc: imx8m: Enable OCOTP clock before reading the register (2022-11-14 15:52:53 +0800)
 
-Shawn
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1-3
+
+for you to fetch changes up to e68be7b39f21d8a9291a5a3019787cd3ca999dd7:
+
+  ARM: dts: imx6q-prti6q: Fix ref/tcxo-clock-frequency properties (2022-11-19 11:20:15 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 6.1, part 3:
+
+- Fix a small memory leak in mach-mxs code.
+- Correct PCIe pad configuration for imx8mp-evk board.
+- Fix ref/tcxo clock frequency property for imx6q-prti6q board.
+
+----------------------------------------------------------------
+Fabio Estevam (1):
+      ARM: dts: imx6q-prti6q: Fix ref/tcxo-clock-frequency properties
+
+Peng Fan (1):
+      arm64: dts: imx8mp-evk: correct pcie pad settings
+
+Zheng Yongjun (1):
+      ARM: mxs: fix memory leak in mxs_machine_init()
+
+ arch/arm/boot/dts/imx6q-prti6q.dts           | 4 ++--
+ arch/arm/mach-mxs/mach-mxs.c                 | 4 +++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 6 +++---
+ 3 files changed, 8 insertions(+), 6 deletions(-)
