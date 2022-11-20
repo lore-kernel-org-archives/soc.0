@@ -1,42 +1,70 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=rXPd=3U=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A00C433FE
-	for <soc@archiver.kernel.org>; Sat, 19 Nov 2022 12:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C811DC4332F
+	for <soc@archiver.kernel.org>; Sun, 20 Nov 2022 23:00:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3E431C433B5; Sat, 19 Nov 2022 12:58:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 807B5C433D7;
-	Sat, 19 Nov 2022 12:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668862710;
-	bh=Sdo965FR8kskk++B73V+qjq3ge/eCgEKxBRu2ndLUsc=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cNcCoRgAei7L+F2Cx/wPMFIMtAAHQcckURqLg57oXrdOTSsUnrgbc5eZ3ZK3vcB6L
-	 sXKDjl9f410H4crAlUBUv4GPVECKLlQvWFPOumP4EavxmhJ3hs7amD4B0LfGuJlF2j
-	 rZfW+1T8TklL+NHli9yU3ILXsFH+OBtstgAQsjVYpgW5/wZt1kJ4BnVo2U5l52tbRU
-	 hyOm6LWhpY6pUvfNqhBL3Pj0o9A+825NRBNLrwu3u2DPNuQrQPtaqnEkvEpm3AhLmr
-	 cSB66FlEApMvAwFaLU4xdFtMvJPq195qvl9VHEd7pgcY8Mh+KEL8GzcTdDyk8rp16h
-	 RcZZpGFb2bRTA==
-From: Shawn Guo <shawnguo@kernel.org>
+	id 5C7EFC433D6; Sun, 20 Nov 2022 23:00:23 +0000 (UTC)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id AADC9C433C1
+	for <soc@kernel.org>; Sun, 20 Nov 2022 23:00:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AADC9C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id f201so11694572yba.12
+        for <soc@kernel.org>; Sun, 20 Nov 2022 15:00:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kLayFs5CC1rVfNtAMtC/BNMXcr8JalgIsdTUxlYLYjU=;
+        b=sYpX4DWcqpkZxHWRV50kw3JFBml1XsqZNDc1V59CGFbMh1BJQHCi70h2B8DFlZVA8G
+         6MBvFcIT9N3fVQDoQzeoPbO8Hr06mjOOOoz2qVfhDksD6my3tXslYc5DnuW7fMnIKsNu
+         ZtDCnXqULNv9vNl0oAXWhe88iZqv8gVp1ji1nRxgGHxrdkMUpGJFfmasvyg+wBdLFJHg
+         I0nItFC8TkDcojUKyaGN4RlND0HA9O7QsOKR4s1EF7Hs0Pa5IP8jcKC2ub9KLYant3yO
+         uSoX1kK6auNbvPy81KUBCft4AKqTrnai68EjNr+DU0UCeV+HVxb44Y72OnV6QVwvzJoa
+         W+XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kLayFs5CC1rVfNtAMtC/BNMXcr8JalgIsdTUxlYLYjU=;
+        b=FT8Ag/3LjGiLsMBqJnuQQPK/UTxSdPq+6XOb+u7nUeQwPPY+rgBAD6D/FoGm28jBiY
+         nbEXb6JfhR0PUUkPE0p/gBnWoc+uJbcSqg9vuujquek2kXl8o6AFdy+Vw7lYCdzO1K/O
+         DUxXnvDX4u5/2OmNVRZ0BYyfXd32X++9NMuY5Zp7ikSerTbPdFDW4JTu4PpT+oiskLzp
+         p7dOfLL0elCUkDvR9EpYpfL1bOggMqRP6L7CaG6bCvzZQX6pdidQhGW19I8HylK7umGQ
+         xhltx2tDLRaIW+RfI5Fh7gXraDkRGR8TPhje73W3YJWLm9ABPaIAy8TroYmUO04w4BHU
+         uJYg==
+X-Gm-Message-State: ANoB5pkoMEKNOoWHBsQQ9RIA4BLL1TqF+FAZ1DOfaFMD5eNItBFe7/IC
+	W8cz+2Kp8WKsktugaVxkCKESY16H9kFfC7x8foESsT8RjwX9Gw==
+X-Google-Smtp-Source: AA0mqf7MlsgUSUABcqArtUFCxFSgdKs3hMTo4vrGjsKRURWQKtJ/bTzYzDQq6pD2RRDpoCPU21EC5z39Ua/jIQhzjsQ=
+X-Received: by 2002:a25:cb42:0:b0:6da:32d3:c2e3 with SMTP id
+ b63-20020a25cb42000000b006da32d3c2e3mr14558982ybg.66.1668985217398; Sun, 20
+ Nov 2022 15:00:17 -0800 (PST)
+MIME-Version: 1.0
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 21 Nov 2022 00:00:06 +0100
+Message-ID: <CACRpkdYNwyZ1FDM07MkUfYyYGtXFQfy1xP9Utc5+K2+gn_ZW9g@mail.gmail.com>
+Subject: [GIT PULL] IXP4xx updates for v6.2
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	arm@kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>,
-	kernel@pengutronix.de,
-	linux-imx@nxp.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] i.MX defconfig change for 6.2
-Date: Sat, 19 Nov 2022 20:57:33 +0800
-Message-Id: <20221119125733.32719-6-shawnguo@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221119125733.32719-1-shawnguo@kernel.org>
-References: <20221119125733.32719-1-shawnguo@kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, arm-soc <arm@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi SoC folks,
+
+here are some small updates to IXP4xx for v6.2.
+Details in the signed tag!
+
+Please pull it in.
+
+Yours,
+Linus Walleij
 
 The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
@@ -44,33 +72,27 @@ The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-defconfig-6.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/ixp4xx-for-v6.2
 
-for you to fetch changes up to 7353bdfaca60c1477c000e8fd5c62832e66d1858:
+for you to fetch changes up to dc6e328a8d28e1c0c6e4f19e90cca17bb8fc126b:
 
-  arm64: defconfig: Add Renesas 9-series PCIe clock generator (2022-11-11 13:02:05 +0800)
-
-----------------------------------------------------------------
-i.MX defconfig change for 6.2:
-
-- Enable Renesas 9-series PCIe clock generator, SNVS LPGRP and i.MX8MP
-  interconnect driver support in arm64 defconfig.
-- Enable Silergy SY7636A EPD PMIC, CYTTSP5 touchscreen and USB GPIO
-  extcon support in imx_v6_v7_defconfig.
+  ARM: ixp4xx: Remove unused static map (2022-11-20 23:47:06 +0100)
 
 ----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: defconfig: Add Renesas 9-series PCIe clock generator
+IXP4xx patches for v6.2:
 
-Alistair Francis (2):
-      ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
-      ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
+- Dropped the final static mappings.
 
-Marcel Ziswiler (3):
-      arm64: defconfig: enable snvs lpgpr support
-      arm64: defconfig: enable i.mx 8m plus specific interconnect support
-      ARM: imx_v6_v7_defconfig: Enable USB GPIO extcon support
+- Fixed some errors in the MAINTAINERS file.
 
- arch/arm/configs/imx_v6_v7_defconfig | 5 +++++
- arch/arm64/configs/defconfig         | 3 +++
- 2 files changed, 8 insertions(+)
+----------------------------------------------------------------
+Linus Walleij (1):
+      ARM: ixp4xx: Remove unused static map
+
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust ARM/INTEL IXP4XX ARM ARCHITECTURE to ixp4xx clean-up
+
+ MAINTAINERS                      |  2 --
+ arch/arm/mach-ixp4xx/ixp4xx-of.c | 25 ++++---------------------
+ 2 files changed, 4 insertions(+), 23 deletions(-)
