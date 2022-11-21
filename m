@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EC55C433FE
-	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 17:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09674C4332F
+	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 17:12:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 12727C43147; Mon, 21 Nov 2022 17:12:50 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	id E0E0BC4347C; Mon, 21 Nov 2022 17:12:50 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 064D6C433C1;
-	Mon, 21 Nov 2022 17:12:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 064D6C433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id 07E97C433D7;
+	Mon, 21 Nov 2022 17:12:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 07E97C433D7
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id s5so17151446edc.12;
-        Mon, 21 Nov 2022 09:12:48 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id bj12so29975015ejb.13;
+        Mon, 21 Nov 2022 09:12:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dD+nn3RcUVAXIgjkmKfwa+r2PxTnm0FpkC5Fz1p9PlQ=;
-        b=EKAKUvd313xA40Vd4Lnjm1Omf6+O4la2dwU7/bRGmpuzsfV4iaFgyOd1hrdMCr/S4B
-         imEFDVKKNNxraUt5f6OxZoW14TIUf+M0J5NFmPkdepaWSxQK3BKUjxbP7GOmw33yvDoI
-         pI0i99nSQ5ho7PhItlEBpTUKK4Kt3InrGGRzUlKV2OXeM0yXxPQIdEGDJIN1rJ9zfKLL
-         yDOHnOiaHvrpIzfUF1XyVI6ahbZt03mN86GlhZrUfN3D64XFoYoPxLwNNr+mxoCWONLe
-         052baunEUUY56WWeetg7cQpFaOoukrdwPHIwh4uuYTOIfR7Qmy+fnmFsnhU3RQLtsDPf
-         cnjw==
+        bh=/I/hLJg7MJV1bbkW493eGQbSidaKR60YPeJkn7lTWxA=;
+        b=nIHs6uEOvd7f5zoJ/R87pVZth0gXsB7ILmkvMmacJfaAUVc5N8SgC/SlkavakiyKZD
+         xGJptgWdBt+Z2g8a9p6nBheyfoSHPuELey76LK+xxYaH2SFkCCueBErlQpOSREBrHwYP
+         ddqjjJr7gx/poxH2aFHrjPb2lo04E1VnJNIVOX27PpZjh3GwKrjTg+J2zgq+0vs982mT
+         b57b+5W4sLMW9uUepW8LTrhdw5F0NkaMT4NlXaTf2Fi374CKtn0dvZZ32oQJFXgp1TTQ
+         PGcsE+fjxgD9ojKcjjqanrK1yF0I3AsOCrt8x+4etRl/tEPe2XjYWzg+nY8K9LxJ+awj
+         /wtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dD+nn3RcUVAXIgjkmKfwa+r2PxTnm0FpkC5Fz1p9PlQ=;
-        b=Q4R5zEpTt7MO2+TOpwFpB+dllbC81gtNi0/QJW5488vLAovTjzFSoGkdR+ENO5rp6N
-         kpF/JkkK8BmaO1M+f9HJ8mQUuCIdiXt16uVfeUaTUx/joE4X9jTedwDdMF89rJIcC0iR
-         EA0AqOUs1uWFBpElR+aRG2uuS9WmIgYSEhh5BLgbCRMCEHwQxq7f8ms9RJhYeyuqbvhN
-         BFwcVQScPRuzfwOmwEeIsV/CLkzUBjq/y+dgrnKYKGvtP9hdvVJlgzA0OUWDQ4LOwzGQ
-         NT5Xg927+YDp/Xqxb14brYTBuJgk1xpmOWhGbwdI3rcKC/IBZt/l8QY4RGq+exaKY2Wg
-         WgOQ==
-X-Gm-Message-State: ANoB5pmXEB3LUubWtWqrPA6xzGR+veD91DU1mZPknTUteBf0PnO1vXNQ
-	acycb+7siURkg9mvOT3G+gR6fGckulE=
-X-Google-Smtp-Source: AA0mqf42i2eQOmFt+Gy7c5CkEuQu5yMKeKQlpAMO2TnU3vVzAPwYj2GnwiM9+8NN37FyV8P3t6E0RQ==
-X-Received: by 2002:aa7:cc8d:0:b0:461:15f0:a574 with SMTP id p13-20020aa7cc8d000000b0046115f0a574mr17446256edt.187.1669050767045;
+        bh=/I/hLJg7MJV1bbkW493eGQbSidaKR60YPeJkn7lTWxA=;
+        b=tsJmj+zPaT40tvYQDM6hnhqv9Uj0MJHZcJcSMtDiyNlnaF4239JPuqDITbAihnpYIT
+         irst8NrkRGoLUGhl7+b+seaKOG0/aEW5sLNC4/5E2+XPhJQzZV0jww3wCERrLoBId1u3
+         sQMLpPqxu75lNm77r38Eol8wNAygUsjbiTNjmPeEezj6oRLeyzAAJDsh5iSHoE1BmOmw
+         ZGpFNZkoKiDAmi0P4//9a/ljpmIwOeXDW8izy79h/1FvvOwBaJQ1H9uK8gWZ3XT+NXob
+         9IrAh8VvPtm6nEliGs9laTK3CmZVZEVcZ4VFs4A9D08/IVgLvWRqUrx0/zWJ4wYfw5lK
+         WC4Q==
+X-Gm-Message-State: ANoB5pnANbQmLScKihF0EHUNByLz0m/Qjey6QNRoF/JEyFbhZASCvOvC
+	Y5dbicOkUgtRlM7tFE3QD9qFkEjLv/w=
+X-Google-Smtp-Source: AA0mqf6HMYgi3IGidZEidg91nwrgrNnZLuWMZJvTXyr05gfMwwYYCVXlUSm6yayBL2u+IVsE5gfb+g==
+X-Received: by 2002:a17:907:d60c:b0:7ae:e592:6d83 with SMTP id wd12-20020a170907d60c00b007aee5926d83mr15462529ejc.699.1669050767943;
         Mon, 21 Nov 2022 09:12:47 -0800 (PST)
 Received: from localhost (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ee47-20020a056402292f00b00468f7bb4895sm5098579edb.43.2022.11.21.09.12.46
+        by smtp.gmail.com with ESMTPSA id w18-20020a056402129200b00467c3cbab6fsm1354462edv.77.2022.11.21.09.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 09:12:46 -0800 (PST)
+        Mon, 21 Nov 2022 09:12:47 -0800 (PST)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -59,9 +59,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL v2 4/7] dt-bindings: Changes for v6.2-rc1
-Date: Mon, 21 Nov 2022 18:12:36 +0100
-Message-Id: <20221121171239.2041835-4-thierry.reding@gmail.com>
+Subject: [GIT PULL v2 5/7] memory: tegra: Changes for v6.2-rc1
+Date: Mon, 21 Nov 2022 18:12:37 +0100
+Message-Id: <20221121171239.2041835-5-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221121171239.2041835-1-thierry.reding@gmail.com>
 References: <20221121171239.2041835-1-thierry.reding@gmail.com>
@@ -77,89 +77,45 @@ The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.2-dt-bindings-v2
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.2-memory-v2
 
-for you to fetch changes up to 97351cd8bea8e284cf62b4b7f35fa12059b47d7f:
+for you to fetch changes up to 5cd24ca0985f2dfb5628354fb63ede67b1dd993d:
 
-  dt-bindings: usb: tegra-xusb: Convert to json-schema (2022-11-21 13:27:30 +0100)
+  memory: tegra: Add DLA clients for Tegra234 (2022-11-21 13:29:02 +0100)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-dt-bindings: Changes for v6.2-rc1
+memory: tegra: Changes for v6.2-rc1
 
-New memory client IDs and IOMMU stream IDs, as well as new compatible
-strings are introduced to support more hardware on Tegra234. Some device
-tree bindings are converted to json-schema to allow formal validation.
+Some cleanups replace open-coded debugfs attributes and memory client
+IDs are added for the DLA IP found on Tegra234 SoCs.
 
 ----------------------------------------------------------------
-Jon Hunter (1):
+Jon Hunter (2):
       dt-bindings: tegra: Update headers for Tegra234
+      memory: tegra: Add DLA clients for Tegra234
 
-Mikko Perttunen (2):
+Liu Shixin (4):
+      memory: tegra20-emc: Use DEFINE_SHOW_ATTRIBUTE to simplify code
+      memory: tegra30-emc: Use DEFINE_SHOW_ATTRIBUTE to simplify code
+      memory: tegra210-emc: Use DEFINE_SHOW_ATTRIBUTE to simplify code
+      memory: tegra186-emc: Use DEFINE_SHOW_ATTRIBUTE to simplify code
+
+Mikko Perttunen (1):
       dt-bindings: Add headers for NVDEC on Tegra234
-      dt-bindings: Add bindings for Tegra234 NVDEC
 
-Sandipan Patra (1):
-      dt-bindings: pwm: tegra: Document Tegra234 PWM
+Thierry Reding (1):
+      Merge branch for-6.2/dt-bindings into for-6.2/memory
 
-Thierry Reding (4):
-      dt-bindings: pinctrl: tegra: Convert to json-schema
-      dt-bindings: pinctrl: tegra194: Separate instances
-      dt-bindings: pwm: tegra: Convert to json-schema
-      dt-bindings: usb: tegra-xusb: Convert to json-schema
-
-Vidya Sagar (1):
-      dt-bindings: PCI: tegra234: Add ECAM support
-
- .../bindings/clock/nvidia,tegra124-dfll.txt        |   2 +-
- .../bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml | 156 +++++
- .../bindings/pci/nvidia,tegra194-pcie.yaml         |  34 +-
- .../devicetree/bindings/pci/snps,dw-pcie.yaml      |   2 +-
- .../pinctrl/nvidia,tegra-pinmux-common.yaml        | 178 ++++++
- .../bindings/pinctrl/nvidia,tegra114-pinmux.txt    | 131 -----
- .../bindings/pinctrl/nvidia,tegra114-pinmux.yaml   | 155 +++++
- .../bindings/pinctrl/nvidia,tegra124-pinmux.txt    | 153 -----
- .../bindings/pinctrl/nvidia,tegra124-pinmux.yaml   | 176 ++++++
- .../bindings/pinctrl/nvidia,tegra194-pinmux.txt    | 107 ----
- .../bindings/pinctrl/nvidia,tegra194-pinmux.yaml   | 284 +++++++++
- .../bindings/pinctrl/nvidia,tegra20-pinmux.txt     | 143 -----
- .../bindings/pinctrl/nvidia,tegra20-pinmux.yaml    | 112 ++++
- .../bindings/pinctrl/nvidia,tegra210-pinmux.txt    | 166 ------
- .../bindings/pinctrl/nvidia,tegra210-pinmux.yaml   | 142 +++++
- .../bindings/pinctrl/nvidia,tegra30-pinmux.txt     | 144 -----
- .../bindings/pinctrl/nvidia,tegra30-pinmux.yaml    | 176 ++++++
- .../devicetree/bindings/pwm/nvidia,tegra20-pwm.txt |  77 ---
- .../bindings/pwm/nvidia,tegra20-pwm.yaml           |  96 ++++
- .../bindings/usb/nvidia,tegra124-xusb.txt          | 132 -----
- .../bindings/usb/nvidia,tegra124-xusb.yaml         | 202 +++++++
- .../bindings/usb/nvidia,tegra186-xusb.yaml         | 173 ++++++
- .../bindings/usb/nvidia,tegra194-xusb.yaml         | 179 ++++++
- .../bindings/usb/nvidia,tegra210-xusb.yaml         | 199 +++++++
- include/dt-bindings/clock/tegra234-clock.h         | 639 ++++++++++++++++++++-
- include/dt-bindings/memory/tegra234-mc.h           | 440 +++++++++++++-
- include/dt-bindings/power/tegra234-powergate.h     |  15 +
- include/dt-bindings/reset/tegra234-reset.h         | 111 +++-
- 28 files changed, 3437 insertions(+), 1087 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra-pinmux-common.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra114-pinmux.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra114-pinmux.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra124-pinmux.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra124-pinmux.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra194-pinmux.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra194-pinmux.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra20-pinmux.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra20-pinmux.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra210-pinmux.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra210-pinmux.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra30-pinmux.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra30-pinmux.yaml
- delete mode 100644 Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.txt
- create mode 100644 Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
- delete mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.txt
- create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra124-xusb.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra186-xusb.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra194-xusb.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
+ drivers/memory/tegra/tegra186-emc.c            |  15 +-
+ drivers/memory/tegra/tegra20-emc.c             |  15 +-
+ drivers/memory/tegra/tegra210-emc-core.c       |  15 +-
+ drivers/memory/tegra/tegra234.c                | 160 +++++++
+ drivers/memory/tegra/tegra30-emc.c             |  15 +-
+ include/dt-bindings/clock/tegra234-clock.h     | 639 ++++++++++++++++++++++++-
+ include/dt-bindings/memory/tegra234-mc.h       | 440 ++++++++++++++++-
+ include/dt-bindings/power/tegra234-powergate.h |  15 +
+ include/dt-bindings/reset/tegra234-reset.h     | 111 ++++-
+ 9 files changed, 1339 insertions(+), 86 deletions(-)
