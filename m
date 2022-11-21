@@ -1,59 +1,65 @@
-Return-Path: <SRS0=puPy=3V=atomide.com=tony@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB82BC433FE
-	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 13:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D17C43219
+	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B2EB6C433D7; Mon, 21 Nov 2022 13:18:22 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 6B5B1C433C1;
-	Mon, 21 Nov 2022 13:18:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B5B1C433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id 727E080A7;
-	Mon, 21 Nov 2022 13:08:07 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Regulator changes for am335x-pcm-953
-Date: Mon, 21 Nov 2022 15:18:17 +0200
-Message-Id: <pull-1669036672-530717@atomide.com>
-X-Mailer: git-send-email 2.38.1
+	id 36F8FC43149; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EC33C433B5;
+	Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669042286;
+	bh=uc/oHcDMt5BBru36d1T/7+3UI7PgzgClxqq1M7Rp3/4=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=fsDzpMcNjO7t338Ua/x5ediM3LMavFcyzq7jnL3rLU3r29BFb8GPyPqvHM9xTBeqm
+	 RMC7J64hJp2DZJzB6aF1DtX+xQ0MxQS+CfyTIqn0khBLDaAc7CIDd9EhjhVX1YMOo9
+	 rpDT2276ddND44wONK4lXp04GYev4e54dd60jfg3uVx75zjL5yw69UFW+hY5Ob5ycV
+	 yr8JcDERFnJ7hG3ePy4LyYxd+OBe9pZKZd8+5otMrzBfx9Bu6UAsq+T4qvgjWyHnG5
+	 MJRQJRO8nw1yykNN6HStFRSPtW2igwv6xyORM4qVnoDNN8Cp3W5LEDwf6+Db7w8pXl
+	 wy6SPCAVwssWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03CD7E270C9;
+	Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Fix possible memory leak OP-TEE driver for v6.1
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <166904228601.4359.11968081106982724023.git-patchwork-notify@kernel.org>
+Date: Mon, 21 Nov 2022 14:51:26 +0000
+References: <Y3d2OuJ60U30OkZe@jade>
+In-Reply-To: <Y3d2OuJ60U30OkZe@jade>
+To: Jens Wiklander <jens.wiklander@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-From: "Tony Lindgren" <tony@atomide.com>
+Hello:
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+On Fri, 18 Nov 2022 13:10:34 +0100 you wrote:
+> Hello arm-soc maintainers,
+> 
+> Please pull this small patch in the OP-TEE driver which fixes a possible
+> memory leak in the error path of optee_register_device().
+> 
+> Thanks,
+> Jens
+> 
+> [...]
 
-are available in the Git repository at:
+Here is the summary with links:
+  - [GIT,PULL] Fix possible memory leak OP-TEE driver for v6.1
+    https://git.kernel.org/soc/soc/c/dc0e2470f4b9
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/am335x-pcm-953-regulators
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-for you to fetch changes up to 8950f345a67d8046d2472dd6ea81fa18ef5b4844:
 
-  ARM: dts: am335x-pcm-953: Define fixed regulators in root node (2022-11-09 10:09:51 +0200)
-
-----------------------------------------------------------------
-Regulator changes for am335x-pcm-953
-
-This is for deferred probe issue on am335x-pcm-953 sdhci-omap regulator.
-
-----------------------------------------------------------------
-Dominik Haller (1):
-      ARM: dts: am335x-pcm-953: Define fixed regulators in root node
-
- arch/arm/boot/dts/am335x-pcm-953.dtsi | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
