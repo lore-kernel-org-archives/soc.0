@@ -1,103 +1,96 @@
-Return-Path: <SRS0=OxWk=3V=gmail.com=matthias.bgg@kernel.org>
+Return-Path: <SRS0=jjp+=3V=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5056AC4332F
-	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 18:49:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BF92C4332F
+	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 20:43:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 35271C433B5; Mon, 21 Nov 2022 18:49:02 +0000 (UTC)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 13281C433D7; Mon, 21 Nov 2022 20:43:30 +0000 (UTC)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 438F8C433C1;
-	Mon, 21 Nov 2022 18:49:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 438F8C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id x17so7755813wrn.6;
-        Mon, 21 Nov 2022 10:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l97CFMxK013jbwqr86PBB0+4UzVCHm4yLdQdXZhW1zs=;
-        b=kv5O+q+4J0Dbvr9/kbtg9lBOaSHuygjekbTq73oxC6WmcqYF+4p/c1l4U+LzBCSPNp
-         JISTCgAqmg2lkzEbTna0iJG0WSLsNwmmNto/HLzLhlcx1W+Y3GDPJSqqFRHtwWrLcAJ+
-         kzfbaPfWByxvKQo2afv7h0nFdzhefyQ1hG9/xrPhR65vsh2EvkGG8OrWo/adM9SlmKju
-         Qzk4rtbzXFiyjpe26jFCXmDTGOh9baUdqPRps76jZH/T7hsRiOiETz4CC3pyJbfXkvOM
-         JhsIqjlWZWzTKaEIXhFEVqpiDSIuKg13BDzYwFexhRGrpFIOPmfhTYYzmVImqlZDgGyz
-         xKkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=l97CFMxK013jbwqr86PBB0+4UzVCHm4yLdQdXZhW1zs=;
-        b=U9ZemRsbA5EdUoIUpz+UrnfAkpHxmTb8rWuzKRjOtOdqSx9+/clcMRaxKwcmLVUEBJ
-         gbuKIrKbyM+po+KUZV5grua1SzlETuEJ+8I5CLL3qEbo8TpEHGKp/GM4b8s9B+1QoQFO
-         ZDd6fGUljfU6CE8zeaFjlaz/BsrwYAWQ/nrw5nSEWMCjiXrYjtMvXF0NO84chgqNOloQ
-         oXs6NBqOUQEQefgX0scPJfvwuWRcrAa+JBWiKCXY97cYiqV1XqHQxNe4xipMPwaqmdeG
-         LH9oU/dyZksS7iVd10JjrIonLcXzE5LNBiJPXMOqftA7EzFosjBheBKJHxqV+QGSph1x
-         dYhg==
-X-Gm-Message-State: ANoB5pn9Yt0NoqrUChHibVSepju3HvHMmKC9OXJhDVRRv6UQUFPeMn7y
-	K4CZkRHvLpXW3HKTJxkhXLSVGrrksfc=
-X-Google-Smtp-Source: AA0mqf5SxIjT9Ke9s3gwPHWa5/eDwUkP9WIJotQNGSGS0b1ho7FUkY2SJWOIkn1yiTqehQ0a1IR9FQ==
-X-Received: by 2002:adf:f6ca:0:b0:241:dc52:5556 with SMTP id y10-20020adff6ca000000b00241dc525556mr2408875wrp.291.1669056539489;
-        Mon, 21 Nov 2022 10:48:59 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id q125-20020a1c4383000000b003c6cd82596esm19135941wma.43.2022.11.21.10.48.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 10:48:58 -0800 (PST)
-Message-ID: <610edfca-0a3a-fd41-5208-71978866be4f@gmail.com>
-Date: Mon, 21 Nov 2022 19:48:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 5C495C433C1;
+	Mon, 21 Nov 2022 20:43:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C495C433C1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 50B965C01DB;
+	Mon, 21 Nov 2022 15:43:27 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 21 Nov 2022 15:43:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm3; t=1669063407; x=1669149807; bh=X99sl0XOU+
+	RnPtDuCkgNa5OfxrgBoPhcnizaCfENa8M=; b=CpOXDUHZhUDIL6Gb9NLrBiW3aN
+	Hj0NRLMhwBr+3XpmUKDWr0v9TkR+d4vy/xEUmJgX++MzPvm+d1l8h5K82DXoCV/t
+	5+JXAgbWqs5FGtgKlF9mdu0v5vwJMXQTwG6Cyv20LG41EOVSP9Mp0i+Yb04k5oJh
+	lDdXUqLoeqcchKGtt7FEFKiaXYYTmKepdenXi3/S51t12DVXPnj88XkkWVacULge
+	6syJX2qrk04c/PGWaomgS7JzNnPfzLeJ7EYxmmkXe3Urnbn0oZ7o1TYI53CZKMcX
+	igX8RJA3KyrnlquWeZ53rTYeekImlhzzXRylwV6r0W1PLJJEcqI9J0cVw0xw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1669063407; x=1669149807; bh=X99sl0XOU+RnPtDuCkgNa5OfxrgB
+	oPhcnizaCfENa8M=; b=Ef2rWWBIFrWuJLua6mD+MZ3KB9Gk8+7T9kPsbmXzPq01
+	gjDuIWeHWnYp0IunrOtUfJa6AaNLv4hryImNhTRzbLoq1B3kiAnxnuzINcnaol8R
+	TWXSNVlrXlm1jZVxxoRc5DBX69ZPBbwdvbF1+TjRFHAjR6Ylj0Kni2IhgY2EO74M
+	OJeQYXRdEkrQlKcHKz+GRW0cvd0QRbvfIvOxDgNPm5QwvSarCvkIBm2YQ7SFCYcA
+	O6/34LU213bPpW2XweGjbaTPtYqvf6zUMxZOTeED2y7lwc7DZ/HC/LSrtejQp05T
+	EtQAiOzPUD0Ug8fioBp/kG3+REro5h4xAw6fBPg+aA==
+X-ME-Sender: <xms:7uJ7Y-DcbA-2W5S1RARkMMwQBtOJq1QrtmZ_mQoQ2is_VW21tqjZOw>
+    <xme:7uJ7Y4hnQYawqhBIyAd1InMcxUam8bsHb24_xARKVPX7a_m9HHeEAVvAksFoTURga
+    LgS0aXgEe3HkXloHp0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheeigddugedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:7uJ7YxmdnUWyHAoqePuZDv2wTgSKEpeeB3dTHbKrsWEmGNqs5ggoRA>
+    <xmx:7uJ7Y8zFLwXpWUQPanGKsTj73AnPtWKHwjzRhF3M4k6icBhvrTbMRQ>
+    <xmx:7uJ7YzREYJ2rL-jZyJH46a7G4vGWrcWPTIGd7gmkyJp9yMfzXD3a1A>
+    <xmx:7-J7Y-H9Qa_FujGGzG_njXuOSVrBK6wJ1I_y7ZuBiBQ4AcbhSqONqA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 96D10B60098; Mon, 21 Nov 2022 15:43:26 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <cf1c2f76-a724-4609-8263-a5cf997895be@app.fastmail.com>
+In-Reply-To: <20221117105131.7059-1-cniedermaier@dh-electronics.com>
+References: <20221117105131.7059-1-cniedermaier@dh-electronics.com>
+Date: Mon, 21 Nov 2022 21:43:06 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Christoph Niedermaier" <cniedermaier@dh-electronics.com>,
+ linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-Cc: "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [GIT PULL] defconfig: mediatek updates for v6.2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: soc@kernel.org, "Marek Vasut" <marex@denx.de>, kernel@dh-electronics.com,
+ linux-kernel@vger.kernel.org, "NXP Linux Team" <linux-imx@nxp.com>,
+ "Shawn Guo" <shawnguo@kernel.org>, "Sascha Hauer" <s.hauer@pengutronix.de>,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+ "Fabio Estevam" <festevam@gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add DHCOR to the DH electronic i.MX6 board support
+Content-Type: text/plain
 
-Hi Olof and Arnd,
+On Thu, Nov 17, 2022, at 11:51, Christoph Niedermaier wrote:
+> Add DHCOR to the DH electronic i.MX6 board support to cover the
+> DHCOR i.MX6ULL SoM. It is a solderable SoM.
+>
+> Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 
-Please have a look on the only patch for defconfig. We basically enable drivers 
-needed to support MT8183 based Chromebooks.
+The patch looks good to me, and while I could apply it directly to the
+soc tree, the normal way is to send this to the i.MX maintainers
+(added to Cc here).
 
-Regards,
-Matthias
+Shawn, let me know if you want me to apply this directly,
+otherwise I assume it will be part of you next pull request. 
 
----
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v6.1-next-defconfig
-
-for you to fetch changes up to 83f3da58682861327e571b3b5149d51a0d8bab27:
-
-   arm64: defconfig: Enable missing configs for mt8183-jacuzzi-juniper 
-(2022-11-11 09:41:16 +0100)
-
-----------------------------------------------------------------
-- enable missing drivers for to boot from MT8183 based chromebooks
-
-----------------------------------------------------------------
-Nícolas F. R. A. Prado (1):
-       arm64: defconfig: Enable missing configs for mt8183-jacuzzi-juniper
-
-  arch/arm64/configs/defconfig | 18 ++++++++++++++++++
-  1 file changed, 18 insertions(+)
+     Arnd
