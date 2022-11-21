@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C353C636F9
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B3EC63704
 	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 14:52:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 186EEC4314C; Mon, 21 Nov 2022 14:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01F27C4314B;
-	Mon, 21 Nov 2022 14:52:23 +0000 (UTC)
+	id 25A9FC43144; Mon, 21 Nov 2022 14:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FF57C4314A;
+	Mon, 21 Nov 2022 14:52:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669042344;
-	bh=Kik7FKP8vns9yM5ZpdZfWq1YspKf8/13makQEMeCT2s=;
+	bh=RtCmaV0rHTHsZjQ95RmUKh1FAa076XulZJhi/JIR8Cc=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ScEfFsOQY/Z6EvQsFzFzEIzsm5Y0c8p8ex5KRl7n7b7DjCcOZlqqkaaBCuC+cztep
-	 cWMbRBafC40YRngnD05JqD2svyUueThdEfadbCGOpMfI1JNUIpXHYWKRRBiyB3cz3V
-	 eF0/tCDWKbQHFv3Y09GwQPrMPx/u12EyyP6lzvI9f2ElqBUyv9AYk0TJGKY+2K06rq
-	 uThgwC0FTNWiSud2wVvZtseL4d37GNDyK8Vye6/XliCldjnEhDttLStqrOgmVIxZjO
-	 Pp3gMuiRQ4YRjWkqoCQWRuIygXzEFEpBqOFMQCjiR/zwH8U1eyj1+Z2Ljl6ENx8fJs
-	 oi+OnOyDJHlRQ==
+	b=Cim2IZU8/TtWpZLi5WSD7elCzO2pvakCvXalnZh4tm9z6uFYYxHZbNMT3kUdOcyfX
+	 XKj2doaM8+idgU3VtwhiYVkfpHc8j8sTXEXfr8zAlR5is8lI/lpLLNxM78Qpg/OolX
+	 zieFm8pML6Nla7oAJBDi+ky73atZ7C9zNu6BYtL2nTS/bW9xrI7H5cTMliAg27C7No
+	 TiSYWneKA5kLZJkV6P91njur7aj6DFWJdYngls022rWlDzvJ2e5XQ2a0ymQIALheRy
+	 ANJk1/Qc59HpeYP/yOqX5vHvnqRpmZKtuhOwMWM9MNLiJxqvg9No+jffVRH7WSoALz
+	 Ib6gseR23SkXA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DFC29E270C7;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ED7DDE29F42;
 	Mon, 21 Nov 2022 14:52:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.1, part 3
+Subject: Re: [GIT PULL] Stable branch for .dts to .dtso rename
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166904234391.4359.2579090098216835311.git-patchwork-notify@kernel.org>
+ <166904234396.4359.14539414950496081717.git-patchwork-notify@kernel.org>
 Date: Mon, 21 Nov 2022 14:52:23 +0000
-References: <20221119073812.GQ16229@T480>
-In-Reply-To: <20221119073812.GQ16229@T480>
-To: Shawn Guo <shawnguo@kernel.org>
+References: <20221118211103.GA1334449-robh@kernel.org>
+In-Reply-To: <20221118211103.GA1334449-robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,22 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 19 Nov 2022 15:38:13 +0800 you wrote:
-> The following changes since commit 836fb30949d9edf91d7de696a884ceeae7e426d2:
+On Fri, 18 Nov 2022 15:11:03 -0600 you wrote:
+> .dts files for overlays are getting renamed to .dtso. The kbuild support
+> for that in in this stable branch. The .dts patches that depend on this
+> are here[1]. There's also some new .dts overlay files posted[2].
 > 
->   soc: imx8m: Enable OCOTP clock before reading the register (2022-11-14 15:52:53 +0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1-3
+> I'll leave it to the SoC and sub-arch maintainers to decide how you all
+> want to handle it from here. Either SoC maintainers can take this branch
+> and dependent rename patches or each sub-arch can. In any case, I would
+> like it converted over in 6.2 so we can remove .dts -> .dtbo build
+> support ASAP and not be carrying both.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.1, part 3
-    https://git.kernel.org/soc/soc/c/cafd3d346acb
+  - [GIT,PULL] Stable branch for .dts to .dtso rename
+    https://git.kernel.org/soc/soc/c/cdd1db76607d
 
 You are awesome, thank you!
 -- 
