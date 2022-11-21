@@ -1,75 +1,51 @@
-Return-Path: <SRS0=1gXN=3V=gmail.com=thierry.reding@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA41C4332F
-	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 17:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89E87C4332F
+	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 17:24:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E7E13C43470; Mon, 21 Nov 2022 17:12:52 +0000 (UTC)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D79B9C433D7;
-	Mon, 21 Nov 2022 17:12:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D79B9C433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id z18so17176846edb.9;
-        Mon, 21 Nov 2022 09:12:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N6dGAFAHsa9p5rBqdTstHSkqVhnceetyhIFDb9Pq0iI=;
-        b=MUodzzIYUG+oJ+MwapKr2R3YfCfQrg1VdeVsyQ/V/WAiXZZFBDEsrzbnNzoCUcDWFE
-         Q67JjLyyhLqI8XHNqnjTFMAy5tTOM4MLqYVG2cm45l+tXD7FApzq00Gr2uCNDolO6XH4
-         WrxT8S71+buqJPUQJa8VrRjamIsFkUChZHnPiGk7H1CIpuwR2c1OVMUqn/+5xOrmzM0M
-         Hpr0JQfgTSPTjkGyWbpbNVkd2wBzRlA4THPz4wyr/Yfr0YrsOVx043j+MH+nGoWrGj5z
-         B5iUTFRC9plC44QzwmcDSoGLT64DIfO9EXZ1d7ttl7iKZ61TLlm8akvC8XbjfaNgmfrW
-         z1kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N6dGAFAHsa9p5rBqdTstHSkqVhnceetyhIFDb9Pq0iI=;
-        b=a8DHX36oRmgnPUUU8jwa48w1wx2BuH9GQLt2e59pSnHsOivyS/7ceMB3ws2+scPh2L
-         mjDKmXppquBFCjHyAzRvKJL2l2SLJBGb095FTtRXx7Qwh9FvrZEf03oJzCNMxGBGQXxt
-         vfq9NO+hgmJYSQoPe9jPFAEwdFadx+iqdD2W36l5dL7p96HGu1w4i4uqDcQdz0H65sbW
-         jtaH4UUzDqnr1ScDsFKfqZq+tOxfQ/ailh2I2bHoUKQtITXROJrOJkVbmKNw/N4bzkv1
-         c++NrNlZd9KS64fnBaUomVRrSCDfJc6/RrN7WvoA1y8yPZ16iiqo6WtQ0vYJuoj7bpUo
-         viBA==
-X-Gm-Message-State: ANoB5pnwxPHEu1iRtNaDVhgMV4+SryYgZ85RngA4HtBhJDD21shrhctW
-	to+AzgJs2zxNo2maeSKeLeuPdsI/S/o=
-X-Google-Smtp-Source: AA0mqf62E7mDMYhB8iW+yawGTfz4x5HJ+AwPVoEjivfQA39R8o5YTr8IwjbdX3GuAexHtaUoraRP5w==
-X-Received: by 2002:aa7:c587:0:b0:469:3d58:20a5 with SMTP id g7-20020aa7c587000000b004693d5820a5mr1802428edq.136.1669050769928;
-        Mon, 21 Nov 2022 09:12:49 -0800 (PST)
-Received: from localhost (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i7-20020a17090671c700b007aec1b39478sm5121213ejk.188.2022.11.21.09.12.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 09:12:49 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
+	id 6C8EEC433D6; Mon, 21 Nov 2022 17:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5425CC433C1;
+	Mon, 21 Nov 2022 17:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669051455;
+	bh=ITOwNpfu8qXwCaHtGeJVM+VyLpA0Z+2LYI12CiSpsIk=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=LcPBJ1wEzq2r4FWd5pmb73BK6DMKw68/GmxBtbM6CXo7Do7DxpEazEhi2XyH6ujgv
+	 oDQ8QAMD4FVaqBKhCVKy+saD1GkMkzEfYAXdEwZVAdJzEyRgLu1XhMWS9EreWGfLWg
+	 5z62WaQNoe3ssRlNPZx1aXpUE3LzKf++9oahohdPFct4yXGpxl4SHEI37IkUgvZZAe
+	 Uiobf5ACnHijOVV9/N7ucu4rE8K/OlIRGpQyLguy2J9YyRjgqbPODEjY5nsGJmD/ws
+	 ZzuJsBAi/VX4E3190jJ8fPtZ0XQAKER0maLe/gPyZeIIlPowAT9jb7t2AHzF0qb6QM
+	 Ca4Sta9ecm6jg==
+Date: Mon, 21 Nov 2022 17:24:11 +0000
+From: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL v2 7/7] arm64: tegra: Device tree changes for v6.2-rc1
-Date: Mon, 21 Nov 2022 18:12:39 +0100
-Message-Id: <20221121171239.2041835-7-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221121171239.2041835-1-thierry.reding@gmail.com>
-References: <20221121171239.2041835-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+To: soc@kernel.org
+Cc: linux-riscv@lists.infradead.org, palmer@dabbelt.com, conor@kernel.org
+Subject: RISC-V SoC Drivers for v6.2
+Message-ID: <Y3u0Oydiv2Wauda2@spud>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi ARM SoC maintainers,
+
+Hey Arnd,
+
+Same stuff applies here: lmk if there's something you'd rather see changed.
+Perhaps you'd prefer to see PRs per vendor? Although I think that's less
+likely to matter here than in the DT stuff. Again, I'll try to get the PR
+out a bit earlier next time.
+
+Not too much to see here, Yang Yingliang has added some error handling
+to the setup of the driver that reports SiFive cache topology
+information. I've put it on -next given how far we are in the release
+cycle, feel free to put it on fixes if you disagree :)
+
+Thanks,
+Conor.
 
 The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
@@ -77,91 +53,23 @@ The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.2-arm64-dt-v2
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-for-v6.2-mw0
 
-for you to fetch changes up to 1002a361127b6b42b8d1ef686a4c1fa68541d6f5:
+for you to fetch changes up to 8fbf94fea0b4e187ca9100936c5429f96b8a4e44:
 
-  arm64: tegra: Remove unneeded clock-names for Tegra132 PWM (2022-11-21 13:30:16 +0100)
-
-Thanks,
-Thierry
+  soc: sifive: ccache: fix missing of_node_put() in sifive_ccache_init() (2022-11-09 22:01:31 +0000)
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v6.2-rc1
+RISC-V SoC drivers for v6.2
 
-This contains many new additions, primarily for Tegra234, as well as a
-slew of cleanups for issues flagged by the DT validation tools.
+SiFive:
+- add probe error handling to the ccache driver
 
 ----------------------------------------------------------------
-Akhil R (1):
-      arm64: tegra: Add dma-channel-mask in GPCDMA node
+Yang Yingliang (3):
+      soc: sifive: ccache: fix missing iounmap() in error path in sifive_ccache_init()
+      soc: sifive: ccache: fix missing free_irq() in error path in sifive_ccache_init()
+      soc: sifive: ccache: fix missing of_node_put() in sifive_ccache_init()
 
-Dipen Patel (1):
-      arm64: tegra: Enable GTE nodes
-
-Fabio Estevam (1):
-      arm64: tegra: Remove 'enable-active-low'
-
-Jon Hunter (6):
-      dt-bindings: tegra: Update headers for Tegra234
-      arm64: tegra: Remove unused property for I2C
-      arm64: tegra: Populate Tegra234 PWMs
-      arm64: tegra: Add PWM fan for Jetson AGX Orin
-      arm64: tegra: Add SBSA UART for Tegra234
-      arm64: tegra: Update console for Jetson Xavier and Orin
-
-Mikko Perttunen (3):
-      dt-bindings: Add headers for NVDEC on Tegra234
-      arm64: tegra: Fix ranges for host1x nodes
-      arm64: tegra: Add NVDEC on Tegra234
-
-Pierre Gondois (1):
-      arm64: tegra: Update cache properties
-
-Prathamesh Shete (1):
-      arm64: tegra: Add Tegra234 SDMMC1 device tree node
-
-Sandipan Patra (1):
-      arm64: tegra: Enable PWM users on Jetson AGX Orin
-
-Thierry Reding (15):
-      Merge branch for-6.2/dt-bindings into for-6.2/arm64/dt
-      arm64: tegra: Sort nodes by unit-address
-      arm64: tegra: Add missing whitespace
-      arm64: tegra: Remove clock-names from PWM nodes
-      arm64: tegra: Separate AON pinmux from main pinmux on Tegra194
-      arm64: tegra: Add missing compatible string to Ethernet USB device
-      arm64: tegra: Restructure Tegra210 PMC pinmux nodes
-      arm64: tegra: Use vbus-gpios property
-      arm64: tegra: Use correct compatible string for Tegra194 HDA
-      arm64: tegra: Use correct compatible string for Tegra234 HDA
-      arm64: tegra: Remove reset-names for QSPI
-      arm64: tegra: Fixup pinmux node names
-      arm64: tegra: Remove unused reset-names for QSPI
-      arm64: tegra: Fix up compatible string for SDMMC1 on Tegra234
-      arm64: tegra: Remove unneeded clock-names for Tegra132 PWM
-
-Vidya Sagar (3):
-      arm64: tegra: Fix Prefetchable aperture ranges of Tegra234 PCIe controllers
-      arm64: tegra: Add ECAM aperture info for all the PCIe controllers
-      arm64: tegra: Fix non-prefetchable aperture of PCIe C3 controller
-
- arch/arm64/boot/dts/nvidia/tegra132-norrin.dts     |   2 +-
- arch/arm64/boot/dts/nvidia/tegra132.dtsi           |   1 -
- arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  12 +-
- arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi     |   2 +-
- .../arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi |   4 +-
- arch/arm64/boot/dts/nvidia/tegra194-p3668.dtsi     |   2 +-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  70 ++-
- arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |   5 +-
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |   4 +-
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  61 +-
- .../arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi |   8 +-
- .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |  21 +-
- .../arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi |  14 +
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           | 666 ++++++++++++++-------
- include/dt-bindings/clock/tegra234-clock.h         | 639 +++++++++++++++++++-
- include/dt-bindings/memory/tegra234-mc.h           | 440 +++++++++++++-
- include/dt-bindings/power/tegra234-powergate.h     |  15 +
- include/dt-bindings/reset/tegra234-reset.h         | 111 +++-
- 18 files changed, 1751 insertions(+), 326 deletions(-)
+ drivers/soc/sifive/sifive_ccache.c | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-
