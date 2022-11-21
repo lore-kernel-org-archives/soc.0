@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D17C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2F2C4167B
 	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 36F8FC43149; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EC33C433B5;
+	id 50152C43470; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39A2EC433D7;
 	Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669042286;
-	bh=uc/oHcDMt5BBru36d1T/7+3UI7PgzgClxqq1M7Rp3/4=;
+	bh=JkPfntjD8AMmMa3/pHar++le8cRBSs8V2n4QzsN8jm8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=fsDzpMcNjO7t338Ua/x5ediM3LMavFcyzq7jnL3rLU3r29BFb8GPyPqvHM9xTBeqm
-	 RMC7J64hJp2DZJzB6aF1DtX+xQ0MxQS+CfyTIqn0khBLDaAc7CIDd9EhjhVX1YMOo9
-	 rpDT2276ddND44wONK4lXp04GYev4e54dd60jfg3uVx75zjL5yw69UFW+hY5Ob5ycV
-	 yr8JcDERFnJ7hG3ePy4LyYxd+OBe9pZKZd8+5otMrzBfx9Bu6UAsq+T4qvgjWyHnG5
-	 MJRQJRO8nw1yykNN6HStFRSPtW2igwv6xyORM4qVnoDNN8Cp3W5LEDwf6+Db7w8pXl
-	 wy6SPCAVwssWA==
+	b=M4KLwe9EeeJM3QFW7CH0LUcKziilpMSA7MQSdmwfsYJDNWVLfg2BJv/H8aAhMNgqr
+	 Aknr5geZHs/O0PHTXzQO41T9W1Bq4cJ7Mp8CI4q9nis/h/mU+sC+qv+DQiWeruWcRH
+	 ppW8r8MmkSHxjLqB4lAihFLoQBdOdb9GAWN+bgegFftC9/l2vW8limFuXpx6pAAgEF
+	 G195ss4UqDtfo+MAiHnUfGy9sjZdOsvmnm0N8y9yvb/qDmOR+HRsQM8J4jDkl2qg7X
+	 eVUEmB/TWAVkHxNreW93q5mp8jjyUfznZjFUynrn9eMG7Ba326G1/Pa2Ai4/wRrmv0
+	 Kgq1NU80cCQ4Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03CD7E270C9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1A467E29F41;
 	Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fix possible memory leak OP-TEE driver for v6.1
+Subject: Re: [GIT PULL] i.MX fixes for 6.1, part 3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166904228601.4359.11968081106982724023.git-patchwork-notify@kernel.org>
+ <166904228609.4359.7324187082938070215.git-patchwork-notify@kernel.org>
 Date: Mon, 21 Nov 2022 14:51:26 +0000
-References: <Y3d2OuJ60U30OkZe@jade>
-In-Reply-To: <Y3d2OuJ60U30OkZe@jade>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+References: <20221119073812.GQ16229@T480>
+In-Reply-To: <20221119073812.GQ16229@T480>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 18 Nov 2022 13:10:34 +0100 you wrote:
-> Hello arm-soc maintainers,
+On Sat, 19 Nov 2022 15:38:13 +0800 you wrote:
+> The following changes since commit 836fb30949d9edf91d7de696a884ceeae7e426d2:
 > 
-> Please pull this small patch in the OP-TEE driver which fixes a possible
-> memory leak in the error path of optee_register_device().
+>   soc: imx8m: Enable OCOTP clock before reading the register (2022-11-14 15:52:53 +0800)
 > 
-> Thanks,
-> Jens
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1-3
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Fix possible memory leak OP-TEE driver for v6.1
-    https://git.kernel.org/soc/soc/c/dc0e2470f4b9
+  - [GIT,PULL] i.MX fixes for 6.1, part 3
+    https://git.kernel.org/soc/soc/c/cafd3d346acb
 
 You are awesome, thank you!
 -- 
