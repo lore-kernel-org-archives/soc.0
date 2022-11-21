@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2F2C4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DFBFC43217
 	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 50152C43470; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 39A2EC433D7;
+	id 483C5C433C1; Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F823C43470;
 	Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669042286;
-	bh=JkPfntjD8AMmMa3/pHar++le8cRBSs8V2n4QzsN8jm8=;
+	bh=rUMWCse4gy2KDSZ2JbqbF3yATlY3w2++mYgqbrl/aQ0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=M4KLwe9EeeJM3QFW7CH0LUcKziilpMSA7MQSdmwfsYJDNWVLfg2BJv/H8aAhMNgqr
-	 Aknr5geZHs/O0PHTXzQO41T9W1Bq4cJ7Mp8CI4q9nis/h/mU+sC+qv+DQiWeruWcRH
-	 ppW8r8MmkSHxjLqB4lAihFLoQBdOdb9GAWN+bgegFftC9/l2vW8limFuXpx6pAAgEF
-	 G195ss4UqDtfo+MAiHnUfGy9sjZdOsvmnm0N8y9yvb/qDmOR+HRsQM8J4jDkl2qg7X
-	 eVUEmB/TWAVkHxNreW93q5mp8jjyUfznZjFUynrn9eMG7Ba326G1/Pa2Ai4/wRrmv0
-	 Kgq1NU80cCQ4Q==
+	b=jzixA5/rADKOG6DXJzWM6v9cFJ3chDH78oRIi0+kj5NbE6QXTQAPua2m12mH2P8yD
+	 RMHBSBzHa06Im9jrCee6W3gN354sH4oV3+a3CWeBoAyC17VaYjI9u9yXpl9XTv389U
+	 C3AZY85K+ZMam3umAuWiAeQTW4iM29rLO6xuSPBfe1xs8ENQ3NxDe9wk9dxoM+/SnM
+	 RkSRZx0UAaWNyPqj3iEjOdwgwK/9/IYYB1EwGdGFQl3eT8Pb7SroRWw6yCqu81oRA+
+	 LFn3PBzQlLqyc7q75Q34Al/i3j8MhessKLzpVxLkBNE0lcBEYp6wFt5WaFg+bZ7r9d
+	 3Npqr0usVexLQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1A467E29F41;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E7C8C395FF;
 	Mon, 21 Nov 2022 14:51:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.1, part 3
+Subject: Re: [GIT PULL] Allwinner fixes for 6.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166904228609.4359.7324187082938070215.git-patchwork-notify@kernel.org>
+ <166904228605.4359.15916793893242177102.git-patchwork-notify@kernel.org>
 Date: Mon, 21 Nov 2022 14:51:26 +0000
-References: <20221119073812.GQ16229@T480>
-In-Reply-To: <20221119073812.GQ16229@T480>
-To: Shawn Guo <shawnguo@kernel.org>
+References: <Y3ftpBFk5+fndA4B@jernej-laptop>
+In-Reply-To: <Y3ftpBFk5+fndA4B@jernej-laptop>
+To: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 19 Nov 2022 15:38:13 +0800 you wrote:
-> The following changes since commit 836fb30949d9edf91d7de696a884ceeae7e426d2:
+On Fri, 18 Nov 2022 21:40:04 +0100 you wrote:
+> Hi!
 > 
->   soc: imx8m: Enable OCOTP clock before reading the register (2022-11-14 15:52:53 +0800)
+> Please pull following fixes for 6.1.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.1-3
+> Best regards,
+> Jernej
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.1, part 3
-    https://git.kernel.org/soc/soc/c/cafd3d346acb
+  - [GIT,PULL] Allwinner fixes for 6.1
+    https://git.kernel.org/soc/soc/c/e7135a28430d
 
 You are awesome, thank you!
 -- 
