@@ -1,127 +1,97 @@
-Return-Path: <SRS0=CRsV=3W=microchip.com=Conor.Dooley@kernel.org>
+Return-Path: <SRS0=Mtmc=3W=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E751DC4332F
-	for <soc@archiver.kernel.org>; Tue, 22 Nov 2022 15:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF76C4332F
+	for <soc@archiver.kernel.org>; Tue, 22 Nov 2022 15:25:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B4F1DC433B5; Tue, 22 Nov 2022 15:15:08 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 335A9C433B5; Tue, 22 Nov 2022 15:25:03 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 119A6C433D6;
-	Tue, 22 Nov 2022 15:15:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 119A6C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669130102; x=1700666102;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GpkSIeWT0lMRPcyAIGKwb/kNRvRf9zXgnioryzKVzg8=;
-  b=Ky1dotnQhMQr1xoy5KhaYyvPDrolUYe7SWp7vEaRgLwjenROBwrfYLB9
-   1k0zKcrAPM4R8IcKQYZb6APS+ZkgQurfpj+LuEUhOvDJtt5MCcfKXRpx+
-   uo3Fqa+4BB7c/NyMY1UTx658oHUQVUDwLGSPUCY1AU0cv+wf8y1v+vHZB
-   AXgoTl+BFq4e3Rchn5VA5dAcD3GaYkhel2O0tHqU2fUC4Hy7yKV+ZGzeu
-   EIR6oJv1xrLTfth8zOZQtV1/8FGwyc7oQTaSqZT8RTP+HHDT5OGtNQ/Kn
-   u0ANfxKeoebrC9N5fHj/9ISHOAIa73bgnA72qMsvD4XOqFkopkxPViOJe
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,184,1665471600"; 
-   d="scan'208";a="188165690"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Nov 2022 08:15:00 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 22 Nov 2022 08:15:00 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 22 Nov 2022 08:14:59 -0700
-Date: Tue, 22 Nov 2022 15:14:41 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Palmer Dabbelt <palmer@dabbelt.com>, <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Conor Dooley <conor@kernel.org>,
-	<soc@kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: RISC-V SoC Drivers for v6.2
-Message-ID: <Y3znYdAi8fS4Paak@wendy>
-References: <608037ab-1e9c-4f70-b85c-5665a4bb1769@app.fastmail.com>
- <mhng-3945534f-98a0-453a-8a1b-3e1c8f3441a4@palmer-ri-x1c9>
+	by smtp.kernel.org (Postfix) with ESMTPS id 113B6C433D7
+	for <soc@kernel.org>; Tue, 22 Nov 2022 15:25:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 113B6C433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so1182694wmi.1
+        for <soc@kernel.org>; Tue, 22 Nov 2022 07:25:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:organization:reply-to:content-language:cc
+         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NIshvcW+dmN6wr7Y/QgpYruJjGhmzM7qSnM+mWsPGXY=;
+        b=EUzX1hweNmJjDIs4y3ET5oXPKpoVdXJC2g56T4XMcQGH3/+FNZk8ktxpn9W6fTilmw
+         GV3D2G/9Qa9OvYHeryAXFpHuPMnnoN2QmBX7uITYBPu68zRcEHnD9dmKkW8y15nwTvzV
+         WN3KAgQnDajLlOH3vjH+7hbDCXPL0dvSLyeLAgtl9otsY0KOshRoF/fhr3R0/+ZpF35t
+         OS+aAs0AslKksBgLhoCFH9QsQecSK5yUXlCg3c4aVeLt6QoqtvXngdTw2TryJ0l/5L7C
+         sw0z7RYAU4mvgwt61P/2yqDOfBcMnPJ2nXk5lwe5b/NjOxqMHWdA4mwVj1z75gmNJGzC
+         3oWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:organization:reply-to:content-language:cc
+         :to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NIshvcW+dmN6wr7Y/QgpYruJjGhmzM7qSnM+mWsPGXY=;
+        b=J4aeVJO9CQpQOoaeRqTfa4RpSF0ruoSfECH4tT0Qe7BsSrdoHFn0AAmFpeMFSjpkJz
+         Ef9nhYqbxLKoECzdb7OZ3iqqWzZGTMEbdgoDGJyaGO5IGKQzoyZVrA8GSLnhTPxHjVcj
+         f7IIvhIYsf0yBzBxb4CXgNWmbRdt2kFPnkXFpscIJcmB0Oeib7AVJ0iBL4Gra1OvKqaX
+         hwORxEWDG0dfmCfk9Hfi7b2LNBSQ7pbJ0xL2DZIyoQn6OYibfLajDFgtMMrnSQKNlBt0
+         XLYVlLPSfEPiNt4j2xulvFZrZDoCy2qExotORoiDqPA1iUwYCPN5Z0AgJyuhB4jIilq6
+         i0ug==
+X-Gm-Message-State: ANoB5plkgItDsdii2/Kp5eHVrpF9FJlUMkBEpBPoTE/sZUNh0fi3LcCd
+	UxsjmzeKUMvRE3w7qR9nbDEGO6UwY3O5wA==
+X-Google-Smtp-Source: AA0mqf5vn7HfJEjIkm7I/bW7zOpgzzDn48vVJxYmegrRLJ1yP+FH5ahqDN1yPvXihrYvaDUuarJFOg==
+X-Received: by 2002:a05:600c:2e51:b0:3cf:6e9b:21f1 with SMTP id q17-20020a05600c2e5100b003cf6e9b21f1mr2893276wmf.90.1669130700262;
+        Tue, 22 Nov 2022 07:25:00 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:6969:11a1:a2af:e8c0? ([2a01:e0a:982:cbb0:6969:11a1:a2af:e8c0])
+        by smtp.gmail.com with ESMTPSA id v17-20020a5d5911000000b00241da0e018dsm4906199wrd.29.2022.11.22.07.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 07:24:59 -0800 (PST)
+Message-ID: <7d1ca7f4-b3ae-46df-5b9a-7cba8ac3e512@linaro.org>
+Date: Tue, 22 Nov 2022 16:24:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <mhng-3945534f-98a0-453a-8a1b-3e1c8f3441a4@palmer-ri-x1c9>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic Drivers updates for v6.2
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Reply-To: neil.armstrong@linaro.org
+Organization: Linaro Developer Services
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 22, 2022 at 07:00:00AM -0800, Palmer Dabbelt wrote:
-> On Tue, 22 Nov 2022 06:38:40 PST (-0800), Arnd Bergmann wrote:
-> > On Mon, Nov 21, 2022, at 18:24, Conor Dooley wrote:
-> > > Hey Arnd,
-> > > 
-> > > Same stuff applies here: lmk if there's something you'd rather see changed.
-> > > Perhaps you'd prefer to see PRs per vendor? Although I think that's less
-> > > likely to matter here than in the DT stuff. Again, I'll try to get the PR
-> > > out a bit earlier next time.
-> > 
-> > Applied, this looks fine, just a few things to keep in mind:
-> 
-> Thanks!
+Hi,
 
-Ditto :)
+Here's an Amlogic Drivers change for v6.3, fixes memcpy vs iomem type warnings in meson_sm driver.
 
-> > - please add "[GIT PULL]" to the subject line of the email
-> 
-> FWIW, here's the script I use to send pull requests:
-https://github.com/palmer-dabbelt/home/blob/master/.local/src/git-send-pull.bash
+Neil
 
-I noticed that yesterday evening while double checking what I'd sent out
-but by then it was too late...
-I'll use the script I use for internal stuff going forward & hopefully
-avoid a repeat.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-> > - Splitting up a large pull request into smaller ones can be
-> >   helpful to make sure things don't go in unnoticed. I try to
-> >   (briefly) look at each patch, but if you have 20 boring but
-> >   large patches, and a small but important patch that I may
-> >   need to comment on, that is a good reason to split.
+   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-Sure. I'll try to figure out what makes the most sense for a split
-versus having stuff in linux-next in a reasonable way. I suppose volume
-of changes will mainly dictate the approach.
+are available in the Git repository at:
 
-> > > Not too much to see here, Yang Yingliang has added some error handling
-> > > to the setup of the driver that reports SiFive cache topology
-> > > information. I've put it on -next given how far we are in the release
-> > > cycle, feel free to put it on fixes if you disagree :)
-> > 
-> > This is fine either way, as none of the fixes are likely to cause
-> > any real issues. I usually like to err on the side of having too much
-> > in the fixes branch instead of risking to miss something, but I'm
-> > just as happy to follow your preference here.
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-drivers-for-v6.2
 
-Cool. I'll bear that in mind for next time, thanks.
+for you to fetch changes up to 7dc69c7d073e6004a281db8f7f15cf6ebf702ea0:
 
-> > > RISC-V SoC drivers for v6.2
-> > > 
-> > > SiFive:
-> > > - add probe error handling to the ccache driver
-> > 
-> > Since this tag description becomes part of the git history, try to write
-> > it like you would write a commit log in the future. Ideally that
-> > avoids bulleted lists (I know they are easy) and instead uses full
-> > sentences that explain things about the state of the patches. If there
-> > are bugfixes, are users likely to need the fixes or were they found
-> > through inspection? For new features, explain who would have the
-> > corresponding hardware and what it does. Again, what you have here
-> > is not wrong, but it can always get better.
+   firmware: meson_sm: Fix memcpy vs iomem type warnings (2022-10-17 17:19:04 +0200)
 
-Yeah, I can do that. You likely won't get a Christian Brauner novella
-out of me ever, but I'll do something more cover letter-y next time
-around.
+----------------------------------------------------------------
+Amlogic Drivers changes for v6.2:
+- Fix memcpy vs iomem type warnings in meson_sm driver
 
-Thanks again,
-Conor.
+----------------------------------------------------------------
+Kees Cook (1):
+       firmware: meson_sm: Fix memcpy vs iomem type warnings
 
+  drivers/firmware/meson/meson_sm.c | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
