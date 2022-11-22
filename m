@@ -1,124 +1,133 @@
-Return-Path: <SRS0=dEhN=3V=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=3AKP=3W=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51D42C433FE
-	for <soc@archiver.kernel.org>; Mon, 21 Nov 2022 22:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3354C4332F
+	for <soc@archiver.kernel.org>; Tue, 22 Nov 2022 00:57:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0CEE2C433B5; Mon, 21 Nov 2022 22:10:22 +0000 (UTC)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	id BA9E1C433D7; Tue, 22 Nov 2022 00:57:44 +0000 (UTC)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E649DC433D7
-	for <soc@kernel.org>; Mon, 21 Nov 2022 22:10:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E649DC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id be13so20896926lfb.4
-        for <soc@kernel.org>; Mon, 21 Nov 2022 14:10:19 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 95A20C433D6
+	for <soc@kernel.org>; Tue, 22 Nov 2022 00:57:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 95A20C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id b12so8653564wrn.2
+        for <soc@kernel.org>; Mon, 21 Nov 2022 16:57:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NQ+sb5fWx0zzY9D9Hzfb1VS3vUwNtOhdp/GACOFf14=;
-        b=XOKKpSB2oWBgU5nJzRr3R4Q1cbpFH+AxjSb0Y1dgvH/xTVjGhF16g+a6t5F0nRkdeE
-         4anceXB+SDSbPN+LCQwL9qcZkPXSZVE78tDYfEKx0yb3DPra0tPMoC9GVscVPQ/1kF/1
-         XBZiVERUlBJYDYZ/KOrsJ4aOvCFchUMVJkUtkYT8O5+hdqFMX5Fq0BV0G9YyHL/8TFM0
-         vvpQfnWKrOj5Z56nVOgiFN9XY8B55NCjb15enAXg7wvItn8ZOzpSspGpf3RM2KmBTomK
-         0QIGTRf3+XqY6XjE4/R2FuTyH2DRJNud1oAcwPKLce1xmSVTnn2yFXSoBGD3/RZ4rCx/
-         SiJQ==
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GLNpOC+EKWhHYX3ClfPrj2d8ABDTkig29CHfa3CG5z0=;
+        b=Wn7LxHxNYEUcNzh5Yi6H7zMJ37MUheNt1yCSxSgFx4Nd19to9uIfW10w5VhxWTOa2u
+         /I+0m0Glugebfu3wA5PTRVCTuY/bPYaxKjsXTyqqRMpADGP3NidUypMw8zvYzpX2n9Rg
+         AMXXNT97A2/YSYROnpkAlf13MuN4Iu/wNv6TU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0NQ+sb5fWx0zzY9D9Hzfb1VS3vUwNtOhdp/GACOFf14=;
-        b=ldLy3npQyn9IHFhxuV/PucVqp64vAAsDeVDyU3lrR5rRHNV0sDwttSOHLwrjcEG4Gs
-         Wi0tW/z8z/nM3SuaPyxU+3OgWa1sY0t3p4m9PzbKHfXBGtKatNZRZjNDu5pUFXBRFxZz
-         +z46GOEz9yp0PpdxZQWbVV/LYK+4j9dn1m+kOt4/ann4GxqWEBKomRwDY/71LT/BQBDC
-         jxwzDhr96AhG25rfzrvnc00w4rOEg8lwQgjabBI8sM5q14jXQtVLBqMr8bEiiyzFbpu6
-         FA2nS6knd8gcd3rmsv+2bd+WLzfG/iAwKJQlXAR8rCpoHXLg8jUP/DQmmPTi3J95id/z
-         V5Mw==
-X-Gm-Message-State: ANoB5pl5s5o2gSjX6Pm3MJgSihEiditJQH06CzYebbgaogElwTqSOQbv
-	aAORlkw3IlnIwntoEJW4ecOzdSfL/Z4OPg==
-X-Google-Smtp-Source: AA0mqf6g9VKovCVc0RUDf86dEVYfrmuBDHf99iegzXtdbj7o6yvAIkUazwm9egONR7e6jqMoVMaw6A==
-X-Received: by 2002:a05:6512:238d:b0:4ad:5f5c:2b31 with SMTP id c13-20020a056512238d00b004ad5f5c2b31mr6336723lfv.422.1669068617678;
-        Mon, 21 Nov 2022 14:10:17 -0800 (PST)
-Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id 12-20020ac25f0c000000b004948ddb4e4dsm2181079lfq.301.2022.11.21.14.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 14:10:17 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Imre Kaloz <kaloz@openwrt.org>,
-	Krzysztof Halasa <khalasa@piap.pl>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] ARM: ixp4xx: Remove unused debug iomap
-Date: Mon, 21 Nov 2022 23:10:15 +0100
-Message-Id: <20221121221015.1454948-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GLNpOC+EKWhHYX3ClfPrj2d8ABDTkig29CHfa3CG5z0=;
+        b=ua0K3IbZJp1T2sgjok3LPi7U9Y9SuRU0/tGxHFyZ8hRkXmLYswrnBWqpyP3F21jpG6
+         33MPUf5Se+PVUeSVmo9AiBPaxuPKNDVVKLvhJuPuWhYDwHd6TkMOKXfCtpZZDBuCJCsq
+         scBv/TfVhjdMX5j00Lu69wnyi+2yPh0ScBuKQr5UKx2apKYPbYx+oQGEPfPs1xiXpiIC
+         yyFSzh/SwTBUCHn7+WXPDe/s0Zq7AmO/vvi5+6Tee8UCbYEtZseRPpYUvOJSBPYtQ7MO
+         LBgxCd6ywfhQWR68n5ndKs0eRgG2KzbxrziDJH4zjGlGfJ4bbtZrvnluQMK8tHJ3NFr0
+         cQ6g==
+X-Gm-Message-State: ANoB5plmFkd1JHvrzQFTINoETA/+3GwOTkNLKNvJzr27jmfxyFALpcdF
+	rlqwN/F4S8U9pVRAKnfboctgDkxY0g/BqkSWUCpk/5numO8=
+X-Google-Smtp-Source: AA0mqf4zegYOqBDXBohUs5DvvquRK2r81ahOv/8Tc5r8so4t4oYa7n5dSAlPXleW16X3sA1ToHjCec/d5wZBzNh5ZAU=
+X-Received: by 2002:a5d:6642:0:b0:236:6a28:eeda with SMTP id
+ f2-20020a5d6642000000b002366a28eedamr12373629wrw.315.1669078660427; Mon, 21
+ Nov 2022 16:57:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 22 Nov 2022 00:57:29 +0000
+Message-ID: <CACPK8Xfsc8BaL_qAgV+3Rk-AFcQoDVfTpMzHvq_rR-UYqwpNNQ@mail.gmail.com>
+Subject: [GIT PULL] ARM: aspeed: devicetree changes for 6.2
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
+Content-Type: text/plain; charset="UTF-8"
 
-If we don't provide the .map_io() callback, the LL debug
-defines will kick in anyway, so delete the UART debug map
-as well.
+Hello soc maintainers,
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ARM SoC folks: please apply this as a fixup on top
-of the pulled IXP4xx patches if it looks OK.
----
- arch/arm/mach-ixp4xx/ixp4xx-of.c | 25 -------------------------
- 1 file changed, 25 deletions(-)
+Here are the aspeed device tree changes for v6.2.
 
-diff --git a/arch/arm/mach-ixp4xx/ixp4xx-of.c b/arch/arm/mach-ixp4xx/ixp4xx-of.c
-index 9f1557f33e84..1b4d84a5b02f 100644
---- a/arch/arm/mach-ixp4xx/ixp4xx-of.c
-+++ b/arch/arm/mach-ixp4xx/ixp4xx-of.c
-@@ -2,31 +2,7 @@
- /*
-  * IXP4xx Device Tree boot support
-  */
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/io.h>
--
- #include <asm/mach/arch.h>
--#include <asm/mach/map.h>
--
--#ifdef CONFIG_DEBUG_UART_8250
--static struct map_desc ixp4xx_of_io_desc[] __initdata = {
--	/* This is needed for LL-debug/earlyprintk/debug-macro.S */
--	{
--		.virtual = CONFIG_DEBUG_UART_VIRT,
--		.pfn = __phys_to_pfn(CONFIG_DEBUG_UART_PHYS),
--		.length = SZ_4K,
--		.type = MT_DEVICE,
--	},
--};
--
--static void __init ixp4xx_of_map_io(void)
--{
--	iotable_init(ixp4xx_of_io_desc, ARRAY_SIZE(ixp4xx_of_io_desc));
--}
--#else
--#define ixp4xx_of_map_io NULL
--#endif
- 
- /*
-  * We handle 4 different SoC families. These compatible strings are enough
-@@ -42,6 +18,5 @@ static const char *ixp4xx_of_board_compat[] = {
- };
- 
- DT_MACHINE_START(IXP4XX_DT, "IXP4xx (Device Tree)")
--	.map_io		= ixp4xx_of_map_io,
- 	.dt_compat	= ixp4xx_of_board_compat,
- MACHINE_END
--- 
-2.38.1
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
+tags/aspeed-6.2-devicetree
+
+for you to fetch changes up to 3973fc0f9f07fc4186bb581014404fbf77a659b5:
+
+  ARM: dts: aspeed: mtjade: Add SMPro nodes (2022-11-20 20:47:32 +1030)
+
+----------------------------------------------------------------
+ASPEED device tree updates for 6.2
+
+ - New machines
+
+  * IBM Bonnell AST2600 BMC, for a Power10 server
+  * Delta AHE-50DC AST1250 BMC, for a 1U Open19 power shelf
+
+ - Removed machines
+
+  * IBM Mihawk AST2500 BMC, a Power9 server similar to Witherspoon
+
+ - Fixes and updates for bletchley, mtjade/mtmitchell, rainier/everest
+
+----------------------------------------------------------------
+Adriana Kobylak (1):
+      ARM: dts: aspeed: rainier,everest: Move reserved memory regions
+
+Eddie James (2):
+      ARM: dts: aspeed: Add IBM Bonnell system BMC devicetree
+      ARM: dts: aspeed: p10bmc: Add occ-hwmon nodes
+
+Joel Stanley (1):
+      ARM: dts: aspeed: Remove Mihawk
+
+Potin Lai (7):
+      ARM: dts: aspeed: bletchley: Change LED sys_log_id to active low
+      ARM: dts: aspeed: bletchley: Disable GPIOV2 pull-down
+      ARM: dts: aspeed: bletchley: Bind presence-sledX pins via gpio-keys
+      ARM: dts: aspeed: bletchley: Update fusb302 nodes
+      ARM: dts: aspeed: bletchley: Update and fix gpio-line-names
+      ARM: dts: aspeed: bletchley: Enable emmc and ehci1
+      ARM: dts: aspeed-g6: Add aliases for mdio nodes
+
+Quan Nguyen (2):
+      ARM: dts: aspeed: mtjade,mtmitchell: Add BMC SSIF nodes
+      ARM: dts: aspeed: mtjade: Add SMPro nodes
+
+Santosh Puranik (1):
+      ARM: dts: aspeed: rainier: Fix pca9551 nodes
+
+Zev Weiss (2):
+      dt-bindings: arm: aspeed: document Delta AHE-50DC BMC
+      ARM: dts: aspeed: Add Delta AHE-50DC BMC
+
+ .../devicetree/bindings/arm/aspeed/aspeed.yaml     |    1 +
+ arch/arm/boot/dts/Makefile                         |    3 +-
+ arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     |   12 +
+ arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts |    4 +
+ arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts     |  418 ++++++
+ .../arm/boot/dts/aspeed-bmc-facebook-bletchley.dts |  213 ++-
+ arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts       |  921 +++++++++++++
+ arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |   57 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |  244 ++--
+ arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts        | 1381 --------------------
+ arch/arm/boot/dts/aspeed-g6.dtsi                   |    4 +
+ 11 files changed, 1705 insertions(+), 1553 deletions(-)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
+ delete mode 100644 arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts
