@@ -1,133 +1,222 @@
-Return-Path: <SRS0=3AKP=3W=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=is8e=3W=mediatek.com=macpaul.lin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3354C4332F
-	for <soc@archiver.kernel.org>; Tue, 22 Nov 2022 00:57:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 947E6C433FE
+	for <soc@archiver.kernel.org>; Tue, 22 Nov 2022 03:34:26 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BA9E1C433D7; Tue, 22 Nov 2022 00:57:44 +0000 (UTC)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5D284C433C1; Tue, 22 Nov 2022 03:34:26 +0000 (UTC)
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 95A20C433D6
-	for <soc@kernel.org>; Tue, 22 Nov 2022 00:57:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 95A20C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id b12so8653564wrn.2
-        for <soc@kernel.org>; Mon, 21 Nov 2022 16:57:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GLNpOC+EKWhHYX3ClfPrj2d8ABDTkig29CHfa3CG5z0=;
-        b=Wn7LxHxNYEUcNzh5Yi6H7zMJ37MUheNt1yCSxSgFx4Nd19to9uIfW10w5VhxWTOa2u
-         /I+0m0Glugebfu3wA5PTRVCTuY/bPYaxKjsXTyqqRMpADGP3NidUypMw8zvYzpX2n9Rg
-         AMXXNT97A2/YSYROnpkAlf13MuN4Iu/wNv6TU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GLNpOC+EKWhHYX3ClfPrj2d8ABDTkig29CHfa3CG5z0=;
-        b=ua0K3IbZJp1T2sgjok3LPi7U9Y9SuRU0/tGxHFyZ8hRkXmLYswrnBWqpyP3F21jpG6
-         33MPUf5Se+PVUeSVmo9AiBPaxuPKNDVVKLvhJuPuWhYDwHd6TkMOKXfCtpZZDBuCJCsq
-         scBv/TfVhjdMX5j00Lu69wnyi+2yPh0ScBuKQr5UKx2apKYPbYx+oQGEPfPs1xiXpiIC
-         yyFSzh/SwTBUCHn7+WXPDe/s0Zq7AmO/vvi5+6Tee8UCbYEtZseRPpYUvOJSBPYtQ7MO
-         LBgxCd6ywfhQWR68n5ndKs0eRgG2KzbxrziDJH4zjGlGfJ4bbtZrvnluQMK8tHJ3NFr0
-         cQ6g==
-X-Gm-Message-State: ANoB5plmFkd1JHvrzQFTINoETA/+3GwOTkNLKNvJzr27jmfxyFALpcdF
-	rlqwN/F4S8U9pVRAKnfboctgDkxY0g/BqkSWUCpk/5numO8=
-X-Google-Smtp-Source: AA0mqf4zegYOqBDXBohUs5DvvquRK2r81ahOv/8Tc5r8so4t4oYa7n5dSAlPXleW16X3sA1ToHjCec/d5wZBzNh5ZAU=
-X-Received: by 2002:a5d:6642:0:b0:236:6a28:eeda with SMTP id
- f2-20020a5d6642000000b002366a28eedamr12373629wrw.315.1669078660427; Mon, 21
- Nov 2022 16:57:40 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id B19D7C433D6;
+	Tue, 22 Nov 2022 03:34:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B19D7C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 9d38496393d94866ad0857e59af2354e-20221122
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:CC:To:Subject:MIME-Version:Date:Message-ID; bh=QTB5WxU1MVbx3x7hLOrrWvui3zg37X1Y1n8WoNJQx8Y=;
+	b=ZMqnLEGtazuFFF8yqSxSiGYC6efftyncuy87YhcVMwNDx0VB4/EA/Cpuri2qiA7V7aoOVIp2FRIm41gTj+2QYN4thWJiyifhzTq0PjdDXgi6vqaKBxFTRCEcDxcP+46FmBi3w2Yk7bEwyKubxGkGtj3BYJkR/CpyyhMNL42plYI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.13,REQID:8b1e3159-dca6-4ff6-a3b7-aecc2c5beca1,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:d12e911,CLOUDID:b2deedf8-3a34-4838-abcf-dfedf9dd068e,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9d38496393d94866ad0857e59af2354e-20221122
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1616329851; Tue, 22 Nov 2022 11:34:09 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 22 Nov 2022 11:34:08 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 22 Nov 2022 11:34:07 +0800
+Message-ID: <bdc08ff5-432e-9a60-1d38-0f44cebd19a8@mediatek.com>
+Date: Tue, 22 Nov 2022 11:34:05 +0800
 MIME-Version: 1.0
-From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 22 Nov 2022 00:57:29 +0000
-Message-ID: <CACPK8Xfsc8BaL_qAgV+3Rk-AFcQoDVfTpMzHvq_rR-UYqwpNNQ@mail.gmail.com>
-Subject: [GIT PULL] ARM: aspeed: devicetree changes for 6.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [GIT PULL] arm64: dts: mediatek updates for v6.2
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	linux-aspeed <linux-aspeed@lists.ozlabs.org>, Andrew Jeffery <andrew@aj.id.au>
-Content-Type: text/plain; charset="UTF-8"
+To: Matthias Brugger <matthias.bgg@gmail.com>, arm-soc <arm@kernel.org>, "SoC
+ Team" <soc@kernel.org>
+CC: Pierre Gondois <pierre.gondois@arm.com>, Yassine Oudjana
+	<y.oudjana@protonmail.com>, =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?=
+	<nfraprado@collabora.com>, Sam Shih <sam.shih@mediatek.com>, Tinghan Shen
+	<tinghan.shen@mediatek.com>, "moderated list:ARM/Mediatek SoC support"
+	<linux-mediatek@lists.infradead.org>, Bo-Chen Chen
+	<rex-bc.chen@mediatek.com>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Bear Wang
+	<bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>, Fabien Parent
+	<fparent@baylibre.com>
+References: <8933d687-71f0-e9ad-a7c6-2e5a8993463d@gmail.com>
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <8933d687-71f0-e9ad-a7c6-2e5a8993463d@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello soc maintainers,
 
-Here are the aspeed device tree changes for v6.2.
+On 11/22/22 02:47, Matthias Brugger wrote:
+> Hi Olof and Arnd,
+> 
+> Please have a look on the latest and greatest DT patches for MediaTek. 
+> We got basic support for the Sony Xperia M5 (Helios X10 based). Apart 
+> from that we have activity around the MT7986 which is on the BananPi R3. 
+> Hopefully support the latter will be ready in the next merge window.
+> Apart from that, MT8195 based Chromebooks have now support for video 
+> encoder, PCIe and display port (internal and external one).
+> 
+> Best regards,
+> Matthias
+> 
+> ---
+> The following changes since commit 
+> 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+> 
+>    Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/__;!!CTRNKA9wMg0ARbw!27PeFLVkB-GGYHHNA51sblVY8UUfYoly9LDdEupM8_c-POxI4Me0a9eBkZvuotWDcBw$ 
+> tags/v6.1-next-dts64
+> 
+> for you to fetch changes up to 885e153ed7c1b0ec8bc25651f0644b3cb65ecaf4:
+> 
+>    arm64: dts: mt7986: add spi related device nodes (2022-11-21 18:17:35 
+> +0100)
+> 
+> ----------------------------------------------------------------
+> Fix check warnings all over the place.
+> 
+> mt7986:
+> - Add crypto, I2C and SPI nodes
+> 
+> mt6795:
+> - Add clock nodes
+> - Add DMA support for UARTs
+> - Add MMC nodes
+> - Add basic support for Sonyx Xperia M5
+> 
+> mt8195:
+> - Add video enconder node
+> - Add PCIe support
+> - Fine tune capacity-dmips-mhz
+> - Add support for internal and external display port
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+Dear Matthias,
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Sorry for bothering you and a reminding again.
 
-are available in the Git repository at:
+It seems the bug fix for booting failure of mt8195-demo isn't in this 
+dts series.
+The patch has been send in the late of September [1] (v1) and resend 
+during this RC period [2] (v2). I'm not sure if the patch simply went to 
+junk mailbox, or I need to send it in more lists. Many board makers are 
+waiting the boot failure fix be merged into mainline and back port to 
+previous stable tree since 5.19. We need your help. Thank for your 
+attention. :)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/joel/bmc.git
-tags/aspeed-6.2-devicetree
+arm64: dts: mediatek: mt8195-demo: fix the memory size of node secmon
 
-for you to fetch changes up to 3973fc0f9f07fc4186bb581014404fbf77a659b5:
+[1] 
+https://lore.kernel.org/all/20220922091648.2821-1-macpaul.lin@mediatek.com/
+[2] 
+https://lore.kernel.org/all/20221111095540.28881-1-macpaul.lin@mediatek.com/
 
-  ARM: dts: aspeed: mtjade: Add SMPro nodes (2022-11-20 20:47:32 +1030)
+> ----------------------------------------------------------------
+> AngeloGioacchino Del Regno (15):
+>        arm64: dts: mediatek: mt8195: Fix CPUs capacity-dmips-mhz
+>        arm64: dts: mt7896a: Fix unit_address_vs_reg warning for oscillator
+>        arm64: dts: mt6779: Fix devicetree build warnings
+>        arm64: dts: mt2712e: Fix unit_address_vs_reg warning for oscillators
+>        arm64: dts: mt2712e: Fix unit address for pinctrl node
+>        arm64: dts: mt2712-evb: Fix vproc fixed regulators unit names
+>        arm64: dts: mt2712-evb: Fix usb vbus regulators unit names
+>        arm64: dts: mediatek: pumpkin-common: Fix devicetree warnings
+>        arm64: dts: mediatek: mt6797: Fix 26M oscillator unit name
+>        arm64: dts: mediatek: mt6795: Add topckgen, infra, peri 
+> clocks/resets
+>        arm64: dts: mediatek: mt6795: Replace UART dummy clocks with pericfg
+>        arm64: dts: mediatek: mt6795: Add support for APDMA and wire up 
+> UART DMAs
+>        arm64: dts: mediatek: mt6795: Add support for eMMC/SD/SDIO 
+> controllers
+>        dt-bindings: arm: mediatek: Add compatible for MT6795 Sony Xperia M5
+>        arm64: dts: mediatek: Add support for MT6795 Sony Xperia M5 
+> smartphone
+> 
+> Bo-Chen Chen (4):
+>        arm64: dts: mt8195: Add dp-intf nodes
+>        arm64: dts: mt8195: Add edptx and dptx nodes
+>        arm64: dts: mediatek: cherry: Add dp-intf ports
+>        arm64: dts: mediatek: cherry: Add edptx and dptx support
+> 
+> Frank Wunderlich (7):
+>        arm64: dts: mediatek: mt2712e: swap last 2 clocks to match binding
+>        arm64: dts: mt8183: drop drv-type from mmc-node
+>        arm64: dts: mt7622: drop r_smpl property from mmc node
+>        arm64: dts: mt7986: fix trng node name
+>        arm64: dts: mt7986: add i2c node
+>        dt-bindings: arm64: dts: mediatek: add compatible for bananapi r3
+>        arm64: dts: mt7986: move wed_pcie node
+> 
+> Matthias Brugger (1):
+>        arm64: dts: mediatek: mt7986: Add SoC compatible
+> 
+> Nícolas F. R. A. Prado (1):
+>        arm64: dts: mediatek: kukui: Remove i2s-share properties
+> 
+> Pierre Gondois (1):
+>        arm64: dts: Update cache properties for mediatek
+> 
+> Sam Shih (3):
+>        arm64: dts: mt7986: harmonize device node order
+>        arm64: dts: mt7986: add crypto related device nodes
+>        arm64: dts: mt7986: add spi related device nodes
+> 
+> Tinghan Shen (2):
+>        arm64: dts: mt8195: Add venc node
+>        arm64: dts: mt8195: Add pcie and pcie phy nodes
+> 
+> Yassine Oudjana (1):
+>        arm64: dts: mediatek: mt6779: Remove syscon compatible from pin 
+> controller
+> 
+>   .../devicetree/bindings/arm/mediatek.yaml          |   2 +
+>   arch/arm64/boot/dts/mediatek/Makefile              |   1 +
+>   arch/arm64/boot/dts/mediatek/mt2712-evb.dts        |  12 +-
+>   arch/arm64/boot/dts/mediatek/mt2712e.dtsi          |  28 +--
+>   arch/arm64/boot/dts/mediatek/mt6779.dtsi           |  10 +-
+>   .../boot/dts/mediatek/mt6795-sony-xperia-m5.dts    |  88 ++++++++
+>   arch/arm64/boot/dts/mediatek/mt6795.dtsi           | 109 +++++++++-
+>   arch/arm64/boot/dts/mediatek/mt6797.dtsi           |   2 +-
+>   .../boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts  |   1 -
+>   arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts       |   1 -
+>   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts       | 135 +++++++-----
+>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi          |  74 ++++++-
+>   arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts       |  57 ++++-
+>   arch/arm64/boot/dts/mediatek/mt7986b.dtsi          |   3 +
+>   arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |   6 -
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi           |   3 +
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi           |   3 +
+>   arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi    |  86 ++++++++
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi           | 233 
+> ++++++++++++++++++++-
+>   arch/arm64/boot/dts/mediatek/pumpkin-common.dtsi   |   6 +-
+>   20 files changed, 750 insertions(+), 110 deletions(-)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
+> 
 
-----------------------------------------------------------------
-ASPEED device tree updates for 6.2
-
- - New machines
-
-  * IBM Bonnell AST2600 BMC, for a Power10 server
-  * Delta AHE-50DC AST1250 BMC, for a 1U Open19 power shelf
-
- - Removed machines
-
-  * IBM Mihawk AST2500 BMC, a Power9 server similar to Witherspoon
-
- - Fixes and updates for bletchley, mtjade/mtmitchell, rainier/everest
-
-----------------------------------------------------------------
-Adriana Kobylak (1):
-      ARM: dts: aspeed: rainier,everest: Move reserved memory regions
-
-Eddie James (2):
-      ARM: dts: aspeed: Add IBM Bonnell system BMC devicetree
-      ARM: dts: aspeed: p10bmc: Add occ-hwmon nodes
-
-Joel Stanley (1):
-      ARM: dts: aspeed: Remove Mihawk
-
-Potin Lai (7):
-      ARM: dts: aspeed: bletchley: Change LED sys_log_id to active low
-      ARM: dts: aspeed: bletchley: Disable GPIOV2 pull-down
-      ARM: dts: aspeed: bletchley: Bind presence-sledX pins via gpio-keys
-      ARM: dts: aspeed: bletchley: Update fusb302 nodes
-      ARM: dts: aspeed: bletchley: Update and fix gpio-line-names
-      ARM: dts: aspeed: bletchley: Enable emmc and ehci1
-      ARM: dts: aspeed-g6: Add aliases for mdio nodes
-
-Quan Nguyen (2):
-      ARM: dts: aspeed: mtjade,mtmitchell: Add BMC SSIF nodes
-      ARM: dts: aspeed: mtjade: Add SMPro nodes
-
-Santosh Puranik (1):
-      ARM: dts: aspeed: rainier: Fix pca9551 nodes
-
-Zev Weiss (2):
-      dt-bindings: arm: aspeed: document Delta AHE-50DC BMC
-      ARM: dts: aspeed: Add Delta AHE-50DC BMC
-
- .../devicetree/bindings/arm/aspeed/aspeed.yaml     |    1 +
- arch/arm/boot/dts/Makefile                         |    3 +-
- arch/arm/boot/dts/aspeed-bmc-ampere-mtjade.dts     |   12 +
- arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts |    4 +
- arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts     |  418 ++++++
- .../arm/boot/dts/aspeed-bmc-facebook-bletchley.dts |  213 ++-
- arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts       |  921 +++++++++++++
- arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts       |   57 +-
- arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts       |  244 ++--
- arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts        | 1381 --------------------
- arch/arm/boot/dts/aspeed-g6.dtsi                   |    4 +
- 11 files changed, 1705 insertions(+), 1553 deletions(-)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-delta-ahe50dc.dts
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-ibm-bonnell.dts
- delete mode 100644 arch/arm/boot/dts/aspeed-bmc-opp-mihawk.dts
+Regards,
+Macpaul Lin
