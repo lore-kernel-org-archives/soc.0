@@ -4,52 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B408C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A720C4332F
 	for <soc@archiver.kernel.org>; Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61D91C433B5; Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A223C433D7
-	for <soc@kernel.org>; Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
+	id 5C043C433C1; Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 40FF6C433D6;
+	Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669106415;
-	bh=SYuw6UREO/c/pakb1USfaNUxcQJKbP+qtDpZs1VQ6nQ=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=REZ0qyZYXhJFqSupE42Fdau8euOA3IIYI/SwogdN8ioLEebi6Uz2thqZCQ8P3eZ/h
-	 8UZSZOXC3lC7gGz6DQBvAxlW6p3BpW26vf3yUs/id9/ZtrXD3Fg+prYV0WBEwJR0zK
-	 s9DoPkSCRjWJ9bhqWSGGq0z6De77JNdZe96f2hl55qGSZDTHNjhuEG4QTbpG8R4vS2
-	 a3cIJCkCDopZZfJsu8qxJMM20kvDfzBSBuUzQa2hECMtfYZ0JDawt8NvuDoXR/Cqzq
-	 m5ByIiTO9BOKxo7t0bJkV4FJaFJKIzeooeypSY6hLb1Def+UMNpJrT8WB+av5jsz06
-	 rLmFbguUchXeg==
+	bh=hFVCS1zLXgKsqIiW/fGlNWqfv60b6TST6xOsGJG2Gy8=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=obKQqUxjZHDZMV92gCbxm1DKOB7tIZSYF6rQfR6hKzsysD0yLeoFehmMlpo4aaYkV
+	 W6M6+EYBHx0Qw1zfvao1btgeoWWp/LXm2MMxdu9mmnAsNWbHKSfdFBjO5V82SC/8OZ
+	 2tx2XvH/pi1pRS4uVboOG9U6L5IVXzpIkWrgDi6t/93zkiyeDqNd6mqHg4F9Y5TPiB
+	 vKNfEDRAwBS/gGlaRVLX7ifTppcTtR5cz7ItLXWMPACwtK95ldqh3oZh7jNkIcsQXX
+	 vTHOCeG54IYZcEUXPqBmZL5bJ48zwO0vVFXi5kNPG8+H3LaHqdphYS09lpqP+X9iMf
+	 v3J/X/cz+H0yQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D656E29F42;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 293BDE4D038;
 	Tue, 22 Nov 2022 08:40:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Regulator changes for am335x-pcm-953
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166910641503.28730.971922818982761620.git-patchwork-summary@kernel.org>
+ <166910641516.28730.7858544092504336072.git-patchwork-notify@kernel.org>
 Date: Tue, 22 Nov 2022 08:40:15 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <pull-1669036672-530717@atomide.com>
+In-Reply-To: <pull-1669036672-530717@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Regulator changes for am335x-pcm-953
-  Submitter: Tony Lindgren <tony@atomide.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=697619
-  Lore link: https://lore.kernel.org/r/pull-1669036672-530717@atomide.com
+On Mon, 21 Nov 2022 15:18:17 +0200 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
+> 
+> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+> 
+>   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] Regulator changes for am335x-pcm-953
+    https://git.kernel.org/soc/soc/c/abd6e3d6d897
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
