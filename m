@@ -4,52 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 599C1C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59994C433FE
 	for <soc@archiver.kernel.org>; Wed, 23 Nov 2022 12:00:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 21B65C433B5; Wed, 23 Nov 2022 12:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0BF49C433C1
-	for <soc@kernel.org>; Wed, 23 Nov 2022 12:00:18 +0000 (UTC)
+	id 24689C43470; Wed, 23 Nov 2022 12:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EC7DC433D6;
+	Wed, 23 Nov 2022 12:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669204818;
-	bh=7eFePT54ozl9OeAs3QFIR5hLJ8EDkmKQcqq0R3q3mnw=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=uYknej+holbDNV+hDn8KAFe+iJOycI1urJsTzwN6tKYWrTMRwwp5JQP1aMpagNJAB
-	 oHgXrMfH9Gz9vnHdg30uhV93ZbyqrlQ6xOV8LN7typRlNCOcjj5iJPM+AY7oIwJzyK
-	 L0MBqYPqVA+RWpawclD+5Bv1GpBcnXwX4EG0ow0kGDHjt5ArgbO5AWP1vV06LxJog1
-	 xWoC18TuQz6gjeZK8cPp/PbzcQ4jNzhlKjfpLGA+Nyx0Sv7HH4tSHZZ+d5Bs0bgoTe
-	 HKzusEft9ri3EM6m/IUzdxETiM4+7/GNpA71WoSBDUunya6tdCOj6zp1zko7FKwJhi
-	 VA5jlMvhXio7w==
+	bh=IP1Fnfq2jWNF6Py3U8qRsZ/d7fofI9rRgucAAW3UfNI=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=LD8vUKE9OaQnWdFbngczDIS4uI64o1johlXCebv039I0vhBgz3iJ07gjm+DvJ92oR
+	 uVrfpJMIxDj0PQunqN9NhQO20voybMhlelyTDkpgUXcwuhHyVNiEcZ2RT09DPupgKZ
+	 OFyOTyfMInqNtBGqe8/TUgz8HWHH/vwUx/HWhaHQjY7sV6nKLHBu2YhzwjPIzjZo6W
+	 5uH3O38cx/p3eZ6YvMWzgNKp2pPju/HRtja7vKx2T0LGHuC9BmXNfi77AYpq6hs/1G
+	 aaNSoI/Gc8yOxS6Y99JtoUXtjNUMQxsauYxIGB9FPoSa6URwoHoBG9+luWJAKg5UoC
+	 KK/lhl4z6kt5g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBEF7C395ED;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E2FE2E21EF9;
 	Wed, 23 Nov 2022 12:00:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] Rockchip dts fixes for 6.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166920481782.7332.296606974488598046.git-patchwork-summary@kernel.org>
+ <166920481792.7332.7289825816208763173.git-patchwork-notify@kernel.org>
 Date: Wed, 23 Nov 2022 12:00:17 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <6274427.GXAFRqVoOG@phil>
+In-Reply-To: <6274427.GXAFRqVoOG@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] Rockchip dts fixes for 6.1
-  Submitter: Heiko Stuebner <heiko@sntech.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=698379
-  Lore link: https://lore.kernel.org/r/6274427.GXAFRqVoOG@phil
+On Wed, 23 Nov 2022 10:07:32 +0100 you wrote:
+> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+> 
+>   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.1-rockchip-dtsfixes1
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] Rockchip dts fixes for 6.1
+    https://git.kernel.org/soc/soc/c/706450b5c321
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
