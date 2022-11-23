@@ -4,70 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 471F9C4167D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62540C4708C
 	for <soc@archiver.kernel.org>; Wed, 23 Nov 2022 12:00:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 28C6DC43149; Wed, 23 Nov 2022 12:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12B7AC433B5;
+	id 58392C4314B; Wed, 23 Nov 2022 12:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 428A1C43152;
 	Wed, 23 Nov 2022 12:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669204824;
-	bh=7o3d8UKi1BZzhEaxSkBGVMfiAdpfJvhWbieHGT+hW9I=;
+	bh=KpeSCObOmLpxCbamWcNH+mFTflVJjt9to5e1HTZkxPM=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UIywe1wQZkZ9mB+ncGh4yPnCQF+YOUIFTdLzeNmUvgATadt6nkEXKHtbsUxcOr9f8
-	 zCVaJUbBvkKoKbKFwNpISNPlR/oSLSzLyOCqpQNN72p2jEho2mF6r/HVLntDgpTnB6
-	 vbMoSYSyFo5o/CcwObluoTzMChyFITHpBkOHKP4ukQcS39NBO9aIVDo7+CpdzKjl+C
-	 iH71CJHiba6Kk/Qm8yNphAgxXW95jzB9G2vdIsnoyE7rDI2Q2Zfd2BsjRIdzGFTKUL
-	 mRf19A6TkfvCIkR7CQCXAJqPZPirRrc0vGIz6z4UJaOptJsyZk7m4fDwaT5Up4QF25
-	 C5cAxgT0dvGng==
+	b=rLnyin/vfEpOfcIDPkE9GTQxZXHhIcA3aySWqAgHljW5JXa6d67xN9zNkPM/RAISP
+	 6UrGAzU+8wXrgO9TEegzocuGlNNKNHM6GqCJANI+R97T7oX4thufLBYJavTmDPPbnV
+	 X3yqq/UKoxyB0uW/gukiGE7TtXZaY4/pTeN5HWmXtmPL9HP3zGM3E8xlDuDwLZdwYj
+	 T871U2PucPbkUbavNSNYau5VMRfhkYv5T5zq+prwLYRBWWbjgMLLfmZNJszww1Qq9e
+	 Ia4BhD0VuEmtSVXNKWZuIgEI0jbkCdoVFvwBQLnHekKSx7Z58u2MFj5UC/DxDBJ8hL
+	 HqMuX+TMFraKg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA1BBC395C5;
-	Wed, 23 Nov 2022 12:00:23 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2C2EBC395ED;
+	Wed, 23 Nov 2022 12:00:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL v2 1/7] soc/tegra: Changes for v6.2-rc1
+Subject: Re: [PATCH] ARM: ixp4xx: Remove unused debug iomap
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166920482395.7332.14928966392738346030.git-patchwork-notify@kernel.org>
-Date: Wed, 23 Nov 2022 12:00:23 +0000
-References: <20221121171239.2041835-1-thierry.reding@gmail.com>
-In-Reply-To: <20221121171239.2041835-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+ <166920482417.7332.7678858501857983180.git-patchwork-notify@kernel.org>
+Date: Wed, 23 Nov 2022 12:00:24 +0000
+References: <20221121221015.1454948-1-linus.walleij@linaro.org>
+In-Reply-To: <20221121221015.1454948-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 21 Nov 2022 18:12:33 +0100 you wrote:
-> Hi ARM SoC maintainers,
+On Mon, 21 Nov 2022 23:10:15 +0100 you wrote:
+> If we don't provide the .map_io() callback, the LL debug
+> defines will kick in anyway, so delete the UART debug map
+> as well.
 > 
-> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-> 
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-> 
-> are available in the Git repository at:
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ARM SoC folks: please apply this as a fixup on top
+> of the pulled IXP4xx patches if it looks OK.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,v2,1/7] soc/tegra: Changes for v6.2-rc1
-    (no matching commit)
-  - [GIT,PULL,v2,2/7] firmware: tegra: Changes for v6.2-rc1
-    (no matching commit)
-  - [GIT,PULL,v2,3/7] clk: tegra: Changes for v6.2-rc1
-    (no matching commit)
-  - [GIT,PULL,v2,4/7] dt-bindings: Changes for v6.2-rc1
-    (no matching commit)
-  - [GIT,PULL,v2,5/7] memory: tegra: Changes for v6.2-rc1
-    (no matching commit)
-  - [GIT,PULL,v2,6/7] ARM: tegra: Device tree changes for v6.2-rc1
-    https://git.kernel.org/soc/soc/c/714aac5dcd3a
-  - [GIT,PULL,v2,7/7] arm64: tegra: Device tree changes for v6.2-rc1
-    (no matching commit)
+  - ARM: ixp4xx: Remove unused debug iomap
+    https://git.kernel.org/soc/soc/c/c93d8b457461
 
 You are awesome, thank you!
 -- 
