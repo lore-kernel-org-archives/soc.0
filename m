@@ -1,72 +1,168 @@
-Return-Path: <SRS0=xvFv=3X=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=EC/j=3X=in-advantage.com=colin.Foster@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A68A6C4332F
-	for <soc@archiver.kernel.org>; Wed, 23 Nov 2022 14:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76239C4332F
+	for <soc@archiver.kernel.org>; Wed, 23 Nov 2022 23:32:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8B090C433C1; Wed, 23 Nov 2022 14:00:11 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	id 35440C433D7; Wed, 23 Nov 2022 23:32:30 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2116.outbound.protection.outlook.com [40.107.220.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2E40AC433D7;
-	Wed, 23 Nov 2022 14:00:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E40AC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1oxqIK-0008NI-4k; Wed, 23 Nov 2022 15:00:08 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 9ED60C433C1;
+	Wed, 23 Nov 2022 23:32:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9ED60C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OLKxm5Tnp26MgL2WRLrCjIWC2kFFkgCEkKEfvGF9BFkbOkW9yfKp/NupU8hnW02/O8YS0X37YuYX4USScaGgHbFo6v4prJAZWxRI17exA73sF3au5EHwpC9anAclgcv0zxLC8t8ctQoD4MyKsAQIQ8egkVkEhC4VwHj/4U4kEbmiZnsQGhI209vOuQnBbCaLkKNFtGo4leYNFQGEelleRBwk6Pd4R6sdnEMfFktjXnOdbRrUT53jquqmJ8wVHkPni3NxAAJhZMsRKYp2ugRgKpzxe7IYkHz5XerOrNg1W/mGcm9ZBWwvDaLvMgiisLLckgPCaDB1Mg3BlS2VSEaRrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0ULWPm05rpr4EqC7UPbE3uKjJHV/QfHeV8IeVr39cYo=;
+ b=DuwqI35OnmU2kzpJdWRrNJlDtZh1VoKt+plozM7V0reuzGcjSfX5pxuIN51YKXd81U6fkihk7nq3/Jz9kukB+RCacCrJvZBRjRflL+eg8I8AkWEG0+1dTfsBKU18vWancT9y81sSbq6+hh5bETnsh3QT8LQBZPxlFqEaug1qedE+F4Op4oH6gcDCYAArrOuPntkurdb1frT+rOaNPzla89QIMch4DHgPhpta1lXzHlAivCyekjHY0l7rBEVCsR1ncHHj48vR8W7Ogge7tfMZoB0rtZ9u6BlWuNxMREnYpDNPmR9O6Am2pDvPZYbCPoAT6wT1FuBwDaNCLTkxOBnkfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0ULWPm05rpr4EqC7UPbE3uKjJHV/QfHeV8IeVr39cYo=;
+ b=zJdgyjywaSDyvR5tGwxpgiQ6lSOPxqGYmg0IJwWqZob7ZGm4zLFg76l7LhiPAXZ5nz5JiWSaNOu3pJO1d3ss8jgmT6nFe2udI8x5ID6SQ2bPY5xd/4BlZcLlIXvOEly1rkbO5iG/+cRzqAGnuG8FmoeIA1U8iaX7HqP0pLXzcLc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CH0PR10MB4873.namprd10.prod.outlook.com
+ (2603:10b6:610:c7::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 23:32:25 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::45b5:a860:9cea:a74c]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::45b5:a860:9cea:a74c%4]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 23:32:25 +0000
+From: Colin Foster <colin.foster@in-advantage.com>
+To: linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL] Rockchip dts32 changes for 6.1 #2
-Date: Wed, 23 Nov 2022 15:00:07 +0100
-Message-ID: <3721014.iZASKD2KPV@phil>
-In-Reply-To: <9661382.T7Z3S40VBb@phil>
-References: <9661382.T7Z3S40VBb@phil>
+Cc: Tony Lindgren <tony@atomide.com>,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	soc@kernel.org,
+	Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 0/2] add support for Phytec PCM-049 and PCM-959
+Date: Wed, 23 Nov 2022 15:32:07 -0800
+Message-Id: <20221123233209.1854806-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY5PR13CA0025.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::38) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|CH0PR10MB4873:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2aa3404d-018f-4f31-9ae6-08dacdaafa5e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	R4fGqHMT4KcuVqWIhbjJeF4YqPIOBN8xwerfCeiH3J8KEcMX9EpvjQ88/seQaMwQ8PZff1r0oVMX1j/2j6sV2gvC7JISn0vLn1uj4a4fT1gjJBXDTbKyQLr8ruxECESd6MnDzAFRPd9NWJGmYy55AbdxaRPTOJ6IgxljT6UfVyzI0SRXpMvTjEqUnQy4Gr/F2RJvdA8RgzjL7d1pnGlGSzb3r3rUadUv8HuYN1pWsSsX+97xuVAKukITqX23OtfPXKcdtyAK3aCYoCN6hCtL/nJL8RJhicgu4jzpc2DdDAMcnXk6cYe4vD3VxOEwCn5lW0oXIe8hzmlM1rF8A7PCmqVS3+sgvu+2KhFS7lzj1FQ9tweG6XBZeshLgpqlr+t1KVJ2ZEeG6ZuDlVuEVYMlleBfFhGlBFJcvdguCZ378VN6p0HOR9NK5vrUMSAMf0df0W1ipasr2j+g5e+0TL6GBwvVSafH1lkUxPwQw5ZQ6CYrNfT3ZwQFrOQTthdwCYAf+jV/5f0MZzuqzJJlTEik21JX5uSSIz/Tsbxh4lR2aTjgLiax9y1jWZMoBJbhvBNE435ALr+UxHp7ae9KByhscnP4EHIpA6I4VN0BYVSHC18HIgKhfBSAqKtdpB9FMuf4DGFPTSjp31O8Q7+NdKJmiQIvh5oKlKmigkmSa7brAA1C6FWfYUZDp7zlANJSRKBeitCZYByUIRpF7+q5MLJlU6q7ifC+pWp6ChUxdqeZSnE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(39840400004)(376002)(346002)(136003)(451199015)(6666004)(41300700001)(478600001)(66899015)(6486002)(966005)(66476007)(8676002)(316002)(1076003)(8936002)(26005)(66556008)(66946007)(4326008)(7416002)(186003)(5660300002)(36756003)(54906003)(44832011)(52116002)(6506007)(83380400001)(2616005)(2906002)(86362001)(6512007)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/8US9MBVXra6+FThBrC/dAmkR0pz3jtGaaql0cbA4UVMwFpo7EAGg4eeMmWQ?=
+ =?us-ascii?Q?iKgwgrCNp8peJLvRynBh0mb5msOi/7U9BWtM9V5X9vXdJMeULvTQz4ceZokm?=
+ =?us-ascii?Q?l8Hjk0dC9vgD3SRUH68YANmfloUAYXa2N3KbTxQbmOSM60BjVqwY1cDcK+R+?=
+ =?us-ascii?Q?v36xer8ex/5iMwlPGJCbxswuU5VRNI2H4DkSDVR+DG3uEw3zacMGSeY3BYsZ?=
+ =?us-ascii?Q?oyoriN58QvyTWlk45Ux36kIfaMgQ0eczH+oNpGckpThMYd1V7vHU1v7FltO2?=
+ =?us-ascii?Q?q1AXO+EqRJZ4NQwP1ZH/E4KFn0Oic1Jr2KTcWmt94yChqfdv3/tkp1UWXZU2?=
+ =?us-ascii?Q?blTXEwab5HZQsus9KUBSb94b1KyYY80mkYSfSozJXUpJaUFbnhtIibEzd1A+?=
+ =?us-ascii?Q?9lArN9QyyV8zylKLLdIc6Nppnv1CVSvECoj7XHv+NsLzHzmXc5M/vgQPCsgL?=
+ =?us-ascii?Q?YRNBd+9OicytKV+EZJ4sPS5KiOcydzlchZYXXIiJbRAY5t1LROdnGwycQ9Rt?=
+ =?us-ascii?Q?qij1gZ7y8uzTRyMaEeLfKgkeMvEinww9zvrxL+4xPZmE3EXsYWtlAv+Az42X?=
+ =?us-ascii?Q?+BKILJm2Gd6KBFHTovhJHcMajygqsRWsXkMqKW0iiaEiaZLqIVmj3f7N9M1A?=
+ =?us-ascii?Q?8hJX30gSz0sJ3EaVXLWxj9nCB4ABnAlfl1l9FiG3+jpc1ja2dk4/spf1lRPA?=
+ =?us-ascii?Q?sZE7rOFMA19lJ9fmzRJ0RLpGnolIyFK+sUpeZqWlqMw9CSVH5HkCq53bsoOZ?=
+ =?us-ascii?Q?QIqPHBC+iLdpw1xAHoYiw2j+RXm41P4/+HCVJZ9YpW5IKk5jeSA2xrRIYdFx?=
+ =?us-ascii?Q?ApRzuVy6BvGBjeY4Ay0oM01Pp6oVM03Bn9WLoM4iCfL5SoHFq49VGIjdT07u?=
+ =?us-ascii?Q?gFKAnnDuE/UbNLVmgi+byUW80RB8iOhtJtzROfQzD0iPm9wJMWh+NXe9gfGS?=
+ =?us-ascii?Q?+oTlOHDcvxRtGhBp1dJYQ7S2vvD4OLq1yA+Z/qbJ/uLfW++EB8UIZBRxFdzz?=
+ =?us-ascii?Q?HnPyNoYhyy1vp0Y91uOk4NYvOo37hXgBId7lGULeg4+AZLohFPVfdBckbm5h?=
+ =?us-ascii?Q?5XtMoTnpdsDB0sTBLp2OMikP+NiAWpSwnMLIx6hyYodaD539VdnbKKOtNZno?=
+ =?us-ascii?Q?45NiymyVQO9i8lAzUMFSxsLB9Mp4EcYV3RDcgH0HtkvgHO67RnKeXIo7YG7F?=
+ =?us-ascii?Q?1xPlqwzfxZNjIMaJ1L0ai9Ms9v+EJpmqVDH9FOeTDeHPSuTMzvngQJNa/SEd?=
+ =?us-ascii?Q?NWAliCH9C4vs7QVI4S8p/IVMtZ3Gn65m45E1arZC9i5OMuf5uiZx1ApUTVbW?=
+ =?us-ascii?Q?tqxd5EfjJeBIoc79F8Z+vBWpAjCKMg2MpSfvUe0prS+w0Hxju6GfpPMQox7S?=
+ =?us-ascii?Q?4f/NSAK8wFM1LBgw6SYt8J/vRMYg3f3yJlgJIC5zcFhUFtYqfaXxNzOjNRgf?=
+ =?us-ascii?Q?euvtCa3UkZji6pe4n3SdFR0u1GF2yWu32RrwFFHklx2UdfaiJKYOagHhvAvc?=
+ =?us-ascii?Q?1EXkaPs+xQTFbKsBPO3yLa2RnqiXBjOEGOZWFA+GIXY2thQnABsvwVOvGzzk?=
+ =?us-ascii?Q?IPEIwHN2/PSU5IY8beIcc0qjoR1r//PxB79RM85QTsKYWLIMyB+Vew2wryfm?=
+ =?us-ascii?Q?lw=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aa3404d-018f-4f31-9ae6-08dacdaafa5e
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 23:32:25.6547
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ULZjce5TEvP0Mrv//kwzjf64KAOcPcxYQUYdpoLbtV8IUl19blz12BwfQF+CLtFvfpjVVPp94cV8Ap2ZQO2FcXX42+uAQfT22/RXXse2kbI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4873
 
-Am Mittwoch, 23. November 2022, 14:50:34 CET schrieb Heiko Stuebner:
+As should be clear for the title and patch title, this is adding initial
+support for the OMAP 4460 SOM and dev kit for Phytec's PCM959 evaluation
+kit.
 
-The subject was supposed to be "#1" not "#2".
-Sorry about that
+The PCM049 is a legacy SOM offered by Phytec:
+https://www.phytec.com/legacy-soms/
+There was a vendor BSP offered by Phytec, but that never entered the
+Device Tree era. This patch is meant to change that.
 
-Heiko
+My development bootloader has moved to U-Boot, but I have verified
+Barebox works in the past. When booting from SD card, either bootloader
+should work. When booting from Barebox, the NAND OOB layout is
+incompatible between the bootloader and the kernel.
 
-> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-> 
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.2-rockchip-dts32-1
-> 
-> for you to fetch changes up to da74858a475782a3f16470907814c8cc5950ad68:
-> 
->   ARM: dts: rockchip: disable arm_global_timer on rk3066 and rk3188 (2022-11-15 12:02:38 +0100)
-> 
-> ----------------------------------------------------------------
-> Disabling of the unreliable arm-global-timer on earliest
-> Rockchip SoCs, due to its frequency being bound to the
-> changing cpu clock.
-> 
-> ----------------------------------------------------------------
-> Johan Jonker (1):
->       ARM: dts: rockchip: disable arm_global_timer on rk3066 and rk3188
-> 
->  arch/arm/boot/dts/rk3188.dtsi | 1 -
->  arch/arm/boot/dts/rk3xxx.dtsi | 7 +++++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
+I haven't had any OOB / ECC errors in the NAND at all, which was my
+main concern. Due to that, I'm submitting this as a patch instead of
+an RFC. Hardware ECC correction seems to be fully functional.
 
 
 
+v1->v2
+    * Almost everything moved into the SOM (PCM-049) .dtsi. Only the
+      LED chip is dev-board specific.
+    * Fix pinmux associations (*pmx_core was applying *pmx_wkup
+      entries... I'm surprised that didn't cause more issues)
+    * Documentation added
+
+    * Updates from review:
+    *   Board compatible strings added
+    *   Hyphen / underscore changes
+    *   Remove unnecessary status="okay" entries
+    *   Generic names used (regulator, led-1, etc.)
+
+
+Colin Foster (2):
+  dt-bindings: arm: omap: add phytec pcm-049 som and pcm-959 dev board
+  arm: dts: omap4: pcm959: add initial support for phytec pcm959
+
+ .../devicetree/bindings/arm/omap/omap.txt     |   3 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi   | 412 ++++++++++++++++++
+ arch/arm/boot/dts/omap4-phytec-pcm-959.dts    |  48 ++
+ 4 files changed, 464 insertions(+)
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-959.dts
+
+-- 
+2.25.1
 
