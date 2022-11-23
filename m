@@ -1,126 +1,106 @@
-Return-Path: <SRS0=xvFv=3X=sntech.de=heiko@kernel.org>
+Return-Path: <SRS0=gsxc=3X=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A5BC4332F
-	for <soc@archiver.kernel.org>; Wed, 23 Nov 2022 09:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E9D8C4332F
+	for <soc@archiver.kernel.org>; Wed, 23 Nov 2022 10:51:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 74ADBC433B5; Wed, 23 Nov 2022 09:07:37 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 1D960C433B5; Wed, 23 Nov 2022 10:51:27 +0000 (UTC)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A731CC433D7;
-	Wed, 23 Nov 2022 09:07:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A731CC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1oxljB-0006tQ-9A; Wed, 23 Nov 2022 10:07:33 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: arm@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] Rockchip dts fixes for 6.1
-Date: Wed, 23 Nov 2022 10:07:32 +0100
-Message-ID: <6274427.GXAFRqVoOG@phil>
+	by smtp.kernel.org (Postfix) with ESMTPS id 0319AC433D7
+	for <soc@kernel.org>; Wed, 23 Nov 2022 10:51:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0319AC433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f52.google.com with SMTP id r9-20020a1c4409000000b003d02dd48c45so796236wma.0
+        for <soc@kernel.org>; Wed, 23 Nov 2022 02:51:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=agDVV6DraxSox23J7he9F5SAzbVldvrCrvEWw1B8iX0=;
+        b=azgb+gOo2rnkXkaWB0hgmT51zrOTplmQTjwYpklcBFwr+sWuSRQYK47K7a4bJY4FIz
+         ELOE3FmCpcR2RbIgM1WVpOOO8hygA2BKahCA0tIbaA3to3Ydl6k6HGSqnZ9qcGY89lKa
+         4LnFP/eHIH+cEz4KYlyHRYnFMl2hWuzm6+pU8O1jfhxG6A58QrVpzvS7Jh9pFjeEs8IF
+         eTuNa3iwYNHHn2SHZ2uKiF9eBCt/TzzDhQbpqjqYfpQSjmIZheInMVE5YOk+tmdYiQvc
+         zWaZpCYCu00enml4e4LB/8mY5Y4+R94Ng9fJL4/NGwCeEYtuf9ETzHqf1mLe8KMTvHaG
+         FxUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=agDVV6DraxSox23J7he9F5SAzbVldvrCrvEWw1B8iX0=;
+        b=h/tnNPMoWbUFHvhr1ffCq0558IfYdm9+4Zuj/JUaAVZIbCi7ktYtVBOIOruD1PTrBM
+         P+cRBPq8ZVhWPMpi6elMR+UubX6+RBfPAm5+qu/O905QG6RKy41oVx/5TUPqATmaPwb6
+         qgWjUUJWNvMwIgsWYkyzAm+JyN8SqRCWUHo8dnzL7HxH16CYcIB2bGyRc8JiJ/YhHbrR
+         7oToJH6IP8tzwgrbiC+KwpMP1JURon6Im+3ngZsQA/abszApEKfs8DicoBxrfedHxZXu
+         f192ylVj17l9vv86ow84memKqi/4yzgJ0NoMahVinDbI1UP6icecUSO+KktNgGkLJJoX
+         bNgQ==
+X-Gm-Message-State: ANoB5pm+3irT7tqDSTfLzLr0DoljK/GG0EqjMA+MjAVJl6r7hOIw54XF
+	BUpGytzOWbZWyjkthMu/2ggzUA==
+X-Google-Smtp-Source: AA0mqf50gOVwqVJVHjrBbPSUHOYN4PCW7GS9QrtNjRCnKKQfX1lwCmse1TAs9eEweY/cecvNqhhgbg==
+X-Received: by 2002:a05:600c:3109:b0:3c6:7abb:9d2b with SMTP id g9-20020a05600c310900b003c67abb9d2bmr12389185wmo.182.1669200683265;
+        Wed, 23 Nov 2022 02:51:23 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:e551:24c3:152c:7c05? ([2a01:e0a:982:cbb0:e551:24c3:152c:7c05])
+        by smtp.gmail.com with ESMTPSA id r64-20020a1c4443000000b003cfaae07f68sm1883416wma.17.2022.11.23.02.51.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 02:51:22 -0800 (PST)
+Message-ID: <9ae1bae2-67ac-12da-7d4b-16dd73e13d5f@linaro.org>
+Date: Wed, 23 Nov 2022 11:51:21 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [GIT PULL] amlogic Drivers updates for v6.2
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <7d1ca7f4-b3ae-46df-5b9a-7cba8ac3e512@linaro.org>
+ <4a6b34ef-f5d2-4e56-a7f6-6a7c9cdda416@app.fastmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <4a6b34ef-f5d2-4e56-a7f6-6a7c9cdda416@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+On 22/11/2022 22:48, Arnd Bergmann wrote:
+> On Tue, Nov 22, 2022, at 16:24, Neil Armstrong wrote:
+>>
+>> for you to fetch changes up to 7dc69c7d073e6004a281db8f7f15cf6ebf702ea0:
+>>
+>>     firmware: meson_sm: Fix memcpy vs iomem type warnings (2022-10-17
+>> 17:19:04 +0200)
+>>
+>> ----------------------------------------------------------------
+>> Amlogic Drivers changes for v6.2:
+>> - Fix memcpy vs iomem type warnings in meson_sm driver
+>>
+> 
+> It looks like a trivial fix, but I think it's actually wrong:
+> The real problem appears to be the use of the ioremap_cache()
+> function in meson_sm_map_shmem(), which returns an __iomem
+> token that is mapped cacheable on architectures that support
+> this function, but behaves like normal ioremap on others.
+> 
+> This is probably not what you want here, instead this should
+> be converted to memremap(), with the __iomem annotation dropped.
+> In the long run, we should try to kill off ioremap_cache
+> entirely, and not introduce new ones.
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+OK will have a look into that,
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.1-rockchip-dtsfixes1
-
-for you to fetch changes up to 562105c1b072411c71ac2202410d83ee79297624:
-
-  arm64: dts: rockchip: Fix Pine64 Quartz4-B PMIC interrupt (2022-11-13 09:54:59 +0100)
-
-----------------------------------------------------------------
-Fixes to make the automated binding tools happier (node-names,
-undocumented + unneeded properties) and fixes for non-working
-devices on some boards.
-
-----------------------------------------------------------------
-Brian Norris (1):
-      arm64: dts: rockchip: Drop RK3399-Scarlet's repeated ec_ap_int_l definition
-
-Chen-Yu Tsai (1):
-      arm64: dts: rockchip: Fix Pine64 Quartz4-B PMIC interrupt
-
-FUKAUMI Naoki (1):
-      arm64: dts: rockchip: keep I2S1 disabled for GPIO function on ROCK Pi 4 series
-
-Furkan Kardame (3):
-      arm64: dts: rockchip: Fix gmac failure of rgmii-id from rk3566-roc-pc
-      arm64: dts: rockchip: Fix i2c3 pinctrl on rk3566-roc-pc
-      arm64: dts: rockchip: remove i2c5 from rk3566-roc-pc
-
-Jakob Unterwurzacher (1):
-      arm64: dts: rockchip: lower rk3399-puma-haikou SD controller clock frequency
-
-Jensen Huang (1):
-      arm64: dts: rockchip: add enable-strobe-pulldown to emmc phy on nanopi4
-
-Johan Jonker (5):
-      ARM: dts: rockchip: fix adc-keys sub node names
-      arm64: dts: rockchip: fix adc-keys sub node names
-      ARM: dts: rockchip: fix ir-receiver node names
-      arm64: dts: rockchip: fix ir-receiver node names
-      ARM: dts: rockchip: rk3188: fix lcdc1-rgb24 node name
-
-Lev Popov (1):
-      arm64: dts: rockchip: fix quartz64-a bluetooth configuration
-
-Sebastian Reichel (4):
-      arm64: dts: rockchip: fix node name for hym8563 rtc
-      arm64: dts: rockchip: remove clock-frequency from rtc
-      arm: dts: rockchip: fix node name for hym8563 rtc
-      arm: dts: rockchip: remove clock-frequency from rtc
-
- arch/arm/boot/dts/rk3036-evb.dts                           |  3 +--
- arch/arm/boot/dts/rk3066a-mk808.dts                        |  2 +-
- arch/arm/boot/dts/rk3188-radxarock.dts                     |  2 +-
- arch/arm/boot/dts/rk3188.dtsi                              |  2 +-
- arch/arm/boot/dts/rk3288-evb-act8846.dts                   |  2 +-
- arch/arm/boot/dts/rk3288-evb.dtsi                          |  6 +++---
- arch/arm/boot/dts/rk3288-firefly.dtsi                      |  3 +--
- arch/arm/boot/dts/rk3288-miqi.dts                          |  3 +--
- arch/arm/boot/dts/rk3288-rock2-square.dts                  |  3 +--
- arch/arm/boot/dts/rk3288-vmarc-som.dtsi                    |  1 -
- arch/arm64/boot/dts/rockchip/px30-evb.dts                  | 10 +++++-----
- arch/arm64/boot/dts/rockchip/rk3308-evb.dts                | 12 ++++++------
- arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts             |  2 +-
- arch/arm64/boot/dts/rockchip/rk3318-a95x-z2.dts            |  2 +-
- arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts     |  3 +--
- arch/arm64/boot/dts/rockchip/rk3368-r88.dts                |  3 +--
- arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi       |  4 ----
- arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi       |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts          |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-nanopi-m4b.dts         |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi           |  1 +
- arch/arm64/boot/dts/rockchip/rk3399-orangepi.dts           |  4 ++--
- arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts        |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts        |  3 +--
- arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi            |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi         |  1 -
- arch/arm64/boot/dts/rockchip/rk3399-sapphire-excavator.dts |  4 ++--
- arch/arm64/boot/dts/rockchip/rk3399pro-vmarc-som.dtsi      |  3 +--
- arch/arm64/boot/dts/rockchip/rk3566-pinenote.dtsi          |  2 +-
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts         |  7 ++++---
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts         |  2 +-
- arch/arm64/boot/dts/rockchip/rk3566-roc-pc.dts             |  8 ++------
- arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts         |  1 -
- arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts            |  1 -
- 34 files changed, 46 insertions(+), 64 deletions(-)
+Thanks,
+Neil
 
 
+> 
+>       Arnd
 
