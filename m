@@ -1,170 +1,85 @@
-Return-Path: <SRS0=V0dz=3Z=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=h2dX=3Z=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF904C4321E
-	for <soc@archiver.kernel.org>; Fri, 25 Nov 2022 10:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C479FC4332F
+	for <soc@archiver.kernel.org>; Fri, 25 Nov 2022 14:00:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9DDA2C433D6; Fri, 25 Nov 2022 10:12:55 +0000 (UTC)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 97E5EC433D7; Fri, 25 Nov 2022 14:00:42 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CB4C0C43470;
-	Fri, 25 Nov 2022 10:12:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CB4C0C43470
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id t1so3069488wmi.4;
-        Fri, 25 Nov 2022 02:12:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hRQplXnMXO/j/dCZjN3HfCgc8e7q8b/J3KcgZO8A6M4=;
-        b=fMOeP9nCS5t+pZle+lEPgvncKlBVKQJrYeRlsw13Iv6caTMJUK83conG0f2KvRuWJK
-         IudkWYY+HdY7/T1DnVgqrmlMxBO6MfrXLts0XY1ZasHwwH25oA/NmwHjwl3vH5JLEqvc
-         atr679e3hHVSW61APP2EGpUobDeW00V6SqrD8iosN+awnFUTMFXs7yTaNFBfF1sFcjZP
-         y9tpo0c5Et1QHlPeji29wT3CNpR5m7L20kVhcjBuG0S17+5HzRAQVHs1anZxNt6zClAm
-         rZqQCUp3GyWLim3ZWK6Fvhf1B76ZPSMX2dAdbwyko+C8VZK1OTB2kzKAO06KbMiLSFGq
-         LVLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hRQplXnMXO/j/dCZjN3HfCgc8e7q8b/J3KcgZO8A6M4=;
-        b=Yulf1QZdJOVxMAY1jauGMpI2HwDB7oRXaLJYVbrl63fgXZv+pu2eG8TVgBlQjY0Qjt
-         6sBswAQD11huMHffD3+JjcvtWHoToK+RYnjjpQInSG2WV+ts65wqehKEzPa8FQQT+twd
-         PpRZHIDMCKYiJMPgHXjA/GqcYoUFp0wHr516d3ts81+2zPWVKoYtSMwUB2G3gSwmtoqR
-         PxGB4bA/ewIx4e09NiTwEyedmDnW49vp6RLeSrc/NsGG1a1Ghuw/QKx/7rYqT59W1gkc
-         bhGnUSC1yCFiY+FdPXCU6tC+GW9sA8CuXNM3xod95MsO2Ee1RCGNOrN0UV5Wur8pM4tZ
-         qilg==
-X-Gm-Message-State: ANoB5pnzM+eZOUXdt8zaNuLxvBFKd/pB+LDN/pdZpUJAmuSbJyZzmJIp
-	S2tMGGFzrwEg9Kp7NUREoxA=
-X-Google-Smtp-Source: AA0mqf4SkxGZvAfDpVzz5RjSY7y/fdsN4OmHKyI0bdV7W2ZZpPr1g53i3cpPReq+Ti5SOPBvN55ukg==
-X-Received: by 2002:a05:600c:a15:b0:3cf:7126:1fd0 with SMTP id z21-20020a05600c0a1500b003cf71261fd0mr25606681wmp.14.1669371169559;
-        Fri, 25 Nov 2022 02:12:49 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id r6-20020a05600c458600b003cfd4a50d5asm8944926wmo.34.2022.11.25.02.12.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 02:12:49 -0800 (PST)
-Date: Fri, 25 Nov 2022 11:12:47 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id C2D93C433C1;
+	Fri, 25 Nov 2022 14:00:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2D93C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669384840; x=1700920840;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kZ6l9IK0hqNxspdPyuio7aO/qr/yU78UB/H6DApFSwA=;
+  b=U8qHcv/K6MNAaSlRnpjhijs1aRsGClWLlELgzyHaM293HwLVWDdp+2EA
+   D7438rc9hAw/RWD1QcBKtoofTUpCJLMApUZaNboMPVH7BneZjm2clz036
+   MAXE47nDLA8ZaNmv6+Bp28jqw8HkkvyOvR4D/t2dpB6G3F41EMQfpvOYg
+   5yZCCNeXdusrlsLVp4auxHHg02xWghqeiZg2KAwXVFftlMvd8z77THBCW
+   XOMiu855ELekT+Vp0ZwX6jLXo+E5a6UnoZnYZfM4SgWH6TMr+7Joj+hqi
+   Mo0XtAU4iz3UqsvGrT45yDY2CUOAUcqEQFdj9INLTsGKIdoQV2HJpuNuP
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="190546141"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 07:00:37 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 25 Nov 2022 07:00:36 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 25 Nov 2022 07:00:35 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm@kernel.org, soc@kernel.org, Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL v2 2/7] firmware: tegra: Changes for v6.2-rc1
-Message-ID: <Y4CVH7TAnAm1BF4M@orome>
-References: <20221121171239.2041835-1-thierry.reding@gmail.com>
- <20221121171239.2041835-2-thierry.reding@gmail.com>
- <374ae4ef-2f57-4737-95af-b1bdfdb03740@app.fastmail.com>
- <Y34FCQ3xTmcjqKRT@orome>
- <6476b823-b47c-461c-b948-752e2671015f@app.fastmail.com>
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 device tree updates for 6.2 #3
+Date: Fri, 25 Nov 2022 16:05:25 +0200
+Message-ID: <20221125140525.384928-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="dtq8rxI/m1Pzd9kE"
-Content-Disposition: inline
-In-Reply-To: <6476b823-b47c-461c-b948-752e2671015f@app.fastmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+The following changes since commit 7a3c62678699d7e56736c2d0579d077a7773e77c:
 
---dtq8rxI/m1Pzd9kE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  ARM: dts: at91: sama7g5: fix signal name of pin PD8 (2022-11-17 15:32:33 +0200)
 
-On Wed, Nov 23, 2022 at 02:23:36PM +0100, Arnd Bergmann wrote:
-> On Wed, Nov 23, 2022, at 12:33, Thierry Reding wrote:
-> > On Tue, Nov 22, 2022 at 10:25:50PM +0100, Arnd Bergmann wrote:
-> >> On Mon, Nov 21, 2022, at 18:12, Thierry Reding wrote:
-> >> >       firmware: tegra: bpmp: Do not support big-endian
-> >>=20
-> >> I pulled the branch, but I think this patch is inconsistent with
-> >> our normal approach: Since all ARMv7 and ARMv8 processors can
-> >> run with both big-endian and little-endian kernels, we normally
-> >> try to keep drivers portable between both ways, even though we
-> >> don't expect anyone to actually want a big-endian kernel any
-> >> more. Changing portable code to nonportable code doesn't seem
-> >> helpful here.
-> >
-> > The only reason I dropped this is because the driver is in itself
-> > inconsistent. Parts of it use byte-swapping for 32-bit values and other
-> > parts don't. I was originally going to fix big-endian support but it
-> > would've required changes to the BPMP ABI header to avoid sparse
-> > warnings in lots of places, then these ABI changes would've needed to
-> > trickle up to the canonical source, etc. All of that didn't seem worth
-> > the effort if we couldn't even test this in any way. So the easiest fix
-> > was to stop pretending and drop the partial support.
->=20
-> Right
->=20
-> >> On the other hand, there are already examples of important
-> >> drivers that are fundamentally incompatible with big-endian
-> >> mode, notably drivers/efi/, which is required on a lot of
-> >> machines.
-> >>=20
-> >> You don't have to revert this patch, but it would be helpful
-> >> to mark code that is explicitly unportable with a 'depends
-> >> on !CPU_BIG_ENDIAN' line in Kconfig. If you agree, I can
-> >> add that.
-> >
-> > Yes, feel free to add that.
->=20
-> Added this commit to the soc/drivers branch now:
->=20
-> commit 4ddb1bf1a83783cebdb174b0efaf62f63ad64e0b
-> Author: Arnd Bergmann <arnd@arndb.de>
-> Date:   Wed Nov 23 14:21:16 2022 +0100
->=20
->     tegra: mark BPMP driver as little-endian only
->    =20
->     The BPMP firmware driver never worked on big-endian kernels, and
->     cannot easily be made portable. Add a dependency to make this clear
->     in case anyone ever wants to try a big-endian kernel on this hardware.
->    =20
->     Link: https://lore.kernel.org/linux-arm-kernel/Y34FCQ3xTmcjqKRT@orome/
->     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->=20
-> diff --git a/drivers/firmware/tegra/Kconfig b/drivers/firmware/tegra/Kcon=
-fig
-> index 1c8ba1f47c7c..cde1ab8bd9d1 100644
-> --- a/drivers/firmware/tegra/Kconfig
-> +++ b/drivers/firmware/tegra/Kconfig
-> @@ -14,6 +14,7 @@ config TEGRA_IVC
->  config TEGRA_BPMP
->  	bool "Tegra BPMP driver"
->  	depends on ARCH_TEGRA && TEGRA_HSP_MBOX && TEGRA_IVC
-> +	depends on !CPU_BIG_ENDIAN
->  	help
->  	  BPMP (Boot and Power Management Processor) is designed to off-loading
->  	  the PM functions which include clock/DVFS/thermal/power from the CPU.
+are available in the Git repository at:
 
-Sounds good, thanks.
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.2-3
 
-Thierry
+for you to fetch changes up to eb93f1d7c91d8d6fe6fc001e0b515d1bbd755fd2:
 
---dtq8rxI/m1Pzd9kE
-Content-Type: application/pgp-signature; name="signature.asc"
+  ARM: dts: lan966x: Add otp support (2022-11-25 11:11:50 +0200)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+AT91 DT for 6.2 #3
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmOAlR4ACgkQ3SOs138+
-s6Fb5xAAoHyriQLf9Zt60TezBoZcJ0d1vzc0fW5d78b9KVOQSWrp3nh0R8HfOlJz
-iDQ4/hJvuSEbLVJHNA25Llo9OYwJHqtDpV+tNdJrjeX5IRZ522vv0xYSUWPF9zxE
-aqSU6xnthj9N7iA2PzMaWo/P0Io+K1YNJWw+6iTWODhQna31rn5aXNz0x6KBKYRm
-er0yzSMGdwxAA7tpYDF5232T/oV3zdD89NS0vHPfHTezSe/9gsd6EBdr5te/dKFA
-voqCG6Z1jL8TpMvJK7aJbkjDXAbhqaXEFnk5teFW8gYM8okuI6J8FpTmJUP93M8I
-O4HPmdyp9xKUh8BC+ELBHdDvzdrbY2oplBMIcVAz/OHyrLaVLahQ5+eJhloXGF50
-bjElUbIIPO9Cq1LgEgmPLm1uThfT0v7Vwx6z0FDcjOE6pLbvcudtvDLtXC+l808L
-jTecsl4H8cSKy8c/7IEqn86XPZb5gmAlr1PXyzv9KzEubG/IRVxvatkbeifdZNw4
-zesg8l7SyO5YJjvDHenTPw6mAx5O1GasLnYp/1PBYYCECV6PczZqKGBJu7uN75Sc
-JWkgg4zLsOIWMnlIFgxtTdosZWqs74+WtnXNFbhEKuDMt/mtT4TJT+WAhVd39J8E
-FxvRzYrJyskJmO9d4qqkhvwgQorxo/4xrtlV1F+sYTlDAEOcJTs=
-=MHQ+
------END PGP SIGNATURE-----
+It contains:
+- proper power rail description for SDMMC devices available on
+  SAMA7G5-EK
+- OTP controller has been added for LAN966X devices
 
---dtq8rxI/m1Pzd9kE--
+----------------------------------------------------------------
+Eugen Hristev (1):
+      ARM: dts: at91: sama7g5ek: align power rails for sdmmc0/1
+
+Horatiu Vultur (1):
+      ARM: dts: lan966x: Add otp support
+
+ arch/arm/boot/dts/at91-sama7g5ek.dts | 5 ++++-
+ arch/arm/boot/dts/lan966x.dtsi       | 5 +++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
