@@ -1,83 +1,82 @@
-Return-Path: <SRS0=UMQL=3Z=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=h2dX=3Z=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CB4AC4332F
-	for <soc@archiver.kernel.org>; Fri, 25 Nov 2022 08:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D8ACC4332F
+	for <soc@archiver.kernel.org>; Fri, 25 Nov 2022 09:30:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D1413C433C1; Fri, 25 Nov 2022 08:23:17 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id A0EDBC433D6;
-	Fri, 25 Nov 2022 08:23:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A0EDBC433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id C3D5380CD;
-	Fri, 25 Nov 2022 08:23:14 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
+	id F15BFC433D7; Fri, 25 Nov 2022 09:30:34 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 65167C433D6;
+	Fri, 25 Nov 2022 09:30:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65167C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669368633; x=1700904633;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=77aiHvxt3wZarpM6WltKKTsVuG2nc8h9fPhvoRHYKPo=;
+  b=WE5rAO2HQpI0TZyr0BpspYGuT2AhJ6yNL4RjDV+UfjsPUoTsX9W4YpiR
+   tCEfl8c19jY1teRjGl1ltq8dqdLonepADKNNgkplSoI89kZ5pwRfaIurL
+   +IrbWGDw/EzuoVIPQS5d1Q0UOnwTRpLgEOV1ptrPpVrhOADoGf5vmr46v
+   KD3qibTZFgKtzJT7yIkccumF17fEAuM8tamryXlMCpSUPxm8eYhJZm4RU
+   +iSEd73mPluQBmrJNujY6JtA45hHraAYtathaP63So3Y3u4d6XTdn9oLV
+   TEaCDJvzvx6n5/uTcVGHxtor3JTsSr9D+J6rB5ivEugVMWcKMucLLYJ21
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="201369161"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 02:30:32 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 25 Nov 2022 02:30:32 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 25 Nov 2022 02:30:30 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL] Devicetree related musb changes for omap3 for v6.2
-Date: Fri, 25 Nov 2022 10:23:12 +0200
-Message-Id: <pull-1669364566-84575@atomide.com>
-X-Mailer: git-send-email 2.38.1
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 fixes for 6.1 #3
+Date: Fri, 25 Nov 2022 11:35:21 +0200
+Message-ID: <20221125093521.382105-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: "Tony Lindgren" <tony@atomide.com>
+The following changes since commit 40a2226e8bfacb79dd154dea68febeead9d847e9:
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+  ARM: dts: at91: sam9g20ek: enable udc vbus gpio pinctrl (2022-11-17 15:23:50 +0200)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/musb-for-v6.2-signed
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.1-3
 
-for you to fetch changes up to 42a79edd4a3dc1bb8e89fd2849f9e8e1e1c13977:
+for you to fetch changes up to 6a3fc8c330d1c1fa3d8773d7d38a7c55c4900dfe:
 
-  ARM: OMAP2+: Drop legacy hwmod data for omap3 otg (2022-11-22 13:25:20 +0200)
-
-----------------------------------------------------------------
-Devicetree related musb changes for omap3 for v6.2
-
-Recent musb driver regressions eposed two issues for musb legacy
-probing. The changes to use device_set_of_node_from_dev() confuse
-the legacy interconnect code. And we now have to manually populate
-the musb core irq resources.
-
-The musb driver has a fix for these, but it's not a good long term
-solution. To fix the issue properly, let's just update musb to
-probe with ti-sysc interconnect driver with proper devicetree data.
-This allows dropping most of the musb driver workaround later on.
-And with these changes we have the omap2430 musb glue layer behaving
-the same way for all the SoCs using it.
-
-We need to patch the ti-sysc driver quirks, and add devicetree
-data to make things work. And we want to drop the legacy data too
-to avoid pointless warnings.
-
-As we have a musb driver workaround, these changes are not needed as
-fixes and can wait for the merge window.
+  ARM: at91: fix build for SAMA5D3 w/o L2 cache (2022-11-24 12:50:07 +0200)
 
 ----------------------------------------------------------------
-Tony Lindgren (3):
-      bus: ti-sysc: Add otg quirk flags for omap3 musb
-      ARM: dts: Update omap3 musb to probe with ti-sysc
-      ARM: OMAP2+: Drop legacy hwmod data for omap3 otg
+AT91 fixes for 6.1 #3
 
- arch/arm/boot/dts/am3517.dtsi              | 38 +++++++++---
- arch/arm/boot/dts/omap3.dtsi               | 40 +++++++++---
- arch/arm/boot/dts/omap34xx.dtsi            |  4 ++
- arch/arm/boot/dts/omap36xx.dtsi            |  4 ++
- arch/arm/mach-omap2/omap_hwmod_3xxx_data.c | 99 ------------------------------
- drivers/bus/ti-sysc.c                      |  6 ++
- 6 files changed, 75 insertions(+), 116 deletions(-)
+It contains:
+- build fix for SAMA5D3 devices which don't have an L2 cache and due to this
+  accesssing outer_cache.write_sec in sama5_secure_cache_init() could throw
+  undefined reference to `outer_cache' if CONFIG_OUTER_CACHE is disabled
+  from common sama5_defconfig.
+
+----------------------------------------------------------------
+Peter Rosin (1):
+      ARM: at91: fix build for SAMA5D3 w/o L2 cache
+
+ arch/arm/mach-at91/sama5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
