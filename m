@@ -1,579 +1,522 @@
-Return-Path: <SRS0=Skgn=32=notify.thinkific.com=bounce+0359aa.acf2a2-soc=kernel.org@kernel.org>
+Return-Path: <SRS0=0eU+=33=z3ntu.xyz=luca@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C95D9C43217
-	for <soc@archiver.kernel.org>; Sat, 26 Nov 2022 11:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DE64C43217
+	for <soc@archiver.kernel.org>; Sun, 27 Nov 2022 18:18:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8C15AC433D6; Sat, 26 Nov 2022 11:27:31 +0000 (UTC)
-Received: from m232-120.mailgun.net (m232-120.mailgun.net [159.135.232.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 60903C4347C; Sun, 27 Nov 2022 18:18:59 +0000 (UTC)
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 76128C433C1
-	for <soc@kernel.org>; Sat, 26 Nov 2022 11:27:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76128C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=notify.thinkific.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=notify.thinkific.com
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=notify.thinkific.com;
- q=dns/txt; s=pic; t=1669462045; x=1669548445;
- h=Content-Transfer-Encoding: Content-Type: Mime-Version: Subject:
- Subject: Message-Id: To: To: Reply-To: From: From: Date: Sender:
- Sender; bh=Qs87u5iLTqSywAu9Ib3bX/vl3gOeOZL56vH5IS8ooAE=; b=VWLwzxPYEeRe8ZkjvvaSvS/xvAuf/tKt4fzCwBFizFI8qIFukNRAKIPYEehMvPIUBCl10GvV
- //nBtMKR4cpGvVKi9mTuazM401r4mE7B1L8BH7qo+g1uahG4TNK4KwTlb37NzyZ27ozKSOqG
- MhdRWjx4ppHTIcUNexKRXMTTK3s=
-X-Mailgun-Sending-Ip: 159.135.232.120
-X-Mailgun-Sid: WyJhMGVmMiIsInNvY0BrZXJuZWwub3JnIiwiYWNmMmEyIl0=
-Received: from notify.thinkific.com
- (ec2-52-86-252-13.compute-1.amazonaws.com [52.86.252.13]) by b04102e8ce4d
- with SMTP id 6381f819516d27517db55c02 (version=TLS1.3,
- cipher=TLS_AES_128_GCM_SHA256); Sat, 26 Nov 2022 11:27:21 GMT
-Sender: noreply@notify.thinkific.com
-Date: Sat, 26 Nov 2022 11:27:20 +0000
-From: "express.mydhl" <noreply@notify.thinkific.com>
-Reply-To: cipafi9865@xegge.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 4FB81C433D6;
+	Sun, 27 Nov 2022 18:18:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4FB81C433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=z3ntu.xyz
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
+Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
+	by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1FE2CD1DC8;
+	Sun, 27 Nov 2022 18:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+	t=1669573129; bh=WAA/oH/DX2GHC9Q3rV5GEm8swqMMa8UE3ecv9eIW4zA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=lJ1uj6JeMgsETX8NGRDyc+SjsyrNC4euVqh2a73/U2DBC/KkaexImsTD7tae3phIl
+	 +jdnak2Abxg0JMEn7zgLu1Zdqa17W+pGrItcutS3B3yRw7mtRMifCcKz5Q350kW24g
+	 ZqKG9OBEFVa+D/b2DGK5+6nepi0mZabgqyIX6CYA=
+From: Luca Weiss <luca@z3ntu.xyz>
+To: linux-arm-msm@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Message-Id: <6381f818ec6af_71e1c981635ef@sidekiq-default-979d98486-hp979.mail>
-Subject: Notice
-Mime-Version: 1.0
-Content-Type: multipart/alternative; boundary="--==_mimepart_6381f818ec2cc_71e1c98163423"; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailgun-Tag: site_welcome_production
-X-Mailgun-Track-Opens: yes
-X-Mailgun-Track-Clicks: htmlonly
+Cc: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	Julian Goldsmith <julian@juliangoldsmith.com>,
+	Oleg Chernovskiy <kanedias@keemail.me>,
+	Luca Weiss <luca@z3ntu.xyz>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] ARM: dts: qcom: msm8974: Add OnePlus One
+Date: Sun, 27 Nov 2022 19:18:35 +0100
+Message-Id: <20221127181835.806410-2-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221127181835.806410-1-luca@z3ntu.xyz>
+References: <20221127181835.806410-1-luca@z3ntu.xyz>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-----==_mimepart_6381f818ec2cc_71e1c98163423
-Content-Type: text/plain;
- charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Julian Goldsmith <julian@juliangoldsmith.com>
 
-Hi,We inform you that your shipment No 54960131540 is still
-awaiting instructions from you.
+OnePlus One is a smartphone launched in 2014 and is based on the
+Snapdragon 801 SoC (-AC variant).
 
-Hi,
+Supported features:
+* ADSP
+* Charger
+* Coincell charger
+* Fuel gauge
+* Internal storage
+* Touchscreen
+* UART
+* USB
+* Wifi/Bluetooth
 
-We inform you that your shipment No 54960131540 is still awaiting
-instructions from you.
+Signed-off-by: Julian Goldsmith <julian@juliangoldsmith.com>
+Co-developed-by: Oleg Chernovskiy <kanedias@keemail.me>
+Signed-off-by: Oleg Chernovskiy <kanedias@keemail.me>
+Co-developed-by: Luca Weiss <luca@z3ntu.xyz>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/qcom-msm8974pro-oneplus-bacon.dts     | 419 ++++++++++++++++++
+ 2 files changed, 420 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
 
-You have to pay the additional shipping fees to ship your parcel
-as soon as possible.
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 90bb9866cc88..3c76e3e4785b 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1064,6 +1064,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-msm8974-sony-xperia-rhine-amami.dtb \
+ 	qcom-msm8974-sony-xperia-rhine-honami.dtb \
+ 	qcom-msm8974pro-fairphone-fp2.dtb \
++	qcom-msm8974pro-oneplus-bacon.dtb \
+ 	qcom-msm8974pro-samsung-klte.dtb \
+ 	qcom-msm8974pro-sony-xperia-shinano-castor.dtb \
+ 	qcom-mdm9615-wp8548-mangoh-green.dtb \
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
+new file mode 100644
+index 000000000000..1d1805983d95
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
+@@ -0,0 +1,419 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "qcom-msm8974pro.dtsi"
++#include "qcom-pm8841.dtsi"
++#include "qcom-pm8941.dtsi"
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
++
++/ {
++	model = "OnePlus One";
++	compatible = "oneplus,bacon", "qcom,msm8974";
++	chassis-type = "handset";
++	qcom,msm-id = <194 0x10000>;
++	qcom,board-id = <8 0>;
++
++	aliases {
++		serial0 = &blsp1_uart2;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++};
++
++&blsp1_i2c1 {
++	status = "okay";
++
++	fuel-gauge@55 {
++		compatible = "ti,bq27541";
++		reg = <0x55>;
++		power-supplies = <&bq24196_charger>;
++	};
++};
++
++&blsp1_i2c2 {
++	status = "okay";
++
++	rmi4-i2c-dev@20 {
++		compatible = "syna,rmi4-i2c";
++		reg = <0x20>;
++
++		syna,startup-delay-ms = <100>;
++
++		interrupts-extended = <&tlmm 61 IRQ_TYPE_EDGE_FALLING>;
++		vdd-supply = <&pm8941_l22>;
++		vio-supply = <&pm8941_lvs3>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&touch_default_state>;
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		rmi4-f01@1 {
++			reg = <0x1>;
++			syna,nosleep-mode = <1>;
++		};
++
++		rmi4-f12@12 {
++			reg = <0x12>;
++			syna,sensor-type = <1>;
++			/*
++			 * Touchscreen size is 2040x1080, y-values between
++			 * 1920-2040 are used for touchkey (menu, home & back).
++			 * For now clip it off so we don't get touch events
++			 * outside of the display area.
++			 */
++			syna,clip-y-high = <1920>;
++		};
++	};
++};
++
++&blsp1_i2c6 {
++	status = "okay";
++
++	bq24196_charger: charger@6b {
++		compatible = "ti,bq24196";
++		reg = <0x6b>;
++		interrupts-extended = <&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
++		omit-battery-class;
++	};
++};
++
++&blsp1_uart2 {
++	status = "okay";
++};
++
++&gcc {
++	compatible = "qcom,gcc-msm8974pro-ac";
++};
++
++&otg {
++	phys = <&usb_hs1_phy>;
++	phy-select = <&tcsr 0xb000 0>;
++	extcon = <&smbb>, <&usb_id>;
++	vbus-supply = <&chg_otg>;
++
++	hnp-disable;
++	srp-disable;
++	adp-disable;
++
++	status = "okay";
++
++	ulpi {
++		phy@a {
++			status = "okay";
++
++			v1p8-supply = <&pm8941_l6>;
++			v3p3-supply = <&pm8941_l24>;
++
++			extcon = <&smbb>;
++			qcom,init-seq = /bits/ 8 <0x1 0x64>;
++		};
++	};
++};
++
++&pm8941_coincell {
++	qcom,rset-ohms = <800>;
++	qcom,vset-millivolts = <3200>;
++
++	status = "okay";
++};
++
++&pronto {
++	vddmx-supply = <&pm8841_s1>;
++	vddcx-supply = <&pm8841_s2>;
++	vddpx-supply = <&pm8941_s3>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&wcnss_pin_a>;
++
++	status = "okay";
++
++	iris {
++		vddxo-supply = <&pm8941_l6>;
++		vddrfa-supply = <&pm8941_l11>;
++		vddpa-supply = <&pm8941_l19>;
++		vdddig-supply = <&pm8941_s3>;
++	};
++
++	smd-edge {
++		qcom,remote-pid = <4>;
++		label = "pronto";
++
++		wcnss {
++			status = "okay";
++		};
++	};
++};
++
++&remoteproc_adsp {
++	cx-supply = <&pm8841_s2>;
++
++	status = "okay";
++};
++
++&rpm_requests {
++	regulators-0 {
++		compatible = "qcom,rpm-pm8841-regulators";
++
++		pm8841_s1: s1 {
++			regulator-min-microvolt = <675000>;
++			regulator-max-microvolt = <1050000>;
++		};
++
++		pm8841_s2: s2 {
++			regulator-min-microvolt = <875000>;
++			regulator-max-microvolt = <1050000>;
++			regulator-always-on;
++		};
++
++		pm8841_s3: s3 {
++			regulator-min-microvolt = <1050000>;
++			regulator-max-microvolt = <1050000>;
++		};
++	};
++
++	regulators-1 {
++		compatible = "qcom,rpm-pm8941-regulators";
++
++		vdd_l1_l3-supply = <&pm8941_s1>;
++		vdd_l2_lvs1_2_3-supply = <&pm8941_s3>;
++		vdd_l4_l11-supply = <&pm8941_s1>;
++		vdd_l5_l7-supply = <&pm8941_s2>;
++		vdd_l6_l12_l14_l15-supply = <&pm8941_s2>;
++		vdd_l8_l16_l18_l19-supply = <&vreg_vph_pwr>;
++		vdd_l9_l10_l17_l22-supply = <&vreg_boost>;
++		vdd_l13_l20_l23_l24-supply = <&vreg_boost>;
++		vdd_l21-supply = <&vreg_boost>;
++
++		pm8941_s1: s1 {
++			regulator-min-microvolt = <1300000>;
++			regulator-max-microvolt = <1300000>;
++
++			regulator-always-on;
++			regulator-boot-on;
++		};
++
++		pm8941_s2: s2 {
++			regulator-min-microvolt = <2150000>;
++			regulator-max-microvolt = <2150000>;
++
++			regulator-boot-on;
++		};
++
++		pm8941_s3: s3 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			regulator-system-load = <154000>;
++
++			regulator-always-on;
++			regulator-boot-on;
++			regulator-allow-set-load;
++		};
++
++		pm8941_l1: l1 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++
++			regulator-always-on;
++			regulator-boot-on;
++		};
++
++		pm8941_l2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++		};
++
++		pm8941_l3: l3 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++
++		pm8941_l4: l4 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++		};
++
++		pm8941_l5: l5 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8941_l6: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++
++			regulator-boot-on;
++		};
++
++		pm8941_l7: l7 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++
++			regulator-boot-on;
++		};
++
++		pm8941_l8: l8 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8941_l9: l9 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8941_l10: l10 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8941_l11: l11 {
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1350000>;
++		};
++
++		pm8941_l12: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++
++			regulator-always-on;
++			regulator-boot-on;
++			regulator-allow-set-load;
++		};
++
++		pm8941_l13: l13 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++
++			regulator-boot-on;
++		};
++
++		pm8941_l14: l14 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8941_l15: l15 {
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++		};
++
++		pm8941_l16: l16 {
++			regulator-min-microvolt = <2700000>;
++			regulator-max-microvolt = <2700000>;
++		};
++
++		pm8941_l17: l17 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <2850000>;
++		};
++
++		pm8941_l18: l18 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <2850000>;
++		};
++
++		pm8941_l19: l19 {
++			regulator-min-microvolt = <2900000>;
++			regulator-max-microvolt = <3350000>;
++		};
++
++		pm8941_l20: l20 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++
++			regulator-system-load = <200000>;
++			regulator-allow-set-load;
++			regulator-boot-on;
++		};
++
++		pm8941_l21: l21 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++
++			regulator-boot-on;
++		};
++
++		pm8941_l22: l22 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3000000>;
++			regulator-allow-set-load;
++		};
++
++		pm8941_l23: l23 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3000000>;
++		};
++
++		pm8941_l24: l24 {
++			regulator-min-microvolt = <3075000>;
++			regulator-max-microvolt = <3075000>;
++
++			regulator-boot-on;
++		};
++
++		pm8941_lvs3: lvs3 {};
++	};
++};
++
++&sdhc_1 {
++	vmmc-supply = <&pm8941_l20>;
++	vqmmc-supply = <&pm8941_s3>;
++
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&sdc1_on>;
++	pinctrl-1 = <&sdc1_off>;
++
++	status = "okay";
++};
++
++&tlmm {
++	sdc1_on: sdc1-on-state {
++		clk-pins {
++			pins = "sdc1_clk";
++			drive-strength = <4>;
++			bias-disable;
++		};
++
++		cmd-data-pins {
++			pins = "sdc1_cmd", "sdc1_data";
++			drive-strength = <4>;
++			bias-pull-up;
++		};
++	};
++
++	touch_default_state: touch-default-state {
++		int-pins {
++			pins = "gpio61";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-disable;
++			input-enable;
++		};
++
++		reset-pins {
++			pins = "gpio60";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++	};
++
++	wcnss_pin_a: wcnss-pin-active-state {
++		wlan-pins {
++			pins = "gpio36", "gpio37", "gpio38", "gpio39", "gpio40";
++			function = "wlan";
++			drive-strength = <6>;
++			bias-pull-down;
++		};
++
++		bt-pins {
++			pins = "gpio35", "gpio43", "gpio44";
++			function = "bt";
++			drive-strength = <2>;
++			bias-pull-down;
++		};
++	};
++};
+-- 
+2.38.1
 
-As soon as we receive your additional shipping fees we’ll be in
-touch to arrange delivery.
-
-Start Delivery ( https://www.rasadhwani.com/1998542546/ )
-
-We'll email you again once we're ready to ship.
-
-Your goods are at our warehouse.Kind regardsCustomer Support |
-
-Remarques :
-Ceci est un courrier électronique généré par voie automatique.
-L'adresse de l'expéditeur de ce courrier électronique permet
-uniquement d'envoyer des messages et non d'en recevoir ! Si vous
-avez des questions, veuillez consulter la rubrique SERVICE
-CLIENTÈLE.
-
-MyCommerce - a service of Digital River
-- http://www.mycommerce.com ( http://www.mycommerce.com/ )
-Digital River GmbH
-Scheidtweilerstr. 4, D-50933 Cologne, Allemagne
-Directeur : Kristopher Thomas Schmidt
-Registre du commerce : HRB 56188 / Tribunal de première instance
-de Cologne
-
-Powered by
-Thinkific 
-( http://www.thinkific.com/?utm_source=romasmc-s-school&utm_medium=email&utm_campaign=powered-by-referral )
-
-
-Everything you need to create & deliver courses on your
-own site
-----==_mimepart_6381f818ec2cc_71e1c98163423
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE html>
-<html lang=3D"en">
-<head>
-<meta content=3D"text/html; charset=3DUTF-8" http-equiv=3D"Content-Type">
-<style>@media screen and (max-width:480px) {
-  .main-table {
-    width: 300px !important; margin: 0 auto;
-  }
-}
-</style>
-</head>
-<body>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">
-<p><span style=3D"color: rgb(255, 255, 255); font-family: sans-serif; font-=
-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; f=
-ont-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text=
--indent: 0px; text-transform: none; white-space: normal; widows: 2; word-sp=
-acing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: init=
-ial; text-decoration-style: initial; text-decoration-color: initial; float:=
- none; background-color: rgb(255, 255, 255); display: inline !important; fo=
-nt-size: 8px;">Hi,We inform you that your shipment No 54960131540 is still =
-awaiting instructions from you.</span></p>
-<img src=3D"https://files.cdn.thinkific.com/file_uploads/727965/images/17b/=
-c95/16a/1669420999072.png" style=3D"width: 466px;" class=3D"fr-fic fr-dib f=
-r-fil"><p><br></p>
-</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left"><strong style=3D"box-sizing: border-box; font-stretch: inherit; marg=
-in: 0px; padding: 0px; border-width: 0px; font: inherit inherit 700 inherit=
-/inherit inherit;">&nbsp;Hi,</strong></div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">&nbsp;</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">We inform you that your shipment <strong style=3D"box-sizing: border=
--box; font-stretch: inherit; margin: 0px; padding: 0px; border-width: 0px; =
-font: inherit inherit 700 inherit/inherit inherit;"><span style=3D"box-sizi=
-ng: border-box; font-style: normal; font-variant: normal; font-weight: norm=
-al; font-size: normal; line-height: normal; vertical-align: baseline; color=
-: inherit; margin: 0px; padding: 0px; border-width: 0px;">No</span></strong=
-> <strong style=3D"box-sizing: border-box; font-stretch: inherit; margin: 0=
-px; padding: 0px; border-width: 0px; font: inherit inherit 700 inherit/inhe=
-rit inherit;"><span style=3D"box-sizing: border-box; font-style: normal; fo=
-nt-variant: normal; font-weight: normal; font-size: normal; line-height: no=
-rmal; vertical-align: baseline; color: rgb(255, 0, 0); margin: 0px; padding=
-: 0px; border-width: 0px;">54960131540</span></strong> is still awaiting in=
-structions from you.</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">&nbsp;</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">You have to pay the additional shipping fees to ship your parcel as =
-soon as possible.</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">&nbsp;</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">As soon as we receive your additional shipping fees we=E2=80=99ll be=
- in touch to arrange delivery.</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">&nbsp;</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">&nbsp;</div>
-<div style=3D"box-sizing: border-box; font-stretch: inherit; min-width: 100=
-%; color: inherit; letter-spacing: normal; orphans: 2; text-indent: 0px; te=
-xt-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -web=
-kit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-deco=
-ration-thickness: initial; text-decoration-style: initial; text-decoration-=
-color: initial; vertical-align: baseline; margin: 0px; padding: 0px; border=
--width: 0px; font: inherit inherit inherit inherit/1.4em inherit;" align=3D=
-"left">
-<div align=3D"center" style=3D"box-sizing: border-box; font-style: normal; =
-font-variant: normal; font-weight: normal; font-size: normal; line-height: =
-normal; min-width: 100%; vertical-align: baseline; color: inherit; margin: =
-0px 20px; padding: 0px; border-width: 0px;"><p align=3D"left" style=3D"box-=
-sizing: border-box; font-style: normal; font-variant: normal; font-weight: =
-normal; font-size: normal; line-height: normal; margin: 1em 0px; padding: 0=
-px; border-width: 0px;"><span style=3D"box-sizing: border-box; font-stretch=
-: inherit; vertical-align: baseline; color: inherit; margin: 0px; padding: =
-0px; border-width: 0px; font: inherit inherit inherit 20px/inherit tahoma, =
-geneva, sans-serif;">&nbsp;<a href=3D"https://email.notify.thinkific.com/c/=
-eJwNjsGOhCAQRL9GbhpBaJsDh7nsbxhsmpUMI64y4feXpA71KnlJsZMAVoOatRHBeYrKK5EcLCg=
-jSmQCH7dVsiSLEhbDcdDzkwK_098YOPpvrqNdbbCoEcbj6n36-JTF4XZDu40kAQORQgirsX5Gtc=
-5Ifg8gsjtqvZ5heQ3qp6e1Nt3-8eFo_kwTlU8fpbVotDIaOojbPYX6hTffJ-ep3L-iuidV3hrnL=
-vB23SV8qaZy_gPilkQ8" style=3D"box-sizing: border-box; color: rgb(255, 255, =
-255); text-decoration: underline; font-stretch: inherit; display: inline-fl=
-ex; vertical-align: baseline; background: rgb(168, 15, 15) 0px 0px; margin:=
- 0px; padding: 12px 24px; border-style: none; border-width: 0px; font: inhe=
-rit inherit bold 14px/24px Verdana, Geneva, sans-serif;" target=3D"_blank">=
-<span style=3D"box-sizing: border-box; font-stretch: inherit; vertical-alig=
-n: baseline; color: inherit; margin: 0px; padding: 0px; border-width: 0px; =
-font: inherit inherit inherit inherit/1.4em inherit;">Start Delivery</span>=
-</a></span></p></div>
-<p align=3D"left" style=3D"box-sizing: border-box; font-style: normal; font=
--variant: normal; font-weight: normal; font-size: normal; line-height: norm=
-al; margin: 1em 0px; padding: 0px; border-width: 0px;">&nbsp;</p>
-<span style=3D"box-sizing: border-box; font-style: normal; font-variant: no=
-rmal; font-weight: normal; font-size: normal; line-height: normal; vertical=
--align: baseline; color: rgb(232, 33, 29); margin: 0px; padding: 0px; borde=
-r-width: 0px;">&nbsp;<strong style=3D"box-sizing: border-box; font-stretch:=
- inherit; margin: 0px; padding: 0px; border-width: 0px; font: inherit inher=
-it 700 inherit/inherit inherit;">&nbsp;<span style=3D"box-sizing: border-bo=
-x; font-stretch: inherit; vertical-align: baseline; color: inherit; margin:=
- 0px; padding: 0px; border-width: 0px; font: inherit inherit inherit 22px/i=
-nherit inherit;">&nbsp;We'll email you again once we're ready to ship.</spa=
-n></strong></span><p style=3D"box-sizing: border-box; font-style: normal; f=
-ont-variant: normal; font-weight: normal; font-size: normal; line-height: n=
-ormal; margin: 1em 0px; padding: 0px; border-width: 0px;">&nbsp;</p>Your go=
-ods are at our warehouse.<br style=3D"box-sizing: border-box;"><p style=3D"=
-box-sizing: border-box; font-style: normal; font-variant: normal; font-weig=
-ht: normal; font-size: normal; line-height: normal; margin: 1em 0px; paddin=
-g: 0px; border-width: 0px;">Kind regards<br style=3D"box-sizing: border-box=
-;">Customer Support |</p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;">&nbsp;</p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;">&nbsp;</p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;">&nbsp;</p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><span style=3D"color: rgb(255, 255,=
- 255);"><br></span></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D'font-style=
-: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-v=
-ariant-numeric: inherit; font-variant-east-asian: inherit; font-weight: 400=
-; font-stretch: inherit; font-size: 15px; line-height: inherit; font-family=
-: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, Bl=
-inkMacSystemFont, Roboto, "Helvetica Neue", sans-serif; color: rgb(36, 36, =
-36); letter-spacing: normal; orphans: 2; text-align: start; text-transform:=
- none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stro=
-ke-width: 0px; text-decoration-thickness: initial; text-decoration-style: i=
-nitial; text-decoration-color: initial;' width=3D"100%" bgcolor=3D"FFFFFF">=
-<tbody><tr><td style=3D"white-space: normal !important; border: 1px solid r=
-gb(221,221,221);" bgcolor=3D"FFFFFF">
-<table bgcolor=3D"#ffffff" cellpadding=3D"0" cellspacing=3D"0" style=3D"fon=
-t-style: normal; font-variant: normal; font-weight: normal; font-size: norm=
-al; line-height: normal;" width=3D"100%"><tbody><tr><td style=3D"white-spac=
-e: normal !important; color: rgb(0, 0, 0); font-family: Arial, Helvetica, s=
-ans-serif; font-size: 1.1em; font-weight: bold; line-height: 1.33em; text-d=
-ecoration: none; padding: 10px;">Remarques&nbsp;:</td></tr></tbody></table>
-<table bgcolor=3D"#ffffff" cellpadding=3D"0" cellspacing=3D"0" style=3D"fon=
-t-style: normal; font-variant: normal; font-weight: normal; font-size: norm=
-al; line-height: normal;" width=3D"100%"><tbody><tr><td style=3D"white-spac=
-e: normal !important; color: rgb(102, 102, 102); font-family: Arial, Helvet=
-ica, sans-serif; font-size: 12px; line-height: 1.33em; padding: 10px;">Ceci=
- est un courrier =C3=A9lectronique g=C3=A9n=C3=A9r=C3=A9 par voie automatiq=
-ue. L'adresse de l'exp=C3=A9diteur de ce courrier =C3=A9lectronique permet =
-uniquement d'envoyer des messages et non d'en recevoir&nbsp;! Si vous avez =
-des questions, veuillez consulter la rubrique SERVICE CLIENT=C3=88LE.</td><=
-/tr></tbody></table>
-</td></tr></tbody></table>
-<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D'font-style=
-: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-v=
-ariant-numeric: inherit; font-variant-east-asian: inherit; font-weight: 400=
-; font-stretch: inherit; font-size: 15px; line-height: inherit; font-family=
-: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, Bl=
-inkMacSystemFont, Roboto, "Helvetica Neue", sans-serif; color: rgb(36, 36, =
-36); letter-spacing: normal; orphans: 2; text-align: start; text-transform:=
- none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stro=
-ke-width: 0px; text-decoration-thickness: initial; text-decoration-style: i=
-nitial; text-decoration-color: initial; margin-top: 10px;' width=3D"100%" b=
-gcolor=3D"FFFFFF"><tbody><tr valign=3D"middle">
-<td style=3D"white-space: normal !important; width: 160px; padding: 5px; bo=
-rder: 1px solid rgb(255,255,255);" bgcolor=3D"FFFFFF"><br></td>
-<td style=3D"white-space: normal !important; padding: 0px; border: 1px soli=
-d rgb(255,255,255);" bgcolor=3D"FFFFFF"><table bgcolor=3D"#ffffff" cellpadd=
-ing=3D"0" cellspacing=3D"0" style=3D"font-style: normal; font-variant: norm=
-al; font-weight: normal; font-size: normal; line-height: normal;" width=3D"=
-100%"><tbody><tr><td style=3D"white-space: normal !important; color: rgb(10=
-2, 102, 102); font-family: Arial, Helvetica, sans-serif; font-size: 10px; l=
-ine-height: 1em; padding-left: 5px;" bgcolor=3D"FFFFFF">MyCommerce - a serv=
-ice of Digital River -&nbsp;<a data-auth=3D"NotApplicable" data-linkindex=
-=3D"6" href=3D"https://email.notify.thinkific.com/c/eJwNjcGOhCAQRL9GbhpB6KE=
-PHOayv2GYphnJ4OAixuzfL0kdXiovVewkAGpQszYiOE9ReSWSg8XKaKVlAh_Xh2RJaCUshuOg5z=
-MF_qTfMXD0V24jPjCg1RbG7eg87T5lsTmp8EUSdTCo7LygAVIM1Ddng2SsyG5r7RiW56B-eu77n=
-vY_KvvOlXjq0EtR3Vmon364fjlPpb5Fc2dqvN6cu8PrUUu4qKXy_Qc7yEA9" rel=3D"noopene=
-r noreferrer" style=3D"font-stretch: inherit; vertical-align: baseline; col=
-or: rgb(0, 176, 208); text-decoration: none; margin: 0px; padding: 0px; bor=
-der-width: 0px; font: inherit inherit bold inherit/inherit inherit;" target=
-=3D"_blank">http://www.mycommerce.com</a><br>Digital River GmbH<br>Scheidtw=
-eilerstr. 4, D-50933 Cologne, Allemagne<br>Directeur&nbsp;: Kristopher Thom=
-as Schmidt<br>Registre du commerce : HRB 56188 / Tribunal de premi=C3=A8re =
-instance de Cologne</td></tr></tbody></table></td>
-</tr></tbody></table>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-<p style=3D"box-sizing: border-box; font-style: normal; font-variant: norma=
-l; font-weight: normal; font-size: normal; line-height: normal; margin: 1em=
- 0px; padding: 0px; border-width: 0px;"><br></p>
-</div>
-
-<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"font-famil=
-y: Arial, Helvetica, sans-serif;" width=3D"100%" bgcolor=3D"#f3f3f3">
-<tr>
-<td align=3D"center">
-<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"font-famil=
-y: Arial, Helvetica, sans-serif;" width=3D"100%" bgcolor=3D"#f3f3f3">
-<tr>
-<td align=3D"center">
-<table cellpadding=3D"0" cellspacing=3D"0" class=3D"main-table" style=3D"-w=
-ebkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; -moz=
--box-shadow: 1px 1px 0 #eaeaea; -webkit-box-shadow: 1px 1px 0 #eaeaea; box-=
-shadow: 1px 1px 0 #eaeaea; width: 500px; margin: 0 25px;">
-<tr>
-<td style=3D"padding-bottom: 25px; font-size: 13px;" align=3D"center">
-Powered by
-<a href=3D"https://email.notify.thinkific.com/c/eJwtj0GKxCAURE8Td4ao6d-6cDE=
-w9DWC0W9HWmNGDWFuPwYGalG8gioKNQNQM_BpfhCnjfXccBI0CMm8ZBItGL88GTKrJAPxQD_MUw=
-0OP-GHOvTmjI2qp3JKzhLodnQ_JhMi2TT3whjpHfROJpxfFUi5TpNcEfwEjES9tXYM4mvgr67ru=
-sa2hf0TfLCjzenG4nW2tNR8FouD-C45mZosrbTaLec4cLjzhC6cqed4b_9Da9Jhwnvv-MgXFnR0=
-_aUFPZZiIim6ZtvffLDsGMdc3qTpGhouF8a-jstRsjttC3n_A2p-YTs" target=3D"_blank">=
-Thinkific</a>
-<br>
-<div style=3D"padding-top: 5px;">
-Everything you need to create &amp; deliver courses on your
-own site
-</div>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-<img width=3D"1px" height=3D"1px" alt=3D"" src=3D"https://email.notify.thin=
-kific.com/o/eJwNzEEOgyAQQNHTlJ3GQRyGBWcxFIZKRLGI6fXLX_3VYwuIRqGc1CKCdT5KJ0W=
-yOBNEAmKPLq4aGLwhwHnh-FLTnQLv6TsEju7JbTDaBEOKcNiu_uPhUhabJfVGbRD0TK5HrCcyqL=
-nDi5MeRLV38d3buZ6cx1I_otk7NV5_nH05eL1qCY9vqZx_M-00Pw"></body>
-</html>
-
-----==_mimepart_6381f818ec2cc_71e1c98163423--
