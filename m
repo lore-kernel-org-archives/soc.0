@@ -1,143 +1,215 @@
-Return-Path: <SRS0=p1VZ=34=bootlin.com=gregory.clement@kernel.org>
+Return-Path: <SRS0=znk2=34=notify.thinkific.com=noreply@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB11C4332F
-	for <soc@archiver.kernel.org>; Mon, 28 Nov 2022 00:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91ACAC433FE
+	for <soc@archiver.kernel.org>; Mon, 28 Nov 2022 01:48:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 45717C433D6; Mon, 28 Nov 2022 00:43:52 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 4923FC433B5; Mon, 28 Nov 2022 01:48:52 +0000 (UTC)
+Received: from alex.cmshoster.org (alex.cmshoster.org [82.96.101.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ED6EAC433C1;
-	Mon, 28 Nov 2022 00:43:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ED6EAC433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id BEFC31BF205;
-	Mon, 28 Nov 2022 00:43:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1669596221;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=WoCbVDhK9tfW30IVjdi68KtxuiHG/VB6qwTMom2AjXo=;
-	b=Rl+qI0KhSSZwRyGd5CDJnU6CgodTNrYVigXuzvXj6v9cFFUWpWQUDj1ng5QgkRsmfOeNxM
-	uuB1L9aARTDSx/g0DxFcTVPH1QegCZoEvfEujSlioxRUnL5//3WUX1BoZ8tb8VGHUdZvca
-	KCaAproGk8GkO6egr9/LcsBtAJTZiuGC749xRmxL+u1Sv0QpubE4HcZb4o4si1rqV5c3/Q
-	CL8RogbammdoHfDuT6cYXBbDp1bbshHjiPoSn1tV8JIDEn/iFPFpJi3fiTRUADB+KR1K1w
-	ctzqAmrH0Wi1c07EU2XkDiAwMO0scYS3W/AjbMXHMLtHcEZQ7Ny5J+N+QN1NCA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2C503C433C1
+	for <soc@kernel.org>; Mon, 28 Nov 2022 01:48:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2C503C433C1
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=reject dis=none) header.from=notify.thinkific.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=notify.thinkific.com
+Received: by alex.cmshoster.org (Postfix, from userid 10289)
+	id 9F862A6E3CE1; Mon, 28 Nov 2022 02:48:49 +0100 (CET)
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v6.2 (#1)
-Date: Mon, 28 Nov 2022 01:43:40 +0100
-Message-ID: <87cz979adf.fsf@BL-laptop>
+To: soc@kernel.org
+Subject: Confirmation of Shipment N:54960131540
+Date: Mon, 28 Nov 2022 01:48:49 +0000
+From: DHL-Post Office <noreply@notify.thinkific.com>
+Message-ID: <097e6e399aa86d6809abffad6a9f6121@ebs116.kunde.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/alternative;
+	boundary="b1_097e6e399aa86d6809abffad6a9f6121"
+Content-Transfer-Encoding: 8bit
+
+This is a multi-part message in MIME format.
+
+--b1_097e6e399aa86d6809abffad6a9f6121
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+
+
+	HTML Editor - Full Version
+
+
+
+DHL Express
+
+Hi soc,
+
+We inform you that your shipment N: 54960131540 is still awaiting instructions from you.
+
+You have to pay the additional shipping fees to ship your parcel as soon as possible
+As soon as we receive your additional shipping fees we’ll be in touch to arrange delivery.
+
+
+ 
+
+Start Delivery
+
+ 
+
+Reminder : This procedure is mandatory to prevent your package from being returned to the sender
+
+Help Support
+
+
+
+
+--b1_097e6e399aa86d6809abffad6a9f6121
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+<!doctype html>
+<html>
+<head>
+=09<title>HTML Editor - Full Version</title>
+</head>
+<body>
+<div align=3D"left" style=3D"border: 0px; font-variant-numeric: inherit; fo=
+nt-variant-east-asian: inherit; font-stretch: inherit; font-size: 15px; lin=
+e-height: inherit; font-family: "Segoe UI", "Segoe UI Web (West European)",=
+ "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", s=
+ans-serif; margin: 0px; padding: 0px; vertical-align: baseline; box-sizing:=
+ border-box; min-width: 100%; color: inherit !important; background-color: =
+rgb(255, 255, 255) !important;">
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline; color:=
+ inherit;"><span style=3D"border: 0px; font-style: inherit; font-variant: i=
+nherit; font-weight: inherit; font-stretch: inherit; font-size: 72px; line-=
+height: inherit; font-family: inherit; margin: 0px; padding: 0px; vertical-=
+align: baseline; color: inherit !important;"><strong><span style=3D"border:=
+ 0px; font: inherit; margin: 0px; padding: 0px; vertical-align: baseline; c=
+olor: inherit !important;"><span style=3D"border: 0px; font-style: inherit;=
+ font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-s=
+ize: 36px; line-height: inherit; font-family: inherit; margin: 0px; padding=
+: 0px; vertical-align: baseline; color: inherit !important;"><span style=3D=
+"border: 0px; font: inherit; margin: 0px; padding: 0px; vertical-align: bas=
+eline; color: rgb(204, 0, 0) !important;">DHL Express</span></span></span><=
+/strong></span></span></p>
 
-Here is the first pull request for dt for mvebu for v6.2.
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"font-size:20px;"><spa=
+n style=3D"border: 0px; font-style: inherit; font-variant: inherit; font-we=
+ight: inherit; font-stretch: inherit; line-height: inherit; margin: 0px; pa=
+dding: 0px; vertical-align: baseline; color: inherit;"><span style=3D"borde=
+r: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; f=
+ont-stretch: inherit; line-height: inherit; margin: 0px; padding: 0px; vert=
+ical-align: baseline; color: inherit !important;"><strong>Hi=C2=A0</strong>=
+</span></span>soc<span style=3D"border: 0px; font-style: inherit; font-vari=
+ant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inh=
+erit; margin: 0px; padding: 0px; vertical-align: baseline; color: inherit;"=
+><span style=3D"border: 0px; font-style: inherit; font-variant: inherit; fo=
+nt-weight: inherit; font-stretch: inherit; line-height: inherit; margin: 0p=
+x; padding: 0px; vertical-align: baseline; color: inherit !important;">,</s=
+pan></span></span></p>
 
-Gregory
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline; color:=
+ inherit;"><span style=3D"border: 0px; font-style: inherit; font-variant: i=
+nherit; font-weight: inherit; font-stretch: inherit; font-size: 18px; line-=
+height: inherit; font-family: inherit; margin: 0px; padding: 0px; vertical-=
+align: baseline; color: inherit !important;">We inform you that your shipme=
+nt N:</span>=C2=A0<span style=3D"border: 0px; font-style: inherit; font-var=
+iant: inherit; font-weight: inherit; font-stretch: inherit; font-size: 18px=
+; line-height: inherit; font-family: inherit; margin: 0px; padding: 0px; ve=
+rtical-align: baseline; color: inherit !important;"><span style=3D"border: =
+0px; font: inherit; margin: 0px; padding: 0px; vertical-align: baseline; co=
+lor: rgb(255, 0, 0) !important;">54960131540</span>=C2=A0is still awaiting =
+instructions from you.</span></span></p>
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline; color:=
+ inherit;"><span style=3D"border: 0px; font-style: inherit; font-variant: i=
+nherit; font-weight: inherit; font-stretch: inherit; font-size: 18px; line-=
+height: inherit; font-family: inherit; margin: 0px; padding: 0px; vertical-=
+align: baseline; color: inherit !important;">You have to pay the additional=
+ shipping fees to ship your parcel as soon as possible<br aria-hidden=3D"tr=
+ue" />
+As soon as we receive your additional shipping fees we=E2=80=99ll be in tou=
+ch to arrange delivery.</span></span></p>
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+<hr style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); =
+font-family: Verdana; font-size: 12px;" />
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline; color:=
+ inherit;">=C2=A0</span></p>
 
-are available in the Git repository at:
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline; color:=
+ inherit;"><span style=3D"border: 0px; font-style: inherit; font-variant: i=
+nherit; font-weight: inherit; font-stretch: inherit; font-size: 18px; line-=
+height: inherit; font-family: inherit; margin: 0px; padding: 0px; vertical-=
+align: baseline; color: inherit !important;"><a data-auth=3D"NotApplicable"=
+ data-linkindex=3D"0" href=3D"https://webtrack.transcaribe.com/mydl/C185102=
+08105/" rel=3D"noopener noreferrer" style=3D"border: 0px none; font-style: =
+inherit; font-variant: inherit; font-weight: bold; font-stretch: inherit; f=
+ont-size: 14px; line-height: 24px; font-family: Verdana, Geneva, sans-serif=
+; margin: 0px; padding: 12px 24px; vertical-align: baseline; background-pos=
+ition: 0px 0px; color: rgb(255, 255, 255) !important; background-color: rgb=
+(168, 15, 15) !important;" target=3D"_blank"><span style=3D"border: 0px; fo=
+nt-style: inherit; font-variant: inherit; font-weight: inherit; font-stretc=
+h: inherit; font-size: inherit; line-height: 1.4em; font-family: inherit; m=
+argin: 0px; padding: 0px; vertical-align: baseline; color: inherit !importa=
+nt;">Start Delivery</span></a></span></span></p>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mve=
-bu-dt-6.2-1
+<p aria-hidden=3D"true" style=3D"color: rgb(36, 36, 36); background-color: =
+rgb(255, 255, 255); font-family: Verdana; font-size: 12px;">=C2=A0</p>
 
-for you to fetch changes up to 11f24029403e6e24b6136c852511b7cfb7b39f5e:
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline; color:=
+ inherit;"><span style=3D"border: 0px; font-style: inherit; font-variant: i=
+nherit; font-weight: inherit; font-stretch: inherit; font-size: 18px; line-=
+height: inherit; font-family: inherit; margin: 0px; padding: 0px; vertical-=
+align: baseline; color: inherit !important;"><span style=3D"border: 0px; fo=
+nt: inherit; margin: 0px; padding: 0px; vertical-align: baseline; color: rg=
+b(255, 0, 0) !important;"><strong>Reminder : This procedure is mandatory to=
+ prevent your package from being returned to the sender</strong></span></sp=
+an></span></p>
 
-  ARM: dts: armada-xp: add interrupts for watchdog (2022-11-28 01:22:12 +01=
-00)
+<p style=3D"color: rgb(36, 36, 36); background-color: rgb(255, 255, 255); f=
+ont-family: Verdana; font-size: 12px;"><span style=3D"border: 0px; font-sty=
+le: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inh=
+erit; font-size: inherit; line-height: inherit; font-family: arial, helveti=
+ca, sans-serif; margin: 0px; padding: 0px; vertical-align: baseline;"><span=
+ style=3D"border: 0px; font-style: inherit; font-variant: inherit; font-wei=
+ght: inherit; font-stretch: inherit; font-size: 16px; line-height: inherit;=
+ font-family: inherit; margin: 0px; padding: 0px; vertical-align: baseline;=
+"><a data-auth=3D"NotApplicable" data-linkindex=3D"1" href=3D"https://webtr=
+ack.transcaribe.com/mydl/C18510208105/" rel=3D"noopener noreferrer" style=
+=3D"border: 0px; font: inherit; margin: 0px; padding: 0px; vertical-align: =
+baseline;" target=3D"_blank">Help Support</a></span></span></p>
+</div>
+</body>
+</html>
 
-----------------------------------------------------------------
-mvebu dt for 6.2 (part 1)
 
-Fix assigned-addresses for every PCIe Root Port
+--b1_097e6e399aa86d6809abffad6a9f6121--
 
-Align LED node names with dtschema
-
-Add a new kirkwood based board: Zyxel NSA310S
-
-Fix compatible string for gpios for Armada 38x and 39x
-
-Add interrupts for watchdog on Armada XP
-
-Turris Omnia (Armada 385 based):
- - Add switch port 6 node
- - Add ethernet aliases
-
-Switch to using gpiod API in pm-board code
-
-----------------------------------------------------------------
-Chris Packham (1):
-      ARM: dts: armada-xp: add interrupts for watchdog
-
-Dmitry Torokhov (1):
-      ARM: mvebu: switch to using gpiod API in pm-board code
-
-Krzysztof Kozlowski (1):
-      ARM: dts: armada: align LED node names with dtschema
-
-Pali Roh=C3=A1r (10):
-      ARM: dts: dove: Fix assigned-addresses for every PCIe Root Port
-      ARM: dts: armada-370: Fix assigned-addresses for every PCIe Root Port
-      ARM: dts: armada-xp: Fix assigned-addresses for every PCIe Root Port
-      ARM: dts: armada-375: Fix assigned-addresses for every PCIe Root Port
-      ARM: dts: armada-38x: Fix assigned-addresses for every PCIe Root Port
-      ARM: dts: armada-39x: Fix assigned-addresses for every PCIe Root Port
-      ARM: dts: turris-omnia: Add ethernet aliases
-      ARM: dts: turris-omnia: Add switch port 6 node
-      ARM: dts: armada-38x: Fix compatible string for gpios
-      ARM: dts: armada-39x: Fix compatible string for gpios
-
-Pawel Dembicki (1):
-      ARM: dts: kirkwood: Add Zyxel NSA310S board
-
- arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/armada-370-dlink-dns327l.dts     |   6 +-
- arch/arm/boot/dts/armada-370-seagate-nas-4bay.dts  |   4 +-
- arch/arm/boot/dts/armada-370-seagate-nas-xbay.dtsi |   8 +-
- .../dts/armada-370-seagate-personal-cloud.dtsi     |   2 +-
- arch/arm/boot/dts/armada-370.dtsi                  |   2 +-
- arch/arm/boot/dts/armada-375.dtsi                  |   2 +-
- arch/arm/boot/dts/armada-380.dtsi                  |   4 +-
- arch/arm/boot/dts/armada-385-linksys-caiman.dts    |   4 +-
- arch/arm/boot/dts/armada-385-linksys-cobra.dts     |   4 +-
- arch/arm/boot/dts/armada-385-linksys-rango.dts     |   8 +-
- arch/arm/boot/dts/armada-385-linksys-shelby.dts    |   4 +-
- arch/arm/boot/dts/armada-385-linksys.dtsi          |   4 +-
- arch/arm/boot/dts/armada-385-synology-ds116.dts    |   2 +-
- arch/arm/boot/dts/armada-385-turris-omnia.dts      |  18 +-
- arch/arm/boot/dts/armada-385.dtsi                  |   6 +-
- arch/arm/boot/dts/armada-38x.dtsi                  |   4 +-
- arch/arm/boot/dts/armada-39x.dtsi                  |  10 +-
- arch/arm/boot/dts/armada-xp-98dx3236.dtsi          |   1 +
- arch/arm/boot/dts/armada-xp-linksys-mamba.dts      |   2 +-
- arch/arm/boot/dts/armada-xp-mv78230.dtsi           |   8 +-
- arch/arm/boot/dts/armada-xp-mv78260.dtsi           |  16 +-
- arch/arm/boot/dts/armada-xp.dtsi                   |   1 +
- arch/arm/boot/dts/dove.dtsi                        |   2 +-
- arch/arm/boot/dts/kirkwood-nsa310s.dts             | 259 +++++++++++++++++=
-++++
- arch/arm/mach-mvebu/pm-board.c                     |  28 +--
- 26 files changed, 339 insertions(+), 71 deletions(-)
- create mode 100644 arch/arm/boot/dts/kirkwood-nsa310s.dts
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
