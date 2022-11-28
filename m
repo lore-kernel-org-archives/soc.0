@@ -1,85 +1,93 @@
-Return-Path: <SRS0=7S9i=34=marcan.st=marcan@kernel.org>
+Return-Path: <SRS0=c8/2=34=foss.st.com=prvs=8331b3624e=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 713E5C433FE
-	for <soc@archiver.kernel.org>; Mon, 28 Nov 2022 11:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9B8CC43217
+	for <soc@archiver.kernel.org>; Mon, 28 Nov 2022 13:33:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 273DEC433C1; Mon, 28 Nov 2022 11:41:35 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	id A1E6DC433D6; Mon, 28 Nov 2022 13:33:54 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BFB01C433D6
-	for <soc@kernel.org>; Mon, 28 Nov 2022 11:41:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BFB01C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 5D70941E2F;
-	Mon, 28 Nov 2022 11:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1669635685; bh=YzTkgZL151xpivSuy+2SYaQn1Sj6M2+eEQlGgH8Ue3c=;
-	h=Date:From:Subject:To:Cc;
-	b=IBsiMw7xYzzdNgwCYXMTK9NZqcEP62rYRbDUmCsf7G2LGAMA6ddmSyIWhwCEImyJy
-	 hPu/5djnVSEsBkj5cqx598fdyMfcKDbxc5Skp9DfIxqP4kF5/ml0Wz8Z48FWRFEfix
-	 YvGJCcM9W59NfD1NTBKTtRgpYTZUZJlMrImQcF2EdnjiJRiCnwhBn1VJNW2yuUTiFC
-	 WUUSUYPd1sS7VbV/MqraaK2xPWEAnUpv+RInZSyVNrlSCD/fXMMZoVoXq2g17tYeti
-	 xZqaO4+1YbSPBWZ1oNbqlqVYqiSI3/KAVMZbxb8rXDyKuj4ep/6Y/wJCS5mENK14nS
-	 RG8G3fjJCK1Mw==
-Message-ID: <57f84134-8645-35f6-2427-ee683800c413@marcan.st>
-Date: Mon, 28 Nov 2022 20:41:22 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From: Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC RTKit/SART updates for 6.2
+	by smtp.kernel.org (Postfix) with ESMTPS id 28220C433C1;
+	Mon, 28 Nov 2022 13:33:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 28220C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASDG65D016777;
+	Mon, 28 Nov 2022 14:33:45 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=jYMbD/1k03Hl6hLPeOod/Pa/2dM12syhuqqVjWA3PiE=;
+ b=X30ycP5W6M94XynFLTjvPZcc72VZ4idhFCnrG5rSkZHzTj3CURZYA/3Bvap4Tn4l5fOZ
+ kgHwV0lqyTvpy/v3HDvu9b+1vZlcBPD/z9cGO3qelHJJvz4TN+fEkApnlC8y0jCmqKl/
+ gAPCcazCHhNDbkkVtCx/zP7LSahRXBSFKKCxZovQC+MiEfQtMo42bOBa1Uh3qyPozG1J
+ bqWTtA8VYV1+7ij0FBE4GbTH4vzphIxrZ1cRcECGfawGW0NBwyDbZYaUCDJ5OvKXeyt4
+ zV200ndNQz3tRhAQLfApBIgj+4j8GFNE/KftxGGiqlQFV/8SNY86KNnwHWWXrJ6eKfbB KQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3m3b16k74e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Nov 2022 14:33:45 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CFC21100034;
+	Mon, 28 Nov 2022 14:33:40 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8193721FEAB;
+	Mon, 28 Nov 2022 14:33:40 +0100 (CET)
+Received: from localhost (10.201.21.93) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Mon, 28 Nov
+ 2022 14:33:40 +0100
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Content-Language: en-US
-Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Kevin
+ Hilman <khilman@baylibre.com>, <soc@kernel.org>,
+        <arm@kernel.org>
+CC: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Subject: [PATCH] Revert "ARM: dts: stm32: add fake interrupt propoerty for ASync notif - TEMP/TO REMOVE"
+Date: Mon, 28 Nov 2022 14:33:39 +0100
+Message-ID: <20221128133339.25055-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_11,2022-11-28_02,2022-06-22_01
 
-Hi SoC folks,
+This reverts commit fb4ce97d9c5daafe100a83670c697b92c9d1bb45.
 
-Please merge these RTKit/SART changes for 6.2.
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-This batch just contains two correctness fixes for issues reported by
-the kernel test robot.
+---
 
--Hector
+Hi,
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+Sorry but I need to revert this patch which has been added to my 
+DT for 6.2 PR by mistake.
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Thanks
+Alex
 
-are available in the Git repository at:
-
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-rtkit-sart-6.2
-
-for you to fetch changes up to 5acf07ff25f0c1c44105e6b8ebf88c55a0a04d2f:
-
-  soc: apple: rtkit: Stop casting function pointer signatures
-(2022-11-28 20:34:09 +0900)
-
-----------------------------------------------------------------
-Apple SoC RTKit/SART updates for 6.2.
-
-Just two minor correctness nits reported by the kernel test robot.
-
-----------------------------------------------------------------
-Sven Peter (2):
-      soc: apple: sart: Stop casting function pointer signatures
-      soc: apple: rtkit: Stop casting function pointer signatures
-
- drivers/soc/apple/rtkit.c | 7 ++++---
- drivers/soc/apple/sart.c  | 7 ++++++-
- 2 files changed, 10 insertions(+), 4 deletions(-)
+diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+index 2a9b3a5bba83..accc3824f7e9 100644
+--- a/arch/arm/boot/dts/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/stm32mp131.dtsi
+@@ -33,8 +33,6 @@
+ 		optee {
+ 			method = "smc";
+ 			compatible = "linaro,optee-tz";
+-			interrupt-parent = <&intc>;
+-			interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
+ 
+ 		scmi: scmi {
+-- 
+2.17.1
 
