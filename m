@@ -1,524 +1,109 @@
-Return-Path: <SRS0=pdIR=34=z3ntu.xyz=luca@kernel.org>
+Return-Path: <SRS0=D+wk=34=linaro.org=bhupesh.sharma@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11642C433FE
-	for <soc@archiver.kernel.org>; Mon, 28 Nov 2022 17:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F38AC433FE
+	for <soc@archiver.kernel.org>; Mon, 28 Nov 2022 20:09:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C936EC433D6; Mon, 28 Nov 2022 17:25:47 +0000 (UTC)
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id E458AC4347C; Mon, 28 Nov 2022 20:09:04 +0000 (UTC)
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2652CC433D7;
-	Mon, 28 Nov 2022 17:25:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2652CC433D7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=z3ntu.xyz
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
-Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
-	by mail.z3ntu.xyz (Postfix) with ESMTPSA id 036D0D1E0D;
-	Mon, 28 Nov 2022 17:25:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-	t=1669656344; bh=dmo/YOaylkpZ/u5w7kpIO263ccAyQ5s7XIWS8DcmI0g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DkawFmOb9FBoJAoIPC1J7aXBp46IV67kD1CT+uTf8broyvU6FkYYZrz/y2j5L0M4C
-	 6xFZN6M5An2k+WT7YIExSTVJIPul0gC29CzHk+9uzyuIkjN/ijd1zp1TnM5JuqhLGp
-	 7MiBGRdB5OlJgEQXdy0WoBxc7Tb4EkegzTbSzwqs=
-From: Luca Weiss <luca@z3ntu.xyz>
-To: linux-arm-msm@vger.kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id D732FC433D6
+	for <soc@kernel.org>; Mon, 28 Nov 2022 20:09:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D732FC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f177.google.com with SMTP id 140so11594571pfz.6
+        for <soc@kernel.org>; Mon, 28 Nov 2022 12:09:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ef8A7O2qxzSTmhR856PPdqttVXha7QPYjhgtijajRFA=;
+        b=SIZ4d1BnQA8JU7BstQ4YLKZaDCIiOstCz6W5e4A3fNCKMrfKTx67tF0CgOS0XSFf7o
+         JVwCqSoCtWg64tpkP/2KWQQQ+V69punEUGw2gV0+yqFHjEa/9Lo6xOGJtE4DpU+clX3w
+         mWElfuZd7I3QnxVYaBUtlCb6s2iVgEkATfyCc/M6zt8TyKQkCKP3Cn4iI/X9vXA1E0/A
+         n1u4Fm79OhrfuV8DPQ+SQ5AhjFDDs032y3/umeyxX4HELHd3Mr/Fx7y6IxxrxYZKswbf
+         ZHYhpU+ECRk+OUNIEQSzWuoOnX2v0YwRl/FRIuH3JByKvcJB7np3mEQNp3WBbz07yPoh
+         I5tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ef8A7O2qxzSTmhR856PPdqttVXha7QPYjhgtijajRFA=;
+        b=7pUou8TkE/60ZI64qE8QKDpGyfUDacGqZn7zC+yG+GDzh94Rk4Fg4PwUkhITZNdVxM
+         50mzMdRQ7QDWEqWwuZe1zNJbUDaSAHAGQwNpr6CYnXuxjTDpSQ/yKiAYCnA7faTcXwTp
+         nDLE4aZqMb3eF5GAUNZ1w7gWgO+8EZHeHvOdJ6HZPpdcQmIeLeosKrjTX1bJyzYf7s53
+         n9asTicjmhAIBR1ARyVsAETADx/YZYZi0Y9FQqapof5pg04ws99eKUyu7mdu8SZhm3mq
+         A9cxESXKl0Vg9hQza8y83s3GQf/y6ZJf2FcgJ0eUYnNo5i4EYs1BaMZEoRgobvC+ACqf
+         N0YQ==
+X-Gm-Message-State: ANoB5plqkN+4lJbXUtp7/qxPzEEhC87I64JW+37VoCCIbkuWxHIhrXcQ
+	cLXt5MFVIOaClYFZPry6/KvypA==
+X-Google-Smtp-Source: AA0mqf5GWz2T7utKo5DSWCX6D1NH6Ua6s1PNODl5UGZhNdP31g+TwJcFYAlRAKjU5zfTWyPKoEKmeQ==
+X-Received: by 2002:a63:4910:0:b0:478:27a1:8602 with SMTP id w16-20020a634910000000b0047827a18602mr4688389pga.9.1669666143166;
+        Mon, 28 Nov 2022 12:09:03 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1f3b:2d41:78ce:bf75:900:30f])
+        by smtp.gmail.com with ESMTPSA id m16-20020a62a210000000b0057564323987sm473113pff.139.2022.11.28.12.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 12:09:02 -0800 (PST)
+From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	Julian Goldsmith <julian@juliangoldsmith.com>,
-	Oleg Chernovskiy <kanedias@keemail.me>,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
+To: linux-arm-msm@vger.kernel.org,
 	soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: qcom: msm8974: Add OnePlus One
-Date: Mon, 28 Nov 2022 18:25:30 +0100
-Message-Id: <20221128172531.828660-2-luca@z3ntu.xyz>
+	linux-arm-kernel@lists.infradead.org
+Cc: arnd@arndb.de,
+	agross@kernel.org,
+	bhupesh.sharma@linaro.org,
+	bhupesh.linux@gmail.com,
+	linux-kernel@vger.kernel.org,
+	will@kernel.org,
+	konrad.dybcio@somainline.org,
+	catalin.marinas@arm.com,
+	me@iskren.info,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>
+Subject: [PATCH] arm64: defconfig: Enable Qualcomm SM6115 / SM4250 GCC and Pinctrl
+Date: Tue, 29 Nov 2022 01:38:34 +0530
+Message-Id: <20221128200834.1776868-1-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221128172531.828660-1-luca@z3ntu.xyz>
-References: <20221128172531.828660-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Julian Goldsmith <julian@juliangoldsmith.com>
+Enable the Qualcomm SM6115 / SM4250 TLMM pinctrl and GCC clock drivers.
+They need to be builtin to ensure that the UART is allowed to probe
+before user space needs a console.
 
-OnePlus One is a smartphone launched in 2014 and is based on the
-Snapdragon 801 SoC (-AC variant).
-
-Supported features:
-* ADSP
-* Charger
-* Coincell charger
-* Fuel gauge
-* Internal storage
-* Touchscreen
-* UART
-* USB
-* Wifi/Bluetooth
-
-Signed-off-by: Julian Goldsmith <julian@juliangoldsmith.com>
-Co-developed-by: Oleg Chernovskiy <kanedias@keemail.me>
-Signed-off-by: Oleg Chernovskiy <kanedias@keemail.me>
-Co-developed-by: Luca Weiss <luca@z3ntu.xyz>
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
-Changes in v2:
-* Rebase on https://lore.kernel.org/linux-arm-msm/20221128171623.825572-1-luca@z3ntu.xyz/T/
-  Clean up USB node like for the other devices in the commit above
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/qcom-msm8974pro-oneplus-bacon.dts     | 417 ++++++++++++++++++
- 2 files changed, 418 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 90bb9866cc88..3c76e3e4785b 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1064,6 +1064,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
- 	qcom-msm8974-sony-xperia-rhine-amami.dtb \
- 	qcom-msm8974-sony-xperia-rhine-honami.dtb \
- 	qcom-msm8974pro-fairphone-fp2.dtb \
-+	qcom-msm8974pro-oneplus-bacon.dtb \
- 	qcom-msm8974pro-samsung-klte.dtb \
- 	qcom-msm8974pro-sony-xperia-shinano-castor.dtb \
- 	qcom-mdm9615-wp8548-mangoh-green.dtb \
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-new file mode 100644
-index 000000000000..b5606623f968
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts
-@@ -0,0 +1,417 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "qcom-msm8974pro.dtsi"
-+#include "qcom-pm8841.dtsi"
-+#include "qcom-pm8941.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-+
-+/ {
-+	model = "OnePlus One";
-+	compatible = "oneplus,bacon", "qcom,msm8974pro", "qcom,msm8974";
-+	chassis-type = "handset";
-+	qcom,msm-id = <194 0x10000>;
-+	qcom,board-id = <8 0>;
-+
-+	aliases {
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&blsp1_i2c1 {
-+	status = "okay";
-+
-+	fuel-gauge@55 {
-+		compatible = "ti,bq27541";
-+		reg = <0x55>;
-+		power-supplies = <&bq24196_charger>;
-+	};
-+};
-+
-+&blsp1_i2c2 {
-+	status = "okay";
-+
-+	rmi4-i2c-dev@20 {
-+		compatible = "syna,rmi4-i2c";
-+		reg = <0x20>;
-+
-+		syna,startup-delay-ms = <100>;
-+
-+		interrupts-extended = <&tlmm 61 IRQ_TYPE_EDGE_FALLING>;
-+		vdd-supply = <&pm8941_l22>;
-+		vio-supply = <&pm8941_lvs3>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&touch_default_state>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		rmi4-f01@1 {
-+			reg = <0x1>;
-+			syna,nosleep-mode = <1>;
-+		};
-+
-+		rmi4-f12@12 {
-+			reg = <0x12>;
-+			syna,sensor-type = <1>;
-+			/*
-+			 * Touchscreen size is 2040x1080, y-values between
-+			 * 1920-2040 are used for touchkey (menu, home & back).
-+			 * For now clip it off so we don't get touch events
-+			 * outside of the display area.
-+			 */
-+			syna,clip-y-high = <1920>;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c6 {
-+	status = "okay";
-+
-+	bq24196_charger: charger@6b {
-+		compatible = "ti,bq24196";
-+		reg = <0x6b>;
-+		interrupts-extended = <&tlmm 31 IRQ_TYPE_EDGE_FALLING>;
-+		omit-battery-class;
-+	};
-+};
-+
-+&blsp1_uart2 {
-+	status = "okay";
-+};
-+
-+&gcc {
-+	compatible = "qcom,gcc-msm8974pro-ac";
-+};
-+
-+&pm8941_coincell {
-+	qcom,rset-ohms = <800>;
-+	qcom,vset-millivolts = <3200>;
-+
-+	status = "okay";
-+};
-+
-+&pronto {
-+	vddmx-supply = <&pm8841_s1>;
-+	vddcx-supply = <&pm8841_s2>;
-+	vddpx-supply = <&pm8941_s3>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wcnss_pin_a>;
-+
-+	status = "okay";
-+
-+	iris {
-+		vddxo-supply = <&pm8941_l6>;
-+		vddrfa-supply = <&pm8941_l11>;
-+		vddpa-supply = <&pm8941_l19>;
-+		vdddig-supply = <&pm8941_s3>;
-+	};
-+
-+	smd-edge {
-+		qcom,remote-pid = <4>;
-+		label = "pronto";
-+
-+		wcnss {
-+			status = "okay";
-+		};
-+	};
-+};
-+
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm8841-regulators";
-+
-+		pm8841_s1: s1 {
-+			regulator-min-microvolt = <675000>;
-+			regulator-max-microvolt = <1050000>;
-+		};
-+
-+		pm8841_s2: s2 {
-+			regulator-min-microvolt = <875000>;
-+			regulator-max-microvolt = <1050000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8841_s3: s3 {
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1050000>;
-+		};
-+	};
-+
-+	regulators-1 {
-+		compatible = "qcom,rpm-pm8941-regulators";
-+
-+		vdd_l1_l3-supply = <&pm8941_s1>;
-+		vdd_l2_lvs1_2_3-supply = <&pm8941_s3>;
-+		vdd_l4_l11-supply = <&pm8941_s1>;
-+		vdd_l5_l7-supply = <&pm8941_s2>;
-+		vdd_l6_l12_l14_l15-supply = <&pm8941_s2>;
-+		vdd_l8_l16_l18_l19-supply = <&vreg_vph_pwr>;
-+		vdd_l9_l10_l17_l22-supply = <&vreg_boost>;
-+		vdd_l13_l20_l23_l24-supply = <&vreg_boost>;
-+		vdd_l21-supply = <&vreg_boost>;
-+
-+		pm8941_s1: s1 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1300000>;
-+
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_s2: s2 {
-+			regulator-min-microvolt = <2150000>;
-+			regulator-max-microvolt = <2150000>;
-+
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_s3: s3 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-system-load = <154000>;
-+
-+			regulator-always-on;
-+			regulator-boot-on;
-+			regulator-allow-set-load;
-+		};
-+
-+		pm8941_l1: l1 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8941_l3: l3 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8941_l4: l4 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8941_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8941_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_l8: l8 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8941_l9: l9 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8941_l10: l10 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8941_l11: l11 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8941_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+
-+			regulator-always-on;
-+			regulator-boot-on;
-+			regulator-allow-set-load;
-+		};
-+
-+		pm8941_l13: l13 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_l14: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8941_l15: l15 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8941_l16: l16 {
-+			regulator-min-microvolt = <2700000>;
-+			regulator-max-microvolt = <2700000>;
-+		};
-+
-+		pm8941_l17: l17 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2850000>;
-+		};
-+
-+		pm8941_l18: l18 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2850000>;
-+		};
-+
-+		pm8941_l19: l19 {
-+			regulator-min-microvolt = <2900000>;
-+			regulator-max-microvolt = <3350000>;
-+		};
-+
-+		pm8941_l20: l20 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+
-+			regulator-system-load = <200000>;
-+			regulator-allow-set-load;
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_l21: l21 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_l22: l22 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-allow-set-load;
-+		};
-+
-+		pm8941_l23: l23 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8941_l24: l24 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+
-+			regulator-boot-on;
-+		};
-+
-+		pm8941_lvs3: lvs3 {};
-+	};
-+};
-+
-+&sdhc_1 {
-+	vmmc-supply = <&pm8941_l20>;
-+	vqmmc-supply = <&pm8941_s3>;
-+
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc1_on>;
-+	pinctrl-1 = <&sdc1_off>;
-+
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	sdc1_on: sdc1-on-state {
-+		clk-pins {
-+			pins = "sdc1_clk";
-+			drive-strength = <4>;
-+			bias-disable;
-+		};
-+
-+		cmd-data-pins {
-+			pins = "sdc1_cmd", "sdc1_data";
-+			drive-strength = <4>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	touch_default_state: touch-default-state {
-+		int-pins {
-+			pins = "gpio61";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-disable;
-+			input-enable;
-+		};
-+
-+		reset-pins {
-+			pins = "gpio60";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	wcnss_pin_a: wcnss-pin-active-state {
-+		wlan-pins {
-+			pins = "gpio36", "gpio37", "gpio38", "gpio39", "gpio40";
-+			function = "wlan";
-+			drive-strength = <6>;
-+			bias-pull-down;
-+		};
-+
-+		bt-pins {
-+			pins = "gpio35", "gpio43", "gpio44";
-+			function = "bt";
-+			drive-strength = <2>;
-+			bias-pull-down;
-+		};
-+	};
-+};
-+
-+&usb {
-+	phys = <&usb_hs1_phy>;
-+	phy-select = <&tcsr 0xb000 0>;
-+	extcon = <&smbb>, <&usb_id>;
-+	vbus-supply = <&chg_otg>;
-+
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+
-+	status = "okay";
-+};
-+
-+&usb_hs1_phy {
-+	status = "okay";
-+
-+	v1p8-supply = <&pm8941_l6>;
-+	v3p3-supply = <&pm8941_l24>;
-+
-+	extcon = <&smbb>;
-+	qcom,init-seq = /bits/ 8 <0x1 0x64>;
-+};
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 03b61f846a0e..851e8f9be06d 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -560,6 +560,7 @@ CONFIG_PINCTRL_SC7280=y
+ CONFIG_PINCTRL_SC8180X=y
+ CONFIG_PINCTRL_SC8280XP=y
+ CONFIG_PINCTRL_SDM845=y
++CONFIG_PINCTRL_SM6115=y
+ CONFIG_PINCTRL_SM8150=y
+ CONFIG_PINCTRL_SM8250=y
+ CONFIG_PINCTRL_SM8350=y
+@@ -1106,6 +1107,7 @@ CONFIG_SDM_GPUCC_845=y
+ CONFIG_SDM_VIDEOCC_845=y
+ CONFIG_SDM_DISPCC_845=y
+ CONFIG_SM_DISPCC_8250=y
++CONFIG_SM_GCC_6115=y
+ CONFIG_SM_GCC_8350=y
+ CONFIG_SM_GCC_8450=y
+ CONFIG_SM_GPUCC_8150=y
 -- 
 2.38.1
 
