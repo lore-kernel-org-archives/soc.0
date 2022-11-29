@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4509AC4332F
-	for <soc@archiver.kernel.org>; Tue, 29 Nov 2022 19:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D522AC4167B
+	for <soc@archiver.kernel.org>; Tue, 29 Nov 2022 19:18:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2D8ADC433C1; Tue, 29 Nov 2022 19:18:06 +0000 (UTC)
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	id A64AAC43470; Tue, 29 Nov 2022 19:18:04 +0000 (UTC)
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 49CDEC433D7;
-	Tue, 29 Nov 2022 19:18:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 49CDEC433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id 7194AC433C1;
+	Tue, 29 Nov 2022 19:18:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7194AC433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id c14so6439953qvq.0;
-        Tue, 29 Nov 2022 11:18:05 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id c2so10579086qko.1;
+        Tue, 29 Nov 2022 11:18:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g/RMkG9rKTHxZ0H7E69DH9MKjm5NgMF9CTX2M/+e50g=;
-        b=qRzcDjoS1dfnFPyEun3UPyRlj0QePUE2UbtOenL2tcvECfCWS73bJQtHrXxiAkaX86
-         228Atrbpr7Wf9U8/bjSl4ihB5p3UNuvJcclLX3VCwKtb9rlHeyiX3VgvzAebQ//PFBHX
-         PasXkyvviX8yqe4zgEvUbddFuzknL3jt8zpvYyjiMobolHFJRgUKC2VRPpmJN7ZsJdzz
-         cq50aQqmsRsDE35imwLLi2M+jTKDu0uQy8QGq7Qn6Q/vvqFZkJlWXBlzciKiRf/Awwu7
-         YqKA/g0f2gG8B9JfWmKGK+nPIBj+jYX2dWgdxiOhmXXKtmAPbH7tVuEZZL7haQdR4uyY
-         kYMw==
+        bh=7JS96QcwzmWNu5pTaMkdCSoIPiEcBofvIJIS7XfX9f4=;
+        b=f0xUITEbhdr9+eGQUzPf6HVUZcz02gPIq1SJCoe/AvwaU7lRETbxgh58y0q/CnrQSF
+         l4uecDhZSWlSab+OOz3KnECio2ISZzRVQgA+/YOcC9pCXJk9Og1oLwPAHXINyIr4csHN
+         1W9kqENcLJk+M+4A9qFyx7LG3yh21punZ0pp1lqIJfaMAV+tFUl50KuiIL/x2VnVDwL3
+         ydzyhxv8Zcwf7EjFDsQDMBENGO/mYPIMdjDZ2T0MyxE9O6iIgA+X51MMOWkrvPUUVeUd
+         /9Ke/91OgT14jhSzB4b5rdvH6Le95DuYXz94U5X/Gj0n2VWjhLhepLH3T5mE+IsqxAYM
+         g5Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g/RMkG9rKTHxZ0H7E69DH9MKjm5NgMF9CTX2M/+e50g=;
-        b=EAFTbl8KGw4gOtwE5mKSsRlKL5GfAaZpOXcfdq2TRrluLHWYKTLSMDXGMslJMGrpSJ
-         XcKLw7e7v6CUYTrDEBXh86nTVStIG1VLbJRBfW2mOpraGdN3dMldqIh64c9FpC4pqyLL
-         s5M8w9ewzm2izUhNFKJ2Cb7yOwBgWDo5ltQdWOzndH5Yv2+pecU+lX0at7MnllDWp7O7
-         ObhHYeF925wrWzuIM+6HPYUWBgR9BOlDp8QpMzuZROB4bPiJ9D1fOmApTzKrXNLk8ZxV
-         gRzizc8VsviY4FtleS5ceVcBxnS+25NRmHpEJZADwP8rkpsGGvjCvuicCy8BQr47vsqo
-         d4ww==
-X-Gm-Message-State: ANoB5plVYzEmBkkwglNubuTAxKaIDVFiK5sLYGUmDHwcaPTU5ljNRtFU
-	UGvvZug+mxsXrhCBAAFAg7Rfgxblr5Y=
-X-Google-Smtp-Source: AA0mqf5qgJsi6GJ3Xr3DoGK/TN04YRGlcgPANVdbyFMIvbSqwDOAc48ye4cGsuHQvH8e7GG5LT7Dpw==
-X-Received: by 2002:ad4:52e8:0:b0:4c6:adf6:e74b with SMTP id p8-20020ad452e8000000b004c6adf6e74bmr40447928qvu.63.1669749483792;
-        Tue, 29 Nov 2022 11:18:03 -0800 (PST)
+        bh=7JS96QcwzmWNu5pTaMkdCSoIPiEcBofvIJIS7XfX9f4=;
+        b=Yvv1h10xXW+eKz9vsr+So++rUPYNTzjJ/YhyobCHNmP1NHbGvNp9jR5qjIH9NMuVkU
+         qOz4ZMFHokQvnAGLaoRqqDjh3HQp0h6GAqKsndRWmxPhfspr3OPwe0kl4nymdCI5apBL
+         +li5n8cJwZV67zpXRRPTRubFiQ2OicQqVk8nEOW/+38r5hz/PmDhXLEpwtfFv7dj9vOR
+         DmIABBYHg2vsUAtxlhYU0pNkV3mII+fd+5i4Pfvxh+/YjpJ+gxMZr4Rp90Xmq+MfTz9y
+         th1Z/htwjYquxk+BBDqRBCY0w6IS3QtHJAyOV2yK8FW6qrkNzaQDjV/iqEDayvvZvAjb
+         jXlg==
+X-Gm-Message-State: ANoB5plOOP2xcd7ebpySilbOZIjUCgmvwhT0InYWs7ZI4fEIm/6ccA2E
+	9U/8pfson5bHaG/QvsPqw8pzH69DNVg=
+X-Google-Smtp-Source: AA0mqf4LKEblaMo/iFEsDbuj/MtMaTG29Aq/J19Leof/xK2RqgCbg/J/H+CwL9AYicdQf++IDgvPsg==
+X-Received: by 2002:a05:620a:2047:b0:6ee:9e6d:9e6b with SMTP id d7-20020a05620a204700b006ee9e6d9e6bmr51742390qka.743.1669749481797;
+        Tue, 29 Nov 2022 11:18:01 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y18-20020a05620a25d200b006eeb3165565sm11230709qko.80.2022.11.29.11.18.01
+        by smtp.gmail.com with ESMTPSA id y18-20020a05620a25d200b006eeb3165565sm11230709qko.80.2022.11.29.11.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 11:18:03 -0800 (PST)
+        Tue, 29 Nov 2022 11:18:01 -0800 (PST)
 From: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
+Cc: Pierre Gondois <pierre.gondois@arm.com>,
+	William Zhang <william.zhang@broadcom.com>,
 	Florian Fainelli <f.fainelli@gmail.com>,
-	Yuan Can <yuancan@huawei.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 3/3] Broadcom drivers changes for 6.2
-Date: Tue, 29 Nov 2022 11:17:55 -0800
-Message-Id: <20221129191755.542584-3-f.fainelli@gmail.com>
+Subject: [GIT PULL 2/3] Broadcom devicetree-arm64 changes for 6.2
+Date: Tue, 29 Nov 2022 11:17:54 -0800
+Message-Id: <20221129191755.542584-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221129191755.542584-1-f.fainelli@gmail.com>
 References: <20221129191755.542584-1-f.fainelli@gmail.com>
@@ -79,31 +80,45 @@ The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.2/drivers
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.2/devicetree-arm64
 
-for you to fetch changes up to a5be5ce0e25439fae3cd42e3d775979547926812:
+for you to fetch changes up to e567e58d6819adc002c57b81e16b88da24d3b4aa:
 
-  firmware/nvram: bcm47xx: support init from IO memory (2022-11-09 10:27:10 -0800)
-
-----------------------------------------------------------------
-This pull request contains Broadcom SoCs driver changes for 6.2, please
-pull the following:
-
-- Yuan uses dev_err_probe() in the Raspberry Pi firmware provider to
-  simplify the error handling code
-
-- Rafal adds support for initialiazing the BCM47xx NVMEM/NVRAM firmware
-  provider out of memory-mapped flash devices.
+  arm64: dts: Update cache properties for broadcom (2022-11-28 15:37:41 -0800)
 
 ----------------------------------------------------------------
-Rafał Miłecki (1):
-      firmware/nvram: bcm47xx: support init from IO memory
+This pull request contains Broadcom ARM64-based SoCs Device Tree updates
+for 6.2, please pull the following:
 
-Yuan Can (1):
-      firmware: raspberrypi: Use dev_err_probe() to simplify code
+- Rafal describes the timer/watchdog block for the BCM4908 and BCM6858
+  SoCs
 
- drivers/firmware/broadcom/bcm47xx_nvram.c | 18 ++++++++++++++++++
- drivers/firmware/raspberrypi.c            |  9 +++------
- drivers/nvmem/brcm_nvram.c                |  3 +++
- include/linux/bcm47xx_nvram.h             |  6 ++++++
- 4 files changed, 30 insertions(+), 6 deletions(-)
+- Krzysztof corrects invalid "reg" properties for the memory nodes that
+  were off by one digit
+
+- Pierre updates a number of cache Device Tree node properties to be
+  schema compliant
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      arm64: dts: broadcom: trim addresses to 8 digits
+
+Pierre Gondois (1):
+      arm64: dts: Update cache properties for broadcom
+
+Rafał Miłecki (2):
+      arm64: dts: broadcom: bcmbca: bcm4908: add TWD block timer
+      arm64: dts: broadcom: bcmbca: bcm6858: add TWD block
+
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi    |  6 ++++++
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm4912.dtsi    |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm63146.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm63158.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm6813.dtsi    |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm6856.dtsi    |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi    | 20 ++++++++++++++++++++
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts |  2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-xmc.dts |  2 +-
+ arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi    |  1 +
+ arch/arm64/boot/dts/broadcom/stingray/stingray.dtsi |  4 ++++
+ 11 files changed, 38 insertions(+), 2 deletions(-)
