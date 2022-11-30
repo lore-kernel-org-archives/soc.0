@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 322AAC352A1
-	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 14:13:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0563FC4332F
+	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 14:13:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A673C433D6; Wed, 30 Nov 2022 14:13:50 +0000 (UTC)
+	id E1C08C433D7; Wed, 30 Nov 2022 14:13:58 +0000 (UTC)
 Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0903BC43146;
-	Wed, 30 Nov 2022 14:13:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0903BC43146
+	by smtp.kernel.org (Postfix) with ESMTPS id C8B3CC433C1;
+	Wed, 30 Nov 2022 14:13:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C8B3CC433C1
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arinc9.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arinc9.com
-ARC-Seal: i=1; a=rsa-sha256; t=1669817583; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1669817569; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=dXasd2esNNmpiHUfVcmRkxgzG65o721c/Rvd3FSmMvedmhALBVsV8qp0aRGUE2LZxkv2HoMmc+ekS3YM7y1rZd7ygvUwHPN/hIGHycdpwbRMl8AKrHO6BjS80kHs3dfXb+tTq6HObvTyo9BtHSLXZJfNhtI2NDQXKCD5ErIoBsg=
+	b=JSacKIfuxVnGPNdOvTNL3VXsKQM4qKYAcNyM62uN0wuH9uI7u4LEUiHbLOklN7MsfxHvazieG2u/0J81Px89NKXRwBPqu4Pw6jInhCXzE3rdWRXhdfZaNTzHLSO9lJPkKtwpitvMR3jgZVj/fr12LzFmvrFen8xyh/DxxgNJ+14=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1669817583; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-	bh=tcD2tFxEru39PLp3xQkd+dJ8fltdBcdkPCdXOUfgLMQ=; 
-	b=lO865isAuQRik7INPA7FZOiYw2VcoYkZzICanbPbLMs5UcOpVmYH2ojvAtyUkogX1bx6lflv9TwhKvXKySfLjzNEfJQth/+YrNbGbOryVSSzseZpaJvZ7R4fmc1NBsDCLo2lxD/q7DmFswtddApJGvyLOVRN0aOK3V+2uvxxs04=
+	t=1669817569; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+	bh=rw2F9BBmZz7hCr2YZL7OfKiCcti+Y/szmYlgYlkB1sE=; 
+	b=Qz//DYinXkVfGaASn1n1TLCXq2S9vL1Nmzeni4L4pbkQxUX6o2mfkIOQEpBudE90saz+FnsTnRKRDmS+fdI2X0cjmxoXlNAtqnUhiMpOl52qMuR2sraP/JJbtqDyyJvA3zg+R3KPiIff8pxLZ0GD4b8+VoOj+usjoXQ7TcBh7Zo=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=arinc9.com;
 	spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
 	dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669817583;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669817569;
 	s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-	bh=tcD2tFxEru39PLp3xQkd+dJ8fltdBcdkPCdXOUfgLMQ=;
-	b=h91l4+uumvdMWNksQsm+lLIQWjvfnAiRH0AY1lQ1rUMZHTcD9BpIXNqyyiRIIZNv
-	zTAeFsofzE/hNeBYRoRnP2XXfHJy36b852k4KrBCBZRISGmZRX3Kl8uojjKq4iNQH83
-	JVCdBqOiVaWHwI39rjwtkpbVw4RCX2IGXFzaUjAo=
+	bh=rw2F9BBmZz7hCr2YZL7OfKiCcti+Y/szmYlgYlkB1sE=;
+	b=Y3UfQeV6t5e6v1+lcSZhghTS0CZxtNhA9fhWhX01/PX+V0q+eUWYHvSIyUBh2gw0
+	hVkCpwAY6EqKEk+cLkhndVHFFnyrRhER+VrpqH9ZxtSVnoH+Ecw3yVjk12T2WlQlAT3
+	hGUf4H0F/Rx7+ehrD/hI7pNaE5FDByojV/CtfC+c=
 Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-	with SMTPS id 1669817581238174.27626882243624; Wed, 30 Nov 2022 06:13:01 -0800 (PST)
+	with SMTPS id 1669817565868514.798752313474; Wed, 30 Nov 2022 06:12:45 -0800 (PST)
 From: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
 List-Id: <soc.lore.kernel.org>
 To: Vladimir Oltean <vladimir.oltean@nxp.com>,
@@ -104,9 +104,9 @@ Cc: netdev@vger.kernel.org,
 	linux-rockchip@lists.infradead.org,
 	linux-mips@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA dt-binding
-Date: Wed, 30 Nov 2022 17:10:40 +0300
-Message-Id: <20221130141040.32447-6-arinc.unal@arinc9.com>
+Subject: [PATCH 4/5] mips: dts: remove label = "cpu" from DSA dt-binding
+Date: Wed, 30 Nov 2022 17:10:39 +0300
+Message-Id: <20221130141040.32447-5-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
 References: <20221130141040.32447-1-arinc.unal@arinc9.com>
@@ -119,28 +119,33 @@ This is not used by the DSA dt-binding, so remove it from all devicetrees.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- arch/powerpc/boot/dts/turris1x.dts | 2 --
- 1 file changed, 2 deletions(-)
+ arch/mips/boot/dts/qca/ar9331.dtsi    | 1 -
+ arch/mips/boot/dts/ralink/mt7621.dtsi | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-index 045af668e928..3841c8d96d00 100644
---- a/arch/powerpc/boot/dts/turris1x.dts
-+++ b/arch/powerpc/boot/dts/turris1x.dts
-@@ -147,7 +147,6 @@ ports {
+diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
+index c4102b280b47..768ac0f869b1 100644
+--- a/arch/mips/boot/dts/qca/ar9331.dtsi
++++ b/arch/mips/boot/dts/qca/ar9331.dtsi
+@@ -176,7 +176,6 @@ ports {
  
- 					port@0 {
- 						reg = <0>;
--						label = "cpu";
- 						ethernet = <&enet1>;
- 						phy-mode = "rgmii-id";
+ 						switch_port0: port@0 {
+ 							reg = <0x0>;
+-							label = "cpu";
+ 							ethernet = <&eth1>;
  
-@@ -184,7 +183,6 @@ port@5 {
+ 							phy-mode = "gmii";
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index f3f4c1f26e01..445817cbf376 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -386,7 +386,6 @@ port@4 {
  
  					port@6 {
  						reg = <6>;
 -						label = "cpu";
- 						ethernet = <&enet0>;
- 						phy-mode = "rgmii-id";
+ 						ethernet = <&gmac0>;
+ 						phy-mode = "trgmii";
  
 -- 
 2.34.1
