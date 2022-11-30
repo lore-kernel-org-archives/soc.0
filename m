@@ -4,60 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C093C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C0D8C4708B
 	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 17:10:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E68EFC433D6; Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D17C8C433B5;
-	Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
+	id E2222C433D7; Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CC40EC433D6
+	for <soc@kernel.org>; Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669828235;
-	bh=xfZz/AZBs5jhzwh8+c8u1/j6CCMDONLgDkUaKS6xnTY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=N+Bqx5a3ZkeLtRin0Bct+pL4Dm6pOkydZSVRwPEym4hturB75ZMEjjaRCkS5EHVda
-	 hEE2TEen2aiobrxgg/4GkR/bo3Ic/sAF617LlhgDZ8AzhXDTt8EbQJAkdJc34s0H1G
-	 83cDv3dG3NHJ+aS06L9wXOwyGnv7wDjlk823t1MVMpKUd1GZznrMiIk728kGjqztJq
-	 Ms/6jlGrQM4o6OTQnZGiIoaYFgukE14oVsuIUcr3raeCQC7Pe5InJaFnT/3/oR500x
-	 1+MUoGfKyemY/imWA6RNgAcV7CytE1lSmEtukyAizik3GysDSi5HAb5vp5eh+5+KIE
-	 +UZx/NmNp8QFg==
+	bh=6Vk4dzUNWIZGRj176xUDV/7nIwaMWRuSnx3KUYhGqXs=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=mU3lILGnB6WAxHqBFOk0sSMBU3i4OvjVwcBB1ZlkML7uV9DdbZor5wSiY2uK+ALF8
+	 iTA5ij+Vsdd2bNhSIB+VO/DRWoRCzvbkjVmvTLFJSEpeYBJV+nG92+GXslNqbIA1V7
+	 CyJcfVf2tvK9bgdIbUEVANDXYCI9fqV7fdI71i8s9U8ge/YDwqEeQgdwb0/TsIP44y
+	 lo0stJ8ToeykO/m2B4uCtsHR7hKf0fiRYt3bA/VCOUskLdh+NOfGNv7P3ha2uKi/n2
+	 t1hkHg6NrIc9Wx4xrAFDklOjw7kWQPS0GCuWA7+c2nWlw67dJ9pV7rf8wKd2ECo7rQ
+	 6rl067wDviFbw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2178E21EF2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A63A8E21EF7;
 	Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AT91 fixes for 6.1 #3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166982823572.9936.16441843441815816091.git-patchwork-notify@kernel.org>
+ <166982823553.9936.18187039978524951474.git-patchwork-summary@kernel.org>
 Date: Wed, 30 Nov 2022 17:10:35 +0000
-References: <20221125093521.382105-1-claudiu.beznea@microchip.com>
-In-Reply-To: <20221125093521.382105-1-claudiu.beznea@microchip.com>
-To: Claudiu Beznea <claudiu.beznea@microchip.com>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 25 Nov 2022 11:35:21 +0200 you wrote:
-> The following changes since commit 40a2226e8bfacb79dd154dea68febeead9d847e9:
-> 
->   ARM: dts: at91: sam9g20ek: enable udc vbus gpio pinctrl (2022-11-17 15:23:50 +0200)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.1-3
-> 
-> [...]
+Patch: [GIT,PULL] AT91 fixes for 6.1 #3
+  Submitter: Claudiu Beznea <claudiu.beznea@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=699083
+  Lore link: https://lore.kernel.org/r/20221125093521.382105-1-claudiu.beznea@microchip.com
 
-Here is the summary with links:
-  - [GIT,PULL] AT91 fixes for 6.1 #3
-    https://git.kernel.org/soc/soc/c/da0cbf9307a2
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
