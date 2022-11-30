@@ -1,121 +1,65 @@
-Return-Path: <SRS0=st61=36=lunn.ch=andrew@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ED47C4321E
-	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 15:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C093C433FE
+	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 17:10:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 07E43C4347C; Wed, 30 Nov 2022 15:58:02 +0000 (UTC)
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E7552C433D6;
-	Wed, 30 Nov 2022 15:57:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E7552C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=HFssHLJMcOmruKkunXBVz4Mvi5+OSTccuRyBV5QXx+g=; b=OQ
-	q2644ZjJ5z5DGVT84EDRKZ9M4Xp1yJ2Hw8pTxDEir29xcZ0b6fIa56wxAPRNzNjx432snbUYOhhk/
-	tfN9lBv0QjZBrGnR45AjZS0cuf1IFCADbWupRUdyHiNYFfa8xUrYmoh0H5OpVg0zvZnvbj5oplX40
-	X2+wHKmTsXtK5XM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1p0PR9-003yFA-Is; Wed, 30 Nov 2022 16:55:51 +0100
-Date: Wed, 30 Nov 2022 16:55:51 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	soc@kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Stefan Agner <stefan@agner.ch>, Heiko Stuebner <heiko@sntech.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Tim Harvey <tharvey@gateworks.com>, Peng Fan <peng.fan@nxp.com>,
-	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-	Frank Wunderlich <frank-w@public-files.de>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Oleksij Rempel <linux@rempel-privat.de>, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 0/5] remove label = "cpu" from DSA dt-binding
-Message-ID: <Y4d9B7VSHvqJn0iS@lunn.ch>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+	id E68EFC433D6; Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D17C8C433B5;
+	Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669828235;
+	bh=xfZz/AZBs5jhzwh8+c8u1/j6CCMDONLgDkUaKS6xnTY=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=N+Bqx5a3ZkeLtRin0Bct+pL4Dm6pOkydZSVRwPEym4hturB75ZMEjjaRCkS5EHVda
+	 hEE2TEen2aiobrxgg/4GkR/bo3Ic/sAF617LlhgDZ8AzhXDTt8EbQJAkdJc34s0H1G
+	 83cDv3dG3NHJ+aS06L9wXOwyGnv7wDjlk823t1MVMpKUd1GZznrMiIk728kGjqztJq
+	 Ms/6jlGrQM4o6OTQnZGiIoaYFgukE14oVsuIUcr3raeCQC7Pe5InJaFnT/3/oR500x
+	 1+MUoGfKyemY/imWA6RNgAcV7CytE1lSmEtukyAizik3GysDSi5HAb5vp5eh+5+KIE
+	 +UZx/NmNp8QFg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2178E21EF2;
+	Wed, 30 Nov 2022 17:10:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
+Subject: Re: [GIT PULL] AT91 fixes for 6.1 #3
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <166982823572.9936.16441843441815816091.git-patchwork-notify@kernel.org>
+Date: Wed, 30 Nov 2022 17:10:35 +0000
+References: <20221125093521.382105-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20221125093521.382105-1-claudiu.beznea@microchip.com>
+To: Claudiu Beznea <claudiu.beznea@microchip.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Wed, Nov 30, 2022 at 05:10:35PM +0300, Arınç ÜNAL wrote:
-> Hello folks,
+Hello:
+
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Fri, 25 Nov 2022 11:35:21 +0200 you wrote:
+> The following changes since commit 40a2226e8bfacb79dd154dea68febeead9d847e9:
 > 
-> With this patch series, we're completely getting rid of 'label = "cpu";'
-> which is not used by the DSA dt-binding at all.
+>   ARM: dts: at91: sam9g20ek: enable udc vbus gpio pinctrl (2022-11-17 15:23:50 +0200)
 > 
-> Information for taking the patches for maintainers:
-> Patch 1: netdev maintainers (based off netdev/net-next.git main)
-> Patch 2-3: SoC maintainers (based off soc/soc.git soc/dt)
-> Patch 4: MIPS maintainers (based off mips/linux.git mips-next)
-> Patch 5: PowerPC maintainers (based off powerpc/linux.git next-test)
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.1-3
+> 
+> [...]
 
-Hi Arınç
+Here is the summary with links:
+  - [GIT,PULL] AT91 fixes for 6.1 #3
+    https://git.kernel.org/soc/soc/c/da0cbf9307a2
 
-So your plan is that each architecture maintainer merges one patch?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-That is fine, but it is good to be explicit, otherwise patches will
-fall through the cracks because nobody picks them up. I generally use
-To: to indicate who i expect to merge a patch, and everybody else in
-the Cc:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
