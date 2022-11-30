@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 696DCC4708B
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2A7C47090
 	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 17:11:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2A7E3C43149; Wed, 30 Nov 2022 17:11:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C5DAC4347C;
-	Wed, 30 Nov 2022 17:11:01 +0000 (UTC)
+	id 36519C4314D; Wed, 30 Nov 2022 17:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 195F1C433D7;
+	Wed, 30 Nov 2022 17:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1669828262;
-	bh=jqxL/BGd7Kk2p7f5AQbqiD1iEN7Np8ZFnPoFDsvqVBc=;
+	bh=XTkUkUV8yhH5/gun38Z4GaCm3VnBi2FxF9dNSF4IiPQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=XmpXj3s1vmxznZ0syLyQJMH1w4caRvQIWU1SJFaTFyfTrXoFsHNx9qlNtm472wEti
-	 eckWYyvL3XBq416xAs2q9Rc0Qq3YF0X0ugNleQBLS8sp+WugLsUkFBwqYX9ipidrzE
-	 fPpRPDBuHGPPyLas9RK22kQWOmQjhdXw1iI42pfCwR0x+r3lZ/SzjOoMZHS8+hVKpC
-	 jHWIS2Wpe0l4jwzD4TeJblmB2lDrU8ZLv2a8F0d+YNiHGWTEJvi6XaCEtZHKRj764M
-	 dD/fh/QcPTKZuPefqW/mIo0tEYsI8u90Gifku2Ht4Q/A1x/5dLqsATfizvvwk5x/me
-	 K/9nlZuoPCRZg==
+	b=Ldi/G4AGADC9pXVZbf/Rc3P2JnK99QkjyW6i200WNnUrIDD88/ndZwb19x+ODH6RJ
+	 21rav/xi4Nj4Xw313rPVDVVo9MSJw2BCIQxK0V9A6aNUav/+djlSMfpN15cwPzH589
+	 288sxFtOdjUWTkjTeRAVjVd+NgEcM9U8Q6OV77wGIWkL3RV1Dt62rWr2Nc2niMDpZm
+	 FCpuyAjx4BbtSq8qs4WkSSs87gaug/AviRM2rqD+5ven+qnL8XJRzntHRrIAhduuhi
+	 tTV0U66Zap79A43fNmO54zYC4h9jdJ73Iv/WoYN8kbkwPsHbvZmItP2G3byosWJ1wD
+	 oK1ZwBCkcvI4Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1721E21EF2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E04CFE50D64;
 	Wed, 30 Nov 2022 17:11:01 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.2 #1
+Subject: Re: [GIT PULL] Apple SoC RTKit/SART updates for 6.2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <166982826185.9936.7958427051561100389.git-patchwork-notify@kernel.org>
+ <166982826191.9936.10336413199114300660.git-patchwork-notify@kernel.org>
 Date: Wed, 30 Nov 2022 17:11:01 +0000
-References: <4716610.aeNJFYEL58@phil>
-In-Reply-To: <4716610.aeNJFYEL58@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+References: <57f84134-8645-35f6-2427-ee683800c413@marcan.st>
+In-Reply-To: <57f84134-8645-35f6-2427-ee683800c413@marcan.st>
+To: Hector Martin <marcan@marcan.st>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 23 Nov 2022 14:49:49 +0100 you wrote:
-> Hi Arnd, Kevin, Olof,
+On Mon, 28 Nov 2022 20:41:22 +0900 you wrote:
+> Hi SoC folks,
 > 
-> please find below and in subsequent pull-request
-> Rockchip changes for for 6.2
+> Please merge these RTKit/SART changes for 6.2.
 > 
-> As always the 64bit DTS part is the big one, while
-> I realized too late that the 32bit actually only consists
-> of one commit this time.
+> This batch just contains two correctness fixes for issues reported by
+> the kernel test robot.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip dts64 changes for 6.2 #1
-    https://git.kernel.org/soc/soc/c/0c5f21291c1e
+  - [GIT,PULL] Apple SoC RTKit/SART updates for 6.2
+    https://git.kernel.org/soc/soc/c/e0d394e4eeec
 
 You are awesome, thank you!
 -- 
