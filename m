@@ -1,115 +1,139 @@
-Return-Path: <SRS0=4uYm=36=winglobalresearch.com=james_wu@kernel.org>
+Return-Path: <SRS0=sDuw=36=arinc9.com=arinc.unal@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4498FC4332F
-	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 04:03:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1934BC433FE
+	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 14:12:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F27ECC433C1; Wed, 30 Nov 2022 04:03:03 +0000 (UTC)
-Received: from mail-177144.yeah.net (mail-177144.yeah.net [123.58.177.144])
+	id D5273C433C1; Wed, 30 Nov 2022 14:12:52 +0000 (UTC)
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E350BC433D6
-	for <soc@kernel.org>; Wed, 30 Nov 2022 04:03:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E350BC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=winglobalresearch.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=winglobalresearch.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 4E8BEC433D6;
+	Wed, 30 Nov 2022 14:12:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4E8BEC433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arinc9.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arinc9.com
+ARC-Seal: i=1; a=rsa-sha256; t=1669817521; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=AnJlLep2xwdKaRzoYQiGsuhHN1kXNKIqJay45/8xGipAA4pU5DmftNsoCWpjfyn3hXiuVFy67s47F/Z0iurPci1OLujtpQdp6rqUIiITopwss7HVUCANJivLbnrUIwhQnY7rwbW3dec0AabIHy6Q3jlIzHL6XvluZqv2X6Z3Otw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1669817521; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+	bh=uPoI5XfZ23UUuypvg5x1t4pcYyKf1wgCFVtGI5ZTQ+s=; 
+	b=ces143QCWhbMpQJLxcEB+IMeYEZCH3LXMw8zZowY6aRLNUNcYEiRpsICXW7/WtM4mBXTjb+8RKLq7oy0hc/fpaUDl20pDwFyk7QHfUtywb6s5i+vc+6hVBG1/M+2aS+pfPjludfBxAQ8s+WO2FDw8NsLo7beqalGi1UEdMw47jA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=arinc9.com;
+	spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+	dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669817521;
+	s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+	bh=uPoI5XfZ23UUuypvg5x1t4pcYyKf1wgCFVtGI5ZTQ+s=;
+	b=QZe441J5Q9GQ/nLIdo/FKpZXwwCbv87jUC83xlWpMM+YnuZ8d55JFGTZdlC5ez82
+	OAuZXidLlhW5VzcaE49WfQ+FAO5JWpfd1J9AMN305UuYPEUBNS2ZlaKZ/5j6AHJahEP
+	Y4M0WSZnV0v8mRrVOvXqs7cca2Mi3VRI2XOdSi3U=
+Received: from arinc9-PC.lan (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+	with SMTPS id 16698175186813.6941551506523638; Wed, 30 Nov 2022 06:11:58 -0800 (PST)
+From: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org<soc@kernel.org>
-Received: from winglobalresearch.com (localhost [127.0.0.1])
-	by mail-m12769.qiye.163.com (Hmail) with ESMTP id F30C628023E;
-	Wed, 30 Nov 2022 12:02:50 +0800 (CST)
-Content-Type: multipart/alternative; BOUNDARY="=_Part_154719_205573438.1669780970984"
-Message-ID: <AFcAWAAoFY8iVcE*Dt1J4arx.1.1669780970984.Hmail.james_wu@winglobalresearch.com>
-Subject: =?UTF-8?B?QXV0b21vdGl2ZSBUb3VjaCBTY3JlZW4gQ29udHJvbCBTeXN0ZW1zIFRyZW5kcyBhbmQgT3Bwb3J0dW5pdGllcyBGb3IgWW91?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com MailMasterPC\4.17.8.1009 Win10 21H2
-X-Originating-IP: 113.83.148.32
+To: Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	soc@kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@microchip.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Stefan Agner <stefan@agner.ch>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	=?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Tim Harvey <tharvey@gateworks.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+	Frank Wunderlich <frank-w@public-files.de>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Oleksij Rempel <linux@rempel-privat.de>
+Cc: netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev,
+	linux-rockchip@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 1/5] dt-bindings: net: qca,ar71xx: remove label = "cpu" from examples
+Date: Wed, 30 Nov 2022 17:10:36 +0300
+Message-Id: <20221130141040.32447-2-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Received: from james_wu@winglobalresearch.com( [113.83.148.32) ] by ajax-webmail ( [127.0.0.1] ) ; Wed, 30 Nov 2022 12:02:50 +0800 (GMT+08:00)
-From: leslie <james_wu@winglobalresearch.com>
-Date: Wed, 30 Nov 2022 12:02:50 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGk5OVhhOHkJMSxpJT00fSVUTARMWGhIXJBQOD1
-	lXWRgSC1lBWUpKSFVDSFVKT0NVSElZV1kWGg8SFR0UWUFZT0tIVUpKS09IT1VPVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzo9GDosOjoUPSJDEi0YPlE*D0ox
-	TxoJA1VKVUpNTUJMQ0tCTEpDSUNVMxYaEhdVERoWHggkDA47DBIVHBcUGRoXCR4IHhoJGBNVGBQW
-	RVlXWRQVHgkYCw9ZQUpXWRILWUFZSkpIVUNIVUpPQ1VISVlXWQgBWUFJTU1PTTcG
-X-HM-Tid: 0a84c6b39d48b243kuuu1849eeda670
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
---=_Part_154719_205573438.1669780970984
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+This is not used by the DSA dt-binding, so remove it from the examples.
 
-CgpIaSEgV2UgcHVibGlzaGVkIEEgR2xvYmFsIE1hcmtldCBSZXBvcnQgb24gQXV0b21vdGl2ZSBU
-b3VjaCBTY3JlZW4gQ29udHJvbCBTeXN0ZW1zIDIwMjIgKGluY2x1ZGluZyAyMDIzIGZvcmVjYXN0
-cykgZm9yIFlvdSBhbmQgQ29tcGV0aXRvcnMuIFRoZSBpbXBhY3Qgb2YgdGhlICJSdXNzaWEgYW5k
-IFVrcmFpbmUiIFNpdHVhdGlvbiBhbmQgIkNvdmlkIiBoYXMgYmVlbiBjb25zaWRlcmVkIGluIG91
-ciByZXBvcnQuIElmIHlvdSBoYXZlIGZ1cnRoZXIgaW50ZXJlc3QgaW4gdGhpcyByZXBvcnQgb3Ig
-cmVsYXRlZCByZXBvcnRzLCB3ZSB3b3VsZCBiZSBoYXBweSB0byBzaGFyZSB0aGUgc2FtcGxlIHJl
-cG9ydCB3aXRoIHlvdS4KClRoZSBmb2xsb3dpbmcgcmVsYXRlZCBjb21wYW5pZXMgYXJlIGNvdmVy
-ZWQ6ClJvYmVydCBCb3NjaCBHbWJICkZ1aml0c3UKRGF3YXIgVGVjaG5vbG9naWVzCk1ldGhvZGUg
-RWxlY3Ryb25pY3MKU3luYXB0aWNzIEluY29ycG9yYXRlZApUb3VjaE5ldGl4IExpbWl0ZWQKRGVs
-cGhpIFRlY2hub2xvZ2llcyAoQm9yZ1dhcm5lciBJbmMuKQpNaWNyb2NoaXAgVGVjaG5vbG9neSBJ
-bmMKVmFsZW8KSGFybWFuIEludGVybmF0aW9uYWwgSW5kdXN0cmllcyBJbmMuCihPdGhlciByZWxh
-dGVkIGNvbXBhbmllcyBJbmZvcm1hdGlvbuKApuKApikKCkF1dG9tb3RpdmUgVG91Y2ggU2NyZWVu
-IENvbnRyb2wgU3lzdGVtcyBTZWdtZW50IGJ5IFR5cGUKUmVzaXN0aXZlIFRvdWNoIFNjcmVlbgpD
-YXBhY2l0aXZlIFRvdWNoIFNjcmVlbgoKVGhpcyByZXBvcnQgYW5hbHl6ZXMgYW5kIHN0dWRpZXMg
-dGhlIHNhbGVzLCB2YWx1ZSwgcmV2ZW51ZSwgbWFya2V0IHNoYXJlIGFuZCBvdGhlciBhc3BlY3Rz
-IG9mIEF1dG9tb3RpdmUgVG91Y2ggU2NyZWVuIENvbnRyb2wgU3lzdGVtcy4gVGhpcyByZXBvcnQg
-d2lsbCBoZWxwIHN0YWtlaG9sZGVycyB0byB1bmRlcnN0YW5kIHRoZSBnbG9iYWwgaW5kdXN0cnkg
-c3RhdHVzIGFuZCB0cmVuZHMgb2YgQXV0b21vdGl2ZSBUb3VjaCBTY3JlZW4gQ29udHJvbCBTeXN0
-ZW1zIGFuZCBwcm92aWRlcyB0aGVtIHdpdGggaW5mb3JtYXRpb24gb24ga2V5IG1hcmtldCBkcml2
-ZXJzLCByZXN0cmFpbnRzLCBjaGFsbGVuZ2VzLCBhbmQgb3Bwb3J0dW5pdGllcy4KCldlIHdvdWxk
-IGFwcHJlY2lhdGUgaXQgaWYgeW91IGNvdWxkIGZvcndhcmQgaXQgdG8gdGhlIG1hcmtldGluZyBk
-ZXBhcnRtZW50IG9yIHRoZSBjb21wYW55IGxlYWRlci4KCkZvciBtb3JlIGluZm9ybWF0aW9uLCBw
-bGVhc2UgZmVlbCBmcmVlIHRvIGNvbnRhY3QgbWUhCgotLS0tLS0tLS0tLS0tLS0tLS0tCllvdXJz
-IHNpbmNlcmVseQpMZXNpbGUgfCBNYW5hZ2VyLUdsb2JhbCBTYWxlcwpFOmxlc2xpZUB3aW5tYXJr
-ZXRyZXNlYXJjaC5jb20KV2VjaGF0L01vYmlsZTogKzg2LTE1NzY3Mzg4MTk0CgoKCgoKCg0KDQo=
---=_Part_154719_205573438.1669780970984
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+---
+ Documentation/devicetree/bindings/net/qca,ar71xx.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-PGh0bWw+DQo8aGVhZD4NCiAgICA8bWV0YSBodHRwLWVxdWl2PSdDb250ZW50LVR5cGUnIGNvbnRl
-bnQ9J3RleHQvaHRtbDsgY2hhcnNldD1VVEYtOCc+DQo8L2hlYWQ+DQo8Ym9keT4NCjxzdHlsZT4N
-CiAgICBmb250ew0KICAgICAgICBsaW5lLWhlaWdodDogMS42Ow0KICAgIH0NCiAgICB1bCxvbHsN
-CiAgICAgICAgcGFkZGluZy1sZWZ0OiAyMHB4Ow0KICAgICAgICBsaXN0LXN0eWxlLXBvc2l0aW9u
-OiBpbnNpZGU7DQogICAgfQ0KPC9zdHlsZT4NCjxkaXYgc3R5bGUgPSAnZm9udC1mYW1pbHk65b6u
-6L2v6ZuF6buRLFZlcmRhbmEsJnF1b3Q7TWljcm9zb2Z0IFlhaGVpJnF1b3Q7LFNpbVN1bixzYW5z
-LXNlcmlmO2ZvbnQtc2l6ZToxNHB4OyBsaW5lLWhlaWdodDoxLjY7Jz4NCiAgICA8ZGl2ID48ZGl2
-PgogICAgPGRpdj4KICAgICAgICA8c3Bhbj4KICAgICAgICAgICAgPGJyPgogICAgICAgIDwvc3Bh
-bj4KICAgIDwvZGl2PgogICAgPGRpdj4KICAgICAgICA8c3Bhbj4KICAgICAgICAgICAgSGkhIFdl
-IHB1Ymxpc2hlZCBBIEdsb2JhbCBNYXJrZXQgUmVwb3J0IG9uIDwvc3Bhbj48Yj5BdXRvbW90aXZl
-IFRvdWNoIFNjcmVlbiBDb250cm9sIFN5c3RlbXM8L2I+PHNwYW4+IDIwMjIgKGluY2x1ZGluZyAy
-MDIzIGZvcmVjYXN0cykgZm9yIFlvdSBhbmQgQ29tcGV0aXRvcnMuIFRoZSBpbXBhY3Qgb2YgdGhl
-ICJSdXNzaWEgYW5kIFVrcmFpbmUiIFNpdHVhdGlvbiBhbmQgIkNvdmlkIiBoYXMgYmVlbiBjb25z
-aWRlcmVkIGluIG91ciByZXBvcnQuIElmIHlvdSBoYXZlIGZ1cnRoZXIgaW50ZXJlc3QgaW4gdGhp
-cyByZXBvcnQgb3IgcmVsYXRlZCByZXBvcnRzLCB3ZSB3b3VsZCBiZSBoYXBweSB0byBzaGFyZSB0
-aGUgc2FtcGxlIHJlcG9ydCB3aXRoIHlvdS48YnI+PGJyPlRoZSBmb2xsb3dpbmcgcmVsYXRlZCBj
-b21wYW5pZXMgYXJlIGNvdmVyZWQ6PGJyPlJvYmVydCBCb3NjaCBHbWJIPGJyPkZ1aml0c3U8YnI+
-RGF3YXIgVGVjaG5vbG9naWVzPGJyPk1ldGhvZGUgRWxlY3Ryb25pY3M8YnI+U3luYXB0aWNzIElu
-Y29ycG9yYXRlZDxicj5Ub3VjaE5ldGl4IExpbWl0ZWQ8YnI+RGVscGhpIFRlY2hub2xvZ2llcyAo
-Qm9yZ1dhcm5lciBJbmMuKTxicj5NaWNyb2NoaXAgVGVjaG5vbG9neSBJbmM8YnI+VmFsZW88YnI+
-SGFybWFuIEludGVybmF0aW9uYWwgSW5kdXN0cmllcyBJbmMuPGJyPihPdGhlciByZWxhdGVkIGNv
-bXBhbmllcyBJbmZvcm1hdGlvbuKApuKApik8YnI+PGJyPkF1dG9tb3RpdmUgVG91Y2ggU2NyZWVu
-IENvbnRyb2wgU3lzdGVtcyBTZWdtZW50IGJ5IFR5cGU8YnI+UmVzaXN0aXZlIFRvdWNoIFNjcmVl
-bjxicj5DYXBhY2l0aXZlIFRvdWNoIFNjcmVlbjxicj48YnI+VGhpcyByZXBvcnQgYW5hbHl6ZXMg
-YW5kIHN0dWRpZXMgdGhlIHNhbGVzLCB2YWx1ZSwgcmV2ZW51ZSwgbWFya2V0IHNoYXJlIGFuZCBv
-dGhlciBhc3BlY3RzIG9mIEF1dG9tb3RpdmUgVG91Y2ggU2NyZWVuIENvbnRyb2wgU3lzdGVtcy4g
-VGhpcyByZXBvcnQgd2lsbCBoZWxwIHN0YWtlaG9sZGVycyB0byB1bmRlcnN0YW5kIHRoZSBnbG9i
-YWwgaW5kdXN0cnkgc3RhdHVzIGFuZCB0cmVuZHMgb2YgQXV0b21vdGl2ZSBUb3VjaCBTY3JlZW4g
-Q29udHJvbCBTeXN0ZW1zIGFuZCBwcm92aWRlcyB0aGVtIHdpdGggaW5mb3JtYXRpb24gb24ga2V5
-IG1hcmtldCBkcml2ZXJzLCByZXN0cmFpbnRzLCBjaGFsbGVuZ2VzLCBhbmQgb3Bwb3J0dW5pdGll
-cy48YnI+PGJyPldlIHdvdWxkIGFwcHJlY2lhdGUgaXQgaWYgeW91IGNvdWxkIGZvcndhcmQgaXQg
-dG8gdGhlIG1hcmtldGluZyBkZXBhcnRtZW50IG9yIHRoZSBjb21wYW55IGxlYWRlci48YnI+PGJy
-PkZvciBtb3JlIGluZm9ybWF0aW9uLCBwbGVhc2UgZmVlbCBmcmVlIHRvIGNvbnRhY3QgbWUhPGJy
-Pjxicj4tLS0tLS0tLS0tLS0tLS0tLS0tPGJyPllvdXJzIHNpbmNlcmVseTxicj5MZXNpbGUgfCBN
-YW5hZ2VyLUdsb2JhbCBTYWxlczxicj5FOmxlc2xpZUB3aW5tYXJrZXRyZXNlYXJjaC5jb208YnI+
-V2VjaGF0L01vYmlsZTogKzg2LTE1NzY3Mzg4MTk0CiAgICAgICAgPC9zcGFuPgogICAgPC9kaXY+
-CiAgICA8ZGl2IGlkPSJudGVzLXBjbWFjLXNpZ25hdHVyZSIgc3R5bGU9ImZvbnQtZmFtaWx5Oifl
-vq7ova/pm4Xpu5EnIj4KICAgICAgICAKICAgICAgICA8ZGl2IHN0eWxlPSJmb250LXNpemU6MTRw
-eDsgcGFkZGluZzogMDsgIG1hcmdpbjowOyI+CgogICAgICAgIDwvZGl2PgogICAgPC9kaXY+Cjwv
-ZGl2PjwvZGl2PjwhLS3wn5iALS0+DQo8L2Rpdj4NCjxicj48L2JvZHk+DQo8L2h0bWw+
---=_Part_154719_205573438.1669780970984--
+diff --git a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
+index 1ebf9e8c8a1d..89f94b31b546 100644
+--- a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
++++ b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
+@@ -123,7 +123,6 @@ examples:
+ 
+                     switch_port0: port@0 {
+                         reg = <0x0>;
+-                        label = "cpu";
+                         ethernet = <&eth1>;
+ 
+                         phy-mode = "gmii";
+-- 
+2.34.1
+
