@@ -1,66 +1,115 @@
-Return-Path: <robh+dt@kernel.org>
+Return-Path: <SRS0=4uYm=36=winglobalresearch.com=james_wu@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B05C4167B
-	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 00:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4498FC4332F
+	for <soc@archiver.kernel.org>; Wed, 30 Nov 2022 04:03:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5C664C43470; Wed, 30 Nov 2022 00:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45784C433D7
-	for <soc@kernel.org>; Wed, 30 Nov 2022 00:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1669769958;
-	bh=hitHTZy+DYECwX6t/IUe+Yg1uyBFdFrqVdRknsATz/o=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=WcZEMom8zE8XR9Spe9a8nr/CARbSX2ZqVu15TDckBRG38CYe8dOh2jWcLl9dGYvZL
-	 8HzFlz9s8JB4+hQ+lImsPPtmtZz9arJyfAu3FfL6zreYsYl9YwW5mNCkRulOzseYXj
-	 bsBwMB4f9jbnUsgEFVhTXZ/VksORpwCSPWOB2Mm3simmN+uhc/o3VJtE+HWYL3yCBW
-	 d8B0CDukBAKyqKtxKQEJuEtYHooT8BRdEpBNdaDkc/8YwejgTqygURxQKQL1/JLuf5
-	 8zTLXextF4FztZPKG1aPxFt2jd6Sp8GpsqhnHggVL2Mx9FUgoRqGmmOgqoubaCAfdC
-	 m5ovaKW1rmgRw==
-Received: by mail-vs1-f41.google.com with SMTP id d185so15828723vsd.0
-        for <soc@kernel.org>; Tue, 29 Nov 2022 16:59:18 -0800 (PST)
-X-Gm-Message-State: ANoB5plenAySRs8WsWk/dZWuOYsCYcaULrAgWwtP9sSIGVcYKTgxnF7b
-	tQ6UiEPWr/+zTBZx8faJskbafwHotawa7GOVsA==
-X-Google-Smtp-Source: AA0mqf5rnHHNGXp4oUSFHP5c4sCgoEsdeGx9NPkxuaM5u/waUw453pq2OFHQtwos2wIwDlU0w3WVgj+snyK+QC2yNds=
-X-Received: by 2002:a05:6102:370a:b0:3af:c63c:5536 with SMTP id
- s10-20020a056102370a00b003afc63c5536mr31587054vst.85.1669769957168; Tue, 29
- Nov 2022 16:59:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20221130003410.191837-1-arinc.unal@arinc9.com>
-In-Reply-To: <20221130003410.191837-1-arinc.unal@arinc9.com>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Tue, 29 Nov 2022 18:59:06 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLv97rHZcbnzGmw0T4pS5nMHVHDjzK54PtVaZzJQh4Yiw@mail.gmail.com>
-Message-ID: <CAL_JsqLv97rHZcbnzGmw0T4pS5nMHVHDjzK54PtVaZzJQh4Yiw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] remove label = "cpu" from DSA dt-binding
-To: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+	id F27ECC433C1; Wed, 30 Nov 2022 04:03:03 +0000 (UTC)
+Received: from mail-177144.yeah.net (mail-177144.yeah.net [123.58.177.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E350BC433D6
+	for <soc@kernel.org>; Wed, 30 Nov 2022 04:03:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E350BC433D6
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=winglobalresearch.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=winglobalresearch.com
 List-Id: <soc.lore.kernel.org>
-Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, Florian Fainelli <f.fainelli@gmail.com>, soc@kernel.org
+To: soc@kernel.org<soc@kernel.org>
+Received: from winglobalresearch.com (localhost [127.0.0.1])
+	by mail-m12769.qiye.163.com (Hmail) with ESMTP id F30C628023E;
+	Wed, 30 Nov 2022 12:02:50 +0800 (CST)
+Content-Type: multipart/alternative; BOUNDARY="=_Part_154719_205573438.1669780970984"
+Message-ID: <AFcAWAAoFY8iVcE*Dt1J4arx.1.1669780970984.Hmail.james_wu@winglobalresearch.com>
+Subject: =?UTF-8?B?QXV0b21vdGl2ZSBUb3VjaCBTY3JlZW4gQ29udHJvbCBTeXN0ZW1zIFRyZW5kcyBhbmQgT3Bwb3J0dW5pdGllcyBGb3IgWW91?=
+X-Priority: 3
+X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com MailMasterPC\4.17.8.1009 Win10 21H2
+X-Originating-IP: 113.83.148.32
+MIME-Version: 1.0
+Received: from james_wu@winglobalresearch.com( [113.83.148.32) ] by ajax-webmail ( [127.0.0.1] ) ; Wed, 30 Nov 2022 12:02:50 +0800 (GMT+08:00)
+From: leslie <james_wu@winglobalresearch.com>
+Date: Wed, 30 Nov 2022 12:02:50 +0800 (GMT+08:00)
+X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGk5OVhhOHkJMSxpJT00fSVUTARMWGhIXJBQOD1
+	lXWRgSC1lBWUpKSFVDSFVKT0NVSElZV1kWGg8SFR0UWUFZT0tIVUpKS09IT1VPVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzo9GDosOjoUPSJDEi0YPlE*D0ox
+	TxoJA1VKVUpNTUJMQ0tCTEpDSUNVMxYaEhdVERoWHggkDA47DBIVHBcUGRoXCR4IHhoJGBNVGBQW
+	RVlXWRQVHgkYCw9ZQUpXWRILWUFZSkpIVUNIVUpPQ1VISVlXWQgBWUFJTU1PTTcG
+X-HM-Tid: 0a84c6b39d48b243kuuu1849eeda670
+
+--=_Part_154719_205573438.1669780970984
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 
-On Tue, Nov 29, 2022 at 6:34 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc=
-9.com> wrote:
->
-> Hello folks,
->
-> With this patch series, we're completely getting rid of 'label =3D "cpu";=
-'
-> which is not used by the DSA dt-binding at all.
->
-> I've been meaning to submit this for a few months. Find the relevant
-> conversation here:
-> https://lore.kernel.org/netdev/20220913155408.GA3802998-robh@kernel.org/
->
-> Can we directly apply this series?
+CgpIaSEgV2UgcHVibGlzaGVkIEEgR2xvYmFsIE1hcmtldCBSZXBvcnQgb24gQXV0b21vdGl2ZSBU
+b3VjaCBTY3JlZW4gQ29udHJvbCBTeXN0ZW1zIDIwMjIgKGluY2x1ZGluZyAyMDIzIGZvcmVjYXN0
+cykgZm9yIFlvdSBhbmQgQ29tcGV0aXRvcnMuIFRoZSBpbXBhY3Qgb2YgdGhlICJSdXNzaWEgYW5k
+IFVrcmFpbmUiIFNpdHVhdGlvbiBhbmQgIkNvdmlkIiBoYXMgYmVlbiBjb25zaWRlcmVkIGluIG91
+ciByZXBvcnQuIElmIHlvdSBoYXZlIGZ1cnRoZXIgaW50ZXJlc3QgaW4gdGhpcyByZXBvcnQgb3Ig
+cmVsYXRlZCByZXBvcnRzLCB3ZSB3b3VsZCBiZSBoYXBweSB0byBzaGFyZSB0aGUgc2FtcGxlIHJl
+cG9ydCB3aXRoIHlvdS4KClRoZSBmb2xsb3dpbmcgcmVsYXRlZCBjb21wYW5pZXMgYXJlIGNvdmVy
+ZWQ6ClJvYmVydCBCb3NjaCBHbWJICkZ1aml0c3UKRGF3YXIgVGVjaG5vbG9naWVzCk1ldGhvZGUg
+RWxlY3Ryb25pY3MKU3luYXB0aWNzIEluY29ycG9yYXRlZApUb3VjaE5ldGl4IExpbWl0ZWQKRGVs
+cGhpIFRlY2hub2xvZ2llcyAoQm9yZ1dhcm5lciBJbmMuKQpNaWNyb2NoaXAgVGVjaG5vbG9neSBJ
+bmMKVmFsZW8KSGFybWFuIEludGVybmF0aW9uYWwgSW5kdXN0cmllcyBJbmMuCihPdGhlciByZWxh
+dGVkIGNvbXBhbmllcyBJbmZvcm1hdGlvbuKApuKApikKCkF1dG9tb3RpdmUgVG91Y2ggU2NyZWVu
+IENvbnRyb2wgU3lzdGVtcyBTZWdtZW50IGJ5IFR5cGUKUmVzaXN0aXZlIFRvdWNoIFNjcmVlbgpD
+YXBhY2l0aXZlIFRvdWNoIFNjcmVlbgoKVGhpcyByZXBvcnQgYW5hbHl6ZXMgYW5kIHN0dWRpZXMg
+dGhlIHNhbGVzLCB2YWx1ZSwgcmV2ZW51ZSwgbWFya2V0IHNoYXJlIGFuZCBvdGhlciBhc3BlY3Rz
+IG9mIEF1dG9tb3RpdmUgVG91Y2ggU2NyZWVuIENvbnRyb2wgU3lzdGVtcy4gVGhpcyByZXBvcnQg
+d2lsbCBoZWxwIHN0YWtlaG9sZGVycyB0byB1bmRlcnN0YW5kIHRoZSBnbG9iYWwgaW5kdXN0cnkg
+c3RhdHVzIGFuZCB0cmVuZHMgb2YgQXV0b21vdGl2ZSBUb3VjaCBTY3JlZW4gQ29udHJvbCBTeXN0
+ZW1zIGFuZCBwcm92aWRlcyB0aGVtIHdpdGggaW5mb3JtYXRpb24gb24ga2V5IG1hcmtldCBkcml2
+ZXJzLCByZXN0cmFpbnRzLCBjaGFsbGVuZ2VzLCBhbmQgb3Bwb3J0dW5pdGllcy4KCldlIHdvdWxk
+IGFwcHJlY2lhdGUgaXQgaWYgeW91IGNvdWxkIGZvcndhcmQgaXQgdG8gdGhlIG1hcmtldGluZyBk
+ZXBhcnRtZW50IG9yIHRoZSBjb21wYW55IGxlYWRlci4KCkZvciBtb3JlIGluZm9ybWF0aW9uLCBw
+bGVhc2UgZmVlbCBmcmVlIHRvIGNvbnRhY3QgbWUhCgotLS0tLS0tLS0tLS0tLS0tLS0tCllvdXJz
+IHNpbmNlcmVseQpMZXNpbGUgfCBNYW5hZ2VyLUdsb2JhbCBTYWxlcwpFOmxlc2xpZUB3aW5tYXJr
+ZXRyZXNlYXJjaC5jb20KV2VjaGF0L01vYmlsZTogKzg2LTE1NzY3Mzg4MTk0CgoKCgoKCg0KDQo=
+--=_Part_154719_205573438.1669780970984
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-No, you have to send to a public maillist. Use get_maintainers.pl.
-
-Each of these can be sent individually because it is all different
-trees. Patch 1 goes to netdev tree. Powerpc and MIPS maintainers will
-take patches 5 and 4. SoC maintainers are just patches 2 and 3.
-
-Rob
+PGh0bWw+DQo8aGVhZD4NCiAgICA8bWV0YSBodHRwLWVxdWl2PSdDb250ZW50LVR5cGUnIGNvbnRl
+bnQ9J3RleHQvaHRtbDsgY2hhcnNldD1VVEYtOCc+DQo8L2hlYWQ+DQo8Ym9keT4NCjxzdHlsZT4N
+CiAgICBmb250ew0KICAgICAgICBsaW5lLWhlaWdodDogMS42Ow0KICAgIH0NCiAgICB1bCxvbHsN
+CiAgICAgICAgcGFkZGluZy1sZWZ0OiAyMHB4Ow0KICAgICAgICBsaXN0LXN0eWxlLXBvc2l0aW9u
+OiBpbnNpZGU7DQogICAgfQ0KPC9zdHlsZT4NCjxkaXYgc3R5bGUgPSAnZm9udC1mYW1pbHk65b6u
+6L2v6ZuF6buRLFZlcmRhbmEsJnF1b3Q7TWljcm9zb2Z0IFlhaGVpJnF1b3Q7LFNpbVN1bixzYW5z
+LXNlcmlmO2ZvbnQtc2l6ZToxNHB4OyBsaW5lLWhlaWdodDoxLjY7Jz4NCiAgICA8ZGl2ID48ZGl2
+PgogICAgPGRpdj4KICAgICAgICA8c3Bhbj4KICAgICAgICAgICAgPGJyPgogICAgICAgIDwvc3Bh
+bj4KICAgIDwvZGl2PgogICAgPGRpdj4KICAgICAgICA8c3Bhbj4KICAgICAgICAgICAgSGkhIFdl
+IHB1Ymxpc2hlZCBBIEdsb2JhbCBNYXJrZXQgUmVwb3J0IG9uIDwvc3Bhbj48Yj5BdXRvbW90aXZl
+IFRvdWNoIFNjcmVlbiBDb250cm9sIFN5c3RlbXM8L2I+PHNwYW4+IDIwMjIgKGluY2x1ZGluZyAy
+MDIzIGZvcmVjYXN0cykgZm9yIFlvdSBhbmQgQ29tcGV0aXRvcnMuIFRoZSBpbXBhY3Qgb2YgdGhl
+ICJSdXNzaWEgYW5kIFVrcmFpbmUiIFNpdHVhdGlvbiBhbmQgIkNvdmlkIiBoYXMgYmVlbiBjb25z
+aWRlcmVkIGluIG91ciByZXBvcnQuIElmIHlvdSBoYXZlIGZ1cnRoZXIgaW50ZXJlc3QgaW4gdGhp
+cyByZXBvcnQgb3IgcmVsYXRlZCByZXBvcnRzLCB3ZSB3b3VsZCBiZSBoYXBweSB0byBzaGFyZSB0
+aGUgc2FtcGxlIHJlcG9ydCB3aXRoIHlvdS48YnI+PGJyPlRoZSBmb2xsb3dpbmcgcmVsYXRlZCBj
+b21wYW5pZXMgYXJlIGNvdmVyZWQ6PGJyPlJvYmVydCBCb3NjaCBHbWJIPGJyPkZ1aml0c3U8YnI+
+RGF3YXIgVGVjaG5vbG9naWVzPGJyPk1ldGhvZGUgRWxlY3Ryb25pY3M8YnI+U3luYXB0aWNzIElu
+Y29ycG9yYXRlZDxicj5Ub3VjaE5ldGl4IExpbWl0ZWQ8YnI+RGVscGhpIFRlY2hub2xvZ2llcyAo
+Qm9yZ1dhcm5lciBJbmMuKTxicj5NaWNyb2NoaXAgVGVjaG5vbG9neSBJbmM8YnI+VmFsZW88YnI+
+SGFybWFuIEludGVybmF0aW9uYWwgSW5kdXN0cmllcyBJbmMuPGJyPihPdGhlciByZWxhdGVkIGNv
+bXBhbmllcyBJbmZvcm1hdGlvbuKApuKApik8YnI+PGJyPkF1dG9tb3RpdmUgVG91Y2ggU2NyZWVu
+IENvbnRyb2wgU3lzdGVtcyBTZWdtZW50IGJ5IFR5cGU8YnI+UmVzaXN0aXZlIFRvdWNoIFNjcmVl
+bjxicj5DYXBhY2l0aXZlIFRvdWNoIFNjcmVlbjxicj48YnI+VGhpcyByZXBvcnQgYW5hbHl6ZXMg
+YW5kIHN0dWRpZXMgdGhlIHNhbGVzLCB2YWx1ZSwgcmV2ZW51ZSwgbWFya2V0IHNoYXJlIGFuZCBv
+dGhlciBhc3BlY3RzIG9mIEF1dG9tb3RpdmUgVG91Y2ggU2NyZWVuIENvbnRyb2wgU3lzdGVtcy4g
+VGhpcyByZXBvcnQgd2lsbCBoZWxwIHN0YWtlaG9sZGVycyB0byB1bmRlcnN0YW5kIHRoZSBnbG9i
+YWwgaW5kdXN0cnkgc3RhdHVzIGFuZCB0cmVuZHMgb2YgQXV0b21vdGl2ZSBUb3VjaCBTY3JlZW4g
+Q29udHJvbCBTeXN0ZW1zIGFuZCBwcm92aWRlcyB0aGVtIHdpdGggaW5mb3JtYXRpb24gb24ga2V5
+IG1hcmtldCBkcml2ZXJzLCByZXN0cmFpbnRzLCBjaGFsbGVuZ2VzLCBhbmQgb3Bwb3J0dW5pdGll
+cy48YnI+PGJyPldlIHdvdWxkIGFwcHJlY2lhdGUgaXQgaWYgeW91IGNvdWxkIGZvcndhcmQgaXQg
+dG8gdGhlIG1hcmtldGluZyBkZXBhcnRtZW50IG9yIHRoZSBjb21wYW55IGxlYWRlci48YnI+PGJy
+PkZvciBtb3JlIGluZm9ybWF0aW9uLCBwbGVhc2UgZmVlbCBmcmVlIHRvIGNvbnRhY3QgbWUhPGJy
+Pjxicj4tLS0tLS0tLS0tLS0tLS0tLS0tPGJyPllvdXJzIHNpbmNlcmVseTxicj5MZXNpbGUgfCBN
+YW5hZ2VyLUdsb2JhbCBTYWxlczxicj5FOmxlc2xpZUB3aW5tYXJrZXRyZXNlYXJjaC5jb208YnI+
+V2VjaGF0L01vYmlsZTogKzg2LTE1NzY3Mzg4MTk0CiAgICAgICAgPC9zcGFuPgogICAgPC9kaXY+
+CiAgICA8ZGl2IGlkPSJudGVzLXBjbWFjLXNpZ25hdHVyZSIgc3R5bGU9ImZvbnQtZmFtaWx5Oifl
+vq7ova/pm4Xpu5EnIj4KICAgICAgICAKICAgICAgICA8ZGl2IHN0eWxlPSJmb250LXNpemU6MTRw
+eDsgcGFkZGluZzogMDsgIG1hcmdpbjowOyI+CgogICAgICAgIDwvZGl2PgogICAgPC9kaXY+Cjwv
+ZGl2PjwvZGl2PjwhLS3wn5iALS0+DQo8L2Rpdj4NCjxicj48L2JvZHk+DQo8L2h0bWw+
+--=_Part_154719_205573438.1669780970984--
