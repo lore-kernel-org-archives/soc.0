@@ -1,116 +1,129 @@
-Return-Path: <SRS0=lsat=37=arinc9.com=arinc.unal@kernel.org>
+Return-Path: <SRS0=Y0j3=37=ellerman.id.au=mpe@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B68C43217
-	for <soc@archiver.kernel.org>; Thu,  1 Dec 2022 09:15:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67953C43217
+	for <soc@archiver.kernel.org>; Thu,  1 Dec 2022 10:42:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6765BC433D7; Thu,  1 Dec 2022 09:15:11 +0000 (UTC)
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+	id 327A4C43148; Thu,  1 Dec 2022 10:42:19 +0000 (UTC)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 53C4AC433D6;
-	Thu,  1 Dec 2022 09:15:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53C4AC433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arinc9.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arinc9.com
-ARC-Seal: i=1; a=rsa-sha256; t=1669886069; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=PuFREHxuJ3FoD3zI0cgmwgxXBACrFbsNXtmB1ZUDMZF0Vw7u5go+yLfWIyRlKmsI4dy/C4JBEgDliSKn1GHoNmOpzBqaWl6iXr8io/eTVI3oCPsCmOMRaRxdzRXptLt4DP3hnV53GkO6NAhhWer+prEaTAbxrLXw/JqtvaQrzWo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1669886069; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-	bh=rmnGX0as+j0mWZhRBwCINR7c9wsJ33DTrPhAflpkh7k=; 
-	b=fw/MEtbCpCH9VgI82wo0vE16g6dZ8NV1Le4xk0BjWdTYK38rt7XBr8kXPBBPo3YRUN6Qe0dqE8w6e3UHXsxU9mNhstxy2c3zRoUP/VEPwky/wlzovr2sCQ7tztCh20i22nk9oPAoF3GnSvN5RPlNAcT6sNLjUOovaigMSm1VuKI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=arinc9.com;
-	spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-	dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669886069;
-	s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=rmnGX0as+j0mWZhRBwCINR7c9wsJ33DTrPhAflpkh7k=;
-	b=kC5OJuaedGtqPWAXavS8QBOXmOzGAN9KVKeFTZblN5hQvtgIY+bZgMHEmvSv5xeL
-	m50GcHUsZyBhq0mNsX+aCeIwwvLqFeeWwtPZKWwBHrfnYXDUeClaEjUb82O6yrKKDVx
-	OifNFxxqXQi0y0KKnh1zyARvxBzbuGAfmR/P71Bk=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-	with SMTPS id 1669886067241836.827775278157; Thu, 1 Dec 2022 01:14:27 -0800 (PST)
-Message-ID: <b5ed90cf-1b5d-9306-7b06-ded7c331ca2a@arinc9.com>
-Date: Thu, 1 Dec 2022 12:14:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/5] remove label = "cpu" from DSA dt-binding
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 06685C433C1;
+	Thu,  1 Dec 2022 10:42:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 06685C433C1
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4NNCLc4QCXz4xFy;
+	Thu,  1 Dec 2022 21:42:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1669891334;
+	bh=4hif7EODqPU9RIQoNSM7f4kViT96m8PqRMy1FOSRqmw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=XMDViV6CFDY+O8nTTE8IlEWWvY7H8YPqwD0Tn3KS84kUAblouGGNC2+Nia8sW2MYv
+	 qiQITUGJnoNf2rF8FqcIgIFTtKJlyIpcKBWiNrEakO5NLQ+ickTPEjtr01+GlyanLx
+	 mzZ9YX/t1jp5UON6rpZmvdKzHLeuceJXW2c99G//FjEB6EQyCPN8TlRw5ClPGntYn1
+	 1lstUDxUIwXt5rogz0qwgKe9XH3/+5CPLNT6DZ3ksaq4/yXNeIe6xOWsdnc3/9h44G
+	 yfuCxdwdv4chZHzuDDmEcJxiTEJT36pr3DPrHlRrFjnXSjff4fqmP4a9zPs8OfNA43
+	 pIMyXosyZ93DA==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, Andrew Lunn
+ <andrew@lunn.ch>
 List-Id: <soc.lore.kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- soc@kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Michael Ellerman <mpe@ellerman.id.au>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, soc@kernel.org, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Gregory Clement
+ <gregory.clement@bootlin.com>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Claudiu Beznea
+ <claudiu.beznea@microchip.com>, Ray Jui <rjui@broadcom.com>, Scott Branden
+ <sbranden@broadcom.com>, Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Florian Fainelli
+ <f.fainelli@gmail.com>, Hauke Mehrtens <hauke@hauke-m.de>, =?utf-8?Q?Rafa?=
+ =?utf-8?Q?=C5=82_Mi=C5=82ecki?=
+ <zajec5@gmail.com>, Hans Ulli Kroll <ulli.kroll@googlemail.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux
+ Team <linux-imx@nxp.com>, Matthias Brugger <matthias.bgg@gmail.com>, Andy
+ Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad
+ Dybcio <konrad.dybcio@somainline.org>, Geert Uytterhoeven
+ <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, Maxime
+ Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Chen-Yu Tsai <wens@csie.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ Stefan Agner <stefan@agner.ch>, Heiko Stuebner <heiko@sntech.de>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Sergio Paracuellos
+ <sergio.paracuellos@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, Tim Harvey
+ <tharvey@gateworks.com>, Peng Fan <peng.fan@nxp.com>, Rasmus Villemoes
+ <rasmus.villemoes@prevas.dk>, Frank Wunderlich <frank-w@public-files.de>,
+ Michael Riesch <michael.riesch@wolfvision.net>, Oleksij Rempel
+ <linux@rempel-privat.de>, netdev@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
+ linux-rockchip@lists.infradead.org, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 0/5] remove label = "cpu" from DSA dt-binding
+In-Reply-To: <32638470-b074-3b14-bfb2-10b49307b9e3@arinc9.com>
 References: <20221130141040.32447-1-arinc.unal@arinc9.com>
-From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+ <Y4d9B7VSHvqJn0iS@lunn.ch>
+ <32638470-b074-3b14-bfb2-10b49307b9e3@arinc9.com>
+Date: Thu, 01 Dec 2022 21:42:00 +1100
+Message-ID: <877czbs8w7.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-I'm sending a more specific mail to make sure this series doesn't fall 
-through the cracks like Andrew said. I'd like this merged this week 
-before the merge window closes.
+Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com> writes:
+> On 30.11.2022 18:55, Andrew Lunn wrote:
+>> On Wed, Nov 30, 2022 at 05:10:35PM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wrot=
+e:
+>>> Hello folks,
+>>>
+>>> With this patch series, we're completely getting rid of 'label =3D "cpu=
+";'
+>>> which is not used by the DSA dt-binding at all.
+>>>
+>>> Information for taking the patches for maintainers:
+>>> Patch 1: netdev maintainers (based off netdev/net-next.git main)
+>>> Patch 2-3: SoC maintainers (based off soc/soc.git soc/dt)
+>>> Patch 4: MIPS maintainers (based off mips/linux.git mips-next)
+>>> Patch 5: PowerPC maintainers (based off powerpc/linux.git next-test)
+>>=20
+>> Hi Ar=C4=B1n=C3=A7
+>>=20
+>> So your plan is that each architecture maintainer merges one patch?
+>
+> Initially, I sent this series to soc@kernel.org to take it all but Rob=20
+> said it must be this way instead.
+>
+>>=20
+>> That is fine, but it is good to be explicit, otherwise patches will
+>> fall through the cracks because nobody picks them up. I generally use
+>> To: to indicate who i expect to merge a patch, and everybody else in
+>> the Cc:
+>
+> Thanks for this, I'll follow suit if I don't see any activity for a few=20
+> weeks.
 
-Jakub, please take patch 1.
-Arnd, please take patch 2 and 3.
-Thomas, please take patch 4.
-Michael, please take patch 5.
+IMHO the best solution if the patches are truly independent is to send
+them independantly to each maintainer. That way there's no confusion
+about whether someone else will take the series.
 
-Arınç
+It's also simpler for maintainers to apply a single standalone patch vs
+pick a single patch from a larger series.
 
-On 30.11.2022 17:10, Arınç ÜNAL wrote:
-> Hello folks,
-> 
-> With this patch series, we're completely getting rid of 'label = "cpu";'
-> which is not used by the DSA dt-binding at all.
-> 
-> Information for taking the patches for maintainers:
-> Patch 1: netdev maintainers (based off netdev/net-next.git main)
-> Patch 2-3: SoC maintainers (based off soc/soc.git soc/dt)
-> Patch 4: MIPS maintainers (based off mips/linux.git mips-next)
-> Patch 5: PowerPC maintainers (based off powerpc/linux.git next-test)
-> 
-> I've been meaning to submit this for a few months. Find the relevant
-> conversation here:
-> https://lore.kernel.org/netdev/20220913155408.GA3802998-robh@kernel.org/
-> 
-> Here's how I did it, for the interested (or suggestions):
-> 
-> Find the platforms which have got 'label = "cpu";' defined.
-> grep -rnw . -e 'label = "cpu";'
-> 
-> Remove the line where 'label = "cpu";' is included.
-> sed -i /'label = "cpu";'/,+d arch/arm/boot/dts/*
-> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/freescale/*
-> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/marvell/*
-> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/mediatek/*
-> sed -i /'label = "cpu";'/,+d arch/arm64/boot/dts/rockchip/*
-> sed -i /'label = "cpu";'/,+d arch/mips/boot/dts/qca/*
-> sed -i /'label = "cpu";'/,+d arch/mips/boot/dts/ralink/*
-> sed -i /'label = "cpu";'/,+d arch/powerpc/boot/dts/turris1x.dts
-> sed -i /'label = "cpu";'/,+d Documentation/devicetree/bindings/net/qca,ar71xx.yaml
-> 
-> Restore the symlink files which typechange after running sed.
-> 
-> Arınç ÜNAL (5):
->    dt-bindings: net: qca,ar71xx: remove label = "cpu" from examples
->    arm: dts: remove label = "cpu" from DSA dt-binding
->    arm64: dts: remove label = "cpu" from DSA dt-binding
->    mips: dts: remove label = "cpu" from DSA dt-binding
->    powerpc: dts: remove label = "cpu" from DSA dt-binding
-> 
-> 
+cheers
