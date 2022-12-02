@@ -1,75 +1,89 @@
-Return-Path: <SRS0=CUVb=4A=ucas.com.cn=honghui.wang@kernel.org>
+Return-Path: <SRS0=1uxm=4A=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08CD0C4332F
-	for <soc@archiver.kernel.org>; Fri,  2 Dec 2022 09:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60E3FC47088
+	for <soc@archiver.kernel.org>; Fri,  2 Dec 2022 10:50:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B6E15C433C1; Fri,  2 Dec 2022 09:25:35 +0000 (UTC)
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 45968C433B5; Fri,  2 Dec 2022 10:50:54 +0000 (UTC)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BE4F6C433D7;
-	Fri,  2 Dec 2022 09:25:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BE4F6C433D7
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ucas.com.cn
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=ucas.com.cn
-X-QQ-SSF: 0040000000B00080
-X-QQ-FEAT: C46Rb8GPIEeJThy4ybpU5KHg+3YJ4oOCdEdnlYvxq/hvyYyTy5yQxd9V406Mw
-	31Zb8AGLr72mqVVD3cmthQqWCDAu6kZIbp3PCcwH7WQQCjUK0vJGDwY7T9W0eMQ1/+Vp+i7
-	IZudxB73QwdZYVaIfi3WfF0tKtJHyA9I58fw+PvjMHkvvonF8Zuy7jyVryGIHDLQBXlNrSS
-	+60de1m/4zHXEpKmPR7VJ3y63r+LUDmKa1/R329Hqr4XxI8KUr0/cypgDNcJlF5TJszSFdB
-	xcSnMRBPxhUiFx8Gbizggc+lqFE2O7rXc9ckc4Zgg/oEX8gAwE6quIHVa/suA/Nid9rfFwD
-	thNxdn4
-X-QQ-BUSINESS-ORIGIN: 1
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 117.136.163.169
-X-QQ-STYLE: 
-X-QQ-mid: qywaplogic4t1669973020t984265
-From: "=?gb18030?B?zfW66bvU?=" <honghui.wang@ucas.com.cn>
+	by smtp.kernel.org (Postfix) with ESMTPS id 4D722C433D7
+	for <soc@kernel.org>; Fri,  2 Dec 2022 10:50:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D722C433D7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id d3so4999530ljl.1
+        for <soc@kernel.org>; Fri, 02 Dec 2022 02:50:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aUa/VqnmfOXM9528l3SlSKgYGZjywEB8U8BxliATOOw=;
+        b=VFw82rS8XMajD7JLPjZ+OrY2yzep2Gk0Guq0onC/auwfDMFkEMBSJJx0LP3b4ROEyM
+         2x3u8HkPtMufM29Iq9RK8weMrGcVDy/xOxXIpnO5gchMRnIkz9XuuvErWhRoxKUkLKVb
+         iZ8pqsFFDI13GWdDwYvRk/NinjvRI7NcQoS88pEGR1eiHd+jOPwSuxn434tG0RgAtWo5
+         2QpjE8VMyjSbugZmbk4n7RCYbqKN9dr0LBsqTKnbTzspVVZ4nSA3PsLaM5T3X5/PEiel
+         Ymb4nUB3J5/loHSM/+OQieYDX2c6bUPKBYsnYIucB+ujPfnCgTFJRRYKGrqYfkVR7yDk
+         SWwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aUa/VqnmfOXM9528l3SlSKgYGZjywEB8U8BxliATOOw=;
+        b=V5UGbsUqspAiXlyUmq3+1WKizKwuCT/m/SuGWwTogQNSnUNc5o1NVk8ab3CYKq+xhM
+         b7/bWwA6rdURUooc9IzNrM5RVPetsQmuKxRZYJrEvzk5LHYYgcwcCCZ2LWSuLAVYBlIF
+         sUcJZhYeadGONIuVTPzfATR7nDEZ/e3+YLGpheQFG7d86QOd1fQg8a/UI5C/55D5VALB
+         8c6/HO84TWns8eZ0JIsExnaqtfCAkSqjxf679IRAZ6ibR3dF0HsoNUnaVHAJDNQSyrKk
+         BZz8o/vtWrc1jNq9Qu43v35zDbRE0RJfURgBSHwB0ubNSV+LcZO2ea96F3Sz85R2+Mc2
+         uRkA==
+X-Gm-Message-State: ANoB5pmAZzCywu/Q0ZqhJGkvu34K/BVUj6QGzxEdLU3zgobtyeLeeWsy
+	qJAFr+uWkxlRCai4e1842o70Xw==
+X-Google-Smtp-Source: AA0mqf69Td280s1XXMPVErEzICrOPlatkrfekwHdq7BevjGZeeR2/YEfCma2e9rB3r0TZ9CLNv+Ehw==
+X-Received: by 2002:a05:651c:1070:b0:276:ac05:b821 with SMTP id y16-20020a05651c107000b00276ac05b821mr24330666ljm.84.1669978251393;
+        Fri, 02 Dec 2022 02:50:51 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c20-20020a056512075400b004a25bb4494fsm974799lfs.178.2022.12.02.02.50.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 02:50:51 -0800 (PST)
+Message-ID: <1b2ae3ef-a27e-accf-4533-66916fe59773@linaro.org>
+Date: Fri, 2 Dec 2022 11:50:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: =?UTF-8?Q?Re=3a_Re=ef=bc=9aRe=3a_=5bPATCH=5d_arm64/boot/dts_and_arm?=
+ =?UTF-8?Q?=5fscpi=3a_add_to_support_Phytium_FT2004_CPU?=
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-To: "=?gb18030?B?S3J6eXN6dG9mIEtvemxvd3NraQ==?=" <krzysztof.kozlowski@linaro.org>, "=?gb18030?B?Q2F0YWxpbiBNYXJpbmFz?=" <catalin.marinas@arm.com>, "=?gb18030?B?V2lsbCBEZWFjb24=?=" <will@kernel.org>, "=?gb18030?B?QXJuZCBCZXJnbWFubg==?=" <arnd@arndb.de>, "=?gb18030?B?T2xvZiBKb2hhbnNzb24=?=" <olof@lixom.net>, "=?gb18030?B?c29j?=" <soc@kernel.org>, "=?gb18030?B?Um9iIEhlcnJpbmc=?=" <robh+dt@kernel.org>, "=?gb18030?B?S3J6eXN6dG9mIEtvemxvd3NraQ==?=" <krzysztof.kozlowski+dt@linaro.org>, "=?gb18030?B?U3VkZWVwIEhvbGxh?=" <sudeep.holla@arm.com>, "=?gb18030?B?Q3Jpc3RpYW4gTWFydXNzaQ==?=" <cristian.marussi@arm.com>, "=?gb18030?B?bGludXgtYXJtLWtlcm5lbA==?=" <linux-arm-kernel@lists.infradead.org>, "=?gb18030?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?gb18030?B?ZGV2aWNldHJlZQ==?=" <devicetree@vger.kernel.org>
-Subject: =?gb18030?B?UmWjulJlOiBbUEFUQ0hdIGFybTY0L2Jvb3QvZHRz?=
- =?gb18030?B?IGFuZCBhcm1fc2NwaTogYWRkIHRvIHN1cHBvcnQg?=
- =?gb18030?B?UGh5dGl1bSBGVDIwMDQgQ1BV?=
-Mime-Version: 1.0
-Content-Type: text/plain;
-	charset="gb18030"
-Content-Transfer-Encoding: base64
-Date: Fri, 2 Dec 2022 17:23:40 +0800
-X-Priority: 3
-Message-ID: <tencent_12CFBB7717187D6F2B9A3246@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-X-QQ-ReplyHash: 1410768324
-X-QQ-SENDSIZE: 520
-Received: from qq.com (unknown [127.0.0.1])
-	by smtp.qq.com (ESMTP) with SMTP
-	id ; Fri, 02 Dec 2022 17:23:41 +0800 (CST)
-Feedback-ID: qywaplogic:ucas.com.cn:qybglogicsvr:qybglogicsvr5
+To: =?UTF-8?B?546L5rSq6L6J?= <honghui.wang@ucas.com.cn>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Sudeep Holla <sudeep.holla@arm.com>,
+ Cristian Marussi <cristian.marussi@arm.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>,
+ devicetree <devicetree@vger.kernel.org>
+References: <tencent_12CFBB7717187D6F2B9A3246@qq.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <tencent_12CFBB7717187D6F2B9A3246@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-VGhlIGFwcHJvYWNoIGlzIHBhc3NlZCB0aGUgdGVzdCBhbmQgdmVyaWZpY2F0aW9uIG9uIEZU
-MjAwNCBERVYgYm9hcmQuDQoNClRoYW5rIHlvdSBmb3IgeW91ciBkZXRhaWxlZCBhbmFseXNp
-cy4NCg0KSSdsbCB0cnkgYWdhaW4uDQoNCkJlc3QgUmVnYXJkcyENCg0KLS0tLS0tLS0tLS0t
-LS0tLS0tDQpXYW5nIEhvbmdodWkNCg0KDQoNCg0KDQoNCg0KDQogICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAtLS3Urcq808q8/i0tLQ0Kt6K8/sjLOiJLcnp5c3p0b2YgS296bG93
-c2tpIjxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQq3osvNyrG85DoyMDIyxOox
-MtTCMsjVKNDHxtrO5Skgz8LO5zQ6NTANCsrVvP7IyzoiV2FuZyBIb25naHVpIjxob25naHVp
-LndhbmdAdWNhcy5jb20uY24+OyJDYXRhbGluIE1hcmluYXMiPGNhdGFsaW4ubWFyaW5hc0Bh
-cm0uY29tPjsiV2lsbCBEZWFjb24iPHdpbGxAa2VybmVsLm9yZz47IkFybmQgQmVyZ21hbm4i
-PGFybmRAYXJuZGIuZGU+OyJPbG9mIEpvaGFuc3NvbiI8b2xvZkBsaXhvbS5uZXQ+OyJzb2Mi
-PHNvY0BrZXJuZWwub3JnPjsiUm9iIEhlcnJpbmciPHJvYmgrZHRAa2VybmVsLm9yZz47Ikty
-enlzenRvZiBLb3psb3dza2kiPGtyenlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZz47
-IlN1ZGVlcCBIb2xsYSI8c3VkZWVwLmhvbGxhQGFybS5jb20+OyJDcmlzdGlhbiBNYXJ1c3Np
-IjxjcmlzdGlhbi5tYXJ1c3NpQGFybS5jb20+OyJsaW51eC1hcm0ta2VybmVsIjxsaW51eC1h
-cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc+OyJsaW51eC1rZXJuZWwiPGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmc+OyJkZXZpY2V0cmVlIjxkZXZpY2V0cmVlQHZnZXIua2Vy
-bmVsLm9yZz47DQrW98ziOiBbUEFUQ0hdIGFybTY0L2Jvb3QvZHRzIGFuZCBhcm1fc2NwaTog
-YWRkIHRvIHN1cHBvcnQgUGh5dGl1bSBGVDIwMDQgQ1BVDQpPbiAwICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIA==
+On 02/12/2022 10:23, 王洪辉 wrote:
+> The approach is passed the test and verification on FT2004 DEV board.
+
+I don't know what does it mean but for sure you did not run dtbs_check.
+Whether it works on your board is different story.
+
+Please also do not top-post and respond to comments inline.
+
+Best regards,
+Krzysztof
 
