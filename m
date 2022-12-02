@@ -1,81 +1,100 @@
-Return-Path: <SRS0=awU/=4A=zte.com.cn=zhang.songyi@kernel.org>
+Return-Path: <patchwork-bot+netdevbpf@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68AA2C4332F
-	for <soc@archiver.kernel.org>; Fri,  2 Dec 2022 02:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B6CBC4332F
+	for <soc@archiver.kernel.org>; Fri,  2 Dec 2022 04:10:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2A89CC433D6; Fri,  2 Dec 2022 02:42:25 +0000 (UTC)
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 19A29C433C1
-	for <soc@kernel.org>; Fri,  2 Dec 2022 02:42:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 19A29C433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NNcfg35Hrz4xVnn;
-	Fri,  2 Dec 2022 10:42:19 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-	by mse-fl2.zte.com.cn with SMTP id 2B22g3kg039926;
-	Fri, 2 Dec 2022 10:42:03 +0800 (+08)
-	(envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-	by mapi (Zmail) with MAPI id mid31;
-	Fri, 2 Dec 2022 10:42:04 +0800 (CST)
-Date: Fri, 2 Dec 2022 10:42:04 +0800 (CST)
-X-Zmail-TransId: 2af9638965fcffffffff86bec3ce
-X-Mailer: Zmail v1.0
-Message-ID: <202212021042043546303@zte.com.cn>
-Mime-Version: 1.0
-From: <zhang.songyi@zte.com.cn>
+	id 550A8C43148; Fri,  2 Dec 2022 04:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FAD9C43470;
+	Fri,  2 Dec 2022 04:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669954217;
+	bh=HaP17cY8bC6Z7s7UbiuxYbq8Tj2YqlDJaygBIxTtgLE=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=ceAE5Mxrl5cb2x2vxCvkWYLuAKVIUSda9eDgrj/v/dsN0Vo4tt9V/HX2M1h78crwH
+	 d03jz31h574qWxU5y0Q6ocFqqylNVBdzBI9uTKgsYl38Y8QLSLrfk+o4bDBD8VeCNC
+	 hOf+Q9VR7k40jlRRbcnmmPma/ihKnDAxNqujnGgx/nv1JtJ94HtmmJ+5QA/ZoM/ljG
+	 RbLwj0w3XtuqtUeWwYO5QEIDqRz2znS9lfFPx2OW5XdmmmHyWdfTLPeNqAhADtZ0Ow
+	 Pk/KqULn6e3dQaK9ZYBlnyp5ewEhowWzruyM0J9zZHiExqyTEM2UT4whZS83/WJftY
+	 F7YUJMQy9oi4w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DDFCE52545;
+	Fri,  2 Dec 2022 04:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/5] remove label = "cpu" from DSA dt-binding
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <166995421705.16716.5360501255567828327.git-patchwork-notify@kernel.org>
+Date: Fri, 02 Dec 2022 04:10:17 +0000
+References: <20221130141040.32447-1-arinc.unal@arinc9.com>
+In-Reply-To: <20221130141040.32447-1-arinc.unal@arinc9.com>
+To: =?utf-8?b?QXLEsW7DpyDDnE5BTCA8YXJpbmMudW5hbEBhcmluYzkuY29tPg==?=@ci.codeaurora.org
 List-Id: <soc.lore.kernel.org>
-To: <soc@kernel.org>, <arnd@arndb.de>
-Cc: <zhang.songyi@zte.com.cn>, <robert.jarzmik@free.fr>, <lkundrak@v3.sk>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHB4YTogUmVtb3ZlIGRldl9lcnIoKSBhZnRlciBwbGF0Zm9ybV9nZXRfaXJxKCk=?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl2.zte.com.cn 2B22g3kg039926
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6389660B.000 by FangMail milter!
-X-FangMail-Envelope: 1669948939/4NNcfg35Hrz4xVnn/6389660B.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6389660B.000/4NNcfg35Hrz4xVnn
+Cc: vladimir.oltean@nxp.com, krzysztof.kozlowski@linaro.org, soc@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+ gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+ linux@armlinux.org.uk, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+ rjui@broadcom.com, sbranden@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+ hauke@hauke-m.de, zajec5@gmail.com, ulli.kroll@googlemail.com,
+ linus.walleij@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+ matthias.bgg@gmail.com, agross@kernel.org, andersson@kernel.org,
+ konrad.dybcio@somainline.org, geert+renesas@glider.be, magnus.damm@gmail.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, wens@csie.org,
+ jernej.skrabec@gmail.com, samuel@sholland.org, stefan@agner.ch,
+ heiko@sntech.de, tsbogend@alpha.franken.de, sergio.paracuellos@gmail.com,
+ mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+ tharvey@gateworks.com, peng.fan@nxp.com, rasmus.villemoes@prevas.dk,
+ frank-w@public-files.de, michael.riesch@wolfvision.net,
+ linux@rempel-privat.de, netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+Hello:
 
-There is no need to call the dev_err() function directly to print a
-custom message when handling an error from either the platform_get_irq()
-or platform_get_irq_byname() functions as both are going to display an
-appropriate error message in case of a failure.
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
-Reviewed-by: Lubomir Rintel <lkundrak@v3.sk>
----
- drivers/soc/pxa/ssp.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Wed, 30 Nov 2022 17:10:35 +0300 you wrote:
+> Hello folks,
+> 
+> With this patch series, we're completely getting rid of 'label = "cpu";'
+> which is not used by the DSA dt-binding at all.
+> 
+> Information for taking the patches for maintainers:
+> Patch 1: netdev maintainers (based off netdev/net-next.git main)
+> Patch 2-3: SoC maintainers (based off soc/soc.git soc/dt)
+> Patch 4: MIPS maintainers (based off mips/linux.git mips-next)
+> Patch 5: PowerPC maintainers (based off powerpc/linux.git next-test)
+> 
+> [...]
 
-diff --git a/drivers/soc/pxa/ssp.c b/drivers/soc/pxa/ssp.c
-index 93449fb3519e..bd029e838241 100644
---- a/drivers/soc/pxa/ssp.c
-+++ b/drivers/soc/pxa/ssp.c
-@@ -146,10 +146,8 @@ static int pxa_ssp_probe(struct platform_device *pdev)
- 	}
+Here is the summary with links:
+  - [1/5] dt-bindings: net: qca,ar71xx: remove label = "cpu" from examples
+    https://git.kernel.org/netdev/net-next/c/ce36d7ef4e08
+  - [2/5] arm: dts: remove label = "cpu" from DSA dt-binding
+    (no matching commit)
+  - [3/5] arm64: dts: remove label = "cpu" from DSA dt-binding
+    (no matching commit)
+  - [4/5] mips: dts: remove label = "cpu" from DSA dt-binding
+    (no matching commit)
+  - [5/5] powerpc: dts: remove label = "cpu" from DSA dt-binding
+    (no matching commit)
 
- 	ssp->irq = platform_get_irq(pdev, 0);
--	if (ssp->irq < 0) {
--		dev_err(dev, "no IRQ resource defined\n");
-+	if (ssp->irq < 0)
- 		return -ENODEV;
--	}
-
- 	if (dev->of_node) {
- 		const struct of_device_id *id =
+You are awesome, thank you!
 -- 
-2.15.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
