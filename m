@@ -1,132 +1,64 @@
-Return-Path: <SRS0=Vh7w=4C=arndb.de=arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1EF4C4332F
-	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 12:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B59C4332F
+	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 12:20:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 59EB7C433C1; Sun,  4 Dec 2022 12:10:43 +0000 (UTC)
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 501E8C433D6
-	for <soc@kernel.org>; Sun,  4 Dec 2022 12:10:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 501E8C433D6
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 284E55C00FF;
-	Sun,  4 Dec 2022 07:10:40 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 04 Dec 2022 07:10:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1670155840; x=1670242240; bh=CoGojBldvp
-	8vts1WXDufl3QTeeG6RrXZWoBhB7qP5HI=; b=Bt3t+pCvXTostL74alusXgNN2I
-	oLhoOcA34WlUK1HpM8zYrIq09NT6vJeDNBj/QdZnjHPCSY+ZUy+12uImKcNpjSPM
-	o0Qr+CIcrehvro9ebDcKpmBO8KNVO0BSLyVsZqv9jkmom0XPxGpvLeiycBhyso/8
-	pWUyCCDG5sY1PPjQhiPvm7NU5068KCV9X/PWB2P1GHq+0C96bygXAKrn+V5Ukhl7
-	s7lNWObcsg2gwh4/61eV3/1UOs8rIoQb6FB3dYEy/Ck7h0skHoTgrMXUYD92caiH
-	LVymfXQoewwpqSKzAiqVC6quJzrOTZYuY02ME7g19RNKqeqgpVhO3za9ITpg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1670155840; x=1670242240; bh=CoGojBldvp8vts1WXDufl3QTeeG6
-	RrXZWoBhB7qP5HI=; b=DxeCgNBVAAMM2gNNTDGahzTQIA8E/3lkh9laTq8iI5JI
-	oocBov/dRgohjG7gGHMhodEsrIvcUGfX70TlrC5hErvHwlfTVVTfGqKcTDhS329l
-	rD+FaM0sMNpM3jsx9euuXm8KFkx502Dwdn3v5snXh5/yrmCGjVUmHg4VFsC3IQOm
-	rLgVcc1ZcgdX7GJ2QRCaCaXSBBv1eAIhu8iM2xjO6xiG+7n3ECRMdG0oJq9aKmiI
-	6SG12snIId67D0+6rJud3wzLSmPtuY+EFsHc/yywdYZFUwR088jM6Mk0ITGUNKvn
-	qf3WI/ip6fDNv+zXdoNPQCXdP6unHlzazkw2UySLnA==
-X-ME-Sender: <xms:P46MYzvkUIE9aAbyhKZ5xYdb6E_zNjnLgcSXVed3u_JPDYFlalAFUA>
-    <xme:P46MY0dL2JSgQQQFPD_QnBCs9YwuQ0hZCxxxWbYhrsT-7PbvOO3waNCDVA8UBJ5Jd
-    sc6wTVP5DdQ_oSIErY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:P46MY2wvjqIL0WULSDsDjK2-iWTcNk577njI8u8urdyWK-INhkIjdw>
-    <xmx:P46MYyOlmJlUGLbTFFm1o1B00hIvptlHzyHb1bGuRvSjePi_cyJwKw>
-    <xmx:P46MYz-G41yzfBtB2Sie70DPf6o0D0uviTpg1dU4jIB6f2uxc1rpew>
-    <xmx:QI6MY_TKF5dWc-RYdd4P32M5mWDH0VGUvz1FAOLC-6R8Be_t2ivPsQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 623A3B60086; Sun,  4 Dec 2022 07:10:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
-In-Reply-To: <Y4wnGgMLOr04RwvU@google.com>
-References: <Y4wnGgMLOr04RwvU@google.com>
-Date: Sun, 04 Dec 2022 13:10:19 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
+	id 42A20C43147; Sun,  4 Dec 2022 12:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D8BFC433B5;
+	Sun,  4 Dec 2022 12:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1670156416;
+	bh=oSk0PVxmUqlIAjO76Gq44YTxdDNDZQc/Odideg/ZeYs=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=rITsc4M1c/H90757lrRprqtNcmenn92A6QIQfaDZqxTkWE5hoKNoAvnH778JAd1SO
+	 VxfvCKfEKkFEOx1OsnwSz15SxO/QJugvhtXZEy4FmJv3iwX4Pj+EccHIVl+2zfRlQd
+	 nCBavq+QTAkoVR5ab6iZLVURkzPcxd94VlRlWQAHppPNOpT3CxEmJKHkHMeFNzmXig
+	 AWLc4LztH630FXyM0s7L02Q+jU9PnB+U0ee2XOoxnCdQYsVajJvFfE6HeMR0wnYS0g
+	 s8QureIIYMoV+70SoOFhbhytUitQdAnjyTwfisgalJzbztLH334QbKPLvMDwTHLrqk
+	 o9PwlC1ANW2Mw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 073C0E29F40;
+	Sun,  4 Dec 2022 12:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] ARM: dts: Second cleanup for v6.2
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <167015641602.6046.18203019468787219880.git-patchwork-notify@kernel.org>
+Date: Sun, 04 Dec 2022 12:20:16 +0000
+References: <20221204082909.5649-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221204082909.5649-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, soc@kernel.org
-Cc: "Li Yang" <leoyang.li@nxp.com>, "Qiang Zhao" <qiang.zhao@nxp.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
-Content-Type: text/plain
+Cc: soc@kernel.org
 
-On Sun, Dec 4, 2022, at 05:50, Dmitry Torokhov wrote:
->
-> SoC team, the problematic patch has been in next for a while and it
-> would be great to get the fix in to make sure the driver is not broken
-> in 6.2. Thanks!
+Hello:
 
-I have no problem taking thsi patch, but I get a merge conflict that
-I'm not sure how to resolve:
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Sun,  4 Dec 2022 09:29:09 +0100 you wrote:
+> Hi,
+> 
+> I had few remaining cleanup patches for ARM DTS.  The imx and lpc32xx one did
+> not get maintainer acks, but the rest got.
+> 
+> On top of previous pull request / tag.
+> 
+> [...]
+
+Here is the summary with links:
+  - [GIT,PULL] ARM: dts: Second cleanup for v6.2
+    https://git.kernel.org/soc/soc/c/9ebe898a3732
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-@@@ -186,23 -182,27 +180,43 @@@ struct qe_pin *qe_pin_request(struct de
-        if (WARN_ON(!gc)) {
-                err = -ENODEV;
-                goto err0;
-++<<<<<<< HEAD
- +      }
- +      qe_pin->gpiod = gpiod;
- +      qe_pin->controller = gpiochip_get_data(gc);
- +      /*
- +       * FIXME: this gets the local offset on the gpio_chip so that the driver
- +       * can manipulate pin control settings through its custom API. The real
- +       * solution is to create a real pin control driver for this.
- +       */
- +      qe_pin->num = gpio_chip_hwgpio(gpiod);
- +
- +      if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
- +              pr_debug("%s: tried to get a non-qe pin\n", __func__);
- +              gpiod_put(gpiod);
-++=======
-+       } else if (!fwnode_device_is_compatible(gc->fwnode,
-+                                               "fsl,mpc8323-qe-pario-bank")) {
-+               dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
-++>>>>>>> soc: fsl: qe: request pins non-exclusively
-                err = -EINVAL;
--               goto err0;
-+       } else {
-+               qe_pin->controller = gpiochip_get_data(gc);
-+               /*
-+                * FIXME: this gets the local offset on the gpio_chip so that
-+                * the driver can manipulate pin control settings through its
-+                * custom API. The real solution is to create a real pin control
-+                * driver for this.
-+                */
-+               qe_pin->num = desc_to_gpio(gpiod) - gc->base;
-        }
-
-Could you rebase the patch on top of the soc/driver branch in the
-soc tree and send the updated version?
-
-       Arnd
