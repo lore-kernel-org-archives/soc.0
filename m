@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16FDBC4332F
-	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 00:51:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3698FC4332F
+	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 00:52:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EE2BEC433D6; Sun,  4 Dec 2022 00:51:58 +0000 (UTC)
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	id E433BC433C1; Sun,  4 Dec 2022 00:52:00 +0000 (UTC)
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D52C6C433D7
-	for <soc@kernel.org>; Sun,  4 Dec 2022 00:51:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D52C6C433D7
+	by smtp.kernel.org (Postfix) with ESMTPS id F3A57C433D6
+	for <soc@kernel.org>; Sun,  4 Dec 2022 00:51:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F3A57C433D6
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schmorgal.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=schmorgal.com
-Received: by mail-pj1-f44.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so8284169pjo.3
-        for <soc@kernel.org>; Sat, 03 Dec 2022 16:51:57 -0800 (PST)
+Received: by mail-pl1-f178.google.com with SMTP id s7so7835093plk.5
+        for <soc@kernel.org>; Sat, 03 Dec 2022 16:51:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=schmorgal.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kkp6H4X+fpDMPFBsB8sOoDo9ZeS/k8d6GtMAjtbvGiY=;
-        b=mVAcfpH3dVqP7p/ORvMYN5pgMRXcaLiqslxX34EuUqBNNhn+QFxZB2qK7OesAPRlHa
-         XNmgh+sDi1ydPwQV9oXILG49j4VmSmgNhHnBTyEsHk//o4EbjJkZrY8lKQUE3u3bX0wc
-         vBEQsDthL3NmbTrAIAgz5tE08tBHGGkYMa+2A=
+        bh=NMKDlQK6w5vM05cXeYbQoGa5PaT/kmzZOsaTUxGIqfw=;
+        b=h04sl9uqFP4yjV+BzAe/1I6f4E74BUDWAxauN4tiRzlfYJPedxIKaPzEuIKqAan0lm
+         NESPULc7hwRVj6zyICBZD/5Ur7C71H4XFZ2n/THytNgNX+F1+hZUA/FubuxOer9aRxUn
+         9NuwwRpdnvrIDh06KRn73YWOfzVQ63R6DIdSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kkp6H4X+fpDMPFBsB8sOoDo9ZeS/k8d6GtMAjtbvGiY=;
-        b=PFdnSq6EFQ34Bg6nvC3e+yfsm/u6xlsuntkc4ibpmpB6BLHZKxW304Pcpkcxj4fuhC
-         6wRgvJSYaeYkTK05mQCUyfKYJdHdAKjOCtedFCzCCKh4kei2UpDV7Z2d/7P5rVTJCv1x
-         VOWBufj2v5j7ReFYQxO7tIYCeaU+oz4OgVBc9MRVB9o4FJTA8GoP4VzzQgyIFrH+AGJ6
-         i8o/IwToZlEPZ7OUPBTJ0jBkzqAQ50r6Ml3ELnR6hps269RZQMX9M7mxiyzpauHApwyS
-         i7p8Q5hZBwC/rl5Mvtz3FqIEOWYz9R48UyRMtIuH02s8Igo+i32nnddLfXFC5pzwCkQf
-         81Iw==
-X-Gm-Message-State: ANoB5pkBvPbqOrktxiN0iNQIxjNW841rcICOB6G263af5PuZD4pujCmV
-	TeZ2Wdd7wViDoBtsNzeDQR2VXw==
-X-Google-Smtp-Source: AA0mqf5J72lgZlsrjE7EnY6shxwoidkz0ut9aVO2Zn7wbp/iIrqhDchnHtRBsf/3ccPViaK9XoheMA==
-X-Received: by 2002:a17:90a:9a85:b0:219:1353:f66 with SMTP id e5-20020a17090a9a8500b0021913530f66mr43397648pjp.190.1670115117209;
-        Sat, 03 Dec 2022 16:51:57 -0800 (PST)
+        bh=NMKDlQK6w5vM05cXeYbQoGa5PaT/kmzZOsaTUxGIqfw=;
+        b=KsDSaHzOQqX6J5Fsd4jP+TkulHeCsB/E9K/iBMdRgSHRJ0pf00JgT+nU3S6mbpXBGu
+         z8U1rO7erzfxXnHg2w/lBup4I/F4dvOiU8QaR1eAw9v1zDRpiCsjoYlUEFYbs69Nv46Y
+         vsRzpDd0O62ImkfGkL1sJ6kunRSRjjLaNja7fOhUYrwFQjT0aUQT6REkJ21oQ0q8nJW7
+         fxz0NhqTTkknoci26RFtZ5/pipaBrWebqVn8a891dqwnnAx3kEIL6vK0Wf9HIpN3WnV9
+         xAhQ0d+91X7puQ5HkE+Lj3aoCK/6K+F66rr38pXLrpMVsG3jgkxTulf4MXwr+pdJXtZh
+         U5mg==
+X-Gm-Message-State: ANoB5pnYNHnlUejfHvC+GWWst6yAkl2dtjnkspQ1bBFl3PTQ3NrlhYlz
+	5N4AmfDT6qG47jVYaIU9l/a0hA==
+X-Google-Smtp-Source: AA0mqf6J3qV2CKsySZYd8rDtLINBQW/HTYZN+JEgB2qymluBQMwEw31K6Hi9ZlDjFbsA11bMunpWrA==
+X-Received: by 2002:a17:90a:67c4:b0:213:ba14:3032 with SMTP id g4-20020a17090a67c400b00213ba143032mr89152676pjm.111.1670115119242;
+        Sat, 03 Dec 2022 16:51:59 -0800 (PST)
 Received: from doug-ryzen-5700G.. ([192.183.212.197])
-        by smtp.gmail.com with ESMTPSA id 24-20020a631358000000b004393f60db36sm6058977pgt.32.2022.12.03.16.51.56
+        by smtp.gmail.com with ESMTPSA id 24-20020a631358000000b004393f60db36sm6058977pgt.32.2022.12.03.16.51.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 16:51:56 -0800 (PST)
+        Sat, 03 Dec 2022 16:51:58 -0800 (PST)
 From: Doug Brown <doug@schmorgal.com>
 To: Russell King <linux@armlinux.org.uk>,
 	Lubomir Rintel <lkundrak@v3.sk>
@@ -58,36 +58,59 @@ Cc: soc@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	Doug Brown <doug@schmorgal.com>
-Subject: [PATCH 1/2] ARM: dts: pxa168: add timer reset and clock
-Date: Sat,  3 Dec 2022 16:51:16 -0800
-Message-Id: <20221204005117.53452-2-doug@schmorgal.com>
+Subject: [PATCH 2/2] ARM: mmp: fix timer_read delay
+Date: Sat,  3 Dec 2022 16:51:17 -0800
+Message-Id: <20221204005117.53452-3-doug@schmorgal.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221204005117.53452-1-doug@schmorgal.com>
 References: <20221204005117.53452-1-doug@schmorgal.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The timer was missing the clock and reset like the other peripherals.
-Add them to allow the timer to continue working after boot completes.
+timer_read() was using an empty 100-iteration loop to wait for the
+TMR_CVWR register to capture the latest timer counter value. The delay
+wasn't long enough. This resulted in CPU idle time being extremely
+underreported on PXA168 with CONFIG_NO_HZ_IDLE=y.
 
+Switch to the approach used in the vendor kernel, which implements the
+capture delay by reading TMR_CVWR a few times instead.
+
+Fixes: 49cbe78637eb ("[ARM] pxa: add base support for Marvell's PXA168 processor line")
 Signed-off-by: Doug Brown <doug@schmorgal.com>
 ---
- arch/arm/boot/dts/pxa168.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/mach-mmp/time.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/pxa168.dtsi b/arch/arm/boot/dts/pxa168.dtsi
-index 4fe7735c7c58..16212b912b94 100644
---- a/arch/arm/boot/dts/pxa168.dtsi
-+++ b/arch/arm/boot/dts/pxa168.dtsi
-@@ -53,6 +53,8 @@ timer0: timer@d4014000 {
- 				compatible = "mrvl,mmp-timer";
- 				reg = <0xd4014000 0x100>;
- 				interrupts = <13>;
-+				clocks = <&soc_clocks PXA168_CLK_TIMER>;
-+				resets = <&soc_clocks PXA168_CLK_TIMER>;
- 			};
+diff --git a/arch/arm/mach-mmp/time.c b/arch/arm/mach-mmp/time.c
+index 41b2e8abc9e6..708816caf859 100644
+--- a/arch/arm/mach-mmp/time.c
++++ b/arch/arm/mach-mmp/time.c
+@@ -43,18 +43,21 @@
+ static void __iomem *mmp_timer_base = TIMERS_VIRT_BASE;
  
- 			uart1: serial@d4017000 {
+ /*
+- * FIXME: the timer needs some delay to stablize the counter capture
++ * Read the timer through the CVWR register. Delay is required after requesting
++ * a read. The CR register cannot be directly read due to metastability issues
++ * documented in the PXA168 software manual.
+  */
+ static inline uint32_t timer_read(void)
+ {
+-	int delay = 100;
++	uint32_t val;
++	int delay = 3;
+ 
+ 	__raw_writel(1, mmp_timer_base + TMR_CVWR(1));
+ 
+ 	while (delay--)
+-		cpu_relax();
++		val = __raw_readl(mmp_timer_base + TMR_CVWR(1));
+ 
+-	return __raw_readl(mmp_timer_base + TMR_CVWR(1));
++	return val;
+ }
+ 
+ static u64 notrace mmp_read_sched_clock(void)
 -- 
 2.34.1
 
