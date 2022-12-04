@@ -1,159 +1,93 @@
-Return-Path: <SRS0=U/Uz=4A=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=WPFH=4C=schmorgal.com=doug@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BC31C4332F
-	for <soc@archiver.kernel.org>; Fri,  2 Dec 2022 19:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A092BC4332F
+	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 00:51:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD0C7C433C1; Fri,  2 Dec 2022 19:35:04 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 402ADC433D6;
-	Fri,  2 Dec 2022 19:35:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 402ADC433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9136923A;
-	Fri,  2 Dec 2022 11:35:01 -0800 (PST)
-Received: from bogus (unknown [10.57.5.79])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A467B3F67D;
-	Fri,  2 Dec 2022 11:34:52 -0800 (PST)
-Date: Fri, 2 Dec 2022 19:34:49 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Wang Honghui <honghui.wang@ucas.com.cn>
+	id 514A0C433B5; Sun,  4 Dec 2022 00:51:56 +0000 (UTC)
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2ADD4C433C1
+	for <soc@kernel.org>; Sun,  4 Dec 2022 00:51:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2ADD4C433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schmorgal.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=schmorgal.com
+Received: by mail-pg1-f169.google.com with SMTP id h193so7433808pgc.10
+        for <soc@kernel.org>; Sat, 03 Dec 2022 16:51:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=schmorgal.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rAIdxB/uhWaqluy9p1yExqxU/j3lY8YtbD1rShEtynw=;
+        b=cKMxtbJnpIJEqPHXyzAbx2pJ5Ikfa8MkbHc9Jm0g8oe9tiIw7/3lE+FufaAtWhDSYa
+         5huOrqN2dzcWyMfWIao7Oi/6tu3OLdn5WlEreeS4YsvxwunaKVDgMJFVe7zNi9AdqBWB
+         VkhcWF+myAhT6w3OthUYkb9Bzpf/RuNmB2ofg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rAIdxB/uhWaqluy9p1yExqxU/j3lY8YtbD1rShEtynw=;
+        b=spwTqj2DzuvVPp4mP7we3qC8gW+OiEgCqD+Gat8uWFOFUR2JXGfbibpwFfL7mQs7UP
+         iuZ7vKnUrI2t38LoPFpSnMZH9UJSSCMeOv0y9D95/Rr6Slmx3cxRcyqWl/m6fa1TN3N7
+         tRjxfJFw9/AuePy11Wt0dVCHfajOP/kcOGTB+zZkVYSiswwz6jIRbFye48UkaV1u5suB
+         5ELZG0vDW2KlHcXElRWKGtRT7BfOH+CL3X2FT4m9hRMuvRDE+BJfpX09Ex9nT28kStOl
+         bGN4I01mxve3PmYu6Ae+EETlpL+CDvh30XKdOJSpikEqv+1gy6T1P/556Q02wxTVZ5cm
+         3Wxw==
+X-Gm-Message-State: ANoB5pnJgEjh5JRX5IF4Q0ORiJ2Uka6K+1MXhw/jODje3V/+vRzRobMN
+	rVYkEz/9g7h4IRVTXzlxu6Mg3A==
+X-Google-Smtp-Source: AA0mqf4Kt49GMYnoKU8LCS8WR0zqHaeAoF29MwClPOxS6l1UBCVn1hOk6L+c8RK/tabnPMtMqc+/QQ==
+X-Received: by 2002:a63:f346:0:b0:477:b53d:19 with SMTP id t6-20020a63f346000000b00477b53d0019mr46174630pgj.166.1670115114419;
+        Sat, 03 Dec 2022 16:51:54 -0800 (PST)
+Received: from doug-ryzen-5700G.. ([192.183.212.197])
+        by smtp.gmail.com with ESMTPSA id 24-20020a631358000000b004393f60db36sm6058977pgt.32.2022.12.03.16.51.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Dec 2022 16:51:53 -0800 (PST)
+From: Doug Brown <doug@schmorgal.com>
+To: Russell King <linux@armlinux.org.uk>,
+	Lubomir Rintel <lkundrak@v3.sk>
 List-Id: <soc.lore.kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org,
-	Sudeep Holla <sudeep.holla@arm.com>,
+Cc: soc@kernel.org,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64/boot/dts and arm_scpi: add to support Phytium
- FT2004 CPU
-Message-ID: <20221202193449.vhmta6oou7oxf7gp@bogus>
-References: <0D48D1B7AC373F2F+Y4l+EOBIC9SmZD2A@TP-P15V>
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Doug Brown <doug@schmorgal.com>
+Subject: [PATCH 0/2] ARM: mmp: PXA168 timer fixes
+Date: Sat,  3 Dec 2022 16:51:15 -0800
+Message-Id: <20221204005117.53452-1-doug@schmorgal.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0D48D1B7AC373F2F+Y4l+EOBIC9SmZD2A@TP-P15V>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 02, 2022 at 12:24:48PM +0800, Wang Honghui wrote:
-> arm64/boot/dts and arm_scpi: add to support Phytium FT2004 CPU.
->
+This series contains a couple of bug fixes for the PXA168 timer. The
+clock wasn't assigned in pxa168.dtsi which eventually resulted in a hang
+at every boot after the clock was disabled. Also, the timer read
+function wasn't waiting long enough to capture the new timer value,
+which resulted in erroneous high CPU usage percent being reported with
+CONFIG_NO_HZ_IDLE=y.
 
-Krzysztof had commented pointing out some of the issues already. I will
-skip those. I am surprised as you seem to still post patches when there
-was ongoing discussions on SCPI compatibles on the other thread[1].
+I don't have any other MMP systems to test with, but I suspect the timer
+read delay problem also affected them. For example, the OLPC XO-4 kernel
+disabled CONFIG_NO_HZ due to incorrect high CPU usage reporting:
 
-> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
-> ---
->  arch/arm64/Kconfig.platforms                  |   5 +
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/phytium/Makefile          |   5 +
->  .../dts/phytium/ft2004-devboard-d4-dsk.dts    |  73 +++
->  .../dts/phytium/ft2004-generic-psci-soc.dtsi  | 469 ++++++++++++++++++
->  drivers/firmware/arm_scpi.c                   |   1 +
+http://dev.laptop.org/git/olpc-kernel/commit?h=arm-3.5&id=5bd2520f8f51fc44911ec7a86b84f41a1f3e384c
 
-You didn't respond with the reason for the need to use extra compatible
-when you can manage with generic compatible. I still think you must not
-need this change in arm_scpi as you simply can use existing compatible.
-Also if you need, it needs to be separate patch, I have already pointed
-out that.
+CCing soc@kernel.org because I didn't receive any responses when I
+submitted these last time and was hoping these fixes could get merged.
 
-> diff --git a/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi b/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi
-> new file mode 100644
-> index 000000000000..80d64e17899b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/phytium/ft2004-generic-psci-soc.dtsi
-> @@ -0,0 +1,469 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * dts file for FT-2000/4 SoC
-> + *
-> + * Copyright (C) 2018-2019, Phytium Technology Co., Ltd.
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +/ {
-> +	compatible = "phytium,ft2004";
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	aliases {
-> +		ethernet0 = &gmac0;
-> +		ethernet1 = &gmac1;
-> +	};
-> +
-> +	psci {
-> +		compatible   = "arm,psci-1.0";
-> +		method       = "smc";
+Doug Brown (2):
+  ARM: dts: pxa168: add timer reset and clock
+  ARM: mmp: fix timer_read delay
 
-Drop all the below properties they are needed only for v0.1. For v0.2 and
-above it is fixed and don't need to be described in the DTS.
-
-> +		cpu_suspend  = <0xc4000001>;
-> +		cpu_off      = <0x84000002>;
-> +		cpu_on       = <0xc4000003>;
-> +		sys_poweroff = <0x84000008>;
-> +		sys_reset    = <0x84000009>;
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <0x2>;
-> +		#size-cells = <0x0>;
-> +
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,armv8";
-
-I assume this is not model and it is real platform in which case it must
-have real processor compatible like "arm,cortex-a57" or whatever it is.
-
-> +
-> +		sram: sram@2a006000 {
-> +			compatible = "phytium,ft2004-sram-ns","mmio-sram";
-> +			reg = <0x0 0x2a006000 0x0 0x2000>;
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0x0 0x2a006000 0x2000>;
-> +
-> +			scpi_lpri: scpi-shmem@0 {
-> +				compatible = "phytium,ft2004-scpi-shmem";
-
-As mentioned multiple times, use the generic compatible "arm,scp-shmem"
-unless you need it for some specific reason in which case I would expect
-associated changes in the driver.
-
-> +				reg = <0x1000 0x800>;
-> +			};
-> +		};
-> +
-> +};
-> diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
-> index 435d0e2658a4..876eb2f9ff81 100644
-> --- a/drivers/firmware/arm_scpi.c
-> +++ b/drivers/firmware/arm_scpi.c
-> @@ -904,6 +904,7 @@ static const struct of_device_id shmem_of_match[] __maybe_unused = {
->  	{ .compatible = "amlogic,meson-axg-scp-shmem", },
->  	{ .compatible = "arm,juno-scp-shmem", },
->  	{ .compatible = "arm,scp-shmem", },
-> +	{ .compatible = "phytium,ft2004-scpi-shmem", },
-
-Drop the above if there is no other change need in the driver which means
-you are compatible with std. SCPI spec and need nothing different meaning
-no need for this extra compatible.
+ arch/arm/boot/dts/pxa168.dtsi |  2 ++
+ arch/arm/mach-mmp/time.c      | 11 +++++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
 -- 
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/all/20221201114107.2ig6pdncekzlpdq2@bogus
+2.34.1
 
