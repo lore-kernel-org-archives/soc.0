@@ -4,131 +4,259 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6396C4332F
-	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 23:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B0A3C4332F
+	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 23:59:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8D43EC433D6; Sun,  4 Dec 2022 23:55:25 +0000 (UTC)
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	id E6F80C433D6; Sun,  4 Dec 2022 23:59:34 +0000 (UTC)
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7D0AFC433C1
-	for <soc@kernel.org>; Sun,  4 Dec 2022 23:55:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7D0AFC433C1
+	by smtp.kernel.org (Postfix) with ESMTPS id BE41EC433C1
+	for <soc@kernel.org>; Sun,  4 Dec 2022 23:59:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BE41EC433C1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id c7so6413497pfc.12
-        for <soc@kernel.org>; Sun, 04 Dec 2022 15:55:24 -0800 (PST)
+Received: by mail-pj1-f43.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so13220804pjc.3
+        for <soc@kernel.org>; Sun, 04 Dec 2022 15:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gHlZGpeZlTuBVPZFLOSWn4tUqUYQHoDhbXM9z/ibwxk=;
-        b=NVPCNqIYQwJ9riFBXF9JBy0G6xWfj+kYEuyG/U/R9TRpQlNH0ftWSX5J+oxMxU5RZI
-         cp6krhYjoSadBWzHh4U0D0CbqBmnQ80pjtWYKW5USrbj4LMmMqDTZoH0WymauCZk5PLa
-         f5THaB5h+f134C/UwnY3U0fVLlycd3mzSe65ilIIIMu1/6HkyLvymnZNIzarKelrwOb/
-         MwpTEc0FPShO2Ho3FGnJUOa66Pdv1YSwUU7GxXAoOewSP7Nh+DQNm4ykxMw6zVcY7BVZ
-         RpeFezVWxW1/d3O1CJXnht0Aeh46fE4r1bb/67Z0455qAKKa3tYVWHLhNHCi6AVIiNC2
-         O6aQ==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gwAN8x9L4qNxV85BxY4GhMGOx/8SzHAhEgmFjx4Yf/8=;
+        b=AFeOI5zSc+VGjp6mFQ+kNOTNIrstPA+Qp6T5aON32yMPoKInxglA4O9x8PAvR3F3PB
+         4ZmyV0w3xLEDD+Q3mwHy9nc7OXKh63tKpNXfKntGx3lsfbFVTD4ExvqUeO1Bzu2YiE8q
+         10KOPQoIKiW2EPP8yhOo0GSwXkkKiu8S0v7qFC/UyWIfLyl+yzD8PcPf1Kdu5Ss7cU9Z
+         utkIDU9hxkecSVftxnRNutbFIn2bzEc/ppQVWYAlpgBgDtGcU2y3xl6I82D9GSkmRFl3
+         S2Hh40r1/su7zC7g/YwT6h+kX9GNbsRBweL6gnHrkjpThg4gqIk6bL6XUieLvxDboqkw
+         R+iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gHlZGpeZlTuBVPZFLOSWn4tUqUYQHoDhbXM9z/ibwxk=;
-        b=3mAvupCD/YwF8szSu2dM62VfUbOvJKpmyds2WM8x+pwmvEwhUDy3bJLiRCg1PkRAuc
-         wTDjuux8etTesF5Hq1JIQ/CKEti+WV1OgC5N5djSfDvHv3bYTZb1L8Ycp/4qCnhUgOhk
-         v+LJqMQClx1Km29ehtbJemYGZfYqKj9mtgV4Jsa9nSb33UcWG4J29MzLWLgnAMCagVTE
-         nId8yKcXhd4TvJ+/zQTJDTKoANlxcBheRhwi1VSedutM21tk5Gw6KqpwIT+rbjWvTPXD
-         O3P/Rz43WdpVlhdVErYo+lUmHFhzhXGf3V2SUhWGC5zl14EBqfsTdUtsiD207l544ugG
-         4Lyg==
-X-Gm-Message-State: ANoB5pmz1aUd+FENgT1vXTN9wdts7zggPGG+LPLmyVp6VilfONUgQ5Vw
-	YQSlHdDHJtv+8ksvDopTCzBknyub2Po=
-X-Google-Smtp-Source: AA0mqf4pMxxhbRVxKZP9kRnJWpyGf5dQqY829R1P8RGw1dgjRNh6xo628tCXNeoJ+fmMbjg0u+d7KQ==
-X-Received: by 2002:a63:cd44:0:b0:478:1391:fc43 with SMTP id a4-20020a63cd44000000b004781391fc43mr31855466pgj.431.1670198123613;
-        Sun, 04 Dec 2022 15:55:23 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwAN8x9L4qNxV85BxY4GhMGOx/8SzHAhEgmFjx4Yf/8=;
+        b=jbnLJlI65pHItRf9yWhkyCdtuTL5nYeh5YD8N6NBtSk37K9Hhk+R6YKcE71CuFwIT+
+         xSHlaAnRbecEV18/OwAh+jgWATas3ngbvAgHIX7Ae5BwXDlXWiDY+WTraQQJG/wViBom
+         6jSGjMyqQI7Sxw1j7ZlEgv1G2OHu5o46T4V2IrECRPxu2UHr/C++jBlqcwqSSBnHMp4z
+         Q8gi4CtTSw3v6StlAokOv3y+4J1IkvFKcQl6ioo3A6bi5XHN8U3hrw+58fTJa603L85E
+         T0S0sEp3qZWJkJ98jiKOBcv/9d0EntL0tGhyTnjH0Eb+KLdXu9MkLrYb8+GPxxC+nqOd
+         ZNxQ==
+X-Gm-Message-State: ANoB5pmMEUGNLFYQQV0xxwtP1/KPXrK5lxUZgxdctbgN0fxB95IWMaKq
+	0oEa1ykGr0J3XODqExrhrWg=
+X-Google-Smtp-Source: AA0mqf4IpXraLE56ol47TcW7xmGPEMG2N5z5q2/oJ2HjOwssbRIqD7Fw6iMCmCYVnbGcAolieL+fqg==
+X-Received: by 2002:a17:902:9897:b0:186:a98c:4ab8 with SMTP id s23-20020a170902989700b00186a98c4ab8mr62957137plp.118.1670198372964;
+        Sun, 04 Dec 2022 15:59:32 -0800 (PST)
 Received: from google.com ([2620:15c:9d:2:ea63:b7ba:2a89:fec])
-        by smtp.gmail.com with ESMTPSA id b65-20020a62cf44000000b0056f0753390csm8802078pfg.96.2022.12.04.15.55.22
+        by smtp.gmail.com with ESMTPSA id n6-20020a654cc6000000b004468cb97c01sm7232776pgt.56.2022.12.04.15.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 15:55:22 -0800 (PST)
-Date: Sun, 4 Dec 2022 15:55:19 -0800
+        Sun, 04 Dec 2022 15:59:32 -0800 (PST)
+Date: Sun, 4 Dec 2022 15:59:29 -0800
 From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Li Yang <leoyang.li@nxp.com>,
-	Qiang Zhao <qiang.zhao@nxp.com>,
+To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
+Cc: Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Linus Walleij <linus.walleij@linaro.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
-Message-ID: <Y40zZ8fkE9d1zbbV@google.com>
-References: <Y4wnGgMLOr04RwvU@google.com>
- <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
+Subject: [PATCH v2] soc: fsl: qe: request pins non-exclusively
+Message-ID: <Y400YXnWBdz1e/L5@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
 
-On Sun, Dec 04, 2022 at 01:10:19PM +0100, Arnd Bergmann wrote:
-> On Sun, Dec 4, 2022, at 05:50, Dmitry Torokhov wrote:
-> >
-> > SoC team, the problematic patch has been in next for a while and it
-> > would be great to get the fix in to make sure the driver is not broken
-> > in 6.2. Thanks!
-> 
-> I have no problem taking thsi patch, but I get a merge conflict that
-> I'm not sure how to resolve:
-> 
-> 
-> @@@ -186,23 -182,27 +180,43 @@@ struct qe_pin *qe_pin_request(struct de
->         if (WARN_ON(!gc)) {
->                 err = -ENODEV;
->                 goto err0;
-> ++<<<<<<< HEAD
->  +      }
->  +      qe_pin->gpiod = gpiod;
->  +      qe_pin->controller = gpiochip_get_data(gc);
->  +      /*
->  +       * FIXME: this gets the local offset on the gpio_chip so that the driver
->  +       * can manipulate pin control settings through its custom API. The real
->  +       * solution is to create a real pin control driver for this.
->  +       */
->  +      qe_pin->num = gpio_chip_hwgpio(gpiod);
->  +
->  +      if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
->  +              pr_debug("%s: tried to get a non-qe pin\n", __func__);
->  +              gpiod_put(gpiod);
-> ++=======
-> +       } else if (!fwnode_device_is_compatible(gc->fwnode,
-> +                                               "fsl,mpc8323-qe-pario-bank")) {
-> +               dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
-> ++>>>>>>> soc: fsl: qe: request pins non-exclusively
->                 err = -EINVAL;
-> -               goto err0;
-> +       } else {
-> +               qe_pin->controller = gpiochip_get_data(gc);
-> +               /*
-> +                * FIXME: this gets the local offset on the gpio_chip so that
-> +                * the driver can manipulate pin control settings through its
-> +                * custom API. The real solution is to create a real pin control
-> +                * driver for this.
-> +                */
-> +               qe_pin->num = desc_to_gpio(gpiod) - gc->base;
->         }
-> 
-> Could you rebase the patch on top of the soc/driver branch in the
-> soc tree and send the updated version?
+Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") changed
+qe_pin_request() to request and hold GPIO corresponding to a given pin.
+Unfortunately this does not work, as fhci-hcd requests these GPIOs
+first, befor calling qe_pin_request() (see
+drivers/usb/host/fhci-hcd.c::of_fhci_probe()).
+To fix it change qe_pin_request() to request GPIOs non-exclusively, and
+free them once the code determines GPIO controller and offset for each
+GPIO/pin.
 
-I see, it conflicts with:
+Also reaching deep into gpiolib implementation is not the best idea. We
+should either export gpio_chip_hwgpio() or keep converting to the global
+gpio numbers space until we fix the driver to implement proper pin
+control.
 
-	c9eb6e546a23 soc: fsl: qe: Switch to use fwnode instead of of_node
+Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
-that is in next but not in soc/driver tree/branch. OK, I'll rebase and I
-just noticed that I was leaking gpiod in case we could not locate gc
-(unlikely but still...).
+v2:
 
-Thanks.
+ - rebased on top of soc/driver. This will conflict with
+   c9eb6e546a23 soc: fsl: qe: Switch to use fwnode instead of of_node
+   found in next, the resolution is trivial: accept
+   fwnode_device_is_compatible() line found in next.
+ - fixed leak of gpiod when gc is not found
+ - dropped Linus' reviewed-by as the patch changed
+
+ drivers/soc/fsl/qe/gpio.c   | 51 +++++++++++++++++--------------------
+ drivers/usb/host/fhci-hcd.c |  2 +-
+ include/soc/fsl/qe/qe.h     |  5 ++--
+ 3 files changed, 28 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/soc/fsl/qe/gpio.c b/drivers/soc/fsl/qe/gpio.c
+index af9193e7e49b..1440922341d8 100644
+--- a/drivers/soc/fsl/qe/gpio.c
++++ b/drivers/soc/fsl/qe/gpio.c
+@@ -13,19 +13,12 @@
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+-#include <linux/of_gpio.h>
++#include <linux/of_gpio.h>	/* for of_mm_gpio_chip */
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/slab.h>
+ #include <linux/export.h>
+ #include <soc/fsl/qe/qe.h>
+-/*
+- * FIXME: this is legacy code that is accessing gpiolib internals in order
+- * to implement a custom pin controller. The proper solution is to create
+- * a real combined pin control and GPIO driver in drivers/pinctrl. However
+- * this hack is here for legacy code reasons.
+- */
+-#include "../../../gpio/gpiolib.h"
+ 
+ struct qe_gpio_chip {
+ 	struct of_mm_gpio_chip mm_gc;
+@@ -147,65 +140,70 @@ struct qe_pin {
+ 	 * something like qe_pio_controller. Someday.
+ 	 */
+ 	struct qe_gpio_chip *controller;
+-	struct gpio_desc *gpiod;
+ 	int num;
+ };
+ 
+ /**
+  * qe_pin_request - Request a QE pin
+- * @np:		device node to get a pin from
+- * @index:	index of a pin in the device tree
++ * @dev:	device to get the pin from
++ * @index:	index of the pin in the device tree
+  * Context:	non-atomic
+  *
+  * This function return qe_pin so that you could use it with the rest of
+  * the QE Pin Multiplexing API.
+  */
+-struct qe_pin *qe_pin_request(struct device_node *np, int index)
++struct qe_pin *qe_pin_request(struct device *dev, int index)
+ {
+ 	struct qe_pin *qe_pin;
+ 	struct gpio_chip *gc;
+ 	struct gpio_desc *gpiod;
++	int gpio_num;
+ 	int err;
+ 
+ 	qe_pin = kzalloc(sizeof(*qe_pin), GFP_KERNEL);
+ 	if (!qe_pin) {
+-		pr_debug("%s: can't allocate memory\n", __func__);
++		dev_dbg(dev, "%s: can't allocate memory\n", __func__);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+-	gpiod = fwnode_gpiod_get_index(of_fwnode_handle(np), NULL, index, GPIOD_ASIS, "qe");
+-	if (IS_ERR(gpiod)) {
+-		err = PTR_ERR(gpiod);
+-		goto err0;
+-	}
+-	if (!gpiod) {
+-		err = -EINVAL;
++	/*
++	 * Request gpio as nonexclusive as it was likely reserved by the
++	 * caller, and we are not planning on controlling it, we only need
++	 * the descriptor to the to the gpio chip structure.
++	 */
++	gpiod = gpiod_get_index(dev, NULL, index,
++			        GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
++	err = PTR_ERR_OR_ZERO(gpiod);
++	if (err)
+ 		goto err0;
+-	}
++
+ 	gc = gpiod_to_chip(gpiod);
++	gpio_num = desc_to_gpio(gpiod);
++	/* We no longer need this descriptor */
++	gpiod_put(gpiod);
++
+ 	if (WARN_ON(!gc)) {
+ 		err = -ENODEV;
+ 		goto err0;
+ 	}
+-	qe_pin->gpiod = gpiod;
++
+ 	qe_pin->controller = gpiochip_get_data(gc);
+ 	/*
+ 	 * FIXME: this gets the local offset on the gpio_chip so that the driver
+ 	 * can manipulate pin control settings through its custom API. The real
+ 	 * solution is to create a real pin control driver for this.
+ 	 */
+-	qe_pin->num = gpio_chip_hwgpio(gpiod);
++	qe_pin->num = gpio_num - gc->base;
+ 
+ 	if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
+-		pr_debug("%s: tried to get a non-qe pin\n", __func__);
+-		gpiod_put(gpiod);
++		dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
+ 		err = -EINVAL;
+ 		goto err0;
+ 	}
+ 	return qe_pin;
+ err0:
+ 	kfree(qe_pin);
+-	pr_debug("%s failed with status %d\n", __func__, err);
++	dev_dbg(dev, "%s failed with status %d\n", __func__, err);
+ 	return ERR_PTR(err);
+ }
+ EXPORT_SYMBOL(qe_pin_request);
+@@ -220,7 +218,6 @@ EXPORT_SYMBOL(qe_pin_request);
+  */
+ void qe_pin_free(struct qe_pin *qe_pin)
+ {
+-	gpiod_put(qe_pin->gpiod);
+ 	kfree(qe_pin);
+ }
+ EXPORT_SYMBOL(qe_pin_free);
+diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+index 95a44462bed0..1f666804fa91 100644
+--- a/drivers/usb/host/fhci-hcd.c
++++ b/drivers/usb/host/fhci-hcd.c
+@@ -651,7 +651,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
+ 	}
+ 
+ 	for (j = 0; j < NUM_PINS; j++) {
+-		fhci->pins[j] = qe_pin_request(node, j);
++		fhci->pins[j] = qe_pin_request(dev, j);
+ 		if (IS_ERR(fhci->pins[j])) {
+ 			ret = PTR_ERR(fhci->pins[j]);
+ 			dev_err(dev, "can't get pin %d: %d\n", j, ret);
+diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
+index b02e9fe69146..eb5079904cc8 100644
+--- a/include/soc/fsl/qe/qe.h
++++ b/include/soc/fsl/qe/qe.h
+@@ -172,14 +172,15 @@ static inline int par_io_data_set(u8 port, u8 pin, u8 val) { return -ENOSYS; }
+ /*
+  * Pin multiplexing functions.
+  */
++struct device;
+ struct qe_pin;
+ #ifdef CONFIG_QE_GPIO
+-extern struct qe_pin *qe_pin_request(struct device_node *np, int index);
++extern struct qe_pin *qe_pin_request(struct device *dev, int index);
+ extern void qe_pin_free(struct qe_pin *qe_pin);
+ extern void qe_pin_set_gpio(struct qe_pin *qe_pin);
+ extern void qe_pin_set_dedicated(struct qe_pin *pin);
+ #else
+-static inline struct qe_pin *qe_pin_request(struct device_node *np, int index)
++static inline struct qe_pin *qe_pin_request(struct device *dev, int index)
+ {
+ 	return ERR_PTR(-ENOSYS);
+ }
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
 
 -- 
 Dmitry
