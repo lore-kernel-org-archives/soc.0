@@ -1,266 +1,144 @@
-Return-Path: <SRS0=vPge=4C=gmail.com=dmitry.torokhov@kernel.org>
+Return-Path: <SRS0=dLfn=4C=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96A62C4321E
-	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 04:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43639C4332F
+	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 08:29:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 33CA0C433C1; Sun,  4 Dec 2022 04:50:40 +0000 (UTC)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	id EA48BC433B5; Sun,  4 Dec 2022 08:29:18 +0000 (UTC)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CB050C433D6
-	for <soc@kernel.org>; Sun,  4 Dec 2022 04:50:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CB050C433D6
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id k7so8060896pll.6
-        for <soc@kernel.org>; Sat, 03 Dec 2022 20:50:38 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id B780FC433C1
+	for <soc@kernel.org>; Sun,  4 Dec 2022 08:29:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B780FC433C1
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id f21so13161146lfm.9
+        for <soc@kernel.org>; Sun, 04 Dec 2022 00:29:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G5RXZPYNU+MGBPjRAeU3aYtU4jqo7I+GsemvhOJe/IQ=;
-        b=HZ3Jzy08bo6BR6ef6vSMmFg8qNnkSsmht0/NEpeDT2monTU4soJcvmDXBT/2uL+Ms6
-         pMDOvTtn8Cy+vUunaoSxxsr6Q6CQWtskPwC0EN/1D30EgSz0Xr2y02Yze/9W0QZs4KR2
-         1Qz2XJqQs7+fQ21Q3litDCICMKO6HF+Hs919/l9J/KIvhhP4QmFhiJvk8VbXGUZuf2BB
-         jBs91beu7NBUSDIzfOiO31Gwh5vkQxU04Mt5ch0qx1YnXU5yymfiJ769rsvFEJg77qqp
-         XtzpgW4vWao/iYKQp+aLUF3kjvQq5OPg6G3cUGHsDxwWTtePDXCmJaWY9tBCPH4f/mAo
-         Nsbw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uB/aOmhuc/lIwYa7cjtgI3/zSgF7chfDnm9pJPWT000=;
+        b=iWiyVLtGi+CbjSF3LefwU1h8UF6+xG8GaHHWyRoXaPJmF7N1pZIAL5u97lRhUtIETH
+         096bcKYKVHLB+uon57U77rW4WSFUh43v69WmCgJJuKpLqNOk+JMDYcxvW94RCyPnMbGV
+         IIENM/TiLaUonKsZ5v9eyvZ+QjPuGKaBRw45sylDdZmBriSEEvCqIE/nu2Bsh6f5hyc6
+         UY+aaHKkhujaNVpvz6ORFwrOxlo3JuDyob5T7Z1fZZDne40tpfh0UkqQ/1+7EwecBfkT
+         fzZCqzDOa/scUYHWhkSkVbmHIF/k6ln1uH5DdzqE7zG8xFJmQm9TA8XLr1MnPl57Ftzq
+         e3VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G5RXZPYNU+MGBPjRAeU3aYtU4jqo7I+GsemvhOJe/IQ=;
-        b=qgVyyyjELVxBvc/ILUWbGD1wxTxJYBJE9Npme/g7HPobKDQaQ8tgNvcCAIKlSOygPH
-         zyRj/BoOsG+IsQ4YIx2XyEKYiomLsKXK/1wmnZzeSk+OaH6m04/Fql/KVlc98b//Xj/l
-         kBOktkk/ivL+ksSQ8Bi+4f4MKGFFAluLVxbT1VmwW60bOn4o2pJaN7Vq8Xs7GFt58E0B
-         HyR/MTnHej7DnCsfrS5RvwOtgI4cxT6yosF7zx3snp28SXFLr45Aluj21LJTklgMAyNL
-         xRuvjqLyHY0qLExf0ioaGzHRiB/MPVn5IGo9Eed3gX0p3TnY8h2rA6DfNp8RULpNtHb2
-         FeNg==
-X-Gm-Message-State: ANoB5pnFiS9RwJJLq/0jyjnKedZ1DgaL/SIlgkOF7PV5zU0s4UmP9604
-	s9nusH0psl6FpFD8CoJO7As=
-X-Google-Smtp-Source: AA0mqf7wyNuhKRXDWggFHjgJr0OniHRf0fRJqFY/fRXX3I4DTnRHj/XYZ0YfuFTr9qK8qWVZ1wXsfw==
-X-Received: by 2002:a17:90a:9c5:b0:219:89c3:23a9 with SMTP id 63-20020a17090a09c500b0021989c323a9mr11145029pjo.212.1670129438001;
-        Sat, 03 Dec 2022 20:50:38 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:50bf:ab09:e932:bfd2])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170902e48a00b00189bf5dc96dsm3575476ple.230.2022.12.03.20.50.36
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uB/aOmhuc/lIwYa7cjtgI3/zSgF7chfDnm9pJPWT000=;
+        b=aZoBNCTFiL/vj2gyvSX4DvnMKCW7f6ltaOmgdxDV7DYnuiRPHuda1qGZov5BHEkYPl
+         nfapkuKJDn1+BnRkO9fCSCxQtQuDaRLlUMRNPlVOcF6PiVw4lmHMaE3N6Un0m2CtKjO7
+         vsE64Zd80YLRw9Hur1Flhnla4C8tknpVSubBOJSXyp87cjK4hBZRDTgYpSCFXm56FOg7
+         xIF5DKZ3Q5rSZqeGRq8pwMXXrQzMi1x7lbycttfvrkFXEiPOQTUHcDrBv24Q8MJ5a9Ay
+         S6AjwDcCwLE90mZqfBxZ2bvJ70mSXSHjR+D3mQdgG4Kb4z1nlXg2p/GF55v2CHanvaki
+         F3hQ==
+X-Gm-Message-State: ANoB5pnVeGV0BoNkSm5jB+STdP8S96p0M8J2fUjG7lEU3sHzRPs75fC7
+	9g7cjWH/ufqdJxRxRkz7d6oAbg==
+X-Google-Smtp-Source: AA0mqf40k/EVXZZA+iO1Hh7riI/DoSG3qM6w+9oRN7gdip/swv1D8iq3Ax6N/AL/gcGi3aarmuZA+g==
+X-Received: by 2002:a05:6512:3133:b0:4a4:7f36:c62e with SMTP id p19-20020a056512313300b004a47f36c62emr24828258lfd.389.1670142555788;
+        Sun, 04 Dec 2022 00:29:15 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z8-20020a056512370800b004a91d1b3070sm1694540lfr.308.2022.12.04.00.29.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Dec 2022 20:50:37 -0800 (PST)
-Date: Sat, 3 Dec 2022 20:50:34 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+        Sun, 04 Dec 2022 00:29:15 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
-Cc: Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
-Message-ID: <Y4wnGgMLOr04RwvU@google.com>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] ARM: dts: Second cleanup for v6.2
+Date: Sun,  4 Dec 2022 09:29:09 +0100
+Message-Id: <20221204082909.5649-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") changed
-qe_pin_request() to request and hold GPIO corresponding to a given pin.
-Unfortunately this does not work, as fhci-hcd requests these GPIOs
-first, before calling qe_pin_request() (see
-drivers/usb/host/fhci-hcd.c::of_fhci_probe()).
-To fix it change qe_pin_request() to request GPIOs non-exclusively, and
-free them once the code determines GPIO controller and offset for each
-GPIO/pin.
+Hi,
 
-Also reaching deep into gpiolib implementation is not the best idea. We
-should either export gpio_chip_hwgpio() or keep converting to the global
-gpio numbers space until we fix the driver to implement proper pin
-control.
+I had few remaining cleanup patches for ARM DTS.  The imx and lpc32xx one did
+not get maintainer acks, but the rest got.
 
-Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
+On top of previous pull request / tag.
 
-SoC team, the problematic patch has been in next for a while and it
-would be great to get the fix in to make sure the driver is not broken
-in 6.2. Thanks!
-
- drivers/soc/fsl/qe/gpio.c   | 71 ++++++++++++++++++-------------------
- drivers/usb/host/fhci-hcd.c |  2 +-
- include/soc/fsl/qe/qe.h     |  5 +--
- 3 files changed, 38 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/soc/fsl/qe/gpio.c b/drivers/soc/fsl/qe/gpio.c
-index 0ee887f89deb..5bb71a2b5b7a 100644
---- a/drivers/soc/fsl/qe/gpio.c
-+++ b/drivers/soc/fsl/qe/gpio.c
-@@ -13,7 +13,7 @@
- #include <linux/err.h>
- #include <linux/io.h>
- #include <linux/of.h>
--#include <linux/of_gpio.h>
-+#include <linux/of_gpio.h>	/* for of_mm_gpio_chip */
- #include <linux/gpio/consumer.h>
- #include <linux/gpio/driver.h>
- #include <linux/slab.h>
-@@ -21,13 +21,6 @@
- #include <linux/property.h>
- 
- #include <soc/fsl/qe/qe.h>
--/*
-- * FIXME: this is legacy code that is accessing gpiolib internals in order
-- * to implement a custom pin controller. The proper solution is to create
-- * a real combined pin control and GPIO driver in drivers/pinctrl. However
-- * this hack is here for legacy code reasons.
-- */
--#include "../../../gpio/gpiolib.h"
- 
- struct qe_gpio_chip {
- 	struct of_mm_gpio_chip mm_gc;
-@@ -149,20 +142,19 @@ struct qe_pin {
- 	 * something like qe_pio_controller. Someday.
- 	 */
- 	struct qe_gpio_chip *controller;
--	struct gpio_desc *gpiod;
- 	int num;
- };
- 
- /**
-  * qe_pin_request - Request a QE pin
-- * @np:		device node to get a pin from
-- * @index:	index of a pin in the device tree
-+ * @dev:	device to get the pin from
-+ * @index:	index of the pin in the device tree
-  * Context:	non-atomic
-  *
-  * This function return qe_pin so that you could use it with the rest of
-  * the QE Pin Multiplexing API.
-  */
--struct qe_pin *qe_pin_request(struct device_node *np, int index)
-+struct qe_pin *qe_pin_request(struct device *dev, int index)
- {
- 	struct qe_pin *qe_pin;
- 	struct gpio_chip *gc;
-@@ -171,40 +163,46 @@ struct qe_pin *qe_pin_request(struct device_node *np, int index)
- 
- 	qe_pin = kzalloc(sizeof(*qe_pin), GFP_KERNEL);
- 	if (!qe_pin) {
--		pr_debug("%s: can't allocate memory\n", __func__);
-+		dev_dbg(dev, "%s: can't allocate memory\n", __func__);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
--	gpiod = fwnode_gpiod_get_index(of_fwnode_handle(np), NULL, index, GPIOD_ASIS, "qe");
--	if (IS_ERR(gpiod)) {
--		err = PTR_ERR(gpiod);
--		goto err0;
--	}
--	if (!gpiod) {
--		err = -EINVAL;
-+	/*
-+	 * Request gpio as nonexclusive as it was likely was reserved by
-+	 * the caller, and we are not planning on controlling it, we only
-+	 * need the descriptor to the to the gpio chip structure.
-+	 */
-+	gpiod = gpiod_get_index(dev, NULL, index,
-+			        GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
-+	err = PTR_ERR_OR_ZERO(gpiod);
-+	if (err)
- 		goto err0;
--	}
-+
- 	gc = gpiod_to_chip(gpiod);
- 	if (WARN_ON(!gc)) {
- 		err = -ENODEV;
- 		goto err0;
--	}
--	qe_pin->gpiod = gpiod;
--	qe_pin->controller = gpiochip_get_data(gc);
--	/*
--	 * FIXME: this gets the local offset on the gpio_chip so that the driver
--	 * can manipulate pin control settings through its custom API. The real
--	 * solution is to create a real pin control driver for this.
--	 */
--	qe_pin->num = gpio_chip_hwgpio(gpiod);
--
--	if (!fwnode_device_is_compatible(gc->fwnode, "fsl,mpc8323-qe-pario-bank")) {
--		pr_debug("%s: tried to get a non-qe pin\n", __func__);
--		gpiod_put(gpiod);
-+	} else if (!fwnode_device_is_compatible(gc->fwnode,
-+						"fsl,mpc8323-qe-pario-bank")) {
-+		dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
- 		err = -EINVAL;
--		goto err0;
-+	} else {
-+		qe_pin->controller = gpiochip_get_data(gc);
-+		/*
-+		 * FIXME: this gets the local offset on the gpio_chip so that
-+		 * the driver can manipulate pin control settings through its
-+		 * custom API. The real solution is to create a real pin control
-+		 * driver for this.
-+		 */
-+		qe_pin->num = desc_to_gpio(gpiod) - gc->base;
- 	}
--	return qe_pin;
-+
-+	/* We no longer need this descriptor */
-+	gpiod_put(gpiod);
-+
-+	if (!err)
-+		return qe_pin;
-+
- err0:
- 	kfree(qe_pin);
- 	pr_debug("%s failed with status %d\n", __func__, err);
-@@ -222,7 +220,6 @@ EXPORT_SYMBOL(qe_pin_request);
-  */
- void qe_pin_free(struct qe_pin *qe_pin)
- {
--	gpiod_put(qe_pin->gpiod);
- 	kfree(qe_pin);
- }
- EXPORT_SYMBOL(qe_pin_free);
-diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
-index 64a64140c2fd..92794ffc25c8 100644
---- a/drivers/usb/host/fhci-hcd.c
-+++ b/drivers/usb/host/fhci-hcd.c
-@@ -651,7 +651,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
- 	}
- 
- 	for (j = 0; j < NUM_PINS; j++) {
--		fhci->pins[j] = qe_pin_request(node, j);
-+		fhci->pins[j] = qe_pin_request(dev, j);
- 		if (IS_ERR(fhci->pins[j])) {
- 			ret = PTR_ERR(fhci->pins[j]);
- 			dev_err(dev, "can't get pin %d: %d\n", j, ret);
-diff --git a/include/soc/fsl/qe/qe.h b/include/soc/fsl/qe/qe.h
-index b02e9fe69146..eb5079904cc8 100644
---- a/include/soc/fsl/qe/qe.h
-+++ b/include/soc/fsl/qe/qe.h
-@@ -172,14 +172,15 @@ static inline int par_io_data_set(u8 port, u8 pin, u8 val) { return -ENOSYS; }
- /*
-  * Pin multiplexing functions.
-  */
-+struct device;
- struct qe_pin;
- #ifdef CONFIG_QE_GPIO
--extern struct qe_pin *qe_pin_request(struct device_node *np, int index);
-+extern struct qe_pin *qe_pin_request(struct device *dev, int index);
- extern void qe_pin_free(struct qe_pin *qe_pin);
- extern void qe_pin_set_gpio(struct qe_pin *qe_pin);
- extern void qe_pin_set_dedicated(struct qe_pin *pin);
- #else
--static inline struct qe_pin *qe_pin_request(struct device_node *np, int index)
-+static inline struct qe_pin *qe_pin_request(struct device *dev, int index)
- {
- 	return ERR_PTR(-ENOSYS);
- }
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+Best regards,
+Krzysztof
 
 
--- 
-Dmitry
+The following changes since commit 001b38cea30961e0f4e562a1872f2409a8024ff0:
+
+  dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename (2022-11-10 10:18:49 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.2-2
+
+for you to fetch changes up to 91bf30a42b16257f98345c9ba519d72babbbaf8a:
+
+  ARM: dts: sti: align LED node names with dtschema (2022-12-01 18:04:47 +0100)
+
+----------------------------------------------------------------
+Minor improvements in ARM DTS for v6.2, part two
+
+Few cleanups which should not have any functional impact:
+1. Trim addresses in "reg" to 8 digits.
+2. Align LED node names with dtschema.
+3. omap: echo: Use preferred enable-gpios property for LP5523 LED.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (8):
+      ARM: dts: omap: trim addresses to 8 digits
+      ARM: dts: imx: trim addresses to 8 digits
+      ARM: dts: lpc32xx: trim addresses to 8 digits
+      ARM: dts: logicpd: align LED node names with dtschema
+      ARM: dts: omap: align LED node names with dtschema
+      ARM: dts: omap: echo: use preferred enable-gpios for LP5523 LED
+      ARM: dts: am335x: align LED node names with dtschema
+      ARM: dts: sti: align LED node names with dtschema
+
+ arch/arm/boot/dts/am335x-baltos-leds.dtsi            | 6 +++---
+ arch/arm/boot/dts/am335x-evm.dts                     | 2 +-
+ arch/arm/boot/dts/am335x-igep0033.dtsi               | 4 ++--
+ arch/arm/boot/dts/am335x-pocketbeagle.dts            | 8 ++++----
+ arch/arm/boot/dts/am437x-idk-evm.dts                 | 2 +-
+ arch/arm/boot/dts/am437x-sk-evm.dts                  | 2 +-
+ arch/arm/boot/dts/am43x-epos-evm.dts                 | 2 +-
+ arch/arm/boot/dts/am57xx-idk-common.dtsi             | 2 +-
+ arch/arm/boot/dts/dra7-evm-common.dtsi               | 2 +-
+ arch/arm/boot/dts/dra7-evm.dts                       | 2 +-
+ arch/arm/boot/dts/dra72-evm-common.dtsi              | 4 ++--
+ arch/arm/boot/dts/imx6sx.dtsi                        | 2 +-
+ arch/arm/boot/dts/logicpd-torpedo-som.dtsi           | 2 +-
+ arch/arm/boot/dts/lpc32xx.dtsi                       | 2 +-
+ arch/arm/boot/dts/omap3-beagle.dts                   | 6 +++---
+ arch/arm/boot/dts/omap3-devkit8000-common.dtsi       | 8 ++++----
+ arch/arm/boot/dts/omap3-echo.dts                     | 2 +-
+ arch/arm/boot/dts/omap3-n900.dts                     | 2 +-
+ arch/arm/boot/dts/omap3-overo-alto35-common.dtsi     | 8 ++++----
+ arch/arm/boot/dts/omap3-overo-chestnut43-common.dtsi | 4 ++--
+ arch/arm/boot/dts/omap3-overo-gallop43-common.dtsi   | 4 ++--
+ arch/arm/boot/dts/omap3-overo-palo35-common.dtsi     | 4 ++--
+ arch/arm/boot/dts/omap3-overo-palo43-common.dtsi     | 4 ++--
+ arch/arm/boot/dts/omap3-overo-summit-common.dtsi     | 2 +-
+ arch/arm/boot/dts/omap3-overo-tobi-common.dtsi       | 2 +-
+ arch/arm/boot/dts/omap4-panda-common.dtsi            | 4 ++--
+ arch/arm/boot/dts/omap4-panda-es.dts                 | 4 ++--
+ arch/arm/boot/dts/stih410-b2260.dts                  | 8 ++++----
+ arch/arm/boot/dts/stih418-b2199.dts                  | 4 ++--
+ arch/arm/boot/dts/stih418-b2264.dts                  | 2 +-
+ arch/arm/boot/dts/stihxxx-b2120.dtsi                 | 4 ++--
+ 31 files changed, 57 insertions(+), 57 deletions(-)
