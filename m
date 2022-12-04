@@ -1,144 +1,132 @@
-Return-Path: <SRS0=dLfn=4C=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Vh7w=4C=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43639C4332F
-	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 08:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1EF4C4332F
+	for <soc@archiver.kernel.org>; Sun,  4 Dec 2022 12:10:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EA48BC433B5; Sun,  4 Dec 2022 08:29:18 +0000 (UTC)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 59EB7C433C1; Sun,  4 Dec 2022 12:10:43 +0000 (UTC)
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B780FC433C1
-	for <soc@kernel.org>; Sun,  4 Dec 2022 08:29:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B780FC433C1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id f21so13161146lfm.9
-        for <soc@kernel.org>; Sun, 04 Dec 2022 00:29:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uB/aOmhuc/lIwYa7cjtgI3/zSgF7chfDnm9pJPWT000=;
-        b=iWiyVLtGi+CbjSF3LefwU1h8UF6+xG8GaHHWyRoXaPJmF7N1pZIAL5u97lRhUtIETH
-         096bcKYKVHLB+uon57U77rW4WSFUh43v69WmCgJJuKpLqNOk+JMDYcxvW94RCyPnMbGV
-         IIENM/TiLaUonKsZ5v9eyvZ+QjPuGKaBRw45sylDdZmBriSEEvCqIE/nu2Bsh6f5hyc6
-         UY+aaHKkhujaNVpvz6ORFwrOxlo3JuDyob5T7Z1fZZDne40tpfh0UkqQ/1+7EwecBfkT
-         fzZCqzDOa/scUYHWhkSkVbmHIF/k6ln1uH5DdzqE7zG8xFJmQm9TA8XLr1MnPl57Ftzq
-         e3VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uB/aOmhuc/lIwYa7cjtgI3/zSgF7chfDnm9pJPWT000=;
-        b=aZoBNCTFiL/vj2gyvSX4DvnMKCW7f6ltaOmgdxDV7DYnuiRPHuda1qGZov5BHEkYPl
-         nfapkuKJDn1+BnRkO9fCSCxQtQuDaRLlUMRNPlVOcF6PiVw4lmHMaE3N6Un0m2CtKjO7
-         vsE64Zd80YLRw9Hur1Flhnla4C8tknpVSubBOJSXyp87cjK4hBZRDTgYpSCFXm56FOg7
-         xIF5DKZ3Q5rSZqeGRq8pwMXXrQzMi1x7lbycttfvrkFXEiPOQTUHcDrBv24Q8MJ5a9Ay
-         S6AjwDcCwLE90mZqfBxZ2bvJ70mSXSHjR+D3mQdgG4Kb4z1nlXg2p/GF55v2CHanvaki
-         F3hQ==
-X-Gm-Message-State: ANoB5pnVeGV0BoNkSm5jB+STdP8S96p0M8J2fUjG7lEU3sHzRPs75fC7
-	9g7cjWH/ufqdJxRxRkz7d6oAbg==
-X-Google-Smtp-Source: AA0mqf40k/EVXZZA+iO1Hh7riI/DoSG3qM6w+9oRN7gdip/swv1D8iq3Ax6N/AL/gcGi3aarmuZA+g==
-X-Received: by 2002:a05:6512:3133:b0:4a4:7f36:c62e with SMTP id p19-20020a056512313300b004a47f36c62emr24828258lfd.389.1670142555788;
-        Sun, 04 Dec 2022 00:29:15 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z8-20020a056512370800b004a91d1b3070sm1694540lfr.308.2022.12.04.00.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 00:29:15 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 501E8C433D6
+	for <soc@kernel.org>; Sun,  4 Dec 2022 12:10:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 501E8C433D6
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 284E55C00FF;
+	Sun,  4 Dec 2022 07:10:40 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 04 Dec 2022 07:10:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1670155840; x=1670242240; bh=CoGojBldvp
+	8vts1WXDufl3QTeeG6RrXZWoBhB7qP5HI=; b=Bt3t+pCvXTostL74alusXgNN2I
+	oLhoOcA34WlUK1HpM8zYrIq09NT6vJeDNBj/QdZnjHPCSY+ZUy+12uImKcNpjSPM
+	o0Qr+CIcrehvro9ebDcKpmBO8KNVO0BSLyVsZqv9jkmom0XPxGpvLeiycBhyso/8
+	pWUyCCDG5sY1PPjQhiPvm7NU5068KCV9X/PWB2P1GHq+0C96bygXAKrn+V5Ukhl7
+	s7lNWObcsg2gwh4/61eV3/1UOs8rIoQb6FB3dYEy/Ck7h0skHoTgrMXUYD92caiH
+	LVymfXQoewwpqSKzAiqVC6quJzrOTZYuY02ME7g19RNKqeqgpVhO3za9ITpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1670155840; x=1670242240; bh=CoGojBldvp8vts1WXDufl3QTeeG6
+	RrXZWoBhB7qP5HI=; b=DxeCgNBVAAMM2gNNTDGahzTQIA8E/3lkh9laTq8iI5JI
+	oocBov/dRgohjG7gGHMhodEsrIvcUGfX70TlrC5hErvHwlfTVVTfGqKcTDhS329l
+	rD+FaM0sMNpM3jsx9euuXm8KFkx502Dwdn3v5snXh5/yrmCGjVUmHg4VFsC3IQOm
+	rLgVcc1ZcgdX7GJ2QRCaCaXSBBv1eAIhu8iM2xjO6xiG+7n3ECRMdG0oJq9aKmiI
+	6SG12snIId67D0+6rJud3wzLSmPtuY+EFsHc/yywdYZFUwR088jM6Mk0ITGUNKvn
+	qf3WI/ip6fDNv+zXdoNPQCXdP6unHlzazkw2UySLnA==
+X-ME-Sender: <xms:P46MYzvkUIE9aAbyhKZ5xYdb6E_zNjnLgcSXVed3u_JPDYFlalAFUA>
+    <xme:P46MY0dL2JSgQQQFPD_QnBCs9YwuQ0hZCxxxWbYhrsT-7PbvOO3waNCDVA8UBJ5Jd
+    sc6wTVP5DdQ_oSIErY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgdefkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:P46MY2wvjqIL0WULSDsDjK2-iWTcNk577njI8u8urdyWK-INhkIjdw>
+    <xmx:P46MYyOlmJlUGLbTFFm1o1B00hIvptlHzyHb1bGuRvSjePi_cyJwKw>
+    <xmx:P46MYz-G41yzfBtB2Sie70DPf6o0D0uviTpg1dU4jIB6f2uxc1rpew>
+    <xmx:QI6MY_TKF5dWc-RYdd4P32M5mWDH0VGUvz1FAOLC-6R8Be_t2ivPsQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 623A3B60086; Sun,  4 Dec 2022 07:10:39 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <81a7715b-559f-4c5c-bdb6-1aa00d409155@app.fastmail.com>
+In-Reply-To: <Y4wnGgMLOr04RwvU@google.com>
+References: <Y4wnGgMLOr04RwvU@google.com>
+Date: Sun, 04 Dec 2022 13:10:19 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] ARM: dts: Second cleanup for v6.2
-Date: Sun,  4 Dec 2022 09:29:09 +0100
-Message-Id: <20221204082909.5649-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, soc@kernel.org
+Cc: "Li Yang" <leoyang.li@nxp.com>, "Qiang Zhao" <qiang.zhao@nxp.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RESEND PATCH] soc: fsl: qe: request pins non-exclusively
+Content-Type: text/plain
 
-Hi,
+On Sun, Dec 4, 2022, at 05:50, Dmitry Torokhov wrote:
+>
+> SoC team, the problematic patch has been in next for a while and it
+> would be great to get the fix in to make sure the driver is not broken
+> in 6.2. Thanks!
 
-I had few remaining cleanup patches for ARM DTS.  The imx and lpc32xx one did
-not get maintainer acks, but the rest got.
-
-On top of previous pull request / tag.
-
-Best regards,
-Krzysztof
+I have no problem taking thsi patch, but I get a merge conflict that
+I'm not sure how to resolve:
 
 
-The following changes since commit 001b38cea30961e0f4e562a1872f2409a8024ff0:
+@@@ -186,23 -182,27 +180,43 @@@ struct qe_pin *qe_pin_request(struct de
+        if (WARN_ON(!gc)) {
+                err = -ENODEV;
+                goto err0;
+++<<<<<<< HEAD
+ +      }
+ +      qe_pin->gpiod = gpiod;
+ +      qe_pin->controller = gpiochip_get_data(gc);
+ +      /*
+ +       * FIXME: this gets the local offset on the gpio_chip so that the driver
+ +       * can manipulate pin control settings through its custom API. The real
+ +       * solution is to create a real pin control driver for this.
+ +       */
+ +      qe_pin->num = gpio_chip_hwgpio(gpiod);
+ +
+ +      if (!of_device_is_compatible(gc->of_node, "fsl,mpc8323-qe-pario-bank")) {
+ +              pr_debug("%s: tried to get a non-qe pin\n", __func__);
+ +              gpiod_put(gpiod);
+++=======
++       } else if (!fwnode_device_is_compatible(gc->fwnode,
++                                               "fsl,mpc8323-qe-pario-bank")) {
++               dev_dbg(dev, "%s: tried to get a non-qe pin\n", __func__);
+++>>>>>>> soc: fsl: qe: request pins non-exclusively
+                err = -EINVAL;
+-               goto err0;
++       } else {
++               qe_pin->controller = gpiochip_get_data(gc);
++               /*
++                * FIXME: this gets the local offset on the gpio_chip so that
++                * the driver can manipulate pin control settings through its
++                * custom API. The real solution is to create a real pin control
++                * driver for this.
++                */
++               qe_pin->num = desc_to_gpio(gpiod) - gc->base;
+        }
 
-  dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename (2022-11-10 10:18:49 +0100)
+Could you rebase the patch on top of the soc/driver branch in the
+soc tree and send the updated version?
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.2-2
-
-for you to fetch changes up to 91bf30a42b16257f98345c9ba519d72babbbaf8a:
-
-  ARM: dts: sti: align LED node names with dtschema (2022-12-01 18:04:47 +0100)
-
-----------------------------------------------------------------
-Minor improvements in ARM DTS for v6.2, part two
-
-Few cleanups which should not have any functional impact:
-1. Trim addresses in "reg" to 8 digits.
-2. Align LED node names with dtschema.
-3. omap: echo: Use preferred enable-gpios property for LP5523 LED.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (8):
-      ARM: dts: omap: trim addresses to 8 digits
-      ARM: dts: imx: trim addresses to 8 digits
-      ARM: dts: lpc32xx: trim addresses to 8 digits
-      ARM: dts: logicpd: align LED node names with dtschema
-      ARM: dts: omap: align LED node names with dtschema
-      ARM: dts: omap: echo: use preferred enable-gpios for LP5523 LED
-      ARM: dts: am335x: align LED node names with dtschema
-      ARM: dts: sti: align LED node names with dtschema
-
- arch/arm/boot/dts/am335x-baltos-leds.dtsi            | 6 +++---
- arch/arm/boot/dts/am335x-evm.dts                     | 2 +-
- arch/arm/boot/dts/am335x-igep0033.dtsi               | 4 ++--
- arch/arm/boot/dts/am335x-pocketbeagle.dts            | 8 ++++----
- arch/arm/boot/dts/am437x-idk-evm.dts                 | 2 +-
- arch/arm/boot/dts/am437x-sk-evm.dts                  | 2 +-
- arch/arm/boot/dts/am43x-epos-evm.dts                 | 2 +-
- arch/arm/boot/dts/am57xx-idk-common.dtsi             | 2 +-
- arch/arm/boot/dts/dra7-evm-common.dtsi               | 2 +-
- arch/arm/boot/dts/dra7-evm.dts                       | 2 +-
- arch/arm/boot/dts/dra72-evm-common.dtsi              | 4 ++--
- arch/arm/boot/dts/imx6sx.dtsi                        | 2 +-
- arch/arm/boot/dts/logicpd-torpedo-som.dtsi           | 2 +-
- arch/arm/boot/dts/lpc32xx.dtsi                       | 2 +-
- arch/arm/boot/dts/omap3-beagle.dts                   | 6 +++---
- arch/arm/boot/dts/omap3-devkit8000-common.dtsi       | 8 ++++----
- arch/arm/boot/dts/omap3-echo.dts                     | 2 +-
- arch/arm/boot/dts/omap3-n900.dts                     | 2 +-
- arch/arm/boot/dts/omap3-overo-alto35-common.dtsi     | 8 ++++----
- arch/arm/boot/dts/omap3-overo-chestnut43-common.dtsi | 4 ++--
- arch/arm/boot/dts/omap3-overo-gallop43-common.dtsi   | 4 ++--
- arch/arm/boot/dts/omap3-overo-palo35-common.dtsi     | 4 ++--
- arch/arm/boot/dts/omap3-overo-palo43-common.dtsi     | 4 ++--
- arch/arm/boot/dts/omap3-overo-summit-common.dtsi     | 2 +-
- arch/arm/boot/dts/omap3-overo-tobi-common.dtsi       | 2 +-
- arch/arm/boot/dts/omap4-panda-common.dtsi            | 4 ++--
- arch/arm/boot/dts/omap4-panda-es.dts                 | 4 ++--
- arch/arm/boot/dts/stih410-b2260.dts                  | 8 ++++----
- arch/arm/boot/dts/stih418-b2199.dts                  | 4 ++--
- arch/arm/boot/dts/stih418-b2264.dts                  | 2 +-
- arch/arm/boot/dts/stihxxx-b2120.dtsi                 | 4 ++--
- 31 files changed, 57 insertions(+), 57 deletions(-)
+       Arnd
