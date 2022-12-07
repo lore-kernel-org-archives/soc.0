@@ -1,64 +1,65 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBB5FC352A1
-	for <soc@archiver.kernel.org>; Wed,  7 Dec 2022 15:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3753C63708
+	for <soc@archiver.kernel.org>; Wed,  7 Dec 2022 21:20:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8957EC43145; Wed,  7 Dec 2022 15:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF5AC433C1;
-	Wed,  7 Dec 2022 15:43:39 +0000 (UTC)
+	id 73FD1C433D6; Wed,  7 Dec 2022 21:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52B72C43470;
+	Wed,  7 Dec 2022 21:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670427820;
-	bh=nkDrrL9+uzqmd46oaJsD6VT2l7LnraBR2Mn/qgKFKoI=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=K0adPwK7kBLbKYAu99U5gHSkWARjQqGBquBS+I+rVAR99BQG5oi26bBEY9H5G8PBL
-	 cKBI2pVltDJkZmu2hbYmSKmFH/4dHXkiHIzmvQHqMi/d8eE/pMEz9xJuMsifYJI5DS
-	 yXziK2/9DGbS/wOmflOHXFy9vlq9MmXostV9e/9ByLH2qNBgBR1kZ4X5k62uAFJJCC
-	 8rwXie5wl22HmY1tGrHTKwnq80oTHNP5VK39mKtjG0qN5KaHRuSY4Ps14C87O7VPDG
-	 fZt5yeZ5Yik2iI981HEYXKa0+dreXkIzzJCoORsmrZY/lYvcn7uLYaBNVlM21XUbXO
-	 eYWTgdYY2WHlw==
-From: Bjorn Andersson <andersson@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Subject: [GIT PULL] More Qualcomm ARM64 defconfig updates for 6.2
-Date: Wed,  7 Dec 2022 09:43:39 -0600
-Message-Id: <20221207154339.3234068-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.37.1
+	s=k20201202; t=1670448029;
+	bh=mx14nShK8e8eYbVo71t6P4vkSBlenXOeAMAzKoXu/CQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Vd4N6XHlxqOVJjXK0iEo9m241jrQs3AV8iOMiN5hMSTaQTxyD2aj6TA3SD8UhZfVh
+	 LN6hNwnPr+H8FM7+I+0AxiP/WPmaeDD6fKlIepfjDyeVtQzS1m6hTLN8FhLN3q23OE
+	 89DBjRh+Benql/HjWwHxjEuGJuhrn2R7C99pDVj1byl2Se+3eMSAVOb/VQ0abEJSCl
+	 pki7gW0Pdbl6kdg721wlsxsjFJNyUFJ8ExRfjZDANh/y9MJhjI84bB5PcXSDpUPE0A
+	 cvDOlWSj18WVe47LoIJSgA8kowfOJPjzaUUlNhmk/igLDmYZQcBo+hanUFV/vdDhkF
+	 9Tr38DGGPmLFA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19700E29F38;
+	Wed,  7 Dec 2022 21:20:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] More Qualcomm ARM64 defconfig updates for 6.2
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <167044802910.32577.14545368426321935770.git-patchwork-notify@kernel.org>
+Date: Wed, 07 Dec 2022 21:20:29 +0000
+References: <20221207154339.3234068-1-andersson@kernel.org>
+In-Reply-To: <20221207154339.3234068-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-The following changes since commit c03fa428ac6e439afa1d437776365a632ce24262:
+Hello:
 
-  arm64: defconfig: build-in Qualcomm SC7180 and SM8450 interconnects (2022-11-05 22:35:12 -0500)
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-are available in the Git repository at:
+On Wed,  7 Dec 2022 09:43:39 -0600 you wrote:
+> The following changes since commit c03fa428ac6e439afa1d437776365a632ce24262:
+> 
+>   arm64: defconfig: build-in Qualcomm SC7180 and SM8450 interconnects (2022-11-05 22:35:12 -0500)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-defconfig-for-6.2-2
+> 
+> [...]
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-defconfig-for-6.2-2
+Here is the summary with links:
+  - [GIT,PULL] More Qualcomm ARM64 defconfig updates for 6.2
+    https://git.kernel.org/soc/soc/c/93b8c91e4cdb
 
-for you to fetch changes up to 5d4bf8607be1683b09378ff1dba71cfe3d4ff6ec:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  arm64: defconfig: Enable Qualcomm SM6115 / SM4250 GCC and Pinctrl (2022-12-05 16:37:15 -0600)
 
-----------------------------------------------------------------
-More Qualcomm ARM64 defconfig updates for 6.2
-
-This enables Globalc Clock Controller (GCC) and TLMM pinctrl for SM6115
-and SM4250.
-
-----------------------------------------------------------------
-Bhupesh Sharma (1):
-      arm64: defconfig: Enable Qualcomm SM6115 / SM4250 GCC and Pinctrl
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
