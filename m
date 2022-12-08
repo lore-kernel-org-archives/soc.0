@@ -1,103 +1,98 @@
-Return-Path: <SRS0=FsQB=4G=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=J9xG=4G=marcan.st=marcan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CDD1C4332F
-	for <soc@archiver.kernel.org>; Thu,  8 Dec 2022 13:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 240AEC4332F
+	for <soc@archiver.kernel.org>; Thu,  8 Dec 2022 16:25:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7F6BEC433D6; Thu,  8 Dec 2022 13:23:12 +0000 (UTC)
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+	id E41B4C433F0; Thu,  8 Dec 2022 16:25:37 +0000 (UTC)
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B25D6C433C1
-	for <soc@kernel.org>; Thu,  8 Dec 2022 13:23:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B25D6C433C1
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 5A00A3200917;
-	Thu,  8 Dec 2022 08:23:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 08 Dec 2022 08:23:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:message-id
-	:mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1670505787; x=1670592187; bh=86NztHs9QVX/n93qJfYm/s7/pby6qjrKy/D
-	ct4MFEvM=; b=hI/3Sg1/GdBfxNMFsIa5cqTzUSo210/cc/BCASPSTZpe7XSPovA
-	NhrsU/JH61i1otSd+PSr+bh5IQQWEioASuB2YC9ff5xVvQOs5xC/5cTaLyueMOG5
-	AFkBx2XPJMfh1G7lUEvrzCIkMgE7C8g2E7J3IY7APBn/0BU4Wrn3I7iMwzDVnrCW
-	2bE1w9VOs2RRZXMFlaZj+H3k7UZkLzOILXDPw6vY8ENUt2GDhYmHMuROYXtRhNAE
-	CoierpoudtgoLhPmA49givAHfrIIZfV2MRYnDidI+FV2n1+HTNi1+PdBa0gR9GnW
-	kvG7e6h1ruxu7x1Smmcld2kijuJQQlDog3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:message-id:mime-version
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1670505787; x=
-	1670592187; bh=86NztHs9QVX/n93qJfYm/s7/pby6qjrKy/Dct4MFEvM=; b=w
-	Fd6NpQgsqe+ZhM8kTFTOq87R9Og2Q1craJFjVm4qW3kE0UlUATPxJVFQO9SSBlNG
-	js7jg+BZoSDPhIrPV6CW6E5Z5OuFu9v20ouzM2Et2I0F8vjR2FetJdMYwkZn6THC
-	tGFTS6Ic1DVyrIGDGL7Psthex2Bg2gpWR6AVUyVDsM/fthPlNWDIAls1ZBnE0ROq
-	qlQJGDuuDWhuoThUB9r+eBsb+NMJG2dq11FcIZCIDOrarJi7KSbmShMb+xSw2dBr
-	z/OyBaVHw3vxr21SfuUKF5vKQ8F0fy3I59/epJ7aZhzFeX8+MsaF+1xUhjXImq/G
-	R7zMFM7CTEn84S5Pa6HzA==
-X-ME-Sender: <xms:O-WRY3AzwOM8jZao1owRU5u_6JCBqeCdr26TRJ4yunjFjAp3htA2RA>
-    <xme:O-WRY9iiQnoi6BIoM-gnVyqtmyNwo9wITdGlmZPdlvVH_L6_gWoQ3rERNoR6zf1yD
-    t1QGV9xZsXn4dNZ8Fk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgdehudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:O-WRYym-LVNTQ05GPp6HulfGIDRQGldMkjJOJK9lqRK-N-hHYZXsog>
-    <xmx:O-WRY5w5AqRgvFRUz9rn9Z98hXGIjBr-N7Zh9Ra97fGlaBq-6IURQw>
-    <xmx:O-WRY8RzyHSYprtaGXT5Hl_vGONMQzHGMYgOaZpbVjjJQwf-ZblqRA>
-    <xmx:O-WRY3Jc9NhXXCPmN7Av54Ta_1f4B03ZX243PJuaNl_v5Oea1RTsPw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 5D4EFB60086; Thu,  8 Dec 2022 08:23:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <c6664af4-7a91-401e-a079-e700e9ff5bbf@app.fastmail.com>
-Date: Thu, 08 Dec 2022 14:22:09 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 1CADEC433EF
+	for <soc@kernel.org>; Thu,  8 Dec 2022 16:25:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1CADEC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 3634541F72;
+	Thu,  8 Dec 2022 16:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1670516729; bh=4RnokV0DnSVNFLMRUJNU+pP7138XjdHt4zeA1xbMWH8=;
+	h=Date:From:Subject:To:Cc;
+	b=O4aqOoSK6JFhVn8RY3hp/IIIOQLUbOB3IOJReCYEXn1xKGezudFuT6kvEgCLbSno+
+	 vElIiQiC/5t9lpkNx2c/B/AIoF2+OBD+k4D+s4DNUoeudJe2QZVkAewBdGiKk9FViY
+	 WxekwQYTgfl0KtLa3tVlqvTfBoe0l+Pai3JkqRT4m9srIRvfdXlwSwkMViGes6LOZ+
+	 78QjhZRM8C3rZfa1qlqZaPLoypBrR6qpLVrUxJz0FG+HOru/2AN8LCNp9OJjbnm+Wy
+	 xAexPOC0cy7cpwYUcdvpgkBna94Vhi9Z9o3kHyFpR2Nxo3RhOyc1KeYjpwMv1XQ1Nj
+	 UoBUEth+5g+dA==
+Message-ID: <488ad4e9-04dc-1774-3bbe-d313ef30f14d@marcan.st>
+Date: Fri, 9 Dec 2022 01:25:25 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+From: Hector Martin <marcan@marcan.st>
+Subject: [GIT PULL] Apple SoC DT updates for 6.2 (v3)
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 5
-Content-Type: text/plain
+To: SoC Team <soc@kernel.org>
+Content-Language: en-US
+Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
 
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+Hi SoC folks,
+
+Please merge these DT changes for 6.2. One last round this cycle :)
+
+This batch ended up collecting a little pile of typo, style, and one
+minor functional fix. It also includes the cache topology info for
+t8103, mirroring the t600x change that went into the previous batch.
+
+-Hector
+
+The following changes since commit d32c1530c7230b756ca9a6b6cf92ce6e60788594:
+
+  arm64: dts: apple: Add CPU topology & cpufreq nodes for t600x (2022-12-04 13:31:59 +0900)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-5
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.2-v3
 
-for you to fetch changes up to da0cbf9307a227f52a38a0a580a4642ad9d7325c:
+for you to fetch changes up to 67327f125801f98aec9e2cf5e1df16cf493a065f:
 
-  Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes (2022-11-29 15:45:36 +0100)
-
-----------------------------------------------------------------
-ARM: SoC fixes for 6.1, part 5
-
-One last build fix came in, addressing a link failure when
-building without CONFIG_OUTER_CACHE
+  arm64: dts: apple: t6002: Fix GPU power domains (2022-12-08 14:37:29 +0900)
 
 ----------------------------------------------------------------
-Arnd Bergmann (1):
-      Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
+Apple SoC DT updates for 6.2 (v3).
 
-Peter Rosin (1):
-      ARM: at91: fix build for SAMA5D3 w/o L2 cache
+One final update for 6.2. This includes:
+* L1/L2 cache topology for t8103
+* A bunch of typo, style, and minor functional fixes
 
- arch/arm/mach-at91/sama5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+Asahi Lina (2):
+      arm64: dts: apple: t600x-pmgr: Fix search & replace typo
+      arm64: dts: apple: t6002: Fix GPU power domains
+
+Hector Martin (1):
+      arm64: dts: apple: Rename dart-sio* to sio-dart*
+
+Janne Grunau (3):
+      arch: arm64: apple: t8103: Use standard "iommu" node name
+      arch: arm64: apple: t600x: Use standard "iommu" node name
+      arm64: dts: apple: Add t8103 L1/L2 cache properties and nodes
+
+ arch/arm64/boot/dts/apple/t6002.dtsi      |  5 ++++
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi | 14 ++++-----
+ arch/arm64/boot/dts/apple/t600x-pmgr.dtsi |  2 +-
+ arch/arm64/boot/dts/apple/t8103.dtsi      | 48 +++++++++++++++++++++++++++----
+ 4 files changed, 56 insertions(+), 13 deletions(-)
+
