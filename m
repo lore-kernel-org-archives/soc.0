@@ -1,98 +1,54 @@
-Return-Path: <SRS0=J9xG=4G=marcan.st=marcan@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 240AEC4332F
-	for <soc@archiver.kernel.org>; Thu,  8 Dec 2022 16:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA0E0C4332F
+	for <soc@archiver.kernel.org>; Thu,  8 Dec 2022 19:26:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E41B4C433F0; Thu,  8 Dec 2022 16:25:37 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1CADEC433EF
-	for <soc@kernel.org>; Thu,  8 Dec 2022 16:25:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1CADEC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id 3634541F72;
-	Thu,  8 Dec 2022 16:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1670516729; bh=4RnokV0DnSVNFLMRUJNU+pP7138XjdHt4zeA1xbMWH8=;
-	h=Date:From:Subject:To:Cc;
-	b=O4aqOoSK6JFhVn8RY3hp/IIIOQLUbOB3IOJReCYEXn1xKGezudFuT6kvEgCLbSno+
-	 vElIiQiC/5t9lpkNx2c/B/AIoF2+OBD+k4D+s4DNUoeudJe2QZVkAewBdGiKk9FViY
-	 WxekwQYTgfl0KtLa3tVlqvTfBoe0l+Pai3JkqRT4m9srIRvfdXlwSwkMViGes6LOZ+
-	 78QjhZRM8C3rZfa1qlqZaPLoypBrR6qpLVrUxJz0FG+HOru/2AN8LCNp9OJjbnm+Wy
-	 xAexPOC0cy7cpwYUcdvpgkBna94Vhi9Z9o3kHyFpR2Nxo3RhOyc1KeYjpwMv1XQ1Nj
-	 UoBUEth+5g+dA==
-Message-ID: <488ad4e9-04dc-1774-3bbe-d313ef30f14d@marcan.st>
-Date: Fri, 9 Dec 2022 01:25:25 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From: Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC DT updates for 6.2 (v3)
+	id 89FB7C433F0; Thu,  8 Dec 2022 19:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 211D6C433D2;
+	Thu,  8 Dec 2022 19:26:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1670527593;
+	bh=NMG6ALVDlfsNvt3OA8+V9P2aBVlQPOg+9d6T7dyYOdE=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=ToB8gQdCEGbtXgRkgsg0pI4k0CHjhxusLcurdSKtmPu4FRDrma4DCzr1gJvos788H
+	 s6dw47V8U1Tg4kYUgQrgCJkZPe/fp+7lprRNdDiGdxzEB72zH1EiwVC0mGds9633h2
+	 vkk/nKnR1qys8R27Nv8GqlSyiIMek3VsopjiIamfAP5ygEtGOmodTFumUhSUj9XDQv
+	 +jX45dx8ygs4GXz5keoBmEd11EL/Mcl2USBTH/k07DuHOCD5S5HnGfA4MOmQxi4uVD
+	 /RL646JG5Y5AZQhDD/jDkj+hJQcX7/Pe0fpzug8FzNW7DsIE2KyzZqEr8p+fpWGfGq
+	 MdTxOCs/Qo+zw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0D786C433D7;
+	Thu,  8 Dec 2022 19:26:33 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for 6.1, part 5
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <c6664af4-7a91-401e-a079-e700e9ff5bbf@app.fastmail.com>
+References: <c6664af4-7a91-401e-a079-e700e9ff5bbf@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lore.kernel.org>
+X-PR-Tracked-Message-Id: <c6664af4-7a91-401e-a079-e700e9ff5bbf@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-5
+X-PR-Tracked-Commit-Id: da0cbf9307a227f52a38a0a580a4642ad9d7325c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f3e8416619ced89abd5b1254f29d0c3904297298
+Message-Id: <167052759305.15249.2823069431065327000.pr-tracker-bot@kernel.org>
+Date: Thu, 08 Dec 2022 19:26:33 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Content-Language: en-US
-Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 
+The pull request you sent on Thu, 08 Dec 2022 14:22:09 +0100:
 
-Hi SoC folks,
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-5
 
-Please merge these DT changes for 6.2. One last round this cycle :)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f3e8416619ced89abd5b1254f29d0c3904297298
 
-This batch ended up collecting a little pile of typo, style, and one
-minor functional fix. It also includes the cache topology info for
-t8103, mirroring the t600x change that went into the previous batch.
+Thank you!
 
--Hector
-
-The following changes since commit d32c1530c7230b756ca9a6b6cf92ce6e60788594:
-
-  arm64: dts: apple: Add CPU topology & cpufreq nodes for t600x (2022-12-04 13:31:59 +0900)
-
-are available in the Git repository at:
-
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.2-v3
-
-for you to fetch changes up to 67327f125801f98aec9e2cf5e1df16cf493a065f:
-
-  arm64: dts: apple: t6002: Fix GPU power domains (2022-12-08 14:37:29 +0900)
-
-----------------------------------------------------------------
-Apple SoC DT updates for 6.2 (v3).
-
-One final update for 6.2. This includes:
-* L1/L2 cache topology for t8103
-* A bunch of typo, style, and minor functional fixes
-
-----------------------------------------------------------------
-Asahi Lina (2):
-      arm64: dts: apple: t600x-pmgr: Fix search & replace typo
-      arm64: dts: apple: t6002: Fix GPU power domains
-
-Hector Martin (1):
-      arm64: dts: apple: Rename dart-sio* to sio-dart*
-
-Janne Grunau (3):
-      arch: arm64: apple: t8103: Use standard "iommu" node name
-      arch: arm64: apple: t600x: Use standard "iommu" node name
-      arm64: dts: apple: Add t8103 L1/L2 cache properties and nodes
-
- arch/arm64/boot/dts/apple/t6002.dtsi      |  5 ++++
- arch/arm64/boot/dts/apple/t600x-die0.dtsi | 14 ++++-----
- arch/arm64/boot/dts/apple/t600x-pmgr.dtsi |  2 +-
- arch/arm64/boot/dts/apple/t8103.dtsi      | 48 +++++++++++++++++++++++++++----
- 4 files changed, 56 insertions(+), 13 deletions(-)
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
