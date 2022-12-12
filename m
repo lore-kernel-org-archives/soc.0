@@ -4,80 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE2C8C4332F
-	for <soc@archiver.kernel.org>; Mon, 12 Dec 2022 18:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 231D3C4332F
+	for <soc@archiver.kernel.org>; Mon, 12 Dec 2022 18:26:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8D651C433D2; Mon, 12 Dec 2022 18:20:03 +0000 (UTC)
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	id D1E3BC433EF; Mon, 12 Dec 2022 18:26:59 +0000 (UTC)
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0AB24C433EF
-	for <soc@kernel.org>; Mon, 12 Dec 2022 18:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0AB24C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id BE4A2C433D2
+	for <soc@kernel.org>; Mon, 12 Dec 2022 18:26:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BE4A2C433D2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qt1-f172.google.com with SMTP id z12so6746110qtv.5
-        for <soc@kernel.org>; Mon, 12 Dec 2022 10:20:01 -0800 (PST)
+Received: by mail-vs1-f49.google.com with SMTP id q128so12114012vsa.13
+        for <soc@kernel.org>; Mon, 12 Dec 2022 10:26:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=onP/KvRHakbT+PgkNr+XHNC9YqsG/EczL6JiFabOL0U=;
-        b=JNuH2HF8bPkdPJns9Frb/3hAu3RMH8AcPZSEHf2cYAzl573JYWDHKuLTUN6kTk/bk2
-         28tJ7PF1hgzIxkq2dZd60fbM0WqtEb/LZVKdYBwuPk+G9ixslL/tLfsqY4afPuSGZ2uB
-         j9r6MScd1LukX820XYEHD2XbCUUdgvxVKO5PU=
+        bh=xEeQjfOgxbzzuaCvVlasz+hixVSsIOY5Hq7uOvYrjTw=;
+        b=G/lMCGnwSgD2+sFVg10enKajkr8vBOrkI8HGGYzC+7tFr+yNjLAXYB+AROvSybglDN
+         L2S66nnGmj59HcxJFOg5xBV5CTxSOE76KQUQkMiaajTd6cAZRHZ0c0oqz59kck42LTCT
+         obxUBb4la276ogjOC/Vg6+xoJSO2uChD5M/mM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=onP/KvRHakbT+PgkNr+XHNC9YqsG/EczL6JiFabOL0U=;
-        b=N1TpnnxbJ4n0oyMHXjnSz9rloqw8mg8XMxiD79Z2VcqUZY1SlaItz+dgfZwDktueBY
-         RU6UIgaWcoU4ElHqMlftkL6cZ7f+YhQK9NOxHJ8HFMJ6b45oLqheOuGJOnrrbEenBb09
-         YJ4MJHRhqo0kLWcTK4E+3IWVGyWzITaW2LiAd6zTxgSp5jVyosHfZltHaYJE6IrO7o3+
-         gnwkDkRjBGoWypnhUaGBMSvFn9Q02Rh3bYNJ7Z519cGpkA1nDHHCfGLiM6GKahMjvCLW
-         58giD0YigZ4plN+i5GTl5QmJBmPnvtOaSufDAone+AYPDp+wnQyTtotbhY4222V7K9vA
-         csjA==
-X-Gm-Message-State: ANoB5pm3soK4rHsY+rc3yQ/1oOYx05krMANTG1gxWAMXx8C8FgB8bpiy
-	rbeIUIJxGeKtnanqoGPSTU8KV5YtGsAcX1SL
-X-Google-Smtp-Source: AA0mqf7j5fsZms0nTRCJ223DRuWrIYkbIOuq0V0Kw9pXKAmXxmj7W2FqBsWK3wFBp4ozm1sd7CWMYA==
-X-Received: by 2002:a05:622a:4c13:b0:3a6:348c:5159 with SMTP id ey19-20020a05622a4c1300b003a6348c5159mr24146483qtb.26.1670869200277;
-        Mon, 12 Dec 2022 10:20:00 -0800 (PST)
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com. [209.85.219.48])
-        by smtp.gmail.com with ESMTPSA id b2-20020ac85402000000b003431446588fsm6244565qtq.5.2022.12.12.10.19.59
+        bh=xEeQjfOgxbzzuaCvVlasz+hixVSsIOY5Hq7uOvYrjTw=;
+        b=cyVw3ahxgvIae7t1DKmIFVBjPjA+Uqy6bt4KHyWiIJqDOL13zrkwcf7n4fS4DU0d80
+         Z2QM+Iwwe/RVtI8E+xwq32HyI+d6mo8HBlmidoOYwHtDCx+JrPZwDo30u3GolIDTz2jm
+         wIsL3lPnGzjVNX6YQKdCh1dvPQyTUQ015PReYgPgFt2Q7eby6SyxdSkW9Ve6yW/Mg3RL
+         AIQ7xiRlOyxNm1qEIC4f204Y3TRwUeGueH+hUcCbAKBMTyVbaiYHDYz3PR5DWf+o+NZi
+         8wCTkipuwt+ozmTtDYO6KJrPm14hLMeVPRDSRbWaNQBu29R1ESRgE5jhaGjMx6TJk7OX
+         T3bQ==
+X-Gm-Message-State: ANoB5pk/SbOcO6IiLOBiJSQxJpQHjw++Uu14oY8dfKQKXgLUAE0gw8uc
+	U3zmr3dGmXi8HiWLi+myhlUCvaKLiadix2ns
+X-Google-Smtp-Source: AA0mqf7Vkeplshrrgs5SGUmgkkpJ7GgDO8ZZeUh2BvjCI3l/h4lIz3eJlReo30S0JAzN9mvt0eu9yw==
+X-Received: by 2002:a67:c984:0:b0:3b0:a5ce:71c5 with SMTP id y4-20020a67c984000000b003b0a5ce71c5mr7792496vsk.3.1670869617154;
+        Mon, 12 Dec 2022 10:26:57 -0800 (PST)
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
+        by smtp.gmail.com with ESMTPSA id t30-20020a37ea1e000000b006eef13ef4c8sm6206049qkj.94.2022.12.12.10.26.56
         for <soc@kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 10:19:59 -0800 (PST)
-Received: by mail-qv1-f48.google.com with SMTP id u10so8773085qvp.4
-        for <soc@kernel.org>; Mon, 12 Dec 2022 10:19:59 -0800 (PST)
-X-Received: by 2002:a05:6214:390c:b0:4c7:7282:5817 with SMTP id
- nh12-20020a056214390c00b004c772825817mr14226201qvb.94.1670869199034; Mon, 12
- Dec 2022 10:19:59 -0800 (PST)
+        Mon, 12 Dec 2022 10:26:56 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id c7so2179515qtw.8
+        for <soc@kernel.org>; Mon, 12 Dec 2022 10:26:56 -0800 (PST)
+X-Received: by 2002:a05:622a:5a87:b0:3a5:47de:a214 with SMTP id
+ fz7-20020a05622a5a8700b003a547dea214mr70877944qtb.304.1670869616205; Mon, 12
+ Dec 2022 10:26:56 -0800 (PST)
 MIME-Version: 1.0
-References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com> <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
-In-Reply-To: <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
+References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com> <02be69ef-cfae-4455-a428-f95517d374cb@app.fastmail.com>
+In-Reply-To: <02be69ef-cfae-4455-a428-f95517d374cb@app.fastmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 12 Dec 2022 10:19:43 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg6u5hV6+O=C-UYkHZATN1b0kQYmoNaJ-EL8eQVBHQRjA@mail.gmail.com>
-Message-ID: <CAHk-=wg6u5hV6+O=C-UYkHZATN1b0kQYmoNaJ-EL8eQVBHQRjA@mail.gmail.com>
-Subject: Re: [GIT PULL 3/4] SoC driver updates for 6.2
+Date: Mon, 12 Dec 2022 10:26:40 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgy2kMzPGturhFGethpnzWBX8Guzna98tSOorNpM0ZEEQ@mail.gmail.com>
+Message-ID: <CAHk-=wgy2kMzPGturhFGethpnzWBX8Guzna98tSOorNpM0ZEEQ@mail.gmail.com>
+Subject: Re: [GIT PULL 4/4] SoC: DT changes for 6.2
 To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Dec 9, 2022 at 9:21 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Fri, Dec 9, 2022 at 9:23 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
->                            While this remains
-> Arm centric for the most part, the branch now also contains updates to
-> risc-v and loongarch specific code in drivers/soc/.
+>  - The Apple T6000 (M1 Pro), T6001 (M1 Max) and T6002 (M2 Ultra)
+>    chips now have initial support.
 
-Yeah, I'll continue to call your series "ARM SoC updates" for now,
-even if they technically do contain some other architecture updates
-too.
+That T6002 is M1 Ultra, not M2 Ultra.
 
-Maybe some day the other parts end up being noticeable enough that
-I'll follow your lead and just call it "SoC".
-
-              Linus
+                Linus
