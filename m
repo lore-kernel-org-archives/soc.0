@@ -1,54 +1,80 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=zzY2=4M=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77F9DC4167B
-	for <soc@archiver.kernel.org>; Mon, 12 Dec 2022 18:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA6BAC001B2
+	for <soc@archiver.kernel.org>; Wed, 14 Dec 2022 14:27:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4E0B2C433D2; Mon, 12 Dec 2022 18:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 374BAC433F2;
-	Mon, 12 Dec 2022 18:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670869812;
-	bh=8w8TR9dP/5krR/vGB1baM/1sVBeaAmGXe73nD+iSX2I=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=U1Qx9JuXQX5nrKPZRgPdWTuFojz7u4AmIQBJ6EmubRx03T3ZSwCTQUbPn2RBV+/aZ
-	 brIz+NmnrG7541E84rMEopF1sXRsHnHs41Kl/yOIq1Ys1DWnrPijBMwncoq96NjyP5
-	 VyWeNhXfbe1E4kxdSqo2yHFWJbyuWukYQryHa+jmMxuDrnmDYmRTpDYOl0+DeI2P7F
-	 3YhyrXrwAviEssygEq3iy6zfyJT6n+CgK2h7Tm7JhIeHlweSF58+Fi1A8MD0SV1m0p
-	 Pf0/xD7samXYDgbGaWo9Kzg0lxoucZIU4SXy/S7UIllD9zBbzHqBDodsADq8ABEvfM
-	 PF+m/1bkDYagQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21F89C197B4;
-	Mon, 12 Dec 2022 18:30:12 +0000 (UTC)
-Subject: Re: [GIT PULL 3/4] SoC driver updates for 6.2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
-References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com> <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.2
-X-PR-Tracked-Commit-Id: 9379885d07c466a9207e88c0fd0c8b3541536fe3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8e17b16a2c13406c56a4d292df3ca083f8729666
-Message-Id: <167086981213.1778.11073104905952934171.pr-tracker-bot@kernel.org>
-Date: Mon, 12 Dec 2022 18:30:12 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id A55FFC433D2; Wed, 14 Dec 2022 14:27:12 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 58964C433F2;
+	Wed, 14 Dec 2022 14:27:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 58964C433F2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1p5Sis-00050J-MP; Wed, 14 Dec 2022 15:27:02 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Johan Jonker <jbx6244@gmail.com>,
+	kever.yang@rock-chips.com
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	devicetree@vger.kernel.org,
+	robh+dt@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	hjc@rock-chips.com,
+	zhangqing@rock-chips.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	philipp.tomsich@vrull.eu,
+	soc@kernel.org,
+	tglx@linutronix.de,
+	daniel.lezcano@linaro.org,
+	arnd@arndb.de,
+	linux-rockchip@lists.infradead.org,
+	sjg@chromium.org,
+	olof@lixom.net
+Subject: Re: (subset) [PATCH v2 0/4] Add basic Rockchip rk3128 DT support
+Date: Wed, 14 Dec 2022 15:26:59 +0100
+Message-Id: <167102796007.2796496.11503501153122031880.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
+References: <e83964fe-ad87-0905-4586-e235757c6b2b@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 09 Dec 2022 18:21:15 +0100:
+On Fri, 28 Oct 2022 16:39:04 +0200, Johan Jonker wrote:
+> Add basic Rockchip rk3128 DT support.
+> 
+> Features:
+>   Quad-core ARM Cortex-A7MP Core processor
+>   Clock & reset unit
+>   Power management unit
+>   Interrupt controller
+>   DMAC
+>   6x 64 bits Timers
+>   4x PWMs
+>   1x 32 bits watchdog
+> 
+> [...]
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-drivers-6.2
+Applied for 6.3, thanks!
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8e17b16a2c13406c56a4d292df3ca083f8729666
+[1/4] dt-bindings: arm: rockchip: Add Rockchip RK3128 Evaluation board
+      commit: a1392d5ac60864a3682c447fe62392eb56e9d93b
+[3/4] ARM: dts: rockchip: add rk3128.dtsi
+      commit: 9ef609cbdbf7a45599b0c9c21e9e7d2ae625896f
+[4/4] ARM: dts: rockchip: add rk3128-evb.dts
+      commit: 7232dafab89ac23b570d0adb3402164719fcbe3d
 
-Thank you!
-
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Heiko Stuebner <heiko@sntech.de>
