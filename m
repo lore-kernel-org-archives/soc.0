@@ -1,153 +1,125 @@
-Return-Path: <SRS0=hCSm=4O=suse.com=mbrugger@kernel.org>
+Return-Path: <SRS0=4CuT=4O=gmail.com=thierry.reding@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B31EC4332F
-	for <soc@archiver.kernel.org>; Fri, 16 Dec 2022 11:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF181C4332F
+	for <soc@archiver.kernel.org>; Fri, 16 Dec 2022 13:20:14 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8511FC433F1; Fri, 16 Dec 2022 11:09:10 +0000 (UTC)
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2041.outbound.protection.outlook.com [40.107.6.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9AF1CC433D2; Fri, 16 Dec 2022 13:20:14 +0000 (UTC)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D4186C433EF;
-	Fri, 16 Dec 2022 11:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4186C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=suse.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OWqEV8KcOgv6IQXeN0GpQsNfoDkQj0bB1Miizp1cw1zyb47cIHWE0AkPhJgjzUWFUqFWmk11g17dSZPZJW4wSCBMXqR73WQoVvcTnZEmCy+gDwkEdsRYRAdykH1Ow+gx05yBzqRB7z6oHq7wkQFr2zIALBLVUYaYeLAIIvNu4UgWk/hIznVzl7+km6Bc5fUcoNZCFO0jZ8/be4YTxnH6RnjLtbGruXlXUw8sfrvNIFG6C/UhZTDErr+00wUMTKYAkyZ65yg3dCgxUfff3X+bNkk12cwurDqLm1nErc7xv2Oj3IbIb9M8IWdL/GjBslkG5K2vck9D0SsZCPrPkOTEjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c6nAEtYYIyMv/voYZ+VggtxK/Au/TTTiV28Y880j9BQ=;
- b=Ald4U04ClG9nt/isVx+DHg9hyj23p7Yp773GFDIHZHHpqNNC8lozaQfZget5TPT/lv4+mOC/oBScDotOEsWRwYPWk1xU4FNBaeiSr6CyMjeOaC1hxHMP1uym362IgJcm2OkxjTRdwENUjg6boz/wCekcJjXdI7CfZmX/zEVv3v9CA9RYYaaIlRLKKivaTZ4KqLCmey1D3uJ84OnM+4dm0zOZ8HJNilsUIfa20cNwk0r6ewx/nqfP90ASbS2KdqMPW93rF0OJyNNVXRzfXRw+oYemXDIQp8x10Gjhg4GmS2rTLTzZdRvNhA7clwboUxa35+eYbvKSk36u9oYxO/CWMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c6nAEtYYIyMv/voYZ+VggtxK/Au/TTTiV28Y880j9BQ=;
- b=JKWzFvOWnxWJS372q0XvQ1Leldvsv+h7imGbCxc7EiWPKZ0MTIj2sabcRudf/6PvJwGC7FlP+u8HEpqtLd6MRy2YroHsNwmhL+REdiZYE+vq3wNkC4Rvvoj2ou4e9MIrSTd46Gv3RemIvkoYvE4zmzy6W9PSZxyssLjMBS7nI0TlSQVMHJ7AzPN0frv5+2h484rztB+ieJrFUKmABe2KGufIVK4HxL03xyrNEmNo+ETaY2t4CUVX4wELfcDQXJuA0SDVovmkx42oPs1EN8Ck9WeMvh31W2hfIMeYJYzqHeuCV60JuAYbCia8Ox7PxwK/I1MyZAo43Apyv52g48tUVA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB6PR0402MB2789.eurprd04.prod.outlook.com (2603:10a6:4:94::7)
- by PA4PR04MB7773.eurprd04.prod.outlook.com (2603:10a6:102:cd::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.15; Fri, 16 Dec
- 2022 11:09:05 +0000
-Received: from DB6PR0402MB2789.eurprd04.prod.outlook.com
- ([fe80::facd:e9d7:d5c3:dc2c]) by DB6PR0402MB2789.eurprd04.prod.outlook.com
- ([fe80::facd:e9d7:d5c3:dc2c%5]) with mapi id 15.20.5880.021; Fri, 16 Dec 2022
- 11:09:05 +0000
-Message-ID: <29c8b913-53cf-096f-fe44-832ceaeac116@suse.com>
-Date: Fri, 16 Dec 2022 12:09:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id B542DC433EF;
+	Fri, 16 Dec 2022 13:20:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B542DC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso1786808wmb.0;
+        Fri, 16 Dec 2022 05:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VVkJauk19hoE6f3kxeOjvaH1U7eIS3w4LTh0tk+l6YI=;
+        b=PUNPY06DZ5RUnX+JRgGiNnOXOovHSAA+nil1/3hZlXM+yy273Bw3n0BC8Rh7HUpN8k
+         NFrC5v9eUwzsAnPW6lgbRV3BvsFRNLGC8lgPHxWS8yNeuGiIisfvvg7MBE9hmfWZHmDH
+         7zWNExs5ZuI7EtJORjxKVTHS7W6Kma7YryTqBN8VWmqXGUvYh/sqB5QPc+s8Xmjfpbsn
+         I/ICf9a8jt6DTin/MapZ15Pk3p0XuEEBgwDwk6zrF3078Q8uWVNH7f8qfCsh9Mw1+Dof
+         Bblb4x/J0pBpTj1pFwQOGxAIvqaorfzAnrpQRFqCkg+SNakUEgv70Kz4UQoi9PYW1NBw
+         wV8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VVkJauk19hoE6f3kxeOjvaH1U7eIS3w4LTh0tk+l6YI=;
+        b=KXvh8eUmjcH1rl5d4z1DcF+MQeIwJtwVRvCQxsUc47A7bOGeH7+JxV6AbsGW54At3h
+         9/UlKsK9Ewm8umzJKDT8JQjD4+0XYUbQSWwitdhLolIQeKbZi1gL45Lh6bCOP0wojmBP
+         zu4JbR7p2NBJVdxLnecKtm+wLMjICjdq65jFbFY53IHwNEoo3rXRPHQPLTV/XYObHQgS
+         v4iNR3EOO4ArZDcmtKidpktTtUytDJEus9FPQSF3a/GBnfh/5PSuzPZZ70oGviEpfmVp
+         WM9IIuEz0qZeeScmYjuDdCKGTsq74nIA6OkWBxMBZLl/iV62IC7g971LF0Xp/QT4zOQZ
+         Xc6A==
+X-Gm-Message-State: ANoB5pkhZOcOWKOdddm3OsXB6J2lQEhTywJ/rf1pQO+i8nvDtLNWGClh
+	DINCrl/Z+4nr2VrUTwlTXK4eCGZT1Hc=
+X-Google-Smtp-Source: AA0mqf4nEP4C4o6ZpBz5fXqKFX2qlIszB/th0rN27adgcD60jatZtWbG/cg5bFKqEdq7plzEAMLcfg==
+X-Received: by 2002:a05:600c:1d27:b0:3d2:27ba:dde0 with SMTP id l39-20020a05600c1d2700b003d227badde0mr15404710wms.33.1671196811680;
+        Fri, 16 Dec 2022 05:20:11 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p2-20020a05600c358200b003d1f2c3e571sm10756854wmq.33.2022.12.16.05.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 05:20:11 -0800 (PST)
+Date: Fri, 16 Dec 2022 14:20:09 +0100
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>
-Cc: "moderated list:ARM/Mediatek SoC support"
- <linux-mediatek@lists.infradead.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- Chun-Jie Chen <chun-jie.chen@mediatek.com>
-From: Matthias Brugger <mbrugger@suse.com>
-Subject: [GIT PULL] soc: mediatek: fixes for v6.1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0003.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a::13) To DB6PR0402MB2789.eurprd04.prod.outlook.com
- (2603:10a6:4:94::7)
+Cc: Jonathan Hunter <jonathanh@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org, Sumit Gupta <sumitg@nvidia.com>,
+	Petlozu Pravareshwar <petlozup@nvidia.com>,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: tegra: fix CPU_BIG_ENDIAN dependencies
+Message-ID: <Y5xwiV/OiAKmnsVt@orome>
+References: <20221215165336.1781080-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB6PR0402MB2789:EE_|PA4PR04MB7773:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3d5b633-9ffb-4b83-c2c5-08dadf55f1f3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	o8cOkcnni5k4rKq2IeUJMtExqKjLOoPFXmpCDfel2eb3xsOm+Fbu9DTx+bUOCrGSO9St2Wa0UVtCRq7kala4AtleyrRuJuEly4nH3CtCXfrLSrXznFDbKpZRB+IpFgo2DBwDxXMXMnrYa6VczcbEGx9jjIlsmsrmF69oeohe/afh1yMtUbq+Td1FirMm2lVGfUzhfCCcbI9p3HOMNuymAkKA1w7BJGPe4RpNlPZ5R2bj0Q3PA96yPdBdQbrdI3HSNlSXeCei5dyQCEAdk4/sxbu5J7BE2rp0pf8B9Fbdr+lApoGNIIL0wBQW5gtC6lIo0kU7rukpB+55s/2uOEfrlIuzTkNPpe6ElneYuBrR0dnt2syOsIuB/ycRtrJGs/vhHbx3TAF3nMJz3mQUxwuYYNQM0oo3LiN5s4e8MtYQv2mOJn+LaNeDSlEAvr3JELY34HSRNrdSoVhRBZz2TXzgO0wmyKYlSsrLLYv+gmoqy41z7SduvWZS1q6JwAe4HQcGxXRWbWFAPOifDPCoFL47Bx/xhISM/2otvTHP0VkQZiDcUQcquBY4yYKLn9PKzO2qMuRrWeVtVMw9yy6/ZETc+mz+EB8pi86rVRe8Zm3iFsngkO7yeMvpGlVgcwda+WrBXfK6FcKiivRYMMbVqM5t187Q/mn3dpQ4ZoJ9PEQKd+1pApcUbCYrNGg1IRow+VAyV1dU6ZxDMPXg0bxEPng42pdOAb9CYhNG31YoqmnX5Tc3+Zj3k/q27uqWmPwbKel8
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2789.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199015)(31686004)(31696002)(86362001)(36756003)(38100700002)(83380400001)(2616005)(26005)(6512007)(186003)(6506007)(478600001)(966005)(6486002)(316002)(54906003)(110136005)(66476007)(8676002)(4326008)(66946007)(66556008)(41300700001)(8936002)(4001150100001)(2906002)(5660300002)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZWRURG9FOXBsdHlMMFAreVpIRVhNMlBpekhKYWRaQTFJUWFNVUlSNHhvSDlx?=
- =?utf-8?B?Z3UzQnpHWjdKZ3lCd08vaG5JZ2huRWdZZUw5MExhU25jWGJ4MUl2eW9JL3VQ?=
- =?utf-8?B?MGJtOGpZc2NDUUVHY3pSNXdqa3VvYXlYK25KcWwzbmxmcUE0NitMdER3bk5k?=
- =?utf-8?B?alkxbU1SVStwTitpemFYUG5Eck96amVRd3RRbGFGTTNzVVZoc3RnajRMUWFa?=
- =?utf-8?B?aUVaYWtHZEYzblFlQmxpM3FHd1YwTitBMnBzMk1hVXBpVDBtZEJXYWF6QU03?=
- =?utf-8?B?bW9jOUYxd2hGWE9HM2NuaUdRYnJyR0tkeDRnYkJMUWplRFVwdUwvbjBXU292?=
- =?utf-8?B?Lzh2UmVac0tza1JoaHFRRnNCT1VaMFVMT0Fqck94R2pCRXdlWHQ3MWVCbllN?=
- =?utf-8?B?T1BSYVdST3kyMFNPRmx3MktJWTJvYWR0eExOcFljTXhNOUtEKzVGajEwWWdT?=
- =?utf-8?B?ZFZHQVJ6dXY5ekl2anc4WTltWGxCTlFNdzB1UTliY1FBTmtDbTVlSDI0YXEx?=
- =?utf-8?B?cXdraThqdTF3N3NqckZBUytWa0VWQ1JwQjJQKzZ4cTgrc21wVzJKN3ljMmpC?=
- =?utf-8?B?VDJpV1VFL28yNUtpaWxJRHlCR3EzU2dNTDIwaDc1Qm1HSjJlc3JoeTdrL3ZR?=
- =?utf-8?B?RUJNd3RjM2g3UjVIY3NOMEhMejlsRTdYQ2VzZXI3dWpyTzdkdEM5eGlQcWlY?=
- =?utf-8?B?OU1pYVhvTW13L2MxL3g0dDV2eHdsdW9aTWJGdSsvalU4Q2ZTdHdNdGlhd3Nj?=
- =?utf-8?B?SVRiNmsvdEVHd0Z5YVY4UDhNS0xJYU8xU3d4dkgwcDdaL1V3dnVMaVJKdm9C?=
- =?utf-8?B?UHo2bFlzTG96aDB4b1hoVURDdWM1aDZVZERHcG5Vc0d0UENOa0MvQTFPRzVP?=
- =?utf-8?B?cmVwdy9iUERDMWdXK3lsREpwRVN1eHQ4NURwR29QelVodkVhSlJBRWs4L1py?=
- =?utf-8?B?cjJaT0pONTJrZmJzZ0phOGpXczJLeWhFWGpNblFLN0JQZ00ydXdsenBCcjFz?=
- =?utf-8?B?eFBoV2hVeXhFWElncUFpVUc2c2Q2bkM5V1ZNNVViOCtGWXN2QjN1bGRBemwy?=
- =?utf-8?B?ODNucTl0aURualJQaDYzYVNHL0FMcC82TTlDN0tQbDN5NmpodFhLcnhEaTUr?=
- =?utf-8?B?U2ZJOUtJYVNUWEtZNFJ1cTVUTSthV1pUN3NpdHVUVDc5Vnk1UFBQUWlnMkdE?=
- =?utf-8?B?Y3RkVUFodjdDdk5remFmaU1sZExVN2xxb2ZueDBJSEVHOW5lUG5VbzFVbldQ?=
- =?utf-8?B?Y2pXY0ozWjRHMG5MWUpORU94QWtmV3V5TzE1SnkzQjhJUEtkOERtY0tuRVFq?=
- =?utf-8?B?UG8yL3BhbngrV0IzRWRHS0M2QWthanNINlZhUXpxbmprNGFQQ2lLL1FLM3Nk?=
- =?utf-8?B?MmV2dVpydjVIbFdDMlVOTkZBWlFlWFZ6aGFYTWk2ekl5ZU1wdmNlZ2JTTG13?=
- =?utf-8?B?SXBHdmdONXdQNzRMK2dIaDJkUE1sUnJvTi8zWUVSVEVieTE0Ry9xOURHcENl?=
- =?utf-8?B?My9oMWFCZ1ZyeWdFeHgxVEdHaGMxRkg2a2t0OEcrNGlwcTNlbWRURk54ZmxB?=
- =?utf-8?B?Sm5XK29ONzFkRnpKL0NmYUc0c3pMejd2SzFwVHB4aGxKWWRJWko2RlpEWGdG?=
- =?utf-8?B?S0ZUUW9tM2dyeXlncFEvNi8rKzlDT0g1NEVsNTZYOHhTTlpJNUMxam9WVExn?=
- =?utf-8?B?TW82cEJETU92OWgrY0NCZlZsUi9USklCaWh4SStBc0pDL3RxZjNwa00wUCtP?=
- =?utf-8?B?a3NhSFpUbnBwckh5WXhadGFrcWI4czBoZ0hIVTZsekc4RkxMQURsem51dlBa?=
- =?utf-8?B?THpDZnM5YkN5Y2h5eEQ0RzlUUTRQVDNNYlJkMCtnSHhocFYwRWROSVJZTUl0?=
- =?utf-8?B?Y3NqTVJOWEpoQkkzYUFlWSt1d1NIMnNPOVhuaitxOEwxOEw2SDdQdUpCZ2lz?=
- =?utf-8?B?V0k1MVE0dnlyY2dMK2FRbkcxUlJCMnZvRzI1RGlhMDhPMHR5YUdGdmE2cSs5?=
- =?utf-8?B?eC80ZmpzUUlIK2RaN29DOWdsRlZnbUt3OHNia3BLcHRiM3ZlZlNLTkd4MXRK?=
- =?utf-8?B?cWF3N3VEU2Y3NUhsQlBqZmVrd0h3Q0JVNHZzZTR5MXRCdHlkR1BwZTRqWmpq?=
- =?utf-8?Q?LiPDw093mtbQxiA4aJENR7zJh?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3d5b633-9ffb-4b83-c2c5-08dadf55f1f3
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2789.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2022 11:09:05.2094
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VH8I17Vo8p0dJlsRH+8205BFYuOE5DgGI09Qrlf0UQNaz/5DlPxJwcnik6aII3VCnbDohno3Z3BprWW33fLq0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7773
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="W9s2yv2C2NngHnLL"
+Content-Disposition: inline
+In-Reply-To: <20221215165336.1781080-1-arnd@kernel.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 
-Hi Arnd and Olof,
 
-Please have a look at the following fix for v6.1
+--W9s2yv2C2NngHnLL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Matthias
+On Thu, Dec 15, 2022 at 05:53:21PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> My previous patch to prevent BPMP from being enabled on big
+> endian kernels caused a build regression:
+>=20
+> WARNING: unmet direct dependencies detected for TEGRA_BPMP
+>   Depends on [n]: ARCH_TEGRA [=3Dy] && TEGRA_HSP_MBOX [=3Dy] && TEGRA_IVC=
+ [=3Dy] && !CPU_BIG_ENDIAN [=3Dy]
+>   Selected by [y]:
+>   - ARCH_TEGRA_186_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
+>   - ARCH_TEGRA_194_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
+>   - ARCH_TEGRA_234_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
+>=20
+> Add even more such dependencies for the SoC types that use
+> the BPMP driver.
+>=20
+> Fixes: 4ddb1bf1a837 ("tegra: mark BPMP driver as little-endian only")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/soc/tegra/Kconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 
----
-The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa2476:
+Do you want to pick this up into ARM SoC directly? If so:
 
-   Linux 6.1 (2022-12-11 14:15:18 -0800)
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-are available in the Git repository at:
+--W9s2yv2C2NngHnLL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/ 
-tags/v6.1-soc-fixes
+-----BEGIN PGP SIGNATURE-----
 
-for you to fetch changes up to dba8eb83af9dd757ef645b52200775e86883d858:
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmOccIkACgkQ3SOs138+
+s6GNmBAAnncANtXp6N1jNx8+Ps/0lg/2MM5Lp/GFca9eT9f6011lLAN5Qu2eiInv
+Be5dzOyAgjCcriwLtQjS/wJzScflRvS+pgJe7CvED8lyI85Ys7pyt1Pl1T6XJAkT
+mZLDbtBtlyE655D8dLvYhMqOk7qZglk3gIKakXulNESv46biLYk09AO5ewrYDQCw
+FNOsWpeKLq+05KJZKOlWyAJk3aajntCKayhNqnp8agO5VHhjpsdxP1oBAw0tnfl+
+V5wxaV9cGERAcJ2Gd4NG7GkYutWpaLK9+aMySjW9fgNRbvpzZJWXH0iGoAsGgO8l
+1JVe8gV6Y9ASOmFrdM6bY0zs9YZHp3waeRvr/cVs0r5rl3yaN751u8bYqEEVTjkQ
+lwgZXGOINhhYxpOmPLG7u6SD5lqvykrkFJQAPn4Z+g6LfadWzrGcfIja+DByk2vb
+nWXWi/7aF0tL0EQWi4soEFQQVjZfL2yN0AGcuSrPM+lFBbgxqcR6fBvtFR95J5M1
+kctUBWzjJp4fvTzUO+tyIbiK+SkqYkKNzQbZKe44CCPh2KptXfeYrOnc0qoFo/Xh
++DSmG/HQ4eg0GAjXm4wD8Ek9p6Bn8fQ2KmRcEnSrDXxvAuyXhYXXxmNxEBdDQfN4
+RSjNRZs1Klfx3a3oUCLabck4tSJHWb1DLeqPNSqK7RiGHLxeZwU=
+=oTaX
+-----END PGP SIGNATURE-----
 
-   soc: mediatek: pm-domains: Fix the power glitch issue (2022-12-16 11:41:18 +0100)
-
-----------------------------------------------------------------
-PM domains: enable isolation before resetting power
-
-----------------------------------------------------------------
-Chun-Jie Chen (1):
-       soc: mediatek: pm-domains: Fix the power glitch issue
-
-  drivers/soc/mediatek/mtk-pm-domains.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+--W9s2yv2C2NngHnLL--
