@@ -1,97 +1,135 @@
-Return-Path: <SRS0=IrBE=4O=dabbelt.com=palmer@kernel.org>
+Return-Path: <SRS0=JANb=4O=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12525C4332F
-	for <soc@archiver.kernel.org>; Fri, 16 Dec 2022 16:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B43C4332F
+	for <soc@archiver.kernel.org>; Fri, 16 Dec 2022 20:04:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CD3D8C433F0; Fri, 16 Dec 2022 16:32:08 +0000 (UTC)
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 5F425C43392; Fri, 16 Dec 2022 20:04:45 +0000 (UTC)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6E111C43392
-	for <soc@kernel.org>; Fri, 16 Dec 2022 16:32:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E111C43392
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pg1-f177.google.com with SMTP id w37so2114669pga.5
-        for <soc@kernel.org>; Fri, 16 Dec 2022 08:32:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lHeZEl4urkRUVM2RdVBA/kn/ywb3AI+XBKELaiBu0qc=;
-        b=NCsfCJsxNnxBuuq0Z9i2gnSCgatr455aBSI9i8tkoK19Ms86AoCXDQoalTrDt3hwXY
-         edQKOS0BX+FQhPJ+mBklzXsWQm1/jb3cxaXxKxFB6OZ3kMbizjfTY7t08YialN7iWaZB
-         spDcvXPqt6N8s9z8yj/qzCnNOVS/y+JMBWYA2+XoGWAFxacEcJFazUZloDyR9yq5/GoA
-         49f2IkGjvpwJogwF3lkFyaCCryEl1W+3MMdc1LYeEJS9UySIVc/n8YwgmI1BzXIndBGw
-         d4OFHxtUKjNa8kE1pqBsMBc2jfWbPCaNyt9dCrrIbRnRps5hGgrGhn1GA64w1NuYL/vY
-         ZS7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lHeZEl4urkRUVM2RdVBA/kn/ywb3AI+XBKELaiBu0qc=;
-        b=1ZJ3pVB+CklBKGwOuyDqIrVSjMW89AT24F8xP+IkfhQ2gSgYrUF9uWmygjR1FYUzSH
-         nuI8jCkHU/b44c8Z/q4G7xn5InQgcFYACJsgQaZI+GpuiKi4SJwAwWEFbGBWZcghePso
-         qUiTfCQcOGVUm2u8jVXJjl1JnJD8iLZru55RoHW3/EV5E8NmfYRyQC6NOsb4WWLypyqj
-         G3TAOueIPgoOhMHSMeBRSBJ0T+BlM48/IR2kGwq3OsbaTDumHsi1sL/x6nRB1rlb/d4j
-         iJBzQkgNAYvfvLcADRsdtzfaWsT9EZP9OYCQm/N3OSMncWIbfcZ1tEYLVCexAl4dY9mI
-         duzA==
-X-Gm-Message-State: ANoB5plzltRXnbe91xMhKft38+dM7Y1eQxFNoG5omC0eubhcpaeNjEjl
-	95okyIi0h9KHzizmoMWJiN5J4g==
-X-Google-Smtp-Source: AA0mqf4izKqYro6PFUpm34vh03n5EOn7EYe4G+r+5xdAGgx0ZYapdWHCjn9GLpaZ5ybuKQdkcdMwuQ==
-X-Received: by 2002:a05:6a00:1409:b0:56c:cea7:88ef with SMTP id l9-20020a056a00140900b0056ccea788efmr39605813pfu.18.1671208325653;
-        Fri, 16 Dec 2022 08:32:05 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id l187-20020a6225c4000000b0057621a437d7sm1699327pfl.116.2022.12.16.08.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 08:32:05 -0800 (PST)
-Date: Fri, 16 Dec 2022 08:32:05 -0800 (PST)
-X-Google-Original-Date: Fri, 16 Dec 2022 08:31:46 PST (-0800)
-Subject:     Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC
-In-Reply-To: <Y5wYIrMZIqu5f+WM@infradead.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 38C1DC433D2;
+	Fri, 16 Dec 2022 20:04:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 38C1DC433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 1EF755C006B;
+	Fri, 16 Dec 2022 15:04:42 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Dec 2022 15:04:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1671221082; x=1671307482; bh=O1rTibXsTD
+	pKm1zwzgUrVX4eUO+lIv2U3Oy/pW2+Uvc=; b=kIOyZ7VcxLykcDYk6fmZlffUP0
+	eq/C9CPSKulkOh7M4ACXPIGmhCGjBuffTTBPo0zaH7i4/VgE2Kp3x2QMwVQXCwgE
+	8xSRy4dVQ5TL94+OhCAiFhuZrZnDGot2bFVg2m+ZGOk4gON7zKa8NB9sthJZzTdf
+	4RZd0ZMZHFhREBQp9HudhBfSS8qSyjNL6C536YsVm41C0YzFRDzlzreybEX6+asD
+	s+dLCINbGwBwv6p61SbitoWiiYaUo1c07UEe0Ib0YWWMeOf+E4LFTqiaNLm1HKZV
+	FWKfHenFTjx9zI4YGD9e5CXupIIY35I+eUtbVzZHa2TfdqW8cCgHSC9HmxHQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1671221082; x=1671307482; bh=O1rTibXsTDpKm1zwzgUrVX4eUO+l
+	Iv2U3Oy/pW2+Uvc=; b=ECzPE/sRKsp+dG/HXK2fj9a5OjOT7apv6OkOg9HBdRKA
+	QneB5lTYdtF3FKJXeSFXUNpow71RXR16v/YbBqkDq+3TH6FsYjewTOMxouPRxXfj
+	nwnrXhZOEUlBiiPPbHSf4xmtsZNpy+hO5lu+872yPJVQxm/XTmMyB5NjwbsCg5Pr
+	MmVL+iuHqssCz6qcnE9+/Avwn9XLOLW4rHKhz8x8sRQ+tefLtkPWPFZi3JQ4mQ+G
+	f4l1BGL/FE6Bnkdg66KN6og7yeTM4weCsmzNr797uQgnyWRi2N/QBHHrQ8oVrh7F
+	fKV2dIJXJeyxtlTMu7GE8AhxMVKqbWsIxvPEb5oNyw==
+X-ME-Sender: <xms:WM-cYxzH1pECrTmU6XvKg7k8j2ay6GglsO1atwuXwxmYoxet6IDLVg>
+    <xme:WM-cYxQLHC1r8btyqYSA58WDofl98UfPJdFNh90ljfGJBMREPXTBnO_b_9yrWNvDZ
+    OM8hh7sfhB6gXgsGr0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejgddufedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:WM-cY7UHteybQrjytPJtkZA_vwiE9pzAnKQWkn13IR6MC7puFPCWVg>
+    <xmx:WM-cYzhSwMPsxdNCNhcfkFAjy0JTsgxQzXw-Mly99qC-ntnOQrtd4A>
+    <xmx:WM-cYzAWpbr6NmAUwADExpdfVO_pgv-F_FHki4ELlCeoxrjjN_6Wqg>
+    <xmx:Ws-cY1zoSqh0WKzVatpi0rYh11AiO4ydNwr7O9CPoU9ZMHEmtQD25w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 943F7B60086; Fri, 16 Dec 2022 15:04:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <32cf0901-a4a0-48a7-bf42-f2cdb34d1ee7@app.fastmail.com>
+In-Reply-To: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
+References: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
+Date: Fri, 16 Dec 2022 21:04:20 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: linux-riscv@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-CC: geert@linux-m68k.org, Christoph Hellwig <hch@infradead.org>, soc@kernel.org,
-  Conor Dooley <conor@kernel.org>, prabhakar.csengg@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-  Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, magnus.damm@gmail.com, heiko@sntech.de,
-  Conor Dooley <conor.dooley@microchip.com>, samuel@sholland.org, guoren@kernel.org, robh+dt@kernel.org,
-  krzysztof.kozlowski+dt@linaro.org, jszhang@kernel.org, Atish Patra <atishp@rivosinc.com>, apatel@ventanamicro.com,
-  ajones@ventanamicro.com, nathan@kernel.org, philipp.tomsich@vrull.eu, devicetree@vger.kernel.org,
-  linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-  biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Christoph Hellwig <hch@infradead.org>
-Message-ID: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: "Geert Uytterhoeven" <geert@linux-m68k.org>, soc@kernel.org,
+ "Conor Dooley" <conor@kernel.org>,
+ Prabhakar <prabhakar.csengg@gmail.com>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Magnus Damm" <magnus.damm@gmail.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ "Conor.Dooley" <conor.dooley@microchip.com>,
+ "Samuel Holland" <samuel@sholland.org>, guoren <guoren@kernel.org>,
+ "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Jisheng Zhang" <jszhang@kernel.org>,
+ "Atish Patra" <atishp@rivosinc.com>,
+ "Anup Patel" <apatel@ventanamicro.com>,
+ "Andrew Jones" <ajones@ventanamicro.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Philipp Tomsich" <philipp.tomsich@vrull.eu>, devicetree@vger.kernel.org,
+ linux-riscv@lists.infradead.org,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, "Biju Das" <biju.das.jz@bp.renesas.com>,
+ "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Christoph Hellwig" <hch@infradead.org>
+Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC
+Content-Type: text/plain
 
-On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
-> On Thu, Dec 15, 2022 at 01:40:30PM -0800, Palmer Dabbelt wrote:
->> Given that we already moved the SiFive one out it seems sane to just start
->> with the rest in drivers/soc/$VENDOR.  Looks like it was Christoph's idea to
->> do the move, so I'm adding him in case he's got an opinion (and also the SOC
->> alias, as that seems generally relevant).
+On Fri, Dec 16, 2022, at 17:32, Palmer Dabbelt wrote:
+> On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
+>> On Thu, Dec 15, 2022 at 01:40:30PM -0800, Palmer Dabbelt wrote:
+>>> Given that we already moved the SiFive one out it seems sane to just start
+>>> with the rest in drivers/soc/$VENDOR.  Looks like it was Christoph's idea to
+>>> do the move, so I'm adding him in case he's got an opinion (and also the SOC
+>>> alias, as that seems generally relevant).
+>>
+>> Well, it isn't an integral architecture feature, so it doesn't really
+>> beloing into arch.  Even the irqchip and timer drivers that are more
+>> less architectural are in drivers/ as they aren't really core
+>> architecture code.
 >
-> Well, it isn't an integral architecture feature, so it doesn't really
-> beloing into arch.  Even the irqchip and timer drivers that are more
-> less architectural are in drivers/ as they aren't really core
-> architecture code.
+> That makes sense to me, it just looks like the SiFive ccache is the only 
+> one that's in drivers/soc/$VENDOR, the rest are in arch.  It looks like 
+> mostly older ports that have vendor-specific cache files in arch (ie, 
+> arm has it but arm64 doesn't).  Maybe that's just because the newer 
+> architectures sorted out standard ISA interfaces for these and thus 
+> don't need the vendor-specific bits?  I think we're likely to end up 
+> with quite a few of these vendor-specific cache management schemes on 
+> RISC-V.
+>
+> I'm always happy to keep stuff out of arch/riscv, though.  So maybe we 
+> just buck the trend here and stick to drivers/soc/$VENDOR like we did 
+> for the first one?
 
-That makes sense to me, it just looks like the SiFive ccache is the only 
-one that's in drivers/soc/$VENDOR, the rest are in arch.  It looks like 
-mostly older ports that have vendor-specific cache files in arch (ie, 
-arm has it but arm64 doesn't).  Maybe that's just because the newer 
-architectures sorted out standard ISA interfaces for these and thus 
-don't need the vendor-specific bits?  I think we're likely to end up 
-with quite a few of these vendor-specific cache management schemes on 
-RISC-V.
+I don't particularly like drivers/soc/ to become more of a dumping
+ground for random drivers. If there are several SoCs that have the
+same requirement to do a particular thing, the logical step would
+be to put them into a proper subsystem, with a well-defined interface
+to dma-mapping and virtualization frameworks.
 
-I'm always happy to keep stuff out of arch/riscv, though.  So maybe we 
-just buck the trend here and stick to drivers/soc/$VENDOR like we did 
-for the first one?
+The other things we have in drivers/soc/ are usually either
+soc_device drivers for identifying the system, or they export
+interfaces used by soc specific drivers.
+
+     Arnd
