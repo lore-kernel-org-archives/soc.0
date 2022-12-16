@@ -1,125 +1,97 @@
-Return-Path: <SRS0=4CuT=4O=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=IrBE=4O=dabbelt.com=palmer@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF181C4332F
-	for <soc@archiver.kernel.org>; Fri, 16 Dec 2022 13:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12525C4332F
+	for <soc@archiver.kernel.org>; Fri, 16 Dec 2022 16:32:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9AF1CC433D2; Fri, 16 Dec 2022 13:20:14 +0000 (UTC)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	id CD3D8C433F0; Fri, 16 Dec 2022 16:32:08 +0000 (UTC)
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B542DC433EF;
-	Fri, 16 Dec 2022 13:20:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B542DC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso1786808wmb.0;
-        Fri, 16 Dec 2022 05:20:13 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 6E111C43392
+	for <soc@kernel.org>; Fri, 16 Dec 2022 16:32:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6E111C43392
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pg1-f177.google.com with SMTP id w37so2114669pga.5
+        for <soc@kernel.org>; Fri, 16 Dec 2022 08:32:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VVkJauk19hoE6f3kxeOjvaH1U7eIS3w4LTh0tk+l6YI=;
-        b=PUNPY06DZ5RUnX+JRgGiNnOXOovHSAA+nil1/3hZlXM+yy273Bw3n0BC8Rh7HUpN8k
-         NFrC5v9eUwzsAnPW6lgbRV3BvsFRNLGC8lgPHxWS8yNeuGiIisfvvg7MBE9hmfWZHmDH
-         7zWNExs5ZuI7EtJORjxKVTHS7W6Kma7YryTqBN8VWmqXGUvYh/sqB5QPc+s8Xmjfpbsn
-         I/ICf9a8jt6DTin/MapZ15Pk3p0XuEEBgwDwk6zrF3078Q8uWVNH7f8qfCsh9Mw1+Dof
-         Bblb4x/J0pBpTj1pFwQOGxAIvqaorfzAnrpQRFqCkg+SNakUEgv70Kz4UQoi9PYW1NBw
-         wV8w==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lHeZEl4urkRUVM2RdVBA/kn/ywb3AI+XBKELaiBu0qc=;
+        b=NCsfCJsxNnxBuuq0Z9i2gnSCgatr455aBSI9i8tkoK19Ms86AoCXDQoalTrDt3hwXY
+         edQKOS0BX+FQhPJ+mBklzXsWQm1/jb3cxaXxKxFB6OZ3kMbizjfTY7t08YialN7iWaZB
+         spDcvXPqt6N8s9z8yj/qzCnNOVS/y+JMBWYA2+XoGWAFxacEcJFazUZloDyR9yq5/GoA
+         49f2IkGjvpwJogwF3lkFyaCCryEl1W+3MMdc1LYeEJS9UySIVc/n8YwgmI1BzXIndBGw
+         d4OFHxtUKjNa8kE1pqBsMBc2jfWbPCaNyt9dCrrIbRnRps5hGgrGhn1GA64w1NuYL/vY
+         ZS7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VVkJauk19hoE6f3kxeOjvaH1U7eIS3w4LTh0tk+l6YI=;
-        b=KXvh8eUmjcH1rl5d4z1DcF+MQeIwJtwVRvCQxsUc47A7bOGeH7+JxV6AbsGW54At3h
-         9/UlKsK9Ewm8umzJKDT8JQjD4+0XYUbQSWwitdhLolIQeKbZi1gL45Lh6bCOP0wojmBP
-         zu4JbR7p2NBJVdxLnecKtm+wLMjICjdq65jFbFY53IHwNEoo3rXRPHQPLTV/XYObHQgS
-         v4iNR3EOO4ArZDcmtKidpktTtUytDJEus9FPQSF3a/GBnfh/5PSuzPZZ70oGviEpfmVp
-         WM9IIuEz0qZeeScmYjuDdCKGTsq74nIA6OkWBxMBZLl/iV62IC7g971LF0Xp/QT4zOQZ
-         Xc6A==
-X-Gm-Message-State: ANoB5pkhZOcOWKOdddm3OsXB6J2lQEhTywJ/rf1pQO+i8nvDtLNWGClh
-	DINCrl/Z+4nr2VrUTwlTXK4eCGZT1Hc=
-X-Google-Smtp-Source: AA0mqf4nEP4C4o6ZpBz5fXqKFX2qlIszB/th0rN27adgcD60jatZtWbG/cg5bFKqEdq7plzEAMLcfg==
-X-Received: by 2002:a05:600c:1d27:b0:3d2:27ba:dde0 with SMTP id l39-20020a05600c1d2700b003d227badde0mr15404710wms.33.1671196811680;
-        Fri, 16 Dec 2022 05:20:11 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id p2-20020a05600c358200b003d1f2c3e571sm10756854wmq.33.2022.12.16.05.20.10
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lHeZEl4urkRUVM2RdVBA/kn/ywb3AI+XBKELaiBu0qc=;
+        b=1ZJ3pVB+CklBKGwOuyDqIrVSjMW89AT24F8xP+IkfhQ2gSgYrUF9uWmygjR1FYUzSH
+         nuI8jCkHU/b44c8Z/q4G7xn5InQgcFYACJsgQaZI+GpuiKi4SJwAwWEFbGBWZcghePso
+         qUiTfCQcOGVUm2u8jVXJjl1JnJD8iLZru55RoHW3/EV5E8NmfYRyQC6NOsb4WWLypyqj
+         G3TAOueIPgoOhMHSMeBRSBJ0T+BlM48/IR2kGwq3OsbaTDumHsi1sL/x6nRB1rlb/d4j
+         iJBzQkgNAYvfvLcADRsdtzfaWsT9EZP9OYCQm/N3OSMncWIbfcZ1tEYLVCexAl4dY9mI
+         duzA==
+X-Gm-Message-State: ANoB5plzltRXnbe91xMhKft38+dM7Y1eQxFNoG5omC0eubhcpaeNjEjl
+	95okyIi0h9KHzizmoMWJiN5J4g==
+X-Google-Smtp-Source: AA0mqf4izKqYro6PFUpm34vh03n5EOn7EYe4G+r+5xdAGgx0ZYapdWHCjn9GLpaZ5ybuKQdkcdMwuQ==
+X-Received: by 2002:a05:6a00:1409:b0:56c:cea7:88ef with SMTP id l9-20020a056a00140900b0056ccea788efmr39605813pfu.18.1671208325653;
+        Fri, 16 Dec 2022 08:32:05 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id l187-20020a6225c4000000b0057621a437d7sm1699327pfl.116.2022.12.16.08.32.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 05:20:11 -0800 (PST)
-Date: Fri, 16 Dec 2022 14:20:09 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Arnd Bergmann <arnd@kernel.org>
+        Fri, 16 Dec 2022 08:32:05 -0800 (PST)
+Date: Fri, 16 Dec 2022 08:32:05 -0800 (PST)
+X-Google-Original-Date: Fri, 16 Dec 2022 08:31:46 PST (-0800)
+Subject:     Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC
+In-Reply-To: <Y5wYIrMZIqu5f+WM@infradead.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org, Sumit Gupta <sumitg@nvidia.com>,
-	Petlozu Pravareshwar <petlozup@nvidia.com>,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: tegra: fix CPU_BIG_ENDIAN dependencies
-Message-ID: <Y5xwiV/OiAKmnsVt@orome>
-References: <20221215165336.1781080-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="W9s2yv2C2NngHnLL"
-Content-Disposition: inline
-In-Reply-To: <20221215165336.1781080-1-arnd@kernel.org>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+CC: geert@linux-m68k.org, Christoph Hellwig <hch@infradead.org>, soc@kernel.org,
+  Conor Dooley <conor@kernel.org>, prabhakar.csengg@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+  Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, magnus.damm@gmail.com, heiko@sntech.de,
+  Conor Dooley <conor.dooley@microchip.com>, samuel@sholland.org, guoren@kernel.org, robh+dt@kernel.org,
+  krzysztof.kozlowski+dt@linaro.org, jszhang@kernel.org, Atish Patra <atishp@rivosinc.com>, apatel@ventanamicro.com,
+  ajones@ventanamicro.com, nathan@kernel.org, philipp.tomsich@vrull.eu, devicetree@vger.kernel.org,
+  linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+  biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: Christoph Hellwig <hch@infradead.org>
+Message-ID: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
+> On Thu, Dec 15, 2022 at 01:40:30PM -0800, Palmer Dabbelt wrote:
+>> Given that we already moved the SiFive one out it seems sane to just start
+>> with the rest in drivers/soc/$VENDOR.  Looks like it was Christoph's idea to
+>> do the move, so I'm adding him in case he's got an opinion (and also the SOC
+>> alias, as that seems generally relevant).
+>
+> Well, it isn't an integral architecture feature, so it doesn't really
+> beloing into arch.  Even the irqchip and timer drivers that are more
+> less architectural are in drivers/ as they aren't really core
+> architecture code.
 
---W9s2yv2C2NngHnLL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That makes sense to me, it just looks like the SiFive ccache is the only 
+one that's in drivers/soc/$VENDOR, the rest are in arch.  It looks like 
+mostly older ports that have vendor-specific cache files in arch (ie, 
+arm has it but arm64 doesn't).  Maybe that's just because the newer 
+architectures sorted out standard ISA interfaces for these and thus 
+don't need the vendor-specific bits?  I think we're likely to end up 
+with quite a few of these vendor-specific cache management schemes on 
+RISC-V.
 
-On Thu, Dec 15, 2022 at 05:53:21PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> My previous patch to prevent BPMP from being enabled on big
-> endian kernels caused a build regression:
->=20
-> WARNING: unmet direct dependencies detected for TEGRA_BPMP
->   Depends on [n]: ARCH_TEGRA [=3Dy] && TEGRA_HSP_MBOX [=3Dy] && TEGRA_IVC=
- [=3Dy] && !CPU_BIG_ENDIAN [=3Dy]
->   Selected by [y]:
->   - ARCH_TEGRA_186_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
->   - ARCH_TEGRA_194_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
->   - ARCH_TEGRA_234_SOC [=3Dy] && ARCH_TEGRA [=3Dy] && ARM64 [=3Dy]
->=20
-> Add even more such dependencies for the SoC types that use
-> the BPMP driver.
->=20
-> Fixes: 4ddb1bf1a837 ("tegra: mark BPMP driver as little-endian only")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/soc/tegra/Kconfig | 3 +++
->  1 file changed, 3 insertions(+)
-
-Do you want to pick this up into ARM SoC directly? If so:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---W9s2yv2C2NngHnLL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmOccIkACgkQ3SOs138+
-s6GNmBAAnncANtXp6N1jNx8+Ps/0lg/2MM5Lp/GFca9eT9f6011lLAN5Qu2eiInv
-Be5dzOyAgjCcriwLtQjS/wJzScflRvS+pgJe7CvED8lyI85Ys7pyt1Pl1T6XJAkT
-mZLDbtBtlyE655D8dLvYhMqOk7qZglk3gIKakXulNESv46biLYk09AO5ewrYDQCw
-FNOsWpeKLq+05KJZKOlWyAJk3aajntCKayhNqnp8agO5VHhjpsdxP1oBAw0tnfl+
-V5wxaV9cGERAcJ2Gd4NG7GkYutWpaLK9+aMySjW9fgNRbvpzZJWXH0iGoAsGgO8l
-1JVe8gV6Y9ASOmFrdM6bY0zs9YZHp3waeRvr/cVs0r5rl3yaN751u8bYqEEVTjkQ
-lwgZXGOINhhYxpOmPLG7u6SD5lqvykrkFJQAPn4Z+g6LfadWzrGcfIja+DByk2vb
-nWXWi/7aF0tL0EQWi4soEFQQVjZfL2yN0AGcuSrPM+lFBbgxqcR6fBvtFR95J5M1
-kctUBWzjJp4fvTzUO+tyIbiK+SkqYkKNzQbZKe44CCPh2KptXfeYrOnc0qoFo/Xh
-+DSmG/HQ4eg0GAjXm4wD8Ek9p6Bn8fQ2KmRcEnSrDXxvAuyXhYXXxmNxEBdDQfN4
-RSjNRZs1Klfx3a3oUCLabck4tSJHWb1DLeqPNSqK7RiGHLxeZwU=
-=oTaX
------END PGP SIGNATURE-----
-
---W9s2yv2C2NngHnLL--
+I'm always happy to keep stuff out of arch/riscv, though.  So maybe we 
+just buck the trend here and stick to drivers/soc/$VENDOR like we did 
+for the first one?
