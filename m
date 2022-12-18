@@ -1,137 +1,119 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=YFLl=4Q=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B387C4332F
-	for <soc@archiver.kernel.org>; Sat, 17 Dec 2022 22:52:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA6E1C4332F
+	for <soc@archiver.kernel.org>; Sun, 18 Dec 2022 11:00:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 02C93C433D2; Sat, 17 Dec 2022 22:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EC4C433EF;
-	Sat, 17 Dec 2022 22:52:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671317575;
-	bh=Ch3US/HKQcH+y5/c6H7bpWBdnZCRxuMofatx7TVmmhc=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=ssVIOBLFzgt1c2WDgtVg+5bXEnsKZb2yX5WwI6fZhC4huuCOkW3mHmtFqoaREY8Vt
-	 jyDzVRJK8jhuaCCESym13+y6gr9fX80Jd2/lnflhFiS3m414dTSr+Wg0KnwfvnrJkv
-	 8V9hGcWT6wUp3QG+kSFZhfXeYNIlXpEhRtimKmaWjapyGk82LJF/+b6GN/FRk/9E2z
-	 DGCh5nGo8I5VW9hDPS1RoVTklWzUBwTXvOy6gubtYW6zpccW8jhZyVMmSO4EFzhCNi
-	 BTZ1ZahMj8+5utw5qApJUJQQfUEMsPPtjhIy4TxN8ADvQUoP2jdwdMSRL8HLiz7r3d
-	 EYfkeuDHMl4Mg==
-Date: Sat, 17 Dec 2022 22:52:48 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
+	id 687D2C433F2; Sun, 18 Dec 2022 11:00:38 +0000 (UTC)
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 9AB5EC433EF;
+	Sun, 18 Dec 2022 11:00:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9AB5EC433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id C274A32007CF;
+	Sun, 18 Dec 2022 06:00:32 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 18 Dec 2022 06:00:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1671361232; x=1671447632; bh=CTcjQagkOe
+	Sa4wcIniJx2lfHjoYHcejOy4bVh6qCaDw=; b=FwI4rYy8XnVjMnL2uAAbtTiCW7
+	4bw+Cn6o3BaQMRFwo4GmDG6eSopP08OaYroIfhUEaxBrWwSaKkPhodB2x4vfx5m7
+	qJlpPDDaHR0lEyCPbQZQ7VHDI6TbYoGlZDZgkkbP624xPStes84BOPWrS0koQMyP
+	X8YP75f1uogpJtDwczYTR+AVr7FU5tzAAWe9lR2JLIkZCHhNzwOstiAB+83jDxTA
+	zp791Z2C27K1J7XnKQpBqIDTiULzzJx8wIxRbvy36cTtu1JoTZeZC9kPwxlJxtRo
+	XC7/Mvx6N3ODUN7TSZsBKfp+zk+mORWJkG3hb4Bg8KJMtf8EkbrpM4c+AJZQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1671361232; x=1671447632; bh=CTcjQagkOeSa4wcIniJx2lfHjoYH
+	cejOy4bVh6qCaDw=; b=CdBByvMP3+1RE1OMXB3vBRUEXpnudYUEiwL8lzlWPR5z
+	zm4ziLsk0PLej2Q1vAgasi8sAsasxtipMpz51+YwKFn53CwL34EozI0Qdvnbe1ac
+	8j6MGIOoU6O337RR22VYrm7Jq6yHTiTQ1GD+NEjWW59TNjiyMLgcOD9uEyxT6gWG
+	x1W9YWBnjSPT16Z6SeCV9kS5IeXQsbRvbl/5m5AxJZjGILgJ9plkWTguuXKBqjNr
+	WQQ/OqjxYzaFaalXXOF6b3s4XooP/cPMsbMQzOVsyvZXcoVSqKsf+ocNMuO8M3PU
+	c7pBH7UskgWnDzD1ewkC/Ej27nbUc3DETwpRcbnS4w==
+X-ME-Sender: <xms:z_KeY_KGduKnm3e2bikGvJ3ussGSEBp52ugTB4-6-T7UusEBRRLZLw>
+    <xme:z_KeYzL9wnTzyStnN9CWmKFWv0WKxBRhvKxqJWzMLGxymoSKcqo4rh77gaVdmK2Nb
+    -9J_rV53hyW1AnUBiA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedugddvfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpedvudfhvdevleehveffueevueejieejudfgffetiedvhfefkeefuddvkeegvdfh
+    ueenucffohhmrghinheprghrmhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:z_KeY3sS-aMSC__eVRx3WUS5tDvE7R7VLLLCqZmB_0U3LPF88Y2C6A>
+    <xmx:z_KeY4bM7o9IpHAtMQSxkqu0qMOlPSA0309NHwacD9CuAsaVxc5BYg>
+    <xmx:z_KeY2Y9OdD4r3DU7o0I2c6Ym8lREpKdHvEsyV97ba99uSTVLHWfKw>
+    <xmx:0PKeY8kaCHN5mwRC3rONu_trKfBLyxcGDH9691mi2ql7ONzZmdBe3A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id BEB05B60086; Sun, 18 Dec 2022 06:00:31 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <9a4d34d4-f78b-49f0-a57a-b80432ad652b@app.fastmail.com>
+In-Reply-To: <m21qoxiw9t.fsf@free.fr>
+References: <20221215160747.2173998-1-arnd@kernel.org>
+ <m21qoxiw9t.fsf@free.fr>
+Date: Sun, 18 Dec 2022 12:00:00 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Robert Jarzmik" <robert.jarzmik@free.fr>,
+ "Arnd Bergmann" <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-riscv@lists.infradead.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>, soc@kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	"Conor.Dooley" <conor.dooley@microchip.com>,
-	Samuel Holland <samuel@sholland.org>, guoren <guoren@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Atish Patra <atishp@rivosinc.com>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Philipp Tomsich <philipp.tomsich@vrull.eu>,
-	devicetree@vger.kernel.org,
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	"Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five
- SoC
-Message-ID: <Y55IQIxXw/twcxFx@spud>
-References: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
- <32cf0901-a4a0-48a7-bf42-f2cdb34d1ee7@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="AVdRAMNp1ZNJqCN3"
-Content-Disposition: inline
-In-Reply-To: <32cf0901-a4a0-48a7-bf42-f2cdb34d1ee7@app.fastmail.com>
+Cc: "Daniel Mack" <daniel@zonque.org>,
+ "Haojian Zhuang" <haojian.zhuang@gmail.com>, soc@kernel.org,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] ARM: pxa: fix building with clang
+Content-Type: text/plain
 
+On Sat, Dec 17, 2022, at 21:45, Robert Jarzmik wrote:
+> Arnd Bergmann <arnd@kernel.org> writes:
+>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The integrated assembler in clang does not understand the xscale
+>> specific mra/mar instructions:
+>>
+>> arch/arm/mach-pxa/pxa27x.c:136:15: error: unsupported 
+>> architectural extension: xscale
+>>         asm volatile(".arch_extension xscale\n\t"
+>> arch/arm/mach-pxa/pxa27x.c:136:40: error: invalid instruction, 
+>> did you mean: mcr, mla, mrc, mrs, msr?
+>>         mra r2, r3, acc0
+>>
+>> Since these are coprocessor features, the same can be expressed 
+>> using
+>> mrrc/mcrr, so use that for builds with IAS.
+> Ok Arnd, but "mrrc" is an ARMv6 instruction if I'm not mistaken.
+> Yet PXA27X is an ARMv5 XScale instruction set IP.
+>
+> Is that patch correct therefore, or is it just to make clang happy 
+> even if it's not correct ?
 
---AVdRAMNp1ZNJqCN3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+According to
 
-On Fri, Dec 16, 2022 at 09:04:20PM +0100, Arnd Bergmann wrote:
-> On Fri, Dec 16, 2022, at 17:32, Palmer Dabbelt wrote:
-> > On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
-> >> On Thu, Dec 15, 2022 at 01:40:30PM -0800, Palmer Dabbelt wrote:
-> >>> Given that we already moved the SiFive one out it seems sane to just =
-start
-> >>> with the rest in drivers/soc/$VENDOR.  Looks like it was Christoph's =
-idea to
-> >>> do the move, so I'm adding him in case he's got an opinion (and also =
-the SOC
-> >>> alias, as that seems generally relevant).
-> >>
-> >> Well, it isn't an integral architecture feature, so it doesn't really
-> >> beloing into arch.  Even the irqchip and timer drivers that are more
-> >> less architectural are in drivers/ as they aren't really core
-> >> architecture code.
-> >
-> > That makes sense to me, it just looks like the SiFive ccache is the onl=
-y=20
-> > one that's in drivers/soc/$VENDOR, the rest are in arch.  It looks like=
-=20
-> > mostly older ports that have vendor-specific cache files in arch (ie,=
-=20
-> > arm has it but arm64 doesn't).  Maybe that's just because the newer=20
-> > architectures sorted out standard ISA interfaces for these and thus=20
-> > don't need the vendor-specific bits?  I think we're likely to end up=20
-> > with quite a few of these vendor-specific cache management schemes on=
-=20
-> > RISC-V.
-> >
-> > I'm always happy to keep stuff out of arch/riscv, though.  So maybe we=
-=20
-> > just buck the trend here and stick to drivers/soc/$VENDOR like we did=
-=20
-> > for the first one?
->=20
-> I don't particularly like drivers/soc/ to become more of a dumping
-> ground for random drivers. If there are several SoCs that have the
-> same requirement to do a particular thing, the logical step would
-> be to put them into a proper subsystem, with a well-defined interface
-> to dma-mapping and virtualization frameworks.
->=20
-> The other things we have in drivers/soc/ are usually either
-> soc_device drivers for identifying the system, or they export
-> interfaces used by soc specific drivers.
+https://developer.arm.com/documentation/dui0231/b/arm-instruction-reference/coprocessor-instructions/mrrc-and-mrrc2?lang=en
 
-Sounds like that's two "not in my back yard" votes from the maintainers
-in question..
-Doing drivers/cache would allow us to co-locate the RISC-V cache
-management bits since it is not just going to be the ax45mp l2 driver
-that will need to have them.
+"MRRC is available in ARMv6 and above, and E variants of ARMv5
+excluding xP variants". I'm not entire sure what "xP variants"
+means, but we do build for ARMv5E, so I think this is actually
+correct.
 
-Would it be okay to put this driver in soc/andestech for now & then move
-it, and the SiFive one, once we've got patches posted for cache
-management with that?
-
-Thanks,
-Conor.
-
-
---AVdRAMNp1ZNJqCN3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY55IQAAKCRB4tDGHoIJi
-0qusAP0a2dfTD6X7ML+t8lFgkHGnfD6rsEPdNdvUTA+/u4OAcAD9HrdOto6jMa+H
-Z0834ZDF+9HV0CdT1zTZVuuunnhfCwk=
-=q/pI
------END PGP SIGNATURE-----
-
---AVdRAMNp1ZNJqCN3--
+    Arnd
