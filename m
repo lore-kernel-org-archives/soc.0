@@ -1,155 +1,129 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=E5jN=4R=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB29C4332F
-	for <soc@archiver.kernel.org>; Mon, 19 Dec 2022 16:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CF8C4332F
+	for <soc@archiver.kernel.org>; Mon, 19 Dec 2022 20:28:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42D30C433F0; Mon, 19 Dec 2022 16:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344C3C433EF;
-	Mon, 19 Dec 2022 16:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671466093;
-	bh=GaN/OfjtkAnVoyul84cO7YLvk/ptcbZoS1Ejha+69j4=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=DGO8kQvS8xExkWQssXfwlmUbgHbc96olZ3YRdqmxojvI15qFrBgPjr5ouwsB+4zGX
-	 F4cLUAKdEbR6lppx9pJUdXO71ezzyil1gIJVgX9w4bFat8Uw2QVTzrBIp5mgjKvDdR
-	 Tig9kJ5N71++gipKN05PN3xLJ55Lc0uMx8WgpRZMdgfZJRn0mMfqocSMlQHY7RaNQe
-	 75++9skU9t0eGQ00JydsXTeTFAXd8Dm0jZh3oAWEhxM9C4a0P8KpzaIGFFODDMWtkb
-	 mvsIKU0BtZZ7o8zEck7WRWgzR19byJrwwRz17gnsp6sOz1ubb8PepP8DV8Catrn+x1
-	 aYxT6Hp1R0JoQ==
-Date: Mon, 19 Dec 2022 16:08:05 +0000
-From: Conor Dooley <conor@kernel.org>
-To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+	id 9ED1FC433F0; Mon, 19 Dec 2022 20:28:34 +0000 (UTC)
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 103F1C433D2
+	for <soc@kernel.org>; Mon, 19 Dec 2022 20:28:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 103F1C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id D62565C013E;
+	Mon, 19 Dec 2022 15:28:31 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 19 Dec 2022 15:28:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1671481711; x=1671568111; bh=9YGbQcIciAgcxjVl1igQM+GkTZnRJT08/4M
+	KvlN3dj4=; b=LnKmZ42CXh9Ua/8xfRrwvrPLd9lDh/8+TYK1M3T8fIYNafAEpX1
+	IDw8s8TMxYOXFOpIRfMElX3hwZHV0ppN8y/8AUHVcZIJ9O8gFIZ5IRk0fplE5oOs
+	wN5s4jAaUuevM2H9GrKhuJ+rgmOBIW80Q2ZlrrznX4CSGsp3EwYY3tnnHttNKBm3
+	6GnxRkRX7EmH2xC1xXnkP8/SIYX2jwc2GzcYOMN1H8p15EB5+l48mQwP1lUx4C/G
+	zeP4KY807UdmRIbL1OFCQzS5h2B6tD4RvD523yiw9NA6Ttj80xbkyGZr1N9yPFy5
+	n/s333j2eWXNfnKptLXRTCCrYbgQxftjX+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:mime-version
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671481711; x=
+	1671568111; bh=9YGbQcIciAgcxjVl1igQM+GkTZnRJT08/4MKvlN3dj4=; b=o
+	YoQ4uKImAqcBi74wuPLQIocfZcLBC/Q5j9TZ5pn0qUMKZNOemyltjl3z5dHHQGrT
+	V0EEVjqYIaJc7vERx4UOYDAiLKRpQeqTWOSb6ptkLpDk5J7SHQvCLuW09fGXmM1B
+	oekdysnIrH3s+SjwUYZTuCEZrlZFR4hAXlNldQbQxc03xmfXXPDb6HGHEDtzSJ6G
+	Z9BhMirzYgLJXMfdQ6Ajr4oakiRZmWGxxzneP7gzAArCkHguZAHU0/dKkRe5v7yf
+	tTXuVw7f+fPpQ1wYygLRkdx4wwFkCml/3r8Het+jOWlwwQHvHL+0konviNWrz2eJ
+	dnhTbpTrdt+onieQXkoAw==
+X-ME-Sender: <xms:b8mgYxpQDArISCJ0rpZpJNYiumPmSutzyr5Wu3JmJ1tVmFKbloRNiA>
+    <xme:b8mgYzqTIwMSnwg8OLGV2N08bPeSLDPpILpRd2SRKvMWK3bRmjJMNbILP8CDzp01p
+    NIQwSh7AIcK2CYZc_Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgdduuddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:b8mgY-MjREkvVY33nLpZejTcPnqMTqmW-Z19CjGIhIsTo4nzteIl0A>
+    <xmx:b8mgY86laJ4Z4RN2QpxUM19Q9hphyyHvk9J1e9f2I8N0cdRU7RSlpw>
+    <xmx:b8mgYw5xsTFUw8u3xHkDTsYaTXk4kysURXUjKxHoTv9gtg9Sq98pOw>
+    <xmx:b8mgY-RclW6DA3qxUhdSnY1BdXyvFZllWbxsPfEZooOB_ggxfyf8Gg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7CE55B60086; Mon, 19 Dec 2022 15:28:31 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <2e5e43ed-ad33-45f7-b270-5b4ae46a78fe@app.fastmail.com>
+Date: Mon, 19 Dec 2022 21:28:11 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>, soc@kernel.org,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	"Conor.Dooley" <conor.dooley@microchip.com>,
-	Samuel Holland <samuel@sholland.org>, guoren <guoren@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Atish Patra <atishp@rivosinc.com>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Philipp Tomsich <philipp.tomsich@vrull.eu>,
-	devicetree@vger.kernel.org,
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	"Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five
- SoC
-Message-ID: <Y6CMZVPURrDSkcwt@spud>
-References: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
- <32cf0901-a4a0-48a7-bf42-f2cdb34d1ee7@app.fastmail.com>
- <Y55IQIxXw/twcxFx@spud>
- <CA+V-a8utcKKp81UTxQSvD6WsHgjO_7gSz33eedaE0+VxrR3f4w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="76/8+jUyugVdoQlq"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8utcKKp81UTxQSvD6WsHgjO_7gSz33eedaE0+VxrR3f4w@mail.gmail.com>
+Cc: soc@kernel.org, inux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Subject: [GIT PULL] ARM: SoC fixes for 6.2
+Content-Type: text/plain
 
+The following changes since commit 830b3c68c1fb1e9176028d02ef86f3cf76aa2476:
 
---76/8+jUyugVdoQlq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.1 (2022-12-11 14:15:18 -0800)
 
-On Mon, Dec 19, 2022 at 12:43:44PM +0000, Lad, Prabhakar wrote:
-> Hi Conor,
->=20
-> On Sat, Dec 17, 2022 at 10:52 PM Conor Dooley <conor@kernel.org> wrote:
-> >
-> > On Fri, Dec 16, 2022 at 09:04:20PM +0100, Arnd Bergmann wrote:
-> > > On Fri, Dec 16, 2022, at 17:32, Palmer Dabbelt wrote:
-> > > > On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
-> > > >> On Thu, Dec 15, 2022 at 01:40:30PM -0800, Palmer Dabbelt wrote:
-> > > >>> Given that we already moved the SiFive one out it seems sane to j=
-ust start
-> > > >>> with the rest in drivers/soc/$VENDOR.  Looks like it was Christop=
-h's idea to
-> > > >>> do the move, so I'm adding him in case he's got an opinion (and a=
-lso the SOC
-> > > >>> alias, as that seems generally relevant).
-> > > >>
-> > > >> Well, it isn't an integral architecture feature, so it doesn't rea=
-lly
-> > > >> beloing into arch.  Even the irqchip and timer drivers that are mo=
-re
-> > > >> less architectural are in drivers/ as they aren't really core
-> > > >> architecture code.
-> > > >
-> > > > That makes sense to me, it just looks like the SiFive ccache is the=
- only
-> > > > one that's in drivers/soc/$VENDOR, the rest are in arch.  It looks =
-like
-> > > > mostly older ports that have vendor-specific cache files in arch (i=
-e,
-> > > > arm has it but arm64 doesn't).  Maybe that's just because the newer
-> > > > architectures sorted out standard ISA interfaces for these and thus
-> > > > don't need the vendor-specific bits?  I think we're likely to end up
-> > > > with quite a few of these vendor-specific cache management schemes =
-on
-> > > > RISC-V.
-> > > >
-> > > > I'm always happy to keep stuff out of arch/riscv, though.  So maybe=
- we
-> > > > just buck the trend here and stick to drivers/soc/$VENDOR like we d=
-id
-> > > > for the first one?
-> > >
-> > > I don't particularly like drivers/soc/ to become more of a dumping
-> > > ground for random drivers. If there are several SoCs that have the
-> > > same requirement to do a particular thing, the logical step would
-> > > be to put them into a proper subsystem, with a well-defined interface
-> > > to dma-mapping and virtualization frameworks.
-> > >
-> > > The other things we have in drivers/soc/ are usually either
-> > > soc_device drivers for identifying the system, or they export
-> > > interfaces used by soc specific drivers.
-> >
-> > Sounds like that's two "not in my back yard" votes from the maintainers
-> > in question..
-> > Doing drivers/cache would allow us to co-locate the RISC-V cache
-> > management bits since it is not just going to be the ax45mp l2 driver
-> > that will need to have them.
-> >
-> > Would it be okay to put this driver in soc/andestech for now & then move
-> > it, and the SiFive one, once we've got patches posted for cache
-> > management with that?
-> >
-> I think to start with it would be better if we place the Andes cache
-> driver in the proposed "drivers/cache" folder. We would avoid
-> unnecessary movement of code?
+are available in the Git repository at:
 
-Uh, go for it I guess. I'll try to put out a few patches for moving the
-sifive ccache driver & adding management stuff to it whenever I
-inevitably get bored over Christmas.
-The offer to make me responsible for applying patches for drivers/cache
-still stands.
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-1
 
-Thanks,
-Conor.
+for you to fetch changes up to 6f85602d5fdea936077060ca6853587f01716a45:
 
+  Merge tag 'v6.1-soc-fixes' of https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into arm/fixes (2022-12-19 16:47:40 +0100)
 
---76/8+jUyugVdoQlq
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+ARM: SoC fixes for 6.2
 
------BEGIN PGP SIGNATURE-----
+These are a couple of build fixes from randconfig testing,
+plus a set of Mediatek SoC specific fixes, all trivial.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6CMYQAKCRB4tDGHoIJi
-0p2JAP4qgoX8AjUnFfvkyiQnKGYSgRjn6eE8/0cwl5UwRGUNGAEAyc85loqs6i0w
-m0enLNoFgKZY5jisIfnfQ46sgFafhwM=
-=kmGJ
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Arnd Bergmann (5):
+      ARM: pxa: fix building with clang
+      ARM: disallow pre-ARMv5 builds with ld.lld
+      soc: tegra: fix CPU_BIG_ENDIAN dependencies
+      Merge tag 'v6.1-dts64-fixes' of https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into arm/fixes
+      Merge tag 'v6.1-soc-fixes' of https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into arm/fixes
 
---76/8+jUyugVdoQlq--
+Chen-Yu Tsai (1):
+      arm64: dts: mt8183: Fix Mali GPU clock
+
+Chun-Jie Chen (1):
+      soc: mediatek: pm-domains: Fix the power glitch issue
+
+Corentin Labbe (1):
+      MAINTAINERS: add related dts to IXP4xx
+
+Krzysztof Kozlowski (1):
+      ARM: dts: spear: drop 0x from unit address
+
+Macpaul Lin (1):
+      arm64: dts: mediatek: mt8195-demo: fix the memory size of node secmon
+
+ MAINTAINERS                                  | 1 +
+ arch/arm/Kconfig                             | 2 ++
+ arch/arm/boot/dts/spear300.dtsi              | 2 +-
+ arch/arm/boot/dts/spear310.dtsi              | 2 +-
+ arch/arm/boot/dts/spear320.dtsi              | 2 +-
+ arch/arm/mach-pxa/pxa27x.c                   | 8 ++++++++
+ arch/arm/mach-pxa/pxa3xx.c                   | 8 ++++++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi     | 2 +-
+ arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 4 ++--
+ drivers/soc/mediatek/mtk-pm-domains.c        | 2 +-
+ drivers/soc/tegra/Kconfig                    | 3 +++
+ 11 files changed, 29 insertions(+), 7 deletions(-)
