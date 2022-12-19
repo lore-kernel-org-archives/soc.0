@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A8A4C4708E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF97C3DA7C
 	for <soc@archiver.kernel.org>; Mon, 19 Dec 2022 16:00:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 02233C433A8; Mon, 19 Dec 2022 16:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DCF57C433A0;
+	id E1058C4339C; Mon, 19 Dec 2022 16:00:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C29EBC43392;
 	Mon, 19 Dec 2022 16:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1671465633;
-	bh=6akd0X6QdNre7kWoSxby70nYjBrODXDI2cgOCIa8utw=;
+	bh=ygNF5yJobn7S+G0mhMJ3ODdTdwjUpOvBgTft6LOALWw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=DYlQ801PiypuMqy8iJJPFLyk4OITrQn8QQNgxKwoSpdFQMrg4O40zeDPxli9QzirF
-	 EBOfxkt6Tp4LCnQ+VzKosFbPS1oSCWKKRTLP74utrRlY4loxxLqw+uYiwTjsG7ev+3
-	 876XkZAOSttXZxXtRKCISAE5NRacMAZqLTETEAfZ95xFqlN6kcp15jg1qK70EaYVoJ
-	 JiNZ63vfAPSZLcR5m+mxCQLd9+1Jrxlp8zdTpUT8SxIkuF6/8GmBoKGOwiU3Yxyz+F
-	 ki8ru84+jOv8zN7hlcLXecLzN+jHMmOcDf4EhsYnNREzPdCjIFH3/+UyrImMiOo8IO
-	 e15emVIRmz5ZA==
+	b=etqGnppIKxX7DRhGMVTrAgxUO9ospU0Pp2ERAHpehP2jOsyn72gQ5SEjhmqJcbzx5
+	 KTp6l1UKNsmxDTW9/menABVb5FyEogk7CTpCoNPnRwAwC0nPH8ltHHeaVBHt0QGlxI
+	 fHtWrkcOHc0Wexld1RMGuAEYOi/0caDCspR+Kbdf846UDyDjgfm/YD7tD8/+SoAlQu
+	 jA6/t2rl6KPcKbgYNduQP2sFaIPANUCHA0c4NHyV/hNi+QBeZ+MwTMLVNya+9lCk7X
+	 b5937nZPDDblNNXSg/9n9HkyJc5PG3/gMMRNZn+v0+vFAyal++Tn6sYGvlLmrFmNlv
+	 pGBjY4S41z/Pw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9DCBE451BB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9BA4CE451B6;
 	Mon, 19 Dec 2022 16:00:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: dts: spear: drop 0x from unit address
+Subject: Re: [PATCH] soc: tegra: fix CPU_BIG_ENDIAN dependencies
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167146563369.24111.14110811094543588406.git-patchwork-notify@kernel.org>
+ <167146563363.24111.14476877221839283586.git-patchwork-notify@kernel.org>
 Date: Mon, 19 Dec 2022 16:00:33 +0000
-References: <20221210113347.63939-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221210113347.63939-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221215165336.1781080-1-arnd@kernel.org>
+In-Reply-To: <20221215165336.1781080-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,24 @@ Hello:
 This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 10 Dec 2022 12:33:46 +0100 you wrote:
-> By coding style, unit address should not start with 0x.
+On Thu, 15 Dec 2022 17:53:21 +0100 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/spear300.dtsi | 2 +-
->  arch/arm/boot/dts/spear310.dtsi | 2 +-
->  arch/arm/boot/dts/spear320.dtsi | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+> My previous patch to prevent BPMP from being enabled on big
+> endian kernels caused a build regression:
+> 
+> WARNING: unmet direct dependencies detected for TEGRA_BPMP
+>   Depends on [n]: ARCH_TEGRA [=y] && TEGRA_HSP_MBOX [=y] && TEGRA_IVC [=y] && !CPU_BIG_ENDIAN [=y]
+>   Selected by [y]:
+>   - ARCH_TEGRA_186_SOC [=y] && ARCH_TEGRA [=y] && ARM64 [=y]
+>   - ARCH_TEGRA_194_SOC [=y] && ARCH_TEGRA [=y] && ARM64 [=y]
+>   - ARCH_TEGRA_234_SOC [=y] && ARCH_TEGRA [=y] && ARM64 [=y]
+> 
+> [...]
 
 Here is the summary with links:
-  - ARM: dts: spear: drop 0x from unit address
-    https://git.kernel.org/soc/soc/c/2b76cfe19030
+  - soc: tegra: fix CPU_BIG_ENDIAN dependencies
+    https://git.kernel.org/soc/soc/c/ba4b4d0293ed
 
 You are awesome, thank you!
 -- 
