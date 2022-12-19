@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5BE9C46467
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B7DC10F1B
 	for <soc@archiver.kernel.org>; Mon, 19 Dec 2022 16:00:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AE0F4C43392; Mon, 19 Dec 2022 16:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9825EC433D2;
+	id AE0C5C433F2; Mon, 19 Dec 2022 16:00:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 984BCC433F1;
 	Mon, 19 Dec 2022 16:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1671465642;
-	bh=+sC6t6SBTQNB+xUsbpx6fcXIgDrM/wF04JGCi3uyyk4=;
+	bh=w/AhZ8IHle5GET6QMTmC0cAhdiL18uZEj8fNII9zkO8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=J7wYlPFYqNBhfVrj+7m7Bjh0Oi8Zv29Qx+E86Rs+eaPfMebncaGHL5Me6V8hRh6cu
-	 DCmLVF8U2SslduhTgZ6OOhic9d9zJb4waOr2IBLOSSpuJlxl5nHEg9LgRELBWWDKik
-	 FAZamvEF2tUkAojK3JCQdTyy0NI5n+syBgZT99urtCtsPh7cHfZrU7HwNNbqtQG5Fj
-	 yNwJP+xqscIHoszeGb3b/cr1DHCi3buAWPxt87F4NtkSuHWpz/yzwMqy7haUP4rnsl
-	 9lcSUgSzzrh3pVnUuWcqj7OGUzRyMl0yicorh6TGy8rr6OSh8tMFaKi5V6encFT8rT
-	 MHc4QNS3VV4Jg==
+	b=QzS6PkdkhT8LYPEvfS4flwhXQEGNjV8wCYb2xr2gse7AX/l9/UT7qJfQIRSuOyu5P
+	 suxq1L109t8EJ5fzfog90mDQFpfjGyD74zCLiNdOBXxu875Xfz7s1i0Qgj78lxhEHe
+	 KWGNIY912a86I+gKDFhcHYc46JO/dY2f4M1std/ErYip4rrH1BZYuwuNKGUkSYwcF/
+	 9zPe/M+rbA4JlSmE/AtXssWHO1E9D8sBSriYv44B7ZSAFCHUg8UqUVx/shy3z/Jkjc
+	 HIdpEU4UzcJjfpsOI/L4vICjcFVQ7RTsdViRHUJ0mAPslVpfR6cMSh39REaV7ELiQm
+	 SShhikVobVzuA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F550E21EF8;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86EE4E21EEE;
 	Mon, 19 Dec 2022 16:00:42 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] arm64: dts: fixes for v6.1
+Subject: Re: [GIT PULL] soc: mediatek: fixes for v6.1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167146564251.24111.17390492346269644977.git-patchwork-notify@kernel.org>
+ <167146564254.24111.17830756198151339411.git-patchwork-notify@kernel.org>
 Date: Mon, 19 Dec 2022 16:00:42 +0000
-References: <af4c45ce-a150-438f-dab4-e47b120c32c4@suse.com>
-In-Reply-To: <af4c45ce-a150-438f-dab4-e47b120c32c4@suse.com>
+References: <29c8b913-53cf-096f-fe44-832ceaeac116@suse.com>
+In-Reply-To: <29c8b913-53cf-096f-fe44-832ceaeac116@suse.com>
 To: Matthias Brugger <mbrugger@suse.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -42,19 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 16 Dec 2022 12:07:19 +0100 you wrote:
-> Hi Olof and Arnd,
+On Fri, 16 Dec 2022 12:09:03 +0100 you wrote:
+> Hi Arnd and Olof,
 > 
-> Please pull the following fixes for v6.1.
+> Please have a look at the following fix for v6.1
 > 
-> Thanks,
+> Regards,
 > Matthias
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] arm64: dts: fixes for v6.1
-    https://git.kernel.org/soc/soc/c/b9cb6be06b56
+  - [GIT,PULL] soc: mediatek: fixes for v6.1
+    https://git.kernel.org/soc/soc/c/6f85602d5fde
 
 You are awesome, thank you!
 -- 
