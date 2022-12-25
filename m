@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60DB9C3DA7A
-	for <soc@archiver.kernel.org>; Sun, 25 Dec 2022 16:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A4E4C3DA7A
+	for <soc@archiver.kernel.org>; Sun, 25 Dec 2022 17:01:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 451A0C433D2; Sun, 25 Dec 2022 16:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657EFC433EF;
-	Sun, 25 Dec 2022 16:50:51 +0000 (UTC)
+	id E2897C433F1; Sun, 25 Dec 2022 17:01:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C73CC433EF;
+	Sun, 25 Dec 2022 17:01:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671987052;
-	bh=JCCOZnt3UbVX8+Pcl+PTdJ8ibNdt2Th19YuSTthkoF4=;
+	s=k20201202; t=1671987663;
+	bh=TjgB20XKll8jOjDUQkrrEGL52x0B4bXomSII/8/nuDM=;
 	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=fxcd9IXN5udBdXWYBosUUfbgXTtNQXxO0DTjgmBYhH7wSbbQIyMOsddR1Qp5jm1rY
-	 nfjKp1GQpy8sP28lfjWZazuw+Fhg4U+yvWMl7DhKRntYwUseeOnaECSrV4sIyIyH5Z
-	 x1t2v7j6XGgXfzPMar/Tyzim3s8gw/oeZGFGVrXnUyBlyu2tJUQsEckG99m65Ms+3C
-	 1DCJenB2oA+s3KoVuErdX82Or6Iir4DobJN1ZGEylgDDCtP+ZQuaqaQSHsscKU52gd
-	 /V+sdJAbkTzmZkYUZMkpxXEKq3PAOTSvQJM/1+1geTboHdMJRVqFAV8uk4uz/IdC9m
-	 pXXJUfS5My/1Q==
+	b=OQp9TYHRWfvW+NCXJ9iZjoc2Ke+4OahBE8Oa40k/1JSWTjB9l0P0/VkSSZZ0VEDxI
+	 lsyfqRurE7jqvy8aRtohDsWvnxnLW7aDv7sIl+u67r4zMaQvXEL0RXSLpFV3R2+RjI
+	 By9KeNFZYwZu7jUzZLY17luR2nMfywwWmGFOuu5/koQCrekH+osr/AhW2de3CWSURw
+	 8BI6f3pCeKML3dl6Tu3ezJChIXjtTcIaXZDUHtEZ4kugMoq0qdyX2tUueIV67xZr0/
+	 jn3gAsQ37jO5k0+beMcf6KrMskNEeNdagpiEkyChKyPzgYBUDqsiope93XeQOQ+c3g
+	 QBbs0hoNdZQ4g==
 From: Sasha Levin <sashal@kernel.org>
 To: stable-commits@vger.kernel.org,
 	kory.maincent@bootlin.com
@@ -29,9 +29,9 @@ Cc: Viresh Kumar <vireshk@kernel.org>,
 	soc@kernel.org,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Patch "arm: dts: spear600: Fix clcd interrupt" has been added to the 4.14-stable tree
-Date: Sun, 25 Dec 2022 11:50:49 -0500
-Message-Id: <20221225165049.746958-1-sashal@kernel.org>
+Subject: Patch "arm: dts: spear600: Fix clcd interrupt" has been added to the 4.9-stable tree
+Date: Sun, 25 Dec 2022 12:01:01 -0500
+Message-Id: <20221225170101.755749-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Patchwork-Hint: ignore
@@ -42,19 +42,19 @@ This is a note to let you know that I've just added the patch titled
 
     arm: dts: spear600: Fix clcd interrupt
 
-to the 4.14-stable tree which can be found at:
+to the 4.9-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      arm-dts-spear600-fix-clcd-interrupt.patch
-and it can be found in the queue-4.14 subdirectory.
+and it can be found in the queue-4.9 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
 
-commit 52a169376b5f7c505385e3b10717d5a0c2775006
+commit 5d2ccbeb81cd62745e2edafc5b6eeae93e01d481
 Author: Kory Maincent <kory.maincent@bootlin.com>
 Date:   Wed Nov 2 18:10:06 2022 +0100
 
@@ -72,10 +72,10 @@ Date:   Wed Nov 2 18:10:06 2022 +0100
     Signed-off-by: Sasha Levin <sashal@kernel.org>
 
 diff --git a/arch/arm/boot/dts/spear600.dtsi b/arch/arm/boot/dts/spear600.dtsi
-index 00166eb9be86..ca07e73e1f27 100644
+index bd379034993c..89318273d787 100644
 --- a/arch/arm/boot/dts/spear600.dtsi
 +++ b/arch/arm/boot/dts/spear600.dtsi
-@@ -53,7 +53,7 @@ clcd: clcd@fc200000 {
+@@ -53,7 +53,7 @@ clcd@fc200000 {
  			compatible = "arm,pl110", "arm,primecell";
  			reg = <0xfc200000 0x1000>;
  			interrupt-parent = <&vic1>;
