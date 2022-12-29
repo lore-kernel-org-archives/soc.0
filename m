@@ -1,72 +1,149 @@
-Return-Path: <pali@kernel.org>
+Return-Path: <SRS0=3fii=43=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F283DC3DA79
-	for <soc@archiver.kernel.org>; Mon, 26 Dec 2022 12:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33465C4332F
+	for <soc@archiver.kernel.org>; Thu, 29 Dec 2022 14:06:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7F5CC433EF; Mon, 26 Dec 2022 12:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0872C433D2;
-	Mon, 26 Dec 2022 12:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672059013;
-	bh=vATcvRfVKP16s74F3jAS0bM/o2WoniPhrwR2tCLy/ZE=;
-	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=S3PAMjL513n0WGxZu6T+wV4VK+ITr8YcjCrcclBWDYZjhOgRRmXNXSm5RiWD2X2qm
-	 mR0qvNv8AQfHmsLY0ZRkONc9mXswx/3L+dOIVeVP5GN4UU/OsJFcQCsI/t7eKt0CtK
-	 bXoy30jOziHcDJ+7+ru5O6en/NyIgyYV6bW5iTLNtpsPTS5BMKIniggN+Tk/ZEBTJu
-	 jm7nxar+91YBhO8ZJgLRPXhSeklUagvnz2/2bpjbD4oeghdmW7AiXz2p1ozn3RVsQb
-	 mmpUSPAYvqkeiE3E/PVcUt0tvylJMVQ84nXu7X20NTwjUMyKesO/tyfuDjU+8T42ZZ
-	 TwY1zGGdG98JQ==
-Received: by pali.im (Postfix)
-	id 5C2AE9D7; Mon, 26 Dec 2022 13:50:13 +0100 (CET)
-From: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To: "Arnd Bergmann" <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>
+	id DFAD9C433F2; Thu, 29 Dec 2022 14:06:01 +0000 (UTC)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 66FB7C433D2;
+	Thu, 29 Dec 2022 14:06:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 66FB7C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 51CB55C009C;
+	Thu, 29 Dec 2022 09:05:59 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Dec 2022 09:05:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1672322759; x=1672409159; bh=YrObHqLUZX
+	ojkNm97IkZC/z6Y0VXxiZy8VywJIHip2I=; b=EihVn2yqPJgTkNJUYLt5HEq6So
+	v7fLFzBBmYgT4lLtwOBVx4k/bfGt7/lG6DMCwdcyuBAEwnCF7xWE16JMPFsuA/6d
+	y4GaS7TgqvCpVT5vqX3c4sI3Gnbqe8uVvn09nmUlVcmKfPd2CgVG+sFIQfj7Y05q
+	AKYdEYyJaW7VpmJdikF3evf9Y8kOLrDePmNJltUDHEZGNLlcRFFQLTz9VhKPp/vo
+	sKxQnsSjnj6E5NAJF/hrc2Qh7rDS5Ya1IPCD4ADAmc4d+aaWQ5lbxNPFJxfo/BNY
+	iR8Gn+0AasaeeRfQ2fJCKlNJMMTOcJTAZCav2/6hWCtH6wW+C+vmoZjir2OA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1672322759; x=1672409159; bh=YrObHqLUZXojkNm97IkZC/z6Y0VX
+	xiZy8VywJIHip2I=; b=JQTTJLSBLzA3pe3NW11WYmdZB2XibIhibGuLVbSJ1E5t
+	2wlUOGtN0te2S50OA0SZqbFa3zA5BLKRsn4OaAIsfRvaf1av0OfosjuB7DacicQv
+	x9ydzspIu9/rih9Ii5lkLFYPz/W1YZAYuwnoYn+SDbi76H9qA58cPE72QvDa2Tcm
+	Pob8fLXk6tFh0LyJY+3a9HwI+sUwwHnkzeWfs1hWoGWc1oNx6Hkbk0Uqocc61bBs
+	hFxBxpIlUng0jqL3r+6ABWk8v4zBNxTxCNSVmT94wztZqjVcb8N+WhudfLps2anJ
+	CRjhMfurmHeFBgiIcws83Oavr/k50WT4bxtM+NPU8Q==
+X-ME-Sender: <xms:xZ6tY0zcaTMo2j14BCVdcYKvM9buMKoux4lC4M62IPZ-0W3p0PpphA>
+    <xme:xZ6tY4QwBUZWTi83XIWfjp70A1A7XDgmpYE5EdvFxBR9hqECVO9o3nQS7qUoCsiuq
+    91QEtTnsVbvm2Op-4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdeitdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:xZ6tY2WY3KKnHU_5hY-uZiwJ0-Ghu6zxIqRTU352ezsRPFmY22p_hA>
+    <xmx:xZ6tYygN1-Cvd7iE_esYN76B52-B82kmOgNvfcjnn_JV57X63ZwoKQ>
+    <xmx:xZ6tY2BOhv6gXLfzeYcH8AuUL07RtoJVjqHFdEiJfXuYvZgUQgDaPw>
+    <xmx:x56tYwyReFwuuTl1NJpDYWxbHLvAVsNgIe4HVIfTPXeY81rOPYUL4w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B1E33B60086; Thu, 29 Dec 2022 09:05:57 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <bb350709-e29a-402c-8e7e-37fd9c452c6d@app.fastmail.com>
+In-Reply-To: <Y55IQIxXw/twcxFx@spud>
+References: <mhng-8b05b6cd-d8a1-4302-af24-2f64a4bf7c32@palmer-ri-x1c9a>
+ <32cf0901-a4a0-48a7-bf42-f2cdb34d1ee7@app.fastmail.com>
+ <Y55IQIxXw/twcxFx@spud>
+Date: Thu, 29 Dec 2022 15:05:37 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Conor Dooley" <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 8/8] leds: turris-omnia: change max brightness from 255 to 1
-Date: Mon, 26 Dec 2022 13:36:30 +0100
-Message-Id: <20221226123630.6515-9-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221226123630.6515-1-pali@kernel.org>
-References: <20221226123630.6515-1-pali@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc: linux-riscv@lists.infradead.org,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>, soc@kernel.org,
+ Prabhakar <prabhakar.csengg@gmail.com>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Magnus Damm" <magnus.damm@gmail.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ "Conor.Dooley" <conor.dooley@microchip.com>,
+ "Samuel Holland" <samuel@sholland.org>, guoren <guoren@kernel.org>,
+ "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Jisheng Zhang" <jszhang@kernel.org>,
+ "Atish Patra" <atishp@rivosinc.com>,
+ "Anup Patel" <apatel@ventanamicro.com>,
+ "Andrew Jones" <ajones@ventanamicro.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Philipp Tomsich" <philipp.tomsich@vrull.eu>, devicetree@vger.kernel.org,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, "Biju Das" <biju.das.jz@bp.renesas.com>,
+ "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Christoph Hellwig" <hch@infradead.org>
+Subject: Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC
+Content-Type: text/plain
 
-From: Marek Behún <kabel@kernel.org>
+On Sat, Dec 17, 2022, at 23:52, Conor Dooley wrote:
+> On Fri, Dec 16, 2022 at 09:04:20PM +0100, Arnd Bergmann wrote:
+>> On Fri, Dec 16, 2022, at 17:32, Palmer Dabbelt wrote:
+>> > On Thu, 15 Dec 2022 23:02:58 PST (-0800), Christoph Hellwig wrote:
+>>
+>> I don't particularly like drivers/soc/ to become more of a dumping
+>> ground for random drivers. If there are several SoCs that have the
+>> same requirement to do a particular thing, the logical step would
+>> be to put them into a proper subsystem, with a well-defined interface
+>> to dma-mapping and virtualization frameworks.
+>> 
+>> The other things we have in drivers/soc/ are usually either
+>> soc_device drivers for identifying the system, or they export
+>> interfaces used by soc specific drivers.
+>
+> Sounds like that's two "not in my back yard" votes from the maintainers
+> in question..
+> Doing drivers/cache would allow us to co-locate the RISC-V cache
+> management bits since it is not just going to be the ax45mp l2 driver
+> that will need to have them.
+>
+> Would it be okay to put this driver in soc/andestech for now & then move
+> it, and the SiFive one, once we've got patches posted for cache
+> management with that?
 
-Using binary brightness makes more sense for this controller, because
-internally in the MCU it works that way: the LED has a color, and a
-state whether it is ON or OFF.
+I actually had a look at both of these drivers now and
+found that they do entirely different things, so I would
+revise what I had said earlier. Sorry for not having paid
+enough attention at first.
 
-The resulting brightness computation with led_mc_calc_color_components()
-will now always result in either (0, 0, 0) or the multi_intensity value.
+The Sifive L2 cache driver handles an interrupt from the
+cache controller that is trigger by data corruption
+(corectable or uncorrectable). This is used as an
+implementation detail of drivers/edac/sifive_edac.c
+and could probably just be merged into that file.
 
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Fixes: 089381b27abe ("leds: initial support for Turris Omnia LEDs")
-Reviewed-by: Pali Rohár <pali@kernel.org>
----
- drivers/leds/leds-turris-omnia.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The Andes cache driver in this series on the other hand
+does not do EDAC at all but instead handles cache maintenance
+for the dma-mapping interface by hooking into the
+inline-asm implementation details of arch/riscv/mm/dma-noncoherent.c
+as an errata fix. If we expect more nonstandard ways
+to manage cache controllers for this, I think this
+needs a proper interface in arch/riscv or drivers/cache.
 
-diff --git a/drivers/leds/leds-turris-omnia.c b/drivers/leds/leds-turris-omnia.c
-index 71340dec492a..04f01ae46c27 100644
---- a/drivers/leds/leds-turris-omnia.c
-+++ b/drivers/leds/leds-turris-omnia.c
-@@ -146,7 +146,7 @@ static int omnia_led_register(struct i2c_client *client, struct omnia_led *led,
- 	init_data.fwnode = &np->fwnode;
- 
- 	cdev = &led->mc_cdev.led_cdev;
--	cdev->max_brightness = 255;
-+	cdev->max_brightness = 1;
- 	cdev->brightness_set_blocking = omnia_led_brightness_set_blocking;
- 	cdev->trigger_type = &omnia_hw_trigger_type;
- 	cdev->default_trigger = omnia_hw_trigger.name;
--- 
-2.20.1
+This could be done the same way as arch/arm/include/asm/cacheflush.h
+with CPU specific cache management callback pointers, but
+can't really be a separate device driver without interacting
+with low-level architecture code.
 
+     Arnd
