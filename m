@@ -1,97 +1,149 @@
-Return-Path: <SRS0=K5CN=45=linaro.org=bhupesh.sharma@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0066C3DA7D
-	for <soc@archiver.kernel.org>; Sat, 31 Dec 2022 12:49:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A44AC4708E
+	for <soc@archiver.kernel.org>; Mon,  2 Jan 2023 13:20:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AA53BC433F2; Sat, 31 Dec 2022 12:49:04 +0000 (UTC)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 101D9C433F1
-	for <soc@kernel.org>; Sat, 31 Dec 2022 12:49:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 101D9C433F1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f176.google.com with SMTP id w37so15687701pga.5
-        for <soc@kernel.org>; Sat, 31 Dec 2022 04:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8DXWGlRQXwEWsvjY0axdM/4CSvGdmhgjoXDmsx5XAE=;
-        b=GKHfIO5/zPApXtAUOUA0aOVIZUwLAURpCXBHgDj1NR1eDpPZ8kJqGc9kYxtnJ8J6n0
-         G7VioD9KKPNReKRZffb5YWGKGrwy7MKl3bL1EccIOeRJVGChBnOjTxOTdKusj1dAVoka
-         lOL7EYDnoTSZwvhuUp0IvnnoufI2Gr390XZrZpzt8yzHrOuSQG1e2YC56zmxhAYmVTkA
-         E3+HowNHFYPE/naF/0ShWsCbZHz2o5P478U7NMHJ17JVORUMQtc0IwnOS0FdMIDjmkQS
-         +eFhB5UlvXPh8sHVCVIEuVaWIp38bOx52PZLr62+JWbPvPc/wGIH1Wbbq4N/oAOAGnp4
-         csUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q8DXWGlRQXwEWsvjY0axdM/4CSvGdmhgjoXDmsx5XAE=;
-        b=YUxk+GrtfsOEyeax/VtpHcKdh1thdfTbYl5bw4bXH09hq0FtZFzU1Js7is1RAhymb7
-         cRNDW1ph9WtvoLO5AuMwuMgQxrhWkRK+/6BxW4fqE5+1a9FU/x8pMneyNCvhNlHY7K/D
-         xHSAio1pWAIjpeYlqBENC8gWymEIIqxEGU0OamEiTR+3eYzwSqY/SvIqCQud4+QKOXen
-         hgQ+8B4lei4Hco9mv2DGbJdsCBG8kEoGbgiUKRxspC30AIB1ZXRPBGebz4ugBBodZltu
-         KEJl7D1HLoBn7BmfiFlIQ8IndPA4Kliarl5DjRYOJFtNulMQ2JqrPTONxQFAeJyJr92v
-         mMGw==
-X-Gm-Message-State: AFqh2kogjdoBXgpzIIzlxDZD5t1D9LMgBC9AHxexMIOQDGwhlrsiFlGa
-	Cm+d1GUfGKOUVMgOnpIZ8Q//Xg==
-X-Google-Smtp-Source: AMrXdXt4c0FpjWbTrXvCfeqQQBQwRmV7yv8JVygcOx12CA48lg1ae5I7PrwtSe5VDyzE/rqRXF7cSQ==
-X-Received: by 2002:a62:b619:0:b0:574:3cde:385a with SMTP id j25-20020a62b619000000b005743cde385amr32875759pff.32.1672490942302;
-        Sat, 31 Dec 2022 04:49:02 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c5e:e3b5:c341:16de:ce17:b857])
-        by smtp.gmail.com with ESMTPSA id r29-20020aa7963d000000b005750d6b4761sm10337204pfg.168.2022.12.31.04.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 04:49:01 -0800 (PST)
-From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+	id 441CDC433F1; Mon,  2 Jan 2023 13:20:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522BFC433EF;
+	Mon,  2 Jan 2023 13:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1672665624;
+	bh=pjKPiSVd/zhGPrMH62/ZthP11sQppZjNCecZL/U9QYg=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=oq+sOw1mKPd2TeAkLJN8RcrtjqwUOhndUUnZaSty68oM/swryiufDbSmvCpgJX+u1
+	 NPNq6iWUpUkhXRm8UaB4agH827RwRwEHbPDkl68vvvY5OuMmDKK35kUUQtQilARzAb
+	 Z1UsQwGEFxicLhyibWugSUBs/QCJ3NuqlSNHioZl5JJ3+LlN6NuMFdIDqviX0IWlns
+	 39zObLK7JutgyyHdSHleXQaMlpKbg7XJIKsKlRMHQ6RUB1a/zw6YR+wH15UA454bMg
+	 Nk3HMe32lX0mBKQhmKL7OhnQVjJK4wS37dlohlGithAVWbMdvJ25VYI2DiJzLSdtum
+	 30SPeHfTO/3fw==
+Date: Mon, 2 Jan 2023 21:20:17 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: linux-arm-msm@vger.kernel.org,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: arnd@arndb.de,
-	agross@kernel.org,
-	bhupesh.sharma@linaro.org,
-	bhupesh.linux@gmail.com,
-	linux-kernel@vger.kernel.org,
-	will@kernel.org,
-	konrad.dybcio@somainline.org,
-	catalin.marinas@arm.com,
-	krzysztof.kozlowski@linaro.org
-Subject: [PATCH] arm64: defconfig: Enable Qualcomm EUD
-Date: Sat, 31 Dec 2022 18:18:52 +0530
-Message-Id: <20221231124852.3283597-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] i.MX fixes for 6.2
+Message-ID: <20230102132016.GA10699@T480>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-Now that the EUD (Embedded USB Debugger) block is supported on
-several Qualcomm SoCs upstream, enable the same as a module in
-the arm64 defconfig as a module.
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 851e8f9be06da..c43aeb936d9ad 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -922,6 +922,7 @@ CONFIG_USB_SERIAL=m
- CONFIG_USB_SERIAL_CP210X=m
- CONFIG_USB_SERIAL_FTDI_SIO=m
- CONFIG_USB_SERIAL_OPTION=m
-+CONFIG_USB_QCOM_EUD=m
- CONFIG_USB_HSIC_USB3503=y
- CONFIG_NOP_USB_XCEIV=y
- CONFIG_USB_GADGET=y
--- 
-2.38.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.2
+
+for you to fetch changes up to 490748874ebf1875420fc29b335bba2075dd1b5e:
+
+  soc: imx8m: Fix incorrect check for of_clk_get_by_name() (2023-01-02 21:16:05 +0800)
+
+----------------------------------------------------------------
+i.MX fixes for 6.2:
+
+- Fix i.MX8MP DT for missing GPC Interrupt, power-domain typo and USB
+  clock error.
+- Fix mach-imx cpu code to add missing of_node_put() call.
+- A couple of verdin-imx8mm DT fixes for audio playback support.
+- Fix pca9547 i2c-mux node name for i.MX and Vybrid device trees.
+- Fix an imx93-11x11-evk uSDHC pad setting problem that causes Micron
+  eMMC CMD8 CRC error in HS400ES/HS400 mode.
+- A couple of imx8mp-blk-ctrl driver fixes from Lucas Stach, enabling
+  pixclk with HDMI_TX_PHY PD, dropping power device name setting.
+- Fix the error check for of_clk_get_by_name() in soc-imx8m driver.
+- Other various DT fixes and cleanups.
+
+----------------------------------------------------------------
+Adam Ford (3):
+      arm64: dts: imx8mm-beacon: Fix ecspi2 pinmux
+      arm64: dts: imx8mp: Fix missing GPC Interrupt
+      arm64: dts: imx8mp: Fix power-domain typo
+
+Dario Binacchi (1):
+      ARM: imx: add missing of_node_put()
+
+Emanuele Ghidoli (2):
+      arm64: dts: verdin-imx8mm: fix dahlia audio playback
+      arm64: dts: verdin-imx8mm: fix dev board audio playback
+
+Fabio Estevam (4):
+      arm64: dts: imx8mp-phycore-som: Remove invalid PMIC property
+      ARM: dts: imx6ul-pico-dwarf: Use 'clock-frequency'
+      ARM: dts: imx7d-pico: Use 'clock-frequency'
+      ARM: dts: imx6qdl-gw560x: Remove incorrect 'uart-has-rtscts'
+
+Geert Uytterhoeven (3):
+      ARM: dts: imx: Fix pca9547 i2c-mux node name
+      ARM: dts: vf610: Fix pca9548 i2c-mux node names
+      arm64: dts: freescale: Fix pca954x i2c-mux node names
+
+Haibo Chen (1):
+      arm64: dts: imx93-11x11-evk: correct clock and strobe pad setting
+
+Krzysztof Kozlowski (1):
+      arm64: dts: imx8mq-thor96: fix no-mmc property for SDHCI
+
+Li Jun (1):
+      arm64: dts: imx8mp: correct usb clocks
+
+Lucas Stach (2):
+      soc: imx: imx8mp-blk-ctrl: enable global pixclk with HDMI_TX_PHY PD
+      soc: imx: imx8mp-blk-ctrl: don't set power device name
+
+Marco Felsch (1):
+      arm64: dts: imx8mp-evk: pcie0-refclk cosmetic cleanup
+
+Marek Vasut (1):
+      arm64: dts: imx8mm: Drop xtal clock specifier from eDM SBC
+
+Miaoqian Lin (1):
+      soc: imx8m: Fix incorrect check for of_clk_get_by_name()
+
+Tim Harvey (1):
+      arm64: dts: imx8mm-venice-gw7901: fix USB2 controller OC polarity
+
+ arch/arm/boot/dts/imx53-ppd.dts                           |  2 +-
+ arch/arm/boot/dts/imx6qdl-gw560x.dtsi                     |  1 -
+ arch/arm/boot/dts/imx6ul-pico-dwarf.dts                   |  2 +-
+ arch/arm/boot/dts/imx7d-pico-dwarf.dts                    |  4 ++--
+ arch/arm/boot/dts/imx7d-pico-nymph.dts                    |  4 ++--
+ arch/arm/boot/dts/vf610-zii-dev-rev-b.dts                 |  2 +-
+ arch/arm/boot/dts/vf610-zii-dev-rev-c.dts                 |  2 +-
+ arch/arm/mach-imx/cpu-imx25.c                             |  1 +
+ arch/arm/mach-imx/cpu-imx27.c                             |  1 +
+ arch/arm/mach-imx/cpu-imx31.c                             |  1 +
+ arch/arm/mach-imx/cpu-imx35.c                             |  1 +
+ arch/arm/mach-imx/cpu-imx5.c                              |  1 +
+ arch/arm64/boot/dts/freescale/fsl-ls1012a-qds.dts         |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1043a-qds.dts         |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts         |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts         |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1088a-rdb.dts         |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts       |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls208xa-qds.dtsi        |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi        |  2 +-
+ arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi       |  2 +-
+ .../arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi |  4 ++--
+ .../boot/dts/freescale/imx8mm-data-modul-edm-sbc.dts      |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dts      |  2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts    |  1 +
+ arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi   |  1 +
+ arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi      |  1 +
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts              |  4 ++--
+ arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi     | 10 ----------
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi                 | 15 ++++++++-------
+ arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dts         |  4 ++--
+ arch/arm64/boot/dts/freescale/imx8mq-thor96.dts           |  4 ++--
+ arch/arm64/boot/dts/freescale/imx8qxp-mek.dts             |  2 +-
+ arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts         |  6 +++---
+ drivers/soc/imx/imx8mp-blk-ctrl.c                         |  7 ++++---
+ drivers/soc/imx/soc-imx8m.c                               |  4 ++--
+ 36 files changed, 53 insertions(+), 54 deletions(-)
