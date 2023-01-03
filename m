@@ -1,149 +1,183 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A44AC4708E
-	for <soc@archiver.kernel.org>; Mon,  2 Jan 2023 13:20:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFE32C3DA7D
+	for <soc@archiver.kernel.org>; Tue,  3 Jan 2023 21:04:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 441CDC433F1; Mon,  2 Jan 2023 13:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522BFC433EF;
-	Mon,  2 Jan 2023 13:20:22 +0000 (UTC)
+	id 85D68C433F0; Tue,  3 Jan 2023 21:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477B4C433EF;
+	Tue,  3 Jan 2023 21:04:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672665624;
-	bh=pjKPiSVd/zhGPrMH62/ZthP11sQppZjNCecZL/U9QYg=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=oq+sOw1mKPd2TeAkLJN8RcrtjqwUOhndUUnZaSty68oM/swryiufDbSmvCpgJX+u1
-	 NPNq6iWUpUkhXRm8UaB4agH827RwRwEHbPDkl68vvvY5OuMmDKK35kUUQtQilARzAb
-	 Z1UsQwGEFxicLhyibWugSUBs/QCJ3NuqlSNHioZl5JJ3+LlN6NuMFdIDqviX0IWlns
-	 39zObLK7JutgyyHdSHleXQaMlpKbg7XJIKsKlRMHQ6RUB1a/zw6YR+wH15UA454bMg
-	 Nk3HMe32lX0mBKQhmKL7OhnQVjJK4wS37dlohlGithAVWbMdvJ25VYI2DiJzLSdtum
-	 30SPeHfTO/3fw==
-Date: Mon, 2 Jan 2023 21:20:17 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	s=k20201202; t=1672779857;
+	bh=+a4GknzPZkuXqBn656i7Wlb1eFqC8Z9LcgenqXot4Jc=;
+	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+	b=F9ntzGAXtEnJ9ec9847PhJqorpKgHZqyhBmP5kxP+gww/HimmqswFaTTMYuwOzivL
+	 5zho4d0Xf3T9KNajmSw9lcolFTYoG88gjrYkXK4JSvY2ZQzKzzdXWh966iXb3jYDhl
+	 eyKhoLmfjkZzZw2bdn8te0Qm8BCBinaK1+lD0vzl2+lb7ax/KnHCEjIhom8opEUcMG
+	 Zu5IhHHoYx4hEk6hOLsdM4mcQ0jeMl6EFR16NycmePWSRkhxUX6GEODBYrYHaWaf1w
+	 nc5ClDao8U1YOQaqDg4tRdtSCRcLN1XuynSgmJBZTVun/9Lfl1lpG+4OcxfhiZCMND
+	 UQNRK5xSOM9rA==
+From: Conor Dooley <conor@kernel.org>
+To: conor@kernel.org,
+	arnd@arndb.de,
+	palmer@dabbelt.com,
+	prabhakar.csengg@gmail.com
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.2
-Message-ID: <20230102132016.GA10699@T480>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	ajones@ventanamicro.com,
+	aou@eecs.berkeley.edu,
+	apatel@ventanamicro.com,
+	atishp@rivosinc.com,
+	biju.das.jz@bp.renesas.com,
+	devicetree@vger.kernel.org,
+	geert@linux-m68k.org,
+	guoren@kernel.org,
+	hch@infradead.org,
+	heiko@sntech.de,
+	jszhang@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	magnus.damm@gmail.com,
+	nathan@kernel.org,
+	paul.walmsley@sifive.com,
+	philipp.tomsich@vrull.eu,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	robh+dt@kernel.org,
+	samuel@sholland.org,
+	soc@kernel.org
+Subject: [RFC v5.1 0/9] Generic function based cache management operations (was Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC)
+Date: Tue,  3 Jan 2023 21:03:52 +0000
+Message-Id: <20230103210400.3500626-1-conor@kernel.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <Y62nOqzyuUKqYDpq@spud>
+References: <Y62nOqzyuUKqYDpq@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5698; i=conor.dooley@microchip.com; h=from:subject; bh=ml9qI4wIsVqAaRr3oVwB9iuAe68WB7bPF35ZiNhQRtI=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMlbZliskpCyseMwuBf3oWL6qpvTry+dFaGcn18VqrXkt6ZD gr9hRykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACbiw8nwhyP/zaUj0paFweUOtvHsU6 2/uzBe9uA88npF7BSRT59SLRgZFryoPcIWK8b1cfmjU8d9Dv4s+pVtZnCe5d6fyI+TnTslGQE=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+From: Conor Dooley <conor.dooley@microchip.com>
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Hey all, hopefully the $subject arrived intact!
 
-are available in the Git repository at:
+See here for prior discussion:
+https://lore.kernel.org/linux-riscv/Y62nOqzyuUKqYDpq@spud/#R
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.2
+Rather than continue that back and forth about where these drivers
+belonged, I've gone and created a mock-up for what it would look like
+if we picked drivers/cache.
 
-for you to fetch changes up to 490748874ebf1875420fc29b335bba2075dd1b5e:
+IMO, doing drivers/cache for the detail of vendor behaviour makes sense
+as it'll keep 'em out of arch/riscv while keeping the drivers
+together.
+I've taken v5 of Prabhakar's patchset & hacked at it a bit, so here
+is a tyre-kicked (more) generic implementation of cache management stuff
+via functions.
+I initially went and moved both the ax45mp and ccache drivers to
+drivers/cache & created a "subsystem" like interface, but quickly
+realised it was all far too trivial to exist & was intrinsically tied to
+the ALT_CMO_OP alternative setup on RISC-V.
+I trashed that so, and instead copied the interface currently used by
+riscv_set_cacheinfo_ops(), and created a corollary which registers cache
+management operations. Or maintenance, IDC which.
+Instead of having the vendor specific cache controller function in the
+errata, the generic one is there instead, which then calls the one
+registered by the vendor driver.
+I figure that even if no other non-coherent implementation ends up making
+it upstream, ax45mp is not going to be the only Andestech product that
+has a "no-iocp" variant...
 
-  soc: imx8m: Fix incorrect check for of_clk_get_by_name() (2023-01-02 21:16:05 +0800)
+I sent this over the Prabhakar the other day & it works for him, so I am
+now sending this here as RFC. I've not yet tested it on PolarFire SoC,
+as we have to sort out some "fun" where archid etc are all zero.
+We'll require some massaging before we can use the alternatives framework
+as is, so that'll have to come at a later date. I included a patch, but
+it's marked "DON'T APPLY" for a reason ;)
 
-----------------------------------------------------------------
-i.MX fixes for 6.2:
+Notably, I have not fixed up any comments which were left against v5,
+bar a rebase on top of riscv/for-next. I blindly "fixed" the pmem issue,
+so that needs to be fixed properly for a v6, alongside the other couple
+bits.
 
-- Fix i.MX8MP DT for missing GPC Interrupt, power-domain typo and USB
-  clock error.
-- Fix mach-imx cpu code to add missing of_node_put() call.
-- A couple of verdin-imx8mm DT fixes for audio playback support.
-- Fix pca9547 i2c-mux node name for i.MX and Vybrid device trees.
-- Fix an imx93-11x11-evk uSDHC pad setting problem that causes Micron
-  eMMC CMD8 CRC error in HS400ES/HS400 mode.
-- A couple of imx8mp-blk-ctrl driver fixes from Lucas Stach, enabling
-  pixclk with HDMI_TX_PHY PD, dropping power device name setting.
-- Fix the error check for of_clk_get_by_name() in soc-imx8m driver.
-- Other various DT fixes and cleanups.
+The other thing that is missing, and I could not think immediately of a
+way to do it, is a way to add additional users of this type of CMO to
+the alternative without having to add a specific entry for each vendor.
+I had first thought about using archid of 0, but that runs into problems
+pretty quickly as that "archid" is what we use for enabling CPU_FEATURE
+stuff, like Zicbom itself.
+Since archid uses the JEDEC IDs, perhaps we could squat on either a
+continuation code (or some vendor that won't make a RISC-V CPU, like
+Actel *cough*).
+I didn't go through with mocking that up, as until we sort out PolarFire
+SoC, there's only one user for this that I, at least, would like to have
+supported properly.
+So if anyone has ideas that are in any way less hacky than that, I am all
+ears.
 
-----------------------------------------------------------------
-Adam Ford (3):
-      arm64: dts: imx8mm-beacon: Fix ecspi2 pinmux
-      arm64: dts: imx8mp: Fix missing GPC Interrupt
-      arm64: dts: imx8mp: Fix power-domain typo
+Thanks,
+Conor.
 
-Dario Binacchi (1):
-      ARM: imx: add missing of_node_put()
+Conor Dooley (2):
+  cache,soc: Move SiFive CCache driver & create drivers/cache
+  RISC-V: create a function based cache management interface
 
-Emanuele Ghidoli (2):
-      arm64: dts: verdin-imx8mm: fix dahlia audio playback
-      arm64: dts: verdin-imx8mm: fix dev board audio playback
+Daire McNamara (1):
+  [DON'T APPLY] cache: sifive-ccache: add cache flushing capability
 
-Fabio Estevam (4):
-      arm64: dts: imx8mp-phycore-som: Remove invalid PMIC property
-      ARM: dts: imx6ul-pico-dwarf: Use 'clock-frequency'
-      ARM: dts: imx7d-pico: Use 'clock-frequency'
-      ARM: dts: imx6qdl-gw560x: Remove incorrect 'uart-has-rtscts'
+Lad Prabhakar (6):
+  riscv: asm: alternative-macros: Introduce ALTERNATIVE_3() macro
+  riscv: asm: vendorid_list: Add Andes Technology to the vendors list
+  riscv: errata: Add Andes alternative ports
+  riscv: mm: dma-noncoherent: Pass direction and operation to
+    ALT_CMO_OP()
+  dt-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation
+    for L2 cache controller
+  soc: renesas: Add L2 cache management for RZ/Five SoC
 
-Geert Uytterhoeven (3):
-      ARM: dts: imx: Fix pca9547 i2c-mux node name
-      ARM: dts: vf610: Fix pca9548 i2c-mux node names
-      arm64: dts: freescale: Fix pca954x i2c-mux node names
+ .../cache/andestech,ax45mp-cache.yaml         |  81 ++++++
+ MAINTAINERS                                   |  15 +-
+ arch/riscv/Kconfig.erratas                    |  26 ++
+ arch/riscv/errata/Makefile                    |   1 +
+ arch/riscv/errata/andes/Makefile              |   1 +
+ arch/riscv/errata/andes/errata.c              |  93 +++++++
+ arch/riscv/include/asm/alternative-macros.h   |  46 +++-
+ arch/riscv/include/asm/alternative.h          |   3 +
+ arch/riscv/include/asm/cacheflush.h           |  23 ++
+ arch/riscv/include/asm/errata_list.h          |  41 ++-
+ arch/riscv/include/asm/vendorid_list.h        |   1 +
+ arch/riscv/kernel/alternative.c               |   5 +
+ arch/riscv/mm/dma-noncoherent.c               |  36 ++-
+ arch/riscv/mm/pmem.c                          |   4 +-
+ drivers/Kconfig                               |   2 +
+ drivers/Makefile                              |   2 +
+ drivers/cache/Kconfig                         |  25 ++
+ drivers/{soc/sifive => cache}/Makefile        |   2 +
+ drivers/cache/ax45mp_cache.c                  | 253 ++++++++++++++++++
+ drivers/{soc/sifive => cache}/sifive_ccache.c |  47 +++-
+ drivers/edac/sifive_edac.c                    |   2 +-
+ drivers/soc/Kconfig                           |   1 -
+ drivers/soc/Makefile                          |   1 -
+ drivers/soc/renesas/Kconfig                   |   4 +
+ drivers/soc/sifive/Kconfig                    |  10 -
+ include/{soc/sifive => cache}/sifive_ccache.h |   0
+ 26 files changed, 684 insertions(+), 41 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+ create mode 100644 arch/riscv/errata/andes/Makefile
+ create mode 100644 arch/riscv/errata/andes/errata.c
+ create mode 100644 drivers/cache/Kconfig
+ rename drivers/{soc/sifive => cache}/Makefile (62%)
+ create mode 100644 drivers/cache/ax45mp_cache.c
+ rename drivers/{soc/sifive => cache}/sifive_ccache.c (86%)
+ delete mode 100644 drivers/soc/sifive/Kconfig
+ rename include/{soc/sifive => cache}/sifive_ccache.h (100%)
 
-Haibo Chen (1):
-      arm64: dts: imx93-11x11-evk: correct clock and strobe pad setting
 
-Krzysztof Kozlowski (1):
-      arm64: dts: imx8mq-thor96: fix no-mmc property for SDHCI
+base-commit: b07de94d4501c61a3015cb0035227e449c51d87e
+-- 
+2.39.0
 
-Li Jun (1):
-      arm64: dts: imx8mp: correct usb clocks
-
-Lucas Stach (2):
-      soc: imx: imx8mp-blk-ctrl: enable global pixclk with HDMI_TX_PHY PD
-      soc: imx: imx8mp-blk-ctrl: don't set power device name
-
-Marco Felsch (1):
-      arm64: dts: imx8mp-evk: pcie0-refclk cosmetic cleanup
-
-Marek Vasut (1):
-      arm64: dts: imx8mm: Drop xtal clock specifier from eDM SBC
-
-Miaoqian Lin (1):
-      soc: imx8m: Fix incorrect check for of_clk_get_by_name()
-
-Tim Harvey (1):
-      arm64: dts: imx8mm-venice-gw7901: fix USB2 controller OC polarity
-
- arch/arm/boot/dts/imx53-ppd.dts                           |  2 +-
- arch/arm/boot/dts/imx6qdl-gw560x.dtsi                     |  1 -
- arch/arm/boot/dts/imx6ul-pico-dwarf.dts                   |  2 +-
- arch/arm/boot/dts/imx7d-pico-dwarf.dts                    |  4 ++--
- arch/arm/boot/dts/imx7d-pico-nymph.dts                    |  4 ++--
- arch/arm/boot/dts/vf610-zii-dev-rev-b.dts                 |  2 +-
- arch/arm/boot/dts/vf610-zii-dev-rev-c.dts                 |  2 +-
- arch/arm/mach-imx/cpu-imx25.c                             |  1 +
- arch/arm/mach-imx/cpu-imx27.c                             |  1 +
- arch/arm/mach-imx/cpu-imx31.c                             |  1 +
- arch/arm/mach-imx/cpu-imx35.c                             |  1 +
- arch/arm/mach-imx/cpu-imx5.c                              |  1 +
- arch/arm64/boot/dts/freescale/fsl-ls1012a-qds.dts         |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1043a-qds.dts         |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dts         |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dts         |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1088a-rdb.dts         |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls1088a-ten64.dts       |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls208xa-qds.dtsi        |  2 +-
- arch/arm64/boot/dts/freescale/fsl-ls208xa-rdb.dtsi        |  2 +-
- arch/arm64/boot/dts/freescale/fsl-lx2160a-cex7.dtsi       |  2 +-
- .../arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi |  4 ++--
- .../boot/dts/freescale/imx8mm-data-modul-edm-sbc.dts      |  2 +-
- arch/arm64/boot/dts/freescale/imx8mm-nitrogen-r2.dts      |  2 +-
- arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts    |  1 +
- arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi   |  1 +
- arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi      |  1 +
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts              |  4 ++--
- arch/arm64/boot/dts/freescale/imx8mp-phycore-som.dtsi     | 10 ----------
- arch/arm64/boot/dts/freescale/imx8mp.dtsi                 | 15 ++++++++-------
- arch/arm64/boot/dts/freescale/imx8mq-nitrogen.dts         |  4 ++--
- arch/arm64/boot/dts/freescale/imx8mq-thor96.dts           |  4 ++--
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts             |  2 +-
- arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts         |  6 +++---
- drivers/soc/imx/imx8mp-blk-ctrl.c                         |  7 ++++---
- drivers/soc/imx/soc-imx8m.c                               |  4 ++--
- 36 files changed, 53 insertions(+), 54 deletions(-)
