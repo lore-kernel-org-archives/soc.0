@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0BEFC3DA7D
-	for <soc@archiver.kernel.org>; Tue,  3 Jan 2023 21:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51A70C3DA7D
+	for <soc@archiver.kernel.org>; Tue,  3 Jan 2023 21:04:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 97AD4C433F0; Tue,  3 Jan 2023 21:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F9F7C4339B;
-	Tue,  3 Jan 2023 21:04:29 +0000 (UTC)
+	id 3A560C433D2; Tue,  3 Jan 2023 21:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7F1C433EF;
+	Tue,  3 Jan 2023 21:04:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672779874;
-	bh=Dprtt2wF+NQ6SFZu7LTN8Uj8OXvpK3xyWL0QoGrvAoA=;
+	s=k20201202; t=1672779880;
+	bh=bttnpUl6BCbE/q8KnOj1xu1MAvPXwKnVgzNXk3Zdw1U=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oFgdGWiLzkHWlvMjV80WzM61DUgIBEyOssLRzqjVpdgrVPratzuquppyS3iPHjiTj
-	 L1v/1cNQg8ioGIEEhtQrs+UyTDl7iHjmZax/+N0RD397I5kTsUssLJESJJX/RAqgJr
-	 ITtf4JHnfnMkJPyQzO5Qmq0Z5f8882pf7hA81Hrep1Db2TvAskKh6YEWpMP61XqUBC
-	 2HnUS+gGNNkZkbL5nT3C4q7OaPSS6qTEIiytUu37kXkeKPP4bKc351Aq+uVb4ts4Gq
-	 /sGZh5ub00hYneBh50DUoTK2Awh92M40bhthQnPSjAnGUg8hRGUMqsEqMi91aoaw+b
-	 qZ3AIVa/W31fA==
+	b=ehLSXd8BDiBlDNlrSH0ntTP5uuxPr/+QIyBR2Sb4rQbPOQO9IOKFWmRY5fjcxgeJs
+	 nOKybp0XvjxJTOMcOTF714uDtv8Fw0SkqRthGiEZVQUIm44LnrcxLmXiKfVpcpLUan
+	 QqC66vdlmlBaRD/LBx8NEOd13h99It7Y3jfouf1pI97RjLTaN9rVwPE2zvviT4ly4O
+	 ha0RJj6bmrMr4Ibe5bOPXtL/hT0+xllulYtG5yPjk+9PXIYnspqxqHLfdpvgiXF8Uq
+	 QW+pE8sdSVm3yYwCuXL3Xcv2wSwcGfNMnC8Weq27qGNat91z+1mQgju5fRnIeEJ8J7
+	 UsSdaoizTp1vg==
 From: Conor Dooley <conor@kernel.org>
 To: conor@kernel.org,
 	arnd@arndb.de,
@@ -50,232 +50,142 @@ Cc: Conor Dooley <conor.dooley@microchip.com>,
 	robh+dt@kernel.org,
 	samuel@sholland.org,
 	soc@kernel.org
-Subject: [RFC v5.1 3/9] riscv: errata: Add Andes alternative ports
-Date: Tue,  3 Jan 2023 21:03:55 +0000
-Message-Id: <20230103210400.3500626-4-conor@kernel.org>
+Subject: [RFC v5.1 4/9] riscv: mm: dma-noncoherent: Pass direction and operation to ALT_CMO_OP()
+Date: Tue,  3 Jan 2023 21:03:56 +0000
+Message-Id: <20230103210400.3500626-5-conor@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <Y62nOqzyuUKqYDpq@spud>
 References: <Y62nOqzyuUKqYDpq@spud>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7075; i=conor.dooley@microchip.com; h=from:subject; bh=00UtI+q6z/vXb7iVXyA4KCXaUC3/5LYAlPRoaCVv1lk=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMlbZljo5gX2i5jl/jPZcS35vcjC0xHtLQHlesdMuk+t/Oj9 V0+oo5SFQYyDQVZMkSXxdl+L1Po/Ljuce97CzGFlAhnCwMUpABO5eonhf25+BPuXvd+Of5katHr9zq pgToWa6Ydq4pa9FrPaNFF/fgvD/9KjDvtOJJSnznni2Hrud4/U31VNZc91tlr3LulZa9HWxwAA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4711; i=conor.dooley@microchip.com; h=from:subject; bh=5zfzekcxdW4CVPyyS9wITNvNNLsIZnhw4rmXAoz+xFo=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMlbZlgkO0Rd3O8yMSrsS+iOuE3fPmR9s34mIGRxxD6Ku1Z7 5bmkjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzk4ktGhl81R/Q4Lv/2/rs57ZJQvr VOwcmDsvXXkueY8125c3ya6ESGv4KXtp571sCyKcpi8ifvSeddPPm//b288Uv2w3M7BDvbN3MCAA==
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Add required ports of the Alternative scheme for Andes CPU cores.
+Pass direction and operation to ALT_CMO_OP() macro.
 
-I/O Coherence Port (IOCP) provides an AXI interface for connecting external
-non-caching masters, such as DMA controllers. IOCP is a specification
-option and is disabled on the Renesas RZ/Five SoC due to this reason cache
-management needs a software workaround.
+Vendors might want to perform different operations based on the direction
+and callbacks (arch_sync_dma_for_device/arch_sync_dma_for_cpu/
+arch_dma_prep_coherent) so to handle such cases pass the direction and
+operation to ALT_CMO_OP() macro. This is in preparation for adding errata
+for the Andes CPU core.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+[Conor: blindy & incorrectly "fixed" pmem compilation. I've not even
+tried to use the defines.]
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/Kconfig.erratas           | 22 +++++++
- arch/riscv/errata/Makefile           |  1 +
- arch/riscv/errata/andes/Makefile     |  1 +
- arch/riscv/errata/andes/errata.c     | 93 ++++++++++++++++++++++++++++
- arch/riscv/include/asm/alternative.h |  3 +
- arch/riscv/include/asm/errata_list.h |  5 ++
- arch/riscv/kernel/alternative.c      |  5 ++
- 7 files changed, 130 insertions(+)
- create mode 100644 arch/riscv/errata/andes/Makefile
- create mode 100644 arch/riscv/errata/andes/errata.c
+ arch/riscv/include/asm/cacheflush.h  |  4 ++++
+ arch/riscv/include/asm/errata_list.h |  8 ++++++--
+ arch/riscv/mm/dma-noncoherent.c      | 15 ++++++++++-----
+ arch/riscv/mm/pmem.c                 |  4 ++--
+ 4 files changed, 22 insertions(+), 9 deletions(-)
 
-diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-index 69621ae6d647..f0f0c1abd52b 100644
---- a/arch/riscv/Kconfig.erratas
-+++ b/arch/riscv/Kconfig.erratas
-@@ -1,5 +1,27 @@
- menu "CPU errata selection"
+diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+index 03e3b95ae6da..e22019668b9e 100644
+--- a/arch/riscv/include/asm/cacheflush.h
++++ b/arch/riscv/include/asm/cacheflush.h
+@@ -8,6 +8,10 @@
  
-+config ERRATA_ANDES
-+	bool "Andes AX45MP errata"
-+	depends on !XIP_KERNEL
-+	select RISCV_ALTERNATIVE
-+	help
-+	  All Andes errata Kconfig depend on this Kconfig. Disabling
-+	  this Kconfig will disable all Andes errata. Please say "Y"
-+	  here if your platform uses Andes CPU cores.
-+
-+	  Otherwise, please say "N" here to avoid unnecessary overhead.
-+
-+config ERRATA_ANDES_CMO
-+	bool "Apply Andes cache management errata"
-+	depends on ERRATA_ANDES && MMU && ARCH_R9A07G043
-+	select RISCV_DMA_NONCOHERENT
-+	default y
-+	help
-+	  This will apply the cache management errata to handle the
-+	  non-standard handling on non-coherent operations on Andes cores.
-+
-+	  If you don't know what to do here, say "Y".
-+
- config ERRATA_SIFIVE
- 	bool "SiFive errata"
- 	depends on !XIP_KERNEL
-diff --git a/arch/riscv/errata/Makefile b/arch/riscv/errata/Makefile
-index a1055965fbee..6f1c693af92d 100644
---- a/arch/riscv/errata/Makefile
-+++ b/arch/riscv/errata/Makefile
-@@ -1,2 +1,3 @@
-+obj-$(CONFIG_ERRATA_ANDES) += andes/
- obj-$(CONFIG_ERRATA_SIFIVE) += sifive/
- obj-$(CONFIG_ERRATA_THEAD) += thead/
-diff --git a/arch/riscv/errata/andes/Makefile b/arch/riscv/errata/andes/Makefile
-new file mode 100644
-index 000000000000..2d644e19caef
---- /dev/null
-+++ b/arch/riscv/errata/andes/Makefile
-@@ -0,0 +1 @@
-+obj-y += errata.o
-diff --git a/arch/riscv/errata/andes/errata.c b/arch/riscv/errata/andes/errata.c
-new file mode 100644
-index 000000000000..3d04f15df8d5
---- /dev/null
-+++ b/arch/riscv/errata/andes/errata.c
-@@ -0,0 +1,93 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Erratas to be applied for Andes CPU cores
-+ *
-+ *  Copyright (C) 2022 Renesas Electronics Corporation.
-+ *
-+ * Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+#include <asm/alternative.h>
-+#include <asm/cacheflush.h>
-+#include <asm/errata_list.h>
-+#include <asm/patch.h>
-+#include <asm/sbi.h>
-+#include <asm/vendorid_list.h>
-+
-+#define ANDESTECH_AX45MP_MARCHID	0x8000000000008a45UL
-+#define ANDESTECH_AX45MP_MIMPID		0x500UL
-+#define ANDESTECH_SBI_EXT_ANDES		0x0900031E
-+
-+#define RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND	0
-+
-+static long ax45mp_iocp_sw_workaround(void)
-+{
-+	struct sbiret ret;
-+
-+	ret = sbi_ecall(ANDESTECH_SBI_EXT_ANDES, RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND,
-+			0, 0, 0, 0, 0, 0);
-+
-+	return ret.error ? 0 : ret.value;
-+}
-+
-+static bool errata_probe_iocp(unsigned int stage, unsigned long arch_id, unsigned long impid)
-+{
-+	if (!IS_ENABLED(CONFIG_ERRATA_ANDES_CMO))
-+		return false;
-+
-+	if (arch_id != ANDESTECH_AX45MP_MARCHID || impid != ANDESTECH_AX45MP_MIMPID)
-+		return false;
-+
-+	if (!ax45mp_iocp_sw_workaround())
-+		return false;
-+
-+	/* Set this just to make core cbo code happy */
-+	riscv_cbom_block_size = 1;
-+	riscv_noncoherent_supported();
-+
-+	return true;
-+}
-+
-+static u32 andes_errata_probe(unsigned int stage, unsigned long archid, unsigned long impid)
-+{
-+	u32 cpu_req_errata = 0;
-+
-+	/*
-+	 * In the absence of the I/O Coherency Port, access to certain peripherals
-+	 * requires vendor specific DMA handling.
-+	 */
-+	if (errata_probe_iocp(stage, archid, impid))
-+		cpu_req_errata |= BIT(ERRATA_ANDESTECH_NO_IOCP);
-+
-+	return cpu_req_errata;
-+}
-+
-+void __init_or_module andes_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-+					      unsigned long archid, unsigned long impid,
-+					      unsigned int stage)
-+{
-+	u32 cpu_req_errata = andes_errata_probe(stage, archid, impid);
-+	struct alt_entry *alt;
-+	u32 tmp;
-+
-+	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-+		return;
-+
-+	for (alt = begin; alt < end; alt++) {
-+		if (alt->vendor_id != ANDESTECH_VENDOR_ID)
-+			continue;
-+		if (alt->errata_id >= ERRATA_ANDESTECH_NUMBER)
-+			continue;
-+
-+		tmp = BIT(alt->errata_id);
-+		if (cpu_req_errata & tmp) {
-+			patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-+
-+			riscv_alternative_fix_offsets(alt->old_ptr, alt->alt_len,
-+						      alt->old_ptr - alt->alt_ptr);
-+		}
-+	}
-+}
-diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-index 1bd4027d34ca..e3a8e603eb5a 100644
---- a/arch/riscv/include/asm/alternative.h
-+++ b/arch/riscv/include/asm/alternative.h
-@@ -43,6 +43,9 @@ struct errata_checkfunc_id {
- 	bool (*func)(struct alt_entry *alt);
- };
+ #include <linux/mm.h>
  
-+void andes_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
-+			     unsigned long archid, unsigned long impid,
-+			     unsigned int stage);
- void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
- 			      unsigned long archid, unsigned long impid,
- 			      unsigned int stage);
++#define NON_COHERENT_SYNC_DMA_FOR_DEVICE	0
++#define NON_COHERENT_SYNC_DMA_FOR_CPU		1
++#define NON_COHERENT_DMA_PREP			2
++
+ static inline void local_flush_icache_all(void)
+ {
+ 	asm volatile ("fence.i" ::: "memory");
 diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 4180312d2a70..2ba7e6e74540 100644
+index 2ba7e6e74540..48e899a8e7a9 100644
 --- a/arch/riscv/include/asm/errata_list.h
 +++ b/arch/riscv/include/asm/errata_list.h
-@@ -9,6 +9,11 @@
- #include <asm/csr.h>
- #include <asm/vendorid_list.h>
+@@ -124,7 +124,7 @@ asm volatile(ALTERNATIVE(						\
+ #define THEAD_flush_A0	".long 0x0275000b"
+ #define THEAD_SYNC_S	".long 0x0190000b"
  
-+#ifdef CONFIG_ERRATA_ANDES
-+#define ERRATA_ANDESTECH_NO_IOCP	0
-+#define ERRATA_ANDESTECH_NUMBER		1
-+#endif
-+
- #ifdef CONFIG_ERRATA_SIFIVE
- #define	ERRATA_SIFIVE_CIP_453 0
- #define	ERRATA_SIFIVE_CIP_1200 1
-diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-index 6212ea0eed72..d7027a977ee6 100644
---- a/arch/riscv/kernel/alternative.c
-+++ b/arch/riscv/kernel/alternative.c
-@@ -40,6 +40,11 @@ static void __init_or_module riscv_fill_cpu_mfr_info(struct cpu_manufacturer_inf
- #endif
+-#define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
++#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)		\
+ asm volatile(ALTERNATIVE_2(						\
+ 	__nops(6),							\
+ 	"mv a0, %1\n\t"							\
+@@ -146,7 +146,11 @@ asm volatile(ALTERNATIVE_2(						\
+ 			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
+ 	: : "r"(_cachesize),						\
+ 	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
+-	    "r"((unsigned long)(_start) + (_size))			\
++	    "r"((unsigned long)(_start) + (_size)),			\
++	    "r"((unsigned long)(_start)),				\
++	    "r"((unsigned long)(_size)),				\
++	    "r"((unsigned long)(_dir)),					\
++	    "r"((unsigned long)(_ops))					\
+ 	: "a0")
  
- 	switch (cpu_mfr_info->vendor_id) {
-+#ifdef CONFIG_ERRATA_ANDES
-+	case ANDESTECH_VENDOR_ID:
-+		cpu_mfr_info->patch_func = andes_errata_patch_func;
-+		break;
-+#endif
- #ifdef CONFIG_ERRATA_SIFIVE
- 	case SIFIVE_VENDOR_ID:
- 		cpu_mfr_info->patch_func = sifive_errata_patch_func;
+ #define THEAD_C9XX_RV_IRQ_PMU			17
+diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
+index d919efab6eba..e2b82034f504 100644
+--- a/arch/riscv/mm/dma-noncoherent.c
++++ b/arch/riscv/mm/dma-noncoherent.c
+@@ -19,13 +19,16 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+ 
+ 	switch (dir) {
+ 	case DMA_TO_DEVICE:
+-		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
++		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size,
++			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
+ 		break;
+ 	case DMA_FROM_DEVICE:
+-		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
++		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size,
++			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
+ 		break;
+ 	case DMA_BIDIRECTIONAL:
+-		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
++		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size,
++			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
+ 		break;
+ 	default:
+ 		break;
+@@ -42,7 +45,8 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+ 		break;
+ 	case DMA_FROM_DEVICE:
+ 	case DMA_BIDIRECTIONAL:
+-		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
++		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size,
++			   dir, NON_COHERENT_SYNC_DMA_FOR_CPU);
+ 		break;
+ 	default:
+ 		break;
+@@ -53,7 +57,8 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
+ {
+ 	void *flush_addr = page_address(page);
+ 
+-	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
++	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size,
++		   0, NON_COHERENT_DMA_PREP);
+ }
+ 
+ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+diff --git a/arch/riscv/mm/pmem.c b/arch/riscv/mm/pmem.c
+index 089df92ae876..4233e28d8611 100644
+--- a/arch/riscv/mm/pmem.c
++++ b/arch/riscv/mm/pmem.c
+@@ -10,12 +10,12 @@
+ 
+ void arch_wb_cache_pmem(void *addr, size_t size)
+ {
+-	ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
++	ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size, 0, 0);
+ }
+ EXPORT_SYMBOL_GPL(arch_wb_cache_pmem);
+ 
+ void arch_invalidate_pmem(void *addr, size_t size)
+ {
+-	ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
++	ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size, 0, 0);
+ }
+ EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
 -- 
 2.39.0
 
