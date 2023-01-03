@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFE32C3DA7D
-	for <soc@archiver.kernel.org>; Tue,  3 Jan 2023 21:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73401C4708E
+	for <soc@archiver.kernel.org>; Tue,  3 Jan 2023 21:04:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85D68C433F0; Tue,  3 Jan 2023 21:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477B4C433EF;
-	Tue,  3 Jan 2023 21:04:12 +0000 (UTC)
+	id 58D5FC43396; Tue,  3 Jan 2023 21:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFADC4339B;
+	Tue,  3 Jan 2023 21:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672779857;
-	bh=+a4GknzPZkuXqBn656i7Wlb1eFqC8Z9LcgenqXot4Jc=;
+	s=k20201202; t=1672779863;
+	bh=ppRajYsT/OkWemwsA6MQ9TF4kq9Xu8/VtdPDy+LZ+1E=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F9ntzGAXtEnJ9ec9847PhJqorpKgHZqyhBmP5kxP+gww/HimmqswFaTTMYuwOzivL
-	 5zho4d0Xf3T9KNajmSw9lcolFTYoG88gjrYkXK4JSvY2ZQzKzzdXWh966iXb3jYDhl
-	 eyKhoLmfjkZzZw2bdn8te0Qm8BCBinaK1+lD0vzl2+lb7ax/KnHCEjIhom8opEUcMG
-	 Zu5IhHHoYx4hEk6hOLsdM4mcQ0jeMl6EFR16NycmePWSRkhxUX6GEODBYrYHaWaf1w
-	 nc5ClDao8U1YOQaqDg4tRdtSCRcLN1XuynSgmJBZTVun/9Lfl1lpG+4OcxfhiZCMND
-	 UQNRK5xSOM9rA==
+	b=btqUvpWk0jN8E0FQWXtS5yhvcKWEsbBwbme7+8TaK/EZQznLECO2SRcJ2qLmQMUql
+	 8dnwoLUx+n+XtT8gEFx9M8b8dcfjEvTwiieT9shrOWLeq33qmunnD7ohDyjGIwq9R5
+	 Xdq8dgoWUY2PX0ox0mwLi9x1CF0+OkobOL2XWQkMdL5lHGQTTVYvfliv/V6g5Zqf5y
+	 JoCbGNJp+YlwvYqwguEnRBNoPyRPW5ea+tQWftx+h+miukQJbeZaWjLtJGgGusxwiR
+	 oZuIfcrzneC+gt3WCPNFZV0eWB/dgo1YcZ7540J3MRtAuRHxSglnD4EPJ6mTx2NpoY
+	 DBK5mcbJrrOMw==
 From: Conor Dooley <conor@kernel.org>
 To: conor@kernel.org,
 	arnd@arndb.de,
@@ -49,135 +49,124 @@ Cc: Conor Dooley <conor.dooley@microchip.com>,
 	prabhakar.mahadev-lad.rj@bp.renesas.com,
 	robh+dt@kernel.org,
 	samuel@sholland.org,
-	soc@kernel.org
-Subject: [RFC v5.1 0/9] Generic function based cache management operations (was Re: [PATCH v5 6/6] soc: renesas: Add L2 cache management for RZ/Five SoC)
-Date: Tue,  3 Jan 2023 21:03:52 +0000
-Message-Id: <20230103210400.3500626-1-conor@kernel.org>
+	soc@kernel.org,
+	Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: [RFC v5.1 1/9] riscv: asm: alternative-macros: Introduce ALTERNATIVE_3() macro
+Date: Tue,  3 Jan 2023 21:03:53 +0000
+Message-Id: <20230103210400.3500626-2-conor@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <Y62nOqzyuUKqYDpq@spud>
 References: <Y62nOqzyuUKqYDpq@spud>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5698; i=conor.dooley@microchip.com; h=from:subject; bh=ml9qI4wIsVqAaRr3oVwB9iuAe68WB7bPF35ZiNhQRtI=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMlbZliskpCyseMwuBf3oWL6qpvTry+dFaGcn18VqrXkt6ZD gr9hRykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACbiw8nwhyP/zaUj0paFweUOtvHsU6 2/uzBe9uA88npF7BSRT59SLRgZFryoPcIWK8b1cfmjU8d9Dv4s+pVtZnCe5d6fyI+TnTslGQE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5020; i=conor.dooley@microchip.com; h=from:subject; bh=JKUr3UqrXzYF8otetDw2MSRIpTRoFJbXZCf7mQF+Ggc=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMlbZlhc5+auLbi4Ucsj+8QDsSemPfERCYF/TsY4B71m7N7h mPOvo5SFQYyDQVZMkSXxdl+L1Po/Ljuce97CzGFlAhnCwMUpABNx+cbIsNz3o8+h1283Gxcttn575X fFy/fsf4Uq7hVO25gYYZ/CLMXwh7/4BrdH0ZdLS+U6rCZGNHtmz2Ji3TJF7nU362mub78qmAE=
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
-From: Conor Dooley <conor.dooley@microchip.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Hey all, hopefully the $subject arrived intact!
+Introduce ALTERNATIVE_3() macro.
 
-See here for prior discussion:
-https://lore.kernel.org/linux-riscv/Y62nOqzyuUKqYDpq@spud/#R
+A vendor wants to replace an old_content, but another vendor has used
+ALTERNATIVE_2() to patch its customized content at the same location.
+In this case, this vendor can use macro ALTERNATIVE_3() and then replace
+ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
 
-Rather than continue that back and forth about where these drivers
-belonged, I've gone and created a mock-up for what it would look like
-if we picked drivers/cache.
+While at it update comment above ALTERNATIVE_2() macro and make it generic
+so that the comment holds good for any new addition of ALTERNATIVE_X()
+macros.
 
-IMO, doing drivers/cache for the detail of vendor behaviour makes sense
-as it'll keep 'em out of arch/riscv while keeping the drivers
-together.
-I've taken v5 of Prabhakar's patchset & hacked at it a bit, so here
-is a tyre-kicked (more) generic implementation of cache management stuff
-via functions.
-I initially went and moved both the ax45mp and ccache drivers to
-drivers/cache & created a "subsystem" like interface, but quickly
-realised it was all far too trivial to exist & was intrinsically tied to
-the ALT_CMO_OP alternative setup on RISC-V.
-I trashed that so, and instead copied the interface currently used by
-riscv_set_cacheinfo_ops(), and created a corollary which registers cache
-management operations. Or maintenance, IDC which.
-Instead of having the vendor specific cache controller function in the
-errata, the generic one is there instead, which then calls the one
-registered by the vendor driver.
-I figure that even if no other non-coherent implementation ends up making
-it upstream, ax45mp is not going to be the only Andestech product that
-has a "no-iocp" variant...
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ arch/riscv/include/asm/alternative-macros.h | 46 ++++++++++++++++++---
+ 1 file changed, 41 insertions(+), 5 deletions(-)
 
-I sent this over the Prabhakar the other day & it works for him, so I am
-now sending this here as RFC. I've not yet tested it on PolarFire SoC,
-as we have to sort out some "fun" where archid etc are all zero.
-We'll require some massaging before we can use the alternatives framework
-as is, so that'll have to come at a later date. I included a patch, but
-it's marked "DON'T APPLY" for a reason ;)
-
-Notably, I have not fixed up any comments which were left against v5,
-bar a rebase on top of riscv/for-next. I blindly "fixed" the pmem issue,
-so that needs to be fixed properly for a v6, alongside the other couple
-bits.
-
-The other thing that is missing, and I could not think immediately of a
-way to do it, is a way to add additional users of this type of CMO to
-the alternative without having to add a specific entry for each vendor.
-I had first thought about using archid of 0, but that runs into problems
-pretty quickly as that "archid" is what we use for enabling CPU_FEATURE
-stuff, like Zicbom itself.
-Since archid uses the JEDEC IDs, perhaps we could squat on either a
-continuation code (or some vendor that won't make a RISC-V CPU, like
-Actel *cough*).
-I didn't go through with mocking that up, as until we sort out PolarFire
-SoC, there's only one user for this that I, at least, would like to have
-supported properly.
-So if anyone has ideas that are in any way less hacky than that, I am all
-ears.
-
-Thanks,
-Conor.
-
-Conor Dooley (2):
-  cache,soc: Move SiFive CCache driver & create drivers/cache
-  RISC-V: create a function based cache management interface
-
-Daire McNamara (1):
-  [DON'T APPLY] cache: sifive-ccache: add cache flushing capability
-
-Lad Prabhakar (6):
-  riscv: asm: alternative-macros: Introduce ALTERNATIVE_3() macro
-  riscv: asm: vendorid_list: Add Andes Technology to the vendors list
-  riscv: errata: Add Andes alternative ports
-  riscv: mm: dma-noncoherent: Pass direction and operation to
-    ALT_CMO_OP()
-  dt-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation
-    for L2 cache controller
-  soc: renesas: Add L2 cache management for RZ/Five SoC
-
- .../cache/andestech,ax45mp-cache.yaml         |  81 ++++++
- MAINTAINERS                                   |  15 +-
- arch/riscv/Kconfig.erratas                    |  26 ++
- arch/riscv/errata/Makefile                    |   1 +
- arch/riscv/errata/andes/Makefile              |   1 +
- arch/riscv/errata/andes/errata.c              |  93 +++++++
- arch/riscv/include/asm/alternative-macros.h   |  46 +++-
- arch/riscv/include/asm/alternative.h          |   3 +
- arch/riscv/include/asm/cacheflush.h           |  23 ++
- arch/riscv/include/asm/errata_list.h          |  41 ++-
- arch/riscv/include/asm/vendorid_list.h        |   1 +
- arch/riscv/kernel/alternative.c               |   5 +
- arch/riscv/mm/dma-noncoherent.c               |  36 ++-
- arch/riscv/mm/pmem.c                          |   4 +-
- drivers/Kconfig                               |   2 +
- drivers/Makefile                              |   2 +
- drivers/cache/Kconfig                         |  25 ++
- drivers/{soc/sifive => cache}/Makefile        |   2 +
- drivers/cache/ax45mp_cache.c                  | 253 ++++++++++++++++++
- drivers/{soc/sifive => cache}/sifive_ccache.c |  47 +++-
- drivers/edac/sifive_edac.c                    |   2 +-
- drivers/soc/Kconfig                           |   1 -
- drivers/soc/Makefile                          |   1 -
- drivers/soc/renesas/Kconfig                   |   4 +
- drivers/soc/sifive/Kconfig                    |  10 -
- include/{soc/sifive => cache}/sifive_ccache.h |   0
- 26 files changed, 684 insertions(+), 41 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
- create mode 100644 arch/riscv/errata/andes/Makefile
- create mode 100644 arch/riscv/errata/andes/errata.c
- create mode 100644 drivers/cache/Kconfig
- rename drivers/{soc/sifive => cache}/Makefile (62%)
- create mode 100644 drivers/cache/ax45mp_cache.c
- rename drivers/{soc/sifive => cache}/sifive_ccache.c (86%)
- delete mode 100644 drivers/soc/sifive/Kconfig
- rename include/{soc/sifive => cache}/sifive_ccache.h (100%)
-
-
-base-commit: b07de94d4501c61a3015cb0035227e449c51d87e
+diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
+index 7226e2462584..a5b4691520da 100644
+--- a/arch/riscv/include/asm/alternative-macros.h
++++ b/arch/riscv/include/asm/alternative-macros.h
+@@ -50,8 +50,17 @@
+ 	ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+ .endm
+ 
++.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
++				new_c_2, vendor_id_2, errata_id_2, enable_2,	\
++				new_c_3, vendor_id_3, errata_id_3, enable_3
++       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,	\
++                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
++       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
++.endm
++
+ #define __ALTERNATIVE_CFG(...)		ALTERNATIVE_CFG __VA_ARGS__
+ #define __ALTERNATIVE_CFG_2(...)	ALTERNATIVE_CFG_2 __VA_ARGS__
++#define __ALTERNATIVE_CFG_3(...)	ALTERNATIVE_CFG_3 __VA_ARGS__
+ 
+ #else /* !__ASSEMBLY__ */
+ 
+@@ -98,6 +107,13 @@
+ 	__ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)	\
+ 	ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
+ 
++#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
++				   new_c_2, vendor_id_2, errata_id_2, enable_2,	\
++				   new_c_3, vendor_id_3, errata_id_3, enable_3)	\
++	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
++                                   new_c_2, vendor_id_2, errata_id_2, enable_2)	\
++	ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k)	\
+@@ -108,6 +124,13 @@
+ 	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),	\
+ 				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
+ 
++#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
++				  new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
++				  new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
++	__ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),	\
++				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),	\
++				   new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
++
+ #else /* CONFIG_RISCV_ALTERNATIVE */
+ #ifdef __ASSEMBLY__
+ 
+@@ -152,15 +175,28 @@
+ 	_ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+ 
+ /*
+- * A vendor wants to replace an old_content, but another vendor has used
+- * ALTERNATIVE() to patch its customized content at the same location. In
+- * this case, this vendor can create a new macro ALTERNATIVE_2() based
+- * on the following sample code and then replace ALTERNATIVE() with
+- * ALTERNATIVE_2() to append its customized content.
++ * ALTERNATIVE_x macros allow providing multiple replacement options
++ * for an ALTERNATIVE code section. This is helpful if multiple
++ * implementation variants for the same functionality exist for
++ * different cpu cores.
++ *
++ * Usage:
++ *   ALTERNATIVE_x(old_content,
++ *      new_content1, vendor_id1, errata_id1, CONFIG_k1,
++ *      new_content2, vendor_id2, errata_id2, CONFIG_k2,
++ *      ...
++ *      new_contentx, vendor_idx, errata_idx, CONFIG_kx)
+  */
+ #define ALTERNATIVE_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
+ 				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)		\
+ 	_ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,	\
+ 					new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)
+ 
++#define ALTERNATIVE_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
++				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
++				   new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
++       _ALTERNATIVE_CFG_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,	\
++                                       new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,	\
++                                       new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)
++
+ #endif
 -- 
 2.39.0
 
