@@ -1,106 +1,190 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=BLje=5B=codethink.co.uk=ben.dooks@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B6B6C4332F
-	for <soc@archiver.kernel.org>; Wed,  4 Jan 2023 09:23:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF633C4332F
+	for <soc@archiver.kernel.org>; Wed,  4 Jan 2023 09:45:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6E9EC433D2; Wed,  4 Jan 2023 09:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113ABC433EF;
-	Wed,  4 Jan 2023 09:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672824196;
-	bh=8Nio75pRnguUldoMBvKssmpiVY656R5TJYi2km9hpHU=;
-	h=Date:From:To:List-Id:CC:Subject:In-Reply-To:References:From;
-	b=Dl40jAfb0bAzXiN+4O8wnsocGGC+3Jl1+BEd48BzdXvQsDmz2HDtWBv8P2TPmugRy
-	 OnI4bHyeefK584AuavsZaZGI5dDMmOU9dD9FWLAmaU+EfWoibogzx362P2K1nFKD7u
-	 P1dbdTymqyYjc2UGVBLnY4lWzyfwtYQCLISKAS2gp8XFJiEFYXrEBaTqa2RELzfmQa
-	 l674S/6hnp5nc3HRJCajbi0wszsLdv5/LrMiwH7YJSesdUv+1e6AGE8Y+d0WaVRN6o
-	 G2YhZrAh6vw7cDuznIgQhZxYIMk3GHvbkSGfZYqZj5GJSYHV3Y6lCO/h9AqNuoPzay
-	 xy2J5+cwvkbMg==
-Date: Wed, 04 Jan 2023 09:23:14 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-List-Id: <soc.lore.kernel.org>
-CC: Palmer Dabbelt <palmer@dabbelt.com>, Prabhakar <prabhakar.csengg@gmail.com>,
- "Conor.Dooley" <conor.dooley@microchip.com>,
- Andrew Jones <ajones@ventanamicro.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Anup Patel <apatel@ventanamicro.com>, Atish Patra <atishp@rivosinc.com>,
- Biju Das <biju.das.jz@bp.renesas.com>, devicetree@vger.kernel.org,
- Geert Uytterhoeven <geert@linux-m68k.org>, guoren <guoren@kernel.org>,
- Christoph Hellwig <hch@infradead.org>,
- =?ISO-8859-1?Q?Heiko_St=FCbner?= <heiko@sntech.de>,
- Jisheng Zhang <jszhang@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- linux-kernel@vger.kernel.org,
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
- linux-riscv@lists.infradead.org, Magnus Damm <magnus.damm@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Philipp Tomsich <philipp.tomsich@vrull.eu>,
- "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Rob Herring <robh+dt@kernel.org>, Samuel Holland <samuel@sholland.org>,
- soc@kernel.org, Daire McNamara <daire.mcnamara@microchip.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_v5=2E1_9/9=5D_=5BDON=27T_APPLY=5D_cache=3A_si?= =?US-ASCII?Q?five-ccache=3A_add_cache_flushing_capability?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ed198390-1bde-44ec-9f3f-b0e016b4b24c@app.fastmail.com>
-References: <Y62nOqzyuUKqYDpq@spud> <20230103210400.3500626-10-conor@kernel.org> <b5712732-40a2-4e29-b29f-e0ab5516d518@app.fastmail.com> <Y7TBh+CJdZPJ6Xzl@spud> <ed198390-1bde-44ec-9f3f-b0e016b4b24c@app.fastmail.com>
-Message-ID: <CFB874A3-3E6F-4C5B-B47D-381EB1E07C02@kernel.org>
+	id 71F95C433D2; Wed,  4 Jan 2023 09:45:47 +0000 (UTC)
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id BEC30C433EF;
+	Wed,  4 Jan 2023 09:45:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BEC30C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=codethink.co.uk
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=codethink.co.uk
+Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.17])
+	by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+	id 1pD0Kx-00G7tJ-Mm; Wed, 04 Jan 2023 09:45:31 +0000
+Message-ID: <6ef122f6-12fa-777f-b4e7-a02531380391@codethink.co.uk>
+Date: Wed, 4 Jan 2023 09:45:30 +0000
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC v5.1 9/9] [DON'T APPLY] cache: sifive-ccache: add cache
+ flushing capability
+Content-Language: en-GB
+To: Conor Dooley <conor@kernel.org>, arnd@arndb.de, palmer@dabbelt.com,
+ prabhakar.csengg@gmail.com
+List-Id: <soc.lore.kernel.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>, ajones@ventanamicro.com,
+ aou@eecs.berkeley.edu, apatel@ventanamicro.com, atishp@rivosinc.com,
+ biju.das.jz@bp.renesas.com, devicetree@vger.kernel.org,
+ geert@linux-m68k.org, guoren@kernel.org, hch@infradead.org, heiko@sntech.de,
+ jszhang@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, magnus.damm@gmail.com, nathan@kernel.org,
+ paul.walmsley@sifive.com, philipp.tomsich@vrull.eu,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, robh+dt@kernel.org,
+ samuel@sholland.org, soc@kernel.org,
+ Daire McNamara <daire.mcnamara@microchip.com>
+References: <Y62nOqzyuUKqYDpq@spud>
+ <20230103210400.3500626-10-conor@kernel.org>
+From: Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20230103210400.3500626-10-conor@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 03/01/2023 21:04, Conor Dooley wrote:
+> From: Daire McNamara <daire.mcnamara@microchip.com>
+> 
+> SiFive L2 cache controller can flush L2 cache. Expose this capability via
+> driver.
+> 
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> [Conor: rebase on top of move to cache subsystem]
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> This commit needs more work, and a way to enable it from errata. I've
+> not gone and done this as PolarFire SoC has archid etc all set to zero.
+> So we need to go figure out a workaround for this, before adding in
+> errata enabling code for this. I've included it here as a second user of
+> the cache management stuff, since what's currently upstream for the
+> ccache driver does not do any cache management.
 
+I think errata isn't the right word here, it's more of a system 
+requirement for anything that isn't coherent. All the SiFive systems
+I have are coherent so won't need this.
 
-On 4 January 2023 08:17:41 GMT, Arnd Bergmann <arnd@arndb=2Ede> wrote:
->On Wed, Jan 4, 2023, at 01:00, Conor Dooley wrote:
->> On Tue, Jan 03, 2023 at 10:28:19PM +0100, Arnd Bergmann wrote:
->>> On Tue, Jan 3, 2023, at 22:04, Conor Dooley wrote:
->>> > From: Daire McNamara <daire=2Emcnamara@microchip=2Ecom>
->>> >
->>> > SiFive L2 cache controller can flush L2 cache=2E Expose this capabil=
-ity via
->>> > driver=2E
->>> >
->>> > Signed-off-by: Daire McNamara <daire=2Emcnamara@microchip=2Ecom>
->>> > [Conor: rebase on top of move to cache subsystem]
->>> > Signed-off-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->>> > ---
->>> > This commit needs more work, and a way to enable it from errata=2E I=
-'ve
->>> > not gone and done this as PolarFire SoC has archid etc all set to ze=
-ro=2E
->>> > So we need to go figure out a workaround for this, before adding in
->>> > errata enabling code for this=2E I've included it here as a second u=
-ser of
->>> > the cache management stuff, since what's currently upstream for the
->>> > ccache driver does not do any cache management=2E
->>> > ---
->>> >  drivers/cache/sifive_ccache=2Ec | 45 ++++++++++++++++++++++++++++++=
-+++++
->>> >  1 file changed, 45 insertions(+)
->>>=20
->>> My feeling here is that the cacheflush code is unrelated to the
->>> EDAC code and it should just be a separate file=2E From what I can
->>> tell, all of the existing contents of this file can simply
->>> get merged into drivers/edac/sifive_edac=2Ec, with the newly
->>> added code becoming a standalone driver=2E
->>
->> Sure? I'd like to do that independently of whatever is done for the
->> ax45mp CMOs though, don't think it's worth holding up that platform's
->> support on me splitting this out=2E
->
->Right, no need to touch the existing file as part of this series,
->it probably just gets in the way of defining a good interface here=2E
+> ---
+>   drivers/cache/sifive_ccache.c | 45 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 45 insertions(+)
+> 
+> diff --git a/drivers/cache/sifive_ccache.c b/drivers/cache/sifive_ccache.c
+> index 47e7d6557f85..3c00f205bace 100644
+> --- a/drivers/cache/sifive_ccache.c
+> +++ b/drivers/cache/sifive_ccache.c
+> @@ -9,12 +9,14 @@
+>   #define pr_fmt(fmt) "CCACHE: " fmt
+>   
+>   #include <linux/debugfs.h>
+> +#include <linux/dma-direction.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/of_irq.h>
+>   #include <linux/of_address.h>
+>   #include <linux/device.h>
+>   #include <linux/bitfield.h>
+>   #include <asm/cacheinfo.h>
+> +#include <asm/cacheflush.h>
+>   #include <cache/sifive_ccache.h>
+>   
+>   #define SIFIVE_CCACHE_DIRECCFIX_LOW 0x100
+> @@ -42,11 +44,15 @@
+>   #define SIFIVE_CCACHE_WAYENABLE 0x08
+>   #define SIFIVE_CCACHE_ECCINJECTERR 0x40
+>   
+> +#define SIFIVE_CCACHE_FLUSH64 0x200
+> +#define SIFIVE_CCACHE_FLUSH32 0x240
+> +
+>   #define SIFIVE_CCACHE_MAX_ECCINTR 4
+>   
+>   static void __iomem *ccache_base;
+>   static int g_irq[SIFIVE_CCACHE_MAX_ECCINTR];
+>   static struct riscv_cacheinfo_ops ccache_cache_ops;
+> +static struct riscv_cache_maint_ops ccache_cmos;
+>   static int level;
+>   
+>   enum {
+> @@ -205,6 +211,42 @@ static irqreturn_t ccache_int_handler(int irq, void *device)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> +static void sifive_ccache_dma_wback_inv(void* vaddr, unsigned long size)
+> +{
+> +	void * __iomem flush = ccache_base + SIFIVE_CCACHE_FLUSH64;
+> +	phys_addr_t start = virt_to_phys(vaddr);
+> +	phys_addr_t aligned_start = start & ~0x3f;
+> +	u64 addr;
+> +	u64 end;
+> +	u64 aligned_end;
+> +
+> +	size += start - aligned_start;
+> +	end = start + size;
+> +	aligned_end = end += 0x3f;
 
-Sure=2E Can leave it where it was & I'll sort it out later when it's errat=
-a etc get added=2E
+I think you meant + 0x3f here. There is an align macro in the kernel
+headers, and I'm not sure by inspection if you'd miss the last line
+with this code.
 
-Btw, would you mind pointing out where you wanted to have that if/else you=
- mentioned on IRC?
+> +	aligned_end &= ~0x3f;
+> +
+> +	for (addr = aligned_start; addr < aligned_end; addr += 64)
+> +		writeq(addr, flush);
+> +}
 
-Thanks,
-Conor=2E
+The p550 manual states that the zero device flush method is quicker for
+any large area flush. However not sure what that level is and whether it
+is worth dealing with here? If so we need to have the L3 zero are mapped.
+
+> +
+> +static void sifive_ccache_cmo(unsigned int cache_size, void *vaddr, size_t size,
+> +			      int dir, int ops)
+> +{
+
+technically dir should have been of type "enum dma_data_direction"
+
+> +	switch (dir) {
+> +	case DMA_TO_DEVICE:
+> +		sifive_ccache_dma_wback_inv(vaddr, size);
+> +		break;
+> +	case DMA_FROM_DEVICE:
+> +		sifive_ccache_dma_wback_inv(vaddr, size);
+> +		break;
+> +	case DMA_BIDIRECTIONAL:
+> +		sifive_ccache_dma_wback_inv(vaddr, size);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+
+I'm not sure why you'd bother checking the dir here, the cache can
+only be flushed (I hope DMA_FROM_DEVICE is done /before/ the DMA op).
+
+You could have saved yourself an include if just ignoring dir.
+
+> +
+>   static int __init sifive_ccache_init(void)
+>   {
+>   	struct device_node *np;
+> @@ -254,6 +296,9 @@ static int __init sifive_ccache_init(void)
+>   	ccache_cache_ops.get_priv_group = ccache_get_priv_group;
+>   	riscv_set_cacheinfo_ops(&ccache_cache_ops);
+>   
+> +	ccache_cmos.cmo_patchfunc = sifive_ccache_cmo;
+> +	riscv_set_cache_maint_ops(&ccache_cmos);
+> +
+>   #ifdef CONFIG_DEBUG_FS
+>   	setup_sifive_debug();
+>   #endif
+
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html
 
