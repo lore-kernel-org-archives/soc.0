@@ -1,247 +1,98 @@
-Return-Path: <SRS0=Ei+P=5D=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=Ci6o=5D=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A053C3DA7A
-	for <soc@archiver.kernel.org>; Fri,  6 Jan 2023 01:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87787C3DA7A
+	for <soc@archiver.kernel.org>; Fri,  6 Jan 2023 08:12:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ED15DC433F1; Fri,  6 Jan 2023 01:04:01 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 68EB6C433F0;
-	Fri,  6 Jan 2023 01:04:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 68EB6C433F0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D397611FB;
-	Thu,  5 Jan 2023 17:04:41 -0800 (PST)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EF243F23F;
-	Thu,  5 Jan 2023 17:03:57 -0800 (PST)
-From: Andre Przywara <andre.przywara@arm.com>
-To: Samuel Holland <samuel@sholland.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Icenowy Zheng <uwu@icenowy.me>,
-	=?UTF-8?q?Andr=C3=A1s=20Szemz=C3=B6?= <szemzo.andras@gmail.com>,
-	Fabien Poussin <fabien.poussin@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-sunxi@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org
-Subject: [PATCH 4/4] ARM: dts: sunxi: add MangoPi MQ-R board
-Date: Fri,  6 Jan 2023 01:01:55 +0000
-Message-Id: <20230106010155.26868-5-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.35.5
-In-Reply-To: <20230106010155.26868-1-andre.przywara@arm.com>
-References: <20230106010155.26868-1-andre.przywara@arm.com>
+	id 51523C433F1; Fri,  6 Jan 2023 08:12:32 +0000 (UTC)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 70318C433EF
+	for <soc@kernel.org>; Fri,  6 Jan 2023 08:12:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70318C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so560385wms.4
+        for <soc@kernel.org>; Fri, 06 Jan 2023 00:12:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:organization:reply-to:content-language:cc
+         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GyfJFZdIdRh2RsiYptrx5CNUd4d9thwSYOnDDNRq4ac=;
+        b=QbXT+24yt8nEeOm0EF1IRu5b7CIQIFHS4PUlvHMQM0VYS0Z0T2pC5sqNPGEiN56jqq
+         jRKQL1lnyNNlFTwoxsJWrNJ6UDN3wGhA/XWAqvzETE8KS0cl3vP0W0qkd0VkEoR5xfp9
+         Q9h6uaLV9W12L2jVLlSPpSXvO1/jmyeOINlqRMDnWnwvDOVGGMQyKpI/BNZzG9wlFXW0
+         1Y3MNJjZAuPvhBhXmalfuuXsBmeW212mfkzgakOX+nULKenaRgrYeuN3Kn4FL81/v5f2
+         aI4sV1RJxJ9wCQgPVsMalUwEAGZHtJpMrV/illsAGJyodCETn6yXJEWI++BLuol0tHZF
+         vvow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:organization:reply-to:content-language:cc
+         :to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GyfJFZdIdRh2RsiYptrx5CNUd4d9thwSYOnDDNRq4ac=;
+        b=VaDtVQW6iA816qo71VTkBaa0xFmiwTurLxoZaud9Kq+fX6NHoT/sHL7aNEU/NZniok
+         za7E8+O7pE7qYw+b+lFaeetz4ldFTDUiHuYOjQB+CZ+ituIIXdCQ0WglzL1tDsns7EUS
+         zlmiq/WC0ZVLJj21UE0lAvZBz/JYuwsDtNbx9ZRVQIrTopaU1SXmA5vy5dtYSE8sxyNE
+         4DFB+aaVuvfl6e1BzNdbkyMqvotUzSG/iRR4ItzYrH90i41j7n/tfxRAacdibXNuKojA
+         czkgSbMzC+AE+Vrh8rrPLmXhJV1lFQkp3looxQTgozBh2LKwkUQSD735gje/DsyyQTXT
+         tPbA==
+X-Gm-Message-State: AFqh2kp78WaN+7zHbFvlYI9zujqwBZGjque0DHD0EDF/Qy06jPuP2QeE
+	ptnyOJVXcSWdDWQLNSCj+InfAs96j+I9xxuC
+X-Google-Smtp-Source: AMrXdXs+7AhCAtGKN3vokaxcoula6Zun3EwFm23Nv2khgIVWsTKJES4Z+Fvpg/IJXBOyIU7AokfuGg==
+X-Received: by 2002:a05:600c:798:b0:3d3:5737:3b0f with SMTP id z24-20020a05600c079800b003d357373b0fmr47485848wmo.36.1672992749604;
+        Fri, 06 Jan 2023 00:12:29 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:a0ba:a5f3:d9f1:7e25? ([2a01:e0a:982:cbb0:a0ba:a5f3:d9f1:7e25])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm6034506wms.31.2023.01.06.00.12.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 00:12:29 -0800 (PST)
+Message-ID: <7915c3f8-57bc-25e2-0314-c78af7a79d6a@linaro.org>
+Date: Fri, 6 Jan 2023 09:12:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic fixes for v6.2-rc
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Reply-To: neil.armstrong@linaro.org
+Organization: Linaro Developer Services
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The MangoPi MQ-R is a small SBC with the Allwinner T113-s3 SoC.
-The SoC features two Arm Cortex-A7 cores and 128 MB of co-packaged DDR3
-DRAM. The board adds mostly connectors and the required regulators, plus
-a Realtek RTL8189FTV WiFi chip.
-Power comes in via a USB-C connector wired as a peripheral, and there is
-a second USB-C connector usable as a host port.
+Hi,
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts | 160 ++++++++++++++++++
- 2 files changed, 161 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
+Here's a DT revert for v6.2-rc1 which fixes USB on Odroid-HC4, having both USB2 PHYs
+enabled is necessary to have functional USB on Amlogic SoCs, even if one port is unused.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index d08a3c450ce72..39fd893682924 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1390,6 +1390,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
- 	sun8i-s3-elimo-initium.dtb \
- 	sun8i-s3-lichee-zero-plus.dtb \
- 	sun8i-s3-pinecube.dtb \
-+	sun8i-t113s-mangopi-mq-r.dtb \
- 	sun8i-t3-cqa3t-bv3.dtb \
- 	sun8i-v3-sl631-imx179.dtb \
- 	sun8i-v3s-licheepi-zero.dtb \
-diff --git a/arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts b/arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
-new file mode 100644
-index 0000000000000..ed4d5217d7b0d
---- /dev/null
-+++ b/arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+// Copyright (C) 2022 Arm Ltd.
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/dts-v1/;
-+
-+#include "sun8i-t113s.dtsi"
-+
-+/ {
-+	model = "MangoPi MQ-R";
-+	compatible = "widora,mangopi-mq-r", "allwinner,sun8i-t113s";
-+
-+	aliases {
-+		ethernet0 = &rtl8189ftv;
-+		serial3 = &uart3;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial3:115200n8";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&pio 3 22 GPIO_ACTIVE_LOW>; /* PD22 */
-+		};
-+	};
-+
-+	/* board wide 5V supply directly from the USB-C socket */
-+	reg_vcc5v: vcc5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-5v";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	/* SY8008 DC/DC regulator on the board */
-+	reg_3v3: regulator-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&reg_vcc5v>;
-+	};
-+
-+	/* SY8008 DC/DC regulator on the board, also supplying VDD-SYS */
-+	reg_vcc_core: regulator-core {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-core";
-+		regulator-min-microvolt = <880000>;
-+		regulator-max-microvolt = <880000>;
-+		vin-supply = <&reg_vcc5v>;
-+	};
-+
-+	/* XC6206 LDO on the board */
-+	reg_avdd2v8: regulator-avdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "avdd2v8";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_3v3>;
-+	};
-+
-+	wifi_pwrseq: wifi-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&pio 6 12 GPIO_ACTIVE_LOW>; /* PG12 */
-+	};
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&reg_vcc_core>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&reg_vcc_core>;
-+};
-+
-+&dcxo {
-+	clock-frequency = <24000000>;
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&mmc0 {
-+	pinctrl-0 = <&mmc0_pins>;
-+	pinctrl-names = "default";
-+	vmmc-supply = <&reg_3v3>;
-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
-+	disable-wp;
-+	bus-width = <4>;
-+	status = "okay";
-+};
-+
-+&mmc1 {
-+	pinctrl-0 = <&mmc1_pins>;
-+	pinctrl-names = "default";
-+	vmmc-supply = <&reg_3v3>;
-+	non-removable;
-+	bus-width = <4>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	status = "okay";
-+
-+	rtl8189ftv: wifi@1 {
-+		reg = <1>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <6 10 IRQ_TYPE_LEVEL_LOW>; /* PG10 = WL_WAKE_AP */
-+		interrupt-names = "host-wake";
-+	};
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&pio {
-+	vcc-pb-supply = <&reg_3v3>;
-+	vcc-pd-supply = <&reg_3v3>;
-+	vcc-pe-supply = <&reg_avdd2v8>;
-+	vcc-pf-supply = <&reg_3v3>;
-+	vcc-pg-supply = <&reg_3v3>;
-+};
-+
-+&reg_ldoa {
-+	regulator-always-on;
-+	regulator-name = "vcc-1v8";
-+	regulator-min-microvolt = <1800000>;
-+	regulator-max-microvolt = <1800000>;
-+	ldo-in-supply = <&reg_3v3>;
-+};
-+
-+&reg_ldob {
-+	regulator-name = "vcc-dram";
-+	regulator-always-on;
-+	ldo-in-supply = <&reg_3v3>;
-+};
-+
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart3_pb_pins>;
-+	status = "okay";
-+};
-+
-+/* The USB-C socket has its CC pins pulled to GND, so is hardwired as a UFP. */
-+&usb_otg {
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb1_vbus-supply = <&reg_vcc5v>;
-+	status = "okay";
-+};
--- 
-2.35.5
+Neil
 
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v6.2-rc
+
+for you to fetch changes up to c45219cba101f32853d011da2ba46a1b2338dc4c:
+
+   Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0" (2023-01-06 09:02:40 +0100)
+
+----------------------------------------------------------------
+Amlogic fixes for v6.2-rc:
+- Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0" which breaks whole USB on Odroid-HC4
+
+----------------------------------------------------------------
+Pierre-Olivier Mercier (1):
+       Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0"
+
+  arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts | 8 ++------
+  1 file changed, 2 insertions(+), 6 deletions(-)
