@@ -1,98 +1,166 @@
-Return-Path: <SRS0=Ci6o=5D=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <SRS0=K58A=5D=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87787C3DA7A
-	for <soc@archiver.kernel.org>; Fri,  6 Jan 2023 08:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9D7EC5479D
+	for <soc@archiver.kernel.org>; Fri,  6 Jan 2023 09:21:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 51523C433F1; Fri,  6 Jan 2023 08:12:32 +0000 (UTC)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	id 702E0C43392; Fri,  6 Jan 2023 09:21:54 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 70318C433EF
-	for <soc@kernel.org>; Fri,  6 Jan 2023 08:12:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70318C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 40EADC433F1
+	for <soc@kernel.org>; Fri,  6 Jan 2023 09:21:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40EADC433F1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so560385wms.4
-        for <soc@kernel.org>; Fri, 06 Jan 2023 00:12:31 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so3121104wmb.2
+        for <soc@kernel.org>; Fri, 06 Jan 2023 01:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:organization:reply-to:content-language:cc
-         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GyfJFZdIdRh2RsiYptrx5CNUd4d9thwSYOnDDNRq4ac=;
-        b=QbXT+24yt8nEeOm0EF1IRu5b7CIQIFHS4PUlvHMQM0VYS0Z0T2pC5sqNPGEiN56jqq
-         jRKQL1lnyNNlFTwoxsJWrNJ6UDN3wGhA/XWAqvzETE8KS0cl3vP0W0qkd0VkEoR5xfp9
-         Q9h6uaLV9W12L2jVLlSPpSXvO1/jmyeOINlqRMDnWnwvDOVGGMQyKpI/BNZzG9wlFXW0
-         1Y3MNJjZAuPvhBhXmalfuuXsBmeW212mfkzgakOX+nULKenaRgrYeuN3Kn4FL81/v5f2
-         aI4sV1RJxJ9wCQgPVsMalUwEAGZHtJpMrV/illsAGJyodCETn6yXJEWI++BLuol0tHZF
-         vvow==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mIBwhXreyLm6L8pvnZwtbHNyGe5mj7GJLNgz4Wh6wQo=;
+        b=rUSG4pEdZZLrEOMBnA8mTNPsn7JjkeFfcu9LagQ3wJ78obWtdOCbs/o/WuvChx67fD
+         sQ4d/0Zy6qJ2bURTTu8YevguKYQF5FP2zjCxS8F0R2yFHERndGlPVLsrlesE/C4ZRF/2
+         9zRpxtpep8sAJoSY5GLI0SDsZZVfNFH5TVsOmcON+O818kZGUzhJAKtLIl8cyb7V+aLl
+         aE4VvJ7F/nbN0sr98J6iCdePjgv/lO1Z0lAipJeP0e3aeA9XgM2bY2Wdugybk53+1vSt
+         9MvqNLM8Mgt117lsXOwrN/loBt0vm4XdjnIRIaTtxevLdzkdxR2kFtoXi6eNlyyQZe9F
+         SPqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:organization:reply-to:content-language:cc
-         :to:subject:from:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GyfJFZdIdRh2RsiYptrx5CNUd4d9thwSYOnDDNRq4ac=;
-        b=VaDtVQW6iA816qo71VTkBaa0xFmiwTurLxoZaud9Kq+fX6NHoT/sHL7aNEU/NZniok
-         za7E8+O7pE7qYw+b+lFaeetz4ldFTDUiHuYOjQB+CZ+ituIIXdCQ0WglzL1tDsns7EUS
-         zlmiq/WC0ZVLJj21UE0lAvZBz/JYuwsDtNbx9ZRVQIrTopaU1SXmA5vy5dtYSE8sxyNE
-         4DFB+aaVuvfl6e1BzNdbkyMqvotUzSG/iRR4ItzYrH90i41j7n/tfxRAacdibXNuKojA
-         czkgSbMzC+AE+Vrh8rrPLmXhJV1lFQkp3looxQTgozBh2LKwkUQSD735gje/DsyyQTXT
-         tPbA==
-X-Gm-Message-State: AFqh2kp78WaN+7zHbFvlYI9zujqwBZGjque0DHD0EDF/Qy06jPuP2QeE
-	ptnyOJVXcSWdDWQLNSCj+InfAs96j+I9xxuC
-X-Google-Smtp-Source: AMrXdXs+7AhCAtGKN3vokaxcoula6Zun3EwFm23Nv2khgIVWsTKJES4Z+Fvpg/IJXBOyIU7AokfuGg==
-X-Received: by 2002:a05:600c:798:b0:3d3:5737:3b0f with SMTP id z24-20020a05600c079800b003d357373b0fmr47485848wmo.36.1672992749604;
-        Fri, 06 Jan 2023 00:12:29 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:a0ba:a5f3:d9f1:7e25? ([2a01:e0a:982:cbb0:a0ba:a5f3:d9f1:7e25])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm6034506wms.31.2023.01.06.00.12.28
+        bh=mIBwhXreyLm6L8pvnZwtbHNyGe5mj7GJLNgz4Wh6wQo=;
+        b=dzeHSHPcRYWnQUR3Scx+y/bEFfXx5O1LXTW7NCmaCRQHvFjt/8ryEi6M6OORbuw1xH
+         3c4IHIxkrUPlatJQCA8cwmuKpgIsMtI4rfQUEUsGBIMKAX+pJOMkLq9kwWAdSgIcX5r0
+         4pAZPcOWcWuOtojCqTNZCbBLKYEIoQKkfNzkzYq9TTfgu0jaRRswVDappzOULFYy7ZEL
+         TSI1X1FiHJFe1fwNlxCunFvfZ4XvloNUY2NcVRLs/grZl5gCMXQtfKomEQI+myAeP29e
+         9BEfyMjG+WcIHyz54m9La2+it+kj9ezSy1xI8CvAzdeSxiv3F3ZHJ301uD1YigZUmWGz
+         VT3w==
+X-Gm-Message-State: AFqh2kps0aRUQ33w5RFSXS1C/bS4srOuBqQMPTR2eBys7alsURRtQQF6
+	k/vMZLf30giPKcO1g3KwoVeNSg==
+X-Google-Smtp-Source: AMrXdXt1czt6+jNPwMhku9nPQSZYF/LqrQNaJuRT/gQVAVTaHXddn9UrPgdw+EhBKkv5Muaf+tmGYQ==
+X-Received: by 2002:a7b:cb89:0:b0:3d2:2101:1f54 with SMTP id m9-20020a7bcb89000000b003d221011f54mr38609714wmi.4.1672996911573;
+        Fri, 06 Jan 2023 01:21:51 -0800 (PST)
+Received: from [192.168.1.102] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id az20-20020a05600c601400b003d96bdddd3dsm1047604wmb.15.2023.01.06.01.21.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 00:12:29 -0800 (PST)
-Message-ID: <7915c3f8-57bc-25e2-0314-c78af7a79d6a@linaro.org>
-Date: Fri, 6 Jan 2023 09:12:28 +0100
+        Fri, 06 Jan 2023 01:21:51 -0800 (PST)
+Message-ID: <93915db1-9089-9c58-62f3-6a424c57bfa5@linaro.org>
+Date: Fri, 6 Jan 2023 10:21:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic fixes for v6.2-rc
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 4/4] ARM: dts: sunxi: add MangoPi MQ-R board
 Content-Language: en-US
-Reply-To: neil.armstrong@linaro.org
-Organization: Linaro Developer Services
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Andre Przywara <andre.przywara@arm.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Icenowy Zheng <uwu@icenowy.me>, =?UTF-8?B?QW5kcsOhcyBTemVtesO2?=
+ <szemzo.andras@gmail.com>, Fabien Poussin <fabien.poussin@gmail.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
+References: <20230106010155.26868-1-andre.przywara@arm.com>
+ <20230106010155.26868-5-andre.przywara@arm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230106010155.26868-5-andre.przywara@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 06/01/2023 02:01, Andre Przywara wrote:
+> The MangoPi MQ-R is a small SBC with the Allwinner T113-s3 SoC.
+> The SoC features two Arm Cortex-A7 cores and 128 MB of co-packaged DDR3
+> DRAM. The board adds mostly connectors and the required regulators, plus
+> a Realtek RTL8189FTV WiFi chip.
+> Power comes in via a USB-C connector wired as a peripheral, and there is
+> a second USB-C connector usable as a host port.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts | 160 ++++++++++++++++++
+>  2 files changed, 161 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
+> 
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index d08a3c450ce72..39fd893682924 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1390,6 +1390,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
+>  	sun8i-s3-elimo-initium.dtb \
+>  	sun8i-s3-lichee-zero-plus.dtb \
+>  	sun8i-s3-pinecube.dtb \
+> +	sun8i-t113s-mangopi-mq-r.dtb \
+>  	sun8i-t3-cqa3t-bv3.dtb \
+>  	sun8i-v3-sl631-imx179.dtb \
+>  	sun8i-v3s-licheepi-zero.dtb \
+> diff --git a/arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts b/arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
+> new file mode 100644
+> index 0000000000000..ed4d5217d7b0d
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/sun8i-t113s-mangopi-mq-r.dts
+> @@ -0,0 +1,160 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +// Copyright (C) 2022 Arm Ltd.
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +/dts-v1/;
+> +
+> +#include "sun8i-t113s.dtsi"
+> +
+> +/ {
+> +	model = "MangoPi MQ-R";
+> +	compatible = "widora,mangopi-mq-r", "allwinner,sun8i-t113s";
+> +
+> +	aliases {
+> +		ethernet0 = &rtl8189ftv;
+> +		serial3 = &uart3;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial3:115200n8";
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led-0 {
+> +			color = <LED_COLOR_ID_BLUE>;
+> +			function = LED_FUNCTION_STATUS;
+> +			gpios = <&pio 3 22 GPIO_ACTIVE_LOW>; /* PD22 */
+> +		};
+> +	};
+> +
+> +	/* board wide 5V supply directly from the USB-C socket */
+> +	reg_vcc5v: vcc5v {
 
-Here's a DT revert for v6.2-rc1 which fixes USB on Odroid-HC4, having both USB2 PHYs
-enabled is necessary to have functional USB on Amlogic SoCs, even if one port is unused.
+Generic node names, so matching style of other - with regulator prefix.
 
-Neil
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc-5v";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	/* SY8008 DC/DC regulator on the board */
+> +	reg_3v3: regulator-3v3 {
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Best regards,
+Krzysztof
 
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v6.2-rc
-
-for you to fetch changes up to c45219cba101f32853d011da2ba46a1b2338dc4c:
-
-   Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0" (2023-01-06 09:02:40 +0100)
-
-----------------------------------------------------------------
-Amlogic fixes for v6.2-rc:
-- Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0" which breaks whole USB on Odroid-HC4
-
-----------------------------------------------------------------
-Pierre-Olivier Mercier (1):
-       Revert "arm64: dts: meson-sm1-odroid-hc4: disable unused USB PHY0"
-
-  arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dts | 8 ++------
-  1 file changed, 2 insertions(+), 6 deletions(-)
