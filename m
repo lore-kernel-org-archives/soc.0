@@ -4,82 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA9F1C5479D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8C17C67871
 	for <soc@archiver.kernel.org>; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 890FDC43392; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 71A09C433EF
-	for <soc@kernel.org>; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
+	id AEACAC433A0; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 95896C433F2;
+	Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1673304083;
-	bh=FfxvZ+rU7mxo39ZQ5eF690GJWYfesfZ0+FVknQ7CVA0=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=NyJ+ztAdAx331NY/z4w4kvHBarOSRi/tJz6pqc6DxdBlojnUE0LT0hhRC2fhhyzNH
-	 rgtmEBxHWdxhdIdYHtv0/S7HggnGIhHF5pvYn0qb8fitmVItb9RYGsSJdQQ9a16y0i
-	 sREic/ziCSxV9XV57r8NfWnYw/Lubw1cQeDXPOKrr8W/nDY3U6/gicwCi7kNP/MMKR
-	 CCDLyYaGTfh+gk8HPZS5U5+NUBaZo9OH/xMik7ff4iHXOV/8SPS2WXRaMa0GDaZerF
-	 iyy4dN4PajLvSXayL3KDmY3Q0Dr8ioQtTNThW4hqYgJE70Utgn/UydPP6dFtNTeEEN
-	 wAOPlaG01dnXw==
+	bh=1OLHvqY0kvUr+Y2whZFS27jfFSSBMJ0YOrTotg5CF4A=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=TJ4rR5ZC7CuZ3m4teiYriLMBTWJxSsmbuHf/NWGpNG6D9KKZjZzwj4/FHb1k538ef
+	 tApZAoWGluczy0ePX+UWHHae/3X5oU7FM0NbUYMRMJAZ4BKq1N6s15DjvpsqjD8Pjy
+	 bsQueVk07poxwIpfa4A0TB3grS96GZHB+jn8tZ7G7l43fJfySbcxQseLl3Ztn3quSo
+	 rrLpsAGyJkf3kPW0FQwgMe0G5RwwKwZQJfZp/+N7jDYNtKGXv23WfcS1xfRvA2Dz3l
+	 J21jrH+8Ff7z9FvKwe/8qv6FPdBqqEb3ij8WXsbSebyq78g6S3xNoMILQv3c6VrHuJ
+	 XId6hxJqwEcxA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 551C8E21EE6;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6FA48E4D005;
 	Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] i.MX fixes for 6.2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167330408330.13717.13604432565225742746.git-patchwork-summary@kernel.org>
+ <167330408345.13717.7633965782308960746.git-patchwork-notify@kernel.org>
 Date: Mon, 09 Jan 2023 22:41:23 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20230102132016.GA10699@T480>
+In-Reply-To: <20230102132016.GA10699@T480>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: ARM: footbridge: drop unnecessary inclusion
-  Submitter: Alexandre Belloni <alexandre.belloni@bootlin.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=703854
-  Lore link: https://lore.kernel.org/r/20221212135953.212303-1-alexandre.belloni@bootlin.com
+On Mon, 2 Jan 2023 21:20:17 +0800 you wrote:
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> 
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.2
+> 
+> [...]
 
-Patch: [GIT,PULL] memory: fixes: Fixes for v6.2
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=710126
-  Lore link: https://lore.kernel.org/r/20230109150322.329614-1-krzysztof.kozlowski@linaro.org
+Here is the summary with links:
+  - [GIT,PULL] i.MX fixes for 6.2
+    https://git.kernel.org/soc/soc/c/33abcaef9888
 
-Patch: [GIT,PULL] Reset controller fixes for v6.2
-  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=708735
-  Lore link: https://lore.kernel.org/r/20230104095855.3809733-1-p.zabel@pengutronix.de
-
-Patch: [GIT,PULL] i.MX fixes for 6.2
-  Submitter: Shawn Guo <shawnguo@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=708235
-  Lore link: https://lore.kernel.org/r/20230102132016.GA10699@T480
-
-Patch: [GIT,PULL] firmware: arm_scmi: Fixes for v6.2
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=709486
-  Lore link: https://lore.kernel.org/r/20230106093909.652657-1-sudeep.holla@arm.com
-
-Patch: [GIT,PULL] amlogic fixes for v6.2-rc
-  Submitter: Neil Armstrong <neil.armstrong@linaro.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=709458
-  Lore link: https://lore.kernel.org/r/7915c3f8-57bc-25e2-0314-c78af7a79d6a@linaro.org
-
-
-Total patches: 6
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
