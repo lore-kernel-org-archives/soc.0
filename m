@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB702C54EBE
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF944C678D7
 	for <soc@archiver.kernel.org>; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 95F9FC43396; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 75101C433D2;
+	id B9823C43398; Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C456C433EF;
 	Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1673304083;
-	bh=9UET/2vfdBr7xGVgOsli3rKvU50+pHUsxOX5mDNPkfM=;
+	bh=o1auHznQuxTZ9PilOFQTXftBhnNngJF0nkvABi8mAn4=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=O1beyw0s2xBUinyytdX+dAc4CBbKnLZnF7Bb8CgDVok4I4kzU3ygamrqRZsATXu3W
-	 FtSq/AD+4KwwYDuNsOy/M0R+TakUNU2JaIXbf5042N8O0zK0UyVYfX/j9SZ02Ln62g
-	 m+gzWZosi1KU7YyaO3SbHJeCk+62TUlcjRDmbvWyKkdM5AVzITgMVgxR+LsbO+ZkDI
-	 865myJLArG2M14sZd5txFWpN38OwAyjUiS9+Atp8cCodcfqV/2PW+HFgK1ZI9XzjkB
-	 jSHGcKsmofW697TBpwmUPrboKnd+okN8ZauiWxaXCahraSDFcSoEgl8Bbz3IL+z5E8
-	 31GRm7TpXlOBA==
+	b=C6lRsYREhwayPhQCSmEgVTb13BDxZyhFi5f0ZqJLQq6oO8DtcL/XQG3lFwZCEe9t5
+	 UdxoRoovb8T5aKFW33DvRauS4Ck04VdoKpicF6tFVkqax6wa9uYvrtV3MqW60VL+tD
+	 zH0/TnV56643d6sJSp/HEb7ciwNg+eaz8dQYjEA+t/EQSJVlROXehwx3zPckD0IIaR
+	 2V1blBgdFqMJqb3ZhggISuqubwvt/p46nxU+zMdUbVsseJYs9bhHU9t7zVNi5016CZ
+	 LLWmUyEvVGLTxDcS4sFkYrJS88VYdu1XtMu1oEDibwgJDjQyst7o5GghOl/W5A4iG/
+	 qjGSJvZgdUwHg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D22DE21EE8;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 758EAE50D70;
 	Mon,  9 Jan 2023 22:41:23 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: footbridge: drop unnecessary inclusion
+Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v6.2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167330408337.13717.9200492599200128322.git-patchwork-notify@kernel.org>
+ <167330408347.13717.5873810523809829736.git-patchwork-notify@kernel.org>
 Date: Mon, 09 Jan 2023 22:41:23 +0000
-References: <20221212135953.212303-1-alexandre.belloni@bootlin.com>
-In-Reply-To: <20221212135953.212303-1-alexandre.belloni@bootlin.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20230106093909.652657-1-sudeep.holla@arm.com>
+In-Reply-To: <20230106093909.652657-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 12 Dec 2022 14:59:52 +0100 you wrote:
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Fri,  6 Jan 2023 09:39:09 +0000 you wrote:
+> Hi ARM SoC Team,
 > 
-> isa-rtc.c doesn't use any definition from bcd.h, remove its inclusion
+> Please pull !
 > 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  arch/arm/mach-footbridge/isa-rtc.c | 1 -
->  1 file changed, 1 deletion(-)
+> Regards,
+> Sudeep
+> 
+> [...]
 
 Here is the summary with links:
-  - ARM: footbridge: drop unnecessary inclusion
-    https://git.kernel.org/soc/soc/c/daec8b54e944
+  - [GIT,PULL] firmware: arm_scmi: Fixes for v6.2
+    https://git.kernel.org/soc/soc/c/a316877372f4
 
 You are awesome, thank you!
 -- 
