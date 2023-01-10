@@ -1,99 +1,72 @@
-Return-Path: <SRS0=trVk=5H=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=W/M8=5H=gmail.com=festevam@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78980C54EBE
-	for <soc@archiver.kernel.org>; Tue, 10 Jan 2023 09:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3D77C46467
+	for <soc@archiver.kernel.org>; Tue, 10 Jan 2023 14:42:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3BC5FC433F2; Tue, 10 Jan 2023 09:51:05 +0000 (UTC)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	id BB8A2C433D2; Tue, 10 Jan 2023 14:42:48 +0000 (UTC)
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 43FC2C433EF
-	for <soc@kernel.org>; Tue, 10 Jan 2023 09:51:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43FC2C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id g10so8347332wmo.1
-        for <soc@kernel.org>; Tue, 10 Jan 2023 01:51:04 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id E3A9FC433EF;
+	Tue, 10 Jan 2023 14:42:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3A9FC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id b17so5876394pld.7;
+        Tue, 10 Jan 2023 06:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WrQzOa9EiO3FMfIzNKHzQ3EJooWDcByw4FpVYo3LxlU=;
-        b=Pp4SFUbS129IGAbhEsVjQoc5E5ovtTjU+hsh6jYN+BKENx/6Xoeqzx3afnbfz451fL
-         6L6ab9gLkQb2muLgNIxbPrpeOjIbKXQJaIJOlef9FFG8PE3ObK7GkrBbo+h2dOZnRr+J
-         KkDeWrnnCFgWb30BB6JBLG1TFRG36JfGVocEMQ16qDgC94jRBHRZ2sexLDVZSMOMOsMw
-         28bygG4Kv2CWUu9mvlnjPN4Tz8CMxPQ0q81BH39BYb6ifOjSjHqW2UCugtHF4tO17wEw
-         hTCtVBHthIJ2OYitMOgt8xSSlSPbg5gkDNl34C8TnF6z7OyRShUccMeJhhA2SQtv/MYJ
-         SCiw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tXjIjnxYMI42IRu4LCReG1Fw+YG7xeYmx7NOLjI+qsU=;
+        b=PGQPByQ8cNmGaK54Q3hmqL9HXjbbF81QAQFlD7ne2zAQuAnhhD/E39cADBo1AJs3QR
+         BFfT8wW9H/dneESzXl8oeveOZCQ19H/AMkWmzr/vBL9t5RcK5cTFebcpNaQP513PunOL
+         0DvyrIkWjwSzrR4kfv2XdnutbkJ0xiNP0yMvL7m3bIELVnvNRyF7XRtQyeJNYimbthos
+         hRc6OtEvjrrtKiOACtjAV8NOpKpK5Jawhy7DffuRF1TFw9UZi0xd+BZZHcg80jMPhglA
+         4HNePjoKBQ2YM/zP1NppyZFcrIsQg+4FVm0cFi/0QfH56U6C7BWVkpAevS8SkHmmcmgg
+         BLhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WrQzOa9EiO3FMfIzNKHzQ3EJooWDcByw4FpVYo3LxlU=;
-        b=UZJxXfxdUCUxXyB6yMW6m/CyskzGpgmt7AlZIgpIi/nse6cUkykET+t7Ebs2IEjIBN
-         r0I5OszIx0sdJ1YgoM7A94fvk0biIAiCruBUsWkHZOJ3/w2MKYUUloqQEGg0xKFWdvhq
-         cu6umz7XnNadcD+nR9mswzw/m22vaDf95UdWbCER4Feh5VJSc7JNyM1Lt/1AJXH4H01Y
-         isDR6I05B1Pl6ItbqH3UEhUY13x03dWDeV9Eptrq0vPajaM5+PIm0cQzEXbxnnqbI87k
-         duP1pUzhX/j3aUOTsaD/6GZot+uEVIjuwUKzS8/p4NE3VQ98j/HunhxSyiiZjQSOKHEQ
-         v3zQ==
-X-Gm-Message-State: AFqh2koyEYh5XuL4U3shHSXqrEFSjWhfBvslO+AP1x2VNJaaAA4I74oD
-	HhKoSh7YjuXO0lYV1dwpCXbGww==
-X-Google-Smtp-Source: AMrXdXtMklGbOTYDwKJIdQhxGy8wSTO8g3hNPyeO13I2MacEos0LoZRtrvbAlFBRnPJOdOR79a3eHA==
-X-Received: by 2002:a05:600c:1c21:b0:3cf:9844:7b11 with SMTP id j33-20020a05600c1c2100b003cf98447b11mr58927717wms.23.1673344262653;
-        Tue, 10 Jan 2023 01:51:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j30-20020a05600c1c1e00b003cfa80443a0sm16128859wms.35.2023.01.10.01.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 01:51:02 -0800 (PST)
-Message-ID: <83e7b2b0-1840-bc8b-e657-ab94975b955d@linaro.org>
-Date: Tue, 10 Jan 2023 10:51:00 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tXjIjnxYMI42IRu4LCReG1Fw+YG7xeYmx7NOLjI+qsU=;
+        b=VRS9QcKSni3t8CmxgBRUa9q6uzZ1fCCZLKbgJlhuoI/1sDxAjKPcS82P4rlyuzMiwv
+         hZxrH3D7mTVxzjJJgZjPLVFGDuLq40ISWgBSox+TDDdF0TLVXmD8wgnOM4Sj3TZjj4TS
+         hsSmxsb70GMh+SvI9310Zp6CKEeAxg6Z8KRE08sm2bg46oMEzVIq1S/fnVcGQk6gp99j
+         +EzR+hrIDjCL65uXvqm7UR24p3yJYDFoDz/LpYby6XhYsg8cF7LBT7OHPUF0otyU7ydU
+         vpLUduKYPNTwIWqFRgCeGgsCl2zIlTYxWN637aBrO/uNbZc8jLIr3PrPO8Mtl2pWkt/V
+         TKjw==
+X-Gm-Message-State: AFqh2kpfVmN4W6l4hxexh8Q993wHFI4RUxYmZXU1j6tDVixNcd2p2d7t
+	W6MhCz+9d96VvJM7eK+RHey2l3w3d1CVX0ijR7Ff0htXwWg=
+X-Google-Smtp-Source: AMrXdXty7OzDWRq24LAAOFuRMApEaB5bX7oedcCoBqct2auy6nyw6iQCP2ZDF57/b45HuqhYDOs8IRjydARsKduAJXA=
+X-Received: by 2002:a17:90a:b016:b0:228:cb89:67d5 with SMTP id
+ x22-20020a17090ab01600b00228cb8967d5mr248130pjq.172.1673361767076; Tue, 10
+ Jan 2023 06:42:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5/5] MAINTAINERS: Add maintainer of GXP SROM support
-Content-Language: en-US
+References: <20230106-arm-wm896x-v1-1-441c564a9cd1@kernel.org>
+In-Reply-To: <20230106-arm-wm896x-v1-1-441c564a9cd1@kernel.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 10 Jan 2023 11:42:35 -0300
+Message-ID: <CAOMZO5C9efF4toR9zKs2iaJj2Z-zBpeZYuXVsqHFoQXZidYShg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable wm896x audio CODECs
+To: Mark Brown <broonie@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: clayc@hpe.com, linux-kernel@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- verdun@hpe.com, nick.hawkins@hpe.com, arnd@arndb.de, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk, olof@lixom.net
-References: <20230110042533.12894-1-clayc@hpe.com>
- <20230110042533.12894-6-clayc@hpe.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230110042533.12894-6-clayc@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	NXP Linux Team <linux-imx@nxp.com>, soc@kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/01/2023 05:25, clayc@hpe.com wrote:
-> From: Clay Chang <clayc@hpe.com>
-> 
-> Add Clay Chang as the maintainer of GXP SROM support.
+On Fri, Jan 6, 2023 at 8:14 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> The wm896x series of audio CODECs is used on a number of Freescale
+> reference designs, enable the drivers in multi_v7_defconfig to improve
+> testing coverage of those systems and their derivatives.
+>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Your commit is not doing it. Nope. Either make proper entry matching
-this commit msg or make commit msg reflecting truth.
-> 
-> Signed-off-by: Clay Chang <clayc@hpe.com>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ea941dc469fa..164571ac1cc5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2279,14 +2279,22 @@ F:	arch/arm/mach-sa1100/jornada720.c
->  ARM/HPE GXP ARCHITECTURE
->  M:	Jean-Marie Verdun <verdun@hpe.com>
->  M:	Nick Hawkins <nick.hawkins@hpe.com>
-> +M:	Clay Chang <clayc@hpe.com>
-
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
