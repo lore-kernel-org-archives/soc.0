@@ -1,107 +1,313 @@
-Return-Path: <SRS0=INbW=5H=hpe.com=prvs=03745b4215=clayc@kernel.org>
+Return-Path: <SRS0=trVk=5H=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB17CC54EBE
-	for <soc@archiver.kernel.org>; Tue, 10 Jan 2023 04:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99A09C54EBE
+	for <soc@archiver.kernel.org>; Tue, 10 Jan 2023 09:47:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AE94BC433F0; Tue, 10 Jan 2023 04:26:15 +0000 (UTC)
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 5A797C433F2; Tue, 10 Jan 2023 09:47:02 +0000 (UTC)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8075FC433D2;
-	Tue, 10 Jan 2023 04:26:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8075FC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309Nprnr016772;
-	Tue, 10 Jan 2023 04:26:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references; s=pps0720;
- bh=ON+ooHXKRcLz9a7mKEFwwAlWyLb4g7QY6+Wkhe/RFTY=;
- b=VutGmrP0WyLiEZRJ690R+rmi4jFdRmcYMU+0lEX+SEUU3WesbHRxhnKeJ64byhIJ5fUZ
- snDrKz6BcT5MxZUmoYB9KJjftxrb6KTwQW24dax2xZ9vDPSo7top05m2emKekp6dHluZ
- tDctxlqkMseRGSBT4q9Nle3Bdq8gISW8baK+HEgVQjR30Y9Vs5tfnOIhu1wN2Du+Dh/k
- r+C/XkknC8lDwVUptlytz7ISjYkUD9NcAbMfITF6Efh9LsbSgQK2zR1d9FnDLgrYsVFf
- 7lMLlMgiklY4AiATwRQ2qJBftpwQ5Z9TVz4WH73OwHct2cX+Yhm7kG8p/rmKBi3DrFMR Yw== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n0vynsfpr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Jan 2023 04:26:09 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id D214D807ECB;
-	Tue, 10 Jan 2023 04:26:01 +0000 (UTC)
-Received: from openbmc-dev.hpecorp.net (unknown [16.231.227.36])
-	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 11D3180BE24;
-	Tue, 10 Jan 2023 04:25:57 +0000 (UTC)
-From: clayc@hpe.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 0CB92C433D2
+	for <soc@kernel.org>; Tue, 10 Jan 2023 09:47:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0CB92C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id p3-20020a05600c1d8300b003d9ee5f125bso4843444wms.4
+        for <soc@kernel.org>; Tue, 10 Jan 2023 01:47:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wPHNOfbtw1EW7vXH7brxiTduNcLS830FFBzh0EZQIoc=;
+        b=opoulNORb+0fxatETIKzqxH06hE9jYaBLMb8auqkajb3loOhVSblfk9gmiuUlfDMIf
+         to+gzthP6JZGQv+DMPut4xsqEmsPSKnqZiitBONnUkucRwRIx2f2CCjaU4kq76yktZGG
+         X3Mv+cTBoiqwMVPJl+dFOXrsV3WDCID2DkcVGjFNASGss3f8RLi+Ezqj8lRhdlCwVj04
+         TXMe5t0gVYRcOoDe67laO/bV1khHAPZ5cCr0iokhY6nmJMd88Cyuyw0D6gcHDvm930hl
+         6BLaxg+jRNz8TblYvm95CONwnUqbIvIRH6JHOWqEJOL4ZUwoKIkQAsj/T/h6wXHLpSFj
+         lVCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPHNOfbtw1EW7vXH7brxiTduNcLS830FFBzh0EZQIoc=;
+        b=EvwqbT4er9jWPuC5Rd7CLjbxSYZN8c7yXTfcSYKv+uKs7+Z9kpd75baQA+FcAaMqrR
+         30TeQUScCl7+u+iP/58CHU6JoAJPX5j8mcTPDJJ9domwKI0QiC73uzJgrPd0v1LKai1f
+         47D/RbNrXcmemXjuvY725dMWTdHXYY7MHJGuGIauxTFe2oQOh5dn0AaXYxlkuhQWkrj0
+         d1OGqXCHOcVTCeWonvs1gRRdXdUDmRV3Qrt3vK2XyORMBwhXvQjnJjecp4kXHdc0WNtT
+         9wpyi0VCc+tqau9bkB8BN4thzCAXgsGdD6CAWO+HFnQZXc1g0gCHtXqYPbIoFNNW4Xh8
+         hPgw==
+X-Gm-Message-State: AFqh2krzl1YlLkzRGMvHbSCqP1wymuCmVEzLfbQItz5Mc3PEya3FodhX
+	JKuZew8y2zqB2mnkD7ofycybyA==
+X-Google-Smtp-Source: AMrXdXvp2ZP7Hjgrx6nxYXVPTK/swbn/+rUAeJoBkj+/fGEZU3b/HfUWTxXHSS7NRBIr/cFdfFZjEw==
+X-Received: by 2002:a7b:c3c6:0:b0:3d2:3376:6f37 with SMTP id t6-20020a7bc3c6000000b003d233766f37mr48095610wmj.10.1673344019233;
+        Tue, 10 Jan 2023 01:46:59 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s23-20020a1cf217000000b003d1e3b1624dsm18782224wmc.2.2023.01.10.01.46.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 01:46:58 -0800 (PST)
+Message-ID: <34191e6f-9a00-114e-4fd8-15ccaec3535b@linaro.org>
+Date: Tue, 10 Jan 2023 10:46:57 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/5] soc: hpe: Add GXP SROM Control Register Driver
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-To: linux-kernel@vger.kernel.org, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        verdun@hpe.com, nick.hawkins@hpe.com, arnd@arndb.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux@armlinux.org.uk, olof@lixom.net
-Cc: Clay Chang <clayc@hpe.com>
-Subject: [PATCH 5/5] MAINTAINERS: Add maintainer of GXP SROM support
-Date: Tue, 10 Jan 2023 12:25:33 +0800
-Message-Id: <20230110042533.12894-6-clayc@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230110042533.12894-1-clayc@hpe.com>
+To: clayc@hpe.com, linux-kernel@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ verdun@hpe.com, nick.hawkins@hpe.com, arnd@arndb.de, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk, olof@lixom.net
 References: <20230110042533.12894-1-clayc@hpe.com>
-X-Proofpoint-GUID: TC7f-ukkXfS1AGZjrSFi6v0Uc-bEsyGU
-X-Proofpoint-ORIG-GUID: TC7f-ukkXfS1AGZjrSFi6v0Uc-bEsyGU
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_01,2023-01-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 bulkscore=0 phishscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100026
+ <20230110042533.12894-2-clayc@hpe.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230110042533.12894-2-clayc@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Clay Chang <clayc@hpe.com>
+On 10/01/2023 05:25, clayc@hpe.com wrote:
+> From: Clay Chang <clayc@hpe.com>
+> 
+> The GXP SROM control register can be used to configure LPC related
+> legacy I/O registers. Currently only the SROM RAM Offset Register
+> (vromoff) is exported.
+> 
+> The GXP SOCLIB is a common library used for creating the common
+> "soc" class in the kernel.
+> 
+> Signed-off-by: Clay Chang <clayc@hpe.com>
+> ---
+>  drivers/soc/Kconfig          |   1 +
+>  drivers/soc/Makefile         |   1 +
+>  drivers/soc/hpe/Kconfig      |  29 +++++++
+>  drivers/soc/hpe/Makefile     |   2 +
+>  drivers/soc/hpe/gxp-soclib.c |  17 +++++
+>  drivers/soc/hpe/gxp-soclib.h |   9 +++
+>  drivers/soc/hpe/gxp-srom.c   | 141 +++++++++++++++++++++++++++++++++++
+>  7 files changed, 200 insertions(+)
+>  create mode 100644 drivers/soc/hpe/Kconfig
+>  create mode 100644 drivers/soc/hpe/Makefile
+>  create mode 100644 drivers/soc/hpe/gxp-soclib.c
+>  create mode 100644 drivers/soc/hpe/gxp-soclib.h
+>  create mode 100644 drivers/soc/hpe/gxp-srom.c
+> 
+> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+> index 5dbb09f843f7..faff0f036b61 100644
+> --- a/drivers/soc/Kconfig
+> +++ b/drivers/soc/Kconfig
+> @@ -10,6 +10,7 @@ source "drivers/soc/bcm/Kconfig"
+>  source "drivers/soc/canaan/Kconfig"
+>  source "drivers/soc/fsl/Kconfig"
+>  source "drivers/soc/fujitsu/Kconfig"
+> +source "drivers/soc/hpe/Kconfig"
+>  source "drivers/soc/imx/Kconfig"
+>  source "drivers/soc/ixp4xx/Kconfig"
+>  source "drivers/soc/litex/Kconfig"
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index fff513bd522d..d257b9d654b3 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -14,6 +14,7 @@ obj-$(CONFIG_MACH_DOVE)		+= dove/
+>  obj-y				+= fsl/
+>  obj-y				+= fujitsu/
+>  obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
+> +obj-$(CONFIG_ARCH_HPE)		+= hpe/
+>  obj-y				+= imx/
+>  obj-y				+= ixp4xx/
+>  obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+> diff --git a/drivers/soc/hpe/Kconfig b/drivers/soc/hpe/Kconfig
+> new file mode 100644
+> index 000000000000..88f5d46b06b6
+> --- /dev/null
+> +++ b/drivers/soc/hpe/Kconfig
+> @@ -0,0 +1,29 @@
+> +#
+> +# HPE GXP SoC drivers
+> +#
+> +menu "HPE GXP SoC drivers"
+> +	depends on ARCH_HPE || COMPILE_TEST
+> +
+> +config HPE_GXP_SOCLIB
+> +	bool "GXP Common SoC Library"
+> +	default y
+> +	depends on ARCH_HPE_GXP || COMPILE_TEST
+> +	help
+> +	  This is for the common library for all HPE SoC drivers. It
+> +	  creates the root soc class (/sys/class/soc) for all GXP SoC
+> +	  drivers. It must be yes if any one of the GXP SoC drivers were
+> +	  added, so the config of all GXP SoC drivers must select this.
 
-Add Clay Chang as the maintainer of GXP SROM support.
+Don't open-code Kconfig dependencies in free-form text. IOW, drop last
+sentence.
 
-Signed-off-by: Clay Chang <clayc@hpe.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> +
+> +
+> +config HPE_GXP_SROM
+> +	bool "GXP SROM Configuration Driver"
+> +	default y
+> +	depends on ARCH_HPE_GXP || COMPILE_TEST
+> +	select HPE_GXP_SOCLIB
+> +	help
+> +	  Say yes here to add support for SROM Configuration. The GXP SROM
+> +	  control register can be used to configure LPC related legacy I/O
+> +	  registers. Currently only the SROM RAM Offset Register (vromoff)
+> +	  is exported.
+> +
+> +endmenu
+> diff --git a/drivers/soc/hpe/Makefile b/drivers/soc/hpe/Makefile
+> new file mode 100644
+> index 000000000000..78de24ecb606
+> --- /dev/null
+> +++ b/drivers/soc/hpe/Makefile
+> @@ -0,0 +1,2 @@
+> +obj-$(CONFIG_HPE_GXP_SOCLIB) += gxp-soclib.o
+> +obj-$(CONFIG_HPE_GXP_SROM) += gxp-srom.o
+> diff --git a/drivers/soc/hpe/gxp-soclib.c b/drivers/soc/hpe/gxp-soclib.c
+> new file mode 100644
+> index 000000000000..11b0afe09070
+> --- /dev/null
+> +++ b/drivers/soc/hpe/gxp-soclib.c
+> @@ -0,0 +1,17 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (C) 2023 Hewlett Packard Enteprise Development Company, L.P. */
+> +
+> +#include <linux/device.h>
+> +#include <linux/module.h>
+> +
+> +struct class *soc_class;
+> +
+> +static int __init gxp_soclib_init(void)
+> +{
+> +	soc_class = class_create(THIS_MODULE, "soc");
+> +	if (IS_ERR(soc_class))
+> +		return PTR_ERR(soc_class);
+> +	return 0;
+> +}
+> +
+> +module_init(gxp_soclib_init);
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea941dc469fa..164571ac1cc5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2279,14 +2279,22 @@ F:	arch/arm/mach-sa1100/jornada720.c
- ARM/HPE GXP ARCHITECTURE
- M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
-+M:	Clay Chang <clayc@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/soc/hpe/
-+F:	Documentation/devicetree/bindings/soc/hpe/hpe,gxp-srom.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/soc/hpe/
-+F:	drivers/soc/hpe/Kconfig
-+F:	drivers/soc/hpe/Makefile
-+F:	drivers/soc/hpe/gxp-soclib.[ch]
-+F:	drivers/soc/hpe/gxp-srom.c
- F:	drivers/spi/spi-gxp.c
- F:	drivers/watchdog/gxp-wdt.c
- 
--- 
-2.17.1
+I don't see a point of making it a shared object and a "kernel library".
+Module inits are not libraries. Drop entire file.
+
+> diff --git a/drivers/soc/hpe/gxp-soclib.h b/drivers/soc/hpe/gxp-soclib.h
+> new file mode 100644
+> index 000000000000..eb0e72b67aee
+> --- /dev/null
+> +++ b/drivers/soc/hpe/gxp-soclib.h
+> @@ -0,0 +1,9 @@
+
+
+> +
+> +static int sysfs_register(struct device *parent,
+> +			  struct gxp_srom_drvdata *drvdata)
+> +{
+> +	struct device *dev;
+> +
+> +	dev = device_create_with_groups(soc_class, parent, 0,
+> +					drvdata, srom_groups, "srom");
+> +	if (IS_ERR(dev))
+> +		return PTR_ERR(dev);
+> +	drvdata->dev = dev;
+> +	return 0;
+> +}
+> +
+> +static int gxp_srom_probe(struct platform_device *pdev)
+> +{
+> +	struct gxp_srom_drvdata *drvdata;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_srom_drvdata),
+
+sizeof(*)
+
+> +				GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->pdev = pdev;
+> +	platform_set_drvdata(pdev, drvdata);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		dev_err(&pdev->dev, "no srom resource defined\n");
+> +		ret = -ENODEV;
+> +		goto out;
+> +	}
+> +
+> +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+
+Combine these two. There is a helper for this.
+
+> +	if (IS_ERR(drvdata->base)) {
+> +		dev_err(&pdev->dev, "ioremap_resource error\n");
+> +		ret = PTR_ERR(drvdata->base);
+
+return dev_err_probe().
+> +		goto ioremap_err;
+> +	}
+> +
+> +	mutex_init(&drvdata->mutex);
+> +
+> +	ret = sysfs_register(&pdev->dev, drvdata);
+
+Missing ABI documentation.
+
+> +	if (ret != 0) {
+> +		dev_err(&pdev->dev, "sysfs error\n");
+
+return dev_err_probe
+
+> +		goto sysfs_err;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "initialized\n");
+
+Drop silly probe successes.
+
+> +	return 0;
+> +
+> +sysfs_err:
+> +ioremap_err:
+> +	platform_set_drvdata(pdev, NULL);
+> +out:
+> +	if (drvdata)
+> +		devm_kfree(&pdev->dev, (void *)drvdata);
+
+1. Why? if it is here, it must be in remove() callback. If it is invalid
+(because it is really not correct) for remove(), it cannot be here, right?
+2. Why cast?
+
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id gxp_srom_of_match[] = {
+> +	{ .compatible = "hpe,gxp-srom" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, gxp_srom_of_match);
+> +
+> +static struct platform_driver gxp_srom_driver = {
+> +	.probe = gxp_srom_probe,
+> +	.driver = {
+> +		.name = "gxp-srom",
+> +		.of_match_table = of_match_ptr(gxp_srom_of_match),
+
+That will cause a warning. Drop of_match_ptr.
+
+> +	},
+> +};
+> +module_platform_driver(gxp_srom_driver);
+> +
+> +MODULE_AUTHOR("Clay Chang <clayc@hpe.com>");
+> +MODULE_DESCRIPTION("HPE GXP SROM Configuration Driver");
+> +MODULE_LICENSE("GPL");
+
+Best regards,
+Krzysztof
 
