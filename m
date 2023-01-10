@@ -1,80 +1,101 @@
-Return-Path: <broonie@kernel.org>
+Return-Path: <SRS0=INbW=5H=hpe.com=prvs=03745b4215=clayc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF3AAC5479D
-	for <soc@archiver.kernel.org>; Mon,  9 Jan 2023 23:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F158C46467
+	for <soc@archiver.kernel.org>; Tue, 10 Jan 2023 04:25:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9DD99C433F0; Mon,  9 Jan 2023 23:47:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD77C433EF;
-	Mon,  9 Jan 2023 23:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673308031;
-	bh=ht4Wv9Cglhs60TpBP+Y7ZEPhCYdlzBXlzkOX9GVh1aY=;
-	h=From:Date:Subject:List-Id:To:Cc:From;
-	b=KEO24XSBeSu0zXeoSXLt054rhifebgRRCxAtQZXZZZsP2AbxqE9dl0JHuK1MqEXLt
-	 8ssdTycWPd9PG0K9ooAIkbwDY7/q97vng0DSX6kSm1TCPLIlscrMJIg2jSRwLUqb+M
-	 YnK9Y+D5VQAEWBpbkl4Z6lAvJp9F64OUG+yYEeIPh24HfMY14kZhYjtDO0OKCOI/CL
-	 gIrVuFi4GGb5+CG8JZyFUtlt3VaZnDpN3lQYtvNj3EgG2JmB9mqzDslrOu7oGwryq0
-	 ndL1k0LAavudb9tf0mDMALOTfrvjuIFkRaK04mCZqhHgejlbc/lCScziTvw8Mg8Kd/
-	 dL3+gC0lsTfjw==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 09 Jan 2023 23:46:53 +0000
-Subject: [PATCH] ARM: multi_v5_defconfig: Enable I2C_GPIO
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230109-arm-multi-v5-i2c-gpio-v1-1-78e191358548@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAG2nvGMC/x2NQQ6CMBAAv0L27CbtikT8iuHQlhU2Sku2iiSEv
- 1s8ziST2SCzCme4VRsoL5IlxQL2VEEYXRwYpS8MZOhsrGnR6YTT5/UWXC4oFHCYJWHdULA9X1vf
- EJTWu8zo1cUwHvU36fPQs/JD1v/u3u37D0j1Wj9+AAAA
+	id 65AB9C433D2; Tue, 10 Jan 2023 04:25:52 +0000 (UTC)
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E4E0CC433EF;
+	Tue, 10 Jan 2023 04:25:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4E0CC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A422L4003370;
+	Tue, 10 Jan 2023 04:25:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id; s=pps0720;
+ bh=oADZAnV3rWFTc+Si9n98UlfL8xVyj92lEDEZZ5a7VMA=;
+ b=aL3sfE+65Slgrh1DXrSx8EOf4Y2vQAWdw5Yxfx1l3BBguo4y+d2avFHJS9QwgXPkWdnu
+ wKHegh8YhKYlbrbl7kGxR8vhY8pNJp1xV2lIc439pUua4m94x/OFDxMkG1Huo7fWU8gr
+ UVOgc137wQuQ18G4/u19DvD705sWW62uDhseWZp5NSugObPv+XhGKvtHsHPPhRUzDW5r
+ a9nDMqHXMpu0zyCQzusQkjwagPnApUWWzZ1dtATbZfXAnrWYT2qwpD/Guip9XyptDPhT
+ +/Zk4j+czsTmjPXB5y4Y2oJjdgmHnv9pj6rYsPnjgOrXI3DVh5kTY0GC+tDVXBrIhzND TQ== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3n103ng8tx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Jan 2023 04:25:42 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 4A8BE807EF3;
+	Tue, 10 Jan 2023 04:25:41 +0000 (UTC)
+Received: from openbmc-dev.hpecorp.net (unknown [16.231.227.36])
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 07C9C800BB1;
+	Tue, 10 Jan 2023 04:25:36 +0000 (UTC)
+From: clayc@hpe.com
 List-Id: <soc.lore.kernel.org>
-To: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-8b3d1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=938; i=broonie@kernel.org;
- h=from:subject:message-id; bh=ht4Wv9Cglhs60TpBP+Y7ZEPhCYdlzBXlzkOX9GVh1aY=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjvKd9bakbQXSeXh42Nc8xLhFuQqZuFa9sl1N/3LNH
- 4ZIPbeKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY7ynfQAKCRAk1otyXVSH0MvlB/
- 9rqAjKtmXjzXsrucrjw3RpdI8kzpGfh0/m0aVasEMRMAFK2hXvhdtqD7yQpfiFjEkyJWooqvQEMC8J
- VsKEJ+5MFOTY+EPgOn00MglmjjGi3WfV8wo9fymIkv7n1uZx/RfeCfS9SfFkMytO6sPog/AJI4a7KL
- Vbz/ARRC9oOW6hYCHmpSHbj5vC1DD2ZGBgEmxo99wwwt27EymZymWUkgvy1QRc3gnxbgqpEzzoMj+i
- gu9MvEy/d5nERXb0afW2oU83lTr1EvRkpeomf5dIvethyIxxOZ4QaxxZBIGjdN7SJcgQvd/n6cq53L
- wKMSVocAlWCSFCxVo3Mdsnpwb40PI2
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+To: linux-kernel@vger.kernel.org, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        verdun@hpe.com, nick.hawkins@hpe.com, arnd@arndb.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, olof@lixom.net
+Cc: Clay Chang <clayc@hpe.com>
+Subject: [PATCH 0/5] ARM: Add GXP SROM Support
+Date: Tue, 10 Jan 2023 12:25:28 +0800
+Message-Id: <20230110042533.12894-1-clayc@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: HrmQPcT41TpapgC6vSRun4wFEpOITVcX
+X-Proofpoint-ORIG-GUID: HrmQPcT41TpapgC6vSRun4wFEpOITVcX
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_01,2023-01-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=613 mlxscore=0 clxscore=1011 bulkscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100026
 
-A GPIO based I2C bus is used by at least some Atmel reference boards,
-including the AT91SAM9G20-EK which is in CI, enable the driver as a
-module to improve test coverage and help users of systems that happen to
-use it.
+From: Clay Chang <clayc@hpe.com>
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm/configs/multi_v5_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+The GXP SROM control register can be used to configure LPC related
+legacy I/O registers. Currently only the SROM RAM Offset Register
+(vromoff) is exported.
 
-diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-index 60fc52b95690..aaeb924d21eb 100644
---- a/arch/arm/configs/multi_v5_defconfig
-+++ b/arch/arm/configs/multi_v5_defconfig
-@@ -138,6 +138,7 @@ CONFIG_HW_RANDOM_TIMERIOMEM=m
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_ASPEED=m
- CONFIG_I2C_AT91=y
-+CONFIG_I2C_GPIO=m
- CONFIG_I2C_IMX=y
- CONFIG_I2C_MV64XXX=y
- CONFIG_SPI=y
+Clay Chang (5):
+  soc: hpe: Add GXP SROM Control Register Driver
+  dt-bindings: soc: hpe: hpe,gxp-srom.yaml
+  ARM: dts: hpe: Add SROM Driver
+  ARM: multi_v7_defconfig: Add GXP SROM Driver
+  MAINTAINERS: Add maintainer of GXP SROM support
 
----
-base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
-change-id: 20230109-arm-multi-v5-i2c-gpio-462c1de89b62
+ .../bindings/soc/hpe/hpe,gxp-srom.yaml        |  36 +++++
+ MAINTAINERS                                   |   8 +
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  41 ++---
+ arch/arm/configs/multi_v7_defconfig           |   2 +
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/hpe/Kconfig                       |  29 ++++
+ drivers/soc/hpe/Makefile                      |   2 +
+ drivers/soc/hpe/gxp-soclib.c                  |  17 +++
+ drivers/soc/hpe/gxp-soclib.h                  |   9 ++
+ drivers/soc/hpe/gxp-srom.c                    | 141 ++++++++++++++++++
+ 11 files changed, 269 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-srom.yaml
+ create mode 100644 drivers/soc/hpe/Kconfig
+ create mode 100644 drivers/soc/hpe/Makefile
+ create mode 100644 drivers/soc/hpe/gxp-soclib.c
+ create mode 100644 drivers/soc/hpe/gxp-soclib.h
+ create mode 100644 drivers/soc/hpe/gxp-srom.c
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.17.1
+
