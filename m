@@ -1,65 +1,135 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=GzeW=5I=arm.com=andre.przywara@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C500BC678D8
-	for <soc@archiver.kernel.org>; Tue, 10 Jan 2023 22:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EE6EC54EBC
+	for <soc@archiver.kernel.org>; Wed, 11 Jan 2023 01:53:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6BACAC4339C; Tue, 10 Jan 2023 22:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 563F0C433F2;
-	Tue, 10 Jan 2023 22:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673390532;
-	bh=6uuFn0NwCafZalIFheYF7LIvUNamfpKn3RGBhJbYkAg=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=CYFFcRAp8OaeTSsatmZ455lJ0K9O6fvyaRUGRPjIFLFzaXFuNyqcQ2M4ALYjWRbbD
-	 TwHrNcXkh7iOJrxZ/9Rqn2LmfCsLVWnGBd7BIyTHIaQPQeVKJAm8DKZFL3KQI25XRe
-	 Ol7R9eJicqStyAxceRrivO5xlKOUf7mV+yWcCVA09Nr846nireMv8pu0BtL74WPGIW
-	 sAh+fmyzhFmvtY2JwcZLFmfW0zD5YmgC9WYswOnlILabbiBcYYiyWxwj5NyNb63cWM
-	 2vaKGTg6EySrjArQJll2+QadcarLECcTC63v4AqfeUpiU7zsq+/6AkQFa+pmN/3Rud
-	 1Q28IJpu5v1gg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44B07E524F1;
-	Tue, 10 Jan 2023 22:42:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 1AB76C433F1; Wed, 11 Jan 2023 01:53:42 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 9ED9BC433EF;
+	Wed, 11 Jan 2023 01:53:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9ED9BC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDF2BFEC;
+	Tue, 10 Jan 2023 17:54:20 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C6333F67D;
+	Tue, 10 Jan 2023 17:53:36 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Chen-Yu Tsai <wens@csie.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Bin Liu <b-liu@ti.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Icenowy Zheng <uwu@icenowy.me>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org,
+	soc@kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev
+Subject: [PATCH v5 00/11] ARM: suniv: USB and two new boards support
+Date: Wed, 11 Jan 2023 01:53:21 +0000
+Message-Id: <20230111015332.172021-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/1] Broadcom drivers fixes for 6.2
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <167339053227.5083.7714293666420123169.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Jan 2023 22:42:12 +0000
-References: <20230110215025.1008437-1-f.fainelli@gmail.com>
-In-Reply-To: <20230110215025.1008437-1-f.fainelli@gmail.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+Hi,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+this is mostly a rebase of the former v4 series.
+It is based on top of v6.2-rc1, and builds cleanly there. For passing
+make dtbs_check, the PHY binding patch, part of a separate series[1], is
+needed. For USB functionality, patch 2/3 from there is needed as well.
 
-On Tue, 10 Jan 2023 13:50:25 -0800 you wrote:
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> 
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.2/drivers-fixes
-> 
-> [...]
+I put a tree with both series combined here:
+https://github.com/apritzel/linux/commits/f1c100s-usb-v5
 
-Here is the summary with links:
-  - [GIT,PULL,1/1] Broadcom drivers fixes for 6.2
-    https://git.kernel.org/soc/soc/c/45c734817847
+There were no changes to the actual patches, this is just a resend since
+the series missed the previous merge window.
 
-You are awesome, thank you!
+Cheers,
+Andre
+
+[1] https://lore.kernel.org/linux-phy/20230109012223.4079299-1-andre.przywara@arm.com/
+
+================
+This patchset introduces support for F1C100s' USB, and the SourceParts
+PopStick and Lctech Pi boards.
+
+The DT binding and driver support for SUNIV USB MUSB device are added, in
+addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
+for the SourceParts PopStick v1.1 and Lctech Pi boards.
+
+Changelog v4 ... v5:
+- Rebase on top to v6.2-rc1
+
+Changelog v3 ... v4:
+- Dropped the PHY patches, they go via a different tree and need a
+  different base
+- rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
+- musb DT binding: use enum
+- musb cleanup: use musb_hdrc_config config pointer directly
+- musb cleanup: use const where possible
+- drop partitions from Popstick DTS file
+- clarify Popstick has a USB type-A *plug*
+- add tags
+
+Changelog v2 ... v3:
+- remove redundant "Device Tree Bindings" suffix in DT binding doc title
+- add BSD license to binding doc file (as per checkpatch)
+- fix some commit message title prefixes
+- use proper plural spelling for usb0_id_det-gpios
+- popstick.dts: Reorder otg_sram node reference alphabetically
+- popstick.dts: Add regulator- prefix to 3.3V regulator node name
+- popstick.dts: Fix status, compatible and reg property order
+- popstick.dts: Drop unneeded mmc0 and spi0 aliases
+- add patch to clean up sunxi MUSB driver
+- add Acks and Reviewed-by's
+
+Changelog v1 ... v2:
+- USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
+- Add Popstick binding and .dts patches
+
+
+Andre Przywara (4):
+  usb: musb: sunxi: Introduce config struct
+  dt-bindings: vendor-prefixes: add Lctech name
+  dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
+  ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
+
+Icenowy Zheng (7):
+  dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
+  usb: musb: sunxi: add support for the F1C100s MUSB controller
+  ARM: dts: suniv: add USB-related device nodes
+  ARM: dts: suniv: licheepi-nano: enable USB
+  dt-bindings: vendor-prefixes: add Source Parts
+  dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
+  ARM: dts: suniv: add device tree for PopStick v1.1
+
+ .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
+ .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
+ .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
+ arch/arm/boot/dts/Makefile                    |  4 +-
+ .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
+ arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
+ .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
+ drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
+ 9 files changed, 301 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
+ create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+prerequisite-patch-id: 7734c0032dcc073e59f0217ee47ff023f0b47bcf
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
