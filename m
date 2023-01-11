@@ -1,628 +1,133 @@
-Return-Path: <SRS0=gVWM=5I=sendnbc.com.ua=info@kernel.org>
+Return-Path: <SRS0=huXH=5I=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92283C5479D
-	for <soc@archiver.kernel.org>; Wed, 11 Jan 2023 09:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED2EC46467
+	for <soc@archiver.kernel.org>; Wed, 11 Jan 2023 13:22:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5C0D9C433D2; Wed, 11 Jan 2023 09:57:05 +0000 (UTC)
-Received: from mail.sendnbc.com.ua (sendnbc.com.ua [80.66.78.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id DA6E4C433F0; Wed, 11 Jan 2023 13:22:16 +0000 (UTC)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C5418C433EF
-	for <soc@kernel.org>; Wed, 11 Jan 2023 09:57:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5418C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=sendnbc.com.ua
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sendnbc.com.ua
-Message-ID: <8cbfe672864b84e3c0c70ea5508c06033c1cb530@sendnbc.com.ua>
-Reply-To: Ella <reply@sendnbc.com.ua>
-From: Ella <info@sendnbc.com.ua>
+	by smtp.kernel.org (Postfix) with ESMTPS id AF1C1C433D2
+	for <soc@kernel.org>; Wed, 11 Jan 2023 13:22:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF1C1C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id e13so16036353ljn.0
+        for <soc@kernel.org>; Wed, 11 Jan 2023 05:22:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=441mvFLohqxOuYmmdP8E+VY0LDXePT3i/GiYn1UFXPs=;
+        b=BSgt/eyuXFtObCcbqqRzpZxA/3ZMZeOXLsuv82PTiZ7eW1R/wmBYpAGmToAepKqlUz
+         tD0W21MteRm7V9LzwD7C4wiZTnFXSF1X/pAUDSGdXHluVitM4rPhwRNqrYIxZI8iVXPe
+         1HfR5ytvlY7lP2r9Uo23z7pcxa5nj7Lq9s9O0DWOzncu3e2AkeYbIEdWEoPd33Qlis5m
+         o13OIxY8Eyd1iR9cG1Ge6ygmtv4sN6j1d4mx8h0DUAtg5VVRKpnJq6CmUjr6K9IhgBYM
+         e2Sl2+U83/KRlLmO0FdRYy3yVdFvKXQWNG3/FaeTaBOkoFTwFD799EcShdtOn9yj2tzE
+         GX1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=441mvFLohqxOuYmmdP8E+VY0LDXePT3i/GiYn1UFXPs=;
+        b=y4vD1hm7QTUGpIIZNIYQAoPgvj8CcCf/Pf9F02Xp2DaFTCUiO9C5suPwhPekVYCp5D
+         bmsgOiUaO3Wa+wg0qL2iJtr+mzwV1sxLL1dbvYmGM6pTjfjS9cZOPoLFCVLIjg1hYUXj
+         abwsyp9tw0Q57pFa7WJscQkW1olaDWrNCHE6jxx4ffYnkZcrzy3EMRJ9AvEvCnasrAoM
+         EQl/z0AwCN41xPZXIC/AyFNrL1i0kqeZhE/TcPCB7lzt22mXpDU3ZR8aPvfZUvD1ktEZ
+         PK6AMlQVwKeL7CUised2YpF+ZIx8NlcLRxmnXXx2HKY1OGHb6rEu9sIfyqAnAoY0fPti
+         QThA==
+X-Gm-Message-State: AFqh2krWGiRRSvKtBpMq8516c4tnSQRoTvACr0rw2/mAmmxAfYmyVM0y
+	iYam9QN7sk1gJxDNeKAWRxo1qg==
+X-Google-Smtp-Source: AMrXdXuo3dYnKUctk03bL1xgUnZsSzLlulfB93CvttVRFeynVrAJ96k8feGjDXqg2a11XLRvmtWDMg==
+X-Received: by 2002:a2e:be06:0:b0:26f:db35:d205 with SMTP id z6-20020a2ebe06000000b0026fdb35d205mr25481400ljq.17.1673443333765;
+        Wed, 11 Jan 2023 05:22:13 -0800 (PST)
+Received: from fedora.. ([85.235.10.72])
+        by smtp.gmail.com with ESMTPSA id f21-20020a2e6a15000000b00284126dbea2sm1353545ljc.55.2023.01.11.05.22.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 05:22:13 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: =?utf-8?B?0JTRgNGD0Log0LLQuNGB0L7QutC+aSDRj9C60L7RgdGCaQ==?=
-Date: Wed, 11 Jan 2023 11:57:17 +0200
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Hartley Sweeten <hsweeten@visionengravers.com>,
+	Lukasz Majewski <lukma@denx.de>
+Subject: [PATCH] ARM: ep93xx: Convert to use descriptors for GPIO LEDs
+Date: Wed, 11 Jan 2023 14:22:10 +0100
+Message-Id: <20230111132210.134478-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/alternative; boundary="282168cadb7359ff5cf6be0d5993a5c5e498"
-List-Unsubscribe: <https://otbc.in.ua/Server-Side/amsweb.php?rtcfY3OIC8v3mDXbKPvQIwaYbcylAfKuynV0iXehC%2FxfV394NjJ98JU9NFOoP%2Bciw9NNxeyMaB2FP7j6LmENHGrKKFM%2BMWrJkjgp0iZGobEb1Fpgob8VpnqwOrD6UvbJA%2FSS1phyR6wr9BuZn3fsE%2BxyHYQyS8Q6Bnn2leLQW4k%3D>
-DKIM-Signature: v=1; c=relaxed/relaxed; a=rsa-sha256; s=mail; d=sendnbc.com.ua;
-	t=1673431037; h=message-id:from:to:subject:date:mime-version:list-unsubscribe;
-	bh=OHPfxYYdtqn77et9jprYuwTjnakYMlE9MTpukL5nf4w=;
-	b=HUn4ZqMvelQUs6lwBjFV+68UmdHoaKljcnvG2Dmp5IkEiIcIAh8rQTWuYVlrJvlZy84x/jF3
-	UeG1r2n8XCIxIsj046I8bSaueUiatPuKZXi5zI7I9speCYjEIIrbp4aj1aWgqbLr+/x9yvmE0d
-	m4/NJ1BE/930wnsBwhXopJXcQ=
+Content-Transfer-Encoding: 8bit
 
---282168cadb7359ff5cf6be0d5993a5c5e498
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+This converts the EP93xx to use GPIO descriptors for the
+LEDs.
 
-(066) 560 78 38
-(044) 227 10 77
-(067) 201 10 44 =C2=A0
-3328168@ukr.net
-otbc.in.ua
+Cc: Nikita Shubin <nikita.shubin@maquefel.me>
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>
+Cc: Lukasz Majewski <lukma@denx.de>
+Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v3->v4:
+- Rebased on v6.2-rc1
+- SoC folks: please apply this patch directly for suitable branch.
+ChangeLog v2->v3:
+- Collected Alexander's Tested-by
+ChangeLog v1->v2:
+- Fix syntax error (doubled left parens)
+---
+ arch/arm/mach-ep93xx/core.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-=D0=A2=D0=9E=D0=92 "=D0=AE=D0=9D=D0=98=D0=94=D0=A0=D0=A3=D0=9A" =D0=BF=D1=
-=80=D0=BE=D0=BF=D0=BE=D0=BD=D1=83=D1=94 =D0=B2=D0=B8=D0=B3=D0=BE=D1=82=D0=
-=BE=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=BE=D0=BB=D1=96=D0=B3=D1=
-=80=D0=B0=D1=84=D1=96=D1=87=D0=BD=D0=BE=D1=96 =D0=BF=D1=80=D0=BE=D0=B4=D1=
-=83=D0=BA=D1=86=D1=96=D1=96
+diff --git a/arch/arm/mach-ep93xx/core.c b/arch/arm/mach-ep93xx/core.c
+index 95e731676cea..71b113976420 100644
+--- a/arch/arm/mach-ep93xx/core.c
++++ b/arch/arm/mach-ep93xx/core.c
+@@ -426,10 +426,8 @@ void __init ep93xx_register_spi(struct ep93xx_spi_info *info,
+ static const struct gpio_led ep93xx_led_pins[] __initconst = {
+ 	{
+ 		.name	= "platform:grled",
+-		.gpio	= EP93XX_GPIO_LINE_GRLED,
+ 	}, {
+ 		.name	= "platform:rdled",
+-		.gpio	= EP93XX_GPIO_LINE_RDLED,
+ 	},
+ };
+ 
+@@ -438,6 +436,16 @@ static const struct gpio_led_platform_data ep93xx_led_data __initconst = {
+ 	.leds		= ep93xx_led_pins,
+ };
+ 
++static struct gpiod_lookup_table ep93xx_leds_gpio_table = {
++	.dev_id = "leds-gpio",
++	.table = {
++		/* Use local offsets on gpiochip/port "E" */
++		GPIO_LOOKUP_IDX("E", 0, NULL, 0, GPIO_ACTIVE_HIGH),
++		GPIO_LOOKUP_IDX("E", 1,	NULL, 1, GPIO_ACTIVE_HIGH),
++		{ }
++	},
++};
++
+ /*************************************************************************
+  * EP93xx pwm peripheral handling
+  *************************************************************************/
+@@ -990,6 +998,7 @@ struct device __init *ep93xx_init_devices(void)
+ 	platform_device_register(&ep93xx_ohci_device);
+ 	platform_device_register(&ep93xx_wdt_device);
+ 
++	gpiod_add_lookup_table(&ep93xx_leds_gpio_table);
+ 	gpio_led_register_device(-1, &ep93xx_led_data);
+ 
+ 	return parent;
+-- 
+2.34.1
 
-=D0=BA=D0=B0=D1=82=D0=B0=D0=BB=D0=BE=D0=B3=D1=96=D0=B2, =D0=BA=D0=B0=D0=BB=
-=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D1=96=D0=B2, =D0=B1=D0=BB=D0=BE=D0=BA=D0=BD=
-=D0=BE=D1=82=D1=96=D0=B2 =D1=82=D0=B0 =D0=B1=D1=83=D0=BA=D0=BB=D0=B5=D1=82=
-=D1=96=D0=B2 =D0=B4=D0=BB=D1=8F =D0=92=D0=B0=D1=88=D0=BE=D1=96 =D0=BA=D0=BE=
-=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=D1=96. =D0=92=D0=BB=D0=B0=D1=81=D0=BD=D0=B0=
- =D0=B2=D0=B8=D1=80=D0=BE=D0=B1=D0=BD=D0=B8=D1=87=D0=B0 =D0=B1=D0=B0=D0=B7=
-=D0=B0 =D0=BE=D1=84=D1=81=D0=B5=D1=82=D0=BD=D0=BE=D1=96 =D0=B8 =D1=86=D0=B8=
-=D1=84=D1=80=D0=BE=D0=B2=D0=BE=D1=96 =D0=BC=D0=B0=D1=88=D0=B8=D0=BD, =D0=B4=
-=D0=BE=D0=B7=D0=B2=D0=BE=D0=BB=D1=8F=D1=94 =D0=BE=D0=B1=D0=B8=D1=80=D0=B0=
-=D1=82=D0=B8 =D0=BE=D0=BF=D1=82=D1=96=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=
-=D0=B9 =D0=BD=D0=B0=D0=BA=D0=BB=D0=B0=D0=B4 =D1=96 =D1=83 =D0=B2=D0=B8=D0=
-=BF=D0=B0=D0=B4=D0=BA=D1=83 =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=
-=BD=D0=BE=D1=81=D1=82=D1=96, =D0=B4=D0=BE=D0=B4=D1=80=D1=83=D0=BA=D1=83=D0=
-=B2=D0=B0=D1=82=D0=B8 =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=D1=
-=83 =D0=BA=D1=96=D0=BB=D1=8C=D0=BA=D1=96=D1=81=D1=82=D1=8C =D0=B2 =D1=81=D1=
-=82=D0=B8=D1=81=D0=BB=D1=96 =D1=82=D0=B5=D1=80=D0=BC=D1=96=D0=BD=D0=B8.
-
-=D0=9C=D0=B8 =D1=96=D0=B4=D0=B5=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=B9 =D0=BF=
-=D0=B0=D1=80=D1=82=D0=BD=D0=B5=D1=80 =D0=B4=D0=BB=D1=8F =D0=92=D0=B0=D1=81=
-, =D1=8F=D0=BA=D1=89=D0=BE: =C2=A0=C2=A0=C2=A0
-=E2=80=A2 =D1=83 =D0=92=D0=B0=D1=88=D0=BE=D0=BC=D1=83 =D1=88=D1=82=D0=B0=D1=
-=82=D1=96 =D0=BD=D0=B5=D0=BC=D0=B0=D1=94 =D0=BA=D0=B2=D0=B0=D0=BB=D1=96=D1=
-=84=D1=96=D0=BA=D0=BE=D0=B2=D0=B0=D0=BD=D0=BE=D0=B3=D0=BE =D1=80=D0=B5=D0=
-=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D1=84=D0=B0 / =D0=B4=D0=B8=D0=B7=D0=B0=D0=
-=B9=D0=BD=D0=B5=D1=80=D0=B0 / =D0=BA=D0=BE=D0=BD=D1=81=D1=82=D1=80=D1=83=D0=
-=BA=D1=82=D0=BE=D1=80=D0=B0; =C2=A0=C2=A0=C2=A0
-=E2=80=A2 =D0=92=D0=B0=D0=BC =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D0=
-=BE =D0=BD=D0=B0=D0=B4=D1=80=D1=83=D0=BA=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D1=
-=84=D0=B0=D1=80=D0=B1=D0=B0=D0=BC=D0=B8 Pantone, CMYK =D0=B7 =D0=BD=D0=B0=
-=D0=BD=D0=B5=D1=81=D0=B5=D0=BD=D0=BD=D1=8F=D0=BC =D0=B7=D0=B0=D1=85=D0=B8=
-=D1=81=D0=BD=D0=BE=D0=B3=D0=BE =D0=BB=D0=B0=D0=BA=D1=83; =C2=A0=C2=A0=C2=A0
-=E2=80=A2 =D0=92=D0=B0=D0=BC =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D0=
-=BE =D0=B2=D0=B8=D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=B8=D1=82=D0=B8 =D0=BF=D0=
-=B0=D0=BF=D0=B5=D1=80=D0=BE=D0=B2=D1=83 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=
-=BA=D1=86=D1=96=D1=8E =D0=BD=D0=B0=D0=BA=D0=BB=D0=B0=D0=B4=D0=BE=D0=BC =D0=
-=B2=D1=96=D0=B4 250 =D1=88=D1=82. (=D0=B4=D0=BB=D1=8F =D0=B1=D0=B0=D0=B3=D0=
-=B0=D1=82=D0=BE=D1=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BA=D0=BE=D0=B2=D0=BE=
-=D1=97 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=96=D1=97);
-=E2=80=A2 =D0=B4=D1=80=D1=83=D0=BA =D0=BD=D0=B0 =D0=B4=D1=80=D1=83=D0=BA=D0=
-=B0=D1=80=D1=81=D1=8C=D0=BA=D1=96=D0=B9 =D0=BC=D0=B0=D1=88=D0=B8=D0=BD=D1=
-=96 =D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=82=D1=96=D0=B2 =D0=902 =D1=87=D1=96=
- =D0=901 =D0=B5=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=D1=96=D1=87=D0=BD=D0=BE =D0=
-=BD=D0=B5=D0=B2=D0=B8=D0=B3=D1=96=D0=B4=D0=BD=D0=B8=D0=B9. =C2=A0=C2=A0=C2=
-=A0
-
-=D0=9F=D1=80=D0=B8 =D1=81=D0=BF=D1=96=D0=B2=D0=BF=D1=80=D0=B0=D1=86=D1=96=
- =D0=B7 =D0=BD=D0=B0=D0=BC=D0=B8 =D0=92=D0=B8 =D0=BE=D1=82=D1=80=D0=B8=D0=
-=BC=D1=83=D1=94=D1=82=D0=B5 =D0=B1=D0=B5=D0=B7=D0=BB=D1=96=D1=87 =D0=BF=D1=
-=80=D0=B8=D0=B2=D1=96=D0=BB=D0=B5=D1=97=D0=B2: =C2=A0=C2=A0=C2=A0
-=E2=80=A2 =D0=B2=D0=B8=D1=81=D0=BE=D0=BA=D0=B0 =D1=8F=D0=BA=D1=96=D1=81=D1=
-=82=D1=8C =D0=B4=D1=80=D1=83=D0=BA=D1=83 (=D0=BB=D1=96=D0=BD=D1=96=D0=B0=D1=
-=82=D1=83=D1=80=D0=BE=D1=8E =D0=B4=D0=BE 210 lpi); =C2=A0=C2=A0=C2=A0
-=E2=80=A2 =D0=BF=D0=B5=D1=80=D1=81=D0=BE=D0=BD=D0=B0=D0=BB=D1=8C=D0=BD=D0=
-=B8=D0=B9 =D0=BC=D0=B5=D0=BD=D0=B5=D0=B4=D0=B6=D0=B5=D1=80 =D0=B7=D0=B0=D0=
-=B2=D0=B6=D0=B4=D0=B8 =D0=B2=D1=96=D0=B4=D0=BF=D0=BE=D0=B2=D1=96=D1=81=D1=
-=82=D1=8C =D0=BD=D0=B0 =D0=92=D0=B0=D1=88=D1=96 =D0=BF=D0=B8=D1=82=D0=B0=D0=
-=BD=D0=BD=D1=8F; =C2=A0=C2=A0=C2=A0
-=E2=80=A2 =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=D1=
-=8C=D0=BD=D1=96 =D0=B7=D0=BD=D0=B8=D0=B6=D0=BA=D0=B8 =D1=96 =D1=82=D0=B5=D1=
-=80=D0=BC=D1=96=D0=BD=D0=B8 (=D0=BF=D1=80=D0=B8 =D0=BC=D1=96=D1=81=D1=8F=D1=
-=87=D0=BD=D0=BE=D0=BC=D1=83 =D0=B7=D0=B0=D0=BC=D0=BE=D0=B2=D0=BB=D0=B5=D0=
-=BD=D0=BD=D1=96 =D0=B2=D1=96=D0=B4 100 =D1=82=D0=B8=D1=81. =D0=B3=D1=80=D0=
-=BD.). =D0=9E=D0=B1=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=8E=D1=8E=D1=82=D1=8C=
-=D1=81=D1=8F =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=
-=D1=8C=D0=BD=D0=BE.
-
-=D0=94=D1=80=D1=83=D0=BA=D0=B0=D1=80=D0=BD=D1=8F "UNIDRUK" =D0=B1=D1=83=D0=
-=B4=D0=B5 =D0=BE=D1=81=D0=BE=D0=B1=D0=BB=D0=B8=D0=B2=D0=BE =D0=BA=D0=BE=D1=
-=80=D0=B8=D1=81=D0=BD=D0=B0, =D1=8F=D0=BA=D1=89=D0=BE =D0=92=D0=B8 =D0=B3=
-=D0=BE=D1=82=D1=83=D1=94=D1=82=D0=B5=D1=81=D1=8C =D0=B4=D0=BE =D0=9D=D0=BE=
-=D0=B2=D0=BE=D0=B3=D0=BE =D1=80=D0=BE=D0=BA=D1=83, =D0=B2=D0=B8=D1=81=D1=82=
-=D0=B0=D0=B2=D0=BA=D0=B8, =D0=B2=D0=B8=D0=B2=D0=BE=D0=B4=D1=83 =D0=BD=D0=BE=
-=D0=B2=D0=BE=D0=B3=D0=BE =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=82=D1=83=
- =D0=BD=D0=B0 =D1=80=D0=B8=D0=BD=D0=BE=D0=BA =D0=B0=D0=B1=D0=BE =D1=94 =D0=
-=BF=D0=BE=D1=82=D1=80=D0=B5=D0=B1=D0=B0 =D0=B2=D0=BD=D0=BE=D1=81=D0=B8=D1=
-=82=D0=B8 =D0=B7=D0=BC=D1=96=D0=BD=D0=B8 =D1=83 =D0=92=D0=B0=D1=88=D0=B5 =
-=D0=BA=D0=BE=D1=80=D0=BF=D0=BE=D1=80=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D0=B5 =
-=D0=B2=D0=B8=D0=B4=D0=B0=D0=BD=D0=BD=D1=8F. =C2=A0=C2=A0=C2=A0
-=D0=92=D0=B0=D0=BC =D0=BD=D0=B5 =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=
-=D1=96 =D0=B2=D0=B5=D0=BB=D0=B8=D0=BA=D1=96 =D0=BD=D0=B0=D0=BA=D0=BB=D0=B0=
-=D0=B4=D0=B8, =D0=BD=D0=BE =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D0=B0=
- =D1=8F=D0=BA=D1=96=D1=81=D1=82=D1=8C. =C2=A0=C2=A0=C2=A0
-=D0=AF=D0=BA=D1=89=D0=BE =D0=92=D0=B0=D1=88=D0=B0 =D0=BA=D0=BE=D0=BC=D0=BF=
-=D0=B0=D0=BD=D1=96=D1=8F =D0=BF=D1=80=D0=B8=D1=82=D1=80=D0=B8=D0=BC=D1=83=
-=D1=94=D1=82=D1=8C=D1=81=D1=8F =D1=80=D0=B0=D0=B7=D1=80=D0=BE=D0=B1=D0=BB=
-=D0=B5=D0=BD=D0=BD=D0=BE=D0=B3=D0=BE =D0=BA=D0=BE=D1=80=D0=BF=D0=BE=D1=80=
-=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D1=82=D0=B8=D0=BB=
-=D1=8E =D0=BF=D0=BE =D0=B1=D1=80=D0=B5=D0=BD=D0=B4=D0=B1=D1=83=D0=BA=D1=83=
-, =D1=82=D0=BE =D0=92=D0=B0=D0=BC =D0=BF=D1=80=D0=BE=D1=81=D1=82=D0=BE =D0=
-=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=D0=BE =D1=82=D0=BE=D1=87=D0=
-=BD=D0=B5 =D0=B2=D1=96=D0=B4=D0=BE=D0=B1=D1=80=D0=B0=D0=B6=D0=B5=D0=BD=D0=
-=BD=D1=8F =D0=BA=D0=BE=D1=80=D0=BF=D0=BE=D1=80=D0=BE=D1=82=D0=B8=D0=B2=D0=
-=BD=D0=BE=D0=B3=D0=BE =D1=81=D1=82=D0=B8=D0=BB=D1=8E =D0=BF=D1=80=D0=B8 =D0=
-=B2=D0=B8=D1=80=D0=BE=D0=B1=D0=BD=D0=B8=D1=86=D1=82=D0=B2=D1=96 =D0=B2=D1=
-=81=D1=96=D0=B9 =D0=BF=D0=BE=D0=BB=D1=96=D0=B3=D1=80=D0=B0=D1=84=D1=96=D1=
-=87=D0=BD=D1=96=D0=B9 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=96=D1=
-=96. =C2=A0=C2=A0=C2=A0
-=D0=9D=D0=B0=D1=88=D0=B0 =D1=82=D0=B5=D1=85=D0=BD=D0=B8=D0=BA=D0=B0 =D0=B4=
-=D0=BE=D0=B7=D0=B2=D0=BE=D0=BB=D1=8F=D1=94 =D1=86=D0=B5 =D0=B7=D1=80=D0=BE=
-=D0=B1=D0=B8=D1=82=D0=B8, =D0=B0 =D0=B4=D0=B8=D0=B7=D0=B0=D0=B9=D0=BD=D0=B5=
-=D1=80 =D1=80=D0=B0=D0=B7=D0=BE=D0=BC =D0=B7 =D0=B4=D1=80=D1=83=D0=BA=D0=B0=
-=D1=80=D0=B5=D0=BC =D0=B7=D0=BC=D0=BE=D0=B6=D0=B5 =D0=BA=D0=BE=D0=BD=D1=82=
-=D1=80=D0=BE=D0=BB=D1=8E=D0=B2=D0=B0=D1=82=D0=B8 =D0=B7=D0=B0=D0=B2=D0=B4=
-=D0=B0=D0=BD=D0=B8=D0=B9 =D0=BA=D0=BE=D0=BB=D1=96=D1=80 =D0=BF=D1=96=D0=B4=
- =D1=87=D0=B0=D1=81 =D0=B4=D1=80=D1=83=D0=BA=D1=83.
-
-=D0=92=D0=B0=D1=80=D1=82=D1=96=D1=81=D1=82=D1=8C =D0=BF=D0=BE=D0=BB=D1=96=
-=D0=B3=D1=80=D0=B0=D1=84=D1=96=D1=87=D0=BD=D0=BE=D1=96 =D0=BF=D1=80=D0=BE=
-=D0=B4=D1=83=D0=BA=D1=86=D1=96=D1=96
-
-=D0=9A=D0=B0=D1=82=D0=B0=D0=BB=D0=BE=D0=B3=D0=B8 =D0=904
-500 =D0=BF=D1=80=D0=B8=D0=BC =E2=80=93 11659 =D0=B3=D1=80=D0=BD.
-16 =D1=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BE=D0=BA + =D0=BE=D0=B1=D0=BA=D0=
-=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0
-=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 170 =D0=B3/=D0=
-=BC2, 4+4
-=D0=B2=D0=BD=D1=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=
-=D0=BE=D0=BA 130 =D0=B3/=D0=BC2
-=D1=81=D1=88=D0=B8=D0=B2=D0=BA=D0=B0 =D0=BD=D0=B0 =D1=81=D0=BA=D0=BE=D0=B1=
-=D1=83 =C2=A0=C2=A0=C2=A0 =D0=96=D1=83=D1=80=D0=BD=D0=B0=D0=BB=D0=B8 =D0=90=
-5
-1000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 20268 =D0=B3=D1=80=D0=BD.
-36 =D1=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BE=D0=BA + =D0=BE=D0=B1=D0=BA=D0=
-=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0
-=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 170 =D0=B3/=D0=
-=BC2 4+4
-=D0=B2=D0=BD=D1=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=
-=D0=BE=D0=BA 130 =D0=B3/=D0=BC2 4+4
-=D1=81=D1=88=D0=B8=D0=B2=D0=BA=D0=B0 =D0=BD=D0=B0 =D1=81=D0=BA=D0=BE=D0=B1=
-=D1=83 =20
-
-=D0=9B=D0=B8=D1=81=D1=82=D1=96=D0=B2=D0=BA=D0=B8 =D0=904
-4+4, 130 =D0=B3/=D0=BC2,
-1000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 2400 =D0=B3=D1=80=D0=BD.
-
-=D0=91=D0=BB=D0=BE=D0=BA=D0=BD=D0=BE=D1=82=D0=B8 =D0=905
-1000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 30503 =D0=B3=D1=80=D0=BD.=20
-=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 + =D0=BF=D1=96=
-=D0=B4=D0=BB=D0=BE=D0=B6=D0=BA=D0=B0 300 =D0=B3/=D0=BC2,
-4+0, 1+0 =D0=BB=D0=B0=D0=BC=D1=96=D0=BD=D0=B0=D1=86=D1=96=D1=8F
-=D0=B2=D0=BD=D1=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=
-=D0=BE=D0=BA 4+0, 80 =D0=B3/=D0=BC2 48 =D0=B0=D1=80=D0=BA.
-
-=D0=9A=D0=B0=D0=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D1=96 =D0=BF=D0=B5=D1=80=
-=D0=B5=D0=BA=D1=96=D0=B4=D0=BD=D1=96
-=D0=903 1000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 65208 =D0=B3=D1=80=D0=BD=
-.
-12 =D1=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BE=D0=BA + =D0=BE=D0=BA=D0=BB=D0=
-=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 + =D0=BF=D1=96=D0=B4=D0=BB=D0=BE=D0=B6=D0=
-=BA=D0=B0,
-=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 300 =D0=B3/=D0=
-=BC2, 4+0,
-=D0=B2=D0=BD=D1=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=
-=D0=BE=D0=BA 170 =D0=B3/=D0=BC2, 4+0,
-=D0=BF=D1=96=D0=B4=D0=BB=D0=BE=D0=B6=D0=BA=D0=B0 300=D0=B3/=D0=BC2 =D0=B1=
-=D0=B5=D0=B7 =D0=B4=D1=80=D1=83=D0=BA=D1=83.
-=D0=97=D0=B1=D1=96=D1=80=D0=BA=D0=B0 =D0=BD=D0=B0 =D0=BF=D1=80=D1=83=D0=B6=
-=D0=B8=D0=BD=D1=83 =D0=BF=D0=BE =D0=BA=D0=BE=D1=80=D0=BE=D1=82=D0=BA=D1=96=
-=D0=B9 =D1=81=D1=82=D1=80=D0=BE=D0=BD=D1=96, =D0=BF=D0=BB=D0=B5=D1=87=D0=B5=
-=D0=BA=D0=BE. =20
-
-=D0=9A=D0=B0=D0=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D1=96 =D0=BA=D0=B2=D0=B0=
-=D1=80=D1=82=D0=B0=D0=BB=D1=8C=D0=BD=D1=96 =D0=BD=D0=B0 3 =D0=BF=D1=80=D1=
-=83=D0=B6=D0=B8=D0=BD=D0=B8
-1000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 56124 =D0=B3=D1=80=D0=BD.
-=D1=84=D1=80=D1=96=D0=B7 =D1=96 =D0=BE=D0=B4=D0=BD=D0=B5 =D1=80=D0=B5=D0=BA=
-=D0=BB=D0=B0=D0=BC=D0=BD=D0=B5 =D0=BF=D0=BE=D0=BB=D0=B5,
-4+0, 1+0 =D0=BB=D0=B0=D0=BC. =D0=BC=D0=B0=D1=82. 2 =D0=BF=D0=BE=D0=B4=D0=BB=
-=D0=BE=D0=B6=D0=BA=D0=B8,
-=D0=B7=D0=B1=D1=96=D1=80=D0=BA=D0=B0 =D0=BD=D0=B0 =D0=BF=D1=80=D1=83=D0=B6=
-=D0=B8=D0=BD=D1=83, =D0=BA=D0=B0=D0=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D0=BD=
-=D0=B0 =D1=81=D1=96=D1=82=D0=BA=D0=B0,
-=D0=BB=D1=8E=D0=B2=D0=B5=D1=80=D1=81, =D0=B2=D1=96=D0=BA=D0=BE=D0=BD=D0=B5=
-=D1=87=D0=BA=D0=BE.
-
-=D0=9D=D0=B0=D0=BB=D1=96=D0=BF=D0=BA=D0=B8, =D0=B5=D1=82=D0=B8=D0=BA=D0=B5=
-=D1=82=D0=BA=D0=B8 90=D1=8590 =D0=BC=D0=BC
-6000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 4164 =D0=B3=D1=80=D0=BD.
-4+0, =D1=80=D0=B0=D1=84=D0=BB=D0=BE=D1=82=D0=B0=D0=BA, =D0=BF=D0=BE=D1=80=
-=D1=96=D0=B7=D0=BA=D0=B0. =C2=A0=C2=A0=C2=A0=C2=A0 =D0=9F=D0=BB=D0=B0=D0=BA=
-=D0=B0=D1=82=D1=8B =D0=903
-4+0,130 =D0=B3/=D0=BC2
-500 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 2184 =D0=B3=D1=80=D0=BD.
-
-=D0=97=D0=B0 11 =D1=80=D0=BE=D0=BA=D1=96=D0=B2 =D0=BF=D1=80=D0=B0=D1=86=D1=
-=96 =D0=BC=D0=B8 =D0=BD=D0=B0=D0=BF=D1=80=D0=B0=D1=86=D1=8E=D0=B2=D0=B0=D0=
-=BB=D0=B8 =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=D1=
-=8C=D0=BD=D0=B8=D0=B9 =D0=BF=D1=96=D0=B4=D1=85=D1=96=D0=B4 =D0=BA =D0=BA=D0=
-=B0=D0=B6=D0=B4=D0=BE=D0=BC=D1=83 =D0=B7=D0=B0=D0=BC=D0=BE=D0=B2=D0=BD=D0=
-=B8=D0=BA=D1=83, =D0=B7=D0=B0=D0=B1=D0=B5=D0=B7=D0=BF=D0=B5=D1=87=D1=83=D1=
-=8F =D0=BA=D0=BE=D0=BC=D0=BF=D0=BB=D0=B5=D0=BA=D1=81=D0=BD=D0=B5=D0=BE=D0=
-=B1=D1=81=D0=BB=D1=83=D0=B3=D0=BE=D0=B2=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F=
- =D0=B9=D0=BE=D0=B3=D0=BE =D0=BF=D0=BE=D1=82=D1=80=D0=B5=D0=B1, =D0=B2=D1=
-=80=D0=B0=D1=85=D0=BE=D0=B2=D1=83=D0=B2=D0=B0=D1=8F =D0=B1=D1=8E=D0=B4=D0=
-=B6=D0=B5=D1=82 =D1=82=D0=B0 =D1=82=D0=B5=D1=80=D0=BC=D1=96=D0=BD=D0=B8. =
-=C2=A0=C2=A0=C2=A0
-
-=D0=97 =D0=BF=D1=80=D0=B8=D0=BA=D0=BB=D0=B0=D0=B4=D0=B0=D0=BC=D0=B8 =D0=BD=
-=D0=B0=D1=88=D0=B8=D1=85 =D1=80=D0=BE=D0=B1=D1=96=D1=82 =D0=92=D0=B8 =D0=BC=
-=D0=BE=D0=B6=D0=B5=D1=82=D0=B5 =D0=BE=D0=B7=D0=BD=D0=B0=D0=B9=D0=BE=D0=BC=
-=D0=B8=D1=82=D0=B8=D1=81=D1=8F =D0=BD=D0=B0 =D1=81=D0=B0=D0=B9=D1=82=D1=96=
-, =D0=B0=D0=B1=D0=BE =D0=BC=D0=B8 =D0=BC=D0=BE=D0=B6=D0=B5=D0=BC=D0=BE =D0=
-=BD=D0=B0=D0=B4=D0=B0=D1=82=D0=B8 =D0=B7=D1=80=D0=B0=D0=B7=D0=BA=D0=B8 =D0=
-=BD=D0=B0=D1=88=D0=BE=D1=97 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=
-=96=D1=97. =D0=9D=D0=B0=D0=B4=D1=81=D0=B8=D0=BB=D0=B0=D0=B9=D1=82=D0=B5 =D0=
-=BD=D0=B0=D0=BC =D0=A2=D0=97 =D0=B4=D0=BB=D1=8F =D1=80=D0=BE=D0=B7=D1=80=D0=
-=B0=D1=85=D1=83=D0=BD=D0=BA=D0=B0 =D0=92=D0=B0=D1=88=D0=BE=D0=B3=D0=BE =D0=
-=B7=D0=B0=D0=BC=D0=BE=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F, =D1=96 =D0=BC=D0=
-=B8 =D0=BE=D0=BF=D1=82=D1=96=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=D0=BE =D1=80=D0=
-=BE=D0=B7=D1=80=D0=B0=D1=85=D1=83=D1=94=D0=BC =D0=B2=D0=B0=D1=80=D1=82=D1=
-=96=D1=81=D1=82=D1=8C. =C2=A0=C2=A0=C2=A0
-
-=D0=94=D1=80=D1=83=D0=BA=D0=B0=D1=80=D0=BD=D1=8F "UNIDRUK" =D0=B7=D0=B0=D0=
-=B2=D0=B6=D0=B4=D0=B8 =D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=B0 =D0=B2=D1=82=D1=
-=96=D0=BB=D0=B8=D1=82=D0=B8 =D0=B2=D1=81=D1=96 =D0=B2=D0=B0=D1=88=D0=B8 =D1=
-=96=D0=B4=D0=B5=D1=96. =C2=A0=C2=A0=C2=A0
-
-=D0=97 =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D1=8C =D1=81=D0=BF=D1=96=D0=B2=D0=BF=
-=D1=80=D0=B0=D1=86=D1=96 =D0=B7=D0=B2=D0=B5=D1=80=D1=82=D0=B0=D0=B9=D1=82=
-=D0=B5=D1=81=D1=8F =D0=B7=D0=B0 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=
-=D0=B0=D0=BC=D0=B8:
-
-(066) 560 78 38
-(044) 227 10 77
-(067) 201 10 44 =C2=A0
-3328168@ukr.net
-otbc.in.ua
-
-=D0=B2=D1=96=D0=B4=D0=BF=D0=B8=D1=81=D0=B0=D1=82=D0=B8=D1=81=D1=8F =D0=B2=
-=D1=96=D0=B4 =D0=BF=D0=BE=D1=88=D1=82=D0=B8
-
---282168cadb7359ff5cf6be0d5993a5c5e498
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
-<style type=3D"text/css">BODY {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif
-}
-TD {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif
-}
-TH {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif
-}
-</style>
-
-<meta name=3DGENERATOR content=3D"-[OUTLOOK_VER]-"></head>
-<body>
-<table cellSpacing=3D0 cellPadding=3D15 width=3D800 align=3Dcenter border=
-=3D0>
-<tbody>
-<tr>
-<td><font size=3D3><strong></strong></font>
-<table cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
-<tbody>
-<tr>
-<td width=3D"31%"><font size=3D3><strong><img border=3D0 hspace=3D0 alt=3D=
-"telefon" src=3D"https://otbc.in.ua/druk/iphone.png" align=3Dleft>(066) 5=
-60 78 38<br>(044) 227 10 77<br>(067) 201 10 44</strong></font></td>
-<td width=3D"31%"><font size=3D3><strong><img border=3D0 hspace=3D0 alt=3D=
-"email" src=3D"https://otbc.in.ua/druk/mail.png" align=3Dleft>&nbsp;<br>&=
-nbsp;<a href=3D"mailto:3328168@ukr.net">3328168@ukr.net</a><br></strong><=
-/font></td>
-<td width=3D"38%"><font size=3D3><strong><img border=3D0 hspace=3D0 alt=3D=
-"site" src=3D"https://otbc.in.ua/druk/www.png" align=3Dleft>&nbsp;<br>&nb=
-sp;<a href=3D"https://otbc.in.ua/Server-Side/amsweb.php?y0WviPtvkz7cgL908=
-H%2FwwmLPliSvGbfv2fWTk7Sl8lV77ChxARRC%2BfENRlmimCp2GWwB7C6tx8wbU9IcR%2B9n=
-U%2BxS07M%2B6svvnAedpZ3gOSOZuHrOGsEi9%2B5gvHiK%2FDrYEeb0OgGf%2FPmhQhRefo%=
-2Fsog%3D%3D">otbc.in.ua</a><br></strong></font></td></tr></tbody></table>=
-</td></tr>
-<tr>
-<td><font color=3D"#ff0000" size=3D4><strong>=D0=A2=D0=9E=D0=92 &quot;=D0=
-=AE=D0=9D=D0=98=D0=94=D0=A0=D0=A3=D0=9A&quot; =D0=BF=D1=80=D0=BE=D0=BF=D0=
-=BE=D0=BD=D1=83=D1=94 =D0=B2=D0=B8=D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=BB=D0=
-=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=BE=D0=BB=D1=96=D0=B3=D1=80=D0=B0=D1=84=D1=
-=96=D1=87=D0=BD=D0=BE=D1=96 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=
-=96=D1=96</strong></font></td></tr>
-<tr>
-<td>=D0=BA=D0=B0=D1=82=D0=B0=D0=BB=D0=BE=D0=B3=D1=96=D0=B2, =D0=BA=D0=B0=D0=
-=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D1=96=D0=B2, =D0=B1=D0=BB=D0=BE=D0=BA=D0=
-=BD=D0=BE=D1=82=D1=96=D0=B2 =D1=82=D0=B0 =D0=B1=D1=83=D0=BA=D0=BB=D0=B5=D1=
-=82=D1=96=D0=B2 =D0=B4=D0=BB=D1=8F =D0=92=D0=B0=D1=88=D0=BE=D1=96 =D0=BA=D0=
-=BE=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=D1=96. =D0=92=D0=BB=D0=B0=D1=81=D0=BD=D0=
-=B0 =D0=B2=D0=B8=D1=80=D0=BE=D0=B1=D0=BD=D0=B8=D1=87=D0=B0 =D0=B1=D0=B0=D0=
-=B7=D0=B0 =D0=BE=D1=84=D1=81=D0=B5=D1=82=D0=BD=D0=BE=D1=96 =D0=B8 =D1=86=D0=
-=B8=D1=84=D1=80=D0=BE=D0=B2=D0=BE=D1=96 =D0=BC=D0=B0=D1=88=D0=B8=D0=BD, =D0=
-=B4=D0=BE=D0=B7=D0=B2=D0=BE=D0=BB=D1=8F=D1=94 =D0=BE=D0=B1=D0=B8=D1=80=D0=
-=B0=D1=82=D0=B8 =D0=BE=D0=BF=D1=82=D1=96=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=D0=
-=B8=D0=B9 =D0=BD=D0=B0=D0=BA=D0=BB=D0=B0=D0=B4 =D1=96 =D1=83 =D0=B2=D0=B8=
-=D0=BF=D0=B0=D0=B4=D0=BA=D1=83 =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=
-=D0=BD=D0=BE=D1=81=D1=82=D1=96, =D0=B4=D0=BE=D0=B4=D1=80=D1=83=D0=BA=D1=83=
-=D0=B2=D0=B0=D1=82=D0=B8 =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=
-=D1=83 =D0=BA=D1=96=D0=BB=D1=8C=D0=BA=D1=96=D1=81=D1=82=D1=8C =D0=B2 =D1=81=
-=D1=82=D0=B8=D1=81=D0=BB=D1=96 =D1=82=D0=B5=D1=80=D0=BC=D1=96=D0=BD=D0=B8=
-.</td></tr>
-<tr>
-<td>
-<p><strong><font color=3D"#ff0000">=D0=9C=D0=B8 =D1=96=D0=B4=D0=B5=D0=B0=D0=
-=BB=D1=8C=D0=BD=D0=B8=D0=B9 =D0=BF=D0=B0=D1=80=D1=82=D0=BD=D0=B5=D1=80 =D0=
-=B4=D0=BB=D1=8F =D0=92=D0=B0=D1=81, =D1=8F=D0=BA=D1=89=D0=BE: &nbsp;&nbsp=
-;&nbsp;</font></strong><br>=E2=80=A2 =D1=83 =D0=92=D0=B0=D1=88=D0=BE=D0=BC=
-=D1=83 =D1=88=D1=82=D0=B0=D1=82=D1=96 =D0=BD=D0=B5=D0=BC=D0=B0=D1=94 =D0=BA=
-=D0=B2=D0=B0=D0=BB=D1=96=D1=84=D1=96=D0=BA=D0=BE=D0=B2=D0=B0=D0=BD=D0=BE=D0=
-=B3=D0=BE =D1=80=D0=B5=D0=BF=D1=80=D0=BE=D0=B3=D1=80=D0=B0=D1=84=D0=B0 / =
-=D0=B4=D0=B8=D0=B7=D0=B0=D0=B9=D0=BD=D0=B5=D1=80=D0=B0 / =D0=BA=D0=BE=D0=BD=
-=D1=81=D1=82=D1=80=D1=83=D0=BA=D1=82=D0=BE=D1=80=D0=B0; &nbsp;&nbsp;&nbsp=
-;<br>=E2=80=A2 =D0=92=D0=B0=D0=BC =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=
-=BD=D0=BE =D0=BD=D0=B0=D0=B4=D1=80=D1=83=D0=BA=D1=83=D0=B2=D0=B0=D1=82=D0=
-=B8 =D1=84=D0=B0=D1=80=D0=B1=D0=B0=D0=BC=D0=B8 Pantone, CMYK =D0=B7 =D0=BD=
-=D0=B0=D0=BD=D0=B5=D1=81=D0=B5=D0=BD=D0=BD=D1=8F=D0=BC =D0=B7=D0=B0=D1=85=
-=D0=B8=D1=81=D0=BD=D0=BE=D0=B3=D0=BE =D0=BB=D0=B0=D0=BA=D1=83; &nbsp;&nbs=
-p;&nbsp;<br>=E2=80=A2 =D0=92=D0=B0=D0=BC =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=
-=B1=D0=BD=D0=BE =D0=B2=D0=B8=D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=B8=D1=82=D0=
-=B8 =D0=BF=D0=B0=D0=BF=D0=B5=D1=80=D0=BE=D0=B2=D1=83 =D0=BF=D1=80=D0=BE=D0=
-=B4=D1=83=D0=BA=D1=86=D1=96=D1=8E =D0=BD=D0=B0=D0=BA=D0=BB=D0=B0=D0=B4=D0=
-=BE=D0=BC =D0=B2=D1=96=D0=B4 250 =D1=88=D1=82. (=D0=B4=D0=BB=D1=8F =D0=B1=
-=D0=B0=D0=B3=D0=B0=D1=82=D0=BE=D1=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BA=D0=
-=BE=D0=B2=D0=BE=D1=97 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=96=D1=
-=97);<br>=E2=80=A2 =D0=B4=D1=80=D1=83=D0=BA =D0=BD=D0=B0 =D0=B4=D1=80=D1=83=
-=D0=BA=D0=B0=D1=80=D1=81=D1=8C=D0=BA=D1=96=D0=B9 =D0=BC=D0=B0=D1=88=D0=B8=
-=D0=BD=D1=96 =D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=82=D1=96=D0=B2 =D0=902 =D1=
-=87=D1=96 =D0=901 =D0=B5=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=D1=96=D1=87=D0=BD=D0=
-=BE =D0=BD=D0=B5=D0=B2=D0=B8=D0=B3=D1=96=D0=B4=D0=BD=D0=B8=D0=B9. &nbsp;&=
-nbsp;&nbsp;</p></td></tr>
-<tr>
-<td>
-<p><strong><font color=3D"#ff0000">=D0=9F=D1=80=D0=B8 =D1=81=D0=BF=D1=96=D0=
-=B2=D0=BF=D1=80=D0=B0=D1=86=D1=96 =D0=B7 =D0=BD=D0=B0=D0=BC=D0=B8 =D0=92=D0=
-=B8 =D0=BE=D1=82=D1=80=D0=B8=D0=BC=D1=83=D1=94=D1=82=D0=B5 =D0=B1=D0=B5=D0=
-=B7=D0=BB=D1=96=D1=87 =D0=BF=D1=80=D0=B8=D0=B2=D1=96=D0=BB=D0=B5=D1=97=D0=
-=B2: &nbsp;&nbsp;&nbsp;</font></strong><br>=E2=80=A2 =D0=B2=D0=B8=D1=81=D0=
-=BE=D0=BA=D0=B0 =D1=8F=D0=BA=D1=96=D1=81=D1=82=D1=8C =D0=B4=D1=80=D1=83=D0=
-=BA=D1=83 (=D0=BB=D1=96=D0=BD=D1=96=D0=B0=D1=82=D1=83=D1=80=D0=BE=D1=8E =D0=
-=B4=D0=BE 210 lpi); &nbsp;&nbsp;&nbsp;<br>=E2=80=A2 =D0=BF=D0=B5=D1=80=D1=
-=81=D0=BE=D0=BD=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=B9 =D0=BC=D0=B5=D0=BD=D0=
-=B5=D0=B4=D0=B6=D0=B5=D1=80 =D0=B7=D0=B0=D0=B2=D0=B6=D0=B4=D0=B8 =D0=B2=D1=
-=96=D0=B4=D0=BF=D0=BE=D0=B2=D1=96=D1=81=D1=82=D1=8C =D0=BD=D0=B0 =D0=92=D0=
-=B0=D1=88=D1=96 =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=D1=8F; &nbsp;&nbsp;&=
-nbsp;<br>=E2=80=A2 =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=
-=D0=BB=D1=8C=D0=BD=D1=96 =D0=B7=D0=BD=D0=B8=D0=B6=D0=BA=D0=B8 =D1=96 =D1=82=
-=D0=B5=D1=80=D0=BC=D1=96=D0=BD=D0=B8 (=D0=BF=D1=80=D0=B8 =D0=BC=D1=96=D1=81=
-=D1=8F=D1=87=D0=BD=D0=BE=D0=BC=D1=83 =D0=B7=D0=B0=D0=BC=D0=BE=D0=B2=D0=BB=
-=D0=B5=D0=BD=D0=BD=D1=96 =D0=B2=D1=96=D0=B4 100 =D1=82=D0=B8=D1=81. =D0=B3=
-=D1=80=D0=BD.). =D0=9E=D0=B1=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=8E=D1=8E=D1=
-=82=D1=8C=D1=81=D1=8F =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=
-=B0=D0=BB=D1=8C=D0=BD=D0=BE.</p></td></tr>
-<tr>
-<td>
-<p><strong><font color=3D"#ff0000">=D0=94=D1=80=D1=83=D0=BA=D0=B0=D1=80=D0=
-=BD=D1=8F &quot;UNIDRUK&quot;</font></strong> =D0=B1=D1=83=D0=B4=D0=B5 =D0=
-=BE=D1=81=D0=BE=D0=B1=D0=BB=D0=B8=D0=B2=D0=BE =D0=BA=D0=BE=D1=80=D0=B8=D1=
-=81=D0=BD=D0=B0, =D1=8F=D0=BA=D1=89=D0=BE =D0=92=D0=B8 =D0=B3=D0=BE=D1=82=
-=D1=83=D1=94=D1=82=D0=B5=D1=81=D1=8C =D0=B4=D0=BE =D0=9D=D0=BE=D0=B2=D0=BE=
-=D0=B3=D0=BE =D1=80=D0=BE=D0=BA=D1=83, =D0=B2=D0=B8=D1=81=D1=82=D0=B0=D0=B2=
-=D0=BA=D0=B8, =D0=B2=D0=B8=D0=B2=D0=BE=D0=B4=D1=83 =D0=BD=D0=BE=D0=B2=D0=BE=
-=D0=B3=D0=BE =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=82=D1=83 =D0=BD=D0=B0=
- =D1=80=D0=B8=D0=BD=D0=BE=D0=BA =D0=B0=D0=B1=D0=BE =D1=94 =D0=BF=D0=BE=D1=
-=82=D1=80=D0=B5=D0=B1=D0=B0 =D0=B2=D0=BD=D0=BE=D1=81=D0=B8=D1=82=D0=B8 =D0=
-=B7=D0=BC=D1=96=D0=BD=D0=B8 =D1=83 =D0=92=D0=B0=D1=88=D0=B5 =D0=BA=D0=BE=D1=
-=80=D0=BF=D0=BE=D1=80=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D0=B5 =D0=B2=D0=B8=D0=
-=B4=D0=B0=D0=BD=D0=BD=D1=8F. &nbsp;&nbsp;&nbsp;<br>=D0=92=D0=B0=D0=BC =D0=
-=BD=D0=B5 =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D1=96 =D0=B2=D0=B5=D0=
-=BB=D0=B8=D0=BA=D1=96 =D0=BD=D0=B0=D0=BA=D0=BB=D0=B0=D0=B4=D0=B8, =D0=BD=D0=
-=BE =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D0=B0 <strong>=D1=8F=D0=BA=
-=D1=96=D1=81=D1=82=D1=8C</strong>. &nbsp;&nbsp;&nbsp;<br>=D0=AF=D0=BA=D1=89=
-=D0=BE =D0=92=D0=B0=D1=88=D0=B0 =D0=BA=D0=BE=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=
-=D1=8F =D0=BF=D1=80=D0=B8=D1=82=D1=80=D0=B8=D0=BC=D1=83=D1=94=D1=82=D1=8C=
-=D1=81=D1=8F =D1=80=D0=B0=D0=B7=D1=80=D0=BE=D0=B1=D0=BB=D0=B5=D0=BD=D0=BD=
-=D0=BE=D0=B3=D0=BE <strong>=D0=BA=D0=BE=D1=80=D0=BF=D0=BE=D1=80=D0=B0=D1=82=
-=D0=B8=D0=B2=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D1=82=D0=B8=D0=BB=D1=8E =D0=BF=
-=D0=BE =D0=B1=D1=80=D0=B5=D0=BD=D0=B4=D0=B1=D1=83=D0=BA=D1=83,</strong> =D1=
-=82=D0=BE =D0=92=D0=B0=D0=BC =D0=BF=D1=80=D0=BE=D1=81=D1=82=D0=BE =D0=BD=D0=
-=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=D0=BE =D1=82=D0=BE=D1=87=D0=BD=D0=
-=B5 =D0=B2=D1=96=D0=B4=D0=BE=D0=B1=D1=80=D0=B0=D0=B6=D0=B5=D0=BD=D0=BD=D1=
-=8F =D0=BA=D0=BE=D1=80=D0=BF=D0=BE=D1=80=D0=BE=D1=82=D0=B8=D0=B2=D0=BD=D0=
-=BE=D0=B3=D0=BE =D1=81=D1=82=D0=B8=D0=BB=D1=8E =D0=BF=D1=80=D0=B8 =D0=B2=D0=
-=B8=D1=80=D0=BE=D0=B1=D0=BD=D0=B8=D1=86=D1=82=D0=B2=D1=96 =D0=B2=D1=81=D1=
-=96=D0=B9 =D0=BF=D0=BE=D0=BB=D1=96=D0=B3=D1=80=D0=B0=D1=84=D1=96=D1=87=D0=
-=BD=D1=96=D0=B9 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=96=D1=96. &=
-nbsp;&nbsp;&nbsp;<br><strong>=D0=9D=D0=B0=D1=88=D0=B0 =D1=82=D0=B5=D1=85=D0=
-=BD=D0=B8=D0=BA=D0=B0 =D0=B4=D0=BE=D0=B7=D0=B2=D0=BE=D0=BB=D1=8F=D1=94 =D1=
-=86=D0=B5 =D0=B7=D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8</strong>, =D0=B0 =D0=
-=B4=D0=B8=D0=B7=D0=B0=D0=B9=D0=BD=D0=B5=D1=80 =D1=80=D0=B0=D0=B7=D0=BE=D0=
-=BC =D0=B7 =D0=B4=D1=80=D1=83=D0=BA=D0=B0=D1=80=D0=B5=D0=BC =D0=B7=D0=BC=D0=
-=BE=D0=B6=D0=B5 =D0=BA=D0=BE=D0=BD=D1=82=D1=80=D0=BE=D0=BB=D1=8E=D0=B2=D0=
-=B0=D1=82=D0=B8 =D0=B7=D0=B0=D0=B2=D0=B4=D0=B0=D0=BD=D0=B8=D0=B9 =D0=BA=D0=
-=BE=D0=BB=D1=96=D1=80 =D0=BF=D1=96=D0=B4 =D1=87=D0=B0=D1=81 =D0=B4=D1=80=D1=
-=83=D0=BA=D1=83.</p></td></tr>
-<tr>
-<td>
-<p><font color=3D"#ff0000" size=3D2><strong>=D0=92=D0=B0=D1=80=D1=82=D1=96=
-=D1=81=D1=82=D1=8C =D0=BF=D0=BE=D0=BB=D1=96=D0=B3=D1=80=D0=B0=D1=84=D1=96=
-=D1=87=D0=BD=D0=BE=D1=96 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=D1=96=
-=D1=96</strong></font></p>
-<table cellSpacing=3D0 cellPadding=3D10 width=3D"100%" border=3D0>
-<tbody>
-<tr>
-<td>
-<p><img border=3D0 hspace=3D0 alt=3D"catalog" src=3D"https://otbc.in.ua/d=
-ruk/1.png"></p></td>
-<td>
-<p><img border=3D0 hspace=3D0 alt=3D"jurnal" src=3D"https://otbc.in.ua/dr=
-uk/2.png"></p></td>
-<td>
-<p><img border=3D0 hspace=3D0 alt=3D"listivka" src=3D"https://otbc.in.ua/=
-druk/3.png"></p></td></tr>
-<tr>
-<td><font color=3D"#000000"><strong><font color=3D"#ff0000">=D0=9A=D0=B0=D1=
-=82=D0=B0=D0=BB=D0=BE=D0=B3=D0=B8 =D0=904</font></strong><br><strong>500 =
-=D0=BF=D1=80=D0=B8=D0=BC =E2=80=93 11659 =D0=B3=D1=80=D0=BD.</strong><br>=
-16 =D1=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BE=D0=BA + =D0=BE=D0=B1=D0=BA=D0=
-=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 <br>=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=
-=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 170 =D0=B3/=D0=BC2, 4+4 <br>=D0=B2=D0=BD=D1=
-=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=D0=BE=D0=BA 13=
-0 =D0=B3/=D0=BC2 <br>=D1=81=D1=88=D0=B8=D0=B2=D0=BA=D0=B0 =D0=BD=D0=B0 =D1=
-=81=D0=BA=D0=BE=D0=B1=D1=83 &nbsp;&nbsp;&nbsp;</font></td>
-<td><font color=3D"#000000"><strong><font color=3D"#ff0000">=D0=96=D1=83=D1=
-=80=D0=BD=D0=B0=D0=BB=D0=B8 =D0=905</font></strong><br><strong>1000 =D0=BF=
-=D1=80=D0=B8=D0=BC. =E2=80=93 20268 =D0=B3=D1=80=D0=BD.</strong><br>36 =D1=
-=81=D1=82=D0=BE=D1=80=D1=96=D0=BD=D0=BE=D0=BA + =D0=BE=D0=B1=D0=BA=D0=BB=D0=
-=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 <br>=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=
-=D0=B5=D0=BD=D0=BA=D0=B0 170 =D0=B3/=D0=BC2 4+4 <br>=D0=B2=D0=BD=D1=83=D1=
-=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=D0=BE=D0=BA 130 =D0=B3=
-/=D0=BC2 4+4 <br>=D1=81=D1=88=D0=B8=D0=B2=D0=BA=D0=B0 =D0=BD=D0=B0 =D1=81=
-=D0=BA=D0=BE=D0=B1=D1=83</font></td>
-<td>
-<div><font color=3D"#000000"><strong><font color=3D"#ff0000">=D0=9B=D0=B8=
-=D1=81=D1=82=D1=96=D0=B2=D0=BA=D0=B8 =D0=904</font></strong><br>4+4, 130 =
-=D0=B3/=D0=BC2,<br><strong>1000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 2400 =
-=D0=B3=D1=80=D0=BD.</strong></font></div>
-<div>&nbsp;&nbsp;&nbsp;</div>
-<div>&nbsp;&nbsp;&nbsp;</div>
-<div>&nbsp;&nbsp;&nbsp;</div></td></tr>
-<tr>
-<td><img border=3D0 hspace=3D0 alt=3D"bloknot" src=3D"https://otbc.in.ua/=
-druk/4.png"></td>
-<td><img border=3D0 hspace=3D0 alt=3D"calendar" src=3D"https://otbc.in.ua=
-/druk/5.png"></td>
-<td><img border=3D0 hspace=3D0 alt=3D"kvartal" src=3D"https://otbc.in.ua/=
-druk/6.png"></td></tr>
-<tr>
-<td>
-<div><font color=3D"#000000"><strong><font color=3D"#ff0000">=D0=91=D0=BB=
-=D0=BE=D0=BA=D0=BD=D0=BE=D1=82=D0=B8 =D0=905</font></strong><br><strong>1=
-000 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 30503 =D0=B3=D1=80=D0=BD.</strong=
-> <br>=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 + =D0=BF=
-=D1=96=D0=B4=D0=BB=D0=BE=D0=B6=D0=BA=D0=B0 300 =D0=B3/=D0=BC2, <br>4+0, 1=
-+0 =D0=BB=D0=B0=D0=BC=D1=96=D0=BD=D0=B0=D1=86=D1=96=D1=8F <br>=D0=B2=D0=BD=
-=D1=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=B9 =D0=B1=D0=BB=D0=BE=D0=BA=
- 4+0, 80 =D0=B3/=D0=BC2 48 =D0=B0=D1=80=D0=BA.</font></div>
-<div>&nbsp;&nbsp;&nbsp;</div>
-<div>&nbsp;&nbsp;&nbsp;</div>
-<div>&nbsp;&nbsp;&nbsp;</div></td>
-<td><font color=3D"#000000"><strong><font color=3D"#ff0000">=D0=9A=D0=B0=D0=
-=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=BA=D1=
-=96=D0=B4=D0=BD=D1=96</font></strong><br><strong>=D0=903 1000 =D0=BF=D1=80=
-=D0=B8=D0=BC. =E2=80=93 65208 =D0=B3=D1=80=D0=BD.</strong><br>12 =D1=81=D1=
-=82=D0=BE=D1=80=D1=96=D0=BD=D0=BE=D0=BA + =D0=BE=D0=BA=D0=BB=D0=B0=D0=B4=D0=
-=B5=D0=BD=D0=BA=D0=B0 + =D0=BF=D1=96=D0=B4=D0=BB=D0=BE=D0=B6=D0=BA=D0=B0,=
-<br>=D0=BE=D0=B1=D0=BA=D0=BB=D0=B0=D0=B4=D0=B5=D0=BD=D0=BA=D0=B0 300 =D0=B3=
-/=D0=BC2, 4+0,<br>=D0=B2=D0=BD=D1=83=D1=82=D1=80=D1=96=D1=88=D0=BD=D1=96=D0=
-=B9 =D0=B1=D0=BB=D0=BE=D0=BA 170 =D0=B3/=D0=BC2, 4+0,<br>=D0=BF=D1=96=D0=B4=
-=D0=BB=D0=BE=D0=B6=D0=BA=D0=B0 300=D0=B3/=D0=BC2 =D0=B1=D0=B5=D0=B7 =D0=B4=
-=D1=80=D1=83=D0=BA=D1=83.<br>=D0=97=D0=B1=D1=96=D1=80=D0=BA=D0=B0 =D0=BD=D0=
-=B0 =D0=BF=D1=80=D1=83=D0=B6=D0=B8=D0=BD=D1=83 =D0=BF=D0=BE =D0=BA=D0=BE=D1=
-=80=D0=BE=D1=82=D0=BA=D1=96=D0=B9 =D1=81=D1=82=D1=80=D0=BE=D0=BD=D1=96, =D0=
-=BF=D0=BB=D0=B5=D1=87=D0=B5=D0=BA=D0=BE.</font></td>
-<td>
-<div><font color=3D"#000000"><font color=3D"#ff0000" size=3D2><strong>=D0=
-=9A=D0=B0=D0=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D1=96 =D0=BA=D0=B2=D0=B0=D1=
-=80=D1=82=D0=B0=D0=BB=D1=8C=D0=BD=D1=96 =D0=BD=D0=B0 3 =D0=BF=D1=80=D1=83=
-=D0=B6=D0=B8=D0=BD=D0=B8</strong></font><br><strong>1000 =D0=BF=D1=80=D0=B8=
-=D0=BC. =E2=80=93 56124 =D0=B3=D1=80=D0=BD.</strong><br>=D1=84=D1=80=D1=96=
-=D0=B7 =D1=96 =D0=BE=D0=B4=D0=BD=D0=B5 =D1=80=D0=B5=D0=BA=D0=BB=D0=B0=D0=BC=
-=D0=BD=D0=B5 =D0=BF=D0=BE=D0=BB=D0=B5,<br>4+0, 1+0 =D0=BB=D0=B0=D0=BC. =D0=
-=BC=D0=B0=D1=82. 2 =D0=BF=D0=BE=D0=B4=D0=BB=D0=BE=D0=B6=D0=BA=D0=B8, <br>=
-=D0=B7=D0=B1=D1=96=D1=80=D0=BA=D0=B0 =D0=BD=D0=B0 =D0=BF=D1=80=D1=83=D0=B6=
-=D0=B8=D0=BD=D1=83, =D0=BA=D0=B0=D0=BB=D0=B5=D0=BD=D0=B4=D0=B0=D1=80=D0=BD=
-=D0=B0 =D1=81=D1=96=D1=82=D0=BA=D0=B0,<br>=D0=BB=D1=8E=D0=B2=D0=B5=D1=80=D1=
-=81, =D0=B2=D1=96=D0=BA=D0=BE=D0=BD=D0=B5=D1=87=D0=BA=D0=BE.</font></div>
-<div>&nbsp;</div></td></tr>
-<tr>
-<td><img border=3D0 hspace=3D0 alt=3D"nalipka" src=3D"https://otbc.in.ua/=
-druk/7.png"></td>
-<td><img border=3D0 hspace=3D0 alt=3D"logo" src=3D"https://otbc.in.ua/dru=
-k/8.png"></td>
-<td><img border=3D0 hspace=3D0 alt=3D"plakat" src=3D"https://otbc.in.ua/d=
-ruk/9.png"></td></tr>
-<tr>
-<td><font color=3D"#000000"><strong><font color=3D"#ff0000">=D0=9D=D0=B0=D0=
-=BB=D1=96=D0=BF=D0=BA=D0=B8, =D0=B5=D1=82=D0=B8=D0=BA=D0=B5=D1=82=D0=BA=D0=
-=B8 90=D1=8590 =D0=BC=D0=BC</font></strong><br><strong>6000 =D0=BF=D1=80=D0=
-=B8=D0=BC. =E2=80=93 4164 =D0=B3=D1=80=D0=BD.</strong><br>4+0, =D1=80=D0=B0=
-=D1=84=D0=BB=D0=BE=D1=82=D0=B0=D0=BA, =D0=BF=D0=BE=D1=80=D1=96=D0=B7=D0=BA=
-=D0=B0.</font></td>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-<td><font color=3D"#ff0000"><strong>=D0=9F=D0=BB=D0=B0=D0=BA=D0=B0=D1=82=D1=
-=8B =D0=903 <br></strong><font color=3D"#000000"><strong>4+0,130 =D0=B3/=D0=
-=BC2<br></strong>500 =D0=BF=D1=80=D0=B8=D0=BC. =E2=80=93 2184 =D0=B3=D1=80=
-=D0=BD.</font></font></td></tr></tbody></table></td></tr>
-<tr>
-<td>
-<p><strong><font color=3D"#ff0000">=D0=97=D0=B0 11 =D1=80=D0=BE=D0=BA=D1=96=
-=D0=B2 =D0=BF=D1=80=D0=B0=D1=86=D1=96</font></strong> =D0=BC=D0=B8 =D0=BD=
-=D0=B0=D0=BF=D1=80=D0=B0=D1=86=D1=8E=D0=B2=D0=B0=D0=BB=D0=B8 =D1=96=D0=BD=
-=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=B9 =
-=D0=BF=D1=96=D0=B4=D1=85=D1=96=D0=B4 =D0=BA =D0=BA=D0=B0=D0=B6=D0=B4=D0=BE=
-=D0=BC=D1=83 =D0=B7=D0=B0=D0=BC=D0=BE=D0=B2=D0=BD=D0=B8=D0=BA=D1=83, =D0=B7=
-=D0=B0=D0=B1=D0=B5=D0=B7=D0=BF=D0=B5=D1=87=D1=83=D1=8F =D0=BA=D0=BE=D0=BC=
-=D0=BF=D0=BB=D0=B5=D0=BA=D1=81=D0=BD=D0=B5=D0=BE=D0=B1=D1=81=D0=BB=D1=83=D0=
-=B3=D0=BE=D0=B2=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =D0=B9=D0=BE=D0=B3=D0=
-=BE =D0=BF=D0=BE=D1=82=D1=80=D0=B5=D0=B1, =D0=B2=D1=80=D0=B0=D1=85=D0=BE=D0=
-=B2=D1=83=D0=B2=D0=B0=D1=8F =D0=B1=D1=8E=D0=B4=D0=B6=D0=B5=D1=82 =D1=82=D0=
-=B0 =D1=82=D0=B5=D1=80=D0=BC=D1=96=D0=BD=D0=B8. &nbsp;&nbsp;&nbsp;</p>
-<p>=D0=97 =D0=BF=D1=80=D0=B8=D0=BA=D0=BB=D0=B0=D0=B4=D0=B0=D0=BC=D0=B8 =D0=
-=BD=D0=B0=D1=88=D0=B8=D1=85 =D1=80=D0=BE=D0=B1=D1=96=D1=82 =D0=92=D0=B8 =D0=
-=BC=D0=BE=D0=B6=D0=B5=D1=82=D0=B5 =D0=BE=D0=B7=D0=BD=D0=B0=D0=B9=D0=BE=D0=
-=BC=D0=B8=D1=82=D0=B8=D1=81=D1=8F =D0=BD=D0=B0 =D1=81=D0=B0=D0=B9=D1=82=D1=
-=96, =D0=B0=D0=B1=D0=BE =D0=BC=D0=B8 =D0=BC=D0=BE=D0=B6=D0=B5=D0=BC=D0=BE=
- =D0=BD=D0=B0=D0=B4=D0=B0=D1=82=D0=B8 =D0=B7=D1=80=D0=B0=D0=B7=D0=BA=D0=B8=
- =D0=BD=D0=B0=D1=88=D0=BE=D1=97 =D0=BF=D1=80=D0=BE=D0=B4=D1=83=D0=BA=D1=86=
-=D1=96=D1=97. =D0=9D=D0=B0=D0=B4=D1=81=D0=B8=D0=BB=D0=B0=D0=B9=D1=82=D0=B5=
- =D0=BD=D0=B0=D0=BC =D0=A2=D0=97 =D0=B4=D0=BB=D1=8F =D1=80=D0=BE=D0=B7=D1=
-=80=D0=B0=D1=85=D1=83=D0=BD=D0=BA=D0=B0 =D0=92=D0=B0=D1=88=D0=BE=D0=B3=D0=
-=BE =D0=B7=D0=B0=D0=BC=D0=BE=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F, =D1=96 =
-=D0=BC=D0=B8 =D0=BE=D0=BF=D1=82=D1=96=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=D0=BE=
- =D1=80=D0=BE=D0=B7=D1=80=D0=B0=D1=85=D1=83=D1=94=D0=BC =D0=B2=D0=B0=D1=80=
-=D1=82=D1=96=D1=81=D1=82=D1=8C. &nbsp;&nbsp;&nbsp;</p></td></tr>
-<tr>
-<td><strong><font color=3D"#ff0000">=D0=94=D1=80=D1=83=D0=BA=D0=B0=D1=80=D0=
-=BD=D1=8F &quot;UNIDRUK&quot; =D0=B7=D0=B0=D0=B2=D0=B6=D0=B4=D0=B8 =D0=B3=
-=D0=BE=D1=82=D0=BE=D0=B2=D0=B0 =D0=B2=D1=82=D1=96=D0=BB=D0=B8=D1=82=D0=B8=
- =D0=B2=D1=81=D1=96 =D0=B2=D0=B0=D1=88=D0=B8 =D1=96=D0=B4=D0=B5=D1=96</fo=
-nt><a href=3D"https://otbc.in.ua/Server-Side/amsweb.php?CIuetgorvBJ0KrSZ0=
-sjJvwlPL4gpVGPpZfJs6bi0YvWWciWRxijNLKUO8mGtj%2Bo0c7SfyBInm%2FSqBE9sKXZ6RC=
-t0j2ZoKxTedmalYv09OL2BRMK0NRpdJgflJSpB%2Fqlge9PPHqv4Vyp0WwORRVMsaehnDLXj1=
-oI2N%2FP06pouEZg%3D"><font color=3D"#ff0000">.</font></a><font color=3D"#=
-ff0000"> &nbsp;&nbsp;&nbsp;</font></strong></td></tr>
-<tr>
-<td>
-<p align=3Dcenter><font color=3D"#ff0000" size=3D4><strong>=D0=97 =D0=BF=D0=
-=B8=D1=82=D0=B0=D0=BD=D1=8C =D1=81=D0=BF=D1=96=D0=B2=D0=BF=D1=80=D0=B0=D1=
-=86=D1=96 =D0=B7=D0=B2=D0=B5=D1=80=D1=82=D0=B0=D0=B9=D1=82=D0=B5=D1=81=D1=
-=8F =D0=B7=D0=B0 =D0=BA=D0=BE=D0=BD=D1=82=D0=B0=D0=BA=D1=82=D0=B0=D0=BC=D0=
-=B8:</strong></font></p></td></tr>
-<tr>
-<td>
-<table cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
-<tbody>
-<tr>
-<td width=3D"31%"><font size=3D3><strong><img border=3D0 hspace=3D0 alt=3D=
-"telefon" src=3D"https://otbc.in.ua/druk/iphone.png" align=3Dleft>(066) 5=
-60 78 38<br>(044) 227 10 77<br>(067) 201 10 44</strong></font></td>
-<td width=3D"31%"><font size=3D3><strong><img border=3D0 hspace=3D0 alt=3D=
-"email" src=3D"https://otbc.in.ua/druk/mail.png" align=3Dleft>&nbsp;<br>&=
-nbsp;<a href=3D"mailto:3328168@ukr.net">3328168@ukr.net</a><br></strong><=
-/font></td>
-<td width=3D"38%"><font size=3D3><strong><img border=3D0 hspace=3D0 alt=3D=
-"site" src=3D"https://otbc.in.ua/druk/www.png" align=3Dleft>&nbsp;<br>&nb=
-sp;<a href=3D"https://otbc.in.ua/Server-Side/amsweb.php?y0WviPtvkz7cgL908=
-H%2FwwmLPliSvGbfv2fWTk7Sl8lV77ChxARRC%2BfENRlmimCp2GWwB7C6tx8wbU9IcR%2B9n=
-U%2BxS07M%2B6svvnAedpZ3gOSOZuHrOGsEi9%2B5gvHiK%2FDrYEeb0OgGf%2FPmhQhRefo%=
-2Fsog%3D%3D">otbc.in.ua</a><br></strong></font></td></tr></tbody></table>=
-</td></tr>
-<tr>
-<td align=3Dcenter>&nbsp;&nbsp;&nbsp;<br><a href=3D"https://otbc.in.ua/Se=
-rver-Side/amsweb.php?rtcfY3OIC8v3mDXbKPvQIwaYbcylAfKuynV0iXehC%2FxfV394Nj=
-J98JU9NFOoP%2Bciw9NNxeyMaB2FP7j6LmENHGrKKFM%2BMWrJkjgp0iZGobEb1Fpgob8Vpnq=
-wOrD6UvbJA%2FSS1phyR6wr9BuZn3fsE%2BxyHYQyS8Q6Bnn2leLQW4k%3D">=D0=B2=D1=96=
-=D0=B4=D0=BF=D0=B8=D1=81=D0=B0=D1=82=D0=B8=D1=81=D1=8F =D0=B2=D1=96=D0=B4=
- =D0=BF=D0=BE=D1=88=D1=82=D0=B8</a><br>&nbsp;&nbsp;&nbsp;</td></tr></tbod=
-y></table></body></html>
-
---282168cadb7359ff5cf6be0d5993a5c5e498--
