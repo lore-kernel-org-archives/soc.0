@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B7F5C54EBD
-	for <soc@archiver.kernel.org>; Thu, 12 Jan 2023 12:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1373C54EBD
+	for <soc@archiver.kernel.org>; Thu, 12 Jan 2023 13:17:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 46EFAC433F1; Thu, 12 Jan 2023 12:48:02 +0000 (UTC)
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	id 9241BC433F1; Thu, 12 Jan 2023 13:17:07 +0000 (UTC)
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DB484C433EF;
-	Thu, 12 Jan 2023 12:47:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB484C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id E6258C433D2;
+	Thu, 12 Jan 2023 13:17:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E6258C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CCBJWY012092;
-	Thu, 12 Jan 2023 12:47:20 GMT
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CBmCvF005040;
+	Thu, 12 Jan 2023 13:16:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
  subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pps0720; bh=L8iC2zg9+OngFwlLIH8ppqMlPM8sWWaK/+EsT/9njpw=;
- b=edENNV/ObMhZV7S3gf2svLiO+obFY0yl78pZ9n0Yqus2vsfPL4GaqZo5tLqRruBPPFb0
- iUf9BmyKoo5xItimYf/7oDijpA0d2Q6mX2TA4i8g2NG1tWEWCrVdE7MO+lt8iSENtbG6
- Z4cmgICxOR81RGtiPhdTW/7C2MB48PqcdsA6Qua07GoL1faeS43dNpKAxThAkq5zMooY
- gGUtEu+H058Hrbt3WCtIHwlyle9pnMFRjpMWIdKNjWDGfY9DEPfrjvDVMcwhdSPJ7GJB
- Q6IRV0rJqcm2iuAdTq6t1cJghwtrSkNmO3O+OutREjRcNBn9zWkvXox8tQZRkX/IZp++ Kw== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n2hn00fac-1
+ mime-version; s=pps0720; bh=UDk5kDNpNfudU4aOMdfSpeSf1JiEVy1J8GznHwKpDA8=;
+ b=HCnJWqHDkYVxcAbvS8lAvPJTcB2P3Yjv9rEqRnruagpnzlE/SUJX8vsUMOMGhqHsi7Mc
+ s72WdABMJnDsTm/2c+QSzZMzpPtnqdvRRNVjFtBnFxuExvAAY/b8UeiISSlkJbIPgcT1
+ rx0nuqBiKUDiWd42HIP/ipjjcLjMoz8CfpbEpio7iKcJHUQc/aiAg6oVuF1TEZXmB+fr
+ Mo/P0gV0FTLj5tRAjA5kxU/MgqNA1K1Kr9Ph2laX5NZsgYNtx+m2+lgW4zpYj1kMCioI
+ s7ktqOSGl3dV83/FUEgHqdTHk9J7UXJKNWfPBhdhlmpa52qUoTsX7v3sxB6vNNPLrlKh Zw== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3n2gn8h3f2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Jan 2023 12:47:18 +0000
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+	Thu, 12 Jan 2023 13:16:52 +0000
+Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 0C6248085F4;
-	Thu, 12 Jan 2023 12:47:16 +0000 (UTC)
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 12 Jan 2023 00:47:10 -1200
-Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 64BDA8099BC;
+	Thu, 12 Jan 2023 13:16:48 +0000 (UTC)
+Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
  p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 12 Jan 2023 01:16:26 -1200
+Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Thu, 12 Jan 2023 00:47:10 -1200
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
+ via Frontend Transport; Thu, 12 Jan 2023 01:16:26 -1200
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (192.58.206.38)
  by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 12 Jan 2023 00:46:54 -1200
+ 15.2.986.15; Thu, 12 Jan 2023 01:16:26 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hl25vHYykf+HweAiPtwiefyapP3BGtjJyS4wp2zqGFSuru83K5ygQ2EBSx33CfaQla3lpcD83aJM0hN3EPkwVoYygBDOhjbtLL3Je6j8uiU0HfSmLUmx2GoM4bkstaLa8lM1z0CtX/JnlwsZw3ce24Lz9tWO9/6k8kbu2djYcNUztmPQsHA+5h1BqXRsu00cDiil9JWOFDPVS7xO7HF1VGF2M9d9kEzZ7ZnJv/MRWQ83mFnK0EWUvB6UzK5baYbvaWBb8FdrZLZ/n13lBO4jHzKQrKlJrrH+truoYNJOZ3b2/+5UvS0j2tsEhY0JAqfNcpU5AzkrZEagQbT+Kf7g5Q==
+ b=hcFTbaaDVep/WDhEqxxzhMBv4aWHZteOe2FExrDP5hJEfrakRGpusfdwn7JeT1mGt6Jd0jx91y24IXFkwLf2YQgx9O3ffdRPs8CvsEpSgj5/fpZO6dP92G5G01eCgtKPcNwrTMcnF79ckNh9xTrCRCFgJzdW0h2p0p/8H13i7GZ4Mo14d74psAvTDY6r/MdCSQ5Ap5dHArFAmNu/Y4aObCUkRgBfeGYhxveAjb7ZV1f1JeGMPgvOzatCVhp5WXuTjUGHcFJA5nJ6TzsxJrE6ZPsdvW12L40si1rLJlNqxZGsJpjRfeR48wHZE9bnopOVtwjFLKpmFrdLfqq+54qqrw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L8iC2zg9+OngFwlLIH8ppqMlPM8sWWaK/+EsT/9njpw=;
- b=K79ArfuMK5TBoCzpaeXkmJ0JU9dO/dY1Z/DESe839VyGaB2MYP/Udx7t5vsqyxtY2LsdZ4p4JhG8QRJT1RcllIXIA4xUXBTTJbuz8mgAzPvCiCYxh97pIK0mL1z924Awsf4ABbwt7rgseYQj4BSSEygkQ6HzRDskWWa96zQrYN45Dr2QC6GoZ/Ma2esATjlEOJQWRKXZmBNsgbD0BFu0m1EPHolw8g3vf6R+pxMWDJWFqNujoyo5TOhA1GWOZlbgSYzoaEwQW+sSOIdzQH+zRBzkeIv8h417Dru1gu+BDgAvXobVMmPWCPglPa8pNXte0Xysppe8LGrOxeP4C47lGw==
+ bh=1sNeL0jgs/nqHRPYHVdYeR+Zub5kqgf7JzNCxEGXrdA=;
+ b=a+PhsuTproel1cJ06A+LPk3SrVm2bWi/yiaRiduzwfg7mahX2aGU5SXbzCSEHcbYAROpvlu3dRj0FtDMcjhMmEaOukFPvNtfSTUbNj7VNugpte0N+DZT5Af9wd1Z4LDEE1bt9Q+3q8rJ73ojbULZhomVMAR3K40v8EJmILPZmy57l6Ws6KbBh9LOEfKYMU7jXV0MPE9QA/NQCboyzEYDjISlTMtpNdcg/QhLQUNp4aOct6VYhjxKhVOBabilUQsKwQ4XkT/jWp0BwnC5FFNMH8nqRElkcWZwVdZhLJ8vmpJPbDcAzVPu/xnbKkt4iAJATObdSjquge0drJoM/0HsfA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
  header.d=hpe.com; arc=none
 Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:173::21)
- by SJ0PR84MB1673.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:430::14) with
+ by MW4PR84MB1658.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a5::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 12:46:52 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
+ 2023 13:16:19 +0000
 Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::337:c28a:4e41:d735]) by PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
  ([fe80::337:c28a:4e41:d735%7]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 12:46:52 +0000
-Date: Thu, 12 Jan 2023 20:46:43 +0800
+ 13:16:19 +0000
+Date: Thu, 12 Jan 2023 21:16:12 +0800
 From: Clay Chang <clayc@hpe.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -76,348 +76,157 @@ CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
         <verdun@hpe.com>, <nick.hawkins@hpe.com>, <arnd@arndb.de>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <linux@armlinux.org.uk>, <olof@lixom.net>
-Subject: Re: [PATCH 1/5] soc: hpe: Add GXP SROM Control Register Driver
-Message-ID: <Y8ABM1XNcyeSh7iZ@enigma.ccjz.io>
+Subject: Re: [PATCH 2/5] dt-bindings: soc: hpe: hpe,gxp-srom.yaml
+Message-ID: <Y8AIHDizIqu9u9BR@enigma.ccjz.io>
 References: <20230110042533.12894-1-clayc@hpe.com>
- <20230110042533.12894-2-clayc@hpe.com>
- <34191e6f-9a00-114e-4fd8-15ccaec3535b@linaro.org>
+ <20230110042533.12894-3-clayc@hpe.com>
+ <110af65f-9c18-524d-a073-ef7be60d1f5a@linaro.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <34191e6f-9a00-114e-4fd8-15ccaec3535b@linaro.org>
-X-ClientProxiedBy: TY2PR0101CA0009.apcprd01.prod.exchangelabs.com
- (2603:1096:404:92::21) To PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+In-Reply-To: <110af65f-9c18-524d-a073-ef7be60d1f5a@linaro.org>
+X-ClientProxiedBy: TYCP286CA0082.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b3::6) To PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
  (2603:10b6:510:173::21)
-MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR84MB1480:EE_|SJ0PR84MB1673:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b1d49ea-dc14-42fa-9736-08daf49b13cc
+X-MS-TrafficTypeDiagnostic: PH0PR84MB1480:EE_|MW4PR84MB1658:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec6901f1-39ff-43a8-3f42-08daf49f3168
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RGw3s07wi0oxFFSLxTRmQOe+0R7GwKZWrlA61JV/3jnJmmbTdj3iGuX7Yr6qQ9kjMa2dvLw5dTT7qoa87rtLCD3HvRNiOlr/gxM+SmUCbGF5QIk6IPG5u5wzcV6PO8qngK07hTl+7E4p38+xbhvszXMQYewBPRWcVae98qSa6pqRN4VQ8JGCd6CEZN0usqzsYzTQBB95PJOGmhtlX8YaYQcT0lTu3RqrG6KGJwy3+wEiujiM/bZzXfyHKGkCcHRORLcplC0l8Lr6nhp7Nfy467X+n/Wt7EeP0UPakztUWNzUSqULgOCfwsSMBB87gcpVmBuOuGsTD3SpExCU4+VMkJ3GwDUI5CQ9Go0mtCv/wY5LXN53k/otsVHEk7DDXTbLwLv24oDoggAv+J8dzfxVfPz35iSQH5qReoNTErs2812gBEG2gj3hKUrB8V6L5z4mfUpmNtmyRdsJZmwlxXuVumVuldHzrtBIwZ5W1cK0Sy/iexASoxwRfI37M7biL/e26bOuDr9TaVRXzKkxXNa3oQGePUr5yAW6j/ehdp78JABayfudkXD9S2CQY11/IW15+82F0BCtfK1e2+O/lfmZbYENF+USUtOSjT1N4ASESmwfS4uwNS+kH1OqYnKXdcVdvwkUaEQGEX6fuxSuTtnzdA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(39860400002)(396003)(366004)(346002)(451199015)(82960400001)(38100700002)(83380400001)(86362001)(41300700001)(6916009)(66556008)(4326008)(8676002)(66476007)(316002)(66946007)(2906002)(8936002)(5660300002)(7416002)(9686003)(6512007)(186003)(6486002)(478600001)(53546011)(6666004)(6506007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 6nQ2VGVKV/7plqft1VsNQ6dL85nH6PTH8fMQbECUVsLIT301Rl3BtWI+DEYSS3FV+5dvGvIrXk9021zvmvrFwSHVtaJYNwilnwIym0ZuJDCuvWwnbwmbVzV38AaJuUDGiBWZkAt69VqDZYObJ2FVpUcN2VqfzTdfsKWqHHYydMAhhx9rhZdhimQhGmu73yIeHcv8gWgrQctCPrZsqwcDEWBI/HbKw7bH86avSMgfieP7LlfEc7epET2RZ+1XCGcbND5E6Lq6p21BldCmPq6s+Cl49jYRaWK83ecdkLFjXl6hLJ54lZvyK7BuueQq/F8xq9Kll39iUY62v4RYMktPMIKJ4SB1sRFCr/VldOODdfz/U3Wz3GW6DsL5qfREI84LySmLa2tqLLdD3CkITIoDKt/XrMtGX3Wip9C9CO+A8MWga+98HeNKBI0K39eT/V3FUNxas1kkAkKuipTu0MAdyb3FoKPRTCNH8XOD6D+bpquAZuzs+wxjmhUBODb6fUlHe5VthjQTTxvGjyo5JqallUCpinQjy+yHf8RIxZnJx780Q5JIRixs5Zysoy5dVR4vUOGY8KLLS7y4bqeIcN/AXBnGMDP47JKR+xonxSR1EsATyA61wQaQPc5yJfN+XSCOYFjWLuxCD/goRyq8qIvbswH1peoa8Zw342s/K51VMt0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(396003)(136003)(39860400002)(366004)(451199015)(86362001)(2906002)(6666004)(7416002)(5660300002)(4326008)(8936002)(41300700001)(66556008)(66476007)(8676002)(66946007)(38100700002)(83380400001)(6512007)(82960400001)(316002)(6916009)(6506007)(9686003)(186003)(966005)(53546011)(478600001)(6486002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VbwxreAm3HmdyB/US3dpLJmJDg/jdbN2hCPAHXdw8S79HM2XliW77W/nnwGD?=
- =?us-ascii?Q?sPrEjlMcpzTYixO8pQ3lHC1YRgm2n2tf+ALdb/0fzaM+gt02tmZLyK5hsF3i?=
- =?us-ascii?Q?bkf7ToTddvyD904wqY11IcbstXQL/z7TldTbm0Vj/Wytr/JVHY+GWrOD+qQ7?=
- =?us-ascii?Q?xb3zDz8ntmMm97hYseDs3kHg725buHUlcs6Hg/R25WqA5de/VCxoY396T9Sz?=
- =?us-ascii?Q?SN+WGr94i2G7FLzESP8Z5P5If1h8xZoW3TJD0+f+KhyUemb6cunRFAVMAI/O?=
- =?us-ascii?Q?0E2+EBw4Q/aw27QfQ9wo/trzREC1dKzLUvvmmKJeAyWKYntis2tTKkzTPooH?=
- =?us-ascii?Q?swXegdA5+bNqC1Zgf0KYmM9xWLUzEOgbKHGo89AitA5qcc09yzF6C07VeHph?=
- =?us-ascii?Q?/WoLdGmPLOSkUWBYgBc4SuacOx4jeQlpmBLaHbg5ibVpUSOh2TMn1jVyCprU?=
- =?us-ascii?Q?miP/CovaHnVBVUPtqQUSabJAfC6iy5+20NLDLuz4+sDAwqJMz0QY1V9KB2fS?=
- =?us-ascii?Q?RmrvHI6WltrhKbEHB/FNno4kyKF5TmmJkRLEduI15JlujbPJ80Jqzuusywaf?=
- =?us-ascii?Q?Et8lMpAT05G2v4++YGiyHXTc3hzOjbe2cjtB4GB+NvtArYXwdshpeza41Mvc?=
- =?us-ascii?Q?1R25/4SpQqJb7wtRV5DrtFss58HGz6LRrAChZf8xCRst2ZzWrlivUhapA6nK?=
- =?us-ascii?Q?cgBOtQ+6REXVQUGlczw7LcysijK3u1OlYQfbZw3mqXgtCf9miVrO/Msw8u+W?=
- =?us-ascii?Q?J7YN+cthj3PgAxCws+fCF/Fe0ElieMVnfjw+2sAbmsDWJkaSKY+LH1SuvFKh?=
- =?us-ascii?Q?EOi+8TPhw3T7FpJVP4irRVxB1IZJ6++lGR5f4/VRtsVoZXjw06cfo0S8z3Jn?=
- =?us-ascii?Q?AakNtuwNeN+v3PNPjFvf32fbj2Lg0kLD2s7XJWgYJLuW2923B6GZZ7aoswfR?=
- =?us-ascii?Q?H4hGYWbkpDUgblX87m/ZCM7q3UuHARX9WtZPa58mLc343HFvGURZYnQXMzZI?=
- =?us-ascii?Q?p4MiAzeU3bjY6zRk5IrKx/35aA0RGtH6fHkDGXmw8QSrOQzN4GnlfTiiDqIq?=
- =?us-ascii?Q?Y1YBlJkwvbgeUO4Jq56+feXPij0wr4tHjK+zEsdGKwvGjHOQa9fv4XSnFIsH?=
- =?us-ascii?Q?AvVpsp8+PunsdhbkxuOVAFiKIKfi9N7h/2u6xmgh1q/eRGkY/stcnbATiWXj?=
- =?us-ascii?Q?rI4+SzU0Vg8vccGEGdCAJbdS/+54ZCYkDWClYRg8XbT35R3ypu2Oh6SlpomQ?=
- =?us-ascii?Q?pryC7XgyHIZrc1ow0Obq1pzkFBKjiyPq38OUIuvRUekOLtrgj4s3j2c6nJnc?=
- =?us-ascii?Q?WmIepCb96HqQCkROufrRFTvg0TnW3Ol3rbytcZoQdX4I0VqGu9NbMdgilQJw?=
- =?us-ascii?Q?LWjqM7KBSqO72ZpLDvO6IT+YBFdWF0JUB2cSwHBcUGCqlmcHoKHM3K0T2xQU?=
- =?us-ascii?Q?gIcP2XzG4AklQ095zHBHXJD7dX/ZTDssPls0+XMo1gYz0EmNnnt3oL0hQO8c?=
- =?us-ascii?Q?rLBr8myHqIVHyMUxnEaYJLr8JFfGF36X2D6rHpnOg/8zNyFPJ8lOJrfg34K9?=
- =?us-ascii?Q?QYixdh1jhdTcsjtbKN+R6JkaGcUkdWz7T5P2HS68ZedM8BPi0Hdu0OkO9unR?=
- =?us-ascii?Q?Mw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b1d49ea-dc14-42fa-9736-08daf49b13cc
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0RUWhXAvQO8Q2RosKo5rbeRLnbNizjL7Gj6eeoXUELEjnhZWNdJzMBTOzU7n?=
+ =?us-ascii?Q?HusvHqghoqLI8vWCvlzg9WxuScbQoNsVjNzasto6xQOdiSwrYJCxkM5Q458d?=
+ =?us-ascii?Q?SQmBcI0DFsX/xISqdjk53fGAnnhZNm9DHjNsMHFMCrEnXOABbc1P89BLaKU9?=
+ =?us-ascii?Q?BxZJHNg0iwK8nsNMcAnzgAd8yuhHAYLE5F8e5ZMNy4wuofCsHmtEZeKUJh/D?=
+ =?us-ascii?Q?Enlys0ASUCpdHzjWC2Wd1mOY7eQRTYIkWAnB+CsS4P2Nwd/36dyFzjJOhFCI?=
+ =?us-ascii?Q?A0HTuE4xye49mjf98LI6gI/Lxll41pn1UpAX3TS/ghpEQOA29+gpY8eCg9ZY?=
+ =?us-ascii?Q?xrCTGSEpaBvw3G25GmVdFkzieBVAg44j+25XIX9MwSbkC4quXAM9SCpwEIsK?=
+ =?us-ascii?Q?1+NlUpdcaaPGUWNqq7H9UNRr2bY/TuyeONQsPfUluZaFzjUwTF9UQ+vPLHzv?=
+ =?us-ascii?Q?NpVriZ93N/3yu86/S5j9Mgi+yJu8L2zsZ2IDV7QznJgoXwydqIZVVRto/Sl9?=
+ =?us-ascii?Q?4ZlPhepwDt4h6DVKQo3ekKlzqTur3AVrqw79+5aZ5tI9vsjqvB3FytuylUjK?=
+ =?us-ascii?Q?d06L41SCMGI67bkVDh5z3G8zo1jwyFFWxcwWD8gqJOt1cTPFg9egBx0maWKw?=
+ =?us-ascii?Q?lA+dbOlyzGTroQD+HOW+m/9dNXEGmWm5DjRdfFToAGVaZ3LWKcPE9p8PwzH3?=
+ =?us-ascii?Q?N7J6OcNll2BpLK59vK10oAsI+ao0o0f5lsop+CPWgG/IDa0ztoPdGnbHs/sH?=
+ =?us-ascii?Q?reu3Cfk5OEb3OC42LPP7qJ0yBYwoj5PrfdgR+uTr0+bR28dP9BqI8vv0VcP4?=
+ =?us-ascii?Q?UbQJHnD+kmVoOVtHmThSbQcDEDUn8YY7zrISowV4KEsWDObXDJFnZrf3tRuw?=
+ =?us-ascii?Q?DcqArsvtXToHAwShZbQv91Ngh7j9qiBL8dD1WPmICYig4pNhR7lZiLLUdf97?=
+ =?us-ascii?Q?p4UZhS4hQZOwmVBieMyDrK+CVakPjQdK+aXNsOOQ2F54KN+cZsZxF3CiW1l5?=
+ =?us-ascii?Q?1vCNBji5AYeid90ySDbXW0vxBHXjS8OlEBBEoDKzw+XhC/RABY4rV7+q9hdB?=
+ =?us-ascii?Q?wEQXa9zgcs3K9ZETI2D1s6AUHMkhiLNQ+mVLbCtKrpNoh7fFxKIUY3SCsqRB?=
+ =?us-ascii?Q?al7A/Ct1auZSxJKf1RKkfDHHpqQXBXT1S+tp4L2DHWLmfIl9LFRH9BsACH70?=
+ =?us-ascii?Q?Q5/OXHN3QIp0NooAgmZmKYqyhuZPBTsx/cPsRgPLPEtj6PEVcUcllkp/MNA/?=
+ =?us-ascii?Q?gyMhsfb2dMItYRlich790NCTpBL1Y4EUD88fsXEAHYNCwB7m2nGYSCk0/bf1?=
+ =?us-ascii?Q?5KhrXKSuZ9YhFn3nPSAdrt580nFoDX5TPL85kTC7SwOv9zWZHLC6SbGTrot8?=
+ =?us-ascii?Q?DkFxnklrUzyRZ6gpfr5jcyS8OrVDbh3N/FPW8Z+vAvGUDz7VOLUcRLSBh1uk?=
+ =?us-ascii?Q?jYkyLWTdNzbh1QmOoy0gDSUYFlCKP2//cK5gp//5I1nint3yqwRo1MXdUiA/?=
+ =?us-ascii?Q?oduaKCzHUaj4pPmW0n6CR3TILKxYNLsLYmu8zN8MohpSsWTupzbn8afnA0X2?=
+ =?us-ascii?Q?24dquDrQkRtTOFAvPb/5JwKQVXNUUus5pByde+mnqrGlVpcd+u+fGRDT7eMK?=
+ =?us-ascii?Q?Yw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec6901f1-39ff-43a8-3f42-08daf49f3168
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 12:46:51.8521
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 13:16:19.4114
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +noYIk4YiVVIJHeqv8HyXBiRSw2nW46YBF8txDKK6ycPWIvI6/88q6aLXmL5t+iJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1673
+X-MS-Exchange-CrossTenant-UserPrincipalName: qd6SFSjqq8KRQxLp7bGM5Iib+ONeckweXS8IuxyIHLL6P2QvIO7s9MwOjbUAwmt2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1658
 X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: 1-5fxM5HL8t_bgtPDXp_1CO-yqrr3xDm
-X-Proofpoint-ORIG-GUID: 1-5fxM5HL8t_bgtPDXp_1CO-yqrr3xDm
+X-Proofpoint-ORIG-GUID: 6qptj6cMRyW3nwowEXMRFAJCTazJl6eh
+X-Proofpoint-GUID: 6qptj6cMRyW3nwowEXMRFAJCTazJl6eh
+X-Proofpoint-UnRewURL: 2 URL's were un-rewritten
+MIME-Version: 1.0
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_07,2023-01-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 clxscore=1011 adultscore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301120091
+ definitions=2023-01-12_08,2023-01-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 phishscore=0 mlxscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301120094
 
-Hi Krzysztof,
-
-Thank you for the time to review my code.
-
-On Tue, Jan 10, 2023 at 10:46:57AM +0100, Krzysztof Kozlowski wrote:
+On Tue, Jan 10, 2023 at 10:49:36AM +0100, Krzysztof Kozlowski wrote:
 > On 10/01/2023 05:25, clayc@hpe.com wrote:
 > > From: Clay Chang <clayc@hpe.com>
 > > 
-> > The GXP SROM control register can be used to configure LPC related
-> > legacy I/O registers. Currently only the SROM RAM Offset Register
-> > (vromoff) is exported.
-> > 
-> > The GXP SOCLIB is a common library used for creating the common
-> > "soc" class in the kernel.
+> > Document binding to support SROM driver in GXP.
 > > 
 > > Signed-off-by: Clay Chang <clayc@hpe.com>
 > > ---
-> >  drivers/soc/Kconfig          |   1 +
-> >  drivers/soc/Makefile         |   1 +
-> >  drivers/soc/hpe/Kconfig      |  29 +++++++
-> >  drivers/soc/hpe/Makefile     |   2 +
-> >  drivers/soc/hpe/gxp-soclib.c |  17 +++++
-> >  drivers/soc/hpe/gxp-soclib.h |   9 +++
-> >  drivers/soc/hpe/gxp-srom.c   | 141 +++++++++++++++++++++++++++++++++++
-> >  7 files changed, 200 insertions(+)
-> >  create mode 100644 drivers/soc/hpe/Kconfig
-> >  create mode 100644 drivers/soc/hpe/Makefile
-> >  create mode 100644 drivers/soc/hpe/gxp-soclib.c
-> >  create mode 100644 drivers/soc/hpe/gxp-soclib.h
-> >  create mode 100644 drivers/soc/hpe/gxp-srom.c
+> >  .../bindings/soc/hpe/hpe,gxp-srom.yaml        | 36 +++++++++++++++++++
+> >  1 file changed, 36 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/soc/hpe/hpe,gxp-srom.yaml
 > > 
-> > diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-> > index 5dbb09f843f7..faff0f036b61 100644
-> > --- a/drivers/soc/Kconfig
-> > +++ b/drivers/soc/Kconfig
-> > @@ -10,6 +10,7 @@ source "drivers/soc/bcm/Kconfig"
-> >  source "drivers/soc/canaan/Kconfig"
-> >  source "drivers/soc/fsl/Kconfig"
-> >  source "drivers/soc/fujitsu/Kconfig"
-> > +source "drivers/soc/hpe/Kconfig"
-> >  source "drivers/soc/imx/Kconfig"
-> >  source "drivers/soc/ixp4xx/Kconfig"
-> >  source "drivers/soc/litex/Kconfig"
-> > diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> > index fff513bd522d..d257b9d654b3 100644
-> > --- a/drivers/soc/Makefile
-> > +++ b/drivers/soc/Makefile
-> > @@ -14,6 +14,7 @@ obj-$(CONFIG_MACH_DOVE)		+= dove/
-> >  obj-y				+= fsl/
-> >  obj-y				+= fujitsu/
-> >  obj-$(CONFIG_ARCH_GEMINI)	+= gemini/
-> > +obj-$(CONFIG_ARCH_HPE)		+= hpe/
-> >  obj-y				+= imx/
-> >  obj-y				+= ixp4xx/
-> >  obj-$(CONFIG_SOC_XWAY)		+= lantiq/
-> > diff --git a/drivers/soc/hpe/Kconfig b/drivers/soc/hpe/Kconfig
+> > diff --git a/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-srom.yaml b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-srom.yaml
 > > new file mode 100644
-> > index 000000000000..88f5d46b06b6
+> > index 000000000000..14ad97d595c8
 > > --- /dev/null
-> > +++ b/drivers/soc/hpe/Kconfig
-> > @@ -0,0 +1,29 @@
-> > +#
-> > +# HPE GXP SoC drivers
-> > +#
-> > +menu "HPE GXP SoC drivers"
-> > +	depends on ARCH_HPE || COMPILE_TEST
-> > +
-> > +config HPE_GXP_SOCLIB
-> > +	bool "GXP Common SoC Library"
-> > +	default y
-> > +	depends on ARCH_HPE_GXP || COMPILE_TEST
-> > +	help
-> > +	  This is for the common library for all HPE SoC drivers. It
-> > +	  creates the root soc class (/sys/class/soc) for all GXP SoC
-> > +	  drivers. It must be yes if any one of the GXP SoC drivers were
-> > +	  added, so the config of all GXP SoC drivers must select this.
+> > +++ b/Documentation/devicetree/bindings/soc/hpe/hpe,gxp-srom.yaml
 > 
-> Don't open-code Kconfig dependencies in free-form text. IOW, drop last
-> sentence.
-
-Understood, I will correct this part in the next revision.
-
+> Don't drop stuff to soc. Put it in respective directories. This also
+> applies to your driver.
 > 
-> > +
-> > +
-> > +config HPE_GXP_SROM
-> > +	bool "GXP SROM Configuration Driver"
-> > +	default y
-> > +	depends on ARCH_HPE_GXP || COMPILE_TEST
-> > +	select HPE_GXP_SOCLIB
-> > +	help
-> > +	  Say yes here to add support for SROM Configuration. The GXP SROM
-> > +	  control register can be used to configure LPC related legacy I/O
-> > +	  registers. Currently only the SROM RAM Offset Register (vromoff)
-> > +	  is exported.
-> > +
-> > +endmenu
-> > diff --git a/drivers/soc/hpe/Makefile b/drivers/soc/hpe/Makefile
-> > new file mode 100644
-> > index 000000000000..78de24ecb606
-> > --- /dev/null
-> > +++ b/drivers/soc/hpe/Makefile
-> > @@ -0,0 +1,2 @@
-> > +obj-$(CONFIG_HPE_GXP_SOCLIB) += gxp-soclib.o
-> > +obj-$(CONFIG_HPE_GXP_SROM) += gxp-srom.o
-> > diff --git a/drivers/soc/hpe/gxp-soclib.c b/drivers/soc/hpe/gxp-soclib.c
-> > new file mode 100644
-> > index 000000000000..11b0afe09070
-> > --- /dev/null
-> > +++ b/drivers/soc/hpe/gxp-soclib.c
-> > @@ -0,0 +1,17 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright (C) 2023 Hewlett Packard Enteprise Development Company, L.P. */
-> > +
-> > +#include <linux/device.h>
-> > +#include <linux/module.h>
-> > +
-> > +struct class *soc_class;
-> > +
-> > +static int __init gxp_soclib_init(void)
-> > +{
-> > +	soc_class = class_create(THIS_MODULE, "soc");
-> > +	if (IS_ERR(soc_class))
-> > +		return PTR_ERR(soc_class);
-> > +	return 0;
-> > +}
-> > +
-> > +module_init(gxp_soclib_init);
+> SROM controllers go to memory-controllers. What is this, I have no clue.
+> "SROM Control Register" is not helping me.
 > 
-> I don't see a point of making it a shared object and a "kernel library".
-> Module inits are not libraries. Drop entire file.
+> > @@ -0,0 +1,36 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/soc/hpe/hpe,gxp-srom.yaml# 
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml# 
+> > +
+> > +title: HPE GXP SoC SROM Control Register
+> > +
+> > +maintainers:
+> > +  - Clay Chang <clayc@hpe.com>
+> > +
+> > +description: |+
+> > +  The SROM control register can be used to configure LPC related legacy
+> > +  I/O registers.
+> 
+> And why this is a hardware? No, you now add fake devices to be able to
+> write some stuff from user-space... Otherwise this needs proper hardware
+> description.
 
-Sure, I will re-write this part in the next revision.
+Thank you for commenting on this. You are right, this is not a real
+hardware device, but simply exposes MMIO regions to the user-space.
+Maybe we should rewrite this as a syscon driver. Is writing a syscon
+driver a right direction?
 
 > 
-> > diff --git a/drivers/soc/hpe/gxp-soclib.h b/drivers/soc/hpe/gxp-soclib.h
-> > new file mode 100644
-> > index 000000000000..eb0e72b67aee
-> > --- /dev/null
-> > +++ b/drivers/soc/hpe/gxp-soclib.h
-> > @@ -0,0 +1,9 @@
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
 > 
+> Drop items, you have only one item.
+> 
+> > +      - const: hpe,gxp-srom
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: SROM LPC Configuration Registers
+> 
+> Drop items and description. Just maxItems: 1
 > 
 > > +
-> > +static int sysfs_register(struct device *parent,
-> > +			  struct gxp_srom_drvdata *drvdata)
-> > +{
-> > +	struct device *dev;
+> > +required:
+> > +  - compatible
+> > +  - reg
 > > +
-> > +	dev = device_create_with_groups(soc_class, parent, 0,
-> > +					drvdata, srom_groups, "srom");
-> > +	if (IS_ERR(dev))
-> > +		return PTR_ERR(dev);
-> > +	drvdata->dev = dev;
-> > +	return 0;
-> > +}
+> > +unevaluatedProperties: false
 > > +
-> > +static int gxp_srom_probe(struct platform_device *pdev)
-> > +{
-> > +	struct gxp_srom_drvdata *drvdata;
-> > +	struct resource *res;
-> > +	int ret;
-> > +
-> > +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_srom_drvdata),
-> 
-> sizeof(*)
-
-Ok, I will correct this in the next.
-
-> 
-> > +				GFP_KERNEL);
-> > +	if (!drvdata)
-> > +		return -ENOMEM;
-> > +
-> > +	drvdata->pdev = pdev;
-> > +	platform_set_drvdata(pdev, drvdata);
-> > +
-> > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +	if (!res) {
-> > +		dev_err(&pdev->dev, "no srom resource defined\n");
-> > +		ret = -ENODEV;
-> > +		goto out;
-> > +	}
-> > +
-> > +	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
-> 
-> Combine these two. There is a helper for this.
-> 
-
-Sure, I will combine these two with devm_platform_ioremap_resource.
-
-> > +	if (IS_ERR(drvdata->base)) {
-> > +		dev_err(&pdev->dev, "ioremap_resource error\n");
-> > +		ret = PTR_ERR(drvdata->base);
-> 
-> return dev_err_probe().
-> > +		goto ioremap_err;
-> > +	}
-> > +
-> > +	mutex_init(&drvdata->mutex);
-> > +
-> > +	ret = sysfs_register(&pdev->dev, drvdata);
-> 
-> Missing ABI documentation.
-
-Ok, I will provide with the proper ABI documentation in the next revision.
-
-> 
-> > +	if (ret != 0) {
-> > +		dev_err(&pdev->dev, "sysfs error\n");
-> 
-> return dev_err_probe
-
-Ok, will correct this in the next.
-
-> 
-> > +		goto sysfs_err;
-> > +	}
-> > +
-> > +	dev_info(&pdev->dev, "initialized\n");
-> 
-> Drop silly probe successes.
-
-Sure, will drop this in the next revision.
-
-> 
-> > +	return 0;
-> > +
-> > +sysfs_err:
-> > +ioremap_err:
-> > +	platform_set_drvdata(pdev, NULL);
-> > +out:
-> > +	if (drvdata)
-> > +		devm_kfree(&pdev->dev, (void *)drvdata);
-> 
-> 1. Why? if it is here, it must be in remove() callback. If it is invalid
-> (because it is really not correct) for remove(), it cannot be here, right?
-> 2. Why cast?
-
-Ok, sorry for my mis-understanding about the error handling path in
-device probing. I will re-write this part in the next revision.
-
-> 
-> > +	return ret;
-> > +}
-> > +
-> > +static const struct of_device_id gxp_srom_of_match[] = {
-> > +	{ .compatible = "hpe,gxp-srom" },
-> > +	{},
-> > +};
-> > +MODULE_DEVICE_TABLE(of, gxp_srom_of_match);
-> > +
-> > +static struct platform_driver gxp_srom_driver = {
-> > +	.probe = gxp_srom_probe,
-> > +	.driver = {
-> > +		.name = "gxp-srom",
-> > +		.of_match_table = of_match_ptr(gxp_srom_of_match),
-> 
-> That will cause a warning. Drop of_match_ptr.
-
-Got it!
-
-> 
-> > +	},
-> > +};
-> > +module_platform_driver(gxp_srom_driver);
-> > +
-> > +MODULE_AUTHOR("Clay Chang <clayc@hpe.com>");
-> > +MODULE_DESCRIPTION("HPE GXP SROM Configuration Driver");
-> > +MODULE_LICENSE("GPL");
+> > +examples:
+> > +  - |
+> > +    srom: srom@80fc0000 {
+> > +      compatible = "hpe,gxp-srom";
+> > +      reg = <0x80fc0000 0x100>;
+> > +    };
 > 
 > Best regards,
 > Krzysztof
