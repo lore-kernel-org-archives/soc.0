@@ -1,189 +1,141 @@
-Return-Path: <SRS0=tqcj=5J=hpe.com=prvs=03767b7f34=clayc@kernel.org>
+Return-Path: <SRS0=MQkj=5J=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E7CAC54EBD
-	for <soc@archiver.kernel.org>; Thu, 12 Jan 2023 13:18:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 827FFC54EBD
+	for <soc@archiver.kernel.org>; Thu, 12 Jan 2023 13:38:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 26496C433EF; Thu, 12 Jan 2023 13:18:39 +0000 (UTC)
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	id 43F65C433F1; Thu, 12 Jan 2023 13:38:18 +0000 (UTC)
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 08A43C433F0;
-	Thu, 12 Jan 2023 13:18:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08A43C433F0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30CCIv4j032551;
-	Thu, 12 Jan 2023 13:18:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pps0720; bh=7Dsyh+GtOmF3ELHbK3wucFT8G+cX8RPbqCVEacH3Iu8=;
- b=Ohbj0/9gKlrV6S88hbK1fyteZXR21otUx0XUMCOZhoHEcK7flTKiR2wDLJ6xzTRjERl2
- 1pj8xXLSp8QzzMDzG0kCG4R3pd6jG9rhz+auo2c/ZP13XycGb0qoxMJWozRB1LzU5h7d
- zZZ6wdbVeZ9WxcFxkJNVUCe+SKhMIWZcl50reEcua48CkRVXg0EY574R5sUARiqyhekx
- ZyOUHCkR1MgNvKqKM7uSnZFeQIdXadvh1sGjHKUWuAdPzbMvCtD9iD784I8DNQHQdJ06
- Vj1fESC9nvodaNeP8np5urjbbVukkL/Tfpev4jvIi/WqvL1f1Hljmb5vCQ4GSz21U5MZ uQ== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n2fc9j62g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Jan 2023 13:18:27 +0000
-Received: from p2wg14938.americas.hpqcorp.net (unknown [10.119.145.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 7ACA5807139;
-	Thu, 12 Jan 2023 13:18:26 +0000 (UTC)
-Received: from p2wg14934.americas.hpqcorp.net (10.119.145.213) by
- p2wg14938.americas.hpqcorp.net (10.119.145.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 12 Jan 2023 01:18:26 -1200
-Received: from p2wg14937.americas.hpqcorp.net (10.119.145.217) by
- p2wg14934.americas.hpqcorp.net (10.119.145.213) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 12 Jan 2023 01:18:25 -1200
-Received: from p2wg14930.americas.hpqcorp.net (16.228.19.10) by
- p2wg14937.americas.hpqcorp.net (10.119.145.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Thu, 12 Jan 2023 01:18:25 -1200
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (192.58.207.38)
- by edge.it.hpe.com (16.228.19.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 12 Jan
- 2023 01:18:25 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IQtQPJVGJw6RLroyYqSJOH7I2cqLnikqlVx3fDi0u9kq2xWzk+CutOiy9+R8+rKLi5k10feP808Mk6WwCQd6URxMtH48tW08ciIYNm9MzjGtlcGVMmv5KtOWXOZeDKfDVeZlQ6m4XgcfcGIdVLHRt+b+QajYTRIITiXjBQ6jYvNays55yKo6diBHha8JCxdRVhccxLxKEVWGx/OjWvV1XX19kLzg//lIay01YU8PpuSuejr8m6ral3P6O+5X7wTirnLDF1LlZAKi7BTx4zK31l1QaAKpcwT5fHy1t4IZUBdsXmT620qCYSgVFD+OdlYaE2N1OAu4fpW9apJFO4/QPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Dsyh+GtOmF3ELHbK3wucFT8G+cX8RPbqCVEacH3Iu8=;
- b=V1v4wOOpzZmlSfTxe4o/EWEvhgk+00DZAh18kcmAchA+IuBcXY7adlKsCrguTuPAYGCaVZW7sYvVuCKiVxs1BRY4jCQWeH6Bm3bEVjNK7fyj15XNNMaRmkw41IEFKzFq2PzJC8wlfyGcx4qfLtbOOeFcMuP7+FEwlUT7qStJogYnFQC42pOXaTwF3OBkZZ+yZBTVCjfNyheCsz0yNA2mSe9ypCurWumofIsdK6EaK4gZrk2jEZm889x8woZvoKun17AyUG94I6N5+yCYpv8bn/9koArmzp+3FbN/ZA4ELS3g4x2FKi2A1o4Tyr6S43YxJ1ivwRQvi3wbdHzi5hbPCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:173::21)
- by SJ0PR84MB1798.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:434::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Thu, 12 Jan
- 2023 13:18:23 +0000
-Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::337:c28a:4e41:d735]) by PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::337:c28a:4e41:d735%7]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 13:18:23 +0000
-Date: Thu, 12 Jan 2023 21:18:15 +0800
-From: Clay Chang <clayc@hpe.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <verdun@hpe.com>, <nick.hawkins@hpe.com>, <arnd@arndb.de>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux@armlinux.org.uk>, <olof@lixom.net>
-Subject: Re: [PATCH 5/5] MAINTAINERS: Add maintainer of GXP SROM support
-Message-ID: <Y8AIl4/J+YwsQrgF@enigma.ccjz.io>
+	by smtp.kernel.org (Postfix) with ESMTPS id A62B1C433EF;
+	Thu, 12 Jan 2023 13:38:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A62B1C433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 13E4E320091F;
+	Thu, 12 Jan 2023 08:38:15 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 12 Jan 2023 08:38:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1673530694; x=1673617094; bh=AUwDiqbFDe
+	X2Nj1CtP9M6Y4zqsgZ3faiB0PqaW+QDig=; b=hVkHYJ/Whep0xqpAdw234/glts
+	AD3tk2/jwkqQ5x7vFPlraFFkvot0AK5QZZqVuV39y9kusOuMgGlz1fotAnHH/LCq
+	s+Aa7K2o4x8QY+O4nX8+DH0G6LFQ1zl9l57r7Ru9NnpqTf8FzpWdIHNYCNjf8Z7q
+	Sk8tHO8QE6pauDLKlTdK6Ii9g1oXGJj3K25+WFj9GkQHWU5JGWyHnqVWC1TDKWHY
+	wlCVpzOw9Noiq49+kQRsmbBs5fLTWwo+rj6wDVGymQ8CufdwWOJSy8A8mKfXixBI
+	19nND5JlrNDnRtALg0Sk+UE7guonlsVbLsdoi+nkvvsWodn9hDYZwbOj+XHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1673530694; x=1673617094; bh=AUwDiqbFDeX2Nj1CtP9M6Y4zqsgZ
+	3faiB0PqaW+QDig=; b=K1Xm+DUwj8KK0hyMthZkyiAb7dda3/cnF8A2IR9A3Sa3
+	RFdlsypem43Lv5i6KPzdFqi0jLccovHEiFQ8/0ErQ99yAGO+/MXG4q3M2ZYqyx/B
+	mNszyu/a1TIid7Rs0Phg7JIvh67wPBawl0fUTdiCZ3wTJxcz1j5nRiomoTCImuvW
+	SEWOpPrfI+9KuSaXRnLnf0Y+4+CQNOLVKWy436zzfMi8wPMC7kGGvW+ttFKVC3P8
+	iRiQ/qz9yi4e6OUmNSjnJgr6QWXPsayuMLw4RJePwFSario9UEsBjqEm+SWLQK9Y
+	plbMxYciM6WmbLUINlo8uapyh8nCKWdUbQbVnchR7A==
+X-ME-Sender: <xms:Rg3AYwlVuUR6Kt9eCVs1HWHHD_dYF00U4vwAPLTZCFSaqYw6-eweiA>
+    <xme:Rg3AY_1mkT_JSRwzfniBg8CNpPXqWNpyJuc61I7mmBPvw4dH1_qtRg77Rwlu8TU2C
+    0ZveRquP_VMvute4EU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeegteejkefgtdekteekvdeukedvudegjeehkeeuheegueekieeuffelffdthfeg
+    udenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Rg3AY-p_DAJqPt_wDqgNTbRrlTtiwVMjpUUXhSyNpk4CM3VJfCZDvw>
+    <xmx:Rg3AY8ke2jZYVspAP9ODfXactKIGrGkHDCgq64uQYZK0TqXytVb8cQ>
+    <xmx:Rg3AY-11Fz6hWWvNGLgPGfrRVmwQefQN0aOpNHyhFAffAR0AmPLTUg>
+    <xmx:Rg3AY8yDyBGnm3cWtHJV_-T9U3UntFbxuusJmhkxLA7OlXxf3HzAfA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 34F3DB60086; Thu, 12 Jan 2023 08:38:14 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <48cd3e28-f1db-487d-8971-473dc8c12c09@app.fastmail.com>
+In-Reply-To: <Y8AIHDizIqu9u9BR@enigma.ccjz.io>
 References: <20230110042533.12894-1-clayc@hpe.com>
- <20230110042533.12894-6-clayc@hpe.com>
- <83e7b2b0-1840-bc8b-e657-ab94975b955d@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83e7b2b0-1840-bc8b-e657-ab94975b955d@linaro.org>
-X-ClientProxiedBy: TY2PR06CA0033.apcprd06.prod.outlook.com
- (2603:1096:404:2e::21) To PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
- (2603:10b6:510:173::21)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR84MB1480:EE_|SJ0PR84MB1798:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56a4744e-053b-48e1-9388-08daf49f7b58
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BI6Cy62x6f1gwumpZ3oJ0gjudVHLSaCO3Pg8HOVEWbUJSDQUFvOTNpUKVnaj3OKunVmkvcZ1ImUPxHBI24SlTYyXoxjGlxht6NaZDZZ0hK3esdqZVjXk7W8f7kLV04URK59wLCXmKDwv85Gp7E8A+0cdIzl8G8SApz6wOPa0BhZsUEjYsA7Sjz301LqXT5y7a7hXEt+YA4RLEg73EoubspvRn6voL5qezBtFiRrwjYYX5yIHtTuq+WawYa1iCSzOADs0g4U5kIfRPi3GSsQme0Ufxg7ROrI2PqReMKi/FKJfQgv97RefGGpW26wKA+S+kvHvxJNF762tDHftD9J7mY0Q5QO2jJ+jr01Q7/bRTxPI2MfhEjAuW1yDpZGVSocCQRPx9mi4POy5on4X6q1OiBlKc7ykkI4vXGwa9omK5IyZC5Vjw/iDXdczqumG9J7Y3M+JQKwu05mDFb0pnT2SJFfgPmU10q4qZhcCtqEKSOrZc9Sxqohj6cA9QyzXeqD2P1hZjUqcD4Pz86vTyBb9xsnmD2Lx38YK/RX90JmmM7MZG6mC/lZ0NdVsqFhXFMMLXK5zMSu+1xinXSC8ALjOxLwMJ7qlbNq0vsibLya3hHdVqXYw0qcBPlfZroncBi1cs/h2FGFvBWW01tXuZlYa+A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(39860400002)(396003)(366004)(346002)(451199015)(82960400001)(38100700002)(86362001)(41300700001)(6916009)(66556008)(4326008)(8676002)(66476007)(316002)(66946007)(4744005)(2906002)(8936002)(5660300002)(7416002)(9686003)(6512007)(186003)(6486002)(478600001)(53546011)(6666004)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UUdmKtmjRq08n0JgR7+vMsXELN0cEK/AAlApK5DyFchERVWz5VK0zXT7IMNv?=
- =?us-ascii?Q?yBanDEO+nZYsCMrYU/3VzZ/mT3ZWH71zsVQr5xTB2QjvLa8sQB/6twPkZp58?=
- =?us-ascii?Q?FGoSu5CetUaUi/C0rOHYt47DFAwDv/mGlNsArzJzpS+aEdN5pRBf+Ci0Px/6?=
- =?us-ascii?Q?RSkeEExLLHXCAM1gDwiZWd8rOOFDAdgvtTeTycuAUfmVc8N5CGlCkWQwFrMZ?=
- =?us-ascii?Q?+0FeFOtPSTCtRqALDeb/2oOy0mUpndgfm8Rlgdc9rOwHX/5kNSCx5u0qmepJ?=
- =?us-ascii?Q?aKM1QOjmEXRDndm83Hn+4gWFtQ+gb001yEpHGVxGxGf1xm8WLVxGsvVBFsWl?=
- =?us-ascii?Q?1l4XtxvCgzuBzs8JB5nZWxMUnqqp17+FozSFKe+LiMw/pUgSz7Q/MXqYTRW2?=
- =?us-ascii?Q?i8+AxU93ykB658Xxcm+tAN7fablAAKPgHKp0PVAQZ7iUcijG4CMJLZoI/la+?=
- =?us-ascii?Q?t2WPwxfVPD0LIuHjl2G7M9GDe1BGVSILgnuf/FCEM5JluYyz7+ihCpvP5ZaG?=
- =?us-ascii?Q?E60yshRYczWdz3bpq6Kyr4crKoRSt2OJivsGZG5Y5EV7nAIFMycqOsf2P4oz?=
- =?us-ascii?Q?VSqWtOfdX/socXqqX5e9WLCzhJkamJ9RpsH5KwMigmnwiqX4+Cppy5hN0UF2?=
- =?us-ascii?Q?ycqCvdCHu9QwxNWa94B7hPPrjA2U3l8lJCT3B18UDK4HSKuHpvg31XeT7omY?=
- =?us-ascii?Q?VH6hzGLfZNuLNRfXL2cjES0eRviTiqtqS8E/duTgNOgu7sWvmRoRMbl8WHei?=
- =?us-ascii?Q?ogi+TbqbVmV7iUVKpEb/hL1dNnFBH3u/8Fu85WlQ3AbbTDgovYAT1IMAYts4?=
- =?us-ascii?Q?UOYCgVtlE8mSs83RrDbHqoYv++KzT4tOdTglSav/I4FmgjhR/pcg6052nJuq?=
- =?us-ascii?Q?NLjhTtrx7kYmtEOKgTSCLInTNFLctnanmHoKHse+O9S8bS7UfRblJy5XTNnc?=
- =?us-ascii?Q?EtGgQMpugHzaDULfPb1tFNAOIeKWZ5j1qJt7XBTcxmXLpk/A7UZCs+TeUdQR?=
- =?us-ascii?Q?0ycbTr8qqxKdzm7iSlh/Y0X8bOhr2fVJSuV8eOYuR48s+NATQnabsDywUvVc?=
- =?us-ascii?Q?bF0w2f/fr7orbHS0Jqgo3uKIwb+DWOFYYQWZqBUDFDsb9mVROG9NBVMXstB9?=
- =?us-ascii?Q?wFCaLwAiyEDThQvOY7HGrH1Mz40wkZxayAgF4UkkvQjhtiZc692uw9PuJ7Fd?=
- =?us-ascii?Q?8heimhaA/7cwZYcAKGNZl69ykLw6fIdPM/y726VdhtPD1ptwOxkADp/58ScH?=
- =?us-ascii?Q?g55fCeRljHja22fD0lM47UTyu/IG0TtpA0d064154XrjFWWZMB28nuF63CcL?=
- =?us-ascii?Q?3guyIVgDGCNUPpyhduDvXAuzXcr188b/KDhXzwQIOfmbWahXPv3DFtDJ2j5Y?=
- =?us-ascii?Q?QAyTrjf8NnRWGZuYEAMbVcNparp6d2WqwELwRvuZiSyptxn/zhw+XV27zyTl?=
- =?us-ascii?Q?HaunKse/BvA4rqQUTs9i1T6Jbuihi+HsJTvzKL4TgQpCsJg2cwwz3Nfv3bb/?=
- =?us-ascii?Q?jC7ibAeqDQwEZiEQBtlsknXD2d1WU56bcphpQEbErr0A0K0nlVM6rwDL551g?=
- =?us-ascii?Q?ekvWx9XWgbkuHZ/WjMo0IqdgIkLh5b81LSutbaYjxIKYxd7RZ6eL1DKiPMkH?=
- =?us-ascii?Q?Ng=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56a4744e-053b-48e1-9388-08daf49f7b58
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 13:18:23.4444
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vyySUfVMSejp1l0CM9/lVTU6AF1EhhIWGzh2CBhrSuHXjZY5eVJODQxuVpLXo4ZU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1798
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: 3RQt8HVWlNZ66_GRX8lrxnD1KkfbZdWx
-X-Proofpoint-GUID: 3RQt8HVWlNZ66_GRX8lrxnD1KkfbZdWx
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-12_08,2023-01-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1011 adultscore=0 mlxlogscore=953
- impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301120095
+ <20230110042533.12894-3-clayc@hpe.com>
+ <110af65f-9c18-524d-a073-ef7be60d1f5a@linaro.org>
+ <Y8AIHDizIqu9u9BR@enigma.ccjz.io>
+Date: Thu, 12 Jan 2023 14:37:53 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Clay Chang" <clayc@hpe.com>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: linux-kernel@vger.kernel.org, soc@kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ "Verdun, Jean-Marie" <verdun@hpe.com>,
+ "Hawkins, Nick" <nick.hawkins@hpe.com>, "Rob Herring" <robh+dt@kernel.org>,
+ krzysztof.kozlowski+dt@linaro.org, "Russell King" <linux@armlinux.org.uk>,
+ "Olof Johansson" <olof@lixom.net>
+Subject: Re: [PATCH 2/5] dt-bindings: soc: hpe: hpe,gxp-srom.yaml
+Content-Type: text/plain
 
-On Tue, Jan 10, 2023 at 10:51:00AM +0100, Krzysztof Kozlowski wrote:
-> On 10/01/2023 05:25, clayc@hpe.com wrote:
-> > From: Clay Chang <clayc@hpe.com>
-> > 
-> > Add Clay Chang as the maintainer of GXP SROM support.
-> 
-> Your commit is not doing it. Nope. Either make proper entry matching
-> this commit msg or make commit msg reflecting truth.
+On Thu, Jan 12, 2023, at 14:16, Clay Chang wrote:
+> On Tue, Jan 10, 2023 at 10:49:36AM +0100, Krzysztof Kozlowski wrote:
+>> On 10/01/2023 05:25, clayc@hpe.com wrote:
 
-Thank you for the comment. I will address this correctly in the next
-revision.
+>> > @@ -0,0 +1,36 @@
+>> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> > +%YAML 1.2
+>> > +---
+>> > +$id: http://devicetree.org/schemas/soc/hpe/hpe,gxp-srom.yaml# 
+>> > +$schema: http://devicetree.org/meta-schemas/core.yaml# 
+>> > +
+>> > +title: HPE GXP SoC SROM Control Register
+>> > +
+>> > +maintainers:
+>> > +  - Clay Chang <clayc@hpe.com>
+>> > +
+>> > +description: |+
+>> > +  The SROM control register can be used to configure LPC related legacy
+>> > +  I/O registers.
+>> 
+>> And why this is a hardware? No, you now add fake devices to be able to
+>> write some stuff from user-space... Otherwise this needs proper hardware
+>> description.
+>
+> Thank you for commenting on this. You are right, this is not a real
+> hardware device, but simply exposes MMIO regions to the user-space.
+> Maybe we should rewrite this as a syscon driver. Is writing a syscon
+> driver a right direction?
 
-> > 
-> > Signed-off-by: Clay Chang <clayc@hpe.com>
-> > ---
-> >  MAINTAINERS | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ea941dc469fa..164571ac1cc5 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -2279,14 +2279,22 @@ F:	arch/arm/mach-sa1100/jornada720.c
-> >  ARM/HPE GXP ARCHITECTURE
-> >  M:	Jean-Marie Verdun <verdun@hpe.com>
-> >  M:	Nick Hawkins <nick.hawkins@hpe.com>
-> > +M:	Clay Chang <clayc@hpe.com>
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+There are two completely separate questions about the DT binding
+and about the user-visible interface.
 
-Thanks,
-Clay
+The binding needs to properly identify what this device is. I don't
+think anyone without the datasheet can tell you the right answer
+here, it really depends what the other registers do. If there are
+lots of unrelated registers in a small area, a syscon might be 
+the right answer, but if they are all related to an external
+memory bus, then categorizing it as a memory controller may
+be more appropriate.
+
+For the user interface side, I don't really like the idea of
+having a hardware register directly exposed as driver in
+drivers/soc, this generally makes it impossible to have portable
+userspace that works across implementations of multiple SoC
+vendors, and it makes it too easy to come up with an ad-hoc
+interface to make a chip work for a particular use case when
+a more general solution would be better.
+
+Again, it's hard for me to tell why this even needs to be runtime
+configurable, please try to describe what type of application
+would access the sysfs interface here, and why this can't just
+be set to a fixed value by bootloader or kernel without user
+interaction.
+
+       Arnd
