@@ -1,80 +1,296 @@
-Return-Path: <SRS0=1ZFw=5K=bootlin.com=gregory.clement@kernel.org>
+Return-Path: <SRS0=2WEJ=5K=hpe.com=prvs=03770366ca=nick.hawkins@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4407C54EBD
-	for <soc@archiver.kernel.org>; Fri, 13 Jan 2023 11:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871EDC61DB3
+	for <soc@archiver.kernel.org>; Fri, 13 Jan 2023 16:09:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A043BC433F1; Fri, 13 Jan 2023 11:09:07 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	id 3EDFAC433EF; Fri, 13 Jan 2023 16:09:10 +0000 (UTC)
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 43199C433D2;
-	Fri, 13 Jan 2023 11:09:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43199C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id B91661C0008;
-	Fri, 13 Jan 2023 11:08:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1673608143;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=Qy+BYfMc3I1HUcrXyTy8CKps5bUh9EQZeZpk0EIjNfQ=;
-	b=KGOFVSaNBZuI02J8S7tnrygcJzQiYF79O/0kH0ggtnzwmy1zLRtFkvB8HV+KOHrDUuITNv
-	Iv8/r5+yRWDaJ5you9KzqLmKA00s9cNogC5tPtCEmW8v5b2piDGJCjVBKbTL2uPKVfJnKx
-	nks1T+WhRjmZRu7RsxccuiqgT/BCFc5jwpKexfGPwtC8wr66n8tn/7rNjCu/tw0VvlAhJv
-	BLcEFCr5EfxV5fc/019s7+sFGT45j/vqZOS0SB1hM/tt1E9UajF3sGrUkEDET+h7WSbXwu
-	lGhKNXbdnFbv6/CjB1P4KgYW9UyPvRFe5SerSI96kCXwbfiQ9Jl1ixkW9fU1GA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 60A17C433F0;
+	Fri, 13 Jan 2023 16:09:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60A17C433F0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DFdheA003297;
+	Fri, 13 Jan 2023 16:08:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references; s=pps0720;
+ bh=EdlIu5xNyF/ge4q9lLsNXjTSygfH163wIXDCpju26ak=;
+ b=oSmLHA2c8yMP/h9ZBh5p4puOTwR1AAG3VvNonNBU/voYzZgzDx+K/Gd0GVfQRnVO4pnw
+ 3UeNpaBNv4w2I02gPyF5e5ekai+0B81LNL+VVdVfs0qBi+KgK6pMT9X2/Su2xq9Mk+4L
+ m/9hYQO4QSy3WX824qlD2pwnXr47KzUKAqmesjA/PyB0DycKM7naWMNwTrmPt6rqzxfQ
+ zHIwFMFQAGLZJ1SiHqZrhVbl9/q/9S3lqSTMZWNzy2UV9hw7FT4L+ONYJGS8oA3OO7El
+ cIiAdPOioRNf3hOGiItilH8xoDwTpdnBQFpKQficJ8Zn3Xgc3zbYpp56gmjGRIGqHg64 IA== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3n38a313qn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Jan 2023 16:08:55 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 2A14E8BAD80;
+	Fri, 13 Jan 2023 16:08:54 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 5D9EA80CCF7;
+	Fri, 13 Jan 2023 16:08:53 +0000 (UTC)
+From: nick.hawkins@hpe.com
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- <arm@kernel.org>, soc@kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: fixes for v6.2 (#1)
-Date: Fri, 13 Jan 2023 12:08:59 +0100
-Message-ID: <87mt6mg08k.fsf@BL-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain
+To: soc@kernel.org
+Cc: arnd@arndb.de, linux@roeck-us.net, verdun@hpe.com, nick.hawkins@hpe.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 1/2] ARM: dts: add GXP Support for fans and SPI
+Date: Fri, 13 Jan 2023 10:06:50 -0600
+Message-Id: <20230113160651.51201-2-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230113160651.51201-1-nick.hawkins@hpe.com>
+References: <20230113160651.51201-1-nick.hawkins@hpe.com>
+X-Proofpoint-GUID: xRFHbI6iL19jOBMBr5dICuYN5Sf4lTvV
+X-Proofpoint-ORIG-GUID: xRFHbI6iL19jOBMBr5dICuYN5Sf4lTvV
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_07,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 bulkscore=0 mlxlogscore=677
+ priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1015 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130108
 
-Hi,
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-Here is the first pull request for fixes for mvebu for v6.2.
+Reorganize the base address of AHB to accommodate the SPI and fan driver
+register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
+compatibles. Add comments to make the register range more clear.
 
-Gregory
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+---
+v5:
+ *Fix ranges
+ *Remove comments
+v4:
+ *No change
+v3:
+ *No change
+v2:
+ *Changed fn2reg to fn2
+ *Changed plreg to pl
+ *Changed fanctrl to fan-controller
+ *Adjusted base register range to elminate need for defines in code
+---
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts | 58 +++++++++++++++++++++
+ arch/arm/boot/dts/hpe-gxp.dtsi           | 64 +++++++++++++++++-------
+ 2 files changed, 103 insertions(+), 19 deletions(-)
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+index 3a7382ce40ef..d49dcef95c5c 100644
+--- a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
++++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+@@ -24,3 +24,61 @@
+ 		reg = <0x40000000 0x20000000>;
+ 	};
+ };
++
++&spifi {
++	status = "okay";
++	flash@0 {
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			u-boot@0 {
++				label = "u-boot";
++				reg = <0x0 0x60000>;
++			};
++
++			u-boot-env@60000 {
++				label = "u-boot-env";
++				reg = <0x60000 0x20000>;
++			};
++
++			kernel@80000 {
++				label = "kernel";
++				reg = <0x80000 0x4c0000>;
++			};
++
++			rofs@540000 {
++				label = "rofs";
++				reg = <0x540000 0x1740000>;
++			};
++
++			rwfs@1c80000 {
++				label = "rwfs";
++				reg = <0x1c80000 0x250000>;
++			};
++
++			section@1ed0000{
++				label = "section";
++				reg = <0x1ed0000 0x130000>;
++			};
++		};
++	};
++	flash@1 {
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			host-prime@0 {
++				label = "host-prime";
++				reg = <0x0 0x02000000>;
++			};
++
++			host-second@2000000 {
++				label = "host-second";
++				reg = <0x02000000 0x02000000>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
+index cf735b3c4f35..4d195d466087 100644
+--- a/arch/arm/boot/dts/hpe-gxp.dtsi
++++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Device Tree file for HPE GXP
++ * Device Tree for HPE
+  */
+ 
+ /dts-v1/;
+@@ -52,76 +52,102 @@
+ 			cache-level = <2>;
+ 		};
+ 
+-		ahb@c0000000 {
++		ahb@80000000 {
+ 			compatible = "simple-bus";
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+-			ranges = <0x0 0xc0000000 0x30000000>;
++			ranges = <0x0 0x80000000 0xf000000>,
++				<0x40000000 0xc0000000 0x40000000>;
+ 			dma-ranges;
+ 
+-			vic0: interrupt-controller@eff0000 {
++			spifi: spi@40000200 {
++				compatible = "hpe,gxp-spifi";
++				reg = <0x40000200 0x80>, <0x4000c000 0x100>, <0x78000000 0x7ff0000>;
++				interrupts = <20>;
++				interrupt-parent = <&vic0>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++				flash@0 {
++					reg = <0>;
++					compatible = "jedec,spi-nor";
++				};
++
++				flash@1 {
++					reg = <1>;
++					compatible = "jedec,spi-nor";
++				};
++			};
++
++			vic0: interrupt-controller@4eff0000 {
+ 				compatible = "arm,pl192-vic";
+-				reg = <0xeff0000 0x1000>;
++				reg = <0x4eff0000 0x1000>;
+ 				interrupt-controller;
+ 				#interrupt-cells = <1>;
+ 			};
+ 
+-			vic1: interrupt-controller@80f00000 {
++			vic1: interrupt-controller@f00000 {
+ 				compatible = "arm,pl192-vic";
+-				reg = <0x80f00000 0x1000>;
++				reg = <0xf00000 0x1000>;
+ 				interrupt-controller;
+ 				#interrupt-cells = <1>;
+ 			};
+ 
+-			uarta: serial@e0 {
++			uarta: serial@400000e0 {
+ 				compatible = "ns16550a";
+-				reg = <0xe0 0x8>;
++				reg = <0x400000e0 0x8>;
+ 				interrupts = <17>;
+ 				interrupt-parent = <&vic0>;
+ 				clock-frequency = <1846153>;
+ 				reg-shift = <0>;
+ 			};
+ 
+-			uartb: serial@e8 {
++			uartb: serial@400000e8 {
+ 				compatible = "ns16550a";
+-				reg = <0xe8 0x8>;
++				reg = <0x400000e8 0x8>;
+ 				interrupts = <18>;
+ 				interrupt-parent = <&vic0>;
+ 				clock-frequency = <1846153>;
+ 				reg-shift = <0>;
+ 			};
+ 
+-			uartc: serial@f0 {
++			uartc: serial@400000f0 {
+ 				compatible = "ns16550a";
+-				reg = <0xf0 0x8>;
++				reg = <0x400000f0 0x8>;
+ 				interrupts = <19>;
+ 				interrupt-parent = <&vic0>;
+ 				clock-frequency = <1846153>;
+ 				reg-shift = <0>;
+ 			};
+ 
+-			usb0: usb@efe0000 {
++			usb0: usb@4efe0000 {
+ 				compatible = "hpe,gxp-ehci", "generic-ehci";
+-				reg = <0xefe0000 0x100>;
++				reg = <0x4efe0000 0x100>;
+ 				interrupts = <7>;
+ 				interrupt-parent = <&vic0>;
+ 			};
+ 
+-			st: timer@80 {
++			st: timer@40000080 {
+ 				compatible = "hpe,gxp-timer";
+-				reg = <0x80 0x16>;
++				reg = <0x40000080 0x16>;
+ 				interrupts = <0>;
+ 				interrupt-parent = <&vic0>;
+ 				clocks = <&iopclk>;
+ 				clock-names = "iop";
+ 			};
+ 
+-			usb1: usb@efe0100 {
++			usb1: usb@4efe0100 {
+ 				compatible = "hpe,gxp-ohci", "generic-ohci";
+-				reg = <0xefe0100 0x110>;
++				reg = <0x4efe0100 0x110>;
+ 				interrupts = <6>;
+ 				interrupt-parent = <&vic0>;
+ 			};
++
++			fan-controller@40000c10 {
++				compatible = "hpe,gxp-fan-ctrl";
++				reg = <0x40000c10 0x8>, <0x51000027 0x06>, <0x200070 0x04>;
++				reg-names = "base", "pl", "fn2";
++			};
+ 		};
+ 	};
+ };
+-- 
+2.17.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-fixes-6.2-1
-
-for you to fetch changes up to 80502ffab2fa92ba9777e381efea2efddc348d13:
-
-  arm64: dts: marvell: AC5/AC5X: Fix address for UART1 (2023-01-10 10:29:03 +0100)
-
-----------------------------------------------------------------
-mvebu fixes for 6.2 (part 1)
-
-Fix regression for gpio support on Armada 38x and Armada 38x
-
-Fix address for UART1 on AC5/AC5X
-
-----------------------------------------------------------------
-Chris Packham (1):
-      arm64: dts: marvell: AC5/AC5X: Fix address for UART1
-
-Klaus Kudielka (2):
-      Revert "ARM: dts: armada-38x: Fix compatible string for gpios"
-      Revert "ARM: dts: armada-39x: Fix compatible string for gpios"
-
- arch/arm/boot/dts/armada-38x.dtsi             | 4 ++--
- arch/arm/boot/dts/armada-39x.dtsi             | 4 ++--
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
