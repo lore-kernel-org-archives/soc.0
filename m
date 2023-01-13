@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0AC5C67871
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEEF5C54EBD
 	for <soc@archiver.kernel.org>; Fri, 13 Jan 2023 16:09:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A1D3FC433F0; Fri, 13 Jan 2023 16:09:10 +0000 (UTC)
+	id 66D3CC433F2; Fri, 13 Jan 2023 16:09:10 +0000 (UTC)
 Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8E993C433D2;
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E9B8C43396;
 	Fri, 13 Jan 2023 16:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E993C433D2
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E9B8C43396
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DFhMu3007323;
-	Fri, 13 Jan 2023 16:08:54 GMT
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DFSbQm030643;
+	Fri, 13 Jan 2023 16:08:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id; s=pps0720;
- bh=GElG5resOz76T4nov208JdcKStrWjNR88nmRJofSfUo=;
- b=kBz4LQozstb4bQ9GfTcnFoANFJey9LmpK8NMA/2sVq90Cw/X1qKOWtl3jf21WAe5ICqB
- JvyCLpWPFwug4BTo6mccuqs2o2BSv/TxoffHJ9pK+XtzJZ0VME3lkg/iKHdgtdlCGZlh
- xtF1VDAzecUMWlmsbA8LDH6NIIg3vWpvLVdeN1LFyDATJNbhT3hq8rEkgIg3Cffetx/t
- j+En0A30e/eF2lFm+oX5MXZFAmvTCa7SB7mYJZx6NTuIGwIgYdCwLIf5F/y+IzeGgO4X
- l4xPZj8FQzMU+vBoFGzCYc/hCaS5oGjoVzQcq9qQ91kJqb2xwfMENEHJFqkwQOwD5Qyi nQ== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n3a66g85t-1
+ : date : message-id : in-reply-to : references; s=pps0720;
+ bh=BT46m0GFyZvdPoAAhfhdMehIokzv4T5w1f0EE/g4HzU=;
+ b=gAjfH527j4tsrLKuxDul2aWmBDD+LSIfY0Nll6tAjRYFMKTGH5kLld0Gmg4MzMdS7AWK
+ EKAkvulsjwVu3p3KCPXgM/QE7aSIDMDZk1tUtHsrCeybGxAmRx633guKmlJsC9jNjj/z
+ l+gzuIsjyKTTjXIRPxzh7jWwgnKL4RHcoJy21VzMKUBUIHSzcaY8RxdDAXWXFt4DlGxH
+ YWr7e5ttonupcAXJHTx5DROdQxbTo7fpr1MrSWWMWPTQa6RSZhHZ7Nn34G2WkYPqcHKv
+ 322F5crnhFam8axXd5ZyLiID/KWLGUtvK8HkWDSUijmeaATJEl7g6ofMQgHgRDAl2rmR NA== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n39th0da2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Jan 2023 16:08:54 +0000
+	Fri, 13 Jan 2023 16:08:55 +0000
 Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 6873ED6C77;
-	Fri, 13 Jan 2023 16:08:53 +0000 (UTC)
+	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 834013D7B0;
+	Fri, 13 Jan 2023 16:08:54 +0000 (UTC)
 Received: from hpe.com (unknown [16.231.227.36])
-	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 4938480CCD0;
-	Fri, 13 Jan 2023 16:08:51 +0000 (UTC)
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id E61E180CCF0;
+	Fri, 13 Jan 2023 16:08:53 +0000 (UTC)
 From: nick.hawkins@hpe.com
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -47,91 +47,68 @@ Cc: arnd@arndb.de, linux@roeck-us.net, verdun@hpe.com, nick.hawkins@hpe.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux@armlinux.org.uk, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 0/2] ARM: Add GXP Fan and SPI controllers
-Date: Fri, 13 Jan 2023 10:06:49 -0600
-Message-Id: <20230113160651.51201-1-nick.hawkins@hpe.com>
+Subject: [PATCH v5 2/2] ARM: multi_v7_defconfig: Add GXP Fan and SPI support
+Date: Fri, 13 Jan 2023 10:06:51 -0600
+Message-Id: <20230113160651.51201-3-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
-X-Proofpoint-GUID: 0h03e_zySHG0YuVa7jqLEKqF9yN5JkcU
-X-Proofpoint-ORIG-GUID: 0h03e_zySHG0YuVa7jqLEKqF9yN5JkcU
+In-Reply-To: <20230113160651.51201-1-nick.hawkins@hpe.com>
+References: <20230113160651.51201-1-nick.hawkins@hpe.com>
+X-Proofpoint-ORIG-GUID: oCfOTr_2_J9GLRPoGZV69o8y8_Dj6aIv
+X-Proofpoint-GUID: oCfOTr_2_J9GLRPoGZV69o8y8_Dj6aIv
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-13_07,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
- clxscore=1011 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301130108
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 mlxscore=0 phishscore=0 clxscore=1015 impostorscore=0
+ spamscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=851
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130108
 
 From: Nick Hawkins <nick.hawkins@hpe.com>
 
-The GXP SoC can support up to 16 fans through the interface provided by
-the CPLD. The fans speeds are controlled via a pwm value 0-255. The fans
-are also capable of reporting if they have failed to the CPLD which in
-turn reports the status to the GXP SoC. Based on previous feedback the
-registers required for fan control have been regmaped individualy to fan
-driver. Specifically these registers are the function 2 registers and the
-programmable logic registers from the CPLD. Additionally in this patchset
-there is support for the SPI driver which already exists as spi-gxp.c in
-the SPI driver.
+In order for HPE platforms to be supported by linux on GXP it is
+necessary for there to be fan and spi driver support. There fan driver
+can support up to 16 fans that are driven by pwm through the CPLD. The
+SPI driver supports access to the core flash and bios part. The SPI
+driver spi-gxp was added previously to linux.
+
+Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 ---
+v5:
+ *No change
+v4:
+ *No change
+v3:
+ *No change
+v2:
+ *No change
+---
+ arch/arm/configs/multi_v7_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Changes since v4:
- *Removed patch for yaml and driver as they have been applied to
-  hwmon-next
- *Fixed issues with range issue with dtsi file and removed
-  comments
-
-Changes since v3:
- *Removed patch for ABI documentation of sysfs-class-hwmon as it
-  was applied
- *Removed unecessary HWMON_PWM_ENABLE usage
-
-Changes since v2:
- *Removed use of regmap in favor of __iomem
- *Updated description on yaml documentation
- *Simplified commit description on sysfs-class-hwmon
- *Removed use of dev and hwmon_dev from drvdata structure
- *Fixed missing breaks in switch statements
- *Added check for pwm values less than 0
- *Removed regmap and slab header file includes
-
-Changes since v1:
-
-*Renamed fn2reg to fn2 in dtsi file and documentation
-*Renamed plreg to pl in dtsi file and documentation
-*Renamed fanctrl to fan-controller in dtsi file and documentation
-*Adjusted base register range for fan ctrl in dtsi
-*Changed commit description on fan-ctrl device-tree binding
-*Changed register description on fan-ctrl device-tree binding
-*Changed number of supported fans from 16 to 8 in driver code and
- documentation
-*Modified commit description of fan code
-*Removed support for fan[0-15]_input
-*Removed PWM defines in driver code
-*Added gxp-fan-ctrl to hwmon's index.rst
-*Removed mutex in driver code
-*Added fan_enable support in fan code and documentation
-*Fixed comment in driver code presents -> present
-*Removed unecessary include files in fan code
-*Added comments to describe what power state is and
- calculations for accessing plreg in fan code
-*Removed use of variable offsets in fan code
-*Fixed GPL header in fan code
-*Changed module description for fan controller
-*Added kfree in case of failure to initialize driver
-*Added missing yaml file to MAINTAINERS
-
-Nick Hawkins (2):
-  ARM: dts: add GXP Support for fans and SPI
-  ARM: multi_v7_defconfig: Add GXP Fan and SPI support
-
- arch/arm/boot/dts/hpe-bmc-dl360gen10.dts | 58 +++++++++++++++++++++
- arch/arm/boot/dts/hpe-gxp.dtsi           | 64 +++++++++++++++++-------
- arch/arm/configs/multi_v7_defconfig      |  2 +
- 3 files changed, 105 insertions(+), 19 deletions(-)
-
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index b61b2e3d116b..192c89bfd02a 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -441,6 +441,7 @@ CONFIG_SPI_CADENCE=y
+ CONFIG_SPI_DAVINCI=y
+ CONFIG_SPI_FSL_QUADSPI=m
+ CONFIG_SPI_GPIO=m
++CONFIG_SPI_GXP=m
+ CONFIG_SPI_FSL_DSPI=m
+ CONFIG_SPI_OMAP24XX=y
+ CONFIG_SPI_ORION=y
+@@ -530,6 +531,7 @@ CONFIG_SENSORS_NTC_THERMISTOR=m
+ CONFIG_SENSORS_PWM_FAN=m
+ CONFIG_SENSORS_RASPBERRYPI_HWMON=m
+ CONFIG_SENSORS_INA2XX=m
++CONFIG_SENSORS_GXP_FAN_CTRL=m
+ CONFIG_CPU_THERMAL=y
+ CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_IMX_THERMAL=y
 -- 
 2.17.1
 
