@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04DD6C63797
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F805C46467
 	for <soc@archiver.kernel.org>; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C5617C433F2; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A926EC433EF;
+	id CAEEBC433D2; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B49D2C433F1;
 	Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1673864417;
-	bh=QcatPQcerkmvj3LQgF4lfdk3+62FMH0MBbERqsHqQVc=;
+	bh=OqOv2n/RavLtAh4BsDgq/aVEHidzQIuKgMLpP43Okvo=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Z+rrEYtN/EvO09X91+9rLWLv91sKfOyassX2PBEr2DdFw+cL2rfwyzCGEyJpI7u5p
-	 FwZWp4FLVsbaPWSLMZuuAHeAtrAAF+zGX1jEENo+zXFOwznWhvTfE74XgfeqbccEZD
-	 1wS1sJa6wcVuJzThj9dDcgsWNDww7dAZdgMmuPKjDmyoTfVOXG9yeLqqGwFUhqaqgJ
-	 xmNvcGf7dDwG+okAtxUKyBBB8HOA3WohlhsnxdSvLI9X4zZLoK53TFyy1R3ztSVxaH
-	 iJWwKAN3QFFHOkEEQNpUwE61ROYnyvMpuFWPrcIuSNAvXhzXW5p5lW35Ue4ta/ba5J
-	 Y3stpOfrflC+A==
+	b=dvMLNmc0GyuWAp/F+irQ2Iq2cQUx0aO5gQmQ+UJAwzqL3Y3tQHu6jOEqC8r88OfF/
+	 FDKKlO8SSPVCs1QPL7BuWTguJvuV20ZRH85dJviYkHflgs5ez7I2X+k0Xvnc4Vn27e
+	 8WoUZi7gBKI/vXlHTIo37u+yia+jNaoPyzVwENG9CaGSEP0oBp+XXtgL/uQvwsHIXz
+	 jGrsioTBbJAz4HhHSUGBl+DMHfZiFa9LOE/OPXCGjzK9NOeqzzscgbtLdQS0148Rnd
+	 mQGeykZxgJs3F1Jf2obZJgsZM3qrH/N03MVcD+Jz0rTqvhgTf1jWOcUsFTTXyZ0C6Q
+	 x/gebxxFJs11Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 987DBE54D26;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92786E54D2A;
 	Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: mvebu: fixes for v6.2 (#1)
+Subject: Re: [GIT PULL] RISC-V DT for v6.2-rc4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167386441762.5760.2833314689623880872.git-patchwork-notify@kernel.org>
+ <167386441759.5760.8998487914110700465.git-patchwork-notify@kernel.org>
 Date: Mon, 16 Jan 2023 10:20:17 +0000
-References: <87mt6mg08k.fsf@BL-laptop>
-In-Reply-To: <87mt6mg08k.fsf@BL-laptop>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
+References: <Y78rn+0fVNOxHLKt@spud>
+In-Reply-To: <Y78rn+0fVNOxHLKt@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,19 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 13 Jan 2023 12:08:59 +0100 you wrote:
-> Hi,
+On Wed, 11 Jan 2023 21:35:27 +0000 you wrote:
+> Hey Arnd!
 > 
-> Here is the first pull request for fixes for mvebu for v6.2.
-> 
-> Gregory
-> 
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> Been a quiet period since -rc1, so I only have a single DT fix for you.
+> Figured I'd get it out of the way & write the script that I've been
+> meaning to write since I sent the first pair of PRs at the same time.
+> Hopefully I didn't break anything in the process!
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: mvebu: fixes for v6.2 (#1)
-    https://git.kernel.org/soc/soc/c/88bcc6fa5eae
+  - [GIT,PULL] RISC-V DT for v6.2-rc4
+    https://git.kernel.org/soc/soc/c/e2f7096f1e76
 
 You are awesome, thank you!
 -- 
