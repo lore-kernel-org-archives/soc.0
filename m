@@ -1,222 +1,65 @@
-Return-Path: <SRS0=72kt=5N=microchip.com=Claudiu.Beznea@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D9FEC46467
-	for <soc@archiver.kernel.org>; Mon, 16 Jan 2023 09:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04DD6C63797
+	for <soc@archiver.kernel.org>; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3538BC433EF; Mon, 16 Jan 2023 09:56:16 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0948AC433F1;
-	Mon, 16 Jan 2023 09:56:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0948AC433F1
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1673862974; x=1705398974;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=3eGrkmugC2rKQhTDFO3gzMXXnuX7SfLm/UGpT7mqrWU=;
-  b=OZp4Bs8B3WXpFX56KTPWNXjsR9DTfyfTy0Q1CorD6SljueuEVzVSEgBV
-   ZZVCAFfTZUWjZaz5NnyFOccogOQx21hsWkXnKDYIbnKNNdVVkXwRD7FbN
-   uVHa0zD7R3h4HderixeTIgwhc8aTxgzHO+F/XwnZhLRs8JywK2ICwbbft
-   FaPbCZEExSGngkASC8f3/6ZTHKTJN2R4Q7zZXy4P2a6y5X/YjAiEs0AVe
-   yjiea1LBADGUfDXw1Xeu02zlaE+Z7xcEhQS/eS6V841gu/VqqY+FwXvAA
-   ZcQL0PdgQLwJycvThU1FXqvolQkeTHN7gqOEou8NQ5EcpMmVp1FP1PSSD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,220,1669100400"; 
-   d="scan'208";a="196805931"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jan 2023 02:56:13 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 16 Jan 2023 02:56:12 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 16 Jan 2023 02:56:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ai+AygvbSSC3zqrW4X9Hqv7nOjc2DqJulYPB4vNX07TyZJ1iwncgtianluwa0qmCkk7FIdX0B8w9OUdfcEQ4H8Gz/RuSdSpP/BXTpdNjdW3Cu+lD80JCfVrz/rdkz4pSIdhIG8d0u9HX6WAvMcdAlna5IOYhHYVOatA2zuNMy74xc6PB+bVWMd7ELMaaxqFY+g+d8hooqSxDleckgggSG8NF8pbT1mKhPLCirUldhBX/MKHSeHQPEc9y/whObyju22kIO5KjaGlUvWMTrf/M9NZvk02C8/DdKXAnuJwi0ZH4fL9ztBoKKQlT52kYAd0M9ZHQJnKXD4fyqAMqyehmcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3eGrkmugC2rKQhTDFO3gzMXXnuX7SfLm/UGpT7mqrWU=;
- b=IWGMj2tbrOzDQrmjDi1vMwS+fBLmsJoS/QL8I06op7/Vk/HxcZO66EShAUg4vilS7CWm5sXndIaNOS8j/Ij9n3z7y1GpI+XJvs+KoMxu8oagfL6PIsUDF4fMFqMi3dnsyc6ea7iF5iD5sczHVPuN1UoZbTkSnEJGqozLi2u+zHxr94XvxiQIbb8Rb18SlRaOBVSkyB6y0Wo8bxr8N6glPWUsAX+pyjId2FEy/jvuewzyx3L9aa0cTRnbUaJJ2rlph57CCem1pIPPv1WKziLt4wcV2rK2Wf+gbMD6X0nUFP97z/Eg780FJbvAONkcBRvoVkoxTdvmlVh4XygPdEaK/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3eGrkmugC2rKQhTDFO3gzMXXnuX7SfLm/UGpT7mqrWU=;
- b=iH8Sf/1Yg0Oyrx7ms34+Oj63qnsZmHuGxkj4mpuQsQxR94PgMdzp2ORbr5w96q3flQeCoKtNVS8ugJV3LilodYP2c8TnKJkLqOglP9ENOAJdiG3o3hXv3dArxNt9TDOLMc3HEPwE8E3hkl5AttuX9ThzvX3tcmxLpPocWRLpqiQ=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by PH0PR11MB5808.namprd11.prod.outlook.com (2603:10b6:510:129::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Mon, 16 Jan
- 2023 09:56:10 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::2177:8dce:88bf:bec5]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::2177:8dce:88bf:bec5%9]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
- 09:56:10 +0000
-From: <Claudiu.Beznea@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: <Durai.ManickamKR@microchip.com>, <Hari.PrasathGE@microchip.com>,
-	<Balamanikandan.Gunasundar@microchip.com>, <Manikandan.M@microchip.com>,
-	<Varshini.Rajendran@microchip.com>, <Dharma.B@microchip.com>,
-	<Nayabbasha.Sayed@microchip.com>, <Balakrishnan.S@microchip.com>,
-	<Cristian.Birsan@microchip.com>, <Nicolas.Ferre@microchip.com>,
-	<krzysztof.kozlowski@linaro.org>, <alexandre.belloni@bootlin.com>,
-	<davem@davemloft.net>, <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
-	<Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>, <andrew@lunn.ch>,
-	<michael@walle.cc>, <Jerry.Ray@microchip.com>
-Subject: Re: [PATCH v4 5/8] ARM: dts: at91: sam9x60: Add DMA bindings for the
- flexcom nodes
-Thread-Topic: [PATCH v4 5/8] ARM: dts: at91: sam9x60: Add DMA bindings for the
- flexcom nodes
-Thread-Index: AQHZKZDCIjDWRZXIuki2niX1Seboug==
-Date: Mon, 16 Jan 2023 09:56:09 +0000
-Message-ID: <62154915-69b1-d8ee-db2a-b70a313946a7@microchip.com>
-References: <20230112110208.97946-1-durai.manickamkr@microchip.com>
- <20230112110208.97946-6-durai.manickamkr@microchip.com>
-In-Reply-To: <20230112110208.97946-6-durai.manickamkr@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|PH0PR11MB5808:EE_
-x-ms-office365-filtering-correlation-id: dd6f2762-a44c-407d-e23d-08daf7a7e500
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wObg3n0Cc84RV3dMGO/YRiSAg11wnw+dHQL2rzHUI18LeBwWna+0Zw0xOaxDqlicyDBw63CV5C/V5xRbNbT+wHqi4l7H4NK/iAyFgSAMCCjg6NimZak77G2WjriTM+/EVw48AnJwo76UTgH0ewGcAvxoOa6V5EtDeEcruqPk+DoJrhncDgMvibyMqTdF7gAXwO+Eb364PMnSLp3VsqHRwU5FvVLeHj0rBKgml3XfZV7jGPGpW62L6xtKImj3/+M//ATZWQ8Qui2V1GZ/Xyu/GnFkY8kPX93HqlIXgclhcraeq1TX5qIP1DoOZpUu9MpGXi/fQFxJGsLf/9asIRFW39NZtM5k7zGvQjpj5aUzkbHY7g1+uxm+ZMjDMcd2Foql7oQylvm8CmVEIibFHSDf/cxlUlM0cTlOfzZeHq0S0993qQvOVWU0A0vtigVw1uS0DFre/kvxXR8nzRtLqEpgLStsGST1DGWXw4ot9yYnE6302LNXIb6KVZRsfi2yeFNXMMZuuv/Yps7g8lJIJWECwsQSebsfRfkGXSy6j+/7z1WVEK7rw0LHXkKD6Kmcsha8EY+JuKXuSLFU2VOg/caU23SabWiTXJRRn8qpIvBITPv7Kxfa6Ge3DYZtO/l2ZPOTL8cAoZ4jiPLMqoKz88IAmAo9+hMvP8ALoyw5p8l6GzVfr1U5NM8uzF5ODPgyOO+XF3Ni9wfEoYuh0NqdaEGuCP6X4nl6BWEZQdJHljfKnICNYH7/hvVRV9PNkV9lznRs4am/97INbf/JXCRQb3yarS+KAKi3P9/oC4JOGMAXV3c=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199015)(36756003)(53546011)(86362001)(6512007)(186003)(26005)(8676002)(64756008)(91956017)(66556008)(41300700001)(76116006)(2616005)(66476007)(66446008)(66946007)(316002)(71200400001)(6506007)(110136005)(31696002)(478600001)(6636002)(7416002)(122000001)(6486002)(38100700002)(38070700005)(921005)(2906002)(83380400001)(5660300002)(8936002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2htMFlOWlNtVnBiV1VjM0djcjdUOFY2RnVQS0hRS2JKNkRhMTBwYkVNS2sx?=
- =?utf-8?B?c3BsSDloUHNKaE02cWw4QXdoYm83akZuOUZXWlR6U3hXVEFsQUpkMTRRTGZI?=
- =?utf-8?B?eXZ4aU5XMVFMZ1ExYzZ0NHNmTnB5K2poRThGanFtclBYc3h6Z1hkbmFrbGRP?=
- =?utf-8?B?L0dkWjFLN1Azd1lKRGxxaGFzVHRadWhFd1FaS1FNRHp6ZmpFR2tVbWIwTG5p?=
- =?utf-8?B?MVFRdlBNTmZ3dHZFeGtzS3Jsd1pWVGhwQUVqVFJKazRZSlFSd2ZJL0pnWGhX?=
- =?utf-8?B?UXlham02VnhWdks4V08rZ3hTVGFxVEtwNjBWeUlUOXdmdDFDRW5xMmlqRmxz?=
- =?utf-8?B?UkdmMzJLU2Y1TmdTWTZhc3ZDM0dEdENwTFUvaGlITW81clpNaFV6VXA3VGJJ?=
- =?utf-8?B?dzl6N0IrQUVGcDlyaHBqRGZab3BOKzQrUUZYTWFiRWRZVStUYmMyOGFZTVd3?=
- =?utf-8?B?dHlCL1hXTVBPOVhWMmllbW9FaTJ3dUhQY2VuUnUwNW5UN2pSbTJ1Wlc5aW1C?=
- =?utf-8?B?OFJZL3o0VWo4WTV0T0I2TFpjc3AzcVpPNXFzTnpSbGZTYzNJNG8xZGk4cTM0?=
- =?utf-8?B?b25qcUZ5M3BYTnZyTGRaRWw2Wm5XN1pWSTBBM2VjVDVRR1REanZJeEZhNEpa?=
- =?utf-8?B?eEJNU3hHZndKeVA2UldDeGg4bXlGMmtZYW4wcUFybFl6S1BiNGttNDBLWHdT?=
- =?utf-8?B?ajU5T3R6YkQwaXR4RlA0QkZ4elNZQ2h0RWZsTUQ4WnlwWEgrU0lMbXA1TzIr?=
- =?utf-8?B?ejlNVlUxWDBmZmtZZ2hvZE9aWEVkcWgyYi9Pam42T3JQcmxEdHFHR2w3VVVk?=
- =?utf-8?B?Wi9DdXQ1ZWswSXVDTkRJalhIU1ZzTHhSRTBHMkJrSStXbTlMeFV3eC9pQmZ3?=
- =?utf-8?B?QWVIaDVVajZkM3FjVzYyaWw5WE1uNFQrQ2ZKVkc1c0tFTUpINXRRdWlsOUhx?=
- =?utf-8?B?VWlhaEVjQitrNzdvYnRJeG9Pb3U0bk94UWUzaDZ5Z1dCSXNSTnlHWldlemFU?=
- =?utf-8?B?OEd1dGg4aTlHZCtXbkRuNWlMNHFoamlieW14KzhUN2EzWmh0M1QyOW9kUFlK?=
- =?utf-8?B?aFhzVURSKy9XOHFCczAwY2JRUk4yaE14dGxXK04rWnNWa2MvSjNrK3g4OXpL?=
- =?utf-8?B?d3YrRTZTdXhadFdOYjZUa3p6ditGdk1HN1kxZTliQjFqTDRxNGFIMTlLRC9w?=
- =?utf-8?B?SU1QdWN4NHlpOHdmQTBsUzBEeTBJYitmRm1SVm1CNU1rZXdqVXFwd3FvUXI1?=
- =?utf-8?B?V1U2di9wNDJDUGo4aXd2VjBvV1lvajFvSmZYbnpheGxhSnc2aTBKbnZhb1pT?=
- =?utf-8?B?aHk4bVpVN0oxR0JETzRFWlJiZ2lxdHNlZzAvcUY2bDlQREhDWXV2OXlXeS9m?=
- =?utf-8?B?YWV0NjZnM3UyUWNxVGdkUm5WNSt2bXhDUU8zWjRUelBmRWpySUYxUGUreVY2?=
- =?utf-8?B?Ylc0OVZDUDd6bXBFUjVPRGNBMjRCelptL0pjeWsvWGRyOXdLR1JSbUZOWXBn?=
- =?utf-8?B?cHgvOGtjVG1xSG1qTmptYW9IYWhXREZrVXQ0K1pvbzJqbG5DdHVlZzNKY2Nj?=
- =?utf-8?B?UjMzdmJNSG9jQWZOc3lGY3BrS0w3amlJSUZLb25rWHBXRWNKUFBnbnhyR2Vm?=
- =?utf-8?B?eTFjekE5QjZLNWZlQmlpdC9HN0NzV2ppQnh3M1RRZEwwaFBYVjl2c0g1SmVX?=
- =?utf-8?B?eXJjMnhNNzFYSEIzWGdHMzRZSzJDbUt1Q3lYNy9WK0kwaThRK1lzbVAyenVG?=
- =?utf-8?B?c25mdDdsUGpDTXIyN29Fb3RYbmN1YnlFdWFDVDRESTF4VTlNV3FZbFVSdUJp?=
- =?utf-8?B?T2hKVUZHYXBqZFJpNXZEUTF1cGp1U1dJRkkvYlhMRktUMXdVczZSWFpLbUJi?=
- =?utf-8?B?ZjRJQzIwUWIrMGNBM1FyTVorTVFaWVlYblVwRWkwSjdNWm1PSkxpSmE5Q21W?=
- =?utf-8?B?RkhwTXpKTnlVWXltOHNHZWx6ams5dFoxMHl6NGNDN3kwYm5GWXNLbmpHUmYy?=
- =?utf-8?B?c3hhdlZQOEU5a0o5NFQwNDYzbWRDT0FBY2s0NjFwd25oSHB3RWRrbVhxQ1JZ?=
- =?utf-8?B?RTErQXRYOFFYQ0RUTHBoMVg2cHlmR2VPbEVPVjdjVVd3SkwvNzNtTTRtcHpE?=
- =?utf-8?B?VDF2MEtjWHV3S1ZrNVVpMkxxK3UvQUpwODUvRWxMUkFXNXNyandRa21iL05i?=
- =?utf-8?B?bkE9PQ==?=
+	id C5617C433F2; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A926EC433EF;
+	Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1673864417;
+	bh=QcatPQcerkmvj3LQgF4lfdk3+62FMH0MBbERqsHqQVc=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Z+rrEYtN/EvO09X91+9rLWLv91sKfOyassX2PBEr2DdFw+cL2rfwyzCGEyJpI7u5p
+	 FwZWp4FLVsbaPWSLMZuuAHeAtrAAF+zGX1jEENo+zXFOwznWhvTfE74XgfeqbccEZD
+	 1wS1sJa6wcVuJzThj9dDcgsWNDww7dAZdgMmuPKjDmyoTfVOXG9yeLqqGwFUhqaqgJ
+	 xmNvcGf7dDwG+okAtxUKyBBB8HOA3WohlhsnxdSvLI9X4zZLoK53TFyy1R3ztSVxaH
+	 iJWwKAN3QFFHOkEEQNpUwE61ROYnyvMpuFWPrcIuSNAvXhzXW5p5lW35Ue4ta/ba5J
+	 Y3stpOfrflC+A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 987DBE54D26;
+	Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <75FC819ACA166D49B65960A023336FA8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd6f2762-a44c-407d-e23d-08daf7a7e500
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 09:56:09.9517
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: isTzNYaCu9B6PJbfxjTiU5cnpt3nggvA4OPonLFywsCcO0n8J5R2L/LeJb8f0CtcqDglj+50A+dNwdel7IUX7fF2yBm89LLn6I0ArhioCS4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5808
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] ARM: mvebu: fixes for v6.2 (#1)
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <167386441762.5760.2833314689623880872.git-patchwork-notify@kernel.org>
+Date: Mon, 16 Jan 2023 10:20:17 +0000
+References: <87mt6mg08k.fsf@BL-laptop>
+In-Reply-To: <87mt6mg08k.fsf@BL-laptop>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-T24gMTIuMDEuMjAyMyAxMzowMiwgRHVyYWkgTWFuaWNrYW0gS1Igd3JvdGU6DQo+IEZyb206IE1h
-bmlrYW5kYW4gTXVyYWxpZGhhcmFuIDxtYW5pa2FuZGFuLm1AbWljcm9jaGlwLmNvbT4NCj4gDQo+
-IEFkZCBkbWEgYmluZGluZ3MgZm9yIGZsZXhjb20gbm9kZXMgaW4gdGhlIHNvYyBkdHNpIGZpbGUu
-IFVzZXJzIHRob3NlIHdobw0KPiBkb24ndCB3aXNoIHRvIHVzZSB0aGUgRE1BIGZ1bmN0aW9uIGZv
-ciB0aGVpciBmbGV4Y29tIGZ1bmN0aW9ucyBjYW4NCj4gb3ZlcndyaXRlIHRoZSBkbWEgYmluZGlu
-Z3MgaW4gdGhlIGJvYXJkIGRldmljZSB0cmVlIGZpbGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBN
-YW5pa2FuZGFuIE11cmFsaWRoYXJhbiA8bWFuaWthbmRhbi5tQG1pY3JvY2hpcC5jb20+DQo+IFtk
-dXJhaS5tYW5pY2thbWtyQG1pY3JvY2hpcC5jb206IGZpeGVkIGNvZGUgaW5kZW50YXRpb24gYW5k
-IHVwZGF0ZWQgY29tbWl0IGxvZ10NCj4gU2lnbmVkLW9mZi1ieTogRHVyYWkgTWFuaWNrYW0gS1Ig
-PGR1cmFpLm1hbmlja2Fta3JAbWljcm9jaGlwLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IENsYXVkaXUg
-QmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29tPg0KDQoNCj4gLS0tDQo+ICBhcmNo
-L2FybS9ib290L2R0cy9hdDkxLXNhbTl4NjBlay5kdHMgfCAgMyArKysNCj4gIGFyY2gvYXJtL2Jv
-b3QvZHRzL3NhbTl4NjAuZHRzaSAgICAgICB8IDI3ICsrKysrKysrKysrKysrKysrKysrKysrKysr
-Kw0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAzMCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0
-IGEvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1zYW05eDYwZWsuZHRzIGIvYXJjaC9hcm0vYm9vdC9k
-dHMvYXQ5MS1zYW05eDYwZWsuZHRzDQo+IGluZGV4IDZiNjM5MWQ1MDQxZS4uMTgwZTRiMWFhMmY2
-IDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybS9ib290L2R0cy9hdDkxLXNhbTl4NjBlay5kdHMNCj4g
-KysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvYXQ5MS1zYW05eDYwZWsuZHRzDQo+IEBAIC0yMDksNiAr
-MjA5LDcgQEAgJmZseDAgew0KPiAgCWkyYzA6IGkyY0A2MDAgew0KPiAgCQkjYWRkcmVzcy1jZWxs
-cyA9IDwxPjsNCj4gIAkJI3NpemUtY2VsbHMgPSA8MD47DQo+ICsJCWRtYXMgPSA8MD4sIDwwPjsN
-Cj4gIAkJcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gIAkJcGluY3RybC0wID0gPCZwaW5j
-dHJsX2ZseDBfZGVmYXVsdD47DQo+ICAJCWkyYy1hbmFsb2ctZmlsdGVyOw0KPiBAQCAtMjMwLDYg
-KzIzMSw3IEBAICZmbHg0IHsNCj4gIAlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiAgDQo+ICAJc3Bp
-NDogc3BpQDQwMCB7DQo+ICsJCWRtYXMgPSA8MD4sIDwwPjsNCj4gIAkJcGluY3RybC1uYW1lcyA9
-ICJkZWZhdWx0IjsNCj4gIAkJcGluY3RybC0wID0gPCZwaW5jdHJsX2ZseDRfZGVmYXVsdD47DQo+
-ICAJCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+IEBAIC0yNTQsNiArMjU2LDcgQEAgJmZseDYgew0K
-PiAgCWkyYzY6IGkyY0A2MDAgew0KPiAgCQkjYWRkcmVzcy1jZWxscyA9IDwxPjsNCj4gIAkJI3Np
-emUtY2VsbHMgPSA8MD47DQo+ICsJCWRtYXMgPSA8MD4sIDwwPjsNCj4gIAkJcGluY3RybC1uYW1l
-cyA9ICJkZWZhdWx0IjsNCj4gIAkJcGluY3RybC0wID0gPCZwaW5jdHJsX2ZseDZfZGVmYXVsdD47
-DQo+ICAJCWkyYy1hbmFsb2ctZmlsdGVyOw0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9k
-dHMvc2FtOXg2MC5kdHNpIGIvYXJjaC9hcm0vYm9vdC9kdHMvc2FtOXg2MC5kdHNpDQo+IGluZGV4
-IGZiZGRlM2FiMTA4Ni4uOGY0NDg1NGRkOGZhIDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybS9ib290
-L2R0cy9zYW05eDYwLmR0c2kNCj4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvc2FtOXg2MC5kdHNp
-DQo+IEBAIC0xNzcsNiArMTc3LDE1IEBAIHNwaTQ6IHNwaUA0MDAgew0KPiAgCQkJCQlpbnRlcnJ1
-cHRzID0gPDEzIElSUV9UWVBFX0xFVkVMX0hJR0ggNz47DQo+ICAJCQkJCWNsb2NrcyA9IDwmcG1j
-IFBNQ19UWVBFX1BFUklQSEVSQUwgMTM+Ow0KPiAgCQkJCQljbG9jay1uYW1lcyA9ICJzcGlfY2xr
-IjsNCj4gKwkJCQkJZG1hcyA9IDwmZG1hMA0KPiArCQkJCQkJKEFUOTFfWERNQUNfRFRfTUVNX0lG
-KDApIHwNCj4gKwkJCQkJCSBBVDkxX1hETUFDX0RUX1BFUl9JRigxKSB8DQo+ICsJCQkJCQkgQVQ5
-MV9YRE1BQ19EVF9QRVJJRCg4KSk+LA0KPiArCQkJCQkJPCZkbWEwDQo+ICsJCQkJCQkoQVQ5MV9Y
-RE1BQ19EVF9NRU1fSUYoMCkgfA0KPiArCQkJCQkJIEFUOTFfWERNQUNfRFRfUEVSX0lGKDEpIHwN
-Cj4gKwkJCQkJCSBBVDkxX1hETUFDX0RUX1BFUklEKDkpKT47DQo+ICsJCQkJCWRtYS1uYW1lcyA9
-ICJ0eCIsICJyeCI7DQo+ICAJCQkJCWF0bWVsLGZpZm8tc2l6ZSA9IDwxNj47DQo+ICAJCQkJCXN0
-YXR1cyA9ICJkaXNhYmxlZCI7DQo+ICAJCQkJfTsNCj4gQEAgLTQxNyw2ICs0MjYsMTUgQEAgaTJj
-NjogaTJjQDYwMCB7DQo+ICAJCQkJCXJlZyA9IDwweDYwMCAweDIwMD47DQo+ICAJCQkJCWludGVy
-cnVwdHMgPSA8OSBJUlFfVFlQRV9MRVZFTF9ISUdIIDc+Ow0KPiAgCQkJCQljbG9ja3MgPSA8JnBt
-YyBQTUNfVFlQRV9QRVJJUEhFUkFMIDk+Ow0KPiArCQkJCQlkbWFzID0gPCZkbWEwDQo+ICsJCQkJ
-CQkoQVQ5MV9YRE1BQ19EVF9NRU1fSUYoMCkgfA0KPiArCQkJCQkJIEFUOTFfWERNQUNfRFRfUEVS
-X0lGKDEpIHwNCj4gKwkJCQkJCSBBVDkxX1hETUFDX0RUX1BFUklEKDEyKSk+LA0KPiArCQkJCQkJ
-PCZkbWEwDQo+ICsJCQkJCQkoQVQ5MV9YRE1BQ19EVF9NRU1fSUYoMCkgfA0KPiArCQkJCQkJIEFU
-OTFfWERNQUNfRFRfUEVSX0lGKDEpIHwNCj4gKwkJCQkJCSBBVDkxX1hETUFDX0RUX1BFUklEKDEz
-KSk+Ow0KPiArCQkJCQlkbWEtbmFtZXMgPSAidHgiLCAicngiOw0KPiAgCQkJCQlhdG1lbCxmaWZv
-LXNpemUgPSA8MTY+Ow0KPiAgCQkJCQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiAgCQkJCX07DQo+
-IEBAIC00NTYsNiArNDc0LDE1IEBAIGkyYzA6IGkyY0A2MDAgew0KPiAgCQkJCQlyZWcgPSA8MHg2
-MDAgMHgyMDA+Ow0KPiAgCQkJCQlpbnRlcnJ1cHRzID0gPDUgSVJRX1RZUEVfTEVWRUxfSElHSCA3
-PjsNCj4gIAkJCQkJY2xvY2tzID0gPCZwbWMgUE1DX1RZUEVfUEVSSVBIRVJBTCA1PjsNCj4gKwkJ
-CQkJZG1hcyA9IDwmZG1hMA0KPiArCQkJCQkJKEFUOTFfWERNQUNfRFRfTUVNX0lGKDApIHwNCj4g
-KwkJCQkJCSBBVDkxX1hETUFDX0RUX1BFUl9JRigxKSB8DQo+ICsJCQkJCQkgQVQ5MV9YRE1BQ19E
-VF9QRVJJRCgwKSk+LA0KPiArCQkJCQkJPCZkbWEwDQo+ICsJCQkJCQkoQVQ5MV9YRE1BQ19EVF9N
-RU1fSUYoMCkgfA0KPiArCQkJCQkJIEFUOTFfWERNQUNfRFRfUEVSX0lGKDEpIHwNCj4gKwkJCQkJ
-CSBBVDkxX1hETUFDX0RUX1BFUklEKDEpKT47DQo+ICsJCQkJCWRtYS1uYW1lcyA9ICJ0eCIsICJy
-eCI7DQo+ICAJCQkJCWF0bWVsLGZpZm8tc2l6ZSA9IDwxNj47DQo+ICAJCQkJCXN0YXR1cyA9ICJk
-aXNhYmxlZCI7DQo+ICAJCQkJfTsNCg0K
+Hello:
+
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
+
+On Fri, 13 Jan 2023 12:08:59 +0100 you wrote:
+> Hi,
+> 
+> Here is the first pull request for fixes for mvebu for v6.2.
+> 
+> Gregory
+> 
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> 
+> [...]
+
+Here is the summary with links:
+  - [GIT,PULL] ARM: mvebu: fixes for v6.2 (#1)
+    https://git.kernel.org/soc/soc/c/88bcc6fa5eae
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
