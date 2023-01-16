@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F805C46467
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D9FC54EBE
 	for <soc@archiver.kernel.org>; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CAEEBC433D2; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B49D2C433F1;
-	Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
+	id C5835C43392; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE9A4C433F0
+	for <soc@kernel.org>; Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1673864417;
-	bh=OqOv2n/RavLtAh4BsDgq/aVEHidzQIuKgMLpP43Okvo=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=dvMLNmc0GyuWAp/F+irQ2Iq2cQUx0aO5gQmQ+UJAwzqL3Y3tQHu6jOEqC8r88OfF/
-	 FDKKlO8SSPVCs1QPL7BuWTguJvuV20ZRH85dJviYkHflgs5ez7I2X+k0Xvnc4Vn27e
-	 8WoUZi7gBKI/vXlHTIo37u+yia+jNaoPyzVwENG9CaGSEP0oBp+XXtgL/uQvwsHIXz
-	 jGrsioTBbJAz4HhHSUGBl+DMHfZiFa9LOE/OPXCGjzK9NOeqzzscgbtLdQS0148Rnd
-	 mQGeykZxgJs3F1Jf2obZJgsZM3qrH/N03MVcD+Jz0rTqvhgTf1jWOcUsFTTXyZ0C6Q
-	 x/gebxxFJs11Q==
+	bh=xs2iuuZApiAgcu9v91Z56BcWa6Lt5S9hc8172Q91ADo=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=NCKs84FhoMIMuAQgQf0eZxCqqec+JzVa9qKQj+BqjjPmA5mcXFYVE9CcIehw1bl3T
+	 5ypZNdGoAC8AARB2ePUtkqvRIfyMr8vmJyAOk5FDamE4BkOgC/ST1qtuVZ1eY1KT15
+	 J+yWpEV85TibstrfdcT4Um2yLEDiMvWfuB1+RqI2aiVJDIDrUD3RZktVaRGVV+RV+j
+	 50PS+5J02mOlFKLltQdQS688hELf3iG/Y5jwA7BxJklNVsGPME9LILmogtZV9F5/+j
+	 r/J7HxEqNaxJke/PzdafZyExOFfSEGq+7wL41F/E4SKootsFhvSIyB2seLcY+SL+LU
+	 m7miNRZq4Fmmg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92786E54D2A;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8BAA4E54D27;
 	Mon, 16 Jan 2023 10:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V DT for v6.2-rc4
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167386441759.5760.8998487914110700465.git-patchwork-notify@kernel.org>
+ <167386441751.5760.13155195718639228808.git-patchwork-summary@kernel.org>
 Date: Mon, 16 Jan 2023 10:20:17 +0000
-References: <Y78rn+0fVNOxHLKt@spud>
-In-Reply-To: <Y78rn+0fVNOxHLKt@spud>
-To: Conor Dooley <conor@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Wed, 11 Jan 2023 21:35:27 +0000 you wrote:
-> Hey Arnd!
-> 
-> Been a quiet period since -rc1, so I only have a single DT fix for you.
-> Figured I'd get it out of the way & write the script that I've been
-> meaning to write since I sent the first pair of PRs at the same time.
-> Hopefully I didn't break anything in the process!
-> 
-> [...]
+Patch: [GIT,PULL] RISC-V DT for v6.2-rc4
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=711125
+  Lore link: https://lore.kernel.org/r/Y78rn+0fVNOxHLKt@spud
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V DT for v6.2-rc4
-    https://git.kernel.org/soc/soc/c/e2f7096f1e76
+Patch: [GIT,PULL] ARM: mvebu: fixes for v6.2 (#1)
+  Submitter: Gregory CLEMENT <gregory.clement@bootlin.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=711730
+  Lore link: https://lore.kernel.org/r/87mt6mg08k.fsf@BL-laptop
 
-You are awesome, thank you!
+
+Total patches: 2
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
