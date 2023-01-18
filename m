@@ -1,1068 +1,142 @@
-Return-Path: <SRS0=vbAy=5P=unisoc.com=Chunyan.Zhang@kernel.org>
+Return-Path: <SRS0=eYgG=5P=arm.com=andre.przywara@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6BB9C004D4
-	for <soc@archiver.kernel.org>; Wed, 18 Jan 2023 08:41:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F222C32793
+	for <soc@archiver.kernel.org>; Wed, 18 Jan 2023 12:11:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79413C433F1; Wed, 18 Jan 2023 08:41:22 +0000 (UTC)
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DCCD9C433D2;
-	Wed, 18 Jan 2023 08:41:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCCD9C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=unisoc.com
-Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-	by SHSQR01.spreadtrum.com with ESMTP id 30I8ecd6070703;
-	Wed, 18 Jan 2023 16:40:38 +0800 (+08)
-	(envelope-from Chunyan.Zhang@unisoc.com)
-Received: from ubt.spreadtrum.com (10.0.74.87) by BJMBX02.spreadtrum.com
- (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Wed, 18 Jan
- 2023 16:40:33 +0800
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-To: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+	id 598BAC433EF; Wed, 18 Jan 2023 12:11:33 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 14F02C433D2;
+	Wed, 18 Jan 2023 12:11:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 14F02C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 754C11477;
+	Wed, 18 Jan 2023 04:12:12 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C0B73F71A;
+	Wed, 18 Jan 2023 04:11:28 -0800 (PST)
+Date: Wed, 18 Jan 2023 12:11:24 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Bin Liu <b-liu@ti.com>,
+ devicetree@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: dts: Add support for Unisoc's UMS512
-Date: Wed, 18 Jan 2023 16:40:25 +0800
-Message-ID: <20230118084025.2898404-1-chunyan.zhang@unisoc.com>
-X-Mailer: git-send-email 2.25.1
+Cc: Icenowy Zheng <uwu@icenowy.me>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, soc@kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v5 00/11] ARM: suniv: USB and two new boards support
+Message-ID: <20230118121124.7ff25929@donnerap.cambridge.arm.com>
+In-Reply-To: <20230111015332.172021-1-andre.przywara@arm.com>
+References: <20230111015332.172021-1-andre.przywara@arm.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.87]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX02.spreadtrum.com (10.0.64.8)
-X-MAIL:SHSQR01.spreadtrum.com 30I8ecd6070703
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add basic support for Unisoc's UMS512, with this patch,
-the board ums512-1h10 can run into console.
+On Wed, 11 Jan 2023 01:53:21 +0000
+Andre Przywara <andre.przywara@arm.com> wrote:
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- arch/arm64/boot/dts/sprd/Makefile        |   3 +-
- arch/arm64/boot/dts/sprd/ums512-1h10.dts |  64 ++
- arch/arm64/boot/dts/sprd/ums512.dtsi     | 919 +++++++++++++++++++++++
- 3 files changed, 985 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/sprd/ums512-1h10.dts
- create mode 100644 arch/arm64/boot/dts/sprd/ums512.dtsi
+Hi,
 
-diff --git a/arch/arm64/boot/dts/sprd/Makefile b/arch/arm64/boot/dts/sprd/Makefile
-index f4f1f5148cc2..97522fb0bf66 100644
---- a/arch/arm64/boot/dts/sprd/Makefile
-+++ b/arch/arm64/boot/dts/sprd/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-$(CONFIG_ARCH_SPRD) += sc9836-openphone.dtb \
- 			sp9860g-1h10.dtb	\
--			sp9863a-1h10.dtb
-+			sp9863a-1h10.dtb	\
-+			ums512-1h10.dtb
-diff --git a/arch/arm64/boot/dts/sprd/ums512-1h10.dts b/arch/arm64/boot/dts/sprd/ums512-1h10.dts
-new file mode 100644
-index 000000000000..d549a8c361d4
---- /dev/null
-+++ b/arch/arm64/boot/dts/sprd/ums512-1h10.dts
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Unisoc UMS512-1h10 boards DTS file
-+ *
-+ * Copyright (C) 2021, Unisoc Inc.
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include "ums512.dtsi"
-+
-+/ {
-+	model = "Unisoc UMS512-1H10 Board";
-+
-+	compatible = "sprd,ums512-1h10", "sprd,ums512";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial1 = &uart1;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x0 0x80000000>;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+		bootargs = "earlycon";
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+/* SD card */
-+&sdio0 {
-+	status = "okay";
-+	bus-width = <4>;
-+	no-sdio;
-+	no-mmc;
-+	sprd,phy-delay-sd-uhs-sdr104 = <0x7f 0x73 0x72 0x72>;
-+	sprd,phy-delay-sd-uhs-sdr50 = <0x6e 0x7f 0x01 0x01>;
-+	sprd,phy-delay-sd-highspeed = <0x7f 0x1a 0x9a 0x9a>;
-+	sprd,phy-delay-legacy = <0x7f 0x1a 0x9a 0x9a>;
-+	sd-uhs-sdr104;
-+	sd-uhs-sdr50;
-+};
-+
-+/* EMMC storage */
-+&sdio3 {
-+	status = "okay";
-+	bus-width = <8>;
-+	no-sdio;
-+	no-sd;
-+	non-removable;
-+	cap-mmc-hw-reset;
-+};
-diff --git a/arch/arm64/boot/dts/sprd/ums512.dtsi b/arch/arm64/boot/dts/sprd/ums512.dtsi
-new file mode 100644
-index 000000000000..028e17f8198e
---- /dev/null
-+++ b/arch/arm64/boot/dts/sprd/ums512.dtsi
-@@ -0,0 +1,919 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Unisoc UMS512 SoC DTS file
-+ *
-+ * Copyright (C) 2021, Unisoc Inc.
-+ */
-+
-+#include <dt-bindings/clock/sprd,ums512-clk.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpus {
-+		#address-cells = <2>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&CPU0>;
-+				};
-+				core1 {
-+					cpu = <&CPU1>;
-+				};
-+				core2 {
-+					cpu = <&CPU2>;
-+				};
-+				core3 {
-+					cpu = <&CPU3>;
-+				};
-+				core4 {
-+					cpu = <&CPU4>;
-+				};
-+				core5 {
-+					cpu = <&CPU5>;
-+				};
-+				core6 {
-+					cpu = <&CPU6>;
-+				};
-+				core7 {
-+					cpu = <&CPU7>;
-+				};
-+			};
-+		};
-+
-+		CPU0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x0>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU1: cpu@100 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x100>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU2: cpu@200 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x200>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU3: cpu@300 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x300>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU4: cpu@400 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x400>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU5: cpu@500 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x500>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU6: cpu@600 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x600>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+
-+		CPU7: cpu@700 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x700>;
-+			enable-method = "psci";
-+			cpu-idle-states = <&CORE_PD>;
-+		};
-+	};
-+
-+	idle-states {
-+		entry-method = "psci";
-+		CORE_PD: core-pd {
-+			compatible = "arm,idle-state";
-+			entry-latency-us = <4000>;
-+			exit-latency-us = <4000>;
-+			min-residency-us = <10000>;
-+			local-timer-stop;
-+			arm,psci-suspend-param = <0x00010000>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>, /* Physical Secure PPI */
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>, /* Physical Non-Secure PPI */
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>, /* Virtual PPI */
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>; /* Hipervisor PPI */
-+	};
-+
-+	pmu {
-+		compatible = "arm,armv8-pmuv3";
-+		interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
-+	};
-+
-+	soc: soc {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		gic: interrupt-controller@12000000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			redistributor-stride = <0x0 0x20000>;	/* 128KB stride */
-+			#redistributor-regions = <1>;
-+			interrupt-controller;
-+			reg = <0x0 0x12000000 0 0x20000>,	/* GICD */
-+			      <0x0 0x12040000 0 0x100000>;	/* GICR */
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		ap_ahb_regs: syscon@20100000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x20100000 0 0x4000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x20100000 0x4000>;
-+
-+			apahb_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-apahb-gate";
-+				reg = <0x0 0x3000>;
-+				clocks = <&ext_26m>;
-+				clock-names = "ext-26m";
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		pub_apb_regs: syscon@31050000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x31050000 0 0x9000>;
-+		};
-+
-+		top_dvfs_apb_regs: syscon@322a0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x322a0000 0 0x8000>;
-+		};
-+
-+		ap_intc0_regs: syscon@32310000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32310000 0 0x1000>;
-+		};
-+
-+		ap_intc1_regs: syscon@32320000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32320000 0 0x1000>;
-+		};
-+
-+		ap_intc2_regs: syscon@32330000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32330000 0 0x1000>;
-+		};
-+
-+		ap_intc3_regs: syscon@32340000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32340000 0 0x1000>;
-+		};
-+
-+		ap_intc4_regs: syscon@32350000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32350000 0 0x1000>;
-+		};
-+
-+		ap_intc5_regs: syscon@32360000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32360000 0 0x1000>;
-+		};
-+
-+		anlg_phy_g0_regs: syscon@32390000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x32390000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x32390000 0x3000>;
-+
-+			dpll0: clock-controller@0 {
-+				compatible = "sprd,ums512-g0-pll";
-+				reg = <0x0 0x100>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		anlg_phy_g2_regs: syscon@323b0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x323b0000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x323b0000 0x3000>;
-+
-+			mpll1: clock-controller@0 {
-+				compatible = "sprd,ums512-g2-pll";
-+				reg = <0x0 0x100>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		anlg_phy_g3_regs: syscon@323c0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x323c0000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x323c0000 0x3000>;
-+
-+			pll1: clock-controller@0 {
-+				compatible = "sprd,ums512-g3-pll";
-+				reg = <0x0 0x3000>;
-+				clocks = <&ext_26m>;
-+				clock-names = "ext-26m";
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		anlg_phy_gc_regs: syscon@323e0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x323e0000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x323e0000 0x3000>;
-+
-+			pll2: clock-controller@0 {
-+				compatible = "sprd,ums512-gc-pll";
-+				reg = <0x0 0x100>;
-+				clock-names = "ext-26m";
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		anlg_phy_g10_regs: syscon@323f0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x323f0000 0 0x3000>;
-+		};
-+
-+		aon_apb_regs: syscon@327d0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x327d0000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x327d0000 0x3000>;
-+
-+			aonapb_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-aon-gate";
-+				reg = <0x0 0x3000>;
-+				clocks = <&ext_26m>;
-+				clock-names = "ext-26m";
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		pmu_apb_regs: syscon@327e0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x327e0000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x327e0000 0x3000>;
-+
-+			pmu_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-pmu-gate";
-+				reg = <0x0 0x3000>;
-+				clocks = <&ext_26m>;
-+				clock-names = "ext-26m";
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		audcp_apb_regs: syscon@3350d000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x3350d000 0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x3350d000 0x1000>;
-+
-+			audcpapb_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-audcpapb-gate";
-+				reg = <0x0 0x300>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		audcp_ahb_regs: syscon@335e0000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x335e0000 0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x335e0000 0x1000>;
-+
-+			audcpahb_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-audcpahb-gate";
-+				reg = <0x0 0x300>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		gpu_apb_regs: syscon@60100000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x60100000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x60100000 0x3000>;
-+
-+			gpu_clk: clock-controller@0 {
-+				compatible = "sprd,ums512-gpu-clk";
-+				clocks = <&ext_26m>;
-+				clock-names = "ext-26m";
-+				reg = <0x0 0x100>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		gpu_dvfs_apb_regs: syscon@60110000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x60110000 0 0x3000>;
-+		};
-+
-+		mm_ahb_regs: syscon@62200000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x62200000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x62200000 0x3000>;
-+
-+			mm_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-mm-gate-clk";
-+				reg = <0x0 0x3000>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		ap_apb_regs: syscon@71000000 {
-+			compatible = "sprd,ums512-glbregs", "syscon",
-+				     "simple-mfd";
-+			reg = <0 0x71000000 0 0x3000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x71000000 0x3000>;
-+
-+			apapb_gate: clock-controller@0 {
-+				compatible = "sprd,ums512-apapb-gate";
-+				reg = <0x0 0x3000>;
-+				#clock-cells = <1>;
-+			};
-+		};
-+
-+		ap_clk: clock-controller@20200000 {
-+			compatible = "sprd,ums512-ap-clk";
-+			reg = <0 0x20200000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "ext-26m";
-+			#clock-cells = <1>;
-+		};
-+
-+		aon_clk: clock-controller@32080000 {
-+			compatible = "sprd,ums512-aonapb-clk";
-+			reg = <0 0x32080000 0 0x1000>;
-+			clocks = <&ext_26m>, <&ext_32k>,
-+				 <&ext_4m>, <&rco_100m>;
-+			clock-names = "ext-26m", "ext-32k",
-+				      "ext-4m", "rco-100m";
-+			#clock-cells = <1>;
-+		};
-+
-+		mm_clk: clock-controller@62100000 {
-+			compatible = "sprd,ums512-mm-clk";
-+			reg = <0 0x62100000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "ext-26m";
-+			#clock-cells = <1>;
-+		};
-+
-+		/* SoC Funnel */
-+		funnel@3c002000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x3c002000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_soc_out_port: endpoint {
-+						remote-endpoint = <&etb_in>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					reg = <1>;
-+					funnel_soc_in_port: endpoint {
-+						remote-endpoint =
-+						<&funnel_corinth_out_port>;
-+					};
-+				};
-+			};
-+		};
-+
-+		/* SoC ETF */
-+		soc_etb: etb@3c003000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x3c003000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			in-ports {
-+				port {
-+					etb_in: endpoint {
-+						remote-endpoint =
-+						<&funnel_soc_out_port>;
-+					};
-+				};
-+			};
-+		};
-+
-+		/* AP-CPU Funnel for core3/4/5/7 */
-+		funnel@3e001000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x3e001000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_corinth_lit_out_port: endpoint {
-+						remote-endpoint =
-+						<&corinth_etf_lit_in>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_core_in_port3: endpoint {
-+						remote-endpoint = <&etm3_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					funnel_core_in_port4: endpoint {
-+						remote-endpoint = <&etm4_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					funnel_core_in_port5: endpoint {
-+						remote-endpoint = <&etm5_out>;
-+					};
-+				};
-+
-+				port@3 {
-+					reg = <3>;
-+					funnel_core_in_port7: endpoint {
-+						remote-endpoint = <&etm7_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		/* AP-CPU ETF for little cores */
-+		etf@3e002000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x3e002000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					corinth_etf_lit_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_corinth_from_lit_in_port>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				port {
-+					corinth_etf_lit_in: endpoint {
-+						remote-endpoint =
-+						<&funnel_corinth_lit_out_port>;
-+					};
-+				};
-+			};
-+		};
-+
-+		/* AP-CPU ETF for big cores */
-+		etf@3e003000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x3e003000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					corinth_etf_big_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_corinth_from_big_in_port>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				port {
-+					corinth_etf_big_in: endpoint {
-+						remote-endpoint =
-+						<&funnel_corinth_big_out_port>;
-+					};
-+				};
-+			};
-+		};
-+
-+		/* Funnel to SoC */
-+		funnel@3e004000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x3e004000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_corinth_out_port: endpoint {
-+						remote-endpoint =
-+						<&funnel_soc_in_port>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_corinth_from_lit_in_port: endpoint {
-+						remote-endpoint = <&corinth_etf_lit_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					funnel_corinth_from_big_in_port: endpoint {
-+						remote-endpoint = <&corinth_etf_big_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		/* AP-CPU Funnel for core0/1/2/6 */
-+		funnel@3e005000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x3e005000 0 0x1000>;
-+			clocks = <&ext_26m>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_corinth_big_out_port: endpoint {
-+						remote-endpoint = <&corinth_etf_big_in>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_core_in_port0: endpoint {
-+						remote-endpoint = <&etm0_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					funnel_core_in_port1: endpoint {
-+						remote-endpoint = <&etm1_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					funnel_core_in_port2: endpoint {
-+						remote-endpoint = <&etm2_out>;
-+					};
-+				};
-+
-+				port@3 {
-+					reg = <3>;
-+					funnel_core_in_port6: endpoint {
-+						remote-endpoint = <&etm6_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm0: etm@3f040000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f040000 0 0x1000>;
-+			cpu = <&CPU0>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm0_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm1: etm@3f140000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f140000 0 0x1000>;
-+			cpu = <&CPU1>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm1_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm2: etm@3f240000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f240000 0 0x1000>;
-+			cpu = <&CPU2>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm2_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm3: etm@3f340000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f340000 0 0x1000>;
-+			cpu = <&CPU3>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm3_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port3>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm4: etm@3f440000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f440000 0 0x1000>;
-+			cpu = <&CPU4>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm4_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port4>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm5: etm@3f540000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f540000 0 0x1000>;
-+			cpu = <&CPU5>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm5_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port5>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm6: etm@3f640000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f640000 0 0x1000>;
-+			cpu = <&CPU6>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm6_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port6>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm7: etm@3f740000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x3f740000 0 0x1000>;
-+			cpu = <&CPU7>;
-+			clocks = <&ext_26m>, <&aon_clk CLK_CSSYS>, <&pll2 CLK_TWPLL_512M>;
-+			clock-names = "apb_pclk", "clk_cs", "cs_src";
-+
-+			out-ports {
-+				port {
-+					etm7_out: endpoint {
-+						remote-endpoint =
-+						<&funnel_core_in_port7>;
-+					};
-+				};
-+			};
-+		};
-+
-+
-+		apb@70000000 {
-+			compatible = "simple-bus";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x0 0x70000000 0x10000000>;
-+
-+			uart0: serial@0 {
-+				compatible = "sprd,ums512-uart",
-+					     "sprd,sc9836-uart";
-+				reg = <0x0 0x100>;
-+				interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&ext_26m>;
-+				status = "disabled";
-+			};
-+
-+			uart1: serial@100000 {
-+				compatible = "sprd,ums512-uart",
-+					     "sprd,sc9836-uart";
-+				reg = <0x100000 0x100>;
-+				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&ext_26m>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		ap-apb {
-+			compatible = "simple-bus";
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			sdio0: sdio@71100000 {
-+				compatible = "sprd,sdhci-r11";
-+				reg = <0 0x71100000 0 0x1000>;
-+				interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-+				clock-names = "sdio", "enable";
-+				clocks = <&ap_clk CLK_SDIO0_2X>,
-+					 <&apapb_gate CLK_SDIO0_EB>;
-+				assigned-clocks = <&ap_clk CLK_SDIO0_2X>;
-+				assigned-clock-parents = <&pll1 CLK_RPLL>;
-+				status = "disabled";
-+			};
-+
-+			sdio3: sdio@71400000 {
-+				compatible = "sprd,sdhci-r11";
-+				reg = <0 0x71400000 0 0x1000>;
-+				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+				clock-names = "sdio", "enable";
-+				clocks = <&ap_clk CLK_EMMC_2X>,
-+					 <&apapb_gate CLK_EMMC_EB>;
-+				assigned-clocks = <&ap_clk CLK_EMMC_2X>;
-+				assigned-clock-parents = <&pll1 CLK_RPLL>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		aon {
-+			compatible = "simple-bus";
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			adi_bus: spi@32100000 {
-+				compatible = "sprd,ums512-adi";
-+				reg = <0 0x32100000 0 0x100000>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				sprd,hw-channels = <2 0x18cc>, <3 0x18cc>, <13 0x1854>, <15 0x1874>,
-+					<17 0x1844>,<19 0x1844>, <21 0x1864>, <30 0x1820>,
-+					<35 0x19b8>, <39 0x19ac>;
-+			};
-+		};
-+	};
-+
-+	ext_26m: ext-26m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <26000000>;
-+		clock-output-names = "ext-26m";
-+	};
-+
-+	ext_32k: ext-32k {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		clock-output-names = "ext-32k";
-+	};
-+
-+	ext_4m: ext-4m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <4000000>;
-+		clock-output-names = "ext-4m";
-+	};
-+
-+	rco_100m: rco-100m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+		clock-output-names = "rco-100m";
-+	};
-+};
--- 
-2.25.1
+> this is mostly a rebase of the former v4 series.
+> It is based on top of v6.2-rc1, and builds cleanly there. For passing
+> make dtbs_check, the PHY binding patch, part of a separate series[1], is
+> needed. For USB functionality, patch 2/3 from there is needed as well.
+
+This series has now been taken by Vinod and is available in linux-next
+since at least Friday.
+
+> I put a tree with both series combined here:
+> https://github.com/apritzel/linux/commits/f1c100s-usb-v5
+> 
+> There were no changes to the actual patches, this is just a resend since
+> the series missed the previous merge window.
+
+Is there anything I can do to move this series forward? If I see this
+correctly, this just misses a review of patch v5 03/11 "usb: musb: sunxi:
+Introduce config struct". I addressed Jernej's comments on this already in v4.
+
+Cheers,
+Andre
+
+> [1] https://lore.kernel.org/linux-phy/20230109012223.4079299-1-andre.przywara@arm.com/
+> 
+> ================
+> This patchset introduces support for F1C100s' USB, and the SourceParts
+> PopStick and Lctech Pi boards.
+> 
+> The DT binding and driver support for SUNIV USB MUSB device are added, in
+> addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
+> for the SourceParts PopStick v1.1 and Lctech Pi boards.
+> 
+> Changelog v4 ... v5:
+> - Rebase on top to v6.2-rc1
+> 
+> Changelog v3 ... v4:
+> - Dropped the PHY patches, they go via a different tree and need a
+>   different base
+> - rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
+> - musb DT binding: use enum
+> - musb cleanup: use musb_hdrc_config config pointer directly
+> - musb cleanup: use const where possible
+> - drop partitions from Popstick DTS file
+> - clarify Popstick has a USB type-A *plug*
+> - add tags
+> 
+> Changelog v2 ... v3:
+> - remove redundant "Device Tree Bindings" suffix in DT binding doc title
+> - add BSD license to binding doc file (as per checkpatch)
+> - fix some commit message title prefixes
+> - use proper plural spelling for usb0_id_det-gpios
+> - popstick.dts: Reorder otg_sram node reference alphabetically
+> - popstick.dts: Add regulator- prefix to 3.3V regulator node name
+> - popstick.dts: Fix status, compatible and reg property order
+> - popstick.dts: Drop unneeded mmc0 and spi0 aliases
+> - add patch to clean up sunxi MUSB driver
+> - add Acks and Reviewed-by's
+> 
+> Changelog v1 ... v2:
+> - USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
+> - Add Popstick binding and .dts patches
+> 
+> 
+> Andre Przywara (4):
+>   usb: musb: sunxi: Introduce config struct
+>   dt-bindings: vendor-prefixes: add Lctech name
+>   dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
+>   ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
+> 
+> Icenowy Zheng (7):
+>   dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
+>   usb: musb: sunxi: add support for the F1C100s MUSB controller
+>   ARM: dts: suniv: add USB-related device nodes
+>   ARM: dts: suniv: licheepi-nano: enable USB
+>   dt-bindings: vendor-prefixes: add Source Parts
+>   dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
+>   ARM: dts: suniv: add device tree for PopStick v1.1
+> 
+>  .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
+>  .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
+>  arch/arm/boot/dts/Makefile                    |  4 +-
+>  .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
+>  arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
+>  arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
+>  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
+>  drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
+>  9 files changed, 301 insertions(+), 34 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
+>  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
+> 
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> prerequisite-patch-id: 7734c0032dcc073e59f0217ee47ff023f0b47bcf
 
