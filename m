@@ -1,107 +1,119 @@
-Return-Path: <SRS0=5t4m=5Q=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=rvNc=5Q=ew.tq-group.com=alexander.stein@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D57C00A5A
-	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 15:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9856C46467
+	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 15:27:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3485EC433F0; Thu, 19 Jan 2023 15:09:31 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	id CF01BC433F0; Thu, 19 Jan 2023 15:27:47 +0000 (UTC)
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8D1CDC433D2;
-	Thu, 19 Jan 2023 15:09:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8D1CDC433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 617415C009E;
-	Thu, 19 Jan 2023 10:09:28 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 10:09:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1674140968; x=1674227368; bh=93MK1e9ilZ
-	3paFDFGrXMn6AVbSKSvQpQ50BYcz3A68s=; b=HiTx94/J6ekTZROPZlwRoFCM0O
-	6rmOcL1zuj+XWZAnkM/gV2bNAdK/9Z6d/tGVpuYZ9W8RIqMIdpUIXvQn0A+O89/b
-	/A8Na35e9kqYQPV0ckOIDlGS+7vHFbdj1BRfBbEnXz7NQPKCVewov6Z755wAfiP6
-	ZKHvwuQnKNJf+e4/nIdc3ke0qJUKTtJ6SbkzX319L5yChf2sRrzOp5W77Bg6QgpV
-	B16Ng6D0KNlbsW3niaLjwfIl3FphacGUCbjFGV46GqT/kHQYiUvmw+lcyYvHUNn3
-	gXqMY2AUIkl1Rm08scXOwdEMZOM7UqnVz2CSQW3gb9lew2fKJSCpJF4Y/qfg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1674140968; x=1674227368; bh=93MK1e9ilZ3paFDFGrXMn6AVbSKS
-	vQpQ50BYcz3A68s=; b=KmCQAc1G8LO5Dbj834YAx7mTgg6KVRw6EgJJcfRkeZ0T
-	m4EeKlAPxRqQiml01IRMZOWb5BdtKUzGq18cvrdnoBvr/+LYZMsmS478MSfuBfIm
-	jmoOpKCXuQLONnNmS8lUpRtUoGWL7SIGW4NrYAbSG/LUqVdwqHh2UhsH/VpkGcMM
-	mQyZyNVUgPIBiwm8QaG2J5Okbv3ku2kS+QI3CAqVQoITOomScoEVUloSDNgeKOYj
-	9i17A9BfLirIPt8ppLIWIJW8gTOFGEDevLZq9f0sqtGOiEetrBGotX4FZJjjIzMt
-	5M4fnFwUAoqiXAauhs79ac1S298Ivw72qNFxbHlraA==
-X-ME-Sender: <xms:J13JYyI1X5vpJwSghC0-Ri1b1CGN811o1k506xs5yl_TAIViPka6iQ>
-    <xme:J13JY6JHlHAjlToIqxzmSypz1pphqXpzO_vVyk1NeQjXUvqS39xph4zw_dRUgcllR
-    U78ssJoczQUrH6L_5c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddutddgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:J13JYytkNqQnjHWpPHA-KepXyTz4tv-Evc4uIG75UWhdvn2LYQ2SjA>
-    <xmx:J13JY3a0rq9BzPnVwbIhmCCLSmJJuJ6owhigvjiIMDQPkREmyzQXmw>
-    <xmx:J13JY5aekLBUsBUZceqXVy6pei8XlzWW9Bd4P_bkRypWh1QNyAt8rQ>
-    <xmx:KF3JY7neURukhGOShGrfcMpvW2_A8jueEmYexJH8FoVO-yeeGGHI9g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D9737B60086; Thu, 19 Jan 2023 10:09:27 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <f1de9cd9-a163-4b56-adf8-319eaf85e38e@app.fastmail.com>
-In-Reply-To: <20230119144236.3541751-10-alexander.stein@ew.tq-group.com>
-References: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com>
- <20230119144236.3541751-10-alexander.stein@ew.tq-group.com>
-Date: Thu, 19 Jan 2023 16:09:05 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alexander Stein" <alexander.stein@ew.tq-group.com>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Olof Johansson" <olof@lixom.net>, "Shawn Guo" <shawnguo@kernel.org>,
- "Li Yang" <leoyang.li@nxp.com>, "Russell King" <linux@armlinux.org.uk>,
- "Marek Vasut" <marex@denx.de>,
- "Marcel Ziswiler" <marcel.ziswiler@toradex.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 57FE6C433D2;
+	Thu, 19 Jan 2023 15:27:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 57FE6C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674142065; x=1705678065;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Fan4CH7rMTs971QPB7GBxYLxAh59SKl4VCqfYSc+19Y=;
+  b=oKKPEjhe6dG3R44dfhJR6iaxLnKbCmBAhQjnFj7RZEhaZ4z5CmeV1gNf
+   p00uwwTzZ/U+4eHysQ4BiyX0f06gWBN2CI1nm2F2wahvBO8jsvbzawZ3G
+   NNG3k5Om0aZATLHqq44gdEMh0uIAtDt0WJuOFum8vhzuUAfDLavxKSm0P
+   yM2UAVOdyl9Cfe30kdldJJm2M2mSzGAjYazlLPqr/jzfnGv3O9aEk1faX
+   RfN/0DVsRESRqsQC/mVk55hbhJtj3W+KXI82OIR6FXLfMq5NXq8SfhWjw
+   v3/rNVPysXXvfzEn4nQWIrl62xhTT2kEm0yef/W/4Pr25ak9RpDvjqmHs
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,229,1669071600"; 
+   d="scan'208";a="28538910"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 19 Jan 2023 16:27:41 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 19 Jan 2023 16:27:41 +0100
+X-PGP-Universal: processed;
+	by tq-pgp-pr1.tq-net.de on Thu, 19 Jan 2023 16:27:41 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674142061; x=1705678061;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Fan4CH7rMTs971QPB7GBxYLxAh59SKl4VCqfYSc+19Y=;
+  b=Y4ZXSfPsmou0BqtmC/HsSTlVirenHbure0fK64PMB2e7zhGlocBbFGlc
+   sX7432u5lFS/Va/Nk0HlIxGPqW1QxCG5edSCmA/+IGRh4s6Qmrpbk23Zl
+   uLjQEV6hL3V14Gj//zZ77lwR8JTW7Khq3dz6WibOmsn+IOm8g3GjAzhrF
+   2NOZWf6r/Ahv5YRLQQ/b7Q06KagHQ4KMojVwpxSua+hGbD513/HnKN6Ti
+   PS2RBKZFzSqKKRrdDt5N19DcigYVJeDcWP9Vpd/5WHnucuK0t8X+9IWLp
+   mU8YaPocdX3ZasBz06ZSj89rNTJRaZvpcmE3AyCws7H+O5NSiNqiitOjp
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,229,1669071600"; 
+   d="scan'208";a="28538909"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 19 Jan 2023 16:27:41 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4F701280056;
+	Thu, 19 Jan 2023 16:27:41 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Olof Johansson <olof@lixom.net>, Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>, Russell King <linux@armlinux.org.uk>, Marek Vasut <marex@denx.de>, Marcel Ziswiler <marcel.ziswiler@toradex.com>, Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 9/9] [DNI] ARM: multi_v7_defconfig: Enable CONFIG_ARM_LPAE for
- multi_v7_config
-Content-Type: text/plain
+Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 9/9] [DNI] ARM: multi_v7_defconfig: Enable CONFIG_ARM_LPAE for multi_v7_config
+Date: Thu, 19 Jan 2023 16:27:39 +0100
+Message-ID: <2617470.BddDVKsqQX@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <f1de9cd9-a163-4b56-adf8-319eaf85e38e@app.fastmail.com>
+References: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com> <20230119144236.3541751-10-alexander.stein@ew.tq-group.com> <f1de9cd9-a163-4b56-adf8-319eaf85e38e@app.fastmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Jan 19, 2023, at 15:42, Alexander Stein wrote:
-> This is necessary to support PCIe on LS1021A.
->
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Hi Arnd,
 
-Can you explain why this is actually required? I can see that the
-ranges in the PCIe device point to a high address (0x4000000000,
-2^40), but I can't tell if this is hardwired in the SoC or a
-setting that is applied by software (either the bootloader or
-the PCIe driver).
+thanks for the fast response.
 
-If you can reprogram the memory map, I would expect this to fit
-easily into the 32-bit address space, with 1GB for DDR3 memory
-and 1GB for PCIe BARs.
+Am Donnerstag, 19. Januar 2023, 16:09:05 CET schrieb Arnd Bergmann:
+> On Thu, Jan 19, 2023, at 15:42, Alexander Stein wrote:
+> > This is necessary to support PCIe on LS1021A.
+> > 
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> 
+> Can you explain why this is actually required? I can see that the
+> ranges in the PCIe device point to a high address (0x4000000000,
+> 2^40), but I can't tell if this is hardwired in the SoC or a
+> setting that is applied by software (either the bootloader or
+> the PCIe driver).
 
-I don't mind having a defconfig with LPAE enabled, I think this
-can be done using a Makefile target that applies a config
-fragment on top of the normal multi_v7_defconfig, you can find
-some examples in arch/powerpc/configs/*.config.
+The RM ([1]) memory map (Table 2-1) says that 'PCI Express 1' is located at 
+'400000_0000', 'PCI Express 2' at '480000_0000', so I assume this is hardcoded 
+in SoC.
+It also explicitly lists in that table PCIe 1&2 is only accessible with 40-bit 
+addressing.
 
-   Arnd
+> If you can reprogram the memory map, I would expect this to fit
+> easily into the 32-bit address space, with 1GB for DDR3 memory
+> and 1GB for PCIe BARs.
+
+I'm not sure which part of memory map you can reprogram and where, but I guess 
+this is fixed on this SoC.
+
+> I don't mind having a defconfig with LPAE enabled, I think this
+> can be done using a Makefile target that applies a config
+> fragment on top of the normal multi_v7_defconfig, you can find
+> some examples in arch/powerpc/configs/*.config.
+
+Ah, nice. This can be a good starter. Thanks.
+
+Best regards,
+Alexander
+
+[1] https://www.nxp.com/webapp/Download?colCode=LS1021ARM
+
+
+
