@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18CB4C00A5A
-	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 14:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF4EC00A5A
+	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 14:42:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7B51C433F0; Thu, 19 Jan 2023 14:42:49 +0000 (UTC)
+	id 53B94C43392; Thu, 19 Jan 2023 14:42:53 +0000 (UTC)
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 23076C433D2;
-	Thu, 19 Jan 2023 14:42:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 23076C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 428EAC433EF;
+	Thu, 19 Jan 2023 14:42:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 428EAC433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674139367; x=1705675367;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aprGr6eVthOxNxFYeHFmXsfEPa0pNWq7D2Wdek7QuEE=;
-  b=bJV2rNh53rQV4a4v3MaeAIcvSJVXDNCPhVBsX/AzydC3UlbSpNPlndHa
-   4tRI4I8FxVmmlL6pCdn5CXgjzsLqATWk7Q+ry4AjRdIf4gLe0NCDLRgxO
-   dc4WEOOcAldQirR8kXI6vfYcFINi5zfExtdr7lriEdl1ptHqXX1NSzLkF
-   vYPG3pFN5J0Nd7rI5bqfbVGY9SxHqhLGzObpue9gcWUE/DdyEv1hw5ffQ
-   iqPFzqrZBlXXUCLnpg/gYwS0Yl/CE7CUiAE8RW2hEDfItvSJ6VaeI8ZOR
-   4NSXl8shGjYkxIu4yUu2nSFpILQ7T49hsAHDbNf9dkl61Tgi2h8HbEEcH
-   Q==;
+  t=1674139370; x=1705675370;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MxvAgWwx3j8bs/X7hks889d23qZmaIa2T4rMGUUlcGE=;
+  b=Zl2CkrMu6MwisBsELv+eFPvM2lWI/+9rnFiJ9+N2rks92a8BHjaRgf4K
+   RKsif2yHvLRhrjfNPekdjJJ+/qtTMjOlyOd2cd/Lz7Rgd73xeLUVA2stt
+   BVvzXXJ2A0fngqhkewX7FC70369O8PWc3F02OnE0gjbV0w0A9I6STSiJS
+   anHpMYSkEaS1uRGW0TdHWjBh7nDFX/mKW3iLOYwLKyyKPKVZMr3tXrRGV
+   M99BJi12t36TRk8asVz0qsvZFy0Q+GM+DBMeY6rL67L4DQ0WfcCd5lPKU
+   Z7x6oEyWEyyNEnRLwxyWHE5f89G7MC4nNiJYUZbBSzPsaTXxTxpmqXAns
+   w==;
 X-IronPort-AV: E=Sophos;i="5.97,229,1669071600"; 
-   d="scan'208";a="28537301"
+   d="scan'208";a="28537302"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 19 Jan 2023 15:42:43 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -41,25 +41,25 @@ X-PGP-Universal: processed;
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1674139363; x=1705675363;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aprGr6eVthOxNxFYeHFmXsfEPa0pNWq7D2Wdek7QuEE=;
-  b=H1qc7/ET2JwQbRuwAH0CLnHyIgycjCU7xbJdvqQlGf+/weo3rSjil5VK
-   3BTzntf1nIu27p7Fu4rbGlO68xzDWOvjKRmnMlOZu/mJOc/R4XN1FUPJ5
-   mCbxAU0TXluS5bN+J5vJEUDFPYBNTrAJEDa0tgOQxTvLKZekZA4TPpfTT
-   15i+yjPACZkp8QZei/ehE5nvjN7IjTGuxC035PTijBnw2oPxvrUs1UNJx
-   QGet3zNLU0DGyhQBnxPvjcevKC8dozu/Oz8bXSIhkZ8vE0HLyfA9IPMst
-   nR2zG0HQtHmjYWHDUU4/VGMOcXfJ22STmxUkn/lC7GoO48phG/ZCnOj82
-   w==;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MxvAgWwx3j8bs/X7hks889d23qZmaIa2T4rMGUUlcGE=;
+  b=aSTjBsEtY/VD7iKipXUekoChgXfUDK04nhTpZqbVujOTk0YEil3TsogR
+   Q1VZOvI6SQg8SDxwa6FXjS6xjS0jrthRb3fWtBhGtuys3WnxI+syCNOLR
+   MMSYGIlpmCsb5lSDHuCsh4A1Lc29gxPryHXTfafranMkuQXzPd5+voACU
+   BarJGnQOBky/z/loXrdx+NJ/05yaoGNsu30K1+x4g+8bd/eRn4j1f3McO
+   cZi+kgkL5hTNw1Sbt5G1j8rdxf/kvAEj0AUY+pnWJiL7ysW/ANDyZhXar
+   3VgTdxXq0ZlqViHS+7vcpOzk3/Xvo+7Ob7i54yhxwLOwFqeeq0G0F4GX9
+   A==;
 X-IronPort-AV: E=Sophos;i="5.97,229,1669071600"; 
-   d="scan'208";a="28537299"
+   d="scan'208";a="28537300"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 19 Jan 2023 15:42:43 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.53.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id EF55B280056;
-	Thu, 19 Jan 2023 15:42:42 +0100 (CET)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 34949280072;
+	Thu, 19 Jan 2023 15:42:43 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -71,62 +71,49 @@ To: Rob Herring <robh+dt@kernel.org>,
 	Marek Vasut <marex@denx.de>,
 	Marcel Ziswiler <marcel.ziswiler@toradex.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+Cc: Matthias Schiffer <matthias.schiffer@tq-group.com>,
 	soc@kernel.org,
 	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 0/9] TQMLS1021A support
-Date: Thu, 19 Jan 2023 15:42:27 +0100
-Message-Id: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com>
+	linux-arm-kernel@lists.infradead.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: [PATCH 1/9] dt-bindings: arm: fsl: add TQ-Systems LS1021A board
+Date: Thu, 19 Jan 2023 15:42:28 +0100
+Message-Id: <20230119144236.3541751-2-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com>
+References: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Matthias Schiffer <matthias.schiffer@tq-group.com>
 
-this adds the DT files for the TQMLS1021A using the MBLS1021A mainboard.
-This includes general board support and several overlays enabling various
-graphic devices. RCW and hardware configuration using dip switches is not
-needed, the default DT can be used. Just video output needs specific
-overlays.
+TQMLS102xA is a SOM family using NXP LS1021A CPU family.
+MBLS102xA is an evaluation mainbord for this SOM.
 
-The last patch enabling LPAE in defconfig is just for demonstration what's
-needed for PCIe support. There was a patchset ([1]) supporting LPAE on
-armv7 defconfig, but there was no feedback.
+Signed-off-by: Matthias Schiffer <matthias.schiffer@tq-group.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ Documentation/devicetree/bindings/arm/fsl.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-[1] https://lore.kernel.org/linux-arm-kernel/20200203184820.4433-2-nsaenzjulienne@suse.de/T/
-
-Alexander Stein (8):
-  ARM: dts: ls1021a: add TQ-Systems MBLS102xA device tree
-  ARM: dts: ls1021a: add TQMLS1021A flash partition layout
-  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS TM070JVHG33 overlay
-  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA HDMI overlay
-  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH DC44 overlay
-  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH FC21 overlay
-  ARM: multi_v7_defconfig: Add options to support TQMLS102xA series
-  [DNI] ARM: multi_v7_defconfig: Enable CONFIG_ARM_LPAE for
-    multi_v7_config
-
-Matthias Schiffer (1):
-  dt-bindings: arm: fsl: add TQ-Systems LS1021A board
-
- .../devicetree/bindings/arm/fsl.yaml          |   7 +
- arch/arm/boot/dts/Makefile                    |  12 +
- ...1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts |  55 +++
- ...1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts |  55 +++
- .../ls1021a-tqmls1021a-mbls1021a-hdmi.dtso    |  36 ++
- ...tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtso |  56 +++
- .../boot/dts/ls1021a-tqmls1021a-mbls1021a.dts | 409 ++++++++++++++++++
- arch/arm/boot/dts/ls1021a-tqmls1021a.dtsi     | 124 ++++++
- arch/arm/configs/multi_v7_defconfig           |  14 +
- 9 files changed, 768 insertions(+)
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-hdmi.dtso
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtso
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a.dts
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a.dtsi
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 3ba354578e8f9..b54a920934c9d 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -1164,6 +1164,13 @@ properties:
+               - fsl,ls1021a-twr
+           - const: fsl,ls1021a
+ 
++      - description: TQ-Systems TQMLS1021A SoM on MBLS102xA board
++        items:
++          - enum:
++              - tq,ls1021a-tqmls1021a-mbls102xa
++          - const: tq,ls1021a-tqmls1021a
++          - const: fsl,ls1021a
++
+       - description: LS1028A based Boards
+         items:
+           - enum:
 -- 
 2.34.1
 
