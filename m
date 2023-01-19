@@ -1,142 +1,216 @@
-Return-Path: <SRS0=eYgG=5P=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=8j6f=5Q=hpe.com=prvs=03834f8dc9=clayc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F222C32793
-	for <soc@archiver.kernel.org>; Wed, 18 Jan 2023 12:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A035C678DB
+	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 07:40:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 598BAC433EF; Wed, 18 Jan 2023 12:11:33 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 14F02C433D2;
-	Wed, 18 Jan 2023 12:11:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 14F02C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 754C11477;
-	Wed, 18 Jan 2023 04:12:12 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C0B73F71A;
-	Wed, 18 Jan 2023 04:11:28 -0800 (PST)
-Date: Wed, 18 Jan 2023 12:11:24 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Bin Liu <b-liu@ti.com>,
- devicetree@vger.kernel.org
+	id 25B0FC433EF; Thu, 19 Jan 2023 07:40:01 +0000 (UTC)
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 60B06C433D2;
+	Thu, 19 Jan 2023 07:39:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 60B06C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30J7Wg7m028740;
+	Thu, 19 Jan 2023 07:39:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pps0720; bh=3w8CwCIa60nNg3L8fc9CIoXJ04OEEbqY1n3A8DbHVw8=;
+ b=fJe2PA4951iNV+FlU4H3HVnHslcHeGX1smuyKBmW/e4zYgG5l2jeW+QKHsruQxqR+2X9
+ Zrq534SWIDQCzajkjVC/hlGkRXCcueXcFR8mzRmPr/Vc9HKpMC2K5TJMgyWZO1HjLRrJ
+ IYO0QA2JelqYNGU3WBwKVVISgWvY8dbWIuGVqgmee+8WCir9Ob7PaHNuoeBNamgiXcRm
+ o7teEwl6nlQUuIdZNhPynj4XaBZzzGg0nA0wvpgn8umHSXbAx0suue4q9LZR/QdGcYo8
+ toY/zH/4m50YRDV0yfeHV7w8KK7ypzQJq+sKPSRyNNob8N9uWX1CS9XfvLS4qNfL/Wbl vQ== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3n6wcya7mh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Jan 2023 07:39:43 +0000
+Received: from p2wg14938.americas.hpqcorp.net (unknown [10.119.145.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id F17F7310E7;
+	Thu, 19 Jan 2023 07:39:41 +0000 (UTC)
+Received: from p2wg14934.americas.hpqcorp.net (10.119.145.213) by
+ p2wg14938.americas.hpqcorp.net (10.119.145.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 19:39:41 -1200
+Received: from p2wg14934.americas.hpqcorp.net (10.119.145.213) by
+ p2wg14934.americas.hpqcorp.net (10.119.145.213) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 19:39:40 -1200
+Received: from p2wg14932.americas.hpqcorp.net (16.228.19.38) by
+ p2wg14934.americas.hpqcorp.net (10.119.145.213) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
+ via Frontend Transport; Wed, 18 Jan 2023 19:39:40 -1200
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (192.58.207.38)
+ by edge.it.hpe.com (16.228.19.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Wed, 18 Jan
+ 2023 19:39:40 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lnEXIvmGEJjfTl+tgrndLiWTPIOK2vhJI4AZcvNAJfwoV05549Qm7kzsDZUKHfl6iUMFO3u/GjVB+Q5Q2KE61WhLO32Pp4StzdghnmIUyAlDkBt9sI9M2qrECpslJhoMws2C4IEDLkroWsc0fpq2SQJNnYXdYEsguUUs7PTQhmwi/0SXaChcDhDXWD+wYpzkscSdOhF/ph6d+T4aaJxsjNt66k9IQk2mYEpukAtvtH6bgAkOyqGKGZv+VuDUBdl6UCkuCMETmJBLhn2/uzBfrH/vdxBW/PKtr/lQMIJS+27FPFDrZ+UR6RHy20MkoKJDwKqEjnod/om7NaDFGDYNSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3w8CwCIa60nNg3L8fc9CIoXJ04OEEbqY1n3A8DbHVw8=;
+ b=LoEkXp1ZlSX3H3mHeSyUn3kysSBVViEvs7JT9+y34o9SOv6whFJ1OLkOLjV74j27OFj+ZGpTmBEo7g04Fq7f/fnv3vX+B7FFkoPoBKizXrX7g1oJoHGCAX92qFnpS4ItT3zkN1Ej+oPBV0eQ7lkWYWtAIGF16m8bdfRRJYC3rG0rWDtNuPOrn/62B9KQUqllNFxY1bJD2662dwleT2mSoYut/Tv3Hwuh752iGGQ/gAfy8otRPM5Cfq/uW7Im5NZIb/5YO7lZwZw2um2qQn7VTx+Zvg5Fbbhl/Oxw1xvXVySAz1v223jIP8VqQm2KxEtFxewux/OyUg72YQHlDj+/Aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:173::21)
+ by DM4PR84MB1661.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:48::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
+ 2023 07:39:39 +0000
+Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::337:c28a:4e41:d735]) by PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::337:c28a:4e41:d735%8]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
+ 07:39:39 +0000
+Date: Thu, 19 Jan 2023 15:39:30 +0800
+From: Clay Chang <clayc@hpe.com>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Icenowy Zheng <uwu@icenowy.me>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, soc@kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 00/11] ARM: suniv: USB and two new boards support
-Message-ID: <20230118121124.7ff25929@donnerap.cambridge.arm.com>
-In-Reply-To: <20230111015332.172021-1-andre.przywara@arm.com>
-References: <20230111015332.172021-1-andre.przywara@arm.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Hawkins, Nick"
+	<nick.hawkins@hpe.com>,
+        Rob Herring <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 2/5] dt-bindings: soc: hpe: hpe,gxp-srom.yaml
+Message-ID: <Y8jzsmC3azFgbZLP@enigma.ccjz.io>
+References: <20230110042533.12894-1-clayc@hpe.com>
+ <20230110042533.12894-3-clayc@hpe.com>
+ <110af65f-9c18-524d-a073-ef7be60d1f5a@linaro.org>
+ <Y8AIHDizIqu9u9BR@enigma.ccjz.io>
+ <48cd3e28-f1db-487d-8971-473dc8c12c09@app.fastmail.com>
+ <Y8VUOENIhe72sqMO@enigma.ccjz.io>
+ <55f09599-b553-4429-aa79-ca99ccf95cda@app.fastmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55f09599-b553-4429-aa79-ca99ccf95cda@app.fastmail.com>
+X-ClientProxiedBy: TYCP301CA0039.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:400:380::16) To PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+ (2603:10b6:510:173::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR84MB1480:EE_|DM4PR84MB1661:EE_
+X-MS-Office365-Filtering-Correlation-Id: 632b5771-c9ce-4427-cd89-08daf9f051f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yFl+rLesWeNrpcHQN3319u7sOjoURZgX7so52l7glheHwrXQV/fbKU2/Mfq+FkbkFc3v3EV7IQC+lBh6BHndPS6LOxcqDEJJZmvJ/kWxki7VwikqDhTIwbunhVNPWfA5iegR8X2g6Mb74COM4F9Iz9yYjWcmx80fbgqE4YM2f1lagIrvN1nq8GSVQ2kbwijxJpcrs4pOeVwM15NoQcJzLAfsQD47QNzo5tX1MgOwzELN6BJkzwxqeUB0i4VPrpcDgN3gjgcqMp242vJgB+r7MJR2zFJH/xjgAeMwDzZeX06v2IajbZ7jVrpnF1ZC+5MoXMYVF/CUccncr96toEJDgWIAkIsrQG8y3OKNuusmTEi9GOruiBTruAhWQQg1TUHnp5YTZJKpXIMr+tLctNbjcYBeEh5FyzCc3oFc+WuQh+YK977fwnkuFQOcUhyhrrtIlJj6I4ktEkC42CGfnkxvsxy2gQ1senqqkI/YfZV7TEz7PQRVm7LrathUd8PvrMP9Cry6A3sUruk8wzrt8PLl2/UIEFHW8ownrU+RJX4LuldJAGNHkdJeBUENGFiPDFnh6jJaBfCIzf0UJyO9/1kqvSMovkynB5/h/tucJEG5OiApgJnD6Nah51PQ3RgJG9RB7B1zK0Pox1y1WSTZDNtPVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(136003)(39860400002)(346002)(396003)(451199015)(8936002)(316002)(5660300002)(86362001)(6486002)(478600001)(6666004)(6506007)(2906002)(54906003)(83380400001)(38100700002)(66556008)(66946007)(4326008)(6916009)(8676002)(7416002)(66476007)(82960400001)(186003)(6512007)(9686003)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L31uKCUtoZNKZ7dITOna4t4IUf5tECZkctYe62V9K73ccmQkJEqnPwyssIng?=
+ =?us-ascii?Q?J6aVRTR/tOgdF4rzK6AhSdFf5X0Eai2nf9GaSxVOsFInm8hMit6HXEiWpcGJ?=
+ =?us-ascii?Q?yPTYYPsX9am0mnsVXf9ey655pyhBfdafqurjMpESU5Kf3eH7RFFFjSPODd6w?=
+ =?us-ascii?Q?pVjEserjxP5b+fmL22DR4xh3NQzHxzESm02YNx6Cwo8XAi+hcgkzA99fRK7S?=
+ =?us-ascii?Q?GuFBp0cAA+Ls6qCE6Wg3ggdhp5YhO3/eDDH8+AlcPgFsrPx120Ul4rOP8O0D?=
+ =?us-ascii?Q?TMOe5i1h6u2rDSUxw1NZOxMuuzAl23U5MndM+LI7G002HflS94hHRA2ZIXp5?=
+ =?us-ascii?Q?9BgY38uy6eVPb55sKRAwFeRv5chK4pk/y2nmaJDJCaA5DcVMBs+NH0skR58m?=
+ =?us-ascii?Q?7niqzDcUqErVjU6U8ckWcpYVyAKeGCa2gAWJ2IzTp0b3wIwJF4wqYmnJ1ltK?=
+ =?us-ascii?Q?mURbYMN9DgHgypNHweVDYC3gPYcCIx6B1KC4R/+GWSBdLRZqBR498bb1erPB?=
+ =?us-ascii?Q?f57fGeUHriYd60lZ/qTB+eWUyvEsc5+VAGxGwOoVa7FYP7DJ8id9TwtIx6W5?=
+ =?us-ascii?Q?SMB5acKfmLJtj1l21mLy+Lz3URQ3gaUWe6bIdpia9OYh7qYTuLIBY8YTsWJi?=
+ =?us-ascii?Q?LnAU4s2lH61Rpe/0Z+jYGV6UBqAFnsZTF1xVSuDoUa0FMOEWiHIkoXpTOQ8i?=
+ =?us-ascii?Q?emsNZoXj7CVUPsLKvJOLW0OY7ZPpVGzX82xpGpTb+5hvVQE/+hn+Gkj4dPEt?=
+ =?us-ascii?Q?El6SWOW6qp3MK405siN6PH+iElrsrkFXCdLmmz84aV0Qjy8tMumaxefO8i7i?=
+ =?us-ascii?Q?R1VsrMXndicYUWYXeWsQ705GPqwfaet2wiT9+vxiKLrxURjcBFW3QjtSIFna?=
+ =?us-ascii?Q?iqEbN8V36TLdnKXabbI2a7ZjQI0BtsUtDfqGvBBF+HWdaFG3zM1h61jEncXd?=
+ =?us-ascii?Q?/FAgi4S3xVqj62OJyVu8EVJWvvaxazT5E5JSGwUaGU813Uff9OWNn2/lPr93?=
+ =?us-ascii?Q?QRYzkTzrRJXrCs2Ph6eMzraqnqO2iP/ByCgd0s8SCz6ktkCfH3PJiDwbkSBC?=
+ =?us-ascii?Q?/23vMuDzK8T+LgMvawgq0fGDhUu7Nqgx7O6nVdlY2zv0wGdoXulQ822NX4DG?=
+ =?us-ascii?Q?q0EH3JUOVNckoEFxsOiJTtoWBPJKsfQ3Ak5ZlrnRLQuLIuWWb0MwncL+d8nT?=
+ =?us-ascii?Q?bXGTn/KYv1SGfA1hP0e2toBzAw5ckGpBgH6jvsKOxhJzCFBsUaNcUwGltpTK?=
+ =?us-ascii?Q?PlKDEqKd0VGcedGBAs41qFQu7tRDGL0Dd289rN6hac5K1NqDeZML7Qq7gyAh?=
+ =?us-ascii?Q?F+a60sJQhh9wSew4xjCKgyH84vHBhGTSdyB6aUmYZT85tuyXpNxY/0dNBFRR?=
+ =?us-ascii?Q?PucTfwvauOdZ/Hqe7CMMczv5sIwvjCFcdsk1zmRYsiG4OLlB+qrix6nWYp6D?=
+ =?us-ascii?Q?wDFFIh2/zgJl18DJiIzv0pjE3iW+ojiTmMYK9sb2qKk7jqBGbrcz52EeT53Z?=
+ =?us-ascii?Q?0vwYXvp36i9L6P8R4QlAOrPhMZEc+cfVU5Z+6+xVGGgN2J8Xbc4EfMi6yhK8?=
+ =?us-ascii?Q?0zg2cKHD3An8xsgspM4fgA4e5CXcgsH641rr3KIPVZPS1ECK4/3RZ0OOTGEm?=
+ =?us-ascii?Q?WQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 632b5771-c9ce-4427-cd89-08daf9f051f0
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 07:39:39.1048
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SV+6bXtXcsZBGZZq6tyy7Y/ShzT/u8VoS6ODIY9GlkYyNoMW0UC489KHxfp32ai2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1661
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: D4dnwJK9ThEuoZkr9g3YLWc1bJHWEEHe
+X-Proofpoint-GUID: D4dnwJK9ThEuoZkr9g3YLWc1bJHWEEHe
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 spamscore=0 mlxlogscore=762
+ suspectscore=0 adultscore=0 priorityscore=1501 bulkscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301190062
 
-On Wed, 11 Jan 2023 01:53:21 +0000
-Andre Przywara <andre.przywara@arm.com> wrote:
+On Mon, Jan 16, 2023 at 04:18:59PM +0100, Arnd Bergmann wrote:
+> On Mon, Jan 16, 2023, at 14:42, Clay Chang wrote:
+> > On Thu, Jan 12, 2023 at 02:37:53PM +0100, Arnd Bergmann wrote:
+> >> On Thu, Jan 12, 2023, at 14:16, Clay Chang wrote:
+> >> For the user interface side, I don't really like the idea of
+> >> having a hardware register directly exposed as driver in
+> >> drivers/soc, this generally makes it impossible to have portable
+> >> userspace that works across implementations of multiple SoC
+> >> vendors, and it makes it too easy to come up with an ad-hoc
+> >> interface to make a chip work for a particular use case when
+> >> a more general solution would be better.
+> >> 
+> >
+> > I agree with you. I have one question though: if we create a 'hpe'
+> > directory under drivers/soc, and put all HPE BMC specific drivers there,
+> > do you think this proper?
+> 
+> It certainly wouldn't be right to put "all HPE BMC specific drivers"
+> in there. Most drivers will fit into some existing subsystem, and
+> should be moved there instead. drivers/soc is used primarily for
+> drivers using soc_device_register() to provide information about the
+> soc, and we also use it as a place for drivers that just export
+> soc-specific helper functions that can be used by other drivers.
+> 
 
-Hi,
+Sorry for not saying it clearly. I meant to put those HPE BMC related
+drivers that are "not specific" to a particular subsystem in
+drivers/soc/hpe. For those fit into some existing subsystems go to their
+designated places.
 
-> this is mostly a rebase of the former v4 series.
-> It is based on top of v6.2-rc1, and builds cleanly there. For passing
-> make dtbs_check, the PHY binding patch, part of a separate series[1], is
-> needed. For USB functionality, patch 2/3 from there is needed as well.
+> >> Again, it's hard for me to tell why this even needs to be runtime
+> >> configurable, please try to describe what type of application
+> >> would access the sysfs interface here, and why this can't just
+> >> be set to a fixed value by bootloader or kernel without user
+> >> interaction.
+> >
+> > The register is used for communication and synchronization between the
+> > BMC and the host. During runtime, user-space daemons configures the
+> > value of the register for interactions.
+> 
+> That does not sound very specific. What is the subsystem on the
+> host that this communicates with? Can you put the driver into the
+> same subsystem?
+> 
+>     Arnd
 
-This series has now been taken by Vinod and is available in linux-next
-since at least Friday.
+This is a control register in the BMC chip that partially controls host
+boot behaviors. When writing to the register, privileged mode is
+required. That's why we rely on a kernel driver for writing to the
+control register. And, there is no corresponding subsystem in the host
+OS. For this case, is it acceptable to put this driver under
+drivers/soc/hpe?
 
-> I put a tree with both series combined here:
-> https://github.com/apritzel/linux/commits/f1c100s-usb-v5
-> 
-> There were no changes to the actual patches, this is just a resend since
-> the series missed the previous merge window.
-
-Is there anything I can do to move this series forward? If I see this
-correctly, this just misses a review of patch v5 03/11 "usb: musb: sunxi:
-Introduce config struct". I addressed Jernej's comments on this already in v4.
-
-Cheers,
-Andre
-
-> [1] https://lore.kernel.org/linux-phy/20230109012223.4079299-1-andre.przywara@arm.com/
-> 
-> ================
-> This patchset introduces support for F1C100s' USB, and the SourceParts
-> PopStick and Lctech Pi boards.
-> 
-> The DT binding and driver support for SUNIV USB MUSB device are added, in
-> addition to DT changes to the DTSI and Lichee Nano DT. New DTs are added
-> for the SourceParts PopStick v1.1 and Lctech Pi boards.
-> 
-> Changelog v4 ... v5:
-> - Rebase on top to v6.2-rc1
-> 
-> Changelog v3 ... v4:
-> - Dropped the PHY patches, they go via a different tree and need a
->   different base
-> - rebased on top of linux-sunxi/sunxi/for-next (provides H616 USB)
-> - musb DT binding: use enum
-> - musb cleanup: use musb_hdrc_config config pointer directly
-> - musb cleanup: use const where possible
-> - drop partitions from Popstick DTS file
-> - clarify Popstick has a USB type-A *plug*
-> - add tags
-> 
-> Changelog v2 ... v3:
-> - remove redundant "Device Tree Bindings" suffix in DT binding doc title
-> - add BSD license to binding doc file (as per checkpatch)
-> - fix some commit message title prefixes
-> - use proper plural spelling for usb0_id_det-gpios
-> - popstick.dts: Reorder otg_sram node reference alphabetically
-> - popstick.dts: Add regulator- prefix to 3.3V regulator node name
-> - popstick.dts: Fix status, compatible and reg property order
-> - popstick.dts: Drop unneeded mmc0 and spi0 aliases
-> - add patch to clean up sunxi MUSB driver
-> - add Acks and Reviewed-by's
-> 
-> Changelog v1 ... v2:
-> - USB PHY binding: clarify the relation with other phy-sun4i-usb bindings
-> - Add Popstick binding and .dts patches
-> 
-> 
-> Andre Przywara (4):
->   usb: musb: sunxi: Introduce config struct
->   dt-bindings: vendor-prefixes: add Lctech name
->   dt-bindings: arm: sunxi: add compatible strings for Lctech Pi
->   ARM: dts: suniv: Add Lctech Pi F1C200s devicetree
-> 
-> Icenowy Zheng (7):
->   dt-bindings: usb: sunxi-musb: add F1C100s MUSB compatible string
->   usb: musb: sunxi: add support for the F1C100s MUSB controller
->   ARM: dts: suniv: add USB-related device nodes
->   ARM: dts: suniv: licheepi-nano: enable USB
->   dt-bindings: vendor-prefixes: add Source Parts
->   dt-binding: arm: sunxi: add compatible strings for PopStick v1.1
->   ARM: dts: suniv: add device tree for PopStick v1.1
-> 
->  .../devicetree/bindings/arm/sunxi.yaml        | 13 +++
->  .../usb/allwinner,sun4i-a10-musb.yaml         | 10 +-
->  .../devicetree/bindings/vendor-prefixes.yaml  |  4 +
->  arch/arm/boot/dts/Makefile                    |  4 +-
->  .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 +++
->  arch/arm/boot/dts/suniv-f1c100s.dtsi          | 32 ++++++
->  arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts | 76 ++++++++++++++
->  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 81 +++++++++++++++
->  drivers/usb/musb/sunxi.c                      | 99 +++++++++++++------
->  9 files changed, 301 insertions(+), 34 deletions(-)
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-lctech-pi.dts
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> 
-> 
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-> prerequisite-patch-id: 7734c0032dcc073e59f0217ee47ff023f0b47bcf
-
+Thanks,
+Clay
