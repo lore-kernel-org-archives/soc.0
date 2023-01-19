@@ -1,136 +1,79 @@
-Return-Path: <SRS0=5t4m=5Q=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=uQx5=5Q=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB2FDC00A5A
-	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 07:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607A0C00A5A
+	for <soc@archiver.kernel.org>; Thu, 19 Jan 2023 11:23:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3E261C433EF; Thu, 19 Jan 2023 07:56:49 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	id 1E1BAC433F2; Thu, 19 Jan 2023 11:23:15 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 83176C433F0;
-	Thu, 19 Jan 2023 07:56:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83176C433F0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 600285C012B;
-	Thu, 19 Jan 2023 02:56:45 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 19 Jan 2023 02:56:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1674115005; x=1674201405; bh=zM/k9tWl4A
-	ZrWACJdmXZKTCMgs2DStBICdw4oFEh4H4=; b=nug90yANL1BU+oerGfsfC3JWCp
-	px5nq10ZWCYRxRqjuR7cr0E1dZfNERA1YS4xgs24Uu8QSy1UqWyk48hgQ5/BJqtH
-	svftZg4LRcVVZpRwYwObtIs5ZbUlRJGfon7agIi0xBDsQO7/0jqSFD/3dgBYDf/p
-	qPQ99mVRoDklIyGf271Vhf5Lusz/Jhm5M9o3p2g9jCHMn4LarI5wwlv6qRLmhRjX
-	sG440ytAjY61X6m1loZwPEK0rFlks+cH6liuttQj9EdxPT3Fv0Z4mST8ZDXOJdsm
-	4DiNB1r2tnHce6cBNQ+2s9S7Et6G/gBy95kyQXpI29wy9bxo6TVuuzbicPbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1674115005; x=1674201405; bh=zM/k9tWl4AZrWACJdmXZKTCMgs2D
-	StBICdw4oFEh4H4=; b=LAhVEuFatwN4IqZ62mEz3Hnr2TNcpjs+OpJaS/SSH/vc
-	2meRhx/01xhC72sMQZLpp2u4IwcGe90j7Qr24dL4X2JBmw6wzNQ23KZG8JKiPWKK
-	8byfhu3YQE8qkOpd5PbSo5df5E/wAb5q8BbGzTOOm1AfcU7Ys7WMN/xDtjRcRYFY
-	Z+wvvfTnQyMxjD3GnuU6ll2APFcUeiX1BiJdazHEblINDqjq1M0n6O4GI709zCRc
-	bMqZkt2mTOK+SiLYy6Bne98gZ5UGR7pOf08Er6/gcSteneHET57cY+ZwjuhbY6uX
-	FMn5qT3tCJ8cgKgOtM8J/C8LLS3IT1CL2JeQuztDGw==
-X-ME-Sender: <xms:vPfIY-kHc6idtBmJEJMnOM5f19hT15nponz-QEK6H0BnDTBqJSnJrA>
-    <xme:vPfIY13Q17Ji2RPFJKB7L5_-r5yXGBk1c70DGtfb8E7rFj-2Jf6j4_8I-4ucSS4Pc
-    lXtNl9JTSkFBowjodo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtledguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:vPfIY8qdM75Mgw2blVly3rYojUfqbZ9aYEPi5l5Yxrl00y_uCB-bSQ>
-    <xmx:vPfIYykX2ULdg1eb8H6rSSzuE1rRP2CX8O0s4tGtj5m0Lcgb1jqm0g>
-    <xmx:vPfIY812TaWcznlN9lBuCvcyHQnmNoTU5wJiKi3WSfv1BYddvvaaDw>
-    <xmx:vffIY2Mk-8K9tt6Igf6XVogGHUGah65qpykOb6DwH8aVP7XENUOMcQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 8233AB60086; Thu, 19 Jan 2023 02:56:44 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <66ef9643-b47e-428d-892d-7c1cbd358a5d@app.fastmail.com>
-In-Reply-To: <Y8jzsmC3azFgbZLP@enigma.ccjz.io>
-References: <20230110042533.12894-1-clayc@hpe.com>
- <20230110042533.12894-3-clayc@hpe.com>
- <110af65f-9c18-524d-a073-ef7be60d1f5a@linaro.org>
- <Y8AIHDizIqu9u9BR@enigma.ccjz.io>
- <48cd3e28-f1db-487d-8971-473dc8c12c09@app.fastmail.com>
- <Y8VUOENIhe72sqMO@enigma.ccjz.io>
- <55f09599-b553-4429-aa79-ca99ccf95cda@app.fastmail.com>
- <Y8jzsmC3azFgbZLP@enigma.ccjz.io>
-Date: Thu, 19 Jan 2023 08:56:25 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Clay Chang" <clayc@hpe.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D447AC433D2;
+	Thu, 19 Jan 2023 11:23:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D447AC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674127393; x=1705663393;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pCZqOWFWxN9pR4lG64mFw2AxGvarWtbhjB2aDMaMuuU=;
+  b=blW6oR3ZJAyMJbnX5lPffMsBIsnfK9G22LrymDsTn+hbIQ1Vk8sFJ/0m
+   uaArVxjc4hHlk9fp36yQu8rMmn02PTX1zbUAKQuKUUKF1Ra0zO1L8GpID
+   2pmZC/2HlZXZcrRDOG+CwpHZ2KMSu+NXEUQnvpDAlrTZppY4RmIyOkoAT
+   OY8GuO07F+WM0/nYcTrPCMd8Vk4bCEdG4HcgNwh9M72EIK+DLIPqgn6bs
+   D5rOxgVkDFOkWFmFLiTgFx9Mlmm3sqaO/eg+0BLIpGo2cPntwsOCtv94k
+   8L/zKn966Q+apDj38fIJscNAsirdB3mZUI0trL8wjzwcqJq3T/F5f7cYd
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,228,1669100400"; 
+   d="scan'208";a="192970992"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jan 2023 04:23:12 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 19 Jan 2023 04:23:10 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 04:23:05 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- linux-kernel@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- "Verdun, Jean-Marie" <verdun@hpe.com>,
- "Hawkins, Nick" <nick.hawkins@hpe.com>, "Rob Herring" <robh+dt@kernel.org>,
- krzysztof.kozlowski+dt@linaro.org, "Russell King" <linux@armlinux.org.uk>,
- "Olof Johansson" <olof@lixom.net>, "Joel Stanley" <joel@jms.id.au>,
- "Andrew Jeffery" <andrew@aj.id.au>, linux-aspeed@lists.ozlabs.org,
- openbmc@lists.ozlabs.org, "Tomer Maimon" <tmaimon77@gmail.com>
-Subject: Re: [PATCH 2/5] dt-bindings: soc: hpe: hpe,gxp-srom.yaml
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>
+CC: <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 fixes for 6.2
+Date: Thu, 19 Jan 2023 13:21:01 +0200
+Message-ID: <20230119112101.42045-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-On Thu, Jan 19, 2023, at 08:39, Clay Chang wrote:
-> On Mon, Jan 16, 2023 at 04:18:59PM +0100, Arnd Bergmann wrote:
->
-> Sorry for not saying it clearly. I meant to put those HPE BMC related
-> drivers that are "not specific" to a particular subsystem in
-> drivers/soc/hpe. For those fit into some existing subsystems go to their
-> designated places.
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-Ok, that makes sense. I'm just trying to reduce the number
-of drivers that fit into this category.
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
->> >> Again, it's hard for me to tell why this even needs to be runtime
->> >> configurable, please try to describe what type of application
->> >> would access the sysfs interface here, and why this can't just
->> >> be set to a fixed value by bootloader or kernel without user
->> >> interaction.
->> >
->> > The register is used for communication and synchronization between the
->> > BMC and the host. During runtime, user-space daemons configures the
->> > value of the register for interactions.
->> 
->> That does not sound very specific. What is the subsystem on the
->> host that this communicates with? Can you put the driver into the
->> same subsystem?
->
-> This is a control register in the BMC chip that partially controls host
-> boot behaviors. When writing to the register, privileged mode is
-> required. That's why we rely on a kernel driver for writing to the
-> control register. And, there is no corresponding subsystem in the host
-> OS. For this case, is it acceptable to put this driver under
-> drivers/soc/hpe?
+are available in the Git repository at:
 
-I see. So this sounds like it might be generic BMC feature, which would
-be nice to handle consistently for all BMC families. We had some
-discussions about other BMC features in the past, but don't remember
-what the overall consensus was, so I'm adding the openbmc list and
-as well as aspeed and npcm maintainers to Cc.
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-fixes-6.2
 
-The part I'm still missing is what type of userspace makes this
-decision on the BMC side, and whether that might already have a
-generalized interface. If there is, maybe part of that interface
-can be abstracted in the kernel.
+for you to fetch changes up to 9bfa2544dbd1133f0b0af4e967de3bb9c1e3a497:
 
-    Arnd
+  ARM: dts: at91: sam9x60: fix the ddr clock for sam9x60 (2023-01-12 13:45:49 +0200)
+
+----------------------------------------------------------------
+AT91 fixes for 6.2:
+
+It contains:
+- fix the clock provided via DT for DDR controller on SAM9X60
+
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: dts: at91: sam9x60: fix the ddr clock for sam9x60
+
+ arch/arm/boot/dts/sam9x60.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
