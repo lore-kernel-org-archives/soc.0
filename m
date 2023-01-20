@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BADBC52D77
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 13:35:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A52F6C54EE1
+	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 13:35:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0CE7BC433EF; Fri, 20 Jan 2023 13:35:16 +0000 (UTC)
+	id 85B4DC433D2; Fri, 20 Jan 2023 13:35:17 +0000 (UTC)
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 35690C4339B;
-	Fri, 20 Jan 2023 13:35:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35690C4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id E3121C4339C;
+	Fri, 20 Jan 2023 13:35:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3121C4339C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674221714; x=1705757714;
+  t=1674221715; x=1705757715;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RadYSxnPEsNw081BTc50G+mT/keKaPVINzosq7+I7zw=;
-  b=ZT/vaauP8ofrJ7Y9Fvep6Klq7N4P+6daQCi0X/8Bj5Wio8Qf7oLwFaCP
-   cGpjMgbk/1IqCiidczPGRN55AHOnQRCz5RkIHsVh5VmyOH5tIdnpiuPYp
-   ch7smQhB0DInfn0F2B017EwbfeANNeyZdd5UGOiBpwhRdxKRrG9xQl9R2
-   ESKEaJ0Y61BoKQA5MyJjTy2aGO9j5tyiVZJgaOwK3zGXJUOCE3cCtKsty
-   DAhPSOnmNfDNnTLWur3zkZs6X0Cs7N6IwmCbjjV2y7fQ4NuF/GqsAZVL4
-   8j1U6T2KWRh0d/+uunowMBlDi8dRQE5UEpHuFhUqnF3ZyhKkHJzqsp2TC
-   A==;
+  bh=Sjo55naQd9lYTfNlnMxN/zRcLhVyGOhekZtyT5t1Hko=;
+  b=C+1RoaM6QeOzkIaAtEiqQMN7KC1LwX5A6NNUrVj40rcjDsvFmtb5suJG
+   jsyXf2V0wEZcju/cluNPHv3b9ErPOHSrD7UwmNEGFxW+1QzbkqcoAEjc/
+   FHHloUBvD+3DnYmtLu/38CkmeMRClRK6qSQlaFvg2x3/pGOs757XApwVd
+   81U3cMJ0C6qx/dy+u15jVkn1/YIlajuH6zArHoFAkpKxVPOZ+Km5xXcrW
+   /qTlggnRfH+mGxsvhGsHuOphfv80P0DioGNvv8pN2WNjUqlC2YRG/0cQE
+   I+LJSfTnGZqmmjYYYIT0s7WOyxBQwB+nI4fiM/K/71eHluvSAlMkLMyNP
+   w==;
 X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28561584"
+   d="scan'208";a="28561589"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 14:35:05 +0100
+  by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 14:35:06 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
   by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 20 Jan 2023 14:35:05 +0100
+  Fri, 20 Jan 2023 14:35:06 +0100
 X-PGP-Universal: processed;
-	by tq-pgp-pr1.tq-net.de on Fri, 20 Jan 2023 14:35:05 +0100
+	by tq-pgp-pr1.tq-net.de on Fri, 20 Jan 2023 14:35:06 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674221705; x=1705757705;
+  t=1674221706; x=1705757706;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RadYSxnPEsNw081BTc50G+mT/keKaPVINzosq7+I7zw=;
-  b=ZKSz8BY+ZjDtLi8NIx3fL1VuvDK1e/4HuH70PCEC0GXl6R1xD3UCF5bT
-   p6QW/YNSSb5mvivz2QtF+38vRYaINz6W4X89JYU5hkCvuTtqWrNztzKyX
-   khdo5oOENVtyg3a9C37VoablSf1yS5wDnXiCiJ2rACfTGtIq9Lp1bIfzp
-   FdamRQZrdMfhc5bBzxmSxc5Bj2Kd2mziMG3+4A2obM5YdpcQjMCphpvw6
-   7rVWyKLogOvb5ZJ9PTbexRFq6klbbl/Bvc6SJnWZgYHaeYd3KFs1yt758
-   nmnNmJ76W9ZbmFPPzRRkHES3ahIlKxWnD3Ydqi3/LS5shUVHWOp6Hcbwo
+  bh=Sjo55naQd9lYTfNlnMxN/zRcLhVyGOhekZtyT5t1Hko=;
+  b=KVCKgBmiPJSqtGq9bPVa9brxbK3L7Bn5Cfqb3pq6xgUKFzTSMvIV9VBy
+   MGBslKyLiDQBKbI971aHhm4a7linuLc21vxpWlkhH7eeuLbgtxn2kf9Ou
+   ALYo46gB5MDcTHb0P97+j3unLGTpLOE1ewE79qUFD5K0bKqUZgsYAfwWt
+   5j9lNB7M32zG8McWs5RTj+C5bkMhch4Yzk0dzsUwwJ0yqsR7eAk49eqts
+   1U5hrky3/kpNw98vq2k/R16PfRcgUCL2UPql/bd2lv4hYNE1PvmcvOEtD
+   sYj7QWwp41UvJrVby6c4mFHtDCajn9IGPssKqsu7FwBAbMyaTYQajGfOg
    A==;
 X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28561583"
+   d="scan'208";a="28561588"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 20 Jan 2023 14:35:05 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.53.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id E12B1280074;
-	Fri, 20 Jan 2023 14:35:04 +0100 (CET)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 92474280082;
+	Fri, 20 Jan 2023 14:35:05 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -84,104 +84,119 @@ Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kbuild@vger.kernel.org
-Subject: [PATCH v2 06/10] ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH DC44 overlay
-Date: Fri, 20 Jan 2023 14:34:51 +0100
-Message-Id: <20230120133455.3962413-7-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 08/10] ARM: multi_v7_defconfig: Add options to support TQMLS102xA series
+Date: Fri, 20 Jan 2023 14:34:53 +0100
+Message-Id: <20230120133455.3962413-9-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
 References: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add device tree overlay for LVDS display usage.
+Enable drivers used on TQMLS102xA + MBLS1021A.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
 Changes in v2:
-* None
+* Changed symbols to 'm' where possible
 
- arch/arm/boot/dts/Makefile                    |  2 +
- ...1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts | 55 +++++++++++++++++++
- 2 files changed, 57 insertions(+)
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
+ arch/arm/configs/multi_v7_defconfig | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index d5105e8179431..774cc57274e20 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -806,9 +806,11 @@ dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-tsn.dtb \
- 	ls1021a-twr.dtb
- 
-+ls1021a-tqmls1021a-mbls1021a-cdtech-dc44-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dtbo
- ls1021a-tqmls1021a-mbls1021a-hdmi-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-hdmi.dtbo
- ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtbo
- 
-+dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dtb
- dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-hdmi.dtb
- dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtb
- 
-diff --git a/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts b/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
-new file mode 100644
-index 0000000000000..ddc71bc597295
---- /dev/null
-+++ b/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: (GPL-2.0-or-later OR X11)
-+/*
-+ * Copyright 2018-2023 TQ-Systems GmbH <linux@ew.tq-group.com>,
-+ * D-82229 Seefeld, Germany.
-+ * Author: Alexander Stein
-+
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&backlight_dcu {
-+	status = "okay";
-+};
-+
-+&dcu {
-+	status = "okay";
-+
-+	port {
-+		dcu_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
-+
-+&display {
-+	compatible = "cdtech,s070swv29hg-dc44";
-+	status = "okay";
-+
-+	port {
-+		panel_in: endpoint {
-+			remote-endpoint = <&dcu_out>;
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	polytouch: touchscreen@38 {
-+		compatible = "edt,edt-ft5406";
-+		reg = <0x38>;
-+		interrupt-parent = <&pca9554_0>;
-+		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-+		/* LCD_PWR_EN -> TSC_WAKE */
-+		wake-gpios = <&pca9554_1 4 GPIO_ACTIVE_HIGH>;
-+		gain = <20>;
-+		touchscreen-size-x = <800>;
-+		touchscreen-size-y = <480>;
-+	};
-+};
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index ee184eb37adcf..92628a160cfb3 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -191,6 +191,7 @@ CONFIG_PCI_TEGRA=y
+ CONFIG_PCI_RCAR_GEN2=y
+ CONFIG_PCIE_RCAR_HOST=y
+ CONFIG_PCI_DRA7XX_EP=y
++CONFIG_PCI_LAYERSCAPE=y
+ CONFIG_PCI_ENDPOINT=y
+ CONFIG_PCI_ENDPOINT_CONFIGFS=y
+ CONFIG_PCI_EPF_TEST=m
+@@ -249,6 +250,7 @@ CONFIG_AHCI_ST=y
+ CONFIG_AHCI_IMX=y
+ CONFIG_AHCI_SUNXI=y
+ CONFIG_AHCI_TEGRA=y
++CONFIG_AHCI_QORIQ=y
+ CONFIG_SATA_HIGHBANK=y
+ CONFIG_SATA_MV=y
+ CONFIG_SATA_RCAR=y
+@@ -329,6 +331,7 @@ CONFIG_TOUCHSCREEN_ADC=m
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=m
+ CONFIG_TOUCHSCREEN_ELAN=m
+ CONFIG_TOUCHSCREEN_MMS114=m
++CONFIG_TOUCHSCREEN_EDT_FT5X06=m
+ CONFIG_TOUCHSCREEN_WM97XX=m
+ CONFIG_TOUCHSCREEN_ST1232=m
+ CONFIG_TOUCHSCREEN_STMPE=y
+@@ -483,6 +486,7 @@ CONFIG_GPIO_ASPEED_SGPIO=y
+ CONFIG_GPIO_DAVINCI=y
+ CONFIG_GPIO_DWAPB=y
+ CONFIG_GPIO_EM=y
++CONFIG_GPIO_MPC8XXX=y
+ CONFIG_GPIO_MXC=y
+ CONFIG_GPIO_RCAR=y
+ CONFIG_GPIO_SYSCON=y
+@@ -493,6 +497,7 @@ CONFIG_GPIO_PCA953X=y
+ CONFIG_GPIO_PCA953X_IRQ=y
+ CONFIG_GPIO_PCF857X=y
+ CONFIG_GPIO_PALMAS=y
++CONFIG_GPIO_STMPE=y
+ CONFIG_GPIO_TPS6586X=y
+ CONFIG_GPIO_TPS65910=y
+ CONFIG_GPIO_TWL4030=y
+@@ -533,6 +538,7 @@ CONFIG_SENSORS_INA2XX=m
+ CONFIG_CPU_THERMAL=y
+ CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_IMX_THERMAL=y
++CONFIG_QORIQ_THERMAL=m
+ CONFIG_ROCKCHIP_THERMAL=y
+ CONFIG_RCAR_THERMAL=y
+ CONFIG_ARMADA_THERMAL=y
+@@ -821,6 +827,8 @@ CONFIG_SND_SOC_MSM8916_WCD_ANALOG=m
+ CONFIG_SND_SOC_MSM8916_WCD_DIGITAL=m
+ CONFIG_SND_SOC_SGTL5000=m
+ CONFIG_SND_SOC_STI_SAS=m
++CONFIG_SND_SOC_TLV320AIC32X4=m
++CONFIG_SND_SOC_TLV320AIC32X4_I2C=m
+ CONFIG_SND_SOC_WM8978=m
+ CONFIG_SND_AUDIO_GRAPH_CARD=m
+ CONFIG_USB=y
+@@ -830,6 +838,7 @@ CONFIG_USB_XHCI_MVEBU=y
+ CONFIG_USB_XHCI_TEGRA=m
+ CONFIG_USB_BRCMSTB=m
+ CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_FSL=m
+ CONFIG_USB_EHCI_HCD_STI=y
+ CONFIG_USB_EHCI_EXYNOS=m
+ CONFIG_USB_EHCI_MV=m
+@@ -933,6 +942,8 @@ CONFIG_NEW_LEDS=y
+ CONFIG_LEDS_CLASS=y
+ CONFIG_LEDS_CLASS_FLASH=m
+ CONFIG_LEDS_CPCAP=m
++CONFIG_LEDS_PCA9532=m
++CONFIG_LEDS_PCA9532_GPIO=y
+ CONFIG_LEDS_GPIO=y
+ CONFIG_LEDS_PWM=y
+ CONFIG_LEDS_MAX8997=m
+@@ -949,6 +960,7 @@ CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+ CONFIG_LEDS_TRIGGER_TRANSIENT=y
+ CONFIG_LEDS_TRIGGER_CAMERA=y
+ CONFIG_EDAC=y
++CONFIG_EDAC_LAYERSCAPE=y
+ CONFIG_EDAC_HIGHBANK_MC=y
+ CONFIG_EDAC_HIGHBANK_L2=y
+ CONFIG_RTC_CLASS=y
+@@ -962,6 +974,7 @@ CONFIG_RTC_DRV_MAX8997=m
+ CONFIG_RTC_DRV_MAX77686=y
+ CONFIG_RTC_DRV_RK808=m
+ CONFIG_RTC_DRV_RS5C372=m
++CONFIG_RTC_DRV_PCF85063=m
+ CONFIG_RTC_DRV_PCF85363=m
+ CONFIG_RTC_DRV_BQ32K=m
+ CONFIG_RTC_DRV_TWL4030=y
 -- 
 2.34.1
 
