@@ -1,128 +1,146 @@
-Return-Path: <SRS0=a+z/=5R=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=MX/P=5R=ew.tq-group.com=alexander.stein@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6B30C05027
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 12:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA67CC38A23
+	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 13:35:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9B3B6C4339C; Fri, 20 Jan 2023 12:57:30 +0000 (UTC)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 6AA82C433AA; Fri, 20 Jan 2023 13:35:09 +0000 (UTC)
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B8F6DC4339B
-	for <soc@kernel.org>; Fri, 20 Jan 2023 12:57:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8F6DC4339B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so5770569wml.3
-        for <soc@kernel.org>; Fri, 20 Jan 2023 04:57:28 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C80CC433D2;
+	Fri, 20 Jan 2023 13:35:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C80CC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eoV8ostgSDbK08VdIZJMHvJGHyPcf5FjWF2t6GC4OEg=;
-        b=I+2h2nB4eC17X95+rn5I4LjsNEODeuLd/RstVgSYO9B2D0iPkpnYaJvdIdryMAT1EO
-         CU5FIeSMPKBW9fVMRpzL+IOLy9wCpHpyqT4JWPVxeEjGfO0IEBspkhA5UJcsPP05Ntfd
-         rV1LO9WfmcPB8z+8of3kfcC8Qiqk1770+UjG/QY6zRB2aDJBcReLfNOHefGUoqPO7Iga
-         VaFSdp2S5tlSKZZztCPhgRwp05yXyUkVmqmkuU65yyVBXnHQ6N2P6ho/wHUBV0YYv5vP
-         JfWl3INAMhagIgOCA+Qjd+eSHo1Yo9YWD238XpPKHtNWXfy5o3JbPFOvjW1b+h7nds4G
-         mMiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eoV8ostgSDbK08VdIZJMHvJGHyPcf5FjWF2t6GC4OEg=;
-        b=GQqMJ6iGWQ5HAQ41xf9YSHAiKjvbKKf9LCtXmReCF3f5TcjL7IFYWnooa12IXVyn8s
-         2p0XVgoik1EubC+h7BRvdcIaUR67/GtmZ2SnOFBb9JFuWuGHLRmtSjeGW/B1jOTvX7fE
-         LG8Qf6FvK8vPFny5s4IxrbEENTt7Z+ERd8Vpw/Snjr9vu8z96ikuHsqNkdPf52FWku20
-         ow8XHzHUsmtzgFn7n2i13B5sthCjkdb7iaeQnXL2EURixwll1DGM42ii6t8aFVPvp21H
-         JDTiby44wQnpHiIIV839Qq6S/JKqxB22rddyjac6tGTu6JzfwSR4dEhvu0GkC0An5LLs
-         aVAA==
-X-Gm-Message-State: AFqh2krUc0QxanQPPwKJ8h7YdvC/Rcg/zT42O8RXv5K7DOP3leBA9EwI
-	+yM4v+UXPiUhVrNZUEv9Q6VyvA==
-X-Google-Smtp-Source: AMrXdXvkIjdx5y0alBmce8ylnRgIDUjnzn/rTeXMSskipMsEgmlz4JbfeRubh4n53lBnOQIWrz2B4Q==
-X-Received: by 2002:a05:600c:1d22:b0:3da:f66c:795d with SMTP id l34-20020a05600c1d2200b003daf66c795dmr14361504wms.9.1674219446983;
-        Fri, 20 Jan 2023 04:57:26 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f22-20020a1cc916000000b003d35acb0fd7sm2229002wmb.34.2023.01.20.04.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 04:57:26 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>,
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674221706; x=1705757706;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m1YkW/D/aj3GzfQPMLoPMshLV3DxdOqxzw3Aa3dO5+I=;
+  b=KAFV9GfHNuIRxv7vtn87uJ935NFEHJQ3IVp4wIMamRHWMbnwCg2n4Kh2
+   IaKOwfkPtXc76Iqx2Smx95+CDOBVRPTQ1T7t6Xw7cCqsZuLSNj8KR9fPq
+   o/vIE4zMqFFWSae1On2icMC9DSd5eRvtMMuD5syVd+Ov9draVAxOANf1f
+   Hh5pO/LanGZX8vX5r0lHpN2w0ZuB2us78bgzRZNtqTAHkz7TRsNZIJkl2
+   5s+f2hUpqaTiBdBQ8wD4MQy9dMCOiEb/zAoh3Rh69nOIb9A5Nliycv/mL
+   cSrm7JddAjw8iqRlmWeqAGXdf0lXgeRs7zlqrh/8hcHtYTYKQsfoeiinU
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
+   d="scan'208";a="28561570"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 14:35:02 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 20 Jan 2023 14:35:02 +0100
+X-PGP-Universal: processed;
+	by tq-pgp-pr1.tq-net.de on Fri, 20 Jan 2023 14:35:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674221702; x=1705757702;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m1YkW/D/aj3GzfQPMLoPMshLV3DxdOqxzw3Aa3dO5+I=;
+  b=OWUkDRRIIHMQnr9dT5WrGSvGaP3GHoUsBSLH9MJ/+pBhTHOSx7QL2gA/
+   R+eAqHY7or8ZJu+N9GiXZy8yVY8c9YX5MakwPhiKZh3RRX3vPT75LKWFC
+   upGxtQ0LJn3Z5VDYrz/82HkHVc50GzjQhlG6aZxMt0Jq8JgjGhdng6x1M
+   KoSEQqd5I80ybDJS8CrTEqmAki15OZhlB7czgUsb4QQW0vjzKO9wELFJT
+   Yz9rM5TZGrJ5J103wHVbewCRnY9iRf04niKsXDYcle5v6ueLQ2Ji74TcH
+   iM4ZmZWZxhFA/+kqvwFQGMQVPE2+El0sXwcQVstPV9A1VWOG0MX3XXLzW
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
+   d="scan'208";a="28561567"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 20 Jan 2023 14:35:02 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 32FD4280056;
+	Fri, 20 Jan 2023 14:35:02 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
-	arm@kernel.org,
+	Shawn Guo <shawnguo@kernel.org>,
+	Li Yang <leoyang.li@nxp.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Marek Vasut <marex@denx.de>,
+	Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>
+List-Id: <soc.lore.kernel.org>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	soc@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
+	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: drop redundant "ARMv8" from Kconfig option title
-Date: Fri, 20 Jan 2023 13:57:22 +0100
-Message-Id: <20230120125722.270722-1-krzysztof.kozlowski@linaro.org>
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kbuild@vger.kernel.org
+Subject: [PATCH v2 00/10] TQMLS1021A support
+Date: Fri, 20 Jan 2023 14:34:45 +0100
+Message-Id: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-All these platforms are ARMv8 or newer and choosing the platforms in
-menuconfig is much easier if the titles start with something specific.
+Hi,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/Kconfig.platforms | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+this is the second round of this series to add support for the TQMLS1021A
+using the MBLS1021A mainboard.
+The changelog is included in the individual patches but the most notable
+one is picking up the old patch series for adding lpae config snippet
+support.
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index d1970adf80ab..165e544aa7f9 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -95,7 +95,7 @@ config ARCH_BITMAIN
- 	  This enables support for the Bitmain SoC Family.
- 
- config ARCH_EXYNOS
--	bool "ARMv8 based Samsung Exynos SoC family"
-+	bool "Samsung Exynos SoC family"
- 	select COMMON_CLK_SAMSUNG
- 	select CLKSRC_EXYNOS_MCT
- 	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
-@@ -108,7 +108,7 @@ config ARCH_EXYNOS
- 	  This enables support for ARMv8 based Samsung Exynos SoC family.
- 
- config ARCH_SPARX5
--	bool "ARMv8 based Microchip Sparx5 SoC family"
-+	bool "Microchip Sparx5 SoC family"
- 	select PINCTRL
- 	select DW_APB_TIMER_OF
- 	help
-@@ -199,13 +199,13 @@ menuconfig ARCH_NXP
- if ARCH_NXP
- 
- config ARCH_LAYERSCAPE
--	bool "ARMv8 based Freescale Layerscape SoC family"
-+	bool "Freescale Layerscape SoC family"
- 	select EDAC_SUPPORT
- 	help
- 	  This enables support for the Freescale Layerscape SoC family.
- 
- config ARCH_MXC
--	bool "ARMv8 based NXP i.MX SoC family"
-+	bool "NXP i.MX SoC family"
- 	select ARM64_ERRATUM_843419
- 	select ARM64_ERRATUM_845719 if COMPAT
- 	select IMX_GPCV2
-@@ -296,7 +296,7 @@ config ARCH_TEGRA
- 	  This enables support for the NVIDIA Tegra SoC family.
- 
- config ARCH_TESLA_FSD
--	bool "ARMv8 based Tesla platform"
-+	bool "Tesla platform"
- 	depends on ARCH_EXYNOS
- 	help
- 	  Support for ARMv8 based Tesla platforms.
+Best regards,
+Alexander
+
+Alexander Stein (7):
+  ARM: dts: ls1021a: add TQ-Systems MBLS102xA device tree
+  ARM: dts: ls1021a: add TQMLS1021A flash partition layout
+  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS TM070JVHG33 overlay
+  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA HDMI overlay
+  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH DC44 overlay
+  ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH FC21 overlay
+  ARM: multi_v7_defconfig: Add options to support TQMLS102xA series
+
+Matthias Schiffer (1):
+  dt-bindings: arm: fsl: add TQ-Systems LS1021A board
+
+Nicolas Saenz Julienne (2):
+  kbuild: Add config fragment merge functionality
+  ARM: add multi_v7_lpae_defconfig
+
+ .../devicetree/bindings/arm/fsl.yaml          |  10 +
+ arch/arm/Makefile                             |   4 +
+ arch/arm/boot/dts/Makefile                    |  12 +
+ ...1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts |  55 +++
+ ...1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts |  55 +++
+ .../ls1021a-tqmls1021a-mbls1021a-hdmi.dtso    |  36 ++
+ ...tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtso |  56 +++
+ .../boot/dts/ls1021a-tqmls1021a-mbls1021a.dts | 406 ++++++++++++++++++
+ arch/arm/boot/dts/ls1021a-tqmls1021a.dtsi     | 112 +++++
+ arch/arm/configs/lpae.config                  |   1 +
+ arch/arm/configs/multi_v7_defconfig           |  13 +
+ arch/powerpc/Makefile                         |  12 +-
+ scripts/Makefile.defconf                      |  15 +
+ 13 files changed, 776 insertions(+), 11 deletions(-)
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-hdmi.dtso
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtso
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a.dts
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a.dtsi
+ create mode 100644 arch/arm/configs/lpae.config
+ create mode 100644 scripts/Makefile.defconf
+
 -- 
 2.34.1
 
