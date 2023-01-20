@@ -1,103 +1,158 @@
-Return-Path: <SRS0=a+z/=5R=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=9ZLf=5R=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6A55C25B4E
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 17:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 006DEC05027
+	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 17:48:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ADE7EC433EF; Fri, 20 Jan 2023 17:35:54 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id BD441C4339E; Fri, 20 Jan 2023 17:48:17 +0000 (UTC)
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 00C95C4339C
-	for <soc@kernel.org>; Fri, 20 Jan 2023 17:35:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 00C95C4339C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id bk16so5469601wrb.11
-        for <soc@kernel.org>; Fri, 20 Jan 2023 09:35:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RtibDBYP4iMtkWCSC6UIrfEqP+79E1l1LSnhYmoZi84=;
-        b=a0EizrBVJ51x9XMo0SmIYGujI1VE9IuQMAZSmgDPW3HPHFB6mYwi9BGrBxpjbkObek
-         itKHvG8slnp/701yTvitXMlHAStQ4lI9mGrzl3SjhF9u0iQrTZxG95kMPUuh8uXghW6r
-         pRu6wigR3XGbq2vfZcGagjR/wpGM9BxewkzOfmmuGjFMBkhB1yQihKjwKg6vXsj5e+Jj
-         irk/A6di6OnFkhm9W+AXN6OnzD4sMdxfpGGGdcxM2C5VTa0JLQ8R/PHNY3GXxGQSrkNo
-         Q8UdRjXv4/n1eEw53K8AUfaTgN69IBSSFcGgAEcicYplX/Rw0A8jpTfAeldp4L9u00Z4
-         eCFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RtibDBYP4iMtkWCSC6UIrfEqP+79E1l1LSnhYmoZi84=;
-        b=kBTRnmKnPLZZqwmKQgZF3WB4dJaaM+a5CnCzoUSQ+8/cSl+LsBYK8XN3TLV19Zjel+
-         6vjSwHhbdjJxvGpkhtKKes3xX5/11OZqyUkUOaaH0sgYtxyuvCi5fHGYCc/iCY11k6TY
-         E49p3b2Ww9VYYkU3uUoYHQ+KIqe+Te+GzdW9lZsCJDQjFgb2IfL6qBeXz65gtPTEgjqp
-         l5Az/LpAH6ke1vnF2TyJiVzwz0JWPTFERdv2YUROSc7DuqIEIBzyPLHGK32KRFpyJ4Gs
-         t+gEU6WYYjpGekXZJ92gE5B6f0osbiMv67pyGqKZGs/2SyyvtFrOLmFO7w8crB2SQsCE
-         TAvQ==
-X-Gm-Message-State: AFqh2krWtRvwp7XXIVsrRtTy4zSusf9fefseuzyIMEwrzSsX7aUaNWQo
-	BArhZwdvdZmIMuK3x+5kgO27wQ==
-X-Google-Smtp-Source: AMrXdXt54pJEA64hU9pqLpjAzfF4EB4BwV1gaYq2BN8kjUL2tMAG73rGdCUL7ncRTIzQmMkHPYLxTw==
-X-Received: by 2002:a5d:4cc8:0:b0:2bd:d779:c1b5 with SMTP id c8-20020a5d4cc8000000b002bdd779c1b5mr22020011wrt.27.1674236151289;
-        Fri, 20 Jan 2023 09:35:51 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i6-20020adfe486000000b002423dc3b1a9sm35871262wrm.52.2023.01.20.09.35.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 09:35:50 -0800 (PST)
-Message-ID: <780f2669-7ef0-1a17-9e04-50eeba4c2cf7@linaro.org>
-Date: Fri, 20 Jan 2023 18:35:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 01/10] dt-bindings: arm: fsl: add TQ-Systems LS1021A
- board
-Content-Language: en-US
-To: Alexander Stein <alexander.stein@ew.tq-group.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
- Russell King <linux@armlinux.org.uk>, Marek Vasut <marex@denx.de>,
- Marcel Ziswiler <marcel.ziswiler@toradex.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>
+	by smtp.kernel.org (Postfix) with ESMTPS id 2F291C4339B;
+	Fri, 20 Jan 2023 17:48:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2F291C4339B
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id A46F43200A47;
+	Fri, 20 Jan 2023 12:48:13 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 12:48:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm2; t=1674236892; x=
+	1674323292; bh=suuEDmGpMK8nFYB774MavCLSlHZ448gfBuVhNRXP7EU=; b=C
+	QcLVRreBsT9rJUB1hoyVgUJ7vWGaM17ha5j9hXxIL5YJmaX14k1LJ4O4SbMkTXy1
+	2EAUuqM8XKqhhvsd2L0aLL8LCrKakXLnOJ4EDxHhkVa6MPdzzhgGAzS1Axale0lx
+	N1IVM8igM6tDyqZOZmxJ0UcEaogD+K5Gtn3M8iTDM6Xrla1DTsc7K+AZSvmdZTPL
+	w5OdBZ4a1MqQlaMaxhUbvAClZJu8DCf+O2DNcIRaFlcAVGz5HXxeqOL7JuTSr2qG
+	PAhUDcC2sN3i2/tW4JwwmiCd6K3AgKYr2tHQy5Sr3ztdwW6Y41NEE6vGiyJR747R
+	1L2RKqasUqUfGfWTOy9Kg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674236892; x=
+	1674323292; bh=suuEDmGpMK8nFYB774MavCLSlHZ448gfBuVhNRXP7EU=; b=f
+	3twNx4gypSuyC82LNunQU3SUx3JQT35yk8KkrZhMH/pkfinaI/2/nBN3IKe0IUAW
+	alB/7JBcG4PVMFUFBKYXCEObg7LPiNi4aCB/SXsaTj86L3b/Y+lkKJfyVPTVEzpu
+	SzLhTYw+Iutd7v6MfVE1qr+ptyxCAiAZujfyEDDw4hMaffqHqL/spNpyOZlh/09y
+	ZysYzJftXVhYmx+dZt8OqpVhZJeuHFNw6velxglhJeNRfovB6DRoCpEfdT2ZKLlI
+	YAIiEtRbDevfm3mB9XjVABvjPBXeQmn7VcmkQPDpzrn5hVl1Ie3wBCyRA65RuAZu
+	x3PYw5WILmzUoI62CMlLw==
+X-ME-Sender: <xms:29PKYylELihtzgeq-nZ34-6DjL0SIqRD4R_4F30uCg--gV3OElBSIw>
+    <xme:29PKY533sVhqJAiJoOsQ3iGpDdf-STroR5kv74P7GnBB9ZbiMYYcfZ-xOphlALEPa
+    gWEVXBSfU_IiWK0iRs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
+    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:29PKYwrUWQrbmvHdUIOMnQnqLCxJ4qs4qHotbjlDq5n9mfQJ_dUxqQ>
+    <xmx:29PKY2mw24bxrJtxFLn64x-m-I3rMlad9TkCqttHJDbgr2vk6WDNZw>
+    <xmx:29PKYw03GLe1PEgTMr5ylaXbbr0GTsYQguNOfKBObPa9OmXGcIkO2g>
+    <xmx:3NPKYxLTrWC9SRpdqaGtp_3nNcT-CRaUmTiQ2oKZrQo783C-pCTLtg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B9E9AB60086; Fri, 20 Jan 2023 12:48:11 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <720a7d19-4b7f-4948-b044-c46a539a4b36@app.fastmail.com>
+In-Reply-To: <Y8rMJcX0cqThKj2N@google.com>
+References: <20221226123630.6515-1-pali@kernel.org>
+ <db008af4-2918-4458-aa68-2392674475c8@app.fastmail.com>
+ <Y8rMJcX0cqThKj2N@google.com>
+Date: Fri, 20 Jan 2023 18:47:52 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Lee Jones" <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Matthias Schiffer <matthias.schiffer@tq-group.com>, soc@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org
-References: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
- <20230120133455.3962413-2-alexander.stein@ew.tq-group.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120133455.3962413-2-alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>, soc@kernel.org,
+ linux-kernel@vger.kernel.org, "Pavel Machek" <pavel@ucw.cz>,
+ linux-leds@vger.kernel.org, "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH RESEND 0/8] Resend LED patches
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 20/01/2023 14:34, Alexander Stein wrote:
-> From: Matthias Schiffer <matthias.schiffer@tq-group.com>
-> 
-> TQMLS102xA is a SOM family using NXP LS1021A CPU family.
-> MBLS102xA is an evaluation mainboard for this SOM.
-> 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@tq-group.com>
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> Changes in v2:
-> * Improved the description mentioning this is a socketable module
-> 
+On Fri, Jan 20, 2023, at 18:15, Lee Jones wrote:
+> On Fri, 20 Jan 2023, Arnd Bergmann wrote:
 
+>> > Marek Beh=C3=BAn (3):
+>> >   leds: turris-omnia: support HW controlled mode via private trigger
+>> >   leds: turris-omnia: initialize multi-intensity to full
+>> >   leds: turris-omnia: change max brightness from 255 to 1
+>> >
+>> > Pali Roh=C3=A1r (5):
+>> >   dt-bindings: leds: register-bit-led: Add active-low property
+>> >   leds: syscon: Implement support for active-low property
+>> >   powerpc/85xx: DTS: Add CPLD definitions for P1021RDB Combo Board =
+CPL
+>> >     Design
+>> >   dt-bindings: leds: Add cznic,turris1x-leds.yaml binding
+>> >   leds: Add support for Turris 1.x LEDs
+>> >
+>> >  .../testing/sysfs-class-led-driver-turris1x   |  31 ++
+>> >  .../bindings/leds/cznic,turris1x-leds.yaml    | 118 +++++
+>> >  .../bindings/leds/register-bit-led.yaml       |   5 +
+>> >  arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi    |  92 ++++
+>> >  arch/powerpc/boot/dts/fsl/p1020mbg-pc_32b.dts |   6 +-
+>> >  arch/powerpc/boot/dts/fsl/p1020mbg-pc_36b.dts |   6 +-
+>> >  arch/powerpc/boot/dts/fsl/p1020rdb-pd.dts     |  44 +-
+>> >  arch/powerpc/boot/dts/fsl/p1020utm-pc.dtsi    |  37 ++
+>> >  arch/powerpc/boot/dts/fsl/p1020utm-pc_32b.dts |   4 +-
+>> >  arch/powerpc/boot/dts/fsl/p1020utm-pc_36b.dts |   4 +-
+>> >  arch/powerpc/boot/dts/fsl/p1021rdb-pc.dtsi    |  37 ++
+>> >  arch/powerpc/boot/dts/fsl/p1021rdb-pc_32b.dts |   5 +-
+>> >  arch/powerpc/boot/dts/fsl/p1021rdb-pc_36b.dts |   5 +-
+>> >  arch/powerpc/boot/dts/fsl/p2020rdb-pc.dtsi    |  33 +-
+>
+>> >  drivers/leds/Kconfig                          |  10 +
+>> >  drivers/leds/Makefile                         |   1 +
+>> >  drivers/leds/leds-syscon.c                    |  14 +-
+>> >  drivers/leds/leds-turris-1x.c                 | 474 ++++++++++++++=
+++++
+>> >  drivers/leds/leds-turris-omnia.c              |  46 +-
+>
+> If everyone is convinced that applying these drivers is the correct
+> thing to do, I'd be happy to (rather) take them via LEDs.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ok, thanks. I had not actually looked at the patches until today.
+They were in the soc tree backlog but appeared to be misplaced
+there until I read the  0/10 message text.
 
-Best regards,
-Krzysztof
+Looking at it now, I see:
 
+- patches 1 and 2 seem obvious and have been reviewed by
+  others already
+
+- patch 3 is for arch/powerpc and should get merged through
+  there if there are no objections to the binding in patch 4.
+
+- patch 5 is the big driver patch, with a Reviewed-by tag
+  from Marek Beh=C3=BAn, who is the author of the last three patches.
+  An earlier version of this patch was sent in June and got
+  a few Acks and detailed feedback from Andy [1], but he's also
+  not on Cc, and I don't know if his comments are all resolved
+  in this version.
+
+- Patches 6, 7 and 8 all seem simple LED subsystem patches,
+  they just need review from you in order to get applied.
+  These are also missing a Signed-off-by from the submitter
+  in addition to the author in order to be applied.
+ =20
+      Arnd
+
+[1] https://lore.kernel.org/all/CAHp75Vcr6o2rm+T6Tr8sS4VXCLVHtmLPWy-njOK=
+AvO4AcZoW=3DA@mail.gmail.com/
