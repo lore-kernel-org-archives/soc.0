@@ -1,144 +1,128 @@
-Return-Path: <SRS0=MX/P=5R=ew.tq-group.com=alexander.stein@kernel.org>
+Return-Path: <SRS0=a+z/=5R=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D93FAC25B4E
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 12:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6B30C05027
+	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 12:57:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 97719C4339C; Fri, 20 Jan 2023 12:43:33 +0000 (UTC)
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 9B3B6C4339C; Fri, 20 Jan 2023 12:57:30 +0000 (UTC)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EA4D8C433D2;
-	Fri, 20 Jan 2023 12:43:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA4D8C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	by smtp.kernel.org (Postfix) with ESMTPS id B8F6DC4339B
+	for <soc@kernel.org>; Fri, 20 Jan 2023 12:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8F6DC4339B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so5770569wml.3
+        for <soc@kernel.org>; Fri, 20 Jan 2023 04:57:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674218610; x=1705754610;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JN8ajwXrj642G4YxWODrXWlILk4BXwrwlIJtEA6ptZI=;
-  b=SOBK9paC7WzqN+h9WJ75t0Yx3TLs1faqs/qO1P111Ig1TgIJ2H8pfDvp
-   EaFxNUZb3SRQEW/Iod0+L3hmsMU4qGeamQKzYJvB++M2CYp3MRNAqFDCH
-   TXPLFOyiH9O8fHnWFS0rCq73vnnK/hd0qWVdoYgg66P3YytIqAPLbK/AL
-   Sbtnyy1VmHGniWsBKYXUnXAlkCPHFwMYID0+wDl2Zsxx/ne063OyxCW50
-   kCwjYrl6tx2e5YqYFw8Ev7Refv8pH5CHv1lci8DKlq46npq3ea+ZDVzZx
-   Ocz+oDUNvrT6VsrKdGVz2CcuNDUKxjlFN/3VQv1TyzQlv9QYu9Y/iABeQ
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28559993"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 13:43:27 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 20 Jan 2023 13:43:27 +0100
-X-PGP-Universal: processed;
-	by tq-pgp-pr1.tq-net.de on Fri, 20 Jan 2023 13:43:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674218607; x=1705754607;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JN8ajwXrj642G4YxWODrXWlILk4BXwrwlIJtEA6ptZI=;
-  b=m3iisd6tyEiZvf/a9fXJ3fgOgLloyNHPNOINcnghTsVUOKJC53dxcZCh
-   eSvpI0rhXBPVARX74QQxPcEo22eIFuVizBAnpDFSPLNPaBmj9hM9BjL/N
-   7sM2SblCS9ObWQ26ZS52nHu71Mj2rpLHF+ZXtzKUzxoNLnG2fDxnVErdN
-   Hc7PzfBZieBSLF3lgxmrUw96NwXYGeezQfBGKRGwpMiMlGxc3MtNEo4rc
-   V8PDuJ5MYoayU9PDq2ZoaOvhqmGmLxKPc1bRxKttEytXKeimPHZsebjLW
-   D4jQ41iAFci1IVJFp6h1lJwsMX2t9aiQdqfVKK19G9Fz/Lp0Eb+PT+2TB
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28559992"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 20 Jan 2023 13:43:26 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9BA23280056;
-	Fri, 20 Jan 2023 13:43:26 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Olof Johansson <olof@lixom.net>, Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>, Russell King <linux@armlinux.org.uk>, Marek Vasut <marex@denx.de>, Marcel Ziswiler <marcel.ziswiler@toradex.com>, Arnd Bergmann <arnd@arndb.de>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eoV8ostgSDbK08VdIZJMHvJGHyPcf5FjWF2t6GC4OEg=;
+        b=I+2h2nB4eC17X95+rn5I4LjsNEODeuLd/RstVgSYO9B2D0iPkpnYaJvdIdryMAT1EO
+         CU5FIeSMPKBW9fVMRpzL+IOLy9wCpHpyqT4JWPVxeEjGfO0IEBspkhA5UJcsPP05Ntfd
+         rV1LO9WfmcPB8z+8of3kfcC8Qiqk1770+UjG/QY6zRB2aDJBcReLfNOHefGUoqPO7Iga
+         VaFSdp2S5tlSKZZztCPhgRwp05yXyUkVmqmkuU65yyVBXnHQ6N2P6ho/wHUBV0YYv5vP
+         JfWl3INAMhagIgOCA+Qjd+eSHo1Yo9YWD238XpPKHtNWXfy5o3JbPFOvjW1b+h7nds4G
+         mMiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eoV8ostgSDbK08VdIZJMHvJGHyPcf5FjWF2t6GC4OEg=;
+        b=GQqMJ6iGWQ5HAQ41xf9YSHAiKjvbKKf9LCtXmReCF3f5TcjL7IFYWnooa12IXVyn8s
+         2p0XVgoik1EubC+h7BRvdcIaUR67/GtmZ2SnOFBb9JFuWuGHLRmtSjeGW/B1jOTvX7fE
+         LG8Qf6FvK8vPFny5s4IxrbEENTt7Z+ERd8Vpw/Snjr9vu8z96ikuHsqNkdPf52FWku20
+         ow8XHzHUsmtzgFn7n2i13B5sthCjkdb7iaeQnXL2EURixwll1DGM42ii6t8aFVPvp21H
+         JDTiby44wQnpHiIIV839Qq6S/JKqxB22rddyjac6tGTu6JzfwSR4dEhvu0GkC0An5LLs
+         aVAA==
+X-Gm-Message-State: AFqh2krUc0QxanQPPwKJ8h7YdvC/Rcg/zT42O8RXv5K7DOP3leBA9EwI
+	+yM4v+UXPiUhVrNZUEv9Q6VyvA==
+X-Google-Smtp-Source: AMrXdXvkIjdx5y0alBmce8ylnRgIDUjnzn/rTeXMSskipMsEgmlz4JbfeRubh4n53lBnOQIWrz2B4Q==
+X-Received: by 2002:a05:600c:1d22:b0:3da:f66c:795d with SMTP id l34-20020a05600c1d2200b003daf66c795dmr14361504wms.9.1674219446983;
+        Fri, 20 Jan 2023 04:57:26 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f22-20020a1cc916000000b003d35acb0fd7sm2229002wmb.34.2023.01.20.04.57.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 04:57:26 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 9/9] [DNI] ARM: multi_v7_defconfig: Enable CONFIG_ARM_LPAE for multi_v7_config
-Date: Fri, 20 Jan 2023 13:43:26 +0100
-Message-ID: <3629553.RUnXabflUD@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <9e2aa58c-10dc-49d0-a492-4d724cf29c2b@app.fastmail.com>
-References: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com> <2617470.BddDVKsqQX@steina-w> <9e2aa58c-10dc-49d0-a492-4d724cf29c2b@app.fastmail.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
+	soc@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: drop redundant "ARMv8" from Kconfig option title
+Date: Fri, 20 Jan 2023 13:57:22 +0100
+Message-Id: <20230120125722.270722-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
 
-Hi Arnd,
+All these platforms are ARMv8 or newer and choosing the platforms in
+menuconfig is much easier if the titles start with something specific.
 
-Am Donnerstag, 19. Januar 2023, 17:07:30 CET schrieb Arnd Bergmann:
-> On Thu, Jan 19, 2023, at 16:27, Alexander Stein wrote:
-> > Am Donnerstag, 19. Januar 2023, 16:09:05 CET schrieb Arnd Bergmann:
-> >> On Thu, Jan 19, 2023, at 15:42, Alexander Stein wrote:
-> >> > This is necessary to support PCIe on LS1021A.
-> >> >=20
-> >> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> >>=20
-> >> Can you explain why this is actually required? I can see that the
-> >> ranges in the PCIe device point to a high address (0x4000000000,
-> >> 2^40), but I can't tell if this is hardwired in the SoC or a
-> >> setting that is applied by software (either the bootloader or
-> >> the PCIe driver).
-> >=20
-> > The RM ([1]) memory map (Table 2-1) says that 'PCI Express 1' is located
-> > at
-> > '400000_0000', 'PCI Express 2' at '480000_0000', so I assume this is
-> > hardcoded in SoC.
-> > It also explicitly lists in that table PCIe 1&2 is only accessible with
-> > 40-bit addressing.
-> >=20
-> >> If you can reprogram the memory map, I would expect this to fit
-> >> easily into the 32-bit address space, with 1GB for DDR3 memory
-> >> and 1GB for PCIe BARs.
-> >=20
-> > I'm not sure which part of memory map you can reprogram and where, but I
-> > guess this is fixed on this SoC.
->=20
-> Ok, I see it now. It looks like they fell victim to the
-> cursed "Principles of ARM=AE Memory Maps White Paper"
-> document and messed it up even further ;-)
->=20
-> In particular, it seems that the memory map of the PCI address
-> spaces is configurable, but only within that area you listed.
-> I see that section "28.4.2 PEX register descriptions" does list
-> a 64-bit prefetchable address space in addition to the 32-bit
-> non-prefetchable memory space, but the 64-bit space is not
-> listed in the DT. It would be a good idea to configure that
-> as well in order for devices to work that need a larger BAR,
-> such as a GPU, but it wouldn't help with fitting the PCIe
-> into non-LPAE 32-bit CPU address space.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/Kconfig.platforms | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-I'm not sure if I can follow you here. Do you have some keywords of what's=
-=20
-missing there?
-
-> In the datasheet I also see that the chip theoretically
-> supports 8GB of DDR4, which would definitely put it beyond
-> the highmem limit, even with the 4G:4G memory split. Do you
-> know if there are ls1021a devices with more than 4GB of
-> installed memory?
-
-Where did you find those 8GB? Section 16.2 mentions it supports up to 4 ban=
-ks/
-chip-selects which I would assume is much more. Also the memory map has a D=
-RAM=20
-region 2 for memory region 2-32GB. But yes this exceeds 32bit addressing.
-I'm not aware of ls1021 devices with more than 4GB memory. Our modules only=
-=20
-support up to 2GB.
-
-Best regards,
-Alexander
-
-
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index d1970adf80ab..165e544aa7f9 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -95,7 +95,7 @@ config ARCH_BITMAIN
+ 	  This enables support for the Bitmain SoC Family.
+ 
+ config ARCH_EXYNOS
+-	bool "ARMv8 based Samsung Exynos SoC family"
++	bool "Samsung Exynos SoC family"
+ 	select COMMON_CLK_SAMSUNG
+ 	select CLKSRC_EXYNOS_MCT
+ 	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
+@@ -108,7 +108,7 @@ config ARCH_EXYNOS
+ 	  This enables support for ARMv8 based Samsung Exynos SoC family.
+ 
+ config ARCH_SPARX5
+-	bool "ARMv8 based Microchip Sparx5 SoC family"
++	bool "Microchip Sparx5 SoC family"
+ 	select PINCTRL
+ 	select DW_APB_TIMER_OF
+ 	help
+@@ -199,13 +199,13 @@ menuconfig ARCH_NXP
+ if ARCH_NXP
+ 
+ config ARCH_LAYERSCAPE
+-	bool "ARMv8 based Freescale Layerscape SoC family"
++	bool "Freescale Layerscape SoC family"
+ 	select EDAC_SUPPORT
+ 	help
+ 	  This enables support for the Freescale Layerscape SoC family.
+ 
+ config ARCH_MXC
+-	bool "ARMv8 based NXP i.MX SoC family"
++	bool "NXP i.MX SoC family"
+ 	select ARM64_ERRATUM_843419
+ 	select ARM64_ERRATUM_845719 if COMPAT
+ 	select IMX_GPCV2
+@@ -296,7 +296,7 @@ config ARCH_TEGRA
+ 	  This enables support for the NVIDIA Tegra SoC family.
+ 
+ config ARCH_TESLA_FSD
+-	bool "ARMv8 based Tesla platform"
++	bool "Tesla platform"
+ 	depends on ARCH_EXYNOS
+ 	help
+ 	  Support for ARMv8 based Tesla platforms.
+-- 
+2.34.1
 
