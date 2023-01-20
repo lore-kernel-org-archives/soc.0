@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A52F6C54EE1
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 13:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A2D8C54E94
+	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 13:35:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85B4DC433D2; Fri, 20 Jan 2023 13:35:17 +0000 (UTC)
+	id 09B10C4339B; Fri, 20 Jan 2023 13:35:19 +0000 (UTC)
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E3121C4339C;
-	Fri, 20 Jan 2023 13:35:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E3121C4339C
+	by smtp.kernel.org (Postfix) with ESMTPS id A494FC4339E;
+	Fri, 20 Jan 2023 13:35:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A494FC4339E
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674221715; x=1705757715;
+  t=1674221717; x=1705757717;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Sjo55naQd9lYTfNlnMxN/zRcLhVyGOhekZtyT5t1Hko=;
-  b=C+1RoaM6QeOzkIaAtEiqQMN7KC1LwX5A6NNUrVj40rcjDsvFmtb5suJG
-   jsyXf2V0wEZcju/cluNPHv3b9ErPOHSrD7UwmNEGFxW+1QzbkqcoAEjc/
-   FHHloUBvD+3DnYmtLu/38CkmeMRClRK6qSQlaFvg2x3/pGOs757XApwVd
-   81U3cMJ0C6qx/dy+u15jVkn1/YIlajuH6zArHoFAkpKxVPOZ+Km5xXcrW
-   /qTlggnRfH+mGxsvhGsHuOphfv80P0DioGNvv8pN2WNjUqlC2YRG/0cQE
-   I+LJSfTnGZqmmjYYYIT0s7WOyxBQwB+nI4fiM/K/71eHluvSAlMkLMyNP
-   w==;
+  bh=UK9in/6pk+cr3TnMOT93DY7cqB9Lku8ZTtDleVDrgtc=;
+  b=mRUIHRVgk8dTG2UPohgjAUbgK/VDPzBTHfntfLUG3bUyJrsKt8UVeyK2
+   EezrUg9ZiISbE2Dh3E+DpRJp9gNlrHxUgOMSW34XFcaS+N4MJk95seLDk
+   dDdYD5SABc22fwZEcyxzIOgT8bipRiTYW67UJ+/pxNAFB27eBxu4BSk2m
+   Cfq9+/vqpA5qG8Pqa8D9OXKWE+2P5RWETSJQHEWPbWXE9E6rCJi36R2zc
+   hkM7phEc17vZn/hdyQ01dSPuG9MmvWXS3S3QEpLrwFJS/oFt9N58FBOUj
+   5vodG+XxbhVtnpprI5sGBw4fZhaHI2bwdpx310lu9Q0GnFY/ZPcEl9ms6
+   g==;
 X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28561589"
+   d="scan'208";a="28561593"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 14:35:06 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -43,23 +43,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1674221706; x=1705757706;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Sjo55naQd9lYTfNlnMxN/zRcLhVyGOhekZtyT5t1Hko=;
-  b=KVCKgBmiPJSqtGq9bPVa9brxbK3L7Bn5Cfqb3pq6xgUKFzTSMvIV9VBy
-   MGBslKyLiDQBKbI971aHhm4a7linuLc21vxpWlkhH7eeuLbgtxn2kf9Ou
-   ALYo46gB5MDcTHb0P97+j3unLGTpLOE1ewE79qUFD5K0bKqUZgsYAfwWt
-   5j9lNB7M32zG8McWs5RTj+C5bkMhch4Yzk0dzsUwwJ0yqsR7eAk49eqts
-   1U5hrky3/kpNw98vq2k/R16PfRcgUCL2UPql/bd2lv4hYNE1PvmcvOEtD
-   sYj7QWwp41UvJrVby6c4mFHtDCajn9IGPssKqsu7FwBAbMyaTYQajGfOg
+  bh=UK9in/6pk+cr3TnMOT93DY7cqB9Lku8ZTtDleVDrgtc=;
+  b=BTcLKl2xHZAJI46pdlQpnyUoeXJGB5vvghfy6DvSWczPmnhpvTq3KHhf
+   FS+VA0cCgRPyMOKe22E4juIsD9DEcNnplumKpyZfzoEOAGLeF0qhROIWz
+   FEPSaTzqsoOgPn2Nd8j474AhEQQlbmMiMTNUFFYTrWq23WNAhqKKfHv0d
+   vb2GcNmFrRphU3wxvR8Om5G/paWw6dqAkxdPWQG2WHokE1VgrSSqSax4o
+   kodh/XAZ3vM4XdWAz9ng195o1k50K9OdhiKBCLVcBSqwB4siuy8ivGg0O
+   uehXPJbRCKcMeiCg+4JqN/c/bgQ9x2nIQXw4o11CXD6RIinkZrxJFEkWn
    A==;
 X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28561588"
+   d="scan'208";a="28561592"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 20 Jan 2023 14:35:05 +0100
+  by mx1.tq-group.com with ESMTP; 20 Jan 2023 14:35:06 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.53.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 92474280082;
-	Fri, 20 Jan 2023 14:35:05 +0100 (CET)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 425DC28007F;
+	Fri, 20 Jan 2023 14:35:06 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -78,125 +78,68 @@ To: Rob Herring <robh+dt@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Nicolas Schier <nicolas@fjasle.eu>
 List-Id: <soc.lore.kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
 	soc@kernel.org,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linuxppc-dev@lists.ozlabs.org,
-	linux-kbuild@vger.kernel.org
-Subject: [PATCH v2 08/10] ARM: multi_v7_defconfig: Add options to support TQMLS102xA series
-Date: Fri, 20 Jan 2023 14:34:53 +0100
-Message-Id: <20230120133455.3962413-9-alexander.stein@ew.tq-group.com>
+	linux-kbuild@vger.kernel.org,
+	Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 10/10] ARM: add multi_v7_lpae_defconfig
+Date: Fri, 20 Jan 2023 14:34:55 +0100
+Message-Id: <20230120133455.3962413-11-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
 References: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable drivers used on TQMLS102xA + MBLS1021A.
+From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
+The only missing configuration option preventing us from using
+multi_v7_defconfig with the Raspberry Pi 4 is ARM_LPAE. It's needed as
+the PCIe controller found on the SoC depends on 64bit addressing, yet
+can't be included as not all v7 boards support LPAE.
+
+Introduce multi_v7_lpae_defconfig, built off multi_v7_defconfig, which will
+avoid us having to duplicate and maintain multiple similar configurations.
+
+Needless to say the Raspberry Pi 4 is not the only platform that can
+benefit from this new configuration.
+
+Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
-Changes in v2:
-* Changed symbols to 'm' where possible
+Directly applied from https://lore.kernel.org/linux-arm-kernel/20200203184820.4433-2-nsaenzjulienne@suse.de/T/#m96968dd45c0aaa88e0a7387024b5ac13b002363d
+Although I had to apply manually
 
- arch/arm/configs/multi_v7_defconfig | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm/Makefile            | 4 ++++
+ arch/arm/configs/lpae.config | 1 +
+ 2 files changed, 5 insertions(+)
+ create mode 100644 arch/arm/configs/lpae.config
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index ee184eb37adcf..92628a160cfb3 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -191,6 +191,7 @@ CONFIG_PCI_TEGRA=y
- CONFIG_PCI_RCAR_GEN2=y
- CONFIG_PCIE_RCAR_HOST=y
- CONFIG_PCI_DRA7XX_EP=y
-+CONFIG_PCI_LAYERSCAPE=y
- CONFIG_PCI_ENDPOINT=y
- CONFIG_PCI_ENDPOINT_CONFIGFS=y
- CONFIG_PCI_EPF_TEST=m
-@@ -249,6 +250,7 @@ CONFIG_AHCI_ST=y
- CONFIG_AHCI_IMX=y
- CONFIG_AHCI_SUNXI=y
- CONFIG_AHCI_TEGRA=y
-+CONFIG_AHCI_QORIQ=y
- CONFIG_SATA_HIGHBANK=y
- CONFIG_SATA_MV=y
- CONFIG_SATA_RCAR=y
-@@ -329,6 +331,7 @@ CONFIG_TOUCHSCREEN_ADC=m
- CONFIG_TOUCHSCREEN_ATMEL_MXT=m
- CONFIG_TOUCHSCREEN_ELAN=m
- CONFIG_TOUCHSCREEN_MMS114=m
-+CONFIG_TOUCHSCREEN_EDT_FT5X06=m
- CONFIG_TOUCHSCREEN_WM97XX=m
- CONFIG_TOUCHSCREEN_ST1232=m
- CONFIG_TOUCHSCREEN_STMPE=y
-@@ -483,6 +486,7 @@ CONFIG_GPIO_ASPEED_SGPIO=y
- CONFIG_GPIO_DAVINCI=y
- CONFIG_GPIO_DWAPB=y
- CONFIG_GPIO_EM=y
-+CONFIG_GPIO_MPC8XXX=y
- CONFIG_GPIO_MXC=y
- CONFIG_GPIO_RCAR=y
- CONFIG_GPIO_SYSCON=y
-@@ -493,6 +497,7 @@ CONFIG_GPIO_PCA953X=y
- CONFIG_GPIO_PCA953X_IRQ=y
- CONFIG_GPIO_PCF857X=y
- CONFIG_GPIO_PALMAS=y
-+CONFIG_GPIO_STMPE=y
- CONFIG_GPIO_TPS6586X=y
- CONFIG_GPIO_TPS65910=y
- CONFIG_GPIO_TWL4030=y
-@@ -533,6 +538,7 @@ CONFIG_SENSORS_INA2XX=m
- CONFIG_CPU_THERMAL=y
- CONFIG_DEVFREQ_THERMAL=y
- CONFIG_IMX_THERMAL=y
-+CONFIG_QORIQ_THERMAL=m
- CONFIG_ROCKCHIP_THERMAL=y
- CONFIG_RCAR_THERMAL=y
- CONFIG_ARMADA_THERMAL=y
-@@ -821,6 +827,8 @@ CONFIG_SND_SOC_MSM8916_WCD_ANALOG=m
- CONFIG_SND_SOC_MSM8916_WCD_DIGITAL=m
- CONFIG_SND_SOC_SGTL5000=m
- CONFIG_SND_SOC_STI_SAS=m
-+CONFIG_SND_SOC_TLV320AIC32X4=m
-+CONFIG_SND_SOC_TLV320AIC32X4_I2C=m
- CONFIG_SND_SOC_WM8978=m
- CONFIG_SND_AUDIO_GRAPH_CARD=m
- CONFIG_USB=y
-@@ -830,6 +838,7 @@ CONFIG_USB_XHCI_MVEBU=y
- CONFIG_USB_XHCI_TEGRA=m
- CONFIG_USB_BRCMSTB=m
- CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_FSL=m
- CONFIG_USB_EHCI_HCD_STI=y
- CONFIG_USB_EHCI_EXYNOS=m
- CONFIG_USB_EHCI_MV=m
-@@ -933,6 +942,8 @@ CONFIG_NEW_LEDS=y
- CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_CLASS_FLASH=m
- CONFIG_LEDS_CPCAP=m
-+CONFIG_LEDS_PCA9532=m
-+CONFIG_LEDS_PCA9532_GPIO=y
- CONFIG_LEDS_GPIO=y
- CONFIG_LEDS_PWM=y
- CONFIG_LEDS_MAX8997=m
-@@ -949,6 +960,7 @@ CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
- CONFIG_LEDS_TRIGGER_TRANSIENT=y
- CONFIG_LEDS_TRIGGER_CAMERA=y
- CONFIG_EDAC=y
-+CONFIG_EDAC_LAYERSCAPE=y
- CONFIG_EDAC_HIGHBANK_MC=y
- CONFIG_EDAC_HIGHBANK_L2=y
- CONFIG_RTC_CLASS=y
-@@ -962,6 +974,7 @@ CONFIG_RTC_DRV_MAX8997=m
- CONFIG_RTC_DRV_MAX77686=y
- CONFIG_RTC_DRV_RK808=m
- CONFIG_RTC_DRV_RS5C372=m
-+CONFIG_RTC_DRV_PCF85063=m
- CONFIG_RTC_DRV_PCF85363=m
- CONFIG_RTC_DRV_BQ32K=m
- CONFIG_RTC_DRV_TWL4030=y
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 506dbc72323bc..80d9eaf3dc06a 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -314,6 +314,10 @@ endif
+ # My testing targets (bypasses dependencies)
+ bp:;	$(Q)$(MAKE) $(build)=$(boot) $(boot)/bootpImage
+ 
++include $(srctree)/scripts/Makefile.defconf
++PHONY += multi_v7_lpae_defconfig
++multi_v7_lpae_defconfig:
++	$(call merge_into_defconfig,multi_v7_defconfig,lpae)
+ 
+ define archhelp
+   echo  '* zImage        - Compressed kernel image (arch/$(ARCH)/boot/zImage)'
+diff --git a/arch/arm/configs/lpae.config b/arch/arm/configs/lpae.config
+new file mode 100644
+index 0000000000000..19bab134e014b
+--- /dev/null
++++ b/arch/arm/configs/lpae.config
+@@ -0,0 +1 @@
++CONFIG_ARM_LPAE=y
 -- 
 2.34.1
 
