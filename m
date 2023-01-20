@@ -4,16 +4,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A2D8C54E94
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B99C38159
 	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 13:35:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 09B10C4339B; Fri, 20 Jan 2023 13:35:19 +0000 (UTC)
+	id 90E82C433EF; Fri, 20 Jan 2023 13:35:19 +0000 (UTC)
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A494FC4339E;
+	by smtp.kernel.org (Postfix) with ESMTPS id 6D7E7C433AC;
 	Fri, 20 Jan 2023 13:35:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A494FC4339E
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6D7E7C433AC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -21,16 +21,16 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1674221717; x=1705757717;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UK9in/6pk+cr3TnMOT93DY7cqB9Lku8ZTtDleVDrgtc=;
-  b=mRUIHRVgk8dTG2UPohgjAUbgK/VDPzBTHfntfLUG3bUyJrsKt8UVeyK2
-   EezrUg9ZiISbE2Dh3E+DpRJp9gNlrHxUgOMSW34XFcaS+N4MJk95seLDk
-   dDdYD5SABc22fwZEcyxzIOgT8bipRiTYW67UJ+/pxNAFB27eBxu4BSk2m
-   Cfq9+/vqpA5qG8Pqa8D9OXKWE+2P5RWETSJQHEWPbWXE9E6rCJi36R2zc
-   hkM7phEc17vZn/hdyQ01dSPuG9MmvWXS3S3QEpLrwFJS/oFt9N58FBOUj
-   5vodG+XxbhVtnpprI5sGBw4fZhaHI2bwdpx310lu9Q0GnFY/ZPcEl9ms6
+  bh=jeLxjazrEih89VJNavAbz95sBkW/7H1uB/1gGqv3ROs=;
+  b=nEcDCKUKUHxI+Gh4ue2LtmU/Ld9i56Ch8djN3iSowXWgX114g4syc6fo
+   JzXsTWWDb8G1u7VMo2xU2fXnZXDbn1RHmnaToKoP7eg++Gxy9vSjHuoPs
+   3hmc7Hh1A14trSt40RXjlpI8ZvPc3S9szbFQj+dVESgJtKrP4pEIX3WfZ
+   AcF191hDoyonAs9QnViA6oLXeVJlEDN02jw8RghNKRE2+UF8FKGhSnbvc
+   sInWj8Tj/RiFZY2B6Qa/2WiD6AcTY4+MmMFelyWhSJE7VWgQq0UoZSvWG
+   J2lfn/tSZGP6PAWfVasCTK8/xRlTy+YzTiEJxeQJ8XYkAkSSxygyIUNEk
    g==;
 X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28561593"
+   d="scan'208";a="28561591"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 20 Jan 2023 14:35:06 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -43,23 +43,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1674221706; x=1705757706;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UK9in/6pk+cr3TnMOT93DY7cqB9Lku8ZTtDleVDrgtc=;
-  b=BTcLKl2xHZAJI46pdlQpnyUoeXJGB5vvghfy6DvSWczPmnhpvTq3KHhf
-   FS+VA0cCgRPyMOKe22E4juIsD9DEcNnplumKpyZfzoEOAGLeF0qhROIWz
-   FEPSaTzqsoOgPn2Nd8j474AhEQQlbmMiMTNUFFYTrWq23WNAhqKKfHv0d
-   vb2GcNmFrRphU3wxvR8Om5G/paWw6dqAkxdPWQG2WHokE1VgrSSqSax4o
-   kodh/XAZ3vM4XdWAz9ng195o1k50K9OdhiKBCLVcBSqwB4siuy8ivGg0O
-   uehXPJbRCKcMeiCg+4JqN/c/bgQ9x2nIQXw4o11CXD6RIinkZrxJFEkWn
+  bh=jeLxjazrEih89VJNavAbz95sBkW/7H1uB/1gGqv3ROs=;
+  b=oJuRmyzBqL7aeSuf5iRIj9SBrXiLVpHa+9ELCuExiHd4+JRAnzLZ8+yD
+   BDlJBssQiPDKIkLm3QxZF1ty5sAiVkE7K0zMrySdOfsBBc44VSCgkYukQ
+   mE1PRH+HtmgpyLMKwAI5sxACLh2ZgY/KpB/S+wDxwtS6kIW4BNV3m8EHV
+   0n4xX8+8ff5aGduJoKoLtyGQ1uOadCwL+RUBW0gsPQiJY3ICw3sY5SPrf
+   3XibdPaZbaokhiZJS0OKX6atD4ZT82YyH0+DO7BR5IktZNlnAVT7jamh/
+   vlIJqvC6HFObkkcsmylo87C7b+nUNFC0EjPXtamkRlM/dlQA/XNZt4b1O
    A==;
 X-IronPort-AV: E=Sophos;i="5.97,232,1669071600"; 
-   d="scan'208";a="28561592"
+   d="scan'208";a="28561590"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 20 Jan 2023 14:35:06 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.53.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 425DC28007F;
-	Fri, 20 Jan 2023 14:35:06 +0100 (CET)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id DF6B9280074;
+	Fri, 20 Jan 2023 14:35:05 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -85,9 +85,9 @@ Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kbuild@vger.kernel.org,
 	Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH v2 10/10] ARM: add multi_v7_lpae_defconfig
-Date: Fri, 20 Jan 2023 14:34:55 +0100
-Message-Id: <20230120133455.3962413-11-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v2 09/10] kbuild: Add config fragment merge functionality
+Date: Fri, 20 Jan 2023 14:34:54 +0100
+Message-Id: <20230120133455.3962413-10-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
 References: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
@@ -96,50 +96,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
-The only missing configuration option preventing us from using
-multi_v7_defconfig with the Raspberry Pi 4 is ARM_LPAE. It's needed as
-the PCIe controller found on the SoC depends on 64bit addressing, yet
-can't be included as not all v7 boards support LPAE.
-
-Introduce multi_v7_lpae_defconfig, built off multi_v7_defconfig, which will
-avoid us having to duplicate and maintain multiple similar configurations.
-
-Needless to say the Raspberry Pi 4 is not the only platform that can
-benefit from this new configuration.
+So far this function was only used locally in powerpc, some other
+architectures might benefit from it. Move it into
+scripts/Makefile.defconf.
 
 Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
 Directly applied from https://lore.kernel.org/linux-arm-kernel/20200203184820.4433-2-nsaenzjulienne@suse.de/T/#m96968dd45c0aaa88e0a7387024b5ac13b002363d
-Although I had to apply manually
 
- arch/arm/Makefile            | 4 ++++
- arch/arm/configs/lpae.config | 1 +
- 2 files changed, 5 insertions(+)
- create mode 100644 arch/arm/configs/lpae.config
+ arch/powerpc/Makefile    | 12 +-----------
+ scripts/Makefile.defconf | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 11 deletions(-)
+ create mode 100644 scripts/Makefile.defconf
 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 506dbc72323bc..80d9eaf3dc06a 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -314,6 +314,10 @@ endif
- # My testing targets (bypasses dependencies)
- bp:;	$(Q)$(MAKE) $(build)=$(boot) $(boot)/bootpImage
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index dc4cbf0a5ca95..533457466ce25 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -253,17 +253,7 @@ PHONY += bootwrapper_install
+ bootwrapper_install:
+ 	$(Q)$(MAKE) $(build)=$(boot) $(patsubst %,$(boot)/%,$@)
  
+-# Used to create 'merged defconfigs'
+-# To use it $(call) it with the first argument as the base defconfig
+-# and the second argument as a space separated list of .config files to merge,
+-# without the .config suffix.
+-define merge_into_defconfig
+-	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
+-		-m -O $(objtree) $(srctree)/arch/$(ARCH)/configs/$(1) \
+-		$(foreach config,$(2),$(srctree)/arch/$(ARCH)/configs/$(config).config)
+-	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+-endef
+-
 +include $(srctree)/scripts/Makefile.defconf
-+PHONY += multi_v7_lpae_defconfig
-+multi_v7_lpae_defconfig:
-+	$(call merge_into_defconfig,multi_v7_defconfig,lpae)
- 
- define archhelp
-   echo  '* zImage        - Compressed kernel image (arch/$(ARCH)/boot/zImage)'
-diff --git a/arch/arm/configs/lpae.config b/arch/arm/configs/lpae.config
+ PHONY += pseries_le_defconfig
+ pseries_le_defconfig:
+ 	$(call merge_into_defconfig,pseries_defconfig,le)
+diff --git a/scripts/Makefile.defconf b/scripts/Makefile.defconf
 new file mode 100644
-index 0000000000000..19bab134e014b
+index 0000000000000..ab332f7534f51
 --- /dev/null
-+++ b/arch/arm/configs/lpae.config
-@@ -0,0 +1 @@
-+CONFIG_ARM_LPAE=y
++++ b/scripts/Makefile.defconf
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0
++# Configuration heplers
++
++# Creates 'merged defconfigs'
++# ---------------------------------------------------------------------------
++# Usage:
++#   $(call merge_into_defconfig,base_config,config_fragment1 config_fragment2 ...)
++#
++# Input config fragments without '.config' suffix
++define merge_into_defconfig
++	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
++		-m -O $(objtree) $(srctree)/arch/$(ARCH)/configs/$(1) \
++		$(foreach config,$(2),$(srctree)/arch/$(ARCH)/configs/$(config).config)
++	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
++endef
 -- 
 2.34.1
 
