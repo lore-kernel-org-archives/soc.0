@@ -4,158 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E0D7C25B4E
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 16:42:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0753C25B4E
+	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 17:14:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C53B5C433EF; Fri, 20 Jan 2023 16:42:15 +0000 (UTC)
+	id 5FD86C4339E; Fri, 20 Jan 2023 17:14:09 +0000 (UTC)
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EA64CC433D2;
-	Fri, 20 Jan 2023 16:42:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA64CC433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 01C8CC433D2;
+	Fri, 20 Jan 2023 17:14:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 01C8CC433D2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 52D4732009D6;
-	Fri, 20 Jan 2023 11:42:12 -0500 (EST)
+	by mailout.west.internal (Postfix) with ESMTP id BE4733200A56;
+	Fri, 20 Jan 2023 12:14:05 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 20 Jan 2023 11:42:13 -0500
+  by compute6.internal (MEProxy); Fri, 20 Jan 2023 12:14:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm2; t=1674232931; x=
-	1674319331; bh=jw1dFTHWMbTPBEwBqLzDuqZE83d4cDbrYgrQVPokymE=; b=I
-	xlujya0wwTfcg7T0ltt1vAZXBUi6YP1ORWY270uyIrJRztQ7RbySZ4/UN6Pm3BS9
-	DCvKn/ctohEezybyGX5TtcmXKEOvZ5RUGhgysQwoiJ7W48NbaCuH8sCyRJZ5P/IH
-	0suffZHvWW6naDkULYR6+VCtYxQZh5b0GcyohIv+xu2CimghgaQo4P0+kx3HRKG0
-	5kJukeGsB1m9+T/nwq57DfxUi6wDke/qNkq19H9oUu3vE+rz0l5gGbsTwg9PbP0j
-	+LNxUqEjF1O1MKMVlZAsT7CyNw3A2c+2dC8uqW4yA+hSodr7l8V+cDEZ+rRnzyut
-	GTbq3Vymeb11ARBl0kM+A==
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1674234845; x=1674321245; bh=uvttBhFM8u
+	1G9tqdLBJZ4jCPXN4Y8Kiz6reEs0adZb4=; b=gRblk5RxB8qqlwnNy2XXQjMxwo
+	673enU/+pEl0fTPjCoXn9jn5zMcS4MLQn00+X229J9lezO/lUyZgteBjm0SfcFnV
+	idOHfxQIQX9MC7e15h6YAVVzLqV93OnwwRJ9E8Eb4JfQwteCCDgGI7lf1MJ/9eZT
+	pc691PeLWKqlolOaDPW00Tw/Lm/yMDMczLkDtqexPONVmVwf3IY0hekpMaS9Dtqz
+	wIjSSf3frSTRjAVbrSPihZGeqKhvi7IRIKT5NkG3WOdo8MKiIX/2tjh1Iognpiqg
+	yn3PEtW8EC7xrAHl+4EiH13DByUZ8QaSZ9GfjYa1UsOywdS6eEw+BUJxyioA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674232931; x=
-	1674319331; bh=jw1dFTHWMbTPBEwBqLzDuqZE83d4cDbrYgrQVPokymE=; b=W
-	N31tjJO0T85FTAmeCSRP+eO3+w+yjH/0sNfIs+SPGPNLdE7x28aAbUH5mQh4aA3p
-	RiUK88wlwdq2ZFGriV4XvG8eILpj8BAR8VGJzRM6P7F6Bp0YIe5pNzDtX2Y8DVfv
-	Jz0mcG4NWCGg/mOK8pyGUM/wM8r7BoWnHAmcduv3H1GANIGEvNCcygSTm8jkZLX9
-	nhPPU0VYO6+W2E9iBVuX8Oxa99k2PEjZdpZH/jIr7e1ZuOdblF9PRw878NN5G4Zu
-	EphPuuWvnJ80IMwmPIiJ8jK/XowlDphm10cwZF9eNnMa1GMv6pXI/vB2kVocUVZA
-	Ny9rbV934cuEvIPww6PJQ==
-X-ME-Sender: <xms:YsTKY2mZEDhH6N3SoijCV4KsKDyPrsasvSbqKmSdXQ3ejR_QkKzO7w>
-    <xme:YsTKY93Dp4ucdrXU0SYjvrQzXAWV1xewOSstGszrT7HwHxKHP6dAAZZCJpeZyBXHW
-    V8uuxVcmvAODYVjRhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1674234845; x=1674321245; bh=uvttBhFM8u1G9tqdLBJZ4jCPXN4Y
+	8Kiz6reEs0adZb4=; b=doPsdZWmTrGmmD+jxmidfxsAkAUSgovN3gKx1JLDM30I
+	VuilmhKbLaaVObnD3mBB2YssC+1l57SsXL4v3mxR3JakbFI7xZCXiKGeZLMPe4fk
+	rRINCqut1a4HBXokq2f/tpvktkKdKwpnCwo/xXC5JAGT5bhsYRlAGvvjtPEZYlg+
+	BOT0QDnYJdR76JDfBF2a5d/b5rKXQLfXcFXWb1GXSM5qKN1QkvkyWkOj95f4F7cu
+	HqfS4Cdi1aHM0eml7vmQC7ZETWzr60m+5O8dutD0u+lxrfqAHXYfYOe88rOLnW0f
+	V7hfc+j1pmMsLZ5QOSLietAu504Vqu9cQPyC0zPCnA==
+X-ME-Sender: <xms:28vKY94yJhen1eq7ZETQOrvpBKIp5uIGlxWqRHCm3r6LDSzF0r6RZQ>
+    <xme:28vKY644ld3dOkLbm1izB8ijNGD9K8Y3x0mZDsJ-WJSJTe3xs3Zr_ZqqN8l-q-gYI
+    jJ_yr6DEU4jpdBiwVw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudduvddguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
     rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
     eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Y8TKY0pLg12qXpNZ0_kJX3Ht6oXkCuYo7xVsWB1oSzlU43GArvILkw>
-    <xmx:Y8TKY6n2pp9EEmaQC20WdZ_lD1C_43tsaXF4X0mKvabz5-ER_MC5YA>
-    <xmx:Y8TKY02gwinU6prhvny08obDwVyISuzg7W1B1DTqSKCljaEKJwd-Nw>
-    <xmx:Y8TKY1KaI9opBZYIbl0NfxBm8UqscM6m_IRFlfofpiyr78uu5MF1IA>
+X-ME-Proxy: <xmx:28vKY0fOPYVpAqE2kT6wfytxOQeuhOpqz8DleBU_Co0K4i4dANCjEw>
+    <xmx:28vKY2IK_EL8xIPpn7GNJdywVPHs87pVfrdZj5jRh6L2x0BCGFAqCA>
+    <xmx:28vKYxI8QMF_vjB9xAFGjjnfg97jPdxaFCoe1wQQ9Epll2TrIbkwIg>
+    <xmx:3cvKY5-yxqvZdOWAkzUqsWg639mLgnRQBBd_n_pang38XKtkf19D7g>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E896EB60086; Fri, 20 Jan 2023 11:42:10 -0500 (EST)
+	id 6E70EB60086; Fri, 20 Jan 2023 12:14:03 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
 Mime-Version: 1.0
-Message-Id: <db008af4-2918-4458-aa68-2392674475c8@app.fastmail.com>
-In-Reply-To: <20221226123630.6515-1-pali@kernel.org>
-References: <20221226123630.6515-1-pali@kernel.org>
-Date: Fri, 20 Jan 2023 17:41:49 +0100
+Message-Id: <647fd07b-6b87-4d6d-9dfe-7cc7b95253b6@app.fastmail.com>
+In-Reply-To: <20230120133455.3962413-10-alexander.stein@ew.tq-group.com>
+References: <20230120133455.3962413-1-alexander.stein@ew.tq-group.com>
+ <20230120133455.3962413-10-alexander.stein@ew.tq-group.com>
+Date: Fri, 20 Jan 2023 18:13:42 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
- "Pavel Machek" <pavel@ucw.cz>, "Lee Jones" <lee@kernel.org>,
- linux-leds@vger.kernel.org, "Michael Ellerman" <mpe@ellerman.id.au>,
+To: "Alexander Stein" <alexander.stein@ew.tq-group.com>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Olof Johansson" <olof@lixom.net>, "Shawn Guo" <shawnguo@kernel.org>,
+ "Li Yang" <leoyang.li@nxp.com>, "Russell King" <linux@armlinux.org.uk>,
+ "Marek Vasut" <marex@denx.de>,
+ "Marcel Ziswiler" <marcel.ziswiler@toradex.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
  "Nicholas Piggin" <npiggin@gmail.com>,
  "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH RESEND 0/8] Resend LED patches
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Nicolas Schier" <nicolas@fjasle.eu>
+List-Id: <soc.lore.kernel.org>
+Cc: "Nicolas Saenz Julienne" <nsaenzjulienne@suse.de>, soc@kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 09/10] kbuild: Add config fragment merge functionality
+Content-Type: text/plain
 
-On Mon, Dec 26, 2022, at 13:36, Pali Roh=C3=A1r wrote:
-> Linus Walleij suggested me to send these patches to SoC tree [1]
-> instead. So I'm doing it.
+On Fri, Jan 20, 2023, at 14:34, Alexander Stein wrote:
+> From: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 >
-> This patch series contains LED patches which are on the linux-leds
-> mailing list for a long time without any future movement. Could you
-> please handle them here via SoC tree? Thanks.
+> So far this function was only used locally in powerpc, some other
+> architectures might benefit from it. Move it into
+> scripts/Makefile.defconf.
 >
-> [1] -=20
-> https://lore.kernel.org/linux-leds/CACRpkdad6WDo7rGfa4MW8zz0mLXmcPHo+S=
-EC-yLQnRz_kdrryA@mail.gmail.com/
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Directly applied from 
+> https://lore.kernel.org/linux-arm-kernel/20200203184820.4433-2-nsaenzjulienne@suse.de/T/#m96968dd45c0aaa88e0a7387024b5ac13b002363d
 
-I'm going through the backlog of patches sent to soc@kernel.org
-and came across this series. While I don't mind taking these
-patches through the soc tree in principle, it is important
-that this is only done as an exception, and with all the
-relevant parties on Cc.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-In particular, the original series that you got no
-feedback for did not include the arch/powerpc/ changes,
-and I would assume those should go through the powerpc
-tree anyway. We have recently decided to take
-risc-v and loongarch dts changes through the soc
-tree, and I don't mind doing it for powerpc as well
-if the powerpc maintainers prefer that, but this is
-not something we have even discussed so far.
-
-I've added everyone to Cc on this mail, but please
-resend the series once more so everyone has the patches,
-and then we can decide who will pick up what.
+I can probably best take this through the soc tree directly
+along with patch 10, while the first eight patches should
+got through the nxp maintainer tree.
 
     Arnd
-
->
-> Marek Beh=C3=BAn (3):
->   leds: turris-omnia: support HW controlled mode via private trigger
->   leds: turris-omnia: initialize multi-intensity to full
->   leds: turris-omnia: change max brightness from 255 to 1
->
-> Pali Roh=C3=A1r (5):
->   dt-bindings: leds: register-bit-led: Add active-low property
->   leds: syscon: Implement support for active-low property
->   powerpc/85xx: DTS: Add CPLD definitions for P1021RDB Combo Board CPL
->     Design
->   dt-bindings: leds: Add cznic,turris1x-leds.yaml binding
->   leds: Add support for Turris 1.x LEDs
->
->  .../testing/sysfs-class-led-driver-turris1x   |  31 ++
->  .../bindings/leds/cznic,turris1x-leds.yaml    | 118 +++++
->  .../bindings/leds/register-bit-led.yaml       |   5 +
->  arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi    |  92 ++++
->  arch/powerpc/boot/dts/fsl/p1020mbg-pc_32b.dts |   6 +-
->  arch/powerpc/boot/dts/fsl/p1020mbg-pc_36b.dts |   6 +-
->  arch/powerpc/boot/dts/fsl/p1020rdb-pd.dts     |  44 +-
->  arch/powerpc/boot/dts/fsl/p1020utm-pc.dtsi    |  37 ++
->  arch/powerpc/boot/dts/fsl/p1020utm-pc_32b.dts |   4 +-
->  arch/powerpc/boot/dts/fsl/p1020utm-pc_36b.dts |   4 +-
->  arch/powerpc/boot/dts/fsl/p1021rdb-pc.dtsi    |  37 ++
->  arch/powerpc/boot/dts/fsl/p1021rdb-pc_32b.dts |   5 +-
->  arch/powerpc/boot/dts/fsl/p1021rdb-pc_36b.dts |   5 +-
->  arch/powerpc/boot/dts/fsl/p2020rdb-pc.dtsi    |  33 +-
->  drivers/leds/Kconfig                          |  10 +
->  drivers/leds/Makefile                         |   1 +
->  drivers/leds/leds-syscon.c                    |  14 +-
->  drivers/leds/leds-turris-1x.c                 | 474 ++++++++++++++++++
->  drivers/leds/leds-turris-omnia.c              |  46 +-
->  19 files changed, 945 insertions(+), 27 deletions(-)
->  create mode 100644=20
-> Documentation/ABI/testing/sysfs-class-led-driver-turris1x
->  create mode 100644=20
-> Documentation/devicetree/bindings/leds/cznic,turris1x-leds.yaml
->  create mode 100644 drivers/leds/leds-turris-1x.c
->
-> --=20
-> 2.20.1
