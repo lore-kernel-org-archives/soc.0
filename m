@@ -1,54 +1,98 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=smpC=5S=gmail.com=markuss.broks@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1042AC05027
-	for <soc@archiver.kernel.org>; Fri, 20 Jan 2023 20:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ED50C54EAA
+	for <soc@archiver.kernel.org>; Sat, 21 Jan 2023 20:17:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BA495C4339B; Fri, 20 Jan 2023 20:06:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9D8BDC433D2;
-	Fri, 20 Jan 2023 20:06:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674245200;
-	bh=wvB4WwzGKSJVO6q/Gj7hl3Xvjcb7eqz0iGNMeX0dzmE=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=myQlQa1qOdwKbnZ2LADgZgJqqDkVxz651cbvvjeNJVDR3um8AznL7nFiFtL6abjzS
-	 VgXT9i4Z2dyiddx5E+UoVUYw+PfQCZe1/p0i/oB3LYmfIiwCJsNhxxGMfMJ/bssoN0
-	 uM47soJg6cA3Lcoudyhdx7xI3o1gVz0WekoZ769XdYaaL9wa3GdXaAOh6XgMKAzta+
-	 26bTHqT0k7VwbEme4Ph1/S/urSxFpcwmVlnNFxpwYdjeon7sA0TJhefKeONha+WRF/
-	 YnU76ub+MNZF9J5rBMSg3ZhJARTgJdnJpFSfvEXMnd2FxXoz21rSDvOvsexhyK0kZ+
-	 t4Ep6ovwluvUA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B85DC04E31;
-	Fri, 20 Jan 2023 20:06:40 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC DT and driver fixes 6.2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <bcb75322-43e6-4e17-b0f4-59d9a5fb844f@app.fastmail.com>
-References: <bcb75322-43e6-4e17-b0f4-59d9a5fb844f@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <bcb75322-43e6-4e17-b0f4-59d9a5fb844f@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2
-X-PR-Tracked-Commit-Id: d2c865553adb7ad9abf3894cbb209cf1bc95484a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1ed46384f85bcf05fc9b6605f9fd54e1f81a331d
-Message-Id: <167424520056.30775.18422833290890232.pr-tracker-bot@kernel.org>
-Date: Fri, 20 Jan 2023 20:06:40 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id 33F4CC4339B; Sat, 21 Jan 2023 20:17:03 +0000 (UTC)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4ED84C433D2;
+	Sat, 21 Jan 2023 20:17:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4ED84C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id u19so21763012ejm.8;
+        Sat, 21 Jan 2023 12:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DVSO49G+90zNDzrj6MAr5GjdLJ2Rrum8smiQJoUXN+E=;
+        b=iejkVLTzMekISSw7CuLQ4ejyCGyo3rzrEO/81IsoLg9rNEnI6pWKM7s4ws93O7rGEB
+         92N1S3ak2gbjYCrf/Lm8C76cDgePs6mtbqELstgxYAhz9NDmSTy2x//JB05Hx/8dbEos
+         7uEfMg5RFZo27PQf7ytsB2zfbrkG/X7XnjlUB34lhlFybPEkWSx6hHsVaVUm7riZ7qDz
+         bmqQN2NsoZSSRIcmsqx3gI8LMHCxozMYubQ1h5WUIuIpKlzd36OqhuRNxB1eYs6Q/aGa
+         L5UXTP5bOEUWiLlZKabKMMGBK5Ha3/m/6GccEWiBPB7j7T4yyXjnx4fIBKHcT2sYgCng
+         XQ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DVSO49G+90zNDzrj6MAr5GjdLJ2Rrum8smiQJoUXN+E=;
+        b=AXNH0nIqMQ2flWG/m11OfQpIGA+cSflmH2z+f6/R1MEVXrx9o99uYoYcaoWCVrHDv0
+         R3uaJdWr6te1cKC4PaXBT9jIfyXWS6uGzefkt2wRw87bIyIvda0llp2KUmfvvowKU+Ur
+         S/8Mm8thfl82ff4r0o2gfD/sOEyx6M8c5mez7EZp8F/hllAo49XOVx/m4Pv4vgYJnKnA
+         21dA71X1Fd6D+TaoBq2PuF8xobFns0H3Ynf6OV+umQZMGp5CMFF2DNGKy1dzIiTN3NQa
+         H/cz1+VNLxwVHOZk8wP/JH8DsyLB2Q6W3Yf+J4PsRQXZoATgoQqixSa6/IKReZUvMy/p
+         jxSA==
+X-Gm-Message-State: AFqh2krFsKQbxL4mU40jNhq3gFZOstJNGuS6XjGzykXnPUHxa7WjEGR1
+	Qr8JNOkSbP3bxCYysJ8MYd8=
+X-Google-Smtp-Source: AMrXdXvsw4VtD76/xrwX5+TzLQDVpMWA1ZIvWyAa1Z/4uArg0b19K+cHV2txsCX07YXiBPZ+e1dr3Q==
+X-Received: by 2002:a17:906:25db:b0:877:6a03:9ad1 with SMTP id n27-20020a17090625db00b008776a039ad1mr11055618ejb.7.1674332220452;
+        Sat, 21 Jan 2023 12:17:00 -0800 (PST)
+Received: from localhost.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id g8-20020aa7d1c8000000b0049e1f167956sm8278427edp.9.2023.01.21.12.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Jan 2023 12:16:59 -0800 (PST)
+From: Markuss Broks <markuss.broks@gmail.com>
+To: linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: Markuss Broks <markuss.broks@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: [PATCH v2 0/3] Correct inaccuracies in Exynos5420 and Exynos5800 device trees
+Date: Sat, 21 Jan 2023 22:16:47 +0200
+Message-Id: <20230121201650.46560-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 20 Jan 2023 11:19:19 +0100:
+Use the proper compatibles for the DSI host controller and MIPI
+video phy, as the current ones are not compatible with the hardware.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2
+While this fixes the kernel panic while trying to use DSI, I was still
+unsuccessful to consistently produce image that isn't noise on S6E3FA2
+panel of Samsung Galaxy S5. It seems to only work sometimes.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1ed46384f85bcf05fc9b6605f9fd54e1f81a331d
+Cc: Mark Brown <broonie@kernel.org>
 
-Thank you!
+v1 -> v2:
+- squash patch 1 and patch 3, making it one patch for adding the label and
+  changing the compatible
+- use better subject prefixes
+
+Markuss Broks (2):
+  arm: dts: exynos5420: Use Exynos5420 compatible for the MIPI video phy
+  arm: dts: exynos5800: Use Exynos5422 compatible for the DSI controller
+
+ arch/arm/boot/dts/exynos5420.dtsi | 4 ++--
+ arch/arm/boot/dts/exynos5800.dtsi | 4 ++++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.0
+
