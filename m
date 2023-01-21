@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52335C54E94
-	for <soc@archiver.kernel.org>; Sat, 21 Jan 2023 20:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E00FC38142
+	for <soc@archiver.kernel.org>; Sat, 21 Jan 2023 20:19:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 39B30C4339B; Sat, 21 Jan 2023 20:18:58 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	id 05654C4339C; Sat, 21 Jan 2023 20:19:01 +0000 (UTC)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51668C433D2;
-	Sat, 21 Jan 2023 20:18:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51668C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 2D7A0C433EF;
+	Sat, 21 Jan 2023 20:19:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2D7A0C433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id v13so10384020eda.11;
-        Sat, 21 Jan 2023 12:18:57 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 18so10393387edw.7;
+        Sat, 21 Jan 2023 12:19:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DVSO49G+90zNDzrj6MAr5GjdLJ2Rrum8smiQJoUXN+E=;
-        b=Ktqtj+r02FZQaYel1XTo+d4okKkl0sNay94nq6NRhXwXAyAVoGLoW7A2YVuJnBujpy
-         oCK+C1lWCsaVqVa9bzgTNvKxVLYdDFAAFWHDhR6i4hBYg9Tw7820Gbw1KMyCWgDeaTsd
-         AMZWXxj1y9cUD9F01nm0Zr9yM4BM2OliyHUIhFgJdwPDs2xlOmeBG/R/eOsgrFSfZrr8
-         Wtf12eAQW9K1QnaNkOJH3zlMrLBt+RCPqHwpBdExoMUVFRf8iSuOlk+cHg1JDqe7zvTR
-         kq5JMPFV+5BF6kWTBkkn3g0I4XO+1Bx1hz4FPm029EQ/8f3fxVyiR+s/ngmZE9J5OazA
-         EC0w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vwQ17Lcm2IqVHFAnePP290nHJ1hZODiXeBdsdtLFjw0=;
+        b=FUXXhdqANULg7ZotC2pLpEfJqS2F0W8GKHoIPlLcjHFCFPLSZUSgepsZotVvY7eGMw
+         5vVvC2b/qMx4OpJdm/r+6AQoChRHf/F/VaUPQuVVK76kGGpDfq2Hisa5WqrCx3R/agid
+         2KsW5yhLhIBWOJPTmMtEaaCN3RFEEjjNF4td9mtVXOhrG/5Ypr6ZKDAlqhcSyDOMxJHe
+         HdrA9qw7XbzOcwrGblNwXzvIaKKJc4Q3n/7g3eAYibqH2FOF1ILhaPeS/NGGOrntOQXg
+         YJmqURb56UN4YeLsT7Q1KgbLqQQ/6RJGXA0dV3iqfvOCiwv6carXW6TNedH9GtCCVkIj
+         bWYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DVSO49G+90zNDzrj6MAr5GjdLJ2Rrum8smiQJoUXN+E=;
-        b=r9qhvbBh3dXfrUWQeiqD+ebiGrP9aM5BmPN2adHkTHqhnALyps7D9AzsweE2k0Bsaf
-         dASLRsNzgWBQYlsBuuSsAAevlypyT8uXKDcszTVLxCQ50t2WZ0LJSHcRZpJYlPvElmLp
-         EtLbP9oNv0miBEdPIdibrbw6VcarMN2ta78IHUA7jZBctYogseMm2MM8M/nQuJd50HHL
-         4Hsy5jh5MNJ7MiAPOTQfnLFEjMrlhrRC6QSdinal4Hb6xbNsygW/it2nl1og5r/8vID6
-         Ph7XkgC7mGXaoPs615tHNr8IIqjKXFTeg9QNPaoMcRcYaUcewBcyAAx/VKMo/ySO2sZH
-         4Dpg==
-X-Gm-Message-State: AFqh2krqFjc0da6Xc77+Mc2zhk9v1V8nicc+G+KAKsSj+vtn/IfK0Hhf
-	NCFL/XupE8pVoA55nIlgJgk=
-X-Google-Smtp-Source: AMrXdXuFmN6u3MxCqMpo+4RPCuRTKeRNijeNYyRJhci6brkCoAJdlqPDIb1W631UAXXidJekm1m38w==
-X-Received: by 2002:a05:6402:27cf:b0:499:c332:3b50 with SMTP id c15-20020a05640227cf00b00499c3323b50mr26900820ede.39.1674332335663;
-        Sat, 21 Jan 2023 12:18:55 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vwQ17Lcm2IqVHFAnePP290nHJ1hZODiXeBdsdtLFjw0=;
+        b=H/3euh04wY0vkgWo25sOYob62cQDjX6Mw/iNokXsyBWgWtCbs/rlrMXRpdtDMZgdO3
+         BeHqjHTK5cLBM0yff4PkrbzrWKcC45Uu97EU73QzNznMlbwyDGNy2JhkYR7EXLilrM6M
+         5vtgi9wB/HH912lqFIFnSIIQlj6kvRE3/BpQIP6jDaZZ+1MUXxGUzEp47hDeGAbziOSF
+         rlZ1DJ5ztH4xH2UltaVoWteLLefqbAJ15IUZXVLoUPwUVhnoMVYUdtju+myCwz8ktzEc
+         19rExHiYSIHTVyO4/MxHLpn179yi4XT9mTJXYc28tKg0TiA8zb+QFehRCdvw6Opxl6l2
+         wODg==
+X-Gm-Message-State: AFqh2kpmW7yw1eiqW98zSN5Zt+uxqess9pds22MP0MqtaYl1Ms9szSK+
+	0I9OyB3655/WjzNNEsW7sI0=
+X-Google-Smtp-Source: AMrXdXvGt++PN5EjA0ztBQb2c/gjgcgD4qFpNIX0JHL6I/yrpki+hm6vVeEIFzUneViDHYXRYrObXA==
+X-Received: by 2002:a05:6402:1cb2:b0:49e:f052:d9d3 with SMTP id cz18-20020a0564021cb200b0049ef052d9d3mr4793877edb.15.1674332338445;
+        Sat, 21 Jan 2023 12:18:58 -0800 (PST)
 Received: from localhost.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0047c6f3eccb2sm19203423edr.50.2023.01.21.12.18.54
+        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0047c6f3eccb2sm19203423edr.50.2023.01.21.12.18.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 12:18:55 -0800 (PST)
+        Sat, 21 Jan 2023 12:18:58 -0800 (PST)
 From: Markuss Broks <markuss.broks@gmail.com>
 To: linux-kernel@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: Markuss Broks <markuss.broks@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	soc@kernel.org,
@@ -64,35 +64,37 @@ Cc: Markuss Broks <markuss.broks@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 0/3] Correct inaccuracies in Exynos5420 and Exynos5800 device trees
-Date: Sat, 21 Jan 2023 22:18:41 +0200
-Message-Id: <20230121201844.46872-1-markuss.broks@gmail.com>
+Subject: [PATCH v2 1/2] arm: dts: exynos5420: Use Exynos5420 compatible for the MIPI video phy
+Date: Sat, 21 Jan 2023 22:18:42 +0200
+Message-Id: <20230121201844.46872-2-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230121201844.46872-1-markuss.broks@gmail.com>
+References: <20230121201844.46872-1-markuss.broks@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the proper compatibles for the DSI host controller and MIPI
-video phy, as the current ones are not compatible with the hardware.
+For some reason, the driver adding support for Exynos5420 MIPI phy
+back in 2016 wasn't used on Exynos5420, which caused a kernel panic.
+Add the proper compatible for it.
 
-While this fixes the kernel panic while trying to use DSI, I was still
-unsuccessful to consistently produce image that isn't noise on S6E3FA2
-panel of Samsung Galaxy S5. It seems to only work sometimes.
+Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+---
+ arch/arm/boot/dts/exynos5420.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cc: Mark Brown <broonie@kernel.org>
-
-v1 -> v2:
-- squash patch 1 and patch 3, making it one patch for adding the label and
-  changing the compatible
-- use better subject prefixes
-
-Markuss Broks (2):
-  arm: dts: exynos5420: Use Exynos5420 compatible for the MIPI video phy
-  arm: dts: exynos5800: Use Exynos5422 compatible for the DSI controller
-
- arch/arm/boot/dts/exynos5420.dtsi | 4 ++--
- arch/arm/boot/dts/exynos5800.dtsi | 4 ++++
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
+diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+index 9f2523a873d9..62263eb91b3c 100644
+--- a/arch/arm/boot/dts/exynos5420.dtsi
++++ b/arch/arm/boot/dts/exynos5420.dtsi
+@@ -592,7 +592,7 @@ dp_phy: dp-video-phy {
+ 		};
+ 
+ 		mipi_phy: mipi-video-phy {
+-			compatible = "samsung,s5pv210-mipi-video-phy";
++			compatible = "samsung,exynos5420-mipi-video-phy";
+ 			syscon = <&pmu_system_controller>;
+ 			#phy-cells = <1>;
+ 		};
 -- 
 2.39.0
 
