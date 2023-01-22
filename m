@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78C81C25B4E
-	for <soc@archiver.kernel.org>; Sun, 22 Jan 2023 12:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62FDEC25B4E
+	for <soc@archiver.kernel.org>; Sun, 22 Jan 2023 12:15:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4A542C4339E; Sun, 22 Jan 2023 12:11:36 +0000 (UTC)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	id 23D62C433EF; Sun, 22 Jan 2023 12:15:49 +0000 (UTC)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 41C57C433D2
-	for <soc@kernel.org>; Sun, 22 Jan 2023 12:11:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 41C57C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 879DBC4339C
+	for <soc@kernel.org>; Sun, 22 Jan 2023 12:15:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 879DBC4339C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id b7so8502624wrt.3
-        for <soc@kernel.org>; Sun, 22 Jan 2023 04:11:35 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso8766716wmc.4
+        for <soc@kernel.org>; Sun, 22 Jan 2023 04:15:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kh46BGaZm1ibq11ENZTVqU06WU/GK9n967GcDHPrdfA=;
-        b=k+DtXHztRgpF2710aOjM4E7UGk5NdggwvA8I3z9p47iO7tDNk3mddSaA/IPqUwTobq
-         iP77U4TAFS4Hxjrq4Uxi4rH3P3mwz4SAlolkbEZCbhRbSiAtEUjGDiOHiHWUA4PAKUZZ
-         EcVpR125Vh3KYmzfCiytDNerZdvGIgjION9oyevaAosx4WSXBeBFV6FVDChkVlgNm1VJ
-         A73m+7ybSGd2pNXWOlzLdFtV+I4oRwiS14A8IKD578CtrkmGtEm/1mysWU7oqvEv7XAD
-         cBHPZSfLe5dJYz6G3hu5ZWif69bRpc+Wl68IM2+nda3yJ/Z6VX/F9un7qNV+mDYGdBjC
-         QuWA==
+        bh=1tGaV/vVqSe7j5jHscTpb4g/SPxvj1PFsDHZ7F3jeUE=;
+        b=BkYrz6odRMNCNMp9kPc0Ffg9qh8Xex6eIYZ/Zw3lR9wRnVIXDY2K9fQSj6mgdI3hE8
+         4X/r1EdLYgTwZg/82E+CTSUEQbDv1qvbCwFxN98iVd1HfgkjySgyqUBq5jumi2U3890P
+         IONGlbI7SK4anAurrWgToBfAtvH2s4zUvyMf8LY/RJFpjel35GNiZzMCRHqxznZaw/DE
+         MR+/ldN/UqFC+0NSd5t9bGcl2jEblcsP0cMfVK57MJK++tJtU9dl1Lub7hhOTRo4DG3m
+         gTGcvVJBdW99T/in0Ejhar1d5pFYQ4Z0+k1sX602/x9ve0EWXK5zNZ8Tv6QXiuJSSNCj
+         D63A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kh46BGaZm1ibq11ENZTVqU06WU/GK9n967GcDHPrdfA=;
-        b=MDy3cYQmuTnioEC8964MgVMCyqO+ozxpJ+oBM5WBnZ2q0/S5J4fA/EJvpQb9IVLfXk
-         64pLxnrOcyy+E87gPp2j1c6gNe3AYKyDeLQUdxLmhrAjPaBhU1gmWBPN4C+zdfgPSFCt
-         TSVzrBCsfJzzwLE7hUxAWMsGWdNbKlWb6CHXHjILyUl0Qh3KE1Dwiu6RDVAmCk6lSmMf
-         nxiSdWGJqmfV6eXciXqjp61nHAAhsXhwZJIe91BJtWVkvEKNYiJNN1km4YWy/MNKOYRx
-         ZQEFBC/XeWtKYM4lzdH0cGtmw1yidb7alVXWC+riPkukmndjMtk5Zb//zFuRfHeu1VPx
-         X3Jw==
-X-Gm-Message-State: AFqh2kq/qgPibkTBCV5Blnc/DnWJZtMerRbomNrK63csT3MM/vDxPcjm
-	8GLWhOfrB5684gxwSur84qZlFg==
-X-Google-Smtp-Source: AMrXdXtEr9vi6vNmJ9qvCPQIZKzcjE0HxnAvvYszmwahQQLXGJ/d647l3d36TaU6H83uzVK0/xredQ==
-X-Received: by 2002:a5d:570b:0:b0:277:2e27:61e7 with SMTP id a11-20020a5d570b000000b002772e2761e7mr18303769wrv.17.1674389493491;
-        Sun, 22 Jan 2023 04:11:33 -0800 (PST)
+        bh=1tGaV/vVqSe7j5jHscTpb4g/SPxvj1PFsDHZ7F3jeUE=;
+        b=GA+MtlNXrE2qoBPjWQfqgR6QV1mpmPmR72vMMD3328uuIt/3nFwwynrkAdVOs8Sr5T
+         1dxuMq2gJp+/G/GSbwQgEC2A0WBXHX6KfDgixWuIFM1rKuR6WZw670NUABgtAS0T1Y+h
+         GoEqxkVo8Gre0iO3oBSQmIh04rPZnrzJkUNOcXweWTCur/3Itgp8btyBlyXIK+DBkgo1
+         V2VDolKHyrFOZi2rzIRl2AiDlIQKHtNkdg6FMpIw7R58V0cDnucj8rvNMrJvOEVH4kx8
+         Euhf+9AmZac8iJgLfBKp9xRj52TL3ZCT4MXIbpu0HLenRAsIX+M6gkYwGQsV21whZxpX
+         +kKA==
+X-Gm-Message-State: AFqh2kq3Qod6WWDQCPf8wVy6gKz1M5DhMIdSwOjYP1R1556FSROKaf95
+	QNKEgIoIGUzr7oQ6IVUPT83uKQ==
+X-Google-Smtp-Source: AMrXdXu2ngAApBUjdl+X0iQODuuOctW1xFD2HBQEjn9ESCYNGbuk/KECrZmQ6uFWU+OoL3ix2RG8nw==
+X-Received: by 2002:a05:600c:1c2a:b0:3cf:d0b1:8aa1 with SMTP id j42-20020a05600c1c2a00b003cfd0b18aa1mr20036181wms.0.1674389745818;
+        Sun, 22 Jan 2023 04:15:45 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t12-20020adff60c000000b0024274a5db0asm2019072wrp.2.2023.01.22.04.11.32
+        by smtp.gmail.com with ESMTPSA id o28-20020a05600c511c00b003dab40f9eafsm8543663wms.35.2023.01.22.04.15.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 04:11:33 -0800 (PST)
+        Sun, 22 Jan 2023 04:15:45 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -57,11 +57,13 @@ To: Olof Johansson <olof@lixom.net>,
 	arm@kernel.org,
 	soc@kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.3
-Date: Sun, 22 Jan 2023 13:11:29 +0100
-Message-Id: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] arm64: dts: Cleanup for v6.3
+Date: Sun, 22 Jan 2023 13:15:40 +0100
+Message-Id: <20230122121541.29312-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,42 +74,24 @@ The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.3
 
-for you to fetch changes up to 4fd1a0e496cb81e939c55143fc81c2be130099c4:
+for you to fetch changes up to d0931f1d5e9c1655cfa8128edd14e813b4044801:
 
-  Merge branch 'for-v6.3/renesas-rpc-if' into mem-ctrl-next (2023-01-22 13:05:21 +0100)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.3
-
-1. TI Emif: simplify device_get_match_data().
-2. Renesas RPC IF: Few fixes (missing address set in manual mode;
-   decouple driver's private data structure from other drivers; unbind
-   and rebind due to triggering managed resources allocation from other
-   drivers) and bigger rework around improved runtime Power Management.
+  arm64: dts: hisilicon: align LED node names with dtschema (2023-01-13 11:38:56 +0100)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (6):
-      memory: renesas-rpc-if: Split-off private data from struct rpcif
-      memory: renesas-rpc-if: Move resource acquisition to .probe()
-      memory: renesas-rpc-if: Always use dev in rpcif_probe()
-      memory: renesas-rpc-if: Improve Runtime PM handling
-      memory: renesas-rpc-if: Pass device instead of rpcif to rpcif_*()
-      memory: renesas-rpc-if: Remove Runtime PM wrappers
+Minor improvements in ARM64 DTS for v6.3
 
-JaimeLiao (1):
-      memory: renesas-rpc-if: Fix missing setting address
+1. Drop 0x from unit address (microchip).
+2. Align HDMI CEC and LED nodes with bindings (hisilicon).
 
-Krzysztof Kozlowski (1):
-      Merge branch 'for-v6.3/renesas-rpc-if' into mem-ctrl-next
+----------------------------------------------------------------
+Krzysztof Kozlowski (2):
+      arm64: dts: microchip: drop 0x from unit address
+      arm64: dts: hisilicon: align LED node names with dtschema
 
-ye xingchen (1):
-      memory: ti-emif-pm: Use device_get_match_data() to simplify the code
-
- drivers/memory/renesas-rpc-if.c | 153 ++++++++++++++++++++++++++--------------
- drivers/memory/ti-emif-pm.c     |   7 +-
- drivers/mtd/hyperbus/rpc-if.c   |  18 ++---
- drivers/spi/spi-rpc-if.c        |  14 ++--
- include/memory/renesas-rpc-if.h |  34 ++-------
- 5 files changed, 120 insertions(+), 106 deletions(-)
+ arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 12 ++++++------
+ arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts    | 12 ++++++------
+ arch/arm64/boot/dts/microchip/sparx5.dtsi         |  2 +-
+ 3 files changed, 13 insertions(+), 13 deletions(-)
