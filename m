@@ -1,91 +1,113 @@
-Return-Path: <SRS0=T3Pj=5S=armlinux.org.uk=linux+soc=kernel.org@kernel.org>
+Return-Path: <SRS0=bw02=5T=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E05C27C76
-	for <soc@archiver.kernel.org>; Sat, 21 Jan 2023 22:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78C81C25B4E
+	for <soc@archiver.kernel.org>; Sun, 22 Jan 2023 12:11:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0912AC4339B; Sat, 21 Jan 2023 22:33:52 +0000 (UTC)
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 4A542C4339E; Sun, 22 Jan 2023 12:11:36 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51B8AC433D2
-	for <soc@kernel.org>; Sat, 21 Jan 2023 22:33:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51B8AC433D2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=qSIbpGBcZLqkCpexATgZFICQef87VnQGSmdts/43mig=; b=ctyqb7SFKq7PzL80nZrlEAu+C/
-	ho+MZHR9P3yZsJAGT4aqF8EaygxfGuMsT0QTZBM0M+XjZ/9/TcBBULVC3EtGTGfSbLu0Oi+lPPZ+D
-	aG1bReWRdfO7uyjDZ82yhlymFnGZiCed8K5qVpdQldmE0JWvn/hewHJGnYC/scXfSdhk5tfbeBPgU
-	kNgpgoS9+3JnyfzkbTvJqxLCvwoyrXf75ccQYhu7udywcKvK35VlyPI8JOA6hx35iC2s1NlaNOBcb
-	z7ZlAB8bmK8oevwZOIDS0KwngcfkPAcFj2la7dEAYqHQir82ib3S+uyManrnCZSzik8o9xNYpHsgp
-	uMNS6qkg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36250)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1pJMQc-0001Td-3v; Sat, 21 Jan 2023 22:33:37 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1pJMQW-0002lj-EM; Sat, 21 Jan 2023 22:33:32 +0000
-Date: Sat, 21 Jan 2023 22:33:32 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 41C57C433D2
+	for <soc@kernel.org>; Sun, 22 Jan 2023 12:11:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 41C57C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id b7so8502624wrt.3
+        for <soc@kernel.org>; Sun, 22 Jan 2023 04:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kh46BGaZm1ibq11ENZTVqU06WU/GK9n967GcDHPrdfA=;
+        b=k+DtXHztRgpF2710aOjM4E7UGk5NdggwvA8I3z9p47iO7tDNk3mddSaA/IPqUwTobq
+         iP77U4TAFS4Hxjrq4Uxi4rH3P3mwz4SAlolkbEZCbhRbSiAtEUjGDiOHiHWUA4PAKUZZ
+         EcVpR125Vh3KYmzfCiytDNerZdvGIgjION9oyevaAosx4WSXBeBFV6FVDChkVlgNm1VJ
+         A73m+7ybSGd2pNXWOlzLdFtV+I4oRwiS14A8IKD578CtrkmGtEm/1mysWU7oqvEv7XAD
+         cBHPZSfLe5dJYz6G3hu5ZWif69bRpc+Wl68IM2+nda3yJ/Z6VX/F9un7qNV+mDYGdBjC
+         QuWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kh46BGaZm1ibq11ENZTVqU06WU/GK9n967GcDHPrdfA=;
+        b=MDy3cYQmuTnioEC8964MgVMCyqO+ozxpJ+oBM5WBnZ2q0/S5J4fA/EJvpQb9IVLfXk
+         64pLxnrOcyy+E87gPp2j1c6gNe3AYKyDeLQUdxLmhrAjPaBhU1gmWBPN4C+zdfgPSFCt
+         TSVzrBCsfJzzwLE7hUxAWMsGWdNbKlWb6CHXHjILyUl0Qh3KE1Dwiu6RDVAmCk6lSmMf
+         nxiSdWGJqmfV6eXciXqjp61nHAAhsXhwZJIe91BJtWVkvEKNYiJNN1km4YWy/MNKOYRx
+         ZQEFBC/XeWtKYM4lzdH0cGtmw1yidb7alVXWC+riPkukmndjMtk5Zb//zFuRfHeu1VPx
+         X3Jw==
+X-Gm-Message-State: AFqh2kq/qgPibkTBCV5Blnc/DnWJZtMerRbomNrK63csT3MM/vDxPcjm
+	8GLWhOfrB5684gxwSur84qZlFg==
+X-Google-Smtp-Source: AMrXdXtEr9vi6vNmJ9qvCPQIZKzcjE0HxnAvvYszmwahQQLXGJ/d647l3d36TaU6H83uzVK0/xredQ==
+X-Received: by 2002:a5d:570b:0:b0:277:2e27:61e7 with SMTP id a11-20020a5d570b000000b002772e2761e7mr18303769wrv.17.1674389493491;
+        Sun, 22 Jan 2023 04:11:33 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id t12-20020adff60c000000b0024274a5db0asm2019072wrp.2.2023.01.22.04.11.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 04:11:33 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-	Marek Vasut <marex@denx.de>,
-	Marcel Ziswiler <marcel.ziswiler@toradex.com>, soc@kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 8/9] ARM: multi_v7_defconfig: Add options to support
- TQMLS102xA series
-Message-ID: <Y8xoPLu4NEQXG6Gj@shell.armlinux.org.uk>
-References: <20230119144236.3541751-1-alexander.stein@ew.tq-group.com>
- <20230119144236.3541751-9-alexander.stein@ew.tq-group.com>
- <acab1d7a-ef00-a3be-f73c-6cb9d01687b9@linaro.org>
- <2168770.1BCLMh4Saa@steina-w>
- <e08e6325-4b2b-c1ce-b33a-877de2c0babe@linaro.org>
- <Y8qr8wl8WdJfQ9We@shell.armlinux.org.uk>
- <3114bdeb-c8eb-3a3a-0d68-ca3370ce64ec@linaro.org>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v6.3
+Date: Sun, 22 Jan 2023 13:11:29 +0100
+Message-Id: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3114bdeb-c8eb-3a3a-0d68-ca3370ce64ec@linaro.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jan 21, 2023 at 09:27:52PM +0100, Krzysztof Kozlowski wrote:
-> On 20/01/2023 15:57, Russell King (Oracle) wrote:
-> > Clearly, "defconfig=y is only for critical stuff" is rather false in
-> > practice, and I suspect is little more than a desire rather than a
-> > rule. I suspect it's more "defconfig=y is for stuff that makes most
-> > platforms successfully boot without an initramfs".
-> 
-> Yes, that's true, although there was already pushback against this.
-> Having an initramfs is not a big deal and nowadays I think all new ARMv8
-> platforms use it.
-> 
-> Anyway this talk here is about RTC which is not needed at all as built in.
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-Provided NFS doesn't repeat XIDs at boot (which it used to when the
-kernel had no idea what the TOD is.)
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-I believe the NFS standard allows NFS servers to repeat their response
-to a repeated XID even if the request is different... which used to
-cause chaos for me with a machine that has no RTC and boots using NFS
-root. So just be aware that if the NFS XID is still dependent on TOD,
-then not having RTCs loaded can cause chaos.
+are available in the Git repository at:
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.3
+
+for you to fetch changes up to 4fd1a0e496cb81e939c55143fc81c2be130099c4:
+
+  Merge branch 'for-v6.3/renesas-rpc-if' into mem-ctrl-next (2023-01-22 13:05:21 +0100)
+
+----------------------------------------------------------------
+Memory controller drivers for v6.3
+
+1. TI Emif: simplify device_get_match_data().
+2. Renesas RPC IF: Few fixes (missing address set in manual mode;
+   decouple driver's private data structure from other drivers; unbind
+   and rebind due to triggering managed resources allocation from other
+   drivers) and bigger rework around improved runtime Power Management.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (6):
+      memory: renesas-rpc-if: Split-off private data from struct rpcif
+      memory: renesas-rpc-if: Move resource acquisition to .probe()
+      memory: renesas-rpc-if: Always use dev in rpcif_probe()
+      memory: renesas-rpc-if: Improve Runtime PM handling
+      memory: renesas-rpc-if: Pass device instead of rpcif to rpcif_*()
+      memory: renesas-rpc-if: Remove Runtime PM wrappers
+
+JaimeLiao (1):
+      memory: renesas-rpc-if: Fix missing setting address
+
+Krzysztof Kozlowski (1):
+      Merge branch 'for-v6.3/renesas-rpc-if' into mem-ctrl-next
+
+ye xingchen (1):
+      memory: ti-emif-pm: Use device_get_match_data() to simplify the code
+
+ drivers/memory/renesas-rpc-if.c | 153 ++++++++++++++++++++++++++--------------
+ drivers/memory/ti-emif-pm.c     |   7 +-
+ drivers/mtd/hyperbus/rpc-if.c   |  18 ++---
+ drivers/spi/spi-rpc-if.c        |  14 ++--
+ include/memory/renesas-rpc-if.h |  34 ++-------
+ 5 files changed, 120 insertions(+), 106 deletions(-)
