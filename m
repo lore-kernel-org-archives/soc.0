@@ -4,99 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14DFDC05027
-	for <soc@archiver.kernel.org>; Mon, 23 Jan 2023 15:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEAE3C38142
+	for <soc@archiver.kernel.org>; Mon, 23 Jan 2023 15:37:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DCCBDC4339C; Mon, 23 Jan 2023 15:35:48 +0000 (UTC)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	id 6258BC433A1; Mon, 23 Jan 2023 15:37:20 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CBF18C433D2
-	for <soc@kernel.org>; Mon, 23 Jan 2023 15:35:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CBF18C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 75CC6C4339C
+	for <soc@kernel.org>; Mon, 23 Jan 2023 15:37:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 75CC6C4339C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10902895wma.1
-        for <soc@kernel.org>; Mon, 23 Jan 2023 07:35:47 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id m15so9335247wms.4
+        for <soc@kernel.org>; Mon, 23 Jan 2023 07:37:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZV/YupdBHfYEgxMNJ/vNSCWnKrdy7rcoPltaDFLsCpE=;
-        b=BUMAANqbKkian0KWpTAwTx7mPcxBcConTeVmyWCjq5Kzn8SbuLc4CtuebTKN9J3iMP
-         JSv7/gXEkjdu5rBaCy//KstbYcBQBzEZ6IcYzJgWoYafO2igUiY/rbnRs68/9ANW1X3v
-         I8vd5jcmZgJylW3o+04nOQ3Mx6DIix6ru33mdEJKdipJIM5JrEFxqsopuvK+Fg3UwQqG
-         dX8cSOLrqHfPJjiNtvkTrzbv/1oO5i6VIkMTnL0XVlis7IzvOlybQ6wRvbelmwgkFOpw
-         Yh939Cheh5P7ZxSN8E3qZWRSGqb6BimxDLQQqpigOWbzN9TpVm4BLBI4DKaxsHWwI/ZE
-         qUrg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5cq6ayhJIiujuCk7dC1Dlzy/ufBwMT4etpRQGBEg7fw=;
+        b=t5PriCepxNWbx3CJFkfx8mWLYrTlYai55ZReEXgm7VuFu0YZ60muJdfQe0CJ5i5HK1
+         HfdV0S0tsNdQUI78o87AzuEtjxRHznyXDAJV5RhXQyeLus2P6zIComcp4nUv4yJuC58V
+         D7Ag06WtJBYy9kgp/eQMOSXERUFi3680TE83B5bWgFS1sVL5A/NRo7E7vWpObV8Pce0g
+         LPsydiuN+8uxRJNY6Cba0afWzlDerSQZrT4GOdKQixe+Stejugr3QdnJHrGPMPOY1RmT
+         kDUHxGs65AeI9PHGgAJ1JrqOd41VU+Vht3l9gYX8FQvn0K1A++/S6LJUBDl98YhNhd6i
+         228Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZV/YupdBHfYEgxMNJ/vNSCWnKrdy7rcoPltaDFLsCpE=;
-        b=ZDgNvtEp19nNeC0KpXDk1jNxSCO+G7GoOH3mp1/q981a6khjj7rvyZ/5jsIhhVy6Zy
-         9vbmRP9b6ff2cRn+l4/40Cndcu7bSZCqN1ncbWmIAbmVT228kNdLVilEaQwtNTNAUDu0
-         1GxOMhzxaB7OaDsPQFAl6qADtTRHoYHqBdTt8fR4SkiopxlcdVKy9tT8uI9x2ttlp4SP
-         AfpllvRcyV8BKrxdRkQyXXnkkBrIElGFZpNaxQnOQgd2wtiFicZlu0zdT6xGyF+m7E5Z
-         kWnp2HvGYbgMMWajk8fX6Pt6TUHWVDGJPPh/49Ot/4ENl6eHh9fLR7H6OAtt78YH9Vkn
-         1K0g==
-X-Gm-Message-State: AFqh2ko2VGKkiZpyQS3WIFq5Pa6SAlW6cprYYowNKz7esycZn7qWfS6Y
-	e11xI1K42Y9qNuqPiFxOsKoqSw==
-X-Google-Smtp-Source: AMrXdXv8boPuYWxImbIFEMrMA8f8P8adojZQbCuvYWC6/21kKUR23nqIM4iyDG6Uy1+FC2jzl1Siww==
-X-Received: by 2002:a05:600c:4f83:b0:3db:eab:a600 with SMTP id n3-20020a05600c4f8300b003db0eaba600mr21346884wmq.7.1674488146174;
-        Mon, 23 Jan 2023 07:35:46 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1c770d000000b003db0ee277b2sm10948154wmi.5.2023.01.23.07.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 07:35:45 -0800 (PST)
-Message-ID: <51e31914-6b86-b83b-898e-2d2d31a59620@linaro.org>
-Date: Mon, 23 Jan 2023 16:35:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 2/2] arm: dts: exynos5422: Add device-tree for Samsung
- Galaxy S5 (SM-G900H)
-Content-Language: en-US
-To: Markuss Broks <markuss.broks@gmail.com>, linux-kernel@vger.kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh+dt@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230121201926.46990-1-markuss.broks@gmail.com>
- <20230121201926.46990-3-markuss.broks@gmail.com>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5cq6ayhJIiujuCk7dC1Dlzy/ufBwMT4etpRQGBEg7fw=;
+        b=7/Mw1ABJcbRyFG0XohbbLym1sViK5ZlNxVLKxD1RPIYeDaTmg6ma9C+EAQvsSUmadl
+         Ot+n4/+PN15j+g0FywGANlvJKkr9e63JxNdmho9gapFyVcA6AHijyfT5ObuFBtDqr0n9
+         h6jLbbyIgb4G86w1e2V++3tYeXAQiTOsM2cUgudTyBvHYV1CJjNAqTUipz3ny8K3MRb4
+         Puul8ZeXj2RS0LoQXmUkK5yltmN1WsnGaYk27LhjX+6m0EvmWmGwzK13JeArABKT97jj
+         yf7lQxaRqwBZDfz0QcFBz4fdVxiFciO7/AzVm4EXGuaVOaq5GJMWU+/z4YfYKhM+UNBk
+         c2ag==
+X-Gm-Message-State: AFqh2kq+VHNYBUkAg/fP5HpWeoHbh4391UWZhUNpvxbVxKjWhVTIh2er
+	a4ejnxeTNKsCgt4cq52NTHo6KQ==
+X-Google-Smtp-Source: AMrXdXtcZWKJ5j0oRc5YZzjtqWQUSggkx82WJfQ2d9BqVHEZ6eTWX69Z3Ae8Af4FxfHtaoxFpVIblw==
+X-Received: by 2002:a05:600c:4d91:b0:3da:fb96:53d with SMTP id v17-20020a05600c4d9100b003dafb96053dmr23424328wmp.4.1674488237771;
+        Mon, 23 Jan 2023 07:37:17 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l7-20020a7bc447000000b003dafa04ecc4sm10808395wmi.6.2023.01.23.07.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 07:37:17 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230121201926.46990-3-markuss.broks@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: linux-kernel@vger.kernel.org,
+	Markuss Broks <markuss.broks@gmail.com>
+List-Id: <soc.lore.kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Brown <broonie@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Correct inaccuracies in Exynos5420 and Exynos5800 device trees
+Date: Mon, 23 Jan 2023 16:37:11 +0100
+Message-Id: <167448788767.376527.17795531099793665794.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230121201844.46872-1-markuss.broks@gmail.com>
+References: <20230121201844.46872-1-markuss.broks@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 21/01/2023 21:19, Markuss Broks wrote:
-> Samsung Galaxy S5 (SM-G900H) was sold alongside Samsung Galaxy S5
-> with Snapdragon SoC, however the Exynos version features a 3G
-> capable Intel modem instead of Qualcomm version featuring LTE modem.
-> This phone is based on Exynos5422. Currently, the touchscreen,
-> USB, eMMC and the PMIC are enabled in the device-tree.
+On Sat, 21 Jan 2023 22:18:41 +0200, Markuss Broks wrote:
+> Use the proper compatibles for the DSI host controller and MIPI
+> video phy, as the current ones are not compatible with the hardware.
 > 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> ---
->  arch/arm/boot/dts/Makefile                   |   1 +
->  arch/arm/boot/dts/exynos5422-samsung-k3g.dts | 676 +++++++++++++++++++
->  2 files changed, 677 insertions(+)
->  create mode 100644 arch/arm/boot/dts/exynos5422-samsung-k3g.dts
+> While this fixes the kernel panic while trying to use DSI, I was still
+> unsuccessful to consistently produce image that isn't noise on S6E3FA2
+> panel of Samsung Galaxy S5. It seems to only work sometimes.
 > 
+> [...]
 
-I gave it a try but dtbs_check complain:
+Applied, thanks!
 
-/home/krzk/dev/linux/linux/out/arch/arm/boot/dts/exynos5422-samsung-k3g.dtb:
-pinctrl@13400000: 's2mps11-irq-pin', 'touch-int-pin' do not match any of
-the regexes: '^(initial|sleep)-state$', '^[a-z0-9-]+-pins$',
-'^[a-z]+[0-9]*-gpio-bank$', 'pinctrl-[0-9]+'
-	From schema:
-/home/krzk/dev/linux/linux/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-
+[1/2] arm: dts: exynos5420: Use Exynos5420 compatible for the MIPI video phy
+      https://git.kernel.org/krzk/linux/c/bf5de14225625627a35d1acb6739068fc126326f
+[2/2] arm: dts: exynos5800: Use Exynos5422 compatible for the DSI controller
+      https://git.kernel.org/krzk/linux/c/234b8dac096d74e330ed1266956c756efddf3676
 
 Best regards,
-Krzysztof
-
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
