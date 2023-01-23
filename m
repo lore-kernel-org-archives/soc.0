@@ -1,117 +1,114 @@
-Return-Path: <SRS0=6Gkx=5U=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=SeoW=5U=gmail.com=geert.uytterhoeven@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE11C38142
-	for <soc@archiver.kernel.org>; Mon, 23 Jan 2023 09:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30E58C05027
+	for <soc@archiver.kernel.org>; Mon, 23 Jan 2023 10:43:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0C80EC4339C; Mon, 23 Jan 2023 09:59:09 +0000 (UTC)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	id 01599C4339C; Mon, 23 Jan 2023 10:43:21 +0000 (UTC)
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0F3FCC433D2
-	for <soc@kernel.org>; Mon, 23 Jan 2023 09:59:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F3FCC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so10160094wml.3
-        for <soc@kernel.org>; Mon, 23 Jan 2023 01:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CtTLJQUHERlGTA1ecjP4ZAB6KPAk/7NPYqYgWuT3Suw=;
-        b=qxRb667FT8O0NQhgeJ5a4fDl242loKNLzX78YKu7cjtJIjcjYHMUzIz584ad53Q5hI
-         bOsyDw8+lkqNVQrw/O0oEVLcIz9OtXayoL6/6l695GMdLIOhXAKDg9iEH8BlQLN83I99
-         miTOO3xCyNBTjscQ3cktsmky2lyQ44RzX1XxlZRXIB3r+ZTcdmRFmBdujfwsjVU9smFp
-         IxGkQqQF1c7RqbEGtA6R75ZTzInores6UmsJtH7UwrLCZpa5TRJ3lOWrLhmfnU/sv0M7
-         fGqg7JG/0oAghdTBOIuPdBg1XaSdVE93v0tQD7nrPvN/vNZvdzudY/qus+UJDjAcoCg/
-         LM8A==
+	by smtp.kernel.org (Postfix) with ESMTPS id 64055C433EF;
+	Mon, 23 Jan 2023 10:43:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 64055C433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id g16so7246114qtu.2;
+        Mon, 23 Jan 2023 02:43:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CtTLJQUHERlGTA1ecjP4ZAB6KPAk/7NPYqYgWuT3Suw=;
-        b=C7lPqY2Xzxl/6qiHglnfDrzpnyphb5Nxa804qcBJTZnxoWib2FPSZQ4txfUys7rnWX
-         U6SHAoWpLT9JFzdiX5XDrp4S9ifjmSwney4aQcPnV9sLid4b3nNsmMLfjpcOp2ltH0Xx
-         6MqnVqzLZWHZX1S8iTD3o5A3rrvdelcQWvH8/RHWaom+f6VgAfIjb6QtG46o0EngAPOZ
-         uVtuheXLLso4oR7eRYKlqFb6nxyaw/E4BDzq9WRWJwJswnuuUPiFOvUcPY1hHz/FA4uq
-         oSMfkwjBMCeLPYvVcaKPLK6UYyDR2W5vzzwYQu0YnxQDjgwhHztvxW//oLaMsmic06S8
-         lJqQ==
-X-Gm-Message-State: AFqh2krHBGp1j98hr2y7FYigi+UGt7fWnO88cq/JISgmb0LOB7wpkqyc
-	abGhAYHlL3agD0fcIRJ7gAXHdA==
-X-Google-Smtp-Source: AMrXdXsGbgUE3umL1U3RniV7/odixrkxY9sW262BHvRmFLtF52S8OAEs3s/oFW819rxhIhuG1QTQ5g==
-X-Received: by 2002:a05:600c:a15:b0:3db:18a0:310f with SMTP id z21-20020a05600c0a1500b003db18a0310fmr17735845wmp.33.1674467945322;
-        Mon, 23 Jan 2023 01:59:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o28-20020a05600c511c00b003dab40f9eafsm11183305wms.35.2023.01.23.01.59.04
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Nz7epYXM0pVoAXm+SmhP1LKWnLLacoKbNMTlqFkP4Y=;
+        b=EohcWuW54yKlHDWpAAaxjWxh6cpGiM1KRP7nP5IOfdwZy5xyRVRO8+fq7crCp4KeHY
+         C0bqeZdd+idaGldyswbkniO00RQ3uUeihepmxv172DUYPpI1UG34/B7lnJcLkrUw7g8T
+         hT0GYClgEr7CHSOjt/pQFpJ9kKiwYf3LfLYE36h5VKjwpG5G2ARHivt03+FanfgF2Aws
+         1RfDVr2yyT690bjEuMUu8DDxW6FBRE66WXs8QRpLhAM8dpN4uoBlHgFG9BsYrzzqNxsZ
+         cRDD4vFe/17N1IflQIGRaqUgA716vUQRrRCCs/CK0aAqc7kZerqsZxZGsWl5PyQmU8lF
+         Ntpg==
+X-Gm-Message-State: AFqh2kosdYnyJxIzgDjPjNUMIpV7ouEM0QKtMDJad5FFUXqyGcWt/j9O
+	cUAX33/AaQ1xNEoIJW/tDElrk4Twx92ESA==
+X-Google-Smtp-Source: AMrXdXuZ5wcXOUoj8zu3+h0IoEoYW9RzxOJc034j56xOu9cOlE8YAvzGEbqQAxhgV+p78LFBoRAjeA==
+X-Received: by 2002:ac8:4914:0:b0:3b1:ad76:eefe with SMTP id e20-20020ac84914000000b003b1ad76eefemr36721290qtq.10.1674470597985;
+        Mon, 23 Jan 2023 02:43:17 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05620a244900b00705cef9b84asm14188516qkn.131.2023.01.23.02.43.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 01:59:04 -0800 (PST)
-Message-ID: <703ad169-fb10-651c-96fe-22d2eae959b6@linaro.org>
-Date: Mon, 23 Jan 2023 10:59:03 +0100
+        Mon, 23 Jan 2023 02:43:17 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-4a263c4ddbaso166348157b3.0;
+        Mon, 23 Jan 2023 02:43:17 -0800 (PST)
+X-Received: by 2002:a05:690c:851:b0:480:fa10:459e with SMTP id
+ bz17-20020a05690c085100b00480fa10459emr1894031ywb.283.1674470596924; Mon, 23
+ Jan 2023 02:43:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 0/2] Add support for Samsung Galaxy S5 (Exynos)
-Content-Language: en-US
-To: Markuss Broks <markuss.broks@gmail.com>, linux-kernel@vger.kernel.org
+References: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 23 Jan 2023 11:43:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXdZbJDTOzQG4=pRpR1OCU0=RTDZDH0MnPW8Ea2LJKs6A@mail.gmail.com>
+Message-ID: <CAMuHMdXdZbJDTOzQG4=pRpR1OCU0=RTDZDH0MnPW8Ea2LJKs6A@mail.gmail.com>
+Subject: Re: [GIT PULL] memory: drivers for v6.3
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20230121201926.46990-1-markuss.broks@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230121201926.46990-1-markuss.broks@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, 
+	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>, 
+	JaimeLiao <jaimeliao.tw@gmail.com>, Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 21/01/2023 21:19, Markuss Broks wrote:
-> Samsung Galaxy S5 (Exynos) is a mobile phone released in 2014.
-> It has an Exynos5422 platform. This version of Galaxy S5 is only
-> capable of 3G communication using the Intel modem, while the
-> LTE version of the device (klte) has a Qualcomm Snapdragon SoC.
-> 
-> Currently, internal eMMC, USB, regulators on a PMIC, and touchscreen
-> are enabled in the device-tree.
-> 
-> It also has the following peripherals:
-> 
-> - 5" 1080p S6E3FA2 DSI display,
-> - Cypress StreetFighter touch buttons,
-> - Broadcom BCM4354 wireless connectivity module,
-> - Intel XMM6360 3G modem,
-> - STM32F401 serving as a sensor hub,
-> - Validify Solutions VFS61 series fingerprint sensor,
-> - Lattice ICE401M FPGA as an IRDA controller,
-> - Maxim MAX86900 heart rate sensor,
-> - NXP PN547 NFC controller,
-> - Wolfson WM5110 Audio DSP,
-> - Broadcom BCM4753 GPS radio,
-> - Maxim MAX77804 PMIC,
-> - Silicon Image SII8240 MHL controller,
-> - TI LP5562 LED driver
-> 
-> Cc: Mark Brown <broonie@kernel.org>
-> 
-> v1 -> v2:
-> - use better subject prefixes
-> - rename Galaxy S5 (Exynos) to Galaxy S5 (SM-G900H)
-> - align the compatibles and clock output names
-> - reorder the includes
-> - generic node name for regulator-tsp-vdd-en
-> - GPIO flag for regulator
-> - rename all the regulators, leaving the voltage values only where
->   it makes sense (e.g. on 3V3 and 1V8 supplies for the HRM)
+Hi Krzysztof,
 
-I got two v2 patchsets from you. No clue which one is correct. Please
-send v3 if there were differences. Otherwise please annotate somehow...
+On Sun, Jan 22, 2023 at 1:14 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+>
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+>
+> are available in the Git repository at:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.3
+>
+> for you to fetch changes up to 4fd1a0e496cb81e939c55143fc81c2be130099c4:
+>
+>   Merge branch 'for-v6.3/renesas-rpc-if' into mem-ctrl-next (2023-01-22 13:05:21 +0100)
+>
+> ----------------------------------------------------------------
+> Memory controller drivers for v6.3
+>
+> 1. TI Emif: simplify device_get_match_data().
+> 2. Renesas RPC IF: Few fixes (missing address set in manual mode;
+>    decouple driver's private data structure from other drivers; unbind
+>    and rebind due to triggering managed resources allocation from other
+>    drivers) and bigger rework around improved runtime Power Management.
+>
+> ----------------------------------------------------------------
+> Geert Uytterhoeven (6):
+>       memory: renesas-rpc-if: Split-off private data from struct rpcif
+>       memory: renesas-rpc-if: Move resource acquisition to .probe()
+>       memory: renesas-rpc-if: Always use dev in rpcif_probe()
+>       memory: renesas-rpc-if: Improve Runtime PM handling
+>       memory: renesas-rpc-if: Pass device instead of rpcif to rpcif_*()
+>       memory: renesas-rpc-if: Remove Runtime PM wrappers
+>
+> JaimeLiao (1):
+>       memory: renesas-rpc-if: Fix missing setting address
 
-Best regards,
-Krzysztof
+This is commit 21a1234f82cbf425
+("memory: renesas-rpc-if: Fix missing setting address").
 
+The same patch, sent by someone else, was sort of nack'ed in
+https://lore.kernel.org/all/CAMuHMdWpvuC2Cm41jCQm+rT8MZB5GN+Z0bPz941QzsHX17Ux-g@mail.gmail.com
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
