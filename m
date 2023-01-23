@@ -4,85 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA93C05027
-	for <soc@archiver.kernel.org>; Mon, 23 Jan 2023 10:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D6FC05027
+	for <soc@archiver.kernel.org>; Mon, 23 Jan 2023 10:53:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0E9FFC433D2; Mon, 23 Jan 2023 10:52:15 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	id 84A26C4339E; Mon, 23 Jan 2023 10:53:36 +0000 (UTC)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 35B59C433EF
-	for <soc@kernel.org>; Mon, 23 Jan 2023 10:52:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35B59C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 7B003C433D2
+	for <soc@kernel.org>; Mon, 23 Jan 2023 10:53:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7B003C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so8218796wms.2
-        for <soc@kernel.org>; Mon, 23 Jan 2023 02:52:14 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id q8so8633301wmo.5
+        for <soc@kernel.org>; Mon, 23 Jan 2023 02:53:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wf6IzpiJWgjJ8XBMtpelOXKyiBWR2D24WcuFGb1gZAE=;
-        b=GlQ/yiKj9WQ0flHkW2fHsanVpC+Hem4dYMR79eUouO6vNaJrIOpzsZLC5O2/W1JW1R
-         zX2IcYdHng+NyIddvZzen0zGg1zo+ZYCyMJeWd0iLUt5jDc9LtLbidsFsF2KL900HzT4
-         wIHn885vLC5xLEi2NK4lKZDJnU+iU+qc2LXyG+aj7M+AcSv5wDq+NiSM4ne0s0AmG5qJ
-         qo0lKVVjFy3dGZaFhg0E+qF903Oj220vWSS9maki1xTMfJgmNvV0AsX9W+NaUXXBmHYQ
-         IeKheWQvNppCRDwx00kSWiS+G7+LApgte/BzEUsn2/HVacuDIMuJsSpRPBhihEaW+Z4s
-         tdxw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FdJJNcufNtuaisjvQK2ChXy93daPNKRKW1qtkKLWAQ4=;
+        b=yEVqAbeWLluveXp/VTFrrCJYUrV4elpQpWZWdW21Wauk98Xo7klhAO3oAHWpjvOqHU
+         W51Nx2DzBJSM36+25bPjyHrvimxXlPIZUbkiTYmUkB9VQKvvBNO2Y5Xfbs0F4sM2+nsU
+         D4/icgc0CI0AB7QU1HHjcBYmDSa6E+mOsudetMmQS3WLjeTIC+1PeXvmyVgOlFKv/JVI
+         xnFlnjCLFJQj/p8CmvLJNB3RPZyT8vFkw2VPZOGYSS7eb6xwj+U8VUCOGTFTB8MVoM5p
+         mXl1Z/ZBr2tEcwo7ihH687hnYjo7lC5O8/ioxE930GrlA8thIsJwOXAauKUbttFoiQhB
+         4HYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wf6IzpiJWgjJ8XBMtpelOXKyiBWR2D24WcuFGb1gZAE=;
-        b=5ph3DrVJKc/4j6D5Xka0Mxe3Deb9Vxmd7mZEPtQHJ2do8Pr3JVAnGvzMlpXa7S9Zs5
-         NozbGdTMb9yfqG1FSnCfqbYZEdReODj3XOhkMweAg1BnEPxB4pV4BORE8Nc3zHQy3KKD
-         TZZPDmxI8WqPWMoBfe3baSXXQuzr9fCMhurNzVRYt2KYdMyG2ilK6je/75nkzy6kZj5B
-         CQMdheucvFYc3eQFyronqoZqgbPEk8TzmFI3SdCuwoLJDx9SY8/Oo8PXRnImk6hoh4Rd
-         Jgt0TVCuI1vS1+7CtgnOWvb+O2GAiy10TuAfINiMzM2LmUlzKA3IOBfGIvxVDlXYKjDo
-         pFNQ==
-X-Gm-Message-State: AFqh2ko73LLNKfXwUEpPW8jIol/1XmgoB/wx5T19+o29QDk3bUTqUtYe
-	wlsZE5P4X/aK0z5hbbpHng5foQ==
-X-Google-Smtp-Source: AMrXdXvqdASlQuynG2I5qf1duw5CyxmiHlmIGbxP9uDal5pHcNeK8sS7LdFXWlaKWwSjzjs4PNWM0g==
-X-Received: by 2002:a05:600c:1ca0:b0:3db:1ded:1769 with SMTP id k32-20020a05600c1ca000b003db1ded1769mr15551397wms.10.1674471132537;
-        Mon, 23 Jan 2023 02:52:12 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003d99da8d30asm11192811wmo.46.2023.01.23.02.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 02:52:12 -0800 (PST)
-Message-ID: <65e5d86b-ab79-9652-2f08-bdab6ba03f89@linaro.org>
-Date: Mon, 23 Jan 2023 11:52:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [GIT PULL] memory: drivers for v6.3
-Content-Language: en-US
-List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
- arm@kernel.org, soc@kernel.org
-Cc: linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-References: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FdJJNcufNtuaisjvQK2ChXy93daPNKRKW1qtkKLWAQ4=;
+        b=ijJXEtNwYPDGf3PvmT6MxHxQkZBArGvAoYVYPmC/aFxOQfdjli4MWyxfqMshbBCe8X
+         yFaO8ADUoBx1eoCr3HG4eN2DlCVyHaCQozLQ0gECvbaD3fPZF86tI9exIxcmsKPCgOeT
+         eaG6PrN/xsM1SbHMQL/Lf4JDm895SwqnW+/ejS+DVOt9YSb3DWJpeyER8uSduFPbjtHX
+         9XscCHcveDKc+BV2Pb0GN9NKDYwkrpumra3WodaQwXMVLYGRgt0lfYEaNGE9ju9f+p9h
+         bptdG6aVfgvb6SaEgnwx0IH4MLGmS9Z6Egrh0Dx8uu1PaFxBmtNy3UgcXtXnRny9qiTj
+         SmXQ==
+X-Gm-Message-State: AFqh2kon9gh4HalQACQY08bzFjz32qK5h4kUxZVHKoiaevxjP4wd3khs
+	oc09oYMR06SxpAk8oPBr1p08ww==
+X-Google-Smtp-Source: AMrXdXvCUzBZ7lNA/yyyDLkfzfr7k8v1XZckOCzSEcaqREsi/y3xn7LlyZaKArybPHRgG7gssZYxgA==
+X-Received: by 2002:a05:600c:4f96:b0:3db:2df0:f2b8 with SMTP id n22-20020a05600c4f9600b003db2df0f2b8mr12762253wmq.36.1674471213842;
+        Mon, 23 Jan 2023 02:53:33 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l7-20020a05600c1d0700b003d990372dd5sm11382125wms.20.2023.01.23.02.53.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 02:53:33 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+List-Id: <soc.lore.kernel.org>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] memory: drivers for v6.3, corrected, v2
+Date: Mon, 23 Jan 2023 11:53:30 +0100
+Message-Id: <20230123105330.63709-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 22/01/2023 13:11, Krzysztof Kozlowski wrote:
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> 
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.3
-> 
-> for you to fetch changes up to 4fd1a0e496cb81e939c55143fc81c2be130099c4:
-> 
->   Merge branch 'for-v6.3/renesas-rpc-if' into mem-ctrl-next (2023-01-22 13:05:21 +0100)
+Hi,
 
-Please ignore this pull request. I'll send a corrected one in few minutes.
+Version 2 of the same pull request - dropped one patch which was not needed.
 
 Best regards,
 Krzysztof
 
+
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.3-2
+
+for you to fetch changes up to bbaf6624f23d6e538401382be97ba3d4bcba963e:
+
+  memory: ti-emif-pm: Use device_get_match_data() to simplify the code (2023-01-23 11:48:31 +0100)
+
+----------------------------------------------------------------
+Memory controller drivers for v6.3
+
+1. TI Emif: simplify device_get_match_data().
+2. Renesas RPC IF:
+   - Few fixes (decouple driver's private data structure from other
+     drivers; unbind and rebind due to triggering managed resources
+     allocation from other drivers);
+   - Bigger rework around improved runtime Power Management.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (6):
+      memory: renesas-rpc-if: Split-off private data from struct rpcif
+      memory: renesas-rpc-if: Move resource acquisition to .probe()
+      memory: renesas-rpc-if: Always use dev in rpcif_probe()
+      memory: renesas-rpc-if: Improve Runtime PM handling
+      memory: renesas-rpc-if: Pass device instead of rpcif to rpcif_*()
+      memory: renesas-rpc-if: Remove Runtime PM wrappers
+
+ye xingchen (1):
+      memory: ti-emif-pm: Use device_get_match_data() to simplify the code
+
+ drivers/memory/renesas-rpc-if.c | 152 ++++++++++++++++++++++++++--------------
+ drivers/memory/ti-emif-pm.c     |   7 +-
+ drivers/mtd/hyperbus/rpc-if.c   |  18 ++---
+ drivers/spi/spi-rpc-if.c        |  14 ++--
+ include/memory/renesas-rpc-if.h |  34 ++-------
+ 5 files changed, 119 insertions(+), 106 deletions(-)
