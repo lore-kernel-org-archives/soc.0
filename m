@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E045C54EAA
-	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 11:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7633DC38142
+	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 11:02:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2625CC4339E; Tue, 24 Jan 2023 11:02:29 +0000 (UTC)
+	id 5DFF6C4339E; Tue, 24 Jan 2023 11:02:30 +0000 (UTC)
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AC469C4339C;
-	Tue, 24 Jan 2023 11:02:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AC469C4339C
+	by smtp.kernel.org (Postfix) with ESMTPS id BA6F4C433D2;
+	Tue, 24 Jan 2023 11:02:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BA6F4C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674558147; x=1706094147;
+  t=1674558148; x=1706094148;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UhEGKPQYZuc8JeUYJQypaDn3DGwfkkMbp6gpJXkidK4=;
-  b=DiEfbkhhnesOdtJ6VrAbYy19AWPwBmSgGNpG1lnHO3bzSeKI5HH7uweZ
-   0XyLIKXDISG14tpa8lq9Qz5mC39s5hCnv9AzqPAaMOBXkrStVgPDGVSGH
-   fZz3iwrUvFXSniJcleGZkoIHldNYH8dnjKuJIkFieh8voHfkh5KKNzimv
-   WYOgw3IeTOJYY9XRWjYq4ura6EjY12BIzsVPZmPqt4WMgOQR8x5SCCzm8
-   x5LVdJiwQW82CjFeMUixKGxb5CSyLmiQZeDLV8XvBs3p+LMycURFDbQ54
-   +yWO8BZByA+2LcMnFncSmxW0dm+yzd5zkDpMbmM7nWfx3D3/KFBn6Ewc3
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,242,1669071600"; 
-   d="scan'208";a="28616625"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 24 Jan 2023 12:02:18 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 24 Jan 2023 12:02:18 +0100
-X-PGP-Universal: processed;
-	by tq-pgp-pr1.tq-net.de on Tue, 24 Jan 2023 12:02:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1674558138; x=1706094138;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UhEGKPQYZuc8JeUYJQypaDn3DGwfkkMbp6gpJXkidK4=;
-  b=l5c6s4chmhCkC4xd3c7PYqgRsDrDp2L4qAu9wReiAixi96pbY2poT0+R
-   gBAKkAKo/F5psBQmqdxfrAEjlRkqPc03lp3ciezsdsDBeUEyYS0jSIDX9
-   JRUQo1V0GnU1jylrjtFUwigqw4+snRWQzJoO8og15zCoH6+UaJSVoLABm
-   m8TbLiGLRKz3yIKq6bV2lbOz3Dt+9v+pmhzz/thJoYPmAsFi8Os7koQTy
-   qyA6epufweOg7A+3ZQT+Hp6u0fvof9EgGJjIRWzrp8VIjW5K0cqEGXPrm
-   K25BSZZ+VAHihpWDFTtRFOKbHBo8eLA/cymKRp5lzYfDgnyDcSzswY30R
+  bh=6mY73K6nvIMOPSYx1Yvwl54SYhIapk9pMK4TeycZtYc=;
+  b=FIWWka9T3wytpzt8hWT6NynTluyF90vcFuiU5JEP8rBo+6PwSOZmqW16
+   NnJX/K1PaK6fBOmfFyJKIE2Iv07SaLFPZZouLuXE0ASVlM+ZieefZ8Rpd
+   7Io9HkAKxiIUBnvfCwh/6PVENfqFuLvUayQ3qbLEKKl8pMZ8GUTOefYkP
+   DKW+67lWyEhHIZT8aZaihnziTavX2mFMYj/NGWGFc/Cn6+tuopiBRtCCr
+   hz3kN6VSGRHp8pXMOTnaoRBpfnal/Wo1SjUqwdHNcUpQLPxsmZlJMiS6p
+   zjP9abzz+gKeb87SPCuWTfEEy0WRLo6+6klzWrqUzDxAj+9dYRQ3p52li
    Q==;
 X-IronPort-AV: E=Sophos;i="5.97,242,1669071600"; 
-   d="scan'208";a="28616624"
+   d="scan'208";a="28616627"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 24 Jan 2023 12:02:19 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 24 Jan 2023 12:02:19 +0100
+X-PGP-Universal: processed;
+	by tq-pgp-pr1.tq-net.de on Tue, 24 Jan 2023 12:02:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1674558139; x=1706094139;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6mY73K6nvIMOPSYx1Yvwl54SYhIapk9pMK4TeycZtYc=;
+  b=P0W+xKigtDhFS8p4873FYTv3qkroFYYUC5aSB1xliZf+JTVmdgpBew8E
+   lKkJq+0zHUq1D2fMhBzAh6SM97ttF41zLaJZGyenei6z5HXZKcwRejpve
+   ksITvs8pLT+Jq1ilmZK3ZmDNn/gUKitl7Rd7Gjs3Yi55WxMg75TK6md6T
+   pgWvDSocdAEES1AyI/I0T2PoOqcarSQ5dxT8V6pKR02lvJICNOXidP2/8
+   aRTyc/4srpQrwVYQD0yikyS5QSRTBRX/9N+0LhSHzPaYQn8pck1M6X9R/
+   C0qyt+fPSwS/sakW9hjsiT8hUmH025KU+JDJmCtCtHgOnwzlMo99GjH77
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,242,1669071600"; 
+   d="scan'208";a="28616626"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 24 Jan 2023 12:02:18 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.53.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 45E3F280074;
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 91985280073;
 	Tue, 24 Jan 2023 12:02:18 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh+dt@kernel.org>,
@@ -84,9 +84,9 @@ Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kbuild@vger.kernel.org
-Subject: [PATCH v3 06/10] ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH DC44 overlay
-Date: Tue, 24 Jan 2023 12:02:09 +0100
-Message-Id: <20230124110213.3221264-7-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v3 07/10] ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH FC21 overlay
+Date: Tue, 24 Jan 2023 12:02:10 +0100
+Message-Id: <20230124110213.3221264-8-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230124110213.3221264-1-alexander.stein@ew.tq-group.com>
 References: <20230124110213.3221264-1-alexander.stein@ew.tq-group.com>
@@ -104,31 +104,32 @@ Changes in v2:
 * None
 
  arch/arm/boot/dts/Makefile                    |  2 +
- ...1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts | 55 +++++++++++++++++++
+ ...1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts | 55 +++++++++++++++++++
  2 files changed, 57 insertions(+)
- create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
+ create mode 100644 arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index f9f75c5325808..64cc0f3f6efb0 100644
+index 64cc0f3f6efb0..d68100144ae4f 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -806,9 +806,11 @@ dtb-$(CONFIG_SOC_LS1021A) += \
+@@ -806,10 +806,12 @@ dtb-$(CONFIG_SOC_LS1021A) += \
  	ls1021a-tsn.dtb \
  	ls1021a-twr.dtb
  
-+ls1021a-tqmls1021a-mbls1021a-cdtech-dc44-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dtbo
++ls1021a-tqmls1021a-mbls1021a-cdtech-fc21-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dtbo
+ ls1021a-tqmls1021a-mbls1021a-cdtech-dc44-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dtbo
  ls1021a-tqmls1021a-mbls1021a-hdmi-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-hdmi.dtbo
  ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33-dtbs := ls1021a-tqmls1021a-mbls1021a.dtb ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtbo
  
-+dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dtb
++dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dtb
  dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-hdmi.dtb
  dtb-$(CONFIG_SOC_LS1021A) += ls1021a-tqmls1021a-mbls1021a-lvds-tm070jvhg33.dtb
- 
-diff --git a/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts b/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
+diff --git a/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts b/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts
 new file mode 100644
-index 0000000000000..ddc71bc597295
+index 0000000000000..4bd10d0e17b90
 --- /dev/null
-+++ b/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-dc44.dts
++++ b/arch/arm/boot/dts/ls1021a-tqmls1021a-mbls1021a-cdtech-fc21.dts
 @@ -0,0 +1,55 @@
 +// SPDX-License-Identifier: (GPL-2.0-or-later OR X11)
 +/*
@@ -159,7 +160,7 @@ index 0000000000000..ddc71bc597295
 +};
 +
 +&display {
-+	compatible = "cdtech,s070swv29hg-dc44";
++	compatible = "cdtech,s070pws19hp-fc21";
 +	status = "okay";
 +
 +	port {
@@ -181,8 +182,8 @@ index 0000000000000..ddc71bc597295
 +		/* LCD_PWR_EN -> TSC_WAKE */
 +		wake-gpios = <&pca9554_1 4 GPIO_ACTIVE_HIGH>;
 +		gain = <20>;
-+		touchscreen-size-x = <800>;
-+		touchscreen-size-y = <480>;
++		touchscreen-size-x = <1024>;
++		touchscreen-size-y = <600>;
 +	};
 +};
 -- 
