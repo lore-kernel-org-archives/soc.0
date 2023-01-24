@@ -4,59 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3C26C54EED
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD6D7C61DA0
 	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 71FF2C433AF; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A206C4339E;
+	id 958EEC433D2; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A23BC433AC;
 	Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1674580834;
-	bh=KrlGOTO62/t6run3jC0zhqUuaHXjSi+1M1/uXhlYo6A=;
+	bh=MZI0kRZuajeECTYxo5jGoCeQApdQ+xZs3nKYkFMCmSs=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=rgoc0I+hpefigJIZmn5CAtQcz66NAKPRt4a1/gXIXEoKMwgcLuDsXJDKxtPAhkBZ6
-	 CBEPrPFrrvR/bC/Pd9A608SxVR7bCkZqK8iXJxkz+Q8YeqhRiVqOLMxPyYouHjkWqc
-	 /v20ASbPvwHTTvKooxpvVd6Da48wMm5vP/3yzRcNFvn2qWMFQfJEQniSg2+T5Cq6m8
-	 jLMaY/KHSvVqUY0X3yyVhrv5OqOnPNh6wopOViC7rOQfi7zqgDYxRJjySk/pMM2LGY
-	 3vTOY0QniR0n+ZQ/fjluyCWQ49RgwFUKmcqDb7+DKV5IFYnMYqtKe2glU6F93qQSK2
-	 2R5DEiza8Dx0Q==
+	b=aMJBoiIRqvdW85gVx9rI97GwPw3s+oDZiGORNhuiAC9USYnJZgwaWOFc7/GTyKYFY
+	 LpoehcoUazuibDeMzhw+xPQuRsEjXokUehdjPXkz8ZXozMAczJ3WZvbMrJtM+9mLZt
+	 dqnqd0MakBV1yx8Wj/bNotSsiF5oE8oWF5hhW2sFaz7LqQgOh27e4IpCh3foUudVPl
+	 vuWF/hNd66KQerdpFmqbWiWbIykX0vnohMe8iD93DPzDnpvIiyUMmUT83wa/ROqZrC
+	 9fYGBJ4s16nwc8LJR4AI5OxTZG2eWjDuKZmjWQ0NlK2TcrkMO3C+Pc1hjsQMHzGYAV
+	 uPHiVic/RpE/A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2860CE5256F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41FF6F83ED2;
 	Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable wm896x audio CODECs
+Subject: Re: [GIT PULL] arm64: dts: Cleanup for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167458083416.16533.17133501959548162788.git-patchwork-notify@kernel.org>
+ <167458083426.16533.5877213124024690075.git-patchwork-notify@kernel.org>
 Date: Tue, 24 Jan 2023 17:20:34 +0000
-References: <20230106-arm-wm896x-v1-1-441c564a9cd1@kernel.org>
-In-Reply-To: <20230106-arm-wm896x-v1-1-441c564a9cd1@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+References: <20230122121541.29312-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230122121541.29312-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 06 Jan 2023 23:14:12 +0000 you wrote:
-> The wm896x series of audio CODECs is used on a number of Freescale
-> reference designs, enable the drivers in multi_v7_defconfig to improve
-> testing coverage of those systems and their derivatives.
+On Sun, 22 Jan 2023 13:15:40 +0100 you wrote:
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm/configs/multi_v7_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.3
 > 
 > [...]
 
 Here is the summary with links:
-  - ARM: multi_v7_defconfig: Enable wm896x audio CODECs
-    https://git.kernel.org/soc/soc/c/74ab23d5a7fc
+  - [GIT,PULL] arm64: dts: Cleanup for v6.3
+    https://git.kernel.org/soc/soc/c/65edaea65d8a
 
 You are awesome, thank you!
 -- 
