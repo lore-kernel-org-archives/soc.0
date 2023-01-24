@@ -4,57 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03DBBC61D97
-	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 21:31:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC29C61DA2
+	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 21:31:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DDE3CC433AC; Tue, 24 Jan 2023 21:31:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BC1A7C433A1;
+	id EF189C433B3; Tue, 24 Jan 2023 21:31:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D7901C433AA;
 	Tue, 24 Jan 2023 21:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1674595889;
-	bh=fQBREP57o6/BugU/6izvxF5lhNxbICnQVgcpPvtzGGU=;
+	bh=+ic1m51jJv1Q4kGLrta5589+eflaw1iykFNUUX1PRew=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=BfIAt6RZGOvA/jle9CE251ksDvtAkvC33mwq6MWqS0tBS5TpWZHTnXXMn2VKYrwlq
-	 l5JWOQMwS5Lm2QKd25WVwhgmMHIWa+Jt1IqMAvGtjm1QKgNur8LL6hJezgyefeiQiP
-	 94t2lj4bEHvvFrh4UU4csqdDn+J9hb4o6f2kmQjlrsChnwa4GxZeh2n8Wrx0AuKXSC
-	 Y89QppU7XZiJvqe0iyRhXtQqNfvQUZcnKrjFr+01qWMnmRBcJ08cEcp7rbPc0pzN5f
-	 +lMWFshsOB79oxaROhlQsrd+8qudO+tnHM7Wlq3mEBKruhUS9/b/tqWwpDhwZ2qpRt
-	 9l+S/7jZNk7Aw==
+	b=S4N11HwFbG3Ziu8YOZ23GxEVGOBJXH5Pbii5/jDT7S91pMDe6rhmAtQr6Wr1OcT12
+	 iScz5VYXUMclFk/FZo7Rr6fTDwX9Y+35xBe/CeHNEMbdhATn1RIIltmGDJS686/MBq
+	 0sGLtPStHIW9+On8vikU1+Y0wHws+07S8kP4bOHVMUbOHXHN1t5vICELC8Ryhyiljq
+	 sTBZKOgWrTQe+CaDD8+1ApvwWTH9swTXgo1UqzDhROtI+PzzFb7xLD0IQfhB/siKF7
+	 fXO8ejf2BsX8/ydT8SYc2uI9Bo4pTO6JeQoXDLPmG6B6FQylvAtTZVTcGcvGFd6glO
+	 BIC/w334e9tMw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A565BF83148;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AC461E5256F;
 	Tue, 24 Jan 2023 21:31:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v6.3
+Subject: Re: [PATCH] ARM: ep93xx: Convert to use descriptors for GPIO LEDs
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167459588967.12731.16583497523143666535.git-patchwork-notify@kernel.org>
+ <167459588970.12731.741146141115993278.git-patchwork-notify@kernel.org>
 Date: Tue, 24 Jan 2023 21:31:29 +0000
-References: <20230120162152.1438456-1-sudeep.holla@arm.com>
-In-Reply-To: <20230120162152.1438456-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+References: <20230111132210.134478-1-linus.walleij@linaro.org>
+In-Reply-To: <20230111132210.134478-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 20 Jan 2023 16:21:52 +0000 you wrote:
-> Hi ARM SoC Team,
+On Wed, 11 Jan 2023 14:22:10 +0100 you wrote:
+> This converts the EP93xx to use GPIO descriptors for the
+> LEDs.
 > 
-> Please pull !
-> 
-> The majority of the changes are in -next for a week now and all the reported
-> build related issues are fixed.
+> Cc: Nikita Shubin <nikita.shubin@maquefel.me>
+> Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> Cc: Hartley Sweeten <hsweeten@visionengravers.com>
+> Cc: Lukasz Majewski <lukma@denx.de>
+> Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Updates for v6.3
-    https://git.kernel.org/soc/soc/c/f938b29d277a
+  - ARM: ep93xx: Convert to use descriptors for GPIO LEDs
+    https://git.kernel.org/soc/soc/c/91aa6280e308
 
 You are awesome, thank you!
 -- 
