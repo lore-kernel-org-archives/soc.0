@@ -4,59 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCB10C61DA2
-	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F89EC54EED
+	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 21:31:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DA3AC43443; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67884C433A7;
-	Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
+	id 473EAC4339E; Tue, 24 Jan 2023 21:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31FDFC433EF
+	for <soc@kernel.org>; Tue, 24 Jan 2023 21:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674580834;
-	bh=NLmVL79yylbp9clnS0TQ60jWgSET2ABt/olpLFlyG34=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=R+sft/LVOnqk4oH32Lzpg2vPDCR9M8DQO3qbyGot7FdWQ/SQ+/bPl3OripxMcLYlm
-	 pAu/YhIRIdQ1yaU98Ie4sWWt6lOzBO6E8MJk0NUSGs4b6E37tmbyoq0Rn/nR0PBnkf
-	 EYnoZ6YZd+iPCe64KITqYM7Htyc4BMpfwa6Vz4K4Bw8od6eltWbBaJV5//6VdVGpyh
-	 dJ4tObHtse9dM3fAB/XUFRsKuyqe0/Xf3v0Wsbr9Ck3c/5BuOGNAT5MbFqKEV/T9MP
-	 Yy+YPTe7T3OQDix7EBWPbZXElBlKeD9pk96Cuu6fZT6o5EGV2UuxoUElKpqQoNGF1B
-	 nyAtzBKAMEy/A==
+	s=k20201202; t=1674595864;
+	bh=qcdKIRwr+YmrOXfUTfSBUWExKdppkXD0irk/cu6sTxQ=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=r0zAKf5XWxmzRCtE1exrEhupV4437wBfuYPFDNCNZHXmtx6ha2i7NPruZf4to20eY
+	 /I7Si52DHG/I9Jv7efIl4bbJs7a0t1DWZ4Xuhx75xu+bZ9JCtbnPAdpnu7I+PkWBEI
+	 tO/c9XQk9jWzIYZZ4MMmYB03+i4OI0P9uErdp1cNSMVHQ2KD8G626oY6RT8vm3XbkD
+	 00YkJxId8TrvCw4W8yptB1OC+JB+dDOLRMT/uiCnl/oqRWqEczbOyjQNXo4FOd3Uvs
+	 WG+bm1o9EIGgPn65d2biHbSLEEpIAugPh+YAGEbakTDyKxWmoVZsOVDuBWNNtDTa7v
+	 C3JncmqnbeZfQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 355E1F83ECD;
-	Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0C226C5C7D4;
+	Tue, 24 Jan 2023 21:31:04 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: multi_v5_defconfig: Enable I2C_GPIO
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167458083421.16533.17237791696151695643.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Jan 2023 17:20:34 +0000
-References: <20230109-arm-multi-v5-i2c-gpio-v1-1-78e191358548@kernel.org>
-In-Reply-To: <20230109-arm-multi-v5-i2c-gpio-v1-1-78e191358548@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+ <167459586398.12731.12249584247140461799.git-patchwork-summary@kernel.org>
+Date: Tue, 24 Jan 2023 21:31:03 +0000
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Mon, 09 Jan 2023 23:46:53 +0000 you wrote:
-> A GPIO based I2C bus is used by at least some Atmel reference boards,
-> including the AT91SAM9G20-EK which is in CI, enable the driver as a
-> module to improve test coverage and help users of systems that happen to
-> use it.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> 
-> [...]
+Patch: ARM: dts: aspeed: Fix pca9849 compatible
+  Submitter: Joel Stanley <joel@jms.id.au>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=713060
+  Lore link: https://lore.kernel.org/r/20230118051736.246714-1-joel@jms.id.au
 
-Here is the summary with links:
-  - ARM: multi_v5_defconfig: Enable I2C_GPIO
-    https://git.kernel.org/soc/soc/c/d54dbdcfd4d2
 
-You are awesome, thank you!
+Total patches: 1
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
