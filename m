@@ -4,60 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADEFEC61D9D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCB10C61DA2
 	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 85CA0C4339E; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F6C4C433AA;
+	id 7DA3AC43443; Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 67884C433A7;
 	Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1674580834;
-	bh=NlSfF220H+mtBCdiMli0aCiLlfSVKOu5cRBwMdzc0I8=;
+	bh=NLmVL79yylbp9clnS0TQ60jWgSET2ABt/olpLFlyG34=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=G2VdEUxoDYxQRmtGTBcx1C2y78hF2ZAXYfGZphJfB0pGS6aGD3zDrraKgd0Vs2LTu
-	 XBVGjXpjG4XZ8V6Bq/BDQscR/nguMXqoC0sHhtMgn2lpUwJoNArWFca1P2HvyxwyVp
-	 cJesudC6AszKbTTzXLquRQEnr/qAgI2s5X0g2FmrJcpTjbikipAzoJPnPd6rWKT073
-	 d/9sWyZ1M5RMPkv3sMHztCw8niQCzMJJC+aTsUHC4TKUSCN5LqSuBnHb7/34RGdf5c
-	 4QiWb5vngraXjB47ofL8rxTOMqwS9qSQsJbMAJJldSohgK0STYWk0g/mLUKHDQbyG5
-	 RFreBXbr8qZJQ==
+	b=R+sft/LVOnqk4oH32Lzpg2vPDCR9M8DQO3qbyGot7FdWQ/SQ+/bPl3OripxMcLYlm
+	 pAu/YhIRIdQ1yaU98Ie4sWWt6lOzBO6E8MJk0NUSGs4b6E37tmbyoq0Rn/nR0PBnkf
+	 EYnoZ6YZd+iPCe64KITqYM7Htyc4BMpfwa6Vz4K4Bw8od6eltWbBaJV5//6VdVGpyh
+	 dJ4tObHtse9dM3fAB/XUFRsKuyqe0/Xf3v0Wsbr9Ck3c/5BuOGNAT5MbFqKEV/T9MP
+	 Yy+YPTe7T3OQDix7EBWPbZXElBlKeD9pk96Cuu6fZT6o5EGV2UuxoUElKpqQoNGF1B
+	 nyAtzBKAMEy/A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3BB8CF83148;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 355E1F83ECD;
 	Tue, 24 Jan 2023 17:20:34 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/2] Devicetree changes for omaps for v6.3
+Subject: Re: [PATCH] ARM: multi_v5_defconfig: Enable I2C_GPIO
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167458083423.16533.9304852216131629055.git-patchwork-notify@kernel.org>
+ <167458083421.16533.17237791696151695643.git-patchwork-notify@kernel.org>
 Date: Tue, 24 Jan 2023 17:20:34 +0000
-References: <pull-1674566471-434733@atomide.com>
-In-Reply-To: <pull-1674566471-434733@atomide.com>
-To: Tony Lindgren <tony@atomide.com>
+References: <20230109-arm-multi-v5-i2c-gpio-v1-1-78e191358548@kernel.org>
+In-Reply-To: <20230109-arm-multi-v5-i2c-gpio-v1-1-78e191358548@kernel.org>
+To: Mark Brown <broonie@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 24 Jan 2023 15:21:55 +0200 you wrote:
-> From: "Tony Lindgren" <tony@atomide.com>
+On Mon, 09 Jan 2023 23:46:53 +0000 you wrote:
+> A GPIO based I2C bus is used by at least some Atmel reference boards,
+> including the AT91SAM9G20-EK which is in CI, enable the driver as a
+> module to improve test coverage and help users of systems that happen to
+> use it.
 > 
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> 
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> 
-> are available in the Git repository at:
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/2] Devicetree changes for omaps for v6.3
-    https://git.kernel.org/soc/soc/c/6e3347ecd44d
-  - [GIT,PULL,2/2] Clean-up for omamps for v6.3
-    (no matching commit)
+  - ARM: multi_v5_defconfig: Enable I2C_GPIO
+    https://git.kernel.org/soc/soc/c/d54dbdcfd4d2
 
 You are awesome, thank you!
 -- 
