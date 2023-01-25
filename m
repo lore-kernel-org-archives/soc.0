@@ -4,104 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC96FC27C76
-	for <soc@archiver.kernel.org>; Wed, 25 Jan 2023 07:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19468C54E94
+	for <soc@archiver.kernel.org>; Wed, 25 Jan 2023 07:58:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7FD53C4339B; Wed, 25 Jan 2023 07:55:57 +0000 (UTC)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	id C14E4C4339E; Wed, 25 Jan 2023 07:58:52 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 86003C433D2
-	for <soc@kernel.org>; Wed, 25 Jan 2023 07:55:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86003C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 8FD3AC433D2
+	for <soc@kernel.org>; Wed, 25 Jan 2023 07:58:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8FD3AC433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id u72so1306532ybi.7
-        for <soc@kernel.org>; Tue, 24 Jan 2023 23:55:56 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id tz11so45399025ejc.0
+        for <soc@kernel.org>; Tue, 24 Jan 2023 23:58:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qZeT9N7/YDOfGF0619aZTvv6j4BJZybuuI/JW5FqfqY=;
-        b=LCjqzQmaoSiwmL7PKK0GQ8JawwEXQFjcrhfAPpH1T9zecBBwCL4mdn7Zt4i7CjF22Z
-         iVetzGhLmUVZcSwMyo0cDbpob6FT5zjkhkXAcLEw97Ollw4QyhLV2m0te8LidzJXmb2u
-         sOkMVwXzN1d87hh74o3r+7t1VRJcIw9QbQfl1EBWqunstN77Frpi1iKZ4YUfGX2B94Mk
-         0z8+QAb16+1iVhDX+MahyaH2VnY4gIKhi9/1t0QaTlEP9uRdS2ppFTU621alknO3TDnU
-         DfrMSrM9u5/Iyfw79crCM+c/RLdMKEc13p7iHSBmzthnccZW+cUJrtvgvmzbRbVOVfRO
-         VclA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SjH36VCeOMEZpzTeh/i/i8Jq/1ehza0Y37Q6ribPPB8=;
+        b=l9VJIjTGDqjxRT7ZvVcqn45H8sUJ0Modk7CkqBGKHfcRWoomf3TsanAbzcpKDrjXE1
+         BJHOJd5+GnkO+IohnWdYN9V64OW1Zlrj6FvWbWsh+LM/aq46W6ouTQ6Uul/Iet9aKZbb
+         fRPyDf+QCnXjG3eUDLcSzA23u/xvPKrOOgz9FU/gYsIIih2l1E1EK/6ZPDOF3QdZxgQz
+         RiZXak8wvZPhiwCfppiTnoUF0puirIHO2khoIOblzSvs2BRzROWLAkDcdCADB9WbBB1A
+         lZnith80U1r3fbg6k4PgO3V55Y6ukGpChNWqe4OMkKNSbNYDNJxif0AappMm2yGWtXwq
+         DMrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qZeT9N7/YDOfGF0619aZTvv6j4BJZybuuI/JW5FqfqY=;
-        b=JGEo0mBkWZR/hrqPDam0VKOZrsasQzctc00hZh1e8JvmutPthkdFHu2cm0gl9vgnyD
-         a/aZeQv4FzwZ9nUeQleXDsMUUw6eFwqtjiJHZEPWg1hIKnMzVkz+kMvJ2Oj5f0IwXcNc
-         HxX34bnkYe7GGd4l5potCDBqJwK7/JcT8HVP21cQ2sQJT8VUgPLxAjFE3ljlTcnFICEm
-         7wmoQLHMoKu492k0fLrBWanxJsLAUx1bV5MlZDTGwbqdRLKkC2ZMKcw4eFCslFbWBngR
-         g1ALBSf4By1SaCE3gBT4g2HDp2AAed3x7RTsoYtgyf0Ifj1QtDPIWLQWGs8HoeI24+BP
-         TCSQ==
-X-Gm-Message-State: AFqh2kq/aBIr8wOB0BoIp+xnQD8LtgSNvGawbShYY9EFALaRiQizjdJq
-	Vjsi2EaflGtePwx0OR4BsCWMatjqsXBi+WY7FoXDT9p3k5HMSxxz
-X-Google-Smtp-Source: AMrXdXt0iVKgdS/CZLnaz+LOmuIUS38xfLcSbGl68UVjInq7AXCpqLPhqRmsiMsEzwlCuuMstHy7Yp9nUeh5t/RASK8=
-X-Received: by 2002:a25:5303:0:b0:7e4:fa1:b33 with SMTP id h3-20020a255303000000b007e40fa10b33mr2857416ybb.460.1674633355142;
- Tue, 24 Jan 2023 23:55:55 -0800 (PST)
-MIME-Version: 1.0
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SjH36VCeOMEZpzTeh/i/i8Jq/1ehza0Y37Q6ribPPB8=;
+        b=2q6IMw97LxTh5cRhzFPHNGsN+q9389ljFsUmsKTfVOqFTb6oRjNJOXDMDrD+KkUGJJ
+         3TDtaEPAT5fkJONHXUkbEv6J3yk11jHSEQ6nTPCS90tE+NyINVeRMWKlUOv4jv/tO+js
+         /Pv0uLE6QM7OO/r8bGs05I1NVEYr6b44T5TslklO0XAP1K6GNIGxzKBwM2o/qkfw6k7x
+         gprNcPYlZOkqv75ACWWDeUP4WhDr5vDlzQxJsyVYQQaekBeBFIpURncOFyxRS0S2ByQa
+         3QbMa3GvOx7yVyGrvGIWHWEJ2eLTCZ54RAnF1uz6+yoSWMESMpuNdx9VgyKrqQRn4olw
+         YYVQ==
+X-Gm-Message-State: AFqh2kr0h7kIiWdFFBhZAaKe8v4fNIve5rAJjYARFAmmPTQKykKgEUNK
+	217eMjzN5phtSIAqaeAmm5+zlw==
+X-Google-Smtp-Source: AMrXdXuDdeqz8IA0qOVpr1ri+vbSQP+8NIV5ctFyLFXH8mFA+RYSByS6kuck1+//aOtm8wo78y+kxg==
+X-Received: by 2002:a17:906:3487:b0:843:770e:777d with SMTP id g7-20020a170906348700b00843770e777dmr32692207ejb.11.1674633529843;
+        Tue, 24 Jan 2023 23:58:49 -0800 (PST)
+Received: from localhost.localdomain (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id c9-20020a170906924900b007bd9e683639sm2001690ejx.130.2023.01.24.23.58.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 23:58:49 -0800 (PST)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 25 Jan 2023 08:55:44 +0100
-Message-ID: <CACRpkdb=dDD-y91jdEM01iuioJVDgDwMgS8F46iN84vw_V8BvA@mail.gmail.com>
-Subject: [GIT PULL] Gemini DTS updates for v6.3
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
-	Hans Ulli Kroll <ulli.kroll@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Corentin Labbe <clabbe@baylibre.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] ARM: dts: intel-ixp42x-welltech-epbx100: add ethernet node
+Date: Wed, 25 Jan 2023 08:58:38 +0100
+Message-Id: <20230125075838.2801020-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi SoC folks,
+From: Corentin Labbe <clabbe@baylibre.com>
 
-here are some Gemini DTS updates that are ripe for merge.
-I was waiting for the USB dependencies to be queued first,
-and not they are in Greg's tree so please pull in these DTS
-changes!
+Add ethernet node for the first port of intel-ixp42x-welltech-epbx100.
 
-Yours,
-Linus Walleij
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Link: https://lore.kernel.org/r/20221005105510.3512132-1-clabbe@baylibre.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ARM SoC folks: please apply this directly on some DTS branch,
+we don't have any other IXP4xx DTS changes for v6.3.
+---
+ .../boot/dts/intel-ixp42x-welltech-epbx100.dts | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+diff --git a/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts b/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts
+index f5846a50e4d4..b444003c10e1 100644
+--- a/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts
++++ b/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts
+@@ -76,5 +76,23 @@ partition@fff000 {
+ 				};
+ 			};
+ 		};
++
++		/* LAN port */
++		ethernet@c8009000 {
++			status = "ok";
++			queue-rx = <&qmgr 3>;
++			queue-txready = <&qmgr 20>;
++			phy-mode = "rgmii";
++			phy-handle = <&phy5>;
++
++			mdio {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				phy5: ethernet-phy@5 {
++					reg = <5>;
++				};
++			};
++		};
+ 	};
+ };
+-- 
+2.39.0
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/gemini-dts-v6.3
-
-for you to fetch changes up to 776e8ee7a3cb8a6a15067ca4b287ac4a3640ea87:
-
-  ARM: dts: gemini: Enable DNS313 FOTG210 as periph (2023-01-25 08:49:32 +0100)
-
-----------------------------------------------------------------
-Gemini DTS additions and fixes for the v6.3 kernel cycle:
-
-- Fix a schema warning by pushing down flash address/size to
-  each device tree.
-
-- Use RedBoot partition parsing properly on Wiliboard devices.
-
-- Fix the FOTG200 USB block version.
-
-- Activate device mode on the DNS-313 now that we merged the
-  necessary USB changes.
-
-----------------------------------------------------------------
-Linus Walleij (5):
-      ARM: dts: gemini: Push down flash address/size cells
-      ARM: dts: gemini: wbd111: Use RedBoot partion parser
-      ARM: dts: gemini: wbd222: Use RedBoot partion parser
-      ARM: dts: gemini: Fix USB block version
-      ARM: dts: gemini: Enable DNS313 FOTG210 as periph
-
- arch/arm/boot/dts/gemini-dlink-dns-313.dts | 19 ++++++++++++++++++
- arch/arm/boot/dts/gemini-wbd111.dts        | 31 ++++--------------------------
- arch/arm/boot/dts/gemini-wbd222.dts        | 31 ++++--------------------------
- arch/arm/boot/dts/gemini.dtsi              |  8 ++++----
- 4 files changed, 31 insertions(+), 58 deletions(-)
