@@ -1,123 +1,107 @@
-Return-Path: <SRS0=L/UR=5V=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=cWTr=5W=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4434C61D97
-	for <soc@archiver.kernel.org>; Tue, 24 Jan 2023 21:37:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC96FC27C76
+	for <soc@archiver.kernel.org>; Wed, 25 Jan 2023 07:55:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8668EC433D2; Tue, 24 Jan 2023 21:37:45 +0000 (UTC)
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 7FD53C4339B; Wed, 25 Jan 2023 07:55:57 +0000 (UTC)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B854BC4339B;
-	Tue, 24 Jan 2023 21:37:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B854BC4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 7B6D03200033;
-	Tue, 24 Jan 2023 16:37:41 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 24 Jan 2023 16:37:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1674596261; x=1674682661; bh=MkvJpaIoWi
-	Y2nfRzftcUt2rDwhUJg4hoUzHTirY6S/I=; b=Qu9kwRBh2VFDOJEnh2TIWnu/dg
-	EJeHcrndgpg5GPAHfS9vjrVQLiEUUuV1JL9ErKZGB+vNooqNSQodD0OAdVErhVY1
-	VrekgA60btAghP4MdgR8OiJDlpgL5BNpEapmSnLwGnB9Tb3f2fqeKKEOaB0gTjqB
-	xA+spq7rU7reybytaL4unmPdlZUGe8Dwtacjw95uDYqO7omcw+/HdSbyWawH5e0Q
-	m1Uh3Iw9jcS+b/xRAAW3IsV9O4v+OkxCMCBWJIPqiQTUGANx0VoaOzOEfWPSxOXC
-	ARCXbazO3IekSWnZBdh2gycspiMS9DZROnN9xpwS4xR6crIV2DN9Hwmtk4XQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1674596261; x=1674682661; bh=MkvJpaIoWiY2nfRzftcUt2rDwhUJ
-	g4hoUzHTirY6S/I=; b=Fval1w2UY74WJLSDcjr0LF1kFnvcvmMh7NZKYSXdT5nh
-	4s6KQYN5NADKDOGSdr8oVVMbFdnImnnKMvX5zRyQJecjnzL9+m4vOMMX9xp5lXSg
-	/FqPyOQBtnBZK+EUXbIdaB1DTyoZoBSkeexf8LHf+7v4lhx38trOPGhVgQWfba8z
-	DNX39PBg/sYYqr/8ow7+rqhbC03f8CMG3RIbbYXxk2aFlQ1NmKihbmmjgwvPCCyJ
-	k7VnTu4VTbG4krw1rQJTEq4rj/zDTNz8+i/5TJmO3CiCPD5m+Xe5LlyUELgqU1Td
-	Ej6YYdHHO63tS17w8MqXPSKsoWYi91+xvERVHo8lgA==
-X-ME-Sender: <xms:pE_QY2WVgV6qfhCzfqFQFVghixOstecb9fvTYxCQRg-zkfot62I4GA>
-    <xme:pE_QYyl2d0BQaw9w6RCvUqkPgzJJOml5H8h_QuXy1Misue_2-fpmKAXHt1VQfC5WS
-    PMqMgO-vw6nhO3RWnc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvtddgudehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:pE_QY6Z9Mjrf7RGnpdQ4GBn_iBXD7YEUn70vVeNCFMYqlAYJGuxhMQ>
-    <xmx:pE_QY9UPTjIm1d9na8nvMeoVg-AmWNzskEsSPj1W2jhaujlHRCRYEQ>
-    <xmx:pE_QYwngFRg-OfvGGZb_Gamp8gJggzeX-BQvj0dIWDn4rzhG2k9IwA>
-    <xmx:pU_QY_cTCaA0Fvpl8fimDafUFyeW7caF8uIjq3MUK9JnZXoWGF0kDA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 29C83B60086; Tue, 24 Jan 2023 16:37:40 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <5fd66e0f-410c-4198-bede-394d05bb0952@app.fastmail.com>
-In-Reply-To: <20230124110213.3221264-1-alexander.stein@ew.tq-group.com>
-References: <20230124110213.3221264-1-alexander.stein@ew.tq-group.com>
-Date: Tue, 24 Jan 2023 22:37:20 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alexander Stein" <alexander.stein@ew.tq-group.com>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Olof Johansson" <olof@lixom.net>, "Shawn Guo" <shawnguo@kernel.org>,
- "Li Yang" <leoyang.li@nxp.com>, "Russell King" <linux@armlinux.org.uk>,
- "Marek Vasut" <marex@denx.de>,
- "Marcel Ziswiler" <marcel.ziswiler@toradex.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Nicolas Schier" <nicolas@fjasle.eu>
+	by smtp.kernel.org (Postfix) with ESMTPS id 86003C433D2
+	for <soc@kernel.org>; Wed, 25 Jan 2023 07:55:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 86003C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f169.google.com with SMTP id u72so1306532ybi.7
+        for <soc@kernel.org>; Tue, 24 Jan 2023 23:55:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qZeT9N7/YDOfGF0619aZTvv6j4BJZybuuI/JW5FqfqY=;
+        b=LCjqzQmaoSiwmL7PKK0GQ8JawwEXQFjcrhfAPpH1T9zecBBwCL4mdn7Zt4i7CjF22Z
+         iVetzGhLmUVZcSwMyo0cDbpob6FT5zjkhkXAcLEw97Ollw4QyhLV2m0te8LidzJXmb2u
+         sOkMVwXzN1d87hh74o3r+7t1VRJcIw9QbQfl1EBWqunstN77Frpi1iKZ4YUfGX2B94Mk
+         0z8+QAb16+1iVhDX+MahyaH2VnY4gIKhi9/1t0QaTlEP9uRdS2ppFTU621alknO3TDnU
+         DfrMSrM9u5/Iyfw79crCM+c/RLdMKEc13p7iHSBmzthnccZW+cUJrtvgvmzbRbVOVfRO
+         VclA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qZeT9N7/YDOfGF0619aZTvv6j4BJZybuuI/JW5FqfqY=;
+        b=JGEo0mBkWZR/hrqPDam0VKOZrsasQzctc00hZh1e8JvmutPthkdFHu2cm0gl9vgnyD
+         a/aZeQv4FzwZ9nUeQleXDsMUUw6eFwqtjiJHZEPWg1hIKnMzVkz+kMvJ2Oj5f0IwXcNc
+         HxX34bnkYe7GGd4l5potCDBqJwK7/JcT8HVP21cQ2sQJT8VUgPLxAjFE3ljlTcnFICEm
+         7wmoQLHMoKu492k0fLrBWanxJsLAUx1bV5MlZDTGwbqdRLKkC2ZMKcw4eFCslFbWBngR
+         g1ALBSf4By1SaCE3gBT4g2HDp2AAed3x7RTsoYtgyf0Ifj1QtDPIWLQWGs8HoeI24+BP
+         TCSQ==
+X-Gm-Message-State: AFqh2kq/aBIr8wOB0BoIp+xnQD8LtgSNvGawbShYY9EFALaRiQizjdJq
+	Vjsi2EaflGtePwx0OR4BsCWMatjqsXBi+WY7FoXDT9p3k5HMSxxz
+X-Google-Smtp-Source: AMrXdXt0iVKgdS/CZLnaz+LOmuIUS38xfLcSbGl68UVjInq7AXCpqLPhqRmsiMsEzwlCuuMstHy7Yp9nUeh5t/RASK8=
+X-Received: by 2002:a25:5303:0:b0:7e4:fa1:b33 with SMTP id h3-20020a255303000000b007e40fa10b33mr2857416ybb.460.1674633355142;
+ Tue, 24 Jan 2023 23:55:55 -0800 (PST)
+MIME-Version: 1.0
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 25 Jan 2023 08:55:44 +0100
+Message-ID: <CACRpkdb=dDD-y91jdEM01iuioJVDgDwMgS8F46iN84vw_V8BvA@mail.gmail.com>
+Subject: [GIT PULL] Gemini DTS updates for v6.3
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] TQMLS1021A support
-Content-Type: text/plain
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 24, 2023, at 12:02, Alexander Stein wrote:
->
-> thanks everyone for the feedback. This is the third round of this series to
-> add support for the TQMLS1021A using the MBLS1021A mainboard.
-> The changelog is included in the individual patches.
->
-> Best regards,
-> Alexander
->
-> Alexander Stein (7):
->   ARM: dts: ls1021a: add TQ-Systems MBLS102xA device tree
->   ARM: dts: ls1021a: add TQMLS1021A flash partition layout
->   ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS TM070JVHG33 overlay
->   ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA HDMI overlay
->   ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH DC44 overlay
->   ARM: dts: ls1021a: add TQMLS1021A/MBLS102xA LVDS CDTECH FC21 overlay
->   ARM: multi_v7_defconfig: Add options to support TQMLS102xA series
->
-> Matthias Schiffer (1):
->   dt-bindings: arm: fsl: add TQ-Systems LS1021A board
->
-> Nicolas Saenz Julienne (2):
->   kbuild: Add config fragment merge functionality
->   ARM: add multi_v7_lpae_defconfig
+Hi SoC folks,
 
-I have applied the last three patches in the defconfig branch
-to make things easier here. The dts patches should go through
-the layerscape tree, so I'll wait for Shawn Guo or Li Yang
-to pick those up once everyone is happy with them.
+here are some Gemini DTS updates that are ripe for merge.
+I was waiting for the USB dependencies to be queued first,
+and not they are in Greg's tree so please pull in these DTS
+changes!
 
-     Arnd
+Yours,
+Linus Walleij
+
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
+tags/gemini-dts-v6.3
+
+for you to fetch changes up to 776e8ee7a3cb8a6a15067ca4b287ac4a3640ea87:
+
+  ARM: dts: gemini: Enable DNS313 FOTG210 as periph (2023-01-25 08:49:32 +0100)
+
+----------------------------------------------------------------
+Gemini DTS additions and fixes for the v6.3 kernel cycle:
+
+- Fix a schema warning by pushing down flash address/size to
+  each device tree.
+
+- Use RedBoot partition parsing properly on Wiliboard devices.
+
+- Fix the FOTG200 USB block version.
+
+- Activate device mode on the DNS-313 now that we merged the
+  necessary USB changes.
+
+----------------------------------------------------------------
+Linus Walleij (5):
+      ARM: dts: gemini: Push down flash address/size cells
+      ARM: dts: gemini: wbd111: Use RedBoot partion parser
+      ARM: dts: gemini: wbd222: Use RedBoot partion parser
+      ARM: dts: gemini: Fix USB block version
+      ARM: dts: gemini: Enable DNS313 FOTG210 as periph
+
+ arch/arm/boot/dts/gemini-dlink-dns-313.dts | 19 ++++++++++++++++++
+ arch/arm/boot/dts/gemini-wbd111.dts        | 31 ++++--------------------------
+ arch/arm/boot/dts/gemini-wbd222.dts        | 31 ++++--------------------------
+ arch/arm/boot/dts/gemini.dtsi              |  8 ++++----
+ 4 files changed, 31 insertions(+), 58 deletions(-)
