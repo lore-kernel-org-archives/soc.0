@@ -4,60 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19654C61D9D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19610C27C76
 	for <soc@archiver.kernel.org>; Wed, 25 Jan 2023 16:20:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DF73FC4339E; Wed, 25 Jan 2023 16:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6855C4339B;
-	Wed, 25 Jan 2023 16:20:18 +0000 (UTC)
+	id E013DC433A1; Wed, 25 Jan 2023 16:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6825C433EF
+	for <soc@kernel.org>; Wed, 25 Jan 2023 16:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1674663618;
-	bh=ilHgFDVvuH2PRvtSeqeCb18wXePKlph1VGdG9v8SjGE=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Rt0Zi0Y8RQNoWtmfvzUKnRDy3t5rBP9t2V3QPNoux4cnKbmcyN4gFqqQHR4oEBNCu
-	 wd9Sy6hr+VYmiEaM//qI8OWldCI74pnW8B47zpUCyTUYdvflm+YMjr2RUektlsGC1m
-	 hWNYGw2eRAAzhRpKIRgiEJc1n2GA6qihoAUadjA36qBaXmxu0cwQMPgmJwuEYJpsAn
-	 vm/rWt+LsMXtOimEnW8LSkeI43sSFAR5bjcUu4jBNmcFHS7qLk3kUiT3vEntYcRV5U
-	 PHDk3b4jYDJWUW+90p7ZjcWVXekUEPApHtWRlcUZLhkBPEvGq8pTcLMXh5Qp3rtsOI
-	 eJnVL0VV96opw==
+	bh=OyAtt7uJ9uwVuwenl/dRFMRVkmx5mjx/02j3nH4plt0=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=aMVW48hC0bE03Qn97GKXlZfr5uEoiarcj58/CZoX2Q7MAf2q+IjMvWm3AJaYP9g6+
+	 6sQOZcFamgIbdJEPWZHzg52ogOFpYXlcTct3U9eBrre7mMp3K2NQ8KkwLcHxtrzbYW
+	 Jz3H+bJbWYL0KcSPwCNMNSa98YU8TVnclq53+6+YAb5Fv9kzupBXLycntPJGNnhx6y
+	 mSdkZmJ4KDl2BkE0PByAHkwrz86k1ETxNZxe/7jeV1uhk7O7I+C2uWRqWAvmwq1smo
+	 /fMxNCQzv6dG3++pM4YOr9xmkEA73vltWFh+bswGdDUV7mK6bnlRB2ZUWX3sjGSetH
+	 hXt9V4at/JdNg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADE19C04E34;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4A87E52507;
 	Wed, 25 Jan 2023 16:20:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: dts: Cleanup for v6.3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167466361870.4524.11402035984829673975.git-patchwork-notify@kernel.org>
+ <167466361859.4524.16573525505988543480.git-patchwork-summary@kernel.org>
 Date: Wed, 25 Jan 2023 16:20:18 +0000
-References: <20230122121541.29312-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230122121541.29312-2-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Sun, 22 Jan 2023 13:15:41 +0100 you wrote:
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> 
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.3
-> 
-> [...]
+Patch: [GIT,PULL] ARM: dts: Cleanup for v6.3
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=714471
+  Lore link: https://lore.kernel.org/r/20230122121541.29312-2-krzysztof.kozlowski@linaro.org
 
-Here is the summary with links:
-  - [GIT,PULL] ARM: dts: Cleanup for v6.3
-    https://git.kernel.org/soc/soc/c/4f848f23f5ff
+Patch: [GIT,PULL] AT91 SoC updates for 6.3
+  Submitter: Claudiu Beznea <claudiu.beznea@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=713627
+  Lore link: https://lore.kernel.org/r/20230119113202.43543-1-claudiu.beznea@microchip.com
 
-You are awesome, thank you!
+Patch: ARM: dts: intel-ixp42x-welltech-epbx100: add ethernet node
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=715378
+  Lore link: https://lore.kernel.org/r/20230125075838.2801020-1-linus.walleij@linaro.org
+
+Patch: [GIT,PULL] Gemini DTS updates for v6.3
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=715376
+  Lore link: https://lore.kernel.org/r/CACRpkdb=dDD-y91jdEM01iuioJVDgDwMgS8F46iN84vw_V8BvA@mail.gmail.com
+
+
+Total patches: 4
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
