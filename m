@@ -1,111 +1,142 @@
-Return-Path: <SRS0=cWTr=5W=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=6jEA=5W=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19468C54E94
-	for <soc@archiver.kernel.org>; Wed, 25 Jan 2023 07:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86F05C27C76
+	for <soc@archiver.kernel.org>; Wed, 25 Jan 2023 08:08:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C14E4C4339E; Wed, 25 Jan 2023 07:58:52 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 3DAFAC4339B; Wed, 25 Jan 2023 08:08:21 +0000 (UTC)
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8FD3AC433D2
-	for <soc@kernel.org>; Wed, 25 Jan 2023 07:58:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8FD3AC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id tz11so45399025ejc.0
-        for <soc@kernel.org>; Tue, 24 Jan 2023 23:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SjH36VCeOMEZpzTeh/i/i8Jq/1ehza0Y37Q6ribPPB8=;
-        b=l9VJIjTGDqjxRT7ZvVcqn45H8sUJ0Modk7CkqBGKHfcRWoomf3TsanAbzcpKDrjXE1
-         BJHOJd5+GnkO+IohnWdYN9V64OW1Zlrj6FvWbWsh+LM/aq46W6ouTQ6Uul/Iet9aKZbb
-         fRPyDf+QCnXjG3eUDLcSzA23u/xvPKrOOgz9FU/gYsIIih2l1E1EK/6ZPDOF3QdZxgQz
-         RiZXak8wvZPhiwCfppiTnoUF0puirIHO2khoIOblzSvs2BRzROWLAkDcdCADB9WbBB1A
-         lZnith80U1r3fbg6k4PgO3V55Y6ukGpChNWqe4OMkKNSbNYDNJxif0AappMm2yGWtXwq
-         DMrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SjH36VCeOMEZpzTeh/i/i8Jq/1ehza0Y37Q6ribPPB8=;
-        b=2q6IMw97LxTh5cRhzFPHNGsN+q9389ljFsUmsKTfVOqFTb6oRjNJOXDMDrD+KkUGJJ
-         3TDtaEPAT5fkJONHXUkbEv6J3yk11jHSEQ6nTPCS90tE+NyINVeRMWKlUOv4jv/tO+js
-         /Pv0uLE6QM7OO/r8bGs05I1NVEYr6b44T5TslklO0XAP1K6GNIGxzKBwM2o/qkfw6k7x
-         gprNcPYlZOkqv75ACWWDeUP4WhDr5vDlzQxJsyVYQQaekBeBFIpURncOFyxRS0S2ByQa
-         3QbMa3GvOx7yVyGrvGIWHWEJ2eLTCZ54RAnF1uz6+yoSWMESMpuNdx9VgyKrqQRn4olw
-         YYVQ==
-X-Gm-Message-State: AFqh2kr0h7kIiWdFFBhZAaKe8v4fNIve5rAJjYARFAmmPTQKykKgEUNK
-	217eMjzN5phtSIAqaeAmm5+zlw==
-X-Google-Smtp-Source: AMrXdXuDdeqz8IA0qOVpr1ri+vbSQP+8NIV5ctFyLFXH8mFA+RYSByS6kuck1+//aOtm8wo78y+kxg==
-X-Received: by 2002:a17:906:3487:b0:843:770e:777d with SMTP id g7-20020a170906348700b00843770e777dmr32692207ejb.11.1674633529843;
-        Tue, 24 Jan 2023 23:58:49 -0800 (PST)
-Received: from localhost.localdomain (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170906924900b007bd9e683639sm2001690ejx.130.2023.01.24.23.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 23:58:49 -0800 (PST)
-From: Linus Walleij <linus.walleij@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 85350C433EF;
+	Wed, 25 Jan 2023 08:08:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 85350C433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id E47623200961;
+	Wed, 25 Jan 2023 03:08:17 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 25 Jan 2023 03:08:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1674634097; x=1674720497; bh=8DJTpXByBP
+	HrfsqMbJyZG5Oa0YHr8WBMwvW/C9sBIMA=; b=R8DYioSCULAYEFrMEQZ5tWfDBd
+	4GbBvD7LL2yqzKz9bOIeIoV/ad4OlyB4uN3vr58BIsdIVVLwJYHsbBp6L392GNhv
+	oFpyIYTOL1+kq0v7MQ9XtfFT5Y474zanIlkNHThxfpMDrXFpkir+U3oOGvBWJetE
+	DlsFTt4sf2VowIuX9uA6k3L+rMep0uAoOvZzndTM1nIoBaGWAoWglih9t4JplLu5
+	uWH7B/7QMQmNp85rDT3DvQBFVnrTNKhjJyS90tDvXeeLLopXKB5PbILQLfDjbBS9
+	gKXz0+ET/dywvJ57O+5vgYJiXlRd9KG0JBVN7f0OzNWtdFoXoYbaw0HC196Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1674634097; x=1674720497; bh=8DJTpXByBPHrfsqMbJyZG5Oa0YHr
+	8WBMwvW/C9sBIMA=; b=Up+VcH1SmO8K4j3FANlN/i9+XJHNW0yoxSXy47H57ncN
+	yWcRO33t7ZhsXDMLJJxptk12jCw9ZEnWXapZne+DGwTCuKKrNJBmHET9U3VgJ3Xd
+	wIVkGQzb9SBEZzu9TkeMQSe8CvFzO0xp9MCcJazPdYutHymSUVnl/TIZUPUwDpAH
+	NPocdXXfCGsGV/5GwO9psL7qu2iGS0AZrenpoYLRlHd4VmbPNUfyMBmSiITWWYDD
+	1b7XQiVGJamOMqIiXj9B4qrPcUEkSNrJ3ivXl4bvxiIvDN0/OfZz/40R9/fLeC5l
+	OeFCNqyPRxPGUuQZU//Riele61UamqdQ8xBYeldUvg==
+X-ME-Sender: <xms:cOPQY_nCuAwzBnUF4KTBiQC3YU32XOR3G5eRXymIuk1mZv1_OG9BkQ>
+    <xme:cOPQYy3WWF2UByWSYVYulr_QTPjcriCluRuy27vvf42ufCkvd3WHq-QYGxcli8ssc
+    7NlqzkYCVHoFuIM4rI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvuddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:cOPQY1r3G_4gi0Jn91WdLgKYKs_-6OhPnv11UFEd_314SvBfhw_VbQ>
+    <xmx:cOPQY3mZ_qm9uGqF2lsnXUTpTpt2bPz7UKLjtM_rbsxd1NcjV_uAzQ>
+    <xmx:cOPQY93SGcX_5wRWDstEgghM3-IlT0RfyAn7iCducnsgt3fwhnhHZQ>
+    <xmx:cePQY6lFCETUCoe3YZyDplJ9hPAbMXDjx36n2hMRHtuSVAxHfN3MDQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id DB120B60086; Wed, 25 Jan 2023 03:08:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <e9b0338e-3b2f-4b54-8547-ab8babf7c0e1@app.fastmail.com>
+In-Reply-To: <20230113160651.51201-2-nick.hawkins@hpe.com>
+References: <20230113160651.51201-1-nick.hawkins@hpe.com>
+ <20230113160651.51201-2-nick.hawkins@hpe.com>
+Date: Wed, 25 Jan 2023 09:07:57 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Corentin Labbe <clabbe@baylibre.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] ARM: dts: intel-ixp42x-welltech-epbx100: add ethernet node
-Date: Wed, 25 Jan 2023 08:58:38 +0100
-Message-Id: <20230125075838.2801020-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.39.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To: "Hawkins, Nick" <nick.hawkins@hpe.com>, soc@kernel.org
+Cc: "Guenter Roeck" <linux@roeck-us.net>,
+ "Verdun, Jean-Marie" <verdun@hpe.com>, "Rob Herring" <robh+dt@kernel.org>,
+ krzysztof.kozlowski+dt@linaro.org, "Russell King" <linux@armlinux.org.uk>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/2] ARM: dts: add GXP Support for fans and SPI
+Content-Type: text/plain
 
-From: Corentin Labbe <clabbe@baylibre.com>
+On Fri, Jan 13, 2023, at 17:06, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Reorganize the base address of AHB to accommodate the SPI and fan driver
+> register requirements. Add the hpe,gxp-spifi and hpe,gxp-fan-ctrl
+> compatibles. Add comments to make the register range more clear.
 
-Add ethernet node for the first port of intel-ixp42x-welltech-epbx100.
+The changelog describes three separate things, which usually means
+you should split up the patch into three smaller ones to make
+it easier to review.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Link: https://lore.kernel.org/r/20221005105510.3512132-1-clabbe@baylibre.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ARM SoC folks: please apply this directly on some DTS branch,
-we don't have any other IXP4xx DTS changes for v6.3.
----
- .../boot/dts/intel-ixp42x-welltech-epbx100.dts | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+It sounds like the third one is no longer part of the patch anyway.
 
-diff --git a/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts b/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts
-index f5846a50e4d4..b444003c10e1 100644
---- a/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts
-+++ b/arch/arm/boot/dts/intel-ixp42x-welltech-epbx100.dts
-@@ -76,5 +76,23 @@ partition@fff000 {
- 				};
- 			};
- 		};
-+
-+		/* LAN port */
-+		ethernet@c8009000 {
-+			status = "ok";
-+			queue-rx = <&qmgr 3>;
-+			queue-txready = <&qmgr 20>;
-+			phy-mode = "rgmii";
-+			phy-handle = <&phy5>;
-+
-+			mdio {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				phy5: ethernet-phy@5 {
-+					reg = <5>;
-+				};
-+			};
-+		};
- 	};
- };
--- 
-2.39.0
+> @@ -52,76 +52,102 @@
+>  			cache-level = <2>;
+>  		};
+> 
+> -		ahb@c0000000 {
+> +		ahb@80000000 {
+>  			compatible = "simple-bus";
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> -			ranges = <0x0 0xc0000000 0x30000000>;
+> +			ranges = <0x0 0x80000000 0xf000000>,
+> +				<0x40000000 0xc0000000 0x40000000>;
 
+In the changelog text for the first patch that moves the
+ranges down, it would make sense to describe why this specific
+move is done. "to accommodate the SPI and fan driver
+register requirements" does not actually tell me why it was
+first thought that the bus starts at 0xc0000000 but now starts
+at 0x80000000 and has a weird hole.
+
+Please explain how you determined the location of the hole and
+the 0x80000000 offset. Are these from the datasheet, from
+the hardware design or did you make them up because you thought
+this is what I want?
+
+>  			dma-ranges;
+
+Having a 1:1 translation for DMA addresses is actually an indication
+that the MMIO addresses on the bus might also be directly
+mapped, rather than offset: If AHB addresses 0x0-0x80000000
+refer to the local MMIO registers, there is no more room
+for addressing RAM in the same addresses.
+
+> -			vic1: interrupt-controller@80f00000 {
+> +			vic1: interrupt-controller@f00000 {
+>  				compatible = "arm,pl192-vic";
+> -				reg = <0x80f00000 0x1000>;
+> +				reg = <0xf00000 0x1000>;
+>  				interrupt-controller;
+>  				#interrupt-cells = <1>;
+>  			};
+
+Since you said that the earlier version of this was broken,
+it would also make sense to split this bit out into a separate
+bugfix patch, or at least describe it in the changelog text.
+
+       Arnd
