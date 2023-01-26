@@ -1,49 +1,108 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=Za1n=5X=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDDC9C27C76
-	for <soc@archiver.kernel.org>; Thu, 26 Jan 2023 00:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 709C1C54EAA
+	for <soc@archiver.kernel.org>; Thu, 26 Jan 2023 09:09:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8C64BC4339B; Thu, 26 Jan 2023 00:02:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F257AC433EF;
-	Thu, 26 Jan 2023 00:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674691349;
-	bh=yLPNFzTBNCt0XlW+j0CgFFQIwtj2V3Qm1Jc5KfZzn8k=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=BfF7QbpIL+1UfTSIPQslYX/210fg0OQ9ZUQOygxGKHnH6EpoUV+zzwdhHda48L1If
-	 iMMvyQIgqf7T7E/lY7Hxe6MCwBQCy3yvbqYIAKSIjwSxtfxcycbGOUradpZ4annCwn
-	 r2uOSLr3s69SYgk52mWb+K64567OeFCIiLW1PMDjRd0LWLT26BZcm4t+Pq7qwlMaUG
-	 YrTDbBuzqla8uV2FFm/ep7JEXttWSsj34Sm6ozZYvKYqOwxq/l0KWQM91RT+ZK9lW5
-	 HSG3aB6RXlzv2rfyy3Cyc3+NJraXheWN4c0m7RrrMdjfyI6/oKIVJCr72oJ1PS3N2B
-	 XEVYNn7ykdxzA==
-Date: Thu, 26 Jan 2023 08:02:22 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+	id 2F987C4339B; Thu, 26 Jan 2023 09:09:17 +0000 (UTC)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 4396DC433D2;
+	Thu, 26 Jan 2023 09:09:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4396DC433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 3C8F15C00F1;
+	Thu, 26 Jan 2023 04:09:14 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 04:09:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1674724154; x=1674810554; bh=g6ATgqr0TN
+	+x4Obdaq5z13CiMjUNSuLQ/IWMI5UhjQw=; b=GsjeYcq8LhhPBwn1zJE68Lx0Ah
+	vONU242J3FZA6SfCo3pVxCHZh9D6hhYEVu3KUC6cxRvSYKdnzB/1U5GllXZQVcsm
+	d94j7XFzTuF0MlgfY0Riv35BmRRSeRA/520iX2W9FjIVatty3MjZqtb2s2mwJKyz
+	QMqTEMaiSklrxnZHg/kotbu76REFXy1sWE0ARG7jKEfLRmvMU8pXEGLQA8zHvWkQ
+	Vckwyfee0DC9gRSiOgrZX+2FylokB5Bwk0l3W5rLIeHLDn/z/vDUNipetke2pbUw
+	B5rcMMjGPl/Kf1SEvNHi2Nx35j7ZY+oyd4pbgk73Qo8KhMWeVkTCf7WI20vQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1674724154; x=1674810554; bh=g6ATgqr0TN+x4Obdaq5z13CiMjUN
+	SuLQ/IWMI5UhjQw=; b=JiuDVXUWgsgA0IS5FKc5OISDgB9m7ZoQfxA/SAc/GXDl
+	C0Ukfs7uZraUw7EInSttXWek6ewPlTtnb3eTlR2m8eRGNeuOtdUfeHIFiOza9jxo
+	lnh4Jcs9jIA8PubftjPla9/RgV5wIiam6HwIAqRZu2aHTiAHnoOx68/vkZ3PMMp1
+	KyCn8civtN/GvBaI8j0ZbVmeioIS4RAe6id5QOVl1Hn1OX1q/GVnoZwVWMXz/ITe
+	1U5PhSZJO7Dy5Zb19MwmLFjAbeYMRubx1AYkaxbPZbT1AN/oSNCe2DH6DWqzcbto
+	ATmXnZejCm8aytNfmvDidImHF2odXUizumQxVUk8fQ==
+X-ME-Sender: <xms:OkPSY3ePdNuA1AbvbhhjpWm5Tg52zKlng_rMN_oQlfGXdDedXDyJNQ>
+    <xme:OkPSY9MbMOWvhn0RGn-c6tEo7KiUFYCwgHwfZ4X2qlnDt4ZNJVaGPR6LO2ChHtCYL
+    86q1JdRwNJckVDW1JY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:OkPSYwjDX2YCJdfobSunG2WOt79nuOIjzFhQ8kFGdudQQQP2CSlvcA>
+    <xmx:OkPSY4-mQqAJBhlKVYYBE7cYdEWuPBWUJSA4tM-X6Abh1WTb_w2TvQ>
+    <xmx:OkPSYzspHeiLBBmBm7lIGufP7kbYEQ1HoNQbUW1u02lHwHcnxMxMWQ>
+    <xmx:OkPSY84CsF9bn825QwHHjmcJcPCyV-u5UZx0Hm-FrzC8S-_Lenct5w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0644EB60086; Thu, 26 Jan 2023 04:09:13 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <6b53a127-4529-4283-be4e-1724de98fd37@app.fastmail.com>
+In-Reply-To: 
+ <CACRpkdZVH8nu=4a4MuQZ=uUpqg1MBXShCU_Bm3CUxPg1adO8BA@mail.gmail.com>
+References: 
+ <CACRpkdY24Lv0F3ct2R6ALPpAdxWz_vEjrPAGNSF3pcoOj-Xqcg@mail.gmail.com>
+ <CACRpkdZVH8nu=4a4MuQZ=uUpqg1MBXShCU_Bm3CUxPg1adO8BA@mail.gmail.com>
+Date: Thu, 26 Jan 2023 10:08:51 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>, soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ARM: multi_v7_defconfig: Enable wm896x audio CODECs
-Message-ID: <20230126000221.GJ20713@T480>
-References: <20230106-arm-wm896x-v1-1-441c564a9cd1@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106-arm-wm896x-v1-1-441c564a9cd1@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+To: "Linus Walleij" <linus.walleij@linaro.org>, "SoC Team" <soc@kernel.org>,
+ arm <arm@kernel.org>
+Cc: "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+ phone-devel@vger.kernel.org
+Subject: Re: [GIT PULL] Ux500 DTS updates
+Content-Type: text/plain
 
-On Fri, Jan 06, 2023 at 11:14:12PM +0000, Mark Brown wrote:
-> The wm896x series of audio CODECs is used on a number of Freescale
-> reference designs, enable the drivers in multi_v7_defconfig to improve
-> testing coverage of those systems and their derivatives.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On Wed, Jan 25, 2023, at 23:18, Linus Walleij wrote:
+> Wait!
+>
+> On Wed, Jan 25, 2023 at 10:43 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+>> Linus Walleij (2):
+>>       ARM: dts: ux500: Add eSRAM to the device tree
+>
+> Now I see there is an appropriate "mmi-sram" binding in
+> Documentation/devicetree/bindings/sram/sram.yaml
+>
+> That's obviously what I should be using for this.
 
-Applied, thanks!
+Ok
+
+> I took it out and pushed the same tag without this patch.
+
+This results in a warning from my tools that notice the commit
+ID in the branch is different from the one in the email.
+
+I pulled it manually, but if you notice something like
+this again, it's better if you follow up with a v2 pull
+request. Patchwork should notice this and mark the first
+version as superseded in this case.
+
+     Arnd
