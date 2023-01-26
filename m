@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF9CC05027
-	for <soc@archiver.kernel.org>; Thu, 26 Jan 2023 16:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4549EC52D11
+	for <soc@archiver.kernel.org>; Thu, 26 Jan 2023 17:47:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 13966C433A0; Thu, 26 Jan 2023 16:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E015C433D2;
-	Thu, 26 Jan 2023 16:30:09 +0000 (UTC)
+	id 05270C433A0; Thu, 26 Jan 2023 17:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581F7C433D2;
+	Thu, 26 Jan 2023 17:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674750610;
-	bh=Gk8Z3I41YYAz9qK0EFlezGRsSfYOHiIE/wYQfinG4tI=;
+	s=k20201202; t=1674755247;
+	bh=E0oo64CBISGpJLz5gle7Xev2MqAzkrNO8Hwf11jMJv0=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=JXXCTH7ymzvTJij3zV7BaDYbQqhHOCASVyETmH/2OgZtpWJoO5dtOgZhtT3DiSNGH
-	 MRuIl35tKNLuczKZ67hhHM5Qg4gJeclnEzJbUU0CqQP4Vw26t+x8GUNIj5KkfmLjcQ
-	 dis14aw+zVXok1phwtmSZp+YZJ9pbUlHuotvGDjQXMoiW2I9GRXL56t8nwS6QgldPc
-	 dSGi0eZhZeXEYWbVLVaJf3owhSfMMYUV1JjpTH/zlUtyoJPQDZsc3PFs9iOrtgSEjj
-	 hHgt6YiZRxMWpCn8tRWex3xv0urYWNm+Yn2U43QDfPHNrX/PgslJUwT31W17vjQPYR
-	 iduVhMI6vDkvA==
+	b=hsA0LcA8KHXIDu1xA3jfnS98y3c9g2evO0cvbJb6BhV9sdg2ETQglx8I8fFKiR2oB
+	 9ez3JX7kbmUApW6WP/MEBzKa7+tg4Iebp4sfbj6nbWIFzX24x4eRlWpRLPgNzJ/cEg
+	 tctNnPAhrYla0Vkusrve8PfODNQtiqMhWVE9PHH5sZvUS0TPeJlrA9vG5H6JDRMNRK
+	 Byf5S67alItfxxGJQwXWQQIZv1nLkNevl1C7GnlZog0APxXHT6suZJzySfynV6vfad
+	 F4K+VxAhpZs56KxKOWuK8jkCwUIhhmBEWdXc7dzGriwhSZKNhw4BX1dVAvRALsqcsm
+	 tRbIcwFSXoG0Q==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -30,160 +30,156 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Guru Das Srinagesh <quic_gurus@quicinc.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Lin,
+	Meng-Bo <linmengbo0689@protonmail.com>,
+	Rayyan Ansari <rayyan@ansari.sh>,
 	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Dawei Li <set_pte_at@outlook.com>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Melody Olvera <quic_molvera@quicinc.com>,
-	Naman Jain <quic_namajain@quicinc.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Yang Li <yang.lee@linux.alibaba.com>
-Subject: [GIT PULL] Qualcomm driver updates for v6.3
-Date: Thu, 26 Jan 2023 10:30:08 -0600
-Message-Id: <20230126163008.3676950-1-andersson@kernel.org>
+	Luca Weiss <luca@z3ntu.xyz>,
+	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Alex Elder <elder@linaro.org>,
+	Julian Weigt <juw@posteo.de>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Owen Yang <ecs.taipeikernel@gmail.com>
+Subject: [GIT PULL] Qualcomm ARM DT updates for v6.3
+Date: Thu, 26 Jan 2023 11:47:25 -0600
+Message-Id: <20230126174725.3681745-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The following changes since commit 6049aae52392539e505bfb8ccbcff3c26f1d2f0b:
+The following changes since commit 0154252a3b87f77db1e44516d1ed2e82e2d29c30:
 
-  PM: AVS: qcom-cpr: Fix an error handling path in cpr_probe() (2023-01-10 09:48:13 -0600)
+  ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI (2022-12-28 10:46:34 -0600)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-dts-for-6.3
 
-for you to fetch changes up to 6bf32599223634294cdc6efb359ffaab1d68073c:
+for you to fetch changes up to 34d50b12d67795454139a1cfc7ca3add8efa3612:
 
-  firmware: qcom: scm: Add wait-queue handling logic (2023-01-18 21:14:40 -0600)
-
-----------------------------------------------------------------
-Qualcomm driver updates for v6.3
-
-This introduces a new driver for the Data Capture and Compare block,
-which provides a mechanism for capturing hardware state (access MMIO
-registers) either upon request of triggered automatically e.g. upon a
-watchdog bite, for post mortem analysis.
-
-The remote filesystem memory share driver gains support for having its
-memory bound to more than a single VMID.
-
-The SCM driver gains the minimal support needed to support a new
-mechanism where secure world can put calls on hold and later request
-them to be retried.
-
-Support for the new SA8775P platform is added to rpmhpd, QDU1000 is
-added to the SCM driver and a long list of platforms are added to the
-socinfo driver. Support for socinfo data revision 16 is also introduced.
-
-Lastly a driver to program the ramp controller in MSM8976 is introduced.
+  ARM: dts: qcom: msm8226: add RPMCC node (2023-01-18 20:20:18 -0600)
 
 ----------------------------------------------------------------
-AngeloGioacchino Del Regno (2):
-      dt-bindings: soc: qcom: Add bindings for Qualcomm Ramp Controller
-      soc: qcom: Add Qualcomm Ramp Controller driver
+Qualcomm ARM DT updates for v6.3
 
-Bagas Sanjaya (2):
-      soc: qcom: dcc: Fix examples list on /sys/kernel/debug/dcc/.../[list-number]/config documentation
-      soc: qcom: dcc: rewrite description of dcc sysfs files
+This introduces support for Acer Iconia Talk S A1-724
 
-Bartosz Golaszewski (2):
-      dt-bindings: power: qcom,rpmpd: document sa8775p
-      soc: qcom: rmphpd: add power domains for sa8775p
+The Samsung Galaxy Tab 4 10.1 gains ADSP and backlight support.
 
-Bjorn Andersson (4):
-      soc: qcom: ramp_controller: Include linux/bitfield.h
-      soc: qcom: ramp_controller: Make things static
-      Merge branch '20230109130523.298971-3-konrad.dybcio@linaro.org' into drivers-for-6.3
-      Merge tag 'qcom-driver-fixes-for-6.2' into drivers-for-6.3
+The Xperia Z2 Tablet gets charging enabled and the touchscreen is given
+a little bit more time to start up.
 
-Bryan O'Donoghue (1):
-      dt-bindings: soc: qcom: smd-rpm: Exclude MSM8936 from glink-channels
+APQ8064 and MSM8974 gains improvements in clock hierarchy. APQ8064
+thermal sensor (tsens) driver gains per-censor calibration data.
 
-Dawei Li (1):
-      soc: qcom: apr: make remove callback of apr driver void returned
+Lastly a set of patches that improves DT binding compliance.
 
-Guru Das Srinagesh (2):
-      dt-bindings: firmware: qcom,scm: Add optional interrupt
-      firmware: qcom: scm: Add wait-queue handling logic
+----------------------------------------------------------------
+Abel Vesa (1):
+      dt-bindings: arm: qcom: Document SM8550 SoC and boards
 
-Konrad Dybcio (4):
-      dt-bindings: reserved-memory: rmtfs: Make qcom,vmid an array
-      dt-bindings: firmware: qcom: scm: Separate VMIDs from header to bindings
-      Revert "soc: qcom: rpmpd: Add SM4250 support"
-      Revert "dt-bindings: power: rpmpd: Add SM4250 support"
+Alex Elder (1):
+      ARM: dts: qcom: use qcom,gsi-loader for IPA
 
-Krzysztof Kozlowski (2):
-      dt-bindings: firmware: qcom,scm: document MSM8226 clocks
-      dt-bindings: firmware: qcom,scm: narrow clocks and interconnects
+Bjorn Andersson (2):
+      ARM: dts: msm8974: castor: Define pm8841 regulators
+      Merge tag 'qcom-dts-fixes-for-6.2' into dts-for-6.3
 
-Loic Poulain (1):
-      soc: qcom: rmtfs: Optionally map RMTFS to more VMs
+Bryan O'Donoghue (3):
+      ARM: dts: qcom: apq8064: add compat qcom,apq8064-dsi-ctrl
+      ARM: dts: qcom: msm8974: Add compat qcom,msm8974-dsi-ctrl
+      dt-bindings: arm: qcom: Document MSM8939 SoC binding
 
-Melody Olvera (1):
-      dt-bindings: firmware: scm: Add QDU1000/QRU1000 compatible
+Dmitry Baryshkov (11):
+      ARM: dts: qcom: msm8974: add second DSI host and PHY
+      ARM: dts: qcom: msm8974: add clocks and clock-names to gcc device
+      ARM: dts: qcom: msm8974: add clocks and clock-names to mmcc device
+      ARM: dts: qcom: msm8974: Add compat qcom,msm8974-dsi-ctrl to dsi1
+      ARM: dts: qcom: msm8974: add xo clock to rpm clock controller
+      ARM: dts: qcom-msm8974: specify per-sensor calibration cells
+      ARM: dts: qcom-apq8084: specify per-sensor calibration cells
+      ARM: dts: qcom-msm8974: add SoC specific compat string to mdp5 node
+      ARM: dts: qcom-msm8974: rename mdss node to display-subsystem
+      ARM: dts: qcom: rename mdp nodes to display-controller
+      ARM: dts: qcom: apq8084: add clocks and clock-names to gcc device
 
-Naman Jain (1):
-      soc: qcom: socinfo: Add support for new fields in revision 16
+Julian Weigt (1):
+      ARM: dts: qcom: msm8974-castor: Enable charging over USB
 
-Neil Armstrong (1):
-      dt-bindings: soc: qcom: convert non-smd RPM bindings to dt-schema
+Konrad Dybcio (1):
+      dt-bindings: arm: qcom: Add SM6115(P) and Lenovo Tab P11
 
-Souradeep Chowdhury (3):
-      dt-bindings: soc: qcom,dcc: Add the dtschema
-      soc: qcom: dcc: Add driver support for Data Capture and Compare unit(DCC)
-      MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver support
+Krzysztof Kozlowski (12):
+      ARM: dts: qcom: sdx55-mtp: add MPSS remoteproc memory-region
+      ARM: dts: qcom: sdx55: add specific compatible for USB HS PHY
+      ARM: dts: qcom: sdx65: add specific compatible for USB HS PHY
+      ARM: dts: qcom: reverse compatibles to match bindings
+      ARM: dts: qcom: apq8064: drop second clock frequency from timer
+      ARM: dts: qcom: ipq8064: drop second clock frequency from timer
+      ARM: dts: qcom: mdm9615: drop second clock frequency from timer
+      ARM: dts: qcom: msm8960: drop second clock frequency from timer
+      ARM: dts: qcom: msm8960: add qcom,kpss-wdt-mdm9615
+      dt-bindings: arm: qcom: add board-id/msm-id for MSM8956, SDM636 and SM4250
+      ARM: dts: qcom: add missing space before {
+      ARM: dts: qcom: align OPP table node name with DT schema
 
-Stephan Gerhold (4):
-      soc: qcom: socinfo: Fix soc_id order
-      dt-bindings: arm: qcom,ids: Add QRD board ID
-      dt-bindings: arm: qcom,ids: Add a bunch of older SoCs
-      soc: qcom: socinfo: Add a bunch of older SoCs
+Lin, Meng-Bo (7):
+      dt-bindings: qcom: Document msm8916-acer-a1-724
+      arm64: dts: qcom: msm8916-acer-a1-724: Add initial device tree
+      arm64: dts: qcom: msm8916-acer-a1-724: Add accelerometer/magnetometer
+      arm64: dts: qcom: msm8916-acer-a1-724: Add touchscreen
+      dt-bindings: vendor-prefixes: Add GPLUS
+      dt-bindings: qcom: Document msm8916-gplus-fl8005a
+      dt-bindings: qcom: Document bindings for msm8916-samsung-j5x
 
-Yang Li (1):
-      soc: qcom: dcc: Fix unsigned comparison with less than zero
+Luca Weiss (3):
+      ARM: dts: qcom: msm8974-*: re-add remoteproc supplies
+      ARM: dts: qcom: msm8974-castor: Fix touchscreen init
+      dt-bindings: arm: qcom: document new msm8953-family devices
 
- Documentation/ABI/testing/debugfs-driver-dcc       |  127 ++
- .../devicetree/bindings/firmware/qcom,scm.yaml     |   64 +-
- Documentation/devicetree/bindings/mfd/qcom-rpm.txt |  283 -----
- .../devicetree/bindings/power/qcom,rpmpd.yaml      |    2 +-
- .../bindings/reserved-memory/qcom,rmtfs-mem.yaml   |    6 +-
- .../devicetree/bindings/soc/qcom/qcom,dcc.yaml     |   44 +
- .../soc/qcom/qcom,msm8976-ramp-controller.yaml     |   36 +
- .../devicetree/bindings/soc/qcom/qcom,rpm.yaml     |  101 ++
- .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |    1 +
- MAINTAINERS                                        |    8 +
- drivers/firmware/qcom_scm-smc.c                    |   86 +-
- drivers/firmware/qcom_scm.c                        |   90 +-
- drivers/firmware/qcom_scm.h                        |    8 +
- drivers/soc/qcom/Kconfig                           |   17 +
- drivers/soc/qcom/Makefile                          |    2 +
- drivers/soc/qcom/dcc.c                             | 1300 ++++++++++++++++++++
- drivers/soc/qcom/ramp_controller.c                 |  343 ++++++
- drivers/soc/qcom/rmtfs_mem.c                       |   29 +-
- drivers/soc/qcom/rpmhpd.c                          |   34 +
- drivers/soc/qcom/rpmpd.c                           |   18 -
- drivers/soc/qcom/socinfo.c                         |   96 +-
- include/dt-bindings/arm/qcom,ids.h                 |   75 ++
- include/dt-bindings/firmware/qcom,scm.h            |   16 +
- include/dt-bindings/power/qcom-rpmpd.h             |   29 +-
- include/linux/qcom_scm.h                           |    6 +-
- include/linux/soc/qcom/apr.h                       |    2 +-
- sound/soc/qcom/qdsp6/q6core.c                      |    4 +-
- 27 files changed, 2480 insertions(+), 347 deletions(-)
- create mode 100644 Documentation/ABI/testing/debugfs-driver-dcc
- delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-rpm.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm8976-ramp-controller.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,rpm.yaml
- create mode 100644 drivers/soc/qcom/dcc.c
- create mode 100644 drivers/soc/qcom/ramp_controller.c
- create mode 100644 include/dt-bindings/firmware/qcom,scm.h
+Matti Lehtimäki (2):
+      ARM: dts: qcom: apq8026-samsung-matisse-wifi: Enable ADSP
+      ARM: dts: qcom: apq8026-samsung-matisse-wifi: Add display backlight
+
+Nikita Travkin (1):
+      dt-bindings: qcom: Document samsung,gt58 and gt510
+
+Owen Yang (1):
+      dt-bindings: arm: qcom: Add zombie with NVMe
+
+Rayyan Ansari (4):
+      ARM: dts: qcom: pm8226: sort includes alphabetically and nodes by address
+      ARM: dts: qcom: pm8226: add PON device node along with resin sub-node
+      ARM: dts: qcom: pm8226: add IADC node
+      ARM: dts: qcom: msm8226: add RPMCC node
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |  63 +++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ .../boot/dts/qcom-apq8026-samsung-matisse-wifi.dts |  71 +++-
+ arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts |   2 +-
+ arch/arm/boot/dts/qcom-apq8064.dtsi                |  18 +-
+ arch/arm/boot/dts/qcom-apq8084.dtsi                | 331 +++++++++++++++-
+ arch/arm/boot/dts/qcom-ipq4019.dtsi                |   2 +-
+ arch/arm/boot/dts/qcom-ipq8064.dtsi                |   7 +-
+ arch/arm/boot/dts/qcom-mdm9615.dtsi                |  10 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi                |   7 +
+ arch/arm/boot/dts/qcom-msm8960.dtsi                |   7 +-
+ .../dts/qcom-msm8974-lge-nexus5-hammerhead.dts     |  11 +
+ .../boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi   |  11 +
+ arch/arm/boot/dts/qcom-msm8974.dtsi                | 435 ++++++++++++++++++++-
+ .../qcom-msm8974pro-sony-xperia-shinano-castor.dts |  38 +-
+ arch/arm/boot/dts/qcom-pm8226.dtsi                 |  46 ++-
+ arch/arm/boot/dts/qcom-sdx55-mtp.dts               |   4 +
+ arch/arm/boot/dts/qcom-sdx55-t55.dts               |   4 +-
+ arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts   |   4 +-
+ arch/arm/boot/dts/qcom-sdx55.dtsi                  |  17 +-
+ arch/arm/boot/dts/qcom-sdx65.dtsi                  |  29 +-
+ arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+ arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts   | 295 ++++++++++++++
+ 23 files changed, 1331 insertions(+), 84 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
