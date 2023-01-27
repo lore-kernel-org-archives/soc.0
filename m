@@ -1,151 +1,315 @@
-Return-Path: <SRS0=WoHU=5Y=amd.com=Thomas.Lendacky@kernel.org>
+Return-Path: <SRS0=8acC=5Y=theobroma-systems.com=quentin.schulz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FE8CC38142
-	for <soc@archiver.kernel.org>; Fri, 27 Jan 2023 14:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE00C61DA3
+	for <soc@archiver.kernel.org>; Fri, 27 Jan 2023 15:05:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7E3CC4339C; Fri, 27 Jan 2023 14:35:24 +0000 (UTC)
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+	id 04261C4339C; Fri, 27 Jan 2023 15:05:07 +0000 (UTC)
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2075.outbound.protection.outlook.com [40.107.241.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8B924C433EF;
-	Fri, 27 Jan 2023 14:35:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B924C433EF
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 1044EC433D2;
+	Fri, 27 Jan 2023 15:05:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1044EC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=theobroma-systems.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=theobroma-systems.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WpkAporF0YiEcRBB4/RTjhnpoTKyfcszQ9Dfdj7/J6aBRHftMSl+Mkw2t3Wi+0tPIunkAj1tMRqEcu0ECQ1Xwijn7vEqejoxSxFbtFlhkHrt/abU8CNdTfOoFmJJNNUJZTj3+S5XWagUbtncO+atj0rjKrVzW4MdYbBnXDxC5f47BW7ellFHyEF+lY+e1x38w8uDuJzEkaWv91QEDMrxzIGuWngzkdgURj371+ESBOiQQ9DbUDgkvh+DqjkGjFYkOSoQnfJjvsUCf3ZiZPkut7LwlQaBPgaTkPFPc2WVMagSdDczQ5DB1xyl5KDpyETLRvMUTcIUiq1/HxxDcSNpCA==
+ b=f07ELYm9KUMDAyVdhgccdZzt4yvGrahkztgwypNvTWUh2yu9725odVv6T5htrlQiWWtwKUvNYAtWOT2Vm16/mKzChiDOZ2v0nPkjegt3i4i645CCQPCKKg6SmDGzPtY49kyN0R3ztxIZAIxP5EQNMU+fgnd2se4gizTRcDIOO2GHc8mMUMD4QZD0JFc9vUAsgrDBWCw6gqvZRkyDe8Vaocs8eG71PSBRI+Ii/2tZg1uZef6qoRANWJ/kW14HX4I+AiITWXtvvk4IhHJyotaWGNdq5HYnuO6BJDxw5PU0x2UxPy1CWAyai+SyZ5wVn3pgEaV3Bv8MzDkAGDxHq2XX2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AL4bodjZMQDXJoWcxbJxKs6eqx/X9ErrVPLdF1E5lFA=;
- b=cTx3vshGXpQH5uGsvhG6dtHH1Ox6K/iZsbu/wyfnblnba3oH4UlAFPC9IxYKMw23nD1clTXeJcALgLghHb1KanZGeVMWDZCkZcdIz23NUOylB5r6jl5DN2W6pOgH2C8X593fZLapEG4UMRRyFxJowH/BNUlKK8JRtohHENfsfMcCUlhi/pL/yhqjLn+wd65GiPYeRRcG5Jirx6ULrglmbU1B3Yp4A70Qi4RFIMqRYOmsEIzT5fvORHRIXnpRmQMrteRQ/EPV3M+FFJzcQY5cZSh/dIp889UaVPYelSvBdRpdMMliS0/eH1fsCUPv0qiB27t5b9Zm4pqOACPdgW6Y4Q==
+ bh=ijfM9OiFW2Rj3hNbr6sBRz7UGqHiPCnhqHWHV+WhPFo=;
+ b=Rzw+jMs5sp9zaxNhO2pDweQjoHBuXFw81aE/EvveKACnAA4NQUsmYtXljQjOAz7V29ZlmT+XklHchH1maikgOM4fly/w8Ug6BlK9BvIz48QnWgm0w3CWbJc9SX4Sm94Zi+tj1xskkrVKSy8m+PEu1QTRV379UFIXRLfAZqgRuNRKyeqYKBj9Ucm80HjaIdTE3kpJhvBwi1HT05Acx3IyS2VwaO+NDza+jy+5ToeDWxSXdIo7lO9lMECElvBEJEICtL8NKasXbJt5TUR0S6RbVmRAeXNNczfFX2+1STZu962TtebJoQMYS+7zi+RWp+pII+VVbtYttPRrmt1faBLEGA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theobroma-systems.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AL4bodjZMQDXJoWcxbJxKs6eqx/X9ErrVPLdF1E5lFA=;
- b=bSVrnTTVqgrJeCdlxDQO0/Rqocor5dTJgQluRz8ADfSUhUcKrjXM7+mzL5NENpKAYcJi2fqJGkmrMbD/hortVieh553z+I9kjmDt8j5zBWlsyBgF9uyLnMBwHQJT3+gZrPXR12g7yKHW1EXhK9Zkrk6YdbdK+xJFOgG4f9/UbSc=
+ bh=ijfM9OiFW2Rj3hNbr6sBRz7UGqHiPCnhqHWHV+WhPFo=;
+ b=jLt8rIA2wpXgtz8n89NRWa0CSnTUCXF68WAdUKRXqYtZwQ3WccRppflXBIeyqLJlAI5wukIAUxo3zbUUmcQ2hPtAcdl8Afk4JEwn3zHya8VHsjoz+mld0pIrYMHD2z1yIj2bzD8k0drCe1ZycrA3SxuOj6qcyoJVS2P+2VAtwr9FK/hl5eH9s41l3lltrtnhS/Bm/dAH4KcMFDsFnwPuAQUMt4gJZC86cB7ADztDqgE1h7IhXiW638Yko8uHyq1ARR5fa0mQbl84KJGZyF9kGJan77cI/mhet1gXl42B1E6iwOt8L5i7eDsxgBK1o7EQnI/NmBmCJWQFsrkjZaLdOQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DS0PR12MB6536.namprd12.prod.outlook.com (2603:10b6:8:d3::17) with
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from DU2PR04MB8536.eurprd04.prod.outlook.com (2603:10a6:10:2d7::10)
+ by AS8PR04MB8135.eurprd04.prod.outlook.com (2603:10a6:20b:3b0::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23; Fri, 27 Jan
- 2023 14:35:21 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::6cc0:9c7a:bd00:441c%7]) with mapi id 15.20.6043.022; Fri, 27 Jan 2023
- 14:35:20 +0000
-Message-ID: <de2255e9-827d-72d8-2f82-a8a23eae1c27@amd.com>
-Date: Fri, 27 Jan 2023 08:35:18 -0600
+ 2023 15:04:59 +0000
+Received: from DU2PR04MB8536.eurprd04.prod.outlook.com
+ ([fe80::24d3:14a5:eeda:6cdd]) by DU2PR04MB8536.eurprd04.prod.outlook.com
+ ([fe80::24d3:14a5:eeda:6cdd%6]) with mapi id 15.20.6043.022; Fri, 27 Jan 2023
+ 15:04:58 +0000
+Message-ID: <275ba038-1824-1ec1-1d45-1584c3d2ca0e@theobroma-systems.com>
+Date: Fri, 27 Jan 2023 16:04:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] MAINTAINERS: amd: drop inactive Brijesh Singh
-List-Id: <soc.lore.kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, arm@kernel.org,
- soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>
-References: <20230127105935.99174-1-krzysztof.kozlowski@linaro.org>
+ Thunderbird/102.6.0
+Subject: Re: [GIT PULL] Qualcomm ARM64 Devicetree updates for v6.3
 Content-Language: en-US
-From: Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230127105935.99174-1-krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>, arm@kernel.org, soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, Kevin Hilman <khilman@baylibre.com>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Abel Vesa
+ <abel.vesa@linaro.org>, Johan Hovold <johan+linaro@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Brian Masney <bmasney@redhat.com>, Robert Marko <robimarko@gmail.com>,
+ Lin@mx08-00349d01.pphosted.com, Meng-Bo <linmengbo0689@protonmail.com>,
+ Luca Weiss <luca.weiss@fairphone.com>, Robert Foss <robert.foss@linaro.org>,
+ Sibi Sankar <quic_sibis@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
+ Douglas Anderson <dianders@chromium.org>, Eric Chanudet
+ <echanude@redhat.com>, Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+ Bjorn Andersson <quic_bjorande@quicinc.com>,
+ Martin Botka <martin.botka@somainline.org>,
+ Richard Acayan <mailingradian@gmail.com>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Alex Elder <elder@linaro.org>, Luca Weiss <luca@z3ntu.xyz>,
+ Manivannan Sadhasivam <mani@kernel.org>, Petr Vorel <petr.vorel@gmail.com>,
+ Stephan Gerhold <stephan@gerhold.net>, Adam Skladowski <a39.skl@gmail.com>,
+ Alejandro Tafalla <atafalla@dnyon.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+ Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+ Danila Tikhonov <JIaxyga@protonmail.com>,
+ Dzmitry Sankouski <dsankouski@gmail.com>, Eugene Lepshy <fekz115@gmail.com>,
+ Gabriela David <ultracoolguy@disroot.org>, Jasper Korten
+ <jja2000@gmail.com>, Judy Hsiao <judyhsiao@chromium.org>,
+ Julian Braha <julianbraha@gmail.com>, Kuogee Hsieh
+ <quic_khsieh@quicinc.com>, Markuss Broks <markuss.broks@gmail.com>,
+ Mukesh Ojha <quic_mojha@quicinc.com>, Owen Yang
+ <ecs.taipeikernel@gmail.com>, Pavankumar Kondeti
+ <quic_pkondeti@quicinc.com>, Pierre Gondois <pierre.gondois@arm.com>,
+ Rob Herring <robh@kernel.org>, Shazad Hussain <quic_shazhuss@quicinc.com>,
+ Siddharth Manthan <siddharth.manthan@gmail.com>,
+ Sireesh Kodali <sireeshkodali1@gmail.com>,
+ Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+ Steev Klimaszewski <steev@kali.org>,
+ Youghandhar Chintala <quic_youghand@quicinc.com>,
+ Yunlong Jia <ecs.beijing2022@gmail.com>
+References: <20230126202528.3691539-1-andersson@kernel.org>
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+In-Reply-To: <20230126202528.3691539-1-andersson@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN6PR2101CA0005.namprd21.prod.outlook.com
- (2603:10b6:805:106::15) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+X-ClientProxiedBy: VI1PR04CA0092.eurprd04.prod.outlook.com
+ (2603:10a6:803:64::27) To DU2PR04MB8536.eurprd04.prod.outlook.com
+ (2603:10a6:10:2d7::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|DS0PR12MB6536:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5967d656-a82a-462b-fd27-08db0073b780
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8536:EE_|AS8PR04MB8135:EE_
+X-MS-Office365-Filtering-Correlation-Id: 48ef5ed8-91e1-4056-e948-08db0077db64
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	G04mwHamr+a9vEIPidSvr7FXW62Jxjaw/sS3ZHQtA2qU7BKB+rbDJH7E15+DvNGdHsHYfhny9X8uLjA0MKO2kWpYhsceaBx2TdwZSLHPXD/ldKYBrHe9lDA/ShEcIPu5bZJjff3n+TBnKUvzqh8zUCfMuQ7gG2oThBUKK1JiEwMgiB/oWvovwhoWielFXQmtVewU3kkCss0qBkX8botPhXFavR5QDa8vqMbFXFRxPDqNxpMbHynzwbE4BF9TDa6E83f1Wzm1dR4Ta39LFfNCmuDRojPKPUL103wzij474q4Gq+BTp71NYdFrHdOn14YFm9kfEOWv8rnOVwFO03LcPZ/lMDtDljK5otdJf8jC9UE43yIFCXf9QItuB3rgmxsk77mS9S1z3sSxHVCeZJ3qquLE7CyKORdgnsviM5G0dH9zcLN9KFsnZ/wIPSIOKfOg0maFVhTs5RSGBrZ/JHNEUUAIJVisOvC5L/KzxVWxndLhyXBwzK4GDpQZ5OECNDVMw4MeHWTfTnyQyobqjNS4VOA78pvwOQKdZlG13QEUp9eIkdiqhGsiRWI7fvK3p51yACKjAgTv+g7TyfDfEpSjNZMq7Wt5BmvAk5sKWrqvobdZxq9um7VXH+3e/DlmrF30bvfk4ejhn0bqbNpH+e+3kLZLWsY0mFfONxcAMBml3NjEsXjO52AYdgRionNbA1CnFo2Ydw7nB3mMbcGw1j4OsyhHavXIcArQqxruYU3DbeC4Hm7eUH4qO0lZzbZ2dw0m
+	STWjKNIP8KLC2r7kRkjbNuouKGDIr4EciVTpI6rAKFxteBGA1uRrGJ1MWRt//LIrICnyXxpaIhA4DJFBIXhR1CRd8LLOfnS8bW386i0KJUaP8FBWIuUX3e6p1hVeDJzb+0sa+tCm3WhP4jcT7DMJxg/Oi3BRZM4NJAQoI0oPXhj+/Jmnm3ANf9kt3QtL2zMPVizjq0Q7PRF2l3MJANC6rApjsOjmrW3LdPfqpfQTJh5L6U28/Q2lpjBEKJjqNcP9dv900DgdDjfT1lURuZY8PcaDc8fuIzZFpzwdFlsdq/1/lT7iVipOZukMrgqY32OeYsKuqefjoGtoX/XH4fS9ZsW3jqQgTbf5B6kRUvNZ1T4nOUdA/5RJD/jEAcE8kli5e7it1fglfGhgQNiw9FBJi+Rl41y5umlmybbDN2uh5ovVqzC3fIYkUvMmUcpQbSvYKdy9Pv1VcoMq1ZmQECidMbrjIQ8uLsGO8rn2SB1TC2TkqrEZbYB/dwIv/Al3ZEfuzV3pnyqNh21V5M/J8MOWnaIbfdSiaWdDvc32u4zOhTXoIoxLQjbyJNy75ndhsFDS0BAnjH+FBRyuZAeM5GN8amKkEIixSqEV3eRBHuhcZJkqgV4hPSE5rj3Xv7t6Mz4Dt2KQxiqTD0Rm1ZPRf+xZAx1z3QStwE4fofsRCHQhiXnQyONfFKk0IPF3EwKy5oJf4qOeep4r3UaInqfKPXrd9TnTdC1a5EK72KILc2KENz2lP9aDlZjuGLlamyJTeVLlErextWDRj6tWeyIoH+EHEg==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199018)(41300700001)(66476007)(66556008)(66946007)(83380400001)(8676002)(31686004)(8936002)(316002)(36756003)(26005)(6512007)(186003)(4744005)(921005)(2906002)(110136005)(5660300002)(6506007)(478600001)(53546011)(86362001)(31696002)(2616005)(38100700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8536.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39840400004)(396003)(366004)(376002)(451199018)(41300700001)(8936002)(7366002)(7406005)(7416002)(6506007)(5660300002)(38100700002)(83380400001)(86362001)(316002)(36756003)(31696002)(54906003)(66946007)(66556008)(66476007)(26005)(186003)(6512007)(6666004)(966005)(4326008)(6486002)(8676002)(478600001)(2616005)(31686004)(53546011)(15650500001)(44832011)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cDZSYndoTDFBV2t3dmFyVUV4WnhFcmhxZkZEU3BWV3Vaait4eU9BL1dYd3Zk?=
- =?utf-8?B?ZkRIODRBOVFER0RJdWtENEZrVXd5OFVPYUFrY0NpMFl6RjJENlArMVB4bFU2?=
- =?utf-8?B?NXFZUDM5MmYwWHZBZWdPVWJGNURGUDdTSkNzZUZkbmd3Y3EzUGZIMlZhajRB?=
- =?utf-8?B?aEhQekZKcUpEdVYwemp4bEhDQUM1YUU1TzBMV3dqOGVOWWtNbnlvSVNUY1BN?=
- =?utf-8?B?TWFxQk1aQkh1dFNvR1dVVVFGQTdWeHNJdDlraXZwQTRDSWRMQTFsQ3F4ZkJO?=
- =?utf-8?B?Y1hKdGJUelowU2VNbGVXdUl3SUx0RWpneXdyS1ErYVE2YXBGVzlIS2hvc1ZF?=
- =?utf-8?B?U0tvc3QyTjY0UFEzNE0yRGZJeEsxcjlPRTNCbkF1L0NjZU5sWXMzOE0wcGh5?=
- =?utf-8?B?dExSZnRLQ0QyYTFhOXVYWkEvczMwc05JY0tjT3RoUklWSzlLdjYzQkM1bysr?=
- =?utf-8?B?dm1FTHRlSzJnNXlZellBVzFHTGFuK3BSc2dzcHRNdGFrRkNFenc2T0N3d29i?=
- =?utf-8?B?OXZFYldxY0dNVGtwODY4Vk9BZ0RmL0hNQnJDVGVSQVd0K25CV0MrNWx1aThu?=
- =?utf-8?B?RmVBcGduUzRQdTBiazkxRitJZTdYRTU0SFB1NHcvd2R0dGIzY3EvNkl3dDFJ?=
- =?utf-8?B?T1VpMTQwMzNuYXJ0ejkrY3pUMFlDTW43dXIrRWQ5bzFiakx0OFRwWlpJNWQ0?=
- =?utf-8?B?aDloWFFhZ2NaanNsUHNkVWphd29WYWYxOTJVajhNdnFIMjZ3ZytuSG5mOXVL?=
- =?utf-8?B?U2RvV0Y5Y2svZVpFeUJJcG1IbUY2VTZ4YjMwZ2pjODV3L3ZZSVlzdFAzRVo4?=
- =?utf-8?B?Rmc1UXRYN1d2eUt1T0wxWU16MVNBeFk0OHg4VVU4VFlQN3pVTGdIL2VQUnVk?=
- =?utf-8?B?Qm1kVFhIUS9lVGdXRWtFSVlrV3hWYTJUYjNHQ0JldlJWekM0VFJ0ak96Z2x3?=
- =?utf-8?B?T2J5ZDg4WHhVbUJEanZQMGpJcVJMRUdVMXlXdC9MVnZEQ01YalhJcnB5UWNt?=
- =?utf-8?B?RmFaQ1ExQm5hWnZVcDMySGRpeDNqQXBWTDdiUThtUGhiZU51R0Y2cHNvU0ZC?=
- =?utf-8?B?TGZQNG1CbXNSTlhab0xQYVJleldBWmNyQlJzdUJQQ1ltSFB4cy9DdnQ3LzRV?=
- =?utf-8?B?SDB0RVVBd3NlZmNSN1hVNlRtaGR6a1djeUxidU8yYnRLdEdheUx2MFg4T241?=
- =?utf-8?B?NU1aNXkzYjB5LzYyb3VFYUZVbmVxTzA3R2FEbzlQM3JMY3o0TnhnREt4UENl?=
- =?utf-8?B?bGs3RUI1d0o2U2Q1OGZiVGFDTkVHNVZjMy9YclJkVkpOZ081RW5ubmo4U3F3?=
- =?utf-8?B?bmZzaC9LWFB0REdheTlHNjZKNi9PaSttSElDTDBWeHJjTXFYRWtEVHlqVjZy?=
- =?utf-8?B?dVFqQmNOUmZ1U2xibTdNUDFFQk5aVEhFT0E3N3R4bVZXL2pMbzdSUlVQd1kw?=
- =?utf-8?B?RG1DUmZYMmwvWUNQTUNscG0wMDY3Mk00cGJuMDhmNjBGK3NzL0U3TkQzVytT?=
- =?utf-8?B?YUhwWVBzSXhleGVHeHg1bklsa0dpM1YxMEZTWTJyRkRuRlRIMVowRm4wdUNk?=
- =?utf-8?B?RVJKM2hMT295SHNjWERhNXBWeDAvZjdWOEEwb0thY3VROVBZdC9LT3JBZjg1?=
- =?utf-8?B?Vk03dlZnTXlYekFWbnpoQ01aakFvdEFBd3NGcTdoQTI4bFlKWEpvNmlDR3pX?=
- =?utf-8?B?dW5BV2lVcUZaTWVMV0IrTDJYTVoxR3BuY0daWnNtNE9qM05VV2diZzhMNUdH?=
- =?utf-8?B?QWtoSC8rWTF0OTFiZjNjUS9CNmRKdTJjelNaSy9GdER3cXZoOUpyV29Eb1Zn?=
- =?utf-8?B?YXIwTmozY241UldHaW9PZlByV3JUaDRKSFhQamdiUzdlSDFBaktkWUtSZk5Z?=
- =?utf-8?B?cWR6SWtLczRxeFN4VWkrN3A3SXYyVjRTbGZGUG00VmYvVUhaMWtueGR2WTdQ?=
- =?utf-8?B?RXUzeWF4QUhteUxxMFpiODU3ZHZQamh0UXVLUDdGVEdaK0tPdG1sTkdzcnI4?=
- =?utf-8?B?TGFiN0ZvWEpXSms3bSs2WDZWTHpxZXlCRDhMMkNKQmhKZzdWMzRQejd0OHRu?=
- =?utf-8?B?cHNuWndYaWpSaE1sZ3ZmaHYzTE1JcjZqVWhQejZ4bEVWZDgxSGZmTkovWVVD?=
- =?utf-8?Q?zN2mRym/UMPiJEZVIYoJGpk9o?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5967d656-a82a-462b-fd27-08db0073b780
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+	=?utf-8?B?MEV1aGhISmcxWW9KYmFkektsQ3pwWkNTRFBMeXZMdys1NFZIb2VKOENLR2pa?=
+ =?utf-8?B?Zjl0NDB0STlucXNtd1NNMXQrdjROWXI2Rm54Tm9uMkZ3YkxPZTlJM3cydXhD?=
+ =?utf-8?B?SEFvNDhrZkZSOS84d3M1L0M4a2ZIbDdnRVBuVk9UVHRzcDZWSVA4UnZxRDFR?=
+ =?utf-8?B?bXdEQVJlaktiZDVTWHA0ZkNKSGplRnFFaUduV2MxUkRwWlkzZW1JdlV4UmtB?=
+ =?utf-8?B?aVNhSDdmSERzM3hLUGlFSW50U3J4ckRxWUt6S3ZhS0RZWURPYVg2Q2h2M3k4?=
+ =?utf-8?B?eGM5ZXcwc3lwOFBTbFdhV3Y2WjVmTVpZQXY3WGt4aTc5Uk9peUJHUW0vcnhD?=
+ =?utf-8?B?bkNBWml2SHUrQXkxR0RQeG5JOU1DWHRPQXBKRVBuclRReHIzbHIwdEtrL1U3?=
+ =?utf-8?B?UjYrR2VjeVEzMkFCTEtJQitkajE0MmRNdjYvZjEvRVJtaDhOR28yZzU2VUo5?=
+ =?utf-8?B?NldLU0lPTWhjemVMTFJ3S3hhR29LbUFncnNoV2VzVkpGdmtRcnpvRnlseDlQ?=
+ =?utf-8?B?SjB5R3VKdjVmV3NNWW5VZnI3Um1QUVJyV29uOGp2UytQQnFqME9OUE82WWpo?=
+ =?utf-8?B?enNGME5pS2NBTC9pU2lsRVFNTS9udEwwdHNoNkVnNWJUMmxpMnJnTjM3bUM2?=
+ =?utf-8?B?b2YvWVVZQW9CR1VTdFVEc2RuVVdETkZmZjYxNG9LaEVzYnF5ek9EdzZiUlYz?=
+ =?utf-8?B?SWJUU2VURngwMDN1cm9zd1JiTUdSMzZLZ1AwelJBZ0svTUNZeFAyRWZOOVow?=
+ =?utf-8?B?QzBiZ2FOR2xmNkRtdTVTcHVzMk5LMXBLSXFDRzdSdU1sdEt2ZmJzdmhqYzFR?=
+ =?utf-8?B?OWZmVytnbnp4ZFpFYzlWelhZb2xDNXdCZUV2UFlXQkNsR0JkSDlzZnRVK2NL?=
+ =?utf-8?B?aWN0RlFOWGhZSDI2alJwK0p2N3d1WTVaSzdqN1ZCbUw1blRuZC9PeXpqd2xR?=
+ =?utf-8?B?aEd1VDVaQkFkYk5zYytNeE5YOXh3a1NhN0xKRHZ1TWc0aTFzYlNlSWo0eTRJ?=
+ =?utf-8?B?eUlxREZqaUVwRGx0dWFWR1JwbDYrcHlzaklvNWlEUDJuc1BRRy94QzB0eFRv?=
+ =?utf-8?B?N0ZueUY4U1JwSGRuOW9TZHA4VlpOWnVsa3RjTk1DN3BiZzM4TkdzOFNDMzRD?=
+ =?utf-8?B?NUgzeE1paGJqYU1kM3piZmJoczdVZ250anZGdnQvZWtvZ1ZZWkF0NzViVGFz?=
+ =?utf-8?B?QnpPaWV5Tlg1Z1R1azVoV3laZlkwSFo2ZTFxWXJZcmE3Myt3REhBNjloeks0?=
+ =?utf-8?B?OHdhM2NHdldwUjN3MnpvSjh5cXlGRnlmTjFwUVAvQzZVY2ZHMnFTNlVPb3d2?=
+ =?utf-8?B?RWNtL0JhUW1UMFlCemJlVnVUVWs1TzhhVlFuRHpEQjkwcHpJdGhZMXdmZWVH?=
+ =?utf-8?B?cjl0cFVneTdFakIvdE1wN0JiWkFNYzk0YlZiRXVIV0xUdkErK2dsdlBtcm5P?=
+ =?utf-8?B?Z1VHWjdldE9JRFg2cEpmVnFxZDVqSGV1TTA0VjE3YnhIVXVoN3hTaXlVangw?=
+ =?utf-8?B?a0pOMU1zcEF2V3NlbTBsdW1nZ2ZseWwySG9jTGFYUVJpclBPTnFnd1MyVU1n?=
+ =?utf-8?B?N0F5UkZ1S1p5Z05JeXM0OUp1K2FieFlNbzA1TU1DeVMzWU9mR3VLYWRwZmF6?=
+ =?utf-8?B?YUlTMFBMcWdVY1JoU1gvQ3hFSCsza3Q5bEtnd3o1aVA2dE5MWnFJcGlWNEhr?=
+ =?utf-8?B?RlNEem1oZEdMMENOa3FhZFpqSEF1TjFoV1RjVnlFRVA0TGVRSkhGVDd6algz?=
+ =?utf-8?B?M0xhMkFYdHlNMnJ4VXloUmRGZE5GYXZBK1NseTNVM0RwWHFnQ0JBcHlXQTh6?=
+ =?utf-8?B?K290aFU4eEtqcWxWNkI0QnNUS3kzRkhGVTN2ZHVoQzJYTUFTM3NTdGhpeXdp?=
+ =?utf-8?B?YUhTUzFibTBtTGJRckpvb2xCYjFua2cwOWFMMTVhQzlVOE1LMnVSTHNLd2F5?=
+ =?utf-8?B?eWxaTURlMDkwQW1nc3BGU3pKb1BIeUF0N3I1NHlubzF6ZjJrcFhIbm9rbFNu?=
+ =?utf-8?B?aEg2dFdTWWtCazJUM1EzWWU4OFpmZ2ViQ0dCMUs1N1RLaVNtNUIycEhuSXVD?=
+ =?utf-8?B?czAxMm5XQ1hLcmpKUjdYTVBTQzk2NlRLOEhCZUl6N2NPVkNUT05jWVB4Q2tI?=
+ =?utf-8?B?b0ZnRC9lS1lRUG5nL0lPbHpKdkpxNjRybEw5bVRiMmdyR2YzYnBaN0djNzhW?=
+ =?utf-8?Q?6E0DtrIgeQqutHqtdzmZ36HmM8opeLNS7YAix9tS55nT?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48ef5ed8-91e1-4056-e948-08db0077db64
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8536.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 14:35:20.6573
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 15:04:58.7332
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BbRWsAfucoUENdkAgXqdon/PjVTPKVLX0X6X7d3k8fMZJtSIdIMHWCaDDXWc2cuKPGp39Bvb1cr1eEvF0UrXgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6536
+X-MS-Exchange-CrossTenant-UserPrincipalName: rMpCsWgbOLfjYxXhuCr5TC6VtC0UV2SmY48KTqZ+zg+Bab6tJ/iCuGwcQMZvOfvaaoCW9OGRFd0thQWYsT9r7Mc2Z6pqrNa62X7APfbKFq6lBqZNxpXeY6pV9QeDPDp/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8135
 
-On 1/27/23 04:59, Krzysztof Kozlowski wrote:
-> Emails to Brijesh Singh bounce ("550 5.1.10
-> RESOLVER.ADR.RecipientNotFound; Recipient not found by SMTP address
-> lookup").
+Hi Bjorn,
+
+On 1/26/23 21:25, Bjorn Andersson wrote:
+> The following changes since commit 69876bc6fd4de3ad2dc7826fe269e91fa2c1807f:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-
-> ---
->   MAINTAINERS | 1 -
->   1 file changed, 1 deletion(-)
+>    arm64: dts: qcom: msm8992-libra: Fix the memory map (2023-01-10 09:49:03 -0600)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 35385df2302c..028df656196f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1099,7 +1099,6 @@ S:	Maintained
->   F:	drivers/dma/ptdma/
->   
->   AMD SEATTLE DEVICE TREE SUPPORT
-> -M:	Brijesh Singh <brijeshkumar.singh@amd.com>
->   M:	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
->   M:	Tom Lendacky <thomas.lendacky@amd.com>
->   S:	Supported
+> are available in the Git repository at:
+> 
+>    https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git__;!!OOPJP91ZZw!gSqxckuJQ24o_zqdjnwdYLdWlnU6s495rnqf9eWlCR97TlUH_0cJjwsofmXM4xftzvUYP7s8ETYsyA7F2R-VBvlNU6jWX2hwvA$  qcom-arm64-for-6.3
+> 
+> for you to fetch changes up to a63a420d050d47a6afb5e2198181dadd08e71f97:
+> 
+>    arm64: dts: qcom: sc7280: Add a carveout for modem metadata (2023-01-18 21:35:25 -0600)
+> 
+> ----------------------------------------------------------------
+> Qualcomm ARM64 Devicetree updates for v6.3
+> 
+> This introduces support for the new Snapdragon 8 Gen 2 (SM8550)
+> platform.  In addition to the adding support for the MTP on this
+> platform, support the following devices is introduced:
+>   - GPLUS FL8005A
+>   - Google Zombie with LTE and NVMe
+>   - Google Zombie with NVMe
+>   - Lenovo Tab P11
+>   - Motorola G5 Plus
+>   - Motorola G7 Power
+>   - Motorola Moto G6
+>   - Samsung Galaxy J5 (2016)
+>   - Samsung Galaxy Tab A 8.0
+>   - Samsung Galaxy Tab A 9.7
+>   - Xiaomi Mi A1
+>   - Xiaomi Mi A2 Lite
+>   - Xiaomi Redmi 5 Plus
+>   - Xiaomi Redmi Note 4X
+> 
+> On IPQ8074 the PCIe PHY register regions and PHY clock names are
+> corrected.
+> 
+> On MSM8916 DMA for the I2C controllers are introduced and blsp_dma is
+> unconditionally enabled. Per-sensor calibration data is provided for the
+> thermal sensor (tsens) block. The GPLUS FL8005A device is introduced and
+> gains support for touchscreen and flash LED. An additional Samsung
+> Galaxy J5 variant is added, and support is added for hall sensor and
+> MUIC.
+> 
+> Per-sensor calibration information is introduced for the thermal sensor
+> on MSM8956 as well.
+> 
+> On MSM8996, GPLL0 is added as a possible Kryo clock controller input, a
+> carveout is added to get modem metadata out of System RAM. Missing bus
+> clocks are added for agnoc2.
+> SDHCI1 is enabled on the Sony Xperia Tone platform and USB is limited to
+> high-speed, to make USB work.
+> 
+> MSM8998 gains the same modem carveout as other platforms, and the
+> description of the clock hierarchy is improved.
+> 
+> On QCS404 the clock hierarchy description is improved, the CDSP PAS node
+> is adjusted to match the binding and the thermal sensor (tsens) gains
+> per-sensor calibration information.
+> 
+> On SC7180 the Data Capture and Compare block is intorduced, and a
+> carveout for the modem metadata is introduced, to get this out of System
+> RAM. Pazquel360 gains touchscreen support, the regulator off-on-time is
+> adjusted for the Trogdor eDP and touchscreen.
+> Data lane and frequency properties are introduced for the DisplayPort
+> links.
+> 
+> SC7280 also gets Data Capture and Compare support, as well as the
+> dedicated modem metadata region. Herobrine gains DP audio support.
+> IPA description is updated so that it's only active on boards with a
+> modem.
+> 
+> On SC8280XP the display subsystem is introduced, currently with support
+> for most of the DisplayPort controllers. GPR, SoundWire and LPASS is
+> introduced, for audio support. Missing I2C and SPI controllers are
+> introduced.
+> Support for EDP is introduced for the CRD, the Lenovo ThinkPad X13s and
+> the SA8295P ADP automotive board. The SA8540P Ride platform enables one
+> i2c and pcie controllers.
+> A CMA region is defined for the CRD and X13s, to avoid allocation issues
+> from the NVMe support.
+> 
+> Fairphone FP3 gains NFC support and the Sony Xperia Nile platform gains
+> a description of simplefb.
+> SDM670 gains QFPROM definition.
+> 
+> SDM845 gains a carveout for the modem metadata and support for the Data
+> Capture and Compare block is introduced.  Lenovo Yoga C630 firmware
+> paths are aligned with all other Qualcomm platforms.
+> 
+> On SM6125 apss SMMU is introduced and streams are defined for USB and
+> SDHCI controllers. GPI DMA description is introduced, as well as missing
+> SPI and I2C serial engines.
+> On Sony Xperia 10 IIa regulator definitions are improved, SDHCI2 is
+> introduced, and I2C and related GPI DMA blocks are enabled.
+> 
+> On SM6350 IPA is introduced. DDR and L3 scaling is introduced based on
+> CPUfreq.
+> 
+> Fairphone FP4, on SM7225 also has IPA enabled, and the Flash LED is
+> enabled as well.
+> 
+> On SM8150 the display subsystem is introduced, with clock controller,
+> DPU and two DSI controllers. The Data Capture and Compare block is
+> introduced.
+> For the Sony Xperia Kumano platform, GPIO keys and NFC support is
+> introduced.
+> 
+> For SM8350 PCIe is introduced, as is the display subsystem with display
+> clock controller, DPU and two DSI controllers. #interconnect-cells is
+> changed to 2, to align with other platforms and allow for active-only
+> votes. The display is enabled and the LT9611uxc found on the SM8350
+> Hardware Development Kit board is described, to provide HDMI output.
+> 
+> On SM8450 the display subsystem is introduced, with DPU and two DSI
+> controllers.  GIC-ITS support is introduced for both PCIe0 and PCIe1.
+> SPMI bus support is introduced and pmics are wired up across the various
+> devices.
+> The display subsystem is enabled and the LT9611uxc is described to
+> provide HDMI output on the SM8450 Hardware Development Kit.
+> On Sony Xperia Nagara platform, GPIO keys and GPIO line names are
+> introduced. As is the SLG51000 PMIC and camera regulators are defined.
+> 
+> Support for SM8550 is introduced, with support for storage, USB,
+> remoteprocs, PCIe, low-speed buses, crypto and display subsystem. These
+> blocks are enabled on the MTP.
+> 
+> Lastly, the work continue to align Devicetree source with bindings
+> across all platforms.
+> 
+> ----------------------------------------------------------------
+[...]
+> 
+> Quentin Schulz (1):
+>        arm64: dts: qcom: msm8998-fxtec: fix touchscreen reset GPIO polarity
+> 
+
+This is going to introduce a regression. See:
+https://lore.kernel.org/lkml/f6a8a8f1-0eec-2716-d4f1-9115c9d156b6@theobroma-systems.com/
+
+I concede the commit title is confusing. It requires a change in the 
+touchscreen driver too and it hasn't been merged yet.
+
+I see I'm late and it's already in linux-next though... So either we 
+revert it or we need the rest of the patch series to be merged.
+
+Cheers,
+Quentin
