@@ -1,622 +1,151 @@
-Return-Path: <lee@kernel.org>
+Return-Path: <SRS0=WoHU=5Y=amd.com=Thomas.Lendacky@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 852DEC54EAA
-	for <soc@archiver.kernel.org>; Fri, 27 Jan 2023 11:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FE8CC38142
+	for <soc@archiver.kernel.org>; Fri, 27 Jan 2023 14:35:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6B167C4339B; Fri, 27 Jan 2023 11:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F57CC433D2;
-	Fri, 27 Jan 2023 11:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674818440;
-	bh=6Ri4obpdrVnFx8tjTbqfxjQ6SpTzNzmur8iWF/6rFvA=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=FLlpdCGczD18OjPpCy9YIqK+mAMBDNM8Qx4yrDcTXtjvojtUjeuW1XQHkOgUP96sg
-	 EzBxsAyEScTtxPccCrOmr/W7HT0PNA0kGIVVfO9rqxSq+yBdPQItz2TFspqOpsuqwa
-	 xx4/peIdENFb7xBTWLarHo3qGrVDoln+hUloHpWuXsmEe24gFre9pkMLHX6h3Zk8mm
-	 0mKSZvnl4ED2h1PFIRMJqhJyTK0i3HPqqXf3qGZDfMogqcsyGt2mCbgDtPacSZ/0wW
-	 ty17o/Rbq0kjUzHm7dnT5mAej0G8tmctHGSEUqBMq6fZdvzECTJHSqIV/jLs2g746m
-	 ufoAAXZSeToJA==
-Date: Fri, 27 Jan 2023 11:20:35 +0000
-From: Lee Jones <lee@kernel.org>
-To: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>, pavel@ucw.cz
+	id D7E3CC4339C; Fri, 27 Jan 2023 14:35:24 +0000 (UTC)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8B924C433EF;
+	Fri, 27 Jan 2023 14:35:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B924C433EF
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WpkAporF0YiEcRBB4/RTjhnpoTKyfcszQ9Dfdj7/J6aBRHftMSl+Mkw2t3Wi+0tPIunkAj1tMRqEcu0ECQ1Xwijn7vEqejoxSxFbtFlhkHrt/abU8CNdTfOoFmJJNNUJZTj3+S5XWagUbtncO+atj0rjKrVzW4MdYbBnXDxC5f47BW7ellFHyEF+lY+e1x38w8uDuJzEkaWv91QEDMrxzIGuWngzkdgURj371+ESBOiQQ9DbUDgkvh+DqjkGjFYkOSoQnfJjvsUCf3ZiZPkut7LwlQaBPgaTkPFPc2WVMagSdDczQ5DB1xyl5KDpyETLRvMUTcIUiq1/HxxDcSNpCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AL4bodjZMQDXJoWcxbJxKs6eqx/X9ErrVPLdF1E5lFA=;
+ b=cTx3vshGXpQH5uGsvhG6dtHH1Ox6K/iZsbu/wyfnblnba3oH4UlAFPC9IxYKMw23nD1clTXeJcALgLghHb1KanZGeVMWDZCkZcdIz23NUOylB5r6jl5DN2W6pOgH2C8X593fZLapEG4UMRRyFxJowH/BNUlKK8JRtohHENfsfMcCUlhi/pL/yhqjLn+wd65GiPYeRRcG5Jirx6ULrglmbU1B3Yp4A70Qi4RFIMqRYOmsEIzT5fvORHRIXnpRmQMrteRQ/EPV3M+FFJzcQY5cZSh/dIp889UaVPYelSvBdRpdMMliS0/eH1fsCUPv0qiB27t5b9Zm4pqOACPdgW6Y4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AL4bodjZMQDXJoWcxbJxKs6eqx/X9ErrVPLdF1E5lFA=;
+ b=bSVrnTTVqgrJeCdlxDQO0/Rqocor5dTJgQluRz8ADfSUhUcKrjXM7+mzL5NENpKAYcJi2fqJGkmrMbD/hortVieh553z+I9kjmDt8j5zBWlsyBgF9uyLnMBwHQJT3+gZrPXR12g7yKHW1EXhK9Zkrk6YdbdK+xJFOgG4f9/UbSc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DS0PR12MB6536.namprd12.prod.outlook.com (2603:10b6:8:d3::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.23; Fri, 27 Jan
+ 2023 14:35:21 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c%7]) with mapi id 15.20.6043.022; Fri, 27 Jan 2023
+ 14:35:20 +0000
+Message-ID: <de2255e9-827d-72d8-2f82-a8a23eae1c27@amd.com>
+Date: Fri, 27 Jan 2023 08:35:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] MAINTAINERS: amd: drop inactive Brijesh Singh
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
-	soc@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 5/8] leds: Add support for Turris 1.x LEDs
-Message-ID: <Y9Ozg2O41a2iijMc@google.com>
-References: <20221226123630.6515-1-pali@kernel.org>
- <20221226123630.6515-6-pali@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, arm@kernel.org,
+ soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>
+References: <20230127105935.99174-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From: Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230127105935.99174-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR2101CA0005.namprd21.prod.outlook.com
+ (2603:10b6:805:106::15) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221226123630.6515-6-pali@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|DS0PR12MB6536:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5967d656-a82a-462b-fd27-08db0073b780
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	G04mwHamr+a9vEIPidSvr7FXW62Jxjaw/sS3ZHQtA2qU7BKB+rbDJH7E15+DvNGdHsHYfhny9X8uLjA0MKO2kWpYhsceaBx2TdwZSLHPXD/ldKYBrHe9lDA/ShEcIPu5bZJjff3n+TBnKUvzqh8zUCfMuQ7gG2oThBUKK1JiEwMgiB/oWvovwhoWielFXQmtVewU3kkCss0qBkX8botPhXFavR5QDa8vqMbFXFRxPDqNxpMbHynzwbE4BF9TDa6E83f1Wzm1dR4Ta39LFfNCmuDRojPKPUL103wzij474q4Gq+BTp71NYdFrHdOn14YFm9kfEOWv8rnOVwFO03LcPZ/lMDtDljK5otdJf8jC9UE43yIFCXf9QItuB3rgmxsk77mS9S1z3sSxHVCeZJ3qquLE7CyKORdgnsviM5G0dH9zcLN9KFsnZ/wIPSIOKfOg0maFVhTs5RSGBrZ/JHNEUUAIJVisOvC5L/KzxVWxndLhyXBwzK4GDpQZ5OECNDVMw4MeHWTfTnyQyobqjNS4VOA78pvwOQKdZlG13QEUp9eIkdiqhGsiRWI7fvK3p51yACKjAgTv+g7TyfDfEpSjNZMq7Wt5BmvAk5sKWrqvobdZxq9um7VXH+3e/DlmrF30bvfk4ejhn0bqbNpH+e+3kLZLWsY0mFfONxcAMBml3NjEsXjO52AYdgRionNbA1CnFo2Ydw7nB3mMbcGw1j4OsyhHavXIcArQqxruYU3DbeC4Hm7eUH4qO0lZzbZ2dw0m
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199018)(41300700001)(66476007)(66556008)(66946007)(83380400001)(8676002)(31686004)(8936002)(316002)(36756003)(26005)(6512007)(186003)(4744005)(921005)(2906002)(110136005)(5660300002)(6506007)(478600001)(53546011)(86362001)(31696002)(2616005)(38100700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cDZSYndoTDFBV2t3dmFyVUV4WnhFcmhxZkZEU3BWV3Vaait4eU9BL1dYd3Zk?=
+ =?utf-8?B?ZkRIODRBOVFER0RJdWtENEZrVXd5OFVPYUFrY0NpMFl6RjJENlArMVB4bFU2?=
+ =?utf-8?B?NXFZUDM5MmYwWHZBZWdPVWJGNURGUDdTSkNzZUZkbmd3Y3EzUGZIMlZhajRB?=
+ =?utf-8?B?aEhQekZKcUpEdVYwemp4bEhDQUM1YUU1TzBMV3dqOGVOWWtNbnlvSVNUY1BN?=
+ =?utf-8?B?TWFxQk1aQkh1dFNvR1dVVVFGQTdWeHNJdDlraXZwQTRDSWRMQTFsQ3F4ZkJO?=
+ =?utf-8?B?Y1hKdGJUelowU2VNbGVXdUl3SUx0RWpneXdyS1ErYVE2YXBGVzlIS2hvc1ZF?=
+ =?utf-8?B?U0tvc3QyTjY0UFEzNE0yRGZJeEsxcjlPRTNCbkF1L0NjZU5sWXMzOE0wcGh5?=
+ =?utf-8?B?dExSZnRLQ0QyYTFhOXVYWkEvczMwc05JY0tjT3RoUklWSzlLdjYzQkM1bysr?=
+ =?utf-8?B?dm1FTHRlSzJnNXlZellBVzFHTGFuK3BSc2dzcHRNdGFrRkNFenc2T0N3d29i?=
+ =?utf-8?B?OXZFYldxY0dNVGtwODY4Vk9BZ0RmL0hNQnJDVGVSQVd0K25CV0MrNWx1aThu?=
+ =?utf-8?B?RmVBcGduUzRQdTBiazkxRitJZTdYRTU0SFB1NHcvd2R0dGIzY3EvNkl3dDFJ?=
+ =?utf-8?B?T1VpMTQwMzNuYXJ0ejkrY3pUMFlDTW43dXIrRWQ5bzFiakx0OFRwWlpJNWQ0?=
+ =?utf-8?B?aDloWFFhZ2NaanNsUHNkVWphd29WYWYxOTJVajhNdnFIMjZ3ZytuSG5mOXVL?=
+ =?utf-8?B?U2RvV0Y5Y2svZVpFeUJJcG1IbUY2VTZ4YjMwZ2pjODV3L3ZZSVlzdFAzRVo4?=
+ =?utf-8?B?Rmc1UXRYN1d2eUt1T0wxWU16MVNBeFk0OHg4VVU4VFlQN3pVTGdIL2VQUnVk?=
+ =?utf-8?B?Qm1kVFhIUS9lVGdXRWtFSVlrV3hWYTJUYjNHQ0JldlJWekM0VFJ0ak96Z2x3?=
+ =?utf-8?B?T2J5ZDg4WHhVbUJEanZQMGpJcVJMRUdVMXlXdC9MVnZEQ01YalhJcnB5UWNt?=
+ =?utf-8?B?RmFaQ1ExQm5hWnZVcDMySGRpeDNqQXBWTDdiUThtUGhiZU51R0Y2cHNvU0ZC?=
+ =?utf-8?B?TGZQNG1CbXNSTlhab0xQYVJleldBWmNyQlJzdUJQQ1ltSFB4cy9DdnQ3LzRV?=
+ =?utf-8?B?SDB0RVVBd3NlZmNSN1hVNlRtaGR6a1djeUxidU8yYnRLdEdheUx2MFg4T241?=
+ =?utf-8?B?NU1aNXkzYjB5LzYyb3VFYUZVbmVxTzA3R2FEbzlQM3JMY3o0TnhnREt4UENl?=
+ =?utf-8?B?bGs3RUI1d0o2U2Q1OGZiVGFDTkVHNVZjMy9YclJkVkpOZ081RW5ubmo4U3F3?=
+ =?utf-8?B?bmZzaC9LWFB0REdheTlHNjZKNi9PaSttSElDTDBWeHJjTXFYRWtEVHlqVjZy?=
+ =?utf-8?B?dVFqQmNOUmZ1U2xibTdNUDFFQk5aVEhFT0E3N3R4bVZXL2pMbzdSUlVQd1kw?=
+ =?utf-8?B?RG1DUmZYMmwvWUNQTUNscG0wMDY3Mk00cGJuMDhmNjBGK3NzL0U3TkQzVytT?=
+ =?utf-8?B?YUhwWVBzSXhleGVHeHg1bklsa0dpM1YxMEZTWTJyRkRuRlRIMVowRm4wdUNk?=
+ =?utf-8?B?RVJKM2hMT295SHNjWERhNXBWeDAvZjdWOEEwb0thY3VROVBZdC9LT3JBZjg1?=
+ =?utf-8?B?Vk03dlZnTXlYekFWbnpoQ01aakFvdEFBd3NGcTdoQTI4bFlKWEpvNmlDR3pX?=
+ =?utf-8?B?dW5BV2lVcUZaTWVMV0IrTDJYTVoxR3BuY0daWnNtNE9qM05VV2diZzhMNUdH?=
+ =?utf-8?B?QWtoSC8rWTF0OTFiZjNjUS9CNmRKdTJjelNaSy9GdER3cXZoOUpyV29Eb1Zn?=
+ =?utf-8?B?YXIwTmozY241UldHaW9PZlByV3JUaDRKSFhQamdiUzdlSDFBaktkWUtSZk5Z?=
+ =?utf-8?B?cWR6SWtLczRxeFN4VWkrN3A3SXYyVjRTbGZGUG00VmYvVUhaMWtueGR2WTdQ?=
+ =?utf-8?B?RXUzeWF4QUhteUxxMFpiODU3ZHZQamh0UXVLUDdGVEdaK0tPdG1sTkdzcnI4?=
+ =?utf-8?B?TGFiN0ZvWEpXSms3bSs2WDZWTHpxZXlCRDhMMkNKQmhKZzdWMzRQejd0OHRu?=
+ =?utf-8?B?cHNuWndYaWpSaE1sZ3ZmaHYzTE1JcjZqVWhQejZ4bEVWZDgxSGZmTkovWVVD?=
+ =?utf-8?Q?zN2mRym/UMPiJEZVIYoJGpk9o?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5967d656-a82a-462b-fd27-08db0073b780
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2023 14:35:20.6573
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BbRWsAfucoUENdkAgXqdon/PjVTPKVLX0X6X7d3k8fMZJtSIdIMHWCaDDXWc2cuKPGp39Bvb1cr1eEvF0UrXgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6536
 
-Pavel, are you happy with the user-space interface?
+On 1/27/23 04:59, Krzysztof Kozlowski wrote:
+> Emails to Brijesh Singh bounce ("550 5.1.10
+> RESOLVER.ADR.RecipientNotFound; Recipient not found by SMTP address
+> lookup").
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Mon, 26 Dec 2022, Pali Rohár wrote:
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
 
-> This adds support for the RGB LEDs found on the front panel of the
-> Turris 1.x routers. There are 8 RGB LEDs that are controlled by
-> CZ.NIC CPLD firmware running on Lattice FPGA.
-> 
-> CPLD firmware provides HW triggering mode for all LEDs except WiFi LED
-> which is automatically enabled after power on reset. LAN LEDs share HW
-> registers for RGB colors settings, so it is not possible to set different
-> colors for individual LAN LEDs.
-> 
-> CZ.NIC CPLD firmware is open source and available at:
-> https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
-> 
-> This driver uses the multicolor LED framework and HW led triggers.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Reviewed-by: Marek Behún <kabel@kernel.org>
 > ---
->  .../testing/sysfs-class-led-driver-turris1x   |  31 ++
->  drivers/leds/Kconfig                          |   9 +
->  drivers/leds/Makefile                         |   1 +
->  drivers/leds/leds-turris-1x.c                 | 474 ++++++++++++++++++
->  4 files changed, 515 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-class-led-driver-turris1x
->  create mode 100644 drivers/leds/leds-turris-1x.c
+>   MAINTAINERS | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-led-driver-turris1x b/Documentation/ABI/testing/sysfs-class-led-driver-turris1x
-> new file mode 100644
-> index 000000000000..272695ae400b
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-class-led-driver-turris1x
-> @@ -0,0 +1,31 @@
-> +What:		/sys/class/leds/<led>/device/brightness
-> +Date:		July 2022
-> +KernelVersion:	6.3
-> +Contact:	Pali Rohár <pali@kernel.org>
-> +Description:	(RW) On the back size of the Turris 1.x routers there is also
-> +		a button which can be used to control the intensity of all the
-> +		LEDs at once, so that if they are too bright, user can dim them.
-> +
-> +		The CPLD firmware cycles between 8 levels of this global
-> +		brightness, but this setting can have any integer value between
-> +		0 and 255. It is therefore convenient to be able to change this
-> +		setting from software.
-> +
-> +		Format: %u
-> +
-> +What:		/sys/class/leds/<led>/device/brightness_level
-> +Date:		July 2022
-> +KernelVersion:	6.3
-> +Contact:	Pali Rohár <pali@kernel.org>
-> +Description:	(RW) Current brightness level value (0-7).
-> +
-> +		Format: %u
-> +
-> +What:		/sys/class/leds/<led>/device/brightness_values
-> +Date:		July 2022
-> +KernelVersion:	6.3
-> +Contact:	Pali Rohár <pali@kernel.org>
-> +Description:	(RW) Values of all 8 levels between which CPLD firmware cycles
-> +		when brightness button is pressed.
-> +
-> +		Format: %u %u %u %u %u %u %u %u
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index 499d0f215a8b..6f78764e20aa 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -157,6 +157,15 @@ config LEDS_EL15203000
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called leds-el15203000.
->  
-> +config LEDS_TURRIS_1X
-> +	tristate "LED support for CZ.NIC's Turris 1.x"
-> +	depends on LEDS_CLASS_MULTICOLOR
-> +	depends on OF
-> +	select LEDS_TRIGGERS
-> +	help
-> +	  This option enables support for LEDs found on the front side of
-> +	  CZ.NIC's Turris 1.x routers.
-> +
->  config LEDS_TURRIS_OMNIA
->  	tristate "LED support for CZ.NIC's Turris Omnia"
->  	depends on LEDS_CLASS_MULTICOLOR
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index 4fd2f92cd198..de08083dbbca 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -82,6 +82,7 @@ obj-$(CONFIG_LEDS_TCA6507)		+= leds-tca6507.o
->  obj-$(CONFIG_LEDS_TI_LMU_COMMON)	+= leds-ti-lmu-common.o
->  obj-$(CONFIG_LEDS_TLC591XX)		+= leds-tlc591xx.o
->  obj-$(CONFIG_LEDS_TPS6105X)		+= leds-tps6105x.o
-> +obj-$(CONFIG_LEDS_TURRIS_1X)		+= leds-turris-1x.o
->  obj-$(CONFIG_LEDS_TURRIS_OMNIA)		+= leds-turris-omnia.o
->  obj-$(CONFIG_LEDS_WM831X_STATUS)	+= leds-wm831x-status.o
->  obj-$(CONFIG_LEDS_WM8350)		+= leds-wm8350.o
-> diff --git a/drivers/leds/leds-turris-1x.c b/drivers/leds/leds-turris-1x.c
-> new file mode 100644
-> index 000000000000..cf7567b64306
-> --- /dev/null
-> +++ b/drivers/leds/leds-turris-1x.c
-> @@ -0,0 +1,474 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// (C) 2022 Pali Rohár <pali@kernel.org>
-> +//
-> +// CZ.NIC's Turris 1.x LEDs driver, controlled by CPLD firmware:
-> +// https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/led-class-multicolor.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include "leds.h"
-> +
-> +/* LED registers starts at byte 0x13 in CPLD memory map */
-> +#define TURRIS1X_LED_REG_OFF(reg) ((reg)-0x13)
-> +
-> +/* LEDs 1-5 share common register for setting brightness */
-> +#define TURRIS1X_LED_BRIGHTNESS_OFF(idx)	({ const u8 _idx = (idx) & 7; \
-> +						   (_idx == 0) ? 0 : \
-> +						   (_idx <= 5) ? 1 : \
-> +						   (_idx - 4); })
-> +
-> +#define TURRIS1X_LED_BRIGHTNESS_REG(idx, color)	TURRIS1X_LED_REG_OFF(0x13 + \
-> +						  3 * TURRIS1X_LED_BRIGHTNESS_OFF(idx) + \
-> +						  ((color) & 3))
-> +#define TURRIS1X_LED_GLOBAL_LEVEL_REG		TURRIS1X_LED_REG_OFF(0x20)
-> +#define TURRIS1X_LED_GET_GLOBAL_BRIGHTNESS_REG	TURRIS1X_LED_REG_OFF(0x21)
-> +#define TURRIS1X_LED_SW_OVERRIDE_REG		TURRIS1X_LED_REG_OFF(0x22)
-> +#define TURRIS1X_LED_SW_DISABLE_REG		TURRIS1X_LED_REG_OFF(0x23)
-> +#define TURRIS1X_LED_GLOBAL_BRIGHTNESS_REG(lvl)	TURRIS1X_LED_REG_OFF(0x28 + ((lvl) & 7))
-> +
-> +struct turris1x_led {
-> +	struct led_classdev_mc mc_cdev;
-> +	struct mc_subled subled_info[3];
-> +	u32 reg;
-> +	bool registered;
-> +};
-> +
-> +#define to_turris1x_led(l)	container_of(l, struct turris1x_led, mc_cdev)
-> +
-> +struct turris1x_leds {
-> +	void __iomem *regs;
-> +	struct mutex lock;
-> +	struct turris1x_led leds[8];
-> +};
-> +
-> +static struct led_hw_trigger_type turris1x_hw_trigger_type;
-> +
-> +static int turris1x_hwtrig_activate(struct led_classdev *cdev)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(cdev->dev->parent);
-> +	struct turris1x_led *led = to_turris1x_led(lcdev_to_mccdev(cdev));
-> +	u8 val;
-> +
-> +	/* Disable software control of LED */
-> +	mutex_lock(&leds->lock);
-> +	val = readb(leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +	val &= ~BIT(led->reg);
-> +	writeb(val, leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +	mutex_unlock(&leds->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static void turris1x_hwtrig_deactivate(struct led_classdev *cdev)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(cdev->dev->parent);
-> +	struct turris1x_led *led = to_turris1x_led(lcdev_to_mccdev(cdev));
-> +	u8 val;
-> +
-> +	/* Enable software control of LED */
-> +	mutex_lock(&leds->lock);
-> +	val = readb(leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +	val |= BIT(led->reg);
-> +	writeb(val, leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +	mutex_unlock(&leds->lock);
-> +}
-> +
-> +static struct led_trigger turris1x_hw_trigger = {
-> +	.name		= "turris1x-cpld",
-> +	.activate	= turris1x_hwtrig_activate,
-> +	.deactivate	= turris1x_hwtrig_deactivate,
-> +	.trigger_type	= &turris1x_hw_trigger_type,
-> +};
-> +
-> +static enum led_brightness turris1x_led_brightness_get(struct led_classdev *cdev)
-> +{
-> +	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-> +	struct turris1x_leds *leds = dev_get_drvdata(cdev->dev->parent);
-> +	struct turris1x_led *led = to_turris1x_led(mc_cdev);
-> +
-> +	if (!(readb(leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG) & BIT(led->reg)))
-> +		return 1;
-> +	else if (!(readb(leds->regs + TURRIS1X_LED_SW_DISABLE_REG) & BIT(led->reg)))
-> +		return 1;
-> +	else
-> +		return 0;
-> +}
-> +
-> +static void turris1x_led_brightness_set(struct led_classdev *cdev,
-> +					enum led_brightness brightness)
-> +{
-> +	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-> +	struct turris1x_leds *leds = dev_get_drvdata(cdev->dev->parent);
-> +	struct turris1x_led *led = to_turris1x_led(mc_cdev);
-> +	int i, j;
-> +	u8 val;
-> +
-> +	mutex_lock(&leds->lock);
-> +
-> +	/* Set new brightness value for each color when LED is enabled */
-> +	if (brightness) {
-> +		led_mc_calc_color_components(mc_cdev, brightness);
-> +		for (i = 0; i < ARRAY_SIZE(led->subled_info); i++)
-> +			writeb(mc_cdev->subled_info[i].brightness,
-> +			       leds->regs + TURRIS1X_LED_BRIGHTNESS_REG(led->reg, i));
-> +
-> +		/*
-> +		 * LEDs 1-5 (LAN) share common color settings in same sets
-> +		 * of HW registers and therefore it is not possible to set
-> +		 * different colors. So when chaning color of one LED then
-> +		 * reflect color change for all of them.
-> +		 */
-> +		if (led->reg >= 1 && led->reg <= 5) {
-> +			for (j = 0; j < ARRAY_SIZE(leds->leds); j++) {
-> +				if (leds->leds[j].reg < 1 ||
-> +				    leds->leds[j].reg > 5 ||
-> +				    leds->leds[j].reg == led->reg)
-> +					continue;
-> +				for (i = 0; i < ARRAY_SIZE(led->subled_info); i++)
-> +					leds->leds[j].mc_cdev.subled_info[i].intensity =
-> +						mc_cdev->subled_info[i].intensity;
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Enable / disable LED for software control */
-> +	val = readb(leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +	if (brightness && (val & BIT(led->reg)))
-> +		writeb(val & ~BIT(led->reg),
-> +		       leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +	else if (!brightness && !(val & BIT(led->reg)))
-> +		writeb(val | BIT(led->reg),
-> +		       leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +
-> +	mutex_unlock(&leds->lock);
-> +}
-> +
-> +static int turris1x_led_register(struct device *dev, struct turris1x_leds *leds,
-> +				 struct device_node *np, u8 val_sw_override,
-> +				 u8 val_sw_disable)
-> +{
-> +	struct led_init_data init_data = {};
-> +	struct led_classdev *cdev;
-> +	struct turris1x_led *led;
-> +	int ret, color;
-> +	u32 reg;
-> +	int i;
-> +
-> +	const unsigned int colors[ARRAY_SIZE(led->subled_info)] = {
-> +		LED_COLOR_ID_RED, LED_COLOR_ID_GREEN, LED_COLOR_ID_BLUE
-> +	};
-> +
-> +	ret = of_property_read_u32(np, "reg", &reg);
-> +	if (ret || reg >= ARRAY_SIZE(leds->leds)) {
-> +		dev_err(dev,
-> +			"Node %pOF: must contain 'reg' property with values between 0 and %u\n",
-> +			np, (unsigned int)ARRAY_SIZE(leds->leds) - 1);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = of_property_read_u32(np, "color", &color);
-> +	if (ret || color != LED_COLOR_ID_RGB) {
-> +		dev_err(dev,
-> +			"Node %pOF: must contain 'color' property with value LED_COLOR_ID_RGB\n",
-> +			np);
-> +		return -EINVAL;
-> +	}
-> +
-> +	led = &leds->leds[reg];
-> +
-> +	if (led->registered) {
-> +		dev_err(dev, "Node %pOF: duplicate 'reg' property %u\n",
-> +			     np, reg);
-> +		return -EINVAL;
-> +	}
-> +
-> +	led->registered = true;
-> +	led->reg = reg;
-> +
-> +	/* Set initial colors to what are currently in use */
-> +	for (i = 0; i < ARRAY_SIZE(led->subled_info); i++) {
-> +		led->subled_info[i].intensity =
-> +			readb(leds->regs + TURRIS1X_LED_BRIGHTNESS_REG(reg, i));
-> +		led->subled_info[i].color_index = colors[i];
-> +		led->subled_info[i].channel = i;
-> +	}
-> +
-> +	led->mc_cdev.subled_info = led->subled_info;
-> +	led->mc_cdev.num_colors = ARRAY_SIZE(led->subled_info);
-> +
-> +	init_data.fwnode = &np->fwnode;
-> +
-> +	cdev = &led->mc_cdev.led_cdev;
-> +	cdev->max_brightness = 1;
-> +	cdev->brightness_get = turris1x_led_brightness_get;
-> +	cdev->brightness_set = turris1x_led_brightness_set;
-> +
-> +	/* All LEDs except LED 6 (WiFi) can be controller by hardware trigger */
-> +	if (reg != 6)
-> +		cdev->trigger_type = &turris1x_hw_trigger_type;
-> +
-> +	/* Disable hardware trigger for LED 6 (WiFi) - allow software control */
-> +	if (reg == 6 && !(val_sw_override & BIT(6))) {
-> +		if (!(val_sw_disable & BIT(6))) {
-> +			val_sw_disable |= BIT(6);
-> +			writeb(val_sw_disable,
-> +			       leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +		}
-> +		val_sw_override |= BIT(6);
-> +		writeb(val_sw_override,
-> +		       leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +	}
-> +
-> +	if (!(val_sw_override & BIT(reg)))
-> +		cdev->default_trigger = turris1x_hw_trigger.name;
-> +
-> +	if (!(val_sw_override & BIT(reg)) || !(val_sw_disable & BIT(reg)))
-> +		cdev->brightness = 1;
-> +
-> +	ret = devm_led_classdev_multicolor_register_ext(dev, &led->mc_cdev,
-> +							&init_data);
-> +	if (ret) {
-> +		dev_err(dev, "Cannot register LED %pOF: %i\n", np, ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static ssize_t brightness_show(struct device *dev, struct device_attribute *a,
-> +			       char *buf)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(dev);
-> +	unsigned int brightness;
-> +
-> +	/*
-> +	 * Current brightness value is available in read-only register
-> +	 * TURRIS1X_LED_GET_GLOBAL_BRIGHTNESS_REG. Equivalent code is:
-> +	 * level = readb(leds->regs + TURRIS1X_LED_GLOBAL_LEVEL_REG) & 7;
-> +	 * brightness = readb(leds->regs + TURRIS1X_LED_GLOBAL_BRIGHTNESS_REG(level));
-> +	 */
-> +	brightness = readb(leds->regs + TURRIS1X_LED_GET_GLOBAL_BRIGHTNESS_REG);
-> +
-> +	return sprintf(buf, "%u\n", brightness);
-> +}
-> +
-> +static ssize_t brightness_store(struct device *dev, struct device_attribute *a,
-> +				const char *buf, size_t count)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(dev);
-> +	int best_error, error, level, value;
-> +	unsigned long brightness;
-> +	u8 best_level;
-> +
-> +	if (kstrtoul(buf, 10, &brightness))
-> +		return -EINVAL;
-> +
-> +	if (brightness > 255)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Brightness can be set only to one of 8 predefined value levels
-> +	 * available in TURRIS1X_LED_GLOBAL_BRIGHTNESS_REG(level) registers.
-> +	 * Choose level which has nearest value to the specified brightness.
-> +	 */
-> +	best_level = 0;
-> +	best_error = INT_MAX;
-> +	for (level = 0; level < 8; level++) {
-> +		value = readb(leds->regs +
-> +			      TURRIS1X_LED_GLOBAL_BRIGHTNESS_REG(level));
-> +		error = abs(value - (int)brightness);
-> +		if (best_error > error) {
-> +			best_error = error;
-> +			best_level = level;
-> +		}
-> +	}
-> +
-> +	writeb(best_level, leds->regs + TURRIS1X_LED_GLOBAL_LEVEL_REG);
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(brightness);
-> +
-> +static ssize_t brightness_level_show(struct device *dev,
-> +				     struct device_attribute *a, char *buf)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(dev);
-> +	unsigned int level;
-> +
-> +	level = readb(leds->regs + TURRIS1X_LED_GLOBAL_LEVEL_REG) & 7;
-> +
-> +	return sprintf(buf, "%u\n", level);
-> +}
-> +
-> +static ssize_t brightness_level_store(struct device *dev,
-> +				      struct device_attribute *a,
-> +				      const char *buf, size_t count)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(dev);
-> +	unsigned long level;
-> +
-> +	if (kstrtoul(buf, 10, &level))
-> +		return -EINVAL;
-> +
-> +	if (level > 7)
-> +		return -EINVAL;
-> +
-> +	writeb(level, leds->regs + TURRIS1X_LED_GLOBAL_LEVEL_REG);
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(brightness_level);
-> +
-> +static ssize_t brightness_values_show(struct device *dev,
-> +				      struct device_attribute *a, char *buf)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(dev);
-> +	unsigned int vals[8];
-> +	int i;
-> +
-> +	for (i = 0; i < 8; i++)
-> +		vals[i] = readb(leds->regs +
-> +				TURRIS1X_LED_GLOBAL_BRIGHTNESS_REG(i));
-> +
-> +	return sprintf(buf, "%u %u %u %u %u %u %u %u\n", vals[0], vals[1],
-> +		       vals[2], vals[3], vals[4], vals[5], vals[6], vals[7]);
-> +}
-> +
-> +static ssize_t brightness_values_store(struct device *dev,
-> +				       struct device_attribute *a,
-> +				       const char *buf, size_t count)
-> +{
-> +	struct turris1x_leds *leds = dev_get_drvdata(dev);
-> +	unsigned int vals[8];
-> +	int nchars;
-> +	int i;
-> +
-> +	if (sscanf(buf, "%u %u %u %u %u %u %u %u%n", &vals[0], &vals[1],
-> +		   &vals[2], &vals[3], &vals[4], &vals[5], &vals[6], &vals[7],
-> +		   &nchars) != 8 || nchars + 1 < count)
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < 8; i++)
-> +		writeb(vals[i],
-> +		       leds->regs + TURRIS1X_LED_GLOBAL_BRIGHTNESS_REG(i));
-> +
-> +	return count;
-> +}
-> +static DEVICE_ATTR_RW(brightness_values);
-> +
-> +static struct attribute *turris1x_leds_controller_attrs[] = {
-> +	&dev_attr_brightness.attr,
-> +	&dev_attr_brightness_level.attr,
-> +	&dev_attr_brightness_values.attr,
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(turris1x_leds_controller);
-> +
-> +static int turris1x_leds_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev_of_node(dev);
-> +	struct device_node *child;
-> +	struct turris1x_leds *leds;
-> +	struct resource *res;
-> +	void __iomem *regs;
-> +	u8 val_sw_override;
-> +	u8 val_sw_disable;
-> +	int ret;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res)
-> +		return -ENODEV;
-> +
-> +	regs = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(regs))
-> +		return PTR_ERR(regs);
-> +
-> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
-> +	if (!leds)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, leds);
-> +
-> +	leds->regs = regs;
-> +	mutex_init(&leds->lock);
-> +
-> +	ret = devm_led_trigger_register(dev, &turris1x_hw_trigger);
-> +	if (ret) {
-> +		dev_err(dev, "Cannot register private LED trigger: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	val_sw_override = readb(leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +	val_sw_disable = readb(leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +
-> +	for_each_available_child_of_node(np, child) {
-> +		ret = turris1x_led_register(dev, leds, child,
-> +					    val_sw_override, val_sw_disable);
-> +		if (ret) {
-> +			of_node_put(child);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret = devm_device_add_groups(dev, turris1x_leds_controller_groups);
-> +	if (ret) {
-> +		dev_err(dev, "Could not add attribute group!\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void turris1x_leds_shutdown(struct platform_device *pdev)
-> +{
-> +	struct turris1x_leds *leds = platform_get_drvdata(pdev);
-> +	int i, j;
-> +	u8 val;
-> +
-> +	/*
-> +	 * LED registers are persisent across board resets.
-> +	 * So reset LEDs to default state before kernel reboots.
-> +	 */
-> +
-> +	/* Disable software control of all LEDs except LED 6 (WiFi) */
-> +	writeb(BIT(6), leds->regs + TURRIS1X_LED_SW_OVERRIDE_REG);
-> +
-> +	/* Turn off LED 6 (WiFi) as there is no hardware trigger for it */
-> +	val = readb(leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +	writeb(val | BIT(6), leds->regs + TURRIS1X_LED_SW_DISABLE_REG);
-> +
-> +	/* Reset colors of all LEDs to default values */
-> +	for (i = 0; i < ARRAY_SIZE(leds->leds); i++) {
-> +		/* Skip LAN2-LAN5 LEDs which share color register with LAN1 */
-> +		if (i >= 2 && i <= 5)
-> +			continue;
-> +		for (j = 0; j < ARRAY_SIZE(leds->leds[i].subled_info); j++)
-> +			writeb(0xff,
-> +			       leds->regs + TURRIS1X_LED_BRIGHTNESS_REG(i, j));
-> +	}
-> +}
-> +
-> +static const struct of_device_id of_turris1x_leds_match[] = {
-> +	{ .compatible = "cznic,turris1x-leds" },
-> +	{},
-> +};
-> +
-> +static struct platform_driver turris1x_leds_driver = {
-> +	.probe = turris1x_leds_probe,
-> +	.shutdown = turris1x_leds_shutdown,
-> +	.driver = {
-> +		.name = "turris1x_leds",
-> +		.of_match_table = of_turris1x_leds_match,
-> +	},
-> +};
-> +module_platform_driver(turris1x_leds_driver);
-> +
-> +MODULE_AUTHOR("Pali Rohár <pali@kernel.org>");
-> +MODULE_DESCRIPTION("CZ.NIC's Turris 1.x LEDs");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:turris1x_leds");
-> -- 
-> 2.20.1
-> 
-
--- 
-Lee Jones [李琼斯]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 35385df2302c..028df656196f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1099,7 +1099,6 @@ S:	Maintained
+>   F:	drivers/dma/ptdma/
+>   
+>   AMD SEATTLE DEVICE TREE SUPPORT
+> -M:	Brijesh Singh <brijeshkumar.singh@amd.com>
+>   M:	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+>   M:	Tom Lendacky <thomas.lendacky@amd.com>
+>   S:	Supported
