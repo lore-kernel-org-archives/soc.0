@@ -1,93 +1,131 @@
-Return-Path: <SRS0=fJuS=5Z=gmail.com=f.fainelli@kernel.org>
+Return-Path: <SRS0=33QP=5Z=z3ntu.xyz=luca@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40121C38142
-	for <soc@archiver.kernel.org>; Sat, 28 Jan 2023 19:38:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56922C38142
+	for <soc@archiver.kernel.org>; Sat, 28 Jan 2023 21:43:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 24AB2C4339B; Sat, 28 Jan 2023 19:38:54 +0000 (UTC)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 09A66C4339E; Sat, 28 Jan 2023 21:43:16 +0000 (UTC)
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 40E22C433EF;
-	Sat, 28 Jan 2023 19:38:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40E22C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f176.google.com with SMTP id e10so5211762pgc.9;
-        Sat, 28 Jan 2023 11:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0UrkbSszXJHZ8V9zA3ukLAKg8MEmz/Fgwi89//fyC/M=;
-        b=bBs6rWvadZ2bX9ERrgPk5PBWcuWxU9HeLJIR09Z7IcyZmidykNkXxsgsLAkGygAB/e
-         jGSNRu9ZjKrQ9uJlMzaVV1SYHJ+j1ze0j8LUqfjeLlHzCJ8X1fhJW6HFt7Wndgtv9tv7
-         T4k8Fe+X7Wxfse9vHWSVmQ/KpJX5gFRlDt23q8vT4Ihqz/N+lQrJ2AAoWarU8YSGJ+Te
-         Yay4QHcUoIUoL0uawRmHIAfnmO0czK3I0bKzpqygdat09Ts9QkqRKSSczYrMXiarAdBi
-         QXH86c/dYl07JhaRbnBLBiWBDqle4bgpPR05fxuOz2kGJT7INB2+PFFd9KlQF9pMwXTH
-         X29g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0UrkbSszXJHZ8V9zA3ukLAKg8MEmz/Fgwi89//fyC/M=;
-        b=5U+9BjZ597p+HZ4DHww4q+Lr2MDPguoHNrIubfPwcsRTUnOi6SXbeD5OH29rcMW/bE
-         /4xCcB+DWhhuV8c4b4WwbTqqUn6ygHLk8FeX/UxFHTxrMPQZEJYECAcLxmEZFd98Qzvp
-         VoAU6Bt9YfAx+M1YeZnGGuP/+IOlRmA/uJ0iVUvFl3S4D87Id2SYJQn8zEDWwgIydZA+
-         4UYA7qrxIlXiSn3fTKh62PZkknkcN/7gpoYsbANtrXfjQPr+NfWc7v2fJScdFT+jM5qh
-         latPDMgGmwykOfGa/KlyWu5SfD4lPsO6IjCjLTDtW85u70X2jGUOUuLMtBQccgfx8SjC
-         fFqw==
-X-Gm-Message-State: AO0yUKUmPvYY3AV7fOxzHYHWSco9kEIps3VhXzgtzSx2zaeA8eXDZmND
-	7NaNFAO0BGU0SAbSpCMaABt/XCG/22CD2Q==
-X-Google-Smtp-Source: AK7set/C1WGMNpRAk8Pd6Q0cBj9fUkAyiTdhoawcC36VCa8s2l/Iiqza0BjnINInBb84kFKu5c1uvg==
-X-Received: by 2002:a05:6a00:1404:b0:58b:bce2:7eb7 with SMTP id l4-20020a056a00140400b0058bbce27eb7mr2522088pfu.10.1674934732187;
-        Sat, 28 Jan 2023 11:38:52 -0800 (PST)
-Received: from localhost.localdomain (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id x26-20020aa7957a000000b0059393d46228sm1654876pfq.144.2023.01.28.11.38.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 11:38:51 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6281FC433D2;
+	Sat, 28 Jan 2023 21:43:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6281FC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=z3ntu.xyz
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
+Received: from g550jk.localnet (unknown [62.108.10.64])
+	by mail.z3ntu.xyz (Postfix) with ESMTPSA id 20CD0CC3A1;
+	Sat, 28 Jan 2023 21:43:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+	t=1674942192; bh=9iikV1aWGTt9Mh+BoQkZ8MLRghcUR/xHdzBYyKknK3Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=r96VFzjFyxTrWOeQl4TIxsKCSjynicL2byqQrIH88j+TgGhVbK816BGns0NFYSEQO
+	 qeRuRa0gMl/ajJTLjOcQN3KJThbStbuo+iXglXwfYdScWPjEKvxOJllGCPoy45XOe+
+	 hScL9sejbf1340Sj3lTGhffxi7RAn3+7N2zBlDoM=
+From: Luca Weiss <luca@z3ntu.xyz>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	khilman@kernel.org,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 5/5] Broadcom soc changes for 6.3
-Date: Sat, 28 Jan 2023 11:38:49 -0800
-Message-Id: <20230128193849.1628945-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+To: Stefan Hansson <newbyte@postmarketos.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ ~postmarketos/upstreaming@lists.sr.ht
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ matti.lehtimaki@gmail.com,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject:
+ Re: [PATCH 2/3] dt-bindings: arm: qcom: Add MSM8926 and Samsung Galaxy Tab 4
+ 10.1 LTE
+Date: Sat, 28 Jan 2023 22:43:11 +0100
+Message-ID: <1938307.usQuhbGJ8B@g550jk>
+In-Reply-To: <05a6f073-7002-0156-1225-cd838e482307@linaro.org>
+References:
+ <20230122144749.87597-1-newbyte@postmarketos.org>
+ <7c69e654-fe57-ad5c-9b41-15aaeaa73102@postmarketos.org>
+ <05a6f073-7002-0156-1225-cd838e482307@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+On Montag, 23. J=E4nner 2023 19:08:03 CET Krzysztof Kozlowski wrote:
+> On 23/01/2023 18:41, Stefan Hansson wrote:
+> >>> 2. You base on other SoC but you do not include its compatibles. Why?=
+ Is
+> >>> it intended? None of the properties applicable to other SoC will match
+> >>> here, thus I actually wonder if you run dtbs_check...
+> >=20
+> > Sorry, I forgot about running dtbs_check. However, I'm not sure I
+> > understand the question. What do you mean by that I don't include its
+> > compatibles?
+>=20
+> I understood you include the msm8226.dtsi which is a different SoC. If
+> you include it, you get all of its content. We do it only for compatible
+> devices, but your device does not indicate compatibility with msm8226.
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Hi Krzysztof,
 
-are available in the Git repository at:
+the way the earlier Qualcomm SoCs work, especially regarding naming scheme =
+is=20
+the following.
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.3/soc
+There's for example the msm8x74 family which includes msm8974, msm8674,=20
+msm8274, and the a bit differently named apq8074 where the significant=20
+different are the RF capabilities, I think with those only 8974 had LTE, 86=
+74=20
+and 8274 only 3G but different band support, and the apq8074 has no mobile=
+=20
+radio.
 
-for you to fetch changes up to a46674396189d045993c7e4aed2c61b166b6585e:
+The same exists for sure also for 8x16 and 8x26, probably a bunch of other=
+=20
+SoCs as well.
 
-  ARM: BCM63xx: remove useless goto statement (2023-01-10 13:46:59 -0800)
+So from software side (apart from modem firmware of course) it can be treat=
+ed=20
+in practise as the same SoC so that's why we included the dtsi in this case=
+ in=20
+msm8226 but also msm8926 and apq8026.
 
-----------------------------------------------------------------
-This pull request contains Broadcom ARM SoCs machine updates for 6.3,
-please pull the following:
+But the compatible on board-level is in practise (to my knowledge) not real=
+ly=20
+used for anything important other than having a nice string in the dts file=
+=2E I=20
+know some software uses compatible from user space but there for=20
+differentiating between different devices and ignoring the SoC compatibles.
 
-- Dario removes an useless goto in the BCM63xx SMP bring up code
+But while they are software-compatible for the most part, they *are* distin=
+ct=20
+SoCs with different capabilities and I just don't see the point in trying t=
+o=20
+establish some kinds of relationships between different SoCs that are somew=
+hat=20
+or very similar (msm8226 and msm8974 also share many components but are=20
+obviously different SoCs).
 
-----------------------------------------------------------------
-Dario Binacchi (1):
-      ARM: BCM63xx: remove useless goto statement
+And also e.g. (nearly) all apq* dts files we already have in mainline only=
+=20
+have apq compatible and not the corresponding msm* compatible. And I think=
+=20
+that's totally legitimate.
 
- arch/arm/mach-bcm/bcm63xx_smp.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Regards
+Luca
+
+>=20
+> > I ran `$ make dtbs_check DT_SCHEMA_FILES=3Dqcom.yaml` locally just now,
+> > and it only gave me errors from the qcom-msm8974pro-oneplus-bacon dtb.
+> > Maybe I'm running it wrong?
+>=20
+> No clue, I cannot test because your patches do not apply cleanly.
+>=20
+> Best regards,
+> Krzysztof
+
+
+
+
