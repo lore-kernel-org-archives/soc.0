@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20E62C05027
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78700C636CC
 	for <soc@archiver.kernel.org>; Sun, 29 Jan 2023 14:45:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EF827C433A4; Sun, 29 Jan 2023 14:45:31 +0000 (UTC)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	id 54671C433EF; Sun, 29 Jan 2023 14:45:32 +0000 (UTC)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3037CC4339B
-	for <soc@kernel.org>; Sun, 29 Jan 2023 14:45:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3037CC4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id 53C75C433D2
+	for <soc@kernel.org>; Sun, 29 Jan 2023 14:45:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 53C75C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso419324wms.0
-        for <soc@kernel.org>; Sun, 29 Jan 2023 06:45:29 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso1549873wms.5
+        for <soc@kernel.org>; Sun, 29 Jan 2023 06:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L3+adTROaQB+gYcBuJMg8idTi/GfFjWlX30uDggGK3g=;
-        b=yJxkCDePAZSNSiIp6Ms3j0H9NQgCYu0j0f/BHOuZ1GzoQUXsOC1ppbl7Cmtiznrzx/
-         wA0MYkuEXDU68p1lIApL1j6GWw1IbUlUelnXiHdEZl/lnRF6Eo0qTQL0Wy9RcHt0sJI+
-         xMx5F+lGstj/0SBWuyNU2iTvHhI/+EEjCrSY3CieBUsYJdjHMbYe7AwPuXTZDJjjA5cr
-         SM1WlRgwnnz42D9K30xYafCa+rhT7s8Q6MePm3fEUaq49Lf8kRbM3bIKwXgA9TWcAhhW
-         4MKQGgKoeJtVOMo3al7o4fqVP22O4z5AmRL4oxZSq/gl27QYbnxIIb/18kr4wkcH+fOX
-         KH5g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fYZkdrMXMeEPg3GRieLPg0wSSepZGYYAWur6SgaAHH0=;
+        b=f/xa2DykNqZe9VBEt7kH6rje8ZlM1nq6aMa+BXbH1FRXonPH83eswZNQZiR0X9sI27
+         oVVJpIfpxQrnIWl5qLewh2d2A4p6/HrqzziPJXn0EWtUitke8qm1Y24JpsTFTyWHPwKW
+         R4v+uRMp/rZDSvQgw0mNm9frFii5skBtTyylrdSE3arfyZpOwynVqN2GmHow62e8GvNv
+         OeoZUt6c+7RlJuroikcW1dO76u49I9lyYhHLgvaHQ1Fh5zEsVXNfMnCWHGtYjCCoEexL
+         FVMsp9owevieL1ZNKr3Mmu1H06EonAaOw53+NWBELFf95J+JgvYNf5mhc91FHo+RO9KC
+         ZtZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L3+adTROaQB+gYcBuJMg8idTi/GfFjWlX30uDggGK3g=;
-        b=UBgB+20siOFjhoJzgKsreHh5VKYwL3ghMLzxlH1IZpmU/zpmb0G1y8cgOGOaO7RGRH
-         h+rpzuzzd2c83N4JVF3+aSbYG6pEh1iZD2/m9B4SxpvnN+wUuHY9XrBWW5txBbzj+Wxv
-         ++Ygz2JZIHeoOcaUBKkL7fvTeInYSNkavryMtJS9JJrbHcA7lD4eoPtchFxAo5nd14ju
-         xUvcpCTPcZbaAI+Q2ubgvcxDeUA42ao643M5ajYK/QzSg7JaEi6Q43FgWyYUDaTOH5ny
-         DhtGOcpsxwGOU0DQXKaCnePvu7n8wsgdHgEZ/3fpIZJUT3DHOy91wAJyYOnzyQ0jo4YX
-         dniw==
-X-Gm-Message-State: AO0yUKUGzR6PuJRpZuoaPyzKhDkSATcV1nwdyq6L07+TTfhc1sR1LoIq
-	YsXOy7VKnwDTdv+C1c4WY+6Xiw==
-X-Google-Smtp-Source: AK7set+Sx3rrx+oc+SUEi1ahvM+ewtnnrVP7wTBDdd9hcsB+U6I5HSbLvhQ0mvSzwuidc+pojB60Yg==
-X-Received: by 2002:a05:600c:188a:b0:3dc:506e:6559 with SMTP id x10-20020a05600c188a00b003dc506e6559mr4061076wmp.37.1675003528361;
-        Sun, 29 Jan 2023 06:45:28 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fYZkdrMXMeEPg3GRieLPg0wSSepZGYYAWur6SgaAHH0=;
+        b=btmSeUX8UGkJtahUZ4K3jqxWz9Qq2eEEmAQ3KW8bE+m+Lk7pZFB2BIQYR2S8Vb1nXX
+         S+0oquuiAkBwxlQGINx9M+E56GJLzDOBin+oR1SXUuAxcZI0dZcnQopyeNsHK0JUAP6n
+         tsi618qnuSiJLOxnPr8a4yQbroIeiCcdiOZ68v//rZr8rtr+k0H6YL3H8s+NCVMadNB9
+         Rx5AR1YXbIutTVlojW/4LX9crASt+DpzgwHgPNSewDpyszEPC81XTtT5/Y2Vf15yFsti
+         rtqRFsQvV/oFd4rLjYclZ9bbH8awYPOYFAQWGRWongAXnHIQuLAUy1AmnBG8n/6hgkYg
+         RZ2g==
+X-Gm-Message-State: AFqh2kqLfNG0cTYObTPcj8VnjNqJHvzOsd3zxOllOu/RFBLzLzn1Mrjm
+	udDWBk5ryHJacNyM2o9+WDNPhA==
+X-Google-Smtp-Source: AMrXdXue3XS92JSUvV0ZZZSgiZgiNQr2+KdurebgIrezvPcNpy5XTgtz5zRTNAYrFb+/sLmbcnTswA==
+X-Received: by 2002:a05:600c:348f:b0:3db:742:cfe9 with SMTP id a15-20020a05600c348f00b003db0742cfe9mr46866684wmq.34.1675003529545;
+        Sun, 29 Jan 2023 06:45:29 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05600c4f4e00b003a3442f1229sm14950038wmq.29.2023.01.29.06.45.27
+        by smtp.gmail.com with ESMTPSA id m14-20020a05600c4f4e00b003a3442f1229sm14950038wmq.29.2023.01.29.06.45.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 06:45:27 -0800 (PST)
+        Sun, 29 Jan 2023 06:45:29 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -61,10 +62,12 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] arm64: dts: cleanup for v6.3, part two
-Date: Sun, 29 Jan 2023 15:45:24 +0100
-Message-Id: <20230129144525.5802-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/2] ARM: dts: cleanup for v6.3, part two
+Date: Sun, 29 Jan 2023 15:45:25 +0100
+Message-Id: <20230129144525.5802-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230129144525.5802-1-krzysztof.kozlowski@linaro.org>
+References: <20230129144525.5802-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -77,49 +80,50 @@ Best regards,
 Krzysztof
 
 
-The following changes since commit d0931f1d5e9c1655cfa8128edd14e813b4044801:
+The following changes since commit 3a48b303d44a19d335910f825f9a8473c5ff35e0:
 
-  arm64: dts: hisilicon: align LED node names with dtschema (2023-01-13 11:38:56 +0100)
+  ARM: dts: at91: align LED node names with dtschema (2023-01-13 11:38:33 +0100)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.3-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.3-2
 
-for you to fetch changes up to 9f2c9170934eace462499ba0bfe042cc72900173:
+for you to fetch changes up to 2ba4ff82f9dd312fb9f77168f159698c93f4841b:
 
-  arm64: dts: amd: use "okay" for status (2023-01-28 11:16:00 +0100)
-
-----------------------------------------------------------------
-Minor improvements in ARM64 DTS for v6.3, part two
-
-1. Drop deprecated "device_type" property from serial nodes (apm,
-   amazon).
-2. Align UART node names and OPP table names with bindings (hisilicon,
-   realtek, synaptics).
-3. Use "okay" for status, as expected by Devicetree specification and
-   dtschema.
+  ARM: dts: berlin: align UART node name with bindings (2023-01-27 10:44:58 +0100)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (8):
-      arm64: dts: apm: drop deprecated serial device_type
-      arm64: dts: amazon: drop deprecated serial device_type
-      arm64: dts: realtek: align UART node name with bindings
-      arm64: dts: hisilicon: align UART node name with bindings
-      arm64: dts: synaptics: align UART node name with bindings
-      arm64: dts: microchip: use "okay" for status
-      arm64: dts: apm: use "okay" for status
-      arm64: dts: amd: use "okay" for status
+Minor improvements in ARM DTS for v6.3, part two
 
- arch/arm64/boot/dts/amazon/alpine-v2.dtsi          |  4 ----
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts   | 16 +++++++--------
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts   | 24 +++++++++++-----------
- arch/arm64/boot/dts/apm/apm-merlin.dts             | 16 +++++++--------
- arch/arm64/boot/dts/apm/apm-mustang.dts            | 16 +++++++--------
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |  1 -
- arch/arm64/boot/dts/apm/apm-storm.dtsi             | 16 ++++++---------
- arch/arm64/boot/dts/hisilicon/hip07.dtsi           |  2 +-
- .../boot/dts/microchip/sparx5_pcb134_board.dtsi    |  2 +-
- .../boot/dts/microchip/sparx5_pcb135_board.dtsi    |  6 +++---
- arch/arm64/boot/dts/realtek/rtd16xx.dtsi           |  6 +++---
- arch/arm64/boot/dts/synaptics/berlin4ct.dtsi       |  2 +-
- 12 files changed, 51 insertions(+), 60 deletions(-)
+Align UART node names and OPP table names with bindings (alpine, arm
+boards, axm55xx, berlin, cx92755, dm814x, moxart, mstar, stih418).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (9):
+      ARM: dts: mstar: align UART node name with bindings
+      ARM: dts: cx92755: align UART node name with bindings
+      ARM: dts: arm: align UART node name with bindings
+      ARM: dts: alpine: align UART node name with bindings
+      ARM: dts: axm55xx: align UART node name with bindings
+      ARM: dts: moxart: align UART node name with bindings
+      ARM: dts: dm814x: align UART node name with bindings
+      ARM: dts: stih418: align OPP table names with DT schema
+      ARM: dts: berlin: align UART node name with bindings
+
+ arch/arm/boot/dts/alpine.dtsi             | 4 ++--
+ arch/arm/boot/dts/axm55xx.dtsi            | 8 ++++----
+ arch/arm/boot/dts/berlin2q.dtsi           | 4 ++--
+ arch/arm/boot/dts/cx92755.dtsi            | 6 +++---
+ arch/arm/boot/dts/dm814x.dtsi             | 6 +++---
+ arch/arm/boot/dts/dm816x.dtsi             | 6 +++---
+ arch/arm/boot/dts/integrator.dtsi         | 4 ++--
+ arch/arm/boot/dts/integratorap-im-pd1.dts | 4 ++--
+ arch/arm/boot/dts/integratorap.dts        | 4 ++--
+ arch/arm/boot/dts/integratorcp.dts        | 4 ++--
+ arch/arm/boot/dts/moxart.dtsi             | 2 +-
+ arch/arm/boot/dts/mstar-v7.dtsi           | 2 +-
+ arch/arm/boot/dts/stih418-b2264.dts       | 2 +-
+ arch/arm/boot/dts/versatile-ab.dts        | 6 +++---
+ arch/arm/boot/dts/versatile-pb.dts        | 2 +-
+ arch/arm/boot/dts/vexpress-v2m.dtsi       | 8 ++++----
+ 16 files changed, 36 insertions(+), 36 deletions(-)
