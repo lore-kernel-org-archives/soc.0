@@ -4,150 +4,164 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F1E4C61D97
-	for <soc@archiver.kernel.org>; Sun, 29 Jan 2023 10:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6355DC61D97
+	for <soc@archiver.kernel.org>; Sun, 29 Jan 2023 14:39:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1AD5DC433D2; Sun, 29 Jan 2023 10:55:16 +0000 (UTC)
+	id 2F299C433A4; Sun, 29 Jan 2023 14:39:51 +0000 (UTC)
 Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 417C9C4339B
-	for <soc@kernel.org>; Sun, 29 Jan 2023 10:55:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 417C9C4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id DE534C433D2
+	for <soc@kernel.org>; Sun, 29 Jan 2023 14:39:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DE534C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso7476556wmb.0
-        for <soc@kernel.org>; Sun, 29 Jan 2023 02:55:14 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id bg26so586850wmb.0
+        for <soc@kernel.org>; Sun, 29 Jan 2023 06:39:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oaz79ZDVJS2xEIGpS2k1SEdhnwOm02zjQ4lWcUyp8UU=;
-        b=xldb5xqWjPFCCjZGiG8c3P2Ih66FBZxhANd7eM9nLWsJ58dgfulz8HCvh+2jcr7mxd
-         1dibfhz72qfr6cXFG0rznplDOEuK9iwschVIOlQYRLHsCYWCNZjL/xJT+Ia1Timbk3DR
-         9jsPO3BNKv76L6515odfRiCg/PdbbPZeb1z3qS5bWtlCwY/ObNZZLFZako+ZRC7UngTO
-         6IS6AgK8QqGq7vdv1rOx0B+IlhG3UCUsS80I+jr5ZY8mtiieIQ9UjC4RKl5UC3eTVmde
-         Oe1KUBDIhTL6u/HqMcr44xtP6XgWvWe5uLYdJlAEuc7VTjZlK6x8r4v3XjrjgzR88wRh
-         S64Q==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/xwwbOs7efGaQMD0UIaeGQeP0AwlUSs0l695B7gQqs=;
+        b=H37AxqvpkcQPDY31nuqRg2AOOocJfGxNxKC58KcEuQOl088wgsSKto7c4b2NNC+yWW
+         KBf01la7BInnT9ieP8DrFMYnPnL0AT34srYjpVYDIC25GsL9Vzku0u/EOGjyIDg5Vgsb
+         sG/IIs9loCETu/2kyIPrhK0fH0Ag+7CH2p+0LQNnflIWziqg2Jr91jfir9JvuL+gsLM4
+         bUslMG33lFQxVjyxIQprAF2nETIUxBFx9byKCH0PxkA+7R21ul+fkgvaPepETkdnamQ8
+         JyxXajHCJvmF86109hiJRXXAfd7y/4uk+kYUFMlg3zcz5KAVkoP8GWB1l/mlY9wro37N
+         O6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oaz79ZDVJS2xEIGpS2k1SEdhnwOm02zjQ4lWcUyp8UU=;
-        b=mwa0FEEz5XpqpwoPy9H+UYm4+f8WlwZTdGXZEXYSmXqZ2LyLMz2PBCYHUWqFJYfnhG
-         XKO/03M3DufZU+09166e6+7a1De0p6fDeC7cdpm0wV5Hd5uOQjw7NGBGPQ94/r1suLTN
-         f6XZ6KtjvzhaanyNWku92ojq1JEwsIk6NNQpZF6N9tV0j8yC+P2fzU8xvh88gTO/za4E
-         BZ+xW6lMmtfGfgfaKl4rfIIaFdQA7I/D65ouwB5bWiriMKXLTY+ltFxpaYDN0ufzwXkb
-         EdA3DbftisN3OfE+0LdsQnTLS02Pdj59DeEYdZHaRmcmUhbVUoRFXLWO8vF0Gb2lvSIp
-         NPQQ==
-X-Gm-Message-State: AFqh2krGiloSE4yLUP3cmrvGkasqEDrGLxKLSK3I/ZTJKPBk0mmZP/kD
-	SqWn2Gk5npR2JdUf5T8CRE8dFA==
-X-Google-Smtp-Source: AMrXdXuzfKrAY6Cb0Myev83sk/T6yVXFL6vmIRVqNDkqsGBT7N9BS3wdhZId4eNF16fKoV6pr5SpUw==
-X-Received: by 2002:a05:600c:4e0f:b0:3db:3695:11b4 with SMTP id b15-20020a05600c4e0f00b003db369511b4mr34387048wmq.33.1674989712357;
-        Sun, 29 Jan 2023 02:55:12 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i20-20020a1c5414000000b003dc3f3d77e3sm6538299wmb.7.2023.01.29.02.55.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jan 2023 02:55:11 -0800 (PST)
-Message-ID: <4b2de180-046b-cf9b-7b8c-f36241beb226@linaro.org>
-Date: Sun, 29 Jan 2023 11:55:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: Add MSM8926 and Samsung
- Galaxy Tab 4 10.1 LTE
-Content-Language: en-US
-List-Id: <soc.lore.kernel.org>
-To: Luca Weiss <luca@z3ntu.xyz>, Stefan Hansson <newbyte@postmarketos.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- ~postmarketos/upstreaming@lists.sr.ht
-Cc: phone-devel@vger.kernel.org, matti.lehtimaki@gmail.com
-References: <20230122144749.87597-1-newbyte@postmarketos.org>
- <7c69e654-fe57-ad5c-9b41-15aaeaa73102@postmarketos.org>
- <05a6f073-7002-0156-1225-cd838e482307@linaro.org> <1938307.usQuhbGJ8B@g550jk>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n/xwwbOs7efGaQMD0UIaeGQeP0AwlUSs0l695B7gQqs=;
+        b=qrt4Um0BlgQS1+1peVvFQPBtSn3rfx3mWjgArl+jXObDjECyE1tOsC7eLKk9bWolNO
+         zP9fDSKune+6V4X9LS4KV8RdJtUCIfQMloWqvQlpc2kp67/F9SMXBaXoBaFlJaptOA/c
+         vS9Z2DMAGe3nXckm0c2nIFT/pBKSBWerhDApyqdL9hFpOpU5TN15C28Yha70AyajqY/x
+         MS5A2GMKnWxqx0scu/xtbyZTEQnEYVdE6PC6GsEZSZTeIQEOiok39ropxRV3mx22AG+H
+         Et5p55n5O7rrTLN1U7WJKwHKCEghK87h2M/FSnqoygQUyqlvzK//d5fS8oNskb8M51j/
+         WOqg==
+X-Gm-Message-State: AO0yUKUSy/+pDdPkDcB3o6RUn7qrl5j9W4mqkrPzKGHYJB8XfLv9YmPT
+	vfW8DCGM6J/QsEyQqinPnJ3a8A==
+X-Google-Smtp-Source: AK7set82BeaboxstGi6b9jRgXk4CsYI4beNgiDWOusTguSgRBlIDNkQyRbiYOh9/lkWhcJL+jDkl7g==
+X-Received: by 2002:a05:600c:4f93:b0:3dc:2b62:ee9f with SMTP id n19-20020a05600c4f9300b003dc2b62ee9fmr12897820wmq.3.1675003188063;
+        Sun, 29 Jan 2023 06:39:48 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id bi5-20020a05600c3d8500b003db0bb81b6asm10477843wmb.1.2023.01.29.06.39.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 06:39:47 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1938307.usQuhbGJ8B@g550jk>
-Content-Type: text/plain; charset=UTF-8
+List-Id: <soc.lore.kernel.org>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/3] ARM: dts: samsung: exynos for v6.3
+Date: Sun, 29 Jan 2023 15:39:42 +0100
+Message-Id: <20230129143944.5104-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 28/01/2023 22:43, Luca Weiss wrote:
-> On Montag, 23. Jänner 2023 19:08:03 CET Krzysztof Kozlowski wrote:
->> On 23/01/2023 18:41, Stefan Hansson wrote:
->>>>> 2. You base on other SoC but you do not include its compatibles. Why? Is
->>>>> it intended? None of the properties applicable to other SoC will match
->>>>> here, thus I actually wonder if you run dtbs_check...
->>>
->>> Sorry, I forgot about running dtbs_check. However, I'm not sure I
->>> understand the question. What do you mean by that I don't include its
->>> compatibles?
->>
->> I understood you include the msm8226.dtsi which is a different SoC. If
->> you include it, you get all of its content. We do it only for compatible
->> devices, but your device does not indicate compatibility with msm8226.
-> 
-> Hi Krzysztof,
-> 
-> the way the earlier Qualcomm SoCs work, especially regarding naming scheme is 
-> the following.
-> 
-> There's for example the msm8x74 family which includes msm8974, msm8674, 
-> msm8274, and the a bit differently named apq8074 where the significant 
-> different are the RF capabilities, I think with those only 8974 had LTE, 8674 
-> and 8274 only 3G but different band support, and the apq8074 has no mobile 
-> radio.
-> 
-> The same exists for sure also for 8x16 and 8x26, probably a bunch of other 
-> SoCs as well.
-> 
-> So from software side (apart from modem firmware of course) it can be treated 
-> in practise as the same SoC so that's why we included the dtsi in this case in 
-> msm8226 but also msm8926 and apq8026.
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-First, there is distinction between SoC having and not having modem. I
-guess small enough that we just include the DTSI.
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-Second, there is distinction between different families, even if they
-share a lot. All of the SoCs here share something, because Qualcomm has
-versionable IP blocks which they re-use.
+are available in the Git repository at:
 
-> 
-> But the compatible on board-level is in practise (to my knowledge) not really 
-> used for anything important other than having a nice string in the dts file. I 
-> know some software uses compatible from user space but there for 
-> differentiating between different devices and ignoring the SoC compatibles.
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-6.3
 
-It's not only about board, but about all devices in the SoC.
+for you to fetch changes up to 27be20e3b9d125f2c1b066d1d238c67bf5b89dc3:
 
-> 
-> But while they are software-compatible for the most part, they *are* distinct 
-> SoCs with different capabilities and I just don't see the point in trying to 
-> establish some kinds of relationships between different SoCs that are somewhat 
-> or very similar (msm8226 and msm8974 also share many components but are 
-> obviously different SoCs).
+  ARM: dts: exynos: add unit address to DWC3 node wrapper in Exynos54xx (2023-01-29 11:34:12 +0100)
 
-You don't have to create such relationships. You don't have to include
-other DTSI, either. What yo have to is - quoting Linux docs:
-"DO make 'compatible' properties specific. DON'T use wildcards in
-compatible strings. DO use fallback compatibles when devices are the
-same as or a subset of prior implementations. DO add new compatibles in
-case there are new features or bugs."
+----------------------------------------------------------------
+Samsung DTS ARM changes for v6.3
 
-> 
-> And also e.g. (nearly) all apq* dts files we already have in mainline only 
-> have apq compatible and not the corresponding msm* compatible. And I think 
-> that's totally legitimate.
+1. Big cleanup and rework towards achieving zero-warning of dtbs_check
+   and dtc W=1:
+    - align node names with the bindings,
+    - drop or correct incorrect properties in several boards,
+    - correct HDMI bridge ports nodes on Exynos4412 Midas,
+    - add dummy regulator supplies when necessary to fullfil bindings
+      requirements,
+    - use lowercase hex,
+    - move non-MMIO exynos-bus nodes out of soc node,
+    - add unit address to USB DWC3 nodes.
 
-We do not talk here about apq, actually, at all. We talk about one
-msm8xxx including other msm8xxx...
+2. Correct Exynos5420 MIPI DSI and phy compatibles.
+3. Correct Exynos4210 and Exynos4412 HDMI phy compatibles.
+4. Add Samsung Galaxy S5 (SM-G900H) board.
 
+----------------------------------------------------------------
+Krzysztof Kozlowski (23):
+      ARM: dts: exynos: drop unused pinctrl-names from Galaxy Tab
+      ARM: dts: exynos: align OPP table names with DT schema
+      ARM: dts: exynos: drop incorrect power-supplies in P4 Note
+      ARM: dts: exynos: correct wr-active property in Exynos3250 Rinato
+      ARM: dts: exynos: drop unsupported desc-num in Exynos3250
+      ARM: dts: exynos: correct cd-gpios property in Exynos4412 Itop Elite
+      ARM: dts: exynos: align pin node names in Exynos4412
+      ARM: dts: exynos: add ports in HDMI bridge in Exynos4412 Midas
+      ARM: dts: exynos: add panel supply in Tiny4412
+      ARM: dts: exynos: add backlight supply in P4 Note
+      ARM: dts: exynos: align HSOTG/USB node names
+      ARM: dts: exynos: correct SATA clocks in Exynos5250
+      ARM: dts: exynos: correct HS200 property in Exynos5260
+      ARM: dts: exynos: correct HSI2C properties in Exynos5410 Odroid XU
+      ARM: dts: exynos: correct HDMI phy compatible in Exynos4
+      ARM: dts: exynos: use generic node names for phy
+      ARM: dts: exynos: use lowercase hex addresses
+      ARM: dts: exynos: move exynos-bus nodes out of soc in Exynos5420
+      ARM: dts: exynos: move exynos-bus nodes out of soc in Exynos3250
+      ARM: dts: exynos: move exynos-bus nodes out of soc in Exynos4210
+      ARM: dts: exynos: move exynos-bus nodes out of soc in Exynos4412
+      ARM: dts: exynos: add unit address to DWC3 node wrapper in Exynos5250
+      ARM: dts: exynos: add unit address to DWC3 node wrapper in Exynos54xx
 
-Best regards,
-Krzysztof
+Markuss Broks (4):
+      ARM: dts: exynos: Use Exynos5420 compatible for the MIPI video phy
+      ARM: dts: exynos: Use Exynos5422 compatible for the DSI controller
+      dt-bindings: arm: samsung: Add compatible for Samsung Galaxy S5 (SM-G900H)
+      ARM: dts: exynos: Add Samsung Galaxy S5 (SM-G900H) board
 
+ .../bindings/arm/samsung/samsung-boards.yaml       |   1 +
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/exynos-syscon-restart.dtsi       |   2 +-
+ arch/arm/boot/dts/exynos3250-monk.dts              |   3 +-
+ arch/arm/boot/dts/exynos3250-rinato.dts            |   5 +-
+ arch/arm/boot/dts/exynos3250.dtsi                  | 386 ++++++------
+ arch/arm/boot/dts/exynos4.dtsi                     |  66 +-
+ arch/arm/boot/dts/exynos4210.dtsi                  | 326 +++++-----
+ arch/arm/boot/dts/exynos4412-itop-elite.dts        |   2 +-
+ arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi    |   2 +-
+ arch/arm/boot/dts/exynos4412-midas.dtsi            |  15 +-
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi    |   2 +-
+ arch/arm/boot/dts/exynos4412-odroidu3.dts          |   2 +-
+ arch/arm/boot/dts/exynos4412-odroidx.dts           |   2 +-
+ arch/arm/boot/dts/exynos4412-odroidx2.dts          |   2 +-
+ arch/arm/boot/dts/exynos4412-origen.dts            |   2 +-
+ arch/arm/boot/dts/exynos4412-p4note.dtsi           |   7 +-
+ arch/arm/boot/dts/exynos4412-pinctrl.dtsi          |   2 +-
+ arch/arm/boot/dts/exynos4412-tiny4412.dts          |   8 +
+ arch/arm/boot/dts/exynos4412.dtsi                  | 381 ++++++------
+ arch/arm/boot/dts/exynos5.dtsi                     |  22 +-
+ arch/arm/boot/dts/exynos5250.dtsi                  |  84 +--
+ arch/arm/boot/dts/exynos5260-xyref5260.dts         |   2 +-
+ arch/arm/boot/dts/exynos5260.dtsi                  |  36 +-
+ arch/arm/boot/dts/exynos5410-odroidxu.dts          |   3 +-
+ arch/arm/boot/dts/exynos5410.dtsi                  |   2 +-
+ .../arm/boot/dts/exynos5420-galaxy-tab-common.dtsi |   1 -
+ arch/arm/boot/dts/exynos5420.dtsi                  | 299 +++++----
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi      |  34 +-
+ arch/arm/boot/dts/exynos5422-samsung-k3g.dts       | 674 +++++++++++++++++++++
+ arch/arm/boot/dts/exynos54xx.dtsi                  |  16 +-
+ arch/arm/boot/dts/exynos5800.dtsi                  |   4 +
+ 32 files changed, 1541 insertions(+), 853 deletions(-)
+ create mode 100644 arch/arm/boot/dts/exynos5422-samsung-k3g.dts
