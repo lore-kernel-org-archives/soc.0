@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 002B8C636D7
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A6DC64EC5
 	for <soc@archiver.kernel.org>; Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C7CA8C433A1; Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0994C433AA;
+	id C23A3C43443; Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB7E1C433AC;
 	Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1675117860;
-	bh=NoOJ9bIWnWLftuAoipGdYddDwoCygtcmxxttv41Xf4c=;
+	bh=aRMEcdVsh6UCAwb4N/AmHqSqgvvkxZ/7kd/9UAI2G2I=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=jtJKbYSmrEsURuMfNuLP3af5piDMgv4WfNTjROEAZ3RXjkJnaf8HG7OZ0A1zCNEwT
-	 74vnVFqAio5eEPk37zkvIr16Zzt636C1zDqCT5DFZev6XOR1AtQYymb9kim56rZdMz
-	 pqfZLbwtk0sYpqM52XyZl0yd3wzlGBi12aMrCBaP/mfpCgcdLWUVuD9lRqOjz/H2G0
-	 r6ci8WwCmPCKu3WoyirDz0EI2hrqbey8/c7D3Ww9njxe3Sl1hJVreHXzOkilUFYtql
-	 0Cdk2QpVBG7Sh2n42AcLhypV/AQt2pKH1UK7VC/XOtTvVUZtzP6XKv5uJeSjSajcuR
-	 6nQemg6VzshvQ==
+	b=toIyRoHRZ3HDO7YgXljH3mnaBJBPRF8pXOHPsGPlMUMCCBw1eodrexqRI1VTYWFCd
+	 c7l9jwZS9fZCtI6EUU5VV9u3bircPuEky9sFnWkoVyIIFWJqLL5bdNy1Th3QRQGgKZ
+	 XBPylDTthUp58I7ftYsJ0UaVQsNJ9NDS8HlVZ2xgW1SiHhjMlGgoj4eZNzwnuWz8P4
+	 I0SDAg/cUYZVYgSuauWDdB2JQC0lZGMlt9IyM4sPtcXZbUO8vx8pteM0lIo26YTn0p
+	 u8NpEHWIj293GJZhAKEcYQV85vgW808wLi6uuBToyLOHc1c1Mo6jfMqziKUecfxxsp
+	 WEip/2c3Y/fWA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 944D9E5255F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E634E5255D;
 	Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V SoC drivers for v6.3
+Subject: Re: [GIT PULL] Qualcomm ARM DT updates for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167511786060.29049.10393466080572590252.git-patchwork-notify@kernel.org>
+ <167511786058.29049.7818069856017367338.git-patchwork-notify@kernel.org>
 Date: Mon, 30 Jan 2023 22:31:00 +0000
-References: <Y9LNIm9pkr+Owv/e@spud>
-In-Reply-To: <Y9LNIm9pkr+Owv/e@spud>
-To: Conor Dooley <conor@kernel.org>
+References: <20230126174725.3681745-1-andersson@kernel.org>
+In-Reply-To: <20230126174725.3681745-1-andersson@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 26 Jan 2023 18:57:38 +0000 you wrote:
-> Hey Arnd,
+On Thu, 26 Jan 2023 11:47:25 -0600 you wrote:
+> The following changes since commit 0154252a3b87f77db1e44516d1ed2e82e2d29c30:
 > 
-> I'm sending this one perhaps earlier than needed given there's going
-> to be -rc8 this time around, just in case something about the PMU
-> driver isn't to your liking. It'd be nice if there was a subsystem for
-> these power management units as I wasn't sure if the API usage was
-> correct. Heiko, who has experience from the rockchip driver, reviewed
-> it, so I am happy with that.
+>   ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI (2022-12-28 10:46:34 -0600)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-dts-for-6.3
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] RISC-V SoC drivers for v6.3
-    https://git.kernel.org/soc/soc/c/75dae633c9c0
+  - [GIT,PULL] Qualcomm ARM DT updates for v6.3
+    https://git.kernel.org/soc/soc/c/be836a16f422
 
 You are awesome, thank you!
 -- 
