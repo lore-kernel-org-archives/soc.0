@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4860AC64ED9
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35959C64ED8
 	for <soc@archiver.kernel.org>; Mon, 30 Jan 2023 22:31:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E49DEC43326; Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8451C4331D;
+	id E421FC43324; Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CD6F1C433AA;
 	Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1675117860;
-	bh=7pG9uENAef10KmTuO4ZCMHrslTJzO3sKSndE+zqn5lg=;
+	bh=2lMDgtLIuwQZs5AZcTvCBA8CgFVyPumZyt5C5U3dPNE=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=AnjOYToetr2ymtZqb+s/E2lhKY2BkXbBbEZuOR7YZrZZTPkPYp5t5g9PkuMYH2W8p
-	 +QtvOetaZSVuE9z8qXmc3bwXioRUEKPD1IeyGJ2Nd8cxwZRMvClUdeRZpO13u660sm
-	 02xC9A3no3StRIgYngM3PJKztX1MFJGGybdsbs7CMu0NnqCRdzdrqm+z/0I1sj5YhF
-	 eONhYxovU5h3RTbf2KcqkQcjsLlG7yM6+qVvtBGxWke/VBvbPZwNR4kcqmEUsfR0Fq
-	 Y/XEm18GPSFqy2UkDficbeJcMklmpYY8FoelolZ66OquTfqx1ArtmddeIkHI+GcYQp
-	 kNWg7p1nyfVGg==
+	b=Rq5gzj4R3Mg9Zhem9XjQ4RD8kHkfH7ZSoyHTjCUfiRA4Cvz61C41DzRXHbjGOmVmj
+	 LQCuSU96YCcSEVt8oT0VtFybs2I/3YRTRRjEHCqGqriIPboNzD1d79Ctf31UnrIDKD
+	 KUguPfRsW7xn6AMeOObedJbELApyl1VPDc0368ESQra63UVksE69riz5Qm8ZuL6F9Z
+	 y/MEqpknkNcsRWI2+qgLKEpwr0bFy0t8LTd1kRVrPPzvLuZ2DXQ5mG4OzEcWZo3c+S
+	 CaczSY6+CRQ2hhUAtpxjZVmsYMfIW93r6oEnckqOKdEM8m2M6cP6F7A9cNspzT42E6
+	 1AmybYeOYQOdg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD48BC16ABD;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B336EE4D014;
 	Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/3] dt-bindings: Changes for v6.3-rc1
+Subject: Re: [GIT PULL] RISC-V Devicetrees for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167511786070.29049.8396568604546670003.git-patchwork-notify@kernel.org>
+ <167511786073.29049.12613987127591912160.git-patchwork-notify@kernel.org>
 Date: Mon, 30 Jan 2023 22:31:00 +0000
-References: <20230127163719.460954-1-thierry.reding@gmail.com>
-In-Reply-To: <20230127163719.460954-1-thierry.reding@gmail.com>
-To: Thierry Reding <thierry.reding@gmail.com>
+References: <Y9LP+Za1h0fkBa58@spud>
+In-Reply-To: <Y9LP+Za1h0fkBa58@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,24 +42,23 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 27 Jan 2023 17:37:17 +0100 you wrote:
-> Hi ARM SoC maintainers,
+On Thu, 26 Jan 2023 19:09:45 +0000 you wrote:
+> Hey Arnd,
 > 
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-> 
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
-> 
-> are available in the Git repository at:
+> DT stuff here for v6.3! I was kinda hoping to have a VisionFive 2 DT
+> for you, but alas no.
+> The changelog looks a bit odd since it's filled with un-reviewed
+> commits of my own, but they went as a PR to Palmer & are in riscv's
+> for-next too:
+> https://lore.kernel.org/all/167225428483.14530.3368527680488639805.b4-ty@rivosinc.com/
+> They might also pop up as part of the Allwinner DT PR, if the D1 stuff
+> lands for v6.3, which I hope does happen!
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] dt-bindings: Changes for v6.3-rc1
-    https://git.kernel.org/soc/soc/c/3fb0520dcc3a
-  - [GIT,PULL,2/3] ARM: tegra: Device tree changes for v6.3-rc1
-    https://git.kernel.org/soc/soc/c/cdd070a4e116
-  - [GIT,PULL,3/3] arm64: tegra: Device tree changes for v6.3-rc1
-    https://git.kernel.org/soc/soc/c/248c07f92c2c
+  - [GIT,PULL] RISC-V Devicetrees for v6.3
+    https://git.kernel.org/soc/soc/c/b453988c59ab
 
 You are awesome, thank you!
 -- 
