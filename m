@@ -1,136 +1,81 @@
-Return-Path: <SRS0=DFaa=53=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=L5sU=53=hpe.com=prvs=0394d7173c=nick.hawkins@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71919C54EAA
-	for <soc@archiver.kernel.org>; Mon, 30 Jan 2023 17:24:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0473BC54EAA
+	for <soc@archiver.kernel.org>; Mon, 30 Jan 2023 22:03:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5686FC4339C; Mon, 30 Jan 2023 17:24:42 +0000 (UTC)
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	id B4267C4339E; Mon, 30 Jan 2023 22:03:29 +0000 (UTC)
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DC6AAC433D2;
-	Mon, 30 Jan 2023 17:24:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC6AAC433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id DBE355C0249;
-	Mon, 30 Jan 2023 12:24:39 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 30 Jan 2023 12:24:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1675099479; x=1675185879; bh=HdYqkwwYzO
-	/7jj6czR+YN6tobe95y5jxPqL1M7qlJpo=; b=pwP8j/6gwCWB6Or/+HLFtAucQ7
-	FOOc6MahZa/+0VQGbmNo89hIHajlEALuxhlIpTnQxcNq95pYpVieYuG/5MBF/C2D
-	YoCdu2TiH0UINPlhv7XyTMMhXylL6H4R3F2TDV6PQO843aGBh6ZHk1PstMbsrMc5
-	Fd2cLw1x1GAWcppmzY5w7jJ7v8EJcyekkPBLFutp1r1Tu1u/rA5waiQvN0PFzX/k
-	s3Ii94a1GLGJoVL01cEIwq+yOhW/4dSt4XBB/kSOaaS9+6K6B4KHCJ1815sVIuYt
-	aR5Auua0cK6w7FRNENNXp+Cv30SiYPmtERVACNnR1NoagWOQ2isCLSvbrIEQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1675099479; x=1675185879; bh=HdYqkwwYzO/7jj6czR+YN6tobe95
-	y5jxPqL1M7qlJpo=; b=QEf+Qc4X57otx6LQYN8rqNKuCkbXK7ZuFnW+6i5e24b/
-	YeJj+4x4aMXonuAkyKrqMZPF9QMlF9G30pVZ5VR3KurqUiTnAacMyUOkAWk5wjUd
-	JYkn0J5t2kb33cCBl7KtPYojRVjPJgGkYmWy4RFYWYmAOaMIgLz/6sI3DiRtYEaD
-	2HkGeftV7Q2H/OF3bL6wmJk2YzPXbN5W6MhtsCoJnaGLV9cF7k8kk4BZOl2HiaP4
-	PFzbnrk+XYdqUBU9+HlzRzVOx1PvMWjiza1FyH89b64CiS6eEff0I1R/bunzoLcN
-	6XzhwlkZa8Iml0g1v+BIj8gMbAwqyhXTb0AotKYdlg==
-X-ME-Sender: <xms:Vv3XY8fbt2IBqgGVrHTkjrDBWJNSu2GaDztG48Nn2AOe-oGBcXupWQ>
-    <xme:Vv3XY-N5J63Zg7m8aCDoJAZQNcnnqxdRLTj1BfPH9jpxGKiBP1T90MmAtSeoBU7_C
-    lUz2mTdELLa1tmJ_d8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Vv3XY9gv9V9KkLwpSifa0TLPB__IYm6CnCIOIkAyB2f0AFQmr3Vlzg>
-    <xmx:Vv3XYx_bZNRMRJlF0EGJvVKSBDQwzUL-xFP7DBHeBXGTPj0hJNI5xw>
-    <xmx:Vv3XY4vqpirxZtAjy-ZRF48dtY_354YE4zvxIkG5n43-tIwVYrODCA>
-    <xmx:V_3XY6IXECQMtB7l3aRnszgL79YWkbLg8mSOJlNtotijItV2xvudgw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 843C8B60086; Mon, 30 Jan 2023 12:24:38 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-106-gfe3ab13a96-fm-20230124.001-gfe3ab13a
-Mime-Version: 1.0
-Message-Id: <3fbab696-2c32-41c6-ac29-86ca302258cb@app.fastmail.com>
-In-Reply-To: <161e4bee-e1c3-4fb1-ab3a-aab5d81796c5@app.fastmail.com>
-References: <Y9Raak4mhdtL0L8e@jernej-laptop>
- <161e4bee-e1c3-4fb1-ab3a-aab5d81796c5@app.fastmail.com>
-Date: Mon, 30 Jan 2023 18:24:19 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8B307C433EF
+	for <soc@kernel.org>; Mon, 30 Jan 2023 22:03:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8B307C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UKmOXF029358;
+	Mon, 30 Jan 2023 22:03:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
+ date : message-id; s=pps0720;
+ bh=A27Es/cKNMb2PQmhdgO4UIsXSiJyWHxfKgzxZPKXfbs=;
+ b=Zegn6obreHGK7BIGk1+x2Gvcn8QDZw5ZKLVglwwxxOpdZ40VgTXsHAX96BF4ohgbFt+Q
+ oEqf5IS67tChw+DjeLktzNtEGkizRlXCcKkrhLfR7v+168Yt2wAZyVGHr4cXou1C4Nwj
+ dPmMILmcN7jBFgS9w3dkHvEnfPqJhwBwqdTDr2CiEdHmgcmlVlrOn1Z3fldbjN+JXZrm
+ ivALOWhKg3pQ12PImJ9Y5J4XWXP7ys9TAmipPQmS4e8YPfiS1onpvg1L4WRUBFmQ7aEr
+ ckdc0j6iiTo9W2I94IvABcBGzRnQFIfeg8rC5K64WbXDPJwjz3ZdCQMFGHIp48rU9h+6 sg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3neh1fuqas-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Jan 2023 22:03:19 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 2426513194;
+	Mon, 30 Jan 2023 22:03:17 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 1A55E806B79;
+	Mon, 30 Jan 2023 22:03:15 +0000 (UTC)
+From: nick.hawkins@hpe.com
 List-Id: <soc.lore.kernel.org>
-To: "Jernej Skrabec" <jernej@kernel.org>, arm <arm@kernel.org>, soc@kernel.org
-Cc: "Chen-Yu Tsai" <wens@csie.org>, "Samuel Holland" <samuel@sholland.org>,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [GIT PULL] Allwinner device tree changes for 6.3
-Content-Type: text/plain
+To: soc@kernel.org, arnd@arndb.de, verdun@hpe.com, nick.hawkins@hpe.com,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v1 0/1] ARM: Correct HPE GXP Register ranges
+Date: Mon, 30 Jan 2023 16:00:55 -0600
+Message-Id: <20230130220056.14349-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-GUID: shxItuureKm-ryzy9TuckhtngJ71ZjBp
+X-Proofpoint-ORIG-GUID: shxItuureKm-ryzy9TuckhtngJ71ZjBp
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 impostorscore=0
+ phishscore=0 spamscore=0 mlxlogscore=890 priorityscore=1501 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300202
 
-On Mon, Jan 30, 2023, at 18:19, Arnd Bergmann wrote:
-> On Sat, Jan 28, 2023, at 00:12, Jernej Skrabec wrote:
->> Hi!
->>
->> Please pull following device tree changes for 6.3. Note that this PR
->> depends on following immutable tag:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git 
->> soc2arch-immutable
->>
->> Let me know if I should split this PR into two, one for ARM and another
->> for RISC-V.
->>
->> Best regards,
->> Jernej
->>
->> The following changes since commit 3af577f9826fdddefac42b35fc5eb3912c5b7d85:
->>
->>   RISC-V: stop directly selecting drivers for SOC_CANAAN (2022-12-27 
->> 18:01:40 +0000)
->>
->> are available in the Git repository at:
->>
->>   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git 
->> tags/sunxi-dt-for-6.3-1
->>
->> for you to fetch changes up to dca36f7b3dd7eb574f0958484d3d21cfd8af2651:
->>
->>   riscv: dts: allwinner: d1: Add power controller node (2023-01-27 
->> 23:21:06 +0100)
->
-> Something looks wrong here, I get an error when pulling this:
->
-> ERROR: commit-id mismatch between pull request and remote
->        msg=dca36f7b3dd7eb574f0958484d3d21cfd8af2651, 
-> remote=3af577f9826fdddefac42b35fc5eb3912c5b7d85
-> Topmost hash is not the same. Expected 
-> dca36f7b3dd7eb574f0958484d3d21cfd8af2651
->
-> Can you check what happened and then either push the correct branch
-> or send a new pull request, depending on which one has the intended
-> commit?
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-nevermind, I see what happened: the script parsed the pull
-request incorrectly and tried to pull the soc2arch-immutable
-tag instead of your tags/sunxi-dt-for-6.3-1 tag.
+The GXP SoC has a large range of registers. This patch will expand the
+registers available to SoC by modifying its device tree file. Initially
+this change was planned to be part of a larger set but feedback
+indicated it should be submitted separately. In the device tree file
+there is a large gap in the ranges of registers available because they
+are reserved.
 
-I can handle that here and fix it up then, it's not your fault.
+Nick Hawkins (1):
+  ARM: dts: hpe: Correct GXP register ranges
 
-Combining the risc-v and arm bits is fine as long as this makes
-sense as a branch overall. If you have too many different things
-in one branch, it makes sense to split it up along some boundary,
-but that does not have to be between architectures, just based
-on what makes the most sensible changelog text in each pull
-request.
+ arch/arm/boot/dts/hpe-gxp.dtsi | 41 +++++++++++++++++-----------------
+ 1 file changed, 20 insertions(+), 21 deletions(-)
 
-     Arnd
+-- 
+2.17.1
+
