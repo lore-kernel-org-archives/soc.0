@@ -1,68 +1,142 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=wYM+=54=monstr.eu=monstr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35959C64ED8
-	for <soc@archiver.kernel.org>; Mon, 30 Jan 2023 22:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 853F5C38142
+	for <soc@archiver.kernel.org>; Tue, 31 Jan 2023 10:56:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E421FC43324; Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CD6F1C433AA;
-	Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675117860;
-	bh=2lMDgtLIuwQZs5AZcTvCBA8CgFVyPumZyt5C5U3dPNE=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Rq5gzj4R3Mg9Zhem9XjQ4RD8kHkfH7ZSoyHTjCUfiRA4Cvz61C41DzRXHbjGOmVmj
-	 LQCuSU96YCcSEVt8oT0VtFybs2I/3YRTRRjEHCqGqriIPboNzD1d79Ctf31UnrIDKD
-	 KUguPfRsW7xn6AMeOObedJbELApyl1VPDc0368ESQra63UVksE69riz5Qm8ZuL6F9Z
-	 y/MEqpknkNcsRWI2+qgLKEpwr0bFy0t8LTd1kRVrPPzvLuZ2DXQ5mG4OzEcWZo3c+S
-	 CaczSY6+CRQ2hhUAtpxjZVmsYMfIW93r6oEnckqOKdEM8m2M6cP6F7A9cNspzT42E6
-	 1AmybYeOYQOdg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B336EE4D014;
-	Mon, 30 Jan 2023 22:31:00 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id 46925C433EF; Tue, 31 Jan 2023 10:56:07 +0000 (UTC)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id EA1D9C433D2
+	for <soc@kernel.org>; Tue, 31 Jan 2023 10:56:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EA1D9C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-ej1-f44.google.com with SMTP id hx15so20856597ejc.11
+        for <soc@kernel.org>; Tue, 31 Jan 2023 02:56:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uxRToB70491st+LdnrmafgQlnLHPgXktyd3RX0RXFig=;
+        b=DTxsOn1HABd1qDaqF4xrpqaZc8ZqlnpjmqAlqKwbSTv3TV/QKo5Oqli0Ok4O6wQZnq
+         pfn0kSoFunz4vMRR/WGeyZf6+SgSswwWnET114nGTAU4cYfW3LXh7zJ0kZw4DFkZYWE7
+         gYv0l+mE8ieZiu+IUtBHhk9Z/J8HxeU/iMWm3cmBcYuiEgSSXhusD0P5cIeV1hj+fVGg
+         K0obVOiTu6IPuYLvPpsjno7Dh6Hcgca9kqbQSaaFm7K2HX8oSVeFR14NJgB/4GhDwVWb
+         drxnli8xxiUEORqT/soG7P8BHy3p0gRjW38XYB/HHIjAkd6cknGoLgE1qrE+iGE6vUQp
+         xuFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uxRToB70491st+LdnrmafgQlnLHPgXktyd3RX0RXFig=;
+        b=KWP8RMXzDWsYgWYOttEce+VrTE7tQT6Q3sPq3bc0xvNlq1C2AopdKNS/16IJ2dR3ZM
+         1e5WB/GGGEiwqefqcbW3o+kkK+2oqPHRQTJ95qW+uHiRI+rCD7LJtLtnr8qKReBqa2S9
+         mVbi0KVFOihDKTjpMH34+6FtVj87U3A7cif6HohSfNeEFbey9RKlSTCNfC1b3dsw10LP
+         yM8/VKCEwQc4kNxfZ0SURQyQm9kHivwcfR5goTebkoceENjWNuhkuFDyImChQTfrTpCZ
+         0f8nXK1QPl1gXevwdufCYBtYPmW4YLPBqVoDf8F5sCNu1BzzBVTifUJvc5SrpiPYDuOn
+         iDMg==
+X-Gm-Message-State: AO0yUKUGqa1GwmPrER0G7fJCktTzxrQ8gEvRVP0L7meG4BAH2WxNmolg
+	R1+1nGztt3CZQhRrjmv2tM5jSU5AsGLm+6sc
+X-Google-Smtp-Source: AK7set80EKGqZC+zoqZBsG9VuTgqF6V0+xOAuhOb4fbZEtx4MSeAiZlMeC3WXr1o+IEFtUIterxr5g==
+X-Received: by 2002:a17:906:e08e:b0:889:1480:d908 with SMTP id gh14-20020a170906e08e00b008891480d908mr2900382ejb.17.1675162561081;
+        Tue, 31 Jan 2023 02:56:01 -0800 (PST)
+Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id e6-20020a1709061e8600b0085e0882cd02sm8317752ejj.92.2023.01.31.02.55.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 02:55:59 -0800 (PST)
+Message-ID: <89d82a7e-6b42-97ce-2912-aa7dec965ff2@monstr.eu>
+Date: Tue, 31 Jan 2023 11:55:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V Devicetrees for v6.3
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <167511786073.29049.12613987127591912160.git-patchwork-notify@kernel.org>
-Date: Mon, 30 Jan 2023 22:31:00 +0000
-References: <Y9LP+Za1h0fkBa58@spud>
-In-Reply-To: <Y9LP+Za1h0fkBa58@spud>
-To: Conor Dooley <conor@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+To: SoC Team <soc@kernel.org>
+Cc: "git (AMD-Xilinx)" <git@amd.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+From: Michal Simek <monstr@monstr.eu>
+Subject: [GIT PULL] arm64: dts: ZynqMP DT changes for v6.3
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
+Hi,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+please pull these DT patches to your tree.
 
-On Thu, 26 Jan 2023 19:09:45 +0000 you wrote:
-> Hey Arnd,
-> 
-> DT stuff here for v6.3! I was kinda hoping to have a VisionFive 2 DT
-> for you, but alas no.
-> The changelog looks a bit odd since it's filled with un-reviewed
-> commits of my own, but they went as a PR to Palmer & are in riscv's
-> for-next too:
-> https://lore.kernel.org/all/167225428483.14530.3368527680488639805.b4-ty@rivosinc.com/
-> They might also pop up as part of the Allwinner DT PR, if the D1 stuff
-> lands for v6.3, which I hope does happen!
-> 
-> [...]
+Thanks,
+Michal
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V Devicetrees for v6.3
-    https://git.kernel.org/soc/soc/c/b453988c59ab
 
-You are awesome, thank you!
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+   https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-dt-for-v6.3
+
+for you to fetch changes up to b993ea2b75fdb0d335487b1b1450c36410585584:
+
+   arm64: dts: zynqmp: Add xlnx prefix to GEM compatible string (2023-01-19 
+14:03:32 +0100)
+
+----------------------------------------------------------------
+arm64: ZynqMP SOC changes for v6.3
+
+- Fix node names to be aligned with dt schema
+- Rename DT overlay files to dtso
+- Add snps,resume-hs-terminations to usb nodes
+- Describe gpio-modepin node
+- Use xlnx prefix for ethernet IP
+
+----------------------------------------------------------------
+Andrew Davis (1):
+       arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
+
+Harini Katakam (1):
+       arm64: dts: zynqmp: Add xlnx prefix to GEM compatible string
+
+Krzysztof Kozlowski (1):
+       arm64: dts: xilinx: align LED node names with dtschema
+
+Michael Grzeschik (1):
+       arm64: zynqmp: Enable hs termination flag for USB dwc3 controller
+
+Michal Simek (2):
+       arm64: xilinx: Fix opp-table-cpu
+       arm64: dts: zynqmp: Remove clock-names from GEM in zynqmp-clk-ccf.dtsi
+
+Piyush Mehta (1):
+       arm64: dts: zynqmp: Add mode-pin GPIO controller DT node
+
+  arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi 
+     |  4 ---
+  arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revA.dts => 
+zynqmp-sck-kv-g-revA.dtso} |  0
+  arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revB.dts => 
+zynqmp-sck-kv-g-revB.dtso} |  0
+  arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts 
+     |  2 +-
+  arch/arm64/boot/dts/xilinx/zynqmp.dtsi 
+     | 28 +++++++++++++-------
+  5 files changed, 20 insertions(+), 14 deletions(-)
+rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revA.dts => 
+zynqmp-sck-kv-g-revA.dtso} (100%)
+rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revB.dts => 
+zynqmp-sck-kv-g-revB.dtso} (100%)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
 
 
