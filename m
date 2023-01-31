@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08666C636CC
-	for <soc@archiver.kernel.org>; Tue, 31 Jan 2023 11:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96309C38142
+	for <soc@archiver.kernel.org>; Tue, 31 Jan 2023 11:13:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BC8EEC4339B; Tue, 31 Jan 2023 11:08:29 +0000 (UTC)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	id 75216C433EF; Tue, 31 Jan 2023 11:13:29 +0000 (UTC)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5BA93C433D2
-	for <soc@kernel.org>; Tue, 31 Jan 2023 11:08:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5BA93C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 40A29C433D2
+	for <soc@kernel.org>; Tue, 31 Jan 2023 11:13:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 40A29C433D2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=monstr.eu
-Received: by mail-ed1-f50.google.com with SMTP id v13so13993942eda.11
-        for <soc@kernel.org>; Tue, 31 Jan 2023 03:08:27 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id k4so35052692eje.1
+        for <soc@kernel.org>; Tue, 31 Jan 2023 03:13:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=monstr-eu.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:subject:from:cc:to:content-language
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nQNJKsEUMULgRJAA6IJz6w60DG2Tc1M9y2m52UHoRDM=;
-        b=RKB10IXv+bX0ej/Ugc4KU/qnZesUNZr33KcOYMQ5N06BNvwvazJWsj+BK7Jxu8g+cT
-         3Trr6an/Omo2A7nkZk1GsHPArScsUBICdRn0S6r47ULuvQaB2A9zE6ix8Gv09+Zpli1q
-         +acDFCujkNDqOZcvdVQSlOqZ7nlUBVraWZLjMBI08/DGWJX4JvaNrtS3/IXWN0KpULs8
-         8v2h3fi1wIv/jAa5n9cXNowepb5yH3E8Uf43mIwaYfbpOVJNQdJ9EMSFM135HdpDstqC
-         90bnC49Ti2RQx7VKoUKoHLUzYrPdH0WWCyEn14sJ9XaNh6K25Z0J3sI/VYN60jlyqiqN
-         eRlA==
+        bh=MmhqSKwbLMTnadViEemiKzjunZ3k+gXB/MWPzgSgSAg=;
+        b=cBUXf5r+KkCjEMDpkwfqlzGWSXrJfQDN5bAslMejEOao7Liwomd/1KPrET6LnLww24
+         hAJTb1QOf/4XyLbcMSqmyZv0GTnqKAxKPLB9xR1sIbkJfcAPQ8sc7x+BOTDZUpZIRoxA
+         KF8GIwsqLoYOi8XVcukmqA5QP0yoziqR0E26ojWeVv9m1WXi2tgx6K6pQQEidbMirOTh
+         FoHeH9UxWPR9UPYEEwovRt+ctAZWs/ZawJQeV1xPM735/x/cUj29RfValSrbvMllMg3J
+         7KzQV8Lojlyfmd6VUjDRagzfq5hIqqhfix+zFjI/xK3zOBJzrI6hF54BMHyUPZuJVfjp
+         IlBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:subject:from:cc:to:content-language
          :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=nQNJKsEUMULgRJAA6IJz6w60DG2Tc1M9y2m52UHoRDM=;
-        b=xxzWN2KKYwyQqSzdfZG/Q1rF+OdDmuxBiluVKVt6oQGoNmmk03xSj08own8vqyCCHW
-         16h4GacnOSpwN15EQqeRI6aaGW1N8yEQy+YMmfHV/TAkVZooPJBfIGrTXzkHI9pGi4z8
-         4nMoGiDPBZFxqoFoajJblH3CfXxT5F7ZTof0CuCWQ63tqb1zFMobq3EmDN3ZkcVwT9oJ
-         5QvRX5fOzekOwBNOzX1ga/Oko4V77HyLL/k5SCVrOHNU9jXG18AkyQxKZZjimR/7B0Kf
-         3aoJ8VCXQYLwduBpma8UPWPpvWIlbAIbqP1XykcLnWOMjTO8bdkvrlh3HuyeXPZ2Rujz
-         leoA==
-X-Gm-Message-State: AO0yUKUxHkFkCr8Vy8s2sD9Xmf+32tV82I3/vhRPIsqQvjLybEdAYQyv
-	8XJEq0QP/woi/prtUdP837E2bP7ykR3cU+gX
-X-Google-Smtp-Source: AK7set8AxHYskWsaIBwB3VZWd4CsFrWvEs/k9ucdV7xIRAT3ybfGjx3xxqUS22zjtGpazCXLkMLZfQ==
-X-Received: by 2002:aa7:d4c5:0:b0:4a2:67e2:6230 with SMTP id t5-20020aa7d4c5000000b004a267e26230mr2281071edr.26.1675163305182;
-        Tue, 31 Jan 2023 03:08:25 -0800 (PST)
+        bh=MmhqSKwbLMTnadViEemiKzjunZ3k+gXB/MWPzgSgSAg=;
+        b=S9ehDTgzP4u2dll2tLHMavR/fTpfRPUn9Q5hxDcOPBx6JIrpKXoJkO73DKvs3QfjYG
+         8tsDfiMWu7yxiPq+76n6sMm4+BWnnWsnv+9P8CZSZ0aPaAv0u5XaJTUPziVEuRjQbQ+w
+         36m7M7bERfH12cLUeG3I1+rutvipIDOCpsuP0GdtXX7vR/kQP8FFJ1r7O2zlk+pjq7Is
+         3FZG73VyuZ+0iPtkak86I46BHohiJBIJ+/h/XgefaGtG6/lyqdZNWSaUbdvZeZh9kWxZ
+         KlUQFicJBww7fKvBfsvNLiXDieLhQfPLqSg0kiIhFmYrcpLzMArqdhh5BLg4Y3tVv/Wv
+         IF5g==
+X-Gm-Message-State: AO0yUKWQ/jvo7YjtTYJtmURq9V8mNr7wRXPGDw4eUck3IeIYBmyhJbeb
+	0Dqbca2lNfLFqg++m/nzPgjHv9cSCgbrg5/a
+X-Google-Smtp-Source: AK7set+8hrPGAYxZIavsqaPrJ/quJsGGtvWPnrOeU1zuZT5gXFDcv/+P2w+cY9GuulZppPPJfaGHMA==
+X-Received: by 2002:a17:906:4912:b0:878:4e83:b058 with SMTP id b18-20020a170906491200b008784e83b058mr21238748ejq.1.1675163606199;
+        Tue, 31 Jan 2023 03:13:26 -0800 (PST)
 Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id p2-20020a05640210c200b00499e5659988sm8055795edu.68.2023.01.31.03.08.23
+        by smtp.gmail.com with ESMTPSA id rh16-20020a17090720f000b0087329ff593fsm8275236ejb.144.2023.01.31.03.13.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 03:08:24 -0800 (PST)
-Message-ID: <42be5129-3ca2-ddbc-ac3b-6448245b61c2@monstr.eu>
-Date: Tue, 31 Jan 2023 12:08:23 +0100
+        Tue, 31 Jan 2023 03:13:25 -0800 (PST)
+Message-ID: <5d7785ca-7fe0-1597-c56a-7a0f4d230db8@monstr.eu>
+Date: Tue, 31 Jan 2023 12:13:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: SoC Team <soc@kernel.org>
-Cc: linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Cc: "git (AMD-Xilinx)" <git@amd.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 From: Michal Simek <monstr@monstr.eu>
-Subject: [GIT PULL] arm64: soc: zynqmp: Xilinx SoC changes for v6.3
+Subject: [GIT PULL] ARM: soc: zynq: Xilinx SoC changes for v6.3
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hi,
 
-please pull these changes to your tree. The most interesting one is from Marek 
-which is adding support for older PMUFW version which didn't handle TAP delay 
-programming for SDHCI properly.
+please pull this one small patch to your tree.
 
 Thanks,
 Michal
@@ -80,36 +79,23 @@ The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
 are available in the Git repository at:
 
-   https://github.com/Xilinx/linux-xlnx.git tags/zynqmp-soc-for-v6.3
+   https://github.com/Xilinx/linux-xlnx.git tags/zynq-soc-for-v6.3
 
-for you to fetch changes up to a4b2e6063cfeaab1160501acfb27e8618a7c693f:
+for you to fetch changes up to 9eedb910a3be0005b88c696a8552c0d4c9937cd4:
 
-   firmware: xilinx: Clear IOCTL_SET_SD_TAPDELAY using PM_MMIO_WRITE (2023-01-05 
-10:18:07 +0100)
-
-----------------------------------------------------------------
-arm64: ZynqMP SoC changes for v6.3
-
-Firmware changes
-- fix memory leak in error path inside notification code
-- trivial comment cleanup
-- add workaround for SD tap delay programming with old PMUFW
+   ARM: zynq: Fix refcount leak in zynq_early_slcr_init (2023-01-05 10:07:43 +0100)
 
 ----------------------------------------------------------------
-Gaosheng Cui (1):
-       driver: soc: xilinx: fix memory leak in xlnx_add_cb_for_notify_event()
+ARM: Zynq SoC changes for v6.3
 
-Marek Vasut (1):
-       firmware: xilinx: Clear IOCTL_SET_SD_TAPDELAY using PM_MMIO_WRITE
+- Fix refcount leak in zynq_early_slcr_init
 
-Michal Simek (1):
-       firmware: xilinx: Remove kernel-doc marking in the code
+----------------------------------------------------------------
+Qiheng Lin (1):
+       ARM: zynq: Fix refcount leak in zynq_early_slcr_init
 
-  drivers/firmware/xilinx/zynqmp.c        | 27 ++++++++++++++++++--
-  drivers/soc/xilinx/xlnx_event_manager.c |  4 ++-
-  drivers/soc/xilinx/zynqmp_pm_domains.c  |  2 +-
-  include/linux/firmware/xlnx-zynqmp.h    |  4 +++
-  4 files changed, 33 insertions(+), 4 deletions(-)
+  arch/arm/mach-zynq/slcr.c | 1 +
+  1 file changed, 1 insertion(+)
 
 -- 
 Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
