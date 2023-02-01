@@ -1,265 +1,177 @@
-Return-Path: <SRS0=7X9i=55=gmail.com=joel.stan@kernel.org>
+Return-Path: <SRS0=BkGW=55=hpe.com=prvs=03963f12ec=clayc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32A4AC38142
-	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 05:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90E9CC05027
+	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 13:29:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0747DC4339C; Wed,  1 Feb 2023 05:17:30 +0000 (UTC)
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 551FDC433EF; Wed,  1 Feb 2023 13:29:34 +0000 (UTC)
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6AE91C433EF
-	for <soc@kernel.org>; Wed,  1 Feb 2023 05:17:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6AE91C433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so866650pjb.1
-        for <soc@kernel.org>; Tue, 31 Jan 2023 21:17:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=TiMf0OJqBSa7ctCNlzH1FXYJRohEDjy9yGiuOzM/lnI=;
-        b=SoUk2Crq0Y6CaouPRbO1tFxWvzkuA3+X62KRjGIi/wZWgGJy1UOryjG51GfdurCx7C
-         ZjQxAgY6Qz/aBkQkR8BMuSxuV9giDMUIf9RhyUrKt6k4Iyce6ipjNSKJIaYX7ZNZwA7e
-         8Yv/uvliSj8/JPg4HfIxOiCM/ErOV+3NIU1PUtNmH1wXLiTR3zvr/NGYYv9CbguAWfCV
-         siyLOBxJiils5nYKMadUaYoxWxLe8WhZeTGIw/CbATj6XCFF2hweXtKUtkboiljx9EZS
-         L44LRjp2yR5q9UWPNdxwWFJR8VhCepLaOQ0G4RxROuZ8z5A8tT5GcMHVbEEsWKBAlxAZ
-         WcyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TiMf0OJqBSa7ctCNlzH1FXYJRohEDjy9yGiuOzM/lnI=;
-        b=0tsH6zMhinAlzTQjOZjPm8uFVX1NFHdtyHfQYOkxS+UUQBU+PE5MWgZdbemTpMFVtq
-         5m1SA4L1dUiezPJol46ayXuSiMQQidVQexUtTMoUEwI5o6+xXUl9Opwfy0Y6PdH2nrF1
-         uRy5oa+DRopFmoZeV4exwb3MVn0i7aYEIT0O5hfDMThd9lJ6gRF7kEs4cDkH/+fnIdyl
-         SiAhbVnNV4c5PoxgvStnYp5O9EaS6I3pYYsEJoB2CH2jgAhGJHnYgLDfNPZc+rRG4+zE
-         EVpNLZw9WDF3Gqi5TNx1Mqfb9iaLvuVaHnpCHCrPLasoWPAlKlJh/BpBfSb68O2LhPkv
-         u5nQ==
-X-Gm-Message-State: AO0yUKWDLtxxQvvm2jBDKH/YRFxNvGkYYmdSn6IzWrgTCct2FQGAl+TU
-	22jIoT9tCpa58dmzu2DF7BCI/A1dxx8=
-X-Google-Smtp-Source: AK7set9ZVqYGSrw2SQDIGz7C7IgkXMmq+ONyj3eK/r6keXWlo8f/8J4tbKG04/Ge2aGwVSrAIGPiTg==
-X-Received: by 2002:a17:902:da92:b0:196:5839:b36a with SMTP id j18-20020a170902da9200b001965839b36amr1951115plx.8.1675228647134;
-        Tue, 31 Jan 2023 21:17:27 -0800 (PST)
-Received: from voyager.ibm.com ([125.63.148.35])
-        by smtp.gmail.com with ESMTPSA id iw6-20020a170903044600b00189f2fdbdd0sm10712798plb.234.2023.01.31.21.17.25
-        for <soc@kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 21:17:26 -0800 (PST)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From: Joel Stanley <joel@jms.id.au>
+	by smtp.kernel.org (Postfix) with ESMTPS id 35711C433D2;
+	Wed,  1 Feb 2023 13:29:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35711C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 311BW5Tr002938;
+	Wed, 1 Feb 2023 13:29:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pps0720; bh=xkWt3LI+YLiu0uf+CzCNT1GpM5RsHrta0JPeh5TPz08=;
+ b=guRn9t86hv/g33fpdJgZJaOOAgM5zF0utjA//qnFfYXy1CdWXaLgHDz+B9uoXW7wm9/R
+ Jc3mWnKY8uruiJiUkdFEbf/x7jdsbP3s12ocgwVWFFfGQaQTyd3ogEgHV54eehrtqpj8
+ jvkJ6LXBOi08p/m3Ca4K2xhvuHoE5+Uaw0bphMI4jwTpxjbUsJOEeXGm78mxVn0rSUAC
+ XdM6xjg2TeVRtF8RU1DRwQQ/HMeCjTAv2PpS4jx80RvIE0cPJyG263oA616F1fCwmDlA
+ /syeD8ETQ7CusGvrFTHE62WSAWwZ6Y8s+ydRMEmeiNZZcSRO52aTlz5eG17djU+ZYl5K Gw== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nfq8dhcu2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Feb 2023 13:29:16 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 2679D1319E;
+	Wed,  1 Feb 2023 13:29:14 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 1 Feb 2023 01:29:12 -1200
+Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
+ via Frontend Transport; Wed, 1 Feb 2023 01:29:12 -1200
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 1 Feb 2023 13:29:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Taw19n6uWR9XYmwKEBy43LFn8eUG+u2tKwXKJ0jY1gAP6ympHwU1AFy2GQrcjj2z9Rvt2qH7RNCC0u5WVB5eFC75ToDvSKJDm51Xb8sPUkZXRCtkA4Jo1uV3O9uIE9VcIxlt92SIcZTC8rH4z0pTHemyZxBVoVGkeVmjgDCHZrMmZmpupLtKcFbFYeaWRhjOtqmDtH2pmH4vHvRIIHR89uj/wG/dV/5I/f/zN8tZVuj+PC04mg3p/TTq2dP3JTUz76YLdL38VsvGSSqAZtgVLvgQl59RIQnVDKXcH+P6lLZYckrwyVG1PniSoitMzUIQAc8lFvuQC7oJYGtXbcahHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xkWt3LI+YLiu0uf+CzCNT1GpM5RsHrta0JPeh5TPz08=;
+ b=CCuuRfQtAV5RWDb6uMa4FRjHGGS23tGS96jE5KItgVUwty5sp5nK/UjRwDsSpZTa1X5j4nRdg2JM7k+AiIGZlIWraErGszzJp2atuTLrFWWjAJ9RXFk3z+YyDmF63HolwI2GKZ0ffU0//6zvKrv7xis8kG8MyNMLxq7RnA4iURaXNqjWg5dABHI1uj5wD+XA5VmeWyAFpjETebMx/LmzbVrgWYN+lf+t1ZDzK+9DuIpGJ/tOmuIhLyD4tkBz+c9DC+UK9oUbLAdik+hURuv9jbZCj5OwWmrEgdu1HAniTRbHNUzfkG8+91omT9aptZGDBTlvB365lYhO1DfLhluKlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:173::21)
+ by SJ0PR84MB1505.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:381::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Wed, 1 Feb
+ 2023 13:29:08 +0000
+Received: from PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c770:7bb6:97df:69e9]) by PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c770:7bb6:97df:69e9%9]) with mapi id 15.20.6043.036; Wed, 1 Feb 2023
+ 13:29:08 +0000
+Date: Wed, 1 Feb 2023 21:28:58 +0800
+From: Clay Chang <clayc@hpe.com>
+To: Andrew Jeffery <andrew@aj.id.au>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: [PATCH] soc: nuvoton: Add SoC info driver for WPCM450
-Date: Wed,  1 Feb 2023 15:47:17 +1030
-Message-Id: <20230201051717.1005938-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.39.1
+CC: <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <verdun@hpe.com>, <nick.hawkins@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>, "Rob
+ Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH 0/5] ARM: Add GXP SROM Support
+Message-ID: <Y9ppGn0rLfnA3vz6@enigma.ccjz.io>
+References: <20230110042533.12894-1-clayc@hpe.com>
+ <7734c165-5918-4677-b8d4-f7d5a3ed37d5@app.fastmail.com>
+ <Y9kbsRsRcOnGS0ps@enigma.ccjz.io>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9kbsRsRcOnGS0ps@enigma.ccjz.io>
+X-ClientProxiedBy: TY2PR02CA0044.apcprd02.prod.outlook.com
+ (2603:1096:404:a6::32) To PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+ (2603:10b6:510:173::21)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR84MB1480:EE_|SJ0PR84MB1505:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4992bf13-9a8c-40e1-2024-08db04584bcc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P1dGGbaNuw63A+eB2nrbE1A3YrvILAKBq0wKXVpAxz++cehxkuzaNZA09zNnahdt6sCtc43Fb6PnNdle6Vd/7hN6HiR6Xx33SYxfjlZUujCKniJutx1IS/M1n7I2KRxOHPoRDK2yKUV5giXISZNzpqHqSBeYDoFgOwNQx4JEScMmRWicNrvEdtSzXG43sHpsswGs1CzukcbefVgVd/pqJHyaLoV8y8vgfVfjUJ5+CR7XY/kHf0l+G6gMBq0ZKNMBgzIlDRYtE8cWPKVqGKPsBjjNVn26JY5wADUnJBt2Idh8eypjv2T3tptxLSzeb5Szsz7nyXhHzVREfN+jvv2e5CKIGY6Ffk2QNQW8I3gFW+vdGlN7Rk52PmkurQyTFBqmVwlEW/d9nqyBI3TuzMvubEepqoqdkbWrlOsAaJyTkQScsK1XVVe4cNxMZ+rMcvkG6DnTfUh7IfR9nWfBevWiRfOoQa0fRfOP2XkRh4Ih60SrsGcWvHWm5H+vrXqkHC9yO4gblGRvTsSs9HOXonqSt9J7YxzHGo6lvE3CflavXu6V/qlv4g18n4zutb74cKNeK/kot2NZFvoz5rUpfX1a2myKpjI5HRbbUXfZVerYrsKY7uNUfLwALbQfpUZog7rR5lQ1j7gxFezAj0KY9/g4HvVjSwTt2ih3BFU7PObf0wM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199018)(5660300002)(8936002)(7416002)(6916009)(4744005)(38100700002)(82960400001)(86362001)(2906002)(54906003)(966005)(478600001)(41300700001)(186003)(6486002)(6512007)(9686003)(66946007)(6506007)(66556008)(316002)(4326008)(66476007)(8676002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ySViE/N8052apUBJUvQ3Q8UZ8a+INE6QMqdfuwIZNa6ZRIsJTPhBWuScDqNX?=
+ =?us-ascii?Q?Rnnm7b+mOoeDSwAEctlxnbTWQR2qgpSHgetjeMHdMhJsiVclIsbG8XqW491D?=
+ =?us-ascii?Q?OaVh3/Vc5XmDKOAjrg/yWp7gUpfkeGNPqdv078J1r83ImaeDRRarNxV2Gx/F?=
+ =?us-ascii?Q?xtYTkCHqAtaD0p2LNbB2CrzRUfl40emVAthB2sGfQM1kMegMQST4LRSLbOFl?=
+ =?us-ascii?Q?NCxYboWkdpPhYYK7/C4gzC6kA7L/F3ZQgqyJG/8bMl7GpRSOT7cmhlbSRazK?=
+ =?us-ascii?Q?YZOAhp9eUK9/011oxL5sabzllgRAhRgUERBGq+h98J9/diyrORIKUcTU7k6O?=
+ =?us-ascii?Q?Ukz9AEDl/WLKhjS2Xsa175p5HxueaXQnzTZqxDBCeQw4aMJ6oz/drFc+Px8y?=
+ =?us-ascii?Q?jn0rxUuwFUY0Ti5alWM0mWKsiKFs2qVQ5TLgaHI+HmzwPFyg2pi00DP9KkvI?=
+ =?us-ascii?Q?lqv5GtSuQq+KGnLxIiyyMRDrQRD1TPZ5rZ4Q4A2T9IlJ1S8xbjkgQz6jNQJr?=
+ =?us-ascii?Q?FfxAo461HB+Js1LtkzbfhdnSeAld4Uq0GnF/+Hz70ggfLMV6o2h5DWzUaptS?=
+ =?us-ascii?Q?Vwl3ZwYmo8sKwDNw3DcWci8S8X0IxxZLMsh3g+j0UCfVYfBIqpmuWKHlhggo?=
+ =?us-ascii?Q?uYfPhOB89xyv/2crcLPxTjJS820ttUwsa46GTvOvEedk4LVjMiCD0fg3egXm?=
+ =?us-ascii?Q?SwUe6MNSVukjJ8sExsOqjJPhdJ3G1uMX4ZiTHzTzl3BoI+YR89QOfnj0ObfK?=
+ =?us-ascii?Q?Yo+nNWa71lC1UtbywRhKbdV6O7ldsz8goNUT/5xTr+UCPn2JPECYuvVXVWK+?=
+ =?us-ascii?Q?xKGTVCkmu48S4pAGMZVxV9hgRx9cYlihVRmxix4ud2LMMX1PWZSBl3oMSkZ5?=
+ =?us-ascii?Q?tjf4JDaX8V3bNhkEJO41mku0xwig7VTdKbuIJf7IIBOQs+NUPPOAx2EGsNQb?=
+ =?us-ascii?Q?IvmTtFfGxba5YLr2D1kdXoMBzGhSt56kidGiFo/d0y7DLfFG9sVvgq93+Jl6?=
+ =?us-ascii?Q?a7FdcTir+EhEuvBUwc3YZcE56HIiG036a0gTyJj2KAuyebMMx/y8TqQk9n6j?=
+ =?us-ascii?Q?NUAzALAvlzgwfp5XtlBdVSIF2lMLhP+nAgN4pZ43E5XLe0n1NN1dQAqz9+JR?=
+ =?us-ascii?Q?sEJf6P6e7GWZ2G6rPowgevyDYks9uV2SpVSlrdBIftRWe/fSf5tNo0E0qqF8?=
+ =?us-ascii?Q?aK2d7/iEgN8Hw2pzE+zliLJjXKDD6ct5asjd78uRkYFEWswLWYXMCOhT3ZSn?=
+ =?us-ascii?Q?PaFQMTItgxn7pyUphZbhEwfbkqUCoU39py3x1pI9/ig4JDUOc4qAfU18hMQK?=
+ =?us-ascii?Q?JkYCpt7l344nqu1kbQIZZpch5dciueQI7uC4TcMUJc0dhyEgfgWcYXwy1EiH?=
+ =?us-ascii?Q?mXV8NVfEWgFyCiVPakAYRbawwbVrtMaUinnikCm65NSNe+vmdFjbbQd2lV+d?=
+ =?us-ascii?Q?NvTjq7szyNg3wytx3bmxtMOBheB40RkEtOa8mOWFMq2whoiCq22d0SqSjqPV?=
+ =?us-ascii?Q?kVs5QOhQdwQA0AYk60TiYoVMp2ZKyCimSva87AGXzdyW7OCMQp1J6u0/p/E8?=
+ =?us-ascii?Q?CUE9GBaHy5fQd7c+ZIiiLJc2dImbik/xzZoLPa+ftS+AM4HwA9Pu6+9JUyFl?=
+ =?us-ascii?Q?wA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4992bf13-9a8c-40e1-2024-08db04584bcc
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1480.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 13:29:08.1170
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XadWIFBv3rrn0U67NuN/qBUPtXzLwy1kX1Aq1vHyHhv+7bxIMdRnAwAR06w2yM61
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1505
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: HN7uJA-cSbA08m5SSTpHd9uYizMPR3Up
+X-Proofpoint-ORIG-GUID: HN7uJA-cSbA08m5SSTpHd9uYizMPR3Up
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_04,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 clxscore=1015 mlxscore=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=517 spamscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010115
 
-From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Hi Andrew,
 
-Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
-information such as the SoC revision.
+On Tue, Jan 31, 2023 at 09:46:42PM +0800, Clay Chang wrote:
+> > I'm trying to understand whether we can find some common ground with
+> > controlling e.g. Aspeed's BMCs LPC peripherals based on Arnd's query[1],
+> > but the description is a bit too vague right now for me to be able to do
+> > that.
+> > 
+> > [1] https://lore.kernel.org/all/66ef9643-b47e-428d-892d-7c1cbd358a5d@app.fastmail.com/
+> > 
+> > Andrew
 
-Usage example:
+I briefly studied driver/soc/aspeed/aspeed-lpc-ctrl.c, and IMO the
+similarity between HPE GXP driver and Aspeed's could be that we both
+expose the LPC memory addresses or registers for configuration purposes.
+However, the functions to be configured could vary. There are a few sets
+of registers that HPE wants to expose for configuration in the future.
 
-  # grep . /sys/devices/soc0/*
-  /sys/devices/soc0/family:Nuvoton NPCM
-  /sys/devices/soc0/revision:A3
-  /sys/devices/soc0/soc_id:WPCM450
+So, do you think there could be some common grounds for genralization?
+Please let me know if you need more information.
 
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Link: https://lore.kernel.org/r/20221031223926.241641-1-j.neuschaefer@gmx.net
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
-Soc maintainers, this has been in -next since the last merge window. I
-think any changes can be done as follow up patches by Jonathan.
-
-Please apply for v6.3.
-
- drivers/soc/nuvoton/wpcm450-soc.c | 109 ++++++++++++++++++++++++++++++
- drivers/soc/Kconfig               |   1 +
- drivers/soc/Makefile              |   1 +
- drivers/soc/nuvoton/Kconfig       |  11 +++
- drivers/soc/nuvoton/Makefile      |   2 +
- 5 files changed, 124 insertions(+)
- create mode 100644 drivers/soc/nuvoton/wpcm450-soc.c
- create mode 100644 drivers/soc/nuvoton/Kconfig
- create mode 100644 drivers/soc/nuvoton/Makefile
-
-diff --git a/drivers/soc/nuvoton/wpcm450-soc.c b/drivers/soc/nuvoton/wpcm450-soc.c
-new file mode 100644
-index 000000000000..c5e0d11c383b
---- /dev/null
-+++ b/drivers/soc/nuvoton/wpcm450-soc.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton WPCM450 SoC Identification
-+ *
-+ * Copyright (C) 2022 Jonathan Neuschäfer
-+ */
-+
-+#include <linux/mfd/syscon.h>
-+#include <linux/of.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/sys_soc.h>
-+
-+#define GCR_PDID	0
-+#define PDID_CHIP(x)	((x) & 0x00ffffff)
-+#define CHIP_WPCM450	0x926450
-+#define PDID_REV(x)	((x) >> 24)
-+
-+struct revision {
-+	u8 number;
-+	const char *name;
-+};
-+
-+static const struct revision revisions[] __initconst = {
-+	{ 0x00, "Z1" },
-+	{ 0x03, "Z2" },
-+	{ 0x04, "Z21" },
-+	{ 0x08, "A1" },
-+	{ 0x09, "A2" },
-+	{ 0x0a, "A3" },
-+	{}
-+};
-+
-+static const char * __init get_revision(unsigned int rev)
-+{
-+	int i;
-+
-+	for (i = 0; revisions[i].name; i++)
-+		if (revisions[i].number == rev)
-+			return revisions[i].name;
-+	return NULL;
-+}
-+
-+static struct soc_device_attribute *wpcm450_attr;
-+static struct soc_device *wpcm450_soc;
-+
-+static int __init wpcm450_soc_init(void)
-+{
-+	struct soc_device_attribute *attr;
-+	struct soc_device *soc;
-+	const char *revision;
-+	struct regmap *gcr;
-+	u32 pdid;
-+	int ret;
-+
-+	if (!of_machine_is_compatible("nuvoton,wpcm450"))
-+		return 0;
-+
-+	gcr = syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr");
-+	if (IS_ERR(gcr))
-+		return PTR_ERR(gcr);
-+	ret = regmap_read(gcr, GCR_PDID, &pdid);
-+	if (ret)
-+		return ret;
-+
-+	if (PDID_CHIP(pdid) != CHIP_WPCM450) {
-+		pr_warn("Unknown chip ID in GCR.PDID: 0x%06x\n", PDID_CHIP(pdid));
-+		return -ENODEV;
-+	}
-+
-+	revision = get_revision(PDID_REV(pdid));
-+	if (!revision) {
-+		pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", PDID_REV(pdid));
-+		return -ENODEV;
-+	}
-+
-+	attr = kzalloc(sizeof(*attr), GFP_KERNEL);
-+	if (!attr)
-+		return -ENOMEM;
-+
-+	attr->family = "Nuvoton NPCM";
-+	attr->soc_id = "WPCM450";
-+	attr->revision = revision;
-+	soc = soc_device_register(attr);
-+	if (IS_ERR(soc)) {
-+		kfree(attr);
-+		pr_warn("Could not register SoC device\n");
-+		return PTR_ERR(soc);
-+	}
-+
-+	wpcm450_soc = soc;
-+	wpcm450_attr = attr;
-+	return 0;
-+}
-+module_init(wpcm450_soc_init);
-+
-+static void __exit wpcm450_soc_exit(void)
-+{
-+	if (wpcm450_soc) {
-+		soc_device_unregister(wpcm450_soc);
-+		wpcm450_soc = NULL;
-+		kfree(wpcm450_attr);
-+	}
-+}
-+module_exit(wpcm450_soc_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Jonathan Neuschäfer");
-+MODULE_DESCRIPTION("Nuvoton WPCM450 SoC Identification driver");
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index 5dbb09f843f7..cd8dba0d316a 100644
---- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -16,6 +16,7 @@ source "drivers/soc/litex/Kconfig"
- source "drivers/soc/loongson/Kconfig"
- source "drivers/soc/mediatek/Kconfig"
- source "drivers/soc/microchip/Kconfig"
-+source "drivers/soc/nuvoton/Kconfig"
- source "drivers/soc/pxa/Kconfig"
- source "drivers/soc/qcom/Kconfig"
- source "drivers/soc/renesas/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index fff513bd522d..a4582afa0c8f 100644
---- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -21,6 +21,7 @@ obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
- obj-y				+= loongson/
- obj-y				+= mediatek/
- obj-y				+= microchip/
-+obj-y				+= nuvoton/
- obj-y				+= pxa/
- obj-y				+= amlogic/
- obj-y				+= qcom/
-diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
-new file mode 100644
-index 000000000000..df46182088ec
---- /dev/null
-+++ b/drivers/soc/nuvoton/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+menuconfig WPCM450_SOC
-+	tristate "Nuvoton WPCM450 SoC driver"
-+	default y if ARCH_WPCM450
-+	select SOC_BUS
-+	help
-+	  Say Y here to compile the SoC information driver for Nuvoton
-+	  WPCM450 SoCs.
-+
-+	  This driver provides information such as the SoC model and
-+	  revision.
-diff --git a/drivers/soc/nuvoton/Makefile b/drivers/soc/nuvoton/Makefile
-new file mode 100644
-index 000000000000..e30317b4e829
---- /dev/null
-+++ b/drivers/soc/nuvoton/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_WPCM450_SOC)	+= wpcm450-soc.o
--- 
-2.39.1
-
+Thanks,
+Clay
