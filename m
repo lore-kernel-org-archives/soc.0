@@ -4,58 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 624D5C636CD
-	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 16:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A55BC6379F
+	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 16:30:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 30570C4339E; Wed,  1 Feb 2023 16:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 118F7C433EF
-	for <soc@kernel.org>; Wed,  1 Feb 2023 16:30:20 +0000 (UTC)
+	id 5C43DC433A0; Wed,  1 Feb 2023 16:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 46A97C4339B;
+	Wed,  1 Feb 2023 16:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675269020;
-	bh=8dX0YdMO/wxP1gvXFGjPFdxwNny1LSUK/GikXYE1+ZQ=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=GnMh7iGE87A3Itz5/DIwZcjBdJW4oCX/AX991JaLjDw4mVTZykJtpEvxM6tTEXNuH
-	 womGtYEGgBDujo2U25qEunYrS67TE4kfVkABxvrRH5ypWH8uYAbHcY9ZXUjK495za0
-	 lUgsqiwvuu9IBJNf5CFuqDECNers7Ws1OMreZ6nPlZpFAchQWRK5BJKicWUnxk58tQ
-	 89wSv3fWiLULYFyk75hUgQ5/I7+p1mKEeCpKnfNVGbQGtZWTRsb0fhigwYWLBoP7bE
-	 MPprdhqkfMeqILEbmjKBE4fMDh7N77Jmuc2JobfnjNeCIS5kY7swjABm1PmQ8YTnQW
-	 ysy1sw4jDcQFw==
+	s=k20201202; t=1675269022;
+	bh=nCcz/LuFVrOfcQCnHV748AokK4td8gi8Rpa+feT4x30=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=AiOYmkXM6nLql5xnvrK2W9FiFdJoJZcmooWxFTEXU63yg9th12UUBDBKFGL6LWjh3
+	 fimxl/fjTkK5UWC1wP7nN9/+ZKXqdBWOTg0Reo+JtBH5IT2nicHUGTuTC+6XI7E33X
+	 XZhSy5WmEdomDalqqcCwIgd360qOkJVNo4G4K7zeJ/tHqGYktYUQexJRr39z+dXYW7
+	 FTGjHZ9RjzEzTPEZ+l2wtLmkO4yPa/7L4htvkMeQ4MmQS0Wf1ytd+ISJac0bLSUNlW
+	 ziCPByjn3ilm5dCWD5aWXr0bQhDpYk2Y3vyJLW3SXEVLnkHQ71tsHdvkznY/w26q07
+	 7SScfp4wSxCCw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DF9CBC4314C;
-	Wed,  1 Feb 2023 16:30:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33000E501F1;
+	Wed,  1 Feb 2023 16:30:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL 1/5] Broadcom defconfig changes for 6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167526901980.23236.1881605249119630613.git-patchwork-summary@kernel.org>
-Date: Wed, 01 Feb 2023 16:30:19 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+ <167526902220.23236.14688798836739567944.git-patchwork-notify@kernel.org>
+Date: Wed, 01 Feb 2023 16:30:22 +0000
+References: <20230128193823.1628716-1-f.fainelli@gmail.com>
+In-Reply-To: <20230128193823.1628716-1-f.fainelli@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (arm/fixes):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: MAINTAINERS: Update entry for MediaTek SoC support
-  Submitter: Matthias Brugger <matthias.bgg@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=717752
-  Lore link: https://lore.kernel.org/r/20230201152256.19514-1-matthias.bgg@kernel.org
+On Sat, 28 Jan 2023 11:38:23 -0800 you wrote:
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> 
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.3/defconfig
+> 
+> [...]
 
-Patch: ARM: dts: wpcm450: Add nuvoton,shm = <&shm> to FIU node
-  Submitter: Joel Stanley <joel@jms.id.au>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=717579
-  Lore link: https://lore.kernel.org/r/20230201044158.962417-1-joel@jms.id.au
+Here is the summary with links:
+  - [GIT,PULL,1/5] Broadcom defconfig changes for 6.3
+    https://git.kernel.org/soc/soc/c/7d576289b276
+  - [GIT,PULL,2/5] Broadcom devicetree changes for 6.3
+    (no matching commit)
+  - [GIT,PULL,3/5] Broadcom devicetree-arm64 changes for 6.3
+    (no matching commit)
+  - [GIT,PULL,4/5] Broadcom drivers changes for 6.3
+    (no matching commit)
+  - [GIT,PULL,5/5] Broadcom soc changes for 6.3
+    https://git.kernel.org/soc/soc/c/521d844dc85a
 
-
-Total patches: 2
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
