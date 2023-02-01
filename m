@@ -1,120 +1,98 @@
-Return-Path: <SRS0=vU2e=54=arm.com=andre.przywara@kernel.org>
+Return-Path: <SRS0=7X9i=55=gmail.com=joel.stan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CF74C38142
-	for <soc@archiver.kernel.org>; Tue, 31 Jan 2023 22:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4277DC05027
+	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 04:42:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2CF5FC4339B; Tue, 31 Jan 2023 22:54:50 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id D75DEC433D2;
-	Tue, 31 Jan 2023 22:54:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D75DEC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32C8F2F4;
-	Tue, 31 Jan 2023 14:55:29 -0800 (PST)
-Received: from slackpad.lan (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B82343F71E;
-	Tue, 31 Jan 2023 14:54:44 -0800 (PST)
-Date: Tue, 31 Jan 2023 22:52:53 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Bin Liu <b-liu@ti.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	id 0C1A7C4339B; Wed,  1 Feb 2023 04:42:09 +0000 (UTC)
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id E77F8C433EF
+	for <soc@kernel.org>; Wed,  1 Feb 2023 04:42:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E77F8C433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id b5so10035852plz.5
+        for <soc@kernel.org>; Tue, 31 Jan 2023 20:42:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=OLY0/56VwDeFq1ZitJffXPUetvy2eLlC/+PytyLhzt0=;
+        b=YmD+vTG01LRJhTpAWTB2altxwukYJbZr/JycF2LQdeO2p+fv1TmLOTTITgAO/Kc8W3
+         jZJpy23gBq1AmAajALWw4j3TRopOoaHfqpIKbIJhVMRvUu0JMUEKkm/NAgsv8McSUebP
+         cym5I+PXfTMmdF5/mb4urVLyLmHG4+oeTN0g5isO2WzDLGtCFF+av4jgCXOkBNNw6Z0u
+         tss9LWcc/45NBSlwZaokPem0rTScf3OD81b6HrcmdaJ5rzKCyIvFJsAYLf/Ouhuj7N85
+         be4RNITJxMfNhEaUv2WHlNoUjf/AF9wZtrZtbqsFOx1LwitipHByy0V9pBu8ajEhL0ut
+         UURw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OLY0/56VwDeFq1ZitJffXPUetvy2eLlC/+PytyLhzt0=;
+        b=M0bopFJn9kz9IC6eHyFKrGWA+z5jZVHC4tw1Bmy+DBT7b5AamnTRNhChjNxXo04UXX
+         T5CrrDgplRWwDPd05l0XjojnmGBIdlf1eJP5ruqW59ygGvD9AGH8lBe8Lod/17RZYVNC
+         EgK2QWlVDChb723GstTRB/9qdm/ti0Es4ipPZtIxNdWDXZvotV4YfBvQ8pJa8OTByDsD
+         KNfc4XsJnRRSuWg0SLjMWHopUqcpUhDPbYNHtVBzvQHZKsiqGr5+lTK5Dg7Nak1Jix0j
+         3IuC9CB2ccPWl8wprM8MucYk02hG4OJgXCpiGJ8/x1gkhwBOYBkLCwFKlIjZilUmFjJQ
+         8irw==
+X-Gm-Message-State: AO0yUKXx4Q93uOt7b9/b0r4AI2/p+pA5EdtTnJO7p1Vq+hcSYDREcNNv
+	Oktjah/xzqjecFE+1IalF06Q5mnKyzE=
+X-Google-Smtp-Source: AK7set9TKs0QJ77vstsWpx3KnoqZcUEuIfNWhVJ3bTdyrg6xMZKwC5hTpjatCrVAbdApWxh0xlP4HQ==
+X-Received: by 2002:a17:90b:1809:b0:22c:6230:ef21 with SMTP id lw9-20020a17090b180900b0022c6230ef21mr712055pjb.33.1675226526646;
+        Tue, 31 Jan 2023 20:42:06 -0800 (PST)
+Received: from voyager.ibm.com (pa49-178-126-220.pa.nsw.optusnet.com.au. [49.178.126.220])
+        by smtp.gmail.com with ESMTPSA id h15-20020a17090a054f00b002276ba8fb71sm299403pjf.25.2023.01.31.20.42.04
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 20:42:06 -0800 (PST)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Icenowy Zheng <uwu@icenowy.me>,
- devicetree@vger.kernel.org, soc@kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 02/11] usb: musb: sunxi: add support for the F1C100s
- MUSB controller
-Message-ID: <20230131225253.04369efc@slackpad.lan>
-In-Reply-To: <20230111015332.172021-3-andre.przywara@arm.com>
-References: <20230111015332.172021-1-andre.przywara@arm.com>
-	<20230111015332.172021-3-andre.przywara@arm.com>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+To: soc@kernel.org
+Subject: [PATCH] ARM: dts: wpcm450: Add nuvoton,shm = <&shm> to FIU node
+Date: Wed,  1 Feb 2023 15:11:58 +1030
+Message-Id: <20230201044158.962417-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 11 Jan 2023 01:53:23 +0000
-Andre Przywara <andre.przywara@arm.com> wrote:
+From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-Hi Bin, Greg,
+The Flash Interface Unit (FIU) should have a reference to the Shared
+Memory controller (SHM) so that flash access from the host (x86 computer
+managed by the WPCM450 BMC) can be blocked during flash access by the
+FIU driver.
 
-> From: Icenowy Zheng <uwu@icenowy.me>
-> 
-> The suniv SoC has a MUSB controller like the one in A33, but with a SRAM
-> region to be claimed.
-> 
-> Add support for it.
+Fixes: 38abcb0d68767 ("ARM: dts: wpcm450: Add FIU SPI controller node")
+Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Link: https://lore.kernel.org/r/20230129112611.1176517-1-j.neuschaefer@gmx.net
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+Hi soc maintainers, please queue this as a fix for v6.2 if possible. If
+you would prefer not then it's fine to go in for v6.3.
 
-is there any chance you could take this patch (and the next one,
-ideally) through your tree? And not sure if the binding patch (01/11)
-should also go this way?
-Patch 03/11 is a cleanup, so is somewhat optional, but Jernej acked
-that recently.
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-The original series [1] is now almost three years old, and the whole
-series was mostly ready in the previous cycle already, but got stuck
-in some dependency chain, which should now be solved, since the PHY
-patch series [2] made it into -next more than two weeks ago.
-
-This would help to unblock the rest of this series, which are DT
-patches only.
-
-Many thanks, and let me know if there is something left for me to do.
-
-Cheers,
-Andre
-
-[1]
-https://patchwork.kernel.org/project/linux-usb/cover/20200309204326.27403-1-thirtythreeforty@gmail.com/
-[2] https://lore.kernel.org/linux-arm-kernel/Y8BFwPZ0DRGImo5O@matsya/
-
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  drivers/usb/musb/sunxi.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
-> index 7f9a999cd5ff1..4b368d16a73ad 100644
-> --- a/drivers/usb/musb/sunxi.c
-> +++ b/drivers/usb/musb/sunxi.c
-> @@ -722,14 +722,17 @@ static int sunxi_musb_probe(struct platform_device *pdev)
->  	INIT_WORK(&glue->work, sunxi_musb_work);
->  	glue->host_nb.notifier_call = sunxi_musb_host_notifier;
->  
-> -	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb"))
-> +	if (of_device_is_compatible(np, "allwinner,sun4i-a10-musb") ||
-> +	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
->  		set_bit(SUNXI_MUSB_FL_HAS_SRAM, &glue->flags);
-> +	}
->  
->  	if (of_device_is_compatible(np, "allwinner,sun6i-a31-musb"))
->  		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
->  
->  	if (of_device_is_compatible(np, "allwinner,sun8i-a33-musb") ||
-> -	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb")) {
-> +	    of_device_is_compatible(np, "allwinner,sun8i-h3-musb") ||
-> +	    of_device_is_compatible(np, "allwinner,suniv-f1c100s-musb")) {
->  		set_bit(SUNXI_MUSB_FL_HAS_RESET, &glue->flags);
->  		set_bit(SUNXI_MUSB_FL_NO_CONFIGDATA, &glue->flags);
->  	}
-> @@ -815,6 +818,7 @@ static const struct of_device_id sunxi_musb_match[] = {
->  	{ .compatible = "allwinner,sun6i-a31-musb", },
->  	{ .compatible = "allwinner,sun8i-a33-musb", },
->  	{ .compatible = "allwinner,sun8i-h3-musb", },
-> +	{ .compatible = "allwinner,suniv-f1c100s-musb", },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, sunxi_musb_match);
+diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
+index b637241316bb..fd671c7a1e5d 100644
+--- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
++++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
+@@ -480,6 +480,7 @@ fiu: spi-controller@c8000000 {
+ 			reg = <0xc8000000 0x1000>, <0xc0000000 0x4000000>;
+ 			reg-names = "control", "memory";
+ 			clocks = <&clk 0>;
++			nuvoton,shm = <&shm>;
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.39.1
 
