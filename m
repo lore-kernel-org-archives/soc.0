@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A070CC05027
-	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 05:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32A4AC38142
+	for <soc@archiver.kernel.org>; Wed,  1 Feb 2023 05:17:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 62714C433A0; Wed,  1 Feb 2023 05:15:46 +0000 (UTC)
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	id 0747DC4339C; Wed,  1 Feb 2023 05:17:30 +0000 (UTC)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3CA4AC4339B
-	for <soc@kernel.org>; Wed,  1 Feb 2023 05:15:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3CA4AC4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id 6AE91C433EF
+	for <soc@kernel.org>; Wed,  1 Feb 2023 05:17:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6AE91C433EF
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so862572pjb.1
-        for <soc@kernel.org>; Tue, 31 Jan 2023 21:15:44 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so866650pjb.1
+        for <soc@kernel.org>; Tue, 31 Jan 2023 21:17:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:to
          :from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=XU7B2HodrmZ+2U0B9nn/Gxwop5Fsqw3mGRGEIhjxZQU=;
-        b=oie8loXX31obAlC0/4l2TNIl9v7iBGZA4wruGWa10n5/1hul/7A2WjubmchbSgMlbK
-         z8VoCZXn6/T9hFUpHsJq5AiyQafid6dH59oK02ifWPAEJ5B91uYv10wFsCXLtx4B/+f6
-         yO+2IsxwG9Tiy10E11VwJoLENCZMAOd0FYssLuiLM5c4ZwqAzqN11IfBiMcDN8h37Gzt
-         F9j9u9RDheBo9DWo8gpwcBnFFcVqFe1xj7Jec0Zx5myIoYxLM8XYMQMYhq1fgiB8a7RN
-         /BCycG+13+eLeFwH6TltVbX/qovhH1ru8GPhhUKG/Ataq8GLZmA1y2bApBDNAxGG1bm9
-         Ywdw==
+        bh=TiMf0OJqBSa7ctCNlzH1FXYJRohEDjy9yGiuOzM/lnI=;
+        b=SoUk2Crq0Y6CaouPRbO1tFxWvzkuA3+X62KRjGIi/wZWgGJy1UOryjG51GfdurCx7C
+         ZjQxAgY6Qz/aBkQkR8BMuSxuV9giDMUIf9RhyUrKt6k4Iyce6ipjNSKJIaYX7ZNZwA7e
+         8Yv/uvliSj8/JPg4HfIxOiCM/ErOV+3NIU1PUtNmH1wXLiTR3zvr/NGYYv9CbguAWfCV
+         siyLOBxJiils5nYKMadUaYoxWxLe8WhZeTGIw/CbATj6XCFF2hweXtKUtkboiljx9EZS
+         L44LRjp2yR5q9UWPNdxwWFJR8VhCepLaOQ0G4RxROuZ8z5A8tT5GcMHVbEEsWKBAlxAZ
+         WcyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:to
          :from:sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XU7B2HodrmZ+2U0B9nn/Gxwop5Fsqw3mGRGEIhjxZQU=;
-        b=nse2R0oxL8b+FIro/1QOl35J9nPtagUo10jtfnHDzBn61CiAore6HsCZZAEb7eYxsu
-         elJ42NUQXy6dA1ZIzkAeRDk3rFOEEqrk7Ra+13UN1DZSk8LVGaNwqA3QjUGtCQnne27f
-         9SAgWH44nxvr/mz0XXvOWi2SKjxupuOZmXQNv32+nW9bmz4BIdTkFziMfJGL/mNrDrAW
-         5dJ7jrZ8dhN0/Ewxdw1wUUcqKVqxNc1chhU4vKlFcC8Tr+XK8zJAyGkaKs8YiW9GS4Zm
-         iWbfJbh8WnzXiOAH7fAmPmT2IHmnYWdlpyK9RFqplLRwrKAxOo0lrnjsPAw+SGSI3Gfl
-         N3rA==
-X-Gm-Message-State: AO0yUKV2RtHUCJzA0uXQN3wXANQszfxPCEOiCFklMpCOoekFA2SBq4E5
-	Ank4Q3xtbn5Iznkvb6gxzaPD2iQdQjk=
-X-Google-Smtp-Source: AK7set+nX6P0+x9gFYRBwNZUOjj3Q0xioaQh0/B4+bC5E7LfzsoDZP1smWvslxQ8T9Wj7dCdCKdMlg==
-X-Received: by 2002:a05:6a20:1aa5:b0:be:b878:6d71 with SMTP id ci37-20020a056a201aa500b000beb8786d71mr1155038pzb.7.1675228542829;
-        Tue, 31 Jan 2023 21:15:42 -0800 (PST)
+        bh=TiMf0OJqBSa7ctCNlzH1FXYJRohEDjy9yGiuOzM/lnI=;
+        b=0tsH6zMhinAlzTQjOZjPm8uFVX1NFHdtyHfQYOkxS+UUQBU+PE5MWgZdbemTpMFVtq
+         5m1SA4L1dUiezPJol46ayXuSiMQQidVQexUtTMoUEwI5o6+xXUl9Opwfy0Y6PdH2nrF1
+         uRy5oa+DRopFmoZeV4exwb3MVn0i7aYEIT0O5hfDMThd9lJ6gRF7kEs4cDkH/+fnIdyl
+         SiAhbVnNV4c5PoxgvStnYp5O9EaS6I3pYYsEJoB2CH2jgAhGJHnYgLDfNPZc+rRG4+zE
+         EVpNLZw9WDF3Gqi5TNx1Mqfb9iaLvuVaHnpCHCrPLasoWPAlKlJh/BpBfSb68O2LhPkv
+         u5nQ==
+X-Gm-Message-State: AO0yUKWDLtxxQvvm2jBDKH/YRFxNvGkYYmdSn6IzWrgTCct2FQGAl+TU
+	22jIoT9tCpa58dmzu2DF7BCI/A1dxx8=
+X-Google-Smtp-Source: AK7set9ZVqYGSrw2SQDIGz7C7IgkXMmq+ONyj3eK/r6keXWlo8f/8J4tbKG04/Ge2aGwVSrAIGPiTg==
+X-Received: by 2002:a17:902:da92:b0:196:5839:b36a with SMTP id j18-20020a170902da9200b001965839b36amr1951115plx.8.1675228647134;
+        Tue, 31 Jan 2023 21:17:27 -0800 (PST)
 Received: from voyager.ibm.com ([125.63.148.35])
-        by smtp.gmail.com with ESMTPSA id s5-20020a637705000000b004da425922c6sm9452595pgc.74.2023.01.31.21.15.40
+        by smtp.gmail.com with ESMTPSA id iw6-20020a170903044600b00189f2fdbdd0sm10712798plb.234.2023.01.31.21.17.25
         for <soc@kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 21:15:41 -0800 (PST)
+        Tue, 31 Jan 2023 21:17:26 -0800 (PST)
 Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
 From: Joel Stanley <joel@jms.id.au>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Subject: [PATCH] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
-Date: Wed,  1 Feb 2023 15:45:34 +1030
-Message-Id: <20230201051534.1005847-1-joel@jms.id.au>
+Subject: [PATCH] soc: nuvoton: Add SoC info driver for WPCM450
+Date: Wed,  1 Feb 2023 15:47:17 +1030
+Message-Id: <20230201051717.1005938-1-joel@jms.id.au>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -65,250 +65,201 @@ Content-Transfer-Encoding: 8bit
 
 From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-This defconfig aims to offer a reasonable set of defaults for all
-systems running on a Nuvoton WPCM450 chip.
+Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+information such as the SoC revision.
+
+Usage example:
+
+  # grep . /sys/devices/soc0/*
+  /sys/devices/soc0/family:Nuvoton NPCM
+  /sys/devices/soc0/revision:A3
+  /sys/devices/soc0/soc_id:WPCM450
 
 Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 Reviewed-by: Joel Stanley <joel@jms.id.au>
-Link: https://lore.kernel.org/r/20230129041547.942335-1-j.neuschaefer@gmx.net
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Link: https://lore.kernel.org/r/20221031223926.241641-1-j.neuschaefer@gmx.net
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
-Soc maintainers, please queue for v6.3
+Soc maintainers, this has been in -next since the last merge window. I
+think any changes can be done as follow up patches by Jonathan.
 
- MAINTAINERS                        |   1 +
- arch/arm/configs/wpcm450_defconfig | 211 +++++++++++++++++++++++++++++
- 2 files changed, 212 insertions(+)
- create mode 100644 arch/arm/configs/wpcm450_defconfig
+Please apply for v6.3.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f61eb221415b..4cb2141def3e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2610,6 +2610,7 @@ S:	Maintained
- W:	https://github.com/neuschaefer/wpcm450/wiki
- F:	Documentation/devicetree/bindings/*/*wpcm*
- F:	arch/arm/boot/dts/nuvoton-wpcm450*
-+F:	arch/arm/configs/wpcm450_defconfig
- F:	arch/arm/mach-npcm/wpcm450.c
- F:	drivers/*/*/*wpcm*
- F:	drivers/*/*wpcm*
-diff --git a/arch/arm/configs/wpcm450_defconfig b/arch/arm/configs/wpcm450_defconfig
+ drivers/soc/nuvoton/wpcm450-soc.c | 109 ++++++++++++++++++++++++++++++
+ drivers/soc/Kconfig               |   1 +
+ drivers/soc/Makefile              |   1 +
+ drivers/soc/nuvoton/Kconfig       |  11 +++
+ drivers/soc/nuvoton/Makefile      |   2 +
+ 5 files changed, 124 insertions(+)
+ create mode 100644 drivers/soc/nuvoton/wpcm450-soc.c
+ create mode 100644 drivers/soc/nuvoton/Kconfig
+ create mode 100644 drivers/soc/nuvoton/Makefile
+
+diff --git a/drivers/soc/nuvoton/wpcm450-soc.c b/drivers/soc/nuvoton/wpcm450-soc.c
 new file mode 100644
-index 000000000000..45483deab034
+index 000000000000..c5e0d11c383b
 --- /dev/null
-+++ b/arch/arm/configs/wpcm450_defconfig
-@@ -0,0 +1,211 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=19
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_PROFILING=y
-+# CONFIG_ARCH_MULTI_V7 is not set
-+CONFIG_ARCH_NPCM=y
-+CONFIG_ARCH_WPCM450=y
-+CONFIG_CPU_DCACHE_WRITETHROUGH=y
-+CONFIG_AEABI=y
-+CONFIG_UACCESS_WITH_MEMCPY=y
-+# CONFIG_ATAGS is not set
-+CONFIG_ARM_APPENDED_DTB=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_KPROBES=y
-+CONFIG_JUMP_LABEL=y
-+CONFIG_STRICT_KERNEL_RWX=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_PACKET_DIAG=y
-+CONFIG_UNIX=y
-+CONFIG_UNIX_DIAG=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_NET_DSA=y
-+CONFIG_NET_DSA_TAG_DSA=y
-+CONFIG_NET_DSA_TAG_EDSA=y
-+CONFIG_NET_DSA_TAG_TRAILER=y
-+CONFIG_NET_PKTGEN=m
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_SPI_NOR=y
-+CONFIG_MTD_UBI=y
-+CONFIG_MTD_UBI_FASTMAP=y
-+CONFIG_MTD_UBI_BLOCK=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_SRAM=y
-+CONFIG_EEPROM_AT24=y
-+CONFIG_SCSI=y
-+# CONFIG_SCSI_PROC_FS is not set
-+# CONFIG_SCSI_LOWLEVEL is not set
-+CONFIG_NETDEVICES=y
-+# CONFIG_NET_VENDOR_ALACRITECH is not set
-+# CONFIG_NET_VENDOR_AMAZON is not set
-+# CONFIG_NET_VENDOR_AQUANTIA is not set
-+# CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CADENCE is not set
-+# CONFIG_NET_VENDOR_CAVIUM is not set
-+# CONFIG_NET_VENDOR_CIRRUS is not set
-+# CONFIG_NET_VENDOR_CORTINA is not set
-+# CONFIG_NET_VENDOR_EZCHIP is not set
-+# CONFIG_NET_VENDOR_FARADAY is not set
-+# CONFIG_NET_VENDOR_GOOGLE is not set
-+# CONFIG_NET_VENDOR_HISILICON is not set
-+# CONFIG_NET_VENDOR_HUAWEI is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MELLANOX is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_NI is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_NETRONOME is not set
-+# CONFIG_NET_VENDOR_PENSANDO is not set
-+# CONFIG_NET_VENDOR_QUALCOMM is not set
-+# CONFIG_NET_VENDOR_RENESAS is not set
-+# CONFIG_NET_VENDOR_ROCKER is not set
-+# CONFIG_NET_VENDOR_SAMSUNG is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
-+# CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_SOCIONEXT is not set
-+# CONFIG_NET_VENDOR_STMICRO is not set
-+# CONFIG_NET_VENDOR_SYNOPSYS is not set
-+# CONFIG_NET_VENDOR_VIA is not set
-+# CONFIG_NET_VENDOR_WIZNET is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+CONFIG_REALTEK_PHY=y
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_FF_MEMLESS=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_KEYBOARD_QT1070=m
-+CONFIG_KEYBOARD_GPIO=y
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_LEGACY_PTY_COUNT=16
-+# CONFIG_LEGACY_TIOCSTI is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_NR_UARTS=6
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=6
-+CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_MANY_PORTS=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_NPCM7XX_KCS_IPMI_BMC=y
-+CONFIG_IPMI_KCS_BMC_CDEV_IPMI=y
-+CONFIG_IPMI_KCS_BMC_SERIO=y
-+CONFIG_HW_RANDOM=y
-+# CONFIG_HW_RANDOM_NPCM is not set
-+CONFIG_I2C=y
-+# CONFIG_I2C_COMPAT is not set
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_MUX=y
-+CONFIG_I2C_NPCM=y
-+CONFIG_SPI=y
-+CONFIG_SPI_WPCM_FIU=y
-+CONFIG_SPI_NPCM_PSPI=y
-+CONFIG_PINCTRL_SINGLE=y
-+CONFIG_PINCTRL_WPCM450=y
-+CONFIG_POWER_SUPPLY=y
-+CONFIG_SENSORS_NPCM7XX=y
-+# CONFIG_THERMAL is not set
-+CONFIG_WATCHDOG=y
-+CONFIG_NPCM7XX_WATCHDOG=y
-+CONFIG_MFD_SYSCON=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_FB=y
-+CONFIG_FB_MODE_HELPERS=y
-+# CONFIG_HID is not set
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_UDC=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_CONFIGFS=y
-+CONFIG_USB_CONFIGFS_SERIAL=y
-+CONFIG_USB_CONFIGFS_ACM=y
-+CONFIG_USB_CONFIGFS_EEM=y
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
-+CONFIG_USB_CONFIGFS_F_FS=y
-+CONFIG_USB_CONFIGFS_F_HID=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+CONFIG_DMADEVICES=y
-+CONFIG_SYNC_FILE=y
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_STAGING=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_PWM=y
-+CONFIG_GENERIC_PHY=y
-+CONFIG_PECI=y
-+CONFIG_PECI_CPU=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_SQUASHFS=y
-+CONFIG_SQUASHFS_XZ=y
-+CONFIG_SQUASHFS_ZSTD=y
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_CODEPAGE_850=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_ISO8859_2=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_KEYS=y
-+CONFIG_HARDENED_USERCOPY=y
-+CONFIG_FORTIFY_SOURCE=y
-+CONFIG_CRYPTO_RSA=y
-+CONFIG_CRYPTO_AES=y
-+CONFIG_CRYPTO_CBC=m
-+CONFIG_CRYPTO_PCBC=m
-+CONFIG_CRYPTO_CCM=y
-+CONFIG_CRYPTO_GCM=y
-+CONFIG_CRYPTO_CMAC=y
-+CONFIG_CRYPTO_SHA256=y
-+CONFIG_ASYMMETRIC_KEY_TYPE=y
-+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
-+CONFIG_X509_CERTIFICATE_PARSER=y
-+CONFIG_PKCS7_MESSAGE_PARSER=y
-+CONFIG_SYSTEM_TRUSTED_KEYRING=y
-+CONFIG_CRC_CCITT=y
-+CONFIG_CRC_ITU_T=m
-+CONFIG_LIBCRC32C=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_DEBUG_PREEMPT is not set
-+# CONFIG_FTRACE is not set
-+CONFIG_IO_STRICT_DEVMEM=y
-+CONFIG_DEBUG_USER=y
-+CONFIG_DEBUG_LL=y
-+CONFIG_DEBUG_LL_UART_8250=y
-+CONFIG_DEBUG_UART_PHYS=0xb8000000
-+CONFIG_DEBUG_UART_VIRT=0x0ff000000
-+CONFIG_DEBUG_UART_8250_WORD=y
-+CONFIG_EARLY_PRINTK=y
++++ b/drivers/soc/nuvoton/wpcm450-soc.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Nuvoton WPCM450 SoC Identification
++ *
++ * Copyright (C) 2022 Jonathan Neuschäfer
++ */
++
++#include <linux/mfd/syscon.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++#include <linux/sys_soc.h>
++
++#define GCR_PDID	0
++#define PDID_CHIP(x)	((x) & 0x00ffffff)
++#define CHIP_WPCM450	0x926450
++#define PDID_REV(x)	((x) >> 24)
++
++struct revision {
++	u8 number;
++	const char *name;
++};
++
++static const struct revision revisions[] __initconst = {
++	{ 0x00, "Z1" },
++	{ 0x03, "Z2" },
++	{ 0x04, "Z21" },
++	{ 0x08, "A1" },
++	{ 0x09, "A2" },
++	{ 0x0a, "A3" },
++	{}
++};
++
++static const char * __init get_revision(unsigned int rev)
++{
++	int i;
++
++	for (i = 0; revisions[i].name; i++)
++		if (revisions[i].number == rev)
++			return revisions[i].name;
++	return NULL;
++}
++
++static struct soc_device_attribute *wpcm450_attr;
++static struct soc_device *wpcm450_soc;
++
++static int __init wpcm450_soc_init(void)
++{
++	struct soc_device_attribute *attr;
++	struct soc_device *soc;
++	const char *revision;
++	struct regmap *gcr;
++	u32 pdid;
++	int ret;
++
++	if (!of_machine_is_compatible("nuvoton,wpcm450"))
++		return 0;
++
++	gcr = syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr");
++	if (IS_ERR(gcr))
++		return PTR_ERR(gcr);
++	ret = regmap_read(gcr, GCR_PDID, &pdid);
++	if (ret)
++		return ret;
++
++	if (PDID_CHIP(pdid) != CHIP_WPCM450) {
++		pr_warn("Unknown chip ID in GCR.PDID: 0x%06x\n", PDID_CHIP(pdid));
++		return -ENODEV;
++	}
++
++	revision = get_revision(PDID_REV(pdid));
++	if (!revision) {
++		pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", PDID_REV(pdid));
++		return -ENODEV;
++	}
++
++	attr = kzalloc(sizeof(*attr), GFP_KERNEL);
++	if (!attr)
++		return -ENOMEM;
++
++	attr->family = "Nuvoton NPCM";
++	attr->soc_id = "WPCM450";
++	attr->revision = revision;
++	soc = soc_device_register(attr);
++	if (IS_ERR(soc)) {
++		kfree(attr);
++		pr_warn("Could not register SoC device\n");
++		return PTR_ERR(soc);
++	}
++
++	wpcm450_soc = soc;
++	wpcm450_attr = attr;
++	return 0;
++}
++module_init(wpcm450_soc_init);
++
++static void __exit wpcm450_soc_exit(void)
++{
++	if (wpcm450_soc) {
++		soc_device_unregister(wpcm450_soc);
++		wpcm450_soc = NULL;
++		kfree(wpcm450_attr);
++	}
++}
++module_exit(wpcm450_soc_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Jonathan Neuschäfer");
++MODULE_DESCRIPTION("Nuvoton WPCM450 SoC Identification driver");
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index 5dbb09f843f7..cd8dba0d316a 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -16,6 +16,7 @@ source "drivers/soc/litex/Kconfig"
+ source "drivers/soc/loongson/Kconfig"
+ source "drivers/soc/mediatek/Kconfig"
+ source "drivers/soc/microchip/Kconfig"
++source "drivers/soc/nuvoton/Kconfig"
+ source "drivers/soc/pxa/Kconfig"
+ source "drivers/soc/qcom/Kconfig"
+ source "drivers/soc/renesas/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index fff513bd522d..a4582afa0c8f 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -21,6 +21,7 @@ obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
+ obj-y				+= loongson/
+ obj-y				+= mediatek/
+ obj-y				+= microchip/
++obj-y				+= nuvoton/
+ obj-y				+= pxa/
+ obj-y				+= amlogic/
+ obj-y				+= qcom/
+diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
+new file mode 100644
+index 000000000000..df46182088ec
+--- /dev/null
++++ b/drivers/soc/nuvoton/Kconfig
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++menuconfig WPCM450_SOC
++	tristate "Nuvoton WPCM450 SoC driver"
++	default y if ARCH_WPCM450
++	select SOC_BUS
++	help
++	  Say Y here to compile the SoC information driver for Nuvoton
++	  WPCM450 SoCs.
++
++	  This driver provides information such as the SoC model and
++	  revision.
+diff --git a/drivers/soc/nuvoton/Makefile b/drivers/soc/nuvoton/Makefile
+new file mode 100644
+index 000000000000..e30317b4e829
+--- /dev/null
++++ b/drivers/soc/nuvoton/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_WPCM450_SOC)	+= wpcm450-soc.o
 -- 
 2.39.1
 
