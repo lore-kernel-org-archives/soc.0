@@ -1,54 +1,113 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <pali@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F45C61DA4
-	for <soc@archiver.kernel.org>; Thu,  2 Feb 2023 21:04:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C99DC636D3
+	for <soc@archiver.kernel.org>; Thu,  2 Feb 2023 23:46:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7AA0CC4339B; Thu,  2 Feb 2023 21:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4EED2C433EF;
-	Thu,  2 Feb 2023 21:04:47 +0000 (UTC)
+	id E1724C4339B; Thu,  2 Feb 2023 23:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF59C433EF;
+	Thu,  2 Feb 2023 23:46:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675371887;
-	bh=k68USTMhC1GzSMsLtIKDm5R99bEZknorPTTLNm/5frw=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=fjiQ2E2OpPglxr26B8/7cveGZSw3yO1nCZ4gE+3gD46+n/Es4BnwGNcrHnQFrNikw
-	 hfF69BKucp3wgLNYFVT8nYre8XlaPvwkv07KjNHsJoabhxFe3PL7L1fxeu42iwnTBU
-	 Jo/dA5GcGN0OmRtXPUqeLdIiU39e3PukqbXJOwHIT6th6lhR2pSpRYB+5Tk13wOXvR
-	 OF0fCdqJFG8dmP8eir/KpRjD5qdr7scaNhBfEf8aDELXSqCDxOcUPVPZVBlTtQZEfO
-	 2PmDXdpG2L5k60Ix7FbkPMivxws4OvGNRSnHTh9L9I3dXL54/Iprs1wFmw4/nlv+8M
-	 XcpUu5V9Jf2pA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3ECB7E21EEC;
-	Thu,  2 Feb 2023 21:04:47 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.2, part 3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <98b46fed-4b4d-46f0-8975-d07df36534be@app.fastmail.com>
-References: <98b46fed-4b4d-46f0-8975-d07df36534be@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <98b46fed-4b4d-46f0-8975-d07df36534be@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-3
-X-PR-Tracked-Commit-Id: 5efb648042a1c3d1734e69ebbae2fe9477f4fc4d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 42c78a5b29c47ad913993bcf845bfc39e2ed8c8b
-Message-Id: <167537188725.3773.14554508240108748616.pr-tracker-bot@kernel.org>
-Date: Thu, 02 Feb 2023 21:04:47 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	s=k20201202; t=1675381616;
+	bh=DvgcfXg5AKjvMPSx1Zn8HpCditz5nJ6MsXT7UI+c9zI=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=EpBCBKTLDGWVaABmiBDaVXi7RGWhIrxUYYoiiO9K95wGLBx46JgM3OQIAZ6ARVBYP
+	 ylkEsXcRI4mNcESmgaw2e9U5z7y5Iw0E3gBqIzg84YubiSykocyMMiNGxX8NNapucG
+	 CNtP9OGzU7ApSKayKVoP95y+Wl+81Py/Mdu7IMYGFRu7Jcoe332e0ELh2NyP4kMwiQ
+	 1+DcbRgOIHL8UYR54nPTjEnv7JLFLClsBNGIr70T0H86USTg4hSVCJzlBKSqtTH9TH
+	 lYIZtqrzhN9Aop6tRqZUL+nU4xzOPkogKHYOTsE7eyQKr0DQCC4cBrbaRQGFG9v0TS
+	 E254ttqB6pRqg==
+Received: by pali.im (Postfix)
+	id AFE5A720; Fri,  3 Feb 2023 00:46:53 +0100 (CET)
+Date: Fri, 3 Feb 2023 00:46:53 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Lee Jones <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: pavel@ucw.cz, Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>, soc@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND 5/8] leds: Add support for Turris 1.x LEDs
+Message-ID: <20230202234653.ukwpjntws3roacty@pali>
+References: <20221226123630.6515-1-pali@kernel.org>
+ <20221226123630.6515-6-pali@kernel.org>
+ <Y9Ozg2O41a2iijMc@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9Ozg2O41a2iijMc@google.com>
+User-Agent: NeoMutt/20180716
 
-The pull request you sent on Thu, 02 Feb 2023 21:53:40 +0100:
+This interface was designed from existing turris-omnia interface:
+https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-led-driver-turris-omnia
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/42c78a5b29c47ad913993bcf845bfc39e2ed8c8b
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+On Friday 27 January 2023 11:20:35 Lee Jones wrote:
+> Pavel, are you happy with the user-space interface?
+> 
+> On Mon, 26 Dec 2022, Pali Rohár wrote:
+> 
+> > This adds support for the RGB LEDs found on the front panel of the
+> > Turris 1.x routers. There are 8 RGB LEDs that are controlled by
+> > CZ.NIC CPLD firmware running on Lattice FPGA.
+> > 
+> > CPLD firmware provides HW triggering mode for all LEDs except WiFi LED
+> > which is automatically enabled after power on reset. LAN LEDs share HW
+> > registers for RGB colors settings, so it is not possible to set different
+> > colors for individual LAN LEDs.
+> > 
+> > CZ.NIC CPLD firmware is open source and available at:
+> > https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
+> > 
+> > This driver uses the multicolor LED framework and HW led triggers.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > Reviewed-by: Marek Behún <kabel@kernel.org>
+> > ---
+> >  .../testing/sysfs-class-led-driver-turris1x   |  31 ++
+> >  drivers/leds/Kconfig                          |   9 +
+> >  drivers/leds/Makefile                         |   1 +
+> >  drivers/leds/leds-turris-1x.c                 | 474 ++++++++++++++++++
+> >  4 files changed, 515 insertions(+)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-class-led-driver-turris1x
+> >  create mode 100644 drivers/leds/leds-turris-1x.c
+> > 
+> > diff --git a/Documentation/ABI/testing/sysfs-class-led-driver-turris1x b/Documentation/ABI/testing/sysfs-class-led-driver-turris1x
+> > new file mode 100644
+> > index 000000000000..272695ae400b
+> > --- /dev/null
+> > +++ b/Documentation/ABI/testing/sysfs-class-led-driver-turris1x
+> > @@ -0,0 +1,31 @@
+> > +What:		/sys/class/leds/<led>/device/brightness
+> > +Date:		July 2022
+> > +KernelVersion:	6.3
+> > +Contact:	Pali Rohár <pali@kernel.org>
+> > +Description:	(RW) On the back size of the Turris 1.x routers there is also
+> > +		a button which can be used to control the intensity of all the
+> > +		LEDs at once, so that if they are too bright, user can dim them.
+> > +
+> > +		The CPLD firmware cycles between 8 levels of this global
+> > +		brightness, but this setting can have any integer value between
+> > +		0 and 255. It is therefore convenient to be able to change this
+> > +		setting from software.
+> > +
+> > +		Format: %u
+> > +
+> > +What:		/sys/class/leds/<led>/device/brightness_level
+> > +Date:		July 2022
+> > +KernelVersion:	6.3
+> > +Contact:	Pali Rohár <pali@kernel.org>
+> > +Description:	(RW) Current brightness level value (0-7).
+> > +
+> > +		Format: %u
+> > +
+> > +What:		/sys/class/leds/<led>/device/brightness_values
+> > +Date:		July 2022
+> > +KernelVersion:	6.3
+> > +Contact:	Pali Rohár <pali@kernel.org>
+> > +Description:	(RW) Values of all 8 levels between which CPLD firmware cycles
+> > +		when brightness button is pressed.
+> > +
+> > +		Format: %u %u %u %u %u %u %u %u
