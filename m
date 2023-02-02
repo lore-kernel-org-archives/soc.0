@@ -1,115 +1,76 @@
-Return-Path: <SRS0=Y3To=56=aj.id.au=andrew@kernel.org>
+Return-Path: <SRS0=M/jh=56=collabora.com=angelogioacchino.delregno@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D32C636CD
-	for <soc@archiver.kernel.org>; Thu,  2 Feb 2023 01:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4262C05027
+	for <soc@archiver.kernel.org>; Thu,  2 Feb 2023 09:08:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5D5D5C433EF; Thu,  2 Feb 2023 01:13:16 +0000 (UTC)
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	id 77E4AC4339C; Thu,  2 Feb 2023 09:08:23 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0FB36C433D2;
-	Thu,  2 Feb 2023 01:13:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0FB36C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=aj.id.au
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=aj.id.au
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 7E7BF320039A;
-	Wed,  1 Feb 2023 20:13:13 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Wed, 01 Feb 2023 20:13:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1675300393; x=1675386793; bh=QfLsF1O5sT
-	/gmSokHoHo9s2t1jshMacmGtTiB4l9UAQ=; b=a7w6MKlNWW4oPSerpo9oV2gf+W
-	LB4sT68ejtdouSAjpoH+IuoBPATqnxcJzBFAhlHKgabyqD1mMS2ecI2sYl4KrB7h
-	juQ0Hxg4Qw+VKmFUQ0Up5S9x9ZjITaekuQrMPnpjGGsUf52v3fbD3EQ802WGMjvJ
-	OZtxniJFZEaEZbgTb4Z2g8ZKRV9s5cH195QGVMRNBuejCgxc4JeNcxV9Lw5MRvUF
-	6S//RhIw1VwBfUE30ULW+HKb7PNCBWba8sR66+wDwLLxENfCtXGfpW8s761dTfN4
-	wi4ilgCZRSQXI4jWKoJy4m2r6kgtmL9+cmpy+hs9j90hwbv4CmWp9axZACsQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1675300393; x=1675386793; bh=QfLsF1O5sT/gmSokHoHo9s2t1jsh
-	MacmGtTiB4l9UAQ=; b=Upo+msoxxyqhXo6uCWcfsWFmg+9iijrl3/bvmoA5+ZMT
-	QagKho9s6GBUyO4d/sVvph+WcGMZpZ5U2B1eWJADclFcZ8eK12u5osyIsdiiO/+5
-	E3TVc7iMoYHXglpfd22wd9sVGZUIYKcQh5SKa+USkTUuWVkQcSN9uIhyA+9NoKq4
-	ORlRPTwBRx8qlDkhpgiIxYzN7QQaa2ZaTz8I2NP59g/rowACmwbGD0Uwgoq9JFfv
-	jc6rS/U7YRQB4/9YoSqupj4Ii0RoSsV0MlvYVejOLZ0Zv0RonSHAN1k6jk/RFi3Q
-	Fo+G7XfR46FN1ukwyxUlhm+1lPNQsQtIq87Yl1k5hg==
-X-ME-Sender: <xms:KA7bY5rc5j29EyVBKrv11btTVxkm2m8k-9eo9_UrY6xXXJ7BzJnEPw>
-    <xme:KA7bY7plbPdGQhBLETcfGfgR5s7BrRf_Qz2pacnp2JoOXm5xOs3cJAmeB28zm0JeT
-    sFq0zxRjYNnP5MbQA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgfeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpedvvedvieeuteehiefftdfhjeevvdetffevgffhhfeuudffhedvkeef
-    veeiueejleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgr
-    uh
-X-ME-Proxy: <xmx:KA7bY2PEZMfATTCg1IwmjS8mKs3xIia0yjiadtYenWMSOJpTK82dqw>
-    <xmx:KA7bY078f5jo6n2dhWCV-5JEBDVFJ7pFRHpUeAvP522XxmFeHFy5Ug>
-    <xmx:KA7bY45FWGP67bdrtONAIdkr4TSmUIO0CBAuHHqGWq6bVGSgov_Jag>
-    <xmx:KQ7bY5HM5Gg5_pGdPyWHEcJ_zLYbBhAbkl20GNIuipY-3VqlweAxKQ>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 92F721700089; Wed,  1 Feb 2023 20:13:12 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
-Mime-Version: 1.0
-Message-Id: <206f0e93-059d-4657-8359-0c5080797c76@app.fastmail.com>
-In-Reply-To: <Y9ppGn0rLfnA3vz6@enigma.ccjz.io>
-References: <20230110042533.12894-1-clayc@hpe.com>
- <7734c165-5918-4677-b8d4-f7d5a3ed37d5@app.fastmail.com>
- <Y9kbsRsRcOnGS0ps@enigma.ccjz.io> <Y9ppGn0rLfnA3vz6@enigma.ccjz.io>
-Date: Thu, 02 Feb 2023 11:42:49 +1030
-From: "Andrew Jeffery" <andrew@aj.id.au>
-To: clayc <clayc@hpe.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id B6CB9C433D2;
+	Thu,  2 Feb 2023 09:08:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B6CB9C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 719246602EDA;
+	Thu,  2 Feb 2023 09:08:19 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1675328899;
+	bh=5IakbPPTAHlstWlMaParv0t58Oe6vt85g0wiRgRU03M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AhJLb6xZ/WrXG051Pd9hnZMFZididw3HEhWfNcyYmcyYlxZorcpLJ43/xX4lHOkHm
+	 T7an22q8EKxOvfoZaT7MzjEC3zZr25DQC5iiTGrr76VQ6TWTSUcrSI8UIJ41lFUSan
+	 87WsaiLeOOB0TOOBeIswrszW2PdYwP/UNQPE8qJI3xFMoBv/U8FYkfSPVA2fJrGlEW
+	 f2oNjJi9cIwRguMO7le/Y7krXBonv6PjymZWsVyRelhDZgHTiztw/2U7ySsoTarioO
+	 ojIUAPMIdNcjCMIZOsQoIgP+DRyZrZRXMyiar+6GKNyFavbySmPJv/j6R/+FLXz/Io
+	 IR8ovNuCfoRPA==
+Message-ID: <4db8fb55-a02b-d98e-65f4-1a095c43104f@collabora.com>
+Date: Thu, 2 Feb 2023 10:08:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] MAINTAINERS: Update entry for MediaTek SoC support
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- verdun@hpe.com, nick.hawkins@hpe.com, "Arnd Bergmann" <arnd@arndb.de>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Russell King" <linux@armlinux.org.uk>, "Olof Johansson" <olof@lixom.net>
-Subject: Re: [PATCH 0/5] ARM: Add GXP SROM Support
-Content-Type: text/plain
+To: matthias.bgg@kernel.org, arm@kernel.org, soc@kernel.org, arnd@arndb.de,
+ olof@lixom.net
+Cc: matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20230201152256.19514-1-matthias.bgg@kernel.org>
+Content-Language: en-US
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230201152256.19514-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Il 01/02/23 16:22, matthias.bgg@kernel.org ha scritto:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> The linux-mediatek IRC channel has moved to liber.chat for quite some
+> time. Apart from that, not all patches are also send to LKML, so add
+> this ML explicitly.
+> 
+> And last but not least:
+> Angelo does a wunderfull job in reviewing patches for all kind of
+> devices from MediaTek.
+> 
+> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 
+Is a R-b tag appropriate here to say "yes, go on with setting me as a reviewer"?
 
-On Wed, 1 Feb 2023, at 23:58, Clay Chang wrote:
-> Hi Andrew,
->
-> On Tue, Jan 31, 2023 at 09:46:42PM +0800, Clay Chang wrote:
->> > I'm trying to understand whether we can find some common ground with
->> > controlling e.g. Aspeed's BMCs LPC peripherals based on Arnd's query[1],
->> > but the description is a bit too vague right now for me to be able to do
->> > that.
->> > 
->> > [1] https://lore.kernel.org/all/66ef9643-b47e-428d-892d-7c1cbd358a5d@app.fastmail.com/
->> > 
->> > Andrew
->
-> I briefly studied driver/soc/aspeed/aspeed-lpc-ctrl.c, and IMO the
-> similarity between HPE GXP driver and Aspeed's could be that we both
-> expose the LPC memory addresses or registers for configuration purposes.
-> However, the functions to be configured could vary. There are a few sets
-> of registers that HPE wants to expose for configuration in the future.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-The talk of "exposing registers" feels concerning - we're trying not to 
-do that directly. Instead we want to lift out an API that constrains 
-the behaviour a bit but works for both of us if there's overlap in 
-functionality.
+P.S.: Thank you :-)
 
-Can you point to any documentation of the behaviour of your hardware? 
-It's still a little vague to me.
+Cheers,
+Angelo
 
-Andrew
