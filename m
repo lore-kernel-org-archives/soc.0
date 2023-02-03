@@ -1,96 +1,123 @@
-Return-Path: <SRS0=n51u=57=foss.st.com=prvs=03985e4a13=patrice.chotard@kernel.org>
+Return-Path: <SRS0=2Vwl=57=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A61C61DA4
-	for <soc@archiver.kernel.org>; Fri,  3 Feb 2023 13:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844B5C61DA4
+	for <soc@archiver.kernel.org>; Fri,  3 Feb 2023 14:04:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 617B0C4339C; Fri,  3 Feb 2023 13:52:18 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 6B11AC433D2; Fri,  3 Feb 2023 14:04:12 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C2609C4339B;
-	Fri,  3 Feb 2023 13:52:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2609C4339B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3139qVaY027466;
-	Fri, 3 Feb 2023 14:52:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=selector1;
- bh=EtzfbCcxs7p5/EFbhCYEbGjaWt4NbkR5NejH+c79F70=;
- b=cEkf67PLn3yKqq232Cve7rKdxXKPHiEDNoaOwL2HnrJjinWz7gOyclNtOeKqtlMBaJUn
- qTyjYwdOncfeyfnROaFo4k8/ljSdecqWwQK8dvwd3ZBmqEjgfcfxw1r+Iz85DFw6APPX
- Ajgw4XNOpmtTUQJs1V4JOvhuA9aOw6zF4XtcmSDnX8DNjOv9VAnnZqiJIOSdmU5SMYbq
- oHSNe/N/k66kVHhVm2liM3U3nsEm1L9wKJRcsSiaF8CGPNcsf89DCW7fm9RZtws+SGCj
- wpi528hRhgU1Ofb5XGxvNS4w25Xv/v2YHebrI/TV670bEf4w7lRNDiWE2qNAdblywaz5 9Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nfny5f8ka-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Feb 2023 14:52:11 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A572510002A;
-	Fri,  3 Feb 2023 14:52:10 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7739E21862E;
-	Fri,  3 Feb 2023 14:52:10 +0100 (CET)
-Received: from [10.252.18.17] (10.252.18.17) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Fri, 3 Feb
- 2023 14:52:10 +0100
-Message-ID: <8e05c729-89bc-20f3-acf6-096fb85d7e36@foss.st.com>
-Date: Fri, 3 Feb 2023 14:52:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 1C6EEC433EF
+	for <soc@kernel.org>; Fri,  3 Feb 2023 14:04:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1C6EEC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id bk15so15570230ejb.9
+        for <soc@kernel.org>; Fri, 03 Feb 2023 06:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wkh/ik+741Un3ANrHSq93txzbFllh2KdlJjlZ7JphtA=;
+        b=aSDvbYELkoRi+22LamsNYccsaoxKuU4kgN/xoI77MyRW1ULn36PnQsWPiV7M9USx4z
+         N+0JJSIyEsTGqJJwX/wzcxVopJge+nV1JH2Zh34yCBEg4h9ZK6PMCLNxMKbHdOgVgN8x
+         oB5LbS5H6/JxOzTnrMq8q2b7lf1g39xzop7yaPzTJ1dCIURN86UISra3v2+P4P7t9aBU
+         A6SPM5uLl85UoYOo3pDj3LnPm+uef9ngshgpxZLHbrG+hJ0hYIGyJ1Xl4+EbxKJa0Cqj
+         gfvXfguCwcklf1D8CS7VM3PXk3aCXKkA63wu+Xpa7+g6zG7/PLGiX6OSa93TxHp/5UuH
+         Zitg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wkh/ik+741Un3ANrHSq93txzbFllh2KdlJjlZ7JphtA=;
+        b=bX/dhBxQQYoBD6v6/jj9iq1BiCI216mPqm/tQFcoDjHJGRDeW5VV28RfLb0zGk7f8u
+         84ZAGLQk16yiI61dNjXIomrV8iqRLoeM/L7laNMMbHXDtO5d9NYtCbTPil+LzcJzwWzZ
+         +wBa3gondn50+8vlgP3rHuVFzYpK/6ODDN2VFtlwU6isi3ISKuAZEfsLERzl9s9BKqeX
+         kiNegzw3At1wRDHA9yz0qSpANDjUaXyPNt8v3428UUiWF7jSWv6qNl2P/USErIRLTvf1
+         /0O4ImYfEw5UGCT3mlXD5sajKOQVRIXmQ60khUGARqcqWAnPWLXQ3D5MA9S/02c6HkB4
+         HVfw==
+X-Gm-Message-State: AO0yUKVXrmy8Z/+peZMuryLmn8Vhs+Sr4ItOpG8C83t/N3g8V+hBdSbG
+	p8zmegllz4RAjIlOvLjp7qa/wA==
+X-Google-Smtp-Source: AK7set+T9dsVNp6Z4zr1OHqXcu2PeATPrwEkE/2pGj/nbYNMwT8MDPnzA5Uew1Q/qViHB1h1PSPIQA==
+X-Received: by 2002:a17:906:5181:b0:88b:f8e5:3318 with SMTP id y1-20020a170906518100b0088bf8e53318mr11891465ejk.38.1675433049287;
+        Fri, 03 Feb 2023 06:04:09 -0800 (PST)
+Received: from fedora.. ([85.235.10.72])
+        by smtp.gmail.com with ESMTPSA id j9-20020a170906534900b0088478517830sm1412324ejo.83.2023.02.03.06.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 06:04:08 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, kevin Hilman <khilman@baylibre.com>,
-        olof
- Johansson <olof@lixom.net>, <soc@kernel.org>,
-        "arm@kernel.org"
-	<arm@kernel.org>
-CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-Subject: [GIT PULL] STi DT changes for v6.3 #1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.18.17]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_13,2023-02-03_01,2022-06-22_01
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Paolo Valente <paolo.valente@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2] ARM: defconfig: Add IOSCHED_BFQ to the default configs
+Date: Fri,  3 Feb 2023 15:04:04 +0100
+Message-Id: <20230203140404.1125850-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC maintainers,
+ARM systems are often memory constrained and more often than not
+use slow single-channel storage such as flash memory or MMC/SD-cards.
+For any interactive systems (such as mobile phones, tablets,
+chromebooks...) the BFQ I/O scheduler will be desireable.
 
-Please consider this first round of STi DT update for v6.3.
+Make sure the BFQ I/O scheduler is available on these systems.
 
-Thanks
-Patrice
+Loongarch, MIPS, m68k, UM and S390 has also enabled BFQ in their
+defconfigs, cf commit b495dfed706c4c5873c0dab8930ad6eb1d276a6c
+"um: Cleanup CONFIG_IOSCHED_CFQ" where the motivation is that
+it replaces the former CFQ scheduler.
 
-The following changes since commit 6d796c50f84ca79f1722bb131799e5a5710c4700:
+Cc: Paolo Valente <paolo.valente@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Collect ACKS
+- SoC folks: please apply directly to the relevant ARM defconfig
+  branch!
+---
+ arch/arm/configs/multi_v5_defconfig | 1 +
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-  Linux 6.2-rc6 (2023-01-29 13:59:43 -0800)
+diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
+index 60fc52b95690..4cf455c3bdee 100644
+--- a/arch/arm/configs/multi_v5_defconfig
++++ b/arch/arm/configs/multi_v5_defconfig
+@@ -49,6 +49,7 @@ CONFIG_ARM_KIRKWOOD_CPUIDLE=y
+ CONFIG_KPROBES=y
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
++CONFIG_IOSCHED_BFQ=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index ee184eb37adc..7a0279a078fc 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -146,6 +146,7 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_PARTITION_ADVANCED=y
+ CONFIG_CMDLINE_PARTITION=y
++CONFIG_IOSCHED_BFQ=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+-- 
+2.34.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti.git tags/sti-dt-for-6.3-round1
-
-for you to fetch changes up to 4722dd4029c63f10414ffd8d3ffdd6c748391cd7:
-
-  ARM: dts: stihxxx-b2120: fix polarity of reset line of tsin0 port (2023-02-03 14:41:50 +0100)
-
-----------------------------------------------------------------
-Fix polarity of reset line of tsin0 port for stihxxx-b2120
-
-----------------------------------------------------------------
-Dmitry Torokhov (1):
-      ARM: dts: stihxxx-b2120: fix polarity of reset line of tsin0 port
-
- arch/arm/boot/dts/stihxxx-b2120.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
