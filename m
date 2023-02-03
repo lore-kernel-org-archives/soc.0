@@ -1,597 +1,104 @@
-Return-Path: <SRS0=QxmZ=57=microchip.com=Durai.ManickamKR@kernel.org>
+Return-Path: <SRS0=unKo=57=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C91F2C636CC
-	for <soc@archiver.kernel.org>; Fri,  3 Feb 2023 03:51:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84BD6C636CC
+	for <soc@archiver.kernel.org>; Fri,  3 Feb 2023 08:12:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B15A9C4339C; Fri,  3 Feb 2023 03:51:08 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 50D34C4339C; Fri,  3 Feb 2023 08:12:23 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EDB3CC4339B;
-	Fri,  3 Feb 2023 03:51:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EDB3CC4339B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675396267; x=1706932267;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6Na3RIlAVA5tvdIDpm9dq7Of4EtVM3MSHAsyyVXcYf8=;
-  b=uuczwWlmcGc+1pE8031Zxw3kXv+izowT+o1vCNKeP9K0yjbbXFKMEEhQ
-   my2Zf3jIBMmAVDl8p6UvdHgEriRUaHjdH69/UIfi/fMJ+03kihVaZAhRO
-   PhlDytm8aIiZVskZ1mIWGoXs/Ry/J86o7s1H91CPW+cryoxmvz1TrbLwh
-   JWrF+LL0wEPWJ7l8u1+0f+z4dtpfV5rjcD6DeH1K+AbmZm8IYmA3Ip+3s
-   aYS7f4QIC25pEzdiT6D2MtBOTqfFoLHUCYHszVEpu1W51q3cLCaoBnd19
-   e/3K9LsBSSsRzYG668GtGBu/qHCT9mmRmNFphGFSrNqK3pM+EoDb3sB06
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,269,1669100400"; 
-   d="scan'208";a="199411260"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2023 20:51:06 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 2 Feb 2023 20:51:05 -0700
-Received: from che-lt-i66125lx.amer.actel.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 2 Feb 2023 20:50:56 -0700
-From: Durai Manickam KR <durai.manickamkr@microchip.com>
-List-Id: <soc.lore.kernel.org>
-To: <Hari.PrasathGE@microchip.com>, <balamanikandan.gunasundar@microchip.com>,
-	<manikandan.m@microchip.com>, <varshini.rajendran@microchip.com>,
-	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
-	<balakrishnan.s@microchip.com>, <claudiu.beznea@microchip.com>,
-	<cristian.birsan@microchip.com>, <nicolas.ferre@microchip.com>,
-	<krzysztof.kozlowski@linaro.org>, <alexandre.belloni@bootlin.com>,
-	<davem@davemloft.net>, <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
-	<Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>, <andrew@lunn.ch>,
-	<michael@walle.cc>, <jerry.ray@microchip.com>
-CC: Durai Manickam KR <durai.manickamkr@microchip.com>
-Subject: [PATCH v5 8/8] ARM: dts: at91: sam9x60_curiosity: Add device tree for sam9x60 curiosity board
-Date: Fri, 3 Feb 2023 09:18:33 +0530
-Message-ID: <20230203034833.451461-9-durai.manickamkr@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230203034833.451461-1-durai.manickamkr@microchip.com>
-References: <20230203034833.451461-1-durai.manickamkr@microchip.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 49E3CC433EF
+	for <soc@kernel.org>; Fri,  3 Feb 2023 08:12:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 49E3CC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id k16so3235781wms.2
+        for <soc@kernel.org>; Fri, 03 Feb 2023 00:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IC0G1L6NjMoqGQD1cOuly4Kpy7+rsQRjwMtomVmlm3o=;
+        b=xD72h3qJGE8pRy1Boa9QLWM3iuOgPxAFkfdvyEux2CoizMWlA590ACWFNz/K80PAZZ
+         Sw9YIc8ZAA1bUthZam/m+Eeba5+E4myAXIVrE36mqP39bF1Jtw29mQ66qEQcqv2bp4p1
+         6cKoRzu44Alj6AZi966ZhxHIRuzmQr6hAewC1bIN7jeDZt8wONW5oMbHQOv7kLq7Wu3C
+         vKcF47She/EjkhgaNzgvU1femR9xaJmeLCSiYnyS9GUb1AJZeNYGNwbtReeChHHP+li1
+         MoZjkm10tpOCl2Ou35pP15Vg/cufTOjE9R35Zt9fxU2S0cN4KfeNZivCAHPUfpfCZNOh
+         uN0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IC0G1L6NjMoqGQD1cOuly4Kpy7+rsQRjwMtomVmlm3o=;
+        b=eQhCgvrihqyLLkQIPccvemaqv8oBWYPUN3acqED6euA3dF6+5HoqTQUtsqMJQ0O2Fu
+         AbdsRe7fnSNURJhYTXGS6ILYtYOmLLeMX2+jcM/NsUwDuJqweSOTM7C+bzXWKrRo6dr/
+         6+O2CujGX7BgLnxSpO0TRFYTea6C28aBk2A468DVY+KxRSspgZi7U3Br5HCk+dvnRJ2c
+         /rmHX1Bsa5GsbtMp5kQTCzvlkNDD30y313nO0T6mEqojyM8AIiXhInCRrvBek0tZG2XN
+         jBDPeC8mRYSA0GQjCT+wymZ5fKCPBiU+FmqkFkGIoK0JzrglI3325gkoKypsZZL2yF+d
+         WP/A==
+X-Gm-Message-State: AO0yUKUTAA8lYWqnFbDlCQ04mh00CukUmYgYw0yZ32zLDRGwsQAivtrc
+	OfGXXA0gbYnhMYB6qvKVuzmzAQ==
+X-Google-Smtp-Source: AK7set+phGji+2ms+lZQhTPHJqeuo6ybtY3qprxpSEW2BSt4H6ct/ep5PFnZxnSNGDJ5ocOKtPFVtA==
+X-Received: by 2002:a05:600c:1e13:b0:3d9:f836:3728 with SMTP id ay19-20020a05600c1e1300b003d9f8363728mr9020715wmb.11.1675411940532;
+        Fri, 03 Feb 2023 00:12:20 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id x14-20020a1c7c0e000000b003daffc2ecdesm6983987wmc.13.2023.02.03.00.12.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 00:12:19 -0800 (PST)
+Message-ID: <70f6e477-86e2-5d71-49be-3c96265c82be@linaro.org>
+Date: Fri, 3 Feb 2023 09:12:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 7/8] dt-bindings: arm: at91: Add info on sam9x60
+ curiosity
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Durai Manickam KR <durai.manickamkr@microchip.com>,
+ Hari.PrasathGE@microchip.com, balamanikandan.gunasundar@microchip.com,
+ manikandan.m@microchip.com, varshini.rajendran@microchip.com,
+ dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+ balakrishnan.s@microchip.com, claudiu.beznea@microchip.com,
+ cristian.birsan@microchip.com, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, davem@davemloft.net, arnd@arndb.de,
+ olof@lixom.net, soc@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Kavyasree.Kotagiri@microchip.com, Horatiu.Vultur@microchip.com,
+ robh+dt@kernel.org, andrew@lunn.ch, michael@walle.cc, jerry.ray@microchip.com
+References: <20230203034833.451461-1-durai.manickamkr@microchip.com>
+ <20230203034833.451461-8-durai.manickamkr@microchip.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230203034833.451461-8-durai.manickamkr@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add device tree file for sam9x60 curiosity board.
+On 03/02/2023 04:48, Durai Manickam KR wrote:
+> Adding the sam9x60 curiosity board from Microchip into the atmel AT91 board
+> description yaml file.
+> 
+> Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
 
-Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
----
- arch/arm/boot/dts/Makefile                   |   1 +
- arch/arm/boot/dts/at91-sam9x60_curiosity.dts | 501 +++++++++++++++++++
- 2 files changed, 502 insertions(+)
- create mode 100644 arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+This is a friendly reminder during the review process.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc..da20980384c4 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -51,6 +51,7 @@ dtb-$(CONFIG_SOC_AT91SAM9) += \
- 	at91sam9x25ek.dtb \
- 	at91sam9x35ek.dtb
- dtb-$(CONFIG_SOC_SAM9X60) += \
-+	at91-sam9x60_curiosity.dtb \
- 	at91-sam9x60ek.dtb
- dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-kizbox2-2.dtb \
-diff --git a/arch/arm/boot/dts/at91-sam9x60_curiosity.dts b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-new file mode 100644
-index 000000000000..6f0a6d9841fc
---- /dev/null
-+++ b/arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-@@ -0,0 +1,501 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * at91-sam9x60_curiosity.dts - Device Tree file for Microchip SAM9X60 Curiosity board
-+ *
-+ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Author: Durai Manickam KR <durai.manickamkr@microchip.com>
-+ */
-+/dts-v1/;
-+#include "sam9x60.dtsi"
-+#include <dt-bindings/input/input.h>
-+
-+/ {
-+	model = "Microchip SAM9X60 Curiosity";
-+	compatible = "microchip,sam9x60-curiosity", "microchip,sam9x60", "atmel,at91sam9";
-+
-+	aliases {
-+		i2c0 = &i2c0;
-+		i2c1 = &i2c6;
-+		serial2 = &uart7;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@20000000 {
-+		reg = <0x20000000 0x8000000>;
-+	};
-+
-+	clocks {
-+		slow_xtal {
-+			clock-frequency = <32768>;
-+		};
-+
-+		main_xtal {
-+			clock-frequency = <24000000>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_key_gpio_default>;
-+
-+		button-user {
-+			label = "PB_USER";
-+			gpios = <&pioA 29 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_PROG1>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		led-red {
-+			label = "red";
-+			gpios = <&pioD 17 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-green {
-+			label = "green";
-+			gpios = <&pioD 19 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-blue {
-+			label = "blue";
-+			gpios = <&pioD 21 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+
-+	vdd_1v8: regulator-0 {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-name = "VDD_1V8";
-+	};
-+
-+	vdd_1v15: regulator-1 {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <1150000>;
-+		regulator-min-microvolt = <1150000>;
-+		regulator-name = "VDD_1V15";
-+	};
-+
-+	vdd1_3v3: regulator-2 {
-+		compatible = "regulator-fixed";
-+		regulator-always-on;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-name = "VDD1_3V3";
-+	};
-+};
-+
-+&adc {
-+	vddana-supply = <&vdd1_3v3>;
-+	vref-supply = <&vdd1_3v3>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc_default &pinctrl_adtrg_default>;
-+	status = "okay";
-+};
-+
-+&can0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_can0_rx_tx>;
-+	status = "disabled"; /* Conflict with dbgu. */
-+};
-+
-+&can1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_can1_rx_tx>;
-+	status = "okay";
-+};
-+
-+&dbgu {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_dbgu>;
-+	status = "okay"; /* Conflict with can0. */
-+};
-+
-+&ebi {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_ebi_addr_nand &pinctrl_ebi_data_lsb>;
-+	status = "okay";
-+
-+	nand_controller: nand-controller {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_nand_oe_we &pinctrl_nand_cs &pinctrl_nand_rb>;
-+		status = "okay";
-+
-+		nand@3 {
-+			reg = <0x3 0x0 0x800000>;
-+			rb-gpios = <&pioD 5 GPIO_ACTIVE_HIGH>;
-+			cs-gpios = <&pioD 4 GPIO_ACTIVE_HIGH>;
-+			nand-bus-width = <8>;
-+			nand-ecc-mode = "hw";
-+			nand-ecc-strength = <8>;
-+			nand-ecc-step-size = <512>;
-+			nand-on-flash-bbt;
-+			label = "atmel_nand";
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				at91bootstrap@0 {
-+					label = "at91bootstrap";
-+					reg = <0x0 0x40000>;
-+				};
-+
-+				uboot@40000 {
-+					label = "u-boot";
-+					reg = <0x40000 0xc0000>;
-+				};
-+
-+				ubootenvred@100000 {
-+					label = "U-Boot Env Redundant";
-+					reg = <0x100000 0x40000>;
-+				};
-+
-+				ubootenv@140000 {
-+					label = "U-Boot Env";
-+					reg = <0x140000 0x40000>;
-+				};
-+
-+				dtb@180000 {
-+					label = "device tree";
-+					reg = <0x180000 0x80000>;
-+				};
-+
-+				kernel@200000 {
-+					label = "kernel";
-+					reg = <0x200000 0x600000>;
-+				};
-+
-+				rootfs@800000 {
-+					label = "rootfs";
-+					reg = <0x800000 0x1f800000>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&flx0 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c0: i2c@600 {
-+		dmas = <0>, <0>;
-+		pinctrl-names = "default";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		pinctrl-0 = <&pinctrl_flx0_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "okay";
-+
-+		eeprom@53 {
-+			compatible = "atmel,24c02";
-+			reg = <0x53>;
-+			pagesize = <16>;
-+		};
-+	};
-+};
-+
-+&flx6 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c6: i2c@600 {
-+		dmas = <0>, <0>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx6_default>;
-+		i2c-analog-filter;
-+		i2c-digital-filter;
-+		i2c-digital-filter-width-ns = <35>;
-+		status = "disabled";
-+	};
-+};
-+
-+&flx7 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	uart7: serial@200 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_flx7_default>;
-+		status = "okay";
-+	};
-+};
-+
-+&macb0 {
-+	phy-mode = "rmii";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_macb0_rmii>;
-+	status = "okay";
-+
-+	ethernet-phy@0 {
-+		reg = <0x0>;
-+	};
-+};
-+
-+&pinctrl {
-+	adc {
-+		pinctrl_adc_default: adc-default {
-+			atmel,pins = <AT91_PIOB 14 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_adtrg_default: adtrg-default {
-+			atmel,pins = <AT91_PIOB 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	can0 {
-+		pinctrl_can0_rx_tx: can0-rx-tx {
-+			atmel,pins =
-+				<AT91_PIOA 9 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANRX0 */
-+				 AT91_PIOA 10 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANTX0 */
-+				 AT91_PIOC 9 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_DOWN>;	/* Enable CAN Transceivers */
-+		};
-+	};
-+
-+	can1 {
-+		pinctrl_can1_rx_tx: can1-rx-tx {
-+			atmel,pins =
-+				<AT91_PIOA 6 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANRX1 */
-+				 AT91_PIOA 5 AT91_PERIPH_B AT91_PINCTRL_NONE	/* CANTX1 */
-+				 AT91_PIOB 17 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_DOWN>;	/* Enable CAN Transceivers */
-+		};
-+	};
-+
-+	dbgu {
-+		pinctrl_dbgu: dbgu-0 {
-+			atmel,pins = <AT91_PIOA 9 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				      AT91_PIOA 10 AT91_PERIPH_A AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	ebi {
-+		pinctrl_ebi_data_lsb: ebi-data-lsb {
-+			atmel,pins =
-+				<AT91_PIOD 6 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 7 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 8 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 9 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 10 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 11 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 12 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 13 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+
-+		pinctrl_ebi_addr_nand: ebi-addr-nand {
-+			atmel,pins =
-+				<AT91_PIOD 2 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 3 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+	};
-+
-+	flexcom {
-+		pinctrl_flx0_default: flx0-twi {
-+			atmel,pins =
-+				<AT91_PIOA 0 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 1 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx6_default: flx6-twi {
-+			atmel,pins =
-+				<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP
-+				 AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_flx7_default: flx7-usart {
-+			atmel,pins =
-+				<AT91_PIOC 0 AT91_PERIPH_C AT91_PINCTRL_NONE
-+				 AT91_PIOC 1 AT91_PERIPH_C AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		pinctrl_key_gpio_default: pinctrl-key-gpio {
-+			atmel,pins = <AT91_PIOA 29 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	leds {
-+		pinctrl_gpio_leds: gpio-leds {
-+			atmel,pins = <AT91_PIOD 17 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 19 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 21 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	macb0 {
-+		pinctrl_macb0_rmii: macb0-rmii-0 {
-+			atmel,pins =
-+				<AT91_PIOB 0 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB0 periph A */
-+				 AT91_PIOB 1 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB1 periph A */
-+				 AT91_PIOB 2 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB2 periph A */
-+				 AT91_PIOB 3 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB3 periph A */
-+				 AT91_PIOB 4 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB4 periph A */
-+				 AT91_PIOB 5 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB5 periph A */
-+				 AT91_PIOB 6 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB6 periph A */
-+				 AT91_PIOB 7 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB7 periph A */
-+				 AT91_PIOB 9 AT91_PERIPH_A AT91_PINCTRL_NONE	/* PB9 periph A */
-+				 AT91_PIOB 10 AT91_PERIPH_A AT91_PINCTRL_NONE>;	/* PB10 periph A */
-+		};
-+	};
-+
-+	nand {
-+		pinctrl_nand_oe_we: nand-oe-we-0 {
-+			atmel,pins =
-+				<AT91_PIOD 0 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)
-+				 AT91_PIOD 1 AT91_PERIPH_A (AT91_PINCTRL_NONE | AT91_PINCTRL_SLEWRATE_DIS)>;
-+		};
-+
-+		pinctrl_nand_rb: nand-rb-0 {
-+			atmel,pins =
-+				<AT91_PIOD 5 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-+		};
-+
-+		pinctrl_nand_cs: nand-cs-0 {
-+			atmel,pins =
-+				<AT91_PIOD 4 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-+		};
-+	};
-+
-+	pwm0 {
-+		pinctrl_pwm0_0: pwm0-0 {
-+			atmel,pins = <AT91_PIOB 12 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_pwm0_1: pwm0-1 {
-+			atmel,pins = <AT91_PIOB 13 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+
-+		pinctrl_pwm0_2: pwm0-2 {
-+			atmel,pins = <AT91_PIOD 16 AT91_PERIPH_B AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc0 {
-+		pinctrl_sdmmc0_default: sdmmc0 {
-+			atmel,pins =
-+				<AT91_PIOA 17 AT91_PERIPH_A (AT91_PINCTRL_DRIVE_STRENGTH_HI)				/* PA17 CK  periph A with pullup */
-+				 AT91_PIOA 16 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA16 CMD periph A with pullup */
-+				 AT91_PIOA 15 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA15 DAT0 periph A */
-+				 AT91_PIOA 18 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA18 DAT1 periph A with pullup */
-+				 AT91_PIOA 19 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA19 DAT2 periph A with pullup */
-+				 AT91_PIOA 20 AT91_PERIPH_A (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)>;	/* PA20 DAT3 periph A with pullup */
-+		};
-+		pinctrl_sdmmc0_cd: sdmmc0-cd {
-+			atmel,pins =
-+				<AT91_PIOA 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	sdmmc1 {
-+		pinctrl_sdmmc1_default: sdmmc1 {
-+			atmel,pins =
-+				<AT91_PIOA 13 AT91_PERIPH_B (AT91_PINCTRL_DRIVE_STRENGTH_HI)				/* PA13 CK periph B */
-+				 AT91_PIOA 12 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA12 CMD periph B with pullup */
-+				 AT91_PIOA 11 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA11 DAT0 periph B with pullup */
-+				 AT91_PIOA  2 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA2 DAT1 periph B with pullup */
-+				 AT91_PIOA  3 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)	/* PA3 DAT2 periph B with pullup */
-+				 AT91_PIOA  4 AT91_PERIPH_B (AT91_PINCTRL_PULL_UP | AT91_PINCTRL_DRIVE_STRENGTH_HI)>;	/* PA4 DAT3 periph B with pullup */
-+		};
-+	};
-+
-+	usb0 {
-+		pinctrl_usba_vbus: usba-vbus {
-+			atmel,pins = <AT91_PIOA 27 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+
-+	usb1 {
-+		pinctrl_usb_default: usb-default {
-+			atmel,pins = <AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-+				      AT91_PIOD 15 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
-+}; /* pinctrl */
-+
-+&pwm0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_0 &pinctrl_pwm0_1 &pinctrl_pwm0_2>;
-+	status = "okay";
-+};
-+
-+&sdmmc0 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc0_default &pinctrl_sdmmc0_cd>;
-+	cd-gpios = <&pioA 25 GPIO_ACTIVE_LOW>;
-+	disable-wp;
-+	status = "okay";
-+};
-+
-+&sdmmc1 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc1_default>;
-+	status = "disabled";
-+};
-+
-+&shutdown_controller {
-+	debounce-delay-us = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
-+};
-+
-+&tcb0 {
-+	timer0: timer@0 {
-+		compatible = "atmel,tcb-timer";
-+		reg = <0>;
-+	};
-+
-+	timer1: timer@1 {
-+		compatible = "atmel,tcb-timer";
-+		reg = <1>;
-+	};
-+};
-+
-+&usb0 {
-+	atmel,vbus-gpio = <&pioA 27 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usba_vbus>;
-+	status = "okay";
-+};
-+
-+&usb1 {
-+	num-ports = <3>;
-+	atmel,vbus-gpio = <0
-+			   &pioD 18 GPIO_ACTIVE_HIGH
-+			   &pioD 15 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb_default>;
-+	status = "okay";
-+};
-+
-+&usb2 {
-+	status = "okay";
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
--- 
-2.25.1
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+
+Best regards,
+Krzysztof
 
