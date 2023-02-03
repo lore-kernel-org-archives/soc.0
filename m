@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69736C64ED6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44A40C64EC7
 	for <soc@archiver.kernel.org>; Fri,  3 Feb 2023 14:30:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 17DDDC433B3; Fri,  3 Feb 2023 14:30:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2A5BC433A8;
-	Fri,  3 Feb 2023 14:30:44 +0000 (UTC)
+	id 269FDC43444; Fri,  3 Feb 2023 14:30:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 114DBC433B0;
+	Fri,  3 Feb 2023 14:30:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1675434645;
-	bh=yI+iTx5SQhd6HSFh5xHLMItjCSDIAr9tOkl6a1zUvUc=;
+	bh=RC+ZSbkGNOnkbrjTNBLK6PopUKPfijd5+hsUrSMv5sg=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=cFqBWZMo1LRUmBtayoMVc4t9PAf6W1wyMSEbhQZU9P3OE7R5V0mqokWcCcP7QCBmW
-	 5KmadZsMsS15Bsz5sB9zLG1iHld0nqzwNpBkKLSKiNIz2fLv/56pzoG+U/LWwA/HrX
-	 0VNC9sXuGK4FqyzbYKatPbTVVtSSo2qq1qkJ76gc6ex2c05xEbUFYrr0wNzSH3uP6M
-	 T7wBiUCmG9q1cF+JDCqTjmDOCQsk7xggqJMiwj58SK9p+YGclfSQ/jSTZcEJkxncef
-	 StlhVbc6wuGS73vFKWWE78VL3TEY0NazDsGlHaUFV1pcLaOo5VzK3O8Od2SW5VgrM4
-	 xC7tU6V57CReQ==
+	b=o9jDDk9dZwimzdtuHAeqhbDz6gSBaERdQyt9sFD0vSfSLZ4nYF+L4edPFAiCOj8vv
+	 buqU2+ZZVy+teLv0S5AO84I3b3OCxbawm1TjSJScU6hmzvUjT5ZaBT1UyGjUpkItna
+	 ckarMheY8tZ071ILGL1vIBIHus0izrslF8kJp24zWrOPK8bg3eWUNPsbUwpgRPA2uK
+	 lFekMlC4Z6Tjo5Of6XucUi4UxW6IsoqMyW/+UdSseZANJ9hSlCwhkx2+n9NdoWoXYh
+	 88MTLTUNDnQ4ikSs/m0py9ZfdygK7WutAojtx1cp2rtFRy3YNSeKY+tTkw9N8arhH8
+	 pL4o5MLpw/Aiw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2312E4D037;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5133E21ED0;
 	Fri,  3 Feb 2023 14:30:44 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] defconfig: mediatek updates for v6.3
+Subject: Re: [GIT PULL] Rockchip dts64 changes for 6.3 #1
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167543464485.16250.2026727731368749658.git-patchwork-notify@kernel.org>
+ <167543464493.16250.592649368361425963.git-patchwork-notify@kernel.org>
 Date: Fri, 03 Feb 2023 14:30:44 +0000
-References: <2330b914-8a8e-8bf3-e98e-88d713c5224d@gmail.com>
-In-Reply-To: <2330b914-8a8e-8bf3-e98e-88d713c5224d@gmail.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>
+References: <6491956.DvuYhMxLoT@phil>
+In-Reply-To: <6491956.DvuYhMxLoT@phil>
+To: Heiko Stuebner <heiko@sntech.de>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,21 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 1 Feb 2023 19:01:56 +0100 you wrote:
-> Hi Arnd and Olof,
+On Thu, 02 Feb 2023 00:04:05 +0100 you wrote:
+> Hi Arnd, Kevin, Olof,
 > 
-> Please have a look at above commits for the defconfig. It basically enables
-> drivers needed to boot MT8192 based boards. That's very useful for kernel-ci
-> where Collabora and Nicolas has put quite some effort into.
+> please find below and in subsequent pull-request
+> Rockchip changes for for 6.3
 > 
-> Regards,
-> Matthias
+> As always the 64bit DTS part is the big one, with the most interesting
+> change probably being the addition of the rk3588 soc support and some
+> boards using it.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] defconfig: mediatek updates for v6.3
-    https://git.kernel.org/soc/soc/c/40445d093e30
+  - [GIT,PULL] Rockchip dts64 changes for 6.3 #1
+    https://git.kernel.org/soc/soc/c/84afaf4e378d
 
 You are awesome, thank you!
 -- 
