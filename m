@@ -1,95 +1,114 @@
-Return-Path: <SRS0=P+Db=6A=marcan.st=marcan@kernel.org>
+Return-Path: <SRS0=EfWe=6B=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B03BEC636CC
-	for <soc@archiver.kernel.org>; Sat,  4 Feb 2023 10:08:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D02BC636CC
+	for <soc@archiver.kernel.org>; Sun,  5 Feb 2023 14:47:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61860C4339B; Sat,  4 Feb 2023 10:08:24 +0000 (UTC)
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 49397C4339B; Sun,  5 Feb 2023 14:47:04 +0000 (UTC)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3E343C433EF
-	for <soc@kernel.org>; Sat,  4 Feb 2023 10:08:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E343C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: marcan@marcan.st)
-	by mail.marcansoft.com (Postfix) with ESMTPSA id F25524265F;
-	Sat,  4 Feb 2023 10:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-	t=1675505291; bh=7/PAeC2Vz0jDqQAqtgjSWco24LeUmkyjQdKv1LGxieM=;
-	h=Date:From:Subject:To:Cc;
-	b=gvUVr5ggkxbv0NMr0OGHgkpxFvhDdOywF1QRKSjg7ZP+QkmRS+C3eLMoJRfulhnaR
-	 NySTMpZxRSVBxUzkdPhZKmF0Kzn0cPMqPgP8oBqEHqapgrMK3TdA/UNzqQNbEvi6ae
-	 gPovATBOnSkcJqMPNo55rET/Qz5rTLIl6Op5WhwQpoItL5Rl/yKV+fvYjdZsdlwhuA
-	 HeuJ0GMg0B/d+yeLhWdglVqJCreHruhkwgNmyG8xq+cgvd3OxrBpRob8ct8kbH5Loz
-	 1lNhRmvsmxjigXGCEYeasBBa16KxLr0MMXWiMT7lt0Xoo4Lsr+t5juTk8yDIPlc2Az
-	 i6+EL/H43Um1w==
-Message-ID: <4790bdc4-b6e2-228b-771f-023363f65fb3@marcan.st>
-Date: Sat, 4 Feb 2023 19:08:07 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From: Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC RTKit/PMGR updates for 6.3
+	by smtp.kernel.org (Postfix) with ESMTPS id 82756C433EF
+	for <soc@kernel.org>; Sun,  5 Feb 2023 14:47:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 82756C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f47.google.com with SMTP id h16so8284465wrz.12
+        for <soc@kernel.org>; Sun, 05 Feb 2023 06:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HR0gJobSHL9vE+BsCSIkgEZdXYIv6WLpvlg39qHg3YM=;
+        b=ue25OXS3a4CzuB1vxQMLp9XWz3vHa0DLAQwEfEaPMjMEx4GVzObfh3kmR1W5nmzz4/
+         G5vn82FlMVMJ04KGY3UmaZJmsqfQpAQGu/JR1++eJGvbLmsNaTC3/NfbgUnEmB7o7Xkc
+         bTdBYzqBvMyPJCltpbgCDPQaqxcNuNwvdPSTt+emWYuZOI3hUia4aWEdw6SpvNIllN4j
+         SikVCtmFO4fb2+8zaa8fgn5O+VX/EPJbHkQdnnF6GgT8F4bqSXHMwYZDseV1MnC4gwTI
+         coZl3AgLT4qLxFW5DoWYUDJ1hJaDeOhtMuFQeOm6xeO+xObw6F2uUh3ZRHWSpAhCtsb9
+         Otxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HR0gJobSHL9vE+BsCSIkgEZdXYIv6WLpvlg39qHg3YM=;
+        b=2wdlypqlCgFjstsI8VBQrF9LuMo+IyMzTGqWtDpxW5IxD9NKW3g+tgVQ7RwyMNPCOm
+         dzzNrVRX6gKlNcqs6u2zFBV1qcjOe39eHRM3hCkXZ0tXEJdyvW3k/pj94PcoOrbKl2J0
+         iooIQxwYiAPCz8WNkuvdAVy2CNE8CTbS9eTeuQasOF7NkrKeE1aNmqpRl1ZsuwY0/V8T
+         /Pqfo+dDPTiyInqN3SeMc1GLUwynHZk+COzDaZrwu33w0KJl8BI7IeJYG3El8Q2l7ePJ
+         YCYE3VjKfMD3I0h0yHwqchMXabgM5/nHyCjDDGwRC0Z8MjFsM3lk1ymA2fD39lbYdi2J
+         N10w==
+X-Gm-Message-State: AO0yUKVVxRiKjxe5+kkgPCItbqO+JkFrfkHFA3yK9Due1XLxIABPWJ2s
+	vN3o8l3+iqJAXrmUBoBPgFyZyg==
+X-Google-Smtp-Source: AK7set+F72M3wUCPpeFvd7+ejV4iEMUfZ+8nDmcg4bm7tKjZoJBQtCmQ2ecj/huPz2vyjS6ubTPI+g==
+X-Received: by 2002:a05:6000:988:b0:2bf:d88b:7b45 with SMTP id by8-20020a056000098800b002bfd88b7b45mr17833434wrb.67.1675608420767;
+        Sun, 05 Feb 2023 06:47:00 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q8-20020adfea08000000b002c3ddcf4f3asm4072354wrm.0.2023.02.05.06.46.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Feb 2023 06:47:00 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Content-Language: en-US
-Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] samsung: drivers: secoond pull for v6.3
+Date: Sun,  5 Feb 2023 15:46:57 +0100
+Message-Id: <20230205144657.951749-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+
+Hi,
+
+On top of previous pull request.
+
+The phy patches were acked by phy maintainer and are necessary to fix warning
+in my next/soc branch (already pulled).  That was an ordering issue.
+
+Best regards,
+Krzysztof
 
 
-Hi SoC folks,
+The following changes since commit 5e487164afbcd917225fb701e8956f388f43b601:
 
-Please merge these driver changes for 6.3.
-
-This batch comes with mostly RTKit changes adding APIs and features
-needed for upcoming drivers, plus a PMGR change that also unblocks some
-upcoming changes.
-
--Hector
-
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
-
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+  MAINTAINERS: arm64: tesla: correct pattern for directory (2023-01-15 12:17:44 +0100)
 
 are available in the Git repository at:
 
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-rtkit-pmgr-6.3
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-drivers-6.3-2
 
-for you to fetch changes up to 22991d8d57251509b8ee5c0b3dac04506fe5ed7a:
+for you to fetch changes up to 7ecd4e5f5de23022d1a1c92058949ddf1a2113ff:
 
-  soc: apple: rtkit: Add register dump decoding to crashlog (2023-01-31 20:44:47 +0900)
-
-----------------------------------------------------------------
-Apple SoC RTKit/PMGR updates for 6.3.
-
-This time around we have a PMGR change to allow IRQ-safe usage, RTKit
-crash register dump decoding, and a bunch of RTKit API changes used by
-upcoming drivers.
+  phy: samsung,mipi-video-phy: deprecate syscon phandle (2023-02-03 20:21:26 +0100)
 
 ----------------------------------------------------------------
-Asahi Lina (3):
-      soc: apple: rtkit: Add a private pointer to apple_rtkit_shmem
-      soc: apple: rtkit: Export non-devm init/free functions
-      soc: apple: rtkit: Add register dump decoding to crashlog
+Samsung SoC driver changes for v6.3
 
-Hector Martin (2):
-      soc: apple: rtkit: Add apple_rtkit_idle() function
-      soc: apple: apple-pmgr-pwrstate: Switch to IRQ-safe mode
+Deprecate syscon phandle to the PMU node in MIPI and DP video phy
+drivers in favor of putting the device nodes directly under the PMU
+nodes.  This better reflects device hierarchy and allows later to solve
+dtc W=1 and dtbs_check warnings.
 
- drivers/soc/apple/apple-pmgr-pwrstate.c | 11 ++--
- drivers/soc/apple/rtkit-crashlog.c      | 93 +++++++++++++++++++++++++++++++++
- drivers/soc/apple/rtkit.c               | 36 +++++++++++--
- include/linux/soc/apple/rtkit.h         | 26 +++++++++
- 4 files changed, 157 insertions(+), 9 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (4):
+      dt-bindings: phy: samsung,dp-video-phy: deprecate syscon phandle
+      dt-bindings: phy: samsung,mipi-video-phy: deprecate syscon phandle
+      phy: samsung,dp-video-phy: deprecate syscon phandle
+      phy: samsung,mipi-video-phy: deprecate syscon phandle
 
+ .../devicetree/bindings/phy/samsung,dp-video-phy.yaml         |  5 ++---
+ .../devicetree/bindings/phy/samsung,mipi-video-phy.yaml       | 11 +++++------
+ drivers/phy/samsung/phy-exynos-dp-video.c                     |  7 +++++--
+ drivers/phy/samsung/phy-exynos-mipi-video.c                   |  7 +++++--
+ 4 files changed, 17 insertions(+), 13 deletions(-)
