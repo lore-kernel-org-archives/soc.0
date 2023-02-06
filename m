@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E491C6379F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD2AC636D6
 	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 11:20:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 288CFC433A4; Mon,  6 Feb 2023 11:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E125C4339B;
+	id 1583AC433A1; Mon,  6 Feb 2023 11:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EE4EDC433D2;
 	Mon,  6 Feb 2023 11:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1675682418;
-	bh=HOMCYSWlP9cCqEmbzpFlvjwYHSmm7ufkhoTpnmkiIMY=;
+	bh=54MveLas/wqhWYBa/qvwhpbbsbLBEeuA35vTHZR8HgY=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=surOgxhh3lGCa1Pu02d3q0VRFlNML5LR33O8fbeam9e+/1ncOKgQYzpXBKNFSbzvb
-	 tASwimISdbnbcHpPrex1s/Rgf/dYlAn2ARSLO1od9IIObeLkkFCRaqItq/QFcJeNnq
-	 6UA0cFqNnEo0HPyaXqkWBjX/+FDCcuN4crzJkaqeVou7OPu2EHixznJBhYqdAEUCGB
-	 s+Xc5PxmApxWtSPSxrXHhZ9jbDyrQv48ocGXhQuLrQmh25E47rOYp2Fdlq6Pu0zb3g
-	 f6oYyApE3fqHxknhzmTiOeyJJn2rSInc6dOWbM2Ax/AlsYDTVhNxclmWIY3c7M306N
-	 1Urmy5oK7CT1w==
+	b=Z6hei5uznoD5y/4ryzRQ5ajU/yst9z05gPcT2SF8ZMd3GC5pysVIuIVROjhdSy7vU
+	 LJzoHxxuVcRQx+gKNbjxfTVz3G6E8np6vVXSWoBCBU5DKCzkM4tKGXt4krwP0UNic7
+	 1bOkgNEiROxZlPhhdd+SHZWngz15nMmW0vdU6sIDtxhgTC3yGPEl4YQfViv73taN4o
+	 9nNJBJchAhronflQZVyV04qPCZEZn/1sDOPhXpnk++cOhdO+Cux7g7UutGTKO5rJso
+	 0xNAPqIIM/Um1tq4OPpY6pEXEJ9cIbPgjJzGJOfp1+6E4PxujnwcoqqPipzAFddeQJ
+	 t6bDUw9pE8fNg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DD124E49BBF;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CEE8BE55EFD;
 	Mon,  6 Feb 2023 11:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] ARM: defconfig: Add IOSCHED_BFQ to the default configs
+Subject: Re: [GIT PULL] samsung: drivers: secoond pull for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167568241790.3898.6782749897913820727.git-patchwork-notify@kernel.org>
+ <167568241783.3898.15184076698892106168.git-patchwork-notify@kernel.org>
 Date: Mon, 06 Feb 2023 11:20:17 +0000
-References: <20230203140404.1125850-1-linus.walleij@linaro.org>
-In-Reply-To: <20230203140404.1125850-1-linus.walleij@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <20230205144657.951749-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230205144657.951749-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri,  3 Feb 2023 15:04:04 +0100 you wrote:
-> ARM systems are often memory constrained and more often than not
-> use slow single-channel storage such as flash memory or MMC/SD-cards.
-> For any interactive systems (such as mobile phones, tablets,
-> chromebooks...) the BFQ I/O scheduler will be desireable.
+On Sun,  5 Feb 2023 15:46:57 +0100 you wrote:
+> Hi,
 > 
-> Make sure the BFQ I/O scheduler is available on these systems.
+> On top of previous pull request.
+> 
+> The phy patches were acked by phy maintainer and are necessary to fix warning
+> in my next/soc branch (already pulled).  That was an ordering issue.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] ARM: defconfig: Add IOSCHED_BFQ to the default configs
-    https://git.kernel.org/soc/soc/c/e52d5388bd6f
+  - [GIT,PULL] samsung: drivers: secoond pull for v6.3
+    https://git.kernel.org/soc/soc/c/e26f8413cc92
 
 You are awesome, thank you!
 -- 
