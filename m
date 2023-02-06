@@ -4,59 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD2AC636D6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ECA7C05027
 	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 11:20:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1583AC433A1; Mon,  6 Feb 2023 11:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EE4EDC433D2;
-	Mon,  6 Feb 2023 11:20:17 +0000 (UTC)
+	id 157FFC4339E; Mon,  6 Feb 2023 11:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F15DFC433EF
+	for <soc@kernel.org>; Mon,  6 Feb 2023 11:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1675682418;
-	bh=54MveLas/wqhWYBa/qvwhpbbsbLBEeuA35vTHZR8HgY=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Z6hei5uznoD5y/4ryzRQ5ajU/yst9z05gPcT2SF8ZMd3GC5pysVIuIVROjhdSy7vU
-	 LJzoHxxuVcRQx+gKNbjxfTVz3G6E8np6vVXSWoBCBU5DKCzkM4tKGXt4krwP0UNic7
-	 1bOkgNEiROxZlPhhdd+SHZWngz15nMmW0vdU6sIDtxhgTC3yGPEl4YQfViv73taN4o
-	 9nNJBJchAhronflQZVyV04qPCZEZn/1sDOPhXpnk++cOhdO+Cux7g7UutGTKO5rJso
-	 0xNAPqIIM/Um1tq4OPpY6pEXEJ9cIbPgjJzGJOfp1+6E4PxujnwcoqqPipzAFddeQJ
-	 t6bDUw9pE8fNg==
+	bh=+3ivyBHseb4io6zphT2+HX9H7+67lAjTzfl66DOTjlA=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=rpxcLQ86SLfVHmjZ2QJvrDsLlaPhUfCGFJyfPmWIROTM8ehQFRdxmssvK2AZjPI0P
+	 8gka19xA3U1F+Vnv26jwR52Zu/Yeu3TiIEfMiQjiovqOHzO5YbxZ+PXpmQXwDYUjA5
+	 PkPQYSIZ3nOeeyhuT9I2SZtaKCUn8k/kFa8et9b2nvtw1SHJ1+Y+cbtk/jzf3I5Pf9
+	 sKulLaqRHgS7nNLrj08dY9vzESwrQenuVa2Tt4FsEPgY+OGttZV2Qxp4wOSTYhipJM
+	 JYfUoqBWLua3ZLiBo8wnXNRpULuJRbbnlpq7IVgX9DXm986+TKRTJ+NxBZQMmKxX2y
+	 g0NV7UMcPg1rQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CEE8BE55EFD;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C50D3E55EFB;
 	Mon,  6 Feb 2023 11:20:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] samsung: drivers: secoond pull for v6.3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167568241783.3898.15184076698892106168.git-patchwork-notify@kernel.org>
+ <167568241772.3898.6357279753642649779.git-patchwork-summary@kernel.org>
 Date: Mon, 06 Feb 2023 11:20:17 +0000
-References: <20230205144657.951749-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230205144657.951749-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Sun,  5 Feb 2023 15:46:57 +0100 you wrote:
-> Hi,
-> 
-> On top of previous pull request.
-> 
-> The phy patches were acked by phy maintainer and are necessary to fix warning
-> in my next/soc branch (already pulled).  That was an ordering issue.
-> 
-> [...]
+Patch: [GIT,PULL] samsung: drivers: secoond pull for v6.3
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=718909
+  Lore link: https://lore.kernel.org/r/20230205144657.951749-1-krzysztof.kozlowski@linaro.org
 
-Here is the summary with links:
-  - [GIT,PULL] samsung: drivers: secoond pull for v6.3
-    https://git.kernel.org/soc/soc/c/e26f8413cc92
+Patch: [GIT,PULL] Apple SoC RTKit/PMGR updates for 6.3
+  Submitter: Hector Martin <marcan@marcan.st>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=718791
+  Lore link: https://lore.kernel.org/r/4790bdc4-b6e2-228b-771f-023363f65fb3@marcan.st
 
-You are awesome, thank you!
+Patch: [v2] ARM: defconfig: Add IOSCHED_BFQ to the default configs
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=718603
+  Lore link: https://lore.kernel.org/r/20230203140404.1125850-1-linus.walleij@linaro.org
+
+
+Total patches: 3
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
