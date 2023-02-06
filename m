@@ -4,33 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8141C05027
-	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 16:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F2F0C63797
+	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 16:26:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CCE21C433EF; Mon,  6 Feb 2023 16:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561C3C433D2;
-	Mon,  6 Feb 2023 16:26:48 +0000 (UTC)
+	id E3568C4339E; Mon,  6 Feb 2023 16:26:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30424C4339B;
+	Mon,  6 Feb 2023 16:26:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675700809;
-	bh=cvlkF2moKqRYWYh68rf7LZClSIAIHf7L0F/n+EarcS8=;
-	h=From:Subject:Date:List-Id:To:Cc:From;
-	b=Is628KAC6s+DO5n2OnjpOrDx/zrxNSMRkRFbSHD+DOBmRz2J432dk1f9Alb/7aURi
-	 gZVlOAm3/Xdropfs+TQ2lMBWuuHZIG8fbk5hVGIToelB6OpAvEU/N53kQ0ZrNWOv2m
-	 gEy/qddTEhDiI3/c2JNB16MrKKvkcBy8b46giq9noCYsghUxt5KcWaUvn2Y1zGR4vA
-	 0RFvmc02DAWlD8g9/fMt4E0gXAxYXvBaTQ/buroJcgrA8/8Fs6MVX9Al4INLCHa9sJ
-	 BAL5ylTuPEXh98dNJ2xYEsZS7Ms7QL6BjpeFAf5B3kBJ2eYymiYMNN2YGKX/TaGxPi
-	 v/vVH/dgP4h6A==
+	s=k20201202; t=1675700811;
+	bh=Hrbz+8jUrxEuoNJy5RH9Usa1r1/o9lWdxVlG8Ulcqkw=;
+	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:From;
+	b=c4OTnqJvugFRDnxi41cuKlb7DIGHj0z/jBTlTTXJJJ6/U6c4E4YKgLydk+VZc18vE
+	 /X8X4ddSQpUYQQT2qWjQTUD7vkQqI7N/jNQ6bpFI54AalLclWxZPOupT0I/ob0KA9q
+	 uPk89HLxWrI4NwfoWHxRgl5CrckR6RuyokBEl/wdQC8BH2LdPU583sEbvcbwmkEyke
+	 EkQirtp3fpjZYrGyc3gN6a0kGYDWknAly0r4o1ksrMIlRWJp6d+XM6tBNw7bPeljFX
+	 YkrdE3UYrtkOd1rcaLXJaOgQoiPHDJYYL4ic6s+i73CnUvbvvSBRP84g2bKfbMuTlD
+	 n+KAmK3UDVhSA==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] arm64: configs: Provide slimmed down configuration for
- guests
-Date: Mon, 06 Feb 2023 16:26:32 +0000
-Message-Id: <20230203-arm64-defconfigs-v1-0-6d0d03a6dbd2@kernel.org>
+Date: Mon, 06 Feb 2023 16:26:33 +0000
+Subject: [PATCH 1/2] arm64: configs: Split defconfig into base and platform
+ configs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADgq4WMC/x2NQQqDQAwAvyI5d2G7WpF+pfQQY6KhdLck0Ari3
- 117nIFhNnA2ZYd7s4HxV11LrnC9NEAL5pmDTpUhxdTGFNuA9u67MLFQyaKzB4odyU2wT8MANRv
- ROYyGmZYz/BV7nfpjLLr+T4/nvh9uXddXeQAAAA==
+Message-Id: <20230203-arm64-defconfigs-v1-1-6d0d03a6dbd2@kernel.org>
+References: <20230203-arm64-defconfigs-v1-0-6d0d03a6dbd2@kernel.org>
+In-Reply-To: <20230203-arm64-defconfigs-v1-0-6d0d03a6dbd2@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, soc@kernel.org
@@ -38,62 +37,475 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  Peter Zijlstra <peterz@infradead.org>, linux-arm-kernel@lists.infradead.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2163; i=broonie@kernel.org;
- h=from:subject:message-id; bh=cvlkF2moKqRYWYh68rf7LZClSIAIHf7L0F/n+EarcS8=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj4SpF2kzo+TQoE9str2cZ5kY1ShsH+XIX6DgoStPT
- S0aEN3GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY+EqRQAKCRAk1otyXVSH0AIRB/
- 0QQt/UtnC4Jkpl1+buU9L3NhR/3YOsuygKzVrg/VswQiJKmE3tov6uS55A9oE+BDMt479gHn3lDeVV
- JX7UT21AZ6ORFr2E4V3a5MOBh9Zf8B95sZMV5S8o0fubBnpsFWaUSYs8IOjShXXrPYfwYHBw/tsN2r
- VoddFQ+fmofPoNC6T+JDx/kvO27/FKguXcvzZoozxr/2SISTGDG3Vq+OJ/+EBi7ynV4RIGGzUXIpcg
- rguNgNzSstcYGlqVG8zC72hW0w5KptKClzL+WsCVg6zv3TDJ+COfViSNpJIhsnWP3iF/xx/xxQrjse
- jf3WaBNpfreyDddfm9d+xca1CvzSeR
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12394; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Hrbz+8jUrxEuoNJy5RH9Usa1r1/o9lWdxVlG8Ulcqkw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj4SpGiSO1sXDN4D5ppKVkBUmXGFlhCtBLC3C9OFCx
+ MxxntcSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY+EqRgAKCRAk1otyXVSH0EHVB/
+ 9fjEnFEBZVSut+eo2RW7xZM+TRRN2B94Rc6aZ48m2rKGLRVGPuhEplb4DrNbwpi7AvYaLSe3mqPnwv
+ wk5zKQzGtN01L7RZdv2rrs8gkdZHh/7+2gBWcyl3qq3Gz+xDDBdtf7PMt2meZWRVB8zwfduNf04Khp
+ Ua9JcOEAH//dcAd89SQJQz+t8q7orqoIw29aIRFzJcaVTyITMHXpi42lcI8vkXvC1D39kXdw7lv8T2
+ qtvQa6U+kTK6AIHbFex2tQcMGLWO1V04VDpon0QrL6Lk0e7Sxi2dlwj48L7XqsMP4K4AhxasETKKV5
+ 5kpvRDhyQegql+JHfyvCm684NUrAW5
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-It has been noted that due to the extensive platform support it
-enables the arm64 defconfig is rather large and takes a while to
-build in comparison with other architectures which can be a
-burden when doing cross architecture work, especially when
-testing is mainly in emulation.  We can mitigate this by providing
-a configuration that only enables the support required to run in
-mach-virt, this will be much smaller and quicker to build.
+In preparation for providing some smaller defconfigs split out
+the architecture defconfig into smaller fragments, one with the
+base enablement for the architecture and one with the platform
+support.  There is definitely plenty of room for discussion on
+the split here, the basic concept is that hardware enablement is
+in the platforms config and everything else in the base config.
 
-Having two completely separate configurations would mean that we'd
-need to make any changes to the architecture wide configuration in
-both the existing defconfig and the new configuration if we wanted to
-ensure consistent default behaviour.  We can reduce this by splitting
-the existing defconfig into a base fragment which enables options for
-the architecture itself and one for platform configuration which has
-all the platform enablement options, merging them to produce
-defconfig.  We can then add another fragment enabling only options for
-mach-virt and merge that with the base config to provide a new
-virtconfig configuration.
-
-The split of configurations is somewhat arbitrary, there will be some
-room for discussion there, and it may be that splitting things up in
-this manner is considered more trouble than it's worth.  If we're
-going to start doing this then there may also be some desire for other
-configurations. 
-
-This is based on current -next since it's very late in the
-release cycle.
+The resulting .config is identical.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      arm64: configs: Split defconfig into base and platform configs
-      arm64: configs: Add virtconfig
-
- arch/arm64/Makefile                                |  10 ++
+ arch/arm64/Makefile                                |   6 +
  arch/arm64/configs/base.config                     | 169 +++++++++++++++++++++
  arch/arm64/configs/{defconfig => platforms.config} | 169 ---------------------
- arch/arm64/configs/virt.config                     |  43 ++++++
- 4 files changed, 222 insertions(+), 169 deletions(-)
----
-base-commit: 4fafd96910add124586b549ad005dcd179de8a18
-change-id: 20230203-arm64-defconfigs-c04cf5fa6288
+ 3 files changed, 175 insertions(+), 169 deletions(-)
 
-Best regards,
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index c33b5da95b4a..491ec81ae0b6 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -205,6 +205,12 @@ ifdef CONFIG_COMPAT_VDSO
+ endif
+ endif
+ 
++include $(srctree)/scripts/Makefile.defconf
++
++PHONY += defconfig
++defconfig:
++	$(call merge_into_defconfig,base.config,platforms)
++
+ define archhelp
+   echo  '* Image.gz      - Compressed kernel image (arch/$(ARCH)/boot/Image.gz)'
+   echo  '  Image         - Uncompressed kernel image (arch/$(ARCH)/boot/Image)'
+diff --git a/arch/arm64/configs/base.config b/arch/arm64/configs/base.config
+new file mode 100644
+index 000000000000..0c5b8a8d1cae
+--- /dev/null
++++ b/arch/arm64/configs/base.config
+@@ -0,0 +1,169 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_AUDIT=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BPF_SYSCALL=y
++CONFIG_BPF_JIT=y
++CONFIG_PREEMPT=y
++CONFIG_IRQ_TIME_ACCOUNTING=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_TASKSTATS=y
++CONFIG_TASK_XACCT=y
++CONFIG_TASK_IO_ACCOUNTING=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_NUMA_BALANCING=y
++CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CGROUP_PIDS=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_HUGETLB=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_PERF=y
++CONFIG_CGROUP_BPF=y
++CONFIG_USER_NS=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_KALLSYMS_ALL=y
++CONFIG_PROFILING=y
++CONFIG_ARM64_VA_BITS_48=y
++CONFIG_SCHED_MC=y
++CONFIG_SCHED_SMT=y
++CONFIG_NUMA=y
++CONFIG_KEXEC=y
++CONFIG_KEXEC_FILE=y
++CONFIG_CRASH_DUMP=y
++CONFIG_XEN=y
++CONFIG_COMPAT=y
++CONFIG_RANDOMIZE_BASE=y
++CONFIG_HIBERNATION=y
++CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
++CONFIG_VIRTUALIZATION=y
++CONFIG_KVM=y
++CONFIG_CRYPTO_SHA1_ARM64_CE=y
++CONFIG_CRYPTO_SHA2_ARM64_CE=y
++CONFIG_CRYPTO_SHA512_ARM64_CE=m
++CONFIG_CRYPTO_SHA3_ARM64=m
++CONFIG_CRYPTO_SM3_ARM64_CE=m
++CONFIG_CRYPTO_GHASH_ARM64_CE=y
++CONFIG_CRYPTO_CRCT10DIF_ARM64_CE=m
++CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
++CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
++CONFIG_CRYPTO_CHACHA20_NEON=m
++CONFIG_CRYPTO_AES_ARM64_BS=m
++CONFIG_JUMP_LABEL=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MEMORY_HOTPLUG=y
++CONFIG_MEMORY_HOTREMOVE=y
++CONFIG_KSM=y
++CONFIG_MEMORY_FAILURE=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IPV6=m
++CONFIG_NETFILTER=y
++CONFIG_BRIDGE_NETFILTER=m
++CONFIG_NF_CONNTRACK=m
++CONFIG_NF_CONNTRACK_EVENTS=y
++CONFIG_NETFILTER_XT_MARK=m
++CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
++CONFIG_NETFILTER_XT_TARGET_LOG=m
++CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
++CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
++CONFIG_NETFILTER_XT_MATCH_IPVS=m
++CONFIG_IP_VS=m
++CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_TARGET_REJECT=m
++CONFIG_IP_NF_NAT=m
++CONFIG_IP_NF_TARGET_MASQUERADE=m
++CONFIG_IP_NF_MANGLE=m
++CONFIG_IP6_NF_IPTABLES=m
++CONFIG_IP6_NF_FILTER=m
++CONFIG_IP6_NF_TARGET_REJECT=m
++CONFIG_IP6_NF_MANGLE=m
++CONFIG_IP6_NF_NAT=m
++CONFIG_IP6_NF_TARGET_MASQUERADE=m
++CONFIG_BRIDGE=m
++CONFIG_BRIDGE_VLAN_FILTERING=y
++CONFIG_NET_DSA=m
++CONFIG_VLAN_8021Q=m
++CONFIG_VLAN_8021Q_GVRP=y
++CONFIG_VLAN_8021Q_MVRP=y
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_CBS=m
++CONFIG_NET_SCH_ETF=m
++CONFIG_NET_SCH_TAPRIO=m
++CONFIG_NET_SCH_MQPRIO=m
++CONFIG_NET_SCH_INGRESS=m
++CONFIG_NET_CLS_BASIC=m
++CONFIG_NET_CLS_FLOWER=m
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_ACT_GACT=m
++CONFIG_NET_ACT_MIRRED=m
++CONFIG_NET_ACT_GATE=m
++CONFIG_QRTR_SMD=m
++CONFIG_QRTR_TUN=m
++CONFIG_NET_9P=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_LEGACY_PTY_COUNT=16
++CONFIG_SYSCON_REBOOT_MODE=y
++CONFIG_ARM_SPE_PMU=m
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_BTRFS_FS=m
++CONFIG_BTRFS_FS_POSIX_ACL=y
++CONFIG_FANOTIFY=y
++CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
++CONFIG_QUOTA=y
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=m
++CONFIG_CUSE=m
++CONFIG_OVERLAY_FS=m
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_HUGETLBFS=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_SQUASHFS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V4=y
++CONFIG_NFS_V4_1=y
++CONFIG_NFS_V4_2=y
++CONFIG_ROOT_NFS=y
++CONFIG_9P_FS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_SECURITY=y
++CONFIG_CRYPTO_USER=y
++CONFIG_CRYPTO_ECHAINIV=y
++CONFIG_CRYPTO_MICHAEL_MIC=m
++CONFIG_CRYPTO_ANSI_CPRNG=y
++CONFIG_CRYPTO_USER_API_RNG=m
++CONFIG_DMA_RESTRICTED_POOL=y
++CONFIG_CMA_SIZE_MBYTES=32
++CONFIG_PRINTK_TIME=y
++CONFIG_DEBUG_KERNEL=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
++CONFIG_DEBUG_INFO_REDUCED=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_PREEMPT is not set
++# CONFIG_FTRACE is not set
++CONFIG_MEMTEST=y
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/platforms.config
+similarity index 88%
+rename from arch/arm64/configs/defconfig
+rename to arch/arm64/configs/platforms.config
+index a8c74a419d95..0217cac34620 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/platforms.config
+@@ -1,35 +1,3 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_AUDIT=y
+-CONFIG_NO_HZ_IDLE=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_BPF_SYSCALL=y
+-CONFIG_BPF_JIT=y
+-CONFIG_PREEMPT=y
+-CONFIG_IRQ_TIME_ACCOUNTING=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_BSD_PROCESS_ACCT_V3=y
+-CONFIG_TASKSTATS=y
+-CONFIG_TASK_XACCT=y
+-CONFIG_TASK_IO_ACCOUNTING=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_NUMA_BALANCING=y
+-CONFIG_MEMCG=y
+-CONFIG_BLK_CGROUP=y
+-CONFIG_CGROUP_PIDS=y
+-CONFIG_CGROUP_FREEZER=y
+-CONFIG_CGROUP_HUGETLB=y
+-CONFIG_CPUSETS=y
+-CONFIG_CGROUP_DEVICE=y
+-CONFIG_CGROUP_CPUACCT=y
+-CONFIG_CGROUP_PERF=y
+-CONFIG_CGROUP_BPF=y
+-CONFIG_USER_NS=y
+-CONFIG_SCHED_AUTOGROUP=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_KALLSYMS_ALL=y
+-CONFIG_PROFILING=y
+ CONFIG_ARCH_ACTIONS=y
+ CONFIG_ARCH_SUNXI=y
+ CONFIG_ARCH_ALPINE=y
+@@ -69,18 +37,6 @@ CONFIG_ARCH_VEXPRESS=y
+ CONFIG_ARCH_VISCONTI=y
+ CONFIG_ARCH_XGENE=y
+ CONFIG_ARCH_ZYNQMP=y
+-CONFIG_ARM64_VA_BITS_48=y
+-CONFIG_SCHED_MC=y
+-CONFIG_SCHED_SMT=y
+-CONFIG_NUMA=y
+-CONFIG_KEXEC=y
+-CONFIG_KEXEC_FILE=y
+-CONFIG_CRASH_DUMP=y
+-CONFIG_XEN=y
+-CONFIG_COMPAT=y
+-CONFIG_RANDOMIZE_BASE=y
+-CONFIG_HIBERNATION=y
+-CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
+ CONFIG_ENERGY_MODEL=y
+ CONFIG_ARM_PSCI_CPUIDLE=y
+ CONFIG_CPU_FREQ=y
+@@ -110,81 +66,6 @@ CONFIG_ACPI_APEI_GHES=y
+ CONFIG_ACPI_APEI_PCIEAER=y
+ CONFIG_ACPI_APEI_MEMORY_FAILURE=y
+ CONFIG_ACPI_APEI_EINJ=y
+-CONFIG_VIRTUALIZATION=y
+-CONFIG_KVM=y
+-CONFIG_CRYPTO_SHA1_ARM64_CE=y
+-CONFIG_CRYPTO_SHA2_ARM64_CE=y
+-CONFIG_CRYPTO_SHA512_ARM64_CE=m
+-CONFIG_CRYPTO_SHA3_ARM64=m
+-CONFIG_CRYPTO_SM3_ARM64_CE=m
+-CONFIG_CRYPTO_GHASH_ARM64_CE=y
+-CONFIG_CRYPTO_CRCT10DIF_ARM64_CE=m
+-CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
+-CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
+-CONFIG_CRYPTO_CHACHA20_NEON=m
+-CONFIG_CRYPTO_AES_ARM64_BS=m
+-CONFIG_JUMP_LABEL=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_MEMORY_HOTPLUG=y
+-CONFIG_MEMORY_HOTREMOVE=y
+-CONFIG_KSM=y
+-CONFIG_MEMORY_FAILURE=y
+-CONFIG_TRANSPARENT_HUGEPAGE=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_IPV6=m
+-CONFIG_NETFILTER=y
+-CONFIG_BRIDGE_NETFILTER=m
+-CONFIG_NF_CONNTRACK=m
+-CONFIG_NF_CONNTRACK_EVENTS=y
+-CONFIG_NETFILTER_XT_MARK=m
+-CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
+-CONFIG_NETFILTER_XT_TARGET_LOG=m
+-CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
+-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+-CONFIG_NETFILTER_XT_MATCH_IPVS=m
+-CONFIG_IP_VS=m
+-CONFIG_IP_NF_IPTABLES=m
+-CONFIG_IP_NF_FILTER=m
+-CONFIG_IP_NF_TARGET_REJECT=m
+-CONFIG_IP_NF_NAT=m
+-CONFIG_IP_NF_TARGET_MASQUERADE=m
+-CONFIG_IP_NF_MANGLE=m
+-CONFIG_IP6_NF_IPTABLES=m
+-CONFIG_IP6_NF_FILTER=m
+-CONFIG_IP6_NF_TARGET_REJECT=m
+-CONFIG_IP6_NF_MANGLE=m
+-CONFIG_IP6_NF_NAT=m
+-CONFIG_IP6_NF_TARGET_MASQUERADE=m
+-CONFIG_BRIDGE=m
+-CONFIG_BRIDGE_VLAN_FILTERING=y
+-CONFIG_NET_DSA=m
+-CONFIG_VLAN_8021Q=m
+-CONFIG_VLAN_8021Q_GVRP=y
+-CONFIG_VLAN_8021Q_MVRP=y
+-CONFIG_NET_SCHED=y
+-CONFIG_NET_SCH_CBS=m
+-CONFIG_NET_SCH_ETF=m
+-CONFIG_NET_SCH_TAPRIO=m
+-CONFIG_NET_SCH_MQPRIO=m
+-CONFIG_NET_SCH_INGRESS=m
+-CONFIG_NET_CLS_BASIC=m
+-CONFIG_NET_CLS_FLOWER=m
+-CONFIG_NET_CLS_ACT=y
+-CONFIG_NET_ACT_GACT=m
+-CONFIG_NET_ACT_MIRRED=m
+-CONFIG_NET_ACT_GATE=m
+-CONFIG_QRTR_SMD=m
+-CONFIG_QRTR_TUN=m
+ CONFIG_CAN=m
+ CONFIG_CAN_FLEXCAN=m
+ CONFIG_CAN_RCAR=m
+@@ -209,8 +90,6 @@ CONFIG_CFG80211=m
+ CONFIG_MAC80211=m
+ CONFIG_MAC80211_LEDS=y
+ CONFIG_RFKILL=m
+-CONFIG_NET_9P=y
+-CONFIG_NET_9P_VIRTIO=y
+ CONFIG_NFC=m
+ CONFIG_NFC_NCI=m
+ CONFIG_NFC_S3FWRN5_I2C=m
+@@ -247,8 +126,6 @@ CONFIG_PCIE_LAYERSCAPE_GEN4=y
+ CONFIG_PCI_ENDPOINT=y
+ CONFIG_PCI_ENDPOINT_CONFIGFS=y
+ CONFIG_PCI_EPF_TEST=m
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_FW_LOADER_USER_HELPER=y
+ CONFIG_HISILICON_LPC=y
+ CONFIG_TEGRA_ACONNECT=m
+@@ -433,7 +310,6 @@ CONFIG_INPUT_PWM_VIBRA=m
+ CONFIG_INPUT_HISI_POWERKEY=y
+ # CONFIG_SERIO_SERPORT is not set
+ CONFIG_SERIO_AMBAKMI=y
+-CONFIG_LEGACY_PTY_COUNT=16
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_SERIAL_8250_EXTENDED=y
+@@ -602,7 +478,6 @@ CONFIG_POWER_RESET_MSM=y
+ CONFIG_POWER_RESET_QCOM_PON=m
+ CONFIG_POWER_RESET_XGENE=y
+ CONFIG_POWER_RESET_SYSCON=y
+-CONFIG_SYSCON_REBOOT_MODE=y
+ CONFIG_BATTERY_SBS=m
+ CONFIG_BATTERY_BQ27XXX=y
+ CONFIG_BATTERY_MAX17042=m
+@@ -1336,7 +1211,6 @@ CONFIG_ARM_CMN=m
+ CONFIG_ARM_SMMU_V3_PMU=m
+ CONFIG_ARM_DSU_PMU=m
+ CONFIG_FSL_IMX8_DDR_PMU=m
+-CONFIG_ARM_SPE_PMU=m
+ CONFIG_ARM_DMC620_PMU=m
+ CONFIG_QCOM_L2_PMU=y
+ CONFIG_QCOM_L3_PMU=y
+@@ -1389,38 +1263,7 @@ CONFIG_INTERCONNECT_QCOM_SM8550=y
+ CONFIG_HTE=y
+ CONFIG_HTE_TEGRA194=y
+ CONFIG_HTE_TEGRA194_TEST=m
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_EXT4_FS_POSIX_ACL=y
+-CONFIG_BTRFS_FS=m
+-CONFIG_BTRFS_FS_POSIX_ACL=y
+-CONFIG_FANOTIFY=y
+-CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
+-CONFIG_QUOTA=y
+-CONFIG_AUTOFS4_FS=y
+-CONFIG_FUSE_FS=m
+-CONFIG_CUSE=m
+-CONFIG_OVERLAY_FS=m
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-CONFIG_HUGETLBFS=y
+-CONFIG_CONFIGFS_FS=y
+ CONFIG_EFIVAR_FS=y
+-CONFIG_SQUASHFS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V4=y
+-CONFIG_NFS_V4_1=y
+-CONFIG_NFS_V4_2=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_9P_FS=y
+-CONFIG_NLS_CODEPAGE_437=y
+-CONFIG_NLS_ISO8859_1=y
+-CONFIG_SECURITY=y
+-CONFIG_CRYPTO_USER=y
+-CONFIG_CRYPTO_ECHAINIV=y
+-CONFIG_CRYPTO_MICHAEL_MIC=m
+-CONFIG_CRYPTO_ANSI_CPRNG=y
+-CONFIG_CRYPTO_USER_API_RNG=m
+ CONFIG_CRYPTO_DEV_SUN8I_CE=m
+ CONFIG_CRYPTO_DEV_FSL_CAAM=m
+ CONFIG_CRYPTO_DEV_FSL_DPAA2_CAAM=m
+@@ -1431,17 +1274,6 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
+ CONFIG_CRYPTO_DEV_HISI_ZIP=m
+ CONFIG_CRYPTO_DEV_HISI_HPRE=m
+ CONFIG_CRYPTO_DEV_HISI_TRNG=m
+-CONFIG_DMA_RESTRICTED_POOL=y
+-CONFIG_CMA_SIZE_MBYTES=32
+-CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_KERNEL=y
+-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+-CONFIG_DEBUG_INFO_REDUCED=y
+-CONFIG_MAGIC_SYSRQ=y
+-CONFIG_DEBUG_FS=y
+-# CONFIG_SCHED_DEBUG is not set
+-# CONFIG_DEBUG_PREEMPT is not set
+-# CONFIG_FTRACE is not set
+ CONFIG_CORESIGHT=m
+ CONFIG_CORESIGHT_LINK_AND_SINK_TMC=m
+ CONFIG_CORESIGHT_CATU=m
+@@ -1450,4 +1282,3 @@ CONFIG_CORESIGHT_SINK_ETBV10=m
+ CONFIG_CORESIGHT_STM=m
+ CONFIG_CORESIGHT_CPU_DEBUG=m
+ CONFIG_CORESIGHT_CTI=m
+-CONFIG_MEMTEST=y
+
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
