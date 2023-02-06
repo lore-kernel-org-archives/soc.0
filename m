@@ -1,68 +1,99 @@
-Return-Path: <dinguyen@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 893A3C636D3
-	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 16:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8141C05027
+	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 16:26:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 441CEC4339C; Mon,  6 Feb 2023 16:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB9DCC433EF;
-	Mon,  6 Feb 2023 16:24:26 +0000 (UTC)
+	id CCE21C433EF; Mon,  6 Feb 2023 16:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561C3C433D2;
+	Mon,  6 Feb 2023 16:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675700667;
-	bh=UKFTgb9xDyqHxPmusOu5KNqr9Dj4JHkZLfiw7RjfZvc=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=dE6edSiUGSZCmXrqPyqt+fvgZuocx6F9ZYyPoj5ZNuEWQaFSLa8Fb2fTxiruVjWu+
-	 2gF71mQWESsKOWLe9V2uy4AFUCKcHhGp92yht3Ey2dnBIaE579cGm06GjNeefooMr/
-	 rXkocrYtTvF8sYJiZ2TXDwZAtvHoVvCprTAEyFGfpNRRBIMBVSN3liEBP6lvUu536/
-	 uTz123t4/lsfR82mX2As12hRobjRNw/l25LYnj+wMuuP2HujYaVnsZr/kgi2Eq/ezY
-	 HPmbSAjglAV3Y9+nPBwGGxaCivndx6JmdE/5XGk1BtEUmd89BGdMdtTiuogz8EA3Yo
-	 i8kHG7AAJgYeA==
-From: Dinh Nguyen <dinguyen@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: dinguyen@kernel.org
-Subject: [GIT PULL] arm: dts: socfpga: dts updates for v6.3
-Date: Mon,  6 Feb 2023 10:24:25 -0600
-Message-Id: <20230206162425.311593-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
+	s=k20201202; t=1675700809;
+	bh=cvlkF2moKqRYWYh68rf7LZClSIAIHf7L0F/n+EarcS8=;
+	h=From:Subject:Date:List-Id:To:Cc:From;
+	b=Is628KAC6s+DO5n2OnjpOrDx/zrxNSMRkRFbSHD+DOBmRz2J432dk1f9Alb/7aURi
+	 gZVlOAm3/Xdropfs+TQ2lMBWuuHZIG8fbk5hVGIToelB6OpAvEU/N53kQ0ZrNWOv2m
+	 gEy/qddTEhDiI3/c2JNB16MrKKvkcBy8b46giq9noCYsghUxt5KcWaUvn2Y1zGR4vA
+	 0RFvmc02DAWlD8g9/fMt4E0gXAxYXvBaTQ/buroJcgrA8/8Fs6MVX9Al4INLCHa9sJ
+	 BAL5ylTuPEXh98dNJ2xYEsZS7Ms7QL6BjpeFAf5B3kBJ2eYymiYMNN2YGKX/TaGxPi
+	 v/vVH/dgP4h6A==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/2] arm64: configs: Provide slimmed down configuration for
+ guests
+Date: Mon, 06 Feb 2023 16:26:32 +0000
+Message-Id: <20230203-arm64-defconfigs-v1-0-6d0d03a6dbd2@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADgq4WMC/x2NQQqDQAwAvyI5d2G7WpF+pfQQY6KhdLck0Ari3
+ 117nIFhNnA2ZYd7s4HxV11LrnC9NEAL5pmDTpUhxdTGFNuA9u67MLFQyaKzB4odyU2wT8MANRv
+ ROYyGmZYz/BV7nfpjLLr+T4/nvh9uXddXeQAAAA==
+List-Id: <soc.lore.kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, soc@kernel.org
+Cc: Mark Rutland <mark.rutland@arm.com>, 
+ Peter Zijlstra <peterz@infradead.org>, linux-arm-kernel@lists.infradead.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2163; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=cvlkF2moKqRYWYh68rf7LZClSIAIHf7L0F/n+EarcS8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj4SpF2kzo+TQoE9str2cZ5kY1ShsH+XIX6DgoStPT
+ S0aEN3GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY+EqRQAKCRAk1otyXVSH0AIRB/
+ 0QQt/UtnC4Jkpl1+buU9L3NhR/3YOsuygKzVrg/VswQiJKmE3tov6uS55A9oE+BDMt479gHn3lDeVV
+ JX7UT21AZ6ORFr2E4V3a5MOBh9Zf8B95sZMV5S8o0fubBnpsFWaUSYs8IOjShXXrPYfwYHBw/tsN2r
+ VoddFQ+fmofPoNC6T+JDx/kvO27/FKguXcvzZoozxr/2SISTGDG3Vq+OJ/+EBi7ynV4RIGGzUXIpcg
+ rguNgNzSstcYGlqVG8zC72hW0w5KptKClzL+WsCVg6zv3TDJ+COfViSNpJIhsnWP3iF/xx/xxQrjse
+ jf3WaBNpfreyDddfm9d+xca1CvzSeR
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+It has been noted that due to the extensive platform support it
+enables the arm64 defconfig is rather large and takes a while to
+build in comparison with other architectures which can be a
+burden when doing cross architecture work, especially when
+testing is mainly in emulation.  We can mitigate this by providing
+a configuration that only enables the support required to run in
+mach-virt, this will be much smaller and quicker to build.
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+Having two completely separate configurations would mean that we'd
+need to make any changes to the architecture wide configuration in
+both the existing defconfig and the new configuration if we wanted to
+ensure consistent default behaviour.  We can reduce this by splitting
+the existing defconfig into a base fragment which enables options for
+the architecture itself and one for platform configuration which has
+all the platform enablement options, merging them to produce
+defconfig.  We can then add another fragment enabling only options for
+mach-virt and merge that with the base config to provide a new
+virtconfig configuration.
 
-are available in the Git repository at:
+The split of configurations is somewhat arbitrary, there will be some
+room for discussion there, and it may be that splitting things up in
+this manner is considered more trouble than it's worth.  If we're
+going to start doing this then there may also be some desire for other
+configurations. 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git tags/socfpga_dts_updates_for_v6.3
+This is based on current -next since it's very late in the
+release cycle.
 
-for you to fetch changes up to 2f8ba037c45925b372194df4bc27fca85fbeeffb:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (2):
+      arm64: configs: Split defconfig into base and platform configs
+      arm64: configs: Add virtconfig
 
-  arm64: dts: socfpga: change address-cells to support 64-bit addressing (2023-01-26 08:27:10 -0600)
+ arch/arm64/Makefile                                |  10 ++
+ arch/arm64/configs/base.config                     | 169 +++++++++++++++++++++
+ arch/arm64/configs/{defconfig => platforms.config} | 169 ---------------------
+ arch/arm64/configs/virt.config                     |  43 ++++++
+ 4 files changed, 222 insertions(+), 169 deletions(-)
+---
+base-commit: 4fafd96910add124586b549ad005dcd179de8a18
+change-id: 20230203-arm64-defconfigs-c04cf5fa6288
 
-----------------------------------------------------------------
-SoCFPGA dts updates for v6.3
-- Align UART node with bindings
-- Add pinctrl properties for Stratix10/Agilex
-- Change address-cells to 2 to support 64-bit address for fpga region
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-----------------------------------------------------------------
-Dinh Nguyen (3):
-      arm64: dts: add pinctrl-single property for Stratix10/Agilex
-      arm64: dts: stratix10: add i2c pins for pinctrl
-      arm64: dts: socfpga: change address-cells to support 64-bit addressing
-
-Krzysztof Kozlowski (1):
-      ARM: dts: socfpga: align UART node name with bindings
-
- arch/arm/boot/dts/socfpga.dtsi                     |  4 ++--
- arch/arm/boot/dts/socfpga_arria10.dtsi             |  4 ++--
- arch/arm/boot/dts/socfpga_vt.dts                   |  4 ++--
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi  | 21 +++++++++++++++++---
- .../boot/dts/altera/socfpga_stratix10_socdk.dts    | 23 ++++++++++++++++++++++
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      | 19 ++++++++++++++++--
- 6 files changed, 64 insertions(+), 11 deletions(-)
