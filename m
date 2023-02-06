@@ -4,64 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ED47C636D4
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 691BDC05027
 	for <soc@archiver.kernel.org>; Mon,  6 Feb 2023 20:20:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 36DCCC4339E; Mon,  6 Feb 2023 20:20:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 21A7AC4339B
-	for <soc@kernel.org>; Mon,  6 Feb 2023 20:20:19 +0000 (UTC)
+	id 3554BC433A0; Mon,  6 Feb 2023 20:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1F55CC433EF;
+	Mon,  6 Feb 2023 20:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1675714819;
-	bh=JQe6NK66cFXUWUcq+dD9SFrRRMaPezd9i11Ib+MJfDA=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=pAH/Qesg8ENytyO1RcfepwxTLxo2CiSjfukkxBZiW7hnQGz4/b2MoIg9KWNQar7Iz
-	 +3nNNqjFCFeQEhbY40ie0IP3aAlyyUWF0fio3iRKyCv6GHENyYNPRR+Cg29JVfiOqa
-	 Ue5kcDhlUWOSV9awvfXvRvLoVsNE4XvDC/faipcaqC0ya7ucF6qGvqzFD3nPmwfQeq
-	 tqOT4+itvWskfpnEtkfIssW8XXay9+gXNn0/z2tUEtvHV9MM0R6TWzW7B6Ksp9ZbTS
-	 qN6XzcNpNQBpZ9NY5534ntOqpZq6BW8AFTwKh2si9M1GK2+fqNINKIzuy92tKzRSkJ
-	 m1XupvP+3s0bQ==
+	bh=LBGhP/wXlZfclkVerPc/0dklUsamTc6mpKVe1+AbO1U=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=gdQSaBcWLIxJIMKsu+u7Cv5dkzoBBsoLdkifL/5CFbVYDHeQ+nMyrdIqSPAZqJUs3
+	 sBS4ztNe+SR54hW2OafMMbSCws8OfKiYj6G7q+KShnD1mIjzDD53q+EiI9RoVbU0pm
+	 pvEjX6KW6ohibQBAvM/XOEAvHOv59r60QyH/MPf+nRIA5WdaJqpJGJg7IhnsI6QnbF
+	 1NdgXAUDS0m2SmiCGit6I2O4ZbsSCVLX+2yBNIxJ06gTdtU5QyGj2RzWYYPmvJvqMq
+	 sNkU65bFHxcr0QTL5CKljRY9ozjuk/PBqRJn1ZVlbEzx9OE1Yf90z0jPQhwfe7Y3yi
+	 6seBPpWqUWn+g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E93A2E55EFC;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F20C9E55EFB;
 	Mon,  6 Feb 2023 20:20:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] TI K3 device tree updates for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167571481887.10318.11684294594171472096.git-patchwork-summary@kernel.org>
+ <167571481898.10318.17373590637962575773.git-patchwork-notify@kernel.org>
 Date: Mon, 06 Feb 2023 20:20:18 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <642cf238-43e5-d6fa-68b5-a9dfbc0277bf@ti.com>
+In-Reply-To: <642cf238-43e5-d6fa-68b5-a9dfbc0277bf@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] TI K3 device tree updates for v6.3
-  Submitter: Vignesh Raghavendra <vigneshr@ti.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=718650
-  Lore link: https://lore.kernel.org/r/642cf238-43e5-d6fa-68b5-a9dfbc0277bf@ti.com
+On Fri, 3 Feb 2023 22:20:23 +0530 you wrote:
+> Hi ARM SoC Maintainers,
+> 
+> 
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> 
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> [...]
 
-Patch: [GIT,PULL] STi DT changes for v6.3 #1
-  Submitter: Patrice CHOTARD <patrice.chotard@foss.st.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=718593
-  Lore link: https://lore.kernel.org/r/8e05c729-89bc-20f3-acf6-096fb85d7e36@foss.st.com
+Here is the summary with links:
+  - [GIT,PULL] TI K3 device tree updates for v6.3
+    https://git.kernel.org/soc/soc/c/f7401f6bc7ae
 
-Patch: [GIT,PULL] arm: dts: socfpga: dts updates for v6.3
-  Submitter: Dinh Nguyen <dinguyen@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=719202
-  Lore link: https://lore.kernel.org/r/20230206162425.311593-1-dinguyen@kernel.org
-
-
-Total patches: 3
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
