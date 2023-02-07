@@ -1,104 +1,107 @@
-Return-Path: <SRS0=2E+3=6D=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=JTxQ=6D=gmail.com=zhang.lyra@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 114A3C636CD
-	for <soc@archiver.kernel.org>; Tue,  7 Feb 2023 07:59:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB45FC636CD
+	for <soc@archiver.kernel.org>; Tue,  7 Feb 2023 08:21:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C7CD0C4339B; Tue,  7 Feb 2023 07:59:56 +0000 (UTC)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	id 67FEDC4339B; Tue,  7 Feb 2023 08:21:51 +0000 (UTC)
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C84B4C433EF
-	for <soc@kernel.org>; Tue,  7 Feb 2023 07:59:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C84B4C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ba1so8593586wrb.5
-        for <soc@kernel.org>; Mon, 06 Feb 2023 23:59:55 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 7A72CC433EF;
+	Tue,  7 Feb 2023 08:21:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7A72CC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f182.google.com with SMTP id 6so7451316vko.7;
+        Tue, 07 Feb 2023 00:21:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i9y/P9MXwLNgqQt+C7wIYeiUxLoDHi6tNn49iTJuqSQ=;
-        b=WdD2Y/cGjIiqlS31xeZvPPnp2bp9E9bEkfrn+p1aF/sykDUZR0Mn+9UPPgIo4Ss5mR
-         X7x5zwE5fV7SDsK7AQzphRSIltCWtrtKKJ5UXe52kK8RkjiP/2OlXEh11Dto5hQGQOUj
-         fSXmQwUYRhlcbsJAXZirNibnhegy55SSODE8Zo9noHQiqBLOv8PODBiyjSuuN2UebDhu
-         xMniewVsouwDvYuFigf0c1XoVs34BeXfuXAjTuGI+br2hw3KjbeIlUIOd4/EZlktIyX0
-         DVTE6nzeYLkEVZogZyQ34rvzldQlKuKNMz9nmTpvilxR1h+W3NhjV9OCXm9W4Qk5vhT6
-         LyLQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qxIrUXBoB2zyDeM1COleyFwtINkoTGd1PktA2wpEmEA=;
+        b=pufxl/WHKqM3Y+0cFFtpThhfHYZ9YO609hoMXgC0g4sbYJ47SGU4uKc0cL9tKF0JUB
+         wAqlqiBBnq5GhMNTkhJwWC1JFrf8zmtWEqaQymkPNcXS8NsTBSOeaIs0EMaRQhgA9NzF
+         AG52xo8CJj1eoX60akdaSUMOgZEipsPi8yRhoo5zEzXYYd77HVcqe/XhwRDK37mxh3/O
+         JRQqMG4sm3buj1qlFfbPNQ0QT1Yq4XRGC3mavdrTOFCD7AmOJxzpZtjMrXUt1zLEKcfo
+         CR17EuxDAnkqPTxcBWTuqUI4xzvq+KOJx91NIWwJ19TPyJhfjPzBXHynVMRk3LYaU4oE
+         c7lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i9y/P9MXwLNgqQt+C7wIYeiUxLoDHi6tNn49iTJuqSQ=;
-        b=vNiAs3denKYVu0oRUMktonXfeHqOILiY7Lo4eCocMcwRm8KiiY7HCeWYPXIyykMnex
-         5GRWUkfN8r46PC9Um3o+LQie0whn3C3MhSECjTDeVoM9eG5T/tPvqx4EVEc1IcxxyT3Y
-         /bc9Kq41brTD7lZaruo605Jj/OJlf6b7mVxeLXgIIUNoJA2PC35UxROiDdWQW5uYFD0h
-         LSJCwOaMAWhWKMtF1AyehQerKB5aNZJa8cnL1oBsBqROWJeOug4KRhOWU/pw35QOgst0
-         0bFVpUcMxQWqVq+X7ZEPEd/c719USKO7p7iutI5liOBl0/i7xtyVGr7Q0MKF60gDZckK
-         VccQ==
-X-Gm-Message-State: AO0yUKVY4Tm5GzYBIOqsXR8o5rACas+vzWsj+G11iAKMIrC8CeAI7caU
-	1UOoh2Kp7PPo6LhrIj+m4iNz1g==
-X-Google-Smtp-Source: AK7set979LY59KDvABkxHfzPCxi00zqtmzn2pfmV76eS0PMM6Bg/n+cN4lqN+Mh65bjJmFGGKeENEA==
-X-Received: by 2002:a05:6000:188d:b0:2c3:be89:7c36 with SMTP id a13-20020a056000188d00b002c3be897c36mr14479686wri.25.1675756794196;
-        Mon, 06 Feb 2023 23:59:54 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f7-20020a056000128700b002c3df9279f5sm7432290wrx.48.2023.02.06.23.59.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 23:59:53 -0800 (PST)
-Message-ID: <b3b9d515-20b1-62a1-3243-b1bc36c306df@linaro.org>
-Date: Tue, 7 Feb 2023 08:59:51 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qxIrUXBoB2zyDeM1COleyFwtINkoTGd1PktA2wpEmEA=;
+        b=ZtSnx5ScT1XzjN/ZYPjBZ1DgC7NzAKnHYtxYAeLWu5IyE6BdoXmlxwAAEVKdqofRtH
+         +slAL+wZ27LIDT53hlgGI58A6RYTnS5vAY5Awjkt1gQZPWZX/1QIim+MEo79oGpxnlmg
+         u1KrjdswTxJYwXmyI0z+4jAG1ProsqHW//e4anQEgzRgUhvS+xeI4QCwJZafUoQhW3p2
+         q7VjPD3ygIW4wvKyALFuhBmjQ3iT8nhfeeLUfmOEp3bKWhv+An/25FKPQea7pplRVai2
+         vC8oUFGX0fW4NGHzcnSQtP6p4l7FZljdUXzWTC8QeM0DYVsH6A9oYnVlSQoQARfqoc5Q
+         rlBA==
+X-Gm-Message-State: AO0yUKWubuZ+6sHUqHXRNs4AqCCaXEmbZZNb6Fbd1PkFoDmTbof4YmsU
+	E+yCUWO/JINsklmqr7LCYqTnHGhZS7QhaqKhkEs=
+X-Google-Smtp-Source: AK7set/hbAUIeRFf7vEmDRrJAvTgRdEClUK/xn9DykWC9alacrgZNdX2P3lXDER15SOMbwcxFZDK3MBZ2ilktPOQJE4=
+X-Received: by 2002:a1f:ab44:0:b0:3ea:53b8:7b08 with SMTP id
+ u65-20020a1fab44000000b003ea53b87b08mr274582vke.37.1675758109443; Tue, 07 Feb
+ 2023 00:21:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] arm64: dts: Add support for Unisoc's UMS512
-Content-Language: en-US
-To: Chunyan Zhang <zhang.lyra@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>, Arnd Bergmann <arnd@arndb.de>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- linux-arm-kernel@lists.infradead.org, soc@kernel.org,
- devicetree@vger.kernel.org, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Orson Zhai <orsonzhai@gmail.com>, LKML <linux-kernel@vger.kernel.org>
 References: <20230118084025.2898404-1-chunyan.zhang@unisoc.com>
- <41fd5c2a-9fc5-8af8-b66e-45bb83b24179@linaro.org>
- <CAAfSe-v3VW_sE4FwjURoOapMXrGavOK0hzeU-84-U_6xfhYbQQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAfSe-v3VW_sE4FwjURoOapMXrGavOK0hzeU-84-U_6xfhYbQQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <41fd5c2a-9fc5-8af8-b66e-45bb83b24179@linaro.org> <CAAfSe-v3VW_sE4FwjURoOapMXrGavOK0hzeU-84-U_6xfhYbQQ@mail.gmail.com>
+ <b3b9d515-20b1-62a1-3243-b1bc36c306df@linaro.org>
+In-Reply-To: <b3b9d515-20b1-62a1-3243-b1bc36c306df@linaro.org>
+From: Chunyan Zhang <zhang.lyra@gmail.com>
+Date: Tue, 7 Feb 2023 16:21:13 +0800
+Message-ID: <CAAfSe-tiF4--dYuKWgHUm52bMX3uSwxvWKKNRd=DFJTZZ=1x8A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: Add support for Unisoc's UMS512
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+List-Id: <soc.lore.kernel.org>
+Cc: Chunyan Zhang <chunyan.zhang@unisoc.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	soc@kernel.org, devicetree@vger.kernel.org, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 07/02/2023 03:19, Chunyan Zhang wrote:
-> On Thu, 19 Jan 2023 at 19:40, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 18/01/2023 09:40, Chunyan Zhang wrote:
->>> Add basic support for Unisoc's UMS512, with this patch,
->>> the board ums512-1h10 can run into console.
->>>
-> 
-> [snip]
-> 
->>> +             ap-apb {
->>
->> Non-unit-address nodes cannot be mixed with unit address ones. Something
->> is wrong here.
-> 
-> To make sure I understand correctly, did you mean non-unit-address
-> nodes shouldn't be the parent of unit-address nodes?
-> 
-> Does that mean the bus node should have a unique base address like:
->         ap-apb@70000000 {
+On Tue, 7 Feb 2023 at 15:59, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 07/02/2023 03:19, Chunyan Zhang wrote:
+> > On Thu, 19 Jan 2023 at 19:40, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 18/01/2023 09:40, Chunyan Zhang wrote:
+> >>> Add basic support for Unisoc's UMS512, with this patch,
+> >>> the board ums512-1h10 can run into console.
+> >>>
+> >
+> > [snip]
+> >
+> >>> +             ap-apb {
+> >>
+> >> Non-unit-address nodes cannot be mixed with unit address ones. Something
+> >> is wrong here.
+> >
+> > To make sure I understand correctly, did you mean non-unit-address
+> > nodes shouldn't be the parent of unit-address nodes?
+> >
+> > Does that mean the bus node should have a unique base address like:
+> >         ap-apb@70000000 {
+>
+> No. I mean, run dtbs W=1 or dtbs_check DT_SCHEMA_FILES=simple-bus
 
-No. I mean, run dtbs W=1 or dtbs_check DT_SCHEMA_FILES=simple-bus
+Ok, I will fix that according to the report.
 
+BTW, where can I see what W=1 means?
 
-Best regards,
-Krzysztof
+Thanks,
+Chunyan
 
+>
+>
+> Best regards,
+> Krzysztof
+>
