@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33DAEC636CC
-	for <soc@archiver.kernel.org>; Tue,  7 Feb 2023 11:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 783C6C636CD
+	for <soc@archiver.kernel.org>; Tue,  7 Feb 2023 11:07:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E834CC4339B; Tue,  7 Feb 2023 11:07:11 +0000 (UTC)
+	id 5CDE5C433D2; Tue,  7 Feb 2023 11:07:24 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CFA58C433D2;
-	Tue,  7 Feb 2023 11:07:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CFA58C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 47CCAC433EF;
+	Tue,  7 Feb 2023 11:07:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 47CCAC433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675768028; x=1707304028;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dDI4A6HJTioLCKUY7vYEGx25MsUN8KwQ7xKiuXhgBIM=;
-  b=x5aq8vdF088K8avujbuzVY3wkb5vhn/nmW89FY6GbMAiJBW1yGyTRzZD
-   +EGj0IQFedbRZgBURs3Y4Bt5dV3kbYl6xGeBeQygAuW9kGEBCS+tfbof/
-   AaOLsc5D7HR2HTR3A3HswJfH3593vnxHzNNHa6cI+jEHngGLPkzEFAuRe
-   kUvRJUq9QDhoecXXQFr0hOJzo6ejTNGqO+MJ314TdX1w8TSYkOMUZldmm
-   tYhE7PWER6jSyS5uaq1bAi2pV9XGFuY0+NGKSC7NeTxarFWqVvRswXFOi
-   cI0pjlZTzFSR5wxpU6C4thlRMLbU/NrzoE592G9iUksG2dJ8TiT3GuMWM
-   Q==;
+  t=1675768041; x=1707304041;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rueJZQaYj5/OCL0rhwE4IQRQNJdQeur4XqdJx6V7odE=;
+  b=DLLErs3a7AeKXv/v2E7G/MTy2Az15gRkpmSAkPkqUEUJMvih9lm28yDg
+   B56hK+pxEKUtXawg6VACr3ZYlJsyM8dg0LX1W9NdGG0VcH4jptOLWirkl
+   b0TG0nZajreaxI4EDnO9UuuiEDZ+6K4KgDgxcF+PCMNwOCIAfUv8pBWhc
+   T+99X/InfA0Vf3dVIaY0Z7J5/TcRdEEf9v4lYvbndWHb6nvIEfVmt+fnR
+   17WMF/1NkS9aqtlAg/nfF3ktyYG4G34yc6ITWY36YXveGvk3m0WxL2EOB
+   GSdm28syDKliNkhIBJSEGD0PN8TCJCmOcHRP4x6qLty6hh0Wzvs32fqHM
+   A==;
 X-IronPort-AV: E=Sophos;i="5.97,278,1669100400"; 
-   d="scan'208";a="135929091"
+   d="scan'208";a="135929117"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 04:07:06 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 04:07:19 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 04:07:05 -0700
+ 15.1.2507.16; Tue, 7 Feb 2023 04:07:16 -0700
 Received: from che-lt-i66125lx.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 04:06:56 -0700
+ 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 04:07:07 -0700
 From: Durai Manickam KR <durai.manickamkr@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <Hari.PrasathGE@microchip.com>, <balamanikandan.gunasundar@microchip.com>,
@@ -54,84 +54,94 @@ To: <Hari.PrasathGE@microchip.com>, <balamanikandan.gunasundar@microchip.com>,
 	<Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>, <andrew@lunn.ch>,
 	<michael@walle.cc>, <jerry.ray@microchip.com>
 CC: Durai Manickam KR <durai.manickamkr@microchip.com>
-Subject: [PATCH v6 0/8] Add support for sam9x60 curiosity board
-Date: Tue, 7 Feb 2023 16:36:43 +0530
-Message-ID: <20230207110651.197268-1-durai.manickamkr@microchip.com>
+Subject: [PATCH v6 1/8] ARM: dts: at91: sam9x60: Fix the label numbering for the flexcom functions
+Date: Tue, 7 Feb 2023 16:36:44 +0530
+Message-ID: <20230207110651.197268-2-durai.manickamkr@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230207110651.197268-1-durai.manickamkr@microchip.com>
+References: <20230207110651.197268-1-durai.manickamkr@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-This series of patches is meant to address the following:
-- Moving of flexcom definitions from board file to SoC file and
-   some minor changes to its properties.
-- Add support for the new sam9x60 curiosity board based on the
-   existing sam9x60 SoC.
+From: Manikandan Muralidharan <manikandan.m@microchip.com>
 
-Changes in v6:
---------------
-- Added Reviewed-by and Acked-by tags.
-All the patches are accepted except the below patches which are
-updated based on the comments receied on PATCH v5,
-- [PATCH v5 8/8] Enabled the sdmmc1 node in dts.
-- [PATCH v5 8/8] Syntax update in dts for sdmmc1 node and i2c0 
-  node.
+Fixed the label numbering of the flexcom functions so that all
+13 flexcom functions of sam9x60 are in the following order when the missing
+flexcom functions are added:
 
-Changes in v5:
---------------
-All the patches are accepted except the below patches which are 
-updated based on the comments receied on PATCH v4,
-- [PATCH v4 2/8] Updated from field and first SOB as same author.
-- [PATCH v4 2/8] Added the missing compatibles for the UART.
-- [PATCH v4 8/8] Fixed the dtb warnings.
+flx0: uart0, spi0, i2c0
+flx1: uart1, spi1, i2c1
+flx2: uart2, spi2, i2c2
+flx3: uart3, spi3, i2c3
+flx4: uart4, spi4, i2c4
+flx5: uart5, spi5, i2c5
+flx6: uart6, i2c6
+flx7: uart7, i2c7
+flx8: uart8, i2c8
+flx9: uart9, i2c9
+flx10: uart10, i2c10
+flx11: uart11, i2c11
+flx12: uart12, i2c12
 
-Changes in v4:
---------------
-- Added the missed property atmel,usart-mode in uart5
-- Renamed the led label.
+Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
+Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Changes in v3:
---------------
-- Updated commit logs mentioning each author's contribution.
-- Author name is updated based on the linux mainline guidelines.
-- updated the description file such that sam9x60 curiosity is
-  added together with sam9x60ek as an enum.
-- Updated the entries in the regulator container alphabetically
-  sorted.
-- Added label name and node name following the guidelines.
-
-Changes in v2:
---------------
-- Added generic names for regulator node.
-- Removed the #addredd-cells and #size-cells property which shows
-  compilation warning.
-- Removed the property "status=okay" as this is default.
-- No underscores used for the pinctrl definitions and node names.
-- Organised the patches in the logical way.
-- Bindings are made separate patch.
-
-Durai Manickam KR (3):
-  ARM: dts: at91: sam9x60: fix spi4 node
-  dt-bindings: arm: at91: Add info on sam9x60 curiosity
-  ARM: dts: at91: sam9x60_curiosity: Add device tree for sam9x60
-    curiosity board
-
-Manikandan Muralidharan (5):
-  ARM: dts: at91: sam9x60: Fix the label numbering for the flexcom
-    functions
-  ARM: dts: at91: sam9x60: move flexcom definitions
-  ARM: dts: at91: sam9x60: Specify the FIFO size for the Flexcom UART
-  ARM: dts: at91: sam9x60: Add DMA bindings for the flexcom nodes
-  ARM: dts: at91: sam9x60: Add missing flexcom definitions
-
- .../devicetree/bindings/arm/atmel-at91.yaml   |   6 +-
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/at91-sam9x60_curiosity.dts  | 503 ++++++++++++++
- arch/arm/boot/dts/at91-sam9x60ek.dts          |  50 +-
- arch/arm/boot/dts/sam9x60.dtsi                | 622 ++++++++++++++++++
- 5 files changed, 1140 insertions(+), 42 deletions(-)
- create mode 100644 arch/arm/boot/dts/at91-sam9x60_curiosity.dts
-
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index d929c1ba5789..cf5d786531f2 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -16,8 +16,8 @@ / {
+ 
+ 	aliases {
+ 		i2c0 = &i2c0;
+-		i2c1 = &i2c1;
+-		serial1 = &uart1;
++		i2c1 = &i2c6;
++		serial1 = &uart5;
+ 	};
+ 
+ 	chosen {
+@@ -234,7 +234,7 @@ &flx4 {
+ 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+ 	status = "disabled";
+ 
+-	spi0: spi@400 {
++	spi4: spi@400 {
+ 		compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
+ 		reg = <0x400 0x200>;
+ 		interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
+@@ -253,7 +253,7 @@ &flx5 {
+ 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+ 	status = "okay";
+ 
+-	uart1: serial@200 {
++	uart5: serial@200 {
+ 		compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+ 		reg = <0x200 0x200>;
+ 		atmel,usart-mode = <AT91_USART_MODE_SERIAL>;
+@@ -279,7 +279,7 @@ &flx6 {
+ 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+ 	status = "okay";
+ 
+-	i2c1: i2c@600 {
++	i2c6: i2c@600 {
+ 		compatible = "microchip,sam9x60-i2c";
+ 		reg = <0x600 0x200>;
+ 		interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
+@@ -439,7 +439,7 @@ AT91_PIOA 13 AT91_PERIPH_A AT91_PINCTRL_NONE
+ 				 AT91_PIOA 14 AT91_PERIPH_A AT91_PINCTRL_NONE>;
+ 		};
+ 
+-		pinctrl_flx5_default: flx_uart {
++		pinctrl_flx5_default: flx5_uart {
+ 			atmel,pins =
+ 				<AT91_PIOA 7 AT91_PERIPH_C AT91_PINCTRL_NONE
+ 				 AT91_PIOA 8 AT91_PERIPH_B AT91_PINCTRL_NONE
 -- 
 2.25.1
 
