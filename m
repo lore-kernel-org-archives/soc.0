@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D371C636CD
-	for <soc@archiver.kernel.org>; Tue,  7 Feb 2023 09:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB97C636CD
+	for <soc@archiver.kernel.org>; Tue,  7 Feb 2023 09:47:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D5CDAC433D2; Tue,  7 Feb 2023 09:36:44 +0000 (UTC)
+	id DF83BC4339B; Tue,  7 Feb 2023 09:47:43 +0000 (UTC)
 Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17B28C4339B;
-	Tue,  7 Feb 2023 09:36:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17B28C4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id CEB2FC433D2;
+	Tue,  7 Feb 2023 09:47:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CEB2FC433D2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=unisoc.com
 Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-	by SHSQR01.spreadtrum.com with ESMTP id 3179a8To008765;
-	Tue, 7 Feb 2023 17:36:08 +0800 (+08)
+	by SHSQR01.spreadtrum.com with ESMTP id 3179lEc3080745;
+	Tue, 7 Feb 2023 17:47:14 +0800 (+08)
 	(envelope-from Chunyan.Zhang@unisoc.com)
 Received: from ubt.spreadtrum.com (10.0.74.87) by BJMBX02.spreadtrum.com
  (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Tue, 7 Feb 2023
- 17:36:05 +0800
+ 17:47:11 +0800
 From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 To: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
         "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
@@ -34,16 +34,16 @@ CC: <linux-arm-kernel@lists.infradead.org>, <soc@kernel.org>,
         Chunyan Zhang <chunyan.zhang@unisoc.com>,
         LKML <linux-kernel@vger.kernel.org>
 Subject: [PATCH V2] arm64: dts: sprd: Add support for Unisoc's UMS512
-Date: Tue, 7 Feb 2023 17:35:59 +0800
-Message-ID: <20230207093559.3390502-1-chunyan.zhang@unisoc.com>
+Date: Tue, 7 Feb 2023 17:47:03 +0800
+Message-ID: <20230207094703.3394109-1-chunyan.zhang@unisoc.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [10.0.74.87]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
  BJMBX02.spreadtrum.com (10.0.64.8)
-X-MAIL:SHSQR01.spreadtrum.com 3179a8To008765
+X-MAIL:SHSQR01.spreadtrum.com 3179lEc3080745
 
 Add basic support for Unisoc's UMS512, with this patch,
 the board ums512-1h10 can run into console.
@@ -60,8 +60,8 @@ Changes since v1:
 ---
  arch/arm64/boot/dts/sprd/Makefile        |   3 +-
  arch/arm64/boot/dts/sprd/ums512-1h10.dts |  62 ++
- arch/arm64/boot/dts/sprd/ums512.dtsi     | 912 +++++++++++++++++++++++
- 3 files changed, 976 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/sprd/ums512.dtsi     | 911 +++++++++++++++++++++++
+ 3 files changed, 975 insertions(+), 1 deletion(-)
  create mode 100644 arch/arm64/boot/dts/sprd/ums512-1h10.dts
  create mode 100644 arch/arm64/boot/dts/sprd/ums512.dtsi
 
@@ -146,10 +146,10 @@ index 000000000000..e5b5a35ea6f4
 +};
 diff --git a/arch/arm64/boot/dts/sprd/ums512.dtsi b/arch/arm64/boot/dts/sprd/ums512.dtsi
 new file mode 100644
-index 000000000000..d9db9b10b41f
+index 000000000000..c9b8f0149b2d
 --- /dev/null
 +++ b/arch/arm64/boot/dts/sprd/ums512.dtsi
-@@ -0,0 +1,912 @@
+@@ -0,0 +1,911 @@
 +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
 +/*
 + * Unisoc UMS512 SoC DTS file
@@ -966,7 +966,6 @@ index 000000000000..d9db9b10b41f
 +			};
 +		};
 +
-+
 +		apb@70000000 {
 +			compatible = "simple-bus";
 +			#address-cells = <1>;
@@ -1016,7 +1015,7 @@ index 000000000000..d9db9b10b41f
 +			};
 +		};
 +
-+		aon-bus@32000000 {
++		aon: bus@32000000 {
 +			compatible = "simple-bus";
 +			#address-cells = <1>;
 +			#size-cells = <1>;
