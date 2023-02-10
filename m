@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40ACFC636D7
-	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 18:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68AF6C636D4
+	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 19:27:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E1E2CC4339E; Fri, 10 Feb 2023 18:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07E6C433EF;
-	Fri, 10 Feb 2023 18:56:35 +0000 (UTC)
+	id 2EFBFC4339E; Fri, 10 Feb 2023 19:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3162CC433EF;
+	Fri, 10 Feb 2023 19:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676055396;
-	bh=q2d8Q//HpOEU7o/hmfLnG8Xs8ky9lUsem92zvnVCSD8=;
+	s=k20201202; t=1676057220;
+	bh=ixcLI5lcLfglR2/BnM4PvcyNMcHe1kF1cvDPm/iC1Ig=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=oeWMkkPyvzxRJtuP21LI933fAI5zy8g6KnOlwJtHKetyZtd6jBYdX0BhDeLecMLbJ
-	 htOKFJYeQPmy2vsYWnNn+qTtXOtpuEfO4U56JwSl75S4ykrbmyT8VIFgqyW5OUP1pq
-	 PyiK4VfrH8Te3GdvRblTFucJbUrG5xpL9kam669IOH3B9Zl/V6PQWE+nCEv7wuk0j+
-	 IH4fB5x8APyV6TJ4X1FfzRzCsn1GqcRMrKnuRqzY05Q1DDZfJkfWgh8SLq++2QaOoE
-	 BXwHjivhZ2i9+5gI2ud7SzjDo656lF6uAVqqCkkBXzvFOBzIh70oMuThtXyp1aBZ+L
-	 nQtgJ9hzMmmcQ==
+	b=EFzowwceVwNZkNF8+m0YYYFBVDhs6cul5Sdo5ImArS40Q/CTIVnnpkvI3mdIM7vvd
+	 xW/fbEVMWXZMDqyeSWWevHIXE5nKG0gnoE9Pqzp+I6tmjccl4VtxFDmbj2pQ91gLHV
+	 G9WLeLDRn/IWeRHfpXC7jmZJeD2Tp/gLYvyWRmSYwLA87n+5L86l8Wls3v1ZQxFEFg
+	 oDJKM0Ei1u0lJvOCLBqV4uG3oE9Fr1JJZTEus9Wa7ByZsWUvRttzTPezN4XbI3kUOE
+	 2bWaK1clZP9vrDEHIapvkNH+VByQc1Fb6PKg7YdAEMxEe1PjI5veLW0IaKTpmzGCYH
+	 HdEyV+gIrcNbg==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -31,95 +31,309 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Luca Weiss <luca@z3ntu.xyz>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Yang Xiwen <forbidden405@foxmail.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Christian Marangi <ansuelsmth@gmail.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Amit Pundir <amit.pundir@linaro.org>,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Jamie Douglass <jamiemdouglass@gmail.com>,
 	Jianhua Lu <lujianhua000@gmail.com>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [GIT PULL] More Qualcomm ARM32 DTS updates for 6.3
-Date: Fri, 10 Feb 2023 10:58:46 -0800
-Message-Id: <20230210185846.2032601-1-andersson@kernel.org>
+	Johan Hovold <johan+linaro@kernel.org>,
+	Petr Vorel <pvorel@suse.cz>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Richard Acayan <mailingradian@gmail.com>,
+	Robert Marko <robimarko@gmail.com>,
+	Yang Xiwen <forbidden405@foxmail.com>
+Subject: [GIT PULL] More Qualcomm ARM64 DT updates for 6.3
+Date: Fri, 10 Feb 2023 11:29:08 -0800
+Message-Id: <20230210192908.2039976-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 
-The following changes since commit 34d50b12d67795454139a1cfc7ca3add8efa3612:
+The following changes since commit a63a420d050d47a6afb5e2198181dadd08e71f97:
 
-  ARM: dts: qcom: msm8226: add RPMCC node (2023-01-18 20:20:18 -0600)
+  arm64: dts: qcom: sc7280: Add a carveout for modem metadata (2023-01-18 21:35:25 -0600)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-dts-for-6.3-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-for-6.3-2
 
-for you to fetch changes up to 68e8dd352adc2c279f9608eaecbe2ced2f398b48:
+for you to fetch changes up to f069ede81ef438d99e76112d8738c4dc3d1766f9:
 
-  ARM: dts: qcom: align OPP table names with DT schema (2023-02-08 20:03:17 -0800)
-
-----------------------------------------------------------------
-More Qualcomm ARM32 DTS updates for 6.3
-
-This adds backlight, notification LED, vibrator, volume keys and hall
-sensor to the OnePlus One, and provides a range of Devicetree validation
-fixes across various platforms.
+  arm64: dts: qcom: sc7280: Power herobrine's 3.3 eDP/TS rail more properly (2023-02-08 20:09:36 -0800)
 
 ----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      dt-bindings: arm: qcom: add the sa8775p-ride board
+More Qualcomm ARM64 DT updates for 6.3
 
-Christian Marangi (1):
-      ARM: dts: qcom: ipq8064: move reg-less nodes outside soc node
+The new Qualcomm QDU1000 and QRU1000 platforms, and the IDP device on
+these are introduced. New support for a couple of USB modem sticks from
+THWC are introduced, so is support for Xiaomi Mi Pad 5 Pro and the Pro
+SKU of the Herobrine device.
 
-Dmitry Baryshkov (3):
-      ARM: dts: qcom: apq8064: add #clock-cells to the HDMI PHY node
-      ARM: dts: qcom: apq8064: use hdmi_phy for the MMCC's hdmipll clock
-      ARM: dts: qcom: apq8064: add second DSI host and PHY
+The Core Bus Fabric (CBF) is introduced on MSM8996. Interconnect paths
+for UFS are also described.
+
+A few fixes related to the power-grid of herobrine, on SC7280, are
+introduced.
+
+QFPROM is introduced on IPQ8074 and Interconnect providers are added for
+SDM670.
+
+On SDM845 the duplicated wcd9340 audio coded description is moved from
+devices to a common file, audio devices are added to the OnePlus 6 and
+6T.
+
+On SM6115 debug UART, SMP2P, watchdog nodes are introduced, and the
+platform is switched to use #address/size-cells of 2, in line with most
+other platforms.
+
+Camera control interface and clock controllers are added for SM6350, and
+the CCI interface is enabled on the Fairphone FP4.
+
+On SM8350 the interconnect reference of SDHCI controller is corrected,
+DSI1 PHY clocks are properly described as sources for the Display clock
+controller and DSI1 is wired up to the display controller.
+
+The firmware paths are corrected for the Sony Xperia Nagara platform.
+
+The GPR bus, audio servic3es and LPASS pinctrl nodes are added for the
+SM8550 platform. Additionally a few small typos/errors are corrected.
+
+gpio-ranges are corrected across MSM8953, SM6115 and SC8280XP and a
+range of DT validation issues are corrected.
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      arm64: dts: qcom: sm8550: Fix the aoss_qmp node name
+
+Amit Pundir (1):
+      arm64: dts: qcom: sdm845-xiaomi-beryllium: Add reserved memory region
+
+Andrew Halaney (2):
+      arm64: dts: qcom: sa8540p-ride: Fix some i2c pinctrl settings
+      arm64: dts: qcom: sa8540p-ride: Document i2c busses
+
+Bhupesh Sharma (3):
+      arm64: dts: qcom: sm6115: Add geni debug uart node for qup0
+      arm64: dts: qcom: sm6115: Add watchdog node to dtsi
+      arm64: dts: qcom: sm6115: Add smp2p nodes
+
+Bjorn Andersson (3):
+      Merge branch 'icc-qdu1000-immutable' of https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc into HEAD
+      Merge branch '20230112204446.30236-2-quic_molvera@quicinc.com' into arm64-for-6.3
+      Merge branch '20221213152617.296426-1-konrad.dybcio@linaro.org' into HEAD
+
+Caleb Connolly (1):
+      arm64: dts: qcom: sdm845-oneplus-*: add audio devices
+
+Dmitry Baryshkov (6):
+      arm64: dts: qcom: sc8280xp-crd: drop #sound-dai-cells from eDP node
+      arm64: dts: qcom: sc8280xp: add p1 register blocks to DP nodes
+      arm64: dts: qcom: sm8350: use qcom,sm8350-dsi-ctrl compatibles
+      arm64: dts: qcom: msm8996: enable UFS interconnects
+      arm64: dts: qcom: msm8996 switch from RPM_SMD_BB_CLK1 to RPM_SMD_XO_CLK_SRC
+      arm64: dts: qcom: msm8996: add CBF device entry
+
+Douglas Anderson (5):
+      arm64: dts: qcom: sc7280: On QCard, regulator L3C should be 1.8V
+      arm64: dts: qcom: sc7280: Add 3ms ramp to herobrine's pp3300_left_in_mlb
+      arm64: dts: qcom: sc7280: Hook up the touchscreen IO rail on villager
+      arm64: dts: qcom: sc7280: Hook up the touchscreen IO rail on evoker
+      arm64: dts: qcom: sc7280: Power herobrine's 3.3 eDP/TS rail more properly
+
+Jamie Douglass (1):
+      arm64: dts: qcom: msm8992-lg-bullhead: Correct memory overlaps with the SMEM and MPSS memory regions
 
 Jianhua Lu (1):
-      dt-bindings: arm: qcom: Add Xiaomi Mi Pad 5 Pro (xiaomi-elish)
+      arm64: dts: qcom: sm8250: Add device tree for Xiaomi Mi Pad 5 Pro
 
-Krzysztof Kozlowski (6):
-      ARM: dts: qcom: use "okay" for status
-      ARM: dts: qcom-sdx55: align RPMh regulator nodes with bindings
-      ARM: dts: qcom-sdx65: align RPMh regulator nodes with bindings
-      ARM: dts: qcom: apq8060-dragonboard: align MPP pin node names with DT schema
-      ARM: dts: qcom: sdx55: correct TLMM gpio-ranges
-      ARM: dts: qcom: align OPP table names with DT schema
+Johan Hovold (1):
+      arm64: dts: qcom: sm8550: fix USB-DP PHY resets
 
-Luca Weiss (5):
-      ARM: dts: qcom: pm8941: Add vibrator node
-      ARM: dts: qcom: msm8974-oneplus-bacon: Add vibrator
-      ARM: dts: qcom: msm8974-oneplus-bacon: Add volume keys and hall sensor
-      ARM: dts: qcom: msm8974-oneplus-bacon: Add backlight
-      ARM: dts: qcom: msm8974-oneplus-bacon: Add notification LED
+Konrad Dybcio (13):
+      arm64: dts: qcom: sm8350: Add missing #address/size-cells to DSIn
+      arm64: dts: qcom: sm8350: Fix DSI1 interrupt
+      arm64: dts: qcom: sm8350: Feed DSI1 PHY clocks to DISPCC
+      arm64: dts: qcom: sm8350: Fix DSI PHY compatibles
+      arm64: dts: qcom: sm8350: Fix DSI PLL size
+      arm64: dts: qcom: sm8350: Add mdss_ prefix to DSIn out labels
+      arm64: dts: qcom: sm8350: Hook up DSI1 to MDP
+      arm64: dts: qcom: sm8450-nagara: Correct firmware paths
+      arm64: dts: qcom: sm6115: Add mdss_ prefix to mdss nodes
+      arm64: dts: qcom: sm6115: Use 64 bit addressing
+      arm64: dts: qcom: sm8450: Fix DSIn PHY compatible
+      arm64: dts: qcom: sm8250: Disable wsamacro and swr0 by default
+      dt-bindings: clock: add QCOM SM6350 camera clock bindings
 
-Manivannan Sadhasivam (2):
-      ARM: dts: qcom: sdx55: Add Qcom SMMU-500 as the fallback for IOMMU node
-      ARM: dts: qcom: sdx65: Add Qcom SMMU-500 as the fallback for IOMMU node
+Krzysztof Kozlowski (30):
+      arm64: dts: qcom: sm8550: add GPR and LPASS pin controller
+      arm64: dts: qcom: sc7280-herobrine-audio-wcd9385: drop incorrect properties
+      arm64: dts: qcom: sc7280-idp: drop incorrect properties
+      arm64: dts: qcom: use generic node name for Bluetooth
+      arm64: dts: qcom: sm8350: drop incorrect cells from serial
+      arm64: dts: qcom: sm8450: drop incorrect cells from serial
+      arm64: dts: qcom: sm8550: drop incorrect cells from serial
+      arm64: dts: qcom: sdm845-db845c: add generic sound compatible
+      arm64: dts: qcom: sdm845-xiaomi-beryllium: add generic sound compatible
+      arm64: dts: qcom: sdm850-lenovo-yoga: correct sound compatible
+      arm64: dts: qcom: sdm845: move codec to separate file
+      arm64: dts: qcom: sdm845-audio-wcd9340: commonize pinctrl
+      arm64: dts: qcom: sdm845-audio-wcd9340: commonize clocks
+      arm64: dts: qcom: sa8295p-adp: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sc7180: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sc8280xp: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sdm845: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sm7225: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sm8150: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sm8250: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sm8350: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sm8450: align RPMh regulator nodes with bindings
+      arm64: dts: qcom: sm8550: add specific SMMU compatible
+      arm64: dts: qcom: sm8550-mtp: correct vdd-l5-l16-supply
+      arm64: dts: qcom: sm8350: fixup SDHCI interconnect arguments
+      arm64: dts: qcom: sm8350-hdk: align pin config node names with bindings
+      arm64: dts: qcom: sm8350-hdk: correct LT9611 pin function
+      arm64: dts: qcom: msm8953: correct TLMM gpio-ranges
+      arm64: dts: qcom: sm6115: correct TLMM gpio-ranges
+      arm64: dts: qcom: sc8280xp: correct LPASS GPIO gpio-ranges
+
+Luca Weiss (4):
+      arm64: dts: qcom: sm6350: Add camera clock controller
+      arm64: dts: qcom: sm6350: Add CCI nodes
+      arm64: dts: qcom: sm7225-fairphone-fp4: Enable CCI busses
+      arm64: dts: qcom: sm6350: Use specific qmpphy compatible
+
+Melody Olvera (5):
+      dt-bindings: interconnect: Add QDU1000/QRU1000 devices
+      interconnect: qcom: Add QDU1000/QRU1000 interconnect driver
+      dt-bindings: clock: Add QDU1000 and QRU1000 GCC clocks
+      arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
+      arm64: dts: qcom: Add base QDU1000/QRU1000 IDP DTs
+
+Neil Armstrong (2):
+      arm64: dts: qcom: sm8550: fix DSI controller compatible
+      arm64: dts: qcom: pmk8550: fix PON compatible
+
+Petr Vorel (1):
+      arm64: dts: qcom: msm8992-lg-bullhead: Enable regulators
 
 Rajendra Nayak (1):
-      dt-bindings: arm: qcom: Document the sc7280 CRD Pro boards
+      arm64: dts: qcom: sc7280: Add a herobrine CRD Pro SKU
 
-Yang Xiwen (2):
-      dt-bindings: vendor-prefixes: add thwc
-      dt-bindings: qcom: Document msm8916-thwc-uf896 and ufi001c
+Richard Acayan (1):
+      arm64: dts: qcom: sdm670: add interconnects
 
- Documentation/devicetree/bindings/arm/qcom.yaml    | 16 ++++
- .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
- arch/arm/boot/dts/qcom-apq8060-dragonboard.dts     | 16 ++--
- arch/arm/boot/dts/qcom-apq8064.dtsi                | 81 +++++++++++++++++-
- arch/arm/boot/dts/qcom-ipq4019.dtsi                |  2 +-
- arch/arm/boot/dts/qcom-ipq8064.dtsi                | 28 +++----
- arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dts  |  2 +-
- .../arm/boot/dts/qcom-msm8974pro-oneplus-bacon.dts | 96 ++++++++++++++++++++++
- arch/arm/boot/dts/qcom-pm8941.dtsi                 |  6 ++
- arch/arm/boot/dts/qcom-sdx55-mtp.dts               |  2 +-
- arch/arm/boot/dts/qcom-sdx55-t55.dts               |  8 +-
- arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts   |  8 +-
- arch/arm/boot/dts/qcom-sdx55.dtsi                  |  4 +-
- arch/arm/boot/dts/qcom-sdx65-mtp.dts               |  2 +-
- arch/arm/boot/dts/qcom-sdx65.dtsi                  |  2 +-
- 15 files changed, 234 insertions(+), 41 deletions(-)
+Robert Marko (1):
+      arm64: dts: qcom: ipq8074: add QFPROM node
+
+Yang Xiwen (1):
+      arm64: dts: qcom: msm8916-thwc: Add initial device trees
+
+ .../bindings/clock/qcom,qdu1000-gcc.yaml           |   51 +
+ .../bindings/clock/qcom,sm6350-camcc.yaml          |   49 +
+ .../bindings/interconnect/qcom,qdu1000-rpmh.yaml   |   70 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    6 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              |    7 +
+ arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts    |   39 +
+ arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts  |   39 +
+ arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          |  250 ++++
+ arch/arm64/boot/dts/qcom/msm8953.dtsi              |    2 +-
+ arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi  |   41 +-
+ .../arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi |    2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              |   25 +-
+ arch/arm64/boot/dts/qcom/pmk8550.dtsi              |    2 +-
+ arch/arm64/boot/dts/qcom/qdu1000-idp.dts           |  453 +++++++
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi              | 1333 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts           |   12 +-
+ arch/arm64/boot/dts/qcom/qru1000-idp.dts           |  453 +++++++
+ arch/arm64/boot/dts/qcom/qru1000.dtsi              |   26 +
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts           |    4 +-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts           |    6 +-
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts          |   11 +-
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts            |    6 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |    4 +-
+ .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   |    4 -
+ .../boot/dts/qcom/sc7280-herobrine-crd-pro.dts     |   14 +
+ .../boot/dts/qcom/sc7280-herobrine-evoker.dtsi     |    1 +
+ .../boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi    |    8 +
+ .../boot/dts/qcom/sc7280-herobrine-villager.dtsi   |    1 +
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |   18 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |    4 -
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi         |   10 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |    7 +-
+ .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |    6 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |   20 +-
+ arch/arm64/boot/dts/qcom/sdm670.dtsi               |   56 +
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi         |    6 +-
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts         |   20 +-
+ arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi     |    6 +-
+ arch/arm64/boot/dts/qcom/sdm845-mtp.dts            |    6 +-
+ .../arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi |  203 ++-
+ .../boot/dts/qcom/sdm845-oneplus-enchilada.dts     |   40 +
+ arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts |   29 +
+ .../boot/dts/qcom/sdm845-samsung-starqltechn.dts   |    4 +-
+ arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts  |    6 +-
+ .../boot/dts/qcom/sdm845-sony-xperia-tama.dtsi     |    6 +-
+ arch/arm64/boot/dts/qcom/sdm845-wcd9340.dtsi       |   87 ++
+ .../dts/qcom/sdm845-xiaomi-beryllium-common.dtsi   |   24 +-
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts |   19 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   60 +-
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts      |   18 +-
+ arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dts   |   16 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi               |  328 +++--
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |  195 ++-
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts  |   24 +-
+ arch/arm64/boot/dts/qcom/sm8150-hdk.dts            |    6 +-
+ .../boot/dts/qcom/sm8150-microsoft-surface-duo.dts |    6 +-
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts            |    6 +-
+ .../boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi   |    4 +-
+ arch/arm64/boot/dts/qcom/sm8250-hdk.dts            |    6 +-
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |   12 +-
+ .../boot/dts/qcom/sm8250-sony-xperia-edo.dtsi      |    6 +-
+ arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts   |  630 +++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |    4 +
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts            |   12 +-
+ .../dts/qcom/sm8350-microsoft-surface-duo2.dts     |    4 +-
+ arch/arm64/boot/dts/qcom/sm8350-mtp.dts            |    4 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |   46 +-
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts            |    8 +-
+ arch/arm64/boot/dts/qcom/sm8450-qrd.dts            |    8 +-
+ .../boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi   |   14 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |    8 +-
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |    2 +-
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |   69 +-
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/qdu1000.c                | 1067 ++++++++++++++++
+ drivers/interconnect/qcom/qdu1000.h                |   95 ++
+ include/dt-bindings/clock/qcom,qdu1000-gcc.h       |  175 +++
+ include/dt-bindings/clock/qcom,sm6350-camcc.h      |  109 ++
+ .../dt-bindings/interconnect/qcom,qdu1000-rpmh.h   |   98 ++
+ 80 files changed, 6086 insertions(+), 461 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6350-camcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-uf896.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-thwc-ufi001c.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/qru1000-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-crd-pro.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-pro-sku.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm845-wcd9340.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
+ create mode 100644 drivers/interconnect/qcom/qdu1000.c
+ create mode 100644 drivers/interconnect/qcom/qdu1000.h
+ create mode 100644 include/dt-bindings/clock/qcom,qdu1000-gcc.h
+ create mode 100644 include/dt-bindings/clock/qcom,sm6350-camcc.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,qdu1000-rpmh.h
