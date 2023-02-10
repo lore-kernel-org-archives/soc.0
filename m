@@ -1,54 +1,70 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E54FDC05027
-	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 17:52:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 004D7C636CD
+	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 18:13:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9A273C433EF; Fri, 10 Feb 2023 17:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 77B7DC433D2;
-	Fri, 10 Feb 2023 17:52:48 +0000 (UTC)
+	id AE80EC4339C; Fri, 10 Feb 2023 18:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FE7C433EF;
+	Fri, 10 Feb 2023 18:13:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676051568;
-	bh=UOUAVsi2uZfIblIVsbUb2Gh+Qm1ICcRMyV/Rjgx5N1o=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=EtP68sYSQ8eiEpBrEAhK8Mc6KZUBR+mhd51rcpj/xFqb3A2T24TsHZ4keJpUPFcBh
-	 yjvkGHUKQ6ll0OWtGzoZAkWdwC2Ywgk5Apx2sv0af2jDz5bLnzCUrFUG6tNUY+74Cm
-	 /vejeytOLuVlopElXjhsUHdaX4wSxwin2abp6LSwoWl5wJLE+h+sleVm/udzI4AiUf
-	 lHGmr15eaFCLGp1rea14Jx9b0NdaVr7Cs2JSJwkUA43UelwoBv16TALA8dvhS3zKbn
-	 zqdUnUfW5bT9nOmXBBxb7q15vtxb2ZUaBtCUFnOAixluj/MHW5yvAY4BnmoO0R5PlW
-	 pTJSsub3ahzpQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 679F2E55F00;
-	Fri, 10 Feb 2023 17:52:48 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.2, part 4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <d3a3546d-cf8b-407b-bf8d-d8666e2b9c98@app.fastmail.com>
-References: <d3a3546d-cf8b-407b-bf8d-d8666e2b9c98@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
-X-PR-Tracked-Message-Id: <d3a3546d-cf8b-407b-bf8d-d8666e2b9c98@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-4
-X-PR-Tracked-Commit-Id: bc6772bbab9af6034f918624a40ac5c962df2bac
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4f72a263e162938de26866b862ed6015f5725946
-Message-Id: <167605156841.13061.901058571077647507.pr-tracker-bot@kernel.org>
-Date: Fri, 10 Feb 2023 17:52:48 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	s=k20201202; t=1676052786;
+	bh=VJGdCQ1XrohX8h/ojyNM35NEe2rPOMZ5aIx6rGxz9go=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=H8Sr8eJBg5SdKI//P/DaUZ1zp4D21dhsrqDW4Y/IR9IQKaUDpWhBRPPpdbj1M9p0m
+	 SS5oKW1JOTgSuZY8IfH6BdK2UA/QV9QyZTRg0gJvz3rvI8MgQn100d+rEFRmTrwI9N
+	 Ps2MHrT7n7E5SIY6+6yzyvV5PaeiKMtHkZznLYYymKJ9uyeply68Z+9mfDTb5/y2IY
+	 5jOMHVVOOrKbX3NBd2NYVm54IxiqS4fAjz1Fh3nav895thP4IxZ4k4HITWqZ7hGZhI
+	 tgNjTXIzWxuFPWds/ZB6tdyXkuPo+xD6ojLkToPZCxGvgqUK0ZtiL4lsbPJN2hyrBo
+	 DFqYwoJm8Hopg==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] More ARM64 defconfig updates for v6.3
+Date: Fri, 10 Feb 2023 10:15:16 -0800
+Message-Id: <20230210181516.2021902-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 10 Feb 2023 17:25:44 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-4
+The following changes since commit 1a87f7e5fa10b23633da03aed6b7c7e716457304:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4f72a263e162938de26866b862ed6015f5725946
+  arm64: defconfig: enable the clock driver for Qualcomm SA8775P platforms (2023-01-18 18:14:33 -0600)
 
-Thank you!
+are available in the Git repository at:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.3-2
+
+for you to fetch changes up to 480ba14b9a95641647a6561d5b246de661589514:
+
+  arm64: defconfig: enable Qualcomm SDAM nvmem driver (2023-02-08 19:05:49 -0800)
+
+----------------------------------------------------------------
+More ARM64 defconfig updates for v6.3
+
+Here are two more defconfig updates for 6.3, enabling the SM8450 Display
+clock controller driver, as well as the SDAM driver, a driver exposing
+SRAM on newer Qualcomm PMICs to other devices.
+
+----------------------------------------------------------------
+Johan Hovold (1):
+      arm64: defconfig: enable Qualcomm SDAM nvmem driver
+
+Neil Armstrong (1):
+      arm64: defconfig: enable SM8450 DISPCC clock driver
+
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
