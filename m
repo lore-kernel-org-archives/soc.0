@@ -1,96 +1,168 @@
-Return-Path: <broonie@kernel.org>
+Return-Path: <SRS0=rYkI=6G=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D39BC05027
-	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 15:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD20C05027
+	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 16:26:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DE649C433D2; Fri, 10 Feb 2023 15:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31535C433EF;
-	Fri, 10 Feb 2023 15:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676043450;
-	bh=FRy96nD5c1SzZmyz4HC/kFO04B5b4qW5UfIkYsHYbUE=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=nsYZt0T9KVUpE3NuFBvt7c6o6xQXqEjdJk67IOK8Y38EHKBa7AsXeC69rFKMeT9NX
-	 eoJRHl5aOhbt5uX2tjhNkFEY13GQXK+62YDs8m8/qpNZZOpHLNF8TnRPb6C7feEXXR
-	 830PSmam4AsM755O4G3B90+XXn6Y22EyR+V+ffgcFQBGfMT7JfxBX+bS3/CJYIcXXr
-	 0SX7c8YZ+M2njD15kzKFdNLNhk8Dzagu0TwtayLtwTQ9M1nj/BEKt4uUtxj2ACOFza
-	 NPAI/9J1nAaImas7uAOL/FUlkjw4Mo5ORmU73UOfkOwIohrtXO7EuX95ms95EAgVxN
-	 XKhUm73Sdglzg==
-Date: Fri, 10 Feb 2023 15:37:25 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
+	id 2092CC4339B; Fri, 10 Feb 2023 16:26:09 +0000 (UTC)
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 46BB4C433D2
+	for <soc@kernel.org>; Fri, 10 Feb 2023 16:26:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 46BB4C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 2DC8C5C0238;
+	Fri, 10 Feb 2023 11:26:03 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 10 Feb 2023 11:26:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1676046363; x=1676132763; bh=t01H0ZxMiLNGoPZFy2PSmF/8v+B8Ck0mxHf
+	dS0i6frE=; b=GdHejhB2I82AGMNvYSArVx66SkXqfu4lqXDZIAgNzOy4d+SSFzj
+	aMMBjInGWeMlQvD3mSbqJKKWH86q837fJ7/vWL0AyQPKFiLE42Kv+thrZoFzmmnn
+	caUjD/5eT/FnZU7m2Bu8sdQXCNhXUCc7WAs9kfLeiRdzuT+s9pbBD0UPOAuzj0g5
+	4GmA5Z2WzXVRtJC1ll1YTI6vvgK1JepgPMm0I4SpDhnIIVl2UMiTEv97yKeoQ8b8
+	ntru4BFkRl+8ZKgEBC04fpDIhrHZjQq2a3XqVgIUfIowM+NSZNL9+VgqELExic21
+	n8V7tKh73Ek/MpUETflsatnxS57F3RqVOIw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:mime-version
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676046363; x=
+	1676132763; bh=t01H0ZxMiLNGoPZFy2PSmF/8v+B8Ck0mxHfdS0i6frE=; b=B
+	0geuZAoeItSagcqnBrbl9aKRfIPlSM+6CvcvOOCBeKp/chYljF0ZgzMITlrCVeD0
+	Uhbpuc308tcPSPyfIeICeHOqMHrtZX9FMeNpcRdvQoDESHX/02nDR17bBg5hgjgE
+	DZ4eurn+kB6SB6S+G9ttKbH1m4uiWbFkyC14iJlQ34KCvX6Fxxn/bwmI50vhS5x9
+	xcZw50ZO7TIG3y9L8qB9Fu37nAXVKz7gsIuM2LpjzL09Mi45JjoOL4iYkMM6tBy0
+	vZBdt77hJ6bnY6ZJjWgByYM75C81y9V33kbfGXhcM0DGEIaa6OLikQGS1njZXfJ0
+	RrxRYGbCdEaBc600f/StQ==
+X-ME-Sender: <xms:GnDmY0Z6SVqQ0Ti1L2Y4pkWyA1eGMiR0VWyIpcn2Y2irm3ihZgcNSA>
+    <xme:GnDmY_YPoinw9y0K_AuVTHkVKnhXxeApvz2-xhNl4PYY5UMBqCUl4B65MzOl2pcii
+    kvNVabMR2qRTEv8b8k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehhedgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:GnDmY-8ngFbyg6B_34m8u6X5OLrJCY8J9Xq_dIERKdwzA6TnrI3gzA>
+    <xmx:GnDmY-omqU_tHpV3lXT_KaahQRa9HTyg8DGkAF1sFJnL1paDO_CHKg>
+    <xmx:GnDmY_qR9-uQhq7TRmTFAJcAw8M9XCpLAlBQ1CfE2sBzLkmxSlu-4Q>
+    <xmx:G3DmY4BlImXSziEyNZulBOrsucJTZSXZUEvuzl1O-8HimW7vjp4-RA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id D7A24B60086; Fri, 10 Feb 2023 11:26:02 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <d3a3546d-cf8b-407b-bf8d-d8666e2b9c98@app.fastmail.com>
+Date: Fri, 10 Feb 2023 17:25:44 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, soc@kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/2] arm64: configs: Provide slimmed down configuration
- for guests
-Message-ID: <Y+ZktXBAXouDriwA@sirena.org.uk>
-References: <20230203-arm64-defconfigs-v1-0-6d0d03a6dbd2@kernel.org>
- <c67dff61-37a8-49a9-855b-c69fcf275f59@app.fastmail.com>
- <Y+ZZ5XFUT/Bw1lDj@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XTbVySs69WGQWquA"
-Content-Disposition: inline
-In-Reply-To: <Y+ZZ5XFUT/Bw1lDj@sirena.org.uk>
-X-Cookie: Brain fried -- Core dumped
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: SoC fixes for 6.2, part 4
+Content-Type: text/plain
 
+The following changes since commit 6d796c50f84ca79f1722bb131799e5a5710c4700:
 
---XTbVySs69WGQWquA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.2-rc6 (2023-01-29 13:59:43 -0800)
 
-On Fri, Feb 10, 2023 at 02:51:23PM +0000, Mark Brown wrote:
-> On Fri, Feb 10, 2023 at 02:34:03PM +0100, Arnd Bergmann wrote:
+are available in the Git repository at:
 
-> > I wonder if we could get to a similar result by having 'defconfig'
-> > still contain all platform support, but then use a fragment to
-> > turn off most of the CONFIG_ARCH_* symbols which in theory
-> > should also disable any platform specific drivers, provided
-> > they have the usual 'depends on ARCH* || COMPILE_TEST' guard.
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-4
 
-> That does knock out quite a lot of stuff (about 2400 options), but
-> there's still a bunch of widely deployed architecture neutral stuff -
-> it's about 25% of the build time of defconfig for me, whereas the
-> virtconfig in these patches is about 50% of the build time.  It's a=20
-> combination of widely used IPs, subsystems that can't be used in
-> mach-virt and off SoC devices.  We can obviously build on that approach
-> though, and 25% of a big number is still a win.
+for you to fetch changes up to bc6772bbab9af6034f918624a40ac5c962df2bac:
 
-Ah, now I try it properly I remember the problem with this approach: the
-tooling doesn't like turning off configuration options that were
-explicitly set by the base configuration:
+  Merge tag 'amlogic-fixes-v6.2-rc-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into arm/fixes (2023-02-10 11:31:25 +0100)
 
-| Value of CONFIG_ARCH_ZYNQMP is redefined by fragment ./arch/arm64/configs=
-/virt.config:
-| Previous value: CONFIG_ARCH_ZYNQMP=3Dy
-| New value: # CONFIG_ARCH_ZYNQMP is not set
+----------------------------------------------------------------
+ARM: SoC fixes for 6.2, part 4
 
-It produces the expected result but does so rather loudly.  It looks
-like those warnings have just been there from the start and not thought
-about too hard so we should be able to fix the tool though.
+All the changes this time are minor devicetree corrections, the majority
+being for 64-bit Rockchip SoC support. These are a couple of corrections
+for properties that are in violation of the binding, some that put the
+machine into safer operating points for the eMMC and thermal settings,
+and missing properties that prevented rk356x PCIe and ethernet from
+working correctly.
 
---XTbVySs69WGQWquA
-Content-Type: application/pgp-signature; name="signature.asc"
+The changes for amlogic and mediatek address incorrect properties that
+were preventing the display support on MT8195 and the MMC support
+on various Meson SoCs from working correctly.
 
------BEGIN PGP SIGNATURE-----
+The stihxxx-b2120 change fixes the GPIO polarity for the DVB tuner
+to allow this to be used correctly after a futre driver change,
+though it has no effect on older kernels.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPmZLUACgkQJNaLcl1U
-h9CA2gf/fPurlq+BjHuNlhZnIbNFx+KoB6OOuX0iCBxGEMzlZhnCESnF99CffhZE
-TDvz8kRnpl8YemTE5ICmgtNxPA9VA4MtyBJvsDuu263m2LUJRcAny0/v35dpPbA4
-yjIIELqugHXTsKv5LKDKIfBW4bC7g8+RPHCaZEyVBu/EJCK3+xzOaauCM67iSBQr
-NEkgkZ03q/RVuMkTGRMShAf2ivC9FIxpd/fWkaX3Yk5LcfK+VGV6EooiOzLZHSXL
-Xq4/t38EJH3kZu8OTXH4MZ9zpelRA4GtJFf5selPF4BsEilA2XzIiwIPmERHLHDh
-f0Q2ts+bOZRNl8d/STNiecSRXaZ5WA==
-=iU1G
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Andy Yan (1):
+      arm64: dts: rockchip: add io domain setting to rk3566-box-demo
 
---XTbVySs69WGQWquA--
+Arnaud Ferraris (1):
+      arm64: dts: rockchip: fix input enable pinconf on rk3399
+
+Arnd Bergmann (3):
+      Merge tag 'v6.2-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
+      Merge tag 'sti-dt-for-6.3-round1' of git://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti into arm/fixes
+      Merge tag 'amlogic-fixes-v6.2-rc-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into arm/fixes
+
+Chen-Yu Tsai (1):
+      arm64: dts: mediatek: mt8195: Fix vdosys* compatible strings
+
+Chukun Pan (1):
+      arm64: dts: rockchip: remove unsupported property from sdmmc2 for rock-3a
+
+Corentin Labbe (1):
+      arm64: dts: rockchip: use correct reset names for rk3399 crypto nodes
+
+Dan Johansen (1):
+      arm64: dts: rockchip: set sdmmc0 speed to sd-uhs-sdr50 on rock-3a
+
+Dmitry Torokhov (1):
+      ARM: dts: stihxxx-b2120: fix polarity of reset line of tsin0 port
+
+Heiner Kallweit (3):
+      arm64: dts: meson-axg: Make mmc host controller interrupts level-sensitive
+      arm64: dts: meson-g12-common: Make mmc host controller interrupts level-sensitive
+      arm64: dts: meson-gx: Make mmc host controller interrupts level-sensitive
+
+Jarrah Gosbell (1):
+      arm64: dts: rockchip: reduce thermal limits on rk3399-pinephone-pro
+
+Jensen Huang (1):
+      arm64: dts: rockchip: add missing #interrupt-cells to rk356x pcie2x1
+
+Johan Jonker (1):
+      ARM: dts: rockchip: add power-domains property to dp node on rk3288
+
+Jonas Karlman (1):
+      arm64: dts: rockchip: fix probe of analog sound card on rock-3a
+
+Krzysztof Kozlowski (2):
+      arm64: dts: rockchip: drop unused LED mode property from rk3328-roc-cc
+      arm64: dts: rockchip: align rk3399 DMC OPP table with bindings
+
+ arch/arm/boot/dts/rk3288.dtsi                         |  1 +
+ arch/arm/boot/dts/stihxxx-b2120.dtsi                  |  2 +-
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi            |  4 ++--
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi     |  6 +++---
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi             |  6 +++---
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi              |  4 ++--
+ arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts        |  2 --
+ arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi      |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts |  7 +++++++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi              |  6 ++----
+ arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts      | 11 +++++++++++
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts       |  5 +++--
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi              |  1 +
+ 13 files changed, 37 insertions(+), 20 deletions(-)
