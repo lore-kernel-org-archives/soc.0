@@ -4,30 +4,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D9AC636D4
-	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 19:54:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97198C636D4
+	for <soc@archiver.kernel.org>; Fri, 10 Feb 2023 19:54:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8A57BC433D2; Fri, 10 Feb 2023 19:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78062C433A7;
-	Fri, 10 Feb 2023 19:54:08 +0000 (UTC)
+	id 7B0D6C4339B; Fri, 10 Feb 2023 19:54:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E9FC4339C;
+	Fri, 10 Feb 2023 19:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676058851;
-	bh=SjJDx1P6SyhsBO9OLesuuShAMN3+Y5zTtnZbVskcLI8=;
+	s=k20201202; t=1676058855;
+	bh=sUouHfKzB8QNcmsZOIwlgTdDLylu0lcK0/xdfuXCJOg=;
 	h=From:Date:Subject:References:In-Reply-To:List-Id:To:Cc:From;
-	b=G/W9M6ZhvfsQ36u1QVT6MOkeLaXsdvrM0Lm34U6px4VJ0IIE+c/KZYQgqLdOk58yx
-	 DD5+4w515wQKy5oSUggRDq8kXujvU81AbwTjmg+NfnIYX3ahZZmTahnFzvnROPitTI
-	 mU//02k8JlLAXc59g1E39Mn5IDyGbLJOHt6y2y9HAX7c2AjuhNusFnCRZY27aQZW5r
-	 B97lpdFNasPSVoRSgU6boQ9L7H5Oui8Yu7YF1NUymPBJIkV+juGOBzOrG6R8NOskG9
-	 fcK3CHhwepUsFHPRCeQkwGI6rK5oekO/7nQ321Vq7GdyUpFXN6fVCSDuxAU/zKAWkr
-	 3sWBZzIBYz74w==
+	b=L25HNEQyRMRx1tQc8Yx+YMZUylYz94mPOw+s4XTU2SvaHqgZ5Z6vm3Hvws0rZMPj0
+	 yNzxUSF72dxlAtxHNEvtcf40oOWnGAys56Yxvmzoopa+qScmRoqLLkB/3+iYFWNxLt
+	 6kKCCcz6flwcCqwVSrfw7LJXXFJxIaE2bsjKcKkagNdZqQnd23M7AbegWZm6g6pY4z
+	 n/abe6AayCvNmRIZEtvH0HvVA2QZR+lhlMu+SDVa2MHPc0S/21soo05z2DHiNAjbq0
+	 xYU2iEcz+lHr8Isn87Ptq7l2/VpojFjC5PUuSPw3VjZK5oZf8MKnowuifIBOC+NufL
+	 1x9FeK3NgIgNQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Fri, 10 Feb 2023 19:52:47 +0000
-Subject: [PATCH 1/3] scripts: merge_config: Add option to suppress warning
- on overrides
+Date: Fri, 10 Feb 2023 19:52:48 +0000
+Subject: [PATCH 2/3] kbuild: Provide a version of merge_into_defconfig
+ without override warnings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-arm64-defconfigs-v1-1-cd0694a05f13@kernel.org>
+Message-Id: <20230203-arm64-defconfigs-v1-2-cd0694a05f13@kernel.org>
 References: <20230203-arm64-defconfigs-v1-0-cd0694a05f13@kernel.org>
 In-Reply-To: <20230203-arm64-defconfigs-v1-0-cd0694a05f13@kernel.org>
 List-Id: <soc.lore.kernel.org>
@@ -41,94 +41,53 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2813; i=broonie@kernel.org;
- h=from:subject:message-id; bh=SjJDx1P6SyhsBO9OLesuuShAMN3+Y5zTtnZbVskcLI8=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj5qDa6UsXmiY6F6KpytcyYNRwEmRSxKg/FVz+rZRK
- 3ctju9CJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY+ag2gAKCRAk1otyXVSH0HD1B/
- 4umTKscagIZ1bx3dT3nhZp+wDNOyjeLdftgFGPvNrx5q4NO7gmsAJ5QicomelxeRGBm+MVSy1VgRQT
- J9qepSgjKAGNvMqrqtl4RiQHxIQEn/SorbRdBD5huORMBfr5dGIrZtkrxme1G+mYhV9K3iqLqcosow
- poFJgrYGMXAu8EdaQa99rsiJX1f+3GiDdm4qUp3YVnPxT/C8gc9q4T71OPHxvvtsvytxuJbw2TaqE8
- xMJfYqxoUaeq/gIqFD2hIqW9N7Kq5osqRof2tqgwLHi0Zap4Eu5dmhLKkfvdhX426tkwv9SLZ5mZn7
- s4ANX70KaNZKgVK2jctF4ktT/73CAd
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1494; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=sUouHfKzB8QNcmsZOIwlgTdDLylu0lcK0/xdfuXCJOg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj5qDb+8sxNLUs/YY2zxViJb60ghK64OQUFJrkF2Ze
+ xDFx8mmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY+ag2wAKCRAk1otyXVSH0B8WB/
+ 9b6xpUsznvytgwXy7hLg2BSznsdSevRxL455FnbMf75gQh4FhSd7q261HEwNpaq//il9B6TS7V/2/B
+ 8ZhWwoLkCm7AbY9jYlzCFohYVDbV9P4UH/Zv7+uzUUuJd9b69TsxnbTg0nD/Av9EGTHV+inhRaLtId
+ aZ2v93h0+hSbTlVOspn6GEskyBqB5CwFfRsCQPo0nN/kxScZvrHn/Vg5oUKNSzE1AWS3rh5CLkBaYD
+ 93qDhiKcY3m1VrUg52+5R2J4yxEkm3YbkQfK5nQmZU1e8yjTqNl1qXPj4CrPX36FY0jbMARJQx+9GB
+ G0NwNZlrZfTs7Pm1NDnYCtN6qe4LM1
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Currently merge_config.sh will unconditionally warn if a fragment overrides
-any already set symbol. This is generally desirable but is inconvenient in
-cases where we want to create a fragment which disables unwanted options in
-the base configuration, for example when attempting to produce a smaller
-version of another configuration.
+While warning on overridden Kconfig options is a good default for merging
+config fragements sometimes that is our explicit intent and the warnings
+are unhelpful, add a new merge_into_defconfig_override which does the merge
+but with warnings suppressed.
 
-Add an option -Q which will suppress these warnings.
+Since merge_into_defconfig accepts any number of fragments it is difficult
+to allow it to accept the flag.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- scripts/kconfig/merge_config.sh | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ scripts/Makefile.defconf | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/scripts/kconfig/merge_config.sh b/scripts/kconfig/merge_config.sh
-index e5b46980c22a..32620de473ad 100755
---- a/scripts/kconfig/merge_config.sh
-+++ b/scripts/kconfig/merge_config.sh
-@@ -29,6 +29,7 @@ usage() {
- 	echo "  -y    make builtin have precedence over modules"
- 	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
- 	echo "  -s    strict mode. Fail if the fragment redefines any value."
-+	echo "  -Q    disable warning messages for overridden options."
- 	echo
- 	echo "Used prefix: '$CONFIG_PREFIX'. You can redefine it with \$CONFIG_ environment variable."
- }
-@@ -40,6 +41,7 @@ BUILTIN=false
- OUTPUT=.
- STRICT=false
- CONFIG_PREFIX=${CONFIG_-CONFIG_}
-+WARNOVERRIDE=echo
- 
- while true; do
- 	case $1 in
-@@ -82,6 +84,11 @@ while true; do
- 		shift
- 		continue
- 		;;
-+	"-Q")
-+		WARNOVERRIDE=true
-+		shift
-+		continue
-+		;;
- 	*)
- 		break
- 		;;
-@@ -138,21 +145,21 @@ for ORIG_MERGE_FILE in $MERGE_LIST ; do
- 		NEW_VAL=$(grep -w $CFG $MERGE_FILE)
- 		BUILTIN_FLAG=false
- 		if [ "$BUILTIN" = "true" ] && [ "${NEW_VAL#CONFIG_*=}" = "m" ] && [ "${PREV_VAL#CONFIG_*=}" = "y" ]; then
--			echo Previous  value: $PREV_VAL
--			echo New value:       $NEW_VAL
--			echo -y passed, will not demote y to m
--			echo
-+			${WARNOVVERIDE} Previous  value: $PREV_VAL
-+			${WARNOVERRIDE} New value:       $NEW_VAL
-+			${WARNOVERRIDE} -y passed, will not demote y to m
-+			${WARNOVERRIDE}
- 			BUILTIN_FLAG=true
- 		elif [ "x$PREV_VAL" != "x$NEW_VAL" ] ; then
--			echo Value of $CFG is redefined by fragment $ORIG_MERGE_FILE:
--			echo Previous  value: $PREV_VAL
--			echo New value:       $NEW_VAL
--			echo
-+			${WARNOVERRIDE} Value of $CFG is redefined by fragment $ORIG_MERGE_FILE:
-+			${WARNOVERRIDE} Previous  value: $PREV_VAL
-+			${WARNOVERRIDE} New value:       $NEW_VAL
-+			${WARNOVERRIDE}
- 			if [ "$STRICT" = "true" ]; then
- 				STRICT_MODE_VIOLATED=true
- 			fi
- 		elif [ "$WARNREDUN" = "true" ]; then
--			echo Value of $CFG is redundant by fragment $ORIG_MERGE_FILE:
-+			${WARNOVERRIDE} Value of $CFG is redundant by fragment $ORIG_MERGE_FILE:
- 		fi
- 		if [ "$BUILTIN_FLAG" = "false" ]; then
- 			sed -i "/$CFG[ =]/d" $TMP_FILE
+diff --git a/scripts/Makefile.defconf b/scripts/Makefile.defconf
+index ab332f7534f5..ab271b2051a2 100644
+--- a/scripts/Makefile.defconf
++++ b/scripts/Makefile.defconf
+@@ -13,3 +13,17 @@ define merge_into_defconfig
+ 		$(foreach config,$(2),$(srctree)/arch/$(ARCH)/configs/$(config).config)
+ 	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+ endef
++
++
++# Creates 'merged defconfigs without warning about overrides'
++# ---------------------------------------------------------------------------
++# Usage:
++#   $(call merge_into_defconfig_override,base_config,config_fragment1 config_fragment2 ...)
++#
++# Input config fragments without '.config' suffix
++define merge_into_defconfig_override
++	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
++		-Q -m -O $(objtree) $(srctree)/arch/$(ARCH)/configs/$(1) \
++		$(foreach config,$(2),$(srctree)/arch/$(ARCH)/configs/$(config).config)
++	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
++endef
 
 -- 
 2.30.2
