@@ -1,131 +1,108 @@
-Return-Path: <SRS0=hIKJ=6H=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E696C636CC
-	for <soc@archiver.kernel.org>; Sat, 11 Feb 2023 11:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8F9C61DA4
+	for <soc@archiver.kernel.org>; Sat, 11 Feb 2023 23:10:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F3927C433EF; Sat, 11 Feb 2023 11:31:11 +0000 (UTC)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 35EF3C4339C
-	for <soc@kernel.org>; Sat, 11 Feb 2023 11:31:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 35EF3C4339C
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso465820wmo.3
-        for <soc@kernel.org>; Sat, 11 Feb 2023 03:31:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uSR8IXziBIMVhSmEufg1SN4JgfbW84fvRPnBN9WPavc=;
-        b=llZ1PmrXT6iaZ/VVXG773oV6lIt2qBbjISC1I5Hqo4JFLve1LrZd5wmE9fF9k2U8Ia
-         ChNmhncH9r6Sj76ZORUKPHTgWg8cc2EbFPUXXLfIGzH9LPp7hG7cyXIFj+Sq5O6pCte+
-         9qRFvftZQTJP6o3LU/NV93/SzEFMuFBs5h1cxuv3j8oL2IfLPEtjpEm8APB1JCYeqKdD
-         cD7jhTLBIAA5gASzXSm4uyl7kaegJaTvXACCS7J/0so1T63Gnap5P7nx3+nK3PRL0FNM
-         +md7PWH5FIhsKrTFdLENc+NzzvmqKOXhr5IvbuGP43VMnbx3dwJev7AORn1Vmsy68BCR
-         Jr1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uSR8IXziBIMVhSmEufg1SN4JgfbW84fvRPnBN9WPavc=;
-        b=EiNBOGJObroZEwhe0f2kiSODVtBzFYmAF93QYwmy2QME+xmp2jI8hEBd+q6Al69QDY
-         K50mzVFERfZjk/2d1OWU7GsIywVMZoQmyoRvprCcVWPIummTcAePQHszAOrPraDUajJZ
-         yW0HkCPaKBIYsgTnwVz+yRQJSSKvAnc8Dr/nGB0PyFxEanSocAkrno0/BVb98KoIPNhn
-         awtiTxPn4gtoQiaz/s2973StJ4c8bMa3FoSA5rjuJu+6+kMeZkKIV630u1vzpZifiMpp
-         JffEcLPSjci4fR39YTIyWqKUNWPQlVvSCrhvntb8XURxNaSDP54b4u0/VG3+a15dvTg6
-         +XqQ==
-X-Gm-Message-State: AO0yUKUgZNnB3VpXKvLYdtIG6rcK5lKGQbWbqBFGmwGBqO4tT0tl2Ph8
-	Ym1ciSS6sNb6S5Rd45lv2Bn0HQ==
-X-Google-Smtp-Source: AK7set/rJMtqF6GRUHR9/M1BvLLThNbbHt3y3RnWKuDtmYwLPRB6rtW0jKn4dtbyQJWbDbQnqPvl3Q==
-X-Received: by 2002:a05:600c:2b46:b0:3df:12ac:7cc9 with SMTP id e6-20020a05600c2b4600b003df12ac7cc9mr15122532wmf.15.1676115068397;
-        Sat, 11 Feb 2023 03:31:08 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l40-20020a05600c1d2800b003dd1b00bd9asm9033559wms.32.2023.02.11.03.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 03:31:08 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 04632C433A1; Sat, 11 Feb 2023 23:10:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414ACC4339C;
+	Sat, 11 Feb 2023 23:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1676157024;
+	bh=Vpk0kzPmLqOB9iqNdDvWYiTR6ancyGu+HM3rMaZPgtM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=YxMJQZElih6rCSXB7YBlVBrWAMmQzXkIzdAnm2BwZN/znBgBdEwfvApfPmMZCCfal
+	 54lUX8CqdMh0LA42QMFgBxaZ9MB/7BvwQybcCob4pMCxlRvI5zjFRYz+EVusFSCsFp
+	 quDidUDYvZMSb0IRjjrgPHIZS+kt1kRfyJL7wu4LliRa8TmPId7fDfdHISzMqMk2Gj
+	 un2pXCpUX27+XP7Wj8ZQtWb72rhNVodlrmyPXSGhleYsKlrzZJADHKpAGlwmUHcd85
+	 64wcrqL/DetEjtE3K+xrqiTkWiCdKVMeAUwpKuvTXTVMcw3Cxl5SHxsyi43+rg3m8h
+	 t0thZJkffq03A==
+Date: Sat, 11 Feb 2023 23:10:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] ARM: dts: samsung: Late DTS for v6.3
-Date: Sat, 11 Feb 2023 12:31:03 +0100
-Message-Id: <20230211113103.58894-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, soc@kernel.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] arm64: configs: Add virtconfig
+Message-ID: <Y+ggXgUnEXHWjeLw@sirena.org.uk>
+References: <20230203-arm64-defconfigs-v1-0-cd0694a05f13@kernel.org>
+ <20230203-arm64-defconfigs-v1-3-cd0694a05f13@kernel.org>
+ <CAK7LNASRz-apG_pNwvNOqxXy+-tp+WGHV--g6yYU-UQnZx5tgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-Hi,
-
-Late pull with DTS cleanups and minor fixes for Exynos ARM boards.  I know it
-is late in the cycle but:
-1. I am really pushing recently towards full DTS compliance with `dtbs_check`
-   and I am almost there,
-2. All these should be low-risk cleanups or fixes, so I don't expect anything
-   broken (previous round of my cleanups affected devfreq/exynos-bus on
-   Exynos4412, but this is some weird driver problem which I am still
-   investigating).
-
-Best regards,
-Krzysztof
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8Y1mJBoovkaRa8jS"
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASRz-apG_pNwvNOqxXy+-tp+WGHV--g6yYU-UQnZx5tgA@mail.gmail.com>
+X-Cookie: Serving suggestion.
 
 
-The following changes since commit 27be20e3b9d125f2c1b066d1d238c67bf5b89dc3:
+--8Y1mJBoovkaRa8jS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  ARM: dts: exynos: add unit address to DWC3 node wrapper in Exynos54xx (2023-01-29 11:34:12 +0100)
+On Sat, Feb 11, 2023 at 04:37:02PM +0900, Masahiro Yamada wrote:
 
-are available in the Git repository at:
+> Yeah, I have a _local_ script to apply
+> a similar config fragragment.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-6.3-2
+> When I run QEMU, I disable unneeded CONFIG_ARCH_*,
+> and also disable unneeded sub-systems.
 
-for you to fetch changes up to 301d3dd05525e3a046f6cfa6ee4dea6a3b7111ee:
+> Not only me, many people are doing similar in their local env,
+> I guess.
 
-  ARM: dts: exynos: correct max98090 DAI argument in Snow (2023-02-09 12:58:30 +0100)
+Me too - I've got a config I actually use when doing development
+that's slimmed down a lot (it's a bit bigger due to me using the
+Arm FVPs for some things).  I suspect you're right that many
+people who do this stuff regularly have one, it's mostly when
+someone is doing cross architecture work rather than specifically
+targetting arm64 that it'd make an immediate difference though
+it's possible some of us will decide we can stop bothering
+maintianing our own configs.
 
-----------------------------------------------------------------
-Samsung DTS ARM changes for v6.3, part two
+> Of course, I will not upstream my set of CONFIG options
+> since it is just my preference.
+> After all, this depends on people in my opinion.
 
-Several cleanups pointed out by `make dtbs_check`:
-1. Align LED status node name with bindings.
-2. Drop redundant properties.
-3. Move i2c-gpio node out of soc to top-level, as soc node is expected
-   to have only MMIO nodes.
-4. Correct SPI NOR flash compatible in SMDK5250 and SMDKv310.
-5. Align GPIO property names in WM1811-family codec nodes with bindings.
-6. Correct MAX98090 codec DAI cells in Snow.
+There's definitely room for opinion with this, for example with
+some of the virtio devices which are less frequently used in
+development.
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (10):
-      ARM: dts: exynos: align status led name with bindings on Origen4210
-      ARM: dts: exynos: drop default status from I2C10 on Arndale
-      ARM: dts: exynos: drop redundant address/size cells from I2C10 on Arndale
-      ARM: dts: exynos: move I2C10 out of soc node on Arndale
-      ARM: dts: exynos: correct SPI nor compatible in SMDKv310
-      ARM: dts: exynos: correct SPI nor compatible in SMDK5250
-      ARM: dts: exynos: add "gpios" suffix to wlf,ldo1ena on Midas
-      ARM: dts: exynos: add "gpios" suffix to wlf,ldo1ena on Arndale
-      ARM: dts: s5pv210: add "gpios" suffix to wlf,ldo1ena on Aries
-      ARM: dts: exynos: correct max98090 DAI argument in Snow
+> BTW, the minimal set for booting + minimal features
+> might be similar to what Buildroot provides?
+> I do not know... It booted at least when I tried some years ago.
 
- arch/arm/boot/dts/exynos4210-origen.dts    |  2 +-
- arch/arm/boot/dts/exynos4210-smdkv310.dts  |  2 +-
- arch/arm/boot/dts/exynos4412-midas.dtsi    |  4 ++--
- arch/arm/boot/dts/exynos5250-arndale.dts   | 35 +++++++++++++-----------------
- arch/arm/boot/dts/exynos5250-smdk5250.dts  |  2 +-
- arch/arm/boot/dts/exynos5250-snow-rev5.dts |  4 ++--
- arch/arm/boot/dts/s5pv210-aries.dtsi       |  4 ++--
- 7 files changed, 24 insertions(+), 29 deletions(-)
+> https://github.com/buildroot/buildroot/blob/master/board/qemu/aarch64-virt/linux.config
+
+It does look pluasible - it looks like it might be slightly
+bigger than just mach-virt since it's got ARCH_VEXPRESS and thing
+slike the SMMU and PL320 turned on which I suspect means it's
+intended to support the Arm models too.  There might be some
+other stuff needed for common test programs or systemd though.
+
+--8Y1mJBoovkaRa8jS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPoIF0ACgkQJNaLcl1U
+h9D3NAgAg4vpXANWCqovcZHQRjzuMCRqDWImVNNDvkp2PbBYk0180ckSEV9qFdpN
+jm0cDKC88fV4RG4FrpNJyTv2sZPkhKI+3htcbbrBqKcWrju95KmswxpHntfklTDA
+qz3amUdXcwt6Yn6JxXaHq91aKGhfnWX/bYN1POjx0xx7XIiqGTj5Nd6TXP7AwolX
+Dg7CQkWoyhjfBi1HS/mPn2Q9kZ4QH7dVOQ32zYx+QwcxYKPnFwuczwxfKXXvJsXt
+fPigP7Xc2pjVeNIA89qblcqnLIMTVET/bFOwRsuwNsAtWv+N3ypyTbb/bnsf0mUL
+0QV2v0Lz5E/2EfnjOVkHhJwCoUTnFw==
+=ROtj
+-----END PGP SIGNATURE-----
+
+--8Y1mJBoovkaRa8jS--
