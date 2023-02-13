@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D0AC64ED8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BEFC64ED6
 	for <soc@archiver.kernel.org>; Mon, 13 Feb 2023 15:30:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A58CDC4339B; Mon, 13 Feb 2023 15:30:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 900CDC4339E;
+	id 91F8FC433A1; Mon, 13 Feb 2023 15:30:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 784A2C433D2;
 	Mon, 13 Feb 2023 15:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1676302229;
-	bh=lcOaQZfUxoYkWnnXTUxVtcjvFjACnP2cjnzUx0FiWLE=;
+	bh=nnhfSHBKgNo3vb6CROqSqJOtgU2YpkgTKM0rdvqHIjs=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=RSqwjBv50739vDpo2X1yPOpJoex+moMCiC6YV2CajxrjdsNmA/CZFAFvBdpDgnAmb
-	 S5VyzFJV8LGaDLW4mXUSFavjoPij1oGK3x3axLVh/nO7Qls8MaEgxDTxEYBPpOGhr8
-	 x/TGuWdY1+KRkymdf9PVM65+3i5p/NNi4CEZT62vcotl68//YKB5yF1Q7qrT5XxwdG
-	 RWJcU3tLpnrEfJwjDmTQLBWuo61ssthVjlIRBx5+S6vKDsIGF1bxL8S9QFB37ss9L0
-	 KqV+O0YduP0L8XKH+BbAhouWVeJRHVhIG0SlL8Yd0eUs2TQEWmGDpp5nVoREs9tywo
-	 lOcLxobDrFbIA==
+	b=hZmaaElPzVCKxfI89Lh/Gk7+L+4NK6Cnjc6W/WPK1qFBVnTN8+1Itc65BAm+u2hbY
+	 rCyaMiDE0MrYNanNr6R4CLluZ3NnWIz3R1zX33Mo63u19y2crDrDmVKHh0Ak2PZJcv
+	 G5dnsGLcX7xGRTo7JClaZTrQP3dqn+CIIkNRoYzJLEA2dFa/doqBg6CIwmgPskWjI1
+	 etsmP5+bQcyOpJwEGHMl1WoIKX3HzqROycqLyft2PB4s5s0tWy6VPhhVJhXvx0P4tU
+	 gicj6EIZt1VbTCyQqt4/1CgVDh9pXauc39GEr7Wzobnv9+gyav2bsIQ3sEYdzjUvTO
+	 DPuHUNliE3+bg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74089E270C1;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E12BC41676;
 	Mon, 13 Feb 2023 15:30:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] More Qualcomm ARM32 DTS updates for 6.3
+Subject: Re: [GIT PULL] More Qualcomm driver updates for 6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167630222947.5266.10798748448357008825.git-patchwork-notify@kernel.org>
+ <167630222937.5266.4559495048006452632.git-patchwork-notify@kernel.org>
 Date: Mon, 13 Feb 2023 15:30:29 +0000
-References: <20230210185846.2032601-1-andersson@kernel.org>
-In-Reply-To: <20230210185846.2032601-1-andersson@kernel.org>
+References: <20230210182242.2023901-1-andersson@kernel.org>
+In-Reply-To: <20230210182242.2023901-1-andersson@kernel.org>
 To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -42,20 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 10 Feb 2023 10:58:46 -0800 you wrote:
-> The following changes since commit 34d50b12d67795454139a1cfc7ca3add8efa3612:
+On Fri, 10 Feb 2023 10:22:42 -0800 you wrote:
+> The following changes since commit c5d52d7bf241a4d06b651362446644948621c426:
 > 
->   ARM: dts: qcom: msm8226: add RPMCC node (2023-01-18 20:20:18 -0600)
+>   soc: qcom: dcc: Drop driver for now (2023-01-30 20:30:54 -0600)
 > 
 > are available in the Git repository at:
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-dts-for-6.3-2
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-drivers-for-6.3-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] More Qualcomm ARM32 DTS updates for 6.3
-    https://git.kernel.org/soc/soc/c/fc54e13d7125
+  - [GIT,PULL] More Qualcomm driver updates for 6.3
+    https://git.kernel.org/soc/soc/c/01e9d2c6bea9
 
 You are awesome, thank you!
 -- 
