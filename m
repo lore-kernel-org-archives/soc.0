@@ -1,89 +1,69 @@
-Return-Path: <SRS0=hKv4=6L=arndb.de=arnd@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D28EC636D4
-	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 14:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 795FEC636D4
+	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0DD37C4339B; Wed, 15 Feb 2023 14:08:41 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7822CC433A0;
-	Wed, 15 Feb 2023 14:08:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7822CC433A0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 92C955C019C;
-	Wed, 15 Feb 2023 09:08:38 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 15 Feb 2023 09:08:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1676470118; x=1676556518; bh=Gu/FcsOCUV
-	TpChSiU1zhnNc7VSd0HRY/lqaNja2+QQU=; b=cXHG5Pkanno7CQ4Sx/U0V+6xeH
-	iXuwIt4KsfokXuvUJSjDhwkvrzH/RQRBl7H6+gCeNKzEvX5bv5I3MZN5oPjGKJZn
-	Qglle7XFqpu7y11TlxMN9Wcz1/dzl/NnXIbAM2NvAvye+h/8AoBxg8o42kzs6Dy3
-	PQCOywl579TkwvrEg0ErejW/9Vr5kVLTUl50vznZ094VUZ0zf8Ube/N+QLoHa5hp
-	eXrTMnDA/v5pNdlO+uE8WGeTp3Ohi6gkAppbODhJIA4vjboCcjxR0dJ03isN+lPK
-	nvGlbUtggG9gnBirQYQ+O2wEqT62GeBbZBXhek41C+qsNLn9iAF3I8Xo37mA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1676470118; x=1676556518; bh=Gu/FcsOCUVTpChSiU1zhnNc7VSd0
-	HRY/lqaNja2+QQU=; b=iuhEKVK5bncac6vb7t89QGZ/BLCSmGUPpHr0zhue2aeH
-	QSvwYLU8eIhZ9Fg9qj7Yk4OWAVqKUGHkzeRFNDFHxzim6osrj43IpXZaGaO9wiqp
-	m6ob+Ca66ea5C31A4wEnnde9AWmIU8X1XWDJieyKbtc9CcB1nzYWtNff55TYVD/M
-	3ANuET80JtGEFMfDlE6YAgzxsRpP/2Say9aKpnBvzAHdhqnIh/OjcK9gbqrK3xe5
-	uNg8IrD91BnoXgmE/b1lpmohYTqS+/5BdNbp5L1s8e7qcIoqIoM9Fl58JtiOwDq7
-	amupWm2heQ7VZvwDRmoAoP5Orwj75dEAJ5Bbmlg8gg==
-X-ME-Sender: <xms:ZufsY48gw1vF3VLN_ogIZrDN7VjnpIUQfj9eiZW__1MJFDaGliudwg>
-    <xme:ZufsYwtzH6-KEE4VLCSPS25Yvfp_HoXm5sJzDeXBM40HVYDXwrskMKq1XWE1T-lmK
-    9EXGXo31uTys-VhSNs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ZufsY-A1RGHNspw1Ee57Td-Vd5F-Gpna3w9rIsBMe9PpJcyBys36PQ>
-    <xmx:ZufsY4ec1eHQGS-fCgCCd4aDLrBa1J0b4HjPUleeOuIsh5cPmELfXw>
-    <xmx:ZufsY9OzTK3lFjGS_RHQz7SmPSYig7p41Kk-t5CA032SjabrS-SAlQ>
-    <xmx:ZufsYw0XMIjNi4Hjy3gM4TGBdGHUgX3CLvrPn4_TUOTWdyOfvXzG8A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 4D8ECB60086; Wed, 15 Feb 2023 09:08:38 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <f7b1ea7d-18cd-49b7-9972-aa40f334d038@app.fastmail.com>
-In-Reply-To: <20230215043658.1156472-1-andersson@kernel.org>
-References: <20230215043658.1156472-1-andersson@kernel.org>
-Date: Wed, 15 Feb 2023 15:08:06 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
+	id 494CCC4339C; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33551C433EF
+	for <soc@kernel.org>; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1676470820;
+	bh=V61rCrP/WqJqWipq7VM4YTQ/wXm78gke5C+CCgSmA4E=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=sRpQKfyqyVKiGaLwnhx3mhhZ3WVIhZtqGbwCbggwNAv1XpOS6mzlnhimcl1IN1f11
+	 6Uy3kEtfitH5KWSvebvHcZnu+PGAdh2CE8LDz0dsZDPzCu7hHBLHnO7HGOxf1DmLU6
+	 6BJ24VyDUlibqArjO70xpWIfOmCjv7W29wPIqB7P7ykoKL6bZEb5G6PIh4UaciwOKb
+	 fb7K4e9fglNVHj1NaEJL/Cd+u+kolxHUc9566BIowAxl9o+QdGC+llujuyO70TRq3V
+	 dSFkq6SHp/s1yXF1cqHsqjAYN2XvfcW4+runlzNQdlbHV0vnWSHVwL8bpiCMWNt7U8
+	 Qe8bq7On1QLMQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0BD9AC41676;
+	Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: linux-soc
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <167647081992.22208.740234508371492191.git-patchwork-summary@kernel.org>
+Date: Wed, 15 Feb 2023 14:20:19 +0000
 List-Id: <soc.lore.kernel.org>
-To: "Bjorn Andersson" <andersson@kernel.org>, arm <arm@kernel.org>,
- soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- "Andy Gross" <agross@kernel.org>, "Olof Johansson" <olof@lixom.net>,
- "Kevin Hilman" <khilman@baylibre.com>
-Subject: Re: [GIT PULL] One more Qualcomm driver update for 6.3
-Content-Type: text/plain
+To: soc@kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-On Wed, Feb 15, 2023, at 05:36, Bjorn Andersson wrote:
-> Arnd, I hope you're okay with a few more last minute updates for v6.3; bringing
-> battery support and, in the DTS patches, support for USB Type-C based external
-> displays on the 8cx Gen3 laptops.
+Hello:
 
-No problem, as these are all smaller follow-ups to earlier
-patches and nothing controversial.
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-  Arnd
+Patch: [GIT,PULL] Last set of Qualcomm ARM64 DTS updates for v6.3
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=721986
+  Lore link: https://lore.kernel.org/r/20230215051530.1165953-1-andersson@kernel.org
+
+Patch: [GIT,PULL] One more Qualcomm driver update for 6.3
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=721977
+  Lore link: https://lore.kernel.org/r/20230215043658.1156472-1-andersson@kernel.org
+
+Patch: [GIT,PULL] Few more Qualcomm ARM64 defconfig updates for v6.3
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=721990
+  Lore link: https://lore.kernel.org/r/20230215051757.1166709-1-andersson@kernel.org
+
+
+Total patches: 3
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
