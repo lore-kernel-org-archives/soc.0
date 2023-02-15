@@ -1,210 +1,169 @@
-Return-Path: <SRS0=hKv4=6L=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=+nKk=6L=in-advantage.com=colin.Foster@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 383E8C636CC
-	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 15:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9303FC636CC
+	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 16:46:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EB241C4339E; Wed, 15 Feb 2023 15:05:58 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	id 53B02C4339B; Wed, 15 Feb 2023 16:46:47 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 07236C433D2;
-	Wed, 15 Feb 2023 15:05:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 07236C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 12CD25C00A4;
-	Wed, 15 Feb 2023 10:05:56 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 15 Feb 2023 10:05:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1676473556; x=1676559956; bh=s0AJKWLVNc
-	ykc9c6LDSigdn2GWFyqJgMF7HOsHcq26g=; b=ejQFZjZ9zb1zguVU2EOGqYlUVh
-	cFXXakvC+UYW1eEDDlBHXuVgORXhkLJUYHeNs/tpaMeVt8D3mgKwwvZuVLu6MNEL
-	Wyfpw3imKLVmqCrYaaRnW7V30ufhO1g7L7ZbDAnkDte5OwZB1XFQUJ5AF2jJoQI5
-	sQh7arAdmV3x91ZXfiAip8e/e8l7G9K38D6I5cHL4fg6zkCKJUSkQlPrv0BOgkX2
-	cXtmNMDdq7Eew30jzbn+LmkS2FKKvKWLZAmR9JflEaMIyiVc1KbRxBB1GKInnCgq
-	mbID759E9AhIIlSwIDY+/Ism2nzwYidLoPJ8pjXC3ABJzbgkPNSV3JfCVTRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1676473556; x=1676559956; bh=s0AJKWLVNcykc9c6LDSigdn2GWFy
-	qJgMF7HOsHcq26g=; b=qKd6ui6kt/QmFfZ5XRDtUeNEX7FtdhbHnStJtNfR6eZc
-	wRn4cTkipY4uzUYopa5DlNNnjNXFNHxwZf+Jsdii+o0BZKpVg3t/7B9qy0bv/xer
-	cxETHA2ifvS+ICvO7f6KEJtR5xGDprVTn+TATqVCFp+ob/XSYqw3rAWbxyFRyKXV
-	RTSEvL0Xl3CXiLH4NYYb6+fguIHV5C3+x2dnSkJPdQtMLxC0khVrjNx32GqrStlB
-	nGSfY6YQIbYo2ml5+3cw+vgvgW5e6uBrE5IHoBjYrY6T05i6clUJFbUUfGg5wVtV
-	1DLAlw9X+EsEOLISV7fLDTRZ4Z/iekFNAL+GkqE9Ig==
-X-ME-Sender: <xms:0vTsYyhaIfGJXZOY4UIk8eX3ryHGOPd0Rar9l5x0M2A_wUmyQ550kA>
-    <xme:0vTsYzBvCbccNt_KY-9NW3tY42lNwEmd8pfv2LPRbk9t-9Q9n6vdisQoxQmMNIZmt
-    Fggn3EUy8rA3puKPw4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgieeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:0vTsY6HPiYD2pfZHnH7sTkhB4t4EH7mBGOV3ucnha3Cez3_5WLwigA>
-    <xmx:0vTsY7R5h9bL1-lbUFlxGpUF_T9Wa9i-ahYkdq7R8s2za3KmUMH2NQ>
-    <xmx:0vTsY_xNOpVeoJLODC5q1JMqQP_3FtokGa4vQ_EeFSTJOWcYvfQvgA>
-    <xmx:1PTsY1kDDXkQLABNSTjcLhvyt1d1DR4aLSJaoULwVx93xuO45a2r7A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B42BEB60086; Wed, 15 Feb 2023 10:05:54 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <9b680581-0956-4188-9af9-af06b625c001@app.fastmail.com>
-In-Reply-To: <20230130222412.t2tkkhqfep2orxf2@builder.lan>
-References: <20230126163008.3676950-1-andersson@kernel.org>
- <cdcff86c-77fe-4c5d-b8e8-58b815b9e969@app.fastmail.com>
- <20230130222412.t2tkkhqfep2orxf2@builder.lan>
-Date: Wed, 15 Feb 2023 16:05:36 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Bjorn Andersson" <andersson@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 1D6C1C433D2;
+	Wed, 15 Feb 2023 16:46:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1D6C1C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cqooHCVhUCLYEg+f+u8mKcDceniis0P1NOEEqcRiFUMwnMlv9bELcfNms5NdxyrSrOerVgf4psekwyGSqnuaxjr14zomNPBN8kjS+Wx5el4TSSvyDezRdtgvu+PhzjCnGwY3w6oK2PbelXOXfmfhHkE216cidbEpNhBzHs0C6N1gzsoeENJnC7VN7rJQ7sTdw3xbJkl0GxGZx9f/LTBPPIZDJcno3R8V6R/DEe+gOhQc8jYr99PITNLtLtUSq+OIBa8TrSnsUP+XaBorpY0IZBrqgy/T1/V89vLrQWL1UKi2XiP3p34dsjUCbpaXJ+ya3+KfcbHC+dcu4B6xVpfJUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kjfpWbDFn4+GxP3g5296w2yANxVMNwhuNQ2VupsFR4s=;
+ b=fVWtlsIa3cKliiKPmQJS0WD6C3sAHERjgFw3e5K/WUXtF+DscXH0tqzBMf18pOl/NI38v+uwJS832A79n6cNBuywY9BMhMNb7SoccamjZ2gH26DLciLvvZCMWYvlhzxgpqXXZZbmTwC7wyFytT4Nn4PSLNUJKtBNhGDSWD7yoooxigHCtn/ijcVqBOM2RXYSgV9GbbwDMEqBrNtUxLSY4a507yNngwejv1dyay65bTCIi2UmSCUj0H6fW7BnLjnAkQmEzc0fGKd4e1u7b7TNrU12ucoyNivLVxkh0EtzPsN7OSixa55gUmF2SfnXvo9wWKeDjlJwlWotTnWK7+XuOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kjfpWbDFn4+GxP3g5296w2yANxVMNwhuNQ2VupsFR4s=;
+ b=gIxHbxa3HVc9aAlP3Q9QodWSKVrBSY18YPKw7ZJKg1rS0LgQ4zT1l2ZrU2Zu8DMFuDcIbT5eI1tu0mGyUq1ZYv4kxQx9rPGPxUAY/Rdepe7yKzkc0VhIPr3Y2u35AbxaOVY1dKmuqkIxA82unfQNCRlKImyzKMcVVJxxA+MyE/8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by SA2PR10MB4746.namprd10.prod.outlook.com
+ (2603:10b6:806:11c::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Wed, 15 Feb
+ 2023 16:46:43 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6111.010; Wed, 15 Feb 2023
+ 16:46:43 +0000
+Date: Wed, 15 Feb 2023 08:46:35 -0800
+From: Colin Foster <colin.foster@in-advantage.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: arm <arm@kernel.org>, soc@kernel.org, linux-arm-msm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, "Andy Gross" <agross@kernel.org>,
- "Olof Johansson" <olof@lixom.net>, "Kevin Hilman" <khilman@baylibre.com>,
- "Konrad Dybcio" <konrad.dybcio@linaro.org>,
- "Stephan Gerhold" <stephan@gerhold.net>,
- "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>,
- "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- "Bagas Sanjaya" <bagasdotme@gmail.com>,
- "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
- "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "Bjorn Andersson" <quic_bjorande@quicinc.com>,
- "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
- "Dawei Li" <set_pte_at@outlook.com>,
- "Loic Poulain" <loic.poulain@linaro.org>,
- "Melody Olvera" <quic_molvera@quicinc.com>,
- "Naman Jain" <quic_namajain@quicinc.com>,
- "Neil Armstrong" <neil.armstrong@linaro.org>,
- "Yang Li" <yang.lee@linux.alibaba.com>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- coresight@lists.linaro.org,
- "Mathieu Poirier" <mathieu.poirier@linaro.org>,
- "Suzuki K Poulose" <suzuki.poulose@arm.com>,
- "Mike Leach" <mike.leach@linaro.org>, "Leo Yan" <leo.yan@linaro.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Namhyung Kim" <namhyung@kernel.org>,
- linux-perf-users@vger.kernel.org, "John Garry" <john.g.garry@oracle.com>,
- "Will Deacon" <will@kernel.org>, "James Clark" <james.clark@arm.com>
-Subject: Re: [GIT PULL] Qualcomm driver updates for v6.3
-Content-Type: text/plain
+Cc: Rob Herring <robh@kernel.org>, linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+	soc@kernel.org, Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: omap: add phytec pcm-049 som
+ and pcm-959 dev board
+Message-ID: <Y+0Ma9En4JLbR41t@COLIN-DESKTOP1.localdomain>
+References: <20230209025525.148872-1-colin.foster@in-advantage.com>
+ <20230209025525.148872-2-colin.foster@in-advantage.com>
+ <20230209173534.GA539622-robh@kernel.org>
+ <Y+yGYycS7rrBRBPN@atomide.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+yGYycS7rrBRBPN@atomide.com>
+X-ClientProxiedBy: BYAPR06CA0035.namprd06.prod.outlook.com
+ (2603:10b6:a03:d4::48) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|SA2PR10MB4746:EE_
+X-MS-Office365-Filtering-Correlation-Id: 75e636f0-f857-45ab-1a51-08db0f7437ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	qpGcQgcKsBYQJqaLzCzIRJ/z4UghWpfGvsVzkf1z/ZbJAUKM/wc7Bly/qAYqrgJOpRYRdikcDzzuf/z6SoDORQX1MwJYG1IVp5aoc2Agk/NKgNh3Tx9j3Y1sHNqOp6aChzgjIEkEv/WMJJfOfjmv3CpKjjzjT1CNKYM9qUZlR9XV6ZAL8jmrzIe2xuu2lvDyKqHSpz2fctFD7xsOH9z9uYrWCjUfPWTOyldfT1q4+033RfSlN+hJk2OTsQf5HcdbnkI9EfR0Oyw2BKJMb6O4GtI1dAlL6KFHwJQhvhfJXMTcFmveK2ZG2v0rxGqDxLtvU72tEsXOvxzoJ3kUadhW6759TwKGcoBj3VdF0sFP3+sJWC+jlW5WVoJbb0OxJ6j6bERGoPwrt7wOPLfjoTE5ITuXky8kLB+M5FcuNJr4aTVjRFYT5Ly1+5qLQcdedCTxuwVD958FwW899CrFYzJW14UwWEf6/aqewSIIp4yUxTrUp+JJNfVlop+mrw9DYFo08WHJ/KU7b+gvku250Zd7as27tlLjxR1oX26xw1bb3MJbukuSBsUVSxqdS4df/4YqHKL2AYGB+AZCtI8xo+XzleQMsAazSqfxGhZo6VV2qCE/mwTigAea8nN+NwDkPEipCgduVA3ccZUfREO6H0HuNZZkJq7jLyZNGcqRpIHT3P6vSJfvVBWqdySHR6nUkIts
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39830400003)(376002)(396003)(366004)(346002)(136003)(451199018)(8936002)(7416002)(41300700001)(44832011)(5660300002)(2906002)(6486002)(6916009)(66556008)(8676002)(66946007)(4326008)(66476007)(316002)(54906003)(478600001)(38100700002)(6506007)(26005)(9686003)(186003)(6512007)(6666004)(86362001)(83380400001)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?QvfDP3gSDkC26/stam3UNuLFgZtJgeBOWKN0UkyaAuQ9fa3YYLmbeepqU571?=
+ =?us-ascii?Q?vkOhGxcV3ZJE4ffLufuZyaTYFfYc26UN7DOlxvl5r/fAriaaQE9ewDclztvd?=
+ =?us-ascii?Q?XIEErSg6m4gRGcJtbYEJiQNNWwtZB8jdxFNJomXefBKz1NmMJ9MTZTqBXy3a?=
+ =?us-ascii?Q?F/URKdD2apwsrtJGo1IWJozqtX2BrGnsMxpFMaoyeoOMiXsejCeNvsaWAJ/r?=
+ =?us-ascii?Q?n4X1uhd+csC5n6Q9AoAlAkAdbaTSSqafj1ussFteIAzhY0PNfK2aU9s1epCI?=
+ =?us-ascii?Q?sAArl9dbYnwqqUq/aQtC6iiaLZVnTGyRQj9a33fmb13K8sX4h99ZvoSAYcwX?=
+ =?us-ascii?Q?rc3fY/h3T0hCffpmSfMHL7dlX2pvchygp9sNGiUVlUQLSTW/Cd4LD612/SMs?=
+ =?us-ascii?Q?v93THO+hwudPK6PwhRcbZAG0kfrBi2UlC7vjvGtxQq62y2MpVKVrQTxTehOh?=
+ =?us-ascii?Q?1vVjK/n9I+LoedFVEQ89YwKJwibugap2wBcGPF06OgsmrJPEIwZKYHr8RT7Q?=
+ =?us-ascii?Q?ne4XnBZNrqWqbYD6F5/xxuWw6fB3Vah/uKidgtAWiN7CVfcY2+rLcHqPbSXV?=
+ =?us-ascii?Q?QQhdsFXRvUJorM9uYLeh6cBXa6+EGy1lBHirQdFCSZE49pZfgMj7HqqrWPya?=
+ =?us-ascii?Q?hE0I/Xgfz+x8y2Qnh/rbIc5Kn1PCdeJQRgyKNEa0qQeK+5Xgc0xkItbasS2g?=
+ =?us-ascii?Q?mCOtNNupE/wsvLjZlA3RaCsCnYZniNvIRaFrrz2co1lFmlJh1HfJNo6A0R8x?=
+ =?us-ascii?Q?iwtTivLUJIp6Mx4FPub65ALOLlD6WCiPQHpqqm2+eq54wlXwKkv84PyuuGAW?=
+ =?us-ascii?Q?mD/2C587Bg/VDI14npRSkhjEb/5UxiCEhEn7G2AUzOYrlhThtVlNgxxGDa0j?=
+ =?us-ascii?Q?ISgJIJduA1hrnyB2cLQNCAro4pMrTmMvwWNqHsOTOhI+DnDpW9XAedQwNwfN?=
+ =?us-ascii?Q?BsQaSE2X0ISnLzWkhd7JGUublBKFLtaHq6i4qcwFT0AAzJUqT4i6gaFzzRbv?=
+ =?us-ascii?Q?SDNj9mwJnpyRtX0C8GNt+a+VIrWjsbdWMXC47cMduo4de/S77ydodDM3tkUE?=
+ =?us-ascii?Q?TyZhCXgynX5rr9VY/VsbAwJHPtzuKjMLqmGW3WIyU/4DFSvPUfviELyBKE9p?=
+ =?us-ascii?Q?RfBVXcACzABXjPMPF6J/Dq0lr3bCxzpPScg3PrNJanLKulECvvk01vRJQWi6?=
+ =?us-ascii?Q?BQM1Pibg797rJIa3gQi5r4d6dvLZRM9XSZdDvjfiMBBpNDe/dNA+uP5SqPiO?=
+ =?us-ascii?Q?y+YnITXV5dJUCtqQ7cYYq7AWcMsIVvqGx5RYi4Sbkz5KhtXSCKuy4ekeP7rk?=
+ =?us-ascii?Q?ltL69uW/0vDlj2b6SpsMVIpo7d67uYRYAsdeqHYI3KVCp3hnD240HJULy7MU?=
+ =?us-ascii?Q?zZWGipH3OjB8Y2DfmIEkAyxZnETfzjQksLKd64GU2rP3MKLc07P4pILi3hmz?=
+ =?us-ascii?Q?Ws8UGpgFQzoeQ0HoqLW+Kx40a4yk3Qy5yc35jUwdP4qQ7pl28K2c2JwTgCR1?=
+ =?us-ascii?Q?boNIRffNmH1ssJ9JhKnAeUv54OnNhk5si/m/uuxw0WQxlCFbpAuuTqj9jOfO?=
+ =?us-ascii?Q?/QokK3nqd1SVX6xzJI2Lw5/MfCJYiUd4cPSBw5o08EJ8d0jIg6tOqcUSXDdf?=
+ =?us-ascii?Q?qzrxGH9zFUZ5BG2ZGLq3Ze8=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75e636f0-f857-45ab-1a51-08db0f7437ad
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 16:46:43.5427
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wyJDfFkWQhW9iLDvJAe8cqNW7hX5QNqYamKfXz+KN2XIOiyC7vSJtkLgYsXZYAlM8lqs1nBxQz743ZA82eX3P8gxyZj4OQh7FIjHt2kEFM0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4746
 
-On Mon, Jan 30, 2023, at 23:24, Bjorn Andersson wrote:
-> On Mon, Jan 30, 2023 at 04:18:45PM +0100, Arnd Bergmann wrote:
->> On Thu, Jan 26, 2023, at 17:30, Bjorn Andersson wrote:
->> 
->> I don't feel comfortable merging the DCC driver through drivers/soc/
->> at this point: This is the first time I see the driver and it introduces
->> a complex user space ABI that I have no time to review as part of the
->> merge process.
->> 
->
-> The DCC driver has made 22 versions over the last 23 months, but now
-> that I look back I do agree that the recipients list has been too
-> limited.
->
-> Further more, due to the complexity of the ABI I steered this towards
-> debugfs, with the explicit mentioning that we will change the interface
-> if needed - in particular since not a lot of review interest has
-> been shown...
+Hi Tony,
 
-I'm sorry to hear this has already taken so long, I understand it's
-frustrating to come up with a good userspace interface for any of
-this.
+On Wed, Feb 15, 2023 at 09:14:43AM +0200, Tony Lindgren wrote:
+> * Rob Herring <robh@kernel.org> [230209 19:35]:
+> > On Wed, Feb 08, 2023 at 06:55:24PM -0800, Colin Foster wrote:
+> > > --- a/Documentation/devicetree/bindings/arm/omap/omap.txt
+> > > +++ b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> > > @@ -131,6 +131,9 @@ Boards (incomplete list of examples):
+> > >  - OMAP4 PandaBoard : Low cost community board
+> > >    compatible = "ti,omap4-panda", "ti,omap4430", "ti,omap4"
+> > >  
+> > > +- OMAP4 PCM-959 : Commercial dev kit with PCM-049 SOM
+> > > +  compatible = "phytec,pcm959", "phytec,pcm049", "ti,omap4460", "ti,omap4430", "ti,omap4";
+> 
+> Do you have both "ti,omap4460" and "ti,omap4430" SoCs variants for
+> these boards? If not just drop the SoC variant not in use. If you do have,
+> please mention it in the commit message.
 
->> I usually try to avoid adding any custom user space interfaces
->> in drivers/soc, as these tend to be things that end up being
->> similar to other chips and need a generic interface.
->> 
->
-> I have no concern with that, but I'm not able to suggest an existing
-> subsystem where this would fit.
->
->> In particular I don't see an explanation about how the new interface
->> relates to the established drivers/hwtracing/ subsystem and why it
->> shouldn't be part of that (adding the hwtracing and coresight
->> maintainers to Cc in case they have looked at this already).
->> 
->
-> To my knowledge the hwtracing framework is an interface for
-> enabling/disabling traces and then you get a stream of trace data out of
-> it.
->
-> With DCC you essentially write a small "program" to be run at the time
-> of an exception (or triggered manually). When the "program" is run it
-> acquire data from mmio interfaces and stores data in sram, which can
-> then be retrieved - possibly after the fatal reset of the system.
->
-> Perhaps I've misunderstood the hwtracing framework, please help me steer
-> Souradeep towards a subsystem you find suitable for this functionality.
+I don't, no. It might not be an issue anymore, but I remember there was
+some reason I thought it had to be there. That was back when I was
+struggling to get anything booting, so it might have been a false
+positive.
 
-I'm also not too familiar with tracing infrastructure and was hoping
-that the coresight maintainers (Mathieu, Suzuki, Mike and Leo)
-would have some suggestions here. My initial guess was that in
-both cases, you have hardware support that is abstracted by the
-kernel in order to have a user interface that can be consumed
-by the 'perf' tool. I probably misinterpreted the part about the
-crash based trigger here, as my original (brief) reading was that
-the data snapshot could be triggered by any kind of event in
-the machine, which would make this useful as a more general
-way of tracing the state of devices at runtime. Can you describe
-how the crash trigger works, and if this would be usable with
-other random hardware events aside from an explicit software
-event?
+I'll remove it, or at the very least explain why it needs to be there in
+the next version.
 
-I've added the perf maintainers to Cc as well now, for reference,
-the now reverted commit is at
-https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=drivers-for-6.3&id=4cbe60cf5ad62
-and it contains both the implementation and the documentation
-of the debugfs interface.
+> 
+> > OMAP maintainers, if no one is going to convert all of omap.txt over to 
+> > schema, can we at least start an empty schema and add to it instead of 
+> > here...
+> 
+> That sounds like a good plan to me as it allows moving one device at a
+> time.
+> 
+> Colin, care to add the initial yaml binding file with your board?
 
-One bit I don't see is the user space side. Is there a patch for
-perf as well, or is the idea to use a custom tool for this? How
-does userspace know which MMIO addresses are even valid here?
+I'll give it a go. To be clear, this would be
+Documentation/devicetree/bindings/arm/omap.yaml and it would
+include my device? I'm taking
+Documentation/devicetree/bindings/arm/sunxi.yaml as inspiration (for no
+reason other than it was the first one that I came across that seemed to
+solve this same issue)
 
-If the possible use is purely for saving some state across
-a reboot, as opposed to other events, I wonder if there is
-a good way to integrate it into the fs/pstore/ code, which
-already has a way to multiplex various kinds of input (log
-buffer, ftrace call chain, userspace strings, ...) into
-various kinds of persistent buffers (sram, blockdev, mtd,
-efivars, ...) with the purpose of helping analyze the
-state after a reboot. 
-
->> Can you send an updated pull request that leaves out the
->> DCC driver until we have clarified these points?
->> 
->
-> I will send a new pull request, with the driver addition reverted. I
-> don't think there's anything controversial with the DT binding, so let's
-> keep that and the dts nodes (we can move the yaml if a better home is
-> found...)
-
-Right, this is fine. I merged the first pull request after I saw the
-revert in the second drivers branch, though I did not see a pull request
-from you that replaced the first one with just the revert added as
-I had expected. Also, I see that patchwork never noticed me merging
-the PR, so you did not get the automated email. Maybe you can double
-check the contents of the soc/drivers branch to see if the contents
-are what you expect them to be.
-
-       Arnd
+> 
+> Regards,
+> 
+> Tony
