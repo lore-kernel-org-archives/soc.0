@@ -1,65 +1,210 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=hKv4=6L=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B547C636D7
-	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 383E8C636CC
+	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 15:05:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 52BBEC433EF; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C916C433D2;
-	Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676470820;
-	bh=wGj4kbgjMufgrG/RmFIlPDxXYlI+WMb8Sz60QbU53mM=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=agRcBh1KsP4+npBnpxboQdWWa/qPHfyl5QHAQpUrk9yn2/Wnzm3BHSKVcRfgoApqP
-	 y7YgtvwgaUwFnl6rZuBwTOHa8OsRZa76FyWa8RYb0p0hywdRb8x3JMsLBm0FAkUkmh
-	 YjjSSEAPsRbWY6G9yho8/e0AV2DK7ourGADE9s1W7dJnDCtAJpew8A4pKnpVS7a7ft
-	 SC1Sy9bCuWbsrX0r9g6IYj0o5GZ1+MSQxB/ENj9G+Pci9t6XS37HvH0ZawwTzZokVM
-	 QhgER2iMhSiVMp4qLY5iM50rGFcRhum0MlwpygbkTbwWaGNS4DBJeHXLO/r2SvK5Ms
-	 3YjtMs7N3g+mQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1741FE21EC4;
-	Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Last set of Qualcomm ARM64 DTS updates for v6.3
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <167647082008.22208.373178813269795521.git-patchwork-notify@kernel.org>
-Date: Wed, 15 Feb 2023 14:20:20 +0000
-References: <20230215051530.1165953-1-andersson@kernel.org>
-In-Reply-To: <20230215051530.1165953-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+	id EB241C4339E; Wed, 15 Feb 2023 15:05:58 +0000 (UTC)
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 07236C433D2;
+	Wed, 15 Feb 2023 15:05:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 07236C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 12CD25C00A4;
+	Wed, 15 Feb 2023 10:05:56 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 15 Feb 2023 10:05:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm3; t=1676473556; x=1676559956; bh=s0AJKWLVNc
+	ykc9c6LDSigdn2GWFyqJgMF7HOsHcq26g=; b=ejQFZjZ9zb1zguVU2EOGqYlUVh
+	cFXXakvC+UYW1eEDDlBHXuVgORXhkLJUYHeNs/tpaMeVt8D3mgKwwvZuVLu6MNEL
+	Wyfpw3imKLVmqCrYaaRnW7V30ufhO1g7L7ZbDAnkDte5OwZB1XFQUJ5AF2jJoQI5
+	sQh7arAdmV3x91ZXfiAip8e/e8l7G9K38D6I5cHL4fg6zkCKJUSkQlPrv0BOgkX2
+	cXtmNMDdq7Eew30jzbn+LmkS2FKKvKWLZAmR9JflEaMIyiVc1KbRxBB1GKInnCgq
+	mbID759E9AhIIlSwIDY+/Ism2nzwYidLoPJ8pjXC3ABJzbgkPNSV3JfCVTRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1676473556; x=1676559956; bh=s0AJKWLVNcykc9c6LDSigdn2GWFy
+	qJgMF7HOsHcq26g=; b=qKd6ui6kt/QmFfZ5XRDtUeNEX7FtdhbHnStJtNfR6eZc
+	wRn4cTkipY4uzUYopa5DlNNnjNXFNHxwZf+Jsdii+o0BZKpVg3t/7B9qy0bv/xer
+	cxETHA2ifvS+ICvO7f6KEJtR5xGDprVTn+TATqVCFp+ob/XSYqw3rAWbxyFRyKXV
+	RTSEvL0Xl3CXiLH4NYYb6+fguIHV5C3+x2dnSkJPdQtMLxC0khVrjNx32GqrStlB
+	nGSfY6YQIbYo2ml5+3cw+vgvgW5e6uBrE5IHoBjYrY6T05i6clUJFbUUfGg5wVtV
+	1DLAlw9X+EsEOLISV7fLDTRZ4Z/iekFNAL+GkqE9Ig==
+X-ME-Sender: <xms:0vTsYyhaIfGJXZOY4UIk8eX3ryHGOPd0Rar9l5x0M2A_wUmyQ550kA>
+    <xme:0vTsYzBvCbccNt_KY-9NW3tY42lNwEmd8pfv2LPRbk9t-9Q9n6vdisQoxQmMNIZmt
+    Fggn3EUy8rA3puKPw4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeihedgieeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:0vTsY6HPiYD2pfZHnH7sTkhB4t4EH7mBGOV3ucnha3Cez3_5WLwigA>
+    <xmx:0vTsY7R5h9bL1-lbUFlxGpUF_T9Wa9i-ahYkdq7R8s2za3KmUMH2NQ>
+    <xmx:0vTsY_xNOpVeoJLODC5q1JMqQP_3FtokGa4vQ_EeFSTJOWcYvfQvgA>
+    <xmx:1PTsY1kDDXkQLABNSTjcLhvyt1d1DR4aLSJaoULwVx93xuO45a2r7A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B42BEB60086; Wed, 15 Feb 2023 10:05:54 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <9b680581-0956-4188-9af9-af06b625c001@app.fastmail.com>
+In-Reply-To: <20230130222412.t2tkkhqfep2orxf2@builder.lan>
+References: <20230126163008.3676950-1-andersson@kernel.org>
+ <cdcff86c-77fe-4c5d-b8e8-58b815b9e969@app.fastmail.com>
+ <20230130222412.t2tkkhqfep2orxf2@builder.lan>
+Date: Wed, 15 Feb 2023 16:05:36 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Bjorn Andersson" <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: arm <arm@kernel.org>, soc@kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, "Andy Gross" <agross@kernel.org>,
+ "Olof Johansson" <olof@lixom.net>, "Kevin Hilman" <khilman@baylibre.com>,
+ "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+ "Stephan Gerhold" <stephan@gerhold.net>,
+ "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>,
+ "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
+ "Bagas Sanjaya" <bagasdotme@gmail.com>,
+ "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Bjorn Andersson" <quic_bjorande@quicinc.com>,
+ "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+ "Dawei Li" <set_pte_at@outlook.com>,
+ "Loic Poulain" <loic.poulain@linaro.org>,
+ "Melody Olvera" <quic_molvera@quicinc.com>,
+ "Naman Jain" <quic_namajain@quicinc.com>,
+ "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Yang Li" <yang.lee@linux.alibaba.com>,
+ "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+ coresight@lists.linaro.org,
+ "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+ "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+ "Mike Leach" <mike.leach@linaro.org>, "Leo Yan" <leo.yan@linaro.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Namhyung Kim" <namhyung@kernel.org>,
+ linux-perf-users@vger.kernel.org, "John Garry" <john.g.garry@oracle.com>,
+ "Will Deacon" <will@kernel.org>, "James Clark" <james.clark@arm.com>
+Subject: Re: [GIT PULL] Qualcomm driver updates for v6.3
+Content-Type: text/plain
 
-Hello:
+On Mon, Jan 30, 2023, at 23:24, Bjorn Andersson wrote:
+> On Mon, Jan 30, 2023 at 04:18:45PM +0100, Arnd Bergmann wrote:
+>> On Thu, Jan 26, 2023, at 17:30, Bjorn Andersson wrote:
+>> 
+>> I don't feel comfortable merging the DCC driver through drivers/soc/
+>> at this point: This is the first time I see the driver and it introduces
+>> a complex user space ABI that I have no time to review as part of the
+>> merge process.
+>> 
+>
+> The DCC driver has made 22 versions over the last 23 months, but now
+> that I look back I do agree that the recipients list has been too
+> limited.
+>
+> Further more, due to the complexity of the ABI I steered this towards
+> debugfs, with the explicit mentioning that we will change the interface
+> if needed - in particular since not a lot of review interest has
+> been shown...
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+I'm sorry to hear this has already taken so long, I understand it's
+frustrating to come up with a good userspace interface for any of
+this.
 
-On Tue, 14 Feb 2023 21:15:30 -0800 you wrote:
-> The following changes since commit f069ede81ef438d99e76112d8738c4dc3d1766f9:
-> 
->   arm64: dts: qcom: sc7280: Power herobrine's 3.3 eDP/TS rail more properly (2023-02-08 20:09:36 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-for-6.3-3
-> 
-> [...]
+>> I usually try to avoid adding any custom user space interfaces
+>> in drivers/soc, as these tend to be things that end up being
+>> similar to other chips and need a generic interface.
+>> 
+>
+> I have no concern with that, but I'm not able to suggest an existing
+> subsystem where this would fit.
+>
+>> In particular I don't see an explanation about how the new interface
+>> relates to the established drivers/hwtracing/ subsystem and why it
+>> shouldn't be part of that (adding the hwtracing and coresight
+>> maintainers to Cc in case they have looked at this already).
+>> 
+>
+> To my knowledge the hwtracing framework is an interface for
+> enabling/disabling traces and then you get a stream of trace data out of
+> it.
+>
+> With DCC you essentially write a small "program" to be run at the time
+> of an exception (or triggered manually). When the "program" is run it
+> acquire data from mmio interfaces and stores data in sram, which can
+> then be retrieved - possibly after the fatal reset of the system.
+>
+> Perhaps I've misunderstood the hwtracing framework, please help me steer
+> Souradeep towards a subsystem you find suitable for this functionality.
 
-Here is the summary with links:
-  - [GIT,PULL] Last set of Qualcomm ARM64 DTS updates for v6.3
-    https://git.kernel.org/soc/soc/c/18b68c695ca6
+I'm also not too familiar with tracing infrastructure and was hoping
+that the coresight maintainers (Mathieu, Suzuki, Mike and Leo)
+would have some suggestions here. My initial guess was that in
+both cases, you have hardware support that is abstracted by the
+kernel in order to have a user interface that can be consumed
+by the 'perf' tool. I probably misinterpreted the part about the
+crash based trigger here, as my original (brief) reading was that
+the data snapshot could be triggered by any kind of event in
+the machine, which would make this useful as a more general
+way of tracing the state of devices at runtime. Can you describe
+how the crash trigger works, and if this would be usable with
+other random hardware events aside from an explicit software
+event?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I've added the perf maintainers to Cc as well now, for reference,
+the now reverted commit is at
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=drivers-for-6.3&id=4cbe60cf5ad62
+and it contains both the implementation and the documentation
+of the debugfs interface.
 
+One bit I don't see is the user space side. Is there a patch for
+perf as well, or is the idea to use a custom tool for this? How
+does userspace know which MMIO addresses are even valid here?
 
+If the possible use is purely for saving some state across
+a reboot, as opposed to other events, I wonder if there is
+a good way to integrate it into the fs/pstore/ code, which
+already has a way to multiplex various kinds of input (log
+buffer, ftrace call chain, userspace strings, ...) into
+various kinds of persistent buffers (sram, blockdev, mtd,
+efivars, ...) with the purpose of helping analyze the
+state after a reboot. 
+
+>> Can you send an updated pull request that leaves out the
+>> DCC driver until we have clarified these points?
+>> 
+>
+> I will send a new pull request, with the driver addition reverted. I
+> don't think there's anything controversial with the DT binding, so let's
+> keep that and the dts nodes (we can move the yaml if a better home is
+> found...)
+
+Right, this is fine. I merged the first pull request after I saw the
+revert in the second drivers branch, though I did not see a pull request
+from you that replaced the first one with just the revert added as
+I had expected. Also, I see that patchwork never noticed me merging
+the PR, so you did not get the automated email. Maybe you can double
+check the contents of the soc/drivers branch to see if the contents
+are what you expect them to be.
+
+       Arnd
