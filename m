@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CA5CC636CC
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D5CFC64EC4
 	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 581E0C433A0; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 423EEC4339B;
+	id 62DA1C433D2; Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D8A1C4339E;
 	Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1676470820;
-	bh=xeqoY9pNqoIrCjh11TnkCGRDa/L5yvmT1jBjjk4dtNk=;
+	bh=yn1cE7svMtTw29+WOOKD2LHJRGPW63o/FYb86TEADiI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Ars7coUKkqEQDNUbMPFOSxVObgyKMpL3RuSYon9aQ1bJE8Z/aGW91j6YOeqmHZrWV
-	 138BHIbIUpL054k4JGkMs4KjaeJ4P4GaOzm674zyT5k2eGuSgY6nP43SXh4ek/VwLP
-	 Z3ugu5wO+5+XOPsVFkvrqpuRungw3RcA1jrWa8V+jhuN3I61ydYgvy1zbeee1H5HaY
-	 ySDR7yBM9X8rzZu9EE5ks5hDXLH910MG540rukiGFhwbfwmiG2QSi4dWfe8HZc5gG3
-	 7w4E5QLTkchGCgK3XOhfHxurChLfCIl5F75RA6Fg8sVOp/5Rh4qKNTRETurtEJp5Dv
-	 cY7KFw1I7UtUQ==
+	b=KliJHldJG3p/5NMLV0shd3nTRfmJVDtGh68J8hgFfcWA/HqaKOV4Zx0XiGk6hIrK1
+	 53h2tCf7WPBFkNWy/12gGYkHm+PMl+4imlg3CZt69Fte12OoSKx4eqMMn8+jhu4c5j
+	 tMZQj4zHkJgNxg3whhPGJULrD8EThnYlgKhb3jwY+Jikb09co6PG28qZQ8jqYSaeVF
+	 f0kUEhavuUZ3SGhRGBZp1OS6q16Ht6dRs+YMYBk+Wxk1fKyn4vEK1zxBfRQfG2MIED
+	 w57NFrF8Ndc+6aBRFJmcThLepyfmwQA2ujaChvhWYg1+LxMChd/lcLuHR5cwfyYgOu
+	 chm7LPAiUF3nw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1E831C4166F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26127E29F42;
 	Wed, 15 Feb 2023 14:20:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] One more Qualcomm driver update for 6.3
+Subject: Re: [GIT PULL] Few more Qualcomm ARM64 defconfig updates for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167647082012.22208.15131642688467729635.git-patchwork-notify@kernel.org>
+ <167647082015.22208.2822154055349582819.git-patchwork-notify@kernel.org>
 Date: Wed, 15 Feb 2023 14:20:20 +0000
-References: <20230215043658.1156472-1-andersson@kernel.org>
-In-Reply-To: <20230215043658.1156472-1-andersson@kernel.org>
+References: <20230215051757.1166709-1-andersson@kernel.org>
+In-Reply-To: <20230215051757.1166709-1-andersson@kernel.org>
 To: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
@@ -42,19 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 14 Feb 2023 20:36:58 -0800 you wrote:
-> Arnd, I hope you're okay with a few more last minute updates for v6.3; bringing
-> battery support and, in the DTS patches, support for USB Type-C based external
-> displays on the 8cx Gen3 laptops.
+On Tue, 14 Feb 2023 21:17:57 -0800 you wrote:
+> The following changes since commit 480ba14b9a95641647a6561d5b246de661589514:
 > 
-> Regards,
-> Bjorn
+>   arm64: defconfig: enable Qualcomm SDAM nvmem driver (2023-02-08 19:05:49 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-defconfig-for-6.3-3
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] One more Qualcomm driver update for 6.3
-    https://git.kernel.org/soc/soc/c/524af30c9313
+  - [GIT,PULL] Few more Qualcomm ARM64 defconfig updates for v6.3
+    https://git.kernel.org/soc/soc/c/af16544d4abe
 
 You are awesome, thank you!
 -- 
