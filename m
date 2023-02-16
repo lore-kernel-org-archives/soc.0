@@ -1,169 +1,550 @@
-Return-Path: <SRS0=+nKk=6L=in-advantage.com=colin.Foster@kernel.org>
+Return-Path: <SRS0=YcTK=6M=gmail.com=mibodhi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9303FC636CC
-	for <soc@archiver.kernel.org>; Wed, 15 Feb 2023 16:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7DA9C636D6
+	for <soc@archiver.kernel.org>; Thu, 16 Feb 2023 01:11:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 53B02C4339B; Wed, 15 Feb 2023 16:46:47 +0000 (UTC)
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 95AD8C433EF; Thu, 16 Feb 2023 01:11:33 +0000 (UTC)
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1D6C1C433D2;
-	Wed, 15 Feb 2023 16:46:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1D6C1C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cqooHCVhUCLYEg+f+u8mKcDceniis0P1NOEEqcRiFUMwnMlv9bELcfNms5NdxyrSrOerVgf4psekwyGSqnuaxjr14zomNPBN8kjS+Wx5el4TSSvyDezRdtgvu+PhzjCnGwY3w6oK2PbelXOXfmfhHkE216cidbEpNhBzHs0C6N1gzsoeENJnC7VN7rJQ7sTdw3xbJkl0GxGZx9f/LTBPPIZDJcno3R8V6R/DEe+gOhQc8jYr99PITNLtLtUSq+OIBa8TrSnsUP+XaBorpY0IZBrqgy/T1/V89vLrQWL1UKi2XiP3p34dsjUCbpaXJ+ya3+KfcbHC+dcu4B6xVpfJUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kjfpWbDFn4+GxP3g5296w2yANxVMNwhuNQ2VupsFR4s=;
- b=fVWtlsIa3cKliiKPmQJS0WD6C3sAHERjgFw3e5K/WUXtF+DscXH0tqzBMf18pOl/NI38v+uwJS832A79n6cNBuywY9BMhMNb7SoccamjZ2gH26DLciLvvZCMWYvlhzxgpqXXZZbmTwC7wyFytT4Nn4PSLNUJKtBNhGDSWD7yoooxigHCtn/ijcVqBOM2RXYSgV9GbbwDMEqBrNtUxLSY4a507yNngwejv1dyay65bTCIi2UmSCUj0H6fW7BnLjnAkQmEzc0fGKd4e1u7b7TNrU12ucoyNivLVxkh0EtzPsN7OSixa55gUmF2SfnXvo9wWKeDjlJwlWotTnWK7+XuOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+	by smtp.kernel.org (Postfix) with ESMTPS id 22287C433D2;
+	Thu, 16 Feb 2023 01:11:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 22287C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f49.google.com with SMTP id l18-20020a4ad9d2000000b0051fdea932cfso35083oou.10;
+        Wed, 15 Feb 2023 17:11:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kjfpWbDFn4+GxP3g5296w2yANxVMNwhuNQ2VupsFR4s=;
- b=gIxHbxa3HVc9aAlP3Q9QodWSKVrBSY18YPKw7ZJKg1rS0LgQ4zT1l2ZrU2Zu8DMFuDcIbT5eI1tu0mGyUq1ZYv4kxQx9rPGPxUAY/Rdepe7yKzkc0VhIPr3Y2u35AbxaOVY1dKmuqkIxA82unfQNCRlKImyzKMcVVJxxA+MyE/8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by SA2PR10MB4746.namprd10.prod.outlook.com
- (2603:10b6:806:11c::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.12; Wed, 15 Feb
- 2023 16:46:43 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6111.010; Wed, 15 Feb 2023
- 16:46:43 +0000
-Date: Wed, 15 Feb 2023 08:46:35 -0800
-From: Colin Foster <colin.foster@in-advantage.com>
-To: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh@kernel.org>, linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=geY9M3i7XS0320uJBxheu6zARAQyYBT5lOg2iBL00do=;
+        b=M4AsGCoOzSK/HwANSF7v+QiBaxKZX6YmRgH4e/5q47CbtBD7P1OC5icvPf0+fZRrRw
+         LtbJ3JvqpqUTihwsOgsFDhcm/u9TLaMRigpMJrzj7jAzSAokUH+2/Vbl1tlGzWgl7wsV
+         irhKdLv6DZIunEzq3Bk7DrCyJLZQaNs33FwhD1TSsYmL1i534eR5xjvvThpj/1IzsvdD
+         lCxLWPDKFw3ySn3iJv1/G2my33i0cXfR046b6qv+DyBW5wF7JxuZsS3TP/66I5AaW7C1
+         vYraJ9pS3U8jffEV8vKpW+4ARqqvPKRO6PzuDKYbCMpusQnjPSQwAzC3b7bCxEbuiLiK
+         w2Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=geY9M3i7XS0320uJBxheu6zARAQyYBT5lOg2iBL00do=;
+        b=W8xvswNdRyTpxsPnaDa3K03eEIlc1KG/iNJawDjSQVDw6dP7Xij2nxxDCQ6L1cDsbc
+         1/HICfFKTuadvwhM9x3FpVJCbafofqb9+kphQpOpry97g3u6mbafRTo+x2jDtmKiM00K
+         a7GNmRkTLghD4oMzhyhgHrkPbGhPxLgpBkk1WFc3fGjHyXL06j/jpcBS5mokumQiCN54
+         ShJ0zo/XrfVaSlt8bfWRoYFSEUNbRCqTo9dB6Fj0C+fw2fy7NHN6NL78McCxhWUY7X0b
+         F5dGTYXqdDdVPzj3xIHUlo0uGJLzG8P1M3/f58u7OWiyxjXW81H8o7HblgXxm6DI5qSe
+         aE6g==
+X-Gm-Message-State: AO0yUKXK0NyUIqLflz0WB5ZgpMjtWVUbysXp15nP2FPGW6qi/u2HuN9c
+	IMEqkA042ax12lRjBVJu9Xg=
+X-Google-Smtp-Source: AK7set8mdHS4xUJPPipnuOns4ssVaQddzJFUS0zOoSq3B5Bxv+Aj+piF/mTG90nkqIlfRUCHiPsr2A==
+X-Received: by 2002:a4a:96aa:0:b0:517:67ba:586 with SMTP id s39-20020a4a96aa000000b0051767ba0586mr1799148ooi.3.1676509891191;
+        Wed, 15 Feb 2023 17:11:31 -0800 (PST)
+Received: from localhost.localdomain (76-229-100-169.lightspeed.irvnca.sbcglobal.net. [76.229.100.169])
+        by smtp.gmail.com with ESMTPSA id k8-20020a4adfa8000000b005176714c603sm160021ook.4.2023.02.15.17.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 17:11:30 -0800 (PST)
+From: Tony Dinh <mibodhi@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
 	devicetree@vger.kernel.org,
-	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-	soc@kernel.org, Olof Johansson <olof@lixom.net>,
+	linux-arm-kernel@lists.infradead.org
+List-Id: <soc.lore.kernel.org>
+Cc: Tony Dinh <mibodhi@gmail.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: omap: add phytec pcm-049 som
- and pcm-959 dev board
-Message-ID: <Y+0Ma9En4JLbR41t@COLIN-DESKTOP1.localdomain>
-References: <20230209025525.148872-1-colin.foster@in-advantage.com>
- <20230209025525.148872-2-colin.foster@in-advantage.com>
- <20230209173534.GA539622-robh@kernel.org>
- <Y+yGYycS7rrBRBPN@atomide.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+yGYycS7rrBRBPN@atomide.com>
-X-ClientProxiedBy: BYAPR06CA0035.namprd06.prod.outlook.com
- (2603:10b6:a03:d4::48) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH] ARM: dts: mvebu: Add support for Thecus N2350 board
+Date: Wed, 15 Feb 2023 17:10:45 -0800
+Message-Id: <20230216011046.3306-1-mibodhi@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|SA2PR10MB4746:EE_
-X-MS-Office365-Filtering-Correlation-Id: 75e636f0-f857-45ab-1a51-08db0f7437ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	qpGcQgcKsBYQJqaLzCzIRJ/z4UghWpfGvsVzkf1z/ZbJAUKM/wc7Bly/qAYqrgJOpRYRdikcDzzuf/z6SoDORQX1MwJYG1IVp5aoc2Agk/NKgNh3Tx9j3Y1sHNqOp6aChzgjIEkEv/WMJJfOfjmv3CpKjjzjT1CNKYM9qUZlR9XV6ZAL8jmrzIe2xuu2lvDyKqHSpz2fctFD7xsOH9z9uYrWCjUfPWTOyldfT1q4+033RfSlN+hJk2OTsQf5HcdbnkI9EfR0Oyw2BKJMb6O4GtI1dAlL6KFHwJQhvhfJXMTcFmveK2ZG2v0rxGqDxLtvU72tEsXOvxzoJ3kUadhW6759TwKGcoBj3VdF0sFP3+sJWC+jlW5WVoJbb0OxJ6j6bERGoPwrt7wOPLfjoTE5ITuXky8kLB+M5FcuNJr4aTVjRFYT5Ly1+5qLQcdedCTxuwVD958FwW899CrFYzJW14UwWEf6/aqewSIIp4yUxTrUp+JJNfVlop+mrw9DYFo08WHJ/KU7b+gvku250Zd7as27tlLjxR1oX26xw1bb3MJbukuSBsUVSxqdS4df/4YqHKL2AYGB+AZCtI8xo+XzleQMsAazSqfxGhZo6VV2qCE/mwTigAea8nN+NwDkPEipCgduVA3ccZUfREO6H0HuNZZkJq7jLyZNGcqRpIHT3P6vSJfvVBWqdySHR6nUkIts
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39830400003)(376002)(396003)(366004)(346002)(136003)(451199018)(8936002)(7416002)(41300700001)(44832011)(5660300002)(2906002)(6486002)(6916009)(66556008)(8676002)(66946007)(4326008)(66476007)(316002)(54906003)(478600001)(38100700002)(6506007)(26005)(9686003)(186003)(6512007)(6666004)(86362001)(83380400001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QvfDP3gSDkC26/stam3UNuLFgZtJgeBOWKN0UkyaAuQ9fa3YYLmbeepqU571?=
- =?us-ascii?Q?vkOhGxcV3ZJE4ffLufuZyaTYFfYc26UN7DOlxvl5r/fAriaaQE9ewDclztvd?=
- =?us-ascii?Q?XIEErSg6m4gRGcJtbYEJiQNNWwtZB8jdxFNJomXefBKz1NmMJ9MTZTqBXy3a?=
- =?us-ascii?Q?F/URKdD2apwsrtJGo1IWJozqtX2BrGnsMxpFMaoyeoOMiXsejCeNvsaWAJ/r?=
- =?us-ascii?Q?n4X1uhd+csC5n6Q9AoAlAkAdbaTSSqafj1ussFteIAzhY0PNfK2aU9s1epCI?=
- =?us-ascii?Q?sAArl9dbYnwqqUq/aQtC6iiaLZVnTGyRQj9a33fmb13K8sX4h99ZvoSAYcwX?=
- =?us-ascii?Q?rc3fY/h3T0hCffpmSfMHL7dlX2pvchygp9sNGiUVlUQLSTW/Cd4LD612/SMs?=
- =?us-ascii?Q?v93THO+hwudPK6PwhRcbZAG0kfrBi2UlC7vjvGtxQq62y2MpVKVrQTxTehOh?=
- =?us-ascii?Q?1vVjK/n9I+LoedFVEQ89YwKJwibugap2wBcGPF06OgsmrJPEIwZKYHr8RT7Q?=
- =?us-ascii?Q?ne4XnBZNrqWqbYD6F5/xxuWw6fB3Vah/uKidgtAWiN7CVfcY2+rLcHqPbSXV?=
- =?us-ascii?Q?QQhdsFXRvUJorM9uYLeh6cBXa6+EGy1lBHirQdFCSZE49pZfgMj7HqqrWPya?=
- =?us-ascii?Q?hE0I/Xgfz+x8y2Qnh/rbIc5Kn1PCdeJQRgyKNEa0qQeK+5Xgc0xkItbasS2g?=
- =?us-ascii?Q?mCOtNNupE/wsvLjZlA3RaCsCnYZniNvIRaFrrz2co1lFmlJh1HfJNo6A0R8x?=
- =?us-ascii?Q?iwtTivLUJIp6Mx4FPub65ALOLlD6WCiPQHpqqm2+eq54wlXwKkv84PyuuGAW?=
- =?us-ascii?Q?mD/2C587Bg/VDI14npRSkhjEb/5UxiCEhEn7G2AUzOYrlhThtVlNgxxGDa0j?=
- =?us-ascii?Q?ISgJIJduA1hrnyB2cLQNCAro4pMrTmMvwWNqHsOTOhI+DnDpW9XAedQwNwfN?=
- =?us-ascii?Q?BsQaSE2X0ISnLzWkhd7JGUublBKFLtaHq6i4qcwFT0AAzJUqT4i6gaFzzRbv?=
- =?us-ascii?Q?SDNj9mwJnpyRtX0C8GNt+a+VIrWjsbdWMXC47cMduo4de/S77ydodDM3tkUE?=
- =?us-ascii?Q?TyZhCXgynX5rr9VY/VsbAwJHPtzuKjMLqmGW3WIyU/4DFSvPUfviELyBKE9p?=
- =?us-ascii?Q?RfBVXcACzABXjPMPF6J/Dq0lr3bCxzpPScg3PrNJanLKulECvvk01vRJQWi6?=
- =?us-ascii?Q?BQM1Pibg797rJIa3gQi5r4d6dvLZRM9XSZdDvjfiMBBpNDe/dNA+uP5SqPiO?=
- =?us-ascii?Q?y+YnITXV5dJUCtqQ7cYYq7AWcMsIVvqGx5RYi4Sbkz5KhtXSCKuy4ekeP7rk?=
- =?us-ascii?Q?ltL69uW/0vDlj2b6SpsMVIpo7d67uYRYAsdeqHYI3KVCp3hnD240HJULy7MU?=
- =?us-ascii?Q?zZWGipH3OjB8Y2DfmIEkAyxZnETfzjQksLKd64GU2rP3MKLc07P4pILi3hmz?=
- =?us-ascii?Q?Ws8UGpgFQzoeQ0HoqLW+Kx40a4yk3Qy5yc35jUwdP4qQ7pl28K2c2JwTgCR1?=
- =?us-ascii?Q?boNIRffNmH1ssJ9JhKnAeUv54OnNhk5si/m/uuxw0WQxlCFbpAuuTqj9jOfO?=
- =?us-ascii?Q?/QokK3nqd1SVX6xzJI2Lw5/MfCJYiUd4cPSBw5o08EJ8d0jIg6tOqcUSXDdf?=
- =?us-ascii?Q?qzrxGH9zFUZ5BG2ZGLq3Ze8=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75e636f0-f857-45ab-1a51-08db0f7437ad
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 16:46:43.5427
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wyJDfFkWQhW9iLDvJAe8cqNW7hX5QNqYamKfXz+KN2XIOiyC7vSJtkLgYsXZYAlM8lqs1nBxQz743ZA82eX3P8gxyZj4OQh7FIjHt2kEFM0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4746
+Content-Transfer-Encoding: 8bit
 
-Hi Tony,
+Thecus N2350 is a NAS based on Marvell Armada 385 SoC.
 
-On Wed, Feb 15, 2023 at 09:14:43AM +0200, Tony Lindgren wrote:
-> * Rob Herring <robh@kernel.org> [230209 19:35]:
-> > On Wed, Feb 08, 2023 at 06:55:24PM -0800, Colin Foster wrote:
-> > > --- a/Documentation/devicetree/bindings/arm/omap/omap.txt
-> > > +++ b/Documentation/devicetree/bindings/arm/omap/omap.txt
-> > > @@ -131,6 +131,9 @@ Boards (incomplete list of examples):
-> > >  - OMAP4 PandaBoard : Low cost community board
-> > >    compatible = "ti,omap4-panda", "ti,omap4430", "ti,omap4"
-> > >  
-> > > +- OMAP4 PCM-959 : Commercial dev kit with PCM-049 SOM
-> > > +  compatible = "phytec,pcm959", "phytec,pcm049", "ti,omap4460", "ti,omap4430", "ti,omap4";
-> 
-> Do you have both "ti,omap4460" and "ti,omap4430" SoCs variants for
-> these boards? If not just drop the SoC variant not in use. If you do have,
-> please mention it in the commit message.
+Board Specification:
 
-I don't, no. It might not be an issue anymore, but I remember there was
-some reason I thought it had to be there. That was back when I was
-struggling to get anything booting, so it might have been a false
-positive.
+- Marvel MV88F6820 Dual Core at 1GHz
+- 1 GiB DDR4 RAM
+- 4MB Macronix mx25l3205d SPI flash
+- 512MB Hynix H27U4G8F2DTR-BC NAND flash
+- I2C
+- 2x USB 3.0
+- 1x GBE LAN port (PHY: Marvell 88E1510)
+- 2x SATA (hot swap slots)
+- 3x buttons
+- 10x LEDS
+- serial console
 
-I'll remove it, or at the very least explain why it needs to be there in
-the next version.
+Signed-off-by: Tony Dinh <mibodhi@gmail.com>
+---
 
-> 
-> > OMAP maintainers, if no one is going to convert all of omap.txt over to 
-> > schema, can we at least start an empty schema and add to it instead of 
-> > here...
-> 
-> That sounds like a good plan to me as it allows moving one device at a
-> time.
-> 
-> Colin, care to add the initial yaml binding file with your board?
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/armada-385-thecus-n2350.dts | 432 ++++++++++++++++++
+ 2 files changed, 433 insertions(+)
+ create mode 100644 arch/arm/boot/dts/armada-385-thecus-n2350.dts
 
-I'll give it a go. To be clear, this would be
-Documentation/devicetree/bindings/arm/omap.yaml and it would
-include my device? I'm taking
-Documentation/devicetree/bindings/arm/sunxi.yaml as inspiration (for no
-reason other than it was the first one that I came across that seemed to
-solve this same issue)
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index d08a3c450..749790e6e 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1528,6 +1528,7 @@ dtb-$(CONFIG_MACH_ARMADA_38X) += \
+ 	armada-385-linksys-rango.dtb \
+ 	armada-385-linksys-shelby.dtb \
+ 	armada-385-synology-ds116.dtb \
++	armada-385-thecus-n2350.dtb \
+ 	armada-385-turris-omnia.dtb \
+ 	armada-388-clearfog.dtb \
+ 	armada-388-clearfog-base.dtb \
+diff --git a/arch/arm/boot/dts/armada-385-thecus-n2350.dts b/arch/arm/boot/dts/armada-385-thecus-n2350.dts
+new file mode 100644
+index 000000000..38114d842
+--- /dev/null
++++ b/arch/arm/boot/dts/armada-385-thecus-n2350.dts
+@@ -0,0 +1,432 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/*
++ * Device Tree file for Thecus N2350 board
++ *
++ * Copyright (C) 2018-2023 Tony Dinh <mibodhi@gmail.com>
++ * Copyright (C) 2018 Manuel Jung <manuel.jung@hotmail.com>
++ */
++
++/dts-v1/;
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/gpio/gpio.h>
++#include "armada-385.dtsi"
++
++/ {
++	model = "Thecus N2350";
++	compatible = "thecus,n2350", "marvell,armada385";
++
++	aliases {
++		ethernet0 = &eth0;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory {
++		device_type = "memory";
++		reg = <0x00000000 0x40000000>; /* 1GB */
++	};
++
++	soc {
++		ranges = <MBUS_ID(0xf0, 0x01) 0 0xf1000000 0x100000
++			  MBUS_ID(0x01, 0x1d) 0 0xfff00000 0x100000
++			  MBUS_ID(0x09, 0x19) 0 0xf1100000 0x10000
++			  MBUS_ID(0x09, 0x15) 0 0xf1110000 0x10000
++			  MBUS_ID(0x0c, 0x04) 0 0xf1200000 0x100000>;
++
++	};
++
++	usb3_0_phy: usb3_0_phy {
++		compatible = "usb-nop-xceiv";
++		vcc-supply = <&usb3_0_power>;
++	};
++
++	usb3_1_phy: usb3_1_phy {
++		compatible = "usb-nop-xceiv";
++		vcc-supply = <&usb3_1_power>;
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		pinctrl-0 = <&pmx_power_button &pmx_copy_button &pmx_reset_button>;
++		pinctrl-names = "default";
++
++		button@1 {
++			label = "Power Button";
++			linux,code = <KEY_POWER>;
++			gpios = <&gpio1 17 GPIO_ACTIVE_HIGH>;
++		};
++
++		button@2 {
++			label = "Copy Button";
++			linux,code = <KEY_COPY>;
++			gpios = <&gpio1 20 GPIO_ACTIVE_HIGH>;
++		};
++
++		button@3 {
++			label = "Reset Button";
++			linux,code = <KEY_RESTART>;
++			gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	gpio-leds {
++		compatible = "gpio-leds";
++		pinctrl-0 = <&pmx_sata1_white_led
++				&pmx_sata1_red_led
++				&pmx_sata2_white_led
++				&pmx_sata2_red_led
++				&pmx_sys_white_led
++				&pmx_sys_red_led
++				&pmx_pwr_blue_led
++				&pmx_pwr_red_led
++				&pmx_usb_white_led
++				&pmx_usb_red_led>;
++
++		pinctrl-names = "default";
++
++		white_sata1 {
++			label = "n2350:white:sata1";
++			gpios = <&gpio0 20 GPIO_ACTIVE_HIGH>;
++		};
++
++		red_sata1 {
++			label = "n2350:red:sata1";
++			gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++		};
++
++		white-sata2 {
++			label = "n2350:white:sata2";
++			gpios = <&gpio0 19 GPIO_ACTIVE_HIGH>;
++		};
++
++		red-sata2 {
++			label = "n2350:red:sata2";
++			gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
++		};
++
++		white-sys {
++			label = "n2350:white:sys";
++			gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "default-on";
++		};
++
++		red-sys {
++			label = "n2350:red:sys";
++			gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
++		};
++
++		blue-pwr {
++			label = "n2350:blue:pwr";
++			gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;
++		};
++
++		red-pwr {
++			label = "n2350:red:pwr";
++			gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
++		};
++
++		white-usb {
++			label = "n2350:white:usb";
++			gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
++		};
++
++		red-usb {
++			label = "n2350:red:usb";
++			gpios = <&gpio0 17 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	usb3_0_power: regulator@1 {
++		compatible = "regulator-fixed";
++		regulator-name = "USB3_0_Power";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		enable-active-high;
++		regulator-always-on;
++		regulator-boot-on;
++		gpio = <&gpio0 21 GPIO_ACTIVE_HIGH>;
++	};
++
++	usb3_1_power: regulator@2 {
++		compatible = "regulator-fixed";
++		regulator-name = "USB3_1_Power";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		enable-active-high;
++		regulator-always-on;
++		regulator-boot-on;
++		gpio = <&gpio0 24 GPIO_ACTIVE_HIGH>;
++	};
++
++	reg_sata0: regulator@3 {
++		compatible = "regulator-fixed";
++		regulator-name = "pwr_en_sata0";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		enable-active-high;
++		regulator-always-on;
++		regulator-boot-on;
++		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
++	};
++
++	reg_5v_sata0: v5-sata0 {
++		compatible = "regulator-fixed";
++		regulator-name = "v5.0-sata0";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&reg_sata0>;
++	};
++
++	reg_12v_sata0: v12-sata0 {
++		compatible = "regulator-fixed";
++		regulator-name = "v12.0-sata0";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		vin-supply = <&reg_sata0>;
++	};
++
++	reg_sata1: regulator@4 {
++		regulator-name = "pwr_en_sata1";
++		compatible = "regulator-fixed";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		enable-active-high;
++		regulator-always-on;
++		regulator-boot-on;
++		gpio = <&gpio1 13 GPIO_ACTIVE_HIGH>;
++	};
++
++	reg_5v_sata1: v5-sata1 {
++		compatible = "regulator-fixed";
++		regulator-name = "v5.0-sata1";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&reg_sata1>;
++	};
++
++	reg_12v_sata1: v12-sata1 {
++		compatible = "regulator-fixed";
++		regulator-name = "v12.0-sata1";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		vin-supply = <&reg_sata1>;
++	};
++
++	gpio-poweroff {
++		compatible = "gpio-poweroff";
++		pinctrl-0 = <&pmx_pwr_off>;
++		pinctrl-names = "default";
++		gpios = <&gpio1 22 GPIO_ACTIVE_HIGH>;
++	};
++
++};
++
++&ahci0 {
++	status = "okay";
++};
++
++&bm {
++	status = "okay";
++};
++
++&bm_bppi {
++	status = "okay";
++};
++
++&eth0 {
++	status = "okay";
++	phy = <&phy0>;
++	phy-mode = "sgmii";
++	buffer-manager = <&bm>;
++	bm,pool-long = <0>;
++	bm,pool-short = <1>;
++};
++
++&i2c0 {
++	status = "okay";
++	clock-frequency = <100000>;
++};
++
++&i2c1 {
++	status = "okay";
++	clock-frequency = <100000>;
++};
++
++&mdio {
++	phy0: ethernet-phy@0 {
++		reg = <1>;
++	};
++};
++
++&nand_controller {
++	status = "okay";
++
++	nand@0 {
++		status = "okay";
++		reg = <0>;
++		label = "pxa3xx_nand-0";
++		nand-rb = <0>;
++		marvell,nand-keep-config;
++		nand-on-flash-bbt;
++		nand-ecc-strength = <4>;
++		nand-ecc-step-size = <512>;
++
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++
++			partition@0 {
++				label = "rootfs";
++				reg = <0x00000000 0x20000000>;
++			};
++
++		};
++	};
++};
++
++&pciec {
++	status = "okay";
++	pcie@1,0 {
++		/* Port 0, Lane 0 */
++		status = "okay";
++	};
++	pcie@2,0 {
++		/* Port 1, Lane 0 */
++		status = "okay";
++	};
++};
++
++&pinctrl {
++	pinctrl-names = "default";
++
++	pmx_power_button: pmx-power-button {
++		marvell,pins = "mpp49";
++		marvell,function = "gpio";
++	};
++
++	pmx_copy_button: pmx-copy-button {
++		marvell,pins = "mpp52";
++		marvell,function = "gpio";
++	};
++
++	pmx_reset_button: pmx-reset-button {
++		marvell,pins = "mpp50";
++		marvell,function = "gpio";
++	};
++
++	pmx_sata1_white_led: pmx-sata1-white-led {
++		marvell,pins = "mpp20";
++		marvell,function = "gpio";
++	};
++
++	pmx_sata1_red_led: pmx-sata1-red-led {
++		marvell,pins = "mpp46";
++		marvell,function = "gpio";
++	};
++
++	pmx_sata2_white_led: pmx-sata2-white-led {
++		marvell,pins = "mpp19";
++		marvell,function = "gpio";
++	};
++
++	pmx_sata2_red_led: pmx-sata2-red-led {
++		marvell,pins = "mpp47";
++		marvell,function = "gpio";
++	};
++
++	pmx_sys_white_led: pmx-sys-white-led {
++		marvell,pins = "mpp14";
++		marvell,function = "gpio";
++	};
++
++	pmx_sys_red_led: pmx-sys-red-led {
++		marvell,pins = "mpp15";
++		marvell,function = "gpio";
++	};
++
++	pmx_buzzer: pmx-buzzer {
++		marvell,pins = "mpp51";
++		marvell,function = "gpio";
++	};
++
++	pmx_pwr_off: pmx-pwr-off {
++		marvell,pins = "mpp54";
++		marvell,function = "gpio";
++	};
++
++	pmx_pwr_blue_led: pmx-pwr-blue-led {
++		marvell,pins = "mpp43";
++		marvell,function = "gpio";
++	};
++
++	pmx_pwr_red_led: pmx-pwr-red-led {
++		marvell,pins = "mpp18";
++		marvell,function = "gpio";
++	};
++
++	pmx_usb_white_led: pmx-usb-white-led {
++		marvell,pins = "mpp16";
++		marvell,function = "gpio";
++	};
++
++	pmx_usb_red_led: pmx-usb-red-led {
++		marvell,pins = "mpp17";
++		marvell,function = "gpio";
++	};
++};
++
++&sdhci {
++	broken-cd;
++	wp-inverted;
++	bus-width = <8>;
++	status = "okay";
++	no-1-8-v;
++};
++
++&spi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi1_pins>;
++	status = "okay";
++
++	/* spi: 4M Flash Macronix MX25L3205D */
++	spi-flash@0 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "macronix,mx25l3205d", "jedec,spi-nor";
++		reg = <0>;
++
++		spi-max-frequency = <108000000>;
++		spi-cpha;
++
++		partition@0 {
++			label = "u-boot";
++			reg = <0x00000000 0x00100000>;
++		};
++
++		partition@100000 {
++			label = "u-boot-env";
++			reg = <0x00100000 0x00010000>;
++		};
++	};
++};
++
++&uart0 {
++	status = "okay";
++};
++
++&usb0 {
++	status = "okay";
++};
++
++&usb3_0 {
++	status = "okay";
++};
++
++&usb3_1 {
++	status = "okay";
++};
+-- 
+2.30.2
 
-> 
-> Regards,
-> 
-> Tony
