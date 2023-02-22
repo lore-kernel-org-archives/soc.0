@@ -1,166 +1,182 @@
-Return-Path: <SRS0=6J62=6S=linaro.org=leo.yan@kernel.org>
+Return-Path: <SRS0=PARV=6S=in-advantage.com=colin.Foster@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5729C61DA4
-	for <soc@archiver.kernel.org>; Wed, 22 Feb 2023 12:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBC05C64EC7
+	for <soc@archiver.kernel.org>; Wed, 22 Feb 2023 20:39:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9450BC433A0; Wed, 22 Feb 2023 12:14:12 +0000 (UTC)
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 9D7A8C4339B; Wed, 22 Feb 2023 20:39:12 +0000 (UTC)
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2136.outbound.protection.outlook.com [40.107.92.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 67F29C433D2
-	for <soc@kernel.org>; Wed, 22 Feb 2023 12:14:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 67F29C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f179.google.com with SMTP id d7so4421628pfu.4
-        for <soc@kernel.org>; Wed, 22 Feb 2023 04:14:10 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id E4946C433D2;
+	Wed, 22 Feb 2023 20:39:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4946C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aBuxrH1p46+UsUtbPnviY3/tHe1mbxx57caVXUrfIiE9oOLgBeP6zUvoI85dZ/Bz7CtWp5XUhow2xTn9ejTo+tvpqeZg3ZpnozNuGbzLTmG9VlB2iKFR3/XWkbHvyLvdRrcQmll2pNAj1vu+C0xsbyDZMvqXPgWAkjLJbp9hJgq3mTQPxsTb58JXMmUeF2BWdTqv5esqBP40Krjx5WHuP4EncdGOP8nUHYkeRJ9wfC2katUHSU3OU+33u0gf2GTD18N6oTwKRqo4JBd+AvvORqyoKayIemRcvrdO2WnaX183fI7rZNY5aBcXPAFDrHbUtX3NlXg+th/H3iGPCC+Nnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RkTx4cHQjuRWhXhLahAxIk5wncsfmsph6laianD1e78=;
+ b=Bau8lbOUdarACJdT53ZG78Z1pBlGrWLTLhLiulBwb4F+aIILhzCaUvpYKlzh4hujI4u98h1lvvZX05NGZDyL9gEJG4bgs4JtDpQQ1CoBY7XIcBrqTKt5VX6O3hr9E4Rr+g3wkyVegFam09ioT9M+HoQKRz/AF+p2B8vFWVKZLQw3Y4ORxBlxUHWxNAuEltflnrDdR/luNVtCXcvkLUlx75xVbIPhM7yzci6PTSBm8Acm5KI+hrhLugrH4fU6cZ08mQlPfv6c6RfnR2SD8HCdf/aK2mzy44uIs1q6yoo5rRZg6Pi9DSjav6UyjHBW4zjB5DihZiFJ9HQngoYAvkGTWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lYGZ5//o8M4pVJprIcaF2S4AKthafJRvOQpNFYhcofw=;
-        b=TryG8umiRILDNUIzA1zTxlagBAfT5lz0wkt1kAVhdh2HRVtf6M53uxmu70d9CcCwq3
-         mGoVW7uWq/X/NXvmfl4J07c72SioPZ7D24FVx5TuP80SqrXFHN9jm73ohoBrTYOWySWd
-         fmk5W+R4DM+udAzM8f03UcGP+ldclcstr/0hvqJaR8B59TTL7it1DD0QpL8LkCC1DSIP
-         GROpt/saqLUP6KMY4rkI5SnrQQS4hSFFatn2NBtfmCRCHDv2qySBtP9qK1P/vDDWCQ/b
-         OlyMqm3tl/5qkI2fXTZdrIu2uT7tEb6pU3jnwKRD9pX6FZCBfSfTYadLeuMY6l6MVhb3
-         brAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lYGZ5//o8M4pVJprIcaF2S4AKthafJRvOQpNFYhcofw=;
-        b=pIrkoByRolGIFq7gdUM9t98q1z9/Eq+OtlOljh5Wkq5c8XY80UoB39JosZfBf6IXjY
-         8UacZgutBDIE68DLQiwEFdVT0rJpepPLib0myz5lVmSKUck0UttXKrGqYzra977NeP0q
-         bCeWP3+VgMwk/xO2fp3EdoMCr7ZqtAsivukhYe9CeuGJIYc4UGwtSEySl7UkWGkJ96mx
-         XSDzvcDN0go0NL83ZJsuXR5n0DV9KDhpne6m+0nkNRe/JmExtLMvjkMGVbt3RZXLeNE3
-         ZwaQtr0ZAz6rjvKUmCTbCw1LcUZK7YgRfeDw3ffLZXy0aplWAHok2MHJ+7zBhmfz2Y4t
-         C7lA==
-X-Gm-Message-State: AO0yUKW3FtkapA02dZgs/7UO+umAcd3MZHLG7ZzxEYfZGDeV6RBYFhZe
-	6tDc65QrG83nVA4or2qXdjzdJw==
-X-Google-Smtp-Source: AK7set/FbhCTWvNdc9k6TNd2ug0UrmTguYiyEScloVCq8+eigxepEY8xvZZ+ET0fyq2XVSiUKBJeuQ==
-X-Received: by 2002:a05:6a00:4c13:b0:5a8:b6ec:3aac with SMTP id ea19-20020a056a004c1300b005a8b6ec3aacmr6963046pfb.15.1677068049595;
-        Wed, 22 Feb 2023 04:14:09 -0800 (PST)
-Received: from leoy-yangtze.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id f14-20020aa782ce000000b005d774488b89sm984450pfn.206.2023.02.22.04.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 04:14:09 -0800 (PST)
-Date: Wed, 22 Feb 2023 20:13:59 +0800
-From: Leo Yan <leo.yan@linaro.org>
-To: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	arm <arm@kernel.org>, soc@kernel.org, linux-arm-msm@vger.kernel.org,
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RkTx4cHQjuRWhXhLahAxIk5wncsfmsph6laianD1e78=;
+ b=smcxLoceM7njTFfBLlG0MpU9+DlAfUCQTBs1CaUa9tmPfV0CbcklmGNNzkX9mV+2KRjr/u9ywYVz3ihjTxTdRPg0MCFnEqxD9MVBXbF7KuRoJL2vVJNSAte1BOVygP1KSZ8mLu59s/12UGK/BR2B6EpMyAmsrDBADe6eRGSvBSc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by PH7PR10MB6033.namprd10.prod.outlook.com
+ (2603:10b6:510:1ff::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 20:39:06 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6111.010; Wed, 22 Feb 2023
+ 20:39:05 +0000
+From: Colin Foster <colin.foster@in-advantage.com>
+To: linux-omap@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>, Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Guru Das Srinagesh <quic_gurus@quicinc.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Dawei Li <set_pte_at@outlook.com>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Melody Olvera <quic_molvera@quicinc.com>,
-	Naman Jain <quic_namajain@quicinc.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Yang Li <yang.lee@linux.alibaba.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	coresight@lists.linaro.org,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@linaro.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	linux-perf-users@vger.kernel.org,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@arm.com>
-Subject: Re: [GIT PULL] Qualcomm driver updates for v6.3
-Message-ID: <Y/YHByya0NvoU+If@leoy-yangtze.lan>
-References: <20230126163008.3676950-1-andersson@kernel.org>
- <cdcff86c-77fe-4c5d-b8e8-58b815b9e969@app.fastmail.com>
- <20230130222412.t2tkkhqfep2orxf2@builder.lan>
- <9b680581-0956-4188-9af9-af06b625c001@app.fastmail.com>
- <Y/VzRJzxkPm3l0Km@leoy-yangtze.lan>
- <4704856d-eac6-9088-4523-3739e04d3fcd@quicinc.com>
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+List-Id: <soc.lore.kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	soc@kernel.org,
+	Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Andrew Davis <afd@ti.com>
+Subject: [PATCH v4 0/2] add support for Phytec PCM-049 and PCM-959
+Date: Wed, 22 Feb 2023 12:38:45 -0800
+Message-Id: <20230222203847.2664903-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR02CA0042.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::19) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4704856d-eac6-9088-4523-3739e04d3fcd@quicinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|PH7PR10MB6033:EE_
+X-MS-Office365-Filtering-Correlation-Id: 02e879b0-c7d6-4269-5af7-08db1514d724
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	++WUTLGlciiI9eh0RctBw6clrzNQXVWPl74d+r/rhNuaz0cA4KiYXdEb2CpvQz3MzlYqNyi5ISrtPBxJPQedhvVNuSZXJaA23d3TKBUo5i4foxLP+aGecwd95B691a7gD++3tEzL+DzPF6r+NW+JD4dskcTi0YJ8WGa3/ceSst3kpvXZQy6doxbzqMy9uaX32FmqnlfuSqU8yBYpck6k++lnpy0jCfCvBXat0W1Cjb9eSSptInUMt/XqXvaNSYoOfi6Bt6GdcOmctJRVJWI2wLwAmWEcM+BeK59bmQEBolc12rJ8QTlXkMIjPR8c53Rf/p7ZCyHhhdole8B+DPUsl24osA4Xf36e2lEHX2itR/WM5yvATEGWIO8V7D09KAsjA1IiS0rEC6K62SApI7lIaLx2eeCi/drk8hdkeJQhQ4pGU9jNN/l4Co0so+o45nQMMpj90iuiV4aa/cZLpFtMGWxLtdKCni4U34Ke6YEp4LNZDBT+qPk1LTA9sEKkkKzPZxsNgMbMefALHW5tis/zyqdyqJYgTcypu3k+E3XpNks9ldB3NF7Z3yS7XdTyt8hAJuTwOlKLkTTQncA/5q0t3xd8q8yohBZhZs55RempNSJJJdrnmsxLrUogmxwvADUdSStqo3y8PLZj+Q5MFBpJNgID2NylSD3SbQsekQQ9zpJx9aUffjV7mBurUK4K+VHj
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(39830400003)(366004)(376002)(136003)(451199018)(478600001)(38100700002)(38350700002)(86362001)(2906002)(44832011)(316002)(54906003)(41300700001)(36756003)(8936002)(7416002)(4326008)(66556008)(8676002)(66946007)(66476007)(83380400001)(5660300002)(966005)(26005)(66899018)(6486002)(186003)(1076003)(6506007)(6666004)(2616005)(6512007)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?QYV4EATQi1AKM0L8MaGQ9mGKjrZlTbeYcYbM/u+yi5KZqe/Z7iQHUotRDg/m?=
+ =?us-ascii?Q?xDasEnfk3p/UaJaw44h0T1WHTCJ3eXZWdB5TpF8qI/bF90PuMok8K75o0Qyi?=
+ =?us-ascii?Q?/7yt2DdheVzmtPpMwONLAFZl2ugK5lz88S0VbMNg0laKGNB9hprYPPzmRES8?=
+ =?us-ascii?Q?tTS4dCmgluK7vGutAkreSReZYjalSVT5r89bD0JF31kFuMcZfu0Cg0EUHAF+?=
+ =?us-ascii?Q?OhuJtvH4chQQEuJbAdBnx5uDzdPDUjWIP+v6aX1SdhZ7W5/VCCYLL79esNpz?=
+ =?us-ascii?Q?05nT8TQSBo0FGST2ByNSdLnej6wA2aQDTlcfTA4dPl4Cx/kFO1fVyUiiFWmy?=
+ =?us-ascii?Q?Nbz8siq88JMa+/WXC6tboOii5cMTjOjoiwh/mNf/KbV8fxmlGD3Fq2PKliPG?=
+ =?us-ascii?Q?Zd+H1DmyMTIOaoZ9fqzjk8D2Oh0QFR0lrARUk8tdRPjU0ZoHypZVUP+jV8R1?=
+ =?us-ascii?Q?7hviiB5C4sSMB7O92sKzIZIcp2LG4fhhl81oETlbm4o0sMi3UE37CvTTxhvq?=
+ =?us-ascii?Q?pStxLBkqspObu2wDcPySknItz13oP9qKCltFoRlf3/y0/9g2BNjlUbdv803k?=
+ =?us-ascii?Q?Z5cg+On2yT+N9Ye16xbhBwhCmRh3N5qp2YdEZxFfESJTSQysdC3/yg1znF2U?=
+ =?us-ascii?Q?4UWd3/9gzecOaMH0aOjmFGvx/IdH3dvMSMwSDHo59bVg5cG2wD5aiJn61ZD3?=
+ =?us-ascii?Q?U0ZJezX+fBeJEZJF/RO/0i5ttDTQj+S3tXoZS8y9hgxHdS/4nxGxBhyhw7Pk?=
+ =?us-ascii?Q?bhV5O9TxZAe1RfmmmMyFKWTvWetjEB+OzgPXjbTe6JYiY398+wOLOnS7k/S3?=
+ =?us-ascii?Q?Xxn0tvNRuIbW5RbHbsGRC+qr+UtdopWwNvg2lKeSkheufj+TdIEaMB/WGQwC?=
+ =?us-ascii?Q?FRdUNnpu09ZKTxNvKec8z4D4SRn6u6cqk5D3YEFK2F5IdIrzwgzvIm8C0xIW?=
+ =?us-ascii?Q?2C/SkNpLR5QN7L8LbwSbGH0IF5KpyE84TuVhgMDL11alqA6WJgx4NZ9lmg4y?=
+ =?us-ascii?Q?uGuXR5McZNr7TRKccsZ7VxGDzCK7TyigNYr3GDT7jo1TLeLCfRJlE24Kzy3y?=
+ =?us-ascii?Q?okHOgSvuz5kjKzIfv2Wb3x/lAO3jnuAq4ncfAhdr7wEXBvjQjq+H9pBeMu+b?=
+ =?us-ascii?Q?G8ThtjYz5HdcGe8o0zliKiFglp1gg9atN/khht18tMkNzE8D+IV23n+ra4u1?=
+ =?us-ascii?Q?iRPimUp9zhmfPXC8WS01PHeNuketi7NczEAuS3V52k1NjHGI//DjNeFxPFOL?=
+ =?us-ascii?Q?9H8x/gT49CFvq/Obe6PftERodMiacRDhRjyYLQD1nR2oyWTNfA6DZcVDreBH?=
+ =?us-ascii?Q?J+MRM/nHG0zhtjn4WYT71nuGwzO1aLAACiMIac2seAzdmnzmzBp61bHmPdlo?=
+ =?us-ascii?Q?u9soAWa2JBv7hbxVue339ZR7fak8mRpg9kWGulWNuB6C2e/kcPSuIfLrRt09?=
+ =?us-ascii?Q?8dtlccCUy7zf2H5GYdH4W0/vuvalPO7HP8PAbkWc9lZIn/t5OV4o+beQ0+YA?=
+ =?us-ascii?Q?hiIVTWdd9SZiv2dGKd3e8LMcmslNL/Z43VCEEqGPIaLboeh+bKOe5pH5LnUe?=
+ =?us-ascii?Q?LQqt6gffIXK/Y2Amip+P7xgSOOJ2cM7ZZIZOEqMiZPfvRiL9lHLNeaRdFzUS?=
+ =?us-ascii?Q?dIy/ZfnxUhS5PNB6LLtPnjA=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02e879b0-c7d6-4269-5af7-08db1514d724
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 20:39:05.9351
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N8l0A8PgFiTLLGkFA5XqUHjbmwDHt/why35nCIZpwioNSGt/3us+C1gsB2zklRRQAfgTuQhHZlH357pw/nDzFY5vFyaGCq2eNoPVYdAW9w0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6033
 
-Hi Souradeep,
+As should be clear for the title and patch title, this is adding initial
+support for the OMAP 4460 SOM and dev kit for Phytec's PCM959 evaluation
+kit.
 
-On Wed, Feb 22, 2023 at 04:46:07PM +0530, Souradeep Chowdhury wrote:
-> On 2/22/2023 7:13 AM, Leo Yan wrote:
-> > On Wed, Feb 15, 2023 at 04:05:36PM +0100, Arnd Bergmann wrote:
+The PCM049 is a legacy SOM offered by Phytec:
+https://www.phytec.com/legacy-soms/
+There was a vendor BSP offered by Phytec, but that never entered the
+Device Tree era. This patch is meant to change that.
 
-[...]
+My development bootloader has moved to U-Boot, but I have verified
+Barebox works in the past. When booting from SD card, either bootloader
+should work. When booting from Barebox, the NAND OOB layout is
+incompatible between the bootloader and the kernel.
 
-> > > If the possible use is purely for saving some state across
-> > > a reboot, as opposed to other events, I wonder if there is
-> > > a good way to integrate it into the fs/pstore/ code, which
-> > > already has a way to multiplex various kinds of input (log
-> > > buffer, ftrace call chain, userspace strings, ...) into
-> > > various kinds of persistent buffers (sram, blockdev, mtd,
-> > > efivars, ...) with the purpose of helping analyze the
-> > > state after a reboot.
-> > 
-> > Good point!
-> > 
-> > I understand pstore/ramoops is somehow like a sink which routes the
-> > tracing data (software tracing data but not hadware tracing data) to
-> > persistent memory.  This is why we also can route these software
-> > tracing data to STM (hardware sink!).
-> > 
-> > Seems to me, Arnd suggests to connect two sinks between DCC and
-> > pstore (to persistent memory).  But I cannot give an example code in
-> > kernel for doing this way, sorry if I miss something.
-> > 
-> > Essentially, a good user case is to keep a persistent memory for the
-> > tracing data, then after rebooting cycle we can retrieve the tracing
-> > data via user space interface (like sysfs node).
-> 
-> Hi Leo/Arnd,
-> 
-> Just wanted to let you know that the justification of not using PStore was
-> already given in the version 1 of this patch series as below
-> 
-> https://lore.kernel.org/linux-arm-msm/ab30490c016f906fd9bc5d789198530b@codeaurora.org/#r
-> 
-> PStore/Ramoops only persists across warm-reboots which is present for chrome
-> devices but not for android ones.
+I haven't had any OOB / ECC errors in the NAND at all, which was my
+main concern. Due to that, I'm submitting this as a patch instead of
+an RFC. Hardware ECC correction seems to be fully functional.
 
-Thanks for the info.  Just remind a subtle difference of reboots.
 
-Besides warm reboot, kernel can reboot system after panic (see kernel
-command line option `panic`) and watchdog can reboot the system as well.
 
-Even though Android doesn't support warm reboot, system still can reboot
-on panic or by watchdog (in particular after bus lockup), pstore/ramoops
-also can support these cases.
+v3->v4
+    * Add initial .yaml documentation instead of omap.txt
+      Thanks to Andrew Davis <afd@ti.com> for posting their WIP patch
+      set, which was the basis for patch 1, with Rob's feedback.
+    * Removed Rob's "Acked-by" because the patch is completely different
+    * Removed unnecessary "omap-4430" from compatible in .dts
 
-> Also the dcc_sram contents can
-> also be collected by going for a software trigger after loading the kernel
-> and the dcc_sram is parsed to get the register values with the
-> opensource parser as below
-> 
-> https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/tools/tree/dcc_parser
+v2->v3
+    * Acked-by on patch 1
+    * Code review changes (see patch 2 for details)
+    * Fix intermittent NAND failures (patch 2)
 
-To be clear, current driver is fine for me (TBH, I didn't spend much
-time to read it but it's very neat after quickly went through it), I
-just share some info in case it's helpful for the discussion.
+v1->v2
+    * Almost everything moved into the SOM (PCM-049) .dtsi. Only the
+      LED chip is dev-board specific.
+    * Fix pinmux associations (*pmx_core was applying *pmx_wkup
+      entries... I'm surprised that didn't cause more issues)
+    * Documentation added
 
-Thanks,
-Leo
+    * Updates from review:
+    *   Board compatible strings added
+    *   Hyphen / underscore changes
+    *   Remove unnecessary status="okay" entries
+    *   Generic names used (regulator, led-1, etc.)
+
+
+Colin Foster (2):
+  dt-bindings: arm: omap: add phytec pcm-049 som and pcm-959 dev board
+  arm: dts: omap4: pcm959: add initial support for phytec pcm959
+
+ .../devicetree/bindings/arm/ti,omap.yaml      |  29 ++
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi   | 400 ++++++++++++++++++
+ arch/arm/boot/dts/omap4-phytec-pcm-959.dts    |  48 +++
+ 4 files changed, 478 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/ti,omap.yaml
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-959.dts
+
+-- 
+2.25.1
+
