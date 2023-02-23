@@ -1,160 +1,106 @@
-Return-Path: <SRS0=B8fj=6T=in-advantage.com=colin.Foster@kernel.org>
+Return-Path: <pali@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6A46C61DA4
-	for <soc@archiver.kernel.org>; Thu, 23 Feb 2023 16:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 769F2C61DA4
+	for <soc@archiver.kernel.org>; Thu, 23 Feb 2023 16:48:37 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9E546C433D2; Thu, 23 Feb 2023 16:25:21 +0000 (UTC)
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2115.outbound.protection.outlook.com [40.107.96.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 170CCC433EF;
-	Thu, 23 Feb 2023 16:25:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 170CCC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=in-advantage.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=in-advantage.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TXDaHDj6d49Dcf2UdL+gnfXGuLQlB29SAASJ0U6BmyIJxlIn3ZiXbPCYEZzVXf8hgKb7KHipAvweXxtDuGCAeSsJkGeReq5HwVwiNCOsxj06XUT43g/ZUbX3PLjdUi2hgN4aA69oxhrycLEboo7W6+3HU/RLPXmmcIaDQ2t1vRFVXnr6uKxluf07xJQ25/5A+reImnSPpa9CNRYlrhbPJ2kiKgsEIyUL9I6UGXZxPfTycw1VTmXK9251142IqhqjMUJkRm3ln4qpCMzs6X40+jr+GkEOikHOFW9K0CJaP/WFnWFGD/92R6EcWOueFQ6RijOz+/mXcWvu3CyqdmqKTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uxzrl3L4QEosO4ddDVp8tc8jC1JmRzGUJBMhaAjXrpw=;
- b=gciWdt2vpnhxN9VDwFJ7HgCnqE6wWXcInFl9f0V9uNQ/wcErqGAe6JOMIKErWZiFUkQt/SDeQF+M3ssHoejHyLKP9VgF7+8eVH+7tkSLYS5QhyFA2YV1i+waIEw4WnGSlKLZhpn7/Aej50LW8O6FZ1zwMpETp4WdWOcXmWUtU+Nihp/Ex5hZ3oOTONA3Rzp5ADZtXlnmYBaFZ1kvN+ghl6W4qNwIEyc8NakiDQFq2krgoIlGUEhKrYb9ZwEov/oBnutbV/nbreEOULbewYOci3mrPb2LZZuFjFBgp1ORm34dgts/kGlyBSvyW3e2vgRRBikq0cJ6uqYLYmM8Ly5wvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uxzrl3L4QEosO4ddDVp8tc8jC1JmRzGUJBMhaAjXrpw=;
- b=mjDtggjbA+Jrl/mufARbZ3b63qsb+YfEpysN17ZIFgNrKYaPbLKNffse44+V10QC6El9wjGhXv8WCzAE8teuVZQZXSTKqIVn3F85Xowc1YWcnlEooloyaYIVorLTd3WBdUpRR9oO87JLHP/0IBapS+GDSyinPRr53Der/QQCbok=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from DM5PR1001MB2345.namprd10.prod.outlook.com (2603:10b6:4:2d::31)
- by DS7PR10MB5136.namprd10.prod.outlook.com (2603:10b6:5:38d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.7; Thu, 23 Feb
- 2023 16:25:18 +0000
-Received: from DM5PR1001MB2345.namprd10.prod.outlook.com
- ([fe80::6f3f:5bbb:ca57:57d0]) by DM5PR1001MB2345.namprd10.prod.outlook.com
- ([fe80::6f3f:5bbb:ca57:57d0%5]) with mapi id 15.20.6156.007; Thu, 23 Feb 2023
- 16:25:18 +0000
-Date: Thu, 23 Feb 2023 08:25:08 -0800
-From: Colin Foster <colin.foster@in-advantage.com>
-To: Andrew Davis <afd@ti.com>
+	id 4306EC4339C; Thu, 23 Feb 2023 16:48:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38BEC433D2;
+	Thu, 23 Feb 2023 16:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677170917;
+	bh=bEei/J02oyeEbj9wPT63afibNBX3GuVMrJSOGc4nAdY=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=bZZ+91rB3MCrsX+m6XWtkSN0HasVmwsjwu9Rjc7YIqRMrhIciOM0zRYpKcFJDelBG
+	 L/CNjw6P36gsdezmMpwVTjOlv4MoZkKS06Cb8/eRLCZUxhOLpuOZKPe6/sNtvMUlwy
+	 CRlpiMxZexdNhITOjj4B5pN0PqGJzI70Wuoucp5G1t20b3UB1ku0nKWCaQ8JdhmZuS
+	 Z47b9dZT6nGmkXWTI7nDMg+Qx2DqtIvh6diA5vbzOQGxO6VogCHntdOIuEv+DBZCAn
+	 CyGzwhcRrCJXXgXyLtuxcfHoIUAlHT77vLMi90uXek2gsDVdZ1EokFmvpkUxVMTqko
+	 eeny22faVCIUA==
+Received: by pali.im (Postfix)
+	id 0EF0860F; Thu, 23 Feb 2023 17:48:33 +0100 (CET)
+Date: Thu, 23 Feb 2023 17:48:33 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Lee Jones <lee@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Tony Lindgren <tony@atomide.com>,
-	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-	soc@kernel.org, Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: omap: add phytec pcm-049 som
- and pcm-959 dev board
-Message-ID: <Y/eTZONJh8QdJVP8@COLIN-DESKTOP1.localdomain>
-References: <20230222203847.2664903-1-colin.foster@in-advantage.com>
- <20230222203847.2664903-2-colin.foster@in-advantage.com>
- <dd67f7c9-0867-47d0-a201-9316908d9d62@ti.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dd67f7c9-0867-47d0-a201-9316908d9d62@ti.com>
-X-ClientProxiedBy: SJ0PR03CA0251.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::16) To DM5PR1001MB2345.namprd10.prod.outlook.com
- (2603:10b6:4:2d::31)
+Cc: Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
+	soc@kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH RESEND 1/8] dt-bindings: leds: register-bit-led: Add
+ active-low property
+Message-ID: <20230223164833.bsaqwgevphnsenal@pali>
+References: <20221226123630.6515-1-pali@kernel.org>
+ <20221226123630.6515-2-pali@kernel.org>
+ <Y9OycfvJEZ3tX/xm@google.com>
+ <Y/d2vNUeuQTwQ2VG@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR1001MB2345:EE_|DS7PR10MB5136:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6253b56a-6479-4846-f1e4-08db15ba8b85
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	DguKHYtM+FZPreT7sGfvOAHmMPk7wSf1WxZKpWIWtx242hiCW62e+qs7QvlPhuUWUL+iBVvrjnTU/AtP6bYoZsovFnOKudkZefmiZV5fYLmFfHnxneTYc4o5Q7CAFoC85Rgnm8vLtUVwSUI9lA3bIBhjCcRz1EXlprtnqAY6hUSr1dn1tuZOiMqaMpfbtIx/PifdGufCE6YeADb9Zg6hnUx/+vgMKd0oIiyOEQc1CGZM6kNPryIlbkhoBSGSj2D45XBlq6zET0Q9FEGpayEh2Zv/iTroKkQpWLs4CFX0Bg6b6JwrldQ6gfj89hVnK9m09WGhB+wADCBTPLAH2uyNSZAeCFQmr+sKGp++rAbdXuHKjvwaqUtHQFt35dFWbrM5LfHr2WHPOsQwHB2CVry+L994dzYWL44z5Z1r23VUD8Z5l4EaIT00u0FOzfTIsmQnJwNL+hjCI9K10b6Gwaf8cf1C8b/W75uv94jFr5Sa8unx+w7ZsyKa7K6s5zEeR5U9gcPRipKL2t3mfpYTcJVnbEGIV9upd0ZHjTMRrVRo3xHsmuVRkHFFf2Vhj5ThiPMioMWMk49VHESciInexu2HJQABZRhlKl6TuTyfs5bHHR6ZoPV19HppRhTGkSvwmeUEUSsp5AYvkQx0T6JnHNgD8Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1001MB2345.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(366004)(376002)(39830400003)(346002)(136003)(451199018)(7416002)(44832011)(86362001)(2906002)(66899018)(38100700002)(478600001)(6486002)(53546011)(9686003)(186003)(6512007)(26005)(66946007)(66476007)(66556008)(83380400001)(54906003)(41300700001)(316002)(6916009)(4326008)(6666004)(6506007)(8936002)(8676002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xWlsRQUwF7D7AahPB/aCzAjEToE2Xgy/UzNdI9E27X3a7c7uZXQNSBga465F?=
- =?us-ascii?Q?Bu7KMc6wIGuC3g9Z7IGU+eLdZPQ5Ypz81lZ6ZCnPCf/gVlgCxHVGqLBNn2u9?=
- =?us-ascii?Q?cVQXxKBn1YmIl7wa01jhgRR22Icejw8ycsGKduWo2HHoUSgpVMH4HOL6k77Y?=
- =?us-ascii?Q?XpYEOGDe15cSSxeEOG5GYv5JsIJNgsFiboz2w4mmr1gY7Z9k4gWPg/a3LAJx?=
- =?us-ascii?Q?cDvePTt/8Ve8dWTDMNhChAi818dgo5dE7xO3Th3UrqePWoi1tjVdGKohv33P?=
- =?us-ascii?Q?5x1QJCWUFa6vDfkzVUKRiRlcHA7naPQSpfoICRTOCHzCqUlXYhc6s9gsZAAv?=
- =?us-ascii?Q?/Pp7aIoTq7QOp/EHY+W8tksdT3fiof9Q153zMY8YtHsNvNXNQp6rQDt4oADi?=
- =?us-ascii?Q?z54YPEsiNd99/T09efT3pguNCQMkGsSpEDYeLD20Vqy5wi8UjPrX/GNJBlJ8?=
- =?us-ascii?Q?3H5guYAchLw8HH4NkNrqeUwnVD6Rdsehb+d644IAN0uadg88uLttcVcG5afX?=
- =?us-ascii?Q?4stJ7sLLJCPk8cF7WifzTMPKaJKXP+XRTbkskYoVArqPQx2aRk/0i1tTVRnW?=
- =?us-ascii?Q?l/ft64sj7DuF3OMWfkQVBTKMZvqpJSmvEGJWJCqbWrOki/ZOXfu1eZe+Kqjl?=
- =?us-ascii?Q?D4lJlr1+BsdrQ8qoDoRoiZjX7tzy5gW8nPN8x2HhL+0O6T7ohxWu+ANsBsXa?=
- =?us-ascii?Q?2pQqoD8mUwh4SVzT+UyH4pQ8+DFf9jbfNyacn2qqst0hglvJ0fR1GePaV63R?=
- =?us-ascii?Q?qApIbHVcXWzy0oAMghqlYgex/IzTN7KXPzkZ3r9MPOQ1Ynbci4QpE501Qx4n?=
- =?us-ascii?Q?ZWCARgbdqbFbCU04NLr47zcclD7CcJXgtMMawCAq256SMIXfCOmVyBmedJ5y?=
- =?us-ascii?Q?UboLZCPsBQWtxSjX7uWfAO1ASnkCCxV/yxgEcfHiKqtg8wm66MvQklw68Y6Y?=
- =?us-ascii?Q?OOWxjsHXToP0faCBUPU1Pb6t0lN63OdGk527kgJQOI9v6nGPr55aN0g0mGqK?=
- =?us-ascii?Q?o15KcpgFPa8OsbCjCEgFIpvwoT177cfampAc1jnKmYQyDSpUxZeT+cc2ww4T?=
- =?us-ascii?Q?UDL0e/gwvYyVBP1ITr2ch4lYmmeBasurMEbH+FzRE7/RPdUEpSPgvnlpd/1K?=
- =?us-ascii?Q?g7kPbR0fgIG5aLkcnBc/BZxgF1VJbMqdfvq8k67PJCSYjSigT6egQGSYzzUI?=
- =?us-ascii?Q?S9GoHuO2Z1yYY9K5zdPAAIkuwKmKV+rtKPM71iYL+dG7ZIrIs3d/nvqSjj0Z?=
- =?us-ascii?Q?YVd5qaPxtMKoVHOFhm6G80fhv3qmcVLvHCmUSozCWxprYzyi3SZAzeYiMTU8?=
- =?us-ascii?Q?zILAcwxuEwmgbjxrVxhd5B7zOEEtm6UzagDwGDhHcR4HTxQel4v8mST+0Gir?=
- =?us-ascii?Q?QZCRLeigUlsZAn5jYVIWmn/d4HpW0NJgarO3J6GVG4CYqqN1x3eMvmjWkzCH?=
- =?us-ascii?Q?P3s2AEXdegDOLY1gcuxQG6oP+Cx8Ll5+iuDmNjaUF5k+l2Z4IuL160/EJqbO?=
- =?us-ascii?Q?6kLrJ1UT0IPV83S9ojORJHDRzmGW/bdIzQAGe1a/YXE0zsRSdtWBGgUQUWKy?=
- =?us-ascii?Q?8LYSPDUryFyM4/gkqba4iM8HPq5JmDR3EaznpPHBeS9NrI2TXuPMmdwVC3PX?=
- =?us-ascii?Q?WXX5efL22hkfPv+yNHZ+kIc=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6253b56a-6479-4846-f1e4-08db15ba8b85
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1001MB2345.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2023 16:25:17.9154
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qf/4dbExY34uGYmESSQVFWqHc7CT4heM6iCmy/f265Jszy7/1WloSa2S+ldXitD5+AoYsrQXssBBP0fEX/MCxU7QkeK6A/M2UOS9TBWe33c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5136
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y/d2vNUeuQTwQ2VG@google.com>
+User-Agent: NeoMutt/20180716
 
-On Thu, Feb 23, 2023 at 10:00:50AM -0600, Andrew Davis wrote:
-> On 2/22/23 2:38 PM, Colin Foster wrote:
-> > Add yaml documentation for TI OMAP devices for the Phytec PCM-049 SoM and
-> > the Phytec PCM-959 development kit.
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> > ---
-> > 
-> > v4
-> >      * New patch, based on a WIP from Andrew Davis <afd@ti.com>
-> > 
-> > ---
-> >   .../devicetree/bindings/arm/ti,omap.yaml      | 29 +++++++++++++++++++
-> >   1 file changed, 29 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/arm/ti,omap.yaml
+On Thursday 23 February 2023 14:22:52 Lee Jones wrote:
+> On Fri, 27 Jan 2023, Lee Jones wrote:
 > 
-> How will this work if I add the same file? Why not take my WIP patch, make
-> the suggested changes from Rob, then have it as your first patch in this
-> series?
+> > On Mon, 26 Dec 2022, Pali Rohár wrote:
+> > 
+> > > Allow to define inverted logic (0 - enable LED, 1 - disable LED) via
+> > > active-low property.
+> > > 
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/leds/register-bit-led.yaml | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > 
+> > Needs a DT Ack (now Cc:ed)
+> 
+> I can't do anything with this set until we have a DT Ack.
+> 
+> If you don't receive one soon, I'd suggest resending the set again with
+> all of the DT people on Cc that it should have been sent to in the first
+> place.
 
-Is your WIP intended to convert all omap.txt to ti,omap.yaml? Or chunk
-off devices one at a time?
+(Re)Sending one email multiple times is against email etiquette,
+moreover it is spam technique and reason for marking sender on the
+blacklist.
 
-If the former, when your patch is done it should be a pretty simple
-rebase conflict resolution. If the latter (which feels more digestable)
-this offers that template. This was Rob's / Tony's suggestion, albeit
-before you sent your patch set.
+Moreover I have already sent it more than one time. DT people are known
+to not respond to patches and pull requests and I have no motivation to
+send reminder emails for them for more than half of year.
 
+So I would suggest to not send emails to people who just do not want to
+receive or read emails. It is logical reaction.
 
-Anyway, I'm happy to do any of the following:
+This patch is here for more than 6 months, so I do not see reason why to
+wait for Godot. Rather move forward than stepping at the same position.
 
-1. Take Andrew's patches, add these references and re-submit.
-2. Keep this set as-is (with the typo fix) and when Andrew's WIP is done
-   it should be an easy rebase before submission.
-3. Wait for Andrew's WIP to be done, then submit with this update.
-
-
-I'd like to avoid #3 because I don't know where this might fall on your
-priorities list.
+> > > diff --git a/Documentation/devicetree/bindings/leds/register-bit-led.yaml b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
+> > > index ed26ec19ecbd..418130b29caa 100644
+> > > --- a/Documentation/devicetree/bindings/leds/register-bit-led.yaml
+> > > +++ b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
+> > > @@ -43,6 +43,11 @@ properties:
+> > >          0x100000, 0x200000, 0x400000, 0x800000, 0x1000000, 0x2000000, 0x4000000,
+> > >          0x8000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000 ]
+> > >  
+> > > +  active-low:
+> > > +    $ref: /schemas/types.yaml#/definitions/flag
+> > > +    description:
+> > > +      LED is ON when bit in register is not set
+> > > +
+> > >    offset:
+> > >      description:
+> > >        register offset to the register controlling this LED
+> > > -- 
+> > > 2.20.1
+> > > 
+> > 
+> > -- 
+> > Lee Jones [李琼斯]
+> 
+> -- 
+> Lee Jones [李琼斯]
