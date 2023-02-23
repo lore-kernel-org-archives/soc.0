@@ -1,106 +1,119 @@
-Return-Path: <pali@kernel.org>
+Return-Path: <SRS0=N8Gl=6T=ti.com=afd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 769F2C61DA4
-	for <soc@archiver.kernel.org>; Thu, 23 Feb 2023 16:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 957FAC6379F
+	for <soc@archiver.kernel.org>; Thu, 23 Feb 2023 17:17:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4306EC4339C; Thu, 23 Feb 2023 16:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38BEC433D2;
-	Thu, 23 Feb 2023 16:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677170917;
-	bh=bEei/J02oyeEbj9wPT63afibNBX3GuVMrJSOGc4nAdY=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=bZZ+91rB3MCrsX+m6XWtkSN0HasVmwsjwu9Rjc7YIqRMrhIciOM0zRYpKcFJDelBG
-	 L/CNjw6P36gsdezmMpwVTjOlv4MoZkKS06Cb8/eRLCZUxhOLpuOZKPe6/sNtvMUlwy
-	 CRlpiMxZexdNhITOjj4B5pN0PqGJzI70Wuoucp5G1t20b3UB1ku0nKWCaQ8JdhmZuS
-	 Z47b9dZT6nGmkXWTI7nDMg+Qx2DqtIvh6diA5vbzOQGxO6VogCHntdOIuEv+DBZCAn
-	 CyGzwhcRrCJXXgXyLtuxcfHoIUAlHT77vLMi90uXek2gsDVdZ1EokFmvpkUxVMTqko
-	 eeny22faVCIUA==
-Received: by pali.im (Postfix)
-	id 0EF0860F; Thu, 23 Feb 2023 17:48:33 +0100 (CET)
-Date: Thu, 23 Feb 2023 17:48:33 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Lee Jones <lee@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linus.walleij@linaro.org>,
-	soc@kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH RESEND 1/8] dt-bindings: leds: register-bit-led: Add
- active-low property
-Message-ID: <20230223164833.bsaqwgevphnsenal@pali>
-References: <20221226123630.6515-1-pali@kernel.org>
- <20221226123630.6515-2-pali@kernel.org>
- <Y9OycfvJEZ3tX/xm@google.com>
- <Y/d2vNUeuQTwQ2VG@google.com>
+	id 4CCB2C4339B; Thu, 23 Feb 2023 17:17:48 +0000 (UTC)
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CDBEAC433EF;
+	Thu, 23 Feb 2023 17:17:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CDBEAC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31NHHXY2037741;
+	Thu, 23 Feb 2023 11:17:33 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1677172653;
+	bh=o2Nb7KbFzvIYkv4sc2lMJ4n5HXWpmBwMln8gTDzt9K0=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=wMrtpCCafkPOnQwzlEcjxQqTlNCsWd4DnQS5l+Sq2uI++DrbqQIimEHXpsvDka0oT
+	 AzyGhbYvxo2IU9+JFFcrrmN/A8I/voZQOy/QOZIS+gseGrCJDGS7CQe1y1+spFJD7C
+	 MOoJHPc5W6N2YRtl3hIHBDIKr3TFfDI5LbLSIIck=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31NHHXUP072344
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 23 Feb 2023 11:17:33 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
+ Feb 2023 11:17:32 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 23 Feb 2023 11:17:32 -0600
+Received: from [10.250.32.101] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+	by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31NHHWVx058665;
+	Thu, 23 Feb 2023 11:17:32 -0600
+Message-ID: <a3819147-dc7b-ecbf-107e-88f88be33825@ti.com>
+Date: Thu, 23 Feb 2023 11:17:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/d2vNUeuQTwQ2VG@google.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: omap: add phytec pcm-049 som and
+ pcm-959 dev board
+Content-Language: en-US
+To: Colin Foster <colin.foster@in-advantage.com>
+List-Id: <soc.lore.kernel.org>
+CC: <linux-omap@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tony Lindgren
+	<tony@atomide.com>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        <soc@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann
+	<arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob
+ Herring <robh+dt@kernel.org>
+References: <20230222203847.2664903-1-colin.foster@in-advantage.com>
+ <20230222203847.2664903-2-colin.foster@in-advantage.com>
+ <dd67f7c9-0867-47d0-a201-9316908d9d62@ti.com>
+ <Y/eTZONJh8QdJVP8@COLIN-DESKTOP1.localdomain>
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <Y/eTZONJh8QdJVP8@COLIN-DESKTOP1.localdomain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Thursday 23 February 2023 14:22:52 Lee Jones wrote:
-> On Fri, 27 Jan 2023, Lee Jones wrote:
+On 2/23/23 10:25 AM, Colin Foster wrote:
+> On Thu, Feb 23, 2023 at 10:00:50AM -0600, Andrew Davis wrote:
+>> On 2/22/23 2:38 PM, Colin Foster wrote:
+>>> Add yaml documentation for TI OMAP devices for the Phytec PCM-049 SoM and
+>>> the Phytec PCM-959 development kit.
+>>>
+>>> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+>>> ---
+>>>
+>>> v4
+>>>       * New patch, based on a WIP from Andrew Davis <afd@ti.com>
+>>>
+>>> ---
+>>>    .../devicetree/bindings/arm/ti,omap.yaml      | 29 +++++++++++++++++++
+>>>    1 file changed, 29 insertions(+)
+>>>    create mode 100644 Documentation/devicetree/bindings/arm/ti,omap.yaml
+>>
+>> How will this work if I add the same file? Why not take my WIP patch, make
+>> the suggested changes from Rob, then have it as your first patch in this
+>> series?
 > 
-> > On Mon, 26 Dec 2022, Pali Rohár wrote:
-> > 
-> > > Allow to define inverted logic (0 - enable LED, 1 - disable LED) via
-> > > active-low property.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > > ---
-> > >  Documentation/devicetree/bindings/leds/register-bit-led.yaml | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > 
-> > Needs a DT Ack (now Cc:ed)
+> Is your WIP intended to convert all omap.txt to ti,omap.yaml? Or chunk
+> off devices one at a time?
 > 
-> I can't do anything with this set until we have a DT Ack.
+> If the former, when your patch is done it should be a pretty simple
+> rebase conflict resolution. If the latter (which feels more digestable)
+> this offers that template. This was Rob's / Tony's suggestion, albeit
+> before you sent your patch set.
 > 
-> If you don't receive one soon, I'd suggest resending the set again with
-> all of the DT people on Cc that it should have been sent to in the first
-> place.
-
-(Re)Sending one email multiple times is against email etiquette,
-moreover it is spam technique and reason for marking sender on the
-blacklist.
-
-Moreover I have already sent it more than one time. DT people are known
-to not respond to patches and pull requests and I have no motivation to
-send reminder emails for them for more than half of year.
-
-So I would suggest to not send emails to people who just do not want to
-receive or read emails. It is logical reaction.
-
-This patch is here for more than 6 months, so I do not see reason why to
-wait for Godot. Rather move forward than stepping at the same position.
-
-> > > diff --git a/Documentation/devicetree/bindings/leds/register-bit-led.yaml b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-> > > index ed26ec19ecbd..418130b29caa 100644
-> > > --- a/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-> > > +++ b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-> > > @@ -43,6 +43,11 @@ properties:
-> > >          0x100000, 0x200000, 0x400000, 0x800000, 0x1000000, 0x2000000, 0x4000000,
-> > >          0x8000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000 ]
-> > >  
-> > > +  active-low:
-> > > +    $ref: /schemas/types.yaml#/definitions/flag
-> > > +    description:
-> > > +      LED is ON when bit in register is not set
-> > > +
-> > >    offset:
-> > >      description:
-> > >        register offset to the register controlling this LED
-> > > -- 
-> > > 2.20.1
-> > > 
-> > 
-> > -- 
-> > Lee Jones [李琼斯]
 > 
-> -- 
-> Lee Jones [李琼斯]
+> Anyway, I'm happy to do any of the following:
+> 
+> 1. Take Andrew's patches, add these references and re-submit.
+> 2. Keep this set as-is (with the typo fix) and when Andrew's WIP is done
+>     it should be an easy rebase before submission.
+> 3. Wait for Andrew's WIP to be done, then submit with this update.
+> 
+> 
+> I'd like to avoid #3 because I don't know where this might fall on your
+> priorities list.
+
+Low priority for me, I'd suggest #1 or they probably will not be
+converted anytime soon.
+
+Andrew
