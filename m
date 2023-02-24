@@ -1,166 +1,113 @@
-Return-Path: <SRS0=27v0=6U=gmail.com=musashino.open@kernel.org>
+Return-Path: <SRS0=KdQ2=6U=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01EEAC61DA3
-	for <soc@archiver.kernel.org>; Fri, 24 Feb 2023 12:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B58C9C61DA3
+	for <soc@archiver.kernel.org>; Fri, 24 Feb 2023 13:52:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AF815C433EF; Fri, 24 Feb 2023 12:58:03 +0000 (UTC)
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	id 7A156C4339E; Fri, 24 Feb 2023 13:52:39 +0000 (UTC)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AE6DAC433D2;
-	Fri, 24 Feb 2023 12:58:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AE6DAC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id z2so16806651plf.12;
-        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
+	by smtp.kernel.org (Postfix) with ESMTPS id 3EA56C433D2
+	for <soc@kernel.org>; Fri, 24 Feb 2023 13:52:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3EA56C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id k14so17007498lfj.7
+        for <soc@kernel.org>; Fri, 24 Feb 2023 05:52:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677243482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CXtEyT8xVIkUMApBSTQ3cYy66lfTrvRLYpoVJHa9vcs=;
-        b=fGNjMXdOa/2jFDtcv4zjh5C+rTTvUkujg/MH7jVU3TzF9pgNNfvHMmhe9KdoxBz/IP
-         nmztiOBlWTPhe8cRXO284AFl+WeBp8e9PutPukzpzZTijXvU5PcC9Nwy+uMv/Mg7/qtq
-         65O0QVE2iGRv7s6zI0/YqQm+oO4XGzzePhfEJTl4EHbLKkdZRyyrGgetPgQYcn5MyOt0
-         nWXkaJhYVsiaj+Q125hN1AqIJe9XEGJAPYQOZDSmCVkg9j/6QVnGvmRJ4xPlwhoxDCJb
-         vwEnSRVIkmlUamNSmoPcmYEFDgUuf7R29/rCGuSskTxzfp6gAWVsKMS24m6VaAWqb/kB
-         sQqQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+Xr3O6i29lV69WsLD6VpYUOFLcXVgAlt2IzXJInFCk=;
+        b=jNO1KwDSJqCEc/W2WlzuT/2azTYizSZstwDGtGNjXHL2sL0gqoSfBnJaQxzpe2GRCK
+         opQZGOy6hESQz0zJZXjQC4UHckKbP3xqhQ/hz30BN3Amd/jtzi/ra+LKYjwYkHwFiDHc
+         OszG46Oi7ov4zusmvtiU/pGderCoABwf75kKgklfhJyA6cG4YJ242B8I8YkM9rHpfpJk
+         QR5fUQ5ynZM0Yqx6kWjAqAetzQgieL/2U2IiSbFEMe7tJK5P7ZoLiAUzz/WDch6TyrZe
+         s9mgbNQGWpA2FiZww955UbH0VzBL7BJN19aTU9S83IhKvSa0jpuL4uvVU6Bey6pldFno
+         zpkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677243482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CXtEyT8xVIkUMApBSTQ3cYy66lfTrvRLYpoVJHa9vcs=;
-        b=UVVYFkpGzky6+/EZpHfDsu+87vjX0Rn0Zz9eYwimGL0WuWRc5w5g/fNzx318dYiuaa
-         V5/2HdZm9xfhaiQf/gViXQ2EHNa+HhQSfXrFpnPRsm/mzcnDTtqPWOTG081OBppZIpkz
-         Fo9iNMBANCkPZnVNohiYuT5ynFneevrCddLBtMTUsXcsm9vhtwL09p71DBMGihmtXsQP
-         mSdzAK1bjBBN1KZbQ4Y0s3bNlciwM1WK8xc3ptHjNhNTGQuaN3gnrjtwjo0MT/gUVBHT
-         Mw7I0kqByvwblWymEeN4OUGOkS0h8C9J8+mBqtu5RPlyRiCQxts0DoOlAKi2rq/PAOaR
-         fs5w==
-X-Gm-Message-State: AO0yUKVj1xV1PQny7mqjDE+pQt9OPcV39djGTerTQ54gZbfUokFZnh7O
-	qfaQvqvOD1ksT2LhEeyuVWc=
-X-Google-Smtp-Source: AK7set+YzXg/RfEEChGbQ+6UrrWMwrZYY/kX2hO/BsunvHndn5j3QyvNXnxK3qAajg7VWTkoh4nCsg==
-X-Received: by 2002:a17:902:d2cd:b0:19a:98fd:9c54 with SMTP id n13-20020a170902d2cd00b0019a98fd9c54mr19495973plc.35.1677243482019;
-        Fri, 24 Feb 2023 04:58:02 -0800 (PST)
-Received: from [192.168.1.39] (M014008005000.v4.enabler.ne.jp. [14.8.5.0])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b0019a74841c9bsm6409474pln.192.2023.02.24.04.57.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Feb 2023 04:58:01 -0800 (PST)
-Message-ID: <7d4a218d-8b8a-5a1d-eff8-e154bfde69be@gmail.com>
-Date: Fri, 24 Feb 2023 21:57:37 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] ARM: dts: mvebu: add device tree for IIJ SA-W2
- appliance
-Content-Language: en-US
-To: Andrew Lunn <andrew@lunn.ch>
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i+Xr3O6i29lV69WsLD6VpYUOFLcXVgAlt2IzXJInFCk=;
+        b=q1/LC+a5ExMzMS+gKp86gh3kHW59+TO+yVdAXLziaf0/OogY3JtI6W5l3kq+ev1HXc
+         RmtE3GfyPXd/2azRQsIbXzcZ2+r3bCh0LFzgkLQ/VGbYykXDG3vXxU3av71LdqQXpclV
+         MaE7iOBAQjW8MHw7BVU1LSTlUKF+rOYGuQNfNXWOtnquxn2TD9ne2oR0UIqajjBSulmx
+         mZewJUgxQLuYQqOQZV5em/YdyvLp6um2ZNR2euSJzqjtTJ8zY2208jThDW5lP1XQ304u
+         J5VjKdjOcug2S/nX2oLlQIhy7S/pd6h15F9e32L3OFBNqEVRxiWVFQa+U9FZ5nTP4mYC
+         ULcw==
+X-Gm-Message-State: AO0yUKVOqB63YuTihmmM3g31d1YwrRmy8UcpA8shOvF8/NoqFENUf5T5
+	5xrlhXW8HnbwbsoCeSz3J+OiYg==
+X-Google-Smtp-Source: AK7set8xXxdI+06ekAcUWHypyTwQ+4pUPS0xGGlEegPqF4Oq/adbE60aVGrb9W8V5cGLHpf3djLkYA==
+X-Received: by 2002:ac2:5333:0:b0:4d8:68f5:747b with SMTP id f19-20020ac25333000000b004d868f5747bmr5346274lfh.37.1677246756278;
+        Fri, 24 Feb 2023 05:52:36 -0800 (PST)
+Received: from fedora.. ([85.235.12.219])
+        by smtp.gmail.com with ESMTPSA id d5-20020ac244c5000000b004d2199ea23dsm1185811lfm.0.2023.02.24.05.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Feb 2023 05:52:35 -0800 (PST)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
- sebastian.hesselbarth@gmail.com, arnd@arndb.de, olof@lixom.net,
- soc@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230223132502.2045-1-musashino.open@gmail.com>
- <20230223132502.2045-2-musashino.open@gmail.com> <Y/d7gjqQCKKXMHqj@lunn.ch>
-From: INAGAKI Hiroshi <musashino.open@gmail.com>
-In-Reply-To: <Y/d7gjqQCKKXMHqj@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Valente <paolo.valente@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH] arm64: defconfig: Add IOSCHED_BFQ to the default configs
+Date: Fri, 24 Feb 2023 14:52:30 +0100
+Message-Id: <20230224135230.2295826-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Andrew,
+ARM64 systems are often memory constrained and more often than not
+use slow single-channel storage such as flash memory or MMC/SD-cards.
+For any interactive systems (such as mobile phones, tablets,
+chromebooks...) the BFQ I/O scheduler will be desireable.
 
-thank you for your reviews and detailed descriptions.
+Make sure the BFQ I/O scheduler is available on these systems.
 
-On 2023/02/23 23:43, Andrew Lunn wrote:
->> +		pcie {
->> +			status = "okay";
->> +
->> +			pcie@1,0 {
->> +				status = "okay";
->> +
->> +				/* Atheros AR9287 */
->> +				wifi@0,0 {
->> +					compatible = "pci168c,002e";
->> +					reg = <0000 0 0 0 0>;
->> +				};
->> +			};
->> +
->> +			pcie@3,0 {
->> +				status = "okay";
->> +
->> +				/* Qualcomm Atheros QCA9880 */
->> +				wifi@0,0 {
->> +					compatible = "qcom,ath10k";
->> +					reg = <0000 0 0 0 0>;
->> +				};
->> +			};
->> +		};
->> +	};
-> These are not wrong, but they are also not needed. PCI devices should
-> be discovered by enumeration, and you don't have any additional
-> properties here, or phandles pointing to these nodes.
->
-> I assume these are COTS wifi modules? By listing them here you are
-> restricting some flexibility. The OEM could for example swap the
-> modules around, and Linux would not care, but the DT would then be
-> wrong. Or you could have a device with a different module because it
-> is cheaper, and again, Linux would not care, but the DT would be
-> wrong.
+ARM (32), Loongarch, MIPS, m68k, UM and S390 has also enabled BFQ in
+their defconfigs, cf commit b495dfed706c4c5873c0dab8930ad6eb1d276a6c
+"um: Cleanup CONFIG_IOSCHED_CFQ" where the motivation is that
+it replaces the former CFQ scheduler.
 
-Got it. SA-W2 is not designed to allow users to swap cards under 
-normal use, but certainly things like you said can happen...
-I'll remove "wifi" nodes.
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Paolo Valente <paolo.valente@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+SoC maintainers: please apply this directly to the ARM64
+defconfig branch if we have consensus.
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- > I assume these are COTS wifi modules?
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 851e8f9be06d..503cc08cf112 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -126,6 +126,7 @@ CONFIG_CRYPTO_AES_ARM64_BS=m
+ CONFIG_JUMP_LABEL=y
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
++CONFIG_IOSCHED_BFQ=y
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ # CONFIG_COMPAT_BRK is not set
+ CONFIG_MEMORY_HOTPLUG=y
+-- 
+2.34.1
 
-Yes, those are the modules manufactured by Silex Technology, Inc. [1][2].
-
-[1]: https://www.silex.jp/products/wireless-module/sxpcegn.html
-[2]: https://www.silex.jp/products/wireless-module/sxpceac.html
-
->
->> +&usb0 {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pmx_usb_pins>;
->> +	status = "okay";
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +
->> +	/* SMSC USB2514B */
->> +	hub@1 {
->> +		compatible = "usb424,2514";
->> +		reg = <1>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		hub_port1: port@1 {
->> +			reg = <1>;
->> +			#trigger-source-cells = <0>;
->> +		};
->> +
->> +		hub_port2: port@2 {
->> +			reg = <2>;
->> +			#trigger-source-cells = <0>;
->> +		};
->> +	};
->> +};
-> Same comment as PCI. However, it is likely that the USB hub is
-> actually on the board, not a module, so it is a lot less likely to
-> change.
-
-Yes, that USB hub is on the PCB and wired to the SoC directly. But 
-I'll keep it in mind...
-
->
-> As i said, they are not wrong, so you don't need to remove them.
->
-> 	Andrew
->
-
-Regards,
-Hiroshi
