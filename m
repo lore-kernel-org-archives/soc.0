@@ -4,37 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7137BC7EE2E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54174C7EE30
 	for <soc@archiver.kernel.org>; Mon, 27 Feb 2023 13:50:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37CB5C433A8; Mon, 27 Feb 2023 13:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2000DC433D2;
+	id 2DD3CC433A4; Mon, 27 Feb 2023 13:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 168D8C4339B;
 	Mon, 27 Feb 2023 13:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1677505818;
-	bh=O2tTndmujFJUokf1mPiUGZtVphBiM8Ml+iIo2miIxgY=;
+	bh=F0cgqgIMxgXO0mw8zvXUkcDjwC5sV6otwKUr2sDG4jo=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Th3czmRKh/bgHHg87JZo+p6giSGGWt9EYCjZLLZVv7da4tSkAl9Rqvs+jVMxjQKLy
-	 23FNOAIMUCCUHs1Fa7pND8p13LdVhcxdFgePsk+Tiq5FpPAIXfnIZjJs2xBqX3ctDk
-	 QBp987bMy6CTfTepLDJSzySlQt7o6+9bgV6Gb3wx12h15QfbLvgYHqbJFIhfVlH5SC
-	 qxEUX8K5Q4GjWrZuY5bEFGFaVj0pe5Y14r0C+/PYPLjMfTh4O5N5RYtv1ppdHafJPj
-	 pCD2NczGp+YNAeEb+mZACunuSfdSo8g4NgMCs18EubIFsoSMtbG2o7ylk1I3ylJV1C
-	 OAWSeDMW8/cJA==
+	b=kvTZZQLUuuLyBD5kIrnpZ8IQ6VvY6VFPbBKGsffB/jIlGZbl5k0LgzYPaIrVJELT2
+	 ckTxJQOZ3FWaK+iKNx6ltSQO07trgPamvOz4aDMf1qAI0uWyQr4ON7o1lml5hOkJQu
+	 3T6bLRZrhyIXM71tZn2bYu0Eb4C5yb5mEQEQ2b7Pb9qGfz6gN9lmrdHDLxm5yGiGzQ
+	 Z0R/T+dvv9+5MoaR8zSa8rL5tcvcUHyNos0FiJri+IWmGgSwqkyvaRuVDHv98GmgV7
+	 JIXNyZ5dxVjAia0UIuuIPl++yA2GUnR6O5VFJb4K2MmYqupCWH9lLZRnK3dZSRUqid
+	 Whmq+hIS61Nwg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF693E524D3;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8FEAE21EC4;
 	Mon, 27 Feb 2023 13:50:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm64: defconfig: Fix unintentional disablement of PCI on
- i.MX
+Subject: Re: [PATCH] arm64: defconfig: Add IOSCHED_BFQ to the default configs
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167750581797.1456.12307474479462615888.git-patchwork-notify@kernel.org>
+ <167750581795.1456.13934614255166460464.git-patchwork-notify@kernel.org>
 Date: Mon, 27 Feb 2023 13:50:17 +0000
-References: <20230220-imx-pci-defconfig-v1-1-2210cf08340e@kernel.org>
-In-Reply-To: <20230220-imx-pci-defconfig-v1-1-2210cf08340e@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+References: <20230224135230.2295826-1-linus.walleij@linaro.org>
+In-Reply-To: <20230224135230.2295826-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -43,20 +42,19 @@ Hello:
 This patch was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 20 Feb 2023 19:09:45 +0000 you wrote:
-> A recent update to support PCI endpoint mode on i.MX platforms
-> unintentionally disabled PCI host support for i.MX in defconfig.  The
-> existing PCI_IMX6 was made a hidden option, selected by new options
-> PCI_IMX6_HOST (for the existing support) and PCI_IMX6_EP (for the
-> endpoint mode), but there has been no corresponding update to defconfig
-> so the PCI_IMX6 ends up getting disabled.  Switch defconfig to
-> PCI_IMX6_HOST to preserve the existing functionality.
+On Fri, 24 Feb 2023 14:52:30 +0100 you wrote:
+> ARM64 systems are often memory constrained and more often than not
+> use slow single-channel storage such as flash memory or MMC/SD-cards.
+> For any interactive systems (such as mobile phones, tablets,
+> chromebooks...) the BFQ I/O scheduler will be desireable.
+> 
+> Make sure the BFQ I/O scheduler is available on these systems.
 > 
 > [...]
 
 Here is the summary with links:
-  - arm64: defconfig: Fix unintentional disablement of PCI on i.MX
-    https://git.kernel.org/soc/soc/c/0cd5780eb625
+  - arm64: defconfig: Add IOSCHED_BFQ to the default configs
+    https://git.kernel.org/soc/soc/c/e505e6bf4205
 
 You are awesome, thank you!
 -- 
