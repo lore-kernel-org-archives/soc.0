@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F102C64EC4
-	for <soc@archiver.kernel.org>; Fri,  3 Mar 2023 17:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E7CBC61DA3
+	for <soc@archiver.kernel.org>; Fri,  3 Mar 2023 23:30:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2B60CC433EF; Fri,  3 Mar 2023 17:12:28 +0000 (UTC)
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	id DB9DDC433D2; Fri,  3 Mar 2023 23:30:45 +0000 (UTC)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 76420C433D2;
-	Fri,  3 Mar 2023 17:12:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76420C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 0DD0DC433EF;
+	Fri,  3 Mar 2023 23:30:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0DD0DC433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677863546; x=1709399546;
+  t=1677886244; x=1709422244;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7gT1uRRS/s2rb1jiK2Tpq+ml2NdiLvR0qfU6wXGpI3Q=;
-  b=REXKn6HqEWfixAFFNaOOTFkq/FvVcJSOcZyJlbDGM//0IZLSWpE0COFp
-   FASHdJEP8F0kX8Y3iaX/GtC93e4y+29c8RS55qUm3Lapg4EaC5ADlROQ6
-   04XmHqg7Pp9JNApy4yR4xvsMpYUi62z9Up2YdEm29T2h+RlKpPI47WhWR
-   RCaVTWVse5qVTTdM6Wv94Gg+cENqaMd21+345sBpiDKT09klkfg58RIq3
-   I78AZdktqZNDsMP2InfHmdHrwRq0Qd607OlOkJdxRpx7bsjcRvWlmTfPV
-   6Ugl8nzYJ4UMeUEbxrJmaT42O4JRYl0lBTWNuGMvwaOE+Q7jtCvqHOLQS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="315497299"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="315497299"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 09:12:25 -0800
+  bh=MsnQ6U1QZT1glkU3UUvrlM2HfAZTPpjEe/eFE0RMVB4=;
+  b=ikOZiH3srptUJ5KTbBmk0fhv/QKlyvDuLjlpzD+ktMM4HWW1AvISfOBO
+   Ww/MlIj9ri4dt2lVRJ0NLksZpjuZlaYTSWYxfq9djhlywYa/OJJjzYrKD
+   NYvAJ/6rJActWFyevrz3jUXZKNCRZVLmF9lE1NFKT4mJ30dv/Q27vebLl
+   Eu4O4mei57TQQVeacgQpeqEvXMoUxe1KirNqQ7nJHPuv5gnviA5B6Y7CT
+   cHYGOQ2qhbjROhvd2iJZnzICiPEqHSFlfVFUETE5Ms1KD+cD0hNt38y0c
+   hxhULZbLOPtB9OsvoGEzLpgjzVg17klZbPVp9ltFvlhxtq5YbTnbqK0ZS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332663670"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="332663670"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 15:30:34 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="668731759"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="668731759"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="799381485"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="799381485"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 03 Mar 2023 09:12:20 -0800
+  by orsmga004.jf.intel.com with ESMTP; 03 Mar 2023 15:30:28 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pY8x9-0001ZQ-1k;
-	Fri, 03 Mar 2023 17:12:19 +0000
-Date: Sat, 4 Mar 2023 01:11:46 +0800
+	id 1pYEr6-0001iy-0d;
+	Fri, 03 Mar 2023 23:30:28 +0000
+Date: Sat, 4 Mar 2023 07:30:01 +0800
 From: kernel test robot <lkp@intel.com>
 List-Id: <soc.lore.kernel.org>
 To: David Wang <tomato1220@gmail.com>, arnd@arndb.de, olof@lixom.net,
@@ -56,13 +56,13 @@ Cc: oe-kbuild-all@lists.linux.dev, avifishman70@gmail.com,
 	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
 	fran.hsu@quantatw.com, David Wang <davidwang@quantatw.com>
-Subject: Re: [PATCH 1/7] ARM: dts: nuvoton: Add Quanta GIS BMC Device Tree
-Message-ID: <202303040046.YS2c6Prp-lkp@intel.com>
-References: <20230303063435.803097-1-davidwang@quantatw.com>
+Subject: Re: [PATCH 2/7] ARM: dts: nuvoton: Add Quanta GSZ BMC Device Tree
+Message-ID: <202303040612.codF6aYF-lkp@intel.com>
+References: <20230303063435.803097-2-davidwang@quantatw.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303063435.803097-1-davidwang@quantatw.com>
+In-Reply-To: <20230303063435.803097-2-davidwang@quantatw.com>
 
 Hi David,
 
@@ -76,17 +76,17 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/David-Wang/ARM-dts-nuvoton-Add-Quanta-GSZ-BMC-Device-Tree/20230303-143845
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230303063435.803097-1-davidwang%40quantatw.com
-patch subject: [PATCH 1/7] ARM: dts: nuvoton: Add Quanta GIS BMC Device Tree
-config: arm-randconfig-r046-20230302 (https://download.01.org/0day-ci/archive/20230304/202303040046.YS2c6Prp-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20230303063435.803097-2-davidwang%40quantatw.com
+patch subject: [PATCH 2/7] ARM: dts: nuvoton: Add Quanta GSZ BMC Device Tree
+config: arm-randconfig-r046-20230302 (https://download.01.org/0day-ci/archive/20230304/202303040612.codF6aYF-lkp@intel.com/config)
 compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/35df7d319f11bec38f67ec9b341d8b9c4d51c028
+        # https://github.com/intel-lab-lkp/linux/commit/582e8c7ca5de26f639e46b839d9b4c6cbf7e43cf
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review David-Wang/ARM-dts-nuvoton-Add-Quanta-GSZ-BMC-Device-Tree/20230303-143845
-        git checkout 35df7d319f11bec38f67ec9b341d8b9c4d51c028
+        git checkout 582e8c7ca5de26f639e46b839d9b4c6cbf7e43cf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
@@ -94,25 +94,25 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303040046.YS2c6Prp-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303040612.codF6aYF-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:204.1-6 Label or path emc0 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:212.1-4 Label or path mc not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:220.1-7 Label or path ohci1 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:224.1-5 Label or path aes not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:228.1-5 Label or path sha not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:232.1-6 Label or path udc5 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:236.1-6 Label or path udc6 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:240.1-6 Label or path udc7 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:244.1-6 Label or path udc8 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:248.1-6 Label or path udc9 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:252.1-9 Label or path pcimbox not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:369.1-5 Label or path otp not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:387.1-10 Label or path lpc_host not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gis.dts:1059.1-7 Label or path peci0 not found
->> FATAL ERROR: Syntax error parsing input tree
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:223.1-6 Label or path emc0 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:231.1-4 Label or path mc not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:239.1-7 Label or path ohci1 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:243.1-5 Label or path aes not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:247.1-5 Label or path sha not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:251.1-6 Label or path udc5 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:255.1-6 Label or path udc6 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:259.1-6 Label or path udc7 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:263.1-6 Label or path udc8 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:267.1-9 Label or path pcimbox not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:271.1-8 Label or path sdhci0 not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:366.1-5 Label or path otp not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:384.1-10 Label or path lpc_host not found
+>> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:1506.1-7 Label or path peci0 not found
+   FATAL ERROR: Syntax error parsing input tree
 
 -- 
 0-DAY CI Kernel Test Service
