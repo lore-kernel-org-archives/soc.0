@@ -1,134 +1,106 @@
-Return-Path: <SRS0=qefb=66=arndb.de=arnd@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A085BC61DA4
-	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 12:07:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 989A5C678D4
+	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 15:34:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 62CA7C4339C; Mon,  6 Mar 2023 12:07:36 +0000 (UTC)
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 426A1C433D2;
-	Mon,  6 Mar 2023 12:07:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 426A1C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id DB22A5C0306;
-	Mon,  6 Mar 2023 07:07:32 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 06 Mar 2023 07:07:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1678104452; x=1678190852; bh=mwc7EIuNo/MyjfHlnoYb4hr47GPIMP//VDK
-	N9qy5o3w=; b=sOsIioPkIoTlw/AhoEbbn92CM8ytuVYhAK4AqH1ZfkJ4IKgj+e1
-	GVZbZScRbf1AyDzUOc5MxXn8Ps7R2g7B52QNvjKLpQivb8jC4vDtrxO7l/wAMApJ
-	gnEPEqvmDUPCiLfovBf9UO6SAwLZucWwEOI0nfe5pVkoy3ekC8AISxMKsGeulRxE
-	vZkhKmJBoP+1/AyebeAeZSxK4PU+YjNnLKDHdDhY/Acm10imOuyninyfR5rSJJiZ
-	TkOLvGq1i8YNmC4+FHf26qfu+NF8uOhugL+d8cWlagP//+QpdSmdVCeM8hQ0YQgO
-	/oJV4cauHONDS2e81ujQOW5ld1/RQfNuT2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1678104452; x=1678190852; bh=mwc7EIuNo/MyjfHlnoYb4hr47GPIMP//VDK
-	N9qy5o3w=; b=KbBPICOviy1ta5mkDBkc7dt4W6IBMk+Mx4HtK3UvpLRSjnp7d2S
-	48AqcxienxXhPJVJ6K4T6DHkkl5omxqoRmH3wpyc0YdlM7mxiESA/xWHK2WCcd6u
-	Z8AP4XgSOjr++aYpCqsGe4V+UEnGy3tHJAvt0T0bY8auApAgGUYg/OSHkMZgePiw
-	ZfopmnuKU1qqOZ2u5w8C7FBROyvuYXKR0KKBCk3k6VF5EuLZ2GiKxFY+1rpVtrvi
-	ryZNlDm9I61SVOGru4KTorJaCtQXg/CQidTDZ+ZGJ84VLpMhTH+jBV75ktaf0qBS
-	9ohfKFzo3t3x9J+bkOwvnvXIlbRKYsd1Ybg==
-X-ME-Sender: <xms:hNcFZM2kPPOQou0beoIZVboKuGd65hFIXT_QVGoirHNNZCA9xgJvnA>
-    <xme:hNcFZHF11AfjkPhFKRqKg1yGOYLVikaZfgQS2Vn3xtBict6ySLT7BOxXapLnqNDaM
-    vkjQkgPaULQEYsTBu0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:hNcFZE7fhXD3h1BUbtr2q8z6Py5FB10iBXBZK3qDFeFFtLsC1tUrMQ>
-    <xmx:hNcFZF2Ua_TjD3C5UeCGpyLldQhj7H7--77l_4Ik4iiRpwsWPw_aBQ>
-    <xmx:hNcFZPF9GWF5Jir3yoxQJ1CCWvlYiSkHbHP8ctFz3FolX30_MY8i5A>
-    <xmx:hNcFZET4IfmY4U9aPjuxGdcSdQRHXlsUiV0V4rff3SkTQReOzoDy7A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 395A6B60086; Mon,  6 Mar 2023 07:07:32 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <40b324af-3483-4b3d-b65a-a97944aa4a70@app.fastmail.com>
-In-Reply-To: 
- <CAAhV-H7Nt+OKAnN1GsYCZCb2SUa3r7zRFRsy3fjMX+TAp1_7Uw@mail.gmail.com>
-References: <20230306032854.254700-1-dzm91@hust.edu.cn>
- <73cd36b6-c6ee-5c55-e2e1-31cae2f712f7@loongson.cn>
- <CAAhV-H7Nt+OKAnN1GsYCZCb2SUa3r7zRFRsy3fjMX+TAp1_7Uw@mail.gmail.com>
-Date: Mon, 06 Mar 2023 13:07:10 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
+	id 4C447C4339E; Mon,  6 Mar 2023 15:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F45C433D2;
+	Mon,  6 Mar 2023 15:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678116871;
+	bh=ouELPa2aI3ivJYhsoRIXEPjaBwaOw6IgYkQLHxSAZ+g=;
+	h=From:Date:Subject:List-Id:To:Cc:From;
+	b=Z87b9gaB7bNVwA1FHe0FEiDWbXkI8LxmXUqSw6Rt+cQt2PAmoQkEBgWDTnJ7fq14L
+	 FFhlTVOy74+m/RhbuFQml9BEQgPm2uLbg81YAOc4G5ZT7TXTsm+XMwHqrror8CCRL6
+	 m8LNn0VMvAG8fPHOispMTz6mrQ3eANh3swu/R1+PF+UT1tFf7RthM+g5P9Wa1R0VJA
+	 xkFs+cq4TlOtVhReKUmMEu95sKQ6Zw3mrpHGGo+c8yBKyILWDKX5jEwgtFlH6en2d1
+	 LTRdPbxG3IuQZ5PEBDpBYPExDehwEYTtHmzKjCN9+RYj4OUvoDdJuQ0m6Lt2wNiwZL
+	 YrQXxItXhkfzA==
+From: Mark Brown <broonie@kernel.org>
+Date: Mon, 06 Mar 2023 15:34:21 +0000
+Subject: [PATCH] arm64: virtconfig: Further shrink the config
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230221-arm64-virtconfig-slim-v1-1-604b64be7ec3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPwHBmQC/x2NywqDQAwAf0VybmCNZQ/9ldLDPqIGuqskIgXx3
+ 7t6nIFhDjBWYYNXd4DyLiZLbdA/OkhzqBOj5MZAjgZH1GPQ4p+4i25pqaNMaF8pSBxdzi54nz2
+ 0NgZjjBpqmq96K+tlV+VRfvft/TnPP7EdQYV9AAAA
 List-Id: <soc.lore.kernel.org>
-To: "Huacai Chen" <chenhuacai@kernel.org>, "Yinbo Zhu" <zhuyinbo@loongson.cn>,
- soc@kernel.org
-Cc: "Dongliang Mu" <dzm91@hust.edu.cn>, loongarch@lists.linux.dev
-Subject: Re: [PATCH v3] drivers: loongson: fix memory leak in loongson2_guts_probe
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bd1bf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1763; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ouELPa2aI3ivJYhsoRIXEPjaBwaOw6IgYkQLHxSAZ+g=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBggEm4/VesX3gTj1spAqAJNRYOxI7FH6aIQJ7YC1
+ XY53bLKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAYIBAAKCRAk1otyXVSH0AjyB/
+ 9VSTXcFvWyNM06zfuxfinVvMBkScBb18GM7E+AGPB4w+zETs3G67OkhmUIHx10BXIZvSVq2Piwf8n7
+ 70IyDrWwkf5uHW0McAybvnBa6vmdtospNOT6aY9jztnxrJtSIuStfTX+dH5O9JtCAaS/LBFl343fKz
+ QkEv56YRLA0SqD8bs8klNPXRSQLhTTFKG3QvmMjx857D1xCXeup8Rd5FbJHdPPQsL4KEe8rjh+Ig4e
+ SAouTTrOWB9iu/HdiLSZDUQ+MCMQ5hT5i5DKah56WKwgCoH/8Cuo9Sx7RG8jCONTar5zwpusbLpOCk
+ RM54l4aMsMMrOBhbahjp5DOsd0vpOH
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon, Mar 6, 2023, at 11:01, Huacai Chen wrote:
-> CC + Arnd&SOC list
+After disabling platform support there's still some more pruning we can
+do to the virtconfig size, there are a number of drivers and subsystems
+which are not likely to be useful on mach-virt and so can be disabled in
+order to further improve build times. Let's do so, noting that having PCI
+device assignment means that PCI devices might potentially appear.
 
-Note: adding me on Cc is not the best way to get me to
-apply patches through the SoC tree, as it's not obvious
-if you just want a review or asking for it to be
-integrated.
+This is just an initial manual passthrough, there will be further savings
+available especially if we take a much more focused approach.
 
-My preferred way would be to have a pull request or a set
-of patches that you send (with your Signed-off-by added when
-forwarding) to soc@kernel.org, with Cc to the loongarch list
-and lkml. This ends up in the patchwork system at
-https://patchwork.kernel.org/project/linux-soc/list/ and
-guarantees that I'll get to it eventually.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/configs/virt.config | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-When you start sending patches for arch/loongarch/boot/dts,
-you can send them the same way as drivers/soc/ patches, but
-please keep the two sets separate, as I keep them in separate
-branches of the soc tree as well.
+diff --git a/arch/arm64/configs/virt.config b/arch/arm64/configs/virt.config
+index 6ef0a739717f..6865d54e68f8 100644
+--- a/arch/arm64/configs/virt.config
++++ b/arch/arm64/configs/virt.config
+@@ -1,3 +1,7 @@
++#
++# Base options for platforms
++#
++
+ # CONFIG_ARCH_ACTIONS is not set
+ # CONFIG_ARCH_SUNXI is not set
+ # CONFIG_ARCH_ALPINE is not set
+@@ -37,3 +41,20 @@
+ # CONFIG_ARCH_VISCONTI is not set
+ # CONFIG_ARCH_XGENE is not set
+ # CONFIG_ARCH_ZYNQMP is not set
++
++#
++# Subsystems which can't be used in mach-virt
++#
++# CONFIG_CHROME_PLATFORMS is not set
++# CONFIG_EXTCON is not set
++# CONFIG_IIO is not set
++# CONFIG_MTD is not set
++# CONFIG_NEW_LEDS is not set
++# CONFIG_PWM is not set
++# CONFIG_REGULATOR is not set
++# CONFIG_SLIMBUS is not set
++# CONFIG_SND_SOC is not set
++# CONFIG_SOUNDWIRE is not set
++# CONFIG_SPI is not set
++# CONFIG_SURFACE_PLATFORMS is not set
++# CONFIG_THERMAL is not set
 
-> On Mon, Mar 6, 2023 at 11:48=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn=
-> wrote:
->> Tested-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>
->> =E5=9C=A8 2023/3/6 =E4=B8=8A=E5=8D=8811:28, Dongliang Mu =E5=86=99=E9=
-=81=93:
->> > drivers/soc/loongson/loongson2_guts.c:150 loongson2_guts_probe()
->> > warn: 'guts->regs' from ioremap() not released on lines: 131,135,13=
-9,143.
->> >
->> > Fix this by modifying ioremap to devm_ioremap.
->> >
->> > Note that, this patch is not tested due to the loongson architectur=
-e.
->> >
->> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230221-arm64-virtconfig-slim-2eb0dd0a66d6
 
-The patch looks good to me,
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-
->      res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -     guts->regs =3D ioremap(res->start, res->end - res->start + 1);
-> +     guts->regs =3D devm_ioremap(dev, res->start, resource_size(res));
-
-The best way to write this is probably using
-devm_platform_ioremap_resource() to combined those two lines into one,
-but either way is correct.
-
-     Arnd
