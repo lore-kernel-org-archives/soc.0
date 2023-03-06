@@ -1,88 +1,134 @@
-Return-Path: <chenhuacai@kernel.org>
+Return-Path: <SRS0=qefb=66=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1969C61DA4
-	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 10:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A085BC61DA4
+	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 12:07:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 69E8CC4339E; Mon,  6 Mar 2023 10:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EECEC433EF
-	for <soc@kernel.org>; Mon,  6 Mar 2023 10:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678096896;
-	bh=MffwcC6int9JSMK1YiF0OPb3x4WeVt12Vxv4iGTYbWI=;
-	h=References:In-Reply-To:From:Date:Subject:List-Id:To:Cc:From;
-	b=MTYrwTcdnlV6MzHAwraKILQezBv4wTxGTITjTGdSxgVTJqaCnq8tH1LNtNtTm06VD
-	 rafho/znxBOAuxRkpOERWTAG3TRBdddjBlRm11X056vmZZ9m9NcGlzFC63CPNJ9eFl
-	 gw+Ada6e6aSVJCGSxYH3JRNE6SyHYCFzn+Igbx6xO+ca38uFihQtoabE6Bk4MzXDjI
-	 I3S2R+WsenKPVbHMLk7APXVTO2boR+Him/WL/3FY3KBsTdykgosOvbJdk+0FHEcQB7
-	 3EwAXERK7dGSPusW+sqawkfGhB+xgkkhrZYOvyy9DbKk/dNPDicyxwfxZYHyR2FwCh
-	 SOAnMLiThFz+w==
-Received: by mail-ed1-f42.google.com with SMTP id o12so36009130edb.9
-        for <soc@kernel.org>; Mon, 06 Mar 2023 02:01:36 -0800 (PST)
-X-Gm-Message-State: AO0yUKXjReXgMNwJrTk8sVdaY5haeoLugXTLADpVMLVXkvhHMAcH+F7w
-	rMUgj5I7Q14zx24OS7AXvq21fiLd2UP4JOfIoiE=
-X-Google-Smtp-Source: AK7set/A0Tbz32X15Ac3Ku9kHPYy93OKJY6xsIGZIPixma6k4WjDXtebdvGjuaum1GSwTQugxJrH+ZrxIkugk1LHk0c=
-X-Received: by 2002:a17:906:a14:b0:8b2:d30:e728 with SMTP id
- w20-20020a1709060a1400b008b20d30e728mr4877908ejf.1.1678096894553; Mon, 06 Mar
- 2023 02:01:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20230306032854.254700-1-dzm91@hust.edu.cn> <73cd36b6-c6ee-5c55-e2e1-31cae2f712f7@loongson.cn>
-In-Reply-To: <73cd36b6-c6ee-5c55-e2e1-31cae2f712f7@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 6 Mar 2023 18:01:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7Nt+OKAnN1GsYCZCb2SUa3r7zRFRsy3fjMX+TAp1_7Uw@mail.gmail.com>
-Message-ID: <CAAhV-H7Nt+OKAnN1GsYCZCb2SUa3r7zRFRsy3fjMX+TAp1_7Uw@mail.gmail.com>
-Subject: Re: [PATCH v3] drivers: loongson: fix memory leak in loongson2_guts_probe
+	id 62CA7C4339C; Mon,  6 Mar 2023 12:07:36 +0000 (UTC)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 426A1C433D2;
+	Mon,  6 Mar 2023 12:07:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 426A1C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id DB22A5C0306;
+	Mon,  6 Mar 2023 07:07:32 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 06 Mar 2023 07:07:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1678104452; x=1678190852; bh=mwc7EIuNo/MyjfHlnoYb4hr47GPIMP//VDK
+	N9qy5o3w=; b=sOsIioPkIoTlw/AhoEbbn92CM8ytuVYhAK4AqH1ZfkJ4IKgj+e1
+	GVZbZScRbf1AyDzUOc5MxXn8Ps7R2g7B52QNvjKLpQivb8jC4vDtrxO7l/wAMApJ
+	gnEPEqvmDUPCiLfovBf9UO6SAwLZucWwEOI0nfe5pVkoy3ekC8AISxMKsGeulRxE
+	vZkhKmJBoP+1/AyebeAeZSxK4PU+YjNnLKDHdDhY/Acm10imOuyninyfR5rSJJiZ
+	TkOLvGq1i8YNmC4+FHf26qfu+NF8uOhugL+d8cWlagP//+QpdSmdVCeM8hQ0YQgO
+	/oJV4cauHONDS2e81ujQOW5ld1/RQfNuT2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1678104452; x=1678190852; bh=mwc7EIuNo/MyjfHlnoYb4hr47GPIMP//VDK
+	N9qy5o3w=; b=KbBPICOviy1ta5mkDBkc7dt4W6IBMk+Mx4HtK3UvpLRSjnp7d2S
+	48AqcxienxXhPJVJ6K4T6DHkkl5omxqoRmH3wpyc0YdlM7mxiESA/xWHK2WCcd6u
+	Z8AP4XgSOjr++aYpCqsGe4V+UEnGy3tHJAvt0T0bY8auApAgGUYg/OSHkMZgePiw
+	ZfopmnuKU1qqOZ2u5w8C7FBROyvuYXKR0KKBCk3k6VF5EuLZ2GiKxFY+1rpVtrvi
+	ryZNlDm9I61SVOGru4KTorJaCtQXg/CQidTDZ+ZGJ84VLpMhTH+jBV75ktaf0qBS
+	9ohfKFzo3t3x9J+bkOwvnvXIlbRKYsd1Ybg==
+X-ME-Sender: <xms:hNcFZM2kPPOQou0beoIZVboKuGd65hFIXT_QVGoirHNNZCA9xgJvnA>
+    <xme:hNcFZHF11AfjkPhFKRqKg1yGOYLVikaZfgQS2Vn3xtBict6ySLT7BOxXapLnqNDaM
+    vkjQkgPaULQEYsTBu0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:hNcFZE7fhXD3h1BUbtr2q8z6Py5FB10iBXBZK3qDFeFFtLsC1tUrMQ>
+    <xmx:hNcFZF2Ua_TjD3C5UeCGpyLldQhj7H7--77l_4Ik4iiRpwsWPw_aBQ>
+    <xmx:hNcFZPF9GWF5Jir3yoxQJ1CCWvlYiSkHbHP8ctFz3FolX30_MY8i5A>
+    <xmx:hNcFZET4IfmY4U9aPjuxGdcSdQRHXlsUiV0V4rff3SkTQReOzoDy7A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 395A6B60086; Mon,  6 Mar 2023 07:07:32 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <40b324af-3483-4b3d-b65a-a97944aa4a70@app.fastmail.com>
+In-Reply-To: 
+ <CAAhV-H7Nt+OKAnN1GsYCZCb2SUa3r7zRFRsy3fjMX+TAp1_7Uw@mail.gmail.com>
+References: <20230306032854.254700-1-dzm91@hust.edu.cn>
+ <73cd36b6-c6ee-5c55-e2e1-31cae2f712f7@loongson.cn>
+ <CAAhV-H7Nt+OKAnN1GsYCZCb2SUa3r7zRFRsy3fjMX+TAp1_7Uw@mail.gmail.com>
+Date: Mon, 06 Mar 2023 13:07:10 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: zhuyinbo <zhuyinbo@loongson.cn>, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>
-Cc: Dongliang Mu <dzm91@hust.edu.cn>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+To: "Huacai Chen" <chenhuacai@kernel.org>, "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+ soc@kernel.org
+Cc: "Dongliang Mu" <dzm91@hust.edu.cn>, loongarch@lists.linux.dev
+Subject: Re: [PATCH v3] drivers: loongson: fix memory leak in loongson2_guts_probe
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-CC + Arnd&SOC list
+On Mon, Mar 6, 2023, at 11:01, Huacai Chen wrote:
+> CC + Arnd&SOC list
 
-On Mon, Mar 6, 2023 at 11:48=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> wro=
-te:
->
-> Tested-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->
-> =E5=9C=A8 2023/3/6 =E4=B8=8A=E5=8D=8811:28, Dongliang Mu =E5=86=99=E9=81=
-=93:
-> > drivers/soc/loongson/loongson2_guts.c:150 loongson2_guts_probe()
-> > warn: 'guts->regs' from ioremap() not released on lines: 131,135,139,14=
-3.
-> >
-> > Fix this by modifying ioremap to devm_ioremap.
-> >
-> > Note that, this patch is not tested due to the loongson architecture.
-> >
-> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-> > ---
-> > v2->v3: change res->end - res->start + 1 to resource_size(res)
-> > v1->v2: instead of modifying error handling code, directly change
-> > ioremap to devm_ioremap.
-> > ---
-> >   drivers/soc/loongson/loongson2_guts.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongs=
-on/loongson2_guts.c
-> > index bace4bc8e03b..ffee5a55a985 100644
-> > --- a/drivers/soc/loongson/loongson2_guts.c
-> > +++ b/drivers/soc/loongson/loongson2_guts.c
-> > @@ -107,7 +107,7 @@ static int loongson2_guts_probe(struct platform_dev=
-ice *pdev)
-> >       guts->little_endian =3D of_property_read_bool(np, "little-endian"=
-);
-> >
-> >       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > -     guts->regs =3D ioremap(res->start, res->end - res->start + 1);
-> > +     guts->regs =3D devm_ioremap(dev, res->start, resource_size(res));
-> >       if (IS_ERR(guts->regs))
-> >               return PTR_ERR(guts->regs);
-> >
->
->
+Note: adding me on Cc is not the best way to get me to
+apply patches through the SoC tree, as it's not obvious
+if you just want a review or asking for it to be
+integrated.
+
+My preferred way would be to have a pull request or a set
+of patches that you send (with your Signed-off-by added when
+forwarding) to soc@kernel.org, with Cc to the loongarch list
+and lkml. This ends up in the patchwork system at
+https://patchwork.kernel.org/project/linux-soc/list/ and
+guarantees that I'll get to it eventually.
+
+When you start sending patches for arch/loongarch/boot/dts,
+you can send them the same way as drivers/soc/ patches, but
+please keep the two sets separate, as I keep them in separate
+branches of the soc tree as well.
+
+> On Mon, Mar 6, 2023 at 11:48=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn=
+> wrote:
+>> Tested-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>
+>> =E5=9C=A8 2023/3/6 =E4=B8=8A=E5=8D=8811:28, Dongliang Mu =E5=86=99=E9=
+=81=93:
+>> > drivers/soc/loongson/loongson2_guts.c:150 loongson2_guts_probe()
+>> > warn: 'guts->regs' from ioremap() not released on lines: 131,135,13=
+9,143.
+>> >
+>> > Fix this by modifying ioremap to devm_ioremap.
+>> >
+>> > Note that, this patch is not tested due to the loongson architectur=
+e.
+>> >
+>> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+
+The patch looks good to me,
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+>      res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -     guts->regs =3D ioremap(res->start, res->end - res->start + 1);
+> +     guts->regs =3D devm_ioremap(dev, res->start, resource_size(res));
+
+The best way to write this is probably using
+devm_platform_ioremap_resource() to combined those two lines into one,
+but either way is correct.
+
+     Arnd
