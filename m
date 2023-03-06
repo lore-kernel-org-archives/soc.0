@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A100C64EC4
-	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 17:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C340C61DA4
+	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 17:23:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 02CD9C433A0; Mon,  6 Mar 2023 17:23:44 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	id E0B0CC433A1; Mon,  6 Mar 2023 17:23:44 +0000 (UTC)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 04ADCC4339B;
-	Mon,  6 Mar 2023 17:23:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 04ADCC4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id 69FCDC433EF;
+	Mon,  6 Mar 2023 17:23:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 69FCDC433EF
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
 Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
  (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M3lkT-1pYxZQ0Hqd-000tYL; Mon, 06 Mar 2023 18:23:15 +0100
+ 1MfYDO-1qFC5C1a8W-00g1vq; Mon, 06 Mar 2023 18:23:14 +0100
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -40,55 +40,54 @@ Cc: linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org,
 	Stefan Wahren <stefan.wahren@chargebyte.com>,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 4/8] dt-bindings: iio: st-sensors: Add IIS328DQ accelerometer
-Date: Mon,  6 Mar 2023 18:22:45 +0100
-Message-Id: <20230306172249.74003-5-stefan.wahren@i2se.com>
+Subject: [PATCH 3/8] w1: ds2482: add i2c id for ds2484
+Date: Mon,  6 Mar 2023 18:22:44 +0100
+Message-Id: <20230306172249.74003-4-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230306172249.74003-1-stefan.wahren@i2se.com>
 References: <20230306172249.74003-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:wQRPex7XRzipPrnANRDADxZJE2vb54rgHl+nepAI703ge7CdZAd
- wBQQEv8D5RoFYWvTcdUDp8/wxCc0OVffAnl6LIf8bIjT/OQ5+j2PMyqSTNjOpeqI0rL6+23
- 2oT0eaxJKFcb5uHJtU9XR1Or0NwKNLIyEGEO7mgrjLURo94lhq0Aj+oKQK50DaIlPh8reIr
- 1RHw7cZPZfig5/B+kzmEw==
-UI-OutboundReport: notjunk:1;M01:P0:2sDwh7PkhG8=;M3XqNZ4rhms1Stj2/5vNtVLQwfl
- kpHEE1eayt996RXZyq/JLFEzualTgBHZrx1WVkoHAKuygRw5S4UzSLVS0XEurlHe8yzT9IAyR
- hvCKZV2FbGrjkWYwz+gDOh8ltdg4po0XQiMVPFjs1isB6MBpbB8QzmbqDUvVyr0DoxZtYwVsW
- dw9DAeMwukSI1qw6CIBeuPO/qwWeZKbpgppuDIOyphGOKJWdUnJlsWG+lCupO8342jMkzFanc
- ahDaqMr/hrmxolDgHzB+43q60Hf1KZimaY1if44ByDm+E2vZd6uTvlte7jHyjA+yw6VGFvPNg
- kcQqzxLhjF/bWK4mS/uUrEs61oZpX9zHKihsQfzR7FKr6CLtTrUwcerZsd5ZIgQ6nJCDw+xc5
- 70FK0567vr6bQkHcXBDdr0ut8FdSXoDzrh2wdRfT3Rob+DAXKFIQSihlITWj4WsGCCULDzEp8
- hCgQ0882ndnYUE/rCHk931oTr0dih4Wi6gEe/9kpYAS0VktAcjB1LZa3KxyKdvjxiX3q2vSnx
- 9MycMde1j9gBZo4myRecY43SbnhiExxOqfdhIaZ9WDMA84SD64vF+0gNSKWXwayvv/Hu0vrKv
- RUgYHOKmZZh7+C/Cl3RKF4H7R8OmggB7mhDxTEmRVZEcU9CTpGsYc7vF7aVVUg+rLOMrmSZ+r
- +pqdM76w4Jfb4+UO7fb5ritG4Q0Pi9a2H9YnsKMQ91Yh3Azq8213XjNKonxpWG0fMhQyqgE1K
- 04rjKx7D2xjcRUJdx5jHwBF/P4nebMydA==
+X-Provags-ID: V03:K1:FpRTpt2ZzY6mienThTEbNRfHWBNdsZCyFr8kQjvCTI+RpIK2Uwa
+ bnunZRwMmRHkOJxcVfa/1K6T4N0nJojbL4G8dF+v9dhYAX7gEj+4BQrOEQQnqs/7QZZLXdp
+ m9eiMTBOWwcZ4/8bpDI4HF5dfcn+KrCIQxrE7HzqYo6SQo0Yjwt5d/ilrrCi0hpgqS9+BQJ
+ f3hyNkJPRL1xpa8bEVriw==
+UI-OutboundReport: notjunk:1;M01:P0:Ia63qqu8ctE=;jrIe9L5aIyXvRzwzWne8iCjw4aU
+ YhUqVmPr5iqvpuP3nwi9a/o1yNPb3wlOhqsNSOvADOChVvsBNn/w6NXN8MZ5o7edDCR9D+Soo
+ q4DH+bK5IWVay2tUMc2qm48bOImDtvG/q8tnSI+fIzI/3B+wZYBXGnUaa1U0+fzrPhjzexSjx
+ ttomjOHibxbjeGuTOSJSj/LyUC06vUUs5Do2W1ujEanU/4MBBtz3hjXWK6n++YIch1YYlFx2G
+ wIgt+7uwfvrmxUVUVl3sHIhJCXnLGtP4KrssOciPkr3zyF7592JDSeF6inFn+Jy/EOQ0ItxMf
+ zUrqAHFRzsXQt5N6yCJvvjF9IjmE+ml9gwtOMYzSs1hS4UZSPIVO5Q6N8ysFLWt3/Xi8nV/qj
+ jFQDmyaATHEQd11Jgg9CkDb7TmkbdqLnS7fEyzGR4ZBzRyBMOuqo+OiKbhT9kv3qQIp8jPe9P
+ 9IfEtwmDpqbzZ5oPGvhpPpi9UqRoQVxcA+mh4J2Jl/io0d/YXEDLrTzzsnBLGYHYyZdhbIDYH
+ 7QFWTzQc2+yZ4xFuXgYSRL0M08HzhrOSkI6BID2AlFsSgBTkohEA1hx08acbX4ob6KYrDBVmD
+ TvWnhB89uDVHJR9Wi3wWd57J8GDyerfT/kjr6McdABQD2ApdO/IyWtBnMNQhZbXsIrGzjYw9k
+ rW2eGs8GSSyUccWDCelRyhl/yMwWmLC5geTt8NghuQ==
 
 From: Stefan Wahren <stefan.wahren@chargebyte.com>
 
-The ST IIS328DQ is an accelerometer sensor compatible with
-the existing ST sensor binding.
+The DS2484 is very similar to the DS2482-100, but also supports a
+pin-controlled power-saving sleep mode.
 
-Link: https://lore.kernel.org/linux-iio/2bac9ecf-9d2e-967e-9020-1c950487d781@i2se.com/
+Link: https://www.analog.com/media/en/technical-documentation/data-sheets/DS2484.pdf
 Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 1 +
+ drivers/w1/masters/ds2482.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-index c6201976378f..247700537aa8 100644
---- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-+++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-@@ -25,6 +25,7 @@ properties:
-       - description: STMicroelectronics Accelerometers
-         enum:
-           - st,h3lis331dl-accel
-+          - st,iis328dq
-           - st,lis2de12
-           - st,lis2dw12
-           - st,lis2hh12
+diff --git a/drivers/w1/masters/ds2482.c b/drivers/w1/masters/ds2482.c
+index 62c44616d8a9..6f6df686e9ad 100644
+--- a/drivers/w1/masters/ds2482.c
++++ b/drivers/w1/masters/ds2482.c
+@@ -545,6 +545,7 @@ static void ds2482_remove(struct i2c_client *client)
+  */
+ static const struct i2c_device_id ds2482_id[] = {
+ 	{ "ds2482", 0 },
++	{ "ds2484", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ds2482_id);
 -- 
 2.34.1
 
