@@ -4,21 +4,21 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C340C61DA4
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58D00C6FA99
 	for <soc@archiver.kernel.org>; Mon,  6 Mar 2023 17:23:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E0B0CC433A1; Mon,  6 Mar 2023 17:23:44 +0000 (UTC)
+	id 2998CC4339B; Mon,  6 Mar 2023 17:23:45 +0000 (UTC)
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 69FCDC433EF;
+	by smtp.kernel.org (Postfix) with ESMTPS id 76A53C4339C;
 	Mon,  6 Mar 2023 17:23:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 69FCDC433EF
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 76A53C4339C
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
 Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
  (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MfYDO-1qFC5C1a8W-00g1vq; Mon, 06 Mar 2023 18:23:14 +0100
+ 1M4b5s-1pXaex3NmY-001j20; Mon, 06 Mar 2023 18:23:17 +0100
 From: Stefan Wahren <stefan.wahren@i2se.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -40,54 +40,83 @@ Cc: linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org,
 	Stefan Wahren <stefan.wahren@chargebyte.com>,
 	Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 3/8] w1: ds2482: add i2c id for ds2484
-Date: Mon,  6 Mar 2023 18:22:44 +0100
-Message-Id: <20230306172249.74003-4-stefan.wahren@i2se.com>
+Subject: [PATCH 8/8] ARM: imx_v6_v7_defconfig: Enable Tarragon peripheral drivers
+Date: Mon,  6 Mar 2023 18:22:49 +0100
+Message-Id: <20230306172249.74003-9-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230306172249.74003-1-stefan.wahren@i2se.com>
 References: <20230306172249.74003-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:FpRTpt2ZzY6mienThTEbNRfHWBNdsZCyFr8kQjvCTI+RpIK2Uwa
- bnunZRwMmRHkOJxcVfa/1K6T4N0nJojbL4G8dF+v9dhYAX7gEj+4BQrOEQQnqs/7QZZLXdp
- m9eiMTBOWwcZ4/8bpDI4HF5dfcn+KrCIQxrE7HzqYo6SQo0Yjwt5d/ilrrCi0hpgqS9+BQJ
- f3hyNkJPRL1xpa8bEVriw==
-UI-OutboundReport: notjunk:1;M01:P0:Ia63qqu8ctE=;jrIe9L5aIyXvRzwzWne8iCjw4aU
- YhUqVmPr5iqvpuP3nwi9a/o1yNPb3wlOhqsNSOvADOChVvsBNn/w6NXN8MZ5o7edDCR9D+Soo
- q4DH+bK5IWVay2tUMc2qm48bOImDtvG/q8tnSI+fIzI/3B+wZYBXGnUaa1U0+fzrPhjzexSjx
- ttomjOHibxbjeGuTOSJSj/LyUC06vUUs5Do2W1ujEanU/4MBBtz3hjXWK6n++YIch1YYlFx2G
- wIgt+7uwfvrmxUVUVl3sHIhJCXnLGtP4KrssOciPkr3zyF7592JDSeF6inFn+Jy/EOQ0ItxMf
- zUrqAHFRzsXQt5N6yCJvvjF9IjmE+ml9gwtOMYzSs1hS4UZSPIVO5Q6N8ysFLWt3/Xi8nV/qj
- jFQDmyaATHEQd11Jgg9CkDb7TmkbdqLnS7fEyzGR4ZBzRyBMOuqo+OiKbhT9kv3qQIp8jPe9P
- 9IfEtwmDpqbzZ5oPGvhpPpi9UqRoQVxcA+mh4J2Jl/io0d/YXEDLrTzzsnBLGYHYyZdhbIDYH
- 7QFWTzQc2+yZ4xFuXgYSRL0M08HzhrOSkI6BID2AlFsSgBTkohEA1hx08acbX4ob6KYrDBVmD
- TvWnhB89uDVHJR9Wi3wWd57J8GDyerfT/kjr6McdABQD2ApdO/IyWtBnMNQhZbXsIrGzjYw9k
- rW2eGs8GSSyUccWDCelRyhl/yMwWmLC5geTt8NghuQ==
+X-Provags-ID: V03:K1:apHcp3EmZDFHmusTpF0RTcwoyJeqPvigk6+aX2bNJECC+tUgQ/N
+ KUbP1kVDBGdaW8jNnatNLV01ny0L8kAQblGyGQ1ONpnD8q2kEPfIupcKhRxrLgNvYFFEpba
+ bkBoeW7BaH8TJc+K47y+GOiQncB3rqNB+tuM1iVk6uezW8MUDzfmiKnScEvr6uOC0UwMNVP
+ PnufDfoFk2bjgy2s0myfg==
+UI-OutboundReport: notjunk:1;M01:P0:a4m4bis2SwU=;axYlHSs0Zq4zPdsGn/qRKITU4rJ
+ d/p/xFSrTK736liY0EaIN9oNQo77dfVlirVDI9XoQC3gEvfKrIYuIGi2Cw+bAa0iiOp4P399e
+ RLNnQdwcTsmM7ZrrJ7OizDEa8402VlmgaZFDD4aoePhviIQB2GtuEknoDunBVqepsVNSxEmcY
+ IxVuEjaTmbZw+8IAPpE3cCJXcPD1OJzykM2MU9tq199EEdfFj62t8f1ojIeeqAcsZ5WbD3zmK
+ gD5mX8qXnTXRSKuecsmvVIHkw44NsDu/UPx4GieYHWxJMngf6QDHdGTY5MmPB7KxTenVUSN5C
+ vqJlxUsH6Kt3hiRXETUMqzHj76IShO1XSV56SxibluyLFzVv/1jeOXmWBqEM/6dT5JC8mVLmb
+ M1+ZDY+h+9Su1iofzMar0imtgMmtUlvENhJZsC7gXb0IfL6XMal29/czhl7YLGkwrLBHmHzl1
+ dx1yrI+zjwNvdDaUKDOquQwlczqJMcMcH/nlsI4YrUxIWkrPBM/j8v+/jwWSn8UhHbG5qgY8e
+ IasH22IGLHHukL6Oj8A4UvYIbArkMhKqCyhPAoSm+FXDWcnfVPyMBiwzibIZWCTwkZbZPaPbm
+ FffbLQR6Lgn9XLh1oPwyMWyhMT2gPnO/SKR/gSgkWWOvvC13xze4ZADeiY9tdcTEoGxLY+sM+
+ 3O7c3hmccmHmIuXVhV61A2g5hlxe1t92Yyf17iAw+g==
 
 From: Stefan Wahren <stefan.wahren@chargebyte.com>
 
-The DS2484 is very similar to the DS2482-100, but also supports a
-pin-controlled power-saving sleep mode.
+We need to enable some drivers in order to use the following peripherals
+of Tarragon:
+  * QCA7000/7005 Powerline chip
+  * One-Wire Master DS2484 with external thermal sensors
+  * external 4 pin PWM fan
+  * ST IIS328DQ I2C accelerometer
 
-Link: https://www.analog.com/media/en/technical-documentation/data-sheets/DS2484.pdf
 Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- drivers/w1/masters/ds2482.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/configs/imx_v6_v7_defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/w1/masters/ds2482.c b/drivers/w1/masters/ds2482.c
-index 62c44616d8a9..6f6df686e9ad 100644
---- a/drivers/w1/masters/ds2482.c
-+++ b/drivers/w1/masters/ds2482.c
-@@ -545,6 +545,7 @@ static void ds2482_remove(struct i2c_client *client)
-  */
- static const struct i2c_device_id ds2482_id[] = {
- 	{ "ds2482", 0 },
-+	{ "ds2484", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ds2482_id);
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index 6dc6fed12af8..c854b03fabf2 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -128,6 +128,7 @@ CONFIG_CS89x0_PLATFORM=y
+ # CONFIG_NET_VENDOR_MICREL is not set
+ # CONFIG_NET_VENDOR_MICROCHIP is not set
+ # CONFIG_NET_VENDOR_NATSEMI is not set
++CONFIG_QCA7000_SPI=m
+ # CONFIG_NET_VENDOR_SEEQ is not set
+ CONFIG_SMC91X=y
+ CONFIG_SMC911X=y
+@@ -215,6 +216,9 @@ CONFIG_GPIO_PCA953X=y
+ CONFIG_GPIO_PCF857X=y
+ CONFIG_GPIO_STMPE=y
+ CONFIG_GPIO_74X164=y
++CONFIG_W1=m
++CONFIG_W1_MASTER_DS2482=m
++CONFIG_W1_SLAVE_THERM=m
+ CONFIG_POWER_RESET=y
+ CONFIG_POWER_RESET_SYSCON=y
+ CONFIG_POWER_RESET_SYSCON_POWEROFF=y
+@@ -223,6 +227,7 @@ CONFIG_RN5T618_POWER=m
+ CONFIG_SENSORS_MC13783_ADC=y
+ CONFIG_SENSORS_GPIO_FAN=y
+ CONFIG_SENSORS_IIO_HWMON=y
++CONFIG_SENSORS_PWM_FAN=y
+ CONFIG_SENSORS_SY7636A=y
+ CONFIG_THERMAL_STATISTICS=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+@@ -403,6 +408,7 @@ CONFIG_CLK_IMX8MQ=y
+ CONFIG_SOC_IMX8M=y
+ CONFIG_EXTCON_USB_GPIO=y
+ CONFIG_IIO=y
++CONFIG_IIO_ST_ACCEL_3AXIS=m
+ CONFIG_MMA8452=y
+ CONFIG_IMX7D_ADC=y
+ CONFIG_RN5T618_ADC=y
 -- 
 2.34.1
 
