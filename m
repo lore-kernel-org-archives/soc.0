@@ -4,28 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 405C9C74A5B
-	for <soc@archiver.kernel.org>; Sat, 11 Mar 2023 18:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 050D8C6FD1C
+	for <soc@archiver.kernel.org>; Sat, 11 Mar 2023 18:08:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 02B18C433AA; Sat, 11 Mar 2023 18:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F786C433D2;
-	Sat, 11 Mar 2023 18:06:34 +0000 (UTC)
+	id C0B76C433D2; Sat, 11 Mar 2023 18:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8673AC4339B;
+	Sat, 11 Mar 2023 18:08:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678557997;
-	bh=GOsprbGMCTh8vvgH1NxGTJsbnd6+WJTpWCk1MiS32Gk=;
+	s=k20201202; t=1678558126;
+	bh=Hxwcyty0Eai6b4gI+GWKz8jsfgHY5+szBl5RoUwvZBg=;
 	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=DrxiGBbb1pdW3L1oTqoeTZx2r6BeE0tjerapNGJhWJdundfZF5pX2bcxJSOrkKdFs
-	 X51go0vh7SkfaMa3QBWxAuunqtjPvN4/TWdYc54bQWkpnt8RSu/mlnVb3vX7E63WCC
-	 uO9qYaaaSzaI+DiasaMU7FFxztkIW2QL+6kV2xvJwWwG2WuqvlSz4rrQhSawd+trAi
-	 Z86zZrw2MT5ECxOO97QnhAEUX1jUkvsi/K87IKxH7UklGYj1C+lCloIOKJOXpSdXQy
-	 CV1+Xjm+dQmnBnHrgj9js2hyZGKrC46WS9p35GCp/PEEB1HiHdG6/wRMttzYt8XRQi
-	 4NgiZMPm3JC8A==
-Date: Sat, 11 Mar 2023 18:06:40 +0000
+	b=mn01IHeTgKouFJx2YZJ3r60NByaSimffuGy7a0j4HdNJDzsZNK9QECzYSY6Zpbv+F
+	 EOx7N0WA493Iyb8M+FpyvV8V4SYR9XuNBOizPJeYxBkZ6vS0t9Oe+OOn7I5gzjskbJ
+	 IKsj0tIRbXUcuEmL2vlQxxut/0THYHmfQ9XCbNHvg80l5qZ8sfvuOIpM1Ukg6DcVCq
+	 w72IXolYh3WKliqMJxtdYvKjLnqHdUFBAnccQ9X+TJbeg/YJOPbYhgRcQKh4atFWOk
+	 alD9NWjAEfZOWYJhsbvM0dw19Nc5eXiwX8sF/C1OJB5ItSmXpf+OyFyv6C/eoVUJDf
+	 sUs0+Nc/tCkJQ==
+Date: Sat, 11 Mar 2023 18:08:49 +0000
 From: Jonathan Cameron <jic23@kernel.org>
 To: Stefan Wahren <stefan.wahren@i2se.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
+Cc: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
  <krzysztof.kozlowski+dt@linaro.org>, Lars-Peter Clausen <lars@metafoo.de>,
  Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Evgeniy
  Polyakov <zbr@ioremap.net>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
@@ -34,64 +33,108 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Rob Herring
  <denis.ciocca@st.com>, soc@kernel.org, linux-iio@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Stefan
  Wahren <stefan.wahren@chargebyte.com>
-Subject: Re: [PATCH 4/8] dt-bindings: iio: st-sensors: Add IIS328DQ
- accelerometer
-Message-ID: <20230311180640.4f975f78@jic23-huawei>
-In-Reply-To: <9c2d0ca3-660e-72d2-d158-5c921cd9d607@i2se.com>
+Subject: Re: [PATCH 5/8] iio: accel: add support for IIS328DQ variant
+Message-ID: <20230311180849.0a8f58a3@jic23-huawei>
+In-Reply-To: <20230306172249.74003-6-stefan.wahren@i2se.com>
 References: <20230306172249.74003-1-stefan.wahren@i2se.com>
-	<20230306172249.74003-5-stefan.wahren@i2se.com>
-	<633b1e27-d148-62d2-ef83-2d0da432c0a7@linaro.org>
-	<9c2d0ca3-660e-72d2-d158-5c921cd9d607@i2se.com>
+	<20230306172249.74003-6-stefan.wahren@i2se.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 7 Mar 2023 18:27:53 +0100
+On Mon,  6 Mar 2023 18:22:46 +0100
 Stefan Wahren <stefan.wahren@i2se.com> wrote:
 
-> Hi Krzysztof,
+> From: Stefan Wahren <stefan.wahren@chargebyte.com>
 > 
-> Am 07.03.23 um 09:23 schrieb Krzysztof Kozlowski:
-> > On 06/03/2023 18:22, Stefan Wahren wrote:  
-> >> From: Stefan Wahren <stefan.wahren@chargebyte.com>
-> >>
-> >> The ST IIS328DQ is an accelerometer sensor compatible with
-> >> the existing ST sensor binding.  
-> > If it is compatible with existing binding, then make it compatible.
-> > Although your driver change suggests it is not compatible...  
-> since the policy is to make the compatible so specific as possible, i 
-> will fix the wording here.
+> Add support for ST IIS328DQ accelerometer to the st_accel framework.
+> The chip is compatible to the LIS331DL.
+> 
+> Link: https://www.st.com/resource/en/datasheet/iis328dq.pdf
+> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-Driver changes are naming only - which we do want as that isn't discoverable
-from the device but it will 'work' fine with a fallback compatible of
-st,h3lis331dl-accel be it with wrong device naming exposed to userspace.
-
-Hmm. That shouldn't have the postfix as it's not a multi device package
-(which are the cases where we need postfix as they have multiple drivers
-binding to different independent things in the one package / part number)
-
-If someone wants to add a compatible of st,h3lis331dl and deprecate
-the accel variant that would be fine, but wouldn't help us much here
-for a fallback compatible and it's probably not worth the effort.
-
-Historically we've not been doing fallback compatibles right in this
-driver but it's probably not worth 'fixing' that for old devices
-as the only real benefit would be things working nicely with old kernels.
-Nice to not make it worse though.
-
-So I'd like to see this fallback to st,h3lis331dl-accel
+LGTM. I'll pick up when the binding discussion concludes.
+(assuming no other issues raised!)
 
 Jonathan
 
-
-> >
-> > Best regards,
-> > Krzysztof
-> >
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel  
+> ---
+>  drivers/iio/accel/st_accel.h      | 1 +
+>  drivers/iio/accel/st_accel_core.c | 1 +
+>  drivers/iio/accel/st_accel_i2c.c  | 5 +++++
+>  drivers/iio/accel/st_accel_spi.c  | 5 +++++
+>  4 files changed, 12 insertions(+)
+> 
+> diff --git a/drivers/iio/accel/st_accel.h b/drivers/iio/accel/st_accel.h
+> index 56ed0c776d4a..e7525615712b 100644
+> --- a/drivers/iio/accel/st_accel.h
+> +++ b/drivers/iio/accel/st_accel.h
+> @@ -39,6 +39,7 @@
+>  #define LIS302DL_ACCEL_DEV_NAME		"lis302dl"
+>  #define LSM303C_ACCEL_DEV_NAME		"lsm303c_accel"
+>  #define SC7A20_ACCEL_DEV_NAME		"sc7a20"
+> +#define IIS328DQ_ACCEL_DEV_NAME		"iis328dq"
+>  
+>  
+>  #ifdef CONFIG_IIO_BUFFER
+> diff --git a/drivers/iio/accel/st_accel_core.c b/drivers/iio/accel/st_accel_core.c
+> index 6b8562f684d5..5f7d81b44b1d 100644
+> --- a/drivers/iio/accel/st_accel_core.c
+> +++ b/drivers/iio/accel/st_accel_core.c
+> @@ -517,6 +517,7 @@ static const struct st_sensor_settings st_accel_sensors_settings[] = {
+>  		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
+>  		.sensors_supported = {
+>  			[0] = H3LIS331DL_ACCEL_DEV_NAME,
+> +			[1] = IIS328DQ_ACCEL_DEV_NAME,
+>  		},
+>  		.ch = (struct iio_chan_spec *)st_accel_12bit_channels,
+>  		.odr = {
+> diff --git a/drivers/iio/accel/st_accel_i2c.c b/drivers/iio/accel/st_accel_i2c.c
+> index 3f02fd5d5946..fb9e2d6f4210 100644
+> --- a/drivers/iio/accel/st_accel_i2c.c
+> +++ b/drivers/iio/accel/st_accel_i2c.c
+> @@ -119,6 +119,10 @@ static const struct of_device_id st_accel_of_match[] = {
+>  		.compatible = "silan,sc7a20",
+>  		.data = SC7A20_ACCEL_DEV_NAME,
+>  	},
+> +	{
+> +		.compatible = "st,iis328dq",
+> +		.data = IIS328DQ_ACCEL_DEV_NAME,
+> +	},
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, st_accel_of_match);
+> @@ -157,6 +161,7 @@ static const struct i2c_device_id st_accel_id_table[] = {
+>  	{ LIS302DL_ACCEL_DEV_NAME },
+>  	{ LSM303C_ACCEL_DEV_NAME },
+>  	{ SC7A20_ACCEL_DEV_NAME },
+> +	{ IIS328DQ_ACCEL_DEV_NAME },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(i2c, st_accel_id_table);
+> diff --git a/drivers/iio/accel/st_accel_spi.c b/drivers/iio/accel/st_accel_spi.c
+> index 5740dc1820bd..f72a24f45322 100644
+> --- a/drivers/iio/accel/st_accel_spi.c
+> +++ b/drivers/iio/accel/st_accel_spi.c
+> @@ -100,6 +100,10 @@ static const struct of_device_id st_accel_of_match[] = {
+>  		.compatible = "st,lsm303c-accel",
+>  		.data = LSM303C_ACCEL_DEV_NAME,
+>  	},
+> +	{
+> +		.compatible = "st,iis328dq",
+> +		.data = IIS328DQ_ACCEL_DEV_NAME,
+> +	},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, st_accel_of_match);
+> @@ -157,6 +161,7 @@ static const struct spi_device_id st_accel_id_table[] = {
+>  	{ LIS3DE_ACCEL_DEV_NAME },
+>  	{ LIS302DL_ACCEL_DEV_NAME },
+>  	{ LSM303C_ACCEL_DEV_NAME },
+> +	{ IIS328DQ_ACCEL_DEV_NAME },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(spi, st_accel_id_table);
 
