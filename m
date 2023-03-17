@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 975C0C74A5B
-	for <soc@archiver.kernel.org>; Fri, 17 Mar 2023 10:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 648BFC7618B
+	for <soc@archiver.kernel.org>; Fri, 17 Mar 2023 10:33:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7DBBFC433EF; Fri, 17 Mar 2023 10:33:55 +0000 (UTC)
+	id 51055C433D2; Fri, 17 Mar 2023 10:33:57 +0000 (UTC)
 Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2081.outbound.protection.outlook.com [40.107.22.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 948DCC433A0;
-	Fri, 17 Mar 2023 10:33:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 948DCC433A0
+	by smtp.kernel.org (Postfix) with ESMTPS id ADED5C4339B;
+	Fri, 17 Mar 2023 10:33:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ADED5C4339B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=chargebyte.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=chargebyte.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUpTiTdzANd0G61Rn0+fQ/9+5hFBDAPtLg2m/nENpp0qvEdGPw2iX/35yY8MGCgsxs2WP9QLUr3R0ELGtHozNOFByPy0e73Us/PhMu9oPEAU91S0TnqZGIKMKw5VkVjsYKcjBV7DzZMCpxaOJqbT28FK1RAQqATmKGd+Vy7tVC5UHGYIOSur+DE2jPN1wTi2pBXCaNyC5RQ1Ifym+GQdeR1vWUPFETL7wUkdVrte+/bJEocBSxbzG8c5Y1k08C2JokSuyoMAuFwNyfGhCIE5vwDEr9E0H8J30s7ms1arm7zpUZZWe3EzCVEKIm3UMDCyN82HwP1CqmJfcomeSU73tA==
+ b=YUD5xFAsUYiEkOJVu2qBcpzsK97GwXpc3/LI0qYV6oEs721EO6aas4BInh9XqtI6awQX/v2VkEOc/UP7etB2ebrfe9VWbVFcJAaq5++q76LO9LBBjiJBgAWXtbfnJQ6s0rdfvH2oWSzBM0xcQxlh0qppzgIusp6klIp6WnasolxuHnz16Aua+4qV0gBBbxtTGuR/9CkMZ7lONht5dgJETxg6g36RO2xjuh5OnaJSlkVv6kHYhM6hvnZZPnBxDWqGqHHCYppszVbPWT+qlsduWALO6fB9WVU5Exs2v4N2JvhulEaiUW81+8B1NdU6O5s2vs7SWl2yitlc3ubdC1mVOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jgHBfWanPZkt+c9wiByfId/wRP/Fan5Nmk+IK/0rPwI=;
- b=BX7aZ75xJ0L+1pwKLyihBbnT7dF88xffBs1FAMHgWWSCuY+WiznIi7I5jubG3/6A9q27KtzYcIwsvyn/WxV13IVyBtKyuccg9ZB6m+g0oFrPcbu3x1VrX+gN9oV2A5L8k7gS8aT1aYqBFzAOoiUfNMfb6X3XyzlexOmECDkL6r6ahJyPD8KyNHJ7Ti2thFMVfBFnUGyjXfNoBYMROhwJfauIpHP6aMlUFZelglCWBGwfcgjwTxoV91pTNOijdrfaorT4CbKtpNOLMCZplODLuGw0/3RhntTFy5I7xga8GQT5k+gzv/KCV93B+G2B5H47oNVTSXy+eF4dNH1e1ux1rg==
+ bh=wLqLGwj5p4Djjmz1/SaU847Q64pRmHBj6EKCPcXNwp4=;
+ b=K/5la9ZFCFprTy4qeLxXDN3FuBzjz4eFPmZ+CKyas8i3CsOxEP5JCJVJa4Vln42f2O/3+lJCUxPgS0M9RyFP+RX6rhe4Zmckxr1uVNLOZbuyDLsiASVtVu6Xtoup51Sq4XwqHosrovzHViesDQSgvLjjaWaqbKhu67kP59Gm8fa0hlrXP7jSnGJwuEyIUIlYh9d+AQQnhsx/774iytmpmw+egxxXj7BJh86NR+KNcXTH8orsEqSlAPWTM+T52fJu4jCSVI01bA5V4u/y9arPd5cwoQ8iL74GZFHkPK1VGPgAd0PzxsQQktGZn25KpyRlwim6bmoTc/JYmVhsitSMhg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=chargebyte.com; dmarc=pass action=none
  header.from=chargebyte.com; dkim=pass header.d=chargebyte.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c4c.onmicrosoft.com;
  s=selector2-c4c-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jgHBfWanPZkt+c9wiByfId/wRP/Fan5Nmk+IK/0rPwI=;
- b=IuVJaIoYLPSjJKbRRejufhy+tVIlR7g+m7aaCRWJP0N60cyleGqIJ9h/cqNBadme+NqMs3cMC/P+4ef1gxlprZ3BZasuCfFP0PoZj6HmzqM0GocwbbwJYBv+O9+mDmav17srLPfGQVvdMjn1mcrcSHcLyJe67zlIiCSvmHMc/Ns=
+ bh=wLqLGwj5p4Djjmz1/SaU847Q64pRmHBj6EKCPcXNwp4=;
+ b=JBu+vuhCn/53QDjaIACphDSf+jUcbbebx1Z/eNRo52VtxxjQJnb5l94r985jx7sPK+cLnmXyNF23BicZC1marFdI6nnbOoonv1QEweGqRF974ol0/ObRAHyRhel4N5jfoUGfhArFQ62hAIAEBYPTcPU8/+BaMDXJOuXT24HHA2A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=chargebyte.com;
 Received: from DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:33f::5)
  by DB8PR10MB3863.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:168::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.10; Fri, 17 Mar
- 2023 10:33:44 +0000
+ 2023 10:33:47 +0000
 Received: from DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::92e9:73c9:940:579e]) by DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::92e9:73c9:940:579e%5]) with mapi id 15.20.6222.008; Fri, 17 Mar 2023
- 10:33:44 +0000
+ 10:33:47 +0000
 From: Stefan Wahren <stefan.wahren@chargebyte.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -63,9 +63,9 @@ Cc: linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org,
 	stefan.wahren@i2se.com,
 	Stefan Wahren <stefan.wahren@chargebyte.com>
-Subject: [PATCH V2 3/8] w1: ds2482: add i2c id for DS2484
-Date: Fri, 17 Mar 2023 11:33:18 +0100
-Message-Id: <20230317103323.7741-4-stefan.wahren@chargebyte.com>
+Subject: [PATCH V2 5/8] iio: accel: add support for IIS328DQ variant
+Date: Fri, 17 Mar 2023 11:33:20 +0100
+Message-Id: <20230317103323.7741-6-stefan.wahren@chargebyte.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
 References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
@@ -76,77 +76,138 @@ X-ClientProxiedBy: FR2P281CA0125.DEUP281.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB9PR10MB5211:EE_|DB8PR10MB3863:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4d9dcb3-7392-4d72-6cde-08db26d3158a
+X-MS-Office365-Filtering-Correlation-Id: d720f611-a04e-46fa-1535-08db26d31729
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	2hbJX3qHVSv/rPs3SMpvrw9RXqJmv8i9+WstYOJTR4n6rl7jysdMqdjkXbAF0h+ycSLtZ+pjfOoWCdy5oWufPH7oPqZcqmWDC7TkrIWTyWk6MiEJVfJJnKafbSBjpCbTcldZVqxwMT4vlUBuJri0xF9j+jZjqF+E/MWyvTVi/4FCrxGarxKd68Wl1Mf+ceqGh/phTI6IFxypfWtSB/pZLIpcSQ6FuVDs7LnGVIfcr0xq542zGJemDgfKoBmPAh0Ai6CD0161VuAjDz2WWsBANDSSyzYSsHcEswTbF9lyiNi0No7VELxYLtLnUj0VyarS8989SGulEz+7BzaazOhAj0V8QfEGZvWpOY5jp3F0MqjB35eXG0fHU1RVE+MQxxR1QpO41pybsdRq2k3bkQ+tkDzzakkuP8RufrfYjwq5p2sga/v54wc8E52LmGSEzPSMYeCJgJgWpdhwMZxuehsWAnBFi0Ope9QQSMI8UdiRVF1asoGqEEEt8syOlfuIwuPpi4PMF9uRJC5GxZYeDul/Gfg6S/ULXFOzvgeyAtZMMAcBOp2a3dfT0rK07LAR3Wp0QQxufvb0ZXPCb8ir9++COozK7wrNiQq/1ovPzUN3Jy4km35hAqOybSsfZdwkSXEEe/WCi/UvcYODs7JpSeA852r0bS3V5IgXZqtyoeXlPCGQugmOI2SrSr+2qBPg6QEyR7Cv2TF680ZOR9mFt1xb1g==
+	0VaeZofDVLhhHnU28Xc6dbLgvhfo0vrT6yLsX7LLdORu5wXwtdWrMQyYEdN7OLCNCe9BaSZGbwLkpyLWOJ7mX+mkDH3oySZMLE2JjzsvPcdzhiLT4sSrCZ0EsE4fy/D3r+PFxSGLhaZS26TgPCS+aA6+QZlL1DUwwnuHL6BWec6OKj1EemjVmUtrB40sFvt0gmlGiS6Uz2HlEoMqN1eK/Me0B4a4y9rZ1JH7qSBT38gSVh1HB7EIERhz1hrHWc7A8VRTlLa8pSIfBPA3RfcqYVAnc3QXBzm2ymGJfbJRFMUSxgFWCy4Pc8LP+xuo1Z61UZauCh+Zh3qNoQQvk9k4g97TrXTZZ7rigRc/+wGKomyhsCZljJ1XV1w9Ncysu5d2TFntpAs4N5XK3Zn/nKeC9AP/V9NXWM64Hz52YnUwc2Lmds5PqO7igIA1S9y48R4clR0cAwOVx6TctdxmKQNYe+h064ZxbvRH/7ZYzJtl50NSwE6pm+TmZX+LPD/34OKik23vgGrsvtrXwyQ4110rz/dQHHIgnu/6DumAWT/1Z/jHkuBaBT9I/u7CJw6pK4OjGkQEYDQDbFoXjIw7omypKTuA4/xAOtrueTwZoZdVzfcHrGJbaINObMc9bDQKSmtf/hC5+rNpQQYaXTni8iv8IpC68qsLpTRaRFw5SXEdS3qMeRoNIaNG0d8yL8+bCyIpilvp89QCCoS3R8+qGABJzQ==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(451199018)(921005)(38350700002)(38100700002)(66946007)(36756003)(7416002)(478600001)(86362001)(4326008)(4744005)(2906002)(5660300002)(44832011)(8936002)(110136005)(8676002)(54906003)(316002)(41300700001)(66556008)(52116002)(6506007)(6486002)(966005)(66476007)(2616005)(107886003)(26005)(186003)(6512007)(6666004)(1076003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(451199018)(921005)(38350700002)(38100700002)(66946007)(36756003)(7416002)(478600001)(86362001)(4326008)(2906002)(5660300002)(44832011)(8936002)(110136005)(8676002)(54906003)(316002)(41300700001)(66556008)(52116002)(6506007)(6486002)(966005)(66476007)(2616005)(107886003)(26005)(186003)(6512007)(6666004)(1076003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Lss4vaAh5+MCHI142dDESsxkAAeCZ+ABWY1p312gST3uwujGyuUWpr47HWn1?=
- =?us-ascii?Q?px2bgVkTuVxAtI4B8KvFbU53oVVHem4MtEax7vuL1Gm0hRjRB2/XEv+4K8/4?=
- =?us-ascii?Q?vwpdhSYvXGn5hoT1IL4CdkF1MGJr1CF6SM92XqdHX/qu5f4/ZH95WPQvnQFS?=
- =?us-ascii?Q?lHUH3JaQTvH2GzpQeOZymRYc7AGGePQI2+FzOf6FwE5eEDS3JSXcmdKCF8+N?=
- =?us-ascii?Q?NvgUZ/kR6xov/ZBCWqVDQbaOswdTXTzSTN59bKYn8SgFcMYinXz063s8bR6n?=
- =?us-ascii?Q?9b3ODG+Rx1++Bq0+Tsvkn1sRKbUTYGkrOObr/pmGMf3KWpsL4q5TSxSLygoO?=
- =?us-ascii?Q?5lyRJaPocI4q21+B8XSGOp5r8pPZ6vI7o23RBfQH+s9NZRoLmvTRwhwPokr9?=
- =?us-ascii?Q?wRH4krM77BXS8e9SIhBa7Hw5CuxHQ9ueeIW8txG5FOWs8SCYXZ6OTqzQfAH6?=
- =?us-ascii?Q?InntukavaAO8NUB4lrsWCzR32TDr6luwDoTo4+ZltnzAm/spYIAXeeOZqvmg?=
- =?us-ascii?Q?3eQSF0+/dA9/Wi/WY8Hq6I88PkvX0sME1uTHtg9t5vvqMZ+tO88VpBvsgc1p?=
- =?us-ascii?Q?0x/EHtWL+bdH7Qq0BQbRUTxvHl22ySKCChZS7yH1KwLMgwmBOVJRv6CbvLCr?=
- =?us-ascii?Q?esXeb3NSt0PoVg5Ooaou6dES0sl1zhw/p6sKNmiXg5jIVFB8an0ekVoX+4ba?=
- =?us-ascii?Q?RJErFjl3dOq0N4JzdQPIGgcXvxFcCj4qbZHPrEotQtfiKY3WVHqSMxIlARvc?=
- =?us-ascii?Q?b23NksYamDrarlsP6dBldyJ+sgxjqRMQ/qK58svFvL80i6uOSPj47nZs1Vbj?=
- =?us-ascii?Q?o/fiq+TSbUDiIQZKXh3AGq/95Ga6gEjMM3bHu6uF4JsOLn6K2anjUmrvZq7W?=
- =?us-ascii?Q?XyFKmzvblUTdbpDph1smE1Fk1628v+cpZdiflMMKRGCMwwWZ//Tyc0GoFRCa?=
- =?us-ascii?Q?rPBVwhU03XTKoNOwltezBd1oCTWg3g39tJOkTIBvhS3AdWNdRVHcg1jmErpL?=
- =?us-ascii?Q?W2aY0cp4ekArDCWEleaNhB7Pv+zygAuQka94jpKZpvOOZdl7YVCzu3da+kvo?=
- =?us-ascii?Q?gazgMEvmJKiH+wtgmw56QkMhXir+2+plOEuvOJAWN67zubfn0NWH5I1TTEGe?=
- =?us-ascii?Q?5quMuThxhoquI77rHTPOLNpmWzfBATC3L//tU8sKD5Ee9vsMpYGzNTxe8k92?=
- =?us-ascii?Q?6iomhYAscqE9V2xZ/CC9jzLZEcS6g0LSpCS12oyid4siPj8VezDl0GOLy8D4?=
- =?us-ascii?Q?/Q9qa5hTTy57UxOhBaPlaDIMoOQmxbZF2bNMgdUJBmUfWB63sVU3+pmWO9LN?=
- =?us-ascii?Q?vS/UGqu3FkQD2m1q3o+0EKimQfDi3aHzSE152xY/Vvh8KYr1XYQ9VGnC38dJ?=
- =?us-ascii?Q?WtAmMOYMmnDBRJmI3BSv7OVIRIgGzWvvoqqqfS/WVOZ5cbbdmG0siqv8HC9I?=
- =?us-ascii?Q?KEQVtd93IsdxKKRIrNzvrezXoi0Zp7bqJVJpiqqgUp6jUf8ps0aSyJWbe+y1?=
- =?us-ascii?Q?Bv4zpVnwHR1DLTudPr2p3ivYkq+lddlkg1Dmm/Y0f+OmNYIyPs0zVOkMFqW4?=
- =?us-ascii?Q?H80z+9yzCCAU0fvtkOrVGGCkFlUk+PYCxNrbX8hPL9sv8CqTFcd++wKjNRP+?=
- =?us-ascii?Q?Rw=3D=3D?=
+	=?us-ascii?Q?MTlhMfUC0uSjuhS4p1iU0Vy7Dy5o/pcE1BZyWoyIF1eBBCKYQJQ7zshkZNvp?=
+ =?us-ascii?Q?rqJoyMs/Bq/S2UNamYrpKhgAEaZcELD1UYAr2QD8boFtiZOnezfDzqfINDLG?=
+ =?us-ascii?Q?d9R4HPI3xVMaj7S3Eg8CCoFopwQBDSSIECxCLSPShWaUBIvgS7kDTyjayBtw?=
+ =?us-ascii?Q?+BdM+NEWkcYNTXaw+Oc61JCSSkQT8XFRTcg8ZqJnOUyyhQebStnYBNTws1i8?=
+ =?us-ascii?Q?gA6djRT8+mk4l8vpVMjUA/SqJnYqEJIHwb2Jt06byzp6wWfAmiJHrFNvg1vR?=
+ =?us-ascii?Q?i8yv1pJiqu4i+klGGn7MZToNqq/hsWe6eF9DKa7Y4tzTwFYepIASZkOBu8xx?=
+ =?us-ascii?Q?ZY+cQF0oXDJAdNEKFybTpw6u4WKzEJefkO5UwApjXRQa6GacjOLMHfFgbv3T?=
+ =?us-ascii?Q?GsOrjc9XGABOToiM+hnHXHh8UW0PkQRL3cpQglT2eX0RBxqzdP/XkMAxHByr?=
+ =?us-ascii?Q?X066ztOoWEiegt/um3mq3o0aCh7MAzV5PWY7gOcUYm5fUncYBxn+a+HV8Fj2?=
+ =?us-ascii?Q?sL/GYun5OOAK6i/YNfRXpxEbVNxidJiol4F/a1QJifZKBejPG2dY3Tq7sZbe?=
+ =?us-ascii?Q?Ax5dFeY8bunBzSQ9enoUWck1kJj1tGsEHKguTB0RvKqBuvXj1ZQoSK9OoceD?=
+ =?us-ascii?Q?EJ0ohDU/A1jcVOlfO3hbK3d/lk67LFxfT/artvxONUbOYJsLXm1doAoAuXKb?=
+ =?us-ascii?Q?ZTMea7h52HDgoaXKDDV1kja0+wb0ud5gmfJGXdCnQqP1HyZ17pqOdnh88ra6?=
+ =?us-ascii?Q?FhvNpkm50uVSN0YMa2S2mPoaKXqpUgGWJAkH4iZ9y/6d+SA6FiNxVT80Sfsl?=
+ =?us-ascii?Q?yVc9hembaWTyVFgYu5n5gxRZSZowXSqcEokPeSc2+P4bi3Z7QS5qBJ/NOXMQ?=
+ =?us-ascii?Q?OQGpDL+y1Pn0ASLYI2za288kyCzwSrlGWbZopJhJABDEq70GQq1ILVzHJ453?=
+ =?us-ascii?Q?WzQ6sZfJVRkwHEuL+qfHb8uKyE8FdTZwF1ZB2qoF9my2yHEbn6onQpcPUfrG?=
+ =?us-ascii?Q?s0DvalrATh68qGoAy7YFLXzS6K1FcMxP7FDzSn5CEOkf/ezqtxb0fcu0o6Ub?=
+ =?us-ascii?Q?RgatRt+00n5xvfuiL35BNO2LAFv3g8GKAfmcvlvVxquY7gchNXJvuNB1vXC4?=
+ =?us-ascii?Q?YOoW3E82Fi9qtJx0G3ZRpWQXPXMRutsULfhWMvN3LkI50ScpEmp8IFzuzCNL?=
+ =?us-ascii?Q?S0rtnEKevxTWvtuv2V1nrxpLv+z1Qr2EqGAJU3wRpoRWkiemgq7e6mgCPt8T?=
+ =?us-ascii?Q?0F9/b6GS9C2UDzl2uSVm93WmjHmPvvRm8AEbI3L3yRvgoLEZoZKGx8+/Z6XI?=
+ =?us-ascii?Q?tFVabUW/vFs+sNe0MNwZsKZ/JHRdemhs6V7GKD2OqAshopvrQ7C1QgFFYImU?=
+ =?us-ascii?Q?8jzXlFMHxOgz8T0Cgi5dTVHoBWmJYP2TQHHlZyzsIjiJ+PG/5dWyTcYofEVT?=
+ =?us-ascii?Q?f9N1ZJcqSLpxFVjvDleJlxtREaPUvDZ+I79/U5Ur/a0wroXqnJg4/G4/tEc1?=
+ =?us-ascii?Q?W/EwT9tqZOzeee3tNN84ecUZ2uTbd6/K7MCag5rQrU4FjBdfuRPiRjxabEFg?=
+ =?us-ascii?Q?6G5gmlKlvzWROah6GXrKMgkacQXztscHpNkkMUr0HmG9gnjmMgr9c7MnXkL0?=
+ =?us-ascii?Q?aA=3D=3D?=
 X-OriginatorOrg: chargebyte.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4d9dcb3-7392-4d72-6cde-08db26d3158a
+X-MS-Exchange-CrossTenant-Network-Message-Id: d720f611-a04e-46fa-1535-08db26d31729
 X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 10:33:44.6239
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 10:33:47.3296
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 30547194-0d55-4a2f-900d-687893d3bdc0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fG1s7BZbDmsmEnlvXf0UnlLzBTMfDtNyasMuCpoPx/VRUbsTBuXs9WQGGhkE4VQ98OHmY61FtWrWn3QGt9kQidO8+thDyHTMcx3mOv+rLkE=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5SGcys2S6z9yhxpg4tCEsNQLWIpLfWlU0ffApbbeAx7ydRTNKF6DorbXQ/QHOfccvsy2cGjwtXJgv3T0qM5Xv5Epv1+xLke5l4o6B9hoXQo=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3863
 
-The DS2484 is compatible to the DS2482-100, but also supports a
-pin-controlled power-saving sleep mode.
+Since the ST IIS328DQ accelerometer is compatible to the ST LIS331DL,
+just add the new compatible to the st_accel framework.
 
-Link: https://www.analog.com/media/en/technical-documentation/data-sheets/DS2484.pdf
+Link: https://www.st.com/resource/en/datasheet/iis328dq.pdf
 Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
 ---
- drivers/w1/masters/ds2482.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/accel/st_accel.h      | 1 +
+ drivers/iio/accel/st_accel_core.c | 1 +
+ drivers/iio/accel/st_accel_i2c.c  | 5 +++++
+ drivers/iio/accel/st_accel_spi.c  | 5 +++++
+ 4 files changed, 12 insertions(+)
 
-diff --git a/drivers/w1/masters/ds2482.c b/drivers/w1/masters/ds2482.c
-index 62c44616d8a9..6f6df686e9ad 100644
---- a/drivers/w1/masters/ds2482.c
-+++ b/drivers/w1/masters/ds2482.c
-@@ -545,6 +545,7 @@ static void ds2482_remove(struct i2c_client *client)
-  */
- static const struct i2c_device_id ds2482_id[] = {
- 	{ "ds2482", 0 },
-+	{ "ds2484", 0 },
- 	{ }
+diff --git a/drivers/iio/accel/st_accel.h b/drivers/iio/accel/st_accel.h
+index 56ed0c776d4a..e7525615712b 100644
+--- a/drivers/iio/accel/st_accel.h
++++ b/drivers/iio/accel/st_accel.h
+@@ -39,6 +39,7 @@
+ #define LIS302DL_ACCEL_DEV_NAME		"lis302dl"
+ #define LSM303C_ACCEL_DEV_NAME		"lsm303c_accel"
+ #define SC7A20_ACCEL_DEV_NAME		"sc7a20"
++#define IIS328DQ_ACCEL_DEV_NAME		"iis328dq"
+ 
+ 
+ #ifdef CONFIG_IIO_BUFFER
+diff --git a/drivers/iio/accel/st_accel_core.c b/drivers/iio/accel/st_accel_core.c
+index 6b8562f684d5..5f7d81b44b1d 100644
+--- a/drivers/iio/accel/st_accel_core.c
++++ b/drivers/iio/accel/st_accel_core.c
+@@ -517,6 +517,7 @@ static const struct st_sensor_settings st_accel_sensors_settings[] = {
+ 		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
+ 		.sensors_supported = {
+ 			[0] = H3LIS331DL_ACCEL_DEV_NAME,
++			[1] = IIS328DQ_ACCEL_DEV_NAME,
+ 		},
+ 		.ch = (struct iio_chan_spec *)st_accel_12bit_channels,
+ 		.odr = {
+diff --git a/drivers/iio/accel/st_accel_i2c.c b/drivers/iio/accel/st_accel_i2c.c
+index 3f02fd5d5946..fb9e2d6f4210 100644
+--- a/drivers/iio/accel/st_accel_i2c.c
++++ b/drivers/iio/accel/st_accel_i2c.c
+@@ -119,6 +119,10 @@ static const struct of_device_id st_accel_of_match[] = {
+ 		.compatible = "silan,sc7a20",
+ 		.data = SC7A20_ACCEL_DEV_NAME,
+ 	},
++	{
++		.compatible = "st,iis328dq",
++		.data = IIS328DQ_ACCEL_DEV_NAME,
++	},
+ 	{},
  };
- MODULE_DEVICE_TABLE(i2c, ds2482_id);
+ MODULE_DEVICE_TABLE(of, st_accel_of_match);
+@@ -157,6 +161,7 @@ static const struct i2c_device_id st_accel_id_table[] = {
+ 	{ LIS302DL_ACCEL_DEV_NAME },
+ 	{ LSM303C_ACCEL_DEV_NAME },
+ 	{ SC7A20_ACCEL_DEV_NAME },
++	{ IIS328DQ_ACCEL_DEV_NAME },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(i2c, st_accel_id_table);
+diff --git a/drivers/iio/accel/st_accel_spi.c b/drivers/iio/accel/st_accel_spi.c
+index 5740dc1820bd..f72a24f45322 100644
+--- a/drivers/iio/accel/st_accel_spi.c
++++ b/drivers/iio/accel/st_accel_spi.c
+@@ -100,6 +100,10 @@ static const struct of_device_id st_accel_of_match[] = {
+ 		.compatible = "st,lsm303c-accel",
+ 		.data = LSM303C_ACCEL_DEV_NAME,
+ 	},
++	{
++		.compatible = "st,iis328dq",
++		.data = IIS328DQ_ACCEL_DEV_NAME,
++	},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, st_accel_of_match);
+@@ -157,6 +161,7 @@ static const struct spi_device_id st_accel_id_table[] = {
+ 	{ LIS3DE_ACCEL_DEV_NAME },
+ 	{ LIS302DL_ACCEL_DEV_NAME },
+ 	{ LSM303C_ACCEL_DEV_NAME },
++	{ IIS328DQ_ACCEL_DEV_NAME },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(spi, st_accel_id_table);
 -- 
 2.17.1
 
