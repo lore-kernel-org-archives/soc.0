@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7086AC74A5B
-	for <soc@archiver.kernel.org>; Fri, 17 Mar 2023 10:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80ED2C76195
+	for <soc@archiver.kernel.org>; Fri, 17 Mar 2023 10:33:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2D4B3C433A1; Fri, 17 Mar 2023 10:33:51 +0000 (UTC)
+	id 645CBC433EF; Fri, 17 Mar 2023 10:33:53 +0000 (UTC)
 Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2081.outbound.protection.outlook.com [40.107.22.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B5928C4339E;
-	Fri, 17 Mar 2023 10:33:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5928C4339E
+	by smtp.kernel.org (Postfix) with ESMTPS id 6101CC433AA;
+	Fri, 17 Mar 2023 10:33:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6101CC433AA
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=chargebyte.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=chargebyte.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GNBi3qH2JzvJqNhK1XCsk3YXfFTJgAYabvd+kDGFVD2g58XNumcG341cbcTXrmGuFAk/kn/Jsk39GPYfteHRpplHDW9Taw0J3iCJND6+TgO8xyxhUHovPiAnVXNmXIUSYX59ATFdM6e5DH27QyZ/a7lSbG5eoFYexOxrcbY5eVGE25ORZGL9KhuWpexZgsKds7nz6SM/d5gWRNyhCwYIhjhJDJZYY0eD6+nuW9wX1/J189ppR5WLV12WYQcfJXzPHxZMykHeuQciWXTC7t7H7HjvCs7AAa4B8+MHAzoeYCSvAJKDz8nAEM162MwsJXhn2XkYW2i703iKe/3h4J/wPA==
+ b=Ys99zSaafY8w02Zx8CTBFjHxDzs6rBYJyJ+zqWE1W53XeWraPMr7T+YTlRF7yNntsZ1BF1YM/on+2ioGP9KwD9iPKO5c6A0y6N7HynKiUGbPA6Ad91ggpcXzbR6MotX6SrAs5B27ZBYprH+dg39+borX6tQH/+yWOL1mu/BctEmeHiZ1KO6nutwBH2Pcy2NQnJlGKi4ypo2/NgmOuoWLkuLhO8Cuw/fmYpbBzMtQaSUhheNhPL6l4cAEBcq55ffLdA85jGjuPcwLMumnjlQP9jhbfXDOwP0so4lsZcOjqzFo0ui0s1HaacB+WA1IY6NgNC4MasS9ulbEu/XdrwqkQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zpH89EnSxr7rEcdtBsoYimy48Gk4J00Ygp0DlPik1qc=;
- b=f69SVgAvJyi8ZQgNgFG1eikVUsetI8XMR7/amCgdyuOlRqPRt6cfS+04EO05W0abnFJzYrPw0slcM3nHwojpKhw8IjZQLsUK2gqVMsnDmF9ZhNPmgHvqZOdB9OMb+Zn15aHOG0lE1zycpHZjpZoaC2uUsu6WPL5YK4e5at9QFnoq8DLJvV9vA6QeDh+FUeks6RpzTbGPEmOogqnPsVr8ZmpcVzywj/swoNwYOVJhFyWXuOcbdFNopnf/zQUKQDZppNYvQj5+1q42d3STupbRGVHkm8+uLZJ5Kn1GNXzf2fKJWocS/2dl6jU8VBCaSCP/d/G997WVmlb003LXGmbh7g==
+ bh=RtjZ184xP4sUDld4v5sEvavh+sm1SVUsnjrJB7OS2Kw=;
+ b=DzhOgyU2epc5uwI15UMOk0hAaP1HvOwtARlLbyFEO4897d784hbzIDqPcLb7ZvALnc59MbQJ4EGJ0KzFLxeIXGJbkjZgk6KwuW8xZOX8MllfaMP/6mNfCQyqsU22RHT+OnuKAY0yr1szXZq1RjZM76V1Xvic2+GbcxKwYgIGHKejmum92NsWrzW4vrgH9rchgD84XUGyrt6eTz3blOYrkylJNy5l9oRQRDR6ztSLTD719S3StHSechnhFkB7dalv+cBtEDkjpTHFrDIR/nNGVUl6OEo13wh9MG5fWXMsJN9FxL20MXCekUy0RRljQgcWLLL9wxprZA/EqdedFbb7YA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=chargebyte.com; dmarc=pass action=none
  header.from=chargebyte.com; dkim=pass header.d=chargebyte.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c4c.onmicrosoft.com;
  s=selector2-c4c-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zpH89EnSxr7rEcdtBsoYimy48Gk4J00Ygp0DlPik1qc=;
- b=M1SbV9p50WOhRJP7g9lDhpQgDkOgd2q0Zsn05ZIh6Ae/R7JiPeFUa+8XkaMcyMz6STf+ZNzuZdYx2kN7YqsimvXIxGTdmueUcA/B1EUqBgnwejeTypVBo+FY121ViuUcynM6r0aB1gOMMpztFa+NiaoQ1gvJ92E/ZuhteWDYJTI=
+ bh=RtjZ184xP4sUDld4v5sEvavh+sm1SVUsnjrJB7OS2Kw=;
+ b=cQ7pxvUuPwcTgUIvKyETgmsrHgX/VCIwifv3JcwPjCUQ35moMoPJzVFtYF7Cutd4ypW0D8mEwlmKCV7JYMS0YZifyTsJC2wbzM6AKyL4qlAeSZCl/tlwAiV7e282h7NMaVeE8KmZbJmygERcxTBIeXMmv48NtH1jn0ru6xY3DC0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=chargebyte.com;
 Received: from DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:33f::5)
  by DB8PR10MB3863.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:168::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.10; Fri, 17 Mar
- 2023 10:33:40 +0000
+ 2023 10:33:43 +0000
 Received: from DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::92e9:73c9:940:579e]) by DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::92e9:73c9:940:579e%5]) with mapi id 15.20.6222.008; Fri, 17 Mar 2023
- 10:33:40 +0000
+ 10:33:43 +0000
 From: Stefan Wahren <stefan.wahren@chargebyte.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -62,11 +62,14 @@ Cc: linux-imx@nxp.com,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	stefan.wahren@i2se.com,
-	Stefan Wahren <stefan.wahren@chargebyte.com>
-Subject: [PATCH V2 0/8] ARM: dts: imx6ull: Add chargebyte Tarragon support
-Date: Fri, 17 Mar 2023 11:33:15 +0100
-Message-Id: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
+	Stefan Wahren <stefan.wahren@chargebyte.com>,
+	Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Subject: [PATCH V2 2/8] dt-bindings: Add DS2482/DS2484 as trivial device
+Date: Fri, 17 Mar 2023 11:33:17 +0100
+Message-Id: <20230317103323.7741-3-stefan.wahren@chargebyte.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
+References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
 Content-Type: text/plain
 X-ClientProxiedBy: FR2P281CA0125.DEUP281.PROD.OUTLOOK.COM
  (2603:10a6:d10:9d::19) To DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
@@ -74,129 +77,80 @@ X-ClientProxiedBy: FR2P281CA0125.DEUP281.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB9PR10MB5211:EE_|DB8PR10MB3863:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f58159b-bad3-47d8-beaa-08db26d3130f
+X-MS-Office365-Filtering-Correlation-Id: b40ebc37-a6cd-49a4-22d7-08db26d314c9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	ULe4zf8M7nBle0seR0jKDiyU0JNBj3AxSgwcOwP3nAv5U8qvm3xOlq2n49ulHmWoYKWVhwe4QdDDNDJzu4vcLMwlgb5LzBCvcgT8LRGSiQvLWHZX7CAKWFz46RzLy+XzlLeyE56lqDYS6Wep4+eebUnPK5/gwwibE0IQaxaQg8bJh959zP96gRFU5f96QSLpJ9kMMpc7IfSkJ28k9Zn304gZOuZMThcsyY6gOzq65TYE7qhlUoaIX0+tBPzb3AryNeldOPHM3E35PHYsr3qBtMbMXVwtpph2F0iLMl6b0f54ZfeCr860yF8AyX8pb2Do8OitdiHGEK9vFVwp7tb8sIAlsScm2k5MScamd1GqzkRV1dOnfLYWmJuEGC2no8Sys3yLN3l0CmCdydZSwtRiD/o/AmtArOLfQSkCM4yaN+DDjdsaiiG48MvQcjhkf00C6gIrBfjtwjXqqcz6sdAmIVNIhzubiYn7uOeUs1lMSaOwLZRMp1Cnsc3gvLNQ0rFL+RchgMsRLjP0aOImbQYogsZYMyBRlOS1+en0vestpAgiGxxSslE28Vfi3O9bn0zk+2qQaM9Bn2sS/xi1kq0Tky17sN5Lg/HimykrfOS/a/dwVCUZP9OJxKJASw9EUyJ5emsqRuAuclK7P/NX5OijSI1/rKnRO2CMnLkPFRVo+leB9DHTsSKvews2bcioPEtyF9VeBh9F1+53TR07iUw6v90i845Oq/muh2JjU0n5NFA=
+	Vn00X3g/+entfFxjDd4eMhgy3ToKx/ZGv3MC8zdUh3w+ItWyqAksTQUefaxCgdMFTLpxeSvqroA/N5f6teSfTY1ndT36D3t6v5+AlC3ehT+J8hSo5GpnaDMzL6t+JQnlX/3vdqDJQD+09p2Gm0Pj3hLYXGREuc2as0y3BzKmUyqf1tQZBRnNfoHzwn6IxJvm92pyAMTYaKJKCrlgQo+mmxdlMIti1h9C5XdUXhIRnGhAHNJsfThDLNwBVKj8BhD57pkZyXPNqGRwzorzHaUMA3nTTRPwUyOuGZVf98meAzjdU2IXKiysuxmdiGFa5wVibi5irY7LNeN/w5yTx6xI/aHEuc0JoPc+gIAYQoM0903/Sl69ZFD3lKtWtrh93UeP8fi9fdEtmEKztNoekivy6zOj9iRCYQX2UIH1V2/vV/Ma5KD/tvp5SuD2dwSzvbY22iEeCTAzLNO2WUCMHAfa5Lp8imaxUie2uv6etlQ3fHSGFViunsCqG/5QHI8mMB7FIsryzUn+rcnC2gmVNaSfBW1hxaFpLdKhp1ikjMAQgBGw6Sm/QWG4ZscoU036FXiDaaKF6dwRHFi9ZEHM4xuWs1ZABPHh+mQ8hwh+Sxz2vichlLOIgIFQkQgt0SMDdOB0G3fRxLK6W3cub9w6+kjpxfjH9eGotl3XfA/CiZdhXFqPFluB2a3Yujq3NH5RBUit6Gvgiff2kuAdjap4z4M0Gzg+mjRjZA14lsmEk2fuzv0=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(451199018)(921005)(38350700002)(38100700002)(66946007)(36756003)(7416002)(478600001)(86362001)(4326008)(2906002)(5660300002)(44832011)(8936002)(110136005)(8676002)(54906003)(316002)(41300700001)(66556008)(83380400001)(52116002)(6506007)(6486002)(966005)(66476007)(2616005)(107886003)(26005)(186003)(6512007)(6666004)(1076003)(32563001);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(451199018)(921005)(38350700002)(38100700002)(66946007)(36756003)(7416002)(478600001)(86362001)(4326008)(4744005)(2906002)(5660300002)(44832011)(8936002)(110136005)(8676002)(54906003)(316002)(41300700001)(66556008)(52116002)(6506007)(6486002)(66476007)(2616005)(26005)(186003)(6512007)(6666004)(1076003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?r+mmJG9Zqq/zogdrPaumuDmiTkNJpBADbXg2AwviJfLzSzycG5X29OkHMyf4?=
- =?us-ascii?Q?F508aOtA2VKh2vzXj8ZFG+Ble5ZrvfX9B5iCRdX+5zTcQzCOua03oh5akSGy?=
- =?us-ascii?Q?hl5za0n4U3N4imXDVy/Ak/6xBL/0qBR5hCJMY3x/VwB74lzeuIdsX9y7wAaU?=
- =?us-ascii?Q?dwLoKF7oUsgddh0lXA1rPu3qKljSQeCFP4sIUKNr+SoZ3AZ9e2MTzYmynGya?=
- =?us-ascii?Q?d4YGrt0QTan6kDIWpXxSlZW19onCzxxB0KO4M+0aInK7XquV8CjrdOfbLgEK?=
- =?us-ascii?Q?BfooXGpJuA07aivaGfaM4zDqdAAtPQGMpHtiN/PjFuJe1+EX0KgsuRZDtETV?=
- =?us-ascii?Q?xjjnpQl60b0GWr9v2XTJyJzwSUmiOIiaIaLdYPGyVeKRjjSMaVeJV2lWlHSC?=
- =?us-ascii?Q?fspLdFgaqzkADdySHUftOiWo6t+YnGrwIKfjfM0cRLx02wlkkSIZZkKIsWDi?=
- =?us-ascii?Q?mBE0iWatJ0v5wdW8qJXHHJhnyJrfDVvIgoWeRmCZ4R5WqAFsRstXwT/8IXVY?=
- =?us-ascii?Q?krQJ0xQ5YqzbhimkVT1ezpuUrhEmL2cQxAXSpcb9oG87vAL3RUZwwe2JGVm7?=
- =?us-ascii?Q?qS4zU3HOoqjJv+o8I7zIhJQ296IYN/KNgLc3j2eN3ESeXkF8sK2zTonxnosB?=
- =?us-ascii?Q?Fo+6PQQBg1G8oXsQcvq/g0GLuTCgoxdIP6EhGjSwqlTsk7whSyiY89tq4VR8?=
- =?us-ascii?Q?G3qUXQWOTRKSqUSRCS7W/AZ1dop+ZtkpOAgfe9gDqucyYEG3G0cx3Pl/0ECN?=
- =?us-ascii?Q?j+mO2BqyaoPi8KofSw6poOhAoSILnsEgL9+5pGu8+dJqdZBBJtAGd9LNEvLu?=
- =?us-ascii?Q?bfbX6Bgm7tQ4W8cpkqOI0u+0Fop0Rl9TPuEkXbMU8l5xmFrXitNZiqv7tr63?=
- =?us-ascii?Q?ev0O9ZviXWoA3pBMuedU6mkPr+vGK5CNNYmwgoBsFsdIY1b4nH3XifFxx9ak?=
- =?us-ascii?Q?TKGjc/DPBNLyfKsKY98y/VvmGgVms+aEYIc624JqrLTqYoIFAFSKyXrvvUve?=
- =?us-ascii?Q?GU/o2rwKjDmOhD5tytgfUWkpYWOPLyVSKuE/2QvfHuyWnl1CXoG7tGyO+AQi?=
- =?us-ascii?Q?GNSiqo4zStiDudl9FTornynfVXa2Txuv+BCucw2ETrimLhaGKmi3AgeE1LAI?=
- =?us-ascii?Q?Xz6UNTleweuVbOhtIX/3mDgI/pfNPps2i8swZkabB+swloz0fxzS7BA0PAHW?=
- =?us-ascii?Q?nif1fbvLsK7qdVFeQunShpAe10+CECjnGvv12skhQPivYzlYQeMVEdFn64Tt?=
- =?us-ascii?Q?k0lvQL7uP9H38vhlVdDVAW3SSELCzMrLxdX83AMXoLAKpz9taBiDuza8l+5i?=
- =?us-ascii?Q?rKneAiSdAsrL1Yz97GMAHGuctetYm2h1F48rhziPuCG9yucIou9jfcoSK4jc?=
- =?us-ascii?Q?JlbwbVVxBrKeovu32aRzWOz0+PN8OCtWob5nr8vu5Of30/DjW4pyqwVhR0mo?=
- =?us-ascii?Q?XKKAHIX7oNQtLBVL2JT9V6NVrp20zmKpC8SZQjstT2hTNE8JvRvHBie2xK+H?=
- =?us-ascii?Q?NnNaGe5vFt0rI+oDFpJNvAMhPvbxvJ9fZRd9bYrfZBzgVIFUwyAgq58AOZBL?=
- =?us-ascii?Q?M+bIGgxd4oMzjbq2XJsH1ic38s6T0Hdjr5ZG3s2apex+1Qu+qg1aOydN502G?=
- =?us-ascii?Q?+g=3D=3D?=
+	=?us-ascii?Q?498fyFzClZVNDuq9yPYw7525Zu+WrobbjspiyZDk1ic67AmMl1LJeLLghCWw?=
+ =?us-ascii?Q?qSZBYqAamw3l9cxV/baYzcwOw1Gkec7Mv7eIwEVNqbEbGSpleF2jNpNbOCl2?=
+ =?us-ascii?Q?klNOrmSudwq8HJzkMnd9fPS+YpelIV8u+grN06yUpjFJEI7J56KPUzkBj9oM?=
+ =?us-ascii?Q?DSj49H/8byQpDIiKkL2tn2lsbsH/kCy7vaMYcluHxrVNLQo6K/sA7Zva6AJi?=
+ =?us-ascii?Q?c9BLr26+o4b12QW3iOETH43tba1OPiZqDqA7kHFhJEzWk6bXwsJFNVdez2mn?=
+ =?us-ascii?Q?NnaKoAyoa/cY//2i/J4S7MShEvFRkVW86YEd9mijE/FiRI+l5YGB3x9qWfHx?=
+ =?us-ascii?Q?znaHmYCGTUN4AGS9JG8pCBcYjZuQ7ok/4mXS/yOhCHKdy2Xgii/tQjRclYQx?=
+ =?us-ascii?Q?BtCS34VXwJGTKAU+KaS7ub4LApxChlxhfZ3IZ/+TF5S+bYWslcA1XsktmTKI?=
+ =?us-ascii?Q?RmASK/kuGgcrhMtb10uAMzl1+6ZtjQTiFzQLAvtutgrXMxSQgN+uyq0rLW4y?=
+ =?us-ascii?Q?8/cMK4c8Ud5sC57ZrTim31LoSf7p7k+7G1HZFytAaR/Ae8NMdpF9KYYu4hxb?=
+ =?us-ascii?Q?i3po9bXI77R2neQlj3IKhSsamLRiQcesB5Qlpx+OHkE6S7Or6re1OVbCcIdM?=
+ =?us-ascii?Q?q1RtMnM8chM/+izVCsjfjnwRxkmwMboRwtveDczFD3xHryoOiNb/C+hBZep4?=
+ =?us-ascii?Q?zwRtYPsOoY8NWyjkAToIgvAPNqfSBCXVWuVQ0jqvOus6mhJJ1BPGKUyPN3M9?=
+ =?us-ascii?Q?wpKFLRHW0XXrNHegBm0eWLEw+uYdAhP7uCjyTlPbr7Yi/6u+kAMhhrS3nAtR?=
+ =?us-ascii?Q?R85sIxIRJHjgZoHFHjIaKHdwAZ+r1Rg+CCe6ELjhexYbzdalfou9zzhxdaVR?=
+ =?us-ascii?Q?qJQsljtQ6lnEmvfkcBpNQKhijF2Wpir3QH1wOJVgdGNNo3i7i6djJ47JqSqD?=
+ =?us-ascii?Q?dq7XvZu+GDOyzbojIp+pEdhXNU5j4fU1LOYZjrvIzPA1OxRV5bKCuryQp2lK?=
+ =?us-ascii?Q?iTqb3hJx+HPuvC1beIgYzTwjcwWZo8jJbeTClIjqXtqTtvcAJmYQlT+Xvkr8?=
+ =?us-ascii?Q?yhuk6NtNnS9YdG/ZuFNG06uvmU9vlPG1zhMsWRPTcRaiWbrIQzoULvQTHA2m?=
+ =?us-ascii?Q?D0peQamLLA1XCOdTElcEoOCQl3IReSjPYh0C/BZGzwoD5qQkvVPJWrA884Nd?=
+ =?us-ascii?Q?t+6m/wj/rpRyK8uP+D0FC9SormznwXZ3eF10dYfOHtbochDc7vHKsZbO6jbA?=
+ =?us-ascii?Q?GJuvmJFzWdhcC0rqS3mIkBxvmwzbwXdd7fihtreae7gYxkrb8Zz4ZGivPxlU?=
+ =?us-ascii?Q?giNhEYFJjN2orvHgEczLvHmpD9epagX7GjDLexJv/XPKWrFS4KtF/DuuXA5F?=
+ =?us-ascii?Q?fn9mR6bRWuPmqSYzX0ErEbLJqP28CUpSQKLuCQCyMDvRjK3KBt03TwGDoLax?=
+ =?us-ascii?Q?uugMcWIJ0Uy8lFZQKNzBuC2Eq215dWiTWx0qE4B+yq+t6Gcqu/6m73vEIRzy?=
+ =?us-ascii?Q?Ve0NM3Urk2LwN8Qj/0TxvSpzZVxxpVnx7izoJdPGvkdaGrz18q9SmZ+fR1fi?=
+ =?us-ascii?Q?vW45F/gGuqYNDfw6hV6JXnrhz1z2x22UqXVoKdUdxD0QR5Hcz0vne1X9eaS+?=
+ =?us-ascii?Q?3g=3D=3D?=
 X-OriginatorOrg: chargebyte.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f58159b-bad3-47d8-beaa-08db26d3130f
+X-MS-Exchange-CrossTenant-Network-Message-Id: b40ebc37-a6cd-49a4-22d7-08db26d314c9
 X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 10:33:40.4221
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 10:33:43.3564
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 30547194-0d55-4a2f-900d-687893d3bdc0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TkMqmCZ6h6VWV20du14wwrb12AxZcEFO2iSMsGX4iTVr3E/h9weclxTOwV4fqvOj2pv3Fh+UM8+b6bCFnxKromA5ExuzWZ6Z3bobi7GAci4=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0Dxi9i5ktyj/CkI2Wdp4khJ+N+DpDd7509pMc3DOzZSo8c5Cc5qpcOy03uMYwt0nWcDZOEokNIPbstnv76MZoBrsBpBeAihjVN+ElOfinhg=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3863
 
-This series adds the support for chargebyte Tarragon, which is an Electrical
-Vehicle Supply Equipment (EVSE) for AC charging stations
-(according to IEC 61851, ISO 15118).
+Both chips are I2C to 1-wire bridges.
 
-The Tarragon board is based on an i.MX6ULL SoC and is available in
-4 variants (Master, Slave, SlaveXT, Micro), which provide more or
-less peripherals.
+Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Supported features:
-  * 512 MB DDR RAM
-  * eMMC
-  * Debug UART
-  * 100 Mbit Ethernet
-  * USB 2.0 Host interface
-  * Powerline communication (QCA700x)
-  * 2x RS485
-  * Digital in- and outputs (12 V)
-  * One-Wire master for external temp sensors
-  * 2x relay outputs
-  * 2x motor interfaces
-  
-The Tarragon hardware is bundled with a charging stack under the name Charge Control C: 
-https://chargebyte.com/products/charging-station-communication/charge-control-c
-
-This series is rebased on top of:
-https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git?h=for-next
-
-Changes in V2:
-- after fixing technical problems send patches directly from chargebyte address
-  and drop the related signed-off-by
-- add Krzysztof's Acked-by
-- improve commit messages (patch 3, 4, 5)
-- make iis328dq fallback to lis331dl as suggested by Jonathan
-- fix order of Tarragon entries in FSL schema
-- improve Tarragon led node names and drop label as suggested by Krzysztof
-- change Tarragon SVNS pinctrl settings after internal discussion
-  with chargebyte hardware team
-- drop broken-cd in Tarragon common DTSI which is not necessary for eMMC
-- add no-sd and no-sdio for eMMC interface of Tarragon
-
-Stefan Wahren (8):
-  dt-bindings: vendor-prefixes: add chargebyte
-  dt-bindings: Add DS2482/DS2484 as trivial device
-  w1: ds2482: add i2c id for DS2484
-  dt-bindings: iio: st-sensors: Add IIS328DQ accelerometer
-  iio: accel: add support for IIS328DQ variant
-  dt-bindings: ARM: fsl: Add chargebyte Tarragon
-  ARM: dts: imx6ull: Add chargebyte Tarragon support
-  ARM: imx_v6_v7_defconfig: Enable Tarragon peripheral drivers
-
- .../devicetree/bindings/arm/fsl.yaml          |   9 +
- .../bindings/iio/st,st-sensors.yaml           |   3 +
- .../devicetree/bindings/trivial-devices.yaml  |   4 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm/boot/dts/Makefile                    |   4 +
- .../arm/boot/dts/imx6ull-tarragon-common.dtsi | 856 ++++++++++++++++++
- arch/arm/boot/dts/imx6ull-tarragon-master.dts |  82 ++
- arch/arm/boot/dts/imx6ull-tarragon-micro.dts  |  10 +
- arch/arm/boot/dts/imx6ull-tarragon-slave.dts  |  32 +
- .../arm/boot/dts/imx6ull-tarragon-slavext.dts |  64 ++
- arch/arm/configs/imx_v6_v7_defconfig          |   6 +
- drivers/iio/accel/st_accel.h                  |   1 +
- drivers/iio/accel/st_accel_core.c             |   1 +
- drivers/iio/accel/st_accel_i2c.c              |   5 +
- drivers/iio/accel/st_accel_spi.c              |   5 +
- drivers/w1/masters/ds2482.c                   |   1 +
- 16 files changed, 1085 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-common.dtsi
- create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-master.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-micro.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-slave.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-slavext.dts
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 6f482a254a1d..9b7b24989359 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -183,6 +183,10 @@ properties:
+           - maxim,ds1803-050
+             # 100 kOhm digital potentiometer with I2C interface
+           - maxim,ds1803-100
++            # I2C to 1-wire bridge
++          - maxim,ds2482
++            # I2C to 1-wire bridge
++          - maxim,ds2484
+             # 10 kOhm digital potentiometer with I2C interface
+           - maxim,ds3502
+             # Low-Power, 4-/12-Channel, 2-Wire Serial, 12-Bit ADCs
 -- 
 2.17.1
 
