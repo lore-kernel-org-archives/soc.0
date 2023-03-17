@@ -4,52 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C92C6FD1D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CF4FC74A5B
 	for <soc@archiver.kernel.org>; Fri, 17 Mar 2023 16:20:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 812FCC4339E; Fri, 17 Mar 2023 16:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60F7FC433EF
-	for <soc@kernel.org>; Fri, 17 Mar 2023 16:20:18 +0000 (UTC)
+	id 80638C4339B; Fri, 17 Mar 2023 16:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6327EC433D2;
+	Fri, 17 Mar 2023 16:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1679070018;
-	bh=8AbRgZl6coCCKdxhx/HdUsykLXLn4JpoDsMiK31XG6A=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=eGp49/+6OhPQTnABqRgqXpcl9uKKUuUMbEMlh/Okl932WsUo6dzJ4BQnaBqVXsRuC
-	 SGwzJFRWIdFXwL8lXnH39hd6s+Scu1T5cYks0w4dCsKBlM7Tye4BUABOUo+1aI1wYY
-	 htSmyYjZ6WIJTHn8axeKzbtFL1lz600APNJzJe6OecUdu6piS3fQIj6WpsNIk0UbAN
-	 6LBBl37fjCU9okHBa40WYNPXEKAqJvXfN41peWau3sVUF7fjvmnxyASOxdg8msf7au
-	 6bCJh2rG2uzFIfaTH5GmvkSvKB50iV0ICg3SEWl1PePLiDuo7r3Ja0XPIYnQvRWEPt
-	 LJti/i7Xrn4oA==
+	bh=MCc3FffLadNh/ID+YYOktycFJVArzs9NvBbn2WWBzd4=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=LQiO8bqVsr2u8+6+wy1gFNZH8BpbH7feCDcIPQtFPjD6L57CLLTIPV1fujOHEg9CX
+	 9cpu9hW6OUFsaDRpgfBJAED971ufiTVDgsolgmtyxKqY0tGvz5YuX49O4mPpm9Seaq
+	 98KMU6A+2ekgKZ75bNpnaoQjD9sqx5Ln2mjKZYqjGQhtiqHB2F/KUhqQXVd1CgghV4
+	 jvnFE0kps4Kgtb9rDnw3yhHsKNNTxuzmbi3DWQZi5avXJt9X1zucY79NW5x6Ed0gNl
+	 JxZLL0ffjlqJZ2k/pvnZMoNQaprfaNy8+PkIj7bJ/jhwnWVLr+gLwbZeXFcyJ+fa3Y
+	 53+IRklxWiqPQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B2E2E66CBF;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44983C43161;
 	Fri, 17 Mar 2023 16:20:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
+Subject: Re: [GIT PULL] firmware: arm_scmi: Fixes for v6.3
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167907001817.31956.13770102782259951521.git-patchwork-summary@kernel.org>
+ <167907001827.31956.6698239494798209437.git-patchwork-notify@kernel.org>
 Date: Fri, 17 Mar 2023 16:20:18 +0000
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+References: <20230315193557.1709241-1-sudeep.holla@arm.com>
+In-Reply-To: <20230315193557.1709241-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Patch: [GIT,PULL] firmware: arm_scmi: Fixes for v6.3
-  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=730485
-  Lore link: https://lore.kernel.org/r/20230315193557.1709241-1-sudeep.holla@arm.com
+On Wed, 15 Mar 2023 19:35:57 +0000 you wrote:
+> Hi ARM SoC Team,
+> 
+> Please pull !
+> 
+> Regards,
+> Sudeep
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] firmware: arm_scmi: Fixes for v6.3
+    https://git.kernel.org/soc/soc/c/d2e53ceaf284
 
-Total patches: 1
-
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
