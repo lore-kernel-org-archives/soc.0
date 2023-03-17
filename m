@@ -4,60 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 549EEC7618A
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52EA4C74A5B
 	for <soc@archiver.kernel.org>; Fri, 17 Mar 2023 15:52:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1E509C4339E; Fri, 17 Mar 2023 15:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07491C4339C;
-	Fri, 17 Mar 2023 15:52:34 +0000 (UTC)
+	id 1C861C433A1; Fri, 17 Mar 2023 15:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07469C433EF
+	for <soc@kernel.org>; Fri, 17 Mar 2023 15:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1679068354;
-	bh=Bd9KxPo+CCSFEvKuNHTxJUuM1alD2d/ELsSXC5oHmkk=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=eGz75a8ZaGmTIfhNR9BxuleVQ1gOWQGlYwoSk7rfvo3jV/FxEegCNQ6ZzbHTapIlR
-	 L1zgoymgCh3ibJnOrcmc9lovHOow59MlPQoxm0ynkJaChrEtptch+ZFB/RbF1d5lHQ
-	 KpatqMUJSJxeeJ1O/Mp3XbQF1mtGKmKOdRaISnJ7fjBOYviXXK2poC6OF+1lXKh5K8
-	 cDebpsucSfiEe0/tdnZFhlmSj6UCBboWN5ZbbJoW2QBWEZEC4tC3CGA6eXlAZrP037
-	 OlsQCscHO+Kw7KueJffR3vV60fiA2+/jqgIq2WcZ3VEWD5Kg/GsxVBjyhQS9vxkr0W
-	 Z4WFx9o8cU4UA==
+	bh=oUZlDIwMAt0ykLVGgQut8HZM7ISud3BEjpLPoKo4dK4=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=V+oZwE0tJmoIQ6sGHYNKmuHZcNW2rsEL0ndomz3Al5fzgfYxOanYPA6Vopo2czGaX
+	 dgP22gFOMeWse+YocshUhaa1BP1OIE7v7QHDA2FgpqUbHhd1FZYN/b1wqyxJHG9Ia7
+	 WF/6L0TDISw8xHdKCa2Sx9bnttOfaMSQgRMMi/riQROxRs9Ae8Cdu8A0uC6W5Rp7Be
+	 k0DCG/y8yOJnMgaMHSpvlgvdTrqu00coI74ZdShrvtjw3pgedPOPmCpBCu2+2LwdAI
+	 BstCfBWpaDLi3St2SG5Y5NxlM8B0HBTSWRikToTWJdbkWItqKQMW8MKKm22bEGV679
+	 DfiNolMeTyiOg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0FCAC43161;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D77BAE66CBF;
 	Fri, 17 Mar 2023 15:52:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ARM: Convert to platform remove callback returning void
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <167906835391.32307.8109258928601284233.git-patchwork-notify@kernel.org>
+ <167906835382.32307.5175544927515550238.git-patchwork-summary@kernel.org>
 Date: Fri, 17 Mar 2023 15:52:33 +0000
-References: <20230314103225.2787101-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230314103225.2787101-1-u.kleine-koenig@pengutronix.de>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@ci.codeaurora.org
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Tue, 14 Mar 2023 11:32:25 +0100 you wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> [...]
+Patch: ARM: Convert to platform remove callback returning void
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=729819
+  Lore link: https://lore.kernel.org/r/20230314103225.2787101-1-u.kleine-koenig@pengutronix.de
 
-Here is the summary with links:
-  - ARM: Convert to platform remove callback returning void
-    https://git.kernel.org/soc/soc/c/74a5b94b6221
+Patch: arm64: virtconfig: Further shrink the config
+  Submitter: Mark Brown <broonie@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=726953
+  Lore link: https://lore.kernel.org/r/20230221-arm64-virtconfig-slim-v1-1-604b64be7ec3@kernel.org
 
-You are awesome, thank you!
+Patch: ARM: dts: ixp4xx: use "okay" for status
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=728958
+  Lore link: https://lore.kernel.org/r/20230310231420.583121-1-linus.walleij@linaro.org
+
+Patch: [GIT,PULL] Fix race condition in AMDTEE driver
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=725597
+  Lore link: https://lore.kernel.org/r/Y/5ZGX0lSTnZz27E@rayden
+
+Patch: [V4] arm64: dts: sprd: Add support for Unisoc's UMS512
+  Submitter: Chunyan Zhang <chunyan.zhang@unisoc.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=726797
+  Lore link: https://lore.kernel.org/r/20230306085717.420353-1-chunyan.zhang@unisoc.com
+
+Patch: [GIT,PULL] i.MX fixes for 6.3
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=730345
+  Lore link: https://lore.kernel.org/r/20230315132814.GF143566@dragon
+
+Patch: [GIT,PULL] arm64: tegra: Device tree fixes for v6.3-rc1
+  Submitter: Thierry Reding <thierry.reding@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=726044
+  Lore link: https://lore.kernel.org/r/20230302094213.3874449-1-thierry.reding@gmail.com
+
+
+Total patches: 7
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
