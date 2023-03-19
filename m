@@ -1,111 +1,106 @@
-Return-Path: <SRS0=S7z/=7L=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <jic23@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA21DC7618A
-	for <soc@archiver.kernel.org>; Sun, 19 Mar 2023 15:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7415DC76195
+	for <soc@archiver.kernel.org>; Sun, 19 Mar 2023 15:28:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8A434C433D2; Sun, 19 Mar 2023 15:27:47 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0B704C433EF
-	for <soc@kernel.org>; Sun, 19 Mar 2023 15:27:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B704C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id er8so26106197edb.0
-        for <soc@kernel.org>; Sun, 19 Mar 2023 08:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679239664;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=btf04DuiQhB9X18hLvJQP2+uq59G2JcTyG4E+evpdrk=;
-        b=jZ86PcRXCyuvFtD4O4YDLdPXc6UStKeJVz8B2x5LqEnIkFbT5VEDaeV9kE1TgwrW3S
-         8PPjp546vUnF9qyqL/IfReOc/upuSIE5QCqBRj5fc9LpdNrNuSyJxUiIcDMxhX+ulVMQ
-         Vj+N4+pZdcsVwrPD3bOZvwewnRO2uiUTUPOQmeVp67prf4pUBCtn7C94Xp1CtCsOn1E3
-         OefiJ7QW0RB3mmpSjVDrFkOEUIL+kH15yezkvLqfmdTI3pkKgNgGuKWMEE4xSpFVZr7P
-         DyvIDN2xIWPu1nPAnRznCz+YqcF2vMUjlyPkQXpLKqjNfE+1HBacr9JP2Zm0pee0dazI
-         BR7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679239664;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=btf04DuiQhB9X18hLvJQP2+uq59G2JcTyG4E+evpdrk=;
-        b=oh6SOug9KgP+d4VvtD084GuQI0JF3S9o2xygjQCAEEuREaVzrKWTHXxb+XVZ6ETLrp
-         24caqSqkYs2FoXao20Nz7ZCpUpUTqX2MQfBIQZN3buAho7HxV2lMIKLzOKn1zAi/9g27
-         ZNfx0Oti8vrWso0+FiAkg5OrGFkmXi8ut87lc+RD0VDzHb793zf9JFNOPm98TkCeQRUs
-         wDSy5Xa0IK3iNKokOVannPtgUh2WxJuLRG5Q2ZiR65xAmiC5T9OJQLLJDKlJBNBncCp+
-         j6ca+I6pX5UDUG0L4+aKx+n/cJeFjq2Cjkdj5cCATuQeEc3fSEYB25Lud3Xep8g1uXbt
-         g3xg==
-X-Gm-Message-State: AO0yUKX295/WKJITHs8H+xla97B2I+QhCjAegPJ3jQOfa4run8R3Kb23
-	PPlvVPXe55O/8bwCNm5AV3yXpQ==
-X-Google-Smtp-Source: AK7set8dTQz+GK5qZqXqshzMDzIkzel/SC4URpp1ZrQOXGslo8nsuHaUFu055ExOlc0D6tTx8CSwlw==
-X-Received: by 2002:a17:907:175b:b0:92d:591f:6586 with SMTP id lf27-20020a170907175b00b0092d591f6586mr5811607ejc.34.1679239664162;
-        Sun, 19 Mar 2023 08:27:44 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm3340857eju.193.2023.03.19.08.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 08:27:43 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 2D210C4339E; Sun, 19 Mar 2023 15:28:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DBCC433D2;
+	Sun, 19 Mar 2023 15:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679239685;
+	bh=QjhvFO2ZYz/AAvEunZaoEc/27RSQIWSFHJwCLdjEg78=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=e+qr8XIAPWPBhkAesjQwcT0QrruSO8hhMt5q+qSYTpgW8LAEuW+ng/VnUymzGlIjG
+	 xqK9FC+DREVX9p3bh6a5lOJvMdxNBA2McBYZE1eLchYc8o6AFb/t4Izcj5UyMxnPMh
+	 szTTgjt3WjJ4l4YvdF8GASn2+Y20CUDbJ2cQ+zIGqZjXt0MjaO0ujEB1kJf88w6FTc
+	 pJBQTQLtX2eLNsUIWOTxYEqKGhkiHjp6E/LeD0Kr54ADBDOK1qqkKIGfvPxFzTICcs
+	 Fu1F1Mhb74XZa3u7BXWiQ30kiElAOQE+KHVd3A69h/KgAlmFDA5ddGTGqEACSS39Nv
+	 XQSScvveJCIHQ==
+Date: Sun, 19 Mar 2023 15:42:57 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>
-Subject: [GIT PULL] ARM: dts: few cleanups for v6.4
-Date: Sun, 19 Mar 2023 16:27:40 +0100
-Message-Id: <20230319152740.34551-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
-References: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
+Cc: Stefan Wahren <stefan.wahren@chargebyte.com>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Evgeniy
+ Polyakov <zbr@ioremap.net>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+ <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ linux-imx@nxp.com, Li Yang <leoyang.li@nxp.com>, Denis Ciocca
+ <denis.ciocca@st.com>, soc@kernel.org, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ stefan.wahren@i2se.com
+Subject: Re: [PATCH V2 4/8] dt-bindings: iio: st-sensors: Add IIS328DQ
+ accelerometer
+Message-ID: <20230319154257.68facd30@jic23-huawei>
+In-Reply-To: <708b63c9-d2b6-c65f-0112-8f50173c0bca@linaro.org>
+References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
+	<20230317103323.7741-5-stefan.wahren@chargebyte.com>
+	<20230318155534.16b47583@jic23-huawei>
+	<708b63c9-d2b6-c65f-0112-8f50173c0bca@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+On Sun, 19 Mar 2023 13:40:49 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+> On 18/03/2023 16:55, Jonathan Cameron wrote:
+> > On Fri, 17 Mar 2023 11:33:19 +0100
+> > Stefan Wahren <stefan.wahren@chargebyte.com> wrote:
+> >   
+> >> The ST IIS328DQ is an accelerometer sensor, which is compatible with
+> >> the already supported ST H3LIS331DL. So add the new compatible
+> >> with a fallback to the ST sensor binding.
+> >>
+> >> Link: https://lore.kernel.org/linux-iio/2bac9ecf-9d2e-967e-9020-1c950487d781@i2se.com/
+> >> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> >> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>	
+> >> ---
+> >>  Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+> >> index c6201976378f..5eb71b24a7cb 100644
+> >> --- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+> >> +++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+> >> @@ -48,6 +48,9 @@ properties:
+> >>            - st,lsm330d-accel
+> >>            - st,lsm330dl-accel
+> >>            - st,lsm330dlc-accel
+> >> +      - items:
+> >> +          - const: st,iis328dq
+> >> +          - const: st,h3lis331dl-accel  
+> > 
+> > Hmm. So this separates the particular 'oneOf' group from the description
+> > associated with the ST accelerometers.
+> > 
+> > DT experts, is there a better way to do this?  Ideally we'd also associate
+> > other similar groups going forwards so it might become less and less obvious
+> > how the groupings work. (bit late for the many groups that exist
+> > already in that list above this point).  
+> 
+> If by "grouping" you mean how the oneOf items are organized with
+> descriptions, I wouldn't put too much attention to it. You can add some
+> '#' comments to separate the groups, but for me this is still readable.
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-are available in the Git repository at:
+Works for me. Thanks for quick response!  Applied this and next patch
+to the togreg branch of iio.git
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.4
 
-for you to fetch changes up to aff750faa5ac699df7ade5a31b6ba52ab1072d8a:
+Thanks,
 
-  ARM: dts: hisilicon: use "okay" for status (2023-03-12 18:01:00 +0100)
+Jonathan
 
-----------------------------------------------------------------
-Minor improvements in ARM DTS for v6.4
+> 
+> Best regards,
+> Krzysztof
+> 
 
-1. TI, Marvell, HiSilicon: "okay" over "ok" is preferred for status
-   property.
-2. OMAP: align UART node name with bindings.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (4):
-      ARM: dts: omap: align UART node name with bindings
-      ARM: dts: marvell: use "okay" for status
-      ARM: dts: ti: use "okay" for status
-      ARM: dts: hisilicon: use "okay" for status
-
- arch/arm/boot/dts/armada-388-db.dts     |  2 +-
- arch/arm/boot/dts/da850-evm.dts         |  2 +-
- arch/arm/boot/dts/dove.dtsi             |  2 +-
- arch/arm/boot/dts/hi3620-hi4511.dts     | 12 ++++++------
- arch/arm/boot/dts/hip04-d01.dts         |  2 +-
- arch/arm/boot/dts/keystone-k2e-evm.dts  |  2 +-
- arch/arm/boot/dts/keystone-k2g-evm.dts  |  2 +-
- arch/arm/boot/dts/keystone-k2hk-evm.dts |  2 +-
- arch/arm/boot/dts/keystone-k2l-evm.dts  |  2 +-
- arch/arm/boot/dts/omap-zoom-common.dtsi |  8 ++++----
- 10 files changed, 18 insertions(+), 18 deletions(-)
