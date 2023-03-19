@@ -1,31 +1,65 @@
-Return-Path: <SRS0=AXbu=7K=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=S7z/=7L=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92847C74A5B
-	for <soc@archiver.kernel.org>; Sat, 18 Mar 2023 17:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B471C7618A
+	for <soc@archiver.kernel.org>; Sun, 19 Mar 2023 12:40:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5C227C433A0; Sat, 18 Mar 2023 17:35:54 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id C6DB0C4339E; Sun, 19 Mar 2023 12:40:54 +0000 (UTC)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 24764C433EF;
-	Sat, 18 Mar 2023 17:35:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 24764C433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.141] ([37.4.248.18]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mgf4k-1q9Kq51Vfw-00h9iT; Sat, 18 Mar 2023 18:35:21 +0100
-Message-ID: <c0b0929c-41b5-6b9e-8667-e76ac9305981@i2se.com>
-Date: Sat, 18 Mar 2023 18:35:19 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 0DEF4C433EF
+	for <soc@kernel.org>; Sun, 19 Mar 2023 12:40:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0DEF4C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id cy23so36866038edb.12
+        for <soc@kernel.org>; Sun, 19 Mar 2023 05:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679229651;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oolnoui9bwD72saRuWz2eUL7PghL9zZD0Mg8CNmPTv8=;
+        b=TU4fToK9xe5RwL9b/rKxUGlthV1NWIQ7hzk1PZnj0tao9+WMFpR0JmIU36YK0ECFK2
+         GeR1qwIQI5eWG+OlHulbySE96Q9h3EcUUD5+TYc6NgCMu0G7ZkH3CAh6hwYXDERGtBAq
+         Eb/275avjh10RRenfGcJZrR7mq0L2V1ix0oONTR+CliZ1/ZomY0lToOcTsPvzZYP6G9I
+         sogM+TaTXZd1ODii5kGR6C/tk5RfHV5dBf8tpmcUNLm1WDTKUOGF5REN8Xk+HVHq1/fH
+         dW3A41ot2SpKd0T/W50dYuL+Vhq4Vhl4g0kKImCvxixBgiWEglqWy6+CGHYECic3020U
+         iQLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679229651;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oolnoui9bwD72saRuWz2eUL7PghL9zZD0Mg8CNmPTv8=;
+        b=Otyo5RxFlJy+2xSLnOYxmmrdq1MPar0WTsdo1TO9V7n1izW4k+YuUn4F4twlQcNf8A
+         Gunmji0DZ13p7QfIlCptm489dX+wAVfavdfAYBbrN+g8MqRRNy4eDe7amZRd7SXo60eF
+         vzRoR5f26CWDLytP4w7O02gA8zI/PWh1LEKnV2GznoN/+caFiS74odU0JjPgfVnzqhZt
+         bgg6AQfHsAjOqubc551Nqb/CE1vjXNPOgyKVOa/9yk0U3GCVPTB82sxfckD2baGnhg/J
+         yslvdrqVHFCyd/IESGj7joxuzWID+dDDF7jd0Fhl5Pv1jg+ItCtwud/qkVQ19Og4Lwlf
+         NL7Q==
+X-Gm-Message-State: AO0yUKUg434HAP9t3hwQZCOfaHq/H3h85SG0OWHeaYiDRe4UVj8p/8Cf
+	JyJM3qG4cKtjJ558RQWQ2Fu6Zg==
+X-Google-Smtp-Source: AK7set8no1xdwXSt61q0acLXah4PhkPn/qpNih1kHxFoOM8Dm3h51+p3tGWlnneauNyuCVN/2xpqkQ==
+X-Received: by 2002:aa7:cac8:0:b0:500:4c0e:cb8d with SMTP id l8-20020aa7cac8000000b005004c0ecb8dmr6412475edt.5.1679229651181;
+        Sun, 19 Mar 2023 05:40:51 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090626c400b00924916f9c21sm3182394ejc.87.2023.03.19.05.40.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Mar 2023 05:40:50 -0700 (PDT)
+Message-ID: <708b63c9-d2b6-c65f-0112-8f50173c0bca@linaro.org>
+Date: Sun, 19 Mar 2023 13:40:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2 5/8] iio: accel: add support for IIS328DQ variant
-To: Jonathan Cameron <jic23@kernel.org>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V2 4/8] dt-bindings: iio: st-sensors: Add IIS328DQ
+ accelerometer
+To: Jonathan Cameron <jic23@kernel.org>,
+ Stefan Wahren <stefan.wahren@chargebyte.com>
 List-Id: <soc.lore.kernel.org>
 Cc: Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -35,143 +69,57 @@ Cc: Rob Herring <robh+dt@kernel.org>,
  Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
  Li Yang <leoyang.li@nxp.com>, Denis Ciocca <denis.ciocca@st.com>,
  soc@kernel.org, linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- Stefan Wahren <stefan.wahren@chargebyte.com>
+ linux-arm-kernel@lists.infradead.org, stefan.wahren@i2se.com
 References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
- <20230317103323.7741-6-stefan.wahren@chargebyte.com>
- <20230318155811.0bcf85e1@jic23-huawei>
+ <20230317103323.7741-5-stefan.wahren@chargebyte.com>
+ <20230318155534.16b47583@jic23-huawei>
 Content-Language: en-US
-From: Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230318155811.0bcf85e1@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230318155534.16b47583@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:dHLkmQBUUBfuNICi6lW+Y88CFIl7yl3WDnzKeRq0UO7C0b91y9g
- 2G8Z7vHaxdiIbJ7OgrktXJjegzGeULbkGZb5hnMcXpk5bwjNX4KoCbuOgYQkgs7G87DvVKO
- o1ZUanrHfbB9E3vh+9uGnfp8U7OuCHSnbJ9EN9kc8O/3cANaZkLeqv9o8hwtgDUGjWLg4lj
- vVlFt6jB5kpdPVUHlPXnQ==
-UI-OutboundReport: notjunk:1;M01:P0:dcx4nZPZQ9g=;2oy2bb6pk2vcr8L6q7wJeGC3nr3
- KJuBnfBAcIs7Eopztt90O2xitOiH3MuMTNnEszSXQLjYJzn9Lna150O5aMS5lbVHxMLtkweBt
- gCnrKbP7ASitGDxn86tXKDrk5ZVrmTDxxh3AIefuvmAFprwTTvzacxcXomrmg+bCMtzzxD5Cl
- vfghDkQ/51VYSW5ktt+Sut77DIdoI2GQIf0XI8NCqGaopNn3nY28pwz/g506mUgJO8wv0Rm8S
- K0+Zw+Uvn8toxhneSTXBFzBAACYDiaYnhiicMM5Lj6L43A3QQ3RBbexdMJgnGXDx3QQDGA/I6
- 63YpTyEGp3mbWODqjZnNt0XCwxEg5nPXmApk8qt2ebFCcVakoYw2hrznv8C2R3oaxueKN0/oL
- MDmLaqhDhGChEXdtKSbpvidqQDyPcKjRR24mRZyU3bSRkStJFktcJ8DnF5PIP9jDRsVkCzXaC
- jt209fUEEf0HJn9DDlePKBy6nAXiMHkwrRmIiqf4z7IuPt9gDuTASgLT+YllRKHWbp/VT6hcq
- /cAxfd9wpijKc6802T2c8y41WMVzl6y5tqvEf7vSL/S6aUTaCHz51YbbQtHnqUg5x06p33Eru
- Z6C941GgXPtDhJ0U7wixrDriRIX7Xw+dNsuM+ubOT5EgBw4X/MF5O4WzVT2DBrYHjEgAzykIc
- 7Rrk5xD1EXeY4tPkIwOoB0FssUrV91JZSRI+5v3/Jg==
 
-Hi Jonathan,
-
-Am 18.03.23 um 16:58 schrieb Jonathan Cameron:
-> On Fri, 17 Mar 2023 11:33:20 +0100
+On 18/03/2023 16:55, Jonathan Cameron wrote:
+> On Fri, 17 Mar 2023 11:33:19 +0100
 > Stefan Wahren <stefan.wahren@chargebyte.com> wrote:
->
->> Since the ST IIS328DQ accelerometer is compatible to the ST LIS331DL,
->> just add the new compatible to the st_accel framework.
+> 
+>> The ST IIS328DQ is an accelerometer sensor, which is compatible with
+>> the already supported ST H3LIS331DL. So add the new compatible
+>> with a fallback to the ST sensor binding.
 >>
->> Link: https://www.st.com/resource/en/datasheet/iis328dq.pdf
->> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
-> Hi Stefan,
->
-> Assuming the DT binding is fine with the DT maintainers, I plan to
-> pick the pair of IIO fixes up through my tree.  Is there any strong
-> reason they should go via another route?
-
-i'm a little bit confused about consider this as "fixes", but i'm fine 
-with them going your tree.
-
-Best regards
-
->
-> It's common for the dts files to go via ARM soc in cases like this
-> and we tend not to worry that they are 'broken' until the binding docs
-> are visible via other trees. Other than that I can't see an obvious
-> reason not to split these up.
->
-> Thanks,
->
-> Jonathan
->
+>> Link: https://lore.kernel.org/linux-iio/2bac9ecf-9d2e-967e-9020-1c950487d781@i2se.com/
+>> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+>> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>	
 >> ---
->>   drivers/iio/accel/st_accel.h      | 1 +
->>   drivers/iio/accel/st_accel_core.c | 1 +
->>   drivers/iio/accel/st_accel_i2c.c  | 5 +++++
->>   drivers/iio/accel/st_accel_spi.c  | 5 +++++
->>   4 files changed, 12 insertions(+)
+>>  Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 3 +++
+>>  1 file changed, 3 insertions(+)
 >>
->> diff --git a/drivers/iio/accel/st_accel.h b/drivers/iio/accel/st_accel.h
->> index 56ed0c776d4a..e7525615712b 100644
->> --- a/drivers/iio/accel/st_accel.h
->> +++ b/drivers/iio/accel/st_accel.h
->> @@ -39,6 +39,7 @@
->>   #define LIS302DL_ACCEL_DEV_NAME		"lis302dl"
->>   #define LSM303C_ACCEL_DEV_NAME		"lsm303c_accel"
->>   #define SC7A20_ACCEL_DEV_NAME		"sc7a20"
->> +#define IIS328DQ_ACCEL_DEV_NAME		"iis328dq"
->>   
->>   
->>   #ifdef CONFIG_IIO_BUFFER
->> diff --git a/drivers/iio/accel/st_accel_core.c b/drivers/iio/accel/st_accel_core.c
->> index 6b8562f684d5..5f7d81b44b1d 100644
->> --- a/drivers/iio/accel/st_accel_core.c
->> +++ b/drivers/iio/accel/st_accel_core.c
->> @@ -517,6 +517,7 @@ static const struct st_sensor_settings st_accel_sensors_settings[] = {
->>   		.wai_addr = ST_SENSORS_DEFAULT_WAI_ADDRESS,
->>   		.sensors_supported = {
->>   			[0] = H3LIS331DL_ACCEL_DEV_NAME,
->> +			[1] = IIS328DQ_ACCEL_DEV_NAME,
->>   		},
->>   		.ch = (struct iio_chan_spec *)st_accel_12bit_channels,
->>   		.odr = {
->> diff --git a/drivers/iio/accel/st_accel_i2c.c b/drivers/iio/accel/st_accel_i2c.c
->> index 3f02fd5d5946..fb9e2d6f4210 100644
->> --- a/drivers/iio/accel/st_accel_i2c.c
->> +++ b/drivers/iio/accel/st_accel_i2c.c
->> @@ -119,6 +119,10 @@ static const struct of_device_id st_accel_of_match[] = {
->>   		.compatible = "silan,sc7a20",
->>   		.data = SC7A20_ACCEL_DEV_NAME,
->>   	},
->> +	{
->> +		.compatible = "st,iis328dq",
->> +		.data = IIS328DQ_ACCEL_DEV_NAME,
->> +	},
->>   	{},
->>   };
->>   MODULE_DEVICE_TABLE(of, st_accel_of_match);
->> @@ -157,6 +161,7 @@ static const struct i2c_device_id st_accel_id_table[] = {
->>   	{ LIS302DL_ACCEL_DEV_NAME },
->>   	{ LSM303C_ACCEL_DEV_NAME },
->>   	{ SC7A20_ACCEL_DEV_NAME },
->> +	{ IIS328DQ_ACCEL_DEV_NAME },
->>   	{},
->>   };
->>   MODULE_DEVICE_TABLE(i2c, st_accel_id_table);
->> diff --git a/drivers/iio/accel/st_accel_spi.c b/drivers/iio/accel/st_accel_spi.c
->> index 5740dc1820bd..f72a24f45322 100644
->> --- a/drivers/iio/accel/st_accel_spi.c
->> +++ b/drivers/iio/accel/st_accel_spi.c
->> @@ -100,6 +100,10 @@ static const struct of_device_id st_accel_of_match[] = {
->>   		.compatible = "st,lsm303c-accel",
->>   		.data = LSM303C_ACCEL_DEV_NAME,
->>   	},
->> +	{
->> +		.compatible = "st,iis328dq",
->> +		.data = IIS328DQ_ACCEL_DEV_NAME,
->> +	},
->>   	{}
->>   };
->>   MODULE_DEVICE_TABLE(of, st_accel_of_match);
->> @@ -157,6 +161,7 @@ static const struct spi_device_id st_accel_id_table[] = {
->>   	{ LIS3DE_ACCEL_DEV_NAME },
->>   	{ LIS302DL_ACCEL_DEV_NAME },
->>   	{ LSM303C_ACCEL_DEV_NAME },
->> +	{ IIS328DQ_ACCEL_DEV_NAME },
->>   	{},
->>   };
->>   MODULE_DEVICE_TABLE(spi, st_accel_id_table);
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>> diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+>> index c6201976378f..5eb71b24a7cb 100644
+>> --- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+>> +++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
+>> @@ -48,6 +48,9 @@ properties:
+>>            - st,lsm330d-accel
+>>            - st,lsm330dl-accel
+>>            - st,lsm330dlc-accel
+>> +      - items:
+>> +          - const: st,iis328dq
+>> +          - const: st,h3lis331dl-accel
+> 
+> Hmm. So this separates the particular 'oneOf' group from the description
+> associated with the ST accelerometers.
+> 
+> DT experts, is there a better way to do this?  Ideally we'd also associate
+> other similar groups going forwards so it might become less and less obvious
+> how the groupings work. (bit late for the many groups that exist
+> already in that list above this point).
+
+If by "grouping" you mean how the oneOf items are organized with
+descriptions, I wouldn't put too much attention to it. You can add some
+'#' comments to separate the groups, but for me this is still readable.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
