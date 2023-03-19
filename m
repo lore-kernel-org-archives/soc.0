@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66DDAC6FD1F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA21DC7618A
 	for <soc@archiver.kernel.org>; Sun, 19 Mar 2023 15:27:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 21D05C4339E; Sun, 19 Mar 2023 15:27:47 +0000 (UTC)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	id 8A434C433D2; Sun, 19 Mar 2023 15:27:47 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C7551C4339B
-	for <soc@kernel.org>; Sun, 19 Mar 2023 15:27:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7551C4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id 0B704C433EF
+	for <soc@kernel.org>; Sun, 19 Mar 2023 15:27:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0B704C433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id eh3so37774486edb.11
-        for <soc@kernel.org>; Sun, 19 Mar 2023 08:27:44 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id er8so26106197edb.0
+        for <soc@kernel.org>; Sun, 19 Mar 2023 08:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679239663;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3viO/SVS1mAUPDADBNw/95UMMSdd5bvS68WvAIfgKs=;
-        b=cndUSDcLJ1g+lnvV7RtVfaGzOd2gedLDsXsY9euB+Vuyr2n5qmyK5XyzpEEEMl4eOq
-         CcgtWk8HQtNxZF3m1uVTD2rJqvpjtuvmQDB91D2aGX7qD4DHMh/rdnmHqh/NyObKb+fT
-         JqXq8/YYeyyDPAR1uq2gKKN+e213lVeSbVx35UqIgvnqV3EsOuhpM7OyNwrf1EBn7C0N
-         9fqaA+7/+UBsh/VSd2kU7suBwTvjGpTQ5Y58iwy0AfxKvX0dAGVeuqkSFCjsWO0krrni
-         RiLEKLufNQSO62aoTrNDCcqT+0KAnoUs708s9LcZPp2u7AY3xomlkcdr03eBsXnEhyhd
-         ig+A==
+        d=linaro.org; s=google; t=1679239664;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=btf04DuiQhB9X18hLvJQP2+uq59G2JcTyG4E+evpdrk=;
+        b=jZ86PcRXCyuvFtD4O4YDLdPXc6UStKeJVz8B2x5LqEnIkFbT5VEDaeV9kE1TgwrW3S
+         8PPjp546vUnF9qyqL/IfReOc/upuSIE5QCqBRj5fc9LpdNrNuSyJxUiIcDMxhX+ulVMQ
+         Vj+N4+pZdcsVwrPD3bOZvwewnRO2uiUTUPOQmeVp67prf4pUBCtn7C94Xp1CtCsOn1E3
+         OefiJ7QW0RB3mmpSjVDrFkOEUIL+kH15yezkvLqfmdTI3pkKgNgGuKWMEE4xSpFVZr7P
+         DyvIDN2xIWPu1nPAnRznCz+YqcF2vMUjlyPkQXpLKqjNfE+1HBacr9JP2Zm0pee0dazI
+         BR7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679239663;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g3viO/SVS1mAUPDADBNw/95UMMSdd5bvS68WvAIfgKs=;
-        b=i0qUHGEfjV/lwTed0dfNVI2ZPHlvhOHo1ti4uI3YQPla8C02Y3tdGUJoXr1j/TWbJy
-         lgFn9SjwG2NmlJq6N8InH2408J/ELSdUcobrwXTUnbX5/tbjcfkHcai2tNd0HFaadoyu
-         vxXjwudHnwztH+GjytBh9suYFD7mgynGim45i9FTaKj4xBOn8L1dK9ZPMItIH2URMUKL
-         oLzxEg4v67WK+Vmunule2JEToJ18fG7RWIjgr4mk0P9ukkqSOc59MX2E9qGuG+fg4FoK
-         KlZoALL/I+0ckIZHo5bCnHGCH6prTNNBRldA9yNEqKR9zR6EyX3v+7BBUv+lC4vG7u+l
-         dBmw==
-X-Gm-Message-State: AO0yUKWhIqERq5ETZsziL0Bvx5yQYsy0ZN7E3WaquhGdPDcwniZo53/m
-	jVoTMcM6tNPdniRZC5NcvclFTg==
-X-Google-Smtp-Source: AK7set/47vNe/VBA1m9BQdyDxM2teNI19eB4W2tllqt6sHMM97qWkxhef7FVbfq+zHUFlQQ1+y73Bw==
-X-Received: by 2002:a17:906:7394:b0:92b:ae6c:23e7 with SMTP id f20-20020a170906739400b0092bae6c23e7mr5985333ejl.56.1679239663137;
-        Sun, 19 Mar 2023 08:27:43 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679239664;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=btf04DuiQhB9X18hLvJQP2+uq59G2JcTyG4E+evpdrk=;
+        b=oh6SOug9KgP+d4VvtD084GuQI0JF3S9o2xygjQCAEEuREaVzrKWTHXxb+XVZ6ETLrp
+         24caqSqkYs2FoXao20Nz7ZCpUpUTqX2MQfBIQZN3buAho7HxV2lMIKLzOKn1zAi/9g27
+         ZNfx0Oti8vrWso0+FiAkg5OrGFkmXi8ut87lc+RD0VDzHb793zf9JFNOPm98TkCeQRUs
+         wDSy5Xa0IK3iNKokOVannPtgUh2WxJuLRG5Q2ZiR65xAmiC5T9OJQLLJDKlJBNBncCp+
+         j6ca+I6pX5UDUG0L4+aKx+n/cJeFjq2Cjkdj5cCATuQeEc3fSEYB25Lud3Xep8g1uXbt
+         g3xg==
+X-Gm-Message-State: AO0yUKX295/WKJITHs8H+xla97B2I+QhCjAegPJ3jQOfa4run8R3Kb23
+	PPlvVPXe55O/8bwCNm5AV3yXpQ==
+X-Google-Smtp-Source: AK7set8dTQz+GK5qZqXqshzMDzIkzel/SC4URpp1ZrQOXGslo8nsuHaUFu055ExOlc0D6tTx8CSwlw==
+X-Received: by 2002:a17:907:175b:b0:92d:591f:6586 with SMTP id lf27-20020a170907175b00b0092d591f6586mr5811607ejc.34.1679239664162;
+        Sun, 19 Mar 2023 08:27:44 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm3340857eju.193.2023.03.19.08.27.42
+        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b008cda6560404sm3340857eju.193.2023.03.19.08.27.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 08:27:42 -0700 (PDT)
+        Sun, 19 Mar 2023 08:27:43 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -62,21 +63,14 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk@kernel.org>,
 	Rob Herring <robh@kernel.org>
-Subject: [GIT PULL 1/2] arm64: dts: few cleanups for v6.4
-Date: Sun, 19 Mar 2023 16:27:39 +0100
-Message-Id: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] ARM: dts: few cleanups for v6.4
+Date: Sun, 19 Mar 2023 16:27:40 +0100
+Message-Id: <20230319152740.34551-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
+References: <20230319152740.34551-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-
-Hi Arnd and Olof,
-
-Few cleanups where maintainers did not pick them up for some time, maybe
-expecting me to send or maybe because they missed these.
-
-Best regards,
-Krzysztof
-
 
 The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
@@ -84,28 +78,34 @@ The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.4
 
-for you to fetch changes up to d2e5c16f6c86901040f3bb6b40d1a01ccf1a21b0:
+for you to fetch changes up to aff750faa5ac699df7ade5a31b6ba52ab1072d8a:
 
-  arm64: dts: cavium: Fix GICv3 ITS nodes (2023-03-17 13:39:00 +0100)
-
-----------------------------------------------------------------
-Minor improvements in ARM64 DTS for v6.4
-
-1. Toshiba: white-space fixes.
-2. Cavium, Marvell: fix GICv3 ITS node name.
+  ARM: dts: hisilicon: use "okay" for status (2023-03-12 18:01:00 +0100)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      arm64: dts: toshiba: adjust whitespace around '='
+Minor improvements in ARM DTS for v6.4
 
-Rob Herring (2):
-      arm64: dts: marvell: armada-ap810: Fix GICv3 ITS node name
-      arm64: dts: cavium: Fix GICv3 ITS nodes
+1. TI, Marvell, HiSilicon: "okay" over "ok" is preferred for status
+   property.
+2. OMAP: align UART node name with bindings.
 
- arch/arm64/boot/dts/cavium/thunder-88xx.dtsi      | 3 ++-
- arch/arm64/boot/dts/cavium/thunder2-99xx.dtsi     | 4 ++--
- arch/arm64/boot/dts/marvell/armada-ap810-ap0.dtsi | 2 +-
- arch/arm64/boot/dts/toshiba/tmpv7708.dtsi         | 2 +-
- 4 files changed, 6 insertions(+), 5 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (4):
+      ARM: dts: omap: align UART node name with bindings
+      ARM: dts: marvell: use "okay" for status
+      ARM: dts: ti: use "okay" for status
+      ARM: dts: hisilicon: use "okay" for status
+
+ arch/arm/boot/dts/armada-388-db.dts     |  2 +-
+ arch/arm/boot/dts/da850-evm.dts         |  2 +-
+ arch/arm/boot/dts/dove.dtsi             |  2 +-
+ arch/arm/boot/dts/hi3620-hi4511.dts     | 12 ++++++------
+ arch/arm/boot/dts/hip04-d01.dts         |  2 +-
+ arch/arm/boot/dts/keystone-k2e-evm.dts  |  2 +-
+ arch/arm/boot/dts/keystone-k2g-evm.dts  |  2 +-
+ arch/arm/boot/dts/keystone-k2hk-evm.dts |  2 +-
+ arch/arm/boot/dts/keystone-k2l-evm.dts  |  2 +-
+ arch/arm/boot/dts/omap-zoom-common.dtsi |  8 ++++----
+ 10 files changed, 18 insertions(+), 18 deletions(-)
