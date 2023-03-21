@@ -1,98 +1,79 @@
-Return-Path: <SRS0=CeWI=7N=gmail.com=lukas.bulwahn@kernel.org>
+Return-Path: <SRS0=HsGY=7N=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E6B6C6FD1D
-	for <soc@archiver.kernel.org>; Tue, 21 Mar 2023 03:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B78C74A5B
+	for <soc@archiver.kernel.org>; Tue, 21 Mar 2023 08:33:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5FCDAC433EF; Tue, 21 Mar 2023 03:38:15 +0000 (UTC)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	id DF835C4339B; Tue, 21 Mar 2023 08:33:33 +0000 (UTC)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 71367C433D2
-	for <soc@kernel.org>; Tue, 21 Mar 2023 03:38:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 71367C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id w9so54707705edc.3
-        for <soc@kernel.org>; Mon, 20 Mar 2023 20:38:14 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 72823C433D2
+	for <soc@kernel.org>; Tue, 21 Mar 2023 08:33:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 72823C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=thingy.jp
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=0x0f.com
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5418d54d77bso267464947b3.12
+        for <soc@kernel.org>; Tue, 21 Mar 2023 01:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679369892;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d4reHO6m1QrpLcgDFWTCpHMyCc1+fqEZ3eH5LXVHOdU=;
-        b=He+Vpp6rzyqI5SGxD/bHXjf60Dgtj9rwsuwB2bcJ4AtceS9KDgbpLsF6H1jYPgxYuG
-         fj5SaN3Cd6uX+U2+a3xrNdOqt7U9jQoRvaFE5ZzE+tgBYn6MOLWfSUhHzi7GbplNuJRC
-         VxH1lXGWs0Ai7bl9nSUg9DqxfvhYHO5IUkPUofd/xmVVGd3EZFIG5WAHHWP0nJ1SPIpq
-         miEomaX2BFFyjEKltK+Mqab/ORjR5+leiHFQ6YrbVTN2uyvbSbYd1UGObUctxu6T8XSt
-         SO/pAReFppScBNXSGJF1uGFwOoXTlSBxVlZ8wtmkTFLLGF5NEfN4YvRKXDsugZBMMfYi
-         kKWA==
+        d=thingy.jp; s=google; t=1679387611;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KB6vuc81jSSkKnMxrZTvHvPKSRtY1MligJPcYjgonTw=;
+        b=L854542Of25QQ3JVGYZn6a0AB9OOdy/B3vOuhkEK5OAKN4+xODvce3FBD1g8PSV1nD
+         PqyMVQ8WlCcy63cRosAHpzwvRh3bckIgDVOVhlRww5TSKtt4WgapFm5Y9wgl41WSVTAd
+         620aYogY8pRdmc8ttv103/JZ3il6bJWNu6kWo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679369892;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d4reHO6m1QrpLcgDFWTCpHMyCc1+fqEZ3eH5LXVHOdU=;
-        b=zXAy898azhTXGtwkJtHKkFUaz9o+xKxT2nbCumxqeLBtmRg5oFS9W0u6bg2K11BM2D
-         pieKhOKOhgqTd9THfEq3yEzn/pExxC5zBHvfAisMiaix/tYJDl9NLM0l55oPUR0KMBtk
-         aQ7F1+dZB3GIIyrWHY93xNNNn/4dr2JoBVdzDi8vDAtgQ5kDZyERRlI7k+QVuxNaYPTi
-         teh89oPy9cH/VacU8dhCHr3aEa4p96rQURi0gc6IxA/J9tbbMNX/XH8Gtw1K/V31uI/P
-         CMqzBIzuj4YyImmz3URG92YqVsApiIB63iMRYE21LCNuLcaFGos+tqNPPeUl/0rYCQrq
-         Rf5g==
-X-Gm-Message-State: AO0yUKXbxO58x1lSr+X/vWZO3dmP7sZUQMg0a0aMtaPrTlDmgfvVVolO
-	jpR62N8x6bO6PAVr8Ztly6c=
-X-Google-Smtp-Source: AK7set9i+KRlF5m1WFQ8OYQm5OEPDMoPwdjE/UJygioKJjSR3dYouu5FbnrEbcgt/Qd5COHT4kqmIw==
-X-Received: by 2002:a17:907:1def:b0:8b2:d30:e722 with SMTP id og47-20020a1709071def00b008b20d30e722mr1268754ejc.3.1679369892532;
-        Mon, 20 Mar 2023 20:38:12 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:6c2c:25d2:96b3:40e6])
-        by smtp.gmail.com with ESMTPSA id g25-20020a50d0d9000000b00501c2a9e16dsm2671755edf.74.2023.03.20.20.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 20:38:12 -0700 (PDT)
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+        d=1e100.net; s=20210112; t=1679387611;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KB6vuc81jSSkKnMxrZTvHvPKSRtY1MligJPcYjgonTw=;
+        b=lzWzKBSxLrCktnFq90FbNr+ulbPIJdccYk3OE6l/sYLCnAMkwK+FEQRz6YcnL3tIm8
+         6VttvWL3LnEhm5zRV7LcpM+3rrct9I2R96xPLE/ue/sj4e84/hnsB40hVTcXF/5ZxJQ9
+         aHirKvotbFTJuvDY2bbWaDGQxV0nVPsTBYwHfS7tPeyPYIpDE8a4HO8F9nbxaIdAczQO
+         VYQV9WB/Q5CEYpuKxA6NT219NWAvNoeZlvsX2Pj/s+TUSfLOzk+U6M5iUfGF7x27jOQt
+         V5jHPRxuPyX95hsFVv6BcNRVxEYSpkjb6fue7xgqNZLhG1WVnloqAhQ+1AtuKTqIQ2Pk
+         yP3w==
+X-Gm-Message-State: AAQBX9cHyhlTfPfcOnmCAij42oFH2m2hMYq5jVTAprWBs+U9zVEZ8X/u
+	LOvXRAICZh+tebG8ph8sLOyXRFHG6Ay8m9N841iNsQ==
+X-Google-Smtp-Source: AKy350ayh3kL/5wMU+1FJfsQfBzUOLJnlM6KS2hGz9x37v9qA1HJCUgNxeaBqW+vqDU/KvLwNjxHef4Xv3FGx8lBXeY=
+X-Received: by 2002:a81:af50:0:b0:541:85d2:af21 with SMTP id
+ x16-20020a81af50000000b0054185d2af21mr582975ywj.5.1679387609813; Tue, 21 Mar
+ 2023 01:33:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
+From: Daniel Palmer <daniel@thingy.jp>
+Date: Tue, 21 Mar 2023 17:33:19 +0900
+Message-ID: <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mstar: remove unused config MACH_MERCURY
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 List-Id: <soc.lore.kernel.org>
-To: Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Russell King <linux@armlinux.org.uk>,
-	soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] ARM: mstar: remove unused config MACH_MERCURY
-Date: Tue, 21 Mar 2023 04:38:10 +0100
-Message-Id: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Cc: Romain Perier <romain.perier@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Russell King <linux@armlinux.org.uk>, soc@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kernel-janitors@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Commit 312b62b6610c ("ARM: mstar: Add machine for MStar/Sigmastar Armv7
-SoCs") adds the config MACH_INFINITY and MACH_MERCURY. The MACH_INFINITY
-config is used in the gpio-msc313 driver, but the MACH_MERCURY config is
-never used to configure anything in the kernel tree.
+Hi Lukas
 
-Remove the unused config MACH_MERCURY.
+On Tue, 21 Mar 2023 at 12:38, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> Commit 312b62b6610c ("ARM: mstar: Add machine for MStar/Sigmastar Armv7
+> SoCs") adds the config MACH_INFINITY and MACH_MERCURY. The MACH_INFINITY
+> config is used in the gpio-msc313 driver, but the MACH_MERCURY config is
+> never used to configure anything in the kernel tree.
+>
+> Remove the unused config MACH_MERCURY.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- arch/arm/mach-mstar/Kconfig | 7 -------
- 1 file changed, 7 deletions(-)
+Because work is still on going to push that stuff.
 
-diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
-index 5dbea7b485af..fa9709f30b46 100644
---- a/arch/arm/mach-mstar/Kconfig
-+++ b/arch/arm/mach-mstar/Kconfig
-@@ -20,11 +20,4 @@ config MACH_INFINITY
- 	help
- 	  Support for MStar/Sigmastar infinity IP camera SoCs.
- 
--config MACH_MERCURY
--	bool "MStar/Sigmastar mercury SoC support"
--	default ARCH_MSTARV7
--	help
--	  Support for MStar/Sigmastar mercury dash camera SoCs.
--	  Note that older Mercury2 SoCs are ARM9 based and not supported.
--
- endif
--- 
-2.17.1
+nak from me.
 
+Thanks,
+
+Daniel
