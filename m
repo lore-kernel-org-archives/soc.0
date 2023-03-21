@@ -1,108 +1,76 @@
-Return-Path: <SRS0=WbgK=7N=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=HsGY=7N=0x0f.com=daniel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84875C74A5B
-	for <soc@archiver.kernel.org>; Tue, 21 Mar 2023 09:30:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD4FAC74A5B
+	for <soc@archiver.kernel.org>; Tue, 21 Mar 2023 11:21:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 55428C433D2; Tue, 21 Mar 2023 09:30:46 +0000 (UTC)
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 91EBEC4339B; Tue, 21 Mar 2023 11:21:53 +0000 (UTC)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5C537C433EF
-	for <soc@kernel.org>; Tue, 21 Mar 2023 09:30:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C537C433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id DE6B53200B6C;
-	Tue, 21 Mar 2023 05:30:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 21 Mar 2023 05:30:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1679391042; x=1679477442; bh=+E
-	ypSQsK60sfT/bFJ/jrHrCRBSgL7jrmaK2N/Q19Plo=; b=KCo5tMqSoan+ASkjyf
-	MzAsfV1mcekU9j4T3uzsD9rJFZUu0oM4C3lLYkADQKB7YFwyZAaeJlK1d9mFtCiw
-	RPi2FZ7o0ZTu/bqMvMtM3SGkdSH63NdboLl6baFh4+BoNDzgqcDH+ik7n/OGjT9P
-	ycU+sXfvLUDVJpn3+G43XWHV3f/SC4QPZvqiA5cPUXH5MpCM9a5qUe25yv7cw3Qe
-	ajY/8A8rQttSlrzEZqG+4f2xvR/zKBEKrs6ngetRuHzeWFP+hpFGrsmQ4Gqqqst2
-	5RgMiHZzTLZnQjvRw+kdLdBritgMGMozuKK9bVY9Zan/q8Lm6pX9j6eMPawciAo6
-	pM5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1679391042; x=1679477442; bh=+EypSQsK60sfT
-	/bFJ/jrHrCRBSgL7jrmaK2N/Q19Plo=; b=T9N9qT610m60k7w9/Hx+v2y+hUyHa
-	EtQCht93ZrhO85hiI7dZ0cH6djJZBX73LAsHKdxvXrr2R4V0F/+aO8A1ffJ2z2Ly
-	BcOFHNHBX9EXnifsH+OuM5nzwQBguBuEQehngX+JAPHYD/TBroYD+LmSzTqjhaLJ
-	FQERaHN8mENDQIVUd/UCPMJAMCioD0ZAxm+SkHEx0FIP17LqyrtMZhsgVhGcVJso
-	hrFSrwbx++K4mSa6Qnmc0VYuOaGGQnne1s/tLJ5NV4+svmt4vQ/fonfzlzsQAro+
-	WAY3cvgiJmutKxqDnyarApud2jjZCk/Ymk2L/hDEBIJSJolrXk4Gwg0yg==
-X-ME-Sender: <xms:QnkZZMkrYMhumZnlOiLzLdNZdGKLgRgPdKQonSkMtO-UrXSyvP3r3w>
-    <xme:QnkZZL1Wi6tph5D9I4fXiq9IS6tbNqqeoZ6g0vcWInn-mjz7QZIF5QtGOmOXC5oSN
-    RVAdxX8Z0HZqSixf1Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:QnkZZKoU3g3J3iUBK7QuIDx4XjZhAwRLUzT4wtecFJgjxWpoBDLFbA>
-    <xmx:QnkZZIn0uisGvHanxlLmoZuMvdJ5rHr433-8aMF0PCgMbYcNyyNP6Q>
-    <xmx:QnkZZK343A7b9Z_xQNMphaQzwKKhXidSgkmtAv2KiV8ZluvEc1_BXQ>
-    <xmx:QnkZZG-PB7USSheHECWfpCPN8ST5Doo474bz5UoPFgL5xv4-iOIacg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1FAB4B60086; Tue, 21 Mar 2023 05:30:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <59c05b36-3370-4d7b-b8cc-39d6dc36cdd0@app.fastmail.com>
-In-Reply-To: 
- <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id EC9E8C433D2
+	for <soc@kernel.org>; Tue, 21 Mar 2023 11:21:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EC9E8C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=thingy.jp
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=0x0f.com
+Received: by mail-yb1-f175.google.com with SMTP id p203so16554030ybb.13
+        for <soc@kernel.org>; Tue, 21 Mar 2023 04:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=thingy.jp; s=google; t=1679397711;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+KqRWhaDx1aJoI/pna5di6cHpQDQbH5Dv0l0ZgDy3g=;
+        b=KVoWmCl3lAefXbSjr1XFa+Pxr15fcLxSACIYq0vUNsPKheJwN9PLuMYI4g/xhAjlJR
+         v5jPl4mNRlohMGFK3j609Jd1v1JyoCHAGE8WkQQir9p+3GVucIAu8ajbJPbJJzf9oW5i
+         f3VlU0/OrWyyNLnaKLuJr/QQ4ZmnEnZCIWWmE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679397711;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N+KqRWhaDx1aJoI/pna5di6cHpQDQbH5Dv0l0ZgDy3g=;
+        b=edD5veRq/KOeHiNFX63z/lsuzc4vS4Ysc49Ej5Xj7D2s5Wpix7ihH70Z8MoIydlIXS
+         g6qMPJqeY1yN+csneozVG4BYSivjwVh8mWa/m/CiSliEATOT3wu98m0ZtLj/Brr+2SMY
+         VQC/9pW8qJcghEyYh9QlC7zoKMZAiLlUEwQdvcOfGSoLNofoN1FW/IhgVJWzQVBw+U0L
+         meWX2/kQ3l9Li2Mh/fbU1Kei79EHwWyidHRq+hmtEXnipg/gbMMo674ch76dKvGdTX1U
+         eH7kKeIZbQSlklApA9s7DXU7vRmfqNIxh3hTKW+HyxPfdJeeSAHx0z7K6OpM+u3yNqdF
+         qbXA==
+X-Gm-Message-State: AAQBX9cpW9bYL9vAlif7WtCkfmUtbM6wnf0nOnpFzGjxhFhNKzl8ESv6
+	XkSJ5oyS+L8De9n+qNExf3sEQCYS0NxQEGo9MRuOGA==
+X-Google-Smtp-Source: AKy350aGC8yl/vUvR9z4Vm7doUX9SkLJ6MUp8qgSDNHNEIcIwszPmP7Z6Gr3qL15c7ncubDyIJlOLnYGFNkZU0VIB/s=
+X-Received: by 2002:a05:6902:283:b0:b6e:d788:eba7 with SMTP id
+ v3-20020a056902028300b00b6ed788eba7mr1159105ybh.6.1679397710763; Tue, 21 Mar
+ 2023 04:21:50 -0700 (PDT)
+MIME-Version: 1.0
 References: <20230321033810.22017-1-lukas.bulwahn@gmail.com>
- <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com>
-Date: Tue, 21 Mar 2023 10:30:21 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Daniel Palmer" <daniel@thingy.jp>,
- "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: "Romain Perier" <romain.perier@gmail.com>,
- "Russell King" <linux@armlinux.org.uk>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-janitors@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ <CAFr9PXmKsequA3V7QWC2fKQYZgaNRj+q3q=UOBLmg6wxYKiVYg@mail.gmail.com> <59c05b36-3370-4d7b-b8cc-39d6dc36cdd0@app.fastmail.com>
+In-Reply-To: <59c05b36-3370-4d7b-b8cc-39d6dc36cdd0@app.fastmail.com>
+From: Daniel Palmer <daniel@thingy.jp>
+Date: Tue, 21 Mar 2023 20:21:40 +0900
+Message-ID: <CAFr9PX=5Xj63Fm2nRa8oPdXbrkKOMG7D1Y_EV361HtYjs7GZaQ@mail.gmail.com>
 Subject: Re: [PATCH] ARM: mstar: remove unused config MACH_MERCURY
-Content-Type: text/plain
+To: Arnd Bergmann <arnd@arndb.de>
+List-Id: <soc.lore.kernel.org>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>, Romain Perier <romain.perier@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, soc@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kernel-janitors@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 21, 2023, at 09:33, Daniel Palmer wrote:
-> Hi Lukas
->
-> On Tue, 21 Mar 2023 at 12:38, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->>
->> Commit 312b62b6610c ("ARM: mstar: Add machine for MStar/Sigmastar Armv7
->> SoCs") adds the config MACH_INFINITY and MACH_MERCURY. The MACH_INFINITY
->> config is used in the gpio-msc313 driver, but the MACH_MERCURY config is
->> never used to configure anything in the kernel tree.
->>
->> Remove the unused config MACH_MERCURY.
->
-> Because work is still on going to push that stuff.
->
-> nak from me.
+Hi Arnd,
 
-The symbol has been unused three year though, and will
-show up every time someone runs a script to look for
-orphaned Kconfig entries.
+On Tue, 21 Mar 2023 at 18:30, Arnd Bergmann <arnd@arndb.de> wrote:
+> I'd still prefer removing it now and only bringing it
+> back when you actually add the code for it.
 
-I'd still prefer removing it now and only bringing it
-back when you actually add the code for it.
+Fair enough. Code does exist for it in my tree but I never got around
+to sending it.
 
-     Arnd
+I rescind my nak.
+
+Cheers,
+
+Daniel
