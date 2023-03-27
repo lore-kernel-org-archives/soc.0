@@ -4,174 +4,123 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63E51C7619A
-	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 02:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32FA5C76195
+	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 05:03:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 220F3C4339B; Mon, 27 Mar 2023 02:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6AFC433EF;
-	Mon, 27 Mar 2023 02:45:12 +0000 (UTC)
+	id DB60FC433EF; Mon, 27 Mar 2023 05:03:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71585C433D2;
+	Mon, 27 Mar 2023 05:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679885116;
-	bh=AiEbgLzIhGbD6g6j2H0IM5fDCH/xy7CmlIhEelLot2k=;
+	s=k20201202; t=1679893388;
+	bh=gtPZSqmlNSbBcBswDi2cFPnElF9M+9q4J/RkVcJKRTc=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=lGsTdYoHJpkcbpi1ryl9j1nwn7PTU1753FYC/owq7PtipZUJ8hDG+XZADL9ncVv+1
-	 uDasc1xtzbJoU4BTZbZa0QdMiEspaN9XA2r+zcj13P9/FgjsoJ4MQ0QCgw3cancOUS
-	 Y5b2y39BDaEoEqD7m5U5Gd+mhiZYxI+bNzs0Jn/RLPwyBYC9EA/XRFQo2A46RU1et4
-	 uwKZjfVhPfpggIghUud0jTWL/MOgh6NP6twgcexXbRNlqIXnleLgeXI07H1CdXnXGZ
-	 541yNODHnkx1JdlGxMFw/3CW/I/xQcFfncWr2jESn+2H4EIHvRpblrLtrevCGZlGYx
-	 mj3RTfSg555Lw==
-Date: Mon, 27 Mar 2023 10:45:07 +0800
+	b=IVw5ZoairZm3ZdR5S4QpEzhzoDSNVrtWU2k21pPuxKLM5hu07igvIE7+o61W1IgTu
+	 h/2n3wwZgHjN9an7SbynztmnYuAQw2loKo5z24dcsxHZptcU0bh+M6x8Walwldcbe1
+	 McDldlzmjScTMOVeJ548rtNCCbnwLHu5KAGV/JH3KXUggo/sU3schoqy5xTisGw0sa
+	 CbO49I7vcf+j034x1rLj3F/Ox2QF/CHLe2+DCiDpuD8k9iKR46hKNi/x60WJIFT+Am
+	 V0SxknOQz5/VsE5bRLZwKbz9tagNMgLG8kpQALj4/pWOSbiqJzqqCwFgefJtRTs5xo
+	 Q7aLX2pS+Rd5Q==
+Date: Mon, 27 Mar 2023 13:02:59 +0800
 From: Shawn Guo <shawnguo@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
+To: Stefan Wahren <stefan.wahren@chargebyte.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de,
-	olof@lixom.net, soc@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	marex@denx.de, max.krummenacher@toradex.com,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] ARM: dts: imx: Add devicetree for Tolino Vison
-Message-ID: <20230327024507.GG3364759@dragon>
-References: <20230317081618.2387407-1-andreas@kemnade.info>
- <20230317081618.2387407-3-andreas@kemnade.info>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, Evgeniy Polyakov <zbr@ioremap.net>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
+	Li Yang <leoyang.li@nxp.com>, Denis Ciocca <denis.ciocca@st.com>,
+	soc@kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	stefan.wahren@i2se.com
+Subject: Re: [PATCH V2 7/8] ARM: dts: imx6ull: Add chargebyte Tarragon support
+Message-ID: <20230327050259.GK3364759@dragon>
+References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
+ <20230317103323.7741-8-stefan.wahren@chargebyte.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317081618.2387407-3-andreas@kemnade.info>
+In-Reply-To: <20230317103323.7741-8-stefan.wahren@chargebyte.com>
 
-On Fri, Mar 17, 2023 at 09:16:18AM +0100, Andreas Kemnade wrote:
-> Add a devicetree for the Tolino Vision Ebook reader. It is based
-> on boards marked with "37NB-E60Q30+4A3". It is equipped with an i.MX6SL
-> SoC.
+On Fri, Mar 17, 2023 at 11:33:22AM +0100, Stefan Wahren wrote:
+> This adds the support for chargebyte Tarragon, which is an Electrical
+> Vehicle Supply Equipment (EVSE) for AC charging stations
+> (according to IEC 61851, ISO 15118).
 > 
-> Expected to work:
->  - Buttons
->  - Wifi
->  - LEDs
->  - uSD
->  - eMMC
->  - USB
->  - RTC
->  - Touchscreen
->  - Backlight
+> The Tarragon board is based on an i.MX6ULL SoC and is available in
+> 4 variants (Master, Slave, SlaveXT, Micro), which provide more or
+> less peripherals.
 > 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Supported features:
+>   * 512 MB DDR RAM
+>   * eMMC
+>   * Debug UART
+>   * 100 Mbit Ethernet
+>   * USB 2.0 Host interface
+>   * Powerline communication (QCA700x)
+>   * 2x RS485
+>   * Digital in- and outputs (12 V)
+>   * One-Wire master for external temp sensors
+>   * 2x relay outputs
+>   * 2x motor interfaces
+> 
+> Link: https://chargebyte.com/products/charging-station-communication/charge-control-c
+> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
 > ---
->  arch/arm/boot/dts/Makefile                 |   1 +
->  arch/arm/boot/dts/imx6sl-tolino-vision.dts | 490 +++++++++++++++++++++
->  2 files changed, 491 insertions(+)
->  create mode 100644 arch/arm/boot/dts/imx6sl-tolino-vision.dts
+>  arch/arm/boot/dts/Makefile                    |   4 +
+>  .../arm/boot/dts/imx6ull-tarragon-common.dtsi | 856 ++++++++++++++++++
+>  arch/arm/boot/dts/imx6ull-tarragon-master.dts |  82 ++
+>  arch/arm/boot/dts/imx6ull-tarragon-micro.dts  |  10 +
+>  arch/arm/boot/dts/imx6ull-tarragon-slave.dts  |  32 +
+>  .../arm/boot/dts/imx6ull-tarragon-slavext.dts |  64 ++
+>  6 files changed, 1048 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-common.dtsi
+>  create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-master.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-micro.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-slave.dts
+>  create mode 100644 arch/arm/boot/dts/imx6ull-tarragon-slavext.dts
 > 
 > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index efe4152e5846..159363f46522 100644
+> index efe4152e5846..aae52a6380bc 100644
 > --- a/arch/arm/boot/dts/Makefile
 > +++ b/arch/arm/boot/dts/Makefile
-> @@ -690,6 +690,7 @@ dtb-$(CONFIG_SOC_IMX6SL) += \
->  	imx6sl-kobo-aura2.dtb \
->  	imx6sl-tolino-shine2hd.dtb \
->  	imx6sl-tolino-shine3.dtb \
-> +	imx6sl-tolino-vision.dtb \
->  	imx6sl-tolino-vision5.dtb \
->  	imx6sl-warp.dtb
->  dtb-$(CONFIG_SOC_IMX6SLL) += \
-> diff --git a/arch/arm/boot/dts/imx6sl-tolino-vision.dts b/arch/arm/boot/dts/imx6sl-tolino-vision.dts
+> @@ -755,6 +755,10 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+>  	imx6ull-phytec-segin-lc-rdk-nand.dtb \
+>  	imx6ull-phytec-tauri-emmc.dtb \
+>  	imx6ull-phytec-tauri-nand.dtb \
+> +	imx6ull-tarragon-master.dtb \
+> +	imx6ull-tarragon-micro.dtb \
+> +	imx6ull-tarragon-slave.dtb \
+> +	imx6ull-tarragon-slavext.dtb \
+>  	imx6ull-tqma6ull2-mba6ulx.dtb \
+>  	imx6ull-tqma6ull2l-mba6ulx.dtb \
+>  	imx6ulz-14x14-evk.dtb \
+> diff --git a/arch/arm/boot/dts/imx6ull-tarragon-common.dtsi b/arch/arm/boot/dts/imx6ull-tarragon-common.dtsi
 > new file mode 100644
-> index 000000000000..035d1dea42c4
+> index 000000000000..fe79990baaea
 > --- /dev/null
-> +++ b/arch/arm/boot/dts/imx6sl-tolino-vision.dts
-> @@ -0,0 +1,490 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device tree for the Tolino Vison ebook reader
-> + *
-> + * Name on mainboard is: 37NB-E60Q30+4A3
-> + * Serials start with: 6032
-> + *
-> + * Copyright 2023 Andreas Kemnade
-> + */
+> +++ b/arch/arm/boot/dts/imx6ull-tarragon-common.dtsi
+> @@ -0,0 +1,856 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +//
+> +// Copyright (C) 2023 chargebyte GmbH
 > +
 > +/dts-v1/;
 > +
-> +#include <dt-bindings/leds/common.h>
 > +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include "imx6sl.dtsi"
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/pwm/pwm.h>
+> +#include "imx6ull.dtsi"
 > +
 > +/ {
-> +	model = "Tolino Vision";
-> +	compatible = "kobo,tolino-vision", "fsl,imx6sl";
-> +
 > +	aliases {
-> +		mmc0 = &usdhc4;
-> +		mmc1 = &usdhc2;
-> +	};
-> +
-> +	backlight {
-> +		compatible = "pwm-backlight";
-> +		pwms = <&ec 0 50000>;
-> +		power-supply = <&backlight_regulator>;
-> +	};
-> +
-> +	backlight_regulator: regulator-backlight {
-> +		compatible = "regulator-fixed";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_backlight_power>;
-> +		regulator-name = "backlight";
-> +		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
+> +		mmc0 = &usdhc2; /* eMMC */
 > +	};
 > +
 > +	chosen {
-> +		stdout-path = &uart1;
-> +	};
-> +
-> +	gpio_keys: gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_gpio_keys>;
-> +
-> +		key-cover {
-> +			/* magnetic sensor in the corner next to the uSD slot */
-> +			label = "Cover";
-> +			gpios = <&gpio5 12 GPIO_ACTIVE_LOW>;
-> +			linux,code = <SW_LID>;
-> +			linux,input-type = <EV_SW>;
-> +			wakeup-source;
-> +		};
-> +
-> +		key-fl {
-> +			label = "Frontlight";
-> +			gpios = <&gpio3 26 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_BRIGHTNESS_CYCLE>;
-> +		};
-> +
-> +		key-power {
-> +			label = "Power";
-> +			gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_POWER>;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	leds: leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_leds>;
-> +
-> +		led-0 {
-> +			/* LED on home button */
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio5 10 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		led-1 {
-> +			/* LED on power button */
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			function = LED_FUNCTION_POWER;
-> +			gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
-> +			linux,default-trigger = "timer";
-> +		};
+> +		stdout-path = &uart4;
 > +	};
 > +
 > +	memory@80000000 {
@@ -179,48 +128,1060 @@ On Fri, Mar 17, 2023 at 09:16:18AM +0100, Andreas Kemnade wrote:
 > +		reg = <0x80000000 0x20000000>;
 > +	};
 > +
-> +	reg_wifi: regulator-wifi {
-> +		compatible = "regulator-fixed";
+> +	emmc_pwrseq: emmc-pwrseq {
+> +		compatible = "mmc-pwrseq-emmc";
+> +		pinctrl-0 = <&pinctrl_emmc_rst>;
 > +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wifi_power>;
-> +		regulator-name = "SD3_SPWR";
-> +		regulator-min-microvolt = <3000000>;
-> +		regulator-max-microvolt = <3000000>;
-> +		gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
+> +		reset-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
 > +	};
 > +
+> +	reg_dcdc_3v3: regulator-dcdc-3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "dcdc-3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +	};
 > +
-> +	wifi_pwrseq: wifi_pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
+> +	reg_1v8: regulator-1v8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "ldo-1v8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
 > +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wifi_reset>;
-> +		post-power-on-delay-ms = <20>;
-> +		reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
+> +		pinctrl-0 = <&pinctrl_status_leds>;
+> +
+> +		led-1 {
+> +			function = LED_FUNCTION_BOOT;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			gpios = <&gpio3 14 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "timer";
+> +		};
+> +
+> +		led-2 {
+> +			function = LED_FUNCTION_PROGRAMMING;
+> +			color = <LED_COLOR_ID_YELLOW>;
+> +			gpios = <&gpio3 15 GPIO_ACTIVE_HIGH>;
+> +		};
+> +
+> +		led-3 {
+> +			function = LED_FUNCTION_HEARTBEAT;
+> +			color = <LED_COLOR_ID_RED>;
+> +			gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +		};
 > +	};
 > +};
 > +
-> +&i2c1 {
-> +	pinctrl-names = "default","sleep";
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	pinctrl-1 = <&pinctrl_i2c1_sleep>;
+> +&adc1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_adc_motor
+> +		     &pinctrl_adc_cp
+> +		     &pinctrl_adc_pp>;
+> +	vref-supply = <&vgen1_reg>;
+> +	status = "okay";
+> +};
+> +
+> +&cpu0 {
+> +	clock-frequency = <792000000>;
+> +};
+> +
+> +&ecspi2 {
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_ecspi2>;
+> +	num-cs = <3>;
+> +	cs-gpios = <&gpio1 29 GPIO_ACTIVE_HIGH
+> +		    &gpio3 2  GPIO_ACTIVE_HIGH
+> +		    &gpio3 4  GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&ecspi4 {
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_qca700x_mains_spi>;
+> +	num-cs = <1>;
+> +	cs-gpios = <&gpio2 15 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&fec1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_enet1
+> +		     &pinctrl_enet1_phy_rst
+> +		     &pinctrl_enet_mdio>;
+> +	phy-supply = <&reg_dcdc_3v3>;
+> +	phy-mode = "rmii";
+> +	phy-reset-gpios = <&gpio5 6 GPIO_ACTIVE_LOW>;
+> +	phy-reset-duration = <25>;
+> +	phy-handle = <&ethphy0>;
+> +
+> +	mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		ethphy0: ethernet-phy@0 {
+> +			compatible = "ethernet-phy-ieee802.3-c22";
+> +			reg = <0>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&pinctrl_enet1_phy_int>;
+> +			interrupt-parent = <&gpio2>;
+> +			interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+> +			interrupts-extended = <&gpio2 7 IRQ_TYPE_EDGE_FALLING>;
+> +			clocks = <&clks IMX6UL_CLK_ENET_REF>;
+> +			clock-names = "rmii-ref";
+> +			max-speed = <100>;
+> +			smsc,disable-energy-detect;
+> +		};
+> +	};
+> +};
+> +
+> +&gpio1 {
+> +	gpio-line-names = "",				/* 0 */
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",				/* 5 */
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",				/* 10 */
+> +			  "",
+> +			  "",
+> +			  "CP_INVERT",
+> +			  "",
+> +			  "",				/* 15 */
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "MOTOR_1_FAULT_N",
+> +			  "",				/* 20 */
+> +			  "",
+> +			  "ROTARY_SWITCH_1_2_N",
+> +			  "ROTARY_SWITCH_1_4_N",
+> +			  "ROTARY_SWITCH_1_8_N",
+> +			  "MOTOR_2_FAULT_N";		/* 25 */
+> +};
+> +
+> +&gpio3 {
+> +	gpio-line-names = "",				/* 0 */
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",				/* 5 */
+> +			  "EXT_GPIO",
+> +			  "MOTOR_1_DRIVER_IN1_N",
+> +			  "MOTOR_1_DRIVER_IN2",
+> +			  "MOTOR_2_DRIVER_IN1",
+> +			  "STM32_BOOT0",		/* 10 */
+> +			  "STM32_RST_N",
+> +			  "RELAY_1_ENABLE",
+> +			  "RELAY_2_ENABLE",
+> +			  "",
+> +			  "",				/* 15 */
+> +			  "QCA700X_MAINS_BOOTLOADER_N",
+> +			  "QCA700X_CP_RST_N",
+> +			  "QCA700X_CP_BOOTLOADER_N",
+> +			  "",
+> +			  "DIGITAL_OUT_1",		/* 20 */
+> +			  "DIGITAL_OUT_2",
+> +			  "DIGITAL_OUT_3",
+> +			  "DIGITAL_OUT_4",
+> +			  "DIGITAL_OUT_5",
+> +			  "DIGITAL_OUT_6",		/* 25 */
+> +			  "ROTARY_SWITCH_2_8_N",
+> +			  "ROTARY_SWITCH_2_4_N",
+> +			  "ROTARY_SWITCH_2_2_N";
+> +};
+> +
+> +&gpio4 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_pmic>;
+> +
+> +	gpio-line-names = "",				/* 0 */
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",				/* 5 */
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",
+> +			  "",				/* 10 */
+> +			  "",
+> +			  "",
+> +			  "BOARD_VARIANT_1",
+> +			  "BOARD_VARIANT_2",
+> +			  "BOARD_VARIANT_0",		/* 15 */
+> +			  "BOARD_VARIANT_3",
+> +			  "",
+> +			  "ROTARY_SWITCH_2_1_N",
+> +			  "",
+> +			  "DIGITAL_IN_5",		/* 20 */
+> +			  "",
+> +			  "",
+> +			  "DIGITAL_IN_6",
+> +			  "",
+> +			  "DIGITAL_IN_1",		/* 25 */
+> +			  "DIGITAL_IN_2",
+> +			  "DIGITAL_IN_4",
+> +			  "DIGITAL_IN_3";
+> +
+> +	pmic-int-hog {
+> +		gpio-hog;
+> +		gpios = <19 0>;
+> +		input;
+> +	};
+> +};
+> +
+> +&gpio5 {
+> +	gpio-line-names = "ROTARY_SWITCH_1_1_N",	/* 0 */
+> +			  "",
+> +			  "RELAY_2_SENSE",
+> +			  "RELAY_1_SENSE",
+> +			  "",
+> +			  "",				/* 5 */
+> +			  "",
+> +			  "QCA700X_MAINS_RST_N",
+> +			  "MOTOR_2_DRIVER_IN2",
+> +			  "",
+> +			  "CP_POSITIVE_PEAK_RST",	/* 10 */
+> +			  "CP_NEGATIVE_PEAK_RST";
+> +};
+> +
+> +&i2c4 {
+> +	clock-frequency = <100000>;
+> +	pinctrl-names = "default", "gpio";
+> +	pinctrl-0 = <&pinctrl_i2c4>;
+> +	pinctrl-1 = <&pinctrl_i2c4_gpio>;
+> +	scl-gpios = <&gpio1 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio1 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 > +	status = "okay";
 > +
-> +	touchscreen@15 {
-> +		compatible = "elan,ektf2132";
-> +		reg = <0x15>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_ts>;
-> +		power-gpios = <&gpio5 13 GPIO_ACTIVE_HIGH>;
-> +		interrupts-extended = <&gpio5 6 IRQ_TYPE_EDGE_FALLING>;
+> +	pfuze3001: pmic@8 {
+> +		compatible = "fsl,pfuze3001";
+> +		reg = <0x08>;
+> +
+> +		regulators {
+> +			sw1_reg: sw1 {
+> +				regulator-name = "SW1";
+> +				regulator-min-microvolt = <700000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			sw2_reg: sw2 {
+> +				regulator-name = "SW2";
+> +				regulator-min-microvolt = <1500000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			sw3_reg: sw3 {
+> +				regulator-name = "SW3";
+> +				regulator-min-microvolt = <900000>;
+> +				regulator-max-microvolt = <1650000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			snvs_reg: vsnvs {
+> +				regulator-name = "VSNVS";
+> +				regulator-min-microvolt = <1000000>;
+> +				regulator-max-microvolt = <3000000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			vgen1_reg: vldo1 {
+> +				regulator-name = "VLDO1";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			vgen2_reg: vldo2 {
+> +				regulator-name = "VLDO2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1550000>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			vgen3_reg: vccsd {
+> +				regulator-name = "VCCSD";
+> +				regulator-min-microvolt = <2850000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			vgen4_reg: v33 {
+> +				regulator-name = "V33";
+> +				regulator-min-microvolt = <2850000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			vgen5_reg: vldo3 {
+> +				regulator-name = "VLDO3";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			vgen6_reg: vldo4 {
+> +				regulator-name = "VLDO4";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +		};
 > +	};
 > +
-> +	accelerometer@1d {
-> +		reg = <0x1d>;
-> +		compatible = "fsl,mma8652";
+> +	onewire@18 {
+> +		compatible = "maxim,ds2484";
+> +		reg = <0x18>;
+> +	};
+> +
+> +	accelerometer@19 {
+> +		compatible = "st,iis328dq", "st,h3lis331dl-accel";
+> +		reg = <0x19>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_accelerometer_int1_snvs>;
+> +		vdd-supply = <&reg_dcdc_3v3>;
+> +		vddio-supply = <&reg_dcdc_3v3>;
+> +		st,drdy-int-pin = <1>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <5 IRQ_TYPE_EDGE_RISING>;
+> +	};
+> +};
+> +
+> +&iomuxc {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_hog_pins
+> +		     &pinctrl_gpio_motor
+> +		     &pinctrl_board_var
+> +		     &pinctrl_digital_input
+> +		     &pinctrl_digital_output
+> +		     &pinctrl_rotary_switch1
+> +		     &pinctrl_rotary_switch2>;
+> +
+> +	tarragon {
 
-Flipped the order of these two.  Applied both, thanks!
+Drop this container node.
+
+> +		pinctrl_status_leds: status-ledsgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA09__GPIO3_IO14            0xb0
+> +				MX6UL_PAD_LCD_DATA10__GPIO3_IO15            0xb0
+> +				MX6UL_PAD_LCD_DATA14__GPIO3_IO19            0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_adc_motor: adc-motorgrp {
+
+Try to sort the pinctrl node alphabetically.
+
+> +			fsl,pins = <
+> +				MX6UL_PAD_GPIO1_IO00__GPIO1_IO00            0xb0
+> +				MX6UL_PAD_GPIO1_IO01__GPIO1_IO01            0xb0
+> +				MX6UL_PAD_GPIO1_IO04__GPIO1_IO04            0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_gpio_motor: gpio-motorgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA02__GPIO3_IO07            0x400000b0
+> +				MX6UL_PAD_LCD_DATA03__GPIO3_IO08            0x400000b0
+> +				MX6UL_PAD_LCD_DATA04__GPIO3_IO09            0x400000b0
+> +				MX6UL_PAD_UART1_RTS_B__GPIO1_IO19           0xb0
+> +				MX6UL_PAD_UART3_RX_DATA__GPIO1_IO25         0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_adc_cp: adc-cpgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_GPIO1_IO02__GPIO1_IO02            0xb0
+> +				MX6UL_PAD_GPIO1_IO03__GPIO1_IO03            0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_adc_pp: adc-ppgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_GPIO1_IO05__GPIO1_IO05            0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_usb_pwr: usb-pwrgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_SD1_CMD__USB_OTG1_PWR             0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_usb: usbgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_SD1_CLK__USB_OTG1_OC              0x70b0
+> +				MX6UL_PAD_SD1_DATA0__ANATOP_OTG1_ID         0x70b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_enet_mdio: enet-mdiogrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_GPIO1_IO06__ENET1_MDIO            0x10b0
+> +				MX6UL_PAD_GPIO1_IO07__ENET1_MDC             0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_enet1_phy_int: enet1-phy-intgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_ENET1_RX_ER__GPIO2_IO07           0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_enet1: enet1grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_ENET1_RX_DATA0__ENET1_RDATA00     0x100b0
+> +				MX6UL_PAD_ENET1_RX_DATA1__ENET1_RDATA01     0x100b0
+> +				MX6UL_PAD_ENET1_RX_EN__ENET1_RX_EN          0x100b0
+> +				MX6UL_PAD_ENET1_TX_CLK__ENET1_REF_CLK1      0x400000b1
+> +				MX6UL_PAD_ENET1_TX_DATA0__ENET1_TDATA00     0xb0
+> +				MX6UL_PAD_ENET1_TX_DATA1__ENET1_TDATA01     0xb0
+> +				MX6UL_PAD_ENET1_TX_EN__ENET1_TX_EN          0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_fan_enable: fan-enablegrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA00__GPIO3_IO05            0x400000b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_pwm_digital_input_ref: pwm-digital-input-refgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_GPIO1_IO09__PWM2_OUT              0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_pwm_fan: pwm-fangrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_JTAG_TCK__PWM7_OUT                0x60a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_pwm_cp: pinctrl-pwm-cpgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_JTAG_TRST_B__PWM8_OUT             0x60a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_rs485_1: rs485-1grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_UART1_CTS_B__GPIO1_IO18           0xb0
+> +				MX6UL_PAD_UART1_RX_DATA__UART1_DCE_RX       0xb0
+> +				MX6UL_PAD_UART1_TX_DATA__UART1_DCE_TX       0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_rs485_2: rs485-2grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_CSI_DATA03__GPIO4_IO24            0x10b0
+> +				MX6UL_PAD_CSI_DATA01__UART5_DCE_RX          0x10b0
+> +				MX6UL_PAD_CSI_DATA00__UART5_DCE_TX          0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_stm32: stm32grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_ENET2_RX_DATA1__UART6_DCE_RX      0x10b0
+> +				MX6UL_PAD_ENET2_RX_DATA0__UART6_DCE_TX      0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_ext_uart: ext-uartgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_ENET2_TX_DATA0__UART7_DCE_RX      0xb0
+> +				MX6UL_PAD_ENET2_RX_EN__UART7_DCE_TX         0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_i2c4: i2c4grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_UART2_RX_DATA__I2C4_SDA           0x400008b0
+> +				MX6UL_PAD_UART2_TX_DATA__I2C4_SCL           0x400008b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_i2c4_gpio: i2c4-gpiogrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_UART2_RX_DATA__GPIO1_IO21         0x400008b0
+> +				MX6UL_PAD_UART2_TX_DATA__GPIO1_IO20         0x400008b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_ecspi2: ecspi2grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_UART4_RX_DATA__GPIO1_IO29         0x10b0
+> +				MX6UL_PAD_LCD_HSYNC__GPIO3_IO02             0xb0
+> +				MX6UL_PAD_LCD_RESET__GPIO3_IO04             0xb0
+> +				MX6UL_PAD_UART4_TX_DATA__ECSPI2_SCLK        0x10b0
+> +				MX6UL_PAD_UART5_RX_DATA__ECSPI2_MISO        0x10b0
+> +				MX6UL_PAD_UART5_TX_DATA__ECSPI2_MOSI        0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_cp_int: qca700x-cp-intgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_SD1_DATA1__GPIO2_IO19             0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_cp_rst: qca700x-cp-rstgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA12__GPIO3_IO17            0x400000b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_cp_btld: qca700x-cp-btldgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA13__GPIO3_IO18            0x400000b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_mains_spi: qca700x-mains-spigrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_ENET2_RX_ER__GPIO2_IO15           0x10b0
+> +				MX6UL_PAD_ENET2_TX_DATA1__ECSPI4_SCLK       0x10b0
+> +				MX6UL_PAD_ENET2_TX_CLK__ECSPI4_MISO         0x10b0
+> +				MX6UL_PAD_ENET2_TX_EN__ECSPI4_MOSI          0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_mains_btld: qca700x-mains-btldgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA11__GPIO3_IO16            0x400000b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_uart4: uart4grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_CLK__UART4_DTE_RX             0xb0
+> +				MX6UL_PAD_LCD_ENABLE__UART4_DTE_TX          0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_digital_input: digital-inputgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_CSI_DATA04__GPIO4_IO25            0xb0
+> +				MX6UL_PAD_CSI_DATA05__GPIO4_IO26            0xb0
+> +				MX6UL_PAD_CSI_DATA07__GPIO4_IO28            0xb0
+> +				MX6UL_PAD_CSI_DATA06__GPIO4_IO27            0xb0
+> +				MX6UL_PAD_CSI_HSYNC__GPIO4_IO20             0xb0
+> +				MX6UL_PAD_CSI_DATA02__GPIO4_IO23            0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_board_var: board-vargrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_NAND_CLE__GPIO4_IO15              0xb0
+> +				MX6UL_PAD_NAND_CE0_B__GPIO4_IO13            0xb0
+> +				MX6UL_PAD_NAND_CE1_B__GPIO4_IO14            0xb0
+> +				MX6UL_PAD_NAND_DQS__GPIO4_IO16              0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_pmic: pmicgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_GPIO1_IO08__USDHC2_VSELECT        0x70b1
+> +				MX6UL_PAD_CSI_VSYNC__GPIO4_IO19             0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_digital_output: digital-outputgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA15__GPIO3_IO20            0x400000b0
+> +				MX6UL_PAD_LCD_DATA16__GPIO3_IO21            0x400000b0
+> +				MX6UL_PAD_LCD_DATA17__GPIO3_IO22            0x400000b0
+> +				MX6UL_PAD_LCD_DATA18__GPIO3_IO23            0x400000b0
+> +				MX6UL_PAD_LCD_DATA19__GPIO3_IO24            0x400000b0
+> +				MX6UL_PAD_LCD_DATA20__GPIO3_IO25            0x400000b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_usdhc2: usdhc2grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_NAND_RE_B__USDHC2_CLK             0x7071
+> +				MX6UL_PAD_NAND_WE_B__USDHC2_CMD             0x7071
+> +				MX6UL_PAD_NAND_DATA00__USDHC2_DATA0         0x7071
+> +				MX6UL_PAD_NAND_DATA01__USDHC2_DATA1         0x7071
+> +				MX6UL_PAD_NAND_DATA02__USDHC2_DATA2         0x7071
+> +				MX6UL_PAD_NAND_DATA03__USDHC2_DATA3         0x7071
+> +				MX6UL_PAD_NAND_DATA04__USDHC2_DATA4         0x7071
+> +				MX6UL_PAD_NAND_DATA05__USDHC2_DATA5         0x7071
+> +				MX6UL_PAD_NAND_DATA06__USDHC2_DATA6         0x7071
+> +				MX6UL_PAD_NAND_DATA07__USDHC2_DATA7         0x7071
+> +			>;
+> +		};
+> +
+> +		pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_NAND_RE_B__USDHC2_CLK             0x70b1
+> +				MX6UL_PAD_NAND_WE_B__USDHC2_CMD             0x70b1
+> +				MX6UL_PAD_NAND_DATA00__USDHC2_DATA0         0x70b1
+> +				MX6UL_PAD_NAND_DATA01__USDHC2_DATA1         0x70b1
+> +				MX6UL_PAD_NAND_DATA02__USDHC2_DATA2         0x70b1
+> +				MX6UL_PAD_NAND_DATA03__USDHC2_DATA3         0x70b1
+> +				MX6UL_PAD_NAND_DATA04__USDHC2_DATA4         0x70b1
+> +				MX6UL_PAD_NAND_DATA05__USDHC2_DATA5         0x70b1
+> +				MX6UL_PAD_NAND_DATA06__USDHC2_DATA6         0x70b1
+> +				MX6UL_PAD_NAND_DATA07__USDHC2_DATA7         0x70b1
+> +			>;
+> +		};
+> +
+> +		pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_NAND_RE_B__USDHC2_CLK             0x70f1
+> +				MX6UL_PAD_NAND_WE_B__USDHC2_CMD             0x70f1
+> +				MX6UL_PAD_NAND_DATA00__USDHC2_DATA0         0x70f1
+> +				MX6UL_PAD_NAND_DATA01__USDHC2_DATA1         0x70f1
+> +				MX6UL_PAD_NAND_DATA02__USDHC2_DATA2         0x70f1
+> +				MX6UL_PAD_NAND_DATA03__USDHC2_DATA3         0x70f1
+> +				MX6UL_PAD_NAND_DATA04__USDHC2_DATA4         0x70f1
+> +				MX6UL_PAD_NAND_DATA05__USDHC2_DATA5         0x70f1
+> +				MX6UL_PAD_NAND_DATA06__USDHC2_DATA6         0x70f1
+> +				MX6UL_PAD_NAND_DATA07__USDHC2_DATA7         0x70f1
+> +			>;
+> +		};
+> +
+> +		pinctrl_emmc_rst: emmc-rstgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_NAND_ALE__GPIO4_IO10              0x400010b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_rotary_switch1: rotary-switch1grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_UART2_CTS_B__GPIO1_IO22           0xb0
+> +				MX6UL_PAD_UART2_RTS_B__GPIO1_IO23           0xb0
+> +				MX6UL_PAD_UART3_TX_DATA__GPIO1_IO24         0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_rotary_switch2: rotary-switch2grp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_CSI_PIXCLK__GPIO4_IO18            0xb0
+> +				MX6UL_PAD_LCD_DATA23__GPIO3_IO28            0xb0
+> +				MX6UL_PAD_LCD_DATA22__GPIO3_IO27            0xb0
+> +				MX6UL_PAD_LCD_DATA21__GPIO3_IO26            0xb0
+> +			>;
+> +		};
+> +
+> +		pinctrl_wdog2: wdoggrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_VSYNC__WDOG2_WDOG_B           0x10b0
+> +			>;
+> +		};
+> +
+> +		pinctrl_hog_pins: hog-pinsgrp {
+> +			fsl,pins = <
+> +				MX6UL_PAD_LCD_DATA07__GPIO3_IO12            0x400000b0
+> +				MX6UL_PAD_LCD_DATA08__GPIO3_IO13            0x400000b0
+> +				MX6UL_PAD_JTAG_TDI__GPIO1_IO13              0x400070a0
+> +				MX6UL_PAD_LCD_DATA05__GPIO3_IO10            0x400000b0
+> +				MX6UL_PAD_LCD_DATA06__GPIO3_IO11            0x400000b0
+> +			>;
+> +		};
+> +	};
+> +};
+> +
+> +&iomuxc_snvs {
+> +	pinctrl-names = "default_snvs";
+> +	pinctrl-0 = <&pinctrl_cp_peak_snvs
+> +		     &pinctrl_gpio_motor_snvs
+> +		     &pinctrl_rotary_switch1_snvs
+> +		     &pinctrl_relay_sense_snvs>;
+> +
+> +	tarragon {
+
+Ditto
 
 Shawn
 
+> +		pinctrl_cp_peak_snvs: cp-peak-snvsgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_BOOT_MODE0__GPIO5_IO10           0x130a0
+> +				MX6ULL_PAD_BOOT_MODE1__GPIO5_IO11           0x130a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_gpio_motor_snvs: gpio-motor-snvsgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER8__GPIO5_IO08         0x110a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_enet1_phy_rst: enet1-phy-rstgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER6__GPIO5_IO06         0x100a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_mains_rst: qca700x-mains-rstgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER7__GPIO5_IO07         0x400100a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_qca700x_mains_int: qca700x-mains-intgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER9__GPIO5_IO09         0x130a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_fan_sense_snvs: fan-sense-snvsgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER1__GPIO5_IO01         0x100a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_accelerometer_int1_snvs: accelerometer-int1-snvsgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER5__GPIO5_IO05         0x130a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_relay_sense_snvs: relay-sense-snvsgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER3__GPIO5_IO03         0x100a0
+> +				MX6ULL_PAD_SNVS_TAMPER2__GPIO5_IO02         0x100a0
+> +			>;
+> +		};
+> +
+> +		pinctrl_rotary_switch1_snvs: rotary-switch1-snvsgrp {
+> +			fsl,pins = <
+> +				MX6ULL_PAD_SNVS_TAMPER0__GPIO5_IO00         0x110a0
+> +			>;
+> +		};
 > +	};
 > +};
+> +
+> +&pwm2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_pwm_digital_input_ref>;
+> +	status = "okay";
+> +};
+> +
+> +&pwm8 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_pwm_cp>;
+> +	status = "okay";
+> +};
+> +
+> +&uart1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_rs485_1>;
+> +	status = "okay";
+> +};
+> +
+> +&uart4 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_uart4>;
+> +	fsl,dte-mode;
+> +	status = "okay";
+> +};
+> +
+> +&uart5 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_rs485_2>;
+> +};
+> +
+> +&uart6 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_stm32>;
+> +	status = "okay";
+> +};
+> +
+> +&uart7 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_ext_uart>;
+> +	status = "okay";
+> +};
+> +
+> +&usbotg1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_usb
+> +		     &pinctrl_usb_pwr>;
+> +	dr_mode = "host";
+> +	power-active-high;
+> +	disable-over-current;
+> +	status = "okay";
+> +};
+> +
+> +&usbotg2 {
+> +	dr_mode = "host";
+> +	disable-over-current;
+> +	status = "okay";
+> +};
+> +
+> +&usbphy1 {
+> +	fsl,tx-cal-45-dn-ohms = <35>;
+> +	fsl,tx-cal-45-dp-ohms = <35>;
+> +};
+> +
+> +&usbphy2 {
+> +	fsl,tx-cal-45-dn-ohms = <35>;
+> +	fsl,tx-cal-45-dp-ohms = <35>;
+> +};
+> +
+> +&usdhc2 {
+> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+> +	pinctrl-0 = <&pinctrl_usdhc2>;
+> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
+> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
+> +	vmmc-supply = <&sw2_reg>;
+> +	vqmmc-supply = <&reg_1v8>;
+> +	mmc-pwrseq = <&emmc_pwrseq>;
+> +	bus-width = <8>;
+> +	non-removable;
+> +	no-sd;
+> +	no-sdio;
+> +	status = "okay";
+> +};
+> +
+> +&wdog1 {
+> +	status = "disabled";
+> +};
+> +
+> +&wdog2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_wdog2>;
+> +	fsl,ext-reset-output;
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-tarragon-master.dts b/arch/arm/boot/dts/imx6ull-tarragon-master.dts
+> new file mode 100644
+> index 000000000000..67007ce383e3
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-tarragon-master.dts
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +//
+> +// Copyright (C) 2023 chargebyte GmbH
+> +
+> +#include "imx6ull-tarragon-common.dtsi"
+> +
+> +/ {
+> +	model = "chargebyte Tarragon Master";
+> +	compatible = "chargebyte,imx6ull-tarragon-master", "fsl,imx6ull";
+> +
+> +	fan0: pwm-fan {
+> +		compatible = "pwm-fan";
+> +		pwms = <&pwm7 0 40000 PWM_POLARITY_INVERTED>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_fan_sense_snvs>;
+> +		fan-supply = <&reg_fan>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+> +	};
+> +
+> +	reg_fan: regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "fan-supply";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_fan_enable>;
+> +		regulator-min-microvolt = <12000000>;
+> +		regulator-max-microvolt = <12000000>;
+> +		gpio = <&gpio3 5 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		regulator-boot-on;
+> +	};
+> +};
+> +
+> +&ecspi2 {
+> +	status = "okay";
+> +
+> +	qca700x_cp: ethernet@0 {
+> +		reg = <0x0>;
+> +		compatible = "qca,qca7000";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_qca700x_cp_int
+> +			     &pinctrl_qca700x_cp_rst
+> +			     &pinctrl_qca700x_cp_btld>;
+> +		interrupt-parent = <&gpio2>;
+> +		interrupts = <19 IRQ_TYPE_EDGE_RISING>;
+> +		spi-cpha;
+> +		spi-cpol;
+> +		spi-max-frequency = <16000000>;
+> +	};
+> +};
+> +
+> +&ecspi4 {
+> +	status = "okay";
+> +
+> +	qca700x_mains: ethernet@0 {
+> +		reg = <0x0>;
+> +		compatible = "qca,qca7000";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_qca700x_mains_int
+> +			     &pinctrl_qca700x_mains_rst
+> +			     &pinctrl_qca700x_mains_btld>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <9 IRQ_TYPE_EDGE_RISING>;
+> +		spi-cpha;
+> +		spi-cpol;
+> +		spi-max-frequency = <16000000>;
+> +	};
+> +};
+> +
+> +&fec1 {
+> +	status = "okay";
+> +};
+> +
+> +&pwm7 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_pwm_fan>;
+> +	status = "okay";
+> +};
+> +
+> +&uart5 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-tarragon-micro.dts b/arch/arm/boot/dts/imx6ull-tarragon-micro.dts
+> new file mode 100644
+> index 000000000000..e471c2005bee
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-tarragon-micro.dts
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +//
+> +// Copyright (C) 2023 chargebyte GmbH
+> +
+> +#include "imx6ull-tarragon-common.dtsi"
+> +
+> +/ {
+> +	model = "chargebyte Tarragon Micro";
+> +	compatible = "chargebyte,imx6ull-tarragon-micro", "fsl,imx6ull";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-tarragon-slave.dts b/arch/arm/boot/dts/imx6ull-tarragon-slave.dts
+> new file mode 100644
+> index 000000000000..cee223b5f8e1
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-tarragon-slave.dts
+> @@ -0,0 +1,32 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +//
+> +// Copyright (C) 2023 chargebyte GmbH
+> +
+> +#include "imx6ull-tarragon-common.dtsi"
+> +
+> +/ {
+> +	model = "chargebyte Tarragon Slave";
+> +	compatible = "chargebyte,imx6ull-tarragon-slave", "fsl,imx6ull";
+> +};
+> +
+> +&ecspi2 {
+> +	status = "okay";
+> +
+> +	qca700x_cp: ethernet@0 {
+> +		reg = <0x0>;
+> +		compatible = "qca,qca7000";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_qca700x_cp_int
+> +			     &pinctrl_qca700x_cp_rst
+> +			     &pinctrl_qca700x_cp_btld>;
+> +		interrupt-parent = <&gpio2>;
+> +		interrupts = <19 IRQ_TYPE_EDGE_RISING>;
+> +		spi-cpha;
+> +		spi-cpol;
+> +		spi-max-frequency = <16000000>;
+> +	};
+> +};
+> +
+> +&fec1 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm/boot/dts/imx6ull-tarragon-slavext.dts b/arch/arm/boot/dts/imx6ull-tarragon-slavext.dts
+> new file mode 100644
+> index 000000000000..7fd53b7a4372
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/imx6ull-tarragon-slavext.dts
+> @@ -0,0 +1,64 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +//
+> +// Copyright (C) 2023 chargebyte GmbH
+> +
+> +#include "imx6ull-tarragon-common.dtsi"
+> +
+> +/ {
+> +	model = "chargebyte Tarragon SlaveXT";
+> +	compatible = "chargebyte,imx6ull-tarragon-slavext", "fsl,imx6ull";
+> +
+> +	fan0: pwm-fan {
+> +		compatible = "pwm-fan";
+> +		pwms = <&pwm7 0 40000 PWM_POLARITY_INVERTED>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_fan_sense_snvs>;
+> +		fan-supply = <&reg_fan>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+> +	};
+> +
+> +	reg_fan: regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "fan-supply";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_fan_enable>;
+> +		regulator-min-microvolt = <12000000>;
+> +		regulator-max-microvolt = <12000000>;
+> +		gpio = <&gpio3 5 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +		regulator-boot-on;
+> +	};
+> +};
+> +
+> +&ecspi2 {
+> +	status = "okay";
+> +
+> +	qca700x_cp: ethernet@0 {
+> +		reg = <0x0>;
+> +		compatible = "qca,qca7000";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_qca700x_cp_int
+> +			     &pinctrl_qca700x_cp_rst
+> +			     &pinctrl_qca700x_cp_btld>;
+> +		interrupt-parent = <&gpio2>;
+> +		interrupts = <19 IRQ_TYPE_EDGE_RISING>;
+> +		spi-cpha;
+> +		spi-cpol;
+> +		spi-max-frequency = <16000000>;
+> +	};
+> +};
+> +
+> +&fec1 {
+> +	status = "okay";
+> +};
+> +
+> +&pwm7 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_pwm_fan>;
+> +	status = "okay";
+> +};
+> +
+> +&uart5 {
+> +	status = "okay";
+> +};
+> -- 
+> 2.17.1
+> 
