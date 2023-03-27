@@ -1,51 +1,85 @@
-Return-Path: <SRS0=VeFV=7T=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=dswN=7T=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5C3AC7619A
-	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 08:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CBE0C76195
+	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 08:57:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9A0ECC4339B; Mon, 27 Mar 2023 08:21:40 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id A9DF5C433D2;
-	Mon, 27 Mar 2023 08:21:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9DF5C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from localhost (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTPS id 3B5078108;
-	Mon, 27 Mar 2023 08:21:38 +0000 (UTC)
-Date: Mon, 27 Mar 2023 11:21:37 +0300
-From: Tony Lindgren <tony@atomide.com>
-To: Andreas Kemnade <andreas@kemnade.info>
+	id EA221C4339C; Mon, 27 Mar 2023 08:57:18 +0000 (UTC)
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id DBB76C433D2
+	for <soc@kernel.org>; Mon, 27 Mar 2023 08:57:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DBB76C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([84.195.187.55])
+	by michel.telenet-ops.be with bizsmtp
+	id dLx82900H1C8whw06Lx8FR; Mon, 27 Mar 2023 10:57:08 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1pgieO-00ExYz-SK;
+	Mon, 27 Mar 2023 10:57:08 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1pgif6-002atk-DO;
+	Mon, 27 Mar 2023 10:57:08 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, bcousson@baylibre.com,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: omap4: add initial support for Epson Moverio
- BT-200
-Message-ID: <20230327082137.GH7501@atomide.com>
-References: <20230313110409.2294154-1-andreas@kemnade.info>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 2/4] Renesas driver updates for v6.4
+Date: Mon, 27 Mar 2023 10:57:02 +0200
+Message-Id: <cover.1679907059.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1679907055.git.geert+renesas@glider.be>
+References: <cover.1679907055.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313110409.2294154-1-andreas@kemnade.info>
+Content-Transfer-Encoding: 8bit
 
-* Andreas Kemnade <andreas@kemnade.info> [230313 13:04]:
-> yes, epson,embt2ws is unknown, is the txt->yaml conversion around the
-> corner? I would then resubmit it includding an addition
-> to that yaml. If not probably I resubmit the conversion patch with
-> the compatible added. But that should not stop the rest of this patch from
-> being reviewed.
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-Yeah let's do the yaml conversion first as otherwise we'll be adding some
-extra warnings for the dt folks.
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-Your patch looks otherwise OK to me.
+are available in the Git repository at:
 
-Thanks,
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v6.4-tag1
 
-Tony
+for you to fetch changes up to 2653d5bf1c9d123c0d8b8c1634cf54dacfcfdb52:
+
+  soc: renesas: Use "#ifdef" for single-symbol definition checks (2023-03-16 16:58:42 +0100)
+
+----------------------------------------------------------------
+Renesas driver updates for v6.4
+
+  - Drop support for the obsolete R-Car H3 ES1.* (R8A77950) SoC,
+  - Miscellaneous fixes and improvements.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (2):
+      soc: renesas: rmobile-sysc: Use of_fwnode_handle() helper
+      soc: renesas: Use "#ifdef" for single-symbol definition checks
+
+Krzysztof Kozlowski (2):
+      soc: renesas: mark OF related data as maybe unused
+      soc: renesas: pwc-rzv2m: drop of_match_ptr for ID table
+
+Wolfram Sang (2):
+      soc: renesas: rcar-sysc: Remove R-Car H3 ES1.* handling
+      soc: renesas: Remove r8a77950 arch
+
+ drivers/soc/renesas/Kconfig              |  7 -------
+ drivers/soc/renesas/pwc-rzv2m.c          |  2 +-
+ drivers/soc/renesas/r8a7795-sysc.c       | 10 ----------
+ drivers/soc/renesas/renesas-soc.c        | 14 ++++++--------
+ drivers/soc/renesas/rmobile-sysc.c       |  2 +-
+ include/dt-bindings/power/r8a7795-sysc.h |  1 -
+ 6 files changed, 8 insertions(+), 28 deletions(-)
