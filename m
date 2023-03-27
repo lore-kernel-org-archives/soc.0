@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CBE0C76195
-	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 08:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5938BC7619A
+	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 08:57:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EA221C4339C; Mon, 27 Mar 2023 08:57:18 +0000 (UTC)
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	id 3D8ECC433D2; Mon, 27 Mar 2023 08:57:20 +0000 (UTC)
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DBB76C433D2
-	for <soc@kernel.org>; Mon, 27 Mar 2023 08:57:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DBB76C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id C2220C4339B
+	for <soc@kernel.org>; Mon, 27 Mar 2023 08:57:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C2220C4339B
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([84.195.187.55])
-	by michel.telenet-ops.be with bizsmtp
-	id dLx82900H1C8whw06Lx8FR; Mon, 27 Mar 2023 10:57:08 +0200
+	by albert.telenet-ops.be with bizsmtp
+	id dLx82900S1C8whw06Lx8Zd; Mon, 27 Mar 2023 10:57:10 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1pgieO-00ExYz-SK;
+	id 1pgieO-00ExZ3-TN;
 	Mon, 27 Mar 2023 10:57:08 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1pgif6-002atk-DO;
+	id 1pgif6-002atq-EB;
 	Mon, 27 Mar 2023 10:57:08 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -36,13 +36,14 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 2/4] Renesas driver updates for v6.4
-Date: Mon, 27 Mar 2023 10:57:02 +0200
-Message-Id: <cover.1679907059.git.geert+renesas@glider.be>
+Subject: [GIT PULL 3/4] Renesas DT binding updates for v6.4
+Date: Mon, 27 Mar 2023 10:57:03 +0200
+Message-Id: <cover.1679907062.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1679907055.git.geert+renesas@glider.be>
 References: <cover.1679907055.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
@@ -51,35 +52,25 @@ The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-drivers-for-v6.4-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dt-bindings-for-v6.4-tag1
 
-for you to fetch changes up to 2653d5bf1c9d123c0d8b8c1634cf54dacfcfdb52:
+for you to fetch changes up to d35ad1030a6bce57234b8eea14ab17560f3c9e1b:
 
-  soc: renesas: Use "#ifdef" for single-symbol definition checks (2023-03-16 16:58:42 +0100)
-
-----------------------------------------------------------------
-Renesas driver updates for v6.4
-
-  - Drop support for the obsolete R-Car H3 ES1.* (R8A77950) SoC,
-  - Miscellaneous fixes and improvements.
+  dt-bindings: soc: renesas: Remove R-Car H3 ES1.* (2023-03-10 17:05:22 +0100)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (2):
-      soc: renesas: rmobile-sysc: Use of_fwnode_handle() helper
-      soc: renesas: Use "#ifdef" for single-symbol definition checks
+Renesas DT binding updates for v6.4
 
-Krzysztof Kozlowski (2):
-      soc: renesas: mark OF related data as maybe unused
-      soc: renesas: pwc-rzv2m: drop of_match_ptr for ID table
+  - Document support for the Renesas RZ/N1 EB board with an RZ/N1D-DB
+    daughter board,
+  - Drop support for the obsolete R-Car H3 ES1.* (R8A77950) SoC.
 
-Wolfram Sang (2):
-      soc: renesas: rcar-sysc: Remove R-Car H3 ES1.* handling
-      soc: renesas: Remove r8a77950 arch
+----------------------------------------------------------------
+Clément Léger (1):
+      dt-bindings: soc: renesas: renesas.yaml: Add renesas,rzn1d400-eb compatible
 
- drivers/soc/renesas/Kconfig              |  7 -------
- drivers/soc/renesas/pwc-rzv2m.c          |  2 +-
- drivers/soc/renesas/r8a7795-sysc.c       | 10 ----------
- drivers/soc/renesas/renesas-soc.c        | 14 ++++++--------
- drivers/soc/renesas/rmobile-sysc.c       |  2 +-
- include/dt-bindings/power/r8a7795-sysc.h |  1 -
- 6 files changed, 8 insertions(+), 28 deletions(-)
+Wolfram Sang (1):
+      dt-bindings: soc: renesas: Remove R-Car H3 ES1.*
+
+ .../devicetree/bindings/soc/renesas/renesas.yaml          | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
