@@ -1,138 +1,106 @@
-Return-Path: <SRS0=20Fe=7T=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=dvnw=7V=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89F57C76195
-	for <soc@archiver.kernel.org>; Mon, 27 Mar 2023 10:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73750C6FD18
+	for <soc@archiver.kernel.org>; Wed, 29 Mar 2023 12:23:04 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6CB21C433D2; Mon, 27 Mar 2023 10:57:41 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 396CCC433EF; Wed, 29 Mar 2023 12:23:04 +0000 (UTC)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 13288C4339B;
-	Mon, 27 Mar 2023 10:57:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 13288C4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MacjC-1qIqB338lW-00cC1T; Mon, 27 Mar 2023 12:57:11 +0200
-Message-ID: <1585c36f-cb8e-55ee-ac30-766feceda09f@i2se.com>
-Date: Mon, 27 Mar 2023 12:57:10 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id AD486C4339B
+	for <soc@kernel.org>; Wed, 29 Mar 2023 12:23:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD486C4339B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id bg13-20020a05600c3c8d00b003ef90adc168so1720656wmb.5
+        for <soc@kernel.org>; Wed, 29 Mar 2023 05:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680092580;
+        h=content-transfer-encoding:organization:content-language:cc:to
+         :reply-to:subject:from:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZHfKG+E4efNoQwXPSxPG/5jUC3noBlzcf9wCRGCH2gM=;
+        b=bp1MUtMwcoBxDMNX8aLUxJJngqz5fWMuKR3N3V2MLtL8Of6MRaDnd3+sq1Mhbazok6
+         FurA6nZm1pcDNi5INwJYkAmzlwJp/0eArNBpHBHecpdD0c322miaa+e6fXEruc0QgSUf
+         OmsP3w35b/u8c0tdmGPkSk05G5sAnk8uEZ3LDN6RI+a8k3RKfgr71/CCKhQ35oplFM3+
+         SPDIhaFLOpkfuW07cjJ8DBtXWLRLBEahmP+g1JQ4Omn78mU9u8Qqssr+lcRwZOTNK1XW
+         ExI2rM/cRy8M1nouV37DWDQd4BPkwJCpnAspaG0eNuQ0Q58JZf8irlMjU09wd4XmKfPC
+         7QDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680092580;
+        h=content-transfer-encoding:organization:content-language:cc:to
+         :reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHfKG+E4efNoQwXPSxPG/5jUC3noBlzcf9wCRGCH2gM=;
+        b=NLMZMqfNKo5NANFnc/2DbGa27bxvqwuA6tz1xjkfVmdl/MTewAPA7TIrNW87p1NVJn
+         8JsD+WBl3iCIB6bkuOuUErg3/hkN/R9Bo94avYIg1545FgTkU0n/ZGK70WlndRRZdIWN
+         YtY2++QGYSRqPDF3U2C5mUlgIEXTl9YjrFIVomRW07C9YB9jcKPHgnYr+8z3sJK7ld9Z
+         Yb8kr++wqjMuR0D9W0vyhypMp2wLw6Dx5oS9r/DRiCqwP0OD46ugoF10uGIW56BeyfIq
+         Mtc5LvtOAMN5JfzbPGQX7PjNn50+WjSo5V5QNGi3H+sToCrACAcBOWM503u9DBpET6Mj
+         WHEA==
+X-Gm-Message-State: AAQBX9er3Fy1MUdGCjaxhQPDMooo16dV/MGoDg1rYsm1MCVXFC9GF2Si
+	dj+Nr7matNtsoregaipl0NiuLr7gCCXbZFB+mbZPSw==
+X-Google-Smtp-Source: AKy350Zf3iXeyV8HWlp0DqmYv47pev44UJE5kdHcyWJcctFoflQHm2VPhrLHRasu7gsCmvQXXwpf4g==
+X-Received: by 2002:a05:600c:204f:b0:3ee:6d88:774a with SMTP id p15-20020a05600c204f00b003ee6d88774amr1400047wmg.14.1680092579919;
+        Wed, 29 Mar 2023 05:22:59 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:72a8:b5f3:7fb:fd29? ([2a01:e0a:982:cbb0:72a8:b5f3:7fb:fd29])
+        by smtp.gmail.com with ESMTPSA id iw13-20020a05600c54cd00b003ef6988e54csm2149166wmb.15.2023.03.29.05.22.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Mar 2023 05:22:59 -0700 (PDT)
+Message-ID: <db5fcdb4-60e8-95e6-06b5-1ac474ecabe3@linaro.org>
+Date: Wed, 29 Mar 2023 14:22:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH V2 4/8] dt-bindings: iio: st-sensors: Add IIS328DQ
- accelerometer
-To: Jonathan Cameron <jic23@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic fixes for v6.3-rc
+Reply-To: neil.armstrong@linaro.org
 List-Id: <soc.lore.kernel.org>
-Cc: Stefan Wahren <stefan.wahren@chargebyte.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, Evgeniy Polyakov <zbr@ioremap.net>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
- Li Yang <leoyang.li@nxp.com>, Denis Ciocca <denis.ciocca@st.com>,
- soc@kernel.org, linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
- <20230317103323.7741-5-stefan.wahren@chargebyte.com>
- <20230318155534.16b47583@jic23-huawei>
- <708b63c9-d2b6-c65f-0112-8f50173c0bca@linaro.org>
- <20230319154257.68facd30@jic23-huawei>
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
 Content-Language: en-US
-From: Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230319154257.68facd30@jic23-huawei>
+Organization: Linaro Developer Services
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:8JjwnMM7XnWNBJfVFVFQz/Tiu5rLOiFTcZi7M3YMwIp1TwXnB5l
- jaYyfdUHoiqK3r+fROLSqx1dkmbWgrg395NUkDbXe4OvFpOKwZODgbQNbkuBBsNbfuyRorI
- BbI845rPcLGfsvazLr4MhkeuSbTiLgUiyqo9nTyEiI+3W4Z9pdxJ4mpn6TPukr21v71IIIi
- gZ/uwEX39dqa1Yr1HlFpQ==
-UI-OutboundReport: notjunk:1;M01:P0:fbuEvtqtbv8=;P7qznWhu6AaORnGTjW46eOTN7B6
- 4ejWaRtPK7L2uBxDHi/sA7a8Peg7WHWAg+MRW+7CNhyKZaw2N7Z3iht4L/W9CrUPRoZ7UsvcZ
- y0SWwgHuqD+darVDWBVkn5dcNgxyUFDJFyiutTAUy74zkRrJg0vYGmJ4jSTCydlFPnR+3rFbF
- cCbgXcfmo0eWmOzEBW6aZh6rmsRg8+83iuwSxsCvOSmmoa9xJpbq7+WPP9+RBg7XGeVEhqC3l
- 9P52t9SY25AF7deTIZGYhIHMP8L3Sn0HLe6DcZvnhTRxQhO2GGCp6v95T5qyiOEgMXA3sibuD
- KwAxqfFUaU/IE9RM7eOUB6NlaxE2VrqVe/UQ9Zf0hPJDPzlUxbiVjPzrPd51Mc14W7SNrHJtU
- dRBt60e6C8JrCz0wFY7gwFhp7PX5BC3HsA9sxtDKqB/Iuxph1DXMQ0Prpv9460dFoZ5RVup8q
- YrR8NyvgtXRkUKKP3XjRPpBccofwMoARRmP0FAD4zPhElqwZJM/+GHF3VtTtjcg1dfA1o63+f
- yIO3GQcb3Oi7GWtOhR9KEJBbNqy6hAtuQ03uOhBp2cU7pBYtOUDI6V/lf6dVnceqL9WAg8FJf
- FqIIYDujafOpFwwtnOx3mb/HZYstaG2LjpOe06IM/q2+qMIl+PBj243vjbaxUMYppTqdGgUHQ
- fL+dqUr6KO2vk5i/THf5WezImMK1gIfNnIst7lYiBg==
 
-Hi Jonathan,
+Hi,
 
-Am 19.03.23 um 16:42 schrieb Jonathan Cameron:
-> On Sun, 19 Mar 2023 13:40:49 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 18/03/2023 16:55, Jonathan Cameron wrote:
->>> On Fri, 17 Mar 2023 11:33:19 +0100
->>> Stefan Wahren <stefan.wahren@chargebyte.com> wrote:
->>>    
->>>> The ST IIS328DQ is an accelerometer sensor, which is compatible with
->>>> the already supported ST H3LIS331DL. So add the new compatible
->>>> with a fallback to the ST sensor binding.
->>>>
->>>> Link: https://lore.kernel.org/linux-iio/2bac9ecf-9d2e-967e-9020-1c950487d781@i2se.com/
->>>> Suggested-by: Jonathan Cameron <jic23@kernel.org>
->>>> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>	
->>>> ---
->>>>   Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 3 +++
->>>>   1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
->>>> index c6201976378f..5eb71b24a7cb 100644
->>>> --- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
->>>> +++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
->>>> @@ -48,6 +48,9 @@ properties:
->>>>             - st,lsm330d-accel
->>>>             - st,lsm330dl-accel
->>>>             - st,lsm330dlc-accel
->>>> +      - items:
->>>> +          - const: st,iis328dq
->>>> +          - const: st,h3lis331dl-accel
->>>
->>> Hmm. So this separates the particular 'oneOf' group from the description
->>> associated with the ST accelerometers.
->>>
->>> DT experts, is there a better way to do this?  Ideally we'd also associate
->>> other similar groups going forwards so it might become less and less obvious
->>> how the groupings work. (bit late for the many groups that exist
->>> already in that list above this point).
->>
->> If by "grouping" you mean how the oneOf items are organized with
->> descriptions, I wouldn't put too much attention to it. You can add some
->> '#' comments to separate the groups, but for me this is still readable.
->>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Works for me. Thanks for quick response!  Applied this and next patch
-> to the togreg branch of iio.git
+Here's a set of changes to solve a conflict between the DMC memory space already
+filled with a node and the Amlogic memory bandwidth perf HW that was using the whole
+DMC memory space. The patches fixes the DMC nodes definition and changes the base
+offset in the perf driver.
 
-Shawn had some comments to patch #7. Just to make it clear, there is no 
-need to resend patch 4 and 5 in V3?
+Will acked me to take the perf driver fix through my tree.
 
-Best regards
+Thanks.
+Neil
 
-> 
-> 
-> Thanks,
-> 
-> Jonathan
-> 
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+
+   Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git tags/amlogic-fixes-v6.3-rc
+
+for you to fetch changes up to f9d323e7c1724270d747657051099826744e91e7:
+
+   perf/amlogic: adjust register offsets (2023-03-27 17:31:22 +0200)
+
+----------------------------------------------------------------
+Amlogic fixes for v6.3-rc:
+- fix conflicts between DMC memory space and Amlogic perf driver
+
+----------------------------------------------------------------
+Marc Gonzalez (3):
+       arm64: dts: meson-g12-common: specify full DMC range
+       arm64: dts: meson-g12-common: resolve conflict between canvas & pmu
+       perf/amlogic: adjust register offsets
+
+  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 15 +++++-----
+  drivers/perf/amlogic/meson_g12_ddr_pmu.c          | 34 +++++++++++------------
+  2 files changed, 24 insertions(+), 25 deletions(-)
