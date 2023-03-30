@@ -1,89 +1,78 @@
-Return-Path: <SRS0=cf91=7W=gmail.com=geert.uytterhoeven@kernel.org>
+Return-Path: <SRS0=FmMO=7W=atomide.com=tony@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDCE9C761AF
-	for <soc@archiver.kernel.org>; Thu, 30 Mar 2023 09:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37944C761A6
+	for <soc@archiver.kernel.org>; Thu, 30 Mar 2023 12:45:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 942D0C433EF; Thu, 30 Mar 2023 09:02:36 +0000 (UTC)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 08B9CC433D2;
-	Thu, 30 Mar 2023 09:02:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 08B9CC433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-536af432ee5so343191907b3.0;
-        Thu, 30 Mar 2023 02:02:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680166953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YqG2Z6d0Pb8iORwk+e3Ro79KtXr2omWNescegmF+Vgw=;
-        b=dvc0x3EkfetE2DLuHtV8RKoioZRB8vAyT5OKNfRKvo/63pUxmC03sEF3PouT4jJrHU
-         9eo7AOq4N9eDme8dKGhugOlxEd9T5YFscoHGpLBjGv7chEt9t7wcVl6Sklp1lCv8gTH0
-         Nc1LV9AgfUS2K27hejAfkyUzcI+vxHzbzU04mJJgxL2T5xSBNJvn6/W+UwZi6wfrzi7i
-         a8+7uBqW7dgB8Y3eLLHARw13W1fGqnNE+eb4FeqbUofVF9SMp6pASLq7OF5Sl0RBKsBc
-         GEvp/KIp0vwbwauUxKoKZmepcuepOBC/I5qUapoiXcK8on3sSAuv/lQAF+U8GxYYezf0
-         KIlA==
-X-Gm-Message-State: AAQBX9cazkh9GGcGoRkyCRyp/SVHdtjtvcyyRswTHKd0+gAb7hN5p0Qa
-	U/pkXfWw83TkVjNM8bebDOduEVZkE++mmQ==
-X-Google-Smtp-Source: AKy350atCbhq+15iJk7SToTreK+FQZLeqsfrRlQzowvdqiNc6zUZBLtMrE82x70teM8sw0+L8fPPcg==
-X-Received: by 2002:a0d:dfd5:0:b0:541:9885:4c9d with SMTP id i204-20020a0ddfd5000000b0054198854c9dmr21788858ywe.3.1680166952931;
-        Thu, 30 Mar 2023 02:02:32 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id q77-20020a819950000000b005462ad5f788sm681737ywg.116.2023.03.30.02.02.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 02:02:32 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5445009c26bso342281117b3.8;
-        Thu, 30 Mar 2023 02:02:32 -0700 (PDT)
-X-Received: by 2002:a81:7e10:0:b0:52f:184a:da09 with SMTP id
- o16-20020a817e10000000b0052f184ada09mr2923082ywn.2.1680166952237; Thu, 30 Mar
- 2023 02:02:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230122121129.28699-1-krzysztof.kozlowski@linaro.org>
- <CAMuHMdXdZbJDTOzQG4=pRpR1OCU0=RTDZDH0MnPW8Ea2LJKs6A@mail.gmail.com> <082ab65b-09d3-e899-ef46-7fe04446109f@kernel.org>
-In-Reply-To: <082ab65b-09d3-e899-ef46-7fe04446109f@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 30 Mar 2023 11:02:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUf=X2eGpa9P0OF34b8yA8vrx_nFqW+P+Odu5S7P1xeng@mail.gmail.com>
-Message-ID: <CAMuHMdUf=X2eGpa9P0OF34b8yA8vrx_nFqW+P+Odu5S7P1xeng@mail.gmail.com>
-Subject: Re: [GIT PULL] memory: drivers for v6.3
-To: Krzysztof Kozlowski <krzk@kernel.org>
+	id D8868C433A7; Thu, 30 Mar 2023 12:45:35 +0000 (UTC)
+Received: from muru.com (muru.com [72.249.23.125])
+	by smtp.kernel.org (Postfix) with ESMTP id 98E8FC433EF;
+	Thu, 30 Mar 2023 12:45:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 98E8FC433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
+Received: from hillo.muru.com (localhost [127.0.0.1])
+	by muru.com (Postfix) with ESMTP id 488B180FE;
+	Thu, 30 Mar 2023 12:45:30 +0000 (UTC)
+From: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Olof Johansson <olof@lixom.net>, 
-	Arnd Bergmann <arnd@arndb.de>, arm@kernel.org, soc@kernel.org, 
-	linux-kernel@vger.kernel.org, JaimeLiao <jaimeliao.tw@gmail.com>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: soc@kernel.org
+Cc: arm@kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Tony Lindgren" <tony@atomide.com>
+Subject: [GIT PULL] Clean-up for omaps for v6.4
+Date: Thu, 30 Mar 2023 15:45:22 +0300
+Message-Id: <pull-1680180293-92168@atomide.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+From: "Tony Lindgren" <tony@atomide.com>
 
-On Mon, Jan 23, 2023 at 11:47=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.o=
-rg> wrote:
-> BTW, you might want to add separate Renesas RPC IF maintainer entry or
-> include it also in Renesas SoC. Otherwise you don't get CC on it.
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-FYI, that should be taken care of for all DT-based drivers for Renesas
-on-SoC peripherals by
-https://lore.kernel.org/linux-renesas-soc/c1be1e97c5457eade25b0eb5118196677=
-cecfc08.1679039809.git.geert+renesas@glider.be/
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-Gr{oetje,eeting}s,
+are available in the Git repository at:
 
-                        Geert
+  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.4/cleanup-signed
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+for you to fetch changes up to 19050da1d1057a7bc73fd9039f94b7f63a00e54e:
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+  ARM: OMAP2+: hwmod: Use kzalloc for allocating only one element (2023-03-28 08:45:55 +0300)
+
+----------------------------------------------------------------
+Clean-up for omaps for v6.4
+
+Some clean-up changes for omaps mostly to use of_property_read_bool() and
+of_address_to_resource(). Also included is removal for an obsolete Kconfig
+option, a typo fix, a return path change for am33xx_suspend_init(), and a
+change to use kzalloc instead of kcalloc for a single element.
+
+----------------------------------------------------------------
+Jilin Yuan (1):
+      ARM: OMAP2+: fix repeated words in comments
+
+Kenneth Lee (1):
+      ARM: OMAP2+: hwmod: Use kzalloc for allocating only one element
+
+Lukas Bulwahn (1):
+      ARM: OMAP2+: remove obsolete config OMAP3_SDRC_AC_TIMING
+
+Rob Herring (2):
+      ARM: OMAP2+: Use of_property_read_bool() for boolean properties
+      ARM: OMAP2+: Use of_address_to_resource()
+
+ye xingchen (1):
+      ARM: OMAP2+: Remove the unneeded result variable
+
+ arch/arm/mach-omap2/Kconfig       | 11 -----------
+ arch/arm/mach-omap2/cm33xx.c      |  2 +-
+ arch/arm/mach-omap2/omap_hwmod.c  | 23 ++++++++++-------------
+ arch/arm/mach-omap2/pm33xx-core.c |  6 +-----
+ 4 files changed, 12 insertions(+), 30 deletions(-)
