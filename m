@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F2B0C77B71
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE9BDC77B72
 	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:34:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 018B5C433A1; Fri, 31 Mar 2023 08:34:55 +0000 (UTC)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	id 902E5C433AC; Fri, 31 Mar 2023 08:34:55 +0000 (UTC)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 33140C433D2
-	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 33140C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 3F185C433B4
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F185C433B4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id j24so21631046wrd.0
-        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:50 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id r11so21576783wrr.12
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251689;
+        d=linaro.org; s=google; t=1680251687;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vqQMlPFjpwyJDFMp/Q+5qT+SRMNMN9WWVCzGVB/CCjE=;
-        b=Z8O/YlVKluZ3frIjBWHinHyf35Hl9tXFgyrb2DvpZeBIUlCdj7trg1eKmtw4ORy470
-         mjOyF9tBJQi2Ey8HheeRE65rpBTqzTq9i3mTVsYp3fwCYypvkM8U5gPx6qo1NyW4w1AT
-         RfYhDtpld7nV252R85LScU8iMrj1F28/lGNNhzXDXFzbXr5XuNt/qTx3rFv33Dysc9qj
-         ng2S0S7/e4gg8Qc0+fK2hotP9nkIwGeMnI0zHMmxfcMcDiw6soURCd1MEiMLog9EoaiT
-         Chmx1245yKaUYuvICD7WIsPKuFiAmHnlmK5dBY5gRvaOBgG75ZXytjZ5wMeIuLRKYD2k
-         uZ8g==
+        bh=aHrUnZC9rbzLW/5UuslNdsLyDWCrAVuJNyAo7I4AMWQ=;
+        b=VSeZX4dc6a1VHevFk6wYWuUx52Fu1aDq9jL8sgwwVCVS6BBHwfpIjUAHhDS6/7LhrO
+         qvPhrOnqjIRoN4IHis7BjDY2Gz5jG7IM2GPdWI3rFajdqF7lzgAzv423Du3Wy8UctYbP
+         RX5ePrSTKYkxKduq+ZOk3zHJjVM4OGrWJjXnW+nw2mO1udYxTN/dH9hwLlB/JY/WSnKQ
+         GBmPPmXKlPgQnSP2t0s76UrTT0OUXFoxmgtq6rFkjckZjvcS6zS0j0T98sHnYNTqIeWz
+         bFvRuWLo1dCLgQbsHfW0sAeXXwRWuDZjWfRtk8nyIgSD3JAb+5jv0Qg5Qj5gCgiUly/P
+         +UsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251689;
+        d=1e100.net; s=20210112; t=1680251687;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vqQMlPFjpwyJDFMp/Q+5qT+SRMNMN9WWVCzGVB/CCjE=;
-        b=12+YipeJOqfegjsPtHcBJvmvlrGH3WAyRlvze1v9FFCu8VeEvHiJY20zxmHLVHt4pb
-         oIgPoFJEEQa3fF+u0bfKj/DmXP8KTNUDOX8y/HK6v36LKXo0845epXamMcdV6KNlVmsw
-         0qZ3ZkjrNvThJlcvwE/gCm9YYF4Hmtd1AAeNDSamphPpgYGVPPQGnXPQ3Y59GqWAwnBn
-         EemB+Aebxv4nGduvqrHfec1SWXXip1fcQdOa6HXmkb51In9hSwAjN5awW7ukBVAdLoaU
-         v/yRHH0278uL1go6+E9v+FA98FBEL3AE2Mdv8qIWyrh0HXFlL7OkgXDdqJxJ9XB99gnY
-         lKzA==
-X-Gm-Message-State: AAQBX9eqx/DWEMaWFiwPTjfZ5wqndLtFptfhIK6cikEje+ZS0ajiRLAF
-	dfH6QKk/llTt6UBGLLgAW83IWQ==
-X-Google-Smtp-Source: AKy350aYMRhuGCU7lgJkqotrX72DL9blN95WJq8/pg0rFFj2/jBzU25Plf3PTEmdwgAKOY8ASbmEgw==
-X-Received: by 2002:a5d:5742:0:b0:2d0:c37a:5ebd with SMTP id q2-20020a5d5742000000b002d0c37a5ebdmr19721443wrw.64.1680251689686;
-        Fri, 31 Mar 2023 01:34:49 -0700 (PDT)
+        bh=aHrUnZC9rbzLW/5UuslNdsLyDWCrAVuJNyAo7I4AMWQ=;
+        b=reuIUwsda9uEJuhtOMt4a/aRL/2hWbHMbI+XWsvazLHs+i8H4y/AtcCNWs9CkJiHuu
+         +sBiANL6jpiqR+bRLSZT5193k5Pmfb+X4TJIFmCSOpNxduBTx1LdpnhJhSIdOqaLuoSS
+         HV7lG5nsaxZV6ShRqYP+OrD1RdGPUj2PLg3SPMRd0/B/4tQ8SJtNu1FH7mjBGQRM/W/G
+         DrudtC8SMCPDWKJbBEyTHzwPAfQmastXhxXuYQo08MNUBeNJ6NeBKPvqjqt0aPfyaDc/
+         K4eJnd4w9GMLjOKEiaYV4daRiI5g+ufiqMpm4SzXhc4Cq0auEcg4lL/3/I2vUa2SEVdw
+         B+Sg==
+X-Gm-Message-State: AAQBX9dLJsesEHiOBMjW4WOaG+87PygxGalBGpx+NVfmzlOUff6baoYH
+	s5uoOMBL19vqJvb2cZTr8TfdMQ==
+X-Google-Smtp-Source: AKy350bTtpPmDWoxvdz6mCtcYISz/1Ys9qi/+iO21shv0+wBfNCQorzQUaMEiY+swVm6wHSWmwrb0w==
+X-Received: by 2002:adf:ff89:0:b0:2cf:e957:644b with SMTP id j9-20020adfff89000000b002cfe957644bmr6630729wrr.27.1680251686957;
+        Fri, 31 Mar 2023 01:34:46 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.48
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:34:49 -0700 (PDT)
+        Fri, 31 Mar 2023 01:34:46 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 31 Mar 2023 10:34:42 +0200
-Subject: [PATCH RFC 04/20] dt-bindings: arm: oxnas: remove obsolete
- bindings
+Date: Fri, 31 Mar 2023 10:34:40 +0200
+Subject: [PATCH RFC 02/20] ARM: oxnas: remove OXNAS support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-4-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-2-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -88,34 +87,75 @@ Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, remove the
-OX810 and OX820 SoC and boards bindings.
+and since no new features will ever be added upstream, remove support
+for OX810 and OX820 ARM support.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/oxnas.txt | 14 --------------
- 1 file changed, 14 deletions(-)
+ arch/arm/Makefile            |  1 -
+ arch/arm/mach-oxnas/Kconfig  | 34 ----------------------------------
+ arch/arm/mach-oxnas/Makefile |  1 -
+ 3 files changed, 36 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/oxnas.txt b/Documentation/devicetree/bindings/arm/oxnas.txt
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 485a439e22ca..547e5856eaa0 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -203,7 +203,6 @@ machine-$(CONFIG_ARCH_MSTARV7)		+= mstar
+ machine-$(CONFIG_ARCH_NOMADIK)		+= nomadik
+ machine-$(CONFIG_ARCH_NPCM)		+= npcm
+ machine-$(CONFIG_ARCH_NSPIRE)		+= nspire
+-machine-$(CONFIG_ARCH_OXNAS)		+= oxnas
+ machine-$(CONFIG_ARCH_OMAP1)		+= omap1
+ machine-$(CONFIG_ARCH_OMAP2PLUS)	+= omap2
+ machine-$(CONFIG_ARCH_ORION5X)		+= orion5x
+diff --git a/arch/arm/mach-oxnas/Kconfig b/arch/arm/mach-oxnas/Kconfig
 deleted file mode 100644
-index ac64e60f99f1..000000000000
---- a/Documentation/devicetree/bindings/arm/oxnas.txt
+index a054235c3d6c..000000000000
+--- a/arch/arm/mach-oxnas/Kconfig
 +++ /dev/null
-@@ -1,14 +0,0 @@
--Oxford Semiconductor OXNAS SoCs Family device tree bindings
---------------------------------------------
+@@ -1,34 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-menuconfig ARCH_OXNAS
+-	bool "Oxford Semiconductor OXNAS Family SoCs"
+-	depends on (ARCH_MULTI_V5 && CPU_LITTLE_ENDIAN) || ARCH_MULTI_V6
+-	select ARCH_HAS_RESET_CONTROLLER
+-	select COMMON_CLK_OXNAS
+-	select GPIOLIB
+-	select MFD_SYSCON
+-	select OXNAS_RPS_TIMER
+-	select PINCTRL_OXNAS
+-	select RESET_CONTROLLER
+-	select RESET_OXNAS
+-	select VERSATILE_FPGA_IRQ
+-	select PINCTRL
+-	help
+-	  Support for OxNas SoC family developed by Oxford Semiconductor.
 -
--Boards with the OX810SE SoC shall have the following properties:
--  Required root node property:
--    compatible: "oxsemi,ox810se"
+-if ARCH_OXNAS
 -
--Boards with the OX820 SoC shall have the following properties:
--  Required root node property:
--    compatible: "oxsemi,ox820"
+-config MACH_OX810SE
+-	bool "Support OX810SE Based Products"
+-	depends on ARCH_MULTI_V5
+-	select CPU_ARM926T
+-	help
+-	  Include Support for the Oxford Semiconductor OX810SE SoC Based Products.
 -
--Board compatible values:
--  - "wd,mbwe" (OX810SE)
--  - "cloudengines,pogoplugv3" (OX820)
+-config MACH_OX820
+-	bool "Support OX820 Based Products"
+-	depends on ARCH_MULTI_V6
+-	select ARM_GIC
+-	help
+-	  Include Support for the Oxford Semiconductor OX820 SoC Based Products.
+-
+-endif
+diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
+deleted file mode 100644
+index a4e40e534e6a..000000000000
+--- a/arch/arm/mach-oxnas/Makefile
++++ /dev/null
+@@ -1 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
 
 -- 
 2.34.1
