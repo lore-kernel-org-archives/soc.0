@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B6BC76196
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7F4DC77B60
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 04930C43444; Fri, 31 Mar 2023 08:35:12 +0000 (UTC)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	id 92B4FC43321; Fri, 31 Mar 2023 08:35:15 +0000 (UTC)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A6772C433B4
-	for <soc@kernel.org>; Fri, 31 Mar 2023 08:35:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A6772C433B4
+	by smtp.kernel.org (Postfix) with ESMTPS id 5A628C43332
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:35:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5A628C43332
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id d17so21570643wrb.11
-        for <soc@kernel.org>; Fri, 31 Mar 2023 01:35:01 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso13352538wmo.0
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251701;
+        d=linaro.org; s=google; t=1680251705;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e2XVUgcXhhuEI3xNnuwh8AFlDinLYyU1iswACd61bmI=;
-        b=kGHKFCRY2/20Z1rCTqcYJVgU3cd0wi3wDJXSMUyFVmZc5j+V1KaiZPKiBhBCNWiEmk
-         YTJR/O1xNUVyGTEJU7oVvd4EgpSvsIeWc4G/vW2FHJAqvr1kgXR0guIzHaF0b/f40umh
-         vl0zURjjjrylWlJemjFV4xwD8kY/633aitJ0VVNsQRTNDNLcU4QFEFBQI5Tugl9mdmvg
-         udtFPfIzb33L0bIbMKt5hHXVZJ/EmVQBNEEcbXpC9ggPMZBn5+Hkia/GFYA4U/4x+oy3
-         mXHaaqPyZzupgnB9Wh3WgukGpxphE0upGxLInLzuYg3CiYPeQuCGDmHn/E7to5cUt0TD
-         JMVg==
+        bh=2eM9F2Ux8ijetoy1aUe1DlA6v+PK0BvM3d2NvEyh+tc=;
+        b=gQVJsVy7NCZuVzYpLt8LnlTZ4QiBCAvEtswZR5oJW7Ax0HOgbVCS1q7DduvuSrz3QB
+         pLE1CWF04GtF3enverLrqHldhVlUiSzPI7jrCSXgCi8UbDyMtPe3IkVfZ/GyjLRNwIpm
+         /ujMu4TZMw9sO2KrNxxvotVxPY8pNrd2cZ+rxfIlO1AGdIvXdy/mWIQx2vBfL7KdoUDl
+         0ZqApcxpBmf6hsRwz4UwQhP9pGz9VYRQa9EqPOw/udhpkAp/VDerl/tq65d5+3IX/Zho
+         UMY82QBbst7fDEeY2LrSQCea+YXbhisFv4q8WpzBVbD+tTkWIamYbAGIdiAl8cUCfiN1
+         MdvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251701;
+        d=1e100.net; s=20210112; t=1680251705;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e2XVUgcXhhuEI3xNnuwh8AFlDinLYyU1iswACd61bmI=;
-        b=AgGyx6jxvA37Q/vZ86WWWgXTB8H5e7tB4D6SREFYwVmFGLlJjYv4H9EcICkNb1VZaV
-         SE//AFNMQtbk1gwhQ4Xw5Fooel/cGbdIkw8NR24DmzAdX2YE7rsBuZBotd4xQ4h8EAla
-         OUCKKOfRtLLrefsk3KnwpCanRUXC79LhkJJFOyjMJMVJFifvrUPFc+eSKtjkgjStsnxg
-         TBV1hfrNgkXaZS1eFTMgBPc3yc2Bi64hEtvNghRFBIG/9wPabkaQVwifXpY1ar/RygHs
-         XvDQFdr6avxaadnD6wmYBY9LQ1LwTV8qZcmkprxW4PKzCx/tjws4JHFSGcICu/7hqdNk
-         a8ig==
-X-Gm-Message-State: AAQBX9fg39WbueOsphCb7chEsKhqypPxFh7uRpo32IYpXNW2CyCsvCID
-	Wwlzn63lkpCQ2isaurlOQZ/UuQ==
-X-Google-Smtp-Source: AKy350aNpaM25UKb9HFn6P6W9+ACITvL4WD6p7Ljzn1vIWq606qr2KNRuWDoLeB1DkeoT9ecCJBieQ==
-X-Received: by 2002:a5d:6e54:0:b0:2da:45f4:c053 with SMTP id j20-20020a5d6e54000000b002da45f4c053mr18574691wrz.52.1680251700946;
-        Fri, 31 Mar 2023 01:35:00 -0700 (PDT)
+        bh=2eM9F2Ux8ijetoy1aUe1DlA6v+PK0BvM3d2NvEyh+tc=;
+        b=w9x5R2SdQ2NUcyactDlsyJclDU2DoPbk58j4QgG9UcaJDwPT4JZQEchyl/pUggeZeg
+         kLfepEgjc6pcGkDpE81x3/j23fIjMQ3qScYoiNtMbpNk+4OQyR9HQPVtY5tKRWIT+OCU
+         0EH3H98weNuguPf5crTUIXb63COJBUqUyMwkuV3eoNj4QwLVhjcDqf83hOHhuyzWhtAI
+         K9Co3XtOYqFxmuvvRLNE316ZvTwP7hmbKtdy3pZgZZKogQ0h2iye3Ks5WlFxr1yaNkZP
+         05zYnmJ2rw3LH/g3Sni2OGS0/VT/ccbqx4LmHAMJ8084ZzGYG7CnQwDzR3FcdvvJD4TI
+         vIMg==
+X-Gm-Message-State: AO0yUKXVGXwiQ3Xtz18xd3ZDeXvnby2fo99FZtXm07KrJneaenr5hg8V
+	8DAfso37AO1UZUoTiAQnGawSiA==
+X-Google-Smtp-Source: AK7set+0JKF+ryMPRRbzb3BibnuUin7VHaHaaeXAUI+4vnrO4VZbOg/l2Mv5uhL3uMmOeMoG9uBNTQ==
+X-Received: by 2002:a05:600c:280e:b0:3ed:551b:b78f with SMTP id m14-20020a05600c280e00b003ed551bb78fmr19188054wmb.4.1680251705130;
+        Fri, 31 Mar 2023 01:35:05 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.59
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:35:00 -0700 (PDT)
+        Fri, 31 Mar 2023 01:35:04 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 31 Mar 2023 10:34:50 +0200
-Subject: [PATCH RFC 12/20] dt-bindings: net: oxnas-dwmac: remove obsolete
+Date: Fri, 31 Mar 2023 10:34:53 +0200
+Subject: [PATCH RFC 15/20] dt-bindings: gpio: gpio_oxnas: remove obsolete
  bindings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-12-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-15-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -89,59 +89,65 @@ X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
 and since no new features will ever be added upstream, remove the
-OX810 and OX820 dwmac glue.
+OX810 and OX820 gpio bindings.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../devicetree/bindings/net/oxnas-dwmac.txt        | 41 ----------------------
- 1 file changed, 41 deletions(-)
+ .../devicetree/bindings/gpio/gpio_oxnas.txt        | 47 ----------------------
+ 1 file changed, 47 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/oxnas-dwmac.txt b/Documentation/devicetree/bindings/net/oxnas-dwmac.txt
+diff --git a/Documentation/devicetree/bindings/gpio/gpio_oxnas.txt b/Documentation/devicetree/bindings/gpio/gpio_oxnas.txt
 deleted file mode 100644
-index 27db496f1ce8..000000000000
---- a/Documentation/devicetree/bindings/net/oxnas-dwmac.txt
+index 966514744df4..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio_oxnas.txt
 +++ /dev/null
-@@ -1,41 +0,0 @@
--* Oxford Semiconductor OXNAS DWMAC Ethernet controller
+@@ -1,47 +0,0 @@
+-* Oxford Semiconductor OXNAS SoC GPIO Controller
 -
--The device inherits all the properties of the dwmac/stmmac devices
--described in the file stmmac.txt in the current directory with the
--following changes.
+-Please refer to gpio.txt for generic information regarding GPIO bindings.
 -
--Required properties on all platforms:
+-Required properties:
+- - compatible: "oxsemi,ox810se-gpio" or "oxsemi,ox820-gpio"
+- - reg: Base address and length for the device.
+- - interrupts: The port interrupt shared by all pins.
+- - gpio-controller: Marks the port as GPIO controller.
+- - #gpio-cells: Two. The first cell is the pin number and
+-   the second cell is used to specify the gpio polarity as defined in
+-   defined in <dt-bindings/gpio/gpio.h>:
+-      0 = GPIO_ACTIVE_HIGH
+-      1 = GPIO_ACTIVE_LOW
+- - interrupt-controller: Marks the device node as an interrupt controller.
+- - #interrupt-cells: Two. The first cell is the GPIO number and second cell
+-   is used to specify the trigger type as defined in
+-   <dt-bindings/interrupt-controller/irq.h>:
+-      IRQ_TYPE_EDGE_RISING
+-      IRQ_TYPE_EDGE_FALLING
+-      IRQ_TYPE_EDGE_BOTH
+- - gpio-ranges: Interaction with the PINCTRL subsystem, it also specifies the
+-   gpio base and count, should be in the format of numeric-gpio-range as
+-   specified in the gpio.txt file.
 -
--- compatible:	For the OX820 SoC, it should be :
--		- "oxsemi,ox820-dwmac" to select glue
--		- "snps,dwmac-3.512" to select IP version.
--		For the OX810SE SoC, it should be :
--		- "oxsemi,ox810se-dwmac" to select glue
--		- "snps,dwmac-3.512" to select IP version.
+-Example:
 -
--- clocks: Should contain phandles to the following clocks
--- clock-names:	Should contain the following:
--		- "stmmaceth" for the host clock - see stmmac.txt
--		- "gmac" for the peripheral gate clock
+-gpio0: gpio@0 {
+-	compatible = "oxsemi,ox810se-gpio";
+-	reg = <0x000000 0x100000>;
+-	interrupts = <21>;
+-	#gpio-cells = <2>;
+-	gpio-controller;
+-	interrupt-controller;
+-	#interrupt-cells = <2>;
+-	gpio-ranges = <&pinctrl 0 0 32>;
+-};
 -
--- oxsemi,sys-ctrl: a phandle to the system controller syscon node
+-keys {
+-	...
 -
--Example :
--
--etha: ethernet@40400000 {
--	compatible = "oxsemi,ox820-dwmac", "snps,dwmac-3.512";
--	reg = <0x40400000 0x2000>;
--	interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
--	interrupt-names = "macirq", "eth_wake_irq";
--	mac-address = [000000000000]; /* Filled in by U-Boot */
--	phy-mode = "rgmii";
--
--	clocks = <&stdclk CLK_820_ETHA>, <&gmacclk>;
--	clock-names = "gmac", "stmmaceth";
--	resets = <&reset RESET_MAC>;
--
--	/* Regmap for sys registers */
--	oxsemi,sys-ctrl = <&sys>;
--
+-	button-esc {
+-		label = "ESC";
+-		linux,code = <1>;
+-		gpios = <&gpio0 12 0>;
+-	};
 -};
 
 -- 
