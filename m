@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A38EC77B6E
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A65C77B62
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2A8E4C433A0; Fri, 31 Mar 2023 08:35:20 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	id 11B1BC4332E; Fri, 31 Mar 2023 08:35:19 +0000 (UTC)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 566EAC433A4
-	for <soc@kernel.org>; Fri, 31 Mar 2023 08:35:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 566EAC433A4
+	by smtp.kernel.org (Postfix) with ESMTPS id DC587C43235
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:35:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC587C43235
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id r11so21577842wrr.12
-        for <soc@kernel.org>; Fri, 31 Mar 2023 01:35:11 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id l27so21597734wrb.2
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:35:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251711;
+        d=linaro.org; s=google; t=1680251708;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5S8DS7MwX0eSMjECdngcIupXRvdIfBFKmoZZhwAEom0=;
-        b=tnfnYtQdWHkb+imXQ5cdS0qz5r299xH4jhkGPSnNJ2hyhvDgzphIZ+JrRafIpmAM9p
-         AYZ75Po2o2Z0SH8MZ2PJlbzGo/n61VmC8VnuZ2JuYUqUV2XrQWwn3l07chxkJqnSXjPP
-         5f1CEgxiSVpvn2h1nzoHxbtdANfxsiKSj6kGo5Gn+zXB98k4Ll0nq2FYEQMcqg9qKycl
-         SaFHJ31SA4vogcCrvZnJv61gFMikTvHDNS7J+H+by9jPFBPOVQx/EaIZbfwOl1I2Oqqc
-         0h4V53L2ZH7bwDuc5XrqWaqkZAcFFMRby1EyH50XYnZmPSj9SLb8FRQWZxdM2RBBTVHm
-         BCmw==
+        bh=wyeKmakvQ1hkSbEX4Ij16MupXpQFelz4/2NYVgWuJEU=;
+        b=zClFd5Vlxi7e28KuIdUeqTBp1gtaAf//uuz3h43rioEByZfX20BHjwgCWryxHTo+9i
+         oWtko8Ixqknbs450gQiNdzgPyJimKEQS8qc/dtfvgsqCDKLQqr6yI900pjhX/qGMFZdX
+         E9YiCGD7wJEMaP2livuoEdQ3bY4d1sZa49exj5qQSZvqCNDpuRGe68UZyI6Xua/Z9nt1
+         a5+zKV2l3pR4RD+Kel2t/PZXyj7R7YgcnFPa4uM70rQY8XI8A3moL7BiabGuEw6lZAtT
+         fhJgPmMUIhLlGzDOshxVzvMD+/1i7AaQ78yMnrrXECZVdQNAju2O9I0ysOGtmNk5iTB6
+         qXnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251711;
+        d=1e100.net; s=20210112; t=1680251708;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5S8DS7MwX0eSMjECdngcIupXRvdIfBFKmoZZhwAEom0=;
-        b=K3GSKj0Qp5wpnMKJFwQ9GH5S3MMTVk9hdPv7e9jyZayuBM2xNwX+qgLhD9cg9gjArS
-         lWgfuqEMM1ojl9Jz4rr4+gwwEYFzunUtCx+J6bpVwSS7iluKf8cuJMw4lsxBTz1uf6vz
-         ruwTFsZcIbXF5CRvXIatSI+CtBBswN1cbniFWTvwkFZ7w1e3MFRVkxjMzYFkqxTttEI8
-         KlUftNwmJNy5uU8IL1ljpvzIknWMXu7y0yO7zLeLHI/8GdG+75OvhanZeQv2IHHZALJD
-         T/QZDPkdy0GWkivlPVv5uxas+vOul0c+iO/+ghCDmg8+pueUFHz+d8EDK3tRoMcqZYXx
-         zyZg==
-X-Gm-Message-State: AAQBX9cobfUPEGDD3ZFxyGQKVaLMacP+LXgffg03S7+LJVsWNQp76pyJ
-	cEOKZbQWVTIscxHVGQRC0nQ/Gg==
-X-Google-Smtp-Source: AKy350bVO2xvOdcujlPweNogfEF/aS/RwRjRN7oD1rhoaEfLODuiLQvDCF4zUxggrf8oM3l2ae/tZg==
-X-Received: by 2002:adf:fa09:0:b0:2dd:cb8:2299 with SMTP id m9-20020adffa09000000b002dd0cb82299mr20102833wrr.11.1680251710872;
-        Fri, 31 Mar 2023 01:35:10 -0700 (PDT)
+        bh=wyeKmakvQ1hkSbEX4Ij16MupXpQFelz4/2NYVgWuJEU=;
+        b=3Ds/yVkiu/jAgOCtQZ06MSZC8eWIpRuPA20HCvR0PSCTc/njYTEsk+izJ3Fg2/lqnf
+         1k/RHm8MvOZOzXYkHdsltxt+0nv+FuchnHLss8FYzAO1PtjpLy/UcTCpKAHw2lJkA9Qv
+         A2OrHRqsH8lQxo74DKEWH6j5h082caAMkTRyITvCRLD6X6QIQnOEC3OpEPExD8EnLUyh
+         kD8HY9F+Lc77xOnohOQxhThJ7+7uEIdCwUucEfMDyyO4pCTkDbEyoqE2pPZtl9E0+/SP
+         XOhHACTU8G8jgXXii6SUIWMDR14/SuXChLTIXYLhFI7sIx4c6JBLsYVDFCCjG7EkJeJG
+         6nxQ==
+X-Gm-Message-State: AAQBX9dDkfLK/vOhVcGPBUc/b3x7HQIQ6cha2doK2nLNkr9f0LRsl5cp
+	K0lVe/12KqQ9g9jkd9G9znE2SQ==
+X-Google-Smtp-Source: AKy350ZgpW5+Oe3dbmzsCW6vw7rhJNBdmiyWR1Pp/d0MnEm1IxdpSh8x2o9HxYqyhz/1afKGjly3uQ==
+X-Received: by 2002:a5d:538e:0:b0:2d5:ac9e:cdde with SMTP id d14-20020a5d538e000000b002d5ac9ecddemr18097313wrv.51.1680251707922;
+        Fri, 31 Mar 2023 01:35:07 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.09
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:35:10 -0700 (PDT)
+        Fri, 31 Mar 2023 01:35:07 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 31 Mar 2023 10:34:57 +0200
-Subject: [PATCH RFC 19/20] dt-bindings: interrupt-controller:
- arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+Date: Fri, 31 Mar 2023 10:34:55 +0200
+Subject: [PATCH RFC 17/20] reset: oxnas: remove obsolete reset driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-19-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-17-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -88,36 +87,201 @@ Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, mark the
-OX810 and OX820 IRQ compatible as deprecated.
+and since no new features will ever be added upstream, remove support
+for OX810 and OX820 peripheral reset.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/interrupt-controller/arm,versatile-fpga-irq.txt          | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/reset/oxnas,reset.txt      |  32 ------
+ drivers/reset/Kconfig                              |   3 -
+ drivers/reset/Makefile                             |   1 -
+ drivers/reset/reset-oxnas.c                        | 114 ---------------------
+ 4 files changed, 150 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt b/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
-index 2a1d16bdf834..ea939f54c5eb 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
-+++ b/Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
-@@ -6,7 +6,7 @@ controllers are OR:ed together and fed to the CPU tile's IRQ input. Each
- instance can handle up to 32 interrupts.
+diff --git a/Documentation/devicetree/bindings/reset/oxnas,reset.txt b/Documentation/devicetree/bindings/reset/oxnas,reset.txt
+deleted file mode 100644
+index d27ccb5d04fc..000000000000
+--- a/Documentation/devicetree/bindings/reset/oxnas,reset.txt
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Oxford Semiconductor OXNAS SoC Family RESET Controller
+-================================================
+-
+-Please also refer to reset.txt in this directory for common reset
+-controller binding usage.
+-
+-Required properties:
+-- compatible: For OX810SE, should be "oxsemi,ox810se-reset"
+-	      For OX820, should be "oxsemi,ox820-reset"
+-- #reset-cells: 1, see below
+-
+-Parent node should have the following properties :
+-- compatible: For OX810SE, should be :
+-			"oxsemi,ox810se-sys-ctrl", "syscon", "simple-mfd"
+-	      For OX820, should be :
+-			"oxsemi,ox820-sys-ctrl", "syscon", "simple-mfd"
+-
+-Reset indices are in dt-bindings include files :
+-- For OX810SE: include/dt-bindings/reset/oxsemi,ox810se.h
+-- For OX820: include/dt-bindings/reset/oxsemi,ox820.h
+-
+-example:
+-
+-sys: sys-ctrl@000000 {
+-	compatible = "oxsemi,ox810se-sys-ctrl", "syscon", "simple-mfd";
+-	reg = <0x000000 0x100000>;
+-
+-	reset: reset-controller {
+-		compatible = "oxsemi,ox810se-reset";
+-		#reset-cells = <1>;
+-	};
+-};
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 2a52c990d4fe..695419d888ab 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -143,9 +143,6 @@ config RESET_NPCM
+ 	  This enables the reset controller driver for Nuvoton NPCM
+ 	  BMC SoCs.
  
- Required properties:
--- compatible: "arm,versatile-fpga-irq" or "oxsemi,ox810se-rps-irq"
-+- compatible: "arm,versatile-fpga-irq"
- - interrupt-controller: Identifies the node as an interrupt controller
- - #interrupt-cells: The number of cells to define the interrupts.  Must be 1
-   as the FPGA IRQ controller has no configuration options for interrupt
-@@ -19,6 +19,8 @@ Required properties:
-   the system till not make it possible for devices to request these
-   interrupts.
- 
-+The "oxsemi,ox810se-rps-irq" compatible is deprecated.
-+
- Example:
- 
- pic: pic@14000000 {
+-config RESET_OXNAS
+-	bool
+-
+ config RESET_PISTACHIO
+ 	bool "Pistachio Reset Driver"
+ 	depends on MIPS || COMPILE_TEST
+diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+index 3e7e5fd633a8..cb1f229e20a6 100644
+--- a/drivers/reset/Makefile
++++ b/drivers/reset/Makefile
+@@ -20,7 +20,6 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+ obj-$(CONFIG_RESET_MESON) += reset-meson.o
+ obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+ obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
+-obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
+ obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
+ obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+ obj-$(CONFIG_RESET_QCOM_AOSS) += reset-qcom-aoss.o
+diff --git a/drivers/reset/reset-oxnas.c b/drivers/reset/reset-oxnas.c
+deleted file mode 100644
+index 8209f922dc16..000000000000
+--- a/drivers/reset/reset-oxnas.c
++++ /dev/null
+@@ -1,114 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Oxford Semiconductor Reset Controller driver
+- *
+- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+- * Copyright (C) 2014 Ma Haijun <mahaijuns@gmail.com>
+- * Copyright (C) 2009 Oxford Semiconductor Ltd
+- */
+-#include <linux/err.h>
+-#include <linux/init.h>
+-#include <linux/of.h>
+-#include <linux/platform_device.h>
+-#include <linux/reset-controller.h>
+-#include <linux/slab.h>
+-#include <linux/delay.h>
+-#include <linux/types.h>
+-#include <linux/regmap.h>
+-#include <linux/mfd/syscon.h>
+-
+-/* Regmap offsets */
+-#define RST_SET_REGOFFSET	0x34
+-#define RST_CLR_REGOFFSET	0x38
+-
+-struct oxnas_reset {
+-	struct regmap *regmap;
+-	struct reset_controller_dev rcdev;
+-};
+-
+-static int oxnas_reset_reset(struct reset_controller_dev *rcdev,
+-			      unsigned long id)
+-{
+-	struct oxnas_reset *data =
+-		container_of(rcdev, struct oxnas_reset, rcdev);
+-
+-	regmap_write(data->regmap, RST_SET_REGOFFSET, BIT(id));
+-	msleep(50);
+-	regmap_write(data->regmap, RST_CLR_REGOFFSET, BIT(id));
+-
+-	return 0;
+-}
+-
+-static int oxnas_reset_assert(struct reset_controller_dev *rcdev,
+-			      unsigned long id)
+-{
+-	struct oxnas_reset *data =
+-		container_of(rcdev, struct oxnas_reset, rcdev);
+-
+-	regmap_write(data->regmap, RST_SET_REGOFFSET, BIT(id));
+-
+-	return 0;
+-}
+-
+-static int oxnas_reset_deassert(struct reset_controller_dev *rcdev,
+-				unsigned long id)
+-{
+-	struct oxnas_reset *data =
+-		container_of(rcdev, struct oxnas_reset, rcdev);
+-
+-	regmap_write(data->regmap, RST_CLR_REGOFFSET, BIT(id));
+-
+-	return 0;
+-}
+-
+-static const struct reset_control_ops oxnas_reset_ops = {
+-	.reset		= oxnas_reset_reset,
+-	.assert		= oxnas_reset_assert,
+-	.deassert	= oxnas_reset_deassert,
+-};
+-
+-static const struct of_device_id oxnas_reset_dt_ids[] = {
+-	 { .compatible = "oxsemi,ox810se-reset", },
+-	 { .compatible = "oxsemi,ox820-reset", },
+-	 { /* sentinel */ },
+-};
+-
+-static int oxnas_reset_probe(struct platform_device *pdev)
+-{
+-	struct oxnas_reset *data;
+-	struct device *parent;
+-
+-	parent = pdev->dev.parent;
+-	if (!parent) {
+-		dev_err(&pdev->dev, "no parent\n");
+-		return -ENODEV;
+-	}
+-
+-	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+-	if (!data)
+-		return -ENOMEM;
+-
+-	data->regmap = syscon_node_to_regmap(parent->of_node);
+-	if (IS_ERR(data->regmap)) {
+-		dev_err(&pdev->dev, "failed to get parent regmap\n");
+-		return PTR_ERR(data->regmap);
+-	}
+-
+-	platform_set_drvdata(pdev, data);
+-
+-	data->rcdev.owner = THIS_MODULE;
+-	data->rcdev.nr_resets = 32;
+-	data->rcdev.ops = &oxnas_reset_ops;
+-	data->rcdev.of_node = pdev->dev.of_node;
+-
+-	return devm_reset_controller_register(&pdev->dev, &data->rcdev);
+-}
+-
+-static struct platform_driver oxnas_reset_driver = {
+-	.probe	= oxnas_reset_probe,
+-	.driver = {
+-		.name		= "oxnas-reset",
+-		.of_match_table	= oxnas_reset_dt_ids,
+-	},
+-};
+-builtin_platform_driver(oxnas_reset_driver);
 
 -- 
 2.34.1
