@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B59F9C77B79
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3A54C77B70
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7E33FC43324; Fri, 31 Mar 2023 08:35:02 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	id C53FBC43443; Fri, 31 Mar 2023 08:35:01 +0000 (UTC)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A9D17C4339E
-	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9D17C4339E
+	by smtp.kernel.org (Postfix) with ESMTPS id A4BE0C43322
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A4BE0C43322
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id e18so21583569wra.9
-        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:55 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id d17so21570189wrb.11
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251695;
+        d=linaro.org; s=google; t=1680251691;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0V8nry5kWVC4/7uVK2TIBPivIea0+SnMt7iP0mU4Cw8=;
-        b=chZXAA03Ktj6cCYt4xjrNnHn2g3CbaZsDusqs4uU9Vhv0+pAm8jD8YNmIH6rxRpV+h
-         vZbIeRwPEq02v7H1BQWanP2WxcrxIeZKG+trsgqWf+VelBUfmK5t3LKEmSAqUKxTZ13L
-         +G9CVycFJ35xf9hcvHQ/5mpMm4vgT5JJt3pCOGXggW1pTaO5/XGxwGfSkh0l2D4lx3xm
-         CdU9FttI+BGLbTmFYxZ4WJMPU0cKt87qQLmEz7fPijrzLc+aEfpd2hBm32tMeL2yzewe
-         wa8ggH+56W4skf84z3SrfyGgzpsmcwI8xPuwXPLIfYxeKh5XiRGPo7geoXtpM7Y1dKG0
-         wv7w==
+        bh=xHB6iDThXcrHPiUZPbOms1jUqgGK29VYjf8IjMfRyFw=;
+        b=OU1zLuH7o+NOr2m6B7SrO4o0iHam3EmzoXHKLsgK9BYloCMtfK/nowyatORufCCuN1
+         0S2YS1Jf8IdII/0kL6aZikOCpl4gPmJusga/jGIu5RJTCZQSnPRu0bT6l47T3zz10RP6
+         McxdVUz7aOeaWEmmB93vHrWKRqDR0V4G8KIQheRtjvbxfjYUC7p1Tr/gQJhUqodf9UbX
+         cfPIB4b7qt3CGsKHc7troZnh6xgZkYMWXzKDJwnMrJ6hhKvoxgQ/Hhd3Wgg51BPEfzhN
+         yPMp3R5Ti2h1FWChvDvtH7XyexKUL1drTYJ0fwNaM4djZfI2kHkDr7Fn1XDVvEJpp7zv
+         vtFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251695;
+        d=1e100.net; s=20210112; t=1680251691;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0V8nry5kWVC4/7uVK2TIBPivIea0+SnMt7iP0mU4Cw8=;
-        b=VKi1J89Wnom3bbI118a0IujAUpB1wllD81GsYa3+CfAfWMM4M55mpOlc/S8KYeQ9ms
-         yWylQIT3U27+2aktilrYLD7blfE0M0rU3dBErSCmvMN09tzNDYIElRjXpuoMXpS/06o8
-         vCiyHJToHP1wR1POpX2XwJUk7yx/4tUwuI72imEWgem/1zBcI0qu0Uaa7gWCcmeD8Pri
-         9Wt4Qk03O2jJ3fD4NcMz7Ak4XhYKMgLICzewSvW/be7fBOUvIeKB+9U/ewh/Fef3Dz3b
-         ycfcE1mlaNfXBg7INf5NP3PHM54KJq5AhHkPani7s5sXEQkcsuH3tjCCLvA9Ct39U5/p
-         MTcw==
-X-Gm-Message-State: AAQBX9crB7B7OdJkEQPXWTyPtRQpOolP57m7oOAuRQd8HkDKNoHsWuzW
-	6fjpqlyq1BIX8foXIwQxrBqyBQ==
-X-Google-Smtp-Source: AKy350bhK+x7s++84IOWEFVO/gMXDRH9T/LCqh08NqEq24KOmp+VFPEpoLewHAutg0wJysva85qmrQ==
-X-Received: by 2002:a5d:550c:0:b0:2d9:5608:ee0 with SMTP id b12-20020a5d550c000000b002d956080ee0mr20654106wrv.69.1680251695160;
-        Fri, 31 Mar 2023 01:34:55 -0700 (PDT)
+        bh=xHB6iDThXcrHPiUZPbOms1jUqgGK29VYjf8IjMfRyFw=;
+        b=BrK9yRGkc6uP4KkLA+MiLrjqHCnnTlW4TjSse5I47NEbf8Q60fE4oyNeHlRokI8bMX
+         xKCZ6a4mNdC1DStf04QAOp21kH9TXm8z1bqjCVvJpnpHwwo7rFMsxCNPxnMMdUe1vsz4
+         xx8eOj2jvrNm/ee+mxJTE0nnBflQrNi8dN6+7MDBMl8rCwus9q9vadCzZUS6+PJOzkQD
+         qEjhubz3ECHtHuIpI2GKN+3zk58ZKhrxlyQE4pNjYtLf/0no3pKhJshXjlu+k0E3mNtk
+         w9pdnxFTYdM7Gkq1WpDe1z9Uyt4xwR64L5MERmz04LkUezgBTd89WzikElgz+K0teH8f
+         j5Eg==
+X-Gm-Message-State: AAQBX9fOpn2M6CKnjc/ITXFzDZSOz8aIzrsemiUhwiPXWsMik9amLNjd
+	22FUTFYixeKLT21se4yM2I6LuA==
+X-Google-Smtp-Source: AKy350YZVgjYN18xwfhWJYe5j5yka9+JqQ6bvN6apomApI+PZnxn/a2kxojIM0PPJc8qiiYSR2kMoA==
+X-Received: by 2002:a5d:5411:0:b0:2c7:a9ec:3 with SMTP id g17-20020a5d5411000000b002c7a9ec0003mr21286471wrv.65.1680251691044;
+        Fri, 31 Mar 2023 01:34:51 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.53
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:34:54 -0700 (PDT)
+        Fri, 31 Mar 2023 01:34:50 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 31 Mar 2023 10:34:46 +0200
-Subject: [PATCH RFC 08/20] dt-bindings: timer: oxsemi,rps-timer: remove
- obsolete bindings
+Date: Fri, 31 Mar 2023 10:34:43 +0200
+Subject: [PATCH RFC 05/20] clk: oxnas: remove obsolete clock driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-8-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-5-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -88,37 +87,303 @@ Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, remove the
-OX810 and OX820 timer bindings.
+and since no new features will ever be added upstream, remove support
+for OX810 and OX820 clock driver.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../devicetree/bindings/timer/oxsemi,rps-timer.txt      | 17 -----------------
- 1 file changed, 17 deletions(-)
+ drivers/clk/Kconfig     |   7 --
+ drivers/clk/Makefile    |   1 -
+ drivers/clk/clk-oxnas.c | 251 ------------------------------------------------
+ 3 files changed, 259 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/timer/oxsemi,rps-timer.txt b/Documentation/devicetree/bindings/timer/oxsemi,rps-timer.txt
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index b6c5bf69a2b2..7ac31d00f03a 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -351,13 +351,6 @@ config COMMON_CLK_PXA
+ 	help
+ 	  Support for the Marvell PXA SoC.
+ 
+-config COMMON_CLK_OXNAS
+-	bool "Clock driver for the OXNAS SoC Family"
+-	depends on ARCH_OXNAS || COMPILE_TEST
+-	select MFD_SYSCON
+-	help
+-	  Support for the OXNAS SoC Family clocks.
+-
+ config COMMON_CLK_RS9_PCIE
+ 	tristate "Clock driver for Renesas 9-series PCIe clock generators"
+ 	depends on I2C
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index e3ca0d058a25..fea32d60f1d9 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -50,7 +50,6 @@ obj-$(CONFIG_ARCH_MOXART)		+= clk-moxart.o
+ obj-$(CONFIG_ARCH_NOMADIK)		+= clk-nomadik.o
+ obj-$(CONFIG_ARCH_NPCM7XX)	    	+= clk-npcm7xx.o
+ obj-$(CONFIG_ARCH_NSPIRE)		+= clk-nspire.o
+-obj-$(CONFIG_COMMON_CLK_OXNAS)		+= clk-oxnas.o
+ obj-$(CONFIG_COMMON_CLK_PALMAS)		+= clk-palmas.o
+ obj-$(CONFIG_CLK_LS1028A_PLLDIG)	+= clk-plldig.o
+ obj-$(CONFIG_COMMON_CLK_PWM)		+= clk-pwm.o
+diff --git a/drivers/clk/clk-oxnas.c b/drivers/clk/clk-oxnas.c
 deleted file mode 100644
-index d191612539e8..000000000000
---- a/Documentation/devicetree/bindings/timer/oxsemi,rps-timer.txt
+index 584e293156ad..000000000000
+--- a/drivers/clk/clk-oxnas.c
 +++ /dev/null
-@@ -1,17 +0,0 @@
--Oxford Semiconductor OXNAS SoCs Family RPS Timer
--================================================
+@@ -1,251 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright (C) 2010 Broadcom
+- * Copyright (C) 2012 Stephen Warren
+- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+- */
 -
--Required properties:
--- compatible: Should be "oxsemi,ox810se-rps-timer" or "oxsemi,ox820-rps-timer"
--- reg : Specifies base physical address and size of the registers.
--- interrupts : The interrupts of the two timers
--- clocks : The phandle of the timer clock source
+-#include <linux/clk-provider.h>
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+-#include <linux/platform_device.h>
+-#include <linux/stringify.h>
+-#include <linux/regmap.h>
+-#include <linux/mfd/syscon.h>
 -
--example:
+-#include <dt-bindings/clock/oxsemi,ox810se.h>
+-#include <dt-bindings/clock/oxsemi,ox820.h>
 -
--timer0: timer@200 {
--	compatible = "oxsemi,ox810se-rps-timer";
--	reg = <0x200 0x40>;
--	clocks = <&rpsclk>;
--	interrupts = <4 5>;
+-/* Standard regmap gate clocks */
+-struct clk_oxnas_gate {
+-	struct clk_hw hw;
+-	unsigned int bit;
+-	struct regmap *regmap;
 -};
+-
+-struct oxnas_stdclk_data {
+-	struct clk_hw_onecell_data *onecell_data;
+-	struct clk_oxnas_gate **gates;
+-	unsigned int ngates;
+-	struct clk_oxnas_pll **plls;
+-	unsigned int nplls;
+-};
+-
+-/* Regmap offsets */
+-#define CLK_STAT_REGOFFSET	0x24
+-#define CLK_SET_REGOFFSET	0x2c
+-#define CLK_CLR_REGOFFSET	0x30
+-
+-static inline struct clk_oxnas_gate *to_clk_oxnas_gate(struct clk_hw *hw)
+-{
+-	return container_of(hw, struct clk_oxnas_gate, hw);
+-}
+-
+-static int oxnas_clk_gate_is_enabled(struct clk_hw *hw)
+-{
+-	struct clk_oxnas_gate *std = to_clk_oxnas_gate(hw);
+-	int ret;
+-	unsigned int val;
+-
+-	ret = regmap_read(std->regmap, CLK_STAT_REGOFFSET, &val);
+-	if (ret < 0)
+-		return ret;
+-
+-	return val & BIT(std->bit);
+-}
+-
+-static int oxnas_clk_gate_enable(struct clk_hw *hw)
+-{
+-	struct clk_oxnas_gate *std = to_clk_oxnas_gate(hw);
+-
+-	regmap_write(std->regmap, CLK_SET_REGOFFSET, BIT(std->bit));
+-
+-	return 0;
+-}
+-
+-static void oxnas_clk_gate_disable(struct clk_hw *hw)
+-{
+-	struct clk_oxnas_gate *std = to_clk_oxnas_gate(hw);
+-
+-	regmap_write(std->regmap, CLK_CLR_REGOFFSET, BIT(std->bit));
+-}
+-
+-static const struct clk_ops oxnas_clk_gate_ops = {
+-	.enable = oxnas_clk_gate_enable,
+-	.disable = oxnas_clk_gate_disable,
+-	.is_enabled = oxnas_clk_gate_is_enabled,
+-};
+-
+-static const char *const osc_parents[] = {
+-	"oscillator",
+-};
+-
+-static const char *const eth_parents[] = {
+-	"gmacclk",
+-};
+-
+-#define OXNAS_GATE(_name, _bit, _parents)				\
+-struct clk_oxnas_gate _name = {						\
+-	.bit = (_bit),							\
+-	.hw.init = &(struct clk_init_data) {				\
+-		.name = #_name,						\
+-		.ops = &oxnas_clk_gate_ops,				\
+-		.parent_names = _parents,				\
+-		.num_parents = ARRAY_SIZE(_parents),			\
+-		.flags = (CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED),	\
+-	},								\
+-}
+-
+-static OXNAS_GATE(ox810se_leon, 0, osc_parents);
+-static OXNAS_GATE(ox810se_dma_sgdma, 1, osc_parents);
+-static OXNAS_GATE(ox810se_cipher, 2, osc_parents);
+-static OXNAS_GATE(ox810se_sata, 4, osc_parents);
+-static OXNAS_GATE(ox810se_audio, 5, osc_parents);
+-static OXNAS_GATE(ox810se_usbmph, 6, osc_parents);
+-static OXNAS_GATE(ox810se_etha, 7, eth_parents);
+-static OXNAS_GATE(ox810se_pciea, 8, osc_parents);
+-static OXNAS_GATE(ox810se_nand, 9, osc_parents);
+-
+-static struct clk_oxnas_gate *ox810se_gates[] = {
+-	&ox810se_leon,
+-	&ox810se_dma_sgdma,
+-	&ox810se_cipher,
+-	&ox810se_sata,
+-	&ox810se_audio,
+-	&ox810se_usbmph,
+-	&ox810se_etha,
+-	&ox810se_pciea,
+-	&ox810se_nand,
+-};
+-
+-static OXNAS_GATE(ox820_leon, 0, osc_parents);
+-static OXNAS_GATE(ox820_dma_sgdma, 1, osc_parents);
+-static OXNAS_GATE(ox820_cipher, 2, osc_parents);
+-static OXNAS_GATE(ox820_sd, 3, osc_parents);
+-static OXNAS_GATE(ox820_sata, 4, osc_parents);
+-static OXNAS_GATE(ox820_audio, 5, osc_parents);
+-static OXNAS_GATE(ox820_usbmph, 6, osc_parents);
+-static OXNAS_GATE(ox820_etha, 7, eth_parents);
+-static OXNAS_GATE(ox820_pciea, 8, osc_parents);
+-static OXNAS_GATE(ox820_nand, 9, osc_parents);
+-static OXNAS_GATE(ox820_ethb, 10, eth_parents);
+-static OXNAS_GATE(ox820_pcieb, 11, osc_parents);
+-static OXNAS_GATE(ox820_ref600, 12, osc_parents);
+-static OXNAS_GATE(ox820_usbdev, 13, osc_parents);
+-
+-static struct clk_oxnas_gate *ox820_gates[] = {
+-	&ox820_leon,
+-	&ox820_dma_sgdma,
+-	&ox820_cipher,
+-	&ox820_sd,
+-	&ox820_sata,
+-	&ox820_audio,
+-	&ox820_usbmph,
+-	&ox820_etha,
+-	&ox820_pciea,
+-	&ox820_nand,
+-	&ox820_etha,
+-	&ox820_pciea,
+-	&ox820_ref600,
+-	&ox820_usbdev,
+-};
+-
+-static struct clk_hw_onecell_data ox810se_hw_onecell_data = {
+-	.hws = {
+-		[CLK_810_LEON]	= &ox810se_leon.hw,
+-		[CLK_810_DMA_SGDMA]	= &ox810se_dma_sgdma.hw,
+-		[CLK_810_CIPHER]	= &ox810se_cipher.hw,
+-		[CLK_810_SATA]	= &ox810se_sata.hw,
+-		[CLK_810_AUDIO]	= &ox810se_audio.hw,
+-		[CLK_810_USBMPH]	= &ox810se_usbmph.hw,
+-		[CLK_810_ETHA]	= &ox810se_etha.hw,
+-		[CLK_810_PCIEA]	= &ox810se_pciea.hw,
+-		[CLK_810_NAND]	= &ox810se_nand.hw,
+-	},
+-	.num = ARRAY_SIZE(ox810se_gates),
+-};
+-
+-static struct clk_hw_onecell_data ox820_hw_onecell_data = {
+-	.hws = {
+-		[CLK_820_LEON]	= &ox820_leon.hw,
+-		[CLK_820_DMA_SGDMA]	= &ox820_dma_sgdma.hw,
+-		[CLK_820_CIPHER]	= &ox820_cipher.hw,
+-		[CLK_820_SD]	= &ox820_sd.hw,
+-		[CLK_820_SATA]	= &ox820_sata.hw,
+-		[CLK_820_AUDIO]	= &ox820_audio.hw,
+-		[CLK_820_USBMPH]	= &ox820_usbmph.hw,
+-		[CLK_820_ETHA]	= &ox820_etha.hw,
+-		[CLK_820_PCIEA]	= &ox820_pciea.hw,
+-		[CLK_820_NAND]	= &ox820_nand.hw,
+-		[CLK_820_ETHB]	= &ox820_ethb.hw,
+-		[CLK_820_PCIEB]	= &ox820_pcieb.hw,
+-		[CLK_820_REF600]	= &ox820_ref600.hw,
+-		[CLK_820_USBDEV]	= &ox820_usbdev.hw,
+-	},
+-	.num = ARRAY_SIZE(ox820_gates),
+-};
+-
+-static struct oxnas_stdclk_data ox810se_stdclk_data = {
+-	.onecell_data = &ox810se_hw_onecell_data,
+-	.gates = ox810se_gates,
+-	.ngates = ARRAY_SIZE(ox810se_gates),
+-};
+-
+-static struct oxnas_stdclk_data ox820_stdclk_data = {
+-	.onecell_data = &ox820_hw_onecell_data,
+-	.gates = ox820_gates,
+-	.ngates = ARRAY_SIZE(ox820_gates),
+-};
+-
+-static const struct of_device_id oxnas_stdclk_dt_ids[] = {
+-	{ .compatible = "oxsemi,ox810se-stdclk", &ox810se_stdclk_data },
+-	{ .compatible = "oxsemi,ox820-stdclk", &ox820_stdclk_data },
+-	{ }
+-};
+-
+-static int oxnas_stdclk_probe(struct platform_device *pdev)
+-{
+-	struct device_node *np = pdev->dev.of_node, *parent_np;
+-	const struct oxnas_stdclk_data *data;
+-	struct regmap *regmap;
+-	int ret;
+-	int i;
+-
+-	data = of_device_get_match_data(&pdev->dev);
+-
+-	parent_np = of_get_parent(np);
+-	regmap = syscon_node_to_regmap(parent_np);
+-	of_node_put(parent_np);
+-	if (IS_ERR(regmap)) {
+-		dev_err(&pdev->dev, "failed to have parent regmap\n");
+-		return PTR_ERR(regmap);
+-	}
+-
+-	for (i = 0 ; i < data->ngates ; ++i)
+-		data->gates[i]->regmap = regmap;
+-
+-	for (i = 0; i < data->onecell_data->num; i++) {
+-		if (!data->onecell_data->hws[i])
+-			continue;
+-
+-		ret = devm_clk_hw_register(&pdev->dev,
+-					   data->onecell_data->hws[i]);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	return of_clk_add_hw_provider(np, of_clk_hw_onecell_get,
+-				      data->onecell_data);
+-}
+-
+-static struct platform_driver oxnas_stdclk_driver = {
+-	.probe = oxnas_stdclk_probe,
+-	.driver	= {
+-		.name = "oxnas-stdclk",
+-		.suppress_bind_attrs = true,
+-		.of_match_table = oxnas_stdclk_dt_ids,
+-	},
+-};
+-builtin_platform_driver(oxnas_stdclk_driver);
 
 -- 
 2.34.1
