@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A65C77B62
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 148B7C77B6D
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 11B1BC4332E; Fri, 31 Mar 2023 08:35:19 +0000 (UTC)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	id E869CC433B4; Fri, 31 Mar 2023 08:35:19 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DC587C43235
-	for <soc@kernel.org>; Fri, 31 Mar 2023 08:35:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DC587C43235
+	by smtp.kernel.org (Postfix) with ESMTPS id F1EC7C433AF
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F1EC7C433AF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id l27so21597734wrb.2
-        for <soc@kernel.org>; Fri, 31 Mar 2023 01:35:08 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id r29so21552651wra.13
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251708;
+        d=linaro.org; s=google; t=1680251699;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wyeKmakvQ1hkSbEX4Ij16MupXpQFelz4/2NYVgWuJEU=;
-        b=zClFd5Vlxi7e28KuIdUeqTBp1gtaAf//uuz3h43rioEByZfX20BHjwgCWryxHTo+9i
-         oWtko8Ixqknbs450gQiNdzgPyJimKEQS8qc/dtfvgsqCDKLQqr6yI900pjhX/qGMFZdX
-         E9YiCGD7wJEMaP2livuoEdQ3bY4d1sZa49exj5qQSZvqCNDpuRGe68UZyI6Xua/Z9nt1
-         a5+zKV2l3pR4RD+Kel2t/PZXyj7R7YgcnFPa4uM70rQY8XI8A3moL7BiabGuEw6lZAtT
-         fhJgPmMUIhLlGzDOshxVzvMD+/1i7AaQ78yMnrrXECZVdQNAju2O9I0ysOGtmNk5iTB6
-         qXnw==
+        bh=oNLeYYmevUI4TEvtO58qWx9WKba4OWRb4gPC7pePliE=;
+        b=QU/SMBwtauCDT26FDqkLVtUXOmKViF57BpBJbMyuNffLde2pjYSjYzzk4mMYgUY3RF
+         Rv1j3nYCqzqWdV0ukZFmHVZEiyVWTayLisexL8iWTuSVhf0GnbgP1m/Kwr55kuXEC247
+         H/1TlEwLAqO67ulQUFvz0q5cljRi5THKZtwqXZGj6DLmUrfgLnU8g5RDzJ3qX2TAyMkG
+         JxtGinY/oJy51QsUfHANnB7s7NryhUeyS97DkLO3aOO3lWC99jyqeBVY2qo5YroHiBcG
+         rbUVwa++BHOKgmdcC2Pxy8TIKtAb93DOo8j1YoPZJI3KBQiM7EvNk0av74pdYjvn/4oV
+         D2Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251708;
+        d=1e100.net; s=20210112; t=1680251699;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wyeKmakvQ1hkSbEX4Ij16MupXpQFelz4/2NYVgWuJEU=;
-        b=3Ds/yVkiu/jAgOCtQZ06MSZC8eWIpRuPA20HCvR0PSCTc/njYTEsk+izJ3Fg2/lqnf
-         1k/RHm8MvOZOzXYkHdsltxt+0nv+FuchnHLss8FYzAO1PtjpLy/UcTCpKAHw2lJkA9Qv
-         A2OrHRqsH8lQxo74DKEWH6j5h082caAMkTRyITvCRLD6X6QIQnOEC3OpEPExD8EnLUyh
-         kD8HY9F+Lc77xOnohOQxhThJ7+7uEIdCwUucEfMDyyO4pCTkDbEyoqE2pPZtl9E0+/SP
-         XOhHACTU8G8jgXXii6SUIWMDR14/SuXChLTIXYLhFI7sIx4c6JBLsYVDFCCjG7EkJeJG
-         6nxQ==
-X-Gm-Message-State: AAQBX9dDkfLK/vOhVcGPBUc/b3x7HQIQ6cha2doK2nLNkr9f0LRsl5cp
-	K0lVe/12KqQ9g9jkd9G9znE2SQ==
-X-Google-Smtp-Source: AKy350ZgpW5+Oe3dbmzsCW6vw7rhJNBdmiyWR1Pp/d0MnEm1IxdpSh8x2o9HxYqyhz/1afKGjly3uQ==
-X-Received: by 2002:a5d:538e:0:b0:2d5:ac9e:cdde with SMTP id d14-20020a5d538e000000b002d5ac9ecddemr18097313wrv.51.1680251707922;
-        Fri, 31 Mar 2023 01:35:07 -0700 (PDT)
+        bh=oNLeYYmevUI4TEvtO58qWx9WKba4OWRb4gPC7pePliE=;
+        b=klh65jtRKE5cVfEm0GpnbZM6UxT2DI36E3DNTFA3PhzjD/ExIpjjyLy2gfoZVdJb21
+         /gjeXu3wx/k4LpIOq2VJ0Ft6/JCe996phVwJC9zGLl/9VjhE1uP0BYtvEQjXWkuKV0A0
+         mWymIwom72FifPM8dpxtPB9v1P3mSFzV1RLJxPt9+p0w3Sm6f1uaR1DZSZSBRW4uD4NO
+         z29JX7jniY0/53sSmDDhg4uiBvifD8zDflAEe71rKxwWQkgaE+17u+xSr/20RJoyl1pS
+         3g04ix+H8C3zeFw6r8HSbH4xOGiOkLgAIIMPugrPkz3lv5zevsd8I4XVNdTPhAqqArr6
+         Rauw==
+X-Gm-Message-State: AAQBX9cdoXI8Zu1BIFTBgEhFF7bjf0ltmV8khqL1GSImKHVL3UOt9iWz
+	yBsfpUEleJuULwbF+Xx/Fhn0Jw==
+X-Google-Smtp-Source: AKy350bU8fJMNCxfVc86Lv2m3v2OU/27OaMpg82cazbgj/q2eFNxD3gWemqObAljC1iPMvpM3rDX1w==
+X-Received: by 2002:a5d:63d1:0:b0:2d5:b6a9:772a with SMTP id c17-20020a5d63d1000000b002d5b6a9772amr20187850wrw.17.1680251699431;
+        Fri, 31 Mar 2023 01:34:59 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.06
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:35:07 -0700 (PDT)
+        Fri, 31 Mar 2023 01:34:59 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 31 Mar 2023 10:34:55 +0200
-Subject: [PATCH RFC 17/20] reset: oxnas: remove obsolete reset driver
+Date: Fri, 31 Mar 2023 10:34:49 +0200
+Subject: [PATCH RFC 11/20] net: stmmac: dwmac-oxnas: remove obsolete dwmac
+ glue driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-17-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-11-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -88,200 +89,300 @@ X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
 and since no new features will ever be added upstream, remove support
-for OX810 and OX820 peripheral reset.
+for OX810 and OX820 ethernet.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../devicetree/bindings/reset/oxnas,reset.txt      |  32 ------
- drivers/reset/Kconfig                              |   3 -
- drivers/reset/Makefile                             |   1 -
- drivers/reset/reset-oxnas.c                        | 114 ---------------------
- 4 files changed, 150 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/Kconfig       |  11 -
+ drivers/net/ethernet/stmicro/stmmac/Makefile      |   1 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c | 245 ----------------------
+ 3 files changed, 257 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reset/oxnas,reset.txt b/Documentation/devicetree/bindings/reset/oxnas,reset.txt
-deleted file mode 100644
-index d27ccb5d04fc..000000000000
---- a/Documentation/devicetree/bindings/reset/oxnas,reset.txt
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Oxford Semiconductor OXNAS SoC Family RESET Controller
--================================================
--
--Please also refer to reset.txt in this directory for common reset
--controller binding usage.
--
--Required properties:
--- compatible: For OX810SE, should be "oxsemi,ox810se-reset"
--	      For OX820, should be "oxsemi,ox820-reset"
--- #reset-cells: 1, see below
--
--Parent node should have the following properties :
--- compatible: For OX810SE, should be :
--			"oxsemi,ox810se-sys-ctrl", "syscon", "simple-mfd"
--	      For OX820, should be :
--			"oxsemi,ox820-sys-ctrl", "syscon", "simple-mfd"
--
--Reset indices are in dt-bindings include files :
--- For OX810SE: include/dt-bindings/reset/oxsemi,ox810se.h
--- For OX820: include/dt-bindings/reset/oxsemi,ox820.h
--
--example:
--
--sys: sys-ctrl@000000 {
--	compatible = "oxsemi,ox810se-sys-ctrl", "syscon", "simple-mfd";
--	reg = <0x000000 0x100000>;
--
--	reset: reset-controller {
--		compatible = "oxsemi,ox810se-reset";
--		#reset-cells = <1>;
--	};
--};
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index 2a52c990d4fe..695419d888ab 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -143,9 +143,6 @@ config RESET_NPCM
- 	  This enables the reset controller driver for Nuvoton NPCM
- 	  BMC SoCs.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+index f77511fe4e87..8a0655d5f22e 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
++++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+@@ -121,17 +121,6 @@ config DWMAC_MESON
+ 	  the stmmac device driver. This driver is used for Meson6,
+ 	  Meson8, Meson8b and GXBB SoCs.
  
--config RESET_OXNAS
--	bool
+-config DWMAC_OXNAS
+-	tristate "Oxford Semiconductor OXNAS dwmac support"
+-	default ARCH_OXNAS
+-	depends on OF && COMMON_CLK && (ARCH_OXNAS || COMPILE_TEST)
+-	select MFD_SYSCON
+-	help
+-	  Support for Ethernet controller on Oxford Semiconductor OXNAS SoCs.
 -
- config RESET_PISTACHIO
- 	bool "Pistachio Reset Driver"
- 	depends on MIPS || COMPILE_TEST
-diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-index 3e7e5fd633a8..cb1f229e20a6 100644
---- a/drivers/reset/Makefile
-+++ b/drivers/reset/Makefile
-@@ -20,7 +20,6 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
- obj-$(CONFIG_RESET_MESON) += reset-meson.o
- obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
- obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
--obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
- obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
- obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
- obj-$(CONFIG_RESET_QCOM_AOSS) += reset-qcom-aoss.o
-diff --git a/drivers/reset/reset-oxnas.c b/drivers/reset/reset-oxnas.c
+-	  This selects the Oxford Semiconductor OXNASSoC glue layer support for
+-	  the stmmac device driver. This driver is used for OX820.
+-
+ config DWMAC_QCOM_ETHQOS
+ 	tristate "Qualcomm ETHQOS support"
+ 	default ARCH_QCOM
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+index 057e4bab5c08..9b56324ccf7d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Makefile
++++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+@@ -19,7 +19,6 @@ obj-$(CONFIG_DWMAC_IPQ806X)	+= dwmac-ipq806x.o
+ obj-$(CONFIG_DWMAC_LPC18XX)	+= dwmac-lpc18xx.o
+ obj-$(CONFIG_DWMAC_MEDIATEK)	+= dwmac-mediatek.o
+ obj-$(CONFIG_DWMAC_MESON)	+= dwmac-meson.o dwmac-meson8b.o
+-obj-$(CONFIG_DWMAC_OXNAS)	+= dwmac-oxnas.o
+ obj-$(CONFIG_DWMAC_QCOM_ETHQOS)	+= dwmac-qcom-ethqos.o
+ obj-$(CONFIG_DWMAC_ROCKCHIP)	+= dwmac-rk.o
+ obj-$(CONFIG_DWMAC_SOCFPGA)	+= dwmac-altr-socfpga.o
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c
 deleted file mode 100644
-index 8209f922dc16..000000000000
---- a/drivers/reset/reset-oxnas.c
+index 62a69a91ab22..000000000000
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c
 +++ /dev/null
-@@ -1,114 +0,0 @@
+@@ -1,245 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-only
 -/*
-- * Oxford Semiconductor Reset Controller driver
+- * Oxford Semiconductor OXNAS DWMAC glue layer
 - *
 - * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
-- * Copyright (C) 2014 Ma Haijun <mahaijuns@gmail.com>
-- * Copyright (C) 2009 Oxford Semiconductor Ltd
+- * Copyright (C) 2014 Daniel Golle <daniel@makrotopia.org>
+- * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
+- * Copyright (C) 2012 John Crispin <blogic@openwrt.org>
 - */
--#include <linux/err.h>
--#include <linux/init.h>
+-
+-#include <linux/device.h>
+-#include <linux/io.h>
+-#include <linux/module.h>
 -#include <linux/of.h>
+-#include <linux/of_device.h>
 -#include <linux/platform_device.h>
--#include <linux/reset-controller.h>
--#include <linux/slab.h>
--#include <linux/delay.h>
--#include <linux/types.h>
 -#include <linux/regmap.h>
 -#include <linux/mfd/syscon.h>
+-#include <linux/stmmac.h>
 -
--/* Regmap offsets */
--#define RST_SET_REGOFFSET	0x34
--#define RST_CLR_REGOFFSET	0x38
+-#include "stmmac_platform.h"
 -
--struct oxnas_reset {
--	struct regmap *regmap;
--	struct reset_controller_dev rcdev;
+-/* System Control regmap offsets */
+-#define OXNAS_DWMAC_CTRL_REGOFFSET	0x78
+-#define OXNAS_DWMAC_DELAY_REGOFFSET	0x100
+-
+-/* Control Register */
+-#define DWMAC_CKEN_RX_IN        14
+-#define DWMAC_CKEN_RXN_OUT      13
+-#define DWMAC_CKEN_RX_OUT       12
+-#define DWMAC_CKEN_TX_IN        10
+-#define DWMAC_CKEN_TXN_OUT      9
+-#define DWMAC_CKEN_TX_OUT       8
+-#define DWMAC_RX_SOURCE         7
+-#define DWMAC_TX_SOURCE         6
+-#define DWMAC_LOW_TX_SOURCE     4
+-#define DWMAC_AUTO_TX_SOURCE    3
+-#define DWMAC_RGMII             2
+-#define DWMAC_SIMPLE_MUX        1
+-#define DWMAC_CKEN_GTX          0
+-
+-/* Delay register */
+-#define DWMAC_TX_VARDELAY_SHIFT		0
+-#define DWMAC_TXN_VARDELAY_SHIFT	8
+-#define DWMAC_RX_VARDELAY_SHIFT		16
+-#define DWMAC_RXN_VARDELAY_SHIFT	24
+-#define DWMAC_TX_VARDELAY(d)		((d) << DWMAC_TX_VARDELAY_SHIFT)
+-#define DWMAC_TXN_VARDELAY(d)		((d) << DWMAC_TXN_VARDELAY_SHIFT)
+-#define DWMAC_RX_VARDELAY(d)		((d) << DWMAC_RX_VARDELAY_SHIFT)
+-#define DWMAC_RXN_VARDELAY(d)		((d) << DWMAC_RXN_VARDELAY_SHIFT)
+-
+-struct oxnas_dwmac;
+-
+-struct oxnas_dwmac_data {
+-	int (*setup)(struct oxnas_dwmac *dwmac);
 -};
 -
--static int oxnas_reset_reset(struct reset_controller_dev *rcdev,
--			      unsigned long id)
--{
--	struct oxnas_reset *data =
--		container_of(rcdev, struct oxnas_reset, rcdev);
+-struct oxnas_dwmac {
+-	struct device	*dev;
+-	struct clk	*clk;
+-	struct regmap	*regmap;
+-	const struct oxnas_dwmac_data	*data;
+-};
 -
--	regmap_write(data->regmap, RST_SET_REGOFFSET, BIT(id));
--	msleep(50);
--	regmap_write(data->regmap, RST_CLR_REGOFFSET, BIT(id));
+-static int oxnas_dwmac_setup_ox810se(struct oxnas_dwmac *dwmac)
+-{
+-	unsigned int value;
+-	int ret;
+-
+-	ret = regmap_read(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, &value);
+-	if (ret < 0)
+-		return ret;
+-
+-	/* Enable GMII_GTXCLK to follow GMII_REFCLK, required for gigabit PHY */
+-	value |= BIT(DWMAC_CKEN_GTX)		|
+-		 /* Use simple mux for 25/125 Mhz clock switching */
+-		 BIT(DWMAC_SIMPLE_MUX);
+-
+-	regmap_write(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, value);
 -
 -	return 0;
 -}
 -
--static int oxnas_reset_assert(struct reset_controller_dev *rcdev,
--			      unsigned long id)
+-static int oxnas_dwmac_setup_ox820(struct oxnas_dwmac *dwmac)
 -{
--	struct oxnas_reset *data =
--		container_of(rcdev, struct oxnas_reset, rcdev);
+-	unsigned int value;
+-	int ret;
 -
--	regmap_write(data->regmap, RST_SET_REGOFFSET, BIT(id));
+-	ret = regmap_read(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, &value);
+-	if (ret < 0)
+-		return ret;
+-
+-	/* Enable GMII_GTXCLK to follow GMII_REFCLK, required for gigabit PHY */
+-	value |= BIT(DWMAC_CKEN_GTX)		|
+-		 /* Use simple mux for 25/125 Mhz clock switching */
+-		BIT(DWMAC_SIMPLE_MUX)		|
+-		/* set auto switch tx clock source */
+-		BIT(DWMAC_AUTO_TX_SOURCE)	|
+-		/* enable tx & rx vardelay */
+-		BIT(DWMAC_CKEN_TX_OUT)		|
+-		BIT(DWMAC_CKEN_TXN_OUT)	|
+-		BIT(DWMAC_CKEN_TX_IN)		|
+-		BIT(DWMAC_CKEN_RX_OUT)		|
+-		BIT(DWMAC_CKEN_RXN_OUT)	|
+-		BIT(DWMAC_CKEN_RX_IN);
+-	regmap_write(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, value);
+-
+-	/* set tx & rx vardelay */
+-	value = DWMAC_TX_VARDELAY(4)	|
+-		DWMAC_TXN_VARDELAY(2)	|
+-		DWMAC_RX_VARDELAY(10)	|
+-		DWMAC_RXN_VARDELAY(8);
+-	regmap_write(dwmac->regmap, OXNAS_DWMAC_DELAY_REGOFFSET, value);
 -
 -	return 0;
 -}
 -
--static int oxnas_reset_deassert(struct reset_controller_dev *rcdev,
--				unsigned long id)
+-static int oxnas_dwmac_init(struct platform_device *pdev, void *priv)
 -{
--	struct oxnas_reset *data =
--		container_of(rcdev, struct oxnas_reset, rcdev);
+-	struct oxnas_dwmac *dwmac = priv;
+-	int ret;
 -
--	regmap_write(data->regmap, RST_CLR_REGOFFSET, BIT(id));
+-	/* Reset HW here before changing the glue configuration */
+-	ret = device_reset(dwmac->dev);
+-	if (ret)
+-		return ret;
 -
--	return 0;
+-	ret = clk_prepare_enable(dwmac->clk);
+-	if (ret)
+-		return ret;
+-
+-	ret = dwmac->data->setup(dwmac);
+-	if (ret)
+-		clk_disable_unprepare(dwmac->clk);
+-
+-	return ret;
 -}
 -
--static const struct reset_control_ops oxnas_reset_ops = {
--	.reset		= oxnas_reset_reset,
--	.assert		= oxnas_reset_assert,
--	.deassert	= oxnas_reset_deassert,
--};
--
--static const struct of_device_id oxnas_reset_dt_ids[] = {
--	 { .compatible = "oxsemi,ox810se-reset", },
--	 { .compatible = "oxsemi,ox820-reset", },
--	 { /* sentinel */ },
--};
--
--static int oxnas_reset_probe(struct platform_device *pdev)
+-static void oxnas_dwmac_exit(struct platform_device *pdev, void *priv)
 -{
--	struct oxnas_reset *data;
--	struct device *parent;
+-	struct oxnas_dwmac *dwmac = priv;
 -
--	parent = pdev->dev.parent;
--	if (!parent) {
--		dev_err(&pdev->dev, "no parent\n");
--		return -ENODEV;
+-	clk_disable_unprepare(dwmac->clk);
+-}
+-
+-static int oxnas_dwmac_probe(struct platform_device *pdev)
+-{
+-	struct plat_stmmacenet_data *plat_dat;
+-	struct stmmac_resources stmmac_res;
+-	struct oxnas_dwmac *dwmac;
+-	int ret;
+-
+-	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+-	if (ret)
+-		return ret;
+-
+-	plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+-	if (IS_ERR(plat_dat))
+-		return PTR_ERR(plat_dat);
+-
+-	dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
+-	if (!dwmac) {
+-		ret = -ENOMEM;
+-		goto err_remove_config_dt;
 -	}
 -
--	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
--	if (!data)
--		return -ENOMEM;
--
--	data->regmap = syscon_node_to_regmap(parent->of_node);
--	if (IS_ERR(data->regmap)) {
--		dev_err(&pdev->dev, "failed to get parent regmap\n");
--		return PTR_ERR(data->regmap);
+-	dwmac->data = (const struct oxnas_dwmac_data *)of_device_get_match_data(&pdev->dev);
+-	if (!dwmac->data) {
+-		ret = -EINVAL;
+-		goto err_remove_config_dt;
 -	}
 -
--	platform_set_drvdata(pdev, data);
+-	dwmac->dev = &pdev->dev;
+-	plat_dat->bsp_priv = dwmac;
+-	plat_dat->init = oxnas_dwmac_init;
+-	plat_dat->exit = oxnas_dwmac_exit;
 -
--	data->rcdev.owner = THIS_MODULE;
--	data->rcdev.nr_resets = 32;
--	data->rcdev.ops = &oxnas_reset_ops;
--	data->rcdev.of_node = pdev->dev.of_node;
+-	dwmac->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
+-							"oxsemi,sys-ctrl");
+-	if (IS_ERR(dwmac->regmap)) {
+-		dev_err(&pdev->dev, "failed to have sysctrl regmap\n");
+-		ret = PTR_ERR(dwmac->regmap);
+-		goto err_remove_config_dt;
+-	}
 -
--	return devm_reset_controller_register(&pdev->dev, &data->rcdev);
+-	dwmac->clk = devm_clk_get(&pdev->dev, "gmac");
+-	if (IS_ERR(dwmac->clk)) {
+-		ret = PTR_ERR(dwmac->clk);
+-		goto err_remove_config_dt;
+-	}
+-
+-	ret = oxnas_dwmac_init(pdev, plat_dat->bsp_priv);
+-	if (ret)
+-		goto err_remove_config_dt;
+-
+-	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+-	if (ret)
+-		goto err_dwmac_exit;
+-
+-
+-	return 0;
+-
+-err_dwmac_exit:
+-	oxnas_dwmac_exit(pdev, plat_dat->bsp_priv);
+-err_remove_config_dt:
+-	stmmac_remove_config_dt(pdev, plat_dat);
+-
+-	return ret;
 -}
 -
--static struct platform_driver oxnas_reset_driver = {
--	.probe	= oxnas_reset_probe,
+-static const struct oxnas_dwmac_data ox810se_dwmac_data = {
+-	.setup = oxnas_dwmac_setup_ox810se,
+-};
+-
+-static const struct oxnas_dwmac_data ox820_dwmac_data = {
+-	.setup = oxnas_dwmac_setup_ox820,
+-};
+-
+-static const struct of_device_id oxnas_dwmac_match[] = {
+-	{
+-		.compatible = "oxsemi,ox810se-dwmac",
+-		.data = &ox810se_dwmac_data,
+-	},
+-	{
+-		.compatible = "oxsemi,ox820-dwmac",
+-		.data = &ox820_dwmac_data,
+-	},
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(of, oxnas_dwmac_match);
+-
+-static struct platform_driver oxnas_dwmac_driver = {
+-	.probe  = oxnas_dwmac_probe,
+-	.remove = stmmac_pltfr_remove,
 -	.driver = {
--		.name		= "oxnas-reset",
--		.of_match_table	= oxnas_reset_dt_ids,
+-		.name           = "oxnas-dwmac",
+-		.pm		= &stmmac_pltfr_pm_ops,
+-		.of_match_table = oxnas_dwmac_match,
 -	},
 -};
--builtin_platform_driver(oxnas_reset_driver);
+-module_platform_driver(oxnas_dwmac_driver);
+-
+-MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
+-MODULE_DESCRIPTION("Oxford Semiconductor OXNAS DWMAC glue layer");
+-MODULE_LICENSE("GPL v2");
 
 -- 
 2.34.1
