@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7343FC77B72
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76C82C77B62
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:35:11 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1B900C4332D; Fri, 31 Mar 2023 08:35:06 +0000 (UTC)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	id 43F46C433AC; Fri, 31 Mar 2023 08:35:11 +0000 (UTC)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 77457C433A4
-	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 77457C433A4
+	by smtp.kernel.org (Postfix) with ESMTPS id 33C81C433A4
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:35:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 33C81C433A4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id j24so21631350wrd.0
-        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:57 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so13345695wmq.3
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:35:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251696;
+        d=linaro.org; s=google; t=1680251704;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9eQd2PRUPObC6vfAXbvz2kWSZ1cGqD24tBtlBu7v0Zk=;
-        b=XT9ECtwlsdWe3o0vMYrNBu+D7NzgbJ564psuhOE+dKhbWFyvXWCZ00wOvDhdwcBTWF
-         48LltN5EjnWWF42U7csY7RNAs8Ln0eounrZktVi46AEN4uvQxMPcnyLlh+rJG9zu8UVq
-         RFkvH1r1JNJn6j6X9lfiDt1vZdo6/1p9ErMChTKM8ftSVmo8G4S5oDlSKT8HzNor2okP
-         GqvO3HCM6OlTOIdQSaa4MigH+oRQil/CqTe9wHVYb+aXYKYiNp/P1tpIS+E8WL8fFrBS
-         ZglAstYH00wmOFh71enLs7n5Hl3l3W/kfLupedHWDuJrVXxjKW29WddmG2mOrnUlLgAH
-         ea1Q==
+        bh=DTkJHErpGDJ9v7s3ekjmHN8aO4NJsl7q6Q7QZM8QMbI=;
+        b=UGr6jhzO3hUVTB6rY7/leRAeWl750ZHVMPEYAKeTT4X06mEnwpBCz4Phsf+P7ItSjw
+         TIi62QAKl2i4gwbJZgnixjiWLnYymuWJtQlev/UOTE8L3tTaSoTPelFszUO9MlZAhEBb
+         svJnNSmQ+fTYwJwHOfZ+BnzUQABhVZKyZM2IISk4TAN6KerdE9+u76JqT768MMwy0WrZ
+         hHa30huv6N2SbwamrxfA5MxDt5MO3eFrL7KNDytCeuOyhCtNf98GhPdjDroQkxFbYiio
+         9lM6zhXS3q9g9LP/PSzlqPbEENCEjOSZL6tjJxXO/fNDHiRHf4knVvhNWSfCrnbGAaBR
+         r18g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251696;
+        d=1e100.net; s=20210112; t=1680251704;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9eQd2PRUPObC6vfAXbvz2kWSZ1cGqD24tBtlBu7v0Zk=;
-        b=15LsoDcmq9t+Gut/wrbAZ7QexIu7TeBOyDbnZZ5E3JXXQRaYjp5M3fHPv0KEoyQ4zI
-         4F9II3BuifxBVYNod2rrK1iaIwKFmHcPtbqn0MjfcIozFa67bW/aJLpvGjoxoHHWmHIY
-         HMU46Nu5FCHU7RpKcdERxgw9vCkKRk1Hpfws5YbudMwq71IRfGDv3JCXx38PympuhRSE
-         E/iTszYdj2Si/6FPGgejyOfYOHgMWJdm2zekyn97af0PaZ3YfSzZ2lwMZMKdjpMykzQv
-         trdkUudriN5Twl+XzkZS91ScKK1Fvyr8ckNZhdoH2Q0pBGcWC4T6vCw0d/RAkAxkckef
-         NOSw==
-X-Gm-Message-State: AAQBX9el+LpoiVE4YXnmrSmxxIyKEvm5YIfq9QjtUqI05dImxE3IPapI
-	YBl+SdYwbUEVaKmO2QUNa7uXrg==
-X-Google-Smtp-Source: AKy350Yu6u8o68jpMb5+fsfClqUxdCINEEq3588tJZY02FrQB56K1YJR0rbP/jzTvZA6NeFeaYgt9g==
-X-Received: by 2002:a5d:5410:0:b0:2cf:e336:cb14 with SMTP id g16-20020a5d5410000000b002cfe336cb14mr6612840wrv.10.1680251696577;
-        Fri, 31 Mar 2023 01:34:56 -0700 (PDT)
+        bh=DTkJHErpGDJ9v7s3ekjmHN8aO4NJsl7q6Q7QZM8QMbI=;
+        b=R9BL4d7tTxfZ7U/vgtWB99p4boZ2at0AEK4ql4f764hx5OCQUVg8rTQ6dwnFTMGUiT
+         GLRE7blrbJ7G2ScN0/O0KmiLNhh2NB2zgfRqM5PPKIarkNoWLZ4C1oOgHyBTADlixbH1
+         Fpt6v9xNU9Qvg3pjeZKY+cl6PrMkZ+TLbpmoXfyCeDvbM2U3k6vs1B7BGKPvJuWRqrzc
+         c0tZmEWNsMuZXlVjNjzTqpD6g9WJkETjNnZP/fbiVownTfFLqI/PrWGKnWFOHBuaosxp
+         F/xo9IQW/KmwbSvRVT4qcTTfK/gv+9XlDGFd2HxArfs+SzeZ37ffay5Y/KJsZxnZ8Xp0
+         mq+Q==
+X-Gm-Message-State: AO0yUKXPZcCxzN7t99EpEQptQXfUZVtp3Dl6iAXQ2IsVwIvGXs08n/Vp
+	oS83KU3M8SaXhjvEA0PMh0MIaA==
+X-Google-Smtp-Source: AK7set+EJ3ur6/ee9yCfqdjB5MLNFawGDsn0ZJD+xQ08Aa57oAcgfY47mb3l6TfHxYQ73tsX3o+sPw==
+X-Received: by 2002:a1c:7714:0:b0:3ee:3f7:35aa with SMTP id t20-20020a1c7714000000b003ee03f735aamr21641887wmi.19.1680251703765;
+        Fri, 31 Mar 2023 01:35:03 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.55
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.35.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:34:56 -0700 (PDT)
+        Fri, 31 Mar 2023 01:35:03 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 31 Mar 2023 10:34:47 +0200
-Subject: [PATCH RFC 09/20] nand: oxnas_nand: remove obsolete raw nand
- driver
+Date: Fri, 31 Mar 2023 10:34:52 +0200
+Subject: [PATCH RFC 14/20] dt-bindings: pinctrl: oxnas,pinctrl: remove
+ obsolete bindings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v1-9-5bd58fd1dd1f@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-14-5bd58fd1dd1f@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -88,263 +88,76 @@ Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, remove support
-for OX810 and OX820 nand.
+and since no new features will ever be added upstream, remove the
+OX810 and OX820 pinctrl bindings.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/mtd/nand/raw/Kconfig      |   7 --
- drivers/mtd/nand/raw/Makefile     |   1 -
- drivers/mtd/nand/raw/oxnas_nand.c | 211 --------------------------------------
- 3 files changed, 219 deletions(-)
+ .../devicetree/bindings/pinctrl/oxnas,pinctrl.txt  | 56 ----------------------
+ 1 file changed, 56 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 170f1185ddc4..aae4c56fe1db 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -204,13 +204,6 @@ config MTD_NAND_BCM47XXNFLASH
- 	  registered by bcma as platform devices. This enables driver for
- 	  NAND flash memories. For now only BCM4706 is supported.
- 
--config MTD_NAND_OXNAS
--	tristate "Oxford Semiconductor NAND controller"
--	depends on ARCH_OXNAS || COMPILE_TEST
--	depends on HAS_IOMEM
--	help
--	  This enables the NAND flash controller on Oxford Semiconductor SoCs.
--
- config MTD_NAND_MPC5121_NFC
- 	tristate "MPC5121 NAND controller"
- 	depends on PPC_MPC512x
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index 917cdfb815b9..53cb380122a5 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -26,7 +26,6 @@ obj-$(CONFIG_MTD_NAND_MARVELL)		+= marvell_nand.o
- obj-$(CONFIG_MTD_NAND_PLATFORM)		+= plat_nand.o
- obj-$(CONFIG_MTD_NAND_PASEMI)		+= pasemi_nand.o
- obj-$(CONFIG_MTD_NAND_ORION)		+= orion_nand.o
--obj-$(CONFIG_MTD_NAND_OXNAS)		+= oxnas_nand.o
- obj-$(CONFIG_MTD_NAND_FSL_ELBC)		+= fsl_elbc_nand.o
- obj-$(CONFIG_MTD_NAND_FSL_IFC)		+= fsl_ifc_nand.o
- obj-$(CONFIG_MTD_NAND_FSL_UPM)		+= fsl_upm.o
-diff --git a/drivers/mtd/nand/raw/oxnas_nand.c b/drivers/mtd/nand/raw/oxnas_nand.c
+diff --git a/Documentation/devicetree/bindings/pinctrl/oxnas,pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/oxnas,pinctrl.txt
 deleted file mode 100644
-index cd112d45e0b5..000000000000
---- a/drivers/mtd/nand/raw/oxnas_nand.c
+index b1159434f593..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/oxnas,pinctrl.txt
 +++ /dev/null
-@@ -1,211 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Oxford Semiconductor OXNAS NAND driver
+@@ -1,56 +0,0 @@
+-* Oxford Semiconductor OXNAS SoC Family Pin Controller
 -
-- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
-- * Heavily based on plat_nand.c :
-- * Author: Vitaly Wool <vitalywool@gmail.com>
-- * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
-- * Copyright (C) 2012 John Crispin <blogic@openwrt.org>
-- */
+-Please refer to pinctrl-bindings.txt, ../gpio/gpio.txt, and
+-../interrupt-controller/interrupts.txt for generic information regarding
+-pin controller, GPIO, and interrupt bindings.
 -
--#include <linux/err.h>
--#include <linux/io.h>
--#include <linux/module.h>
--#include <linux/platform_device.h>
--#include <linux/slab.h>
--#include <linux/clk.h>
--#include <linux/reset.h>
--#include <linux/mtd/mtd.h>
--#include <linux/mtd/rawnand.h>
--#include <linux/mtd/partitions.h>
--#include <linux/of.h>
+-OXNAS 'pin configuration node' is a node of a group of pins which can be
+-used for a specific device or function. This node represents configurations of
+-pins, optional function, and optional mux related configuration.
 -
--/* Nand commands */
--#define OXNAS_NAND_CMD_ALE		BIT(18)
--#define OXNAS_NAND_CMD_CLE		BIT(19)
+-Required properties for pin controller node:
+- - compatible: "oxsemi,ox810se-pinctrl" or "oxsemi,ox820-pinctrl"
+- - oxsemi,sys-ctrl: a phandle to the system controller syscon node
 -
--#define OXNAS_NAND_MAX_CHIPS	1
+-Required properties for pin configuration sub-nodes:
+- - pins: List of pins to which the configuration applies.
 -
--struct oxnas_nand_ctrl {
--	struct nand_controller base;
--	void __iomem *io_base;
--	struct clk *clk;
--	struct nand_chip *chips[OXNAS_NAND_MAX_CHIPS];
--	unsigned int nchips;
+-Optional properties for pin configuration sub-nodes:
+-----------------------------------------------------
+- - function: Mux function for the specified pins.
+- - bias-pull-up: Enable weak pull-up.
+-
+-Example:
+-
+-pinctrl: pinctrl {
+-	compatible = "oxsemi,ox810se-pinctrl";
+-
+-	/* Regmap for sys registers */
+-	oxsemi,sys-ctrl = <&sys>;
+-
+-	pinctrl_uart2: pinctrl_uart2 {
+-		uart2a {
+-			pins = "gpio31";
+-			function = "fct3";
+-		};
+-		uart2b {
+-			pins = "gpio32";
+-			function = "fct3";
+-		};
+-	};
 -};
 -
--static uint8_t oxnas_nand_read_byte(struct nand_chip *chip)
--{
--	struct oxnas_nand_ctrl *oxnas = nand_get_controller_data(chip);
--
--	return readb(oxnas->io_base);
--}
--
--static void oxnas_nand_read_buf(struct nand_chip *chip, u8 *buf, int len)
--{
--	struct oxnas_nand_ctrl *oxnas = nand_get_controller_data(chip);
--
--	ioread8_rep(oxnas->io_base, buf, len);
--}
--
--static void oxnas_nand_write_buf(struct nand_chip *chip, const u8 *buf,
--				 int len)
--{
--	struct oxnas_nand_ctrl *oxnas = nand_get_controller_data(chip);
--
--	iowrite8_rep(oxnas->io_base, buf, len);
--}
--
--/* Single CS command control */
--static void oxnas_nand_cmd_ctrl(struct nand_chip *chip, int cmd,
--				unsigned int ctrl)
--{
--	struct oxnas_nand_ctrl *oxnas = nand_get_controller_data(chip);
--
--	if (ctrl & NAND_CLE)
--		writeb(cmd, oxnas->io_base + OXNAS_NAND_CMD_CLE);
--	else if (ctrl & NAND_ALE)
--		writeb(cmd, oxnas->io_base + OXNAS_NAND_CMD_ALE);
--}
--
--/*
-- * Probe for the NAND device.
-- */
--static int oxnas_nand_probe(struct platform_device *pdev)
--{
--	struct device_node *np = pdev->dev.of_node;
--	struct device_node *nand_np;
--	struct oxnas_nand_ctrl *oxnas;
--	struct nand_chip *chip;
--	struct mtd_info *mtd;
--	int count = 0;
--	int err = 0;
--	int i;
--
--	/* Allocate memory for the device structure (and zero it) */
--	oxnas = devm_kzalloc(&pdev->dev, sizeof(*oxnas),
--			     GFP_KERNEL);
--	if (!oxnas)
--		return -ENOMEM;
--
--	nand_controller_init(&oxnas->base);
--
--	oxnas->io_base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(oxnas->io_base))
--		return PTR_ERR(oxnas->io_base);
--
--	oxnas->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(oxnas->clk))
--		oxnas->clk = NULL;
--
--	/* Only a single chip node is supported */
--	count = of_get_child_count(np);
--	if (count > 1)
--		return -EINVAL;
--
--	err = clk_prepare_enable(oxnas->clk);
--	if (err)
--		return err;
--
--	device_reset_optional(&pdev->dev);
--
--	for_each_child_of_node(np, nand_np) {
--		chip = devm_kzalloc(&pdev->dev, sizeof(struct nand_chip),
--				    GFP_KERNEL);
--		if (!chip) {
--			err = -ENOMEM;
--			goto err_release_child;
--		}
--
--		chip->controller = &oxnas->base;
--
--		nand_set_flash_node(chip, nand_np);
--		nand_set_controller_data(chip, oxnas);
--
--		mtd = nand_to_mtd(chip);
--		mtd->dev.parent = &pdev->dev;
--		mtd->priv = chip;
--
--		chip->legacy.cmd_ctrl = oxnas_nand_cmd_ctrl;
--		chip->legacy.read_buf = oxnas_nand_read_buf;
--		chip->legacy.read_byte = oxnas_nand_read_byte;
--		chip->legacy.write_buf = oxnas_nand_write_buf;
--		chip->legacy.chip_delay = 30;
--
--		/* Scan to find existence of the device */
--		err = nand_scan(chip, 1);
--		if (err)
--			goto err_release_child;
--
--		err = mtd_device_register(mtd, NULL, 0);
--		if (err)
--			goto err_cleanup_nand;
--
--		oxnas->chips[oxnas->nchips++] = chip;
--	}
--
--	/* Exit if no chips found */
--	if (!oxnas->nchips) {
--		err = -ENODEV;
--		goto err_clk_unprepare;
--	}
--
--	platform_set_drvdata(pdev, oxnas);
--
--	return 0;
--
--err_cleanup_nand:
--	nand_cleanup(chip);
--err_release_child:
--	of_node_put(nand_np);
--
--	for (i = 0; i < oxnas->nchips; i++) {
--		chip = oxnas->chips[i];
--		WARN_ON(mtd_device_unregister(nand_to_mtd(chip)));
--		nand_cleanup(chip);
--	}
--
--err_clk_unprepare:
--	clk_disable_unprepare(oxnas->clk);
--	return err;
--}
--
--static int oxnas_nand_remove(struct platform_device *pdev)
--{
--	struct oxnas_nand_ctrl *oxnas = platform_get_drvdata(pdev);
--	struct nand_chip *chip;
--	int i;
--
--	for (i = 0; i < oxnas->nchips; i++) {
--		chip = oxnas->chips[i];
--		WARN_ON(mtd_device_unregister(nand_to_mtd(chip)));
--		nand_cleanup(chip);
--	}
--
--	clk_disable_unprepare(oxnas->clk);
--
--	return 0;
--}
--
--static const struct of_device_id oxnas_nand_match[] = {
--	{ .compatible = "oxsemi,ox820-nand" },
--	{},
+-uart2: serial@900000 {
+-	compatible = "ns16550a";
+-	reg = <0x900000 0x100000>;
+-	clocks = <&sysclk>;
+-	interrupts = <29>;
+-	reg-shift = <0>;
+-	fifo-size = <16>;
+-	reg-io-width = <1>;
+-	current-speed = <115200>;
+-	no-loopback-test;
+-	resets = <&reset 22>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart2>;
 -};
--MODULE_DEVICE_TABLE(of, oxnas_nand_match);
--
--static struct platform_driver oxnas_nand_driver = {
--	.probe	= oxnas_nand_probe,
--	.remove	= oxnas_nand_remove,
--	.driver	= {
--		.name		= "oxnas_nand",
--		.of_match_table = oxnas_nand_match,
--	},
--};
--
--module_platform_driver(oxnas_nand_driver);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
--MODULE_DESCRIPTION("Oxnas NAND driver");
--MODULE_ALIAS("platform:oxnas_nand");
 
 -- 
 2.34.1
