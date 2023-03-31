@@ -1,636 +1,192 @@
-Return-Path: <SRS0=47lo=7W=rdlkiev.in.ua=info@kernel.org>
+Return-Path: <SRS0=bmCH=7X=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BF67C6FD1D
-	for <soc@archiver.kernel.org>; Thu, 30 Mar 2023 22:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7817C6FD18
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 08:34:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1F837C433EF; Thu, 30 Mar 2023 22:11:10 +0000 (UTC)
-Received: from rdlkiev.in.ua (rdlkiev.in.ua [194.113.235.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 579B4C43446; Fri, 31 Mar 2023 08:34:49 +0000 (UTC)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8C700C433D2
-	for <soc@kernel.org>; Thu, 30 Mar 2023 22:11:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8C700C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=rdlkiev.in.ua
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=rdlkiev.in.ua
-Message-ID: <2ed0d4c337f730ddfee3ea41b4f00a0e3edc0409@rdlkiev.in.ua>
-Reply-To: Xenia <reply@rdlkiev.in.ua>
-From: Xenia <info@rdlkiev.in.ua>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Subject: =?utf-8?B?0K/QuiDQv9GA0L7RgtC40YHRgtC+0Y/RgtC4INGF0LjRgtGA0L7RidCw0Lw=?=
-	=?utf-8?B?INGWINC/0YDQuNGF0L7QstCw0L3QuNC8INGG0ZbQu9GP0Lwg0YHQv9GW0LI=?=
-	=?utf-8?B?0YDQvtC30LzQvtCy0L3QuNC60LA=?=
-Date: Fri, 31 Mar 2023 01:11:02 +0300
+	by smtp.kernel.org (Postfix) with ESMTPS id E7859C433D2
+	for <soc@kernel.org>; Fri, 31 Mar 2023 08:34:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E7859C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id q19so18516577wrc.5
+        for <soc@kernel.org>; Fri, 31 Mar 2023 01:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680251684;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKmFDwBzmqKaD1W7wuLHbQZgTpJgWQagzC13l4DdTqw=;
+        b=ez7Y8DKhU9m8mENWYc8eLh3UjQj04JKUYpk8LZc0Cgj82lGXgAqKThXbmY29WwZFpa
+         8iJCKddXPmrHzPzXLQ682kWfEp0XTxPc6/GH5fWihQi5njtBGVCzQSKchgik6ZjPxGVs
+         LJ6kI8ENaL4ylviyHLejBooWU1vyhc5pUBM2V6BzXIypiwp1tF0C80ee0BcHRFohBjvs
+         PS3KjixZZ5L0SEv7mF4LYg/aatUGXQwxrjYjN3GBCSHubljOca4C/g7Smtoai9yEYKM2
+         MPuBgGNvstDtP1p1JijRIUW+SkbLI/c5/0B4ugSh+dx2vHET0l1a/8etg25rGkrvIHls
+         EkFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680251684;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKmFDwBzmqKaD1W7wuLHbQZgTpJgWQagzC13l4DdTqw=;
+        b=JIBr4XfplbvrxxU3N9DdIyHkScHsBVX0rYrqT21Y7JqLxhgUmDo4HSSz7RtVWAygn5
+         8XQOR1JcpzNCdeM2O78Y2BGJ4wVgaVV+tGzf+pZmqBEuui0SZpt7gDNSflYkaUCc9t39
+         RpTr30MQapENa91gG9q/sVu2d944YdImtztRLkUecMJXA+l+ZCUKDoLZ7ePUEKi4pDK7
+         PlMuFw5l6Tqr+errQ0LbbYMCaQycC/cT+84lF0PUIU9r5S2+JTI8G0KJaxeg/MH6o4FM
+         ZiS5ctKxjoszLBe6v93wdpMmJfsvBaiFe1kJOd6NUtV8UmyTxiV1XbjUccBJ/432ilde
+         yp/A==
+X-Gm-Message-State: AAQBX9eFBnOeeGdtRXbDNxCReXt1J3e+mFjk+uoHgGIR84v6Y6sMcF5V
+	bL6nQEZcmcJS3IQnEq/HEk8Isg==
+X-Google-Smtp-Source: AKy350ZffcjiZSGBVm/JblhOGFpZodzn92ieAjz2v27srUZ+zaxOkeHyJPQUex2yEMscYYMGa2NW2w==
+X-Received: by 2002:a5d:58c9:0:b0:2cf:e34c:a229 with SMTP id o9-20020a5d58c9000000b002cfe34ca229mr22477632wrf.8.1680251684116;
+        Fri, 31 Mar 2023 01:34:44 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b002cde626cd96sm1563153wru.65.2023.03.31.01.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 01:34:43 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH RFC 00/20] ARM: oxnas support removal
+Date: Fri, 31 Mar 2023 10:34:38 +0200
+Message-Id: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/alternative; boundary="a0cf862930123884e74d052e0ac1f876521c"
-List-Unsubscribe: <https://senkiv.com/Server-Side/amsweb.php?LWwrjJutltlIWqqRQmbISrB2GHDI74C98NWB86kp9Ov2OYbivh%2BDKcZ21uc7DxI4al6anKkdT6G%2BGfL3myb7%2BZMPIphj3nba1fff2BLrhZ4v4IDRnig1%2BlOsC%2BOTQ9S1HLKNlRubEKWNOwvrsUgN0DcI6R6ex9u4vaMFeH%2BGDAk%3D>
-DKIM-Signature: v=1; c=relaxed/relaxed; a=rsa-sha256; s=mail; d=rdlkiev.in.ua;
-	t=1680214262; h=message-id:from:to:subject:date:mime-version:list-unsubscribe;
-	bh=6tarwQCsx/5fHUPE5BLpSUQJv9wuo9f7koTxi0kMn2s=;
-	b=q79bCAinzLqdTlxCmxuoCcYnTkX9H+b1IYBQbAvOQRJtAvqhFgsiApW0dMSWgFnffxoUQsRX
-	u3TgoPliwJGeCmqLSdtXjXdJKEA5BEfui3r8mEYuQ5EtdERHkqbN2wH027uoIGT87ollFdFLVP
-	otxAks0VsLRb85aKP4Got4V8g=
-
---a0cf862930123884e74d052e0ac1f876521c
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB6bJmQC/x2NwQqDMBAFf0X23AVNQLDXQj+g19JDjM+6oEnIq
+ gjivzf0OHOYOUmRBUr36qSMXVRiKNDcKvKTC1+wDIXJ1MbW1ja8xiSe4xGc8pZ0zXALZyxxB7v
+ WoBu6dgRApdA7BffZBT+VRtjmuciUMcrxX77p9XzQ57p+JL2B/4cAAAA=
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
+ soc@kernel.org, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Russell King <linux@armlinux.org.uk>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Jose Abreu <joabreu@synopsys.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Sebastian Reichel <sre@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, netdev@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.1
 
-=D0=9C=D0=B0=D0=B9=D1=81=D1=82=D0=B5=D1=80 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=
-=D1=96=D0=B2=D0=B5=D0=BB=D1=8C: =D1=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=D1=82=
-=D0=B0=D1=82=D0=B8=D0=B2=D0=BD=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=
-=D0=B2=D0=BE=D1=80=D0=B8.
+With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+associated with a clear lack of maintainance, development and migration to
+dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
 
-=D0=9F=D0=BE=D0=BD=D0=B0=D0=B4 50% =D0=B5=D1=84=D0=B5=D0=BA=D1=82=D0=B8=D0=
-=B2=D0=BD=D0=BE=D1=81=D1=82=D1=96 =D0=B2=D1=81=D1=8C=D0=BE=D0=B3=D0=BE =D0=
-=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81=D1=83 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=
-=96=D0=B2=D0=B5=D0=BB=D1=8C =D0=B7=D0=B0=D0=BB=D0=B5=D0=B6=D0=B0=D1=82=D1=
-=8C =D0=B2=D1=96=D0=B4 =D1=82=D0=BE=D0=B3=D0=BE, =D1=8F=D0=BA =D0=B1=D1=83=
-=D0=BB=D0=BE =D0=BF=D1=96=D0=B4=D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=BB=D0=B5=
-=D0=BD=D0=BE =D1=82=D0=B0 =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D0=B4=D0=B5=D0=BD=
-=D0=BE =D0=B2=D1=96=D0=B4=D0=BF=D0=BE=D0=B2=D1=96=D0=B4=D0=BD=D1=96 =D0=BF=
-=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8. =D0=9F=D1=80=D0=BE=
- =D1=82=D0=B5, =D1=8F=D0=BA =D0=B4=D0=BE=D1=81=D1=8F=D0=B3=D1=82=D0=B8 =D0=
-=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D0=BE=D0=B3=D0=BE =D1=80=D0=B5=D0=
-=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=82=D1=83, =D1=8F=D0=BA=D1=96 =D0=BC=D0=
-=B5=D1=82=D0=BE=D0=B4=D0=B8 =D0=B7=D0=B0=D1=81=D1=82=D0=BE=D1=81=D1=83=D0=
-=B2=D0=B0=D1=82=D0=B8 =D0=BF=D1=96=D0=B4 =D1=87=D0=B0=D1=81 =D0=BF=D0=B5=D1=
-=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2, =D0=92=D0=B8 =D0=B4=D1=
-=96=D0=B7=D0=BD=D0=B0=D1=94=D1=82=D0=B5=D1=81=D1=8C =D0=BD=D0=B0 =D1=86=D1=
-=8C=D0=BE=D0=BC=D1=83 =D1=82=D1=80=D0=B5=D0=BD=D1=96=D0=BD=D0=B3=D1=83.
+In addition, the OX810 hasn't been booted for years and isn't even present
+in an ARM config file.
 
-=D0=97=D0=BC=D1=96=D1=81=D1=82: =C2=A0=C2=A0=C2=A0
-=D0=91=D0=9B=D0=9E=D0=9A 1. =D0=9F=D1=96=D0=B4=D0=B3=D0=BE=D1=82=D0=BE=D0=
-=B2=D0=BA=D0=B0 =D0=B4=D0=BE =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=
-=BE=D1=80=D1=96=D0=B2 =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=
-=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8. =D0=9A=D0=BE=D1=80=D0=
-=B8=D0=B3=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =D1=96=D0=BD=D0=B4=D0=B8=D0=
-=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=D1=8C=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D1=
-=82=D0=B8=D0=BB=D1=8E =D0=B2=D0=B5=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=
-=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2. =D0=9F=D1=80=D0=
-=B8=D0=BD=D1=86=D0=B8=D0=BF=D0=B8 =D1=84=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=
-=B0=D0=BD=D0=BD=D1=8F "=D0=9E=D0=A1=D0=9E=D0=91=D0=9B=D0=98=D0=92=D0=9E=D0=
-=93=D0=9E =D0=91=D0=A0=D0=95=D0=9D=D0=94=D0=A3". =D0=A4=D0=BE=D1=80=D0=BC=
-=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =D0=B7=D0=BE=D0=BD=D0=B8 =D0=B7=D1=80=
-=D0=BE=D1=81=D1=82=D0=B0=D0=BD=D0=BD=D1=8F =D1=82=D0=B0 =D1=80=D0=BE=D0=B7=
-=D0=B2=D0=B8=D1=82=D0=BA=D1=83. =C2=A0=C2=A0=C2=A0
-- =D0=9D=D0=B0=D1=81=D0=B0=D0=BC=D0=BF=D0=B5=D1=80=D0=B5=D0=B4 =D0=BD=D0=B5=
-=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=D0=BE =D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=
-=D1=87=D0=B8=D1=82=D0=B8 =D0=BC=D0=B5=D1=82=D1=83 =D0=B4=D0=B0=D0=BD=D0=B8=
-=D1=85 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2=
-. =D0=9F=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =E2=80=93 =
-=D1=86=D0=B5 =D1=82=D0=BE=D1=80=D0=B3=D0=B8, =D1=82=D0=BE=D0=BC=D1=83 =D0=
-=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=D0=BE =D0=B2=D0=B8=D0=B7=D0=
-=BD=D0=B0=D1=87=D0=B8=D1=82=D0=B8 =D0=B4=D1=96=D0=B0=D0=BF=D0=B0=D0=B7=D0=
-=BE=D0=BD =D1=86=D1=96=D0=BB=D0=B5=D0=B9 =E2=80=93 =D0=BC=D1=96=D0=BD=D1=96=
-=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=B9 =D1=82=D0=B0 =D0=BC=D0=B0=D0=BA=
-=D1=81=D0=B8=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=B9 =D1=80=D0=B5=D0=B7=
-=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=82=D0=B8.
+For the OX820, lack of USB and SATA support makes the platform not usable
+in the current Linux support and relies on off-tree drivers hacked from the
+vendor (defunct for years) sources.
 
-=D0=91=D0=9B=D0=9E=D0=9A 2. =D0=9F=D1=81=D0=B8=D1=85=D0=BE=D0=BB=D0=BE=D0=
-=B3=D1=96=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=
-=96=D0=B2 =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=
-=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=
-=B5=D1=84=D0=BE=D0=BD=D1=83 =D1=82=D0=B0 =D0=BF=D1=80=D0=B8 =D1=96=D0=BD=D0=
-=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D1=85 =D0=
-=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D0=B0=D1=85. =C2=A0=C2=A0=C2=A0
+The last users are in the OpenWRT distribution, and today's removal means
+support will still be in stable 6.1 LTS kernel until end of 2026.
 
-=D0=91=D0=9B=D0=9E=D0=9A 3. =D0=9F=D1=81=D0=B8=D1=85=D0=BE=D0=BB=D0=BE=D0=
-=B3=D1=96=D1=87=D0=BD=D1=96 =D1=85=D0=B0=D1=80=D0=B0=D0=BA=D1=82=D0=B5=D1=
-=80=D0=B8=D1=81=D1=82=D0=B8=D0=BA=D0=B8 =D0=BE=D1=81=D0=BE=D0=B1=D0=B8=D1=
-=81=D1=82=D0=BE=D1=81=D1=82=D1=96 =D0=9C=D0=B5=D0=BD=D0=B5=D0=B4=D0=B6=D0=
-=B5=D1=80=D0=B0 =D1=96=D0=B7 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=D0=B2=D0=
-=B5=D0=BB=D1=8C =D0=B7 =D1=83=D1=80=D0=B0=D1=85=D1=83=D0=B2=D0=B0=D0=BD=D0=
-=BD=D1=8F=D0=BC =D1=81=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=D0=BA=D0=B8 =D0=
-=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=D0=B2=D0=B5=D0=BB=D1=8C=D0=BD=D0=BE=D1=97=
- =D0=B4=D1=96=D1=8F=D0=BB=D1=8C=D0=BD=D0=BE=D1=81=D1=82=D1=96 =C2=A0=C2=A0=
-=C2=A0
+If someone wants to take over the development even with lack of SMP, I'll
+be happy to hand off maintainance.
 
-=D0=91=D0=9B=D0=9E=D0=9A 4. =D0=9E=D1=80=D0=B3=D0=B0=D0=BD=D1=96=D0=B7=D0=
-=B0=D1=86=D1=96=D1=8F =D1=82=D0=B0 =D0=BA=D0=BE=D0=BE=D1=80=D0=B4=D0=B8=D0=
-=BD=D0=B0=D1=86=D1=96=D1=8F =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=D0=B2=D0=
-=B5=D0=BB=D1=8C=D0=BD=D0=BE=D1=8E =D0=B4=D1=96=D1=8F=D0=BB=D1=8C=D0=BD=D1=
-=96=D1=81=D1=82=D1=8E =C2=A0=C2=A0=C2=A0
+The plan is to apply the first 4 patches first, then the drivers
+followed by bindings. Finally the MAINTAINANCE entry can be removed.
 
-=D0=91=D0=9B=D0=9E=D0=9A 5. =D0=A0=D0=BE=D0=B1=D0=BE=D1=82=D0=B0 =D0=B7 =D0=
-=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0=
-=D0=BC=D0=B8: =C2=A0=C2=A0=C2=A0
-- =D0=B2=D0=B8=D0=B2=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=BC=D0=B5=D1=82=D0=BE=
-=D0=B4=D0=B8=D0=BA =D0=BE=D0=B1'=D1=94=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=
-=D1=97 =D0=BE=D1=86=D1=96=D0=BD=D0=BA=D0=B8 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=
-=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D1=96=D0=B2; =C2=A0=C2=A0=C2=A0
-- =D0=BF=D0=BE=D1=88=D1=83=D0=BA =D0=B4=D0=B6=D0=B5=D1=80=D0=B5=D0=BB =D1=
-=82=D0=B0 =D0=B7=D0=B1=D1=96=D1=80 =D0=B2=D1=96=D0=B4=D0=BE=D0=BC=D0=BE=D1=
-=81=D1=82=D0=B5=D0=B9 =D0=BF=D1=80=D0=BE =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=
-=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D1=96=D0=B2; =C2=A0=C2=A0=C2=A0
-- =D0=BF=D0=B5=D1=80=D0=B5=D0=BB=D1=96=D0=BA =D0=BE=D1=81=D0=BD=D0=BE=D0=B2=
-=D0=BD=D0=B8=D1=85 =D0=BA=D1=80=D0=B8=D1=82=D0=B5=D1=80=D1=96=D1=97=D0=B2=
- =D0=BE=D1=86=D1=96=D0=BD=D0=BA=D0=B8 =D0=B2=D0=B8=D0=B1=D0=BE=D1=80=D1=83=
- =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=
-=D0=B0;
-- =D1=80=D0=B5=D0=B9=D1=82=D0=B8=D0=BD=D0=B3 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=
-=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D1=96=D0=B2 =D0=B7=D0=B0 =D1=80=
-=D1=96=D0=B2=D0=BD=D0=B5=D0=BC =D1=97=D1=85=D0=BD=D1=8C=D0=BE=D1=97 =D1=86=
-=D1=96=D0=BD=D0=BD=D0=BE=D1=81=D1=82=D1=96 =D0=B4=D0=BB=D1=8F =D0=BA=D0=BE=
-=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=D1=97;
-- =D0=86=D1=81=D0=BD=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =D1=81=D1=82=D1=80=
-=D0=B0=D1=82=D0=B5=D0=B3=D1=96=D0=B9 =D1=81=D1=82=D0=B2=D0=BE=D1=80=D0=B5=
-=D0=BD=D0=BD=D1=8F =D1=82=D1=80=D0=B8=D0=B2=D0=B0=D0=BB=D0=B8=D1=85 =D0=B2=
-=D0=B7=D0=B0=D1=94=D0=BC=D0=B8=D0=BD =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=
-=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8.
+I'm not sure about the process of bindings removal, but perhaps the bindings
+should be marked as deprecated first then removed later on ?
 
-=D0=91=D0=9B=D0=9E=D0=9A 6. =D0=A1=D1=82=D1=80=D0=B0=D1=82=D0=B5=D0=B3=D1=
-=96=D1=87=D0=BD=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=
-=80=D0=B8 =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=
-=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8. =D0=9F=D0=B5=D1=80=D0=B5=D0=B3=D0=
-=BE=D0=B2=D0=BE=D1=80=D0=B8 =D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=
-=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=BE=D0=BC =D0=BF=D0=BE =D1=82=D0=B5=D0=
-=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83: =C2=A0=C2=A0=C2=A0
-- =D1=81=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=D0=BA=D0=B0 =D1=82=D0=B5=D0=BB=
-=D0=B5=D1=84=D0=BE=D0=BD=D0=BD=D0=B8=D1=85 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=
-=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2;
-- =D0=9F=D0=B5=D1=80=D0=B5=D0=B2=D0=B0=D0=B3=D0=B8 =D1=82=D0=B0 =D1=81=D0=
-=BA=D0=BB=D0=B0=D0=B4=D0=BD=D0=BE=D1=81=D1=82=D1=96 =D0=BF=D1=80=D0=BE=D0=
-=B2=D0=B5=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=
-=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=
-=84=D0=BE=D0=BD=D1=83;
-- =D0=AF=D0=BA =D0=B7=D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D1=82=D0=B5=D0=
-=BB=D0=B5=D1=84=D0=BE=D0=BD=D0=BD=D1=83 =D1=80=D0=BE=D0=B7=D0=BC=D0=BE=D0=
-=B2=D1=83 =D0=BD=D0=B0=D0=B9=D0=B1=D1=96=D0=BB=D1=8C=D1=88 =D0=B5=D1=84=D0=
-=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=D1=8E;
-- =D0=B5=D1=84=D0=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D1=96 =D0=BF=D0=B8=D1=82=
-=D0=B0=D0=BD=D0=BD=D1=8F =D0=B4=D0=BB=D1=8F =D0=BE=D1=82=D1=80=D0=B8=D0=BC=
-=D0=B0=D0=BD=D0=BD=D1=8F =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=
-=D0=BE=D1=97 =D1=96=D0=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=D1=96=D1=97=
- =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83;
-- =D0=A3=D0=BF=D1=80=D0=B0=D0=B2=D0=BB=D1=96=D0=BD=D0=BD=D1=8F =D0=B3=D0=BE=
-=D0=BB=D0=BE=D1=81=D0=BE=D0=BC. =C2=A0=C2=A0=C2=A0
+It has been a fun time adding support for this architecture, but it's time
+to get over!
 
-=D0=91=D0=9B=D0=9E=D0=9A 7. =D0=92=D0=B5=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D1=
-=82=D0=B0 =D1=83=D0=BF=D1=80=D0=B0=D0=B2=D0=BB=D1=96=D0=BD=D0=BD=D1=8F =D0=
-=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=BD=D0=B8=D0=BC =D0=
-=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81=D0=BE=D0=BC: =C2=A0=C2=A0=C2=A0
-- =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D1=80=D0=BE=
-=D0=B2=D1=96=D0=B4=D0=BD=D0=B8=D1=85 =D0=BC=D0=BE=D1=82=D0=B8=D0=B2=D1=96=
-=D0=B2 =D0=BF=D1=80=D0=B5=D0=B4=D1=81=D1=82=D0=B0=D0=B2=D0=BD=D0=B8=D0=BA=
-=D0=B0 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=
-=D0=BA=D0=B0;
-- =D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=81=D0=BF=
-=D1=96=D0=BB=D1=8C=D0=BD=D0=BE=D1=97 =D0=B7=D0=BE=D0=BD=D0=B8 =D1=96=D0=BD=
-=D1=82=D0=B5=D1=80=D0=B5=D1=81=D1=96=D0=B2; =C2=A0=C2=A0=C2=A0
-- =D0=90=D0=BD=D0=B0=D0=BB=D1=96=D0=B7 =D1=82=D0=B0 =D1=84=D0=BE=D1=80=D0=
-=BC=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =C2=AB=D0=BC=D0=BE=D0=B4=D0=B5=D0=
-=BB=D1=96 =D1=81=D0=B2=D1=96=D1=82=D1=83=C2=BB =D0=BE=D0=BF=D0=BE=D0=BD=D0=
-=B5=D0=BD=D1=82=D0=B0; =C2=A0=C2=A0=C2=A0
-- =D0=A0=D0=B5=D0=B7=D1=8E=D0=BC=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =E2=80=
-=93 =D0=BF=D0=B5=D1=80=D0=B5=D1=85=D1=96=D0=B4 =D0=B4=D0=BE =D0=B4=D1=96=D0=
-=B0=D0=BB=D0=BE=D0=B3=D1=83 =D0=BF=D1=80=D0=BE =D1=81=D0=BF=D1=96=D0=B2=D0=
-=BF=D1=80=D0=B0=D1=86=D1=8E;
-- =D0=9F=D0=B5=D1=80=D0=B5=D0=BA=D0=BE=D0=BD=D0=BB=D0=B8=D0=B2=D1=96=D1=81=
-=D1=82=D1=8C =D1=82=D0=B0 =D0=B0=D1=80=D0=B3=D1=83=D0=BC=D0=B5=D0=BD=D1=82=
-=D0=B0=D1=86=D1=96=D1=8F =D0=BF=D1=80=D0=BE=D0=BF=D0=BE=D0=B7=D0=B8=D1=86=
-=D1=96=D1=97. =C2=A0=C2=A0=C2=A0
+Patch 2 obviously depends on [1].
 
-=D0=91=D0=9B=D0=9E=D0=9A 8. =D0=9C=D0=B0=D0=BD=D1=96=D0=BF=D1=83=D0=BB=D1=
-=8F=D1=86=D1=96=D1=8F =D1=82=D0=B0 =D1=82=D0=B8=D1=81=D0=BA =E2=80=93 =D0=
-=B7=D0=B0=D1=85=D0=B8=D1=81=D1=82 =D1=96 =D0=BF=D1=80=D0=BE=D1=82=D0=B8=D0=
-=B4=D1=96=D1=8F: =C2=A0=C2=A0=C2=A0
-- =D0=BF=D0=BE=D0=B7=D0=B8=D1=86=D1=96=D1=8F =D0=BF=D0=BE=D0=BA=D1=83=D0=BF=
-=D1=86=D1=8F =D0=BD=D0=B0 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=
-=D1=80=D0=B0=D1=85, =D1=96 =D1=8F=D0=BA =D0=BD=D0=B0=D1=81 =D1=81=D0=BF=D1=
-=80=D0=B8=D0=B9=D0=BC=D0=B0=D1=8E=D1=82=D1=8C =D0=BF=D1=80=D0=BE=D0=B4=D0=
-=B0=D0=B2=D1=86=D1=96;
-- =D1=82=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D1=83=D0=BF=D1=80=D0=B0=D0=B2=
-=D0=BB=D1=96=D0=BD=D0=BD=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=
-=D0=BE=D1=80=D0=B0=D0=BC=D0=B8 =D1=87=D0=B5=D1=80=D0=B5=D0=B7 =D0=BF=D0=B5=
-=D1=80=D0=B5=D1=85=D0=BE=D0=BF=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D1=96=D0=BD=
-=D1=96=D1=86=D1=96=D0=B0=D1=82=D0=B8=D0=B2=D0=B8;
-- =D0=9F=D0=BE=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D0=BC=D0=B0=D0=BD=D1=96=D0=BF=
-=D1=83=D0=BB=D1=8F=D1=86=D1=96=D1=97. =D0=92=D0=B8=D0=B4=D0=B8 =D1=82=D0=B0=
- =D0=BC=D0=B5=D1=85=D0=B0=D0=BD=D1=96=D0=B7=D0=BC=D0=B8 =D0=BC=D0=B0=D0=BD=
-=D1=96=D0=BF=D1=83=D0=BB=D1=8F=D1=86=D1=96=D0=B9. =D1=81=D0=BF=D0=BE=D1=81=
-=D0=BE=D0=B1=D0=B8 =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F=
- =D0=BC=D0=B0=D0=BD=D1=96=D0=BF=D1=83=D0=BB=D1=8F=D1=86=D1=96=D0=B9;
-- =D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=82=D0=B8=
-=D0=BF=D1=83 =D1=82=D0=B0 =D0=BF=D1=80=D0=BE=D1=82=D0=B8=D1=81=D1=82=D0=BE=
-=D1=8F=D0=BD=D0=BD=D1=8F =D0=BC=D0=B0=D0=BD=D1=96=D0=BF=D1=83=D0=BB=D1=8F=
-=D1=86=D1=96=D1=97; =C2=A0=C2=A0=C2=A0
+[1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
 
-=D0=91=D0=9B=D0=9E=D0=9A 9. =D0=9F=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=
-=BE=D1=80=D0=B8 =D1=89=D0=BE=D0=B4=D0=BE =D1=83=D0=BC=D0=BE=D0=B2 =D1=81=D0=
-=BF=D1=96=D0=B2=D1=80=D0=BE=D0=B1=D1=96=D1=82=D0=BD=D0=B8=D1=86=D1=82=D0=B2=
-=D0=B0 =E2=80=93 =D0=BA=D0=BB=D1=8E=D1=87=D0=BE=D0=B2=D0=B8=D0=B9 =D0=B5=D1=
-=82=D0=B0=D0=BF =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=
-=96=D0=B2. =D0=97=D0=B2=D0=BE=D1=80=D0=BE=D1=82=D0=BD=D1=96=D0=B9 =D0=B7=D0=
-=B2'=D1=8F=D0=B7=D0=BE=D0=BA =D1=82=D0=B0 =D0=BC=D0=BE=D0=B4=D0=B5=D0=BB=D1=
-=96 =D0=B2=D0=B7=D0=B0=D1=94=D0=BC=D0=BE=D0=B4=D1=96=D1=97 =D0=B7 =D0=BF=D0=
-=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=
-=D0=B8. =C2=A0=C2=A0=C2=A0
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (20):
+      ARM: dts: oxnas: remove obsolete device tree files
+      ARM: oxnas: remove OXNAS support
+      ARM: configs: remove oxnas_v6_defconfig
+      dt-bindings: arm: oxnas: remove obsolete bindings
+      clk: oxnas: remove obsolete clock driver
+      dt-bindings: clk: oxnas: remove obsolete bindings
+      clksource: timer-oxnas-rps: remove obsolete timer driver
+      dt-bindings: timer: oxsemi,rps-timer: remove obsolete bindings
+      nand: oxnas_nand: remove obsolete raw nand driver
+      dt-bindings: mtd: oxnas-nand: remove obsolete bindings
+      net: stmmac: dwmac-oxnas: remove obsolete dwmac glue driver
+      dt-bindings: net: oxnas-dwmac: remove obsolete bindings
+      pinctrl: pinctrl-oxnas: remove obsolete pinctrl driver
+      dt-bindings: pinctrl: oxnas,pinctrl: remove obsolete bindings
+      dt-bindings: gpio: gpio_oxnas: remove obsolete bindings
+      power: reset: oxnas-restart: remove obsolete restart driver
+      reset: oxnas: remove obsolete reset driver
+      irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
+      dt-bindings: interrupt-controller: arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+      MAINTAINERS: remove OXNAS entry
 
-=D0=92=D1=96=D0=B4=D0=B1=D1=83=D0=B4=D0=B5=D1=82=D1=8C=D1=81=D1=8F: =D0=9E=
-=D0=BD=D0=BB=D0=B0=D0=B9=D0=BD 4-5 =D0=BA=D0=B2=D1=96=D1=82=D0=BD=D1=8F =C2=
-=A0=C2=A0=C2=A0
+ Documentation/devicetree/bindings/arm/oxnas.txt    |   14 -
+ .../devicetree/bindings/clock/oxnas,stdclk.txt     |   28 -
+ .../devicetree/bindings/gpio/gpio_oxnas.txt        |   47 -
+ .../arm,versatile-fpga-irq.txt                     |    4 +-
+ .../devicetree/bindings/mtd/oxnas-nand.txt         |   41 -
+ .../devicetree/bindings/net/oxnas-dwmac.txt        |   41 -
+ .../devicetree/bindings/pinctrl/oxnas,pinctrl.txt  |   56 -
+ .../devicetree/bindings/reset/oxnas,reset.txt      |   32 -
+ .../devicetree/bindings/timer/oxsemi,rps-timer.txt |   17 -
+ MAINTAINERS                                        |   10 -
+ arch/arm/Makefile                                  |    1 -
+ arch/arm/boot/dts/Makefile                         |    3 -
+ arch/arm/boot/dts/ox810se-wd-mbwe.dts              |  115 --
+ arch/arm/boot/dts/ox810se.dtsi                     |  357 ------
+ .../dts/ox820-cloudengines-pogoplug-series-3.dts   |   93 --
+ arch/arm/boot/dts/ox820.dtsi                       |  299 -----
+ arch/arm/configs/oxnas_v6_defconfig                |   92 --
+ arch/arm/mach-oxnas/Kconfig                        |   34 -
+ arch/arm/mach-oxnas/Makefile                       |    1 -
+ drivers/clk/Kconfig                                |    7 -
+ drivers/clk/Makefile                               |    1 -
+ drivers/clk/clk-oxnas.c                            |  251 ----
+ drivers/clocksource/Kconfig                        |    7 -
+ drivers/clocksource/Makefile                       |    1 -
+ drivers/clocksource/timer-oxnas-rps.c              |  288 -----
+ drivers/irqchip/irq-versatile-fpga.c               |    1 -
+ drivers/mtd/nand/raw/Kconfig                       |    7 -
+ drivers/mtd/nand/raw/Makefile                      |    1 -
+ drivers/mtd/nand/raw/oxnas_nand.c                  |  211 ----
+ drivers/net/ethernet/stmicro/stmmac/Kconfig        |   11 -
+ drivers/net/ethernet/stmicro/stmmac/Makefile       |    1 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c  |  245 ----
+ drivers/pinctrl/Kconfig                            |   11 -
+ drivers/pinctrl/Makefile                           |    1 -
+ drivers/pinctrl/pinctrl-oxnas.c                    | 1292 --------------------
+ drivers/power/reset/Kconfig                        |    7 -
+ drivers/power/reset/Makefile                       |    1 -
+ drivers/power/reset/oxnas-restart.c                |  233 ----
+ drivers/reset/Kconfig                              |    3 -
+ drivers/reset/Makefile                             |    1 -
+ drivers/reset/reset-oxnas.c                        |  114 --
+ 41 files changed, 3 insertions(+), 3977 deletions(-)
+---
+base-commit: df45499b419b31c4d44ef9f1d1656d1fc0897014
+change-id: 20230331-topic-oxnas-upstream-remove-a62e9d96feee
 
-=D0=94=D1=96=D0=B7=D0=BD=D0=B0=D1=82=D0=B8=D1=81=D1=8F =D0=B1=D1=96=D0=BB=
-=D1=8C=D1=88=D0=B5 https://senkiv.com/training/188/mayster-zakup-vel-rezu=
-ltativn-peregovori-ta-upravl-nnya-postachalnikami.htm
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
-=D0=97=D0=B0=D0=BB=D0=B8=D1=88=D0=B8=D0=BB=D0=B8=D1=81=D1=8C =D0=BF=D0=B8=
-=D1=82=D0=B0=D0=BD=D0=BD=D1=8F? =C2=A0=C2=A0=C2=A0
--- =C2=A0=C2=A0=C2=A0
-=D0=97=C2=A0=D0=BF=D0=BE=D0=B2=D0=B0=D0=B3=D0=BE=D1=8E, =C2=A0=C2=A0=C2=A0
-=D0=A1=D0=BE=D1=84=D1=96=D1=8F =C2=A0=C2=A0=C2=A0
-email-=D0=BC=D0=B0=D1=80=D0=BA=D0=B5=D1=82=D0=BE=D0=BB=D0=BE=D0=B3 =C2=A0=
-=C2=A0=C2=A0
-
-=D0=97=D0=B0=D0=B4=D0=B0=D1=82=D0=B8 =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=
-=D1=8F: +38 /063/ 237 90 05
-=D0=94=D1=96=D0=B7=D0=BD=D0=B0=D1=82=D0=B8=D1=81=D1=8F =D0=B1=D1=96=D0=BB=
-=D1=8C=D1=88=D0=B5 HTTPS://SENKIV.COM/
-
-=D0=B1=D1=96=D0=BB=D1=8C=D1=88=D0=B5 =D0=BD=D0=B5 =D0=BE=D1=82=D1=80=D0=B8=
-=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8
-List-Unsubscribe
-
---a0cf862930123884e74d052e0ac1f876521c
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
-<style type=3D"text/css">BODY {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif
-}
-TD {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif
-}
-TH {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif
-}
-A {
-	FONT-SIZE: 13px; FONT-FAMILY: Verdana, Geneva, sans-serif; COLOR: #093
-}
-</style>
-
-<meta name=3DGENERATOR content=3D"-[OUTLOOK_VER]-"></head>
-<body>
-<table class=3Dwrapper-table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: c=
-ollapse; BACKGROUND-REPEAT: repeat-x; BACKGROUND-POSITION: left top; LINE=
--HEIGHT: 1.5; BACKGROUND-COLOR: rgb(0,218,132)" cellSpacing=3D0 cellPaddi=
-ng=3D5 width=3D"100%" align=3Dcenter bgColor=3D"#00da84" border=3D0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
-RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
-GHT-COLOR: transparent" align=3Dcenter>
-<table id=3DbodyTable style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse=
-; LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D10 width=3D650 bgColor=3D=
-"#ffffff" border=3D0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
-RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
-GHT-COLOR: transparent" cellspacing=3D0 cellpadding=3D0 border=3D0>
-<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
-LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
-0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
-p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: normal; BORDER-BOTTOM-COL=
-OR: transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" bgCol=
-or=3D"#d3e8c1" vAlign=3Dtop width=3D650 align=3Dleft cellspacing=3D0 cell=
-padding=3D0>
-<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
-1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
-width=3D"100%" bgColor=3D"#ffffff" border=3D0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
-RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
-GHT-COLOR: transparent" bgColor=3D"#d3e8c1" cellspacing=3D0 cellpadding=3D=
-0>
-<p align=3Dcenter><b><font color=3D"#ff0000" size=3D4>=D0=9C=D0=B0=D0=B9=D1=
-=81=D1=82=D0=B5=D1=80 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=D0=B2=D0=B5=D0=
-=BB=D1=8C: =D1=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=82=D0=B8=D0=
-=B2=D0=BD=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=
-=B8.</font></b></p></td></tr></tbody></table></th></tr></tbody></table>
-<table id=3Dwout_block_out_block_20 style=3D"FONT-SIZE: 14px; BORDER-COLL=
-APSE: collapse; FONT-WEIGHT: normal; MARGIN: 0px; LINE-HEIGHT: 1.5; text-=
-color: black" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
-<tbody>
-<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
-lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
-ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
--RIGHT-COLOR: transparent'>
-<td class=3Dcontent-cell style=3D"BORDER-TOP-COLOR: transparent; VERTICAL=
--ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; P=
-ADDING-BOTTOM: 15px; BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 15px;=
- PADDING-LEFT: 15px; BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px=
-" vAlign=3Dtop width=3D620>
-<p>=D0=9F=D0=BE=D0=BD=D0=B0=D0=B4 50% =D0=B5=D1=84=D0=B5=D0=BA=D1=82=D0=B8=
-=D0=B2=D0=BD=D0=BE=D1=81=D1=82=D1=96 =D0=B2=D1=81=D1=8C=D0=BE=D0=B3=D0=BE=
- =D0=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81=D1=83 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=
-=D1=96=D0=B2=D0=B5=D0=BB=D1=8C =D0=B7=D0=B0=D0=BB=D0=B5=D0=B6=D0=B0=D1=82=
-=D1=8C =D0=B2=D1=96=D0=B4 =D1=82=D0=BE=D0=B3=D0=BE, =D1=8F=D0=BA =D0=B1=D1=
-=83=D0=BB=D0=BE =D0=BF=D1=96=D0=B4=D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=BB=D0=
-=B5=D0=BD=D0=BE =D1=82=D0=B0 =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D0=B4=D0=B5=D0=
-=BD=D0=BE =D0=B2=D1=96=D0=B4=D0=BF=D0=BE=D0=B2=D1=96=D0=B4=D0=BD=D1=96 =D0=
-=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8. =D0=9F=D1=80=D0=
-=BE =D1=82=D0=B5, =D1=8F=D0=BA =D0=B4=D0=BE=D1=81=D1=8F=D0=B3=D1=82=D0=B8=
- =D0=BF=D0=BE=D1=82=D1=80=D1=96=D0=B1=D0=BD=D0=BE=D0=B3=D0=BE =D1=80=D0=B5=
-=D0=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=D1=82=D1=83, =D1=8F=D0=BA=D1=96 =D0=BC=
-=D0=B5=D1=82=D0=BE=D0=B4=D0=B8 =D0=B7=D0=B0=D1=81=D1=82=D0=BE=D1=81=D1=83=
-=D0=B2=D0=B0=D1=82=D0=B8 =D0=BF=D1=96=D0=B4 =D1=87=D0=B0=D1=81 =D0=BF=D0=B5=
-=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2, =D0=92=D0=B8 =D0=B4=
-=D1=96=D0=B7=D0=BD=D0=B0=D1=94=D1=82=D0=B5=D1=81=D1=8C =D0=BD=D0=B0 =D1=86=
-=D1=8C=D0=BE=D0=BC=D1=83 =D1=82=D1=80=D0=B5=D0=BD=D1=96=D0=BD=D0=B3=D1=83=
-.=20
-<hr>
-
-<p><font color=3D"#c10000" size=3D2><strong>=D0=97=D0=BC=D1=96=D1=81=D1=82=
-: &nbsp;&nbsp;&nbsp;</strong></font><br><strong>=D0=91=D0=9B=D0=9E=D0=9A =
-1.</strong> =D0=9F=D1=96=D0=B4=D0=B3=D0=BE=D1=82=D0=BE=D0=B2=D0=BA=D0=B0 =
-=D0=B4=D0=BE =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=
-=D0=B2 =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=
-=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8. =D0=9A=D0=BE=D1=80=D0=B8=D0=B3=D1=83=
-=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=
-=D1=83=D0=B0=D0=BB=D1=8C=D0=BD=D0=BE=D0=B3=D0=BE =D1=81=D1=82=D0=B8=D0=BB=
-=D1=8E =D0=B2=D0=B5=D0=B4=D0=B5=D0=BD=D0=BD=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=
-=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2. =D0=9F=D1=80=D0=B8=D0=BD=D1=86=
-=D0=B8=D0=BF=D0=B8 =D1=84=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=
-=D1=8F &quot;=D0=9E=D0=A1=D0=9E=D0=91=D0=9B=D0=98=D0=92=D0=9E=D0=93=D0=9E=
- =D0=91=D0=A0=D0=95=D0=9D=D0=94=D0=A3&quot;. =D0=A4=D0=BE=D1=80=D0=BC=D1=83=
-=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =D0=B7=D0=BE=D0=BD=D0=B8 =D0=B7=D1=80=D0=BE=
-=D1=81=D1=82=D0=B0=D0=BD=D0=BD=D1=8F =D1=82=D0=B0 =D1=80=D0=BE=D0=B7=D0=B2=
-=D0=B8=D1=82=D0=BA=D1=83. &nbsp;&nbsp;&nbsp;<br>- =D0=9D=D0=B0=D1=81=D0=B0=
-=D0=BC=D0=BF=D0=B5=D1=80=D0=B5=D0=B4 =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=
-=D0=B4=D0=BD=D0=BE =D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B8=D1=82=D0=B8=
- =D0=BC=D0=B5=D1=82=D1=83 =D0=B4=D0=B0=D0=BD=D0=B8=D1=85 =D0=BF=D0=B5=D1=80=
-=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2. =D0=9F=D0=B5=D1=80=D0=B5=
-=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =E2=80=93 =D1=86=D0=B5 =D1=82=D0=BE=D1=
-=80=D0=B3=D0=B8, =D1=82=D0=BE=D0=BC=D1=83 =D0=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=
-=96=D0=B4=D0=BD=D0=BE =D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B8=D1=82=D0=
-=B8 =D0=B4=D1=96=D0=B0=D0=BF=D0=B0=D0=B7=D0=BE=D0=BD =D1=86=D1=96=D0=BB=D0=
-=B5=D0=B9 =E2=80=93 =D0=BC=D1=96=D0=BD=D1=96=D0=BC=D0=B0=D0=BB=D1=8C=D0=BD=
-=D0=B8=D0=B9 =D1=82=D0=B0 =D0=BC=D0=B0=D0=BA=D1=81=D0=B8=D0=BC=D0=B0=D0=BB=
-=D1=8C=D0=BD=D0=B8=D0=B9 =D1=80=D0=B5=D0=B7=D1=83=D0=BB=D1=8C=D1=82=D0=B0=
-=D1=82=D0=B8.</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 2.</strong> =D0=9F=D1=81=D0=B8=D1=85=D0=
-=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=
-=B2=D0=BE=D1=80=D1=96=D0=B2 =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=
-=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8 =D0=BF=D0=BE =D1=
-=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83 =D1=82=D0=B0 =D0=BF=D1=80=D0=
-=B8 =D1=96=D0=BD=D0=B4=D0=B8=D0=B2=D1=96=D0=B4=D1=83=D0=B0=D0=BB=D1=8C=D0=
-=BD=D0=B8=D1=85 =D0=B7=D1=83=D1=81=D1=82=D1=80=D1=96=D1=87=D0=B0=D1=85. &=
-nbsp;&nbsp;&nbsp;</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 3.</strong> =D0=9F=D1=81=D0=B8=D1=85=D0=
-=BE=D0=BB=D0=BE=D0=B3=D1=96=D1=87=D0=BD=D1=96 =D1=85=D0=B0=D1=80=D0=B0=D0=
-=BA=D1=82=D0=B5=D1=80=D0=B8=D1=81=D1=82=D0=B8=D0=BA=D0=B8 =D0=BE=D1=81=D0=
-=BE=D0=B1=D0=B8=D1=81=D1=82=D0=BE=D1=81=D1=82=D1=96 =D0=9C=D0=B5=D0=BD=D0=
-=B5=D0=B4=D0=B6=D0=B5=D1=80=D0=B0 =D1=96=D0=B7 =D0=B7=D0=B0=D0=BA=D1=83=D0=
-=BF=D1=96=D0=B2=D0=B5=D0=BB=D1=8C =D0=B7 =D1=83=D1=80=D0=B0=D1=85=D1=83=D0=
-=B2=D0=B0=D0=BD=D0=BD=D1=8F=D0=BC =D1=81=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=
-=96=D0=BA=D0=B8 =D0=B7=D0=B0=D0=BA=D1=83=D0=BF=D1=96=D0=B2=D0=B5=D0=BB=D1=
-=8C=D0=BD=D0=BE=D1=97 =D0=B4=D1=96=D1=8F=D0=BB=D1=8C=D0=BD=D0=BE=D1=81=D1=
-=82=D1=96 &nbsp;&nbsp;&nbsp;</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 4.</strong> =D0=9E=D1=80=D0=B3=D0=B0=D0=
-=BD=D1=96=D0=B7=D0=B0=D1=86=D1=96=D1=8F =D1=82=D0=B0 =D0=BA=D0=BE=D0=BE=D1=
-=80=D0=B4=D0=B8=D0=BD=D0=B0=D1=86=D1=96=D1=8F =D0=B7=D0=B0=D0=BA=D1=83=D0=
-=BF=D1=96=D0=B2=D0=B5=D0=BB=D1=8C=D0=BD=D0=BE=D1=8E =D0=B4=D1=96=D1=8F=D0=
-=BB=D1=8C=D0=BD=D1=96=D1=81=D1=82=D1=8E &nbsp;&nbsp;&nbsp;</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 5.</strong> =D0=A0=D0=BE=D0=B1=D0=BE=D1=
-=82=D0=B0 =D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=
-=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8: &nbsp;&nbsp;&nbsp;<br>- =D0=B2=D0=B8=D0=
-=B2=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=BC=D0=B5=D1=82=D0=BE=D0=B4=D0=B8=D0=
-=BA =D0=BE=D0=B1'=D1=94=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=D1=97 =D0=BE=D1=
-=86=D1=96=D0=BD=D0=BA=D0=B8 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=
-=BB=D1=8C=D0=BD=D0=B8=D0=BA=D1=96=D0=B2; &nbsp;&nbsp;&nbsp;<br>- =D0=BF=D0=
-=BE=D1=88=D1=83=D0=BA =D0=B4=D0=B6=D0=B5=D1=80=D0=B5=D0=BB =D1=82=D0=B0 =D0=
-=B7=D0=B1=D1=96=D1=80 =D0=B2=D1=96=D0=B4=D0=BE=D0=BC=D0=BE=D1=81=D1=82=D0=
-=B5=D0=B9 =D0=BF=D1=80=D0=BE =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=
-=BB=D1=8C=D0=BD=D0=B8=D0=BA=D1=96=D0=B2; &nbsp;&nbsp;&nbsp;<br>- =D0=BF=D0=
-=B5=D1=80=D0=B5=D0=BB=D1=96=D0=BA =D0=BE=D1=81=D0=BD=D0=BE=D0=B2=D0=BD=D0=
-=B8=D1=85 =D0=BA=D1=80=D0=B8=D1=82=D0=B5=D1=80=D1=96=D1=97=D0=B2 =D0=BE=D1=
-=86=D1=96=D0=BD=D0=BA=D0=B8 =D0=B2=D0=B8=D0=B1=D0=BE=D1=80=D1=83 =D0=BF=D0=
-=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0;<br=
->- =D1=80=D0=B5=D0=B9=D1=82=D0=B8=D0=BD=D0=B3 =D0=BF=D0=BE=D1=81=D1=82=D0=
-=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D1=96=D0=B2 =D0=B7=D0=B0 =D1=
-=80=D1=96=D0=B2=D0=BD=D0=B5=D0=BC =D1=97=D1=85=D0=BD=D1=8C=D0=BE=D1=97 =D1=
-=86=D1=96=D0=BD=D0=BD=D0=BE=D1=81=D1=82=D1=96 =D0=B4=D0=BB=D1=8F =D0=BA=D0=
-=BE=D0=BC=D0=BF=D0=B0=D0=BD=D1=96=D1=97;<br>- =D0=86=D1=81=D0=BD=D1=83=D0=
-=B2=D0=B0=D0=BD=D0=BD=D1=8F =D1=81=D1=82=D1=80=D0=B0=D1=82=D0=B5=D0=B3=D1=
-=96=D0=B9 =D1=81=D1=82=D0=B2=D0=BE=D1=80=D0=B5=D0=BD=D0=BD=D1=8F =D1=82=D1=
-=80=D0=B8=D0=B2=D0=B0=D0=BB=D0=B8=D1=85 =D0=B2=D0=B7=D0=B0=D1=94=D0=BC=D0=
-=B8=D0=BD =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=
-=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8.</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 6.</strong> =D0=A1=D1=82=D1=80=D0=B0=D1=
-=82=D0=B5=D0=B3=D1=96=D1=87=D0=BD=D1=96 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=
-=BE=D0=B2=D0=BE=D1=80=D0=B8 =D1=96=D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=
-=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8. =D0=9F=D0=B5=D1=
-=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =D0=B7 =D0=BF=D0=BE=D1=81=D1=
-=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=BD=D0=B8=D0=BA=D0=BE=D0=BC =D0=BF=D0=
-=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83: &nbsp;&nbsp;&nbsp;<=
-br>- =D1=81=D0=BF=D0=B5=D1=86=D0=B8=D1=84=D1=96=D0=BA=D0=B0 =D1=82=D0=B5=D0=
-=BB=D0=B5=D1=84=D0=BE=D0=BD=D0=BD=D0=B8=D1=85 =D0=BF=D0=B5=D1=80=D0=B5=D0=
-=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=B2;<br>- =D0=9F=D0=B5=D1=80=D0=B5=D0=
-=B2=D0=B0=D0=B3=D0=B8 =D1=82=D0=B0 =D1=81=D0=BA=D0=BB=D0=B0=D0=B4=D0=BD=D0=
-=BE=D1=81=D1=82=D1=96 =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D0=B4=D0=B5=D0=BD=D0=
-=BD=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D1=96=D0=
-=B2 =D0=BF=D0=BE =D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83;<br>- =D0=
-=AF=D0=BA =D0=B7=D1=80=D0=BE=D0=B1=D0=B8=D1=82=D0=B8 =D1=82=D0=B5=D0=BB=D0=
-=B5=D1=84=D0=BE=D0=BD=D0=BD=D1=83 =D1=80=D0=BE=D0=B7=D0=BC=D0=BE=D0=B2=D1=
-=83 =D0=BD=D0=B0=D0=B9=D0=B1=D1=96=D0=BB=D1=8C=D1=88 =D0=B5=D1=84=D0=B5=D0=
-=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=D1=8E;<br>- =D0=B5=D1=84=D0=B5=D0=BA=D1=
-=82=D0=B8=D0=B2=D0=BD=D1=96 =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=D1=8F =D0=
-=B4=D0=BB=D1=8F =D0=BE=D1=82=D1=80=D0=B8=D0=BC=D0=B0=D0=BD=D0=BD=D1=8F =D0=
-=BD=D0=B5=D0=BE=D0=B1=D1=85=D1=96=D0=B4=D0=BD=D0=BE=D1=97 =D1=96=D0=BD=D1=
-=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=D1=96=D1=97 =D0=BF=D0=BE =D1=82=D0=B5=D0=
-=BB=D0=B5=D1=84=D0=BE=D0=BD=D1=83;<br>- =D0=A3=D0=BF=D1=80=D0=B0=D0=B2=D0=
-=BB=D1=96=D0=BD=D0=BD=D1=8F =D0=B3=D0=BE=D0=BB=D0=BE=D1=81=D0=BE=D0=BC. &=
-nbsp;&nbsp;&nbsp;</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 7</strong>. =D0=92=D0=B5=D0=B4=D0=B5=D0=
-=BD=D0=BD=D1=8F =D1=82=D0=B0 =D1=83=D0=BF=D1=80=D0=B0=D0=B2=D0=BB=D1=96=D0=
-=BD=D0=BD=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=
-=BD=D0=B8=D0=BC =D0=BF=D1=80=D0=BE=D1=86=D0=B5=D1=81=D0=BE=D0=BC: &nbsp;&=
-nbsp;&nbsp;<br>- =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=
-=BF=D1=80=D0=BE=D0=B2=D1=96=D0=B4=D0=BD=D0=B8=D1=85 =D0=BC=D0=BE=D1=82=D0=
-=B8=D0=B2=D1=96=D0=B2 =D0=BF=D1=80=D0=B5=D0=B4=D1=81=D1=82=D0=B0=D0=B2=D0=
-=BD=D0=B8=D0=BA=D0=B0 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=
-=8C=D0=BD=D0=B8=D0=BA=D0=B0;<br>- =D0=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=
-=B5=D0=BD=D0=BD=D1=8F =D1=81=D0=BF=D1=96=D0=BB=D1=8C=D0=BD=D0=BE=D1=97 =D0=
-=B7=D0=BE=D0=BD=D0=B8 =D1=96=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81=D1=96=D0=
-=B2; &nbsp;&nbsp;&nbsp;<br>- =D0=90=D0=BD=D0=B0=D0=BB=D1=96=D0=B7 =D1=82=D0=
-=B0 =D1=84=D0=BE=D1=80=D0=BC=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =C2=AB=D0=
-=BC=D0=BE=D0=B4=D0=B5=D0=BB=D1=96 =D1=81=D0=B2=D1=96=D1=82=D1=83=C2=BB =D0=
-=BE=D0=BF=D0=BE=D0=BD=D0=B5=D0=BD=D1=82=D0=B0; &nbsp;&nbsp;&nbsp;<br>- =D0=
-=A0=D0=B5=D0=B7=D1=8E=D0=BC=D1=83=D0=B2=D0=B0=D0=BD=D0=BD=D1=8F =E2=80=93=
- =D0=BF=D0=B5=D1=80=D0=B5=D1=85=D1=96=D0=B4 =D0=B4=D0=BE =D0=B4=D1=96=D0=B0=
-=D0=BB=D0=BE=D0=B3=D1=83 =D0=BF=D1=80=D0=BE =D1=81=D0=BF=D1=96=D0=B2=D0=BF=
-=D1=80=D0=B0=D1=86=D1=8E;<br>- =D0=9F=D0=B5=D1=80=D0=B5=D0=BA=D0=BE=D0=BD=
-=D0=BB=D0=B8=D0=B2=D1=96=D1=81=D1=82=D1=8C =D1=82=D0=B0 =D0=B0=D1=80=D0=B3=
-=D1=83=D0=BC=D0=B5=D0=BD=D1=82=D0=B0=D1=86=D1=96=D1=8F =D0=BF=D1=80=D0=BE=
-=D0=BF=D0=BE=D0=B7=D0=B8=D1=86=D1=96=D1=97. &nbsp;&nbsp;&nbsp;</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 8.</strong> =D0=9C=D0=B0=D0=BD=D1=96=D0=
-=BF=D1=83=D0=BB=D1=8F=D1=86=D1=96=D1=8F =D1=82=D0=B0 =D1=82=D0=B8=D1=81=D0=
-=BA =E2=80=93 =D0=B7=D0=B0=D1=85=D0=B8=D1=81=D1=82 =D1=96 =D0=BF=D1=80=D0=
-=BE=D1=82=D0=B8=D0=B4=D1=96=D1=8F: &nbsp;&nbsp;&nbsp;<br>- =D0=BF=D0=BE=D0=
-=B7=D0=B8=D1=86=D1=96=D1=8F =D0=BF=D0=BE=D0=BA=D1=83=D0=BF=D1=86=D1=8F =D0=
-=BD=D0=B0 =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B0=D1=
-=85, =D1=96 =D1=8F=D0=BA =D0=BD=D0=B0=D1=81 =D1=81=D0=BF=D1=80=D0=B8=D0=B9=
-=D0=BC=D0=B0=D1=8E=D1=82=D1=8C =D0=BF=D1=80=D0=BE=D0=B4=D0=B0=D0=B2=D1=86=
-=D1=96;<br>- =D1=82=D0=B5=D1=85=D0=BD=D1=96=D0=BA=D0=B8 =D1=83=D0=BF=D1=80=
-=D0=B0=D0=B2=D0=BB=D1=96=D0=BD=D0=BD=D1=8F =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=
-=D0=BE=D0=B2=D0=BE=D1=80=D0=B0=D0=BC=D0=B8 =D1=87=D0=B5=D1=80=D0=B5=D0=B7=
- =D0=BF=D0=B5=D1=80=D0=B5=D1=85=D0=BE=D0=BF=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F=
- =D1=96=D0=BD=D1=96=D1=86=D1=96=D0=B0=D1=82=D0=B8=D0=B2=D0=B8;<br>- =D0=9F=
-=D0=BE=D0=BD=D1=8F=D1=82=D1=82=D1=8F =D0=BC=D0=B0=D0=BD=D1=96=D0=BF=D1=83=
-=D0=BB=D1=8F=D1=86=D1=96=D1=97. =D0=92=D0=B8=D0=B4=D0=B8 =D1=82=D0=B0 =D0=
-=BC=D0=B5=D1=85=D0=B0=D0=BD=D1=96=D0=B7=D0=BC=D0=B8 =D0=BC=D0=B0=D0=BD=D1=
-=96=D0=BF=D1=83=D0=BB=D1=8F=D1=86=D1=96=D0=B9. =D1=81=D0=BF=D0=BE=D1=81=D0=
-=BE=D0=B1=D0=B8 =D0=B2=D0=B8=D1=8F=D0=B2=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F =D0=
-=BC=D0=B0=D0=BD=D1=96=D0=BF=D1=83=D0=BB=D1=8F=D1=86=D1=96=D0=B9;<br>- =D0=
-=B2=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D1=82=D0=B8=D0=
-=BF=D1=83 =D1=82=D0=B0 =D0=BF=D1=80=D0=BE=D1=82=D0=B8=D1=81=D1=82=D0=BE=D1=
-=8F=D0=BD=D0=BD=D1=8F =D0=BC=D0=B0=D0=BD=D1=96=D0=BF=D1=83=D0=BB=D1=8F=D1=
-=86=D1=96=D1=97; &nbsp;&nbsp;&nbsp;</p>
-<p><strong>=D0=91=D0=9B=D0=9E=D0=9A 9.</strong> =D0=9F=D0=B5=D1=80=D0=B5=D0=
-=B3=D0=BE=D0=B2=D0=BE=D1=80=D0=B8 =D1=89=D0=BE=D0=B4=D0=BE =D1=83=D0=BC=D0=
-=BE=D0=B2 =D1=81=D0=BF=D1=96=D0=B2=D1=80=D0=BE=D0=B1=D1=96=D1=82=D0=BD=D0=
-=B8=D1=86=D1=82=D0=B2=D0=B0 =E2=80=93 =D0=BA=D0=BB=D1=8E=D1=87=D0=BE=D0=B2=
-=D0=B8=D0=B9 =D0=B5=D1=82=D0=B0=D0=BF =D0=BF=D0=B5=D1=80=D0=B5=D0=B3=D0=BE=
-=D0=B2=D0=BE=D1=80=D1=96=D0=B2. =D0=97=D0=B2=D0=BE=D1=80=D0=BE=D1=82=D0=BD=
-=D1=96=D0=B9 =D0=B7=D0=B2'=D1=8F=D0=B7=D0=BE=D0=BA =D1=82=D0=B0 =D0=BC=D0=
-=BE=D0=B4=D0=B5=D0=BB=D1=96 =D0=B2=D0=B7=D0=B0=D1=94=D0=BC=D0=BE=D0=B4=D1=
-=96=D1=97 =D0=B7 =D0=BF=D0=BE=D1=81=D1=82=D0=B0=D1=87=D0=B0=D0=BB=D1=8C=D0=
-=BD=D0=B8=D0=BA=D0=B0=D0=BC=D0=B8. &nbsp;&nbsp;&nbsp;</p>
-<p>&nbsp;&nbsp;&nbsp;<br><strong><font color=3D"#c10000">=D0=92=D1=96=D0=B4=
-=D0=B1=D1=83=D0=B4=D0=B5=D1=82=D1=8C=D1=81=D1=8F:</font></strong> =D0=9E=D0=
-=BD=D0=BB=D0=B0=D0=B9=D0=BD <strong>4-5 =D0=BA=D0=B2=D1=96=D1=82=D0=BD=D1=
-=8F</strong> &nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;</p>
-<div><strong><font color=3D"#c10000">=D0=94=D1=96=D0=B7=D0=BD=D0=B0=D1=82=
-=D0=B8=D1=81=D1=8F =D0=B1=D1=96=D0=BB=D1=8C=D1=88=D0=B5</font></strong> <=
-a href=3D"https://senkiv.com/Server-Side/amsweb.php?rtcfY3OIC8v3mDXbKPvQI=
-zWl1RpnNjFzL7LyNLw1stDeqxvxmOW71B52jBIRLlDUrFWr9dQ1V10fmRBbRlh404xnK43Xy6=
-bnVGmgWad5oYcukXPzZ23nT9JuqVsM0bcueQDBdD8JPOAA8Q8uxb0Sj%2FTQf3WnYYT7Pp%2F=
-52uSTgsxSKrJyeno1btJP8keLCHbdL4dp6vPKbdaAtvrIvJWC1xMHD7CgWVjgYGSiWhG5ns3h=
-psm1OB1oW77B%2Ff%2F6oRtNjkXyJzNePxrmzNHm7zk%2BIQ%3D%3D">https://senkiv.co=
-m/training/188/mayster-zakup-vel-rezultativn-peregovori-ta-upravl-nnya-po=
-stachalnikami.htm</a></div></td></tr></tbody></table>
-<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
-LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
-0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
-p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: normal; BORDER-BOTTOM-COL=
-OR: transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlig=
-n=3Dtop width=3D650 align=3Dleft cellspacing=3D0 cellpadding=3D0>
-<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
-1.5; BACKGROUND-COLOR: rgb(255,255,255)" height=3D36 cellSpacing=3D0 cell=
-Padding=3D0 width=3D670 bgColor=3D"#ffffff" border=3D0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
-RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
-GHT-COLOR: transparent" cellspacing=3D0 cellpadding=3D0>
-<hr>
-</td></tr></tbody></table></th></tr></tbody></table>
-<table style=3D"FONT-SIZE: 14px; WIDTH: 100%; BORDER-COLLAPSE: collapse; =
-LINE-HEIGHT: 1.5" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D=
-0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<th class=3Dtc style=3D"BORDER-TOP-COLOR: transparent; VERTICAL-ALIGN: to=
-p; BORDER-LEFT-COLOR: transparent; FONT-WEIGHT: normal; BORDER-BOTTOM-COL=
-OR: transparent; TEXT-ALIGN: left; BORDER-RIGHT-COLOR: transparent" vAlig=
-n=3Dtop width=3D650 align=3Dleft cellspacing=3D0 cellpadding=3D0>
-<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
-1.5; BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D0 cellPadding=3D0 =
-width=3D"100%" bgColor=3D"#ffffff" border=3D0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
-RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
-GHT-COLOR: transparent" cellspacing=3D0 cellpadding=3D0>
-<table id=3Dwout_block_out_block_17 style=3D"FONT-SIZE: 14px; BORDER-COLL=
-APSE: collapse; FONT-WEIGHT: normal; MARGIN: 0px; LINE-HEIGHT: 1.5; text-=
-color: black" cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
-<tbody>
-<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
-lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
-ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
--RIGHT-COLOR: transparent'>
-<td class=3Dcontent-cell style=3D"BORDER-TOP-COLOR: transparent; VERTICAL=
--ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR: transparent; P=
-ADDING-BOTTOM: 15px; BORDER-BOTTOM-COLOR: transparent; PADDING-TOP: 15px;=
- PADDING-LEFT: 15px; BORDER-RIGHT-COLOR: transparent; PADDING-RIGHT: 15px=
-" vAlign=3Dtop width=3D620>
-<p><font face=3DGeorgia><font size=3D3><em><strong>=D0=97=D0=B0=D0=BB=D0=B8=
-=D1=88=D0=B8=D0=BB=D0=B8=D1=81=D1=8C =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=
-=D1=8F?</strong> &nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;=
-&nbsp;<br></em><a href=3D"https://senkiv.com/Server-Side/amsweb.php?lCRk6=
-AjgNHkkfma4UdSsqO69l6%2BPgruR9FAEveHmvM7KnVK6CBLdQk%2BQKyVe0hyYxnQoazgmhN=
-pkspjesJSlfGoaHQmSL24HHNLeXwHbckhD9RBm92AfQ4AEphAHfhdLKtJ%2FsRmgeo6U5t9Yo=
-N3xKQk%2BI5JU4N9w6cSwNijPqB4%3D"><font color=3D"#555555" face=3DGeorgia><=
-em>--</em></font></a><font size=3D3 face=3DGeorgia><em> &nbsp;&nbsp;&nbsp=
-;<br>=D0=97&nbsp;=D0=BF=D0=BE=D0=B2=D0=B0=D0=B3=D0=BE=D1=8E, &nbsp;&nbsp;=
-&nbsp;<br>=D0=A1=D0=BE=D1=84=D1=96=D1=8F &nbsp;&nbsp;&nbsp;<br>email-=D0=BC=
-=D0=B0=D1=80=D0=BA=D0=B5=D1=82=D0=BE=D0=BB=D0=BE=D0=B3 &nbsp;&nbsp;&nbsp;=
-</em></font></font></font></p><font face=3DGeorgia><font size=3D3>
-<p><font face=3DGeorgia><font size=3D3><em><strong><font color=3D"#c10000=
-">=D0=97=D0=B0=D0=B4=D0=B0=D1=82=D0=B8 =D0=BF=D0=B8=D1=82=D0=B0=D0=BD=D0=BD=
-=D1=8F:</font></strong> +38 /063/ 237 90 05<br>&nbsp;&nbsp;&nbsp;<br><str=
-ong><font color=3D"#c10000">=D0=94=D1=96=D0=B7=D0=BD=D0=B0=D1=82=D0=B8=D1=
-=81=D1=8F =D0=B1=D1=96=D0=BB=D1=8C=D1=88=D0=B5 </font></font></font><a hr=
-ef=3D"https://senkiv.com/Server-Side/amsweb.php?lCRk6AjgNHkkfma4UdSsqO69l=
-6%2BPgruR9FAEveHmvM7KnVK6CBLdQk%2BQKyVe0hyYxnQoazgmhNpkspjesJSlfGoaHQmSL2=
-4HHNLeXwHbckhD9RBm92AfQ4AEphAHfhdLJMn%2B78ePDu26Swd0tTwStA%3D%3D"><font s=
-ize=3D3 face=3DGeorgia>HTTPS://SENKIV.COM/</em></font></strong></a></p></=
-font></font></td></tr></tbody></table></td></tr></tbody></table>
-<table style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: =
-1.5; BACKGROUND-COLOR: rgb(255,255,255)" height=3D62 cellSpacing=3D0 cell=
-Padding=3D0 width=3D669 bgColor=3D"#ffffff" border=3D0>
-<tbody>
-<tr style=3D"BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: transparen=
-t; BORDER-BOTTOM-COLOR: transparent; BORDER-RIGHT-COLOR: transparent">
-<td style=3D"BORDER-TOP-COLOR: transparent; BORDER-COLLAPSE: collapse; BO=
-RDER-LEFT-COLOR: transparent; BORDER-BOTTOM-COLOR: transparent; BORDER-RI=
-GHT-COLOR: transparent" cellspacing=3D0 cellpadding=3D0>
-<table id=3Dw style=3D"FONT-SIZE: 14px; BORDER-COLLAPSE: collapse; FONT-W=
-EIGHT: normal; MARGIN: 0px; LINE-HEIGHT: 1.5; text-color: black" cellSpac=
-ing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
-<tbody>
-<tr class=3Dcontent-row style=3D'FONT-FAMILY: Arial, "Helvetica Neue", He=
-lvetica, sans-serif; BORDER-TOP-COLOR: transparent; BORDER-LEFT-COLOR: tr=
-ansparent; COLOR: rgb(46,46,46); BORDER-BOTTOM-COLOR: transparent; BORDER=
--RIGHT-COLOR: transparent'>
-<td class=3D"content-cell padding-top-0" style=3D"BORDER-TOP-COLOR: trans=
-parent; VERTICAL-ALIGN: top; BORDER-COLLAPSE: collapse; BORDER-LEFT-COLOR=
-: transparent; PADDING-BOTTOM: 2px; BORDER-BOTTOM-COLOR: transparent; PAD=
-DING-TOP: 0px; PADDING-LEFT: 30px; BORDER-RIGHT-COLOR: transparent; PADDI=
-NG-RIGHT: 30px" vAlign=3Dtop width=3D590>
-<hr>
-
-<p align=3Dcenter>=D0=B1=D1=96=D0=BB=D1=8C=D1=88=D0=B5 =D0=BD=D0=B5 =D0=BE=
-=D1=82=D1=80=D0=B8=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8<br><strong><font c=
-olor=3D"#ae0000"><a href=3D"https://senkiv.com/Server-Side/amsweb.php?CIu=
-etgorvBJ0KrSZ0sjJv3BxZkcSSa0G4TavYWNOyGK8QoOr%2BH1YqyUmzbzT4Eu633t8jufDM7=
-PJ8z2tnZkhX7o45RvFpvY6aRIox1RqX%2BFrUPYgjoAlg1cmiwuWOZ%2FMVm2%2BlyiCfeFlb=
-bb8uZ6d2Fnjxo7k60V43zIlGNPSA7g%3D">List-Unsubscribe</a></font></strong></=
-p></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody><=
-/table></td></tr></tbody></table></td></tr></tbody></table></body></html>
-
---a0cf862930123884e74d052e0ac1f876521c--
