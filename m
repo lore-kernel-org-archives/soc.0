@@ -1,171 +1,82 @@
-Return-Path: <SRS0=bmCH=7X=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <robh+dt@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C103CC761A6
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 14:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04E77C76196
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 15:49:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A9A91C433D2; Fri, 31 Mar 2023 14:59:05 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 32427C433EF
-	for <soc@kernel.org>; Fri, 31 Mar 2023 14:59:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 32427C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so14066084wms.1
-        for <soc@kernel.org>; Fri, 31 Mar 2023 07:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680274741;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vnlFqaagyiGC/yxykb+LPtjAztaRZkdyq0QplfwjoFU=;
-        b=nF3sjGDQMAa+9jHsKfcp2XyDYlHpo2KuexE8K8B4AEt9/p0IObEDWv2CgD5R/nHOZs
-         LKrnCyin/QS2zaGGOJyMPMc9pDYbfs+wygN0GlXYN79Pk627UpehAwFW+43cDdVYZ3h5
-         EKqyUv3wk56Nyvg2r5e0GliVdi+B8N8eRMEu7xCrjLBQFnSstXL2oVvoMkrtv/dveeiO
-         F37ewmOOr6JQO4KPhRRQmgyaI7I1mqSfqTqfRB3WByalYZ5HZ8FovnO1iw6OQz1VY4oN
-         KGrF+QS+fO8qgq6jFJlJv0L9G9eYlEl0jj7QZM7zsAaCtqPH4+v4I5ncnoa+EWF86CHG
-         DKmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680274741;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vnlFqaagyiGC/yxykb+LPtjAztaRZkdyq0QplfwjoFU=;
-        b=rYKLET4VkXjH7p3wAvf7aw/i3hc4Ucbxo6zrXePBKEjvQNOhCkFJAwLWBHZKi+EIO3
-         uFR28WVTDWDVD2lcczYCyiYcQOt8U79RSbUyQh5e/R6As8+LHLRB/cbhR2yYKS3b8EYZ
-         vnol8MU7u9kTzlal9yBYT3Ls+PI4/weurv/x58+2m0ZK+B6eUCtLq+CkUaID1ssEFbYh
-         IyUw4cYp3WQNQyyctFRO89FWNI9PdfV7UwdrT4UQIk8HBivfl99pCp+M3RxoKfWXHej5
-         wgxtsn6NITx/Bz8G3+DRVvw3TCRSvQBTrckx0ca+RKZOvGyp+YSg8xi4lQbJfzSRk20I
-         9dZw==
-X-Gm-Message-State: AO0yUKXdRflzKAkKxJ5m/NFxNQQ0y/pWr7BK1htHuGXLmKV8EOfqyHVQ
-	A/SlPdM9qcZGDFSdn0zNg97dsw==
-X-Google-Smtp-Source: AK7set/StNy++vH3rTk//CEKOWCplvO4ynmJaY373xQJNztEOfuyKCvvX4OAZ8I7XwRimDvrMK7WOA==
-X-Received: by 2002:a7b:c8c3:0:b0:3ed:711c:e8fe with SMTP id f3-20020a7bc8c3000000b003ed711ce8femr23315255wml.2.1680274741435;
-        Fri, 31 Mar 2023 07:59:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0? ([2a01:e0a:982:cbb0:74cb:1a96:c994:e7e0])
-        by smtp.gmail.com with ESMTPSA id iv19-20020a05600c549300b003ef69873cf1sm10363016wmb.40.2023.03.31.07.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 07:59:01 -0700 (PDT)
-Message-ID: <22bac350-0a2f-48df-c8b3-6d915a830caa@linaro.org>
-Date: Fri, 31 Mar 2023 16:58:59 +0200
+	id B75A6C433AC; Fri, 31 Mar 2023 15:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A105EC433A1;
+	Fri, 31 Mar 2023 15:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680277752;
+	bh=7sYG1ROb3TcoZzoTgiciX1cqj1srZop/PgY7/5fqvlM=;
+	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
+	b=KhNEzbPXIPIybwDCHRKuyygG4A3hmjwTUXeDaEFDK3imThvztJZWvftW7zwtfmGji
+	 zLwCI8CAVrqC7StST9DQyUKDYYqCmW+cZuS5njcZecpPJxrDiAIftjYI6AZbHg+CNC
+	 9kJoTATN93MuAmGav4pXECDg09hHdnGa9QDCyfZTGHbN8PKViIgChafcUuCQ2voFel
+	 xd0JSIBjjjH76oUaWohwOSLIdn2Zu6iYv6nwLYzgp9FDZBv2yQox1FbZLNPl33tj0w
+	 SbYBKt3jUIBO1fEZj3P//aJCooZHUyt3iYo5pWXPIxriOGXuDsxycoqTjTkzqQPmJw
+	 RBllHTlGxvO6g==
+Received: by mail-yb1-f172.google.com with SMTP id z83so27912556ybb.2;
+        Fri, 31 Mar 2023 08:49:12 -0700 (PDT)
+X-Gm-Message-State: AAQBX9e908dedxRTBTQjFdbgBw8fUrh1Fo7d4g6fukzlVCyP24hJIv8a
+	zAOmDbJktbpgLEfFQ3AMyIATGOuBUuCvgdFGYg==
+X-Google-Smtp-Source: AKy350Zu45r0mPHHP04Fo3WtjdI5vrOgO43ZKIYE5YCQV78EmZ9+CstGFZM+PufYOUVR2jcRfEZlyZr/BaGKP9HD2oY=
+X-Received: by 2002:a05:6902:1586:b0:b68:7b14:186b with SMTP id
+ k6-20020a056902158600b00b687b14186bmr13710481ybu.1.1680277751614; Fri, 31 Mar
+ 2023 08:49:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC 00/20] ARM: oxnas support removal
-Content-Language: en-US
-To: Daniel Golle <daniel@makrotopia.org>, Arnd Bergmann <arnd@arndb.de>
+References: <20230331095715.5988-1-stefan.wahren@chargebyte.com> <20230331095715.5988-3-stefan.wahren@chargebyte.com>
+In-Reply-To: <20230331095715.5988-3-stefan.wahren@chargebyte.com>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Fri, 31 Mar 2023 10:49:00 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ8rabJ7ZSzrvpzxrNrki1jZ7Ry1iVxf1CZOU5pxvjmdg@mail.gmail.com>
+Message-ID: <CAL_JsqJ8rabJ7ZSzrvpzxrNrki1jZ7Ry1iVxf1CZOU5pxvjmdg@mail.gmail.com>
+Subject: Re: [PATCH V3 2/6] dt-bindings: Add DS2482/DS2484 as trivial device
+To: Stefan Wahren <stefan.wahren@chargebyte.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Russell King <linux@armlinux.org.uk>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Giuseppe Cavallaro <peppe.cavallaro@st.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin
- <mcoquelin.stm32@gmail.com>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Sebastian Reichel <sre@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Marc Zyngier <maz@kernel.org>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
- linux-stm32@st-md-mailman.stormreply.com,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-pm@vger.kernel.org
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
- <df218abb-fa83-49d2-baf5-557b83b33670@app.fastmail.com>
- <ZCblCsKMHYDZI-H9@makrotopia.org>
-Organization: Linaro Developer Services
-In-Reply-To: <ZCblCsKMHYDZI-H9@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Lars-Peter Clausen <lars@metafoo.de>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Evgeniy Polyakov <zbr@ioremap.net>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, soc@kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	stefan.wahren@i2se.com, Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+On Fri, Mar 31, 2023 at 4:58=E2=80=AFAM Stefan Wahren
+<stefan.wahren@chargebyte.com> wrote:
+>
+> Both chips are I2C to 1-wire bridges.
+>
+> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
+> Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
+umentation/devicetree/bindings/trivial-devices.yaml
+> index 6f482a254a1d..9b7b24989359 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -183,6 +183,10 @@ properties:
+>            - maxim,ds1803-050
+>              # 100 kOhm digital potentiometer with I2C interface
+>            - maxim,ds1803-100
+> +            # I2C to 1-wire bridge
+> +          - maxim,ds2482
+> +            # I2C to 1-wire bridge
+> +          - maxim,ds2484
 
-On 31/03/2023 15:50, Daniel Golle wrote:
-> On Fri, Mar 31, 2023 at 03:42:15PM +0200, Arnd Bergmann wrote:
->> On Fri, Mar 31, 2023, at 10:34, Neil Armstrong wrote:
->>> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
->>> associated with a clear lack of maintainance, development and migration to
->>> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
->>>
->>> In addition, the OX810 hasn't been booted for years and isn't even present
->>> in an ARM config file.
->>>
->>> For the OX820, lack of USB and SATA support makes the platform not usable
->>> in the current Linux support and relies on off-tree drivers hacked from the
->>> vendor (defunct for years) sources.
->>>
->>> The last users are in the OpenWRT distribution, and today's removal means
->>> support will still be in stable 6.1 LTS kernel until end of 2026.
->>>
->>> If someone wants to take over the development even with lack of SMP, I'll
->>> be happy to hand off maintainance.
->>>
->>> The plan is to apply the first 4 patches first, then the drivers
->>> followed by bindings. Finally the MAINTAINANCE entry can be removed.
->>>
->>> I'm not sure about the process of bindings removal, but perhaps the bindings
->>> should be marked as deprecated first then removed later on ?
->>>
->>> It has been a fun time adding support for this architecture, but it's time
->>> to get over!
->>>
->>> Patch 2 obviously depends on [1].
->>>
->>> [1] https://lore.kernel.org/all/20230327121317.4081816-1-arnd@kernel.org/
->>>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>
->> Thanks a lot for going through this and preparing the patches!
->>
->> I've discussed this with Daniel Golle on the OpenWRT channel as well,
->> and he indicated that the timing is probably fine here, as there are
->> already close to zero downloads for oxnas builds, and the 6.1 kernel
->> will only be part of a release in 2024.
->>
->> For the dependency on my other patch, I'd suggest you instead
->> remove the SMP files here as well, which means we can merge either
->> part independently based on just 6.3-rc. I can do that change
->> myself by picking up patches 1-4 of your RFC series, or maybe you
->> can send resend them after rebase to 6.3-rc1.
->>
->> For the driver removals, I think we can merge those at the same
->> time as the platform removal since there are no shared header files
->> that would cause build time regressions and there are no runtime
->> regressions other than breaking the platform itself. Maybe
->> just send the driver removal separately to the subsystem
->> maintainers with my
->>
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Sounds reasonable, so also
-> 
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
-> 
-> (but I am a bit sad about it anyway. without SMP it doesn't make sense
-> to keep ox820 though)
+A 1-wire device isn't really trivial because it can have child nodes.
+You're probably not the first here, but don't add more.
 
-Same !
+You could do a "trivial 1-wire devices" schema similar to trivial RTC
+device schema.
 
-I would have loved to see the full support mainline, but the platform is
-old and apart you nobody were interested in working on this.
-
-Thanks a lot for you work keeping Oxnas support alive!
-Neil
-
-
+Rob
