@@ -1,157 +1,104 @@
-Return-Path: <SRS0=zA1q=7X=bgdev.pl=brgl@kernel.org>
+Return-Path: <SRS0=qWJH=7X=microchip.com=Nicolas.Ferre@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DE42C761A6
-	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 14:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12616C76196
+	for <soc@archiver.kernel.org>; Fri, 31 Mar 2023 14:28:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 18947C433A0; Fri, 31 Mar 2023 14:11:32 +0000 (UTC)
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id D7D87C4339B; Fri, 31 Mar 2023 14:28:20 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A40C4C4339B
-	for <soc@kernel.org>; Fri, 31 Mar 2023 14:11:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A40C4C4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-vs1-f42.google.com with SMTP id h15so19302753vsh.0
-        for <soc@kernel.org>; Fri, 31 Mar 2023 07:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680271889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lG/WYsq29l19IPVJ1k1HveeXpXEw8n6whXP0RBXQsVE=;
-        b=EvtZrKsNbHzwyuTtRqHQROrrofpQ/sG01uOiuhmiI8aPts7n7Ee5Ir4NvfrBMC9uI+
-         rP59rZDcNbSrbcJgAHZuzWOVqM440qSkPSsXQam8gLhm6JrqARMEWp7hP37azlVW4org
-         fBACV9jHeMc/fcIgXarc7w17iylr7tNHGmieksiQNlIzpXJ80+yWU+CJGHU8lpI3k2C8
-         ICYW0V27W/2DBLWul+Ja7q7aEtfylH/JCpUFcy+E+zrhYwff5tk/+w+43pgclTvoUdaY
-         JKB3eTBzT085pwnm7cEdG1xRDF3HVWkUIWkzjjSc40AzCnbk/tZvpSB9Tq3T3RIS9CKy
-         06FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680271889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lG/WYsq29l19IPVJ1k1HveeXpXEw8n6whXP0RBXQsVE=;
-        b=ee6WAVkFu1yXTXktRFy4EQboNXNMvjhTSZpbrbzPfetdkdiS4JZzKFtAbBskZV6raV
-         U+peFc0WwlQdFsOOI4Cw+Dkr9QfLeCJTMR2i2oCsRr0pNBaYc8y5mF1sRgcAsCkLQASN
-         Bo+p8wXeV8Dvw37rJ6i5PQCdQXcb6UU+6Ol3g8/wYe59rSnphUtfdZnflCSLHDKdbhf/
-         0X3tdeM1ss+rTMBbspfGkfWQ/x4GALCjfwAO+UKfnf+McuIlK+LAuw7vfu0XW/Qgnjlk
-         X9bUcVxBVKi04On6kPio+2SoqNJGHecWL+aMeeSQVM+DNKQct2eM6ITI/c3KZIkfMcMf
-         0tCA==
-X-Gm-Message-State: AAQBX9fDCX2oRsCG0D/Auzz4KBlg2qjXloaA4mjjCb1i7AD8GMrPApFe
-	S5ab1HJa42EOaD1bSAh+skM6pdYCA233xI7JN3EBVdY1IpkAwJTD
-X-Google-Smtp-Source: AKy350Ya9O0j2IJ/iXVAszn5aY9fHDH1jV5pYhAfg5ER4OEHtZmmlP21NIaPy6SQjGvX406cL1yK9LBdk5p7JcyHINc=
-X-Received: by 2002:a67:e095:0:b0:426:b051:1c4 with SMTP id
- f21-20020a67e095000000b00426b05101c4mr9141092vsl.0.1680271889495; Fri, 31 Mar
- 2023 07:11:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
- <20230331-topic-oxnas-upstream-remove-v1-15-5bd58fd1dd1f@linaro.org>
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-15-5bd58fd1dd1f@linaro.org>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 31 Mar 2023 16:11:18 +0200
-Message-ID: <CAMRc=Mdp48+DitzSV5gq3arPL75TJXQLoBxTujsWSH4UVpd2ww@mail.gmail.com>
-Subject: Re: [PATCH RFC 15/20] dt-bindings: gpio: gpio_oxnas: remove obsolete bindings
-To: Neil Armstrong <neil.armstrong@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id A3D5CC433D2;
+	Fri, 31 Mar 2023 14:28:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A3D5CC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680272898; x=1711808898;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FPeKCSq//jX/PgJO9hMQy3VzulKpWZJXnBnblAWYvII=;
+  b=yWeNpTld/qahhRPmSL8Fn2hBvtPLcrAzvR/Hwa98A3ZWpwmtp2HlnqO8
+   y+uLO0lA0tIKNHY3bovtpxZ56Ogm0SyZem+aCUENuyucsLMwz2CXLhzGP
+   JFCaQcdI4NQPtpyUGaR4kv8QaiyWZxTxissS5jAosHRxFhNwF7c8S0R9R
+   GgKHy3TeZf6Bq/AsVQr4EwmWzgT59XwJqejZzlAFxUPInNZyOM9lSfxxC
+   YIKU3YPav49hxSJXQu65ElAlSt/ulOhgTjLddWbotvtvmdoFIYCVb4ImC
+   b/k/rkK2YiH7BK42fnLwa6s4Xl1UyH13bC6CI4VdZm9FQEvrRgug9mtsV
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,307,1673938800"; 
+   d="scan'208";a="208261974"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Mar 2023 07:28:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 31 Mar 2023 07:28:16 -0700
+Received: from ROU-LT-M43238L.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 31 Mar 2023 07:28:14 -0700
+From: <nicolas.ferre@microchip.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Russell King <linux@armlinux.org.uk>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Jose Abreu <joabreu@synopsys.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Sebastian Reichel <sre@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Marc Zyngier <maz@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<arm@kernel.org>, <soc@kernel.org>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Linux Kernel list
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Ludovic Desroches
+	<ludovic.desroches@microchip.com>, Claudiu Beznea
+	<claudiu.beznea@microchip.com>
+Subject: [GIT PULL] ARM: at91: dt for 6.4
+Date: Fri, 31 Mar 2023 16:27:51 +0200
+Message-ID: <20230331142751.41522-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Organization: microchip
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Fri, Mar 31, 2023 at 10:35=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> Due to lack of maintainance and stall of development for a few years now,
-> and since no new features will ever be added upstream, remove the
-> OX810 and OX820 gpio bindings.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/gpio/gpio_oxnas.txt        | 47 ----------------=
-------
->  1 file changed, 47 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio_oxnas.txt b/Docu=
-mentation/devicetree/bindings/gpio/gpio_oxnas.txt
-> deleted file mode 100644
-> index 966514744df4..000000000000
-> --- a/Documentation/devicetree/bindings/gpio/gpio_oxnas.txt
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -* Oxford Semiconductor OXNAS SoC GPIO Controller
-> -
-> -Please refer to gpio.txt for generic information regarding GPIO bindings=
-.
-> -
-> -Required properties:
-> - - compatible: "oxsemi,ox810se-gpio" or "oxsemi,ox820-gpio"
-> - - reg: Base address and length for the device.
-> - - interrupts: The port interrupt shared by all pins.
-> - - gpio-controller: Marks the port as GPIO controller.
-> - - #gpio-cells: Two. The first cell is the pin number and
-> -   the second cell is used to specify the gpio polarity as defined in
-> -   defined in <dt-bindings/gpio/gpio.h>:
-> -      0 =3D GPIO_ACTIVE_HIGH
-> -      1 =3D GPIO_ACTIVE_LOW
-> - - interrupt-controller: Marks the device node as an interrupt controlle=
-r.
-> - - #interrupt-cells: Two. The first cell is the GPIO number and second c=
-ell
-> -   is used to specify the trigger type as defined in
-> -   <dt-bindings/interrupt-controller/irq.h>:
-> -      IRQ_TYPE_EDGE_RISING
-> -      IRQ_TYPE_EDGE_FALLING
-> -      IRQ_TYPE_EDGE_BOTH
-> - - gpio-ranges: Interaction with the PINCTRL subsystem, it also specifie=
-s the
-> -   gpio base and count, should be in the format of numeric-gpio-range as
-> -   specified in the gpio.txt file.
-> -
-> -Example:
-> -
-> -gpio0: gpio@0 {
-> -       compatible =3D "oxsemi,ox810se-gpio";
-> -       reg =3D <0x000000 0x100000>;
-> -       interrupts =3D <21>;
-> -       #gpio-cells =3D <2>;
-> -       gpio-controller;
-> -       interrupt-controller;
-> -       #interrupt-cells =3D <2>;
-> -       gpio-ranges =3D <&pinctrl 0 0 32>;
-> -};
-> -
-> -keys {
-> -       ...
-> -
-> -       button-esc {
-> -               label =3D "ESC";
-> -               linux,code =3D <1>;
-> -               gpios =3D <&gpio0 12 0>;
-> -       };
-> -};
->
-> --
-> 2.34.1
->
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Arnd, Olof,
+
+Here are the dt changes for 6.4. Just a few patches this cycle, please pull.
+
+Thanks, best regards,
+  Nicolas
+
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.4
+
+for you to fetch changes up to 2c0a1faa4da5324a2ad6621b69fb7db26134b994:
+
+  ARM: dts: at91: sam9x60ek: Set sst26vf064b SPI NOR flash at its maximum frequency (2023-03-30 21:20:59 +0200)
+
+----------------------------------------------------------------
+AT91 device tree updates for 6.4:
+
+It contains:
+- Update to maximum frequency for QSPI on several boards thanks
+  to the additon of the new spi-cs-setup-ns property.
+
+----------------------------------------------------------------
+Tudor Ambarus (4):
+      ARM: dts: at91-sama5d27_wlsom1: Set sst26vf064b SPI NOR flash at its maximum frequency
+      ARM: dts: at91-sama5d27_som1: Set sst26vf064b SPI NOR flash at its maximum frequency
+      ARM: dts: at91: sama5d2_icp: Set sst26vf064b SPI NOR flash at its maximum frequency
+      ARM: dts: at91: sam9x60ek: Set sst26vf064b SPI NOR flash at its maximum frequency
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts        | 3 ++-
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi   | 3 ++-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1.dtsi | 3 ++-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts      | 3 ++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+
+-- 
+Nicolas Ferre
