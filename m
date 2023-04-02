@@ -1,131 +1,106 @@
-Return-Path: <jic23@kernel.org>
+Return-Path: <SRS0=Kx1M=7Z=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1505C76196
-	for <soc@archiver.kernel.org>; Sat,  1 Apr 2023 15:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E69E3C76196
+	for <soc@archiver.kernel.org>; Sun,  2 Apr 2023 10:18:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 52490C433EF; Sat,  1 Apr 2023 15:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30A0C433D2;
-	Sat,  1 Apr 2023 15:23:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680362607;
-	bh=Fi/bBSEGuSvZZ1SJybMI04OJr1M6NXLuuJk/0lVWYno=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=iH43BkSGOToEm6xuBaUVkPDfoAn++n8oUXoRfKuLaVA307pKXzSINgK/Va8XqZ+gH
-	 RibdMVJf91a4k+vWMAfoiQtn/EpqEhfUKksqNInd7UiI/MM3vT6Wk48Y8PnBR7AsKt
-	 AztH9ipTzzetFtelxfOAVA6rQsT7d4onHE5BsTeL3nvJRQoOoGG2hcLU2/a3z1AMKM
-	 k1NzyVSbq7fuB+TRJNYHpUhHGDqITiFZUSWsW/gxQT9b4bNWIqy3M8OE3ToRDBwRzL
-	 rj3aEAsWO0mEhzzsstAuEFDDzrzmRK68FzR3n3G2HOuBopXX38nb96WPsvZFg1L8Z9
-	 7mIeoEvghNYPw==
-Date: Sat, 1 Apr 2023 16:38:33 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Stefan Wahren <stefan.wahren@i2se.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Stefan Wahren
- <stefan.wahren@chargebyte.com>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Lars-Peter Clausen
- <lars@metafoo.de>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson
- <olof@lixom.net>, Evgeniy Polyakov <zbr@ioremap.net>, Shawn Guo
- <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam
- <festevam@gmail.com>, linux-imx@nxp.com, Li Yang <leoyang.li@nxp.com>,
- Denis Ciocca <denis.ciocca@st.com>, soc@kernel.org,
- linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V2 4/8] dt-bindings: iio: st-sensors: Add IIS328DQ
- accelerometer
-Message-ID: <20230401163833.18c334ed@jic23-huawei>
-In-Reply-To: <1585c36f-cb8e-55ee-ac30-766feceda09f@i2se.com>
-References: <20230317103323.7741-1-stefan.wahren@chargebyte.com>
-	<20230317103323.7741-5-stefan.wahren@chargebyte.com>
-	<20230318155534.16b47583@jic23-huawei>
-	<708b63c9-d2b6-c65f-0112-8f50173c0bca@linaro.org>
-	<20230319154257.68facd30@jic23-huawei>
-	<1585c36f-cb8e-55ee-ac30-766feceda09f@i2se.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+	id 97C76C4339E; Sun,  2 Apr 2023 10:18:33 +0000 (UTC)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C52B9C4339C
+	for <soc@kernel.org>; Sun,  2 Apr 2023 10:18:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C52B9C4339C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f52.google.com with SMTP id t10so106259157edd.12
+        for <soc@kernel.org>; Sun, 02 Apr 2023 03:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680430710;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5vbY+hH9xlDJ5JkvEylzYvLfmOyGSfk8lVRHgqhEHvY=;
+        b=jt9PRfw5VQJUcClBuDD0yW3taPLHmIYTZT+hRzcnTsZeLzqTwOu592kOF52dyvMgmN
+         jWia1f1dvudUnIMCqV/J9ddLPR4fuDVkJM/43X+6sdC0vLh4pkc4zEOBUy0H2h0enKHJ
+         /IbIgWIWbuMI5DZwbCxvTn8TD3CPiLHME9Qjd/Pu15AtH27jrmtxex4QLF0fjsnN+1CZ
+         TKvYD5ccYK1rb3AWi6KkV+vQnvdUd5CI87AS8JYq/dA76yknzmqbx5ErPLNiJgBKps2i
+         0336/3xyzwLIt2xofO6kU6atVVguHVcQwncUdT2PkiUg+34YkOH58yJpOdEaK4T/dIl0
+         pByw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680430710;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5vbY+hH9xlDJ5JkvEylzYvLfmOyGSfk8lVRHgqhEHvY=;
+        b=vxOO+GF4CadhCmPj6Qm2RvSBGlzFSAv9UHzydHQcsMrN364sMGvzqApqkiyyiT25FY
+         jDEujKiMLiJUMCPzizxJvyAgQxmyH6YPjxd4EiEXTIdfA0F2WyZBR8CgswQ29PNgV+FG
+         GiDuEYuiFViDYbrtdj7KZHy0FQknpCy6jAYMhk9+plAIIwBp3FfDmCCmQNouHWoQ2JlO
+         PHLBGSUNrIDQdIaCKj3EGOhXveN2bwtLs1iaKjZWB1cqAQElbO8+LE3IWQUtwiUbg3TN
+         KejYZg4kvMXkcjmr1Pw4gbBSZpi03GOWx6TFJFsXayzDMwbQZpW6LXebO6nLM22xL71W
+         l0NA==
+X-Gm-Message-State: AAQBX9eQrFqa6/LpW6Pz/tTihXy4uRF+HYJrMEnWx9OWuOTPcJ4XUxpq
+	H5OInmev6d9Is12DhTwKJ/u/fw==
+X-Google-Smtp-Source: AKy350Z6IQ1DInGgJ1tkTuG1NeZ3Izk22lBovEOzygEIjFvMr1KmPSan8ScnFcJMV6jOJPTmKXwNWw==
+X-Received: by 2002:aa7:c859:0:b0:4fb:78a0:eabe with SMTP id g25-20020aa7c859000000b004fb78a0eabemr32523704edt.14.1680430709888;
+        Sun, 02 Apr 2023 03:18:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7f7f:6a30:7a20:94d5? ([2a02:810d:15c0:828:7f7f:6a30:7a20:94d5])
+        by smtp.gmail.com with ESMTPSA id 9-20020a508e09000000b00501dac14d7asm3129576edw.3.2023.04.02.03.18.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Apr 2023 03:18:29 -0700 (PDT)
+Message-ID: <d79d35af-792d-4f42-03f0-37ff0abce461@linaro.org>
+Date: Sun, 2 Apr 2023 12:18:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH RFC 04/20] dt-bindings: arm: oxnas: remove obsolete
+ bindings
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Russell King <linux@armlinux.org.uk>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <joabreu@synopsys.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Sebastian Reichel <sre@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <20230331-topic-oxnas-upstream-remove-v1-4-5bd58fd1dd1f@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-4-5bd58fd1dd1f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, 27 Mar 2023 12:57:10 +0200
-Stefan Wahren <stefan.wahren@i2se.com> wrote:
+On 31/03/2023 10:34, Neil Armstrong wrote:
+> Due to lack of maintainance and stall of development for a few years now,
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 SoC and boards bindings.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-> Hi Jonathan,
-> 
-> Am 19.03.23 um 16:42 schrieb Jonathan Cameron:
-> > On Sun, 19 Mar 2023 13:40:49 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >   
-> >> On 18/03/2023 16:55, Jonathan Cameron wrote:  
-> >>> On Fri, 17 Mar 2023 11:33:19 +0100
-> >>> Stefan Wahren <stefan.wahren@chargebyte.com> wrote:
-> >>>      
-> >>>> The ST IIS328DQ is an accelerometer sensor, which is compatible with
-> >>>> the already supported ST H3LIS331DL. So add the new compatible
-> >>>> with a fallback to the ST sensor binding.
-> >>>>
-> >>>> Link: https://lore.kernel.org/linux-iio/2bac9ecf-9d2e-967e-9020-1c950487d781@i2se.com/
-> >>>> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> >>>> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>	
-> >>>> ---
-> >>>>   Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 3 +++
-> >>>>   1 file changed, 3 insertions(+)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-> >>>> index c6201976378f..5eb71b24a7cb 100644
-> >>>> --- a/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-> >>>> +++ b/Documentation/devicetree/bindings/iio/st,st-sensors.yaml
-> >>>> @@ -48,6 +48,9 @@ properties:
-> >>>>             - st,lsm330d-accel
-> >>>>             - st,lsm330dl-accel
-> >>>>             - st,lsm330dlc-accel
-> >>>> +      - items:
-> >>>> +          - const: st,iis328dq
-> >>>> +          - const: st,h3lis331dl-accel  
-> >>>
-> >>> Hmm. So this separates the particular 'oneOf' group from the description
-> >>> associated with the ST accelerometers.
-> >>>
-> >>> DT experts, is there a better way to do this?  Ideally we'd also associate
-> >>> other similar groups going forwards so it might become less and less obvious
-> >>> how the groupings work. (bit late for the many groups that exist
-> >>> already in that list above this point).  
-> >>
-> >> If by "grouping" you mean how the oneOf items are organized with
-> >> descriptions, I wouldn't put too much attention to it. You can add some
-> >> '#' comments to separate the groups, but for me this is still readable.
-> >>
-> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>  
-> > 
-> > Works for me. Thanks for quick response!  Applied this and next patch
-> > to the togreg branch of iio.git  
-> 
-> Shawn had some comments to patch #7. Just to make it clear, there is no 
-> need to resend patch 4 and 5 in V3?
-> 
-> Best regards
-> 
-Yes. They will work their way through the IIO tree to upstream whilst
-other bits go via appropriate routes.
 
-Jonathan
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > 
-> > 
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>  
-> > 
-> > 
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel  
+Best regards,
+Krzysztof
 
