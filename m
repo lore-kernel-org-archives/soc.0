@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB038C761A6
-	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 07:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08C0CC77B62
+	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 07:42:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 87193C4339B; Mon,  3 Apr 2023 07:42:29 +0000 (UTC)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	id E487AC4339C; Mon,  3 Apr 2023 07:42:29 +0000 (UTC)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id EBCEDC433D2
-	for <soc@kernel.org>; Mon,  3 Apr 2023 07:42:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EBCEDC433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 47589C433A4
+	for <soc@kernel.org>; Mon,  3 Apr 2023 07:42:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 47589C433A4
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id v1so28259194wrv.1
-        for <soc@kernel.org>; Mon, 03 Apr 2023 00:42:27 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id q19so25190040wrc.5
+        for <soc@kernel.org>; Mon, 03 Apr 2023 00:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680507746;
+        d=linaro.org; s=google; t=1680507744;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XsljtCJiazE5NkGm88Tojg7L6Z8lihqck8h8eoHTGEg=;
-        b=ERYeu1hbMOABzJJIf6abhps9hFWp8DcXj2oDxzp/+9rTEOPxfhbQIkNedDGIqLvYVV
-         X9EhMi9RWzcaYrOj38qxaTk2u2uhRdfiIT1V6NKXbvRc6UPvDQEsRqkazeNpb2Hs6UYX
-         Gk5vYKoCUPqzs8DHgM4nV0HhtQ2FkIoIG2qQfEVNPmA8llVQPymDbMMFHPFhZGmf8enp
-         wRNDpAy7bBi1jjtKp5ZGlGkBpN+T0tv0qZPuCKxXSt4MhiYYGNtOTBqfqtcBB4C5iJYG
-         jSetrrI681iFXZiJhAwXAmR3wo2jD7HqpJ32bALf0z0k3OsW90iNMkBXqrKROktYBaMw
-         PGVw==
+        bh=5lIMvCiOpXbjiA/H8m7sjsrgtjChRorDGbAszqv8dTw=;
+        b=RZ5neoIUjL3gtmVC9SsbfcC9HNH1lmUqXYCwYiBpqTQaXggs3Zks/fOlRphVhClxEn
+         QJ5nsah+fKVcblUF4uELFa7yco4YF7VUfpClFI9w+tMxKUELJ2EcmQrqB9o0Wu7bb4vz
+         PJ17vPZ+/oZ7CvHTQ3BoxyNfYisSxFmnaGtxURakuKgMri5mDrT1JStLPuZ+8IhKtqMq
+         d0n/PBjRPgAbWHTo2uHgQTEdFCYoK0cLpSJ56t0KE8M+mkq095sE/Y84CkNO3hJvcIFa
+         kd6dnlrk4HD7f9gs7TabS048kon4Tc7o2DHEBWo6dOLTIdSHs29Wt2ileLCRhv8FHl5m
+         dvLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680507746;
+        d=1e100.net; s=20210112; t=1680507744;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XsljtCJiazE5NkGm88Tojg7L6Z8lihqck8h8eoHTGEg=;
-        b=HAgvra5rMyS5lVwp+W1pMr8c67q50iru9eq/K1QewLf1oo6C6mwG1a0TatBll8yUpL
-         VpobfSczxtA4LnXXUPJMi3vZXMU3zQALqSRnue9cqkLXmMT5FhWUixqXaReN64cbXHI8
-         l7FX5DHksuBsbjcBBC0nn1u1V9Bcs8xdWisj1AnX8eA34VQvh9kGEOC7aJ8cFNYL9soC
-         VzeQGFaq+LF1gtXv7LWcQDy/EiAec4LsyCvk9kHSAubi4j2vGtcwIZt5QQtZQi3KTHe/
-         +AGXT6ltgJydHotzJs/ZY7yPhswK/8wX3DqWhqzxL3xGnJ3I4zXAK4YaltP7m2I6NBrI
-         jmaw==
-X-Gm-Message-State: AAQBX9ccrkeo5jHCjQtcGo/OL1EXSoW/VflZWgW+KyvB4npBP3WlW76G
-	9BgkdRo4wzByv4k0laSMhV1XKg==
-X-Google-Smtp-Source: AKy350Z6e6J7uSkW2Hv2dRYhOElAG4NTAcR0nwGJ0pugXPyWTFpVuEPcRywE7wwpOPRnYtIXtriOjA==
-X-Received: by 2002:a5d:55c7:0:b0:2d2:ab47:3ef4 with SMTP id i7-20020a5d55c7000000b002d2ab473ef4mr28234897wrw.70.1680507746014;
-        Mon, 03 Apr 2023 00:42:26 -0700 (PDT)
+        bh=5lIMvCiOpXbjiA/H8m7sjsrgtjChRorDGbAszqv8dTw=;
+        b=TV60nYhvdgEtIqnIHE787ZMlyz7U57cTYKZvEHCx+cvl0CKdMstQe/nMbF2St5+HUl
+         W7YF+VkYRJOAb8fCDKru5RVmjD2iuaD7o2y4t1G7v7NLlpBpjXMZzk11yFfoJw0Vr71/
+         bl/DKT9gtsqzopKoG9j2pue41EowHdnZLJpTWRQtpol6Pegcfyr8wB/+2CfnhkyZ0KlR
+         Igqiemf/rk1lctZRVFBZPopUhMsL5dPSlxGbcE6ge4D3vilP/OLJjGyfqAI+2YPFaOQs
+         cdKcKhDmW1TYbZAM+KoBGeUiuhGgY5QVL8QNj9oFHkozLfpqMLBId/qQ2U58oW5Jj9N9
+         nk6w==
+X-Gm-Message-State: AAQBX9emeZOJGg57MANlHSEbLn1ApZUOWuVJ0VFntGbXYTFAIYKZ19Ug
+	+v1olZr+zsYX0d3KtGinLnr28Q==
+X-Google-Smtp-Source: AKy350Yniqdqc+Q5myV/H73Qhyh9BvslsjSTxkmlc/aqhCtpZ8+tchcyrqoWB2n2QIIhHWA81UE92w==
+X-Received: by 2002:adf:e882:0:b0:2ce:a8f4:2b01 with SMTP id d2-20020adfe882000000b002cea8f42b01mr13253583wrm.32.1680507744351;
+        Mon, 03 Apr 2023 00:42:24 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id q14-20020adff94e000000b002e62384d17dsm8180482wrr.21.2023.04.03.00.42.25
+        by smtp.gmail.com with ESMTPSA id q14-20020adff94e000000b002e62384d17dsm8180482wrr.21.2023.04.03.00.42.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 00:42:25 -0700 (PDT)
+        Mon, 03 Apr 2023 00:42:24 -0700 (PDT)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Mon, 03 Apr 2023 09:42:20 +0200
-Subject: [PATCH RFC v2 3/4] ARM: configs: remove oxnas_v6_defconfig
+Date: Mon, 03 Apr 2023 09:42:18 +0200
+Subject: [PATCH RFC v2 1/4] ARM: dts: oxnas: remove obsolete device tree
+ files
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v2-3-e51078376f08@linaro.org>
+Message-Id: <20230331-topic-oxnas-upstream-remove-v2-1-e51078376f08@linaro.org>
 References: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
 In-Reply-To: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -74,114 +75,922 @@ X-Mailer: b4 0.12.1
 
 Due to lack of maintainance and stall of development for a few years now,
 and since no new features will ever be added upstream, remove support
-for OX820 specific defconfig.
+for OX810 and OX820 devices.
 
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Acked-by: Arnd Bergmann <arnd@arndb.de>
 Acked-by: Daniel Golle <daniel@makrotopia.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm/configs/oxnas_v6_defconfig | 92 -------------------------------------
- 1 file changed, 92 deletions(-)
+ arch/arm/boot/dts/Makefile                         |   3 -
+ arch/arm/boot/dts/ox810se-wd-mbwe.dts              | 115 -------
+ arch/arm/boot/dts/ox810se.dtsi                     | 357 ---------------------
+ .../dts/ox820-cloudengines-pogoplug-series-3.dts   |  93 ------
+ arch/arm/boot/dts/ox820.dtsi                       | 299 -----------------
+ 5 files changed, 867 deletions(-)
 
-diff --git a/arch/arm/configs/oxnas_v6_defconfig b/arch/arm/configs/oxnas_v6_defconfig
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index efe4152e5846..ad83faecfdc6 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1033,9 +1033,6 @@ dtb-$(CONFIG_ARCH_PXA) += \
+ 	pxa300-raumfeld-speaker-m.dtb \
+ 	pxa300-raumfeld-speaker-one.dtb \
+ 	pxa300-raumfeld-speaker-s.dtb
+-dtb-$(CONFIG_ARCH_OXNAS) += \
+-	ox810se-wd-mbwe.dtb \
+-	ox820-cloudengines-pogoplug-series-3.dtb
+ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-apq8016-sbc.dtb \
+ 	qcom-apq8026-asus-sparrow.dtb \
+diff --git a/arch/arm/boot/dts/ox810se-wd-mbwe.dts b/arch/arm/boot/dts/ox810se-wd-mbwe.dts
 deleted file mode 100644
-index 70a67b3fc91b..000000000000
---- a/arch/arm/configs/oxnas_v6_defconfig
+index c59e06ff2423..000000000000
+--- a/arch/arm/boot/dts/ox810se-wd-mbwe.dts
 +++ /dev/null
-@@ -1,92 +0,0 @@
--CONFIG_SYSVIPC=y
--CONFIG_NO_HZ_IDLE=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_CGROUPS=y
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_EMBEDDED=y
--CONFIG_PERF_EVENTS=y
--CONFIG_STRICT_KERNEL_RWX=y
--CONFIG_STRICT_MODULE_RWX=y
--CONFIG_ARCH_MULTI_V6=y
--CONFIG_ARCH_OXNAS=y
--CONFIG_MACH_OX820=y
--CONFIG_SMP=y
--CONFIG_NR_CPUS=16
--CONFIG_ARCH_FORCE_MAX_ORDER=12
--CONFIG_SECCOMP=y
--CONFIG_ARM_APPENDED_DTB=y
--CONFIG_ARM_ATAG_DTB_COMPAT=y
--CONFIG_KEXEC=y
--CONFIG_EFI=y
--CONFIG_CPU_IDLE=y
--CONFIG_ARM_CPUIDLE=y
--CONFIG_VFP=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_PARTITION_ADVANCED=y
--CONFIG_CMDLINE_PARTITION=y
--CONFIG_CMA=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_IP_PNP_BOOTP=y
--CONFIG_IP_PNP_RARP=y
--CONFIG_IPV6_ROUTER_PREF=y
--CONFIG_IPV6_OPTIMISTIC_DAD=y
--CONFIG_INET6_AH=m
--CONFIG_INET6_ESP=m
--CONFIG_INET6_IPCOMP=m
--CONFIG_IPV6_MIP6=m
--CONFIG_IPV6_TUNNEL=m
--CONFIG_IPV6_MULTIPLE_TABLES=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_RAW_NAND=y
--CONFIG_MTD_NAND_OXNAS=y
--CONFIG_MTD_UBI=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_RAM_SIZE=65536
--CONFIG_NETDEVICES=y
--CONFIG_STMMAC_ETH=y
--CONFIG_REALTEK_PHY=y
--CONFIG_INPUT_EVDEV=y
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_SERIAL_OF_PLATFORM=y
--CONFIG_GPIO_GENERIC_PLATFORM=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_CLASS_FLASH=m
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_ONESHOT=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_CPU=y
--CONFIG_LEDS_TRIGGER_GPIO=y
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
--CONFIG_ARM_TIMER_SP804=y
--CONFIG_EXT4_FS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_UBIFS_FS=y
--CONFIG_PSTORE=y
--CONFIG_PSTORE_CONSOLE=y
--CONFIG_PSTORE_PMSG=y
--CONFIG_PSTORE_RAM=y
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_NLS_UTF8=y
--CONFIG_DMA_CMA=y
--CONFIG_CMA_SIZE_MBYTES=64
--CONFIG_PRINTK_TIME=y
--CONFIG_MAGIC_SYSRQ=y
+@@ -1,115 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * wd-mbwe.dtsi - Device tree file for Western Digital My Book World Edition
+- *
+- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+- */
+-
+-/dts-v1/;
+-#include "ox810se.dtsi"
+-
+-/ {
+-	model = "Western Digital My Book World Edition";
+-
+-	compatible = "wd,mbwe", "oxsemi,ox810se";
+-
+-	chosen {
+-		bootargs = "console=ttyS1,115200n8 earlyprintk=serial";
+-	};
+-
+-	memory {
+-		/* 128Mbytes DDR */
+-		reg = <0x48000000 0x8000000>;
+-	};
+-
+-	aliases {
+-		serial1 = &uart1;
+-		gpio0 = &gpio0;
+-		gpio1 = &gpio1;
+-	};
+-
+-	gpio-keys-polled {
+-		compatible = "gpio-keys-polled";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		poll-interval = <100>;
+-
+-		power {
+-			label = "power";
+-			gpios = <&gpio0 0 1>;
+-			linux,code = <0x198>;
+-		};
+-
+-		recovery {
+-			label = "recovery";
+-			gpios = <&gpio0 4 1>;
+-			linux,code = <0xab>;
+-		};
+-	};
+-
+-	leds {
+-		compatible = "gpio-leds";
+-
+-		a0 {
+-			label = "activity0";
+-			gpios = <&gpio0 25 0>;
+-			default-state = "keep";
+-		};
+-
+-		a1 {
+-			label = "activity1";
+-			gpios = <&gpio0 26 0>;
+-			default-state = "keep";
+-		};
+-
+-		a2 {
+-			label = "activity2";
+-			gpios = <&gpio0 5 0>;
+-			default-state = "keep";
+-		};
+-
+-		a3 {
+-			label = "activity3";
+-			gpios = <&gpio0 6 0>;
+-			default-state = "keep";
+-		};
+-
+-		a4 {
+-			label = "activity4";
+-			gpios = <&gpio0 7 0>;
+-			default-state = "keep";
+-		};
+-
+-		a5 {
+-			label = "activity5";
+-			gpios = <&gpio1 2 0>;
+-			default-state = "keep";
+-		};
+-	};
+-
+-	i2c-gpio {
+-		compatible = "i2c-gpio";
+-		gpios = <&gpio0 3 0 /* sda */
+-			 &gpio0 2 0 /* scl */
+-			 >;
+-		i2c-gpio,delay-us = <2>;        /* ~100 kHz */
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		rtc0: rtc@48 {
+-			compatible = "st,m41t00";
+-			reg = <0x68>;
+-		};
+-	};
+-};
+-
+-&etha {
+-	status = "okay";
+-};
+-
+-&uart1 {
+-	status = "okay";
+-
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart1>;
+-};
+diff --git a/arch/arm/boot/dts/ox810se.dtsi b/arch/arm/boot/dts/ox810se.dtsi
+deleted file mode 100644
+index 96c0745f7b70..000000000000
+--- a/arch/arm/boot/dts/ox810se.dtsi
++++ /dev/null
+@@ -1,357 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * ox810se.dtsi - Device tree file for Oxford Semiconductor OX810SE SoC
+- *
+- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+- */
+-
+-#include <dt-bindings/clock/oxsemi,ox810se.h>
+-#include <dt-bindings/reset/oxsemi,ox810se.h>
+-
+-/ {
+-	#address-cells = <1>;
+-	#size-cells = <1>;
+-	compatible = "oxsemi,ox810se";
+-
+-	cpus {
+-		#address-cells = <0>;
+-		#size-cells = <0>;
+-
+-		cpu {
+-			device_type = "cpu";
+-			compatible = "arm,arm926ej-s";
+-			clocks = <&armclk>;
+-		};
+-	};
+-
+-	memory {
+-		device_type = "memory";
+-		/* Max 256MB @ 0x48000000 */
+-		reg = <0x48000000 0x10000000>;
+-	};
+-
+-	clocks {
+-		osc: oscillator {
+-			compatible = "fixed-clock";
+-			#clock-cells = <0>;
+-			clock-frequency = <25000000>;
+-		};
+-
+-		gmacclk: gmacclk {
+-			compatible = "fixed-clock";
+-			#clock-cells = <0>;
+-			clock-frequency = <125000000>;
+-		};
+-
+-		rpsclk: rpsclk {
+-			compatible = "fixed-factor-clock";
+-			#clock-cells = <0>;
+-			clock-div = <1>;
+-			clock-mult = <1>;
+-			clocks = <&osc>;
+-		};
+-
+-		pll400: pll400 {
+-			compatible = "fixed-clock";
+-			#clock-cells = <0>;
+-			clock-frequency = <733333333>;
+-		};
+-
+-		sysclk: sysclk {
+-			compatible = "fixed-factor-clock";
+-			#clock-cells = <0>;
+-			clock-div = <4>;
+-			clock-mult = <1>;
+-			clocks = <&pll400>;
+-		};
+-
+-		armclk: armclk {
+-			compatible = "fixed-factor-clock";
+-			#clock-cells = <0>;
+-			clock-div = <2>;
+-			clock-mult = <1>;
+-			clocks = <&pll400>;
+-		};
+-	};
+-
+-	soc {
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		compatible = "simple-bus";
+-		ranges;
+-		interrupt-parent = <&intc>;
+-
+-		etha: ethernet@40400000 {
+-			compatible = "oxsemi,ox810se-dwmac", "snps,dwmac";
+-			reg = <0x40400000 0x2000>;
+-			interrupts = <8>;
+-			interrupt-names = "macirq";
+-			mac-address = [000000000000]; /* Filled in by U-Boot */
+-			phy-mode = "rgmii";
+-
+-			clocks = <&stdclk 6>, <&gmacclk>;
+-			clock-names = "gmac", "stmmaceth";
+-			resets = <&reset 6>;
+-
+-			/* Regmap for sys registers */
+-			oxsemi,sys-ctrl = <&sys>;
+-
+-			status = "disabled";
+-		};
+-
+-		apb-bridge@44000000 {
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			compatible = "simple-bus";
+-			ranges = <0 0x44000000 0x1000000>;
+-
+-			pinctrl: pinctrl {
+-				compatible = "oxsemi,ox810se-pinctrl";
+-
+-				/* Regmap for sys registers */
+-				oxsemi,sys-ctrl = <&sys>;
+-
+-				pinctrl_uart0: uart0 {
+-					uart0a {
+-						pins = "gpio31";
+-						function = "fct3";
+-					};
+-					uart0b {
+-						pins = "gpio32";
+-						function = "fct3";
+-					};
+-				};
+-
+-				pinctrl_uart0_modem: uart0_modem {
+-					uart0c {
+-						pins = "gpio27";
+-						function = "fct3";
+-					};
+-					uart0d {
+-						pins = "gpio28";
+-						function = "fct3";
+-					};
+-					uart0e {
+-						pins = "gpio29";
+-						function = "fct3";
+-					};
+-					uart0f {
+-						pins = "gpio30";
+-						function = "fct3";
+-					};
+-					uart0g {
+-						pins = "gpio33";
+-						function = "fct3";
+-					};
+-					uart0h {
+-						pins = "gpio34";
+-						function = "fct3";
+-					};
+-				};
+-
+-				pinctrl_uart1: uart1 {
+-					uart1a {
+-						pins = "gpio20";
+-						function = "fct3";
+-					};
+-					uart1b {
+-						pins = "gpio22";
+-						function = "fct3";
+-					};
+-				};
+-
+-				pinctrl_uart1_modem: uart1_modem {
+-					uart1c {
+-						pins = "gpio8";
+-						function = "fct3";
+-					};
+-					uart1d {
+-						pins = "gpio9";
+-						function = "fct3";
+-					};
+-					uart1e {
+-						pins = "gpio23";
+-						function = "fct3";
+-					};
+-					uart1f {
+-						pins = "gpio24";
+-						function = "fct3";
+-					};
+-					uart1g {
+-						pins = "gpio25";
+-						function = "fct3";
+-					};
+-					uart1h {
+-						pins = "gpio26";
+-						function = "fct3";
+-					};
+-				};
+-
+-				pinctrl_uart2: uart2 {
+-					uart2a {
+-						pins = "gpio6";
+-						function = "fct3";
+-					};
+-					uart2b {
+-						pins = "gpio7";
+-						function = "fct3";
+-					};
+-				};
+-
+-				pinctrl_uart2_modem: uart2_modem {
+-					uart2c {
+-						pins = "gpio0";
+-						function = "fct3";
+-					};
+-					uart2d {
+-						pins = "gpio1";
+-						function = "fct3";
+-					};
+-					uart2e {
+-						pins = "gpio2";
+-						function = "fct3";
+-					};
+-					uart2f {
+-						pins = "gpio3";
+-						function = "fct3";
+-					};
+-					uart2g {
+-						pins = "gpio4";
+-						function = "fct3";
+-					};
+-					uart2h {
+-						pins = "gpio5";
+-						function = "fct3";
+-					};
+-				};
+-			};
+-
+-			gpio0: gpio@0 {
+-				compatible = "oxsemi,ox810se-gpio";
+-				reg = <0x000000 0x100000>;
+-				interrupts = <21>;
+-				#gpio-cells = <2>;
+-				gpio-controller;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-				ngpios = <32>;
+-				oxsemi,gpio-bank = <0>;
+-				gpio-ranges = <&pinctrl 0 0 32>;
+-			};
+-
+-			gpio1: gpio@100000 {
+-				compatible = "oxsemi,ox810se-gpio";
+-				reg = <0x100000 0x100000>;
+-				interrupts = <22>;
+-				#gpio-cells = <2>;
+-				gpio-controller;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-				ngpios = <3>;
+-				oxsemi,gpio-bank = <1>;
+-				gpio-ranges = <&pinctrl 0 32 3>;
+-			};
+-
+-			uart0: serial@200000 {
+-			       compatible = "ns16550a";
+-			       reg = <0x200000 0x100000>;
+-			       clocks = <&sysclk>;
+-			       interrupts = <23>;
+-			       reg-shift = <0>;
+-			       fifo-size = <16>;
+-			       reg-io-width = <1>;
+-			       current-speed = <115200>;
+-			       no-loopback-test;
+-			       status = "disabled";
+-			       resets = <&reset RESET_UART1>;
+-			};
+-
+-			uart1: serial@300000 {
+-			       compatible = "ns16550a";
+-			       reg = <0x300000 0x100000>;
+-			       clocks = <&sysclk>;
+-			       interrupts = <24>;
+-			       reg-shift = <0>;
+-			       fifo-size = <16>;
+-			       reg-io-width = <1>;
+-			       current-speed = <115200>;
+-			       no-loopback-test;
+-			       status = "disabled";
+-			       resets = <&reset RESET_UART2>;
+-			};
+-
+-			uart2: serial@900000 {
+-			       compatible = "ns16550a";
+-			       reg = <0x900000 0x100000>;
+-			       clocks = <&sysclk>;
+-			       interrupts = <29>;
+-			       reg-shift = <0>;
+-			       fifo-size = <16>;
+-			       reg-io-width = <1>;
+-			       current-speed = <115200>;
+-			       no-loopback-test;
+-			       status = "disabled";
+-			       resets = <&reset RESET_UART3>;
+-			};
+-
+-			uart3: serial@a00000 {
+-			       compatible = "ns16550a";
+-			       reg = <0xa00000 0x100000>;
+-			       clocks = <&sysclk>;
+-			       interrupts = <30>;
+-			       reg-shift = <0>;
+-			       fifo-size = <16>;
+-			       reg-io-width = <1>;
+-			       current-speed = <115200>;
+-			       no-loopback-test;
+-			       status = "disabled";
+-			       resets = <&reset RESET_UART4>;
+-			};
+-		};
+-
+-		apb-bridge@45000000 {
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			compatible = "simple-bus";
+-			ranges = <0 0x45000000 0x1000000>;
+-
+-			sys: sys-ctrl@0 {
+-				compatible = "oxsemi,ox810se-sys-ctrl", "syscon", "simple-mfd";
+-				reg = <0x000000 0x100000>;
+-
+-				reset: reset-controller {
+-					compatible = "oxsemi,ox810se-reset";
+-					#reset-cells = <1>;
+-				};
+-
+-				stdclk: stdclk {
+-					compatible = "oxsemi,ox810se-stdclk";
+-					#clock-cells = <1>;
+-				};
+-			};
+-
+-			rps@300000 {
+-				#address-cells = <1>;
+-				#size-cells = <1>;
+-				compatible = "simple-bus";
+-				ranges = <0 0x300000 0x100000>;
+-
+-				intc: interrupt-controller@0 {
+-					compatible = "oxsemi,ox810se-rps-irq";
+-					interrupt-controller;
+-					reg = <0 0x200>;
+-					#interrupt-cells = <1>;
+-					valid-mask = <0xffffffff>;
+-					clear-mask = <0xffffffff>;
+-				};
+-
+-				timer0: timer@200 {
+-					compatible = "oxsemi,ox810se-rps-timer";
+-					reg = <0x200 0x40>;
+-					clocks = <&rpsclk>;
+-					interrupts = <4 5>;
+-				};
+-			};
+-		};
+-	};
+-};
+diff --git a/arch/arm/boot/dts/ox820-cloudengines-pogoplug-series-3.dts b/arch/arm/boot/dts/ox820-cloudengines-pogoplug-series-3.dts
+deleted file mode 100644
+index c3daceccde55..000000000000
+--- a/arch/arm/boot/dts/ox820-cloudengines-pogoplug-series-3.dts
++++ /dev/null
+@@ -1,93 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * cloudengines-pogoplug-series-3.dtsi - Device tree file for Cloud Engines PogoPlug Series 3
+- *
+- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+- */
+-
+-/dts-v1/;
+-#include "ox820.dtsi"
+-
+-/ {
+-	model = "Cloud Engines PogoPlug Series 3";
+-
+-	compatible = "cloudengines,pogoplugv3", "oxsemi,ox820";
+-
+-	chosen {
+-		bootargs = "earlyprintk";
+-		stdout-path = "serial0:115200n8";
+-	};
+-
+-	memory {
+-		/* 128Mbytes DDR */
+-		reg = <0x60000000 0x8000000>;
+-	};
+-
+-	aliases {
+-		serial0 = &uart0;
+-		gpio0 = &gpio0;
+-		gpio1 = &gpio1;
+-	};
+-
+-	leds {
+-		compatible = "gpio-leds";
+-
+-		blue {
+-			label = "pogoplug:blue";
+-			gpios = <&gpio0 2 0>;
+-			default-state = "keep";
+-		};
+-
+-		orange {
+-			label = "pogoplug:orange";
+-			gpios = <&gpio1 16 1>;
+-			default-state = "keep";
+-		};
+-
+-		green {
+-			label = "pogoplug:green";
+-			gpios = <&gpio1 17 1>;
+-			default-state = "keep";
+-		};
+-	};
+-};
+-
+-&uart0 {
+-	status = "okay";
+-
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_uart0>;
+-};
+-
+-&nandc {
+-	status = "okay";
+-
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_nand>;
+-
+-	nand@0 {
+-		reg = <0>;
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		nand-ecc-mode = "soft";
+-		nand-ecc-algo = "hamming";
+-
+-		partition@0 {
+-			label = "boot";
+-			reg = <0x00000000 0x00e00000>;
+-			read-only;
+-		};
+-
+-		partition@e00000 {
+-			label = "ubi";
+-			reg = <0x00e00000 0x07200000>;
+-		};
+-	};
+-};
+-
+-&etha {
+-	status = "okay";
+-
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_etha_mdio>;
+-};
+diff --git a/arch/arm/boot/dts/ox820.dtsi b/arch/arm/boot/dts/ox820.dtsi
+deleted file mode 100644
+index dde4364892bf..000000000000
+--- a/arch/arm/boot/dts/ox820.dtsi
++++ /dev/null
+@@ -1,299 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * ox820.dtsi - Device tree file for Oxford Semiconductor OX820 SoC
+- *
+- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+- */
+-
+-#include <dt-bindings/interrupt-controller/arm-gic.h>
+-#include <dt-bindings/clock/oxsemi,ox820.h>
+-#include <dt-bindings/reset/oxsemi,ox820.h>
+-
+-/ {
+-	#address-cells = <1>;
+-	#size-cells = <1>;
+-	compatible = "oxsemi,ox820";
+-
+-	cpus {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		enable-method = "oxsemi,ox820-smp";
+-
+-		cpu@0 {
+-			device_type = "cpu";
+-			compatible = "arm,arm11mpcore";
+-			clocks = <&armclk>;
+-			reg = <0>;
+-		};
+-
+-		cpu@1 {
+-			device_type = "cpu";
+-			compatible = "arm,arm11mpcore";
+-			clocks = <&armclk>;
+-			reg = <1>;
+-		};
+-	};
+-
+-	memory {
+-		device_type = "memory";
+-		/* Max 512MB @ 0x60000000 */
+-		reg = <0x60000000 0x20000000>;
+-	};
+-
+-	clocks {
+-		osc: oscillator {
+-			compatible = "fixed-clock";
+-			#clock-cells = <0>;
+-			clock-frequency = <25000000>;
+-		};
+-
+-		gmacclk: gmacclk {
+-			compatible = "fixed-clock";
+-			#clock-cells = <0>;
+-			clock-frequency = <125000000>;
+-		};
+-
+-		sysclk: sysclk {
+-			compatible = "fixed-factor-clock";
+-			#clock-cells = <0>;
+-			clock-div = <4>;
+-			clock-mult = <1>;
+-			clocks = <&osc>;
+-		};
+-
+-		plla: plla {
+-			compatible = "fixed-clock";
+-			#clock-cells = <0>;
+-			clock-frequency = <850000000>;
+-		};
+-
+-		armclk: armclk {
+-			compatible = "fixed-factor-clock";
+-			#clock-cells = <0>;
+-			clock-div = <2>;
+-			clock-mult = <1>;
+-			clocks = <&plla>;
+-		};
+-	};
+-
+-	soc {
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		compatible = "simple-bus";
+-		ranges;
+-		interrupt-parent = <&gic>;
+-
+-		nandc: nand-controller@41000000 {
+-			compatible = "oxsemi,ox820-nand";
+-			reg = <0x41000000 0x100000>;
+-			clocks = <&stdclk CLK_820_NAND>;
+-			resets = <&reset RESET_NAND>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-			status = "disabled";
+-		};
+-
+-		etha: ethernet@40400000 {
+-			compatible = "oxsemi,ox820-dwmac", "snps,dwmac";
+-			reg = <0x40400000 0x2000>;
+-			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+-				     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
+-			interrupt-names = "macirq", "eth_wake_irq";
+-			mac-address = [000000000000]; /* Filled in by U-Boot */
+-			phy-mode = "rgmii";
+-
+-			clocks = <&stdclk CLK_820_ETHA>, <&gmacclk>;
+-			clock-names = "gmac", "stmmaceth";
+-			resets = <&reset RESET_MAC>;
+-
+-			/* Regmap for sys registers */
+-			oxsemi,sys-ctrl = <&sys>;
+-
+-			status = "disabled";
+-		};
+-
+-		apb-bridge@44000000 {
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			compatible = "simple-bus";
+-			ranges = <0 0x44000000 0x1000000>;
+-
+-			pinctrl: pinctrl {
+-				compatible = "oxsemi,ox820-pinctrl";
+-
+-				/* Regmap for sys registers */
+-				oxsemi,sys-ctrl = <&sys>;
+-
+-				pinctrl_uart0: uart0 {
+-					uart0 {
+-						pins = "gpio30", "gpio31";
+-						function = "fct5";
+-					};
+-				};
+-
+-				pinctrl_uart0_modem: uart0_modem {
+-					uart0_modem_a {
+-						pins = "gpio24", "gpio24", "gpio26", "gpio27";
+-						function = "fct4";
+-					};
+-					uart0_modem_b {
+-						pins = "gpio28", "gpio29";
+-						function = "fct5";
+-					};
+-				};
+-
+-				pinctrl_uart1: uart1 {
+-					uart1 {
+-						pins = "gpio7", "gpio8";
+-						function = "fct4";
+-					};
+-				};
+-
+-				pinctrl_uart1_modem: uart1_modem {
+-					uart1_modem {
+-						pins = "gpio5", "gpio6", "gpio40", "gpio41", "gpio42", "gpio43";
+-						function = "fct4";
+-					};
+-				};
+-
+-				pinctrl_etha_mdio: etha_mdio {
+-					etha_mdio {
+-						pins = "gpio3", "gpio4";
+-						function = "fct1";
+-					};
+-				};
+-
+-				pinctrl_nand: nand {
+-					nand {
+-						pins = "gpio12", "gpio13", "gpio14", "gpio15",
+-						     "gpio16", "gpio17", "gpio18", "gpio19",
+-						     "gpio20", "gpio21", "gpio22", "gpio23",
+-						     "gpio24";
+-						function = "fct1";
+-					};
+-				};
+-			};
+-
+-			gpio0: gpio@0 {
+-				compatible = "oxsemi,ox820-gpio";
+-				reg = <0x000000 0x100000>;
+-				interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+-				#gpio-cells = <2>;
+-				gpio-controller;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-				ngpios = <32>;
+-				oxsemi,gpio-bank = <0>;
+-				gpio-ranges = <&pinctrl 0 0 32>;
+-			};
+-
+-			gpio1: gpio@100000 {
+-				compatible = "oxsemi,ox820-gpio";
+-				reg = <0x100000 0x100000>;
+-				interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
+-				#gpio-cells = <2>;
+-				gpio-controller;
+-				interrupt-controller;
+-				#interrupt-cells = <2>;
+-				ngpios = <18>;
+-				oxsemi,gpio-bank = <1>;
+-				gpio-ranges = <&pinctrl 0 32 18>;
+-			};
+-
+-			uart0: serial@200000 {
+-			       compatible = "ns16550a";
+-			       reg = <0x200000 0x100000>;
+-			       interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+-			       reg-shift = <0>;
+-			       fifo-size = <16>;
+-			       reg-io-width = <1>;
+-			       current-speed = <115200>;
+-			       no-loopback-test;
+-			       status = "disabled";
+-			       clocks = <&sysclk>;
+-			       resets = <&reset RESET_UART1>;
+-			};
+-
+-			uart1: serial@300000 {
+-			       compatible = "ns16550a";
+-			       reg = <0x200000 0x100000>;
+-			       interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+-			       reg-shift = <0>;
+-			       fifo-size = <16>;
+-			       reg-io-width = <1>;
+-			       current-speed = <115200>;
+-			       no-loopback-test;
+-			       status = "disabled";
+-			       clocks = <&sysclk>;
+-			       resets = <&reset RESET_UART2>;
+-			};
+-
+-			rps@400000 {
+-				#address-cells = <1>;
+-				#size-cells = <1>;
+-				compatible = "simple-bus";
+-				ranges = <0 0x400000 0x100000>;
+-
+-				intc: interrupt-controller@0 {
+-					compatible = "oxsemi,ox820-rps-irq", "oxsemi,ox810se-rps-irq";
+-					interrupt-controller;
+-					reg = <0 0x200>;
+-					interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+-					#interrupt-cells = <1>;
+-					valid-mask = <0xffffffff>;
+-					clear-mask = <0xffffffff>;
+-				};
+-
+-				timer0: timer@200 {
+-					compatible = "oxsemi,ox820-rps-timer";
+-					reg = <0x200 0x40>;
+-					clocks = <&sysclk>;
+-					interrupt-parent = <&intc>;
+-					interrupts = <4>;
+-				};
+-			};
+-
+-			sys: sys-ctrl@e00000 {
+-				compatible = "oxsemi,ox820-sys-ctrl", "syscon", "simple-mfd";
+-				reg = <0xe00000 0x200000>;
+-
+-				reset: reset-controller {
+-					compatible = "oxsemi,ox820-reset", "oxsemi,ox810se-reset";
+-					#reset-cells = <1>;
+-				};
+-
+-				stdclk: stdclk {
+-					compatible = "oxsemi,ox820-stdclk", "oxsemi,ox810se-stdclk";
+-					#clock-cells = <1>;
+-				};
+-			};
+-		};
+-
+-		apb-bridge@47000000 {
+-			#address-cells = <1>;
+-			#size-cells = <1>;
+-			compatible = "simple-bus";
+-			ranges = <0 0x47000000 0x1000000>;
+-
+-			scu: scu@0 {
+-				compatible = "arm,arm11mp-scu";
+-				reg = <0x0 0x100>;
+-			};
+-
+-			local-timer@600 {
+-				compatible = "arm,arm11mp-twd-timer";
+-				reg = <0x600 0x20>;
+-				interrupts = <GIC_PPI 13 (GIC_CPU_MASK_RAW(3)|IRQ_TYPE_LEVEL_HIGH)>;
+-				clocks = <&armclk>;
+-			};
+-
+-			gic: interrupt-controller@1000 {
+-				compatible = "arm,arm11mp-gic";
+-				interrupt-controller;
+-				#interrupt-cells = <3>;
+-				reg = <0x1000 0x1000>,
+-				      <0x100 0x500>;
+-			};
+-		};
+-	};
+-};
 
 -- 
 2.34.1
