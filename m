@@ -1,303 +1,65 @@
-Return-Path: <SRS0=Z6O2=72=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09666C77B6E
-	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 07:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D53E3C76196
+	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 16:01:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E78C2C4339C; Mon,  3 Apr 2023 07:42:30 +0000 (UTC)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2E3D8C433A7
-	for <soc@kernel.org>; Mon,  3 Apr 2023 07:42:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E3D8C433A7
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id j24so28305261wrd.0
-        for <soc@kernel.org>; Mon, 03 Apr 2023 00:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680507745;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pI/9yh94djA+1m9+33QTcqLMC72RdA1UX5CeiZQgLZ8=;
-        b=ShyOJVvAHbR/ULnZEDJTDWjjeZsqyanjv5iLgF8WvqgYAERgo2CxDCi40pGVcfsy2Z
-         vItyDQVEedyMepEtz6XN/7VB1G/EUJAUEkwZPEg/mQM2MRKtV9zx8YxsxlqJ6P9o2NdZ
-         3jdTx9DoCclRzPsCe/FppL6/0LMgtVeA5cbsaDcW1jwGzsS1M0yLZM77PF7NF4esfDiO
-         lTLtcBde1FzTO3sB41nU94P5cqb1iUdiiU/ttg0d8OiXptkTYUCfD00Nf81zjMig8P90
-         HaAiH3zwqNy8txJ6tPhAFHrDPI+ThPAaTdX8RHDEzPkpJEdlMph9b/hc2TADnTnUK+vE
-         b/sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680507745;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pI/9yh94djA+1m9+33QTcqLMC72RdA1UX5CeiZQgLZ8=;
-        b=3BikTjtGQsZhdiBpWMTM5YaL0eRUQz3NrMTCVdYZ0XFYVei7B3dlNp9n6EO8FN66O9
-         M7iS8t8o2upjQPt7XQJH32kQgjp4Q0q6AlCz1qhvdA7EXTL3ltUwypvhOPKRghbcmFBH
-         pWudty+vq82ZQ3dHBbZfwIP1bjtDNdVu6FJ1KjgADq6Ip2DRRLjnnO6/mt2hPJMNacdH
-         CPdFXxflSpLcE3WDI2Pv+GyNIEM5fSpcOd6U7SPXZHCf5KWi3m8eyTTb4RDPGOKQqu6f
-         RY+6ZxCVBGFBMCXu8+gFho3iaIL8KD/e6E5+/12AdsNO+z77t5nuwEtImANa0YIrN/hn
-         LOCA==
-X-Gm-Message-State: AAQBX9eky7cxWsIc3xYG+fHFe1DDRJW1ng845dfIp1xfVf6SChZX9X64
-	69/laJq/gynUs+lC47zRW0UJ5w==
-X-Google-Smtp-Source: AKy350asEbGzesMfKkqVtRfdX08ALHtN7EQ+XfMJAtdnHQxDKXa07X0OUp7+w4Pm2aTAP9+e/K6dyA==
-X-Received: by 2002:a5d:4603:0:b0:2d1:7ade:ab1 with SMTP id t3-20020a5d4603000000b002d17ade0ab1mr24784237wrq.10.1680507745186;
-        Mon, 03 Apr 2023 00:42:25 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id q14-20020adff94e000000b002e62384d17dsm8180482wrr.21.2023.04.03.00.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 00:42:24 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Mon, 03 Apr 2023 09:42:19 +0200
-Subject: [PATCH RFC v2 2/4] ARM: oxnas: remove OXNAS support
-MIME-Version: 1.0
+	id 9D32CC4339E; Mon,  3 Apr 2023 16:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 868BAC433EF;
+	Mon,  3 Apr 2023 16:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680537684;
+	bh=iRB9C8bsK1YSnnMHMUijiO3OxeE1UKnjiv5ps2pFTJE=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=Xra8P5Bb9Ax0CU6yhag0Bw6JrUJGlh8yKgIxJ1K444pML/4yQ2nBfWHyd+IMBG0AP
+	 96LHjBPQiwlSOWPzlaOS6PARebNZ4THdHaxCDzKP4zp0rABSSd4IXA7KsBDHPggzrX
+	 E6zTm4jowJBUd2CKn1iK0CEIykEvV65vQ3ZzJF2ydcmMJ7tDLPpFmmQHDn0IH9qPqI
+	 e5Zu4Dy0yi7EhXwkqHcn9j9BAUNiUPRJMeHF+MWFwpwIJowvvbRWVpaTxOQfJzkTxn
+	 1ZV5BQRonwfL9DKycVcnBjmWlttU82l1RHHB3b/WMtm2IAxU6dGQ4IszM7nojyMgpU
+	 IryThmaZCQ5pQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 65001E5EA88;
+	Mon,  3 Apr 2023 16:01:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230331-topic-oxnas-upstream-remove-v2-2-e51078376f08@linaro.org>
-References: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Fix spell error in OP-TEE driver for v6.3
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <168053768439.32283.15118391848827777529.git-patchwork-notify@kernel.org>
+Date: Mon, 03 Apr 2023 16:01:24 +0000
+References: <20230314184441.GA2936721@rayden>
+In-Reply-To: <20230314184441.GA2936721@rayden>
+To: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, 
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Russell King <linux@armlinux.org.uk>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-oxnas@groups.io, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Daniel Golle <daniel@makrotopia.org>
-X-Mailer: b4 0.12.1
+Cc: soc@kernel.org
 
-Due to lack of maintainance and stall of development for a few years now,
-and since no new features will ever be added upstream, remove support
-for OX810 and OX820 ARM support.
+Hello:
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Daniel Golle <daniel@makrotopia.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm/Kconfig              |  2 -
- arch/arm/Makefile             |  1 -
- arch/arm/mach-oxnas/Kconfig   | 38 -----------------
- arch/arm/mach-oxnas/Makefile  |  2 -
- arch/arm/mach-oxnas/headsmp.S | 23 -----------
- arch/arm/mach-oxnas/platsmp.c | 96 -------------------------------------------
- 6 files changed, 162 deletions(-)
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index e24a9820e12f..017329401b3d 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -497,8 +497,6 @@ source "arch/arm/mach-omap2/Kconfig"
- 
- source "arch/arm/mach-orion5x/Kconfig"
- 
--source "arch/arm/mach-oxnas/Kconfig"
--
- source "arch/arm/mach-pxa/Kconfig"
- 
- source "arch/arm/mach-qcom/Kconfig"
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 485a439e22ca..547e5856eaa0 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -203,7 +203,6 @@ machine-$(CONFIG_ARCH_MSTARV7)		+= mstar
- machine-$(CONFIG_ARCH_NOMADIK)		+= nomadik
- machine-$(CONFIG_ARCH_NPCM)		+= npcm
- machine-$(CONFIG_ARCH_NSPIRE)		+= nspire
--machine-$(CONFIG_ARCH_OXNAS)		+= oxnas
- machine-$(CONFIG_ARCH_OMAP1)		+= omap1
- machine-$(CONFIG_ARCH_OMAP2PLUS)	+= omap2
- machine-$(CONFIG_ARCH_ORION5X)		+= orion5x
-diff --git a/arch/arm/mach-oxnas/Kconfig b/arch/arm/mach-oxnas/Kconfig
-deleted file mode 100644
-index a9ded7079268..000000000000
---- a/arch/arm/mach-oxnas/Kconfig
-+++ /dev/null
-@@ -1,38 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--menuconfig ARCH_OXNAS
--	bool "Oxford Semiconductor OXNAS Family SoCs"
--	depends on (ARCH_MULTI_V5 && CPU_LITTLE_ENDIAN) || ARCH_MULTI_V6
--	select ARCH_HAS_RESET_CONTROLLER
--	select COMMON_CLK_OXNAS
--	select GPIOLIB
--	select MFD_SYSCON
--	select OXNAS_RPS_TIMER
--	select PINCTRL_OXNAS
--	select RESET_CONTROLLER
--	select RESET_OXNAS
--	select VERSATILE_FPGA_IRQ
--	select PINCTRL
--	help
--	  Support for OxNas SoC family developed by Oxford Semiconductor.
--
--if ARCH_OXNAS
--
--config MACH_OX810SE
--	bool "Support OX810SE Based Products"
--	depends on ARCH_MULTI_V5
--	select CPU_ARM926T
--	help
--	  Include Support for the Oxford Semiconductor OX810SE SoC Based Products.
--
--config MACH_OX820
--	bool "Support OX820 Based Products"
--	depends on ARCH_MULTI_V6
--	select ARM_GIC
--	select DMA_CACHE_RWFO if SMP
--	select HAVE_SMP
--	select HAVE_ARM_SCU if SMP
--	select HAVE_ARM_TWD if SMP
--	help
--	  Include Support for the Oxford Semiconductor OX820 SoC Based Products.
--
--endif
-diff --git a/arch/arm/mach-oxnas/Makefile b/arch/arm/mach-oxnas/Makefile
-deleted file mode 100644
-index 0e78ecfe6c49..000000000000
---- a/arch/arm/mach-oxnas/Makefile
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_SMP)		+= platsmp.o headsmp.o
-diff --git a/arch/arm/mach-oxnas/headsmp.S b/arch/arm/mach-oxnas/headsmp.S
-deleted file mode 100644
-index 9c0f1479f33a..000000000000
---- a/arch/arm/mach-oxnas/headsmp.S
-+++ /dev/null
-@@ -1,23 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
-- * Copyright (c) 2003 ARM Limited
-- * All Rights Reserved
-- */
--#include <linux/linkage.h>
--#include <linux/init.h>
--
--	__INIT
--
--/*
-- * OX820 specific entry point for secondary CPUs.
-- */
--ENTRY(ox820_secondary_startup)
--	mov r4, #0
--	/* invalidate both caches and branch target cache */
--	mcr p15, 0, r4, c7, c7, 0
--	/*
--	 * we've been released from the holding pen: secondary_stack
--	 * should now contain the SVC stack for this core
--	 */
--	b	secondary_startup
-diff --git a/arch/arm/mach-oxnas/platsmp.c b/arch/arm/mach-oxnas/platsmp.c
-deleted file mode 100644
-index f0a50b9e61df..000000000000
---- a/arch/arm/mach-oxnas/platsmp.c
-+++ /dev/null
-@@ -1,96 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
-- * Copyright (C) 2013 Ma Haijun <mahaijuns@gmail.com>
-- * Copyright (C) 2002 ARM Ltd.
-- * All Rights Reserved
-- */
--#include <linux/io.h>
--#include <linux/delay.h>
--#include <linux/of.h>
--#include <linux/of_address.h>
--
--#include <asm/cacheflush.h>
--#include <asm/cp15.h>
--#include <asm/smp_plat.h>
--#include <asm/smp_scu.h>
--
--extern void ox820_secondary_startup(void);
--
--static void __iomem *cpu_ctrl;
--static void __iomem *gic_cpu_ctrl;
--
--#define HOLDINGPEN_CPU_OFFSET		0xc8
--#define HOLDINGPEN_LOCATION_OFFSET	0xc4
--
--#define GIC_NCPU_OFFSET(cpu)		(0x100 + (cpu)*0x100)
--#define GIC_CPU_CTRL			0x00
--#define GIC_CPU_CTRL_ENABLE		1
--
--static int __init ox820_boot_secondary(unsigned int cpu,
--		struct task_struct *idle)
--{
--	/*
--	 * Write the address of secondary startup into the
--	 * system-wide flags register. The BootMonitor waits
--	 * until it receives a soft interrupt, and then the
--	 * secondary CPU branches to this address.
--	 */
--	writel(virt_to_phys(ox820_secondary_startup),
--			cpu_ctrl + HOLDINGPEN_LOCATION_OFFSET);
--
--	writel(cpu, cpu_ctrl + HOLDINGPEN_CPU_OFFSET);
--
--	/*
--	 * Enable GIC cpu interface in CPU Interface Control Register
--	 */
--	writel(GIC_CPU_CTRL_ENABLE,
--		gic_cpu_ctrl + GIC_NCPU_OFFSET(cpu) + GIC_CPU_CTRL);
--
--	/*
--	 * Send the secondary CPU a soft interrupt, thereby causing
--	 * the boot monitor to read the system wide flags register,
--	 * and branch to the address found there.
--	 */
--	arch_send_wakeup_ipi_mask(cpumask_of(cpu));
--
--	return 0;
--}
--
--static void __init ox820_smp_prepare_cpus(unsigned int max_cpus)
--{
--	struct device_node *np;
--	void __iomem *scu_base;
--
--	np = of_find_compatible_node(NULL, NULL, "arm,arm11mp-scu");
--	scu_base = of_iomap(np, 0);
--	of_node_put(np);
--	if (!scu_base)
--		return;
--
--	/* Remap CPU Interrupt Interface Registers */
--	np = of_find_compatible_node(NULL, NULL, "arm,arm11mp-gic");
--	gic_cpu_ctrl = of_iomap(np, 1);
--	of_node_put(np);
--	if (!gic_cpu_ctrl)
--		goto unmap_scu;
--
--	np = of_find_compatible_node(NULL, NULL, "oxsemi,ox820-sys-ctrl");
--	cpu_ctrl = of_iomap(np, 0);
--	of_node_put(np);
--	if (!cpu_ctrl)
--		goto unmap_scu;
--
--	scu_enable(scu_base);
--	flush_cache_all();
--
--unmap_scu:
--	iounmap(scu_base);
--}
--
--static const struct smp_operations ox820_smp_ops __initconst = {
--	.smp_prepare_cpus	= ox820_smp_prepare_cpus,
--	.smp_boot_secondary	= ox820_boot_secondary,
--};
--
--CPU_METHOD_OF_DECLARE(ox820_smp, "oxsemi,ox820-smp", &ox820_smp_ops);
+On Tue, 14 Mar 2023 19:44:41 +0100 you wrote:
+> Hello arm-soc maintainers,
+> 
+> Please pull this small patch fixing a spell error in an error message in
+> the OP-TEE driver.
+> 
+> Thanks,
+> Jens
+> 
+> [...]
 
+Here is the summary with links:
+  - [GIT,PULL] Fix spell error in OP-TEE driver for v6.3
+    https://git.kernel.org/soc/soc/c/167fba62c377
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
