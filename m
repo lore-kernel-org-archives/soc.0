@@ -1,118 +1,89 @@
-Return-Path: <SRS0=Mhi8=72=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=gdDO=72=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DF9AC76196
-	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 16:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8578C761A6
+	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 18:01:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 22A5AC4339C; Mon,  3 Apr 2023 16:14:33 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	id 5B4CAC433EF; Mon,  3 Apr 2023 18:01:13 +0000 (UTC)
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 02FE5C433D2
-	for <soc@kernel.org>; Mon,  3 Apr 2023 16:14:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 02FE5C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id y4so119539883edo.2
-        for <soc@kernel.org>; Mon, 03 Apr 2023 09:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680538470;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4L3DXDw+rPCXmzKTDiK+3ai07bE4enDVUdfQ3XZnOM=;
-        b=JDRoUWbIVadBNxnsD8FFYLW7AuITxTUXwX3xdwX6RNSAYEyIQ+biBbpCkF16oaq9bQ
-         416XY92YW9cDZp7Gk4OjNG+ilJvXUDf6cv0GJvKmnrvjPnYqmeHJ8FmoC+0Z/v/kqPil
-         XmsuGa5brUm3IZl4+AX9zex8XYTNVM4+hgS8185zv6oCDVXN3T9P3lrertndNPsWpu54
-         Le42lby9c0nCmgKXGoANFbRn9n0UZWNR2iclkD2c7GGUrd10NW3326TuyoWOXFABQNL1
-         1AvtkCx9I2yLc5mzYwpuhzQEXiu0EpowEHDC8jQYKpyfcbzHLPCrLagU2wpj4GdbpsOz
-         0hKw==
+	by smtp.kernel.org (Postfix) with ESMTPS id 67CF2C433D2;
+	Mon,  3 Apr 2023 18:01:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 67CF2C433D2
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f53.google.com with SMTP id w15-20020a056830410f00b006a386a0568dso800884ott.4;
+        Mon, 03 Apr 2023 11:01:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680538470;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y4L3DXDw+rPCXmzKTDiK+3ai07bE4enDVUdfQ3XZnOM=;
-        b=44npMWERg6AF6J4kE4gUdHfNMjunRPCVHFmo0YAwoNhD7+OJnQrG0w/xqJr3Uhyptz
-         V692GgpfuLlAPYu4xGJaS2+Y3JjdbG94xg/GOXivMoMFXwrTysuXgYD5sXWUsKTFW8Fs
-         6oQkEpTFB32uuz+fY7KLCX7VycSEbtUAN//NKi1ypHSMvFppsZxVJu+smLyZnZrj92Mi
-         8/Zh4zpjQaJzZBKr7IJKTQczWP2ZdpR5vE4R/Xy0TQX8SGuFqMkcePFvVr1sgFhmXbmM
-         cOrmbTUkNUC7GKXupzoE9mfLWdsDNwtmKkoXhTQ/2B0GSn83MewAlaObY+78iq05L6Z5
-         GGTQ==
-X-Gm-Message-State: AAQBX9fzn/nYYHKHjseEIDUZmACX9uPcDVo1Fswyjmeafpmta/Y9eRRK
-	iWsvFoCPEfDIEe09lkhCAxsUTA==
-X-Google-Smtp-Source: AKy350Z3xCJXIC+Hli76zppu9pCredWqfD5VdWlKk07M12aYUrThxhmHTTPbZfExtPuGaP2tIhW6Zg==
-X-Received: by 2002:a17:907:3e93:b0:947:793d:b5c4 with SMTP id hs19-20020a1709073e9300b00947793db5c4mr16523759ejc.64.1680538470292;
-        Mon, 03 Apr 2023 09:14:30 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id f24-20020a170906825800b008bc8ad41646sm4725234ejx.157.2023.04.03.09.14.29
+        d=1e100.net; s=20210112; t=1680544871;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+2HyVBZpgIAk4A8UQ7TPXHjOeuEm1wa0e7V0v5arzY=;
+        b=Y36RcD8iRdfLQg7wgYZL7ukTHBLa/dIsilS7BAAnKq+tz7fjmnku7QRSKAvCtAOyTQ
+         MCvXAifC4IuXFLQza5qzad98ZJu/9E7FKLq/QT6b0PV2Be7IARQky3+NuwldbQAdYHBQ
+         ZXY/ARcGVxPDPaHED1esC6i6epkMul4tq7+xeEhC18btnErWcyrM+skBU+QwxELePVWe
+         Fs8lC9mLpjkHJPt0wCKDUwqn+sLUYey6sQrJJio41J++vhlcbZxxPWN+cjDK6o3KW0Xu
+         NDfVzexRe3x+EnO2lrEwfR1R2oUoeZkEQJZOHSJHTAidjhmjvsCoqSMNki7dzW0VKmNH
+         TOaQ==
+X-Gm-Message-State: AAQBX9dWFNSQdAcf+ULTJPXyYr3QO1i0GVLO023O6pzdeXeGB2sqWYyv
+	PwZYw92mUsxrQi8PgFu7wg==
+X-Google-Smtp-Source: AKy350YbposOHjUqSKPLp1r0c5pZmS2vrYBOO8PRSBJMRbIsZ8g5xLashYmoygD9IWOODdA8MPrzFQ==
+X-Received: by 2002:a9d:63c5:0:b0:697:a381:a8f8 with SMTP id e5-20020a9d63c5000000b00697a381a8f8mr41722otl.3.1680544871315;
+        Mon, 03 Apr 2023 11:01:11 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d11-20020a9d5e0b000000b006a3170fe3efsm2707835oti.27.2023.04.03.10.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 09:14:29 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Mon, 03 Apr 2023 10:59:56 -0700 (PDT)
+Received: (nullmailer pid 1164679 invoked by uid 1000);
+	Mon, 03 Apr 2023 17:59:39 -0000
+Date: Mon, 3 Apr 2023 12:59:39 -0500
+From: Rob Herring <robh@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] memory: drivers for v6.4
-Date: Mon,  3 Apr 2023 18:14:27 +0200
-Message-Id: <20230403161427.328128-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Russell King <linux@armlinux.org.uk>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Jose Abreu <joabreu@synopsys.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Sebastian Reichel <sre@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Marc Zyngier <maz@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC 06/20] dt-bindings: clk: oxnas: remove obsolete
+ bindings
+Message-ID: <20230403175939.GA1162106-robh@kernel.org>
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <20230331-topic-oxnas-upstream-remove-v1-6-5bd58fd1dd1f@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-6-5bd58fd1dd1f@linaro.org>
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+On Fri, Mar 31, 2023 at 10:34:44AM +0200, Neil Armstrong wrote:
+> Due to lack of maintainance and stall of development for a few years now,
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+I can't spell it either, but checkpatch tells me it is: maintenance
 
-are available in the Git repository at:
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 clock bindings.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/clock/oxnas,stdclk.txt     | 28 ----------------------
+>  1 file changed, 28 deletions(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.4
+Always great to see fewer bindings. 
 
-for you to fetch changes up to 69d170c4c28ba0490bd42630cc09d7e1834bbb3d:
-
-  dt-bindings: memory-controller: Drop unneeded quotes (2023-03-31 21:53:15 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers for v6.4
-
-1. STM32 FMC2: allow using driver on all STM32MP SoCs.
-2. Cleanups:
-   - Atmel EBI: use preferred of_property_present() API.
-   - Tegra210 MC: drop redundant variable initialization.
-   - Drop redundant quotes in Devicetree bindings.
-   - Remove MODULE_LICENSE in non-modules (several drivers).
-
-----------------------------------------------------------------
-Christophe Kerello (1):
-      memory: stm32-fmc2-ebi: depends on ARCH_STM32 instead of MACH_STM32MP157
-
-Diogo Ivo (1):
-      memory: tegra: remove redundant variable initialization
-
-Nick Alcock (2):
-      memory: tegra: remove MODULE_LICENSE in non-modules
-      memory: remove MODULE_LICENSE in non-modules
-
-Rob Herring (2):
-      memory: atmel-ebi: Use of_property_present() for testing DT property presence
-      dt-bindings: memory-controller: Drop unneeded quotes
-
- .../devicetree/bindings/memory-controllers/renesas,dbsc.yaml        | 4 ++--
- .../devicetree/bindings/memory-controllers/renesas,rpc-if.yaml      | 2 +-
- .../bindings/memory-controllers/samsung,exynos5422-dmc.yaml         | 6 +++---
- drivers/memory/Kconfig                                              | 2 +-
- drivers/memory/atmel-ebi.c                                          | 2 +-
- drivers/memory/bt1-l2-ctl.c                                         | 1 -
- drivers/memory/da8xx-ddrctl.c                                       | 1 -
- drivers/memory/fsl_ifc.c                                            | 1 -
- drivers/memory/mvebu-devbus.c                                       | 1 -
- drivers/memory/tegra/mc.c                                           | 1 -
- drivers/memory/tegra/tegra186-emc.c                                 | 1 -
- drivers/memory/tegra/tegra210-emc-table.c                           | 2 --
- 12 files changed, 8 insertions(+), 16 deletions(-)
+Rob
