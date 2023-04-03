@@ -1,84 +1,106 @@
-Return-Path: <SRS0=gdDO=72=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=Mhi8=72=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F0C7C76196
-	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 18:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC2AC76188
+	for <soc@archiver.kernel.org>; Mon,  3 Apr 2023 18:37:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6CC35C433EF; Mon,  3 Apr 2023 18:36:46 +0000 (UTC)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+	id 2467CC433A1; Mon,  3 Apr 2023 18:37:47 +0000 (UTC)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7687CC433D2
-	for <soc@kernel.org>; Mon,  3 Apr 2023 18:36:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7687CC433D2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-17683b570b8so31791789fac.13
-        for <soc@kernel.org>; Mon, 03 Apr 2023 11:36:45 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 04329C433EF
+	for <soc@kernel.org>; Mon,  3 Apr 2023 18:37:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 04329C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id t10so120945014edd.12
+        for <soc@kernel.org>; Mon, 03 Apr 2023 11:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680547064;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=woHQBzslpxQn8sWqqC0TN46wIMWpqjyxk4syqknSbnU=;
+        b=bFvBbagm8aL0eG1WpkUMpZ7aBLUx6PKp4lseK3TKYNSJLKFTvbdAL/UOpVLQNG7W80
+         6+T9nAIO+CFbrpm+FWmXGLv3iRlsx77POHfwFU7a9hg24cauINgniJsEiBKhlm45+9Zt
+         jdiSe4FQmK1ZDt9moJ7wCgte6na7VoYwXmxWvsdvyoUvAbqvjIPbDOZoIrfa+thb2oen
+         pJKuwQuT1MPNg+BYN/L+ZUa0yIcZL3V7ad9X2JSCYn+GbtBET4ExYrhzv/dGLWNKMrX0
+         aY8Wq8zP6tmnwHk2JvG3m5+v2BlZ5wTQPHX9GIHg7/lCDDWcpU5ePfRmEIyP882gWeQr
+         nULA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680547004;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CIk+N2IXSsJAoY2e0gzvK6ymWE6vQVlOd434dzmo7vc=;
-        b=m+XDioODRk53s8nsD3ZYUyat5CKH7vAOL4+H+uCHTTRpkr+1+PkA19ZbF55LEN9G3b
-         VXUBilDZVweIuw8AL7CPwqMRUIZhiM/SSag7IzQplT2z+kyHZQr384BZvYTkYA1nmhRu
-         nmwMU54F5PsV4JtX2MO3k4blHMjxYIh3AAEHdG6O+nNtyXtGi6YT9nwO05t65Ij5Nlwb
-         xuedTP2TCe0y8So+njFADyx5eUK8zpsvYIHmoHZlOcptawpFNj3YU/hTCVWkxIjCq8XJ
-         KgpjNjpcU61xLOGLx5Kuh0OP5h2YD9hpw7UYsvmShYmH/iv79TwJX3G1kmAvRNqO8Om+
-         YaQg==
-X-Gm-Message-State: AAQBX9fZ8DMPVXKxdjEZ8Qnfemsm9DZd1Odeo7aE1+ULZ+UdmJZWKqOG
-	EpZl9zzjHCZc2XZR27vopw==
-X-Google-Smtp-Source: AKy350ZUlFhjgnglIoYafXPoxlDOutQn4rOsAma6LUGjUwvFzwRX7OlCEgbyqHLMXYRz6fgk9hhxRA==
-X-Received: by 2002:a05:6870:1707:b0:17e:3772:bdd7 with SMTP id h7-20020a056870170700b0017e3772bdd7mr90499oae.46.1680547004506;
-        Mon, 03 Apr 2023 11:36:44 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id xf19-20020a056870cf1300b001724742cfcesm3759713oab.38.2023.04.03.11.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 11:36:44 -0700 (PDT)
-Received: (nullmailer pid 1340936 invoked by uid 1000);
-	Mon, 03 Apr 2023 18:36:43 -0000
-Date: Mon, 3 Apr 2023 13:36:43 -0500
-From: Rob Herring <robh@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Russell King <linux@armlinux.org.uk>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-oxnas@groups.io, Linus Walleij <linus.walleij@linaro.org>, Daniel Golle <daniel@makrotopia.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH RFC v2 0/4] ARM: oxnas support removal
-Message-ID: <20230403183643.GA1335487-robh@kernel.org>
-References: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
+        d=1e100.net; s=20210112; t=1680547064;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=woHQBzslpxQn8sWqqC0TN46wIMWpqjyxk4syqknSbnU=;
+        b=AqijF73Bdw8OsrvvfcDGhIm8vPRrJ+UytZF7Wz07vBC6SDDRm0XZ5vA2+Tnr5bqisQ
+         JAqp/k/cFUEO856nOUjL69DX2i2SPfK9H+q7+xi0ZJrus6Uojz4vxQAW0u2b+Y5peN2T
+         4upyVtzYSPPOypjKw20hlDcZJkzdhf9cGG6d/Qe5bojZu5AHxoO90gWMdLNq/ajthPqK
+         EvojlH8xFbi971EVSO2MzXy/hr9/swJ4TMnvyocjWxEoCY4vnlYAnak2d8LG1fLLpAjZ
+         qJpBOmNj7tTMo9zglqYKDvR8MgI/k4zovetdgepA0dSWNV+FTd7rga8dfXD4MTZVfS/D
+         PNkw==
+X-Gm-Message-State: AAQBX9ev2JCtCTDg+bPb7ra18vKc5/rnOHIKLGiEE+3KWyAA4TnUS/Vy
+	jU1VO3mKW7/TodlhniXpkilffw==
+X-Google-Smtp-Source: AKy350aGwqQCodZpb/gzcGe1S8OGxNbhVHt1iC2+Dk0P5OGvd+2PK7IQlx/UQ3iZewsFT9iUWIorCA==
+X-Received: by 2002:a17:906:1c19:b0:92b:f118:ef32 with SMTP id k25-20020a1709061c1900b0092bf118ef32mr36754487ejg.48.1680547064210;
+        Mon, 03 Apr 2023 11:37:44 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
+        by smtp.gmail.com with ESMTPSA id b17-20020a170906491100b008e57b5e0ce9sm4826642ejq.108.2023.04.03.11.37.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 11:37:43 -0700 (PDT)
+Message-ID: <ba5cf9c5-50b2-b31b-eba4-d22eda2de0f3@linaro.org>
+Date: Mon, 3 Apr 2023 20:37:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH RFC 19/20] dt-bindings: interrupt-controller:
+ arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Russell King <linux@armlinux.org.uk>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <joabreu@synopsys.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Sebastian Reichel <sre@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org>
+ <20230331-topic-oxnas-upstream-remove-v1-19-5bd58fd1dd1f@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331-topic-oxnas-upstream-remove-v1-19-5bd58fd1dd1f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 03, 2023 at 09:42:17AM +0200, Neil Armstrong wrote:
-> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
-> associated with a clear lack of maintainance, development and migration to
-> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
+On 31/03/2023 10:34, Neil Armstrong wrote:
+> Due to lack of maintainance and stall of development for a few years now,
+> and since no new features will ever be added upstream, mark the
+> OX810 and OX820 IRQ compatible as deprecated.
 > 
-> In addition, the OX810 hasn't been booted for years and isn't even present
-> in an ARM config file.
-> 
-> For the OX820, lack of USB and SATA support makes the platform not usable
-> in the current Linux support and relies on off-tree drivers hacked from the
-> vendor (defunct for years) sources.
-> 
-> The last users are in the OpenWRT distribution, and today's removal means
-> support will still be in stable 6.1 LTS kernel until end of 2026.
-> 
-> If someone wants to take over the development even with lack of SMP, I'll
-> be happy to hand off maintainance.
-> 
-> The plan is to apply the first 4 patches first, then the drivers
-> followed by bindings. Finally the MAINTAINANCE entry can be removed.
-> 
-> I'm not sure about the process of bindings removal, but perhaps the bindings
-> should be marked as deprecated first then removed later on ?
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-Nah, just remove them. Like the code, we can always bring them back if 
-needed.
 
-Rob
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
