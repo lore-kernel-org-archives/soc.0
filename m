@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A49C77B72
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ABCFC77B75
 	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 14:41:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EFC75C433A4; Tue,  4 Apr 2023 14:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D971BC4339B;
-	Tue,  4 Apr 2023 14:41:23 +0000 (UTC)
+	id 4DA53C43323; Tue,  4 Apr 2023 14:41:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38308C4331D;
+	Tue,  4 Apr 2023 14:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680619283;
-	bh=JMBDK+RKzU6roQz7K1542hV1BPbOHqULToFNIDNZ0x8=;
+	s=k20201202; t=1680619284;
+	bh=bVUAldohEOgavgkHfjFXA353Q5gE96By/UB2t2Va5Jo=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=UJ+vdtDPmpLhIu2K5vmOgJP/iX0cpvWLPNqLRAp0W9sILYBEFzR5CxxbEu0oDrRpC
-	 TlbJhi0uclD5rzvgByE5x9uOBjC9s79cLkagMvDWJIDNzbcABVjWbFcoxE8xbejYRN
-	 L+HJ3bmkAyrmMOIKW6uGhEIDYeIQFL8Oiphlg8Y442WA95SV+Wj24KmkcneqladFCs
-	 71XwVIGSEmAgrEHTt+oXjIaZhl4IYNglj7gibVHcejsxYxXwyoM9le5qdVg/R0mRSI
-	 tfygk+gkf/pnZPDVszLNNhNl95oFcZBuEyQOylOsJEyLD7cTICSijQ87lfCMXQtBLi
-	 BQzCH34GmQ6/g==
+	b=dr4viydTowGJSWtzLx/XMMEB8JEMYEJJ75DD5fiNvEwxjSnFsYXrhutW5QbLR4fjr
+	 qrqjV2bfaOC4bhxLX0Nn1ErSH3bpxLopnQ17cSqcPu/lVAAjHTyaTiOyCkCBDeQFst
+	 cgkE5jH6UlLQUmNDC/O/9M5o+KoV0ZzuFDW01IVA8Zb/CJnIh7sqOU+dqs3k2EOVpl
+	 KEMrFFNYhUtfjkVCCjpjdzdzIosJP6Fakf7itYcZpmjM5Pr2aa16m+WYEPxFCP1LjJ
+	 ZIjrxXvK8by6fAsIkxjEkbcDoSqEId+GOF0DMsW1P9xgz/He0k8m4JbkOAX9ZsXdjt
+	 BVvmb8HO8oWxA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B23F1E5EA85;
-	Tue,  4 Apr 2023 14:41:23 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2450BC41671;
+	Tue,  4 Apr 2023 14:41:24 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] ARM: at91: dt for 6.4
+Subject: Re: [GIT PULL] Clean-up for omap1 for v6.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168061928372.17322.5401131999722781322.git-patchwork-notify@kernel.org>
-Date: Tue, 04 Apr 2023 14:41:23 +0000
-References: <20230331142751.41522-1-nicolas.ferre@microchip.com>
-In-Reply-To: <20230331142751.41522-1-nicolas.ferre@microchip.com>
-To: Nicolas Ferre <nicolas.ferre@microchip.com>
+ <168061928414.17322.4566537320672562223.git-patchwork-notify@kernel.org>
+Date: Tue, 04 Apr 2023 14:41:24 +0000
+References: <pull-1680180485-415954@atomide.com>
+In-Reply-To: <pull-1680180485-415954@atomide.com>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 31 Mar 2023 16:27:51 +0200 you wrote:
-> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Thu, 30 Mar 2023 15:48:19 +0300 you wrote:
+> From: "Tony Lindgren" <tony@atomide.com>
 > 
-> Arnd, Olof,
+> The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 > 
-> Here are the dt changes for 6.4. Just a few patches this cycle, please pull.
+>   Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 > 
-> Thanks, best regards,
->   Nicolas
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] ARM: at91: dt for 6.4
-    https://git.kernel.org/soc/soc/c/63d2b92754aa
+  - [GIT,PULL] Clean-up for omap1 for v6.4
+    https://git.kernel.org/soc/soc/c/c00574bb43cf
 
 You are awesome, thank you!
 -- 
