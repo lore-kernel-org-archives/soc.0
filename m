@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91887C6FD1D
-	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 08:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12E99C761A6
+	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 08:24:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 77A7FC433D2; Tue,  4 Apr 2023 08:24:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A0DC433EF;
-	Tue,  4 Apr 2023 08:24:07 +0000 (UTC)
+	id EAE4EC433EF; Tue,  4 Apr 2023 08:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1045C433A1;
+	Tue,  4 Apr 2023 08:24:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680596652;
-	bh=7vKCr/wx0D/pzTc4HtD4pB/VjmT6FF2fybgVyJGND3w=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=X/VmBgVLTL/6OlmX+DDX269i2Mufj2DETYS6+3ifyrKm5OpVjNd/3siwGG2uL6ofo
-	 sdyLd55QreOaZHhBSOAykIti3xRWus3jvPfL8RqLXRhyMMQfQ/gm01E/cjcllmtpUI
-	 9Mzpbd73kDAQe28bt3RLSQ2L2Tz5l4g8jcu9pJcuekxAQTf16+F/pCBc77jmQ6v0Ij
-	 U3RwHJLaZ4hql0OzNE3xgJy+kPdghtKXBCJFmMcp8/zF2g89zZWeEsZ+ZFSUjC86o5
-	 T3BrDQLMM9HKmOZ2nO8i4Qfm3F9KS5FaJBO8RimVA+ZoRx9+5jhQLf0oR4DKgQGr2K
-	 rT+JfxB8qPNmQ==
+	s=k20201202; t=1680596657;
+	bh=Wu9Q5YNgmAzpnEFBnOoyRUEdHAWjUx5xpzv1twk34q8=;
+	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
+	b=AM3ydbcoEuF6wt0hUYzZ8HqTTkMrRla/MaZzFAP1WR1tOmbrUd7cd6xUrj8bsh8SV
+	 zLwegJU9XVHxfjfd96C7OcMHffCfPvWQZLLCUPmoRgaxS0rXZeWIZudweg2EUKCw3y
+	 MaaAnSdzM2ECpcwdJtbPgNyaSPEHFimuQxKDn5OhA7WbZ8EQkvDe4zwgwWAACCS44/
+	 zhliv1LqCbx4cAXdhmNwS0Wy6LWMaNLIffcULq5/BIoK+jfQWPsFcIw34FDrJIWR1B
+	 psbm/muVnWCauyEq/jNYPfL6DOzP5dCLd0sdGuDPxonWy0y7cvRChIO1QGpIAt7/Dv
+	 EHOua9Tuk5CXw==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
@@ -45,79 +45,91 @@ Cc: soc@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org,
-	linux-omap@vger.kernel.org
-Subject: [PATCH v2 0/3] p54spi devicetree conversion
-Date: Tue,  4 Apr 2023 10:23:58 +0200
-Message-Id: <20230404082401.1087835-1-arnd@kernel.org>
+	linux-omap@vger.kernel.org,
+	Christian Lamparter <chunkeey@gmail.com>
+Subject: [PATCH v2 1/3] dt-bindings: net: add st,stlc45xx
+Date: Tue,  4 Apr 2023 10:23:59 +0200
+Message-Id: <20230404082401.1087835-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230404082401.1087835-1-arnd@kernel.org>
+References: <20230404082401.1087835-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-I now revisited the earlier submission, hopefully addressing
-all of the feedback correctly. This is still untested, but if
-everyone is happy, it could still make it into v6.4.
-
-Patch 3 touches both driver and platform parts, and can't
-easily be split up without breaking bisectability, so I think
-it's easiest to merge it through the soc tree, with Christian's
-Ack.
-
-Tony, I see you already sent a set of pull requests, let me know
-if you want to pick up these patches for a future round (6.4
-or 6.5), or if I should just apply them on top.
-
-Link: https://lore.kernel.org/all/20230314163201.955689-1-arnd@kernel.org/
+Link: https://lore.kernel.org/all/e8dc9acb-6f85-e0a9-a145-d101ca6da201@gmail.com/
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Changes in v2:
-
- - split into three patches
- - reverse polarity of power(down) gpio
- - clean up binding
-
-Arnd Bergmann (3):
-  dt-bindings: net: add st,stlc45xx
-  ARM: dts: omap2: add stlc4560 spi-wireless node
-  p54spi: convert to devicetree
-
- .../bindings/net/wireless/st,stlc45xx.yaml    | 58 +++++++++++++++
- MAINTAINERS                                   |  1 +
- arch/arm/boot/dts/omap2.dtsi                  |  4 ++
- arch/arm/boot/dts/omap2420-n8x0-common.dtsi   | 12 ++++
- arch/arm/mach-omap2/board-n8x0.c              | 18 -----
- drivers/net/wireless/intersil/p54/p54spi.c    | 71 +++++++------------
- drivers/net/wireless/intersil/p54/p54spi.h    |  3 +
- 7 files changed, 104 insertions(+), 63 deletions(-)
+ .../bindings/net/wireless/st,stlc45xx.yaml    | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
 
+diff --git a/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml b/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
+new file mode 100644
+index 000000000000..99f13d8d3816
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/wireless/st,stlc45xx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ST/Intersil/Conexant stlc45xx/p54spi/cx3110x SPI wireless device
++
++maintainers:
++  - Christian Lamparter <chunkeey@gmail.com>
++
++description:
++  The SPI variant of the Intersil Prism54 wireless device was sold
++  under a variety of names, including Conexant CX3110x and
++  ST Microelectronics STLC5460.
++
++allOf:
++  - $ref: ieee80211.yaml#
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++properties:
++  compatible:
++    enum:
++      - cnxt,3110x
++      - isil,p54spi
++      - st,stlc4550
++      - st,stlc4560
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  powerdown-gpios:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	wifi@0 {
++	    compatible = "st,stlc4560";
++	    reg = <0>;
++	    spi-max-frequency = <48000000>;
++	    interrupts-extended = <&gpio 23>;
++	    powerdown-gpios = <&gpio 1>;
++	};
++    };
 -- 
 2.39.2
-
-Cc: "Aaro Koskinen" <aaro.koskinen@iki.fi>
-Cc: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Bartosz Golaszewski" <brgl@bgdev.pl>
-Cc: "Benoît Cousson" <bcousson@baylibre.com>
-Cc: Christian Lamparter <chunkeey@googlemail.com>,
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
-Cc: "Eric Dumazet" <edumazet@google.com>
-Cc: "Felipe Balbi" <balbi@kernel.org>
-Cc: "Jakub Kicinski" <kuba@kernel.org>
-Cc: "Johannes Berg" <johannes@sipsolutions.net>
-Cc: "Kalle Valo <kvalo@kernel.org>"
-Cc: "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>
-Cc: "Paolo Abeni" <pabeni@redhat.com>
-Cc: "Rob Herring" <robh+dt@kernel.org>
-Cc: "Tony Lindgren" <tony@atomide.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-gpio@vger.kernel.org
-Cc: linux-omap@vger.kernel.org
-
 
