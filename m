@@ -1,91 +1,123 @@
-Return-Path: <SRS0=U1k6=73=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06CAEC6FD1D
-	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 08:16:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91887C6FD1D
+	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 08:24:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DF209C4339C; Tue,  4 Apr 2023 08:16:29 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC7A5C433EF
-	for <soc@kernel.org>; Tue,  4 Apr 2023 08:16:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC7A5C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id w9so127193473edc.3
-        for <soc@kernel.org>; Tue, 04 Apr 2023 01:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680596187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=miHUyUNmojfIItEHS1ocDVFcVyQlVzUoZy6LNzCd8iM=;
-        b=j+Z6LlwyGlurTnhoA/v00QGDlGgTS8okFCWMxdIAg8t0gKOJ0+fKDy+zcEZf6v6CO6
-         3VByImao6RBMcgTCCz/uWmeOpxSlpkqEp7PO9pn6muH3GLxkM1E9+geE3iyMXhrV/T/W
-         W+Og4jUJrBQF/zreX0bFL5713QMYfQ5ZNa01iI/3dHEVwAM0VihOw04APgFLTYdP5YeQ
-         CaVfBGGnIl3+nz8c03tWwSDwrN06YgA0FJ3DssmlZ1YCtrbdlLjfBCts0ETJ5sXqNnOA
-         3kLSUXyWEzRkKBSJ6ETyuoElvv4krzIrzbzGsU/SzUZtTe+UOVldPrOrLESsbmt6Ydrh
-         lkjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680596187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=miHUyUNmojfIItEHS1ocDVFcVyQlVzUoZy6LNzCd8iM=;
-        b=aapkKuvbeg3ilsoUasOX1x300aLMIcdO1FZA5BtTPmOAddZW6CsNJtK3nG3b3BQOez
-         gn64PSLlnJ0nYofFaVCcvHvz2uQoLN/LDAaYsm3nr2KTrBhXcU0u1jmF9AFtYOC4Bzkh
-         /c5tAkG53zqZ7UFs8R+m/5qZvP9cPyj5XglXxw8LVLns1djFdN67YvA4rdNk0Yh2Ec9d
-         8dQLqK90KMHPPS+WGhBudFYQlOvaHYIIXjFe4GuQn1Dh5iUEVT6M+LbmJSxtlr9J+R+j
-         Equbmm5ezefs2/Te8V6y4+xbKq7Z0hn5diDCIzrTSFZva5OKPDXgmZA9AMEn3dJ2SZst
-         l/Gw==
-X-Gm-Message-State: AAQBX9e0GnHwkOrcP1s3gcnnMapOnoGi60BXZYk3jOkymEtPbJ10OMhz
-	zz4MPXRISos8kCFBVo2HIlkKKA==
-X-Google-Smtp-Source: AKy350ZwDvqnyIubzzt0HCD26W8pCbMIetSIJ3v9g3Iard2u2TxiyleGqkFBQt1Tu0D3z5Wt2qEQIg==
-X-Received: by 2002:a17:906:20d7:b0:932:d2bb:4fd with SMTP id c23-20020a17090620d700b00932d2bb04fdmr1315066ejc.58.1680596187048;
-        Tue, 04 Apr 2023 01:16:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
-        by smtp.gmail.com with ESMTPSA id gl25-20020a170906e0d900b00929fc8d264dsm5714850ejb.17.2023.04.04.01.16.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 01:16:26 -0700 (PDT)
-Message-ID: <27076f5c-1693-75bf-2ae9-d0e232b80b02@linaro.org>
-Date: Tue, 4 Apr 2023 10:16:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V5 2/6] dt-bindings: w1: Add DS2482/DS2484 I2C to 1-W
- bridges
-Content-Language: en-US
-To: Stefan Wahren <stefan.wahren@chargebyte.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Evgeniy Polyakov <zbr@ioremap.net>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
+	id 77A7FC433D2; Tue,  4 Apr 2023 08:24:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A0DC433EF;
+	Tue,  4 Apr 2023 08:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680596652;
+	bh=7vKCr/wx0D/pzTc4HtD4pB/VjmT6FF2fybgVyJGND3w=;
+	h=From:To:List-Id:Cc:Subject:Date:From;
+	b=X/VmBgVLTL/6OlmX+DDX269i2Mufj2DETYS6+3ifyrKm5OpVjNd/3siwGG2uL6ofo
+	 sdyLd55QreOaZHhBSOAykIti3xRWus3jvPfL8RqLXRhyMMQfQ/gm01E/cjcllmtpUI
+	 9Mzpbd73kDAQe28bt3RLSQ2L2Tz5l4g8jcu9pJcuekxAQTf16+F/pCBc77jmQ6v0Ij
+	 U3RwHJLaZ4hql0OzNE3xgJy+kPdghtKXBCJFmMcp8/zF2g89zZWeEsZ+ZFSUjC86o5
+	 T3BrDQLMM9HKmOZ2nO8i4Qfm3F9KS5FaJBO8RimVA+ZoRx9+5jhQLf0oR4DKgQGr2K
+	 rT+JfxB8qPNmQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-imx@nxp.com, soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, stefan.wahren@i2se.com
-References: <20230404080243.9613-1-stefan.wahren@chargebyte.com>
- <20230404080243.9613-3-stefan.wahren@chargebyte.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230404080243.9613-3-stefan.wahren@chargebyte.com>
+Cc: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	"Aaro Koskinen" <aaro.koskinen@iki.fi>,
+	"Bartosz Golaszewski" <brgl@bgdev.pl>,
+	=?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+	Christian Lamparter <chunkeey@googlemail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	"Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+	"Eric Dumazet" <edumazet@google.com>,
+	"Felipe Balbi" <balbi@kernel.org>,
+	"Jakub Kicinski" <kuba@kernel.org>,
+	"Johannes Berg" <johannes@sipsolutions.net>,
+	"Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+	"Linus Walleij" <linus.walleij@linaro.org>,
+	"Paolo Abeni" <pabeni@redhat.com>,
+	"Rob Herring" <robh+dt@kernel.org>,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-gpio@vger.kernel.org,
+	linux-omap@vger.kernel.org
+Subject: [PATCH v2 0/3] p54spi devicetree conversion
+Date: Tue,  4 Apr 2023 10:23:58 +0200
+Message-Id: <20230404082401.1087835-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/04/2023 10:02, Stefan Wahren wrote:
-> This adds a dedicated devicetree binding for the Maxim DS2482/DS2484
-> I2C to 1-W bridges, which can be extended later for further features
-> (e.g. sleep mode control GPIO). Since one wire is a bus, child nodes
-> needs to be allowed here.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
-> ---
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I now revisited the earlier submission, hopefully addressing
+all of the feedback correctly. This is still untested, but if
+everyone is happy, it could still make it into v6.4.
 
-Best regards,
-Krzysztof
+Patch 3 touches both driver and platform parts, and can't
+easily be split up without breaking bisectability, so I think
+it's easiest to merge it through the soc tree, with Christian's
+Ack.
+
+Tony, I see you already sent a set of pull requests, let me know
+if you want to pick up these patches for a future round (6.4
+or 6.5), or if I should just apply them on top.
+
+Link: https://lore.kernel.org/all/20230314163201.955689-1-arnd@kernel.org/
+---
+Changes in v2:
+
+ - split into three patches
+ - reverse polarity of power(down) gpio
+ - clean up binding
+
+Arnd Bergmann (3):
+  dt-bindings: net: add st,stlc45xx
+  ARM: dts: omap2: add stlc4560 spi-wireless node
+  p54spi: convert to devicetree
+
+ .../bindings/net/wireless/st,stlc45xx.yaml    | 58 +++++++++++++++
+ MAINTAINERS                                   |  1 +
+ arch/arm/boot/dts/omap2.dtsi                  |  4 ++
+ arch/arm/boot/dts/omap2420-n8x0-common.dtsi   | 12 ++++
+ arch/arm/mach-omap2/board-n8x0.c              | 18 -----
+ drivers/net/wireless/intersil/p54/p54spi.c    | 71 +++++++------------
+ drivers/net/wireless/intersil/p54/p54spi.h    |  3 +
+ 7 files changed, 104 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
+
+-- 
+2.39.2
+
+Cc: "Aaro Koskinen" <aaro.koskinen@iki.fi>
+Cc: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Bartosz Golaszewski" <brgl@bgdev.pl>
+Cc: "Benoît Cousson" <bcousson@baylibre.com>
+Cc: Christian Lamparter <chunkeey@googlemail.com>,
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
+Cc: "Eric Dumazet" <edumazet@google.com>
+Cc: "Felipe Balbi" <balbi@kernel.org>
+Cc: "Jakub Kicinski" <kuba@kernel.org>
+Cc: "Johannes Berg" <johannes@sipsolutions.net>
+Cc: "Kalle Valo <kvalo@kernel.org>"
+Cc: "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+Cc: "Linus Walleij" <linus.walleij@linaro.org>
+Cc: "Paolo Abeni" <pabeni@redhat.com>
+Cc: "Rob Herring" <robh+dt@kernel.org>
+Cc: "Tony Lindgren" <tony@atomide.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-gpio@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+
 
