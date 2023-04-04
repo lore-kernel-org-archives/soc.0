@@ -1,112 +1,163 @@
-Return-Path: <SRS0=kSmn=73=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <SRS0=l9Wc=73=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98A04C77B60
-	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 14:43:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9D06C77B60
+	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 18:24:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 82741C4339B; Tue,  4 Apr 2023 14:43:11 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 6555CC4339C; Tue,  4 Apr 2023 18:24:07 +0000 (UTC)
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 81C39C433D2
-	for <soc@kernel.org>; Tue,  4 Apr 2023 14:43:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 81C39C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id h17so33067951wrt.8
-        for <soc@kernel.org>; Tue, 04 Apr 2023 07:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680619388;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ad6h00Bx8GcKvck9bd01LkivTMFfzeKAoZr2DuRzZuA=;
-        b=YeDuuIfA00m/SVTJZt2sK031PCR9Cqj0FtcGK4nbxlIe3o3QA9GFmxs/v/H0Ac988T
-         2F2mIHDrEEy4B+S+TJ46ZVZIDMOUfekOcTI+vhfhF9hM3r54E0WUhyghB0Ji7VR0W1LJ
-         wU0t6+WVfS+2kzdcdCxytjoUNKCA+ijsWzkRVExLs9Vv6+YCHH9LpaZt1BxOvcBZWdgZ
-         N9BkFzq1CAGRBE101KY9uf0jywL5fYp4LHcMo7Op+yhLlkkyldgQSw6v46szCeKyJx3F
-         +jUua4LZ728+8/bW+ZIKBvip3PcN8/Uq4lvAWvWwToQYMD13rwGfK+uoZUBWQ/KZZNM6
-         xu9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680619388;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ad6h00Bx8GcKvck9bd01LkivTMFfzeKAoZr2DuRzZuA=;
-        b=r1RR9uiZFKoVOqxKKpj9yE1QW4rMovYRmTAj8Vw01nzaD5TdOUvVD9mZLndL+p9Pyx
-         ZDrREWsfyXPzd2FCON9X29Ov/vtr28NzbCZyISUi79EWXWmouOmgU5ccLbu6QCi2mIbO
-         XuBY035pN3Ty9hqOEfAzliPkLXdHsxOirOA8pH8KgRuAAN1gAHKlN2GPQrrBzI4P25+7
-         yQNRLQTKudgF/J/JTKAWq9j8C1php1nz8GiRwJtyFXoJvbLGo1xfNAyS9orV4K/4qS32
-         n1VCBctEOxB4I+Pg6FAaoylFPgfs7NpK4iWznsnmmLQHEXlZtA9mdFPyUeSitC1P3Ppa
-         zSHg==
-X-Gm-Message-State: AAQBX9dqf+bYrGd6nj9hO2y/FN/Itvu/rHS1SeMBPr4lXMBKsMbYJvn2
-	6DbF0sMJloKFDXddfsXxA6HIkQ==
-X-Google-Smtp-Source: AKy350YBdvNgOC8F8gqfsSh8GXu4M4HZH2CymaXshNdroBrqtynflWna7ZvGWLovVOxyHFO0u4kGHA==
-X-Received: by 2002:adf:f18e:0:b0:2d3:b1fa:3031 with SMTP id h14-20020adff18e000000b002d3b1fa3031mr1712262wro.16.1680619388666;
-        Tue, 04 Apr 2023 07:43:08 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5136:bca8:1616:ba77? ([2a01:e0a:982:cbb0:5136:bca8:1616:ba77])
-        by smtp.gmail.com with ESMTPSA id y6-20020adff6c6000000b002ceac2ccc4asm12489979wrp.23.2023.04.04.07.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 07:43:08 -0700 (PDT)
-Message-ID: <f221954d-66f2-8dac-8e2b-5769c18d9aca@linaro.org>
-Date: Tue, 4 Apr 2023 16:43:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH RFC v2 0/4] ARM: oxnas support removal
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id D1092C433D2;
+	Tue,  4 Apr 2023 18:24:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D1092C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 005E63200A4B;
+	Tue,  4 Apr 2023 14:24:00 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 04 Apr 2023 14:24:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1680632640; x=1680719040; bh=07
+	WV5NgL8vMYW4YUKKfLXg4CjXG2oD6eDnOlB5kaoU8=; b=JGa8FIHroy2kuC8LiN
+	uVI9eJvX/WnAlMxVCM2boz1XZBjtb+I+3BkYSY6z0K9ZqvrN2EA1ZWNeF8YmXgWa
+	V7ZoERoi5MO+DUwPlLn1Ucw2hvFf0D5TtT53BZ0kh45sgI2LoK7wv3R/nXR5UjSH
+	9b3bKT6JkJPnOLbyM+m0a/KGQhxcNPNjqMHQGl7VSdmWk1qEBf+n7L3Qpm/GVOpz
+	K000UDXHngCAGdnTsUdGte5U6Tb3GMl/EXgg4hYcXrSrCRE9DLEVQsrJY/0Pa6x3
+	r/iwJCSRda8Dpxgi/lNU/+J5VtrdQIcn3rb2atd+66ob8yVvPYkPxDeXBdcsDUMy
+	mxyg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1680632640; x=1680719040; bh=07WV5NgL8vMYW
+	4YUKKfLXg4CjXG2oD6eDnOlB5kaoU8=; b=Ll7gcFmwspK8PWje88pzP5XHBF30k
+	nszHo2aD9dKsbNo8i5fVt078Tqxr0/hBAmgIe+ajQ96C1nYT4iTAgVt5ROfY1LoC
+	8A9lSJNqLU32vWDzOFa+jbE96Bw4RK/0ETwVf4AUECmBYYd+JjLnhSxv/eQ/IGb3
+	sSyIXHjQYMKNRvy7PcwPSCZZEKQC5c/w2hx1x2dcSGMflcyX44XlS+G6JOjPy91Z
+	yh4tKJ8a17uCiAWZdkc1gnJO2Jnw0pXtO2Ck+gMPHPB9EBuow1R6bHQqbPponcbM
+	J3qTjK6zuv6j33MDk9klBTqg0SBR4ecSvIQUTrkUq/D/LNfrunXSlZhtQ==
+X-ME-Sender: <xms:P2ssZMkSZECcK0tljlLZGMSwvrCJAmIjFEmwPAZDEf5RqMXHXs6JsA>
+    <xme:P2ssZL2xvjoogo9s5uizDg9v6kC0-vA97NKuQqBvmRgcYMdo72P8RR8WDtleRILbc
+    yQ_UFrDgAp-rcrbV0E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:P2ssZKrTfQ5011WxEv1wwyCNED72NYIKp9vQ0ityoTuUhxw04WDIjg>
+    <xmx:P2ssZIlHWQmNQEH1q8fjYjrbwibOboOyWzq-LbLbJKFwA2Zy_d-_yQ>
+    <xmx:P2ssZK1P2C1CLK1diOl2BG_1LABkLUlrLHxernQyk6vxtoI3gzRE0w>
+    <xmx:QGssZJ6_WY4opnWQsUKwdQXrPhNk7dDMrf3uywEiqxUk01M4F-l7RA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7E323B60089; Tue,  4 Apr 2023 14:23:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <2b04a64a-80fe-4ff3-b78b-2f999c8be9f6@app.fastmail.com>
+In-Reply-To: <20230324172657.GE309305@hu-bjorande-lv.qualcomm.com>
+References: <20230126163008.3676950-1-andersson@kernel.org>
+ <cdcff86c-77fe-4c5d-b8e8-58b815b9e969@app.fastmail.com>
+ <20230130222412.t2tkkhqfep2orxf2@builder.lan>
+ <9b680581-0956-4188-9af9-af06b625c001@app.fastmail.com>
+ <20230324172657.GE309305@hu-bjorande-lv.qualcomm.com>
+Date: Tue, 04 Apr 2023 20:23:39 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Bjorn Andersson" <quic_bjorande@quicinc.com>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Russell King <linux@armlinux.org.uk>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, "linux-oxnas@groups.io"
- <linux-oxnas@groups.io>, Linus Walleij <linus.walleij@linaro.org>,
- Daniel Golle <daniel@makrotopia.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230331-topic-oxnas-upstream-remove-v2-0-e51078376f08@linaro.org>
- <86d63038-e3f5-4c03-b904-a26761b0578d@app.fastmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <86d63038-e3f5-4c03-b904-a26761b0578d@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: "Bjorn Andersson" <andersson@kernel.org>, arm <arm@kernel.org>,
+ soc@kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, "Andy Gross" <agross@kernel.org>,
+ "Olof Johansson" <olof@lixom.net>, "Kevin Hilman" <khilman@baylibre.com>,
+ "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+ "Stephan Gerhold" <stephan@gerhold.net>,
+ "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>,
+ "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
+ "Bagas Sanjaya" <bagasdotme@gmail.com>,
+ "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+ "Dawei Li" <set_pte_at@outlook.com>,
+ "Loic Poulain" <loic.poulain@linaro.org>,
+ "Melody Olvera" <quic_molvera@quicinc.com>,
+ "Naman Jain" <quic_namajain@quicinc.com>,
+ "Neil Armstrong" <neil.armstrong@linaro.org>,
+ "Yang Li" <yang.lee@linux.alibaba.com>,
+ "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+ coresight@lists.linaro.org,
+ "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+ "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+ "Mike Leach" <mike.leach@linaro.org>, "Leo Yan" <leo.yan@linaro.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>, linux-perf-users@vger.kernel.org,
+ "John Garry" <john.g.garry@oracle.com>, "Will Deacon" <will@kernel.org>,
+ "James Clark" <james.clark@arm.com>
+Subject: Re: [GIT PULL] Qualcomm driver updates for v6.3
+Content-Type: text/plain
 
-On 04/04/2023 16:37, Arnd Bergmann wrote:
-> On Mon, Apr 3, 2023, at 09:42, Neil Armstrong wrote:
->> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
->> associated with a clear lack of maintainance, development and migration to
->> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
->>
->> In addition, the OX810 hasn't been booted for years and isn't even present
->> in an ARM config file.
->>
->> For the OX820, lack of USB and SATA support makes the platform not usable
->> in the current Linux support and relies on off-tree drivers hacked from the
->> vendor (defunct for years) sources.
->>
->> The last users are in the OpenWRT distribution, and today's removal means
->> support will still be in stable 6.1 LTS kernel until end of 2026.
->>
->> If someone wants to take over the development even with lack of SMP, I'll
->> be happy to hand off maintainance.
->>
->> The plan is to apply the first 4 patches first, then the drivers
->> followed by bindings. Finally the MAINTAINANCE entry can be removed.
->>
-> 
-> I merged all four into the soc tree now, thanks!
+On Fri, Mar 24, 2023, at 18:26, Bjorn Andersson wrote:
+> On Wed, Feb 15, 2023 at 04:05:36PM +0100, Arnd Bergmann wrote:
+>> On Mon, Jan 30, 2023, at 23:24, Bjorn Andersson wrote:
+>
+> Iiuc pstore provides a place to store system state for analysis after a
+> reboot, but DCC provides essentially register dumps on demand - with the
+> system reset being a special case trigger.
+>
+> So I think it would look neat to expose the DCC data alongside other
+> pstore data (except for the mentioned issues with ramoops not working on
+> most Qualcomm devices), but when the reboot happens DCC captures data in
+> the DCC SRAM, not in the pstore (whatever backing might be used). So
+> post boot, something would need to get the DCC data into the pstore.
+>
+> To me this sounds in conflict with the pstore design.
 
-Thanks for handling this !
+Sorry for the late reply.
 
-Neil
+The case I was thinking of is making the DCC SRAM a pstore backend
+that might be shared with other pstore users, in place of the
+other targets like PSTORE_RAM, PSTORE_BLK, EFI_VARS_PSTORE and
+the powerpc64 nvram. This might be a bad idea for other reasons of
+course, e.g. if it's impossible to have more than one pstore
+backend active and the SRAM is too small to contain the data
+that would otherwise be store here, or if it's not persistent
+enough.
 
-> 
->       Arnd
+> Further more, with the reboot trigger being the special case, we'd need
+> to amend the pstore state in runtime to capture the case where the user
+> requested the DCC to capture the state.
+>
+>
+> One idea that I was looking at was to trigger a devcoredump as a way to
+> get the data out of the kernel, instead of a new device node. But it
+> doesn't seem to fit very well with existing use cases, and I haven't
+> used DCC sufficiently - given that it doesn't exist upstream...
 
+You are probably right, but I'm curious about DEV_COREDUMP, as I
+haven't actually seen that before, and I can't seem to find any
+documentation about what its intention is, though I can see a number
+of in-kernel users.
+
+> We made significant changes to the control interface through the review
+> process, I think we have something that looks reasonable now, but I
+> picked the patches under the premise that it's unstable and in debugfs,
+> and exposing the tool to users could lead to more interest in
+> polishing it.
+
+Ok
+ 
+        Arnd
