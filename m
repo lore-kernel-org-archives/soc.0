@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12E99C761A6
-	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 08:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ED22C6FD1D
+	for <soc@archiver.kernel.org>; Tue,  4 Apr 2023 08:24:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EAE4EC433EF; Tue,  4 Apr 2023 08:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1045C433A1;
-	Tue,  4 Apr 2023 08:24:12 +0000 (UTC)
+	id 56B54C433EF; Tue,  4 Apr 2023 08:24:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5276FC433D2;
+	Tue,  4 Apr 2023 08:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680596657;
-	bh=Wu9Q5YNgmAzpnEFBnOoyRUEdHAWjUx5xpzv1twk34q8=;
+	s=k20201202; t=1680596663;
+	bh=Jx5bvjrSNpzL7FAJ0vFM7n8T6kg58By1narMR8bQMcI=;
 	h=From:To:List-Id:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AM3ydbcoEuF6wt0hUYzZ8HqTTkMrRla/MaZzFAP1WR1tOmbrUd7cd6xUrj8bsh8SV
-	 zLwegJU9XVHxfjfd96C7OcMHffCfPvWQZLLCUPmoRgaxS0rXZeWIZudweg2EUKCw3y
-	 MaaAnSdzM2ECpcwdJtbPgNyaSPEHFimuQxKDn5OhA7WbZ8EQkvDe4zwgwWAACCS44/
-	 zhliv1LqCbx4cAXdhmNwS0Wy6LWMaNLIffcULq5/BIoK+jfQWPsFcIw34FDrJIWR1B
-	 psbm/muVnWCauyEq/jNYPfL6DOzP5dCLd0sdGuDPxonWy0y7cvRChIO1QGpIAt7/Dv
-	 EHOua9Tuk5CXw==
+	b=Vlpp8/o5jbSpwOhzro/2OUcugQ6BJ3HLIkiEzefoeA+6yrtMBNJXqubbdSKt0yyCh
+	 IF37wNje1EPIR8zA0WzZ24p35vIhIWJ1wbo7V3fl9spRq7SZw6pdpaoHcz25b/MAYd
+	 8BziiO4iVla68ernU21LsVc0Oy2rGV1ZUPHfqHyzOu6jA7lCiP1aRxEKP30IccQNMs
+	 6+TF6rmamywTb77+/rE6x/wtR+KOaX0nRBbpE5zf+l32wHeM1myjWxl78HG113gVBd
+	 wLBuTXKE34mtjFdOfKqCbJIoJCOCUvuziKKdcfk2QYOepdd9Kb4RDPZ/GH8l5SbsLE
+	 nl+jKQTYn4bCg==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Tony Lindgren <tony@atomide.com>
 List-Id: <soc.lore.kernel.org>
@@ -45,11 +45,10 @@ Cc: soc@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-gpio@vger.kernel.org,
-	linux-omap@vger.kernel.org,
-	Christian Lamparter <chunkeey@gmail.com>
-Subject: [PATCH v2 1/3] dt-bindings: net: add st,stlc45xx
-Date: Tue,  4 Apr 2023 10:23:59 +0200
-Message-Id: <20230404082401.1087835-2-arnd@kernel.org>
+	linux-omap@vger.kernel.org
+Subject: [PATCH v2 2/3] ARM: dts: omap2: add stlc4560 spi-wireless node
+Date: Tue,  4 Apr 2023 10:24:00 +0200
+Message-Id: <20230404082401.1087835-3-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230404082401.1087835-1-arnd@kernel.org>
 References: <20230404082401.1087835-1-arnd@kernel.org>
@@ -58,78 +57,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Link: https://lore.kernel.org/all/e8dc9acb-6f85-e0a9-a145-d101ca6da201@gmail.com/
-Acked-by: Christian Lamparter <chunkeey@gmail.com>
+Converted from the platform_device creation in board-n8x0.c.
+
+Link: https://lore.kernel.org/all/20230314163201.955689-1-arnd@kernel.org/
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../bindings/net/wireless/st,stlc45xx.yaml    | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
+ arch/arm/boot/dts/omap2.dtsi                |  4 ++++
+ arch/arm/boot/dts/omap2420-n8x0-common.dtsi | 12 ++++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml b/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
-new file mode 100644
-index 000000000000..99f13d8d3816
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/wireless/st,stlc45xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm/boot/dts/omap2.dtsi b/arch/arm/boot/dts/omap2.dtsi
+index afabb36a8ac1..fdc1790adf43 100644
+--- a/arch/arm/boot/dts/omap2.dtsi
++++ b/arch/arm/boot/dts/omap2.dtsi
+@@ -129,6 +129,8 @@ i2c2: i2c@48072000 {
+ 		};
+ 
+ 		mcspi1: spi@48098000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
+ 			compatible = "ti,omap2-mcspi";
+ 			ti,hwmods = "mcspi1";
+ 			reg = <0x48098000 0x100>;
+@@ -140,6 +142,8 @@ mcspi1: spi@48098000 {
+ 		};
+ 
+ 		mcspi2: spi@4809a000 {
++			#address-cells = <1>;
++			#size-cells = <0>;
+ 			compatible = "ti,omap2-mcspi";
+ 			ti,hwmods = "mcspi2";
+ 			reg = <0x4809a000 0x100>;
+diff --git a/arch/arm/boot/dts/omap2420-n8x0-common.dtsi b/arch/arm/boot/dts/omap2420-n8x0-common.dtsi
+index 63b0b4921e4e..fe9dd8bbfc85 100644
+--- a/arch/arm/boot/dts/omap2420-n8x0-common.dtsi
++++ b/arch/arm/boot/dts/omap2420-n8x0-common.dtsi
+@@ -109,3 +109,15 @@ partition@5 {
+ 		};
+ 	};
+ };
 +
-+title: ST/Intersil/Conexant stlc45xx/p54spi/cx3110x SPI wireless device
-+
-+maintainers:
-+  - Christian Lamparter <chunkeey@gmail.com>
-+
-+description:
-+  The SPI variant of the Intersil Prism54 wireless device was sold
-+  under a variety of names, including Conexant CX3110x and
-+  ST Microelectronics STLC5460.
-+
-+allOf:
-+  - $ref: ieee80211.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - cnxt,3110x
-+      - isil,p54spi
-+      - st,stlc4550
-+      - st,stlc4560
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  powerdown-gpios:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
++&mcspi2 {
++	status = "okay";
 +
 +	wifi@0 {
-+	    compatible = "st,stlc4560";
-+	    reg = <0>;
-+	    spi-max-frequency = <48000000>;
-+	    interrupts-extended = <&gpio 23>;
-+	    powerdown-gpios = <&gpio 1>;
++		reg = <0>;
++		compatible = "st,stlc4560";
++		spi-max-frequency = <48000000>;
++		interrupts-extended = <&gpio3 23 IRQ_TYPE_EDGE_RISING>;
++		powerdown-gpios = <&gpio4 1 GPIO_ACTIVE_LOW>; /* gpio 97 */
 +	};
-+    };
++};
 -- 
 2.39.2
 
