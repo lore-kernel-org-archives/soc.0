@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D63FBC7619A
-	for <soc@archiver.kernel.org>; Wed,  5 Apr 2023 08:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E2EC76188
+	for <soc@archiver.kernel.org>; Wed,  5 Apr 2023 08:04:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 93E4AC433A4; Wed,  5 Apr 2023 08:04:43 +0000 (UTC)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	id B2A4EC4339B; Wed,  5 Apr 2023 08:04:44 +0000 (UTC)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5BCDCC433EF
-	for <soc@kernel.org>; Wed,  5 Apr 2023 08:04:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5BCDCC433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 54BE6C4339C
+	for <soc@kernel.org>; Wed,  5 Apr 2023 08:04:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 54BE6C4339C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-500298a69a0so269913a12.2
-        for <soc@kernel.org>; Wed, 05 Apr 2023 01:04:42 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id cn12so139019984edb.4
+        for <soc@kernel.org>; Wed, 05 Apr 2023 01:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680681880;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wi5FMUcuNcmNWMrhurZ3bybGg/p7Cg429nUa1gNhErw=;
-        b=zEOqPfjaaL2uWzxMd+MxD7UmgoolMd3GIiKxj1lKrzUPpeLR98UNKKTPj6QVyYlwgd
-         2oco99MNtndOMABSvfzFa+hkfzI6+Iinva90oq35eGWDEqQKAOzRSqd3Zggdb7qeNQb2
-         Y8NPBYS5jxtEvqqf6imr1f+6EmlnHdSHlGE7Tp7a1hF8cHnFsNIummg57ga3I9kL5GNf
-         4KgwiNfUjPeIc/J5nWDifRjFWiCu0/oL6rHrFgipybSNBdeWmkQkfnOgLKFoG5NhxFlf
-         ho2Yx4VI4FuwTCnPwXvyVWJTXzy2U8oZWNx6waFmTKx9SdQMsOJAyFHoSKgusLOh5e+S
-         qPTg==
+        d=linaro.org; s=google; t=1680681881;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZsIZIEr0aAVyFyPyxeatxNJYaoKvpa6MbUjKIWxAf28=;
+        b=ANgXPdpRApV231c056euDA+gL6loatGvlGjqnGjJYgmAQ+QPsArouFKfFX4FfyUoxw
+         pdxa95dr7h0tQyjXz+1NS0FHmfxuxTX2iaJvfKYfpPmSuZyyZHpsK1Fv/YphfoU56KtM
+         Y4GIMwvx9pBx6pvxDqVy7LatPgqfY3ikZxza33IxGJ7lG4GlY2XPsv0K0upLORNGoZQV
+         GEW1VNMMdryLNzNniqS1BAybYDyTV20/ODBW1p9DuF3YNTnU1riFMe/8qFCDiR/RnPqg
+         FSEjv4S+1za/MxsF5PT+gDDqNtNL/bhDwW2ZEQp96tq6jB4/qixqCpYKxRO5GGpOOfFf
+         YQhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681880;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wi5FMUcuNcmNWMrhurZ3bybGg/p7Cg429nUa1gNhErw=;
-        b=6fa7GoXEwzU7fu8lLMxqLB66jPI4Q0sHcIAqPhQIZFjKteVoXHpVnbxAdV1Mw9EkAh
-         WqWaaC8Ww91Dd7mQroUv3k5zRr43thU5Ankd+hoV+MKV18a9gY20QEdskpRHGNI6NMpe
-         26NNZckXauZO20a5xey/ahRYwWNuBR5Y/THRuBM1ApNuKuiqX4Z9a7cmWVmJQe0DdfiZ
-         WsDR7mnpQ0gPVLCmPI7upnRzKTQF81viUMxQv7b/PTek4NcUoqvCE7EJzvsAVcjLtMjz
-         ZK47nEkfZe1FbmVyBwdLfB2EhZA1Ew7dAKZZuPWLwqmWyTB0OGZCeHzCh6oJuJchoHxo
-         VKSw==
-X-Gm-Message-State: AAQBX9fjebCo4mh2E0DPts/fHh9XA3NV5XNFoyyhOQkWknZKlSzU9gUl
-	jnWvMvw3EzrEqR3vwUQhI88y3Q==
-X-Google-Smtp-Source: AKy350Ypl3SjcaA4rvPosLM+UbI2XKDgKUe1Kw/yQlqS1oKhDE7dlDYsvmIvMQG1dCeDpE7XboeEcA==
-X-Received: by 2002:aa7:c40c:0:b0:500:50f6:dd30 with SMTP id j12-20020aa7c40c000000b0050050f6dd30mr1231622edq.15.1680681880521;
-        Wed, 05 Apr 2023 01:04:40 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680681881;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZsIZIEr0aAVyFyPyxeatxNJYaoKvpa6MbUjKIWxAf28=;
+        b=tdnOqavi5UQ5yN7XfeQNj2USDsTRpJdC9j8L5sOjZ0xDvV8rwIIPTp+t6gvs8JC0o7
+         pJPq6vGSptYBzAZI+jGvnqtB/7haa7yO/zCordRsPgOhHLrqyUPyovU48L90gyfzBeMd
+         sOCBmhBnjm3Flwj0idCvmiaBZpmeaJVs3nhbEYIqYjS7Jgkurc90PP7yXGng+OvOKVib
+         ROG/FNKGSQn1RnrbGka1Ejx0iH5oZcp2EilzCLl1PrU+LoJbsc9QH7AXOjuEDoK78Zs1
+         u1IDuIfXPdEu0v29lfCL25V+fQoWNgLU9ZRH/wlxVPr4yT5o7fWCYc6BF8lSYq+mWJTD
+         zUcQ==
+X-Gm-Message-State: AAQBX9cRvzHB2A3Y3jqbDlKdamVeADoI4rg1UPG6TyY2qoVs/6G6fghL
+	7yEa6QRxdBP58pibaYbTS3CojA==
+X-Google-Smtp-Source: AKy350anXDNR/biQqZ6JMgQ0aXo/aHS9FfOnnekJMprh7HcLgu+oA0FLUW0pw6l+yYPi78mhpNalBw==
+X-Received: by 2002:a17:906:144d:b0:93f:2256:fc05 with SMTP id q13-20020a170906144d00b0093f2256fc05mr2128420ejc.55.1680681881479;
+        Wed, 05 Apr 2023 01:04:41 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
-        by smtp.gmail.com with ESMTPSA id z21-20020a056402275500b00501d73cfc86sm6845839edd.9.2023.04.05.01.04.39
+        by smtp.gmail.com with ESMTPSA id z21-20020a056402275500b00501d73cfc86sm6845839edd.9.2023.04.05.01.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 01:04:40 -0700 (PDT)
+        Wed, 05 Apr 2023 01:04:41 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -62,10 +63,12 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-kernel@vger.kernel.org,
 	Alim Akhtar <alim.akhtar@samsung.com>,
 	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/3] arm64: dts: samsung: dts64 for v6.4
-Date: Wed,  5 Apr 2023 10:04:36 +0200
-Message-Id: <20230405080438.156805-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/4] ARM: dts: samsung: dts for v6.4
+Date: Wed,  5 Apr 2023 10:04:37 +0200
+Message-Id: <20230405080438.156805-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230405080438.156805-1-krzysztof.kozlowski@linaro.org>
+References: <20230405080438.156805-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
@@ -75,18 +78,19 @@ The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-6.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-6.4
 
-for you to fetch changes up to 5f67124757464d632f0e5288e0ba48e3ff5531a9:
+for you to fetch changes up to e154a338e16cc3b3bbd54c891253319d22383746:
 
-  arm64: dts: exynos: add mmc aliases (2023-03-17 13:45:02 +0100)
+  dt-bindings: soc: samsung: exynos-pmu: allow phys as child on Exynos3 and Exynos4 (2023-04-05 09:52:11 +0200)
 
 ----------------------------------------------------------------
-Samsung DTS ARM64 changes for v6.4
+Samsung DTS ARM changes for v6.4
 
-1. Exynos850: add headers with AUD, G3D and HSI clock controller clock
-   IDs. Add G3D (GPU) clock controller node.
-2. Exynos5433: fixes for dtbs_check: move MIPI phy to PMU node.
+1. Several cleanups and improvements as a result of dtbs_checks: align
+   node names with bindings, drop incorrect properties, fix clock-names,
+   add missing "ports" node.
+2. Move DP and MIPI phys to PMU node (DTS with binding change).
 3. Drop old MSHC aliases (while adding proper mmc-ddr-1_8v which was
    selected by the driver based on the MSHC alias) and add generic MMC
    aliases in each board.  The aliases match known numbering in
@@ -94,22 +98,61 @@ Samsung DTS ARM64 changes for v6.4
 
 ----------------------------------------------------------------
 Henrik Grimler (2):
-      arm64: dts: exynos: drop mshc aliases
-      arm64: dts: exynos: add mmc aliases
+      ARM: dts: exynos: replace mshc0 alias with mmc-ddr-1_8v property
+      ARM: dts: exynos: add mmc aliases
 
-Krzysztof Kozlowski (1):
-      arm64: dts: exynos: move MIPI phy to PMU node in Exynos5433
+Krzysztof Kozlowski (13):
+      ARM: dts: exynos: align STMPE ADC node name with bindings in P4 Note
+      ARM: dts: exynos: drop fake align STMPE properties in P4 Note
+      ARM: dts: exynos: add ports to TC358764 bridge on Arndale
+      ARM: dts: exynos: fix WM8960 clock name in Itop Elite
+      ARM: dts: exynos: correct whitespace in Midas
+      ARM: dts: s5pv210: correct MIPI CSIS clock name
+      ARM: dts: exynos: drop unused samsung,camclk-out property in Midas
+      ARM: dts: exynos: move MIPI phy to PMU node in Exynos3250
+      ARM: dts: exynos: move MIPI phy to PMU node in Exynos4
+      ARM: dts: exynos: move DP and MIPI phys to PMU node in Exynos5420
+      ARM: dts: exynos: move DP and MIPI phys to PMU node in Exynos5250
+      ARM: dts: exynos: fix MCT compatible in Universal C210
+      dt-bindings: soc: samsung: exynos-pmu: allow phys as child on Exynos3 and Exynos4
 
-Sam Protsenko (3):
-      dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
-      dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
-      arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
-
- .../bindings/clock/samsung,exynos850-clock.yaml    | 19 +++++++++++++++
- .../boot/dts/exynos/exynos5433-tm2-common.dtsi     |  5 ++--
- arch/arm64/boot/dts/exynos/exynos5433.dtsi         | 19 +++++++--------
- arch/arm64/boot/dts/exynos/exynos7-espresso.dts    |  5 ++--
- .../boot/dts/exynos/exynos7885-jackpotlte.dts      |  1 +
- arch/arm64/boot/dts/exynos/exynos850.dtsi          |  9 +++++++
- include/dt-bindings/clock/exynos850.h              | 28 +++++++++++++++++++---
- 7 files changed, 69 insertions(+), 17 deletions(-)
+ .../bindings/soc/samsung/exynos-pmu.yaml           | 23 ++++++++++++++++--
+ arch/arm/boot/dts/exynos3250-artik5-eval.dts       |  4 ++++
+ arch/arm/boot/dts/exynos3250-artik5.dtsi           |  6 +++++
+ arch/arm/boot/dts/exynos3250-monk.dts              |  2 ++
+ arch/arm/boot/dts/exynos3250-rinato.dts            |  3 +++
+ arch/arm/boot/dts/exynos3250.dtsi                  | 14 ++++-------
+ arch/arm/boot/dts/exynos4.dtsi                     | 13 +++++-----
+ arch/arm/boot/dts/exynos4210-i9100.dts             |  6 +++++
+ arch/arm/boot/dts/exynos4210-origen.dts            |  5 ++++
+ arch/arm/boot/dts/exynos4210-smdkv310.dts          |  4 ++++
+ arch/arm/boot/dts/exynos4210-trats.dts             |  6 +++++
+ arch/arm/boot/dts/exynos4210-universal_c210.dts    |  8 ++++++-
+ arch/arm/boot/dts/exynos4412-itop-elite.dts        |  6 ++++-
+ arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi    |  5 ++++
+ arch/arm/boot/dts/exynos4412-midas.dtsi            |  8 ++++---
+ arch/arm/boot/dts/exynos4412-odroid-common.dtsi    |  6 +++++
+ arch/arm/boot/dts/exynos4412-origen.dts            |  6 +++++
+ arch/arm/boot/dts/exynos4412-p4note.dtsi           | 11 ++++++---
+ arch/arm/boot/dts/exynos4412-smdk4412.dts          |  4 ++++
+ arch/arm/boot/dts/exynos4412-tiny4412.dts          |  4 ++++
+ arch/arm/boot/dts/exynos4412.dtsi                  |  3 +--
+ arch/arm/boot/dts/exynos5250-arndale.dts           | 21 +++++++++++-----
+ arch/arm/boot/dts/exynos5250-smdk5250.dts          |  3 +++
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi      |  4 ++++
+ arch/arm/boot/dts/exynos5250-spring.dts            |  6 +++++
+ arch/arm/boot/dts/exynos5250.dtsi                  | 28 +++++++++-------------
+ arch/arm/boot/dts/exynos5260-xyref5260.dts         |  6 +++++
+ arch/arm/boot/dts/exynos5410-odroidxu.dts          |  3 +++
+ arch/arm/boot/dts/exynos5410-smdk5410.dts          |  6 +++++
+ arch/arm/boot/dts/exynos5420-arndale-octa.dts      |  6 +++++
+ .../arm/boot/dts/exynos5420-galaxy-tab-common.dtsi |  6 +++++
+ arch/arm/boot/dts/exynos5420-peach-pit.dts         |  4 ++++
+ arch/arm/boot/dts/exynos5420-smdk5420.dts          |  6 +++++
+ arch/arm/boot/dts/exynos5420.dtsi                  | 27 +++++++++------------
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi      |  4 ++++
+ arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi |  5 ++++
+ arch/arm/boot/dts/exynos5422-samsung-k3g.dts       |  5 ++++
+ arch/arm/boot/dts/exynos5800-peach-pi.dts          |  4 ++++
+ arch/arm/boot/dts/s5pv210.dtsi                     |  2 +-
+ 39 files changed, 225 insertions(+), 68 deletions(-)
