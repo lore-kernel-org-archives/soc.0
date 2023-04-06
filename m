@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1419C761A6
-	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 12:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF93DC77B70
+	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 12:48:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BFB6CC4339C; Thu,  6 Apr 2023 12:48:08 +0000 (UTC)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	id B017DC4339E; Thu,  6 Apr 2023 12:48:09 +0000 (UTC)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BC71EC433EF;
-	Thu,  6 Apr 2023 12:48:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BC71EC433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id D481FC433D2;
+	Thu,  6 Apr 2023 12:48:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D481FC433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id 18so1090757ejo.13;
-        Thu, 06 Apr 2023 05:48:07 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id by26so1090960ejb.2;
+        Thu, 06 Apr 2023 05:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680785286;
+        d=gmail.com; s=20210112; t=1680785287;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C/oNPSXF4DEXkM4iJ7WzDu31Vha4rpo63BbtWEOYdL4=;
-        b=B3OhMfX5OZYNer0C9NNK+6rM1YKacqHCOa2H7QCFZAui3hQe59xMIAsZxWTDdTi2T9
-         +sPauCztyvgty/T7zEbnstVmr2ZUxadFhGT9PC2csPtE7NtV/9WlB2p0HSA+uUzpouK8
-         2cKbTwzshxRH0lhe/v9z4q14bT9XlN11NjJCRgKGBW9m5d0QLM9gJ2KCcE8VcdHCYaMg
-         B7pMf520mzhvX7Ex3nJO/R6Y+dzfIHUY+b5YDkp/uQbmIrI0jXWvzRVxMReGWe4Ephfu
-         m/mmmFHmDNZ60zKxkIFP0pSQcQZYG83GkhjVSEOaDeApJImsrlB5wfTKic49QQDhjruC
-         j7NA==
+        bh=EP3pWoThzxNHvqPa+xfASwdPg7dot4xq5Kg3CfDSY8o=;
+        b=b5ZFEB2OJgUR3afX1uEmCBWj9H8BCyx/vbkn3JTjzU7lMKWXz8uvG12uoV4X7IZx2a
+         f4MCqfZi0Z+Tm7qRn8FyIT7U5qI2R2jaI/BUrB3SXYCv6qqZvewlktPlwQSsMOO+GT9t
+         I+bTw1o6FZmez2RteHa7ox8HqDjgLJrVMfrS9o8tMGmrRHh3ZQfKKE4O1Ev7UJ0aso2i
+         PkC7HUHE+cmEiKxVmzOoWuNxJCY2+Bbp5J+BeDuA76y1knKfrQUf4Jb4YDbo0C7UPQoU
+         Buay7IGYg2ve9yKeYpqFol4An9jCFch9ULHpxS97ZuSnq14NgrgjMn15sIouflOlFKgC
+         fT+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680785286;
+        d=1e100.net; s=20210112; t=1680785287;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C/oNPSXF4DEXkM4iJ7WzDu31Vha4rpo63BbtWEOYdL4=;
-        b=184KQcP0oapEJpIdN707RmgQStyXRrbdcrotAtn5qKXPfVvjPZz/jFYUDZ9f1hhc7Y
-         ifdKmq8iF1j/hTtU2QYdHSPpaLVhHeB7c/lNGx0OIwloGMPElbJSclj45Ycc246oovRs
-         n2vsRGr+Swl4JNpdOkdS/dUkZsmUfXFYYYtW43vRK3YoEcN+2dLUyEKarOE/jmM7J9Un
-         ZB2cD4CNH0CR7sF1a3CxzRJ0jJl+ScWqpYEU5nRIQdCADzcmHXLcXbyy8KWlerG5m4br
-         KR5ckDp0Hkcc4Kpl62c6us234F9r2aaXH5JQtA0zPCE8H4kG3+S55A3YDVOF/7XjgS6m
-         OzjA==
-X-Gm-Message-State: AAQBX9eNtj2Nd/fEVr+aVAkYqUEXxPiowYA7yzUbWz8WQ9DpF6+IhsdA
-	oCztQ3pvTbVw0ydpzRpnXKOQbyLOjTA=
-X-Google-Smtp-Source: AKy350bHCWjsKOT+HSqtRAOm/6ukLHpkAF0MU8QVFPLej0KBruxegYeGUhznE2/zgUMPjUEjZLozjg==
-X-Received: by 2002:a17:907:77c1:b0:889:58bd:86f1 with SMTP id kz1-20020a17090777c100b0088958bd86f1mr6586345ejc.14.1680785285785;
-        Thu, 06 Apr 2023 05:48:05 -0700 (PDT)
+        bh=EP3pWoThzxNHvqPa+xfASwdPg7dot4xq5Kg3CfDSY8o=;
+        b=GJG4U8HQP638RAo+FpGt9zPr3du2MrE0NNnVtQPp3ZjAk2if+Gw2z8F2eOayAL1SPH
+         qekU7msN+EmJrD5xxrGsPdyaG50F4m7/bP7+E3CuWmPGrTEIv/l+n/cmRYgZOVKIraxl
+         cH+U1dZ8+Eg8y4stu+eKxCak11QRZAuWsjwyG4hQWML2O/CENNTy+jdyVY+mQmj56YLa
+         3556f+32EFIUV7yxnEh2ImI1FGWEjT3jv9glsdT0FJAtRxvkPG73JZAsv3DAteUq7STT
+         bE13XeX8FBIptRN3Lrid8FWYFyoCRfHo8LLaouJvh1WTx9JMaDqQfKw/zftvSzSJ3oFP
+         eXsg==
+X-Gm-Message-State: AAQBX9cUv8tHz5GVQVqlzrRNSHuXtV1P73HBVU5jKqRaV+4Q7WXbksmN
+	m18iLdqmj+gkBCGdXE2oFH3GNcupwro=
+X-Google-Smtp-Source: AKy350YXQtNJ66qZW0DYBXxnghnb5q4N1dEGs04/9d/3jbwLyuWpNIV9ZakPEe1v49M4zU91KARp5g==
+X-Received: by 2002:a17:906:6851:b0:931:af6a:ad0f with SMTP id a17-20020a170906685100b00931af6aad0fmr5936423ejs.76.1680785286754;
+        Thu, 06 Apr 2023 05:48:06 -0700 (PDT)
 Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id qp4-20020a170907206400b0093048a8bd31sm784093ejb.68.2023.04.06.05.48.05
+        by smtp.gmail.com with ESMTPSA id jr3-20020a170906a98300b00933356c681esm771775ejb.150.2023.04.06.05.48.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 05:48:05 -0700 (PDT)
+        Thu, 06 Apr 2023 05:48:06 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -59,9 +59,9 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/7] soc/tegra: Changes for v6.4-rc1
-Date: Thu,  6 Apr 2023 14:47:59 +0200
-Message-Id: <20230406124804.970394-2-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/7] soc/tegra: Changes for v6.4-rc1
+Date: Thu,  6 Apr 2023 14:48:00 +0200
+Message-Id: <20230406124804.970394-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230406124804.970394-1-thierry.reding@gmail.com>
 References: <20230406124804.970394-1-thierry.reding@gmail.com>
@@ -77,11 +77,11 @@ The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.4-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.4-firmware
 
-for you to fetch changes up to 821d96e3a006d09ca9aa3d982c50f3d86fa55500:
+for you to fetch changes up to 8c47b8253f4cfd8b4dbda8c9adc1d0b1d7f3009d:
 
-  soc/tegra: fuse: Remove nvmem root only access (2023-04-05 17:10:40 +0200)
+  firmware: Use of_property_present() for testing DT property presence (2023-04-04 21:51:23 +0200)
 
 Thanks,
 Thierry
@@ -89,45 +89,19 @@ Thierry
 ----------------------------------------------------------------
 soc/tegra: Changes for v6.4-rc1
 
-Contains various minor cleanups and fixes as well as support for several
-more wake events on Tegra234.
+This contains minor fixes and cleanups. Note that one of the patches
+here includes ARM firmware changes, but I picked that up after checking
+with Sudeep and Rob because it didn't seem worth splitting it up any
+further.
 
 ----------------------------------------------------------------
-Jon Hunter (1):
-      soc/tegra: pmc: Add the PMIC wake event for Tegra234
-
-Kartik (1):
-      soc/tegra: fuse: Remove nvmem root only access
-
 Mikko Perttunen (1):
-      soc/tegra: bpmp: Actually free memory on error path
+      firmware: tegra: bpmp: Fix error paths in debugfs
 
-Muhammad Usama Anjum (1):
-      soc/tegra: cbb: remove linux/version.h
+Rob Herring (1):
+      firmware: Use of_property_present() for testing DT property presence
 
-Nick Alcock (1):
-      soc/tegra: cbb: Remove MODULE_LICENSE in non-modules
-
-Petlozu Pravareshwar (1):
-      soc/tegra: pmc: Support software wake-up for SPE
-
-Sushil Singh (1):
-      soc/tegra: pmc: Add wake source interrupt for MGBE
-
-Uwe Kleine-König (1):
-      soc: tegra: cbb: Drop empty platform remove function
-
-Yang Yingliang (1):
-      soc/tegra: cbb: tegra194: Use of_address_count() helper
-
-Ye Xingchen (1):
-      soc/tegra: flowctrl: Use devm_platform_get_and_ioremap_resource()
-
- drivers/soc/tegra/cbb/tegra-cbb.c    |  1 -
- drivers/soc/tegra/cbb/tegra194-cbb.c |  6 +-----
- drivers/soc/tegra/cbb/tegra234-cbb.c |  8 --------
- drivers/soc/tegra/flowctrl.c         |  4 +---
- drivers/soc/tegra/fuse/fuse-tegra.c  |  4 ++--
- drivers/soc/tegra/pmc.c              | 26 +++++++++++++++++++++++++-
- drivers/soc/tegra/powergate-bpmp.c   |  2 +-
- 7 files changed, 30 insertions(+), 21 deletions(-)
+ drivers/firmware/arm_scmi/optee.c     |  2 +-
+ drivers/firmware/tegra/bpmp-debugfs.c | 12 ++++++++----
+ drivers/firmware/tegra/bpmp.c         |  6 +++---
+ 3 files changed, 12 insertions(+), 8 deletions(-)
