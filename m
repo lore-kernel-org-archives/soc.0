@@ -1,76 +1,133 @@
-Return-Path: <SRS0=Fn9z=75=i2se.com=stefan.wahren@kernel.org>
+Return-Path: <SRS0=to0O=75=marcan.st=marcan@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5819C76196
-	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 06:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1C39C76196
+	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 07:18:16 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A29E1C4339E; Thu,  6 Apr 2023 06:57:22 +0000 (UTC)
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	id 708FEC433EF; Thu,  6 Apr 2023 07:18:16 +0000 (UTC)
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6338CC433EF;
-	Thu,  6 Apr 2023 06:57:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6338CC433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=i2se.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=i2se.com
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N49Qd-1qScX81GuP-0103xM; Thu, 06 Apr 2023 08:57:03 +0200
-Message-ID: <ea67b952-d94b-d7c4-e4d4-0e8d9daf1f08@i2se.com>
-Date: Thu, 6 Apr 2023 08:57:01 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 9B50FC433D2
+	for <soc@kernel.org>; Thu,  6 Apr 2023 07:18:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9B50FC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 7006642463;
+	Thu,  6 Apr 2023 07:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1680765489; bh=e70UwBute4HAoZJh+nxQBtfBPLvA9NDh9kwubSF5MIY=;
+	h=Date:To:Cc:From:Subject;
+	b=SGZHa/ng2HRa2VBLu8w/J/QKi0mDuTL0458I1X/lX/UA91ME/izT/mZ5mJNefiJZQ
+	 sAFmE6e7XH245Rayty/3/jShvtsNtt0frKxAgahWLZm4zz8R+Z9uIQhWzrtZ/wagWN
+	 kre+SRKOs0f8/4ercrfkn78R8r4W0e9o6ys48evrBL4JuP0LDAzluutvl263OureHQ
+	 8qHM4PGfqgrgi2ocV5OZo92ySkmwuzkz1/g/X2Obtxx+Vt7daP7SlvZOWejhchHSW2
+	 sg+EU/bPS3ZFmRkb49nv0U0TywDCzlmjZ3ilwtCK1BMqBpYljLAELmSIPMdIm/LJ7Z
+	 XAnDDkLnl07Jw==
+Message-ID: <7263df01-aebc-2db5-f074-4805e0ae9fbc@marcan.st>
+Date: Thu, 6 Apr 2023 16:18:05 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH V5 4/6] dt-bindings: ARM: fsl: Add chargebyte Tarragon
-To: Shawn Guo <shawnguo@kernel.org>,
- Stefan Wahren <stefan.wahren@chargebyte.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Evgeniy Polyakov <zbr@ioremap.net>, Sascha Hauer <s.hauer@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, soc@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230404080243.9613-1-stefan.wahren@chargebyte.com>
- <20230404080243.9613-5-stefan.wahren@chargebyte.com>
- <20230406014631.GL11367@dragon>
 Content-Language: en-US
-From: Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230406014631.GL11367@dragon>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+List-Id: <soc.lore.kernel.org>
+To: SoC Team <soc@kernel.org>
+Cc: Asahi Linux <asahi@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+From: Hector Martin <marcan@marcan.st>
+Subject: [GIT PULL] Apple SoC DT updates for 6.4
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:7QEkdBBfrMm1kmrS/aM6oJhq4ReuMUZBV54BqCVhP63oqsJggRI
- 5+Zda+zQP5N5E1XHUPCyEI+PJtL9h4zCWezkLBuP6wGnGNOrFK28REeo0VYS5I5UMt4hwPQ
- 7cbWLDaC9RCNSRoHoQulPGzjiwCNxc2JAoWO1myG9CYq9rW5XDPAE53pzvSjNwhs1C5x5dr
- M1rM9h8ntf97MonMI/HGQ==
-UI-OutboundReport: notjunk:1;M01:P0:9NXzCW9wF3c=;VJtVKcK+H5GvzAcvPMSPnbqPtdN
- rSsJq8A0FY5aeMSBaqraU06aA/Wtto3uGXxnh132+fzD7PLvw3oWYwYfpLjWpXdeLchRQ/E8n
- 8P2euYvLpbbei3KFl18A3wXfPYYiMnohHyLcbHOE+VksERa0v2FfvXOmIhh0xyAAeglPaBqRm
- kZOYOteEmwxoowA31W05U4CXtF1sVShAbbaF52Q6kz1eoyQ+iGdzydd1lbqi9la+B+9F60G8h
- IFyVGbWQVYa0jcncpIRcAsHXVZKU2ALZXUVOHhrfdfkdXLOl5C8enNIP1x05jCMf9WSWq44+V
- +auFhxik2sX+VvsSrPubklUds1vt77DyGMCctqBN+SywttAhDsMb5AcuKkNNm3Dq5npsaF7CV
- RkxKvTU0oo+Ym0sYHTjgQwdpHLkokOki/Q6G5BJ/UOzCiuy84oC0xcQPA85OI+XUAQpbsvN6R
- 7mqic9Tt+U8U2ggcH6tNFuVmOqm435SsyqbQMEeVA/xf+Ru0oYiLhAJk5Ido/t/MHRSMxZrf2
- G3Xg2ECoOE8RE7036c2uK0ZhldMlF1U9MQRqDLUg24iDHQmB+P58V9IXwxk+3izDjCOMvSgah
- DiBvoFnQaY+lf0GTymlmyBNUmbF3XW2//J3WLCKZmLKZGI4u6i6cUFaDlsmc8GJ315RXPiP7s
- 6Gne6eXsxQpVlZjmtBPmVLSwVvRGSDab8YugXiWVEg==
 
-Hi,
+Hi SoC folks,
 
-Am 06.04.23 um 03:46 schrieb Shawn Guo:
-> On Tue, Apr 04, 2023 at 10:02:41AM +0200, Stefan Wahren wrote:
->> This adds the compatibles for the chargebyte Tarragon boards.
->>
->> Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Applied 4 ~ 6, thanks!
+Please merge these DT changes for 6.4.
 
-thanks a lot.
+For this cycle we have the M2 DT series (which didn't make 6.3) as well as
+minor PCIe disable fixes on the older platforms.
 
-What happens to patch 2 & 3?
+-Hector
 
-Who take care of them?
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  https://github.com/AsahiLinux/linux.git tags/asahi-soc-dt-6.4
+
+for you to fetch changes up to 8d59efc33fdaa2c82072b4d3ba5f67d7dd9270d0:
+
+  arm64: dts: apple: t600x: Disable unused PCIe ports (2023-03-28 20:07:02 +0900)
+
+----------------------------------------------------------------
+Apple SoC DT updates for 6.4.
+
+This time we have the M2 (t8112) device trees and compatible updates,
+as well as a minor fix for PCIe ports on the prior models.
+
+----------------------------------------------------------------
+Hector Martin (2):
+      dt-bindings: power: apple,pmgr-pwrstate: Add t8112 compatible
+      arm64: dts: apple: t8112: Initial t8112 (M2) device trees
+
+Janne Grunau (14):
+      dt-bindings: arm: apple: apple,pmgr: Add t8112-pmgr compatible
+      dt-bindings: watchdog: apple,wdt: Add t8112-wdt compatible
+      dt-bindings: arm: cpus: Add apple,avalanche & blizzard compatibles
+      dt-bindings: interrupt-controller: apple,aic2: Add apple,t8112-aic compatible
+      dt-bindings: iommu: apple,sart: Add apple,t8112-sart compatible string
+      dt-bindings: mailbox: apple,mailbox: Add t8112 compatibles
+      dt-bindings: nvme: apple: Add apple,t8112-nvme-ans2 compatible string
+      dt-bindings: pci: apple,pcie: Add t8112 support
+      dt-bindings: pinctrl: apple,pinctrl: Add apple,t8112-pinctrl compatible
+      dt-bindings: i2c: apple,i2c: Add apple,t8112-i2c compatible
+      dt-bindings: clock: apple,nco: Add t8112-nco compatible
+      dt-bindings: arm: apple: Add t8112 j413/j473/j493 compatibles
+      arm64: dts: apple: t8103: Disable unused PCIe ports
+      arm64: dts: apple: t600x: Disable unused PCIe ports
+
+ Documentation/devicetree/bindings/arm/apple.yaml   |   15 +
+ .../devicetree/bindings/arm/apple/apple,pmgr.yaml  |    1 +
+ Documentation/devicetree/bindings/arm/cpus.yaml    |    2 +
+ .../devicetree/bindings/clock/apple,nco.yaml       |    1 +
+ .../devicetree/bindings/i2c/apple,i2c.yaml         |    1 +
+ .../bindings/interrupt-controller/apple,aic2.yaml  |   22 +-
+ .../devicetree/bindings/iommu/apple,sart.yaml      |   10 +-
+ .../devicetree/bindings/mailbox/apple,mailbox.yaml |    2 +
+ .../devicetree/bindings/nvme/apple,nvme-ans.yaml   |    5 +-
+ .../devicetree/bindings/pci/apple,pcie.yaml        |    1 +
+ .../devicetree/bindings/pinctrl/apple,pinctrl.yaml |    1 +
+ .../bindings/power/apple,pmgr-pwrstate.yaml        |    1 +
+ .../devicetree/bindings/watchdog/apple,wdt.yaml    |    1 +
+ arch/arm64/boot/dts/apple/Makefile                 |    3 +
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi          |    4 +
+ arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi     |   11 -
+ arch/arm64/boot/dts/apple/t600x-j375.dtsi          |   11 +
+ arch/arm64/boot/dts/apple/t8103-j274.dts           |   10 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts           |   15 -
+ arch/arm64/boot/dts/apple/t8103-j313.dts           |   15 -
+ arch/arm64/boot/dts/apple/t8103-j456.dts           |   10 +
+ arch/arm64/boot/dts/apple/t8103-j457.dts           |   11 +-
+ arch/arm64/boot/dts/apple/t8103.dtsi               |    4 +
+ arch/arm64/boot/dts/apple/t8112-j413.dts           |   63 ++
+ arch/arm64/boot/dts/apple/t8112-j473.dts           |   54 +
+ arch/arm64/boot/dts/apple/t8112-j493.dts           |   52 +
+ arch/arm64/boot/dts/apple/t8112-jxxx.dtsi          |   81 ++
+ arch/arm64/boot/dts/apple/t8112-pmgr.dtsi          | 1140 ++++++++++++++++++++
+ arch/arm64/boot/dts/apple/t8112.dtsi               |  912 ++++++++++++++++
+ 29 files changed, 2403 insertions(+), 56 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/apple/t8112-j413.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8112-j473.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8112-j493.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8112-jxxx.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8112-pmgr.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8112.dtsi
