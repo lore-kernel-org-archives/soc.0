@@ -1,104 +1,116 @@
-Return-Path: <SRS0=RqzZ=75=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD55C7618D
-	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 18:10:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01DB6C76196
+	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 20:11:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4165EC4339E; Thu,  6 Apr 2023 18:10:45 +0000 (UTC)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 416E7C4339B
-	for <soc@kernel.org>; Thu,  6 Apr 2023 18:10:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 416E7C4339B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5002e950e23so1308273a12.1
-        for <soc@kernel.org>; Thu, 06 Apr 2023 11:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680804642;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P+hArcc86ZP8XQBSobS6A1oZuyXWuAFhXHewFPdkAko=;
-        b=R9KjY9V+CDKLJMFqIk58XpthyY1P5yr+BpSatZ+Ih5ohqs7rDh0UmvI/0HVttUtcEW
-         Q+QC2/aK2be6/IGBlfJdLKBFfRDci22HyqQw0Vb2EcGbvIloK1vj8KxKCke/lfEzwHRi
-         PcbKxUfkYUGDGacHabCuxJGVe5718iW/N32OvG0FhPuL4YN9EX2LpHI6tScIEgcNrFIX
-         6r7iHhkgPXstB+Dw9HXmkZngU1cBoVZ2inZh8XLEE+1GLDK9QlpgYEsPPXJUvJJ6aTNY
-         bsOchuCi5HoCfypfeBOTyggXvA/6/bTo+wHfK/vc7JJrTAVyGO7eEMT2uVl2qVWvsGzH
-         LN7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680804642;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+hArcc86ZP8XQBSobS6A1oZuyXWuAFhXHewFPdkAko=;
-        b=i2SEGe1icMnyaPB3FubfkfACITWYgVs8obI9ZRAm3YKk3HLR9z/sl0bjNyTSmGgZid
-         j6P9pSs2P/Wo3PMA/ynue2KnEyqW8xXfyGVmEC7sBW3nDc+yGZhhs/SakBG6dUNoiXgk
-         /an0X0L/UsW/15JMXoE+EknNCrcrpUrsEjx1ZHg6+r/Mkm/eDAd8FERLpuJuqV1duILJ
-         PRNRhmO8pUwF6NTvzg4m0Sn+on3la4K8dJPP4Jk2aVKjJub1aonvO5U2y3bwuppgTlNZ
-         ckmDP6n9objXZ5gvo8bwrkcMd9Uwml/BqqUSun7gl6oVFWDn4n5wqYVBdZZmNtJppHTX
-         v/BA==
-X-Gm-Message-State: AAQBX9dG5saiyp8Y9rzDEDmJJOpPtdseRT0T8TsYDMAAEh3eRFgPGS+k
-	XD5xSCwvVDAiEhTm2J5AAOnz+A==
-X-Google-Smtp-Source: AKy350bzO4eamTsoFTvkm3B8HbgN0MG/FfDkaVzPiAZkq5TaO+7lLXPtLRrN1Hf1AAJIjmBFObBqpg==
-X-Received: by 2002:aa7:c6d2:0:b0:4fb:1c02:8750 with SMTP id b18-20020aa7c6d2000000b004fb1c028750mr396472eds.23.1680804642490;
-        Thu, 06 Apr 2023 11:10:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id qu19-20020a170907111300b0092c8da1e5ecsm1097404ejb.21.2023.04.06.11.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:10:42 -0700 (PDT)
-Message-ID: <dc794f94-42ff-33a5-facc-5fe09f6da295@linaro.org>
-Date: Thu, 6 Apr 2023 20:10:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V5 2/6] dt-bindings: w1: Add DS2482/DS2484 I2C to 1-W
- bridges
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Stefan Wahren <stefan.wahren@i2se.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>
+	id BDB7FC4339B; Thu,  6 Apr 2023 20:11:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78143C433EF;
+	Thu,  6 Apr 2023 20:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680811887;
+	bh=RG0+qH0bHgBw6z23tjhDO+t3nbzJJKefNMSC7QzCp8k=;
+	h=Date:From:To:List-Id:Cc:Subject:From;
+	b=KUdisQZQ4Ri7N9ofNoSule7tMwdz4oVZtIrT/r2rHBqMhFGVEZRj7QISH2IsH50ga
+	 N7fCCv6X8g15yq+hbd+ZYOkktMS6SX9bryAmJ+tADY/iCuFu5L33rbnMh0yHBBT2qT
+	 T8qVB0e86XM40h8UYs8d4Wf0gfIs0f5Cjj5pdy27rsjCcri9/wKqo/c2jBRWmNyGqI
+	 xEni9Nnc5ZyLsDPlQGY5xQgduff+Jgt9gzMt9Y8ovDw3tEGeci90paykp74Jo+nN13
+	 QAVy9taWLBfBFHgqd5/QF5aU9Nb4SRtANIsqwSVxqGseqjlVDcuGuQMEXZtmKqJ2rk
+	 lRMh1o4rOf6ug==
+Date: Thu, 6 Apr 2023 21:11:23 +0100
+From: Conor Dooley <conor@kernel.org>
+To: arnd@arndb.de
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, soc@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Rob Herring <robh@kernel.org>, Stefan Wahren <stefan.wahren@chargebyte.com>,
- Evgeniy Polyakov <zbr@ioremap.net>
-References: <20230404080243.9613-1-stefan.wahren@chargebyte.com>
- <20230404080243.9613-3-stefan.wahren@chargebyte.com>
- <20230404133937.GA3778861-robh@kernel.org>
- <e2afed14-fed3-772c-3acc-dc132b5a1078@i2se.com>
- <2023040651-baboon-busybody-6175@gregkh>
- <bdcf41d5-cd61-1e95-0b21-b8fe401644bd@ioremap.net>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bdcf41d5-cd61-1e95-0b21-b8fe401644bd@ioremap.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: conor@kernel.org, palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+	soc@kernel.org
+Subject: [GIT PULL] RISC-V SoC drivers for v6.4
+Message-ID: <20230406-islamist-mop-81d651b8830d@spud>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MG9SQdyiof7sCpeZ"
+Content-Disposition: inline
 
-On 06/04/2023 13:47, Evgeniy Polyakov wrote:
-> Stefan, Greg, hi
-> 
-> On 06/04/2023 10:58, Greg Kroah-Hartman wrote:
->> On Thu, Apr 06, 2023 at 11:53:28AM +0200, Stefan Wahren wrote:
->>> Unfortunately no feedback from Evgeniy so far. Should i resend these two
->>> patches for you?
->>
->> Please do.
-> 
-> Thank you for the patches Stefan, but I'm no longer a w1 maintainer, 
-> sorry I haven't updated the maintainers file, please send all w1 patches 
-> to Greg.
 
-Thanks Evgeniy.
+--MG9SQdyiof7sCpeZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If the one-wire subsystem is orphaned, I can manage the patches to
-offload Greg a bit.
+Hey Arnd,
 
-Best regards,
-Krzysztof
+Please pull some updates for the "otherwise unloved" RISC-V SoC drivers
+for v6.4! The bulk of this is my fixing my own driver, and there's a fix
+in here to make sure that we don't hit randconfig build issues once !MMU
+is enabled for 32-bit kernels.
 
+Thanks,
+Conor.
+
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ tags/riscv-soc-for-v6.4
+
+for you to fetch changes up to 4dd472bdafcb660bea17bc63a97d06e24fcb36ed:
+
+  soc: microchip: mpfs: add a prefix to rx_callback() (2023-04-03 20:32:43 +0100)
+
+----------------------------------------------------------------
+RISC-V SoC drivers for v6.4
+
+Microchip:
+Mailbox controller & client changes for the system controller on
+PolarFire SoC. The controller bits have been acked by Jassi.
+Primarily the changes work around a "hardware" bug (really the system
+controller's software, but it may as well be hardware as customers
+cannot change it) where interrupts are not generated if a service fails.
+The mailbox controller driver is tweaked to use polling, rather than
+interrupt, mode and there are some changes to timeout code required in
+the client driver as a result. There's some opportunistic cleanup that I
+performed while doing the swap too.
+
+Canaan:
+A single fix for some randconfig issues that crop up when !mmu is
+enabled for 32-bit kernels, due to my changes in a previous release that
+swapped out select based entablement of the driver.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+
+----------------------------------------------------------------
+Conor Dooley (10):
+      mailbox: mpfs: fix an incorrect mask width
+      mailbox: mpfs: switch to txdone_poll
+      mailbox: mpfs: ditch a useless busy check
+      mailbox: mpfs: check the service status in .tx_done()
+      soc: microchip: mpfs: fix some horrible alignment
+      soc: microchip: mpfs: use a consistent completion timeout
+      soc: microchip: mpfs: simplify error handling in mpfs_blocking_transaction()
+      soc: microchip: mpfs: handle timeouts and failed services differently
+      Merge patch series "mailbox,soc: mpfs: add support for fallible services"
+      soc: microchip: mpfs: add a prefix to rx_callback()
+
+Jesse Taube (1):
+      soc: canaan: Make K210_SYSCTL depend on CLK_K210
+
+ drivers/mailbox/mailbox-mpfs.c              | 55 +++++++++++++++-------------
+ drivers/soc/canaan/Kconfig                  |  5 +--
+ drivers/soc/microchip/mpfs-sys-controller.c | 56 +++++++++++++++++++----------
+ 3 files changed, 72 insertions(+), 44 deletions(-)
+
+--MG9SQdyiof7sCpeZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC8nawAKCRB4tDGHoIJi
+0jpvAPsG/NvFHWbivVqaIaLXBOhx1O24bkBks+fD9Tjcj93OTAEAlfjInam2orOU
+RLfmeEtVNnF8u+KCbf4ioD2F1H6YOwA=
+=tcys
+-----END PGP SIGNATURE-----
+
+--MG9SQdyiof7sCpeZ--
