@@ -1,99 +1,104 @@
-Return-Path: <SRS0=gyVr=75=gmail.com=thierry.reding@kernel.org>
+Return-Path: <SRS0=RqzZ=75=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ECB8C7618D
-	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 12:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77390C7618D
+	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 17:21:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 26274C433D2; Thu,  6 Apr 2023 12:48:13 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	id 40B6CC433D2; Thu,  6 Apr 2023 17:21:51 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4C592C433EF;
-	Thu,  6 Apr 2023 12:48:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C592C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id sg7so1095294ejc.9;
-        Thu, 06 Apr 2023 05:48:12 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 94E9CC433EF
+	for <soc@kernel.org>; Thu,  6 Apr 2023 17:21:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 94E9CC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-93db98f7b33so111784566b.2
+        for <soc@kernel.org>; Thu, 06 Apr 2023 10:21:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680785290;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9/+RpHErjTdXdB93GeqLCx48JgLw2erKdymhSD8OmlI=;
-        b=E3nzhPppOYHrnXBPABAcaFviLzZ4mFUxS4xyJi36KQHl/YECBXUJn2pAKvnIAw2C/I
-         4IBqv2NVbw6fDt3pSEBnqaXBUppfbF6jzjDCQPGB1OLUr7tR3nkdkwVINnbbw+SHLvFH
-         dyJMRKHR+2TotbD0uxeol0jiK89PEU951hakclU2TOdE8FnJRWh6EPUAaMLF2vIcgHXw
-         s2lk2TYB5p+cJCwkFuS+D523vj0ac1Oxgv/KRFqSCfxirq6UTa3tBki3l+MZLBuCAJKf
-         CIpQ6/zHN3tYlZUiX8+85rogorNNjyykgTxmtdVJGgPcCwhYLx2EW+t5r7nv4BmLUuix
-         5u9A==
+        d=linaro.org; s=google; t=1680801708;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=145yGzODgxY+rJbwAEpe0vSJYcWx7FkVo4x57vw/2Ds=;
+        b=J3QonWmOAxHMqJ1EOSUj4Rs4updaQcuUihcgcTFNhvmsCy6vBtmalIIUSokDtx0F3o
+         6nHdCIpzrLSH+VxgApjJ8P2UKckkNOkxX/fwqeuvB1cGopdBPEPwOnwC0KJ3GsZyHB2W
+         lszpadIv4hDgi03TskBGJpV3t+bDZsTEL0pGZgx1pl2e+DHeJwKaUvIFHVjPHSxHNkqP
+         jZtZPk3HiuFjSs3/9EMd2Q1h/dPqJqn3uopp1XusIxh+cfVVyR84rP6A1HeFr3Huklb5
+         JjnpiK3qXY8wlTF4ziKCllgSkJV7EMH3nOtGeRVKFnwORSESnC2LfbhneG+9pO1Bz2WS
+         sPmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680785290;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9/+RpHErjTdXdB93GeqLCx48JgLw2erKdymhSD8OmlI=;
-        b=2/iW3K3L5rvdG7e8UeztVgIUvlJuRfeFEAUi3b8LwDqE4VF7++z9o3fmUnY+XTMdH9
-         gbdsTOzFiW9pEvA20eHq7KJCJzXbFQvwHeMXwUY7UdPOowVVVxRaJSRzqZBsnCFRAqrb
-         y9rF4i4DOCFgCv2MT9ZF88s533CHf2nYf3Do4seVBBVanYB3R98R4cu4YYWnoXN/0P4I
-         fsLCOCsrkDRbtTHFomBR6Sx1FKcHk3CbD3iOa1a7GzWrUxgToQ2dFAYfnTl374VSteCp
-         EbPmaDebfmGYqVk1FqtirG+VCuseLWUkxtiaoTiHaXRkOQ6obOEeoqiRJbwBKUSUYA4b
-         l2bA==
-X-Gm-Message-State: AAQBX9eid6UMM1ix8/0r0KTvIz9uljXXfcTcAIjT5zqMD3cw5fXUQijv
-	fJE9MjGM0nZZwfNoGeDcDcnj1Uq7kGI=
-X-Google-Smtp-Source: AKy350Z2fNOnYmEnQMcJr35AUuVbNBeo6+AT0dqlj9zdpYMkpTK+Vvy20f9Y1w+mWoMJLYEHgo/VBQ==
-X-Received: by 2002:a17:907:6b0c:b0:8fd:2f01:86c0 with SMTP id rm12-20020a1709076b0c00b008fd2f0186c0mr6644977ejc.2.1680785290348;
-        Thu, 06 Apr 2023 05:48:10 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id m8-20020a50d7c8000000b004fe924d16cfsm716320edj.31.2023.04.06.05.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 05:48:10 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
-List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 7/7] arm64: tegra: Default configuration changes for v6.4-rc1
-Date: Thu,  6 Apr 2023 14:48:04 +0200
-Message-Id: <20230406124804.970394-7-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230406124804.970394-1-thierry.reding@gmail.com>
-References: <20230406124804.970394-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20210112; t=1680801708;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=145yGzODgxY+rJbwAEpe0vSJYcWx7FkVo4x57vw/2Ds=;
+        b=N9qFfqnb07E/lwTuz9uoU1uUMwbWjp13hSxqRiZRvBErZ3LgZO8YDhJwh7DR0XCgnF
+         cZxeJJWNqX66shlmB2lQdCS7pj1FZuoBT/bB2grTlOZGHuITbC0KaLvF34C9adYrbsTl
+         +RzAcusEEqt+peShLNtL2STrVubEYooQgupnZug8ZKgZKKKiM0djSOdDkF3FDzwH99wV
+         B52vaV59Kj0kDTo1PPToCbo7trH1ZRDYoi2BbuEX8wZZVdSBDV6p+mUe99FIoh9bdr0b
+         WizwfA9HOqiQaWwshf3o0I5BAiyP+a6eT4NIhAIZPorY8VUhWNtV3GfSMvD/iiTagxqW
+         8ncg==
+X-Gm-Message-State: AAQBX9c+n2tIglaghYndrWcpp5aJZeGCayJrNX12pGO16gOwYEaYE372
+	jCZA5c+Scl53dVeNGjIVXFFTpg==
+X-Google-Smtp-Source: AKy350YRBx7KoZyPvNoeZ4w8rpaupgS8OEN5BdZpbF0ZP0CslF/6SZi49GUb5ys+HM8ofDMXceerJw==
+X-Received: by 2002:a05:6402:344:b0:502:246e:6739 with SMTP id r4-20020a056402034400b00502246e6739mr235993edw.27.1680801707878;
+        Thu, 06 Apr 2023 10:21:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id jr3-20020a170906a98300b00933356c681esm1046545ejb.150.2023.04.06.10.21.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 10:21:47 -0700 (PDT)
+Message-ID: <c79ca1c4-d7d7-50f5-ee2c-1c1ff459c429@linaro.org>
+Date: Thu, 6 Apr 2023 19:21:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/5] dt-bindings: Add Blaize vendor prefix
+Content-Language: en-US
+To: Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: "soc@kernel.org" <soc@kernel.org>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "olof@lixom.net" <olof@lixom.net>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+ "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+ "sboyd@kernel.org" <sboyd@kernel.org>,
+ James Cowgill <james.cowgill@blaize.com>,
+ Matt Redfearn <matthew.redfearn@blaize.com>,
+ Neil Jones <neil.jones@blaize.com>
+References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+ <20230406102149.729726-2-nikolaos.pasaloukos@blaize.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406102149.729726-2-nikolaos.pasaloukos@blaize.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi ARM SoC maintainers,
+On 06/04/2023 12:22, Niko Pasaloukos wrote:
+> Blaize, Inc. (www.blaize.com) is a SoC manufacturer with integrated
+> programmable Graph-Streaming-Processors for AI and ML.
+> 
+> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
+> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
+> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Co-developed-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Four people were working on one pattern in vendor prefixes? I have
+doubts, because this is very trivial patch.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.4-arm64-defconfig
+Best regards,
+Krzysztof
 
-for you to fetch changes up to f462eb1d0df39499eff2407b2581ddf2fe89e744:
-
-  arm64: defconfig: Enable ARM CoreSight PMU driver (2023-04-05 15:08:34 +0200)
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-arm64: tegra: Default configuration changes for v6.4-rc1
-
-Contains a single patch to enable the Coresight System PMU driver.
-
-----------------------------------------------------------------
-Besar Wicaksono (1):
-      arm64: defconfig: Enable ARM CoreSight PMU driver
-
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
