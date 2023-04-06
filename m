@@ -4,59 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C4E5C77B71
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52117C76196
 	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 21:30:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4BF70C4339E; Thu,  6 Apr 2023 21:30:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3637AC4339C;
-	Thu,  6 Apr 2023 21:30:31 +0000 (UTC)
+	id 3CC7EC433A4; Thu,  6 Apr 2023 21:30:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FC92C433A1
+	for <soc@kernel.org>; Thu,  6 Apr 2023 21:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1680816631;
-	bh=gCR6EYfecwWEVrPu4EKMWiWEwcWW4dEWWV8spPf/pu8=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=jINVi24n9cGjH2pUfthJ9rMBRqa39s5BGiJf8FySf+ppfTMGyaCkgQU4UBMxTsxgN
-	 7q5Z0y8IyV+Kl79X3XFNWBIvAtaD+5QS7iICFpqEkIbue09EaMWEpQol/XMkc4KJNU
-	 AvjWXuUSLvqtoZx5kpdBAFcDRDAtmRes6ixSkaNkvDzh7pDtUlb2a+9xMMnUXS0zen
-	 a+8oro/EtuLgQ2WUZMajeJIpQL/D/eXyxNjz8wtBigHfvJP3Seig186e3eRVhkkiJw
-	 30zqAZXwh5ci2t5bHSXbvD1FhDzFAH+nEyTyZ3v1/R5oYH6YHlYTn6bRR1nrhvSe+4
-	 XW48yQlAfajiw==
+	bh=GgzQ/XTKzGe0FaiB/ZMvyTplpxjDDQpSWrvPWjTJiQM=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=TO19AHyrGHse65SlxM6Jjp/6BNTe73zSvKRG6jiEPc59SIyJNaS0BT19pNCrYTHiE
+	 6eDa4owYt1huayMhFjWje5J5rBiZ7ZSItvas1mO0gjBzF3bov3IIJAfVO0jQ3N43Ji
+	 vT8VSV0gnVUMOiNSdZWz1eCPrZuVuYeYEkAfSwubv8zgiZG/sC/urokn1bpMBXug3p
+	 gI3ZWCq7c5ZgjJKEYXxv+6arPBkvMhSLOddDq+PNts6FxERYoa3EcGNM7wRBiu/mA/
+	 O8kU0uCcWF3VBdI27AdAxEIV1xzrhEQnc1jAqY2C9uxeKu8wVxVDrcstwzzjefS5GM
+	 lXS+5ZG8NxsZg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20184E4F156;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08BA3C4167B;
 	Thu,  6 Apr 2023 21:30:31 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V Devicetree fixes for v6.3-final
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168081663112.18696.8209555222598882400.git-patchwork-notify@kernel.org>
+ <168081663102.18696.1464570615417181721.git-patchwork-summary@kernel.org>
 Date: Thu, 06 Apr 2023 21:30:31 +0000
-References: <20230406-negate-octagon-0fc2e47dbde5@spud>
-In-Reply-To: <20230406-negate-octagon-0fc2e47dbde5@spud>
-To: Conor Dooley <conor@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Thu, 6 Apr 2023 18:36:56 +0100 you wrote:
-> Hey Arnd,
-> 
-> Please pull a single fix, it's been a quiet window on the fixes front!
-> I don't have any urgent fixes on the soc side either, only fixes for
-> behaviour that cannot be triggered with an upstream kernel that I've
-> put in for-next.
-> 
-> [...]
+Patch: [GIT,PULL] i.MX fixes for 6.3, 2nd round
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=737423
+  Lore link: https://lore.kernel.org/r/20230406021602.GP11367@dragon
 
-Here is the summary with links:
-  - [GIT,PULL] RISC-V Devicetree fixes for v6.3-final
-    https://git.kernel.org/soc/soc/c/4f7e22b8b634
+Patch: [GIT,PULL] OP-TEE load for v6.4
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=737042
+  Lore link: https://lore.kernel.org/r/20230405062701.GA3391925@rayden
 
-You are awesome, thank you!
+Patch: [GIT,PULL] RISC-V Devicetree fixes for v6.3-final
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=737730
+  Lore link: https://lore.kernel.org/r/20230406-negate-octagon-0fc2e47dbde5@spud
+
+
+Total patches: 3
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
