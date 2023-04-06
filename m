@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7779FC7618D
-	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 01:46:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E0BDC7619A
+	for <soc@archiver.kernel.org>; Thu,  6 Apr 2023 01:47:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 37430C433D2; Thu,  6 Apr 2023 01:46:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD25C433EF;
-	Thu,  6 Apr 2023 01:46:35 +0000 (UTC)
+	id 0FE04C433EF; Thu,  6 Apr 2023 01:47:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8584BC4339E;
+	Thu,  6 Apr 2023 01:47:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680745598;
-	bh=PFG4OEhZApBHE0ImlIOBqZz2jesMOKmAJVcF4lHhKvM=;
+	s=k20201202; t=1680745673;
+	bh=9WbDKZosrCXTsUtAQGMZgcJi5OcwU1MrdsRoFKjgStk=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=incg1uFGOHRa1d+Z+fjX4LOiQi4clu4i2Tr7eVpsaY2uWjbVAnW/bcB0Mh5cV5Mp3
-	 5pQefrPoUEMuTRVW9cf/ZoJyJt8p7wQoj46NG8CvElSxBt579qQy9sZbEylUURcWjk
-	 qokgtzmByuizf5PrqZQ5QPpX9lH4L9sFQKZtyLe/hFHAJi42m0y6QflNTok/V+bycO
-	 QZ0kgS2Hbr1buneOZxXcVg2G11ME5PFc5l8zc9yhQSSzTKUwxqxRhpU2qUY433X3I9
-	 gvY8f+Pz8KDzCwLemc+UYGluUEDtYC+QcZrST9w3qCYHrhHk3Z0m5TJeafX5QIdPXe
-	 pFzQ3iJw6TttA==
-Date: Thu, 6 Apr 2023 09:46:31 +0800
+	b=AgkT8B61lJddYqRem5134nPvt7nDy9IhYfhL2HEsSikV3iTxHH6VfoiimRqwo4ln7
+	 kVu9rnnYT2kkJQTWZYB9qCf9SRlldF9QbyPOsSDW80VouVklQKGN7A388gHXs0ztcg
+	 9Lr+XdWcjIvCg0L37CnaBdheG/hBR+cSNHLeJv/seWkNx8tRbcd3gECKJZwZ/tfjon
+	 /02qbAqxqYebbqNY7gHddlJWOkXXo4k0PwXf5q0anLxUxfxprO4mK3PQe0cL4EfKWX
+	 Po297A6wejnge6QAPEV32f552Y4sQRU98jzQI4UZEAv214xStqT5B6MbNwn77iP0N6
+	 6XWZUlLPj67rA==
+Date: Thu, 6 Apr 2023 09:47:46 +0800
 From: Shawn Guo <shawnguo@kernel.org>
 To: Stefan Wahren <stefan.wahren@chargebyte.com>
 List-Id: <soc.lore.kernel.org>
@@ -32,19 +32,21 @@ Cc: Rob Herring <robh+dt@kernel.org>,
 	Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
 	soc@kernel.org, devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, stefan.wahren@i2se.com
-Subject: Re: [PATCH V5 4/6] dt-bindings: ARM: fsl: Add chargebyte Tarragon
-Message-ID: <20230406014631.GL11367@dragon>
+Subject: Re: [PATCH V5 1/6] dt-bindings: vendor-prefixes: add chargebyte
+Message-ID: <20230406014746.GM11367@dragon>
 References: <20230404080243.9613-1-stefan.wahren@chargebyte.com>
- <20230404080243.9613-5-stefan.wahren@chargebyte.com>
+ <20230404080243.9613-2-stefan.wahren@chargebyte.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404080243.9613-5-stefan.wahren@chargebyte.com>
+In-Reply-To: <20230404080243.9613-2-stefan.wahren@chargebyte.com>
 
-On Tue, Apr 04, 2023 at 10:02:41AM +0200, Stefan Wahren wrote:
-> This adds the compatibles for the chargebyte Tarragon boards.
+On Tue, Apr 04, 2023 at 10:02:38AM +0200, Stefan Wahren wrote:
+> chargebyte supplies hardware and software products for all
+> aspects of charging communication.
+> https://chargebyte.com/
 > 
 > Signed-off-by: Stefan Wahren <stefan.wahren@chargebyte.com>
 > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Applied 4 ~ 6, thanks!
+Applied, thanks!
