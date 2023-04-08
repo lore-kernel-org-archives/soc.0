@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 166D3C77B61
-	for <soc@archiver.kernel.org>; Sat,  8 Apr 2023 10:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE7EAC77B61
+	for <soc@archiver.kernel.org>; Sat,  8 Apr 2023 10:20:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6A86C433D2; Sat,  8 Apr 2023 10:20:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB81C433EF;
-	Sat,  8 Apr 2023 10:20:00 +0000 (UTC)
+	id 946B4C433D2; Sat,  8 Apr 2023 10:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A25CC433EF;
+	Sat,  8 Apr 2023 10:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680949204;
-	bh=SKZgt/L7ZEU/qJCGp4F/kRHpD0xgaGiBJ3y8qkzmiuw=;
+	s=k20201202; t=1680949209;
+	bh=9k/Fcd87Pyh9wh18qTzfKdB+LgjR7OrEP1r5yFEeasc=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cMYb87bw/SZeIsrDtTv+upMFK1MHMzQR6j1O63MqGtQiPUcw3yRyYQn7XxdGu04Mp
-	 ZbU/YfqCx2x8L8W+Ll+R1/BDVvB4RF+AXYuon/kVQVRufKrIJ2piBJK87l4Bt1UgTy
-	 z0keli2lxqvXsGnz2D1/MNhjoE7bGniVsz/P6LgVrdLw9HN4Pf8RKAJo+8fplHHHOS
-	 MVR55xIh4Hthpq9ikHPYHn0LkH+uTwGTKXqAImLxJPzftNrZB9R2E6e6gIWndHKzS/
-	 kFxIYhwbIVHEi3ixb0qnzl8oAjDkPMdMgDnJaWoxt44P7XETpMidVFS2F8PQI9WFPB
-	 Xvdxyie8ZxHmA==
+	b=Vo5Px6LdKVazpXjYmZPtZmOpOAFJQ+yVptqJSzyW8SmTd2D/FnIdwCBIMKZwrdbMA
+	 8chyU7q2TzTiHMnHRVP1IObu2QMXPU2xi/E5NLIjQC+2+IO1m4Jtfz+V056Ng6ILIT
+	 SxcJri8vEISn4b5dxcjS3aCgYQR29OBm4YE/5fvkZkZyxVTfBvxF6Sohvzdd6ff5dv
+	 uOT60/a8uGt4BOdiUrT3CmgGobNpwsWsfGZCkiF9BBsZ65wEr9AjyZtcfoi4QJHcjD
+	 0FchJoyO/pGhFQeV4GdfmRhvbETF2nLzDukc9gLhCBBWPC3e5UloQz7/Np/2ipMYH3
+	 HBIBE0NfesQjg==
 From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org,
@@ -31,13 +31,14 @@ Cc: Shawn Guo <shawnguo@kernel.org>,
 	kernel@pengutronix.de,
 	linux-imx@nxp.com,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 2/6] i.MX SoC changes for 6.4
-Date: Sat,  8 Apr 2023 18:19:24 +0800
-Message-Id: <20230408101928.280271-2-shawnguo@kernel.org>
+Subject: [GIT PULL 3/6] i.MX dt-bindings update for 6.4
+Date: Sat,  8 Apr 2023 18:19:25 +0800
+Message-Id: <20230408101928.280271-3-shawnguo@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230408101928.280271-1-shawnguo@kernel.org>
 References: <20230408101928.280271-1-shawnguo@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
@@ -46,31 +47,54 @@ The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-soc-6.4
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.4
 
-for you to fetch changes up to 614bef7e2727f35ff7edb7f41354e4e5c655590c:
+for you to fetch changes up to 1c2eb76b9456130c377372727744e9a109abf5e1:
 
-  ARM: imx: Use of_property_read_bool() for boolean properties (2023-03-14 15:06:00 +0800)
-
-----------------------------------------------------------------
-i.MX SoC changes for 6.4:
-
-- A couple of changes from Oleksij Rempel which make it possible
-  to configure Ethernet refclock from device tree.
-- Use common DT helpers to test DT property presence and read boolean
-  properties.
+  dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC (2023-04-08 15:25:41 +0800)
 
 ----------------------------------------------------------------
-Oleksij Rempel (2):
-      ARM: imx6q: skip ethernet refclock reconfiguration if enet_clk_ref is present
-      ARM: mach-imx: imx6ul: remove not optional ethernet refclock overwrite
+i.MX dt-bindings update for 6.4:
 
-Rob Herring (2):
-      ARM: mxs: Use of_property_present() for testing DT property presence
-      ARM: imx: Use of_property_read_bool() for boolean properties
+- Add vendor prefix for chargebyte.
+- A bunch of new board compatibles: Tolino Vision, Toradex Apalis,
+  chargebyte Tarragon, i.MX8M Plus based boards from DH electronics
+  and Data Modul, etc.
+- A series from Marek Vasut to improve blk-ctrl bindings.
 
- arch/arm/mach-imx/gpc.c         |  2 +-
- arch/arm/mach-imx/mach-imx6q.c  | 10 +++++++++-
- arch/arm/mach-imx/mach-imx6ul.c | 20 --------------------
- arch/arm/mach-mxs/mach-mxs.c    |  2 +-
- 4 files changed, 11 insertions(+), 23 deletions(-)
+----------------------------------------------------------------
+Andreas Kemnade (1):
+      dt-bindings: arm: fsl: add compatible string for Tolino Vision
+
+Marcel Ziswiler (1):
+      dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
+
+Marek Vasut (6):
+      dt-bindings: soc: imx8mp-media-blk-ctrl: Align block controller example name
+      dt-bindings: soc: imx8mp-media-blk-ctrl: Add LDB subnode into schema and example
+      dt-bindings: arm: Add DH electronics i.MX8M Plus DHCOM on PDK3
+      dt-bindings: soc: imx8m-blk-ctrl: Rename blk_ctrl to blk-ctrl in examples
+      dt-bindings: soc: imx-blk-ctrl: Drop leading label in blk-ctrl in examples
+      dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC
+
+Michal Vokáč (2):
+      dt-bindings: arm: fsl: Fix copy-paste error in comment
+      dt-bindings: arm: fsl: Add Y Soft IOTA Phoenix, Lynx, Pegasus and Pegasus+
+
+Philippe Schenker (1):
+      dt-bindings: arm: fsl: Add colibri-imx8x carrier boards
+
+Stefan Wahren (2):
+      dt-bindings: vendor-prefixes: add chargebyte
+      dt-bindings: arm: fsl: Add chargebyte Tarragon
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 45 ++++++++++++++++--
+ .../bindings/soc/imx/fsl,imx8mm-disp-blk-ctrl.yaml |  2 +-
+ .../bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml  |  2 +-
+ .../bindings/soc/imx/fsl,imx8mn-disp-blk-ctrl.yaml |  2 +-
+ .../bindings/soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml |  2 +-
+ .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml         | 53 +++++++++++++++++++++-
+ .../bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml  |  2 +-
+ .../bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml |  2 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
+ 9 files changed, 102 insertions(+), 10 deletions(-)
