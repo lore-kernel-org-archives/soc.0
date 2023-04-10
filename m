@@ -1,62 +1,61 @@
-Return-Path: <SRS0=RwLv=AB=ti.com=nm@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEF98C77B61
-	for <soc@archiver.kernel.org>; Mon, 10 Apr 2023 14:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE56EC77B61
+	for <soc@archiver.kernel.org>; Mon, 10 Apr 2023 15:20:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 991C8C433EF; Mon, 10 Apr 2023 14:05:26 +0000 (UTC)
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A742EC433D2;
-	Mon, 10 Apr 2023 14:05:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A742EC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33AE5L1i093233;
-	Mon, 10 Apr 2023 09:05:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1681135521;
-	bh=AIwMLx5zivcNKdarlibtfBgnGtOCiEdnfhcDUKPiAjs=;
-	h=Date:From:To:CC:Subject;
-	b=fVPDvW2xL+ogv/+UjsFnrFvDYBg4ju5f2GzTHc9dnNkTGl/85aW/WfFkD8SFsGOwB
-	 XzuoBzBjk9pCGvIiGq5HmwWeCuMszLYyWSISn/zZO17Uvo54xbMHedOTRJXPFvR4RL
-	 MA+eqcxKZgfU/lLvF1B5LduF/xQWx3PIVbXkrtgw=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33AE5Li7126305
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 10 Apr 2023 09:05:21 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 10
- Apr 2023 09:05:21 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 10 Apr 2023 09:05:21 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-	by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33AE5L5X040962;
-	Mon, 10 Apr 2023 09:05:21 -0500
-Date: Mon, 10 Apr 2023 09:05:21 -0500
-From: Nishanth Menon <nm@ti.com>
+	id 83892C433D2; Mon, 10 Apr 2023 15:20:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2437C433EF;
+	Mon, 10 Apr 2023 15:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681140038;
+	bh=9aBIN0Ze80trWv+bhwwMOtyJodZ6uhRiV8OtcH4VttI=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=M3b457xNp57Y45F74DVLjYFxnbbjysMNgQoRDg1KCQRvtGNzPWz1RqwEsEKfxRFJu
+	 qXomc4prcwUcGwf3ryFjR3YIAlvOUBlq/fGcPm42ZSLM9uEBrkQZDDnhHkufh/QHmo
+	 GE+xEAzMJ45xo6v7GJkjlzhT23g53H+dy+MVx2uOz/Fsu1X8+ir0B/SuIHWrtJucN1
+	 c5c5zySeHnmiJqY/9mwST2JKoQO0i2iAgmR38//X9TcVbkRDuJMeu9+PQUqElzz91D
+	 SXccxUvxkBM/sh8RxDOg4WI8g/QV2bfrirBcCUXAHrsq9z4Ms/NN2ywCW30OcUvwl3
+	 zqHKy0ZR+mwtw==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC: Tero Kristo <kristo@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL 3/3] arm64: dts: ti: K3 updates for v6.4
-Message-ID: <20230410140521.3u3fftgnejakqnzj@shakable>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+	Danila Tikhonov <danila@jiaxyga.com>,
+	David Wronek <davidwronek@gmail.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Varadarajan Narayanan <quic_varada@quicinc.com>,
+	Devi Priya <quic_devipriy@quicinc.com>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Kathiravan T <quic_kathirav@quicinc.com>,
+	Mukesh Ojha <quic_mojha@quicinc.com>,
+	Poovendhan Selvaraj <quic_poovendh@quicinc.com>,
+	Rob Herring <robh@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Visweswara Tanuku <quic_vtanuku@quicinc.com>,
+	Ye Xingchen <ye.xingchen@zte.com.cn>
+Subject: [GIT PULL] Qualcomm driver updates for v6.4
+Date: Mon, 10 Apr 2023 08:24:21 -0700
+Message-Id: <20230410152421.4477-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
 The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
@@ -64,151 +63,166 @@ The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-for-v6.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-drivers-for-6.4
 
-for you to fetch changes up to 891db0c48efb48c3af334006f9d7ea6a0aa49cb9:
+for you to fetch changes up to c78ad8597ed961e822bf86ce7f1916dbfba255ef:
 
-  arm64: dts: ti: k3-j784s4-evm: Add eMMC mmc0 support (2023-03-30 13:36:34 -0500)
-
-----------------------------------------------------------------
-TI K3 device tree updates for v6.4
-
-New features:
-* Overlays for CPSW9G and CPSW5G on J721e-evm, J7200-evm
-* Add support for AM625 based BeaglePlay, AM62-LP-SK
-* Audio, RTC, watchdog support for AM625
-* McSPI for J7200,j721e, j721s2, J784s4
-* ADC for j721s2
-* Crypto acceleration, CPSW2G for J784s4
-
-Non critical fixes:
-AM62, AM62a:
-* Fix schematics error to increase DDR to 4GB on AM62a-SK
-* L2Cache size fix (AM62a/AM625)
-* ti,vbus-divider property to USB1 on AM625-SK
-* Gpio count fix for AM625
-
-J7200,j721e, j721s2, J784s4, AM68, AM69:
-* ti,sci-dev-id for J784s4 NAVSS nodes
-* j721e-sk: Drop application specific firmware name
-* am68-sk: Fix the gpio expander lines for production version
-
-Cleanups:
-* Pinmux header move to dt folder (next kernel PR, we will drop the uapi header).
-* j721e: ti,strobe-sel property cleanup for descoped HS400 MMC operation
+  dt-bindings: firmware: document Qualcomm SC8180X SCM (2023-04-04 20:23:56 -0700)
 
 ----------------------------------------------------------------
-Anand Gadiyar (2):
-      arm64: dts: ti: Refractor AM625 SK dts
-      arm64: ti: dts: Add support for AM62x LP SK
+Qualcomm driver updates for v6.4
 
-Andrew Davis (1):
-      arm64: dts: ti: k3-j721e-sk: Remove firmware-name override for R5F
+The Qualcomm SCM driver will now always clear the download bit, avoiding
+entering download mode on a clean reboot because the bootloader left it
+set. The vmid bitmap passed to qcom_scm_assign_mem() is transitioned to
+a well defined size. SM6375 support is added, and SC8180X,
+QDU1000/QRU1000, IPQ5332 and IPQ9574 compatibles are documented.
 
-Apurva Nandan (1):
-      arm64: dts: ti: k3-j784s4-evm: Add eMMC mmc0 support
+GENI gains support for newer hardware with deeper FIFOs.
 
-Bhavya Kapoor (3):
-      arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel property
-      arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support for ADC nodes
-      arm64: dts: ti: k3-j721s2-common-proc-board: Add pinmux information for ADC
+The BWMON driver is updated to better handle the two register blocks,
+which are not consistent between MSM8998 and newer platforms.
 
-Devarsh Thakkar (1):
-      arm64: dts: ti: k3-am62a7-sk: Fix DDR size to full 4GB
+The LLCC driver no longer assumes a fixes stride across the various
+banks, and instead acquire the bank placement from DeviceTree. EDAC
+support for polling is introduced. EDAC support on SDM845 is disabled,
+as its been observed that accessing relevant registers is not permitted
+on most devices.
 
-Dhruva Gole (1):
-      arm64: dts: ti: k3-am625-sk: Add ti,vbus-divider property to usbss1
+PMIC GLINK is reworked to support defining which auxiliary children to
+spawn per platform, support for spawning a UCSI child is added and
+SM8450 and SM8550 is introduced.
 
-Jai Luthra (1):
-      arm64: dts: ti: Enable audio on SK-AM62(-LP)
+The RPM power-domain driver is cleaned up by moving and generalizing
+structures that are common between platforms, rather than duplicating
+everything. Macros are replaced with just direct definition of the
+relevant structures. Support for defining parent relationships between
+the power-domains is introduced, like it has been in rpmhpd for a long
+time.
 
-Jayesh Choudhary (3):
-      arm64: dts: ti: k3-j784s4-*: Add 'ti,sci-dev-id' for NAVSS nodes
-      arm64: dts: ti: k3-j784s4-main: Enable crypto accelerator
-      arm64: dts: ti: k3-am62-main: Add McASP nodes
+Number of processors has gone up, so max processor count in SMEM
+is bumped again. Error handling in SMSM is cleaned up using
+dev_err_probe().
 
-Julien Panis (1):
-      arm64: dts: ti: k3-am62: Add watchdog nodes
+Socinfo is taught about IPQ9574, QCM2290, QRB2210, QRB4210, SM7150,
+SA8775P and a number of PMICs.
 
-Nishanth Menon (4):
-      dt-bindings: net: ti: k3-am654-cpsw-nuss: Drop pinmux header
-      arm64: dts: ti: Use local header for pinctrl register values
-      dt-bindings: pinctrl: k3: Deprecate header with register constants
-      arm64: dts: ti: k3-am62-wakeup: Introduce RTC node
+----------------------------------------------------------------
+Bartosz Golaszewski (3):
+      soc: qcom: smem: update max processor count
+      dt-bindings: arm: qcom: add the SoC ID for SA8775P
+      soc: qcom: socinfo: add support for SA8775P
 
-Nitin Yadav (1):
-      arm64: dts: ti: k3-am62-main: Fix GPIO numbers in DT
+Bhupesh Sharma (2):
+      dt-bindings: arm: qcom,ids: Add IDs for QRB4210
+      soc: qcom: socinfo: Add IDs for QRB4210
 
-Robert Nelson (2):
-      dt-bindings: arm: ti: Add BeaglePlay
-      arm64: dts: ti: Add k3-am625-beagleplay
+Danila Tikhonov (2):
+      dt-bindings: arm: msm: Add LLCC for SM7150
+      soc: qcom: llcc: Add configuration data for SM7150
 
-Siddharth Vadapalli (5):
-      arm64: dts: ti: k3-j784s4-evm: Enable MCU CPSW2G
-      arm64: dts: ti: k3-j721e: Add CPSW9G nodes
-      arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports in QSGMII mode
-      arm64: dts: ti: j7200-main: Add CPSW5G nodes
-      arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII mode
+David Wronek (2):
+      dt-bindings: arm: qcom,ids: Add Soc ID for SM7150
+      soc: qcom: socinfo: Add Soc ID for SM7150
 
-Sinthu Raja (1):
-      arm64: dts: ti: k3-am68-sk-base-board: Update IO EXP GPIO lines for Rev E2
+Devi Priya (1):
+      dt-bindings: soc: qcom: smd-rpm: Add IPQ9574 compatible
 
-Vaishnav Achath (4):
-      arm64: dts: ti: k3-j721e: Add MCSPI nodes
-      arm64: dts: ti: k3-j7200: Add MCSPI nodes
-      arm64: dts: ti: k3-j721s2: Add MCSPI nodes
-      arm64: dts: ti: k3-j784s4: Add MCSPI nodes
+Elliot Berman (1):
+      firmware: qcom_scm: Use fixed width src vm bitmap
 
-Vignesh Raghavendra (3):
-      arm64: dts: ti: k3-am625: Correct L2 cache size to 512KB
-      arm64: dts: ti: k3-am62a7: Correct L2 cache size to 512KB
-      dt-bindings: arm: ti: k3: Add compatible for AM62x LP SK
+Kathiravan T (1):
+      dt-bindings: firmware: qcom,scm: document IPQ5332 SCM
 
- Documentation/devicetree/bindings/arm/ti/k3.yaml   |   2 +
- .../bindings/net/ti,k3-am654-cpsw-nuss.yaml        |   1 -
- arch/arm64/boot/dts/ti/Makefile                    |   8 +-
- arch/arm64/boot/dts/ti/k3-am62-lp-sk.dts           | 231 +++++++
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi           | 109 ++-
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi            |  11 +
- arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi         |  21 +
- arch/arm64/boot/dts/ti/k3-am62.dtsi                |   3 +-
- arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts     | 758 +++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts             | 244 +------
- arch/arm64/boot/dts/ti/k3-am625.dtsi               |   2 +-
- arch/arm64/boot/dts/ti/k3-am62a.dtsi               |   3 +-
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts            |   5 +-
- arch/arm64/boot/dts/ti/k3-am62a7.dtsi              |   2 +-
- arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi     | 351 ++++++++++
- arch/arm64/boot/dts/ti/k3-am64.dtsi                |   3 +-
- arch/arm64/boot/dts/ti/k3-am65.dtsi                |   3 +-
- arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts   |  12 +-
- .../dts/ti/k3-j7200-evm-quad-port-eth-exp.dtso     | 101 +++
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi          | 176 +++++
- arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi    |  33 +
- arch/arm64/boot/dts/ti/k3-j7200.dtsi               |   3 +-
- .../dts/ti/k3-j721e-evm-quad-port-eth-exp.dtso     | 133 ++++
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi          | 205 +++++-
- arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi    |  33 +
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts             |   4 -
- arch/arm64/boot/dts/ti/k3-j721e.dtsi               |   4 +-
- .../boot/dts/ti/k3-j721s2-common-proc-board.dts    |  44 ++
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi         |  88 +++
- arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi   |  73 ++
- arch/arm64/boot/dts/ti/k3-j721s2.dtsi              |   3 +-
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts           |  59 ++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi         | 108 +++
- arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi   |  34 +
- arch/arm64/boot/dts/ti/k3-j784s4.dtsi              |   3 +-
- arch/arm64/boot/dts/ti/k3-pinctrl.h                |  53 ++
- include/dt-bindings/pinctrl/k3.h                   |   7 +
- 37 files changed, 2672 insertions(+), 261 deletions(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62-lp-sk.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-evm-quad-port-eth-exp.dtso
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-evm-quad-port-eth-exp.dtso
- create mode 100644 arch/arm64/boot/dts/ti/k3-pinctrl.h
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Konrad Dybcio (17):
+      soc: qcom: socinfo: Add some PMICs
+      dt-bindings: arm: qcom,ids: Add IDs for QCM2290/QRB2210
+      soc: qcom: socinfo: Add IDs for QCM2290/QRB2210
+      soc: qcom: rpmpd: Remove SoC names from RPMPD definitions
+      soc: qcom: rpmpd: Bring all definitions to the top
+      soc: qcom: rpmpd: Unify Low Power Island definitions
+      soc: qcom: rpmpd: Remove vdd* from struct names
+      soc: qcom: rpmpd: Expand struct definition macros
+      soc: qcom: rpmpd: Improve the naming
+      soc: qcom: rpmpd: Make bindings assignments consistent
+      soc: qcom: rpmpd: Add parent PD support
+      soc: qcom: rpmpd: Hook up VDDMX as parent of SM6375 VDDGX
+      soc: qcom: rpmpd: Remove useless comments
+      firmware: qcom_scm: Add SM6375 compatible
+      soc: qcom: icc-bwmon: Remove unused struct member
+      soc: qcom: icc-bwmon: Handle global registers correctly
+      dt-bindings: sram: qcom,imem: document SM6375 IMEM
+
+Krzysztof Kozlowski (4):
+      soc: qcom: gsbi: mark OF related data as maybe unused
+      soc: qcom: restrict L2 accessors to ARM64 build tests
+      dt-bindings: soc: qcom,apr: correct qcom,intents type
+      dt-bindings: soc: qcom: smd-rpm: re-add missing qcom,rpm-msm8994
+
+Manivannan Sadhasivam (5):
+      dt-bindings: arm: msm: Update the maintainers for LLCC
+      dt-bindings: arm: msm: Fix register regions used for LLCC banks
+      qcom: llcc/edac: Fix the base address used for accessing LLCC banks
+      qcom: llcc/edac: Support polling mode for ECC handling
+      soc: qcom: llcc: Do not create EDAC platform device on SDM845
+
+Melody Olvera (2):
+      dt-bindings: firmware: qcom,scm: Update QDU1000/QRU1000 compatible
+      dt-bindings: soc: qcom: aoss: Document QDU1000/QRU1000 compatible
+
+Mukesh Ojha (1):
+      firmware: qcom_scm: Clear download bit during reboot
+
+Neil Armstrong (3):
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM8450 compatible
+      dt-bindings: soc: qcom: qcom,pmic-glink: document SM8550 compatible
+      soc: qcom: pmic_glink: register ucsi aux device
+
+Poovendhan Selvaraj (1):
+      dt-bindings: scm: Add compatible for IPQ9574
+
+Rob Herring (1):
+      soc: qcom: Use of_property_present() for testing DT property presence
+
+Varadarajan Narayanan (2):
+      dt-bindings: arm: qcom,ids: Add IDs for IPQ9574 and its variants
+      soc: qcom: socinfo: Add IDs for IPQ9574 and its variants
+
+Vinod Koul (1):
+      dt-bindings: firmware: document Qualcomm SC8180X SCM
+
+Visweswara Tanuku (1):
+      soc: qcom: geni-se: Update Tx and Rx fifo depth based on QUP HW version
+
+Ye Xingchen (1):
+      soc: qcom: smsm: Use dev_err_probe()
+
+ .../devicetree/bindings/arm/msm/qcom,llcc.yaml     | 129 +++-
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   4 +
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   1 +
+ .../devicetree/bindings/soc/qcom/qcom,apr.yaml     |   9 +-
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         |   2 +
+ .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |   3 +
+ .../devicetree/bindings/sram/qcom,imem.yaml        |   1 +
+ drivers/edac/qcom_edac.c                           |  64 +-
+ drivers/firmware/qcom_scm.c                        |  16 +-
+ drivers/misc/fastrpc.c                             |   2 +-
+ drivers/net/wireless/ath/ath10k/qmi.c              |   4 +-
+ drivers/remoteproc/qcom_q6v5_mss.c                 |   8 +-
+ drivers/remoteproc/qcom_q6v5_pas.c                 |   2 +-
+ drivers/soc/qcom/Kconfig                           |   2 +-
+ drivers/soc/qcom/icc-bwmon.c                       | 231 +++++-
+ drivers/soc/qcom/llcc-qcom.c                       | 104 ++-
+ drivers/soc/qcom/pmic_glink.c                      |  65 +-
+ drivers/soc/qcom/qcom_aoss.c                       |   2 +-
+ drivers/soc/qcom/qcom_gsbi.c                       |   2 +-
+ drivers/soc/qcom/rmtfs_mem.c                       |   2 +-
+ drivers/soc/qcom/rpmpd.c                           | 833 ++++++++++++++-------
+ drivers/soc/qcom/smem.c                            |   4 +-
+ drivers/soc/qcom/smsm.c                            |  11 +-
+ drivers/soc/qcom/socinfo.c                         |  16 +
+ include/dt-bindings/arm/qcom,ids.h                 |  11 +
+ include/linux/firmware/qcom/qcom_scm.h             |   2 +-
+ include/linux/soc/qcom/geni-se.h                   |  42 +-
+ include/linux/soc/qcom/llcc-qcom.h                 |   6 +-
+ 28 files changed, 1161 insertions(+), 417 deletions(-)
