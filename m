@@ -1,65 +1,92 @@
-Return-Path: <SRS0=zAZ3=AD=lunn.ch=andrew@kernel.org>
+Return-Path: <SRS0=fw/+=AD=gmail.com=robherring2@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B11AC77B6E
-	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 12:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 473B9C77B6E
+	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 14:03:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 686F0C433D2; Wed, 12 Apr 2023 12:26:50 +0000 (UTC)
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 03F39C4339B; Wed, 12 Apr 2023 14:03:48 +0000 (UTC)
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DBA25C433EF;
-	Wed, 12 Apr 2023 12:26:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DBA25C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=qkNd91mc0wlb2VPKu+SyH5ISGGmmbOrNHWSQupS56iM=; b=WZCWrWYbQ4ZSJIOzFEnG7+lWwj
-	bRqu/CHjEZ+F/0Z+DoAGQMMjSa6r9/P89eQedGa59zn2475FPvmVhcShraAtW6t0DMJ3ujRkz7nbD
-	BHmb95TGPbCEJ8cDCQhzBNNB8WUs8bxlp06GtpvPAcikO4aDADD8o63uoIM1o5cMQQZI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1pmZYf-00A5OU-1G; Wed, 12 Apr 2023 14:26:41 +0200
-Date: Wed, 12 Apr 2023 14:26:41 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: INAGAKI Hiroshi <musashino.open@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D2133C433D2;
+	Wed, 12 Apr 2023 14:03:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2133C433D2
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f172.google.com with SMTP id z16so7396815oib.9;
+        Wed, 12 Apr 2023 07:03:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681308226; x=1683900226;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XkKJbGcmCESOp5kGHyfKWXGMOOU/ouU4bAVhUJXQjqA=;
+        b=VndVXASXS2HnO573wbRyAiymjXidcgY89zlCU0776tcvs3LYSdfc6bGVzVEz/JED/k
+         TIDsHpMEeT2t8ooHsgXDhef2r1KGIA3ue8tNgjOoBAa+6exWPPyu+v28GvPw44WLTxlX
+         Gg1ZeCWSq6tuIPekVKUqCdZAEq/YsIQOysbMC4Jtrs/WowBQ9WKWGc6CESd1wCES7ZhK
+         IUrj/j22duOlOq6ML7coVWsMF+TBtMP0JIUh9l6MY/F7y9v5qydCYdDWjwhKg6+oTOHH
+         tQVyOJX/qHMCDtpVz4XVbDKoVjzojVUhhu6AvXF6fVzVg2u9xE7bYn9G4qjGsiOyPH3v
+         YozA==
+X-Gm-Message-State: AAQBX9fLrS3aPM0OM+x/8WQPWRCe3YbwP1v7CT0VLxWtaiqCdvoE6pTi
+	Elcr912qqolsKuwEY3pT/A==
+X-Google-Smtp-Source: AKy350Y4tWN4Ri2Yf9zEZz08i2glwRo8Dr90/wmyCM6hmihMUWaqoNcTtQG0LOp2GloTALjDW2dmog==
+X-Received: by 2002:a05:6808:352:b0:38b:a4f9:2570 with SMTP id j18-20020a056808035200b0038ba4f92570mr3031262oie.16.1681308225748;
+        Wed, 12 Apr 2023 07:03:45 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p5-20020a4a95c5000000b0053a7aaa85a0sm7063881ooi.0.2023.04.12.07.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 07:03:45 -0700 (PDT)
+Received: (nullmailer pid 2248174 invoked by uid 1000);
+	Wed, 12 Apr 2023 14:03:44 -0000
+Date: Wed, 12 Apr 2023 09:03:44 -0500
+From: Rob Herring <robh@kernel.org>
+To: Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	sebastian.hesselbarth@gmail.com, arnd@arndb.de, olof@lixom.net,
-	soc@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH 2/2] ARM: dts: mvebu: add device tree for IIJ SA-W2
- appliance
-Message-ID: <b9cb92ea-6a11-4299-a963-b9674faa4011@lunn.ch>
-References: <20230223132502.2045-1-musashino.open@gmail.com>
- <20230223132502.2045-2-musashino.open@gmail.com>
- <Y/d7gjqQCKKXMHqj@lunn.ch>
- <7d4a218d-8b8a-5a1d-eff8-e154bfde69be@gmail.com>
- <87jzyn3dv9.fsf@BL-laptop>
- <64b5504d-c81d-f77e-da67-c6d9e76aedd6@gmail.com>
- <b153523b-45cf-4e2e-8d62-de15b01a158d@lunn.ch>
- <231f9093-968b-e008-f2ff-899d8b24459c@gmail.com>
+Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "soc@kernel.org" <soc@kernel.org>, "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "olof@lixom.net" <olof@lixom.net>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>, "sboyd@kernel.org" <sboyd@kernel.org>, James Cowgill <james.cowgill@blaize.com>, Matt Redfearn <matthew.redfearn@blaize.com>, Neil Jones <neil.jones@blaize.com>
+Subject: Re: [PATCH 5/5] arm64: Add initial support for Blaize BLZP1600 CB2
+Message-ID: <20230412140344.GA2234522-robh@kernel.org>
+References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+ <20230406102149.729726-6-nikolaos.pasaloukos@blaize.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <231f9093-968b-e008-f2ff-899d8b24459c@gmail.com>
+In-Reply-To: <20230406102149.729726-6-nikolaos.pasaloukos@blaize.com>
 
-On Wed, Apr 12, 2023 at 02:21:27PM +0900, INAGAKI Hiroshi wrote:
-> Hello Andrew Lunn,
+On Thu, Apr 06, 2023 at 10:22:32AM +0000, Niko Pasaloukos wrote:
+> Adds support for the Blaize CB2 development board based on
+> BLZP1600 SoC. This consists of a Carrier-Board and a SoM.
 > 
-> thank you for your guidance, I'll do it.
+> The blaize-blzp1600.dtsi is the common part for the SoC,
+> blaize-blzp1600-som.dtsi is the common part for the SoM and
+> blaize-blzp1600-som-cb2.dts is the board specific file.
+> 
+> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
+> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
+> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Co-developed-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+> ---
+>  arch/arm64/Kconfig.platforms                  |   5 +
+>  arch/arm64/boot/dts/Makefile                  |   1 +
+>  arch/arm64/boot/dts/blaize/Makefile           |   2 +
+>  .../dts/blaize/blaize-blzp1600-som-cb.dtsi    | 217 +++++
+>  .../dts/blaize/blaize-blzp1600-som-cb2.dts    | 103 ++
+>  .../boot/dts/blaize/blaize-blzp1600-som.dtsi  | 104 ++
+>  .../boot/dts/blaize/blaize-blzp1600.dtsi      | 894 ++++++++++++++++++
+>  arch/arm64/configs/defconfig                  |   1 +
+>  8 files changed, 1327 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/blaize/Makefile
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som-cb.dtsi
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som-cb2.dts
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
+>  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
 
-You probably want to talk to Tony Dinh <mibodhi@gmail.com>.
+New platforms should be free of warnings from 'make dtbs_check'. Please 
+run and fix if you have not, and confirm that in the commit message.
 
-https://lore.kernel.org/linux-arm-kernel/20230412025737.20280-2-mibodhi@gmail.com/T/
-
-    Andrew
+Rob
