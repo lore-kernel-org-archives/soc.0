@@ -1,63 +1,114 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <shawnguo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1834C77B6F
-	for <soc@archiver.kernel.org>; Tue, 11 Apr 2023 21:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C25FC77B70
+	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 01:46:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B0C59C4339B; Tue, 11 Apr 2023 21:33:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B08C433EF;
-	Tue, 11 Apr 2023 21:33:12 +0000 (UTC)
+	id D360AC4339B; Wed, 12 Apr 2023 01:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72436C433EF;
+	Wed, 12 Apr 2023 01:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681248793;
-	bh=a/Ibkn+oiRDOCtEQMuKBzxAMKNVKsFoB2724VcRyOPk=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=lc9Vd94rlQfsOHp2xlvfcUz3DAiSrthDRZM4fIjiS3zdT/11OiT1I+nh7ry1nrQ6d
-	 TPb/MwV8H1juQ00+xmqWedqWgnX5roaFJqglBvHzArn1TK1R7ksWT42HvWx5Ym0+lI
-	 ti5wFHmDMoF0OSiX0shrJt+3IHn1lWmejV1+gWDlYfRV8ajCgLGEAFTEi2MUjSRp4A
-	 ryM8wa5ucv2ZywyuE2QzWhwuERv8t2LcYbn1horMhDmN1IztrEb/aVKhfOQYvIQYog
-	 hvMykkUaOboUA/mlte6MINTIY9ooT2cg0txz7arO5Wbju6wUNl3rixsdF5VfmTWaBz
-	 yanOWloU1vPNg==
-Date: Tue, 11 Apr 2023 22:33:10 +0100
-From: Conor Dooley <conor@kernel.org>
-To: arnd@arndb.de
+	s=k20201202; t=1681263978;
+	bh=xmbGKQh1VgudkbRC0ysWkE4tRNo6S8GXdt5Y3+dZi/U=;
+	h=Date:From:List-Id:To:Cc:Subject:References:In-Reply-To:From;
+	b=qdo70GXYqs5A+ZEeOf5MsWaRPcjYerGPed0wTnB2J+19Hq9m8ABpXABbOmFmxelfu
+	 xFfsQgeiQvE4bZmgkE00KKkhWuwkUjJpKPY12MseVhPE8MC8bX8ecP4PLvrXodrpVr
+	 1AwcB4Ws2L8UQz9fYCZ2d32HQj1qUN1XL2HzjQ6K1Axnz9tSyjs97E1eYHUvuouieZ
+	 kodeH3VVc3dMn0OZTtAB5qMUsuHfHdXZWuXtldazEzjbcTwFbrqw9CJ8TFNWPp+6Ae
+	 WpccjuvuGtSEgXziMzPtqTD3DN8LE9dIgXCLwUL6lSROi/B5njiwUGK9j6NSshN60V
+	 hbNGE5UqTPAcQ==
+Date: Wed, 12 Apr 2023 09:46:07 +0800
+From: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: palmer@dabbelt.com, linux-riscv@lists.infradead.org, soc@kernel.org
-Subject: Re: [GIT PULL] RISC-V Devicetrees for v6.4
-Message-ID: <20230411-sacrifice-liable-524c033b70a8@spud>
-References: <20230406-shank-impromptu-3d483bbc249f@spud>
+To: soc@kernel.org, arm@kernel.org
+Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
+	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
+	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL 3/6] i.MX dt-bindings update for 6.4
+Message-ID: <20230412014607.GC129227@dragon>
+References: <20230408101928.280271-1-shawnguo@kernel.org>
+ <20230408101928.280271-3-shawnguo@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Aal+fc4OVB1GV+w9"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230406-shank-impromptu-3d483bbc249f@spud>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230408101928.280271-3-shawnguo@kernel.org>
+
+On Sat, Apr 08, 2023 at 06:19:25PM +0800, Shawn Guo wrote:
+> The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+> 
+>   Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.4
+> 
+> for you to fetch changes up to 1c2eb76b9456130c377372727744e9a109abf5e1:
+> 
+>   dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC (2023-04-08 15:25:41 +0800)
+
+It gets updated to add missing SoB to one commit.  Nothing else changed.
+
+Shawn
 
 
---Aal+fc4OVB1GV+w9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-On Thu, Apr 06, 2023 at 09:24:40PM +0100, Conor Dooley wrote:
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-> I may have another
-> PR adding some of the peripherals (pmu, mmc) for the StarFive stuff
-> that are already reviewed etc, but need a rebase on top of what
-> actually got applied. Is that okay, or will the end of next week be
-> too late for you?
+are available in the Git repository at:
 
-FWIW, the patches didn't show up yet, and now it is too late for me :)
+  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.4
 
---Aal+fc4OVB1GV+w9
-Content-Type: application/pgp-signature; name="signature.asc"
+for you to fetch changes up to e7a985d50841e43ea1794b3597fd7f646ed95a32:
 
------BEGIN PGP SIGNATURE-----
+  dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC (2023-04-12 09:32:39 +0800)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZDXSFgAKCRB4tDGHoIJi
-0nGOAQDvZS6TFvs0s6z5xx7uf6KIc6DCnrfDdn1ZEaKSpOnHHAEAzyzP+fPmqrkn
-Ao9sgz676dQL5BwAaXTTXJ4CVZ9H+wo=
-=/3f6
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+i.MX dt-bindings update for 6.4:
 
---Aal+fc4OVB1GV+w9--
+- Add vendor prefix for chargebyte.
+- A bunch of new board compatibles: Tolino Vision, Toradex Apalis,
+  chargebyte Tarragon, i.MX8M Plus based boards from DH electronics
+  and Data Modul, etc.
+- A series from Marek Vasut to improve blk-ctrl bindings.
+
+----------------------------------------------------------------
+Andreas Kemnade (1):
+      dt-bindings: arm: fsl: add compatible string for Tolino Vision
+
+Marcel Ziswiler (1):
+      dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
+
+Marek Vasut (6):
+      dt-bindings: soc: imx8mp-media-blk-ctrl: Align block controller example name
+      dt-bindings: soc: imx8mp-media-blk-ctrl: Add LDB subnode into schema and example
+      dt-bindings: arm: Add DH electronics i.MX8M Plus DHCOM on PDK3
+      dt-bindings: soc: imx8m-blk-ctrl: Rename blk_ctrl to blk-ctrl in examples
+      dt-bindings: soc: imx-blk-ctrl: Drop leading label in blk-ctrl in examples
+      dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC
+
+Michal Vokáč (2):
+      dt-bindings: arm: fsl: Fix copy-paste error in comment
+      dt-bindings: arm: fsl: Add Y Soft IOTA Phoenix, Lynx, Pegasus and Pegasus+
+
+Philippe Schenker (1):
+      dt-bindings: arm: fsl: Add colibri-imx8x carrier boards
+
+Stefan Wahren (2):
+      dt-bindings: vendor-prefixes: add chargebyte
+      dt-bindings: arm: fsl: Add chargebyte Tarragon
+
+ Documentation/devicetree/bindings/arm/fsl.yaml     | 45 ++++++++++++++++--
+ .../bindings/soc/imx/fsl,imx8mm-disp-blk-ctrl.yaml |  2 +-
+ .../bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml  |  2 +-
+ .../bindings/soc/imx/fsl,imx8mn-disp-blk-ctrl.yaml |  2 +-
+ .../bindings/soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml |  2 +-
+ .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml         | 53 +++++++++++++++++++++-
+ .../bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml  |  2 +-
+ .../bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml |  2 +-
+ .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
+ 9 files changed, 102 insertions(+), 10 deletions(-)
