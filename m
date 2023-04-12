@@ -1,114 +1,112 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=MDPj=AD=gmail.com=mibodhi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C25FC77B70
-	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 01:46:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CEC1C7619A
+	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 02:58:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D360AC4339B; Wed, 12 Apr 2023 01:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72436C433EF;
-	Wed, 12 Apr 2023 01:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681263978;
-	bh=xmbGKQh1VgudkbRC0ysWkE4tRNo6S8GXdt5Y3+dZi/U=;
-	h=Date:From:List-Id:To:Cc:Subject:References:In-Reply-To:From;
-	b=qdo70GXYqs5A+ZEeOf5MsWaRPcjYerGPed0wTnB2J+19Hq9m8ABpXABbOmFmxelfu
-	 xFfsQgeiQvE4bZmgkE00KKkhWuwkUjJpKPY12MseVhPE8MC8bX8ecP4PLvrXodrpVr
-	 1AwcB4Ws2L8UQz9fYCZ2d32HQj1qUN1XL2HzjQ6K1Axnz9tSyjs97E1eYHUvuouieZ
-	 kodeH3VVc3dMn0OZTtAB5qMUsuHfHdXZWuXtldazEzjbcTwFbrqw9CJ8TFNWPp+6Ae
-	 WpccjuvuGtSEgXziMzPtqTD3DN8LE9dIgXCLwUL6lSROi/B5njiwUGK9j6NSshN60V
-	 hbNGE5UqTPAcQ==
-Date: Wed, 12 Apr 2023 09:46:07 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	id 49B77C433D2; Wed, 12 Apr 2023 02:58:00 +0000 (UTC)
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5C026C433EF;
+	Wed, 12 Apr 2023 02:57:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5C026C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f170.google.com with SMTP id w13so27389355oik.2;
+        Tue, 11 Apr 2023 19:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681268278; x=1683860278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rBFq4BHhH/cjgo3hbq/bqAErrb/K3fGnq66n2iIKmYk=;
+        b=e1Q2jiqOH7wW3KWNsflgd8NjY+K4Ulk1rGHEeGeuGBrOrOGAcznh+FtudInqmiSSou
+         NHJCXgCDAS4d1ofWyqVuWF2ZK3ECZ9wtojyTP+O0NkpT42TpwtDj/iuvrKnIFsF0NttJ
+         9vfOYl3kHxQltIAM6WGQhlxVNEbjuYzwv0qfr9LXztTECT9t8moq+6BLSIJOWh4sNlrP
+         XwZPe5AU0Ht8PAMfK62fc5ConQ+orAm84obW762drf//P8TAYlQufS1pEF3Old8CCPah
+         koI+urtWwk7LAcxnOpkwetpOfjpkJ0fy08PCJvvexFENjYAWz1QI5Tt7JJMpcPCNHfEp
+         eeyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681268278; x=1683860278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rBFq4BHhH/cjgo3hbq/bqAErrb/K3fGnq66n2iIKmYk=;
+        b=x75mj8s4LEkj4zLm6beilGzho3R0nKhc/gSPt97NzpZUBUKVyUybhr29kQnZIfD4Fj
+         naZO13GuiyQ5wUfLxGSThoQE4mKGyGqE1G6uoiIVuSExyslogK6+aoMIbJOpfT6Zcfl3
+         tL5bSWP29CtU7MyfIzP/qNr4bDAhQsCgWTd6cIZJBVQwdBkV/l7zqI45SlUcJ7LSsOUh
+         3SJaNSs2FJ1i7hFtUazZsOuiV7nCpj9mpUNk879HHoHB5SJyR0IFJXGcfJVL26//9Y53
+         9m/4R7Gc4CctOxNcs8tqdJu3KxVLd5+cQCwECMKUBNBbYJz49odtJCk3WSamLJ6+B+2c
+         DHrg==
+X-Gm-Message-State: AAQBX9eUZstFEMh+G+bwYDYYZC8+3Np2ES3vok/i4cZG/8oxRDTRFKIa
+	mxOh+m+Ln+QFdlhmdE/Qgug=
+X-Google-Smtp-Source: AKy350ZL3k2HQ1msLFr3129WnolMPaBLSMdDj4Bc6jcq5S8BBlX+vDi4HsuaMTQpgJQUOhsM+goNjQ==
+X-Received: by 2002:a05:6808:8e:b0:387:2075:59c with SMTP id s14-20020a056808008e00b003872075059cmr249676oic.37.1681268278334;
+        Tue, 11 Apr 2023 19:57:58 -0700 (PDT)
+Received: from localhost.localdomain (76-229-100-169.lightspeed.irvnca.sbcglobal.net. [76.229.100.169])
+        by smtp.gmail.com with ESMTPSA id b124-20020aca3482000000b0038bc0cb5d52sm3013293oia.9.2023.04.11.19.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 19:57:57 -0700 (PDT)
+From: Tony Dinh <mibodhi@gmail.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [GIT PULL 3/6] i.MX dt-bindings update for 6.4
-Message-ID: <20230412014607.GC129227@dragon>
-References: <20230408101928.280271-1-shawnguo@kernel.org>
- <20230408101928.280271-3-shawnguo@kernel.org>
+Cc: Tony Dinh <mibodhi@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Olof Johansson <olof@lixom.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	soc@kernel.org
+Subject: [PATCH v2 0/2] Add support for Thecus N2350 board
+Date: Tue, 11 Apr 2023 19:57:34 -0700
+Message-Id: <20230412025737.20280-1-mibodhi@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230408101928.280271-3-shawnguo@kernel.org>
-
-On Sat, Apr 08, 2023 at 06:19:25PM +0800, Shawn Guo wrote:
-> The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
-> 
->   Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.4
-> 
-> for you to fetch changes up to 1c2eb76b9456130c377372727744e9a109abf5e1:
-> 
->   dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC (2023-04-08 15:25:41 +0800)
-
-It gets updated to add missing SoB to one commit.  Nothing else changed.
-
-Shawn
 
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+Thecus N2350 is a NAS based on Marvell Armada 385 SoC.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+Board Specification:
 
-are available in the Git repository at:
+	- Marvel MV88F6820 Dual Core at 1GHz
+	- 1 GiB DDR4 RAM
+	- 4MB Macronix mx25l3205d SPI flash
+	- 512MB Hynix H27U4G8F2DTR-BC NAND flash
+	- I2C
+	- 2x USB 3.0
+	- 1x GBE LAN port (PHY: Marvell 88E1510)
+	- 2x SATA (hot swap slots)
+	- 3x buttons
+	- 10x LEDS
+	- serial console
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.4
+Changes in v2:
+- Add marvell,38x.yaml. For now, add this binding to the Marvell
+directory to keep it consistent with other Marvell yaml files.
+At a later date and a separate patch, consolidate the Marvell
+yaml files into  marvell.yaml.
+- Fix various DT bindings conformance (too numerous to list)
+- Vendor prefix is not necessary, so remove it.
 
-for you to fetch changes up to e7a985d50841e43ea1794b3597fd7f646ed95a32:
+Tony Dinh (2):
+  ARM: dts: mvebu: Add device tree binding for Marvell Armada 38x
+  ARM: dts: mvebu: add Thecus N2350 board DTS
 
-  dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC (2023-04-12 09:32:39 +0800)
+ .../bindings/arm/marvell/armada-38x.yaml      |  27 ++
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/armada-385-thecus-n2350.dts | 432 ++++++++++++++++++
+ 3 files changed, 460 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/marvell/armada-38x.yaml
+ create mode 100644 arch/arm/boot/dts/armada-385-thecus-n2350.dts
 
-----------------------------------------------------------------
-i.MX dt-bindings update for 6.4:
+-- 
+2.30.2
 
-- Add vendor prefix for chargebyte.
-- A bunch of new board compatibles: Tolino Vision, Toradex Apalis,
-  chargebyte Tarragon, i.MX8M Plus based boards from DH electronics
-  and Data Modul, etc.
-- A series from Marek Vasut to improve blk-ctrl bindings.
-
-----------------------------------------------------------------
-Andreas Kemnade (1):
-      dt-bindings: arm: fsl: add compatible string for Tolino Vision
-
-Marcel Ziswiler (1):
-      dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
-
-Marek Vasut (6):
-      dt-bindings: soc: imx8mp-media-blk-ctrl: Align block controller example name
-      dt-bindings: soc: imx8mp-media-blk-ctrl: Add LDB subnode into schema and example
-      dt-bindings: arm: Add DH electronics i.MX8M Plus DHCOM on PDK3
-      dt-bindings: soc: imx8m-blk-ctrl: Rename blk_ctrl to blk-ctrl in examples
-      dt-bindings: soc: imx-blk-ctrl: Drop leading label in blk-ctrl in examples
-      dt-bindings: arm: Add Data Modul i.MX8M Plus eDM SBC
-
-Michal Vokáč (2):
-      dt-bindings: arm: fsl: Fix copy-paste error in comment
-      dt-bindings: arm: fsl: Add Y Soft IOTA Phoenix, Lynx, Pegasus and Pegasus+
-
-Philippe Schenker (1):
-      dt-bindings: arm: fsl: Add colibri-imx8x carrier boards
-
-Stefan Wahren (2):
-      dt-bindings: vendor-prefixes: add chargebyte
-      dt-bindings: arm: fsl: Add chargebyte Tarragon
-
- Documentation/devicetree/bindings/arm/fsl.yaml     | 45 ++++++++++++++++--
- .../bindings/soc/imx/fsl,imx8mm-disp-blk-ctrl.yaml |  2 +-
- .../bindings/soc/imx/fsl,imx8mm-vpu-blk-ctrl.yaml  |  2 +-
- .../bindings/soc/imx/fsl,imx8mn-disp-blk-ctrl.yaml |  2 +-
- .../bindings/soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml |  2 +-
- .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml         | 53 +++++++++++++++++++++-
- .../bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml  |  2 +-
- .../bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml |  2 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
- 9 files changed, 102 insertions(+), 10 deletions(-)
