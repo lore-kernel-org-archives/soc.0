@@ -1,92 +1,95 @@
-Return-Path: <SRS0=fw/+=AD=gmail.com=robherring2@kernel.org>
+Return-Path: <SRS0=MDPj=AD=gmail.com=mibodhi@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 473B9C77B6E
-	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 14:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06069C7619A
+	for <soc@archiver.kernel.org>; Wed, 12 Apr 2023 18:51:00 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 03F39C4339B; Wed, 12 Apr 2023 14:03:48 +0000 (UTC)
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+	id B93D6C4339E; Wed, 12 Apr 2023 18:51:00 +0000 (UTC)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D2133C433D2;
-	Wed, 12 Apr 2023 14:03:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2133C433D2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id A5561C4339C;
+	Wed, 12 Apr 2023 18:50:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A5561C4339C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f172.google.com with SMTP id z16so7396815oib.9;
-        Wed, 12 Apr 2023 07:03:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681308226; x=1683900226;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+Received: by mail-ua1-f44.google.com with SMTP id bh10so9986968uab.13;
+        Wed, 12 Apr 2023 11:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681325458; x=1683917458;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XkKJbGcmCESOp5kGHyfKWXGMOOU/ouU4bAVhUJXQjqA=;
-        b=VndVXASXS2HnO573wbRyAiymjXidcgY89zlCU0776tcvs3LYSdfc6bGVzVEz/JED/k
-         TIDsHpMEeT2t8ooHsgXDhef2r1KGIA3ue8tNgjOoBAa+6exWPPyu+v28GvPw44WLTxlX
-         Gg1ZeCWSq6tuIPekVKUqCdZAEq/YsIQOysbMC4Jtrs/WowBQ9WKWGc6CESd1wCES7ZhK
-         IUrj/j22duOlOq6ML7coVWsMF+TBtMP0JIUh9l6MY/F7y9v5qydCYdDWjwhKg6+oTOHH
-         tQVyOJX/qHMCDtpVz4XVbDKoVjzojVUhhu6AvXF6fVzVg2u9xE7bYn9G4qjGsiOyPH3v
-         YozA==
-X-Gm-Message-State: AAQBX9fLrS3aPM0OM+x/8WQPWRCe3YbwP1v7CT0VLxWtaiqCdvoE6pTi
-	Elcr912qqolsKuwEY3pT/A==
-X-Google-Smtp-Source: AKy350Y4tWN4Ri2Yf9zEZz08i2glwRo8Dr90/wmyCM6hmihMUWaqoNcTtQG0LOp2GloTALjDW2dmog==
-X-Received: by 2002:a05:6808:352:b0:38b:a4f9:2570 with SMTP id j18-20020a056808035200b0038ba4f92570mr3031262oie.16.1681308225748;
-        Wed, 12 Apr 2023 07:03:45 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p5-20020a4a95c5000000b0053a7aaa85a0sm7063881ooi.0.2023.04.12.07.03.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 07:03:45 -0700 (PDT)
-Received: (nullmailer pid 2248174 invoked by uid 1000);
-	Wed, 12 Apr 2023 14:03:44 -0000
-Date: Wed, 12 Apr 2023 09:03:44 -0500
-From: Rob Herring <robh@kernel.org>
-To: Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>
-List-Id: <soc.lore.kernel.org>
-Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "soc@kernel.org" <soc@kernel.org>, "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "olof@lixom.net" <olof@lixom.net>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>, "sboyd@kernel.org" <sboyd@kernel.org>, James Cowgill <james.cowgill@blaize.com>, Matt Redfearn <matthew.redfearn@blaize.com>, Neil Jones <neil.jones@blaize.com>
-Subject: Re: [PATCH 5/5] arm64: Add initial support for Blaize BLZP1600 CB2
-Message-ID: <20230412140344.GA2234522-robh@kernel.org>
-References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
- <20230406102149.729726-6-nikolaos.pasaloukos@blaize.com>
+        bh=E8GgKi0Rd6kCiCYBZPhErEcVfM0TkK8lsiwJgbaw5K0=;
+        b=e1uDKoOANgFwZXtXr6Q1OJ789UtCyc7uXFniZoXLtq9IL3x4Ad49N2oeEmctylAGzI
+         eAGaQaZgUH6iYA1wwvCBJnJppwZOxQvsf1ku8qgDIFnzaxJmqAZVg1zXsQgM/Pd7WdOf
+         HNLCt/kcEKvIl6mbeLK9izZKLfpHFR3NuGQ1ZNwWbFTKZ4gwf9Jc2/Swa5Bl2vtlYFGQ
+         11B/7VI1M59nTdix34hDNSsk0SDLMsMrDnkl0l3FrfRpXL09Qymh1togU36zZzvx09Z6
+         F1TmHAemUutNXwmb93BgH6/pttjKSB+Lm79xlK7Bf/so7KfDB0j8FT9dWeXN43MjPUXG
+         XQNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681325458; x=1683917458;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E8GgKi0Rd6kCiCYBZPhErEcVfM0TkK8lsiwJgbaw5K0=;
+        b=ktXA4hKhgDy5Tp3tMYqZsh3ZEwDRVhhtJgxYDCrPAyIh4JB2KbDsQlNh/H4x94F46H
+         AaZA+ofHJKb3MwnXP2cpHPhb8C3jf8gDkUuVplQKpwuGwr4ZZuMAAk687VuZGoyNIAH4
+         Yvr0ww/tNGZBqV7Tvv9knTCy1162/ibVwZ1/ScQO/ZrHORqkHjRUxg03wnXR/hmm3LRy
+         I8b+JYkkVzncHOWQ7p8CtL9bdzTrnsrtN9FBMYP3E+KFQ8DItmd8XiXpqWEIwVy+K9Kw
+         5gfKQQYg4bzHMSwH7CwTUzN6mIDSjuQBiJmqzWBa0G2rKKzrXggrIe2k2siEWnfqkVka
+         vTmA==
+X-Gm-Message-State: AAQBX9ekBM8BYnpxYSDHEKfteRLwYqN30rOg0LvJm8fUJA0SR8Hz7PFq
+	sN0ck63sgpUphFMbcXcNNM7dNBMdC2HLf7hcctI=
+X-Google-Smtp-Source: AKy350ZSVhFoyFTi/fc3NDFlzFOLXKPOeWn5CiJd8C5f/p/xHotBKpHKfdjLlytUOo9/tu0uRyJWhOwLjvnCGyP6tyA=
+X-Received: by 2002:ab0:5b54:0:b0:68b:90f4:1d8c with SMTP id
+ v20-20020ab05b54000000b0068b90f41d8cmr4868990uae.1.1681325458573; Wed, 12 Apr
+ 2023 11:50:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406102149.729726-6-nikolaos.pasaloukos@blaize.com>
+References: <20230412025737.20280-1-mibodhi@gmail.com> <20230412025737.20280-3-mibodhi@gmail.com>
+ <eddb141e-6a8a-4473-b5e4-2e043d6f5197@lunn.ch>
+In-Reply-To: <eddb141e-6a8a-4473-b5e4-2e043d6f5197@lunn.ch>
+From: Tony Dinh <mibodhi@gmail.com>
+Date: Wed, 12 Apr 2023 11:50:47 -0700
+Message-ID: <CAJaLiFw00VyD4rPBh=06U6wXmbDaK75Cd9MCVwUCN1SF4A1_Xw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ARM: dts: mvebu: add Thecus N2350 board DTS
+To: Andrew Lunn <andrew@lunn.ch>
+List-Id: <soc.lore.kernel.org>
+Cc: Gregory Clement <gregory.clement@bootlin.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Olof Johansson <olof@lixom.net>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, linux-kernel@vger.kernel.org, 
+	soc@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 06, 2023 at 10:22:32AM +0000, Niko Pasaloukos wrote:
-> Adds support for the Blaize CB2 development board based on
-> BLZP1600 SoC. This consists of a Carrier-Board and a SoM.
-> 
-> The blaize-blzp1600.dtsi is the common part for the SoC,
-> blaize-blzp1600-som.dtsi is the common part for the SoM and
-> blaize-blzp1600-som-cb2.dts is the board specific file.
-> 
-> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
-> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
-> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
-> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
-> Co-developed-by: Neil Jones <neil.jones@blaize.com>
-> Signed-off-by: Neil Jones <neil.jones@blaize.com>
-> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
-> ---
->  arch/arm64/Kconfig.platforms                  |   5 +
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/blaize/Makefile           |   2 +
->  .../dts/blaize/blaize-blzp1600-som-cb.dtsi    | 217 +++++
->  .../dts/blaize/blaize-blzp1600-som-cb2.dts    | 103 ++
->  .../boot/dts/blaize/blaize-blzp1600-som.dtsi  | 104 ++
->  .../boot/dts/blaize/blaize-blzp1600.dtsi      | 894 ++++++++++++++++++
->  arch/arm64/configs/defconfig                  |   1 +
->  8 files changed, 1327 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/blaize/Makefile
->  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som-cb.dtsi
->  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som-cb2.dts
->  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
->  create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
+Hi Andrew,
 
-New platforms should be free of warnings from 'make dtbs_check'. Please 
-run and fix if you have not, and confirm that in the commit message.
+On Wed, Apr 12, 2023 at 5:24=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > +
+> > +/ {
+> > +     model =3D "Thecus N2350";
+> > +     compatible =3D "marvell,armada385";
+>
+> If you look at all the other armarda-385 .dts files, they all have a
+> board compatible. It might not be needed now, but it could be useful
+> in the future and allow backwards compatibility.
+>
+> > +&mdio {
+> > +     phy0: ethernet-phy@0 {
+> > +             reg =3D <1>;
+> > +     };
+> > +};
+>
+> Since you have ref =3D <1>, this should be ethernet-phy@1.
+>
 
-Rob
+Thanks! somehow I kept missing that change.
+
+All the best,
+Tony
