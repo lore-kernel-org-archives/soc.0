@@ -4,61 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3BAEC77B7C
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E0CC77B72
 	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9A728C433A8; Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 791BEC4339B;
+	id 97152C433D2; Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EEB5C4339E;
 	Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1681477830;
-	bh=N7oWUmngeUwNX1iELfxDtIKdgDrPsjtyDJQS5fMPaYU=;
+	bh=gnvnVWPVKu/8uD3/vkRS2bzgSygotZcFiTauQGeK1Mw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=MAYY2pcf5/A+RKZE2lYntPn5Ft79RPVp4Kyp7AqbBt6LF8txv2yqcD1l6W2i7zOgO
-	 N8WHqOmD8f85punBAHdbe5TWbajyf17PXol94sorrtWepNSVzFI1JEc3utKHG/9hPu
-	 8PAlWmTMtAxBQryAj+ltiaTTPwKpm7hMkmDDSc9GRzimfEYeBvsFYsEidFu/Rsg1hr
-	 SWW8LOeA0hdpda5bHdWVMzxRTDwR17QOwJoR8oiSp1R09mL/3UIIUQJMb8fzNt6YLY
-	 Nb3QNMoJf8KadBPb++ciJvKEw9h14fq0+tu1oljAhONc+6O0IphXiMppKwV9WLc2NZ
-	 Mp2OHYl8U5dVw==
+	b=Vn0eitC0iHKQeDo0EW3loE6+oKtc+Cprei+nvPFT96918ElNHNQfvkf9k/JymhfPQ
+	 gEpmMKg731UAj6sVbl/ug9cAdXzq74d0nbZwLK8UwXGl8o5UvmVJ8Lq0b4w1zfEaB3
+	 4WXXDMlrgB8PMXqYw3sjqQUaGz/2bTpaYqAgOy0wdsPAGITYoPP4omyt0FqVuoAKr6
+	 n4iQPxSWsnHpJyERuK8MW6L64NWvAk16YulpiTQzF/K+YtornEM5wcvXE+l2p/1hIR
+	 5WLUd3sPFFwcZslzHyI3+Ge2Zp3rXNUj7WsoIURz9CAg3TrdA4bOE0qnbzHuxDoT7j
+	 Uc1dzqtpX6vyQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5ED8DE4D003;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57586E52446;
 	Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 0/3] Renesas SoC updates for v6.4 (take two)
+Subject: Re: [GIT PULL] Allwinner drivers changes for 6.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168147783038.23940.13433356986585169215.git-patchwork-notify@kernel.org>
+ <168147783035.23940.15452437343875739464.git-patchwork-notify@kernel.org>
 Date: Fri, 14 Apr 2023 13:10:30 +0000
-References: <cover.1681113111.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1681113111.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20230408125255.GA17134@jernej-laptop>
+In-Reply-To: <20230408125255.GA17134@jernej-laptop>
+To: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 10 Apr 2023 09:55:25 +0200 you wrote:
-> Hi SoC folks,
+On Sat, 8 Apr 2023 14:52:55 +0200 you wrote:
+> Hi!
 > 
-> This is my second pull request for the inclusion of Renesas SoC updates
-> for v6.4.
+> Please pull following driver changes for 6.4.
 > 
-> It consists of 3 parts:
+> Best regards,
+> Jernej
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/3] Renesas ARM SoC updates for v6.4
-    https://git.kernel.org/soc/soc/c/bda649b9a8bf
-  - [GIT,PULL,2/3] Renesas driver updates for v6.4 (take two)
-    https://git.kernel.org/soc/soc/c/9f8f0d07249b
-  - [GIT,PULL,3/3] Renesas DTS updates for v6.4 (take two)
-    (no matching commit)
+  - [GIT,PULL] Allwinner drivers changes for 6.4
+    https://git.kernel.org/soc/soc/c/e15a70922f6a
 
 You are awesome, thank you!
 -- 
