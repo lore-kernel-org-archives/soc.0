@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607F9C77B6E
-	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 02:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ED0FC77B6E
+	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 02:39:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 10D48C4339C; Fri, 14 Apr 2023 02:33:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019CAC433EF;
-	Fri, 14 Apr 2023 02:33:43 +0000 (UTC)
+	id 12650C433EF; Fri, 14 Apr 2023 02:39:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2488DC433D2;
+	Fri, 14 Apr 2023 02:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681439625;
-	bh=4FLiGnXVYQzYShRWtGxavfiQglKcqiUD3e9N3TGht7Y=;
+	s=k20201202; t=1681439963;
+	bh=bdiVIisasE4JCbZBg4djOiVPEGiTmmgdoGN8uXayqrI=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=EZfFtMGhIERXe6mLqgqK1gl6t+jPnsfKVUea55UlDfeBMFBUm9mTl4/6U7ln06CFC
-	 JjrWlHW2LGbK7oaHEDUgaW3LYJs4Wi9IazOlmV0DzFHqEeDEPob/m6DWaMDr3TnQ5k
-	 X0xur7R9AxEfrAd5QJ0EOOC3bZNvCV7RH5Bt7mLLJoCNn6W3bYaqdUe14okHHkXwi9
-	 GXynq4w3O6+sfdOcLxWTUnC10uzzxmLf39ALZlVoZD+Bx5smjCkKdJ0z46wdZhdfJP
-	 46Lxx6iKDm+tyE7K7yKK7FYXn21GCDeFR1gzrMkMzpnpKSmpbf1QiKciDbWQck6iyz
-	 0wRIPX6eOS2hA==
+	b=u9DX36vHfcqefMccNWmld3kUrY5N1roU3oPOV+5juy2V0A6YqXx3tgcMNRyCJl5Y2
+	 nf8vE/iCRotQlZVMTwP1Zta61OXl3Z43mAzL5c2cuse+CzOVQQhfcO7C+POX5gkGCU
+	 nW52xiMqcs3ZCdxA7EmmKLwkOzbGMu26q1h9IvnuNOJqqA34C7MrOKCBJ3fQA3E3Nm
+	 SH2Lq/La2JpN5U2I4GFKcRSjKFRNPyxLetg8FcxENaC6ei5siZYBaHtkZ8NVpN2tUK
+	 hoOrClMW8i+asxRITjoNd+5DLt4ZKp8kc/PwSr5exnURgaoovSAcf2k/in4r5gTUvy
+	 FuqWxhVh4jfxg==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -30,67 +30,68 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Arnd Bergmann <arnd@arndb.de>,
 	Olof Johansson <olof@lixom.net>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Alex Elder <elder@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-	Kathiravan T <quic_kathirav@quicinc.com>,
+	Abel Vesa <abel.vesa@linaro.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Lux Aliaga <they@mint.lgbt>
-Subject: [GIT PULL] A few more Qualcomm ARM32 DeviceTree updates for v6.4
-Date: Thu, 13 Apr 2023 19:37:23 -0700
-Message-Id: <20230414023723.2411793-1-andersson@kernel.org>
+	Rob Clark <robdclark@chromium.org>,
+	Tushar Nimkar <quic_tnimkar@quicinc.com>
+Subject: [GIT PULL] A few more Qualcomm driver updates for v6.4
+Date: Thu, 13 Apr 2023 19:43:02 -0700
+Message-Id: <20230414024302.2411985-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 
-The following changes since commit 26c56dbddc304cf7304346df4b25b3be0c086e36:
+The following changes since commit c78ad8597ed961e822bf86ce7f1916dbfba255ef:
 
-  dt-bindings: arm: qcom: Add Yiming LTE dongle uz801-v3.0 (yiming-uz801v3) (2023-04-04 12:23:04 -0700)
+  dt-bindings: firmware: document Qualcomm SC8180X SCM (2023-04-04 20:23:56 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-dts-for-6.4-2
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-drivers-for-6.4-2
 
-for you to fetch changes up to 4e859ef0bae3c0839ad362408d2f7321332e4850:
+for you to fetch changes up to f6ff91a47ac57cb1118d94020302617b6b22c0d1:
 
-  dt-bindings: arm: qcom: Document the Qualcomm qrb4210-rb2 board (2023-04-11 05:43:57 -0700)
-
-----------------------------------------------------------------
-A few more Qualcomm ARM32 DeviceTree updates for v6.4
-
-This adds IPA definition to the sdx65 platform, and brings a few
-stylistic changes to sdx55 and sdx65.
-
-Compatibles for the two new Qualcomm Robotics Platform boards, RB1 and
-RB2, are defined, as is Xiaomi Mi A3 and the MI01.6 development baord on
-IPQ5332. These are all ARM64 boards, despite being introduced through
-the ARM32 pull request...
+  dt-bindings: crypto: Add Qualcomm Inline Crypto Engine (2023-04-07 12:21:27 -0700)
 
 ----------------------------------------------------------------
-Alex Elder (2):
-      ARM: dts: qcom: sdx65: add IPA information
-      ARM: dts: qcom: sdx65: move status properties to end of nodes
+A few more Qualcomm driver updates for v6.4
 
-Bhupesh Sharma (1):
-      dt-bindings: arm: qcom: Document the Qualcomm qrb4210-rb2 board
+This introduces a new binding and a dedicated driver for the Qualcomm
+Inline-Crypto-Engine (ICE), in order to support a single shared instance
+between SDHCI and UFS, found in recent platforms.
 
-Kathiravan T (1):
-      dt-bindings: arm: qcom: document MI01.6 board based on IPQ5332 family
+RSC version check is updated to support minor revisions of v3 of the ip
+block, the SMD-RPM interface is transitioned to GFP_ATOMIC to avoid the
+shrinker to kick in underneath the GPU and QCM2290 support is added to
+the SCM binding.
+
+----------------------------------------------------------------
+Abel Vesa (2):
+      soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
+      dt-bindings: crypto: Add Qualcomm Inline Crypto Engine
+
+Bjorn Andersson (1):
+      Merge tag '20230407105029.2274111-4-abel.vesa@linaro.org' into drivers-for-6.4
 
 Konrad Dybcio (1):
-      dt-bindings: arm: qcom: Add QRB2210/QCM2290 and RB1 board
+      dt-bindings: firmware: document Qualcomm QCM2290 SCM
 
-Lux Aliaga (1):
-      dt-bindings: arm: qcom: Document xiaomi,laurel-sprout board
+Rob Clark (1):
+      soc: qcom: smd-rpm: Use GFP_ATOMIC in write path
 
-Manivannan Sadhasivam (2):
-      ARM: dts: qcom: sdx55: Move reset and wake gpios to board dts
-      ARM: dts: qcom: sdx55-fn980: Move "status" property to the end of node
+Tushar Nimkar (1):
+      soc: qcom: rpmh-rsc: Support RSC v3 minor versions
 
- Documentation/devicetree/bindings/arm/qcom.yaml  | 20 ++++++++++
- arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dts | 19 ++++++----
- arch/arm/boot/dts/qcom-sdx55.dtsi                |  2 -
- arch/arm/boot/dts/qcom-sdx65-mtp.dts             | 11 ++++--
- arch/arm/boot/dts/qcom-sdx65.dtsi                | 47 ++++++++++++++++++++++--
- 5 files changed, 84 insertions(+), 15 deletions(-)
+ .../bindings/crypto/qcom,inline-crypto-engine.yaml |  42 +++
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   3 +
+ drivers/soc/qcom/Kconfig                           |   4 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/ice.c                             | 366 +++++++++++++++++++++
+ drivers/soc/qcom/rpmh-rsc.c                        |   2 +-
+ drivers/soc/qcom/smd-rpm.c                         |   2 +-
+ include/soc/qcom/ice.h                             |  37 +++
+ 8 files changed, 455 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
+ create mode 100644 drivers/soc/qcom/ice.c
+ create mode 100644 include/soc/qcom/ice.h
