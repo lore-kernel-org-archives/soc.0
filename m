@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6ECC77B78
-	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 14:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE45BC77B72
+	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 14:06:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E17E6C433A0; Fri, 14 Apr 2023 14:06:30 +0000 (UTC)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	id C0EF3C4339C; Fri, 14 Apr 2023 14:06:30 +0000 (UTC)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B3161C433A7
-	for <soc@kernel.org>; Fri, 14 Apr 2023 14:06:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3161C433A7
+	by smtp.kernel.org (Postfix) with ESMTPS id 29717C433AC
+	for <soc@kernel.org>; Fri, 14 Apr 2023 14:06:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 29717C433AC
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id h37so6724553lfv.0
-        for <soc@kernel.org>; Fri, 14 Apr 2023 07:06:28 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id h37so6724415lfv.0
+        for <soc@kernel.org>; Fri, 14 Apr 2023 07:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681481188; x=1684073188;
+        d=linaro.org; s=google; t=1681481186; x=1684073186;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YTAL+X79fFSg7Vdy2Php9Hw3wS0uqtZxqCJF6Zi/jeI=;
-        b=YGQPsnba86DaMk0Jax3OQOs/A6b3ow03oOFnX+XJJDcL2QNnkKNIcWGwcnrJ7sn45H
-         f3444NABSrf4kpRKA1kK95qZ2g63dJ8gsSsdVEmOQp9FkFTwqa1Gn3HNZ4HUndI/ilFs
-         OhP89nob15jC8f9ro3WGj2ryAwI4n+KkfOfRfSVSjCDxRWrPpltvIyMeXuBHq0APUy4I
-         /vKKpt//M0l65r2WFQupuwfBQCrEc4F08tgMhTrz8ylsAJ/5TiDhI47VXsKhjvvXB9ZU
-         V1JaPb1PHPcFUtaZiZiPc3Jzvsp/Wq7AiAReEpKMY4mX/mJzIjLz5876C2MO3MCq+Fez
-         hfbg==
+        bh=4BHCI/166BKjZ+FXcUih3BMF+v7LRQkg3jx37UcTFdA=;
+        b=Rtev4/ouMtv+3Ed1LMSldMuZi7Jobjganjd2eiBngYCBR11LBhPlNuqD0oYCykYj8z
+         hgK2yiOi9reFESjiXBFAuocR3eC5qVgfkbX9rIqfTmBiZPYeqB3c40dLsPTERtiWObjt
+         r4lJCABTXAOdw5aQOaTx+o4jhXklmEuRxWv4urJxtFwjWNLf0v/u56mNqt2a7yR/O3dt
+         8gtCdcEYkB2wsn6TtmRVIQLTZEr07XPZ89MH3XjwAPYqLEoOqQ64Q7rqOgNWCk++rrMC
+         BCifHz4Kazh47gRnljH7yeWv1uAY7NsZI+hlf5gRfbLNHV1x/j7BrE+2jQuE3cs3ZTKV
+         bmng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681481188; x=1684073188;
+        d=1e100.net; s=20221208; t=1681481186; x=1684073186;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YTAL+X79fFSg7Vdy2Php9Hw3wS0uqtZxqCJF6Zi/jeI=;
-        b=eJXzavzGCFm6l04IgmOlIerOR89wG1jtLTSmAH9rZZ9rtPXi2ttNacvCb/TqLmkQXY
-         8qAGmymMdLJmh5o46g/vW/wg3SyYlKmJaNnWgd+xqHO2U73m+qat+NUfWGF8OX50fw0r
-         3/qAHQJ3eV27L1qoAR+BHYydIqGkv2ah2t0guElBId7mw+VlKCDR6Qnx32u8xBHTXW5G
-         Na91ldJ/GrMyZO2LCkqEhfkEFJ6uNw6CwOJ4eZsgxX54TO+lFhbt1MQmMwmIQkODaFgI
-         iW3tJj4zuuzTfalFwANbW40Qmy3gwgro7U1CM16reyGWF1GhMAoizjR47rCn+36TZ40a
-         yFKw==
-X-Gm-Message-State: AAQBX9foiKSriKNfCwS6IcyWvHijl5+4nOeePzP6An3fhdLYYoTZgKzB
-	JOGZatUf2aMcUnlkHs/RYeXtDQ==
-X-Google-Smtp-Source: AKy350YW1tq7RlVAbMysRMGGwpO123vxwnoXAyGTOLxIgY81ErunoKL5Dlr4nWwny/5PkWJnupMGuQ==
-X-Received: by 2002:a05:6512:b83:b0:4dc:8049:6f36 with SMTP id b3-20020a0565120b8300b004dc80496f36mr2567531lfv.1.1681481188014;
-        Fri, 14 Apr 2023 07:06:28 -0700 (PDT)
+        bh=4BHCI/166BKjZ+FXcUih3BMF+v7LRQkg3jx37UcTFdA=;
+        b=CwhJ/3Euoe10eKYIEhRVgztDQoahoA6AYYpW0Glboaa2wRih5f4+Lae2EgRlUaq2FB
+         L/DSU0lR+WGNK14bMFNk3vFFB8kOrAFnWKgGXTnlS5Yu9WTJakU3/CMgUEPu1E4QehI8
+         lFJYPYG049kkvYcX+Bk2WQMV3Fukjooc0TDQdWW0kp8INk7m5/NQeg0EmuvX073zW1rG
+         4OpRtW4zue1WCCvooXCEuxDJ9Ow6llZhyDqhP+BERIkd7G5gXIanMgWRkr4OBY6SqZCH
+         VUlUULHxwh8Oo+EmwQQz5QI9xKQoMTOejD6FQDBx+6x/eCT28rvE211KHNkZwhHLpSys
+         XPAg==
+X-Gm-Message-State: AAQBX9cpDqGl8q14lY6e1gmOeWX61wZaQIy4pwseCnTcffrnI7oWG6fL
+	T9aNtv3Vom04Oz8r1OEDpSfhwg==
+X-Google-Smtp-Source: AKy350YriwNgCGDtf5oV+RFjWvDkEL94w5t6irwr93Q8pCEGa96woZ1cRxPOwIE/JcEBXleGpR4rxQ==
+X-Received: by 2002:ac2:5159:0:b0:4dd:a61c:8f71 with SMTP id q25-20020ac25159000000b004dda61c8f71mr1960530lfd.41.1681481186017;
+        Fri, 14 Apr 2023 07:06:26 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id b10-20020ac25e8a000000b004d856fe5121sm808794lfq.194.2023.04.14.07.06.27
+        by smtp.gmail.com with ESMTPSA id b10-20020ac25e8a000000b004d856fe5121sm808794lfq.194.2023.04.14.07.06.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 07:06:27 -0700 (PDT)
+        Fri, 14 Apr 2023 07:06:25 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 14 Apr 2023 16:06:22 +0200
-Subject: [PATCH 6/6] pinctrl: qcom ssbi-gpio: Convert to immutable irq_chip
+Date: Fri, 14 Apr 2023 16:06:20 +0200
+Subject: [PATCH 4/6] pinctrl: qcom spmi-mpp: Convert to immutable irq_chip
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-immutable-irqchips-2-v1-6-6b59a5186b00@linaro.org>
+Message-Id: <20230414-immutable-irqchips-2-v1-4-6b59a5186b00@linaro.org>
 References: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
 In-Reply-To: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -75,55 +75,73 @@ intuition.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ drivers/pinctrl/qcom/pinctrl-spmi-mpp.c | 38 ++++++++++++++++++++++++---------
+ 1 file changed, 28 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c b/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
-index e973001e5c88..dec1ffc49ffd 100644
---- a/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
-+++ b/drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c
-@@ -652,12 +652,30 @@ static int pm8xxx_pin_populate(struct pm8xxx_gpio *pctrl,
+diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c b/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
+index 644fb4a0e72a..fe0393829c20 100644
+--- a/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
++++ b/drivers/pinctrl/qcom/pinctrl-spmi-mpp.c
+@@ -143,7 +143,6 @@ struct pmic_mpp_state {
+ 	struct regmap	*map;
+ 	struct pinctrl_dev *ctrl;
+ 	struct gpio_chip chip;
+-	struct irq_chip irq;
+ };
+ 
+ static const struct pinconf_generic_params pmic_mpp_bindings[] = {
+@@ -823,6 +822,33 @@ static int pmic_mpp_child_to_parent_hwirq(struct gpio_chip *chip,
  	return 0;
  }
  
--static struct irq_chip pm8xxx_irq_chip = {
-+static void pm8xxx_irq_disable(struct irq_data *d)
++static void pmic_mpp_irq_mask(struct irq_data *d)
 +{
 +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
 +
++	irq_chip_mask_parent(d);
 +	gpiochip_disable_irq(gc, irqd_to_hwirq(d));
 +}
 +
-+static void pm8xxx_irq_enable(struct irq_data *d)
++static void pmic_mpp_irq_unmask(struct irq_data *d)
 +{
 +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
 +
 +	gpiochip_enable_irq(gc, irqd_to_hwirq(d));
++	irq_chip_unmask_parent(d);
 +}
 +
-+static const struct irq_chip pm8xxx_irq_chip = {
- 	.name = "ssbi-gpio",
- 	.irq_mask_ack = irq_chip_mask_ack_parent,
- 	.irq_unmask = irq_chip_unmask_parent,
-+	.irq_disable = pm8xxx_irq_disable,
-+	.irq_enable = pm8xxx_irq_enable,
- 	.irq_set_type = irq_chip_set_type_parent,
--	.flags = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_SKIP_SET_WAKE,
-+	.flags = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_SKIP_SET_WAKE |
-+		IRQCHIP_IMMUTABLE,
++static const struct irq_chip pmic_mpp_irq_chip = {
++	.name = "spmi-mpp",
++	.irq_ack = irq_chip_ack_parent,
++	.irq_mask = pmic_mpp_irq_mask,
++	.irq_unmask = pmic_mpp_irq_unmask,
++	.irq_set_type = irq_chip_set_type_parent,
++	.irq_set_wake = irq_chip_set_wake_parent,
++	.flags = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
 +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
- 
- static int pm8xxx_domain_translate(struct irq_domain *domain,
-@@ -788,7 +806,7 @@ static int pm8xxx_gpio_probe(struct platform_device *pdev)
++};
++
+ static int pmic_mpp_probe(struct platform_device *pdev)
+ {
+ 	struct irq_domain *parent_domain;
+@@ -915,16 +941,8 @@ static int pmic_mpp_probe(struct platform_device *pdev)
+ 	if (!parent_domain)
  		return -ENXIO;
  
- 	girq = &pctrl->chip.irq;
--	girq->chip = &pm8xxx_irq_chip;
-+	gpio_irq_chip_set_chip(girq, &pm8xxx_irq_chip);
+-	state->irq.name = "spmi-mpp",
+-	state->irq.irq_ack = irq_chip_ack_parent,
+-	state->irq.irq_mask = irq_chip_mask_parent,
+-	state->irq.irq_unmask = irq_chip_unmask_parent,
+-	state->irq.irq_set_type = irq_chip_set_type_parent,
+-	state->irq.irq_set_wake = irq_chip_set_wake_parent,
+-	state->irq.flags = IRQCHIP_MASK_ON_SUSPEND,
+-
+ 	girq = &state->chip.irq;
+-	girq->chip = &state->irq;
++	gpio_irq_chip_set_chip(girq, &pmic_mpp_irq_chip);
  	girq->default_type = IRQ_TYPE_NONE;
  	girq->handler = handle_level_irq;
- 	girq->fwnode = dev_fwnode(pctrl->dev);
+ 	girq->fwnode = dev_fwnode(state->dev);
 
 -- 
 2.34.1
