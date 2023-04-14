@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B478C7EE23
-	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 13:10:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039A7C7EE21
+	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D77C2C43321; Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BFE08C433B3;
+	id C9B82C43443; Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A9D45C433AE;
 	Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1681477830;
-	bh=z4YAFcTJHTz5annkeEGPcNZzgHTkFt/JdFDKEjDKBfY=;
+	bh=tddPBNOoSn+numx0Gsnh2BLsuZIxL3AFBxVSRwgKV40=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ULNN+dAB3c0VflYP5SLEZ6Iy7kU4aY+lUovbL3kbrcyzwaMOSeERES/s6XSEeqXx8
-	 CFkEf+Sn3QRHMdaxtha7HvMuZIbYzGCpye4LDIPX+ZEyfgxI0EzfnKn8MtMRUfFxcd
-	 0FapwvKPJW4DIHkTbsfi1f+5XLwiTl6zUvzcy1sSr5OB80ElZ6JRE64d/XKmtJv2JA
-	 4TD6y4JMj6+XiIhECwdizOy7E1eUud8Cujx182sg4rhC5A8+iFtWhbZ02dzvth7Xlx
-	 LfGXnRq4yEMshIAEzzu3G8/6+n8rB6TfX45DM5p6pAjoCZhgcY5fKG94M2hzfCESNk
-	 st9CSZmTuiXDg==
+	b=Zdle1HM4pPL/pvPcMgYJ3PCfCmjW1tjl6htcBhn9CU++8Jz137Hz8doQ10bMf5MSX
+	 yIXuN0LGepVO0WcZcUFiEP2QBZ2tdq+6aUfROd7szaQO6jNE4JOr3Gt3If+ol5V396
+	 NlhBjuiGrvHexiGTzqZzEP4YOcVEEBk/bgEhT8oaNiG7CiV19uvv34uo+kgBeyJBRZ
+	 7QlKq83jnU3OjwimrKSt6suqiagiLZbYEYlFOB/Ld29ZcJKm3meAeKtdEGBhmsGNCN
+	 1qWHPlx4MbfKTRn3N1a53Q9/P5J0wEH5ssJpaBPJfe5JYgztFUDi9CEevTkx4aFE8Y
+	 dA7keTeymzhcw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0E18E52446;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 79111E4D016;
 	Fri, 14 Apr 2023 13:10:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V SoC drivers for v6.4
+Subject: Re: [GIT PULL 1/6] i.MX drivers update for 6.4
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168147783065.23940.12659432237225494977.git-patchwork-notify@kernel.org>
+ <168147783048.23940.6974333573420960728.git-patchwork-notify@kernel.org>
 Date: Fri, 14 Apr 2023 13:10:30 +0000
-References: <20230406-islamist-mop-81d651b8830d@spud>
-In-Reply-To: <20230406-islamist-mop-81d651b8830d@spud>
-To: Conor Dooley <conor@kernel.org>
+References: <20230408101928.280271-1-shawnguo@kernel.org>
+In-Reply-To: <20230408101928.280271-1-shawnguo@kernel.org>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,19 +42,30 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 6 Apr 2023 21:11:23 +0100 you wrote:
-> Hey Arnd,
+On Sat,  8 Apr 2023 18:19:23 +0800 you wrote:
+> The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 > 
-> Please pull some updates for the "otherwise unloved" RISC-V SoC drivers
-> for v6.4! The bulk of this is my fixing my own driver, and there's a fix
-> in here to make sure that we don't hit randconfig build issues once !MMU
-> is enabled for 32-bit kernels.
+>   Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-drivers-6.4
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] RISC-V SoC drivers for v6.4
-    https://git.kernel.org/soc/soc/c/3d3b32a6dd1e
+  - [GIT,PULL,1/6] i.MX drivers update for 6.4
+    https://git.kernel.org/soc/soc/c/e4fa3c7fc7b4
+  - [GIT,PULL,2/6] i.MX SoC changes for 6.4
+    https://git.kernel.org/soc/soc/c/a8739ac16342
+  - [GIT,PULL,3/6] i.MX dt-bindings update for 6.4
+    (no matching commit)
+  - [GIT,PULL,4/6] i.MX arm32 device tree changes for 6.4
+    (no matching commit)
+  - [GIT,PULL,5/6] i.MX arm64 device tree changes for 6.4
+    (no matching commit)
+  - [GIT,PULL,6/6] i.MX defconfig updates for 6.4
+    https://git.kernel.org/soc/soc/c/fe46e5547f27
 
 You are awesome, thank you!
 -- 
