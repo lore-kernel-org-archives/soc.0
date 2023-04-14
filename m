@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F2EC77B72
-	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 14:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADAF5C77B72
+	for <soc@archiver.kernel.org>; Fri, 14 Apr 2023 14:06:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4F177C433A1; Fri, 14 Apr 2023 14:06:25 +0000 (UTC)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	id 434A3C433A0; Fri, 14 Apr 2023 14:06:28 +0000 (UTC)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3BE8DC433EF
-	for <soc@kernel.org>; Fri, 14 Apr 2023 14:06:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3BE8DC433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 39EA3C433A1
+	for <soc@kernel.org>; Fri, 14 Apr 2023 14:06:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 39EA3C433A1
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id bi41so5415509lfb.7
-        for <soc@kernel.org>; Fri, 14 Apr 2023 07:06:24 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 26so6805689lfq.11
+        for <soc@kernel.org>; Fri, 14 Apr 2023 07:06:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681481182; x=1684073182;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dw4R9yF5pQV1g0wZt/lit2ez2JDvjqS5l1RKTEe/yxA=;
-        b=S/CAvV5qAVCU/68x1axECLEAe/g7GF0gwATiwlXa/MXUYeHCZe6NLyB2CvuL7D7TeD
-         vAB2nrq0EfVCHofdXLe6V5V2vSBcZL3sgML7Kdk6d+wjIqBS97Y2ybS2M+I0w36P0AHT
-         tUgAwsHOM6wm05erIWgSb1oQD4AkKWot8mhpRjRY5voxnvWZgd1VP93stZH8FPCjB1KC
-         hp3M8Q6/HOkefIK0xXasqkEAcK9mEYtnmwyM4PPGB3SBWXUs9PIX8bE1WAzICenwIF9w
-         NDQsSHv2kwWk8HYEsuwKxdLVz/OxiJhe/IgUHS+GFSZE+rzMH0NnqMpoH9WJdkO0pB2P
-         Lq+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681481182; x=1684073182;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1681481184; x=1684073184;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Dw4R9yF5pQV1g0wZt/lit2ez2JDvjqS5l1RKTEe/yxA=;
-        b=MPx13kNE8jzj1/wi6Z6tjBqb+O5uzNfqbH91RD8HTeXVNAe+Q9ukmNQyoVzy4HJhq7
-         olM2e4C3NXgT7TPz4333LFrUu9xGdUooVj9sW5Z0sIWMJPvyXtcjhrYHFoemSlRrHGDk
-         LqhjDgCB9XmStxhvHVmz3/mLVuhBww/FN5p0Wt1fWutWvfs1iTev7Wb+krMtZWZvz1k/
-         sLTrp36oWib7N8RyF44v+Fm3KastovkzTlJ50dzAPtEb37cxHXOqZnGHuQLFttPD+4h7
-         Y6TTAGR1CCMAqlHPWJz4KDhIV1LWfv81NvwIq6DVhaJldX51hva3lxE8b5OqcV8WOiTZ
-         Lv3g==
-X-Gm-Message-State: AAQBX9eoDdGM7Q+KWtc2iN57jpjHzEogosjCOiDbL8vQ4wqOgFvxtJZq
-	EcgATAApoowZI6pMDAuVSVok0w==
-X-Google-Smtp-Source: AKy350YI2myKORD+1bBf9V0MVzMF6Dl8kIb0e8hd0klWyNZrgM7mWlvudofzXiQ82QcQd3mDvU9acA==
-X-Received: by 2002:ac2:5488:0:b0:4ec:7973:1ac with SMTP id t8-20020ac25488000000b004ec797301acmr1600070lfk.22.1681481182231;
-        Fri, 14 Apr 2023 07:06:22 -0700 (PDT)
+        bh=HANrBatD66XHrbynSUb+/d3zU2tkPBuvtN1APBMREqs=;
+        b=vmS8y1HoE3osnmSlFtEzioX6TV5Um9jP0ExIdP3zFRLiSZW6+sRf5ERlXDRKWWEBx/
+         fTivZmIt9xt9gE01HBFaWbuMcAq158o4uWc4udD6AFn5gRS4dwlCQhKN4o4kISiFQGXL
+         LqCuczJt6lpfI1bWxF/ub8BSg+qk8PI4FoJ2z+475a+y2LiBYM9ncWzV1juQmh44WhpO
+         CJQvVbz6ZORpvmZhPvl88e2t6M3tSRGKeCdbRNKvuE8n2QK32R57LvkIJxrjqGCQSAbL
+         BH590BAv8/RfVSA5wo595UDxqGt/cdrTFVNmwNCR0aqfmyXl3cTpOHGluf/rR9y8pDbh
+         I+oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681481184; x=1684073184;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HANrBatD66XHrbynSUb+/d3zU2tkPBuvtN1APBMREqs=;
+        b=QJKgTKmLp+k+r46ulRZuyV3jDykEuHLeYyMtFBaJijv4Sy+Iygc+vNF5dGzESNLlO1
+         37WDybKyfXpQU2/5z/osSp3hxlhX0mZBCZ33EiTXrcvIHaPgQ9xx/VPXkH2+TkcR4WXm
+         2d2jCM1p9EFGKIAdrqDVhwiJlzQNv4J5j7/gjzngKuhsSbligD5GMUFZi/3vEJMUkT2b
+         uU838yMHLHZBNR7OOKAwxpGdh4OTgRObS7Amir1cOVrJc0vdrXjlzD//G5yttsYbICuI
+         YuoxvV4h/2W1B0MahCfGbLgu318vApcW0Xmu1BHiGV2vKOKh5Ve3yME5YUh2R5ri30Fk
+         L+Jg==
+X-Gm-Message-State: AAQBX9diHcoA4LGMVFP0C+4Qk6UneTHxBpDimpZe27BrjgPEgReizOfs
+	VSEevi3z68nvdH8AaynlUSvLSA==
+X-Google-Smtp-Source: AKy350ZXNx9gUpKotPMlL4TZIccFfIfntAQ6+DMyC3z1S7xiZNKxTlSI+yACE1Foc5Bc8CHs7KMgZg==
+X-Received: by 2002:a19:5208:0:b0:4e8:16e8:88b with SMTP id m8-20020a195208000000b004e816e8088bmr1761984lfb.29.1681481184186;
+        Fri, 14 Apr 2023 07:06:24 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id b10-20020ac25e8a000000b004d856fe5121sm808794lfq.194.2023.04.14.07.06.21
+        by smtp.gmail.com with ESMTPSA id b10-20020ac25e8a000000b004d856fe5121sm808794lfq.194.2023.04.14.07.06.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 07:06:21 -0700 (PDT)
+        Fri, 14 Apr 2023 07:06:23 -0700 (PDT)
 From: Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 0/6] pinctrl immutable irqchips
-Date: Fri, 14 Apr 2023 16:06:16 +0200
-Message-Id: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
+Date: Fri, 14 Apr 2023 16:06:18 +0200
+Subject: [PATCH 2/6] pinctrl: pistachio: Convert to immutable irq_chip
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANhdOWQC/x2NQQqDMBBFryKzbmASI5ZepXSRxLEZ0NTOtFIQ7
- 97o8r3P42+gJEwKt2YDoZWVX6WCvTSQcihPMjxUBoeuRW+94Xn+fkKc6iDvlHlR40yHbcSxv2L
- vLdQ0BiUTJZSUj3iglabDL0Ij/867+2Pf/zipgBZ+AAAA
+Message-Id: <20230414-immutable-irqchips-2-v1-2-6b59a5186b00@linaro.org>
+References: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
+In-Reply-To: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
  Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, 
@@ -70,31 +70,112 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
  Linus Walleij <linus.walleij@linaro.org>
 X-Mailer: b4 0.12.1
 
-This is the final set of immutable GPIO irqchips conversions
-for pinctrl. All done by trivial thinking.
+Convert the driver to immutable irq-chip with a bit of
+intuition.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-Linus Walleij (6):
-      pinctrl: pic32: Convert to immutable irq_chip
-      pinctrl: pistachio: Convert to immutable irq_chip
-      pinctrl: plgpio: Convert to immutable irq_chip
-      pinctrl: qcom spmi-mpp: Convert to immutable irq_chip
-      pinctrl: qcom ssbi-mpp: Convert to immutable irq_chip
-      pinctrl: qcom ssbi-gpio: Convert to immutable irq_chip
+ drivers/pinctrl/pinctrl-pistachio.c | 35 +++++++++++++++++++++++++----------
+ 1 file changed, 25 insertions(+), 10 deletions(-)
 
- drivers/pinctrl/pinctrl-pic32.c          | 36 +++++++++++++++++++++---------
- drivers/pinctrl/pinctrl-pistachio.c      | 35 ++++++++++++++++++++---------
- drivers/pinctrl/qcom/pinctrl-spmi-mpp.c  | 38 +++++++++++++++++++++++---------
- drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c | 24 +++++++++++++++++---
- drivers/pinctrl/qcom/pinctrl-ssbi-mpp.c  | 35 ++++++++++++++++++++++-------
- drivers/pinctrl/spear/pinctrl-plgpio.c   |  8 +++++--
- 6 files changed, 132 insertions(+), 44 deletions(-)
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230414-immutable-irqchips-2-503b0f780741
+diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-pistachio.c
+index 7ca4ecb6eb8d..53408344927a 100644
+--- a/drivers/pinctrl/pinctrl-pistachio.c
++++ b/drivers/pinctrl/pinctrl-pistachio.c
+@@ -17,6 +17,7 @@
+ #include <linux/pinctrl/pinmux.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
++#include <linux/seq_file.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ 
+@@ -93,10 +94,10 @@ struct pistachio_pin_group {
+ struct pistachio_gpio_bank {
+ 	struct pistachio_pinctrl *pctl;
+ 	void __iomem *base;
++	int instance;
+ 	unsigned int pin_base;
+ 	unsigned int npins;
+ 	struct gpio_chip gpio_chip;
+-	struct irq_chip irq_chip;
+ };
+ 
+ struct pistachio_pinctrl {
+@@ -1228,12 +1229,14 @@ static void pistachio_gpio_irq_mask(struct irq_data *data)
+ 	struct pistachio_gpio_bank *bank = irqd_to_bank(data);
+ 
+ 	gpio_mask_writel(bank, GPIO_INTERRUPT_EN, data->hwirq, 0);
++	gpiochip_disable_irq(&bank->gpio_chip, irqd_to_hwirq(data));
+ }
+ 
+ static void pistachio_gpio_irq_unmask(struct irq_data *data)
+ {
+ 	struct pistachio_gpio_bank *bank = irqd_to_bank(data);
+ 
++	gpiochip_enable_irq(&bank->gpio_chip, irqd_to_hwirq(data));
+ 	gpio_mask_writel(bank, GPIO_INTERRUPT_EN, data->hwirq, 1);
+ }
+ 
+@@ -1312,6 +1315,7 @@ static void pistachio_gpio_irq_handler(struct irq_desc *desc)
+ 
+ #define GPIO_BANK(_bank, _pin_base, _npins)				\
+ 	{								\
++		.instance = (_bank),					\
+ 		.pin_base = _pin_base,					\
+ 		.npins = _npins,					\
+ 		.gpio_chip = {						\
+@@ -1326,14 +1330,6 @@ static void pistachio_gpio_irq_handler(struct irq_desc *desc)
+ 			.base = _pin_base,				\
+ 			.ngpio = _npins,				\
+ 		},							\
+-		.irq_chip = {						\
+-			.name = "GPIO" #_bank,				\
+-			.irq_startup = pistachio_gpio_irq_startup,	\
+-			.irq_ack = pistachio_gpio_irq_ack,		\
+-			.irq_mask = pistachio_gpio_irq_mask,		\
+-			.irq_unmask = pistachio_gpio_irq_unmask,	\
+-			.irq_set_type = pistachio_gpio_irq_set_type,	\
+-		},							\
+ 	}
+ 
+ static struct pistachio_gpio_bank pistachio_gpio_banks[] = {
+@@ -1345,6 +1341,25 @@ static struct pistachio_gpio_bank pistachio_gpio_banks[] = {
+ 	GPIO_BANK(5, PISTACHIO_PIN_MFIO(80), 10),
+ };
+ 
++static void pistachio_gpio_irq_print_chip(struct irq_data *data,
++					  struct seq_file *p)
++{
++	struct pistachio_gpio_bank *bank = irqd_to_bank(data);
++
++	seq_printf(p, "GPIO%d", bank->instance);
++}
++
++static const struct irq_chip pistachio_gpio_irq_chip = {
++	.irq_startup = pistachio_gpio_irq_startup,
++	.irq_ack = pistachio_gpio_irq_ack,
++	.irq_mask = pistachio_gpio_irq_mask,
++	.irq_unmask = pistachio_gpio_irq_unmask,
++	.irq_set_type = pistachio_gpio_irq_set_type,
++	.irq_print_chip = pistachio_gpio_irq_print_chip,
++	.flags = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
++
+ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
+ {
+ 	struct pistachio_gpio_bank *bank;
+@@ -1394,7 +1409,7 @@ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
+ 		bank->gpio_chip.fwnode = child;
+ 
+ 		girq = &bank->gpio_chip.irq;
+-		girq->chip = &bank->irq_chip;
++		gpio_irq_chip_set_chip(girq, &pistachio_gpio_irq_chip);
+ 		girq->parent_handler = pistachio_gpio_irq_handler;
+ 		girq->num_parents = 1;
+ 		girq->parents = devm_kcalloc(pctl->dev, 1,
 
-Best regards,
 -- 
-Linus Walleij <linus.walleij@linaro.org>
+2.34.1
 
