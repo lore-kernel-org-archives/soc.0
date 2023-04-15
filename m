@@ -1,111 +1,87 @@
-Return-Path: <SRS0=9svH=AG=infradead.org=rdunlap@kernel.org>
+Return-Path: <SRS0=WIbn=AG=ioremap.net=zbr@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F2D0C7619A
-	for <soc@archiver.kernel.org>; Sat, 15 Apr 2023 16:08:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D8B3C77B70
+	for <soc@archiver.kernel.org>; Sat, 15 Apr 2023 22:26:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E6C66C433EF; Sat, 15 Apr 2023 16:08:43 +0000 (UTC)
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	id 3C193C4339B; Sat, 15 Apr 2023 22:26:12 +0000 (UTC)
+Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A8117C433D2
-	for <soc@kernel.org>; Sat, 15 Apr 2023 16:08:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8117C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=4my/HdVpvEW7ZsohZBuFTRTyuBzPr6i6gOfM7+nk0bs=; b=PvXjVvdgAC+nBUCJF2RkC1Kayr
-	Zru0Yo8URlH+eWoljrVADs4S4LuZFpov7rLs31nhVbOV+LvnvAGDSwEYVep1dNA/XYkTRLYCHMTQk
-	UMo4b4OtIdNfx6CTrKSzRLLiZeLGly/9xXBLVcM+/nTdnsXpZfeiPCIo2JP1fb9XemTGExMB1+9Dm
-	fMWZn/+e5yzFeSdwvvrZhGPHN600/UDKPT1TnPh5ujg1jE0EY7ASAZZi+SLXO/cl3de+j4e8Gh7lP
-	SpuHv5NgV1eajwbAihIiVWRelyOQ9D1UiUh6qEet5qsa4DZDQycu+BKUDZqvuMOtTbToDCsLEfEO5
-	1Z5N3QxQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1pniS5-00CQCg-2V;
-	Sat, 15 Apr 2023 16:08:37 +0000
-Message-ID: <84fd6222-89e8-58de-f386-b51af8cf9ebe@infradead.org>
-Date: Sat, 15 Apr 2023 09:08:37 -0700
+	by smtp.kernel.org (Postfix) with ESMTPS id 6831FC433D2;
+	Sat, 15 Apr 2023 22:26:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6831FC433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ioremap.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ioremap.net
+Received: from mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:992a:0:640:c3bc:0])
+	by forward501c.mail.yandex.net (Yandex) with ESMTP id 0B8D95E4FA;
+	Sun, 16 Apr 2023 01:25:58 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rPiwCiZWr8c0-9qdmcQtV;
+	Sun, 16 Apr 2023 01:25:56 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ioremap.net; s=mail; t=1681597557;
+	bh=j6QL5cAd6kmENaJ82LDvshMMXQELa95dKR1dUFlpYmE=;
+	h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+	b=KaRSxOwkFKngw62Mbq9RoV51ofVHld/zLGoioK+9FWyilxZT2EsW222DYznSvgdrT
+	 7Rc//KVRiQ5bRdqCNuHZX4LAgcJlHMQ9mNXS0o1qanoaGGax8OkT//rCNVnF7Z/24H
+	 JTMUIVhEess3Tjq0Zg7h1iT8bBbc+aOxoXFhLSbg=
+Authentication-Results: mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net; dkim=pass header.i=@ioremap.net
+Message-ID: <daa72583-922f-4ed5-f7e9-36423dd899a0@ioremap.net>
+Date: Sat, 15 Apr 2023 23:25:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 02/15] w1: ds2433: correct kerneldoc annotation
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V5 2/6] dt-bindings: w1: Add DS2482/DS2484 I2C to 1-W
+ bridges
 Content-Language: en-US
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- linux-kernel@vger.kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: Evgeniy Polyakov <zbr@ioremap.net>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230415104304.104134-1-krzysztof.kozlowski@linaro.org>
- <20230415104304.104134-2-krzysztof.kozlowski@linaro.org>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230415104304.104134-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+ Stefan Wahren <stefan.wahren@i2se.com>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>
+List-Id: <soc.lore.kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, soc@kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Rob Herring <robh@kernel.org>, Stefan Wahren <stefan.wahren@chargebyte.com>
+References: <20230404080243.9613-1-stefan.wahren@chargebyte.com>
+ <20230404080243.9613-3-stefan.wahren@chargebyte.com>
+ <20230404133937.GA3778861-robh@kernel.org>
+ <e2afed14-fed3-772c-3acc-dc132b5a1078@i2se.com>
+ <2023040651-baboon-busybody-6175@gregkh>
+ <bdcf41d5-cd61-1e95-0b21-b8fe401644bd@ioremap.net>
+ <dc794f94-42ff-33a5-facc-5fe09f6da295@linaro.org>
+ <4649763c-4355-758e-dcdc-5bdb4277c441@linaro.org>
+From: Evgeniy Polyakov <zbr@ioremap.net>
+In-Reply-To: <4649763c-4355-758e-dcdc-5bdb4277c441@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+Hi Krzysztof
 
-
-On 4/15/23 03:42, Krzysztof Kozlowski wrote:
-> Correct kerneldoc comments (or drop annotation) to fix:
+On 15/04/2023 10:34, Krzysztof Kozlowski wrote:
+>>> Thank you for the patches Stefan, but I'm no longer a w1 maintainer,
+>>> sorry I haven't updated the maintainers file, please send all w1 patches
+>>> to Greg.
+>>
+>> Thanks Evgeniy.
+>>
+>> If the one-wire subsystem is orphaned, I can manage the patches to
+>> offload Greg a bit.
 > 
->   w1_ds2433.c:46: warning: This comment starts with '/**', but isn't a kernel-doc comment.
->   w1_ds2433.c:141: warning: This comment starts with '/**', but isn't a kernel-doc comment.
+> There was not feedback on my proposal, which I am optimistically going
+> to understand as "go ahead". :)
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> I'll send a patch, assuming Evgeniy that you are not planning to
+> maintain w1 anymore and a new maintainer would be useful.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Greg has been managing all the w1 patches for last years and as far as I 
+understand, in particular since I stepped out, I'm totally not against 
+anyone picking up the queue from him or doing it the way I've been doing 
+through his tree, but please discuss it with him and come up with the 
+solution which works best, I have no word in it.
 
-Thanks.
-
-> ---
->  drivers/w1/slaves/w1_ds2433.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/w1/slaves/w1_ds2433.c b/drivers/w1/slaves/w1_ds2433.c
-> index 0f72df15a024..6134ca2f37fe 100644
-> --- a/drivers/w1/slaves/w1_ds2433.c
-> +++ b/drivers/w1/slaves/w1_ds2433.c
-> @@ -42,7 +42,7 @@ struct w1_f23_data {
->  	u32	validcrc;
->  };
->  
-> -/**
-> +/*
->   * Check the file size bounds and adjusts count as needed.
->   * This would not be needed if the file size didn't reset to 0 after a write.
->   */
-> @@ -138,16 +138,17 @@ static ssize_t eeprom_read(struct file *filp, struct kobject *kobj,
->  }
->  
->  /**
-> - * Writes to the scratchpad and reads it back for verification.
-> + * w1_f23_write() - Writes to the scratchpad and reads it back for verification.
-> + * @sl:		The slave structure
-> + * @addr:	Address for the write
-> + * @len:	length must be <= (W1_PAGE_SIZE - (addr & W1_PAGE_MASK))
-> + * @data:	The data to write
-> + *
->   * Then copies the scratchpad to EEPROM.
->   * The data must be on one page.
->   * The master must be locked.
->   *
-> - * @param sl	The slave structure
-> - * @param addr	Address for the write
-> - * @param len   length must be <= (W1_PAGE_SIZE - (addr & W1_PAGE_MASK))
-> - * @param data	The data to write
-> - * @return	0=Success -1=failure
-> + * Return:	0=Success, -1=failure
->   */
->  static int w1_f23_write(struct w1_slave *sl, int addr, int len, const u8 *data)
->  {
-
--- 
-~Randy
+Thank you.
