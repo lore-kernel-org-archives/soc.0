@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A18C77B76
-	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 10:18:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98ADCC77B7A
+	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 10:18:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 86BB5C43446; Sun, 16 Apr 2023 10:18:24 +0000 (UTC)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	id 7AE38C433D2; Sun, 16 Apr 2023 10:18:25 +0000 (UTC)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 93356C433D2;
-	Sun, 16 Apr 2023 10:18:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 93356C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 9A8D0C43322;
+	Sun, 16 Apr 2023 10:18:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9A8D0C43322
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id q23so47331584ejz.3;
-        Sun, 16 Apr 2023 03:18:23 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-50489b16e6aso5105532a12.1;
+        Sun, 16 Apr 2023 03:18:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681640302; x=1684232302;
+        d=gmail.com; s=20221208; t=1681640304; x=1684232304;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MKVIgiz58zIFJgX8elDwMTDtG02bu6kIfybVoLMLnnE=;
-        b=cqXiolsx0L2qOIBAA7EALCik+iaaMM62IB0P+KqocrXkk7GYA93KjBCpZoy0NZhJUd
-         zFaSWz7Pk/WRCBJVmp76y9w8+t7VnQLSiTi0SzoZ1VSEtpmbzRMTxFrqiGFAYYFBIsGx
-         WPYkkPYTcimur1fXWbF9clpXQOhh6c/8gItlzWD0C74yR1BtOioezl+95Jpx2Pz4K5gn
-         /EBQZXYEXoszFUQPGeQznA9XBQtpL8d9IW4DEizt/m2fZDYEdmlYRdVBr5SbXw2B77mz
-         yI3+V/Rn+urSLxJtYLfbjVP6d8B8WC0W4ZxKS7UmQ7rHRGzxlhBhZE3Qiv+xlVEXTHKR
-         A14g==
+        bh=3Vw7IkhYneCykALUpZzpj7USB2Ld/fNOUvy0zl1WvSk=;
+        b=d3y8JwMRUwKh1tdSMa3QufUNZpkVuowkFvs4vXbquxrQmW8u3zh+YVaqidheSd18Yh
+         sSXeivwOOH8D+8PiCzIwl0EluBzr+9LDHM11AiA/JtHuqWxwbIi1PP50x1HeBbs+dIx+
+         GAR9wetWmRxOwNik60THfZ4owhwjEkCv9bHYWlG2oLvny7tsaMg5681VpCrmwlljWfMv
+         /wvCkvIWlVWZ39PtNCy0m59vaZ/dl71wsBwPGfsJlJRxSzm0LqR8Cy8U4iSU06DUsyE/
+         gQLfm8LhsjWqkWVFZxRz8gZjMnreGOJTOz/pjnzDOzrXfhsYMnFiuabKdZgsoL0zsaeX
+         PaXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681640302; x=1684232302;
+        d=1e100.net; s=20221208; t=1681640304; x=1684232304;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MKVIgiz58zIFJgX8elDwMTDtG02bu6kIfybVoLMLnnE=;
-        b=jwUiWVmDfu7Jt0XCYYODjyl0me3Rhe/11Fvm3Oh8fjJbR4R5Y4IzZfGQbwuCZVGul+
-         qpQqQlklWUOm5mCDzPYpShI+I0OjxtG54dpOsZblYvUvLB9pJqf47iWyUzc7FjgBZ8p9
-         Va6JegZRFrnF2b0dTpe33bmhJKo731NESz6sLDFyqtl4bQKKBM+NS5yPnEExl8e44SqP
-         gtqepgORJ/NvKsUTsQ+KBhjDaSoKTovTg+QHV4MTZx3JF71jCIfx9mdIoq2esOjQEc1B
-         Of2Sivv9caf8fFdp0r2M0qcjtEfEATwLdLpbm7eGaTY0iFx7LH4WUMKX051pM2bZsQvi
-         Qh6Q==
-X-Gm-Message-State: AAQBX9fQuh4YKhdktITck4nlJazFPiXkUoB8bux/1DWwekh5XwqZUJcM
-	U/U8Y61YnBj7VNUKN10oUH8=
-X-Google-Smtp-Source: AKy350Zs3joV9ktaohSXSoa5ZOuDSyR6CCu/nkacUYcu2ur7+lu2yQnFNAz/9zbkpqhVoD9a6AMQUA==
-X-Received: by 2002:a17:906:57d5:b0:94e:dd1c:dc78 with SMTP id u21-20020a17090657d500b0094edd1cdc78mr4487386ejr.69.1681640301702;
-        Sun, 16 Apr 2023 03:18:21 -0700 (PDT)
+        bh=3Vw7IkhYneCykALUpZzpj7USB2Ld/fNOUvy0zl1WvSk=;
+        b=EbtVNfNasCfCOC5iUCFvUicJOoPiqlj5HK3m/yNPGHEVOu19VrF6F2PR+Gm9M7AvKN
+         EmpnNka4Wcxhyr3pqe+t5/lGd15D4qmnAa3OndFJ6z/c6N7zppjSjl4/PmwybjtDLEDw
+         CXBlY3GwQS5lQYO1u6I+8u4zNZC+QjuPRhshM4xUHgoTfB8/05IutGC99YaeBpQzAvbM
+         taw1u6Dhp3GawdK3wbOYTSmsooXTppEhjuIejTv4Jx+rLkyiA44FH28i0YUFp9PpnBeK
+         LqsBJIhs8lOjbSkwyjIhhVZ8KCtIGu0Jz+3WfGdEMnANPlgoacMSXLel5eG5ieVVdSzv
+         s+fQ==
+X-Gm-Message-State: AAQBX9eAqaU0xgz2RljhjJwL3ebkDOzJYk16LJsh7ll9QdBGg3phxP5s
+	G/68VtEBXAMOvgR3fwFxgj0=
+X-Google-Smtp-Source: AKy350baF3wt8f4vZvCbFp7IBlN80m1snCFuzJDRbGXEHsXmYWJBHgGmsrQ4P3yYeHwlqivEcl086w==
+X-Received: by 2002:a05:6402:1b02:b0:501:d4f9:3141 with SMTP id by2-20020a0564021b0200b00501d4f93141mr11301812edb.32.1681640303935;
+        Sun, 16 Apr 2023 03:18:23 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id r20-20020a056402019400b0050476da5160sm4427443edv.45.2023.04.16.03.18.19
+        by smtp.gmail.com with ESMTPSA id r20-20020a056402019400b0050476da5160sm4427443edv.45.2023.04.16.03.18.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 03:18:21 -0700 (PDT)
+        Sun, 16 Apr 2023 03:18:23 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -80,9 +80,9 @@ Cc: Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-phy@lists.infradead.org,
 	~postmarketos/upstreaming@lists.sr.ht,
 	Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH 07/12] Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
-Date: Sun, 16 Apr 2023 12:16:19 +0200
-Message-Id: <20230416101624.15866-8-aweber.kernel@gmail.com>
+Subject: [PATCH 08/12] Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
+Date: Sun, 16 Apr 2023 12:16:20 +0200
+Message-Id: <20230416101624.15866-9-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230416101624.15866-1-aweber.kernel@gmail.com>
 References: <20230416101624.15866-1-aweber.kernel@gmail.com>
@@ -95,54 +95,26 @@ no boards using it.
 
 We will be adding a device that uses it, so add it back.
 
-This reverts commit 2d41a0c9ae51ac363d107f2510022106e7234b33.
+This reverts commit fee7e1d50c6e6da1d99035181ba5a5c88f5bb526.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- drivers/media/platform/samsung/exynos4-is/Kconfig     | 2 +-
- drivers/media/platform/samsung/exynos4-is/fimc-core.c | 2 +-
- drivers/media/platform/samsung/exynos4-is/fimc-lite.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/phy/samsung/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/samsung/exynos4-is/Kconfig b/drivers/media/platform/samsung/exynos4-is/Kconfig
-index da33faa7132e..7f9ba053dd8e 100644
---- a/drivers/media/platform/samsung/exynos4-is/Kconfig
-+++ b/drivers/media/platform/samsung/exynos4-is/Kconfig
-@@ -47,7 +47,7 @@ config VIDEO_S5P_MIPI_CSIS
- config VIDEO_EXYNOS_FIMC_LITE
- 	tristate "EXYNOS FIMC-LITE camera interface driver"
- 	depends on I2C
--	depends on SOC_EXYNOS4412 || SOC_EXYNOS5250 || COMPILE_TEST
-+	depends on SOC_EXYNOS4212 || SOC_EXYNOS4412 || SOC_EXYNOS5250 || COMPILE_TEST
- 	depends on HAS_DMA
- 	select VIDEOBUF2_DMA_CONTIG
- 	select VIDEO_EXYNOS4_IS_COMMON
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-core.c b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-index 1791100b6935..e2f394e60dee 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-@@ -1129,7 +1129,7 @@ static const struct fimc_drvdata fimc_drvdata_exynos4210 = {
- 	.out_buf_count	= 32,
- };
+diff --git a/drivers/phy/samsung/Kconfig b/drivers/phy/samsung/Kconfig
+index 3ccaabf2850a..f10afa3d7ff5 100644
+--- a/drivers/phy/samsung/Kconfig
++++ b/drivers/phy/samsung/Kconfig
+@@ -59,7 +59,7 @@ config PHY_EXYNOS4210_USB2
+ config PHY_EXYNOS4X12_USB2
+ 	bool
+ 	depends on PHY_SAMSUNG_USB2
+-	default SOC_EXYNOS3250 || SOC_EXYNOS4412
++	default SOC_EXYNOS3250 || SOC_EXYNOS4212 || SOC_EXYNOS4412
  
--/* EXYNOS4412 */
-+/* EXYNOS4212, EXYNOS4412 */
- static const struct fimc_drvdata fimc_drvdata_exynos4x12 = {
- 	.num_entities	= 4,
- 	.lclk_frequency	= 166000000UL,
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
-index e185a40305a8..f80047095f30 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
-@@ -1619,7 +1619,7 @@ static const struct dev_pm_ops fimc_lite_pm_ops = {
- 			   NULL)
- };
- 
--/* EXYNOS4412 */
-+/* EXYNOS4212, EXYNOS4412 */
- static struct flite_drvdata fimc_lite_drvdata_exynos4 = {
- 	.max_width		= 8192,
- 	.max_height		= 8192,
+ config PHY_EXYNOS5250_USB2
+ 	bool
 -- 
 2.40.0
 
