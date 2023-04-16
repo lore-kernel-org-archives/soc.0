@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C1B9C77B61
-	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 10:18:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4E1DC77B61
+	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 10:18:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 42FAAC433D2; Sun, 16 Apr 2023 10:18:11 +0000 (UTC)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	id B81F4C433A0; Sun, 16 Apr 2023 10:18:13 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5EFFEC433EF;
-	Sun, 16 Apr 2023 10:18:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5EFFEC433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id D6D08C433D2;
+	Sun, 16 Apr 2023 10:18:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6D08C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-94ef8b88a5bso99072466b.2;
-        Sun, 16 Apr 2023 03:18:10 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5068e99960fso1095806a12.1;
+        Sun, 16 Apr 2023 03:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681640288; x=1684232288;
+        d=gmail.com; s=20221208; t=1681640291; x=1684232291;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ictKT9aVXsy71NADauVKmbOAOmI+urQXpaOOBezHLGg=;
-        b=NmVfd+lGkyzIR89aTXtzukxRcrjPYn7C0h2vuCLNzXGN+ESHg7XCpJ05A0r2JFDj8A
-         ThSYnlSVdf/13t1J3961GHMbdlNv2jDuNPkJlyZjkQpoQAuDMQ019JKdzlhnNjhHsa2D
-         fF8kmlHnLHneEsPKwni4PtIvZmmYjfJRYmQwNrKSQIjA2/H6QePZhY8yOK+Kuv/zbwhl
-         PDA5PAAp+DXDXzgSneFDhQ5M5W+a1mPgofcdxOg5GbpESo+IvLoGqF1/f52FVuO5i8Jw
-         4en1XGcuCPvnrP/0arn8WBfOQUQUGvUuA0ulv3xi+hslfOFu4dl0OrFKqk22Cn1W9ftc
-         3QIg==
+        bh=C2Jvxyw959FBVgqwdIHjHqfLuFNRZ5ppQl2qELcKy9w=;
+        b=a8/reai+fkCe0l97u3b5U2wOLRijCZpCFVTYo9W7WwvGifVyD2Svg5XOangqDnMw9v
+         UiQvk2DzAV2i+ZCWAFQf/6bgUeFkblmNvoTTxbnSkRfeiNwAyelGLE3L7Hus0jMxVeXM
+         5Xe/OpzoGwoC5Ih4ac9xayLYGRbO/Wft4yl576G4A6GdZlWl6UQKPspsHDch9VcoQOwv
+         oEN6Dki2IBGnGA/7V1JeTbXIKTMN4FvNKfu6IyOLQ7F9R/vKjSABVb+9/mjqBpZ8LtmY
+         EFV3hnyMz5SAO4Dhu/sQauy3yzQAFpgDXXcGm1+raTjNnE6nlXvp3FAkLShA3ESTSZqK
+         8EuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681640288; x=1684232288;
+        d=1e100.net; s=20221208; t=1681640291; x=1684232291;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ictKT9aVXsy71NADauVKmbOAOmI+urQXpaOOBezHLGg=;
-        b=O3uEajmUZ44/97YbJ1PKNfr71w8PXMXxYBHsLHtls9iPqKDn1V8/vedvl9QP31ZPe9
-         scE0TjEpdsAXE7j0jxwUO/ijH3ChgeDCYT0Fs8jMw8dnK799tabTAnh+myKp652J0Fxm
-         LNBOJva+k1IwsbahHdq3V1gtQ8MqNDvmoZbLdjobJZec0ItA+tm/qNAlJIqSuyAZA5wS
-         6ScoKUqCoqtHPfp/rD0+LEzh277mlZS7jmqsNY9LBybZ5vXlkRLwdWw3mjf/fr0mGWBr
-         WcuBw/vxBfJKOHPuLUTVlZbZZl4a5Q9FDeZVPH/+tsQymxSYEcBt8XPSIQ/lw3NQ7207
-         Dn+w==
-X-Gm-Message-State: AAQBX9dImSPen1ds5bPS/nG2tPpscMgvn9WmsYURYHU73cfHyoLuXlA7
-	DbNM6DMzMBpQ+MP0mKXQ260=
-X-Google-Smtp-Source: AKy350b4tPKvu3DKWB3ezxr4rb5TH+DVkFeKgGXShis+Z10SPj3vkg0ePywiJThMbrjGTZeKUqdoTw==
-X-Received: by 2002:aa7:cb19:0:b0:502:6e48:65ea with SMTP id s25-20020aa7cb19000000b005026e4865eamr8951620edt.12.1681640288447;
-        Sun, 16 Apr 2023 03:18:08 -0700 (PDT)
+        bh=C2Jvxyw959FBVgqwdIHjHqfLuFNRZ5ppQl2qELcKy9w=;
+        b=lhu51Zz+h41m+n/blIOBUbAvCl+VZLFzRGbIVzsh/C5s0wiaJFdl8AkbkEgKtOJvFY
+         FNYG/1C16hZncaSVY83C0VG5s40yCGdQdN/B2UoiH/uOZug6z5Tj7heB1zV8f7Yi+2xn
+         1FQUkCcDhfoW4osC/kteXezCp3maR1PenIALssDL63xCe1umvIbSDVGdDqo0lI9R3k6U
+         YMUt2R+7QWKwJTi22JZzjWO8jVbkxuk2jNhLimPKaYOM1Zv1XRYBX7pv7WarChxEsTs0
+         P92ZB3OyKeK1jLZaxK+R0NanBVJLi+Tmx5iW5d8P2sO5QQ9O9ecjCGVWkuPjj50FBBa7
+         kuFQ==
+X-Gm-Message-State: AAQBX9cQX3UmdeYh8RMfeMttRF95HSI6p1ZsILYDwLtM6+9dhuezDfo7
+	bHgJotGaBlxn/uxvQzoutVM=
+X-Google-Smtp-Source: AKy350aSVJC1e8d38M+/4GkG/aB/xdn2FE4imNsQNhQV8/4WJrKgBKEMZUfyCo5fWAX95bzv7TNC2Q==
+X-Received: by 2002:aa7:cf87:0:b0:506:77e5:d157 with SMTP id z7-20020aa7cf87000000b0050677e5d157mr9264259edx.19.1681640290762;
+        Sun, 16 Apr 2023 03:18:10 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id r20-20020a056402019400b0050476da5160sm4427443edv.45.2023.04.16.03.18.06
+        by smtp.gmail.com with ESMTPSA id r20-20020a056402019400b0050476da5160sm4427443edv.45.2023.04.16.03.18.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 03:18:07 -0700 (PDT)
+        Sun, 16 Apr 2023 03:18:10 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -80,9 +80,9 @@ Cc: Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-phy@lists.infradead.org,
 	~postmarketos/upstreaming@lists.sr.ht,
 	Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH 01/12] dt-bindings: soc: samsung: add Exynos4212 PMU compatible
-Date: Sun, 16 Apr 2023 12:16:13 +0200
-Message-Id: <20230416101624.15866-2-aweber.kernel@gmail.com>
+Subject: [PATCH 02/12] dt-bindings: clock: add Exynos4212 clock compatible
+Date: Sun, 16 Apr 2023 12:16:14 +0200
+Message-Id: <20230416101624.15866-3-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230416101624.15866-1-aweber.kernel@gmail.com>
 References: <20230416101624.15866-1-aweber.kernel@gmail.com>
@@ -93,37 +93,21 @@ Re-introduced as part of the Exynos4212 re-introduction effort.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ .../devicetree/bindings/clock/samsung,exynos-clock.yaml          | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-index f7c141dd11ec..be3128f2c0df 100644
---- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-+++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-@@ -17,6 +17,7 @@ select:
-         enum:
-           - samsung,exynos3250-pmu
-           - samsung,exynos4210-pmu
-+          - samsung,exynos4212-pmu
-           - samsung,exynos4412-pmu
-           - samsung,exynos5250-pmu
-           - samsung,exynos5260-pmu
-@@ -36,6 +37,7 @@ properties:
-           - enum:
-               - samsung,exynos3250-pmu
-               - samsung,exynos4210-pmu
-+              - samsung,exynos4212-pmu
-               - samsung,exynos4412-pmu
-               - samsung,exynos5250-pmu
-               - samsung,exynos5260-pmu
-@@ -122,6 +124,7 @@ allOf:
-             enum:
-               - samsung,exynos3250-pmu
-               - samsung,exynos4210-pmu
-+              - samsung,exynos4212-pmu
-               - samsung,exynos4412-pmu
-               - samsung,exynos5250-pmu
-               - samsung,exynos5410-pmu
+diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
+index 0589a63e273a..a36781a455b6 100644
+--- a/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
+@@ -24,6 +24,7 @@ properties:
+           - samsung,exynos3250-cmu-dmc
+           - samsung,exynos3250-cmu-isp
+           - samsung,exynos4210-clock
++          - samsung,exynos4212-clock
+           - samsung,exynos4412-clock
+           - samsung,exynos5250-clock
+       - items:
 -- 
 2.40.0
 
