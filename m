@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB097C77B7A
-	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 13:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79919C7EE24
+	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 13:35:59 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD503C433AA; Sun, 16 Apr 2023 13:35:52 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	id 590E7C433A7; Sun, 16 Apr 2023 13:35:59 +0000 (UTC)
+Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CC94DC433D2;
-	Sun, 16 Apr 2023 13:35:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC94DC433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 2CA8FC433D2;
+	Sun, 16 Apr 2023 13:35:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2CA8FC433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id c9so18616369ejz.1;
-        Sun, 16 Apr 2023 06:35:51 -0700 (PDT)
+Received: by mail-ej1-f67.google.com with SMTP id xi5so57466977ejb.13;
+        Sun, 16 Apr 2023 06:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681652151; x=1684244151;
+        d=gmail.com; s=20221208; t=1681652156; x=1684244156;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3Vw7IkhYneCykALUpZzpj7USB2Ld/fNOUvy0zl1WvSk=;
-        b=cRF1bWrdsBz4f28aZ73WeavD7TVKFP4oorqaP9bWG8O8IiWQMq6oY9JC4JbyW/RXbI
-         pkAHJvSNy+9TOSdXB4wPGHxW/STgx2xQCxCS27jEE/M1kjEgCuCakrG5TfRRvPLkA/ku
-         1E+4amkPNqjoEeluN/gFoP5QOmn6tt33rYhSIQuGUVve2Dg6r73qDcTd6dcZ3bU3RaFW
-         h0wm+l0CGb4J2vvOhwEui7B4ekSLqcRt+JzITkXsBir50i1qqZ1S1A4BYyV/nBVnei0l
-         GKmkD9EbNNZqQQggx6rN0Rde62raOEqByS31trHH0ssCuKNBxHuw2NjgHOaN8Vi1ByVK
-         34sg==
+        bh=Daq90p6qrczMZk89cBam/kQAHCGL98Y3xxZQBJA/2hY=;
+        b=JdyJtzg1mPJKZLWloB4AdzyfRPZqN+bEpQ12NixoS+Me97tKAttDlyqq7HUCxRQ+1v
+         v9Z5HBoG7mOB9bVkThpXHzl+2yV5KsrEAiy0qpoX0bqPYieRYuiJEkvnDgbcQjNed8X6
+         ucBkXUDv75ePKNA8z27uxkJLe1bxLilzQ5SPMNdXYTVweWk5b7bCqEWtyd+XPQJToa39
+         m/pG8wvjAD1ritFEKoFkWrjYcj1zbZlg3jOts3BYthPdQghXtVbV/d1HiWd/07yqilm2
+         dkPOAL+TFuG+WZGJJtifZiEeD5eyKQAwrFoSp6y+gp8acVeKeT75CHskrmmPpb9bl52s
+         xBhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681652151; x=1684244151;
+        d=1e100.net; s=20221208; t=1681652156; x=1684244156;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3Vw7IkhYneCykALUpZzpj7USB2Ld/fNOUvy0zl1WvSk=;
-        b=YbIrPJmRJhAUy760+5ymIkV+oCj3ZAHyvJOEoT5k1VAYWopZeAd+1xsngox/s2CcoL
-         xJIhUkywWhJzN7Ju5YkPXnvSfRL0SEdIIuEWEcco8pC7lz41A/S7ArDuYt4HC0YkIOVX
-         s6Y47KWPxOOy9jCbNYcbUdCmKyOhBGw3Bmf5pbbbLSMrzoHidqkFbc++l9AlCfZ5WQRD
-         SgSDWfcyhmgdZOiW/GHz74CDrbay4HS0rsTY+dBqqlGd6rhvuvOW2BXHnVGJFm1wfCP1
-         ifYQPc/+Zu87UcwSNn3YCNECDvikRXZWJYizCakF15HzrUBU1BLnKMriHsgpIAXxuQ4v
-         J2QA==
-X-Gm-Message-State: AAQBX9f5S9SNa7+nS4tyeXqJ+B0y4qpVd63yIp9GpR36G/j6gvOwcZ4D
-	1Hd/DZ7YDRDHek0NJaiMBxU=
-X-Google-Smtp-Source: AKy350b1tv+Q7WC1YUJEbb+ngTtMSVvXW1d2BFu4xZaTGXGIYcrGI3kWjHi0WWPUS/315j1JDD0IHw==
-X-Received: by 2002:a17:906:fe4d:b0:94f:6218:191e with SMTP id wz13-20020a170906fe4d00b0094f6218191emr1084789ejb.20.1681652151296;
-        Sun, 16 Apr 2023 06:35:51 -0700 (PDT)
+        bh=Daq90p6qrczMZk89cBam/kQAHCGL98Y3xxZQBJA/2hY=;
+        b=UOjpo4PIFgtQVwtAS9zBE3I7QoI9spCpzo0ImLrYRiltL0KB2aXfOgb59SeKCfca6m
+         ihX8GHeGkRgoa3fF4BrcUmVDnK+JrKPhL27Nl6YtvTCBd7J7o3Rvn/f43n51zDm0K7zx
+         xgyutpv4UqiVuVFx00hz/KqNyxZos0Zkz9oxMbc7MQOaNWMewcqYoZN9KdsiTyY17S+L
+         ExAD9Iuu3MZbhSRJ2Dco2ZtZ2Bp3m9ZOIfExVmvGGDDYI7Jmg8niQHo7p+EAwIQ6qbrg
+         FcWzB4wWc8DnMn1sTgizLB93HnCDcJOFaYCcp69BTFFeqW6LrerTPUCLi1PZuqE/vsnt
+         bYVA==
+X-Gm-Message-State: AAQBX9fkWbcEvEmg38UDTyFfsmc5aYDPTdnx911nBrM9Pj6h1jFT261L
+	g6acxnoU1xxZycfvV3XCjUY=
+X-Google-Smtp-Source: AKy350YvqfmFSWkKt+Nc/8zQRr1Skw46RS13uJ3HUwVg0TMXAaJsvx1W6TU9yGC+D1uSawH51zHTDA==
+X-Received: by 2002:a17:906:d047:b0:94e:116:8581 with SMTP id bo7-20020a170906d04700b0094e01168581mr4758908ejb.5.1681652156503;
+        Sun, 16 Apr 2023 06:35:56 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.49
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 06:35:50 -0700 (PDT)
+        Sun, 16 Apr 2023 06:35:56 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -80,41 +80,190 @@ Cc: Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-phy@lists.infradead.org,
 	~postmarketos/upstreaming@lists.sr.ht,
 	Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH v2 08/12] Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
-Date: Sun, 16 Apr 2023 15:34:18 +0200
-Message-Id: <20230416133422.1949-9-aweber.kernel@gmail.com>
+Subject: [PATCH v2 10/12] ARM: dts: Re-introduce Exynos4212 DTSI
+Date: Sun, 16 Apr 2023 15:34:20 +0200
+Message-Id: <20230416133422.1949-11-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230416133422.1949-1-aweber.kernel@gmail.com>
 References: <20230416133422.1949-1-aweber.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The platform was originally dropped in commit bca9085e0ae9 ("ARM:
+The DTSI file was originally dropped in commit bca9085e0ae9 ("ARM:
 dts: exynos: remove Exynos4212 support (dead code)"), as there were
 no boards using it.
 
 We will be adding a device that uses it, so add it back.
 
-This reverts commit fee7e1d50c6e6da1d99035181ba5a5c88f5bb526.
-
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- drivers/phy/samsung/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/exynos4212.dtsi | 157 ++++++++++++++++++++++++++++++
+ 1 file changed, 157 insertions(+)
+ create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
 
-diff --git a/drivers/phy/samsung/Kconfig b/drivers/phy/samsung/Kconfig
-index 3ccaabf2850a..f10afa3d7ff5 100644
---- a/drivers/phy/samsung/Kconfig
-+++ b/drivers/phy/samsung/Kconfig
-@@ -59,7 +59,7 @@ config PHY_EXYNOS4210_USB2
- config PHY_EXYNOS4X12_USB2
- 	bool
- 	depends on PHY_SAMSUNG_USB2
--	default SOC_EXYNOS3250 || SOC_EXYNOS4412
-+	default SOC_EXYNOS3250 || SOC_EXYNOS4212 || SOC_EXYNOS4412
- 
- config PHY_EXYNOS5250_USB2
- 	bool
+diff --git a/arch/arm/boot/dts/exynos4212.dtsi b/arch/arm/boot/dts/exynos4212.dtsi
+new file mode 100644
+index 000000000000..9261c14a4489
+--- /dev/null
++++ b/arch/arm/boot/dts/exynos4212.dtsi
+@@ -0,0 +1,157 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Samsung's Exynos4212 SoC device tree source
++ *
++ * Copyright (c) 2012 Samsung Electronics Co., Ltd.
++ *		http://www.samsung.com
++ *
++ * Samsung's Exynos4212 SoC device nodes are listed in this file. Exynos4212
++ * based board files can include this file and provide values for board specfic
++ * bindings.
++ *
++ * Note: This file does not include device nodes for all the controllers in
++ * Exynos4212 SoC. As device tree coverage for Exynos4212 increases, additional
++ * nodes can be added to this file.
++ */
++
++#include "exynos4x12.dtsi"
++
++/ {
++	compatible = "samsung,exynos4212", "samsung,exynos4";
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++			};
++		};
++
++		cpu0: cpu@a00 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a9";
++			reg = <0xa00>;
++			clocks = <&clock CLK_ARM_CLK>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++			#cooling-cells = <2>; /* min followed by max */
++		};
++
++		cpu1: cpu@a01 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a9";
++			reg = <0xa01>;
++			clocks = <&clock CLK_ARM_CLK>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
++			#cooling-cells = <2>; /* min followed by max */
++		};
++	};
++
++	cpu0_opp_table: opp-table-0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-200000000 {
++			opp-hz = /bits/ 64 <200000000>;
++			opp-microvolt = <900000>;
++			clock-latency-ns = <200000>;
++		};
++		opp-300000000 {
++			opp-hz = /bits/ 64 <300000000>;
++			opp-microvolt = <900000>;
++			clock-latency-ns = <200000>;
++		};
++		opp-400000000 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <925000>;
++			clock-latency-ns = <200000>;
++		};
++		opp-500000000 {
++			opp-hz = /bits/ 64 <500000000>;
++			opp-microvolt = <950000>;
++			clock-latency-ns = <200000>;
++		};
++		opp-600000000 {
++			opp-hz = /bits/ 64 <600000000>;
++			opp-microvolt = <975000>;
++			clock-latency-ns = <200000>;
++		};
++		opp-700000000 {
++			opp-hz = /bits/ 64 <700000000>;
++			opp-microvolt = <987500>;
++			clock-latency-ns = <200000>;
++		};
++		opp-800000000 {
++			opp-hz = /bits/ 64 <800000000>;
++			opp-microvolt = <1000000>;
++			clock-latency-ns = <200000>;
++			opp-suspend;
++		};
++		opp-900000000 {
++			opp-hz = /bits/ 64 <900000000>;
++			opp-microvolt = <1037500>;
++			clock-latency-ns = <200000>;
++		};
++		opp-1000000000 {
++			opp-hz = /bits/ 64 <1000000000>;
++			opp-microvolt = <1087500>;
++			clock-latency-ns = <200000>;
++		};
++		opp-1100000000 {
++			opp-hz = /bits/ 64 <1100000000>;
++			opp-microvolt = <1137500>;
++			clock-latency-ns = <200000>;
++		};
++		opp-1200000000 {
++			opp-hz = /bits/ 64 <1200000000>;
++			opp-microvolt = <1187500>;
++			clock-latency-ns = <200000>;
++		};
++		opp-1300000000 {
++			opp-hz = /bits/ 64 <1300000000>;
++			opp-microvolt = <1250000>;
++			clock-latency-ns = <200000>;
++		};
++		opp-1400000000 {
++			opp-hz = /bits/ 64 <1400000000>;
++			opp-microvolt = <1287500>;
++			clock-latency-ns = <200000>;
++		};
++		cpu0_opp_1500: opp-1500000000 {
++			opp-hz = /bits/ 64 <1500000000>;
++			opp-microvolt = <1350000>;
++			clock-latency-ns = <200000>;
++			turbo-mode;
++		};
++	};
++};
++
++&clock {
++	compatible = "samsung,exynos4212-clock";
++};
++
++&combiner {
++	samsung,combiner-nr = <18>;
++};
++
++&gic {
++	cpu-offset = <0x8000>;
++};
++
++&pmu {
++	interrupts = <2 2>, <3 2>;
++	interrupt-affinity = <&cpu0>, <&cpu1>;
++	status = "okay";
++};
++
++&pmu_system_controller {
++	compatible = "samsung,exynos4212-pmu", "syscon";
++};
 -- 
 2.40.0
 
