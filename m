@@ -4,116 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2307C77B73
-	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 14:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FB4C77B7A
+	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 14:32:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 92C00C433A1; Sun, 16 Apr 2023 14:14:06 +0000 (UTC)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	id 9EE38C4339E; Sun, 16 Apr 2023 14:32:54 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17D9CC433D2
-	for <soc@kernel.org>; Sun, 16 Apr 2023 14:14:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17D9CC433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id B5996C433EF
+	for <soc@kernel.org>; Sun, 16 Apr 2023 14:32:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B5996C433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id fw30so4819882ejc.5
-        for <soc@kernel.org>; Sun, 16 Apr 2023 07:14:04 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id sz19so608363ejc.2
+        for <soc@kernel.org>; Sun, 16 Apr 2023 07:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681654443; x=1684246443;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CqjZpfyKPAXa2my2S9Kqm0ywJgkkRuAyH0u0+ZgWeBo=;
-        b=j4GkOa4aNXRE+r4a4/nRTgrCWkl7MYHpNnYSl0JUMuXQMFmbIBleGTKd4PpQexnVfb
-         ybv3marMchyBRQjoztB01LrSlUdnNIgEC2ZRC9/I9vufBTND2fzAkZTAK27uji8UbvVN
-         eXR7Vj1YD0XwMQTYaih7Z7jTeVysyDnc2M/CwTZYD7pe01ug16FiAD3Excw0mMBKNXxE
-         ZLVfBxHmOA3nj0qVdBkY6gXLPmuqkoPl62SIH8BJpmyd/dkWX6gNXzS9gq9SWdgsZX6a
-         WW3kWlsSnOis2a9y4OWL5EztRceKZZ4dk438V1Mjju23FydTqMpKSxldchxID3YY+pFo
-         zGFQ==
+        d=linaro.org; s=google; t=1681655572; x=1684247572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vxPwmhTn7R8qcbvvXrEOzUT6iY4Cfl6bwCwS+WC5Va8=;
+        b=jRcjXg6jNI5pjujR/dVJj+LQpcy/81Qohbx/vk0NeKE/+JJSu4YD+o826383+s0OTJ
+         G+srA2g+4s8lELCqwy4n466Ip06tbeoBQDAgd1Fg2chSEnwPThZz0KDuGcyLQEj/xzsM
+         VxvIQfA/RZpK90xvfRkeJid59BhrRkzSCfJCG9cOAazSrwDz2osvpMJdQt8li1pb2jSB
+         y9/8RZp/30ZZGsEpp9u/Qn1ZkpvFKxpKm6Dvg+PQ/A6sl4EcUi+0+fruNo2eQR4gc1l9
+         VGH5fq3Baf8Cwep1ZSX3tILq2EbswDTIqt6xGjT5SL8n7Mk4VOpLVrQtCmzqbLOBboiU
+         mWpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681654443; x=1684246443;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CqjZpfyKPAXa2my2S9Kqm0ywJgkkRuAyH0u0+ZgWeBo=;
-        b=bnsjAnC5/d5NnTOyqdhJShML60qtcInTsVeM5QMgYxEvcEHQ7Fvm3v1U4lvxNGW/vH
-         qKrQ5Ug5S3FJXf6bBjp32UZHSosb6T5XBcH88XorEhwHYsc+jdI/fYpxaSjRDjIlrMdS
-         2rfxJzuDlVrSbOKecPdHYlMtdyHZePGpmBu+JwB8fuvMNQ811zaqPSSKyWt3cUjeCnEw
-         rKgwTCIzby9qGTrfC/M8FC1M9W+TSMvCF2W/7ZMa3/cXl8XKr9PfsRZr3h5eP2LcjjOq
-         FuRpa8c4bUgcnWt5/Ahx3gUH4wIDhro5ZIaNJIIRysEKgYmFrVE7Ho1sHMC+b+0kJPrv
-         1C4g==
-X-Gm-Message-State: AAQBX9fw+gzBA1obWCgXxQ9kF+jY6/uvHUS3HH8oNzUkyQOr5qV71cK4
-	QSL/S+VqrqLAiBuEjn7WC2yTog==
-X-Google-Smtp-Source: AKy350ayEmg9ZXfl/HB5LQ9Hom4UKULeEgkxZWgCAIx/UHNm3rrpWuZPfU3gw9Fv1tjxFQ4I1e04Cw==
-X-Received: by 2002:a17:906:6091:b0:94c:93e4:b0c with SMTP id t17-20020a170906609100b0094c93e40b0cmr4922508ejj.76.1681654443262;
-        Sun, 16 Apr 2023 07:14:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ba4d:301c:484d:5c9? ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
-        by smtp.gmail.com with ESMTPSA id ce18-20020a170906b25200b0094ee2b8ab77sm3589650ejb.73.2023.04.16.07.14.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 07:14:02 -0700 (PDT)
-Message-ID: <421f998a-8d66-d333-4e41-58a74bc687e9@linaro.org>
-Date: Sun, 16 Apr 2023 16:14:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 00/12] Re-introduce Exynos4212 support and add Samsung
- Galaxy Tab 3 8.0 boards
-To: Artur Weber <aweber.kernel@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh+dt@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Russell King <linux@armlinux.org.uk>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Kukjin Kim <kgene@kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-media@vger.kernel.org, linux-phy@lists.infradead.org,
- ~postmarketos/upstreaming@lists.sr.ht
-References: <20230416133422.1949-1-aweber.kernel@gmail.com>
-Content-Language: en-US
+        d=1e100.net; s=20221208; t=1681655572; x=1684247572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vxPwmhTn7R8qcbvvXrEOzUT6iY4Cfl6bwCwS+WC5Va8=;
+        b=hAWusiOOduSIMyatjsYggT7gPiwSFxj9574vDoe+faRhlwO3MSrTQQS3ZBCxgj4/et
+         jWwuOB3qGUWgeWFfw/ZiLP0LM08GhzqnTRYJ1tI/DD1c02qK+IgKgodVevo5jxPHwY74
+         ZclFOj1gOW7Qb+LQlABmxCsVIsoG4lHKHoGZ/9p6luc0z8nl80iDrPRbKeIs3OTqCQs7
+         WooTHATvOcLHYyqYBmF+2FhjA0e3QvvdfqgtHk6CG0m9ttdkiqWKxAeUv0PoPhyoEQvq
+         MfGWgeqk4cOgVl0W8h2oR9Q+Nz5DwBe118rNM9sIi7f+KoyZAOL8FuETRJhPdfWW4iWW
+         hCkQ==
+X-Gm-Message-State: AAQBX9e3oKvXN8VBcmxz85OIXYTYSfeKlB08ZykIiv9pbCTRh0SfwAnm
+	rOE/7xbFcq/evr5TW0x2teIRmg==
+X-Google-Smtp-Source: AKy350bxYnhx5lTuz3nhlAXOfqrgCFlsA9aSriC++51hMHa6zCQKlPTLANk80um0Va61/aHij0j7qw==
+X-Received: by 2002:a17:906:17c1:b0:932:ac6c:7ef9 with SMTP id u1-20020a17090617c100b00932ac6c7ef9mr4599921eje.22.1681655571849;
+        Sun, 16 Apr 2023 07:32:51 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:ba4d:301c:484d:5c9])
+        by smtp.gmail.com with ESMTPSA id g25-20020a17090613d900b0094edfbd475csm3663271ejc.127.2023.04.16.07.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 07:32:51 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230416133422.1949-1-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+List-Id: <soc.lore.kernel.org>
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers: late pull for v6.4, part two
+Date: Sun, 16 Apr 2023 16:32:48 +0200
+Message-Id: <20230416143248.308942-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 16/04/2023 15:34, Artur Weber wrote:
-> This patches re-introduces the Exynos4212 platform and adds support
-> for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
-> 
->  - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
->  - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
->  - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
-> 
-> What works:
-> 
->  - Display and backlight
->  - Touchscreen (without touchkeys)
->  - GPIO buttons, hall sensor
->  - WiFi and Bluetooth
->  - USB, fuel gauge, charging (partial)
->  - Accelerometer and magnetometer
->  - WiFi model only: light sensor
-> 
-> Display panel bindings used by the Tab3 DTSI are added in a separate
-> patchset - "[PATCH 0/3] Add Samsung S6D7AA0 panel controller driver":
-> https://lore.kernel.org/all/20230416131632.31673-1-aweber.kernel@gmail.com/
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> 
-> Changed in v2:
->  - Added note about display panel bindings to cover letter and
->    Tab3 DTSI commit
+The following changes since commit 69d170c4c28ba0490bd42630cc09d7e1834bbb3d:
 
-That's not really a reason for resend and you explained me the bindings.
-Wait for at least a day before sending big patchsets, to get a chance of
-review.
+  dt-bindings: memory-controller: Drop unneeded quotes (2023-03-31 21:53:15 +0200)
 
-Best regards,
-Krzysztof
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-6.4-2
+
+for you to fetch changes up to 3ec0e1ea4770e40575bfb2bb4e9ebbbaa3c80d3f:
+
+  memory: mtk-smi: mt8365: Add SMI Support (2023-04-10 18:57:15 +0200)
+
+----------------------------------------------------------------
+Memory controller drivers for v6.4, part two
+
+1. Tegra210 EMC: correct reading of MR18 register.
+2. MediaTek SMI: add support for MT8365.
+
+----------------------------------------------------------------
+Alexandre Mergnat (3):
+      dt-bindings: memory-controllers: mediatek,smi-common: add mt8365
+      dt-bindings: memory-controllers: mediatek,smi-larb: add mt8365
+      memory: mtk-smi: mt8365: Add SMI Support
+
+Diogo Ivo (1):
+      memory: tegra: read values from correct device
+
+ .../devicetree/bindings/memory-controllers/mediatek,smi-common.yaml | 2 ++
+ .../devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml   | 4 ++++
+ drivers/memory/mtk-smi.c                                            | 6 ++++++
+ drivers/memory/tegra/tegra210-emc-cc-r21021.c                       | 2 +-
+ 4 files changed, 13 insertions(+), 1 deletion(-)
