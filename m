@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F4D3C77B61
-	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 13:35:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 115B1C7EE25
+	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 13:35:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 15792C433D2; Sun, 16 Apr 2023 13:35:45 +0000 (UTC)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	id EB589C433EF; Sun, 16 Apr 2023 13:35:46 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9F382C4339B;
-	Sun, 16 Apr 2023 13:35:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9F382C4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id 17364C4339B;
+	Sun, 16 Apr 2023 13:35:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 17364C4339B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-50489c109f4so6348920a12.2;
-        Sun, 16 Apr 2023 06:35:43 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id dm2so57577487ejc.8;
+        Sun, 16 Apr 2023 06:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681652142; x=1684244142;
+        d=gmail.com; s=20221208; t=1681652144; x=1684244144;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p71y//uR+D7cixeMALk8VhvdwbZ2ImHTuWWM7+KMyYU=;
-        b=pJXFgk+NWdlcUWqn0CAJER8vvEVEsgWfuzc+d4oDR+4JPfI0l+9p13UP24yjnlotOQ
-         QA+hvrFp47yzq08fnypXcq+33V6ao+pTGROzOzbDVlcdqay/CcY0jdmknsIEJk67LRC1
-         BHntnCxsLYiJPmnRxY0zx14QO/tGrqQvcaEh5XwW1/9OLDLy/M0af93NVFdvBsh52Zm4
-         bvo2lz2v2q21biuHZ6i4g+8PIUreOfZNZRnNnovx6PkAq6kUIxRvQ8xWUYPVP9sYp2QI
-         3NGcbfx1UZ3/gW6hg9YPch/cZiSdGoNcKBatd/1JXdhUBNpyjtTJ8azkYheGV1JbJyTb
-         oD/A==
+        bh=AjXGUzPKMMr8ygNmvKTs+ca+O+QBcfL+qA6w2J0vS7w=;
+        b=UgUKRtwE4oogpbBNh8fzZ3FqYbVAAOAtKTi1c6uAgDKatTn7KPuM6DbVmUVkVTtmuR
+         FSp52Dzw63N5O+/AzrgnCXSoYK2oSQ6Pk1xUfJ6Wa5OU0++bSc+N3LQgK0GOHmzJX46e
+         hadyNfBXqpFptAYcDI0LULtH95r/hbrEvaAYEQZLVdnIUXIkK+ilqyKez5dYbcmosIGt
+         gGm7HCaPN82U9qgXychN+Bc+WPuHmKEeO6r2sWVdFeSPesYbW6EUQH9UPMjaKL2MVwhG
+         rCQY7wNkclVIuhCpcbx1T8+HQsk4OCgOYiYT6yMiQJnQIN4Di8RJkRrOYlyZ2ZTldpSH
+         kitw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681652142; x=1684244142;
+        d=1e100.net; s=20221208; t=1681652144; x=1684244144;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p71y//uR+D7cixeMALk8VhvdwbZ2ImHTuWWM7+KMyYU=;
-        b=HMfq6qJ5sJo9plxd+jDUlEeEw//fFNui6UK/8BVRV7H5g8Gt9g9LITJCk/sXoA2JdU
-         LyQgGx+2UCqmf5eE8IcW/h/OGucncGReo8PcoXLPuutSu6r2Ehg8gFRQ2ypxZs9zk82Z
-         FLp/11dGojOTyXpZqB+iJvA0YhgeMVZkVZW0YDxRFG5Jesz57PaNxPTpQOIKjjcqZVB6
-         AbCvjDpbPYXxKIGrZPO9lVW4vXUAjDXFL+aeC0n+sq8vgbpRmMwbEaupzppPdT+bY9w2
-         ZIBfTwsLgRsOHKRKjPjOgIuhLA+zAl/Ql644a6s9VyZoTNoAc8wWbdEK4rPpZdykXUn7
-         /U7A==
-X-Gm-Message-State: AAQBX9eJQD+erz/aKvRFuMSqRPyXuvNU5pbNaxJDQQ6OzUtfPlYet/UT
-	H98hgFxNDDuhwwqzrRbJLJSy37DtZUFB8w==
-X-Google-Smtp-Source: AKy350a4bDFc1nDQ4TpPm8FPIuPeDQN6bY3okrym98knbaDGqTAnZNubzYyTwKGklnso2Fml0g+Smw==
-X-Received: by 2002:aa7:c90b:0:b0:506:7385:9653 with SMTP id b11-20020aa7c90b000000b0050673859653mr10582713edt.39.1681652141742;
-        Sun, 16 Apr 2023 06:35:41 -0700 (PDT)
+        bh=AjXGUzPKMMr8ygNmvKTs+ca+O+QBcfL+qA6w2J0vS7w=;
+        b=ZBCpUs/pL3xEjISUI3Gewl1RmRnYKS/3QIAm+EMnyrGR+kDqVzXCM4J9Io/KgZWkrK
+         yW6/RZc/XLCZlWFBOySBz7773eNd7ucyCA2gnkDcCV+z68akP2XRuVyQdprncoIrpjW+
+         BMWMOWBX0YPXtOIHSGTCVWUKbadobJpg1wpmAIhNYL2F5FZjIHh/AvuyoftrEGT1v2Lg
+         GmqlFIQtCUL2Yc5k/1o/82lsTwea1HQO7Ep8ZWhNrxtrMZbLa3oYafHvYG2JAXBcRlDh
+         PMpS49xIt9y0FCLSFmuYNF0c1/3lid3biwSILEv3wwZb0bap5oQE5x84OoEAg2g3PnQo
+         VXLA==
+X-Gm-Message-State: AAQBX9eGrDdQXG30kAdU0kJlpRZm/JQ9Lac9bRUa1sLEQ/c65r6Dtw+I
+	xzvg06dwoTcAkcXRx7/fO6o=
+X-Google-Smtp-Source: AKy350aB997CQTiblOPPq0SvVcmrg3sVPcAu4d+kAnkGtuMsIWRj3quw4TlqSzUjasl+SrIb1dRo3Q==
+X-Received: by 2002:a17:906:8805:b0:933:130e:e81a with SMTP id zh5-20020a170906880500b00933130ee81amr4134021ejb.32.1681652144115;
+        Sun, 16 Apr 2023 06:35:44 -0700 (PDT)
 Received: from localhost.my.domain (83.8.121.70.ipv4.supernova.orange.pl. [83.8.121.70])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.39
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm5122958ejc.161.2023.04.16.06.35.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 06:35:41 -0700 (PDT)
+        Sun, 16 Apr 2023 06:35:43 -0700 (PDT)
 From: Artur Weber <aweber.kernel@gmail.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
@@ -80,9 +80,9 @@ Cc: Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-phy@lists.infradead.org,
 	~postmarketos/upstreaming@lists.sr.ht,
 	Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH v2 04/12] soc: samsung: Re-introduce Exynos4212 support
-Date: Sun, 16 Apr 2023 15:34:14 +0200
-Message-Id: <20230416133422.1949-5-aweber.kernel@gmail.com>
+Subject: [PATCH v2 05/12] clk: samsung: Add Exynos4212 compatible to CLKOUT driver
+Date: Sun, 16 Apr 2023 15:34:15 +0200
+Message-Id: <20230416133422.1949-6-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230416133422.1949-1-aweber.kernel@gmail.com>
 References: <20230416133422.1949-1-aweber.kernel@gmail.com>
@@ -95,100 +95,29 @@ no boards using it.
 
 We will be adding a device that uses it, so add it back.
 
-This effectively reverts commit c40610198f35 ("soc: samsung: Remove
-Exynos4212 related dead code").
+This is effectively a revert of commit d5cd103b06f9 ("clk: samsung:
+Remove support for Exynos4212 SoCs in Exynos CLKOUT driver"); the
+driver has changed significantly since then, prompting this re-make.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
- drivers/soc/samsung/exynos-pmu.c  |  9 +++++++++
- drivers/soc/samsung/exynos-pmu.h  |  2 ++
- drivers/soc/samsung/exynos4-pmu.c | 13 +++++++++++--
- 3 files changed, 22 insertions(+), 2 deletions(-)
+ drivers/clk/samsung/clk-exynos-clkout.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/soc/samsung/exynos-pmu.c b/drivers/soc/samsung/exynos-pmu.c
-index 732c86ce2be8..f3437db2fbdc 100644
---- a/drivers/soc/samsung/exynos-pmu.c
-+++ b/drivers/soc/samsung/exynos-pmu.c
-@@ -57,6 +57,12 @@ void exynos_sys_powerdown_conf(enum sys_powerdown mode)
- 
- 	if (pmu_data->powerdown_conf_extra)
- 		pmu_data->powerdown_conf_extra(mode);
-+
-+	if (pmu_data->pmu_config_extra) {
-+		for (i = 0; pmu_data->pmu_config_extra[i].offset != PMU_TABLE_END; i++)
-+			pmu_raw_writel(pmu_data->pmu_config_extra[i].val[mode],
-+					pmu_data->pmu_config_extra[i].offset);
-+	}
- }
- 
- /*
-@@ -79,6 +85,9 @@ static const struct of_device_id exynos_pmu_of_device_ids[] = {
+diff --git a/drivers/clk/samsung/clk-exynos-clkout.c b/drivers/clk/samsung/clk-exynos-clkout.c
+index e6d6cbf8c4e6..326d5fc58727 100644
+--- a/drivers/clk/samsung/clk-exynos-clkout.c
++++ b/drivers/clk/samsung/clk-exynos-clkout.c
+@@ -55,6 +55,9 @@ static const struct of_device_id exynos_clkout_ids[] = {
  	}, {
  		.compatible = "samsung,exynos4210-pmu",
- 		.data = exynos_pmu_data_arm_ptr(exynos4210_pmu_data),
+ 		.data = &exynos_clkout_exynos4,
 +	}, {
 +		.compatible = "samsung,exynos4212-pmu",
-+		.data = exynos_pmu_data_arm_ptr(exynos4212_pmu_data),
++		.data = &exynos_clkout_exynos4,
  	}, {
  		.compatible = "samsung,exynos4412-pmu",
- 		.data = exynos_pmu_data_arm_ptr(exynos4412_pmu_data),
-diff --git a/drivers/soc/samsung/exynos-pmu.h b/drivers/soc/samsung/exynos-pmu.h
-index 5e851f32307e..1c652ffd79b4 100644
---- a/drivers/soc/samsung/exynos-pmu.h
-+++ b/drivers/soc/samsung/exynos-pmu.h
-@@ -20,6 +20,7 @@ struct exynos_pmu_conf {
- 
- struct exynos_pmu_data {
- 	const struct exynos_pmu_conf *pmu_config;
-+	const struct exynos_pmu_conf *pmu_config_extra;
- 
- 	void (*pmu_init)(void);
- 	void (*powerdown_conf)(enum sys_powerdown);
-@@ -32,6 +33,7 @@ extern void __iomem *pmu_base_addr;
- /* list of all exported SoC specific data */
- extern const struct exynos_pmu_data exynos3250_pmu_data;
- extern const struct exynos_pmu_data exynos4210_pmu_data;
-+extern const struct exynos_pmu_data exynos4212_pmu_data;
- extern const struct exynos_pmu_data exynos4412_pmu_data;
- extern const struct exynos_pmu_data exynos5250_pmu_data;
- extern const struct exynos_pmu_data exynos5420_pmu_data;
-diff --git a/drivers/soc/samsung/exynos4-pmu.c b/drivers/soc/samsung/exynos4-pmu.c
-index cb35103565a6..f8092190b938 100644
---- a/drivers/soc/samsung/exynos4-pmu.c
-+++ b/drivers/soc/samsung/exynos4-pmu.c
-@@ -86,7 +86,7 @@ static const struct exynos_pmu_conf exynos4210_pmu_config[] = {
- 	{ PMU_TABLE_END,},
- };
- 
--static const struct exynos_pmu_conf exynos4412_pmu_config[] = {
-+static const struct exynos_pmu_conf exynos4x12_pmu_config[] = {
- 	{ S5P_ARM_CORE0_LOWPWR,			{ 0x0, 0x0, 0x2 } },
- 	{ S5P_DIS_IRQ_CORE0,			{ 0x0, 0x0, 0x0 } },
- 	{ S5P_DIS_IRQ_CENTRAL0,			{ 0x0, 0x0, 0x0 } },
-@@ -191,6 +191,10 @@ static const struct exynos_pmu_conf exynos4412_pmu_config[] = {
- 	{ S5P_GPS_ALIVE_LOWPWR,			{ 0x7, 0x0, 0x0 } },
- 	{ S5P_CMU_SYSCLK_ISP_LOWPWR,		{ 0x1, 0x0, 0x0 } },
- 	{ S5P_CMU_SYSCLK_GPS_LOWPWR,		{ 0x1, 0x0, 0x0 } },
-+	{ PMU_TABLE_END,},
-+};
-+
-+static const struct exynos_pmu_conf exynos4412_pmu_config[] = {
- 	{ S5P_ARM_CORE2_LOWPWR,			{ 0x0, 0x0, 0x2 } },
- 	{ S5P_DIS_IRQ_CORE2,			{ 0x0, 0x0, 0x0 } },
- 	{ S5P_DIS_IRQ_CENTRAL2,			{ 0x0, 0x0, 0x0 } },
-@@ -204,6 +208,11 @@ const struct exynos_pmu_data exynos4210_pmu_data = {
- 	.pmu_config	= exynos4210_pmu_config,
- };
- 
-+const struct exynos_pmu_data exynos4212_pmu_data = {
-+	.pmu_config	= exynos4x12_pmu_config,
-+};
-+
- const struct exynos_pmu_data exynos4412_pmu_data = {
--	.pmu_config		= exynos4412_pmu_config,
-+	.pmu_config		= exynos4x12_pmu_config,
-+	.pmu_config_extra	= exynos4412_pmu_config,
- };
+ 		.data = &exynos_clkout_exynos4,
 -- 
 2.40.0
 
