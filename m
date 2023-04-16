@@ -1,87 +1,106 @@
-Return-Path: <SRS0=WIbn=AG=ioremap.net=zbr@kernel.org>
+Return-Path: <SRS0=JHH0=AH=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D8B3C77B70
-	for <soc@archiver.kernel.org>; Sat, 15 Apr 2023 22:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C302FC77B61
+	for <soc@archiver.kernel.org>; Sun, 16 Apr 2023 07:18:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3C193C4339B; Sat, 15 Apr 2023 22:26:12 +0000 (UTC)
-Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 6EC3FC4339B; Sun, 16 Apr 2023 07:18:51 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6831FC433D2;
-	Sat, 15 Apr 2023 22:26:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6831FC433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=ioremap.net
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=ioremap.net
-Received: from mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:992a:0:640:c3bc:0])
-	by forward501c.mail.yandex.net (Yandex) with ESMTP id 0B8D95E4FA;
-	Sun, 16 Apr 2023 01:25:58 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rPiwCiZWr8c0-9qdmcQtV;
-	Sun, 16 Apr 2023 01:25:56 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ioremap.net; s=mail; t=1681597557;
-	bh=j6QL5cAd6kmENaJ82LDvshMMXQELa95dKR1dUFlpYmE=;
-	h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-	b=KaRSxOwkFKngw62Mbq9RoV51ofVHld/zLGoioK+9FWyilxZT2EsW222DYznSvgdrT
-	 7Rc//KVRiQ5bRdqCNuHZX4LAgcJlHMQ9mNXS0o1qanoaGGax8OkT//rCNVnF7Z/24H
-	 JTMUIVhEess3Tjq0Zg7h1iT8bBbc+aOxoXFhLSbg=
-Authentication-Results: mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net; dkim=pass header.i=@ioremap.net
-Message-ID: <daa72583-922f-4ed5-f7e9-36423dd899a0@ioremap.net>
-Date: Sat, 15 Apr 2023 23:25:53 +0100
+	by smtp.kernel.org (Postfix) with ESMTPS id 27A8CC433D2
+	for <soc@kernel.org>; Sun, 16 Apr 2023 07:18:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 27A8CC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f41.google.com with SMTP id vc20so1353324ejc.10
+        for <soc@kernel.org>; Sun, 16 Apr 2023 00:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681629528; x=1684221528;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=shJMfgVoZ/Uf3DZ3zDo9afK/q9xkXpJiFnl//R92tvI=;
+        b=vMgoignxc+Q8AEpA4YE2dH/3yZVV3lffJ1FRQE9sikuR/9fZKeXb0kGHtxa2axg7zN
+         ksUaFg+6EdXWnjIpU18LyXuUCXlB4yUwk8HOr32sDJXkt4St3DAYp+Gu9SDHsvHWXdsm
+         ULLaD7AhrF8FPwC4A5c8OkHnFExvpJ0SQpCjrVZ56oLqds63/huuHH2rCym4JNVlkTeW
+         QS9/XLLBrCovAHmFJSAgMP5MEyR7sGhQfKH8mwG2hP/DfpMj/nEz4ZtGPL+XHfxjVlwT
+         1qmokUUJrsgQjjg0nhXaH8ZtYf9jIYU8XEmY6eGBm6Y6c72jaJGBQyEyqKbOF69/PSP2
+         VFeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681629528; x=1684221528;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=shJMfgVoZ/Uf3DZ3zDo9afK/q9xkXpJiFnl//R92tvI=;
+        b=Z9uz0YDSqEpXLL2fiz25g1ILkg0tNfnKUgvpYkhDnKrYgdjrh+mrBOMG5sZjlE2+j7
+         lBmnZ57RSivjW4+jSfrjaxLuYwUJ5hdSt8m0gRSsIlkTZhVXYv8I/dFaws9S5j0HEQin
+         lBgmUmhPLlD+nWnTClqIByVC01gh6+LBgj+S0mvFU6ibqzuWqWzP4B+cLUf/Qju01x+6
+         3/QE6SEs8+d0VRi/zwig2tybKXYKo7b+jlIsd7pJ+Atao5jVwdW5nNKMLpF68nzWiYnF
+         dfaMKSjrllJaTeb+JbmcYwLdx16qPBlHPXG9gOPQEL5zuA2M+vrMHfJINqad+mcFdWc3
+         aegw==
+X-Gm-Message-State: AAQBX9dczYezty7qmfjADjej5DePtvV6mgBECT6lxCj2ho8FI1BiUwVT
+	XmQ+6Jo/A3amPuL51E3YC6bdTA==
+X-Google-Smtp-Source: AKy350bA0/Hj6WBxqqB7KTZIkvmNM4AjQoPUWqFuSeSMCMxymM3HjpocW0nSNIIk9qGyg6Junh5DTA==
+X-Received: by 2002:a17:907:9908:b0:885:a62c:5a5c with SMTP id ka8-20020a170907990800b00885a62c5a5cmr3209036ejc.46.1681629528314;
+        Sun, 16 Apr 2023 00:18:48 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
+        by smtp.gmail.com with ESMTPSA id xb9-20020a170907070900b0094e6a9c1d24sm4817719ejb.12.2023.04.16.00.18.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 00:18:47 -0700 (PDT)
+Message-ID: <c21d1af9-41e4-34aa-8596-ed1c2accd13a@linaro.org>
+Date: Sun, 16 Apr 2023 09:18:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V5 2/6] dt-bindings: w1: Add DS2482/DS2484 I2C to 1-W
- bridges
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/4] w1: omap-hdq: allow compile testing
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Stefan Wahren <stefan.wahren@i2se.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, soc@kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Rob Herring <robh@kernel.org>, Stefan Wahren <stefan.wahren@chargebyte.com>
-References: <20230404080243.9613-1-stefan.wahren@chargebyte.com>
- <20230404080243.9613-3-stefan.wahren@chargebyte.com>
- <20230404133937.GA3778861-robh@kernel.org>
- <e2afed14-fed3-772c-3acc-dc132b5a1078@i2se.com>
- <2023040651-baboon-busybody-6175@gregkh>
- <bdcf41d5-cd61-1e95-0b21-b8fe401644bd@ioremap.net>
- <dc794f94-42ff-33a5-facc-5fe09f6da295@linaro.org>
- <4649763c-4355-758e-dcdc-5bdb4277c441@linaro.org>
-From: Evgeniy Polyakov <zbr@ioremap.net>
-In-Reply-To: <4649763c-4355-758e-dcdc-5bdb4277c441@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc: linux-kernel@vger.kernel.org, Evgeniy Polyakov <zbr@ioremap.net>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ soc@kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230415104304.104134-1-krzysztof.kozlowski@linaro.org>
+ <20230415104304.104134-5-krzysztof.kozlowski@linaro.org>
+ <2023041542-arrogance-jury-ccf1@gregkh>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2023041542-arrogance-jury-ccf1@gregkh>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof
-
-On 15/04/2023 10:34, Krzysztof Kozlowski wrote:
->>> Thank you for the patches Stefan, but I'm no longer a w1 maintainer,
->>> sorry I haven't updated the maintainers file, please send all w1 patches
->>> to Greg.
+On 15/04/2023 17:18, Greg Kroah-Hartman wrote:
+> On Sat, Apr 15, 2023 at 12:42:53PM +0200, Krzysztof Kozlowski wrote:
+>> omap-hdq does not depend on anything from ARCH_OMAP for building.
 >>
->> Thanks Evgeniy.
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/w1/masters/Kconfig | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> If the one-wire subsystem is orphaned, I can manage the patches to
->> offload Greg a bit.
+>> diff --git a/drivers/w1/masters/Kconfig b/drivers/w1/masters/Kconfig
+>> index 692cac3ff0ee..ad316573288a 100644
+>> --- a/drivers/w1/masters/Kconfig
+>> +++ b/drivers/w1/masters/Kconfig
+>> @@ -53,7 +53,7 @@ config W1_MASTER_GPIO
+>>  
+>>  config HDQ_MASTER_OMAP
+>>  	tristate "OMAP HDQ driver"
+>> -	depends on ARCH_OMAP
+>> +	depends on ARCH_OMAP || COMPILE_TEST
+>>  	help
+>>  	  Say Y here if you want support for the 1-wire or HDQ Interface
+>>  	  on an OMAP processor.
+>> -- 
+>> 2.34.1
+>>
 > 
-> There was not feedback on my proposal, which I am optimistically going
-> to understand as "go ahead". :)
-> 
-> I'll send a patch, assuming Evgeniy that you are not planning to
-> maintain w1 anymore and a new maintainer would be useful.
+> I'm guessing this shouldn't be part of this series?
 
-Greg has been managing all the w1 patches for last years and as far as I 
-understand, in particular since I stepped out, I'm totally not against 
-anyone picking up the queue from him or doing it the way I've been doing 
-through his tree, but please discuss it with him and come up with the 
-solution which works best, I have no word in it.
+Yes, a git format-patch glitch. It's included in the series as 12/15.
 
-Thank you.
+Best regards,
+Krzysztof
+
