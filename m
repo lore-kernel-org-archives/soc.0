@@ -1,90 +1,64 @@
-Return-Path: <SRS0=SF3S=AI=arm.com=sudeep.holla@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 521BBC77B76
-	for <soc@archiver.kernel.org>; Mon, 17 Apr 2023 14:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4D4AC77B7E
+	for <soc@archiver.kernel.org>; Mon, 17 Apr 2023 15:50:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 157B0C4339C; Mon, 17 Apr 2023 14:57:55 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id E01CEC433EF;
-	Mon, 17 Apr 2023 14:57:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E01CEC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 204A9168F;
-	Mon, 17 Apr 2023 07:58:36 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6CBA23F6C4;
-	Mon, 17 Apr 2023 07:57:51 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_scmi: Updates for v6.4
-Date: Mon, 17 Apr 2023 15:57:43 +0100
-Message-Id: <20230417145743.1904318-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.40.0
+	id 90EF4C433A4; Mon, 17 Apr 2023 15:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 754E2C4339E;
+	Mon, 17 Apr 2023 15:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681746620;
+	bh=MphEfVeniRg6vmdwHncmhFBL/JDmwzOpVupsRnjMTbw=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=hde9ab65Q1Q1Yt6KK8VCR4cUAIcmM7c3gsgscE5emz9sh8Fgx8KEp2PD98rHTcJbG
+	 ezGfEIWvBY/uiSRhYO/TcAQb4OmJfMzEKvUB7mKFuSir9hr8Qn5/Nycm6hC1R+UopL
+	 FHNlFZ6BYZnpKHdZegcZ9m5sb0apHfShvVwrwpRlgq2rcS1D+ztj7FwC2D0oCkx3Zx
+	 OfwEcnvA/NxsfBcPLGs9vvTNZXEW4kKmetvZIQ6Spv/U9tHVBInFR4RLOoT013awqk
+	 cDxefpoSuSsSYBg+TB53Pc2Ju6onRmixQhrZ6Td1Pd6/4TnEa/MtkKRHg7vDImzpYn
+	 IsjpQiRC/hvmA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58364E29F3A;
+	Mon, 17 Apr 2023 15:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] firmware: arm_scmi: Updates for v6.4
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <168174662035.17676.17175462515200161381.git-patchwork-notify@kernel.org>
+Date: Mon, 17 Apr 2023 15:50:20 +0000
+References: <20230417145743.1904318-1-sudeep.holla@arm.com>
+In-Reply-To: <20230417145743.1904318-1-sudeep.holla@arm.com>
+To: Sudeep Holla <Sudeep.Holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-Hi ARM SoC Team,
+Hello:
 
-Please pull !
+This pull request was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-Regards,
-Sudeep
+On Mon, 17 Apr 2023 15:57:43 +0100 you wrote:
+> Hi ARM SoC Team,
+> 
+> Please pull !
+> 
+> Regards,
+> Sudeep
+> 
+> [...]
 
--->8
+Here is the summary with links:
+  - [GIT,PULL] firmware: arm_scmi: Updates for v6.4
+    https://git.kernel.org/soc/soc/c/4c87f3ff78b2
 
-The following changes since commit d617808e3b8324eacebabefec49dc75536ee39cc:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  firmware: arm_scmi: Use the bitmap API to allocate bitmaps (2023-03-08 15:24:15 +0000)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/scmi-updates-6.4
-
-for you to fetch changes up to 9f68ff79ec2cb303f360a35eef5dd8f1f0f817e1:
-
-  firmware: arm_scmi: Add support for unidirectional mailbox channels (2023-04-05 09:39:18 +0100)
-
-----------------------------------------------------------------
-Arm SCMI updates for v6.4
-
-The main and only new addition this time around is the support for
-unidirectional mailbox channels. SCMI communicates between the agent
-and the platform using one bidirectional 'a2p' channel used by the agent
-to send SCMI commands and synchronously receive the related replies, and
-an optional 'p2a' unidirectional channel used to asynchronously receive
-delayed responses and notifications emitted from the platform.
-
-In order to support platforms that support only unidirectional mailbox
-hardware channels, the existing bindings are extended to support the
-same. Both bidirectional and unidirectional channels support for the
-SCMI mailbox can coexist. The correct and effective combination of
-defined 'mboxes' and 'shmem' descriptors determines the type of the
-mailbox channel.
-
-This also contains a fix for the transfers allocation on Rx channel
-especially when the base protocol doesn't use Rx channel while some
-of the protocols can have dedicated Rx channels.
-
-----------------------------------------------------------------
-Cristian Marussi (3):
-      firmware: arm_scmi: Fix xfers allocation on Rx channel
-      dt-bindings: firmware: arm,scmi: Support mailboxes unidirectional channels
-      firmware: arm_scmi: Add support for unidirectional mailbox channels
-
- .../devicetree/bindings/firmware/arm,scmi.yaml     | 48 ++++++++---
- drivers/firmware/arm_scmi/driver.c                 |  2 +-
- drivers/firmware/arm_scmi/mailbox.c                | 95 +++++++++++++++++++---
- 3 files changed, 123 insertions(+), 22 deletions(-)
