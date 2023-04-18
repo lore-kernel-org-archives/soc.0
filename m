@@ -1,108 +1,87 @@
-Return-Path: <SRS0=EwYq=AJ=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=6U1h=AJ=bootlin.com=gregory.clement@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B2CDC77B75
-	for <soc@archiver.kernel.org>; Tue, 18 Apr 2023 08:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B225C77B75
+	for <soc@archiver.kernel.org>; Tue, 18 Apr 2023 09:52:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4EDDAC4339C; Tue, 18 Apr 2023 08:24:34 +0000 (UTC)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 15332C4339C; Tue, 18 Apr 2023 09:52:15 +0000 (UTC)
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2DA6BC433D2
-	for <soc@kernel.org>; Tue, 18 Apr 2023 08:24:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2DA6BC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id a29so30169408ljq.0
-        for <soc@kernel.org>; Tue, 18 Apr 2023 01:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681806271; x=1684398271;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5oKAYbsVysV5zF+myMqONTAUveV47CceODODEhedGw=;
-        b=m4wzO69pEfKu7T0+rQGvC3iCdIJ2TbgAj3MrJ9AV9vo31A8GWp5k72165geLAgWIaE
-         sqey/HiUxQgSQvpbseV4ZgUoc/BBrhtdKlE2Es0Jz+0O2Es4jbrVK5GqI7Md87JDoflc
-         fePDEmrSjbGi09U+auo3jGTxmcbYP8NZ7WwF0mbFbnN2PLzBIM5jg25ecUsMoLb2h0wa
-         +wgk2PAjL+yT3x1O+Qamb/deFdQZAKEoibUiUz6/XSjh5ooviRCbwa9WF9mTEX7gtgOJ
-         dlKwcDgxWXv36/PrGUermMVEud1Tu7B1ZxAiQq0jpeD7ovcbNxn/jzSQO7Y7n34S3k30
-         37cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681806271; x=1684398271;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n5oKAYbsVysV5zF+myMqONTAUveV47CceODODEhedGw=;
-        b=cC1ABltnbR2E/4XZtKzmqR6jir/yLD6qyJSHWjlk5thPCKQGQ2MyAsM9R3kx1Sd48N
-         Su5NcKkqipzwhA/KGq/QiLj7lIETjFePFijR5sJotD/6jrStpC+kQSEAZ1PsJA/c5V9t
-         dtc1We8DowZqh7njYhvg+sqpJEw48pRIAKoseUYPQGPRTJEVaqM2emdT69jGnafNWzZS
-         /U7E8g39j1C2txfgr7OVR4X8ASRniPxpvrUNKLPM+abm18rXTjzLz9HbddDjN5B3LaBR
-         gyM2aH7Q3O+gwnGP0trHNzmbZ86fUzEC+mqsRfEqedKgEfYgmkZg4A2FgHECkk6S2h4N
-         UZYQ==
-X-Gm-Message-State: AAQBX9el1syO5ryziC9ZyfAOlQkep3Rswp2KYmsCYKPWAWg23qOgSpMF
-	XHFxSWQNl2XnbriGJLDesCgDbQ==
-X-Google-Smtp-Source: AKy350YDINGQqPxYh26iUVoQUoVgEARu2cswDZaKR4lBSw3TAPwZIFiGLbEi8J5lk+iZclfe4G055Q==
-X-Received: by 2002:a2e:3a13:0:b0:2a8:ca1c:12b with SMTP id h19-20020a2e3a13000000b002a8ca1c012bmr451070lja.17.1681806271118;
-        Tue, 18 Apr 2023 01:24:31 -0700 (PDT)
-Received: from Linus-Dell.lan ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id g6-20020a2e9e46000000b00295a96a0f6csm2409222ljk.102.2023.04.18.01.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 01:24:30 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id F0B06C433D2;
+	Tue, 18 Apr 2023 09:52:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F0B06C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id 576FF240005;
+	Tue, 18 Apr 2023 09:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1681811529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=2gAhcanSMqG2E1c+h/bcgQKJea+88ncGOlC1MPsv0Mk=;
+	b=Mdn+ao1DMewSI/ilxGYZFTx0kEzMWKiWVlREh4kY7iXbe5ry3GWH4rGF7itHrwVIMro2jO
+	mMK0j0pcQQByDRt1BnEUum0g/By4rig/P8cLf9uKwBJQYuMYn/rImYRgqRTeJuc/xx9XE1
+	ypj89IBy4gtExmtvxoxCtjB/LIZD9zZHyWZ1C1QJU2wvJihdKSjZtCaul2TIPJOgtg43u1
+	GwBf5/QsFF0rdkEtDJUf1/xAWQuyyUpnyzJBvVsStLSsPZMoXK1pnX5/s08Lq3N6FJVsPE
+	+lPh2C1thdtMdFhmeEmQMylbXhQMSTccXLHuhDPRy111i71pJHEt1jHllOV7Kg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] ARM: config: Update Vexpress defconfig
-Date: Tue, 18 Apr 2023 10:24:27 +0200
-Message-Id: <20230418082427.186677-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.39.2
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ <arm@kernel.org>, soc@kernel.org
+Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] ARM: mvebu: dt for v6.4 (#1)
+Date: Tue, 18 Apr 2023 11:52:07 +0200
+Message-ID: <87edohzfeg.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The Versatile Express should conform to standard contemporary
-kernel features: add NO_HZ_FULL and HIGH_RES_TIMERS. Also add
-the AFS flash partitions as these are used on the platform.
+Hi,
 
-The removed SCHED_DEBUG is due to Kconfig changes.
+Here is the first pull request for dt for mvebu for v6.4.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-SoC folks: please apply this to the appropriate branch when
-appropriate, for this or the next kernel cycle.
----
- arch/arm/configs/vexpress_defconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Gregory
 
-diff --git a/arch/arm/configs/vexpress_defconfig b/arch/arm/configs/vexpress_defconfig
-index ac3fd7523698..96ad442089bd 100644
---- a/arch/arm/configs/vexpress_defconfig
-+++ b/arch/arm/configs/vexpress_defconfig
-@@ -1,5 +1,7 @@
- # CONFIG_LOCALVERSION_AUTO is not set
- CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_FULL=y
-+CONFIG_HIGH_RES_TIMERS=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_LOG_BUF_SHIFT=14
-@@ -42,6 +44,7 @@ CONFIG_NET_9P_VIRTIO=y
- CONFIG_DEVTMPFS=y
- CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_AFS_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_INTELEXT=y
-@@ -137,5 +140,4 @@ CONFIG_DEBUG_KERNEL=y
- CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DETECT_HUNG_TASK=y
--# CONFIG_SCHED_DEBUG is not set
- CONFIG_DEBUG_USER=y
--- 
-2.34.1
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-6.4-1
+
+for you to fetch changes up to 0939de7d89d2efc4f565ce1961b4020787e9f297:
+
+  ARM: dts: armada: Add missing phy-mode and fixed links (2023-04-07 17:28:24 +0200)
+
+----------------------------------------------------------------
+mvebu dt for 6.4 (part 1)
+
+Add missing phy-mode and fixed links for kirkwood, orion5 and Armada
+(370, XP, 38x) SoCs
+
+----------------------------------------------------------------
+Andrew Lunn (3):
+      ARM: dts: kirkwood: Add missing phy-mode and fixed links
+      ARM: dts: orion5: Add missing phy-mode and fixed links
+      ARM: dts: armada: Add missing phy-mode and fixed links
+
+ arch/arm/boot/dts/armada-370-rd.dts               | 2 +-
+ arch/arm/boot/dts/armada-381-netgear-gs110emx.dts | 2 +-
+ arch/arm/boot/dts/armada-385-clearfog-gtr-l8.dts  | 7 ++++++-
+ arch/arm/boot/dts/armada-385-clearfog-gtr-s4.dts  | 7 ++++++-
+ arch/arm/boot/dts/armada-385-linksys.dtsi         | 2 +-
+ arch/arm/boot/dts/armada-385-turris-omnia.dts     | 2 --
+ arch/arm/boot/dts/armada-xp-linksys-mamba.dts     | 2 +-
+ arch/arm/boot/dts/kirkwood-dir665.dts             | 3 ++-
+ arch/arm/boot/dts/kirkwood-l-50.dts               | 2 +-
+ arch/arm/boot/dts/kirkwood-linksys-viper.dts      | 3 ++-
+ arch/arm/boot/dts/kirkwood-mv88f6281gtw-ge.dts    | 3 ++-
+ arch/arm/boot/dts/kirkwood-rd88f6281.dtsi         | 2 +-
+ arch/arm/boot/dts/orion5x-netgear-wnr854t.dts     | 7 ++++++-
+ 13 files changed, 30 insertions(+), 14 deletions(-)
