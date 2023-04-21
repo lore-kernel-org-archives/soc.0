@@ -1,235 +1,83 @@
-Return-Path: <SRS0=FwyP=AK=grimler.se=henrik@kernel.org>
+Return-Path: <SRS0=n5Gs=AM=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE375C6FD18
-	for <soc@archiver.kernel.org>; Wed, 19 Apr 2023 20:24:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2550C7618E
+	for <soc@archiver.kernel.org>; Fri, 21 Apr 2023 07:38:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AC717C4339C; Wed, 19 Apr 2023 20:24:24 +0000 (UTC)
-Received: from out-38.mta0.migadu.com (out-38.mta0.migadu.com [91.218.175.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 760FDC433A0; Fri, 21 Apr 2023 07:38:52 +0000 (UTC)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 97B71C4339E
-	for <soc@kernel.org>; Wed, 19 Apr 2023 20:24:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 97B71C4339E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=grimler.se
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=grimler.se
-Date: Wed, 19 Apr 2023 22:24:16 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-	t=1681935859;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V20VJv1TvezaAhFXg1TxVwCOql54YGFqOYPkGP8pazQ=;
-	b=cT8c6lY/bJVW3tUmDsyOXCpLyLqQnkGWUJhsaPyDTQDN+T0llTayhLrryh//uChH+//JHo
-	x17+hr5gXmgXXv214KbPtSXg1i5+Whi6AkB87RxbFU1t5mpoZ5++enCMNkSEDLKNkmnQb6
-	3IMIQH5r+ho1nDTvIw+DjYAL79D8v9M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Henrik Grimler <henrik@grimler.se>
-To: Artur Weber <aweber.kernel@gmail.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org,
-	Russell King <linux@armlinux.org.uk>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Kukjin Kim <kgene@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 03/12] ARM: exynos: Re-introduce Exynos4212 support
-Message-ID: <ZEBN8ImTp/tRdej+@L14.lan>
-References: <20230416133422.1949-1-aweber.kernel@gmail.com>
- <20230416133422.1949-4-aweber.kernel@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id CD331C433D2
+	for <soc@kernel.org>; Fri, 21 Apr 2023 07:38:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD331C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-555e853d3c5so4313687b3.2
+        for <soc@kernel.org>; Fri, 21 Apr 2023 00:38:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682062729; x=1684654729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GbLVXy+xDpAqXOw3eLwbqNtcQaFjWeU5ILDIT0cNbUg=;
+        b=mST3V/2nI8K5sew2KQtTF50x8ftoZePkg1QvEKHIydeu0oqB3+NYCr7eKWARFDydch
+         tGKSAhLcPy7j8fiT/jd5jrV5lTYJPAG4qPSeadhCdmY6cC5UncClXrjhPzYl51B6WzDC
+         8Mjl6sj1z0nONe1EesQqBIi1YMOGaD5OaY6fXWNqZhP5oytIv7e3WWan3IDrnQIRoHRG
+         /IXK50KeJgYzyZ6A50UMYt+GKK/iJmwxTIMfzrZDxq6KpGuy5X1aL1n2FEO4NrGiWa4E
+         w60ggOCtYHtm6nXBEPq0JDKy/VE+fjn4JDf7xmtaJ/Ayh2p9nh+AYcdAhmoDS67xWz0y
+         5MXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682062729; x=1684654729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GbLVXy+xDpAqXOw3eLwbqNtcQaFjWeU5ILDIT0cNbUg=;
+        b=OfTEO0F3F7loXuv93bzFPbgVHScRrTZ31ynUVdLZ5jldHB1vObPRN18LVB0bVGvr4D
+         /wS6CNLzr43pNImXRjyBeuuu29T7hEB1YXCWiQQpydAd7UMyWnbPLlDJ7+MDNAmnmLx0
+         RwgcZ21MQuHqrwAKd6NP5EpKyErwo1aDNwJblMznbPNcc8Fq1Yrr49yT4Zs8wQSkzIG0
+         xtePXlvub0nu+I6M0dGW9t9+6XpkBBakoavT1lTG1C4nZNRwA8+iQWhsqB0qaX1HsB5a
+         E2bFkJekL/2KvZ78MJa9GUL2vzLoKkc0Wr71Mv0JqxyZsf/h87J0/FMoC0u3iAsd/rwa
+         ROKg==
+X-Gm-Message-State: AAQBX9d0dj1OkBkeWDDsi06h39L+1RrzjEFCXYEfPMxTLeXjvbNLP14j
+	Oki2EwqVw6MyrALppAxDH4S4ygqW0sqWZB+gX0NR7g==
+X-Google-Smtp-Source: AKy350aIpaPr4xkUOoyYRC1YeivqX5fuZiepgJF9m7/Tyv5uVXU7MJ7jIbfLDhJLisWLy8EL4Ur1dcuPwccTzu8ER1g=
+X-Received: by 2002:a0d:d742:0:b0:555:d20f:6572 with SMTP id
+ z63-20020a0dd742000000b00555d20f6572mr1162824ywd.12.1682062729773; Fri, 21
+ Apr 2023 00:38:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416133422.1949-4-aweber.kernel@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
+In-Reply-To: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 21 Apr 2023 09:38:38 +0200
+Message-ID: <CACRpkdbzNgkmhxhGTP3Rs-PkirDTXRWbOWjF1R4U61Wm1mAQaA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] pinctrl immutable irqchips
+List-Id: <soc.lore.kernel.org>
+To: Marc Zyngier <maz@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, 
+	Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Artur,
+On Fri, Apr 14, 2023 at 4:06=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
 
-On Sun, Apr 16, 2023 at 03:34:13PM +0200, Artur Weber wrote:
-> The platform was originally dropped in commit bca9085e0ae9 ("ARM:
-> dts: exynos: remove Exynos4212 support (dead code)"), as there were
-> no boards using it.
-> 
-> We will be adding a device that uses it, so add it back.
-> 
-> This effectively reverts commit 9e43eca3c874 ("ARM: EXYNOS: Remove
-> Exynos4212 related dead code").
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  arch/arm/mach-exynos/Kconfig    | 5 +++++
->  arch/arm/mach-exynos/common.h   | 8 ++++++++
->  arch/arm/mach-exynos/exynos.c   | 2 ++
->  arch/arm/mach-exynos/firmware.c | 8 +++++++-
->  arch/arm/mach-exynos/pm.c       | 2 +-
->  arch/arm/mach-exynos/suspend.c  | 4 ++++
->  6 files changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-> index 4d3b40e4049a..b3d5df5225fe 100644
-> --- a/arch/arm/mach-exynos/Kconfig
-> +++ b/arch/arm/mach-exynos/Kconfig
-> @@ -78,6 +78,11 @@ config CPU_EXYNOS4210
->  	default y
->  	depends on ARCH_EXYNOS4
->  
-> +config SOC_EXYNOS4212
-> +	bool "Samsung Exynos4212"
-> +	default y
-> +	depends on ARCH_EXYNOS4
-> +
->  config SOC_EXYNOS4412
->  	bool "Samsung Exynos4412"
->  	default y
-> diff --git a/arch/arm/mach-exynos/common.h b/arch/arm/mach-exynos/common.h
-> index 29eb075b24a4..c9e85d33c309 100644
-> --- a/arch/arm/mach-exynos/common.h
-> +++ b/arch/arm/mach-exynos/common.h
-> @@ -15,6 +15,7 @@
->  #define EXYNOS3_SOC_MASK	0xFFFFF000
->  
->  #define EXYNOS4210_CPU_ID	0x43210000
-> +#define EXYNOS4212_CPU_ID	0x43220000
->  #define EXYNOS4412_CPU_ID	0xE4412200
->  #define EXYNOS4_CPU_MASK	0xFFFE0000
->  
-> @@ -34,6 +35,7 @@ static inline int is_samsung_##name(void)	\
->  
->  IS_SAMSUNG_CPU(exynos3250, EXYNOS3250_SOC_ID, EXYNOS3_SOC_MASK)
->  IS_SAMSUNG_CPU(exynos4210, EXYNOS4210_CPU_ID, EXYNOS4_CPU_MASK)
-> +IS_SAMSUNG_CPU(exynos4212, EXYNOS4212_CPU_ID, EXYNOS4_CPU_MASK)
->  IS_SAMSUNG_CPU(exynos4412, EXYNOS4412_CPU_ID, EXYNOS4_CPU_MASK)
->  IS_SAMSUNG_CPU(exynos5250, EXYNOS5250_SOC_ID, EXYNOS5_SOC_MASK)
->  IS_SAMSUNG_CPU(exynos5410, EXYNOS5410_SOC_ID, EXYNOS5_SOC_MASK)
-> @@ -52,6 +54,12 @@ IS_SAMSUNG_CPU(exynos5800, EXYNOS5800_SOC_ID, EXYNOS5_SOC_MASK)
->  # define soc_is_exynos4210()	0
->  #endif
->  
-> +#if defined(CONFIG_SOC_EXYNOS4212)
-> +# define soc_is_exynos4212()	is_samsung_exynos4212()
-> +#else
-> +# define soc_is_exynos4212()	0
-> +#endif
-> +
->  #if defined(CONFIG_SOC_EXYNOS4412)
->  # define soc_is_exynos4412()	is_samsung_exynos4412()
->  #else
-> diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
-> index 51a247ca4da8..5671621f1661 100644
-> --- a/arch/arm/mach-exynos/exynos.c
-> +++ b/arch/arm/mach-exynos/exynos.c
-> @@ -178,6 +178,7 @@ static void __init exynos_dt_machine_init(void)
->  		exynos_cpuidle.dev.platform_data = &cpuidle_coupled_exynos_data;
->  #endif
->  	if (of_machine_is_compatible("samsung,exynos4210") ||
-> +	    of_machine_is_compatible("samsung,exynos4212") ||
->  	    (of_machine_is_compatible("samsung,exynos4412") &&
->  	     (of_machine_is_compatible("samsung,trats2") ||
->  		  of_machine_is_compatible("samsung,midas") ||
-> @@ -192,6 +193,7 @@ static char const *const exynos_dt_compat[] __initconst = {
->  	"samsung,exynos3250",
->  	"samsung,exynos4",
->  	"samsung,exynos4210",
-> +	"samsung,exynos4212",
->  	"samsung,exynos4412",
->  	"samsung,exynos5",
->  	"samsung,exynos5250",
-> diff --git a/arch/arm/mach-exynos/firmware.c b/arch/arm/mach-exynos/firmware.c
-> index 2da5b60b59e2..110c8064ee64 100644
-> --- a/arch/arm/mach-exynos/firmware.c
-> +++ b/arch/arm/mach-exynos/firmware.c
-> @@ -63,12 +63,18 @@ static int exynos_cpu_boot(int cpu)
->  	 *
->  	 * On Exynos5 devices the call is ignored by trustzone firmware.
->  	 */
-> -	if (!soc_is_exynos4210() && !soc_is_exynos4412())
-> +	if (!soc_is_exynos4210() && !soc_is_exynos4412() &&
-> +	    !soc_is_exynos4212())
+> This is the final set of immutable GPIO irqchips conversions
+> for pinctrl. All done by trivial thinking.
+>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Seems more logical to have 4212 before 4412 here.
+No reaction to this so I just merged these.
 
->  		return 0;
->  
->  	/*
->  	 * The second parameter of SMC_CMD_CPU1BOOT command means CPU id.
-> +	 * But, Exynos4212 has only one secondary CPU so second parameter
-> +	 * isn't used for informing secure firmware about CPU id.
->  	 */
-> +	if (soc_is_exynos4212())
-> +		cpu = 0;
+Marc: for the next cycle we can start checking what is left.
+I think making irq_chips unconditionally immutable is within
+reach.
 
-Is it necessary to set cpu = 0?  Are there any obvious issues without
-it (like second cpu not being brought up)?  It seems vendor kernel
-does this for both exynos4210 and exynos4212 [1], but mainline has not
-done this for exynos4210 and there has been no reported issues on for
-that platform as far as I know.
-
-The assembly that handles SMC_CMD_CPU1BOOT in sboot.bin from firmware
-version T310XXSBQB2 is identical to what is found in sboot.bin from
-exynos4412-galaxy-s3, and it uses the cpu arg in both cases, so seems
-likely that we need this and I am mostly asking out of curiosity.
-
-[1] https://github.com/krzk/linux-vendor-backup/blob/mokee/android-3.4-samsung-galaxy-tab-s-10.5-sm-t805-exynos5420/arch/arm/mach-exynos/platsmp.c#L225-L229
-
-Best regards,
-Henrik Grimler
-
->  	exynos_smc(SMC_CMD_CPU1BOOT, cpu, 0, 0);
->  	return 0;
->  }
-> diff --git a/arch/arm/mach-exynos/pm.c b/arch/arm/mach-exynos/pm.c
-> index 30f4e55bf39e..9b6db04e4e34 100644
-> --- a/arch/arm/mach-exynos/pm.c
-> +++ b/arch/arm/mach-exynos/pm.c
-> @@ -161,7 +161,7 @@ void exynos_enter_aftr(void)
->  
->  	exynos_pm_central_suspend();
->  
-> -	if (soc_is_exynos4412()) {
-> +	if (soc_is_exynos4412() || soc_is_exynos4212()) {
->  		/* Setting SEQ_OPTION register */
->  		pmu_raw_writel(S5P_USE_STANDBY_WFI0 | S5P_USE_STANDBY_WFE0,
->  			       S5P_CENTRAL_SEQ_OPTION);
-> diff --git a/arch/arm/mach-exynos/suspend.c b/arch/arm/mach-exynos/suspend.c
-> index 3bf14ca78b62..df1e10033f90 100644
-> --- a/arch/arm/mach-exynos/suspend.c
-> +++ b/arch/arm/mach-exynos/suspend.c
-> @@ -231,6 +231,7 @@ static int __init exynos_pmu_irq_init(struct device_node *node,
->  
->  EXYNOS_PMU_IRQ(exynos3250_pmu_irq, "samsung,exynos3250-pmu");
->  EXYNOS_PMU_IRQ(exynos4210_pmu_irq, "samsung,exynos4210-pmu");
-> +EXYNOS_PMU_IRQ(exynos4212_pmu_irq, "samsung,exynos4212-pmu");
->  EXYNOS_PMU_IRQ(exynos4412_pmu_irq, "samsung,exynos4412-pmu");
->  EXYNOS_PMU_IRQ(exynos5250_pmu_irq, "samsung,exynos5250-pmu");
->  EXYNOS_PMU_IRQ(exynos5420_pmu_irq, "samsung,exynos5420-pmu");
-> @@ -640,6 +641,9 @@ static const struct of_device_id exynos_pmu_of_device_ids[] __initconst = {
->  	}, {
->  		.compatible = "samsung,exynos4210-pmu",
->  		.data = &exynos4_pm_data,
-> +	}, {
-> +		.compatible = "samsung,exynos4212-pmu",
-> +		.data = &exynos4_pm_data,
->  	}, {
->  		.compatible = "samsung,exynos4412-pmu",
->  		.data = &exynos4_pm_data,
-> -- 
-> 2.40.0
-> 
+Yours,
+Linus Walleij
