@@ -1,83 +1,96 @@
-Return-Path: <SRS0=n5Gs=AM=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=MU6W=AM=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2550C7618E
-	for <soc@archiver.kernel.org>; Fri, 21 Apr 2023 07:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15965C7618E
+	for <soc@archiver.kernel.org>; Fri, 21 Apr 2023 07:54:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 760FDC433A0; Fri, 21 Apr 2023 07:38:52 +0000 (UTC)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	id D25A0C433EF; Fri, 21 Apr 2023 07:54:48 +0000 (UTC)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CD331C433D2
-	for <soc@kernel.org>; Fri, 21 Apr 2023 07:38:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CD331C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id D6B64C433D2
+	for <soc@kernel.org>; Fri, 21 Apr 2023 07:54:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D6B64C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-555e853d3c5so4313687b3.2
-        for <soc@kernel.org>; Fri, 21 Apr 2023 00:38:50 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4ec8143400aso1400912e87.0
+        for <soc@kernel.org>; Fri, 21 Apr 2023 00:54:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682062729; x=1684654729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GbLVXy+xDpAqXOw3eLwbqNtcQaFjWeU5ILDIT0cNbUg=;
-        b=mST3V/2nI8K5sew2KQtTF50x8ftoZePkg1QvEKHIydeu0oqB3+NYCr7eKWARFDydch
-         tGKSAhLcPy7j8fiT/jd5jrV5lTYJPAG4qPSeadhCdmY6cC5UncClXrjhPzYl51B6WzDC
-         8Mjl6sj1z0nONe1EesQqBIi1YMOGaD5OaY6fXWNqZhP5oytIv7e3WWan3IDrnQIRoHRG
-         /IXK50KeJgYzyZ6A50UMYt+GKK/iJmwxTIMfzrZDxq6KpGuy5X1aL1n2FEO4NrGiWa4E
-         w60ggOCtYHtm6nXBEPq0JDKy/VE+fjn4JDf7xmtaJ/Ayh2p9nh+AYcdAhmoDS67xWz0y
-         5MXQ==
+        d=linaro.org; s=google; t=1682063686; x=1684655686;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6Wh8weJt8MJNcMpPGqSo6AWzC32rS1+vzeDVd0dv2ds=;
+        b=XPy9s7e65qNm1qT8IKSzdOZynHmkmK2kk+w8/KWnOOgWpy3HBEWVT5FUMIj3jFRbxk
+         khx7teJtwYgv9RvV59C35bLiVrLQXxfGwRCTVC23bGyfQv6joyZK2Zbrq877pxVezv/g
+         9TVLnWT8/FW68M19ulsbjB1lcYQeYdLTKBF7zTaELfhXhknMl6N0zayIovgS3v3vWj7z
+         ruTlMEd8cZ+EpYh0hUmDdULpDm4YfhDkPN7aVMjMabbXfMr7x2pHgkJzTTWU9Z8dWfCP
+         cdKHq0Tt56ykzAq7CMdPSppF42JipVMrL3cViihUgLrjsdFFDihEAzb8zGOTQBcpRY+L
+         nWpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682062729; x=1684654729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GbLVXy+xDpAqXOw3eLwbqNtcQaFjWeU5ILDIT0cNbUg=;
-        b=OfTEO0F3F7loXuv93bzFPbgVHScRrTZ31ynUVdLZ5jldHB1vObPRN18LVB0bVGvr4D
-         /wS6CNLzr43pNImXRjyBeuuu29T7hEB1YXCWiQQpydAd7UMyWnbPLlDJ7+MDNAmnmLx0
-         RwgcZ21MQuHqrwAKd6NP5EpKyErwo1aDNwJblMznbPNcc8Fq1Yrr49yT4Zs8wQSkzIG0
-         xtePXlvub0nu+I6M0dGW9t9+6XpkBBakoavT1lTG1C4nZNRwA8+iQWhsqB0qaX1HsB5a
-         E2bFkJekL/2KvZ78MJa9GUL2vzLoKkc0Wr71Mv0JqxyZsf/h87J0/FMoC0u3iAsd/rwa
-         ROKg==
-X-Gm-Message-State: AAQBX9d0dj1OkBkeWDDsi06h39L+1RrzjEFCXYEfPMxTLeXjvbNLP14j
-	Oki2EwqVw6MyrALppAxDH4S4ygqW0sqWZB+gX0NR7g==
-X-Google-Smtp-Source: AKy350aIpaPr4xkUOoyYRC1YeivqX5fuZiepgJF9m7/Tyv5uVXU7MJ7jIbfLDhJLisWLy8EL4Ur1dcuPwccTzu8ER1g=
-X-Received: by 2002:a0d:d742:0:b0:555:d20f:6572 with SMTP id
- z63-20020a0dd742000000b00555d20f6572mr1162824ywd.12.1682062729773; Fri, 21
- Apr 2023 00:38:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
-In-Reply-To: <20230414-immutable-irqchips-2-v1-0-6b59a5186b00@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 21 Apr 2023 09:38:38 +0200
-Message-ID: <CACRpkdbzNgkmhxhGTP3Rs-PkirDTXRWbOWjF1R4U61Wm1mAQaA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] pinctrl immutable irqchips
+        d=1e100.net; s=20221208; t=1682063686; x=1684655686;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Wh8weJt8MJNcMpPGqSo6AWzC32rS1+vzeDVd0dv2ds=;
+        b=XUdggeWu2oxebm2p5eebAUdmvEOu7M5sTNPjHvvJd//bTmcXtApdl6B2AZTUkR2ayk
+         djzBQB6qcugi+vHosou/slGZBIKSYmgdMY0r2moGA0fgyBGnT/atBtzy5Oeiib42AmUu
+         yVQImN/vidbXKgqDg9n0x3nFuhv0F2NIiuaVOeaqa9V9wcJn0oKzwN7uInZPtzAc59jK
+         I9vG2gqA2JD1GHVKb4tQ0kvM6Vxoou27Unm7n8leKy5zl9PC+F0XE0bztAz4agjLE3Xe
+         Nird8H/+ZJGsYVFFMXQpQ7CtVYSL+K/DMnACA6mpYy8xlTqcoL5+m5Gzsx6AK/jN4bA5
+         lpJQ==
+X-Gm-Message-State: AAQBX9e0W6/w8QAjZLGTa7oiw4n8TMo78JY8mD2eB2jMRM7GMu9EiTJQ
+	sA9KBOSjwiVT2ZjuG0FIbpmjTds1vWgp4janKyA=
+X-Google-Smtp-Source: AKy350aI/gfjWYMEX8FEBnMG6f3jPDPE7j076Zv9ZCwKRsCe4qJ2vPd/M/ZRqyYyhzSMb6wODl0MSA==
+X-Received: by 2002:a05:6512:64:b0:4ee:d8f3:1398 with SMTP id i4-20020a056512006400b004eed8f31398mr1149093lfo.68.1682063685701;
+        Fri, 21 Apr 2023 00:54:45 -0700 (PDT)
+Received: from rayden (81-236-179-152-no272.tbcn.telia.com. [81.236.179.152])
+        by smtp.gmail.com with ESMTPSA id e7-20020ac25467000000b004d4d7fb0e07sm470622lfn.216.2023.04.21.00.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 00:54:45 -0700 (PDT)
+Date: Fri, 21 Apr 2023 09:54:43 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Viresh Kumar <vireshk@kernel.org>, 
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, 
-	Bjorn Andersson <andersson@kernel.org>, Andy Gross <agross@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] Fix uninitialized variable in OP-TEE driver for v6.3
+Message-ID: <20230421075443.GA3136581@rayden>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Fri, Apr 14, 2023 at 4:06=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
+Hello arm-soc maintainers,
 
-> This is the final set of immutable GPIO irqchips conversions
-> for pinctrl. All done by trivial thinking.
->
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Please pull this small patch fixing an unintialized variable in the
+OP-TEE driver. The error has been reported recently by the kernel test
+robot.
 
-No reaction to this so I just merged these.
+I realize that this is late for v6.3, please queue this for v6.4 instead
+if v6.3 isn't possible.
 
-Marc: for the next cycle we can start checking what is left.
-I think making irq_chips unconditionally immutable is within
-reach.
+Thanks,
+Jens
 
-Yours,
-Linus Walleij
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-async-notif-fix-for-v6.3
+
+for you to fetch changes up to 654d0310007146fae87b0c1a68f81e53ad519b14:
+
+  optee: fix uninited async notif value (2023-04-20 14:52:25 +0200)
+
+----------------------------------------------------------------
+Fixes an uninitialized variable in OP-TEE driver
+
+----------------------------------------------------------------
+Etienne Carriere (1):
+      optee: fix uninited async notif value
+
+ drivers/tee/optee/smc_abi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
