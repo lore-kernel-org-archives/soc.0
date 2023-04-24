@@ -4,160 +4,160 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFD4C7618E
-	for <soc@archiver.kernel.org>; Mon, 24 Apr 2023 11:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4664C7618E
+	for <soc@archiver.kernel.org>; Mon, 24 Apr 2023 20:59:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 22445C433AC; Mon, 24 Apr 2023 11:31:51 +0000 (UTC)
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+	id 769F2C4339B; Mon, 24 Apr 2023 20:59:17 +0000 (UTC)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B05EEC433D2;
-	Mon, 24 Apr 2023 11:31:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B05EEC433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 936C0C433D2
+	for <soc@kernel.org>; Mon, 24 Apr 2023 20:59:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 936C0C433D2
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 7A206582110;
-	Mon, 24 Apr 2023 07:31:48 -0400 (EDT)
+	by mailout.nyi.internal (Postfix) with ESMTP id 7C95D5C0181;
+	Mon, 24 Apr 2023 16:59:14 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 24 Apr 2023 07:31:48 -0400
+  by compute6.internal (MEProxy); Mon, 24 Apr 2023 16:59:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1682335908; x=1682343108; bh=Y9
-	FYoJaNOjxIXKXj5iVt3HG1MU0gziVJXHg42DuXBOg=; b=H/aI5xfu4/X/cYq8+q
-	xGRXgtXhxBpBlpJF5oNaL0cTiYSlseucxY51bY4PRf1gv4QIHv63oN/18nV2INkn
-	6O2pTeLy0q1gyPwhORooxGeHzHI3WimhvlvsW4wWbDrEt8hw/FVRgnnlInC+4vwP
-	kYbG0HHULZdaYWUwxjEb9o/FloV9dYAihc/IDkZXPxJYIj9+fUYsC5I/vtriUmgb
-	FWybLUf+Y2VRK7qDk3jHQ7J32E/XtRUTSXbdYtSlt5nHb/u8lENeGKhiuW8+l/DS
-	mAoSk2lpjRi3o7VwNGpJJ9ARQNskUw0EdqmtBWLord/1SW3xetGHzX3aI/cVpPmk
-	woDQ==
+	:message-id:mime-version:reply-to:sender:subject:subject:to:to;
+	 s=fm2; t=1682369954; x=1682456354; bh=YZR03TenSPMwHMOQYMC6jZ6OC
+	YtJLxUpls1rXekOnhQ=; b=hkPdVoGlfSNfE2YMdriSSkg3sF4pblK8hsqReIbeZ
+	0OUe8EGuVszpcJEqBWGLUrPy0dBXROzDSDOo5eLwDawjQY28YRw2MHYoyvKzks7B
+	Dhqwv8GMSXSYQ+3CQBctyo+8srzNFdhVtczAdEo1hle0cPLryd7wxGl0KM26IXBb
+	jFOSD1yrxdN8LKfSPllnp3YxNze3/k+5e2jRhV3Ba9LjjVTEcunWJlg0bH88xJ+c
+	/52+N3YhfkYNs4ANDgHPyQQuqfqVE87Sa0HzSNH6qJPzJ6a4dTKSpEdYnkmYi8UU
+	CdnHjYW6sbm8M36TkE4dWqJqUhGFnnaXqYqvmoUken9DA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1682335908; x=1682343108; bh=Y9FYoJaNOjxIX
-	KXj5iVt3HG1MU0gziVJXHg42DuXBOg=; b=dpbP4Jh1s0eCqDGOmM7UDUyNWzhc4
-	XX9bUZIXp933hmZB9xrD12WHtB6Mz1whx6WnhlN2Tj7VydKWDfUUAGl/7F9sJ3rD
-	MiZ84QLQbINxpRY0pCCvJq5n3tlu/6yOlabr1cHGdW18SNLJFvym/jAh532kU1UJ
-	Ka51E8Hk9RhZMWzJVPef/ePlOWrrcx5L9UOuQ/osK+hFYMPKwlUuS5b9WEV/rM4e
-	Zrq47gLrjM0lVZGYInJ+pTUXtuyWn4mMye9MK+OFjIBfPHYbgsrxq3UV7LaA9oqA
-	8yfZp/LRYFrNPCEeph46hWBXVhBJ51Wk/pvGPjdOsx8HfmcbvLQYmxGZA==
-X-ME-Sender: <xms:o2hGZMsP1r_hHGjqMpUeClqOi55IE9JKADt-uJNa-nFyfqUf9AlLCQ>
-    <xme:o2hGZJc3b-Gx9pVoYHmn9d6Zmc_6lwOPFMRFUZD37QHTN5IY4VtajG_r-xvSklBL3
-    8lU67eg-UpjMXfN8f0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddggeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:o2hGZHyt4BARWluvy-ny0VstXoMFWLhD_0JgVOkCb6OyEz58lTf2Ew>
-    <xmx:o2hGZPOxusZyYNgUhcREUxMNqc2Ze7MI2lllSsAiNTOJegNvuTE9-w>
-    <xmx:o2hGZM_apVsxZaXCjLmibZImNAbgHZ-mYH0mKLyqEE9WovAP88tw8Q>
-    <xmx:pGhGZP2rYsHBZNn0RRfI9M2aIExsAjxd8O6cZjaoBdj_dUcpRV9b9Q>
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1682369954; x=1682456354; bh=YZR03TenSPMwHMOQYMC6jZ6OCYtJLxUpls1
+	rXekOnhQ=; b=exuXq+0yr8hllOhiHFcN4UzkKKZOdgKWNvbu2jlVVcS3u3vsuL5
+	x2aCxgc+MIcaeRWDd52nA7BOf5VUumxGptUviunxvvSF4RgYZx56TE+2iM9d9FpS
+	+18hpfoF59i9wSD+xPjzGikdiKh8se+Mulyz8V/Npd5FKDCzyOM6KyNQQExQ8z6z
+	gscQv+tCHcLVZa3A/aaGCMcxmi8a4or4e7XJOmk5CK/d1FtgRLvRSZXa4KeOvJYy
+	NsdobVXc5xxz/i0Cj3Y//wsq+8aX8tJxSVelaOz5n7q1cJitr+gbttFZI1b+iyNJ
+	HvKkKNilGmULR/BV4AwYeXS51nzWPT812Dw==
+X-ME-Sender: <xms:ou1GZDUF0TKNWeOwNWL4wXjiPoJzdhBpToAFEePkrBFGY0qCA47Nhg>
+    <xme:ou1GZLnxfnioANqg4gyHTpjE3y6IVJ8BBn2CEOVVmEi4MHDuZYUlTV9b3Pg-w-Z2-
+    Aw6PTZIagz0GzTaN0g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedutddgudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeuhfffffdvkefhiedvhfdthfeuvedtfffhheejieefkeeggeeuudegfeehudff
+    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:ou1GZPZ5JZdgmmBCJa0I5vnqgYoF4y-l5yB1RGh_QAqzem24G1sBNg>
+    <xmx:ou1GZOVdMw452z83DcEo6XDvj7cmiY1qrtFzH1gboU_eSTWGU4iVgQ>
+    <xmx:ou1GZNl8mpPr5JLZn1Ph4vYgs9q5GTEYVD_aT638Oh1BTxNmPjuelg>
+    <xmx:ou1GZNtgYKTlHXcPwaqfBE_UmYJ7NQKpqFPMOXS0SfFhM6nco2Bsdg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 2684DB60086; Mon, 24 Apr 2023 07:31:47 -0400 (EDT)
+	id F3FF6B60086; Mon, 24 Apr 2023 16:59:13 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
 Mime-Version: 1.0
-Message-Id: <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
-In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-Date: Mon, 24 Apr 2023 13:31:25 +0200
+Message-Id: <bbd25997-173e-4c3b-930c-65c6232908e3@app.fastmail.com>
+Date: Mon, 24 Apr 2023 22:58:53 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nikita Shubin" <nikita.shubin@maquefel.me>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "Linus Walleij" <linusw@kernel.org>,
- "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
- "David S . Miller" <davem@davemloft.net>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- "Russell King" <rmk+kernel@armlinux.org.uk>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- "Alessandro Zummo" <a.zummo@towertech.it>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Brian Norris" <briannorris@chromium.org>,
- "Chuanhong Guo" <gch981213@gmail.com>,
- "Conor.Dooley" <conor.dooley@microchip.com>,
- "Damien Le Moal" <dlemoal@kernel.org>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- "Emil Renner Berthing" <kernel@esmil.dk>,
- "Eric Dumazet" <edumazet@google.com>,
- "Florian Fainelli" <f.fainelli@gmail.com>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Hartley Sweeten" <hsweeten@visionengravers.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Jaroslav Kysela" <perex@perex.cz>,
- "Jean Delvare" <jdelvare@suse.de>, "Joel Stanley" <joel@jms.id.au>,
- "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
- "Liam Girdwood" <lgirdwood@gmail.com>,
- "Liang Yang" <liang.yang@amlogic.com>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Lukasz Majewski" <lukma@denx.de>, "Lv Ruyi" <lv.ruyi@zte.com.cn>,
- "Mark Brown" <broonie@kernel.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Miquel Raynal" <miquel.raynal@bootlin.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
- "Olof Johansson" <olof@lixom.net>, "Paolo Abeni" <pabeni@redhat.com>,
- "Qin Jian" <qinjian@cqplus1.com>, "Richard Weinberger" <richard@nod.at>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Russell King" <linux@armlinux.org.uk>,
- "Sebastian Reichel" <sre@kernel.org>,
- "Sergey Shtylyov" <s.shtylyov@omp.ru>, "Stephen Boyd" <sboyd@kernel.org>,
- "Sumanth Korikkar" <sumanthk@linux.ibm.com>,
- "Sven Peter" <sven@svenpeter.dev>, "Takashi Iwai" <tiwai@suse.com>,
- "Thierry Reding" <thierry.reding@gmail.com>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Ulf Hansson" <ulf.hansson@linaro.org>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Vignesh Raghavendra" <vigneshr@ti.com>, "Vinod Koul" <vkoul@kernel.org>,
- "Walker Chen" <walker.chen@starfivetech.com>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Yinbo Zhu" <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
- devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- soc@kernel.org
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Subject: [GIT PULL 0/4] SoC branches for 6.4
 Content-Type: text/plain
 
-On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
-> This series aims to convert ep93xx from platform to full device tree support.
->
-> Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
->
-> Thank you Linus and Arnd for your support, review and comments, sorry 
-> if i missed something -
-> these series are quite big for me.
->
-> Big thanks to Alexander Sverdlin for his testing, support, review, 
-> fixes and patches.
+At 1062 non-merge commits, this is another large merge window for the
+SoC tree with the largest chunk coming from the Qualcomm tree, and 80%
+of the total is just devicetree changes.
 
-Thanks a lot for your continued work. I can't merge any of this at
-the moment since the upstream merge window just opened, but I'm
-happy to take this all through the soc tree for 6.5, provided we
-get the sufficient Acks from the subsystem maintainers. Merging
-it through each individual tree would take a lot longer, so I
-hope we can avoid that.
+There are a couple of new SoCs, but all of them are just variations of
+other ones we already supported. We had submissions for several entirely
+new SoC families, all of which ended up not being ready, so they are
+not included.
 
-      Arnd
+There were 206 contributors, and the most of active of them by number
+of commits are:
+
+    131 Krzysztof Kozlowski
+     75 Konrad Dybcio
+     54 Manivannan Sadhasivam
+     44 AngeloGioacchino Del Regno
+     36 Neil Armstrong
+     30 Bartosz Golaszewski
+     27 Rob Herring
+     25 Philippe Schenker
+     24 Geert Uytterhoeven
+     21 Marek Vasut
+     18 Douglas Anderson
+     14 Oleksij Rempel
+     14 Janne Grunau
+     14 Cristian Ciocaltea
+     13 Stefan Wahren
+     12 Peng Fan
+     12 Johan Hovold
+     11 Kathiravan T
+     11 Conor Dooley
+     10 Sebastian Krzyszkowiak
+     10 Alexandre Mergnat
+
+and the dirstat is:
+
+   0.2% Documentation/devicetree/bindings/arm/msm/
+   0.1% Documentation/devicetree/bindings/arm/tegra/
+   0.5% Documentation/devicetree/bindings/arm/
+   1.0% Documentation/devicetree/bindings/clock/
+   0.1% Documentation/devicetree/bindings/firmware/
+   0.1% Documentation/devicetree/bindings/soc/amlogic/
+   0.1% Documentation/devicetree/bindings/soc/imx/
+   0.1% Documentation/devicetree/bindings/soc/
+   0.3% Documentation/devicetree/bindings/
+   0.1% Documentation/staging/
+  18.6% arch/arm/boot/dts/
+   0.2% arch/arm/configs/
+   0.2% arch/arm/mach-mv78xx0/
+   0.1% arch/arm/mach-omap2/
+   0.3% arch/arm/mach-oxnas/
+   0.4% arch/arm/
+   1.8% arch/arm64/boot/dts/amlogic/
+   4.5% arch/arm64/boot/dts/apple/
+   0.3% arch/arm64/boot/dts/broadcom/bcmbca/
+  12.9% arch/arm64/boot/dts/freescale/
+   0.3% arch/arm64/boot/dts/marvell/
+   4.4% arch/arm64/boot/dts/mediatek/
+   1.1% arch/arm64/boot/dts/nvidia/
+  20.5% arch/arm64/boot/dts/qcom/
+   4.3% arch/arm64/boot/dts/renesas/
+   2.7% arch/arm64/boot/dts/rockchip/
+   1.5% arch/arm64/boot/dts/sprd/
+   5.9% arch/arm64/boot/dts/ti/
+   0.1% arch/arm64/boot/dts/
+   0.1% arch/arm64/configs/
+   0.1% arch/riscv/boot/dts/allwinner/
+   2.0% arch/riscv/boot/dts/starfive/
+   0.1% drivers/bus/
+   0.1% drivers/edac/
+   0.2% drivers/firmware/arm_scmi/
+   0.1% drivers/firmware/
+   0.1% drivers/mailbox/
+   1.8% drivers/soc/bcm/brcmstb/pm/
+   1.8% drivers/soc/mediatek/
+   0.1% drivers/soc/microchip/
+   3.6% drivers/soc/qcom/
+   0.1% drivers/soc/tegra/
+   0.1% drivers/soc/ti/
+   0.2% drivers/soc/
+   0.7% drivers/tee/optee/
+   0.1% drivers/
+   2.4% include/dt-bindings/clock/
+   0.8% include/dt-bindings/reset/
+   0.2% include/linux/soc/mediatek/
+   0.1% include/linux/soc/qcom/
+   0.1% include/
