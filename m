@@ -1,186 +1,145 @@
-Return-Path: <SRS0=mTu1=AQ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=toTv=AQ=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97CCDC77B61
-	for <soc@archiver.kernel.org>; Tue, 25 Apr 2023 06:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8603AC77B61
+	for <soc@archiver.kernel.org>; Tue, 25 Apr 2023 09:20:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 48808C433D2; Tue, 25 Apr 2023 06:08:34 +0000 (UTC)
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 546B7C4339B; Tue, 25 Apr 2023 09:20:54 +0000 (UTC)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CF47AC433EF;
-	Tue, 25 Apr 2023 06:08:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CF47AC433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id A8F365C00AC;
-	Tue, 25 Apr 2023 02:08:30 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 25 Apr 2023 02:08:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1682402910; x=1682489310; bh=aJgi4spPsFQMfOdmy5CVQvlkrVppKGiGa4z
-	XRLkCvhw=; b=PUyyiP7uvMsLeJ4aMHmXRJqlthrOClNFs1rTtuqwn7hczrza5Xj
-	ArZQuKjNOBZ5dzgph04QngM3idcNQRiaq9V1qPxADUeA2IEtInPHMpBHQK+mbwpR
-	nVykboFKchlNSHM73ZCcWLLcmnyhb+dcKWY0nzjQWPzUvcy8jrQv8SJUslImF5MM
-	/MdKAjE7tSg9TBD0I0pHkWuESYtYzZ58SSutWirNoQqC/C2IsACI6welHx14Xj77
-	JfZghkFow0AGDtBqLjkhScJNQyidA6Dih380GZkvG/az5BnPRfdfkJh3QqIJPr+h
-	b5sEgMt/5m0I47oIoj44QImDPDeKm0ifYdA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1682402910; x=1682489310; bh=aJgi4spPsFQMfOdmy5CVQvlkrVppKGiGa4z
-	XRLkCvhw=; b=ZZmgqeQiihJAmXaoMLh9ch8IMYKc4EuYPCVG8KbGrwiSBsurPeg
-	CJBncCrM8jD9ws9n4smPrWoK0QWjXNJAmVphUXxGlTV9lbVA6cLcyp6xtnahBspZ
-	7VNm2hYg1EUkoMy+7UkIgPVwYNN+aLHcDvsO8YoE6oI6QT8VdR/6gJ/7DVGD1mJK
-	K1p0vlfVSNH8VB+3DRu61+8kLLxTS99CClaCtX8E7NJR0WBraZPrP5NxY+a599tx
-	fV1Ad7oiM5CGy1TdZjR5aQJ+0yUh8lS/qmWHPBe/TtcoDsziuqt1bSyN9VHylHiH
-	FShSUH2rod449TNkDJ3vcXKk/Kfascz/vTA==
-X-ME-Sender: <xms:Xm5HZOk5GbNgi8EqvtVOrx02eB9RHBsm5bwBsbLMSxejQJTg-8S6rw>
-    <xme:Xm5HZF0ah6RYyU2fPcXs1A232j43IrvSzWRTJwsmGFikdszDccakxJNzaC_Q-yQAG
-    n54crXtaSg6fLi6jQ0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduuddguddtiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Xm5HZMofUlrleyL3tbizc0XPyn0QLtOkkur-zWnt1eh8Exg-Ht1wAw>
-    <xmx:Xm5HZClxovzsbCpkLVNOujEpGlyFcW7xsx0BBJqBZgHw63-ULHipWQ>
-    <xmx:Xm5HZM3I5J7MbPmwaSVio56fLvwqYiDaHbfVwr4jZwiUmgpUYNqyPg>
-    <xmx:Xm5HZP2D-_sVHNyFLu6tVhd2bY1S_6Q4wNiXE3G-ixS7qo0zUiWwZw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 0BFE0B60086; Tue, 25 Apr 2023 02:08:29 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <16ba11f1-5aa2-48c9-81cf-e3d98f547657@app.fastmail.com>
-In-Reply-To: <90d4aba4-d0a5-9868-583b-b3a4dd7ca6d6@huawei.com>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
- <90d4aba4-d0a5-9868-583b-b3a4dd7ca6d6@huawei.com>
-Date: Tue, 25 Apr 2023 08:08:08 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Huisong Li" <lihuisong@huawei.com>,
- "Bjorn Andersson" <andersson@kernel.org>,
- "Matthias Brugger" <matthias.bgg@gmail.com>,
- "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
- "Shawn Guo" <shawnguo@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id A408AC433D2
+	for <soc@kernel.org>; Tue, 25 Apr 2023 09:20:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A408AC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-50506111a6eso10112893a12.1
+        for <soc@kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682414449; x=1685006449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
+        b=wOvkX2oC5ZHyFMdylx8IkrryNZeg23DU/Ch9AChLKbcB/sx0DFV8Yb/H7vUSsHm/ay
+         6vKeAhZHqi4KvKzBL9RsojhjUK4oU8lb+V+mupjRsr3d4Ozv9ezhvySx+DHEhqR+hjMA
+         gaiJOqLYT51c8eBo6o+cG8x82KOH/6WDLxVffZqZup0JrvMaRV4XDFiPQxHmTy81GMpM
+         QIfjcv/pPcyMi1TiLUVU+h31xU2FfOzqmTSR6PnZ45uP7vvaFC3j0EA3bBbvXBOdzaR3
+         fHRbyuMSy1Dp046zUXSSm/0Gjosdxp/aEC/NPYM4X7lNjpFDITb7o57bkR9W209v9XtR
+         w4rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682414449; x=1685006449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
+        b=FoU2QBj6VHUTtsAmYjPoJ6Mf/oLUz1b210v9kMG7JIDqzQh5HzdS8Oev2wJchTlAI+
+         7nJ/ToTFZ9jahs6M0zHLMYsP4D5nwu4KkMUGtL9jHMRZQNHRZG2SdDx80NUgg7VBZs5A
+         Zg8KS19WKrd67XbC7jWpBFclxWJXo9WqJ5yCguM7XNvDMkUWQug3LRh2tLYIJljIAPry
+         dSivxKQ/EkGRjJWJAVcMa0uxftdiRSP7NTwRIpaO0NwnoxifULqKXTRDuRoR6A18n3hV
+         u3mNkPfHGnUGnJQIWxirzThWey8sJifCIjBOyERU0ZNbB0iBgVm5r6+gwdeskxn1bYOI
+         Xchw==
+X-Gm-Message-State: AAQBX9dZZA8st7u6s1IlP7xCozrjxKiLoGJ/RTdnGxzieMYke6HbjuPM
+	knMZaDzjyy9IPn39q5Mvk283jg==
+X-Google-Smtp-Source: AKy350YuXymrw7So4UOjZjef+iEPyi/CshywTQ5AjTJZJr/4WaSMcccmVMSSXrgcRBO0CsBCTlwDVg==
+X-Received: by 2002:a17:907:b9d9:b0:94f:1a23:2f1c with SMTP id xa25-20020a170907b9d900b0094f1a232f1cmr14815686ejc.50.1682414449568;
+        Tue, 25 Apr 2023 02:20:49 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170906828b00b0094f23480619sm6620286ejx.172.2023.04.25.02.20.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 02:20:48 -0700 (PDT)
+Message-ID: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
+Date: Tue, 25 Apr 2023 11:20:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, soc@kernel.org, wanghuiqiang@huawei.com,
- tanxiaofei@huawei.com, liuyonglong@huawei.com, huangdaode@huawei.com,
- linux-acpi@vger.kernel.org, "Len Brown" <lenb@kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org,
- "Rob Herring" <robh+dt@kernel.org>, "Frank Rowand" <frowand.list@gmail.com>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Cc: Nikita Shubin <nikita.shubin@maquefel.me>, Arnd Bergmann
+ <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>,
+ =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+ Russell King <rmk+kernel@armlinux.org.uk>,
+ =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+ Alessandro Zummo <a.zummo@towertech.it>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Brian Norris
+ <briannorris@chromium.org>, Chuanhong Guo <gch981213@gmail.com>,
+ "Conor.Dooley" <conor.dooley@microchip.com>,
+ Damien Le Moal <dlemoal@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Emil Renner Berthing <kernel@esmil.dk>, Eric Dumazet <edumazet@google.com>,
+ Florian Fainelli <f.fainelli@gmail.com>, Guenter Roeck <linux@roeck-us.net>,
+ Hartley Sweeten <hsweeten@visionengravers.com>,
+ =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+ Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+ Jaroslav Kysela <perex@perex.cz>, Jean Delvare <jdelvare@suse.de>,
+ Joel Stanley <joel@jms.id.au>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Liang Yang <liang.yang@amlogic.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Lukasz Majewski <lukma@denx.de>,
+ Lv Ruyi <lv.ruyi@zte.com.cn>, Mark Brown <broonie@kernel.org>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nicolas Saenz Julienne <nsaenz@kernel.org>, Olof Johansson <olof@lixom.net>,
+ Paolo Abeni <pabeni@redhat.com>, Qin Jian <qinjian@cqplus1.com>,
+ Richard Weinberger <richard@nod.at>, Rob Herring <robh+dt@kernel.org>,
+ Robert Jarzmik <robert.jarzmik@free.fr>, Russell King
+ <linux@armlinux.org.uk>, Sebastian Reichel <sre@kernel.org>,
+ Sergey Shtylyov <s.shtylyov@omp.ru>, Stephen Boyd <sboyd@kernel.org>,
+ Sumanth Korikkar <sumanthk@linux.ibm.com>, Sven Peter <sven@svenpeter.dev>,
+ Takashi Iwai <tiwai@suse.com>, Thierry Reding <thierry.reding@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Vasily Gorbik <gor@linux.ibm.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Vinod Koul <vkoul@kernel.org>, Walker Chen <walker.chen@starfivetech.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Yinbo Zhu <zhuyinbo@loongson.cn>,
+ alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ soc@kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
+ <20230424152933.48b2ede1@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424152933.48b2ede1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 25, 2023, at 05:04, lihuisong (C) wrote:
-> =E5=9C=A8 2023/4/24 16:09, Arnd Bergmann =E5=86=99=E9=81=93:
->> On Mon, Apr 24, 2023, at 09:30, Huisong Li wrote:
+On 25/04/2023 00:29, Jakub Kicinski wrote:
+> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
+>> Thanks a lot for your continued work. I can't merge any of this at
+>> the moment since the upstream merge window just opened, but I'm
+>> happy to take this all through the soc tree for 6.5, provided we
+>> get the sufficient Acks from the subsystem maintainers. Merging
+>> it through each individual tree would take a lot longer, so I
+>> hope we can avoid that.
+> 
+> Is there a dependency between the patches?
 
->>         depends on ACPI
->>         depends on (ARM64 && ARCH_HISI) || COMPILE_TEST
-> What do you think of adjusting it as below?
-> menu "Hisilicon SoC drivers"
->  =C2=A0=C2=A0 =C2=A0depends on ARCH_HISI || COMPILE_TEST
->
-> config KUNPENG_HCCS
->  =C2=A0=C2=A0 =C2=A0depends on ACPI
->  =C2=A0=C2=A0 =C2=A0depends on ARM64 || COMPILE_TEST
+I didn't get entire patchset and cover letter does not mention
+dependencies, but usually there shouldn't be such. Maybe for the next
+versions this should be split per subsystem?
 
-Yes, that's perfect.
+Best regards,
+Krzysztof
 
->>
->>> +
->>> +#include "kunpeng_hccs.h"
->>> +
->>> +/* PCC defines */
->>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
->>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
->> Should these perhaps be in include/acpi/pcc.h? The 0x50434300
->> number is just "PCC\0", so it appears to not be HCCS specific.
-> This is a PCC signature. As stated in the APCI,
-> "The signature of a subspace is computed by a bitwiseor of the value=20
-> 0x50434300
-> with the subspace ID. For example, subspace 3 has the signature 0x5043=
-4303."
->
-> I am not sure if all driver need to use this fixed signature mask.
-> As far as I know, cppc_acpi.c didn't use this signature and=20
-> xgene-hwmon.c used another mask defined in its driver.
-> So I place it here.
-
-I would still put it into the generic header, but it doesn't
-really matter much, so do it whichever way you prefer. No need
-for a separate patch if you decide to use the global header,
-it can just be part of your normal patch.
-
->>> +
->>> +static int hccs_get_device_property(struct hccs_dev *hdev)
->>> +{
->>> +	struct device *dev =3D hdev->dev;
->>> +
->>> +	if (device_property_read_u32(dev, "device-flags", &hdev->flags)) {
->>> +		dev_err(hdev->dev, "no device-flags property.\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	if (device_property_read_u8(dev, "pcc-type", &hdev->type)) {
->>> +		dev_err(hdev->dev, "no pcc-type property.\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	if (device_property_read_u32(dev, "pcc-chan-id", &hdev->chan_id)) {
->>> +		dev_err(hdev->dev, "no pcc-channel property.\n");
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	hdev->intr_mode =3D hccs_get_bit(hdev->flags, HCCS_DEV_FLAGS_INTR_=
-B);
->>> +	if (!hccs_dev_property_supported(hdev))
->>> +		return -EOPNOTSUPP;
->>> +
->> Where are the device properties documented? I'm never quite sure how
->> to handle these for ACPI-only drivers, since we don't normally have t=
-he
->> bindings in Documentation/devicetree/bindings/, but it feels like the=
-re
->> should be some properly reviewed document somewhere else.
-> These are ACPI-only, instead of DT.
-> I will add a comment here as Krzysztof suggested.
-
-I understand that they are ACPI-only, what I'm more interested here is
-the general question of how we should document them, to ensure these
-are handled consistently across drivers.
-
->>> --- /dev/null
->>> +++ b/drivers/soc/hisilicon/kunpeng_hccs.h
->>> @@ -0,0 +1,204 @@
->>> +/* SPDX-License-Identifier: GPL-2.0+ */
->>> +/* Copyright (c) 2023 Hisilicon Limited. */
->>> +
->>> +#ifndef __KUNPENG_HCCS_H__
->>> +#define __KUNPENG_HCCS_H__
->> Are you planning to add more drivers that share this file? If not,
->> just fold the contents into the driver itself.
-> Yes, we will add more drivers in this file.
-
-Ok.
-
-
-       Arnd
