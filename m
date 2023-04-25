@@ -1,180 +1,83 @@
-Return-Path: <SRS0=mTu1=AQ=arndb.de=arnd@kernel.org>
+Return-Path: <torvalds@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7491C6FD18
-	for <soc@archiver.kernel.org>; Tue, 25 Apr 2023 13:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D876C77B61
+	for <soc@archiver.kernel.org>; Tue, 25 Apr 2023 19:22:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8D01CC433AC; Tue, 25 Apr 2023 13:27:49 +0000 (UTC)
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 359BEC433EF; Tue, 25 Apr 2023 19:22:01 +0000 (UTC)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7225CC4339B;
-	Tue, 25 Apr 2023 13:27:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7225CC4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.west.internal (Postfix) with ESMTP id CF7262B05E77;
-	Tue, 25 Apr 2023 09:27:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 25 Apr 2023 09:27:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1682429262; x=1682436462; bh=sh
-	lQTGWa7vUbJrf98fLKqQIz8VMZW6pYwyh6rr26DkQ=; b=BDKjZe8V8E+P7NICJp
-	Vq4lbdGZugmlgIu152zKM3zkUh7lbz6/8ZE3O3ghra0opEb0BMclXv6oYWb/IWhh
-	pDb8EmpNYEkTrSc4CmFm5Q6KJBCzeZ0mw9D7uKV05tYwVrTdYdIVGGidixbP4MWh
-	4r1UoQfDB8lihJtrEmZJCtwFOftU6Wbs0DVtBCjvNiXUuQutk5sKuY69/gJHCG+8
-	cZqypV9rXYLPWhewsJZurlaV8YUAP3yaeQBMfNyTLIrxsr1EuJa19aCeC58maNpo
-	PbtohZqSbFaMd0Ty7vTTMtEgT74/PhX5jSRWSwLEn10og6S+9jidu3qsOtrzJP2V
-	XxnQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1682429262; x=1682436462; bh=shlQTGWa7vUbJ
-	rf98fLKqQIz8VMZW6pYwyh6rr26DkQ=; b=Ww7caQ/n5Bh/og36bBMDdHO3Q9nzz
-	24Z798Vdo8uKqG5xOCWM1oyAwqHpcneVXP7NUVjR1hKFAxNWS1drT9CPVw3Aq0Qq
-	ZioN3iQ0xUDLc023Ik8zUk4Y88FP/PG9KL50rojHHHmlPww+t6Nf/Ac/WtsUaOZp
-	oh3n6YzkFJLTpw9009VQ4Gb8Xn+KcIQsmh7mtOSGpQJlRqj8e7Z9UV5nDe4YcZRV
-	ZyQTxmps+Dk8dasaXzAh+fJQ8oR/Fj8Oo0N7OUU6cBrtbjQQ1iXcTV3B3ixJfKXn
-	KGqdXmVvj5Q9gpLOLEoSzEd7+MI3wcnYH/FhyHbMpEnV6BPt8byhhWuOw==
-X-ME-Sender: <xms:S9VHZPtnbIA9a43-BUkGQTLPcycQPz6VDZsrIBMpV6GNsFVbOjG1cQ>
-    <xme:S9VHZAfk7eBnWSRULg_fpQ1pS2hO1vXlDfrK1cPPfGmnGQ70nP8vLJLUF2S_Bn4nO
-    AjH3HiagLE1jcX28wU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:S9VHZCy5_L8CMNNMfCSoxcG0Ldgdu7A6DDjI9EX6lgbtNhLXqW2oKA>
-    <xmx:S9VHZOPLa-4kTfCSYdR2ozfHjDDtS0CErsrViXmqEyf4B52AABLWwQ>
-    <xmx:S9VHZP-Fm2j12c--Vr6NsLBBu0flFv8CRoOYZkbSjW8IGaTp6RuoZQ>
-    <xmx:TtVHZG3qm6n0uWAcAkRFbA0jlBkt4yoH8l-8jZeE4qFVqIoQakHOoruLBXY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 91FC6B60086; Tue, 25 Apr 2023 09:27:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <c3db2294-4fef-46be-a62a-11fc38884918@app.fastmail.com>
-In-Reply-To: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
- <20230424152933.48b2ede1@kernel.org>
- <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
-Date: Tue, 25 Apr 2023 14:27:26 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "Jakub Kicinski" <kuba@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id E2053C433D2
+	for <soc@kernel.org>; Tue, 25 Apr 2023 19:21:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E2053C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-506b8c6bc07so10440743a12.2
+        for <soc@kernel.org>; Tue, 25 Apr 2023 12:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682450518; x=1685042518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bRik1ba8P7vVGVJFKz6rQn6VBICPL/tBFMdSaau0t/M=;
+        b=ej8Ewql86bp0QaJp9MK9EnfW5nmFTW57OCCTtSwzCApwx7xAwl3sKTtQN8Jsj6xvtC
+         hFtaFtk9JXJj1VaJIcFGbgHKtBn/KzBjd0cGGxw91s+cuDZoSVEPC89v/3QZWSHAfr3L
+         rWB5ZUTpctyR/cX6Ly2p4Qbd7ruoBlGcgERf0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682450518; x=1685042518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bRik1ba8P7vVGVJFKz6rQn6VBICPL/tBFMdSaau0t/M=;
+        b=TJcNSJC97BbGh1k8stkhNcSQpk5kKL2ND4wIXzR+K8UG2UgBCMK6/5SF+Mzis+i+u2
+         pSr7LwGk+Pf3LPvpHtMbYvM2/FbJuKIQzvPX019A+XrG7yfDU141eZxYpI1RRFNyPoKE
+         fUD6X6M24cFKbhk+sC08Jdsy2X9W6BBRMNXd38eox73iCsAZl1ACutTPcmN6hmSgpiHm
+         ib9ls9lJaYdL+uLuSZXdVCLkoPFTEnS3kcQtc6Iaifh7JmwoHXlGTWBIe4X48vAc9NvB
+         X0gShtcPlWXidNc2PubQH1UU9xTOEoQZ2+3Nyw/yto0bxssXFHeR9ZPrz1Y+AFf+lMPf
+         WRQA==
+X-Gm-Message-State: AAQBX9ckFNfmXmZkLvQRiXgnweqNG8wHOgUbfUK0A7KitloKg9lqLTBt
+	Z4g1n+MM3ae7Sq8l7nY/D4kBRbFyZrmTUfw5awahCA==
+X-Google-Smtp-Source: AKy350Z2kZbjlyo8kogxPdo9pZiFLhktBEAlaDJ7iuM5ebO1/tmXxGLLXSQnQA2tB0NqgNr6dC8AyA==
+X-Received: by 2002:aa7:d949:0:b0:506:bce0:48d6 with SMTP id l9-20020aa7d949000000b00506bce048d6mr14882136eds.5.1682450517839;
+        Tue, 25 Apr 2023 12:21:57 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id n3-20020a056402514300b0050687ca0c92sm5947684edd.84.2023.04.25.12.21.56
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 12:21:56 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-506bfe81303so10458981a12.1
+        for <soc@kernel.org>; Tue, 25 Apr 2023 12:21:56 -0700 (PDT)
+X-Received: by 2002:aa7:dace:0:b0:4fb:78a0:eabe with SMTP id
+ x14-20020aa7dace000000b004fb78a0eabemr15219963eds.14.1682450516259; Tue, 25
+ Apr 2023 12:21:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <bbd25997-173e-4c3b-930c-65c6232908e3@app.fastmail.com> <3579080b-db88-493c-a260-7313a81e2aa3@app.fastmail.com>
+In-Reply-To: <3579080b-db88-493c-a260-7313a81e2aa3@app.fastmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 25 Apr 2023 12:21:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgMmTo=SL1URex5kQbhwGhfBy541tbNbLXrYniAnTxvew@mail.gmail.com>
+Message-ID: <CAHk-=wgMmTo=SL1URex5kQbhwGhfBy541tbNbLXrYniAnTxvew@mail.gmail.com>
+Subject: Re: [GIT PULL 4/4] ARM: SoC devicetree changes for 6.4
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-Cc: "Nikita Shubin" <nikita.shubin@maquefel.me>,
- "Arnd Bergmann" <arnd@kernel.org>, "Linus Walleij" <linusw@kernel.org>,
- "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
- "David S . Miller" <davem@davemloft.net>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- "Russell King" <rmk+kernel@armlinux.org.uk>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- "Alessandro Zummo" <a.zummo@towertech.it>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Brian Norris" <briannorris@chromium.org>,
- "Chuanhong Guo" <gch981213@gmail.com>,
- "Conor.Dooley" <conor.dooley@microchip.com>,
- "Damien Le Moal" <dlemoal@kernel.org>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- "Emil Renner Berthing" <kernel@esmil.dk>,
- "Eric Dumazet" <edumazet@google.com>,
- "Florian Fainelli" <f.fainelli@gmail.com>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Hartley Sweeten" <hsweeten@visionengravers.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
- "Jaroslav Kysela" <perex@perex.cz>, "Jean Delvare" <jdelvare@suse.de>,
- "Joel Stanley" <joel@jms.id.au>,
- "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
- "Liam Girdwood" <lgirdwood@gmail.com>,
- "Liang Yang" <liang.yang@amlogic.com>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Lukasz Majewski" <lukma@denx.de>, "Lv Ruyi" <lv.ruyi@zte.com.cn>,
- "Mark Brown" <broonie@kernel.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Miquel Raynal" <miquel.raynal@bootlin.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
- "Olof Johansson" <olof@lixom.net>, "Paolo Abeni" <pabeni@redhat.com>,
- "Qin Jian" <qinjian@cqplus1.com>, "Richard Weinberger" <richard@nod.at>,
- "Rob Herring" <robh+dt@kernel.org>,
- "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Russell King" <linux@armlinux.org.uk>,
- "Sebastian Reichel" <sre@kernel.org>,
- "Sergey Shtylyov" <s.shtylyov@omp.ru>, "Stephen Boyd" <sboyd@kernel.org>,
- "Sumanth Korikkar" <sumanthk@linux.ibm.com>,
- "Sven Peter" <sven@svenpeter.dev>, "Takashi Iwai" <tiwai@suse.com>,
- "Thierry Reding" <thierry.reding@gmail.com>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Ulf Hansson" <ulf.hansson@linaro.org>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Vignesh Raghavendra" <vigneshr@ti.com>, "Vinod Koul" <vkoul@kernel.org>,
- "Walker Chen" <walker.chen@starfivetech.com>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Yinbo Zhu" <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
- devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- soc@kernel.org
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
-Content-Type: text/plain
+Cc: soc@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 25, 2023, at 10:20, Krzysztof Kozlowski wrote:
-> On 25/04/2023 00:29, Jakub Kicinski wrote:
->> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
->>> Thanks a lot for your continued work. I can't merge any of this at
->>> the moment since the upstream merge window just opened, but I'm
->>> happy to take this all through the soc tree for 6.5, provided we
->>> get the sufficient Acks from the subsystem maintainers. Merging
->>> it through each individual tree would take a lot longer, so I
->>> hope we can avoid that.
->> 
->> Is there a dependency between the patches?
+On Mon, Apr 24, 2023 at 2:06=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
-> I didn't get entire patchset and cover letter does not mention
-> dependencies, but usually there shouldn't be such. Maybe for the next
-> versions this should be split per subsystem?
+> ARM: SoC devicetree changes for 6.4
 
-Clearly the last patch that removes the board files depends on
-all the previous patches, but I assume that the other ones
-are all independent.
+Hmm. This also has commit e49eabe3e13f ("pinctrl: qcom: Support
+OUTPUT_ENABLE; deprecate INPUT_ENABLE") that doesn't seem to be
+obviously about devicetree changes.
 
-We don't do complete conversions from boardfiles to DT that often
-any more, but in the past we tended to do this through a cross-
-subsystem branch in the soc tree, which helps do it more quickly
-and is less work for Nikita. In this case, I would make it a
-separate top-level branch in the soc tree.
+Whatever. I took the pull, but that change looked oddly out of place..
 
-If anyone strongly feels that the patches should go through
-the subsystem trees here, we'll take the longer path and
-do the changes separately, with the boardfile removal
-coming a release later.
-
-     Arnd
+            Linus
