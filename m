@@ -1,159 +1,127 @@
-Return-Path: <SRS0=lQnc=AT=gmail.com=robertcnelson@kernel.org>
+Return-Path: <SRS0=4wwY=AT=embeddedTS.com=kris@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71127C77B61
-	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 20:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ADA7C77B61
+	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 21:57:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40AF3C433EF; Fri, 28 Apr 2023 20:53:45 +0000 (UTC)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 1256EC4339B; Fri, 28 Apr 2023 21:57:03 +0000 (UTC)
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 21F9BC433D2;
-	Fri, 28 Apr 2023 20:53:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21F9BC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-4405fb5c314so146327e0c.2;
-        Fri, 28 Apr 2023 13:53:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682715223; x=1685307223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JRYO52blVuIjsOSLyVlbkequxT+e3yW4z+4sA1lzj5A=;
-        b=H7ejqF0RJ8HO9k7UgwEUKBPHQSgxcDlr/xgGbySmFBJfc7ChK3pRNPbBX9fC2E+Rkf
-         e6fcW1/saGQbRiFSZz8b5VHp4i07vnC9gqt/qE9DFsTwD8v0cBzKYHTp3/mLTr6CHbNO
-         rL8KnMqahFyapQXK48UzpDTILsnyJ/KmE6kHKMTBMdTu1ELDLIdFbqawdATU1hfNXBTQ
-         eGX1YN1RLbvnQnF8gaekFxMo1LQNvieeIEkWepQN0dH3OhvLN/GlUCfiRtC4ntPPV6WU
-         gdSIqqCTYXekgtXCV6RNxE+N6gdQR1fXyNGDB1Dj6qEw+c6v1k/Bf1NxEuikJW5wTYRL
-         dHoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682715223; x=1685307223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JRYO52blVuIjsOSLyVlbkequxT+e3yW4z+4sA1lzj5A=;
-        b=W26SbQYzCJKmCFNSAkmHtOkzplzWLkMZVdMaldjN7gb7A2xuqe22Lb1eWCPi8wxXps
-         /bttgHwME2lnk2Bervb07CMxnTFn2aSkDCwTVOWekSx/tn+SlpgZYu7mXToKdd4ZPAQa
-         +7qxXLXZLbOSWyVlV9Y9gvVGqhWKlG3eEg+9Qvm4tOdaQlKqNK9yuzbFMKs77NJI2HQE
-         YPTSHLZ0IOUmy8T9a44WH5bQar724vFOZaer0z6bwbha1QWMMpxs9Ur+UYwftsTTCYNe
-         ar4QVUFgKJArG+CCdqyOmBriSLkS6mmgpnWDVGuCan1VCIaZ4HCbPthz8pfs92fxD3E/
-         2EYQ==
-X-Gm-Message-State: AC+VfDyOF+Ogc6sZTx9MR/8rDyS2fRAywHyHuCz9aH3RrMzGRyDJ4xWJ
-	E+jYH+p2x3n5EIcXdLQfbVgsXNJyOXOF+f8WuesL6+lJCA8=
-X-Google-Smtp-Source: ACHHUZ5dtyhB7wkfx17vKwIAdsNhr1LLTqVEcPSLcN60jFiC6cARjWzhVpel3Qnfv1+NnkX+H+VZ1lJMZ57FK7zzUio=
-X-Received: by 2002:a1f:41c9:0:b0:43f:ec5d:51e1 with SMTP id
- o192-20020a1f41c9000000b0043fec5d51e1mr3235818vka.9.1682715222835; Fri, 28
- Apr 2023 13:53:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230428105453.110254-1-jpanis@baylibre.com> <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
-In-Reply-To: <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Fri, 28 Apr 2023 15:53:16 -0500
-Message-ID: <CAOCHtYgreXmtcuRDRu3UWRhPJ0-k2E+3YYhxp_AaPf-sObuR1Q@mail.gmail.com>
-Subject: Re: [PATCH] arm: dts: Add am335x-boneblack-pps.dts
-To: Julien Panis <jpanis@baylibre.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id CFD73C433D2;
+	Fri, 28 Apr 2023 21:57:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CFD73C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=embeddedTS.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=embeddedTS.com
+Received: from 1psW52-0008XV-Uz by out3b.electric.net with emc1-ok (Exim 4.96)
+	(envelope-from <kris@embeddedTS.com>)
+	id 1psW58-0008lM-UJ;
+	Fri, 28 Apr 2023 14:56:46 -0700
+Received: by emcmailer; Fri, 28 Apr 2023 14:56:46 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+	by out3b.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
+	(Exim 4.96)
+	(envelope-from <kris@embeddedTS.com>)
+	id 1psW52-0008XV-Uz;
+	Fri, 28 Apr 2023 14:56:40 -0700
+Received: from tsdebian (unknown [75.164.37.163])
+	by mail.embeddedts.com (Postfix) with ESMTPSA id 87B62E98;
+	Fri, 28 Apr 2023 14:56:39 -0700 (MST)
+Message-ID: <1682718975.5028.2.camel@embeddedTS.com>
+Subject: Re: [PATCH 34/43] ARM: dts: add device tree for ep93xx Soc
+From: Kris Bahnsen <kris@embeddedTS.com>
+Reply-To: kris@embeddedTS.com
+To: Arnd Bergmann <arnd@arndb.de>, Nikita Shubin <nikita.shubin@maquefel.me>
 List-Id: <soc.lore.kernel.org>
-Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, tony@atomide.com, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Cc: Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, Olof Johansson
+ <olof@lixom.net>, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>, Michael
+ Peters <mpeters@embeddedts.com>
+Date: Fri, 28 Apr 2023 14:56:15 -0700
+In-Reply-To: <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+	 <20230424123522.18302-35-nikita.shubin@maquefel.me>
+	 <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
+Organization: embeddedTS
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS: TLS1.2:DHE-RSA-SEED-SHA:128
+X-Authenticated_ID: 
+X-VIPRE-Scanners:virus_clamav;virus_bd;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=T0qxuKHoFC3u0mSLJrS7Q0aIpKmNCJV1D92yNNJU0SQ=;b=WOjiTTaY+yQPgJRdeciQy77OzmGE8iM/WSdmHyKCvqiMhyOMU60rsBaBvMBRbaYsuSCPHL/MjzBn/2dDLA4c5XCBBzIhkr14Xj4xX80MGzmyvMJdsiEiHfzazNOauIXr0W31HgSeD+1jKRR7K0DIpc4kZI5sW9ShuLgXzBHerk7dGaw4Lp8cQEUsq7QgpnB9B0N87e60maQ9Jmrfc77jpb3gXRvyEdVOOSheepxllY6jhZtHxmoJGq1jVZfZbJOnM1S3jGqCPPyahk4x6Nzx4FduyNAUCL9/8szx2S4Pnos2xEWVomblEa5Nlx9mToE72uCYxYEbP6T8BcPoYNN/hA==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 29564942
 
-On Fri, Apr 28, 2023 at 9:44=E2=80=AFAM Robert Nelson <robertcnelson@gmail.=
-com> wrote:
->
-> On Fri, Apr 28, 2023 at 6:00=E2=80=AFAM Julien Panis <jpanis@baylibre.com=
-> wrote:
-> >
-> > From: Lokesh Vutla <lokeshvutla@ti.com>
-> >
-> > Add a new am335x-boneblack-pps.dts that can be used to configure TIMER7
-> > in PWM mode. This PWM signal can be used as a PPS signal when
-> > synchronized to PTP clock. Typically this synchronization is done by a
-> > userspace program. This PPS signal can be observed on pin P8.8.
-> >
-> > Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
-> > Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> > Signed-off-by: Adrien Ricciardi <aricciardi@baylibre.com>
-> > Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> > ---
-> >  arch/arm/boot/dts/Makefile                 |  1 +
-> >  arch/arm/boot/dts/am335x-boneblack-pps.dts | 25 ++++++++++++++++++++++
-> >  2 files changed, 26 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/am335x-boneblack-pps.dts
-> >
-> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> > index efe4152e5846..d74158aae72d 100644
-> > --- a/arch/arm/boot/dts/Makefile
-> > +++ b/arch/arm/boot/dts/Makefile
-> > @@ -939,6 +939,7 @@ dtb-$(CONFIG_SOC_AM33XX) +=3D \
-> >         am335x-base0033.dtb \
-> >         am335x-bone.dtb \
-> >         am335x-boneblack.dtb \
-> > +       am335x-boneblack-pps.dtb \
-> >         am335x-boneblack-wireless.dtb \
-> >         am335x-boneblue.dtb \
-> >         am335x-bonegreen.dtb \
-> > diff --git a/arch/arm/boot/dts/am335x-boneblack-pps.dts b/arch/arm/boot=
-/dts/am335x-boneblack-pps.dts
-> > new file mode 100644
-> > index 000000000000..88d2bc3fd759
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/am335x-boneblack-pps.dts
-> > @@ -0,0 +1,25 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2023 Texas Instruments Incorporated - http://www.ti.c=
-om/
-> > + */
-> > +
-> > +#include "am335x-boneblack.dts"
-> > +
-> > +&am33xx_pinmux {
-> > +       pwm7_pins: pinmux_pwm7_pins {
-> > +               pinctrl-single,pins =3D <
-> > +                       AM33XX_PADCONF(AM335X_PIN_GPMC_OEN_REN, PIN_OUT=
-PUT_PULLDOWN, MUX_MODE2)
-> > +               >;
-> > +       };
-> > +};
-> > +
-> > +/{
-> > +       pwm7: dmtimer-pwm7 {
-> > +               compatible =3D "ti,omap-dmtimer-pwm";
-> > +               pinctrl-names =3D "default";
-> > +               pinctrl-0 =3D <&pwm7_pins>;
-> > +               #pwm-cells =3D <3>;
-> > +               ti,timers =3D <&timer7>;
-> > +               ti,clock-source =3D <0x00>; /* timer_sys_ck */
-> > +       };
-> > +};
->
-> I know this commit is pretty small, but mainline now has overlay support:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D0fff0e49d72a53c51d8903fbadb2e6a84e531c4a
->
-> At what point do we finally merge in the many dozen *BeagleBone*
-> overlays, or do we still wait for :
-> https://lore.kernel.org/lkml/20220328000915.15041-1-ansuelsmth@gmail.com/
+On Mon, 2023-04-24 at 13:28 +0200, Arnd Bergmann wrote:
+> On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
+> > This adds a divice for Cirrus ep93xx SoC amd ts7250 board that has been
+> > my testing target for ep93xx device support.
+> > 
+> > Also inluded device tree for Liebherr BK3.1 board through it's not a
+> > complete support.
+> > 
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> Can you describe which parts are missing for BK3.1 in the
+> changelog? I'm fairly sure that Liebherr is still supporting
+> this board, but I don't have a contact to add to Cc here.
+> 
+> I've added Lukasz Majewski to Cc here, as he originally worked
+> on BK3.1 and likely either has the hardware or knows someone
+> who does.  Technologic Systems also lists the ts7250 as supported
+> on their website, but the only contact I found for them is the
+> generic support@embeddedTS.com. In case someone from Technologic
+> is available for giving the series a spin, see [1] for the
+> full set of patches.
+> 
+>      Arnd
+> 
+> [1] https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel.me/
 
-OH SIde note, #2... thanks @Nishanth Menon !
+Thanks Nikita for putting this together and getting us some
+details/notes off-list to get us testing this quickly.
 
-We do have this example:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D8e01fb15b8157a825d309ea2598b494dd81a7b42
+We ran a TS-7250 with this series applied through some of
+our basic testing and everything is working as expected.
 
-So instead of `am335x-boneblack-pps.dtb` it could be: ....
-am335x-bone-dmtimer-pwm7.dtbo or even am335x-dmtimer-pwm7.dtbo ?
+Tested-by: Michael Peters <mpeters@embeddedTS.com>
+Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
 
-Thoughts?
-
---=20
-Robert Nelson
-https://rcn-ee.com/
+-Kris
