@@ -1,136 +1,95 @@
-Return-Path: <SRS0=iHIr=AT=baylibre.com=jpanis@kernel.org>
+Return-Path: <SRS0=PF7I=AT=maquefel.me=nikita.shubin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBC86C77B61
-	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 10:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D3A0C77B61
+	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 12:13:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A0A61C433D2; Fri, 28 Apr 2023 10:55:00 +0000 (UTC)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 583D3C4339B; Fri, 28 Apr 2023 12:13:45 +0000 (UTC)
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4D94BC433EF
-	for <soc@kernel.org>; Fri, 28 Apr 2023 10:54:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4D94BC433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3f18dacd392so60904905e9.0
-        for <soc@kernel.org>; Fri, 28 Apr 2023 03:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682679295; x=1685271295;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFNBJS20WLgq1YWyfU1SnWpJA65lDW01dwN6L86FEiI=;
-        b=Uja4PbpFNjG0tUrWzV09vLbGbxy8/XMyaRlpnY3ur3T4I31yDWe6lI+tDUCB7ZRQgw
-         wKktKgeKeY9r/rtr6ND+Tyxq8CfoAZG/TOIxEL9HCum80TT2EZ3djIAPJxECmr13rzGA
-         hWQSzjg44ObkZ4UmDX68wPFnFJyplsR9kXT5iiUUqis1H+ZugoybNAjr5xvm7hQXK64l
-         /wwVh/UoO44nN8KWR+ZNdW0MEaHuoUhVyS2rVzfrQ6uDNEyt2J98448fQ4FUE5rMikUl
-         xGzAn4opGhPtOvyVKfTl1Uik6WT6VDUv0pl2inM93MxyMi3tjYcyUROvR383dkmVaFun
-         71zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682679295; x=1685271295;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fFNBJS20WLgq1YWyfU1SnWpJA65lDW01dwN6L86FEiI=;
-        b=IORwzCgBQhtzNODdOVw93hvwvooV83XCSKinKn1t/d39zu8cVQv5Ii7/R/iZRPzWbq
-         A5wkyDwMCxu6/C3KJCIdxfoYYr6vwZe54tUHeCldfSwyM1NSLdMHgfPXhcIHw9wW6Ni6
-         nx9Q816txfKzsObjrzjKr6U9KQC1EioUxjn4u69xOg8M2F1/F7U/2BeVCA1Tj5ljuxWN
-         9mtJtsWApUzyyIldWLbcLsZhQw6ZoASJH2ricIdeJYZ4MSHhw+mDDugROgGg1GT2wzui
-         Tggj+a67Wa1WAVQGJnzYT8y0HcNjvdMWaSrQrjuUMWcO5PW4+hR/DixHIp1IpXmqD785
-         vTYA==
-X-Gm-Message-State: AC+VfDwbJLvMdvw65AwWv89bKA2H95yGwOnBvzsdC2g97tBrXmNDG1kE
-	2Y9Oqx5Qm7xgx0WjkVfKNKxV+Q==
-X-Google-Smtp-Source: ACHHUZ7pVr9Uf8iWfR262MteoPdvkPdUB1g3VnlbDTqQ6Aacto3mpYT36+LLcoSnXyQC7MluFI1Vlw==
-X-Received: by 2002:a05:600c:2042:b0:3f1:7e3a:2ef2 with SMTP id p2-20020a05600c204200b003f17e3a2ef2mr3895061wmg.14.1682679295180;
-        Fri, 28 Apr 2023 03:54:55 -0700 (PDT)
-Received: from baylibre-ThinkPad-T14s-Gen-2i.. (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id z9-20020a05600c114900b003f1745c7df3sm703323wmz.23.2023.04.28.03.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 03:54:54 -0700 (PDT)
-From: Julien Panis <jpanis@baylibre.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D0C76C433EF;
+	Fri, 28 Apr 2023 12:13:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D0C76C433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=maquefel.me
+Received: from mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:8a85:0:640:8fc9:0])
+	by forward500b.mail.yandex.net (Yandex) with ESMTP id 7B71D5EB59;
+	Fri, 28 Apr 2023 15:13:32 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UDIqPQ1DRSw0-oizJTPZv;
+	Fri, 28 Apr 2023 15:13:31 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682684011;
+	bh=8/DsglW6bXdL6cKM+snErWK1zkh/4xaDsTI58/cmNVI=;
+	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+	b=TJwmrTCcVjrFrr3pAzJ629AteXtzNuVp9rAvtkWbI8aOWxvUiGt62HaU1oBYn/IUz
+	 IPICn1gnZTN/TY61XhL2BLxp7IWtwIFXOr3iX+z/upMRANUUGYm8C8d24THa1YgWMp
+	 ht8TU9U/75ncMus/ytq78TOG1VrJT6W/0gbTg+pE=
+Authentication-Results: mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <90ad7d369ec3cae132245aa75daf460b90ec7b4e.camel@maquefel.me>
+Subject: Re: [PATCH 34/43] ARM: dts: add device tree for ep93xx Soc
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: arnd@arndb.de,
-	olof@lixom.net,
-	soc@kernel.org,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	tony@atomide.com
-Cc: linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org
-Subject: [PATCH] arm: dts: Add am335x-boneblack-pps.dts
-Date: Fri, 28 Apr 2023 12:54:53 +0200
-Message-Id: <20230428105453.110254-1-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.37.3
+Cc: Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, Olof Johansson
+ <olof@lixom.net>, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>, 
+ support@embeddedTS.com
+Date: Fri, 28 Apr 2023 18:13:31 +0300
+In-Reply-To: <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+	 <20230424123522.18302-35-nikita.shubin@maquefel.me>
+	 <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Lokesh Vutla <lokeshvutla@ti.com>
+Hello Arnd!
 
-Add a new am335x-boneblack-pps.dts that can be used to configure TIMER7
-in PWM mode. This PWM signal can be used as a PPS signal when
-synchronized to PTP clock. Typically this synchronization is done by a
-userspace program. This PPS signal can be observed on pin P8.8.
+On Mon, 2023-04-24 at 13:28 +0200, Arnd Bergmann wrote:
+> On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
+> > This adds a divice for Cirrus ep93xx SoC amd ts7250 board that has
+> > been
+> > my testing target for ep93xx device support.
+> >=20
+> > Also inluded device tree for Liebherr BK3.1 board through it's not
+> > a
+> > complete support.
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+>=20
+> Can you describe which parts are missing for BK3.1 in the
+> changelog? I'm fairly sure that Liebherr is still supporting
+> this board, but I don't have a contact to add to Cc here.
 
-Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Signed-off-by: Adrien Ricciardi <aricciardi@baylibre.com>
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
----
- arch/arm/boot/dts/Makefile                 |  1 +
- arch/arm/boot/dts/am335x-boneblack-pps.dts | 25 ++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
- create mode 100644 arch/arm/boot/dts/am335x-boneblack-pps.dts
+The current dt implementation is missing:
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index efe4152e5846..d74158aae72d 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -939,6 +939,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
- 	am335x-base0033.dtb \
- 	am335x-bone.dtb \
- 	am335x-boneblack.dtb \
-+	am335x-boneblack-pps.dtb \
- 	am335x-boneblack-wireless.dtb \
- 	am335x-boneblue.dtb \
- 	am335x-bonegreen.dtb \
-diff --git a/arch/arm/boot/dts/am335x-boneblack-pps.dts b/arch/arm/boot/dts/am335x-boneblack-pps.dts
-new file mode 100644
-index 000000000000..88d2bc3fd759
---- /dev/null
-+++ b/arch/arm/boot/dts/am335x-boneblack-pps.dts
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Texas Instruments Incorporated - http://www.ti.com/
-+ */
-+
-+#include "am335x-boneblack.dts"
-+
-+&am33xx_pinmux {
-+	pwm7_pins: pinmux_pwm7_pins {
-+		pinctrl-single,pins = <
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_OEN_REN, PIN_OUTPUT_PULLDOWN, MUX_MODE2)
-+		>;
-+	};
-+};
-+
-+/{
-+	pwm7: dmtimer-pwm7 {
-+		compatible = "ti,omap-dmtimer-pwm";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pwm7_pins>;
-+		#pwm-cells = <3>;
-+		ti,timers = <&timer7>;
-+		ti,clock-source = <0x00>; /* timer_sys_ck */
-+	};
-+};
+- I2S
+- MMC on SPI
 
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
--- 
-2.37.3
+I will add those nodes so it will be a complete dt, however i have no
+possibility to test it.
+
+
+>=20
+> I've added Lukasz Majewski to Cc here, as he originally worked
+> on BK3.1 and likely either has the hardware or knows someone
+> who does.=C2=A0 Technologic Systems also lists the ts7250 as supported
+> on their website, but the only contact I found for them is the
+> generic support@embeddedTS.com. In case someone from Technologic
+> is available for giving the series a spin, see [1] for the
+> full set of patches.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0 Arnd
+>=20
+> [1]
+> https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel=
+.me/
 
