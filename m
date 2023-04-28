@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E5FC77B60
-	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 14:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71127C77B61
+	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 20:53:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8F9D5C4339B; Fri, 28 Apr 2023 14:45:13 +0000 (UTC)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+	id 40AF3C433EF; Fri, 28 Apr 2023 20:53:45 +0000 (UTC)
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 43327C433EF;
-	Fri, 28 Apr 2023 14:45:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43327C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 21F9BC433D2;
+	Fri, 28 Apr 2023 20:53:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 21F9BC433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-77a8cc70fdeso1265026241.2;
-        Fri, 28 Apr 2023 07:45:12 -0700 (PDT)
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-4405fb5c314so146327e0c.2;
+        Fri, 28 Apr 2023 13:53:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682693111; x=1685285111;
+        d=gmail.com; s=20221208; t=1682715223; x=1685307223;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5WQK7u5uz2CHg54GpE0t/aU1Db+XDUfrdkRM7v2mYWI=;
-        b=fFcZJGAwp++jtP0/hTAPabIKRlMdYbKEaaskT7cQ4sOzTrlDwNUfVIXI/fmOvgutu5
-         B6TgJu/lKSKidAswj8BDo9ce/rQG34eTvZdL/Uv4U4R3AUNva2ekPXjDUcjg/2Y2Z1io
-         8jks80r28IkYJC4lmq2U4njFm/eNPi/f5KT9aKJGivJdjueVp4+WGMnejjeiVwpACQ2D
-         PS0rax6j0Dg9VvZa9pTco/YgNehFbvNdN4t6rTYm51lxaBgEKsfdllrWOVJR3ItvYlN1
-         /a/b6eHrTdorKQI4ubJO9gLLKd4rvK5AY0JS/rWNBnRtVuPXd0H2SF+SSoUBXESvKah6
-         l1fA==
+        bh=JRYO52blVuIjsOSLyVlbkequxT+e3yW4z+4sA1lzj5A=;
+        b=H7ejqF0RJ8HO9k7UgwEUKBPHQSgxcDlr/xgGbySmFBJfc7ChK3pRNPbBX9fC2E+Rkf
+         e6fcW1/saGQbRiFSZz8b5VHp4i07vnC9gqt/qE9DFsTwD8v0cBzKYHTp3/mLTr6CHbNO
+         rL8KnMqahFyapQXK48UzpDTILsnyJ/KmE6kHKMTBMdTu1ELDLIdFbqawdATU1hfNXBTQ
+         eGX1YN1RLbvnQnF8gaekFxMo1LQNvieeIEkWepQN0dH3OhvLN/GlUCfiRtC4ntPPV6WU
+         gdSIqqCTYXekgtXCV6RNxE+N6gdQR1fXyNGDB1Dj6qEw+c6v1k/Bf1NxEuikJW5wTYRL
+         dHoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682693111; x=1685285111;
+        d=1e100.net; s=20221208; t=1682715223; x=1685307223;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5WQK7u5uz2CHg54GpE0t/aU1Db+XDUfrdkRM7v2mYWI=;
-        b=PhPniOf8pWE3bbPczOMz0uHW2iEgC+D7/K7mrR6DmEjpEfxBAF6Pq3Y0NuEfznlsvR
-         GGKK8HC3sYtdS/DYvzrADsGIOPbfYzhgGEoCR3WTW4wG9UhcSRR9Gt0DnmPuyY/DNnVP
-         2LaKCHhzQ3PZXy0AEdEV7w4ipUGbgzFE6LIwLRSJHewH39lCAo4QwcszuqoLsMZaHleh
-         P6wiT5gZLX+stTrrA5TR+4XQ9wmUouEV7fII+ctrSZBkppDFU+9Xi0oNPOo+bqvFKbHk
-         LdbGM9U/5zB1mJWGcPuiHPL3TsO92XZxMoTsdL5uhMrrRnFxdqpb+egdSYRWVhdgtM+c
-         0jFg==
-X-Gm-Message-State: AC+VfDy+uTRvtkodu//yw2jyUwcalt12yAM2STap1nn8grxQf2tWKpkU
-	MLqE1IGgQ7HUi6Q4HGXpp5Vhe9bbMxgpuAcTjhg=
-X-Google-Smtp-Source: ACHHUZ6ddCrxyxsU99j9thZI4WCeWSX+BROb5gyuOULzRIorRvUiWvX8kw0ISJV+jvwxjANaJdUmLXEvnlyEu+VEQlc=
-X-Received: by 2002:a67:f6c3:0:b0:42f:e7f3:923f with SMTP id
- v3-20020a67f6c3000000b0042fe7f3923fmr2816115vso.13.1682693110896; Fri, 28 Apr
- 2023 07:45:10 -0700 (PDT)
+        bh=JRYO52blVuIjsOSLyVlbkequxT+e3yW4z+4sA1lzj5A=;
+        b=W26SbQYzCJKmCFNSAkmHtOkzplzWLkMZVdMaldjN7gb7A2xuqe22Lb1eWCPi8wxXps
+         /bttgHwME2lnk2Bervb07CMxnTFn2aSkDCwTVOWekSx/tn+SlpgZYu7mXToKdd4ZPAQa
+         +7qxXLXZLbOSWyVlV9Y9gvVGqhWKlG3eEg+9Qvm4tOdaQlKqNK9yuzbFMKs77NJI2HQE
+         YPTSHLZ0IOUmy8T9a44WH5bQar724vFOZaer0z6bwbha1QWMMpxs9Ur+UYwftsTTCYNe
+         ar4QVUFgKJArG+CCdqyOmBriSLkS6mmgpnWDVGuCan1VCIaZ4HCbPthz8pfs92fxD3E/
+         2EYQ==
+X-Gm-Message-State: AC+VfDyOF+Ogc6sZTx9MR/8rDyS2fRAywHyHuCz9aH3RrMzGRyDJ4xWJ
+	E+jYH+p2x3n5EIcXdLQfbVgsXNJyOXOF+f8WuesL6+lJCA8=
+X-Google-Smtp-Source: ACHHUZ5dtyhB7wkfx17vKwIAdsNhr1LLTqVEcPSLcN60jFiC6cARjWzhVpel3Qnfv1+NnkX+H+VZ1lJMZ57FK7zzUio=
+X-Received: by 2002:a1f:41c9:0:b0:43f:ec5d:51e1 with SMTP id
+ o192-20020a1f41c9000000b0043fec5d51e1mr3235818vka.9.1682715222835; Fri, 28
+ Apr 2023 13:53:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230428105453.110254-1-jpanis@baylibre.com>
-In-Reply-To: <20230428105453.110254-1-jpanis@baylibre.com>
+References: <20230428105453.110254-1-jpanis@baylibre.com> <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
+In-Reply-To: <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
 From: Robert Nelson <robertcnelson@gmail.com>
-Date: Fri, 28 Apr 2023 09:44:45 -0500
-Message-ID: <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
+Date: Fri, 28 Apr 2023 15:53:16 -0500
+Message-ID: <CAOCHtYgreXmtcuRDRu3UWRhPJ0-k2E+3YYhxp_AaPf-sObuR1Q@mail.gmail.com>
 Subject: Re: [PATCH] arm: dts: Add am335x-boneblack-pps.dts
 To: Julien Panis <jpanis@baylibre.com>
 List-Id: <soc.lore.kernel.org>
@@ -64,83 +64,95 @@ Cc: arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 28, 2023 at 6:00=E2=80=AFAM Julien Panis <jpanis@baylibre.com> =
-wrote:
+On Fri, Apr 28, 2023 at 9:44=E2=80=AFAM Robert Nelson <robertcnelson@gmail.=
+com> wrote:
 >
-> From: Lokesh Vutla <lokeshvutla@ti.com>
+> On Fri, Apr 28, 2023 at 6:00=E2=80=AFAM Julien Panis <jpanis@baylibre.com=
+> wrote:
+> >
+> > From: Lokesh Vutla <lokeshvutla@ti.com>
+> >
+> > Add a new am335x-boneblack-pps.dts that can be used to configure TIMER7
+> > in PWM mode. This PWM signal can be used as a PPS signal when
+> > synchronized to PTP clock. Typically this synchronization is done by a
+> > userspace program. This PPS signal can be observed on pin P8.8.
+> >
+> > Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
+> > Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> > Signed-off-by: Adrien Ricciardi <aricciardi@baylibre.com>
+> > Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> > ---
+> >  arch/arm/boot/dts/Makefile                 |  1 +
+> >  arch/arm/boot/dts/am335x-boneblack-pps.dts | 25 ++++++++++++++++++++++
+> >  2 files changed, 26 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/am335x-boneblack-pps.dts
+> >
+> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> > index efe4152e5846..d74158aae72d 100644
+> > --- a/arch/arm/boot/dts/Makefile
+> > +++ b/arch/arm/boot/dts/Makefile
+> > @@ -939,6 +939,7 @@ dtb-$(CONFIG_SOC_AM33XX) +=3D \
+> >         am335x-base0033.dtb \
+> >         am335x-bone.dtb \
+> >         am335x-boneblack.dtb \
+> > +       am335x-boneblack-pps.dtb \
+> >         am335x-boneblack-wireless.dtb \
+> >         am335x-boneblue.dtb \
+> >         am335x-bonegreen.dtb \
+> > diff --git a/arch/arm/boot/dts/am335x-boneblack-pps.dts b/arch/arm/boot=
+/dts/am335x-boneblack-pps.dts
+> > new file mode 100644
+> > index 000000000000..88d2bc3fd759
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/am335x-boneblack-pps.dts
+> > @@ -0,0 +1,25 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2023 Texas Instruments Incorporated - http://www.ti.c=
+om/
+> > + */
+> > +
+> > +#include "am335x-boneblack.dts"
+> > +
+> > +&am33xx_pinmux {
+> > +       pwm7_pins: pinmux_pwm7_pins {
+> > +               pinctrl-single,pins =3D <
+> > +                       AM33XX_PADCONF(AM335X_PIN_GPMC_OEN_REN, PIN_OUT=
+PUT_PULLDOWN, MUX_MODE2)
+> > +               >;
+> > +       };
+> > +};
+> > +
+> > +/{
+> > +       pwm7: dmtimer-pwm7 {
+> > +               compatible =3D "ti,omap-dmtimer-pwm";
+> > +               pinctrl-names =3D "default";
+> > +               pinctrl-0 =3D <&pwm7_pins>;
+> > +               #pwm-cells =3D <3>;
+> > +               ti,timers =3D <&timer7>;
+> > +               ti,clock-source =3D <0x00>; /* timer_sys_ck */
+> > +       };
+> > +};
 >
-> Add a new am335x-boneblack-pps.dts that can be used to configure TIMER7
-> in PWM mode. This PWM signal can be used as a PPS signal when
-> synchronized to PTP clock. Typically this synchronization is done by a
-> userspace program. This PPS signal can be observed on pin P8.8.
+> I know this commit is pretty small, but mainline now has overlay support:
 >
-> Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> Signed-off-by: Adrien Ricciardi <aricciardi@baylibre.com>
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> ---
->  arch/arm/boot/dts/Makefile                 |  1 +
->  arch/arm/boot/dts/am335x-boneblack-pps.dts | 25 ++++++++++++++++++++++
->  2 files changed, 26 insertions(+)
->  create mode 100644 arch/arm/boot/dts/am335x-boneblack-pps.dts
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3D0fff0e49d72a53c51d8903fbadb2e6a84e531c4a
 >
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index efe4152e5846..d74158aae72d 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -939,6 +939,7 @@ dtb-$(CONFIG_SOC_AM33XX) +=3D \
->         am335x-base0033.dtb \
->         am335x-bone.dtb \
->         am335x-boneblack.dtb \
-> +       am335x-boneblack-pps.dtb \
->         am335x-boneblack-wireless.dtb \
->         am335x-boneblue.dtb \
->         am335x-bonegreen.dtb \
-> diff --git a/arch/arm/boot/dts/am335x-boneblack-pps.dts b/arch/arm/boot/d=
-ts/am335x-boneblack-pps.dts
-> new file mode 100644
-> index 000000000000..88d2bc3fd759
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/am335x-boneblack-pps.dts
-> @@ -0,0 +1,25 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Texas Instruments Incorporated - http://www.ti.com=
-/
-> + */
-> +
-> +#include "am335x-boneblack.dts"
-> +
-> +&am33xx_pinmux {
-> +       pwm7_pins: pinmux_pwm7_pins {
-> +               pinctrl-single,pins =3D <
-> +                       AM33XX_PADCONF(AM335X_PIN_GPMC_OEN_REN, PIN_OUTPU=
-T_PULLDOWN, MUX_MODE2)
-> +               >;
-> +       };
-> +};
-> +
-> +/{
-> +       pwm7: dmtimer-pwm7 {
-> +               compatible =3D "ti,omap-dmtimer-pwm";
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&pwm7_pins>;
-> +               #pwm-cells =3D <3>;
-> +               ti,timers =3D <&timer7>;
-> +               ti,clock-source =3D <0x00>; /* timer_sys_ck */
-> +       };
-> +};
+> At what point do we finally merge in the many dozen *BeagleBone*
+> overlays, or do we still wait for :
+> https://lore.kernel.org/lkml/20220328000915.15041-1-ansuelsmth@gmail.com/
 
-I know this commit is pretty small, but mainline now has overlay support:
+OH SIde note, #2... thanks @Nishanth Menon !
 
+We do have this example:
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D0fff0e49d72a53c51d8903fbadb2e6a84e531c4a
+id=3D8e01fb15b8157a825d309ea2598b494dd81a7b42
 
-At what point do we finally merge in the many dozen *BeagleBone*
-overlays, or do we still wait for :
-https://lore.kernel.org/lkml/20220328000915.15041-1-ansuelsmth@gmail.com/
+So instead of `am335x-boneblack-pps.dtb` it could be: ....
+am335x-bone-dmtimer-pwm7.dtbo or even am335x-dmtimer-pwm7.dtbo ?
 
-Regards,
+Thoughts?
 
 --=20
 Robert Nelson
