@@ -1,127 +1,110 @@
-Return-Path: <SRS0=4wwY=AT=embeddedTS.com=kris@kernel.org>
+Return-Path: <SRS0=rpJb=AU=gmail.com=aweber.kernel@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ADA7C77B61
-	for <soc@archiver.kernel.org>; Fri, 28 Apr 2023 21:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63A18C77B7C
+	for <soc@archiver.kernel.org>; Sat, 29 Apr 2023 15:55:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1256EC4339B; Fri, 28 Apr 2023 21:57:03 +0000 (UTC)
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 2088FC433A1; Sat, 29 Apr 2023 15:55:46 +0000 (UTC)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CFD73C433D2;
-	Fri, 28 Apr 2023 21:57:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CFD73C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=embeddedTS.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=embeddedTS.com
-Received: from 1psW52-0008XV-Uz by out3b.electric.net with emc1-ok (Exim 4.96)
-	(envelope-from <kris@embeddedTS.com>)
-	id 1psW58-0008lM-UJ;
-	Fri, 28 Apr 2023 14:56:46 -0700
-Received: by emcmailer; Fri, 28 Apr 2023 14:56:46 -0700
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-	by out3b.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
-	(Exim 4.96)
-	(envelope-from <kris@embeddedTS.com>)
-	id 1psW52-0008XV-Uz;
-	Fri, 28 Apr 2023 14:56:40 -0700
-Received: from tsdebian (unknown [75.164.37.163])
-	by mail.embeddedts.com (Postfix) with ESMTPSA id 87B62E98;
-	Fri, 28 Apr 2023 14:56:39 -0700 (MST)
-Message-ID: <1682718975.5028.2.camel@embeddedTS.com>
-Subject: Re: [PATCH 34/43] ARM: dts: add device tree for ep93xx Soc
-From: Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To: Arnd Bergmann <arnd@arndb.de>, Nikita Shubin <nikita.shubin@maquefel.me>
+	by smtp.kernel.org (Postfix) with ESMTPS id 1E121C433EF;
+	Sat, 29 Apr 2023 15:55:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1E121C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94f32588c13so146858566b.2;
+        Sat, 29 Apr 2023 08:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682783743; x=1685375743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TxvGvkws6v3OUPVKHHB+9cC8k2VhJOwpUtI24BtY69g=;
+        b=REYv5IGmxp2EXyq8ER51sGhzE/vJ8B13FZucXizKVVauZ2+kxdXZrsbWRxGiSyw9vY
+         mKasHYVY5c5pCmWaY5LlkET5nfRS718JeXly2SPQYhCV2slCyqdhsHj48MIZVoGUzkPq
+         ZgsNaog2b1xuhmY2gebCZ49QMwXmFjKt9yW1vJqbiX32rit3XriwHMgwOsIZ1XXjDnUp
+         7zGiX1xTBBEcV7zShZw2HjZesYzYfHtf3xnx1YNBUeQmJP6BSR0dRF02DQN7teRAOkzS
+         UoXP2vVvFV6Euyh8Yz12CbC7D5p7rRHeUxKlx5rSfyN6iRGkVetF0bzrP7WpVunUyuvw
+         7iew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682783743; x=1685375743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TxvGvkws6v3OUPVKHHB+9cC8k2VhJOwpUtI24BtY69g=;
+        b=PKqoLjO/rCmd56meKHa+Zi5O9alwkzUKZuEMzxDTsDnyWbKIE1XgE3RyrQxPYy+GoR
+         i+MOUYBUE8mm/IlQSXMVlH8+96Y2VF9gz1Wdg8EUE5bbj2XGS0MBigopwjjBbiSO5pca
+         2JHyFRFdTazEz8R5h4RTFZOPYsV+ODhDI9MZfps2ElfcdURgpM2otl6MaNbijKsngqkM
+         zNC/5lVNvPabGcP40z9yRPVSENRfyrXAQxDTdwHoic1PXDCf7eq38ekm9tjPybffIF2b
+         ipmsjqQOThDxIWVeOXVPoHIYESaWnBBcX8l7Og6HopNhkf38GpFDBSIDq9WsmgQN5ARs
+         tgCQ==
+X-Gm-Message-State: AC+VfDwi2z480/VbrjHa3dQ2utlI6xbjYFX9hQ9SyoJ28h8hbyfaREP8
+	iq55yFovFQiLjrUayF4QFnk=
+X-Google-Smtp-Source: ACHHUZ5dT/PeCwnQSBGn49wK0jIxYcMU3RAAAEX/X4fj13wWXTPrHhe6nJQLWFRONNoSzGgOljix5A==
+X-Received: by 2002:a17:906:dc93:b0:94f:1ac0:850b with SMTP id cs19-20020a170906dc9300b0094f1ac0850bmr9028611ejc.71.1682783743147;
+        Sat, 29 Apr 2023 08:55:43 -0700 (PDT)
+Received: from [192.168.50.244] (83.8.115.30.ipv4.supernova.orange.pl. [83.8.115.30])
+        by smtp.gmail.com with ESMTPSA id sg9-20020a170907a40900b00959aba150c3sm8040932ejc.50.2023.04.29.08.55.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Apr 2023 08:55:42 -0700 (PDT)
+Message-ID: <712cd0a7-fdb9-059a-90b7-5c3b6a08fd5b@gmail.com>
+Date: Sat, 29 Apr 2023 17:55:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 03/12] ARM: exynos: Re-introduce Exynos4212 support
+Content-Language: en-US
+To: Henrik Grimler <henrik@grimler.se>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, Olof Johansson
- <olof@lixom.net>, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>, Michael
- Peters <mpeters@embeddedts.com>
-Date: Fri, 28 Apr 2023 14:56:15 -0700
-In-Reply-To: <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-	 <20230424123522.18302-35-nikita.shubin@maquefel.me>
-	 <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh+dt@kernel.org>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Russell King <linux@armlinux.org.uk>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Kukjin Kim <kgene@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-phy@lists.infradead.org,
+ ~postmarketos/upstreaming@lists.sr.ht
+References: <20230416133422.1949-1-aweber.kernel@gmail.com>
+ <20230416133422.1949-4-aweber.kernel@gmail.com> <ZEBN8ImTp/tRdej+@L14.lan>
+From: Artur Weber <aweber.kernel@gmail.com>
+In-Reply-To: <ZEBN8ImTp/tRdej+@L14.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS: TLS1.2:DHE-RSA-SEED-SHA:128
-X-Authenticated_ID: 
-X-VIPRE-Scanners:virus_clamav;virus_bd;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=T0qxuKHoFC3u0mSLJrS7Q0aIpKmNCJV1D92yNNJU0SQ=;b=WOjiTTaY+yQPgJRdeciQy77OzmGE8iM/WSdmHyKCvqiMhyOMU60rsBaBvMBRbaYsuSCPHL/MjzBn/2dDLA4c5XCBBzIhkr14Xj4xX80MGzmyvMJdsiEiHfzazNOauIXr0W31HgSeD+1jKRR7K0DIpc4kZI5sW9ShuLgXzBHerk7dGaw4Lp8cQEUsq7QgpnB9B0N87e60maQ9Jmrfc77jpb3gXRvyEdVOOSheepxllY6jhZtHxmoJGq1jVZfZbJOnM1S3jGqCPPyahk4x6Nzx4FduyNAUCL9/8szx2S4Pnos2xEWVomblEa5Nlx9mToE72uCYxYEbP6T8BcPoYNN/hA==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
 
-On Mon, 2023-04-24 at 13:28 +0200, Arnd Bergmann wrote:
-> On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
-> > This adds a divice for Cirrus ep93xx SoC amd ts7250 board that has been
-> > my testing target for ep93xx device support.
-> > 
-> > Also inluded device tree for Liebherr BK3.1 board through it's not a
-> > complete support.
-> > 
-> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+On 19/04/2023 22:24, Henrik Grimler wrote:
+>>  	/*
+>>  	 * The second parameter of SMC_CMD_CPU1BOOT command means CPU id.
+>> +	 * But, Exynos4212 has only one secondary CPU so second parameter
+>> +	 * isn't used for informing secure firmware about CPU id.
+>>  	 */
+>> +	if (soc_is_exynos4212())
+>> +		cpu = 0;
 > 
-> Can you describe which parts are missing for BK3.1 in the
-> changelog? I'm fairly sure that Liebherr is still supporting
-> this board, but I don't have a contact to add to Cc here.
-> 
-> I've added Lukasz Majewski to Cc here, as he originally worked
-> on BK3.1 and likely either has the hardware or knows someone
-> who does.  Technologic Systems also lists the ts7250 as supported
-> on their website, but the only contact I found for them is the
-> generic support@embeddedTS.com. In case someone from Technologic
-> is available for giving the series a spin, see [1] for the
-> full set of patches.
-> 
->      Arnd
-> 
-> [1] https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel.me/
+> Is it necessary to set cpu = 0?  Are there any obvious issues without
+> it (like second cpu not being brought up)?
 
-Thanks Nikita for putting this together and getting us some
-details/notes off-list to get us testing this quickly.
+Just tested this; looks like it's required here, without it the second
+core fails to start up:
 
-We ran a TS-7250 with this series applied through some of
-our basic testing and everything is working as expected.
+[    0.064277] smp: Bringing up secondary CPUs ...
+[    1.067163] CPU1: failed to boot: -110
+[    1.069683] smp: Brought up 1 node, 1 CPU
+[    1.072470] SMP: Total of 1 processors activated (48.00 BogoMIPS).
 
-Tested-by: Michael Peters <mpeters@embeddedTS.com>
-Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
+SBOOT on my tablet claims the version is T310XXSBQB2, so it should match
+with the one you checked.
 
--Kris
+Best regards
+Artur Weber
