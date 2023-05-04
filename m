@@ -1,58 +1,92 @@
-Return-Path: <SRS0=BKuy=AY=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=Kapo=AZ=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7088C77B78
-	for <soc@archiver.kernel.org>; Wed,  3 May 2023 06:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89927C77B7C
+	for <soc@archiver.kernel.org>; Thu,  4 May 2023 13:16:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7C8A9C4339C; Wed,  3 May 2023 06:07:43 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 7F4E8C4339B;
-	Wed,  3 May 2023 06:07:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7F4E8C4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from localhost (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTPS id 9436280EB;
-	Wed,  3 May 2023 06:07:40 +0000 (UTC)
-Date: Wed, 3 May 2023 09:07:39 +0300
-From: Tony Lindgren <tony@atomide.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-Cc: Julien Panis <jpanis@baylibre.com>, arnd@arndb.de, olof@lixom.net,
-	soc@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH] arm: dts: Add am335x-boneblack-pps.dts
-Message-ID: <20230503060739.GM14287@atomide.com>
-References: <20230428105453.110254-1-jpanis@baylibre.com>
- <8e1ee169-603f-4aa4-9f02-68520d708d57@linaro.org>
+	id 4C1A8C433EF; Thu,  4 May 2023 13:16:28 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 93DE5C433D2;
+	Thu,  4 May 2023 13:16:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 93DE5C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QBvQL3SpbzLpJZ;
+	Thu,  4 May 2023 21:13:30 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 4 May 2023 21:16:17 +0800
+Message-ID: <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+Date: Thu, 4 May 2023 21:16:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e1ee169-603f-4aa4-9f02-68520d708d57@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To: Sudeep Holla <sudeep.holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+CC: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Shawn Guo <shawnguo@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <soc@kernel.org>, <wanghuiqiang@huawei.com>,
+	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
+	<linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, <devicetree@vger.kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
+ <20230425103040.znv66k364ant6klq@bogus>
+ <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
+ <20230425131918.5tf5vot4h7jf54xk@bogus>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230425131918.5tf5vot4h7jf54xk@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
-Hi,
 
-* Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> [230428 13:50]:
-> On 28/04/2023 12:54, Julien Panis wrote:
-> > From: Lokesh Vutla <lokeshvutla@ti.com>
-> > +		compatible = "ti,omap-dmtimer-pwm";
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pwm7_pins>;
-> > +		#pwm-cells = <3>;
-> > +		ti,timers = <&timer7>;
-> > +		ti,clock-source = <0x00>; /* timer_sys_ck */
-> 
-> Why this is hex? Should be just 0/1/2?
+在 2023/4/25 21:19, Sudeep Holla 写道:
+> On Tue, Apr 25, 2023 at 09:00:31PM +0800, lihuisong (C) wrote:
+>> For firmware, DSD way is simpler and easier to manage these virtual platform
+>> devices, and it's an usual way in kernel.
+> Any specific examples you are referring here. We had lots of debate when
+> DSD was introduced. It must be used only when there is no standard ACPI
+> way to achieve the same. But in this I don't (yet) think that is the case.
+> Further "simplicity" is remotely not the reason why you must use DSD.
+> So until you provide me technical reasons as why _CRS can't work, I
+> have to NACK this approach. DSD in this case seems like pure hack.
+>
+>> Driver only needs to get a fixed value, like pcc-id and type, here.
+>>
+> Yes and _CRS is used to get similar such properties in ACPI. It includes
+> normally MMIO and interrupts and since GAS supports PCC and _CRS can
+> contain GAS, you must simply use that.
+Hi Sudeep,
 
-I think the ti,clock-source can be left out now, this can be done
-with assigned-clocks and parents instead. Please grep for some
-examples in the current mainline kernel dts files.
+I'm tring to use CRS with GAS to report PCC channel ID and get other 
+informations driver need by address.
+I found a way to obtain the generic register information according to 
+"Referencing the PCC address space" in ACPI spec.
+And driver also get the PCC generic register information successfully.
 
-Regards,
+But I don't know how to set and use the address in PCC register.
+Where should this address come from?
+It seems that ACPI spec is not very detailed about this.
+Do you have any suggestions?
 
-Tony
+On the other hand, we think that System Memory space + method can also 
+achieve above goal.
+What do you think of that?
+
+Best regards,
+Huisong
