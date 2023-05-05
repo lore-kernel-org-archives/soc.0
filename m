@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95403C7EE21
-	for <soc@archiver.kernel.org>; Fri,  5 May 2023 03:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66158C7EE23
+	for <soc@archiver.kernel.org>; Fri,  5 May 2023 03:29:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 50DFAC433AA; Fri,  5 May 2023 03:29:41 +0000 (UTC)
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	id 2A9B3C4339C; Fri,  5 May 2023 03:29:44 +0000 (UTC)
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D504FC4339B;
-	Fri,  5 May 2023 03:29:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D504FC4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id DCF19C4339B;
+	Fri,  5 May 2023 03:29:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCF19C4339B
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1925ad4953dso596007fac.2;
-        Thu, 04 May 2023 20:29:39 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-54caba50d07so698771eaf.2;
+        Thu, 04 May 2023 20:29:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683257379; x=1685849379;
+        d=1e100.net; s=20221208; t=1683257382; x=1685849382;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=krDfg6eQorFar2BpT+qnQpTfnL3RzdaYbq8obJrv+/Q=;
-        b=Z5UsLmYcnnfu+wuxwzBMEqqdV5efc4FjpbYfLeEsQd7fnhXafPnPihSfwT8X3UZ8uz
-         mNHT6OhVjTxLeUcASoJH5LPbKOeHtvSF4kCotiT4wrLWvImunYgItHshzc/Vda2ChorX
-         ofCy0AwFcVnX3Jl3eHfavBfGcDb24NDoctOlnv8WiGk6H9/djUhUGHHNqbusqwxz32nD
-         RukeDWqMnHKN0thSyaJQiAFo8Vr6aDjQ9h/KnD/Nt1nldcrqYuXsDWmwbWU5xADqYZl5
-         lGB9jW6FuwMEkXq5/gaWkK5a+YHNs8l/txHSGn2QwYG+kv0v3kDZJVURVmeAB7xLpX4S
-         /Snw==
-X-Gm-Message-State: AC+VfDwBUTJ7JkLQO45XnkteeBRF0irFMHojjOuio7cgrebGkA/m9dx1
-	bh7GbinEaaWH7vlvMMcUxA==
-X-Google-Smtp-Source: ACHHUZ68TTTqF83QwSVG8QIgx0pe1rGpwuKnkT2ePoQ26EPmsn27BR+W57lYjAvZ7fiOrLSWLuMUmg==
-X-Received: by 2002:a05:6870:304:b0:192:57fd:9062 with SMTP id m4-20020a056870030400b0019257fd9062mr173653oaf.1.1683257378744;
-        Thu, 04 May 2023 20:29:38 -0700 (PDT)
+        bh=cO08HzmVk1n7d0QynKl12ITRwYajT1G6ollIJzLwnQ0=;
+        b=iqdmGf6l+IULd2nyBY/W2AhHpq3xY9IrOgE1j1DMOQLJ5wItqRS8cMbTpiARmkOSv/
+         UtwVVjD5xLnbDDhpPHVNF1WIyK7CP8KGTXfatfGDsgryAxgGHeSMmNx5HdgijB9rM474
+         DvsZBZ9A2Tr1IAsDYkUBpeA64MWO2mVBlTJgnxvd3jPM92hiNV5iOsimF70O4RniPrkN
+         dinjW1OyRS0FFDM5QkaH/pUjpqIMEySA/CgrSQUd71COPVNUjoJeqPpHBwR3iNyyjteA
+         FoG8GGp4oXIcjz5YK9oVAxZTpheOCnS8JGrkU8NH3+MLMCtnr+oeVR3rVAw0e9zWKSeB
+         nFpg==
+X-Gm-Message-State: AC+VfDxjtPSQMT42Eyh/Nl3inUxwXRtMI7sLmjACfcDnOeiHY00pntv9
+	x3tiF3XC93vcHfAl95jvAw==
+X-Google-Smtp-Source: ACHHUZ5dG/KV5t6GBZgbnTBt4RRfH6XJsLQcOegoUooL1M3JR9y6bvBwgGoVTHkorw1jCXtBTd5onw==
+X-Received: by 2002:a05:6808:308f:b0:38c:3c53:9e15 with SMTP id bl15-20020a056808308f00b0038c3c539e15mr3141116oib.13.1683257381863;
+        Thu, 04 May 2023 20:29:41 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x15-20020a4ae78f000000b0053b547ebee7sm501012oov.1.2023.05.04.20.29.35
+        by smtp.gmail.com with ESMTPSA id w12-20020a056808090c00b0038c235e24fesm2259619oih.48.2023.05.04.20.29.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 20:29:38 -0700 (PDT)
-Received: (nullmailer pid 1056848 invoked by uid 1000);
+        Thu, 04 May 2023 20:29:41 -0700 (PDT)
+Received: (nullmailer pid 1056850 invoked by uid 1000);
 	Fri, 05 May 2023 03:29:31 -0000
 From: Rob Herring <robh@kernel.org>
-Date: Thu, 04 May 2023 22:29:27 -0500
-Subject: [PATCH 2/4] ARM: dts: Add .dts files missing from the build
+Date: Thu, 04 May 2023 22:29:28 -0500
+Subject: [PATCH 3/4] kbuild: Support flat DTBs install
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+Message-Id: <20230504-arm-dts-mv-v1-3-2c8e51a2b6c4@kernel.org>
 References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
 In-Reply-To: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
 List-Id: <soc.lore.kernel.org>
@@ -86,62 +86,45 @@ To: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
 Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
 X-Mailer: b4 0.13-dev
 
-Comparing .dts files to built .dtb files yielded a few .dts files which
-are never built. Add them to the build.
+In preparation to move Arm .dts files into sub-directories grouped
+by vendor/family, the current flat tree of DTBs generated by
+dtbs_install needs to be maintained. Moving the installed DTBs to
+sub-directories would break various consumers using 'make dtbs_install'.
+
+This is a NOP until sub-directories are introduced.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm/boot/dts/Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm/Kconfig         | 3 +++
+ scripts/Makefile.dtbinst | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 59829fc90315..3cf1bf724e8e 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -335,6 +335,7 @@ dtb-$(CONFIG_MACH_KIRKWOOD) += \
- 	kirkwood-iconnect.dtb \
- 	kirkwood-iomega_ix2_200.dtb \
- 	kirkwood-is2.dtb \
-+	kirkwood-km_fixedeth.dtb \
- 	kirkwood-km_kirkwood.dtb \
- 	kirkwood-l-50.dtb \
- 	kirkwood-laplug.dtb \
-@@ -880,7 +881,10 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
- 	am3517-craneboard.dtb \
- 	am3517-evm.dtb \
- 	am3517_mt_ventoux.dtb \
-+	logicpd-torpedo-35xx-devkit.dtb \
- 	logicpd-torpedo-37xx-devkit.dtb \
-+	logicpd-torpedo-37xx-devkit-28.dtb \
-+	logicpd-som-lv-35xx-devkit.dtb \
- 	logicpd-som-lv-37xx-devkit.dtb \
- 	omap3430-sdp.dtb \
- 	omap3-beagle.dtb \
-@@ -1561,6 +1565,8 @@ dtb-$(CONFIG_MACH_ARMADA_38X) += \
- 	armada-388-helios4.dtb \
- 	armada-388-rd.dtb
- dtb-$(CONFIG_MACH_ARMADA_39X) += \
-+	armada-390-db.dtb \
-+	armada-395-gp.dtb \
- 	armada-398-db.dtb
- dtb-$(CONFIG_MACH_ARMADA_XP) += \
- 	armada-xp-axpwifiap.dtb \
-@@ -1590,6 +1596,7 @@ dtb-$(CONFIG_MACH_DOVE) += \
- dtb-$(CONFIG_ARCH_MEDIATEK) += \
- 	mt2701-evb.dtb \
- 	mt6580-evbp1.dtb \
-+	mt6582-prestigio-pmt5008-3g.dtb \
- 	mt6589-aquaris5.dtb \
- 	mt6589-fairphone-fp1.dtb \
- 	mt6592-evb.dtb \
-@@ -1645,6 +1652,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-intel-s2600wf.dtb \
- 	aspeed-bmc-inspur-fp5280g2.dtb \
- 	aspeed-bmc-inspur-nf5280m6.dtb \
-+	aspeed-bmc-inspur-on5263m5.dtb \
- 	aspeed-bmc-lenovo-hr630.dtb \
- 	aspeed-bmc-lenovo-hr855xg2.dtb \
- 	aspeed-bmc-microsoft-olympus.dtb \
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index e24a9820e12f..7a3b1176f19d 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1463,6 +1463,9 @@ config USE_OF
+ 	help
+ 	  Include support for flattened device tree machine descriptions.
+ 
++config ARCH_WANT_FLAT_DTB_INSTALL
++	def_bool y
++
+ config ATAGS
+ 	bool "Support for the traditional ATAGS boot data passing"
+ 	default y
+diff --git a/scripts/Makefile.dtbinst b/scripts/Makefile.dtbinst
+index 2ab936e4179d..4405d5b67578 100644
+--- a/scripts/Makefile.dtbinst
++++ b/scripts/Makefile.dtbinst
+@@ -34,6 +34,6 @@ $(dst)/%.dtbo: $(obj)/%.dtbo
+ 
+ PHONY += $(subdirs)
+ $(subdirs):
+-	$(Q)$(MAKE) $(dtbinst)=$@ dst=$(patsubst $(obj)/%,$(dst)/%,$@)
++	$(Q)$(MAKE) $(dtbinst)=$@ dst=$(if $(CONFIG_ARCH_WANT_FLAT_DTB_INSTALL),$(dst),$(patsubst $(obj)/%,$(dst)/%,$@))
+ 
+ .PHONY: $(PHONY)
 
 -- 
 2.39.2
