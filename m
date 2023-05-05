@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 074ABC77B7C
-	for <soc@archiver.kernel.org>; Fri,  5 May 2023 12:40:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CB7CC77B75
+	for <soc@archiver.kernel.org>; Fri,  5 May 2023 12:53:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AFF77C433A4; Fri,  5 May 2023 12:40:37 +0000 (UTC)
+	id 4DCADC433A7; Fri,  5 May 2023 12:53:50 +0000 (UTC)
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id DB119C433EF;
-	Fri,  5 May 2023 12:40:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DB119C433EF
+	by smtp.kernel.org (Postfix) with ESMTP id BFA60C433D2;
+	Fri,  5 May 2023 12:53:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BFA60C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B92C1FB;
-	Fri,  5 May 2023 05:41:18 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 085A31FB;
+	Fri,  5 May 2023 05:54:31 -0700 (PDT)
 Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F8C93F64C;
-	Fri,  5 May 2023 05:40:26 -0700 (PDT)
-Date: Fri, 5 May 2023 13:40:22 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 343563F64C;
+	Fri,  5 May 2023 05:53:39 -0700 (PDT)
+Date: Fri, 5 May 2023 13:53:35 +0100
 From: Andre Przywara <andre.przywara@arm.com>
 To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
@@ -62,47 +62,50 @@ Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof
  <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@axis.com
-Subject: Re: [PATCH 1/4] ARM: dts: allwinner: Use quoted #include
-Message-ID: <20230505134022.77c565e7@donnerap.cambridge.arm.com>
-In-Reply-To: <20230504-arm-dts-mv-v1-1-2c8e51a2b6c4@kernel.org>
+Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+Message-ID: <20230505135335.29935b42@donnerap.cambridge.arm.com>
+In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
 References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
-	<20230504-arm-dts-mv-v1-1-2c8e51a2b6c4@kernel.org>
+	<20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
 Organization: ARM
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 04 May 2023 22:29:26 -0500
+On Thu, 04 May 2023 22:29:29 -0500
 Rob Herring <robh@kernel.org> wrote:
 
-> In preparation to move .dts files into subdirectories, include
-> sunxi-h3-h5-emlid-neutis.dtsi from the current directory rather than the
-> symlinked include path.
-
-Looks alright, I guess originally we thought we'd need this from
-the arm64 directory, but we don't, so this is fine:
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
+> The arm dts directory has grown to 1553 boards which makes it a bit
+> unwieldy to maintain and use. Past attempts stalled out due to plans to
+> move .dts files out of the kernel tree. Doing that is no longer planned
+> (any time soon at least), so let's go ahead and group .dts files by
+> vendors. This move aligns arm with arm64 .dts file structure.
+> 
+> Doing this enables building subsets of dts files by vendor easily
+> without changing kernel configs:
+> 
+> make allyesconfig
+> make arch/arm/boot/dts/ti/
+> 
+> There's no change to dtbs_install as the flat structure is maintained on
+> install.
+> 
+> The naming of vendor directories is roughly in this order of preference:
+> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
+> - Current vendor prefix/name if still actively sold (SoCs which have
+>   been aquired) (e.g. nxp/imx)
+> - Existing platform name for older platforms not sold/maintained by any
+>   company (e.g. gemini, nspire)
+> 
+> The whole move was scripted with the exception of MAINTAINERS.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm/boot/dts/sun8i-h3-emlid-neutis-n5h3.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-h3-emlid-neutis-n5h3.dtsi b/arch/arm/boot/dts/sun8i-h3-emlid-neutis-n5h3.dtsi
-> index eedd5da5dc2f..35e71f46c197 100644
-> --- a/arch/arm/boot/dts/sun8i-h3-emlid-neutis-n5h3.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-h3-emlid-neutis-n5h3.dtsi
-> @@ -8,4 +8,4 @@
->  /dts-v1/;
->  
->  #include "sun8i-h3.dtsi"
-> -#include <arm/sunxi-h3-h5-emlid-neutis.dtsi>
-> +#include "sunxi-h3-h5-emlid-neutis.dtsi"
-> 
+
+For Highbank:
+
+Acked-by: Andre Przywara <andre.przywara@arm.com>
+
+Thanks,
+Andre
 
