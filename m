@@ -1,32 +1,33 @@
-Return-Path: <mani@kernel.org>
+Return-Path: <jszhang@kernel.org>
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C24C77B75
-	for <soc@archiver.kernel.org>; Mon,  8 May 2023 15:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6755C7EE22
+	for <soc@archiver.kernel.org>; Mon,  8 May 2023 16:09:34 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 802A7C4339C; Mon,  8 May 2023 15:49:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A8EC433EF;
-	Mon,  8 May 2023 15:49:26 +0000 (UTC)
+	id AF6ADC433A4; Mon,  8 May 2023 16:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840C7C4339B;
+	Mon,  8 May 2023 16:09:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683560987;
-	bh=2VTbg1QZuoQaJvO2WDv+5daHHRd4pUx2K5KZ6uaSwrE=;
+	s=k20201202; t=1683562174;
+	bh=KglEC+MBJKS3y4ruoJi1BXL9cHN6VQJjsZehsqTB2cM=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=k/IvCFm0h8AVD0dnQ8AqFWTXxltVVDgFVCwdX+xEkm/ftGEPhCZovH+P9P2uPFz0k
-	 vRmo7CB55HFpvEAOjmDlgUmSsNmD3JpdSTVKWmJnI/77TYOAVR8JfDm2cIoCMRvmlh
-	 P5YohVZi1w7w1yeYhGNWU7RPGRm7Rs9M3p6st8C0GbPG9BOeV2xnWMm82mzh9b1uJ4
-	 uWt4wNVdo+3kEDcIrqaLJdJ5xMBlmEIWRiaTX3k29+sduQ7gRXuPX8ADzTy7GKoZhG
-	 wAlNbr5bbWcvJvfpZcdzdGntbeTEnJfy5o802WyZKY2NPPLNNScgXxkIMBQ4Hh1BqI
-	 dqmNx9RCkghIA==
-Date: Mon, 8 May 2023 21:19:22 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
+	b=TfjDY6BNF4VtE6a79lJtISRLuLP599yJnkbBSulxd7twixwTLYZzL46OkINa5Y1u+
+	 xMVgqtgp+ghgs3tj7CF57rLh0NS6SCR+61Pov2rp/VpY3vUEOxaH7qaULTIVCsIoBl
+	 hsu9JmO/lHg1deP8m/T9UI9oJqAaBhm+3uKfreeH/BXGcYAjb9H6PqndeTVPJnSQon
+	 AYRaIDFUA7QbTWtvrMG65jVYwd6d3ddWmgF0Hrar/HNdDlbUNhE5BjMnMcPwFJ5Xcs
+	 a23dYci9ReQg/+jpnpKaVCmLFewWxs3NWJ14P1KKAV1yhyc6fpSXuniZ/XhYKn08ec
+	 SuODJwVUULylw==
+Date: Mon, 8 May 2023 23:58:09 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
 To: Rob Herring <robh@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Russell King <linux@armlinux.org.uk>,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
 	Shawn Guo <shawnguo@kernel.org>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Fabio Estevam <festevam@gmail.com>,
@@ -55,7 +56,7 @@ Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
 	Benjamin Fair <benjaminfair@google.com>,
-	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
 	Thierry Reding <thierry.reding@gmail.com>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -67,7 +68,6 @@ Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
 	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
 	Patrice Chotard <patrice.chotard@foss.st.com>,
 	Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
 	Tony Lindgren <tony@atomide.com>,
 	Paul Barker <paul.barker@sancloud.com>,
 	Bartosz Golaszewski <brgl@bgdev.pl>, Nishanth Menon <nm@ti.com>,
@@ -78,7 +78,7 @@ Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@axis.com
 Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-Message-ID: <20230508154922.GB14969@thinkpad>
+Message-ID: <ZFkcEZcTl8oz3xS7@xhacker>
 References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
  <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
 MIME-Version: 1.0
@@ -114,11 +114,9 @@ On Thu, May 04, 2023 at 10:29:29PM -0500, Rob Herring wrote:
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
-For Actions and RDA,
+For berlin arm SoC, Reviewed-by: Jisheng Zhang <jszhang@kernel.org>
 
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-
-- Mani
+Thanks
 
 > ---
 >  MAINTAINERS                                        |  181 +--
@@ -18130,6 +18128,3 @@ Acked-by: Manivannan Sadhasivam <mani@kernel.org>
 > -- 
 > 2.39.2
 > 
-
--- 
-மணிவண்ணன் சதாசிவம்
