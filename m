@@ -1,94 +1,107 @@
-Return-Path: <SRS0=4zcX=A5=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=h8Fn=A5=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC224C77B75
-	for <soc@archiver.kernel.org>; Mon,  8 May 2023 09:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA98C77B75
+	for <soc@archiver.kernel.org>; Mon,  8 May 2023 14:48:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 90E4DC4339C; Mon,  8 May 2023 09:01:09 +0000 (UTC)
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	id ED709C433AA; Mon,  8 May 2023 14:48:30 +0000 (UTC)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3F8D7C433EF
-	for <soc@kernel.org>; Mon,  8 May 2023 09:01:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3F8D7C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id C3839C4339B
+	for <soc@kernel.org>; Mon,  8 May 2023 14:48:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3839C4339B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-965e93f915aso582544066b.2
-        for <soc@kernel.org>; Mon, 08 May 2023 02:01:08 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-559de1d36a9so66298707b3.1
+        for <soc@kernel.org>; Mon, 08 May 2023 07:48:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683536466; x=1686128466;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1683557309; x=1686149309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mdjVB1LcK65MjUQ5lAoWWtjhBM+KfEqN5gXnbsQlIK0=;
-        b=t40AGY5/zL0/XXc7pQ4Npisl0XqlgKQc9BM/f43pHyOgmLT7RrDqoFoJaUTQjSel5S
-         C0hfCvVd2YeezCX1ZvEN4S8f+dCNm5R0iCkNKEVLWdx8Kj39qwAww0eq7SztqAeoKWW5
-         GNipyl/sTouqc+HG67BH0X5Xl61zdJnpc6kwIIYWg2zSJKppGoghENY4OPp31mxr23Tz
-         Ug+u3P37klL3iESNEiUTRQRcRZqTFA4IPjV3KWkMoE0N/5vQOBwneqBDF1YytNJHFk7P
-         HwF3YwPS2hc8WhTkpkuUEgKXk+igPwAGHa7roc6GAuDn3tfjp4+k0Tkp32ehLyCNzFL4
-         6PsQ==
+        bh=dBRDdEMkcJinIhxYo+B9YRkKgZD79DRuOOXoD9mvqrA=;
+        b=iD0hSzpClyLDSlsnaJ2NGcfs5E32cBiwzYfcZo6LCcWAHRSKDUETJfz3+7n45JTCwt
+         douc/nbRktVg+S9fgzdZd9ScZKiQ+MLW3/muv3NLSJFv+HVZ1RbAevD7TlvCK57ZbvsL
+         WbMNsnumNBYCgNcGj9soUX8blE5RPgua8v/9CbQ9T+ZTUmF4CWk5O7uuwGp0/o9HtmFA
+         qyXKiledds2jlCCRcHNZCkTa7gVrJPZ0JjWU86yuchOPpVmmabEi+k8tUyz46CCBxqZu
+         lkwDO47kj1R1h518ubnwuTvtPDxjClD3JFwmyETVbTvSrq7BD1t2WPJWAC3zXBCHpNJT
+         kT/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683536466; x=1686128466;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683557309; x=1686149309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mdjVB1LcK65MjUQ5lAoWWtjhBM+KfEqN5gXnbsQlIK0=;
-        b=SPWtIClNxn01CF3kuGYNJa8UyIHTrImpMqpgP1tGosgOx2HUhlV1AU3CK9fisC7FzN
-         VJWF6PBAiNIfIsgaXgY0E2PrT7TRhUCoIa4kAU4wzYhIHVvDhwE/ZhpMIOhjFZVmyhN0
-         ruS8GKoeOEm5scqbf7hVXsvS3CM3wPF/7jq7JfI0idHZA7Z/LrmCRKetQswY0Y9xFBM1
-         pNwsRzpcqKDg4navrY18fWZzGQLBj6Sde+N+wArNqWG1WuDB4uoSkF9LorXdTe1ug/9e
-         TsBy0n8ExHcDpISvYJ8HmoCZ4Z+tFoOLTwhtAH/88c29Hh9qlfPg+zT+x5+mtn4EfWpj
-         719g==
-X-Gm-Message-State: AC+VfDwmtdHsYtKMI4DKBPIU/14SScrOfOXBfgDMxvT++Vn4o+hUlmV8
-	wGfywzzMwtKsOLscNxIPiBvGhg==
-X-Google-Smtp-Source: ACHHUZ4HpKWDjurqiqoLaDtN/lfcKNWSX5+AEn0mGRBLeJKV/5W39K4QrEkUfS5UpnPMpO6vpYpdLA==
-X-Received: by 2002:a17:907:5c5:b0:965:9edf:f0d0 with SMTP id wg5-20020a17090705c500b009659edff0d0mr7601374ejb.13.1683536466403;
-        Mon, 08 May 2023 02:01:06 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:50e0:ebdf:b755:b300])
-        by smtp.gmail.com with ESMTPSA id z10-20020a1709063a0a00b0094b5ce9d43dsm4685758eje.85.2023.05.08.02.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 02:01:05 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-List-Id: <soc.lore.kernel.org>
-To: Russell King <linux@armlinux.org.uk>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
-Date: Mon,  8 May 2023 11:01:02 +0200
-Message-Id: <168353645813.78617.10247256011505870361.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
-References: <20230508040433.13648-1-lukas.bulwahn@gmail.com>
+        bh=dBRDdEMkcJinIhxYo+B9YRkKgZD79DRuOOXoD9mvqrA=;
+        b=aOiyLJ7hOhcIvy9heJvnJn4tzcgHpML8Es/qYCD+mw3GapM0YOmWnKjG4TPQ29QXsB
+         tBRLfFQgcTQ9gzL7mGKmtDn8XL1uDryvksX9qSYh1S4+cvG8ynrdKX9M2x65SVw7hJaG
+         PKnbWLqyficrcSfvG3ifJ987zNnTACm5BB43HmIkZFpUX6EWVXwGDM8WGGA7/ttWUS9S
+         3eqT3iVrwhZVB9wrdkeLol6lxcuE5tD895zlDkXfOVITH4LOt9jzBPkrgB+LnrinARQH
+         zlTuBlFooN6C3sAO17zVlQKm+6ORyR0nwWExyQqSn998Gt3K+VnL6ZUu2FlFi2MZvUaX
+         JTHQ==
+X-Gm-Message-State: AC+VfDxsh0JH8rkaXr8HbL+gn9DT+JHunXdBcKcC3KfyZ3Z7Q8OBjkab
+	DQhRW4yqZtLsLyVvkpZ0tP7XpqOLDE8OYeh2KUbvInTiRyKD87fB
+X-Google-Smtp-Source: ACHHUZ5YUrkJZ/Z2beY5zA4zYoasGmvc6Wh2Js2To2GzZo6nfjG/1CfaA4enPcYkeZdCT/H+sD/SeZS62t99vhljdDw=
+X-Received: by 2002:a05:6902:18c6:b0:b99:5707:4e6f with SMTP id
+ ck6-20020a05690218c600b00b9957074e6fmr15005818ybb.32.1683557308817; Mon, 08
+ May 2023 07:48:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org> <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+In-Reply-To: <20230504-arm-dts-mv-v1-2-2c8e51a2b6c4@kernel.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 8 May 2023 16:48:17 +0200
+Message-ID: <CACRpkdbfKdR=ru8dCJL0Tincu2-Smsi56vt=C7OW3K9JuQ=47Q@mail.gmail.com>
+Subject: Re: [PATCH 2/4] ARM: dts: Add .dts files missing from the build
+To: Rob Herring <robh@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Russell King <linux@armlinux.org.uk>, 
+	Masahiro Yamada <masahiroy@kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Antoine Tenart <atenart@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Joel Stanley <joel@jms.id.au>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@microchip.com>, Lars Persson <lars.persson@axis.com>, 
+	Scott Branden <sbranden@broadcom.com>, Florian Fainelli <f.fainelli@gmail.com>, 
+	Andre Przywara <andre.przywara@arm.com>, Baruch Siach <baruch@tkos.co.il>, 
+	Wei Xu <xuwei5@hisilicon.com>, Jean-Marie Verdun <verdun@hpe.com>, 
+	Nick Hawkins <nick.hawkins@hpe.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Vladimir Zapolskiy <vz@mleia.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
+	Lubomir Rintel <lkundrak@v3.sk>, Matthias Brugger <matthias.bgg@gmail.com>, Peter Rosin <peda@axentia.se>, 
+	Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>, 
+	=?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+	Thierry Reding <thierry.reding@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Heiko Stuebner <heiko@sntech.de>, 
+	Daniel Palmer <daniel@thingy.jp>, Romain Perier <romain.perier@gmail.com>, 
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	Patrice Chotard <patrice.chotard@foss.st.com>, Marek Vasut <marex@denx.de>, 
+	Qin Jian <qinjian@cqplus1.com>, Jisheng Zhang <jszhang@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Paul Barker <paul.barker@sancloud.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>, 
+	Enric Balletbo i Serra <eballetbo@gmail.com>, Javier Martinez Canillas <javier@dowhile0.org>, 
+	Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@axis.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, May 5, 2023 at 5:29=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
 
-On Mon, 08 May 2023 06:04:33 +0200, Lukas Bulwahn wrote:
-> Commit 0d297df03890 ("ARM: s3c: simplify platform code") removes the line
-> in Makefile.s3c64xx to configure the inclusion of setup-ide-s3c64xx.c,
-> with CONFIG_S3C64XX_SETUP_IDE. So, since then, config S3C64XX_SETUP_IDE has
-> no effect and any further purpose.
-> 
-> Remove the obsolete config S3C64XX_SETUP_IDE.
-> 
-> [...]
+> Comparing .dts files to built .dtb files yielded a few .dts files which
+> are never built. Add them to the build.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Applied, thanks!
+Wow weird.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-[1/1] ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
-      https://git.kernel.org/krzk/linux/c/9d2edccb154bd98baf7f1e21d23f799e4f5e8359
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yours,
+Linus Walleij
