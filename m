@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84422C7EE24
-	for <soc@archiver.kernel.org>; Tue,  9 May 2023 18:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D55DC7EE31
+	for <soc@archiver.kernel.org>; Tue,  9 May 2023 18:09:51 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5155CC433A8; Tue,  9 May 2023 18:09:49 +0000 (UTC)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	id 2258CC4332C; Tue,  9 May 2023 18:09:51 +0000 (UTC)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 00E62C433B0
-	for <soc@kernel.org>; Tue,  9 May 2023 18:09:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 00E62C433B0
+	by smtp.kernel.org (Postfix) with ESMTPS id AE5E7C433A8
+	for <soc@kernel.org>; Tue,  9 May 2023 18:09:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AE5E7C433A8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-50db7ec8188so1903914a12.2
-        for <soc@kernel.org>; Tue, 09 May 2023 11:09:47 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-50bc4b88998so11248748a12.3
+        for <soc@kernel.org>; Tue, 09 May 2023 11:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683655786; x=1686247786;
+        d=linaro.org; s=google; t=1683655787; x=1686247787;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OOQJ77m1hn2uL1cTNrMZrbjBsCRcFkR8CI8TyWOVeFY=;
-        b=OovPyp7aIg8w0Y2PWf73DJevlnGdLg6GkUsrV5aMhfHSA/KQaHoY89Y1q4g8zhbUe3
-         cNTyTRLnrYWmioL+NQm7sH+YoyOTLtcEI0eXmQNHMGO3O6AxcD3g101jAc2BFiz5jCYc
-         DkQLoj06QPse32O1Igj++xPPUtAcks/RooaQrH5VyjbCpwaVfCb4mmftt5wGXpO45jEf
-         wwGvn+faJfzqPADD5jqw/msSmUOcrzf3WOJVTyoS/mLKIJ+GMoBF/C8DO/yQSWtmsLKj
-         2XXq0b3BuqHulO3w8gNELQpPD8kbuMgqvsMLTJT2JtRJJw91y2SGsKK0pVUq/dYp9P7E
-         k7rw==
+        bh=wTAOCVPOPtOy5y17r+mtI5VSueoAcoLIpQdMbfiTcg8=;
+        b=D1PFvAm7SlYpPsPFpbjzQy80gA8ralWcfpyiMeU/EMEfyrmde5hbToU9wgYycOcF5v
+         YAGOBiJA9kXiZKh8/GLzZg7upeXk909wM4m461AZhHh7bb2RhFQ8yBduQ0nJJ4Nq/o2K
+         RJBJUS6ydoWHlz9PeO/s9mEkytwTeKthMGp9hCNp8d2M6W/gi66naI1GvRJq+QY4uGz3
+         ajzSsfVMOtdHHDtZEvJR4ZoDkE3zvfXq1G47DUgEzDOobj7be99w7fHB6KSl80Yqzuw4
+         Bzc8ItdSUVWIHCFNGojsGVJQUzgptt6T3EG/wu3hWZwAytyZn5TQuhJcJP6Fph8ngztz
+         7J2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683655786; x=1686247786;
+        d=1e100.net; s=20221208; t=1683655787; x=1686247787;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OOQJ77m1hn2uL1cTNrMZrbjBsCRcFkR8CI8TyWOVeFY=;
-        b=Bt63YX7uXGbY+AFp133wAPOg8YDvANPdjqM7UGfY0e/RPOCb5woJUeUpeCxFrmJTdA
-         Xk/C9BCW4R/P5bA4+9sWIFBvhpEOFfcHilm1WD73cHJ+4wXzw3BxWsRK0uX2f9VrwWVt
-         6sm/yRsBm1oRvD8KlsblvHKuh1BsjBLWbPh47K8ExHInfS0iQskuSi2cHQH+lnNUBAsq
-         mSCWm1hreKqPANPvrS4Hni/6PgPYdGc9eMz+h+Lxsjk4uO443km8x2c456N4G9h38FQH
-         Z7OhPRQluih8HgkLAYH3wK8JiRfWcY3M/sLvLQqMuzMN8a1szZf/9YgOaS7/Lpticsct
-         47hA==
-X-Gm-Message-State: AC+VfDy8vuhXvhLoIIS0zK0ROgldYq5+eqcuYAaU82RtjIg6+qkxvzMa
-	moeOVWojpnyP5orWPp8F0gdf+qXsy9+sZyFEfIU=
-X-Google-Smtp-Source: ACHHUZ6cDJL6YidGvvj6uPnksNjdWxWsEBzwCc6yc87ckzFi/G3UAAmcV2j/+o2UMJfpv4L8Y5V2aA==
-X-Received: by 2002:a05:6402:10cc:b0:502:2494:b8fc with SMTP id p12-20020a05640210cc00b005022494b8fcmr10929397edu.7.1683655785888;
-        Tue, 09 May 2023 11:09:45 -0700 (PDT)
+        bh=wTAOCVPOPtOy5y17r+mtI5VSueoAcoLIpQdMbfiTcg8=;
+        b=BnWIsgNMoFFLuHfJzKDCM30zwlP9La9jbQjkcTcuPMs77BUOeTIVXFBCsy2lgFhh8T
+         MCVJiXg1tjn07WPgQ3mWsoxYJG9U04H3eDwOebcnqfZpXNKQtIB8H7y05ruBEsgksYx5
+         g8GrC1dE3+ZE2RYj7LlDQSA1Cpt2hYJrGTwjyS34drhGRiLjqJJy0y5r2eG2mWekmXNb
+         zWGWMuvA3FDdSUVsaq9+LRhhE67sBE1sbVuW+VT6cVTcan482rf/NrOAxhido1Gt0LEq
+         Tii3o6Zuw76mufEFYxtn785Pq8ijz2hu5IzEL2sOruNcvzJ1nInW7wR3W9v+NOhowbB5
+         ZaIw==
+X-Gm-Message-State: AC+VfDw0m1CTBnGd7fV8/i7wy3B1UWcBDuMdWKnn6wsocWtL28GDLM65
+	hTEdGQW84CUBh4t+NsZ9RGrF+A==
+X-Google-Smtp-Source: ACHHUZ5hovFjTjykdEntWpkRkWy8gjb9Ub7wb8Lh4BgtsqFJo3AnBC7o0FPzHT4uW5ImOYI0KpKMUA==
+X-Received: by 2002:a05:6402:10d7:b0:50d:bb87:247c with SMTP id p23-20020a05640210d700b0050dbb87247cmr2359508edu.1.1683655787536;
+        Tue, 09 May 2023 11:09:47 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id dy28-20020a05640231fc00b0050d8b5757d1sm1015286edb.54.2023.05.09.11.09.44
+        by smtp.gmail.com with ESMTPSA id dy28-20020a05640231fc00b0050d8b5757d1sm1015286edb.54.2023.05.09.11.09.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 11:09:45 -0700 (PDT)
+        Tue, 09 May 2023 11:09:47 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Artur Weber <aweber.kernel@gmail.com>
 List-Id: <soc.lore.kernel.org>
@@ -80,31 +80,31 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-media@vger.kernel.org,
 	linux-phy@lists.infradead.org,
 	~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: (subset) [PATCH v3 04/13] soc: samsung: Re-introduce Exynos4212 support
-Date: Tue,  9 May 2023 20:09:31 +0200
-Message-Id: <168365575564.242810.10871458937058949630.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v3 05/13] clk: samsung: Add Exynos4212 compatible to CLKOUT driver
+Date: Tue,  9 May 2023 20:09:32 +0200
+Message-Id: <168365575565.242810.6906601762854965924.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230501195525.6268-5-aweber.kernel@gmail.com>
-References: <20230501195525.6268-1-aweber.kernel@gmail.com> <20230501195525.6268-5-aweber.kernel@gmail.com>
+In-Reply-To: <20230501195525.6268-6-aweber.kernel@gmail.com>
+References: <20230501195525.6268-1-aweber.kernel@gmail.com> <20230501195525.6268-6-aweber.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 
-On Mon, 01 May 2023 21:55:16 +0200, Artur Weber wrote:
+On Mon, 01 May 2023 21:55:17 +0200, Artur Weber wrote:
 > Support for the Exynos4212 SoC was originally dropped as there were
 > no boards using it. We will be adding a device that uses it, so add
 > it back.
 > 
-> This reverts commit c40610198f35e8264f9175dafe74db6288a07eda.
+> This reverts commit d5cd103b06f9d766295d18798de484528eb120ea.
 > 
 > 
 > [...]
 
 Applied, thanks!
 
-[04/13] soc: samsung: Re-introduce Exynos4212 support
-        https://git.kernel.org/krzk/linux/c/514a935fd0d4d522a08257f5acbc5439174c7cf0
+[05/13] clk: samsung: Add Exynos4212 compatible to CLKOUT driver
+        https://git.kernel.org/krzk/linux/c/48b359732e166d0f5d53649e21eac8d9343b8e13
 
 Best regards,
 -- 
