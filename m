@@ -1,124 +1,103 @@
-Return-Path: <SRS0=iSY0=BE=socionext.com=hayashi.kunihiko@kernel.org>
+Return-Path: <SRS0=QGPE=BE=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1355CC77B7D
-	for <soc@archiver.kernel.org>; Mon, 15 May 2023 01:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB8EC7EE22
+	for <soc@archiver.kernel.org>; Mon, 15 May 2023 03:37:43 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C76AEC433D2; Mon, 15 May 2023 01:00:12 +0000 (UTC)
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.kernel.org (Postfix) with ESMTP id 8150DC433EF;
-	Mon, 15 May 2023 01:00:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8150DC433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 15 May 2023 09:58:58 +0900
-Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
-	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 5FC052115460;
-	Mon, 15 May 2023 09:58:58 +0900 (JST)
-Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Mon, 15 May 2023 09:58:58 +0900
-Received: from [10.212.159.55] (unknown [10.212.159.55])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id 715D3B6CD6;
-	Mon, 15 May 2023 09:58:56 +0900 (JST)
-Message-ID: <77abbe8a-5114-66b6-46b2-14e29f433446@socionext.com>
-Date: Mon, 15 May 2023 09:58:55 +0900
+	id 3E459C4339B; Mon, 15 May 2023 03:37:43 +0000 (UTC)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B07ECC433EF;
+	Mon, 15 May 2023 03:37:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B07ECC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QKQ1B0yRpzTkhP;
+	Mon, 15 May 2023 11:32:46 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 15 May 2023 11:37:30 +0800
+Message-ID: <e92558e2-f371-27f4-a030-04efe840cda8@huawei.com>
+Date: Mon, 15 May 2023 11:37:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+From: "lihuisong (C)" <lihuisong@huawei.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-To: Rob Herring <robh@kernel.org>, soc@kernel.org,
- Christian Marangi <ansuelsmth@gmail.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Russell King <linux@armlinux.org.uk>, Masahiro Yamada
- <masahiroy@kernel.org>, =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
- Manivannan Sadhasivam <mani@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Antoine Tenart <atenart@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Linus Walleij <linus.walleij@linaro.org>, Sudeep Holla
- <sudeep.holla@arm.com>, Joel Stanley <joel@jms.id.au>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@microchip.com>,
- Lars Persson <lars.persson@axis.com>, Scott Branden <sbranden@broadcom.com>,
- Florian Fainelli <f.fainelli@gmail.com>,
- Andre Przywara <andre.przywara@arm.com>, Baruch Siach <baruch@tkos.co.il>,
- Wei Xu <xuwei5@hisilicon.com>, Jean-Marie Verdun <verdun@hpe.com>,
- Nick Hawkins <nick.hawkins@hpe.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Lubomir Rintel <lkundrak@v3.sk>, Matthias Brugger <matthias.bgg@gmail.com>,
- Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
- Benjamin Fair <benjaminfair@google.com>,
- =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
- Thierry Reding <thierry.reding@gmail.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Heiko Stuebner <heiko@sntech.de>, Daniel Palmer <daniel@thingy.jp>,
- Romain Perier <romain.perier@gmail.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
- Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>, Marek Vasut <marex@denx.de>,
- Qin Jian <qinjian@cqplus1.com>, Jisheng Zhang <jszhang@kernel.org>,
- Tony Lindgren <tony@atomide.com>, Paul Barker <paul.barker@sancloud.com>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Nishanth Menon <nm@ti.com>,
- Santosh Shilimkar <ssantosh@kernel.org>,
- Enric Balletbo i Serra <eballetbo@gmail.com>,
- Javier Martinez Canillas <javier@dowhile0.org>,
- Michal Simek <michal.simek@xilinx.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
-References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
- <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Content-Language: en-US
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+CC: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Shawn Guo <shawnguo@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <soc@kernel.org>, <wanghuiqiang@huawei.com>,
+	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
+	<linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, <devicetree@vger.kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
+ <20230425103040.znv66k364ant6klq@bogus>
+ <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
+ <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+In-Reply-To: <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
-Hi Rob,
 
-On 2023/05/05 12:29, Rob Herring wrote:
-> The arm dts directory has grown to 1553 boards which makes it a bit
-> unwieldy to maintain and use. Past attempts stalled out due to plans to
-> move .dts files out of the kernel tree. Doing that is no longer planned
-> (any time soon at least), so let's go ahead and group .dts files by
-> vendors. This move aligns arm with arm64 .dts file structure.
-> 
-> Doing this enables building subsets of dts files by vendor easily
-> without changing kernel configs:
-> 
-> make allyesconfig
-> make arch/arm/boot/dts/ti/
-> 
-> There's no change to dtbs_install as the flat structure is maintained on
-> install.
-> 
-> The naming of vendor directories is roughly in this order of preference:
-> - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
-> - Current vendor prefix/name if still actively sold (SoCs which have
->    been aquired) (e.g. nxp/imx)
-> - Existing platform name for older platforms not sold/maintained by any
->    company (e.g. gemini, nspire)
-> 
-> The whole move was scripted with the exception of MAINTAINERS.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+在 2023/5/4 21:16, lihuisong (C) 写道:
+>
+> 在 2023/4/25 21:19, Sudeep Holla 写道:
+>> On Tue, Apr 25, 2023 at 09:00:31PM +0800, lihuisong (C) wrote:
+>>> For firmware, DSD way is simpler and easier to manage these virtual 
+>>> platform
+>>> devices, and it's an usual way in kernel.
+>> Any specific examples you are referring here. We had lots of debate when
+>> DSD was introduced. It must be used only when there is no standard ACPI
+>> way to achieve the same. But in this I don't (yet) think that is the 
+>> case.
+>> Further "simplicity" is remotely not the reason why you must use DSD.
+>> So until you provide me technical reasons as why _CRS can't work, I
+>> have to NACK this approach. DSD in this case seems like pure hack.
+>>
+>>> Driver only needs to get a fixed value, like pcc-id and type, here.
+>>>
+>> Yes and _CRS is used to get similar such properties in ACPI. It includes
+>> normally MMIO and interrupts and since GAS supports PCC and _CRS can
+>> contain GAS, you must simply use that.
+> Hi Sudeep,
+>
+> I'm tring to use CRS with GAS to report PCC channel ID and get other 
+> informations driver need by address.
+> I found a way to obtain the generic register information according to 
+> "Referencing the PCC address space" in ACPI spec.
+> And driver also get the PCC generic register information successfully.
+>
+> But I don't know how to set and use the address in PCC register.
+> Where should this address come from?
+> It seems that ACPI spec is not very detailed about this.
+> Do you have any suggestions?
+>
+> On the other hand, we think that System Memory space + method can also 
+> achieve above goal.
+> What do you think of that?
+>
+>
+Hi Sudeep,
 
-For socionext platform:
+Can you give us some suggestions about above question and idea?
 
-Acked-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Looking forward to your reply.
 
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+/Huisong
