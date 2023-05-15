@@ -1,94 +1,92 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <SRS0=iSY0=BE=socionext.com=hayashi.kunihiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE6D1C77B7D
-	for <soc@archiver.kernel.org>; Mon, 15 May 2023 00:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1355CC77B7D
+	for <soc@archiver.kernel.org>; Mon, 15 May 2023 01:00:12 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9337FC433A4; Mon, 15 May 2023 00:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68721C433EF;
-	Mon, 15 May 2023 00:47:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684111697;
-	bh=1zQxsyUKQuLPlubixvcaK54fF5Gs4vF4eOBUGTEEczw=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=sELuOiue+EILxB3fyDU7U+UwWDZjIIVdfOqlkfT6VABDKqGbd7POy7uX2+/lcJrmo
-	 +sDAnMBteCnX7oWl6wvVqEruZAM1nQPfI9PBqzFQezVIC5RiOMAZbYco71eU+Aqr1L
-	 HXN4WdRS8aY2XcqMjtgGFfuZATwSpTWHBW+Ocoa4iS6gDANZul2z4m+DGHL3Admclm
-	 hODKweNFimfJw0TpDsvhPcNQXXpMXsqbL8T7IuZNl+ywTZfAAjd/qqr3kZO6G+3W+G
-	 cm3DgYjHOg6GPwCvwE8e99MiJb37iaXqap4ZSMtVON83l4lUsNFcxap6T1VJCcDyDL
-	 0tXbpdAEK6dqA==
-Date: Mon, 15 May 2023 08:47:44 +0800
-From: Shawn Guo <shawnguo@kernel.org>
-To: Rob Herring <robh@kernel.org>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Antoine Tenart <atenart@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>, Joel Stanley <joel@jms.id.au>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@microchip.com>,
-	Lars Persson <lars.persson@axis.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Andre Przywara <andre.przywara@arm.com>,
-	Baruch Siach <baruch@tkos.co.il>, Wei Xu <xuwei5@hisilicon.com>,
-	Jean-Marie Verdun <verdun@hpe.com>,
-	Nick Hawkins <nick.hawkins@hpe.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Lubomir Rintel <lkundrak@v3.sk>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko Stuebner <heiko@sntech.de>, Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Marek Vasut <marex@denx.de>, Qin Jian <qinjian@cqplus1.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Tony Lindgren <tony@atomide.com>,
-	Paul Barker <paul.barker@sancloud.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Nishanth Menon <nm@ti.com>,
-	Santosh Shilimkar <ssantosh@kernel.org>,
-	Enric Balletbo i Serra <eballetbo@gmail.com>,
-	Javier Martinez Canillas <javier@dowhile0.org>,
-	Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@axis.com
+	id C76AEC433D2; Mon, 15 May 2023 01:00:12 +0000 (UTC)
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+	by smtp.kernel.org (Postfix) with ESMTP id 8150DC433EF;
+	Mon, 15 May 2023 01:00:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8150DC433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=socionext.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=socionext.com
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 15 May 2023 09:58:58 +0900
+Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
+	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 5FC052115460;
+	Mon, 15 May 2023 09:58:58 +0900 (JST)
+Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Mon, 15 May 2023 09:58:58 +0900
+Received: from [10.212.159.55] (unknown [10.212.159.55])
+	by kinkan2.css.socionext.com (Postfix) with ESMTP id 715D3B6CD6;
+	Mon, 15 May 2023 09:58:56 +0900 (JST)
+Message-ID: <77abbe8a-5114-66b6-46b2-14e29f433446@socionext.com>
+Date: Mon, 15 May 2023 09:58:55 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
 Subject: Re: [PATCH 4/4] ARM: dts: Move .dts files to vendor sub-directories
-Message-ID: <20230515004744.GA727834@dragon>
+List-Id: <soc.lore.kernel.org>
+To: Rob Herring <robh@kernel.org>, soc@kernel.org,
+ Christian Marangi <ansuelsmth@gmail.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Russell King <linux@armlinux.org.uk>, Masahiro Yamada
+ <masahiroy@kernel.org>, =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+ Manivannan Sadhasivam <mani@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Antoine Tenart <atenart@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Sudeep Holla
+ <sudeep.holla@arm.com>, Joel Stanley <joel@jms.id.au>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@microchip.com>,
+ Lars Persson <lars.persson@axis.com>, Scott Branden <sbranden@broadcom.com>,
+ Florian Fainelli <f.fainelli@gmail.com>,
+ Andre Przywara <andre.przywara@arm.com>, Baruch Siach <baruch@tkos.co.il>,
+ Wei Xu <xuwei5@hisilicon.com>, Jean-Marie Verdun <verdun@hpe.com>,
+ Nick Hawkins <nick.hawkins@hpe.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Lubomir Rintel <lkundrak@v3.sk>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Peter Rosin <peda@axentia.se>, Nancy Yuen <yuenn@google.com>,
+ Benjamin Fair <benjaminfair@google.com>,
+ =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Heiko Stuebner <heiko@sntech.de>, Daniel Palmer <daniel@thingy.jp>,
+ Romain Perier <romain.perier@gmail.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+ Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+ Patrice Chotard <patrice.chotard@foss.st.com>, Marek Vasut <marex@denx.de>,
+ Qin Jian <qinjian@cqplus1.com>, Jisheng Zhang <jszhang@kernel.org>,
+ Tony Lindgren <tony@atomide.com>, Paul Barker <paul.barker@sancloud.com>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Nishanth Menon <nm@ti.com>,
+ Santosh Shilimkar <ssantosh@kernel.org>,
+ Enric Balletbo i Serra <eballetbo@gmail.com>,
+ Javier Martinez Canillas <javier@dowhile0.org>,
+ Michal Simek <michal.simek@xilinx.com>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@axis.com
 References: <20230504-arm-dts-mv-v1-0-2c8e51a2b6c4@kernel.org>
  <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Language: en-US
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 In-Reply-To: <20230504-arm-dts-mv-v1-4-2c8e51a2b6c4@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 04, 2023 at 10:29:29PM -0500, Rob Herring wrote:
+Hi Rob,
+
+On 2023/05/05 12:29, Rob Herring wrote:
 > The arm dts directory has grown to 1553 boards which makes it a bit
 > unwieldy to maintain and use. Past attempts stalled out due to plans to
 > move .dts files out of the kernel tree. Doing that is no longer planned
@@ -107,14 +105,20 @@ On Thu, May 04, 2023 at 10:29:29PM -0500, Rob Herring wrote:
 > The naming of vendor directories is roughly in this order of preference:
 > - Matching original and current SoC vendor prefix/name (e.g. ti, qcom)
 > - Current vendor prefix/name if still actively sold (SoCs which have
->   been aquired) (e.g. nxp/imx)
+>    been aquired) (e.g. nxp/imx)
 > - Existing platform name for older platforms not sold/maintained by any
->   company (e.g. gemini, nspire)
+>    company (e.g. gemini, nspire)
 > 
 > The whole move was scripted with the exception of MAINTAINERS.
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
-For i.MX platform:
+For socionext platform:
 
-Acked-by: Shawn Guo <shawnguo@kernel.org>
+Acked-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+
+Thank you,
+
+---
+Best Regards
+Kunihiko Hayashi
