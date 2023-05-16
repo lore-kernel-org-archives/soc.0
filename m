@@ -1,99 +1,83 @@
-Return-Path: <shawnguo@kernel.org>
+Return-Path: <vkoul@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB5CC77B7A
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 13:36:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2949CC77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 14:09:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C955AC4339C; Tue, 16 May 2023 13:36:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A265CC433D2;
-	Tue, 16 May 2023 13:36:33 +0000 (UTC)
+	id E0475C433A1; Tue, 16 May 2023 14:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E11C433D2;
+	Tue, 16 May 2023 14:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684244196;
-	bh=XHu+zsYXNh8Fqxd1I5RCFgLVKWxmy519UEt9PAr5P4k=;
-	h=Date:From:List-Id:To:Cc:Subject:From;
-	b=sI+Rxz/a1QOKfq0DJQXYBCXAjSVzwAYAUaFJGZBpUNXQgNvleod1sOYhlgoJJnHh3
-	 KB8gd+jiNG6xVRoLY+3Mv5JWeMCw6mS3HNBM3KtHaumci3LPGY6IhLtGZSN2yXiSQw
-	 6Aze2tCXUhdy+2tlgVuA4siSquw4Bkznm4SN91b/BNPf5+iBtz/AEj/YIe2BBQNZaC
-	 zAPHgUNEKPGtUbFKmxc+4ny94El9VVIf1MAnKsWmeEIqmo2hDhpqhv8JHd3nbTd9rE
-	 /pOw0da8riX+JF9dwY0h/LhsdUxAR2614cRVnvLHtBKhAI+ejQvTqhfyaL/SC8LC7R
-	 RK06IWlLFOZPg==
-Date: Tue, 16 May 2023 21:36:25 +0800
-From: Shawn Guo <shawnguo@kernel.org>
+	s=k20201202; t=1684246179;
+	bh=0RSHeuFCD2oceb9abj/1/8VS0htG2UkEmX0KLrYlQGA=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=WgLNzi4CU+Iq84e2g5cZY6+HiU6CyPB94Oz3EvRBXv4tOH/3oxGe1j8azfWR9Zn47
+	 Uk6rLEKIpr0aJe0BBSPYMjpjckPvIEqrxFYnrW3XRdHGkxskbUpxK/AHdGPAew1H7r
+	 CT486piuqu85p/iVrPXTrruMDSPwjpjWQ9tJMHCNJuhgO8MEtojLhilZf0XeffFUos
+	 2kOzWmuFUlHm/QiZcS1YCk5VrlyfRjqDsb+psp0fR5hYuD9AIBx0YyyeU4yekab4IZ
+	 JfEuWrJgtCfmLtChATdNRn3kN8d+ouGK9E1TAF8hhqfauDa2ixDArvPFNLaJZTQbz1
+	 MyIgTv2rUQrBw==
+Date: Tue, 16 May 2023 19:39:36 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-	Li Yang <leoyang.li@nxp.com>, kernel@pengutronix.de,
-	linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX fixes for 6.4
-Message-ID: <20230516133625.GI767028@dragon>
+Cc: Artur Weber <aweber.kernel@gmail.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	Russell King <linux@armlinux.org.uk>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Kukjin Kim <kgene@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v3 08/13] Revert "phy: Remove SOC_EXYNOS4212 dep. from
+ PHY_EXYNOS4X12_USB"
+Message-ID: <ZGOOoGIlbqlmo/2Q@matsya>
+References: <20230501195525.6268-1-aweber.kernel@gmail.com>
+ <20230501195525.6268-9-aweber.kernel@gmail.com>
+ <193f3489-4937-6d4a-2466-a67d335ac37c@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <193f3489-4937-6d4a-2466-a67d335ac37c@linaro.org>
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On 09-05-23, 19:42, Krzysztof Kozlowski wrote:
+> On 01/05/2023 21:55, Artur Weber wrote:
+> > Support for the Exynos4212 SoC was originally dropped as there were
+> > no boards using it. We will be adding a device that uses it, so add
+> > it back.
+> > 
+> > This reverts commit fee7e1d50c6e6da1d99035181ba5a5c88f5bb526.
+> 
+> Subject:
+> phy: Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+Right a revert patch is patch which shall follow the sematics
+> 
+> I assume this will go via phy tree. If not, let me know.
 
-are available in the Git repository at:
+Applied after fixing the title
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.4
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> Best regards,
+> Krzysztof
 
-for you to fetch changes up to 0f554e37dad416f445cd3ec5935f5aec1b0e7ba5:
-
-  arm64: dts: imx8: fix USB 3.0 Gadget Failure in QM & QXPB0 at super speed (2023-05-16 20:43:48 +0800)
-
-----------------------------------------------------------------
-i.MX fixes for 6.4:
-
-- A couple of i.MX8MN/P video clock changes from Adam Ford to fix issue
-  with clock re-parenting.
-- Add missing pvcie-supply regulator for imx6qdl-mba6 board.
-- A series of colibri-imx8x board fixes on pin configuration.
-- Set and limit the mode for PMIC bucks for imx6ull-dhcor board to fix
-  stability problems.
-- A couple of changes from Frank Li to correct cdns,usb3 bindings
-  cdns,on-chip-buff-size property and fix USB 3.0 gadget failure on
-  i.MX8QM & QXPB0.
-- Add a required PHY deassert delay for imx8mn-var-som board to fix PHY
-  detection failure.
-
-----------------------------------------------------------------
-Adam Ford (2):
-      arm64: dts: imx8mn: Fix video clock parents
-      arm64: dts: imx8mp: Fix video clock parents
-
-Alexander Stein (1):
-      ARM: dts: imx6qdl-mba6: Add missing pvcie-supply regulator
-
-Andrejs Cainikovs (1):
-      arm64: dts: colibri-imx8x: delete adc1 and dsp
-
-Christoph Niedermaier (1):
-      ARM: dts: imx6ull-dhcor: Set and limit the mode for PMIC buck 1, 2 and 3
-
-Emanuele Ghidoli (3):
-      arm64: dts: colibri-imx8x: fix eval board pin configuration
-      arm64: dts: colibri-imx8x: move pinctrl property from SoM to eval board
-      arm64: dts: colibri-imx8x: fix iris pinctrl configuration
-
-Frank Li (2):
-      dt-binding: cdns,usb3: Fix cdns,on-chip-buff-size type
-      arm64: dts: imx8: fix USB 3.0 Gadget Failure in QM & QXPB0 at super speed
-
-Hugo Villeneuve (1):
-      arm64: dts: imx8mn-var-som: fix PHY detection bug by adding deassert delay
-
- .../devicetree/bindings/usb/cdns,usb3.yaml         |  2 +-
- arch/arm/boot/dts/imx6qdl-mba6.dtsi                |  1 +
- arch/arm/boot/dts/imx6ull-dhcor-som.dtsi           |  7 ++++++
- arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi    |  1 +
- arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi  |  8 ++++++-
- arch/arm64/boot/dts/freescale/imx8mn.dtsi          | 28 ++++++++++++----------
- arch/arm64/boot/dts/freescale/imx8mp.dtsi          | 25 +++++++------------
- .../boot/dts/freescale/imx8x-colibri-eval-v3.dtsi  |  6 +++++
- .../boot/dts/freescale/imx8x-colibri-iris.dtsi     |  3 +--
- arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi   | 14 ++++++-----
- 10 files changed, 56 insertions(+), 39 deletions(-)
+-- 
+~Vinod
