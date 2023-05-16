@@ -1,98 +1,153 @@
-Return-Path: <arnd@kernel.org>
+Return-Path: <SRS0=yJ9S=BF=bgdev.pl=brgl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F1F7C77B7A
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 174BDC77B75
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:41:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E75BDC433D2; Tue, 16 May 2023 15:33:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BC3C433A7;
-	Tue, 16 May 2023 15:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251185;
-	bh=C4SQH88o4X8B0aZDjwE/ytf02UfVOzvqYZUgEam+Yak=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q/8wxST6e4Z+JZ+RhzY/zoHGngrClR10FXgLYUTQhzQPnn6BqbNnHSWPBclX/ijHr
-	 MPlKyvyjHyavoBTrerlvk7AhR1ZSyLUVOeV8I5JzsggGk4lk6aj4AgzHZGLTkB0uAU
-	 Igz8wNgGKfKTwxXOt5FYTmPd4IW/ilWnVFQXk8sw1EoFI6b0VdZTiOjdLUzvmLCANw
-	 hbrml1KqP8PM1Lvpzxe5JzNmgrEuMaixcAUAe+upaDoq1++2N21SbAmoDO961KedR7
-	 uLaQsXgNa/8BZOgdLjOG95NljNNx3DrW7m2f/N8MvvzWEhaPbGq8OUP16LiA/H4SMq
-	 vHc1T58kI5phw==
-From: Arnd Bergmann <arnd@kernel.org>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Russell King <linux@armlinux.org.uk>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Andre Przywara <andre.przywara@arm.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 13/13] ARM: versatile: mark mmc_status() static
-Date: Tue, 16 May 2023 17:31:09 +0200
-Message-Id: <20230516153109.514251-14-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
-References: <20230516153109.514251-1-arnd@kernel.org>
+	id E5DD7C433A4; Tue, 16 May 2023 15:41:32 +0000 (UTC)
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C942EC433D2
+	for <soc@kernel.org>; Tue, 16 May 2023 15:41:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C942EC433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-44fa6454576so5055032e0c.0
+        for <soc@kernel.org>; Tue, 16 May 2023 08:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684251690; x=1686843690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dUlgGwi/Bid+V+vNq0ihjnvnFHGXCmk1OrWz555v4NM=;
+        b=PwfMKsdb+yRpZ4onFvCLkAE93SmlnNm0Ta3+o6TB28KIbmR8tK1ZYoO5t9fa4TfPDk
+         lw9jaDL9fSmEFurrwzHmqYRCZPO8h/K8PRgP03l8Rpkpy/9kOa4cFt8n8j/IGa4PjN5e
+         xe06l6ToYOPFrMKxW5ChRmmbw1TPJSTuq+KM+CMWNiIY1fnlHEq2AdRLU0uXN/ihPxLl
+         D4LDqU8lNz6pSLUwB9xkU6A2/8AVlFvNoTVW4QYLQKPr6NwqWVxkKiNB3QSdLhGbe7dD
+         zgCFO+ccPHibN/JBS4R/XtUiJFNonfUTYhe+mKZxY061UdbpsdpRUasBFCuuRG8NRtaP
+         d4Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684251690; x=1686843690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dUlgGwi/Bid+V+vNq0ihjnvnFHGXCmk1OrWz555v4NM=;
+        b=cd+trsEy1dS6mmLeFU5whkqTsikXby0+cRkw2wPJ7rXSlKJEv7M0JNPV/YPM/alCgG
+         TMuHm7rNppBudZgad0wJhpoNKjnyG3KiN+3itXM/z1/gkH+b85OTR0YOJ05NaCNJf+kG
+         8oxadwN1x/6gyvg3bvJBhp46KNsOyQ4Ln04khB2xFrzT1bgqSZfd8xEb191QEDzlVEeO
+         chGSs0OlbBn5NU3/8eCqMQ0WeYQ6IQXh37UffbJwMb4+Zi9Cy9a1je8L5lF7NrhYND33
+         jNeQuLywO73UsT4OyFFbtXtKiUBDbxk9GRqMPzffyUccnOaSlZgJ/btcohNp+mNU+9R2
+         uH3g==
+X-Gm-Message-State: AC+VfDys3YWh+hlQvcLCWzwo11eRDDw09TKQCD+lsa2WUXYtarvgREov
+	HDmq98YNs7LDFDRtdKtPn+R/sLq61fWvo7ZJKjNNSA==
+X-Google-Smtp-Source: ACHHUZ7geFgnpKprltmekDwePERwLI1/NGr2YZczOVKccWMobKpDNL54KOiEZyFYlCUv/sA4Wmnqgjfv0BdhoMFOVIs=
+X-Received: by 2002:a1f:bd47:0:b0:44f:cc25:2007 with SMTP id
+ n68-20020a1fbd47000000b0044fcc252007mr12901502vkf.11.1684251690642; Tue, 16
+ May 2023 08:41:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230516153109.514251-1-arnd@kernel.org> <20230516153109.514251-2-arnd@kernel.org>
+In-Reply-To: <20230516153109.514251-2-arnd@kernel.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 16 May 2023 17:41:19 +0200
+Message-ID: <CAMRc=MdHC=PPs2f3XXpRF5705553dXgVaVpN1kbRzypoeuOpRQ@mail.gmail.com>
+Subject: Re: [PATCH 01/13] ARM: davinci: fix davinci_cpufreq_init() declaration
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, 
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Andre Przywara <andre.przywara@arm.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Vladimir Zapolskiy <vz@mleia.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+	Gregory Clement <gregory.clement@bootlin.com>, Daniel Mack <daniel@zonque.org>, 
+	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+	Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 16, 2023 at 5:31=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The davinci_cpufreq_init() declaration is only seen by its caller
+> but not the definition:
+>
+> drivers/cpufreq/davinci-cpufreq.c:153:12: error: no previous prototype fo=
+r 'davinci_cpufreq_init'
+>
+> Move it into the platform_data header that is already used an
+> interface between the two places.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-davinci/common.c                | 1 +
+>  arch/arm/mach-davinci/common.h                | 6 ------
+>  include/linux/platform_data/davinci-cpufreq.h | 6 ++++++
+>  3 files changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/arm/mach-davinci/common.c b/arch/arm/mach-davinci/commo=
+n.c
+> index c1ce6b2a8d48..7bc7018688de 100644
+> --- a/arch/arm/mach-davinci/common.c
+> +++ b/arch/arm/mach-davinci/common.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/etherdevice.h>
+>  #include <linux/davinci_emac.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/platform_data/davinci-cpufreq.h>
+>
+>  #include <asm/tlb.h>
+>  #include <asm/mach/map.h>
+> diff --git a/arch/arm/mach-davinci/common.h b/arch/arm/mach-davinci/commo=
+n.h
+> index b2a96cdf88da..010ba1df27b3 100644
+> --- a/arch/arm/mach-davinci/common.h
+> +++ b/arch/arm/mach-davinci/common.h
+> @@ -55,12 +55,6 @@ extern void davinci_common_init(const struct davinci_s=
+oc_info *soc_info);
+>  extern void davinci_init_ide(void);
+>  void davinci_init_late(void);
+>
+> -#ifdef CONFIG_CPU_FREQ
+> -int davinci_cpufreq_init(void);
+> -#else
+> -static inline int davinci_cpufreq_init(void) { return 0; }
+> -#endif
+> -
+>  #ifdef CONFIG_SUSPEND
+>  int davinci_pm_init(void);
+>  #else
+> diff --git a/include/linux/platform_data/davinci-cpufreq.h b/include/linu=
+x/platform_data/davinci-cpufreq.h
+> index bc208c64e3d7..1ef91c36f609 100644
+> --- a/include/linux/platform_data/davinci-cpufreq.h
+> +++ b/include/linux/platform_data/davinci-cpufreq.h
+> @@ -16,4 +16,10 @@ struct davinci_cpufreq_config {
+>         int (*init)(void);
+>  };
+>
+> +#ifdef CONFIG_CPU_FREQ
+> +int davinci_cpufreq_init(void);
+> +#else
+> +static inline int davinci_cpufreq_init(void) { return 0; }
+> +#endif
+> +
+>  #endif /* _MACH_DAVINCI_CPUFREQ_H */
+> --
+> 2.39.2
+>
 
-mmc_status() is only used in the file it is defined in, and
-no longer has an 'extern' declaration:
-
-arch/arm/mach-versatile/versatile.c:56:14: error: no previous prototype for 'mmc_status'
-
-Fixes: 16956fed35fe ("ARM: versatile: switch to DT only booting and remove legacy code")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/mach-versatile/versatile.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/mach-versatile/versatile.c b/arch/arm/mach-versatile/versatile.c
-index 02ba68abe533..7ef03d0c224d 100644
---- a/arch/arm/mach-versatile/versatile.c
-+++ b/arch/arm/mach-versatile/versatile.c
-@@ -53,7 +53,7 @@
- 
- static void __iomem *versatile_sys_base;
- 
--unsigned int mmc_status(struct device *dev)
-+static unsigned int mmc_status(struct device *dev)
- {
- 	struct amba_device *adev = container_of(dev, struct amba_device, dev);
- 	u32 mask;
--- 
-2.39.2
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
