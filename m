@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E82C77B7F
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:31:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CEC8C77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:31:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6A480C433EF; Tue, 16 May 2023 15:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224C9C433D2;
-	Tue, 16 May 2023 15:31:41 +0000 (UTC)
+	id 0E511C433D2; Tue, 16 May 2023 15:31:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB97C4339B;
+	Tue, 16 May 2023 15:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251109;
-	bh=BIagkEY4mLvGqj4tPqjkB1cb/gqev1UThavPZEGdG5M=;
+	s=k20201202; t=1684251117;
+	bh=w4lHecQFJ3ZINP3Hc7+YhHQezZE2AOKlOI1bwVTKIBg=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hGyYeFqlE/uEmWvEwVxHREbGHmJvhAvqdVTAkN1iXDNQRc5fpQRVIFrMHuNw+27Dp
-	 vmTVi3Ldc35LGpEStLxFP/6zP8YV+sQdd3NOgRs6j3Mm45+rLnBGdE2CIGpoJoOjRb
-	 TuxluRCdiplaJCG1GaKE27GXjJxP+l5nROu+qXP0xFBXP2USW89qRMbk19lJFm24yh
-	 BAhAQ/3d2DxsxTtUya+ndT98c62mUeJP5AugjbAWfLoVdMc8sHgmxDnUzF52b855BU
-	 qpYgomV0TLXapsX2O9OM4VL6lYzqnw/+3NSb71xu3zhdFtNsLCngDN5FAZT4RuZwAK
-	 E+PoHTJXfLsxg==
+	b=RQDSyMJnvfCmcikGVq/JcSp3iv74yOgo5tXTfilU+bVA8a2P+ZY9hu6ZzoD6eHEbn
+	 ONnZK6g+LjqmQVemTraCdw+lXaaQHL1YcDe8Vm9IVr4ALIXXMdK7y1KYcR68lSsRtx
+	 vCZ3emzEsNpJvz6y2V/Vo7j3lq37rOlbqRSuS0sirTuBtycZaO7ssZixsCQqe9MOc3
+	 g1cxzYhfbd84IrhpJIYucYcWAzT++8R2Snq/KU6vDUNpkbket/PCkfVhIM7FkAntqd
+	 L9yt/v8nAVk8exjrfYckjxLnnNj7e9+uWs7DEHpeoTGSjRvpN3pD+dGmQUf4OMFw6e
+	 DZFR9KRdd5PKA==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -58,9 +58,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-omap@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH 03/13] ARM: highbank: add missing include
-Date: Tue, 16 May 2023 17:30:59 +0200
-Message-Id: <20230516153109.514251-4-arnd@kernel.org>
+Subject: [PATCH 04/13] ARM: imx: add missing include
+Date: Tue, 16 May 2023 17:31:00 +0200
+Message-Id: <20230516153109.514251-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
 References: <20230516153109.514251-1-arnd@kernel.org>
@@ -69,29 +69,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-highbank_pm_init() is declared in core.h this is not included in the
-file that defines it.
+imx25_pm_init() is declared in common.h but this is not included
+before its definition:
 
-arch/arm/mach-highbank/pm.c:43:13: error: no previous prototype for 'highbank_pm_init'
+arch/arm/mach-imx/pm-imx25.c:31:13: error: no previous prototype for 'imx25_pm_init'
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-highbank/pm.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/mach-imx/pm-imx25.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-highbank/pm.c b/arch/arm/mach-highbank/pm.c
-index 561941baeda9..3fdbdb83113b 100644
---- a/arch/arm/mach-highbank/pm.c
-+++ b/arch/arm/mach-highbank/pm.c
-@@ -12,6 +12,8 @@
+diff --git a/arch/arm/mach-imx/pm-imx25.c b/arch/arm/mach-imx/pm-imx25.c
+index f253e5019465..0c574e8607fd 100644
+--- a/arch/arm/mach-imx/pm-imx25.c
++++ b/arch/arm/mach-imx/pm-imx25.c
+@@ -6,6 +6,7 @@
+ #include <linux/kernel.h>
+ #include <linux/suspend.h>
+ #include <linux/io.h>
++#include "common.h"
  
- #include <uapi/linux/psci.h>
- 
-+#include "core.h"
-+
- #define HIGHBANK_SUSPEND_PARAM \
- 	((0 << PSCI_0_2_POWER_STATE_ID_SHIFT) | \
- 	 (1 << PSCI_0_2_POWER_STATE_AFFL_SHIFT) | \
+ static int imx25_suspend_enter(suspend_state_t state)
+ {
 -- 
 2.39.2
 
