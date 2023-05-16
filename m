@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69716C77B7A
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2011C77B7A
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:32:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4BBC1C433D2; Tue, 16 May 2023 15:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136AAC4339B;
-	Tue, 16 May 2023 15:32:04 +0000 (UTC)
+	id D7D18C4339C; Tue, 16 May 2023 15:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8001C433EF;
+	Tue, 16 May 2023 15:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251132;
-	bh=Lif0fPFnMA+RVd7k+dq/VZD68IuDTY92OD9g1tXQ54A=;
+	s=k20201202; t=1684251139;
+	bh=dDRQbj/KbMQidLzt89wdLCnqDQHFvR8G70nf6jL+1Jo=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ASVc7pRCEvgwvGP60q+d+Xrx1QFUzr9N2Pm9i7uUwMw7hudmAR8i+hVaZF3Jzw1nU
-	 rJOg+dT5ocHqbf4B4khzmAlpOEyIMB7EIk63umwG8/A27VTgLvNN0HEocz6MKqvSY6
-	 oE300R8yaflSxMPW/1GiTnEve0Y8tKXbsx6GbY3eoeSnv2GUq0YQ+q4D1rcoXr9YhM
-	 HDZPAOgWmnRZ1ktr2Bxx3wK5F8Md3HJAFt1MN/ZmVOphPVsHWeIQ77eP/3gSh9ZD/M
-	 jcU4v5S45zBUkKu7CkBG0FMOo7zxSes0BcOX6UCEG/WrdoE/VSDKwZjozIVjp8YgKE
-	 lghSKYQVriOxw==
+	b=q9aWL79Ak+LPTHCFymDaK/bTJEoBzpQ0TDN2miU15QI6phT666vjvqi8ICCUY3oS/
+	 NMl7bOlEwi7SJIX8/rOgfjl8cZE/X4pbqIqqsaWNgWT7yMU4MO5rlHIwCKIg7qjLgY
+	 5SBUGfW/4uAScd7GyBlrwutWporaGKZsnYZkwuWXU9hrUF3B7sHW0HfMxMKCx/pSTa
+	 QlJpi91NxL0Ifip2A0KnQXDLBAlzJyRJQK4+MTfaRPm3mnB0yalBAQ08R6Lj7BenQG
+	 vLrGvTlVtznA5Tdi3Rbaw/I8Xk8McclPS3975cBayCcQ6gbjECgH3NwbuydwMtXynP
+	 dfoheysl/A6kQ==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -58,9 +58,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-omap@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH 06/13] ARM: lpc32xx: add missing include
-Date: Tue, 16 May 2023 17:31:02 +0200
-Message-Id: <20230516153109.514251-7-arnd@kernel.org>
+Subject: [PATCH 07/13] ARM: omap1: add missing include
+Date: Tue, 16 May 2023 17:31:03 +0200
+Message-Id: <20230516153109.514251-8-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
 References: <20230516153109.514251-1-arnd@kernel.org>
@@ -69,28 +69,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-lpc32xx_loopback_set() is defined in linux/soc/nxp/lpc32xx-misc.h but
-this is not included before the function definition.
+The omap_serial_wakeup_init() declaration is not visible where it is
+defined, so make sure "common.h" is included here, avoiding:
 
-arch/arm/mach-lpc32xx/serial.c:63:6: error: no previous prototype for 'lpc32xx_loopback_set'
+arch/arm/mach-omap1/serial.c:221:12: error: no previous prototype for 'omap_serial_wakeup_init' [-Werror=missing-prototypes]
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-lpc32xx/serial.c | 1 +
+ arch/arm/mach-omap1/serial.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/mach-lpc32xx/serial.c b/arch/arm/mach-lpc32xx/serial.c
-index 3e765c4bf986..3b1203db81b2 100644
---- a/arch/arm/mach-lpc32xx/serial.c
-+++ b/arch/arm/mach-lpc32xx/serial.c
-@@ -15,6 +15,7 @@
- #include <linux/serial_8250.h>
- #include <linux/clk.h>
- #include <linux/io.h>
-+#include <linux/soc/nxp/lpc32xx-misc.h>
+diff --git a/arch/arm/mach-omap1/serial.c b/arch/arm/mach-omap1/serial.c
+index 96f59110d649..f25b94c86aec 100644
+--- a/arch/arm/mach-omap1/serial.c
++++ b/arch/arm/mach-omap1/serial.c
+@@ -19,6 +19,7 @@
  
- #include "lpc32xx.h"
- #include "common.h"
+ #include <asm/mach-types.h>
+ 
++#include "common.h"
+ #include "serial.h"
+ #include "mux.h"
+ #include "pm.h"
 -- 
 2.39.2
 
