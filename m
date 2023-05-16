@@ -1,92 +1,63 @@
-Return-Path: <SRS0=eoc3=BF=lunn.ch=andrew@kernel.org>
+Return-Path: <arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7188DC77B7F
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 16:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D9AEC77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 20:12:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 54734C4339B; Tue, 16 May 2023 16:18:13 +0000 (UTC)
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0F572C433EF;
-	Tue, 16 May 2023 16:18:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F572C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=k6pE6LQLvDW5mSH6Et4dw3uMNf89kWok94/55zOHmm4=; b=xXVTQL07bowUpiYYnlQODjugpM
-	Wt/UYIQMdDgOVSrZPFnfejnxjYV63jlK0V+xrwBZZf92YrV4jMBs2RRF3zD8B+eR5xHYzmGOmmpEh
-	mGmoadVPnz7tRi9UWKFeNpmirHXWvrSSgY1EQaHbD3SPpTc5Wo/3vNyWC84YT9qAu+Nk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1pyxMr-00D2Xp-ET; Tue, 16 May 2023 18:17:41 +0200
-Date: Tue, 16 May 2023 18:17:41 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Arnd Bergmann <arnd@kernel.org>
+	id 5E06BC433EF; Tue, 16 May 2023 20:12:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26894C433D2;
+	Tue, 16 May 2023 20:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1684267965;
+	bh=uDoxf4j57uTIWh7dDHvDavID5kz+BSfrqY1OSQfPaoc=;
+	h=From:To:List-Id:Cc:Subject:Date:From;
+	b=ax2CHu24CXSLzv2nNIoEOchbjl8miggdXazvAJ6tZRFGss70pYtR3p7T1d2o8LqOW
+	 q72QzBP6ojBoPnuZFle/TRou9ZtkHSWLFoGHV8/Y9HZvgkM0SLMeC51+7vmCT0nbPU
+	 YcF1mFnw/iTKMFVSp44A5XqcBa8hQuSjbmf473AY1Eroxc3qhUbpKDsP8dpUDIwGnH
+	 Dg0vW0qhjxBNhyFzstcUxggaHg5di98pM/rq2TrBH9eGXOEk4Js4J4DhRvJgeW1fqv
+	 Bufx4vqMHvPs5Uz4OyxuInICflYzJwwuRwxRgmmqXD1qvRmejrcd0r7WCho0aaEXTN
+	 kbBV5M+QMr1bw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Robin Murphy <robin.murphy@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Russell King <linux@armlinux.org.uk>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Andre Przywara <andre.przywara@arm.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 09/13] ARM: orion5x: fix d2net gpio initialization
-Message-ID: <3ddd6e7d-510e-4f2f-b21d-4e7eb1b75920@lunn.ch>
-References: <20230516153109.514251-1-arnd@kernel.org>
- <20230516153109.514251-10-arnd@kernel.org>
+Cc: soc@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] arm-cci: add cci_enable_port_for_self prototype
+Date: Tue, 16 May 2023 22:12:12 +0200
+Message-Id: <20230516201218.556437-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516153109.514251-10-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 16, 2023 at 05:31:05PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The DT version of this board has a custom file with the gpio
-> device. However, it does nothing because the d2net_init()
-> has no caller or prototype:
-> 
-> arch/arm/mach-orion5x/board-d2net.c:101:13: error: no previous prototype for 'd2net_init'
-> 
-> Call it from the board-dt file as intended.
-> 
-> Fixes: 94b0bd366e36 ("ARM: orion5x: convert d2net to Device Tree")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+The cci_enable_port_for_self() is called from assembler, so
+add the prototype only to shut up the W=1 warning:
 
-    Andrew
+drivers/bus/arm-cci.c:298:25: error: no previous prototype for 'cci_enable_port_for_self' [-Werror=missing-prototypes]
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/linux/arm-cci.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/linux/arm-cci.h b/include/linux/arm-cci.h
+index d0e44201d855..7f7a576267bc 100644
+--- a/include/linux/arm-cci.h
++++ b/include/linux/arm-cci.h
+@@ -43,6 +43,8 @@ static inline int __cci_control_port_by_index(u32 port, bool enable)
+ }
+ #endif
+ 
++void cci_enable_port_for_self(void);
++
+ #define cci_disable_port_by_device(dev) \
+ 	__cci_control_port_by_device(dev, false)
+ #define cci_enable_port_by_device(dev) \
+-- 
+2.39.2
+
