@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92F5AC77B7A
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77A22C77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:32:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7F014C4339C; Tue, 16 May 2023 15:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E920C4339B;
-	Tue, 16 May 2023 15:32:20 +0000 (UTC)
+	id 5FBA8C433D2; Tue, 16 May 2023 15:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A2BC433EF;
+	Tue, 16 May 2023 15:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251147;
-	bh=dvQdqL3zWm7vO4AUHY3E39PwDsm+dTszcVCJpk1xl0g=;
+	s=k20201202; t=1684251155;
+	bh=DrqAX+1UhPNTYpc/1d0D3nvDlt1nvYJqyMlOg0NqDNY=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LLy1+d+/ZCw6Wb4qr5DYAXio7HcbcAKuFJxjrWjq7tmqqOy9SdHdHp0evNa02cqjd
-	 WGOgkub2eKH9G8sWfcYvsLCLqejYnItvRYzgP0jpk+D1QijzHW1X7cJHNJF43tRq0V
-	 QZ1MdGAE4ryPpIKvCe57NOmzILA9xzp6R5NA8ROPOfASOKgmZRBHBXHbYnngDmV6MZ
-	 ub/526cr9ReXuNlkxkjh8EUaV/zL60LKlbQjiN30juWlUtlO65+PII73MHoC8c1SbK
-	 XykoHq4KxQdKkw1bENapWueD8wdcB+oNVBX8Hv/EN0vOLG9ceY3BH5ZCefmu5J/Ryn
-	 i3xnd7ykEn6kA==
+	b=tn4bT2n56+ohbh8dxl7/RdZwx7SCsqHB2ZcSWJQXTBOVcKLmRxc9SrHDhHSq/drKi
+	 kglo46WZ2JIwmfJZ+JDYZUAcqYYGUU0M8ANaekCIepNN2vwjHPtNu+gPLEJMYriEDR
+	 kcJOwZrxUedGV3ZTczsqETUqFu1bTlnXsJfqxlRyonKUJKpWdYKCZmioM81KkZ/9g5
+	 esLrBbkZzPkF6KpMFtGdkcup2dvd7XiwGpuQo1YvBBwaxKFzW+E+HxR08wyfmH1Gj9
+	 qk3VkeUmHTpr9/isE/FwAePtr2YOI/ghZuGBjJDt9K79f+RWKiZdmWH5lwssqF/jQO
+	 r9Uz3T7rDMN4A==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -57,10 +57,11 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-kernel@vger.kernel.org,
 	linux-omap@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 08/13] ARM: omap2: fix missing tick_broadcast() prototype
-Date: Tue, 16 May 2023 17:31:04 +0200
-Message-Id: <20230516153109.514251-9-arnd@kernel.org>
+	linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH 09/13] ARM: orion5x: fix d2net gpio initialization
+Date: Tue, 16 May 2023 17:31:05 +0200
+Message-Id: <20230516153109.514251-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
 References: <20230516153109.514251-1-arnd@kernel.org>
@@ -69,32 +70,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-omap2 contains a hack to define tick_broadcast() on non-SMP
-configurations in place of the normal SMP definition. This one
-causes a warning because of a missing prototype:
+The DT version of this board has a custom file with the gpio
+device. However, it does nothing because the d2net_init()
+has no caller or prototype:
 
-arch/arm/mach-omap2/board-generic.c:44:6: error: no previous prototype for 'tick_broadcast'
+arch/arm/mach-orion5x/board-d2net.c:101:13: error: no previous prototype for 'd2net_init'
 
-Make sure to always include the header with the declaration.
+Call it from the board-dt file as intended.
 
-Fixes: d86ad463d670 ("ARM: OMAP2+: Fix regression for using local timer on non-SMP SoCs")
+Fixes: 94b0bd366e36 ("ARM: orion5x: convert d2net to Device Tree")
+Cc: stable@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-omap2/board-generic.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/mach-orion5x/board-dt.c | 3 +++
+ arch/arm/mach-orion5x/common.h   | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/arch/arm/mach-omap2/board-generic.c b/arch/arm/mach-omap2/board-generic.c
-index 853409b341a3..7aa41841edd4 100644
---- a/arch/arm/mach-omap2/board-generic.c
-+++ b/arch/arm/mach-omap2/board-generic.c
-@@ -13,6 +13,7 @@
- #include <linux/of_platform.h>
- #include <linux/irqdomain.h>
- #include <linux/clocksource.h>
-+#include <linux/clockchips.h>
+diff --git a/arch/arm/mach-orion5x/board-dt.c b/arch/arm/mach-orion5x/board-dt.c
+index e3736ffc8347..be47492c6640 100644
+--- a/arch/arm/mach-orion5x/board-dt.c
++++ b/arch/arm/mach-orion5x/board-dt.c
+@@ -60,6 +60,9 @@ static void __init orion5x_dt_init(void)
+ 	if (of_machine_is_compatible("maxtor,shared-storage-2"))
+ 		mss2_init();
  
- #include <asm/setup.h>
- #include <asm/mach/arch.h>
++	if (of_machine_is_compatible("lacie,d2-network"))
++		d2net_init();
++
+ 	of_platform_default_populate(NULL, orion5x_auxdata_lookup, NULL);
+ }
+ 
+diff --git a/arch/arm/mach-orion5x/common.h b/arch/arm/mach-orion5x/common.h
+index f2e0577bf50f..8df70e23aa82 100644
+--- a/arch/arm/mach-orion5x/common.h
++++ b/arch/arm/mach-orion5x/common.h
+@@ -73,6 +73,12 @@ extern void mss2_init(void);
+ static inline void mss2_init(void) {}
+ #endif
+ 
++#ifdef CONFIG_MACH_D2NET_DT
++void d2net_init(void);
++#else
++static inline void d2net_init(void) {}
++#endif
++
+ /*****************************************************************************
+  * Helpers to access Orion registers
+  ****************************************************************************/
 -- 
 2.39.2
 
