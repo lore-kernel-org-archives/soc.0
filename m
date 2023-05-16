@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC375C7EE25
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F1F7C77B7A
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:33:06 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5D4DFC4339B; Tue, 16 May 2023 15:32:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195B7C433EF;
-	Tue, 16 May 2023 15:32:50 +0000 (UTC)
+	id E75BDC433D2; Tue, 16 May 2023 15:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BC3C433A7;
+	Tue, 16 May 2023 15:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251178;
-	bh=MGpebGFHpc0L0zdL2phujQLcz6KDg8DvNfOSVA71ez0=;
+	s=k20201202; t=1684251185;
+	bh=C4SQH88o4X8B0aZDjwE/ytf02UfVOzvqYZUgEam+Yak=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kzTKyvbDHAlfcLnPPaRMDeJ1hnPyGJz8z1y3Gpyjl65t0vC1nlvdBnhxOXYF6fYDU
-	 PjuJMTzXldiYVj/uRaBM9Y0DUCTZYqnFQsVOPvMlHKTmncVBpCHyCJNspeS9L7jliO
-	 bF6kEpzE3EpNr0Qs6XPI4CeAFlRn7ccL84622jT4SgrRkDfJvhE3cuyd1j/y8EPSuZ
-	 jfJ62SJK4gWwCtg/RGzS4GsVBBybpK+F0r3PwnHhumCDqzuy0Lpi9umqPcaNZIwAp/
-	 rXk2HpVteoZePx2HWX3hNEtHwBhR3K/2jAIYze7Mi6D/lRW4swaCprb+DoU5D4284p
-	 paJw0hRnIBfLw==
+	b=Q/8wxST6e4Z+JZ+RhzY/zoHGngrClR10FXgLYUTQhzQPnn6BqbNnHSWPBclX/ijHr
+	 MPlKyvyjHyavoBTrerlvk7AhR1ZSyLUVOeV8I5JzsggGk4lk6aj4AgzHZGLTkB0uAU
+	 Igz8wNgGKfKTwxXOt5FYTmPd4IW/ilWnVFQXk8sw1EoFI6b0VdZTiOjdLUzvmLCANw
+	 hbrml1KqP8PM1Lvpzxe5JzNmgrEuMaixcAUAe+upaDoq1++2N21SbAmoDO961KedR7
+	 uLaQsXgNa/8BZOgdLjOG95NljNNx3DrW7m2f/N8MvvzWEhaPbGq8OUP16LiA/H4SMq
+	 vHc1T58kI5phw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -58,9 +58,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-omap@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH 12/13] ARM: spear: include "pl080.h" for pl080_get_signal() prototype
-Date: Tue, 16 May 2023 17:31:08 +0200
-Message-Id: <20230516153109.514251-13-arnd@kernel.org>
+Subject: [PATCH 13/13] ARM: versatile: mark mmc_status() static
+Date: Tue, 16 May 2023 17:31:09 +0200
+Message-Id: <20230516153109.514251-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
 References: <20230516153109.514251-1-arnd@kernel.org>
@@ -69,30 +69,30 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-pl080_get_signal() and pl080_put_signal() are declared in pl080.h
-and defined in pl080.c, but this file is missing an include
-of the header:
+mmc_status() is only used in the file it is defined in, and
+no longer has an 'extern' declaration:
 
-arch/arm/mach-spear/pl080.c:27:5: error: no previous prototype for 'pl080_get_signal'
-arch/arm/mach-spear/pl080.c:62:6: error: no previous prototype for 'pl080_put_signal'
+arch/arm/mach-versatile/versatile.c:56:14: error: no previous prototype for 'mmc_status'
 
+Fixes: 16956fed35fe ("ARM: versatile: switch to DT only booting and remove legacy code")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-spear/pl080.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/mach-versatile/versatile.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-spear/pl080.c b/arch/arm/mach-spear/pl080.c
-index d6b8627d2544..47243a8153d0 100644
---- a/arch/arm/mach-spear/pl080.c
-+++ b/arch/arm/mach-spear/pl080.c
-@@ -16,6 +16,7 @@
- #include <linux/spinlock_types.h>
- #include "spear.h"
- #include "misc_regs.h"
-+#include "pl080.h"
+diff --git a/arch/arm/mach-versatile/versatile.c b/arch/arm/mach-versatile/versatile.c
+index 02ba68abe533..7ef03d0c224d 100644
+--- a/arch/arm/mach-versatile/versatile.c
++++ b/arch/arm/mach-versatile/versatile.c
+@@ -53,7 +53,7 @@
  
- static spinlock_t lock = __SPIN_LOCK_UNLOCKED(x);
+ static void __iomem *versatile_sys_base;
  
+-unsigned int mmc_status(struct device *dev)
++static unsigned int mmc_status(struct device *dev)
+ {
+ 	struct amba_device *adev = container_of(dev, struct amba_device, dev);
+ 	u32 mask;
 -- 
 2.39.2
 
