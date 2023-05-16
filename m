@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 484D6C77B7A
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:31:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD2E2C77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:31:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 13921C433EF; Tue, 16 May 2023 15:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0DEC433A4;
-	Tue, 16 May 2023 15:31:26 +0000 (UTC)
+	id B031BC4339E; Tue, 16 May 2023 15:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0F7C433A1;
+	Tue, 16 May 2023 15:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251094;
-	bh=jSt93p6QqRHSfhQI7J2hfgJYmouz2AQLVyfURXXqX8s=;
+	s=k20201202; t=1684251101;
+	bh=5Ob/x9sOKHvBpaTIVr8ONLXcGD9gziQ+4a3wROsf1bo=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AwomvbT8Pm+fhyGJwGnUOYhunar1+rxNklkbAupsLWDpLmLjStG8P95r0LW0TZ7Sn
-	 rUt0ea8SiWMVTZAiu4cMYZbbqvqcv2e5DTPOk7p1oIHvJ+Ao0RHe6GVdZ5zJRnAPVd
-	 qy/Nqrez73CiiRfbe0msHl+n84nCTm1LvattabEfx9Ed1CbYinH+MqmnQ4vCIsy8bD
-	 HpHPXOv+AbSGsNFushKq1hOP4kIPFJLROWGA9jOdBsyH0QKtmHcFeRb2CsRWAEBNXZ
-	 gM8iD9hn1D5PUXY3XhTLS9pkXmC1Abn+RFpluaep373/1+vT3WOghrCF2mY9s3EJiv
-	 NZdHPN/tuvyTQ==
+	b=IHuGfAQPh5Mp3dhNT5Mx+S1PqR+LqyyBSG/XwwaAU1dg7uPcXFP4wrgEgfb7+3tRD
+	 Al1R8pbUX8n0AIA49EifWICbGjD4TVnacdED78FsO21z07NX7lplDIex3HpB7DoEIG
+	 nzs5RpgzCNbDrY8qXkqgExO47LYddcAEG4uMK7z4yeiPvpjU7bnm/VidZMuDjb8tR4
+	 GE/AwNA6Yg/k8Qhx9L+/904Q7sbtnmXCYiJ3UVtetXOiStDf9fwVsBgKP3Z4lW5UOI
+	 VEsps2PwUSvko3ALHGI5qUe/VZ8TuR1rtWWwwGzFg+fOBYsdZK6cyIpeHhRTuHJ4tp
+	 R2E6+v/AzUnHw==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -58,9 +58,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-omap@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH 01/13] ARM: davinci: fix davinci_cpufreq_init() declaration
-Date: Tue, 16 May 2023 17:30:57 +0200
-Message-Id: <20230516153109.514251-2-arnd@kernel.org>
+Subject: [PATCH 02/13] ARM: ep93xx: fix missing-prototype warnings
+Date: Tue, 16 May 2023 17:30:58 +0200
+Message-Id: <20230516153109.514251-3-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
 References: <20230516153109.514251-1-arnd@kernel.org>
@@ -69,65 +69,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The davinci_cpufreq_init() declaration is only seen by its caller
-but not the definition:
+ep93xx_clocksource_read() is only called from the file it is declared in,
+while ep93xx_timer_init() is declared in a header that is not included here.
 
-drivers/cpufreq/davinci-cpufreq.c:153:12: error: no previous prototype for 'davinci_cpufreq_init'
+arch/arm/mach-ep93xx/timer-ep93xx.c:120:13: error: no previous prototype for 'ep93xx_timer_init'
+arch/arm/mach-ep93xx/timer-ep93xx.c:63:5: error: no previous prototype for 'ep93xx_clocksource_read'
 
-Move it into the platform_data header that is already used an
-interface between the two places.
-
+Fixes: 000bc17817bf ("ARM: ep93xx: switch to GENERIC_CLOCKEVENTS")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-davinci/common.c                | 1 +
- arch/arm/mach-davinci/common.h                | 6 ------
- include/linux/platform_data/davinci-cpufreq.h | 6 ++++++
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ arch/arm/mach-ep93xx/timer-ep93xx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-davinci/common.c b/arch/arm/mach-davinci/common.c
-index c1ce6b2a8d48..7bc7018688de 100644
---- a/arch/arm/mach-davinci/common.c
-+++ b/arch/arm/mach-davinci/common.c
-@@ -11,6 +11,7 @@
- #include <linux/etherdevice.h>
- #include <linux/davinci_emac.h>
- #include <linux/dma-mapping.h>
-+#include <linux/platform_data/davinci-cpufreq.h>
+diff --git a/arch/arm/mach-ep93xx/timer-ep93xx.c b/arch/arm/mach-ep93xx/timer-ep93xx.c
+index dd4b164d1831..a9efa7bc2fa1 100644
+--- a/arch/arm/mach-ep93xx/timer-ep93xx.c
++++ b/arch/arm/mach-ep93xx/timer-ep93xx.c
+@@ -9,6 +9,7 @@
+ #include <linux/io.h>
+ #include <asm/mach/time.h>
+ #include "soc.h"
++#include "platform.h"
  
- #include <asm/tlb.h>
- #include <asm/mach/map.h>
-diff --git a/arch/arm/mach-davinci/common.h b/arch/arm/mach-davinci/common.h
-index b2a96cdf88da..010ba1df27b3 100644
---- a/arch/arm/mach-davinci/common.h
-+++ b/arch/arm/mach-davinci/common.h
-@@ -55,12 +55,6 @@ extern void davinci_common_init(const struct davinci_soc_info *soc_info);
- extern void davinci_init_ide(void);
- void davinci_init_late(void);
+ /*************************************************************************
+  * Timer handling for EP93xx
+@@ -60,7 +61,7 @@ static u64 notrace ep93xx_read_sched_clock(void)
+ 	return ret;
+ }
  
--#ifdef CONFIG_CPU_FREQ
--int davinci_cpufreq_init(void);
--#else
--static inline int davinci_cpufreq_init(void) { return 0; }
--#endif
--
- #ifdef CONFIG_SUSPEND
- int davinci_pm_init(void);
- #else
-diff --git a/include/linux/platform_data/davinci-cpufreq.h b/include/linux/platform_data/davinci-cpufreq.h
-index bc208c64e3d7..1ef91c36f609 100644
---- a/include/linux/platform_data/davinci-cpufreq.h
-+++ b/include/linux/platform_data/davinci-cpufreq.h
-@@ -16,4 +16,10 @@ struct davinci_cpufreq_config {
- 	int (*init)(void);
- };
+-u64 ep93xx_clocksource_read(struct clocksource *c)
++static u64 ep93xx_clocksource_read(struct clocksource *c)
+ {
+ 	u64 ret;
  
-+#ifdef CONFIG_CPU_FREQ
-+int davinci_cpufreq_init(void);
-+#else
-+static inline int davinci_cpufreq_init(void) { return 0; }
-+#endif
-+
- #endif /* _MACH_DAVINCI_CPUFREQ_H */
 -- 
 2.39.2
 
