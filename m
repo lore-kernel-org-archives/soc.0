@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD2E2C77B7F
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E82C77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 15:31:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B031BC4339E; Tue, 16 May 2023 15:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0F7C433A1;
-	Tue, 16 May 2023 15:31:34 +0000 (UTC)
+	id 6A480C433EF; Tue, 16 May 2023 15:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224C9C433D2;
+	Tue, 16 May 2023 15:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684251101;
-	bh=5Ob/x9sOKHvBpaTIVr8ONLXcGD9gziQ+4a3wROsf1bo=;
+	s=k20201202; t=1684251109;
+	bh=BIagkEY4mLvGqj4tPqjkB1cb/gqev1UThavPZEGdG5M=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IHuGfAQPh5Mp3dhNT5Mx+S1PqR+LqyyBSG/XwwaAU1dg7uPcXFP4wrgEgfb7+3tRD
-	 Al1R8pbUX8n0AIA49EifWICbGjD4TVnacdED78FsO21z07NX7lplDIex3HpB7DoEIG
-	 nzs5RpgzCNbDrY8qXkqgExO47LYddcAEG4uMK7z4yeiPvpjU7bnm/VidZMuDjb8tR4
-	 GE/AwNA6Yg/k8Qhx9L+/904Q7sbtnmXCYiJ3UVtetXOiStDf9fwVsBgKP3Z4lW5UOI
-	 VEsps2PwUSvko3ALHGI5qUe/VZ8TuR1rtWWwwGzFg+fOBYsdZK6cyIpeHhRTuHJ4tp
-	 R2E6+v/AzUnHw==
+	b=hGyYeFqlE/uEmWvEwVxHREbGHmJvhAvqdVTAkN1iXDNQRc5fpQRVIFrMHuNw+27Dp
+	 vmTVi3Ldc35LGpEStLxFP/6zP8YV+sQdd3NOgRs6j3Mm45+rLnBGdE2CIGpoJoOjRb
+	 TuxluRCdiplaJCG1GaKE27GXjJxP+l5nROu+qXP0xFBXP2USW89qRMbk19lJFm24yh
+	 BAhAQ/3d2DxsxTtUya+ndT98c62mUeJP5AugjbAWfLoVdMc8sHgmxDnUzF52b855BU
+	 qpYgomV0TLXapsX2O9OM4VL6lYzqnw/+3NSb71xu3zhdFtNsLCngDN5FAZT4RuZwAK
+	 E+PoHTJXfLsxg==
 From: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
@@ -58,9 +58,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-omap@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH 02/13] ARM: ep93xx: fix missing-prototype warnings
-Date: Tue, 16 May 2023 17:30:58 +0200
-Message-Id: <20230516153109.514251-3-arnd@kernel.org>
+Subject: [PATCH 03/13] ARM: highbank: add missing include
+Date: Tue, 16 May 2023 17:30:59 +0200
+Message-Id: <20230516153109.514251-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
 References: <20230516153109.514251-1-arnd@kernel.org>
@@ -69,39 +69,29 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-ep93xx_clocksource_read() is only called from the file it is declared in,
-while ep93xx_timer_init() is declared in a header that is not included here.
+highbank_pm_init() is declared in core.h this is not included in the
+file that defines it.
 
-arch/arm/mach-ep93xx/timer-ep93xx.c:120:13: error: no previous prototype for 'ep93xx_timer_init'
-arch/arm/mach-ep93xx/timer-ep93xx.c:63:5: error: no previous prototype for 'ep93xx_clocksource_read'
+arch/arm/mach-highbank/pm.c:43:13: error: no previous prototype for 'highbank_pm_init'
 
-Fixes: 000bc17817bf ("ARM: ep93xx: switch to GENERIC_CLOCKEVENTS")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-ep93xx/timer-ep93xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/mach-highbank/pm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/mach-ep93xx/timer-ep93xx.c b/arch/arm/mach-ep93xx/timer-ep93xx.c
-index dd4b164d1831..a9efa7bc2fa1 100644
---- a/arch/arm/mach-ep93xx/timer-ep93xx.c
-+++ b/arch/arm/mach-ep93xx/timer-ep93xx.c
-@@ -9,6 +9,7 @@
- #include <linux/io.h>
- #include <asm/mach/time.h>
- #include "soc.h"
-+#include "platform.h"
+diff --git a/arch/arm/mach-highbank/pm.c b/arch/arm/mach-highbank/pm.c
+index 561941baeda9..3fdbdb83113b 100644
+--- a/arch/arm/mach-highbank/pm.c
++++ b/arch/arm/mach-highbank/pm.c
+@@ -12,6 +12,8 @@
  
- /*************************************************************************
-  * Timer handling for EP93xx
-@@ -60,7 +61,7 @@ static u64 notrace ep93xx_read_sched_clock(void)
- 	return ret;
- }
+ #include <uapi/linux/psci.h>
  
--u64 ep93xx_clocksource_read(struct clocksource *c)
-+static u64 ep93xx_clocksource_read(struct clocksource *c)
- {
- 	u64 ret;
- 
++#include "core.h"
++
+ #define HIGHBANK_SUSPEND_PARAM \
+ 	((0 << PSCI_0_2_POWER_STATE_ID_SHIFT) | \
+ 	 (1 << PSCI_0_2_POWER_STATE_AFFL_SHIFT) | \
 -- 
 2.39.2
 
