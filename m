@@ -1,128 +1,247 @@
-Return-Path: <SRS0=P+GZ=BF=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Ssp7=BF=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61A91C77B7F
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 10:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65C8C77B7F
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 12:29:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 29C31C4339B; Tue, 16 May 2023 10:08:45 +0000 (UTC)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0138EC433D2
-	for <soc@kernel.org>; Tue, 16 May 2023 10:08:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0138EC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96aadfb19d7so877978566b.2
-        for <soc@kernel.org>; Tue, 16 May 2023 03:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684231721; x=1686823721;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m6yW3uiUU8worGAhCWTnKjolqfsTZfDHxQcGNaSZOHo=;
-        b=sYbwL8NbcnUYOCmm3ua2K3PkwzXy2DvCrp/FiM1YYTZHJnS8MZ9MycZXzvPIH52y8K
-         nx16349Gw5DCWd4wBnLWC5Y8MdO9Y4kq8gB8BJN4eEdU8Jr1HuHasO9Pbo9/wyo3JXnL
-         mRD7nI2xPMPT48q3tiLj9YPcWj74NRWeZ0ts/t9B6c+AJgsxc+uHTabZ57oDUr2t+5Pt
-         rkF2FYG4brCI76Yhjmkyumc1Ng8NtaLbtpeGolmcAcQwFQoi70V/TtQYoBdDBucgIqMM
-         hePl/rbvIfVEcFSGBDQckzVh9PMMsab89cJEQ0zng/U4CHMN/uWu2vzJ7nvqzKQRBPZZ
-         A2HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684231721; x=1686823721;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m6yW3uiUU8worGAhCWTnKjolqfsTZfDHxQcGNaSZOHo=;
-        b=AXPNAUcxeBnjYm7nqWWxcQHZPbX3L8tiqozmbJ1AdBw1CYB5IlHyfw3vEKZO3N0oxu
-         R7034EH8s+Ra9OE82HTjO0wG1qsVM1IIHXHZhFsTY93+h0dPgZ67zXRKTkYFdFGIpeaL
-         XOMDUwOffRlAQzEd9RZIQZcSVb/n6CpMl3181AT1xI4JAoh0ODxgSd+/Zpwfh5QvdxQJ
-         KsmlSSKbr0SWQN902vJKB235XxE06PmeZYNfT6DwirhMwF4JcNwOkTV/b/YDghZHgvQN
-         HVXQFkiSn0Ym7QAEm/UYXCY0+PHoEf0UbKogsJzs/Tkbcf+wfJt2n67vmCU4uVxED9yZ
-         /VcQ==
-X-Gm-Message-State: AC+VfDxT27fwgycYdfIb0L/C4m6WTMt/gAIzWxp1iDHjABr+VzYVztPx
-	w+i/H8T1ag/kueEJPY1ChpmHHg==
-X-Google-Smtp-Source: ACHHUZ7RsURJ0g0lVoK+1AjWAF9OygwrFW8U+HKJt4w9B64uqLEs6dlJ9LWo64bJ/UesMm7TFHjspA==
-X-Received: by 2002:a17:906:db08:b0:965:fa80:bf1 with SMTP id xj8-20020a170906db0800b00965fa800bf1mr34845143ejb.32.1684231721143;
-        Tue, 16 May 2023 03:08:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id jy17-20020a170907763100b00969dc13d0b1sm10311892ejc.43.2023.05.16.03.08.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 03:08:40 -0700 (PDT)
-Message-ID: <a3c625fc-2bc0-866f-bc60-f12e887fd900@linaro.org>
-Date: Tue, 16 May 2023 12:08:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1] Documentation/process: add soc maintainer handbook
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, "Conor.Dooley" <conor.dooley@microchip.com>
+	id 5EF11C433A0; Tue, 16 May 2023 12:29:40 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 3B072C433D2;
+	Tue, 16 May 2023 12:29:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3B072C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 544EF2F4;
+	Tue, 16 May 2023 05:30:21 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 336033F663;
+	Tue, 16 May 2023 05:29:34 -0700 (PDT)
+Date: Tue, 16 May 2023 13:29:31 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: "lihuisong (C)" <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Conor Dooley <conor@kernel.org>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Olof Johansson <olof@lixom.net>, Palmer Dabbelt <palmer@dabbelt.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org
-References: <20230515-geometry-olympics-b0556ff8a5f7@spud>
- <cf1c6b8c-8a3f-eca1-948f-e41946d4c34c@linaro.org>
- <20230516-grader-dejected-df65cdc584b3@wendy>
- <ea4bc471-9cac-4ef1-97aa-9cf71b60c785@app.fastmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ea4bc471-9cac-4ef1-97aa-9cf71b60c785@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+	liuyonglong@huawei.com, huangdaode@huawei.com,
+	linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Message-ID: <20230516122931.il4ai7fyxdo5gsff@bogus>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
+ <20230425103040.znv66k364ant6klq@bogus>
+ <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
+ <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+ <20230515130807.pdvx7bxwjkfdsmsr@bogus>
+ <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
 
-On 16/05/2023 11:16, Arnd Bergmann wrote:
-> On Tue, May 16, 2023, at 10:57, Conor Dooley wrote:
->> On Tue, May 16, 2023 at 10:31:19AM +0200, Krzysztof Kozlowski wrote:
->>> On 15/05/2023 21:20, Conor Dooley wrote:
->>
->>>> + - Defer the devicetree changes to a release after the binding and driver have
->>>> +   already been merged
->>>> +
->>>> + - Change the bindings in a shared immutable branch that is used as the base for
->>>> +   both the driver change and the devicetree changes
->>>
->>> The policy told to me some time ago was that no merges from driver
->>> branch or tree are allowed towards DTS branch, even if they come only
->>> with binding header change. There are exceptions for this, e.g. [1], but
->>> that would mean we need to express here rules for cross-tree merges.
->>
->> I've got away with having an immutable branch for dt-binding headers!
->> That said, Arnd did actually have a look at this (and suggested some
->> changes) before I sent it & did not cry fowl about this section. IIRC,
->> this is actually his wording, not mine.
-> 
-> Yes, I merge a lot of shared branches with dt-binding changes into the
-> soc/dt branch, and I wasn't aware of a policy against that, certainly did
-> not enforce it.
+On Tue, May 16, 2023 at 03:35:54PM +0800, lihuisong (C) wrote:
+>
+> =E5=9C=A8 2023/5/15 21:08, Sudeep Holla =E5=86=99=E9=81=93:
+> > On Thu, May 04, 2023 at 09:16:16PM +0800, lihuisong (C) wrote:
+> > > I'm tring to use CRS with GAS to report PCC channel ID and get other
+> > > informations driver need by address.
+> > OK you had pcc-chan-id pcc-type and device-flags in the DSD style bindi=
+ngs
+> > to begin with. I haven't understood device-flags here so can't comment =
+on
+> > that.
+>
+> We want to use the 'device-flags' to report some information by bit.
 
-Not as enforcement, but as your (or Olof's) preferred approach. See for
-example:
+Please give more details, until then NACK for the idea.
 
-https://lore.kernel.org/all/CAOesGMhfrWSvLtDtGRWBTJiAoeSwzGgsdUTm26j1mpoVu0ghDg@mail.gmail.com/
+> Currently, this driver requests PCC channel and use type2 to communicate
+> with firmware.
 
-https://lore.kernel.org/all/CAOesGMi98hJnUYVLkgcbBpXsi-Xe6QPh-gtLaPWPO-EW+KcGuQ@mail.gmail.com/
+OKAY...
 
-I understand the "preferred approach" as part of discussions on the
-patches, when the entire patchset can still be re-arranged or changed.
-Not as strict policy applied on the actual git pull request from
-sub-arch maintainer.
+> But, if some platform support type3 and PCC Operation Region, driver can
+> choice this method to communicate with firmware.
+> So firmware and driver have to use this flag to make compatibility.
+>
 
-If we want to keep such recommendation, let's embed it into maintainer
-handbook, so we will not have to dig the emails.
+I would rather add such things to the spec if it is any sort of limitation
+with the current specification.
 
-> 
-> I generally object to changes touching drivers/* or anything else besides
-> arch/*/boot/dts, Documentation/devicetree/bindings/ and include/dt-bindings
-> in the dt branches, but I have made expections in the past when there
-> was a particular important reason.
+> >
+> > > I found a way to obtain the generic register information according to
+> > > "Referencing the PCC address space" in ACPI spec.
+> > > And driver also get the PCC generic register information successfully.
+> > >
+> > Can you elaborate ? I assume by that you must be able to get pcc-chan-id
+>
+> Yes=EF=BC=8Cdriver can get pcc-chan-id by below register.
+>
+> Register (PCC, RegisterBitWidth, RegisterBitOffset, RegisterAddress, Acce=
+ssSize)
+>
 
-Best regards,
-Krzysztof
+Good to know.
 
+> > right ? You must not need pcc-type as the pcc mailbox driver must handle
+> > the type for you. If not, we may need to fix or add any missing support.
+> Yes, PCC driver doesn't support it currently. And aother patch [1] we've
+> been talking about does it.
+> If it is applied to kernel, we can drop this pcc-type here.
+>
+> [1] https://patchwork.kernel.org/project/linux-acpi/patch/20230423110335.=
+2679-2-lihuisong@huawei.com/
+
+OK then we are good, no need for pcc-type then ?
+
+> >
+> > > But I don't know how to set and use the address in PCC register.
+> > It must be same as what you would have specified in you new bindings
+> > under "pcc-chan-id". I am confused as you say you were able to get the
+> > PCC generic register information successfully but you still claim you
+> > don't know how to set or use the address.
+> My confusion about this address is mentioned below.
+
+OK
+
+> > > Where should this address come from?
+> > > It seems that ACPI spec is not very detailed about this.
+> > > Do you have any suggestions?
+> > >
+> > I am afraid, I don't have any as I am failing to understand the exact i=
+ssue
+> > you are facing.
+> >
+> > Let me try to ask the question explicity here:
+> >
+> > If you are just referring to just the <RegisterAddress,> in
+> >
+> > Register (PCC, RegisterBitWidth, RegisterBitOffset, RegisterAddress, Ac=
+cessSize)
+> Yeah, this is what I'm using.
+> >
+> > then,
+> >
+> > RegisterAddress is usually the offset in the comms address associated w=
+ith
+> Communication subspace in share memory of PCC subspace?
+> > the PCC subspace ID specified in AccessSize. Yes the use of AccessSize =
+for
+> > the PCC subspace ID is bit confusing though.
+> >
+> > You can either list all the registers with _CRS individually or the dri=
+ver
+> List all the registers as following way?
+> Name (_CRS, ResourceTemplate ()=C2=A0 // _CRS: Current Resource Settings
+> {
+> =C2=A0=C2=A0 =C2=A0QWordMemory (ResourceProducer, PosDecode, MinFixed, Ma=
+xFixed,
+> NonCacheable, ReadWrite,
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 0x0000000000000000, // Granularity
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 0x0000000098190000, // Range Minimum
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 0x000000009819FFFF, // Range Maximum
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 0x0000000000000000, // Translation =
+Offset
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 0x0000000000010000, // Length
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 ,, , AddressRangeMemory, TypeStatic)
+> })
+
+Not sure if you can use QWordMemory here TBH.
+
+> > can just use the PCC subspace ID in AccessSize and keep RegisterAddress=
+ =3D 0
+> > but access individual offset based on its own knowledge. I haven't seen=
+ the
+> Following words come from ACPI spec.
+> -->
+> As an example, the following resource template refers to the feld occupyi=
+ng
+> bits 8 through 15 at address 0x30 in PCC
+> subspace 9:
+> ResourceTemplate()
+> {
+> Register (
+> =C2=A0=C2=A0=C2=A0 PCC, //AddressSpaceKeyword
+> =C2=A0=C2=A0=C2=A0 8, //RegisterBitWidth
+> =C2=A0=C2=A0=C2=A0 8, //RegisterBitOffset
+> =C2=A0=C2=A0=C2=A0=06pcc 0x30, //RegisterAddress
+> =C2=A0=C2=A0=C2=A0 9 //AccessSize (subspace ID)
+> =C2=A0=C2=A0=C2=A0 )
+> }
+>
+> If the width of the address is 32bit, set RegisterAddress to 0,
+> RegisterBitOffset to 0 and set RegisterBitWidth to 64 here.
+> Driver can access to the ((void __iomem *)pcc_comm_addr + 0x8 + 0) and
+> ((void __iomem *)pcc_comm_addr + 0x8 + 4) address=EF=BC=8Cright?
+> (This virtual address =3D pcc mapped address + header size + offset withi=
+n PCC
+> subspace.)
+
+Yes that's my understanding. I remember seeing the driver is just fetching
+pcc-chan-id using DSD style key-value pair, which means you don't need
+any other info other than the PCC subspace/channel ID, just have address
+as 0.
+
+Also I see the driver uses type for just rejecting the type 3 PCCT. The
+question is will the driver probe and run on a platform with type 3 PCCT ?
+If so what is the problem running on such a platform. I see it is useless
+check in the driver and can be dropped. Also the comment above enum
+HCCS_DEV_FLAGS_INTR_B is confusing and  so is the way flags is used.
+
+> > full driver yet but I assuming that's how you would have used if you we=
+nt with
+> > your DSD pcc-chan-id proposal.
+> >
+> > > On the other hand, we think that System Memory space + method can also
+> > > achieve above goal. What do you think of that?
+> > Again I don't understand what you mean by that.
+> Sorry, here is what I want to say.
+> -->
+> OperationRegion (CCS0, SystemMemory, 0x00000002081000CC, 0x04)
+> Field (CCS0, DWordAcc, NoLock, Preserve)
+> {
+> =C2=A0=C2=A0 =C2=A0HAU1,=C2=A0=C2=A0 32
+> }
+> OperationRegion (CCS1, SystemMemory, 0x0000000201070410, 0x04)
+> Field (CCS1, DWordAcc, NoLock, Preserve)
+> {
+> =C2=A0=C2=A0=C2=A0 HCGE,=C2=A0=C2=A0 32
+> }
+> Method (_DSM, 2, Serialized)=C2=A0 // _DSM: Device-Specific Method
+> {
+> =C2=A0=C2=A0 =C2=A0If ((Arg0 =3D=3D ToUUID ("b06b81ab-0134-4a45-9b0c-4834=
+47b95fa7")))
+> =C2=A0=C2=A0 =C2=A0{
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 If ((Arg1 =3D=3D One))
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 {
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Return (HAU1)
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 }
+>
+> =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 Return (HCGE)
+> =C2=A0=C2=A0 =C2=A0}
+> }
+>
+> Driver can call _DSM method to get some information, such as pcc_chan_id =
+and
+> device_flags.
+
+Big fat NACK for _DSM for the above purpose, please stop abusing _DSM or _D=
+SD
+for such information which can be obtained with the existing _CRS.
+
+--
+Regards,
+Sudeep
