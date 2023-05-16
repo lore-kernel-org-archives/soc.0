@@ -1,192 +1,120 @@
-Return-Path: <SRS0=B+39=BF=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=3VY7=BF=maquefel.me=nikita.shubin@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D06C7EE24
-	for <soc@archiver.kernel.org>; Tue, 16 May 2023 07:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57479C77B75
+	for <soc@archiver.kernel.org>; Tue, 16 May 2023 07:38:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3A577C433A1; Tue, 16 May 2023 07:36:05 +0000 (UTC)
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	id 19A19C433AC; Tue, 16 May 2023 07:38:09 +0000 (UTC)
+Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [178.154.239.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 79A35C433EF;
-	Tue, 16 May 2023 07:35:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 79A35C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QL7Fn2fNmzTkhh;
-	Tue, 16 May 2023 15:31:09 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 15:35:55 +0800
-Message-ID: <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
-Date: Tue, 16 May 2023 15:35:54 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Sudeep Holla <sudeep.holla@arm.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 1AFF8C433D2;
+	Tue, 16 May 2023 07:38:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1AFF8C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=maquefel.me
+Received: from mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:2991:0:640:bb47:0])
+	by forward501b.mail.yandex.net (Yandex) with ESMTP id 6695D5F29E;
+	Tue, 16 May 2023 10:38:03 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rbVsqF6Wo4Y0-UkaxrYJI;
+	Tue, 16 May 2023 10:38:01 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1684222681;
+	bh=R3NyR73k7IhF7nI84HX4UghfXKGpid2SwwTSfXwtO70=;
+	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+	b=QotG58g6dFkLdzg/jCTCPqPNHWfIFJSnx9H8OHC12M2roLLuxVWKx6W2h25dkjVSe
+	 HRwtXoqfClom0cLuEY16ejoh6MbeEy+uPI8UAhwOs+j0NQ/gw1AVexLnYUBpraFKDp
+	 l0egQl1rEQANggrBncTSCi4j3ZinsQfxms2ylvX4=
+Authentication-Results: mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <4f81a96b826344f45d0994539e3b3fe94fe7eb50.camel@maquefel.me>
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: Florian Fainelli <f.fainelli@gmail.com>
 List-Id: <soc.lore.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Shawn Guo <shawnguo@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <soc@kernel.org>, <wanghuiqiang@huawei.com>,
-	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
-	<linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, <devicetree@vger.kernel.org>, Rob Herring
-	<robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
- <20230425103040.znv66k364ant6klq@bogus>
- <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
- <20230425131918.5tf5vot4h7jf54xk@bogus>
- <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
- <20230515130807.pdvx7bxwjkfdsmsr@bogus>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230515130807.pdvx7bxwjkfdsmsr@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+Cc: Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Jonathan =?ISO-8859-1?Q?Neusch=E4fer?=
+ <j.neuschaefer@gmx.net>, "Russell King (Oracle)"
+ <rmk+kernel@armlinux.org.uk>,  Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, Alessandro Zummo <a.zummo@towertech.it>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Arnd Bergmann <arnd@arndb.de>, Bartosz
+ Golaszewski <brgl@bgdev.pl>, Brian Norris <briannorris@chromium.org>,
+ Chuanhong Guo <gch981213@gmail.com>,  Conor Dooley
+ <conor.dooley@microchip.com>, Damien Le Moal <dlemoal@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Dmitry Torokhov
+ <dmitry.torokhov@gmail.com>,  Emil Renner Berthing <kernel@esmil.dk>, Eric
+ Dumazet <edumazet@google.com>, Guenter Roeck <linux@roeck-us.net>, Hartley
+ Sweeten <hsweeten@visionengravers.com>, Heiko Stuebner <heiko@sntech.de>,
+ Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>, Jakub Kicinski
+ <kuba@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Jean Delvare
+ <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Le Moal
+ <damien.lemoal@opensource.wdc.com>,  Liam Girdwood <lgirdwood@gmail.com>,
+ Liang Yang <liang.yang@amlogic.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Lukasz Majewski <lukma@denx.de>, Lv Ruyi
+ <lv.ruyi@zte.com.cn>, Mark Brown <broonie@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Miquel
+ Raynal <miquel.raynal@bootlin.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Nicolas Saenz Julienne
+ <nsaenz@kernel.org>, Olof Johansson <olof@lixom.net>, Paolo Abeni
+ <pabeni@redhat.com>, Qin Jian <qinjian@cqplus1.com>, Richard Weinberger
+ <richard@nod.at>, Rob Herring <robh+dt@kernel.org>, Robert Jarzmik
+ <robert.jarzmik@free.fr>,  Russell King <linux@armlinux.org.uk>, Sebastian
+ Reichel <sre@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,  Stephen
+ Boyd <sboyd@kernel.org>, Sumanth Korikkar <sumanthk@linux.ibm.com>, Sven
+ Peter <sven@svenpeter.dev>,  Takashi Iwai <tiwai@suse.com>, Thierry Reding
+ <thierry.reding@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,  Ulf
+ Hansson <ulf.hansson@linaro.org>, Vasily Gorbik <gor@linux.ibm.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Vinod Koul <vkoul@kernel.org>,
+ Walker Chen <walker.chen@starfivetech.com>, Wim Van Sebroeck
+ <wim@linux-watchdog.org>,  Yinbo Zhu <zhuyinbo@loongson.cn>,
+ alsa-devel@alsa-project.org, devicetree@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-ide@vger.kernel.org,  linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-mtd@lists.infradead.org,
+ linux-pm@vger.kernel.org,  linux-pwm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, netdev@vger.kernel.org, soc@kernel.org
+Date: Tue, 16 May 2023 13:37:54 +0300
+In-Reply-To: <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+	 <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
 
+Hello Florian!
 
-在 2023/5/15 21:08, Sudeep Holla 写道:
-> On Thu, May 04, 2023 at 09:16:16PM +0800, lihuisong (C) wrote:
->> I'm tring to use CRS with GAS to report PCC channel ID and get other
->> informations driver need by address.
-> OK you had pcc-chan-id pcc-type and device-flags in the DSD style bindings
-> to begin with. I haven't understood device-flags here so can't comment on
-> that.
+On Mon, 2023-05-15 at 20:47 -0700, Florian Fainelli wrote:
+>=20
+>=20
+> On 4/24/2023 5:34 AM, Nikita Shubin wrote:
+> > This series aims to convert ep93xx from platform to full device
+> > tree support.
+> >=20
+> > Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
+> >=20
+> > Thank you Linus and Arnd for your support, review and comments,
+> > sorry if i missed something -
+> > these series are quite big for me.
+> >=20
+> > Big thanks to Alexander Sverdlin for his testing, support, review,
+> > fixes and patches.
+>=20
+> If anyone is interested I still have a TS-7300 board [1] that is
+> fully=20
+> functional and could be sent out to a new home.
 
-We want to use the 'device-flags' to report some information by bit.
-Currently, this driver requests PCC channel and use type2 to communicate 
-with firmware.
-But, if some platform support type3 and PCC Operation Region, driver can 
-choice this method to communicate with firmware.
-So firmware and driver have to use this flag to make compatibility.
+Thank you kindly, i'll keep this in mind !
 
->
->> I found a way to obtain the generic register information according to
->> "Referencing the PCC address space" in ACPI spec.
->> And driver also get the PCC generic register information successfully.
->>
-> Can you elaborate ? I assume by that you must be able to get pcc-chan-id
+>=20
+> https://www.embeddedts.com/products/TS-7300
 
-Yes，driver can get pcc-chan-id by below register.
-
-Register (PCC, RegisterBitWidth, RegisterBitOffset, RegisterAddress, AccessSize)
-
-> right ? You must not need pcc-type as the pcc mailbox driver must handle
-> the type for you. If not, we may need to fix or add any missing support.
-Yes, PCC driver doesn't support it currently. And aother patch [1] we've 
-been talking about does it.
-If it is applied to kernel, we can drop this pcc-type here.
-
-[1] 
-https://patchwork.kernel.org/project/linux-acpi/patch/20230423110335.2679-2-lihuisong@huawei.com/
->
->> But I don't know how to set and use the address in PCC register.
-> It must be same as what you would have specified in you new bindings
-> under "pcc-chan-id". I am confused as you say you were able to get the
-> PCC generic register information successfully but you still claim you
-> don't know how to set or use the address.
-My confusion about this address is mentioned below.
->> Where should this address come from?
->> It seems that ACPI spec is not very detailed about this.
->> Do you have any suggestions?
->>
-> I am afraid, I don't have any as I am failing to understand the exact issue
-> you are facing.
->
-> Let me try to ask the question explicity here:
->
-> If you are just referring to just the <RegisterAddress,> in
->
-> Register (PCC, RegisterBitWidth, RegisterBitOffset, RegisterAddress, AccessSize)
-Yeah, this is what I'm using.
->
-> then,
->
-> RegisterAddress is usually the offset in the comms address associated with
-Communication subspace in share memory of PCC subspace?
-> the PCC subspace ID specified in AccessSize. Yes the use of AccessSize for
-> the PCC subspace ID is bit confusing though.
->
-> You can either list all the registers with _CRS individually or the driver
-List all the registers as following way?
-Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-{
-     QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, 
-NonCacheable, ReadWrite,
-         0x0000000000000000, // Granularity
-         0x0000000098190000, // Range Minimum
-         0x000000009819FFFF, // Range Maximum
-         0x0000000000000000, // Translation Offset
-         0x0000000000010000, // Length
-         ,, , AddressRangeMemory, TypeStatic)
-})
-> can just use the PCC subspace ID in AccessSize and keep RegisterAddress = 0
-> but access individual offset based on its own knowledge. I haven't seen the
-Following words come from ACPI spec.
--->
-As an example, the following resource template refers to the feld 
-occupying bits 8 through 15 at address 0x30 in PCC
-subspace 9:
-ResourceTemplate()
-{
-Register (
-     PCC, //AddressSpaceKeyword
-     8, //RegisterBitWidth
-     8, //RegisterBitOffset
-     0x30, //RegisterAddress
-     9 //AccessSize (subspace ID)
-     )
-}
-
-If the width of the address is 32bit, set RegisterAddress to 0, 
-RegisterBitOffset to 0 and set RegisterBitWidth to 64 here.
-Driver can access to the ((void __iomem *)pcc_comm_addr + 0x8 + 0) and 
-((void __iomem *)pcc_comm_addr + 0x8 + 4) address，right?
-(This virtual address = pcc mapped address + header size + offset within 
-PCC subspace.)
-> full driver yet but I assuming that's how you would have used if you went with
-> your DSD pcc-chan-id proposal.
->
->> On the other hand, we think that System Memory space + method can also
->> achieve above goal. What do you think of that?
-> Again I don't understand what you mean by that.
-Sorry, here is what I want to say.
--->
-OperationRegion (CCS0, SystemMemory, 0x00000002081000CC, 0x04)
-Field (CCS0, DWordAcc, NoLock, Preserve)
-{
-     HAU1,   32
-}
-OperationRegion (CCS1, SystemMemory, 0x0000000201070410, 0x04)
-Field (CCS1, DWordAcc, NoLock, Preserve)
-{
-     HCGE,   32
-}
-Method (_DSM, 2, Serialized)  // _DSM: Device-Specific Method
-{
-     If ((Arg0 == ToUUID ("b06b81ab-0134-4a45-9b0c-483447b95fa7")))
-     {
-         If ((Arg1 == One))
-         {
-             Return (HAU1)
-         }
-
-         Return (HCGE)
-     }
-}
-
-Driver can call _DSM method to get some information, such as pcc_chan_id 
-and device_flags.
->
