@@ -1,96 +1,155 @@
-Return-Path: <SRS0=2Cpl=BG=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=v0mk=BG=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E025C77B7A
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 11:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0530C77B75
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 13:13:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 4A274C433D2; Wed, 17 May 2023 11:35:38 +0000 (UTC)
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 805C6C433EF; Wed, 17 May 2023 13:13:08 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C7FD9C433EF;
-	Wed, 17 May 2023 11:35:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7FD9C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QLrXB2BPkz18LWR;
-	Wed, 17 May 2023 19:31:06 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 17 May 2023 19:35:25 +0800
-Message-ID: <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
-Date: Wed, 17 May 2023 19:35:25 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Sudeep Holla <sudeep.holla@arm.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id B1F74C4339B
+	for <soc@kernel.org>; Wed, 17 May 2023 13:13:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B1F74C4339B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96652cb7673so114851766b.0
+        for <soc@kernel.org>; Wed, 17 May 2023 06:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684329185; x=1686921185;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IkIVFj4R5Q+55a1je0LcDz57182aKaTQ7taUpc1g5Fw=;
+        b=wXQFPuEw70b2+bXUVsYgNP0/1Dn8YFk/Q/HjvBi9uDmSKbij6FIQWShVu5d16LMfTR
+         ErnCY1WVDNcWEuSWfRfW05nDGd4fVC9sw8Kf3unBB58rKWX23MCevz4V6tirWmIvjwUg
+         afpghlDIPJJZhdysxT3UAqXUj/G8Rd53QtIMpFpYDsjfJ7ZttFv2fFNx5QZM3xmddHRN
+         M+nS5u62yleBce4GjlQL/ry9wq9vdxEiUd4eMVgeBBOeBM/cmDzX0qiibPgtNolNfnU8
+         Ksn3TFnGNVjjnV3Zo48pq1cY4yvWZJqlcP8x5QwAA/T68RvjxYJyNd86gLjWNozW+WhW
+         LRog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684329185; x=1686921185;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IkIVFj4R5Q+55a1je0LcDz57182aKaTQ7taUpc1g5Fw=;
+        b=lucIDTcPtwKl1WEuF0T+KvM+teUInfRl1fiJhewTiOcegm8yIfbnsU84cx+XpesSuS
+         E13O5xX7wyOi3ZVKJJHRra842btVjlMMCyuAwO+72aSsJn2r4najfBMfLbxUZY14gI8j
+         9pKtmQWd5HbvXgQWS+bB1Wf1YB9JSilHT5HXX8UIQj6p/1Fd47vzxux5vgt6/CUV1qaz
+         2TZmsaTTFPlRWTGVWCu0igqnB72WsMzD5hRn5SHKkxJ0uMY+rSjn5r3OcFOH5XfdDLKj
+         9IirFcCeIyNEAHP0ZtOWmnnkjuah2E6QOovoZPYMpWTd30Fb/Aj6N3Guacy3PCN+Bxr8
+         dGbg==
+X-Gm-Message-State: AC+VfDzgD7oMiwZcdGlB9+tfQk8H+CR6w7ubQ5A9OjGHJb8d8b2GX/vy
+	IeMwQmr/bCKAb6AnmCPcB/8xwA==
+X-Google-Smtp-Source: ACHHUZ4VW+5Xqgt7SOM2d9kyGd2bMdASGdzmtGWMx6Czs6SkbiJzsQKBgir8aNyg+gNbGiHeMQVChw==
+X-Received: by 2002:a17:907:9488:b0:96a:a0fd:d43e with SMTP id dm8-20020a170907948800b0096aa0fdd43emr17519873ejc.49.1684329184900;
+        Wed, 17 May 2023 06:13:04 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b009534211cc97sm12291184ejc.159.2023.05.17.06.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 06:13:04 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Shawn Guo <shawnguo@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <soc@kernel.org>, <wanghuiqiang@huawei.com>,
-	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
-	<linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, <devicetree@vger.kernel.org>, Rob Herring
-	<robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230425103040.znv66k364ant6klq@bogus>
- <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
- <20230425131918.5tf5vot4h7jf54xk@bogus>
- <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
- <20230515130807.pdvx7bxwjkfdsmsr@bogus>
- <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
- <20230516122931.il4ai7fyxdo5gsff@bogus>
- <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
- <20230516143530.venhj4gax6stinah@bogus>
- <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
- <20230517093033.4jvwjxuoeic46a24@bogus>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230517093033.4jvwjxuoeic46a24@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Olof Johansson <olof@lixom.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	arm@kernel.org,
+	soc@kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Lars Povlsen <lars.povlsen@microchip.com>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com
+Subject: [GIT PULL 1/2] arm64: dts: cleanup and fixes for v6.5
+Date: Wed, 17 May 2023 15:12:54 +0200
+Message-Id: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+
+Hi,
+
+Few usual cleanups from me and few other fixes/cleanups from Michael
+and Robert. To clarify - I don't want to step on someone's toes, so
+me picking up other patches is rather exception. It's just sad when
+someone's work gets lost.
+
+There is ongoing discussion how to improve a bit Microchip ARM64 SparX-5 patch
+handling process, so the contributions won't get lost.
+
+Best regards,
+Krzysztof
 
 
-在 2023/5/17 17:30, Sudeep Holla 写道:
-> On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
->
-> [...]
->
->> No. I want to use this flag to make compability between different platforms.
->> This driver only use PCC OpRegion to access to the channel if platform
->> support use PCC OpRegion.
-> What do you mean by that ? It is not correct. If there is a PCC Opregion,
-> then you need to make it work with drivers/acpi/acpi_pcc.c
->
-> You need to have all the other details in the firmware(ASL). By looking
-> at the driver, it has no connection to PCC Opregion IMO unless I am missing
-> something.
-Driver just needs to call these APIs, such as acpi_evaluate_integer(), 
-if want to use PCC OpRegion.
-I know that. I have tested PCC OpRegion before.
-You've completely misunderstood what I said.😅
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-I mean that this driver plans to support both PCC and PCC OpRegion.
-For example,
-Platform A: this driver use PCC (as the current implementation)
-Platform B: this driver use PCC OpRegion (Currently, this patch does not 
-implement it, but it may be available in the future.)
-Note:
-This driver selects only one of them (PCC and PCC OpRegion) to 
-communicate with firmware on one platform.
-We use one bit in device-flags to know which one this driver will use.
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-I'm not sure if you can understand what I mean by saing that.
-If you're not confused about this now, can you reply to my last email 
-again?😁
->
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.5
+
+for you to fetch changes up to d5e64404e77c19ec5bd687b34a11eec0263f1aa8:
+
+  arm64: dts: sparx5: rename pinctrl nodes (2023-05-17 14:16:13 +0200)
+
+----------------------------------------------------------------
+Minor improvements in ARM64 DTS for v6.5
+
+Mostly minor improvements to fix dtbs_check warnings:
+1. mba6ulx: use non-deprecated property for GPIO keys wake-up,
+2. Add missing cache properties (APM, Amazon, HiSilicon, Realtek,
+   Synaptics, AllWinner, Microchip).
+
+Few older minor and major fixes which were waiting on mailing lists for
+longer time for Microchip SparX-5:
+1. Fix secondary CPU bring-up and crash when talking to PSCI on reference
+   boards (Robert Marko),
+2. Simplify CPU address-cells (Robert Marko),
+3. Align pinctrl node names with bindings (Michael Walle).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (8):
+      arm64: dts: mba6ulx: correct GPIO keys wakeup
+      arm64: dts: apm: add missing cache properties
+      arm64: dts: amazon: add missing cache properties
+      arm64: dts: hisilicon: add missing cache properties
+      arm64: dts: realtek: add missing cache properties
+      arm64: dts: synaptics: add missing cache properties
+      arm64: dts: allwinner: a64: add missing cache properties
+      arm64: dts: microchip: add missing cache properties
+
+Michael Walle (1):
+      arm64: dts: sparx5: rename pinctrl nodes
+
+Robert Marko (2):
+      arm64: dts: microchip: sparx5: do not use PSCI on reference boards
+      arm64: dts: microchip: sparx5: correct CPU address-cells
+
+ arch/arm/boot/dts/mba6ulx.dtsi                     |  2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      |  1 +
+ arch/arm64/boot/dts/amazon/alpine-v3.dtsi          |  4 ++++
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |  8 +++++++
+ arch/arm64/boot/dts/apm/apm-storm.dtsi             |  8 +++++++
+ arch/arm64/boot/dts/hisilicon/hi3660.dtsi          |  2 ++
+ arch/arm64/boot/dts/hisilicon/hi6220.dtsi          |  2 ++
+ arch/arm64/boot/dts/hisilicon/hip05.dtsi           |  4 ++++
+ arch/arm64/boot/dts/hisilicon/hip06.dtsi           |  4 ++++
+ arch/arm64/boot/dts/hisilicon/hip07.dtsi           | 16 +++++++++++++
+ arch/arm64/boot/dts/microchip/sparx5.dtsi          | 10 +++++----
+ .../boot/dts/microchip/sparx5_pcb134_board.dtsi    | 26 +++++++++++-----------
+ .../boot/dts/microchip/sparx5_pcb135_board.dtsi    | 10 ++++-----
+ .../boot/dts/microchip/sparx5_pcb_common.dtsi      | 12 ++++++++++
+ arch/arm64/boot/dts/realtek/rtd1293.dtsi           |  2 ++
+ arch/arm64/boot/dts/realtek/rtd1295.dtsi           |  2 ++
+ arch/arm64/boot/dts/realtek/rtd1296.dtsi           |  2 ++
+ arch/arm64/boot/dts/realtek/rtd1395.dtsi           |  2 ++
+ arch/arm64/boot/dts/realtek/rtd16xx.dtsi           |  4 ++++
+ arch/arm64/boot/dts/synaptics/berlin4ct.dtsi       |  2 ++
+ 20 files changed, 100 insertions(+), 23 deletions(-)
