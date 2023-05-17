@@ -4,20 +4,20 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31571C7EE2A
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 05:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A7BDC77B7D
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 05:58:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DB50AC4339B; Wed, 17 May 2023 05:58:44 +0000 (UTC)
+	id F217AC433A1; Wed, 17 May 2023 05:58:52 +0000 (UTC)
 Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 8436BC433D2;
-	Wed, 17 May 2023 05:58:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8436BC433D2
+	by smtp.kernel.org (Postfix) with ESMTP id 0C702C433EF;
+	Wed, 17 May 2023 05:58:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C702C433EF
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
 Received: from localhost (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTPS id 19262813D;
-	Wed, 17 May 2023 05:58:37 +0000 (UTC)
-Date: Wed, 17 May 2023 08:58:35 +0300
+	by muru.com (Postfix) with ESMTPS id 3DE4F8164;
+	Wed, 17 May 2023 05:58:51 +0000 (UTC)
+Date: Wed, 17 May 2023 08:58:50 +0300
 From: Tony Lindgren <tony@atomide.com>
 To: Aaro Koskinen <aaro.koskinen@iki.fi>
 List-Id: <soc.lore.kernel.org>
@@ -53,7 +53,7 @@ Cc: Arnd Bergmann <arnd@kernel.org>, soc@kernel.org,
 	linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
 	linux-usb@vger.kernel.org
 Subject: Re: [PATCH 07/13] ARM: omap1: add missing include
-Message-ID: <20230517055835.GK14287@atomide.com>
+Message-ID: <20230517055850.GL14287@atomide.com>
 References: <20230516153109.514251-1-arnd@kernel.org>
  <20230516153109.514251-8-arnd@kernel.org>
  <20230516231821.GC271152@darkstar.musicnaut.iki.fi>
