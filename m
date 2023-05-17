@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0530C77B75
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 13:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83812C7EE32
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 13:13:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 805C6C433EF; Wed, 17 May 2023 13:13:08 +0000 (UTC)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	id 6BD0AC433D2; Wed, 17 May 2023 13:13:09 +0000 (UTC)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B1F74C4339B
-	for <soc@kernel.org>; Wed, 17 May 2023 13:13:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B1F74C4339B
+	by smtp.kernel.org (Postfix) with ESMTPS id 31B41C43323
+	for <soc@kernel.org>; Wed, 17 May 2023 13:13:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31B41C43323
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96652cb7673so114851766b.0
-        for <soc@kernel.org>; Wed, 17 May 2023 06:13:06 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-510bcd2d6b8so6653922a12.0
+        for <soc@kernel.org>; Wed, 17 May 2023 06:13:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684329185; x=1686921185;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IkIVFj4R5Q+55a1je0LcDz57182aKaTQ7taUpc1g5Fw=;
-        b=wXQFPuEw70b2+bXUVsYgNP0/1Dn8YFk/Q/HjvBi9uDmSKbij6FIQWShVu5d16LMfTR
-         ErnCY1WVDNcWEuSWfRfW05nDGd4fVC9sw8Kf3unBB58rKWX23MCevz4V6tirWmIvjwUg
-         afpghlDIPJJZhdysxT3UAqXUj/G8Rd53QtIMpFpYDsjfJ7ZttFv2fFNx5QZM3xmddHRN
-         M+nS5u62yleBce4GjlQL/ry9wq9vdxEiUd4eMVgeBBOeBM/cmDzX0qiibPgtNolNfnU8
-         Ksn3TFnGNVjjnV3Zo48pq1cY4yvWZJqlcP8x5QwAA/T68RvjxYJyNd86gLjWNozW+WhW
-         LRog==
+        d=linaro.org; s=google; t=1684329186; x=1686921186;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RsCYEtDB1ffr+2Y+/vC2jddSRU/GNfdHR9H1LD49MZ4=;
+        b=AY4YtKtj0ujl9+Mmw+CN96C9qS1pl/EP9v0K0ELoQazLV651LI2GjmChiUhIn9r2bh
+         xeXqQ7sJ+WCpNmAkbF/6YEdSVcYfmd4qodUP7gpKPgdFLvMnYB/UO0H+iwNfBl4MC95G
+         Mvdm+rLhHfM7lKzFEQQU+sXSGNyWozdxEnKOiIuZZDLsZIo8GgVLUbGrrLGBvq2kDErf
+         oMVN90lZnHHJpP6NHBpoca10ZkD2n8Kx40bij1U3jH3g646VVOZSQBeQPNozefNIPv4H
+         V+ae/JgK7z4xmgoihVFr+QScA1c4i2uNL66UzChrtQO2FLWQzf3LBB2Tk7pS2WRBRcyy
+         5cYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684329185; x=1686921185;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IkIVFj4R5Q+55a1je0LcDz57182aKaTQ7taUpc1g5Fw=;
-        b=lucIDTcPtwKl1WEuF0T+KvM+teUInfRl1fiJhewTiOcegm8yIfbnsU84cx+XpesSuS
-         E13O5xX7wyOi3ZVKJJHRra842btVjlMMCyuAwO+72aSsJn2r4najfBMfLbxUZY14gI8j
-         9pKtmQWd5HbvXgQWS+bB1Wf1YB9JSilHT5HXX8UIQj6p/1Fd47vzxux5vgt6/CUV1qaz
-         2TZmsaTTFPlRWTGVWCu0igqnB72WsMzD5hRn5SHKkxJ0uMY+rSjn5r3OcFOH5XfdDLKj
-         9IirFcCeIyNEAHP0ZtOWmnnkjuah2E6QOovoZPYMpWTd30Fb/Aj6N3Guacy3PCN+Bxr8
-         dGbg==
-X-Gm-Message-State: AC+VfDzgD7oMiwZcdGlB9+tfQk8H+CR6w7ubQ5A9OjGHJb8d8b2GX/vy
-	IeMwQmr/bCKAb6AnmCPcB/8xwA==
-X-Google-Smtp-Source: ACHHUZ4VW+5Xqgt7SOM2d9kyGd2bMdASGdzmtGWMx6Czs6SkbiJzsQKBgir8aNyg+gNbGiHeMQVChw==
-X-Received: by 2002:a17:907:9488:b0:96a:a0fd:d43e with SMTP id dm8-20020a170907948800b0096aa0fdd43emr17519873ejc.49.1684329184900;
-        Wed, 17 May 2023 06:13:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684329186; x=1686921186;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RsCYEtDB1ffr+2Y+/vC2jddSRU/GNfdHR9H1LD49MZ4=;
+        b=PaXI9JAKIGSOBYAjy0kjoNariwZf7Oz7zdG4jeb7V0lFDmWRgand65yWzxobXt2R/L
+         K4T86jB0XDWOwTBTJ7lLpG5YIS3/0i25w1dhyJm9LC/MgUAlOGJTvFssC8EF3z8AKM7x
+         Hv/sd31DteukW6HpkuCM4MHm3NtwFSbAkdgxSq80pdLejIJs2H3ax/dwcR8VKL5YECjg
+         Y5D0iyIRvk8+mRRsR8yKrgpVZONysm6ua7UKBdTiunopN5Vm9bFaA5uEhon715lgQZu7
+         6aX4s+Ns9a7HJim4zmEqj5IAnzzTonZ0K3Xrml92J2RpuJQXZ+LLXUb3DXDyrUnRs68S
+         3e+g==
+X-Gm-Message-State: AC+VfDxO0jY2Yd4z9wQZez9rwNlHF84w6Se0jh5RPqBxtn/5iHVbO71K
+	JlhIQ8LxuxWYqs8WwGpR6r9RcQ==
+X-Google-Smtp-Source: ACHHUZ4KHT9X6WEz67mV7Zi3b4JfOl7XqzWOKK6QNiEjbdiMOUpttEUxIbNwfYMDn2EKItI3M03jZQ==
+X-Received: by 2002:a17:907:1621:b0:968:892b:1902 with SMTP id hb33-20020a170907162100b00968892b1902mr2122535ejc.6.1684329186304;
+        Wed, 17 May 2023 06:13:06 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b009534211cc97sm12291184ejc.159.2023.05.17.06.13.03
+        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b009534211cc97sm12291184ejc.159.2023.05.17.06.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:13:04 -0700 (PDT)
+        Wed, 17 May 2023 06:13:05 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 To: Olof Johansson <olof@lixom.net>,
@@ -66,26 +67,14 @@ Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Conor Dooley <conor.dooley@microchip.com>,
 	Daniel Machon <daniel.machon@microchip.com>,
 	UNGLinuxDriver@microchip.com
-Subject: [GIT PULL 1/2] arm64: dts: cleanup and fixes for v6.5
-Date: Wed, 17 May 2023 15:12:54 +0200
-Message-Id: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/2] ARM: dts: cleanup for v6.5
+Date: Wed, 17 May 2023 15:12:55 +0200
+Message-Id: <20230517131255.471002-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+References: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-
-Hi,
-
-Few usual cleanups from me and few other fixes/cleanups from Michael
-and Robert. To clarify - I don't want to step on someone's toes, so
-me picking up other patches is rather exception. It's just sad when
-someone's work gets lost.
-
-There is ongoing discussion how to improve a bit Microchip ARM64 SparX-5 patch
-handling process, so the contributions won't get lost.
-
-Best regards,
-Krzysztof
-
 
 The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
@@ -93,63 +82,37 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt64-cleanup-6.5
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.5
 
-for you to fetch changes up to d5e64404e77c19ec5bd687b34a11eec0263f1aa8:
+for you to fetch changes up to 21f475946d89911e31bccd02f8a7ce40b8f52a70:
 
-  arm64: dts: sparx5: rename pinctrl nodes (2023-05-17 14:16:13 +0200)
-
-----------------------------------------------------------------
-Minor improvements in ARM64 DTS for v6.5
-
-Mostly minor improvements to fix dtbs_check warnings:
-1. mba6ulx: use non-deprecated property for GPIO keys wake-up,
-2. Add missing cache properties (APM, Amazon, HiSilicon, Realtek,
-   Synaptics, AllWinner, Microchip).
-
-Few older minor and major fixes which were waiting on mailing lists for
-longer time for Microchip SparX-5:
-1. Fix secondary CPU bring-up and crash when talking to PSCI on reference
-   boards (Robert Marko),
-2. Simplify CPU address-cells (Robert Marko),
-3. Align pinctrl node names with bindings (Michael Walle).
+  ARM: dts: en7523: add missing cache properties (2023-05-16 18:26:24 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (8):
-      arm64: dts: mba6ulx: correct GPIO keys wakeup
-      arm64: dts: apm: add missing cache properties
-      arm64: dts: amazon: add missing cache properties
-      arm64: dts: hisilicon: add missing cache properties
-      arm64: dts: realtek: add missing cache properties
-      arm64: dts: synaptics: add missing cache properties
-      arm64: dts: allwinner: a64: add missing cache properties
-      arm64: dts: microchip: add missing cache properties
+Minor improvements in ARM DTS for v6.5
 
-Michael Walle (1):
-      arm64: dts: sparx5: rename pinctrl nodes
+Minor improvements to fix dtbs_check warnings:
+1. STE: Align UART nodes with bindings.
+2. EN7523: add missing cache properties.
 
-Robert Marko (2):
-      arm64: dts: microchip: sparx5: do not use PSCI on reference boards
-      arm64: dts: microchip: sparx5: correct CPU address-cells
+----------------------------------------------------------------
+Krzysztof Kozlowski (2):
+      ARM: dts: ste: align UART node name with bindings
+      ARM: dts: en7523: add missing cache properties
 
- arch/arm/boot/dts/mba6ulx.dtsi                     |  2 +-
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      |  1 +
- arch/arm64/boot/dts/amazon/alpine-v3.dtsi          |  4 ++++
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |  8 +++++++
- arch/arm64/boot/dts/apm/apm-storm.dtsi             |  8 +++++++
- arch/arm64/boot/dts/hisilicon/hi3660.dtsi          |  2 ++
- arch/arm64/boot/dts/hisilicon/hi6220.dtsi          |  2 ++
- arch/arm64/boot/dts/hisilicon/hip05.dtsi           |  4 ++++
- arch/arm64/boot/dts/hisilicon/hip06.dtsi           |  4 ++++
- arch/arm64/boot/dts/hisilicon/hip07.dtsi           | 16 +++++++++++++
- arch/arm64/boot/dts/microchip/sparx5.dtsi          | 10 +++++----
- .../boot/dts/microchip/sparx5_pcb134_board.dtsi    | 26 +++++++++++-----------
- .../boot/dts/microchip/sparx5_pcb135_board.dtsi    | 10 ++++-----
- .../boot/dts/microchip/sparx5_pcb_common.dtsi      | 12 ++++++++++
- arch/arm64/boot/dts/realtek/rtd1293.dtsi           |  2 ++
- arch/arm64/boot/dts/realtek/rtd1295.dtsi           |  2 ++
- arch/arm64/boot/dts/realtek/rtd1296.dtsi           |  2 ++
- arch/arm64/boot/dts/realtek/rtd1395.dtsi           |  2 ++
- arch/arm64/boot/dts/realtek/rtd16xx.dtsi           |  4 ++++
- arch/arm64/boot/dts/synaptics/berlin4ct.dtsi       |  2 ++
- 20 files changed, 100 insertions(+), 23 deletions(-)
+ arch/arm/boot/dts/en7523.dtsi                      | 2 ++
+ arch/arm/boot/dts/ste-dbx5x0.dtsi                  | 6 +++---
+ arch/arm/boot/dts/ste-href.dtsi                    | 6 +++---
+ arch/arm/boot/dts/ste-hrefprev60.dtsi              | 2 +-
+ arch/arm/boot/dts/ste-nomadik-nhk15.dts            | 2 +-
+ arch/arm/boot/dts/ste-nomadik-s8815.dts            | 2 +-
+ arch/arm/boot/dts/ste-nomadik-stn8815.dtsi         | 6 +++---
+ arch/arm/boot/dts/ste-snowball.dts                 | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-codina-tmo.dts | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-codina.dts     | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-gavini.dts     | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-golden.dts     | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-janice.dts     | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-kyle.dts       | 6 +++---
+ arch/arm/boot/dts/ste-ux500-samsung-skomer.dts     | 6 +++---
+ 15 files changed, 38 insertions(+), 36 deletions(-)
