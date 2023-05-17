@@ -1,95 +1,139 @@
-Return-Path: <SRS0=64NK=BG=linaro.org=linus.walleij@kernel.org>
+Return-Path: <SRS0=OxUt=BG=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E823C77B75
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 07:28:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9DCC77B7A
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 09:30:47 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 45532C4339B; Wed, 17 May 2023 07:28:02 +0000 (UTC)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 34A3AC433D2
-	for <soc@kernel.org>; Wed, 17 May 2023 07:28:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 34A3AC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-55a8e9e2c53so2818187b3.1
-        for <soc@kernel.org>; Wed, 17 May 2023 00:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684308480; x=1686900480;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OrwqWk2bWNKOSrtc/x6QkZwtop8uir/Nx5QXfysiiao=;
-        b=JyK0dJUPYDQSjStEhHuUxOLFHBRn7E8uzaDRQKC6KFBSBf2cweyewJ8wAlSwxFT51P
-         5iVvvmpG7EHmhXw0qffKLNfKA6I4pm/51jegIB3eTPmWmbUW95mEjUFsBgmni3XcbFZt
-         +yL8n7EmKLzcGbOPMEffQz82vEzzv2vmHUMdANybG6lqm4oO5zJctbRvjHmXLCPF3LUg
-         zYgy5bqmJMmpyuCuckMsEaPQpDkG/MmaHoptqKJ2oMRlbb69cBcE5xQ2Jtxjz6PF/i9e
-         4lA/w4Mu+0C7yo5omW/JkwpQk+FM03hgN7xk6Ea69+yCALOZMQkLkzfuaGa69NA7/RiQ
-         3W/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684308480; x=1686900480;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OrwqWk2bWNKOSrtc/x6QkZwtop8uir/Nx5QXfysiiao=;
-        b=PYTSdQb+jK2boMi1YgD9VelO59G9PK4od+s9/O2ZuXmSSgPdTNs8yr4RDPmPJb1UlU
-         nvAUsWZZ+hz4BLoU4oGpDQ4MYL6NtaGyOrDfz+ClZcs68O+z3o5xFDdviIiL63p7cyyP
-         I3VrMvYF+/IxdXU+YqYiLiYDxprtfRLK48nytWzYNyDTRoNC5CWwJZh0Hw9y9MEoTRb7
-         R8syKsss1TVco6ronikgoRd1qtbxUYM2yOwfBlsuqv1CfYulQgws7UAiMtK4QGnau3PA
-         atUOGewFwFwP9x7UZ4MuLOHoG4DAGK67tg8JDHhizvvnSyaawp0hOvIiCYuj+8PR+o/J
-         36Aw==
-X-Gm-Message-State: AC+VfDyoAlsTEe0w1Tw9wT0pjxSqPLDvhlcHWYWWQLvFGNRH6/NO/i0v
-	9jAcO70TQ6HM6xfsSeagLRCN4Tk1CpSuEkkhdBaHUmQ5Cv8fPrwA3hg=
-X-Google-Smtp-Source: ACHHUZ6wpuKDdYOMRDgLIBs/yX5qbop9yPt3tw02sithV7avf76JI7OyIlfb4B5CXp5ontHPbF1/rM5pUTd4FgVrl1Q=
-X-Received: by 2002:a81:6cc7:0:b0:561:b00d:1e12 with SMTP id
- h190-20020a816cc7000000b00561b00d1e12mr2722807ywc.29.1684308479948; Wed, 17
- May 2023 00:27:59 -0700 (PDT)
-MIME-Version: 1.0
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 17 May 2023 09:27:48 +0200
-Message-ID: <CACRpkdbEQ7nTnJTj5WMtxvH057fDSbX5tNs5j4Y=5KSBMpa-Sw@mail.gmail.com>
-Subject: [GIT PULL] SoC/misc: SRAM driver and binding updates
+	id 1421DC433D2; Wed, 17 May 2023 09:30:47 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 6B078C4339B;
+	Wed, 17 May 2023 09:30:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B078C4339B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46C571FB;
+	Wed, 17 May 2023 02:31:23 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E7443F663;
+	Wed, 17 May 2023 02:30:35 -0700 (PDT)
+Date: Wed, 17 May 2023 10:30:33 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: "lihuisong (C)" <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
-To: SoC Team <soc@kernel.org>
-Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+	liuyonglong@huawei.com, huangdaode@huawei.com,
+	linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Message-ID: <20230517093033.4jvwjxuoeic46a24@bogus>
+References: <20230425103040.znv66k364ant6klq@bogus>
+ <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
+ <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+ <20230515130807.pdvx7bxwjkfdsmsr@bogus>
+ <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
+ <20230516122931.il4ai7fyxdo5gsff@bogus>
+ <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
+ <20230516143530.venhj4gax6stinah@bogus>
+ <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
 
-Hi SoC folks,
+On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
 
-it seems most natural to pull these misc/sram driver changes
-into the SoC tree.
+[...]
 
-Please pull it in, some notes in the signed tag.
+> No. I want to use this flag to make compability between different platforms.
+> This driver only use PCC OpRegion to access to the channel if platform
+> support use PCC OpRegion.
 
-Yours,
-Linus Walleij
+What do you mean by that ? It is not correct. If there is a PCC Opregion,
+then you need to make it work with drivers/acpi/acpi_pcc.c
 
+You need to have all the other details in the firmware(ASL). By looking
+at the driver, it has no connection to PCC Opregion IMO unless I am missing
+something.
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+> Driver must select one of them (PCC and PCC OpRegion) to communicate with
+> firmware on one platform.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+No for reasons mentioned above. PCC Opregion support in the kernel will
+be minimal and already there. Fix that if it is not working. If you are
+attempting to do something with PCC Opregion in this driver, it is just
+wrong and I will NACK it if I see anything around that.
 
-are available in the Git repository at:
+> > If so that may not work as the current implementation of PCC Opregion
+> > assumes the exclusive access to the channel. Since it is initialised
+> > quite early, Opregion must succeed to get the mbox channel acquired and
+> > this driver must fail if they are sharing the channel. Making the sharing
+> > across firmware and this driver may need changes in the PCC Opregion
+> Only using PCC OpRegion after requesting and releasing PCC channel shouldn't
+> change PCC OpRegion code?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git
-tags/sram-for-soc
+I don't understand what exactly that means. The spec states clearly that
+PCC subspaces that are used for PCC Operation Regions must not be used
+as PCC subspaces for other std ACPI features. I don't understand what
+really is going on, on this platform as I don't see what you are saying
+(which is wrong and I disagree with approach) in the code posted yet.
 
-for you to fetch changes up to 21e5a2d10c8f319be4126f320855429842473640:
+> > support code. One possible way is to acquire and release the channel for
+> > each transaction which will be definitely overhead.
+> Yes, transaction will be definitely overhead.
+> The following method should be no such problem.
+> -->
+> If driver want to obtain other info by RegisterAddress and offset in PCC
+> Register(), driver generally needs to do it as follows:
+> 1> get channel ID and RegisterAddress and offset.
+> 2> call pcc_mbox_request_channel to acquire the channel.
+> 3> ioremap 'shmem_base_addr' to get 'pcc_comm_addr'
+> 4> obtain other info based on RegisterAddress, offset and 'pcc_comm_addr'.
 
-  misc: sram: Generate unique names for subpools (2023-05-17 09:15:25 +0200)
+Above sound good but it is not PCC Opregion. Either you are not giving
+full context or you are confusing what PCC Opregion means. There is a
+section "Declaring PCC Operation Regions", please refer and see if that
+is what you have on your platform.
 
-----------------------------------------------------------------
-This fixes a small bug in the SRAM misc driver and adds
-a compatible for SRAMs to the SRAM bindings.
+> If driver selects PCC OpRegion method, driver may also need to release this
+> PCC channel by calling pcc_mbox_free_channel.
 
-----------------------------------------------------------------
-Linus Walleij (2):
-      dt-bindings: sram: Add compatible for ST-Ericsson U8500 eSRAM
-      misc: sram: Generate unique names for subpools
+As I mentioned, the driver must not do anything related to PCC Opregion.
 
- Documentation/devicetree/bindings/sram/sram.yaml | 1 +
- drivers/misc/sram.c                              | 9 +++++----
- 2 files changed, 6 insertions(+), 4 deletions(-)
+> Because this channel will be requested when PCC OpRegion method is executed
+> for the first time.
+>
+
+drivers/acpi/acpi_pcc.c must take care of that. If not patch that and get
+it working. It must be generic and nothing to do with your platform.
+
+> 
+> Overall, the above process is a bit cumbersome if this driver only use PCC
+> OpRegion.
+
+Yes and hence must not touch anything around PCC Opregion.
+
+> In addition, I have to dig one address from comm space in share memory,
+> which will cause the available size of comm space to decrease, right?
+> So it is better to use other way to do get channel ID and other info if it
+> is possible.
+> What do you think?
+
+I am more confused about your platform than yesterday, so I don't have
+much valuable suggestions ATM.
+
+-- 
+Regards,
+Sudeep
