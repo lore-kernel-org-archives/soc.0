@@ -1,43 +1,45 @@
-Return-Path: <SRS0=OxUt=BG=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=2Cpl=BG=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9DCC77B7A
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 09:30:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E025C77B7A
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 11:35:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1421DC433D2; Wed, 17 May 2023 09:30:47 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 6B078C4339B;
-	Wed, 17 May 2023 09:30:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6B078C4339B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46C571FB;
-	Wed, 17 May 2023 02:31:23 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E7443F663;
-	Wed, 17 May 2023 02:30:35 -0700 (PDT)
-Date: Wed, 17 May 2023 10:30:33 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "lihuisong (C)" <lihuisong@huawei.com>
-List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
-	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
-	liuyonglong@huawei.com, huangdaode@huawei.com,
-	linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+	id 4A274C433D2; Wed, 17 May 2023 11:35:38 +0000 (UTC)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id C7FD9C433EF;
+	Wed, 17 May 2023 11:35:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7FD9C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QLrXB2BPkz18LWR;
+	Wed, 17 May 2023 19:31:06 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 17 May 2023 19:35:25 +0800
+Message-ID: <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
+Date: Wed, 17 May 2023 19:35:25 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
 Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Message-ID: <20230517093033.4jvwjxuoeic46a24@bogus>
+To: Sudeep Holla <sudeep.holla@arm.com>
+List-Id: <soc.lore.kernel.org>
+CC: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Shawn Guo <shawnguo@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <soc@kernel.org>, <wanghuiqiang@huawei.com>,
+	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
+	<linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, <devicetree@vger.kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 References: <20230425103040.znv66k364ant6klq@bogus>
  <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
  <20230425131918.5tf5vot4h7jf54xk@bogus>
@@ -48,92 +50,47 @@ References: <20230425103040.znv66k364ant6klq@bogus>
  <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
  <20230516143530.venhj4gax6stinah@bogus>
  <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
+ <20230517093033.4jvwjxuoeic46a24@bogus>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230517093033.4jvwjxuoeic46a24@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
-On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
 
-[...]
-
-> No. I want to use this flag to make compability between different platforms.
-> This driver only use PCC OpRegion to access to the channel if platform
-> support use PCC OpRegion.
-
-What do you mean by that ? It is not correct. If there is a PCC Opregion,
-then you need to make it work with drivers/acpi/acpi_pcc.c
-
-You need to have all the other details in the firmware(ASL). By looking
-at the driver, it has no connection to PCC Opregion IMO unless I am missing
-something.
-
-> Driver must select one of them (PCC and PCC OpRegion) to communicate with
-> firmware on one platform.
-
-No for reasons mentioned above. PCC Opregion support in the kernel will
-be minimal and already there. Fix that if it is not working. If you are
-attempting to do something with PCC Opregion in this driver, it is just
-wrong and I will NACK it if I see anything around that.
-
-> > If so that may not work as the current implementation of PCC Opregion
-> > assumes the exclusive access to the channel. Since it is initialised
-> > quite early, Opregion must succeed to get the mbox channel acquired and
-> > this driver must fail if they are sharing the channel. Making the sharing
-> > across firmware and this driver may need changes in the PCC Opregion
-> Only using PCC OpRegion after requesting and releasing PCC channel shouldn't
-> change PCC OpRegion code?
-
-I don't understand what exactly that means. The spec states clearly that
-PCC subspaces that are used for PCC Operation Regions must not be used
-as PCC subspaces for other std ACPI features. I don't understand what
-really is going on, on this platform as I don't see what you are saying
-(which is wrong and I disagree with approach) in the code posted yet.
-
-> > support code. One possible way is to acquire and release the channel for
-> > each transaction which will be definitely overhead.
-> Yes, transaction will be definitely overhead.
-> The following method should be no such problem.
-> -->
-> If driver want to obtain other info by RegisterAddress and offset in PCC
-> Register(), driver generally needs to do it as follows:
-> 1> get channel ID and RegisterAddress and offset.
-> 2> call pcc_mbox_request_channel to acquire the channel.
-> 3> ioremap 'shmem_base_addr' to get 'pcc_comm_addr'
-> 4> obtain other info based on RegisterAddress, offset and 'pcc_comm_addr'.
-
-Above sound good but it is not PCC Opregion. Either you are not giving
-full context or you are confusing what PCC Opregion means. There is a
-section "Declaring PCC Operation Regions", please refer and see if that
-is what you have on your platform.
-
-> If driver selects PCC OpRegion method, driver may also need to release this
-> PCC channel by calling pcc_mbox_free_channel.
-
-As I mentioned, the driver must not do anything related to PCC Opregion.
-
-> Because this channel will be requested when PCC OpRegion method is executed
-> for the first time.
+在 2023/5/17 17:30, Sudeep Holla 写道:
+> On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
 >
+> [...]
+>
+>> No. I want to use this flag to make compability between different platforms.
+>> This driver only use PCC OpRegion to access to the channel if platform
+>> support use PCC OpRegion.
+> What do you mean by that ? It is not correct. If there is a PCC Opregion,
+> then you need to make it work with drivers/acpi/acpi_pcc.c
+>
+> You need to have all the other details in the firmware(ASL). By looking
+> at the driver, it has no connection to PCC Opregion IMO unless I am missing
+> something.
+Driver just needs to call these APIs, such as acpi_evaluate_integer(), 
+if want to use PCC OpRegion.
+I know that. I have tested PCC OpRegion before.
+You've completely misunderstood what I said.😅
 
-drivers/acpi/acpi_pcc.c must take care of that. If not patch that and get
-it working. It must be generic and nothing to do with your platform.
+I mean that this driver plans to support both PCC and PCC OpRegion.
+For example,
+Platform A: this driver use PCC (as the current implementation)
+Platform B: this driver use PCC OpRegion (Currently, this patch does not 
+implement it, but it may be available in the future.)
+Note:
+This driver selects only one of them (PCC and PCC OpRegion) to 
+communicate with firmware on one platform.
+We use one bit in device-flags to know which one this driver will use.
 
-> 
-> Overall, the above process is a bit cumbersome if this driver only use PCC
-> OpRegion.
-
-Yes and hence must not touch anything around PCC Opregion.
-
-> In addition, I have to dig one address from comm space in share memory,
-> which will cause the available size of comm space to decrease, right?
-> So it is better to use other way to do get channel ID and other info if it
-> is possible.
-> What do you think?
-
-I am more confused about your platform than yesterday, so I don't have
-much valuable suggestions ATM.
-
--- 
-Regards,
-Sudeep
+I'm not sure if you can understand what I mean by saing that.
+If you're not confused about this now, can you reply to my last email 
+again?😁
+>
