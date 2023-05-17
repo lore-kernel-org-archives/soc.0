@@ -1,118 +1,133 @@
-Return-Path: <SRS0=v0mk=BG=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=OxUt=BG=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83812C7EE32
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 13:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75CBFC77B75
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 13:16:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6BD0AC433D2; Wed, 17 May 2023 13:13:09 +0000 (UTC)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 31B41C43323
-	for <soc@kernel.org>; Wed, 17 May 2023 13:13:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 31B41C43323
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-510bcd2d6b8so6653922a12.0
-        for <soc@kernel.org>; Wed, 17 May 2023 06:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684329186; x=1686921186;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RsCYEtDB1ffr+2Y+/vC2jddSRU/GNfdHR9H1LD49MZ4=;
-        b=AY4YtKtj0ujl9+Mmw+CN96C9qS1pl/EP9v0K0ELoQazLV651LI2GjmChiUhIn9r2bh
-         xeXqQ7sJ+WCpNmAkbF/6YEdSVcYfmd4qodUP7gpKPgdFLvMnYB/UO0H+iwNfBl4MC95G
-         Mvdm+rLhHfM7lKzFEQQU+sXSGNyWozdxEnKOiIuZZDLsZIo8GgVLUbGrrLGBvq2kDErf
-         oMVN90lZnHHJpP6NHBpoca10ZkD2n8Kx40bij1U3jH3g646VVOZSQBeQPNozefNIPv4H
-         V+ae/JgK7z4xmgoihVFr+QScA1c4i2uNL66UzChrtQO2FLWQzf3LBB2Tk7pS2WRBRcyy
-         5cYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684329186; x=1686921186;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RsCYEtDB1ffr+2Y+/vC2jddSRU/GNfdHR9H1LD49MZ4=;
-        b=PaXI9JAKIGSOBYAjy0kjoNariwZf7Oz7zdG4jeb7V0lFDmWRgand65yWzxobXt2R/L
-         K4T86jB0XDWOwTBTJ7lLpG5YIS3/0i25w1dhyJm9LC/MgUAlOGJTvFssC8EF3z8AKM7x
-         Hv/sd31DteukW6HpkuCM4MHm3NtwFSbAkdgxSq80pdLejIJs2H3ax/dwcR8VKL5YECjg
-         Y5D0iyIRvk8+mRRsR8yKrgpVZONysm6ua7UKBdTiunopN5Vm9bFaA5uEhon715lgQZu7
-         6aX4s+Ns9a7HJim4zmEqj5IAnzzTonZ0K3Xrml92J2RpuJQXZ+LLXUb3DXDyrUnRs68S
-         3e+g==
-X-Gm-Message-State: AC+VfDxO0jY2Yd4z9wQZez9rwNlHF84w6Se0jh5RPqBxtn/5iHVbO71K
-	JlhIQ8LxuxWYqs8WwGpR6r9RcQ==
-X-Google-Smtp-Source: ACHHUZ4KHT9X6WEz67mV7Zi3b4JfOl7XqzWOKK6QNiEjbdiMOUpttEUxIbNwfYMDn2EKItI3M03jZQ==
-X-Received: by 2002:a17:907:1621:b0:968:892b:1902 with SMTP id hb33-20020a170907162100b00968892b1902mr2122535ejc.6.1684329186304;
-        Wed, 17 May 2023 06:13:06 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b009534211cc97sm12291184ejc.159.2023.05.17.06.13.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:13:05 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id 40923C4339B; Wed, 17 May 2023 13:16:25 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 7E8BDC433EF;
+	Wed, 17 May 2023 13:16:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7E8BDC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36BB81FB;
+	Wed, 17 May 2023 06:17:04 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D9BF3F7BD;
+	Wed, 17 May 2023 06:16:17 -0700 (PDT)
+Date: Wed, 17 May 2023 14:16:14 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: "lihuisong (C)" <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
-To: Olof Johansson <olof@lixom.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org,
-	soc@kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Lars Povlsen <lars.povlsen@microchip.com>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com
-Subject: [GIT PULL 2/2] ARM: dts: cleanup for v6.5
-Date: Wed, 17 May 2023 15:12:55 +0200
-Message-Id: <20230517131255.471002-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
-References: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+	liuyonglong@huawei.com, huangdaode@huawei.com,
+	linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Message-ID: <20230517131614.cwi2fcj2cngaq7dm@bogus>
+References: <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+ <20230515130807.pdvx7bxwjkfdsmsr@bogus>
+ <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
+ <20230516122931.il4ai7fyxdo5gsff@bogus>
+ <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
+ <20230516143530.venhj4gax6stinah@bogus>
+ <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
+ <20230517093033.4jvwjxuoeic46a24@bogus>
+ <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On Wed, May 17, 2023 at 07:35:25PM +0800, lihuisong (C) wrote:
+> 
+> 在 2023/5/17 17:30, Sudeep Holla 写道:
+> > On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
+> > 
+> > [...]
+> > 
+> > > No. I want to use this flag to make compability between different platforms.
+> > > This driver only use PCC OpRegion to access to the channel if platform
+> > > support use PCC OpRegion.
+> > What do you mean by that ? It is not correct. If there is a PCC Opregion,
+> > then you need to make it work with drivers/acpi/acpi_pcc.c
+> > 
+> > You need to have all the other details in the firmware(ASL). By looking
+> > at the driver, it has no connection to PCC Opregion IMO unless I am missing
+> > something.
+> Driver just needs to call these APIs, such as acpi_evaluate_integer(), if
+> want to use PCC OpRegion.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+OK, please provide examples. I am definitely lost as it doesn't match with
+my understanding of how PCC Opregions are/can be used.
 
-are available in the Git repository at:
+> I know that. I have tested PCC OpRegion before.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.5
+Cool, examples please.
 
-for you to fetch changes up to 21f475946d89911e31bccd02f8a7ce40b8f52a70:
+> You've completely misunderstood what I said.😅
+>
 
-  ARM: dts: en7523: add missing cache properties (2023-05-16 18:26:24 +0200)
+Hmm, may be but I need examples.
 
-----------------------------------------------------------------
-Minor improvements in ARM DTS for v6.5
+> I mean that this driver plans to support both PCC and PCC OpRegion.
+> For example,
+> Platform A: this driver use PCC (as the current implementation)
 
-Minor improvements to fix dtbs_check warnings:
-1. STE: Align UART nodes with bindings.
-2. EN7523: add missing cache properties.
+Good, then just keep what it needs in the implementation nothing more
+until you add support for something you have described below(not that
+I agree, just want you to make progress here based on what is actually
+required today)
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      ARM: dts: ste: align UART node name with bindings
-      ARM: dts: en7523: add missing cache properties
+> Platform B: this driver use PCC OpRegion (Currently, this patch does not
+> implement it, but it may be available in the future.)
 
- arch/arm/boot/dts/en7523.dtsi                      | 2 ++
- arch/arm/boot/dts/ste-dbx5x0.dtsi                  | 6 +++---
- arch/arm/boot/dts/ste-href.dtsi                    | 6 +++---
- arch/arm/boot/dts/ste-hrefprev60.dtsi              | 2 +-
- arch/arm/boot/dts/ste-nomadik-nhk15.dts            | 2 +-
- arch/arm/boot/dts/ste-nomadik-s8815.dts            | 2 +-
- arch/arm/boot/dts/ste-nomadik-stn8815.dtsi         | 6 +++---
- arch/arm/boot/dts/ste-snowball.dts                 | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-codina-tmo.dts | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-codina.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-gavini.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-golden.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-janice.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-kyle.dts       | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-skomer.dts     | 6 +++---
- 15 files changed, 38 insertions(+), 36 deletions(-)
+Then let us discuss that in the future, don't add unnecessary complexity
+for some future use case today. You can always add it when you introduce
+that feature or support in the future.
+
+> Note:
+> This driver selects only one of them (PCC and PCC OpRegion) to communicate
+> with firmware on one platform.
+
+Let us keep it simple(KISS). The driver works just for PCC not PCC Opregion
+for now.
+
+> We use one bit in device-flags to know which one this driver will use.
+>
+
+NACK again just to re-iterate my point if you have not yet accepted that
+fact.
+
+> I'm not sure if you can understand what I mean by saing that.
+> If you're not confused about this now, can you reply to my last email
+> again?😁
+>
+
+The example you had IIRC is use of System Memory Opregion to demonstrate
+some _DSM. That has nothing to do with PCC Opregion.
+
+Commit 77e2a04745ff ("ACPI: PCC: Implement OperationRegion handler for
+the PCC Type 3 subtype") has the example in the commit message. IIRC,
+you have even fixed couple of bugs in that driver. That is the reason
+why I don't understand how you think this driver and that can or must
+work together. At least I fail to see how ATM(examples please, by that
+I mean ASL snippet for PCC vs PCC Opregion usage to work with this driver)
+
+-- 
+Regards,
+Sudeep
