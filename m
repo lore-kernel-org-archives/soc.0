@@ -1,133 +1,117 @@
-Return-Path: <SRS0=OxUt=BG=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=v0mk=BG=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75CBFC77B75
-	for <soc@archiver.kernel.org>; Wed, 17 May 2023 13:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A95EFC77B7A
+	for <soc@archiver.kernel.org>; Wed, 17 May 2023 14:30:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 40923C4339B; Wed, 17 May 2023 13:16:25 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id 7E8BDC433EF;
-	Wed, 17 May 2023 13:16:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7E8BDC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36BB81FB;
-	Wed, 17 May 2023 06:17:04 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D9BF3F7BD;
-	Wed, 17 May 2023 06:16:17 -0700 (PDT)
-Date: Wed, 17 May 2023 14:16:14 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "lihuisong (C)" <lihuisong@huawei.com>
+	id 66BD5C433A1; Wed, 17 May 2023 14:30:42 +0000 (UTC)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 2E07DC4339C
+	for <soc@kernel.org>; Wed, 17 May 2023 14:30:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2E07DC4339C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso761501a12.1
+        for <soc@kernel.org>; Wed, 17 May 2023 07:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684333839; x=1686925839;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sw4AmAQYZ1efOtuboC8tuzE6GxP3pTc6qv80qoB6U2M=;
+        b=bKyhm0sFnndsJTAa3h1AVM8sIYeseNib/U3ZQYTtU2X+lPjPz4INyyqmDxdGODuRPr
+         kbMaQMp/+/5E177ATV6ERiAR0uGhCRsGdwCS65MP3DvOuWQK/7gtGzqJfzkJRpjcinTB
+         FOK/6ZVIP4deE6RwjAnzn8joSgBEpRqsaAuGCQ/9zOHNoqh2lAMIAa0jxnlodvadDk2T
+         g9SYbtUY8ZFZyubq+qQhkEyOvL5ss2vNhCGV6PW5dMKd/VTY950o8Edw7lpsTAs9Nft1
+         5iWYDaeybqGix5BPJgblKr3bEA7Pw9gEU1IC3JQLujELj6Kwr6EXbBxmSZgYmb0WAnlm
+         yiyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684333839; x=1686925839;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sw4AmAQYZ1efOtuboC8tuzE6GxP3pTc6qv80qoB6U2M=;
+        b=QoPADErMckSDHNGiD2kYWb0h83QdlJL4G7BaXsAw9va01Q/xMaiZISagpQupB4v4xY
+         zpIi+TVy1g6PlW9jMqj7AoeXrOS/ubzetEbv+FV7PXs6liioA1eKv6/5NJMTCe2QcsAw
+         2/zy52K5ziSCrGIM2dyAoBqOv+pPD7Dr7ev7gHjEEq6WctFcEEeX509h2SxNRdgsPjMq
+         egTiTw5hHcKGCr6haeLyYqTYD/FuRdEJoxMICsxoL2alDuJU9UUQVKWWUFWmeWEbw+0D
+         Dm0NCjfNdxgkvwVVrjHulfweymNaLedb48FN4Q2qZ4ZtgXQpD2mdkNlriLCJ2DWbi8YY
+         qBkg==
+X-Gm-Message-State: AC+VfDyNJ9/+MOHd22wYXBGDzXEHiV3r93cNbr7/ic/s52t6stJqjRf7
+	b48AioVwl6S/tS0/XIgOqXcGaA==
+X-Google-Smtp-Source: ACHHUZ6yw89KlxZBTvgE/5dOclub660CXUfA34kiArdQvxFvau9bhNBAgQuOCCeb8ird8GLV1AVaHw==
+X-Received: by 2002:a17:907:961d:b0:966:6056:a7c1 with SMTP id gb29-20020a170907961d00b009666056a7c1mr35946908ejc.74.1684333839303;
+        Wed, 17 May 2023 07:30:39 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170906499000b0096b55be592asm3649592eju.92.2023.05.17.07.30.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 07:30:38 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
-	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
-	liuyonglong@huawei.com, huangdaode@huawei.com,
-	linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Message-ID: <20230517131614.cwi2fcj2cngaq7dm@bogus>
-References: <20230425131918.5tf5vot4h7jf54xk@bogus>
- <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
- <20230515130807.pdvx7bxwjkfdsmsr@bogus>
- <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
- <20230516122931.il4ai7fyxdo5gsff@bogus>
- <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
- <20230516143530.venhj4gax6stinah@bogus>
- <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
- <20230517093033.4jvwjxuoeic46a24@bogus>
- <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	arm@kernel.org,
+	soc@kernel.org,
+	afaerber@suse.de,
+	linux-arm-kernel@lists.infradead.org,
+	linux-realtek-soc@lists.infradead.org,
+	Conor Dooley <conor@kernel.org>,
+	lars.povlsen@microchip.com,
+	Steen.Hegelund@microchip.com,
+	daniel.machon@microchip.com,
+	UNGLinuxDriver@microchip.com,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: defconfig: Enable ARCH_SPARX5 and ARCH_REALTEK
+Date: Wed, 17 May 2023 16:30:11 +0200
+Message-Id: <20230517143011.549319-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
 
-On Wed, May 17, 2023 at 07:35:25PM +0800, lihuisong (C) wrote:
-> 
-> 在 2023/5/17 17:30, Sudeep Holla 写道:
-> > On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
-> > 
-> > [...]
-> > 
-> > > No. I want to use this flag to make compability between different platforms.
-> > > This driver only use PCC OpRegion to access to the channel if platform
-> > > support use PCC OpRegion.
-> > What do you mean by that ? It is not correct. If there is a PCC Opregion,
-> > then you need to make it work with drivers/acpi/acpi_pcc.c
-> > 
-> > You need to have all the other details in the firmware(ASL). By looking
-> > at the driver, it has no connection to PCC Opregion IMO unless I am missing
-> > something.
-> Driver just needs to call these APIs, such as acpi_evaluate_integer(), if
-> want to use PCC OpRegion.
+Enable Microchip SparX-5 (ARCH_SPARX5) with its MMC controller and
+Realtek (ARCH_REALTEK) so their DTS will get built with defconfig and
+maybe platforms could be booted from it.
 
-OK, please provide examples. I am definitely lost as it doesn't match with
-my understanding of how PCC Opregions are/can be used.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> I know that. I have tested PCC OpRegion before.
-
-Cool, examples please.
-
-> You've completely misunderstood what I said.😅
->
-
-Hmm, may be but I need examples.
-
-> I mean that this driver plans to support both PCC and PCC OpRegion.
-> For example,
-> Platform A: this driver use PCC (as the current implementation)
-
-Good, then just keep what it needs in the implementation nothing more
-until you add support for something you have described below(not that
-I agree, just want you to make progress here based on what is actually
-required today)
-
-> Platform B: this driver use PCC OpRegion (Currently, this patch does not
-> implement it, but it may be available in the future.)
-
-Then let us discuss that in the future, don't add unnecessary complexity
-for some future use case today. You can always add it when you introduce
-that feature or support in the future.
-
-> Note:
-> This driver selects only one of them (PCC and PCC OpRegion) to communicate
-> with firmware on one platform.
-
-Let us keep it simple(KISS). The driver works just for PCC not PCC Opregion
-for now.
-
-> We use one bit in device-flags to know which one this driver will use.
->
-
-NACK again just to re-iterate my point if you have not yet accepted that
-fact.
-
-> I'm not sure if you can understand what I mean by saing that.
-> If you're not confused about this now, can you reply to my last email
-> again?😁
->
-
-The example you had IIRC is use of System Memory Opregion to demonstrate
-some _DSM. That has nothing to do with PCC Opregion.
-
-Commit 77e2a04745ff ("ACPI: PCC: Implement OperationRegion handler for
-the PCC Type 3 subtype") has the example in the commit message. IIRC,
-you have even fixed couple of bugs in that driver. That is the reason
-why I don't understand how you think this driver and that can or must
-work together. At least I fail to see how ATM(examples please, by that
-I mean ASL snippet for PCC vs PCC Opregion usage to work with this driver)
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index a24609e14d50..de1ef135c578 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -41,6 +41,7 @@ CONFIG_ARCH_BCMBCA=y
+ CONFIG_ARCH_BRCMSTB=y
+ CONFIG_ARCH_BERLIN=y
+ CONFIG_ARCH_EXYNOS=y
++CONFIG_ARCH_SPARX5=y
+ CONFIG_ARCH_K3=y
+ CONFIG_ARCH_LG1K=y
+ CONFIG_ARCH_HISI=y
+@@ -54,6 +55,7 @@ CONFIG_ARCH_MXC=y
+ CONFIG_ARCH_S32=y
+ CONFIG_ARCH_NPCM=y
+ CONFIG_ARCH_QCOM=y
++CONFIG_ARCH_REALTEK=y
+ CONFIG_ARCH_RENESAS=y
+ CONFIG_ARCH_ROCKCHIP=y
+ CONFIG_ARCH_SEATTLE=y
+@@ -1003,6 +1005,7 @@ CONFIG_MMC_SDHCI_PLTFM=y
+ CONFIG_MMC_SDHCI_OF_ARASAN=y
+ CONFIG_MMC_SDHCI_OF_ESDHC=y
+ CONFIG_MMC_SDHCI_OF_DWCMSHC=y
++CONFIG_MMC_SDHCI_OF_SPARX5=y
+ CONFIG_MMC_SDHCI_CADENCE=y
+ CONFIG_MMC_SDHCI_ESDHC_IMX=y
+ CONFIG_MMC_SDHCI_TEGRA=y
 -- 
-Regards,
-Sudeep
+2.34.1
+
