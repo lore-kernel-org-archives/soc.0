@@ -1,205 +1,75 @@
-Return-Path: <SRS0=AnSx=BH=huawei.com=lihuisong@kernel.org>
+Return-Path: <sboyd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7658DC7EE23
-	for <soc@archiver.kernel.org>; Thu, 18 May 2023 12:29:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3481C77B73
+	for <soc@archiver.kernel.org>; Thu, 18 May 2023 20:10:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 328D9C4339E; Thu, 18 May 2023 12:29:13 +0000 (UTC)
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D9763C433D2;
-	Thu, 18 May 2023 12:29:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9763C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.55])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QMTjJ3r0qzLppC;
-	Thu, 18 May 2023 20:26:12 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 18 May 2023 20:29:05 +0800
-Message-ID: <f013d4c6-afbe-ebc8-cb2d-1a12b55cc1d4@huawei.com>
-Date: Thu, 18 May 2023 20:29:04 +0800
+	id 89FCAC4339B; Thu, 18 May 2023 20:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62062C433EF;
+	Thu, 18 May 2023 20:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1684440654;
+	bh=8ADVUlv2ISWPlpxPmf/ySUg5Jb+Bc1bMYOm2326rqxY=;
+	h=In-Reply-To:References:Subject:From:Cc:List-Id:To:Date:From;
+	b=O7MAkrBessqkZ7/t1VwHglElnZ/75v2/qwNN/Q2RYwXAvBv32J/MVlhEQhKHg3YXe
+	 WvVkBvySbmDqoFI0OiuMI8cWqVKCapy/Wz6LtMeBR7s13Sj0RrgMOjY0GGKwv/Kyr6
+	 IWd+yYP4Ip7bNorNaGpFrprAR9itldhPNfWaLwzqBaCdtEUE8GZnxqICgdAV5yF+BD
+	 fch/9qkiBEXJFR8yrI7fPx4QH/kLoyLYzaRcpmUP2OASsEckcPdzOLHD/mfEk1hZIY
+	 mm6KBC/FR+klYbeqGLe98JlB96Lrc9TkpGmX4C0X9YMBfAV0vk8e9Zoj0r/yJnV7Jm
+	 yg6XU/j1UKMMQ==
+Message-ID: <568f74a4667711a8b7c852d88f6f5669.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Sudeep Holla <sudeep.holla@arm.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230516153109.514251-11-arnd@kernel.org>
+References: <20230516153109.514251-1-arnd@kernel.org> <20230516153109.514251-11-arnd@kernel.org>
+Subject: Re: [PATCH 10/13] ARM: pxa: fix missing-prototypes warnings
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, Bartosz Golaszewski <brgl@bgdev.pl>, Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin <alexander.sverdlin@gmail.com>, Andre Przywara <andre.przywara@arm.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Vladimir Zapolskiy <vz@mleia.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Gregory Clement <gregory.clement@bootlin.com>, Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel
+ .org>, Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alan Stern <stern@rowland.harvard.edu>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, linux-clk@vger.kernel.org, linux-usb@vger.kernel.org
 List-Id: <soc.lore.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Shawn Guo <shawnguo@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <soc@kernel.org>, <wanghuiqiang@huawei.com>,
-	<tanxiaofei@huawei.com>, <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
-	<linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, <devicetree@vger.kernel.org>, Rob Herring
-	<robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230515130807.pdvx7bxwjkfdsmsr@bogus>
- <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
- <20230516122931.il4ai7fyxdo5gsff@bogus>
- <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
- <20230516143530.venhj4gax6stinah@bogus>
- <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
- <20230517093033.4jvwjxuoeic46a24@bogus>
- <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
- <20230517131614.cwi2fcj2cngaq7dm@bogus>
- <aec13381-e9be-4f3d-1834-52f32f9f8418@huawei.com>
- <20230518083841.nqmjvqqxnea6qrbe@bogus>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230518083841.nqmjvqqxnea6qrbe@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+To: Arnd Bergmann <arnd@kernel.org>, soc@kernel.org
+Date: Thu, 18 May 2023 13:10:52 -0700
+User-Agent: alot/0.10
 
+Quoting Arnd Bergmann (2023-05-16 08:31:06)
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The PXA platform has a number of configurations that end up with
+> a warning like these when building with W=3D1:
+>=20
+> drivers/hwmon/max1111.c:83:5: error: no previous prototype for 'max1111_r=
+ead_channel' [-Werror=3Dmissing-prototypes]
+> arch/arm/mach-pxa/reset.c:86:6: error: no previous prototype for 'pxa_res=
+tart' [-Werror=3Dmissing-prototypes]
+> arch/arm/mach-pxa/mfp-pxa2xx.c:254:5: error: no previous prototype for 'k=
+eypad_set_wake' [-Werror=3Dmissing-prototypes]
+> drivers/clk/pxa/clk-pxa25x.c:70:14: error: no previous prototype for 'pxa=
+25x_get_clk_frequency_khz' [-Werror=3Dmissing-prototypes]
+> drivers/clk/pxa/clk-pxa25x.c:325:12: error: no previous prototype for 'px=
+a25x_clocks_init' [-Werror=3Dmissing-prototypes]
+> drivers/clk/pxa/clk-pxa27x.c:74:14: error: no previous prototype for 'pxa=
+27x_get_clk_frequency_khz' [-Werror=3Dmissing-prototypes]
+> drivers/clk/pxa/clk-pxa27x.c:102:6: error: no previous prototype for 'pxa=
+27x_is_ppll_disabled' [-Werror=3Dmissing-prototypes]
+> drivers/clk/pxa/clk-pxa27x.c:470:12: error: no previous prototype for 'px=
+a27x_clocks_init' [-Werror=3Dmissing-prototypes]
+> arch/arm/mach-pxa/pxa27x.c:44:6: error: no previous prototype for 'pxa27x=
+_clear_otgph' [-Werror=3Dmissing-prototypes]
+> arch/arm/mach-pxa/pxa27x.c:58:6: error: no previous prototype for 'pxa27x=
+_configure_ac97reset' [-Werror=3Dmissing-prototypes]
+> arch/arm/mach-pxa/spitz_pm.c:170:15: error: no previous prototype for 'sp=
+itzpm_read_devdata' [-Werror=3Dmissing-prototypes]
+>=20
+> The problem is that there is a declaration for each of these, but
+> it's only seen by the caller and not the callee. Moving these
+> into appropriate header files ensures that both use the same
+> calling conventions and it avoids the warnings.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-在 2023/5/18 16:38, Sudeep Holla 写道:
-> On Thu, May 18, 2023 at 04:24:36PM +0800, lihuisong (C) wrote:
->> 在 2023/5/17 21:16, Sudeep Holla 写道:
->>> On Wed, May 17, 2023 at 07:35:25PM +0800, lihuisong (C) wrote:
->>>> 在 2023/5/17 17:30, Sudeep Holla 写道:
->>>>> On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
->>>>>
->>>>> [...]
->>>>>
->>>>>> No. I want to use this flag to make compability between different platforms.
->>>>>> This driver only use PCC OpRegion to access to the channel if platform
->>>>>> support use PCC OpRegion.
->>>>> What do you mean by that ? It is not correct. If there is a PCC Opregion,
->>>>> then you need to make it work with drivers/acpi/acpi_pcc.c
->>>>>
->>>>> You need to have all the other details in the firmware(ASL). By looking
->>>>> at the driver, it has no connection to PCC Opregion IMO unless I am missing
->>>>> something.
->>>> Driver just needs to call these APIs, such as acpi_evaluate_integer(), if
->>>> want to use PCC OpRegion.
->>> OK, please provide examples. I am definitely lost as it doesn't match with
->>> my understanding of how PCC Opregions are/can be used.
->>>
->>>> I know that. I have tested PCC OpRegion before.
->>> Cool, examples please.
->>>
->>>> You've completely misunderstood what I said.😅
->>>>
->>> Hmm, may be but I need examples.
->> As you said below, the driver works just for PCC not PCC Opregion for now.
->> not sure if we need to discuss how PCC Opregion is used here.
-> Good let us drop the idea of using PCC Opregion with this driver for now.
->
->>>> I mean that this driver plans to support both PCC and PCC OpRegion.
->>>> For example,
->>>> Platform A: this driver use PCC (as the current implementation)
->>> Good, then just keep what it needs in the implementation nothing more
->>> until you add support for something you have described below(not that
->>> I agree, just want you to make progress here based on what is actually
->>> required today)
->> Agreed.
->>>> Platform B: this driver use PCC OpRegion (Currently, this patch does not
->>>> implement it, but it may be available in the future.)
->>> Then let us discuss that in the future, don't add unnecessary complexity
->>> for some future use case today. You can always add it when you introduce
->>> that feature or support in the future.
->> Yes. We just need to focus on the current.
->> If there are any usage problems with PCC OpRegion in the future, we can
->> discuss that later.
->>
-> Agreed.
->
->> My original full scheme is as follows:
->> -->
->> dev_flags = get_device_flags();  // to know if use PCC OpRegion
->> if (USE_PCC_OPREGION_B in dev_flags is 0) {
->>      chan_id = get_pcc_chan_id();
->>      init_mbox_client();
->>      pcc_mbox_request_channel(cl, chan_id)
->> } else {
->>      /* we need to return unsupport now because of no this feature in this
->> driver. */
->>      do_nothing();
->> }
->>
->> void get_some_info(...) {
->>      if (USE_PCC_OPREGION_B in dev_flags is 0)
->>          pcc_cmd_send();  // use PCC to communicate with Platform
->>      else
->>          acpi_evaluate_object(); // will be used in future.
->> }
->>
->> As described in the pseudocode above,
->> it is necessary to put "dev_flags" in this current driver first in case of
->> the version driver runs on the platform which just use PCC Opregion.
-> No, you can't randomly define dev_flags just to assist your driver
-> implementation. If you need it, you need to get the spec updated. We
-> will not add anything unless that happens.
->
-> Note that I don't agree with the flags at all but if you convince and get
-> them added to spec, I won't object.
-Ok，let us drop it.
->>>> Note:
->>>> This driver selects only one of them (PCC and PCC OpRegion) to communicate
->>>> with firmware on one platform.
->>> Let us keep it simple(KISS). The driver works just for PCC not PCC Opregion
->>> for now.
->> ok.
-> Good
->
->>>> We use one bit in device-flags to know which one this driver will use.
->>>>
->>> NACK again just to re-iterate my point if you have not yet accepted that
->>> fact.
->> Above is our plan. Do you still think we shouldn't add this device-flags?
->> please let me know.
-> Correct, no device flags as I see no use for it with your PCC only use case
-> for now, right ?
-Yes, it can still work well.
-As for PCC Opregion way on other platform, I think of other way.
->
->>>> I'm not sure if you can understand what I mean by saing that.
->>>> If you're not confused about this now, can you reply to my last email
->>>> again?😁
->>>>
->>> The example you had IIRC is use of System Memory Opregion to demonstrate
->>> some _DSM. That has nothing to do with PCC Opregion.
->> Yes, it doesn't matter.
->> I just want to have a way to get device-flags which contains many bits(every
->> bits can be used to as one feature for expanding), rigtht?
-> Get it through the spec, we don't allow random additions for some
-> implementations like this.
-Get it.
->>> Commit 77e2a04745ff ("ACPI: PCC: Implement OperationRegion handler for
->>> the PCC Type 3 subtype") has the example in the commit message. IIRC,
->> Your example is very useful to the user.
->>> you have even fixed couple of bugs in that driver. That is the reason
->>> why I don't understand how you think this driver and that can or must
->> Understand you, Sudeep.
->> At that time, I tested it by a simple demo driver on the platform supported
->> type3.
->>
-> OK
->
->> This driver will support multiple platforms.
->> On some platforms, we can only use PCC with polling way.
->> And we will add PCC Opregion way for others platforms.
-> Again when you do please post the patch with the ASL snippet as I am
-> very much interested in understanding how you would make that work.
-All right.
->
->> What's more, every platform just use one of them(PCC and PCC Opregion).
-> OK
->
->>> work together. At least I fail to see how ATM(examples please, by that
->>> I mean ASL snippet for PCC vs PCC Opregion usage to work with this driver)
->> ok!
->> For PCC, ASL snippet is little.
->> I will add ASL snippet when this driver addes PCC Opregion way.
->
-> Sounds like a plan to make progress at-least for now.
->
+Acked-by: Stephen Boyd <sboyd@kernel.org>
