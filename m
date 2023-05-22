@@ -1,77 +1,104 @@
-Return-Path: <conor@kernel.org>
+Return-Path: <SRS0=26A/=BL=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C85B0C77B7A
-	for <soc@archiver.kernel.org>; Thu, 18 May 2023 21:31:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08E80C7EE23
+	for <soc@archiver.kernel.org>; Mon, 22 May 2023 06:23:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7626AC4339E; Thu, 18 May 2023 21:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2C7C433EF;
-	Thu, 18 May 2023 21:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1684445509;
-	bh=lNL+k3H/SyeTgTh2EpoRKz5agGIKPRGDOyv9RjDde/k=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=aaFzyI0f913j2MuXEolyeEXyyc3GO3pW0zoivzOinIgt0IUPrtY6y8q7HEKovqoHm
-	 GPVlFg2HU3jtAu/3KV3FSoxC8DA0KMt0rCqpRzSiIlab2gn+s6cav+dY3agrRUFOhz
-	 BWzzElqhAglQtMdHlloDa3J3IBeDM4iXg+Tj1gYpojvxTCb6zsN3jSJ95rYYSjGXpu
-	 82d98mYr4fnhYbSuASnyjpD9Pz/Ix5t37QFg4+MiZWH6aulDBBaWtIzgreZTHtWiT/
-	 34ziEwc2fbwtVPHFXbwrzgvmfV/dfFkvUhrOH4ioQNd7100l34z7QbXTFSYsMhk2YK
-	 rI84FHpuRFXEw==
-Date: Thu, 18 May 2023 22:31:44 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	id C7D4FC4339B; Mon, 22 May 2023 06:23:28 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 59214C433D2
+	for <soc@kernel.org>; Mon, 22 May 2023 06:23:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 59214C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q0ywb-0001Xd-Gv; Mon, 22 May 2023 08:22:57 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q0ywY-001wVk-Sw; Mon, 22 May 2023 08:22:54 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q0ywY-006nxT-7b; Mon, 22 May 2023 08:22:54 +0200
+Date: Mon, 22 May 2023 08:22:54 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Aurelien Jarno <aurelien@aurel32.net>
 List-Id: <soc.lore.kernel.org>
-Cc: Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-	arm@kernel.org, soc@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Lars Povlsen <lars.povlsen@microchip.com>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com
-Subject: Re: [GIT PULL 1/2] arm64: dts: cleanup and fixes for v6.5
-Message-ID: <20230518-tactile-outback-f4ceeb36d68c@spud>
-References: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Olof Johansson <olof@lixom.net>, Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, soc@kernel.org
+Subject: Re: [PATCH 0/2] arm/arm64: dts: Enable device-tree overlay support
+ for RPi devices
+Message-ID: <20230522062254.6biyisl4qp7krm3h@pengutronix.de>
+References: <20220410225940.135744-1-aurelien@aurel32.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="2BWurFb0z5GwQBwE"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="owu27q3xhaobzkom"
 Content-Disposition: inline
-In-Reply-To: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220410225940.135744-1-aurelien@aurel32.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
 
---2BWurFb0z5GwQBwE
-Content-Type: text/plain; charset=us-ascii
+--owu27q3xhaobzkom
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 17, 2023 at 03:12:54PM +0200, Krzysztof Kozlowski wrote:
+Hello,
 
-> There is ongoing discussion how to improve a bit Microchip ARM64 SparX-5 patch
-> handling process, so the contributions won't get lost.
+On Mon, Apr 11, 2022 at 12:59:38AM +0200, Aurelien Jarno wrote:
+> This patchset changes the generation of the Raspberry Pi devices DTB
+> files to improve the support for out-of-tree device-tree overlays, like
+> it has recently been done for the Nvidia SoCs.
+>=20
+> I personally only need that for arm64, but I have added a similar patch
+> to do the same on arm.
+>=20
+> Aurelien Jarno (2):
+>   arm64: dts: broadcom: Enable device-tree overlay support for RPi
+>     devices
+>   arm: dts: Enable device-tree overlay support for RPi devices
 
-Aye, should be sorted. We'll add some arm64 specific branches in the
-at91 repo & a patch has been sent for the related maintainers entries:
-https://lore.kernel.org/all/20230517-shimmer-retry-34596c637882@spud/
+I like these changes,
 
-Thanks Krzysztof for picking up these ones.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Cheers,
-Conor.
+Given there was no feedback for >1 year now, I wonder if there are good
+reasons against this change, or it just fell through the cracks?!
 
+Best regards
+Uwe
 
---2BWurFb0z5GwQBwE
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--owu27q3xhaobzkom
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGaZQAAKCRB4tDGHoIJi
-0ucFAP9FsBSzbfasREHu4YtbKs0mqnzV4QTMrMIwRhuqfU8fzwEA6IrkQ3ZvCcKO
-C7Nmi+N7Eycv/T352FFSEQVJX1Btwgo=
-=IgHa
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRrCj0ACgkQj4D7WH0S
+/k7/bQf/Xf3slCx2ZMVVh1c6RAW7rjXO+Ue9JKEO4+afkalpGJNYhhbifc/NcB+8
+naeNjgjhQc0g0vAP2MSK+17Tj7vysFC1wKruQ+AhC0rDeCsjGxZNTrZcMCBRyLJm
+wYJU+BQxZshzkmUqZvdLQxfFnwt4r8H8cJXo3V0hgSzX9RXEyY+4X5j7n3Mg1HeH
+GCY0EbiWds7uQKEMQWh6ITPS8OM8Cdacr5/bcaSM+Sb9wBOg/pejoM0fcnY2hH0w
+p0zS7EQox7x4LHa5/SPO+aNrMXYi6iRlfKO/B/jWMWRBeNRnQksQFzWQ3iFCl0GY
+lEJ2swJ2QggYRTK81XipLR2fa45pJw==
+=T73M
 -----END PGP SIGNATURE-----
 
---2BWurFb0z5GwQBwE--
+--owu27q3xhaobzkom--
