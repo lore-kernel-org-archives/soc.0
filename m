@@ -1,107 +1,118 @@
-Return-Path: <SRS0=NTGa=BM=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=GMnE=BM=mleia.com=vz@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C055C77B75
-	for <soc@archiver.kernel.org>; Tue, 23 May 2023 13:41:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D5FC77B75
+	for <soc@archiver.kernel.org>; Tue, 23 May 2023 20:17:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 15274C4339C; Tue, 23 May 2023 13:41:43 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id A356BC433D2;
-	Tue, 23 May 2023 13:41:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A356BC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8DD7139F;
-	Tue, 23 May 2023 06:42:24 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 400DD3F840;
-	Tue, 23 May 2023 06:41:38 -0700 (PDT)
-Date: Tue, 23 May 2023 14:41:35 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "lihuisong (C)" <lihuisong@huawei.com>
-List-Id: <soc.lore.kernel.org>
-Cc: andersson@kernel.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, shawnguo@kernel.org,
-	arnd@arndb.de, krzk@kernel.org, linux-kernel@vger.kernel.org,
-	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
-	liuyonglong@huawei.com
-Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Message-ID: <20230523134135.jkkhcwfihflp775m@bogus>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230522072211.8894-1-lihuisong@huawei.com>
- <20230522072211.8894-2-lihuisong@huawei.com>
- <20230523093922.f2y4wrz3vkzi7kmw@bogus>
- <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
+	id C3B3DC433A1; Tue, 23 May 2023 20:17:57 +0000 (UTC)
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id B7CA7C433D2;
+	Tue, 23 May 2023 20:17:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7CA7C433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1684873066; bh=09CTwGtCwgqIKNSsEvY2eczqQBaTuZs3wRO9EsOKxfQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jSzJuLZGCRCwxDW0kck7iHhJkaWxzX2g50Sf4XlKqSlYzGbcX5y4Ot27bH3UnCuAy
+	 xXFzaH/eqQFQdM25pwGVzE77PTPjLENrEanS5Stmh1eiw72HZHu4WyASHV1X4lWRPU
+	 Sbvxe56qXNAbmchx3Fgp3rSZV9fdffeY/gKOF2xlaKYrXJg8QmO8ckB88R8JkXgW4p
+	 WOW5cah5PDX66QCW4H/t24wBmSn3Qh1jYqOmoGmD5b0yqwjohwRDoNVUqrfrE85px/
+	 S/m8vWUEiVua6QGU0I27doLb3zPgqLAkahg7ybRE8nOk3MFv/Gm9r/JoosmYYOqfwf
+	 PXgN13JbZhLMQ==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+	by mail.mleia.com (Postfix) with ESMTP id 644274228A9;
+	Tue, 23 May 2023 20:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1684873066; bh=09CTwGtCwgqIKNSsEvY2eczqQBaTuZs3wRO9EsOKxfQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=jSzJuLZGCRCwxDW0kck7iHhJkaWxzX2g50Sf4XlKqSlYzGbcX5y4Ot27bH3UnCuAy
+	 xXFzaH/eqQFQdM25pwGVzE77PTPjLENrEanS5Stmh1eiw72HZHu4WyASHV1X4lWRPU
+	 Sbvxe56qXNAbmchx3Fgp3rSZV9fdffeY/gKOF2xlaKYrXJg8QmO8ckB88R8JkXgW4p
+	 WOW5cah5PDX66QCW4H/t24wBmSn3Qh1jYqOmoGmD5b0yqwjohwRDoNVUqrfrE85px/
+	 S/m8vWUEiVua6QGU0I27doLb3zPgqLAkahg7ybRE8nOk3MFv/Gm9r/JoosmYYOqfwf
+	 PXgN13JbZhLMQ==
+Message-ID: <f39da4b5-528b-e389-c0ee-d31add169620@mleia.com>
+Date: Tue, 23 May 2023 23:17:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 06/13] ARM: lpc32xx: add missing include
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>, soc@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Hartley Sweeten <hsweeten@visionengravers.com>,
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+ Andre Przywara <andre.przywara@arm.com>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>,
+ Andrew Lunn <andrew@lunn.ch>,
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+ Gregory Clement <gregory.clement@bootlin.com>,
+ Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>,
+ Robert Jarzmik <robert.jarzmik@free.fr>, Viresh Kumar <vireshk@kernel.org>,
+ Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+ Sudeep Holla <sudeep.holla@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-7-arnd@kernel.org>
+From: Vladimir Zapolskiy <vz@mleia.com>
+In-Reply-To: <20230516153109.514251-7-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20230523_201746_460868_EF02DC5F 
+X-CRM114-Status: GOOD (  14.88  )
 
-On Tue, May 23, 2023 at 07:57:42PM +0800, lihuisong (C) wrote:
+On 5/16/23 18:31, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> 在 2023/5/23 17:39, Sudeep Holla 写道:
-> > On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
-> > > The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
-> > > for ensuring cache coherent on HiSilicon SoC. The performance of
-> > > the application may be affected if some hccs ports are in non-full
-> > > lane status, have a large number of CRC errors and so on.
-> > > 
-> > > This driver provides the query interface of the health status and
-> > > port information of HCCS on Kunpeng SoC.
-> > > 
-> > > Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> > > ---
-> > >   MAINTAINERS                          |    6 +
-> > >   drivers/soc/Kconfig                  |    1 +
-> > >   drivers/soc/Makefile                 |    1 +
-> > >   drivers/soc/hisilicon/Kconfig        |   19 +
-> > >   drivers/soc/hisilicon/Makefile       |    2 +
-> > >   drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
-> > >   drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
-> > >   7 files changed, 1512 insertions(+)
-> > >   create mode 100644 drivers/soc/hisilicon/Kconfig
-> > >   create mode 100644 drivers/soc/hisilicon/Makefile
-> > >   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
-> > >   create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index eddbc48c61e9..fe0e796e8445 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -9399,6 +9399,12 @@ S:	Maintained
-> > >   W:	http://www.hisilicon.com
-> > >   F:	drivers/spi/spi-hisi-sfc-v3xx.c
-> > > +HISILICON KUNPENG SOC HCCS DRIVER
-> > s/HCCS/HCCS INFO or QUERY/ ?
-> From the current features, what you suggest is suitable.
-> But this driver will support to the setting feature.
+> lpc32xx_loopback_set() is defined in linux/soc/nxp/lpc32xx-misc.h but
+> this is not included before the function definition.
+> 
+> arch/arm/mach-lpc32xx/serial.c:63:6: error: no previous prototype for 'lpc32xx_loopback_set'
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   arch/arm/mach-lpc32xx/serial.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/mach-lpc32xx/serial.c b/arch/arm/mach-lpc32xx/serial.c
+> index 3e765c4bf986..3b1203db81b2 100644
+> --- a/arch/arm/mach-lpc32xx/serial.c
+> +++ b/arch/arm/mach-lpc32xx/serial.c
+> @@ -15,6 +15,7 @@
+>   #include <linux/serial_8250.h>
+>   #include <linux/clk.h>
+>   #include <linux/io.h>
+> +#include <linux/soc/nxp/lpc32xx-misc.h>
+>   
+>   #include "lpc32xx.h"
+>   #include "common.h"
 
-Ah OK, I wasn't aware of that, in that case it is fine to keep it as is
-and add comment about future feature expansions so that the name makes
-more sense them. I assumed it is more a query interface.
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 
-I also assume the settings with just control performance and is fully
-safe and stability of the system is taken care.
+If you wish, you may consider to add one more tag:
 
-[...]
+Fixes: ffba29c9ebd0 ("serial: lpc32xx: allow compile testing")
 
-> > > +
-> > > +/* PCC defines */
-> > > +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
-> > > +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
-> > I am not really sure if we keep duplicating this. I will try to cook up
-> > a patch consolidating these.
-> Yes, these info is better placed in a global header.
-> Do I need to do this in this series?
-> Or do not modify it, and then process all related code in your patch.
-
-Fair enough, we can do that later. I don't want to block this for that reason.
-
--- 
-Regards,
-Sudeep
+--
+Best wishes,
+Vladimir
