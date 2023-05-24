@@ -1,133 +1,117 @@
-Return-Path: <SRS0=s7Mr=BN=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=g95U=BN=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 429D5C77B73
-	for <soc@archiver.kernel.org>; Wed, 24 May 2023 09:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F69BC77B7A
+	for <soc@archiver.kernel.org>; Wed, 24 May 2023 09:37:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F309DC4339C; Wed, 24 May 2023 09:00:27 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	id C612BC4339B; Wed, 24 May 2023 09:37:10 +0000 (UTC)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DA7BBC4339B;
-	Wed, 24 May 2023 09:00:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DA7BBC4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id CE7B25C02B7;
-	Wed, 24 May 2023 05:00:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 24 May 2023 05:00:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1684918824; x=1685005224; bh=S7sa8C/IogYZURJrOm0ZDAiU3OBbB8qNXQm
-	tRKL6Fb0=; b=HZKgHz3rqNYJ2Pw2wrGOpbUOIDA/IOAgTV784ojJJtvpSFQIj10
-	8qTDsUtYq8lLue6pSLuU0AKRdGj8vejKNrdfdMfAmpWhh8pG+RzEkpPpBUdEVivD
-	Wig/sXjJbIH4DfPUMxXs4OaxlQNtuj0OfBonnlO0laVhGgx6NqSrRwgP9uQ9O6MU
-	VDKrC24b2sAwDNuQe7GgUT9lsggeJGDTlgVY9rlS7KMTR0GIvSukUYLSWdWOeuaI
-	hlBF0YtAnNGm1EfHiJlwP/75vOdgyNyKMlT8emi99bcEnAF4c8yKL0wKBIkXz7R6
-	ZkJp7/2gMenWnwgulnYpEhTpvRGRV/3JQ9w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1684918824; x=1685005224; bh=S7sa8C/IogYZURJrOm0ZDAiU3OBbB8qNXQm
-	tRKL6Fb0=; b=p9n89m5rSqqp+mY4RDK1NFs2zf98lBIc8CeA3dU/0VKMZ7Qw86P
-	ksW9Xf+jjGAxJxWXKlY4l/lJ3YNFzPTrtaSSosKEen3k11nXsqzx3NLAlijir1uZ
-	7UvAcnSJKDcr11zux9/uGh52TnjzqgQI9l9Vg6X7Hw5oLzQGATQoSTU3F3jyMP2I
-	NSdyBTtut4qnrnwk4tHRVCl8w02n0qeuXS9coLBsrjRCg5jBVl0T9AuVRSVVWiF6
-	1O0M/6z3+BBNjn/8wDBtyIgD3oeENXAzvR2R0XJa6rVYY+wVIjF6mE3f9kXEXh2H
-	yNC+29I76uPDb66Fob6VAwWbYkDDrgp7Q5A==
-X-ME-Sender: <xms:KNJtZMPPd-OUVctrSMtu6gC_Wj2ea8HS-Scn1-0rMeC0-leHJYPFiA>
-    <xme:KNJtZC_EZmiDOhgUVt0HFihP2Mr2muE4qaHOLCV1md5NfFpNwzPOFtvJJsXEN4ZRQ
-    Dk5XxOyoEdoT1ePjL8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejhedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:KNJtZDQauFxY19YxAr7s2-7N5d1NzWWUW0NdVA4pLmUpJ4vUbjkOVQ>
-    <xmx:KNJtZEtMwWa0CTxIzqV9LHZyznmkP0crMbnONb6f240qugw1cG4sdQ>
-    <xmx:KNJtZEeiQAbGIAB1oGeRFC0MSADUaMjEEt8gCtYTdKVOX3a9cmvHYA>
-    <xmx:KNJtZHWbuShUGGLuk0n7ehdbI6bgUuC5auJISleEu21SrAe-0_dUcA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 0B98CB60086; Wed, 24 May 2023 05:00:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <e312b861-a5cc-43b0-b2b0-7d66f47a3d0b@app.fastmail.com>
-In-Reply-To: <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
-References: <20230516075217.205401-1-ychuang570808@gmail.com>
- <20230516075217.205401-11-ychuang570808@gmail.com>
- <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
- <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
-Date: Wed, 24 May 2023 11:00:02 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jacky Huang" <ychuang570808@gmail.com>,
- "Jiri Slaby" <jirislaby@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
- krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Tomer Maimon" <tmaimon77@gmail.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 30C7CC433D2;
+	Wed, 24 May 2023 09:37:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30C7CC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QR5Z61K5gz18LhL;
+	Wed, 24 May 2023 17:32:30 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 17:36:58 +0800
+Message-ID: <b0a08101-2f20-825a-5120-6662e1436821@huawei.com>
+Date: Wed, 24 May 2023 17:36:58 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
- mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver support
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+CC: <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+	<angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+	<arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<soc@kernel.org>, <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
+	<liuyonglong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230522072211.8894-1-lihuisong@huawei.com>
+ <20230522072211.8894-2-lihuisong@huawei.com>
+ <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+ <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
+ <20230523134135.jkkhcwfihflp775m@bogus>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230523134135.jkkhcwfihflp775m@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
-On Wed, May 24, 2023, at 10:34, Jacky Huang wrote:
-> On 2023/5/24 =E4=B8=8B=E5=8D=88 03:42, Jiri Slaby wrote:
->> On 16. 05. 23, 9:52, Jacky Huang wrote:
->>> +static void ma35d1serial_config_port(struct uart_port *port, int fl=
-ags)
->>> +{
->>> +=C2=A0=C2=A0=C2=A0 /*
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Driver core for serial ports forces a no=
-n-zero value for port=20
->>> type.
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Write an arbitrary value here to accommo=
-date the serial core=20
->>> driver,
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 * as ID part of UAPI is redundant.
->>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->>> +=C2=A0=C2=A0=C2=A0 port->type =3D 1;
->>
->> So this 1 translates to PORT_8250. Why not to use it directly? Or=20
->> something more saner like PORT_16550A?
->>
-> It's not actually 8250 or 16550A.
-> Can we add the following definition to=20
-> 'include/uapi/linux/serial_core.h' and use PORT_MA35 instead?
+
+在 2023/5/23 21:41, Sudeep Holla 写道:
+> On Tue, May 23, 2023 at 07:57:42PM +0800, lihuisong (C) wrote:
+>> 在 2023/5/23 17:39, Sudeep Holla 写道:
+>>> On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
+>>>> The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
+>>>> for ensuring cache coherent on HiSilicon SoC. The performance of
+>>>> the application may be affected if some hccs ports are in non-full
+>>>> lane status, have a large number of CRC errors and so on.
+>>>>
+>>>> This driver provides the query interface of the health status and
+>>>> port information of HCCS on Kunpeng SoC.
+>>>>
+>>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>>>> ---
+>>>>    MAINTAINERS                          |    6 +
+>>>>    drivers/soc/Kconfig                  |    1 +
+>>>>    drivers/soc/Makefile                 |    1 +
+>>>>    drivers/soc/hisilicon/Kconfig        |   19 +
+>>>>    drivers/soc/hisilicon/Makefile       |    2 +
+>>>>    drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
+>>>>    drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
+>>>>    7 files changed, 1512 insertions(+)
+>>>>    create mode 100644 drivers/soc/hisilicon/Kconfig
+>>>>    create mode 100644 drivers/soc/hisilicon/Makefile
+>>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+>>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index eddbc48c61e9..fe0e796e8445 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -9399,6 +9399,12 @@ S:	Maintained
+>>>>    W:	http://www.hisilicon.com
+>>>>    F:	drivers/spi/spi-hisi-sfc-v3xx.c
+>>>> +HISILICON KUNPENG SOC HCCS DRIVER
+>>> s/HCCS/HCCS INFO or QUERY/ ?
+>>  From the current features, what you suggest is suitable.
+>> But this driver will support to the setting feature.
+> Ah OK, I wasn't aware of that, in that case it is fine to keep it as is
+> and add comment about future feature expansions so that the name makes
+It's not suitable to add it in advance.
+> more sense them. I assumed it is more a query interface.
+Yes, most of them are query interfaces.
 >
-> #define PORT_MA35=C2=A0=C2=A0=C2=A0 124
-
-This was already in a previous version, until Greg commented
-that it was probably not needed:
-
-https://lore.kernel.org/lkml/20fc81c9-5517-ce1e-639a-3b425cf27759@gmail.=
-com/
-
-Since leaving port->type at PORT_UNKNOWN doesn't work, and almost
-all other drivers have something in serial_core.h, it's probably
-best to do the same here. Checking the other drivers showed that
-drivers/tty/serial/lantiq.c is currently the only exception, it
-defines PORT_LTQ_ASC locally, which causes a conflict with
-PORT_SPRD.
-
-    Arnd
+> I also assume the settings with just control performance and is fully
+> safe and stability of the system is taken care.
+Yes, it will has an impact on performance and power consumption, but not 
+functionality.
+>
+> [...]
+>
+>>>> +
+>>>> +/* PCC defines */
+>>>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
+>>>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
+>>> I am not really sure if we keep duplicating this. I will try to cook up
+>>> a patch consolidating these.
+>> Yes, these info is better placed in a global header.
+>> Do I need to do this in this series?
+>> Or do not modify it, and then process all related code in your patch.
+> Fair enough, we can do that later. I don't want to block this for that reason.
+ok, thanks. will send v3 ASAP.
+>
