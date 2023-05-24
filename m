@@ -1,118 +1,236 @@
-Return-Path: <SRS0=GMnE=BM=mleia.com=vz@kernel.org>
+Return-Path: <SRS0=r+P1=BN=gmail.com=jirislaby@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D5FC77B75
-	for <soc@archiver.kernel.org>; Tue, 23 May 2023 20:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D49C77B7A
+	for <soc@archiver.kernel.org>; Wed, 24 May 2023 07:42:55 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C3B3DC433A1; Tue, 23 May 2023 20:17:57 +0000 (UTC)
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id AAA52C4339C; Wed, 24 May 2023 07:42:55 +0000 (UTC)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B7CA7C433D2;
-	Tue, 23 May 2023 20:17:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B7CA7C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=mleia.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1684873066; bh=09CTwGtCwgqIKNSsEvY2eczqQBaTuZs3wRO9EsOKxfQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jSzJuLZGCRCwxDW0kck7iHhJkaWxzX2g50Sf4XlKqSlYzGbcX5y4Ot27bH3UnCuAy
-	 xXFzaH/eqQFQdM25pwGVzE77PTPjLENrEanS5Stmh1eiw72HZHu4WyASHV1X4lWRPU
-	 Sbvxe56qXNAbmchx3Fgp3rSZV9fdffeY/gKOF2xlaKYrXJg8QmO8ckB88R8JkXgW4p
-	 WOW5cah5PDX66QCW4H/t24wBmSn3Qh1jYqOmoGmD5b0yqwjohwRDoNVUqrfrE85px/
-	 S/m8vWUEiVua6QGU0I27doLb3zPgqLAkahg7ybRE8nOk3MFv/Gm9r/JoosmYYOqfwf
-	 PXgN13JbZhLMQ==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id 644274228A9;
-	Tue, 23 May 2023 20:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1684873066; bh=09CTwGtCwgqIKNSsEvY2eczqQBaTuZs3wRO9EsOKxfQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jSzJuLZGCRCwxDW0kck7iHhJkaWxzX2g50Sf4XlKqSlYzGbcX5y4Ot27bH3UnCuAy
-	 xXFzaH/eqQFQdM25pwGVzE77PTPjLENrEanS5Stmh1eiw72HZHu4WyASHV1X4lWRPU
-	 Sbvxe56qXNAbmchx3Fgp3rSZV9fdffeY/gKOF2xlaKYrXJg8QmO8ckB88R8JkXgW4p
-	 WOW5cah5PDX66QCW4H/t24wBmSn3Qh1jYqOmoGmD5b0yqwjohwRDoNVUqrfrE85px/
-	 S/m8vWUEiVua6QGU0I27doLb3zPgqLAkahg7ybRE8nOk3MFv/Gm9r/JoosmYYOqfwf
-	 PXgN13JbZhLMQ==
-Message-ID: <f39da4b5-528b-e389-c0ee-d31add169620@mleia.com>
-Date: Tue, 23 May 2023 23:17:37 +0300
+	by smtp.kernel.org (Postfix) with ESMTPS id 833A5C433D2;
+	Wed, 24 May 2023 07:42:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 833A5C433D2
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-96f5685f902so82039166b.2;
+        Wed, 24 May 2023 00:42:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684914172; x=1687506172;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wwgrcZ2UwBjm9qvElzAVRShxkr9NVzmzmVcR8DMPVj8=;
+        b=Wb8fo7YjZsMnK7+HNtATOCKTuUE+OuJBbTNKWnLz8+A229rjNt/GhsoDWWRYxr9d/S
+         3QDhHDE0K4peINqbdX8dcuHl/J10DxF0tTebAtWjvlCNs/zaPC+xgAQGGyDPZjOnbrKw
+         w46CFVZF26Bbg+unQ8JGnO5LynUONDAxn8jHnCKNLCVExeJfCO6sCXpGDuDRNphoaJaa
+         DE4vbsa9vYBTZIaVBwoD8oK6gJhAadXuXDh/VCF+4vwa1Zrn6Ab7PkwAGG7dHe5T7WZv
+         e9frl1OgLIxKI6gZS4OdrJu9qsvB/eJtbL8pa4Ni+Y7BRaFrsfnFJv/CDaXq43g08lvr
+         AAOw==
+X-Gm-Message-State: AC+VfDyXxCHYZ9VCicGIRpG29yIpdtsnj6ZAUcVFr4IKc/41dRY4tSHA
+	uYJDHl9A9n+SmS3i1GP0PQY=
+X-Google-Smtp-Source: ACHHUZ4HvOu04Y5mGSqqaAuE6ebBkKg8OJvbfmZxEJbWTMKb6kSYysDu9rwF9z+yUleqxo4VhBArLg==
+X-Received: by 2002:a17:907:2cc7:b0:959:18b2:454a with SMTP id hg7-20020a1709072cc700b0095918b2454amr15794693ejc.76.1684914172213;
+        Wed, 24 May 2023 00:42:52 -0700 (PDT)
+Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id mj14-20020a170906af8e00b009659fa6eeddsm5381880ejb.196.2023.05.24.00.42.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 00:42:51 -0700 (PDT)
+Message-ID: <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
+Date: Wed, 24 May 2023 09:42:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH 06/13] ARM: lpc32xx: add missing include
+ Thunderbird/102.10.1
 Content-Language: en-US
+To: Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, lee@kernel.org, mturquette@baylibre.com,
+ sboyd@kernel.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+ tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>, soc@kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Hartley Sweeten <hsweeten@visionengravers.com>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>,
- Andre Przywara <andre.przywara@arm.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>,
- Andrew Lunn <andrew@lunn.ch>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>,
- Robert Jarzmik <robert.jarzmik@free.fr>, Viresh Kumar <vireshk@kernel.org>,
- Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
- Sudeep Holla <sudeep.holla@arm.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20230516153109.514251-1-arnd@kernel.org>
- <20230516153109.514251-7-arnd@kernel.org>
-From: Vladimir Zapolskiy <vz@mleia.com>
-In-Reply-To: <20230516153109.514251-7-arnd@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
+ schung@nuvoton.com, mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230516075217.205401-1-ychuang570808@gmail.com>
+ <20230516075217.205401-11-ychuang570808@gmail.com>
+From: Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+In-Reply-To: <20230516075217.205401-11-ychuang570808@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20230523_201746_460868_EF02DC5F 
-X-CRM114-Status: GOOD (  14.88  )
 
-On 5/16/23 18:31, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> lpc32xx_loopback_set() is defined in linux/soc/nxp/lpc32xx-misc.h but
-> this is not included before the function definition.
-> 
-> arch/arm/mach-lpc32xx/serial.c:63:6: error: no previous prototype for 'lpc32xx_loopback_set'
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   arch/arm/mach-lpc32xx/serial.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/mach-lpc32xx/serial.c b/arch/arm/mach-lpc32xx/serial.c
-> index 3e765c4bf986..3b1203db81b2 100644
-> --- a/arch/arm/mach-lpc32xx/serial.c
-> +++ b/arch/arm/mach-lpc32xx/serial.c
-> @@ -15,6 +15,7 @@
->   #include <linux/serial_8250.h>
->   #include <linux/clk.h>
->   #include <linux/io.h>
-> +#include <linux/soc/nxp/lpc32xx-misc.h>
->   
->   #include "lpc32xx.h"
->   #include "common.h"
+On 16. 05. 23, 9:52, Jacky Huang wrote:
+> +static void ma35d1serial_config_port(struct uart_port *port, int flags)
+> +{
+> +	/*
+> +	 * Driver core for serial ports forces a non-zero value for port type.
+> +	 * Write an arbitrary value here to accommodate the serial core driver,
+> +	 * as ID part of UAPI is redundant.
+> +	 */
+> +	port->type = 1;
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+So this 1 translates to PORT_8250. Why not to use it directly? Or 
+something more saner like PORT_16550A?
 
-If you wish, you may consider to add one more tag:
+> +}
+> +
+> +static int ma35d1serial_verify_port(struct uart_port *port, struct serial_struct *ser)
+> +{
+> +	if (port->type != PORT_UNKNOWN && ser->type != 1)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+...
+> +static int __init ma35d1serial_console_setup(struct console *co, char *options)
+> +{
+> +	struct device_node *np = ma35d1serial_uart_nodes[co->index];
+> +	struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
+> +	u32 val32[4];
+> +	struct uart_port *port;
+> +	int baud = 115200;
+> +	int bits = 8;
+> +	int parity = 'n';
+> +	int flow = 'n';
+> +
+> +	/*
+> +	 * Check whether an invalid uart number has been specified, and
 
-Fixes: ffba29c9ebd0 ("serial: lpc32xx: allow compile testing")
+You dereferenced ma35d1serial_uart_nodes already. Doesn't 
+console=ttyNVT1000 (or something like that) crash the system?
 
---
-Best wishes,
-Vladimir
+> +	 * if so, search for the first available port that does have
+> +	 * console support.
+
+The code below doesn't match this comment.
+
+> +	 */
+> +	if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
+> +		pr_debug("Console Port%x out of range\n", co->index);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
+
+Shouldn't that 4 be ARRAY_SIZE(val32) instead?
+
+> +		return -EINVAL;
+
+One \n here please.
+
+> +	p->port.iobase = val32[1];
+> +	p->port.membase = ioremap(p->port.iobase, MA35_UART_REG_SIZE);
+
+What if this fails?
+
+> +	p->port.ops = &ma35d1serial_ops;
+> +	p->port.line = 0;
+> +	p->port.uartclk = MA35_UART_CONSOLE_CLK;
+> +
+> +	port = &ma35d1serial_ports[co->index].port;
+
+Isn't this:
+   port = &p->port;
+?
+
+Either use port on all above lines or drop the "port" variable 
+completely and use "p->port" below instead.
+
+> +
+> +	if (options)
+> +		uart_parse_options(options, &baud, &parity, &bits, &flow);
+> +
+> +	return uart_set_options(port, co, baud, parity, bits, flow);
+> +}
+> +
+> +static struct console ma35d1serial_console = {
+> +	.name    = "ttyNVT",
+> +	.write   = ma35d1serial_console_write,
+> +	.device  = uart_console_device,
+> +	.setup   = ma35d1serial_console_setup,
+> +	.flags   = CON_PRINTBUFFER | CON_ENABLED,
+> +	.index   = -1,
+> +	.data    = &ma35d1serial_reg,
+
+I don't see console->data used anywhere in the driver?
+
+> +};
+...
+> +static int ma35d1serial_probe(struct platform_device *pdev)
+> +{
+> +	struct resource *res_mem;
+> +	struct uart_ma35d1_port *up;
+> +	int ret = 0;
+> +
+> +	if (pdev->dev.of_node) {
+> +		ret = of_alias_get_id(pdev->dev.of_node, "serial");
+> +		if (ret < 0) {
+> +			dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +	up = &ma35d1serial_ports[ret];
+> +	up->port.line = ret;
+> +	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res_mem)
+> +		return -ENODEV;
+> +
+> +	up->port.iobase = res_mem->start;
+> +	up->port.membase = ioremap(up->port.iobase, MA35_UART_REG_SIZE);
+
+Check this too.
+
+> +	up->port.ops = &ma35d1serial_ops;
+> +
+> +	spin_lock_init(&up->port.lock);
+> +
+> +	up->clk = of_clk_get(pdev->dev.of_node, 0);
+> +	if (IS_ERR(up->clk)) {
+> +		ret = PTR_ERR(up->clk);
+> +		dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
+> +		goto err_iounmap;
+> +	}
+> +
+> +	ret = clk_prepare_enable(up->clk);
+> +	if (ret)
+> +		goto err_iounmap;
+> +
+> +	if (up->port.line != 0)
+> +		up->port.uartclk = clk_get_rate(up->clk);
+> +
+> +	ret = platform_get_irq(pdev, 0);
+> +	if (ret < 0)
+> +		goto err_clk_disable;
+> +
+> +	up->port.irq = ret;
+> +	up->port.dev = &pdev->dev;
+> +	up->port.flags = UPF_BOOT_AUTOCONF;
+> +
+> +	platform_set_drvdata(pdev, up);
+> +
+> +	ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
+> +	if (ret < 0)
+> +		goto err_free_irq;
+> +
+> +	return 0;
+> +
+> +err_free_irq:
+> +	free_irq(up->port.irq, &up->port);
+> +
+> +err_clk_disable:
+> +	clk_disable_unprepare(up->clk);
+> +
+> +err_iounmap:
+> +	iounmap(up->port.membase);
+> +	return ret;
+> +}
+
+thanks,
+-- 
+js
+suse labs
+
