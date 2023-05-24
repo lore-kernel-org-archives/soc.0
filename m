@@ -1,117 +1,148 @@
-Return-Path: <SRS0=g95U=BN=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=z7KL=BN=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F69BC77B7A
-	for <soc@archiver.kernel.org>; Wed, 24 May 2023 09:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C0D4C77B73
+	for <soc@archiver.kernel.org>; Wed, 24 May 2023 13:07:17 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C612BC4339B; Wed, 24 May 2023 09:37:10 +0000 (UTC)
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 65E7CC4339C; Wed, 24 May 2023 13:07:17 +0000 (UTC)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 30C7CC433D2;
-	Wed, 24 May 2023 09:37:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 30C7CC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QR5Z61K5gz18LhL;
-	Wed, 24 May 2023 17:32:30 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 17:36:58 +0800
-Message-ID: <b0a08101-2f20-825a-5120-6662e1436821@huawei.com>
-Date: Wed, 24 May 2023 17:36:58 +0800
+	by smtp.kernel.org (Postfix) with ESMTPS id 462C8C433EF
+	for <soc@kernel.org>; Wed, 24 May 2023 13:07:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 462C8C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-561bb2be5f8so12809857b3.0
+        for <soc@kernel.org>; Wed, 24 May 2023 06:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684933635; x=1687525635;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7T2td/HP9EXHaURHSmB+HEKZGzkbT+5xCwINot9A/Zw=;
+        b=yi4ylD8eJiuNjIP4eECWuk48rWL8P+wmAU25nBZw8BFzcQxO/1sEfVaA4MIDtb6MS4
+         6/0f5keWIZkT3bhRaOiauFkWFsWhIw7oytk+6wcwpw2KIEN2qo9IBdrVTCprGDuqNHZa
+         NyrQBt5ZOzZJPwqY51BH8KDf2207rT44nuK64dPXCtudLUrHyWwtQS2jzJXLne6uTAK3
+         YnNH2yVpOv4leOAwC4ti6kylg8HxCXWiqleqTRgjXHl8AZ9oYBMXJINWS50kU7rgdds2
+         jVbpKicozPdhF8/H3MSha9f3LfVDSYTVjhvp1PK8TtBpwjSxnOJ3zAPNVlzR3b/UOU95
+         koWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684933635; x=1687525635;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7T2td/HP9EXHaURHSmB+HEKZGzkbT+5xCwINot9A/Zw=;
+        b=jHgDtLchc+zWytBeo97tlyiLOvP8/tHBv04VjxBfIDc4ux1LJKM5l1YErosgUt2cH5
+         3pkvAuDklYKTy13/49wIKakXhyGGEZjTvbbqDmI83rdFmJ3TOJ/0dn8d521uOPUamRrb
+         JTBkXPooaDl4tp+0AzFkezJmww+3ZfB94lis5sDjFiqv86rdQyCZ237EknYExYwo63xY
+         lmG3PlOlZ3rg5GipJUU9tRQZvXeI53uIxtMTZsiadDGGJbJ1vANmuW8TvA1KMZBaWAuP
+         WHigxg8uQD2aYTSE7n8ecSxTr7Hz9BrBnaP7+RMCv32VrWRrcyxZNWSEzUckWH/5+3zO
+         TRVg==
+X-Gm-Message-State: AC+VfDzTae6wstURBWzs+O8U9otHWBsES/YIHQb/DliHat9clQC0RSk2
+	ThzzYwwotLmzl++Lt/OCynz8JEgY9Afzhq72Nla1x3PXFN8jguJPOd0=
+X-Google-Smtp-Source: ACHHUZ7V57h9injTXnZtjgFdZ71gBB4fHagZfU55PK9k8FuPbaFmWuRLP+stVoaf5OMAO0zgAhir1Y7zuTPJQeqN7sg=
+X-Received: by 2002:a0d:ccd3:0:b0:562:7f3:beee with SMTP id
+ o202-20020a0dccd3000000b0056207f3beeemr19710027ywd.45.1684933634934; Wed, 24
+ May 2023 06:07:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Sudeep Holla <sudeep.holla@arm.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 24 May 2023 15:07:03 +0200
+Message-ID: <CACRpkdbtE9yfx9kZqGwsHim91WsxHERecrGwjnr6TQpCUMsQwg@mail.gmail.com>
+Subject: [GIT PULL] OMAP GPIO numbers cleanup
 List-Id: <soc.lore.kernel.org>
-CC: <andersson@kernel.org>, <matthias.bgg@gmail.com>,
-	<angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
-	<arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<soc@kernel.org>, <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
-	<liuyonglong@huawei.com>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230522072211.8894-1-lihuisong@huawei.com>
- <20230522072211.8894-2-lihuisong@huawei.com>
- <20230523093922.f2y4wrz3vkzi7kmw@bogus>
- <928a893b-6596-8d40-ce0e-80059a363d11@huawei.com>
- <20230523134135.jkkhcwfihflp775m@bogus>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230523134135.jkkhcwfihflp775m@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+To: SoC Team <soc@kernel.org>, arm-soc <arm@kernel.org>
+Cc: Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	Linux-OMAP <linux-omap@vger.kernel.org>, ext Tony Lindgren <tony@atomide.com>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi SoC maintainers,
 
-在 2023/5/23 21:41, Sudeep Holla 写道:
-> On Tue, May 23, 2023 at 07:57:42PM +0800, lihuisong (C) wrote:
->> 在 2023/5/23 17:39, Sudeep Holla 写道:
->>> On Mon, May 22, 2023 at 03:22:10PM +0800, Huisong Li wrote:
->>>> The Huawei Cache-Coherent System (HCCS) is a bus protocol standard
->>>> for ensuring cache coherent on HiSilicon SoC. The performance of
->>>> the application may be affected if some hccs ports are in non-full
->>>> lane status, have a large number of CRC errors and so on.
->>>>
->>>> This driver provides the query interface of the health status and
->>>> port information of HCCS on Kunpeng SoC.
->>>>
->>>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->>>> ---
->>>>    MAINTAINERS                          |    6 +
->>>>    drivers/soc/Kconfig                  |    1 +
->>>>    drivers/soc/Makefile                 |    1 +
->>>>    drivers/soc/hisilicon/Kconfig        |   19 +
->>>>    drivers/soc/hisilicon/Makefile       |    2 +
->>>>    drivers/soc/hisilicon/kunpeng_hccs.c | 1287 ++++++++++++++++++++++++++
->>>>    drivers/soc/hisilicon/kunpeng_hccs.h |  196 ++++
->>>>    7 files changed, 1512 insertions(+)
->>>>    create mode 100644 drivers/soc/hisilicon/Kconfig
->>>>    create mode 100644 drivers/soc/hisilicon/Makefile
->>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
->>>>    create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index eddbc48c61e9..fe0e796e8445 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -9399,6 +9399,12 @@ S:	Maintained
->>>>    W:	http://www.hisilicon.com
->>>>    F:	drivers/spi/spi-hisi-sfc-v3xx.c
->>>> +HISILICON KUNPENG SOC HCCS DRIVER
->>> s/HCCS/HCCS INFO or QUERY/ ?
->>  From the current features, what you suggest is suitable.
->> But this driver will support to the setting feature.
-> Ah OK, I wasn't aware of that, in that case it is fine to keep it as is
-> and add comment about future feature expansions so that the name makes
-It's not suitable to add it in advance.
-> more sense them. I assumed it is more a query interface.
-Yes, most of them are query interfaces.
->
-> I also assume the settings with just control performance and is fully
-> safe and stability of the system is taken care.
-Yes, it will has an impact on performance and power consumption, but not 
-functionality.
->
-> [...]
->
->>>> +
->>>> +/* PCC defines */
->>>> +#define HCCS_PCC_SIGNATURE_MASK		0x50434300
->>>> +#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
->>> I am not really sure if we keep duplicating this. I will try to cook up
->>> a patch consolidating these.
->> Yes, these info is better placed in a global header.
->> Do I need to do this in this series?
->> Or do not modify it, and then process all related code in your patch.
-> Fair enough, we can do that later. I don't want to block this for that reason.
-ok, thanks. will send v3 ASAP.
->
+please pull in this cleanup of the OMAP board files removing all
+usage of the global GPIO numberspace.
+
+It's reasonably reviewed and tested, any remaining issues can
+be smoked out in-tree.
+
+Required subsystem maintainer ACKs are in place.
+
+Yours,
+Linus Walleij
+
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+tags/gpio-omap-descriptors-v6.5
+
+for you to fetch changes up to 8e0285ab95a9baf374f2c13eb152221c8ecb3f28:
+
+  ARM/musb: omap2: Remove global GPIO numbers from TUSB6010
+(2023-05-24 15:01:59 +0200)
+
+----------------------------------------------------------------
+This removes all usage of global GPIO numbers from
+arch/arm/mach-omap[12].
+
+The patches have been reviewed and tested by everyone
+who showed interest which was one person that tested
+on OSK1 and Nokia 770, and we smoked out the bugs and
+also addressed all review comments.
+
+Any remaining problems can certainly be fixed in-tree.
+
+----------------------------------------------------------------
+Linus Walleij (13):
+      ARM/mfd/gpio: Fixup TPS65010 regression on OMAP1 OSK1
+      ARM: omap1: Drop header on AMS Delta
+      ARM: omap1: Remove reliance on GPIO numbers from PalmTE
+      ARM: omap1: Remove reliance on GPIO numbers from SX1
+      Input: ads7846 - Convert to use software nodes
+      ARM/mmc: Convert old mmci-omap to GPIO descriptors
+      ARM: omap1: Fix up the Nokia 770 board device IRQs
+      ARM: omap1: Make serial wakeup GPIOs use descriptors
+      ARM: omap1: Exorcise the legacy GPIO header
+      ARM/gpio: Push OMAP2 quirk down into TWL4030 driver
+      ARM: omap2: Get USB hub reset GPIO from descriptor
+      ARM: omap2: Rewrite WLAN quirk to use GPIO descriptors
+      ARM/musb: omap2: Remove global GPIO numbers from TUSB6010
+
+ arch/arm/mach-omap1/board-ams-delta.c   |   1 -
+ arch/arm/mach-omap1/board-nokia770.c    | 207 ++++++++++++++++++++------------
+ arch/arm/mach-omap1/board-osk.c         | 146 +++++++++++++++-------
+ arch/arm/mach-omap1/board-palmte.c      |  51 +++++---
+ arch/arm/mach-omap1/board-sx1-mmc.c     |   1 -
+ arch/arm/mach-omap1/board-sx1.c         |  40 ++++--
+ arch/arm/mach-omap1/devices.c           |   1 -
+ arch/arm/mach-omap1/gpio15xx.c          |   1 -
+ arch/arm/mach-omap1/gpio16xx.c          |   1 -
+ arch/arm/mach-omap1/irq.c               |   1 -
+ arch/arm/mach-omap1/serial.c            |  30 ++---
+ arch/arm/mach-omap2/board-n8x0.c        | 156 +++++++-----------------
+ arch/arm/mach-omap2/omap_device.c       |   1 -
+ arch/arm/mach-omap2/pdata-quirks.c      | 132 ++++++++++----------
+ arch/arm/mach-omap2/usb-tusb6010.c      |  20 +--
+ arch/arm/mach-omap2/usb-tusb6010.h      |  12 ++
+ arch/arm/mach-pxa/spitz.c               |  11 +-
+ arch/mips/alchemy/devboards/db1000.c    |  11 +-
+ drivers/gpio/gpio-twl4030.c             |  52 +++++---
+ drivers/input/touchscreen/ads7846.c     | 113 +++++++----------
+ drivers/mfd/tps65010.c                  |  14 +--
+ drivers/mmc/host/omap.c                 |  46 ++++++-
+ drivers/usb/musb/musb_core.c            |   1 -
+ drivers/usb/musb/musb_core.h            |   2 -
+ drivers/usb/musb/tusb6010.c             |  53 +++++---
+ drivers/video/fbdev/omap/lcd_mipid.c    |  10 ++
+ include/linux/mfd/tps65010.h            |  11 +-
+ include/linux/mfd/twl.h                 |   3 -
+ include/linux/platform_data/lcd-mipid.h |   2 -
+ include/linux/platform_data/mmc-omap.h  |   2 -
+ include/linux/spi/ads7846.h             |   2 -
+ include/linux/usb/musb.h                |  13 --
+ 32 files changed, 636 insertions(+), 511 deletions(-)
+ create mode 100644 arch/arm/mach-omap2/usb-tusb6010.h
