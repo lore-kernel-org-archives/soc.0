@@ -1,51 +1,64 @@
-Return-Path: <SRS0=r+P1=BN=gmail.com=jirislaby@kernel.org>
+Return-Path: <SRS0=F34d=BN=gmail.com=ychuang570808@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D49C77B7A
-	for <soc@archiver.kernel.org>; Wed, 24 May 2023 07:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ABC3C7EE2C
+	for <soc@archiver.kernel.org>; Wed, 24 May 2023 08:34:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AAA52C4339C; Wed, 24 May 2023 07:42:55 +0000 (UTC)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	id 0B4FEC4339B; Wed, 24 May 2023 08:34:33 +0000 (UTC)
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 833A5C433D2;
-	Wed, 24 May 2023 07:42:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 833A5C433D2
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by smtp.kernel.org (Postfix) with ESMTPS id C3B4EC433EF;
+	Wed, 24 May 2023 08:34:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C3B4EC433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-96f5685f902so82039166b.2;
-        Wed, 24 May 2023 00:42:54 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-64d426e63baso645299b3a.0;
+        Wed, 24 May 2023 01:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684917271; x=1687509271;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dVLu9J9bPh+2rRySJRbCvWIrIN06DaPuyL4368frERU=;
+        b=BEiqCV2skxteCHF6gJIXNcEPy9N7Y4l/hVdwzg8juR/ExQ8LFn+P0Vgc7MVcxLBLRF
+         ag0SC0QTIvX9q0iEjRHG2pA3s2yhxwf7v7q0wI7yOw2BigNSDfKB4ITSP3igZKqkJlhw
+         dUAHazKTTO59rs30xYDwJNL0bh3nIgbvB9CSgQbU+8l7yuB2qvZF1OJI/ShrY/9cdSe4
+         p7akHiZwMYclgums6O7Aw20lUInCA6ZS/g/6N+/TtafH4SH++nRg5hBRlDEnQOHxgK65
+         UuLCsyCvE+R7rdXUVzvOJe/LB3+tZIX0qU8mbx8CL+6keXTLB3nPk16kQ2naAqAU65e9
+         vh2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684914172; x=1687506172;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684917271; x=1687509271;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wwgrcZ2UwBjm9qvElzAVRShxkr9NVzmzmVcR8DMPVj8=;
-        b=Wb8fo7YjZsMnK7+HNtATOCKTuUE+OuJBbTNKWnLz8+A229rjNt/GhsoDWWRYxr9d/S
-         3QDhHDE0K4peINqbdX8dcuHl/J10DxF0tTebAtWjvlCNs/zaPC+xgAQGGyDPZjOnbrKw
-         w46CFVZF26Bbg+unQ8JGnO5LynUONDAxn8jHnCKNLCVExeJfCO6sCXpGDuDRNphoaJaa
-         DE4vbsa9vYBTZIaVBwoD8oK6gJhAadXuXDh/VCF+4vwa1Zrn6Ab7PkwAGG7dHe5T7WZv
-         e9frl1OgLIxKI6gZS4OdrJu9qsvB/eJtbL8pa4Ni+Y7BRaFrsfnFJv/CDaXq43g08lvr
-         AAOw==
-X-Gm-Message-State: AC+VfDyXxCHYZ9VCicGIRpG29yIpdtsnj6ZAUcVFr4IKc/41dRY4tSHA
-	uYJDHl9A9n+SmS3i1GP0PQY=
-X-Google-Smtp-Source: ACHHUZ4HvOu04Y5mGSqqaAuE6ebBkKg8OJvbfmZxEJbWTMKb6kSYysDu9rwF9z+yUleqxo4VhBArLg==
-X-Received: by 2002:a17:907:2cc7:b0:959:18b2:454a with SMTP id hg7-20020a1709072cc700b0095918b2454amr15794693ejc.76.1684914172213;
-        Wed, 24 May 2023 00:42:52 -0700 (PDT)
-Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id mj14-20020a170906af8e00b009659fa6eeddsm5381880ejb.196.2023.05.24.00.42.50
+        bh=dVLu9J9bPh+2rRySJRbCvWIrIN06DaPuyL4368frERU=;
+        b=TKGNPQoVnWIGqaSYGyLXGC0H0gWoeap1q9xOXfjy7i/pr4b1LA/xTqGtQKZHYSZO9A
+         OX7dzmhEI19FrwIQAYdDUe95+ffm4DJiiWgeVztOykJaK3AHVjsall9CedgriCoCX6i+
+         D+bPp0jsnxcVT59rjEB/xwrzo/mp+z6R3sU7Uj4bCSV4mhs1F312AKP4TY9isAqTrgWm
+         N0bb+1zoxf4e8IH0JijLOFWqjtRzHdjYfzg1Nt+AujWuPSChswTn30Jwsg5jWeIRU2RN
+         dOy8lLOKcSD+0VYW6jFHgIskxm90Hp68RS8wOUYqMEwYimmXN4lCkpKDxqxs9Z4mISrC
+         brAQ==
+X-Gm-Message-State: AC+VfDwPYyz825zqQEgvmDXv4KWgqM2RsweOTTpUT8NVB62rLHaclPX2
+	mfQEbW2XBr2k/cDQCkosmRpiChHmJzY=
+X-Google-Smtp-Source: ACHHUZ5lxTTG65pVSIiJHH9CSoWTk0Ct2ooLQyqcSdibswps4X+OBsBz7+TYwOVVSh0HIersUhJGWQ==
+X-Received: by 2002:a05:6a00:1408:b0:647:3de:c0ff with SMTP id l8-20020a056a00140800b0064703dec0ffmr1753269pfu.30.1684917270836;
+        Wed, 24 May 2023 01:34:30 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id e26-20020a63501a000000b005143448896csm7259981pgb.58.2023.05.24.01.34.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 00:42:51 -0700 (PDT)
-Message-ID: <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
-Date: Wed, 24 May 2023 09:42:50 +0200
+        Wed, 24 May 2023 01:34:30 -0700 (PDT)
+Message-ID: <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
+Date: Wed, 24 May 2023 16:34:24 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Content-Language: en-US
-To: Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+To: Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, lee@kernel.org, mturquette@baylibre.com,
  sboyd@kernel.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
  tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
@@ -56,181 +69,227 @@ Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  schung@nuvoton.com, mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
 References: <20230516075217.205401-1-ychuang570808@gmail.com>
  <20230516075217.205401-11-ychuang570808@gmail.com>
-From: Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-In-Reply-To: <20230516075217.205401-11-ychuang570808@gmail.com>
+ <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
+Content-Language: en-US
+From: Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 16. 05. 23, 9:52, Jacky Huang wrote:
-> +static void ma35d1serial_config_port(struct uart_port *port, int flags)
-> +{
-> +	/*
-> +	 * Driver core for serial ports forces a non-zero value for port type.
-> +	 * Write an arbitrary value here to accommodate the serial core driver,
-> +	 * as ID part of UAPI is redundant.
-> +	 */
-> +	port->type = 1;
+Dear Jiri,
 
-So this 1 translates to PORT_8250. Why not to use it directly? Or 
-something more saner like PORT_16550A?
+Thanks for your advice.
 
-> +}
-> +
-> +static int ma35d1serial_verify_port(struct uart_port *port, struct serial_struct *ser)
-> +{
-> +	if (port->type != PORT_UNKNOWN && ser->type != 1)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-...
-> +static int __init ma35d1serial_console_setup(struct console *co, char *options)
-> +{
-> +	struct device_node *np = ma35d1serial_uart_nodes[co->index];
-> +	struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
-> +	u32 val32[4];
-> +	struct uart_port *port;
-> +	int baud = 115200;
-> +	int bits = 8;
-> +	int parity = 'n';
-> +	int flow = 'n';
-> +
-> +	/*
-> +	 * Check whether an invalid uart number has been specified, and
+On 2023/5/24 下午 03:42, Jiri Slaby wrote:
+> On 16. 05. 23, 9:52, Jacky Huang wrote:
+>> +static void ma35d1serial_config_port(struct uart_port *port, int flags)
+>> +{
+>> +    /*
+>> +     * Driver core for serial ports forces a non-zero value for port 
+>> type.
+>> +     * Write an arbitrary value here to accommodate the serial core 
+>> driver,
+>> +     * as ID part of UAPI is redundant.
+>> +     */
+>> +    port->type = 1;
+>
+> So this 1 translates to PORT_8250. Why not to use it directly? Or 
+> something more saner like PORT_16550A?
+>
+It's not actually 8250 or 16550A.
+Can we add the following definition to 
+'include/uapi/linux/serial_core.h' and use PORT_MA35 instead?
 
-You dereferenced ma35d1serial_uart_nodes already. Doesn't 
-console=ttyNVT1000 (or something like that) crash the system?
+#define PORT_MA35    124
 
-> +	 * if so, search for the first available port that does have
-> +	 * console support.
 
-The code below doesn't match this comment.
+>> +}
+>> +
+>> +static int ma35d1serial_verify_port(struct uart_port *port, struct 
+>> serial_struct *ser)
+>> +{
+>> +    if (port->type != PORT_UNKNOWN && ser->type != 1)
+>> +        return -EINVAL;
+>> +
+>> +    return 0;
+>> +}
+> ...
+>> +static int __init ma35d1serial_console_setup(struct console *co, 
+>> char *options)
+>> +{
+>> +    struct device_node *np = ma35d1serial_uart_nodes[co->index];
+>> +    struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
+>> +    u32 val32[4];
+>> +    struct uart_port *port;
+>> +    int baud = 115200;
+>> +    int bits = 8;
+>> +    int parity = 'n';
+>> +    int flow = 'n';
+>> +
+>> +    /*
+>> +     * Check whether an invalid uart number has been specified, and
+>
+> You dereferenced ma35d1serial_uart_nodes already. Doesn't 
+> console=ttyNVT1000 (or something like that) crash the system?
+>
 
-> +	 */
-> +	if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
-> +		pr_debug("Console Port%x out of range\n", co->index);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
+I will add the following check before np = 
+"ma35d1serial_uart_nodes[co->index]".
 
-Shouldn't that 4 be ARRAY_SIZE(val32) instead?
+if (co->index < 0 || co->index >= MA35_UART_NR)
+     return -EINVAL;
 
-> +		return -EINVAL;
 
-One \n here please.
+>> +     * if so, search for the first available port that does have
+>> +     * console support.
+>
+> The code below doesn't match this comment.
 
-> +	p->port.iobase = val32[1];
-> +	p->port.membase = ioremap(p->port.iobase, MA35_UART_REG_SIZE);
+Yes, I will remove the above comment.
 
-What if this fails?
+>
+>> +     */
+>> +    if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
+>> +        pr_debug("Console Port%x out of range\n", co->index);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
+>
+> Shouldn't that 4 be ARRAY_SIZE(val32) instead?
+>
 
-> +	p->port.ops = &ma35d1serial_ops;
-> +	p->port.line = 0;
-> +	p->port.uartclk = MA35_UART_CONSOLE_CLK;
-> +
-> +	port = &ma35d1serial_ports[co->index].port;
+Will be fixed.
 
-Isn't this:
-   port = &p->port;
-?
+>> +        return -EINVAL;
+>
+> One \n here please.
+>
 
-Either use port on all above lines or drop the "port" variable 
-completely and use "p->port" below instead.
+Okay, I will add it.
 
-> +
-> +	if (options)
-> +		uart_parse_options(options, &baud, &parity, &bits, &flow);
-> +
-> +	return uart_set_options(port, co, baud, parity, bits, flow);
-> +}
-> +
-> +static struct console ma35d1serial_console = {
-> +	.name    = "ttyNVT",
-> +	.write   = ma35d1serial_console_write,
-> +	.device  = uart_console_device,
-> +	.setup   = ma35d1serial_console_setup,
-> +	.flags   = CON_PRINTBUFFER | CON_ENABLED,
-> +	.index   = -1,
-> +	.data    = &ma35d1serial_reg,
+>> +    p->port.iobase = val32[1];
+>> +    p->port.membase = ioremap(p->port.iobase, MA35_UART_REG_SIZE);
+>
+> What if this fails?
+>
 
-I don't see console->data used anywhere in the driver?
+I will add a check for the return value.
 
-> +};
-...
-> +static int ma35d1serial_probe(struct platform_device *pdev)
-> +{
-> +	struct resource *res_mem;
-> +	struct uart_ma35d1_port *up;
-> +	int ret = 0;
-> +
-> +	if (pdev->dev.of_node) {
-> +		ret = of_alias_get_id(pdev->dev.of_node, "serial");
-> +		if (ret < 0) {
-> +			dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +	up = &ma35d1serial_ports[ret];
-> +	up->port.line = ret;
-> +	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res_mem)
-> +		return -ENODEV;
-> +
-> +	up->port.iobase = res_mem->start;
-> +	up->port.membase = ioremap(up->port.iobase, MA35_UART_REG_SIZE);
+>> +    p->port.ops = &ma35d1serial_ops;
+>> +    p->port.line = 0;
+>> +    p->port.uartclk = MA35_UART_CONSOLE_CLK;
+>> +
+>> +    port = &ma35d1serial_ports[co->index].port;
+>
+> Isn't this:
+>   port = &p->port;
+> ?
+>
+> Either use port on all above lines or drop the "port" variable 
+> completely and use "p->port" below instead.
+>
 
-Check this too.
+I will remove port variable and use p->port only.
 
-> +	up->port.ops = &ma35d1serial_ops;
-> +
-> +	spin_lock_init(&up->port.lock);
-> +
-> +	up->clk = of_clk_get(pdev->dev.of_node, 0);
-> +	if (IS_ERR(up->clk)) {
-> +		ret = PTR_ERR(up->clk);
-> +		dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
-> +		goto err_iounmap;
-> +	}
-> +
-> +	ret = clk_prepare_enable(up->clk);
-> +	if (ret)
-> +		goto err_iounmap;
-> +
-> +	if (up->port.line != 0)
-> +		up->port.uartclk = clk_get_rate(up->clk);
-> +
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0)
-> +		goto err_clk_disable;
-> +
-> +	up->port.irq = ret;
-> +	up->port.dev = &pdev->dev;
-> +	up->port.flags = UPF_BOOT_AUTOCONF;
-> +
-> +	platform_set_drvdata(pdev, up);
-> +
-> +	ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
-> +	if (ret < 0)
-> +		goto err_free_irq;
-> +
-> +	return 0;
-> +
-> +err_free_irq:
-> +	free_irq(up->port.irq, &up->port);
-> +
-> +err_clk_disable:
-> +	clk_disable_unprepare(up->clk);
-> +
-> +err_iounmap:
-> +	iounmap(up->port.membase);
-> +	return ret;
-> +}
+>> +
+>> +    if (options)
+>> +        uart_parse_options(options, &baud, &parity, &bits, &flow);
+>> +
+>> +    return uart_set_options(port, co, baud, parity, bits, flow);
+>> +}
+>> +
+>> +static struct console ma35d1serial_console = {
+>> +    .name    = "ttyNVT",
+>> +    .write   = ma35d1serial_console_write,
+>> +    .device  = uart_console_device,
+>> +    .setup   = ma35d1serial_console_setup,
+>> +    .flags   = CON_PRINTBUFFER | CON_ENABLED,
+>> +    .index   = -1,
+>> +    .data    = &ma35d1serial_reg,
+>
+> I don't see console->data used anywhere in the driver?
+>
 
-thanks,
--- 
-js
-suse labs
+I will remove it.
+
+>> +};
+> ...
+>> +static int ma35d1serial_probe(struct platform_device *pdev)
+>> +{
+>> +    struct resource *res_mem;
+>> +    struct uart_ma35d1_port *up;
+>> +    int ret = 0;
+>> +
+>> +    if (pdev->dev.of_node) {
+>> +        ret = of_alias_get_id(pdev->dev.of_node, "serial");
+>> +        if (ret < 0) {
+>> +            dev_err(&pdev->dev, "failed to get alias/pdev id, errno 
+>> %d\n", ret);
+>> +            return ret;
+>> +        }
+>> +    }
+>> +    up = &ma35d1serial_ports[ret];
+>> +    up->port.line = ret;
+>> +    res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +    if (!res_mem)
+>> +        return -ENODEV;
+>> +
+>> +    up->port.iobase = res_mem->start;
+>> +    up->port.membase = ioremap(up->port.iobase, MA35_UART_REG_SIZE);
+>
+> Check this too.
+>
+
+Okay, sure.
+
+>> +    up->port.ops = &ma35d1serial_ops;
+>> +
+>> +    spin_lock_init(&up->port.lock);
+>> +
+>> +    up->clk = of_clk_get(pdev->dev.of_node, 0);
+>> +    if (IS_ERR(up->clk)) {
+>> +        ret = PTR_ERR(up->clk);
+>> +        dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
+>> +        goto err_iounmap;
+>> +    }
+>> +
+>> +    ret = clk_prepare_enable(up->clk);
+>> +    if (ret)
+>> +        goto err_iounmap;
+>> +
+>> +    if (up->port.line != 0)
+>> +        up->port.uartclk = clk_get_rate(up->clk);
+>> +
+>> +    ret = platform_get_irq(pdev, 0);
+>> +    if (ret < 0)
+>> +        goto err_clk_disable;
+>> +
+>> +    up->port.irq = ret;
+>> +    up->port.dev = &pdev->dev;
+>> +    up->port.flags = UPF_BOOT_AUTOCONF;
+>> +
+>> +    platform_set_drvdata(pdev, up);
+>> +
+>> +    ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
+>> +    if (ret < 0)
+>> +        goto err_free_irq;
+>> +
+>> +    return 0;
+>> +
+>> +err_free_irq:
+>> +    free_irq(up->port.irq, &up->port);
+>> +
+>> +err_clk_disable:
+>> +    clk_disable_unprepare(up->clk);
+>> +
+>> +err_iounmap:
+>> +    iounmap(up->port.membase);
+>> +    return ret;
+>> +}
+>
+> thanks,
+
+Best regards,
+Jacky Huang
 
