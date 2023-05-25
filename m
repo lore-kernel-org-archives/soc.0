@@ -1,92 +1,100 @@
-Return-Path: <SRS0=Z7LC=BO=huawei.com=lihuisong@kernel.org>
+Return-Path: <SRS0=SMoz=BO=winglobalresearch.com=leslie_ca@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 539A6C77B7E
-	for <soc@archiver.kernel.org>; Thu, 25 May 2023 08:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EBD8C77B7E
+	for <soc@archiver.kernel.org>; Thu, 25 May 2023 10:21:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1D7D0C4339E; Thu, 25 May 2023 08:13:01 +0000 (UTC)
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	id 34EABC4339B; Thu, 25 May 2023 10:21:49 +0000 (UTC)
+Received: from mail-m127136.qiye.163.com (mail-m127136.qiye.163.com [115.236.127.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 4C00EC433D2;
-	Thu, 25 May 2023 08:12:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 4C00EC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.53])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QRgjG6mK4zYslL;
-	Thu, 25 May 2023 16:10:42 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 25 May 2023 16:12:50 +0800
-Message-ID: <5e0d81c8-5f52-82e5-5509-785e87a9a17e@huawei.com>
-Date: Thu, 25 May 2023 16:12:50 +0800
+	by smtp.kernel.org (Postfix) with ESMTPS id 5ACDCC433D2
+	for <soc@kernel.org>; Thu, 25 May 2023 10:21:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5ACDCC433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=winglobalresearch.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=winglobalresearch.com
+Received: from winglobalresearch.com (localhost [127.0.0.1])
+	by mail-m12749.qiye.163.com (Hmail) with ESMTP id A89075805D4;
+	Thu, 25 May 2023 18:18:54 +0800 (CST)
+Content-Type: multipart/alternative; BOUNDARY="=_Part_133437_377636511.1685009934686"
+Message-ID: <AP*AlQAUFu5*fMNu3lrdZqqD.1.1685009934686.Hmail.leslie_ca@winglobalresearch.com>
+Subject: =?UTF-8?B?QXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IExhdGVzdCBDaGFuZ2Vz?=
+X-Priority: 3
+X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
+X-Originating-IP: 152.32.254.231
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-To: Sudeep Holla <sudeep.holla@arm.com>
+Received: from leslie_ca@winglobalresearch.com( [152.32.254.231) ] by ajax-webmail ( [127.0.0.1] ) ; Thu, 25 May 2023 18:18:54 +0800 (GMT+08:00)
+From: Elaine <leslie_ca@winglobalresearch.com>
+Date: Thu, 25 May 2023 18:18:54 +0800 (GMT+08:00)
+X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHxhDVkhKHh4fTBlDTh5IQlUTARMWGhIXJBQOD1
+	lXWRgSC1lBWUpOSVVISVVJTk9VSUhKWVdZFhoPEhUdFFlBWU9LSFVKSktPSE9VT1VKT1kG
+X-HM-Tid: 0a88526b295eb21ckuuu1884c8ae9fb
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzorUToXKjouPQ5OUR02NQ5IFwkf
+	IQoKP1VKVUpNQ05LS0JCSE5NSUhVMxYaEhdVFx4IFxIeJBgaOwwSFRwXFBkaFwkeCB4aCRgTVRgU
+	FkVZV1kUFR4JGAsPWUFKV1kSC1lBWUpOSVVISVVJTk9VSUhKWVdZCAFZQUlCSE5JNwY+
 List-Id: <soc.lore.kernel.org>
-CC: <andersson@kernel.org>, <matthias.bgg@gmail.com>,
-	<angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
-	<arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<soc@kernel.org>, <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
-	<liuyonglong@huawei.com>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <20230522072211.8894-1-lihuisong@huawei.com>
- <20230522072211.8894-2-lihuisong@huawei.com>
- <20230523093922.f2y4wrz3vkzi7kmw@bogus>
- <b29eab0c-4084-0e91-3e31-7f7c264ad629@huawei.com>
- <20230525073539.waaa7wpudohullcg@bogus>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230525073539.waaa7wpudohullcg@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
+To: soc@kernel.org
 
+--=_Part_133437_377636511.1685009934686
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-在 2023/5/25 15:35, Sudeep Holla 写道:
-> On Thu, May 25, 2023 at 10:41:51AM +0800, lihuisong (C) wrote:
->> Hi Sudeep,
->>
->> Here, the interface is used to determine whether a port is in use or
->> enabled.
->> If we just use 'status', it cannot inidicates its own meaning by name.
->> What do you think?
->>
-> How about "port_status" or "port-status" ?
-The meaning of this status is a little board.
-How about 'enable'? just a read-only entry.
+SGVsbG8hCkhvcGUgZXZlcnl0aGluZyBnb2VzIHdlbGwgd2l0aCB5b3UuCldlIHB1Ymxpc2hlZCBB
+IE1hcmtldCBSZXBvcnQgb24gQXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IDIw
+MjN+MjAyOSBzbyB0aGF0IHlvdSBjYW4gaGF2ZSBhIGRlZXBlciB1bmRlcnN0YW5kaW5nIG9mIHRo
+aXMgbWFya2V0LiBUaGUgcmVzZWFyY2ggdGVhbSBoYXMgY29tcGxldGVkIHRoZSBkYXRhIGZvciBR
+MSAyMDIzIHdoaWNoIHdpbGwgcHJlc2VudCBpdCBpbiBvdXIgbGF0ZXN0IHJlcG9ydC4gSWYgeW91
+IGhhdmUgZnVydGhlciBpbnRlcmVzdCBpbiB0aGlzIHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMs
+IHdlIHdvdWxkIGJlIGhhcHB5IHRvIHNoYXJlIHRoZSBzYW1wbGUgcmVwb3J0IHdpdGggeW91LgpU
+aGUgZm9sbG93aW5nIHJlbGF0ZWQgY29tcGFuaWVzIGFyZSBjb3ZlcmVkOgpIdWF3ZWkgVGVjaG5v
+bG9naWVzIChDaGluYSkKUXVhbGNvbW0gKFVTKQpGaW5HZW5pdXMgKFVLKQpHZW5lcmFsIFZpc2lv
+biAoVVMpCklCTSBDb3Jwb3JhdGlvbiAoVVMpCk5WSURJQSBDb3Jwb3JhdGlvbiAoVVMpCkludGVs
+IENvcnBvcmF0aW9uIChVUykKTWVkaWFUZWsgSW5jIChUYWl3YW4pCkluYmVudGEgVGVjaG5vbG9n
+aWVzIChVUykKQ2VyZWJyYXMgU3lzdGVtcyAoVVMpCk1pY3Jvc29mdCBDb3Jwb3JhdGlvbiAoVVMp
+ClNhbXN1bmcgRWxlY3Ryb25pY3MoU291dGggS29yZWEpCkFkdmFuY2VkIE1pY3JvIERldmljZXMg
+KFVTKQpBcHBsZSBJbmMgKFVTKQpOdW1lbnRhIChVUykKU2VudGllbnQgVGVjaG5vbG9naWVzIChV
+UykKR29vZ2xlIEluYyAoVVMpCi4uLi4uLgooT3RoZXIgcmVsYXRlZCBjb21wYW5pZXMgSW5mb3Jt
+YXRpb27igKbigKYpClNlZ21lbnQgYnkgVHlwZQpEZWVwIExlYXJuaW5nCk5ldXJhbCBuZXR3b3Jr
+cwpOYXR1cmFsIGxhbmd1YWdlIHByb2Nlc3NpbmcKT3RoZXJzClNlZ21lbnQgYnkgQXBwbGljYXRp
+b24KUm9ib3RpY3MKQ29uc3VtZXIgRWxlY3Ryb25pY3MKU2VjdXJpdHkgc3lzdGVtcwpBdXRvbW9i
+aWxlCk90aGVycwpUaGFuayB5b3UgZm9yIHRha2luZyB0aGUgdGltZSB0byByZWFkIHRoaXMgZW1h
+aWwuIExvb2tpbmcgZm9yd2FyZCB0byBoZWFyaW5nIGZyb20geW91LgotLS0tLS0tLS0tLS0tLS0t
+LS0tCllvdXJzIHNpbmNlcmVseQpFbGFpbmUKCgoNCg0K
+--=_Part_133437_377636511.1685009934686
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-
-In addition, I happen to have another problem when replace ioremap() 
-with acpi_os_ioremap().
-
-The driver selects 'M' in .config to compile.
-The driver cannot be compiled if we use acpi_os_ioremap().
-The compiling log is as follows:
--->
-make -j80
-   CALL    scripts/checksyscalls.sh
-   CC [M]  drivers/soc/hisilicon/kunpeng_hccs.o
-   MODPOST Module.symvers
-ERROR: modpost: "acpi_os_ioremap" 
-[drivers/soc/hisilicon/kunpeng_hccs.ko] undefined!
-scripts/Makefile.modpost:136: recipe for target 'Module.symvers' failed
-make[1]: *** [Module.symvers] Error 1
-Makefile:1978: recipe for target 'modpost' failed
-make: *** [modpost] Error 2
-
-The driver can be compiled if we selects 'Y' or export symbol for 
-acpi_os_ioremap.
-So we have to export symbol for acpi_os_ioremap.
-I plan to do it in another patch, and not in this series in case of 
-blocking the upload of this driver.
-What do you think?
+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS43O2NvbG9yOiMwMDAwMDA7Zm9udC1zaXplOjE2cHg7
+Zm9udC1mYW1pbHk6Q2FsaWJyaSI+PHA+SGVsbG8hPC9wPjxwPkhvcGUgZXZlcnl0aGluZyBnb2Vz
+IHdlbGwgd2l0aCB5b3UuPC9wPjxwPldlIHB1Ymxpc2hlZCZuYnNwOzxzcGFuIHN0eWxlPSJiYWNr
+Z3JvdW5kLWNvbG9yOiByZ2IoMTk2LCAyMjQsIDE3OCk7Ij5BIE1hcmtldCBSZXBvcnQgb24gQXJ0
+aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IDIwMjN+MjAyOSZuYnNwOzwvc3Bhbj5z
+byB0aGF0IHlvdSBjYW4gaGF2ZSBhIGRlZXBlciB1bmRlcnN0YW5kaW5nIG9mIHRoaXMgbWFya2V0
+LiBUaGUgcmVzZWFyY2ggdGVhbSBoYXMgY29tcGxldGVkIHRoZSBkYXRhIGZvciBRMSAyMDIzIHdo
+aWNoIHdpbGwgcHJlc2VudCBpdCBpbiBvdXIgbGF0ZXN0IHJlcG9ydC4gSWYgeW91IGhhdmUgZnVy
+dGhlciBpbnRlcmVzdCBpbiB0aGlzIHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMsIHdlIHdvdWxk
+IGJlIGhhcHB5IHRvIHNoYXJlIHRoZSBzYW1wbGUgcmVwb3J0IHdpdGggeW91LjwvcD48cD5UaGUg
+Zm9sbG93aW5nIHJlbGF0ZWQgY29tcGFuaWVzIGFyZSBjb3ZlcmVkOjwvcD48cD5IdWF3ZWkgVGVj
+aG5vbG9naWVzIChDaGluYSk8L3A+PHA+UXVhbGNvbW0gKFVTKTwvcD48cD5GaW5HZW5pdXMgKFVL
+KTwvcD48cD5HZW5lcmFsIFZpc2lvbiAoVVMpPC9wPjxwPklCTSBDb3Jwb3JhdGlvbiAoVVMpPC9w
+PjxwPk5WSURJQSBDb3Jwb3JhdGlvbiAoVVMpPC9wPjxwPkludGVsIENvcnBvcmF0aW9uIChVUyk8
+L3A+PHA+TWVkaWFUZWsgSW5jIChUYWl3YW4pPC9wPjxwPkluYmVudGEgVGVjaG5vbG9naWVzIChV
+Uyk8L3A+PHA+Q2VyZWJyYXMgU3lzdGVtcyAoVVMpPC9wPjxwPk1pY3Jvc29mdCBDb3Jwb3JhdGlv
+biAoVVMpPC9wPjxwPlNhbXN1bmcgRWxlY3Ryb25pY3MoU291dGggS29yZWEpPC9wPjxwPkFkdmFu
+Y2VkIE1pY3JvIERldmljZXMgKFVTKTwvcD48cD5BcHBsZSBJbmMgKFVTKTwvcD48cD5OdW1lbnRh
+IChVUyk8L3A+PHA+U2VudGllbnQgVGVjaG5vbG9naWVzIChVUyk8L3A+PHA+R29vZ2xlIEluYyAo
+VVMpPC9wPjxwPi4uLi4uLjwvcD48cD4oT3RoZXIgcmVsYXRlZCBjb21wYW5pZXMgSW5mb3JtYXRp
+b27igKbigKYpPC9wPjxwPlNlZ21lbnQgYnkgVHlwZTwvcD48cD5EZWVwIExlYXJuaW5nPC9wPjxw
+Pk5ldXJhbCBuZXR3b3JrczwvcD48cD5OYXR1cmFsIGxhbmd1YWdlIHByb2Nlc3Npbmc8L3A+PHA+
+T3RoZXJzPC9wPjxwPlNlZ21lbnQgYnkgQXBwbGljYXRpb248L3A+PHA+Um9ib3RpY3M8L3A+PHA+
+Q29uc3VtZXIgRWxlY3Ryb25pY3M8L3A+PHA+U2VjdXJpdHkgc3lzdGVtczwvcD48cD5BdXRvbW9i
+aWxlPC9wPjxwPk90aGVyczwvcD48cD5UaGFuayB5b3UgZm9yIHRha2luZyB0aGUgdGltZSB0byBy
+ZWFkIHRoaXMgZW1haWwuIExvb2tpbmcgZm9yd2FyZCB0byBoZWFyaW5nIGZyb20geW91LjwvcD48
+cD4tLS0tLS0tLS0tLS0tLS0tLS0tPC9wPjxwPllvdXJzIHNpbmNlcmVseTwvcD48cD5FbGFpbmU8
+L3A+PC9kaXY+PGJyPg==
+--=_Part_133437_377636511.1685009934686--
