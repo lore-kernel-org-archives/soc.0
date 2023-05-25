@@ -1,127 +1,57 @@
-Return-Path: <SRS0=rBOi=BO=gmail.com=jirislaby@kernel.org>
+Return-Path: <SRS0=ciMe=BO=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BD2EC77B7A
-	for <soc@archiver.kernel.org>; Thu, 25 May 2023 05:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1AAC77B7E
+	for <soc@archiver.kernel.org>; Thu, 25 May 2023 07:35:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27BC0C433A1; Thu, 25 May 2023 05:48:51 +0000 (UTC)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D478CC4339B;
-	Thu, 25 May 2023 05:48:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D478CC4339B
-Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-510f525e06cso3694463a12.2;
-        Wed, 24 May 2023 22:48:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684993728; x=1687585728;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B8+s/K+5RvHd3mBUPmt+K92bKir5drTiVIL22nfYEIw=;
-        b=POqkwUS4Zdck/rvb+WpaN4KQ1jtbUsJubUy2HFowd2Fo/E2nesbDEU2onnOr6YHbKM
-         Pu7oE1AKA88OeyETapeOckPOR8x812De/X4GTPrdInMmtGHO/x7xlls05jYm1oew1lr8
-         dyETxm1YpoOSHLfH6WKBJ+YuJkU1IOyHhyf6Y0KekaJ3l0u2lkZ2bP0dA5fdwUTKkeHq
-         wSOYybwh38wVUn4bgUm1xmVsGb/oi1oUX4355B28rS52RNTMGfJbbteut9BW1qcVCV3Q
-         gHuhmBstpy6BpnHO4bz9IrHnmmcsKYViP7dX5F/rUzZm1t8JTQx1kGjrbvUG7ZbI0ij1
-         qUeg==
-X-Gm-Message-State: AC+VfDy0dn8jEA6rhenjYzNmcdDTbx5SSGkxtsGEpHUJ0Ml/ZTZCpBTw
-	QclyI/3jWsNC6pa4GCXcqA0=
-X-Google-Smtp-Source: ACHHUZ78kwCROM6GPOi1V6fq6adO7uQrYlWFOtHDvlX1THAntXJfkj8+8n3Bv+8+Mx+VI4jYcFWVQg==
-X-Received: by 2002:a50:ed1a:0:b0:510:e877:33c with SMTP id j26-20020a50ed1a000000b00510e877033cmr3218941eds.30.1684993727811;
-        Wed, 24 May 2023 22:48:47 -0700 (PDT)
-Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id d6-20020a056402078600b0050d89daaa70sm189740edy.2.2023.05.24.22.48.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 22:48:47 -0700 (PDT)
-Message-ID: <75375f8d-e157-a364-3da5-9c8d5b832927@kernel.org>
-Date: Thu, 25 May 2023 07:48:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Jacky Huang <ychuang570808@gmail.com>,
- Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- Lee Jones <lee@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Tomer Maimon <tmaimon77@gmail.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+	id BAEEFC4339C; Thu, 25 May 2023 07:35:48 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id 37847C433D2;
+	Thu, 25 May 2023 07:35:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 37847C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A34F1042;
+	Thu, 25 May 2023 00:36:29 -0700 (PDT)
+Received: from bogus (unknown [10.57.96.86])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD4CD3F762;
+	Thu, 25 May 2023 00:35:41 -0700 (PDT)
+Date: Thu, 25 May 2023 08:35:39 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: "lihuisong (C)" <lihuisong@huawei.com>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
- mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230516075217.205401-1-ychuang570808@gmail.com>
- <20230516075217.205401-11-ychuang570808@gmail.com>
- <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
- <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
- <e312b861-a5cc-43b0-b2b0-7d66f47a3d0b@app.fastmail.com>
-From: Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-In-Reply-To: <e312b861-a5cc-43b0-b2b0-7d66f47a3d0b@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: andersson@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, shawnguo@kernel.org,
+	arnd@arndb.de, krzk@kernel.org, linux-kernel@vger.kernel.org,
+	soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+	Sudeep Holla <sudeep.holla@arm.com>, liuyonglong@huawei.com
+Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Message-ID: <20230525073539.waaa7wpudohullcg@bogus>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230522072211.8894-1-lihuisong@huawei.com>
+ <20230522072211.8894-2-lihuisong@huawei.com>
+ <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+ <b29eab0c-4084-0e91-3e31-7f7c264ad629@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b29eab0c-4084-0e91-3e31-7f7c264ad629@huawei.com>
 
-On 24. 05. 23, 11:00, Arnd Bergmann wrote:
-> On Wed, May 24, 2023, at 10:34, Jacky Huang wrote:
->> On 2023/5/24 下午 03:42, Jiri Slaby wrote:
->>> On 16. 05. 23, 9:52, Jacky Huang wrote:
->>>> +static void ma35d1serial_config_port(struct uart_port *port, int flags)
->>>> +{
->>>> +    /*
->>>> +     * Driver core for serial ports forces a non-zero value for port
->>>> type.
->>>> +     * Write an arbitrary value here to accommodate the serial core
->>>> driver,
->>>> +     * as ID part of UAPI is redundant.
->>>> +     */
->>>> +    port->type = 1;
->>>
->>> So this 1 translates to PORT_8250. Why not to use it directly? Or
->>> something more saner like PORT_16550A?
->>>
->> It's not actually 8250 or 16550A.
->> Can we add the following definition to
->> 'include/uapi/linux/serial_core.h' and use PORT_MA35 instead?
->>
->> #define PORT_MA35    124
+On Thu, May 25, 2023 at 10:41:51AM +0800, lihuisong (C) wrote:
+> Hi Sudeep,
 > 
-> This was already in a previous version, until Greg commented
-> that it was probably not needed:
+> Here, the interface is used to determine whether a port is in use or
+> enabled.
+> If we just use 'status', it cannot inidicates its own meaning by name.
+> What do you think?
 > 
-> https://lore.kernel.org/lkml/20fc81c9-5517-ce1e-639a-3b425cf27759@gmail.com/
-> 
-> Since leaving port->type at PORT_UNKNOWN doesn't work, and almost
-> all other drivers have something in serial_core.h, it's probably
-> best to do the same here. Checking the other drivers showed that
-> drivers/tty/serial/lantiq.c is currently the only exception, it
-> defines PORT_LTQ_ASC locally, which causes a conflict with
-> PORT_SPRD.
 
-Hmm.
+How about "port_status" or "port-status" ?
 
-Anyone has an idea what this is really used for in userspace? Can we 
-replace all of them by simply some sort of "PORT_OTHER"?
-
-For example:
-
-xdg-open `echo -n 'https://codesearch.debian.net/search?q=\b('; sed -n 
-'s@#define\s\(\w\+\)\s.*@\1@ p' include/uapi/linux/serial_core.h | tail 
--20 | sed 's@.* \(.*\)[\x09 ][\x09 ]*.*@\1@'|paste -sd'|' | tr -d '\n'; 
-echo ')\b'`
-
-gives _no_ clue. FTR the above translates here into:
-https://codesearch.debian.net/search?q=\b(PORT_HSCIF|PORT_ASC|PORT_TILEGX|PORT_MEN_Z135|PORT_SC16IS7XX|PORT_MESON|PORT_DIGICOLOR|PORT_SPRD|PORT_CRIS|PORT_STM32|PORT_MVEBU|PORT_PIC32|PORT_MPS2UART|PORT_MTK_BTIF|PORT_RDA|PORT_MLB_USIO|PORT_SIFIVE_V0|PORT_SUNIX|PORT_LINFLEXUART|PORT_SUNPLUS)\b
-
-thanks,
 -- 
-js
-suse labs
-
+Regards,
+Sudeep
