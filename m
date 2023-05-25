@@ -1,100 +1,66 @@
-Return-Path: <SRS0=SMoz=BO=winglobalresearch.com=leslie_ca@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EBD8C77B7E
-	for <soc@archiver.kernel.org>; Thu, 25 May 2023 10:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3794AC7EE2D
+	for <soc@archiver.kernel.org>; Thu, 25 May 2023 15:47:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 34EABC4339B; Thu, 25 May 2023 10:21:49 +0000 (UTC)
-Received: from mail-m127136.qiye.163.com (mail-m127136.qiye.163.com [115.236.127.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5ACDCC433D2
-	for <soc@kernel.org>; Thu, 25 May 2023 10:21:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5ACDCC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=winglobalresearch.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=winglobalresearch.com
-Received: from winglobalresearch.com (localhost [127.0.0.1])
-	by mail-m12749.qiye.163.com (Hmail) with ESMTP id A89075805D4;
-	Thu, 25 May 2023 18:18:54 +0800 (CST)
-Content-Type: multipart/alternative; BOUNDARY="=_Part_133437_377636511.1685009934686"
-Message-ID: <AP*AlQAUFu5*fMNu3lrdZqqD.1.1685009934686.Hmail.leslie_ca@winglobalresearch.com>
-Subject: =?UTF-8?B?QXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IExhdGVzdCBDaGFuZ2Vz?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
-X-Originating-IP: 152.32.254.231
+	id 0C635C433A1; Thu, 25 May 2023 15:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EA673C4339B;
+	Thu, 25 May 2023 15:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685029639;
+	bh=99ZUpctvcmqIGpSRL2CD/QrL5GXNbGdQG8skxFaUhh0=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=P69sQUVznWIsP2b/eY7Q64yWVItOypiEcc4GhwilCA9ZPkTeDkw1HEb8WW6Egfbvn
+	 azGvOcs1DyKdycurjwrdn4hUUhIA1Q57HZWhbMZ28XB1UG3bAX7Z33dn8aPwNAxXn4
+	 wwj+WXFNMe7/kwqrX5cL/ri4U559KzjMeVt+5sAdMb1ZFyxfaOXhfcnZ4zsbhLUZdg
+	 eYlHm1pqAFQSSmvm2hKEddhsViCDPTioXwm+JpMXOkY6zzKX1O3siyDP7u2bEHwf2I
+	 1y6qybPPDxlIiFX8SAIykPgKpb47PfFbMQhjiH9gH2yoqNr/KS3AoLKlbbVvWyKVEn
+	 z5Pt89d1jBspw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2313E4F133;
+	Thu, 25 May 2023 15:47:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: from leslie_ca@winglobalresearch.com( [152.32.254.231) ] by ajax-webmail ( [127.0.0.1] ) ; Thu, 25 May 2023 18:18:54 +0800 (GMT+08:00)
-From: Elaine <leslie_ca@winglobalresearch.com>
-Date: Thu, 25 May 2023 18:18:54 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUhXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHxhDVkhKHh4fTBlDTh5IQlUTARMWGhIXJBQOD1
-	lXWRgSC1lBWUpOSVVISVVJTk9VSUhKWVdZFhoPEhUdFFlBWU9LSFVKSktPSE9VT1VKT1kG
-X-HM-Tid: 0a88526b295eb21ckuuu1884c8ae9fb
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzorUToXKjouPQ5OUR02NQ5IFwkf
-	IQoKP1VKVUpNQ05LS0JCSE5NSUhVMxYaEhdVFx4IFxIeJBgaOwwSFRwXFBkaFwkeCB4aCRgTVRgU
-	FkVZV1kUFR4JGAsPWUFKV1kSC1lBWUpOSVVISVVJTk9VSUhKWVdZCAFZQUlCSE5JNwY+
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Fix uninitialized variable in OP-TEE driver for v6.3
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <168502963885.27102.1312262124124929132.git-patchwork-notify@kernel.org>
+Date: Thu, 25 May 2023 15:47:18 +0000
+References: <20230421075443.GA3136581@rayden>
+In-Reply-To: <20230421075443.GA3136581@rayden>
+To: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
+Cc: soc@kernel.org
 
---=_Part_133437_377636511.1685009934686
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Hello:
 
-SGVsbG8hCkhvcGUgZXZlcnl0aGluZyBnb2VzIHdlbGwgd2l0aCB5b3UuCldlIHB1Ymxpc2hlZCBB
-IE1hcmtldCBSZXBvcnQgb24gQXJ0aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IDIw
-MjN+MjAyOSBzbyB0aGF0IHlvdSBjYW4gaGF2ZSBhIGRlZXBlciB1bmRlcnN0YW5kaW5nIG9mIHRo
-aXMgbWFya2V0LiBUaGUgcmVzZWFyY2ggdGVhbSBoYXMgY29tcGxldGVkIHRoZSBkYXRhIGZvciBR
-MSAyMDIzIHdoaWNoIHdpbGwgcHJlc2VudCBpdCBpbiBvdXIgbGF0ZXN0IHJlcG9ydC4gSWYgeW91
-IGhhdmUgZnVydGhlciBpbnRlcmVzdCBpbiB0aGlzIHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMs
-IHdlIHdvdWxkIGJlIGhhcHB5IHRvIHNoYXJlIHRoZSBzYW1wbGUgcmVwb3J0IHdpdGggeW91LgpU
-aGUgZm9sbG93aW5nIHJlbGF0ZWQgY29tcGFuaWVzIGFyZSBjb3ZlcmVkOgpIdWF3ZWkgVGVjaG5v
-bG9naWVzIChDaGluYSkKUXVhbGNvbW0gKFVTKQpGaW5HZW5pdXMgKFVLKQpHZW5lcmFsIFZpc2lv
-biAoVVMpCklCTSBDb3Jwb3JhdGlvbiAoVVMpCk5WSURJQSBDb3Jwb3JhdGlvbiAoVVMpCkludGVs
-IENvcnBvcmF0aW9uIChVUykKTWVkaWFUZWsgSW5jIChUYWl3YW4pCkluYmVudGEgVGVjaG5vbG9n
-aWVzIChVUykKQ2VyZWJyYXMgU3lzdGVtcyAoVVMpCk1pY3Jvc29mdCBDb3Jwb3JhdGlvbiAoVVMp
-ClNhbXN1bmcgRWxlY3Ryb25pY3MoU291dGggS29yZWEpCkFkdmFuY2VkIE1pY3JvIERldmljZXMg
-KFVTKQpBcHBsZSBJbmMgKFVTKQpOdW1lbnRhIChVUykKU2VudGllbnQgVGVjaG5vbG9naWVzIChV
-UykKR29vZ2xlIEluYyAoVVMpCi4uLi4uLgooT3RoZXIgcmVsYXRlZCBjb21wYW5pZXMgSW5mb3Jt
-YXRpb27igKbigKYpClNlZ21lbnQgYnkgVHlwZQpEZWVwIExlYXJuaW5nCk5ldXJhbCBuZXR3b3Jr
-cwpOYXR1cmFsIGxhbmd1YWdlIHByb2Nlc3NpbmcKT3RoZXJzClNlZ21lbnQgYnkgQXBwbGljYXRp
-b24KUm9ib3RpY3MKQ29uc3VtZXIgRWxlY3Ryb25pY3MKU2VjdXJpdHkgc3lzdGVtcwpBdXRvbW9i
-aWxlCk90aGVycwpUaGFuayB5b3UgZm9yIHRha2luZyB0aGUgdGltZSB0byByZWFkIHRoaXMgZW1h
-aWwuIExvb2tpbmcgZm9yd2FyZCB0byBoZWFyaW5nIGZyb20geW91LgotLS0tLS0tLS0tLS0tLS0t
-LS0tCllvdXJzIHNpbmNlcmVseQpFbGFpbmUKCgoNCg0K
---=_Part_133437_377636511.1685009934686
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+This pull request was applied to soc/soc.git (arm/fixes)
+by Arnd Bergmann <arnd@arndb.de>:
 
-PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS43O2NvbG9yOiMwMDAwMDA7Zm9udC1zaXplOjE2cHg7
-Zm9udC1mYW1pbHk6Q2FsaWJyaSI+PHA+SGVsbG8hPC9wPjxwPkhvcGUgZXZlcnl0aGluZyBnb2Vz
-IHdlbGwgd2l0aCB5b3UuPC9wPjxwPldlIHB1Ymxpc2hlZCZuYnNwOzxzcGFuIHN0eWxlPSJiYWNr
-Z3JvdW5kLWNvbG9yOiByZ2IoMTk2LCAyMjQsIDE3OCk7Ij5BIE1hcmtldCBSZXBvcnQgb24gQXJ0
-aWZpY2lhbCBJbnRlbGxpZ2VuY2UgKEFJKSBDaGlwc2V0IDIwMjN+MjAyOSZuYnNwOzwvc3Bhbj5z
-byB0aGF0IHlvdSBjYW4gaGF2ZSBhIGRlZXBlciB1bmRlcnN0YW5kaW5nIG9mIHRoaXMgbWFya2V0
-LiBUaGUgcmVzZWFyY2ggdGVhbSBoYXMgY29tcGxldGVkIHRoZSBkYXRhIGZvciBRMSAyMDIzIHdo
-aWNoIHdpbGwgcHJlc2VudCBpdCBpbiBvdXIgbGF0ZXN0IHJlcG9ydC4gSWYgeW91IGhhdmUgZnVy
-dGhlciBpbnRlcmVzdCBpbiB0aGlzIHJlcG9ydCBvciByZWxhdGVkIHJlcG9ydHMsIHdlIHdvdWxk
-IGJlIGhhcHB5IHRvIHNoYXJlIHRoZSBzYW1wbGUgcmVwb3J0IHdpdGggeW91LjwvcD48cD5UaGUg
-Zm9sbG93aW5nIHJlbGF0ZWQgY29tcGFuaWVzIGFyZSBjb3ZlcmVkOjwvcD48cD5IdWF3ZWkgVGVj
-aG5vbG9naWVzIChDaGluYSk8L3A+PHA+UXVhbGNvbW0gKFVTKTwvcD48cD5GaW5HZW5pdXMgKFVL
-KTwvcD48cD5HZW5lcmFsIFZpc2lvbiAoVVMpPC9wPjxwPklCTSBDb3Jwb3JhdGlvbiAoVVMpPC9w
-PjxwPk5WSURJQSBDb3Jwb3JhdGlvbiAoVVMpPC9wPjxwPkludGVsIENvcnBvcmF0aW9uIChVUyk8
-L3A+PHA+TWVkaWFUZWsgSW5jIChUYWl3YW4pPC9wPjxwPkluYmVudGEgVGVjaG5vbG9naWVzIChV
-Uyk8L3A+PHA+Q2VyZWJyYXMgU3lzdGVtcyAoVVMpPC9wPjxwPk1pY3Jvc29mdCBDb3Jwb3JhdGlv
-biAoVVMpPC9wPjxwPlNhbXN1bmcgRWxlY3Ryb25pY3MoU291dGggS29yZWEpPC9wPjxwPkFkdmFu
-Y2VkIE1pY3JvIERldmljZXMgKFVTKTwvcD48cD5BcHBsZSBJbmMgKFVTKTwvcD48cD5OdW1lbnRh
-IChVUyk8L3A+PHA+U2VudGllbnQgVGVjaG5vbG9naWVzIChVUyk8L3A+PHA+R29vZ2xlIEluYyAo
-VVMpPC9wPjxwPi4uLi4uLjwvcD48cD4oT3RoZXIgcmVsYXRlZCBjb21wYW5pZXMgSW5mb3JtYXRp
-b27igKbigKYpPC9wPjxwPlNlZ21lbnQgYnkgVHlwZTwvcD48cD5EZWVwIExlYXJuaW5nPC9wPjxw
-Pk5ldXJhbCBuZXR3b3JrczwvcD48cD5OYXR1cmFsIGxhbmd1YWdlIHByb2Nlc3Npbmc8L3A+PHA+
-T3RoZXJzPC9wPjxwPlNlZ21lbnQgYnkgQXBwbGljYXRpb248L3A+PHA+Um9ib3RpY3M8L3A+PHA+
-Q29uc3VtZXIgRWxlY3Ryb25pY3M8L3A+PHA+U2VjdXJpdHkgc3lzdGVtczwvcD48cD5BdXRvbW9i
-aWxlPC9wPjxwPk90aGVyczwvcD48cD5UaGFuayB5b3UgZm9yIHRha2luZyB0aGUgdGltZSB0byBy
-ZWFkIHRoaXMgZW1haWwuIExvb2tpbmcgZm9yd2FyZCB0byBoZWFyaW5nIGZyb20geW91LjwvcD48
-cD4tLS0tLS0tLS0tLS0tLS0tLS0tPC9wPjxwPllvdXJzIHNpbmNlcmVseTwvcD48cD5FbGFpbmU8
-L3A+PC9kaXY+PGJyPg==
---=_Part_133437_377636511.1685009934686--
+On Fri, 21 Apr 2023 09:54:43 +0200 you wrote:
+> Hello arm-soc maintainers,
+> 
+> Please pull this small patch fixing an unintialized variable in the
+> OP-TEE driver. The error has been reported recently by the kernel test
+> robot.
+> 
+> I realize that this is late for v6.3, please queue this for v6.4 instead
+> if v6.3 isn't possible.
+> 
+> [...]
+
+Here is the summary with links:
+  - [GIT,PULL] Fix uninitialized variable in OP-TEE driver for v6.3
+    https://git.kernel.org/soc/soc/c/9bafc2bb469c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
