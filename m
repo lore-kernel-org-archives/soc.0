@@ -4,61 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3794AC7EE2D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37910C77B7A
 	for <soc@archiver.kernel.org>; Thu, 25 May 2023 15:47:19 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0C635C433A1; Thu, 25 May 2023 15:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EA673C4339B;
-	Thu, 25 May 2023 15:47:18 +0000 (UTC)
+	id 0934CC433EF; Thu, 25 May 2023 15:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6EB0C433D2
+	for <soc@kernel.org>; Thu, 25 May 2023 15:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685029639;
-	bh=99ZUpctvcmqIGpSRL2CD/QrL5GXNbGdQG8skxFaUhh0=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=P69sQUVznWIsP2b/eY7Q64yWVItOypiEcc4GhwilCA9ZPkTeDkw1HEb8WW6Egfbvn
-	 azGvOcs1DyKdycurjwrdn4hUUhIA1Q57HZWhbMZ28XB1UG3bAX7Z33dn8aPwNAxXn4
-	 wwj+WXFNMe7/kwqrX5cL/ri4U559KzjMeVt+5sAdMb1ZFyxfaOXhfcnZ4zsbhLUZdg
-	 eYlHm1pqAFQSSmvm2hKEddhsViCDPTioXwm+JpMXOkY6zzKX1O3siyDP7u2bEHwf2I
-	 1y6qybPPDxlIiFX8SAIykPgKpb47PfFbMQhjiH9gH2yoqNr/KS3AoLKlbbVvWyKVEn
-	 z5Pt89d1jBspw==
+	s=k20201202; t=1685029638;
+	bh=GGTMb4UVw9dAseuEZsYMVRxE+OXcyp+DOrm0qID2GCk=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=BZajVA8FwHtoAvM56z3onPv7oElAos+h1jsx96H/3i/oBvM0lKlt3iHMjicVPuzSC
+	 2IAkp4JAY98fL6CjTXPRfNctecvdE1C0RbJUqwzE08pGyzHdzs/o3oUbUwNZsM3Clr
+	 flAO1S2ZZh7Fj0HdPWfKRsqxDqmm/Mgm12ubJ6sK1QSBTryabYczEU1+gcd71aoJlO
+	 iQvG1fUQICWPlv8dqlrYkQSfw0u+jGv8MOJUBy/14jVzvwReBuDcJzo1CBG8WBq8bJ
+	 YbBGYgbxGyTzXnjDmudh6Kt9Ec6SEJtWuvcOK9I0JCWzoAzNS0+7Yq34EEB0ToRvFt
+	 i4ri5ElKYt7rw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2313E4F133;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7CC0C395DF;
 	Thu, 25 May 2023 15:47:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Fix uninitialized variable in OP-TEE driver for v6.3
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168502963885.27102.1312262124124929132.git-patchwork-notify@kernel.org>
+ <168502963871.27102.17105434820624919434.git-patchwork-summary@kernel.org>
 Date: Thu, 25 May 2023 15:47:18 +0000
-References: <20230421075443.GA3136581@rayden>
-In-Reply-To: <20230421075443.GA3136581@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Fri, 21 Apr 2023 09:54:43 +0200 you wrote:
-> Hello arm-soc maintainers,
-> 
-> Please pull this small patch fixing an unintialized variable in the
-> OP-TEE driver. The error has been reported recently by the kernel test
-> robot.
-> 
-> I realize that this is late for v6.3, please queue this for v6.4 instead
-> if v6.3 isn't possible.
-> 
-> [...]
+Patch: [GIT,PULL] Fix uninitialized variable in OP-TEE driver for v6.3
+  Submitter: Jens Wiklander <jens.wiklander@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=742003
+  Lore link: https://lore.kernel.org/r/20230421075443.GA3136581@rayden
 
-Here is the summary with links:
-  - [GIT,PULL] Fix uninitialized variable in OP-TEE driver for v6.3
-    https://git.kernel.org/soc/soc/c/9bafc2bb469c
+Patch: [GIT,PULL] arm/arm64: dts: Fixes for v6.4
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=746145
+  Lore link: https://lore.kernel.org/r/20230509143508.1188786-1-sudeep.holla@arm.com
 
-You are awesome, thank you!
+Patch: [GIT,PULL] firmware: arm_scmi: Fix for v6.4
+  Submitter: Sudeep Holla <Sudeep.Holla@arm.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=746146
+  Lore link: https://lore.kernel.org/r/20230509143529.1188812-1-sudeep.holla@arm.com
+
+Patch: [v2] MAINTAINERS: update arm64 Microchip entries
+  Submitter: Conor Dooley <conor.dooley@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=749682
+  Lore link: https://lore.kernel.org/r/20230522-wagon-stencil-a164ec39322a@wendy
+
+Patch: [GIT,PULL] i.MX fixes for 6.4
+  Submitter: Shawn Guo <shawnguo@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=748008
+  Lore link: https://lore.kernel.org/r/20230516133625.GI767028@dragon
+
+
+Total patches: 5
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
