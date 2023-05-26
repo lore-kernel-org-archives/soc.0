@@ -4,29 +4,29 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1BEEC7EE2F
-	for <soc@archiver.kernel.org>; Fri, 26 May 2023 09:48:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FED4C7EE31
+	for <soc@archiver.kernel.org>; Fri, 26 May 2023 09:48:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BB973C433D2; Fri, 26 May 2023 09:48:45 +0000 (UTC)
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
+	id 477BDC433D2; Fri, 26 May 2023 09:48:46 +0000 (UTC)
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id CA018C433A0
-	for <soc@kernel.org>; Fri, 26 May 2023 09:48:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CA018C433A0
+	by smtp.kernel.org (Postfix) with ESMTPS id B3693C433B0
+	for <soc@kernel.org>; Fri, 26 May 2023 09:48:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3693C433B0
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:ae30:9d2b:3228:d21])
-	by andre.telenet-ops.be with bizsmtp
-	id 1Moc2A00A4eYoVn01MocrB; Fri, 26 May 2023 11:48:36 +0200
+	by albert.telenet-ops.be with bizsmtp
+	id 1Moc2A0064eYoVn06Moc3v; Fri, 26 May 2023 11:48:36 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1q2U3X-0038ju-KZ;
+	id 1q2U3X-0038jq-Jx;
 	Fri, 26 May 2023 11:48:36 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1q2U3o-00EFZc-5E;
+	id 1q2U3o-00EFZU-3q;
 	Fri, 26 May 2023 11:48:36 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 List-Id: <soc.lore.kernel.org>
@@ -36,9 +36,9 @@ Cc: Magnus Damm <magnus.damm@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 3/3] Renesas DTS updates for v6.5
-Date: Fri, 26 May 2023 11:48:31 +0200
-Message-Id: <cover.1685094244.git.geert+renesas@glider.be>
+Subject: [GIT PULL 1/3] Renesas ARM defconfig updates for v6.5
+Date: Fri, 26 May 2023 11:48:29 +0200
+Message-Id: <cover.1685094240.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1685094238.git.geert+renesas@glider.be>
 References: <cover.1685094238.git.geert+renesas@glider.be>
@@ -51,53 +51,20 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-dts-for-v6.5-tag1
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.5-tag1
 
-for you to fetch changes up to 18cbbdd846c5d74bd56fd1f229d074e1f7068fc8:
+for you to fetch changes up to 3f1e1ad9230f8b1c415b432841db2b2850450fd4:
 
-  arm64: dts: renesas: r8a779a0: Add PWM nodes (2023-05-08 09:21:51 +0200)
-
-----------------------------------------------------------------
-Renesas DTS updates for v6.5
-
-  - Add partial display support for the RZ/G2L and RZ/V2L SoCs and the
-    RZ/G2L{,C} SMARC EVK development boards,
-  - Add camera support for the RZ/GV2L SoC and the RZ/V2L and RZ/G2LC
-    SMARC EVK development boards,
-  - Add Multi-Function Timer Pulse Unit 3 support for the RZ/G2L and
-    RZ/V2L SoCs,
-  - Add PWM support for the R-Car V3U SoC.
+  ARM: shmobile: defconfig: Refresh for v6.4-rc1 (2023-05-15 10:31:22 +0200)
 
 ----------------------------------------------------------------
-Biju Das (10):
-      arm64: dts: renesas: r9a07g044: Add fcpvd node
-      arm64: dts: renesas: r9a07g054: Add fcpvd node
-      arm64: dts: renesas: r9a07g044: Add vspd node
-      arm64: dts: renesas: r9a07g054: Add vspd node
-      arm64: dts: renesas: r9a07g044: Add DSI node
-      arm64: dts: renesas: r9a07g054: Add DSI node
-      arm64: dts: renesas: rzg2l-smarc: Link DSI with ADV7535
-      arm64: dts: renesas: rzg2lc-smarc: Link DSI with ADV7535
-      arm64: dts: renesas: r9a07g044: Add MTU3a node
-      arm64: dts: renesas: r9a07g054: Add MTU3a node
+Renesas ARM defconfig updates for v6.5
 
-Lad Prabhakar (3):
-      arm64: dts: renesas: r9a07g054: Add CSI and CRU nodes
-      arm64: dts: renesas: rzv2l-smarc: Enable CRU, CSI support
-      arm64: dts: renesas: rzg2lc-smarc: Enable CRU, CSI support
+  - Refresh shmobile_defconfig for v6.4-rc1.
 
-Phong Hoang (1):
-      arm64: dts: renesas: r8a779a0: Add PWM nodes
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      ARM: shmobile: defconfig: Refresh for v6.4-rc1
 
- arch/arm64/boot/dts/renesas/Makefile               |   2 +
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi          |  50 +++++
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi         | 123 +++++++++++++
- .../renesas/r9a07g044c2-smarc-cru-csi-ov5645.dtso  |  21 +++
- .../renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso  |   2 +-
- arch/arm64/boot/dts/renesas/r9a07g054.dtsi         | 203 +++++++++++++++++++++
- .../renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso  |   1 +
- arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi       |  79 ++++++++
- arch/arm64/boot/dts/renesas/rzg2lc-smarc.dtsi      |  79 ++++++++
- 9 files changed, 559 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044c2-smarc-cru-csi-ov5645.dtso
- create mode 120000 arch/arm64/boot/dts/renesas/r9a07g054l2-smarc-cru-csi-ov5645.dtso
+ arch/arm/configs/shmobile_defconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
