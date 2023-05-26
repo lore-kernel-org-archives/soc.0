@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 520B2C7EE32
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5521EC7EE39
 	for <soc@archiver.kernel.org>; Fri, 26 May 2023 11:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2448CC433AE; Fri, 26 May 2023 11:50:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E190C433A7;
-	Fri, 26 May 2023 11:50:28 +0000 (UTC)
+	id 18620C433AF; Fri, 26 May 2023 11:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F176DC433EF;
+	Fri, 26 May 2023 11:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1685101828;
-	bh=ULmYpNlX3/DiQLwW/pyKkHA5DpiRLtRblJTMt/fDt+Q=;
+	bh=x4TaP0SIYkO9LPC3kG+noZUdRCHqyCK9I8RxhdsLgys=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=OGzJHrg8tgsZAgzeWjd2xD4Q1Vw8z9S+nVueiRheipAyi8wqVVdcaO8IsLDMvdFf/
-	 klwHN+njq4PuT5l3t0uTtn+5GPMtpYPPFD+7ANpStiKGof44o0OaqE8B+vSQYrWHCO
-	 Cs+l0LDsf5dh/FSaT1e3s9/7yEKBvNzm58tCaHbIhad0HagggWhD6CiLPh+c2mQfCM
-	 WU9xp77VbR5EEXS3ul72B18MlTcN73mPU7ZoiewVQI5kPkbRcKy04/ic5929gzqUxr
-	 H5gty/DII0IhMraDKf8ACaIZAk5G36bkYWzr0P5r/1kHW0LnjkzMMQLmsvRd+V0KbS
-	 O4G2TZUSA/DPw==
+	b=t21uMUMzU8E3fYQG65vEcQ4E5BrV/j2smwacXMFDv4ILVDNB0tIgmlxp1K5ojHXVY
+	 Zz3OxAPUkX5H8dr4c2Az1JuKLeH03zp/FCJu90aDNkbWoxtHHdYrOGZfYaDkHGrMUh
+	 5d3Ns375/bQ9V86K/tXu20KeRGm3iw8PLPJLPnWxcD2L68b6dJIrcEhVP3liZyQR/E
+	 hE9qHH3cpXZfFZTV4YfYwADJgz2kFHZoVAcg5bFDlDnNAbtzqx9eLRR9iTFi94D86C
+	 QPjP2AdWHRWZErsy/6hbSIs3O6IyHNvJzN7KCu+DQrRQD9W+GQvdSt6jD04GuTvOiq
+	 B/14SCnFpKBvA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBAABE4F139;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC28DE4F133;
 	Fri, 26 May 2023 11:50:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] OMAP GPIO numbers cleanup
+Subject: Re: [PATCH] arm-cci: add cci_enable_port_for_self prototype
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168510182788.28560.12908030019424974256.git-patchwork-notify@kernel.org>
+ <168510182776.28560.18086249203886738020.git-patchwork-notify@kernel.org>
 Date: Fri, 26 May 2023 11:50:27 +0000
-References: <CACRpkdbtE9yfx9kZqGwsHim91WsxHERecrGwjnr6TQpCUMsQwg@mail.gmail.com>
-In-Reply-To: <CACRpkdbtE9yfx9kZqGwsHim91WsxHERecrGwjnr6TQpCUMsQwg@mail.gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+References: <20230516201218.556437-1-arnd@kernel.org>
+In-Reply-To: <20230516201218.556437-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 24 May 2023 15:07:03 +0200 you wrote:
-> Hi SoC maintainers,
+On Tue, 16 May 2023 22:12:12 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> please pull in this cleanup of the OMAP board files removing all
-> usage of the global GPIO numberspace.
+> The cci_enable_port_for_self() is called from assembler, so
+> add the prototype only to shut up the W=1 warning:
 > 
-> It's reasonably reviewed and tested, any remaining issues can
-> be smoked out in-tree.
+> drivers/bus/arm-cci.c:298:25: error: no previous prototype for 'cci_enable_port_for_self' [-Werror=missing-prototypes]
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] OMAP GPIO numbers cleanup
-    https://git.kernel.org/soc/soc/c/5fa035bb7156
+  - arm-cci: add cci_enable_port_for_self prototype
+    https://git.kernel.org/soc/soc/c/db967cf828fc
 
 You are awesome, thank you!
 -- 
