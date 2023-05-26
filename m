@@ -1,64 +1,82 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=00RE=BP=linux-m68k.org=geert@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8548DC7EE2F
-	for <soc@archiver.kernel.org>; Thu, 25 May 2023 15:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32ED9C7EE23
+	for <soc@archiver.kernel.org>; Fri, 26 May 2023 09:48:44 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 49D6BC433A4; Thu, 25 May 2023 15:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D78FC4339E;
-	Thu, 25 May 2023 15:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685030320;
-	bh=gyvlPwsYDDQOx0bwNpipjrkrXzl4zenG1Gq7Sf7G03U=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=Q3qqsvs+9wZaoOe9ITkmazz8M0Pg4BgLaEi5W+bJTmOHrJIRsKkzCN4jrlmW9zCVS
-	 Pnry84ui9yiAbFsD0YQibhyuD/cZft02vSFaSXzZb095pDSI3Sd5KWRpqvzUA9KpFM
-	 0/Oyw8QN8Zd8m/Y1xRqHLIgHoOR3OaP7aOghB8mRbXBu7LoMem5Bz2uzUc3pBHJ6k7
-	 GJV2j5F1yflQjwJAAgQRpXgl8oyr3litHlEvQFc1RwZSd6jZPvmrTiucWtd9R6FfAT
-	 YiUBhpVK0T0Y92Hh9glMTUW2TQR+LNNcA/7/C8+6lGf1IvaoBAQaQPMoWXdDj5x2y0
-	 dUyzwrl2At53Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16E8FE4F133;
-	Thu, 25 May 2023 15:58:40 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	id F2071C433A7; Fri, 26 May 2023 09:48:43 +0000 (UTC)
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8C24FC4339E
+	for <soc@kernel.org>; Fri, 26 May 2023 09:48:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8C24FC4339E
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:ae30:9d2b:3228:d21])
+	by baptiste.telenet-ops.be with bizsmtp
+	id 1Moc2A0074eYoVn01Mocvu; Fri, 26 May 2023 11:48:38 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1q2U3X-0038jr-Jx;
+	Fri, 26 May 2023 11:48:36 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1q2U3o-00EFZR-2m;
+	Fri, 26 May 2023 11:48:36 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+List-Id: <soc.lore.kernel.org>
+To: arm-soc <arm@kernel.org>,
+	soc <soc@kernel.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL 0/3] Renesas SoC updates for v6.5
+Date: Fri, 26 May 2023 11:48:28 +0200
+Message-Id: <cover.1685094238.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_scmi: Fix for v6.4
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <168503032009.27102.16491061276257313151.git-patchwork-notify@kernel.org>
-Date: Thu, 25 May 2023 15:58:40 +0000
-References: <20230509143529.1188812-1-sudeep.holla@arm.com>
-In-Reply-To: <20230509143529.1188812-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
 
-Hello:
+	Hi SoC folks,
 
-This pull request was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+This is my first pull request for the inclusion of Renesas SoC updates
+for v6.5.
 
-On Tue,  9 May 2023 15:35:29 +0100 you wrote:
-> Hi ARM SoC Team,
-> 
-> Please pull !
-> 
-> Regards,
-> Sudeep
-> 
-> [...]
+It consists of 3 parts:
 
-Here is the summary with links:
-  - [GIT,PULL] firmware: arm_scmi: Fix for v6.4
-    https://git.kernel.org/soc/soc/c/0bfa36f9bc66
+  [GIT PULL 1/3] Renesas ARM defconfig updates for v6.5
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+    - Refresh shmobile_defconfig for v6.4-rc1.
 
+  [GIT PULL 2/3] Renesas driver updates for v6.5
 
+    - Enable watchdog reset support on R-Car V3U.
+
+  [GIT PULL 3/3] Renesas DTS updates for v6.5
+
+    - Add partial display support for the RZ/G2L and RZ/V2L SoCs and the
+      RZ/G2L{,C} SMARC EVK development boards,
+    - Add camera support for the RZ/GV2L SoC and the RZ/V2L and RZ/G2LC
+      SMARC EVK development boards,
+    - Add Multi-Function Timer Pulse Unit 3 support for the RZ/G2L and
+      RZ/V2L SoCs,
+    - Add PWM support for the R-Car V3U SoC.
+
+Thanks for pulling!
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
