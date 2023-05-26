@@ -1,70 +1,88 @@
-Return-Path: <SRS0=00RE=BP=linux-m68k.org=geert@kernel.org>
+Return-Path: <patchwork-bot+linux-soc@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FED4C7EE31
-	for <soc@archiver.kernel.org>; Fri, 26 May 2023 09:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333B4C77B73
+	for <soc@archiver.kernel.org>; Fri, 26 May 2023 11:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 477BDC433D2; Fri, 26 May 2023 09:48:46 +0000 (UTC)
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B3693C433B0
-	for <soc@kernel.org>; Fri, 26 May 2023 09:48:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B3693C433B0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:ae30:9d2b:3228:d21])
-	by albert.telenet-ops.be with bizsmtp
-	id 1Moc2A0064eYoVn06Moc3v; Fri, 26 May 2023 11:48:36 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1q2U3X-0038jq-Jx;
-	Fri, 26 May 2023 11:48:36 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1q2U3o-00EFZU-3q;
-	Fri, 26 May 2023 11:48:36 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-List-Id: <soc.lore.kernel.org>
-To: arm-soc <arm@kernel.org>,
-	soc <soc@kernel.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL 1/3] Renesas ARM defconfig updates for v6.5
-Date: Fri, 26 May 2023 11:48:29 +0200
-Message-Id: <cover.1685094240.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1685094238.git.geert+renesas@glider.be>
-References: <cover.1685094238.git.geert+renesas@glider.be>
+	id E4D30C4339E; Fri, 26 May 2023 11:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CEC36C4339B;
+	Fri, 26 May 2023 11:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685101827;
+	bh=vGcECz2cUcSGPtOc628c3Xkxzqn94zQHLkodK6Xv5Hw=;
+	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
+	b=R3WsTZrL4TT7RUhAF2mbL9nNs95XL3b9+1n055chrwqQX6ETz1xvFhJfT/zsyN182
+	 M3OH0ax9qJu8HmtL6ss/2Upv5+h2XIq3VmkmTPW+4Pm/W8Dqfj6hHhT2/7J4JrdaRP
+	 bbezHhB06T5LHtnmUbI3LB5VWzG7UxSS0NdenSlviYekeywSqTGqL+zc1pMeEPERaY
+	 txZ7wCV/mPvhR6iu+ux+UrMuciiLx6UEOSTfhDF+laHMZH4HyE/7KoH9dn1AZlO+V0
+	 BxXMSbR3xHAnMX7q9pLiWoWDUXXj8AxLip5B7NlBp56ORLs8AdIgQu+ZI+YidDkQl6
+	 5iZ0OIK4QAhmQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6371E270C2;
+	Fri, 26 May 2023 11:50:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/13] ARM: SoC: address -Wmissing-prototype warnings
+From: patchwork-bot+linux-soc@kernel.org
+Message-Id: 
+ <168510182767.28560.13275711874607455114.git-patchwork-notify@kernel.org>
+Date: Fri, 26 May 2023 11:50:27 +0000
+References: <20230516153109.514251-1-arnd@kernel.org>
+In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+Hello:
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+This series was applied to soc/soc.git (for-next)
+by Arnd Bergmann <arnd@arndb.de>:
 
-are available in the Git repository at:
+On Tue, 16 May 2023 17:30:56 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This is part of a longer series of patches to address all -Wmissing-prototype
+> warnings. I would like to take these through the soc tree directly, but
+> if anyone wants to first apply a patch to their platform specific tree,
+> I'll drop that one. See the Link below for more background.
+> 
+> [...]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git tags/renesas-arm-defconfig-for-v6.5-tag1
+Here is the summary with links:
+  - [01/13] ARM: davinci: fix davinci_cpufreq_init() declaration
+    https://git.kernel.org/soc/soc/c/30955b4afc2b
+  - [02/13] ARM: ep93xx: fix missing-prototype warnings
+    https://git.kernel.org/soc/soc/c/419013740ea1
+  - [03/13] ARM: highbank: add missing include
+    https://git.kernel.org/soc/soc/c/774f60dd6abc
+  - [04/13] ARM: imx: add missing include
+    https://git.kernel.org/soc/soc/c/5692520a040b
+  - [05/13] ARM: imx: remove unused mx25_revision()
+    (no matching commit)
+  - [06/13] ARM: lpc32xx: add missing include
+    https://git.kernel.org/soc/soc/c/ecd2a5769d09
+  - [07/13] ARM: omap1: add missing include
+    https://git.kernel.org/soc/soc/c/94c1c0a29bfc
+  - [08/13] ARM: omap2: fix missing tick_broadcast() prototype
+    https://git.kernel.org/soc/soc/c/861bc1d2886d
+  - [09/13] ARM: orion5x: fix d2net gpio initialization
+    https://git.kernel.org/soc/soc/c/f8ef12339394
+  - [10/13] ARM: pxa: fix missing-prototypes warnings
+    https://git.kernel.org/soc/soc/c/a9ae9c526cc2
+  - [11/13] ARM: sa1100: address missing prototype warnings
+    https://git.kernel.org/soc/soc/c/6475f4bb3fbd
+  - [12/13] ARM: spear: include "pl080.h" for pl080_get_signal() prototype
+    https://git.kernel.org/soc/soc/c/5e40c79a513b
+  - [13/13] ARM: versatile: mark mmc_status() static
+    https://git.kernel.org/soc/soc/c/88813f05b834
 
-for you to fetch changes up to 3f1e1ad9230f8b1c415b432841db2b2850450fd4:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  ARM: shmobile: defconfig: Refresh for v6.4-rc1 (2023-05-15 10:31:22 +0200)
 
-----------------------------------------------------------------
-Renesas ARM defconfig updates for v6.5
-
-  - Refresh shmobile_defconfig for v6.4-rc1.
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      ARM: shmobile: defconfig: Refresh for v6.4-rc1
-
- arch/arm/configs/shmobile_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
