@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1A85C77B73
-	for <soc@archiver.kernel.org>; Fri, 26 May 2023 16:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26FFCC77B73
+	for <soc@archiver.kernel.org>; Fri, 26 May 2023 20:50:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 97FC3C433EF; Fri, 26 May 2023 16:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 758B3C4339C;
-	Fri, 26 May 2023 16:10:19 +0000 (UTC)
+	id EBAA6C4339C; Fri, 26 May 2023 20:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D5DFFC433EF;
+	Fri, 26 May 2023 20:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685117419;
-	bh=jUUoOs7nDpq0Usf63X+oh19q0sb62PslALcfZiHF4QU=;
+	s=k20201202; t=1685134221;
+	bh=/mKLY44qfVmjA3XUJjAbZuKUjbJHdwGCcXM+JidlfJw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=WrSHMmy4c3MB1h0Bo9ROP2SyLPxvfeFVvbxku7CnXChVwBDarqIphiWlk52sXDrCf
-	 BK3+f+I+i5Dv3xo2Iy+spyojJj8POg2khixBsCuw8U/gEsAMPx3qOg59PLfBwFyGnG
-	 pPJYNEkADMgmDtJzlOuMfUC+MfQRavjsN54TQWFvNhCrLNyVahDbs3UiopBB21pkGD
-	 cMXAs7SY/tuY0Tjy7y3AiqL6YXqojZ9hmUZbtMGr9LYfG4ivrKkuSHWOl7+oWOZbr9
-	 0TiBKmqhgJApdSavOb8stGl9lF43vjoFPy6lMf7YTUdxxt192DEc3RqTCAYfjN+p2h
-	 qDF+cSwD4fUWg==
+	b=PldlZcogvQPWLc/t8i8Nb4GOoFVgiAYc2MUQHG9X3+DXIE4AI24NUih+HVNab77ni
+	 OwfwcBM3pATridNSpxkEI9zBJAwE9gEbSGJEWnIslKpb5PdFuBrRyb7CxTva/7kEeP
+	 j3lpH4YYu2wQeYt4L+FCA4nkLj1YfHuG3N0Ba0cTbmVZfHNYpDrtJPx4KXM7lkj6cp
+	 Ct1yXCinqXoe1J/vWF4lGWSfcAPfPq9quwcqtMt5uQ2ncMEdlsLUmJtqPu8nE6P/TD
+	 7bGh/MtUAq+UWa1ujShkb5aaTEfCVt29eqm6oQdOcCyj/nLJF6KgHhH6V9D0FwqS+D
+	 TtKb7wHhMeIlQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 54D0BE21ECD;
-	Fri, 26 May 2023 16:10:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4613E270C2;
+	Fri, 26 May 2023 20:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] firmware: arm_ffa: Fixes for v6.4
+Subject: Re: [GIT PULL] arm64: s32g2/s32v234 DT changes for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168511741934.25839.6688326588156894642.git-patchwork-notify@kernel.org>
-Date: Fri, 26 May 2023 16:10:19 +0000
-References: <20230509143453.1188753-1-sudeep.holla@arm.com>
-In-Reply-To: <20230509143453.1188753-1-sudeep.holla@arm.com>
-To: Sudeep Holla <Sudeep.Holla@arm.com>
+ <168513422172.30982.8984817002956983160.git-patchwork-notify@kernel.org>
+Date: Fri, 26 May 2023 20:50:21 +0000
+References: <ZHC8PO8lDjTae7nV@linux-8mug>
+In-Reply-To: <ZHC8PO8lDjTae7nV@linux-8mug>
+To: Chester Lin <clin@suse.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue,  9 May 2023 15:34:53 +0100 you wrote:
-> Hi ARM SoC Team,
+On Fri, 26 May 2023 22:03:40 +0800 you wrote:
+> Hi Arnd and Olof,
 > 
-> Please pull !
+> Please pull this small s32 DT change for v6.5.
 > 
-> Regards,
-> Sudeep
+> Thanks,
+> Chester
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] firmware: arm_ffa: Fixes for v6.4
-    https://git.kernel.org/soc/soc/c/abf5422e821f
+  - [GIT,PULL] arm64: s32g2/s32v234 DT changes for v6.5
+    https://git.kernel.org/soc/soc/c/c98d58987931
 
 You are awesome, thank you!
 -- 
