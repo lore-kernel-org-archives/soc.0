@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37324C7EE31
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A53CC7EE2E
 	for <soc@archiver.kernel.org>; Fri, 26 May 2023 11:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 18452C433AA; Fri, 26 May 2023 11:50:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 021B3C4339B;
-	Fri, 26 May 2023 11:50:27 +0000 (UTC)
+	id 2C985C433EF; Fri, 26 May 2023 11:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 176F2C433AC;
+	Fri, 26 May 2023 11:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1685101828;
-	bh=mYR04vW03dYd3fHqTzl+6Re77PbaVNbgXMaPC5reRGY=;
+	bh=ndf54B5hupBGRe7V63Pbyo4BhfRi9+WQlDPQw3ydPCo=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=SFjk9nixyWbvFgtMjAHPYjRyTrA4JRb7/NRfXq+WXXQlVnSBEnPmxnihAg2f4gEB7
-	 +PdUxf2y1HQE+vNX24G3IK9MSRqWOkFc347qgjmHj91OkDVFP7IulbMyH59cG4rX+n
-	 vbv+SuzlBHTmP2S0Y2cwd8/epVSlXzH+mQmjXJEti93lKUq3LEjmH63rx9nZeUL6G7
-	 pbOD9SBanByRWNyRi8oscc6NXur1XMjBTpBWHF0M+Ye7n8qheUJ0E9+rIXFFx25zz8
-	 FjbvuGjLQHxF0fTu0CX5HGtWfXStgQkKSGwnBDxZY6K9goikXiXbNvf+O3HtU8T6ZN
-	 6MEZDJN5GnZog==
+	b=b4hUMzWIzskXUNuxSSUSWpLL4NMYdvRrZfu3boHa2OxJ3zvce2YYwlUnUHbojPjUC
+	 WCbudFtr9ZHV72vnPvyG26tqRWnspzvQa9sfTh3sJiovsdb+sUWsD7vGhS6be3S1mH
+	 ZlOKeZS4xTJTOY/o+s4L5y6yeYDQ8CWZsjQQ2hBI5pZ/ezF8Y0xVZ5Z/pJS1bw2GPY
+	 QVv09IunMCMgQ8lmwAdTgrasw7pCBUZW4FQTDRHvpqYSKlpDiAwk5DTCua4vBmFkVo
+	 H3EYFuZj3m6xjahmRS1xqs3GC6gaKaqd62Aqkjg8Ro51s4HgY/CJmfm2blo0JvltBI
+	 V1TjwKALLdcrw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA4FBE4D023;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EAEDCC4166F;
 	Fri, 26 May 2023 11:50:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Reset controller updates for v6.5
+Subject: Re: [GIT PULL 1/2] arm64: dts: cleanup and fixes for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168510182782.28560.329490827179216051.git-patchwork-notify@kernel.org>
+ <168510182794.28560.9708236829245095420.git-patchwork-notify@kernel.org>
 Date: Fri, 26 May 2023 11:50:27 +0000
-References: <20230511133235.874566-1-p.zabel@pengutronix.de>
-In-Reply-To: <20230511133235.874566-1-p.zabel@pengutronix.de>
-To: Philipp Zabel <p.zabel@pengutronix.de>
+References: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,20 +42,21 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu, 11 May 2023 15:32:35 +0200 you wrote:
-> Dear arm-soc maintainers,
+On Wed, 17 May 2023 15:12:54 +0200 you wrote:
+> Hi,
 > 
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-> 
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-> 
-> are available in the Git repository at:
+> Few usual cleanups from me and few other fixes/cleanups from Michael
+> and Robert. To clarify - I don't want to step on someone's toes, so
+> me picking up other patches is rather exception. It's just sad when
+> someone's work gets lost.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Reset controller updates for v6.5
-    https://git.kernel.org/soc/soc/c/eaae5a8977d6
+  - [GIT,PULL,1/2] arm64: dts: cleanup and fixes for v6.5
+    https://git.kernel.org/soc/soc/c/6a023136126c
+  - [GIT,PULL,2/2] ARM: dts: cleanup for v6.5
+    https://git.kernel.org/soc/soc/c/c45585623710
 
 You are awesome, thank you!
 -- 
