@@ -4,83 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333B4C77B73
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22968C77B7A
 	for <soc@archiver.kernel.org>; Fri, 26 May 2023 11:50:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E4D30C4339E; Fri, 26 May 2023 11:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CEC36C4339B;
-	Fri, 26 May 2023 11:50:27 +0000 (UTC)
+	id DE82EC4339C; Fri, 26 May 2023 11:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C8153C433EF
+	for <soc@kernel.org>; Fri, 26 May 2023 11:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1685101827;
-	bh=vGcECz2cUcSGPtOc628c3Xkxzqn94zQHLkodK6Xv5Hw=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=R3WsTZrL4TT7RUhAF2mbL9nNs95XL3b9+1n055chrwqQX6ETz1xvFhJfT/zsyN182
-	 M3OH0ax9qJu8HmtL6ss/2Upv5+h2XIq3VmkmTPW+4Pm/W8Dqfj6hHhT2/7J4JrdaRP
-	 bbezHhB06T5LHtnmUbI3LB5VWzG7UxSS0NdenSlviYekeywSqTGqL+zc1pMeEPERaY
-	 txZ7wCV/mPvhR6iu+ux+UrMuciiLx6UEOSTfhDF+laHMZH4HyE/7KoH9dn1AZlO+V0
-	 BxXMSbR3xHAnMX7q9pLiWoWDUXXj8AxLip5B7NlBp56ORLs8AdIgQu+ZI+YidDkQl6
-	 5iZ0OIK4QAhmQ==
+	bh=DmrjjjHFogrZCqFWrlWMaR8sJPyZUTtvrUAXJ9m5mDM=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=P/d2niT/No1AvM3cdDDQH54Ru1uxGoBP+lNCkRAc4hkJeYDM7Qlxo6m0gm6EG5SwW
+	 gLtAoScs1fGVBk1PK9kvNSBt2r26w9JdJO+vclBRc4eMvMUNQKIp6WJ94mbDp6SUSK
+	 G2tN51t+2QhaJO69UvXi/5HozVe8sSTWoxZUvXsaFuyyGr3nSr23PXQeoKXj9TMt4r
+	 hrxf+Q2OR45/RUxXGcAkrcvkSQo9efH4ASzdsAaGA0kHSYsCBZTTnUqoyv7+1Oe1Hy
+	 RW5noGjTc/Qh3fhjRTxxgvSGLGWA+pTlGNcokLOOBZ7tIwBjmnIwcfxrQe0X6SRN1Q
+	 vJv1YQhHhhtNA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6371E270C2;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9B90FC4166F;
 	Fri, 26 May 2023 11:50:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/13] ARM: SoC: address -Wmissing-prototype warnings
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168510182767.28560.13275711874607455114.git-patchwork-notify@kernel.org>
+ <168510182754.28560.4086652414684165891.git-patchwork-summary@kernel.org>
 Date: Fri, 26 May 2023 11:50:27 +0000
-References: <20230516153109.514251-1-arnd@kernel.org>
-In-Reply-To: <20230516153109.514251-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This series was applied to soc/soc.git (for-next)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (for-next):
 
-On Tue, 16 May 2023 17:30:56 +0200 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This is part of a longer series of patches to address all -Wmissing-prototype
-> warnings. I would like to take these through the soc tree directly, but
-> if anyone wants to first apply a patch to their platform specific tree,
-> I'll drop that one. See the Link below for more background.
-> 
-> [...]
+Series: ARM: SoC: address -Wmissing-prototype warnings
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=748058
+  Lore link: https://lore.kernel.org/r/20230516153109.514251-1-arnd@kernel.org
+    Patches: [01/13] ARM: davinci: fix davinci_cpufreq_init() declaration
+             [02/13] ARM: ep93xx: fix missing-prototype warnings
+             [03/13] ARM: highbank: add missing include
+             [04/13] ARM: imx: add missing include
+             [06/13] ARM: lpc32xx: add missing include
+             [07/13] ARM: omap1: add missing include
+             [08/13] ARM: omap2: fix missing tick_broadcast() prototype
+             [09/13] ARM: orion5x: fix d2net gpio initialization
+             [10/13] ARM: pxa: fix missing-prototypes warnings
+             [11/13] ARM: sa1100: address missing prototype warnings
+             [12/13] ARM: spear: include "pl080.h" for pl080_get_signal() prototype
+             [13/13] ARM: versatile: mark mmc_status() static
 
-Here is the summary with links:
-  - [01/13] ARM: davinci: fix davinci_cpufreq_init() declaration
-    https://git.kernel.org/soc/soc/c/30955b4afc2b
-  - [02/13] ARM: ep93xx: fix missing-prototype warnings
-    https://git.kernel.org/soc/soc/c/419013740ea1
-  - [03/13] ARM: highbank: add missing include
-    https://git.kernel.org/soc/soc/c/774f60dd6abc
-  - [04/13] ARM: imx: add missing include
-    https://git.kernel.org/soc/soc/c/5692520a040b
-  - [05/13] ARM: imx: remove unused mx25_revision()
-    (no matching commit)
-  - [06/13] ARM: lpc32xx: add missing include
-    https://git.kernel.org/soc/soc/c/ecd2a5769d09
-  - [07/13] ARM: omap1: add missing include
-    https://git.kernel.org/soc/soc/c/94c1c0a29bfc
-  - [08/13] ARM: omap2: fix missing tick_broadcast() prototype
-    https://git.kernel.org/soc/soc/c/861bc1d2886d
-  - [09/13] ARM: orion5x: fix d2net gpio initialization
-    https://git.kernel.org/soc/soc/c/f8ef12339394
-  - [10/13] ARM: pxa: fix missing-prototypes warnings
-    https://git.kernel.org/soc/soc/c/a9ae9c526cc2
-  - [11/13] ARM: sa1100: address missing prototype warnings
-    https://git.kernel.org/soc/soc/c/6475f4bb3fbd
-  - [12/13] ARM: spear: include "pl080.h" for pl080_get_signal() prototype
-    https://git.kernel.org/soc/soc/c/5e40c79a513b
-  - [13/13] ARM: versatile: mark mmc_status() static
-    https://git.kernel.org/soc/soc/c/88813f05b834
+Series: Renesas SoC updates for v6.5
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=751307
+  Lore link: https://lore.kernel.org/r/cover.1685094238.git.geert+renesas@glider.be
+    Patches: [GIT,PULL,1/3] Renesas ARM defconfig updates for v6.5
+             [GIT,PULL,2/3] Renesas driver updates for v6.5
+             [GIT,PULL,3/3] Renesas DTS updates for v6.5
 
-You are awesome, thank you!
+Patch: arm-cci: add cci_enable_port_for_self prototype
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=748142
+  Lore link: https://lore.kernel.org/r/20230516201218.556437-1-arnd@kernel.org
+
+Patch: [GIT,PULL] Reset controller updates for v6.5
+  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=746759
+  Lore link: https://lore.kernel.org/r/20230511133235.874566-1-p.zabel@pengutronix.de
+
+Patch: [GIT,PULL] OMAP GPIO numbers cleanup
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=750664
+  Lore link: https://lore.kernel.org/r/CACRpkdbtE9yfx9kZqGwsHim91WsxHERecrGwjnr6TQpCUMsQwg@mail.gmail.com
+
+Series: [GIT,PULL,1/2] arm64: dts: cleanup and fixes for v6.5
+  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=748446
+  Lore link: https://lore.kernel.org/r/20230517131255.471002-1-krzysztof.kozlowski@linaro.org
+    Patches: [GIT,PULL,1/2] arm64: dts: cleanup and fixes for v6.5
+             [GIT,PULL,2/2] ARM: dts: cleanup for v6.5
+
+Patch: ARM: s3c: remove obsolete config S3C64XX_SETUP_IDE
+  Submitter: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=745675
+  Lore link: https://lore.kernel.org/r/20230508040433.13648-1-lukas.bulwahn@gmail.com
+
+
+Total patches: 21
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
