@@ -1,90 +1,89 @@
-Return-Path: <SRS0=8gjP=BR=gmail.com=guptarud@kernel.org>
+Return-Path: <gregkh@linuxfoundation.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46179C7EE23
-	for <soc@archiver.kernel.org>; Sun, 28 May 2023 13:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E080BC77B7E
+	for <soc@archiver.kernel.org>; Sun, 28 May 2023 13:56:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CDFE5C433A1; Sun, 28 May 2023 13:36:42 +0000 (UTC)
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8D70CC433D2;
-	Sun, 28 May 2023 13:36:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8D70CC433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6260a2522d9so10543446d6.3;
-        Sun, 28 May 2023 06:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685281000; x=1687873000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2n/WoDLxYIs5byxeZJLkV/uF8fU1oTZ8WCiBG786KWU=;
-        b=Ri6l7Zx7Zq5TyRhM1oOvRL6b6/CiRhjnyFwXpUFCKl9dN82foHPdn49IeTDonA+M4z
-         9IyzYufFo5m2DJv3Xj6qB55Ixp6cH6iceqSFDts2NNo/GgqJT4SYB2LC1rzr03lezx2s
-         C3U+sIIucSQKaxVIG8u2Y4K1xD3M1LJNfYeoW+pDSQ+koTLc+npw7WV7YY0AO+ck4r6s
-         zyLg12MI9QNCwrtGnChOV6mHEh7KYrNa1CSQhF2Bo2W3zhtw5M3hRFz9LdPq4FZdzyny
-         k/5RpJ8/gTqGr/S+c/nOolxJemNP6Vytr8OsUy6axFIBjSiOzMDM56HcwsoqwNTMIfX3
-         4vmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685281000; x=1687873000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n/WoDLxYIs5byxeZJLkV/uF8fU1oTZ8WCiBG786KWU=;
-        b=iVTAMRSX9EZLv6LUSIvCpYWAuUDjWiSuoJPS+p3JXwTK+DNV2Iy2RaSqcUaZam6AHX
-         zNObMMF2/TTXE/1tKXPFyJ3m2nXUz+B2DMom58D4kyLdFRa52GrhI8FTvAguUbrOXSEO
-         YKzpXws1xZz3GJOWKRmmwZdv7uBPDGRzv27Yt7+XKCGB1Q8QNSC/VnmcBYy1PNXZt8N+
-         rxO0DB1M92Rjaz7c4THIGMV0SGxEgppYJE98KoGrbymx9+OepiUIn+1fv/53Ns3lX5Tp
-         /1ykBrJMGkIEo5soZ/20iJ6bGKVWS557tIoVmJLCXWiTdZH69OIGmfEd1o/inFP1Pf0r
-         nFlw==
-X-Gm-Message-State: AC+VfDy6vdArqtHxG8rX2+2ONq7XXCtKX2Sf2ULyIRh7XdcJKhiMjb20
-	tzXV1co+iGqPlz1nRg2s+m4YPTgUrl8wHQ==
-X-Google-Smtp-Source: ACHHUZ6XUZe6ez6PJp2Vl27vedty0Ud/1hhdxDFc5ChSTJOKCw/jzUz5Qav5ZBXkf80FRvXpjxUbeA==
-X-Received: by 2002:a05:6214:500c:b0:626:1589:68e4 with SMTP id jo12-20020a056214500c00b00626158968e4mr4422550qvb.43.1685280999942;
-        Sun, 28 May 2023 06:36:39 -0700 (PDT)
-Received: from ?IPV6:2600:4040:2007:9800:ffda:b634:1d9d:77a8? ([2600:4040:2007:9800:ffda:b634:1d9d:77a8])
-        by smtp.gmail.com with ESMTPSA id k15-20020ad4450f000000b006260e7361ebsm1661935qvu.1.2023.05.28.06.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 May 2023 06:36:39 -0700 (PDT)
-Message-ID: <ad7a6ee3-cabb-6f92-a595-8791801cfe97@gmail.com>
-Date: Sun, 28 May 2023 09:36:37 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: arm: qcom: Add Samsung Galaxy Express
-To: Conor Dooley <conor@kernel.org>
+	id 85B0EC433A0; Sun, 28 May 2023 13:56:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD66EC433D2;
+	Sun, 28 May 2023 13:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1685282165;
+	bh=OoZPC1V1hYUWEPl5vfYB+Zu55Xna3a+gVyr1lVOG01E=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=wgWVmXL9JVkXhkERB8AHu7gZIz4/SC6Cd9GvHnQBtdwTxTo8laghhoiL5iVFDHY3g
+	 YIWmU8jbia/wnIJN4Z5vSid1X9Z8prPA2B14S35Q3BhJAdTylyAx9hLp4qyOlWKQj6
+	 quA1BrNAkOX95gV/9QGf0zwSJkxxV8GXrEQsQLEo=
+Date: Sun, 28 May 2023 12:46:25 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-References: <20230527040905.stmnoshkdqgiaex6@ripper>
- <20230528001010.47868-2-guptarud@gmail.com>
- <20230528-decode-creasing-f5b3996163e5@spud>
-Content-Language: en-US
-From: Rudraksha Gupta <guptarud@gmail.com>
-In-Reply-To: <20230528-decode-creasing-f5b3996163e5@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Russell King <linux@armlinux.org.uk>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Hartley Sweeten <hsweeten@visionengravers.com>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 10/13] ARM: pxa: fix missing-prototypes warnings
+Message-ID: <2023052815-skinning-mantis-2cee@gregkh>
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-11-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516153109.514251-11-arnd@kernel.org>
 
- > Where did the "att" come from in the compatible. Is this some carrier 
-specific model of the phone?
+On Tue, May 16, 2023 at 05:31:06PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The PXA platform has a number of configurations that end up with
+> a warning like these when building with W=1:
+> 
+> drivers/hwmon/max1111.c:83:5: error: no previous prototype for 'max1111_read_channel' [-Werror=missing-prototypes]
+> arch/arm/mach-pxa/reset.c:86:6: error: no previous prototype for 'pxa_restart' [-Werror=missing-prototypes]
+> arch/arm/mach-pxa/mfp-pxa2xx.c:254:5: error: no previous prototype for 'keypad_set_wake' [-Werror=missing-prototypes]
+> drivers/clk/pxa/clk-pxa25x.c:70:14: error: no previous prototype for 'pxa25x_get_clk_frequency_khz' [-Werror=missing-prototypes]
+> drivers/clk/pxa/clk-pxa25x.c:325:12: error: no previous prototype for 'pxa25x_clocks_init' [-Werror=missing-prototypes]
+> drivers/clk/pxa/clk-pxa27x.c:74:14: error: no previous prototype for 'pxa27x_get_clk_frequency_khz' [-Werror=missing-prototypes]
+> drivers/clk/pxa/clk-pxa27x.c:102:6: error: no previous prototype for 'pxa27x_is_ppll_disabled' [-Werror=missing-prototypes]
+> drivers/clk/pxa/clk-pxa27x.c:470:12: error: no previous prototype for 'pxa27x_clocks_init' [-Werror=missing-prototypes]
+> arch/arm/mach-pxa/pxa27x.c:44:6: error: no previous prototype for 'pxa27x_clear_otgph' [-Werror=missing-prototypes]
+> arch/arm/mach-pxa/pxa27x.c:58:6: error: no previous prototype for 'pxa27x_configure_ac97reset' [-Werror=missing-prototypes]
+> arch/arm/mach-pxa/spitz_pm.c:170:15: error: no previous prototype for 'spitzpm_read_devdata' [-Werror=missing-prototypes]
+> 
+> The problem is that there is a declaration for each of these, but
+> it's only seen by the caller and not the callee. Moving these
+> into appropriate header files ensures that both use the same
+> calling conventions and it avoids the warnings.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-This is the code name for the device. Since there are usually multiple 
-variants of a device, using the code name differentiates between those 
-variants. For example, if I left this as "samsung,express", it would be 
-unclear if I am referring to the GT-I8730 (code name: expresslte) or the 
-SGH-I437 model. This is typically done in postmarketOS: 
-https://wiki.postmarketos.org/wiki/Devices and XDA developers. I believe 
-it is a carrier specific model of the Samsung Galaxy Express.
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
