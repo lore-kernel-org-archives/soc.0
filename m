@@ -4,43 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 057A9C77B7A
-	for <soc@archiver.kernel.org>; Mon, 29 May 2023 16:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C81EC77B7E
+	for <soc@archiver.kernel.org>; Mon, 29 May 2023 16:22:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E2718C4339B; Mon, 29 May 2023 16:20:57 +0000 (UTC)
+	id 0967FC433A4; Mon, 29 May 2023 16:22:15 +0000 (UTC)
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 70900C433D2;
-	Mon, 29 May 2023 16:20:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70900C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id D2E64C433EF;
+	Mon, 29 May 2023 16:22:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2E64C433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TBP5Lp014132;
-	Mon, 29 May 2023 18:20:51 +0200
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TBPbu5003563;
+	Mon, 29 May 2023 18:22:09 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=R7roW/pXBm1AzX1ECpv0Ow4olyyWijd6fAx4mT/U654=;
- b=rKKWWShAAaoZfxuiWwq7ehnP0eeGYX4d5a/bAXwhovoCfGeeHG5ryv4N69GhisLuQWWf
- 1+3gnOh3Q9TPK998v+azfamrkdUo92Hcv+5I+qz/Hfr9D+SpMbNVRZ5IgXTp68ENmzIA
- EkA6aYgqufGzp4U7MAy3fZ+Cye5MAqF8HjDvtDeRwbIFok35zS9FoEhdh4GONzOoclwb
- 4i/IIX1TWGttFGSfKUu7sDkZByth+1NTAkPYR5tcXDcJUmzELql57iKo4UBXJURlB9Sj
- J9GMPjQAbuwes8KNx7FY4ZEUXYisy2/e4WRd5Fjr5S/Mi4C8tdiLPWnbCdO6vt8Pf1jD 8Q== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=selector1;
+ bh=PDoE1Z+cF75l+gk9sdlZVUIvH6BbnuzzZQPvr/2NagA=;
+ b=um3/lGK4AXmYmq6YiLzgwaBWt8i2wVUPRJcDo/PcGeBZ+VXm9SRfj1rzFiJ7Q0IdVSVz
+ yZnR9fDpPEVbNem85O3p+9cEygYX6PYllWwJQtuwS+ImAjKeMUw2DuTP1EFHUenVHN2F
+ hckkNik2ICrDjR/Msu1zQIXZEpmyGXk5aqZ/wssYjS6RsEEusNADSGBzS9TsiobiG5No
+ b1QkkGsZXRgVA7brCzJ6bbyMwAcsGasunt2OnAogA1hCLhFR3Bv0keMVKK8/RGKJP7m8
+ aR12yuVwShDosoflDblPd8nR9jAiMOMUhDXG3Eu2TSO9hqJjLNgvFlRJ9Hrk3azGmbc/ Kg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy2mcq-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quag2ap28-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 May 2023 18:20:50 +0200
+	Mon, 29 May 2023 18:22:09 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C84EC10002A;
-	Mon, 29 May 2023 18:20:41 +0200 (CEST)
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 376E510002A;
+	Mon, 29 May 2023 18:22:08 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9FED1233C87;
-	Mon, 29 May 2023 18:20:41 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 89F0C227F09;
+	Mon, 29 May 2023 18:21:44 +0200 (CEST)
 Received: from localhost (10.201.21.93) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 29 May
- 2023 18:20:41 +0200
+ 2023 18:21:44 +0200
 From: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -56,10 +57,12 @@ CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-Subject: [PATCH 00/11] Add STM32MP25 support
-Date: Mon, 29 May 2023 18:20:23 +0200
-Message-ID: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+Subject: [PATCH 05/11] arm64: introduce STM32 family on Armv8 architecture
+Date: Mon, 29 May 2023 18:20:28 +0200
+Message-ID: <20230529162034.20481-6-alexandre.torgue@foss.st.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.201.21.93]
@@ -69,89 +72,37 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-29_10,2023-05-29_01,2023-05-22_02
 
-I'm pleased to announce extension of the STM32 MPU family with the addition of
-the STM32MP25 Armv8 based SoCs.
+Add a dedicated ARCH_STM32 for STM32 SoCs config. First STM32 Armv8 SoC
+family is the STM32MP25 which is composed of STM32MP251, STM32MP253,
+STM32MP255, STM32MP257 SoCs.
 
-STM32MP25 family is composed of 4 SoCs defined as following:
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-  -STM32MP251: common part composed of 1*Cortex-A35, common peripherals like
-   SDMMC, UART, SPI, I2C, PCIe, USB3, parallel and DSI display, 1*ETH ...
-
-  -STM32MP253: STM32MP251 + 1*Cortex-A35 (dual CPU), a second ETH, CAN-FD and
-   LVDS display.
-
-  -STM32MP255: STM32MP253 + GPU/AI and video encode/decode.
-  -STM32MP257: STM32MP255 + ETH TSN switch (2+1 ports).
-
-  A second diversity layer exists for security features/ A35 frequency:
-  -STM32MP25xY, "Y" gives information:
-    -Y = A means A35@1.2GHz + no cryp IP and no secure boot.
-    -Y = C means A35@1.2GHz + cryp IP and secure boot.
-    -Y = D means A35@1.5GHz + no cryp IP and no secure boot.
-    -Y = F means A35@1.5GHz + cryp IP and secure boot.
-
-This series adds the STM32MP257F EV1 board support. This board embeds a
-STM32MP257FAI SoC, with 4GB of DDR4, TSN switch (2+1 ports), 2*USB typeA,
-1*USB2 typeC, SNOR OctoSPI, mini PCIe, STPMIC2 for power distribution ...
-
-Thanks
-Alex
-
-Alexandre Torgue (10):
-  dt-bindings: pinctrl: stm32: support for stm32mp257 and additional
-    packages
-  pinctrl: stm32: add stm32mp257 pinctrl support
-  dt-bindings: stm32: add st,stm32mp25 compatibles to the stm32 family
-  arm64: introduce STM32 family on Armv8 architecture
-  arm64: dts: st: introduce stm32mp25 SoCs family
-  arm64: dts: st: introduce stm32mp25 pinctrl files
-  dt-bindings: stm32: document stm32mp257f-ev1 board
-  arm64: dts: st: add stm32mp257f-ev1 board support
-  arm64: defconfig: enable ARCH_STM32 and STM32 serial driver
-  MAINTAINERS: add entry for ARM/STM32 ARCHITECTURE
-
-Patrick Delaunay (1):
-  dt-bindings: stm32: add st,stm32mp25-syscfg compatible for syscon
-
- .../bindings/arm/stm32/st,stm32-syscon.yaml   |    1 +
- .../devicetree/bindings/arm/stm32/stm32.yaml  |   12 +
- .../bindings/pinctrl/st,stm32-pinctrl.yaml    |    4 +-
- MAINTAINERS                                   |    1 +
- arch/arm64/Kconfig.platforms                  |   14 +
- arch/arm64/boot/dts/Makefile                  |    1 +
- arch/arm64/boot/dts/st/Makefile               |    2 +
- arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   38 +
- arch/arm64/boot/dts/st/stm32mp251.dtsi        |  279 ++
- arch/arm64/boot/dts/st/stm32mp253.dtsi        |   23 +
- arch/arm64/boot/dts/st/stm32mp255.dtsi        |    9 +
- arch/arm64/boot/dts/st/stm32mp257.dtsi        |    9 +
- arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   50 +
- arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |    8 +
- arch/arm64/boot/dts/st/stm32mp25xf.dtsi       |    8 +
- .../boot/dts/st/stm32mp25xxai-pinctrl.dtsi    |   83 +
- .../boot/dts/st/stm32mp25xxak-pinctrl.dtsi    |   71 +
- .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    |   71 +
- arch/arm64/configs/defconfig                  |    3 +
- drivers/pinctrl/stm32/Kconfig                 |    6 +
- drivers/pinctrl/stm32/Makefile                |    1 +
- drivers/pinctrl/stm32/pinctrl-stm32.h         |    3 +
- drivers/pinctrl/stm32/pinctrl-stm32mp257.c    | 2581 +++++++++++++++++
- include/dt-bindings/pinctrl/stm32-pinfunc.h   |    3 +
- 24 files changed, 3280 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/st/Makefile
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp251.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp253.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp255.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp257.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xf.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxai-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxak-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
- create mode 100644 drivers/pinctrl/stm32/pinctrl-stm32mp257.c
-
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 89a0b13b058d..b1818d100d88 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -277,6 +277,20 @@ config ARCH_INTEL_SOCFPGA
+ 	  Stratix 10 (ex. Altera), Stratix10 Software Virtual Platform,
+ 	  Agilex and eASIC N5X.
+ 
++config ARCH_STM32
++	bool "STMicroelectronics STM32 SoC Family"
++	select GPIOLIB
++	select PINCTRL
++	select PINCTRL_STM32MP257
++	select ARM_SMC_MBOX
++	select ARM_SCMI_PROTOCOL
++	select COMMON_CLK_SCMI
++	help
++	  This enables support for ARMv8 based STMicroelectronics
++	  STM32 family, including:
++		- STM32MP25:
++			- STM32MP251, STM32MP253, STM32MP255 and STM32MP257.
++
+ config ARCH_SYNQUACER
+ 	bool "Socionext SynQuacer SoC Family"
+ 	select IRQ_FASTEOI_HIERARCHY_HANDLERS
 -- 
 2.17.1
 
