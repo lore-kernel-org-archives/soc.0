@@ -1,168 +1,118 @@
-Return-Path: <SRS0=FmVO=BS=foss.st.com=prvs=4513b8c82e=alexandre.torgue@kernel.org>
+Return-Path: <conor@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 361CFC77B7A
-	for <soc@archiver.kernel.org>; Mon, 29 May 2023 16:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3880C77B7A
+	for <soc@archiver.kernel.org>; Mon, 29 May 2023 18:00:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 16B79C4339C; Mon, 29 May 2023 16:28:03 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AF843C433D2;
-	Mon, 29 May 2023 16:28:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AF843C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TBP4Yi014101;
-	Mon, 29 May 2023 18:27:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=C+ebRuDOhS/ebAl2UJHd3k8GuuDebeXLpJMENkYDOvY=;
- b=uMhme3gx39dqAvjqtn0kyqjQW1QGVqszX20vrgVqI43bb4q5e6YiuENYC2ogla1/kd0K
- 42O3kPGMsJ/RRigwbWKoB9RdC8Sr8aoJE9y3rfdx3eQkPeG4AoexRVj+ebv1N71cjg5O
- 1JX1y2Z8lyBVFzSzU6GlxZSdK9fTp4IPiAYxyyyrjGOxxY4wAPUNVzpTdYKKrToOlYiB
- kS067Y+v4aNeVw4Cyh7/ASzWjPze+pGVvL5zUt7aFtpsbTtEIgMxSMH+e7y4XJVsVg9f
- +JdvykBjzxC4RqxsVSOi7n9KnuTHYCqnsL5hnTzgcyfd5522xBmKZ5shBVJwkVDjk8rQ PQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy2n6e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 May 2023 18:27:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C6B8E10002A;
-	Mon, 29 May 2023 18:27:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B8B97235F19;
-	Mon, 29 May 2023 18:27:55 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 29 May
- 2023 18:27:55 +0200
-Message-ID: <eb0c54d6-aa48-040c-cbcc-be2b577ee3f8@foss.st.com>
-Date: Mon, 29 May 2023 18:27:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 00/11] Add STM32MP25 support
-Content-Language: en-US
+	id 5BC35C433D2; Mon, 29 May 2023 18:00:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAB3C433EF;
+	Mon, 29 May 2023 18:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685383246;
+	bh=vi2xctN3CK3uPsWaCuUocWHcD/LuyN1ltyEEPt3iNOY=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=YpX7Z6+GNRRHa1XHK4+nvJy/oOG9Ca4XgrTqwLjZPYo86MUn6ROeBFj9BABVJ5Dq9
+	 xhqtOKAdEXkCzmmZVZxLFkgthH1YI9AKA3Rfh7nl5sm0ii8+9pMIXSt5wFP4WcmHiW
+	 pdMTpPVetIiJZVhnlcyT3EDcVZTMKhnv4lx7iWwFh+exJigmHEBKfEswMNoxyg9hnD
+	 JwoetkaOGtJ6IHfzsM1MWNLJfAKdEagjv3PuDN5I+szw+zG8F/cLN0Eww6YWJIIWtZ
+	 lDxjMHl9TDGmAw5NoTIQe9DE0/wDMmAfPmBVhaPGeFzqsCdmBEjLG7AwyBQrljFgmt
+	 6pyXFbEhmmWSQ==
+Date: Mon, 29 May 2023 19:00:40 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin
- Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, <soc@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-References: <20230529160130.18940-1-alexandre.torgue@foss.st.com>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230529160130.18940-1-alexandre.torgue@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-29_10,2023-05-29_01,2023-05-22_02
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 01/11] dt-bindings: pinctrl: stm32: support for
+ stm32mp257 and additional packages
+Message-ID: <20230529-contrite-smoking-17248b00ae75@spud>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-2-alexandre.torgue@foss.st.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="+gGo4p1wZB1XxafT"
+Content-Disposition: inline
+In-Reply-To: <20230529162034.20481-2-alexandre.torgue@foss.st.com>
 
-Hi,
 
-Please drop this mail, my mail server has crashed. The full series has 
-been resend.
+--+gGo4p1wZB1XxafT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Alex
+On Mon, May 29, 2023 at 06:20:24PM +0200, Alexandre Torgue wrote:
+> Add support for st,stm32mp257-pinctrl and st,stm32mp257-z-pinctrl.
+> Add packages AI, AK and AL (values : 0x100, 0x400 and 0x800)
+>=20
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-On 5/29/23 18:01, Alexandre Torgue wrote:
-> I'm pleased to announce extension of the STM32 MPU family with the addition of
-> the STM32MP25 Armv8 based SoCs.
-> 
-> STM32MP25 family is composed of 4 SoCs defined as following:
-> 
->    -STM32MP251: common part composed of 1*Cortex-A35, common peripherals like
->     SDMMC, UART, SPI, I2C, PCIe, USB3, parallel and DSI display, 1*ETH ...
-> 
->    -STM32MP253: STM32MP251 + 1*Cortex-A35 (dual CPU), a second ETH, CAN-FD and
->     LVDS display.
-> 
->    -STM32MP255: STM32MP253 + GPU/AI and video encode/decode.
->    -STM32MP257: STM32MP255 + ETH TSN switch (2+1 ports).
-> 
->    A second diversity layer exists for security features/ A35 frequency:
->    -STM32MP25xY, "Y" gives information:
->      -Y = A means A35@1.2GHz + no cryp IP and no secure boot.
->      -Y = C means A35@1.2GHz + cryp IP and secure boot.
->      -Y = D means A35@1.5GHz + no cryp IP and no secure boot.
->      -Y = F means A35@1.5GHz + cryp IP and secure boot.
-> 
-> This series adds the STM32MP257F EV1 board support. This board embeds a
-> STM32MP257FAI SoC, with 4GB of DDR4, TSN switch (2+1 ports), 2*USB typeA,
-> 1*USB2 typeC, SNOR OctoSPI, mini PCIe, STPMIC2 for power distribution ...
-> 
-> Thanks
-> Alex
-> 
-> Alexandre Torgue (10):
->    dt-bindings: pinctrl: stm32: support for stm32mp257 and additional
->      packages
->    pinctrl: stm32: add stm32mp257 pinctrl support
->    dt-bindings: stm32: add st,stm32mp25 compatibles to the stm32 family
->    arm64: introduce STM32 family on Armv8 architecture
->    arm64: dts: st: introduce stm32mp25 SoCs family
->    arm64: dts: st: introduce stm32mp25 pinctrl files
->    dt-bindings: stm32: document stm32mp257f-ev1 board
->    arm64: dts: st: add stm32mp257f-ev1 board support
->    arm64: defconfig: enable ARCH_STM32 and STM32 serial driver
->    MAINTAINERS: add entry for ARM/STM32 ARCHITECTURE
-> 
-> Patrick Delaunay (1):
->    dt-bindings: stm32: add st,stm32mp25-syscfg compatible for syscon
-> 
->   .../bindings/arm/stm32/st,stm32-syscon.yaml   |    1 +
->   .../devicetree/bindings/arm/stm32/stm32.yaml  |   12 +
->   .../bindings/pinctrl/st,stm32-pinctrl.yaml    |    4 +-
->   MAINTAINERS                                   |    1 +
->   arch/arm64/Kconfig.platforms                  |   14 +
->   arch/arm64/boot/dts/Makefile                  |    1 +
->   arch/arm64/boot/dts/st/Makefile               |    2 +
->   arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   38 +
->   arch/arm64/boot/dts/st/stm32mp251.dtsi        |  279 ++
->   arch/arm64/boot/dts/st/stm32mp253.dtsi        |   23 +
->   arch/arm64/boot/dts/st/stm32mp255.dtsi        |    9 +
->   arch/arm64/boot/dts/st/stm32mp257.dtsi        |    9 +
->   arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   50 +
->   arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |    8 +
->   arch/arm64/boot/dts/st/stm32mp25xf.dtsi       |    8 +
->   .../boot/dts/st/stm32mp25xxai-pinctrl.dtsi    |   83 +
->   .../boot/dts/st/stm32mp25xxak-pinctrl.dtsi    |   71 +
->   .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    |   71 +
->   arch/arm64/configs/defconfig                  |    3 +
->   drivers/pinctrl/stm32/Kconfig                 |    6 +
->   drivers/pinctrl/stm32/Makefile                |    1 +
->   drivers/pinctrl/stm32/pinctrl-stm32.h         |    3 +
->   drivers/pinctrl/stm32/pinctrl-stm32mp257.c    | 2581 +++++++++++++++++
->   include/dt-bindings/pinctrl/stm32-pinfunc.h   |    3 +
->   24 files changed, 3280 insertions(+), 1 deletion(-)
->   create mode 100644 arch/arm64/boot/dts/st/Makefile
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp251.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp253.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp255.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp257.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp25xf.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxai-pinctrl.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxak-pinctrl.dtsi
->   create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
->   create mode 100644 drivers/pinctrl/stm32/pinctrl-stm32mp257.c
-> 
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
+
+>=20
+> diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.y=
+aml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+> index 1ab0f8dde477..2120ef71a78d 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+> @@ -27,6 +27,8 @@ properties:
+>        - st,stm32mp135-pinctrl
+>        - st,stm32mp157-pinctrl
+>        - st,stm32mp157-z-pinctrl
+> +      - st,stm32mp257-pinctrl
+> +      - st,stm32mp257-z-pinctrl
+> =20
+>    '#address-cells':
+>      const: 1
+> @@ -56,7 +58,7 @@ properties:
+>        Indicates the SOC package used.
+>        More details in include/dt-bindings/pinctrl/stm32-pinfunc.h
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> -    enum: [1, 2, 4, 8]
+> +    enum: [0x1, 0x2, 0x4, 0x8, 0x100, 0x400, 0x800]
+> =20
+>  patternProperties:
+>    '^gpio@[0-9a-f]*$':
+> diff --git a/include/dt-bindings/pinctrl/stm32-pinfunc.h b/include/dt-bin=
+dings/pinctrl/stm32-pinfunc.h
+> index e6fb8ada3f4d..28ad0235086a 100644
+> --- a/include/dt-bindings/pinctrl/stm32-pinfunc.h
+> +++ b/include/dt-bindings/pinctrl/stm32-pinfunc.h
+> @@ -37,6 +37,9 @@
+>  #define STM32MP_PKG_AB	0x2
+>  #define STM32MP_PKG_AC	0x4
+>  #define STM32MP_PKG_AD	0x8
+> +#define STM32MP_PKG_AI	0x100
+> +#define STM32MP_PKG_AK	0x400
+> +#define STM32MP_PKG_AL	0x800
+> =20
+>  #endif /* _DT_BINDINGS_STM32_PINFUNC_H */
+> =20
+> --=20
+> 2.17.1
+>=20
+
+--+gGo4p1wZB1XxafT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHToSAAKCRB4tDGHoIJi
+0iyDAP9/JVSOQbuG+a+VQLRIv4gIrd2FEzYzb+RcrYSAtPyttQEA91RuoS1J3vTo
+oGcXIU9YaSSWjOk8dr4JdUJYYLlmLQ8=
+=mUUh
+-----END PGP SIGNATURE-----
+
+--+gGo4p1wZB1XxafT--
