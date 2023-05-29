@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB756C77B7A
-	for <soc@archiver.kernel.org>; Mon, 29 May 2023 18:05:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78845C77B7E
+	for <soc@archiver.kernel.org>; Mon, 29 May 2023 18:06:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 65AE7C433EF; Mon, 29 May 2023 18:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533C5C433D2;
-	Mon, 29 May 2023 18:05:49 +0000 (UTC)
+	id 5968FC4339C; Mon, 29 May 2023 18:06:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B376C433EF;
+	Mon, 29 May 2023 18:06:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685383552;
-	bh=AZRdPQt1r/FGQvfF0fX+wuaBd3GnTe6Njx9eZY7jpB8=;
+	s=k20201202; t=1685383583;
+	bh=JlOqYA5PNKYDRGnDc492lVyo/u//gPIhjtNje7m6WP8=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=tp2VEC5vSXC0t5v9H5aNkz+JINl418Pu+gxnuexZPReHEPbcF5Bbrld8dCN7gF/oX
-	 bSAmkLbjxxrZEYlAXfts5hIgPPvc2SiMU8XuReW1/kgtJuynrdgV9/2/BJBikOyoCF
-	 WAhaMYt3VXlGxgvCFgRBuVAWsvtq1ycl3bQpXgSg5LE5NTSrYy7zoeFKrMCKNxGcen
-	 gohuS5UdR17D24k7jH/AhMtT95GnTKcDttegWMO8RFErMmGKXGpWx72PYwBnEc+eXU
-	 L2vvYl0PghdDidZHXmquZeBFKOdcXMA1KzX2Y7mwiUTV1ztm103acnhXW1uZuW9fly
-	 X5pTesP2+PAQw==
-Date: Mon, 29 May 2023 19:05:46 +0100
+	b=eHny8rGDrvxGzhzs3IUkg3qiVVQ+bYdI7+/J3Q8mu6+t9+5zjQcRYnaBwE7bAhdHK
+	 /8YW43Ff4vcOJZmtqiauWNxS79q1gV1HQ9dCut0KCvjQQ5uA3zmG2aiQHqXPUM1Qqo
+	 tjqesHGqrJAOaxutZC9/88kK7qFjLo5gq0UTNneFbBb/ODC9h9tadAh3TJ8jFsKsth
+	 5Gvah0fhAd9zNFW+OdIBWGateyhwR1lxByoNaPnrYR/Rq0+0jipkN3QToa4xGeXCFT
+	 UYS/fy/xjOoMVfoIBI5sRWozykV+8xl2MdCkxtr8A8oof4eDejweRTCYWUyvvGmrjR
+	 vgC6cVNulgGxw==
+Date: Mon, 29 May 2023 19:06:17 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
@@ -33,73 +33,41 @@ Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 04/11] dt-bindings: stm32: add st,stm32mp25 compatibles
- to the stm32 family
-Message-ID: <20230529-backlit-dealing-b099e4eb5210@spud>
+Subject: Re: [PATCH 08/11] dt-bindings: stm32: document stm32mp257f-ev1 board
+Message-ID: <20230529-dictation-subtract-54f4c0a97cef@spud>
 References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
- <20230529162034.20481-5-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-9-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="g/aPNMyoKyHSJ2S4"
+	protocol="application/pgp-signature"; boundary="wmDZkNNWuAgDypap"
 Content-Disposition: inline
-In-Reply-To: <20230529162034.20481-5-alexandre.torgue@foss.st.com>
+In-Reply-To: <20230529162034.20481-9-alexandre.torgue@foss.st.com>
 
 
---g/aPNMyoKyHSJ2S4
+--wmDZkNNWuAgDypap
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 29, 2023 at 06:20:27PM +0200, Alexandre Torgue wrote:
-> STM32 family is extended by the addition of the STM32MP25 SoCs. It is com=
-posed
-> of 4 SoCs: STM32MP251, STM32MP253, STM32MP255 and STM32MP257.
+On Mon, May 29, 2023 at 06:20:31PM +0200, Alexandre Torgue wrote:
+> Add new entry for stm32mp257f-ev1 board.
 >=20
 > Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->=20
-> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Doc=
-umentation/devicetree/bindings/arm/stm32/stm32.yaml
-> index 4af5b8f4f803..7d7ca33d2e61 100644
-> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
-> @@ -161,6 +161,15 @@ properties:
->            - const: phytec,phycore-stm32mp157c-som
->            - const: st,stm32mp157
-> =20
-> +      - items:
-> +          - const: st,stm32mp251
-> +      - items:
-> +          - const: st,stm32mp253
-> +      - items:
-> +          - const: st,stm32mp255
-> +      - items:
-> +          - const: st,stm32mp257
-
-I assume the slightly odd format is just to avoid churn when adding
-the board compatibles.
 
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
 Conor.
 
-> +
->  additionalProperties: true
-> =20
->  ...
-> --=20
-> 2.17.1
->=20
-
---g/aPNMyoKyHSJ2S4
+--wmDZkNNWuAgDypap
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHTpegAKCRB4tDGHoIJi
-0ubOAQDekXaYZ/amJx7D8FUr2DifW+kUXwNrdgGFzxAkuR459wD/ao13mBBk4zRX
-4oklgSPdn0wVI3rlVxTNozxPyp3mmwY=
-=BwAV
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHTpmQAKCRB4tDGHoIJi
+0tdXAQDJKRZXXiz4bnG/DxWM1ywcpxVOAEoI19A5hBLfTLrDawD9HjJvOwtVe0Kz
+tHW42t+uehGwmJ07RO7JcQywVXt0aAQ=
+=/XQj
 -----END PGP SIGNATURE-----
 
---g/aPNMyoKyHSJ2S4--
+--wmDZkNNWuAgDypap--
