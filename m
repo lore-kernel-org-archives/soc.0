@@ -1,116 +1,108 @@
-Return-Path: <SRS0=3O4a=BT=microchip.com=Conor.Dooley@kernel.org>
+Return-Path: <SRS0=jKnc=BT=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF06CC7EE23
-	for <soc@archiver.kernel.org>; Tue, 30 May 2023 13:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEBA6C77B7A
+	for <soc@archiver.kernel.org>; Tue, 30 May 2023 13:14:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 795F9C4339C; Tue, 30 May 2023 13:12:40 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 8BEB7C433EF; Tue, 30 May 2023 13:14:09 +0000 (UTC)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 122C0C433EF;
-	Tue, 30 May 2023 13:12:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 122C0C433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685452359; x=1716988359;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rgP8/DkgE67Jn/btWtUmo2sPLJIt6my6BaVAXky+q5g=;
-  b=g+SAKZ4SYEysn11ETMlWgbSNyVIGB6N9nbS2FzadZdLmxhyYfqjF+IoT
-   lYqxo01h/dqrrPyfd1xzL3VbYc2vwh9IF5QdOye4ejK68zAHuWJV4frwC
-   taJmBvxbWSXTztBZzLg6U9SORSfqlbsDtzYYsT4U1zgQnQGvcVlPLkM1d
-   3XXZSrLbkl1mVDcxZ/u7LZ7R/bve72t7Tz5t4d75jVoGBXAFSzlG4iJX1
-   LKvh3KaOKD3MAdOKuMUFZPtySXl7mUKuzIS+gA7S7wucKl4j2Tgzg5HHt
-   3/vr7L19hwJmVPYLKZoPibApIHjUZk4ZkD+X771y9NaZ8dnTgJqkI/iL9
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="asc'?scan'208";a="213720607"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 06:12:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 30 May 2023 06:12:32 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 30 May 2023 06:12:30 -0700
-Date: Tue, 30 May 2023 14:12:07 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Jonathan Corbet <corbet@lwn.net>
-List-Id: <soc.lore.kernel.org>
-CC: <soc@kernel.org>, <conor@kernel.org>, <devicetree@vger.kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <olof@lixom.net>, <palmer@dabbelt.com>,
-	<robh+dt@kernel.org>, <arnd@arndb.de>
-Subject: Re: [PATCH v2] Documentation/process: add soc maintainer handbook
-Message-ID: <20230530-enviable-poise-183119e695bf@wendy>
-References: <20230530-multiple-whooping-ee5706fceb67@wendy>
- <87bki23rbx.fsf@meer.lwn.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id AB73FC4339B
+	for <soc@kernel.org>; Tue, 30 May 2023 13:14:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AB73FC4339B
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5149bdb59daso3648628a12.2
+        for <soc@kernel.org>; Tue, 30 May 2023 06:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685452446; x=1688044446;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fUH9XtAzWIRgOsb1MqDJfvd6qVENrkssqR4+2VADmQU=;
+        b=iLSrL45SV8BP5SNaj9ihAs/HG1rHntKH8UaPf63oqwFqxFSR3voahRiA6NEluOhKtu
+         ZTWv7fK83uKK5C7t5jOu7RMYdZ0qCXslmYTpIm+t+1WULQ0dTV+ziS/8Isu6K3DlYOjz
+         8TG5F71WCuwaE7AwHpS7Zj7M1Lo5T+UykhITrpppwUN8RqIsUUf4Iee/kT71bNlhbuuF
+         /XkTcRCmJr1HZNRZeq17NBZww56GGHJllapgC0nC/bEuBsHqLQzx+zttBSsa5qMY8IR0
+         OIlVyz9O7ET9giNoKqD+fXIkU923lQIPOBa2AmO4BtTdrIgWdhXOVkNilDHJjMDJY/hn
+         y/MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685452446; x=1688044446;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fUH9XtAzWIRgOsb1MqDJfvd6qVENrkssqR4+2VADmQU=;
+        b=XeUzrvGttUNOrznDNkxOzCe3V8XytC3Yd3zcfrpCgu2Bq8JKFmXJyvFfjh3uACotQf
+         rsx2nnjVuBhXYjXUnTBb4lTcMMf7FRKhlujxImFt+0boWJFXvsPPookW1qgqdOHVzGjD
+         lpRMDCe6SKeJkdHPVk4cA1vEBvlmRBHCzZW2FlKPMwKgAYymRX/+1uLCmFlZzj+7EPbx
+         aU1q6mnYzRcbZmpdWRgpXrPuNx2GH/ltZWonsdVxmNaawOAjV3PFPyYAe0QHiKhZRrc1
+         22+hoCVcSm2oWpLq5zSHjgVal+7cJiRGPIcCB265l0hHHPJ9/4gyeYAu7sBmy7d+pLfF
+         axrg==
+X-Gm-Message-State: AC+VfDz0Mtqav/KM8DopiTH6AAcuo0pSnvGKjVtsBl60+KAUDFD8htbn
+	Yy8EXsZ1NZihV8gDlvrYtoB7ug==
+X-Google-Smtp-Source: ACHHUZ71bUnQXRzAkoYWkylcW0WPdqFvOlzeWjYH5TDzER83v471t24VZ6980CJNywvjLuGF0XQLiA==
+X-Received: by 2002:aa7:d8cb:0:b0:514:9474:f4b7 with SMTP id k11-20020aa7d8cb000000b005149474f4b7mr1588818eds.31.1685452445895;
+        Tue, 30 May 2023 06:14:05 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id j2-20020a50ed02000000b0050bc4600d38sm3929947eds.79.2023.05.30.06.14.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 06:14:05 -0700 (PDT)
+Message-ID: <34864c2f-dbe2-8598-ad4c-f9c3acc13164@linaro.org>
+Date: Tue, 30 May 2023 15:14:03 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Vd/KN9AFeCUUrCcz"
-Content-Disposition: inline
-In-Reply-To: <87bki23rbx.fsf@meer.lwn.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] Documentation/process: add soc maintainer handbook
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>, soc@kernel.org
+Cc: conor@kernel.org, corbet@lwn.net, devicetree@vger.kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, olof@lixom.net, palmer@dabbelt.com,
+ robh+dt@kernel.org, arnd@arndb.de
+References: <20230530-multiple-whooping-ee5706fceb67@wendy>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530-multiple-whooping-ee5706fceb67@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Vd/KN9AFeCUUrCcz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 30/05/2023 14:49, Conor Dooley wrote:
+> Arnd suggested that adding a maintainer handbook for the SoC "subsystem"
+> would be helpful in trying to bring on board maintainers for the various
+> new platforms cropping up in RISC-V land.
+> 
+> Add a document briefly describing the role of the SoC subsystem and some
+> basic advice for (new) platform maintainers.
+> 
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes in v2:
+> - add Krzysztof's suggested method for avoiding inter-branch
+>   dependencies
+> - explicitly mention that tags should be signed
+> - link to the devicetree abi document, rather than trying to explain it
+>   here & reword that whole section
+> - fix some typos, capitalisation & unify bullet style
+> 
+> The devicetree abi doc feels quite out of date at this point, and could
+> probably do with a spring clean - but it also feels like hallowed groun
 
-On Tue, May 30, 2023 at 07:02:26AM -0600, Jonathan Corbet wrote:
-> Conor Dooley <conor.dooley@microchip.com> writes:
+Yep, but that's another topic.
 
-> > diff --git a/Documentation/devicetree/bindings/ABI.rst b/Documentation/=
-devicetree/bindings/ABI.rst
-> > index a885713cf184..93ec82f78ae5 100644
-> > --- a/Documentation/devicetree/bindings/ABI.rst
-> > +++ b/Documentation/devicetree/bindings/ABI.rst
-> > @@ -1,5 +1,7 @@
-> >  .. SPDX-License-Identifier: GPL-2.0
-> > =20
-> > +.. _devicetree-abi:
->=20
-> Somehow we've developed this habit of putting labels at the top of each
-> file; I really think that they just add clutter and are best left out.
-> Without the label, this reference:
->=20
-> > +Perhaps one of the most important things to highlight is that dt-bindi=
-ngs
-> > +document the ABI between the devicetree and the kernel. Please see
-> > +:ref:`devicetree-abi` more information on the ABI.
->=20
-> ...can just be written as "Please see
-> Documentation/devicetree/bindings/ABI.rst".  The cross-reference link
-> will be generated as expected, and readers of the plain-text docs don't
-> have to go grepping to find the reference.
+> d
+> on which one should tread lightly, so I won't go near that til Rob is
+> back.
 
-Sure. As someone who does read these things in their editor that sounds
-preferable to me. I didn't know that I could do that, as the whole
-"building the docs" thing is new to me ;)
-I'll wait a bit before resubmitting for obvious reasons.
+Thanks!
 
-Cheers,
-Conor.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---Vd/KN9AFeCUUrCcz
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+Krzysztof
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHX2JwAKCRB4tDGHoIJi
-0jE3AP9pDjLP9d6RnL00Efrio6ZoaKZjOG0zDOEg+4VAprMwmwEAjpD8+2LaBcMN
-FnbPRUS5wn47utSB1NzZVqP8Ep4rLAE=
-=VH3D
------END PGP SIGNATURE-----
-
---Vd/KN9AFeCUUrCcz--
