@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE81C7EE31
-	for <soc@archiver.kernel.org>; Tue, 30 May 2023 07:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19CA7C7EE2E
+	for <soc@archiver.kernel.org>; Tue, 30 May 2023 07:45:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1ACBEC43446; Tue, 30 May 2023 07:45:06 +0000 (UTC)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	id E1009C43443; Tue, 30 May 2023 07:45:06 +0000 (UTC)
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C5814C433AE;
-	Tue, 30 May 2023 07:42:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C5814C433AE
+	by smtp.kernel.org (Postfix) with ESMTPS id 26820C43326;
+	Tue, 30 May 2023 07:43:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 26820C43326
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1b039168ba0so19078755ad.3;
-        Tue, 30 May 2023 00:42:39 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5304d0d1eddso2008718a12.2;
+        Tue, 30 May 2023 00:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685432559; x=1688024559;
+        d=gmail.com; s=20221208; t=1685432581; x=1688024581;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RLc5jEICyGFPtj5UVRr/46bNpOgUxZnI7Pfi7aWcdhA=;
-        b=QIg+fY0UbpKdF2WP8LfGUwW/ZD+Gew9S9inFHVLg8WsUwkLeZ0KMirdRyiEoPiKR2D
-         bWZWY2biWP8lGeKsIbkxq0pwmWLGVH/FsT7R9oaDE2gmJBWlZcwdESm1CWuQPQWR6rEz
-         m5T9lusOp4R69OUqMsLYfthI7HNYQLBbHkmbRjwbj5sB9Y3V7YOzVsjOi8aD46UXXI//
-         d8QHxllbTpkJr6G7791CK9cwqQQDGH4tHibuCTB3JgYFGczIWgY/pjM1xe84ykhDjUja
-         k1Q0tagloSfXglIvTTAcM4ss3xLbdoRM3+w4ijR4PszqJUNhJAV3ocW1HRI0gKEhnVl6
-         mPhg==
+        bh=wh4S3DCs0K/sx0d0emXPkFW/k+nrYsVpD6MXHagOka8=;
+        b=BeuzAaT4hlrlDV5Bta7Tqvjr3FA9SzJDD3BDaQwbLad69CE1q9SF4yagSulQ3znqAz
+         P6gTRS6z5GjXBXdltMkG84IXAVsJtsSK5qaO/DQNbW7YD+uLIcOqX4ka2ofMvpVLEshq
+         NooJfzAFBjF0/Y0yZ1pC+5zL6a8Ct+EHwdBuY5ImL04YRrFLF1DiOWzzRQW2C8FhaQd0
+         CilVUmZ+Bfe3i2OizJnEOmlDbfdPvvJZx52uHT5TQdM/+WhWr3lqQFRlDS9Q3P653L7t
+         kZunIGCZN3W8/CvOvxNFVEVKWQyIfcvIbM9pP8fICDvgSEqzO7ZDO21YEaADQwR7BBx6
+         lngA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685432559; x=1688024559;
+        d=1e100.net; s=20221208; t=1685432581; x=1688024581;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RLc5jEICyGFPtj5UVRr/46bNpOgUxZnI7Pfi7aWcdhA=;
-        b=RUsNpl7Au+lDJFkBU2ocYwa3l5UPdrAw9d6ruOQF8wrgnVF6iU12F5CV8AEw0f+wG1
-         WRBafTt8kMyPwMbTpJK6JxF9P+icOTojqTAaVkaQaRpbao0zPF7lqgjBTyHQedzk+QYg
-         ec36/U/N55KuHrTZNF81ljr5C0cf3hcDWutLftt/0demcFq3PgJ5L2In11L2pJNzsvBt
-         etFiO+ZMUru1aVBocxftfOGd1tU5o2GMCi6kvB/mWxgYMi7NfCbMTbqjXrYbg4BwN4Qr
-         XIXLnDAzEadVB2cIuZkUIoL7eO3FCAFVuqjw606SzbP/0EkEz8M13A6xaTBRL9aQMeAC
-         m3nw==
-X-Gm-Message-State: AC+VfDwL+XVHc8i14tCmrIk6hQUp2QdyIqNYUvE3odrwWKCvo1k5NJvv
-	6YeguzWij9cvYV6xQGvuf4chb57KNFo=
-X-Google-Smtp-Source: ACHHUZ7DrmLdsuX8KF0Ud111Zp6Vi0V6pS2ZXtyLS3979IpLfHrwKGsY/WhTorquhehAKrtoMtE0SA==
-X-Received: by 2002:a17:902:ce91:b0:1b0:2b0e:d3ef with SMTP id f17-20020a170902ce9100b001b02b0ed3efmr1857701plg.55.1685432558835;
-        Tue, 30 May 2023 00:42:38 -0700 (PDT)
+        bh=wh4S3DCs0K/sx0d0emXPkFW/k+nrYsVpD6MXHagOka8=;
+        b=ZVZqR1Pq7ADHwsg/C3MmPc+H4W6Kz+yV8LmOq3mk/RB5P2TiUHMk7PPlRtJph0p3Ce
+         7phs5b17kWDYSXdxL9Q5rMZtTc0Fo+43Ogsg1MfJXyxQusSXiBpP+bN1mp5Xkxq7MsA8
+         OnGEGEUBI8+a7HmUkGJcJ66Jwk3ny3O82gMl3nmYq6ojG4XBSFSAYVV6dJFG8NCUdynJ
+         OWaVp5+fB0KdX6ORPHdWPEt/tPcyk0MT88YlK7zcx2cjvwebtDIVMfUTpQc/2OmtrtZm
+         IRROPNAiETaRxnhi9G7kVEDJJfVaEfuh9wr5oFCpSyk4/rzHwgDQOVoka6pwfXWSKH8E
+         q3Dg==
+X-Gm-Message-State: AC+VfDx+KcaucKDdiX5C2wkfVMt2A3YaETiBW7oZ4FzolUyJm2t0/J7k
+	5qxIUu2oZ5yu/fcKzXM5g+ZvqS6De/Y=
+X-Google-Smtp-Source: ACHHUZ7GBF4O1qXSBR/+7WtyXCA4nLQdc7hJRuWJqP7HUZg6KWOLcb9FCYsYwmXRQXhrVrMEWZJ5Bw==
+X-Received: by 2002:a17:903:182:b0:1b0:2bc1:94bc with SMTP id z2-20020a170903018200b001b02bc194bcmr1910322plg.65.1685432581221;
+        Tue, 30 May 2023 00:43:01 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b001afb96f4b90sm5930793plh.274.2023.05.30.00.42.35
+        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b001afb96f4b90sm5930793plh.274.2023.05.30.00.42.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 00:42:38 -0700 (PDT)
+        Tue, 30 May 2023 00:43:00 -0700 (PDT)
 From: Jacky Huang <ychuang570808@gmail.com>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -74,359 +74,302 @@ Cc: devicetree@vger.kernel.org,
 	schung@nuvoton.com,
 	mjchen@nuvoton.com,
 	Jacky Huang <ychuang3@nuvoton.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v12 03/10] dt-bindings: clock: nuvoton: add binding for ma35d1 clock controller
-Date: Tue, 30 May 2023 07:42:14 +0000
-Message-Id: <20230530074221.1031011-4-ychuang570808@gmail.com>
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v12 09/10] reset: Add Nuvoton ma35d1 reset driver support
+Date: Tue, 30 May 2023 07:42:20 +0000
+Message-Id: <20230530074221.1031011-10-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230530074221.1031011-1-ychuang570808@gmail.com>
 References: <20230530074221.1031011-1-ychuang570808@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-Add the dt-bindings header for Nuvoton ma35d1, that gets shared
-between the clock controller and clock references in the dts.
-Add documentation to describe nuvoton ma35d1 clock driver.
+This driver supports individual IP reset for the MA35D1. The reset
+control registers are a subset of the system control registers.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- .../bindings/clock/nuvoton,ma35d1-clk.yaml    |  63 +++++
- .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 253 ++++++++++++++++++
- 2 files changed, 316 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
- create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+ drivers/reset/Kconfig        |   6 +
+ drivers/reset/Makefile       |   1 +
+ drivers/reset/reset-ma35d1.c | 235 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 242 insertions(+)
+ create mode 100644 drivers/reset/reset-ma35d1.c
 
-diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 6aa8f243b30c..07499177a266 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -143,6 +143,12 @@ config RESET_NPCM
+ 	  This enables the reset controller driver for Nuvoton NPCM
+ 	  BMC SoCs.
+ 
++config RESET_NUVOTON_MA35D1
++	bool "Nuvton MA35D1 Reset Driver"
++	default ARCH_MA35 || COMPILE_TEST
++	help
++	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
++
+ config RESET_OXNAS
+ 	bool
+ 
+diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+index 7fec5af6c964..411b45ba0da7 100644
+--- a/drivers/reset/Makefile
++++ b/drivers/reset/Makefile
+@@ -21,6 +21,7 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+ obj-$(CONFIG_RESET_MESON) += reset-meson.o
+ obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+ obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
++obj-$(CONFIG_RESET_NUVOTON_MA35D1) += reset-ma35d1.o
+ obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
+ obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
+ obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
 new file mode 100644
-index 000000000000..8f0c43683729
+index 000000000000..54e53863c98a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton MA35D1 Clock Controller Module
-+
-+maintainers:
-+  - Chi-Fang Li <cfli0@nuvoton.com>
-+  - Jacky Huang <ychuang3@nuvoton.com>
-+
-+description: |
-+  The MA35D1 clock controller generates clocks for the whole chip,
-+  including system clocks and all peripheral clocks.
-+
-+  See also:
-+    include/dt-bindings/clock/ma35d1-clk.h
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: nuvoton,ma35d1-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  nuvoton,pll-mode:
-+    description:
-+      A list of PLL operation mode corresponding to CAPLL, DDRPLL, APLL,
-+      EPLL, and VPLL in sequential.
-+    maxItems: 5
-+    items:
-+      enum:
-+        - integer
-+        - fractional
-+        - spread-spectrum
-+    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+
-+    clock-controller@40460200 {
-+        compatible = "nuvoton,ma35d1-clk";
-+        reg = <0x40460200 0x100>;
-+        #clock-cells = <1>;
-+        clocks = <&clk_hxt>;
-+    };
-+...
-diff --git a/include/dt-bindings/clock/nuvoton,ma35d1-clk.h b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-new file mode 100644
-index 000000000000..ba2d70f776a6
---- /dev/null
-+++ b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-@@ -0,0 +1,253 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
++++ b/drivers/reset/reset-ma35d1.c
+@@ -0,0 +1,235 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Copyright (C) 2023 Nuvoton Technologies.
++ * Copyright (C) 2023 Nuvoton Technology Corp.
++ * Author: Chi-Fang Li <cfli0@nuvoton.com>
 + */
 +
-+#ifndef __DT_BINDINGS_CLOCK_NUVOTON_MA35D1_CLK_H
-+#define __DT_BINDINGS_CLOCK_NUVOTON_MA35D1_CLK_H
++#include <linux/bits.h>
++#include <linux/container_of.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/reboot.h>
++#include <linux/reset-controller.h>
++#include <linux/spinlock.h>
++#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
 +
-+/* external and internal oscillator clocks */
-+#define HXT		0
-+#define HXT_GATE	1
-+#define LXT		2
-+#define LXT_GATE	3
-+#define HIRC		4
-+#define HIRC_GATE	5
-+#define LIRC		6
-+#define LIRC_GATE	7
-+/* PLLs */
-+#define CAPLL		8
-+#define SYSPLL		9
-+#define DDRPLL		10
-+#define APLL		11
-+#define EPLL		12
-+#define VPLL		13
-+/* EPLL divider */
-+#define EPLL_DIV2	14
-+#define EPLL_DIV4	15
-+#define EPLL_DIV8	16
-+/* CPU clock, system clock, AXI, HCLK and PCLK */
-+#define CA35CLK_MUX	17
-+#define AXICLK_DIV2	18
-+#define AXICLK_DIV4	19
-+#define AXICLK_MUX	20
-+#define SYSCLK0_MUX	21
-+#define SYSCLK1_MUX	22
-+#define SYSCLK1_DIV2	23
-+#define HCLK0		24
-+#define HCLK1		25
-+#define HCLK2		26
-+#define PCLK0		27
-+#define PCLK1		28
-+#define PCLK2		29
-+#define HCLK3		30
-+#define PCLK3		31
-+#define PCLK4		32
-+/* AXI and AHB peripheral clocks */
-+#define USBPHY0		33
-+#define USBPHY1		34
-+#define DDR0_GATE	35
-+#define DDR6_GATE	36
-+#define CAN0_MUX	37
-+#define CAN0_DIV	38
-+#define CAN0_GATE	39
-+#define CAN1_MUX	40
-+#define CAN1_DIV	41
-+#define CAN1_GATE	42
-+#define CAN2_MUX	43
-+#define CAN2_DIV	44
-+#define CAN2_GATE	45
-+#define CAN3_MUX	46
-+#define CAN3_DIV	47
-+#define CAN3_GATE	48
-+#define SDH0_MUX	49
-+#define SDH0_GATE	50
-+#define SDH1_MUX	51
-+#define SDH1_GATE	52
-+#define NAND_GATE	53
-+#define USBD_GATE	54
-+#define USBH_GATE	55
-+#define HUSBH0_GATE	56
-+#define HUSBH1_GATE	57
-+#define GFX_MUX		58
-+#define GFX_GATE	59
-+#define VC8K_GATE	60
-+#define DCU_MUX		61
-+#define DCU_GATE	62
-+#define DCUP_DIV	63
-+#define EMAC0_GATE	64
-+#define EMAC1_GATE	65
-+#define CCAP0_MUX	66
-+#define CCAP0_DIV	67
-+#define CCAP0_GATE	68
-+#define CCAP1_MUX	69
-+#define CCAP1_DIV	70
-+#define CCAP1_GATE	71
-+#define PDMA0_GATE	72
-+#define PDMA1_GATE	73
-+#define PDMA2_GATE	74
-+#define PDMA3_GATE	75
-+#define WH0_GATE	76
-+#define WH1_GATE	77
-+#define HWS_GATE	78
-+#define EBI_GATE	79
-+#define SRAM0_GATE	80
-+#define SRAM1_GATE	81
-+#define ROM_GATE	82
-+#define TRA_GATE	83
-+#define DBG_MUX		84
-+#define DBG_GATE	85
-+#define CKO_MUX		86
-+#define CKO_DIV		87
-+#define CKO_GATE	88
-+#define GTMR_GATE	89
-+#define GPA_GATE	90
-+#define GPB_GATE	91
-+#define GPC_GATE	92
-+#define GPD_GATE	93
-+#define GPE_GATE	94
-+#define GPF_GATE	95
-+#define GPG_GATE	96
-+#define GPH_GATE	97
-+#define GPI_GATE	98
-+#define GPJ_GATE	99
-+#define GPK_GATE	100
-+#define GPL_GATE	101
-+#define GPM_GATE	102
-+#define GPN_GATE	103
-+/* APB peripheral clocks */
-+#define TMR0_MUX	104
-+#define TMR0_GATE	105
-+#define TMR1_MUX	106
-+#define TMR1_GATE	107
-+#define TMR2_MUX	108
-+#define TMR2_GATE	109
-+#define TMR3_MUX	110
-+#define TMR3_GATE	111
-+#define TMR4_MUX	112
-+#define TMR4_GATE	113
-+#define TMR5_MUX	114
-+#define TMR5_GATE	115
-+#define TMR6_MUX	116
-+#define TMR6_GATE	117
-+#define TMR7_MUX	118
-+#define TMR7_GATE	119
-+#define TMR8_MUX	120
-+#define TMR8_GATE	121
-+#define TMR9_MUX	122
-+#define TMR9_GATE	123
-+#define TMR10_MUX	124
-+#define TMR10_GATE	125
-+#define TMR11_MUX	126
-+#define TMR11_GATE	127
-+#define UART0_MUX	128
-+#define UART0_DIV	129
-+#define UART0_GATE	130
-+#define UART1_MUX	131
-+#define UART1_DIV	132
-+#define UART1_GATE	133
-+#define UART2_MUX	134
-+#define UART2_DIV	135
-+#define UART2_GATE	136
-+#define UART3_MUX	137
-+#define UART3_DIV	138
-+#define UART3_GATE	139
-+#define UART4_MUX	140
-+#define UART4_DIV	141
-+#define UART4_GATE	142
-+#define UART5_MUX	143
-+#define UART5_DIV	144
-+#define UART5_GATE	145
-+#define UART6_MUX	146
-+#define UART6_DIV	147
-+#define UART6_GATE	148
-+#define UART7_MUX	149
-+#define UART7_DIV	150
-+#define UART7_GATE	151
-+#define UART8_MUX	152
-+#define UART8_DIV	153
-+#define UART8_GATE	154
-+#define UART9_MUX	155
-+#define UART9_DIV	156
-+#define UART9_GATE	157
-+#define UART10_MUX	158
-+#define UART10_DIV	159
-+#define UART10_GATE	160
-+#define UART11_MUX	161
-+#define UART11_DIV	162
-+#define UART11_GATE	163
-+#define UART12_MUX	164
-+#define UART12_DIV	165
-+#define UART12_GATE	166
-+#define UART13_MUX	167
-+#define UART13_DIV	168
-+#define UART13_GATE	169
-+#define UART14_MUX	170
-+#define UART14_DIV	171
-+#define UART14_GATE	172
-+#define UART15_MUX	173
-+#define UART15_DIV	174
-+#define UART15_GATE	175
-+#define UART16_MUX	176
-+#define UART16_DIV	177
-+#define UART16_GATE	178
-+#define RTC_GATE	179
-+#define DDR_GATE	180
-+#define KPI_MUX		181
-+#define KPI_DIV		182
-+#define KPI_GATE	183
-+#define I2C0_GATE	184
-+#define I2C1_GATE	185
-+#define I2C2_GATE	186
-+#define I2C3_GATE	187
-+#define I2C4_GATE	188
-+#define I2C5_GATE	189
-+#define QSPI0_MUX	190
-+#define QSPI0_GATE	191
-+#define QSPI1_MUX	192
-+#define QSPI1_GATE	193
-+#define SMC0_MUX	194
-+#define SMC0_DIV	195
-+#define SMC0_GATE	196
-+#define SMC1_MUX	197
-+#define SMC1_DIV	198
-+#define SMC1_GATE	199
-+#define WDT0_MUX	200
-+#define WDT0_GATE	201
-+#define WDT1_MUX	202
-+#define WDT1_GATE	203
-+#define WDT2_MUX	204
-+#define WDT2_GATE	205
-+#define WWDT0_MUX	206
-+#define WWDT1_MUX	207
-+#define WWDT2_MUX	208
-+#define EPWM0_GATE	209
-+#define EPWM1_GATE	210
-+#define EPWM2_GATE	211
-+#define I2S0_MUX	212
-+#define I2S0_GATE	213
-+#define I2S1_MUX	214
-+#define I2S1_GATE	215
-+#define SSMCC_GATE	216
-+#define SSPCC_GATE	217
-+#define SPI0_MUX	218
-+#define SPI0_GATE	219
-+#define SPI1_MUX	220
-+#define SPI1_GATE	221
-+#define SPI2_MUX	222
-+#define SPI2_GATE	223
-+#define SPI3_MUX	224
-+#define SPI3_GATE	225
-+#define ECAP0_GATE	226
-+#define ECAP1_GATE	227
-+#define ECAP2_GATE	228
-+#define QEI0_GATE	229
-+#define QEI1_GATE	230
-+#define QEI2_GATE	231
-+#define ADC_DIV		232
-+#define ADC_GATE	233
-+#define EADC_DIV	234
-+#define EADC_GATE	235
-+#define	CLK_MAX_IDX	236
++struct ma35d1_reset_data {
++	struct reset_controller_dev rcdev;
++	struct notifier_block restart_handler;
++	void __iomem *base;
++	/* protect registers against concurrent read-modify-write */
++	spinlock_t lock;
++};
 +
-+#endif /* __DT_BINDINGS_CLOCK_NUVOTON_MA35D1_CLK_H */
++static const struct {
++	u32 reg_ofs;
++	u32 bit;
++} ma35d1_reset_map[] = {
++	[MA35D1_RESET_CHIP] =    {0x20, 0},
++	[MA35D1_RESET_CA35CR0] = {0x20, 1},
++	[MA35D1_RESET_CA35CR1] = {0x20, 2},
++	[MA35D1_RESET_CM4] =     {0x20, 3},
++	[MA35D1_RESET_PDMA0] =   {0x20, 4},
++	[MA35D1_RESET_PDMA1] =   {0x20, 5},
++	[MA35D1_RESET_PDMA2] =   {0x20, 6},
++	[MA35D1_RESET_PDMA3] =   {0x20, 7},
++	[MA35D1_RESET_DISP] =    {0x20, 9},
++	[MA35D1_RESET_VCAP0] =   {0x20, 10},
++	[MA35D1_RESET_VCAP1] =   {0x20, 11},
++	[MA35D1_RESET_GFX] =     {0x20, 12},
++	[MA35D1_RESET_VDEC] =    {0x20, 13},
++	[MA35D1_RESET_WHC0] =    {0x20, 14},
++	[MA35D1_RESET_WHC1] =    {0x20, 15},
++	[MA35D1_RESET_GMAC0] =   {0x20, 16},
++	[MA35D1_RESET_GMAC1] =   {0x20, 17},
++	[MA35D1_RESET_HWSEM] =   {0x20, 18},
++	[MA35D1_RESET_EBI] =     {0x20, 19},
++	[MA35D1_RESET_HSUSBH0] = {0x20, 20},
++	[MA35D1_RESET_HSUSBH1] = {0x20, 21},
++	[MA35D1_RESET_HSUSBD] =  {0x20, 22},
++	[MA35D1_RESET_USBHL] =   {0x20, 23},
++	[MA35D1_RESET_SDH0] =    {0x20, 24},
++	[MA35D1_RESET_SDH1] =    {0x20, 25},
++	[MA35D1_RESET_NAND] =    {0x20, 26},
++	[MA35D1_RESET_GPIO] =    {0x20, 27},
++	[MA35D1_RESET_MCTLP] =   {0x20, 28},
++	[MA35D1_RESET_MCTLC] =   {0x20, 29},
++	[MA35D1_RESET_DDRPUB] =  {0x20, 30},
++	[MA35D1_RESET_TMR0] =    {0x24, 2},
++	[MA35D1_RESET_TMR1] =    {0x24, 3},
++	[MA35D1_RESET_TMR2] =    {0x24, 4},
++	[MA35D1_RESET_TMR3] =    {0x24, 5},
++	[MA35D1_RESET_I2C0] =    {0x24, 8},
++	[MA35D1_RESET_I2C1] =    {0x24, 9},
++	[MA35D1_RESET_I2C2] =    {0x24, 10},
++	[MA35D1_RESET_I2C3] =    {0x24, 11},
++	[MA35D1_RESET_QSPI0] =   {0x24, 12},
++	[MA35D1_RESET_SPI0] =    {0x24, 13},
++	[MA35D1_RESET_SPI1] =    {0x24, 14},
++	[MA35D1_RESET_SPI2] =    {0x24, 15},
++	[MA35D1_RESET_UART0] =   {0x24, 16},
++	[MA35D1_RESET_UART1] =   {0x24, 17},
++	[MA35D1_RESET_UART2] =   {0x24, 18},
++	[MA35D1_RESET_UART3] =   {0x24, 19},
++	[MA35D1_RESET_UART4] =   {0x24, 20},
++	[MA35D1_RESET_UART5] =   {0x24, 21},
++	[MA35D1_RESET_UART6] =   {0x24, 22},
++	[MA35D1_RESET_UART7] =   {0x24, 23},
++	[MA35D1_RESET_CANFD0] =  {0x24, 24},
++	[MA35D1_RESET_CANFD1] =  {0x24, 25},
++	[MA35D1_RESET_EADC0] =   {0x24, 28},
++	[MA35D1_RESET_I2S0] =    {0x24, 29},
++	[MA35D1_RESET_SC0] =     {0x28, 0},
++	[MA35D1_RESET_SC1] =     {0x28, 1},
++	[MA35D1_RESET_QSPI1] =   {0x28, 4},
++	[MA35D1_RESET_SPI3] =    {0x28, 6},
++	[MA35D1_RESET_EPWM0] =   {0x28, 16},
++	[MA35D1_RESET_EPWM1] =   {0x28, 17},
++	[MA35D1_RESET_QEI0] =    {0x28, 22},
++	[MA35D1_RESET_QEI1] =    {0x28, 23},
++	[MA35D1_RESET_ECAP0] =   {0x28, 26},
++	[MA35D1_RESET_ECAP1] =   {0x28, 27},
++	[MA35D1_RESET_CANFD2] =  {0x28, 28},
++	[MA35D1_RESET_ADC0] =    {0x28, 31},
++	[MA35D1_RESET_TMR4] =    {0x2C, 0},
++	[MA35D1_RESET_TMR5] =    {0x2C, 1},
++	[MA35D1_RESET_TMR6] =    {0x2C, 2},
++	[MA35D1_RESET_TMR7] =    {0x2C, 3},
++	[MA35D1_RESET_TMR8] =    {0x2C, 4},
++	[MA35D1_RESET_TMR9] =    {0x2C, 5},
++	[MA35D1_RESET_TMR10] =   {0x2C, 6},
++	[MA35D1_RESET_TMR11] =   {0x2C, 7},
++	[MA35D1_RESET_UART8] =   {0x2C, 8},
++	[MA35D1_RESET_UART9] =   {0x2C, 9},
++	[MA35D1_RESET_UART10] =  {0x2C, 10},
++	[MA35D1_RESET_UART11] =  {0x2C, 11},
++	[MA35D1_RESET_UART12] =  {0x2C, 12},
++	[MA35D1_RESET_UART13] =  {0x2C, 13},
++	[MA35D1_RESET_UART14] =  {0x2C, 14},
++	[MA35D1_RESET_UART15] =  {0x2C, 15},
++	[MA35D1_RESET_UART16] =  {0x2C, 16},
++	[MA35D1_RESET_I2S1] =    {0x2C, 17},
++	[MA35D1_RESET_I2C4] =    {0x2C, 18},
++	[MA35D1_RESET_I2C5] =    {0x2C, 19},
++	[MA35D1_RESET_EPWM2] =   {0x2C, 20},
++	[MA35D1_RESET_ECAP2] =   {0x2C, 21},
++	[MA35D1_RESET_QEI2] =    {0x2C, 22},
++	[MA35D1_RESET_CANFD3] =  {0x2C, 23},
++	[MA35D1_RESET_KPI] =     {0x2C, 24},
++	[MA35D1_RESET_GIC] =     {0x2C, 28},
++	[MA35D1_RESET_SSMCC] =   {0x2C, 30},
++	[MA35D1_RESET_SSPCC] =   {0x2C, 31}
++};
++
++static int ma35d1_restart_handler(struct notifier_block *this, unsigned long mode, void *cmd)
++{
++	struct ma35d1_reset_data *data =
++				 container_of(this, struct ma35d1_reset_data, restart_handler);
++	u32 id = MA35D1_RESET_CHIP;
++
++	writel_relaxed(BIT(ma35d1_reset_map[id].bit),
++		       data->base + ma35d1_reset_map[id].reg_ofs);
++	return 0;
++}
++
++static int ma35d1_reset_update(struct reset_controller_dev *rcdev, unsigned long id, bool assert)
++{
++	struct ma35d1_reset_data *data = container_of(rcdev, struct ma35d1_reset_data, rcdev);
++	unsigned long flags;
++	u32 reg;
++
++	if (WARN_ON_ONCE(id >= ARRAY_SIZE(ma35d1_reset_map)))
++		return -EINVAL;
++
++	spin_lock_irqsave(&data->lock, flags);
++	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
++	if (assert)
++		reg |= BIT(ma35d1_reset_map[id].bit);
++	else
++		reg &= ~(BIT(ma35d1_reset_map[id].bit));
++	writel_relaxed(reg, data->base + ma35d1_reset_map[id].reg_ofs);
++	spin_unlock_irqrestore(&data->lock, flags);
++
++	return 0;
++}
++
++static int ma35d1_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	return ma35d1_reset_update(rcdev, id, true);
++}
++
++static int ma35d1_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	return ma35d1_reset_update(rcdev, id, false);
++}
++
++static int ma35d1_reset_status(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	struct ma35d1_reset_data *data = container_of(rcdev, struct ma35d1_reset_data, rcdev);
++	u32 reg;
++
++	if (WARN_ON_ONCE(id >= ARRAY_SIZE(ma35d1_reset_map)))
++		return -EINVAL;
++
++	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
++	return !!(reg & BIT(ma35d1_reset_map[id].bit));
++}
++
++static const struct reset_control_ops ma35d1_reset_ops = {
++	.assert = ma35d1_reset_assert,
++	.deassert = ma35d1_reset_deassert,
++	.status = ma35d1_reset_status,
++};
++
++static const struct of_device_id ma35d1_reset_dt_ids[] = {
++	{ .compatible = "nuvoton,ma35d1-reset" },
++	{ },
++};
++
++static int ma35d1_reset_probe(struct platform_device *pdev)
++{
++	struct ma35d1_reset_data *reset_data;
++	struct device *dev = &pdev->dev;
++	int err;
++
++	if (!pdev->dev.of_node) {
++		dev_err(&pdev->dev, "Device tree node not found\n");
++		return -EINVAL;
++	}
++
++	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
++	if (!reset_data)
++		return -ENOMEM;
++
++	reset_data->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(reset_data->base))
++		return PTR_ERR(reset_data->base);
++
++	reset_data->rcdev.owner = THIS_MODULE;
++	reset_data->rcdev.nr_resets = MA35D1_RESET_COUNT;
++	reset_data->rcdev.ops = &ma35d1_reset_ops;
++	reset_data->rcdev.of_node = dev->of_node;
++	reset_data->restart_handler.notifier_call = ma35d1_restart_handler;
++	reset_data->restart_handler.priority = 192;
++	spin_lock_init(&reset_data->lock);
++
++	err = register_restart_handler(&reset_data->restart_handler);
++	if (err)
++		dev_warn(&pdev->dev, "failed to register restart handler\n");
++
++	return devm_reset_controller_register(dev, &reset_data->rcdev);
++}
++
++static struct platform_driver ma35d1_reset_driver = {
++	.probe = ma35d1_reset_probe,
++	.driver = {
++		.name = "ma35d1-reset",
++		.of_match_table	= ma35d1_reset_dt_ids,
++	},
++};
++
++builtin_platform_driver(ma35d1_reset_driver);
 -- 
 2.34.1
 
