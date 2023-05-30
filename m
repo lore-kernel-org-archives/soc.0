@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A9C4C77B73
-	for <soc@archiver.kernel.org>; Tue, 30 May 2023 13:22:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A53B6C77B7A
+	for <soc@archiver.kernel.org>; Tue, 30 May 2023 13:22:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 45EAFC433A8; Tue, 30 May 2023 13:22:07 +0000 (UTC)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	id 6A192C433D2; Tue, 30 May 2023 13:22:42 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 62FA0C433D2
-	for <soc@kernel.org>; Tue, 30 May 2023 13:22:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 62FA0C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 9E011C4339C
+	for <soc@kernel.org>; Tue, 30 May 2023 13:22:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9E011C4339C
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f53c06babso790844966b.3
-        for <soc@kernel.org>; Tue, 30 May 2023 06:22:06 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-97000a039b2so806987066b.2
+        for <soc@kernel.org>; Tue, 30 May 2023 06:22:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685452924; x=1688044924;
+        d=linaro.org; s=google; t=1685452959; x=1688044959;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4rcd/m8WcNQQtUZ5t+JPMtS7xHuDS2RmOZsx2AqUrBI=;
-        b=AS8lKWQsAFEX70mEx4xEjeYR+oPg2B0T7AP0fFII9tibVdLUUJKgWAzt7OkW4rnTHY
-         iT0NJS5a/KOM2+PPGHp+NRkEDecy+5fIXXzqBmw6270DUgBj63WrYRJD8ZQs/AswAb16
-         4PVHxgOyliC9OFowe6c7YMsU7N4GuJ7TTt5GQ16/+35RWyMbjq5ict4nS+kkeRICbDh4
-         b4B6w0s12yQ+EGL/08WVAtg12e6iJVvZhSwY5va4NwnILA9qlRKnTmv+sH7/awJxtRtx
-         eDfLk9dfMcC9uHvi3avCG3Ae7i/s56WmzBb/Id1DWHjnqnEYpk3J6m4/Jy7Io0ArIsuu
-         iueA==
+        bh=/24UxPBfR0sgEFqt/O6F91wFOQpVVQfus6oLh21Y0t0=;
+        b=DmIrPMnOuyRs7Z/Y5MO/vMwytCqh3Klgp3OWWvqhoHTcsmrb22wZ6jSH8ZJpiDIb4F
+         YBoOWQoH4MbBZJjKE7wBFfGyp9OktLQBP5LvaqZKvz3GD8iwxAVrLEj1piYY//GU8NVX
+         9Qf/yEY/7MGUvANSTn+Sit+uQGkM2weDAZq+Z8d7cfLK4qVHMb+B1jewFuS5hUHarEWD
+         vF2do19OHGTWt0Om1/iy6MBEr6fQ6xhN5B6rWsZvSHKfP/go6CxxSGaahZffpDFGpQq6
+         VGFPLziUXUkhcXQWfF9c/S9BT6g3sPZEatKZzH+Wrwn/L3rMFKaJfAX+Cf4oH+CUbHKZ
+         U2WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685452924; x=1688044924;
+        d=1e100.net; s=20221208; t=1685452959; x=1688044959;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4rcd/m8WcNQQtUZ5t+JPMtS7xHuDS2RmOZsx2AqUrBI=;
-        b=UKeB/zuWwTVMYEq68L3sJD5cWUh9JYYVJLV51ruDQqMB6D4WMxp5Sd/tmDesRZzVBA
-         +Yyk7hltURZkUWLty69PgDvk+mb0BJpWRuxSvRRrvaDPo1E++D1w72LWwMkskax6lIHM
-         lgqXMmrW/fEZy7WiwhfC+98Nv/tjhZSDNCbhsS6UqghPVqWf+SzHG59EBfJdFL8TgQ1r
-         YnFSnaGPMERdD11KSU3iSHQ3uzs7s+Yu6uqWWuw8wqqUlFGSBqqRoGPW7E3vBBs8Cfri
-         qGoBSTVBbFRMuprtnswAioiXstb0+l+W3ECMW035F8ZrmRwfAM6XG2BpATzAxWx3ylIB
-         ItoQ==
-X-Gm-Message-State: AC+VfDybEylkI6haA6iq2qQxlCl4Ritd/udV5dBgrUbrKBaisV9kgxtQ
-	nIrOEJQ4vpn9wfi6YDpb6Sc0PQ==
-X-Google-Smtp-Source: ACHHUZ5swZnIqt/3wRBv6QMXu4VLN/2oWK3Mm/fnIbsjpD9wHV2n0FuXPUqTpTyuZ4aBVdIFouM5qA==
-X-Received: by 2002:a17:907:3e8f:b0:96f:181b:87d3 with SMTP id hs15-20020a1709073e8f00b0096f181b87d3mr2782421ejc.37.1685452924691;
-        Tue, 30 May 2023 06:22:04 -0700 (PDT)
+        bh=/24UxPBfR0sgEFqt/O6F91wFOQpVVQfus6oLh21Y0t0=;
+        b=jjL4/6RVrLVqnIWhwgEkt0LNKmj24pnyX7TSzLa7je8xO9p4oIDFTcZuhZL5xEIFgp
+         BIlYqXjcRttJ7B2dtBRop9IR8epuzdd2huwOpDHeQxlM8ukPZ8aLXVnfpq/UAP8B5hTL
+         98Vl+3POsqZpKZYxc5cd/7hFUocCqggFVdHc8VGI0FHf9wDPYH3ZfhLMjqkyiAGTuZ6s
+         fLyezc9O54iaZvcL/0MN8ZrjeojkRL0izU26kBH+VtreUv5k12kjMV9LX48TzuELo8Cx
+         jt+Tw6Ei8ZGoPWyGt9JipZtqYBBMgvsxKrnFkkJrTGd67hPVBCqpa+egEi6l7MH5mW1Z
+         pHEw==
+X-Gm-Message-State: AC+VfDwZarQh+dpcbpQ03RI4Q5Q0yu6VqBxeg9fkP5SjKEnPbdTuBk1E
+	JgmUJAzfEh13x3d5/SvGA9+n+A==
+X-Google-Smtp-Source: ACHHUZ5XdM462+bLqkMo9j64utn6Epv2miFRV1JBcRRR1jwxLR2ZzYktlryXRxelMtBLc0cubiaRrQ==
+X-Received: by 2002:a17:907:7206:b0:974:1eeb:1ab7 with SMTP id dr6-20020a170907720600b009741eeb1ab7mr1891024ejc.24.1685452958920;
+        Tue, 30 May 2023 06:22:38 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709067d5100b0096f72424e00sm7337450ejp.131.2023.05.30.06.22.02
+        by smtp.gmail.com with ESMTPSA id la11-20020a170906ad8b00b00965f5d778e3sm7380051ejb.120.2023.05.30.06.22.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 06:22:04 -0700 (PDT)
-Message-ID: <fb65244e-ab3b-c473-57b9-2da80e67be4a@linaro.org>
-Date: Tue, 30 May 2023 15:22:02 +0200
+        Tue, 30 May 2023 06:22:38 -0700 (PDT)
+Message-ID: <20845b22-9250-c4fe-376f-d0d600679c8e@linaro.org>
+Date: Tue, 30 May 2023 15:22:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/4] dt-bindings: Add qcom,usb-hs-phy-msm8960
+Subject: Re: [PATCH v2 3/4] ARM: dts: qcom: msm8960: Add USB node
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Rudraksha Gupta <guptarud@gmail.com>, Andy Gross <agross@kernel.org>,
@@ -70,19 +70,57 @@ Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
 References: <20230527040905.stmnoshkdqgiaex6@ripper>
- <20230528001010.47868-3-guptarud@gmail.com>
+ <20230528001010.47868-4-guptarud@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230528001010.47868-3-guptarud@gmail.com>
+In-Reply-To: <20230528001010.47868-4-guptarud@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 28/05/2023 02:10, Rudraksha Gupta wrote:
-> Adds qcom,usb-hs-phy-msm8960 compatible
+> Add the required nodes to support USB on the MSM8960 SoC. As it's very
+> similar to the APQ8064 SoC, the nodes are almost identical
 > 
+> Add a label to sleep_clk for the USB node to reference
+> 
+> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+
+> +		usb1: usb@12500000 {
+> +			compatible = "qcom,ci-hdrc";
+> +			reg = <0x12500000 0x200>,
+> +			      <0x12500200 0x200>;
+> +			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&gcc USB_HS1_XCVR_CLK>, <&gcc USB_HS1_H_CLK>;
+> +			clock-names = "core", "iface";
+> +			assigned-clocks = <&gcc USB_HS1_XCVR_CLK>;
+> +			assigned-clock-rates = <60000000>;
+> +			resets = <&gcc USB_HS1_RESET>;
+> +			reset-names = "core";
+> +			phy_type = "ulpi";
+> +			ahb-burst-config = <0>;
+> +			phys = <&usb_hs1_phy>;
+> +			phy-names = "usb-phy";
+> +			status = "disabled";
+
+status is the last
+
+> +			#reset-cells = <1>;
+> +
+> +			ulpi {
+> +				usb_hs1_phy: phy {
+> +					compatible = "qcom,usb-hs-phy-msm8960",
+> +						     "qcom,usb-hs-phy";
+> +					clocks = <&sleep_clk>, <&cxo_board>;
+> +					clock-names = "sleep", "ref";
+> +					resets = <&usb1 0>;
+> +					reset-names = "por";
+> +					#phy-cells = <0>;
+> +				};
+> +			};
+> +		};
+> +
+
+Don't add stray blank lines.
 
 Best regards,
 Krzysztof
