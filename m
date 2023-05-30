@@ -1,126 +1,80 @@
-Return-Path: <SRS0=oyvj=BT=foss.st.com=prvs=45149136fa=alexandre.torgue@kernel.org>
+Return-Path: <SRS0=Cgdr=BT=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E55BFC7EE23
-	for <soc@archiver.kernel.org>; Tue, 30 May 2023 12:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74596C77B73
+	for <soc@archiver.kernel.org>; Tue, 30 May 2023 12:40:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 96B85C4339B; Tue, 30 May 2023 12:08:42 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id 3E055C433D2; Tue, 30 May 2023 12:40:10 +0000 (UTC)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E618BC433EF;
-	Tue, 30 May 2023 12:08:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E618BC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UC4pTN018239;
-	Tue, 30 May 2023 14:08:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=eUMt/DGvSnsVrLlt9wTQ7XbXUJ6l9bqRdAwrT9NXRl4=;
- b=gpY60mVqFAHm5rhYyUhnApTQy+VI+kpHjEhL+RL0V2FdWiHUyjZb48b4pLS6qiNbGX2e
- 8xG4XR6+yUNpNSeUxA4EXa5JjMMkmNjj5IK73Vel8PP7cYDEwSL0b7/tylFqnodu4hur
- fbTNPB4qVeEaXOjcwJERDAbMS+VHSlHWumhHWNtGtSfgWnexxbyY9outi7zR0CxkGOB4
- PPVL1rjtBiY/OfGpBt6JBbHG3PcHaoPvvt9Zf3zcy80AcRq+f+/mewrlw4x+tQTT9vFl
- zWUaCpiAUxiejXCqZ3+nZTRv+EaoIv/xBqq7cZpZoZgOpY4PQaXDVZztTUYO6JQAj1Yq hw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qwdm5hhgj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 May 2023 14:08:32 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5F0C610002A;
-	Tue, 30 May 2023 14:08:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3839E21ED5D;
-	Tue, 30 May 2023 14:08:30 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
- 2023 14:08:29 +0200
-Message-ID: <4308327f-d2e2-e9a2-6add-5e0352d3f1e2@foss.st.com>
-Date: Tue, 30 May 2023 14:08:29 +0200
+	by smtp.kernel.org (Postfix) with ESMTPS id 66C01C433EF
+	for <soc@kernel.org>; Tue, 30 May 2023 12:40:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 66C01C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-568900c331aso24438487b3.3
+        for <soc@kernel.org>; Tue, 30 May 2023 05:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685450407; x=1688042407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KOtUrb1jXt1YTc92Nx2K8yaF1tV0C2PLHIJDBXMJ1e8=;
+        b=Xzaug7RhDfquxOwHHHTAUcmTCtkuzS5zRcWlYeEfobpHfoMjVlAS/CwdmhocJy+96e
+         GWYVY+IToJWNf9RtM9CIM/4PkuKAlXjNuQvcsVuWPFSx3X7+/JzWNPUl91BQ2ra5ZCl9
+         WONJg0uWUzsOzjrDyIK0shIC3ZgS5EfKxfg2hGcKlFIk5QoOXa0c6mbUMYZXh+tuhlZT
+         /PitNi3wMZcN5EZ+MZKSUEOGbHJh1N3Gc9VcsdvFdffGhb2KSAG9ISFWbZVIgAazwWrD
+         CTGPKjvp6w9IHZGE8jnBotfig/8ctvxCSmFJUU35tgunJYFbWHAKP83CjH6vJNj44Vm2
+         b5MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685450407; x=1688042407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KOtUrb1jXt1YTc92Nx2K8yaF1tV0C2PLHIJDBXMJ1e8=;
+        b=SjWaPZtSuVOQlwQ4LlmhJlSiKyYw5oyKAVuDtku9OT4eLhzt7pgPavo6aNmSM0qIQ1
+         OIY2+LI5vzfsMNdAKjB/O5omIAg3DMPujImTZQb9yobhoCQFXDvFtPl7FMUChmd/fz28
+         Ht8JrKKZEuxm9xHYyOT9ZBm1gnASEDEu/fGDKEAvdKEhGM/zTTt4udOB+XLF3B7PNY5/
+         5/lzPP/tBMcPCNRvWqfE7wEsujkNhwQk1PkvrLSp5/+lis3RCDQ98Z6xNERBGx+b134W
+         FaHsrdSRapX2fL3xu23CuDg2KKZVDDAzh6BjIXCeZ7uE05t/pBwqP+qdJDjyLfHHKfd4
+         dE2A==
+X-Gm-Message-State: AC+VfDw55vo6ZqnjrDR9CVdtIlxYvDRJktzaFgBHzJNUWA7JCE5vGNYw
+	B7ddbTFtY1R2spZi8TFK1TUqlDKGb9kl8527yIz5BQ==
+X-Google-Smtp-Source: ACHHUZ5IRGVEGgUUERDvrDWcgtVuSj/SsOzSJ38VVusLz/5pCio/b35QywJsy1pwoBoZoBBFa8YeImTExOj4H4CgVzs=
+X-Received: by 2002:a81:83d6:0:b0:566:a76a:fcc2 with SMTP id
+ t205-20020a8183d6000000b00566a76afcc2mr2345411ywf.4.1685450407354; Tue, 30
+ May 2023 05:40:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 02/11] pinctrl: stm32: add stm32mp257 pinctrl support
-Content-Language: en-US
-To: Conor Dooley <conor.dooley@microchip.com>
-List-Id: <soc.lore.kernel.org>
-CC: Conor Dooley <conor@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas
-	<catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann
-	<arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, <soc@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
 References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
- <20230529162034.20481-3-alexandre.torgue@foss.st.com>
- <20230529-enrich-clammy-14b498baf09f@spud>
- <879b7689-5663-28b5-9431-2fdd243ffff2@foss.st.com>
- <20230530-payday-gravity-45a26bd7f2dc@wendy>
-From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230530-payday-gravity-45a26bd7f2dc@wendy>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_08,2023-05-30_01,2023-05-22_02
+In-Reply-To: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 30 May 2023 14:39:56 +0200
+Message-ID: <CACRpkdboHeg-=thHvZrQXcx_HnecwmuBJskJTPjxFOB9z9R0gw@mail.gmail.com>
+Subject: Re: [PATCH 00/11] Add STM32MP25 support
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+List-Id: <soc.lore.kernel.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	Conor Dooley <conor+dt@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/30/23 10:56, Conor Dooley wrote:
-> On Tue, May 30, 2023 at 10:38:30AM +0200, Alexandre TORGUE wrote:
->> Hi Conor
->>
->> On 5/29/23 20:04, Conor Dooley wrote:
->>> On Mon, May 29, 2023 at 06:20:25PM +0200, Alexandre Torgue wrote:
->>>> Add stm32mp257 pinctrl support.
->>>> diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.h b/drivers/pinctrl/stm32/pinctrl-stm32.h
->>>> index e0c31c4c8bca..5e5de92ddd58 100644
->>>> --- a/drivers/pinctrl/stm32/pinctrl-stm32.h
->>>> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.h
->>>> @@ -24,6 +24,9 @@
->>>>    #define STM32MP_PKG_AB		BIT(1)
->>>>    #define STM32MP_PKG_AC		BIT(2)
->>>>    #define STM32MP_PKG_AD		BIT(3)
->>>> +#define STM32MP_PKG_AI		BIT(8)
->>>> +#define STM32MP_PKG_AK		BIT(10)
->>>> +#define STM32MP_PKG_AL		BIT(11)
->>>
->>> Mainly out of curiosity, why have you go duplicate defines for these?
->>
->> Mainly to fit with available packages for various STM32 MPU. Currently MP1
->> SoCs are available with packages AB/AC/AD and MP2 series with AI/AK/AL but
->> in the future we could have package AB/AC/AD/AI available for a particular
->> SoC and then I need to anticipate this case.
-> 
-> Sorry, what I meant was "why have you got defines for these in this
-> header, when there is an existing set in
-> include/dt-bindings/pinctrl/stm32-pinfunc.h?".
+On Mon, May 29, 2023 at 6:20=E2=80=AFPM Alexandre Torgue
+<alexandre.torgue@foss.st.com> wrote:
 
-Ok, I see. To be honest I do it as we did in the past for STM32 MCU and 
-MP1 products. We had this discussion maybe 5 or 6 years ago about the 
-fact to include or not the "dt-bindings" file in the stm32 drivers. I 
-don't remember exactly the rational behind our choice. It is something 
-that we could improve for all our STM32 products. Sorry for this 
-imprecise answer.
+> Alexandre Torgue (10):
+>   dt-bindings: pinctrl: stm32: support for stm32mp257 and additional
+>     packages
+>   pinctrl: stm32: add stm32mp257 pinctrl support
 
-Alex
+Can patch 1 & 2 be applied to the pinctrl tree separately?
 
-
-> 
-> Cheers,
-> Conor.
-> 
-
+Yours,
+Linus Walleij
