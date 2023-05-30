@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FA94C77B7A
-	for <soc@archiver.kernel.org>; Tue, 30 May 2023 13:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A9C4C77B73
+	for <soc@archiver.kernel.org>; Tue, 30 May 2023 13:22:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6CAA9C4339B; Tue, 30 May 2023 13:21:09 +0000 (UTC)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	id 45EAFC433A8; Tue, 30 May 2023 13:22:07 +0000 (UTC)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E4D13C433A7
-	for <soc@kernel.org>; Tue, 30 May 2023 13:21:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E4D13C433A7
+	by smtp.kernel.org (Postfix) with ESMTPS id 62FA0C433D2
+	for <soc@kernel.org>; Tue, 30 May 2023 13:22:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 62FA0C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so3066071a12.3
-        for <soc@kernel.org>; Tue, 30 May 2023 06:21:07 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f53c06babso790844966b.3
+        for <soc@kernel.org>; Tue, 30 May 2023 06:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685452866; x=1688044866;
+        d=linaro.org; s=google; t=1685452924; x=1688044924;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=E+eOOtFzZaMUgzpRXCTOhauCZvZ2ynFbGFE/iL/+7bs=;
-        b=FYCaGVlW5w5LKnkaLbT/K7xC4sgxPR9LtKj7+k4YLieH0eGiQwzMy+hgpJbbRrj9MC
-         5y1WhbO6jFitH0xRstz2DVx118ojkGzHVGlmIVywkanTiNLlzAwmMkkZmVvKf3W/k3Ts
-         XcK5GVJT5x0S3qBuuYtYTLqh1JScJsTfJxvv49HT2qyr+IvgZpnz7dHO/VAFgh3Br7vM
-         T3vXJ236PEesrfuIxqpCIJh1EP4+g6X0Ck2ptZKBWOkRO6QL4DHgyFGSy0SnymRd4pWj
-         W0swycRrswpcYUvK1i5IROG7IuIbAFZnIpfGK7NbheBjBSopHyYIVc+cdHwyqbJPEPBH
-         w27w==
+        bh=4rcd/m8WcNQQtUZ5t+JPMtS7xHuDS2RmOZsx2AqUrBI=;
+        b=AS8lKWQsAFEX70mEx4xEjeYR+oPg2B0T7AP0fFII9tibVdLUUJKgWAzt7OkW4rnTHY
+         iT0NJS5a/KOM2+PPGHp+NRkEDecy+5fIXXzqBmw6270DUgBj63WrYRJD8ZQs/AswAb16
+         4PVHxgOyliC9OFowe6c7YMsU7N4GuJ7TTt5GQ16/+35RWyMbjq5ict4nS+kkeRICbDh4
+         b4B6w0s12yQ+EGL/08WVAtg12e6iJVvZhSwY5va4NwnILA9qlRKnTmv+sH7/awJxtRtx
+         eDfLk9dfMcC9uHvi3avCG3Ae7i/s56WmzBb/Id1DWHjnqnEYpk3J6m4/Jy7Io0ArIsuu
+         iueA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685452866; x=1688044866;
+        d=1e100.net; s=20221208; t=1685452924; x=1688044924;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E+eOOtFzZaMUgzpRXCTOhauCZvZ2ynFbGFE/iL/+7bs=;
-        b=avSiNEw5k+qiAarVnktFx5yI+3Njq3YflZZ72MztaV0uGflOmA33iCFuyhZ+XkdC7A
-         cNko70dZTMvEF7/GNu04DkVFvKCzpA810UuMC1ddnAurVTSuiKKo5j8jJpAJtKgqd777
-         bhEAeXg+LPhruJPKfQq9+4Y3l5X/A4kRPPV5jPMaqah74YPkyUEW4ynKHBreVVFnJiFM
-         Vo7EBKgtHXYIIqAZuqU6QNEn25DzKf4e89QNXyr/dZz7OSFOJDk6IrnHdTCZDk51M5Q/
-         l3Rl/QuNpx/aLcvJDqKgDy3qTHhCHdAbIm/+ixnmQh+NVZUAOehCvsZH3/kd3kvnBLLw
-         PSGg==
-X-Gm-Message-State: AC+VfDycVGrfODVHUihpR68ik46UE5pZW9UfIzFpDUJexM951aDv8Q6q
-	iragXzEQqfWWXs88J1h3L0ejJw==
-X-Google-Smtp-Source: ACHHUZ5g3cfwTuUld8iB6zign2Xojoa+5qld/dJybIZhplIUr7yPUPRkQLMzEu0iOZGJjcIMDnWldg==
-X-Received: by 2002:a17:906:db0e:b0:970:e80:e29a with SMTP id xj14-20020a170906db0e00b009700e80e29amr2500203ejb.68.1685452865904;
-        Tue, 30 May 2023 06:21:05 -0700 (PDT)
+        bh=4rcd/m8WcNQQtUZ5t+JPMtS7xHuDS2RmOZsx2AqUrBI=;
+        b=UKeB/zuWwTVMYEq68L3sJD5cWUh9JYYVJLV51ruDQqMB6D4WMxp5Sd/tmDesRZzVBA
+         +Yyk7hltURZkUWLty69PgDvk+mb0BJpWRuxSvRRrvaDPo1E++D1w72LWwMkskax6lIHM
+         lgqXMmrW/fEZy7WiwhfC+98Nv/tjhZSDNCbhsS6UqghPVqWf+SzHG59EBfJdFL8TgQ1r
+         YnFSnaGPMERdD11KSU3iSHQ3uzs7s+Yu6uqWWuw8wqqUlFGSBqqRoGPW7E3vBBs8Cfri
+         qGoBSTVBbFRMuprtnswAioiXstb0+l+W3ECMW035F8ZrmRwfAM6XG2BpATzAxWx3ylIB
+         ItoQ==
+X-Gm-Message-State: AC+VfDybEylkI6haA6iq2qQxlCl4Ritd/udV5dBgrUbrKBaisV9kgxtQ
+	nIrOEJQ4vpn9wfi6YDpb6Sc0PQ==
+X-Google-Smtp-Source: ACHHUZ5swZnIqt/3wRBv6QMXu4VLN/2oWK3Mm/fnIbsjpD9wHV2n0FuXPUqTpTyuZ4aBVdIFouM5qA==
+X-Received: by 2002:a17:907:3e8f:b0:96f:181b:87d3 with SMTP id hs15-20020a1709073e8f00b0096f181b87d3mr2782421ejc.37.1685452924691;
+        Tue, 30 May 2023 06:22:04 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id pg27-20020a170907205b00b009662d0e637esm7252694ejb.155.2023.05.30.06.21.03
+        by smtp.gmail.com with ESMTPSA id l17-20020a1709067d5100b0096f72424e00sm7337450ejp.131.2023.05.30.06.22.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 06:21:05 -0700 (PDT)
-Message-ID: <6cea59fe-3192-0a0f-9633-7c2d83d5a87f@linaro.org>
-Date: Tue, 30 May 2023 15:21:03 +0200
+        Tue, 30 May 2023 06:22:04 -0700 (PDT)
+Message-ID: <fb65244e-ab3b-c473-57b9-2da80e67be4a@linaro.org>
+Date: Tue, 30 May 2023 15:22:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/4] Samsung Galaxy Express SGH-I437 Support
+Subject: Re: [PATCH v2 2/4] dt-bindings: Add qcom,usb-hs-phy-msm8960
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Rudraksha Gupta <guptarud@gmail.com>, Andy Gross <agross@kernel.org>,
@@ -70,26 +70,19 @@ Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
 References: <20230527040905.stmnoshkdqgiaex6@ripper>
- <20230528001010.47868-1-guptarud@gmail.com>
+ <20230528001010.47868-3-guptarud@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230528001010.47868-1-guptarud@gmail.com>
+In-Reply-To: <20230528001010.47868-3-guptarud@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 28/05/2023 02:10, Rudraksha Gupta wrote:
-> This patch series adds support for the Samsung Galaxy Express SGH-I437.
-> Currently the following things work on this phone: UART, eMMC, SD Card, and USB.
-> 
-> version 2:
-> - Combined patch 1 into patch 4, as the sleep_clk label is specifically needed for the USB node.
-> - Reformatted the commit messages to align with the style used in other commit messages that modify the same files.
-> - Included a cover letter to provide an overview of the patch series.
-> - Slight refactoring of the device tree source (DTS) file.
+> Adds qcom,usb-hs-phy-msm8960 compatible
 > 
 
-Do not attach (thread) your patchsets to some other threads (unrelated
-or older versions). This buries them deep in the mailbox and might
-interfere with applying entire sets.
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
 
 Best regards,
 Krzysztof
