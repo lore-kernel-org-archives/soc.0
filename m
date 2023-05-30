@@ -1,323 +1,105 @@
-Return-Path: <SRS0=K2iS=BT=gmail.com=ychuang570808@kernel.org>
+Return-Path: <SRS0=uZ+G=BT=huawei.com=lihuisong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54324C77B7E
-	for <soc@archiver.kernel.org>; Tue, 30 May 2023 01:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0F4AC77B7E
+	for <soc@archiver.kernel.org>; Tue, 30 May 2023 02:53:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 25A12C4339B; Tue, 30 May 2023 01:09:24 +0000 (UTC)
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 69398C433EF; Tue, 30 May 2023 02:53:52 +0000 (UTC)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DF01CC433EF;
-	Tue, 30 May 2023 01:09:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DF01CC433EF
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2568befcf1dso912566a91.0;
-        Mon, 29 May 2023 18:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685408962; x=1688000962;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=d1wG3ZzBNrC3Iuv0Sazp7NPX3sgvbpQA8Twr3uxU34s=;
-        b=kXw1U6akBeszmRiZ1MVvqGt5eDQuWhg17xwHKHH1jEX/9yaFkD1SOvWX/DEiaSJ8V9
-         a39ZEYAGgARyRX7UhQmHCk6Ej8CON2madP8nOXK+2PwuqPMl7c39mDtdlgUY2qONvt4O
-         17GOFsEwtbE1glmbzKXvHUnmFP86NdwnWvazFzlNQSlmKMm0RxUAnSXNw3RXzsnw3mma
-         adXNWyoyVDsjz+4PA2AMk3EJ9+cLtETJoBicLQLeaR+5EPBiZN0vSR7ej7T6bl5azXNN
-         gXCpv+CXrKKrWXCo74OPAUXxjC/6Kj8uND/4IW5e5bLShDEOZKg7DeX93UwgYWKlPIGn
-         TYuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685408962; x=1688000962;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d1wG3ZzBNrC3Iuv0Sazp7NPX3sgvbpQA8Twr3uxU34s=;
-        b=J53AwuejV5KR0ccLxlU5JlfN16v59sacCrdgEX8EyUgrGDX5B/9w4MoXb0q8DTeJeY
-         PTeyXGC6Opo298FwXW3TVXDtnolcK0pAfIBsXDdoMwPEU21XvxUnyS9cNXC8sMJws3mH
-         Eza3EWjCz9vlNbGxR0Xz1ihb5RZmLWuLGmxF4AuHH8Lr0pHIYO9Nbb0IjXAFhMzi6aM0
-         Y7E6PbB6KerGSNKRcdyAf+NId5m61M4SrMLQArCgJYLq7M0T8K1waylp3aneyC5CZ9T7
-         HMOW+rb87Ks6Z8Sw9fHnNvDAUWSzIXfPkMyI5iHyhbH0hPmVcO1FAenjya0mSNNU8R8M
-         j4aA==
-X-Gm-Message-State: AC+VfDynjNfD75iWY5bGfuFdEEZqFB2y1Vd4W5xh8ui+KsxXhpktFTRP
-	ZbquXt93MpfAgLPRN3jd7Xe5jhElixc=
-X-Google-Smtp-Source: ACHHUZ4lRcccoA8lGODePVC271WFd12PsoH9zTA9AafQ4ZPdWcMilHiDIITrvpbD1M0gojDXw1+KCw==
-X-Received: by 2002:a17:90b:3a91:b0:24e:3752:194f with SMTP id om17-20020a17090b3a9100b0024e3752194fmr9899966pjb.21.1685408961878;
-        Mon, 29 May 2023 18:09:21 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id b1-20020a17090a100100b002532eef4fc5sm8271339pja.34.2023.05.29.18.09.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 18:09:21 -0700 (PDT)
-Message-ID: <c9493f4d-8056-20a0-6ed2-161fbcc3d34e@gmail.com>
-Date: Tue, 30 May 2023 09:09:16 +0800
+	by smtp.kernel.org (Postfix) with ESMTPS id 0F066C433D2;
+	Tue, 30 May 2023 02:53:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F066C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.55])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QVcKw1ZtXzqTYF;
+	Tue, 30 May 2023 10:49:08 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 30 May 2023 10:53:45 +0800
+Message-ID: <7852a2b4-b601-f4e8-bc5f-7b1bc9d9dc69@huawei.com>
+Date: Tue, 30 May 2023 10:53:38 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-From: Jacky Huang <ychuang570808@gmail.com>
-To: Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, lee@kernel.org, mturquette@baylibre.com,
- sboyd@kernel.org, p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
- tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+From: "lihuisong (C)" <lihuisong@huawei.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
- schung@nuvoton.com, mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230516075217.205401-1-ychuang570808@gmail.com>
- <20230516075217.205401-11-ychuang570808@gmail.com>
- <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
- <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
-Content-Language: en-US
-In-Reply-To: <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+CC: <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+	<angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+	<arnd@arndb.de>, <krzk@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<soc@kernel.org>, <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
+	<liuyonglong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <20230522072211.8894-1-lihuisong@huawei.com>
+ <20230522072211.8894-2-lihuisong@huawei.com>
+ <20230523093922.f2y4wrz3vkzi7kmw@bogus>
+ <b29eab0c-4084-0e91-3e31-7f7c264ad629@huawei.com>
+ <20230525073539.waaa7wpudohullcg@bogus>
+ <5e0d81c8-5f52-82e5-5509-785e87a9a17e@huawei.com>
+In-Reply-To: <5e0d81c8-5f52-82e5-5509-785e87a9a17e@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
 
-Dear Jiri,
+Hi Sudeep,
 
 
-On 2023/5/24 下午 04:34, Jacky Huang wrote:
-> Dear Jiri,
+在 2023/5/25 16:12, lihuisong (C) 写道:
 >
-> Thanks for your advice.
->
-> On 2023/5/24 下午 03:42, Jiri Slaby wrote:
->> On 16. 05. 23, 9:52, Jacky Huang wrote:
->>> +static void ma35d1serial_config_port(struct uart_port *port, int 
->>> flags)
->>> +{
->>> +    /*
->>> +     * Driver core for serial ports forces a non-zero value for 
->>> port type.
->>> +     * Write an arbitrary value here to accommodate the serial core 
->>> driver,
->>> +     * as ID part of UAPI is redundant.
->>> +     */
->>> +    port->type = 1;
->>
->> So this 1 translates to PORT_8250. Why not to use it directly? Or 
->> something more saner like PORT_16550A?
->>
-> It's not actually 8250 or 16550A.
-> Can we add the following definition to 
-> 'include/uapi/linux/serial_core.h' and use PORT_MA35 instead?
->
-> #define PORT_MA35    124
+> 在 2023/5/25 15:35, Sudeep Holla 写道:
+>> On Thu, May 25, 2023 at 10:41:51AM +0800, lihuisong (C) wrote:
+>>> Hi Sudeep,
+>>>
+>>> Here, the interface is used to determine whether a port is in use or
+>>> enabled.
+>>> If we just use 'status', it cannot inidicates its own meaning by name.
+>>> What do you think?
+>>>
+>> How about "port_status" or "port-status" ?
+> The meaning of this status is a little board.
+> How about 'enable'? just a read-only entry.
 >
 >
->>> +}
->>> +
->>> +static int ma35d1serial_verify_port(struct uart_port *port, struct 
->>> serial_struct *ser)
->>> +{
->>> +    if (port->type != PORT_UNKNOWN && ser->type != 1)
->>> +        return -EINVAL;
->>> +
->>> +    return 0;
->>> +}
->> ...
->>> +static int __init ma35d1serial_console_setup(struct console *co, 
->>> char *options)
->>> +{
->>> +    struct device_node *np = ma35d1serial_uart_nodes[co->index];
->>> +    struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
->>> +    u32 val32[4];
->>> +    struct uart_port *port;
->>> +    int baud = 115200;
->>> +    int bits = 8;
->>> +    int parity = 'n';
->>> +    int flow = 'n';
->>> +
->>> +    /*
->>> +     * Check whether an invalid uart number has been specified, and
->>
->> You dereferenced ma35d1serial_uart_nodes already. Doesn't 
->> console=ttyNVT1000 (or something like that) crash the system?
->>
->
-> I will add the following check before np = 
-> "ma35d1serial_uart_nodes[co->index]".
->
-> if (co->index < 0 || co->index >= MA35_UART_NR)
->     return -EINVAL;
->
->
->>> +     * if so, search for the first available port that does have
->>> +     * console support.
->>
->> The code below doesn't match this comment.
->
-> Yes, I will remove the above comment.
->
->>
->>> +     */
->>> +    if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
->>> +        pr_debug("Console Port%x out of range\n", co->index);
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
->>
->> Shouldn't that 4 be ARRAY_SIZE(val32) instead?
->>
->
-> Will be fixed.
->
->>> +        return -EINVAL;
->>
->> One \n here please.
->>
->
-> Okay, I will add it.
->
->>> +    p->port.iobase = val32[1];
->>> +    p->port.membase = ioremap(p->port.iobase, MA35_UART_REG_SIZE);
->>
->> What if this fails?
->>
->
-> I will add a check for the return value.
->
->>> +    p->port.ops = &ma35d1serial_ops;
->>> +    p->port.line = 0;
->>> +    p->port.uartclk = MA35_UART_CONSOLE_CLK;
->>> +
->>> +    port = &ma35d1serial_ports[co->index].port;
->>
->> Isn't this:
->>   port = &p->port;
->> ?
->>
->> Either use port on all above lines or drop the "port" variable 
->> completely and use "p->port" below instead.
->>
->
-> I will remove port variable and use p->port only.
->
->>> +
->>> +    if (options)
->>> +        uart_parse_options(options, &baud, &parity, &bits, &flow);
->>> +
->>> +    return uart_set_options(port, co, baud, parity, bits, flow);
->>> +}
->>> +
->>> +static struct console ma35d1serial_console = {
->>> +    .name    = "ttyNVT",
->>> +    .write   = ma35d1serial_console_write,
->>> +    .device  = uart_console_device,
->>> +    .setup   = ma35d1serial_console_setup,
->>> +    .flags   = CON_PRINTBUFFER | CON_ENABLED,
->>> +    .index   = -1,
->>> +    .data    = &ma35d1serial_reg,
->>
->> I don't see console->data used anywhere in the driver?
->>
->
-> I will remove it.
->
+"using_status" --> "enable" ? What do you think?
+Its original purpose was to determine whether a port is in use or enabled.
 
-I removed the " .data    = &ma35d1serial_reg", but kernel crashed in 
-'drivers/tty/serial/serial_core.c'.
-
-The variable 'p' of  uart_console_device() refer to a NULL, because 
-co->data is NULL.
-As a result, kernel crashed at 'p->tty_driver'.
-
-struct tty_driver *uart_console_device(struct console *co, int *index)
-{
-     struct uart_driver *p = co->data;
-     *index = co->index;
-     return p->tty_driver;
-}
-
-We seem to be unable to remove it.
-If there are no other considerations, I will keep it in the next version.
-
->>> +};
->> ...
->>> +static int ma35d1serial_probe(struct platform_device *pdev)
->>> +{
->>> +    struct resource *res_mem;
->>> +    struct uart_ma35d1_port *up;
->>> +    int ret = 0;
->>> +
->>> +    if (pdev->dev.of_node) {
->>> +        ret = of_alias_get_id(pdev->dev.of_node, "serial");
->>> +        if (ret < 0) {
->>> +            dev_err(&pdev->dev, "failed to get alias/pdev id, errno 
->>> %d\n", ret);
->>> +            return ret;
->>> +        }
->>> +    }
->>> +    up = &ma35d1serial_ports[ret];
->>> +    up->port.line = ret;
->>> +    res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +    if (!res_mem)
->>> +        return -ENODEV;
->>> +
->>> +    up->port.iobase = res_mem->start;
->>> +    up->port.membase = ioremap(up->port.iobase, MA35_UART_REG_SIZE);
->>
->> Check this too.
->>
+> In addition, I happen to have another problem when replace ioremap() 
+> with acpi_os_ioremap().
 >
-> Okay, sure.
+> The driver selects 'M' in .config to compile.
+> The driver cannot be compiled if we use acpi_os_ioremap().
+> The compiling log is as follows:
+> -->
+> make -j80
+>   CALL    scripts/checksyscalls.sh
+>   CC [M]  drivers/soc/hisilicon/kunpeng_hccs.o
+>   MODPOST Module.symvers
+> ERROR: modpost: "acpi_os_ioremap" 
+> [drivers/soc/hisilicon/kunpeng_hccs.ko] undefined!
+> scripts/Makefile.modpost:136: recipe for target 'Module.symvers' failed
+> make[1]: *** [Module.symvers] Error 1
+> Makefile:1978: recipe for target 'modpost' failed
+> make: *** [modpost] Error 2
 >
->>> +    up->port.ops = &ma35d1serial_ops;
->>> +
->>> +    spin_lock_init(&up->port.lock);
->>> +
->>> +    up->clk = of_clk_get(pdev->dev.of_node, 0);
->>> +    if (IS_ERR(up->clk)) {
->>> +        ret = PTR_ERR(up->clk);
->>> +        dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
->>> +        goto err_iounmap;
->>> +    }
->>> +
->>> +    ret = clk_prepare_enable(up->clk);
->>> +    if (ret)
->>> +        goto err_iounmap;
->>> +
->>> +    if (up->port.line != 0)
->>> +        up->port.uartclk = clk_get_rate(up->clk);
->>> +
->>> +    ret = platform_get_irq(pdev, 0);
->>> +    if (ret < 0)
->>> +        goto err_clk_disable;
->>> +
->>> +    up->port.irq = ret;
->>> +    up->port.dev = &pdev->dev;
->>> +    up->port.flags = UPF_BOOT_AUTOCONF;
->>> +
->>> +    platform_set_drvdata(pdev, up);
->>> +
->>> +    ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
->>> +    if (ret < 0)
->>> +        goto err_free_irq;
->>> +
->>> +    return 0;
->>> +
->>> +err_free_irq:
->>> +    free_irq(up->port.irq, &up->port);
->>> +
->>> +err_clk_disable:
->>> +    clk_disable_unprepare(up->clk);
->>> +
->>> +err_iounmap:
->>> +    iounmap(up->port.membase);
->>> +    return ret;
->>> +}
->>
->> thanks,
->
-> Best regards,
-> Jacky Huang
->
+> The driver can be compiled if we selects 'Y' or export symbol for 
+> acpi_os_ioremap.
+> So we have to export symbol for acpi_os_ioremap.
+> I plan to do it in another patch, and not in this series in case of 
+> blocking the upload of this driver.
+> What do you think?
+Someone disagree we do it here. please see the patch[1].
+So we have to keep what it was.
 
-Best regards,
-Jacky Huang
-
+[1] 
+https://lore.kernel.org/linux-arm-kernel/d180192a-afad-00dc-426f-3d8d249cdd89@huawei.com/T/
