@@ -1,112 +1,109 @@
-Return-Path: <SRS0=WuaE=BV=pengutronix.de=ukl@kernel.org>
+Return-Path: <andersson@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ADDCC7EE2E
-	for <soc@archiver.kernel.org>; Thu,  1 Jun 2023 14:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 832ABC7EE23
+	for <soc@archiver.kernel.org>; Thu,  1 Jun 2023 14:07:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EC767C4339B; Thu,  1 Jun 2023 14:02:26 +0000 (UTC)
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 049B7C433EF
-	for <soc@kernel.org>; Thu,  1 Jun 2023 14:02:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 049B7C433EF
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1q4isb-0001mf-F8; Thu, 01 Jun 2023 16:02:17 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1q4isZ-004Mqt-G9; Thu, 01 Jun 2023 16:02:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1q4isY-00AAqk-MH; Thu, 01 Jun 2023 16:02:14 +0200
-Date: Thu, 1 Jun 2023 16:02:14 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+	id 3B7D3C433A1; Thu,  1 Jun 2023 14:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F15C433D2;
+	Thu,  1 Jun 2023 14:07:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1685628438;
+	bh=BszhT873sT85Q92RbxHDVmdKfb7i8JngCWneZRMssa8=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=Ux+IszQcXhahHvRmzle7DLlH7jCs5OJ95kVi6cfnwz1asAq6hvyVPH8+QDij/9PZ+
+	 e4mvrVZV84Iy0V9tLRsn2JG1bcnsJ1ZRYdeT+CtQPyv4qen9hlO+s+TuRRqoKNPITr
+	 Dnv5E5R4jLw2A34c8VS8hyGYie4NSBi0pMLcBry4tDWul+CbJLZbFVN7bsvWuWyw92
+	 dNPBolOS9/p87FF8LcpNKT/o6anAEBPSQWInmo5/2HDuufI1UYXUqHm7ilor5/s0a4
+	 39IO8m5+M7rqTNgkOXlDnoiOJPbGq1AZO3yJxU5gQBVQIOS+26WVgUDajZf9OZx/Wx
+	 bfwwG7+S4mGqw==
+From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Aurelien Jarno <aurelien@aurel32.net>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] arm*/dts: Enable symbols for rpi device trees
-Message-ID: <20230601140214.i4yvya763sotyjz7@pengutronix.de>
-References: <20230530175624.2360218-1-u.kleine-koenig@pengutronix.de>
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Andy Gross <agross@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [GIT PULL] Qualcomm driver fixes for 6.4
+Date: Thu,  1 Jun 2023 07:10:58 -0700
+Message-Id: <20230601141058.2246039-1-andersson@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="amlqjlvulilkdc53"
-Content-Disposition: inline
-In-Reply-To: <20230530175624.2360218-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: soc@kernel.org
+Content-Transfer-Encoding: 8bit
 
 
---amlqjlvulilkdc53
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-Hello,
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-On Tue, May 30, 2023 at 07:56:22PM +0200, Uwe Kleine-K=F6nig wrote:
-> based on an earlier submission by Aurelien Jarno, I rebased and slightly
-> simplified the patches.
->=20
-> There was some related irc conversion in #armlinux. Quoting the relevant
-> parts:
->=20
-> 1685078851< ukleinek> arnd, [florian]: Who would pick up https://lore.ker=
-nel.org/linux-arm-kernel/20220410225940.135744-1-aurelien@aurel32.net ?
-> 1685078920< ukleinek> arnd, [florian]: If there is an agreement in genera=
-l that this is a good idea, I can coordinate with Aurelien that for arm64 t=
-here is a v2 with the simpler approach I pointed out.
-> 1685083481< arnd> ukleinek: I have no objections to this, if [florian] wa=
-nts to pick it up and send me for 6.5.
-> 1685083809< arnd> robher: any comments on this one?
-> 1685466520 < [florian]> ukleinek: I was hoping we would get an Ack for ro=
-bher before picking it up in the brcm soc tree, don't want to ruffle any fe=
-athers unnecessarily
->=20
-> So it seems to start a beneficial chain reaction, only Rob's Ack is
-> needed.
+are available in the Git repository at:
 
-Not sure this might help, but as Rob seems to be away for mail, I'll
-try: arch/arm64/boot/dts/nvidia/Makefile and
-arch/arm64/boot/dts/ti/Makefile also make use of -@. So this patch at
-least isn't a completely new thing and maybe Florian might dare to take
-this patch even without Rob's explicit consent?!
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-driver-fixes-for-6.4
 
-Best regards
-Uwe
+for you to fetch changes up to cbd77119b6355872cd308a60e99f9ca678435d15:
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+  EDAC/qcom: Get rid of hardcoded register offsets (2023-05-26 20:56:55 -0700)
 
---amlqjlvulilkdc53
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Qualcomm driver fixes for 6.4
 
------BEGIN PGP SIGNATURE-----
+Error paths is corrected across icc-bwmon, rpmh-rsc, ramp_controller and
+rmtfs. The ice module is renamed qcom_ice, to avoid clashing with
+existing "ice" driver.
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR4pOUACgkQj4D7WH0S
-/k4Rtwf+JHWlbKMR+NxhWHLdRZU6hn08KbS1LCLpaUT9otzRZkdJoAUM2V6Z9dG2
-4ZBaVwEwIt7sJE+7aKJuFUhWW297t1JFjsHWisbn1fi5G/ebSkDEGSTlT0LWcxZ1
-1DBF06ni16hOykNFcXgYv/TNDHhjwrVa2DibEld7cxPOf+GV1gf0X3wMlfQSwkBt
-kArT5yePh6pu8E9fOv5UOEvDm94yjSt8hUtAupOblf5O2SKr0WnAI6xL53m18gxR
-Swh5Wsf2z5GyQCYCnKh7DPu81TmlVpbOuSBsEmeilAvCx0uxwiFceT7wOaoZemrc
-vXJuDMbNpYLjO9/nxdrvxfVQA16TAQ==
-=h9eu
------END PGP SIGNATURE-----
+SA8155P-specific RPMh power-domains are introduced to avoid the code
+trying to access resources that exists on SM8150, but not on SA8155P.
 
---amlqjlvulilkdc53--
+Lastly, changes to the EDAC driver to fix an issue where the driver
+performs mmio based on the wrong register map.
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      soc: qcom: Rename ice to qcom_ice to avoid module name conflict
+
+Bjorn Andersson (1):
+      Merge branch '20230411-topic-hanaau-v2-1-fd3d70844b31@linaro.org' into drivers-fixes-for-6.4
+
+Christophe JAILLET (1):
+      soc: qcom: ramp_controller: Fix an error handling path in qcom_ramp_controller_probe()
+
+Dan Carpenter (1):
+      soc: qcom: rmtfs: Fix error code in probe()
+
+Konrad Dybcio (3):
+      dt-bindings: power: qcom,rpmpd: Add SA8155P
+      soc: qcom: rpmhpd: Add SA8155P power domains
+      dt-bindings: cache: qcom,llcc: Fix SM8550 description
+
+Krzysztof Kozlowski (2):
+      soc: qcom: icc-bwmon: fix incorrect error code passed to dev_err_probe()
+      soc: qcom: rpmh-rsc: drop redundant unsigned >=0 comparision
+
+Manivannan Sadhasivam (2):
+      EDAC/qcom: Remove superfluous return variable assignment in qcom_llcc_core_setup()
+      EDAC/qcom: Get rid of hardcoded register offsets
+
+ .../devicetree/bindings/cache/qcom,llcc.yaml       |   1 +
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |   1 +
+ drivers/edac/qcom_edac.c                           | 118 ++++++++++-----------
+ drivers/soc/qcom/Makefile                          |   3 +-
+ drivers/soc/qcom/icc-bwmon.c                       |   4 +-
+ drivers/soc/qcom/ramp_controller.c                 |   2 +-
+ drivers/soc/qcom/rmtfs_mem.c                       |   1 +
+ drivers/soc/qcom/rpmh-rsc.c                        |   2 +-
+ drivers/soc/qcom/rpmhpd.c                          |  16 +++
+ include/dt-bindings/power/qcom-rpmpd.h             |   9 ++
+ include/linux/soc/qcom/llcc-qcom.h                 |   6 --
+ 11 files changed, 93 insertions(+), 70 deletions(-)
