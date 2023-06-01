@@ -4,22 +4,22 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C21B9C77B7A
-	for <soc@archiver.kernel.org>; Thu,  1 Jun 2023 14:21:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB4DC77B7A
+	for <soc@archiver.kernel.org>; Thu,  1 Jun 2023 14:23:18 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A1138C4339E; Thu,  1 Jun 2023 14:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F14C433EF;
-	Thu,  1 Jun 2023 14:21:12 +0000 (UTC)
+	id 91623C433EF; Thu,  1 Jun 2023 14:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E067C433D2;
+	Thu,  1 Jun 2023 14:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685629273;
-	bh=GDJvQxlNj4tiFptfrI4g/+DKmcVCf7e2AficQEqOPMY=;
+	s=k20201202; t=1685629398;
+	bh=vMu6SU6DTsFB/rZ35O6AXdPYqi0eaWiGC1aWH0L32Pg=;
 	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=bDKc3kVnXEs42fzveVUd3lZFQQ72fSU2/QTCqSEnBPh4lXR2vhNeOc5xbE6S9jcXj
-	 hkhjpdyMerN96x33Zk4ZWteVw7+Lim9MU/ZvKK1ROc+xKLzXOHI1VdgZDxECdDn3w0
-	 uXv5Z/l6r2mIOVV+rsogFb2oUC4sWUctyUgXUzqzqp4QrHeSmur46IAxBDw/2hi1hn
-	 D6Z7/rNCcEze80N/fK2TPxNVeEJHvnMizYh2jmDcJMPk2QJCAO1JlqvOvrpwo5xHN5
-	 HylkA/Gchue2CQo03QoZSnxs7WPu19CFdkd4A/hCGTRubvGrsh6xROM/UOovzz+aJt
-	 JvdfinInfnKwA==
+	b=RrdSXT5/jG6wunovFdHVf11E4pCDAX//7feMBnw94C4Mm+PKwqkNonqYEGsBkxz7I
+	 nQdoiH6DwZNkcZZQ7KThRKNeu4KqWfdc6VmjvyY1+E2l5T78SdQD22xSheXKjbWBWE
+	 oAXqZUOETsoD4TKKm6UN8HVGsAm5osV7Oa6vIBQHXcDKQaaiwiOHJzqVfF9zj9ok8Q
+	 6iiiVHrvV33LrrKxA65919trS/wKZrdp+OyhkUfOMv3+OApCMGdn5sDkQYTtta13pB
+	 thMCwYnPvkTj3U+96bkBsTWr88JL2tyv/Rm0+fRJ8qtuwuwkwNOhXfGALyhkrB6Wm2
+	 teOZ990xAc+aQ==
 From: Bjorn Andersson <andersson@kernel.org>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -34,13 +34,18 @@ Cc: linux-arm-msm@vger.kernel.org,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Bjorn Andersson <quic_bjorande@quicinc.com>,
 	Douglas Anderson <dianders@chromium.org>
-Subject: [GIT PULL] Qualcomm ARM64 DeviceTree fixes for 6.4
-Date: Thu,  1 Jun 2023 07:24:54 -0700
-Message-Id: <20230601142454.2246259-1-andersson@kernel.org>
+Subject: [RESEND GIT PULL] Qualcomm ARM64 DeviceTree fixes for 6.4
+Date: Thu,  1 Jun 2023 07:26:59 -0700
+Message-Id: <20230601142659.2246348-1-andersson@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+Resend, because I missed that git request-pull complained that the tag had not
+propagated to the server and thereby gave a partial refspec.
+
+Regards,
+Bjorn
 
 The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
@@ -48,7 +53,7 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git qcom-arm64-fixes-for-6.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-fixes-for-6.4
 
 for you to fetch changes up to 661a4f089317c877aecd598fb70cd46510cc8d29:
 
