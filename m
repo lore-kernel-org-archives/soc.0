@@ -1,71 +1,112 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <SRS0=WuaE=BV=pengutronix.de=ukl@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0945C77B7E
-	for <soc@archiver.kernel.org>; Thu,  1 Jun 2023 14:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ADDCC7EE2E
+	for <soc@archiver.kernel.org>; Thu,  1 Jun 2023 14:02:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 6A74CC4339E; Thu,  1 Jun 2023 14:00:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB48C433EF;
-	Thu,  1 Jun 2023 14:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685628006;
-	bh=WKHUvwYa6H+UOFpzOfgjtodDBSsV/P6ewCnAUZQ7EHM=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=jVtcuAbTrMoqknloUbVSqBT1e3Sb4i13u2vgmQh8QLkTbsOZDDZB/wdlcRN/pKldV
-	 HOIZgrCG98dctvaUgNdBawam79w44IJpY01yeX+RkUjIzwiAVTKj2ay1senTFt4pd8
-	 89fhJlUEh7tRtRt1pGPISj82jb+eSbF5QkoMl5/Pc1wDS7yyf4kAI0yPDDH1gsUzyK
-	 nzIkNpKUJ3fd+7S+4Tw/js/y32GsA46w+0ENnw6v94ASP5X9W6FVguaOX5/NajqkOj
-	 mkbAU3hHMrGUwDvY5qDm5Iq8VehQQvnKxV8SzsbSH9NVWGXCROPX+7/uaNRKs2DyT/
-	 6XmwEY0OOS0Wg==
-From: Bjorn Andersson <andersson@kernel.org>
+	id EC767C4339B; Thu,  1 Jun 2023 14:02:26 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 049B7C433EF
+	for <soc@kernel.org>; Thu,  1 Jun 2023 14:02:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 049B7C433EF
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q4isb-0001mf-F8; Thu, 01 Jun 2023 16:02:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q4isZ-004Mqt-G9; Thu, 01 Jun 2023 16:02:15 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1q4isY-00AAqk-MH; Thu, 01 Jun 2023 16:02:14 +0200
+Date: Thu, 1 Jun 2023 16:02:14 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [GIT PULL] Qualcomm ARM32 fix for 6.4
-Date: Thu,  1 Jun 2023 07:03:47 -0700
-Message-Id: <20230601140347.2245680-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.39.2
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Aurelien Jarno <aurelien@aurel32.net>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/2] arm*/dts: Enable symbols for rpi device trees
+Message-ID: <20230601140214.i4yvya763sotyjz7@pengutronix.de>
+References: <20230530175624.2360218-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="amlqjlvulilkdc53"
+Content-Disposition: inline
+In-Reply-To: <20230530175624.2360218-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+--amlqjlvulilkdc53
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+Hello,
 
-are available in the Git repository at:
+On Tue, May 30, 2023 at 07:56:22PM +0200, Uwe Kleine-K=F6nig wrote:
+> based on an earlier submission by Aurelien Jarno, I rebased and slightly
+> simplified the patches.
+>=20
+> There was some related irc conversion in #armlinux. Quoting the relevant
+> parts:
+>=20
+> 1685078851< ukleinek> arnd, [florian]: Who would pick up https://lore.ker=
+nel.org/linux-arm-kernel/20220410225940.135744-1-aurelien@aurel32.net ?
+> 1685078920< ukleinek> arnd, [florian]: If there is an agreement in genera=
+l that this is a good idea, I can coordinate with Aurelien that for arm64 t=
+here is a v2 with the simpler approach I pointed out.
+> 1685083481< arnd> ukleinek: I have no objections to this, if [florian] wa=
+nts to pick it up and send me for 6.5.
+> 1685083809< arnd> robher: any comments on this one?
+> 1685466520 < [florian]> ukleinek: I was hoping we would get an Ack for ro=
+bher before picking it up in the brcm soc tree, don't want to ruffle any fe=
+athers unnecessarily
+>=20
+> So it seems to start a beneficial chain reaction, only Rob's Ack is
+> needed.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-fixes-for-6.4
+Not sure this might help, but as Rob seems to be away for mail, I'll
+try: arch/arm64/boot/dts/nvidia/Makefile and
+arch/arm64/boot/dts/ti/Makefile also make use of -@. So this patch at
+least isn't a completely new thing and maybe Florian might dare to take
+this patch even without Rob's explicit consent?!
 
-for you to fetch changes up to 925a80af6106a55fa6bcfedc5bd2f02b0b835495:
+Best regards
+Uwe
 
-  ARM: dts: qcom: add missing cache properties (2023-05-17 19:21:59 -0700)
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-----------------------------------------------------------------
-Qualcomm ARM32 fix for 6.4
+--amlqjlvulilkdc53
+Content-Type: application/pgp-signature; name="signature.asc"
 
-A range of 32-bit Qualcomm platforms are missing cache-unified, which is
-now required by the binding, this is now corrected.
+-----BEGIN PGP SIGNATURE-----
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      ARM: dts: qcom: add missing cache properties
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR4pOUACgkQj4D7WH0S
+/k4Rtwf+JHWlbKMR+NxhWHLdRZU6hn08KbS1LCLpaUT9otzRZkdJoAUM2V6Z9dG2
+4ZBaVwEwIt7sJE+7aKJuFUhWW297t1JFjsHWisbn1fi5G/ebSkDEGSTlT0LWcxZ1
+1DBF06ni16hOykNFcXgYv/TNDHhjwrVa2DibEld7cxPOf+GV1gf0X3wMlfQSwkBt
+kArT5yePh6pu8E9fOv5UOEvDm94yjSt8hUtAupOblf5O2SKr0WnAI6xL53m18gxR
+Swh5Wsf2z5GyQCYCnKh7DPu81TmlVpbOuSBsEmeilAvCx0uxwiFceT7wOaoZemrc
+vXJuDMbNpYLjO9/nxdrvxfVQA16TAQ==
+=h9eu
+-----END PGP SIGNATURE-----
 
- arch/arm/boot/dts/qcom-apq8064.dtsi | 1 +
- arch/arm/boot/dts/qcom-apq8084.dtsi | 1 +
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 1 +
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 1 +
- arch/arm/boot/dts/qcom-msm8660.dtsi | 1 +
- arch/arm/boot/dts/qcom-msm8960.dtsi | 1 +
- arch/arm/boot/dts/qcom-msm8974.dtsi | 1 +
- 7 files changed, 7 insertions(+)
+--amlqjlvulilkdc53--
