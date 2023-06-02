@@ -1,107 +1,162 @@
-Return-Path: <SRS0=uson=BW=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=1ZhM=BW=foss.st.com=prvs=45170c5eae=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F20CC7EE24
-	for <soc@archiver.kernel.org>; Fri,  2 Jun 2023 13:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BA9CC7EE24
+	for <soc@archiver.kernel.org>; Fri,  2 Jun 2023 13:29:13 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5A103C4339C; Fri,  2 Jun 2023 13:14:14 +0000 (UTC)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 2E5E7C433A0; Fri,  2 Jun 2023 13:29:13 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 49156C4339E
-	for <soc@kernel.org>; Fri,  2 Jun 2023 13:14:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 49156C4339E
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-97448470403so279259066b.1
-        for <soc@kernel.org>; Fri, 02 Jun 2023 06:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685711650; x=1688303650;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NM7E2bhPISEHbBlp1H32wp1Q4VWvkt2UL0EOlnHQmhw=;
-        b=EMRhYGqE0xvmt/e3UTWvucXGuihMx3qxy93kVgcdl0JaBC6zfPxxlaYtyG7CwUnPK2
-         IsW2bmeGb79p0HFI+crVf0iOrCWPNAhG9UOuCkjRL6BvZMYjr/Hb6lCCCG4v61L2/ewA
-         xb1is/o+4n4jOMiVzInw5czw6lMNOK3tQkbgv9IpldCx0bcp5AtRNXpC2l00j5Fu/1/e
-         EGbvr+JPC2XX+1gjobhAKXk1sIQW8c9CWk7dFN5jEWVCLQrDTF5BZOw5TUmxEYP9FbFv
-         7FN1w7pWbEwKqAebcSuJPJMmRFC5mN6YtIm0uKG95FNaYi5DuTPFC57WclQSrrJ2bh8H
-         fgJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711650; x=1688303650;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NM7E2bhPISEHbBlp1H32wp1Q4VWvkt2UL0EOlnHQmhw=;
-        b=GZbriWyw1e3zura6T5U3cZC01xF+7TKyg2exkosIG9aJq7NYms4gtXwmBrhpFW6wdi
-         ztGXiPTqCSGuxFIoQhJl8QsRXZMeEqjmr1+RjpcVFtkqApzLxLx3A2GZPLoFpCPyH28O
-         mPW2/L2WYGrBz2u2iTmQaa422dMNpgdCNOYnDBg/sigx/47WQDNe5I4iiEgdkcHq2l1a
-         GH12q64eGonddPkjNIOya+2SDEBkC3TB4bvLVXGFZv1wxkGkvFqtKFmlJtGQIDDFMbbh
-         l+AaD0iriKTF2ezwdI3PQNBt4cYqOOx5z7x7pEtjjj9tzYQs9Y11YYKCKDyC4uK55HnX
-         1ktg==
-X-Gm-Message-State: AC+VfDyeaVwAqU1jGv6A7A1FoD+33K6S/qUdLdgHCaWvzSaWC056L9Wz
-	6+NEDU4l1d9e6Gv3ulbOZ/jc1A==
-X-Google-Smtp-Source: ACHHUZ4uIIsfu5hfYvBBUXo02QYm4Gt9O+H37x3tBrXc8NtwSrPZ6PnJax9nm8arEBESNAAtPajQbQ==
-X-Received: by 2002:a17:906:fe43:b0:973:e69d:c720 with SMTP id wz3-20020a170906fe4300b00973e69dc720mr10021680ejb.51.1685711650410;
-        Fri, 02 Jun 2023 06:14:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id bi1-20020a170906a24100b009664cdb3fc5sm737006ejb.138.2023.06.02.06.14.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 06:14:09 -0700 (PDT)
-Message-ID: <de4aa846-c609-b0c3-a04a-2ad5ffaec815@linaro.org>
-Date: Fri, 2 Jun 2023 15:14:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 03/11] dt-bindings: stm32: add st,stm32mp25-syscfg
- compatible for syscon
+	by smtp.kernel.org (Postfix) with ESMTPS id 87298C433EF;
+	Fri,  2 Jun 2023 13:29:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 87298C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 352Bxqhe001514;
+	Fri, 2 Jun 2023 15:29:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=Jaa9ldqnH9KBfB6bgVSLUH7do/rkSGKUFcgJkRV5qeg=;
+ b=eHT1B5x3tld74c/PxAnFGDH2M2q0FHnMDECpqOzJ0JhuZU9osWR+CM8nvmVjnWa7HoL8
+ s/nbhzZ9H9UeeR6ke47mwUYSgMznJ+fxS6YQs29mwrWL7Z9jiW642UPAH55KHkc6ozZZ
+ EC+yiHJmtrFNNveKaCRIHFyaEW5Ka45eiSBkikRl1V6BsFT5GxWZSngMTj6JQQBIzYJN
+ rfnQTtbxnEQ3J7C9IbnlTFavuK6ze+UV1TVermEOWtJfQPRlnVI85gtmcY8lc+Cku8Si
+ c0cVgHUJ3VVhEKqIl1WowwPUkc4+O/wj1D6FkG9NP4RXKuxaEjA3Ceks7jUpaRix56MJ 8A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qweqepguk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Jun 2023 15:29:04 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D3A9310002A;
+	Fri,  2 Jun 2023 15:29:03 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C4A11236927;
+	Fri,  2 Jun 2023 15:29:03 +0200 (CEST)
+Received: from localhost (10.201.21.93) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 2 Jun
+ 2023 15:29:03 +0200
+From: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-To: Alexandre Torgue <alexandre.torgue@foss.st.com>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, Conor Dooley <conor+dt@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org
-References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
- <20230529162034.20481-4-alexandre.torgue@foss.st.com>
-Content-Language: en-US
-In-Reply-To: <20230529162034.20481-4-alexandre.torgue@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin
+ Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <soc@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+Subject: [PATCH v2 00/10] Add STM32MP25 support
+Date: Fri, 2 Jun 2023 15:28:49 +0200
+Message-ID: <20230602132859.16442-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_10,2023-06-02_02,2023-05-22_02
 
-Resending as my previous email probably got lost. If you got it twice,
-apologies.
+I'm pleased to announce extension of the STM32 MPU family with the addition of
+the STM32MP25 Armv8 based SoCs.
 
-On 29/05/2023 18:20, Alexandre Torgue wrote:
-> From: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> 
-> Add the new syscon compatible for STM32MP25 syscfg = "st,stm32mp25-syscfg".
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-> index ad8e51aa01b0..9ed5b121cea9 100644
-> --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-> +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
-> @@ -16,6 +16,7 @@ properties:
->        - items:
->            - enum:
->                - st,stm32mp157-syscfg
-> +              - st,stm32mp25-syscfg
+STM32MP25 family is composed of 4 SoCs defined as following:
 
-You should rather keep some (alphabetical?) order.
+  -STM32MP251: common part composed of 1*Cortex-A35, common peripherals like
+   SDMMC, UART, SPI, I2C, PCIe, USB3, parallel and DSI display, 1*ETH ...
 
+  -STM32MP253: STM32MP251 + 1*Cortex-A35 (dual CPU), a second ETH, CAN-FD and
+   LVDS display.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  -STM32MP255: STM32MP253 + GPU/AI and video encode/decode.
+  -STM32MP257: STM32MP255 + ETH TSN switch (2+1 ports).
 
-Best regards,
-Krzysztof
+  A second diversity layer exists for security features/ A35 frequency:
+  -STM32MP25xY, "Y" gives information:
+    -Y = A means A35@1.2GHz + no cryp IP and no secure boot.
+    -Y = C means A35@1.2GHz + cryp IP and secure boot.
+    -Y = D means A35@1.5GHz + no cryp IP and no secure boot.
+    -Y = F means A35@1.5GHz + cryp IP and secure boot.
+
+This series adds the STM32MP257F EV1 board support. This board embeds a
+STM32MP257FAI SoC, with 4GB of DDR4, TSN switch (2+1 ports), 2*USB typeA,
+1*USB2 typeC, SNOR OctoSPI, mini PCIe, STPMIC2 for power distribution ...
+
+Changes since v1:
+
+-Add Conor "reviewed-by".
+-Drop patch[4] of initial series to not define SoC without board in stm32,yaml.
+-Add Krzysztof "Acked-by" after reordering enum in st,stm32-syscon.yaml
+
+Thanks
+Alex
+
+Alexandre Torgue (9):
+  dt-bindings: pinctrl: stm32: support for stm32mp257 and additional
+    packages
+  pinctrl: stm32: add stm32mp257 pinctrl support
+  arm64: introduce STM32 family on Armv8 architecture
+  arm64: dts: st: introduce stm32mp25 SoCs family
+  arm64: dts: st: introduce stm32mp25 pinctrl files
+  dt-bindings: stm32: document stm32mp257f-ev1 board
+  arm64: dts: st: add stm32mp257f-ev1 board support
+  arm64: defconfig: enable ARCH_STM32 and STM32 serial driver
+  MAINTAINERS: add entry for ARM/STM32 ARCHITECTURE
+
+Patrick Delaunay (1):
+  dt-bindings: stm32: add st,stm32mp25-syscfg compatible for syscon
+
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |    7 +-
+ .../devicetree/bindings/arm/stm32/stm32.yaml  |    6 +
+ .../bindings/pinctrl/st,stm32-pinctrl.yaml    |    4 +-
+ MAINTAINERS                                   |    1 +
+ arch/arm64/Kconfig.platforms                  |   14 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/st/Makefile               |    2 +
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   38 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |  279 ++
+ arch/arm64/boot/dts/st/stm32mp253.dtsi        |   23 +
+ arch/arm64/boot/dts/st/stm32mp255.dtsi        |    9 +
+ arch/arm64/boot/dts/st/stm32mp257.dtsi        |    9 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   50 +
+ arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |    8 +
+ arch/arm64/boot/dts/st/stm32mp25xf.dtsi       |    8 +
+ .../boot/dts/st/stm32mp25xxai-pinctrl.dtsi    |   83 +
+ .../boot/dts/st/stm32mp25xxak-pinctrl.dtsi    |   71 +
+ .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    |   71 +
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/pinctrl/stm32/Kconfig                 |    6 +
+ drivers/pinctrl/stm32/Makefile                |    1 +
+ drivers/pinctrl/stm32/pinctrl-stm32.h         |    3 +
+ drivers/pinctrl/stm32/pinctrl-stm32mp257.c    | 2581 +++++++++++++++++
+ include/dt-bindings/pinctrl/stm32-pinfunc.h   |    3 +
+ 24 files changed, 3277 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/st/Makefile
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp251.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp253.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp255.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp257.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xf.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxai-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxak-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
+ create mode 100644 drivers/pinctrl/stm32/pinctrl-stm32mp257.c
+
+-- 
+2.17.1
 
