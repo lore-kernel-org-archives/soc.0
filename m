@@ -1,68 +1,114 @@
-Return-Path: <SRS0=RlPc=BW=atomide.com=tony@kernel.org>
+Return-Path: <SRS0=1ZhM=BW=foss.st.com=prvs=45170c5eae=alexandre.torgue@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D33F0C7EE24
-	for <soc@archiver.kernel.org>; Fri,  2 Jun 2023 10:13:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB12FC7EE29
+	for <soc@archiver.kernel.org>; Fri,  2 Jun 2023 12:24:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 9436BC433A0; Fri,  2 Jun 2023 10:13:19 +0000 (UTC)
-Received: from muru.com (muru.com [72.249.23.125])
-	by smtp.kernel.org (Postfix) with ESMTP id 75EE1C433D2;
-	Fri,  2 Jun 2023 10:13:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 75EE1C433D2
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.kernel.org; spf=none smtp.mailfrom=atomide.com
-Received: from hillo.muru.com (localhost [127.0.0.1])
-	by muru.com (Postfix) with ESMTP id C82998111;
-	Fri,  2 Jun 2023 10:13:16 +0000 (UTC)
-From: Tony Lindgren <tony@atomide.com>
-List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org,
-	linux-omap@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"Tony Lindgren" <tony@atomide.com>
-Subject: [GIT PULL 3/3] Devicetree changes for omaps for v6.5
-Date: Fri,  2 Jun 2023 13:13:07 +0300
-Message-ID: <pull-1685700720-242492@atomide.com-3>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <pull-1685700720-242492@atomide.com>
-References: <pull-1685700720-242492@atomide.com>
+	id 791DEC4339B; Fri,  2 Jun 2023 12:24:29 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id CC6C9C433D2;
+	Fri,  2 Jun 2023 12:24:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CC6C9C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3528MIf3010549;
+	Fri, 2 Jun 2023 14:24:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=EL9LPEgnvnxBiF/rxjtdAHWrropSEiOFCBwvxy3fJ+4=;
+ b=K+nJMGMpiDBBOQV8KtRH3bnuw4UBsl3yeC32F2awR8eG+YpP8oLHd6N+7Q7Fp+z9xaV/
+ CcMdzZHps8ziJ9hmunRkVD4Hq3iaqjHK5XB3A5eKVx17wjGQkQ/wKieQipW27myPv97N
+ XXMHP0xBdHN0L4e7W/2YJYoY062L/+zk/g+OxTSN8TBRetnb414HcL01/6a8GS631tEQ
+ fHeUangqEuzoFh7752yTSbhj9X+PK3c6YuK4MoCXf0zYNDqMOAsits6FDezDhWQ/atST
+ aLxeoNKwKjJTwcEJmKQT+fFQBBdNIA3p5gOV911ZVMgS0QuRmjXOxzAnAdT1G2hk5RX5 Zw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qx31577ke-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Jun 2023 14:24:21 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5DCC510002A;
+	Fri,  2 Jun 2023 14:24:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 50AD4231524;
+	Fri,  2 Jun 2023 14:24:20 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 2 Jun
+ 2023 14:24:19 +0200
+Message-ID: <a618b718-bd21-58f3-a79c-073310d39f85@foss.st.com>
+Date: Fri, 2 Jun 2023 14:24:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 03/11] dt-bindings: stm32: add st,stm32mp25-syscfg
+ compatible for syscon
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin
+ Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <soc@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-4-alexandre.torgue@foss.st.com>
+ <d35fdc37-a793-3109-1474-065dffb03069@linaro.org>
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <d35fdc37-a793-3109-1474-065dffb03069@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-02_08,2023-06-02_02,2023-05-22_02
 
-From: "Tony Lindgren" <tony@atomide.com>
+Hi Krzysztof
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On 5/31/23 20:48, Krzysztof Kozlowski wrote:
+> On 29/05/2023 18:20, Alexandre Torgue wrote:
+>> From: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>>
+>> Add the new syscon compatible for STM32MP25 syscfg = "st,stm32mp25-syscfg".
+>>
+>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+>> index ad8e51aa01b0..9ed5b121cea9 100644
+>> --- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+>> @@ -16,6 +16,7 @@ properties:
+>>         - items:
+>>             - enum:
+>>                 - st,stm32mp157-syscfg
+>> +              - st,stm32mp25-syscfg
+> 
+> You should rather keep some (alphabetical?) order.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+I agree, I'll fix it in V2.
 
-are available in the Git repository at:
+Alex
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap tags/omap-for-v6.5/dt-signed
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Best regards,
+> Krzysztof
+> 
 
-for you to fetch changes up to 445d5be64be82c11505c41d75a4bde3af41d619b:
-
-  ARM: dts: omap4: add initial support for Epson Moverio BT-200 (2023-05-31 08:23:48 +0300)
-
-----------------------------------------------------------------
-Devicetree changes for omaps for v6.5
-
-A non-urgent fix for gpmc,wait-pin property for am335x-myirtech-myc, and
-initial support for Epson Moverio BT-200 AR glasses.
-
-----------------------------------------------------------------
-Alexander Shiyan (1):
-      ARM: dts: am335x-myirtech: Add missing NAND wait pin definition
-
-Andreas Kemnade (1):
-      ARM: dts: omap4: add initial support for Epson Moverio BT-200
-
- arch/arm/boot/dts/Makefile                 |   1 +
- arch/arm/boot/dts/am335x-myirtech-myc.dtsi |   1 +
- arch/arm/boot/dts/omap4-epson-embt2ws.dts  | 450 +++++++++++++++++++++++++++++
- 3 files changed, 452 insertions(+)
- create mode 100644 arch/arm/boot/dts/omap4-epson-embt2ws.dts
