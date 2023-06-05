@@ -1,314 +1,275 @@
-Return-Path: <SRS0=+5zV=BY=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=QcdD=BZ=gmail.com=ychuang570808@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA12C7EE23
-	for <soc@archiver.kernel.org>; Sun,  4 Jun 2023 19:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E6AC7EE2A
+	for <soc@archiver.kernel.org>; Mon,  5 Jun 2023 04:07:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5BC8BC4339C; Sun,  4 Jun 2023 19:15:41 +0000 (UTC)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	id BAE40C433A1; Mon,  5 Jun 2023 04:07:57 +0000 (UTC)
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id ADCD9C433D2
-	for <soc@kernel.org>; Sun,  4 Jun 2023 19:15:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ADCD9C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51475e981f0so6072572a12.1
-        for <soc@kernel.org>; Sun, 04 Jun 2023 12:15:39 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id 5DB97C433EF;
+	Mon,  5 Jun 2023 04:07:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5DB97C433EF
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b011cffef2so40585185ad.3;
+        Sun, 04 Jun 2023 21:07:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685906137; x=1688498137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oH9Cr0aed9+SlGFSxcuX+CM/ZuPzolXMmmuHZioD1Hw=;
-        b=M3lclyEwwgmcfweqqFKYlO/pXrx5sqR43R8US5cgUcuQhYgXTxTBH8bnmoz+xOxQ2x
-         Qww5rcE2NpTNCTpfUf5lWWC+vIqXTCNNcE/fUOjDtZhvG5ZIzvrMpuMi/f6M+y2dVp9i
-         s0poQ0QHk+JdzLZeEy4BiP0LPnClqeazR+Pi7c89GerlRJu8hA9D/NV6Yo2jURUrtXe7
-         6frzkKUcbwyBWYBLiv4QSu0/sJ2P2ZUqmdD0NtwOD8CN3Lnos87LuMEExUGb4lI6KGId
-         53mruOVpbKZmf4ArPdMAeACMFiGST6DhgYMSa5Ku0aktXjiL8VWIQKTNY2F1oiPrM07L
-         XyXQ==
+        d=gmail.com; s=20221208; t=1685938075; x=1688530075;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=652JpJkLoWj/t+Dv8KQmBEx358qgiU+Lje74sKtKVzo=;
+        b=o2kG8IFEgF9X46L1mat+0mEHB8VrXmIs7IFQRAizQkDdDBG01eLu0Gn1kAgDT3P1NO
+         lKowFn+oFbYNvi+8A1VmY8OkipcLQbui4neuEztHz7o5gJPyFArTFpeJv7KmokQBN29Z
+         YECZoHtgteAHtwfbxIBxqIiNgX/ntRdgra8IaWb/mrtctTO4AC8opEaOfFFGr/qaz9sy
+         jhNRN6teh1bNMoVJk/ZWFAjJfi0gQfuboAMrY4apE3jbhjPhocEa6fiohOIMVsu4ARLl
+         tkRUv6VT78w+fe6UkYuydX45InK2VQf+NGuDF4twDu8MRGC+SB8tJLGOiZAbYPQItU3F
+         Eshw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685906137; x=1688498137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oH9Cr0aed9+SlGFSxcuX+CM/ZuPzolXMmmuHZioD1Hw=;
-        b=jlDewT54dKmA9+fG8iBxexhSnKesA8DEaU23lHi2YsXaCfJIiJTbdwB7+1WoI35zab
-         zWCHBgaXz0rQby5qsmQ98zqBl+dUYz4wuP0B6R1UjjWGtXYsFVSwP01giLSKMps38d4d
-         +KC9DZCfWk5IB48OJWBCd/NP5DMx8RpxLuecRtI7CtVHIhLE4nJ4BRlHrQaGIzm2CCFR
-         p+ZvoAJ/ASKR5QSOoqRXSTDAkpL+K0GXrvOEoIzi4UB2d25CoHmuIDQSyvXnKRTKNeLJ
-         OEM8LTzT1/Ej+ZhQHlkn9iFZp+DwmNAL9jk502fWqtzrYsZICSDIIJxV7yJUJ6seRyRY
-         113Q==
-X-Gm-Message-State: AC+VfDxSS4rCjXsh5k+Mmj2q2u0tln8y4/Uz0hB8hqo3gzhQhzJ9bCQq
-	l/avW7zwghwXUWqiuRAnnIOPRQ==
-X-Google-Smtp-Source: ACHHUZ7Ksh/PEECYfIW7+cnMnPoU2N/J0/a3hIXQ3RDFnmAk+dCPnK6b0/p2X6w6QuFk8miSunoa5A==
-X-Received: by 2002:a17:907:1607:b0:96a:6c64:8066 with SMTP id hb7-20020a170907160700b0096a6c648066mr5595587ejc.4.1685906137605;
-        Sun, 04 Jun 2023 12:15:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id f14-20020a170906494e00b0097461fecc91sm3335292ejt.81.2023.06.04.12.15.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 12:15:37 -0700 (PDT)
-Message-ID: <aae10e8f-b4f2-7417-ab08-41d6ec9ab8fc@linaro.org>
-Date: Sun, 4 Jun 2023 21:15:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
-Content-Language: en-US
-To: Artur Weber <aweber.kernel@gmail.com>, Olof Johansson <olof@lixom.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        d=1e100.net; s=20221208; t=1685938075; x=1688530075;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=652JpJkLoWj/t+Dv8KQmBEx358qgiU+Lje74sKtKVzo=;
+        b=l+g/jlBt+2TEXjhxkUrxPKZTsZq0eDaDpSRLbMwXTkMnJ2+JLhHLN5PUAILDsNTPXx
+         7DKH/1c9yxr5HZFmnyegdL2B61y5JyoNNWi8TOv/Lcd5Cw4wnzW2zE5mCa1KgMoTMlJc
+         rNr7Mj4u+0ckxUeAqkf5qMoVBehF9XzTlbHVcrJ/S/yhs04G9PA98nto58MoY7G1k8Ub
+         ntASV/5cIBDPC4Hw8h2SzfGQ6HbtelbMiHD6BCck6zLfWg2FxQu7awRuhVcjYFGTzJnt
+         fB194o+sfIRNIwZF4Cr+1LhFS7RCRPpJxGytgi9DIql9U3zCj5QadgzMKQzQVh/+UtsD
+         iGvw==
+X-Gm-Message-State: AC+VfDwNcKfuYmaBxt/oag1CjJ5s/WhRzB8lPp7AuEYj8h+3ZWmtu71b
+	naIIwLWBaNg2Wue7UQjZs5v2Oe7dKbM=
+X-Google-Smtp-Source: ACHHUZ7Y4u3Z8ob/D7XXc51E40iSzJIBaa+3ztJQ3n6LUEVWfGUDXBrL/UmhoBgOaZM3cKYbf+yLlg==
+X-Received: by 2002:a17:902:d34b:b0:1b0:1095:f4f6 with SMTP id l11-20020a170902d34b00b001b01095f4f6mr6169360plk.24.1685938075344;
+        Sun, 04 Jun 2023 21:07:55 -0700 (PDT)
+Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170903228400b001b21bcea439sm206164plh.170.2023.06.04.21.07.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jun 2023 21:07:54 -0700 (PDT)
+From: Jacky Huang <ychuang570808@gmail.com>
+To: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	lee@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	tmaimon77@gmail.com,
+	catalin.marinas@arm.com,
+	will@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230604165627.16963-1-aweber.kernel@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230604165627.16963-1-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-serial@vger.kernel.org,
+	arnd@arndb.de,
+	soc@kernel.org,
+	schung@nuvoton.com,
+	mjchen@nuvoton.com,
+	Jacky Huang <ychuang3@nuvoton.com>
+Subject: [PATCH v13 00/10] Introduce Nuvoton ma35d1 SoC
+Date: Mon,  5 Jun 2023 04:07:39 +0000
+Message-Id: <20230605040749.67964-1-ychuang570808@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 04/06/2023 18:56, Artur Weber wrote:
-> Introduce support for the Galaxy Tab 3 8.0 series of boards:
-> 
->  - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
->  - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
->  - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
-> 
-> What works:
-> 
->  - Display and backlight
->  - Touchscreen
->  - GPIO buttons, hall sensor
->  - WiFi and Bluetooth
->  - USB, fuel gauge, charging
->  - Accelerometer and magnetometer
->  - Audio: speaker, microphone, headset
->  - WiFi model only: light sensor
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
-> This is an updated version of "[PATCH v3 13/13] ARM: dts: exynos: Add Samsung
-> Galaxy Tab 3 8.0 boards"[1].
-> 
-> Changed in v4:
-> - Added touchkey keycodes
-> - Added audio nodes
-> - Added MMC aliases
-> - Fixed dtbs_check warnings
-> - Fixed indentation in pinctrl sleep state overrides
-> 
-> Changed in v3:
->  - Addressed review comments
->  - Removed rtc node (RTC is provided by PMIC)
->  - Added CPU thermal node
->  - Fixed dtbs_check warnings
->  - Added common changes from next/dt
-> 
-> Should pass dtbs_check with no errors, provided that the following patches
-> are present:
-> 
-> Backlight node is adapted to changes from "[PATCH v2 1/4] dt-bindings:
-> backlight: lp855x: convert to YAML and modernize"[2]. The whole patchset
-> has been reviewed, waiting for any further reviews or a merge.
-> 
-> Touchkey keycode property is added by "[PATCH 1/2] dt-bindings: mms114: Add
-> linux,keycodes property for touch keys"[3]. So far only the bindings part
-> of the patch has been acked, otherwise everything is awaiting review.
-> 
-> Display bindings have been added by "[PATCH v5 1/3] dt-bindings: display:
-> panel: Add Samsung S6D7AA0 LCD panel controller"[4]. These are already
-> reviewed and merged into the DRM tree.
-> 
-> [1] https://lore.kernel.org/linux-devicetree/20230501195525.6268-14-aweber.kernel@gmail.com/
-> [2] https://lore.kernel.org/linux-devicetree/20230519180728.2281-2-aweber.kernel@gmail.com/
-> [3] https://lore.kernel.org/linux-devicetree/20230521145843.19489-2-aweber.kernel@gmail.com/
-> [4] https://lore.kernel.org/linux-devicetree/20230519170354.29610-2-aweber.kernel@gmail.com/
-> ---
->  arch/arm/boot/dts/Makefile                  |    3 +
->  arch/arm/boot/dts/exynos4212-tab3-3g8.dts   |   29 +
->  arch/arm/boot/dts/exynos4212-tab3-lte8.dts  |   44 +
->  arch/arm/boot/dts/exynos4212-tab3-wifi8.dts |   26 +
->  arch/arm/boot/dts/exynos4212-tab3.dtsi      | 1303 +++++++++++++++++++
->  5 files changed, 1405 insertions(+)
->  create mode 100644 arch/arm/boot/dts/exynos4212-tab3-3g8.dts
->  create mode 100644 arch/arm/boot/dts/exynos4212-tab3-lte8.dts
->  create mode 100644 arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
->  create mode 100644 arch/arm/boot/dts/exynos4212-tab3.dtsi
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 59829fc90315..6a4ca481171e 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -217,6 +217,9 @@ dtb-$(CONFIG_ARCH_EXYNOS4) += \
->  	exynos4210-smdkv310.dtb \
->  	exynos4210-trats.dtb \
->  	exynos4210-universal_c210.dtb \
-> +	exynos4212-tab3-3g8.dtb \
-> +	exynos4212-tab3-lte8.dtb \
-> +	exynos4212-tab3-wifi8.dtb \
->  	exynos4412-i9300.dtb \
->  	exynos4412-i9305.dtb \
->  	exynos4412-itop-elite.dtb \
-> diff --git a/arch/arm/boot/dts/exynos4212-tab3-3g8.dts b/arch/arm/boot/dts/exynos4212-tab3-3g8.dts
-> new file mode 100644
-> index 000000000000..d96b2dd44608
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/exynos4212-tab3-3g8.dts
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Samsung's Exynos4212 based Galaxy Tab 3 8.0 3G board device tree
-> + * source
-> + *
-> + * Copyright (c) 2013 Samsung Electronics Co., Ltd.
-> + *		http://www.samsung.com
-> + */
-> +
-> +/dts-v1/;
-> +#include "exynos4212-tab3.dtsi"
-> +
-> +/ {
-> +	model = "Samsung Galaxy Tab 3 8.0 3G (SM-T311) based on Exynos4212";
-> +	compatible = "samsung,t311", "samsung,tab3", "samsung,exynos4212", "samsung,exynos4";
-> +	chassis-type = "tablet";
-> +};
-> +
-> +/* Pin control sleep state overrides */
-> +&sleep0 {
-> +	PIN_SLP(gpb-5, INPUT, UP);
-> +};
-> +
-> +&sleep1 {
-> +	PIN_SLP(gpl0-0, OUT0, NONE);
-> +	PIN_SLP(gpl1-0, OUT0, NONE);
-> +	PIN_SLP(gpl2-4, OUT0, NONE);
-> +	PIN_SLP(gpm3-3, OUT1, NONE);
-> +};
-> diff --git a/arch/arm/boot/dts/exynos4212-tab3-lte8.dts b/arch/arm/boot/dts/exynos4212-tab3-lte8.dts
-> new file mode 100644
-> index 000000000000..bbb398eca7b0
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/exynos4212-tab3-lte8.dts
-> @@ -0,0 +1,44 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Samsung's Exynos4212 based Galaxy Tab 3 8.0 LTE board device tree
-> + * source
-> + *
-> + * Copyright (c) 2013 Samsung Electronics Co., Ltd.
-> + *		http://www.samsung.com
-> + */
-> +
-> +/dts-v1/;
-> +#include "exynos4212-tab3.dtsi"
-> +
-> +/ {
-> +	model = "Samsung Galaxy Tab 3 8.0 LTE (SM-T315) based on Exynos4212";
-> +	compatible = "samsung,t315", "samsung,tab3", "samsung,exynos4212", "samsung,exynos4";
-> +	chassis-type = "tablet";
-> +};
-> +
-> +/* Pin control sleep state overrides */
-> +&sleep0 {
-> +	PIN_SLP(gpa0-4, INPUT, UP);
-> +	PIN_SLP(gpa0-5, INPUT, UP);
-> +
-> +	PIN_SLP(gpb-5, INPUT, UP);
-> +
-> +	PIN_SLP(gpc0-0, PREV, NONE);
-> +	PIN_SLP(gpc1-3, INPUT, NONE);
-> +
-> +	PIN_SLP(gpf1-6, INPUT, NONE);
-> +	PIN_SLP(gpf2-2, PREV, NONE);
-> +};
-> +
-> +&sleep1 {
-> +	PIN_SLP(gpl0-0, PREV, NONE);
-> +
-> +	PIN_SLP(gpl1-0, PREV, NONE);
-> +
-> +	PIN_SLP(gpl2-1, INPUT, DOWN);
-> +	PIN_SLP(gpl2-2, INPUT, DOWN);
-> +	PIN_SLP(gpl2-4, OUT0, NONE);
-> +	PIN_SLP(gpl2-5, PREV, NONE);
-> +
-> +	PIN_SLP(gpm3-3, OUT1, NONE);
-> +};
-> diff --git a/arch/arm/boot/dts/exynos4212-tab3-wifi8.dts b/arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
-> new file mode 100644
-> index 000000000000..54cb01703b60
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
-> @@ -0,0 +1,26 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Samsung's Exynos4212 based Galaxy Tab 3 8.0 WiFi board device tree
-> + * source
-> + *
-> + * Copyright (c) 2013 Samsung Electronics Co., Ltd.
-> + *		http://www.samsung.com
-> + */
-> +
-> +/dts-v1/;
-> +#include "exynos4212-tab3.dtsi"
-> +
-> +/ {
-> +	model = "Samsung Galaxy Tab 3 8.0 WiFi (SM-T310) based on Exynos4212";
-> +	compatible = "samsung,t310", "samsung,tab3", "samsung,exynos4212", "samsung,exynos4";
-> +	chassis-type = "tablet";
-> +};
-> +
-> +&i2c_lightsensor {
-> +	status = "okay";
-> +
-> +	lightsensor@10 {
-> +		compatible = "capella,cm3323";
-> +		reg = <0x10>;
-> +	};
-> +};
-> diff --git a/arch/arm/boot/dts/exynos4212-tab3.dtsi b/arch/arm/boot/dts/exynos4212-tab3.dtsi
-> new file mode 100644
-> index 000000000000..e014100e11f8
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/exynos4212-tab3.dtsi
-> @@ -0,0 +1,1303 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Samsung's Exynos4212 based Galaxy Tab 3 board common source
-> + *
-> + * Copyright (c) 2013 Samsung Electronics Co., Ltd.
-> + *		http://www.samsung.com
-> + */
-> +
-> +/dts-v1/;
-> +#include "exynos4212.dtsi"
-> +#include "exynos4412-ppmu-common.dtsi"
-> +#include "exynos-mfc-reserved-memory.dtsi"
-> +#include <dt-bindings/clock/samsung,s2mps11.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/input/gpio-keys.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include "exynos-pinctrl.h"
-> +
-> +/*
-> + * This device does not use the built-in RTC; instead, the RTC in the
-> + * S5M8786 PMIC is used instead. Remove the unused node to avoid DTB check
-> + * warnings.
-> + */
-> +/delete-node/ &rtc;
+From: Jacky Huang <ychuang3@nuvoton.com>
 
-This is not the solution. The S3C RTC is there. Just like all other
-boards we have two RTCs and DTS should be complete. Definitely you
-should not remove something just because there were warnings. Instead
-warnings should be fixed.
+This patchset adds initial support for the Nuvoton ma35d1 SoC, including
+initial device tree, clock driver, reset driver, and serial driver.
 
-Best regards,
-Krzysztof
+This patchset cover letter is based from the initial support for Nuvoton
+ma35d1 to keep tracking the version history.
+
+This patchset had been applied to Linux kernel 6.4.0-rc5
+and tested on the Nuvoton ma35d1 SOM evaluation board.
+
+(ma35d1 information: https://www.nuvoton.com/products/microprocessors/arm-cortex-a35-mpus/)
+MA35D1 porting on linux-5.10.y can be found at: https://github.com/OpenNuvoton/MPU-Family
+
+v13:
+  - Modify serial driver
+    - Added a check for oops_in_progress in ma35d1serial_console_write to
+      determine whether to perform the spin_lock.
+    - Rebased drivers/tty/serial/Kconfig and recreate the patch
+    - Rebased MAINTAINERS and recreate the patch
+
+v12:
+  - Modify serial driver
+    - Added PORT_MA35 to include/uapi/linux/serial_core.h, and apply to
+      the port->type of ma35d1 serial driver
+    - Added check for the return value of ioremap()
+    - Fixed several coding issues
+  - Rebase MAINTAINERS and recreate the patch
+
+v11:
+  - Rebase on top of 2023.05.24
+  - Modify serial driver
+    - Fixed several coding style issues
+    - Fixed ma35d1serial_set_mctrl()
+    - Added the 'MA35_' prefix to all register and bit field definitions.
+    - Used 'ttyNVT' instead of 'ttyS'
+  - Modify clock driver
+    - Added 'source nuvoton/Kconfig' to drivers/clk/Kconfig
+    - Fixed several coding issues
+    - Removed unnecessary inline specifier
+  - Modify reset driver
+    - Fixed typo and added comments
+  - Modify ma35d1.dtsi l2-cache node
+    - Added cache-unified and cache-size properties
+
+v10:
+  - Change from using ARCH_NUVOTON to using ARCH_MA35. The following patch files
+    have been modified:
+    - patch 1 arch/arm64/Kconfig.platforms
+    - patch 2 arch/arm64/configs/defconfig
+    - patch 7 arch/arm64/boot/dts/nuvoton/Makefile
+    - patch 8 drivers/clk/Makefile
+              drivers/clk/nuvoton/Kconfig
+              drivers/clk/nuvoton/Makefile
+    - patch 9 drivers/reset/Kconfig
+    - patch 10 drivers/tty/serial/Kconfig
+
+v9:
+  - Combine MAINTAINERS patch into patch 5 'dt-bindings: arm: Add initial bindings
+    for Nuvoton platform'
+  - Modify clock driver
+    - Use the helper function for 64-bit division
+    - Fixed minor issues
+  - Modify reset driver
+    - Refine coding style and add required header files
+    - Add spin_lock protection
+  - Add error return handling to the serial driver probe function
+
+v8:
+  - Remove '0005-dt-bindings-mfd-syscon-Add-nuvoton-ma35d1-sys-compat.patch' as it was applied.
+  - Modify MAINTAINERS NUVOTON MA35 and NPCM path settings
+  - Remove 'syscon' from dtsi 'sys' node and modify the corresponding yaml
+  - Modify clock driver
+    - Remove the header file and move definitions into .c files.
+    - Use parent_data instead of parent name.
+  - Modify serial driver
+  - Modify reset driver
+    - Modify reset register/offset lookup table to be indexed by reset id
+    - Combined reset and reboot structure
+
+v7:
+  - Fixed dts system-management node and compatible driver
+  - move 'nuvoton,npcm-gcr.yaml' from 'binding/arm/nuvoton' to 'binding/soc/nuvoton'
+  - In ma35d1.dtsi, create the soc node for ma35d1 SoC
+  - Modify the issues found in serial driver
+  - Modify the issues found in clock driver
+  - Modify the IDs of reset driver to be contiguous numbers and use lookup table
+    to find register offset and bit position.
+  - Modify MAINTAINERS NUVOTON NPCM path as npcm directory name to nuvoton
+
+v6:
+  - Combine nuvoton,ma35d1-clk.yaml and nuvoton,ma35d1-clk.h into one patch
+  - Combine nuvoton,ma35d1-reset.yaml and nuvoton,ma35d1-reset.h into one patch
+  - rename Documentation/devicetree/bindings/arm/npcm directory as nuvoton
+  - Remove patch for adding include/linux/mfd/ma35d1-sys.h as it's not required
+  - Update dtsi & dts files and move board-specific nodes to dts
+  - Modify reset driver
+  - Modify serial driver, fix coding style issues
+  - Modify clock driver, rewrite the PLL calculation functions
+
+v5:
+  - Add ARCH_NUVOTON to arm64 Kconfig
+  - Add ARCH_NUVOTON to defconfig
+  - Add the clock driver
+  - Add the reset driver
+  - Add the serial driver
+  - Add us to the maintainer
+
+v4:
+  - patch 4/5 is a resend
+  - Fixed dt_binding_check errors of nuvoton,ma35d1-clk.yaml
+  - Modify ma35d1.dtsi
+    1. Add a node hxt_24m
+    2. Fixed the base address of gic node
+    3. Add clocks and clock-names to clock node
+  - Fixed borad binding mistakes of nuvoton.yaml
+
+v3:
+  - added patch 4/5 and 5/5
+  - introduce CONFIG_ARCH_NUVOTON option
+  - add initial bindings for Nuvoton Platform boards
+  - fixed coding style problem of nuvoton,ma35d1-clk.h
+  - added CAPLL to clock-controller node
+  - modify the chosen node of ma35d1-evb.dts
+  - modify clock yaml "clk-pll-mode" to "nuvoton,clk-pll-mode"
+
+v2:
+  - fixed dt_binding_check failed of nuvoton,ma35d1-clk.yaml
+
+Jacky Huang (10):
+  arm64: Kconfig.platforms: Add config for Nuvoton MA35 platform
+  arm64: defconfig: Add support for Nuvoton MA35 family SoCs
+  dt-bindings: clock: nuvoton: add binding for ma35d1 clock controller
+  dt-bindings: reset: nuvoton: Document ma35d1 reset control
+  dt-bindings: arm: Add initial bindings for Nuvoton platform
+  dt-bindings: serial: Document ma35d1 uart controller
+  arm64: dts: nuvoton: Add initial ma35d1 device tree
+  clk: nuvoton: Add clock driver for ma35d1 clock controller
+  reset: Add Nuvoton ma35d1 reset driver support
+  tty: serial: Add Nuvoton ma35d1 serial driver support
+
+ .../bindings/arm/nuvoton/nuvoton,ma35d1.yaml  |  30 +
+ .../npcm.yaml => nuvoton/nuvoton,npcm.yaml}   |   2 +-
+ .../bindings/clock/nuvoton,ma35d1-clk.yaml    |  63 ++
+ .../bindings/reset/nuvoton,ma35d1-reset.yaml  |  45 +
+ .../serial/nuvoton,ma35d1-serial.yaml         |  48 +
+ .../nuvoton/nuvoton,npcm-gcr.yaml}            |   2 +-
+ MAINTAINERS                                   |  13 +-
+ arch/arm64/Kconfig.platforms                  |   8 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../boot/dts/nuvoton/ma35d1-iot-512m.dts      |  56 ++
+ .../boot/dts/nuvoton/ma35d1-som-256m.dts      |  56 ++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       | 234 +++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/nuvoton/Kconfig                   |  19 +
+ drivers/clk/nuvoton/Makefile                  |   4 +
+ drivers/clk/nuvoton/clk-ma35d1-divider.c      | 135 +++
+ drivers/clk/nuvoton/clk-ma35d1-pll.c          | 361 +++++++
+ drivers/clk/nuvoton/clk-ma35d1.c              | 933 ++++++++++++++++++
+ drivers/reset/Kconfig                         |   6 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-ma35d1.c                  | 235 +++++
+ drivers/tty/serial/Kconfig                    |  18 +
+ drivers/tty/serial/Makefile                   |   1 +
+ drivers/tty/serial/ma35d1_serial.c            | 808 +++++++++++++++
+ .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 253 +++++
+ .../dt-bindings/reset/nuvoton,ma35d1-reset.h  | 108 ++
+ include/uapi/linux/serial_core.h              |   3 +
+ 29 files changed, 3444 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml
+ rename Documentation/devicetree/bindings/arm/{npcm/npcm.yaml => nuvoton/nuvoton,npcm.yaml} (93%)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+ create mode 100644 Documentation/devicetree/bindings/serial/nuvoton,ma35d1-serial.yaml
+ rename Documentation/devicetree/bindings/{arm/npcm/nuvoton,gcr.yaml => soc/nuvoton/nuvoton,npcm-gcr.yaml} (93%)
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-iot-512m.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-som-256m.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+ create mode 100644 drivers/clk/nuvoton/Kconfig
+ create mode 100644 drivers/clk/nuvoton/Makefile
+ create mode 100644 drivers/clk/nuvoton/clk-ma35d1-divider.c
+ create mode 100644 drivers/clk/nuvoton/clk-ma35d1-pll.c
+ create mode 100644 drivers/clk/nuvoton/clk-ma35d1.c
+ create mode 100644 drivers/reset/reset-ma35d1.c
+ create mode 100644 drivers/tty/serial/ma35d1_serial.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+ create mode 100644 include/dt-bindings/reset/nuvoton,ma35d1-reset.h
+
+-- 
+2.34.1
 
