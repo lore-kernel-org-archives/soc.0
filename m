@@ -4,60 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB97BC7EE32
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAF4DC7EE23
 	for <soc@archiver.kernel.org>; Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B37BBC433AA; Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A933C433A4;
-	Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
+	id 8662BC4339B; Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F532C433D2
+	for <soc@kernel.org>; Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1685980240;
-	bh=2PTwgHdIXDjZFIL8tuuz80WNG6TdcYxI4pqOuArZtYE=;
-	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ZGDwYvBDP90ai4pJS4Gs8dK/XR6Jqs6PIrh6+WFKVFEC8RNvNuF6mYGYACyrEKtfH
-	 Vl+AFbZ4pIYHSifI8FJ4/ZA9e0RH2BbAESQuei7eLyCeo+LymVCeg4wqFQx+4fjrHB
-	 17ivw8/tiwMEU4WOrUL0MmWqGMKzGAkrfO36drlde3CINI4Re3jyFX/AIBF/83lLEe
-	 FQ+tKp3nt1gNFpcz2I0Ji1vKB3ykXzOWee8iNuShrjXa5SGh0uvBgcLcINh7a5V3h7
-	 EVMb0zx49ypmkimNf5QKr/gYXpAu70jDSmE56L7yPMxEvVLOuKtMpCAhrHa2VlUa9C
-	 qEeP42zFHPI3A==
+	bh=nUzZVrbahrl+1wAjGSjiLhwjPOriEisp6dZwgeQwksI=;
+	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
+	b=VTWNwPqXrYD3LRtIG5pzP2Xmoz2aUkJgDevYYsnlKqzsL4F5j8oStuJGoDmDRmbwk
+	 83ah8f5MW4200AEEbUyxx38CGK4EtUATiAE9CtlcbWMiUwLsjTOq3Bz0eJf1IxheDA
+	 iK/ZMD801m9/j25iTI/1FQ3js1HL0g594oZgNea6AYDJsKTMKzPwT438GtBtVSz4io
+	 WSLFtxsCuL3Dx7ihdkz7uwzDi08Up1kpN7eCi2icxxxu0ZN27vV7zmZzglhu6Mbf2n
+	 WF6flPkgX403GztZkhwn4gLfQeHWXw6sjcpba+3SFhmx+2MtVXGEqO7IQNRv/HapA+
+	 yk31PU+3Wf8cg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6B2B0E4F0A9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4CCA0E4F0A6;
 	Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm driver fixes for 6.4
+Subject: Patchwork summary for: linux-soc
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168598024043.10098.12996868688756123593.git-patchwork-notify@kernel.org>
+ <168598024022.10098.13978422200974665950.git-patchwork-summary@kernel.org>
 Date: Mon, 05 Jun 2023 15:50:40 +0000
-References: <20230601141058.2246039-1-andersson@kernel.org>
-In-Reply-To: <20230601141058.2246039-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+List-Id: <soc.lore.kernel.org>
+To: soc@kernel.org
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
-by Arnd Bergmann <arnd@arndb.de>:
+The following patches were marked "accepted", because they were applied to
+soc/soc.git (arm/fixes):
 
-On Thu,  1 Jun 2023 07:10:58 -0700 you wrote:
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-> 
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-driver-fixes-for-6.4
-> 
-> [...]
+Patch: [GIT,PULL] AT91 fixes for 6.4
+  Submitter: Claudiu Beznea <claudiu.beznea@microchip.com>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=752157
+  Lore link: https://lore.kernel.org/r/20230530105930.11621-1-claudiu.beznea@microchip.com
 
-Here is the summary with links:
-  - [GIT,PULL] Qualcomm driver fixes for 6.4
-    https://git.kernel.org/soc/soc/c/be02e1fc71d2
+Patch: ARM: dts: Fix erroneous ADS touchscreen polarities
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=746386
+  Lore link: https://lore.kernel.org/r/20230510105156.1134320-1-linus.walleij@linaro.org
 
-You are awesome, thank you!
+Patch: [GIT,PULL] Qualcomm driver fixes for 6.4
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=753130
+  Lore link: https://lore.kernel.org/r/20230601141058.2246039-1-andersson@kernel.org
+
+Patch: [RESEND,GIT,PULL] Qualcomm ARM64 DeviceTree fixes for 6.4
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=753139
+  Lore link: https://lore.kernel.org/r/20230601142659.2246348-1-andersson@kernel.org
+
+Patch: [GIT,PULL] Qualcomm ARM32 fix for 6.4
+  Submitter: Bjorn Andersson <andersson@kernel.org>
+  Committer: Arnd Bergmann <arnd@arndb.de>
+  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=753124
+  Lore link: https://lore.kernel.org/r/20230601140347.2245680-1-andersson@kernel.org
+
+
+Total patches: 5
+
 -- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
