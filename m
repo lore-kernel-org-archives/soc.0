@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8936C7EE2C
-	for <soc@archiver.kernel.org>; Mon,  5 Jun 2023 04:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55CD2C77B73
+	for <soc@archiver.kernel.org>; Mon,  5 Jun 2023 04:08:09 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B803FC433A4; Mon,  5 Jun 2023 04:08:04 +0000 (UTC)
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	id 3AD42C433D2; Mon,  5 Jun 2023 04:08:09 +0000 (UTC)
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AD1BDC433EF;
-	Mon,  5 Jun 2023 04:08:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD1BDC433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id CCB04C433EF;
+	Mon,  5 Jun 2023 04:08:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CCB04C433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-652328c18d5so1794554b3a.1;
-        Sun, 04 Jun 2023 21:08:03 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-394c7ba4cb5so3003639b6e.1;
+        Sun, 04 Jun 2023 21:08:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685938083; x=1688530083;
+        d=gmail.com; s=20221208; t=1685938086; x=1688530086;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OzBlnANu1AM5Fjx46MEeCrq3qasOfTTbM5uM0GEAlY0=;
-        b=IZy1HL2XKLngjDI2mxhpx5ridDWNCnu232bl8Iu9EHvRrAXCzwC6RotioeGoMNDThZ
-         Rq71z3zRNUJ7rpMICnJ1z6rpwKwW/m+Akd09c3EfyfhwinVTwgg3SR7Y3rLNQiqng7t/
-         oUTZ0f1UUjUplkL4gnVYRb0/swN8L7OShCszWb2nJK6LXTYcQcmlfLvcnGUYGp9SuZD9
-         cOilEwupHixBdR3+tcYzOJztv9IjGQmIQKwf/esE7OlREey+RGQultPxwKecubUmqQQk
-         88uSVQsRyIqJ/ZSpfr/M6RH0YvUiJVQ8BiGOkf6yE/x1xObPEcttYIv1fRM/QpbjEgCU
-         CfOw==
+        bh=RLc5jEICyGFPtj5UVRr/46bNpOgUxZnI7Pfi7aWcdhA=;
+        b=NNBnQ9rb31VPMLLdUCl0HLjAtBUNbOiFbvNGxICXdd6MZ8YL2pE8e2MdQoeg1qlLuo
+         Ti1Z5n24ABmPrez11sftG4plj2/scY3zg+C73rHyvKlnpKPR8zDc/3SHouhxzHddRjBT
+         V1kma6VgZ6vzrltg/XVbvPIGagsQMH0Nx5iDQsWPyTJ0H5txMvJLwy1YpEQAQIoXMXX3
+         D7iYesRyx49LvN2I56DaUgxvODZ1j71djR3KY9NVXNUBHzphseaqB+Vy49x552AEkcsz
+         Gq5y9iqlNSwh9lMoavdzD0mGmGJvAUrvqsIy3DRabHsuAoLQ1ubJuQpGR+I/PsV4LUot
+         ZZUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685938083; x=1688530083;
+        d=1e100.net; s=20221208; t=1685938086; x=1688530086;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OzBlnANu1AM5Fjx46MEeCrq3qasOfTTbM5uM0GEAlY0=;
-        b=BEMQV1Ns9T6vuLKIsSzrS1xl+/KsoCrpLmbtyUOcSi83hTBOsXinMc2+HFLWjsWt9t
-         YZdj23QCBG/WhvvCDD5f7Hp14Jr55Qs9gTosYmH1dBu3V0PX+mXkplwIWOAWtlYELKGW
-         YNObmjqD8ceAfIgtppDL02MMSz+ibdI9W6alD3jyeyq2eu+/bkGkFVoYH8Xgxvo40pXp
-         E7ptf7gBSk0t91GYNKCCNlpr9L2u7vIpzdabZqSPw4/3K0t3tk+ql49kX5x/kRwrmTov
-         U/yuP5tSQPrIkiIBTO7l7byr1M1LZlTPbUHz4JPq+Q7k0rNQMfG1A9Jt5OPdO7i7DMxE
-         mcnQ==
-X-Gm-Message-State: AC+VfDybxtMi9RqHhNBblKEzIVbzVDpF7VND3xkOPwqcTy02+T3nHknE
-	dI9EzTSALN+vEYLA2N3mgw2T3fWom+8=
-X-Google-Smtp-Source: ACHHUZ6lnNT3qIiWuTmhO0qL7zE/FmPm5o7P/1UwRjxNu2RZvKyWjy7zfJECsOyrNmXOuMi4FrM51Q==
-X-Received: by 2002:a05:6a21:33a0:b0:111:92ef:314e with SMTP id yy32-20020a056a2133a000b0011192ef314emr1400147pzb.35.1685938082661;
-        Sun, 04 Jun 2023 21:08:02 -0700 (PDT)
+        bh=RLc5jEICyGFPtj5UVRr/46bNpOgUxZnI7Pfi7aWcdhA=;
+        b=MW97xDMPPE2rYQGCfqSvbZRCiZzm/job15ozzJ9+6c2Rt53OTH3nNNJcDvy2f+DqiR
+         FvvIYv31pBqLxZ5YAe9QFJn1t3EL+uo618Y1g8433RlVHzYa+OcJcBfz+zMfwu5AiZq6
+         FBqRRpd1B1OxVG8RQvE8BgfP+5P52/l56ol5CRNegQfhLYs7pFwy2X+IEUDaq+Rti6bR
+         anf1ED+PBWH39ioNVDVOPKcAnTVR1LwvSf4ZbadcnEzygT8sGtG/QaVLDJZEnPT4DpQP
+         2YoKW8nyfJXRHtKcTafsV9n85KpUGn2RI7rDeZWv0LyfamhHqvFJCLRWVVYEmb9szUKk
+         x0GQ==
+X-Gm-Message-State: AC+VfDwLY0BPQ2AnipWAaTCE155ST2K4wV36E3p2XaVdYqJvsGNZ3sIz
+	uqFyywRUbL0M8wRwaxELlylmKOZb0Vc=
+X-Google-Smtp-Source: ACHHUZ5VXEKVaBG4fvJOSvEbfAdUT4tSpyNkLRuyYfs8l6yIZFAlP7cGStrtdTJ/C6DGLHP6XWrLvA==
+X-Received: by 2002:aca:6741:0:b0:39a:aafd:dda7 with SMTP id b1-20020aca6741000000b0039aaafddda7mr3351338oiy.35.1685938086496;
+        Sun, 04 Jun 2023 21:08:06 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170903228400b001b21bcea439sm206164plh.170.2023.06.04.21.07.59
+        by smtp.gmail.com with ESMTPSA id b4-20020a170903228400b001b21bcea439sm206164plh.170.2023.06.04.21.08.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Jun 2023 21:08:02 -0700 (PDT)
+        Sun, 04 Jun 2023 21:08:06 -0700 (PDT)
 From: Jacky Huang <ychuang570808@gmail.com>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -75,9 +75,9 @@ Cc: devicetree@vger.kernel.org,
 	mjchen@nuvoton.com,
 	Jacky Huang <ychuang3@nuvoton.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v13 02/10] arm64: defconfig: Add support for Nuvoton MA35 family SoCs
-Date: Mon,  5 Jun 2023 04:07:41 +0000
-Message-Id: <20230605040749.67964-3-ychuang570808@gmail.com>
+Subject: [PATCH v13 03/10] dt-bindings: clock: nuvoton: add binding for ma35d1 clock controller
+Date: Mon,  5 Jun 2023 04:07:42 +0000
+Message-Id: <20230605040749.67964-4-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230605040749.67964-1-ychuang570808@gmail.com>
 References: <20230605040749.67964-1-ychuang570808@gmail.com>
@@ -86,27 +86,347 @@ Content-Transfer-Encoding: 8bit
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-This adds support for the Nuvoton MA35 family SoCs which
-are based on the Cortex-A35 Armv8-A 64-bit architecture.
+Add the dt-bindings header for Nuvoton ma35d1, that gets shared
+between the clock controller and clock references in the dts.
+Add documentation to describe nuvoton ma35d1 clock driver.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/clock/nuvoton,ma35d1-clk.yaml    |  63 +++++
+ .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 253 ++++++++++++++++++
+ 2 files changed, 316 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+ create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index a24609e14d50..0ee572753f1a 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -52,6 +52,7 @@ CONFIG_ARCH_NXP=y
- CONFIG_ARCH_LAYERSCAPE=y
- CONFIG_ARCH_MXC=y
- CONFIG_ARCH_S32=y
-+CONFIG_ARCH_MA35=y
- CONFIG_ARCH_NPCM=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_RENESAS=y
+diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+new file mode 100644
+index 000000000000..8f0c43683729
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+@@ -0,0 +1,63 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton MA35D1 Clock Controller Module
++
++maintainers:
++  - Chi-Fang Li <cfli0@nuvoton.com>
++  - Jacky Huang <ychuang3@nuvoton.com>
++
++description: |
++  The MA35D1 clock controller generates clocks for the whole chip,
++  including system clocks and all peripheral clocks.
++
++  See also:
++    include/dt-bindings/clock/ma35d1-clk.h
++
++properties:
++  compatible:
++    items:
++      - const: nuvoton,ma35d1-clk
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    const: 1
++
++  clocks:
++    maxItems: 1
++
++  nuvoton,pll-mode:
++    description:
++      A list of PLL operation mode corresponding to CAPLL, DDRPLL, APLL,
++      EPLL, and VPLL in sequential.
++    maxItems: 5
++    items:
++      enum:
++        - integer
++        - fractional
++        - spread-spectrum
++    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++
++    clock-controller@40460200 {
++        compatible = "nuvoton,ma35d1-clk";
++        reg = <0x40460200 0x100>;
++        #clock-cells = <1>;
++        clocks = <&clk_hxt>;
++    };
++...
+diff --git a/include/dt-bindings/clock/nuvoton,ma35d1-clk.h b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+new file mode 100644
+index 000000000000..ba2d70f776a6
+--- /dev/null
++++ b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+@@ -0,0 +1,253 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
++/*
++ * Copyright (C) 2023 Nuvoton Technologies.
++ */
++
++#ifndef __DT_BINDINGS_CLOCK_NUVOTON_MA35D1_CLK_H
++#define __DT_BINDINGS_CLOCK_NUVOTON_MA35D1_CLK_H
++
++/* external and internal oscillator clocks */
++#define HXT		0
++#define HXT_GATE	1
++#define LXT		2
++#define LXT_GATE	3
++#define HIRC		4
++#define HIRC_GATE	5
++#define LIRC		6
++#define LIRC_GATE	7
++/* PLLs */
++#define CAPLL		8
++#define SYSPLL		9
++#define DDRPLL		10
++#define APLL		11
++#define EPLL		12
++#define VPLL		13
++/* EPLL divider */
++#define EPLL_DIV2	14
++#define EPLL_DIV4	15
++#define EPLL_DIV8	16
++/* CPU clock, system clock, AXI, HCLK and PCLK */
++#define CA35CLK_MUX	17
++#define AXICLK_DIV2	18
++#define AXICLK_DIV4	19
++#define AXICLK_MUX	20
++#define SYSCLK0_MUX	21
++#define SYSCLK1_MUX	22
++#define SYSCLK1_DIV2	23
++#define HCLK0		24
++#define HCLK1		25
++#define HCLK2		26
++#define PCLK0		27
++#define PCLK1		28
++#define PCLK2		29
++#define HCLK3		30
++#define PCLK3		31
++#define PCLK4		32
++/* AXI and AHB peripheral clocks */
++#define USBPHY0		33
++#define USBPHY1		34
++#define DDR0_GATE	35
++#define DDR6_GATE	36
++#define CAN0_MUX	37
++#define CAN0_DIV	38
++#define CAN0_GATE	39
++#define CAN1_MUX	40
++#define CAN1_DIV	41
++#define CAN1_GATE	42
++#define CAN2_MUX	43
++#define CAN2_DIV	44
++#define CAN2_GATE	45
++#define CAN3_MUX	46
++#define CAN3_DIV	47
++#define CAN3_GATE	48
++#define SDH0_MUX	49
++#define SDH0_GATE	50
++#define SDH1_MUX	51
++#define SDH1_GATE	52
++#define NAND_GATE	53
++#define USBD_GATE	54
++#define USBH_GATE	55
++#define HUSBH0_GATE	56
++#define HUSBH1_GATE	57
++#define GFX_MUX		58
++#define GFX_GATE	59
++#define VC8K_GATE	60
++#define DCU_MUX		61
++#define DCU_GATE	62
++#define DCUP_DIV	63
++#define EMAC0_GATE	64
++#define EMAC1_GATE	65
++#define CCAP0_MUX	66
++#define CCAP0_DIV	67
++#define CCAP0_GATE	68
++#define CCAP1_MUX	69
++#define CCAP1_DIV	70
++#define CCAP1_GATE	71
++#define PDMA0_GATE	72
++#define PDMA1_GATE	73
++#define PDMA2_GATE	74
++#define PDMA3_GATE	75
++#define WH0_GATE	76
++#define WH1_GATE	77
++#define HWS_GATE	78
++#define EBI_GATE	79
++#define SRAM0_GATE	80
++#define SRAM1_GATE	81
++#define ROM_GATE	82
++#define TRA_GATE	83
++#define DBG_MUX		84
++#define DBG_GATE	85
++#define CKO_MUX		86
++#define CKO_DIV		87
++#define CKO_GATE	88
++#define GTMR_GATE	89
++#define GPA_GATE	90
++#define GPB_GATE	91
++#define GPC_GATE	92
++#define GPD_GATE	93
++#define GPE_GATE	94
++#define GPF_GATE	95
++#define GPG_GATE	96
++#define GPH_GATE	97
++#define GPI_GATE	98
++#define GPJ_GATE	99
++#define GPK_GATE	100
++#define GPL_GATE	101
++#define GPM_GATE	102
++#define GPN_GATE	103
++/* APB peripheral clocks */
++#define TMR0_MUX	104
++#define TMR0_GATE	105
++#define TMR1_MUX	106
++#define TMR1_GATE	107
++#define TMR2_MUX	108
++#define TMR2_GATE	109
++#define TMR3_MUX	110
++#define TMR3_GATE	111
++#define TMR4_MUX	112
++#define TMR4_GATE	113
++#define TMR5_MUX	114
++#define TMR5_GATE	115
++#define TMR6_MUX	116
++#define TMR6_GATE	117
++#define TMR7_MUX	118
++#define TMR7_GATE	119
++#define TMR8_MUX	120
++#define TMR8_GATE	121
++#define TMR9_MUX	122
++#define TMR9_GATE	123
++#define TMR10_MUX	124
++#define TMR10_GATE	125
++#define TMR11_MUX	126
++#define TMR11_GATE	127
++#define UART0_MUX	128
++#define UART0_DIV	129
++#define UART0_GATE	130
++#define UART1_MUX	131
++#define UART1_DIV	132
++#define UART1_GATE	133
++#define UART2_MUX	134
++#define UART2_DIV	135
++#define UART2_GATE	136
++#define UART3_MUX	137
++#define UART3_DIV	138
++#define UART3_GATE	139
++#define UART4_MUX	140
++#define UART4_DIV	141
++#define UART4_GATE	142
++#define UART5_MUX	143
++#define UART5_DIV	144
++#define UART5_GATE	145
++#define UART6_MUX	146
++#define UART6_DIV	147
++#define UART6_GATE	148
++#define UART7_MUX	149
++#define UART7_DIV	150
++#define UART7_GATE	151
++#define UART8_MUX	152
++#define UART8_DIV	153
++#define UART8_GATE	154
++#define UART9_MUX	155
++#define UART9_DIV	156
++#define UART9_GATE	157
++#define UART10_MUX	158
++#define UART10_DIV	159
++#define UART10_GATE	160
++#define UART11_MUX	161
++#define UART11_DIV	162
++#define UART11_GATE	163
++#define UART12_MUX	164
++#define UART12_DIV	165
++#define UART12_GATE	166
++#define UART13_MUX	167
++#define UART13_DIV	168
++#define UART13_GATE	169
++#define UART14_MUX	170
++#define UART14_DIV	171
++#define UART14_GATE	172
++#define UART15_MUX	173
++#define UART15_DIV	174
++#define UART15_GATE	175
++#define UART16_MUX	176
++#define UART16_DIV	177
++#define UART16_GATE	178
++#define RTC_GATE	179
++#define DDR_GATE	180
++#define KPI_MUX		181
++#define KPI_DIV		182
++#define KPI_GATE	183
++#define I2C0_GATE	184
++#define I2C1_GATE	185
++#define I2C2_GATE	186
++#define I2C3_GATE	187
++#define I2C4_GATE	188
++#define I2C5_GATE	189
++#define QSPI0_MUX	190
++#define QSPI0_GATE	191
++#define QSPI1_MUX	192
++#define QSPI1_GATE	193
++#define SMC0_MUX	194
++#define SMC0_DIV	195
++#define SMC0_GATE	196
++#define SMC1_MUX	197
++#define SMC1_DIV	198
++#define SMC1_GATE	199
++#define WDT0_MUX	200
++#define WDT0_GATE	201
++#define WDT1_MUX	202
++#define WDT1_GATE	203
++#define WDT2_MUX	204
++#define WDT2_GATE	205
++#define WWDT0_MUX	206
++#define WWDT1_MUX	207
++#define WWDT2_MUX	208
++#define EPWM0_GATE	209
++#define EPWM1_GATE	210
++#define EPWM2_GATE	211
++#define I2S0_MUX	212
++#define I2S0_GATE	213
++#define I2S1_MUX	214
++#define I2S1_GATE	215
++#define SSMCC_GATE	216
++#define SSPCC_GATE	217
++#define SPI0_MUX	218
++#define SPI0_GATE	219
++#define SPI1_MUX	220
++#define SPI1_GATE	221
++#define SPI2_MUX	222
++#define SPI2_GATE	223
++#define SPI3_MUX	224
++#define SPI3_GATE	225
++#define ECAP0_GATE	226
++#define ECAP1_GATE	227
++#define ECAP2_GATE	228
++#define QEI0_GATE	229
++#define QEI1_GATE	230
++#define QEI2_GATE	231
++#define ADC_DIV		232
++#define ADC_GATE	233
++#define EADC_DIV	234
++#define EADC_GATE	235
++#define	CLK_MAX_IDX	236
++
++#endif /* __DT_BINDINGS_CLOCK_NUVOTON_MA35D1_CLK_H */
 -- 
 2.34.1
 
