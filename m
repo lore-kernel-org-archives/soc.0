@@ -4,58 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC06BC7EE2F
-	for <soc@archiver.kernel.org>; Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C97B9C7EE2C
+	for <soc@archiver.kernel.org>; Mon,  5 Jun 2023 15:50:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD31AC4339E; Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A7402C433A7;
-	Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
+	id AAEECC433AA; Mon,  5 Jun 2023 15:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8F878C4339B;
+	Mon,  5 Jun 2023 15:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1685980240;
-	bh=HsAIcmF5W4zEYgXVMbTLd8pCITnj2HiMS28qxF0QdNc=;
+	s=k20201202; t=1685980254;
+	bh=mE0UKYl2Um3TxuGNld9gf7azmAFiO+N9qMuJHTh6S1s=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=ND21hUtq+N01fWezp4wOIgwy7bWtUqj0nl5Nnxy0Uy2+f4sCe8zsyIv527NZtgRFu
-	 OAJ1fJvYeSc39O4DpX1yUCqHW54H3H9jSy2QFtIvKkjDnKPjh5XvHlxPptuI7ccy0X
-	 bvlBD6ss/VSt5NAX5XdXSXXfAh6lveqVOITj2ilBO8J5tIjVc1BNIA7ou+iwbDviqe
-	 x7rq5fGcu6lKSdGwUw8reijVDEtaOTnR1DHYQ4Hhu6WeeHLP1oOB/VlzewYtWHeZel
-	 Po5ZgppKNTbipb9Lmcp2pxS49sPcQgHRx4PYKtzBKtITDKbaqqVAi4p1W6brFXn7IW
-	 Ff7QyS8aNv/dQ==
+	b=Z7FL/nl7Ht2gA+1DASiBj1CTvU+QxRTkItPu7Oyqls+YCHnJmWdaIUu0rQUQhjGWZ
+	 xnU+/GkJOUDo4eKDxcqzBgTrpndC9zttFXlpDj7wcjDzGscg7z1hl+C6xmcybnJBON
+	 4KEuNuFz5nzK0ZxeJ/V8GTlrrgms2ZhJNPrpHHbJjE105SZ9IS34VrFIBG39LjJFzZ
+	 zRrdhzKK8ItXXeAoDVjS0eb8tNpLKAmpAFG6LrlFhj+I2H6AKw2/ERd7Z85PjBjkZb
+	 Ib4e2/S98Uu9KpQfZjpq0o9LYyoA/9k0yy8T8aCep8jewYOnBG5ZspPbAEIkZCFI+Z
+	 6d6gM5XGVgbTA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7DB7CE4F0AB;
-	Mon,  5 Jun 2023 15:50:40 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A669E4F0A6;
+	Mon,  5 Jun 2023 15:50:54 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Qualcomm ARM32 fix for 6.4
+Subject: Re: [PATCH v13 00/10] Introduce Nuvoton ma35d1 SoC
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168598024051.10098.571859651945326662.git-patchwork-notify@kernel.org>
-Date: Mon, 05 Jun 2023 15:50:40 +0000
-References: <20230601140347.2245680-1-andersson@kernel.org>
-In-Reply-To: <20230601140347.2245680-1-andersson@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
+ <168598025449.10098.5010316026145887768.git-patchwork-notify@kernel.org>
+Date: Mon, 05 Jun 2023 15:50:54 +0000
+References: <20230605040749.67964-1-ychuang570808@gmail.com>
+In-Reply-To: <20230605040749.67964-1-ychuang570808@gmail.com>
+To: Jacky Huang <ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Thu,  1 Jun 2023 07:03:47 -0700 you wrote:
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On Mon,  5 Jun 2023 04:07:39 +0000 you wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
 > 
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+> This patchset adds initial support for the Nuvoton ma35d1 SoC, including
+> initial device tree, clock driver, reset driver, and serial driver.
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-fixes-for-6.4
+> This patchset cover letter is based from the initial support for Nuvoton
+> ma35d1 to keep tracking the version history.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Qualcomm ARM32 fix for 6.4
-    https://git.kernel.org/soc/soc/c/1c278f8eba9b
+  - [v13,01/10] arm64: Kconfig.platforms: Add config for Nuvoton MA35 platform
+    https://git.kernel.org/soc/soc/c/64b88e9ff6c5
+  - [v13,02/10] arm64: defconfig: Add support for Nuvoton MA35 family SoCs
+    https://git.kernel.org/soc/soc/c/4cc2272447b8
+  - [v13,03/10] dt-bindings: clock: nuvoton: add binding for ma35d1 clock controller
+    https://git.kernel.org/soc/soc/c/2f8b5eb589cb
+  - [v13,04/10] dt-bindings: reset: nuvoton: Document ma35d1 reset control
+    https://git.kernel.org/soc/soc/c/476650a64b6b
+  - [v13,05/10] dt-bindings: arm: Add initial bindings for Nuvoton platform
+    https://git.kernel.org/soc/soc/c/0545810f7eda
+  - [v13,06/10] dt-bindings: serial: Document ma35d1 uart controller
+    https://git.kernel.org/soc/soc/c/15b53677e786
+  - [v13,07/10] arm64: dts: nuvoton: Add initial ma35d1 device tree
+    https://git.kernel.org/soc/soc/c/b69af0984732
+  - [v13,08/10] clk: nuvoton: Add clock driver for ma35d1 clock controller
+    https://git.kernel.org/soc/soc/c/691521a367cf
+  - [v13,09/10] reset: Add Nuvoton ma35d1 reset driver support
+    https://git.kernel.org/soc/soc/c/e4bb55d6ccf0
+  - [v13,10/10] tty: serial: Add Nuvoton ma35d1 serial driver support
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
