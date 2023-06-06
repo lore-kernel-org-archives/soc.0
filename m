@@ -1,443 +1,106 @@
-Return-Path: <SRS0=nKH+=B2=gmail.com=guptarud@kernel.org>
+Return-Path: <SRS0=uhhx=B2=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF80DC77B7A
-	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 04:06:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E9EFC77B73
+	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 06:08:53 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id C67BBC4339C; Tue,  6 Jun 2023 04:06:07 +0000 (UTC)
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id E658BC433EF; Tue,  6 Jun 2023 06:08:52 +0000 (UTC)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 83AC2C433D2;
-	Tue,  6 Jun 2023 04:06:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83AC2C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-3f6a3a76665so37064961cf.1;
-        Mon, 05 Jun 2023 21:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686024364; x=1688616364;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lKpXbq/o8UuRrRzfkzrH5gxvv1kbuqM5H9JQKpqvD7I=;
-        b=CQSgu976fwxZmTFg70KFH24vtUT6z8y6KO86BG789U/2++wBNeat78HxAbat+GaylQ
-         RoHwUe7WDJJ2j640gkg79qDE0JR7nbmzWRJhlNvjtw1g8IPqlrpTo+PSwXgeeatE/4lU
-         1Fju6gVdgEcBjPXY87QGcV48KGjRrXU4DCftm3nC3025OU3h8TDWmtagKLxHrLJzCEbo
-         xFJrRkhotHQ+zrTV5/XRVtnNAlKAvywb2TBP42Kz6D/yvdiHOgynPr/CiLleUAxBab3A
-         yZ35roDVILntQcXTUUWLlzO+hKhVkWCZDyfriDGJMLZTh8Sa7oCP4XbaVOD0Vlk1pDks
-         Wo5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686024364; x=1688616364;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lKpXbq/o8UuRrRzfkzrH5gxvv1kbuqM5H9JQKpqvD7I=;
-        b=cOBJkqGuvhydrblr4K6na3MHH7Tq0O5qqByCRyiU3HbosuIovdLxsBVKA4qaFRzGqG
-         KFMvQuarTCfyaiL+wrLL6PXcRCzjXvg8VBmM0sVDA7urxer5afL77veMdfExzeAzUE7l
-         zTe9uk0Czuv4y2tXnfyyaIXhXi7C2a7p64SuKr94rtc5j/ETczIKbIgd3DqwloCJHFjk
-         wJ4+CYhlb+jRnchPg02foUxliJVlODhuywF4LQL0bq2L9/9NuR1PO/4jT350cISNQqMk
-         ss+hRt5vd1To0Rydmv5ljQLVLW2VlYXPwx1kwehpgisC5PdUe1n9NrI/ASgWKf/3GTqC
-         Mh8g==
-X-Gm-Message-State: AC+VfDzD1fnXsE2H5ZsavwQEb8hEVICAco9L9AeJ0FneRDSbpFj2reUt
-	6Jv42mRfjv/pIGqwCkwAIhSPzRs/JSmPjg==
-X-Google-Smtp-Source: ACHHUZ53+3rS7Q8EZjpbm/cE4UIrdk3qDP3dfGBtgDEI2do97jNqH/gtytubyQf8gjrfPHUY3txhuw==
-X-Received: by 2002:a05:622a:1986:b0:3f5:2177:eca0 with SMTP id u6-20020a05622a198600b003f52177eca0mr1340073qtc.5.1686024364554;
-        Mon, 05 Jun 2023 21:06:04 -0700 (PDT)
-Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:aac8:d62:35cc:958c])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac84b42000000b003e388264753sm382980qts.65.2023.06.05.21.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 21:06:04 -0700 (PDT)
-From: Rudraksha Gupta <guptarud@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6F83CC4339B;
+	Tue,  6 Jun 2023 06:08:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F83CC4339B
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 3D9E75C01FC;
+	Tue,  6 Jun 2023 02:08:49 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 02:08:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1686031729; x=1686118129; bh=jWnd+Tu93Ydyd0XWIfSLCz4ZEAGnqPSE7yv
+	GS7uwiVk=; b=SSoZ+7I0c9Fwv2n5Hn515aFeknC06tGYFxgzpP1yl+fz4c4+cfz
+	685JrWK/U9/LC0FTpCnJg20SeaYXRFSKBIim3AY8EE6zoHfGvAhBnALYYvYRKIq3
+	qbi2MIa4tR7v72JR6JDzblr8WLQvqRqpfhytNZ2YjSY72XguwvR9QR/YlNZye8iH
+	uZF6vvrKihuAuyM37QhIjvY+kHKYctuTI9XSH1VFoPZ6q+BIAVcx7KF0T+71S6zu
+	dZogg9CxBSwUsL9uqpDALybi1q15TZJsyF/DFRQHrtKVEMotcb1EJxJhUiBXphXS
+	ITwi9nnJJDmNg6sigEUd2p5fogCx+JqkjcA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1686031729; x=1686118129; bh=jWnd+Tu93Ydyd0XWIfSLCz4ZEAGnqPSE7yv
+	GS7uwiVk=; b=eYsVkHkjsOb7rRAyl98E0Jcwr8/9bmekhSRQ8hv9jldeDtxXBrL
+	mtQ1zNy6Gk6YjffscBlEiUrsHktliRFYzGP+CwvkTsQz7GgA9o1+F+jmiFlfL+kn
+	7cQWGecJkl2Gr7mIn/JF/luqhuhlyZXQ+XRou0etPp3mrcYSDovzShCch8iMwHiE
+	HDz9CzpFqxDlExv++HYgqSiTbJMe3Njhj0S0PIYoXxzyPaIqAhv2SIflF28V4oZj
+	IZ6yhmC3jjbi3tIU2ZkV3zCBaQEB0jYteN5+Q2m3q5YeVmyWO6LQjcdWuW693CKj
+	8BpjJTNpuZ4HkDVxAG0sJAf9cT3YTAXCslg==
+X-ME-Sender: <xms:cM1-ZIIwjYF1VFsJK7COwEnOuf67AdF6Fw4SpR1SWTedqOz6jIYqnw>
+    <xme:cM1-ZIKPgL7wM-O7vXlSfBRo9AThdEPpx7OIB1PjY4KGBP5PmyMwwiJeBbkMp8ntF
+    hxR9WPfAL41op40bj0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cM1-ZIs-5JwC2kaEVBxOYGJuU0ODDRl3q7w8BCh3mQ_aVh1UJQD8lg>
+    <xmx:cM1-ZFbvZlSVBfwhmLps7V0XV2lVrMaAAE8G_91IOG1thZ5-tClb0g>
+    <xmx:cM1-ZPbvZt6NWfUJFC9cZBG0Aqn0GJ18m18X8TLAMShrXceHc2TycQ>
+    <xmx:cc1-ZMSRFsAbeEkqS__3eaSeemwET6EzJI8YKz11xBNnI-ai0-fBNg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 38310B60086; Tue,  6 Jun 2023 02:08:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <4f85ea74-5788-471d-bf3f-01402652a6b8@app.fastmail.com>
+In-Reply-To: <c57453ce-341c-ef89-5e71-58ad63466b11@gmail.com>
+References: <20230605040749.67964-1-ychuang570808@gmail.com>
+ <9dc45c49-02aa-4e63-a176-97e3536f14f4@app.fastmail.com>
+ <c57453ce-341c-ef89-5e71-58ad63466b11@gmail.com>
+Date: Tue, 06 Jun 2023 08:08:27 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jacky Huang" <ychuang570808@gmail.com>,
+ "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Lee Jones" <lee@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Jiri Slaby" <jirislaby@kernel.org>, "Tomer Maimon" <tmaimon77@gmail.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	soc@kernel.org
-Cc: Rudraksha Gupta <guptarud@gmail.com>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 4/4] ARM: dts: qcom: Add Samsung Galaxy Express support
-Date: Tue,  6 Jun 2023 00:05:27 -0400
-Message-Id: <20230606040529.122433-5-guptarud@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230606040529.122433-1-guptarud@gmail.com>
-References: <20230606040529.122433-1-guptarud@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
+ mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v13 00/10] Introduce Nuvoton ma35d1 SoC
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add a very basic device tree file for the Samsung Galaxy Express SGH-I437.
-Currently, the following things work: UART, eMMC, SD Card, and USB.
+On Tue, Jun 6, 2023, at 02:22, Jacky Huang wrote:
+> On 2023/6/5 =E4=B8=8B=E5=8D=88 08:00, Arnd Bergmann wrote:
+>> On Mon, Jun 5, 2023, at 06:07, Jacky Huang wrote:
+>
+> I'm glad to see that these patches have finally been accepted.
+> Thank you very much for all the assistance you have provided.
+> Once the device tree is merged, we will start submitting drivers
+> such as pinctrl, gpio, rtc, and so on.
 
-Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/qcom-msm8960-samsung-expressatt.dts   | 331 ++++++++++++++++++
- 2 files changed, 332 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
+I think you can start submitting all the drivers to their
+respective maintainers now, just mention that the SoC support
+is currently in linux-next in case they get confused about the
+dependencies.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 59829fc90315..12c90f263142 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1081,6 +1081,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
- 	qcom-msm8916-samsung-grandmax.dtb \
- 	qcom-msm8916-samsung-serranove.dtb \
- 	qcom-msm8960-cdp.dtb \
-+	qcom-msm8960-samsung-expressatt.dtb \
- 	qcom-msm8974-lge-nexus5-hammerhead.dtb \
- 	qcom-msm8974-sony-xperia-rhine-amami.dtb \
- 	qcom-msm8974-sony-xperia-rhine-honami.dtb \
-diff --git a/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-new file mode 100644
-index 000000000000..13e85c287498
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-@@ -0,0 +1,331 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <dt-bindings/input/input.h>
-+
-+#include "qcom-msm8960.dtsi"
-+#include <dt-bindings/reset/qcom,gcc-msm8960.h>
-+
-+/ {
-+	model = "Samsung Galaxy Express SGH-I437";
-+	compatible = "samsung,expressatt", "qcom,msm8960";
-+	chassis-type = "handset";
-+
-+	aliases {
-+		serial0 = &gsbi5_serial;
-+		mmc0 = &sdcc1; /* SDCC1 eMMC slot */
-+		mmc1 = &sdcc3; /* SDCC3 SD card slot */
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&gsbi5 {
-+	qcom,mode = <GSBI_PROT_I2C_UART>;
-+	status = "okay";
-+};
-+
-+&gsbi5_serial {
-+	status = "okay";
-+};
-+
-+&sdcc1 {
-+	vmmc-supply = <&pm8921_l5>;
-+	status = "okay";
-+};
-+
-+&sdcc3 {
-+	vmmc-supply = <&pm8921_l6>;
-+	vqmmc-supply = <&pm8921_l7>;
-+	status = "okay";
-+};
-+
-+&gsbi1 {
-+	qcom,mode = <GSBI_PROT_SPI>;
-+	pinctrl-0 = <&spi1_default>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&gsbi1_spi {
-+	status = "okay";
-+};
-+
-+&msmgpio {
-+	spi1_default: spi1-default-state {
-+		mosi-pins {
-+			pins = "gpio6";
-+			function = "gsbi1";
-+			drive-strength = <12>;
-+			bias-disable;
-+		};
-+
-+		miso-pins {
-+			pins = "gpio7";
-+			function = "gsbi1";
-+			drive-strength = <12>;
-+			bias-disable;
-+		};
-+
-+		cs-pins {
-+			pins = "gpio8";
-+			function = "gsbi1";
-+			drive-strength = <12>;
-+			bias-disable;
-+			output-low;
-+		};
-+
-+		clk-pins {
-+			pins = "gpio9";
-+			function = "gsbi1";
-+			drive-strength = <12>;
-+			bias-disable;
-+		};
-+	};
-+};
-+
-+&rpm {
-+	regulators {
-+		compatible = "qcom,rpm-pm8921-regulators";
-+		vin_lvs1_3_6-supply = <&pm8921_s4>;
-+		vin_lvs2-supply = <&pm8921_s4>;
-+		vin_lvs4_5_7-supply = <&pm8921_s4>;
-+		vdd_ncp-supply = <&pm8921_l6>;
-+		vdd_l1_l2_l12_l18-supply = <&pm8921_s4>;
-+		vdd_l21_l23_l29-supply = <&pm8921_s8>;
-+		vdd_l24-supply = <&pm8921_s1>;
-+		vdd_l25-supply = <&pm8921_s1>;
-+		vdd_l27-supply = <&pm8921_s7>;
-+		vdd_l28-supply = <&pm8921_s7>;
-+
-+		/* Buck SMPS */
-+		pm8921_s1: s1 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+			qcom,switch-mode-frequency = <3200000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_s2: s2 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1300000>;
-+			qcom,switch-mode-frequency = <1600000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_s3: s3 {
-+			regulator-min-microvolt = <500000>;
-+			regulator-max-microvolt = <1150000>;
-+			qcom,switch-mode-frequency = <4800000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_s4: s4 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			qcom,switch-mode-frequency = <1600000>;
-+			bias-pull-down;
-+			qcom,force-mode = <QCOM_RPM_FORCE_MODE_AUTO>;
-+		};
-+
-+		pm8921_s7: s7 {
-+			regulator-min-microvolt = <1150000>;
-+			regulator-max-microvolt = <1150000>;
-+			qcom,switch-mode-frequency = <3200000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_s8: s8 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+			qcom,switch-mode-frequency = <1600000>;
-+			bias-pull-down;
-+		};
-+
-+		/* PMOS LDO */
-+		pm8921_l1: l1 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1050000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l3: l3 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3300000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l4: l4 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l5: l5 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l6: l6 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l7: l7 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1850000>;
-+			regulator-max-microvolt = <2950000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l8: l8 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3100000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l9: l9 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2850000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l10: l10 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l11: l11 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3300000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l12: l12 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l14: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l16: l16 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l17: l17 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l18: l18 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1500000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l21: l21 {
-+			regulator-min-microvolt = <1900000>;
-+			regulator-max-microvolt = <1900000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l22: l22 {
-+			regulator-min-microvolt = <2750000>;
-+			regulator-max-microvolt = <2750000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l23: l23 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l24: l24 {
-+			regulator-min-microvolt = <750000>;
-+			regulator-max-microvolt = <1150000>;
-+			bias-pull-down;
-+		};
-+
-+		pm8921_l25: l25 {
-+			regulator-always-on;
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+			bias-pull-down;
-+		};
-+
-+		/* Low Voltage Switch */
-+		pm8921_lvs1: lvs1 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_lvs2: lvs2 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_lvs3: lvs3 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_lvs4: lvs4 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_lvs5: lvs5 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_lvs6: lvs6 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_lvs7: lvs7 {
-+			bias-pull-down;
-+		};
-+
-+		pm8921_ncp: ncp {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			qcom,switch-mode-frequency = <1600000>;
-+		};
-+	};
-+};
-+
-+&usb_hs1_phy {
-+	v3p3-supply = <&pm8921_l3>;
-+	v1p8-supply = <&pm8921_l4>;
-+};
-+
-+&usb1 {
-+	dr_mode = "otg";
-+	status = "okay";
-+};
--- 
-2.34.1
-
+     Arnd
