@@ -1,99 +1,97 @@
-Return-Path: <SRS0=2UBY=B2=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=eGOd=B2=linaro.org=jens.wiklander@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40583C7EE24
-	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 06:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9BDDC77B7A
+	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 07:58:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CCE68C433EF; Tue,  6 Jun 2023 06:21:04 +0000 (UTC)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	id 66C53C4339B; Tue,  6 Jun 2023 07:58:48 +0000 (UTC)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A9306C4339C
-	for <soc@kernel.org>; Tue,  6 Jun 2023 06:21:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9306C4339C
+	by smtp.kernel.org (Postfix) with ESMTPS id 65283C433EF
+	for <soc@kernel.org>; Tue,  6 Jun 2023 07:58:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 65283C433EF
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso8567617a12.3
-        for <soc@kernel.org>; Mon, 05 Jun 2023 23:21:03 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b1af9ef7a9so51248151fa.1
+        for <soc@kernel.org>; Tue, 06 Jun 2023 00:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686032462; x=1688624462;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1686038325; x=1688630325;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ghjbsto09XqPnsXCUmUZKd24RXiWGjP2OfhheXx+RZE=;
-        b=TupcBBlW5YEsh9v8j0nYCbVHO7kh1ulyfMEcAnHSvqrsAxbcWEijEqcLa3NoDkrLNC
-         VZ5CLdNHUWr4YbJo1wXbRo6ScBX1r4AqA6CpiILcBP0d8KyHdJS/h5JH5fcbSimOV3TF
-         CoQRcqjIH5RKYiXQLZf0jRjIsFnNiyqbFvMvbfIh1sSwe/RwpK0D57LcVg3u7Je4g9Xo
-         5flyiey/WV3vroipsE+6eGIp8rgRrH2WAub63Rc3eUdapbw9iH5Ws3qdjT55fpvu+Kmc
-         Nq0FzgL743GFM8WbmcVJ7QQn51V/xseA2jDS8D3WILlA9ZC7UJh4W0TwxA2wMN6qzXny
-         cm/w==
+        bh=3k1irXTYukr99PsFNAkymM0Og80zDNstPLsK0k6o+Jk=;
+        b=rL2FG1uuVGUyrvNG3McMCmB4ydldmGc4bEMB0o2gg28bdxcdSbAjvXkldJ3xX7uK2n
+         bTd41UrD8iNypclzCFRPQsu8PCtmWvpl7VLnzzhB/aQ6699H39Hs+PmqLEo8v0qC2ydL
+         LKW5YZLrUHqSBRQKHi5dTc/OL32bnnid33luzOvZrIKNilTeH8gNjpw2X5/8P/g96IcD
+         QJ7rB/AH5QPjuUZQTl8bRVFad77eG/izX1PAqJqjBc1mBkQCec5Qfcy5NMJFTQzOtoAI
+         agYrWXEflFntXYEvhY/iXFy0Oo/ZxcO1qcXX5AQ5t7SENQ1O2GQCwxX3446a7UWD/Q1F
+         3rmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686032462; x=1688624462;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686038325; x=1688630325;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghjbsto09XqPnsXCUmUZKd24RXiWGjP2OfhheXx+RZE=;
-        b=G8+dd7rmeEGZtPCtaRXu1vfGhRilLNVMoLND3uYAkrj06VXhLYZkz6R4LL13mYeS3y
-         3SN5obK3UoerhaK2qY4syiEhU/KtD/wgeB2c1cvxo/ffatrGbYJN80XDaQiThAmOCNIh
-         +Rb8pSS2zYjxoPB51P3EQK7k0eICl4hkHjeZo8BeKvhTmXkqoF6epE51GitRmmSYpHV7
-         O+QJ/MycalRTQwuaowVl7YtIOEQbOlE5paOkqYTTT9Ir8yyscvUL7ItDvsXU+xJbP7pz
-         qk817dHa2lzorzgN630n7xX6Qsb5WcIDjGVP+I170acIaXe7jqcSzsn1kOhHHljKHTa6
-         u5LA==
-X-Gm-Message-State: AC+VfDx89NyOt1el0HB6gfd7zXltGsfL+mZzsceNzhFj9JEYtOGGetQK
-	eeZVjEcSEsVUCzCWrhzKkjGcSw==
-X-Google-Smtp-Source: ACHHUZ5BBOuUVEcj0d9nizDVIPtOnYGoIXZ8X7BWvAVGbZl4oKgdIvd4Behhvjfjmvzv3MOC84YPMQ==
-X-Received: by 2002:aa7:c507:0:b0:50c:3dc:2262 with SMTP id o7-20020aa7c507000000b0050c03dc2262mr990172edq.39.1686032461745;
-        Mon, 05 Jun 2023 23:21:01 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id q22-20020aa7d456000000b0051631518aabsm4613727edr.93.2023.06.05.23.20.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 23:21:01 -0700 (PDT)
-Message-ID: <ee60f6ff-42bc-d30e-8465-39d00320d48b@linaro.org>
-Date: Tue, 6 Jun 2023 08:20:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add compatible
-Content-Language: en-US
+        bh=3k1irXTYukr99PsFNAkymM0Og80zDNstPLsK0k6o+Jk=;
+        b=ftWKA4D5sycNtKWcngWUx8SiPDEM3cKA7WY3M+TUMWVDfkiKD+84hU1gaavRpdk+KU
+         XyQY+F/TWWnnmAaOd15hU0TF27B+HlzpkJfpG7sIxfRhfm84+NclAatsx1fbwgPXjAt3
+         kkU82Umn0Mhc6XMEIMaOwwqqOJSJkKfZTzWk/EoI2Q6r/Teo/tA/arIbqeJq+XA3IQA0
+         JzoGS4/wexdIYmycnGFqCy7xQ4xM3muI/Ci5YUPQj65r0TmlUgQOQ+YaMdTo62/un78t
+         2HuYFbmRbBxUX3PrYryWGGOrDKla8fISCixqlyeVP8NvhMgPgRy5CSz9Rs52W7IpbNH1
+         IZMQ==
+X-Gm-Message-State: AC+VfDxmNG9XHOPVvoJVQw5bjS4QQ4aLj5PzqMTtb+WhFveK80k+8IUh
+	5EklGwVnV4dqLhi73S/ABoxr8w==
+X-Google-Smtp-Source: ACHHUZ518pQSHi1ktn+stGaMfzxkmsSSqAI6RmGocuetkundaUI/8yvnmw/gM4JX4uZKtIWhFzvJmA==
+X-Received: by 2002:a2e:8010:0:b0:2b1:ae75:2781 with SMTP id j16-20020a2e8010000000b002b1ae752781mr867582ljg.27.1686038325151;
+        Tue, 06 Jun 2023 00:58:45 -0700 (PDT)
+Received: from rayden (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05651c010400b002a8bc9918d4sm1736574ljb.97.2023.06.06.00.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 00:58:44 -0700 (PDT)
+Date: Tue, 6 Jun 2023 09:58:43 +0200
+From: Jens Wiklander <jens.wiklander@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Rudraksha Gupta <guptarud@gmail.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-References: <20230604063032.365775-1-guptarud@gmail.com>
- <20230604063032.365775-3-guptarud@gmail.com>
- <3c781ae6-4a45-1d6d-840c-d25f33684b00@linaro.org>
- <CT583OP69XTU.3E141NE263OR3@Latitude-E6420>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CT583OP69XTU.3E141NE263OR3@Latitude-E6420>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: arm@kernel.org, soc@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] AMDTEE fix for v6.5
+Message-ID: <20230606075843.GA2792442@rayden>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On 06/06/2023 04:48, Rudraksha Gupta wrote:
-ted patch soon that addresses this.
-> 
->>
->> It does not look like you tested the bindings, at least after quick
->> look. Please run `make dt_binding_check` (see
->> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->> Maybe you need to update your dtschema and yamllint.
->>
->> Best regards,
->> Krzysztof
-> Sorry. I was only looking for expressatt errors/warnings and failed to
-> see the other errors/warnings in the sea of text.
+Hello arm-soc maintainers,
 
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+Please pull this AMDTEE driver fix to add a return origin field to the
+struct tee_cmd_load_ta used when loading a Trusted Application into the
+AMDTEE. This change is backward compatible.
 
-Best regards,
-Krzysztof
+Note that this isn't a usual Arm driver update. This targets AMD instead,
+but is part of the TEE subsystem.
 
+Thanks,
+Jens
+
+The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+
+  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/amdtee-fix-for-v6.5
+
+for you to fetch changes up to 436eeae0411acdfc54521ddea80ee76d4ae8a7ea:
+
+  tee: amdtee: Add return_origin to 'struct tee_cmd_load_ta' (2023-05-15 08:29:52 +0200)
+
+----------------------------------------------------------------
+AMDTEE add return origin to load TA command
+
+----------------------------------------------------------------
+Rijo Thomas (1):
+      tee: amdtee: Add return_origin to 'struct tee_cmd_load_ta'
+
+ drivers/tee/amdtee/amdtee_if.h | 10 ++++++----
+ drivers/tee/amdtee/call.c      | 30 +++++++++++++++++-------------
+ 2 files changed, 23 insertions(+), 17 deletions(-)
