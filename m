@@ -1,72 +1,112 @@
-Return-Path: <SRS0=8MIz=B2=arm.com=sudeep.holla@kernel.org>
+Return-Path: <SRS0=fQh+=B2=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16C1C77B7A
-	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 12:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC5B9C7EE24
+	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 19:13:15 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7A88BC433EF; Tue,  6 Jun 2023 12:57:35 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.kernel.org (Postfix) with ESMTP id ED977C433D2;
-	Tue,  6 Jun 2023 12:57:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org ED977C433D2
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E84E2F4;
-	Tue,  6 Jun 2023 05:58:17 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 058E73F793;
-	Tue,  6 Jun 2023 05:57:30 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
+	id 80854C4339B; Tue,  6 Jun 2023 19:13:15 +0000 (UTC)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 64F97C433D2
+	for <soc@kernel.org>; Tue,  6 Jun 2023 19:13:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 64F97C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b1a86cdec6so72255521fa.3
+        for <soc@kernel.org>; Tue, 06 Jun 2023 12:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686078792; x=1688670792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZA9rQfuTuqMm7L4rY7JdHmHFP9ipyFjfGT8l696KaLE=;
+        b=vLc1ML2qr3C12ZYpWpoyaYhHj0XIOe8Njbe6tedoFST7tai7/M5t+EDQudAS5OF5fI
+         7os6Kmn0Lyc+boAbg8vRBciqi1msjsu72IBo8fyoCX3Ov7MfKtvFAAQ9pgEZQS8JblJ+
+         xviNlYe/0EGavOwUWR0njwHprykxc2mjk6qfpv3zoSLZzg7ir9YAurVfpHQrF1xQqdtZ
+         yJ3ZaEy9YLUqs59eZAXtlQyOzQfrEpgTfRfzthTKl+AX7APrE8TXh1BDH2jtg4wri7HH
+         n2+U2ccLFQKoU6Qtxw7KrK31/upkrfDpOWeWCVNGPZcDO1KMkiO5dIPtCvRkimqSeJN+
+         k2+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686078792; x=1688670792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZA9rQfuTuqMm7L4rY7JdHmHFP9ipyFjfGT8l696KaLE=;
+        b=ZTNHoTbfWl+0vU50GF3mdBXzIdBAlrrj6P3ScDOIaX7i2XJeBBJWQoLFMhYpohtzHD
+         cppWN2VnXY/oxWAL4vKzayXUrGyHH9IdyXHKSlr1ydxudyJ6rHPK2GEtIcK3eNqMCSEC
+         SV7bu+qzlm+6+aRK8xqBQhnnUFiKdo+GEyVCbYHhLbJDElWs/iHOBBdSAjp3rDjj43TJ
+         FGly+0YSeVWEXbBO/HHyMzGrQtUqPHFJ5ToKVM/0IR0TluMclR3YIajPYOsol4HkzO6J
+         AENX94MCw6yfIIzF8CBXuWqFFdnHsHISAo6gxNqXGLQIyDpUVI8oVace9h2DE9kUMFtq
+         zcqw==
+X-Gm-Message-State: AC+VfDzwprvD/V67IBqee89ENML++ENGnxRWRmbdbmcb6Jtr1uWqAnyH
+	y6GJvMIxW70J2mKxl/nDkncg4A==
+X-Google-Smtp-Source: ACHHUZ5hIzfSf9Id8op7bMrggT6dyfvWxlvGZYvBblpZ5phSJdaSXH7BjMIp7vBZT6Idca1Nd8MtHg==
+X-Received: by 2002:a2e:b0e1:0:b0:2b0:4c72:98ff with SMTP id h1-20020a2eb0e1000000b002b04c7298ffmr1440823ljl.7.1686078792034;
+        Tue, 06 Jun 2023 12:13:12 -0700 (PDT)
+Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id z19-20020a2e8853000000b002af15f2a735sm1972480ljj.111.2023.06.06.12.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 12:13:11 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: ARM SoC Team <arm@kernel.org>,
-	SoC Team <soc@kernel.org>,
-	ALKML <linux-arm-kernel@lists.infradead.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Olof Johansson <olof@lixom.net>
-Subject: [GIT PULL] firmware: arm_ffa: Fix for v6.4(part 2)
-Date: Tue,  6 Jun 2023 13:57:20 +0100
-Message-Id: <20230606125720.2816923-1-sudeep.holla@arm.com>
+To: Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	soc@kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-omap@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] Input: ads7846 - Fix usage of match data
+Date: Tue,  6 Jun 2023 21:13:04 +0200
+Message-Id: <20230606191304.3804174-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi ARM SoC Team,
+device_get_match_data() returns the match data directly, fix
+this up and fix the probe crash.
 
-Please pull !
+Fixes: 767d83361aaa ("Input: ads7846 - Convert to use software nodes")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+This patch needs to be applied to the SoC tree where the
+offending patch is residing.
+---
+ drivers/input/touchscreen/ads7846.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-Regards,
-Sudeep
+diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+index 40eb27f1b23f..fe6fe8acd8a6 100644
+--- a/drivers/input/touchscreen/ads7846.c
++++ b/drivers/input/touchscreen/ads7846.c
+@@ -1117,20 +1117,13 @@ MODULE_DEVICE_TABLE(of, ads7846_dt_ids);
+ static const struct ads7846_platform_data *ads7846_get_props(struct device *dev)
+ {
+ 	struct ads7846_platform_data *pdata;
+-	const struct platform_device_id *pdev_id;
+ 	u32 value;
+ 
+-	pdev_id = device_get_match_data(dev);
+-	if (!pdev_id) {
+-		dev_err(dev, "Unknown device model\n");
+-		return ERR_PTR(-EINVAL);
+-	}
+-
+ 	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
+ 	if (!pdata)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	pdata->model = (unsigned long)pdev_id->driver_data;
++	pdata->model = (u32)device_get_match_data(dev);
+ 
+ 	device_property_read_u16(dev, "ti,vref-delay-usecs",
+ 				 &pdata->vref_delay_usecs);
+-- 
+2.34.1
 
--->8
-
-The following changes since commit 111a833dc5cbef3d05b2a796a7e23cb7f6ff2192:
-
-  firmware: arm_ffa: Set reserved/MBZ fields to zero in the memory descriptors (2023-05-08 20:40:46 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git tags/ffa-fix-6.4-2
-
-for you to fetch changes up to 3aa0519a4780f1b8e11966bd879d4a2934ba455f:
-
-  firmware: arm_ffa: Set handle field to zero in memory descriptor (2023-06-06 13:41:56 +0100)
-
-----------------------------------------------------------------
-Arm FF-A fix for v6.4
-
-A single fix addressing another MBZ field being non-zero and non-compliant
-resulting in the rejection of certain memory interface transmissions by
-the receivers(secure partitions). The issue was addressed before but missed
-to address this one field which is part of this change.
-
-----------------------------------------------------------------
-Balint Dobszay (1):
-      firmware: arm_ffa: Set handle field to zero in memory descriptor
-
- drivers/firmware/arm_ffa/driver.c | 1 +
- 1 file changed, 1 insertion(+)
