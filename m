@@ -4,102 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABFFDC77B73
-	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 10:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC18C77B7A
+	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 11:47:10 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 79EABC433EF; Tue,  6 Jun 2023 10:23:59 +0000 (UTC)
+	id 4B78FC4339B; Tue,  6 Jun 2023 11:47:10 +0000 (UTC)
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D4D70C433D2;
-	Tue,  6 Jun 2023 10:23:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D4D70C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 70B82C433EF;
+	Tue,  6 Jun 2023 11:47:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 70B82C433EF
 Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 960E25C00D1;
-	Tue,  6 Jun 2023 06:23:56 -0400 (EDT)
+	by mailout.nyi.internal (Postfix) with ESMTP id 15C165C0068;
+	Tue,  6 Jun 2023 07:47:07 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 06 Jun 2023 06:23:56 -0400
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 07:47:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
 	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1686047036; x=1686133436; bh=IV
-	nHRJ2xnPQEKReHByO5PzHk/GC9Q4kW/KN2ePpn5lo=; b=HhfUp8mGIm+6cqVzV9
-	vMJv7emaBvWLeJLNLXL3Rvsm459tEb6GBttaLakEEouC6SBRH1bzpA7umFK+ekJv
-	RdmY4UiE1SV/LT6UMobg2aev207mVOcqNBH8xs73BsWhgbkRArQVZ31kG6WVgUln
-	huEUbe9Bs6ReHPwBoLbeUQ/DgFvX4633wjaVs6iPx5k5yXRF2VQvnRhg3vBV2rp6
-	W2/VG0EXTa4uTZ3V/z4rYA0Qp2igBVgxd7oZVGkbcLxVwXxNrCwQf9tI5h9yf1xv
-	owhG15maZoPVK5mf80AlKOBEJywOR0f3uYt9CuqEDE0CVOEi44X4lOmKDbCIg+j6
-	ZpWw==
+	:subject:subject:to:to; s=fm1; t=1686052027; x=1686138427; bh=dA
+	jZXnSLv8zideXMYfipOX2kQzWtw8W7LqpkuBArsm8=; b=iowoh88imufE/I74sh
+	/Qqc5VguGgE1kZQWJ8bLwvlULfXaNr4BLeNMZnnav/vwRkgDdmpAa3DnN/BbXlGL
+	7Va/X3pX+Pi1ns3aC5OfpXODP4pAkwaIxCQ7iS5UTrqL34xgWBuoo+54p7C9fFID
+	0kmiMZDw4W7jG1EF1iz4HfMGAwMZtVpJAP63OdAPcDaYLIz/MWoLBB3S27Bhn8Bh
+	+DJ7bG/YUebn+cFW2+zDiyqYSYGuDnpbWD7RKHAWCecuLC0pp9ocHmUAXOnufDhS
+	E9p0f0B8YR5WiFAJGWdFmU/WbtivZoyf4hYNY+lO0YNPXTE3dVmonAcuP76hPkl9
+	Q7BA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:sender:subject
 	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1686047036; x=1686133436; bh=IVnHRJ2xnPQEK
-	ReHByO5PzHk/GC9Q4kW/KN2ePpn5lo=; b=l2cxCNtaMtRUhvJJJ12FlLo7t15zK
-	4Rd6CYcBI8MivJDENbPObrCPRJc8XFO6Zsp9WdyiA/MYu1wdVcQZWPbr9ZYE7Nu6
-	7Po4XnSVRc4YGs5WfNsdXdFuH+nZaiwIdsqYkycNJOD1vHxYMRzTLkc4d2ZH/NQc
-	+KaGjT8mTdNdVP00fXsRmEz1m23RyEGra3Nb1ResivBq4fHooIHCswzs1Oah3B0M
-	lMEqDPVoCuH4wrjjdzSvE1FA0xiNLamXmFod6T+4jqo7YVQA5ufqi6rLeqL07CF0
-	CcP9a1HYfOQCPxFaRmFc5WoklbIra9VRkx8SuLEuFJVMHGdRed0mXDugA==
-X-ME-Sender: <xms:PAl_ZB9EPrudgevlnz4aaIxQzW8MImBM9bG7LWsb3i9bVAElr_79NQ>
-    <xme:PAl_ZFv3QKGOwfMvJQiuCFTmxOGfy4KE4Cmqq1z9fWw5vZELNWbCtDwCuyWqetWhW
-    CjY9pTDcURlnEYw2g8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgvdekucetufdoteggodetrfdotf
+	:x-sasl-enc; s=fm1; t=1686052027; x=1686138427; bh=dAjZXnSLv8zid
+	eXMYfipOX2kQzWtw8W7LqpkuBArsm8=; b=TVNuRbhZevQ950/x6PWjau6/Ulx+/
+	LjtZT+mWPxMQD8i4CBPYBhv5npqOewu5thkKIpabgl+R57byiomZOwIJlwP0tW5x
+	yAIQw7gAFaNVGXtVfjWlI5NlxZsUFc8APCfAdDgWE4w7i8y4l78sS763+6+xAG6L
+	kywfctMPMecTmhVBczWd/h2er7ejWYyRudLi2Gap4rg3zYxMOBx9N1/JZZAkymH7
+	J5I5LIPLiWJpIXlMgrwDWeRn45adpHasD9wV2onyUA3HlKZ/nEAYQqvBr4hRQQWJ
+	pVK5+VVdlkDAL53WVV/3yO7PmYIy73d6NZm+ayHGQ7u1bfSASbz6vIFwA==
+X-ME-Sender: <xms:uhx_ZNR7KnMWkS1jGZ_9_RCNz4OPrwAU-zyP_uqZPlscwFq_-76jkQ>
+    <xme:uhx_ZGxNvXuHyKNl9EgZhar-wM-lsVznyA0CrQLClikzrEf5tI8ckYbrF1hF1bx4V
+    Zv7vCshxvwVnVpH1Fc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddggeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
     nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:PAl_ZPBrKfD1ctrI_vnQS2aTYSHEnMLaiOeYBULYg71OenhRBhUnLg>
-    <xmx:PAl_ZFcBwF7VEpPQZaFvo0N2-IFnyR1X0ShshEp0VuL026Yk2_aSTA>
-    <xmx:PAl_ZGOAbMOBPgLiPL1mjkIucyzGRuOmc2Yj20btXYOdRx5dDj5row>
-    <xmx:PAl_ZCks3-GENqmngUfXVrVuH5cd20AixeKaIOGz_gr0eisl7SDiwQ>
+    htvghrnhephfdtlefhtedttedvtedvueeugedvueelueduvefhuefhuefgvddtveevvdff
+    hfdunecuffhomhgrihhnpehlihhnrghrohdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:uhx_ZC1XGcJGj4WIBKz60QluVUSZyHge-6Jcfexmc3k98xUqYJ0y2w>
+    <xmx:uhx_ZFD4exF8octn-J6Uy1qTvNAp-T0KgL6LVmN5ALnjR3Y4sf9anA>
+    <xmx:uhx_ZGhe5Fjd6VOgQXlWBTl3CPsNYVWx2_LJv6x8EVmb_KVcwfZCRQ>
+    <xmx:uxx_ZJvQ5UXq4GAJVBe9NFLE7KeEIwIvL1CdwubYtvOa11exlUdjdg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1EABDB60086; Tue,  6 Jun 2023 06:23:56 -0400 (EDT)
+	id B8E8EB60086; Tue,  6 Jun 2023 07:47:06 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
 Mime-Version: 1.0
-Message-Id: <05c50d10-080b-43ab-9131-98f71508ac2d@app.fastmail.com>
-In-Reply-To: <20230606-escapable-stuffed-7ca5033e7741@wendy>
-References: <20230606-escapable-stuffed-7ca5033e7741@wendy>
-Date: Tue, 06 Jun 2023 12:23:26 +0200
+Message-Id: <0fac8e65-fe05-4dbf-a634-4620f764e2bd@app.fastmail.com>
+In-Reply-To: <20230606075843.GA2792442@rayden>
+References: <20230606075843.GA2792442@rayden>
+Date: Tue, 06 Jun 2023 13:46:46 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: "Conor.Dooley" <conor.dooley@microchip.com>, soc@kernel.org
-Cc: "Conor Dooley" <conor@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- "Olof Johansson" <olof@lixom.net>, "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Rob Herring" <robh+dt@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3] Documentation/process: add soc maintainer handbook
+To: "Jens Wiklander" <jens.wiklander@linaro.org>, arm <arm@kernel.org>,
+ soc@kernel.org
+Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ op-tee@lists.trustedfirmware.org
+Subject: Re: [GIT PULL] AMDTEE fix for v6.5
 Content-Type: text/plain
 
-On Tue, Jun 6, 2023, at 10:27, Conor Dooley wrote:
-> Arnd suggested that adding a maintainer handbook for the SoC "subsystem"
-> would be helpful in trying to bring on board maintainers for the various
-> new platforms cropping up in RISC-V land.
+On Tue, Jun 6, 2023, at 09:58, Jens Wiklander wrote:
+> Hello arm-soc maintainers,
 >
-> Add a document briefly describing the role of the SoC subsystem and some
-> basic advice for (new) platform maintainers.
+> Please pull this AMDTEE driver fix to add a return origin field to the
+> struct tee_cmd_load_ta used when loading a Trusted Application into the
+> AMDTEE. This change is backward compatible.
 >
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Changes in v3:
-> - sort out a rake of spelling/grammar bits spotted by Randy, apart from
->   the one noted as a suggestion
-> - drop the refs for document filepaths
+> Note that this isn't a usual Arm driver update. This targets AMD instead,
+> but is part of the TEE subsystem.
+>
+> Thanks,
+> Jens
+>
+> The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+>
+>   Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+>
+> are available in the Git repository at:
+>
+>   https://git.linaro.org/people/jens.wiklander/linux-tee.git 
+> tags/amdtee-fix-for-v6.5
+>
+> for you to fetch changes up to 436eeae0411acdfc54521ddea80ee76d4ae8a7ea:
 
-Thanks, I've applied this in the soc/newsoc branch of the soc tree
-now, which is where I'm already queuing new platforms.
+I see there is only one patch here, and it is marked as 'Cc: stable',
+so I assume  you meant this to be include in v6.4, not 6.5. Can you
+confirm that?
 
      Arnd
