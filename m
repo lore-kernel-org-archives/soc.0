@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A806C77B7A
-	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 04:06:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF80DC77B7A
+	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 04:06:07 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 20C6DC4339C; Tue,  6 Jun 2023 04:06:00 +0000 (UTC)
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	id C67BBC4339C; Tue,  6 Jun 2023 04:06:07 +0000 (UTC)
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0F787C433EF;
-	Tue,  6 Jun 2023 04:05:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0F787C433EF
+	by smtp.kernel.org (Postfix) with ESMTPS id 83AC2C433D2;
+	Tue,  6 Jun 2023 04:06:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 83AC2C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-3f805551a19so43951171cf.3;
-        Mon, 05 Jun 2023 21:05:58 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-3f6a3a76665so37064961cf.1;
+        Mon, 05 Jun 2023 21:06:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686024357; x=1688616357;
+        d=gmail.com; s=20221208; t=1686024364; x=1688616364;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q/5Ew/nWKQC0Hp+PQTU4XGdu9OmMQKTpW4O893GVieI=;
-        b=TdZhC4fK9DyYXDuCcL99ezhhzR2FYt5SIbcIGNGUEACCtmtsKkCwRtxsijJbkV6kRC
-         bySvqYT1hfdbs/wqWfgksdGbUqtETeL6afYwVlY2SNDvXXqRV5bi4PCGkKr26owu/2pV
-         /He6pn1J99ITVTlRUTSMW/l4+IwJJ9d7GK/TlaLuK0t9/UabMnoLEOjMNV76r/QihlSL
-         qD7OcOs3KpGuY+M1VSzX3OvfwsxLXbzT3CYbS3hsmYgeXuQuxQZ1NnuLEKbKDblDLK6Z
-         7iV3tfYrTGw6OVhLwZrT4OJ19vrmGbe3BsB8cy0if8J3l9mmes4T4QxHykexeSlHG0ou
-         DxRw==
+        bh=lKpXbq/o8UuRrRzfkzrH5gxvv1kbuqM5H9JQKpqvD7I=;
+        b=CQSgu976fwxZmTFg70KFH24vtUT6z8y6KO86BG789U/2++wBNeat78HxAbat+GaylQ
+         RoHwUe7WDJJ2j640gkg79qDE0JR7nbmzWRJhlNvjtw1g8IPqlrpTo+PSwXgeeatE/4lU
+         1Fju6gVdgEcBjPXY87QGcV48KGjRrXU4DCftm3nC3025OU3h8TDWmtagKLxHrLJzCEbo
+         xFJrRkhotHQ+zrTV5/XRVtnNAlKAvywb2TBP42Kz6D/yvdiHOgynPr/CiLleUAxBab3A
+         yZ35roDVILntQcXTUUWLlzO+hKhVkWCZDyfriDGJMLZTh8Sa7oCP4XbaVOD0Vlk1pDks
+         Wo5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686024357; x=1688616357;
+        d=1e100.net; s=20221208; t=1686024364; x=1688616364;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q/5Ew/nWKQC0Hp+PQTU4XGdu9OmMQKTpW4O893GVieI=;
-        b=C5+6+OTZ6ykaHaDRoRaCjZ8+qf4UWphGj8nVEaO3NIPXv/HQssm0l9OyLqBIg2Trki
-         cgN22l2aKYpRwmGSTjUtvCaVzl7oR9ROJCe/NhK128j5piuOCJidedg2TUGwSq0aCTUV
-         8oK3FSr91lGJgjLCyp+TWmY2YHuB3cKKh1VapuDlfi+4Sk/AWNkAi+vHMDOZVaxyL4Ou
-         dU8BJOKMQ/Rjal0Lg+lHrwdtf+enSO4am6TTvU1wzMRCB/1XmViKQrb1F+bYRRihXpoc
-         DpQ1RU43Dld73zOVG9LjHhinDoDj66y0OEKOxW97ccDvrhqNx4FL8P/IoP27PNXnq1Zk
-         WF/A==
-X-Gm-Message-State: AC+VfDyjrA8KvSu4FGsYt47vhWzNLil7xYcYooHTZsOLXreih3Pg0Hfx
-	I0cmU5/1MNbo7SZLGkb+X6inyoPamzrYXg==
-X-Google-Smtp-Source: ACHHUZ48ICTMK8+jPajYie1seRRfS8Ys1Qbmh2kMJZTCbKIUEJYe04P9PZ6VW4QJWdw6nHCyIIObcQ==
-X-Received: by 2002:ac8:7c56:0:b0:3f9:a73b:57a2 with SMTP id o22-20020ac87c56000000b003f9a73b57a2mr749030qtv.26.1686024357354;
-        Mon, 05 Jun 2023 21:05:57 -0700 (PDT)
+        bh=lKpXbq/o8UuRrRzfkzrH5gxvv1kbuqM5H9JQKpqvD7I=;
+        b=cOBJkqGuvhydrblr4K6na3MHH7Tq0O5qqByCRyiU3HbosuIovdLxsBVKA4qaFRzGqG
+         KFMvQuarTCfyaiL+wrLL6PXcRCzjXvg8VBmM0sVDA7urxer5afL77veMdfExzeAzUE7l
+         zTe9uk0Czuv4y2tXnfyyaIXhXi7C2a7p64SuKr94rtc5j/ETczIKbIgd3DqwloCJHFjk
+         wJ4+CYhlb+jRnchPg02foUxliJVlODhuywF4LQL0bq2L9/9NuR1PO/4jT350cISNQqMk
+         ss+hRt5vd1To0Rydmv5ljQLVLW2VlYXPwx1kwehpgisC5PdUe1n9NrI/ASgWKf/3GTqC
+         Mh8g==
+X-Gm-Message-State: AC+VfDzD1fnXsE2H5ZsavwQEb8hEVICAco9L9AeJ0FneRDSbpFj2reUt
+	6Jv42mRfjv/pIGqwCkwAIhSPzRs/JSmPjg==
+X-Google-Smtp-Source: ACHHUZ53+3rS7Q8EZjpbm/cE4UIrdk3qDP3dfGBtgDEI2do97jNqH/gtytubyQf8gjrfPHUY3txhuw==
+X-Received: by 2002:a05:622a:1986:b0:3f5:2177:eca0 with SMTP id u6-20020a05622a198600b003f52177eca0mr1340073qtc.5.1686024364554;
+        Mon, 05 Jun 2023 21:06:04 -0700 (PDT)
 Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:aac8:d62:35cc:958c])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac84b42000000b003e388264753sm382980qts.65.2023.06.05.21.05.56
+        by smtp.gmail.com with ESMTPSA id e2-20020ac84b42000000b003e388264753sm382980qts.65.2023.06.05.21.06.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 21:05:57 -0700 (PDT)
+        Mon, 05 Jun 2023 21:06:04 -0700 (PDT)
 From: Rudraksha Gupta <guptarud@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: Andy Gross <agross@kernel.org>,
@@ -70,83 +70,374 @@ Cc: Rudraksha Gupta <guptarud@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	linux-phy@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 3/4] ARM: dts: qcom: msm8960: Add USB node
-Date: Tue,  6 Jun 2023 00:05:26 -0400
-Message-Id: <20230606040529.122433-4-guptarud@gmail.com>
+Subject: [PATCH v4 4/4] ARM: dts: qcom: Add Samsung Galaxy Express support
+Date: Tue,  6 Jun 2023 00:05:27 -0400
+Message-Id: <20230606040529.122433-5-guptarud@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230606040529.122433-1-guptarud@gmail.com>
 References: <20230606040529.122433-1-guptarud@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the required nodes to support USB on the MSM8960 SoC. As it's very
-similar to the APQ8064 SoC, the nodes are almost identical
-
-Add a label to sleep_clk for the USB node to reference
+Add a very basic device tree file for the Samsung Galaxy Express SGH-I437.
+Currently, the following things work: UART, eMMC, SD Card, and USB.
 
 Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
 ---
- arch/arm/boot/dts/qcom-msm8960.dtsi | 34 ++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/qcom-msm8960-samsung-expressatt.dts   | 331 ++++++++++++++++++
+ 2 files changed, 332 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
 
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index 2a668cd535cc..581b3ab5c4ca 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-msm8960.h>
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 59829fc90315..12c90f263142 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1081,6 +1081,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
+ 	qcom-msm8916-samsung-grandmax.dtb \
+ 	qcom-msm8916-samsung-serranove.dtb \
+ 	qcom-msm8960-cdp.dtb \
++	qcom-msm8960-samsung-expressatt.dtb \
+ 	qcom-msm8974-lge-nexus5-hammerhead.dtb \
+ 	qcom-msm8974-sony-xperia-rhine-amami.dtb \
+ 	qcom-msm8974-sony-xperia-rhine-honami.dtb \
+diff --git a/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
+new file mode 100644
+index 000000000000..13e85c287498
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
+@@ -0,0 +1,331 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <dt-bindings/input/input.h>
++
++#include "qcom-msm8960.dtsi"
 +#include <dt-bindings/reset/qcom,gcc-msm8960.h>
- #include <dt-bindings/clock/qcom,lcc-msm8960.h>
- #include <dt-bindings/mfd/qcom-rpm.h>
- #include <dt-bindings/soc/qcom,gsbi.h>
-@@ -71,7 +72,7 @@ pxo_board: pxo_board {
- 			clock-output-names = "pxo_board";
- 		};
- 
--		sleep_clk {
-+		sleep_clk: sleep_clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <32768>;
-@@ -370,5 +371,36 @@ gsbi1_spi: spi@16080000 {
- 				status = "disabled";
- 			};
- 		};
 +
-+		usb1: usb@12500000 {
-+			compatible = "qcom,ci-hdrc";
-+			reg = <0x12500000 0x200>,
-+			      <0x12500200 0x200>;
-+			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc USB_HS1_XCVR_CLK>, <&gcc USB_HS1_H_CLK>;
-+			clock-names = "core", "iface";
-+			assigned-clocks = <&gcc USB_HS1_XCVR_CLK>;
-+			assigned-clock-rates = <60000000>;
-+			resets = <&gcc USB_HS1_RESET>;
-+			reset-names = "core";
-+			phy_type = "ulpi";
-+			ahb-burst-config = <0>;
-+			phys = <&usb_hs1_phy>;
-+			phy-names = "usb-phy";
-+			#reset-cells = <1>;
-+			status = "disabled";
++/ {
++	model = "Samsung Galaxy Express SGH-I437";
++	compatible = "samsung,expressatt", "qcom,msm8960";
++	chassis-type = "handset";
 +
-+			ulpi {
-+				usb_hs1_phy: phy {
-+					compatible = "qcom,usb-hs-phy-msm8960",
-+						     "qcom,usb-hs-phy";
-+					clocks = <&sleep_clk>, <&cxo_board>;
-+					clock-names = "sleep", "ref";
-+					resets = <&usb1 0>;
-+					reset-names = "por";
-+					#phy-cells = <0>;
-+				};
-+			};
++	aliases {
++		serial0 = &gsbi5_serial;
++		mmc0 = &sdcc1; /* SDCC1 eMMC slot */
++		mmc1 = &sdcc3; /* SDCC3 SD card slot */
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++};
++
++&gsbi5 {
++	qcom,mode = <GSBI_PROT_I2C_UART>;
++	status = "okay";
++};
++
++&gsbi5_serial {
++	status = "okay";
++};
++
++&sdcc1 {
++	vmmc-supply = <&pm8921_l5>;
++	status = "okay";
++};
++
++&sdcc3 {
++	vmmc-supply = <&pm8921_l6>;
++	vqmmc-supply = <&pm8921_l7>;
++	status = "okay";
++};
++
++&gsbi1 {
++	qcom,mode = <GSBI_PROT_SPI>;
++	pinctrl-0 = <&spi1_default>;
++	pinctrl-names = "default";
++	status = "okay";
++};
++
++&gsbi1_spi {
++	status = "okay";
++};
++
++&msmgpio {
++	spi1_default: spi1-default-state {
++		mosi-pins {
++			pins = "gpio6";
++			function = "gsbi1";
++			drive-strength = <12>;
++			bias-disable;
 +		};
- 	};
- };
++
++		miso-pins {
++			pins = "gpio7";
++			function = "gsbi1";
++			drive-strength = <12>;
++			bias-disable;
++		};
++
++		cs-pins {
++			pins = "gpio8";
++			function = "gsbi1";
++			drive-strength = <12>;
++			bias-disable;
++			output-low;
++		};
++
++		clk-pins {
++			pins = "gpio9";
++			function = "gsbi1";
++			drive-strength = <12>;
++			bias-disable;
++		};
++	};
++};
++
++&rpm {
++	regulators {
++		compatible = "qcom,rpm-pm8921-regulators";
++		vin_lvs1_3_6-supply = <&pm8921_s4>;
++		vin_lvs2-supply = <&pm8921_s4>;
++		vin_lvs4_5_7-supply = <&pm8921_s4>;
++		vdd_ncp-supply = <&pm8921_l6>;
++		vdd_l1_l2_l12_l18-supply = <&pm8921_s4>;
++		vdd_l21_l23_l29-supply = <&pm8921_s8>;
++		vdd_l24-supply = <&pm8921_s1>;
++		vdd_l25-supply = <&pm8921_s1>;
++		vdd_l27-supply = <&pm8921_s7>;
++		vdd_l28-supply = <&pm8921_s7>;
++
++		/* Buck SMPS */
++		pm8921_s1: s1 {
++			regulator-always-on;
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++			qcom,switch-mode-frequency = <3200000>;
++			bias-pull-down;
++		};
++
++		pm8921_s2: s2 {
++			regulator-min-microvolt = <1300000>;
++			regulator-max-microvolt = <1300000>;
++			qcom,switch-mode-frequency = <1600000>;
++			bias-pull-down;
++		};
++
++		pm8921_s3: s3 {
++			regulator-min-microvolt = <500000>;
++			regulator-max-microvolt = <1150000>;
++			qcom,switch-mode-frequency = <4800000>;
++			bias-pull-down;
++		};
++
++		pm8921_s4: s4 {
++			regulator-always-on;
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			qcom,switch-mode-frequency = <1600000>;
++			bias-pull-down;
++			qcom,force-mode = <QCOM_RPM_FORCE_MODE_AUTO>;
++		};
++
++		pm8921_s7: s7 {
++			regulator-min-microvolt = <1150000>;
++			regulator-max-microvolt = <1150000>;
++			qcom,switch-mode-frequency = <3200000>;
++			bias-pull-down;
++		};
++
++		pm8921_s8: s8 {
++			regulator-always-on;
++			regulator-min-microvolt = <2050000>;
++			regulator-max-microvolt = <2050000>;
++			qcom,switch-mode-frequency = <1600000>;
++			bias-pull-down;
++		};
++
++		/* PMOS LDO */
++		pm8921_l1: l1 {
++			regulator-always-on;
++			regulator-min-microvolt = <1050000>;
++			regulator-max-microvolt = <1050000>;
++			bias-pull-down;
++		};
++
++		pm8921_l2: l2 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++			bias-pull-down;
++		};
++
++		pm8921_l3: l3 {
++			regulator-min-microvolt = <3075000>;
++			regulator-max-microvolt = <3300000>;
++			bias-pull-down;
++		};
++
++		pm8921_l4: l4 {
++			regulator-always-on;
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			bias-pull-down;
++		};
++
++		pm8921_l5: l5 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++			bias-pull-down;
++		};
++
++		pm8921_l6: l6 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++			bias-pull-down;
++		};
++
++		pm8921_l7: l7 {
++			regulator-always-on;
++			regulator-min-microvolt = <1850000>;
++			regulator-max-microvolt = <2950000>;
++			bias-pull-down;
++		};
++
++		pm8921_l8: l8 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3100000>;
++			bias-pull-down;
++		};
++
++		pm8921_l9: l9 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <2850000>;
++			bias-pull-down;
++		};
++
++		pm8921_l10: l10 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3000000>;
++			bias-pull-down;
++		};
++
++		pm8921_l11: l11 {
++			regulator-min-microvolt = <2800000>;
++			regulator-max-microvolt = <3300000>;
++			bias-pull-down;
++		};
++
++		pm8921_l12: l12 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1200000>;
++			bias-pull-down;
++		};
++
++		pm8921_l14: l14 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			bias-pull-down;
++		};
++
++		pm8921_l15: l15 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++			bias-pull-down;
++		};
++
++		pm8921_l16: l16 {
++			regulator-min-microvolt = <2800000>;
++			regulator-max-microvolt = <3000000>;
++			bias-pull-down;
++		};
++
++		pm8921_l17: l17 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <3300000>;
++			bias-pull-down;
++		};
++
++		pm8921_l18: l18 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1500000>;
++			bias-pull-down;
++		};
++
++		pm8921_l21: l21 {
++			regulator-min-microvolt = <1900000>;
++			regulator-max-microvolt = <1900000>;
++			bias-pull-down;
++		};
++
++		pm8921_l22: l22 {
++			regulator-min-microvolt = <2750000>;
++			regulator-max-microvolt = <2750000>;
++			bias-pull-down;
++		};
++
++		pm8921_l23: l23 {
++			regulator-always-on;
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			bias-pull-down;
++		};
++
++		pm8921_l24: l24 {
++			regulator-min-microvolt = <750000>;
++			regulator-max-microvolt = <1150000>;
++			bias-pull-down;
++		};
++
++		pm8921_l25: l25 {
++			regulator-always-on;
++			regulator-min-microvolt = <1225000>;
++			regulator-max-microvolt = <1225000>;
++			bias-pull-down;
++		};
++
++		/* Low Voltage Switch */
++		pm8921_lvs1: lvs1 {
++			bias-pull-down;
++		};
++
++		pm8921_lvs2: lvs2 {
++			bias-pull-down;
++		};
++
++		pm8921_lvs3: lvs3 {
++			bias-pull-down;
++		};
++
++		pm8921_lvs4: lvs4 {
++			bias-pull-down;
++		};
++
++		pm8921_lvs5: lvs5 {
++			bias-pull-down;
++		};
++
++		pm8921_lvs6: lvs6 {
++			bias-pull-down;
++		};
++
++		pm8921_lvs7: lvs7 {
++			bias-pull-down;
++		};
++
++		pm8921_ncp: ncp {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++			qcom,switch-mode-frequency = <1600000>;
++		};
++	};
++};
++
++&usb_hs1_phy {
++	v3p3-supply = <&pm8921_l3>;
++	v1p8-supply = <&pm8921_l4>;
++};
++
++&usb1 {
++	dr_mode = "otg";
++	status = "okay";
++};
 -- 
 2.34.1
 
