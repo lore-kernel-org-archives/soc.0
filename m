@@ -1,106 +1,99 @@
-Return-Path: <SRS0=uhhx=B2=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=2UBY=B2=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E9EFC77B73
-	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 06:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40583C7EE24
+	for <soc@archiver.kernel.org>; Tue,  6 Jun 2023 06:21:05 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E658BC433EF; Tue,  6 Jun 2023 06:08:52 +0000 (UTC)
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	id CCE68C433EF; Tue,  6 Jun 2023 06:21:04 +0000 (UTC)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6F83CC4339B;
-	Tue,  6 Jun 2023 06:08:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F83CC4339B
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 3D9E75C01FC;
-	Tue,  6 Jun 2023 02:08:49 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 06 Jun 2023 02:08:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1686031729; x=1686118129; bh=jWnd+Tu93Ydyd0XWIfSLCz4ZEAGnqPSE7yv
-	GS7uwiVk=; b=SSoZ+7I0c9Fwv2n5Hn515aFeknC06tGYFxgzpP1yl+fz4c4+cfz
-	685JrWK/U9/LC0FTpCnJg20SeaYXRFSKBIim3AY8EE6zoHfGvAhBnALYYvYRKIq3
-	qbi2MIa4tR7v72JR6JDzblr8WLQvqRqpfhytNZ2YjSY72XguwvR9QR/YlNZye8iH
-	uZF6vvrKihuAuyM37QhIjvY+kHKYctuTI9XSH1VFoPZ6q+BIAVcx7KF0T+71S6zu
-	dZogg9CxBSwUsL9uqpDALybi1q15TZJsyF/DFRQHrtKVEMotcb1EJxJhUiBXphXS
-	ITwi9nnJJDmNg6sigEUd2p5fogCx+JqkjcA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1686031729; x=1686118129; bh=jWnd+Tu93Ydyd0XWIfSLCz4ZEAGnqPSE7yv
-	GS7uwiVk=; b=eYsVkHkjsOb7rRAyl98E0Jcwr8/9bmekhSRQ8hv9jldeDtxXBrL
-	mtQ1zNy6Gk6YjffscBlEiUrsHktliRFYzGP+CwvkTsQz7GgA9o1+F+jmiFlfL+kn
-	7cQWGecJkl2Gr7mIn/JF/luqhuhlyZXQ+XRou0etPp3mrcYSDovzShCch8iMwHiE
-	HDz9CzpFqxDlExv++HYgqSiTbJMe3Njhj0S0PIYoXxzyPaIqAhv2SIflF28V4oZj
-	IZ6yhmC3jjbi3tIU2ZkV3zCBaQEB0jYteN5+Q2m3q5YeVmyWO6LQjcdWuW693CKj
-	8BpjJTNpuZ4HkDVxAG0sJAf9cT3YTAXCslg==
-X-ME-Sender: <xms:cM1-ZIIwjYF1VFsJK7COwEnOuf67AdF6Fw4SpR1SWTedqOz6jIYqnw>
-    <xme:cM1-ZIKPgL7wM-O7vXlSfBRo9AThdEPpx7OIB1PjY4KGBP5PmyMwwiJeBbkMp8ntF
-    hxR9WPfAL41op40bj0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cM1-ZIs-5JwC2kaEVBxOYGJuU0ODDRl3q7w8BCh3mQ_aVh1UJQD8lg>
-    <xmx:cM1-ZFbvZlSVBfwhmLps7V0XV2lVrMaAAE8G_91IOG1thZ5-tClb0g>
-    <xmx:cM1-ZPbvZt6NWfUJFC9cZBG0Aqn0GJ18m18X8TLAMShrXceHc2TycQ>
-    <xmx:cc1-ZMSRFsAbeEkqS__3eaSeemwET6EzJI8YKz11xBNnI-ai0-fBNg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 38310B60086; Tue,  6 Jun 2023 02:08:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <4f85ea74-5788-471d-bf3f-01402652a6b8@app.fastmail.com>
-In-Reply-To: <c57453ce-341c-ef89-5e71-58ad63466b11@gmail.com>
-References: <20230605040749.67964-1-ychuang570808@gmail.com>
- <9dc45c49-02aa-4e63-a176-97e3536f14f4@app.fastmail.com>
- <c57453ce-341c-ef89-5e71-58ad63466b11@gmail.com>
-Date: Tue, 06 Jun 2023 08:08:27 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jacky Huang" <ychuang570808@gmail.com>,
- "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- "Lee Jones" <lee@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jiri Slaby" <jirislaby@kernel.org>, "Tomer Maimon" <tmaimon77@gmail.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id A9306C4339C
+	for <soc@kernel.org>; Tue,  6 Jun 2023 06:21:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A9306C4339C
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso8567617a12.3
+        for <soc@kernel.org>; Mon, 05 Jun 2023 23:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686032462; x=1688624462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ghjbsto09XqPnsXCUmUZKd24RXiWGjP2OfhheXx+RZE=;
+        b=TupcBBlW5YEsh9v8j0nYCbVHO7kh1ulyfMEcAnHSvqrsAxbcWEijEqcLa3NoDkrLNC
+         VZ5CLdNHUWr4YbJo1wXbRo6ScBX1r4AqA6CpiILcBP0d8KyHdJS/h5JH5fcbSimOV3TF
+         CoQRcqjIH5RKYiXQLZf0jRjIsFnNiyqbFvMvbfIh1sSwe/RwpK0D57LcVg3u7Je4g9Xo
+         5flyiey/WV3vroipsE+6eGIp8rgRrH2WAub63Rc3eUdapbw9iH5Ws3qdjT55fpvu+Kmc
+         Nq0FzgL743GFM8WbmcVJ7QQn51V/xseA2jDS8D3WILlA9ZC7UJh4W0TwxA2wMN6qzXny
+         cm/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686032462; x=1688624462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghjbsto09XqPnsXCUmUZKd24RXiWGjP2OfhheXx+RZE=;
+        b=G8+dd7rmeEGZtPCtaRXu1vfGhRilLNVMoLND3uYAkrj06VXhLYZkz6R4LL13mYeS3y
+         3SN5obK3UoerhaK2qY4syiEhU/KtD/wgeB2c1cvxo/ffatrGbYJN80XDaQiThAmOCNIh
+         +Rb8pSS2zYjxoPB51P3EQK7k0eICl4hkHjeZo8BeKvhTmXkqoF6epE51GitRmmSYpHV7
+         O+QJ/MycalRTQwuaowVl7YtIOEQbOlE5paOkqYTTT9Ir8yyscvUL7ItDvsXU+xJbP7pz
+         qk817dHa2lzorzgN630n7xX6Qsb5WcIDjGVP+I170acIaXe7jqcSzsn1kOhHHljKHTa6
+         u5LA==
+X-Gm-Message-State: AC+VfDx89NyOt1el0HB6gfd7zXltGsfL+mZzsceNzhFj9JEYtOGGetQK
+	eeZVjEcSEsVUCzCWrhzKkjGcSw==
+X-Google-Smtp-Source: ACHHUZ5BBOuUVEcj0d9nizDVIPtOnYGoIXZ8X7BWvAVGbZl4oKgdIvd4Behhvjfjmvzv3MOC84YPMQ==
+X-Received: by 2002:aa7:c507:0:b0:50c:3dc:2262 with SMTP id o7-20020aa7c507000000b0050c03dc2262mr990172edq.39.1686032461745;
+        Mon, 05 Jun 2023 23:21:01 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id q22-20020aa7d456000000b0051631518aabsm4613727edr.93.2023.06.05.23.20.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 23:21:01 -0700 (PDT)
+Message-ID: <ee60f6ff-42bc-d30e-8465-39d00320d48b@linaro.org>
+Date: Tue, 6 Jun 2023 08:20:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add compatible
+Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
-Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
- mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v13 00/10] Introduce Nuvoton ma35d1 SoC
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+To: Rudraksha Gupta <guptarud@gmail.com>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20230604063032.365775-1-guptarud@gmail.com>
+ <20230604063032.365775-3-guptarud@gmail.com>
+ <3c781ae6-4a45-1d6d-840c-d25f33684b00@linaro.org>
+ <CT583OP69XTU.3E141NE263OR3@Latitude-E6420>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CT583OP69XTU.3E141NE263OR3@Latitude-E6420>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 6, 2023, at 02:22, Jacky Huang wrote:
-> On 2023/6/5 =E4=B8=8B=E5=8D=88 08:00, Arnd Bergmann wrote:
->> On Mon, Jun 5, 2023, at 06:07, Jacky Huang wrote:
->
-> I'm glad to see that these patches have finally been accepted.
-> Thank you very much for all the assistance you have provided.
-> Once the device tree is merged, we will start submitting drivers
-> such as pinctrl, gpio, rtc, and so on.
+On 06/06/2023 04:48, Rudraksha Gupta wrote:
+ted patch soon that addresses this.
+> 
+>>
+>> It does not look like you tested the bindings, at least after quick
+>> look. Please run `make dt_binding_check` (see
+>> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+>> Maybe you need to update your dtschema and yamllint.
+>>
+>> Best regards,
+>> Krzysztof
+> Sorry. I was only looking for expressatt errors/warnings and failed to
+> see the other errors/warnings in the sea of text.
 
-I think you can start submitting all the drivers to their
-respective maintainers now, just mention that the SoC support
-is currently in linux-next in case they get confused about the
-dependencies.
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
 
-     Arnd
+Best regards,
+Krzysztof
+
