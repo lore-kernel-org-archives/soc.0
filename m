@@ -1,88 +1,995 @@
-Return-Path: <SRS0=KieJ=B3=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=rtvp=B3=pengutronix.de=lgo@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36C6FC7EE23
-	for <soc@archiver.kernel.org>; Wed,  7 Jun 2023 06:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D274C7EE23
+	for <soc@archiver.kernel.org>; Wed,  7 Jun 2023 11:58:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F423CC433AA; Wed,  7 Jun 2023 06:58:05 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 4560CC4339B; Wed,  7 Jun 2023 11:58:23 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1DB02C433A8
-	for <soc@kernel.org>; Wed,  7 Jun 2023 06:58:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1DB02C433A8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-977d0ee1736so536405366b.0
-        for <soc@kernel.org>; Tue, 06 Jun 2023 23:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686121081; x=1688713081;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4r5ckWADvIeunNEBSYEKM/Q/81CyZ43oAc3SDHOV06A=;
-        b=D5LHu0NTTbEdUyGlMZ43xZPsl509RpHKHHhl33Qtv5+IetJFJX9U92zpFIdk/i1RLf
-         4eNXmSRqrbIQVFYTRHxZm1aKIPebzkD1fBQDFjzGsVeHKS2wzjUKeBzPqQfsxtsXV14a
-         5NrG7kd/PvckTQmCTpUHGy+IUFgT+HmqoImaC/5bCXZcKq0I27285PXg1InggQEUE8HZ
-         W+is7a9B9fsx+ZIlSXs3rw8bVSnUtGiyhU6jIMCulcaio0t94so88ivQS4eHRsl3S5fF
-         7fiV2DEYsxx0/dsmbicQoa1YwBR23HsQGwaZ5DGaQJKKxbG7evIzlV4sP6W7HKXtVJSl
-         Yojw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686121081; x=1688713081;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4r5ckWADvIeunNEBSYEKM/Q/81CyZ43oAc3SDHOV06A=;
-        b=IA6U8v/8mUutoCfhElsj1Tdu72P5wmH6yPKFnMYwH56HxkTRXOFqI2J0AhC8SJZuqY
-         Pp4iulBA9T4crK/kgqasvpeuypBuxnQNs47ftIaKhP0C+f+FK32Fk+pHguo/DJB6Iy26
-         zXGyHVmNlqcLGhu4FBj+BVctRUZOyELEXNnKTUbrxz5mvNiEXSZI78hn2EhCS6QWgvwC
-         Dfj54AuoTXaW+BEaqEBn8bxP5nKVZKuVwSqGpV1tB+nHEX03WAeoiDE2UEjc1WrZtYFu
-         ZUPWmhTw8sTzbJ7nJG/pC2ucbNZmUgRZA3kZnXJ7LNS9fjBjAlTyx1qZ5pjqrsgsi6zg
-         W7bA==
-X-Gm-Message-State: AC+VfDyx+k0WumcqORwI+VvBfKHe/uxXWWUrMZ/OJzklrqDLxsXEzmb9
-	CYU8B3IfaOKxzInLOICt6GTuWg==
-X-Google-Smtp-Source: ACHHUZ7fu0rabSgiRWnoDuVUvfCn6LZF2OhmoDNeDBuj4KR7YKeD2MulnLNleOKJe6o6wIMQqNdSFQ==
-X-Received: by 2002:a17:907:2d93:b0:973:cc48:f19c with SMTP id gt19-20020a1709072d9300b00973cc48f19cmr4610485ejc.56.1686121080808;
-        Tue, 06 Jun 2023 23:58:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u26-20020a1709060b1a00b00977d7bd9069sm3826614ejg.179.2023.06.06.23.57.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 23:58:00 -0700 (PDT)
-Message-ID: <2edc5ad1-0000-572d-317c-387dd9c25450@linaro.org>
-Date: Wed, 7 Jun 2023 08:57:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add compatible
-Content-Language: en-US
+	by smtp.kernel.org (Postfix) with ESMTPS id 0D9CDC433D2
+	for <soc@kernel.org>; Wed,  7 Jun 2023 11:58:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0D9CDC433D2
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <lgo@pengutronix.de>)
+	id 1q6rns-0000Z3-P6; Wed, 07 Jun 2023 13:58:16 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <lgo@pengutronix.de>)
+	id 1q6rnr-005jGU-D3; Wed, 07 Jun 2023 13:58:15 +0200
+Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <lgo@pengutronix.de>)
+	id 1q6rnq-00CTlo-NF; Wed, 07 Jun 2023 13:58:14 +0200
+From: =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
 List-Id: <soc.lore.kernel.org>
-To: Rudraksha Gupta <guptarud@gmail.com>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org
-References: <20230607050025.86636-1-guptarud@gmail.com>
- <20230607050025.86636-3-guptarud@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607050025.86636-3-guptarud@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: kernel@pengutronix.de,
+	=?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v1 8/8] ARM: dts: stm32: lxa-tac: add Linux Automation GmbH TAC
+Date: Wed,  7 Jun 2023 13:55:07 +0200
+Message-Id: <20230607115508.2964574-8-l.goehrs@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
+References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: lgo@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: soc@kernel.org
 
-On 07/06/2023 07:00, Rudraksha Gupta wrote:
-> Adds qcom,usb-hs-phy-msm8960 compatible
-> 
-> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+The Linux Automation Test Automation Controller (LXA TAC)[1] is an embedded
+software development tool built around the Octavo Systems OSD32MP15x SiP.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The device contains an eMMC for storage, a DSA-capable on board ethernet
+switch with two external ports, dual CAN busses, a power switch to turn
+a device under test on or off and some other I/O.
 
-Best regards,
-Krzysztof
+As of now there are two STM32MP157 based hardware generations (Gen 1 and
+Gen 2) that have most of their hardware config in common.
+In the future there will also be a STM32MP153 based hardware generation.
+
+[1]: https://www.linux-automation.com/en/products/lxa-tac.html
+
+Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+---
+ arch/arm/boot/dts/Makefile                    |   2 +
+ .../arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts |  93 +++
+ .../arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts | 172 +++++
+ arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi    | 612 ++++++++++++++++++
+ 4 files changed, 879 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts
+ create mode 100644 arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 59829fc903152..886371436bbc1 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1266,6 +1266,8 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157c-ev1.dtb \
+ 	stm32mp157c-ev1-scmi.dtb \
+ 	stm32mp157c-lxa-mc1.dtb \
++	stm32mp157c-lxa-tac-gen1.dtb \
++	stm32mp157c-lxa-tac-gen2.dtb \
+ 	stm32mp157c-odyssey.dtb
+ dtb-$(CONFIG_MACH_SUN4I) += \
+ 	sun4i-a10-a1000.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts
+new file mode 100644
+index 0000000000000..81f254fb88b0a
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen1.dts
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 STMicroelectronics - All Rights Reserved
++ * Copyright (C) 2021 Rouven Czerwinski, Pengutronix
++ * Copyright (C) 2023 Leonard Göhrs, Pengutronix
++ */
++
++/dts-v1/;
++
++#include "stm32mp157.dtsi"
++#include "stm32mp15xc-lxa-tac.dtsi"
++
++/ {
++	model = "Linux Automation Test Automation Controller (TAC) Gen 1";
++	compatible = "lxa,stm32mp157c-tac-gen1", "oct,stm32mp15xx-osd32", "st,stm32mp157";
++
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		power-supply = <&v3v3>;
++
++		brightness-levels = <0 31 63 95 127 159 191 223 255>;
++		default-brightness-level = <7>;
++		pwms = <&backlight_pwm 1 1000000 0>;
++	};
++
++	reg_iobus_12v: regulator-iobus-12v {
++		compatible = "regulator-fixed";
++		vin-supply = <&reg_12v>;
++
++		gpio = <&gpioh 13 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-max-microvolt = <12000000>;
++		regulator-min-microvolt = <12000000>;
++		regulator-name = "12V_IOBUS";
++	};
++};
++
++&gpioa {
++	gpio-line-names = "", "", "STACK_CS2", "", "STACK_CS3", /*  0 */
++	"ETH_GPIO1", "ETH_INT", "", "", "",                     /*  5 */
++	"", "", "", "BOOTROM_LED", "ETH_LAB_LEDRP",             /* 10 */
++	"";                                                     /* 15 */
++};
++
++&gpioc {
++	gpio-line-names = "", "STACK_CS1", "", "", "", /*  0 */
++	"", "", "", "", "",                            /*  5 */
++	"", "";                                        /* 10 */
++};
++
++&gpu {
++	status = "disabled";
++};
++
++&i2c1 {
++	powerboard_gpio: gpio@24 {
++		compatible = "nxp,pca9570";
++		reg = <0x24>;
++
++		#gpio-cells = <2>;
++		gpio-controller;
++		gpio-line-names = "DUT_PWR_EN", "DUT_PWR_DISCH", "DUT_PWR_ADCRST", "";
++	};
++};
++
++&spi2 {
++	adc@0 {
++		compatible = "ti,lmp92064";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++		vdd-supply = <&reg_pb_3v3>;
++		vdig-supply = <&reg_pb_3v3>;
++		reset-gpios = <&powerboard_gpio 2 GPIO_ACTIVE_HIGH>;
++
++		shunt-resistor-micro-ohms = <15000>;
++	};
++};
++
++&timers1 {
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++
++	backlight_pwm: pwm {
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&pwm1_pins_c>;
++		pinctrl-1 = <&pwm1_sleep_pins_c>;
++
++		status = "okay";
++	};
++};
+diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts
+new file mode 100644
+index 0000000000000..8a34d15e9005f
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp157c-lxa-tac-gen2.dts
+@@ -0,0 +1,172 @@
++// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 STMicroelectronics - All Rights Reserved
++ * Copyright (C) 2021 Rouven Czerwinski, Pengutronix
++ * Copyright (C) 2023 Leonard Göhrs, Pengutronix
++ */
++
++/dts-v1/;
++
++#include "stm32mp157.dtsi"
++#include "stm32mp15xc-lxa-tac.dtsi"
++
++/ {
++	model = "Linux Automation Test Automation Controller (TAC) Gen 2";
++	compatible = "lxa,stm32mp157c-tac-gen2", "oct,stm32mp15xx-osd32", "st,stm32mp157";
++
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		power-supply = <&v3v3>;
++
++		brightness-levels = <0 31 63 95 127 159 191 223 255>;
++		default-brightness-level = <7>;
++		pwms = <&led_pwm 3 1000000 0>;
++	};
++
++	reg_iobus_12v: regulator-iobus-12v {
++		compatible = "regulator-fixed";
++		vin-supply = <&reg_12v>;
++		gpio = <&gpioh 13 GPIO_ACTIVE_LOW>;
++		regulator-max-microvolt = <12000000>;
++		regulator-min-microvolt = <12000000>;
++		regulator-name = "12V_IOBUS";
++	};
++
++	led-controller-1 {
++		compatible = "pwm-leds-multicolor";
++
++		multi-led {
++			color = <LED_COLOR_ID_RGB>;
++			function = LED_FUNCTION_STATUS;
++			max-brightness = <65535>;
++
++			led-red {
++				active-low;
++				color = <LED_COLOR_ID_RED>;
++				pwms = <&led_pwm 0 1000000 0>;
++			};
++
++			led-green {
++				active-low;
++				color = <LED_COLOR_ID_GREEN>;
++				pwms = <&led_pwm 2 1000000 0>;
++			};
++
++			led-blue {
++				active-low;
++				color = <LED_COLOR_ID_BLUE>;
++				pwms = <&led_pwm 1 1000000 0>;
++			};
++		};
++	};
++
++	led-controller-2 {
++		compatible = "gpio-leds";
++
++		led-5 {
++			label = "tac:green:iobus";
++			gpios = <&gpiog 1 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-6 {
++			label = "tac:green:can";
++			gpios = <&gpiof 3 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-7 {
++			label = "tac:green:out0";
++			gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-8 {
++			label = "tac:green:out1";
++			gpios = <&gpiog 3 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-9 {
++			label = "tac:green:uarttx";
++			gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-10 {
++			label = "tac:green:uartrx";
++			gpios = <&gpiof 6 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-11 {
++			label = "tac:green:usbh1";
++			gpios = <&gpioc 8 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-12 {
++			label = "tac:green:usbh2";
++			gpios = <&gpiod 6 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-13 {
++			label = "tac:green:usbh3";
++			gpios = <&gpiob 9 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-14 {
++			label = "tac:green:usbg";
++			gpios = <&gpiod 14 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "usb-gadget";
++		};
++
++		led-15 {
++			label = "tac:green:dutpwr";
++			gpios = <&gpioa 15 GPIO_ACTIVE_HIGH>;
++		};
++	};
++};
++
++&gpioa {
++	gpio-line-names = "", "", "DUT_PWR_EN", "", "STACK_CS3", /*  0 */
++	"ETH_GPIO1", "ETH_INT", "", "", "",                      /*  5 */
++	"", "", "", "BOOTROM_LED", "ETH_LAB_LEDRP",              /* 10 */
++	"";                                                      /* 15 */
++};
++
++&gpioc {
++	gpio-line-names = "", "DUT_PWR_DISCH", "", "", "", /*  0 */
++	"", "", "", "", "",                                /*  5 */
++	"", "";                                            /* 10 */
++};
++
++&gpu {
++	status = "disabled";
++};
++
++&m_can2 {
++	termination-gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
++	termination-ohms = <120>;
++};
++
++&spi2 {
++	adc@0 {
++		compatible = "ti,lmp92064";
++		reg = <0>;
++
++		reset-gpios = <&gpioa 4 GPIO_ACTIVE_HIGH>;
++		shunt-resistor-micro-ohms = <15000>;
++		spi-max-frequency = <5000000>;
++		vdd-supply = <&reg_pb_3v3>;
++		vdig-supply = <&reg_pb_3v3>;
++	};
++};
++
++&timers8 {
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++
++	led_pwm: pwm {
++		pinctrl-names = "default", "sleep";
++		pinctrl-0 = <&pwm8_pins_b>;
++		pinctrl-1 = <&pwm8_sleep_pins_b>;
++		status = "okay";
++	};
++};
+diff --git a/arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi b/arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi
+new file mode 100644
+index 0000000000000..ca4d25f5c9b51
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp15xc-lxa-tac.dtsi
+@@ -0,0 +1,612 @@
++// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
++/*
++ * Copyright (C) 2020 STMicroelectronics - All Rights Reserved
++ * Copyright (C) 2021 Rouven Czerwinski, Pengutronix
++ * Copyright (C) 2023 Leonard Göhrs, Pengutronix
++ */
++
++#include "stm32mp15xc.dtsi"
++#include "stm32mp15xx-osd32.dtsi"
++#include "stm32mp15xxac-pinctrl.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/ {
++	aliases {
++		ethernet0 = &ethernet0;
++		ethernet1 = &port_uplink;
++		ethernet2 = &port_dut;
++		mmc1 = &sdmmc2;
++		serial0 = &uart4;
++		serial1 = &usart3;
++	};
++
++	chosen {
++		stdout-path = &uart4;
++	};
++
++	led-controller-0 {
++		compatible = "gpio-leds";
++
++		led-0 {
++			label = "tac:green:user1";
++			gpios = <&gpiof 10 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++		};
++
++		led-1 {
++			label = "tac:green:user2";
++			gpios = <&gpiog 7 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-2 {
++			label = "tac:green:statusdut";
++			gpios = <&gpioa 13 GPIO_ACTIVE_LOW>;
++		};
++
++		/* led-3 and led-4 are internally connected antiparallel to one
++		 * another inside the ethernet jack like this:
++		 * GPIOA14 ---+---|led-3|>--+--- GPIOD15
++		 *            +--<|led-4|---+
++		 * E.g. only one of the LEDs can be illuminated at a time while
++		 * the other output must be driven low.
++		 * This should likely be implemented using a multi color LED
++		 * driver for antiparallel LEDs.
++		 */
++		led-3 {
++			label = "tac:green:statuslab";
++			gpios = <&gpioa 14 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-4 {
++			label = "tac:orange:statuslab";
++			gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>;
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-lower {
++			label = "USER_BTN2";
++			linux,code = <KEY_ESC>;
++			gpios = <&gpioe 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++		};
++
++		button-upper {
++			label = "USER_BTN";
++			linux,code = <KEY_HOME>;
++			gpios = <&gpioi 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
++		};
++	};
++
++	/* supplied by either barrel connector or PoE */
++	reg_12v: regulator-12v {
++		compatible = "regulator-fixed";
++		regulator-name = "12V";
++		regulator-min-microvolt = <12000000>;
++		regulator-max-microvolt = <12000000>;
++		regulator-always-on;
++	};
++
++	reg_5v: regulator-5v {
++		compatible = "regulator-fixed";
++		regulator-name = "5V";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++		vin-supply = <&reg_12v>;
++	};
++
++	reg_1v2: regulator-1v2 {
++		compatible = "regulator-fixed";
++		regulator-name = "1V2";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++		regulator-always-on;
++		vin-supply = <&reg_5v>;
++	};
++
++	reg_pb_5v: regulator-pb-5v {
++		compatible = "regulator-fixed";
++		regulator-name = "5V_POWERBOARD";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++		vin-supply = <&reg_5v>;
++	};
++
++	reg_pb_3v3: regulator-pb-3v3 {
++		compatible = "regulator-fixed";
++		regulator-name = "3V3_POWERBOARD";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++		vin-supply = <&reg_pb_5v>;
++	};
++
++	output-iobus-12v {
++		compatible = "regulator-output";
++		vout-supply = <&reg_iobus_12v>;
++	};
++
++	output-vuart {
++		compatible = "regulator-output";
++		vout-supply = <&v3v3_hdmi>;
++	};
++};
++
++baseboard_eeprom: &sip_eeprom {
++};
++
++&adc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&adc1_ain_pins_a>;
++	vdd-supply = <&vdd>;
++	vdda-supply = <&vdda>;
++	vref-supply = <&vrefbuf>;
++	status = "okay";
++
++	adc1: adc@0 {
++		st,adc-channels = <0 1 2 5 9 10 13 15>;
++		st,min-sample-time-nsecs = <5000>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "okay";
++
++		channel@0 {
++			reg = <0>;
++			label = "HOST_2_CURR_FB";
++		};
++
++		channel@1 {
++			reg = <1>;
++			label = "HOST_3_CURR_FB";
++		};
++
++		channel@2 {
++			reg = <2>;
++			label = "OUT_0_FB";
++		};
++
++		channel@5 {
++			reg = <5>;
++			label = "IOBUS_CURR_FB";
++		};
++
++		channel@9 {
++			reg = <9>;
++			label = "IOBUS_VOLT_FB";
++		};
++
++		channel@10 {
++			reg = <10>;
++			label = "OUT_1_FB";
++		};
++
++		channel@13 {
++			reg = <13>;
++			label = "HOST_CURR_FB";
++		};
++
++		channel@15 {
++			reg = <15>;
++			label = "HOST_1_CURR_FB";
++		};
++	};
++
++	adc2: adc@100 {
++		st,adc-channels = <12>;
++		st,min-sample-time-nsecs = <500000>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "okay";
++
++		channel@12 {
++			reg = <12>;
++			label = "TEMP_INTERNAL";
++		};
++	};
++};
++
++&crc1 {
++	status = "okay";
++};
++
++&cryp1 {
++	status = "okay";
++};
++
++&dts {
++	status = "okay";
++};
++
++&ethernet0 {
++	assigned-clocks = <&rcc ETHCK_K>, <&rcc PLL4_P>;
++	assigned-clock-parents = <&rcc PLL4_P>;
++	assigned-clock-rates = <125000000>; /* Clock PLL4 to 750Mhz in ATF */
++
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&ethernet0_rgmii_pins_d>;
++	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_d>;
++
++	st,eth-clk-sel;
++	phy-mode = "rgmii-id";
++
++	status = "okay";
++
++	fixed-link {
++		speed = <1000>;
++		full-duplex;
++	};
++};
++
++&ethernet0_rgmii_pins_d {
++	pins1 {
++		/* Reduce EMI emission by reducing RGMII drive strength */
++		slew-rate = <1>;
++	};
++};
++
++&gpiob {
++	gpio-line-names = "", "", "", "", "", /*  0 */
++	"", "USB_RESET", "", "", "",          /*  5 */
++	"", "", "", "", "",                   /* 10 */
++	"";                                   /* 15 */
++};
++
++&gpiod {
++	gpio-line-names = "", "", "", "", "TP38", /*  0 */
++	"TP39", "", "", "TP41", "TP42",           /*  5 */
++	"OLED_DC", "", "", "ETH_CS", "",          /* 10 */
++	"ETH_LAB_LEDRN";                          /* 15 */
++};
++
++&gpioe {
++	gpio-line-names = "TP35", "", "", "", "CAN_1_120R", /*  0 */
++	"", "", "USER_BTN2", "TP48", "UART_TX_EN",          /*  5 */
++	"UART_RX_EN", "TP24", "", "TP25", "TP26",           /* 10 */
++	"TP27";                                             /* 15 */
++};
++
++&gpiof {
++	gpio-line-names = "TP36", "TP37", "", "", "OLED_CS", /*  0 */
++	"", "", "", "", "",                                  /*  5 */
++	"USER_LED1", "", "STACK_CS0", "", "",                /* 10 */
++	"";                                                  /* 15 */
++};
++
++&gpiog {
++	gpio-line-names = "ETH_RESET", "", "", "", "",               /*  0 */
++	"IOBUS_FLT_FB", "", "USER_LED2", "ETH1_PPS_A", "CAN_0_120R", /*  5 */
++	"TP49", "", "", "", "",                                      /* 10 */
++	"";                                                          /* 15 */
++};
++
++&gpioh {
++	gpio-line-names = "", "", "OUT_1", "OUT_0", "OLED_RESET", /*  0 */
++	"", "", "", "", "",                                       /*  5 */
++	"ETH1_PPS_B", "ETH_GPIO2", "", "IOBUS_PWR_EN", "",        /* 10 */
++	"TP33";                                                   /* 15 */
++};
++
++&gpioi {
++	gpio-line-names = "TIM_RTS", "", "", "", "DEVICE_DATA_EN", /*  0 */
++	"", "", "", "ETH_WOL", "TP43",                             /*  5 */
++	"", "USER_BTN";                                            /* 10 */
++};
++
++&gpioz {
++	gpio-line-names = "HWID0", "HWID1", "HWID2", "HWID3", "", /*  0 */
++	"", "HWID4", "HWID5";                                     /*  5 */
++};
++
++&hash1 {
++	status = "okay";
++};
++
++&i2c1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2c1_pins_b>;
++	pinctrl-1 = <&i2c1_sleep_pins_b>;
++	status = "okay";
++
++	powerboard_eeprom: eeprom@50 {
++		compatible = "atmel,24c02";
++		reg = <0x50>;
++		vcc-supply = <&v3v3>;
++	};
++
++	temperature-sensor@48 {
++		compatible = "national,lm75a";
++		reg = <0x48>;
++		status = "disabled";
++	};
++};
++
++&i2c5 {
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&i2c5_pins_b>;
++	pinctrl-1 = <&i2c5_sleep_pins_b>;
++
++	status = "okay";
++
++	usbhub: usbhub@2c {
++		compatible ="microchip,usb2514b";
++		reg = <0x2c>;
++		vdd-supply = <&v3v3>;
++		reset-gpios = <&gpiob 6 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&iwdg2 {
++	timeout-sec = <8>;
++	status = "okay";
++};
++
++&m_can1 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can1_pins_b>;
++	pinctrl-1 = <&m_can1_sleep_pins_b>;
++	status = "okay";
++};
++
++&m_can2 {
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&m_can2_pins_a>;
++	pinctrl-1 = <&m_can2_sleep_pins_a>;
++	status = "okay";
++};
++
++&pmic {
++	regulators {
++		buck1-supply = <&reg_5v>;	/* VIN */
++		buck2-supply = <&reg_5v>;	/* VIN */
++		buck3-supply = <&reg_5v>;	/* VIN */
++		buck4-supply = <&reg_5v>;	/* VIN */
++		ldo2-supply = <&reg_5v>;	/* PMIC_LDO25IN */
++		ldo4-supply = <&reg_5v>;	/* VIN */
++		ldo5-supply = <&reg_5v>;	/* PMIC_LDO25IN */
++		vref_ddr-supply = <&reg_5v>;	/* VIN */
++		boost-supply = <&reg_5v>;	/* PMIC_BSTIN */
++		pwr_sw2-supply = <&bst_out>;	/* PMIC_SWIN */
++	};
++};
++
++&pwr_regulators {
++	vdd-supply = <&vdd>;
++	vdd_3v3_usbfs-supply = <&vdd_usb>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&sdmmc2 {
++	pinctrl-names = "default", "opendrain", "sleep";
++	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_b>;
++	pinctrl-1 = <&sdmmc2_b4_od_pins_a &sdmmc2_d47_pins_b>;
++	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_b>;
++	vmmc-supply = <&v3v3>;
++
++	bus-width = <8>;
++	mmc-ddr-3_3v;
++	no-1-8-v;
++	non-removable;
++	no-sd;
++	no-sdio;
++	st,neg-edge;
++
++	status = "okay";
++};
++
++&spi2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi2_pins_c>;
++	cs-gpios = <&gpiof 12 GPIO_ACTIVE_LOW>;
++	status = "okay";
++};
++
++&spi4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi4_pins_a>;
++	cs-gpios = <&gpiof 4 GPIO_ACTIVE_LOW>;
++	status = "okay";
++
++	lcd: display@0 {
++		compatible = "shineworld,lh133k", "panel-mipi-dbi-spi";
++		reg = <0>;
++		power-supply = <&v3v3>;
++		io-supply = <&v3v3>;
++		backlight = <&backlight>;
++		dc-gpios = <&gpiod 10 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpioh 4 GPIO_ACTIVE_HIGH>;
++		spi-3wire;
++		spi-max-frequency = <32000000>;
++
++		width-mm = <23>;
++		height-mm = <23>;
++		rotation = <180>;
++
++		panel-timing {
++			hactive = <240>;
++			vactive = <240>;
++			hback-porch = <0>;
++			vback-porch = <0>;
++
++			clock-frequency = <0>;
++			hfront-porch = <0>;
++			hsync-len = <0>;
++			vfront-porch = <0>;
++			vsync-len = <0>;
++		};
++	};
++};
++
++&spi5 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi5_pins_a>;
++
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	cs-gpios = <&gpiod 13 GPIO_ACTIVE_LOW>;
++
++	status = "okay";
++
++	switch: switch@0 {
++		compatible = "microchip,ksz9563";
++		reg = <0>;
++
++		reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
++		spi-max-frequency = <44000000>;
++		spi-cpha;
++		spi-cpol;
++
++		interrupt-parent = <&gpioa>;
++		interrupts = <6 IRQ_TYPE_EDGE_RISING>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			port_dut: port@0 {
++				reg = <0>;
++				label = "dut";
++			};
++
++			port_uplink: port@1 {
++				reg = <1>;
++				label = "uplink";
++			};
++
++			port_cpu: port@2 {
++				reg = <2>;
++				label = "cpu";
++
++				ethernet = <&ethernet0>;
++
++				phy-mode = "rgmii-id";
++				rx-internal-delay-ps = <2000>;
++				tx-internal-delay-ps = <2000>;
++
++				fixed-link {
++					speed = <1000>;
++					full-duplex;
++				};
++			};
++		};
++	};
++};
++
++&timers2 {
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++
++	timer@1 {
++		status = "okay";
++	};
++};
++
++&timers3 {
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++
++	timer@2 {
++		status = "okay";
++	};
++};
++
++&timers4 {
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++
++	timer@3 {
++		status = "okay";
++	};
++};
++
++&uart4 {
++	label = "debug";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart4_pins_a>;
++
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++};
++
++&usart3 {
++	label = "dut";
++	uart-has-rtscts;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&usart3_pins_f>;
++
++	/* spare dmas for other usage */
++	/delete-property/dmas;
++	/delete-property/dma-names;
++
++	status = "okay";
++};
++
++&usbh_ehci {
++	phys = <&usbphyc_port0>;
++	phy-names = "usb";
++
++	status = "okay";
++};
++
++&usbotg_hs {
++	phys = <&usbphyc_port1 0>;
++	phy-names = "usb2-phy";
++
++	vusb_d-supply = <&vdd_usb>;
++	vusb_a-supply = <&reg18>;
++
++	dr_mode = "peripheral";
++
++	status = "okay";
++};
++
++&usbphyc {
++	status = "okay";
++};
++
++&usbphyc_port0 {
++	phy-supply = <&vdd_usb>;
++};
++
++&usbphyc_port1 {
++	phy-supply = <&vdd_usb>;
++};
++
++&v3v3_hdmi {
++	/delete-property/regulator-always-on;
++};
++
++&vrefbuf {
++	regulator-min-microvolt = <2500000>;
++	regulator-max-microvolt = <2500000>;
++	vdda-supply = <&vdda>;
++
++	status = "okay";
++};
+-- 
+2.39.2
 
