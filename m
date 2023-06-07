@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EBCFC7EE25
-	for <soc@archiver.kernel.org>; Wed,  7 Jun 2023 05:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85567C83005
+	for <soc@archiver.kernel.org>; Wed,  7 Jun 2023 05:00:38 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0C23BC433A4; Wed,  7 Jun 2023 05:00:32 +0000 (UTC)
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	id 69254C43446; Wed,  7 Jun 2023 05:00:38 +0000 (UTC)
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E6B27C433D2;
-	Wed,  7 Jun 2023 05:00:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E6B27C433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 6ADFDC4339B;
+	Wed,  7 Jun 2023 05:00:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6ADFDC4339B
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-62884fa0e53so40872146d6.0;
-        Tue, 06 Jun 2023 22:00:30 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-62b3b505961so23674726d6.3;
+        Tue, 06 Jun 2023 22:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686114029; x=1688706029;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BnDSNztBm4J3NasuTfQRWgwfyES7T9XRaUOrSTDLNZ4=;
-        b=hfOxgLDZXBPnbDuIG7QLJvtBnPCEgqErrK1gQCRO8R2Wv36kpvTnKynhJCefBg/5NR
-         NgSk+cqo5oY2Gh58WRiu06UYRiXSUdH5znj7CDiyDPfN7QnE/Wi1dNHq5bTLSO/wRuNu
-         9TXuzHyIen3xPyALTGrZdxvFldOR1EHSDFcoKAjDx4I5pM5+vZv7ZxLOpuUbQXh2NF0k
-         XnmX3zbaLDU2rrftRUuBPIL4NTJ1l4UGaB7RSbsYqcUilHqJfY0P3NqG5LS5cUyIU/N8
-         XdpJVR2MHevcF+aVYrkSDLyqlanxCJ01MOugzFHuwgoCdgEczFtQCC3X2mepC+cTQPHA
-         wjLg==
+        d=gmail.com; s=20221208; t=1686114036; x=1688706036;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=InNCRBFCVMAHRg7WiAegvwd5G8nBYWhLOZCACH97Qks=;
+        b=NjQQi6X5A0njTI5DDSxjm0LWsJUyKKR3vJn9jnNOMjq+JnQWy0citPCe7DoOZxbWg/
+         jenX6DtpOzlBSu+C4vPZl+MQdwP5EzCHnLNU1bHv79xUm+4Rvj+U0koigf90P1B6RFvv
+         imwFm8/60luDl6DYFGpko6+kWbk8o+ubeQF6vGgtljOc7bTAHjVuaMbT9Iipax0xH/Ze
+         p88qsHXfLdaWgpjjiaU6Vkxm2xVv8AkaurWJeCFUgAinIPNmibHFHd7ZfFq/xwYXaJVE
+         S3K+QibqojhUy00hTBT/rpieqZxAwrKAbNw8/VF1fGUrnASi/Lf86aKB59GFfeufKHWC
+         cJFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686114029; x=1688706029;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BnDSNztBm4J3NasuTfQRWgwfyES7T9XRaUOrSTDLNZ4=;
-        b=NBYUf++oLAuwihps8FhnCexhSbWv/ZTHDRVTrl4xTkelwK7N5XPkUuLeyjXX6Go6jx
-         AYfCrV8HQ6EWNO4NcXQSJGkRUFPhx2Zh/wcXiHyJksYOGvbxdraa2awA45U+SQUFSRzB
-         zrUWXSv38Sy3LkxXxAfcc03mVFFAISPVIddtbq2VWkzMQgbxz339RUu5SEaj8W7XbBFd
-         5UZZrP1nu8qqOt9GS+/Rw5hU3N+5wKWBlw8+DJtmjHJTLcH3HPD2C7pligiDQziZa9TN
-         3tcg/UvJKLN6YpcZeMPvO72pfAwXeD7ddpmwPUtHE1yK+Baq22PmDArSCsjLie9TB0uN
-         kEDg==
-X-Gm-Message-State: AC+VfDyRA6EPbEoGO2sbBrtZZXuWk4Sik1r5gfQ/JvUZY0IyKXIQiDjI
-	3XBPirvzlcojmB+Rf+4stvPFivBOwATD8Q==
-X-Google-Smtp-Source: ACHHUZ6FSOUL8gqKJKG6injW2YR28bdwhMVki0CET5tehnYzxt3S9hid7iykw0he0o1Ml6HfPwuWIw==
-X-Received: by 2002:a05:6214:1d2b:b0:625:b3a2:f637 with SMTP id f11-20020a0562141d2b00b00625b3a2f637mr2236823qvd.8.1686114029079;
-        Tue, 06 Jun 2023 22:00:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686114036; x=1688706036;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=InNCRBFCVMAHRg7WiAegvwd5G8nBYWhLOZCACH97Qks=;
+        b=M+o9KYX9Wbwf/Dizh+pyw8JcSloKj8qbChqpSlyt4zwzDff0X7fkgscc9K5R6mwqAR
+         gwDFCKrJYBjwpVKCwlC7JW8SZIEygXLxn52MUmbfMkI3Op4B6n2AvM89d2n8Qij0Y75i
+         2Dfro6FNPlIO6ibZgHJfoVc1u/kXay3yeXug/FUOEZQ9UCA9qtacCOkS8nWwcDV3DGKg
+         A2oXV6PpHWyS6WkeGS7PdHMmMECdJn6fFUoGyGopQ5b/r+o9K9nPhcu318PeRee6/448
+         PuxWOvGXUWyi9Y4x/Pg2dlifX8/NE08V6QbugoOoEb19JFwctfZXW8z/g0dMePQUx7c2
+         pvnQ==
+X-Gm-Message-State: AC+VfDy2QkUSMLcW8Rwd3xZGAqB471C7d3v7fxaRhNWB6MjWLLWsrW/R
+	6oZvPr3b+2mmS/uhM/pxwruz5hlOBJqm8g==
+X-Google-Smtp-Source: ACHHUZ67ua4QqB8D/EpRugVFld375BJ7JpcXkvv7idb/0bZDgZBksaFRzAEA9X39AnUcgtAbqa9wTQ==
+X-Received: by 2002:a05:6214:2124:b0:61b:6fcd:34ab with SMTP id r4-20020a056214212400b0061b6fcd34abmr2570897qvc.0.1686114035697;
+        Tue, 06 Jun 2023 22:00:35 -0700 (PDT)
 Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:c358:f4f2:89b6:ca7d])
-        by smtp.gmail.com with ESMTPSA id m1-20020ad44481000000b00621430707f7sm5848980qvt.83.2023.06.06.22.00.27
+        by smtp.gmail.com with ESMTPSA id m1-20020ad44481000000b00621430707f7sm5848980qvt.83.2023.06.06.22.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 22:00:28 -0700 (PDT)
+        Tue, 06 Jun 2023 22:00:35 -0700 (PDT)
 From: Rudraksha Gupta <guptarud@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: Andy Gross <agross@kernel.org>,
@@ -69,54 +70,45 @@ Cc: Rudraksha Gupta <guptarud@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	linux-phy@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 0/4] Samsung Galaxy Express SGH-I437 Support
-Date: Wed,  7 Jun 2023 01:00:19 -0400
-Message-Id: <20230607050025.86636-1-guptarud@gmail.com>
+Subject: [PATCH v5 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add compatible
+Date: Wed,  7 Jun 2023 01:00:21 -0400
+Message-Id: <20230607050025.86636-3-guptarud@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230607050025.86636-1-guptarud@gmail.com>
+References: <20230607050025.86636-1-guptarud@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series adds support for the Samsung Galaxy Express SGH-I437.
-Currently the following things work on this phone: UART, eMMC, SD Card, and
-USB.
+Adds qcom,usb-hs-phy-msm8960 compatible
 
-version 5:
-- use enum instead of anyOf in qcom,usb-hs-phy.yaml
+Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+---
+ Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-version 4:
-- Rebase onto rc1
-- Fix qcom,usb-hs-phy.yaml patch so it doesn't break other devices
-
-version 3:
-- Added Ack
-- Fixed compatible in qcom,usb-hs-phy.yaml. `make dt_binding_check dtbs_check`
-  no longer complains about USB
-- Fixed formatting in qcom-msm8960.dtsi and qcom-msm8960-samsung-expressatt.dts
-- Fixed the spi1_default node in qcom-msm8960-samsung-expressatt.dts.
-  `make dt_binding_check dtbs_check` no longer complains
-
-version 2:
-- Combined patch 1 into patch 4, as the sleep_clk label is specifically needed
-  for the USB node.
-- Reformatted the commit messages to align with the style used in other commit
-  messages that modify the same files.
-- Included a cover letter to provide an overview of the patch series.
-- Slight refactoring of the device tree source (DTS) file.
-
-Rudraksha Gupta (4):
-  dt-bindings: arm: qcom: Add Samsung Galaxy Express
-  dt-bindings: phy: qcom,usb-hs-phy: Add compatible
-  ARM: dts: qcom: msm8960: Add USB node
-  ARM: dts: qcom: Add Samsung Galaxy Express support
-
- .../devicetree/bindings/arm/qcom.yaml         |   1 +
- .../bindings/phy/qcom,usb-hs-phy.yaml         |   5 +-
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/qcom-msm8960-samsung-expressatt.dts   | 331 ++++++++++++++++++
- arch/arm/boot/dts/qcom-msm8960.dtsi           |  34 +-
- 5 files changed, 370 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+index aa97478dd016..f042d6af1594 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+@@ -13,7 +13,9 @@ if:
+   properties:
+     compatible:
+       contains:
+-        const: qcom,usb-hs-phy-apq8064
++        enum:
++          - qcom,usb-hs-phy-apq8064
++          - qcom,usb-hs-phy-msm8960
+ then:
+   properties:
+     resets:
+@@ -40,6 +42,7 @@ properties:
+           - qcom,usb-hs-phy-apq8064
+           - qcom,usb-hs-phy-msm8226
+           - qcom,usb-hs-phy-msm8916
++          - qcom,usb-hs-phy-msm8960
+           - qcom,usb-hs-phy-msm8974
+       - const: qcom,usb-hs-phy
+ 
 -- 
 2.34.1
 
