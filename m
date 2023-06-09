@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EE73C87FE4
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EEB3C87FE1
 	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 13:10:28 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 1A350C4331F; Fri,  9 Jun 2023 13:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0307FC433A1;
-	Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
+	id 2D9FCC43324; Fri,  9 Jun 2023 13:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1711AC4331E;
+	Fri,  9 Jun 2023 13:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1686316228;
-	bh=2s3fR4tpsfP4EaDTkJoW4aapz2LgB1Z7UZAVeYIj07I=;
+	bh=Bv4Q/cFXCg74f2Q/BpPofPLCkLr97q7qHVtG1ggAO0Q=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=k2MtBogUdfo1SGX/Hmz+eGG7t2HjpeMfr0iwOZuOWYXTxC2Tl44T3g79ogeF43qwG
-	 h5upLZUJnk0XFueER5XBZsprOgsTuF0mOvSj5qWiEhLEDI+X8uqAKCq+pdA8NpQBJn
-	 A9PgE4uJY34NY93uuiJgUOe57HP7RO7DTmk5c5tt0F9BP0dUwYThnJEeqbw8d/rO6w
-	 Ia7NEEDhpEL1pcFWhh9h4+dvbBH8dnu4QvnqI3Wq+bRNJcnP1SyZ1YLyQe076hLcrv
-	 qGlaEgq8G1AdLyAE2AVqkChkHGLNmge2KTT0GQTm2k9liNbGA2YYakerwyoflXwC+j
-	 a6rqf8HlMEu7A==
+	b=pWrWNK8hoLLH02/Wx3ha/cH7PqtvCOnsHAPQHyaYsYfrx5TmBOS3oqvymsetX2u66
+	 xPyrK9o500sSHxO+S1czBmRTIcX4XVevgAaE6q9DAF7g9CJt3CwfjyNPoBV60fTocq
+	 SxKB1cZjoeYAOkQhOBQcJn40zmszDiJLTrRKYm9UTOif4RPhC5ra61FO4Q0a8CD9IF
+	 58YlGnd+6/nNnX1qdlM+9EQ9xcMhPP2kCWreTE3eXRb9yqwznXPOet7NdzcqEE9twY
+	 DcPMB2xrkZUdJbV+oliyb2ccnXbs+yo9pFt3BtxUTXd483PlFcTkgnQv9fDkoAZ0P8
+	 m8CjMV+aMs3+Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBF25E29F36;
-	Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02E49C43143;
+	Fri,  9 Jun 2023 13:10:28 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AMDTEE fix for v6.5
+Subject: Re: [GIT PULL] i.MX fixes for 6.4, round 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168631622789.816.1399329447481675161.git-patchwork-notify@kernel.org>
-Date: Fri, 09 Jun 2023 13:10:27 +0000
-References: <20230606075843.GA2792442@rayden>
-In-Reply-To: <20230606075843.GA2792442@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+ <168631622800.816.4503813612291634101.git-patchwork-notify@kernel.org>
+Date: Fri, 09 Jun 2023 13:10:28 +0000
+References: <20230607141312.GU4199@dragon>
+In-Reply-To: <20230607141312.GU4199@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 6 Jun 2023 09:58:43 +0200 you wrote:
-> Hello arm-soc maintainers,
+On Wed, 7 Jun 2023 22:13:12 +0800 you wrote:
+> The following changes since commit 0f554e37dad416f445cd3ec5935f5aec1b0e7ba5:
 > 
-> Please pull this AMDTEE driver fix to add a return origin field to the
-> struct tee_cmd_load_ta used when loading a Trusted Application into the
-> AMDTEE. This change is backward compatible.
+>   arm64: dts: imx8: fix USB 3.0 Gadget Failure in QM & QXPB0 at super speed (2023-05-16 20:43:48 +0800)
 > 
-> Note that this isn't a usual Arm driver update. This targets AMD instead,
-> but is part of the TEE subsystem.
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.4-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] AMDTEE fix for v6.5
-    https://git.kernel.org/soc/soc/c/abd649fdf91a
+  - [GIT,PULL] i.MX fixes for 6.4, round 2
+    https://git.kernel.org/soc/soc/c/5cdd5ec17654
 
 You are awesome, thank you!
 -- 
