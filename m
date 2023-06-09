@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7619CC7EE29
-	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFE10C7EE25
+	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3DE15C433A1; Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 278CEC433D2;
-	Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
+	id C140DC433AE; Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A9A9AC433A7;
+	Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686316223;
-	bh=2bTC0dqPzHKLUvaspNhW8bMNCmhxtXWBelpPj73aK84=;
+	s=k20201202; t=1686316227;
+	bh=DfYOi2zUxqOjT522JLAispLX9Zpmt4yOMCoyH3bMCCo=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=QNxTdLK7uBhM+JvArc7s5efQyUyZojWjYOf78HrHqrWy2iUXf1dcNHHT7qvD1bqEv
-	 7miRrUNlMbbyn1RDYOBKyM9OjdEDFxbYijbvtYhBAuyoZKLBUM8a+PavDf7eBx9uN0
-	 j40AMj8XmDTrEaDGDRed9PFXtQKctmgYXAiHyNfzBg+DMMkzvykHz5RYUnXq214JCW
-	 8DAkPAGfmSExgKcv+f427ZQ7jydLHl4gAviwXPSCUa32Ekl2VN0XrKwG9jaagLQS1K
-	 nZIfVR6+B6+SBVhZJ2xwFRZUGTbNCVO27bAi9OdNePgfB3fgyNj19hkF+baZz0vl0S
-	 cuSOUK7U+TTRg==
+	b=IaAxhMgve8oKF0W3fwUdIJ2eD7qZ6p74LItE/w1eQQenOnOQkBMl9VYAfEYj09iKX
+	 tWhzN6/pmuMcxJ4LDHdq/pspq2gNWnYVkeE6TlWOoJ71RiGdPo7EYAWhgtEra5MkXT
+	 HuKMYiOU7c9zqb0yeCqKPjoGBJ8KYdgaJLd8b5TZR58WdbiG3J/2uasXuziEpTKwH6
+	 3hcZZyX67Uu/CCnBaE1f5iGc+LaSVt9jdu3+amB4QFeX9VUz/cpex/afo0BJoKKft+
+	 J/HLVjZeAVVfWyOsaxlQk93nO8whqBYltqMXI4YsabRRFGGLFMD/UpasUXZLZgcdM2
+	 trVCFawn+3CXQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2B10E1CF31;
-	Fri,  9 Jun 2023 13:10:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 942ACE1CF31;
+	Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] i.MX fixes for 6.4, round 2
+Subject: Re: [PATCH] Input: ads7846 - Fix usage of match data
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168631622298.816.16788144763302717919.git-patchwork-notify@kernel.org>
-Date: Fri, 09 Jun 2023 13:10:22 +0000
-References: <20230607141312.GU4199@dragon>
-In-Reply-To: <20230607141312.GU4199@dragon>
-To: Shawn Guo <shawnguo@kernel.org>
+ <168631622760.816.6700631558190466064.git-patchwork-notify@kernel.org>
+Date: Fri, 09 Jun 2023 13:10:27 +0000
+References: <20230606191304.3804174-1-linus.walleij@linaro.org>
+In-Reply-To: <20230606191304.3804174-1-linus.walleij@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (arm/fixes)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Wed, 7 Jun 2023 22:13:12 +0800 you wrote:
-> The following changes since commit 0f554e37dad416f445cd3ec5935f5aec1b0e7ba5:
+On Tue,  6 Jun 2023 21:13:04 +0200 you wrote:
+> device_get_match_data() returns the match data directly, fix
+> this up and fix the probe crash.
 > 
->   arm64: dts: imx8: fix USB 3.0 Gadget Failure in QM & QXPB0 at super speed (2023-05-16 20:43:48 +0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.4-2
+> Fixes: 767d83361aaa ("Input: ads7846 - Convert to use software nodes")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] i.MX fixes for 6.4, round 2
-    https://git.kernel.org/soc/soc/c/5cdd5ec17654
+  - Input: ads7846 - Fix usage of match data
+    https://git.kernel.org/soc/soc/c/8f7913c04f6a
 
 You are awesome, thank you!
 -- 
