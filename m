@@ -1,75 +1,43 @@
-Return-Path: <SRS0=ktnR=B5=gmail.com=thierry.reding@kernel.org>
+Return-Path: <jernej@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BF4EC7EE2E
-	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 19:36:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19E62C7EE29
+	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 21:04:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 29AC0C433EF; Fri,  9 Jun 2023 19:36:36 +0000 (UTC)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 32DEFC4339B;
-	Fri,  9 Jun 2023 19:36:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 32DEFC4339B
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so3067998a12.3;
-        Fri, 09 Jun 2023 12:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686339393; x=1688931393;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5fRwrzCjp88t418nAkVEpU9kS4OdGnnMmJzDqEeTRBY=;
-        b=C3VYqj2iTBch94O7kQIm62iZ8Y9Yxt9J3+nD2sQOLh5ltPNEl0ThEscSZYWe13/b9l
-         Lxt8saKifQQWvJf9J0v+C4do+CA5ZybEA1XlTJX6uRYtTo4vyGCH13RBbx8tl6bBAWBu
-         /A/F6jZRJh3MzxFAoHi4OCYBHIkSpN+tOig+VxnLJkgQz61HC+aw/y2gSGzWVQ+mEbL7
-         0C9C5K3dV32+kKJysB0xgzJiotRsvh+bCo7AbrgcA2+JBFJEGYJUVPFhGvQ1GY9i6LIT
-         uGWjqq4YcXQhJdjqGdsoYP7vcSPGxBdsCAjsCBjdLqbncsuCCwk7SFFGdmbHH4Nm7+wO
-         LHHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686339393; x=1688931393;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5fRwrzCjp88t418nAkVEpU9kS4OdGnnMmJzDqEeTRBY=;
-        b=Rzf+5FfNYt4YEzq+KvLl2vaRZbOPzKv08QT6ZbVhsRLQPoKsv4C8+RLcPI3fF72BAr
-         cXju4qElbRFd48VTEMMrwK8kcCI/F6B3LGZvnSG56vt/Yj5ZTnlS4//I0t5RMtu022wm
-         FChWvOH2JjzeZiiuKDfKRqMrsg/eIUhBEs+Zvppxw1/pIzLFajKz1AxApfhwCM6PR/kf
-         WvE9NtcuaQhQhCyEBWgdKhoFiMK2HLWYcjoeKqqjmC+USgF6I2kRn+Lrbql3Hk4Khi6A
-         zs4wOoOR7d3dcUhPqSRL8UNLgZoVgIN2of0S5RdbX8wwa3wmuwvl8zi08a8+G0xShBuJ
-         dd4w==
-X-Gm-Message-State: AC+VfDw+BPTtZR+9sOdBKgQo3vOskuMYxRTYQXStkMvsvrmdIlb/EPnY
-	m51ona0j1dlhaS9cHKT5mEegN41nqD8=
-X-Google-Smtp-Source: ACHHUZ7UKbrsxsz++D3lw+J8Oo0aNvgCavYHLRyMTlv5TKpbD4FHS3AgCuHrOFUPp+Gm4TOFWsmIxg==
-X-Received: by 2002:a17:907:8a12:b0:969:7739:2eb7 with SMTP id sc18-20020a1709078a1200b0096977392eb7mr2688891ejc.4.1686339392907;
-        Fri, 09 Jun 2023 12:36:32 -0700 (PDT)
-Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id gv11-20020a170906f10b00b00947ed087a2csm1643638ejb.154.2023.06.09.12.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 12:36:32 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
+	id D44A8C4339C; Fri,  9 Jun 2023 21:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364B3C433D2;
+	Fri,  9 Jun 2023 21:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1686344696;
+	bh=vQ/vYwo1cHkuBXg95nGuvGxoT7yx40Wmpwo7/FiKopM=;
+	h=Date:From:List-Id:To:Cc:Subject:From;
+	b=Y9CKb9GbLKkhquGM4B+v1RfnbqaQYGha1TSoWUX732gNPWjjUAL+dJzX0/tOg3VK5
+	 0i/TB95D/87mKjavm5Z7KFzfGujD5nWYJcMrckVFTz2BjghwBB2AhisTwvQqi5jSAT
+	 cq/pMhA/TAitmuI8qSZZ0RSiDPt8TXYdWG9TAccTUwyBNPc73jbvkGVduG0igqSDT4
+	 D3R1YkQNqOIC+vxYppgZiyoVCqmbnlcmW/MnN3LEne8x7ECxLJvjOGkxunW3skmeXm
+	 3OQyRyj+oTRQ9AYUS91RjygcNyRiZyF5fdnk/NqvkKntvheJuvPmKkt8jryEEtIzm5
+	 94z7SHWuKtSiw==
+Date: Fri, 9 Jun 2023 23:04:52 +0200
+From: Jernej Skrabec <jernej@kernel.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 6/6] arm64: tegra: Device tree changes for v6.5-rc1
-Date: Fri,  9 Jun 2023 21:36:20 +0200
-Message-Id: <20230609193620.2275240-6-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230609193620.2275240-1-thierry.reding@gmail.com>
-References: <20230609193620.2275240-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+To: arm@kernel.org, soc@kernel.org
+Cc: wens@csie.org, samuel@sholland.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [GIT PULL] Allwinner device tree changes for 6.5
+Message-ID: <20230609210452.GA17638@jernej-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi ARM SoC maintainers,
+Hi!
+
+Please pull following DT changes for 6.5.
+
+Best regards,
+Jernej
 
 The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
@@ -77,82 +45,48 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.5-arm64-dt
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git tags/sunxi-dt-for-6.5-1
 
-for you to fetch changes up to 6312e57b3250085b196d9630d2eeea6a583b97ef:
+for you to fetch changes up to 09d199b6dcb6bd94a1f00cfbfa1ee7d3841444b0:
 
-  arm64: tegra: Enable thermal support on Jetson Orin Nano (2023-06-09 17:44:26 +0200)
-
-Thanks,
-Thierry
+  ARM: dts: axp209: Add iio-hwmon node for internal temperature (2023-05-31 23:15:24 +0200)
 
 ----------------------------------------------------------------
-arm64: tegra: Device tree changes for v6.5-rc1
-
-This introduces support for the IGX Orin and Jetson Orin Nano devices
-and enables various additional features on the Jetson AGX Orin and
-Jetson Orin NX. This also enables some basic thermal support to prevent
-the devices from overheating.
-
-Support for the GPU on the Google Pixel C is enabled and various minor
-issues are fixed and cleaned up.
+- fix DCLK clock names
+- new board ICnova A20 ADB4006
+- add D1 SPI node
+- add bluetooth node for chip board
+- add extra mmc2 pinmux to sun5i
+- add axp209 iio-hwmon node
 
 ----------------------------------------------------------------
-Diogo Ivo (2):
-      arm64: tegra: Add GPU power rail regulator on Smaug
-      arm64: tegra: Enable GPU on Smaug
+Jonathan McDowell (3):
+      ARM: dts: sun5i: chip: Enable bluetooth
+      ARM: dts: sun5i: Add port E pinmux settings for mmc2
+      ARM: dts: axp209: Add iio-hwmon node for internal temperature
 
-Jon Hunter (3):
-      arm64: tegra: Fix PCIe regulator for Orin Jetson AGX
-      arm64: tegra: Enable USB device for Jetson AGX Orin
-      arm64: tegra: Update USB phy-name for Jetson Orin NX
+Ludwig Kormann (2):
+      dt-bindings: arm: sunxi: add ICnova A20 ADB4006 binding
+      arm: dts: sunxi: Add ICnova A20 ADB4006 board
 
-Krzysztof Kozlowski (1):
-      arm64: tegra: Add missing cache properties on Tegra210
+Maksim Kiselev (1):
+      riscv: dts: allwinner: d1: Add SPI controllers node
 
-Prathamesh Shete (1):
-      arm64: tegra: Add Tegra234 pin controllers
+Roman Beranek (1):
+      ARM: dts: sunxi: rename tcon's clock output
 
-Shubhi Garg (2):
-      dt-bindings: tegra: Document compatible for IGX
-      arm64: tegra: Add support for IGX Orin
-
-Sumit Gupta (2):
-      dt-bindings: tegra: Add ICC IDs for dummy memory clients
-      arm64: tegra: Add CPU OPP tables and interconnects property
-
-Thierry Reding (8):
-      Merge branch 'for-6.5/dt-bindings' into for-6.5/arm64/dt
-      arm64: tegra: Support Jetson Orin Nano Developer Kit
-      arm64: tegra: Sort properties more logically
-      arm64: tegra: Add a few blank lines for better readability
-      arm64: tegra: Add Tegra234 thermal support
-      arm64: tegra: Enable thermal support on Jetson AGX Orin
-      arm64: tegra: Enable thermal support on Jetson Orin NX
-      arm64: tegra: Enable thermal support on Jetson Orin Nano
-
- Documentation/devicetree/bindings/arm/tegra.yaml   |   5 +
- arch/arm64/boot/dts/nvidia/Makefile                |   4 +
- arch/arm64/boot/dts/nvidia/tegra210-smaug.dts      |  23 +-
- arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   1 +
- .../arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi |  24 +-
- .../arm64/boot/dts/nvidia/tegra234-p3701-0008.dtsi | 111 +++++++
- .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |  46 ++-
- .../arm64/boot/dts/nvidia/tegra234-p3737-0000.dtsi |   6 +
- .../dts/nvidia/tegra234-p3740-0002+p3701-0008.dts  | 154 ++++++++++
- .../arm64/boot/dts/nvidia/tegra234-p3740-0002.dtsi | 137 +++++++++
- .../arm64/boot/dts/nvidia/tegra234-p3767-0005.dtsi |  14 +
- arch/arm64/boot/dts/nvidia/tegra234-p3767.dtsi     |  60 +---
- .../dts/nvidia/tegra234-p3768-0000+p3767-0000.dts  |  23 +-
- .../dts/nvidia/tegra234-p3768-0000+p3767-0005.dts  |  33 ++
- .../arm64/boot/dts/nvidia/tegra234-p3768-0000.dtsi |   3 +-
- arch/arm64/boot/dts/nvidia/tegra234.dtsi           | 341 +++++++++++++++++++++
- include/dt-bindings/memory/tegra234-mc.h           |   5 +
- .../dt-bindings/thermal/tegra234-bpmp-thermal.h    |  19 ++
- 18 files changed, 937 insertions(+), 72 deletions(-)
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3701-0008.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3740-0002+p3701-0008.dts
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3740-0002.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3767-0005.dtsi
- create mode 100644 arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0005.dts
- create mode 100644 include/dt-bindings/thermal/tegra234-bpmp-thermal.h
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |   6 +
+ arch/arm/boot/dts/Makefile                         |   1 +
+ arch/arm/boot/dts/axp209.dtsi                      |   7 ++
+ arch/arm/boot/dts/sun5i-r8-chip.dts                |   6 +
+ arch/arm/boot/dts/sun5i.dtsi                       |  11 +-
+ arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 +++++++++++++++++++++
+ arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi        |  62 ++++++++++
+ arch/arm/boot/dts/sun8i-a23-a33.dtsi               |   2 +-
+ arch/arm/boot/dts/sun8i-a83t.dtsi                  |   2 +-
+ arch/arm/boot/dts/sun8i-v3s.dtsi                   |   2 +-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      |   2 +-
+ arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi  |  37 ++++++
+ 12 files changed, 270 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
