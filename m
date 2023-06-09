@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 041ABC7EE2E
-	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 19:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50D2AC7EE45
+	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 19:36:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B6D8DC4339B; Fri,  9 Jun 2023 19:36:29 +0000 (UTC)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	id 3848FC4339B; Fri,  9 Jun 2023 19:36:32 +0000 (UTC)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A67CBC433D2;
-	Fri,  9 Jun 2023 19:36:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A67CBC433D2
+	by smtp.kernel.org (Postfix) with ESMTPS id 43CB1C433D2;
+	Fri,  9 Jun 2023 19:36:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 43CB1C433D2
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-970056276acso320986966b.2;
-        Fri, 09 Jun 2023 12:36:28 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-970056276acso320994466b.2;
+        Fri, 09 Jun 2023 12:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686339386; x=1688931386;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kO1qKhOJaKdap30fcHYTQI7lFzHq12HURBNl6AXLAwo=;
-        b=HaRhe8cNwuD2aW7SSxwuWT1A2FrZDaoHZ3geyskluJFFwaEFVOedGvjQiLMOU8j1XY
-         5GIJhCpMzVzBnTR1MzGpupJdQE+aXJLHXFHO97kNm2OqdyGBKWWngCFkAuRIdhfaq5pZ
-         yiCZ0jUFyIE1si5Pm5Ljg9TR6BfYQWv7u1r8m+pw0saxm5H5gmXsfNZI9xcJA4NPSEfS
-         ap0jrai1BIaECTrgJaynu3qxuM87ROy6kVYttPqg47t6EKah5wgaI6YegKS3ZIf+aGqH
-         RNHBoFRhXijRPU6UCYqa9F1z7jU6j8QmX/cEKepJC9BVn39wof+zuEv1v9mIRyAmM92P
-         3vxA==
+        d=gmail.com; s=20221208; t=1686339389; x=1688931389;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SAtEPr9Ys387Pe4RYRZ8iJILAuFrQDNs1SzA9w6+Yyo=;
+        b=k0cWRvpS5kSr8RZZFS5wFtvbidYOlyxT5MYwlyuryj1ZrDd8GlXKfHUluc8uOlxdXK
+         gdwk9sBN0+Y6hHVLyeDBEP+LIyCmFPNFL9hVLiRihJzWvkDSJ2/RiXbrFA/r6KUky/8D
+         QeyrDh5PvyMwhAzcuJt6tAz3snwokLlDyKOqLlAvDLYJiUNbo4Pj3GaDSivW7+Aqcl2R
+         Xk69O8QopgncPqWq4uUujWjsIu8s4mgmRuHRYSBU1L/osCKA/pi+WMIMnI/3jyII6eBj
+         V/YY6QnLIU2/d5YNtRj1AUH4/gEYJWe4axexIvCtMq6brC4fgKL4JIljqPBa1t3VxFY4
+         odGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686339386; x=1688931386;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kO1qKhOJaKdap30fcHYTQI7lFzHq12HURBNl6AXLAwo=;
-        b=V188DsCQUEdrG/RMtYxB++8RShGzmehmj9BJK24ZttwDz1DkFQUocwpb02jhYAPbiP
-         WqU/tVr5OYc2XBpHqjWk5qWF3JHZZYIQmlFYniqCwUVl2LId2P9k3+5RsXpRVdMs99wa
-         LN2sD8fWMEleMvBtcusnjB3mCHr0MzP6OPI0tgcg8h5KwiuTspZVG/WwbHrjnaMMK1C1
-         wwCPXjOfFdd7RjJL5hFg2GGZq5uyehdwIBrsW4nkzyR19FX9t1/8r/T3/KpKpkNHG2Td
-         OjUl0Pvyo2o9tIDt2hjefJ7A2lUvsgjpSaOJe502cWRuLzkSuAH0GtB/qdySu2AhwTCE
-         bXQg==
-X-Gm-Message-State: AC+VfDzYIo7PKOe2UJR5x6YEN35ZoXNH8N9qons8BFrRyxN96OrFODFK
-	BviHXurw0S/xyTwmnfXp4bmU6lzTYCY=
-X-Google-Smtp-Source: ACHHUZ7lBuR4AS4bpJEEO5SCTHfx2ULgdyWa08hXimyR75+JGLKOU5N9xxKtHZCys1P9lF6E7YlPTQ==
-X-Received: by 2002:a17:907:9307:b0:973:ebbc:1d6a with SMTP id bu7-20020a170907930700b00973ebbc1d6amr2638457ejc.33.1686339386253;
-        Fri, 09 Jun 2023 12:36:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686339389; x=1688931389;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SAtEPr9Ys387Pe4RYRZ8iJILAuFrQDNs1SzA9w6+Yyo=;
+        b=I4Djbwb3p1YyhtHtJs9UXqWN2FbXFpOXDPVkuYyFDESN1HGkMsQ+mee8wLhsyrMgco
+         MC6XGCHzeICft3LoI6ylwBU+Zu6L9E/So/w8jtc9+D/4T/w9xrpLWTZp+lKCua76DZTt
+         DJ+Za1Lho3o60vhcRgcl3ePQ1NqMMcOb9bkTu2YyTV4S+GDc+VxRmvgboVaGRtAlk9ai
+         lVlJd3ssPtkA7VwU7IUo+K6SBb3xpekh0GOZdDXylMr/eygRITefUpePMa2iTRfAroGX
+         5BC0Bv97jNmyIcQmgKcLZi6h7qlhpUzcmMpcvsASCpzTAXvA956rRSJrf0AEvpVxfeR/
+         CoZg==
+X-Gm-Message-State: AC+VfDzGDZJ7zfODdz+2V366k4tGB2U5qBdwWeD5rFMPkecZCP9bf+q8
+	2UMj/CKO2/jrVJV46OSJWW+SM0oKMmI=
+X-Google-Smtp-Source: ACHHUZ7oOKplEQYw+eKt0I0zfBetbQxm7g/GHSDvca+tryCErcp39fy8REsaGXCCcnn9tHBYL7moWA==
+X-Received: by 2002:a17:907:7e99:b0:967:5c5f:e45c with SMTP id qb25-20020a1709077e9900b009675c5fe45cmr2296589ejc.0.1686339388963;
+        Fri, 09 Jun 2023 12:36:28 -0700 (PDT)
 Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id zo18-20020a170906ff5200b0096ae4451c65sm1658904ejb.157.2023.06.09.12.36.25
+        by smtp.gmail.com with ESMTPSA id o20-20020a170906601400b00977d3fb2a7dsm1637378ejj.76.2023.06.09.12.36.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 12:36:25 -0700 (PDT)
+        Fri, 09 Jun 2023 12:36:28 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 List-Id: <soc.lore.kernel.org>
 To: arm@kernel.org,
@@ -58,10 +59,12 @@ Cc: Thierry Reding <thierry.reding@gmail.com>,
 	Jon Hunter <jonathanh@nvidia.com>,
 	linux-tegra@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL 1/6] soc/tegra: Changes for v6.5-rc1
-Date: Fri,  9 Jun 2023 21:36:15 +0200
-Message-Id: <20230609193620.2275240-1-thierry.reding@gmail.com>
+Subject: [GIT PULL 3/6] dt-bindings: Changes for v6.5-rc1
+Date: Fri,  9 Jun 2023 21:36:17 +0200
+Message-Id: <20230609193620.2275240-3-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230609193620.2275240-1-thierry.reding@gmail.com>
+References: <20230609193620.2275240-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,39 +77,39 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.5-soc
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-6.5-dt-bindings
 
-for you to fetch changes up to c954cd7ad041251d903707c463a2c4d6cc30e5ae:
+for you to fetch changes up to 5f027147e4796e9fc11083b2ad50a91c1ac36ede:
 
-  soc/tegra: pmc: Use devm_clk_notifier_register() (2023-06-09 16:56:58 +0200)
+  dt-bindings: tegra: Document Jetson Orin Nano Developer Kit (2023-06-06 14:39:20 +0200)
 
 Thanks,
 Thierry
 
 ----------------------------------------------------------------
-soc/tegra: Changes for v6.5-rc1
+dt-bindings: Changes for v6.5-rc1
 
-This adds initial support for identifying the Tegra264 SoC family and
-fixes potential issues when reading from the FUSE block. A new software
-wake event for the AON cluster is added on Tegra234 and the debugfs
-initialization is drastically simplified.
+Several new modules and devices are documented and fixes incorporated
+for the Tegra234 GPIO controller pin mappings as well as the possible
+Tegra XUDC PHY connections.
 
 ----------------------------------------------------------------
-Kartik (1):
-      soc/tegra: fuse: Fix Tegra234 fuse size
+Prathamesh Shete (1):
+      dt-bindings: gpio: Remove FSI domain ports on Tegra234
 
-Stefan Kristiansson (1):
-      soc/tegra: fuse: Add support for Tegra264
+Shubhi Garg (1):
+      dt-bindings: tegra: Document compatible for IGX
 
-Thierry Reding (2):
-      soc/tegra: pmc: Simplify debugfs initialization
-      soc/tegra: pmc: Use devm_clk_notifier_register()
+Sumit Gupta (1):
+      dt-bindings: tegra: Add ICC IDs for dummy memory clients
 
-Viswanath L (1):
-      soc/tegra: pmc: Add AON SW Wake support for Tegra234
+Thierry Reding (3):
+      dt-bindings: usb: tegra-xudc: Remove extraneous PHYs
+      dt-bindings: tegra: Document Jetson Orin Nano
+      dt-bindings: tegra: Document Jetson Orin Nano Developer Kit
 
- drivers/soc/tegra/fuse/fuse-tegra30.c  |  2 +-
- drivers/soc/tegra/fuse/tegra-apbmisc.c |  3 ++-
- drivers/soc/tegra/pmc.c                | 31 +++++++------------------------
- include/soc/tegra/fuse.h               |  3 ++-
- 4 files changed, 12 insertions(+), 27 deletions(-)
+ Documentation/devicetree/bindings/arm/tegra.yaml     | 14 ++++++++++++++
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml   |  7 +------
+ include/dt-bindings/gpio/tegra234-gpio.h             | 20 ++++++++------------
+ include/dt-bindings/memory/tegra234-mc.h             |  5 +++++
+ 4 files changed, 28 insertions(+), 18 deletions(-)
