@@ -1,93 +1,96 @@
-Return-Path: <SRS0=giUv=B5=inventec.com=Chen.PJ@kernel.org>
+Return-Path: <SRS0=qGgT=B5=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C62EBC7EE29
-	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 11:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93093C7EE29
+	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 12:13:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 83F92C4339B; Fri,  9 Jun 2023 11:52:43 +0000 (UTC)
-Received: from mail.inventec.com (mail.inventec.com [61.220.76.156])
+	id 58279C433EF; Fri,  9 Jun 2023 12:13:25 +0000 (UTC)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 731DCC43444;
-	Fri,  9 Jun 2023 11:52:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 731DCC43444
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inventec.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inventec.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 3E5C2C433D2
+	for <soc@kernel.org>; Fri,  9 Jun 2023 12:13:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3E5C2C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-97668583210so258733366b.1
+        for <soc@kernel.org>; Fri, 09 Jun 2023 05:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=sEx04; d=inventec.com;
-    h=from:to:cc:subject:date:message-id:in-reply-to:content-type:
-      mime-version;
-    bh=EEbqQOffsxMaPWtW7UGxs6N/o1lBOZW5XM+gHa3cw9k=;
-    b=HV2w3Rba7JA1eR1IwRlZkvNJqC8XgJGOJWG+jbZ7EBlvEb4FUBas8yC8ssuU3M
-      0srULzYZecrVeKFKzCyVoSNu21ISNBCVK+vSPDwjQpX0ua4WL8O+6Z/laE7dFT
-      rZqmJhNg281fgB5UtYeUIC4EFI/bSXAhrBKTGKTNz1XyWvY=
-Received: from IEC1-EX2016-03.iec.inventec (10.15.2.59) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 9 Jun 2023 19:52:34 +0800
-Received: from IEC1-MSE-FE2.inventec.com (10.1.254.204) by
- IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server id
- 15.1.2507.23 via Frontend Transport; Fri, 9 Jun 2023 19:52:34 +0800
-Received: from IEC1-EX2016-02.iec.inventec (IEC1-EX2016-02.iec.inventec [10.1.254.221])
-	by IEC1-MSE-FE2.inventec.com with ESMTP id 359BqS66062581;
-	Fri, 9 Jun 2023 19:52:28 +0800 (GMT-8)
-	(envelope-from Chen.PJ@inventec.com)
-Received: from IEC1-EX2016-01.iec.inventec (10.15.2.58) by
- IEC1-EX2016-02.iec.inventec (10.1.254.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 9 Jun 2023 19:52:28 +0800
-Received: from IEC1-EX2016-01.iec.inventec ([fe80::3cbc:265e:12a1:d39b]) by
- IEC1-EX2016-01.iec.inventec ([fe80::3cbc:265e:12a1:d39b%7]) with mapi id
- 15.01.2507.023; Fri, 9 Jun 2023 19:52:28 +0800
-From: =?big5?B?Q2hlbi5QSiCzr6xmpfQgVEFP?= <Chen.PJ@inventec.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	"soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Joel Stanley
-	<joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>
-CC: =?big5?B?WWUuVmljILitpnSyTSBUQU8=?= <ye.vic@inventec.com>,
-	=?big5?B?SHVhbmcuQWxhbmcgtsCtXq2mIFRBTw==?= <Huang.Alang@inventec.com>
-Subject: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec starscream-bmc
-Thread-Topic: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec
- starscream-bmc
-Thread-Index: AQHZmsjdyWzKt8FWXUGyE1efizUsDQ==
-Date: Fri, 9 Jun 2023 11:52:28 +0000
-Message-ID: <c5f1fbb0e6754394af41eb5083f64d89@inventec.com>
-References: <b039b1b2673644af84db8f803bc7d156@inventec.com>
-In-Reply-To: <b039b1b2673644af84db8f803bc7d156@inventec.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-imapappendstamp: IEC1-EX2016-01.iec.inventec (15.01.2507.023)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [10.6.245.192]
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google; t=1686312802; x=1688904802;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/d+dHBgEekjDSHClTJsQ6wFO80YgJRYqTq5jLwHrLwA=;
+        b=ypCdboJHyF8Pl/ysbJkoYgLbs2KgBOkv6jkgGU15xvwv23HstfZfrsJpg3tC1MEEuz
+         vXmsyfIHbJSOHw3ZFkrvJooHvlXZN2EMJ8xsL2krSz5bWH5IZwiqmMvvw9Qc0sSy30vD
+         NmqHwwxnfIoReQ4ETAfHr5AdQJ2M5iARlfood5WIeTn8qAk9NBXlbuPplX6UMwgJGrL5
+         kASZo4ZlpTQE5zwrRUKwOgB1ygNTimN3wYxxF54lXaeqr/qaccSB26ev+k4Voe5O6/CE
+         fP7zDagujvUUHxFk7N8/5CMjkBKJ8IbqJMASia8SWduXSrKaejVH9jyhSMqygHKbz3VE
+         kK6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686312802; x=1688904802;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/d+dHBgEekjDSHClTJsQ6wFO80YgJRYqTq5jLwHrLwA=;
+        b=YoFykNKA85oXr+T3YiErSjgvNa5obrJNnt+YOt8XHePSYLVd3WrKoD0NGuSQ1chAqX
+         hSa7U0Zbcn9gEs4I5XIm1yr5f6hlvGc8JTfybt37njHrGZ3rH9ILuxIFIc6XqhX7wGEU
+         gqOf7P/mMNvj3pIfnOb7B3grX8HdeZ1xan3wg9sN7VclVuNo5FJuzWxh34heNft0Wk9k
+         MOl3/0EAMVlFgLwOolyU1z+t4aEb2W5oDUPfIJOZFnAiaw7aftXT0GsVnb+RDQ+JGCQ3
+         45W2g8sqzPTOOQICd8xN/Wq/lmlTQ8BFm7zv4L2ohHQuDLPTXkEoVPMDPlmMZaiSal+G
+         N30Q==
+X-Gm-Message-State: AC+VfDylG8905SVqWtydH4L4NF2neQ/ZbPOdDhGxCfYEGJxhC74POdyj
+	1iDhWrYPcZQjH2+F0xVp6Y/hsQ==
+X-Google-Smtp-Source: ACHHUZ448AEQ91mBl1jmqqcGkRQTF/d2BTQKH4v4bK07JoAJsj99mIAC7VHg/3tDLGCNWOO1iKpbXA==
+X-Received: by 2002:a17:907:d9e:b0:974:630a:fbac with SMTP id go30-20020a1709070d9e00b00974630afbacmr1485064ejc.18.1686312802221;
+        Fri, 09 Jun 2023 05:13:22 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id e26-20020a1709062c1a00b00974556e50a6sm1223271ejh.114.2023.06.09.05.13.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 05:13:21 -0700 (PDT)
+Message-ID: <3106c4a1-ce5b-a9c4-5cf4-6adead7fce80@linaro.org>
+Date: Fri, 9 Jun 2023 14:13:19 +0200
 MIME-Version: 1.0
-X-MAIL: IEC1-MSE-FE2.inventec.com 359BqS66062581
-X-TM-SNTS-SMTP: 8FC9931BA941FCBC45B2527A75CA23D9CCB5FC066D5F223A6C00B5FF3DDBF2052000:8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec
+ starscream-bmc
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: =?UTF-8?B?Q2hlbi5QSiDpmbPmn4/ku7sgVEFP?= <Chen.PJ@inventec.com>,
+ Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+ "soc@kernel.org" <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
+Cc: =?UTF-8?B?WWUuVmljIOiRieWuh+a4hSBUQU8=?= <ye.vic@inventec.com>,
+ =?UTF-8?B?SHVhbmcuQWxhbmcg6buD6Iux6YOOIFRBTw==?= <Huang.Alang@inventec.com>
+References: <b039b1b2673644af84db8f803bc7d156@inventec.com>
+ <c5f1fbb0e6754394af41eb5083f64d89@inventec.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c5f1fbb0e6754394af41eb5083f64d89@inventec.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-RG9jdW1lbnQgdGhlIG5ldyBjb21wYXRpYmxlcyB1c2VkIG9uIEludmVudGVjIHN0YXJzY3JlYW0t
-Ym1jDQoNClNpZ25lZC1vZmYtYnk6IENoZW4gUEogPENoZW4ucGpAaW52ZW50ZWMuY29tPg0KLS0t
-DQogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlh
-bWwgfCAxICsNCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCg0KZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1s
-IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlh
-bWwNCmluZGV4IDFiNTg1ZTU1NDc5MS4uZmI0Y2U1ZGYyZmEwIDEwMDY0NA0KLS0tIGEvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlhbWwNCisrKyBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1s
-DQpAQCAtODIsNiArODIsNyBAQCBwcm9wZXJ0aWVzOg0KICAgICAgICAgICAgICAgLSBpYm0sZXZl
-cmVzdC1ibWMNCiAgICAgICAgICAgICAgIC0gaWJtLHJhaW5pZXItYm1jDQogICAgICAgICAgICAg
-ICAtIGlibSx0YWNvbWEtYm1jDQorICAgICAgICAgICAgICAtIGludmVudGVjLHN0YXJzY3JlYW0t
-Ym1jDQogICAgICAgICAgICAgICAtIGludmVudGVjLHRyYW5zZm9ybWVyLWJtYw0KICAgICAgICAg
-ICAgICAgLSBqYWJpbCxyYnAtYm1jDQogICAgICAgICAgICAgICAtIG51dmlhLGRjLXNjbS1ibWMN
-Ci0tIA0KMi4yNS4xDQoNCg==
+On 09/06/2023 13:52, Chen.PJ 陳柏任 TAO wrote:
+> Document the new compatibles used on Inventec starscream-bmc
+> 
+> Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+> ---
+
+Any reason to ignore what I wrote?
+
+https://lore.kernel.org/all/2e06e7db-64f9-51f8-adf1-b240f30a2608@linaro.org/
+
+You got there clear instruction, didn't you?
+
+Best regards,
+Krzysztof
+
