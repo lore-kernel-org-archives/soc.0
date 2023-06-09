@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 598E6C7EE25
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7619CC7EE29
 	for <soc@archiver.kernel.org>; Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 30291C4339C; Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19864C4339B;
+	id 3DE15C433A1; Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 278CEC433D2;
 	Fri,  9 Jun 2023 13:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1686316223;
-	bh=KaB2BkLMnTOqS60Fme+gLYM1oMgphmfkz1Xus1COVuI=;
+	bh=2bTC0dqPzHKLUvaspNhW8bMNCmhxtXWBelpPj73aK84=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tglBc1WM5iAKmPYjngv96vL/S8LbYDv2dVz1oCCw29nQrCsDYrHUla/u/fCa2N3w5
-	 xwp+VTyXnsH36Emogx4KsCjrQy0Y0C8Wur9DaDCVQKLG4Qho18GmW/l2xdauRh89ci
-	 iEJOtUn+PxnWXHP7/nYCsvpRDzkNwG3DWRTTa4Ks8RVHOD3iORbKvNBVM5WxcvAAUj
-	 iG4r45cNR/+MMBkW2YGKFnUSM2lHJYTfn/eWv0KxNRltyLK7RsjkaXOeKlf8PemEtn
-	 YER7Rya2dZUfQT/oab+w78aiDwaUlqzoUV+w/CdizqetBiTPMUBnvMEdbsGchMOz2G
-	 1bD620T3nXcbw==
+	b=QNxTdLK7uBhM+JvArc7s5efQyUyZojWjYOf78HrHqrWy2iUXf1dcNHHT7qvD1bqEv
+	 7miRrUNlMbbyn1RDYOBKyM9OjdEDFxbYijbvtYhBAuyoZKLBUM8a+PavDf7eBx9uN0
+	 j40AMj8XmDTrEaDGDRed9PFXtQKctmgYXAiHyNfzBg+DMMkzvykHz5RYUnXq214JCW
+	 8DAkPAGfmSExgKcv+f427ZQ7jydLHl4gAviwXPSCUa32Ekl2VN0XrKwG9jaagLQS1K
+	 nZIfVR6+B6+SBVhZJ2xwFRZUGTbNCVO27bAi9OdNePgfB3fgyNj19hkF+baZz0vl0S
+	 cuSOUK7U+TTRg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7411C43143;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2B10E1CF31;
 	Fri,  9 Jun 2023 13:10:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] AMDTEE fix for v6.5
+Subject: Re: [GIT PULL] i.MX fixes for 6.4, round 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168631622293.816.9995460255020380114.git-patchwork-notify@kernel.org>
+ <168631622298.816.16788144763302717919.git-patchwork-notify@kernel.org>
 Date: Fri, 09 Jun 2023 13:10:22 +0000
-References: <20230606075843.GA2792442@rayden>
-In-Reply-To: <20230606075843.GA2792442@rayden>
-To: Jens Wiklander <jens.wiklander@linaro.org>
+References: <20230607141312.GU4199@dragon>
+In-Reply-To: <20230607141312.GU4199@dragon>
+To: Shawn Guo <shawnguo@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,20 @@ Hello:
 This pull request was applied to soc/soc.git (arm/fixes)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 6 Jun 2023 09:58:43 +0200 you wrote:
-> Hello arm-soc maintainers,
+On Wed, 7 Jun 2023 22:13:12 +0800 you wrote:
+> The following changes since commit 0f554e37dad416f445cd3ec5935f5aec1b0e7ba5:
 > 
-> Please pull this AMDTEE driver fix to add a return origin field to the
-> struct tee_cmd_load_ta used when loading a Trusted Application into the
-> AMDTEE. This change is backward compatible.
+>   arm64: dts: imx8: fix USB 3.0 Gadget Failure in QM & QXPB0 at super speed (2023-05-16 20:43:48 +0800)
 > 
-> Note that this isn't a usual Arm driver update. This targets AMD instead,
-> but is part of the TEE subsystem.
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-fixes-6.4-2
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] AMDTEE fix for v6.5
-    https://git.kernel.org/soc/soc/c/abd649fdf91a
+  - [GIT,PULL] i.MX fixes for 6.4, round 2
+    https://git.kernel.org/soc/soc/c/5cdd5ec17654
 
 You are awesome, thank you!
 -- 
