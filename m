@@ -1,74 +1,54 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <pr-tracker-bot@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1134C7EE2F
-	for <soc@archiver.kernel.org>; Sat, 10 Jun 2023 17:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F26E8C77B7A
+	for <soc@archiver.kernel.org>; Sat, 10 Jun 2023 20:54:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 86C53C4339B; Sat, 10 Jun 2023 17:06:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F726C433EF;
-	Sat, 10 Jun 2023 17:06:26 +0000 (UTC)
+	id B3B0EC433EF; Sat, 10 Jun 2023 20:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 890FFC433D2;
+	Sat, 10 Jun 2023 20:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686416787;
-	bh=oI8rZ+TH06IPYh4Zqr7iwWYYJo+KqmpF/Rt3torKTDk=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=A6VbFeOEfLv4ACjpFe20SttJnkQQhX0Htqq1DNdv6+YUJq+hbQMMxL7M/g722jFiJ
-	 l/cgG0d+PRBJg5F7M9RQ8LK5sOloB+GarFUXxktD+BvOe4CSHfeI0460IghzEi40S6
-	 mhGdATma+fugYy6Z2b6Z5etZ+sCeEu/MTWBAn+ZIrmcIe9tMHlEO35zZ5VrwG3ot/a
-	 MR+8oaARNfbvcvVBpFgIDv3Q+1xKoFx/1WW3ejoANuYihy5pq/jDVq90nmHmyp8ncX
-	 k+z0Uj99PZaDlMTNszlFZJVO4gLTNwWKF05gF9OC2u2vy9nflQjk55sMkFRE6ODS1m
-	 CCyJYCDKDE28A==
-From: Bjorn Andersson <andersson@kernel.org>
+	s=k20201202; t=1686430486;
+	bh=NQJsPOG3kOUtOnYf7wqq+TDCR8gcnzRoO2NZnRSBgqc=;
+	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
+	b=aIA+hs+29gQnfKPUMWBTwZXkhw6WoHTVeXC0VztdWqPN6K2NuDbeXHkpiAx7CYb9o
+	 aSC33QWPOfQeE1OLdcYMAN4f5xfyh0ClUbAyP1Fb9itpf7P1QZi1+8nKP6nFArl2xS
+	 ENqMq399YD6AthAC6z054cp5IWZCP70vz+j55RuFfJlLwZ9qa3M4JohZIj62PcA0T3
+	 y60BeQjIgHHNFJwj3RogHWYut3SdAcajBrS1ufCGnPyY5fJWC7n+1movcdWh0i5tuB
+	 TxzvP6XUjDMLqw4CHWlLy4+oMfCmzWibhMG5LSp2nV4r2rEWjdCz/XuoJZ1/UinY5u
+	 JIaDHIv2xIrGg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6AFADC43143;
+	Sat, 10 Jun 2023 20:54:46 +0000 (UTC)
+Subject: Re: [GIT PULL] ARM: SoC fixes for 6.4, part 2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ea181a04-d093-4c1b-bd87-01036d301567@app.fastmail.com>
+References: <ea181a04-d093-4c1b-bd87-01036d301567@app.fastmail.com>
+X-PR-Tracked-List-Id: <soc.lore.kernel.org>
+X-PR-Tracked-Message-Id: <ea181a04-d093-4c1b-bd87-01036d301567@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.4-2
+X-PR-Tracked-Commit-Id: 5cdd5ec176544a3f5b18591577cfab2fcdc13c79
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 859c74595156f894c4e8edd523c6d1c4a1899127
+Message-Id: <168643048629.9094.3941160630305987651.pr-tracker-bot@kernel.org>
+Date: Sat, 10 Jun 2023 20:54:46 +0000
+To: Arnd Bergmann <arnd@arndb.de>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Devi Priya <quic_devipriy@quicinc.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] Qualcomm ARM64 defconfig updates for v6.5
-Date: Sat, 10 Jun 2023 10:09:55 -0700
-Message-Id: <20230610170955.2478831-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 
+The pull request you sent on Sat, 10 Jun 2023 09:00:44 +0200:
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.4-2
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/859c74595156f894c4e8edd523c6d1c4a1899127
 
-are available in the Git repository at:
+Thank you!
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-arm64-defconfig-for-6.5
-
-for you to fetch changes up to 3098f34977480c9aa75cf328501f1b47ec49fec7:
-
-  arm64: defconfig: Enable ipq6018 apss clock and PLL controller (2023-05-26 12:17:08 -0700)
-
-----------------------------------------------------------------
-Qualcomm ARM64 defconfig updates for v6.5
-
-Enable the FSA4480 driver to enable USB Type-C altmode on devices such
-as SM8350 and SM8450 HDK. Enable the IPQ6018 APSS clock and PLL
-controller for CPU scaling, and enable GPU clock river for SA8775P.
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      arm64: defconfig: enable the SA8775P GPUCC driver
-
-Devi Priya (1):
-      arm64: defconfig: Enable ipq6018 apss clock and PLL controller
-
-Neil Armstrong (1):
-      arm64: defconfig: enable FSA4480 driver as module
-
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
