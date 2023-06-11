@@ -1,49 +1,47 @@
-Return-Path: <andersson@kernel.org>
+Return-Path: <SRS0=EKYy=B7=sntech.de=heiko@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79BF5C77B7A
-	for <soc@archiver.kernel.org>; Sun, 11 Jun 2023 01:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66554C7EE23
+	for <soc@archiver.kernel.org>; Sun, 11 Jun 2023 21:09:40 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 02D67C4339B; Sun, 11 Jun 2023 01:05:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE85DC433EF;
-	Sun, 11 Jun 2023 01:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1686445515;
-	bh=fW6c+EgKV15BRnATkYwXonZVtbspOtgztUrIeJWBmWw=;
-	h=From:List-Id:To:Cc:Subject:Date:From;
-	b=Ux4pCg5ZSYOJ8GIBk0evxQKbChRmZFsKwkaOp410Tn8pnzEncMLRXsiWYP6CfY5Tb
-	 rjS8xtuzZKB7Bbl5B3c2+YK6WwTSDTa2bKlnW9z1XxO7r3hIGHHIgmV0OPZFH16NtR
-	 5VJjVMxMh2XpprZAW5lv+DAAjvgIrpDWYPldYS8e5wV2dR6wXbafIA6SWkyzHdxLBg
-	 wloJ3F2py0wYOJLj4o7Dm4ttSnU/BNPX/ClXt4zmudlxwceBeqB/BQUM4JdCNH8KgA
-	 jCHCy1kFAPPySBw6dLtbpCJLWT++Lf1VwOH/4ACsrwc4sU2T44ekQCxx5a22s8rQgB
-	 k2VG81sPXZjzQ==
-From: Bjorn Andersson <andersson@kernel.org>
+	id 2D2F0C4339C; Sun, 11 Jun 2023 21:09:40 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 031A7C433D2;
+	Sun, 11 Jun 2023 21:09:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 031A7C433D2
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875b22.versanet.de ([83.135.91.34] helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1q8SJb-0005rv-OP; Sun, 11 Jun 2023 23:09:35 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: arm@kernel.org
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org,
-	soc@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Andy Gross <agross@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rohit Agarwal <quic_rohiagar@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [GIT PULL] Qualcomm ARM32 DeviceTree updates for v6.5
-Date: Sat, 10 Jun 2023 18:08:43 -0700
-Message-Id: <20230611010843.2482142-1-andersson@kernel.org>
-X-Mailer: git-send-email 2.39.2
+Cc: soc@kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Rockchip dts fixes for 6.4
+Date: Sun, 11 Jun 2023 23:09:34 +0200
+Message-ID: <2885657.e9J7NaK4W3@phil>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
+Hi Arnd, Kevin, Olof,
+
+please find a below a collection of fixes for the current release 6.4
+cycle.
+
+Please pull
+
+Thanks
+Heiko
 
 The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
@@ -51,84 +49,44 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-dts-for-6.5
+  git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.4-rockchip-dtsfixes1
 
-for you to fetch changes up to 925bac3caa46c5790d21ee236869b017090aad2d:
+for you to fetch changes up to 568a67e742dfa90b19a23305317164c5c350b71e:
 
-  ARM: dts: qcom: apq8074-dragonboard: enable DSI panel (2023-05-30 07:54:19 -0700)
-
-----------------------------------------------------------------
-Qualcomm ARM32 DeviceTree updates for v6.5
-
-NAND support on IPQ4019 boards is restored, after a faulty node rename.
-
-On MSM8226 IMEM, PMU and RPM stats are introduced. The Huawei Watch
-gains vibrator support.
-
-On MSM8974, the LGE Nexus 5 gains vibrator support. The APQ8074
-Dragonboard marks BLSP2 BAM controlled remotely, DSI panel, audio and
-modem DSPs are enabled.
-
-On SDX65 PCIe controller and PHY are introduced, to provide endpoint
-functionality. This is enabled on the related MTP.
-
-A range of DeviceTree cleanups are also included.
+  arm64: dts: rockchip: Fix rk356x PCIe register and range mappings (2023-06-06 18:22:49 +0200)
 
 ----------------------------------------------------------------
-Dmitry Baryshkov (3):
-      ARM: dts: qcom: apq8074-dragonboard: Set DMA as remotely controlled
-      ARM: dts: qcom: apq8074-dragonboard: enable adsp and MSS
-      ARM: dts: qcom: apq8074-dragonboard: enable DSI panel
+Fixes for the reset pin on nanopi r5c, a reset line on SOQuartz, a duplicate
+usb regulator on rock64 and PCIe register mappings on rk356x.
+Also some missing cache properties.
 
-Krzysztof Kozlowski (14):
-      ARM: dts: qcom: msm8974: do not use underscore in node name (again)
-      ARM: dts: qcom: msm8974: drop unit addresses from USB phys
-      ARM: dts: qcom: ipq4019: fix broken NAND controller properties override
-      ARM: dts: qcom: ipq4019: correct syscon unit-address
-      ARM: dts: qcom: sdx55: correct rsc unit-address
-      ARM: dts: qcom: msm8974: correct pronto unit-address
-      ARM: dts: qcom: ipq8064: drop leading 0 from unit-address
-      ARM: dts: qcom: ipq8064: drop invalid GCC thermal-sensor unit-address
-      ARM: dts: qcom: ipq8064: correct LED node names
-      ARM: dts: qcom: ipq8064: align USB node names with bindings
-      ARM: dts: qcom: apq8060-dragonboard: move regulators out of simple-bus
-      ARM: dts: qcom: msm8960-cdp: move regulator out of simple-bus
-      ARM: dts: qcom: apq8084: correct thermal sensor unit-address
-      ARM: dts: qcom: msm8974: align WCNSS Bluetooth node name with bindings
+----------------------------------------------------------------
+Andrew Powers-Holmes (1):
+      arm64: dts: rockchip: Fix rk356x PCIe register and range mappings
 
-Linus Walleij (1):
-      ARM: dts: qcom: msm8660: Fix regulator node names
+Krzysztof Kozlowski (1):
+      arm64: dts: rockchip: add missing cache properties
 
-Luca Weiss (2):
-      ARM: dts: qcom: msm8974-hammerhead: Add vibrator
-      ARM: dts: qcom: apq8026-huawei-sturgeon: Add vibrator
+Lorenz Brun (1):
+      arm64: dts: rockchip: fix USB regulator on ROCK64
 
-Matti Lehtimäki (3):
-      ARM: dts: qcom: msm8226: Add PMU node
-      ARM: dts: qcom: msm8226: Add rpm-stats device node
-      ARM: dts: qcom: msm8226: Add IMEM node
+Nicolas Frattaroli (1):
+      arm64: dts: rockchip: fix nEXTRST on SOQuartz
 
-Rohit Agarwal (4):
-      ARM: dts: qcom: sdx65: Add support for PCIe PHY
-      ARM: dts: qcom: sdx65: Add support for PCIe EP
-      ARM: dts: qcom: sdx65-mtp: Enable PCIe PHY
-      ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
+Tianling Shen (1):
+      arm64: dts: rockchip: fix button reset pin for nanopi r5c
 
- arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts | 28 +++++++
- arch/arm/boot/dts/qcom-apq8060-dragonboard.dts     | 84 ++++++++++-----------
- arch/arm/boot/dts/qcom-apq8074-dragonboard.dts     | 83 +++++++++++++++++++++
- arch/arm/boot/dts/qcom-apq8084.dtsi                |  2 +-
- arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dts    |  8 +-
- arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1.dtsi      | 10 +--
- arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1.dtsi      | 12 +--
- arch/arm/boot/dts/qcom-ipq8064-rb3011.dts          |  2 +-
- arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi           | 10 +--
- arch/arm/boot/dts/qcom-ipq8064.dtsi                | 12 +--
- arch/arm/boot/dts/qcom-msm8226.dtsi                | 25 +++++++
- arch/arm/boot/dts/qcom-msm8960-cdp.dts             | 16 ++--
- .../dts/qcom-msm8974-lge-nexus5-hammerhead.dts     | 35 +++++++++
- arch/arm/boot/dts/qcom-msm8974.dtsi                | 10 +--
- arch/arm/boot/dts/qcom-sdx55.dtsi                  |  4 +-
- arch/arm/boot/dts/qcom-sdx65-mtp.dts               | 42 +++++++++++
- arch/arm/boot/dts/qcom-sdx65.dtsi                  | 87 ++++++++++++++++++++++
- 17 files changed, 381 insertions(+), 89 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi           |  1 +
+ arch/arm64/boot/dts/rockchip/rk3328-rock64.dts     | 14 ++---------
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  1 +
+ .../boot/dts/rockchip/rk3566-soquartz-cm4.dts      | 18 ++++++++------
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi  | 29 ++++++++++------------
+ arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5c.dts |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts |  1 -
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi           | 14 ++++++-----
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           |  7 +++---
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi          |  9 +++++++
+ 10 files changed, 50 insertions(+), 46 deletions(-)
+
+
+
