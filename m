@@ -4,20 +4,20 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2F50C77B7A
-	for <soc@archiver.kernel.org>; Tue, 13 Jun 2023 10:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A1D6C7EE2E
+	for <soc@archiver.kernel.org>; Tue, 13 Jun 2023 10:29:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 64961C433D2; Tue, 13 Jun 2023 10:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC559C433EF;
-	Tue, 13 Jun 2023 10:28:09 +0000 (UTC)
+	id 42147C4339C; Tue, 13 Jun 2023 10:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FA7C4339B;
+	Tue, 13 Jun 2023 10:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1686652090;
-	bh=hwhRVY/U8OOY9aUuR5CfYMofJxlb/LPcsEErTaZj9DE=;
+	s=korg; t=1686652179;
+	bh=GKjykxi8jkpJPrEh4DwtTX4rkA8LohqIze6xn3gvCgg=;
 	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=wvaxvHobJCTvf4R/mqOl5LiBcHZVvAu5NG5I5fvpRDvhU263ik5r7AhPwzhY9KhLd
-	 wYV2l3z935Mln7+6ZqhppEaND5Fdy6HeUj2l0j+5Rqw6GwZo3bsc0LFKw16GDDFpqs
-	 xWrHt7pVqlTSLX+47TPTC54csg68JYgGuIrEegCU=
-Date: Tue, 13 Jun 2023 12:28:07 +0200
+	b=KrHiw4yGlWzLr+Y0L8kgwzDfaDjiz6V36vUT6Iu3GS3yBWOvnqdGIc8k+ZAazWNdw
+	 GiVI06RIJFsN4Cup5bm6FxEhcEKNjFziI0RZfXPo5HB4xmvglnOW3wvtexlp5N6s1n
+	 e1Ep8Orhyb6ZT7tsfJeR+35txiJzQfFBl+Ccx3mU=
+Date: Tue, 13 Jun 2023 12:29:36 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Jacky Huang <ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
@@ -31,7 +31,7 @@ Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
 	mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
 Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver
  support
-Message-ID: <2023061338-lunchbox-snorkel-e6a9@gregkh>
+Message-ID: <2023061325-distant-gaffe-8871@gregkh>
 References: <20230612025355.547871-1-ychuang570808@gmail.com>
  <20230612025355.547871-2-ychuang570808@gmail.com>
 MIME-Version: 1.0
@@ -46,19 +46,12 @@ On Mon, Jun 12, 2023 at 02:53:55AM +0000, Jacky Huang wrote:
 > It supports full-duplex communication, FIFO control, and
 > hardware flow control.
 
-You get a full 72 columns for your changelog :)
+You don't specify here what your tty device name is going to be, why?
 
-> --- a/include/uapi/linux/serial_core.h
-> +++ b/include/uapi/linux/serial_core.h
-> @@ -279,4 +279,7 @@
->  /* Sunplus UART */
->  #define PORT_SUNPLUS	123
->  
-> +/* Nuvoton MA35 SoC */
-> +#define PORT_MA35	124
-> +
+It's not written anywhere, is that intentional?
 
-Why is this change needed?  What userspace code is going to rely on it?
+Same for your tty major/minor, what numbers are you using that might
+also be in use by a different device in the system?
 
 thanks,
 
