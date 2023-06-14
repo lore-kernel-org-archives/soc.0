@@ -1,139 +1,149 @@
-Return-Path: <SRS0=R/d1=CC=gmail.com=ychuang570808@kernel.org>
+Return-Path: <SRS0=7pP/=CC=gmail.com=jirislaby@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3E21EB64D8
-	for <soc@archiver.kernel.org>; Wed, 14 Jun 2023 01:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61470EB64D8
+	for <soc@archiver.kernel.org>; Wed, 14 Jun 2023 04:58:03 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id ADE60C433CA; Wed, 14 Jun 2023 01:18:58 +0000 (UTC)
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	id 1E1CEC433CC; Wed, 14 Jun 2023 04:58:03 +0000 (UTC)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 89551C433C8;
-	Wed, 14 Jun 2023 01:18:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 89551C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.kernel.org (Postfix) with ESMTPS id BD024C433C0;
+	Wed, 14 Jun 2023 04:58:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BD024C433C0
+Authentication-Results: smtp.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-54fd171cedcso156924a12.3;
-        Tue, 13 Jun 2023 18:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686705537; x=1689297537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8rlEEo9ikUJaK6kPNcD1MGYGJ2duYtePI073tq2+zWU=;
-        b=oYEYcNMp5KxkPdf9UjssCKvX91RZnKPWQtliT4xkdMh6wUhLo/HgUtc6IEG9O9gWud
-         UE7s6bBVjSDQlT34wkCTUrN+n4tVKq7ty2Lvo7KEklUuhSeFPp9Ielx4042MlB7ltx8m
-         wVf3kkXSdv7HWSKG92NqsSa6cEQUbmxEfe1dI3b5QyY0K0ysT6cXzf2Sxi7Cr+/Uvh1n
-         yRWpDwsckYZTY0Mnaro9ti9D6vBNc9RUDvgp+yCwURmT6cqhkU95SrugTV9UFJoJCjfL
-         v9JwFKNBFcYVqynPfElCM7VG3G6b6bgXSQasb5wv+e5k6qDZ1ogVd6G+umOL1OBJsTSh
-         fwYw==
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-9768fd99c0cso50475566b.0;
+        Tue, 13 Jun 2023 21:58:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686705537; x=1689297537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686718680; x=1689310680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rlEEo9ikUJaK6kPNcD1MGYGJ2duYtePI073tq2+zWU=;
-        b=T1wYXon/G/fB6JyJrg/RVc+CYc4O5nmnCXWQoqazy5FlY7ICcQP0cNtAw/oWf2frR3
-         7QOL0v6yPYOagtSDn2xgKCPygHM1VJ96dMacJMZdjsrFzzv8yu///RVoye7syFwZO8CH
-         XKDAAtU+h0FFBPCoD3ES/y8MPuMpjiMcqht0jS5DFtQDb8eTi96x95dL8UMBojkxmydR
-         wBPT5D8H1z/TgkW8PkLkPUXpmIOuQ+4KvU97V5Vuu4RuPbtrf3MKFF1oNOO7YFvrB8v+
-         r0KD9BV0sKTUOaWAw4Gd6E7btXHL3m8jFOVSCFJQoYv35PMKe63+5+Og4kfte7n1qmXf
-         6zIQ==
-X-Gm-Message-State: AC+VfDxwXJTHKyYDmGseZt4tbWkPAQDbR47yBDY1h5+RF3GLCKxMOALR
-	5V97oM2stCcDBsaQ1TtzX6w=
-X-Google-Smtp-Source: ACHHUZ6ST5lfSynOfzFpFQetsY4B3xQufhNg6RfgeefKg/BKLEcPb8+yNElTpG47QCrMvPN+Efpjzg==
-X-Received: by 2002:a17:902:e74e:b0:1b3:8865:aaae with SMTP id p14-20020a170902e74e00b001b38865aaaemr13011364plf.53.1686705536763;
-        Tue, 13 Jun 2023 18:18:56 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id r21-20020a170902ea5500b001ac8e0ea157sm10804832plg.144.2023.06.13.18.18.52
+        bh=dVqjech6rehqYVc76kP00nVY02sE+W+4Mbw+HMfqJs0=;
+        b=KX9x7xXc1aXQ1ApMr2mpYsahzDzRERgROBIh1+u7ZsrbHmBWDdjnwNURLUsF/XN7b3
+         iI/IVRGmbyFsE7Hq2A/SdNGxdciw5ag5X1NBbYSnVsnrzdoOQ4Ypc6UjDxEdHdi80xHE
+         6EAaAhlMcoz7UxNh/6f6gAJEu9rTRAeX83y6JuXHPRfO7wXuPg3ESGicyWxCVy5gRBel
+         /KxgFs6rFY+i1D42DpUdvipxMOwhNFthEOsN0qrIFt/z32SAZcYHjeCYLAMG5qCCCIL2
+         iMAzeLEIw77VdWcXsoPUJF2MaqEgGlx8fzeB0N8ZrYeK1srMEegB1yBWojMHfuv8FEMo
+         Daeg==
+X-Gm-Message-State: AC+VfDyt2cUezxDdBERnRCVaGR1dlYghglJP90s3fGcAb8CzfUmyT0lE
+	lrXbwVvbLDEhWqo6t/WZK70=
+X-Google-Smtp-Source: ACHHUZ66MPHDLCxi4nWcCRjbBaPXVXW2hh68IAC/e+uTnvNGyZwoL0gPajf4l9a7mqMeV31MsL6ocQ==
+X-Received: by 2002:a17:907:7e9a:b0:977:d468:827 with SMTP id qb26-20020a1709077e9a00b00977d4680827mr453941ejc.17.1686718679529;
+        Tue, 13 Jun 2023 21:57:59 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id ha19-20020a170906a89300b0097d77a5f033sm5974327ejb.24.2023.06.13.21.57.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 18:18:56 -0700 (PDT)
-Message-ID: <a2ff6965-e373-5bce-00cd-c8d9deb287c8@gmail.com>
-Date: Wed, 14 Jun 2023 09:18:51 +0800
+        Tue, 13 Jun 2023 21:57:58 -0700 (PDT)
+Message-ID: <11b0f59e-7cca-1b50-9c34-f38e6b6fc0f9@kernel.org>
+Date: Wed, 14 Jun 2023 06:57:57 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
 Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver
  support
-To: Greg KH <gregkh@linuxfoundation.org>
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jacky Huang <ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
- jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
- will@kernel.org, devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+Cc: Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ Lee Jones <lee@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Tomer Maimon <tmaimon77@gmail.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
- schung@nuvoton.com, mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+ linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
+ mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
 References: <20230612025355.547871-1-ychuang570808@gmail.com>
  <20230612025355.547871-2-ychuang570808@gmail.com>
- <2023061325-distant-gaffe-8871@gregkh>
- <0e40cbe6-0e88-b300-3507-5fa92eadb46d@gmail.com>
- <2023061312-outsource-triumph-7dd6@gregkh>
-Content-Language: en-US
-From: Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <2023061312-outsource-triumph-7dd6@gregkh>
+ <2023061338-lunchbox-snorkel-e6a9@gregkh>
+ <f8eb6114-8248-8886-b301-c2886e50e016@gmail.com>
+ <2023061356-matchbook-footwear-d142@gregkh>
+ <35e768ad-7f15-48a4-9c38-09570026cf71@app.fastmail.com>
+From: Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <35e768ad-7f15-48a4-9c38-09570026cf71@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Dear Greg,
-
-
-On 2023/6/13 下午 10:48, Greg KH wrote:
-> On Tue, Jun 13, 2023 at 07:03:11PM +0800, Jacky Huang wrote:
->> Dear Greg,
->>
->>
->> On 2023/6/13 下午 06:29, Greg KH wrote:
->>> On Mon, Jun 12, 2023 at 02:53:55AM +0000, Jacky Huang wrote:
->>>> From: Jacky Huang <ychuang3@nuvoton.com>
+On 13. 06. 23, 17:44, Arnd Bergmann wrote:
+> On Tue, Jun 13, 2023, at 16:49, Greg KH wrote:
+>> On Tue, Jun 13, 2023 at 06:58:32PM +0800, Jacky Huang wrote:
+>>>
+>>> On 2023/6/13 下午 06:28, Greg KH wrote:
+>>>> On Mon, Jun 12, 2023 at 02:53:55AM +0000, Jacky Huang wrote:
+>>>>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>>>>
+>>>>> This adds UART and console driver for Nuvoton ma35d1 Soc.
+>>>>> It supports full-duplex communication, FIFO control, and
+>>>>> hardware flow control.
+>>>> You get a full 72 columns for your changelog :)
 >>>>
->>>> This adds UART and console driver for Nuvoton ma35d1 Soc.
->>>> It supports full-duplex communication, FIFO control, and
->>>> hardware flow control.
->>> You don't specify here what your tty device name is going to be, why?
+>>>>> --- a/include/uapi/linux/serial_core.h
+>>>>> +++ b/include/uapi/linux/serial_core.h
+>>>>> @@ -279,4 +279,7 @@
+>>>>>    /* Sunplus UART */
+>>>>>    #define PORT_SUNPLUS	123
+>>>>> +/* Nuvoton MA35 SoC */
+>>>>> +#define PORT_MA35	124
+>>>>> +
+>>>> Why is this change needed?  What userspace code is going to rely on it?
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
 >>>
->>> It's not written anywhere, is that intentional?
->>>
->>> Same for your tty major/minor, what numbers are you using that might
->>> also be in use by a different device in the system?
->>>
->>> thanks,
->>>
->>> greg k-h
->> I will add description about the tty name to the log.
->> In practical testing, we specified in the u-boot parameters
->> to use ttyNVT0 for the console, and it worked fine.
-> Where did you pick that name from?  Why can't you use the "default" uart
-> name instead?
->
-> I thought we had a list of tty names around somewhere, but I can't find
-> it right now...
->
-> thanks,
->
-> greg k-h
+>>> Because the serial driver requires a port->type, and almost all serial
+>>> drivers defined their port type here. We follow the practice of most serial
+>>> drivers here.
+>>> If we don't do it this way, we would have to directly assign a value to
+>>> port->type. However, such modifications were questioned in the past,
+>>> which is why we changed it back to defining the port type in serial_core.h.
+>>
+>> I really really want to get rid of this list, as it's a UAPI that no one
+>> uses.  So please don't use it, it doesn't help anything, and while the
+>> serial driver might require it, it doesn't actually do anything with
+>> that field, right?  So why don't we just set all of the values to the
+>> same one?
+> 
+> I don't see how Jacky can come up with a patch to do this correctly
+> without more specific guidance to what exactly you are looking for,
+> after the last 123 people that added support for a new port got
+> that merged.
+> 
+> I checked debian codesearch and found only three obscure packages that
+> accidentally include this header instead of including linux/serial.h,
+> a couple of lists of all kernel headers, and none that include it on
+> purpose. I agree that this header should really not exist in uapi,
+> but the question is what exactly to do about it.
+> 
+> Possible changes would be:
+> 
+> - add a special value PORT_* constant other than PORT_UNKNOWN that
+>    can be used by serial drivers instead of a unique value, and
+>    ensure that the serial core can handle drivers using it.
+> 
+> - move all values used by the 8250 driver from serial_core.h
+>    to serial.h, as this driver actually uses the constants.
+> 
+> - Move the remaining contents of uapi/linux/serial.h into the
+>    non-uapi version.
+> 
+> - Change all drivers that only reference a single PORT_*
+>    value to use the generic one.
 
-Initially, we were using the well-known ttyS, but it is used by the 8250 
-driver.
-Since the MA35D1 UART is incompatible with the 8250 driver, Andr raised
-concerns about using ttyS.
+Hmm, we are looping :).
 
-To differentiate this UART from the incompatible 8250, we defined ttyNVT.
-This name is specified in the driver's UART name and console name
-structure, and other serial drivers follow a similar approach. For example,
-we can find names like ttySA, ttySAC, ttySC, ttySIF, ttySTM, ttySUP,
-and so on.
+https://lore.kernel.org/all/75375f8d-e157-a364-3da5-9c8d5b832927@kernel.org/
 
-If you believe that this UART driver can use ttyS, I am more than willing to
-make the modification. After all, some applications and scripts default to
-using ttyS, and using ttyNVT can indeed cause some inconvenience in
-certain situations.
-
-Best regards,
-Jacky Huang
-
+regards,
+-- 
+js
+suse labs
 
