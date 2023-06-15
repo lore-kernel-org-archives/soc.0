@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E407EB64D9
-	for <soc@archiver.kernel.org>; Thu, 15 Jun 2023 17:49:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E9EBEB64D9
+	for <soc@archiver.kernel.org>; Thu, 15 Jun 2023 17:49:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 21F7AC433CA; Thu, 15 Jun 2023 17:49:02 +0000 (UTC)
+	id 59DE8C433CA; Thu, 15 Jun 2023 17:49:45 +0000 (UTC)
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8C886C433C0;
-	Thu, 15 Jun 2023 17:49:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8C886C433C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 460E8C433C8;
+	Thu, 15 Jun 2023 17:49:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 460E8C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Received: from mercury (dyndsl-091-248-208-152.ewe-ip-backbone.de [91.248.208.152])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 88F9A6606F6E;
-	Thu, 15 Jun 2023 18:48:58 +0100 (BST)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 660DB6606F6E;
+	Thu, 15 Jun 2023 18:49:42 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1686851338;
-	bh=SLeuROCJRaxby8+GxtmF6Jitvh7OaProeRiGkN5+RuE=;
+	s=mail; t=1686851382;
+	bh=LBXhXrA7LDalNxXhdPzqibZYlYyjem8MKx+tIXAQuL8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=oBlh03bLbAU5mp+avvQEfFt1QGqbs9OeDoFLIeqwCoC392BuGNaz8uO1eSTZReaUQ
-	 qwG4OxRv6eCXeL2Lb6fmDOffgYAA/+ugbTWVfwJQq1rjdJVTxQ/tmcR77bkYBNl3Rp
-	 F1UmUaX17P78/A8gNB5cfxW3GHNECa2JTlTURCSvcdNVIceO4f5CS2yqwyOACdjTIc
-	 FZv/I+jLaD/0cwBi++/l+Cu924O7PfgZWJIRrzjwD164QbrmoZEVJTbVqlIAGzZXxe
-	 NDo3kAjZ1ZWK2QrQUx3A1ZFNxJAD0+agwuGOeVTy4UQKJOoCPku6upY6XmsnzhuXNI
-	 tsqiE/sdGEHeA==
+	b=TB/t4dM0Zka/BiawlsHVvTaPgBKLc+eElFaw1eZPav/uFJkYob3TpckXXFTG8Zt1i
+	 aLEUIOU6BZwzkDYDAVqB7+OftWG80vc8tXBMMwUq7vZMIyw7EyNEoukV8jD7T8C8R7
+	 j0Vi8dR/0hJSmmbYNM3lLFE/KQEm25Y4OE8jzk9c3cXZKdJtoKOsggUHLJ3+ykl1lN
+	 TEOGJCxR37NY++GzgKVbr0AixwzzXBJDK3E71eg4mbz9AVG9a0VcDVEpfkYu/tcUmM
+	 M+VERZVxyReAeo6AlLTbF5uz3euV9dxVwdtlUCANHInr7bGOBYfMs9CSpcXI0dRq+E
+	 wysqABrIwC3BQ==
 Received: by mercury (Postfix, from userid 1000)
-	id DFF4F1060DE4; Thu, 15 Jun 2023 19:48:56 +0200 (CEST)
-Date: Thu, 15 Jun 2023 19:48:56 +0200
+	id A955C1060DE4; Thu, 15 Jun 2023 19:49:40 +0200 (CEST)
+Date: Thu, 15 Jun 2023 19:49:40 +0200
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
 Cc: arm@kernel.org, linux-arm-kernel@lists.infradead.org,
 	kernel@lists.collabora.com
-Subject: [GIT PULL] ARM32 RK808 defconfig fix
-Message-ID: <20230615174856.6z7ft3myebjlulen@mercury.elektranox.org>
+Subject: [GIT PULL] ARM64 RK808 defconfig fix
+Message-ID: <20230615174940.jmzuv5kb6o7htkwo@mercury.elektranox.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k4636gj4rt2y56i5"
+	protocol="application/pgp-signature"; boundary="fwbqteb5ytrdisia"
 Content-Disposition: inline
 
 
---k4636gj4rt2y56i5
+--fwbqteb5ytrdisia
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -60,8 +60,8 @@ Since I did not get any feedback for the defconfig patches from [0] and they
 are fixing a KernelCI regression (Rockchip Chromebooks no longer boot because
 of missing PMIC driver), I prepared a pull request with the defconfig change
 instead as suggested by Tony [1]. It consists of the rk806 immutable branch
-prepared by Lee Jones [2] and the multi_v7_defconfig defconfig patch. I will
-send a second pull request for the arm64 defconfig.
+prepared by Lee Jones [2] and the arm64 defconfig patch. I will send a second
+pull request for the arm32 multi_v7 defconfig. This is targeting linux-next.
 
 [0] https://lore.kernel.org/all/20230518040541.299189-1-sebastian.reichel@collabora.com/
 [1] https://lore.kernel.org/linux-omap/20230604060436.GT14287@atomide.com/
@@ -77,11 +77,11 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/ rk806-defconfig-fix-arm32
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/ rk806-defconfig-fix-arm64
 
-for you to fetch changes up to 6053cda09ba5398ef854b2bb3a9ffcde19854b61:
+for you to fetch changes up to 787614e7c48437ea5764f9cff824b45357c912ed:
 
-  ARM: multi_v7_defconfig: update MFD_RK808 name (2023-06-14 19:28:35 +0200)
+  arm64: defconfig: update RK8XX MFD config (2023-06-14 19:33:04 +0200)
 
 ----------------------------------------------------------------
 Sebastian Reichel (10):
@@ -94,10 +94,10 @@ Sebastian Reichel (10):
       dt-bindings: mfd: Add rk806 binding
       mfd: rk8xx: Add rk806 support
       pinctrl: rk805: Add rk806 pinctrl support
-      ARM: multi_v7_defconfig: update MFD_RK808 name
+      arm64: defconfig: update RK8XX MFD config
 
  .../devicetree/bindings/mfd/rockchip,rk806.yaml    | 406 ++++++++++++++++++++
- arch/arm/configs/multi_v7_defconfig                |   2 +-
+ arch/arm64/configs/defconfig                       |   3 +-
  drivers/clk/Kconfig                                |   2 +-
  drivers/clk/clk-rk808.c                            |  34 +-
  drivers/input/misc/Kconfig                         |   2 +-
@@ -113,30 +113,30 @@ Sebastian Reichel (10):
  drivers/rtc/Kconfig                                |   2 +-
  include/linux/mfd/rk808.h                          | 417 ++++++++++++++++++++-
  sound/soc/codecs/Kconfig                           |   2 +-
- 17 files changed, 1465 insertions(+), 283 deletions(-)
+ 17 files changed, 1466 insertions(+), 283 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk806.yaml
  rename drivers/mfd/{rk808.c => rk8xx-core.c} (71%)
  create mode 100644 drivers/mfd/rk8xx-i2c.c
  create mode 100644 drivers/mfd/rk8xx-spi.c
 
---k4636gj4rt2y56i5
+--fwbqteb5ytrdisia
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSLTwMACgkQ2O7X88g7
-+ppu+BAAqSI3BwXNQ0j3p0ktFB1veZxbbiZg4cG2pXRRBb4yMMMQHknb8NU3PF36
-DOKcBxvRLRbyXyZYF9VFAd5bjOimMwdG3gIFOFtNsR/O7Lps+onFOO7DCwnVGpxX
-AV8PMjcbfhVZXieDSeaoZYVFZRb/Uf8BP2+jzRUMtSkZuIvL18P8qZjAIW7kRUnA
-nigaj1z5sowmE83Id6HF0OfCSp0M623kleRZIwwOUIoA0vliD7bJLjlx9PLGRjiW
-gDsKSmH7fu9lMhBpjNdS0QD7MD4a3g1UJ+9NqW1nuv9RaBmPeIrMURadmanKyjcw
-dT80M32rWxH5KUkbiQ9u0qMGz8xntJRDKp9pNgQ0vQM/z/maNMi3v9v4bjcO/0z3
-iWN+9o0eqT1hFrbvkItO4a2QRWC/p/7/hcaUpTmVUVAp6U1564uGuD2CGjhrJCss
-p4qSEO7LiMggLLscgd0zYhRc6lvjlrknpFfn1MPOripv4se5pKXRfbCNxXNH9gmR
-FynF3W/HFrLLoTQ+anjpBmXRE8bIMSfcqvQ75HyPh4vJ7fHkjdOQkPGQEO0mt+bn
-f0IlwyxCi7JQhFTUJbjtrmctRWEQS0UcjDBW+ihvs+4UNWbjjOxajOfwOg7qEeqt
-4n5PXKtHqsB79ZDuMyPX5tNEerzHoZ9VD60m6LNK3oMn8HWYpKg=
-=rHv0
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSLTzQACgkQ2O7X88g7
++po17hAAjEdzHpgxW3TaKd6DatJHgyP3LUKSRZgDTa56rl3NceGpziU6eDK15xC1
+q0FlqXgBcSYOG/H1UR9x0r/Bvpz5BhQ84sjbPRGrFW5rQvKcVqqB5Wg3KXtx+eRH
+fDP5jCKZpueeU3+wK0/aZB8Wl1Re9NRgmJhz/tdFtaHXAhVFI7rQOwigSjqdmYQR
+EZkQNT8p3GBTOEw3CPxm9RSQMv10h8dqQm2m7u3Vp7zpJo6Tq5xZvsufBYIF3c6+
+94TlguXDMY2ZUMEshZQx8aTYRXT+QMt2l9OWQEROY+THejwjiWfhTAjziAl5sAZH
+iHSIPO3uLlBwmUk66BqAzUJDsOhyUc+Ay91Di+BmbslvOBYJOzReMZVOy7kaed0e
+HQgY+z084AdAC54e982kmFkOPVfmo6SrrkkU7zTdEIOZwfn1QrFWRp7JmDpT532j
+orjO3e/q091RIolmaqXu+CtdS2n1eC2UvMCugB4L50wkS1YbCe9/YRMMEZLwCsqp
+RCdXbu23SK4Oyb0mOWaN9nO7aiVP/wffHZd5b+qsTp4Yov1Mb2JkKUoDGawFF/SA
+sm2xfIlQba0VnstEaxQCfWNZOZMVq/VArpvxUnXiXyRA+BujwEKCMLqr6Be+kjMC
+w+VT6Kodp5Sq8DYRXpU2bl0i+H20w+0sLbJCr6eIp/9o2yukM/o=
+=+K2u
 -----END PGP SIGNATURE-----
 
---k4636gj4rt2y56i5--
+--fwbqteb5ytrdisia--
