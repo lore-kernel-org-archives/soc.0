@@ -1,93 +1,140 @@
-Return-Path: <SRS0=Yf9c=CD=linaro.org=jens.wiklander@kernel.org>
+Return-Path: <SRS0=bzd+=CD=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58BB4EB64D9
-	for <soc@archiver.kernel.org>; Thu, 15 Jun 2023 13:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C6D1EB64D9
+	for <soc@archiver.kernel.org>; Thu, 15 Jun 2023 14:02:21 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2DB1EC433CB; Thu, 15 Jun 2023 13:00:55 +0000 (UTC)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id E1D3BC433CA; Thu, 15 Jun 2023 14:02:20 +0000 (UTC)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 1841FC433C8
-	for <soc@kernel.org>; Thu, 15 Jun 2023 13:00:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 1841FC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4f64fb05a8aso10545011e87.0
-        for <soc@kernel.org>; Thu, 15 Jun 2023 06:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686834052; x=1689426052;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5TctcZvXGN43HwETUwBc1JHngngPXfmJv1grpN3Hs04=;
-        b=kWH5wT1655+UGW6aDb53bxMa3hBYH17QrxPTsuS34rPkI7u4/If0ZBBvHfEtUeStHD
-         pruKT02Tr8NLLGcgRr1TK7G2XHjFbZ8e2sdxJg3ERDs/kgZEEJYqLQeee++MYsEWpj1Z
-         75Thz7oRqM3LRvJWI7ulD1ArHNj3llb7ylJ7HnmUn7o7mlcQp/Uvi6zY7D5dScmS0X03
-         i3V6q7GBE7qQo3b1C3Kgs/oNgCVyOGWTDmUoUr25o1zw1xZuvPrS78pgq/q9ns7q2R9p
-         FrsaTnnM0L7C/Ii0Ht5Xg64CoisL0wJ8Q2H4ZK1LZvVgtoXFqSranXUZHnqgqVUs2bga
-         kgtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686834052; x=1689426052;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5TctcZvXGN43HwETUwBc1JHngngPXfmJv1grpN3Hs04=;
-        b=EKiV+pwvHAHFZ5yAHUux+wbr3lu4rFDi7tdzePvSGcqsLpNb+EKgCacTt4BuvWLaCj
-         JyiuPURcJyGMPPjUfoiM9HaOPo+mNC1rmQEzgy1VWKJryDm5O0L2UURibcJ1U9aFT2QM
-         XSgaImt9WUbmatLbe+IZgO0HOK9mDw6UEHd/8PIOpwxJpybJdG6akwurRkipRFmnDjlv
-         vVECB6WUkvKpbzJzIwbvnARhTn4v/esMOLZjlVw64CWYYnU4/pv6JxZYyO/g7OVd1n4v
-         cPIlfDZvXGyegYNwspD7eLaWen682GDldVLEpP/tpxOEAshO9AOJXK1QhBXJnYXuCdqP
-         3BBA==
-X-Gm-Message-State: AC+VfDweGXqsQTn0QJJ5oCcymy3PdcGhTtjyrRsNSGNCSjo/pXS8Ge14
-	Dxlwql2qJgzgMSE7VWjCjQv+xw==
-X-Google-Smtp-Source: ACHHUZ5WnNmjpeWjgFMIShPC0wbAbHETohuoX3sQ4DalX61hG477WQFaQIWdr0WyVeYjQBNyGwTjjA==
-X-Received: by 2002:a19:7b05:0:b0:4f1:3eea:eaf9 with SMTP id w5-20020a197b05000000b004f13eeaeaf9mr10605445lfc.24.1686834051722;
-        Thu, 15 Jun 2023 06:00:51 -0700 (PDT)
-Received: from rayden (81-236-179-152-no272.tbcn.telia.com. [81.236.179.152])
-        by smtp.gmail.com with ESMTPSA id d29-20020ac25edd000000b004e83fbba141sm1860644lfq.164.2023.06.15.06.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 06:00:51 -0700 (PDT)
-Date: Thu, 15 Jun 2023 15:00:49 +0200
-From: Jens Wiklander <jens.wiklander@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id 71364C433C8;
+	Thu, 15 Jun 2023 14:02:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 71364C433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 3A0905C00D8;
+	Thu, 15 Jun 2023 10:02:17 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 15 Jun 2023 10:02:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm1; t=1686837737; x=1686924137; bh=eY
+	CsNbwSpZasMtX08Ox/O4cr7nckW5aMGHyiTHaMEvU=; b=vOzobmNPGCa6Mb+YMn
+	asY4+o4H7LWFlBlorgzjotB25hUrMvqvukGFrvIOFTYkNkmBCFfkfYb7X6imkzfn
+	sML3mf0MEl+OOFAzv6L0+9AuUaTQic/O3l7J/Um+a/XK/7TQ3dK9jE23HkDJV3Vs
+	tDR4Cptq7Fgq6dS47eJsrpRHBCMYlX0sI0Td+Q7oFfoVuMaf0cMmk4mZGTrOZpYO
+	0rMG2r1EEBy5j9jm1bkbitkBDqQTPnwcL4WNXUNHHbhTVXFMjTwseb2LBCgUEp/1
+	+s+r4qww3/aMPqDMeUtP5In77D7fY0JN1JnDwlhLQ//7UetfJyigloRfTgfH3qFG
+	V+Fg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1686837737; x=1686924137; bh=eYCsNbwSpZasM
+	tX08Ox/O4cr7nckW5aMGHyiTHaMEvU=; b=RSjrdEsgeakMj9X0uhMrA2PN8j4Rw
+	pWXc64Yh1QUJkZeWJkSnJ0wQsjdXWC/3XpGIHvmkTcOdt0VT+5p3Xd6K+WSijJZD
+	P9QRahEgKUIIR6zj5ENb/as3xq4x6AqDJw4/GMYKH7b+N/YNAtxKum1MSPXLflPG
+	m+HlPmtoy7O2mEY7LLNS57KYNliFt1xshKmL9IOluY5EiwB7aXhrahSgQhyPoY5q
+	6VwOrvtNtqhDyTOc2qBbMDmGt9vkhZgEglyYMXiiMxdFV2KpT+lH4lAnZz1lUxWM
+	W0mHLLlOQST/9FfJJb2bpnMmrnrSx7xM+VZOqpQpE1UAmfOmbdFqxZq5A==
+X-ME-Sender: <xms:5xmLZKCYyHW13ObS6w0LD32bRjVKIvAyUoxIfkLUbwHtvZxyxzeB4A>
+    <xme:5xmLZEjY_hphZXlP1bRPz0opQcFXjc-eW38HI_E3PzOCKDizjqRXwR1xD4qSwCSeq
+    VcGMqtko0gNCR47e-Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:5xmLZNkekz6_0Xug5GdmBYkGf7aRRh9mTOIPN1FfLVJMFhxt3vwz8Q>
+    <xmx:5xmLZIyESrV9s75tfwvOAsFrQB5NyxdP7_8qsaRcPkjS3Q4Pnc6FtA>
+    <xmx:5xmLZPT7I_mIrWmX-DvFqlb4-GewBZkZk_6P1avaIqcMyNV5RSAH8w>
+    <xmx:6RmLZALLJEV_J5Zlse85sRbLxpAvhdWEEI0sUeczWEi-Hx4Bd32Kig>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6F440B60089; Thu, 15 Jun 2023 10:02:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <502240f7-2cac-4fe6-9e27-f9861db3666d@app.fastmail.com>
+In-Reply-To: <2023061555-enlighten-worshiper-c92d@gregkh>
+References: <20230612025355.547871-1-ychuang570808@gmail.com>
+ <20230612025355.547871-2-ychuang570808@gmail.com>
+ <2023061338-lunchbox-snorkel-e6a9@gregkh>
+ <f8eb6114-8248-8886-b301-c2886e50e016@gmail.com>
+ <2023061356-matchbook-footwear-d142@gregkh>
+ <35e768ad-7f15-48a4-9c38-09570026cf71@app.fastmail.com>
+ <2023061555-enlighten-worshiper-c92d@gregkh>
+Date: Thu, 15 Jun 2023 16:01:55 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 List-Id: <soc.lore.kernel.org>
-To: arm@kernel.org, soc@kernel.org
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] Use kmemdup() in OP-TEE driver for v6.5
-Message-ID: <20230615130049.GA979203@rayden>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Cc: "Jacky Huang" <ychuang570808@gmail.com>,
+ "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+ "Lee Jones" <lee@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>,
+ "Jiri Slaby" <jirislaby@kernel.org>, "Tomer Maimon" <tmaimon77@gmail.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
+ mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver support
+Content-Type: text/plain
 
-Hello arm-soc maintainers,
+On Thu, Jun 15, 2023, at 12:19, Greg Kroah-Hartman wrote:
+> On Tue, Jun 13, 2023 at 05:44:23PM +0200, Arnd Bergmann wrote:
+>> On Tue, Jun 13, 2023, at 16:49, Greg KH wrote:
+>> I don't see how Jacky can come up with a patch to do this correctly
+>> without more specific guidance to what exactly you are looking for,
+>> after the last 123 people that added support for a new port got
+>> that merged.
+>
+> I keep complaining about this, when I notice it.  Just use the "default"
+> port type in the serial driver and don't add a new type here and it
+> should just work, right?
+>
+>> I checked debian codesearch and found only three obscure packages that
+>> accidentally include this header instead of including linux/serial.h,
+>> a couple of lists of all kernel headers, and none that include it on
+>> purpose. I agree that this header should really not exist in uapi,
+>> but the question is what exactly to do about it.
+>> 
+>> Possible changes would be:
+>> 
+>> - add a special value PORT_* constant other than PORT_UNKNOWN that
+>>   can be used by serial drivers instead of a unique value, and
+>>   ensure that the serial core can handle drivers using it.
+>
+> Why do we need a special constant?
 
-Please pull this small patch to the OP-TEE driver that replaces
-kmalloc() + memcpy() with kmemdup() at one place.
+The "default" value is 0, which translates to PORT_UNKNOWN, and the
+serial core code prevents this from working. I think Jacky tried
+to use this the last one or two times you commented on it, and
+it did not work.
 
-Thanks,
-Jens
+Setting it to a plain '1' as Jacky suggested in his reply is the
+same as PORT_8250, which may or may not be a good choice here.
 
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+Since the number is exported to userspace in serial_struct,
+it might be better to pick a new constant such as
 
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+#define PORT_SERIAL_GENERIC (-1)
 
-are available in the Git repository at:
+in order to be less ambiguous. It's a signed integer, so -1
+would work here this would clearly be a special value, or
+another option might be to use 255 as something that is
+slightly less special but still recognizable as something
+that may have a special meaning.
 
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-use-kmemdup-for-6.5
-
-for you to fetch changes up to 6a8b7e80105416cc7324fda295608ea2d3f98862:
-
-  tee: optee: Use kmemdup() to replace kmalloc + memcpy (2023-06-15 08:49:55 +0200)
-
-----------------------------------------------------------------
-Use kmemdup() in OP-TEE driver
-
-----------------------------------------------------------------
-Jiapeng Chong (1):
-      tee: optee: Use kmemdup() to replace kmalloc + memcpy
-
- drivers/tee/optee/smc_abi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+      Arnd
