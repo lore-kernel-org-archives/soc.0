@@ -1,142 +1,94 @@
-Return-Path: <SRS0=swYH=CD=collabora.com=sebastian.reichel@kernel.org>
+Return-Path: <SRS0=N2oh=CE=linaro.org=viresh.kumar@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E9EBEB64D9
-	for <soc@archiver.kernel.org>; Thu, 15 Jun 2023 17:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD5AEB64D7
+	for <soc@archiver.kernel.org>; Fri, 16 Jun 2023 06:01:02 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 59DE8C433CA; Thu, 15 Jun 2023 17:49:45 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 8F8E9C433C8; Fri, 16 Jun 2023 06:01:02 +0000 (UTC)
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 460E8C433C8;
-	Thu, 15 Jun 2023 17:49:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 460E8C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Received: from mercury (dyndsl-091-248-208-152.ewe-ip-backbone.de [91.248.208.152])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 660DB6606F6E;
-	Thu, 15 Jun 2023 18:49:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1686851382;
-	bh=LBXhXrA7LDalNxXhdPzqibZYlYyjem8MKx+tIXAQuL8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TB/t4dM0Zka/BiawlsHVvTaPgBKLc+eElFaw1eZPav/uFJkYob3TpckXXFTG8Zt1i
-	 aLEUIOU6BZwzkDYDAVqB7+OftWG80vc8tXBMMwUq7vZMIyw7EyNEoukV8jD7T8C8R7
-	 j0Vi8dR/0hJSmmbYNM3lLFE/KQEm25Y4OE8jzk9c3cXZKdJtoKOsggUHLJ3+ykl1lN
-	 TEOGJCxR37NY++GzgKVbr0AixwzzXBJDK3E71eg4mbz9AVG9a0VcDVEpfkYu/tcUmM
-	 M+VERZVxyReAeo6AlLTbF5uz3euV9dxVwdtlUCANHInr7bGOBYfMs9CSpcXI0dRq+E
-	 wysqABrIwC3BQ==
-Received: by mercury (Postfix, from userid 1000)
-	id A955C1060DE4; Thu, 15 Jun 2023 19:49:40 +0200 (CEST)
-Date: Thu, 15 Jun 2023 19:49:40 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 6F7FDC433C9
+	for <soc@kernel.org>; Fri, 16 Jun 2023 06:01:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F7FDC433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6668c030ec9so383294b3a.1
+        for <soc@kernel.org>; Thu, 15 Jun 2023 23:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686895261; x=1689487261;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z2Tdae4NzuKasm7w2+zUMrYnjwOZmFXGaFRcSVLtGS4=;
+        b=IiY7MEtF51azzi+Au/MlRmq+0IYmYohAb3gth8d0B9zh2HsQriiVYCehdq9xmRoMjf
+         DFaDtnFbUHtYrDeD13F1ZXWVCg8zanaz51fHubhIQiztpvYqiBK3WxfgdpGzjlx51r6h
+         jAOcw8m56xqxLVyuP8dLEZPFBOgGepgtX19/Cv+aYZPoHzwTVbHwJIoSDCnJnn0dxHqQ
+         OGkl3jTV6rkgBrWRwzwWl2Z/eLW+GCswsPynY65c7iBROleoF21UAwod/21sjHA7fzVk
+         NC9DnRDYWvwgHCTd4j0xXrRJrBGWZFGqhaZeT6gemvb8bmZYaHHyZPblSPjckOhuNdkY
+         Q74w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686895261; x=1689487261;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z2Tdae4NzuKasm7w2+zUMrYnjwOZmFXGaFRcSVLtGS4=;
+        b=J8Qf18UkGXMfoxVKU8ppUpAp9yJaZuGkJKvC1g/J/7b8oSI27sReOkjySRXDtn6YrV
+         OZPjkhJGj8rQjFGerxF5r/bEE6BX1OhLxCI3RVHcTLNGWUZRsb3MgFVOIzeeVJiWGBwt
+         YzNKEYTY7HsVweTfEs6cxJjniLVpnr6rVMcsPHPcXSb0cbA+16v83syJ31cmVGUbHEEH
+         V5GNEs5WJW22hX9bYcogSmSCC2u9RgZF0VZMkJVx4HLBN+Fm/JV00m45tc2XroJBmgRX
+         f/Mee3bK9dpsGqD5878wyC+pmQ39kH+gKbXvbbEA+DkiA1LXI0wH4hUoigSkief7hyAf
+         lcZA==
+X-Gm-Message-State: AC+VfDxPiLdKlEslAcpRgzZ9mK2hcRkmRW/G5vc7L8xkc3lUHzinNK8E
+	JYEzH1aQdPeXp3YV2hSfHZR2Sg==
+X-Google-Smtp-Source: ACHHUZ60sq1ipG1z94+WQu+zmM7i765xoHf5/NNQO8ODM5H/I7pDV1nW7CsA+JwiRlp1ezi51TAn5g==
+X-Received: by 2002:a05:6a00:2382:b0:64d:277c:4ab2 with SMTP id f2-20020a056a00238200b0064d277c4ab2mr1350915pfc.24.1686895260664;
+        Thu, 15 Jun 2023 23:01:00 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id g3-20020a62e303000000b00654ecbafeadsm1879921pfh.218.2023.06.15.23.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 23:01:00 -0700 (PDT)
+Date: Fri, 16 Jun 2023 11:30:52 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-Cc: arm@kernel.org, linux-arm-kernel@lists.infradead.org,
-	kernel@lists.collabora.com
-Subject: [GIT PULL] ARM64 RK808 defconfig fix
-Message-ID: <20230615174940.jmzuv5kb6o7htkwo@mercury.elektranox.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/1] pinctrl: spear: Remove unused of_gpio.h inclusion
+Message-ID: <20230616060052.kid7gtdunrlhhqu2@vireshk-i7>
+References: <20230615164158.25406-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fwbqteb5ytrdisia"
-Content-Disposition: inline
-
-
---fwbqteb5ytrdisia
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230615164158.25406-1-andriy.shevchenko@linux.intel.com>
 
-Hi,
+On 15-06-23, 19:41, Andy Shevchenko wrote:
+> The of_gpio.h is not and shouldn't be used in the drivers. Remove it.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/pinctrl/spear/pinctrl-spear.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/pinctrl/spear/pinctrl-spear.c b/drivers/pinctrl/spear/pinctrl-spear.c
+> index 18de2e70ea50..b8caaa5a2d4e 100644
+> --- a/drivers/pinctrl/spear/pinctrl-spear.c
+> +++ b/drivers/pinctrl/spear/pinctrl-spear.c
+> @@ -18,7 +18,6 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/slab.h>
 
-Since I did not get any feedback for the defconfig patches from [0] and they
-are fixing a KernelCI regression (Rockchip Chromebooks no longer boot because
-of missing PMIC driver), I prepared a pull request with the defconfig change
-instead as suggested by Tony [1]. It consists of the rk806 immutable branch
-prepared by Lee Jones [2] and the arm64 defconfig patch. I will send a second
-pull request for the arm32 multi_v7 defconfig. This is targeting linux-next.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-[0] https://lore.kernel.org/all/20230518040541.299189-1-sebastian.reichel@collabora.com/
-[1] https://lore.kernel.org/linux-omap/20230604060436.GT14287@atomide.com/
-[1] https://lore.kernel.org/all/20230515152425.GV10825@google.com/
-
-Thanks,
-
--- Sebastian
-
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/ rk806-defconfig-fix-arm64
-
-for you to fetch changes up to 787614e7c48437ea5764f9cff824b45357c912ed:
-
-  arm64: defconfig: update RK8XX MFD config (2023-06-14 19:33:04 +0200)
-
-----------------------------------------------------------------
-Sebastian Reichel (10):
-      clk: RK808: Reduce 'struct rk808' usage
-      mfd: rk808: Convert to device managed resources
-      mfd: rk808: Use dev_err_probe
-      mfd: rk808: Replace 'struct i2c_client' with 'struct device'
-      mfd: rk808: Split into core and i2c
-      mfd: rk8xx-i2c: Use device_get_match_data
-      dt-bindings: mfd: Add rk806 binding
-      mfd: rk8xx: Add rk806 support
-      pinctrl: rk805: Add rk806 pinctrl support
-      arm64: defconfig: update RK8XX MFD config
-
- .../devicetree/bindings/mfd/rockchip,rk806.yaml    | 406 ++++++++++++++++++++
- arch/arm64/configs/defconfig                       |   3 +-
- drivers/clk/Kconfig                                |   2 +-
- drivers/clk/clk-rk808.c                            |  34 +-
- drivers/input/misc/Kconfig                         |   2 +-
- drivers/mfd/Kconfig                                |  21 +-
- drivers/mfd/Makefile                               |   4 +-
- drivers/mfd/{rk808.c => rk8xx-core.c}              | 352 ++++++-----------
- drivers/mfd/rk8xx-i2c.c                            | 185 +++++++++
- drivers/mfd/rk8xx-spi.c                            | 124 ++++++
- drivers/pinctrl/Kconfig                            |   2 +-
- drivers/pinctrl/pinctrl-rk805.c                    | 189 ++++++++--
- drivers/power/supply/Kconfig                       |   2 +-
- drivers/regulator/Kconfig                          |   2 +-
- drivers/rtc/Kconfig                                |   2 +-
- include/linux/mfd/rk808.h                          | 417 ++++++++++++++++++++-
- sound/soc/codecs/Kconfig                           |   2 +-
- 17 files changed, 1466 insertions(+), 283 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk806.yaml
- rename drivers/mfd/{rk808.c => rk8xx-core.c} (71%)
- create mode 100644 drivers/mfd/rk8xx-i2c.c
- create mode 100644 drivers/mfd/rk8xx-spi.c
-
---fwbqteb5ytrdisia
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSLTzQACgkQ2O7X88g7
-+po17hAAjEdzHpgxW3TaKd6DatJHgyP3LUKSRZgDTa56rl3NceGpziU6eDK15xC1
-q0FlqXgBcSYOG/H1UR9x0r/Bvpz5BhQ84sjbPRGrFW5rQvKcVqqB5Wg3KXtx+eRH
-fDP5jCKZpueeU3+wK0/aZB8Wl1Re9NRgmJhz/tdFtaHXAhVFI7rQOwigSjqdmYQR
-EZkQNT8p3GBTOEw3CPxm9RSQMv10h8dqQm2m7u3Vp7zpJo6Tq5xZvsufBYIF3c6+
-94TlguXDMY2ZUMEshZQx8aTYRXT+QMt2l9OWQEROY+THejwjiWfhTAjziAl5sAZH
-iHSIPO3uLlBwmUk66BqAzUJDsOhyUc+Ay91Di+BmbslvOBYJOzReMZVOy7kaed0e
-HQgY+z084AdAC54e982kmFkOPVfmo6SrrkkU7zTdEIOZwfn1QrFWRp7JmDpT532j
-orjO3e/q091RIolmaqXu+CtdS2n1eC2UvMCugB4L50wkS1YbCe9/YRMMEZLwCsqp
-RCdXbu23SK4Oyb0mOWaN9nO7aiVP/wffHZd5b+qsTp4Yov1Mb2JkKUoDGawFF/SA
-sm2xfIlQba0VnstEaxQCfWNZOZMVq/VArpvxUnXiXyRA+BujwEKCMLqr6Be+kjMC
-w+VT6Kodp5Sq8DYRXpU2bl0i+H20w+0sLbJCr6eIp/9o2yukM/o=
-=+K2u
------END PGP SIGNATURE-----
-
---fwbqteb5ytrdisia--
+-- 
+viresh
