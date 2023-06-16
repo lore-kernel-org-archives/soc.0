@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDFAEB64D7
-	for <soc@archiver.kernel.org>; Fri, 16 Jun 2023 12:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC8D8EB64D7
+	for <soc@archiver.kernel.org>; Fri, 16 Jun 2023 13:01:39 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F07E2C433CA; Fri, 16 Jun 2023 12:59:42 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	id AF4B2C433C9; Fri, 16 Jun 2023 13:01:39 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 89B93C433C0;
-	Fri, 16 Jun 2023 12:59:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 89B93C433C0
+	by smtp.kernel.org (Postfix) with ESMTPS id AFF54C433C8;
+	Fri, 16 Jun 2023 13:01:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AFF54C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 X-GND-Sasl: gregory.clement@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1686920372;
+	t=1686920494;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=i5pzZqE82Yd+EsjjRCej2HPoWrh5MR43bR4h+fV8q84=;
-	b=GVIR0givqLwdHw3R4lAUy6mj7ybGnpWLMl4qBuuM7MHI+CAKPuXH/muIfGXLpq6gXUbBQ/
-	Q5BDZHhfT6w7sn3XjoIcIS9OiYITT5HJ5Rc8Bup3ph3XssdFOzJqzJXjyiobqEvIKSD+5t
-	plnQI6tYVBY8rm2qKnonULBchUtEKkw4xGCTIgTD4TyZ+o494wvUX3/xojxzrBY6kVwkYq
-	bnNqT37ai/c1geMtBPWeEsSqEr4VsfVnWYW64E0TVXfRyB8v8+GoSBIiFFspiN3if2uVkk
-	AwSWkbUXPZyFQrKmGwdb/UluyXK1fnzH/Ga8VJKeUn0GRzoT6hzvN5nAUotIXA==
+	bh=+Vqk6EUzp/JcaHYL1WybIBQcsTgJzV+jgJIrymzDDMg=;
+	b=ERexkclTiHCmhcus1l2KRHo5F6PpZp5LwQjn6jrcsvwm7HBVScd/mC2gR2nzvjgCnk8JNs
+	2X+PBGEL42qERiZIcDdclKVczevcaI17qr3tUrR4R6EWMhBu9XXisPUXsqFPHnbV1kTfHB
+	d1hkWME+RyegS9ZW+NVxBzL4b+7XA7c1OxWgJYkcQmBxBr09NAgmzQr/bd0toyrnkdY67m
+	1dZs1u0+no+aR4TIEO5G2zfP7e4YSO4dXFQqssdb0uNJY0O7kPLblGdOAtuIsO1SYEATHt
+	dmtB4rJUzMwEyg/Whf/PahIJLpxUcAZl5laroM/TF98ppRKZSsoZEafAJvSqNg==
 X-GND-Sasl: gregory.clement@bootlin.com
 X-GND-Sasl: gregory.clement@bootlin.com
 X-GND-Sasl: gregory.clement@bootlin.com
 X-GND-Sasl: gregory.clement@bootlin.com
 X-GND-Sasl: gregory.clement@bootlin.com
 X-GND-Sasl: gregory.clement@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B701F24000E;
-	Fri, 16 Jun 2023 12:59:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C42BE000D;
+	Fri, 16 Jun 2023 13:01:34 +0000 (UTC)
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 List-Id: <soc.lore.kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
  <arm@kernel.org>, soc@kernel.org
 Cc: Andrew Lunn <andrew@lunn.ch>, Sebastian Hesselbarth
  <sebastian.hesselbarth@gmail.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [GIT PULL] ARM: mvebu: dt for v6.5 (#1)
-Date: Fri, 16 Jun 2023 14:59:30 +0200
-Message-ID: <87a5wzh8b1.fsf@BL-laptop>
+Subject: [GIT PULL] ARM: mvebu: dt64 for v6.5 (#1)
+Date: Fri, 16 Jun 2023 15:01:33 +0200
+Message-ID: <877cs3h87m.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain
 
 Hi,
 
-Here is the first pull request for dt for mvebu for v6.5.
+Here is the first pull request for dt64 for mvebu for v6.5.
 
 Gregory
 
@@ -59,40 +59,45 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt-6.5-1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gclement/mvebu.git tags/mvebu-dt64-6.5-1
 
-for you to fetch changes up to dc393f1fdf22eda7255e99aadb400d8faaf3bdcf:
+for you to fetch changes up to 0ee03b8c8576bf00bd65e60f9a6bb49ca17102ae:
 
-  ARM: dts: mvebu: align MTD partition nodes to dtschema (2023-06-16 13:55:18 +0200)
-
-----------------------------------------------------------------
-mvebu dt for 6.5 (part 1)
-
-Add Endian 4i Edge 200 board (kirkwood based)
-Add missing phy-modes on Armada 388 clearfog board
-Replace deprecated spi-gpio properties on Armada XP
-Align MTD partition nodes to dtschema for all mvebu boards
+  arm64: dts: marvell: Fix espressobin-ultra boot failure and wifi (2023-06-16 14:05:18 +0200)
 
 ----------------------------------------------------------------
-Chris Packham (1):
-      ARM: dts: mvebu: align MTD partition nodes to dtschema
+mvebu dt64 for 6.5 (part 1)
 
-Fabio Estevam (1):
-      ARM: dts: armada-xp: Replace deprecated spi-gpio properties
+Few improvements following the dt bindings:
+ - add missing cache properties
+ - fix nand_controller node name according to YAML
+ - fix pca954x i2c-mux node names
 
-Pawel Dembicki (1):
-      ARM: dts: kirkwood: Add Endian 4i Edge 200 board
+Fix espressobin-ultra boot failure and wifi for EspressoBIN Ultra
+(Armada 3720)
 
-Russell King (1):
-      ARM: dts: armada388-clearfog: add missing phy-modes
+----------------------------------------------------------------
+Ben Schneider (1):
+      arm64: dts: marvell: Fix espressobin-ultra boot failure and wifi
 
- arch/arm/boot/dts/Makefile                      |   1 +
- arch/arm/boot/dts/armada-385-atl-x530.dts       |  14 +-
- arch/arm/boot/dts/armada-388-clearfog.dts       |   7 +-
- arch/arm/boot/dts/armada-xp-lenovo-ix4-300d.dts |   4 +-
- arch/arm/boot/dts/kirkwood-4i-edge-200.dts      | 205 ++++++++++++++++++++++++
- 5 files changed, 221 insertions(+), 10 deletions(-)
- create mode 100644 arch/arm/boot/dts/kirkwood-4i-edge-200.dts
+Geert Uytterhoeven (1):
+      arm64: dts: marvell: Fix pca954x i2c-mux node names
+
+Krzysztof Kozlowski (1):
+      arm64: dts: marvell: add missing cache properties
+
+Vadym Kochan (1):
+      arm64: dts: marvell: cp11x: Fix nand_controller node name according to YAML
+
+ arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi                 | 1 +
+ arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts | 3 +++
+ arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi            | 2 +-
+ arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts       | 2 +-
+ arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi            | 1 +
+ arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi            | 2 ++
+ arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi            | 2 ++
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi                 | 2 +-
+ 8 files changed, 12 insertions(+), 3 deletions(-)
 
 -- 
 Gregory Clement, Bootlin
