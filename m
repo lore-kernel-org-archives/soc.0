@@ -4,73 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE956EB64DB
-	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 13:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E614EB64D9
+	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 13:49:54 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D6271C433C9; Mon, 19 Jun 2023 13:49:34 +0000 (UTC)
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	id 40322C433C9; Mon, 19 Jun 2023 13:49:54 +0000 (UTC)
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 11705C433C0
-	for <soc@kernel.org>; Mon, 19 Jun 2023 13:49:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 11705C433C0
+	by smtp.kernel.org (Postfix) with ESMTPS id E74FEC433CA
+	for <soc@kernel.org>; Mon, 19 Jun 2023 13:49:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E74FEC433CA
 Authentication-Results: smtp.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-666e6541c98so2861400b3a.2
-        for <soc@kernel.org>; Mon, 19 Jun 2023 06:49:33 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-763a360868aso37562685a.0
+        for <soc@kernel.org>; Mon, 19 Jun 2023 06:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1687182573; x=1689774573;
+        d=broadcom.com; s=google; t=1687182591; x=1689774591;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xj8JcShG5uYJcC9CobTBsWcEnjveXyrfEDMd5DhxZyE=;
-        b=dFCGU8X2XHDoSlDAOUsaHKGLRHh/O1OJj8htQVXvo17V39jSWCVhdmf6pmEvzWG8xG
-         Vl8foigwYSiTfhGW+ButMe0HDaF1nFLnu33F6Fh0AFbQvTpQFF7sLhbZe160fa4IPpIg
-         +FyTNXS9Gs6IYypffH6DCh5mKi3DE19/YwSvw=
+        bh=DN292S6KXdoEnJ8k2I8hGnQsr/4s5CTLwTIt9cDvfT8=;
+        b=F4OL7pdK9UgIKJlBLG+d/IKVfehZ6Zer+p+rUaP15creY82IaYJaswgbSe7Z4OG6K9
+         ORs9Po8MfzcoEP7F4GEBTZb+/pgp/ZC157IE1t3Obw5vyZdT5uWNEdrGp4MMsAjtlLgo
+         Ln8Q7O7Wkdejt4uhpZBfqPDh0KURO/59ssiLA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687182573; x=1689774573;
+        d=1e100.net; s=20221208; t=1687182591; x=1689774591;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xj8JcShG5uYJcC9CobTBsWcEnjveXyrfEDMd5DhxZyE=;
-        b=bFIaD0w79HSHBmgUSwc+QBlfKGX2mMF/WwE1S2Zi11FgMNsSL6IsuDftcZo/hoJun4
-         5rgCoqBsAD3BRZ1mAHAIdUaLkpjsJy0j7SYc3nATpgyNL763Q6nASasbC6JAlxNyFI60
-         RyskrLWiI53S2OMnRdT8Rdo4h6Mcs8MCPvs+wXJvlYCdA+CB6oRXhbEURsTcfG3P6yTm
-         38zM9PemAI+U4dOZ39nNP40eblg3xrlWk5I2m20ggb59BUTZG6b/M5zqSHgDI/I0gTlH
-         KOYEwY9Bo8PcfnqY2Un2CripNSctSjNCQyozL5vlvKMQLSoM49mmtN09EWrQiMVdkO4q
-         4b+A==
-X-Gm-Message-State: AC+VfDyM50+rL1ohrXLfiArPUOUu7Bz2oJV4Ck3pCKF8AGTts1Tc1QhO
-	JHh13xlQ4yV4uOH/NmzqNzccqrtcBo2miJAb5a/1qpFS7ZfiOGIAabpC1qEsihRxI8IzgqdTWzq
-	A/i9EDaHUgJJquMuO/EPdZq6OOnp1VlWm9T30Qiy5YU7ycq5l33dmX375qVdRO8yyw33i8YpPSC
-	3Y4Q==
-X-Google-Smtp-Source: ACHHUZ76JJgUylhwFpKh152/Fo5emO1/URFxMX4aZ6XOfU89Teemh6Zq0mZizyloUufU1R8+SUS9Uw==
-X-Received: by 2002:a05:6a00:22d2:b0:668:7143:50b0 with SMTP id f18-20020a056a0022d200b00668714350b0mr7833807pfj.31.1687182573015;
-        Mon, 19 Jun 2023 06:49:33 -0700 (PDT)
+        bh=DN292S6KXdoEnJ8k2I8hGnQsr/4s5CTLwTIt9cDvfT8=;
+        b=YrOIPrI/9IPvkU0m4Ywlj2j94luN9ArsNG9Spj/GYJAqLVFouyvk+XA3dhmbrdE1wR
+         kMGt2/pUre3xWxxBvbKaQRbwA+v5agaAjB86/kMDomR5rTVKecdo2677Vkkx6EhwZbpO
+         bjq29RuBPilaSwfhFVyP5nq7hb/b/N+AjZ8CItROMHHOaB8Gkgstc8dcK1HfkNJG7GYw
+         m8b6hRC2u7RtwAHxfrrCA/YLQq4pim9WUOu6+3PGlou4FdoKdOxMbrgdcHd0q8FWUp0V
+         TDCx6Qda+m11ydAvi0/8207Rbyjpfc08w/ohYa2ME0gyRCV0+gwArhD2JdakPDFK+z/5
+         19Pg==
+X-Gm-Message-State: AC+VfDz5QxJuU4Hs5unHTbrzE3ybspFNkXCWNNT6UaKHu4sAd0EdbMc/
+	5UhhBulJZbIHQz05HNLoZOH5ZnFVw3uoLwVaP/vL5Cl0wStiNzQe3/r8FZA5Wssk/3+O51Eigzm
+	KNNKs25CbfbauyC1aU94ReKGGVr+J/48v7cGbkyDpd5FBsjqy8Wtx8i+mXiqD8qEsBvUFkemm/W
+	Zovw==
+X-Google-Smtp-Source: ACHHUZ6WT7Es8JBpBM8wjVJaPZe+O9S2JyLpXdnUTzaN8JyNsG7Xxznj3kL7+DDK1JRVQSTq7RN7bw==
+X-Received: by 2002:a05:6a00:cc2:b0:656:c7b2:876f with SMTP id b2-20020a056a000cc200b00656c7b2876fmr14855389pfv.14.1687182570978;
+        Mon, 19 Jun 2023 06:49:30 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f11-20020aa782cb000000b00571cdbd0771sm17676540pfn.102.2023.06.19.06.49.31
+        by smtp.gmail.com with ESMTPSA id f11-20020aa782cb000000b00571cdbd0771sm17676540pfn.102.2023.06.19.06.49.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 06:49:31 -0700 (PDT)
+        Mon, 19 Jun 2023 06:49:30 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 To: soc@kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>,
+Cc: Aurelien Jarno <aurelien@aurel32.net>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Conor Dooley <conor.dooley@microchip.com>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Kamal Dasu <kamal.dasu@broadcom.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	William Zhang <william.zhang@broadcom.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
 	arnd@arndb.de,
 	olof@lixom.net,
 	khilman@kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Subject: [GIT PULL 3/3] Broadcom maintainers changes for 6.5
-Date: Mon, 19 Jun 2023 06:49:20 -0700
-Message-Id: <20230619134920.3384844-3-florian.fainelli@broadcom.com>
+Subject: [GIT PULL 2/3] Broadcom devicetree-arm64 changes for 6.5
+Date: Mon, 19 Jun 2023 06:49:19 -0700
+Message-Id: <20230619134920.3384844-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230619134920.3384844-1-florian.fainelli@broadcom.com>
 References: <20230619134920.3384844-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000f6d0de05fe7bcd0f"
+	boundary="0000000000000c0f9105fe7bcf5a"
 
---000000000000f6d0de05fe7bcd0f
+--0000000000000c0f9105fe7bcf5a
 Content-Transfer-Encoding: 8bit
 
 The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
@@ -79,33 +84,47 @@ The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
 are available in the Git repository at:
 
-  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.5/maintainers
+  https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.5/devicetree-arm64
 
-for you to fetch changes up to 825edae7d1c39171634253203f03cf6c6cf380bc:
+for you to fetch changes up to 3cdba279c5e9209fc1ffd6e56db1e79421555984:
 
-  MAINTAINERS: Replace my email address (2023-06-19 04:48:28 -0700)
-
-----------------------------------------------------------------
-This pull request contains MAINTAINERS file updates for 6.5, please pull
-the following:
-
-- Justin, Kamal and Florian update their email to use their corporate
-  Broadcom email address
+  arm64: dts: broadcom: Enable device-tree overlay support for RPi devices (2023-06-01 10:37:02 -0700)
 
 ----------------------------------------------------------------
-Florian Fainelli (1):
-      MAINTAINERS: Replace my email address
+This pull request contains Broadcom ARM64-based SoCs changes for 6.5,
+please pull the following:
 
-Justin Chen (1):
-      MAINTAINERS: Replace my email address
+- Krzysztof fixes the BCMBCA DTS files to have correct cache properties
 
-Kamal Dasu (1):
-      MAINTAINERS: Replace my email address
+- Tony unifies the pinctrl-single pin group(s) for the Stingray SoCs
 
- MAINTAINERS | 42 +++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+- Aurelien enables the BCM283x DTS files to be built with relocation
+  information to make them usable with DT overlays
 
---000000000000f6d0de05fe7bcd0f
+----------------------------------------------------------------
+Aurelien Jarno (1):
+      arm64: dts: broadcom: Enable device-tree overlay support for RPi devices
+
+Krzysztof Kozlowski (1):
+      arm64: dts: broadcom: add missing cache properties
+
+Tony Lindgren (1):
+      arm64: dts: broadcom: Unify pinctrl-single pin group nodes for stingray
+
+ arch/arm64/boot/dts/broadcom/Makefile              |  4 ++
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm4912.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm63146.dtsi  |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm63158.dtsi  |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm6813.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm6856.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi   |  1 +
+ arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi   |  1 +
+ .../dts/broadcom/stingray/stingray-pinctrl.dtsi    | 52 +++++++++++-----------
+ .../arm64/boot/dts/broadcom/stingray/stingray.dtsi |  4 ++
+ 11 files changed, 42 insertions(+), 26 deletions(-)
+
+--0000000000000c0f9105fe7bcf5a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -176,14 +195,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAynoBqgRWY8mOmZ
-0h1qL5F7Xel84vGmhzeItUbVEzTUMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDYxOTEzNDkzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDYHfuCA4RVicO2h
+I+CbMsuM7EZx0Y8Or6NxvRUj2QEGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYxOTEzNDk1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDKa1dRsfNrQ3C6TvM54uGCX3iBNp1ewQsP
-rURlQ2QSRogWU6pdV9577vhqbo4hzivcV7eeIo+yVnpLzglhGFmNnwRPtz2jFV+3yvanWPVUCWxM
-u03Xi3AQqXrwamr40eYM1v560n1fxhtFRyANAnz2vjmnYa9SKl9RuLfR+Xt02OJIKo4mdhJEF1uE
-6i+LilAeFuh/uJSzm2bhX6GSoZQBZK54X+oqJhELhnyYU+8++5UZI+GKRVKHN6po8U/tFDAkSF6i
-08YQi8krgjQZB+qFQb8Krb/aJmjI1AL922c1Vdo0Uar3V1nmm7GbtdE0AA6oAWVcpcyyL8WZXkwy
-EunP
---000000000000f6d0de05fe7bcd0f--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDNlaz3jNNpenuuvryQM4gxfzv3O3L21sPb
+qhaZbkhPhKxXNfUDHJXHtXgUXXE7yJpUcuKWD3kfjD55546pVAEybnxoOdrKNjE6vCJd5RUZWGUs
++c/xMZXV0ADvgc5/gIosR8Xv1oOL5XH7JS+AgomwRTRBCn50yh2Ay99cDWixwpXMxuC/11/gzqgP
+kcIWagGVwxrKKULrl+hw++eEH+5YoLUuYICEHd4oNw0+DggELCmivUNZl/ZmVM7kR/6JE9Zmlfyo
+phX9XK1dAz1nPmKrR1guuatzcKpH2kRclBTxcK73ezChpSmFFxZNMzReP7N2r2mPNMioowYiQJIG
+/WHo
+--0000000000000c0f9105fe7bcf5a--
