@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28332EB64D8
-	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 03:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69F06EB64D7
+	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 03:30:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 0E5ABC433C0; Mon, 19 Jun 2023 03:23:49 +0000 (UTC)
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	id 1AFE8C433CB; Mon, 19 Jun 2023 03:30:56 +0000 (UTC)
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A1887C433C8;
-	Mon, 19 Jun 2023 03:23:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A1887C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 6BE6DC433C0;
+	Mon, 19 Jun 2023 03:30:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6BE6DC433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1b5452b77b4so15205995ad.3;
-        Sun, 18 Jun 2023 20:23:45 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-25ecc11961dso1632293a91.1;
+        Sun, 18 Jun 2023 20:30:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687145025; x=1689737025;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
+        d=gmail.com; s=20221208; t=1687145451; x=1689737451;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=uAzDvlgk5DWc2Ag5GcBWEz31n+jrRz+01Rx6/Hat2LM=;
-        b=sU5dYN2zXFmHnjxKxyi0FlFBp1Ykf37PT2p79o9PL3hbgSRc+KdMc0eSxN+tRQVlkJ
-         DxkZuTOWktNUYAFGXnxAgpeM+8gwC4FMrEXs+fnzY1sJwjx1RlGew53noab0K5foz3Z6
-         WOEoR+3e1JLNhrAhr/HEtA2dX1ZcNQ+rCs9u90lFmbfIGgGWfU5//nMAKAT0i8ann8sq
-         yCBIFiqFNAaqaH3cQDrKuElOBwsl12rXpjVQG5FeDmkqfSHx7bpXa85OOhyWqkjd5Q4o
-         5EK+9dUo1tH91QcBQ8PvobbtX65IPJX8FD9wAcXigio/NPk+JarRv9z+wqiVCIVogLdu
-         knFg==
+        b=dTMZJtgsv6g8l/O7dRYeKEjHIaXXPw5GyWW8IGr6cVLLi53T5JUc+Oqoyr2SvM8XJH
+         +8XyZq+xw00+xwoKrYOAkPqCX1NdB4vk7fFlVGJ97CEip46lSTYZX/NknxtPeCBBRdL0
+         bWUEaUoovwaanwtgSRNpWg3NXXZ352hlhrqHQ+rlasPsZcfZ77bBeAfcCrqpf0Qfd1Lq
+         tytP94Pzpv9+9LA7rMbgqCHLTbHTzLtMLA0mymrLEpka8wtbR8krA9oadQSrEzEJJyVb
+         vRXCtk0rbXrwVB4eDrZovEReByudZivJ95nNsAcQd343xVW9qHxxlyZin7DPLkmUywOi
+         H5WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687145025; x=1689737025;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
+        d=1e100.net; s=20221208; t=1687145451; x=1689737451;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
         bh=uAzDvlgk5DWc2Ag5GcBWEz31n+jrRz+01Rx6/Hat2LM=;
-        b=c1IWpN05LlLwH2a2gJ5xipROjYhXFsZflpjn2da3e9/rspVo7thXTtWBnUBPu451hS
-         g3iuT7Rd6c7ZkOJqzDZ2OCwFpr64ncsHeDK6S1jtsELBg7j5MGmzAF9601XSZLuhQFY/
-         ALELAz/XixVoZ1GlyoI//HzCaB0wpR9Wlg5REyOY/BgzinAj2LJBLhhMqzj3Tuuf9Sf3
-         Z0qOK7fwa3T0bSTGE7/C/KlRkCCyyttqV5IoDL9qFbcUWBpcxdJSBlNu+Wmb9kCwXjGp
-         TV41uw5YnlPr5LA0/K73JdCA16te8Pltf6zKdZw4MawraFfqD5W5nl352DaZKhCl+sct
-         Vmzw==
-X-Gm-Message-State: AC+VfDz5rONkqRZYv12C9z0lDoUom9mv/dnX28anWcxuY25NEPcREVvf
-	23i9Z+JRWEO97ySnR1ci5s9a9XS3RM8=
-X-Google-Smtp-Source: ACHHUZ7fbTXsZz9htVc92iDYYqxb9Sko0mBybbCo+U+oHBbk4lgQSGNnCGZElJI7NT2HvmqdIQETlQ==
-X-Received: by 2002:a17:903:550:b0:1af:adc6:3bc0 with SMTP id jo16-20020a170903055000b001afadc63bc0mr7304326plb.5.1687145024036;
-        Sun, 18 Jun 2023 20:23:44 -0700 (PDT)
+        b=c0P0nGp/uURGXiVszCoG2nBxL034chKdh9AUEhO5J9JxNLsuaMBOtScyF6dGTCf6kd
+         gR5nRT/vHhA4Q7UTmmQknVf1J26yfI+HsWvRVfkqm2D/cOiMykc2i2Oz9NESB1B551E4
+         lRSW26Cbc7v3A90/0ZIiBBEhTcePjqfMCRlFGaOA6buM3tlZYTyCsBPVgSTpH4RB/5gY
+         GWGoecOnMAyEGbHZ7P6TGvD0mc9+jnD2IC4Gp3uD5Ivwydnrs3afmjCjlHNECx8qFXu7
+         GbwYLmx4AyDzKVBXID5TTddE1APP1OHPLtB33s4VD44N70K+ezZ8CQwGUlu6nWbOpliJ
+         twQw==
+X-Gm-Message-State: AC+VfDzaN2Nl8NqwgxtUHvUd3m+7ePY7il4Cru9ZH9cY0b32Ox+BlkHX
+	vsR7GaERkwVXHVoAukckyjyOHDwb1LY=
+X-Google-Smtp-Source: ACHHUZ6/Ent+lmGLC1hVrfSQ2MrjBSRwjeIxariJ3UI8Va/t3/nIQgZmhQvIPOkLXfDsCNpYDB52mw==
+X-Received: by 2002:a17:90a:550:b0:258:b651:4f80 with SMTP id h16-20020a17090a055000b00258b6514f80mr8261022pjf.36.1687145450266;
+        Sun, 18 Jun 2023 20:30:50 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b001a4fecf79e4sm19329817plh.49.2023.06.18.20.23.40
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090a2a8a00b0025e2358f146sm5033967pjd.13.2023.06.18.20.30.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 20:23:43 -0700 (PDT)
+        Sun, 18 Jun 2023 20:30:49 -0700 (PDT)
 From: Jacky Huang <ychuang570808@gmail.com>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -76,12 +75,10 @@ Cc: devicetree@vger.kernel.org,
 	mjchen@nuvoton.com,
 	Jacky Huang <ychuang3@nuvoton.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] clk: nuvoton: Add clock driver for ma35d1 clock controller
-Date: Mon, 19 Jun 2023 03:23:30 +0000
-Message-Id: <20230619032330.233796-3-ychuang570808@gmail.com>
+Subject: [PATCH v15 2/2] clk: nuvoton: Add clock driver for ma35d1 clock controller
+Date: Mon, 19 Jun 2023 03:30:41 +0000
+Message-Id: <20230619033041.233921-1-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230619032330.233796-1-ychuang570808@gmail.com>
-References: <20230619032330.233796-1-ychuang570808@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
