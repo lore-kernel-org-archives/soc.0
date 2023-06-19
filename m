@@ -1,569 +1,134 @@
-Return-Path: <SRS0=bMh9=CH=inventec.com=Chen.PJ@kernel.org>
+Return-Path: <SRS0=YV+F=CH=linaro.org=krzysztof.kozlowski@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F90EB64DA
-	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 06:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4F3EB64D9
+	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 06:58:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id EE33EC433CA; Mon, 19 Jun 2023 06:58:08 +0000 (UTC)
-Received: from mail.inventec.com (mail.inventec.com [61.220.76.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 63E50C433CA; Mon, 19 Jun 2023 06:58:58 +0000 (UTC)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 51231C433C9;
-	Mon, 19 Jun 2023 06:58:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 51231C433C9
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inventec.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inventec.com
+	by smtp.kernel.org (Postfix) with ESMTPS id 6F519C433C0
+	for <soc@kernel.org>; Mon, 19 Jun 2023 06:58:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6F519C433C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5195c85fbb2so3967674a12.2
+        for <soc@kernel.org>; Sun, 18 Jun 2023 23:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=sEx04; d=inventec.com;
-    h=from:to:cc:subject:date:message-id:in-reply-to:mime-version:
-      content-type;
-    bh=eb5T0VtdtzKouwRPXB4PuHymzhd3Mg+INur6+8aDvIg=;
-    b=HxeXED1tzjGTtsQHT5DvHGKoYdSQgukhtAQYdooI2ARgwbZtsKsu5HlETsuuW7
-      Yf/sVi0Hdp8oC1kKomqcBGulg/0C4JUj19Fn5A58we9wZCo2WRQESHJk+KzWM8
-      yEPmXxB3lPcceDYWNahFk4CJ3j8LWbjg02qNJn72IONibaI=
-Received: from IEC1-EX2016-04.iec.inventec (10.1.254.222) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 19 Jun 2023 14:42:53 +0800
-Received: from TAO-MailRelay-1.iec.inventec (10.6.254.133) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server id
- 15.1.2507.23 via Frontend Transport; Mon, 19 Jun 2023 14:42:53 +0800
-Received: from charon ([10.6.141.37]) by TAO-MailRelay-1.iec.inventec with Microsoft SMTPSVC(8.0.9200.16384);
-	 Mon, 19 Jun 2023 14:42:53 +0800
-From: PJ Chen <chen.pj@inventec.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Joel Stanley <joel@jms.id.au>, Andrew
- Jeffery <andrew@aj.id.au>, <linux-arm-kernel@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-aspeed@lists.ozlabs.org>
-CC: <ye.vic@inventec.com>, <Huang.Alang@inventec.com>, Chen PJ
-	<Chen.pj@inventec.com>
-Subject: [PATCH v5 2/2] ARM: dts: aspeed: Adding Inventec Starscream BMC
-Date: Mon, 19 Jun 2023 14:42:49 +0800
-Message-ID: <20230619064249.3623-2-chen.pj@inventec.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230619064249.3623-1-chen.pj@inventec.com>
-References: <20230619064249.3623-1-chen.pj@inventec.com>
+        d=linaro.org; s=google; t=1687157935; x=1689749935;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4G6hf18TKdmfNtJ8UCEo6JcM7dVVDUhqliUhTUBuICc=;
+        b=NWnPdS7D1gDt3/LuJFeLM1TendCaMiVqQJD+F4P1R56EoN7m1O5j/1TOTzV4tW5QnM
+         z3qSJa66nU6AVAXlSKmyMw7NsegMUwKGXm8x+Z7H7uR5VQUe1RKiqUi/3YDf+ipvqVWJ
+         hfMZnmJd+vci2rzqV5EBfQaAiBXcZjLfnXZc9zlHgInF+kOyELYsxw8dYpWfkQ1taYhE
+         3MqxdfI1BC2AQ5/9xkXVCHr/7zXKiCA1ZPyerIm0vjCqUMKFyA3lc82/CBp5mhvAUe9s
+         iKqPqUVZoTtA0nVNpbq/PpBEESHcAtBD3A+maZyrJ1LCYAoDzhcCKF7kY5L9z9XaFWGL
+         jKjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687157936; x=1689749936;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4G6hf18TKdmfNtJ8UCEo6JcM7dVVDUhqliUhTUBuICc=;
+        b=e6N/ItZQYcY2xavWbAvzQQMHVzM3Xiq8CRoloueW2e/bJeSJaXXqxbK2fpzayNKJ+V
+         FcHg+2jSlp82oggx8Mo+kl+/vn8tHUuUW5jl/2rH9jX7fG/LaFgMjAO4t222N9vEHpse
+         H703rV+Mr6wmwfU/MkqHgMnbtIuLYh0qaGQR2f9pBKtmJCy/JcuqRhkQaT1oAWPuUwc0
+         FstNz8gilCEnUgLudTNGEtGQh4xz7E7S2/1DVskNsObNj+7RXPLgmDB2Yx3I4yS+mxqB
+         R3a6w8NghGdQ3OBdU/kD9QNJIwE5F7GkfOVpXEzJEGYKhaw2Kc9OU3ntkoZEFAzBCfd5
+         0W5g==
+X-Gm-Message-State: AC+VfDw7l3WkW/8j0G0AHKxRfuWaw7oVsSjxINSnP6ACQca/PVtAnz4u
+	aPG920lYCGi2yLHgtWNtnlWXpQ==
+X-Google-Smtp-Source: ACHHUZ7dJrESQHn9geXJxEPrr2M7TIYqbkSdh/fM8A4bQoGoLVTjbKoOXm0qEqvY2My4FfHw1MZbAQ==
+X-Received: by 2002:a50:ef12:0:b0:51a:f6de:bb81 with SMTP id m18-20020a50ef12000000b0051af6debb81mr150817eds.28.1687157935727;
+        Sun, 18 Jun 2023 23:58:55 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id ca15-20020aa7cd6f000000b00514a5f7a145sm12562486edb.37.2023.06.18.23.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Jun 2023 23:58:55 -0700 (PDT)
+Message-ID: <f5e6a29f-6df7-b56c-c7b2-9914008eaa33@linaro.org>
+Date: Mon, 19 Jun 2023 08:58:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 19 Jun 2023 06:42:53.0247 (UTC) FILETIME=[45F384F0:01D9A279]
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 680A6C23417125417F5BBD99C3B425B7C3B97B38C51D2BC9FF4CDD1F9771BCB22000:8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 2/2] ARM: dts: aspeed: Adding Inventec Starscream BMC
+Content-Language: en-US
+List-Id: <soc.lore.kernel.org>
+To: PJ Chen <chen.pj@inventec.com>, Arnd Bergmann <arnd@arndb.de>,
+ Olof Johansson <olof@lixom.net>, soc@kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Cc: ye.vic@inventec.com, Huang.Alang@inventec.com
+References: <20230619064249.3623-1-chen.pj@inventec.com>
+ <20230619064249.3623-2-chen.pj@inventec.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230619064249.3623-2-chen.pj@inventec.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Chen PJ <Chen.pj@inventec.com>
+On 19/06/2023 08:42, PJ Chen wrote:
+> From: Chen PJ <Chen.pj@inventec.com>
+> 
+> Initial introduction of Inventec Starscream x86 family
+> equipped with AST2600 BMC SoC.
+> 
+> Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+> 
 
-Initial introduction of Inventec Starscream x86 family
-equipped with AST2600 BMC SoC.
+...
 
-Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+> +	reserved-memory {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		video_engine_memory: video {
+> +			size = <0x04000000>;
+> +			alignment = <0x01000000>;
+> +			compatible = "shared-dma-pool";
+> +			reusable;
+> +		};
+> +	};
+> +
+> +
 
----
- V4 -> V5:
-  - Remove devices not defined in dt-binding yet.
- V3 -> V4:
-  - Reply with devicetree binding
-    https://lore.kernel.org/all/28f0ce0a82464083ae24f9ef2f598425@inventec.com/
- V2 -> V3:
-  - Rename the node name to generic.
- V1 -> V2:
-  - Correct License description
-  - Remove not supported device
-  - Using openbmc-flash-layout.dtsi
-  - Correct device format
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/aspeed-bmc-inventec-starscream.dts    | 465 ++++++++++++++++++
- 2 files changed, 466 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
+Drop stray blank lines. Only one blank line, not two. Comment applies to
+multiple places.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index eb681903d50b..6a897ff40ff0 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1629,6 +1629,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-quanta-q71l.dtb \
- 	aspeed-bmc-quanta-s6q.dtb \
- 	aspeed-bmc-supermicro-x11spi.dtb \
-+	aspeed-bmc-inventec-starscream.dtb \
- 	aspeed-bmc-inventec-transformers.dtb \
- 	aspeed-bmc-tyan-s7106.dtb \
- 	aspeed-bmc-tyan-s8036.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts b/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
-new file mode 100644
-index 000000000000..9fd1dd5633af
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
-@@ -0,0 +1,465 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2023 Inventec Corp.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include "aspeed-g6-pinctrl.dtsi"
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "STARSCREAM BMC";
-+	compatible = "inventec,starscream-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		video_engine_memory: video {
-+			size = <0x04000000>;
-+			alignment = <0x01000000>;
-+			compatible = "shared-dma-pool";
-+			reusable;
-+		};
-+	};
-+
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels =
-+		<&adc_u74 0>, // P0_VDD11
-+		<&adc_u74 1>, // P1_VDD11
-+		<&adc_u74 2>, // P0_3V3_S5
-+		<&adc_u74 3>, // P1_3V3_S5
-+		<&adc_u74 4>, // P3V3
-+		<&adc_u74 5>, // VBAT
-+		<&adc_u74 6>, // P3V3_STBY
-+		<&adc_u74 7>, // P5V_STBY
-+		<&adc_u74 8>, // P5V
-+		<&adc_u74 9>, // P12V
-+		<&adc_u74 10>, // P1_VDD18_S5
-+		<&adc_u74 11> // P0_VDD18_S5
-+		;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		uid {
-+			label = "UID_LED";
-+			gpios = <&gpio0 ASPEED_GPIO(X, 2) GPIO_ACTIVE_LOW>;
-+		};
-+
-+		heartbeat {
-+			label = "HB_LED";
-+			gpios = <&gpio0 ASPEED_GPIO(P, 7) GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&mdio0 {
-+	status = "okay";
-+
-+	ethphy0: ethernet-phy@0 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+	};
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	phy-mode = "rmii";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	use-ncsi;
-+};
-+
-+&mac3 {
-+	status = "okay";
-+
-+	phy-mode = "rgmii";
-+	phy-handle = <&ethphy0>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii4_default>;
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+#include "openbmc-flash-layout.dtsi"
-+	};
-+
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc2";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
-+&spi1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi1_default>;
-+
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bios";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
-+
-+&wdt1 {
-+	status = "okay";
-+};
-+
-+&vuart1 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	aspeed,lpc-io-reg = <0xca2>;
-+	status = "okay";
-+};
-+
-+&uart_routing {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+&i2c1 {
-+	status = "okay";
-+};
-+&i2c2 {
-+	status = "okay";
-+};
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+
-+	// I2C EXPANDER
-+	i2c-switch@71 {
-+		compatible = "nxp,pca9546";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x71>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+			// AMD SB-TSI CPU1
-+			sbtsi@4c {
-+				compatible = "amd,sbtsi";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+			// AMD SB-TSI CPU2
-+			sbtsi@48 {
-+				compatible = "amd,sbtsi";
-+				reg = <0x48>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	// I2C EXPANDER U153
-+	i2c-switch@70 {
-+		compatible = "nxp,pca9546";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		usb_hub: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+
-+			// USB U114
-+			usb-hub@2c {
-+				compatible = "microchip,usb2514b";
-+				reg = <0x2c>;
-+			};
-+		};
-+
-+		riser1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		riser2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+
-+	// ADC_U74
-+	adc_u74: adc@35 {
-+		compatible = "maxim,max1139";
-+		reg = <0x35>;
-+		#io-channel-cells = <1>;
-+	};
-+
-+	psu@58 {
-+		compatible = "pmbus";
-+		reg = <0x58>;
-+	};
-+
-+	psu@5a {
-+		compatible = "pmbus";
-+		reg = <0x5a>;
-+	};
-+
-+	// Motherboard Temp_U89
-+	temperature-sensor@4e {
-+		compatible = "ti,tmp421";
-+		reg = <0x4e>;
-+	};
-+
-+	// RunBMC Temp_U6
-+	temperature-sensor@49 {
-+		compatible = "ti,tmp75";
-+		reg = <0x49>;
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+	// I2C EXPANDER U40
-+	i2c-switch@70 {
-+		compatible = "nxp,pca9545";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+
-+&i2c8 {
-+	status = "okay";
-+	// FRU RunBMC
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+		pagesize = <128>;
-+	};
-+};
-+
-+&i2c9 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	// FRU SCM
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+		pagesize = <128>;
-+	};
-+
-+	// SCM Temp_U17
-+	temperature-sensor@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+
-+&gpio0 {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/   "","","","","","","","",
-+	/*B0-B7*/   "alert-psu0-smb-r-n","bmc-ready","","assert-cpu0-prochot-r-n",
-+	"","","","",
-+	/*C0-C7*/   "","","","","","","","",
-+	/*D0-D7*/   "","","","","","","","",
-+	/*E0-E7*/   "","","","","","","","",
-+	/*F0-F7*/   "","","","","reset-sgpio-r-n","","","",
-+	/*G0-G7*/   "","","scm-jtag-mux-select","","","","","",
-+	/*H0-H7*/   "","","","","reset-out","power-out","","",
-+	/*I0-I7*/   "","","","","","","irq-bmc-cpu0-buf-nmi-n","",
-+	/*J0-J7*/   "","","","","","","","",
-+	/*K0-K7*/   "","","","","","","","",
-+	/*L0-L7*/   "","","","","","","","",
-+	/*M0-M7*/   "","","","","","","","",
-+	/*N0-N7*/   "","","ncsi-ocp-clk-en-n","","","","","",
-+	/*O0-O7*/   "","","","","","","cpu1-thermal-trip-n","",
-+	/*P0-P7*/   "","","","","","","","",
-+	/*Q0-Q7*/   "cpu0-prochot-n","","cpu1-prochot-n","","cpu0-pe-rst0","","","",
-+	/*R0-R7*/   "","","","","","","","",
-+	/*S0-S7*/   "","","","",
-+	"","PCH_SLP_S4_BMC_N","cpu0-thermtrip-n","alert-psu1-smb-r-n",
-+	/*T0-T7*/   "","","","","","","","",
-+	/*U0-U7*/   "","","","","","","","",
-+	/*V0-V7*/   "bios-recovery-buf-n","","assert-cpu1-prochot-r-n","",
-+	"power-chassis-good","","","",
-+	/*W0-W7*/   "","","","","","","","",
-+	/*X0-X7*/   "","","","","platform-type","","","",
-+	/*Y0-Y7*/   "","","","","","","","",
-+	/*Z0-Z7*/   "","cpld-power-break-n","","","","","","",
-+	/*AA0-AA7*/ "","","","","","","","",
-+	/*AB0-AB7*/ "","","","","","","","",
-+	/*AC0-AC7*/ "","","","","","","","";
-+};
-+
-+&sgpiom0 {
-+	status = "okay";
-+	max-ngpios = <64>;
-+	ngpios = <64>;
-+	bus-frequency = <1000000>;
-+	gpio-line-names =
-+	/*in - out - in - out */
-+	/*A0-A7*/   "","","","","","","","",
-+	/*A0-A7*/   "","","","","","","","",
-+	/*B0-B7*/   "","reset-cpu0-i2c-n","","reset-cpu1-i2c-n",
-+	"","reset-i2c-bus7-n","","usb2514-1-reset-n",
-+	/*B0-B7*/   "","bmc-cpu0-uart-en","","hdt-buff-en-n",
-+	"","assert-clear-cmos","","hdt-mux-select-mon",
-+	/*C0-C7*/   "led-identify","cpld-jtag-oe-r-n","cpu0-spd-host-ctrl-n","reset-cpld-hdt-n",
-+	"","i3c-mux-select","","spi-mux-select",
-+	/*C0-C7*/   "","","","","","","","",
-+	/*D0-D7*/   "","","","","","","","",
-+	/*D0-D7*/   "","","","","","","bios-post-complete-buf-n","",
-+	/*E0-E7*/   "","","","","","","","",
-+	/*E0-E7*/   "","","","","","","","",
-+	/*F0-F7*/   "presence-fan0-n","","presence-fan1-n","",
-+	"presence-fan2-n","","presence-fan3-n","",
-+	/*F0-F7*/   "presence-fan4-n","","presence-fan5-n","",
-+	"presence-cpu0-n","","presence-cpu1-n","",
-+	/*G0-G7*/   "","","","","","","","",
-+	/*G0-G7*/   "","","","","presence-psu0-cpld-n","","presence-psu1-cpld-n","",
-+	/*H0-H7*/   "","","","","","","","",
-+	/*H0-H7*/   "","","","","presence-riser0-n","","presence-riser1-n","";
-+};
-+
-+
-+&lpc_snoop {
-+	status = "okay";
-+	snoop-ports = <0x80>;
-+};
-+
-+&emmc_controller {
-+	status = "okay";
-+};
-+
-+&emmc {
-+	status = "okay";
-+	non-removable;
-+	max-frequency = <52000000>;
-+	bus-width = <8>;
-+};
-+
-+&video {
-+	status = "okay";
-+	memory-region = <&video_engine_memory>;
-+};
-+
-+&vhub {
-+	status = "okay";
-+	aspeed,vhub-downstream-ports = <7>;
-+	aspeed,vhub-generic-endpoints = <21>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb2ad_default>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
--- 
-2.25.1
+> +	iio-hwmon {
+> +		compatible = "iio-hwmon";
+> +		io-channels =
+> +		<&adc_u74 0>, // P0_VDD11
+> +		<&adc_u74 1>, // P1_VDD11
+> +		<&adc_u74 2>, // P0_3V3_S5
+> +		<&adc_u74 3>, // P1_3V3_S5
+> +		<&adc_u74 4>, // P3V3
+> +		<&adc_u74 5>, // VBAT
+> +		<&adc_u74 6>, // P3V3_STBY
+> +		<&adc_u74 7>, // P5V_STBY
+> +		<&adc_u74 8>, // P5V
+> +		<&adc_u74 9>, // P12V
+> +		<&adc_u74 10>, // P1_VDD18_S5
+> +		<&adc_u74 11> // P0_VDD18_S5
+> +		;
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		uid {
+
+No improvements. Still not fixed and not tested.
+
+Best regards,
+Krzysztof
 
