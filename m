@@ -1,94 +1,78 @@
-Return-Path: <SRS0=YV+F=CH=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=bMh9=CH=inventec.com=Chen.PJ@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8D61EB64DB
-	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 06:56:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8804BEB64D9
+	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 06:58:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 8FC47C433CA; Mon, 19 Jun 2023 06:56:29 +0000 (UTC)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 521FBC433CA; Mon, 19 Jun 2023 06:58:08 +0000 (UTC)
+Received: from mail.inventec.com (mail.inventec.com [218.32.67.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9B9B0C433C0
-	for <soc@kernel.org>; Mon, 19 Jun 2023 06:56:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9B9B0C433C0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b46d270ea1so19643101fa.1
-        for <soc@kernel.org>; Sun, 18 Jun 2023 23:56:27 -0700 (PDT)
+	by smtp.kernel.org (Postfix) with ESMTPS id D5D10C433C0;
+	Mon, 19 Jun 2023 06:58:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D5D10C433C0
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inventec.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inventec.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687157785; x=1689749785;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qVQvPmZfMjyE4EriF44N+ZqOy+pXJULp7jhybIMTZRg=;
-        b=Nz7oMq/2JerE/qSJ0p1lmM0Tc6F/T4n0tY/5puv07oURkxjNaE3hnag7QPHhBQjjtu
-         pVxH+uT/izoeyx1d4ygzWZPMkHcF3kXs3BSobsB0Z/iATiWJ9slFaccqjZs+5nVaRg9l
-         xaKTFpVuIW6y12JVg0ZeDuO+vLXn8SIDk8GUMppBI4UXBKFzuGKyX1xVaYDLDQjWsubT
-         550gEcY9B6WXteuUHKUJk3DU3p4BUHhK3cLpmq4h93naDBxH8tvUzPG3dSwkmteTcnxE
-         pIXu6PX7TznbjL37tyhAa4kt9fasvG4OKhMLYeiqIOMBjWBxam5eGAM8trzdor1oITs/
-         yIEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687157785; x=1689749785;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qVQvPmZfMjyE4EriF44N+ZqOy+pXJULp7jhybIMTZRg=;
-        b=Hwi6UH0B0tRBR7AkZt81lFLo1Z6DBODVhtJsW6sgKJMKcTxZqRSu7ZP8hSwZS6xs2j
-         1RzHIgVz5sHG+nEc9qFJsL6k9z6wL7zsMj73umF/l7F5al9Zwgs5f3HQxAYmt1MbHEOV
-         YfNQ8BcEdEuxK8eAGTTxV0h5ICnp4r+PiDF3Iuz1SsDu7hYd8MWHQg+9kbxsfiR240k4
-         71BuJOlXaHhfaDj7o8xqlfNKkffx4T57211rH3TgbC6XUls18Vu6YWcxebxLUVILiv47
-         tZXrFKPE18oZHqAgBnWE1q9wyc8ZGq7aVCcqzysGJGNiVvB1cX0MKtlW7IVlCb66f/Yk
-         yBLw==
-X-Gm-Message-State: AC+VfDw9KJ+E0FxcqMTQMbh4UIn7odDypHxLJORYLfIf6AoEtjPcQB6i
-	RP74v2x8QEyrGPHoMZm7IJpN/w==
-X-Google-Smtp-Source: ACHHUZ73QHeatxNWNXWGjtENaICZG2mDwLhCI1onbdo3FjYTjn3nlSLNYVQvlsMOir4Fl3iZo9lkMQ==
-X-Received: by 2002:a2e:9a8f:0:b0:2b4:470e:8447 with SMTP id p15-20020a2e9a8f000000b002b4470e8447mr5553201lji.34.1687157785301;
-        Sun, 18 Jun 2023 23:56:25 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o8-20020aa7d3c8000000b0051a575c76e6sm1172846edr.43.2023.06.18.23.56.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 23:56:24 -0700 (PDT)
-Message-ID: <2a9e503b-7a5b-3b1e-a912-5d54a23c1ca1@linaro.org>
-Date: Mon, 19 Jun 2023 08:56:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec
- starscream-bmc
-Content-Language: en-US
+    s=sEx03; d=inventec.com;
+    h=from:to:cc:subject:date:message-id:mime-version:content-type;
+    bh=+iZDI5LfbBOyTNjNXRCxS6priF8NDgi4YudT5HC9XVA=;
+    b=YQv5o0heuVlGH6KmpR7OlAEodSiBwRgMKwQDkpMUzj7Og0aQM5DunnqY5KM9Hx
+      cUSyaycnYvAtePVWZdc7891Fr3j4DXequhAe2ZM+/QlVo9cmpuynfXOEeXkD5x
+      hbzlwmoq+n1C/vU0+HkINU6jDTv5rt9zfOnqWARk1zK2cGY=
+Received: from IEC1-EX2016-04.iec.inventec (10.1.254.222) by
+ IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 19 Jun 2023 14:42:53 +0800
+Received: from TAO-MailRelay-1.iec.inventec (10.6.254.133) by
+ IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server id
+ 15.1.2507.23 via Frontend Transport; Mon, 19 Jun 2023 14:42:53 +0800
+Received: from charon ([10.6.141.37]) by TAO-MailRelay-1.iec.inventec with Microsoft SMTPSVC(8.0.9200.16384);
+	 Mon, 19 Jun 2023 14:42:53 +0800
+From: PJ Chen <chen.pj@inventec.com>
 List-Id: <soc.lore.kernel.org>
-To: PJ Chen <chen.pj@inventec.com>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-Cc: ye.vic@inventec.com, Huang.Alang@inventec.com
-References: <20230619064249.3623-1-chen.pj@inventec.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230619064249.3623-1-chen.pj@inventec.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Joel Stanley <joel@jms.id.au>, Andrew
+ Jeffery <andrew@aj.id.au>, <linux-arm-kernel@lists.infradead.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-aspeed@lists.ozlabs.org>
+CC: <ye.vic@inventec.com>, <Huang.Alang@inventec.com>, Chen PJ
+	<Chen.pj@inventec.com>
+Subject: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec starscream-bmc
+Date: Mon, 19 Jun 2023 14:42:48 +0800
+Message-ID: <20230619064249.3623-1-chen.pj@inventec.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 19 Jun 2023 06:42:53.0200 (UTC) FILETIME=[45EC5900:01D9A279]
+Content-Type: text/plain
+X-TM-SNTS-SMTP: A81A35F0C03A71E0F510E7C07D3F405C04BC80A4A53DBD4796CDC03DCE1F11632000:8
 
-On 19/06/2023 08:42, PJ Chen wrote:
-> From: Chen PJ <Chen.pj@inventec.com>
-> 
-> Document the new compatibles used on Inventec starscream-bmc
-> 
-> Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+From: Chen PJ <Chen.pj@inventec.com>
 
-https://lore.kernel.org/all/3106c4a1-ce5b-a9c4-5cf4-6adead7fce80@linaro.org/
+Document the new compatibles used on Inventec starscream-bmc
 
-https://lore.kernel.org/all/2e06e7db-64f9-51f8-adf1-b240f30a2608@linaro.org/
+Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+---
+ Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-What's unclear here? You did not care to respond to that (the second
-part of that message).
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+index 1b585e554791..fb4ce5df2fa0 100644
+--- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
++++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+@@ -82,6 +82,7 @@ properties:
+               - ibm,everest-bmc
+               - ibm,rainier-bmc
+               - ibm,tacoma-bmc
++              - inventec,starscream-bmc
+               - inventec,transformer-bmc
+               - jabil,rbp-bmc
+               - nuvia,dc-scm-bmc
+-- 
+2.25.1
 
