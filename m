@@ -1,117 +1,124 @@
-Return-Path: <SRS0=ywQJ=CH=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=71Jt=CH=gmail.com=ychuang570808@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20E38EB64D9
-	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 08:13:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBCFCEB64D9
+	for <soc@archiver.kernel.org>; Mon, 19 Jun 2023 08:25:42 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id D7BC1C433C9; Mon, 19 Jun 2023 08:13:21 +0000 (UTC)
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id BC28AC433C9; Mon, 19 Jun 2023 08:25:42 +0000 (UTC)
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 20694C433C8;
-	Mon, 19 Jun 2023 08:13:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 20694C433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id D5F135C0091;
-	Mon, 19 Jun 2023 04:13:18 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 19 Jun 2023 04:13:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1687162398; x=1687248798; bh=ac
-	mQm0nuxCyr0NIKr6vJjBR8GRwKxrYohjffNuU8ThI=; b=jSf0Dn1cNRjWCPqBp/
-	tmQZzNRdUPVbsfRpFhe4brf3D6W8oWhX7R/kba0c2bdIfpHuioIPd+GAaTGuQQMS
-	JejO5C+VGa75RTFv/tGXYBNjhMX9zDV6DWD680ak+HG2ufngtLABDMK8bAP3mmGf
-	iKIiJ1bc+wkBe320cg4NLxrfcUc0rA9mHGm3dSaP64B4lzE11awVDRpfrLOD0OvS
-	BLO6jKPG1lDXy1Re+bQbocQBuvmZGIXnzyAH3peknh3DlaI5lhyCUGQHpFwT0cHR
-	QW+/0joER771++ZsU8/NZK8LXDJC5izVBQqCTsMovWTC2t5TqfS3ZkeUtH1EScdb
-	Opqg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1687162398; x=1687248798; bh=acmQm0nuxCyr0
-	NIKr6vJjBR8GRwKxrYohjffNuU8ThI=; b=FFGWsIVeXBmDhzlMRAfZjj3K2eiwR
-	v0Bd6yvnCFsXK7oYvg118CsfDxw27jjWlwL2aRHzHx6S5VYTWiCK1fBRpbzwjp1t
-	681ZuaiQc1d2lkVP/ZOhlMuO2kkOI0SPJIRM9s+gf7idnKhG++vzwbSj5VLANeLH
-	6JR50eJMDDOdwzyIRsF5f7qLFCuBBL1fmWN5w2BzgSeb2u6LJFAF7Ah6A1LFQJ+d
-	INj+Hv143hG8dlqTXlhlJ4p3n5UhXCQ1feV1kWgrgtsYLxSfKL4czVSfCRCmGuDk
-	U2dJinyRCawabNBZBrg5Rqf4ecqcV+g8mlv6U2aNVUmak3wfG0GdLRAHA==
-X-ME-Sender: <xms:HQ6QZHudSZcr99XCGAwT8aexgY-5xPnlBrnMRPhHxX3M_KLtiUhGPw>
-    <xme:HQ6QZIerLq1unp2hy-1fvpPA3Si46dm91um9J5xJwV9O5OVoWqzV63c-uypohthH1
-    4W0shxPNhSWefEavyc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvdcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeetffen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Hg6QZKyqztS5u4jssAhWLeO90hrurtwGAZK24v5IXmDaggara6lybg>
-    <xmx:Hg6QZGOfyAy2G09L8c5M7pjUCnGIxCooHD4r4H8-EFH1PHulm6_iyg>
-    <xmx:Hg6QZH-TJrb7_qIrOl-SxEH7hfAU1cMNiShpH_cXFHQ8Df1Hnmvsqg>
-    <xmx:Hg6QZGjya9-5i6kyAcYL4gA-4Ns_yms7_IzDbRXRLzt2KIkoGQ2OZg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D61E5B60086; Mon, 19 Jun 2023 04:13:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
-Mime-Version: 1.0
-Message-Id: <f3f9bd5c-b4bd-461c-a6e1-b310cdaa0595@app.fastmail.com>
-In-Reply-To: <20230619033041.233921-1-ychuang570808@gmail.com>
-References: <20230619033041.233921-1-ychuang570808@gmail.com>
-Date: Mon, 19 Jun 2023 10:12:56 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jacky Huang" <ychuang570808@gmail.com>,
- "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- "Lee Jones" <lee@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jiri Slaby" <jirislaby@kernel.org>, "Tomer Maimon" <tmaimon77@gmail.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id DCFF8C433C8;
+	Mon, 19 Jun 2023 08:25:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DCFF8C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-666eec46206so1953788b3a.3;
+        Mon, 19 Jun 2023 01:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687163141; x=1689755141;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vRAMSb3QLjF2Pifd9MJCuo7PLicH63ZOqCju9kt2DRc=;
+        b=g9vkRqXznPmnyw096XgVwqzl/mWuQjez8CHkXq0G3sgqxo5UrY+QhcNKe7Aq9h4lGq
+         LvAZYej2HJTgizPJk5Ei3J4ZtYVQx4uGPnZRikXhTKqAqQFUurbYfWeJJeZZbBns5yfW
+         rasG1e0w2wRllONuQYPZ9xWB4z0mAoNgKLh/BHFENVI6DW5n+FNZdtx8885jr3Ltp1et
+         rHVFeV/phZ7Ak2jEhgwIxCOCJ1b3R6m7DHs/YjnTg8DdjsvOWtPDWyN25xJtt45HlQrU
+         yUUKjk5s5hvEqy7ibBXGvm1RWtPXQ0QVLyjHEH/Knr6JMS4vvk84b8YDwIXXnMGpBS5O
+         s2ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687163141; x=1689755141;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRAMSb3QLjF2Pifd9MJCuo7PLicH63ZOqCju9kt2DRc=;
+        b=QYDEguJPCwDWz5t6a1B4e+ADIzmFPyhsvzrRHczks316e4h+3/PQ3CcbLWdmqy/IXP
+         FO5u03TchBKb8uNgnYWENlhtnwlZjk+O3BeSIPBzPZFFtGqdMxgHVtrxMigFzFnUxRSD
+         ikMae5B+bc0RSrwuQHfyEp+f308cHRS+QVCkW5j4U9s3PNxxl+F4JZFP2zdqYBmdOVXk
+         hhb1+cONjSbYKkR3A6kXeNOmIHjxYEQNCbkH10pbFCIhYKBAYfeze/6NDSITmYFyuZa0
+         dhAr67uqmzRYg2OsJtfYw3AityXEfWSrboLCw9n7bLK6jt5NInWots7/Mjj0JDXWG3c5
+         T08Q==
+X-Gm-Message-State: AC+VfDyF3uCfcy1lXPgAeKCrHxMLyqGi3H3Ubb2B0yf2P2k/xtimcscK
+	xG6irAG+cufk07TLfO/XP3Y=
+X-Google-Smtp-Source: ACHHUZ68kJjz2ljXB0Yz5H2UWJkK6ZZQS9rxmZ3ddDF9ffIAXIG/lVIosS4Jf8SsHVunlrF9VeARAA==
+X-Received: by 2002:a05:6a00:21ce:b0:666:64fb:b129 with SMTP id t14-20020a056a0021ce00b0066664fbb129mr13429469pfj.27.1687163141133;
+        Mon, 19 Jun 2023 01:25:41 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id a7-20020aa78647000000b0066642f95bc5sm8075178pfo.35.2023.06.19.01.25.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 01:25:40 -0700 (PDT)
+Message-ID: <f7594eb2-9c89-14bf-56a2-990bcd0c7abe@gmail.com>
+Date: Mon, 19 Jun 2023 16:25:36 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v15 2/2] clk: nuvoton: Add clock driver for ma35d1 clock
+ controller
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+ krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Tomer Maimon <tmaimon77@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
- mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v15 2/2] clk: nuvoton: Add clock driver for ma35d1 clock controller
-Content-Type: text/plain
+ mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230619033041.233921-1-ychuang570808@gmail.com>
+ <f3f9bd5c-b4bd-461c-a6e1-b310cdaa0595@app.fastmail.com>
+From: Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <f3f9bd5c-b4bd-461c-a6e1-b310cdaa0595@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 19, 2023, at 05:30, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
+
+
+On 2023/6/19 下午 04:12, Arnd Bergmann wrote:
+> On Mon, Jun 19, 2023, at 05:30, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> The clock controller generates clocks for the whole chip, including
+>> system clocks and all peripheral clocks. This driver support ma35d1
+>> clock gating, divider, and individual PLL configuration.
+>>
+>> There are 6 PLLs in ma35d1 SoC:
+>>    - CA-PLL for the two Cortex-A35 CPU clock
+>>    - SYS-PLL for system bus, which comes from the companion MCU
+>>      and cannot be programmed by clock controller.
+>>    - DDR-PLL for DDR
+>>    - EPLL for GMAC and GFX, Display, and VDEC IPs.
+>>    - VPLL for video output pixel clock
+>>    - APLL for SDHC, I2S audio, and other IPs.
+>> CA-PLL has only one operation mode.
+>> DDR-PLL, EPLL, VPLL, and APLL are advanced PLLs which have 3
+>> operation modes: integer mode, fraction mode, and spread specturm mode.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Hi Jacky,
 >
-> The clock controller generates clocks for the whole chip, including
-> system clocks and all peripheral clocks. This driver support ma35d1
-> clock gating, divider, and individual PLL configuration.
+> Since I have already picked up the previous version of this patch,
+> please send a diff against the version I merged please.
 >
-> There are 6 PLLs in ma35d1 SoC:
->   - CA-PLL for the two Cortex-A35 CPU clock
->   - SYS-PLL for system bus, which comes from the companion MCU
->     and cannot be programmed by clock controller.
->   - DDR-PLL for DDR
->   - EPLL for GMAC and GFX, Display, and VDEC IPs.
->   - VPLL for video output pixel clock
->   - APLL for SDHC, I2S audio, and other IPs.
-> CA-PLL has only one operation mode.
-> DDR-PLL, EPLL, VPLL, and APLL are advanced PLLs which have 3
-> operation modes: integer mode, fraction mode, and spread specturm mode.
->
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>       Arnd
 
-Hi Jacky,
+Dear Arnd,
 
-Since I have already picked up the previous version of this patch,
-please send a diff against the version I merged please.
+I got it. Thank you.
+I will send a diff version based on the previous patch.
 
-     Arnd
+
+Best regards,
+Jacky Huang
+
+
+
