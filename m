@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D677EB64DB
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5662EB64DD
 	for <soc@archiver.kernel.org>; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 52CB9C433CD; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3AF89C433CA;
+	id 7625DC433AB; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 577C3C433CA;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1687296112;
-	bh=Iv5J3pkCrsI4jBNt7gnE/GYuwKeWaIy7M/gIKJ06KZ0=;
+	bh=0WzOiHz1LQW5f2rvpzDXMcE3cBhAbBkY2L6xyDmWIf8=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=tsfNipdyKkP2yA7KjFsoPLRQi4kjkh6OZw0Y0SMTIGRPM4jxP1c0f0MpcI4pelDvo
-	 vFz4gSq0h5ly6If1M74BU+ibTHCoxeRD70J0yG8yBOpCMzxnkIJIuts1ibjRPYLI7O
-	 NwSKlp3PBIB+0t0tpwo1qQ0sT91k0rzA3O2uQUNhxs5Cvq76Geir+gLIacFB1WHZia
-	 ewlNOFcuLH4PLnl1gYMgQdhiOXkwba6VuLHSnBHOUJtHa03/UideeoKlE9NwLsv2d9
-	 mAAfI87UbWT64xrLSXZSM36LlC+fx/mJRtR7+z+B6DyRq8VecgJkp6TSaLBhcQ25Zh
-	 1BQcjBCaXAjPQ==
+	b=oKTYojYltJAF5yNiOn2t/UQtyy2gaafVwvDeVpg/KUmZ43RPCF0GSyK14lkUGh7NV
+	 IRc/99bgoEkD/jvB/AQYefyTQjXidLmZz+n5iVFPDrNUlKlfLtENhV+h/Damf8E37F
+	 BeGDiNZjjSr4rJTPzkcbfq4JNpI8YhnH9oOw85XSASblFCI6nZRW0ItYojqtJ/tWia
+	 rtn/Qu8UzinOUwa5xZkKimy9b0ctKjhZoGHM0g0tZCAviDBsyYDiuXRYl09urgWEWj
+	 RnHQo+FBJ0N8s8kw2TWvCOO2kn7uN5M2nJPrV2gmitn3NCkP3DSlZe5+5NbsWBy3lh
+	 gMuWA3dj8aJ1g==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12FB3C395D9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33205E2A036;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] RISC-V Devicetrees for v6.5 Part 2
+Subject: Re: [GIT PULL 1/3] Broadcom devicetree changes for 6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168729611206.12258.17428637429522831122.git-patchwork-notify@kernel.org>
+ <168729611220.12258.11240309928222488341.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Jun 2023 21:21:52 +0000
-References: <20230620-fidelity-variety-60b47c889e31@spud>
-In-Reply-To: <20230620-fidelity-variety-60b47c889e31@spud>
-To: Conor Dooley <conor@kernel.org>
+References: <20230619134920.3384844-1-florian.fainelli@broadcom.com>
+In-Reply-To: <20230619134920.3384844-1-florian.fainelli@broadcom.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,24 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Tue, 20 Jun 2023 15:39:26 +0100 you wrote:
-> Hey Arnd,
+On Mon, 19 Jun 2023 06:49:18 -0700 you wrote:
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 > 
-> Please pull a second part, if it is not too late for v6.5.
-> This lot is based on top of v6.4-rc2, because Randy & Linus did a rejig
-> of the MAINTAINERS file. As a result, the diff below includes what was
-> in the previous PR. Wasn't sure if there was a request-pull incantation
-> to exclude what was in PR #1 (I guess I'd have to do a local merge of my
-> first PR & then use that as the base for the request-pull command?)
+>   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://github.com/Broadcom/stblinux.git tags/arm-soc/for-6.5/devicetree
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] RISC-V Devicetrees for v6.5 Part 2
-    https://git.kernel.org/soc/soc/c/c9a5aa0e53d0
+  - [GIT,PULL,1/3] Broadcom devicetree changes for 6.5
+    https://git.kernel.org/soc/soc/c/313c22bb3195
+  - [GIT,PULL,2/3] Broadcom devicetree-arm64 changes for 6.5
+    https://git.kernel.org/soc/soc/c/d704f1fe9f4a
+  - [GIT,PULL,3/3] Broadcom maintainers changes for 6.5
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
