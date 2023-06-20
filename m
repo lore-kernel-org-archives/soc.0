@@ -4,61 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A44ECC3DA40
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D677EB64DB
 	for <soc@archiver.kernel.org>; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 756C8C433D9; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E596C433CC;
+	id 52CB9C433CD; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3AF89C433CA;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1687296112;
-	bh=IFFha/0BkTbLRfxJJoXZHVjKeBG5BwnZI+HqnTKL368=;
+	bh=Iv5J3pkCrsI4jBNt7gnE/GYuwKeWaIy7M/gIKJ06KZ0=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=N9rEDy80aEHkWSbfeuBlU6Nx3f7A6630hpZ6698XnV8W0X7h0giafHHgSEPoS2PlB
-	 hsMQUVuRftIfji5pwE/XQw62RmeQmIFkyBjMDN/aFLywqjxow0NnU0kpLRONo/lKOF
-	 K32wC22LaFcjuyus0QOavq1HrYwj6IFZ9U0OsmLejVxVETBLjC/VEBqyGsbJ91PY/L
-	 hd4OWenZdz6cUChRP+mmNYhh2vUpZi6yEiCDpZYutpe8ragZlGSfSddm8BJgrVLvA7
-	 7Gh5gv7YFHI5I0tK9D+kWvIsfCUfsfnR/jz7/P7Eu5OuU1F1hgHvSLGtjjokf4kQVf
-	 n2GeFfqq1veTQ==
+	b=tsfNipdyKkP2yA7KjFsoPLRQi4kjkh6OZw0Y0SMTIGRPM4jxP1c0f0MpcI4pelDvo
+	 vFz4gSq0h5ly6If1M74BU+ibTHCoxeRD70J0yG8yBOpCMzxnkIJIuts1ibjRPYLI7O
+	 NwSKlp3PBIB+0t0tpwo1qQ0sT91k0rzA3O2uQUNhxs5Cvq76Geir+gLIacFB1WHZia
+	 ewlNOFcuLH4PLnl1gYMgQdhiOXkwba6VuLHSnBHOUJtHa03/UideeoKlE9NwLsv2d9
+	 mAAfI87UbWT64xrLSXZSM36LlC+fx/mJRtR7+z+B6DyRq8VecgJkp6TSaLBhcQ25Zh
+	 1BQcjBCaXAjPQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29A55C395C7;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12FB3C395D9;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH PULL] arm64: dts: exynos: Remove clock from Exynos850
- pmu_system_controller
+Subject: Re: [GIT PULL] RISC-V Devicetrees for v6.5 Part 2
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168729611216.12258.7590441946801906780.git-patchwork-notify@kernel.org>
+ <168729611206.12258.17428637429522831122.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Jun 2023 21:21:52 +0000
-References: <20230612180102.289745-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230612180102.289745-1-krzysztof.kozlowski@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230620-fidelity-variety-60b47c889e31@spud>
+In-Reply-To: <20230620-fidelity-variety-60b47c889e31@spud>
+To: Conor Dooley <conor@kernel.org>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 12 Jun 2023 20:01:02 +0200 you wrote:
-> From: Sam Protsenko <semen.protsenko@linaro.org>
+On Tue, 20 Jun 2023 15:39:26 +0100 you wrote:
+> Hey Arnd,
 > 
-> As described in the corresponding binding documentation for
-> "samsung,exynos850-pmu", the "clocks" property should be used for
-> specifying CLKOUT mux inputs. Therefore, the clock provided to exynos850
-> pmu_system_controller is incorrect and should be removed. Instead of
-> making syscon regmap keep that clock running for PMU accesses, it should
-> be made always running in the clock driver, because the kernel is not
-> the only software accessing PMU registers on Exynos850 platform.
+> Please pull a second part, if it is not too late for v6.5.
+> This lot is based on top of v6.4-rc2, because Randy & Linus did a rejig
+> of the MAINTAINERS file. As a result, the diff below includes what was
+> in the previous PR. Wasn't sure if there was a request-pull incantation
+> to exclude what was in PR #1 (I guess I'd have to do a local merge of my
+> first PR & then use that as the base for the request-pull command?)
 > 
 > [...]
 
 Here is the summary with links:
-  - [PULL] arm64: dts: exynos: Remove clock from Exynos850 pmu_system_controller
-    https://git.kernel.org/soc/soc/c/12109610a5ce
+  - [GIT,PULL] RISC-V Devicetrees for v6.5 Part 2
+    https://git.kernel.org/soc/soc/c/c9a5aa0e53d0
 
 You are awesome, thank you!
 -- 
