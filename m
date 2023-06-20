@@ -4,36 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9675C001DD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC0ADC001DF
 	for <soc@archiver.kernel.org>; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id AEF95C43215; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 94A63C433BA;
+	id 9BEE8C433BD; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 831AAC433A9;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1687296112;
-	bh=kiEAE4ASJZ6m3z8aCad6GMQ3bRxlEjEmd6KCU6HUgyw=;
+	bh=xJSQKByjFcJOvRQhZLdUZYJTSqhCd7iexpZH1sj6CMw=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=DXRdhrpzidYddOkVQTatHugFGR9CUzpAdD2wMBqOrZJrf7VElrRhKHZtfGu9W8InC
-	 GPzL3ytSu14T5JGL+jlsrcbeELl16gZoqKafKvngnHkVes/CX4xAEkIjM8VCZhW69I
-	 AC/WAeuxs9IFA2UG/Mf/ekzTmJ/F/3NXhzByUPad67AW7OLZ35CMIZf71szV/0XOTc
-	 4PAHFQcq8FugrStZ8JESkg+UI5t32y8TMAaTJCNnAg37Fpx689UzVePm7CYi0yBhDn
-	 8nu04ng2iunnN1Zh+kPHCg/4XO2egfxJIUP+swVpF6rF+RhtMKCJvUO+gbEdbRJHaK
-	 G0+XJHoaYRThA==
+	b=ptp3oLl5ZkX16yUgJMZtjLyhtfI7xb7NAifzBPLC7in5r0wvuAELrJxrgjK1x75zI
+	 OtgwOu8AcztGg2jLjpISgaTjACKF1jaeWxAaibr7XRpKWZ/ZzpLpF6eFUbH52uin5l
+	 tWB67zctk6bfzx2aN/lUq16gxWct9XiN4r1pKkAgQCnVQ6wg6tSBHEz/lVpN9OTW72
+	 wvsAh/u7pTo6/dZI/8gvfg8PC89MsW1rVX61LNPQRB1lHAPqO8bmv2WO9UXP8hyyXe
+	 n6k4fdJd+wnvpn3+OhXxwao+cHma08fHzwHKXbqLdG5ubQDapP/EyUc7gUJBN+lk8m
+	 N7af2P2LWxu1Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F0BBC395C7;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6B88DE2A038;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] STM32MP25 support for v6.5 #1
+Subject: Re: [GIT PULL] ARM: mediatek: dts32 updates for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168729611251.12258.14928138570632325402.git-patchwork-notify@kernel.org>
+ <168729611243.12258.12445868077305340082.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Jun 2023 21:21:52 +0000
-References: <080fc303-45c1-6cc0-4c5e-694e730896a6@foss.st.com>
-In-Reply-To: <080fc303-45c1-6cc0-4c5e-694e730896a6@foss.st.com>
-To: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+References: <98e21acb-d792-6a8c-2de6-12d5af8a8111@gmail.com>
+In-Reply-To: <98e21acb-d792-6a8c-2de6-12d5af8a8111@gmail.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
@@ -42,21 +42,21 @@ Hello:
 This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Mon, 12 Jun 2023 11:48:06 +0200 you wrote:
-> Hi ARM SoC maintainers,
+On Thu, 15 Jun 2023 18:27:36 +0200 you wrote:
+> Hi Olof and Arnd,
 > 
-> Please find this dedicated pull request for the addition of the
-> STM32MP25 (ARM V8 based product).
+> Please have a look on the arm 32 bit device tree changes for this round. This
+> time it's rather small and only contains smaller changes to the SoC used in the
+> BPI-R2 board.
 > 
-> 
-> Thanks
-> Alex
+> Regards,
+> Matthias
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] STM32MP25 support for v6.5 #1
-    https://git.kernel.org/soc/soc/c/868a11b602cf
+  - [GIT,PULL] ARM: mediatek: dts32 updates for v6.5
+    https://git.kernel.org/soc/soc/c/f07c96511d00
 
 You are awesome, thank you!
 -- 
