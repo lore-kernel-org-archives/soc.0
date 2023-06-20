@@ -4,64 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC346C00528
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D982AC001E0
 	for <soc@archiver.kernel.org>; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD582C61185; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A5E56C433BC;
+	id CEDE6C43142; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B9D8AC433BB;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1687296112;
-	bh=fWwjNWdzpQPHPBVyH1V9xd1MnZQjkBm98gBy+yPvrCE=;
+	bh=3NAa0+CQaTBxEWCit3+23kTvL9GUgTrvXDqGMFlIl9o=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=RRAbbX06KvJ/wglpwNQaW+HqE+VTlmzgHvZWMacBPixdlL8wL0JoEiGnVtLdigdx5
-	 aTb1tPexxQe4Nunl8MUWKwFVZ2q2YV+AMNgRtKQF/1ijVgnCTWH0MKsuNjF25ttLNI
-	 pIttOBOg/LAwU3x8gfcMZngopuZ6VMtdYnY759nGr+PB/g+A58BqVZmZwqoW8e5NTg
-	 OAUEwbL8ZQ60rq4acKKOpJKOCOrBWvz275G0zhcInUrMONV6O1UpE2qnq2e1fY6cdP
-	 hd6Ems7gQJIEVvOrpaXsWFZs3ZE5jkdAYm5xMnopZFBUSx4KFaguJfREmYPD5g2oEW
-	 pj1pV7Ps+LAEQ==
+	b=YjKpOUO8PMsGuoLE+MS2Ha0qV+h/rP/I6JWR7SzL1/CfBzmEnb+0qzyBdKw7prTjW
+	 UNSFJs6Y694Lu/WwNLD2somfHHqzz19aiPnbg02YU6CG8Nybwuj0h4Rkc44YDqzh2m
+	 jwv5tZrA5ziQbjLI2Iglxss3wQO5Ey8nfsj25WQeF9oKPH5G6dFk9RecL6p6GYxMuU
+	 Yw9PMjOPR6Qjqhs3wXfmdCqY6JzOsIbmGajYVxXLDGXMoSC+N2dOLpCQ0wJFbSN628
+	 kz1ht0j7I7BZkut0cr19evcu310nVfL7H4Fe1EtOV5fFVWBq6ocaix7PvHblSzHUwI
+	 svUmQUr+4bkHg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92587E301FA;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A94C1C395D9;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL 1/4] i.MX dt-bindings for 6.5
+Subject: Re: [PATCH] arm: dts: Enable device-tree overlay support for AT91 boards
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168729611259.12258.7698089169899117034.git-patchwork-notify@kernel.org>
+ <168729611269.12258.12218763788178197448.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Jun 2023 21:21:52 +0000
-References: <20230610072530.418847-1-shawnguo@kernel.org>
-In-Reply-To: <20230610072530.418847-1-shawnguo@kernel.org>
-To: Shawn Guo <shawnguo@kernel.org>
+References: <20230616152932.1484154-1-cristian.birsan@microchip.com>
+In-Reply-To: <20230616152932.1484154-1-cristian.birsan@microchip.com>
+To: Cristian Birsan <cristian.birsan@microchip.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This patch was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sat, 10 Jun 2023 15:25:27 +0800 you wrote:
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On Fri, 16 Jun 2023 18:29:32 +0300 you wrote:
+> From: Cristian Birsan <cristian.birsan@microchip.com>
 > 
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-bindings-6.5
+> Add the '-@' DTC option for AT91 boards that have device-tree overlays.
+> This option populates the '__symbols__' node that contains all the
+> necessary symbols for supporting device-tree overlays (from bootloader)
+> on these devices.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL,1/4] i.MX dt-bindings for 6.5
-    https://git.kernel.org/soc/soc/c/3230271930ad
-  - [GIT,PULL,2/4] i.MX ARM device tree for 6.5
-    https://git.kernel.org/soc/soc/c/f50a4e594db8
-  - [GIT,PULL,3/4] i.MX arm64 device tree for 6.5
-    https://git.kernel.org/soc/soc/c/70cdf5e28c08
-  - [GIT,PULL,4/4] i.MX defconfig changes for 6.5
-    (no matching commit)
+  - arm: dts: Enable device-tree overlay support for AT91 boards
+    https://git.kernel.org/soc/soc/c/11d5441cde74
 
 You are awesome, thank you!
 -- 
