@@ -4,57 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D982AC001E0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE338C001B3
 	for <soc@archiver.kernel.org>; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id CEDE6C43142; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9D8AC433BB;
+	id A054EC433BF; Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 89CF8C433C9;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1687296112;
-	bh=3NAa0+CQaTBxEWCit3+23kTvL9GUgTrvXDqGMFlIl9o=;
+	bh=7e7jK6376qy3dZhVKSFXjGGaGN4QW42/hVrcokBErbQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=YjKpOUO8PMsGuoLE+MS2Ha0qV+h/rP/I6JWR7SzL1/CfBzmEnb+0qzyBdKw7prTjW
-	 UNSFJs6Y694Lu/WwNLD2somfHHqzz19aiPnbg02YU6CG8Nybwuj0h4Rkc44YDqzh2m
-	 jwv5tZrA5ziQbjLI2Iglxss3wQO5Ey8nfsj25WQeF9oKPH5G6dFk9RecL6p6GYxMuU
-	 Yw9PMjOPR6Qjqhs3wXfmdCqY6JzOsIbmGajYVxXLDGXMoSC+N2dOLpCQ0wJFbSN628
-	 kz1ht0j7I7BZkut0cr19evcu310nVfL7H4Fe1EtOV5fFVWBq6ocaix7PvHblSzHUwI
-	 svUmQUr+4bkHg==
+	b=CwkKJCU4PPKTHaHKheAI6EMnuZZc6xqEV37qPMYM3r92KD7ikmhhw1W/M8Fyrg2GB
+	 5iwgxUyurmXboe16jaQd4Sf8cssl6RfcEKQhft0SM9ZDTgkD2yEC5Ek4vbbO/TqdJ7
+	 0Gbf+9YJMHpGPZEpiJ/bx+1CfqC3wfu2Rm4MSTmuj8AxI6GzmWt9QyjI+RcA9b/xJg
+	 mjhWzinknf80Nv/vdZXFjmcV+oKcZbgYXGex9m/7avPkuWLozkV1/Qp8Qp/3AnDrh/
+	 yLMjqXrLh/LChPN3pSYNoIehwi/N/mruUmw9lCJ19j7G4GNhD01DqpBJJKr6RGVk9X
+	 aFAGpgZ6gZLOA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A94C1C395D9;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 754FDE21EDF;
 	Tue, 20 Jun 2023 21:21:52 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] arm: dts: Enable device-tree overlay support for AT91 boards
+Subject: Re: [GIT PULL 1/2] arm64: defconfig: TI K3 updates for v6.5
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168729611269.12258.12218763788178197448.git-patchwork-notify@kernel.org>
+ <168729611247.12258.3956873659078567385.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Jun 2023 21:21:52 +0000
-References: <20230616152932.1484154-1-cristian.birsan@microchip.com>
-In-Reply-To: <20230616152932.1484154-1-cristian.birsan@microchip.com>
-To: Cristian Birsan <cristian.birsan@microchip.com>
+References: <97a49740-32e7-f899-d153-743b5a57eba7@ti.com>
+In-Reply-To: <97a49740-32e7-f899-d153-743b5a57eba7@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This patch was applied to soc/soc.git (for-next)
+This pull request was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Fri, 16 Jun 2023 18:29:32 +0300 you wrote:
-> From: Cristian Birsan <cristian.birsan@microchip.com>
+On Thu, 15 Jun 2023 21:49:44 +0530 you wrote:
+> Hi ARM SoC maintainers,
 > 
-> Add the '-@' DTC option for AT91 boards that have device-tree overlays.
-> This option populates the '__symbols__' node that contains all the
-> necessary symbols for supporting device-tree overlays (from bootloader)
-> on these devices.
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+> 
+>   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+> 
+> are available in the Git repository at:
 > 
 > [...]
 
 Here is the summary with links:
-  - arm: dts: Enable device-tree overlay support for AT91 boards
-    https://git.kernel.org/soc/soc/c/11d5441cde74
+  - [GIT,PULL,1/2] arm64: defconfig: TI K3 updates for v6.5
+    (no matching commit)
+  - [GIT,PULL,2/2] arm64: dts: ti: K3 updates for v6.5
+    https://git.kernel.org/soc/soc/c/af3c684721cf
 
 You are awesome, thank you!
 -- 
