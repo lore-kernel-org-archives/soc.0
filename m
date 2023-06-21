@@ -1,117 +1,121 @@
-Return-Path: <SRS0=fGjY=CJ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=sKO5=CJ=microchip.com=Claudiu.Beznea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09FFCEB64D8
-	for <soc@archiver.kernel.org>; Wed, 21 Jun 2023 09:37:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3FC9EB64D7
+	for <soc@archiver.kernel.org>; Wed, 21 Jun 2023 09:39:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E173AC433C0; Wed, 21 Jun 2023 09:37:14 +0000 (UTC)
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	id 895BBC433C8; Wed, 21 Jun 2023 09:39:08 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6880FC433C8;
-	Wed, 21 Jun 2023 09:37:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6880FC433C8
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 0E0D932007D7;
-	Wed, 21 Jun 2023 05:37:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 21 Jun 2023 05:37:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1687340229; x=1687426629; bh=sO
-	c6wz1DSt49ZRU9TRFU6qTEbYFcvanTnrJ2RrO4fCc=; b=qocp2wOA7JiDbd8wBx
-	vGs6+soz5HpqqYzJicdwz2qUYeyFuabijLABV1RIRzL1UUi6O/8UMz2hESAbFzcz
-	4j9MdMr+bVO0NAq8MGhxt7HATOdslGYJR+/KGk/8m2X1kNyS0fyhvWZIzb2eHVow
-	O/yeG30nQZQawrGWjZDFj+kg3YpCtIQahI1I+DuwcPZ18+z+WQT2aysgy4PPhyBR
-	fqx/Z3gDhxEDHZfiImdqnzlKB0gwTnjwS6gDoN0xIGBkvM1BEzamXNzspAGQZz0Y
-	bE4UAI7wsw4uuqmtKROWlvDLrGbPkA8XE3MF3dB6uespLact0JP7jMTdAj3yGZay
-	6wIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1687340229; x=1687426629; bh=sOc6wz1DSt49Z
-	RU9TRFU6qTEbYFcvanTnrJ2RrO4fCc=; b=M/EKxA/yazcvKHcNil/o8XQPgfdmz
-	GIoKn2yArQTYdjEPm5yJNwQanoE6oMsZ+vOLqi4kmUdifrglYUKEYesK396PxnrW
-	cCrG5IYWkuC6Eq5Z1KgASQmwL1qL5NPcURVWzjtqnHKORoRTwMgbBNpc9Y2i2WUH
-	A1HsQe3BCAXEy7YTEK29Ds5US5eHfhykiDX94v6SkWQW4kSWJFd6rEXIXBNojKRK
-	Udj+0Ou6nyCNtHfwrVllp0qeqUsJJ2AxgZOtWK5htwvswnH4c3yzBKRgtT2mos5/
-	EExOxAfy+KMmko5bebmD+eXjAiu+KkO+wiDr2w2f/kz0q1yqY2Hsgfvuw==
-X-ME-Sender: <xms:xcSSZLA3mmB_Fpz91uU4CpBjvUq_ZM-PmN5qDrm1wplNVxOU8EsdVQ>
-    <xme:xcSSZBjy5-2zGmZmRRbG_HidplHZeV4LaUrSlg6bBd7lDpCoh1o0iQkZ0RMNFbzz7
-    BbsRdr2B3ytrJiasv4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefjedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:xcSSZGn8w6RH9g77dY1GBibc67NX8Xjhcnw4ID-2P0D9ThLMQTDwOw>
-    <xmx:xcSSZNw66D-XW8qdDUoMCDHtxOliNTnpkYi8WWMXv2_u8BDNAQ2jsg>
-    <xmx:xcSSZAR81iEoZKWsIubA5jxRoolFYr9CIBrfZ8EbJTx65WOIToL0OQ>
-    <xmx:xcSSZLeFC7nAjU6JIGBhBG9raVZSV5B6U3B0yBKFNYHJqnogcSnRVw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 69B63B60086; Wed, 21 Jun 2023 05:37:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <5dd55b3f-9a12-4c3e-99a8-b81add924cbb@app.fastmail.com>
-In-Reply-To: <20230615174940.jmzuv5kb6o7htkwo@mercury.elektranox.org>
-References: <20230615174940.jmzuv5kb6o7htkwo@mercury.elektranox.org>
-Date: Wed, 21 Jun 2023 11:36:48 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
+	by smtp.kernel.org (Postfix) with ESMTPS id D5ED1C433C9;
+	Wed, 21 Jun 2023 09:39:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D5ED1C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687340348; x=1718876348;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sMNuBOL7JFuUxXmzkCxcxwFYbUVZ7zD6QtJeFTRf+d8=;
+  b=03ANReSk4OCJ2UZ991ez1Rk3ISATMgnZAnUXo0xMz4gf01qZ8SutZEJn
+   4UeBaoTbabsw/dEv1kwxMlj4bH6V9ViXrbGzLjfFpfFCbOaR9HEo3m4EQ
+   KjoEK5h6YB6TTvokzhxG0+sEEQQZcAdd+ekQwJafQdngmzWYIToRqDNBw
+   EfvbN7wL1iAqbgG3bj3IBzjsqUFtjYRicExjgz8Vvu0Q30xudAQDq8b2O
+   eX90EvdjasGZqVOQtHVDRJJzrDANPVTOMBkAPOpq2DNcrPHEKke6HtC6d
+   EvouQEQasBWL9hto3zblo8+goa/jc/UnW4OmaMVC9wMG3WyyVn4u7w1Gs
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="219676361"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jun 2023 02:39:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 21 Jun 2023 02:39:00 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 21 Jun 2023 02:38:57 -0700
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 List-Id: <soc.lore.kernel.org>
-To: "Sebastian Reichel" <sebastian.reichel@collabora.com>, soc@kernel.org
-Cc: arm <arm@kernel.org>, linux-arm-kernel@lists.infradead.org,
- kernel@lists.collabora.com
-Subject: Re: [GIT PULL] ARM64 RK808 defconfig fix
+To: <arnd@arndb.de>, <olof@lixom.net>, <arm@kernel.org>, <soc@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+CC: <linux-arm-kernel@lists.infradead.org>
+Subject: [GIT PULL] AT91 DT updates for 6.5 #2
+Date: Wed, 21 Jun 2023 12:38:53 +0300
+Message-ID: <20230621093853.1575312-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-On Thu, Jun 15, 2023, at 19:49, Sebastian Reichel wrote:
-> Hi,
->
-> Since I did not get any feedback for the defconfig patches from [0] and they
-> are fixing a KernelCI regression (Rockchip Chromebooks no longer boot because
-> of missing PMIC driver), I prepared a pull request with the defconfig change
-> instead as suggested by Tony [1]. It consists of the rk806 immutable branch
-> prepared by Lee Jones [2] and the arm64 defconfig patch. I will send a second
-> pull request for the arm32 multi_v7 defconfig. This is targeting linux-next.
->
-> [0] 
-> https://lore.kernel.org/all/20230518040541.299189-1-sebastian.reichel@collabora.com/
-> [1] 
-> https://lore.kernel.org/linux-omap/20230604060436.GT14287@atomide.com/
-> [1] https://lore.kernel.org/all/20230515152425.GV10825@google.com/
+Hi, Arnd,
 
-I don't think it's important to have bisectable defconfig changes,
-and I'd prefer to just cherry-pick the two defconfig patches in
-this case if that's ok with you.
+Please pull in case it is not too late.
 
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
->
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
->
-> are available in the Git repository at:
->
->   
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/ 
-> rk806-defconfig-fix-arm64
+Thank you,
+Claudiu
 
-This is also not a public git URL, you may need something like this
-in your .gitconfig to generate better pull requests:
+The following changes since commit 4ceb0c70d0dae0f1327c4cfda3826b98a885f735:
 
-[url "https://git.kernel.org"]
-    insteadOf = ssh://git@gitolite.ra.kernel.org
+  ARM: dts: at91: sama5d2: remove extra line (2023-05-24 12:15:29 +0300)
 
-       Arnd
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-dt-6.5-2
+
+for you to fetch changes up to 33c01ff3b1003aea11288f2bf7924ada5b5b8327:
+
+  ARM: dts: lan966x: kontron-d10: add PHY interrupts (2023-06-21 10:22:40 +0300)
+
+----------------------------------------------------------------
+AT91 DT for 6.5 #2
+
+It contains:
+- generic names for shutdown controller nodes
+- enablement of DT overlay support for some AT91 boards
+- fix reset and SPI CS for lan966x-kontron-kswitch-d10-mmt based boards
+- addition of PHY interrupts for lan966x-kontron-kswitch-d10-mmt-8g
+  board
+
+----------------------------------------------------------------
+Claudiu Beznea (1):
+      ARM: dts: at91: use generic name for shutdown controller
+
+Cristian Birsan (1):
+      ARM: dts: at91: Enable device-tree overlay support for AT91 boards
+
+Michael Walle (3):
+      ARM: dts: lan966x: kontron-d10: fix board reset
+      ARM: dts: lan966x: kontron-d10: fix SPI CS
+      ARM: dts: lan966x: kontron-d10: add PHY interrupts
+
+ arch/arm/boot/dts/Makefile                         | 14 +++++++++++
+ arch/arm/boot/dts/at91-qil_a9260.dts               |  2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts        |  2 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts          |  2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts        |  2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi                 |  2 +-
+ arch/arm/boot/dts/at91sam9260ek.dts                |  2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi                 |  2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi                 |  2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi        |  2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi                 |  2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi                 |  2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi                  |  2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi                  |  2 +-
+ .../dts/lan966x-kontron-kswitch-d10-mmt-8g.dts     |  2 ++
+ .../boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi  | 29 +++++++++++++++++++++-
+ arch/arm/boot/dts/sam9x60.dtsi                     |  2 +-
+ arch/arm/boot/dts/sama5d2.dtsi                     |  2 +-
+ arch/arm/boot/dts/sama5d3.dtsi                     |  2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                     |  2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                     |  2 +-
+ arch/arm/boot/dts/usb_a9260.dts                    |  2 +-
+ arch/arm/boot/dts/usb_a9263.dts                    |  2 +-
+ 23 files changed, 64 insertions(+), 21 deletions(-)
