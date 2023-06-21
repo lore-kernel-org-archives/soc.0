@@ -1,128 +1,112 @@
-Return-Path: <SRS0=fGjY=CJ=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=8opd=CJ=chromium.org=dianders@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4CF0EB64D7
-	for <soc@archiver.kernel.org>; Wed, 21 Jun 2023 14:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7549EB64D7
+	for <soc@archiver.kernel.org>; Wed, 21 Jun 2023 16:56:32 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5E91DC433C9; Wed, 21 Jun 2023 14:22:42 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id A72EFC433C0; Wed, 21 Jun 2023 16:56:32 +0000 (UTC)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D9BFFC433C0;
-	Wed, 21 Jun 2023 14:22:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9BFFC433C0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 8C24F5C00AB;
-	Wed, 21 Jun 2023 10:22:39 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 21 Jun 2023 10:22:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1687357359; x=1687443759; bh=uq
-	h8tuCqF2dKU/vlVkQ8edaMsCAAwNBeUvu46sx3Vr8=; b=n/k1xIatpSiHzZ/KiJ
-	/Kn+e6auwMeIvQud6Vykz3TW8nFUpbyjf0bXEE7w05GD9shcMK3OKVAX1H25HTh2
-	Ibihj5rpbIv8kjIX5EnTP5HtHObp1Z5l079DTY1DTqU8t+ylqhhsTeU/Fl+cimZZ
-	a60vKPDZHc95/GGR1TZRvj3Tdp44obNMuiRQQqXjN9O7VzxHgRvd5F7YbEN7gx+c
-	VcDIEgcFIGw/MSb0nOqUZNCaWAaQaAtld9uuFgOwWcp2lSJ87J14N5NohrWsU9b4
-	1P104rKiiOwXEJ8pR4hlAe13FTCaUKJ5KNuVTDgUAfZCCyJ51pYhNJDhZAd5/khz
-	ePgA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1687357359; x=1687443759; bh=uqh8tuCqF2dKU
-	/vlVkQ8edaMsCAAwNBeUvu46sx3Vr8=; b=JvqS126TUMtYNG2bnXKUnqMMIaO4L
-	Zq1sOfPQ7X74qemER9BF0sTdhDfzM7zN463Lbjx5O90kcd4IzT3S9hDDoqdp61eA
-	SwV/CENSELEJeDzijTa8XZLbf8cBjWzGbDPvE1Ly/o5jwU2AUhYLuvG1MKwtVAzA
-	oqZEI2ImOkXI+4h1mLECJenCoIVJDD59YZ6MiQ+CwwCPz4i8NLAU//tNWa8iACaw
-	9YfSCkwyjyTQVHLOQOjEkcqIIXTH27A+E7GADA0DIQ41RjS9A0Emdhlhk9IXjCeq
-	1zFhMBs8NXY75pRdV8t+GidD4m/uoNeKUyzfJZIBZn/F8wt5FIz2UOwEw==
-X-ME-Sender: <xms:rgeTZGX6TK4gsWNg77bFFhp-eu9JRUSO0wZ09ZOuGQeKu6aeldyF_w>
-    <xme:rgeTZCl3zxINr-BuPzVw2jR782RWB8or-rtbUXd9CXkOn7_Z7goIt2pIwx9zGeea6
-    YYWJmYI6yiepJObtDM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefkedggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:rgeTZKbqkMb9v6aiDvqKfoWEa6ip6RMn6glshY_t3QTc9Ei1-olfVQ>
-    <xmx:rgeTZNV4cEhclxHcVvKPC5uXSTEXaNxH1g8P5ZysTWQk8O2gPMKyFg>
-    <xmx:rgeTZAmVEjsTGrmVKsmfLvac3RY1fSAaFa2pYWAtpK0ghr0VIzgZlg>
-    <xmx:rweTZK7Ih1fRiAVcBsixMaOHBXXccPA8sDrGMrEm512ZIWMDiXWBbg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B68BAB60089; Wed, 21 Jun 2023 10:22:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <69c742e5-3270-4b1c-be31-1552d877677e@app.fastmail.com>
-In-Reply-To: <20230621031605.234149-2-ychuang570808@gmail.com>
-References: <20230621031605.234149-1-ychuang570808@gmail.com>
- <20230621031605.234149-2-ychuang570808@gmail.com>
-Date: Wed, 21 Jun 2023 16:22:18 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jacky Huang" <ychuang570808@gmail.com>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id BE0C6C433C9
+	for <soc@kernel.org>; Wed, 21 Jun 2023 16:56:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BE0C6C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-9896216338cso173663366b.3
+        for <soc@kernel.org>; Wed, 21 Jun 2023 09:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687366588; x=1689958588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UBrF3iaP3Fd6iHn8cw7cCxGg4FZTsp6oWE22ClcY7C8=;
+        b=Dw1l8Awv8LpyoGMx91gmy78/vjUIS457mDn8V8FN2qIk+fOrUs96tPSVDkuRAD+6hC
+         5i0XRnGfXJ9KrqxSs0BcEsOMwhEiI3a44hDBwNqhP2+kdMJjAi1+JYXLH4ArqrkGZv8R
+         0v/9S3oP3oKG5c+ZOWSDEMI3bHO24MXxWPAao=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687366588; x=1689958588;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UBrF3iaP3Fd6iHn8cw7cCxGg4FZTsp6oWE22ClcY7C8=;
+        b=SnF+sx33ZFJvPU9WEwzFF8NfXzLUvgVPPYrxaXvoF0bCnJq+upG/9X+BbZlvI6yEzw
+         sgRJ8RLDM33rQ9ZSpeEFDmLsx5szT524Ccl8QL9EdNUvz9ZzeSndBWIRLyUdyF8aVxjW
+         9+sgl0Pd8sQJStqkbKyjeDH0nCMO3XAL/aqqU+vM7H/qii5HzPKTwB5O9Cv0CVDJ3TMW
+         k9Tf170D0K5U9iP7xvfKAPC585hUT2StlkIFVOkfP1rqa6aaOEQ3Vczfmwi3JMBFvoiO
+         0DUCA6owdCynCKrsRDLamW/QQLWK9zCVAZkQeqBeCserpvqZRsLa1DBufpIVKXRT50CW
+         cgUg==
+X-Gm-Message-State: AC+VfDwKCSUOb2z+FYja4BRyyrflbQfNQq8dvbUNiMWbwQSEKsBiX7Nu
+	xhEYdj6IHri4OPrmFwbFkfQKA3KnHRtiBLKEs7qxBrMF
+X-Google-Smtp-Source: ACHHUZ5p+FXmeL9XF4rK+WsJcqyxNpfJX8+0RaxpDyeb2/ojv095jHiOV/DAyw+hluGg/pKU8pVjAw==
+X-Received: by 2002:a17:907:94c1:b0:982:7d5f:f608 with SMTP id dn1-20020a17090794c100b009827d5ff608mr15077299ejc.46.1687366588477;
+        Wed, 21 Jun 2023 09:56:28 -0700 (PDT)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id f22-20020a17090624d600b009786ae9ed50sm3375013ejb.194.2023.06.21.09.56.27
+        for <soc@kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 09:56:27 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so270a12.1
+        for <soc@kernel.org>; Wed, 21 Jun 2023 09:56:27 -0700 (PDT)
+X-Received: by 2002:a50:9e65:0:b0:51a:2012:5b34 with SMTP id
+ z92-20020a509e65000000b0051a20125b34mr630898ede.4.1687366587250; Wed, 21 Jun
+ 2023 09:56:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230616081440.v2.1.Ie79b5f0ed45739695c9970df121e11d724909157@changeid>
+In-Reply-To: <20230616081440.v2.1.Ie79b5f0ed45739695c9970df121e11d724909157@changeid>
+From: Doug Anderson <dianders@chromium.org>
+Date: Wed, 21 Jun 2023 09:56:15 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WqirzpMwq8wto2B9cDGVf5JfirAQRargKWcZLpFhXCVA@mail.gmail.com>
+Message-ID: <CAD=FV=WqirzpMwq8wto2B9cDGVf5JfirAQRargKWcZLpFhXCVA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: firmware: qcom,scm: Document that SCM
+ can be dma-coherent
 List-Id: <soc.lore.kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, soc@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- schung@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v2 1/2] clk: nuvoton: Add clk-ma35d1.h for driver extern functions
-Content-Type: text/plain
+To: andersson@kernel.org, SoC Team <soc@kernel.org>
+Cc: amit.pundir@linaro.org, Will Deacon <will@kernel.org>, sumit.semwal@linaro.org, 
+	linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org, 
+	linux-arm-kernel@lists.infradead.org, Stephan Gerhold <stephan@gerhold.net>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Nikita Travkin <nikita@trvn.ru>, 
+	Stephen Boyd <swboyd@chromium.org>, Sibi Sankar <quic_sibis@quicinc.com>, 
+	Andy Gross <agross@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Das Srinagesh <quic_gurus@quicinc.com>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
+	Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 21, 2023, at 05:16, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
+Bjorn,
+
+On Fri, Jun 16, 2023 at 8:18=E2=80=AFAM Douglas Anderson <dianders@chromium=
+.org> wrote:
 >
-> Moved the declaration of extern functions ma35d1_reg_clk_pll() and
-> ma35d1_reg_adc_clkdiv() from the .c files to the newly created header
-> file clk-ma35d1.h.
+> Trogdor devices use firmware backed by TF-A instead of Qualcomm's
+> normal TZ. On TF-A we end up mapping memory as cacheable. Specifically,
+> you can see in Trogdor's TF-A code [1] in qti_sip_mem_assign() that we
+> call qti_mmap_add_dynamic_region() with MT_RO_DATA. This translates
+> down to MT_MEMORY instead of MT_NON_CACHEABLE or MT_DEVICE.
 >
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> Let's allow devices like trogdor to be described properly by allowing
+> "dma-coherent" in the SCM node.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+> Changes in v2:
+> - Bindings change new for v2.
+>
+>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
+Without this series v6.4 will have a regression where WiFi / LTE won't
+work at all on trogdor devices. Any chance you can send up a "Fixes"
+pull request with the 4 patches in it? ...or I could try to convince
+someone on the SoC tree to land them directly?
 
->  #define PLL_MAX_NUM		5
-> @@ -20,19 +22,19 @@ static DEFINE_SPINLOCK(ma35d1_lock);
->  #define REG_CLK_PWRCTL		0x00
->  #define REG_CLK_SYSCLK0		0x04
->  #define REG_CLK_SYSCLK1		0x08
-> -#define REG_CLK_APBCLK0		0x0C
-> +#define REG_CLK_APBCLK0		0x0c
->  #define REG_CLK_APBCLK1		0x10
->  #define REG_CLK_APBCLK2		0x14
->  #define REG_CLK_CLKSEL0		0x18
-> -#define REG_CLK_CLKSEL1		0x1C
-> +#define REG_CLK_CLKSEL1		0x1c
->  #define REG_CLK_CLKSEL2		0x20
->  #define REG_CLK_CLKSEL3		0x24
->  #define REG_CLK_CLKSEL4		0x28
-> -#define REG_CLK_CLKDIV0		0x2C
-> +#define REG_CLK_CLKDIV0		0x2c
->  #define REG_CLK_CLKDIV1		0x30
->  #define REG_CLK_CLKDIV2		0x34
->  #define REG_CLK_CLKDIV3		0x38
-> -#define REG_CLK_CLKDIV4		0x3C
-> +#define REG_CLK_CLKDIV4		0x3c
->  #define REG_CLK_CLKOCTL		0x40
->  #define REG_CLK_STATUS		0x50
->  #define REG_CLK_PLL0CTL0	0x60
+Thanks!
 
-This part of the patch does not relate to the decription, it
-looks like a minor cleanup that should be a separate patch.
-
-The actual change looks good and required, but I can't apply it
-if it's mixed with unrelated changes like this.
-
-    Arnd
+-Doug
