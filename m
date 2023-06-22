@@ -4,58 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BBA2EB64DB
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5665CEB64D8
 	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 16:10:30 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 457E0C4339A; Thu, 22 Jun 2023 16:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2B0A9C433D9;
+	id 207DFC433CA; Thu, 22 Jun 2023 16:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 062DBC433C8;
 	Thu, 22 Jun 2023 16:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1687450230;
-	bh=EZFTQEYeO4veG6PSBBKcQeMX7MWrvaFg+85liqHsu0A=;
+	bh=1ZNVK9th0fxL58BezuIkgJToC50QEHcYAmhFrzETyrI=;
 	h=Subject:From:Date:References:In-Reply-To:To:List-Id:Cc:From;
-	b=r1J9XoGLIaEcf6CWMBEDBKy9FD12Io22SFQGV+lDlLdH182owvBdVu9wwF3A+hevC
-	 ZQE+P9J0r+P5AUGlRHqh/c0LGS/BxUfHK0lDIx7a1YI6WTTU5yimX15g+3zWAMBACV
-	 znemY1qdYnXvjgJEd7t1//XI51aOVhfZnEuErYRP76lPMoO1qmA3djroR+VNlq2uhs
-	 V+lUItEjGsPSt5gBtFvY8U0Xrd8Z5MpSCShX224UGGYj4dqMBgdNUfrR0ldqy1Fwlh
-	 LGhpkdtwTdMcKJ3OuUrO7bUC/XF3zp0wDRRhpK0zmA+yuWqh0xRrznEtUk+q2ONoUs
-	 KBuDy1ev7FDmw==
+	b=Y2Q4sFRfu9SUp3ORyrAAx/0Rdj6QviqqTKTFv1dbnhKaSFNSrdmRQg6GNMGlOVH2f
+	 RLiRBmqijCCowBYNDQhS8AiglHxJKiaRo73w5vQ+bkpZ1Ajystlw/PJpCgVYSWeQGb
+	 7JrdJT/t1gUFtyVIHzaiESY9g0XhH461uf+e026nyX+nmWlFvD0rI5GEhkKmgjo0tX
+	 QYYvsVU3UaUlDFj7NsbQmGxRBv09rsavhrkvBe6M9Hp6UQx5bZHJIT3JIizYPuZtAb
+	 wqC3J9ztZeipOV0Zup7JqjvSaEnVW8gsAWtg2xPCIqQU4tDqnRBXvAgoC1WwokRyYu
+	 Taj+nxox0sBIw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EFA5FC691F1;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8911C691EE;
 	Thu, 22 Jun 2023 16:10:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Rockchip driver changes for 6.5 #1
+Subject: Re: [PATCH v3 0/3] clk: nuvoton: Use clk_parent_data instead and add a
+ header file
 From: patchwork-bot+linux-soc@kernel.org
 Message-Id: 
- <168745022997.12309.11983479127040981070.git-patchwork-notify@kernel.org>
+ <168745022987.12309.7607055430519385855.git-patchwork-notify@kernel.org>
 Date: Thu, 22 Jun 2023 16:10:29 +0000
-References: <10286366.nUPlyArG6x@phil>
-In-Reply-To: <10286366.nUPlyArG6x@phil>
-To: =?utf-8?q?Heiko_St=C3=BCbner_=3Cheiko=40sntech=2Ede=3E?=@ci.codeaurora.org
+References: <20230622141343.13595-1-ychuang570808@gmail.com>
+In-Reply-To: <20230622141343.13595-1-ychuang570808@gmail.com>
+To: Jacky Huang <ychuang570808@gmail.com>
 List-Id: <soc.lore.kernel.org>
 Cc: soc@kernel.org
 
 Hello:
 
-This pull request was applied to soc/soc.git (for-next)
+This series was applied to soc/soc.git (for-next)
 by Arnd Bergmann <arnd@arndb.de>:
 
-On Sun, 11 Jun 2023 23:12:12 +0200 you wrote:
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On Thu, 22 Jun 2023 14:13:40 +0000 you wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
 > 
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+> This set of patches addresses some of the issues that were identified in
+> the ma35d1 clock driver.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git tags/v6.5-rockchip-drivers1
+> 1. The external functions referenced between the .c files in this driver
+>    should not be declared within the .c files themselves. Instead, a shared
+>    .h file should be created to reference them.
 > 
 > [...]
 
 Here is the summary with links:
-  - [GIT,PULL] Rockchip driver changes for 6.5 #1
-    https://git.kernel.org/soc/soc/c/618d12930905
+  - [v3,1/3] clk: nuvoton: Add clk-ma35d1.h for driver extern functions
+    https://git.kernel.org/soc/soc/c/a5e3f37217b7
+  - [v3,2/3] clk: nuvoton: Update all constant hex values to lowercase
+    https://git.kernel.org/soc/soc/c/ebd617b67543
+  - [v3,3/3] clk: nuvoton: Use clk_parent_data instead of string for parent clock
+    https://git.kernel.org/soc/soc/c/f50a000b4219
 
 You are awesome, thank you!
 -- 
