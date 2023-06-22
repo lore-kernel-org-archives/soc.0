@@ -1,111 +1,101 @@
-Return-Path: <SRS0=Gilr=CK=linaro.org=neil.armstrong@kernel.org>
+Return-Path: <SRS0=JtlV=CK=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28950EB64D8
-	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 08:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2246DEB64D8
+	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 10:10:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DF33AC433C0; Thu, 22 Jun 2023 08:10:56 +0000 (UTC)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id E6EC8C433C9; Thu, 22 Jun 2023 10:10:55 +0000 (UTC)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D2DA4C433C8
-	for <soc@kernel.org>; Thu, 22 Jun 2023 08:10:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2DA4C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-3f9c532fa45so13471215e9.2
-        for <soc@kernel.org>; Thu, 22 Jun 2023 01:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687421454; x=1690013454;
-        h=content-transfer-encoding:organization:content-language:cc:to
-         :reply-to:subject:from:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=E6E/DKjP8bIO9nlNl0dJE1KVK22hxgPcNnONiA41pro=;
-        b=gznygwPGC1pXzExG36qSookApcXSWC8V8JkfWObvXUwxiWWqt83zwo63bOaBkQmMEq
-         UkL85J0FDWpWJE4VaZxBS+LqP/fEqSjnbMw34MpcF/hJlNUJnPkR7auMLJygD4y8QUw+
-         Ekj8PUSzan5R5f21XVWtQIIFB7GTtILqZAUEDkmpOhaeo26MAxhPgrzIYXFCpZSwKivF
-         xjbPbdAZgC9hoTAtFrTpxc3hBWditVZwxtRpnaKzkpfuTaOfSSZa2BEhu1CB7K/S4yuR
-         jkEdLfNO2iXMwYkJ7eQsUVjTRyoUql9+o+L/cLD7pPXS3rmz/InjXEHAUjEbZuupWx+3
-         nqvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687421454; x=1690013454;
-        h=content-transfer-encoding:organization:content-language:cc:to
-         :reply-to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6E/DKjP8bIO9nlNl0dJE1KVK22hxgPcNnONiA41pro=;
-        b=iBfbiH0l2e/fYr0e62JplAQ1c7P3FoHDlcN2/AsNiSgK/vZ8I5I5lrRoRlONU73cGC
-         AUuMZvk1M+yMMKUCtpgzfryWwhZLN2/AJBtZK8qryBtGujdJ84C+vQIpXEx3fdDMLuTo
-         X+nHQHrXHKPUTIw/3IXz8Q5Clu/ZcD57AGsNLojIQG239cJL9KHI0IKTgxah6VvG+22g
-         wlXmmJJNWgYhESFdGG7fQyJrPXqtOUtXWg8lN2NOiImNZOqeJfUqw5Xh+5O3EMe5B1OF
-         MFJepXLQ8Rvu59jepxQkEhVHTyyhclyXqyH02Y35B1BJVkvFe+VySvc5FgEhf98Qfn/9
-         r0KA==
-X-Gm-Message-State: AC+VfDwtTvOy9R+gjkP3nJN/i7voOOVBtRgXrkuSUSgi3LeO3/VZl4pX
-	DqwByV62J5wpNBDNNJU9LHwwTahdGjvPmMiUjp0bYw==
-X-Google-Smtp-Source: ACHHUZ55OPiQl2bI3ECC95oo1SQkENMW+Ehw8FL52KPlnvb0Op00znXJhgk2lQtMgl1Nu26ZRi18cg==
-X-Received: by 2002:a05:600c:214d:b0:3f9:ad7:ae86 with SMTP id v13-20020a05600c214d00b003f90ad7ae86mr9011643wml.37.1687421453816;
-        Thu, 22 Jun 2023 01:10:53 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f692:a800:4794:385? ([2a01:e0a:982:cbb0:f692:a800:4794:385])
-        by smtp.gmail.com with ESMTPSA id z11-20020a7bc7cb000000b003f5ffba9ae1sm7023861wmk.24.2023.06.22.01.10.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 01:10:53 -0700 (PDT)
-Message-ID: <a10ea420-7599-3f41-dfd8-1742ef436ca0@linaro.org>
-Date: Thu, 22 Jun 2023 10:10:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [GIT PULL] amlogic late Drivers updates for v6.5
-Reply-To: neil.armstrong@linaro.org
+	by smtp.kernel.org (Postfix) with ESMTPS id 7C062C433C0;
+	Thu, 22 Jun 2023 10:10:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7C062C433C0
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 4B3E05C008E;
+	Thu, 22 Jun 2023 06:10:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 06:10:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1687428653; x=1687515053; bh=rQtLPWivvoqJHEflH1RQG9ep95dMvO0UyWn
+	P9cqsqPs=; b=hgNyx4A21ezJ3AFz5nxXKPLWcENK9ov93cxuU17cpSO5QTceB8g
+	KmE2V/gzSbH899GspBkd/PvmIEHsNMjYTMr1FrPOUJsnUwYIYsADYucLseS5WRov
+	z0RcE1dP105RKCupGkduFjcEy6w27UDxtC2neFgYesjFrzHIaCdo8perNV7FYit2
+	4El7QoaWOVqkZBAlbpGmfYV1+iqDrXl3Ohtb28RhddWYPlSMzFsNHyYvC6qdkOXE
+	B9m0E/bwzhvltmKXAp6y6L9OwrrVIU9py3y0/Wx+Fz5W3bmBuGjdNWiNWuaRp+ZC
+	9OQPj/01xuiA1VcymD8TT/BiHEgfu7EkC9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1687428653; x=1687515053; bh=rQtLPWivvoqJHEflH1RQG9ep95dMvO0UyWn
+	P9cqsqPs=; b=Lqp8Kg1AF6Jd7qR1ESsLmDMU+KhuEp3ddeHr0n7kSfY4a5ABWsX
+	hfCzcu+NCfFUtPVm1SxnD2LYJPVCidiFquh67PPXWw9G3AyBdj/1fgoGsQyd0sat
+	jpkYxtQITeKVlBlbcxTUQC4D6zuxtsTl19mP6K2M7zFYmiqAl/KTidQqF+270AGO
+	tZsEYjo4eS+6WphReJdTrS9Wh0pdGevpgdEG3BgkjblKtHk7HBRr1Asu/myRFXj7
+	wlgfJAO12LQbCm5Lve05l2Fjx+yQ/kgxhkQbm1XTckKi3DF2qHuyBoBKCH9Jhgyy
+	DALSGSiucppmXislYzs1t6z2yCZjxb0lr1w==
+X-ME-Sender: <xms:LB6UZCybnsLf6vIe7FXvVAz0zeVGSOzfzKDmB5AU_DMrETJAMorXsw>
+    <xme:LB6UZOS1d9mkBJvpX5L--g4RS-RHmGaYGgfhS7n2ySsS1gCWZxExCFk8FYoH752Cv
+    zD6cSU3roBwXlMb6dI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:LB6UZEWi84JajD8g0Nl8xAB5IB8EtzWp9SMYZxKJDF8noYAusw4yig>
+    <xmx:LB6UZIiBBVj0VlmMbK5_evoPPLaXrtOP-vTTIKSdpQLsoslGgtwmNg>
+    <xmx:LB6UZEAbXALC1hBnp7VHGBrcL9Y4CZ4o4ufIkQ5dMTKDbTaAnPsR8A>
+    <xmx:LR6UZA2mE8ZjDdDUHX9a7RKR56N_QNeBfcvy0eBp19JklhYebBSJSQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 2007BB60086; Thu, 22 Jun 2023 06:10:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <c788d873-ad57-4a94-9be0-cdc5d1326cc2@app.fastmail.com>
+In-Reply-To: <19e93057-46e4-1578-9e3e-138bd09cccfc@gmail.com>
+References: <20230621031605.234149-1-ychuang570808@gmail.com>
+ <20230621031605.234149-2-ychuang570808@gmail.com>
+ <69c742e5-3270-4b1c-be31-1552d877677e@app.fastmail.com>
+ <19e93057-46e4-1578-9e3e-138bd09cccfc@gmail.com>
+Date: Thu, 22 Jun 2023 12:10:29 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jacky Huang" <ychuang570808@gmail.com>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org, arm@kernel.org
-Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Language: en-US
-Organization: Linaro Developer Services
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, soc@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ schung@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v2 1/2] clk: nuvoton: Add clk-ma35d1.h for driver extern functions
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Jun 22, 2023, at 03:42, Jacky Huang wrote:
+> On 2023/6/21 =E4=B8=8B=E5=8D=88 10:22, Arnd Bergmann wrote:
+>
+> I will extract the unrelated parts from this patch and create another=20
+> patch for them.
+>
 
-Here's a late Amlogic Drivers changeset for v6.5, with includes
-a low priority fix for secure-pwrc, a MAINTAINERS fix and a bindings yaml
-conversion patch that were lying on the lists for too long.
+Ok, sounds good. It would be great to still get this today or tomorrow
+though, as the merge window probably opens on Monday and I want to
+have the tree in a good state before I send my pull request to Linus.
 
-Neil
-
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
-   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git amlogic-drivers-for-v6.5
-
-for you to fetch changes up to 6b0139b372d40bd5dafc140b6618b57d13211168:
-
-   dt-bindings: interrupt-controller: Convert Amlogic Meson GPIO interrupt controller binding (2023-06-20 09:41:07 +0200)
-
-----------------------------------------------------------------
-Amlogic Drivers changes for v6.5:
-- tag some powers domains as always-on for secure-pwrc
-- fix MAINTAINERS entry for PHY drivers & bindings
-- Amlogic Meson GPIO interrupt controller binding to yaml conversion
-
-----------------------------------------------------------------
-Alexey Romanov (1):
-       drivers: meson: secure-pwrc: always enable DMA domain
-
-Heiner Kallweit (2):
-       MAINTAINERS: add PHY-related files to Amlogic SoC file list
-       dt-bindings: interrupt-controller: Convert Amlogic Meson GPIO interrupt controller binding
-
-  .../amlogic,meson-gpio-intc.txt                    | 38 ------------
-  .../amlogic,meson-gpio-intc.yaml                   | 72 ++++++++++++++++++++++
-  MAINTAINERS                                        |  2 +
-  drivers/soc/amlogic/meson-secure-pwrc.c            |  2 +-
-  4 files changed, 75 insertions(+), 39 deletions(-)
-  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt
-  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.yaml
+     Arnd
