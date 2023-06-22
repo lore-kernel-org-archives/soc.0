@@ -1,114 +1,111 @@
-Return-Path: <SRS0=JtlV=CK=arndb.de=arnd@kernel.org>
+Return-Path: <SRS0=Gilr=CK=linaro.org=neil.armstrong@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D635EB64DC
-	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 07:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28950EB64D8
+	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 08:10:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id F0A32C433C9; Thu, 22 Jun 2023 07:57:28 +0000 (UTC)
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id DF33AC433C0; Thu, 22 Jun 2023 08:10:56 +0000 (UTC)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 3FCF7C433C0;
-	Thu, 22 Jun 2023 07:57:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3FCF7C433C0
-Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 08C2E5C00B2;
-	Thu, 22 Jun 2023 03:57:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 03:57:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1687420645; x=1687507045; bh=Gk
-	KZ59lQ593WQfkM2Ne32UUdJV1b5jkhK8Vh4H1Zzd8=; b=3QIUvH519S7xyxVwHe
-	t4OjA4EnxuqZcAvkAAyjlbzZGsvXllDD/qPYz/3rUESwqTHTgA3RLkvg2r1pQefz
-	+8f1GWsbXk3MiZw8s+XFTPTVvcP7e+p6jN5dN7ZXoeMj/CJf4KRJHNJfT4v/DURC
-	uWiu+mEgGx+sN62dmZw4bkUc1VNLPdIp1JVuBbK6OpdHNnJ54Ecum70/3u2XSXKW
-	Ry6XMjlpls2wy2lL59sxfZtHWrCTemuRgq28HFLQEAQLEQj/0F6T1dL0Z5cVvzDo
-	Jm2u04mOjkA9oBZXFdbPSiOEfPYnE4Iw2GCbDvFA7AnhV7TgRezHSeZMwf/YVw14
-	TDyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1687420645; x=1687507045; bh=GkKZ59lQ593WQ
-	fkM2Ne32UUdJV1b5jkhK8Vh4H1Zzd8=; b=BPSsm07+RlhpSIFyYJ4wNWomqf3Zy
-	0LEnJ5+TGP099pVOZDS/NIDaL0iX4oYy3jP8lv6nL4TKOBqIzgq0v8qBI2pYUdyE
-	rK4TbM3cl0ZAl4noq2NIAuT+97JUvDSOJAGJo2jAxKt2M+DBSvrbRYvXdg3EqAwP
-	WW6O36IIzQdykvbVWv6kvVPVeZ3w9wDJnXa3MFATVSQ0QMDTu8L8s9VjJ5ZccFwj
-	DF6LM/O8So01hgbs5gB2AC9Kjbgi606nbw8Iwwm7xt8KOYPvpqNHABR6CoNgsFXq
-	5jIoJ1lTbx7A/93MjueHqD1ZGBTF62Jie4rN7E7ZRceaaboo2xhsmrs1A==
-X-ME-Sender: <xms:5P6TZAnLvQmm-88vFK30Qq-3F3-RBrJYNCa5ajPBSQ-hENzahoWllQ>
-    <xme:5P6TZP2ke-wfLwwI6WDkhAdluGe0w1mT4pf8iV_VjsU3e0PeMvxMDBcp8sE7Tp1Pf
-    Tglq4z9b2A0xQuhGpk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegtddguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5P6TZOrlfD17IHkZf9NvgbSqKsIORpiR3O-4CTYXB9wxDiXSexpTNw>
-    <xmx:5P6TZMmMWYkJtNmEmbQazf6cQP-n404fDkUOfVf0FD-1znuODexKRg>
-    <xmx:5P6TZO1LLUOSnybP5kWX1LEq-hF0lNl69UWYhcJHzmT2gabZtmW4DQ>
-    <xmx:5f6TZB34Fpjv_gKy09J7s47__5-Q8NL-Vrq5-k3HIudombGwGYVQHg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 4D1E3B60086; Thu, 22 Jun 2023 03:57:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <6d7d1f99-02e3-4e13-ae50-96e8b38a6bb0@app.fastmail.com>
-In-Reply-To: <6d3c01d0-c809-b420-335f-551c98956493@foss.st.com>
-References: <20230602132859.16442-1-alexandre.torgue@foss.st.com>
- <20230602132859.16442-5-alexandre.torgue@foss.st.com>
- <24e9c526-4128-4e63-8d28-c4ef1647f886@roeck-us.net>
- <6d3c01d0-c809-b420-335f-551c98956493@foss.st.com>
-Date: Thu, 22 Jun 2023 09:57:03 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Arnaud POULIQUEN" <arnaud.pouliquen@foss.st.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id D2DA4C433C8
+	for <soc@kernel.org>; Thu, 22 Jun 2023 08:10:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D2DA4C433C8
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-3f9c532fa45so13471215e9.2
+        for <soc@kernel.org>; Thu, 22 Jun 2023 01:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687421454; x=1690013454;
+        h=content-transfer-encoding:organization:content-language:cc:to
+         :reply-to:subject:from:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=E6E/DKjP8bIO9nlNl0dJE1KVK22hxgPcNnONiA41pro=;
+        b=gznygwPGC1pXzExG36qSookApcXSWC8V8JkfWObvXUwxiWWqt83zwo63bOaBkQmMEq
+         UkL85J0FDWpWJE4VaZxBS+LqP/fEqSjnbMw34MpcF/hJlNUJnPkR7auMLJygD4y8QUw+
+         Ekj8PUSzan5R5f21XVWtQIIFB7GTtILqZAUEDkmpOhaeo26MAxhPgrzIYXFCpZSwKivF
+         xjbPbdAZgC9hoTAtFrTpxc3hBWditVZwxtRpnaKzkpfuTaOfSSZa2BEhu1CB7K/S4yuR
+         jkEdLfNO2iXMwYkJ7eQsUVjTRyoUql9+o+L/cLD7pPXS3rmz/InjXEHAUjEbZuupWx+3
+         nqvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687421454; x=1690013454;
+        h=content-transfer-encoding:organization:content-language:cc:to
+         :reply-to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6E/DKjP8bIO9nlNl0dJE1KVK22hxgPcNnONiA41pro=;
+        b=iBfbiH0l2e/fYr0e62JplAQ1c7P3FoHDlcN2/AsNiSgK/vZ8I5I5lrRoRlONU73cGC
+         AUuMZvk1M+yMMKUCtpgzfryWwhZLN2/AJBtZK8qryBtGujdJ84C+vQIpXEx3fdDMLuTo
+         X+nHQHrXHKPUTIw/3IXz8Q5Clu/ZcD57AGsNLojIQG239cJL9KHI0IKTgxah6VvG+22g
+         wlXmmJJNWgYhESFdGG7fQyJrPXqtOUtXWg8lN2NOiImNZOqeJfUqw5Xh+5O3EMe5B1OF
+         MFJepXLQ8Rvu59jepxQkEhVHTyyhclyXqyH02Y35B1BJVkvFe+VySvc5FgEhf98Qfn/9
+         r0KA==
+X-Gm-Message-State: AC+VfDwtTvOy9R+gjkP3nJN/i7voOOVBtRgXrkuSUSgi3LeO3/VZl4pX
+	DqwByV62J5wpNBDNNJU9LHwwTahdGjvPmMiUjp0bYw==
+X-Google-Smtp-Source: ACHHUZ55OPiQl2bI3ECC95oo1SQkENMW+Ehw8FL52KPlnvb0Op00znXJhgk2lQtMgl1Nu26ZRi18cg==
+X-Received: by 2002:a05:600c:214d:b0:3f9:ad7:ae86 with SMTP id v13-20020a05600c214d00b003f90ad7ae86mr9011643wml.37.1687421453816;
+        Thu, 22 Jun 2023 01:10:53 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f692:a800:4794:385? ([2a01:e0a:982:cbb0:f692:a800:4794:385])
+        by smtp.gmail.com with ESMTPSA id z11-20020a7bc7cb000000b003f5ffba9ae1sm7023861wmk.24.2023.06.22.01.10.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 01:10:53 -0700 (PDT)
+Message-ID: <a10ea420-7599-3f41-dfd8-1742ef436ca0@linaro.org>
+Date: Thu, 22 Jun 2023 10:10:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [GIT PULL] amlogic late Drivers updates for v6.5
+Reply-To: neil.armstrong@linaro.org
 List-Id: <soc.lore.kernel.org>
-Cc: "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH v2 04/10] arm64: introduce STM32 family on Armv8 architecture
-Content-Type: text/plain
+To: soc@kernel.org, arm@kernel.org
+Cc: linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Language: en-US
+Organization: Linaro Developer Services
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 22, 2023, at 09:50, Alexandre TORGUE wrote:
-> On 6/22/23 02:57, Guenter Roeck wrote:
->> 
->> On Fri, Jun 02, 2023 at 03:28:53PM +0200, Alexandre Torgue wrote:
->>> Add a dedicated ARCH_STM32 for STM32 SoCs config. First STM32 Armv8 SoC
->>> family is the STM32MP25 which is composed of STM32MP251, STM32MP253,
->>> STM32MP255, STM32MP257 SoCs.
->>>
->>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>>
->> 
->> This patch (or patch series) results in the following build error when
->> trying to build arm64:allmodconfig.
->> 
->> Building arm64:allmodconfig ... failed
->
-> Should be fixed by this patch:
->
-> https://lore.kernel.org/linux-arm-kernel/9ebb9a5a-7bc8-da67-529f-5193b9352b23@infradead.org/T/
+Hi,
 
-I added that patch to my the soc/newsoc branch now.
+Here's a late Amlogic Drivers changeset for v6.5, with includes
+a low priority fix for secure-pwrc, a MAINTAINERS fix and a bindings yaml
+conversion patch that were lying on the lists for too long.
 
-    Arnd
+Neil
+
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git amlogic-drivers-for-v6.5
+
+for you to fetch changes up to 6b0139b372d40bd5dafc140b6618b57d13211168:
+
+   dt-bindings: interrupt-controller: Convert Amlogic Meson GPIO interrupt controller binding (2023-06-20 09:41:07 +0200)
+
+----------------------------------------------------------------
+Amlogic Drivers changes for v6.5:
+- tag some powers domains as always-on for secure-pwrc
+- fix MAINTAINERS entry for PHY drivers & bindings
+- Amlogic Meson GPIO interrupt controller binding to yaml conversion
+
+----------------------------------------------------------------
+Alexey Romanov (1):
+       drivers: meson: secure-pwrc: always enable DMA domain
+
+Heiner Kallweit (2):
+       MAINTAINERS: add PHY-related files to Amlogic SoC file list
+       dt-bindings: interrupt-controller: Convert Amlogic Meson GPIO interrupt controller binding
+
+  .../amlogic,meson-gpio-intc.txt                    | 38 ------------
+  .../amlogic,meson-gpio-intc.yaml                   | 72 ++++++++++++++++++++++
+  MAINTAINERS                                        |  2 +
+  drivers/soc/amlogic/meson-secure-pwrc.c            |  2 +-
+  4 files changed, 75 insertions(+), 39 deletions(-)
+  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt
+  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.yaml
