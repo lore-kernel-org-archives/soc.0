@@ -1,304 +1,142 @@
-Return-Path: <SRS0=pBr9=CK=protonmail.com=linmengbo0689@kernel.org>
+Return-Path: <SRS0=Kim5=CK=gmail.com=groeck7@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D58EB64D7
-	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 00:06:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 610B2EB64D7
+	for <soc@archiver.kernel.org>; Thu, 22 Jun 2023 00:57:25 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E1060C433C9; Thu, 22 Jun 2023 00:06:00 +0000 (UTC)
-Received: from mail-40137.protonmail.ch (mail-40137.protonmail.ch [185.70.40.137])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	id 1D4A6C433C0; Thu, 22 Jun 2023 00:57:25 +0000 (UTC)
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 0C679C433C0
-	for <soc@kernel.org>; Thu, 22 Jun 2023 00:05:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0C679C433C0
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-Date: Thu, 22 Jun 2023 00:05:33 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1687392349; x=1687651549;
-	bh=4SJtCK0x5F//Ag420gz6tCmHCCiBdGr2OH4BylyuTHc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=TYl9sBM/w6FRIJndST1C0wRCDk4EYlMAdB8YxoBzIVFSXuVr0u+3ooYLZuU64sTUy
-	 u5ZstxgXTukjqkbEuC9mkfXU7r0hZf5tSrRlmtLr2VaTc/yo6rJNj4Pre9QqCZLFwR
-	 jf8QMkePu/6Co2y+IXSrIGd8FGUBmAFBgT0KCGPTCD2IWlqB5OJcZ/iD4IrNRTNHBx
-	 lRu5xVmd6naYQ6BkaFEmWauIFP2eyTDR0PMO16QhIyQK+DtQypj+rM4STpqy+ANWt3
-	 y9SD9HRwY0cqq8/FtNskLqmBG/n0biIConVB2l20mxwsXW/vEtaZ2Uv9G2hsyKYMYO
-	 LOTBtvbXN/rmw==
-To: linux-kernel@vger.kernel.org
-From: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 968B8C433C9;
+	Thu, 22 Jun 2023 00:57:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 968B8C433C9
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6685421cdb3so77111b3a.1;
+        Wed, 21 Jun 2023 17:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687395443; x=1689987443;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TRHIPcIYRAsemBQXSugqu1HmfZ2F6V2nohZmaYh7iX8=;
+        b=bNJZdch2OwwbnqDEK2vJWSbZAhzVy+lJNFjojoaYtGBHQ42zzJE9uP0xQXAKcHVwJy
+         zWrH1177G7B/nu196zLwqmr4/gOwUm9R/vLT/prTcANUa4BN1xisyNtrMMQo5YUqEy+W
+         8/a8c0RrrmFyTfSfkmX4Dw9tbioOB2nPfhnowk/g6KcKhHm6R47BweJBTxVB3nQHsPt4
+         v7hd/i1tZiCVgQNRvqw859uOQbiIk02jSIJ97h+vCQokQaLhMriKc7QXpfEyh5iuK8oF
+         vSX6ofjVC1G2M9D1q1HzM0YtKHOTH3Hf4d3AbSzuFFNYZBeIGYt4HlASt9FzXuXJwO23
+         S9aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687395443; x=1689987443;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TRHIPcIYRAsemBQXSugqu1HmfZ2F6V2nohZmaYh7iX8=;
+        b=asXdPqbaQpzIZVDXZpUiw/mbp0eOhV2DbuMhOkEpU4hqxUniKz28PSwFc5X/aP7vpY
+         G6lJz/xQgsfjB1elADIkUSP+NQH67yunPrlXzSDNMSfE5buCMexi4aSAU4EbgfeMQMcz
+         7mkjSJu6gZQD+Lf+go8PtxEoaNjInI7cyfYBweJKpI3LVfcn79qMZk7nFFXxYCR6N2B5
+         Gy1yP7+FOZBsd7bkjZzijl9kVgPwMqu+QdR0KSgUlihdOKh9R4wTLjydLtK4pUnUO140
+         mYQMM3rekF/M862bZZ3gOPtznlTFtOz6DJMi/9qUm0SixjKDNPzr+gsa6SUfJPpCpKSm
+         wP5w==
+X-Gm-Message-State: AC+VfDzPv2w7fMycuQRRbH0/3oqSU/d8wiiKoydB2xSyC3ONS+aaNY+y
+	ZpGCZ3iTC52MEKEwsDd82Ss=
+X-Google-Smtp-Source: ACHHUZ6iMp+OYqownUXjVdBdLJssPnWKXdDhAMDRONi/XOCG8SypV1kVE1GgB0nIJZDzI0bj35KRhw==
+X-Received: by 2002:a05:6a00:13a0:b0:668:9f95:b518 with SMTP id t32-20020a056a0013a000b006689f95b518mr9140094pfg.9.1687395442837;
+        Wed, 21 Jun 2023 17:57:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t12-20020a62ea0c000000b00657fbf81ffbsm1420690pfh.80.2023.06.21.17.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 17:57:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 21 Jun 2023 17:57:20 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, Stephan Gerhold <stephan@gerhold.net>, Nikita Travkin <nikita@trvn.ru>, soc@kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, ~postmarketos/upstreaming@lists.sr.ht, Joe Mason <buddyjojo06@outlook.com>, "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH 7/7] arm64: dts: qcom: msm8916-samsung-fortuna: Add NFC
-Message-ID: <20230622000437.48367-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20230622000007.48219-1-linmengbo0689@protonmail.com>
-References: <20230622000007.48219-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 04/10] arm64: introduce STM32 family on Armv8
+ architecture
+Message-ID: <24e9c526-4128-4e63-8d28-c4ef1647f886@roeck-us.net>
+References: <20230602132859.16442-1-alexandre.torgue@foss.st.com>
+ <20230602132859.16442-5-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602132859.16442-5-alexandre.torgue@foss.st.com>
 
-From: Joe Mason <buddyjojo06@outlook.com>
+Hi,
 
-The Samsung Galaxy Ace 4, Core Prime and some Grand Prime have a
-Samsung S3FWRN5 NFC chip that works quite well with the s3fwrn5 driver
-in the Linux NFC subsystem.
+On Fri, Jun 02, 2023 at 03:28:53PM +0200, Alexandre Torgue wrote:
+> Add a dedicated ARCH_STM32 for STM32 SoCs config. First STM32 Armv8 SoC
+> family is the STM32MP25 which is composed of STM32MP251, STM32MP253,
+> STM32MP255, STM32MP257 SoCs.
+> 
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> 
 
-The clock setup for the NFC chip is a bit special (although this
-seems to be a common approach used for Qualcomm devices with NFC):
+This patch (or patch series) results in the following build error when
+trying to build arm64:allmodconfig.
 
-The NFC chip has an output GPIO that is asserted whenever the clock
-is needed to function properly. On the A3/A5 this is wired up to
-PM8916 GPIO2, which is then configured with a special function
-(NFC_CLK_REQ or BB_CLK2_REQ).
+Building arm64:allmodconfig ... failed
+--------------
+Error log:
+In file included from include/linux/printk.h:564,
+                 from include/asm-generic/bug.h:22,
+                 from arch/arm64/include/asm/bug.h:26,
+                 from include/linux/bug.h:5,
+                 from include/linux/fortify-string.h:5,
+                 from include/linux/string.h:254,
+                 from include/linux/dma-mapping.h:7,
+                 from drivers/remoteproc/stm32_rproc.c:9:
+drivers/remoteproc/stm32_rproc.c: In function 'stm32_rproc_mem_alloc':
+drivers/remoteproc/stm32_rproc.c:122:22: error: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'size_t'
 
-Enabling the rpmcc RPM_SMD_BB_CLK2_PIN clock will then instruct
-PM8916 to automatically enable the clock whenever the NFC chip
-requests it. The advantage is that the clock is only enabled when
-needed and we don't need to manage it ourselves from the NFC driver.
+Bisect log attached.
 
-Grand Prime SM-G530Y (fortunaltezt) has a NXP PN547, which is supported
-by the nxp-nci-i2c driver in mainline.
+Guenter
 
-It seems to detect NFC tags using "nfctool" just fine, although more
-testing is difficult given there seem to be very few useful applications
-making use of the Linux NFC subsystem.
-
-Signed-off-by: Joe Mason <buddyjojo06@outlook.com>
-[Put i2c-nfc and NFC pinctrl into fortuna.dtsi to share it with other varia=
-nts]
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-[Add pn547_nfc]
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 ---
- .../dts/qcom/msm8216-samsung-fortuna3g.dts    |  5 ++
- .../qcom/msm8916-samsung-fortuna-common.dtsi  | 81 +++++++++++++++++++
- .../dts/qcom/msm8916-samsung-fortunaltezt.dts |  4 +
- .../dts/qcom/msm8916-samsung-gprimeltecan.dts | 25 ++++++
- .../qcom/msm8916-samsung-grandprimelte.dts    |  4 +
- .../qcom/msm8916-samsung-rossa-common.dtsi    |  4 +
- 6 files changed, 123 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8216-samsung-fortuna3g.dts b/arch/=
-arm64/boot/dts/qcom/msm8216-samsung-fortuna3g.dts
-index e7f6df229f9a..694a9962ee22 100644
---- a/arch/arm64/boot/dts/qcom/msm8216-samsung-fortuna3g.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8216-samsung-fortuna3g.dts
-@@ -10,6 +10,11 @@ / {
- =09chassis-type =3D "handset";
- };
-=20
-+&i2c_nfc {
-+=09/* 3G variant doesn't have NFC */
-+=09status =3D "disabled";
-+};
-+
- &st_accel {
- =09status =3D "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi b=
-/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi
-index 0436b8ccc3e8..e58cce5d1879 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi
-@@ -4,6 +4,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-=20
- / {
- =09aliases {
-@@ -52,6 +53,53 @@ haptic {
- =09=09max-microvolt =3D <3300000>;
- =09};
-=20
-+=09i2c_nfc: i2c-nfc {
-+=09=09compatible =3D "i2c-gpio";
-+=09=09sda-gpios =3D <&tlmm 0 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+=09=09scl-gpios =3D <&tlmm 1 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+
-+=09=09pinctrl-0 =3D <&nfc_i2c_default>;
-+=09=09pinctrl-names =3D "default";
-+
-+=09=09#address-cells =3D <1>;
-+=09=09#size-cells =3D <0>;
-+
-+=09=09/* Available NFC chip varies depending on model variant */
-+=09=09pn547_nfc: nfc@2b {
-+=09=09=09compatible =3D "nxp,pn547", "nxp,nxp-nci-i2c";
-+=09=09=09reg =3D <0x2b>;
-+
-+=09=09=09interrupt-parent =3D <&tlmm>;
-+=09=09=09interrupts =3D <21 IRQ_TYPE_EDGE_RISING>;
-+
-+=09=09=09enable-gpios =3D <&tlmm 20 GPIO_ACTIVE_HIGH>;
-+=09=09=09firmware-gpios =3D <&tlmm 49 GPIO_ACTIVE_HIGH>;
-+
-+=09=09=09pinctrl-0 =3D <&nfc_default>;
-+=09=09=09pinctrl-names =3D "default";
-+
-+=09=09=09status =3D "disabled";
-+=09=09};
-+
-+=09=09s3fwrn5_nfc: nfc@27 {
-+=09=09=09compatible =3D "samsung,s3fwrn5-i2c";
-+=09=09=09reg =3D <0x27>;
-+
-+=09=09=09interrupt-parent =3D <&tlmm>;
-+=09=09=09interrupts =3D <21 IRQ_TYPE_EDGE_RISING>;
-+
-+=09=09=09en-gpios =3D <&tlmm 20 GPIO_ACTIVE_HIGH>;
-+=09=09=09wake-gpios =3D <&tlmm 49 GPIO_ACTIVE_HIGH>;
-+
-+=09=09=09clocks =3D <&rpmcc RPM_SMD_BB_CLK2_PIN>;
-+
-+=09=09=09pinctrl-0 =3D <&nfc_default>, <&nfc_clk_req>;
-+=09=09=09pinctrl-names =3D "default";
-+
-+=09=09=09status =3D "disabled";
-+=09=09};
-+=09};
-+
- =09reg_motor_vdd: regulator-motor-vdd {
- =09=09compatible =3D "regulator-fixed";
- =09=09regulator-name =3D "motor_vdd";
-@@ -286,6 +334,29 @@ muic_int_default: muic-int-default-state {
- =09=09bias-disable;
- =09};
-=20
-+=09nfc_default: nfc-default-state {
-+=09=09nfc-pins {
-+=09=09=09pins =3D "gpio20", "gpio49";
-+=09=09=09function =3D "gpio";
-+=09=09=09drive-strength =3D <2>;
-+=09=09=09bias-disable;
-+=09=09};
-+
-+=09=09irq-pins {
-+=09=09=09pins =3D "gpio21";
-+=09=09=09function =3D "gpio";
-+=09=09=09drive-strength =3D <2>;
-+=09=09=09bias-pull-down;
-+=09=09};
-+=09};
-+
-+=09nfc_i2c_default: nfc-i2c-default-state {
-+=09=09pins =3D "gpio0", "gpio1";
-+=09=09function =3D "gpio";
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
- =09sdc2_cd_default: sdc2-cd-default-state {
- =09=09pins =3D "gpio38";
- =09=09function =3D "gpio";
-@@ -307,3 +378,13 @@ tsp_int_default: tsp-int-default-state {
- =09=09bias-disable;
- =09};
- };
-+
-+&pm8916_gpios {
-+=09nfc_clk_req: nfc-clk-req-state {
-+=09=09pins =3D "gpio2";
-+=09=09function =3D "func1";
-+=09=09power-source =3D <PM8916_GPIO_L2>;
-+=09=09bias-disable;
-+=09=09input-enable;
-+=09};
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-fortunaltezt.dts b/ar=
-ch/arm64/boot/dts/qcom/msm8916-samsung-fortunaltezt.dts
-index 0716ef577df1..eb033f555184 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-fortunaltezt.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-fortunaltezt.dts
-@@ -22,6 +22,10 @@ / {
- =09chassis-type =3D "handset";
- };
-=20
-+&pn547_nfc {
-+=09status =3D "okay";
-+};
-+
- &st_accel {
- =09compatible =3D "st,lis2hh12";
- =09mount-matrix =3D "1",  "0", "0",
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gprimeltecan.dts b/ar=
-ch/arm64/boot/dts/qcom/msm8916-samsung-gprimeltecan.dts
-index b0d8ac3d6ce9..1a24e00e2024 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gprimeltecan.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gprimeltecan.dts
-@@ -21,6 +21,26 @@ tz-apps@85500000 {
- =09};
- };
-=20
-+&blsp_i2c6 {
-+=09status =3D "okay";
-+
-+=09nfc@27 {
-+=09=09compatible =3D "samsung,s3fwrn5-i2c";
-+=09=09reg =3D <0x27>;
-+
-+=09=09interrupt-parent =3D <&tlmm>;
-+=09=09interrupts =3D <21 IRQ_TYPE_EDGE_RISING>;
-+
-+=09=09en-gpios =3D <&tlmm 20 GPIO_ACTIVE_HIGH>;
-+=09=09wake-gpios =3D <&tlmm 49 GPIO_ACTIVE_HIGH>;
-+
-+=09=09clocks =3D <&rpmcc RPM_SMD_BB_CLK2_PIN>;
-+
-+=09=09pinctrl-0 =3D <&nfc_default>, <&nfc_clk_req>;
-+=09=09pinctrl-names =3D "default";
-+=09};
-+};
-+
- &bosch_accel {
- =09status =3D "okay";
- };
-@@ -28,3 +48,8 @@ &bosch_accel {
- &bosch_magn {
- =09status =3D "okay";
- };
-+
-+&i2c_nfc {
-+=09/* Used for MFD instead. NFC is on i2c6 */
-+=09status =3D "disabled";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandprimelte.dts b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-grandprimelte.dts
-index f7fc538fda04..090b8fb6b444 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandprimelte.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-grandprimelte.dts
-@@ -17,3 +17,7 @@ &bosch_accel {
- &bosch_magn {
- =09status =3D "okay";
- };
-+
-+&s3fwrn5_nfc {
-+=09status =3D "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-rossa-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-rossa-common.dtsi
-index 39f99b5030e5..dbc4ee8719a6 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-rossa-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-rossa-common.dtsi
-@@ -23,6 +23,10 @@ &blsp_i2c5 {
- =09/delete-node/ touchscreen@20;
- };
-=20
-+&s3fwrn5_nfc {
-+=09status =3D "okay";
-+};
-+
- &st_accel {
- =09compatible =3D "st,lis2hh12";
- =09mount-matrix =3D "1",  "0", "0",
---=20
-2.39.2
-
-
+# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# bad: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect bad e867e67cd55ae460c860ffd896c7fc96add2821c
+# bad: [57b289d5b1005a9c39d6d6567e0ef6115bd59cea] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+git bisect bad 57b289d5b1005a9c39d6d6567e0ef6115bd59cea
+# good: [dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f] Merge branch 'for-next/perf' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git
+git bisect good dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f
+# good: [5bfea833dd8f972ce3435359f12f61bdbf01b147] Merge tag 'v6.4-next-dts64' of https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into soc/dt
+git bisect good 5bfea833dd8f972ce3435359f12f61bdbf01b147
+# bad: [6f8f9120fd588b28edb0a9c6b9ae9ca6c261d9f6] Merge branch 'for-linux-next' of git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git
+git bisect bad 6f8f9120fd588b28edb0a9c6b9ae9ca6c261d9f6
+# bad: [fe16e4b5e7fa1badc2fa69d85f7b13926cce8fe2] Merge branch 'at91-next' of git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
+git bisect bad fe16e4b5e7fa1badc2fa69d85f7b13926cce8fe2
+# good: [0e4ad579ef10d4e9eca86eb33fb4cd87de7c05c4] soc: document merges
+git bisect good 0e4ad579ef10d4e9eca86eb33fb4cd87de7c05c4
+# good: [d704f1fe9f4a4ae9c9f1f9fac1e4194c34dd035b] Merge tag 'arm-soc/for-6.5/devicetree-arm64' of https://github.com/Broadcom/stblinux into soc/dt
+git bisect good d704f1fe9f4a4ae9c9f1f9fac1e4194c34dd035b
+# bad: [26588df4e5a385e5b7751997d48bdeef042cf736] Merge branch 'soc/newsoc' into for-next
+git bisect bad 26588df4e5a385e5b7751997d48bdeef042cf736
+# good: [6bce45197c25c99612a3c5e0cf041d18aa28fbf3] Merge branch 'soc/dt' into for-next
+git bisect good 6bce45197c25c99612a3c5e0cf041d18aa28fbf3
+# bad: [3b170e1653c05b067ea6ef616ece961b07714f48] arm64: dts: st: introduce stm32mp25 pinctrl files
+git bisect bad 3b170e1653c05b067ea6ef616ece961b07714f48
+# good: [c3053382574a5a829c93fb5ab0bb52d20456e745] dt-bindings: stm32: add st,stm32mp25-syscfg compatible for syscon
+git bisect good c3053382574a5a829c93fb5ab0bb52d20456e745
+# bad: [5d30d03aaf78586c37100006ba271d045f730bb5] arm64: dts: st: introduce stm32mp25 SoCs family
+git bisect bad 5d30d03aaf78586c37100006ba271d045f730bb5
+# bad: [9e4e24414cc6b45bd887d746a59691e295431ddf] arm64: introduce STM32 family on Armv8 architecture
+git bisect bad 9e4e24414cc6b45bd887d746a59691e295431ddf
+# first bad commit: [9e4e24414cc6b45bd887d746a59691e295431ddf] arm64: introduce STM32 family on Armv8 architecture
