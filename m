@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B4E6C001DF
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 21:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57FDDC001B0
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 21:07:35 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 3BFB9C433C0; Fri, 23 Jun 2023 21:06:41 +0000 (UTC)
+	id 3FECBC433C9; Fri, 23 Jun 2023 21:07:35 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E469FC43395;
-	Fri, 23 Jun 2023 21:06:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E469FC43395
+	by smtp.kernel.org (Postfix) with ESMTPS id DA19EC433C0;
+	Fri, 23 Jun 2023 21:07:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org DA19EC433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687554395; x=1719090395;
+  t=1687554445; x=1719090445;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lqDl2qv8oW6JjrVycxP7PCqyNjHBaQIvP6CwSvpsy4A=;
-  b=X+S4j3+LqiZlvDB7b6p2fAPF0VnuO/Dnot5dBErg9k4mBHXiAc8LT7lR
-   VZZu9vXMVBN85+Tywevbit7L15JbVntYgdqSj1ZzqEllm5qn3b4NOJt0D
-   MaL1oEn40Qc8phMM4Y+W4hdZGh4akuWCVg0WEbqQ78zONsV6QCiBdDmvk
-   e1q56a/XZyBa/9ZSmSoKbDP+uuiqjZ5XfhHL3iC31jYiGLGpgDL/EZ+77
-   zJUIOvGMQceOBJKPsfyyG3DzGkQB8HGQxOwSz5UfdxN0ImTyVK7RlaTRZ
-   2CJFkBEqap4Icn6vlYs7c8Yfz4+R0PoPczfyhzmucYZ3oce1RZC06U9QZ
-   Q==;
+  bh=VSgJEaXGE5mC5+J5yXqmr6+eX6G4aP7h1/R3eyDsTQg=;
+  b=H8DshNdaXhTgU77sumKx8WFCLPc8mTldf1pN419mS6xFCslamRtdg1Vu
+   OAIUwPOZBdleUXm9GI+N/NkSwe+8kSeimlXGaV2OLWt94WbckdzBZS0Lb
+   7vm8tyPQC7jGcxiuAvd1+N+m4JchqFhetazXq11ViL68w/aNdi4NMHYJS
+   hobGdwu86PiwrJ5C9qum377JSM4WWf/D8e1MVBYawhmme/mQr7OlAo0kA
+   xFsuVhhPw1w6uzIKomUm8WB5zCILpGGazPVvlV4RpINXU7fQyFCS9Ohgy
+   nkMt6y5ViBoXcddzkvNlTqi1Dn7mdnXy6e29WxLkUUwCxsMBg8XWeaowu
+   g==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="221704946"
+   d="scan'208";a="221705070"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 14:06:25 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 14:07:11 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:50:27 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:51:56 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:49:59 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:51:26 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 39/45] power: reset: at91-reset: add reset support for sam9x7 SoC
-Date: Sat, 24 Jun 2023 02:00:50 +0530
-Message-ID: <20230623203056.689705-40-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 42/45] ARM: configs: at91: enable config flags for sam9x7 SoC family
+Date: Sat, 24 Jun 2023 02:00:53 +0530
+Message-ID: <20230623203056.689705-43-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,26 +84,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add power reset support for SAM9X7 SoC.
+Enable config flags for SAM9X7 SoC for the sam9x7 SoC family.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- drivers/power/reset/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/configs/at91_dt_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 8c87eeda0fec..6c4ad81a0059 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -26,7 +26,7 @@ config POWER_RESET_AT91_POWEROFF
- config POWER_RESET_AT91_RESET
- 	tristate "Atmel AT91 reset driver"
- 	depends on ARCH_AT91
--	default SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAMA5
-+	default SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAM9X7 || SOC_SAMA5
- 	help
- 	  This driver supports restart for Atmel AT91SAM9 and SAMA5
- 	  SoCs
+diff --git a/arch/arm/configs/at91_dt_defconfig b/arch/arm/configs/at91_dt_defconfig
+index 82bcf4dc7f54..6266a000736b 100644
+--- a/arch/arm/configs/at91_dt_defconfig
++++ b/arch/arm/configs/at91_dt_defconfig
+@@ -15,6 +15,7 @@ CONFIG_ARCH_AT91=y
+ CONFIG_SOC_AT91RM9200=y
+ CONFIG_SOC_AT91SAM9=y
+ CONFIG_SOC_SAM9X60=y
++CONFIG_SOC_SAM9X7=y
+ # CONFIG_ATMEL_CLOCKSOURCE_PIT is not set
+ CONFIG_AEABI=y
+ CONFIG_UACCESS_WITH_MEMCPY=y
 -- 
 2.25.1
 
