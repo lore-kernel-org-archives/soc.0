@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7277BC0015E
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB30EB64DD
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:37:56 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 57465C433D9; Fri, 23 Jun 2023 20:37:43 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id 50220C433CC; Fri, 23 Jun 2023 20:37:56 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AD041C433CC;
-	Fri, 23 Jun 2023 20:37:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AD041C433CC
+	by smtp.kernel.org (Postfix) with ESMTPS id 0A41AC433C0;
+	Fri, 23 Jun 2023 20:37:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 0A41AC433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687552653; x=1719088653;
+  t=1687552671; x=1719088671;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tH9AVaAcxd+GcHe2T8xuzXdIyuaeVxCclQ1y7YkWXOM=;
-  b=C/XRy86yEKn3uaqZQdSzghdR7yXwM2KJ96x+AVs1fis8KdKIoAwVtnNA
-   cDeG6aIPEiAIQPH01hGeldszDrRvLSHYAf8jHc2qveT1caYUJXKFWvin7
-   RRIvy26/3F5szttyeA30Srk8TCoNYTjgKzKEo37XcP7O+DLrhfyMd8hVC
-   +dAHW2m0SwF18mZM7kk7DvoJbKEDsldGJfriRCbrwmJfk8BsdRtaaGEHu
-   OZv7WmCB4jhUenqQymLr2VgiwUn1rJkwvIJfEKaUlu9JS9s1jAQQtThNy
-   xYNkBLjO2JdqkdP4Czp7DDIXcdqDQftQjA2HhdfG276oTKZIgYeADGaOD
-   Q==;
+  bh=gvnR65uyKMk5CUoToEoiuPKzluNwCII060FV6LYqd6M=;
+  b=2YCwkfr9Qdad90uhxd4YkDucjrXNq9cr9phSCslIOZ8eJnot7WobEIht
+   udzIZ9wPgg1Ru8K1AApJRNw9NpxDAV3uf+1Yb9afnzKbYZjqseqiB8dxh
+   FTvoq+ysS3ubs/o6OfigMuj82WEjOyHr5WiaJn6QkopZ4Advsddg9CP+V
+   dPKqKqwa6xRtLHiaXP5z/QzKHLcuILMKr3E6inAX8dvsTkCerL1UGuJbx
+   SdSmiiSayTvgjCukzh5MNlclgpcrgbl//SdIkgeGTaRKmgeKZSdUPUy90
+   ycXpuMW/YfAr6cFbjEIrev0GFNmmiFkn78qwB2dt3tKNSrjB3UQ5CFHBx
+   A==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="219550882"
+   d="scan'208";a="158362329"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:37:22 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:37:49 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:37:20 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:37:48 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:36:51 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:37:21 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 12/45] dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7 binding
-Date: Sat, 24 Jun 2023 02:00:23 +0530
-Message-ID: <20230623203056.689705-13-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 13/45] dt-bindings: atmel-sysreg: add bindings for sam9x7
+Date: Sat, 24 Jun 2023 02:00:24 +0530
+Message-ID: <20230623203056.689705-14-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,25 +84,52 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add documentation for SAM9X7 reset controller.
+Add RAM controller, shutdown controller & SFR DT bindings.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- .../devicetree/bindings/reset/atmel,at91sam9260-reset.yaml       | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/arm/atmel-sysregs.txt | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-index 98465d26949e..593a13c277ab 100644
---- a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-+++ b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-@@ -22,6 +22,7 @@ properties:
-               - atmel,at91sam9g45-rstc
-               - atmel,sama5d3-rstc
-               - microchip,sam9x60-rstc
-+              - microchip,sam9x7-rstc
-               - microchip,sama7g5-rstc
-       - items:
-           - const: atmel,sama5d3-rstc
+diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+index ab1b352344ae..1e7349987d77 100644
+--- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
++++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+@@ -11,7 +11,7 @@ PIT Timer required properties:
+   shared across all System Controller members.
+ 
+ PIT64B Timer required properties:
+-- compatible: Should be "microchip,sam9x60-pit64b"
++- compatible: Should be "microchip,sam9x60-pit64b" or "microchip,sam9x7-pit64b"
+ - reg: Should contain registers location and length
+ - interrupts: Should contain interrupt for PIT64B timer
+ - clocks: Should contain the available clock sources for PIT64B timer.
+@@ -31,6 +31,7 @@ RAMC SDRAM/DDR Controller required properties:
+ 			"atmel,at91sam9g45-ddramc",
+ 			"atmel,sama5d3-ddramc",
+ 			"microchip,sam9x60-ddramc",
++			"microchip,sam9x7-ddramc",
+ 			"microchip,sama7g5-uddrc"
+ - reg: Should contain registers location and length
+ 
+@@ -89,7 +90,7 @@ SHDWC SAMA5D2-Compatible Shutdown Controller
+ 
+ required properties:
+ - compatible: should be "atmel,sama5d2-shdwc", "microchip,sam9x60-shdwc" or
+-  "microchip,sama7g5-shdwc"
++  "microchip,sama7g5-shdwc" or "microchip,sam9x7-shdwc"
+ - reg: should contain registers location and length
+ - clocks: phandle to input clock.
+ - #address-cells: should be one. The cell is the wake-up input index.
+@@ -156,7 +157,7 @@ required properties:
+ - compatible: Should be "atmel,<chip>-sfr", "syscon" or
+ 	"atmel,<chip>-sfrbu", "syscon"
+   <chip> can be "sama5d3", "sama5d4" or "sama5d2".
+-  It also can be "microchip,sam9x60-sfr", "syscon".
++  It also can be "microchip,sam9x60-sfr" or "microchip,sam9x7-sfr", "syscon".
+ - reg: Should contain registers location and length
+ 
+ 	sfr@f0038000 {
 -- 
 2.25.1
 
