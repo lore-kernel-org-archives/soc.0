@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A1EAC001B1
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92196EB64D7
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:44:57 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 2FEECC433C8; Fri, 23 Jun 2023 20:44:28 +0000 (UTC)
+	id 77704C433CB; Fri, 23 Jun 2023 20:44:57 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id BBB8BC433C0;
-	Fri, 23 Jun 2023 20:44:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BBB8BC433C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 6752AC433CD;
+	Fri, 23 Jun 2023 20:44:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6752AC433CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687553063; x=1719089063;
+  t=1687553090; x=1719089090;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LDWBjvnTTsLcekUwxDRyJLu3Qkm1EGGjQgrSvTcjXhI=;
-  b=aYgekCW3njEVbI0diVNouTCjp/FPPJMRym2pWR8N9ufP2xFR9KVnzzE4
-   J6Y8XOieqdgZyRiGc6VJInKcfJGUUppw0xK93e8mDVytGZEWFFDeudP1q
-   rZ8UA6hFpiH7biX/DppAPpgs93bOuZ+i6Ux5BHasMPA/4UOcRITJtNSDY
-   S7FdLv7Sk5IO87bzWIS3uh5huF1LPyit9EY91k8Gvx4fxR43ywZiO51OE
-   pZ0R2+cEN7Ic0WwIAwpSKrHLBSUDqwPW7/XN8dK2IamJl585uJ9aVUUzo
-   N5T39BWoUsiRayjT+EPdv3Y4PAXQE5vIkE7JXk5Xx+75mHESqcil3Mnl3
-   A==;
+  bh=JkG4wlz8/Al/l8T/H4VQ/7CYKvbmuJHYqTaJPf15ZYw=;
+  b=ZDwcuKES/QFIbFFkE8ZKfxZvyqvwV4+UTqFoArxL+TAOlMWH44KCKrlp
+   Xip4clgbM1nkMdzNP2zA/DfhESbomLJmE6S4wyAZWco2m+eVRypVrkoBx
+   YjK+e9sTlSKgZzJeCdNicajueEm4FEgvBJ2LNI7GsHSaq/osl9JfVkEUn
+   r5p5lQTCAdqJC5154RkrJmsBTJJPeR07tTsW7L7CD1hgxrkJAlWAVyGe/
+   YoVgJ4geQSyhyAyc90YMjNARxHjFwd0Bui6XI7gD9q5XWfccXFJxBbcys
+   w7C55gPcj7WYs1QCPeHjBIyAst4oLM33dJY0ycNkdQbHCN3q6uRYtJgCf
+   Q==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="217419517"
+   d="scan'208";a="217419567"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:44:21 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:44:49 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:44:07 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:44:37 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:43:38 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:44:08 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 26/45] dt-bindings: pinctrl: at91: add bindings for SAM9X7
-Date: Sat, 24 Jun 2023 02:00:37 +0530
-Message-ID: <20230623203056.689705-27-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 27/45] dt-bindings: rng: atmel,at91-trng: document sam9x7 TRNG
+Date: Sat, 24 Jun 2023 02:00:38 +0530
+Message-ID: <20230623203056.689705-28-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,34 +84,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add device tree binding for SAM9X7 pin controller.
+Add compatbile for Microchip sam9x7 TRNG.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- .../devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt         | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt
-index e8abbdad7b5d..5a3be10dcbfb 100644
---- a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt
-+++ b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt
-@@ -20,6 +20,7 @@ such as pull-up, multi drive, etc.
- Required properties for iomux controller:
- - compatible: "atmel,at91rm9200-pinctrl" or "atmel,at91sam9x5-pinctrl"
- 		or "atmel,sama5d3-pinctrl" or "microchip,sam9x60-pinctrl"
-+		or "microchip,sam9x7-pinctrl"
- - atmel,mux-mask: array of mask (periph per bank) to describe if a pin can be
-   configured in this periph mode. All the periph and bank need to be describe.
- 
-@@ -119,7 +120,7 @@ Some requirements for using atmel,at91rm9200-pinctrl binding:
- 
- For each bank the required properties are:
- - compatible: "atmel,at91sam9x5-gpio" or "atmel,at91rm9200-gpio" or
--  "microchip,sam9x60-gpio"
-+  "microchip,sam9x60-gpio" or "microchip,sam9x7-gpio"
- - reg: physical base address and length of the controller's registers
- - interrupts: interrupt outputs from the controller
- - interrupt-controller: marks the device node as an interrupt controller
+diff --git a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+index 3ce45456d867..7e4dbf5e22b4 100644
+--- a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
++++ b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+@@ -17,6 +17,7 @@ properties:
+       - enum:
+           - atmel,at91sam9g45-trng
+           - microchip,sam9x60-trng
++          - microchip,sam9x7-trng
+       - items:
+           - enum:
+               - microchip,sama7g5-trng
 -- 
 2.25.1
 
