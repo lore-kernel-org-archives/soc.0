@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B1ABC001DC
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CD71EB64D7
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:52:01 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 7F77CC433CB; Fri, 23 Jun 2023 20:50:24 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id 3D97CC433C9; Fri, 23 Jun 2023 20:52:01 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 2731AC433C0;
-	Fri, 23 Jun 2023 20:50:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 2731AC433C0
+	by smtp.kernel.org (Postfix) with ESMTPS id 3ED27C433C8;
+	Fri, 23 Jun 2023 20:51:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 3ED27C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687553419; x=1719089419;
+  t=1687553516; x=1719089516;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FQaqOrc0da577LMZqP/Fi64MeTY0WzHny0EnnioIJsQ=;
-  b=m9XlwvOjgZFDhzeivvpA8scKQ38SsnfFZVxMVky3SWZtDUYjO6A7wxwD
-   KJRoVxTaO7WB8CAYnw7u7W9ZEM8kV7ZKjbny9BVY8ebarfZEKR8uKv6W7
-   14qyYqRgwpK2Hnb0tHFPgLVIW+Tg8gVYK5+GBsOYxKsqpKBkSabCaHW3Z
-   QukNndBTOAX7QF9wqtUJHzAE2I9pPEsjbwsPkDGfij5pGqiT7oHHoGwJ8
-   KT1XE+vKt/gL/Z1HMsbiZGeHLyN5Yg/uRKXL4+Mw1P9FiWbrC+uhtAAEI
-   Ba8ApkED3rOxaxzkW3clowJzDQFq4x2Rk471LasMGaOOKoUes3A0bQ/Z4
-   Q==;
+  bh=3CL7AMEd4iWfhNY7rztjIZf6Et4SGAj+Z92S97fPh/g=;
+  b=AQVRBbvqI0X90XPuQCvQYydLBlqnMS97oq+SX9WAsT8QQYBG6noGwv7w
+   dTmVqM1jzqDx78pLIrPLJd+P5EAvEReSlHFfbG7S6BIgbybqBSN5nFbR4
+   YW3T62vN9Zfj6O7dahfxXATUfvkqBsveGZyzKAWOPl3NsmfL70raWqCKS
+   LHyAOipH+Ep/8aJFoBslCd6Gtgw4Eai6G7+oIHZ0tmEEMmyHKPjfETaiM
+   S+/qup6X17RLbXUYOYbCjb5x/yvWwY1SbCMkCOGISvGQid6syCfqM3l8v
+   KBNvaUl7GarjU0rQX+FDaQftnYgS2cV3N61yDO5JtZ7q0+xPcFothtGWh
+   g==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="231891639"
+   d="scan'208";a="221703423"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:50:16 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:51:55 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:49:59 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:51:26 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:49:30 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:50:57 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 38/45] power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
-Date: Sat, 24 Jun 2023 02:00:49 +0530
-Message-ID: <20230623203056.689705-39-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 41/45] ARM: at91: Kconfig: add config flag for SAM9X7 SoC
+Date: Sat, 24 Jun 2023 02:00:52 +0530
+Message-ID: <20230623203056.689705-42-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,25 +84,65 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Use sam9x7 pmc's compatible to lookup for in the SHDWC driver.
+Add config flag for sam9x7 SoC.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/mach-at91/Kconfig | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-index d8ecffe72f16..d0f29b99f25e 100644
---- a/drivers/power/reset/at91-sama5d2_shdwc.c
-+++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-@@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] = {
- 	{ .compatible = "atmel,sama5d2-pmc" },
- 	{ .compatible = "microchip,sam9x60-pmc" },
- 	{ .compatible = "microchip,sama7g5-pmc" },
-+	{ .compatible = "microchip,sam9x7-pmc" },
- 	{ /* Sentinel. */ }
- };
+diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
+index 3dd9e718661b..4e9cb30f5091 100644
+--- a/arch/arm/mach-at91/Kconfig
++++ b/arch/arm/mach-at91/Kconfig
+@@ -143,11 +143,28 @@ config SOC_SAM9X60
+ 	help
+ 	  Select this if you are using Microchip's SAM9X60 SoC
  
++config SOC_SAM9X7
++	bool "SAM9X7"
++	depends on ARCH_MULTI_V5
++	select ATMEL_AIC5_IRQ
++	select ATMEL_PM if PM
++	select ATMEL_SDRAMC
++	select CPU_ARM926T
++	select HAVE_AT91_USB_CLK
++	select HAVE_AT91_GENERATED_CLK
++	select HAVE_AT91_SAM9X60_PLL
++	select MEMORY
++	select PINCTRL_AT91
++	select SOC_SAM_V4_V5
++	select SRAM if PM
++	help
++	  Select this if you are using Microchip's SAM9X7 SoC
++
+ comment "Clocksource driver selection"
+ 
+ config ATMEL_CLOCKSOURCE_PIT
+ 	bool "Periodic Interval Timer (PIT) support"
+-	depends on SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAMA5
++	depends on SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAM9X7 || SOC_SAMA5
+ 	default SOC_AT91SAM9 || SOC_SAMA5
+ 	select ATMEL_PIT
+ 	help
+@@ -157,7 +174,7 @@ config ATMEL_CLOCKSOURCE_PIT
+ 
+ config ATMEL_CLOCKSOURCE_TCB
+ 	bool "Timer Counter Blocks (TCB) support"
+-	default SOC_AT91RM9200 || SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAMA5
++	default SOC_AT91RM9200 || SOC_AT91SAM9 || SOC_SAM9X60 || SOC_SAM9X7 || SOC_SAMA5
+ 	select ATMEL_TCB_CLKSRC
+ 	help
+ 	  Select this to get a high precision clocksource based on a
+@@ -168,7 +185,7 @@ config ATMEL_CLOCKSOURCE_TCB
+ 
+ config MICROCHIP_CLOCKSOURCE_PIT64B
+ 	bool "64-bit Periodic Interval Timer (PIT64B) support"
+-	default SOC_SAM9X60 || SOC_SAMA7
++	default SOC_SAM9X60 || SOC_SAM9X7 || SOC_SAMA7
+ 	select MICROCHIP_PIT64B
+ 	help
+ 	  Select this to get a high resolution clockevent (SAM9X60) or
 -- 
 2.25.1
 
