@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFEF3C0015E
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 616DFEB64DD
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:47:41 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id B3020C43391; Fri, 23 Jun 2023 20:47:10 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id 1FB0AC433AD; Fri, 23 Jun 2023 20:47:41 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 792C8C433C8;
-	Fri, 23 Jun 2023 20:47:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 792C8C433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id D9BA0C433C8;
+	Fri, 23 Jun 2023 20:47:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D9BA0C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687553225; x=1719089225;
+  t=1687553256; x=1719089256;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fNyeswamikUAfj8qMnAnax4MsblCkT848RthFZXCwQM=;
-  b=OgMnSk+7XPlJkhFOcqDj4STG3kzDOf5cxiaDpOm3E6Q5Laz/bMa7u/qI
-   rxxoCThl0W4KgZqDRUpu2bC9VFWe0m1gaPAxStcciiM6mPo+RTyh/2kzb
-   8HYK5rf/YkJhL3MIqIcMfmyZ77teKSqBPh8xltcGGvjLpAt0tA/UsZin3
-   LWZ9potwLWDLU4yT+uLLaHkO/CLbyKNsjz9FHMatz6C03ds5W+QoiRmTS
-   gKiL1jGIhqgloClEZ0x0cG78hJeK7WcunZUSsN+BcvJjxpbyaHr94GruN
-   G8ABMPwY6zS+aaHDPwX/PSzFJzgWWRNM/Sp+90CWK+KSbkn4UrTcVGnzj
+  bh=blhyJaBG9pAvmN8wTYuGwuXwRrYHv3oqHCwBY9ZWXns=;
+  b=EYmjK9zHHl//IlXl0AUe+lx04j2JhHv4j5+ux5UMLDhPZrSFNurEQlKR
+   Na3/IoFTY9WkI+jNp3q3/POW07u2Qj/dedMxIfz3jraId8lsRQvz4AhoV
+   IbMyy0bVjFAYyhh+hTKBXcvI4sCYQphmGAk9P54PxBEXLL+SdGmFIYZmJ
+   JACD8Z/RTnUe16TZCp2X0nTjvp0io2WrEzypsH7+NW623k9RV/IjqXguZ
+   xB8oGk2lUS4jnRY9+TyKOu1w98P8CzhvNrg4aYtFAdYobOo4si4vybW9e
+   /X0WLMTrL0n5d2/v/kV0BVaKXeAn3gOUhsyKvuvX2wOqMe55zRKeuJT4m
    Q==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="158363454"
+   d="scan'208";a="219552217"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:47:04 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:47:33 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:47:03 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:47:31 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:46:34 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:47:04 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 32/45] spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7 compatible
-Date: Sat, 24 Jun 2023 02:00:43 +0530
-Message-ID: <20230623203056.689705-33-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 33/45] dt-bindings: usb: atmel: Update DT bindings documentation for sam9x7
+Date: Sat, 24 Jun 2023 02:00:44 +0530
+Message-ID: <20230623203056.689705-34-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,25 +84,47 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add sam9x7 compatible to DT bindings documentation.
+Add sam9x7 bindings.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/usb/atmel-usb.txt | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-index 6c57dd6c3a36..bdc42eeacba4 100644
---- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-@@ -19,6 +19,7 @@ properties:
-       - const: atmel,at91rm9200-spi
-       - items:
-           - const: microchip,sam9x60-spi
-+          - const: microchip,sam9x7-spi
-           - const: atmel,at91rm9200-spi
+diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+index 12183ef47ee4..6359af0123bf 100644
+--- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
++++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+@@ -3,8 +3,8 @@ Atmel SOC USB controllers
+ OHCI
  
-   reg:
+ Required properties:
+- - compatible: Should be "atmel,at91rm9200-ohci" for USB controllers
+-   used in host mode.
++ - compatible: Should be "atmel,at91rm9200-ohci" or "microchip,sam9x7-ohci"
++   for USB controllers used in host mode.
+  - reg: Address and length of the register set for the device
+  - interrupts: Should contain ohci interrupt
+  - clocks: Should reference the peripheral, host and system clocks
+@@ -30,8 +30,8 @@ usb0: ohci@500000 {
+ EHCI
+ 
+ Required properties:
+- - compatible: Should be "atmel,at91sam9g45-ehci" for USB controllers
+-   used in host mode.
++ - compatible: Should be "atmel,at91sam9g45-ehci" or "microchip,sam9x7-ehci"
++   for USB controllers used in host mode.
+  - reg: Address and length of the register set for the device
+  - interrupts: Should contain ehci interrupt
+  - clocks: Should reference the peripheral and the UTMI clocks
+@@ -87,6 +87,7 @@ Required properties:
+ 	       "atmel,at91sam9g45-udc"
+ 	       "atmel,sama5d3-udc"
+ 	       "microchip,sam9x60-udc"
++	       "microchip,sam9x7-udc"
+ 	       "microchip,lan9662-udc"
+ 	       For "microchip,lan9662-udc" the fallback "atmel,sama5d3-udc"
+ 	       is required.
 -- 
 2.25.1
 
