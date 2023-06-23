@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E44DC04A94
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39A79C0015E
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:39:52 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 246F0C433C9; Fri, 23 Jun 2023 20:39:31 +0000 (UTC)
+	id 16952C433CD; Fri, 23 Jun 2023 20:39:52 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id E8C6DC433C8;
-	Fri, 23 Jun 2023 20:39:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E8C6DC433C8
+	by smtp.kernel.org (Postfix) with ESMTPS id 04860C433C0;
+	Fri, 23 Jun 2023 20:39:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 04860C433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687552766; x=1719088766;
+  t=1687552788; x=1719088788;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BghAzpBOsD/G8yJhbLfihqjeVjiLcTMvY+1q984gv6Q=;
-  b=v9r96wl9FZPMAi5YYXyy2fUqt6d+QY2v4CbabL/y3+nDU4uJj9iYLyOH
-   RphuORrpACd0u7v6whgI9UVciDOIEqft9kzBF4oB0NvBPuINU7xjiUD/3
-   +oFDy6PdM1ZYo+B0/iQ1rWN2GPkfYFOfc49hKdZsY7DkGuCAc3IuSA+EQ
-   LsCVLLX858nYIPX6yuwfwWa0J1vxC6AV3JEKom7UoVja7qulwtYNHmHoC
-   UhpOXhpWV4TU0WRKmcVcmRdwRSX1KpFq+BRtPMRDz+LLLH6fuEcrdR35p
-   ub3tWQJP8QX0QioNOOJTLdmVtKps/saDMO7O9qMBOfeHGT8El9Tw/NgWL
-   A==;
+  bh=BdWVxRk/sfsAxZ1mW04Nt1w0W11icyyMsW/XnDjycFE=;
+  b=QqWrDhWQ2dz2s+8iTXx7KKE69G8zF+shm+1GzIrc7K3Om7xOp/q2wcvd
+   YyiRIS0YODP/+ooIz6rZkniYA0jk22sibl/Y6jzJ7G5dNml8OpmL5aAbH
+   x09SCeZxD9wFVm3Osv14ShE9cQNUrVtcm2bXpoSExT50lXJO3Q/aDuXWc
+   QKIk49hY3v/PL6P4bO0Aykp5Gc/GyyWBvjh3Uh2FDHArPyGyIZLRlmKvs
+   yVYkfyIrPwbYfjle0hEsOTFVlyp6YPArHOrntPNop7/wTjQ22a9KVsDu3
+   4PjD5nnUwyfAZ4jreKtPYpHXlswcx7VugrzpLPaYF1sO4pmr95X9Iht+H
+   w==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="219551128"
+   d="scan'208";a="220216874"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:39:23 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:39:47 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:39:17 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:39:46 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:38:48 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:39:18 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 16/45] dt-bindings: crypto: add bindings for sam9x7 in Atmel TDES
-Date: Sat, 24 Jun 2023 02:00:27 +0530
-Message-ID: <20230623203056.689705-17-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 17/45] dt-bindings: dmaengine: at_xdmac: add compatible with microchip,sam9x7
+Date: Sat, 24 Jun 2023 02:00:28 +0530
+Message-ID: <20230623203056.689705-18-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,29 +84,28 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add DT bindings for atmel TDES.
+Add compatible for sam9x7.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- .../devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml   | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/dma/atmel-xdma.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-index 3d6ed24b1b00..0e71bfd32a1c 100644
---- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-+++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-@@ -12,7 +12,10 @@ maintainers:
+diff --git a/Documentation/devicetree/bindings/dma/atmel-xdma.txt b/Documentation/devicetree/bindings/dma/atmel-xdma.txt
+index 510b7f25ba24..f672556ea715 100644
+--- a/Documentation/devicetree/bindings/dma/atmel-xdma.txt
++++ b/Documentation/devicetree/bindings/dma/atmel-xdma.txt
+@@ -2,8 +2,8 @@
  
- properties:
-   compatible:
--    const: atmel,at91sam9g46-tdes
-+    oneOf:
-+      - items:
-+          - const: atmel,at91sam9g46-tdes
-+          - const: microchip,sam9x7-tdes
- 
-   reg:
-     maxItems: 1
+ * XDMA Controller
+ Required properties:
+-- compatible: Should be "atmel,sama5d4-dma", "microchip,sam9x60-dma" or
+-  "microchip,sama7g5-dma".
++- compatible: Should be "atmel,sama5d4-dma", "microchip,sam9x60-dma",
++  "microchip,sam9x7-dma" or "microchip,sama7g5-dma".
+ - reg: Should contain DMA registers location and length.
+ - interrupts: Should contain DMA interrupt.
+ - #dma-cells: Must be <1>, used to represent the number of integer cells in
 -- 
 2.25.1
 
