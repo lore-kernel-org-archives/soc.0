@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 518E0EB64DD
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8493EB64D7
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:46:46 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 33C94C433AB; Fri, 23 Jun 2023 20:46:16 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	id 67AA8C43391; Fri, 23 Jun 2023 20:46:46 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 71913C433CA;
-	Fri, 23 Jun 2023 20:46:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 71913C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 8F768C433CD;
+	Fri, 23 Jun 2023 20:46:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8F768C433CD
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687553167; x=1719089167;
+  t=1687553198; x=1719089198;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=a1xnWCYuB9DCSfx0+SvLtwQB8Hh5Ow+g0UBFkP7Cuoo=;
-  b=tPz5JY97oxTFaW/cTm4LA4+khUVo8mMU05HiDdu7+88jB0CeEKap9RAq
-   jICWtUCEMUwQtfQ3rM3P4zmvfoLMh4ZiXXfe0WHRZZHBV4bvR42KyAu/M
-   csg7ynqbnG4Z70gqkaig/mPMayqG3nx2xfttoILaERckEwA8hx5eL/Qmf
-   eEMZom3Vd2Mj7Qiao9Ek/b7/oniN7EHu+7ysdMrezyDD8+EOijsCewLdU
-   o/t+W7zh9MUfYsRnsx7Dzw+ayBrUiuR5DvzZRDWImLYEUvEzHFDvWo68T
-   Ea+nlb8n5C1/yxGIcAtIRFggUOnNEVMBNL4X8/goTRA3cD1K+p5JQ5WXa
-   w==;
+  bh=o7crmmjGyjBkSmcJC3SA7Zc95Mth14OJpn76dYKAtWg=;
+  b=bHovXRhJujPDxvqRV9Q2EQ/gKJ6qET5/n3Q81H4xCaxUrvVAdg/XrrEp
+   0j2Zs6mB6EE/RkAe7FqX0llc5sr2+iAtkrv5pLuJmsrnGWQOwCfBnUAc1
+   IqDpSfGZPVGea/OQYlgqiFLcI+X/l7SnBADUS3ZU9jJbeO1qsfvcEr7Em
+   NdPglNwk6HYETuSd2VLnSNP+XjsTu9hqs5bG3iTiah1IwqE8uDKsreCTa
+   KaP/hWyjkpusONcLJTdeaLcKfE7ImY7phG6FcNefCRsph3NStw5O+gU5k
+   n/kR7jLp8zTMsYpzNxqrsX/UYNRFRncnyRVcrDnfooWXeFeJ858Q0pDI0
+   g==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="219551820"
+   d="scan'208";a="158363343"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:46:05 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:46:35 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:46:05 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:46:34 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:45:35 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:46:05 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 30/45] dt-bindings: serial: atmel,at91-usart: add compatible for sam9x7
-Date: Sat, 24 Jun 2023 02:00:41 +0530
-Message-ID: <20230623203056.689705-31-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 31/45] dt-bindings: atmel-classd: add sam9x7 compatible
+Date: Sat, 24 Jun 2023 02:00:42 +0530
+Message-ID: <20230623203056.689705-32-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -88,30 +88,25 @@ Add sam9x7 compatible to DT bindings documentation.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ .../devicetree/bindings/sound/atmel,sama5d2-classd.yaml      | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-index 30b2131b5860..d836224f99c6 100644
---- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-+++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-@@ -17,6 +17,7 @@ properties:
-           - atmel,at91rm9200-usart
-           - atmel,at91sam9260-usart
-           - microchip,sam9x60-usart
-+          - microchip,sam9x7-usart
-       - items:
-           - const: atmel,at91rm9200-dbgu
-           - const: atmel,at91rm9200-usart
-@@ -26,6 +27,8 @@ properties:
-       - items:
-           - const: microchip,sam9x60-dbgu
-           - const: microchip,sam9x60-usart
-+          - const: microchip,sam9x7-dbgu
-+          - const: microchip,sam9x7-usart
-           - const: atmel,at91sam9260-dbgu
-           - const: atmel,at91sam9260-usart
+diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
+index 43d04702ac2d..d53addbcd41b 100644
+--- a/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
++++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.yaml
+@@ -18,7 +18,10 @@ description:
  
+ properties:
+   compatible:
+-    const: atmel,sama5d2-classd
++    oneOf:
++      - items:
++          - const: atmel,sama5d2-classd
++          - const: microchip,sam9x7-classd
+ 
+   reg:
+     maxItems: 1
 -- 
 2.25.1
 
