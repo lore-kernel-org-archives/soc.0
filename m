@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7E61C0015E
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E44DC04A94
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:39:31 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BD334C433CA; Fri, 23 Jun 2023 20:39:12 +0000 (UTC)
+	id 246F0C433C9; Fri, 23 Jun 2023 20:39:31 +0000 (UTC)
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 9FE17C433CB;
-	Fri, 23 Jun 2023 20:39:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 9FE17C433CB
+	by smtp.kernel.org (Postfix) with ESMTPS id E8C6DC433C8;
+	Fri, 23 Jun 2023 20:39:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org E8C6DC433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687552745; x=1719088745;
+  t=1687552766; x=1719088766;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=e9oA8mTganAUO15ozItRduyArWzrex6gB8ZPH5UXZuI=;
-  b=bwhSsVIq2drcDCkcXvuo9Udps+OlQobjct7pdG+M6XdQlyyJq3xSL8kU
-   9/Zdlp6iPhX/fWWwsKu7UOq96q+ZU4FVGD2AvJFW6jYKVP1suQyq2y8KN
-   02p+ChpCUcmTiQTah/Pal4iC+vZtcdw6UbF0F4gNK39N35lLsI2jgFcXO
-   D2iM30mjbFlojJvgVnoYpPlYwOOTux6SjyrDBhdSxfbg0H7AVvIXTF/om
-   nYCXhksT/24ZmGNu80EObpLY/C2jd/VavNlYA77OFZN3ia7QdKJY9e5/D
-   b9UDwF319Y8r/seXNp4fYL1vnhM3a1KCLu73I0E2PSyF0ruxlmdJAgiHU
-   w==;
+  bh=BghAzpBOsD/G8yJhbLfihqjeVjiLcTMvY+1q984gv6Q=;
+  b=v9r96wl9FZPMAi5YYXyy2fUqt6d+QY2v4CbabL/y3+nDU4uJj9iYLyOH
+   RphuORrpACd0u7v6whgI9UVciDOIEqft9kzBF4oB0NvBPuINU7xjiUD/3
+   +oFDy6PdM1ZYo+B0/iQ1rWN2GPkfYFOfc49hKdZsY7DkGuCAc3IuSA+EQ
+   LsCVLLX858nYIPX6yuwfwWa0J1vxC6AV3JEKom7UoVja7qulwtYNHmHoC
+   UhpOXhpWV4TU0WRKmcVcmRdwRSX1KpFq+BRtPMRDz+LLLH6fuEcrdR35p
+   ub3tWQJP8QX0QioNOOJTLdmVtKps/saDMO7O9qMBOfeHGT8El9Tw/NgWL
+   A==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="220216762"
+   d="scan'208";a="219551128"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:39:02 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:39:23 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:38:48 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:39:17 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:38:20 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:38:48 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 15/45] dt-bindings: crypto: add bindings for sam9x7 in Atmel SHA
-Date: Sat, 24 Jun 2023 02:00:26 +0530
-Message-ID: <20230623203056.689705-16-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 16/45] dt-bindings: crypto: add bindings for sam9x7 in Atmel TDES
+Date: Sat, 24 Jun 2023 02:00:27 +0530
+Message-ID: <20230623203056.689705-17-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,26 +84,26 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add DT bindings for atmel SHA.
+Add DT bindings for atmel TDES.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- .../devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml    | 5 ++++-
+ .../devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml   | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-index ee2ffb034325..6a54cb79b6e2 100644
---- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-+++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
+index 3d6ed24b1b00..0e71bfd32a1c 100644
+--- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
++++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
 @@ -12,7 +12,10 @@ maintainers:
  
  properties:
    compatible:
--    const: atmel,at91sam9g46-sha
+-    const: atmel,at91sam9g46-tdes
 +    oneOf:
 +      - items:
-+          - const: atmel,at91sam9g46-sha
-+          - const: microchip,sam9x7-sha
++          - const: atmel,at91sam9g46-tdes
++          - const: microchip,sam9x7-tdes
  
    reg:
      maxItems: 1
