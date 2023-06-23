@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92196EB64D7
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EC41EB64DD
+	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 20:45:29 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 77704C433CB; Fri, 23 Jun 2023 20:44:57 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	id 86917C433D9; Fri, 23 Jun 2023 20:45:29 +0000 (UTC)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6752AC433CD;
-	Fri, 23 Jun 2023 20:44:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6752AC433CD
+	by smtp.kernel.org (Postfix) with ESMTPS id 8CBAEC433C9;
+	Fri, 23 Jun 2023 20:45:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8CBAEC433C9
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687553090; x=1719089090;
+  t=1687553119; x=1719089119;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JkG4wlz8/Al/l8T/H4VQ/7CYKvbmuJHYqTaJPf15ZYw=;
-  b=ZDwcuKES/QFIbFFkE8ZKfxZvyqvwV4+UTqFoArxL+TAOlMWH44KCKrlp
-   Xip4clgbM1nkMdzNP2zA/DfhESbomLJmE6S4wyAZWco2m+eVRypVrkoBx
-   YjK+e9sTlSKgZzJeCdNicajueEm4FEgvBJ2LNI7GsHSaq/osl9JfVkEUn
-   r5p5lQTCAdqJC5154RkrJmsBTJJPeR07tTsW7L7CD1hgxrkJAlWAVyGe/
-   YoVgJ4geQSyhyAyc90YMjNARxHjFwd0Bui6XI7gD9q5XWfccXFJxBbcys
-   w7C55gPcj7WYs1QCPeHjBIyAst4oLM33dJY0ycNkdQbHCN3q6uRYtJgCf
-   Q==;
+  bh=wbDKJvws7DHEcqSVmZREfaRKSyZQlG7Jb80ahWLRLHI=;
+  b=Q1SaMNUtbccWGfxfdvo5lYMQSUFcqqp0AbhmF8rcoqeVj4OFAWoMiMQE
+   ZQ9dcswl1kc9AjSvWwwpB3Jp2nizsjye6+rjG3ifBotN5KdkMwFnT3J2c
+   EyXerYFBKmo6MrDFunXFf76/IcYZvd2Fo8XdtG6gikLmpdadtci7wA7KS
+   v0t+asU/k9k1zFaS6SOq6l2ahJW6zqH/+iGaz5RLDsg5BRZaDbllHgce8
+   hCd5scshyA7UXzBLKxz6H0l3zKlqFY1hSrDWe0JrFc5tNMmGmb0QX8SM4
+   j4v1A0/9+As9EqpyjpVzLGxark7y9hmph9amfE8JEyvkqZHP50BcdWNd8
+   g==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="217419567"
+   d="scan'208";a="231891135"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:44:49 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:45:12 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:44:37 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:45:05 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:44:08 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:44:38 -0700
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 List-Id: <soc.lore.kernel.org>
 To: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,9 @@ CC: <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
 	<balamanikandan.gunasundar@microchip.com>, <manikandan.m@microchip.com>,
 	<dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
 	<balakrishnan.s@microchip.com>
-Subject: [PATCH v2 27/45] dt-bindings: rng: atmel,at91-trng: document sam9x7 TRNG
-Date: Sat, 24 Jun 2023 02:00:38 +0530
-Message-ID: <20230623203056.689705-28-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 28/45] dt-bindings: rtc: at91rm9200: add sam9x7 compatible
+Date: Sat, 24 Jun 2023 02:00:39 +0530
+Message-ID: <20230623203056.689705-29-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -84,25 +84,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add compatbile for Microchip sam9x7 TRNG.
+Add compatible for SAM9X7 RTC.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml | 1 +
+ Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
-index 3ce45456d867..7e4dbf5e22b4 100644
---- a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
-+++ b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
-@@ -17,6 +17,7 @@ properties:
-       - enum:
-           - atmel,at91sam9g45-trng
-           - microchip,sam9x60-trng
-+          - microchip,sam9x7-trng
-       - items:
-           - enum:
-               - microchip,sama7g5-trng
+diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+index 4d2bef15fb7a..e15872bbdd7e 100644
+--- a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+@@ -20,6 +20,7 @@ properties:
+       - atmel,sama5d4-rtc
+       - atmel,sama5d2-rtc
+       - microchip,sam9x60-rtc
++      - microchip,sam9x7-rtc
+       - microchip,sama7g5-rtc
+ 
+   reg:
 -- 
 2.25.1
 
