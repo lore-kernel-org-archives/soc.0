@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ABB1EB64DD
-	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 08:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF343C001DD
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 08:27:22 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 219FCC433C8; Sat, 24 Jun 2023 08:24:52 +0000 (UTC)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	id 90F7EC433AB; Sat, 24 Jun 2023 08:27:22 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 7AF84C433A9
-	for <soc@kernel.org>; Sat, 24 Jun 2023 08:24:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 7AF84C433A9
+	by smtp.kernel.org (Postfix) with ESMTPS id CE8ACC433C0
+	for <soc@kernel.org>; Sat, 24 Jun 2023 08:27:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org CE8ACC433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so30566066b.2
-        for <soc@kernel.org>; Sat, 24 Jun 2023 01:24:47 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-9883123260fso151874166b.0
+        for <soc@kernel.org>; Sat, 24 Jun 2023 01:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687595085; x=1690187085;
+        d=linaro.org; s=google; t=1687595231; x=1690187231;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3/1MyAMnY+Za4p1Z3b6q8vQY3JjDEV6jQ0tLk7ro11c=;
-        b=vEp3OTxw3d1bxXmcrGbjPTZvGdATt4kPb7wTR8P+STWcYy+IGxBjmsrwXHlsdl+475
-         D3HkXaVWkfKkJd8Y1v8mJIJNd7MKu+DSOBpGH1R/wozFufpVZ4WggR5v+D40MBe1DSSC
-         xIxqP9drpnReATR6sXOtXazHadpPvVE4WXYIX8p8txCkuf3z8X9pyH76wlzCm+qOtyk4
-         gvPYv/GZefHyoz4e7fucZIFONAUje8+rTmDzHlmEROrBOi8nsQuF66lLuDZBLi0jIYoP
-         HsEXJZtaKyd0E+mlUCbFPj9PypWzwjLssl0KqaqVaVTXlEmAzs4cO8YEpP6UmKpo1O/B
-         OPRA==
+        bh=gJlPeAcJkflrsYHeqhAxG1xpnKkKctKx9VK4XOcUSNU=;
+        b=Kkt2tu0fZVyjdnIT+9aWz+2dC0xTVD3lu4yLwV0kQqZHuhz8Ro07GQdKqy6N1bU9f6
+         pQSHbTPMPW6t676hrqq5z5c4/jC1zAayJMvQIsQvygTbtQ1Ast7+Cs+Sp/qYXZDLJHWw
+         XBE4dYbEQtIeIRkumTncrrM+RY7bqG5QLJTYAogks8em7F36iQZDlMeHdRvWBibNfJyB
+         5GEQ4ZMC7udapD1WxMM6AWpT4cPZ2HWl0da/r/wrXgxUiY6gz4DHtTZ2kx7RHe9LGGjI
+         QKd+aWA5QHSnmV6Qgt2UIMZ5Ylb44sRp4CxcC3kLBCXNXnUnEVR8y9x1idlk9Lr31Gd9
+         XPIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687595085; x=1690187085;
+        d=1e100.net; s=20221208; t=1687595231; x=1690187231;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/1MyAMnY+Za4p1Z3b6q8vQY3JjDEV6jQ0tLk7ro11c=;
-        b=KqW3jsdYbJogV+vaqZpzUz8fym/TjD/eRMHJA0YVwhZVd9pqBu/2Tagrox99dM/his
-         Cy7ciY++5Ful5rDAM73V+PtcZA2aoTQQBk3otVbIBV+r8bMdHjnnihsWDKC1Kj0w+I9d
-         a+44jKqE40dGUSGtjFB7qKnJm+oVO8JPCeamhG9mzREBc+8mtCbtlM3+pxNRwqG3GnJa
-         RixKRbvMi5zjh8XOssn4zXiOm8ChG+JsSR51Q1ugZ5FFjUiDwqQaYWKLcHhnNZoMN3dK
-         9AIlEOOb+KmF7PYnpY7s/7fI5p1ytwM99Z0xWPtlaIdtVDFqrO3CYzHxLsw/SBAT1iDx
-         RLww==
-X-Gm-Message-State: AC+VfDwD21QJNp7wvlZBaXogPLsrTtNG+KYToUUnopueFf8GOoVENO+7
-	ZVJPeUNgbWzSstm21Ck/z4p6Wg==
-X-Google-Smtp-Source: ACHHUZ6cYsMw0LIHQWddUSwohWm7hR0wZwIOc//Ha6WVz0kylI9t5vWz4f/hmDOCHTFgPVqzAQ5yVQ==
-X-Received: by 2002:a17:907:3f87:b0:965:6075:d100 with SMTP id hr7-20020a1709073f8700b009656075d100mr20942422ejc.39.1687595085678;
-        Sat, 24 Jun 2023 01:24:45 -0700 (PDT)
+        bh=gJlPeAcJkflrsYHeqhAxG1xpnKkKctKx9VK4XOcUSNU=;
+        b=WEgumhh9g9IaxJANYO1tcfcTDfYq4OcV3wAJNDAQ3/KBf6q7wxuhtRsTqBG6mXBaCt
+         YCsdg2O9duy2+iRPYK4X2aw9LRpBR4j5byYjQiIiZZuBNnewed7D8tFgO9lf2YDA7Js9
+         q+D6FLAbqRyp4/nTB/2WU2WUOtixxSaF9tgQlbx1cdxP8GFr0J+C/QaV/GEV8LNOk1Bg
+         lRNyCr4kwJkc9SwVtPItCAg8BW8hZjUEmWPSpWCGL6ooXKuuteM64AdPmOdw0AunBbQQ
+         VzQG/wko8gil1icxez8YASikt1pzEd18jyz6U40jiNmLKeQTqTlWxRvQz73NXVQ1W0v2
+         Raaw==
+X-Gm-Message-State: AC+VfDzsoHDNd9iszsxnuMpBxfuHvrI+C+yZusZYj099L0p+I/q+6AQ7
+	ZCvH5AkaH2I8iBz0pLG8J7P5kw==
+X-Google-Smtp-Source: ACHHUZ5t7epZFC28S4hxtPyy+RCHfLvODV3nPC4aL8/psJFMdpVy5ABk2SDosvlu0zr3308+wJnq2w==
+X-Received: by 2002:a17:907:8a03:b0:988:acb4:f63 with SMTP id sc3-20020a1709078a0300b00988acb40f63mr12986422ejc.74.1687595230874;
+        Sat, 24 Jun 2023 01:27:10 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id re3-20020a170906d8c300b00977ca5de275sm639460ejb.13.2023.06.24.01.24.40
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709060c4600b0098654d3c270sm635400ejf.52.2023.06.24.01.27.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 01:24:45 -0700 (PDT)
-Message-ID: <c9cbac9c-40dd-bb40-0d92-e25e767f486c@linaro.org>
-Date: Sat, 24 Jun 2023 10:24:39 +0200
+        Sat, 24 Jun 2023 01:27:10 -0700 (PDT)
+Message-ID: <caff28bc-8824-f173-99ea-267dd26e5cbc@linaro.org>
+Date: Sat, 24 Jun 2023 10:27:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 26/45] dt-bindings: pinctrl: at91: add bindings for
- SAM9X7
+Subject: Re: [PATCH v2 17/45] dt-bindings: dmaengine: at_xdmac: add compatible
+ with microchip,sam9x7
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Varshini Rajendran <varshini.rajendran@microchip.com>,
@@ -92,29 +92,32 @@ Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
  dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
  balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-27-varshini.rajendran@microchip.com>
+ <20230623203056.689705-18-varshini.rajendran@microchip.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-27-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-18-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Add device tree binding for SAM9X7 pin controller.
+> Add compatible for sam9x7.
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->  .../devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt         | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/dma/atmel-xdma.txt | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt
-> index e8abbdad7b5d..5a3be10dcbfb 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt
-> +++ b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pinctrl.txt
-> @@ -20,6 +20,7 @@ such as pull-up, multi drive, etc.
->  Required properties for iomux controller:
->  - compatible: "atmel,at91rm9200-pinctrl" or "atmel,at91sam9x5-pinctrl"
->  		or "atmel,sama5d3-pinctrl" or "microchip,sam9x60-pinctrl"
-> +		or "microchip,sam9x7-pinctrl"
+> diff --git a/Documentation/devicetree/bindings/dma/atmel-xdma.txt b/Documentation/devicetree/bindings/dma/atmel-xdma.txt
+> index 510b7f25ba24..f672556ea715 100644
+> --- a/Documentation/devicetree/bindings/dma/atmel-xdma.txt
+> +++ b/Documentation/devicetree/bindings/dma/atmel-xdma.txt
+> @@ -2,8 +2,8 @@
+>  
+>  * XDMA Controller
+>  Required properties:
+> -- compatible: Should be "atmel,sama5d4-dma", "microchip,sam9x60-dma" or
+> -  "microchip,sama7g5-dma".
+> +- compatible: Should be "atmel,sama5d4-dma", "microchip,sam9x60-dma",
+> +  "microchip,sam9x7-dma" or "microchip,sama7g5-dma".
 
 That's not what your DTS is saying. NAK.
 
