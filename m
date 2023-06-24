@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04FDAC04E69
-	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 07:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7054C0015E
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 07:59:45 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id DEA9DC433CC; Sat, 24 Jun 2023 07:59:11 +0000 (UTC)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	id A114BC433BA; Sat, 24 Jun 2023 07:59:45 +0000 (UTC)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id B8274C43397
-	for <soc@kernel.org>; Sat, 24 Jun 2023 07:59:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org B8274C43397
+	by smtp.kernel.org (Postfix) with ESMTPS id D664CC433C0
+	for <soc@kernel.org>; Sat, 24 Jun 2023 07:59:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org D664CC433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-51cb40f13f6so815119a12.2
-        for <soc@kernel.org>; Sat, 24 Jun 2023 00:59:01 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-98377c5d53eso159360466b.0
+        for <soc@kernel.org>; Sat, 24 Jun 2023 00:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593540; x=1690185540;
+        d=linaro.org; s=google; t=1687593579; x=1690185579;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2RPXidMTrzBctnlI68UKYA3FxvKEi+gyM/+eAniSxHU=;
-        b=biIFt0+5HLIeQJNObq9fw50IfGs4F5DFXzw8WQaXnv6Hdp3USYZJNL8PssYy6o2vEe
-         uTNazxcXxlW9nYoOgc1ECAXqLXI0Fy6OTpXxKHrO5KBGlvJvfFS0T1Yy1tTOfdnYqT7s
-         cMkaa3hPEAmXD6ANC4ih3z1UVMiivHFKHKNCNhNRtq9hQ7bMkaNVdI+n4Hlx2BE7yzQO
-         jx50D2lQ67d60SVIUDBnCbxdMAAwJOdFf8iKs6wYFG3VWtA2pwPKLl5H6eldXBBdXINm
-         rY7xzFgOPvVvf6qqwYEsEXTKFvEIRltIXoBmYft7pQBxV4w1cue28E4Voq0fdjydEvEn
-         MpcQ==
+        bh=0JmZczCbpOdE83RS1Jg0IHZhGZBw+0h6TxJ0xSKGXpQ=;
+        b=R3QjgEeu0SyVI2lDD0gF/mGGjC5l0xnsrF0U9MS0AWWSj8UlJYzroCkC1cYsnjqZdl
+         BzpLsrAuOKn29IaswtTcZdkJNSfWnQleG3C6ZdH9XWhRbB/SKyi8sCQGlFDwD6xsXGuP
+         kmXmMzlN1dUYqxzKx8uwQEcphW3mVPAWM6Ex6Zk41Y1+4AHsy17OsciQHWMC5iqsCIQp
+         xgEjDKsBw0XHepXwvs0wO7a1D5N7PoR7VcNjyQ3ZY2nJoTGH/Q/E8I2tlEh4XuPggliv
+         39av2i6EtrySSSH4jPALRV1rB4Pltm1L//Y2Dkb6C7rR0iojQsrFOeIKnevRsMXfqE8t
+         p0mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593540; x=1690185540;
+        d=1e100.net; s=20221208; t=1687593579; x=1690185579;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RPXidMTrzBctnlI68UKYA3FxvKEi+gyM/+eAniSxHU=;
-        b=QzxLrPmReaEG0JFvXKJfj4LrhPxbOIu4vSURUNineXOK/JctRt+B4fnSvinFfyWNqV
-         7doYNjRyGr5w9x24pR2jBZbzGaCDueL2kyn6kmveryhSikwlT4xHoHgXiRR8afLt/za2
-         rLiU/A/Oj+++ShkDxzMynjVcyhtYT64vq88eWdCHhya1QiWz+FWpFpXeWhobgVrElrOe
-         b04TNB8fnFTJnw24ZH87Mx2K4lwi6Wj9D+91Wa6LmBH6s5TBQDBwICQorhotAQo5HhIn
-         eP7l0SXCATYsrYQCRXK4ekOIW7pHb2z0erjPsUQGq5QIlACa5v38PfpQka7ACP1mPH1Z
-         TmbQ==
-X-Gm-Message-State: AC+VfDzeMNEK0o/PMMlHRmAN/cZe7KfIxFPLy79Hz5MrbIQSly9A1vEI
-	18WWtPL8q2piXu8fqjBsvMM4BA==
-X-Google-Smtp-Source: ACHHUZ6KTEX3PoU0t4AzSkFJrRvYcc7s1C5vvyEb440YGE+szTSoYCbadoq/cw/0a/YYcc9DpVEdLg==
-X-Received: by 2002:a17:907:a06:b0:974:1e0e:9bd4 with SMTP id bb6-20020a1709070a0600b009741e0e9bd4mr20928031ejc.16.1687593539714;
-        Sat, 24 Jun 2023 00:58:59 -0700 (PDT)
+        bh=0JmZczCbpOdE83RS1Jg0IHZhGZBw+0h6TxJ0xSKGXpQ=;
+        b=i8Jj/vn1rfI+cHSFWLWrPuB1YKGDzuesi2qXAlPcEpyvEzlPuPPRMsEQcUP5LvBjzv
+         YKDoLWFVItEBnL53Uq4iAs1lDY/TDNirsUxjrJP4UyGL6ZmuVKkfiKYbIPXL+C3f2NM+
+         nmAMImxv5GRIe2OD1iz8hULvqTmM/ToJWfhsekE42XowUGze4wWRgIlCfno3f4x33uBK
+         UCpNxQudbkEJGS82dIGKPGP8Qy/M+XgLsV0qj3Rg8piEwIxkV9G8qG8JVIVkfDwIYNBp
+         WZGvPlDlMni1zsSDPD21NMEzt1KvjEQRopDyyy48dmtfY7mpoR+CWA+USrn4KsmGwzQN
+         qFAg==
+X-Gm-Message-State: AC+VfDzpp6DwQZ3NA0WsqVrVKhMnUeETfj0c/UmSJsvU+aoUXjVv9arl
+	q7feyI3UvDUyZUQoA13xtJIMFg==
+X-Google-Smtp-Source: ACHHUZ7suzN5/2BEJw/pDsP2JF0ZtjamK/L1/904JX+bl8LiLRiewrvSQqyW/+nam/ghVhSAGJ3L/A==
+X-Received: by 2002:a17:907:84c:b0:987:783f:449a with SMTP id ww12-20020a170907084c00b00987783f449amr14721000ejb.11.1687593579095;
+        Sat, 24 Jun 2023 00:59:39 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id l24-20020a1709060e1800b009783791b1a1sm592525eji.121.2023.06.24.00.58.53
+        by smtp.gmail.com with ESMTPSA id pg10-20020a170907204a00b0096f67b55b0csm598213ejb.115.2023.06.24.00.59.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:58:59 -0700 (PDT)
-Message-ID: <28a5d2e7-d3bf-d373-10ad-73c7590924c4@linaro.org>
-Date: Sat, 24 Jun 2023 09:58:52 +0200
+        Sat, 24 Jun 2023 00:59:38 -0700 (PDT)
+Message-ID: <efec9572-f717-ec26-0f26-a79fcfee27cf@linaro.org>
+Date: Sat, 24 Jun 2023 09:59:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 14/45] dt-bindings: crypto: add bindings for sam9x7 in
- Atmel AES
+Subject: Re: [PATCH v2 15/45] dt-bindings: crypto: add bindings for sam9x7 in
+ Atmel SHA
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Varshini Rajendran <varshini.rajendran@microchip.com>,
@@ -92,41 +92,36 @@ Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
  dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
  balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-15-varshini.rajendran@microchip.com>
+ <20230623203056.689705-16-varshini.rajendran@microchip.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-15-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-16-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Add DT bindings for atmel AES.
+> Add DT bindings for atmel SHA.
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->  .../devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml    | 5 ++++-
+>  .../devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml    | 5 ++++-
 >  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
-> index 0b7383b3106b..f0736696c883 100644
-> --- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
+> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+> index ee2ffb034325..6a54cb79b6e2 100644
+> --- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
 > @@ -12,7 +12,10 @@ maintainers:
 >  
 >  properties:
 >    compatible:
-> -    const: atmel,at91sam9g46-aes
+> -    const: atmel,at91sam9g46-sha
 > +    oneOf:
-
-This is not oneOf.
-
 > +      - items:
+> +          - const: atmel,at91sam9g46-sha
+> +          - const: microchip,sam9x7-sha
 
-And these are not items. You just broke existing users, which points to
-the fact that you did not test the bindings nor the DTS. You didn't test
-anything here.
-
-This comment applies for entire patchset - please test everything. I
-expect v3, after testing.
+Same as in other cases, so just to avoid applying by submaintainer: not
+tested, broken.
 
 
 Best regards,
