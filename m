@@ -1,119 +1,105 @@
-Return-Path: <SRS0=mqJN=CM=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=Relq=CM=linaro.org=linus.walleij@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65D1EB64DA
-	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 09:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77613EB64DA
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 12:21:48 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 61456C4163C; Sat, 24 Jun 2023 09:20:09 +0000 (UTC)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	id 2A917C433C9; Sat, 24 Jun 2023 12:21:48 +0000 (UTC)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id AB198C433CA
-	for <soc@kernel.org>; Sat, 24 Jun 2023 09:19:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org AB198C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id 165B4C433C0
+	for <soc@kernel.org>; Sat, 24 Jun 2023 12:21:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 165B4C433C0
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-51a2de3385fso1810678a12.0
-        for <soc@kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2b6985de215so1841261fa.2
+        for <soc@kernel.org>; Sat, 24 Jun 2023 05:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=yQVzjTKSXVmVV9dLLVhjlfW4hSkCHaHSkFp8XKDuppCzQpGHvyVttjnWT3sZWadL6G
-         Aptg8K8aHU9euO2VsKWw8w5GNb7iZUmQN6s980dsKNw8bDt/Gg0mjyG+1qbTOWHueIrY
-         /Q6bxSUkrx10KI9Bk3ImA6gPyy5RwRLI1IVUQjGo73WdFwY+k9WU2qYNImsGMRH4LVBY
-         NGoLGDAz09o/yosqduTlRt/bCpwDw40AnKJvyTtb5EsV6kYLtwXhkQO6myiWdEiHilCp
-         eezk0kHCVcUBB/e4mc1VfkMXxJnPCuve2SWX/BdtYwhjQIOCgvko85iNcFXLb/8ecU/N
-         rm6g==
+        d=linaro.org; s=google; t=1687609305; x=1690201305;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VBAeuEKi4TumGQZarWYAofM/kt/WlzX0ayFAaSfgRg0=;
+        b=isELkhleoirfZfTIzL1phvML2a4utiN1s+Zc5tXECihFYMuaobFx17Zh3KJZH+1tUT
+         iF075/7CBZtw87MNe+CyogWJhShfq+7mq95W4BOMxqWsbxMWu5FwihAkFItzEbikpV6m
+         Rl4TU1w3u1EQsWGjQbdYah3K0EGR1Avl6qY4gGvgV8q5HqxcsocO9R08fXcEuvE91Vfw
+         Fm1eJwKoD2Vp3T0P7jffYkWOf0l6xIeseCKkXkggEjSFLmZYIlNqFrvY8UykzOt6S0B1
+         SH0rHqp314/6f7N2ZStlSSd4pQctAUFAvI29HgL3B/cBMoKen4KMPeA25Q5gIlRGZgXq
+         0aTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=VY/gFWpfJNa3Ik5M5usGwpDRoyiiPLNOz3S+QW4bO5KRlKm0yxL2k12/zkbW8CkVSO
-         79f3z6WFBYYq0gw1IfIen3TKpopWXK0H2hXAxP4BhRZvClIq4VzQISnTd3V3dfPtbTtc
-         ibZZD56N4Iym4USv8cHLoxdXcgydCgQ/H2K+szqJDaYh5T43dmtqa9VVlQsB1UymgHie
-         gp0tqN9hZkXMqv0EhpJ2UqUGJeuZzI9gcoPPgfNqc8QsAW1odALTBW2n5nEGXMAixHrb
-         2+l1LZHlbSoP85OdnxjSIt0/7aZzfQiUAoJj/Vc1u9hV9t96qvynZ78yElMRic3bmi6R
-         ULtA==
-X-Gm-Message-State: AC+VfDwZnECc63PCDQY/3RTeR5l569RHbKr3Z4ajzP2TvCvowv0Qzvv4
-	yAYXLDYO/KExVL9JVwuLyDBbeg==
-X-Google-Smtp-Source: ACHHUZ5fG8f481PX14S7vktzFZQMA1l6HoKP1yysFPHfBvGgcLJOb2TMBp2polua7/w5jYwHHssrXQ==
-X-Received: by 2002:a17:907:987:b0:987:6372:c31f with SMTP id bf7-20020a170907098700b009876372c31fmr16230436ejc.37.1687598396633;
-        Sat, 24 Jun 2023 02:19:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p13-20020a1709060e8d00b00989065149d0sm663324ejf.86.2023.06.24.02.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 02:19:55 -0700 (PDT)
-Message-ID: <ca3b6a75-2811-6013-28cc-9f6a7854b469@linaro.org>
-Date: Sat, 24 Jun 2023 11:19:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
- add sam9x60, sam9x7 compatible
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20221208; t=1687609305; x=1690201305;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VBAeuEKi4TumGQZarWYAofM/kt/WlzX0ayFAaSfgRg0=;
+        b=kcuYmCiZlh8LuyLNCPZmPPnnSI8rncPCRDxg0nnULHJ9iHKv3gSxLskiK3XIcpg5rc
+         9j80vPOL4u/NyIhiwMsuminPeYkdQhRz9wQIVIxseRaEtcF2hKhBmW+yq7rgzv0CCWAp
+         m7ScAokuJfrdonjGHXPAbbDw3I5qeBwXHwZkffksCJhqQcYUdhbeRB0piCE68hu6bHuL
+         nKik0wPpoGU1vwmaDY5Sf/orQvJzMsMX4X6AXAYgL77RuWA+LJO9X/8e8BBA8BR9b6K2
+         u1kiCPc39HnS/pAObbWLJNRsQYa0nriIqQg1OunAyqUxfyWecx5tm+Crs3iV0a88HaGW
+         7AKw==
+X-Gm-Message-State: AC+VfDwJjg4OsH2Dk+PLzHr+dYDVNBOnG3UNIJb0ALMOJAANvgP/lLYJ
+	d8I3tXLYmuuDTnnSkNX3vgPhUQ==
+X-Google-Smtp-Source: ACHHUZ46nD0x2dHG5p6zlGBmn2pjrt4AVodkjdoyLQ+u979hnQlVdrR/RZGt7MpW7gDA9SaM2xnx0g==
+X-Received: by 2002:a2e:7e11:0:b0:2b5:95a8:412b with SMTP id z17-20020a2e7e11000000b002b595a8412bmr3617667ljc.52.1687609304977;
+        Sat, 24 Jun 2023 05:21:44 -0700 (PDT)
+Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id p15-20020a2e740f000000b002b4d766bda5sm256819ljc.124.2023.06.24.05.21.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jun 2023 05:21:44 -0700 (PDT)
+From: Linus Walleij <linus.walleij@linaro.org>
 List-Id: <soc.lore.kernel.org>
-To: Varshini Rajendran <varshini.rajendran@microchip.com>,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- claudiu.beznea@microchip.com, mturquette@baylibre.com, sboyd@kernel.org,
- herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
- tglx@linutronix.de, maz@kernel.org, lee@kernel.org, ulf.hansson@linaro.org,
- tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
- vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- linus.walleij@linaro.org, p.zabel@pengutronix.de, olivia@selenic.com,
- a.zummo@towertech.it, radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
- gregkh@linuxfoundation.org, lgirdwood@gmail.com, broonie@kernel.org,
- wim@linux-watchdog.org, linux@roeck-us.net, arnd@arndb.de, olof@lixom.net,
- soc@kernel.org, linux@armlinux.org.uk, sre@kernel.org,
- jerry.ray@microchip.com, horatiu.vultur@microchip.com,
- durai.manickamkr@microchip.com, andrew@lunn.ch, alain.volmat@foss.st.com,
- neil.armstrong@linaro.org, mihai.sain@microchip.com,
- eugen.hristev@collabora.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
- linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-pm@vger.kernel.org
-Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
- balamanikandan.gunasundar@microchip.com, manikandan.m@microchip.com,
- dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
- balakrishnan.s@microchip.com
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-2-varshini.rajendran@microchip.com>
- <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-In-Reply-To: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: arm@kernel.org,
+	soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org,
+	Jonas Gorski <jonas.gorski@gmail.com>,
+	stable@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] bus: ixp4xx: fix IXP4XX_EXP_T1_MASK
+Date: Sat, 24 Jun 2023 14:21:39 +0200
+Message-Id: <20230624122139.3229642-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 24/06/2023 09:53, Krzysztof Kozlowski wrote:
-> On 23/06/2023 22:30, Varshini Rajendran wrote:
->> Add sam9x60, sam9x7 compatible string support in the schema file.
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> ---
->>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Jonas Gorski <jonas.gorski@gmail.com>
 
-Un-acked. Actually NAK.
+The IXP4XX_EXP_T1_MASK was shifted one bit to the right, overlapping
+IXP4XX_EXP_T2_MASK and leaving bit 29 unused. The offset being wrong is
+also confirmed at least by the datasheet of IXP45X/46X [1].
 
-This does not match your DTS. Please test your patches before sending.
+Fix this by aligning it to IXP4XX_EXP_T1_SHIFT.
 
-Best regards,
-Krzysztof
+[1] https://www.intel.com/content/dam/www/public/us/en/documents/manuals/ixp45x-ixp46x-developers-manual.pdf
+
+Cc: stable@vger.kernel.org
+Fixes: 1c953bda90ca ("bus: ixp4xx: Add a driver for IXP4xx expansion bus")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Link: https://lore.kernel.org/r/20230624112958.27727-1-jonas.gorski@gmail.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+SoC maintainers: please apply this for fixes.
+---
+ drivers/bus/intel-ixp4xx-eb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bus/intel-ixp4xx-eb.c b/drivers/bus/intel-ixp4xx-eb.c
+index f5ba6bee6fd8..320cf307db05 100644
+--- a/drivers/bus/intel-ixp4xx-eb.c
++++ b/drivers/bus/intel-ixp4xx-eb.c
+@@ -33,7 +33,7 @@
+ #define IXP4XX_EXP_TIMING_STRIDE	0x04
+ #define IXP4XX_EXP_CS_EN		BIT(31)
+ #define IXP456_EXP_PAR_EN		BIT(30) /* Only on IXP45x and IXP46x */
+-#define IXP4XX_EXP_T1_MASK		GENMASK(28, 27)
++#define IXP4XX_EXP_T1_MASK		GENMASK(29, 28)
+ #define IXP4XX_EXP_T1_SHIFT		28
+ #define IXP4XX_EXP_T2_MASK		GENMASK(27, 26)
+ #define IXP4XX_EXP_T2_SHIFT		26
+-- 
+2.40.1
 
