@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF26EC04E69
-	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 07:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD17EEB64DD
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 07:57:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 47A1FC433C8; Sat, 24 Jun 2023 07:56:23 +0000 (UTC)
+	id B6029C433B7; Sat, 24 Jun 2023 07:57:33 +0000 (UTC)
 Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id C91ADC43391
-	for <soc@kernel.org>; Sat, 24 Jun 2023 07:56:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C91ADC43391
+	by smtp.kernel.org (Postfix) with ESMTPS id F2843C433C8
+	for <soc@kernel.org>; Sat, 24 Jun 2023 07:57:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F2843C433C8
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98d8c38549dso189337966b.1
-        for <soc@kernel.org>; Sat, 24 Jun 2023 00:56:13 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-988883b0d8fso179410266b.1
+        for <soc@kernel.org>; Sat, 24 Jun 2023 00:57:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593372; x=1690185372;
+        d=linaro.org; s=google; t=1687593447; x=1690185447;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tSt2AtZZh3GZpsNl8QTQCKxlNBUmkNMW7h6B51q0Fvg=;
-        b=tp25xMDkznV75JI3vdiNAJWl65hzOtE1vIYxwwqhJlEy8/uxyjJc8gmF/4BpROZwMT
-         So8ags5GA1qeqt4Tvv428U9zTD3AyFOt9eJl17rkpG9KAF+5CO4JrNvHK7RXC/XAuRr+
-         JcopiYDZa1WusC6EfjHKdyFc3XbT1M/q56rklAdlCGENZH4tkQV/QG/JZVau6sqLBXB0
-         2dRHekqT/OoGYzPBegRHXQEZ3vSChxxWz73Vul9JkPlhE3sg97lUxnYzd8hlJPIBh9re
-         Ua5gz1poF3bWk4vsdRhFLrh3EuQLyNSezyG9xckHLFn7241Ta+EO82c3g+jtHwkNHVWO
-         bPSA==
+        bh=i6/OKE3tdUs5NzQDJgtLHSJJGNPHgdjozA0WirJWwVM=;
+        b=HnqNx/Ebwlv7O4a+MO53LVK8hUXaO2CscKgFVOdXu2ycnMg2hOS0E0CzugfJ3w99Sw
+         NTpfcO8m4fcFu7MQn1RVPozmqJTrSYnumv9XZ//sHZFfnfQn38R8rBKcX9/41fMUm++e
+         SMm77XYsnipU3YNETrH2NcLRyssL3zI6YmQzliflkWOFkjuhDWQKpw9oHLzSF4yxj1Zb
+         0WHuZofFw0RlYyr3v57UovyHHwgejt7TDVz8L41/QVTNC3ruqQIFr/BZIHDOI2RPurVq
+         m+m4zKhmQGGpjsiHNqKQ41IzwPemcQfTXtF/FSAXgnXXsxI/R+pb7QaK/NRZMzPQLBf8
+         wzzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593372; x=1690185372;
+        d=1e100.net; s=20221208; t=1687593447; x=1690185447;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tSt2AtZZh3GZpsNl8QTQCKxlNBUmkNMW7h6B51q0Fvg=;
-        b=N8aS1PzWXt96gP1elXafct8hobfPaumR6JXsI+C0BVVe5EegWVwZSvQVHnUXY7i3f5
-         PnGWFENo8xrHlVc5id80T5I0KwGaOZXY14TOjlJMaFglneDrb5Azm1LcIpmjd+9nJmHV
-         zJ3yFinI2a90xBC9XPj87g9Ia58nEXgPe4vaLyFXrXqvm6lToKK7Nry45EWVSlNBNuUu
-         YWu2xDakHHHtQwrG1tAp6LhWng7ds4MaJNsAcYpDkzNGCY79hzloPeuqSWiHDxDbg2Jk
-         3fSoBo/RfqEQkioNfbAfca+Pog7KSTrxWXL6SX2mWOGiE+bz34DYgpBbkNBWwfTLPe6o
-         BV5g==
-X-Gm-Message-State: AC+VfDwEJqUwlSZOCrLmz+Qvjs2XE32gm4hut0OPQH80jiM/Md+Rf9oG
-	ViqGSmH+HfHw7wVLOa6G5bWNow==
-X-Google-Smtp-Source: ACHHUZ6NF60BoiHF1787mu6pGM6EiBURQ9TKeKNqM6q3ihuvMLTZrjMfALGAKYzmSFnyF+q8mSD8Pw==
-X-Received: by 2002:a17:907:970e:b0:98d:470d:6c7e with SMTP id jg14-20020a170907970e00b0098d470d6c7emr5868847ejc.16.1687593371873;
-        Sat, 24 Jun 2023 00:56:11 -0700 (PDT)
+        bh=i6/OKE3tdUs5NzQDJgtLHSJJGNPHgdjozA0WirJWwVM=;
+        b=NTOxyV1989ndMbboaJmKjPs7STdSiDHL89opxHUK4NJTlSiW75U3usebVMmRyCHacU
+         jAhLskOuxt8bLmJkrc94Ej7USn5k94LpflnXzo9UyRQ0G6JQc0aAXNRRJFqJainugKHD
+         qupVcsBnqfJ4jpUXyTPjK5KarPbCU56rHZUXJE3dH8YXzMQIsvzOdl9K3HKcf22f3b4C
+         IcVmWnsWxbb9yi54ARGZIiLEv061NEhbb9K37nrxbMLrDHkvIe9seRxEuMhUnCal7nxd
+         z6hwMiSTB74BO5GttH3D4JmZqxCrzUBJJrOjWC9cHNloIu7jcaoUO5TfI+DYwb1e7UwX
+         234A==
+X-Gm-Message-State: AC+VfDylS4M1wMtO+AnDfMpw+l9PeEN2zwpNCVTJ3iWMhcGBw+tB6XgU
+	b3clAtJWwhd/q4Y9a//zfWvGLg==
+X-Google-Smtp-Source: ACHHUZ7hGHGwi7ptFp7dDRS6Z6+2UNRDyiR5qq+R0zKm3LPTmxEiM/1iXpaTmu/76o0ziH1heFA4BQ==
+X-Received: by 2002:a17:906:44c:b0:98e:a54:42e6 with SMTP id e12-20020a170906044c00b0098e0a5442e6mr75957eja.5.1687593447021;
+        Sat, 24 Jun 2023 00:57:27 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id fy23-20020a170906b7d700b0098d4ac60c20sm577426ejb.190.2023.06.24.00.56.06
+        by smtp.gmail.com with ESMTPSA id q16-20020a170906361000b009893f268b92sm600124ejb.28.2023.06.24.00.57.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:56:11 -0700 (PDT)
-Message-ID: <f2f8cabf-ca4d-c6f3-5561-b24334be89d1@linaro.org>
-Date: Sat, 24 Jun 2023 09:56:05 +0200
+        Sat, 24 Jun 2023 00:57:26 -0700 (PDT)
+Message-ID: <703ed392-5607-446e-e59a-8b51b6cd0007@linaro.org>
+Date: Sat, 24 Jun 2023 09:57:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 00/45] Add support for sam9x7 SoC family
+Subject: Re: [PATCH v2 12/45] dt-bindings: reset: atmel,at91sam9260-reset: add
+ sam9x7 binding
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Varshini Rajendran <varshini.rajendran@microchip.com>,
@@ -91,21 +92,41 @@ Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
  dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
  balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+ <20230623203056.689705-13-varshini.rajendran@microchip.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-13-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
+> Add documentation for SAM9X7 reset controller.
+> 
 
-Your CC list is enormous and causes multiple bounces/rejections.
 
-Organize your patchset properly to avoid this.
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  .../devicetree/bindings/reset/atmel,at91sam9260-reset.yaml       | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> index 98465d26949e..593a13c277ab 100644
+> --- a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> +++ b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> @@ -22,6 +22,7 @@ properties:
+>                - atmel,at91sam9g45-rstc
+>                - atmel,sama5d3-rstc
+>                - microchip,sam9x60-rstc
+> +              - microchip,sam9x7-rstc
+
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check` (see
+Documentation/devicetree/bindings/writing-schema.rst or
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+for instructions).
+
 
 Best regards,
 Krzysztof
