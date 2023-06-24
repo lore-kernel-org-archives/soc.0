@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 658B8EB64DA
-	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 08:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407FEEB64DA
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 08:00:58 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 48519C433AB; Sat, 24 Jun 2023 08:00:23 +0000 (UTC)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	id 27197C433D9; Sat, 24 Jun 2023 08:00:58 +0000 (UTC)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A3C00C433CA
-	for <soc@kernel.org>; Sat, 24 Jun 2023 08:00:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A3C00C433CA
+	by smtp.kernel.org (Postfix) with ESMTPS id A8666C43142
+	for <soc@kernel.org>; Sat, 24 Jun 2023 08:00:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8666C43142
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so4551176a12.0
-        for <soc@kernel.org>; Sat, 24 Jun 2023 01:00:17 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51d7d0dbec8so487885a12.2
+        for <soc@kernel.org>; Sat, 24 Jun 2023 01:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593616; x=1690185616;
+        d=linaro.org; s=google; t=1687593647; x=1690185647;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=plRq9uRX7lb7dTEBq+/7uDl8MLqphJlYEezgY+W1p9o=;
-        b=a43pJHJ0/i79GK0sVllmNDFxmLRvG6mdn29k3MDLUJpDO/vAzPg3YyQ818IBbmxC/u
-         1gtZ48SyfAQ5B6l0nPXN+iauyWfgfXlbH0dfibAQKneNTKdjh2/VHLoEKzIxurh9DBP5
-         ygKyuWkrfxIEeg0x0Ulo13gCWxCoWUMToLkqHYl6h6s3s4qa1bsqQQrA6iOgzlG7pLl+
-         dIYVYidPvnGoTN3V2N4aRfUTueCnlqRpbuIYXLGn2MIJJvK807soiNVOfavxJ/gbhjQH
-         difhgo70gZBHNBdb4AvayK2zERp3uN7fHKNQxbBPF+9B6cl2sxkR8NHUfutycTaQtmog
-         Ussw==
+        bh=VmzapWDzimsSs6oDauhmY7EwCGGpNbBGYW0zDq7Y0g0=;
+        b=f5y83YDj2ZiTfv4GVL6XxhbaBiZOx8b2Dlce2BicSyjaKrg3kDy5bYdkvq4WYHDMz1
+         Ux3eFKLU2XtW4NjNZu+3nofzPI6tApMEkrFij9agnP/0hLWMMo+HXTmVe4fIFHF7hTae
+         SrSbgYuAOfTU+0JPddM5gmK/zaeXnm72JG7Uipl4neBtSGAQLTKpx5MCjVYgls6+G4NE
+         H1Ec0eBTsmzlMz3qMbR91RzwyYZWUEUywL/5K07LC2PXw/FMwvaX6+z0Y8njTfC252LU
+         Mec49oeKqIlgUkZU2Gfp86uWtTbkzHTzl1xyRp6Iv4f0UPBejvrofeBtdZUrrjTWxCdp
+         0zgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593616; x=1690185616;
+        d=1e100.net; s=20221208; t=1687593647; x=1690185647;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=plRq9uRX7lb7dTEBq+/7uDl8MLqphJlYEezgY+W1p9o=;
-        b=Gv6Z42J+qvlCNbouJ0yNxwlCYzSjBZj5+Pj/1MJQvYOec48Ko2O5OjCHu2u6O+GFZX
-         qWUSmN4U9ODURHVkIUL30m9VuLpolPcpGbLLXRlf/XtG9suWyHjZ5wC1fVwB/LcFjrha
-         wOtfQYMakliPkim+HIhtWFNclW1zzB3yyBK0nPoj4cba9d/3a5zr8SzuxlssxMbS1H/w
-         /4G0SOx1IxK5uyCizkG1jga52aANZcHGHgxI7LS0fw6b0pZYGWdETVPOkFUyc4sK/5Bd
-         AeIsGxXeYZ8iGCDZW+y5zGDySE8NMaMOeQTQiVuX5lYspy3ys7mzkDQ1y/kSpdg8vuEA
-         YVgQ==
-X-Gm-Message-State: AC+VfDwHRFnlGTN2HTUNOjowawppmuDRgElzPYr+n0/JFeYzwPBLHK5o
-	n9JvccOlHAxm1HgnY+IeIiSuBA==
-X-Google-Smtp-Source: ACHHUZ6M3mY16cNIWWFFSaJhLerF0OTUcHm2JKoX1SNGPbnrXFGF7T+AVx68dGzEKp0F0dxMjJC17w==
-X-Received: by 2002:aa7:da90:0:b0:51b:de6f:2182 with SMTP id q16-20020aa7da90000000b0051bde6f2182mr9641369eds.8.1687593615898;
-        Sat, 24 Jun 2023 01:00:15 -0700 (PDT)
+        bh=VmzapWDzimsSs6oDauhmY7EwCGGpNbBGYW0zDq7Y0g0=;
+        b=SKATYWoeFe/i3EwGRAw+JIyNtuMejmEBzCdmwfMvQZpLrlUjr26+vYBL54LAmixrDL
+         Uri7EPUsILhirXXOp1sc2zr/SM/BiWmaeCKoT4n/iLaistuxNi4KcoaSaZ/rebugWlh4
+         L6/t5N4QNMbJFncLLJ1Z8bEPYFS/DFDl+5IV2QfPMOqLjElDQYcmGER7ACKYIPrmL2Ai
+         OytA54XEKKhCKjK/tSslmB3tolHQUAVrYerJyRVXfxGPOIhaKBN2qBbWsZqtcTnRwBtb
+         PS8R80VBNQvPEiLVeYQb/m4D9OJGvw8QO6kuvyqenPBmq8Vv97mCNjwp98eIsEHvxU5e
+         3Zmw==
+X-Gm-Message-State: AC+VfDyCt9neuH+Z9T6QfgW8LcfHaZmtqj7ji+MXP0ID0sgsYj6hnDhR
+	rzmVFAljbjq757kUwRX3o/1a7g==
+X-Google-Smtp-Source: ACHHUZ7m+A1bOO2g0Q0gWubK6hkpG4u9CftsH8A5UeM6HKS2e7gJgZ9D0w88xvVVqU6mCdiqpCRT2Q==
+X-Received: by 2002:aa7:d892:0:b0:51b:fc05:a6aa with SMTP id u18-20020aa7d892000000b0051bfc05a6aamr1674326edq.42.1687593646698;
+        Sat, 24 Jun 2023 01:00:46 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p18-20020aa7d312000000b0051a2d2f82fdsm422074edq.6.2023.06.24.01.00.10
+        by smtp.gmail.com with ESMTPSA id b10-20020a05640202ca00b0051a4ab66d92sm410131edx.11.2023.06.24.01.00.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 01:00:15 -0700 (PDT)
-Message-ID: <b837784a-50f0-7cab-a535-e699688640e5@linaro.org>
-Date: Sat, 24 Jun 2023 10:00:09 +0200
+        Sat, 24 Jun 2023 01:00:46 -0700 (PDT)
+Message-ID: <f2ba9ca6-ce6e-b012-d43c-f192a6043a42@linaro.org>
+Date: Sat, 24 Jun 2023 10:00:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 13/45] dt-bindings: atmel-sysreg: add bindings for
- sam9x7
+Subject: Re: [PATCH v2 18/45] dt-bindings: i2c: at91: Add SAM9X7 compatible
+ string
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Varshini Rajendran <varshini.rajendran@microchip.com>,
@@ -92,19 +92,32 @@ Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
  dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
  balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-14-varshini.rajendran@microchip.com>
+ <20230623203056.689705-19-varshini.rajendran@microchip.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-14-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-19-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Add RAM controller, shutdown controller & SFR DT bindings.
+> Add compatible string for sam9x7.
+> 
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+> index 6adedd3ec399..440f890e209f 100644
+> --- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+> @@ -24,9 +24,11 @@ properties:
+>                - atmel,sama5d4-i2c
+>                - atmel,sama5d2-i2c
+>                - microchip,sam9x60-i2c
+> +              - microchip,sam9x7-i2c
 
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
-
-Applies to every patch, since there will be a v3.
+Same as in other cases, so just to avoid applying by submaintainer:
+looks not tested and not working.
 
 
 Best regards,
