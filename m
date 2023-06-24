@@ -1,54 +1,104 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <broonie@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDECFEB64D7
-	for <soc@archiver.kernel.org>; Fri, 23 Jun 2023 23:53:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23FC6EB64D7
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 00:52:50 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id A43A8C433CC; Fri, 23 Jun 2023 23:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CBE3C433CB;
-	Fri, 23 Jun 2023 23:53:20 +0000 (UTC)
+	id B775BC433C8; Sat, 24 Jun 2023 00:52:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728B1C433C0;
+	Sat, 24 Jun 2023 00:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1687564400;
-	bh=X/TZ4mnGYcfxVlEuHhkVc4I9PGFeVrYqpxSX2dFapHY=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=rHOMTwA5HzWY2Wr3vMSfr9pjLzM6+ZNPgxGgxh567q6ZPaYISli5tm6+suSrIuirg
-	 43v5u+w6HS/bDtLiQelrHer4Yy/fUo/l7HI84UgbnowqeGTMw/7MyYcI1V/4H1XFIB
-	 U9OAxRuCI0FImww3sVjoXZKSYY214CrGsD2gBf0LZrL6aBjJGsQ9gN1thV7GIqRDrs
-	 OaZYdbA56z7kbYRCW4T98sfb3gm4DzG541vMZyHkroZal3FoXHLcIzdie4YkThNVE/
-	 0xCoIHWJva7qys+zGGuUGej5EVtqsFRR/wHNUn/p4mTVUL21r9GF92vyb+4Urpw1UM
-	 GcYDmrAp7WOEA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 79BEEC43143;
-	Fri, 23 Jun 2023 23:53:20 +0000 (UTC)
-Subject: Re: [GIT PULL] ARM: SoC fixes for 6.4, part 3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <fac1e7b7-4ba6-4334-a550-9d8a78037bf6@app.fastmail.com>
-References: <fac1e7b7-4ba6-4334-a550-9d8a78037bf6@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <fac1e7b7-4ba6-4334-a550-9d8a78037bf6@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.4-3
-X-PR-Tracked-Commit-Id: ed8ff046eddd916627e1e9a549eacd9c043fde7d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0f56e657488fe35e543fc17bc192fb7c7ac07ac6
-Message-Id: <168756440049.22934.17858212604181868493.pr-tracker-bot@kernel.org>
-Date: Fri, 23 Jun 2023 23:53:20 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	s=k20201202; t=1687567970;
+	bh=r/EW6obxSAVNNGjwUGkGRU+SWh5nEHChw4jIkdrVMyk=;
+	h=From:List-Id:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=dSOKhy79sEB2zIN2c8ajaVofGMArO0Go+fWumUQL9gmmkAU3QnfwbPH7w9WAaAOOZ
+	 w2GYaOr0xjKNeW8QA4o905lF5G9oX5k83Z7NVNVK0BRDZOe0gr7KK1bn3S+/TZ4fA2
+	 utNavE4sqCzZkKo0lfmhyMQzNQjXWTcX5MAmp82m8t11shclN2Cy3B6Il2KRsjJqa1
+	 L6tvmcwX8j5bfsy21mp78UvjksdnPTlXaMUpDMhWKk+uAqGmyUEFF2mtf7Z8p2Q1XR
+	 bRoAQou336boKyaD+3RQxZDzBKli+QkQJk1AGEeapc1CUwRC7l8k9a+I5g79sPTr29
+	 PSjHxExxu4Q+w==
+From: Mark Brown <broonie@kernel.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Bjorn Andersson <andersson@kernel.org>, Doug Anderson <dianders@chromium.org>, =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+ conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com, 
+ mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
+ davem@davemloft.net, vkoul@kernel.org, tglx@linutronix.de, maz@kernel.org, 
+ lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org, 
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+ linus.walleij@linaro.org, p.zabel@pengutronix.de, olivia@selenic.com, 
+ a.zummo@towertech.it, radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com, 
+ gregkh@linuxfoundation.org, lgirdwood@gmail.com, wim@linux-watchdog.org, 
+ linux@roeck-us.net, arnd@arndb.de, olof@lixom.net, soc@kernel.org, 
+ linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com, 
+ horatiu.vultur@microchip.com, durai.manickamkr@microchip.com, 
+ andrew@lunn.ch, alain.volmat@foss.st.com, neil.armstrong@linaro.org, 
+ mihai.sain@microchip.com, eugen.hristev@collabora.com, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, netdev@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+ alsa-devel@alsa-project.org, linux-usb@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com, 
+ balamanikandan.gunasundar@microchip.com, manikandan.m@microchip.com, 
+ dharma.b@microchip.com, nayabbasha.sayed@microchip.com, 
+ balakrishnan.s@microchip.com
+In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+Subject: Re: (subset) [PATCH v2 00/45] Add support for sam9x7 SoC family
+Message-Id: <168756794811.1155588.11719780333735420720.b4-ty@kernel.org>
+Date: Sat, 24 Jun 2023 01:52:28 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
 
-The pull request you sent on Fri, 23 Jun 2023 22:57:31 +0200:
+On Sat, 24 Jun 2023 02:00:11 +0530, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
+> 
+>  Changes in v2:
+>  --------------
+> 
+> [...]
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/arm-fixes-6.4-3
+Applied to
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0f56e657488fe35e543fc17bc192fb7c7ac07ac6
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thank you!
+Thanks!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+[32/45] spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7 compatible
+        commit: a3eb95484f276488e3d59cffa8eec29f79be416e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
