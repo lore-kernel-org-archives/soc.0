@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407FEEB64DA
-	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 08:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8469BEB64DA
+	for <soc@archiver.kernel.org>; Sat, 24 Jun 2023 08:01:49 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 27197C433D9; Sat, 24 Jun 2023 08:00:58 +0000 (UTC)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	id 639A6C433CD; Sat, 24 Jun 2023 08:01:49 +0000 (UTC)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id A8666C43142
-	for <soc@kernel.org>; Sat, 24 Jun 2023 08:00:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A8666C43142
+	by smtp.kernel.org (Postfix) with ESMTPS id 004D8C433CB
+	for <soc@kernel.org>; Sat, 24 Jun 2023 08:01:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 004D8C433CB
 Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51d7d0dbec8so487885a12.2
-        for <soc@kernel.org>; Sat, 24 Jun 2023 01:00:48 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-98e0c1d5289so2154866b.2
+        for <soc@kernel.org>; Sat, 24 Jun 2023 01:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593647; x=1690185647;
+        d=linaro.org; s=google; t=1687593702; x=1690185702;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VmzapWDzimsSs6oDauhmY7EwCGGpNbBGYW0zDq7Y0g0=;
-        b=f5y83YDj2ZiTfv4GVL6XxhbaBiZOx8b2Dlce2BicSyjaKrg3kDy5bYdkvq4WYHDMz1
-         Ux3eFKLU2XtW4NjNZu+3nofzPI6tApMEkrFij9agnP/0hLWMMo+HXTmVe4fIFHF7hTae
-         SrSbgYuAOfTU+0JPddM5gmK/zaeXnm72JG7Uipl4neBtSGAQLTKpx5MCjVYgls6+G4NE
-         H1Ec0eBTsmzlMz3qMbR91RzwyYZWUEUywL/5K07LC2PXw/FMwvaX6+z0Y8njTfC252LU
-         Mec49oeKqIlgUkZU2Gfp86uWtTbkzHTzl1xyRp6Iv4f0UPBejvrofeBtdZUrrjTWxCdp
-         0zgw==
+        bh=9HaHZDehClxR9T/qxmaslajrl1EPqKVL0R9NY/jGTsg=;
+        b=F3QDL4q8VywBoEOgLA003XEmcfdYtm3Ea0matX93IHzoJEv8hWPz4+c37arSFLlHPJ
+         KJiKcZZsCJW3EISQa/0WZr7GmFkHehvHcqCTL77aPrpRtf7wWxpMpUHHteIIi/i6WgrA
+         P+PyBeA1xhafgy3H/e2UWInSjheEjPAhT1BMP3IiTNbjmRYdvtR5v1zPluKBxz0S3DCW
+         wy2fTJI3bg3cbA/DNbDMu9pAzD0bF/mNG4WsH3QsxXMLCCGLPK6NC8MJ9l8TNSf1hLUM
+         58xmuXiAu9nxjdyxt5KPAyhabLHOsvTKYI7E3U6I1s7LAWe0FlD5wup3cDa7Ngf3ArIy
+         5drQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593647; x=1690185647;
+        d=1e100.net; s=20221208; t=1687593702; x=1690185702;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VmzapWDzimsSs6oDauhmY7EwCGGpNbBGYW0zDq7Y0g0=;
-        b=SKATYWoeFe/i3EwGRAw+JIyNtuMejmEBzCdmwfMvQZpLrlUjr26+vYBL54LAmixrDL
-         Uri7EPUsILhirXXOp1sc2zr/SM/BiWmaeCKoT4n/iLaistuxNi4KcoaSaZ/rebugWlh4
-         L6/t5N4QNMbJFncLLJ1Z8bEPYFS/DFDl+5IV2QfPMOqLjElDQYcmGER7ACKYIPrmL2Ai
-         OytA54XEKKhCKjK/tSslmB3tolHQUAVrYerJyRVXfxGPOIhaKBN2qBbWsZqtcTnRwBtb
-         PS8R80VBNQvPEiLVeYQb/m4D9OJGvw8QO6kuvyqenPBmq8Vv97mCNjwp98eIsEHvxU5e
-         3Zmw==
-X-Gm-Message-State: AC+VfDyCt9neuH+Z9T6QfgW8LcfHaZmtqj7ji+MXP0ID0sgsYj6hnDhR
-	rzmVFAljbjq757kUwRX3o/1a7g==
-X-Google-Smtp-Source: ACHHUZ7m+A1bOO2g0Q0gWubK6hkpG4u9CftsH8A5UeM6HKS2e7gJgZ9D0w88xvVVqU6mCdiqpCRT2Q==
-X-Received: by 2002:aa7:d892:0:b0:51b:fc05:a6aa with SMTP id u18-20020aa7d892000000b0051bfc05a6aamr1674326edq.42.1687593646698;
-        Sat, 24 Jun 2023 01:00:46 -0700 (PDT)
+        bh=9HaHZDehClxR9T/qxmaslajrl1EPqKVL0R9NY/jGTsg=;
+        b=aFFZPsiwXEv5m/oJ0+KBYQ+Xl/5QkCfLlQlATE+4pXLiOvg5mEbpF1WrXyf3k/rhPy
+         8b7MbXazQPX/tdaNswIkFsHohijeaaLlfHAvdnP98TcvJre+sNLfWlrqt1FuO5BNtJHr
+         AibX3ctVXm8/Yy8oa1aDv7dM8zWAyzs3K55P/sXo02T9hCBsM+aac0lkxoqrD4dEBCQ1
+         g92lnfRPhKdof+kY2U4ja1fzhGK9H1IZZTFu2y3RMt2QQzpyAqgtJCsti2I6aSZbXFxO
+         zlpUFfC/KQLRXkYHdDD7DUuv5hyvg2ZAohkHgl2Nn6Z0reY7DI392uiYpVQJAuhxmNT5
+         ev3Q==
+X-Gm-Message-State: AC+VfDxk9xmD4sEuT15pHQ4ke0/28mPOYMn0x/vVeRRNjxOUvL22N4cI
+	BffC1JqsWKkVDO6Sa4t/OUHb7g==
+X-Google-Smtp-Source: ACHHUZ7LZUuSsLPmwaJcMGBzTaxcrMKmP11V5Fuvqcxhksu+1Vgcylqr7l5RCc1ndNOBQHLG9wFOKg==
+X-Received: by 2002:a17:907:3f18:b0:978:6e73:e837 with SMTP id hq24-20020a1709073f1800b009786e73e837mr23104557ejc.4.1687593702085;
+        Sat, 24 Jun 2023 01:01:42 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id b10-20020a05640202ca00b0051a4ab66d92sm410131edx.11.2023.06.24.01.00.41
+        by smtp.gmail.com with ESMTPSA id qh15-20020a170906ecaf00b009885462a644sm587108ejb.215.2023.06.24.01.01.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 01:00:46 -0700 (PDT)
-Message-ID: <f2ba9ca6-ce6e-b012-d43c-f192a6043a42@linaro.org>
-Date: Sat, 24 Jun 2023 10:00:40 +0200
+        Sat, 24 Jun 2023 01:01:41 -0700 (PDT)
+Message-ID: <44780d35-5c90-7195-1dc6-019e54944af0@linaro.org>
+Date: Sat, 24 Jun 2023 10:01:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 18/45] dt-bindings: i2c: at91: Add SAM9X7 compatible
- string
+Subject: Re: [PATCH v2 27/45] dt-bindings: rng: atmel,at91-trng: document
+ sam9x7 TRNG
 Content-Language: en-US
 List-Id: <soc.lore.kernel.org>
 To: Varshini Rajendran <varshini.rajendran@microchip.com>,
@@ -92,33 +92,32 @@ Cc: Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
  dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
  balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-19-varshini.rajendran@microchip.com>
+ <20230623203056.689705-28-varshini.rajendran@microchip.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-19-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-28-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Add compatible string for sam9x7.
+> Add compatbile for Microchip sam9x7 TRNG.
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> index 6adedd3ec399..440f890e209f 100644
-> --- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> @@ -24,9 +24,11 @@ properties:
->                - atmel,sama5d4-i2c
->                - atmel,sama5d2-i2c
->                - microchip,sam9x60-i2c
-> +              - microchip,sam9x7-i2c
+> diff --git a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+> index 3ce45456d867..7e4dbf5e22b4 100644
+> --- a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+> +++ b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+> @@ -17,6 +17,7 @@ properties:
+>        - enum:
+>            - atmel,at91sam9g45-trng
+>            - microchip,sam9x60-trng
+> +          - microchip,sam9x7-trng
 
 Same as in other cases, so just to avoid applying by submaintainer:
 looks not tested and not working.
-
 
 Best regards,
 Krzysztof
