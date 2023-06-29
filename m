@@ -1,57 +1,179 @@
-Return-Path: <patchwork-bot+linux-soc@kernel.org>
+Return-Path: <SRS0=6q9U=CR=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB740EB64D9
-	for <soc@archiver.kernel.org>; Thu, 29 Jun 2023 15:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9966EB64D9
+	for <soc@archiver.kernel.org>; Thu, 29 Jun 2023 15:13:33 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 989FDC433C8; Thu, 29 Jun 2023 15:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 81914C433C0
-	for <soc@kernel.org>; Thu, 29 Jun 2023 15:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688050869;
-	bh=jsyKcXAWYVgqzCllduPQkymvJ0mOHyhgr04KCocpowM=;
-	h=Subject:From:Date:List-Id:To:List-Id:Cc:From;
-	b=SAHNamjUQYVQjaxVM5MsQtPNo5dzeXEiEQIS73AJmTTLr1fePo0Oix+OfZ9Ga7pFn
-	 kXMHoElLPiPQmvM6evVPWp3briUcQgFELAyGSPOUjWU7SIUQyc5UuDmhEbzzzylFGM
-	 3fTqILlP+8VdlEAvRCiWWchveqeW4egRq4v2PhxsfzpS96ucsl5IW1yZCr5wxaSGqY
-	 f70AShlSrThYonO8jc+tFYZzxFHeQx/9m+MyR8M1mQAgwO/3jvfCUFfG+fLv++kP6S
-	 D7sK7oxynvqwT7rcZf2prNfEaHnkBEC+m80sQoG6E3uwMcNa8xmLpSQ27EtQoQWLPe
-	 7+oQwME0PPejg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5F075C43158;
-	Thu, 29 Jun 2023 15:01:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: linux-soc
-From: patchwork-bot+linux-soc@kernel.org
-Message-Id: 
- <168805086932.12232.2840308721432441410.git-patchwork-summary@kernel.org>
-Date: Thu, 29 Jun 2023 15:01:09 +0000
+	id 5E874C433C8; Thu, 29 Jun 2023 15:13:33 +0000 (UTC)
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id BFF95C433C0
+	for <soc@kernel.org>; Thu, 29 Jun 2023 15:13:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org BFF95C433C0
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 7B74A3200927;
+	Thu, 29 Jun 2023 11:13:30 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Jun 2023 11:13:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:sender:subject:subject:to:to; s=fm1; t=1688051610; x=
+	1688138010; bh=XeIvPk5ko2AMp3S+4HUOBL42jph3ztzXitHWLUGtnyo=; b=T
+	47bABH4HuaPsYxVhK3Bnux5Iq2JUgC2eGv4dvL0Q4k+NMNu5f15LiaaWormh3iKO
+	soRzQNAiv4nv1FJ4nNz35dQVLEOOCQbclraJnJBmM11McdMS4pkYGf9WVCIjwe6r
+	NRZJzsEbqmEWkN6kqjprqe7NpHuRAgC1iJnBtBZlXTZAaAwKiz/MQpSYPfMR4v9o
+	pJ+bxpZd+gzDvq0Tj9rwk1b9dQoZNFH9KfIRWObzAysoUb9E4BrhWz1VsAiAqJvt
+	uGlerbis2CWPgJvY1qYrpmQ58c9HynI5aH3H4VBuUtBfxhQEYhDDJyVEgK5ORKb7
+	k/XHFB5mD1yyl8ZcEdBwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:sender
+	:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm2; t=1688051610; x=1688138010; bh=X
+	eIvPk5ko2AMp3S+4HUOBL42jph3ztzXitHWLUGtnyo=; b=HJCB6rr4s1FFq/6G2
+	NGJlhAO3bOeShRpCrNyO4GchqI3BZbdDtDYQvuXKL5uHUCTs9a6vSV+haRKk7Lhn
+	L9U46/oHf7DbA4ql0GjoqckRvN+74QcqWbqkPEuwQYk7/y0BmuPTr2rvlY9CEsR9
+	DbgTECWcXTiLR0dCA5Hrvje3yGCuXIhsOklpNk4ccoOSTT9wkCvRb/tURM5WJ+Qc
+	o2Le8/dJKANgu3nVXBpj0vmT05UhNtRj6CXJRhEi1XlCjoBEAnwJaFo5faCEry1S
+	mIJL+X6YlmNXlhX00nbcKfppCYmVXfE0J1Peru+5dCrm6hhec6a7+bljnY4Y4WDe
+	msbpg==
+X-ME-Sender: <xms:mZ-dZP21BbUcWVWtMctHpBKFR0xDDLGNqouLik4Q4Ydy0fZAFk-FWg>
+    <xme:mZ-dZOHmIajaSKKFGyAAnpXzqba8ayZkJztoTNr1XLUHlkYUaAy5J-JKTN14S_5hc
+    hCMEf6yUCPR-jQOUi4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeehleefteehledvieeifeeftefhkedvheehudelteevieekhefhgefhveekffeu
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:mZ-dZP7LqfhqH4_gxqvUkoja6NgegdsPEa1ub31T44ljN382EsyAag>
+    <xmx:mZ-dZE17nQToPZkSQ6tGLI9EJewwigvs2_PNcdT-rFjexkbOWAkaEw>
+    <xmx:mZ-dZCFyFCHu122QnwZqlTKzZOg_3D_1Ci72jutKwj0aZzB2biIe8A>
+    <xmx:mp-dZEPDWSihYKBa7qaJICOI1WZ_ztRLqgp2uGO9ctpYKTQkeH9GKw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B880BB6008D; Thu, 29 Jun 2023 11:13:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <80fba92e-3836-4d27-8be6-1e5f7b5b2f53@app.fastmail.com>
+Date: Thu, 29 Jun 2023 17:11:48 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-To: soc@kernel.org
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 0/5] ARM: SoC tree changes for 6.5
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+We have the usual large number of devicetree updates, mostly for arm64
+and a little bit of arm32 and riscv. The most notable contents this
+time are the move of all 32-bit dts files into subdirectories, as it
+was getting very much out of hand to have everything in one place.
 
-The following patches were marked "accepted", because they were applied to
-soc/soc.git (for-next):
+Among the newly added hardware, the rv64 TH1520 and the three added
+arm64/cortex-a35 based stm32mp2, ma35d1 and amlogic C3 are the
+most notable.
 
-Patch: [GIT,PULL] One last Qualcomm ARM64 DeviceTree fix for v6.4
-  Submitter: Bjorn Andersson <andersson@kernel.org>
-  Committer: Arnd Bergmann <arnd@arndb.de>
-  Patchwork: https://patchwork.kernel.org/project/linux-soc/list/?series=759625
-  Lore link: https://lore.kernel.org/r/20230622203248.106422-1-andersson@kernel.org
+Overall, there are 1132 non-merge changesets ion 74 branches, which
+is large but not overly so. There were 214 individual contributors
+this time, the and the most active ones by number of changesets are
 
+    103 Krzysztof Kozlowski
+     84 Nishanth Menon
+     32 Konrad Dybcio
+     30 Fabio Estevam
+     29 Stephan Gerhold
+     26 Michal Simek
+     21 Linus Walleij
+     21 Dmitry Baryshkov
+     18 Rafa=C5=82 Mi=C5=82ecki
+     18 AngeloGioacchino Del Regno
+     17 Arnd Bergmann
+     16 Neil Armstrong
+     16 Kathiravan T
+     15 Tony Lindgren
+     14 Devi Priya
+     14 Bhupesh Sharma
+     13 Marek Vasut
+     13 Luca Weiss
+     13 Bjorn Andersson
+     12 Thierry Reding
+     12 Jacky Huang
+     11 Robert Marko
+     11 Oleksij Rempel
+     11 Biju Das
+     11 Bartosz Golaszewski
+     11 Artur Weber
 
-Total patches: 1
+The diff/dirstat now shows the dts file modifications in their
+new location, not including the changes of the actual merge:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+   0.3% Documentation/devicetree/bindings/arm/
+   0.4% Documentation/devicetree/bindings/clock/
+   0.2% Documentation/devicetree/bindings/interrupt-controller/
+   0.3% Documentation/devicetree/bindings/media/
+   0.2% Documentation/devicetree/bindings/soc/
+   0.7% Documentation/devicetree/bindings/
+   0.4% Documentation/process/
+   0.7% arch/arm/boot/dts/allwinner/
+   1.1% arch/arm/boot/dts/broadcom/
+   0.2% arch/arm/boot/dts/hisilicon/
+   0.4% arch/arm/boot/dts/marvell/
+   0.3% arch/arm/boot/dts/mediatek/
+   0.4% arch/arm/boot/dts/microchip/
+   1.7% arch/arm/boot/dts/nxp/imx/
+   0.2% arch/arm/boot/dts/nxp/
+   1.5% arch/arm/boot/dts/qcom/
+   0.9% arch/arm/boot/dts/samsung/
+   1.8% arch/arm/boot/dts/st/
+   0.2% arch/arm/boot/dts/ti/keystone/
+   4.9% arch/arm/boot/dts/ti/omap/
+   3.3% arch/arm/boot/dts/
+   0.8% arch/arm/mach-omap1/
+   0.5% arch/arm/mach-omap2/
+   0.6% arch/arm/
+   3.6% arch/arm64/boot/dts/freescale/
+   0.7% arch/arm64/boot/dts/hisilicon/
+   3.2% arch/arm64/boot/dts/mediatek/
+   0.4% arch/arm64/boot/dts/nuvoton/
+   1.0% arch/arm64/boot/dts/nvidia/
+  28.5% arch/arm64/boot/dts/qcom/
+   1.1% arch/arm64/boot/dts/renesas/
+   3.5% arch/arm64/boot/dts/rockchip/
+   0.7% arch/arm64/boot/dts/st/
+  15.1% arch/arm64/boot/dts/ti/
+   1.1% arch/arm64/boot/dts/xilinx/
+   0.4% arch/arm64/boot/dts/
+   0.6% arch/riscv/boot/dts/thead/
+   0.2% arch/
+   2.9% drivers/clk/nuvoton/
+   0.2% drivers/firmware/arm_scmi/
+   0.2% drivers/firmware/tegra/
+   0.2% drivers/input/touchscreen/
+   0.9% drivers/memory/tegra/
+   0.2% drivers/memory/
+   4.5% drivers/pinctrl/stm32/
+   0.7% drivers/reset/
+   0.5% drivers/soc/mediatek/
+   0.7% drivers/soc/qcom/
+   0.4% drivers/soc/rockchip/
+   0.5% drivers/soc/ti/
+   0.2% drivers/soc/
+   0.7% drivers/
+   0.9% include/dt-bindings/clock/
+   0.2% include/dt-bindings/reset/
+   0.5% include/linux/
+   0.2% include/
