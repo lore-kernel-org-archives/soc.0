@@ -1,497 +1,109 @@
-Return-Path: <SRS0=k/QS=CV=inventec.com=Chen.PJ@kernel.org>
+Return-Path: <SRS0=i2+K=CV=collabora.com=cristian.ciocaltea@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31801EB64DC
-	for <soc@archiver.kernel.org>; Mon,  3 Jul 2023 06:17:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66B58C001B0
+	for <soc@archiver.kernel.org>; Mon,  3 Jul 2023 18:10:20 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id E4AF9C433C7; Mon,  3 Jul 2023 06:17:39 +0000 (UTC)
-Received: from mail.inventec.com (mail.inventec.com [218.32.67.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	id 26FDBC433C8; Mon,  3 Jul 2023 18:10:20 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F0494C433C8;
-	Mon,  3 Jul 2023 06:17:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org F0494C433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inventec.com
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inventec.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=sEx03; d=inventec.com;
-    h=from:to:cc:subject:date:message-id:in-reply-to:mime-version:
-      content-type;
-    bh=hIMcZMsWbpt8FgyYLdfQQ/GAzTgQR7eyippkjzikMWQ=;
-    b=RI2YTMOLAkS82rUZ+AoycjRVkcVveluiOkplN3Xhqd2QpmbgvLbPyvdZnXbTpT
-      UXCXJE56UD+nuJaNidzFZhOCsEQdo9lsfGrj7B6+VWl55fm9xL6cAvCtdpCZqy
-      rQiidVexINS0/5FzkH98aNeEcfXbfkNfxxWPkX5pZXHkpVw=
-Received: from IEC1-EX2016-04.iec.inventec (10.1.254.222) by
- IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 3 Jul 2023 14:02:25 +0800
-Received: from TAO-MailRelay-1.iec.inventec (10.6.254.133) by
- IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server id
- 15.1.2507.23 via Frontend Transport; Mon, 3 Jul 2023 14:02:25 +0800
-Received: from charon ([10.6.141.37]) by TAO-MailRelay-1.iec.inventec with Microsoft SMTPSVC(8.0.9200.16384);
-	 Mon, 3 Jul 2023 14:02:24 +0800
-From: PJ Chen <chen.pj@inventec.com>
-List-Id: <soc.lore.kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	<soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Joel Stanley <joel@jms.id.au>, Andrew
- Jeffery <andrew@aj.id.au>, <linux-arm-kernel@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-aspeed@lists.ozlabs.org>
-CC: <ye.vic@inventec.com>, <Huang.Alang@inventec.com>, Chen PJ
-	<Chen.pj@inventec.com>
-Subject: [PATCH v7 2/2] ARM: dts: aspeed: Adding Inventec Starscream BMC
-Date: Mon, 3 Jul 2023 14:02:22 +0800
-Message-ID: <20230703060222.24263-2-chen.pj@inventec.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230703060222.24263-1-chen.pj@inventec.com>
-References: <20230703060222.24263-1-chen.pj@inventec.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id C7522C433C7;
+	Mon,  3 Jul 2023 18:10:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org C7522C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Received: from [192.168.1.90] (unknown [188.24.137.5])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 834A46606F85;
+	Mon,  3 Jul 2023 19:10:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1688407816;
+	bh=UU/JyNAeehW37wvqIZuneyiVzqMP1lc3HgGiWGDbDOg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Q8LW9XQfLueXxVtJqDx0XQEnUIw2KFEYQTwlFkQBWujJMF4RIrNrmaAPwzllEMYd5
+	 I+JUT30wwo7pFcLLKxBGCx76qzxbnvERAyaZGOzb3iQVI/OK4m+bl4TgW7skJJfNsg
+	 b7PpCmIGCo1bBJ8e97EpmvuXlshmjmmUWuHQAHEmjv7JWYstpkkrV8PtfWZG3Fc49c
+	 1WXDMzlPVK2izZ/AVGSOmlxaVrCiMyNePsCJhXvzIys1XKjgHjrSSRWOCYHpZm3MQC
+	 zzgZLKTPgr43gGAGiXqdnmzOjJWDy39YJlZZWZCoRJWkqwprku4SPfBdPAfPDnLa2Y
+	 EebYFdKgKRP5Q==
+Message-ID: <f527a768-a92c-5565-6fa1-a6396869d1c0@collabora.com>
+Date: Mon, 3 Jul 2023 21:10:13 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 03 Jul 2023 06:02:24.0909 (UTC) FILETIME=[F0550BD0:01D9AD73]
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 8EF94C605EEB815EA2DFE3A1D19DF3BDB7028A516C868836792279F99A61768C2000:8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] ARM64 RK808 defconfig fix
+To: Arnd Bergmann <arnd@arndb.de>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+List-Id: <soc.lore.kernel.org>
+Cc: soc@kernel.org, arm <arm@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, kernel@lists.collabora.com,
+ =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>
+References: <20230615174940.jmzuv5kb6o7htkwo@mercury.elektranox.org>
+ <5dd55b3f-9a12-4c3e-99a8-b81add924cbb@app.fastmail.com>
+ <20230621122854.yvffeuhhp4ywqcla@mercury.elektranox.org>
+ <83094b7e-5298-4d9d-9eab-8af979c3f710@app.fastmail.com>
+Content-Language: en-US
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <83094b7e-5298-4d9d-9eab-8af979c3f710@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Chen PJ <Chen.pj@inventec.com>
+On 6/21/23 16:10, Arnd Bergmann wrote:
+> On Wed, Jun 21, 2023, at 14:28, Sebastian Reichel wrote:
+>> On Wed, Jun 21, 2023 at 11:36:48AM +0200, Arnd Bergmann wrote:
+>>> On Thu, Jun 15, 2023, at 19:49, Sebastian Reichel wrote:
+>>>> Since I did not get any feedback for the defconfig patches from [0] and they
+>>>> are fixing a KernelCI regression (Rockchip Chromebooks no longer boot because
+>>>> of missing PMIC driver), I prepared a pull request with the defconfig change
+>>>> instead as suggested by Tony [1]. It consists of the rk806 immutable branch
+>>>> prepared by Lee Jones [2] and the arm64 defconfig patch. I will send a second
+>>>> pull request for the arm32 multi_v7 defconfig. This is targeting linux-next.
+>>>>
+>>>> [0] 
+>>>> https://lore.kernel.org/all/20230518040541.299189-1-sebastian.reichel@collabora.com/
+>>>> [1] 
+>>>> https://lore.kernel.org/linux-omap/20230604060436.GT14287@atomide.com/
+>>>> [1] https://lore.kernel.org/all/20230515152425.GV10825@google.com/
+>>>
+>>> I don't think it's important to have bisectable defconfig changes,
+>>> and I'd prefer to just cherry-pick the two defconfig patches in
+>>> this case if that's ok with you.
+>>
+>> Sure, please go ahead. I just want to make sure that the regression
+>> is fixed.
+> 
+> Done
+> 
+>> By the way, what's the merge strategy for defconfig patches? Apart
+>> from my RK808 fixes we have some other pending defconfig updates and
+>> nobody seems to care:
+>>
+>> https://lore.kernel.org/all/20230504201916.1121243-1-cristian.ciocaltea@collabora.com/
+>> https://lore.kernel.org/all/20230604171345.1215276-1-cristian.ciocaltea@collabora.com/
+> 
+> I normally expect defconfig patches to go through one of the platform
+> maintainer trees, the same way that I merge dts or driver changes,
+> so I tend to miss patches sent individually, unless they take soc@kernel.org
+> into Cc, which puts them into patchwork.
+> 
+> I've applied the above two now, as they seem harmless. I see that
+> Heiko was not on Cc here, so he probably never saw them.
 
-Initial introduction of Inventec Starscream x86 family
-equipped with AST2600 BMC SoC.
+Hi Arnd,
 
-Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+For some reason, the 2nd patch ("arm64: defconfig: Enable Rockchip OTP
+memory driver") didn't show up in linux-next, but only the 1st one
+("arm64: defconfig: Enable Rockchip I2S TDM and ES8316 drivers").
 
----
-V6 -> V7:
-  - Resend a new patch set.
-V5 -> V6:
-  - Remove setting not match dt-binging check.
-V4 -> V5:
-  - Remove devices not defined in dt-binding yet.
-V3 -> V4:
-  - Reply with devicetree binding
-    https://lore.kernel.org/all/28f0ce0a82464083ae24f9ef2f598425@inventec.com/
-V2 -> V3:
-  - Rename the node name to generic.
-V1 -> V2:
-  - Correct License description
-  - Remove not supported device
-  - Using openbmc-flash-layout.dtsi
-  - Correct device format
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/aspeed-bmc-inventec-starscream.dts    | 389 ++++++++++++++++++
- 2 files changed, 390 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
+Could you please check?
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index eb681903d50b..6a897ff40ff0 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1629,6 +1629,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-quanta-q71l.dtb \
- 	aspeed-bmc-quanta-s6q.dtb \
- 	aspeed-bmc-supermicro-x11spi.dtb \
-+	aspeed-bmc-inventec-starscream.dtb \
- 	aspeed-bmc-inventec-transformers.dtb \
- 	aspeed-bmc-tyan-s7106.dtb \
- 	aspeed-bmc-tyan-s8036.dtb \
-diff --git a/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts b/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
-new file mode 100644
-index 000000000000..ec82af94e1fb
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-inventec-starscream.dts
-@@ -0,0 +1,389 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2023 Inventec Corp.
-+
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include "aspeed-g6-pinctrl.dtsi"
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "STARSCREAM BMC";
-+	compatible = "inventec,starscream-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		video_engine_memory: video {
-+			size = <0x04000000>;
-+			alignment = <0x01000000>;
-+			compatible = "shared-dma-pool";
-+			reusable;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-uid {
-+			label = "UID_LED";
-+			gpios = <&gpio0 186 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-heartbeat {
-+			label = "HB_LED";
-+			gpios = <&gpio0 127 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&mdio0 {
-+	status = "okay";
-+
-+	ethphy0: ethernet-phy@0 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+	};
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	phy-mode = "rmii";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	use-ncsi;
-+};
-+
-+&mac3 {
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-handle = <&ethphy0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rgmii4_default>;
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+#include "openbmc-flash-layout.dtsi"
-+	};
-+
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc2";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
-+&spi1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi1_default>;
-+
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bios";
-+		spi-max-frequency = <50000000>;
-+		spi-tx-bus-width = <4>;
-+		spi-rx-bus-width = <4>;
-+	};
-+};
-+
-+&vuart1 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	aspeed,lpc-io-reg = <0xca2>;
-+	status = "okay";
-+};
-+
-+&uart_routing {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+&i2c1 {
-+	status = "okay";
-+};
-+&i2c2 {
-+	status = "okay";
-+};
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+
-+	// I2C EXPANDER
-+	i2c-mux@71 {
-+		compatible = "nxp,pca9546";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x71>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+			// AMD SB-TSI CPU1
-+			sbtsi@4c {
-+				compatible = "amd,sbtsi";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+			// AMD SB-TSI CPU2
-+			sbtsi@48 {
-+				compatible = "amd,sbtsi";
-+				reg = <0x48>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	// I2C EXPANDER U153
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9546";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		usb_hub: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		riser1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		riser2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+
-+	// Motherboard Temp_U89
-+	temperature-sensor@4e {
-+		compatible = "ti,tmp421";
-+		reg = <0x4e>;
-+	};
-+
-+	// RunBMC Temp_U6
-+	temperature-sensor@49 {
-+		compatible = "ti,tmp75";
-+		reg = <0x49>;
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+	// I2C EXPANDER U40
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9545";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x70>;
-+
-+		i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+	// FRU RunBMC
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+		pagesize = <128>;
-+	};
-+};
-+
-+&i2c9 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+	// FRU SCM
-+	eeprom@51 {
-+		compatible = "atmel,24c512";
-+		reg = <0x51>;
-+		pagesize = <128>;
-+	};
-+
-+	// SCM Temp_U17
-+	temperature-sensor@4f {
-+		compatible = "ti,tmp75";
-+		reg = <0x4f>;
-+	};
-+};
-+
-+&gpio0 {
-+	status = "okay";
-+	gpio-line-names =
-+	/*A0-A7*/   "","","","","","","","",
-+	/*B0-B7*/   "alert-psu0-smb-r-n","bmc-ready","","assert-cpu0-prochot-r-n",
-+	"","","","",
-+	/*C0-C7*/   "","","","","","","","",
-+	/*D0-D7*/   "","","","","","","","",
-+	/*E0-E7*/   "","","","","","","","",
-+	/*F0-F7*/   "","","","","reset-sgpio-r-n","","","",
-+	/*G0-G7*/   "","","scm-jtag-mux-select","","","","","",
-+	/*H0-H7*/   "","","","","reset-out","power-out","","",
-+	/*I0-I7*/   "","","","","","","irq-bmc-cpu0-buf-nmi-n","",
-+	/*J0-J7*/   "","","","","","","","",
-+	/*K0-K7*/   "","","","","","","","",
-+	/*L0-L7*/   "","","","","","","","",
-+	/*M0-M7*/   "","","","","","","","",
-+	/*N0-N7*/   "","","ncsi-ocp-clk-en-n","","","","","",
-+	/*O0-O7*/   "","","","","","","cpu1-thermal-trip-n","",
-+	/*P0-P7*/   "","","","","","","","",
-+	/*Q0-Q7*/   "cpu0-prochot-n","","cpu1-prochot-n","","cpu0-pe-rst0","","","",
-+	/*R0-R7*/   "","","","","","","","",
-+	/*S0-S7*/   "","","","",
-+	"","PCH_SLP_S4_BMC_N","cpu0-thermtrip-n","alert-psu1-smb-r-n",
-+	/*T0-T7*/   "","","","","","","","",
-+	/*U0-U7*/   "","","","","","","","",
-+	/*V0-V7*/   "bios-recovery-buf-n","","assert-cpu1-prochot-r-n","",
-+	"power-chassis-good","","","",
-+	/*W0-W7*/   "","","","","","","","",
-+	/*X0-X7*/   "","","","","platform-type","","","",
-+	/*Y0-Y7*/   "","","","","","","","",
-+	/*Z0-Z7*/   "","cpld-power-break-n","","","","","","",
-+	/*AA0-AA7*/ "","","","","","","","",
-+	/*AB0-AB7*/ "","","","","","","","",
-+	/*AC0-AC7*/ "","","","","","","","";
-+};
-+
-+&sgpiom0 {
-+	status = "okay";
-+	ngpios = <64>;
-+	bus-frequency = <1000000>;
-+};
-+
-+&lpc_snoop {
-+	status = "okay";
-+	snoop-ports = <0x80>;
-+};
-+
-+&emmc_controller {
-+	status = "okay";
-+};
-+
-+&emmc {
-+	status = "okay";
-+	non-removable;
-+	max-frequency = <52000000>;
-+	bus-width = <8>;
-+};
-+
-+&video {
-+	status = "okay";
-+	memory-region = <&video_engine_memory>;
-+};
-+
-+&vhub {
-+	status = "okay";
-+	aspeed,vhub-downstream-ports = <7>;
-+	aspeed,vhub-generic-endpoints = <21>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb2ad_default>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
--- 
-2.25.1
-
+Thanks,
+Cristian
