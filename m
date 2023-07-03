@@ -1,54 +1,79 @@
-Return-Path: <pr-tracker-bot@kernel.org>
+Return-Path: <SRS0=k/QS=CV=inventec.com=Chen.PJ@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75BD8C001B3
-	for <soc@archiver.kernel.org>; Thu, 29 Jun 2023 22:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D98FC001B3
+	for <soc@archiver.kernel.org>; Mon,  3 Jul 2023 06:02:36 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5C13EC433C8; Thu, 29 Jun 2023 22:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 45C36C433C0;
-	Thu, 29 Jun 2023 22:39:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1688078361;
-	bh=8WYZOi/aDgId4eGpgDDN+lQ7ySkeBWvBbJx4ZvQXLCs=;
-	h=Subject:From:In-Reply-To:References:Date:To:List-Id:Cc:From;
-	b=q2diZgyoEYVnnu8hTDWtD8EEZq/JHhhlzNg4jzNs0cWp7XIrIRrxHK/LyFzFRWrY4
-	 fSAjaZ7tgWq0i4h/wx3gIXqKrkTQ/oUcL13wRVQ27iPv0107jltW1Bk6m/oYRxiF+x
-	 hO4+xH/sHBMVBciJV+YaNfo+eQIzfuh1lI/ngrkNb73M+5zX+/uLhfVPtO55XbIjLF
-	 JzsFrfQSv+cMcTgRocYiBaHhg8RA0/whRNGno3Q0Aq5zcmCHiDsOx3gsvFTbBxIf6j
-	 5kF2dDlsQWj7g4t6lzs3S1JiBTTGIjrXRPSuFn5IBHOLfByBK0HFFBEnIBspbAaCVf
-	 jjStEszpQBl6g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30F70C40C5E;
-	Thu, 29 Jun 2023 22:39:21 +0000 (UTC)
-Subject: Re: [GIT PULL 4/5] ARM: SoC defconfig changes for 6.5
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <850b11a6-4f23-41dd-ac14-d8663683d1f6@app.fastmail.com>
-References: <80fba92e-3836-4d27-8be6-1e5f7b5b2f53@app.fastmail.com> <850b11a6-4f23-41dd-ac14-d8663683d1f6@app.fastmail.com>
-X-PR-Tracked-List-Id: <soc.lore.kernel.org>
-X-PR-Tracked-Message-Id: <850b11a6-4f23-41dd-ac14-d8663683d1f6@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.5
-X-PR-Tracked-Commit-Id: 2b24391767ae6897dff6eeb521f01d495bc27b55
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0873694a339821277d9f2cae7ef981a1283b44f5
-Message-Id: <168807836119.26000.6447730228997347802.pr-tracker-bot@kernel.org>
-Date: Thu, 29 Jun 2023 22:39:21 +0000
-To: Arnd Bergmann <arnd@arndb.de>
+	id 2EAD6C433C7; Mon,  3 Jul 2023 06:02:36 +0000 (UTC)
+Received: from mail.inventec.com (mail.inventec.com [61.220.76.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 8E882C433C9;
+	Mon,  3 Jul 2023 06:02:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 8E882C433C9
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=inventec.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=inventec.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+    s=sEx04; d=inventec.com;
+    h=from:to:cc:subject:date:message-id:mime-version:content-type;
+    bh=dcvSYvSNU+uro1iISYrrd705f26G2TyH8iwSt1QWGqw=;
+    b=F1xPnoJHvZqlIreIR6YNJPq+bwax2spNTD7mELdYYf+LL4KqyVSzYRNa8pLsw9
+      HqViQNcAUSYXLqvjCa/AorI4BgAvpaw+IYtz+uup/ljw/YuPZV//BZFLeACo/G
+      W2LWo1rL+f8WhwaOiv9HyhtNizBciMlUd7YNE/Ui3HK4dAI=
+Received: from IEC1-EX2016-04.iec.inventec (10.1.254.222) by
+ IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 3 Jul 2023 14:02:24 +0800
+Received: from TAO-MailRelay-1.iec.inventec (10.6.254.133) by
+ IEC1-EX2016-04.iec.inventec (10.1.254.222) with Microsoft SMTP Server id
+ 15.1.2507.23 via Frontend Transport; Mon, 3 Jul 2023 14:02:24 +0800
+Received: from charon ([10.6.141.37]) by TAO-MailRelay-1.iec.inventec with Microsoft SMTPSVC(8.0.9200.16384);
+	 Mon, 3 Jul 2023 14:02:23 +0800
+From: PJ Chen <chen.pj@inventec.com>
 List-Id: <soc.lore.kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, soc@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	<soc@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Joel Stanley <joel@jms.id.au>, Andrew
+ Jeffery <andrew@aj.id.au>, <linux-arm-kernel@lists.infradead.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-aspeed@lists.ozlabs.org>
+CC: <ye.vic@inventec.com>, <Huang.Alang@inventec.com>, Chen PJ
+	<Chen.pj@inventec.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v7 1/2] dt-bindings: arm: aspeed: add Inventec starscream-bmc
+Date: Mon, 3 Jul 2023 14:02:21 +0800
+Message-ID: <20230703060222.24263-1-chen.pj@inventec.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 03 Jul 2023 06:02:24.0048 (UTC) FILETIME=[EFD1AB00:01D9AD73]
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 3E1DF7C11C547A2FC99E3D2474257FEF65628B9BCDE1CD7826B620155397CAE42000:8
 
-The pull request you sent on Thu, 29 Jun 2023 17:22:41 +0200:
+From: Chen PJ <Chen.pj@inventec.com>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.5
+Document the new compatibles used on Inventec starscream-bmc
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0873694a339821277d9f2cae7ef981a1283b44f5
+Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+index 1b585e554791..fb4ce5df2fa0 100644
+--- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
++++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+@@ -82,6 +82,7 @@ properties:
+               - ibm,everest-bmc
+               - ibm,rainier-bmc
+               - ibm,tacoma-bmc
++              - inventec,starscream-bmc
+               - inventec,transformer-bmc
+               - jabil,rbp-bmc
+               - nuvia,dc-scm-bmc
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
