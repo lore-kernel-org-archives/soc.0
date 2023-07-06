@@ -1,88 +1,125 @@
-Return-Path: <SRS0=BsMw=CY=linaro.org=viresh.kumar@kernel.org>
+Return-Path: <SRS0=rPfG=CY=arndb.de=arnd@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CADDEB64D9
-	for <soc@archiver.kernel.org>; Thu,  6 Jul 2023 04:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A198AEB64DD
+	for <soc@archiver.kernel.org>; Thu,  6 Jul 2023 08:21:08 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id 5479AC433CB; Thu,  6 Jul 2023 04:03:37 +0000 (UTC)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	id 5A281C433C9; Thu,  6 Jul 2023 08:21:08 +0000 (UTC)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6955BC433C8
-	for <soc@kernel.org>; Thu,  6 Jul 2023 04:03:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 6955BC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6b74791c948so233939a34.3
-        for <soc@kernel.org>; Wed, 05 Jul 2023 21:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688616215; x=1691208215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FYnNIawbku4DKzQ1lg5ea0ay/M1V65V06UjetuXA9iA=;
-        b=m0mCMyE1InXnqQ5cdii/3F7YbEoSK9lxA+z+DQdZTCfCx8cXChj8jRFysYNlLPMEAe
-         EptgGsCkDLVwc4TzxOPyiJY0RfeO17V+Of1nSUEmvNq0zgf+8VEFmJVxIZuNjyQ8wtcP
-         DZru+OMi/twpsdDVsIA/y1fSYVd0IJIYbi77ufYGez2Aj3f4lqGVrLsrBppNJFmEy0AQ
-         3AQ2zZSaWxkkQhc2jhlgo9NRpxi2/0ljjvSbK1oY0yuwgj3qzZGtyRs9TXS2GHo3HdLn
-         9E2J+F0p2vIrbu26KS4Mca5vOmuA8XX+F/HjF7XNyFoA5bWQrynh87gmX2sTdqRtGktl
-         khUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688616215; x=1691208215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FYnNIawbku4DKzQ1lg5ea0ay/M1V65V06UjetuXA9iA=;
-        b=IOkwHE78NfDStcariW8VZMsFnCyYViwRWfORZPSPrTQysP3lfYpjRtgeSQo18a8/M6
-         01dQ9Rjb8lEbN3FFAtWbEQXkHfrovvbd7L3AHhDS+bVXOBSXxpX8d/i/iKcSOrUbA0XP
-         aaZAXlbWTUYdeAaEENfs6elNNiaoBAj2YMHNTBWxWSLlpnTp3P9B44ngW9+cqHWPA3jU
-         4DdDbrvEpkj8e7oYTPbVkcQjwoSI0zIzVkz0KABOCEFnK4Xk1wvMPi7IrAouYEp1KTtT
-         qOpCyTWWb2EuwLPuvfYws3ahDYN/8FQat8s1M78f+KTi3NByGm9X4KcyrXOlSm7CUawa
-         cUBg==
-X-Gm-Message-State: ABy/qLYSa2YxSXbvouohrfidZo5FaH4bGx++X6jTndXYd68gd3HnbD0x
-	9okI77N8a4kZ+18FnLUEibt1yw==
-X-Google-Smtp-Source: APBJJlEqmZLxNQQuzUk///fUNFmjd1X6nxiU+4HGt0ELa+ZA5RK91Tyw0++U5t+sxlKc/LKULTeoPg==
-X-Received: by 2002:a05:6358:4196:b0:134:d122:b681 with SMTP id w22-20020a056358419600b00134d122b681mr580552rwc.20.1688616215142;
-        Wed, 05 Jul 2023 21:03:35 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id fk25-20020a056a003a9900b0063f0068cf6csm263890pfb.198.2023.07.05.21.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 21:03:34 -0700 (PDT)
-Date: Thu, 6 Jul 2023 09:33:31 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	by smtp.kernel.org (Postfix) with ESMTPS id A214FC433C8
+	for <soc@kernel.org>; Thu,  6 Jul 2023 08:21:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org A214FC433C8
+Authentication-Results: smtp.kernel.org; dmarc=none (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 6BC655C00D4;
+	Thu,  6 Jul 2023 04:21:05 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Jul 2023 04:21:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:sender:subject:subject:to:to;
+	 s=fm2; t=1688631665; x=1688718065; bh=RoJE5GTy67nX2a3Vmizguhy5l
+	YuBkadye1gBut0tsZk=; b=B69HohW3KnwAJnk6maL5YW7ttivIu/DIzi0z9EbTQ
+	PoTJc7Rg3GBKuGUlQRFw/7cT3pImBY7wMMjZe3UiEipupofrC6IuLT+2cS1ebtQn
+	21GkZfWbRXc7bEOiWeBUEEXW9Vh+kon9eHuhw/WNM9J+a5dloPAb0+Ord88ORRhL
+	Ugavncwbyatp8ea3IApQEiYUiYKZXJti9PG5hyj5/8TQTrfFjqXs5wsWhoMnx6QO
+	pW2+5aIKOIvk71PJ430fVdLKH3lSxQ1OF2TLk50pxPAnUOjsSnsUjhTURecQ9Svb
+	1XO5FR7uYtJLnbQponmRnQ4SOWdYOi2DiwDPh8MfQOVTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1688631665; x=1688718065; bh=RoJE5GTy67nX2a3Vmizguhy5lYuBkadye1g
+	But0tsZk=; b=ZzB1IMKQNThu7aao2ytl4LOyAo2LeVXi4i0qG8A1BXRJ11YSHOA
+	yQ9Pk0lpyjvlWpqsNJzZ4KGQlyOdYSxU+l4CZdK2Rs0zzZn1DhukdU72QgdcNI23
+	bokHrNJMElYCpZTQobN0GwSCEtjLJp4/2djiNp0av2QSGRaLokspQKqGpMD5KXu/
+	FhSnylTNVkDuAXeDSiNeuF7V5zKM8eQw9VqBDUDC3gP5UgiKfujOBqCEzCWorw5S
+	hMzTdWji/WBXnefyoXGUc8yY/eek4wiuDeP2ZULuYq+yTwhwmABcbJ4xI1FE+7li
+	hrR2cJmUIei7huXKvGFMGbL+0kRx4uN1vmA==
+X-ME-Sender: <xms:cXmmZIqPM-Xco4WCppcUGJUILbwJrAGgbl8CEHIOnGxyVs0S4w8vaA>
+    <xme:cXmmZOo1GDEf3BEtBzkWFRsge1vy-hCj0MEb6UdrElhke9RSX1HsfLCSRQU5fffcz
+    _7wifHNG4tT5WnTWl0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelgddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgepudenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cXmmZNOI1z6dSBCES5YO8pHhpdfQs_vZP04xC1p3E8N0ecj6-oPfNg>
+    <xmx:cXmmZP4_GsgQyEB0ssktRWB_Cpq4rRzWpWAoXbyZFPWPypRPrkap4w>
+    <xmx:cXmmZH43F0fanZ_QrrRiXiFHQh4iGpLlgNjuzu2SMhIzZFHYWU-kkQ>
+    <xmx:cXmmZBQNLjYivsDFf6a7w8W6YNaUewMdOCn9YacsSRzI6mHJ5H5u_w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 2FD51B60086; Thu,  6 Jul 2023 04:21:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
+Mime-Version: 1.0
+Message-Id: <a89a22e2-df89-4341-ba61-c42149e21c8e@app.fastmail.com>
+Date: Thu, 06 Jul 2023 10:20:17 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 List-Id: <soc.lore.kernel.org>
-Cc: Viresh Kumar <vireshk@kernel.org>,
-	Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] ARM: dts: st: add missing space before {
-Message-ID: <20230706040331.izqrdsq7wfrm6fqp@vireshk-i7>
-References: <20230705150033.293832-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705150033.293832-1-krzysztof.kozlowski@linaro.org>
+Cc: soc@kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] SoC fixes for 6.5, part 1
+Content-Type: text/plain
 
-On 05-07-23, 17:00, Krzysztof Kozlowski wrote:
-> Add missing whitespace between node name/label and opening {.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/st/spear1310.dtsi                    |  2 +-
->  arch/arm/boot/dts/st/spear1340.dtsi                    |  2 +-
+The following changes since commit bf1fa6f15553df04f2bdd06190ccd5f388ab0777:
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+  Merge tag 'soc-arm-6.5' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc (2023-06-29 15:28:33 -0700)
 
--- 
-viresh
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.5-1
+
+for you to fetch changes up to 6722e46513e0af8e2fff4698f7cb78bc50a9f13f:
+
+  bus: ixp4xx: fix IXP4XX_EXP_T1_MASK (2023-07-05 22:22:55 +0200)
+
+----------------------------------------------------------------
+SoC fixes for 6.5, part 1
+
+There are three small fixes that came up sincie the past week:
+
+ - an incorrect bit offset in ixp4xx bus driver
+
+ - a riscv randconfig regression in the thead platform I merged
+
+ - whitespace fixes for some dts files
+
+----------------------------------------------------------------
+
+Conor Dooley (1):
+      RISC-V: make ARCH_THEAD preclude XIP_KERNEL
+
+Jonas Gorski (1):
+      bus: ixp4xx: fix IXP4XX_EXP_T1_MASK
+
+Krzysztof Kozlowski (1):
+      ARM: dts: st: add missing space before {
+
+ arch/arm/boot/dts/st/spear1310.dtsi                     |  2 +-
+ arch/arm/boot/dts/st/spear1340.dtsi                     |  2 +-
+ arch/arm/boot/dts/st/stih407-family.dtsi                |  2 +-
+ arch/arm/boot/dts/st/stih407-pinctrl.dtsi               | 10 +++++-----
+ arch/arm/boot/dts/st/stm32f429-disco.dts                |  2 +-
+ arch/arm/boot/dts/st/stm32f746-pinctrl.dtsi             |  2 +-
+ arch/arm/boot/dts/st/stm32f769-pinctrl.dtsi             |  2 +-
+ arch/arm/boot/dts/st/stm32h7-pinctrl.dtsi               |  6 +++---
+ arch/arm/boot/dts/st/stm32mp15-pinctrl.dtsi             |  4 ++--
+ arch/arm/boot/dts/st/stm32mp157a-icore-stm32mp1.dtsi    |  6 +++---
+ arch/arm/boot/dts/st/stm32mp157a-microgea-stm32mp1.dtsi |  6 +++---
+ arch/riscv/Kconfig.socs                                 |  1 +
+ drivers/bus/intel-ixp4xx-eb.c                           |  2 +-
+ 13 files changed, 24 insertions(+), 23 deletions(-)
