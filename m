@@ -1,150 +1,77 @@
-Return-Path: <SRS0=7r1l=C4=linaro.org=krzysztof.kozlowski@kernel.org>
+Return-Path: <SRS0=td2K=C5=arm.com=sudeep.holla@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 023A7EB64D9
-	for <soc@archiver.kernel.org>; Mon, 10 Jul 2023 07:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38126EB64DC
+	for <soc@archiver.kernel.org>; Tue, 11 Jul 2023 09:26:24 +0000 (UTC)
 Received: by smtp.kernel.org (Postfix)
-	id BFFC7C433C9; Mon, 10 Jul 2023 07:01:13 +0000 (UTC)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 5F3FCC433C8
-	for <soc@kernel.org>; Mon, 10 Jul 2023 07:01:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org 5F3FCC433C8
-Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51e5672d580so1411745a12.2
-        for <soc@kernel.org>; Mon, 10 Jul 2023 00:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688972469; x=1691564469;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bAAM318e50FzwuPYMp5fFaAKn/TzSZTu0tdXq5W1k3U=;
-        b=RTdZ0NYCeNaJPv0g58tv/l9RYh1y/Rv/GHdNaQfKRcAmFnLEI6riSkUu5QkvhOEubP
-         28bQEeP3RrVqdbPb9Wj5tykDNaRulPdqIcfZDHriBi6qo8PeOEz3JTd/oUnZ7A7v8Qrp
-         ZpDpzCRZcV5a/5arlXiyexGE61wq2KMv9BJygu3Oef0o1zpCq+UC01PDJTrpHIUO6UfB
-         t7lHgvTa0dGcSuwtQW6CZYeWh65DG+PtjIVjM+aRA9yRF91Gt9dRnhWGBKQAuMGPj8wG
-         69rJptP4dJlLU6uHJJvOXBNkkvI4c9fyI1HvO2sNHwykZD4hVFdEiVLo4tsEZas5BEyx
-         5IJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688972469; x=1691564469;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bAAM318e50FzwuPYMp5fFaAKn/TzSZTu0tdXq5W1k3U=;
-        b=H4mqOJbeb8w9qnA1H3QFj2LADsfeHRpD39giZYYcMVqRVZ9ptx6HgVoDcSvPQVfwnv
-         tQBhPhJOuo+sKNnCxHVzQqLzh4ZGFlZAvIy5GPkl9o7pF9w2k0JNljtNJ9+CmBxImfN5
-         Zy3TKc6UmUGTnWP4FeRFWe70GDYRRxFV/YzhBqdp6ijH291VYTZg1HyM2UMANx6KxBEa
-         wD/RfGUkQ8jCw99oze8/HP8Z6gDk71MGH2nr5N/3i9NHGfY+cYPAsNHif6Uqs/HTFNqX
-         jLRTf9Ys2GeKbywIzg0net4Gnd2HGmjMmAyvSCvnX3M5oNz1oBbxjwPD7wm/uHMPwtAz
-         CXGA==
-X-Gm-Message-State: ABy/qLY0zlN2J3ErO7r3W/8xraNLeWQY1hH6PDc03mQ6t44KXH7QV/NL
-	qxt+iBLEYqKlyoMWkdBTRQoDfw==
-X-Google-Smtp-Source: APBJJlGBJv/pG3fRR7H73rSe8XqG6pWMaXfeTU/GjuyMR4ZA8r4RhtJyxCqLUDfc8K3TojxugeZm3w==
-X-Received: by 2002:a17:906:2ce:b0:993:dd1d:8251 with SMTP id 14-20020a17090602ce00b00993dd1d8251mr8929143ejk.28.1688972469441;
-        Mon, 10 Jul 2023 00:01:09 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id k3-20020a1709061c0300b0098d25cbb899sm5685021ejg.41.2023.07.10.00.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 00:01:09 -0700 (PDT)
-Message-ID: <83847c7b-74fa-bc79-0287-893e23516a23@linaro.org>
-Date: Mon, 10 Jul 2023 09:01:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
-Content-Language: en-US
-To: Artur Weber <aweber.kernel@gmail.com>, Olof Johansson <olof@lixom.net>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+	id 04799C433CA; Tue, 11 Jul 2023 09:26:24 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.kernel.org (Postfix) with ESMTP id EFED6C433C7;
+	Tue, 11 Jul 2023 09:26:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.kernel.org EFED6C433C7
+Authentication-Results: smtp.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52DA12B;
+	Tue, 11 Jul 2023 02:27:03 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0F4B83F67D;
+	Tue, 11 Jul 2023 02:26:19 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: linux-kernel@vger.kernel.org,
+	arnd@kernel.org
 List-Id: <soc.lore.kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
- Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230628082332.25102-1-aweber.kernel@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230628082332.25102-1-aweber.kernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	soc@kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: [PATCH] ARM: dts: nspire: Fix arm primecell compatible string
+Date: Tue, 11 Jul 2023 10:26:17 +0100
+Message-ID: <20230711092617.1412815-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 28/06/2023 10:23, Artur Weber wrote:
-> Introduce support for the Galaxy Tab 3 8.0 series of boards:
-> 
->  - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
->  - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
->  - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
-> 
-> What works:
-> 
->  - Display and backlight
->  - Touchscreen
->  - GPIO buttons, hall sensor
->  - WiFi and Bluetooth
->  - USB, fuel gauge, charging
->  - Accelerometer and magnetometer
->  - Audio: speaker, microphone, headset
->  - WiFi model only: light sensor
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
-> This is an updated version of "[PATCH v3 13/13] ARM: dts: exynos: Add Samsung
-> Galaxy Tab 3 8.0 boards"[1].
-> 
-> Changed in v5:
->  - Re-added disabled RTC node instead of deleting it with delete-node
-> 
-> Changed in v4:
->  - Added touchkey keycodes
->  - Added audio nodes
->  - Added MMC aliases
->  - Fixed dtbs_check warnings
->  - Fixed indentation in pinctrl sleep state overrides
-> 
-> Changed in v3:
->  - Addressed review comments
->  - Removed rtc node (RTC is provided by PMIC)
->  - Added CPU thermal node
->  - Fixed dtbs_check warnings
->  - Added common changes from next/dt
-> 
-> Should pass dtbs_check with no errors, provided that the following patches
-> are present:
-> 
-> Backlight node is adapted to changes from "[PATCH v2 1/4] dt-bindings:
-> backlight: lp855x: convert to YAML and modernize"[2]. The whole patchset
-> has been merged into the backlight tree.
-> 
-> Touchkey keycode property is added by "[PATCH 1/2] dt-bindings: mms114: Add
-> linux,keycodes property for touch keys"[3]. So far only the bindings part
-> of the patch has been acked, otherwise everything is awaiting review.
-> 
-> Display bindings have been added by "[PATCH v5 1/3] dt-bindings: display:
-> panel: Add Samsung S6D7AA0 LCD panel controller"[4]. These are already
-> reviewed and merged into the DRM tree.
-> 
-> [1] https://lore.kernel.org/linux-devicetree/20230501195525.6268-14-aweber.kernel@gmail.com/
-> [2] https://lore.kernel.org/linux-devicetree/20230519180728.2281-2-aweber.kernel@gmail.com/
-> [3] https://lore.kernel.org/linux-devicetree/20230521145843.19489-2-aweber.kernel@gmail.com/
-> [4] https://lore.kernel.org/linux-devicetree/20230519170354.29610-2-aweber.kernel@gmail.com/
-> ---
->  arch/arm/boot/dts/Makefile                  |    3 +
->  arch/arm/boot/dts/exynos4212-tab3-3g8.dts   |   29 +
->  arch/arm/boot/dts/exynos4212-tab3-lte8.dts  |   44 +
->  arch/arm/boot/dts/exynos4212-tab3-wifi8.dts |   26 +
->  arch/arm/boot/dts/exynos4212-tab3.dtsi      | 1310 +++++++++++++++++++
+Commit c44e0503e5fd ("docs: dt: fix documented Primecell compatible string")
+removed the last occurrence of incorrect "arm,amba-primecell" compatible
+string, but somehow one occurrence of the same is left in the nspire platform.
 
+Fix the same by replacing it with the correct "arm,primecell" compatible.
 
-This does not apply. You rebased your work on some older version/tree,
-without new layout. Please work on linux-next.
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ arch/arm/boot/dts/nspire/nspire.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+Hi Arnd,
 
+Couldn't find any maintainer for these platforms, hence cc-ing soc@kernel.org
 
-Best regards,
-Krzysztof
+Regards,
+Sudeep
+
+diff --git a/arch/arm/boot/dts/nspire/nspire.dtsi b/arch/arm/boot/dts/nspire/nspire.dtsi
+index bb240e6a3a6f..088bcc38589f 100644
+--- a/arch/arm/boot/dts/nspire/nspire.dtsi
++++ b/arch/arm/boot/dts/nspire/nspire.dtsi
+@@ -161,7 +161,7 @@ timer1: timer@900d0000 {
+ 			};
+ 
+ 			watchdog: watchdog@90060000 {
+-				compatible = "arm,amba-primecell";
++				compatible = "arm,primecell";
+ 				reg = <0x90060000 0x1000>;
+ 				interrupts = <3>;
+ 			};
+-- 
+2.41.0
 
